@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoattr.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: cl $ $Date: 2002-04-25 09:58:13 $
+ *  last change: $Author: thb $ $Date: 2002-10-31 12:52:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1218,9 +1218,8 @@ void SdrAttrObj::ImpAddShadowToBoundRect()
     }
 }
 
-FASTBOOL SdrAttrObj::ImpSetShadowAttributes(ExtOutputDevice& rXOut, FASTBOOL bNoFill) const
+FASTBOOL SdrAttrObj::ImpSetShadowAttributes( const SfxItemSet& rSet, SfxItemSet& rShadowSet ) const
 {
-    const SfxItemSet& rSet = GetItemSet();
     BOOL bShadOn=((SdrShadowItem&)(rSet.Get(SDRATTR_SHADOW))).GetValue();
 
     if(bShadOn)
@@ -1234,45 +1233,45 @@ FASTBOOL SdrAttrObj::ImpSetShadowAttributes(ExtOutputDevice& rXOut, FASTBOOL bNo
 //              aL.GetItemSet().Put(XLineTransparenceItem(nTransp));
 //              rXOut.SetLineAttr(aL);
 //          }
-        if(!bNoFill)
+
+// #103692# Caller must now handle noFill case
+//      if(!bNoFill)
+//      {
+
+        const SdrShadowColorItem& rShadColItem = ((const SdrShadowColorItem&)(rSet.Get(SDRATTR_SHADOWCOLOR)));
+        Color aShadCol(rShadColItem.GetValue());
+        sal_uInt16 nTransp = ((const SdrShadowTransparenceItem&)(rSet.Get(SDRATTR_SHADOWTRANSPARENCE))).GetValue();
+        XFillStyle eStyle = ((const XFillStyleItem&)(rSet.Get(XATTR_FILLSTYLE))).GetValue();
+        BOOL bFillBackground = ((const XFillBackgroundItem&)(rSet.Get(XATTR_FILLBACKGROUND))).GetValue();
+
+        if(eStyle==XFILL_HATCH && !bFillBackground)
         {
-            const SdrShadowColorItem& rShadColItem = ((const SdrShadowColorItem&)(rSet.Get(SDRATTR_SHADOWCOLOR)));
-            Color aShadCol(rShadColItem.GetValue());
-            sal_uInt16 nTransp = ((const SdrShadowTransparenceItem&)(rSet.Get(SDRATTR_SHADOWTRANSPARENCE))).GetValue();
-            XFillStyle eStyle = ((const XFillStyleItem&)(rSet.Get(XATTR_FILLSTYLE))).GetValue();
-            BOOL bFillBackground = ((const XFillBackgroundItem&)(rSet.Get(XATTR_FILLBACKGROUND))).GetValue();
-            SfxItemSet aSet(rSet);
-
-            if(eStyle==XFILL_HATCH && !bFillBackground)
-            {
-                // #41666#
-                XHatch aHatch = ((XFillHatchItem&)(rSet.Get(XATTR_FILLHATCH))).GetValue();
-                aHatch.SetColor(aShadCol);
-                aSet.Put(XFillHatchItem(String(), aHatch));
-            }
-            else
-            {
-                if(eStyle != XFILL_NONE && eStyle != XFILL_SOLID)
-                {
-                    // also fuer Gradient und Bitmap
-                    aSet.Put(XFillStyleItem(XFILL_SOLID));
-                }
-
-                aSet.Put(XFillColorItem(String(),aShadCol));
-
-                // #92183# set XFillTransparenceItem only when no FloatTransparence is used,
-                // else the OutDev will use the wrong method
-                if(nTransp)
-                {
-                    const XFillFloatTransparenceItem& rFillFloatTransparence =
-                        (const XFillFloatTransparenceItem&)rSet.Get(XATTR_FILLFLOATTRANSPARENCE);
-                    if(!rFillFloatTransparence.IsEnabled())
-                        aSet.Put(XFillTransparenceItem(nTransp));
-                }
-            }
-
-            rXOut.SetFillAttr(aSet);
+            // #41666#
+            XHatch aHatch = ((XFillHatchItem&)(rSet.Get(XATTR_FILLHATCH))).GetValue();
+            aHatch.SetColor(aShadCol);
+            rShadowSet.Put(XFillHatchItem(String(), aHatch));
         }
+        else
+        {
+            if(eStyle != XFILL_NONE && eStyle != XFILL_SOLID)
+            {
+                // also fuer Gradient und Bitmap
+                rShadowSet.Put(XFillStyleItem(XFILL_SOLID));
+            }
+
+            rShadowSet.Put(XFillColorItem(String(),aShadCol));
+
+            // #92183# set XFillTransparenceItem only when no FloatTransparence is used,
+            // else the OutDev will use the wrong method
+            if(nTransp)
+            {
+                const XFillFloatTransparenceItem& rFillFloatTransparence =
+                    (const XFillFloatTransparenceItem&)rSet.Get(XATTR_FILLFLOATTRANSPARENCE);
+                if(!rFillFloatTransparence.IsEnabled())
+                    rShadowSet.Put(XFillTransparenceItem(nTransp));
+            }
+        }
+
         return TRUE;
     }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoedge.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: cl $ $Date: 2002-10-11 12:46:05 $
+ *  last change: $Author: thb $ $Date: 2002-10-31 12:52:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -601,12 +601,17 @@ FASTBOOL SdrEdgeObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
     aEmptySet.Put(XLineStyleItem(XLINE_NONE));
     aEmptySet.Put(XFillStyleItem(XFILL_NONE));
 
+    // #103692# prepare ItemSet for shadow fill attributes
+    SfxItemSet aShadowSet(rSet);
+
     // prepare line geometry
     ::std::auto_ptr< SdrLineGeometry > pLineGeometry( ImpPrepareLineGeometry(rXOut, rSet, bIsLineDraft) );
 
     // Shadows
-    if(!bHideContour && ImpSetShadowAttributes(rXOut,TRUE))
+    if(!bHideContour && ImpSetShadowAttributes(rSet, aShadowSet))
     {
+        rXOut.SetFillAttr(aEmptySet);
+
         UINT32 nXDist=((SdrShadowXDistItem&)(rSet.Get(SDRATTR_SHADOWXDIST))).GetValue();
         UINT32 nYDist=((SdrShadowYDistItem&)(rSet.Get(SDRATTR_SHADOWYDIST))).GetValue();
         XPolygon aXP(*pEdgeTrack);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdobj.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: aw $ $Date: 2002-10-30 14:52:52 $
+ *  last change: $Author: thb $ $Date: 2002-10-31 12:52:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -349,15 +349,21 @@ SdrObjPlusData* SdrObjPlusData::Clone(SdrObject* pObj1) const
 ///////////////////////////////////////////////////////////////////////////////
 
 // #100127# Bracket filled output with a comment, if recording a Mtf
-ImpGraphicFill::ImpGraphicFill( const SdrObject& rObj, const ExtOutputDevice& rXOut ) :
+ImpGraphicFill::ImpGraphicFill( const SdrObject&        rObj,
+                                const ExtOutputDevice&  rXOut,
+                                const SfxItemSet&       rFillItemSet,
+                                bool                    bIsShadow       ) :
     mrObj( rObj ),
     mrXOut( rXOut ),
     mbCommentWritten( false )
 {
     const SfxItemSet& rSet = rObj.GetItemSet();
-    XFillStyle eFillStyle( ITEMVALUE( rSet, XATTR_FILLSTYLE, XFillStyleItem ) );
-    XGradient aGradient( ITEMVALUE( rSet, XATTR_FILLGRADIENT, XFillGradientItem ) );
-    XHatch aHatch( ITEMVALUE( rSet, XATTR_FILLHATCH, XFillHatchItem ) );
+    XFillStyle eFillStyle( ITEMVALUE( rFillItemSet, XATTR_FILLSTYLE, XFillStyleItem ) );
+    XGradient aGradient( ITEMVALUE( rFillItemSet, XATTR_FILLGRADIENT, XFillGradientItem ) );
+    XHatch aHatch( ITEMVALUE( rFillItemSet, XATTR_FILLHATCH, XFillHatchItem ) );
+
+    sal_Int32 nDX( ((SdrShadowXDistItem&)(rSet.Get(SDRATTR_SHADOWXDIST))).GetValue() );
+    sal_Int32 nDY( ((SdrShadowYDistItem&)(rSet.Get(SDRATTR_SHADOWYDIST))).GetValue() );
 
     GDIMetaFile* pMtf=NULL;
     if( eFillStyle != XFILL_NONE &&
@@ -365,6 +371,13 @@ ImpGraphicFill::ImpGraphicFill( const SdrObject& rObj, const ExtOutputDevice& rX
     {
         XPolyPolygon aPolyPoly;
         mrObj.TakeXorPoly(aPolyPoly, TRUE);
+
+        // #103692# Offset original geometry for shadows
+        if( bIsShadow && (nDX || nDY) )
+        {
+            // transformation necessary
+            aPolyPoly.Move( nDX, nDY );
+        }
 
         SvtGraphicFill::FillType eType;
         switch( eFillStyle )
@@ -438,18 +451,18 @@ ImpGraphicFill::ImpGraphicFill( const SdrObject& rObj, const ExtOutputDevice& rX
         }
 
         SvtGraphicFill aFill( XOutCreatePolyPolygonBezier( aPolyPoly, rXOut.GetOutDev() ),
-                              ITEMVALUE( rSet, XATTR_FILLCOLOR, XFillColorItem ),
-                              ITEMVALUE( rSet, XATTR_FILLTRANSPARENCE, XFillTransparenceItem ) / 100.0,
+                              ITEMVALUE( rFillItemSet, XATTR_FILLCOLOR, XFillColorItem ),
+                              ITEMVALUE( rFillItemSet, XATTR_FILLTRANSPARENCE, XFillTransparenceItem ) / 100.0,
                               SvtGraphicFill::fillEvenOdd,
                               eType,
                               SvtGraphicFill::Transform(), // TODO
-                              eType == SvtGraphicFill::fillTexture ? ITEMVALUE( rSet, XATTR_FILLBMP_TILE, SfxBoolItem ) : false,
+                              eType == SvtGraphicFill::fillTexture ? ITEMVALUE( rFillItemSet, XATTR_FILLBMP_TILE, SfxBoolItem ) : false,
                               eHatch,
                               aHatch.GetColor(),
                               eGrad,
                               aGradient.GetStartColor(),
                               aGradient.GetEndColor(),
-                              ITEMVALUE( rSet, XATTR_FILLBITMAP, XFillBitmapItem ).GetBitmap() );
+                              ITEMVALUE( rFillItemSet, XATTR_FILLBITMAP, XFillBitmapItem ).GetBitmap() );
 
 #ifdef DBG_UTIL
         ::rtl::OString aStr( aFill.toString() );
@@ -2191,35 +2204,14 @@ void PolyPolygon3D_BuildSkeletonsAndGrow(const PolyPolygon3D& rPolyPoly)
 void SdrObject::ImpDrawShadowLineGeometry(
     ExtOutputDevice& rXOut, const SfxItemSet& rSet, SdrLineGeometry& rLineGeometry) const
 {
-    sal_uInt32 nXDist = ((SdrShadowXDistItem&)(rSet.Get(SDRATTR_SHADOWXDIST))).GetValue();
-    sal_uInt32 nYDist = ((SdrShadowYDistItem&)(rSet.Get(SDRATTR_SHADOWYDIST))).GetValue();
+    sal_Int32 nXDist = ((SdrShadowXDistItem&)(rSet.Get(SDRATTR_SHADOWXDIST))).GetValue();
+    sal_Int32 nYDist = ((SdrShadowYDistItem&)(rSet.Get(SDRATTR_SHADOWYDIST))).GetValue();
     const SdrShadowColorItem& rShadColItem = ((SdrShadowColorItem&)(rSet.Get(SDRATTR_SHADOWCOLOR)));
     Color aColor(rShadColItem.GetValue());
     sal_uInt16 nTrans = ((SdrShadowTransparenceItem&)(rSet.Get(SDRATTR_SHADOWTRANSPARENCE))).GetValue();
 
-    if(nXDist || nYDist)
-    {
-        // transformation necessary
-        PolyPolygon3D aRememberPolyPoly = rLineGeometry.GetPolyPoly3D();
-        PolyPolygon3D aRememberLinePoly = rLineGeometry.GetLinePoly3D();
-        Matrix4D aTrans;
-
-        aTrans.Translate((double)nXDist, -(double)nYDist, 0.0);
-        rLineGeometry.GetPolyPoly3D().Transform(aTrans);
-        rLineGeometry.GetLinePoly3D().Transform(aTrans);
-
-        // draw the line geometry
-        ImpDrawLineGeometry(rXOut, aColor, nTrans, rLineGeometry);
-
-        // reset line geometry to old values
-        rLineGeometry.GetPolyPoly3D() = aRememberPolyPoly;
-        rLineGeometry.GetLinePoly3D() = aRememberLinePoly;
-    }
-    else
-    {
-        // draw shadow line geometry
-        ImpDrawLineGeometry(rXOut, aColor, nTrans, rLineGeometry);
-    }
+    // draw shadow line geometry
+    ImpDrawLineGeometry(rXOut, aColor, nTrans, rLineGeometry, nXDist, nYDist);
 }
 
 void SdrObject::ImpDrawColorLineGeometry(
@@ -2232,11 +2224,12 @@ void SdrObject::ImpDrawColorLineGeometry(
     ImpDrawLineGeometry(rXOut, aColor, nTrans, rLineGeometry);
 }
 
-void SdrObject::ImpDrawLineGeometry(
-    ExtOutputDevice& rXOut,
-     Color& rColor,
-    sal_uInt16 nTransparence,
-    SdrLineGeometry& rLineGeometry) const
+void SdrObject::ImpDrawLineGeometry(   ExtOutputDevice&     rXOut,
+                                       Color&              rColor,
+                                       sal_uInt16           nTransparence,
+                                       SdrLineGeometry&    rLineGeometry,
+                                       sal_Int32            nDX,
+                                       sal_Int32            nDY             ) const
 {
     Color aLineColor( rColor );
 
@@ -2255,6 +2248,21 @@ void SdrObject::ImpDrawLineGeometry(
         rXOut.GetOutDev()->SetDrawMode( nOldDrawMode & (~DRAWMODE_SETTINGSFILL) );
     }
 
+    // #103692# Hold local copy of geometry
+    PolyPolygon3D aPolyPoly = rLineGeometry.GetPolyPoly3D();
+    PolyPolygon3D aLinePoly = rLineGeometry.GetLinePoly3D();
+
+    // #103692# Offset geometry (extracted from SdrObject::ImpDrawShadowLineGeometry)
+    if( nDX || nDY )
+    {
+        // transformation necessary
+        Matrix4D aTrans;
+
+        aTrans.Translate((double)nDX, -(double)nDY, 0.0);
+        aPolyPoly.Transform(aTrans);
+        aLinePoly.Transform(aTrans);
+    }
+
     // #100127# Bracket output with a comment, if recording a Mtf
     GDIMetaFile* pMtf=NULL;
     bool bMtfCommentWritten( false );
@@ -2262,6 +2270,13 @@ void SdrObject::ImpDrawLineGeometry(
     {
         XPolyPolygon aPolyPoly;
         TakeXorPoly(aPolyPoly, TRUE);
+
+        // #103692# Offset original geometry, too
+        if( nDX || nDY )
+        {
+            // transformation necessary
+            aPolyPoly.Move( nDX, nDY );
+        }
 
         // for geometries with more than one polygon, dashing, arrows
         // etc. become ambiguous (e.g. measure objects have no arrows
@@ -2366,10 +2381,10 @@ void SdrObject::ImpDrawLineGeometry(
             aGradient.SetSteps(3);
 
             // get bounds of geometry
-            if(rLineGeometry.GetPolyPoly3D().Count())
-                aVolume.Union(rLineGeometry.GetPolyPoly3D().GetPolySize());
-            if(rLineGeometry.GetLinePoly3D().Count())
-                aVolume.Union(rLineGeometry.GetLinePoly3D().GetPolySize());
+            if(aPolyPoly.Count())
+                aVolume.Union(aPolyPoly.GetPolySize());
+            if(aLinePoly.Count())
+                aVolume.Union(aLinePoly.GetPolySize());
 
             // get pixel size in logic coor for 1,2 pixel cases
             Size aSizeSinglePixel(1, 1);
@@ -2410,44 +2425,44 @@ void SdrObject::ImpDrawLineGeometry(
             aVDev.SetRefPoint(rXOut.GetOutDev()->GetRefPoint());
 
             // create output
-            if(rLineGeometry.GetPolyPoly3D().Count())
+            if(aPolyPoly.Count())
             {
-                PolyPolygon aPolyPoly = rLineGeometry.GetPolyPoly3D().GetPolyPolygon();
+                PolyPolygon aVCLPolyPoly = aPolyPoly.GetPolyPolygon();
 
-                for(UINT16 a=0;a<aPolyPoly.Count();a++)
-                    aMetaFile.AddAction(new MetaPolygonAction(aPolyPoly[a]));
+                for(UINT16 a=0;a<aVCLPolyPoly.Count();a++)
+                    aMetaFile.AddAction(new MetaPolygonAction(aVCLPolyPoly[a]));
             }
 
-            if(rLineGeometry.GetLinePoly3D().Count())
+            if(aLinePoly.Count())
             {
-                PolyPolygon aLinePoly = rLineGeometry.GetLinePoly3D().GetPolyPolygon();
+                PolyPolygon aVCLLinePoly = aLinePoly.GetPolyPolygon();
 
                 if(rLineGeometry.DoForceTwoPixel())
                 {
                     UINT16 a;
 
-                    for(a=0;a<aLinePoly.Count();a++)
-                        aMetaFile.AddAction(new MetaPolyLineAction(aLinePoly[a]));
+                    for(a=0;a<aVCLLinePoly.Count();a++)
+                        aMetaFile.AddAction(new MetaPolyLineAction(aVCLLinePoly[a]));
 
-                    aLinePoly.Move(aSizeSinglePixel.Width() - 1, 0);
+                    aVCLLinePoly.Move(aSizeSinglePixel.Width() - 1, 0);
 
-                    for(a=0;a<aLinePoly.Count();a++)
-                        aMetaFile.AddAction(new MetaPolyLineAction(aLinePoly[a]));
+                    for(a=0;a<aVCLLinePoly.Count();a++)
+                        aMetaFile.AddAction(new MetaPolyLineAction(aVCLLinePoly[a]));
 
-                    aLinePoly.Move(0, aSizeSinglePixel.Height() - 1);
+                    aVCLLinePoly.Move(0, aSizeSinglePixel.Height() - 1);
 
-                    for(a=0;a<aLinePoly.Count();a++)
-                        aMetaFile.AddAction(new MetaPolyLineAction(aLinePoly[a]));
+                    for(a=0;a<aVCLLinePoly.Count();a++)
+                        aMetaFile.AddAction(new MetaPolyLineAction(aVCLLinePoly[a]));
 
-                    aLinePoly.Move(-aSizeSinglePixel.Width() - 1, 0);
+                    aVCLLinePoly.Move(-aSizeSinglePixel.Width() - 1, 0);
 
-                    for(a=0;a<aLinePoly.Count();a++)
-                        aMetaFile.AddAction(new MetaPolyLineAction(aLinePoly[a]));
+                    for(a=0;a<aVCLLinePoly.Count();a++)
+                        aMetaFile.AddAction(new MetaPolyLineAction(aVCLLinePoly[a]));
                 }
                 else
                 {
-                    for(UINT16 a=0;a<aLinePoly.Count();a++)
-                        aMetaFile.AddAction(new MetaPolyLineAction(aLinePoly[a]));
+                    for(UINT16 a=0;a<aVCLLinePoly.Count();a++)
+                        aMetaFile.AddAction(new MetaPolyLineAction(aVCLLinePoly[a]));
                 }
             }
 
@@ -2463,56 +2478,56 @@ void SdrObject::ImpDrawLineGeometry(
     else
     {
         // no transparence, simple output
-        if(rLineGeometry.GetPolyPoly3D().Count())
+        if(aPolyPoly.Count())
         {
-            PolyPolygon aPolyPoly = rLineGeometry.GetPolyPoly3D().GetPolyPolygon();
+            PolyPolygon aVCLPolyPoly = aPolyPoly.GetPolyPolygon();
 
             rXOut.GetOutDev()->SetLineColor();
             rXOut.GetOutDev()->SetFillColor(aLineColor);
 
-            for(UINT16 a=0;a<aPolyPoly.Count();a++)
-                rXOut.GetOutDev()->DrawPolygon(aPolyPoly[a]);
+            for(UINT16 a=0;a<aVCLPolyPoly.Count();a++)
+                rXOut.GetOutDev()->DrawPolygon(aVCLPolyPoly[a]);
         }
 
-        if(rLineGeometry.GetLinePoly3D().Count())
+        if(aLinePoly.Count())
         {
-            PolyPolygon aLinePoly = rLineGeometry.GetLinePoly3D().GetPolyPolygon();
+            PolyPolygon aVCLLinePoly = aLinePoly.GetPolyPolygon();
 
             rXOut.GetOutDev()->SetLineColor(aLineColor);
             rXOut.GetOutDev()->SetFillColor();
 
             if(rLineGeometry.DoForceTwoPixel())
             {
-                PolyPolygon aPolyPolyPixel( rXOut.GetOutDev()->LogicToPixel(aLinePoly) );
+                PolyPolygon aPolyPolyPixel( rXOut.GetOutDev()->LogicToPixel(aVCLLinePoly) );
                 BOOL bWasEnabled = rXOut.GetOutDev()->IsMapModeEnabled();
                 rXOut.GetOutDev()->EnableMapMode(FALSE);
                 UINT16 a;
 
-                for(a=0;a<aLinePoly.Count();a++)
+                for(a=0;a<aVCLLinePoly.Count();a++)
                     rXOut.GetOutDev()->DrawPolyLine(aPolyPolyPixel[a]);
 
                 aPolyPolyPixel.Move(1,0);
 
-                for(a=0;a<aLinePoly.Count();a++)
+                for(a=0;a<aVCLLinePoly.Count();a++)
                     rXOut.GetOutDev()->DrawPolyLine(aPolyPolyPixel[a]);
 
                 aPolyPolyPixel.Move(0,1);
 
-                for(a=0;a<aLinePoly.Count();a++)
+                for(a=0;a<aVCLLinePoly.Count();a++)
                     rXOut.GetOutDev()->DrawPolyLine(aPolyPolyPixel[a]);
 
                 aPolyPolyPixel.Move(-1,0);
 
-                for(a=0;a<aLinePoly.Count();a++)
+                for(a=0;a<aVCLLinePoly.Count();a++)
                     rXOut.GetOutDev()->DrawPolyLine(aPolyPolyPixel[a]);
 
                 rXOut.GetOutDev()->EnableMapMode(bWasEnabled);
             }
             else
             {
-                for( UINT16 a = 0; a < aLinePoly.Count(); a++ )
+                for( UINT16 a = 0; a < aVCLLinePoly.Count(); a++ )
                 {
-                    const Polygon&  rPoly = aLinePoly[ a ];
+                    const Polygon&  rPoly = aVCLLinePoly[ a ];
                     BOOL            bDrawn = FALSE;
 
                     if( rPoly.GetSize() == 2 )

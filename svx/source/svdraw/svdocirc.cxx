@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdocirc.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: thb $ $Date: 2002-09-24 16:25:35 $
+ *  last change: $Author: thb $ $Date: 2002-10-31 12:52:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -354,12 +354,20 @@ FASTBOOL SdrCircObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
     aEmptySet.Put(XLineStyleItem(XLINE_NONE));
     aEmptySet.Put(XFillStyleItem(XFILL_NONE));
 
+    // #103692# prepare ItemSet for shadow fill attributes
+    SfxItemSet aShadowSet(rSet);
+
     // prepare line geometry
     ::std::auto_ptr< SdrLineGeometry > pLineGeometry( ImpPrepareLineGeometry(rXOut, rSet, bIsLineDraft) );
 
     // Shadows
-    if(!bHideContour && ImpSetShadowAttributes(rXOut,eKind==OBJ_CARC || bIsFillDraft))
+    if(!bHideContour && ImpSetShadowAttributes(rSet, aShadowSet))
     {
+        if( eKind==OBJ_CARC || bIsFillDraft )
+            rXOut.SetFillAttr(aEmptySet);
+        else
+            rXOut.SetFillAttr(aShadowSet);
+
         UINT32 nXDist=((SdrShadowXDistItem&)(rSet.Get(SDRATTR_SHADOWXDIST))).GetValue();
         UINT32 nYDist=((SdrShadowYDistItem&)(rSet.Get(SDRATTR_SHADOWYDIST))).GetValue();
 
@@ -374,13 +382,13 @@ FASTBOOL SdrCircObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
                 aX.Move(nXDist,nYDist);
 
                 // #100127# Output original geometry for metafiles
-                ImpGraphicFill aFill( *this, rXOut );
+                ImpGraphicFill aFill( *this, rXOut, aShadowSet, true );
 
                 rXOut.DrawXPolygon(aX);
             }
         } else {
             // #100127# Output original geometry for metafiles
-            ImpGraphicFill aFill( *this, rXOut );
+            ImpGraphicFill aFill( *this, rXOut, aShadowSet, true );
 
             Rectangle aR(aRect);
             aR.Move(nXDist,nYDist);
@@ -413,17 +421,7 @@ FASTBOOL SdrCircObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
     // Before here the LineAttr were set: if(pLineAttr) rXOut.SetLineAttr(*pLineAttr);
     rXOut.SetLineAttr(aEmptySet);
 
-    if(bIsFillDraft)
-    {
-        // perepare ItemSet to avoid XOut filling
-        XFillAttrSetItem aXFSet(rSet.GetPool());
-        aXFSet.GetItemSet().Put(XFillStyleItem(XFILL_NONE));
-        rXOut.SetFillAttr(aEmptySet);
-    }
-    else
-    {
-        rXOut.SetFillAttr(rSet);
-    }
+    rXOut.SetFillAttr( bIsFillDraft ? aEmptySet : rSet );
 
     if (!bHideContour) {
         if (PaintNeedsXPoly())
@@ -433,13 +431,13 @@ FASTBOOL SdrCircObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
                 const XPolygon& rXP=GetXPoly(); // In dieser Reihenfolge, damit bXPolyIsLine gueltig ist.
 
                 // #100127# Output original geometry for metafiles
-                ImpGraphicFill aFill( *this, rXOut );
+                ImpGraphicFill aFill( *this, rXOut, bIsFillDraft ? aEmptySet : rSet );
 
                 rXOut.DrawXPolygon(rXP);
             }
         } else {
             // #100127# Output original geometry for metafiles
-            ImpGraphicFill aFill( *this, rXOut );
+            ImpGraphicFill aFill( *this, rXOut, bIsFillDraft ? aEmptySet : rSet );
 
             if (eKind==OBJ_CIRC) {
                 rXOut.DrawEllipse(aRect);

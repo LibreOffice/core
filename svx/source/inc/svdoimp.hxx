@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoimp.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2002-09-10 08:12:44 $
+ *  last change: $Author: thb $ $Date: 2002-10-31 12:57:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,7 +124,7 @@ class SfxItemSet;
 class ImpGraphicFill
 {
 public:
-    ImpGraphicFill( const SdrObject& rObj, const ExtOutputDevice& rXOut );
+    ImpGraphicFill( const SdrObject& rObj, const ExtOutputDevice& rXOut, const SfxItemSet& rFillItemSet, bool bIsShadow=false );
     ~ImpGraphicFill();
 
 private:

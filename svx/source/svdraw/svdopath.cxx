@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdopath.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: aw $ $Date: 2002-10-22 13:41:25 $
+ *  last change: $Author: thb $ $Date: 2002-10-31 12:52:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -331,12 +331,20 @@ FASTBOOL SdrPathObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
     aEmptySet.Put(XLineStyleItem(XLINE_NONE));
     aEmptySet.Put(XFillStyleItem(XFILL_NONE));
 
+    // #103692# prepare ItemSet for shadow fill attributes
+    SfxItemSet aShadowSet(rSet);
+
     // prepare line geometry
     ::std::auto_ptr< SdrLineGeometry > pLineGeometry( ImpPrepareLineGeometry(rXOut, rSet, bIsLineDraft) );
 
     // Shadows
-    if (!bHideContour && ImpSetShadowAttributes(rXOut,!IsClosed() || bIsFillDraft))
+    if (!bHideContour && ImpSetShadowAttributes(rSet, aShadowSet))
     {
+        if( !IsClosed() || bIsFillDraft )
+            rXOut.SetFillAttr(aEmptySet);
+        else
+            rXOut.SetFillAttr(aShadowSet);
+
         UINT32 nXDist=((SdrShadowXDistItem&)(rSet.Get(SDRATTR_SHADOWXDIST))).GetValue();
         UINT32 nYDist=((SdrShadowYDistItem&)(rSet.Get(SDRATTR_SHADOWYDIST))).GetValue();
         XPolyPolygon aTmpXPoly(aPathPolygon);
@@ -352,7 +360,7 @@ FASTBOOL SdrPathObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
             }
         } else {
             // #100127# Output original geometry for metafiles
-            ImpGraphicFill aFill( *this, rXOut );
+            ImpGraphicFill aFill( *this, rXOut, aShadowSet, true );
 
             rXOut.DrawXPolyPolygon(aTmpXPoly);
         }
@@ -369,25 +377,14 @@ FASTBOOL SdrPathObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
     // avoid line drawing in XOut
     rXOut.SetLineAttr(aEmptySet);
 
-    if(bIsFillDraft)
-    {
-        // perepare ItemSet to avoid XOut filling
-        rXOut.SetFillAttr(aEmptySet);
-    }
-    else
-    {
-        if(IsClosed() || bHideContour)
-        {
-            rXOut.SetFillAttr(rSet);
-        }
-    }
+    rXOut.SetFillAttr( bIsFillDraft || !IsClosed() ? aEmptySet : rSet );
 
     if( !bHideContour )
     {
         if( IsClosed() )
         {
             // #100127# Output original geometry for metafiles
-            ImpGraphicFill aFill( *this, rXOut );
+            ImpGraphicFill aFill( *this, rXOut, bIsFillDraft || !IsClosed() ? aEmptySet : rSet );
 
             rXOut.DrawXPolyPolygon(aPathPolygon);
         }
