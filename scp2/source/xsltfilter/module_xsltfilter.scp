@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module_xsltfilter.scp,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-05 08:59:37 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 12:25:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,6 @@ Module gid_Module_Optional_Xsltfiltersamples
     gid_File_Xsl_Export_Xhtml_Body,
     gid_File_Xsl_Export_Xhtml_Header,
     gid_File_Xsl_Export_Xhtml_Master_Chapter_Numbering,
-    gid_File_Xsl_Export_Xhtml_Master_Child_Linking,
     gid_File_Xsl_Export_Xhtml_Master_Document,
     gid_File_Xsl_Export_Xhtml_Master_Refs_Workaround,
     gid_File_Xsl_Export_Xhtml_Master_Usability_Links,
