@@ -3,9 +3,9 @@
  *
  *  $RCSfile: UI.xcu,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tl $ $Date: 2002-07-16 12:12:13 $
+ *  last change: $Author: os $ $Date: 2002-07-31 12:23:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1017,6 +1017,11 @@
           <prop oor:name="IsVisible">
             <value>true</value>
           </prop>
+          <prop oor:name="Color">
+            <value xsi:nil="true"/>
+          </prop>
+        </node>
+        <node oor:name="WriterPageBreaks">
           <prop oor:name="Color">
             <value xsi:nil="true"/>
           </prop>
