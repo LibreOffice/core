@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shellexec.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: obr $ $Date: 2001-06-20 13:55:05 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 13:06:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,8 @@
 #ifndef _SHELLEXEC_HXX_
 #define _SHELLEXEC_HXX_
 
-#ifndef _CPPUHELPER_COMPBASE3_HXX_
-#include <cppuhelper/compbase3.hxx>
+#ifndef _CPPUHELPER_IMPLBASE2_HXX_
+#include <cppuhelper/implbase2.hxx>
 #endif
 
 #ifndef _OSL_MUTEX_HXX_
@@ -74,8 +74,8 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_LANG_XEVENTLISTENER_HPP_
-#include <com/sun/star/lang/XEventListener.hpp>
+#ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
+#include <com/sun/star/uno/XComponentContext.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_SYS_SHELL_XSYSTEMSHELLEXECUTE_HPP_
@@ -86,26 +86,12 @@
 // class declaration
 //----------------------------------------------------------
 
-class ShellExecBase
+class ShellExec : public ::cppu::WeakImplHelper2< com::sun::star::system::XSystemShellExecute, com::sun::star::lang::XServiceInfo >
 {
-protected:
-    osl::Mutex  m_aMutex;
-};
-
-class ShellExec :
-    public ShellExecBase,
-    public  cppu::WeakComponentImplHelper3<
-            com::sun::star::system::XSystemShellExecute,
-            com::sun::star::lang::XEventListener,
-            com::sun::star::lang::XServiceInfo >
-{
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xServiceManager;
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xConfigurationProvider;
-
-    ::osl::Mutex m_aMutex;
+    ::rtl::OString m_aDesktopEnvironment;
 
 public:
-    ShellExec( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager );
+    ShellExec(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext);
 
     //------------------------------------------------
     // XSystemShellExecute
@@ -113,13 +99,6 @@ public:
 
     virtual void SAL_CALL execute( const ::rtl::OUString& aCommand, const ::rtl::OUString& aParameter, sal_Int32 nFlags )
         throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::system::SystemShellExecuteException, ::com::sun::star::uno::RuntimeException);
-
-    //------------------------------------------------
-    // XEventListener
-    //------------------------------------------------
-
-    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& aEvent )
-        throw(::com::sun::star::uno::RuntimeException);
 
     //------------------------------------------------
     // XServiceInfo
