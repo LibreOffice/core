@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleEditObject.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-08 13:20:09 $
+ *  last change: $Author: vg $ $Date: 2002-08-13 09:13:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ enum EditObjectType
 {
     CellInEditMode,
     EditLine,
-    EditControl,
+    EditControl
 };
 
 /** @descr
