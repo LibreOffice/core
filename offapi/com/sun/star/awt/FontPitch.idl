@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FontPitch.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:52:33 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 08:45:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,32 +68,28 @@
 
 //=============================================================================
 
-// DocMerge from idl: constants com::sun::star::awt::FontPitch
 /** These values are used to specify whether the width of a character is
-        fixed or variable.
+    fixed or variable.
 
-        <p>They may be expanded in future versions.
+    <p>They may be expanded in future versions.</p>
  */
 constants FontPitch
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::awt::FontPitch::DONTKNOW
     /** specifies that the pitch for this font is unknown.
      */
     const short DONTKNOW = 0;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::awt::FontPitch::FIXED
-    /** specifies a font with a fixed chacacter width.
+    /** specifies a font with a fixed character width.
      */
     const short FIXED = 1;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::awt::FontPitch::VARIABLE
-    /** specifies a font with a variable chacacter width.
+    /** specifies a font with a variable character width.
      */
     const short VARIABLE = 2;
 
