@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 14:55:03 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:16:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -241,7 +241,7 @@ SdDrawDocument* SdDrawDocument::pDocLockedInsertingLinks = NULL;
 SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh) :
     FmFormModel(
     SvtPathOptions().GetPalettePath(),
-    NULL, (SvPersist*)pDrDocSh ),
+    NULL, pDrDocSh ),
     eDocType(eType),
     pDocSh(static_cast< ::sd::DrawDocShell*>(pDrDocSh)),
     pCreatingTransferable( NULL ),
@@ -275,7 +275,6 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh) :
     bAllocDocSh(FALSE),
     pDeletedPresObjList(NULL),
     nFileFormatVersion(SDIOCOMPAT_VERSIONDONTKNOW),
-    pDocStor(NULL),
     pCustomShowList(NULL),
     eLanguage( LANGUAGE_SYSTEM ),
     eLanguageCJK( LANGUAGE_SYSTEM ),
@@ -611,7 +610,7 @@ SdrModel* SdDrawDocument::AllocModel() const
     if( pCreatingTransferable )
     {
         // Dokument wird fuer Drag&Drop/Clipboard erzeugt, dafuer muss dem Dokument eine DocShell (SvPersist) bekannt sein
-        SvEmbeddedObject*   pObj = NULL;
+        SfxObjectShell*   pObj = NULL;
         ::sd::DrawDocShell*     pNewDocSh = NULL;
 
         if( eDocType == DOCUMENT_TYPE_IMPRESS )
