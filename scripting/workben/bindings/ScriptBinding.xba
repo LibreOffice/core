@@ -79,6 +79,10 @@ Sub ExecuteMenuBinding()
 	PopulateMenuCombo()
 	PopulateSubMenuList( 1 )
 	MenuLabelBoxListener()
+	subMenuList = bindingDialog.getControl(&quot;SubMenuList&quot;)
+	
+	subMenuList.selectItemPos( 0, true )
+
 	bindingDialog.execute()	
 end Sub
 
@@ -124,7 +128,7 @@ function GetDocumentType( bindingType as string ) as string
 				end if
 			end if
 		else
-			msgbox &quot;Couldn&apos;t determine file type&quot;
+			MsgBox (&quot;Error: Couldn&apos;t determine configuration file type&quot; + chr$(10) + chr$(10) + &quot;Action: Please reinstall Scripting Framework&quot;,0,&quot;Error&quot; )
 		end if
 	end if
 end function
@@ -155,7 +159,7 @@ function GetOfficePath() as string
 				officePath = startPath + &quot;/&quot; + endPath
 			wend
 		else
-			msgbox &quot;Office path not found&quot;
+			MsgBox (&quot;Error: Office path not found&quot; + chr$(10) + chr$(10) + &quot;Action: Please reinstall Scripting Framework&quot;,0,&quot;Error&quot; )
 			REM Prompt user
 		end if
 	end if
@@ -300,12 +304,10 @@ sub AddNewMenuBinding( newScript as string, newMenuLabel as string, newLinePosit
 			REM If the line number is the position at which to insert the new line
 			if lineCounter = newLinePosition then
 				if( instr( xmlFile( lineCounter ), &quot;&lt;menu:menupopup&gt;&quot; ) &gt; 0 ) then
-					msgbox(&quot;It is &lt;menu:menupopup&gt;&quot;)
 					indent = GetMenuWhiteSpace( xmlFile( newLinePosition + 1 ) )
 					newXmlFile( lineCounter ) = xmlFile( lineCounter )
 					newXmlFile( lineCounter + 1 ) = ( indent + &quot;&lt;menu:menuitem menu:id=&quot;+chr$(34)+&quot;script://&quot; + newScript + chr$(34)+&quot; menu:helpid=&quot;+chr$(34)+&quot;1929&quot;+chr$(34)+&quot; menu:label=&quot;+chr$(34)+ newMenuLabel + chr$(34)+&quot;/&gt;&quot; )
 				else
-					msgbox(&quot;It is NOT &lt;menu:menupopup&gt;&quot;)
 					indent = GetMenuWhiteSpace( xmlFile( newLinePosition - 1 ) )
 					newXmlFile( lineCounter ) = ( indent + &quot;&lt;menu:menuitem menu:id=&quot;+chr$(34)+&quot;script://&quot; + newScript + chr$(34)+&quot; menu:helpid=&quot;+chr$(34)+&quot;1929&quot;+chr$(34)+&quot; menu:label=&quot;+chr$(34)+ newMenuLabel + chr$(34)+&quot;/&gt;&quot; )
 					newXmlFile( lineCounter + 1 ) = xmlFile( lineCounter )									
@@ -715,7 +717,6 @@ function IsAllocatedKeyCombo( script as string ) as integer
 		end if
 		count = count + 1
 	wend
-	msgbox( &quot; IsAllocatedKeyCombo() script: &quot; + script + &quot; Allocation: &quot; + Allocation )
 	IsAllocatedKeyCombo() = Allocation
 end Function
 
@@ -841,7 +842,7 @@ sub KeyComboListener()
 	case &quot;SHIFT + F keys&quot;
 		PopulateKeyBindingList( 95, 105 )
 	case else
-		msgbox &quot;Error&quot;
+		MsgBox (&quot;Error: Unknown Key Combination&quot; + chr$(10) + chr$(10) + &quot;Action: Please reinstall Scripting Framework&quot;,0,&quot;Error&quot; )
 	end select
 end sub
 
@@ -860,7 +861,7 @@ REM ------ Event Handling Functions (Buttons) ------
 
 
 sub MenuOKButton()
-	msgbox (&quot;Office must be restarted before your changes will take effect.&quot;+ chr$(10)+&quot;Also close the Office QuickStarter (Windows and some Linux)&quot;, 48, &quot;Assign Script (Java) To Menu&quot; )
+	msgbox (&quot;Office must be restarted before your changes will take effect.&quot;+ chr$(10)+&quot;Also close the Office QuickStarter (Windows and Linux)&quot;, 48, &quot;Assign Script (Java) To Menu&quot; )
 	WriteXMLFromArray()
 	bindingDialog.endExecute()
 end sub
@@ -893,6 +894,8 @@ sub MenuDeleteButton()
 	UpdateTopLevelMenus( counter + 1, false )	
 	
 	MenuComboListener()
+	
+	subMenuList.selectItemPos( subMenuList.getSelectedItemPos(), true )
 end sub
 
 
@@ -919,11 +922,13 @@ sub MenuNewButton()
 	AddNewMenuBinding( script, newMenuLabel, linePos )
 
 	MenuComboListener()
+	
+	subMenuList.selectItemPos( subMenuList.getSelectedItemPos() + 1, true )
 end sub
 
 
 sub KeyOKButton()	
-	msgbox (&quot;Office must be restarted before your changes will take effect.&quot;+ chr$(10)+&quot;Also close the Office QuickStarter (Windows and some Linux)&quot;, 48, &quot;Assign Script (Java) To Key&quot; )
+	msgbox (&quot;Office must be restarted before your changes will take effect.&quot;+ chr$(10)+&quot;Also close the Office QuickStarter (Windows and Linux)&quot;, 48, &quot;Assign Script (Java) To Key&quot; )
 	WriteXMLFromArray()
 	bindingDialog.endExecute()
 end sub
