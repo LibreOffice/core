@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbexchange.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-28 15:41:34 $
+ *  last change: $Author: fs $ $Date: 2001-03-28 15:47:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,12 +170,14 @@ namespace dbaui
         {
             m_pHtml = new OHTMLImportExport(m_aSeq, _rxORB, _rxFormatter);
             m_xHtml = m_pHtml;
+            m_pHtml->initialize();
         }
 
         if (m_nFormats && DCF_RTF_TABLE)
         {
             m_pRtf = new ORTFImportExport(m_aSeq, _rxORB, _rxFormatter);
             m_xRtf = m_pRtf;
+            m_pRtf->initialize();
         }
     }
 
