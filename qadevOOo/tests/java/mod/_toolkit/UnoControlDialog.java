@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoControlDialog.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change:$Date: 2003-11-18 16:32:03 $
+ *  last change:$Date: 2004-01-05 20:48:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,14 +60,6 @@
  ************************************************************************/
 package mod._toolkit;
 
-import java.io.PrintWriter;
-
-import lib.StatusException;
-import lib.TestCase;
-import lib.TestEnvironment;
-import lib.TestParameters;
-import util.SOfficeFactory;
-
 import com.sun.star.awt.PosSize;
 import com.sun.star.awt.XControl;
 import com.sun.star.awt.XControlContainer;
@@ -83,6 +75,15 @@ import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.util.XCloseable;
+
+import java.io.PrintWriter;
+
+import lib.StatusException;
+import lib.TestCase;
+import lib.TestEnvironment;
+import lib.TestParameters;
+
+import util.SOfficeFactory;
 
 
 /**
@@ -128,7 +129,7 @@ public class UnoControlDialog extends TestCase {
     public synchronized TestEnvironment createTestEnvironment(TestParameters Param,
                                                               PrintWriter log) {
         XInterface oObj = null;
-        XMultiServiceFactory xMSF =  (XMultiServiceFactory) Param.getMSF();
+        XMultiServiceFactory xMSF = (XMultiServiceFactory) Param.getMSF();
         XControlModel dlgModel = null;
 
         XWindowPeer the_win = null;
@@ -174,15 +175,16 @@ public class UnoControlDialog extends TestCase {
 
 
             // creating additional controls for XUnoControlContainer
+            tabControl1 = (XTabController) UnoRuntime.queryInterface(
+                                  XTabController.class,
+                                  xMSF.createInstance(
+                                          "com.sun.star.awt.TabController"));
 
-            tabControl1 = (XTabController) UnoRuntime.queryInterface(XTabController.class,
-                                                               xMSF.createInstance(
-                                                                       "com.sun.star.awt.TabController"));
+            tabControl2 = (XTabController) UnoRuntime.queryInterface(
+                                  XTabController.class,
+                                  xMSF.createInstance(
+                                          "com.sun.star.awt.TabController"));
 
-
-            tabControl2 = (XTabController) UnoRuntime.queryInterface(XTabController.class,
-                                                               xMSF.createInstance(
-                                                                       "com.sun.star.awt.TabController"));
 
             // creating additional controls for XControlContainer
             butModel = (XControlModel) UnoRuntime.queryInterface(
@@ -246,6 +248,7 @@ public class UnoControlDialog extends TestCase {
         tEnv.addObjRelation("INSTANCE", butControl);
         tEnv.addObjRelation("XContainer.Container", ctrlCont);
 
+
         // adding relations for XUnoControlContainer
         tEnv.addObjRelation("TABCONTROL1", tabControl1);
         tEnv.addObjRelation("TABCONTROL2", tabControl2);
@@ -267,19 +270,12 @@ public class UnoControlDialog extends TestCase {
         xWinDlg.dispose();
         log.println("    disposing xTextDoc ");
 
-        try {
-            XCloseable closer = (XCloseable) UnoRuntime.queryInterface(
-                                        XCloseable.class, xTextDoc);
-            closer.close(true);
-        } catch (com.sun.star.util.CloseVetoException e) {
-            log.println("couldn't close document");
-        } catch (com.sun.star.lang.DisposedException e) {
-            log.println("couldn't close document");
-        }
+        util.DesktopTools.closeDoc(xTextDoc);
     }
 
     protected void initialize(TestParameters tParam, PrintWriter log) {
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory) tParam.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory(
+                                     (XMultiServiceFactory) tParam.getMSF());
 
         try {
             log.println("creating a textdocument");
