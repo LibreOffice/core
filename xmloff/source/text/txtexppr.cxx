@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtexppr.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 13:06:08 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 11:36:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -915,11 +915,14 @@ void XMLTextExportPropertySetMapper::ContextFilter(
         switch( eVal )
         {
         case WrapTextMode_NONE:
-        case WrapTextMode_THROUGHT:
-            if( pWrapContourState )
-                pWrapContourState->mnIndex = -1;
+            // no wrapping: disable para-only and contour
             if( pWrapParagraphOnlyState )
                 pWrapParagraphOnlyState->mnIndex = -1;
+            // no break
+        case WrapTextMode_THROUGHT:
+            // wrap through: disable only contour
+            if( pWrapContourState )
+                pWrapContourState->mnIndex = -1;
             break;
         }
         if( pWrapContourModeState  &&
