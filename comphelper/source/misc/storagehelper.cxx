@@ -2,9 +2,9 @@
  *
  *  $RCSfile: storagehelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 16:36:49 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 22:20:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,7 @@
 #include <comphelper/fileformat.h>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/documentconstants.hxx>
 
 using namespace ::com::sun::star;
 
@@ -249,25 +250,31 @@ sal_Int32 OStorageHelper::GetXStorageFormat(
     sal_Int32 nResult = 0;
 
     // TODO/LATER: the filter configuration could be used to detect it later, or batter a special service
-    if ( aMediaType.equalsIgnoreAsciiCase( ::rtl::OUString::createFromAscii( "application/vnd.sun.xml.writer" ) )
-      || aMediaType.equalsIgnoreAsciiCase( ::rtl::OUString::createFromAscii( "application/vnd.sun.xml.writer.web" ) )
-      || aMediaType.equalsIgnoreAsciiCase( ::rtl::OUString::createFromAscii( "application/vnd.sun.xml.writer.global" ) )
-      || aMediaType.equalsIgnoreAsciiCase( ::rtl::OUString::createFromAscii( "application/vnd.sun.xml.draw" ) )
-      || aMediaType.equalsIgnoreAsciiCase( ::rtl::OUString::createFromAscii( "application/vnd.sun.xml.impress" ) )
-      || aMediaType.equalsIgnoreAsciiCase( ::rtl::OUString::createFromAscii( "application/vnd.sun.xml.calc" ) )
-      || aMediaType.equalsIgnoreAsciiCase( ::rtl::OUString::createFromAscii( "application/vnd.sun.xml.chart" ) )
-      || aMediaType.equalsIgnoreAsciiCase( ::rtl::OUString::createFromAscii( "application/vnd.sun.xml.math" ) ) )
+    if (
+        aMediaType.equalsIgnoreAsciiCaseAscii(MIMETYPE_VND_SUN_XML_WRITER_ASCII       ) ||
+        aMediaType.equalsIgnoreAsciiCaseAscii(MIMETYPE_VND_SUN_XML_WRITER_WEB_ASCII   ) ||
+        aMediaType.equalsIgnoreAsciiCaseAscii(MIMETYPE_VND_SUN_XML_WRITER_GLOBAL_ASCII) ||
+        aMediaType.equalsIgnoreAsciiCaseAscii(MIMETYPE_VND_SUN_XML_DRAW_ASCII         ) ||
+        aMediaType.equalsIgnoreAsciiCaseAscii(MIMETYPE_VND_SUN_XML_IMPRESS_ASCII      ) ||
+        aMediaType.equalsIgnoreAsciiCaseAscii(MIMETYPE_VND_SUN_XML_CALC_ASCII         ) ||
+        aMediaType.equalsIgnoreAsciiCaseAscii(MIMETYPE_VND_SUN_XML_CHART_ASCII        ) ||
+        aMediaType.equalsIgnoreAsciiCaseAscii(MIMETYPE_VND_SUN_XML_MATH_ASCII         )
+       )
     {
         nResult = SOFFICE_FILEFORMAT_60;
     }
-    else if ( aMediaType.equalsIgnoreAsciiCase( ::rtl::OUString::createFromAscii( "application/x-vnd.oasis.openoffice.text" ) )
-      || aMediaType.equalsIgnoreAsciiCase( ::rtl::OUString::createFromAscii( "application/x-vnd.oasis.openoffice.text-web" ) )
-      || aMediaType.equalsIgnoreAsciiCase( ::rtl::OUString::createFromAscii( "application/x-vnd.oasis.openoffice.text-global" ) )
-      || aMediaType.equalsIgnoreAsciiCase( ::rtl::OUString::createFromAscii( "application/x-vnd.oasis.openoffice.drawing" ) )
-      || aMediaType.equalsIgnoreAsciiCase( ::rtl::OUString::createFromAscii( "application/x-vnd.oasis.openoffice.presentation" ) )
-      || aMediaType.equalsIgnoreAsciiCase( ::rtl::OUString::createFromAscii( "application/x-vnd.oasis.openoffice.spreadsheet" ) )
-      || aMediaType.equalsIgnoreAsciiCase( ::rtl::OUString::createFromAscii( "application/x-vnd.oasis.openoffice.chart" ) )
-      || aMediaType.equalsIgnoreAsciiCase( ::rtl::OUString::createFromAscii( "application/x-vnd.oasis.openoffice.formula" ) ) )
+    else
+    if (
+        aMediaType.equalsIgnoreAsciiCaseAscii(MIMETYPE_OASIS_OPENDOCUMENT_TEXT_ASCII        ) ||
+        aMediaType.equalsIgnoreAsciiCaseAscii(MIMETYPE_OASIS_OPENDOCUMENT_TEXT_WEB_ASCII    ) ||
+        aMediaType.equalsIgnoreAsciiCaseAscii(MIMETYPE_OASIS_OPENDOCUMENT_TEXT_GLOBAL_ASCII ) ||
+        aMediaType.equalsIgnoreAsciiCaseAscii(MIMETYPE_OASIS_OPENDOCUMENT_DRAWING_ASCII     ) ||
+        aMediaType.equalsIgnoreAsciiCaseAscii(MIMETYPE_OASIS_OPENDOCUMENT_PRESENTATION_ASCII) ||
+        aMediaType.equalsIgnoreAsciiCaseAscii(MIMETYPE_OASIS_OPENDOCUMENT_SPREADSHEET_ASCII ) ||
+        aMediaType.equalsIgnoreAsciiCaseAscii(MIMETYPE_OASIS_OPENDOCUMENT_CHART_ASCII       ) ||
+        aMediaType.equalsIgnoreAsciiCaseAscii(MIMETYPE_OASIS_OPENDOCUMENT_FORMULA_ASCII     ) ||
+        aMediaType.equalsIgnoreAsciiCaseAscii(MIMETYPE_OASIS_OPENDOCUMENT_DATABASE_ASCII    )
+       )
     {
         nResult = SOFFICE_FILEFORMAT_8;
     }
