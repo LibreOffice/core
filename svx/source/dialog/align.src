@@ -2,9 +2,9 @@
  *
  *  $RCSfile: align.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 19:36:49 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 05:34:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text [ italian ] = "~Standard" ;
         Text [ portuguese_brazilian ] = "~Padrão" ;
         Text [ portuguese ] = "~Padrão" ;
-        Text [ finnish ] = "~Normaali" ;
+        Text [ finnish ] = "~Oletusarvo" ;
         Text [ danish ] = "Standar~d" ;
         Text [ french ] = "Standard" ;
         Text [ swedish ] = "~Standard" ;
@@ -130,7 +130,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text [ italian ] = "A sinistra" ;
         Text [ portuguese_brazilian ] = "Alinhar ~õ Esquerda" ;
         Text [ portuguese ] = "~Esquerda" ;
-        Text [ finnish ] = "~Vasen tasaus" ;
+        Text [ finnish ] = "~Vasen" ;
         Text [ danish ] = "Venstre" ;
         Text [ french ] = "À gauch~e" ;
         Text [ swedish ] = "V~änster" ;
@@ -161,7 +161,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text [ italian ] = "Al ~centro" ;
         Text [ portuguese_brazilian ] = "~Centralizado" ;
         Text [ portuguese ] = "~Centrado" ;
-        Text [ finnish ] = "~Keski" ;
+        Text [ finnish ] = "Keskitä" ;
         Text [ danish ] = "Centreret" ;
         Text [ french ] = "Centré" ;
         Text [ swedish ] = "~Centrera" ;
@@ -192,7 +192,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text [ italian ] = "A destra" ;
         Text [ portuguese_brazilian ] = "Alinhar ~õ Direita" ;
         Text [ portuguese ] = "~Direita" ;
-        Text [ finnish ] = "~Oikea tasaus" ;
+        Text [ finnish ] = "~Oikea" ;
         Text [ danish ] = "Højre" ;
         Text [ french ] = "À dr~oite" ;
         Text [ swedish ] = "Hö~ger" ;
@@ -223,7 +223,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text [ italian ] = "Giustifica" ;
         Text [ portuguese_brazilian ] = "Blo~co" ;
         Text [ portuguese ] = "~Justificado" ;
-        Text [ finnish ] = "Lo~hko" ;
+        Text [ finnish ] = "~Tasaa" ;
         Text [ danish ] = "Lige margener" ;
         Text [ french ] = "~Justifié" ;
         Text [ swedish ] = "Marginal~justering" ;
@@ -272,6 +272,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ turkish ] = "Girinti";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Sangría";
+        Text[ finnish ] = "Indent";
     };
     MetricField ED_INDENT
     {
@@ -295,7 +296,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text [ italian ] = "Orizzontale" ;
         Text [ portuguese_brazilian ] = "Horizontal" ;
         Text [ portuguese ] = "Horizontal" ;
-        Text [ finnish ] = "Vaakasuora" ;
+        Text [ finnish ] = "Vaakataso" ;
         Text [ danish ] = "Vandret" ;
         Text [ french ] = "Horizontal" ;
         Text [ swedish ] = "Horisontellt" ;
@@ -326,13 +327,13 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text [ italian ] = "St~andard" ;
         Text [ portuguese_brazilian ] = "~Padrão" ;
         Text [ portuguese ] = "~Padrão" ;
-        Text [ finnish ] = "~Normaali" ;
+        Text [ finnish ] = "~Vakio" ;
         Text [ danish ] = "Standard" ;
         Text [ french ] = "~Standard" ;
         Text [ swedish ] = "S~tandard" ;
         Text [ dutch ] = "~Standaard" ;
         Text [ spanish ] = "~Predeterm." ;
-        Text [ english_us ] = "~Standard" ;
+        Text [ english_us ] = "Defa~ult" ;
         Text[ chinese_simplified ] = "±ê×¼(~S)";
         Text[ russian ] = "Ñòàíäàðò";
         Text[ polish ] = "Domyœlnie";
@@ -357,13 +358,13 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text [ italian ] = "In ~alto" ;
         Text [ portuguese_brazilian ] = "~Topo" ;
         Text [ portuguese ] = "Em ~cima" ;
-        Text [ finnish ] = "~Ylös" ;
+        Text [ finnish ] = "~Yläosa" ;
         Text [ danish ] = "Øverst" ;
         Text [ french ] = "En ha~ut" ;
         Text [ swedish ] = "~Överst" ;
         Text [ dutch ] = "~Boven" ;
         Text [ spanish ] = "A~rriba" ;
-        Text [ english_us ] = "~Top" ;
+        Text [ english_us ] = "T~op" ;
         Text[ chinese_simplified ] = "ÉÏ(~T)";
         Text[ russian ] = "Ñâåðõó";
         Text[ polish ] = "Na ~górze";
@@ -388,7 +389,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text [ italian ] = "In ~basso" ;
         Text [ portuguese_brazilian ] = "~Base" ;
         Text [ portuguese ] = "Em ~baixo" ;
-        Text [ finnish ] = "~Alas" ;
+        Text [ finnish ] = "~Alaosa" ;
         Text [ danish ] = "Nederst" ;
         Text [ french ] = "En ~bas" ;
         Text [ swedish ] = "~Underst" ;
@@ -419,13 +420,13 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text [ italian ] = "Al centro" ;
         Text [ portuguese_brazilian ] = "~Meio" ;
         Text [ portuguese ] = "~Centro" ;
-        Text [ finnish ] = "K~eski" ;
+        Text [ finnish ] = "~Keskitä" ;
         Text [ danish ] = "Centreret" ;
         Text [ french ] = "~Milieu" ;
         Text [ swedish ] = "~Mitten" ;
         Text [ dutch ] = "~Midden" ;
         Text [ spanish ] = "Ce~ntro" ;
-        Text [ english_us ] = "C~enter" ;
+        Text [ english_us ] = "Middl~e" ;
         Text[ chinese_simplified ] = "ÖÐ(~E)";
         Text[ russian ] = "Â öåíòðå";
         Text[ polish ] = "Do œrodka";
@@ -517,6 +518,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ turkish ] = "De~rece";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Grados";
+        Text[ finnish ] = "Degrees";
     };
     NumericField NF_ORIENT
     {
@@ -556,6 +558,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ turkish ] = "Referans ~kenarý";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Aristas de referencia";
+        Text[ finnish ] = "~Viitteen reuna";
     };
     Control CTR_BORDER_LOCK
     {
@@ -575,7 +578,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text [ italian ] = "Orientamento" ;
         Text [ portuguese_brazilian ] = "Orientação" ;
         Text [ portuguese ] = "Orientação" ;
-        Text [ finnish ] = "Suunta" ;
+        Text [ finnish ] = "Tekstin suunta" ;
         Text [ danish ] = "Skriveretning" ;
         Text [ french ] = "Sens d'écriture" ;
         Text [ swedish ] = "Skrivriktning" ;
@@ -606,13 +609,13 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text [ italian ] = "A sinistra" ;
         Text [ portuguese_brazilian ] = "E~squerda" ;
         Text [ portuguese ] = "E~squerda" ;
-        Text [ finnish ] = "Va~sen" ;
+        Text [ finnish ] = "Vasen" ;
         Text [ danish ] = "Venstre" ;
         Text [ french ] = "~À gauche" ;
         Text [ swedish ] = "Vänster" ;
         Text [ dutch ] = "~Links" ;
         Text [ spanish ] = "I~zquierda" ;
-        Text [ english_us ] = "Left" ;
+        Text [ english_us ] = "Lef~t" ;
         Text[ chinese_simplified ] = "Ïò×ó(~E)";
         Text[ russian ] = "Ñëåâà";
         Text[ polish ] = "Z lewej";
@@ -651,7 +654,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text [ italian ] = "A destra" ;
         Text [ portuguese_brazilian ] = "Dir~eita" ;
         Text [ portuguese ] = "Dir~eita" ;
-        Text [ finnish ] = "Oi~kea" ;
+        Text [ finnish ] = "Oikea" ;
         Text [ danish ] = "Højre" ;
         Text [ french ] = "À droite" ;
         Text [ swedish ] = "~Höger" ;
@@ -696,7 +699,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text [ italian ] = "In alto" ;
         Text [ portuguese_brazilian ] = "To~po" ;
         Text [ portuguese ] = "Em ~cima" ;
-        Text [ finnish ] = "Yl~ä" ;
+        Text [ finnish ] = "~Yläosa" ;
         Text [ danish ] = "Øverst" ;
         Text [ french ] = "~En haut" ;
         Text [ swedish ] = "Ö~verst" ;
@@ -741,7 +744,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text [ italian ] = "In basso" ;
         Text [ portuguese_brazilian ] = "Bas~e" ;
         Text [ portuguese ] = "Em ~baixo" ;
-        Text [ finnish ] = "A~la" ;
+        Text [ finnish ] = "~Alaosa" ;
         Text [ danish ] = "Nederst" ;
         Text [ french ] = "En ~bas" ;
         Text [ swedish ] = "Un~derst" ;
@@ -786,7 +789,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text [ italian ] = "Distanza dalle linee della griglia" ;
         Text [ portuguese_brazilian ] = "Margens" ;
         Text [ portuguese ] = "Margens da quadrícula" ;
-        Text [ finnish ] = "Reunukset" ;
+        Text [ finnish ] = "Välit ruudukon viivoihin" ;
         Text [ danish ] = "Afstand til gitterlinjer" ;
         Text [ french ] = "Écart des lignes de la grille" ;
         Text [ swedish ] = "Avstånd till gitterlinjer" ;
@@ -817,7 +820,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text [ italian ] = "Testo a capo" ;
         Text [ portuguese_brazilian ] = "Interrupç~ao de linha" ;
         Text [ portuguese ] = "Quebra de ~linha" ;
-        Text [ finnish ] = "R~ivinvaihto" ;
+        Text [ finnish ] = "Rivinvaihto" ;
         Text [ danish ] = "Linjeskift" ;
         Text [ french ] = "R~envoi à la ligne" ;
         Text [ swedish ] = "Rad~brytning" ;
@@ -867,6 +870,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ turkish ] = "Metin akýþý";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Flujo del texto";
+        Text[ finnish ] = "Tekstin rivitys";
     };
     ImageList IL_LOCK_BMPS
     {
@@ -906,6 +910,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ korean ] = "¼¿ ¾Æ·¡ Å×µÎ¸®¿¡¼­ ºÎÅÍ ÅØ½ºÆ® È®Àå";
         Text[ turkish ] = "Hücre alt kenarýndan metin geniþlemesi";
         Text[ catalan ] = "Expansión del texto a partir del borde inferior de la celda.";
+        Text[ finnish ] = "Tekstin laajennus solun alareunasta";
     };
     String STR_TOPLOCK
     {
@@ -933,6 +938,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ korean ] = "¼¿ À­Å×µÎ¸®¿¡¼­ ºÎÅÍ ÅØ½ºÆ® È®Àå";
         Text[ turkish ] = "Hücre üst kenarýndan metin geniþlemesi.";
         Text[ catalan ] = "Expansión del texto a partir del borde superior de la celda.";
+        Text[ finnish ] = "Tekstin laajennus solun yläreunasta";
     };
     String STR_CELLLOCK
     {
@@ -960,6 +966,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ korean ] = "¼¿ ¾È¿¡¼­¸¸ ÅØ½ºÆ® È®Àå";
         Text[ turkish ] = "Yalnýzca hücre içinde metin geniþlemesi";
         Text[ catalan ] = "Expansión del texto solo dentro de la celda.";
+        Text[ finnish ] = "Tekstin laajennus solun sisällä";
     };
     Text[ chinese_simplified ] = "¶ÔÆë";
     Text[ russian ] = "Âûðàâíèâàíèå";
