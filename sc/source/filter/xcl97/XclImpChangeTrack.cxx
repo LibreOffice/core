@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XclImpChangeTrack.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-16 08:21:06 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 13:44:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -235,14 +235,17 @@ sal_Bool XclImpChangeTrack::Read3DTabRefInfo( sal_uInt16& rFirstTab, sal_uInt16&
     else
     {
         // external ref - read doc and tab name and find sc tab num
-        String aUrl, aTabName;
+        // - URL
+        String aEncUrl( pStrm->ReadUniString() );
+        String aUrl;
         bool bSelf;
-        XclImpSupbook::ReadUrl( *pStrm, aUrl, bSelf );
+        XclImpUrlHelper::DecodeUrl( aUrl, bSelf, *pExcRoot->pIR, aEncUrl );
         pStrm->Ignore( 1 );
-        XclImpSupbook::ReadTabName( *pStrm, aTabName );
+        // - sheet name, always separated from URL
+        String aTabName( pStrm->ReadUniString() );
+        ScfTools::ConvertToScSheetName( aTabName );
         pStrm->Ignore( 1 );
-        const XclImpSupbook* pSupbook = pExcRoot->pIR->GetLinkManager().GetSupbook( aUrl );
-        rFirstTab = rLastTab = pSupbook ? pSupbook->GetScTabNum( aTabName ) : EXC_TAB_INVALID;
+        rFirstTab = rLastTab = pExcRoot->pIR->GetLinkManager().GetScTab( aUrl, aTabName );
     }
     return sal_True;
 }
