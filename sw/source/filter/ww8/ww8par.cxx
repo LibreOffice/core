@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.151 $
+ *  $Revision: 1.152 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-22 10:03:56 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:55:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,6 +133,11 @@
 #ifndef _SVX_LANGITEM_HXX //autogen
 #include <svx/langitem.hxx>
 #endif
+// --> OD 2005-02-28 #i43427#
+#ifndef _SVX_OPAQITEM_HXX
+#include <svx/opaqitem.hxx>
+#endif
+// <--
 #ifndef _SVXMSBAS_HXX
 #include <svx/svxmsbas.hxx>
 #endif
@@ -693,47 +698,51 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
                 MSO_Anchor eTextAnchor =
                     (MSO_Anchor)GetPropertyValue( DFF_Prop_anchorText );
 
-                SdrTextVertAdjust eTVA = SDRTEXTVERTADJUST_CENTER;
-                BOOL bTVASet(FALSE);
-                SdrTextHorzAdjust eTHA = SDRTEXTHORZADJUST_CENTER;
-                BOOL bTHASet(FALSE);
+                // --> OD 2005-02-17 #i42783#, #b6227886#
+                // consider vertical text and use correct defaults
+                SdrTextVertAdjust eTVA = bVerticalText
+                                         ? SDRTEXTVERTADJUST_BLOCK
+                                         : SDRTEXTVERTADJUST_CENTER;
+                SdrTextHorzAdjust eTHA = bVerticalText
+                                         ? SDRTEXTHORZADJUST_CENTER
+                                         : SDRTEXTHORZADJUST_BLOCK;
 
                 switch( eTextAnchor )
                 {
                     case mso_anchorTop:
                     {
-                        eTVA = SDRTEXTVERTADJUST_TOP;
-                        bTVASet = TRUE;
+                        if ( bVerticalText )
+                            eTHA = SDRTEXTHORZADJUST_RIGHT;
+                        else
+                            eTVA = SDRTEXTVERTADJUST_TOP;
                     }
                     break;
                     case mso_anchorTopCentered:
                     {
-                        eTVA = SDRTEXTVERTADJUST_TOP;
-                        bTVASet = TRUE;
-                        bTHASet = TRUE;
+                        if ( bVerticalText )
+                            eTHA = SDRTEXTHORZADJUST_RIGHT;
+                        else
+                            eTVA = SDRTEXTVERTADJUST_TOP;
                     }
                     break;
-
                     case mso_anchorMiddle:
-                        bTVASet = TRUE;
                     break;
                     case mso_anchorMiddleCentered:
-                    {
-                        bTVASet = TRUE;
-                        bTHASet = TRUE;
-                    }
                     break;
                     case mso_anchorBottom:
                     {
-                        eTVA = SDRTEXTVERTADJUST_BOTTOM;
-                        bTVASet = TRUE;
+                        if ( bVerticalText )
+                            eTHA = SDRTEXTHORZADJUST_LEFT;
+                        else
+                            eTVA = SDRTEXTVERTADJUST_BOTTOM;
                     }
                     break;
                     case mso_anchorBottomCentered:
                     {
-                        eTVA = SDRTEXTVERTADJUST_BOTTOM;
-                        bTVASet = TRUE;
-                        bTHASet = TRUE;
+                        if ( bVerticalText )
+                            eTHA = SDRTEXTHORZADJUST_LEFT;
+                        else
+                            eTVA = SDRTEXTVERTADJUST_BOTTOM;
                     }
                     break;
     /*
@@ -744,12 +753,26 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
                     break;
     */
                 }
+                // <--
                 // Einsetzen
-                if ( bTVASet )
-                    aSet.Put( SdrTextVertAdjustItem( eTVA ) );
-                if ( bTHASet )
-                    aSet.Put( SdrTextHorzAdjustItem( eTHA ) );
+                aSet.Put( SdrTextVertAdjustItem( eTVA ) );
+                aSet.Put( SdrTextHorzAdjustItem( eTHA ) );
             }
+            // --> OD 2005-02-17 #i42783#, #b6227886# - apply own default values
+            else
+            {
+                if ( bVerticalText )
+                {
+                    aSet.Put( SdrTextVertAdjustItem( SDRTEXTVERTADJUST_BLOCK ) );
+                    aSet.Put( SdrTextHorzAdjustItem( SDRTEXTHORZADJUST_CENTER ) );
+                }
+                else
+                {
+                    aSet.Put( SdrTextVertAdjustItem( SDRTEXTVERTADJUST_CENTER ) );
+                    aSet.Put( SdrTextHorzAdjustItem( SDRTEXTHORZADJUST_BLOCK ) );
+                }
+            }
+            // <--
 
             pTextObj->SetMergedItemSet(aSet);
             pTextObj->SetModel(pSdrModel);
@@ -1928,6 +1951,16 @@ void SwWW8ImplReader::Read_HdFtTextAsHackedFrame(long nStart, long nLen,
     pFrame->SetAttr(SwFmtFrmSize(ATT_MIN_SIZE, nPageWidth, MINLAY));
     pFrame->SetAttr(SwFmtSurround(SURROUND_THROUGHT));
     pFrame->SetAttr(SwFmtHoriOrient(0, HORI_RIGHT)); //iFOO
+    // --> OD 2005-02-28 #i43427# - send frame for header/footer into background.
+    pFrame->SetAttr( SvxOpaqueItem( RES_OPAQUE, false ) );
+    SdrObject* pFrmObj = CreateContactObject( pFrame );
+    ASSERT( pFrmObj,
+            "<SwWW8ImplReader::Read_HdFtTextAsHackedFrame(..)> - missing SdrObject instance" );
+    if ( pFrmObj )
+    {
+        pFrmObj->SetOrdNum( 0L );
+    }
+    // <--
     MoveInsideFly(pFrame);
 
     const SwNodeIndex* pHackIdx = pFrame->GetCntnt().GetCntntIdx();
@@ -3164,7 +3197,10 @@ bool SwWW8ImplReader::ReadText(long nStartCp, long nTextLen, short nType)
             {
                 // --> OD 2005-01-07 #i39251# - insert text node for page break,
                 // if no one inserted.
-                if ( !bStartLine )
+                // --> OD 2005-02-28 #i43118# - refine condition: the anchor
+                // control stack has to have entries, otherwise it's not needed
+                // to insert a text node.
+                if ( !bStartLine && pAnchorStck->Count() > 0 )
                 {
                     AppendTxtNode(*pPaM->GetPoint());
                 }
