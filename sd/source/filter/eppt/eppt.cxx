@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eppt.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sj $ $Date: 2000-11-14 17:05:52 $
+ *  last change: $Author: sj $ $Date: 2000-11-17 11:21:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -266,7 +266,7 @@ PPTWriter::PPTWriter( SvStorageRef& rSvStorage, SvStorageRef& xOleSource,
             return;
     }
     maTextRuleList.First();                         // rewind list, so we can get the current or next entry without
-                                                    // searching, all entrys are sorted
+                                                    // searching, all entrys are sorted#
     for ( i = 0; i < mnPages; i++ )
     {
         if ( !ImplCreateSlide( i ) )
@@ -734,7 +734,7 @@ sal_Bool PPTWriter::ImplCreateDocument()
                             SvMemoryStream aExtBu( 0x200, 0x200 );
                             ImplWriteTextStyleAtom( *mpStrm, nTextType, nPObjects, pRule, aExtBu );
                             ImplWriteExtParaHeader( aExtBu, nPObjects++, nTextType, i + 0x100 );
-                            maTextRuleList.Insert( (void*)pRule );
+                            maTextRuleList.Insert( (void*)pRule, LIST_APPEND );
                             if ( rLayout.bSecOutlinerPossible )
                             {
                                 if ( ( nIndex + 1 ) < nShapes )
@@ -746,7 +746,7 @@ sal_Bool PPTWriter::ImplCreateDocument()
                                         SvMemoryStream aExtBu( 0x200, 0x200 );
                                         ImplWriteTextStyleAtom( *mpStrm, nTextType, nPObjects, pRule, aExtBu );
                                         ImplWriteExtParaHeader( aExtBu, nPObjects++, nTextType, i + 0x100 );
-                                        maTextRuleList.Insert( (void*)pRule );
+                                        maTextRuleList.Insert( (void*)pRule, LIST_APPEND );
                                     }
                                 }
                             }
@@ -765,7 +765,7 @@ sal_Bool PPTWriter::ImplCreateDocument()
                             SvMemoryStream aExtBu( 0x200, 0x200 );
                             ImplWriteTextStyleAtom( *mpStrm, EPP_TEXTTYPE_Title, nPObjects, pRule, aExtBu );
                             ImplWriteExtParaHeader( aExtBu, nPObjects++, EPP_TEXTTYPE_Title, i + 0x100 );
-                            maTextRuleList.Insert( (void*)pRule );
+                            maTextRuleList.Insert( (void*)pRule, LIST_APPEND );
                         }
                     }
                 }

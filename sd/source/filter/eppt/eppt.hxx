@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eppt.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sj $ $Date: 2000-11-10 08:21:15 $
+ *  last change: $Author: sj $ $Date: 2000-11-17 11:21:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,6 +205,9 @@
 #endif
 #ifndef _COM_SUN_STAR_AWT_XCONTROLMODEL_HPP_
 #include <com/sun/star/awt/XControlModel.hpp>
+#endif
+#ifndef _COM_SUN_STAR_STYLE_TABSTOP_HPP_
+#include <com/sun/star/style/TabStop.hpp>
 #endif
 #ifndef _MSOCXIMEX_HXX
 #include <svx/msocximex.hxx>
@@ -754,7 +757,8 @@ class ParagraphObj : public List, public PropStateValue, public SOParagraph
 
     public :
 
-        sal_Int32*          mpTab;
+        ::com::sun::star::uno::Sequence< ::com::sun::star::style::TabStop > maTabStop;
+
         sal_uInt32          mnTextSize;
 
         sal_Bool            mbIsBullet;

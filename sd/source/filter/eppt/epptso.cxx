@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epptso.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sj $ $Date: 2000-11-15 10:22:43 $
+ *  last change: $Author: sj $ $Date: 2000-11-17 11:22:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,9 +115,6 @@
 #endif
 #ifndef _COM_SUN_STAR_AWT_XFONTUNDERLINE_HPP_
 #include <com/sun/star/awt/FontUnderline.hpp>
-#endif
-#ifndef _COM_SUN_STAR_STYLE_TABSTOP_HPP_
-#include <com/sun/star/style/TabStop.hpp>
 #endif
 #ifndef _COM_SUN_STAR_STYLE_PARAGRAPHADJUST_HPP_
 #include <com/sun/star/style/ParagraphAdjust.hpp>
@@ -2463,8 +2460,7 @@ PortionObj& PortionObj::operator=( PortionObj& rPortionObj )
 ParagraphObj::ParagraphObj( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet,
                 PPTExBulletProvider& rProv ) :
     maMapModeSrc        ( MAP_100TH_MM ),
-    maMapModeDest       ( MAP_INCH, Point(), Fraction( 1, 576 ), Fraction( 1, 576 ) ),
-    mpTab               ( NULL )
+    maMapModeDest       ( MAP_INCH, Point(), Fraction( 1, 576 ), Fraction( 1, 576 ) )
 {
     mXPropSet = rXPropSet;
 
@@ -2482,8 +2478,7 @@ ParagraphObj::ParagraphObj( const ::com::sun::star::uno::Reference< ::com::sun::
     maMapModeSrc        ( MAP_100TH_MM ),
     maMapModeDest       ( MAP_INCH, Point(), Fraction( 1, 576 ), Fraction( 1, 576 ) ),
     mbFirstParagraph    ( aParaFlags.bFirstParagraph ),
-    mbLastParagraph     ( aParaFlags.bLastParagraph ),
-    mpTab               ( NULL )
+    mbLastParagraph     ( aParaFlags.bLastParagraph )
 {
     bDepth = bExtendedParameters = FALSE;
 
@@ -2543,7 +2538,6 @@ void ParagraphObj::ImplClear()
 {
     for ( void* pPtr = First(); pPtr; pPtr = Next() )
         delete (PortionObj*)pPtr;
-    delete mpTab;
 }
 
 void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int16 nDepth, sal_Bool bGetPropStateValue )
@@ -2969,19 +2963,7 @@ void ParagraphObj::ImplGetParagraphValues( PPTExBulletProvider& rBuProv, sal_Boo
         ImplGetNumberingLevel( rBuProv, nDepth, bGetPropStateValue );
     }
     if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "ParaTabstops" ) ), bGetPropStateValue ) )
-    {
-        ::com::sun::star::uno::Sequence< ::com::sun::star::style::TabStop>& rSeq =
-            *( ::com::sun::star::uno::Sequence< ::com::sun::star::style::TabStop>*)mAny.getValue();
-        sal_Int32 nCount = rSeq.getLength();
-        ::com::sun::star::style::TabStop* pTabStop = (::com::sun::star::style::TabStop*)rSeq.getConstArray();
-        if ( nCount && pTabStop )
-        {
-            mpTab = new sal_Int32[ nCount + 1 ];
-            mpTab[ 0 ] = nCount;
-            for ( sal_uInt32 i = 0; i < nCount; i++ )
-                mpTab[ i + 1 ] = ( pTabStop[ i ].Position / 4.40972 ) + nTextOfs;
-        }
-    }
+        maTabStop = *( ::com::sun::star::uno::Sequence< ::com::sun::star::style::TabStop>*)mAny.getValue();
     ::com::sun::star::drawing::TextAdjust eTextAdjust( ::com::sun::star::drawing::TextAdjust_LEFT );
     if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "ParaAdjust" ) ), bGetPropStateValue ) )
         eTextAdjust = (::com::sun::star::drawing::TextAdjust)EncodeAnyTosal_Int16( mAny );
@@ -3048,15 +3030,7 @@ void ParagraphObj::ImplConstruct( ParagraphObj& rParagraphObj )
     for ( void* pPtr = rParagraphObj.First(); pPtr; pPtr = rParagraphObj.Next() )
         Insert( new PortionObj( *(PortionObj*)pPtr ), LIST_APPEND );
 
-    if ( rParagraphObj.mpTab && rParagraphObj.mpTab[ 0 ] )
-    {
-        sal_uInt32 nCount = rParagraphObj.mpTab[ 0 ] + 1;
-        mpTab = new sal_Int32[ nCount ];
-        memcpy( mpTab, rParagraphObj.mpTab, nCount << 2 );
-    }
-    else
-        mpTab = NULL;
-
+    maTabStop = rParagraphObj.maTabStop;
     bDepth = rParagraphObj.bDepth;
     bExtendedParameters = rParagraphObj.bExtendedParameters;
     nParaFlags = rParagraphObj.nParaFlags;
@@ -3300,7 +3274,9 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance,
         {
             sal_uInt32  nParaFlags = 0x1f;
             sal_Int16   nDepth, nMask, nNumberingRule[ 10 ];
-            const   sal_Int32* pTab = pPara->mpTab;
+            sal_uInt32  nTextOfs = pPara->nTextOfs;
+            sal_uInt32  nTabs = pPara->maTabStop.getLength();
+            const ::com::sun::star::style::TabStop* pTabStop = ( const ::com::sun::star::style::TabStop* )pPara->maTabStop.getConstArray();
 
             for ( ; pPara; pPara = aTextObj.Next() )
             {
@@ -3327,10 +3303,9 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance,
             nParaFlags >>= 16;
 
             sal_uInt32  nDefaultTabSize = ImplMapSize( ::com::sun::star::awt::Size( 2011, 1 ) ).Width;
-            sal_uInt32  nTabs = ( pTab ) ? pTab[ 0 ] : 0;
             sal_Int32   nDefaultTabs = abs( maRect.GetWidth() ) / nDefaultTabSize;
             if ( nTabs )
-                nDefaultTabs -= pTab[ nTabs ] / nDefaultTabSize;
+                nDefaultTabs -= ( ( pTabStop[ nTabs - 1 ].Position / 4.40972 ) + nTextOfs ) / nDefaultTabSize;
             if ( nDefaultTabs < 0 )
                 nDefaultTabs = 0;
 
@@ -3354,12 +3329,26 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance,
                 if ( nTextRulerAtomFlags & 4 )
                 {
                     *pRuleOut << (sal_uInt16)nTabCount;
-                    for ( sal_uInt32 i = 1; i <= nTabs; i++ )
-                        *pRuleOut << (sal_uInt32)pTab[ i ];
+                    for ( sal_uInt32 i = 0; i < nTabs; i++ )
+                    {
+                        sal_uInt16 nPosition = (sal_uInt16)( ( pTabStop[ i ].Position / 4.40972 ) + nTextOfs );
+                        sal_uInt16 nType;
+                        switch ( pTabStop[ i ].Alignment )
+                        {
+                            case ::com::sun::star::style::TabAlign_DECIMAL :    nType = 3; break;
+                            case ::com::sun::star::style::TabAlign_RIGHT :      nType = 2; break;
+                            case ::com::sun::star::style::TabAlign_CENTER :     nType = 1; break;
+
+                            case ::com::sun::star::style::TabAlign_LEFT :
+                            default:                                            nType = 0;
+                        };
+                        *pRuleOut << nPosition
+                                  << nType;
+                    }
 
                     sal_uInt32 nWidth = 1;
-                    if ( pTab )
-                        nWidth += ( pTab[ nTabs ] / nDefaultTabSize );
+                    if ( nTabs )
+                        nWidth += ( ( pTabStop[ nTabs - 1 ].Position / 4.40972 + nTextOfs ) / nDefaultTabSize );
                     nWidth *= nDefaultTabSize;
                     for ( i = 0; i < nDefaultTabs; i++, nWidth += nDefaultTabSize )
                         *pRuleOut << nWidth;
