@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unonames.hxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 12:23:33 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 12:26:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -473,6 +473,7 @@
 #define SC_UNO_STANDARDDEC          "StandardDecimals"
 #define SC_UNO_REGEXENABLED         "RegularExpressions"
 #define SC_UNO_BASICLIBRARIES       "BasicLibraries"
+#define SC_UNO_RUNTIMEUID           "RuntimeUID"
 
 //  document properties from FormModel
 #define SC_UNO_APPLYFMDES           "ApplyFormDesignMode"
