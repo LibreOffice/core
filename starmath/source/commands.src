@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commands.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:34:40 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 15:35:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -276,11 +276,11 @@ Menu RID_COMMANDMENU
             Text [ english_us ] = "~Unary/Binary Operators" ;
             Text [ portuguese_brazilian ] = "Operadores ~Un�rios/Bin�rios" ;
             Text [ swedish ] = "~Un�ra/bin�ra operatorer" ;
-            Text [ danish ] = "Monadiske/bin�re operatorer" ;
+            Text [ danish ] = "~Monadiske/bin�re operatorer" ;
             Text [ italian ] = "Operatori unari/binari" ;
             Text [ spanish ] = "Operadores ~unarios/binarios" ;
             Text [ french ] = "Op�rateurs u~naires/binaires" ;
-            Text [ dutch ] = "~Monadische/binaire operatoren" ;
+            Text [ dutch ] = "~Unaire/binaire operatoren" ;
             Text [ portuguese ] = "Operadores ~un�rios/bin�rios" ;
             SubMenu = Menu
             {
@@ -413,7 +413,7 @@ Menu RID_COMMANDMENU
             Text[ polish ] = "Operatory ~jedno- lub dwuargumentowe";
             Text[ japanese ] = "単項・二項演算子(~U)";
             Text[ chinese_traditional ] = "一元/二元運算符(~U)";
-            Text[ dutch ] = "~Monadische/binaire operatoren";
+            Text[ dutch ] = "~Unaire/binaire operatoren";
             Text[ chinese_simplified ] = "一元/二元运算符(~U)";
             Text[ greek ] = "���~�����/�������� ��������";
             Text[ korean ] = "단항/이항 연산자(~U)";
@@ -427,6 +427,8 @@ Menu RID_COMMANDMENU
             Text[ hebrew ] = "‮אופרטורים אונריים\\בינריים‬";
             Text[ hindi ] = "~यूनारि/बैनारि प्रवर्तक";
             Text[ slovak ] = "~Unárne/binárne operátory";
+            Text[ hungarian ] = "~Egy- és kétoperandusú operátorok";
+            Text[ slovenian ] = "~Unarni/binarni operatorji";
         };
         MenuItem
         {
@@ -437,7 +439,7 @@ Menu RID_COMMANDMENU
             Text [ english_us ] = "~Relations" ;
             Text [ portuguese_brazilian ] = "~Rela��es" ;
             Text [ swedish ] = "~Relationer" ;
-            Text [ danish ] = "Relationer" ;
+            Text [ danish ] = "~Relationer" ;
             Text [ italian ] = "Relazioni" ;
             Text [ spanish ] = "~Relaciones" ;
             Text [ french ] = "~Relations" ;
@@ -602,6 +604,8 @@ Menu RID_COMMANDMENU
             Text[ hebrew ] = "‮יחסים‬";
             Text[ hindi ] = "~सम्बन्धें";
             Text[ slovak ] = "~Relácie";
+            Text[ hungarian ] = "~Relációk";
+            Text[ slovenian ] = "~Relacije";
         };
         MenuItem
         {
@@ -612,7 +616,7 @@ Menu RID_COMMANDMENU
             Text [ english_us ] = "~Set Operations" ;
             Text [ portuguese_brazilian ] = "Opera��es de ~Conjuntos" ;
             Text [ swedish ] = "~M�ngdoperationer" ;
-            Text [ danish ] = "M�ngdeoperationer" ;
+            Text [ danish ] = "~M�ngdeoperationer" ;
             Text [ italian ] = "Operazioni degli insiemi" ;
             Text [ spanish ] = "~Operaciones de conjuntos" ;
             Text [ french ] = "O~p�rateurs d'ensemble" ;
@@ -783,6 +787,8 @@ Menu RID_COMMANDMENU
             Text[ hebrew ] = "‮פעולות על סטים‬";
             Text[ hindi ] = "~कार्य सेट्ट करो";
             Text[ slovak ] = "Množinové o~perácie";
+            Text[ hungarian ] = "~Halmazműveletek";
+            Text[ slovenian ] = "Na~stavi operacije";
         };
         MenuItem
         {
@@ -793,7 +799,7 @@ Menu RID_COMMANDMENU
             Text [ english_us ] = "~Functions" ;
             Text [ portuguese_brazilian ] = "~Fun��es" ;
             Text [ swedish ] = "~Funktioner" ;
-            Text [ danish ] = "Funktioner" ;
+            Text [ danish ] = "~Funktioner" ;
             Text [ italian ] = "Funzioni" ;
             Text [ spanish ] = "~Funciones" ;
             Text [ french ] = "~Fonctions" ;
@@ -922,7 +928,7 @@ Menu RID_COMMANDMENU
                         TEXT[ italian ] = "altri";
                         TEXT[ portuguese_brazilian ] = "Mais";
                         TEXT[ portuguese ] = "Outros";
-                        TEXT[ danish ] = "andre";
+                        TEXT[ danish ] = "Mere";
                         TEXT[ french ] = "Autres";
                         TEXT[ swedish ] = "andra";
                         TEXT[ dutch ] = "andere";
@@ -1001,6 +1007,8 @@ Menu RID_COMMANDMENU
                         TEXT[ hebrew ] = "‮עוד‬";
                         TEXT[ hindi ] = "अधिक";
                         TEXT[ slovak ] = "Viac";
+                        TEXT[ hungarian ] = "További";
+                        TEXT[ slovenian ] = "Dodatno";
                     };
                 };
             };
@@ -1023,6 +1031,8 @@ Menu RID_COMMANDMENU
             Text[ hebrew ] = "‮תפקודים‬";
             Text[ hindi ] = "~फंक्शन्";
             Text[ slovak ] = "~Funkcie";
+            Text[ hungarian ] = "~Függvények";
+            Text[ slovenian ] = "~Funkcije";
         };
         MenuItem
         {
@@ -1033,7 +1043,7 @@ Menu RID_COMMANDMENU
             Text [ english_us ] = "O~perators" ;
             Text [ portuguese_brazilian ] = "~Operadores" ;
             Text [ swedish ] = "~Operatorer" ;
-            Text [ danish ] = "Operatorer" ;
+            Text [ danish ] = "~Operatorer" ;
             Text [ italian ] = "Operatori" ;
             Text [ spanish ] = "~Operadores" ;
             Text [ french ] = "~Op�rateurs" ;
@@ -1146,6 +1156,8 @@ Menu RID_COMMANDMENU
             Text[ hebrew ] = "‮אופרטורים‬";
             Text[ hindi ] = "~प्रवर्तक";
             Text[ slovak ] = "O~perátory";
+            Text[ hungarian ] = "~Operátorok";
+            Text[ slovenian ] = "O~peratorji";
         };
         MenuItem
         {
@@ -1157,7 +1169,7 @@ Menu RID_COMMANDMENU
             Text [ english_us ] = "~Attributes" ;
             Text [ portuguese_brazilian ] = "~Atributos" ;
             Text [ swedish ] = "~Attribut" ;
-            Text [ danish ] = "Attributter" ;
+            Text [ danish ] = "~Attributter" ;
             Text [ italian ] = "Attributi" ;
             Text [ spanish ] = "Atributos" ;
             Text [ french ] = "~Attributs" ;
@@ -1333,6 +1345,8 @@ Menu RID_COMMANDMENU
             Text[ hebrew ] = "‮תכונות‬";
             Text[ hindi ] = "~ऐट्रिब्यूट्स";
             Text[ slovak ] = "Prízn~aky";
+            Text[ hungarian ] = "~Jellemzők";
+            Text[ slovenian ] = "~Atributi";
         };
         MenuItem
         {
@@ -1343,7 +1357,7 @@ Menu RID_COMMANDMENU
             Text [ english_us ] = "~Brackets" ;
             Text [ portuguese_brazilian ] = "~Colchetes" ;
             Text [ swedish ] = "~Parenteser" ;
-            Text [ danish ] = "Parenteser" ;
+            Text [ danish ] = "~Parenteser" ;
             Text [ italian ] = "Parentesi" ;
             Text [ spanish ] = "~Par�ntesis" ;
             Text [ french ] = "~Parenth�ses" ;
@@ -1524,6 +1538,8 @@ Menu RID_COMMANDMENU
             Text[ hebrew ] = "‮סוגריים מרובעות‬";
             Text[ hindi ] = "~कोष्ठकें";
             Text[ slovak ] = "Zátv~orky";
+            Text[ hungarian ] = "~Zárójel";
+            Text[ slovenian ] = "O~klepaji";
         };
         MenuItem
         {
@@ -1534,7 +1550,7 @@ Menu RID_COMMANDMENU
             Text [ english_us ] = "For~mats" ;
             Text [ portuguese_brazilian ] = "~Formatos" ;
             Text [ swedish ] = "~Formateringar" ;
-            Text [ danish ] = "Formateringer" ;
+            Text [ danish ] = "Forma~ter" ;
             Text [ italian ] = "Formattazioni" ;
             Text [ spanish ] = "~Formatos" ;
             Text [ french ] = "Format~age" ;
@@ -1618,6 +1634,8 @@ Menu RID_COMMANDMENU
                         Text[ hebrew ] = "‮קו חדש‬";
                         Text[ hindi ] = "नया रेखा";
                         Text[ slovak ] = "Nový riadok";
+                        Text[ hungarian ] = "Új sor";
+                        Text[ slovenian ] = "Nova vrstica";
                     };
                     MenuItem
                     {
@@ -1628,7 +1646,7 @@ Menu RID_COMMANDMENU
                         Text[ italian ] = "Spazio intemedio piccolo";
                         Text[ portuguese_brazilian ] = "Intervalo Pequeno";
                         Text[ portuguese ] = "espa�amento pequeno";
-                        Text[ danish ] = "lille mellemrum";
+                        Text[ danish ] = "Lille frirum";
                         Text[ french ] = "Petit espace";
                         Text[ swedish ] = "Litet mellanrum";
                         Text[ dutch ] = "kleine spatie";
@@ -1653,6 +1671,8 @@ Menu RID_COMMANDMENU
                         Text[ hebrew ] = "‮מרווח קטן‬";
                         Text[ hindi ] = "छोटा अंतर";
                         Text[ slovak ] = "Malá medzera";
+                        Text[ hungarian ] = "Kis hézag";
+                        Text[ slovenian ] = "Majhna vrzel";
                     };
                     MenuItem
                     {
@@ -1663,7 +1683,7 @@ Menu RID_COMMANDMENU
                         Text[ italian ] = "Spazio intermedio";
                         Text[ portuguese_brazilian ] = "Intervalo";
                         Text[ portuguese ] = "espa�amento";
-                        Text[ danish ] = "mellemrum";
+                        Text[ danish ] = "Frirum";
                         Text[ french ] = "Espace";
                         Text[ swedish ] = "mellanrum";
                         Text[ dutch ] = "spatie";
@@ -1688,6 +1708,8 @@ Menu RID_COMMANDMENU
                         Text[ hebrew ] = "‮מרווח‬";
                         Text[ hindi ] = "अंतर";
                         Text[ slovak ] = "Voľný priestor";
+                        Text[ hungarian ] = "Hézag";
+                        Text[ slovenian ] = "Vrzel";
                     };
                     MenuItem
                     {
@@ -1750,6 +1772,8 @@ Menu RID_COMMANDMENU
             Text[ hebrew ] = "‮צורות‬";
             Text[ hindi ] = "~रचना";
             Text[ slovak ] = "Fo~rmáty";
+            Text[ hungarian ] = "For~mátumok";
+            Text[ slovenian ] = "Ob~like";
         };
         MenuItem
         {
@@ -1760,7 +1784,7 @@ Menu RID_COMMANDMENU
             Text [ english_us ] = "~Others" ;
             Text [ portuguese_brazilian ] = "~Outros" ;
             Text [ swedish ] = "�~vrigt" ;
-            Text [ danish ] = "Andet" ;
+            Text [ danish ] = "~Andre" ;
             Text [ italian ] = "Altro" ;
             Text [ spanish ] = "~Otros" ;
             Text [ french ] = "~Autres" ;
@@ -1913,9 +1937,12 @@ Menu RID_COMMANDMENU
             Text[ hebrew ] = "‮אחרים‬";
             Text[ hindi ] = "~अन्य";
             Text[ slovak ] = "~Ostatné";
+            Text[ hungarian ] = "~Egyebek";
+            Text[ slovenian ] = "~Ostali";
         };
     };
 };
+
 
 
 
