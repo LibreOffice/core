@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-17 17:29:34 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 13:13:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3130,35 +3130,6 @@ NaviContentBookmark::NaviContentBookmark( const String &rUrl,
     nDefDrag( nDragType ),
     nDocSh((long)pDocSh)
 {
-}
-
-/*-----------------06.02.97 19.17-------------------
-
---------------------------------------------------*/
-
-
-sal_Bool NaviContentBookmark::HasFormat( TransferableDataHelper& rData,
-                                                const SwDocShell* pDocSh )
-{
-    sal_Bool bRet = sal_False;
-    if( rData.HasFormat( SOT_FORMATSTR_ID_SONLK ) )
-    {
-        if( !pDocSh )
-            bRet = sal_True;
-        else
-        {
-            long nDocSh = (long) pDocSh;
-            NaviContentBookmark aTemp;
-            aTemp.Paste( rData );
-            // steht vor dem # ein Dateiname?
-            sal_uInt16 nFound = aTemp.GetURL().Search( '#' );
-            // entweder die Quelle hatte einen Namen oder Quelle und Ziel sind gleich
-               if( STRING_NOTFOUND != nFound &&
-                ( nFound > 0  || nDocSh == aTemp.GetDocShell() ))
-                    bRet = sal_True;
-        }
-    }
-    return bRet;
 }
 
 void NaviContentBookmark::Copy( TransferDataContainer& rData ) const
