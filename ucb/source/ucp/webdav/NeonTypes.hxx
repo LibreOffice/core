@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NeonTypes.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kso $ $Date: 2001-02-15 11:04:48 $
+ *  last change: $Author: kso $ $Date: 2001-02-19 10:07:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,8 @@
 #ifndef _NEONTYPES_HXX_
 #define _NEONTYPES_HXX_
 
-#if SUPD<=614
+// Activate after switching to neon > v0.11.0
 #define OLD_NEON_PROPFIND_INTERFACE
-#endif
 
 #include <http_basic.h>
 #include <http_request.h>
