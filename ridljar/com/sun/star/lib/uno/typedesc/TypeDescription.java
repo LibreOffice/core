@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TypeDescription.java,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2003-08-07 14:37:35 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 13:24:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,913 +61,615 @@
 
 package com.sun.star.lib.uno.typedesc;
 
-
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Hashtable;
-
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-
-
-import com.sun.star.uno.Any;
-import com.sun.star.uno.Enum;
-import com.sun.star.uno.IFieldDescription;
-import com.sun.star.uno.IMethodDescription;
-import com.sun.star.uno.ITypeDescription;
-import com.sun.star.uno.Type;
-import com.sun.star.uno.TypeClass;
-import com.sun.star.uno.Union;
-
 import com.sun.star.lib.uno.typeinfo.AttributeTypeInfo;
 import com.sun.star.lib.uno.typeinfo.MemberTypeInfo;
 import com.sun.star.lib.uno.typeinfo.MethodTypeInfo;
 import com.sun.star.lib.uno.typeinfo.ParameterTypeInfo;
 import com.sun.star.lib.uno.typeinfo.TypeInfo;
+import com.sun.star.uno.IFieldDescription;
+import com.sun.star.uno.IMethodDescription;
+import com.sun.star.uno.ITypeDescription;
+import com.sun.star.uno.Type;
+import com.sun.star.uno.TypeClass;
+import java.lang.ref.ReferenceQueue;
+import java.lang.ref.SoftReference;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 
 /**
- * The Type class represents the IDL builtin type <code>type</code>.
- * <p>
- * The IDL type is not directly mapped to <code>java.lang.Class</code>,
- * because it can be necessary to describe a type which is unknown
- * to the java runtime system, e.g. for delaying the need of a class,
- * so that it is possible to generate it one the fly.
- * <p>
- * The current implementations holds various <code>static</code> helper
- * methods, which may be changed or moved in the furture, so please
- * do not use these methods.
- * <p>
- * @version     $Revision: 1.15 $ $ $Date: 2003-08-07 14:37:35 $
- * @author      Kay Ramme
- * @since       UDK2.0
+ * Supplies information about UNO types.
+ *
+ * @since UDK2.0
  */
-public class TypeDescription implements ITypeDescription {
-    /**
-     * When set to true, enables various debugging output.
-     */
-    private static final boolean DEBUG = false;
-
-    public static final TypeDescription __void_TypeDescription    = new TypeDescription(TypeClass.VOID,           "void", "[Ljava.lang.Void;", void.class);     // VOID
-    public static final TypeDescription __char_TypeDescription    = new TypeDescription(TypeClass.CHAR,           "char", "[C", char.class);     // CHAR
-    public static final TypeDescription __boolean_TypeDescription = new TypeDescription(TypeClass.BOOLEAN,        "boolean", "[Z", boolean.class);  // BOOLEAN
-    public static final TypeDescription __byte_TypeDescription    = new TypeDescription(TypeClass.BYTE,           "byte", "[B", byte.class);     // BYTE
-    public static final TypeDescription __short_TypeDescription   = new TypeDescription(TypeClass.SHORT,          "short", "[S", short.class);    // SHORT
-    public static final TypeDescription __ushort_TypeDescription  = new TypeDescription(TypeClass.UNSIGNED_SHORT, "unsigned short", "[S", short.class);    // UNSIGNED SHORT
-    public static final TypeDescription __long_TypeDescription    = new TypeDescription(TypeClass.LONG,           "long", "[I", int.class);     // LONG
-    public static final TypeDescription __ulong_TypeDescription   = new TypeDescription(TypeClass.UNSIGNED_LONG,  "unsigned long", "[I", int.class);     // UNSIGNED_LONG
-    public static final TypeDescription __hyper_TypeDescription   = new TypeDescription(TypeClass.HYPER,          "hyper", "[J", long.class);    // HYPER
-    public static final TypeDescription __uhyper_TypeDescription  = new TypeDescription(TypeClass.UNSIGNED_HYPER, "unsigned hyper", "[J", long.class);    // UNSIGNED_HYPER
-    public static final TypeDescription __float_TypeDescription   = new TypeDescription(TypeClass.FLOAT,          "float", "[F", float.class);    // FLOAT
-    public static final TypeDescription __double_TypeDescription  = new TypeDescription(TypeClass.DOUBLE,         "double", "[D", double.class);   // DOUBLE
-    public static final TypeDescription __string_TypeDescription  = new TypeDescription(TypeClass.STRING,         "string", "[Ljava.lang.String;", String.class);   // STRING
-    public static final TypeDescription __type_TypeDescription    = new TypeDescription(TypeClass.TYPE,           "type", "[Lcom.sun.star.uno.Type;", Type.class);     // TYPE
-    public static final TypeDescription __any_TypeDescription     = new TypeDescription(TypeClass.ANY,            "any", "[Ljava.lang.Object;", Object.class);       // ANY
-
-    static private final HashMap __typeNameToTypeDescription = new HashMap();
-    static {
-        __typeNameToTypeDescription.put("void", __void_TypeDescription);
-        __typeNameToTypeDescription.put("boolean", __boolean_TypeDescription);
-        __typeNameToTypeDescription.put("char", __char_TypeDescription);
-        __typeNameToTypeDescription.put("byte", __byte_TypeDescription);
-        __typeNameToTypeDescription.put("short", __short_TypeDescription);
-        __typeNameToTypeDescription.put("unsigned short",
-                                        __ushort_TypeDescription);
-        __typeNameToTypeDescription.put("long", __long_TypeDescription);
-        __typeNameToTypeDescription.put("unsigned long",
-                                        __ulong_TypeDescription);
-        __typeNameToTypeDescription.put("hyper", __hyper_TypeDescription);
-        __typeNameToTypeDescription.put("unsigned hyper",
-                                        __uhyper_TypeDescription);
-        __typeNameToTypeDescription.put("float", __float_TypeDescription);
-        __typeNameToTypeDescription.put("double", __double_TypeDescription);
-        __typeNameToTypeDescription.put("string", __string_TypeDescription);
-        __typeNameToTypeDescription.put("type", __type_TypeDescription);
-        __typeNameToTypeDescription.put("any", __any_TypeDescription);
-    }
-
-    static private final HashMap __classToTypeDescription = new HashMap();
-    static {
-        __classToTypeDescription.put(void.class, __void_TypeDescription);
-        __classToTypeDescription.put(Void.class, __void_TypeDescription);
-        __classToTypeDescription.put(boolean.class, __boolean_TypeDescription);
-        __classToTypeDescription.put(Boolean.class, __boolean_TypeDescription);
-        __classToTypeDescription.put(char.class, __char_TypeDescription);
-        __classToTypeDescription.put(Character.class, __char_TypeDescription);
-        __classToTypeDescription.put(byte.class, __byte_TypeDescription);
-        __classToTypeDescription.put(Byte.class, __byte_TypeDescription);
-        __classToTypeDescription.put(short.class, __short_TypeDescription);
-        __classToTypeDescription.put(Short.class, __short_TypeDescription);
-        __classToTypeDescription.put(int.class, __long_TypeDescription);
-        __classToTypeDescription.put(Integer.class, __long_TypeDescription);
-        __classToTypeDescription.put(long.class, __hyper_TypeDescription);
-        __classToTypeDescription.put(Long.class, __hyper_TypeDescription);
-        __classToTypeDescription.put(float.class, __float_TypeDescription);
-        __classToTypeDescription.put(Float.class, __float_TypeDescription);
-        __classToTypeDescription.put(double.class, __double_TypeDescription);
-        __classToTypeDescription.put(Double.class, __double_TypeDescription);
-        __classToTypeDescription.put(String.class, __string_TypeDescription);
-        __classToTypeDescription.put(Type.class, __type_TypeDescription);
-        __classToTypeDescription.put(Object.class, __any_TypeDescription);
-        __classToTypeDescription.put(Any.class, __any_TypeDescription);
-    }
-
-    // must be sorted same as TypeClass:
-    private static final TypeDescription[] __typeClassToTypeDescription
-    = new TypeDescription[] {
-        __void_TypeDescription,
-        __char_TypeDescription,
-        __boolean_TypeDescription,
-        __byte_TypeDescription,
-        __short_TypeDescription,
-        __ushort_TypeDescription,
-        __long_TypeDescription,
-        __ulong_TypeDescription,
-        __hyper_TypeDescription,
-        __uhyper_TypeDescription,
-        __float_TypeDescription,
-        __double_TypeDescription,
-        __string_TypeDescription,
-        __type_TypeDescription,
-        __any_TypeDescription
-    };
-
-    public static boolean isTypeClassSimple(TypeClass typeClass) {
-        return typeClass.getValue() < __typeClassToTypeDescription.length;
-    }
-
-    static private TypeInfo []__getTypeInfos(Class zInterface) {
-        TypeInfo typeInfos[] = null;
-
-        try {
-            Field field = zInterface.getField("UNOTYPEINFO");
-            typeInfos = (TypeInfo[])field.get(null);
-
-            if(typeInfos == null) {
-                // This is a workaround for a bug in solaris JDK 1.2, so please do not remove.
-                // Interface members are sometimes not fully initialized,
-                // reloading helps, who knows why?
-                Class.forName(zInterface.getName());
-                typeInfos = (TypeInfo[])field.get(null);
+public final class TypeDescription implements ITypeDescription {
+    public static TypeDescription getTypeDescription(String typeName)
+        throws ClassNotFoundException
+    {
+        Type t = new Type(typeName);
+        if (t.getTypeClass() == TypeClass.UNKNOWN) {
+            if (typeName.startsWith("[]")) {
+                t = new Type(typeName, TypeClass.SEQUENCE);
+            } else {
+                t = new Type(Class.forName(typeName));
             }
         }
-        catch(NoSuchFieldException noSuchFieldException) {
-              if(DEBUG) System.err.println("__getTypeInfos:" + zInterface + " - exception:" + noSuchFieldException);
-        }
-        catch(ClassNotFoundException classNotFoundException) {
-              if(DEBUG) System.err.println("__getTypeInfos:" + zInterface + " - exception:" + classNotFoundException);
-        }
-        catch(IllegalAccessException illegalAccessException) {
-            System.err.println("__getTypeInfos:" + zInterface + " - exception:" + illegalAccessException);
-        }
-
-        return typeInfos;
+        return get(t);
     }
 
-    /**
-     * Find the member type info for the given interface and member name
-     * <p>
-     * This method does not belong to the provided <code>api</code>
-     * <p>
-     * @return the member type infos
-     * @param  zInterface  the interface
-     * @param  name        the member name
-     * @see                com.sun.star.lib.uno.MemberTypeInfo
-     */
-    static private MemberTypeInfo __findMemberTypeInfo(TypeInfo typeInfos[], String name) {
-        MemberTypeInfo memberTypeInfo = null;
-
-        if(typeInfos != null)
-            for(int i = 0; i < typeInfos.length; ++ i) {
-                if(typeInfos[i] instanceof MemberTypeInfo && typeInfos[i].getName().equals(name)) {
-                    memberTypeInfo = (MemberTypeInfo)typeInfos[i];
-                    break;
-                }
-            }
-
-        return memberTypeInfo;
-    }
-
-    /**
-     * Find the attribute type info for the given interface and attribute name
-     * <p>
-     * This method does not belong to the provided <code>api</code>
-     * <p>
-     * @return the attribute type infos
-     * @param  zInterface  the interface
-     * @param  name        the attribute name
-     * @see                com.sun.star.lib.uno.AttributeTypeInfo
-     */
-    static private AttributeTypeInfo __findAttributeTypeInfo(TypeInfo typeInfos[], String name) {
-        AttributeTypeInfo attributeTypeInfo = null;
-
-        if(typeInfos != null)
-            for(int i = 0; i < typeInfos.length; ++ i) {
-                if(typeInfos[i] instanceof AttributeTypeInfo && typeInfos[i].getName().equals(name)) {
-                    attributeTypeInfo = (AttributeTypeInfo)typeInfos[i];
-                    break;
-                }
-            }
-
-        return attributeTypeInfo;
-    }
-
-    /**
-     * Find the method type info for the given interface and method name.
-     * <p>
-     * This method does not belong to the provided <code>api</code>.
-     * <p>
-     * @return the method type infos
-     * @param  zInterface  the interface
-     * @param  methodName  the method name
-     * @see                com.sun.star.lib.uno.MethodDescription
-     */
-    static private MethodTypeInfo __findMethodTypeInfo(TypeInfo typeInfos[], String methodName) {
-        MethodTypeInfo methodTypeInfo = null;
-
-        if(typeInfos != null)
-            for(int i = 0; i < typeInfos.length; ++ i) {
-                if(typeInfos[i] instanceof MethodTypeInfo && typeInfos[i].getName().equals(methodName)) {
-                    methodTypeInfo = (MethodTypeInfo)typeInfos[i];
-                    break;
-                }
-            }
-
-        return methodTypeInfo;
-    }
-
-    /**
-     * Find the parameter type info for the given interface, method name and parameter index.
-     * <p>
-     * This method does not belong to the provided <code>api</code>.
-     * <p>
-     * @return the parameter type infos
-     * @param  zInterface  the interface
-     * @param  methodName  the method name
-     * @param  index       the parameter index
-     * @see                com.sun.star.lib.uno.ParameterTypeInfo
-     */
-    static private ParameterTypeInfo __findParameterTypeInfo(TypeInfo typeInfos[], String methodName, int index) {
-        ParameterTypeInfo parameterTypeInfo = null;
-
-        if(typeInfos != null)
-            for(int i = 0; i < typeInfos.length; ++ i) {
-                if(typeInfos[i] instanceof ParameterTypeInfo
-                && (index == ((ParameterTypeInfo)typeInfos[i]).getIndex())
-                && ((ParameterTypeInfo)typeInfos[i]).getMethodName().equals(methodName))
-                {
-                    parameterTypeInfo = (ParameterTypeInfo)typeInfos[i];
-                    break;
-                }
-            }
-
-        return parameterTypeInfo;
-    }
-
-    static private Hashtable __cyclicTypes = new Hashtable();
-
-    static private Hashtable __typeCache_name = new Hashtable();
-    static private Hashtable __typeCache_class = new Hashtable();
-    static class CacheEntry {
-        TypeDescription _typeDescription;
-
-        short _index;
-        short _prev;
-        short _next;
-        CacheEntry(TypeDescription typeDescription, short index, short prev, short next) {
-            _typeDescription = typeDescription;
-            _index = index;
-            _prev = prev;
-            _next = next;
-        }
-    }
-
-    private static final boolean DEBUG_CACHE = false;
-    private static CacheEntry __cacheEntrys[] = new CacheEntry[256];
-    private static short __first;
-    private static short __last = (short)(__cacheEntrys.length - 1);
-
-    static {
-        for(short i = 0; i < __cacheEntrys.length; ++ i)
-            __cacheEntrys[i] = new CacheEntry(null, i, (short)(i - 1), (short)((i + 1) < __cacheEntrys.length ? i + 1 : -1));
-    }
-
-    static private void listCache() {
-        synchronized(__cacheEntrys) {
-            System.err.println("************ TypeDescription - Cache *************");
-            short i = __first;
-            while(i != (short)-1) {
-                if(__cacheEntrys[i]._typeDescription != null)
-                    System.err.println(__cacheEntrys[i]._typeDescription.getTypeName());
-                else
-                    System.err.println("null");
-
-                i = __cacheEntrys[i]._next;
-            }
-        }
-    }
-
-    static private void touchCacheEntry(CacheEntry cacheEntry) {
-          if(DEBUG_CACHE) System.err.println("touchCacheEntry:" + (cacheEntry._typeDescription != null ? cacheEntry._typeDescription.getTypeName() : null));
-
-        if(cacheEntry != __cacheEntrys[__first]) {
-            synchronized(__cacheEntrys) {
-                if(DEBUG_CACHE) listCache();
-                // move entry to front of chain
-
-                // remove entry from chain
-                __cacheEntrys[cacheEntry._prev]._next = cacheEntry._next;
-                if(cacheEntry._next != -1) // not last entry
-                    __cacheEntrys[cacheEntry._next]._prev = cacheEntry._prev;
-
-                else
-                    __last = cacheEntry._prev;
-
-                // insert it as first element
-                __cacheEntrys[__first]._prev = cacheEntry._index;
-                cacheEntry._next = __first;
-
-                __first = cacheEntry._index;
-
-                if(DEBUG_CACHE) listCache();
-            }
-        }
-    }
-
-    static private TypeDescription getFromCache(String name) {
-        TypeDescription typeDescription = null;
-
-        CacheEntry cacheEntry = (CacheEntry)__typeCache_name.get(name);
-
-          if(DEBUG_CACHE) System.err.println("getFromCache:" + name + " " + cacheEntry);
-
-        if(cacheEntry != null) {
-            touchCacheEntry(cacheEntry);
-
-            typeDescription = cacheEntry._typeDescription;
-        }
-
-        return typeDescription;
-    }
-
-    static private TypeDescription getFromCache(Class zClass) {
-        TypeDescription typeDescription = null;
-
-        CacheEntry cacheEntry = (CacheEntry)__typeCache_class.get(zClass);
-
-          if(DEBUG_CACHE) System.err.println("getFromCache:" + zClass + " " + cacheEntry);
-
-        if(cacheEntry != null) {
-            touchCacheEntry(cacheEntry);
-
-            typeDescription = cacheEntry._typeDescription;
-        }
-
-        return typeDescription;
-    }
-
-    static private void addToCache(TypeDescription typeDescription) {
-          if(DEBUG_CACHE) System.err.println("addToCache:" + typeDescription.getTypeName());
-
-        // If typeDescription is a sequence type whose base component type is
-        // any of SHORT, UNSIGNED SHORT, LONG, UNSIGNED LONG, HYPER, UNSIGNED
-        // HYPER, ANY or com::sun::star::uno::XInterface, do not add it to the
-        // cache.  Those UNO types have corresponding Java types that are not
-        // unique (e.g., both a sequence of SHORT and a sequence of UNSIGNED
-        // SHORT map to the Java type short[]), so using __typeCache_class to
-        // map from such a Java type to a type description could give a wrong
-        // result:
-        String n = typeDescription.getTypeName();
-        if (n.endsWith("[]short") || n.endsWith("[]unsigned short")
-            || n.endsWith("[]long") || n.endsWith("[]unsigned long")
-            || n.endsWith("[]hyper") || n.endsWith("[]unsigned hyper")
-            || n.endsWith("[]any")
-            || n.endsWith("[]com.sun.star.uno.XInterface")) {
-            return;
-        }
-
-        synchronized(__cacheEntrys) {
-              if(DEBUG_CACHE) listCache();
-
-            // remove hashtab entry
-            if(__cacheEntrys[__last]._typeDescription != null) {// maybe null, when cache not full
-                __typeCache_name.remove(__cacheEntrys[__last]._typeDescription.getTypeName());
-                __typeCache_class.remove(__cacheEntrys[__last]._typeDescription.getZClass());
-            }
-
-            // move last cache entry to front
-            touchCacheEntry(__cacheEntrys[__last]);
-
-            // replace typedescription with new typedescription
-            __cacheEntrys[__first]._typeDescription = typeDescription;
-
-            __typeCache_name.put(typeDescription.getTypeName(), __cacheEntrys[__first]);
-            __typeCache_class.put(typeDescription.getZClass(), __cacheEntrys[__first]);
-
-            if(DEBUG_CACHE) listCache();
-        }
-    }
-
-    static public TypeDescription getTypeDescription(TypeInfo typeInfo, Class zClass) {
-        if(DEBUG) System.err.println("TypeDescription.getTypeDescription:" + typeInfo + " " + zClass);
-
-          TypeDescription typeDescription = null;
-
-        if(typeInfo == null || !typeInfo.isInterface())
-            typeDescription = TypeDescription.getTypeDescription(zClass);
-
-        else {
-            // blackdown 118 bug workaround
-//                  __getFields(zClass);
-
-            // see if the typeinfo says, that the parameter is an interface
-            // and the parameter is not assignable to xinterface (mapping of xinterface to java.lang.Object)
-            // set the parameter to class of xinterface, cause it must be assignable
-
-            // unrole any arrays
-            int arrayNesting = 0;
-            Class xClass = zClass;
-            while(xClass.isArray()) {
-                ++ arrayNesting;
-
-                xClass = xClass.getComponentType();
-            }
-
-            if(xClass.isInterface())
-                typeDescription = TypeDescription.getTypeDescription(zClass);
-
-            else {
-                typeDescription = TypeDescription.getTypeDescription(com.sun.star.uno.XInterface.class);
-
-                for(int i = 0; i < arrayNesting; ++ i) {
-                    try {
-                        typeDescription = TypeDescription.getTypeDescription("[]" + typeDescription.getTypeName());
-                    }
-                    catch(ClassNotFoundException classNotFoundException) { // this could never happen, but anyway...
-                        throw new RuntimeException(classNotFoundException.toString());
-                    }
-                }
-            }
-          }
-
-
-        return typeDescription;
-    }
-
-    static public TypeDescription getTypeDescription(Class zClass) {
-        TypeDescription typeDescription = (TypeDescription)__classToTypeDescription.get(zClass);
-
-        if(typeDescription == null) {
-            typeDescription = (TypeDescription)__cyclicTypes.get(zClass.getName());
-
-            if(typeDescription == null) {
-                typeDescription = getFromCache(zClass);
-
-                if(typeDescription == null) {
-                    typeDescription = new TypeDescription(zClass);
-
-                    addToCache(typeDescription);
-                }
-            }
-        }
-
-        return typeDescription;
-    }
-
-    static public TypeDescription getTypeDescription(String typeName) throws ClassNotFoundException {
-        TypeDescription typeDescription = (TypeDescription)__typeNameToTypeDescription.get(typeName);
-
-        if(typeDescription == null) {
-            typeDescription = (TypeDescription)__cyclicTypes.get(typeName);
-
-            if(typeDescription == null) {
-                typeDescription = getFromCache(typeName);
-
-                if(typeDescription == null) {
-                    typeDescription = new TypeDescription(typeName);
-
-                    addToCache(typeDescription);
-                }
-            }
-        }
-
-
-        return typeDescription;
+    public static TypeDescription getTypeDescription(Class zClass) {
+        return getDefinitely(new Type(zClass));
     }
 
     public static ITypeDescription getTypeDescription(Type type)
         throws ClassNotFoundException
     {
-        ITypeDescription td = type.getTypeDescription();
-        if (td == null) {
-            if (type.getZClass() != null) {
-                td = getTypeDescription(type.getZClass());
-            } else {
-                td = getTypeDescription(type.getTypeClass());
-                if (td == null) {
-                    td = getTypeDescription(type.getTypeName());
-                }
-            }
-            type.setTypeDescription(td);
+        //TODO: synchronize on type?
+        ITypeDescription desc = type.getTypeDescription();
+        if (desc == null) {
+            desc = getTypeDescription(type.getTypeName());
+            type.setTypeDescription(desc);
         }
-        return td;
+        return desc;
     }
 
     public static TypeDescription getTypeDescription(TypeClass typeClass) {
-        int n = typeClass.getValue();
-        return n < __typeClassToTypeDescription.length
-            ? __typeClassToTypeDescription[n] : null;
+        switch (typeClass.getValue()) {
+        case TypeClass.VOID_value:
+            return getDefinitely(Type.VOID);
+
+        case TypeClass.BOOLEAN_value:
+            return getDefinitely(Type.BOOLEAN);
+
+        case TypeClass.BYTE_value:
+            return getDefinitely(Type.BYTE);
+
+        case TypeClass.SHORT_value:
+            return getDefinitely(Type.SHORT);
+
+        case TypeClass.UNSIGNED_SHORT_value:
+            return getDefinitely(Type.UNSIGNED_SHORT);
+
+        case TypeClass.LONG_value:
+            return getDefinitely(Type.LONG);
+
+        case TypeClass.UNSIGNED_LONG_value:
+            return getDefinitely(Type.UNSIGNED_LONG);
+
+        case TypeClass.HYPER_value:
+            return getDefinitely(Type.HYPER);
+
+        case TypeClass.UNSIGNED_HYPER_value:
+            return getDefinitely(Type.UNSIGNED_HYPER);
+
+        case TypeClass.FLOAT_value:
+            return getDefinitely(Type.FLOAT);
+
+        case TypeClass.DOUBLE_value:
+            return getDefinitely(Type.DOUBLE);
+
+        case TypeClass.CHAR_value:
+            return getDefinitely(Type.CHAR);
+
+        case TypeClass.STRING_value:
+            return getDefinitely(Type.STRING);
+
+        case TypeClass.TYPE_value:
+            return getDefinitely(Type.TYPE);
+
+        case TypeClass.ANY_value:
+            return getDefinitely(Type.ANY);
+
+        default:
+            return null;
+        }
     }
 
-    protected TypeClass _typeClass;
-    protected String    _typeName;
-    protected String    _arrayTypeName;
-    protected Class     _class;
-
-    protected TypeDescription _superType; // if this is a struct or an interface
-
-    protected int               _offset;
-    protected MethodDescription _methodDescriptions[];
-    protected Hashtable         _methodDescriptionsByName;
-
-    protected Hashtable         _iFieldDescriptionsByName;
-    protected IFieldDescription _iFieldDescriptions[];
-
-    protected ITypeDescription _componentType;
-
-
-    private int calcMethodOffset(Class zClass) {
-        int offset = 3;
-
-        if(zClass != com.sun.star.uno.XInterface.class) {
-            Method methods[] = zClass.getMethods();
-
-            for(int i = 0; i < methods.length; ++ i)
-                if((methods[i].getModifiers() & Modifier.STATIC) == 0)
-                    ++ offset;
-        }
-
-        return offset;
+    public static boolean isTypeClassSimple(TypeClass typeClass) {
+        return getTypeDescription(typeClass) != null;
     }
 
-    private void _initByClass(Class zClass) {
-        __cyclicTypes.put(zClass.getName(), this);
-
-        _class = zClass;
-
-        if(Enum.class.isAssignableFrom(zClass)) {
-            _typeClass = TypeClass.ENUM;
-            _typeName  = zClass.getName();
-
-            _arrayTypeName = "[L" + _class.getName() + ";";
-        }
-        else if(Union.class.isAssignableFrom(zClass)) {
-            _typeClass = TypeClass.UNION;
-            _typeName  = zClass.getName();
-
-            _arrayTypeName = "[L" + _class.getName() + ";";
-        }
-        else if(zClass.isInterface()) {
-            _typeClass = TypeClass.INTERFACE;
-            _typeName  = zClass.getName();
-
-            _arrayTypeName = "[L" + _class.getName() + ";";
-
-            _offset = calcMethodOffset(zClass);
-
-            Class interfaces[] = _class.getInterfaces();
-            if(interfaces.length > 0)
-                _superType = getTypeDescription(interfaces[0]); // uno only supports single inheritance
-        }
-        else if(zClass.isArray()) {
-            _typeClass = TypeClass.SEQUENCE;
-
-            _componentType = getTypeDescription(zClass.getComponentType());
-            _typeName = "[]" + _componentType.getTypeName();
-
-            _arrayTypeName = "[" + _class.getName();
-        }
-        else if(java.lang.Throwable.class.isAssignableFrom(zClass)) {
-            _typeClass = TypeClass.EXCEPTION;
-            _typeName  = zClass.getName();
-
-            _arrayTypeName = "[L" + _class.getName() + ";";
-
-            Class superClass = _class.getSuperclass();
-            if(superClass != null && superClass != Object.class)
-                _superType = getTypeDescription(superClass);
-        }
-        else {
-            _typeClass = TypeClass.STRUCT;
-            _typeName  = zClass.getName();
-
-            _arrayTypeName = "[L" + _class.getName() + ";";
-
-            Class superClass = _class.getSuperclass();
-            if(superClass != null && superClass != Object.class)
-                _superType = getTypeDescription(superClass);
-        }
-
-          __cyclicTypes.remove(zClass.getName());
+    // @see ITypeDescription#getSuperType
+    public ITypeDescription getSuperType() {
+        // Arbitrarily take the first super type:
+        return superTypes == null || superTypes.length == 0
+            ? null : superTypes[0];
     }
 
-    private TypeDescription(TypeClass typeClass, String typeName, String arrayTypeName, Class zClass) {
-        _typeClass     = typeClass;
-        _typeName      = typeName;
-        _arrayTypeName = arrayTypeName;
-        _class         = zClass;
-        // _componentType == null is ok, since only primitive TypeDescriptions
-        // are created with this constructor
+    // @see ITypeDescription#getMethodDescriptions
+    public IMethodDescription[] getMethodDescriptions() {
+        initMethodDescriptions();
+        return methodDescriptions; //TODO: clone?
     }
 
-    private TypeDescription(Class zClass) {
-        _initByClass(zClass);
+    // @see ITypeDescription#getMethodDescription(int)
+    public IMethodDescription getMethodDescription(int methodId) {
+        initMethodDescriptions();
+        return methodId < 0
+            ? null
+            : methodId < superMethodDescriptions.length
+            ? superMethodDescriptions[methodId]
+            : (methodId - superMethodDescriptions.length
+               < methodDescriptions.length)
+            ? methodDescriptions[methodId - superMethodDescriptions.length]
+            : null;
     }
 
-    private TypeDescription(String typeName) throws ClassNotFoundException {
-
-        _typeName = typeName;
-
-        if(typeName.startsWith("[]")) {
-            __cyclicTypes.put(typeName, this);
-            _typeClass = TypeClass.SEQUENCE;
-
-            _componentType = getTypeDescription(typeName.substring(2));
-            _class = Class.forName(_componentType.getArrayTypeName());
-            _arrayTypeName = "[" + _componentType.getArrayTypeName();
-
-            __cyclicTypes.remove(typeName);
+    // @see ITypeDescription#getMethodDescription(String)
+    public IMethodDescription getMethodDescription(String name) {
+        initMethodDescriptions();
+        for (int i = 0; i < superMethodDescriptions.length; ++i) {
+            if (superMethodDescriptions[i].getName().equals(name)) {
+                return superMethodDescriptions[i];
+            }
         }
-        else {
-            _initByClass(Class.forName(typeName));
+        for (int i = 0; i < methodDescriptions.length; ++i) {
+            if (methodDescriptions[i].getName().equals(name)) {
+                return methodDescriptions[i];
+            }
         }
-
+        return null;
     }
 
-    private void _initMethodTypeInfos() {
-        if(DEBUG) System.err.println("TypeDescription._initMethodTypeInfos");
+    // @see ITypeDescription#getFieldDescriptions
+    public IFieldDescription[] getFieldDescriptions() {
+        initFieldDescriptions();
+        return fieldDescriptions; //TODO: clone?
+    }
 
-        Hashtable methodDescriptionsByName = new Hashtable();
-
-        int superOffset = 0;
-
-        if(_class == com.sun.star.uno.XInterface.class) { // take special care for xinterface
-              MethodDescription queryInterface = new MethodDescription("queryInterface", 0, TypeInfo.ANY);
-            queryInterface.init(new Class[]{Type.class}, new ParameterTypeInfo[]{new ParameterTypeInfo(null, "queryInterface", 0, 0)},
-                                Object.class);
-
-            MethodDescription acquire = new MethodDescription("acquire", 1, TypeInfo.ONEWAY);
-            acquire.init(new Class[0], null, Void.class);
-
-            MethodDescription release = new MethodDescription("release", 2, TypeInfo.ONEWAY);
-            release.init(new Class[0], null, Void.class);
-
-            methodDescriptionsByName.put("queryInterface", queryInterface);
-            methodDescriptionsByName.put("acquire", acquire);
-            methodDescriptionsByName.put("release", release);
-
-            _offset = 3;
+    // @see ITypeDescription#getFieldDescription
+    public IFieldDescription getFieldDescription(String name) {
+        initFieldDescriptions();
+        for (int i = 0; i < fieldDescriptions.length; ++i) {
+            if (fieldDescriptions[i].getName().equals(name)) {
+                return fieldDescriptions[i];
+            }
         }
-        else {
-            if(_superType != null) // do we have a supertype (we don't have one, if we are not derived of XInterface)
-                superOffset = _superType._offset;
+        return superTypes != null && superTypes.length == 1
+            ? superTypes[0].getFieldDescription(name) : null;
+    }
 
-            TypeInfo typeInfos[] = __getTypeInfos(_class);
-            Method methods[] = _class.getMethods();
+    // @see ITypeDescription#getTypeClass
+    public TypeClass getTypeClass() {
+        return typeClass;
+    }
 
-            for(int i = 0; i < methods.length; ++ i) {
-                Class parameters[] = methods[i].getParameterTypes();
-                ParameterTypeInfo[] parameterTypeInfos = null;
-                String name = methods[i].getName();
-                MethodTypeInfo methodTypeInfo = __findMethodTypeInfo(typeInfos,
-                                                                     name);
-                MethodDescription methodDescription = null;
+    // @see ITypeDescription#getComponentType
+    public ITypeDescription getComponentType() {
+        return componentType;
+    }
 
-                if(methodTypeInfo != null) { // this is a idl method
-                    methodDescription = new MethodDescription(methodTypeInfo);
-                    parameterTypeInfos = new ParameterTypeInfo[
-                        parameters.length];
-                    for(int j = 0; j < parameters.length; ++ j)
-                        parameterTypeInfos[j] = __findParameterTypeInfo(
-                            typeInfos, name, j);
-                } else {
-                    final int NO_ATTRIBUTE = 0;
-                    final int GET_ATTRIBUTE = 1;
-                    final int SET_ATTRIBUTE = 2;
-                    int attr = name.startsWith("get") ? GET_ATTRIBUTE
-                        : name.startsWith("set") ? SET_ATTRIBUTE
-                        : NO_ATTRIBUTE;
-                    if (attr != NO_ATTRIBUTE) {
-                        AttributeTypeInfo ati = __findAttributeTypeInfo(
-                            typeInfos, name.substring("?et".length()));
-                        if (ati != null) {
-                            if (attr == GET_ATTRIBUTE) {
-                                methodDescription = new MethodDescription(
-                                    name, ati.getIndex(), ati.getFlags());
-                            } else {
-                                methodDescription = new MethodDescription(
-                                    name, ati.getIndex() + 1, 0);
-                                parameterTypeInfos = new ParameterTypeInfo[] {
-                                    new ParameterTypeInfo("", name, 0,
-                                                          ati.getFlags()) };
-                            }
+    // @see ITypeDescription#getTypeName
+    public String getTypeName() {
+        return typeName;
+    }
+
+    // @see ITypeDescription#getArrayTypeName
+    public String getArrayTypeName() {
+        return arrayTypeName;
+    }
+
+    // @see ITypeDescription#getZClass
+    public Class getZClass() {
+        return zClass;
+    }
+
+    // @see Object#toString
+    public String toString() {
+        return "[" + getClass().getName() + ": " + getTypeClass() + ", "
+            + getTypeName() + "]";
+    }
+
+    private static TypeDescription getDefinitely(Type type) {
+        try {
+            return get(type);
+        } catch (ClassNotFoundException e) {
+            throw new IllegalArgumentException("this cannot happen: " + e);
+        }
+    }
+
+    private static TypeDescription get(Type type) throws ClassNotFoundException
+    {
+        String typeName = type.getTypeName();
+        TypeDescription desc = cache.get(typeName);
+        if (desc == null) {
+            desc = create(type);
+            cache.put(desc);
+        }
+        return desc;
+    }
+
+    private static TypeDescription create(Type type)
+        throws ClassNotFoundException
+    {
+        TypeClass typeClass = type.getTypeClass();
+        String typeName = type.getTypeName();
+        Class zClass = type.getZClass();
+        if (zClass == null) {
+            throw new ClassNotFoundException("UNO type " + type);
+        }
+        switch (typeClass.getValue()) {
+        case TypeClass.VOID_value:
+            return new TypeDescription(
+                typeClass, typeName, "[Ljava.lang.Void;", zClass, null, null);
+
+        case TypeClass.BOOLEAN_value:
+            return new TypeDescription(
+                typeClass, typeName, "[Z", zClass, null, null);
+
+        case TypeClass.BYTE_value:
+            return new TypeDescription(
+                typeClass, typeName, "[B", zClass, null, null);
+
+        case TypeClass.SHORT_value:
+        case TypeClass.UNSIGNED_SHORT_value:
+            return new TypeDescription(
+                typeClass, typeName, "[S", zClass, null, null);
+
+        case TypeClass.LONG_value:
+        case TypeClass.UNSIGNED_LONG_value:
+            return new TypeDescription(
+                typeClass, typeName, "[I", zClass, null, null);
+
+        case TypeClass.HYPER_value:
+        case TypeClass.UNSIGNED_HYPER_value:
+            return new TypeDescription(
+                typeClass, typeName, "[J", zClass, null, null);
+
+        case TypeClass.FLOAT_value:
+            return new TypeDescription(
+                typeClass, typeName, "[F", zClass, null, null);
+
+        case TypeClass.DOUBLE_value:
+            return new TypeDescription(
+                typeClass, typeName, "[D", zClass, null, null);
+
+        case TypeClass.CHAR_value:
+            return new TypeDescription(
+                typeClass, typeName, "[C", zClass, null, null);
+
+        case TypeClass.STRING_value:
+            return new TypeDescription(
+                typeClass, typeName, "[Ljava.lang.String;", zClass, null, null);
+
+        case TypeClass.TYPE_value:
+            return new TypeDescription(
+                typeClass, typeName, "[Lcom.sun.star.uno.Type;", zClass, null,
+                null);
+
+        case TypeClass.ANY_value:
+            return new TypeDescription(
+                typeClass, typeName, "[Ljava.lang.Object;", zClass, null, null);
+
+        case TypeClass.SEQUENCE_value:
+            {
+                // assert typeName.startsWith("[]");
+                ITypeDescription componentType = getTypeDescription(
+                    typeName.substring("[]".length()));
+                // assert zClass.getName().startsWith("[");
+                return new TypeDescription(
+                    typeClass, typeName, "[" + zClass.getName(), zClass, null,
+                    componentType);
+            }
+
+        case TypeClass.ENUM_value:
+            // assert !zClass.getName().startsWith("[");
+            return new TypeDescription(
+                typeClass, typeName, "[L" + zClass.getName() + ";", zClass,
+                null, null);
+
+        case TypeClass.STRUCT_value:
+            {
+                Class superClass = zClass.getSuperclass();
+                TypeDescription[] superTypes = superClass != Object.class
+                    ? new TypeDescription[] { get(new Type(superClass)) }
+                    : null;
+                // assert !zClass.getName().startsWith("[");
+                return new TypeDescription(
+                    typeClass, typeName, "[L" + zClass.getName() + ";", zClass,
+                    superTypes, null);
+            }
+
+        case TypeClass.EXCEPTION_value:
+            {
+                TypeDescription[] superTypes
+                    = typeName.equals("com.sun.star.uno.Exception")
+                    || typeName.equals("com.sun.star.uno.RuntimeException")
+                    ? null
+                    : new TypeDescription[] {
+                            get(new Type(zClass.getSuperclass())) };
+                // assert !zClass.getName().startsWith("[");
+                return new TypeDescription(
+                    typeClass, typeName, "[L" + zClass.getName() + ";", zClass,
+                    superTypes, null);
+            }
+
+        case TypeClass.INTERFACE_value:
+            {
+                SuperTypes superTypes = new SuperTypes();
+                Class[] interfaces = zClass.getInterfaces();
+                for (int i = 0; i < interfaces.length; ++i) {
+                    Type t = new Type(interfaces[i]);
+                    if (t.getTypeClass() == TypeClass.INTERFACE) {
+                        TypeDescription desc = getDefinitely(t);
+                        TypeDescription[] descs = desc.superTypes;
+                        for (int j = 0; j < descs.length; ++j) {
+                            superTypes.add(descs[j]);
                         }
+                        superTypes.add(desc);
                     }
                 }
-
-                if(methodDescription != null) {
-                    methodDescription.init(methods[i], parameterTypeInfos, superOffset);
-
-                    methodDescriptionsByName.put(methodDescription.getName(), methodDescription);
-                }
+                // assert !zClass.getName().startsWith("[");
+                return new TypeDescription(
+                    typeClass, typeName, "[L" + zClass.getName() + ";", zClass,
+                    superTypes.toArray(), null);
             }
 
+        default:
+            throw new IllegalArgumentException("given type has bad type class");
         }
-
-        MethodDescription methodDescriptions[] = new MethodDescription[methodDescriptionsByName.size()];
-        Enumeration element = methodDescriptionsByName.elements();
-        while(element.hasMoreElements()) {
-            MethodDescription methodDescription = (MethodDescription)element.nextElement();
-
-            methodDescriptions[methodDescription.getIndex() - superOffset] = methodDescription;
-        }
-
-        _offset = superOffset + methodDescriptions.length;
-
-        // transactional assignment
-        _methodDescriptions       = methodDescriptions;
-        _methodDescriptionsByName = methodDescriptionsByName;
     }
 
-    private void _initMemberTypeInfos() {
-        if(DEBUG) System.err.println("TypeDescription._initMemberTypeInfos");
+    private static final class SuperTypes {
+        public SuperTypes() {}
 
-        TypeInfo typeInfos[] = __getTypeInfos(_class);
-        Field fields[] = _class.getFields();
-        int index = 0;
-        int superTypeMemberCount = 0;
-        if( _superType != null )
-            superTypeMemberCount = _superType.getFieldDescriptions().length;
-
-        IFieldDescription tmp_iFieldDescriptions[] = new IFieldDescription[fields.length];
-
-        Hashtable iFieldDescriptionsByName = new Hashtable();
-
-        int i;
-        for( i = 0; i < fields.length; ++ i) {
-            if((fields[i].getModifiers() & (Modifier.STATIC | Modifier.TRANSIENT)) == 0) { // neither static nor transient ?
-
-                IFieldDescription iFieldDescription = null;
-
-                if(_superType != null)
-                    iFieldDescription = _superType.getFieldDescription(fields[i].getName());
-
-                if(iFieldDescription == null) {
-                    MemberTypeInfo memberTypeInfo = __findMemberTypeInfo(typeInfos, fields[i].getName());
-
-                    if( memberTypeInfo == null )
-                        throw new com.sun.star.uno.RuntimeException(
-                            TypeDescription.class.getName() + "no membertype info for field " + fields[i].getName(),null );
-
-                    iFieldDescription = new FieldDescription(
-                        memberTypeInfo.getName(),
-                        memberTypeInfo.getIndex() + superTypeMemberCount,
-                        memberTypeInfo.getFlags(),
-                        fields[i]);
-                }
-
-                iFieldDescriptionsByName.put(iFieldDescription.getName(), iFieldDescription);
-                tmp_iFieldDescriptions[index ++] = iFieldDescription;
+        public void add(TypeDescription desc) {
+            if (!list.contains(desc)) {
+                list.add(desc);
             }
         }
 
-        IFieldDescription iFieldDescriptions[] = new IFieldDescription[index];
-        for( i = 0; i < index ; i ++ )
-        {
-            iFieldDescriptions[tmp_iFieldDescriptions[i].getIndex()] = tmp_iFieldDescriptions[i];
+        public TypeDescription[] toArray() {
+            return (TypeDescription[]) list.toArray(
+                new TypeDescription[list.size()]);
         }
 
-        // transactional assignment
-        _iFieldDescriptions = iFieldDescriptions;
-        _iFieldDescriptionsByName = iFieldDescriptionsByName;
+        private final ArrayList list = new ArrayList();
     }
 
-    public ITypeDescription getSuperType() {
-        return _superType;
+    private TypeDescription(
+        TypeClass typeClass, String typeName, String arrayTypeName,
+        Class zClass, TypeDescription[] superTypes,
+        ITypeDescription componentType)
+    {
+        this.typeClass = typeClass;
+        this.typeName = typeName;
+        this.arrayTypeName = arrayTypeName;
+        this.zClass = zClass;
+        this.superTypes = superTypes;
+        this.componentType = componentType;
+        // method/fieldDescriptions must be initialized lazily, to avoid
+        // problems with circular dependencies (a super-interface that has a
+        // sub-interface as method parameter type; an interface that has a
+        // struct as method parameter type, and the struct has the interface as
+        // member type)
     }
 
-    public IMethodDescription []getMethodDescriptions() {
-        if(_methodDescriptions == null)
-            _initMethodTypeInfos();
-
-        return _methodDescriptions;
+    private synchronized void initMethodDescriptions() {
+        if (methodDescriptions != null || typeClass != TypeClass.INTERFACE) {
+            return;
+        }
+        if (superTypes.length == 0) { // com.sun.star.uno.XInterface
+            superMethodDescriptions = new IMethodDescription[0];
+            methodDescriptions = new IMethodDescription[] {
+                new MethodDescription(
+                    "queryInterface", 0, false,
+                    new ITypeDescription[] { getDefinitely(Type.TYPE) },
+                    new ITypeDescription[] { null }, getDefinitely(Type.ANY),
+                    null),
+                new MethodDescription(
+                    "acquire", 1, true, new ITypeDescription[0],
+                    new ITypeDescription[0], getDefinitely(Type.VOID), null),
+                new MethodDescription(
+                    "release", 2, true, new ITypeDescription[0],
+                    new ITypeDescription[0], getDefinitely(Type.VOID), null) };
+        } else {
+            int methodOffset = 0;
+            ArrayList superList = new ArrayList();
+            for (int i = 0; i < superTypes.length; ++i) {
+                IMethodDescription[] ds = superTypes[i].getMethodDescriptions();
+                for (int j = 0; j < ds.length; ++j) {
+                    superList.add(
+                        new MethodDescription(
+                            (MethodDescription) ds[j], methodOffset++));
+                }
+            }
+            superMethodDescriptions = (IMethodDescription[]) superList.toArray(
+                new IMethodDescription[superList.size()]);
+            ArrayList directList = new ArrayList();
+            TypeInfo[] infos = getTypeInfo();
+            int infoCount = infos == null ? 0 : infos.length;
+            int index = 0;
+            Method[] methods = zClass.getDeclaredMethods();
+            for (int i = 0; i < infoCount;) {
+                if (infos[i] instanceof AttributeTypeInfo) {
+                    AttributeTypeInfo info = (AttributeTypeInfo) infos[i++];
+                    if (info.getIndex() != index) {
+                        throw new IllegalArgumentException(
+                            "Bad UNOTYPEINFO for " + zClass
+                            + ": entries not ordererd");
+                    }
+                    String getterName = "get" + info.getName();
+                    Method getter = findMethod(methods, getterName);
+                    ITypeDescription type = getTypeDescription(
+                        getter.getReturnType(), info);
+                    directList.add(
+                        new MethodDescription(
+                            getterName, index++ + methodOffset, false,
+                            new ITypeDescription[0], new ITypeDescription[0],
+                            type, getter));
+                    if (!info.isReadOnly()) {
+                        String setterName = "set" + info.getName();
+                        Method setter = findMethod(methods, setterName);
+                        directList.add(
+                            new MethodDescription(
+                                setterName, index++ + methodOffset, false,
+                                new ITypeDescription[] { type },
+                                new ITypeDescription[] { null },
+                                getDefinitely(Type.VOID), setter));
+                    }
+                } else {
+                    MethodTypeInfo info = (MethodTypeInfo) infos[i++];
+                    if (info.getIndex() != index) {
+                        throw new IllegalArgumentException(
+                            "Bad UNOTYPEINFO for " + zClass
+                            + ": entries not ordererd");
+                    }
+                    Method method = findMethod(methods, info.getName());
+                    Class[] params = method.getParameterTypes();
+                    ITypeDescription[] in = new ITypeDescription[params.length];
+                    ITypeDescription[] out
+                        = new ITypeDescription[params.length];
+                    for (int j = 0; j < params.length; ++j) {
+                        ParameterTypeInfo p = null;
+                        if (i < infoCount
+                            && infos[i] instanceof ParameterTypeInfo
+                            && ((ParameterTypeInfo) infos[i]).getIndex() == j)
+                        {
+                            p = (ParameterTypeInfo) infos[i++];
+                        }
+                        ITypeDescription d = getTypeDescription(params[j], p);
+                        if (p == null || p.isIN()) {
+                            in[j] = d;
+                        }
+                        if (p != null && p.isOUT()) {
+                            out[j] = d;
+                        }
+                    }
+                    directList.add(
+                        new MethodDescription(
+                            info.getName(), index++ + methodOffset,
+                            info.isOneway(), in, out,
+                            getTypeDescription(method.getReturnType(), info),
+                            method));
+                }
+            }
+            methodDescriptions = (IMethodDescription[]) directList.toArray(
+                new IMethodDescription[directList.size()]);
+        }
     }
 
-    public IMethodDescription getMethodDescription(int methodId) {
-        if(_methodDescriptionsByName == null)
-            _initMethodTypeInfos();
-
-        IMethodDescription iMethodDescription = null;
-
-        int relMethodId = methodId - (_offset - _methodDescriptions.length);
-
-        if(relMethodId >= 0 && relMethodId < _methodDescriptions.length)
-            iMethodDescription = _methodDescriptions[relMethodId];
-
-        else if(_superType != null)
-            iMethodDescription = _superType.getMethodDescription(methodId);
-
-        return iMethodDescription;
+    private synchronized void initFieldDescriptions() {
+        if (fieldDescriptions != null
+            || (typeClass != TypeClass.STRUCT
+                && typeClass != TypeClass.EXCEPTION)) {
+            return;
+        }
+        TypeInfo[] infos = getTypeInfo();
+        int infoCount = infos == null ? 0 : infos.length;
+        ITypeDescription superType = getSuperType();
+        IFieldDescription[] superDescs = superType == null
+            ? null : superType.getFieldDescriptions();
+        int superCount = superDescs == null ? 0 : superDescs.length;
+        IFieldDescription[] descs = new IFieldDescription[
+            superCount + infoCount];
+        if (superCount != 0) {
+            System.arraycopy(superDescs, 0, descs, 0, superCount);
+        }
+        for (int i = 0; i < infoCount; ++i) {
+            MemberTypeInfo info = (MemberTypeInfo) infos[i];
+            if (info.getIndex() != i) {
+                throw new IllegalArgumentException(
+                    "Bad UNOTYPEINFO for " + zClass + ": entries not ordererd");
+            }
+            Field field;
+            try {
+                field = zClass.getDeclaredField(info.getName());
+            } catch (NoSuchFieldException e) {
+                throw new IllegalArgumentException(
+                    "Bad UNOTYPEINFO for " + zClass + ": " + e);
+            }
+            descs[i + superCount] = new FieldDescription(
+                info.getName(), i + superCount,
+                getTypeDescription(field.getType(), info), field);
+        }
+        fieldDescriptions = descs;
     }
 
-    public IMethodDescription getMethodDescription(String name) {
-        if(_methodDescriptionsByName == null)
-            _initMethodTypeInfos();
-
-        IMethodDescription iMethodDescription = (MethodDescription)_methodDescriptionsByName.get(name);
-        if(iMethodDescription == null && _superType != null)
-            iMethodDescription = _superType.getMethodDescription(name);
-
-        return iMethodDescription;
+    private TypeInfo[] getTypeInfo() {
+        try {
+            return (TypeInfo[])
+                zClass.getDeclaredField("UNOTYPEINFO").get(null);
+        } catch (NoSuchFieldException e) {
+            return null;
+        } catch (IllegalAccessException e) {
+            throw new IllegalArgumentException(
+                "Bad UNOTYPEINFO for " + zClass + ": " + e);
+        }
     }
 
-    public IFieldDescription []getFieldDescriptions() {
-        if(_iFieldDescriptions == null)
-            _initMemberTypeInfos();
-
-        return _iFieldDescriptions;
+    private Method findMethod(Method[] methods, String name) {
+        for (int i = 0; i < methods.length; ++i) {
+            if (methods[i].getName().equals(name)) {
+                return methods[i];
+            }
+        }
+        throw new IllegalArgumentException(
+            "Bad UNOTYPEINFO for " + zClass + ": no method " + name);
     }
 
-    public IFieldDescription getFieldDescription(String name) {
-        if(_iFieldDescriptions == null)
-            _initMemberTypeInfos();
-
-        IFieldDescription iFieldDescription = (IFieldDescription)_iFieldDescriptionsByName.get(name);
-        if(iFieldDescription == null && _superType != null)
-            iFieldDescription = _superType.getFieldDescription(name);
-
-        return iFieldDescription;
+    private static ITypeDescription getTypeDescription(
+        Class zClass, TypeInfo typeInfo)
+    {
+        return getDefinitely(
+            new Type(
+                zClass,
+                typeInfo != null
+                && (typeInfo.isUnsigned() || typeInfo.isInterface())));
     }
 
-    /**
-     * Gets the IDL <code>TypeClass</code> of the type.
-     * <p>
-     * @return  the <code>TypeClass</code>.
-     */
-    public TypeClass getTypeClass() {
-        return _typeClass;
+    private static final class Cache {
+        public Cache() {}
+
+        public TypeDescription get(String typeName) {
+            synchronized (map) {
+                cleanUp();
+                Entry e = (Entry) map.get(typeName);
+                return e == null ? null : (TypeDescription) e.get();
+            }
+        }
+
+        public void put(TypeDescription desc) {
+            synchronized (map) {
+                cleanUp();
+                map.put(desc.getTypeName(), new Entry(desc));
+            }
+        }
+
+        private void cleanUp() {
+            for (;;) {
+                Entry e = (Entry) queue.poll();
+                if (e == null) {
+                    break;
+                }
+                map.remove(e.typeName);
+            }
+        }
+
+        private final class Entry extends SoftReference {
+            public Entry(TypeDescription desc) {
+                super(desc, queue);
+                typeName = desc.getTypeName();
+            }
+
+            public final String typeName;
+        }
+
+        private final HashMap map = new HashMap();
+        private final ReferenceQueue queue = new ReferenceQueue();
     }
 
-    /**
-     * Gets the component <code>TypeDescription</code> if this is a sequence
-     * type.
-     *
-     * @return the component <code>TypeDescription</code>, or <code>null</code>
-     *     if this is not a sequence type
-     */
-    public ITypeDescription getComponentType() {
-        return _componentType;
-    }
+    private static final Cache cache = new Cache();
 
-    /**
-     * Gets the type name.
-     * <p>
-     * @return  the type name.
-     */
-    public String getTypeName() {
-        return _typeName;
-    }
-
-    /**
-     * Gets the array type name.
-     * <p>
-     * @return  the array type name.
-     */
-    public String getArrayTypeName() {
-        return _arrayTypeName;
-    }
-
-    /**
-     * Gets the corresponding java class for the type.
-     * <p>
-     * @return   the corresponding java class.
-     */
-    public Class getZClass() {
-        return _class;
-    }
-
-
-    public boolean equals(Object typeDescription) {
-        boolean result = false;
-
-        if(typeDescription != null)
-            result = _typeName.equals(((TypeDescription)typeDescription)._typeName);
-
-        return result;
-    }
-
-    public String toString() {
-        return "<" + getTypeName() + ">";
-    }
+    private final TypeClass typeClass;
+    private final String typeName;
+    private final String arrayTypeName;
+    private final Class zClass;
+    private final TypeDescription[] superTypes;
+    private final ITypeDescription componentType;
+    private IMethodDescription[] methodDescriptions = null;
+    private IMethodDescription[] superMethodDescriptions;
+    private IFieldDescription[] fieldDescriptions = null;
 }
-
