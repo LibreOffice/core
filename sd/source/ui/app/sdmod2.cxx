@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod2.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 09:53:01 $
+ *  last change: $Author: hr $ $Date: 2004-02-05 16:55:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -274,9 +274,9 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo)
                 // #110023#
                 // since the view from the SdOutlineViewShell can be zero during SdOutlineViewShell c'tor
                 // we have to check this here
-                ::sd::SdOutlineView* pSdView = NULL;
-                if (pViewSh->ISA (::sd::SdOutlineViewShell))
-                    pSdView = static_cast< ::sd::SdOutlineView*> (static_cast< ::sd::SdOutlineViewShell*>(pViewSh)->GetView());
+                ::sd::OutlineView* pSdView = NULL;
+                if (pViewSh->ISA (::sd::OutlineViewShell))
+                    pSdView = static_cast< ::sd::OutlineView*> (static_cast< ::sd::OutlineViewShell*>(pViewSh)->GetView());
                 if (pSdView != NULL
                     && (pInfo->GetOutliner() ==  pSdView->GetOutliner()))
                 {
