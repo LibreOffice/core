@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodoc.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:18:34 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 12:33:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,8 +69,12 @@
 #endif
 
 #include "sdmod.hxx"
-#include "docshell.hxx"
-#include "grdocsh.hxx"
+#ifndef SD_DRAW_DOC_SHELL_HXX
+#include "DrawDocShell.hxx"
+#endif
+#ifndef SD_GRAPHIC_DOC_SHELL_HXX
+#include "GraphicDocShell.hxx"
+#endif
 
 #ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
@@ -104,7 +108,8 @@ uno::Reference< uno::XInterface > SAL_CALL SdDrawingDocument_createInstance(
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
     SdDLL::Init();
-    SfxObjectShell* pShell = new SdGraphicDocShell( SFX_CREATE_MODE_STANDARD );
+    SfxObjectShell* pShell =
+        new ::sd::GraphicDocShell(SFX_CREATE_MODE_STANDARD);
     return uno::Reference< uno::XInterface >( pShell->GetModel() );
 }
 
@@ -132,7 +137,7 @@ uno::Reference< uno::XInterface > SAL_CALL SdPresentationDocument_createInstance
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
     SdDLL::Init();
-    SfxObjectShell* pShell = new SdDrawDocShell( SFX_CREATE_MODE_STANDARD );
+    SfxObjectShell* pShell = new ::sd::DrawDocShell(SFX_CREATE_MODE_STANDARD);
     return uno::Reference< uno::XInterface >( pShell->GetModel() );
 }
 
