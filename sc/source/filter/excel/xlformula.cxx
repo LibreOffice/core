@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlformula.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-09 15:04:14 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 10:46:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef SC_XLFORMULA_HXX
 #include "xlformula.hxx"
 #endif
@@ -87,7 +86,7 @@ const sal_uInt8 I = EXC_FUNC_PAR_INVALID;
 static const XclFunctionInfo saFuncTable_2[] =
 {
     { ocCount,              0,      0,  30, V, { R } },
-    { ocIf,                 1,      2,  3,  V, { V, R } },
+    { ocIf,                 1,      2,  3,  R, { V, R } },
     { ocIsNV,               2,      1,  1,  V, { V } },
     { ocIsError,            3,      1,  1,  V, { V } },
     { ocSum,                4,      0,  30, V, { R } },
