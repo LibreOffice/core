@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OfficeSettings.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: toconnor $ $Date: 2002-11-13 17:44:38 $
+ *  last change: $Author: toconnor $ $Date: 2002-11-26 12:46:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,7 @@ public class OfficeSettings extends SystemOption {
 
         // if no office version is found try a default value
         setOfficeDirectory(System.getProperty("user.home") +
-            System.getProperty("file.separator") + "StarOffice6.0");
+            System.getProperty("file.separator") + "OpenOffice643C");
     }
 
     public String displayName() {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OpenOfficeDocFileSystemBeanInfo.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: toconnor $ $Date: 2002-11-13 17:44:28 $
+ *  last change: $Author: toconnor $ $Date: 2002-11-26 12:46:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@ import org.openide.util.NbBundle;
 import org.openide.util.Utilities;
 
 /**
- * Description of the OpenOffice Document filesystem.
+ * Description of the OpenOffice.org Document filesystem.
  *
  * @author misha <misha@openoffice.org>
  */

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OfficeDocumentDataLoaderBeanInfo.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: toconnor $ $Date: 2002-11-13 17:44:31 $
+ *  last change: $Author: toconnor $ $Date: 2002-11-26 12:46:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,9 +74,9 @@ public class OfficeDocumentDataLoaderBeanInfo extends SimpleBeanInfo {
     /*
     public PropertyDescriptor[] getPropertyDescriptors() {
         try {
-            PropertyDescriptor myProp = new PropertyDescriptor("myProp", StarOfficeDocumentDataLoader.class);
-            myProp.setDisplayName(NbBundle.getMessage(StarOfficeDocumentDataLoaderBeanInfo.class, "PROP_myProp"));
-            myProp.setShortDescription(NbBundle.getMessage(StarOfficeDocumentDataLoaderBeanInfo.class, "HINT_myProp"));
+            PropertyDescriptor myProp = new PropertyDescriptor("myProp", OfficeDocumentDataLoader.class);
+            myProp.setDisplayName(NbBundle.getMessage(OfficeDocumentDataLoaderBeanInfo.class, "PROP_myProp"));
+            myProp.setShortDescription(NbBundle.getMessage(OfficeDocumentDataLoaderBeanInfo.class, "HINT_myProp"));
             return new PropertyDescriptor[] {myProp};
         } catch (IntrospectionException ie) {
             ErrorManager.getDefault().notify(ie);

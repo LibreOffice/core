@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OfficeDocument.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: toconnor $ $Date: 2002-11-13 17:44:06 $
+ *  last change: $Author: toconnor $ $Date: 2002-11-26 12:46:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,7 @@ public class OfficeDocument
     public static final String PARCEL_PREFIX_DIR = "Scripts/java/";
     public static final String OFFICE_EXTENSIONS = "sxc,sxw";
     public static final String ARCHIVE_TAG = "[PARCEL_FILE]";
+    public static final String OFFICE_PRODUCT_NAME = "OpenOffice.org";
 
     private static ParcelZipper zipper = ParcelZipper.getParcelZipper();
     private File officeFile = null;
@@ -88,7 +89,8 @@ public class OfficeDocument
         this.officeFile = officeFile;
         if( !checkIfOfficeDocument() )
         {
-            throw new InvalidNameException("This is not a valid StarOffice document.");
+            throw new InvalidNameException("This is not a valid " +
+                OFFICE_PRODUCT_NAME + " document.");
         }
     }
 
@@ -115,9 +117,11 @@ public class OfficeDocument
     public Enumeration getParcels()
     {
         java.util.Vector parcelEntries = new java.util.Vector();
+        ZipFile zp = null;
+
         try
         {
-            ZipFile zp = new ZipFile(this.officeFile);
+            zp = new ZipFile(this.officeFile);
 
             for (Enumeration officeEntries = zp.entries(); officeEntries.hasMoreElements(); )
             {
@@ -135,14 +139,22 @@ public class OfficeDocument
                 }
             }
         }
-        catch(ZipException ze)
-        {
+        catch(ZipException ze) {
             ze.printStackTrace();
         }
-        catch(IOException ioe)
-        {
+        catch(IOException ioe) {
             ioe.printStackTrace();
         }
+        finally {
+            if (zp != null) {
+                try {
+                    zp.close();
+                }
+                catch (IOException asdf) {
+                }
+            }
+        }
+
         return parcelEntries.elements();
     }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ParcelDescriptorDataLoader.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: toconnor $ $Date: 2002-11-13 17:44:33 $
+ *  last change: $Author: toconnor $ $Date: 2002-11-26 12:46:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,8 @@ import org.openide.loaders.*;
 import org.openide.util.NbBundle;
 import org.openide.util.actions.SystemAction;
 
+import org.openoffice.idesupport.OfficeDocument;
+
 /** Recognizes single files in the Repository as being of a certain type.
  *
  * @author tomaso
@@ -85,7 +87,7 @@ public class ParcelDescriptorDataLoader extends UniFileLoader {
     }
 
     protected String defaultDisplayName() {
-        return "StarOffice Script Parcel Descriptor";
+        return OfficeDocument.OFFICE_PRODUCT_NAME + " Script Parcel Descriptor";
     }
 
     protected void initialize() {

@@ -3,7 +3,7 @@
 <filesystem>
     <folder name="Templates">
         <attr name="SystemFileSystem.localizingBundle" stringvalue="org.openoffice.netbeans.modules.office.resources.Bundle"/>
-        <folder name="StarOfficeScripting">
+        <folder name="OfficeScripting">
             <attr name="SystemFileSystem.localizingBundle" stringvalue="org.openoffice.netbeans.modules.office.resources.Bundle"/>
             <folder name="Parcel">
                 <attr boolvalue="true" name="template"/>
@@ -17,8 +17,8 @@
                 </folder>
             </folder>
         </folder>
-        <attr boolvalue="true" name="Ant/StarOfficeScripting"/>
-        <attr boolvalue="true" name="StarOfficeScripting/Other"/>
+        <attr boolvalue="true" name="Ant/OfficeScripting"/>
+        <attr boolvalue="true" name="OfficeScripting/Other"/>
 
     <!-- OpenOfficeDoc FileSystem BEGIN: -->
         <!-- Uncomment to enable writable mounting of Office Documents

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ParcelZipper.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: toconnor $ $Date: 2002-11-13 17:44:17 $
+ *  last change: $Author: toconnor $ $Date: 2002-11-26 12:46:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,6 +221,7 @@ public class ParcelZipper
 
     private boolean isDocumentOverwriteNeeded(File parcel, File document) {
         ZipFile documentZip;
+        boolean result = false;
 
         try {
             documentZip = new ZipFile(document);
@@ -234,9 +235,15 @@ public class ParcelZipper
                 "/" + PARCEL_DESCRIPTOR_XML;
 
         if (documentZip.getEntry(name) != null)
-            return true;
+            result = true;
 
-        return false;
+        try {
+            documentZip.close();
+        }
+        catch (IOException ioe) {
+        }
+
+        return result;
     }
 
     public String deployParcel(File parcel, File target)
@@ -484,22 +491,27 @@ public class ParcelZipper
         }
 
         ZipEntry original = documentZip.getEntry("META-INF/manifest.xml");
-        if (original == null) {
-            return null;
+        if (original != null) {
+            try {
+                result =
+                    new Manifest(documentZip.getInputStream(original), parser);
+            }
+            catch (IOException ioe) {
+                result = null;
+            }
         }
 
         try {
-            result = new Manifest(documentZip.getInputStream(original), parser);
+            documentZip.close();
         }
         catch (IOException ioe) {
-            return null;
         }
 
         return result;
     }
 
     private Manifest addParcelToManifest(File document, File parcel) {
-        ZipFile documentZip, parcelZip;
+        ZipFile parcelZip;
         Manifest result = null;
 
         result = getManifestFromDocument(document);
@@ -520,6 +532,12 @@ public class ParcelZipper
         while (entries.hasMoreElements()) {
             ZipEntry entry = (ZipEntry)entries.nextElement();
             result.add(prefix + entry.getName());
+        }
+
+        try {
+            parcelZip.close();
+        }
+        catch (IOException ioe) {
         }
 
         return result;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OfficeDocumentDataNode.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: toconnor $ $Date: 2002-11-13 17:44:31 $
+ *  last change: $Author: toconnor $ $Date: 2002-11-26 12:46:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,8 +138,8 @@ public class OfficeDocumentDataNode extends DataNode {
         if (set == null) {
             set = new Sheet.Set();
             set.setName(ExecSupport.PROP_EXECUTION);
-            set.setDisplayName(NbBundle.getMessage(StarOfficeDocumentDataNode.class, "LBL_DataNode_exec_sheet"));
-            set.setShortDescription(NbBundle.getMessage(StarOfficeDocumentDataNode.class, "HINT_DataNode_exec_sheet"));
+            set.setDisplayName(NbBundle.getMessage(OfficeDocumentDataNode.class, "LBL_DataNode_exec_sheet"));
+            set.setShortDescription(NbBundle.getMessage(OfficeDocumentDataNode.class, "HINT_DataNode_exec_sheet"));
         }
         ((ExecSupport)getCookie(ExecSupport.class)).addProperties(set);
         // Maybe:
