@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntcap.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jp $ $Date: 2001-08-22 07:58:43 $
+ *  last change: $Author: fme $ $Date: 2001-10-11 12:45:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -468,7 +468,11 @@ void SwSubFont::DrawStretchCapital( SwDrawTextInfo &rInf )
 
     if( rInf.GetLen() == STRING_LEN )
         rInf.SetLen( rInf.GetText().Len() );
+
+    const Point& rOldPos = rInf.GetPos();
     const USHORT nCapWidth = (USHORT)( GetCapitalSize( rInf ).Width() );
+    rInf.SetPos( rOldPos );
+
     rInf.SetDrawSpace( GetUnderline() != UNDERLINE_NONE ||
                        GetStrikeout() != STRIKEOUT_NONE );
     SwDoDrawStretchCapital aDo( rInf, nCapWidth );
