@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputhdl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-27 10:45:41 $
+ *  last change: $Author: nn $ $Date: 2000-11-26 13:51:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -446,13 +446,18 @@ void ScInputHandler::UpdateSpellSettings( BOOL bFromStartTab )
         BOOL bHideSpell = pViewData->GetOptions().IsHideAutoSpell();
 
         //  language must be set before spelling is started
+        //! is SetDefaultLanguage still needed? (all 3 languages now are in the attributes)
 
         USHORT nLanguage;
         if ( pLastPattern )
             nLanguage = ((const SvxLanguageItem&)
                             pLastPattern->GetItem(ATTR_FONT_LANGUAGE)).GetValue();
         else if ( pActiveViewSh )
-            nLanguage = pActiveViewSh->GetViewData()->GetDocShell()->GetDocument()->GetLanguage();
+        {
+            LanguageType eLatin, eCjk, eCtl;
+            pActiveViewSh->GetViewData()->GetDocShell()->GetDocument()->GetLanguage( eLatin, eCjk, eCtl );
+            nLanguage = eLatin;
+        }
         else
             nLanguage = LANGUAGE_SYSTEM;
         if ( nLanguage == LANGUAGE_SYSTEM )

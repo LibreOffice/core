@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docuno.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-24 12:08:33 $
+ *  last change: $Author: nn $ $Date: 2000-11-26 13:50:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,8 @@ const SfxItemPropertyMap* lcl_GetDocOptPropertyMap()
         {MAP_CHAR_LEN(SC_UNO_AREALINKS),    0,  &getCppuType((uno::Reference<sheet::XAreaLinks>*)0),      0},
         {MAP_CHAR_LEN(SC_UNO_CALCASSHOWN),  0,  &getBooleanCppuType(),                                    0},
         {MAP_CHAR_LEN(SC_UNONAME_CLOCAL),   0,  &getCppuType((lang::Locale*)0),                           0},
+        {MAP_CHAR_LEN(SC_UNO_CJK_CLOCAL),   0,  &getCppuType((lang::Locale*)0),                           0},
+        {MAP_CHAR_LEN(SC_UNO_CTL_CLOCAL),   0,  &getCppuType((lang::Locale*)0),                           0},
         {MAP_CHAR_LEN(SC_UNO_COLLABELRNG),  0,  &getCppuType((uno::Reference<sheet::XLabelRanges>*)0),    0},
         {MAP_CHAR_LEN(SC_UNO_DDELINKS),     0,  &getCppuType((uno::Reference<container::XNameAccess>*)0), 0},
         {MAP_CHAR_LEN(SC_UNO_DEFTABSTOP),   0,  &getCppuType((sal_Int16*)0),                              0},
@@ -728,7 +730,34 @@ void SAL_CALL ScModelObj::setPropertyValue(
         {
             lang::Locale aLocale;
             if ( aValue >>= aLocale )
-                pDoc->SetLanguage( ScUnoConversion::GetLanguage(aLocale) );
+            {
+                LanguageType eLatin, eCjk, eCtl;
+                pDoc->GetLanguage( eLatin, eCjk, eCtl );
+                eLatin = ScUnoConversion::GetLanguage(aLocale);
+                pDoc->SetLanguage( eLatin, eCjk, eCtl );
+            }
+        }
+        else if ( aString.EqualsAscii( SC_UNO_CJK_CLOCAL ) )
+        {
+            lang::Locale aLocale;
+            if ( aValue >>= aLocale )
+            {
+                LanguageType eLatin, eCjk, eCtl;
+                pDoc->GetLanguage( eLatin, eCjk, eCtl );
+                eCjk = ScUnoConversion::GetLanguage(aLocale);
+                pDoc->SetLanguage( eLatin, eCjk, eCtl );
+            }
+        }
+        else if ( aString.EqualsAscii( SC_UNO_CTL_CLOCAL ) )
+        {
+            lang::Locale aLocale;
+            if ( aValue >>= aLocale )
+            {
+                LanguageType eLatin, eCjk, eCtl;
+                pDoc->GetLanguage( eLatin, eCjk, eCtl );
+                eCtl = ScUnoConversion::GetLanguage(aLocale);
+                pDoc->SetLanguage( eLatin, eCjk, eCtl );
+            }
         }
 
         if ( aNewOpt != rOldOpt )
@@ -758,8 +787,29 @@ uno::Any SAL_CALL ScModelObj::getPropertyValue( const rtl::OUString& aPropertyNa
         }
         else if ( aString.EqualsAscii( SC_UNONAME_CLOCAL ) )
         {
+            LanguageType eLatin, eCjk, eCtl;
+            pDocShell->GetDocument()->GetLanguage( eLatin, eCjk, eCtl );
+
             lang::Locale aLocale;
-            ScUnoConversion::FillLocale( aLocale, pDocShell->GetDocument()->GetLanguage() );
+            ScUnoConversion::FillLocale( aLocale, eLatin );
+            aRet <<= aLocale;
+        }
+        else if ( aString.EqualsAscii( SC_UNO_CJK_CLOCAL ) )
+        {
+            LanguageType eLatin, eCjk, eCtl;
+            pDocShell->GetDocument()->GetLanguage( eLatin, eCjk, eCtl );
+
+            lang::Locale aLocale;
+            ScUnoConversion::FillLocale( aLocale, eCjk );
+            aRet <<= aLocale;
+        }
+        else if ( aString.EqualsAscii( SC_UNO_CTL_CLOCAL ) )
+        {
+            LanguageType eLatin, eCjk, eCtl;
+            pDocShell->GetDocument()->GetLanguage( eLatin, eCjk, eCtl );
+
+            lang::Locale aLocale;
+            ScUnoConversion::FillLocale( aLocale, eCtl );
             aRet <<= aLocale;
         }
         else if ( aString.EqualsAscii( SC_UNO_NAMEDRANGES ) )
