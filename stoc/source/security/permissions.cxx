@@ -2,9 +2,9 @@
  *
  *  $RCSfile: permissions.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dbo $ $Date: 2002-04-11 16:04:11 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:13:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,7 @@ static inline sal_Int32 makeMask(
             }
             ++nPos;
         }
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
         if (! strings[ nPos ])
         {
             OUStringBuffer buf( 48 );
