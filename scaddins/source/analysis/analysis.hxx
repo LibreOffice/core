@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysis.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: gt $ $Date: 2001-06-21 12:00:59 $
+ *  last change: $Author: gt $ $Date: 2001-07-18 06:44:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,22 +141,22 @@ public:
                             // XAnalysis
 //    virtual double SAL_CALL       get_Test( constREFXPS&, sal_Int32 nMode, double f1, double f2, double f3 ) THROWDEF_RTE;
 
-    virtual sal_Int32 SAL_CALL  getWorkday( constREFXPS&, sal_Int32 nStartDate, sal_Int32 nDays, const ANY& aHDay ) THROWDEF_RTE;
+    virtual sal_Int32 SAL_CALL  getWorkday( constREFXPS&, sal_Int32 nStartDate, sal_Int32 nDays, const ANY& aHDay ) THROWDEF_RTE_IAE;
     virtual double SAL_CALL     getYearfrac( constREFXPS&, sal_Int32 nStartDate, sal_Int32 nEndDate, const ANY& aMode ) THROWDEF_RTE_IAE;
-    virtual sal_Int32 SAL_CALL  getEdate( constREFXPS&, sal_Int32 nStartDate, sal_Int32 nMonths ) THROWDEF_RTE;
-    virtual sal_Int32 SAL_CALL  getWeeknum( constREFXPS&, sal_Int32 nStartDate, sal_Int32 nMode ) THROWDEF_RTE;
-    virtual sal_Int32 SAL_CALL  getEomonth( constREFXPS&, sal_Int32 nStartDate, sal_Int32 nMonths ) THROWDEF_RTE;
-    virtual sal_Int32 SAL_CALL  getNetworkdays( constREFXPS&, sal_Int32 nStartDate, sal_Int32 nEndDate, const ANY& aHDay ) THROWDEF_RTE;
+    virtual sal_Int32 SAL_CALL  getEdate( constREFXPS&, sal_Int32 nStartDate, sal_Int32 nMonths ) THROWDEF_RTE_IAE;
+    virtual sal_Int32 SAL_CALL  getWeeknum( constREFXPS&, sal_Int32 nStartDate, sal_Int32 nMode ) THROWDEF_RTE_IAE;
+    virtual sal_Int32 SAL_CALL  getEomonth( constREFXPS&, sal_Int32 nStartDate, sal_Int32 nMonths ) THROWDEF_RTE_IAE;
+    virtual sal_Int32 SAL_CALL  getNetworkdays( constREFXPS&, sal_Int32 nStartDate, sal_Int32 nEndDate, const ANY& aHDay ) THROWDEF_RTE_IAE;
 
-    virtual sal_Int32 SAL_CALL  getIseven( sal_Int32 nVal ) THROWDEF_RTE;
-    virtual sal_Int32 SAL_CALL  getIsodd( sal_Int32 nVal ) THROWDEF_RTE;
+    virtual sal_Int32 SAL_CALL  getIseven( sal_Int32 nVal ) THROWDEF_RTE_IAE;
+    virtual sal_Int32 SAL_CALL  getIsodd( sal_Int32 nVal ) THROWDEF_RTE_IAE;
 
     virtual double SAL_CALL     getMultinomial( const SEQSEQ( sal_Int32 )& aValueList ) THROWDEF_RTE_IAE;
-    virtual double SAL_CALL     getSeriessum( double fX, double fN, double fM, const SEQSEQ( double )& aCoeffList ) THROWDEF_RTE;
-    virtual double SAL_CALL     getQuotient( double fNum, double fDenum ) THROWDEF_RTE;
+    virtual double SAL_CALL     getSeriessum( double fX, double fN, double fM, const SEQSEQ( double )& aCoeffList ) THROWDEF_RTE_IAE;
+    virtual double SAL_CALL     getQuotient( double fNum, double fDenum ) THROWDEF_RTE_IAE;
 
-    virtual double SAL_CALL     getMround( double fNum, double fMult ) THROWDEF_RTE;
-    virtual double SAL_CALL     getSqrtpi( double fNum ) THROWDEF_RTE;
+    virtual double SAL_CALL     getMround( double fNum, double fMult ) THROWDEF_RTE_IAE;
+    virtual double SAL_CALL     getSqrtpi( double fNum ) THROWDEF_RTE_IAE;
 
     virtual double SAL_CALL     getRandbetween( double fMin, double fMax ) THROWDEF_RTE_IAE;
 
@@ -184,12 +184,12 @@ public:
     virtual double SAL_CALL     getHex2Dec( const STRING& aNum ) THROWDEF_RTE_IAE;
     virtual STRING SAL_CALL     getHex2Oct( const STRING& aNum, const ANY& rPlaces ) THROWDEF_RTE_IAE;
 
-    virtual sal_Int32 SAL_CALL  getDelta( double fNum1, const ANY& rNum2 ) THROWDEF_RTE;
+    virtual sal_Int32 SAL_CALL  getDelta( double fNum1, const ANY& rNum2 ) THROWDEF_RTE_IAE;
 
-    virtual double SAL_CALL     getErf( double fLowerLimit, const ANY& rUpperLimit ) THROWDEF_RTE;
-    virtual double SAL_CALL     getErfc( double fLowerLimit ) THROWDEF_RTE;
+    virtual double SAL_CALL     getErf( double fLowerLimit, const ANY& rUpperLimit ) THROWDEF_RTE_IAE;
+    virtual double SAL_CALL     getErfc( double fLowerLimit ) THROWDEF_RTE_IAE;
 
-    virtual sal_Int32 SAL_CALL  getGestep( double fNum, const ANY& rStep ) THROWDEF_RTE;
+    virtual sal_Int32 SAL_CALL  getGestep( double fNum, const ANY& rStep ) THROWDEF_RTE_IAE;
 
     virtual double SAL_CALL     getFactdouble( sal_Int32 nNum ) THROWDEF_RTE_IAE;
 

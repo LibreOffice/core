@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysis.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: gt $ $Date: 2001-07-12 11:50:13 $
+ *  last change: $Author: gt $ $Date: 2001-07-18 06:44:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -604,7 +604,7 @@ SEQofLocName SAL_CALL AnalysisAddIn::getCompatibilityNames( const STRING& aProgr
  */
 
 sal_Int32 SAL_CALL AnalysisAddIn::getWorkday( constREFXPS& xOptions,
-    sal_Int32 nDate, sal_Int32 nDays, const ANY& aHDay ) THROWDEF_RTE
+    sal_Int32 nDate, sal_Int32 nDays, const ANY& aHDay ) THROWDEF_RTE_IAE
 {
     if( !nDays )
         return nDate;
@@ -663,7 +663,7 @@ double SAL_CALL AnalysisAddIn::getYearfrac( constREFXPS& xOpt,
 }
 
 
-sal_Int32 SAL_CALL AnalysisAddIn::getEdate( constREFXPS& xOpt, sal_Int32 nStartDate, sal_Int32 nMonths ) THROWDEF_RTE
+sal_Int32 SAL_CALL AnalysisAddIn::getEdate( constREFXPS& xOpt, sal_Int32 nStartDate, sal_Int32 nMonths ) THROWDEF_RTE_IAE
 {
     sal_Int32   nNullDate = GetNullDate( xOpt );
     sal_Int32   nDate = nStartDate + nNullDate;
@@ -681,7 +681,7 @@ sal_Int32 SAL_CALL AnalysisAddIn::getEdate( constREFXPS& xOpt, sal_Int32 nStartD
 }
 
 
-sal_Int32 SAL_CALL AnalysisAddIn::getWeeknum( constREFXPS& xOpt, sal_Int32 nDate, sal_Int32 nMode ) THROWDEF_RTE
+sal_Int32 SAL_CALL AnalysisAddIn::getWeeknum( constREFXPS& xOpt, sal_Int32 nDate, sal_Int32 nMode ) THROWDEF_RTE_IAE
 {
     nDate += GetNullDate( xOpt );
 
@@ -695,7 +695,7 @@ sal_Int32 SAL_CALL AnalysisAddIn::getWeeknum( constREFXPS& xOpt, sal_Int32 nDate
 }
 
 
-sal_Int32 SAL_CALL AnalysisAddIn::getEomonth( constREFXPS& xOpt, sal_Int32 nDate, sal_Int32 nMonths ) THROWDEF_RTE
+sal_Int32 SAL_CALL AnalysisAddIn::getEomonth( constREFXPS& xOpt, sal_Int32 nDate, sal_Int32 nMonths ) THROWDEF_RTE_IAE
 {
     sal_Int32   nNullDate = GetNullDate( xOpt );
     nDate += nNullDate;
@@ -723,7 +723,7 @@ sal_Int32 SAL_CALL AnalysisAddIn::getEomonth( constREFXPS& xOpt, sal_Int32 nDate
 
 
 sal_Int32 SAL_CALL AnalysisAddIn::getNetworkdays( constREFXPS& xOpt,
-        sal_Int32 nStartDate, sal_Int32 nEndDate, const ANY& aHDay ) THROWDEF_RTE
+        sal_Int32 nStartDate, sal_Int32 nEndDate, const ANY& aHDay ) THROWDEF_RTE_IAE
 {
     sal_Int32                   nNullDate = GetNullDate( xOpt );
 
@@ -760,13 +760,13 @@ sal_Int32 SAL_CALL AnalysisAddIn::getNetworkdays( constREFXPS& xOpt,
 }
 
 
-sal_Int32 SAL_CALL AnalysisAddIn::getIseven( sal_Int32 nVal ) THROWDEF_RTE
+sal_Int32 SAL_CALL AnalysisAddIn::getIseven( sal_Int32 nVal ) THROWDEF_RTE_IAE
 {
     return ( nVal & 0x00000001 )? 0 : 1;
 }
 
 
-sal_Int32 SAL_CALL AnalysisAddIn::getIsodd( sal_Int32 nVal ) THROWDEF_RTE
+sal_Int32 SAL_CALL AnalysisAddIn::getIsodd( sal_Int32 nVal ) THROWDEF_RTE_IAE
 {
     return ( nVal & 0x00000001 )? 1 : 0;
 }
@@ -807,7 +807,7 @@ double SAL_CALL AnalysisAddIn::getMultinomial( const SEQSEQ( sal_Int32 )& aV ) T
 }
 
 
-double SAL_CALL AnalysisAddIn::getSeriessum( double fX, double fN, double fM, const SEQSEQ( double )& aCoeffList ) THROWDEF_RTE
+double SAL_CALL AnalysisAddIn::getSeriessum( double fX, double fN, double fM, const SEQSEQ( double )& aCoeffList ) THROWDEF_RTE_IAE
 {
     double                          fRet = 0.0;
 
@@ -837,13 +837,13 @@ double SAL_CALL AnalysisAddIn::getSeriessum( double fX, double fN, double fM, co
 }
 
 
-double SAL_CALL AnalysisAddIn::getQuotient( double fNum, double fDenum ) THROWDEF_RTE
+double SAL_CALL AnalysisAddIn::getQuotient( double fNum, double fDenum ) THROWDEF_RTE_IAE
 {
     return SolarMath::ApproxFloor( fNum / fDenum );
 }
 
 
-double SAL_CALL AnalysisAddIn::getMround( double fNum, double fMult ) THROWDEF_RTE
+double SAL_CALL AnalysisAddIn::getMround( double fNum, double fMult ) THROWDEF_RTE_IAE
 {
     if( fMult == 0.0 )
         return fMult;
@@ -852,7 +852,7 @@ double SAL_CALL AnalysisAddIn::getMround( double fNum, double fMult ) THROWDEF_R
 }
 
 
-double SAL_CALL AnalysisAddIn::getSqrtpi( double fNum ) THROWDEF_RTE
+double SAL_CALL AnalysisAddIn::getSqrtpi( double fNum ) THROWDEF_RTE_IAE
 {
     return sqrt( fNum * PI );
 }
@@ -1046,7 +1046,7 @@ STRING SAL_CALL AnalysisAddIn::getHex2Oct( const STRING& aNum, const ANY& rPlace
 }
 
 
-sal_Int32 SAL_CALL AnalysisAddIn::getDelta( double fNum1, const ANY& rNum2 ) THROWDEF_RTE
+sal_Int32 SAL_CALL AnalysisAddIn::getDelta( double fNum1, const ANY& rNum2 ) THROWDEF_RTE_IAE
 {
 #ifdef DEBUG
     return ( fNum1 == GetOpt( rNum2, 0.0 ) )? 1 : 0;
@@ -1056,7 +1056,7 @@ sal_Int32 SAL_CALL AnalysisAddIn::getDelta( double fNum1, const ANY& rNum2 ) THR
 }
 
 
-double SAL_CALL AnalysisAddIn::getErf( double fLL, const ANY& rUL ) THROWDEF_RTE
+double SAL_CALL AnalysisAddIn::getErf( double fLL, const ANY& rUL ) THROWDEF_RTE_IAE
 {
     switch( rUL.getValueTypeClass() )
     {
@@ -1075,13 +1075,13 @@ double SAL_CALL AnalysisAddIn::getErf( double fLL, const ANY& rUL ) THROWDEF_RTE
 }
 
 
-double SAL_CALL AnalysisAddIn::getErfc( double f ) THROWDEF_RTE
+double SAL_CALL AnalysisAddIn::getErfc( double f ) THROWDEF_RTE_IAE
 {
     return 1.0 - Erf( f );
 }
 
 
-sal_Int32 SAL_CALL AnalysisAddIn::getGestep( double fNum, const ANY& rStep ) THROWDEF_RTE
+sal_Int32 SAL_CALL AnalysisAddIn::getGestep( double fNum, const ANY& rStep ) THROWDEF_RTE_IAE
 {
 #ifdef DEBUG
     return ( fNum >= GetOpt( rStep, 0.0 ) )? 1 : 0;
