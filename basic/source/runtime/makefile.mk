@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hjs $ $Date: 2000-11-17 15:44:04 $
+#   last change: $Author: rt $ $Date: 2002-01-10 11:10:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -105,7 +105,8 @@ SLOFILES+= $(SLO)$/os2.obj
 EXCEPTIONSFILES=$(SLO)$/step0.obj	\
         $(SLO)$/step2.obj	\
         $(SLO)$/methods.obj	\
-        $(SLO)$/iosys.obj
+        $(SLO)$/iosys.obj	\
+        $(SLO)$/runtime.obj
 
 # --- Targets -------------------------------------------------------------
 
