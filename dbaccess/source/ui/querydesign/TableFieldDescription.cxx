@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableFieldDescription.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-30 11:16:01 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:14:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,14 +71,10 @@
 #ifndef _COMPHELPER_STREAMSECTION_HXX_
 #include <comphelper/streamsection.hxx>
 #endif
-#ifndef _COMPHELPER_BASIC_IO_HXX_
-#include <comphelper/basicio.hxx>
-#endif
-
 
 using namespace ::com::sun::star::sdbc;
-using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::beans;
 using namespace comphelper;
 using namespace dbaui;
 
@@ -228,47 +224,89 @@ sal_Bool OTableFieldDesc::IsNumericDataType() const
     return bErg;
 }
 // -----------------------------------------------------------------------------
-void OTableFieldDesc::Load(const Reference< XObjectInputStream>& _rxIn)
+void OTableFieldDesc::Load(const ::com::sun::star::beans::PropertyValue& _rProperty)
 {
     DBG_CHKTHIS(OTableFieldDesc,NULL);
-    OStreamSection aSection(_rxIn.get());
-    _rxIn >> m_aTableName;
-    _rxIn >> m_aAliasName;
-    _rxIn >> m_aFieldName;
-    _rxIn >> m_aFieldAlias;
-    _rxIn >> m_aDatabaseName;
-    _rxIn >> m_aFunctionName;
-    _rxIn >> m_eDataType;
-    sal_Int32 nValue = 0;
-    _rxIn >> nValue;
-    m_eFunctionType = (EFunctionType)nValue;
-    _rxIn >> nValue;
-    m_eFieldType = (ETableFieldType)nValue;
-    _rxIn >> nValue;
-    m_eOrderDir = (EOrderDir)nValue;
-    _rxIn >> m_nColWidth;
-    _rxIn >> m_bGroupBy;
-    _rxIn >> m_bVisible;
+    Sequence<PropertyValue> aFieldDesc;
+    _rProperty.Value >>= aFieldDesc;
+    if ( aFieldDesc.getLength() == 13 )
+    {
+        sal_Int32 nCount = aFieldDesc.getLength();
+        for (sal_Int32 nPos = 0; nPos < nCount; ++nPos)
+        {
+            if ( aFieldDesc[nPos].Name == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AliasName")) )
+                aFieldDesc[nPos].Value >>= m_aAliasName;
+            else if ( aFieldDesc[nPos].Name == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TableName")) )
+                aFieldDesc[nPos].Value >>= m_aTableName;
+            else if ( aFieldDesc[nPos].Name == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FieldName")) )
+                aFieldDesc[nPos].Value >>= m_aFieldName;
+            else if ( aFieldDesc[nPos].Name == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FieldAlias")) )
+                aFieldDesc[nPos].Value >>= m_aFieldAlias;
+            else if ( aFieldDesc[nPos].Name == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DatabaseName")) )
+                aFieldDesc[nPos].Value >>= m_aDatabaseName;
+            else if ( aFieldDesc[nPos].Name == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FunctionName")) )
+                aFieldDesc[nPos].Value >>= m_aFunctionName;
+            else if ( aFieldDesc[nPos].Name == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DataType")) )
+                aFieldDesc[nPos].Value >>= m_eDataType;
+            else if ( aFieldDesc[nPos].Name == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FunctionType")) )
+                aFieldDesc[nPos].Value >>= m_eFunctionType;
+            else if ( aFieldDesc[nPos].Name == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FieldType")) )
+            {
+                sal_Int32 nTemp = 0;
+                aFieldDesc[nPos].Value >>= nTemp;
+                m_eFieldType = static_cast<ETableFieldType>(nTemp);
+            }
+            else if ( aFieldDesc[nPos].Name == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OrderDir")) )
+            {
+                sal_Int32 nTemp = 0;
+                aFieldDesc[nPos].Value >>= nTemp;
+                m_eOrderDir = static_cast<EOrderDir>(nTemp);
+            }
+            else if ( aFieldDesc[nPos].Name == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ColWidth")) )
+                aFieldDesc[nPos].Value >>= m_nColWidth;
+            else if ( aFieldDesc[nPos].Name == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("GroupBy")) )
+                aFieldDesc[nPos].Value >>= m_bGroupBy;
+            else if ( aFieldDesc[nPos].Name == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Visible")) )
+                aFieldDesc[nPos].Value >>= m_bVisible;
+        }
+    }
 }
 //------------------------------------------------------------------------------
-void OTableFieldDesc::Save(const Reference< XObjectOutputStream>& _rxOut)
+void OTableFieldDesc::Save(::com::sun::star::beans::PropertyValue& _rProperty)
 {
     DBG_CHKTHIS(OTableFieldDesc,NULL);
-    OStreamSection aSection(_rxOut.get());
 
-    _rxOut << m_aTableName;
-    _rxOut << m_aAliasName;
-    _rxOut << m_aFieldName;
-    _rxOut << m_aFieldAlias;
-    _rxOut << m_aDatabaseName;
-    _rxOut << m_aFunctionName;
-    _rxOut << m_eDataType;
-    _rxOut << (sal_Int32)m_eFunctionType;
-    _rxOut << (sal_Int32)m_eFieldType;
-    _rxOut << (sal_Int32)m_eOrderDir;
-    _rxOut << m_nColWidth;
-    _rxOut << m_bGroupBy;
-    _rxOut << m_bVisible;
+
+    Sequence<PropertyValue> aFieldDesc(13);
+    sal_Int32 nPos = 0;
+    aFieldDesc[nPos].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AliasName"));
+    aFieldDesc[nPos++].Value <<= m_aAliasName;
+    aFieldDesc[nPos].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TableName"));
+    aFieldDesc[nPos++].Value <<= m_aTableName;
+    aFieldDesc[nPos].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FieldName"));
+    aFieldDesc[nPos++].Value <<= m_aFieldName;
+    aFieldDesc[nPos].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FieldAlias"));
+    aFieldDesc[nPos++].Value <<= m_aFieldAlias;
+    aFieldDesc[nPos].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DatabaseName"));
+    aFieldDesc[nPos++].Value <<= m_aDatabaseName;
+    aFieldDesc[nPos].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FunctionName"));
+    aFieldDesc[nPos++].Value <<= m_aFunctionName;
+    aFieldDesc[nPos].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DataType"));
+    aFieldDesc[nPos++].Value <<= m_eDataType;
+    aFieldDesc[nPos].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FunctionType"));
+    aFieldDesc[nPos++].Value <<= (sal_Int32)m_eFunctionType;
+    aFieldDesc[nPos].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FieldType"));
+    aFieldDesc[nPos++].Value <<= (sal_Int32)m_eFieldType;
+    aFieldDesc[nPos].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OrderDir"));
+    aFieldDesc[nPos++].Value <<= (sal_Int32)m_eOrderDir;
+    aFieldDesc[nPos].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ColWidth"));
+    aFieldDesc[nPos++].Value <<= m_nColWidth;
+    aFieldDesc[nPos].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("GroupBy"));
+    aFieldDesc[nPos++].Value <<= m_bGroupBy;
+    aFieldDesc[nPos].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Visible"));
+    aFieldDesc[nPos++].Value <<= m_bVisible;
+
+    _rProperty.Value <<= aFieldDesc;
 }
 // -----------------------------------------------------------------------------
 
