@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-01 10:35:45 $
+ *  last change: $Author: rt $ $Date: 2001-06-08 22:39:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -523,7 +523,7 @@ TabPage TP_CHAR_URL
         Size = MAP_APPFONT ( 63 , 10 ) ;
         Text = "~Frame" ;
         Text [ English ] = "Frame" ;
-        Text [ english_us ] = "Target Frame" ;
+        Text [ english_us ] = "~Target frame" ;
         Text [ portuguese_brazilian ] = "~Targetframe" ;
         Text [ swedish ] = "Ra~m" ;
         Text [ danish ] = "Frame" ;
@@ -603,7 +603,7 @@ TabPage TP_CHAR_URL
         Text[ chinese_simplified ] = "×Ö·ûÑùÊ½";
         Text[ russian ] = "Ñòèëè çíàêîâ";
         Text[ polish ] = "Style znaku";
-        Text[ japanese ] = "Ã·½Ä½À²Ù";
+        Text[ japanese ] = "•¶Žš½À²Ù";
         Text[ chinese_traditional ] = "¦r¤¸¼Ë¦¡";
         Text[ arabic ] = "ÃäãÇØ ÃÍÑÝ";
         Text[ dutch ] = "Tekenopmaakprofielen";
@@ -693,3 +693,4 @@ TabPage TP_CHAR_URL
         Group = TRUE ;
     };
 };
+
