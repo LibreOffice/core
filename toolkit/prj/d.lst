@@ -1,8 +1,10 @@
+mkdir: %COMMON_DEST%\bin%_EXT%\hid
 mkdir: %_DEST%\inc%_EXT%\toolkit
 mkdir: %_DEST%\inc%_EXT%\toolkit\helper
 mkdir: %_DEST%\inc%_EXT%\toolkit\awt
 mkdir: %_DEST%\inc%_EXT%\toolkit\controls
 
+..\%COMMON_OUTDIR%\misc\*.hid %COMMON_DEST%\bin%_EXT%\hid\*.hid
 ..\%__SRC%\lib\itk.lib %_DEST%\lib%_EXT%\itk.lib
 ..\%__SRC%\lib\lib*.so %_DEST%\lib%_EXT%
 ..\%__SRC%\lib\*.sl %_DEST%\lib%_EXT%\*.sl
