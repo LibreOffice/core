@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdata.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 13:14:00 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 11:17:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,9 +106,6 @@
 #include <wrkwin.hxx>
 #endif
 
-#ifndef _VCL_UNOWRAP_HXX
-#include <unowrap.hxx>
-#endif
 #ifndef _VCL_UNOHELP_HXX
 #include <unohelp.hxx>
 #endif
@@ -220,12 +217,6 @@ void ImplDeInitSVData()
         delete pSVData->mpImeStatus;
     if( pSVData->mpSalSystem )
         delete pSVData->mpSalSystem;
-
-    if ( pSVData->mpUnoWrapper )
-    {
-        pSVData->mpUnoWrapper->Destroy();
-        pSVData->mpUnoWrapper = NULL;
-    }
 
     if ( pSVData->maAppData.mpMSFTempFileName )
     {
