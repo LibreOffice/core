@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.196 $
+ *  $Revision: 1.197 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 11:46:29 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 12:56:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3054,14 +3054,16 @@ ImplFontEntry* ImplFontCache::GetFallback( ImplDevFontList* pFontList,
         int nMaxLevel = 0;
         int nBestQuality = 0;
         ImplDevFontListData** pFallbackList = NULL;
-        for( const char** ppNames = &aGlyphFallbackList[0]; *ppNames; ++ppNames )
+        for( const char** ppNames = &aGlyphFallbackList[0];; ++ppNames )
         {
-            // advance to next sublist when end-of-sublist marker
-            if( !**ppNames )
+            // advance to next sub-list when end-of-sublist marker
+            if( !*ppNames )
             {
                 if( nBestQuality > 0 )
                     if( ++nMaxLevel >= MAX_FALLBACK )
                         break;
+                if( !ppNames[1] )
+                    break;
                 nBestQuality = 0;
                 continue;
             }
@@ -3103,8 +3105,9 @@ ImplFontEntry* ImplFontCache::GetFallback( ImplDevFontList* pFontList,
         for( int i = 0; i < nMaxLevel; ++i )
         {
             ImplDevFontListData* pFont = pFallbackList[ i ];
-            ByteString aFontName( pFont->GetFamilyName(), RTL_TEXTENCODING_UTF8);
-            fprintf(stderr,"GlyphFallbackFont[%d] = \"%s\"\n", i, aFontName.GetBuffer());
+            ByteString aFontName( pFont->GetFamilyName(), RTL_TEXTENCODING_UTF8 );
+            fprintf( stderr, "GlyphFallbackFont[%d] (quality=%05d): \"%s\"\n",
+                i, pFont->GetMinQuality(), aFontName.GetBuffer() );
         }
 #endif
 
