@@ -2,9 +2,9 @@
 *
 *  $RCSfile: ScriptContext.java,v $
 *
-*  $Revision: 1.5 $
+*  $Revision: 1.6 $
 *
-*  last change: $Author: svesik $ $Date: 2004-04-19 23:09:11 $
+*  last change: $Author: rt $ $Date: 2004-05-19 08:23:17 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -155,14 +155,21 @@ public class ScriptContext extends PropertySet implements XScriptContext
             (short)(PropertyAttribute.MAYBEVOID | PropertyAttribute.TRANSIENT), "m_xComponentContext");
     }
 
-    public static ScriptContext createContext(Object invocationCtx,
+    public static XScriptContext createContext(Object invocationCtx,
         XComponentContext xCtxt, XMultiComponentFactory xMCF)
     {
-        ScriptContext sc = null;
+        XScriptContext sc = null;
+        XModel xModel = null;
 
         try {
-            XPropertySet invocationCtxPropSet = (XPropertySet)
-                UnoRuntime.queryInterface( XPropertySet.class, invocationCtx);
+            XPropertySet invocationCtxPropSet = null;
+            if ( invocationCtx != null )
+            {
+                invocationCtxPropSet = (XPropertySet)
+                    UnoRuntime.queryInterface( XPropertySet.class, invocationCtx);
+                 xModel = ( XModel ) UnoRuntime.queryInterface(
+                    XModel.class, invocationCtxPropSet.getPropertyValue( DOC_REF ) );
+            }
 
             Object xInterface = null;
             XDesktop xDesktop = null;
@@ -172,10 +179,17 @@ public class ScriptContext extends PropertySet implements XScriptContext
             xDesktop = (XDesktop)
                 UnoRuntime.queryInterface(XDesktop.class, xInterface);
 
-            sc = new ScriptContext(xCtxt, xDesktop, invocationCtxPropSet);
+            if ( xModel != null )
+            {
+                sc = new ScriptContext(xCtxt, xDesktop, invocationCtxPropSet);
+            }
+            else
+            {
+                sc = new EditorScriptContext( xCtxt, xDesktop );
+            }
         }
         catch ( Exception e ) {
-            LogUtils.DEBUG( LogUtils.getTrace( e ) );
+            e.printStackTrace();
         }
         return sc;
     }
