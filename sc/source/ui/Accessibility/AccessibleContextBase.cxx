@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleContextBase.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: sab $ $Date: 2002-11-05 07:59:07 $
+ *  last change: $Author: sab $ $Date: 2002-12-04 15:39:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -315,13 +315,6 @@ void SAL_CALL ScAccessibleContextBase::grabFocus(  )
         throw (uno::RuntimeException)
 {
     DBG_ERROR("not implemented");
-}
-
-uno::Any SAL_CALL ScAccessibleContextBase::getAccessibleKeyBinding(  )
-        throw (uno::RuntimeException)
-{
-    // here is no implementation, because here are no KeyBindings for every object
-    return uno::Any();
 }
 
 sal_Int32 SAL_CALL ScAccessibleContextBase::getForeground(  )

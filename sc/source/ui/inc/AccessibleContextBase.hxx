@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleContextBase.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: sab $ $Date: 2002-10-28 07:31:19 $
+ *  last change: $Author: sab $ $Date: 2002-12-04 15:39:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,9 +205,6 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
 
     virtual void SAL_CALL grabFocus(  )
-        throw (::com::sun::star::uno::RuntimeException);
-
-    virtual ::com::sun::star::uno::Any SAL_CALL getAccessibleKeyBinding(  )
         throw (::com::sun::star::uno::RuntimeException);
 
     virtual sal_Int32 SAL_CALL getForeground(  )
