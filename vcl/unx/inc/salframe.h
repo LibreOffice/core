@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.h,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:24:44 $
+ *  last change: $Author: obo $ $Date: 2004-02-20 08:55:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,6 @@
 class   SalDisplay;
 class   X11SalGraphics;
 class SalGraphicsLayout;
-class   SalColormap;
 class   SalI18N_InputContext;
 
 namespace vcl_sal { class WMAdaptor; class NetWMAdaptor; class GnomeWMAdaptor; }
@@ -177,7 +176,6 @@ class X11SalFrame : public SalFrame
     bool            mbMoved;
     bool            mbSized;
     Rectangle       maPaintRegion;
-    bool            mbWasGraphicsPaint;
 
     Timer           maAlwaysOnTopRaiseTimer;
 
@@ -253,7 +251,6 @@ public:
     void            PostExtTextEvent (sal_uInt16 nExtTextEventType,
                                       void *pExtTextEvent);
 #endif
-    inline  SalColormap    &GetColormap() const;
     bool                    IsOverrideRedirect() const;
     bool                    IsFloatGrabWindow() const;
     SalI18N_InputContext* getInputContext() const { return mpInputContext; }
@@ -303,7 +300,6 @@ public:
     virtual ULONG               GetCurrentModButtons();
     virtual void                SetParent( SalFrame* pNewParent );
     virtual bool                SetPluginParent( SystemParentData* pNewParent );
-    virtual void                YieldGraphicsExpose();
 };
 
 #ifdef _SV_SALDISP_HXX
@@ -313,9 +309,6 @@ inline Display *X11SalFrame::GetXDisplay() const
 
 inline XLIB_Window X11SalFrame::GetDrawable() const
 { return GetWindow(); }
-
-inline  SalColormap &X11SalFrame::GetColormap() const
-{ return pDisplay_->GetColormap(); }
 
 #endif
 
