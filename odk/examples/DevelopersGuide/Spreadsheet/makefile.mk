@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-27 16:45:25 $
+#   last change: $Author: rt $ $Date: 2005-01-31 16:55:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,14 +76,15 @@ TARGET=copying
 
 SPREADSHEET_FILES=\
     $(DESTDIRDEVGUIDEEXAMPLES)$/Spreadsheet$/ExampleAddIn.java \
-    $(DESTDIRDEVGUIDEEXAMPLES)$/Spreadsheet$/ExampleAddIn.sxc \
+    $(DESTDIRDEVGUIDEEXAMPLES)$/Spreadsheet$/ExampleAddIn.ods \
     $(DESTDIRDEVGUIDEEXAMPLES)$/Spreadsheet$/ExampleDataPilotSource.java \
     $(DESTDIRDEVGUIDEEXAMPLES)$/Spreadsheet$/GeneralTableSample.java \
     $(DESTDIRDEVGUIDEEXAMPLES)$/Spreadsheet$/Makefile \
     $(DESTDIRDEVGUIDEEXAMPLES)$/Spreadsheet$/SpreadsheetDocHelper.java \
     $(DESTDIRDEVGUIDEEXAMPLES)$/Spreadsheet$/SpreadsheetSample.java \
     $(DESTDIRDEVGUIDEEXAMPLES)$/Spreadsheet$/ViewSample.java \
-    $(DESTDIRDEVGUIDEEXAMPLES)$/Spreadsheet$/XExampleAddIn.idl
+    $(DESTDIRDEVGUIDEEXAMPLES)$/Spreadsheet$/XExampleAddIn.idl \
+    $(DESTDIRDEVGUIDEEXAMPLES)$/Spreadsheet$/DataPilotReadme.txt
 
 DIR_FILE_LIST= \
     $(SPREADSHEET_FILES) \
