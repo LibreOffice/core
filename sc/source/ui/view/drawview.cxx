@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawview.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 18:19:10 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 18:01:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,11 @@
 #include <svx/svdundo.hxx>
 #include <svx/svdvmark.hxx>
 #include <svx/svdocapt.hxx>
+#include <svx/outlobj.hxx>
 #include <svx/xoutx.hxx>
+#ifndef _SVX_WRITINGMODEITEM_HXX
+#include <svx/writingmodeitem.hxx>
+#endif
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
 
@@ -90,6 +94,7 @@
 #include "viewdata.hxx"
 #include "document.hxx"
 #include "drawutil.hxx"
+#include "futext.hxx"
 #include "globstr.hrc"
 #include "tabvwsh.hxx"
 #include "client.hxx"
@@ -852,17 +857,52 @@ void ScDrawView::StoreCaptionDimensions()
             if(aOldRect != aNewRect)
             {
                 aNote.SetRectangle(aNewRect);
-                // The new height is honoured if property item is reset.
-                if(aNewRect.Bottom() - aNewRect.Top() > aOldRect.Bottom() - aOldRect.Top())
+                // The new height/width is honoured if property item is reset.
+                SdrCaptionObj* pCaption = static_cast<SdrCaptionObj*>(pObj);
+                OutlinerParaObject* pPObj = pCaption->GetOutlinerParaObject();
+                bool bVertical = (pPObj && pPObj->IsVertical());
+                if(!bVertical && aNewRect.Bottom() - aNewRect.Top() > aOldRect.Bottom() - aOldRect.Top())
                 {
-                    SdrCaptionObj* pCaption = static_cast<SdrCaptionObj*>(pObj);
                     if(pCaption && pCaption->IsAutoGrowHeight())
                     {
                         pCaption->SetMergedItem( SdrTextAutoGrowHeightItem( false ) );
                         aNote.SetItemSet(pCaption->GetMergedItemSet());
                     }
                 }
+                else if(bVertical && aNewRect.Right() - aNewRect.Left() > aOldRect.Right() - aOldRect.Left())
+                {
+                    if(pCaption && pCaption->IsAutoGrowWidth())
+                    {
+                        pCaption->SetMergedItem( SdrTextAutoGrowWidthItem( false ) );
+                        aNote.SetItemSet(pCaption->GetMergedItemSet());
+                    }
+                }
                 pDoc->SetNote( aTabPos.Col(), aTabPos.Row(), aTabPos.Tab(), aNote );
+            }
+        }
+    }
+}
+
+void ScDrawView::CaptionTextDirection( USHORT nSlot )
+{
+    if(nSlot != SID_TEXTDIRECTION_LEFT_TO_RIGHT && nSlot != SID_TEXTDIRECTION_TOP_TO_BOTTOM)
+        return;
+
+    SdrObject* pObject  = GetTextEditObject();
+
+    if ( pObject && pObject->GetLayer() == SC_LAYER_INTERN && pObject->ISA(SdrCaptionObj) )
+    {
+        SdrCaptionObj* pCaption = static_cast<SdrCaptionObj*>(pObject);
+        if(pCaption)
+        {
+            SfxItemSet aAttr(pCaption->GetMergedItemSet());
+            aAttr.Put( SvxWritingModeItem( nSlot == SID_TEXTDIRECTION_LEFT_TO_RIGHT ? com::sun::star::text::WritingMode_LR_TB : com::sun::star::text::WritingMode_TB_RL ) );
+            pCaption->SetMergedItemSet(aAttr);
+            FuPoor* pPoor = pViewData->GetView()->GetDrawFuncPtr();
+            if ( pPoor )
+            {
+                FuText* pText = static_cast<FuText*>(pPoor);
+                pText->StopEditMode(TRUE);
             }
         }
     }
