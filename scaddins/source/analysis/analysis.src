@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysis.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-17 21:14:50 $
+ *  last change: $Author: kz $ $Date: 2001-10-19 21:52:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -6862,7 +6862,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Renvoie l'amortissement linéaire prorata correspondant à chaque période comptable.";
             Text[ spanish ] = "Devuelve la depreciación de una cantidad en un periodo en base al método francés de amortización progresiva completa.";
             Text[ finnish ] = "Returns the prorated linear depreciation of an asset for each accounting period";
-            Text[ italian ] = "Restituisce l'ammortamento lineare equamente distribuito di un bene per ciascun periodo contabile (sistema contabile francese).";
+            Text[ italian ] = "Restituisce la somma di ammortamento di un periodo contabile quale ammortamento degressivo.";
             Text[ danish ] = "Returns the prorated linear depreciation of an asset for each accounting period";
             Text[ swedish ] = "Returnerar avskrivningsbeloppet för en redovisningsperiod enligt det franska bokföringssystemet.";
             Text[ polish ] = "Podaje wartoœæ amortyzacji dla ka¿dego okresu rozliczeniowego. Funkcja ta dotyczy francuskiego systemu ksiêgowego.";
@@ -7270,7 +7270,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Renvoie l'amortissement linéaire prorata correspondant à chaque période comptable.";
             Text[ spanish ] = "Devuelve la depreciación de un bien en un determinado período en base al sistema contable francés.";
             Text[ finnish ] = "Returns the prorated linear depreciation of an asset for each accounting period";
-            Text[ italian ] = "Restituisce l'ammortamento lineare equamente distribuito di un bene per ciascun periodo contabile (sistema contabile francese).";
+            Text[ italian ] = "Restituisce la somma di ammortamento di un periodo contabile quale ammortamento lineare.";
             Text[ danish ] = "Returns the prorated linear depreciation of an asset for each accounting period";
             Text[ swedish ] = "Returnerar avskrivningsbeloppet för en redovisningsperiod enligt det franska bokföringssystemet.";
             Text[ polish ] = "Podaje wartoœæ amortyzacji dla ka¿dego okresu rozliczeniowego. Funkcja ta dotyczy francuskiego systemu ksiêgowego.";
@@ -7678,7 +7678,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Renvoie les intérêts échus (ou intérêts accumulés) d'un titre ; versement périodique des intérêts.";
             Text[ spanish ] = "Devuelve el interés acumulado para un valor con pagos periódicos de intereses.";
             Text[ finnish ] = "Return the accrued interest for a security that pays periodic interest";
-            Text[ italian ] = "Restituisce l'interesse maturato di un titolo che paga interessi periodici.";
+            Text[ italian ] = "Restituisce gli interessi maturati (ratei) di un titolo a pagamenti periodici.";
             Text[ danish ] = "Return the accrued interest for a security that pays periodic interest";
             Text[ swedish ] = "Returnerar de upplupna räntorna för ett värdepapper med periodisk räntebetalning.";
             Text[ polish ] = "Podaje wartoœæ procentu sk³adanego papieru wartoœciowego o okresowym oprocentowaniu.";
@@ -8086,7 +8086,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Renvoie les intérêts échus (ou intérêts accumulés) d'un titre ; versement des intérêts à échéance.";
             Text[ spanish ] = "Devuelve el interés acumulado de un valor que se pagará al vencimiento.";
             Text[ finnish ] = "Return the accrued interest for a security that pays interest at maturity";
-            Text[ italian ] = "Restituisce l'interesse maturato di un titolo che paga gli interessi alla scadenza.";
+            Text[ italian ] = "Restituisce gli interessi maturati (ratei) di un titolo a pagamento unico alla data di scadenza.";
             Text[ danish ] = "Return the accrued interest for a security that pays interest at maturity";
             Text[ swedish ] = "Returnerar ett värdepappers upplupna räntor som betalas ut på förfallodagen.";
             Text[ polish ] = "Podaje wartoœæ procentu sk³adanego papieru wartoœciowego oprocentowanego przy wykupie.";
@@ -8386,7 +8386,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ french ] = "Renvoie le montant du versement au terme de l'échéance pour une obligation.";
             Text[ spanish ] = "Devuelve la cantidad recibida al vencimiento de un valor totalmente invertido.";
             Text[ finnish ] = "Returns the amount received at maturity for a fully invested security";
-            Text[ italian ] = "Restituisce l'ammontare ricevuto alla scadenza di un titolo.";
+            Text[ italian ] = "Restituisce l'importo che si ottiene a una determinata scadenza per un titolo a interesse fissato.";
             Text[ danish ] = "Returns the amount received at maturity for a fully invested security";
             Text[ swedish ] = "Returnerar beloppet som utbetalas på förfallodagen för ett fullinvesterat värdepapper.";
             Text[ polish ] = "Podaje wartoœæ kapita³u otrzymanego przy wykupie papieru wartoœciowego ca³kowicie ulokowanego.";
@@ -17858,6 +17858,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         };
     };
 };
+
 
 
 
