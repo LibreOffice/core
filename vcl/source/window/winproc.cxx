@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winproc.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:58:24 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 15:20:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1116,6 +1116,11 @@ static long ImplHandleKey( Window* pWindow, USHORT nSVEvent,
     Window* pChild = ImplGetKeyInputWindow( pWindow );
     if ( !pChild )
         return 0;
+
+    // --- RTL --- mirror cursor keys
+    if( (aKeyCode.GetCode() == KEY_LEFT || aKeyCode.GetCode() == KEY_RIGHT) &&
+      pChild->ImplHasMirroredGraphics() && pChild->IsRTLEnabled() )
+        aKeyCode = KeyCode( aKeyCode.GetCode() == KEY_LEFT ? KEY_RIGHT : KEY_LEFT, aKeyCode.GetModifier() );
 
     // call handler
     ImplDelData aDelData;
