@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rubydialog.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-08 13:41:42 $
+ *  last change: $Author: hjs $ $Date: 2001-05-11 05:29:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,7 @@ ModelessDialog RID_SVXDLG_RUBY
         Text[ turkish ] = "Auto detection";
         Text[ arabic ] = "ﬂ‘›  ·ﬁ«∆Ì";
         Text[ catalan ] = "Reconocimiento autom·tico";
+        Text[ finnish ] = "Automatische Erkennung";
     };
     Window HB_HEADER
     {
@@ -187,6 +188,7 @@ ModelessDialog RID_SVXDLG_RUBY
         Text[ turkish ] = "Adjust";
         Text[ arabic ] = "«·„Õ«–«…";
         Text[ catalan ] = "AlineaciÛn";
+        Text[ finnish ] = "Ausrichtung";
     };
     ListBox LB_ADJUST
     {
@@ -284,9 +286,9 @@ ModelessDialog RID_SVXDLG_RUBY
     };
     StringList [ danish ] =
     {
-            "Links" ;
-            "Zentriert" ;
-            "Rechts" ;
+            "Venstre" ;
+            "Centreret" ;
+            "H¯jre" ;
             "0 1 0" ;
             "1 2 1" ;
     };
@@ -348,9 +350,9 @@ ModelessDialog RID_SVXDLG_RUBY
     };
     StringList [ turkish ] =
     {
-            "Links" ;
-            "Zentriert" ;
-            "Rechts" ;
+            "Sola" ;
+            "Ortala" ;
+            "Sa" ;
             "0 1 0" ;
             "1 2 1" ;
     };
@@ -369,6 +371,14 @@ ModelessDialog RID_SVXDLG_RUBY
          "Derecha" ;
          "0 1 0" ;
          "1 2 1" ;
+    };
+    StringList [ finnish ] =
+    {
+            < "Links" ;
+        < "Zentriert" ;
+        < "Rechts" ;
+        < "0 1 0" ;
+        < "1 2 1" ;
     };
     };
     FixedText FT_CHAR_STYLE
@@ -396,6 +406,7 @@ ModelessDialog RID_SVXDLG_RUBY
         Text[ turkish ] = "Character style for ruby text";
         Text[ arabic ] = "‰„ÿ «·√Õ—› ·‰’ \"—Ê»Ì\"";
         Text[ catalan ] = "Estilo de car·cter para texto ruby";
+        Text[ finnish ] = "Zeichenvorlage f¸r Ruby-Text";
     };
     ListBox LB_CHAR_STYLE
     {
@@ -445,7 +456,7 @@ ModelessDialog RID_SVXDLG_RUBY
     };
     StringList [ danish ] =
     {
-             < "<Keine>" ; > ;
+             < "<ingen>" ; > ;
     };
     StringList [ swedish ] =
     {
@@ -477,7 +488,7 @@ ModelessDialog RID_SVXDLG_RUBY
     };
     StringList [ turkish ] =
     {
-             < "<Keine>" ; > ;
+             < "<yok>" ; > ;
     };
     StringList [ arabic ] =
     {
@@ -486,6 +497,10 @@ ModelessDialog RID_SVXDLG_RUBY
     StringList [ catalan ] =
     {
              < "<ninguno>" ; > ;
+    };
+    StringList [ finnish ] =
+    {
+             < "<Keine>" ; > ;
     };
     };
     PushButton PB_STYLIST
@@ -513,6 +528,7 @@ ModelessDialog RID_SVXDLG_RUBY
         Text[ turkish ] = "Stylist";
         Text[ arabic ] = "«·„ı’„„";
         Text[ catalan ] = "Estilista";
+        Text[ finnish ] = "Stylist";
     };
     FixedText FT_PREVIEW
     {
@@ -539,6 +555,7 @@ ModelessDialog RID_SVXDLG_RUBY
         Text[ turkish ] = "Preview:";
         Text[ arabic ] = "„⁄«Ì‰…:";
         Text[ catalan ] = "PrevisualizaciÛn:";
+        Text[ finnish ] = "Vorschau:";
     };
     Window WIN_PREVIEW
     {
@@ -570,6 +587,7 @@ ModelessDialog RID_SVXDLG_RUBY
         Text[ turkish ] = "Apply";
         Text[ arabic ] = " ÿ»Ìﬁ";
         Text[ catalan ] = "Aplicar";
+        Text[ finnish ] = "‹bernehmen";
     };
     PushButton PB_CLOSE
     {
@@ -596,6 +614,7 @@ ModelessDialog RID_SVXDLG_RUBY
         Text[ turkish ] = "Close";
         Text[ arabic ] = "≈€·«ﬁ";
         Text[ catalan ] = "Cerrar";
+        Text[ finnish ] = "Schlieﬂen";
     };
     HelpButton PB_HELP
     {
@@ -625,6 +644,7 @@ ModelessDialog RID_SVXDLG_RUBY
         Text[ turkish ] = "Basis text";
         Text[ arabic ] = "«·‰’ «·√”«”Ì";
         Text[ catalan ] = "Texto base";
+        Text[ finnish ] = "Basistext";
     };
     String ST_RUBY
     {
@@ -649,6 +669,7 @@ ModelessDialog RID_SVXDLG_RUBY
         Text[ turkish ] = "Ruby text";
         Text[ arabic ] = "‰’ \"—Ê»Ì\"";
         Text[ catalan ] = "Texto ruby";
+        Text[ finnish ] = "Ruby-Text";
     };
     Text[ english_us ] = "Ruby";
     Text[ portuguese ] = "Ruby";
@@ -660,7 +681,7 @@ ModelessDialog RID_SVXDLG_RUBY
     Text[ italian ] = "Testo ruby";
     Text[ danish ] = "Ruby";
     Text[ swedish ] = "Ruby";
-    Text[ polish ] = "Znak diakrytyczny";
+    Text[ polish ] = "Znaki diakrytyczne";
     Text[ portuguese_brazilian ] = "Ruby";
     Text[ japanese ] = "ŸÀﬁ";
     Text[ korean ] = "Ruby";
@@ -669,5 +690,6 @@ ModelessDialog RID_SVXDLG_RUBY
     Text[ turkish ] = "Ruby";
     Text[ arabic ] = "œ·Ì· ’Ê Ì";
     Text[ catalan ] = "Car·cter fonÈtico guÌa";
+    Text[ finnish ] = "Phonetisches Leitzeichen";
 };
 
