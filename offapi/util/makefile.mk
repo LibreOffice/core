@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.73 $
+#   $Revision: 1.74 $
 #
-#   last change: $Author: rt $ $Date: 2004-04-02 10:46:15 $
+#   last change: $Author: rt $ $Date: 2004-04-02 15:04:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -153,6 +153,7 @@ UNOIDLDBFILES= \
     $(UCR)$/dcssfstatus.db \
     $(UCR)$/dcssgeometry.db \
     $(UCR)$/dcssrendering.db \
+    $(UCR)$/dcssdrawing.db
 
 REFERENCE_RDB=$(PRJ)$/type_reference$/OO_11$/types.rdb
 REFERENCE_DOC_RDB=$(PRJ)$/type_reference$/OO_11$/types_doc.rdb
