@@ -2,9 +2,9 @@
  *
  *  $RCSfile: token.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: er $ $Date: 2001-10-18 09:03:25 $
+ *  last change: $Author: er $ $Date: 2002-06-14 14:27:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -292,7 +292,7 @@ ScRawToken* ScRawToken::Clone() const
             case svIndex:       n += sizeof(USHORT); break;
             case svJump:        n += nJump[ 0 ] * 2 + 2; break;
             case svExternal:    n += GetStrLenBytes( cStr+1 ) + GetStrLenBytes( 2 ); break;
-            default:            n += (BYTE) cStr[ 0 ];  // unbekannt eingelesen!
+            default:            n += *((BYTE*)cStr);    // read in unknown!
         }
         p = (ScRawToken*) new BYTE[ n ];
         memcpy( p, this, n * sizeof(BYTE) );
@@ -332,7 +332,7 @@ ScToken* ScRawToken::CreateToken() const
             return new ScJumpToken( eOp, (short*) nJump );
         break;
         case svExternal :
-            return new ScExternalToken( eOp, (BYTE) cStr[0], String( cStr+1 ) );
+            return new ScExternalToken( eOp, cByte, String( cStr+1 ) );
         break;
         case svMissing :
             return new ScMissingToken( eOp );
@@ -2017,6 +2017,7 @@ void ScRawToken::Load( SvStream& rStream, USHORT nVer )
             }
             else
                 rStream.Read( c+1, n );
+            //! parameter count is in cByte (cStr[0] little endian)
             CharSet eSrc = rStream.GetStreamCharSet();
             for ( BYTE j=1; j<n+1; j++ )
                 cStr[j] = ByteString::ConvertToUnicode( c[j], eSrc );
@@ -2101,11 +2102,23 @@ void ScRawToken::Load( SvStream& rStream, USHORT nVer )
         default:
         {
             rStream >> n;
-            cStr[ 0 ] = n;
-            // eigentlich kann es nicht 0 sein, aber bei rottem Dokument
-            // nicht wild in den Stack lesen
-            if ( n > 1 )
-                rStream.Read( cStr+1, n-1 );
+            if( n > MAXSTRLEN-2 )
+            {
+                DBG_ERRORFILE( "bad unknown token type array boundary" );
+                USHORT nDiff = n - (MAXSTRLEN-2);
+                n = MAXSTRLEN-2;
+                rStream.Read( ((BYTE*)cStr)+1, n );
+                rStream.SeekRel( nDiff );
+                ++n;
+            }
+            else if ( n > 1 )
+                rStream.Read( ((BYTE*)cStr)+1, n-1 );
+            else if ( n == 0 )
+            {
+                DBG_ERRORFILE( "unknown token type length==0" );
+                n = 1;
+            }
+            *((BYTE*)cStr) = n;     // length including length byte
         }
     }
 }
