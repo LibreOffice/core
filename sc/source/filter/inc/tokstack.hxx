@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tokstack.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2001-02-21 18:38:34 $
+ *  last change: $Author: er $ $Date: 2001-03-06 16:38:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,20 @@
 #endif
 
 
-typedef UINT16 TokenId;
+// in PRODUCT version: ambiguity between OpCode (being USHORT) and UINT16
+// Unfortunately a typedef is just a dumb alias and not a real type ...
+//typedef UINT16 TokenId;
+struct TokenId
+{
+        UINT16          nId;
+
+                        TokenId() {}
+                        TokenId( UINT16 n ) : nId( n ) {}
+                        TokenId( const TokenId& r ) : nId( r.nId ) {}
+    inline  TokenId&    operator =( const TokenId& r ) { nId = r.nId; return *this; }
+    inline              operator UINT16&() { return nId; }
+    inline              operator const UINT16&() const { return nId; }
+};
 typedef OpCode DefTokenId;
 
 
