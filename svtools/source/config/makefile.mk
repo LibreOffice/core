@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.39 $
+#   $Revision: 1.40 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-27 14:37:34 $
+#   last change: $Author: vg $ $Date: 2003-04-17 10:23:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,8 +76,6 @@ TARGET1=heavyconfig
 SLOFILES = \
     $(SLO)$/accelcfg.obj				\
     $(SLO)$/xmlaccelcfg.obj				\
-    $(SLO)$/cjkoptions.obj				\
-    $(SLO)$/ctloptions.obj				\
     $(SLO)$/pathoptions.obj             \
     $(SLO)$/saveopt.obj					\
     $(SLO)$/undoopt.obj             	\
@@ -108,7 +106,6 @@ SLOFILES = \
     $(SLO)$/regoptions.obj				\
     $(SLO)$/accessibilityoptions.obj	\
     $(SLO)$/cmdoptions.obj				\
-    $(SLO)$/languageoptions.obj        \
     $(SLO)$/extendedsecurityoptions.obj \
     $(SLO)$/sourceviewconfig.obj
 
@@ -123,6 +120,9 @@ EXCEPTIONSFILES = \
 LIB1TARGET= $(SLB)$/$(TARGET1).lib
 
 LIB1OBJFILES=  \
+        $(SLO)$/languageoptions.obj     \
+        $(SLO)$/ctloptions.obj			\
+        $(SLO)$/cjkoptions.obj			\
         $(SLO)$/colorcfg.obj
 
 # --- Targets ------------------------------------------------------
