@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: svx_AccessiblePresentationGraphicShape.xba,v $ 
 '*
-'*  $Revision: 1.3 $ 
+'*  $Revision: 1.4 $ 
 '*
-'*  last change:$Date: 2003-03-26 14:54:23 $ 
+'*  last change:$Date: 2003-05-27 12:18:55 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -95,9 +95,9 @@ On Error Goto ErrHndl
     wait(1000)
     oWin = utils.at_getCurrentWindow(oDoc)
     xRoot = utils.at_getAccessibleObject(oWin)
-    oObj = utils.at_getAccessibleObjectForRole(xRoot,111,"ImpressGraphicObject0")
+    oObj = utils.at_getAccessibleObjectForRole(xRoot, com.sun.star.accessibility.AccessibleRole.SHAPE,"ImpressGraphicObject0")
     Out.Log("Implementation Name: "+oObj.getImplementationName())
-    if hasUNOInterfaces(oObj,"drafts.com.sun.star.accessibility.XAccessibleText") then 
+    if hasUNOInterfaces(oObj,"com.sun.star.accessibility.XAccessibleText") then 
         accText = oObj.getText()
     End If
     hasChangeableAttrs = true
@@ -108,7 +108,7 @@ ErrHndl:
 End Sub
 
 Sub DisposeObj()
-    oDoc.dispose()
+    utils.closeObject(oDoc)
 End Sub
 
 Sub fireEvent()
