@@ -2,9 +2,9 @@
  *
  *  $RCSfile: expfld.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:49:05 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:30:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 #include <svtools/svarray.hxx>
 #endif
 
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
+#endif
 #ifndef _FLDBAS_HXX
 #include <fldbas.hxx>
 #endif
@@ -101,7 +104,7 @@ struct _SeqFldLstElem
 };
 SV_DECL_PTRARR_DEL( _SwSeqFldList, _SeqFldLstElem*, 10, 10 )
 
-class SwSeqFldList : public _SwSeqFldList
+class SW_DLLPUBLIC SwSeqFldList : public _SwSeqFldList
 {
 public:
     SwSeqFldList()  : _SwSeqFldList( 10, 10 ) {}
@@ -193,7 +196,7 @@ inline void SwGetExpField::ChgBodyTxtFlag( BOOL bIsInBody )
 
 class SwSetExpField;
 
-class SwSetExpFieldType : public SwValueFieldType
+class SW_DLLPUBLIC SwSetExpFieldType : public SwValueFieldType
 {
     String      sName;
     const SwNode* pOutlChgNd;
