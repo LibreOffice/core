@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsntypes.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-07 15:55:24 $
+ *  last change: $Author: oj $ $Date: 2001-08-15 13:16:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,7 @@ namespace dbaui
 //=========================================================================
 //= ODsnTypeCollection
 //=========================================================================
+DBG_NAME(ODsnTypeCollection);
 //-------------------------------------------------------------------------
 ODsnTypeCollection::ODsnTypeCollection()
     :Resource(ModuleRes(RSC_DATASOURCE_TYPES))
@@ -87,6 +88,7 @@ ODsnTypeCollection::ODsnTypeCollection()
     ,m_nLivingIterators(0)
 #endif
 {
+    DBG_CTOR(ODsnTypeCollection,NULL);
     String sConnectionTypes = String(ResId(STR_CONNTYPES));
     String sConnectionTypeNames = String(ResId(STR_CONNUINAMES));
     DBG_ASSERT(sConnectionTypes.GetTokenCount(';') == sConnectionTypeNames.GetTokenCount(';'),
@@ -107,6 +109,7 @@ ODsnTypeCollection::ODsnTypeCollection()
 ODsnTypeCollection::~ODsnTypeCollection()
 {
     DBG_ASSERT(0 == m_nLivingIterators, "ODsnTypeCollection::~ODsnTypeCollection : there are still living iterator objects!");
+    DBG_DTOR(ODsnTypeCollection,NULL);
 }
 
 //-------------------------------------------------------------------------
@@ -432,6 +435,9 @@ ADDRESSBOOK_TYPE AddressBookTypes::getAddressType( const String& _rAddressURL )
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.11  2001/08/07 15:55:24  fs
+ *  #88431# +isFileSystemBased
+ *
  *  Revision 1.10  2001/08/01 08:32:49  fs
  *  #88530# getAddressType: allow for invalid URLs without assertion
  *

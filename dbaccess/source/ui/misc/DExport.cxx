@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DExport.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-16 13:40:36 $
+ *  last change: $Author: oj $ $Date: 2001-08-15 13:16:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,9 @@
 #ifndef _MEMORY_
 #include <memory>
 #endif
-
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
+#endif
 
 #define CONTAINER_ENTRY_NOTFOUND    ((ULONG)0xFFFFFFFF)
 
@@ -149,6 +151,7 @@ using namespace ::com::sun::star::lang;
 // ==========================================================================
 // ODatabaseExport
 // ==========================================================================
+DBG_NAME(ODatabaseExport);
 ODatabaseExport::ODatabaseExport(sal_Int32 nRows,
                                  const ::std::vector<sal_Int32> &_rColumnPositions,
                                  const Reference< XNumberFormatter >& _rxNumberF,
@@ -172,6 +175,8 @@ ODatabaseExport::ODatabaseExport(sal_Int32 nRows,
     ,m_vColumns(_rColumnPositions)
     ,m_bFoundTable(sal_False)
 {
+    DBG_CTOR(ODatabaseExport,NULL);
+
     m_nDefToken = gsl_getSystemTextEncoding();
 
     m_nRows += nRows;
@@ -220,6 +225,7 @@ ODatabaseExport::ODatabaseExport(const Reference< XConnection >& _rxConnection,
     ,m_pTypeInfo(NULL)
     ,m_bFoundTable(sal_False)
 {
+    DBG_CTOR(ODatabaseExport,NULL);
     try
     {
         Any aValue = ConfigManager::GetDirectConfigProperty(ConfigManager::LOCALE);
@@ -269,6 +275,7 @@ ODatabaseExport::ODatabaseExport(const Reference< XConnection >& _rxConnection,
 ODatabaseExport::~ODatabaseExport()
 {
     delete m_pTypeInfo;
+    DBG_DTOR(ODatabaseExport,NULL);
 }
 //------------------------------------------------------------------------------
 String ODatabaseExport::ShortenFieldName( const String& rName, xub_StrLen nNewLength,

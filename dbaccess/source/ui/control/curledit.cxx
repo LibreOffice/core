@@ -2,9 +2,9 @@
  *
  *  $RCSfile: curledit.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-24 12:08:19 $
+ *  last change: $Author: oj $ $Date: 2001-08-15 13:17:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@
 namespace dbaui
 {
 //.........................................................................
-
+    DBG_NAME(OConnectionURLEdit);
 //=========================================================================
 //= OConnectionURLEdit
 //=========================================================================
@@ -79,6 +79,7 @@ OConnectionURLEdit::OConnectionURLEdit(Window* _pParent, WinBits _nStyle)
     :Edit(_pParent, _nStyle)
     ,m_pForcedPrefix(NULL)
 {
+    DBG_CTOR(OConnectionURLEdit ,NULL);
 }
 
 //-------------------------------------------------------------------------
@@ -86,6 +87,7 @@ OConnectionURLEdit::OConnectionURLEdit(Window* _pParent, const ResId& _rResId)
     :Edit(_pParent, _rResId)
     ,m_pForcedPrefix(NULL)
 {
+    DBG_CTOR(OConnectionURLEdit ,NULL);
 }
 
 //-------------------------------------------------------------------------
@@ -96,6 +98,8 @@ OConnectionURLEdit::~OConnectionURLEdit()
     SetSubEdit(NULL);
     delete pSubEdit;
     delete m_pForcedPrefix;
+
+    DBG_DTOR(OConnectionURLEdit ,NULL);
 }
 
 //-------------------------------------------------------------------------
@@ -183,6 +187,9 @@ String OConnectionURLEdit::GetText() const
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2000/10/24 12:08:19  fs
+ *  S/GetTextNoPrefix
+ *
  *  Revision 1.2  2000/10/18 16:00:47  fs
  *  use the system's DialogColor as background for the fixed text - looks much better
  *

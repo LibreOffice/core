@@ -2,9 +2,9 @@
  *
  *  $RCSfile: singledoccontroller.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-14 12:00:02 $
+ *  last change: $Author: oj $ $Date: 2001-08-15 13:16:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,10 +124,12 @@ namespace dbaui
         ~OConnectionChangeBroadcaster();
     };
 
+    DBG_NAME(OConnectionChangeBroadcaster);
     //--------------------------------------------------------------------
     OConnectionChangeBroadcaster::OConnectionChangeBroadcaster( OSingleDocumentController* _pController )
         :m_pController( _pController )
     {
+        DBG_CTOR(OConnectionChangeBroadcaster,NULL);
         DBG_ASSERT( m_pController, "OConnectionChangeBroadcaster::OConnectionChangeBroadcaster: invalid controller!" );
         if ( m_pController )
             m_xOldConnection = m_pController->getConnection();
@@ -149,6 +151,7 @@ namespace dbaui
                 m_pController->fire( &mHandle, &aNewValue, &aOldValue, 1, sal_False );
             }
         }
+        DBG_DTOR(OConnectionChangeBroadcaster,NULL);
     }
 
     //====================================================================
@@ -160,7 +163,7 @@ namespace dbaui
         ,OSingleDocumentController_PBASE( getBroadcastHelper() )
         ,m_bOwnConnection( sal_False )
     {
-        registerProperty( PROPERTY_ACTIVECONNECTION, PROPERTY_ID_ACTIVECONNECTION, PropertyAttribute::READONLY,
+        registerProperty( PROPERTY_ACTIVECONNECTION, PROPERTY_ID_ACTIVECONNECTION, PropertyAttribute::READONLY | PropertyAttribute::BOUND,
             &m_xConnection, ::getCppuType( &m_xConnection ) );
     }
 
@@ -188,8 +191,17 @@ namespace dbaui
     //--------------------------------------------------------------------
     Sequence<sal_Int8> SAL_CALL OSingleDocumentController::getImplementationId(  ) throw(RuntimeException)
     {
-        static ::cppu::OImplementationId aId;
-        return aId.getImplementationId();
+        static ::cppu::OImplementationId * pId = 0;
+        if (! pId)
+        {
+            ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+            if (! pId)
+            {
+                static ::cppu::OImplementationId aId;
+                pId = &aId;
+            }
+        }
+        return pId->getImplementationId();
     }
 
     //--------------------------------------------------------------------
@@ -349,8 +361,14 @@ namespace dbaui
         OConnectionChangeBroadcaster( this );
 
         stopConnectionListening(m_xConnection);
-        if ( m_bOwnConnection )
-            ::comphelper::disposeComponent( m_xConnection );
+        try
+        {
+            if ( m_bOwnConnection )
+                ::comphelper::disposeComponent( m_xConnection );
+        }
+        catch(const Exception&)
+        {
+        }
         m_xConnection = NULL;
         m_bOwnConnection = sal_False;
 
@@ -392,6 +410,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/08/14 12:00:02  fs
+ *  initial checkin - base class for controller which work on one single object belonging to a data source connection
+ *
  *
  *  Revision 1.0 14.08.01 09:45:39  fs
  ************************************************************************/
