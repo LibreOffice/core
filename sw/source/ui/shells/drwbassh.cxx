@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwbassh.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-14 16:16:26 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 13:10:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,6 +181,11 @@
 #include <svx/dialogs.hrc>
 #include "swabstdlg.hxx" //CHINA001
 #include "dialog.hrc" //CHINA001
+// --> OD 2004-07-14 #i30451#
+#ifndef _SWUNDO_HXX
+#include <swundo.hxx>
+#endif
+// <--
 
 #ifndef _COM_SUN_STAR_TEXT_HORIORIENTATION_HPP_
 #include <com/sun/star/text/HoriOrientation.hpp>
@@ -417,6 +422,10 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                         {
                             const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
                             pSh->StartAllAction();
+
+                            // --> OD 2004-07-14 #i30451#
+                            pSh->StartUndo();
+
                             pSdrView->SetGeoAttrToMarked(*pOutSet);
 
                             if (bCaption)
@@ -495,8 +504,11 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                             if(aSet.Count())
                                 pSh->SetDrawingAttr(aSet);
 
-
                             rBind.InvalidateAll(FALSE);
+
+                            // --> OD 2004-07-14 #i30451#
+                            pSh->EndUndo( UNDO_INSFMTATTR );
+
                             pSh->EndAllAction();
                         }
                         delete pDlg;
