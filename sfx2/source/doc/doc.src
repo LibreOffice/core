@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-21 20:14:26 $
+ *  last change: $Author: kz $ $Date: 2001-04-11 18:11:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -832,7 +832,7 @@ ErrorBox MSG_ERROR_EMPTY_NAME
     Message[ chinese_simplified ] = "±ØĞëÖ¸¶¨Ò»¸öÃû³Æ¡£";
     Message[ russian ] = "Íåîáõîäèìî ââåñòè èìÿ.";
     Message[ polish ] = "Trzeba podaæ nazwê.";
-    Message[ japanese ] = "–¼‘O‚ğw’è‚µ‚Ä‰º‚³‚¢B";
+    Message[ japanese ] = "–¼‘O‚ğw’è‚µ‚Ä‚­‚¾‚³‚¢B";
     Message[ chinese_traditional ] = "±z¥²¶·¿é¤J¤@­Ó¦WºÙ¡C";
     Message[ arabic ] = "íÌÈ ÅÏÎÇá ÇÓã.";
     Message[ dutch ] = "U moet een naam invullen.";
@@ -862,7 +862,7 @@ ErrorBox MSG_ERROR_UNIQ_NAME
     Message[ chinese_simplified ] = "±ØĞë¸ø¶¨Ò»¸öÈ·ÇĞµÄÃû³Æ¡£\n²»±ØÇø±ğ×ÖÄ¸´óĞ¡Ğ´¡£";
     Message[ russian ] = "Íåîáõîäèìî ââåñòè îäíîçíà÷íîå èìÿ.\nÍàïèñàíèå ñ ïğîïèñíîé èëè ñòğî÷íîé áóêâû íå ó÷èòûâàåòñÿ.";
     Message[ polish ] = "Musi zostaæ podana jednoznaczna nazwa. \nNie ma rozró¿niania du¿ych i ma³ych liter.";
-    Message[ japanese ] = "–¾Šm‚È–¼‘O‚ğw’è‚µ‚Ä‰º‚³‚¢B\n‘å•¶š‚Æ¬•¶š‚Í‹æ•Ê‚³‚ê‚Ü‚¹‚ñB";
+    Message[ japanese ] = "–¾Šm‚È–¼‘O‚ğw’è‚µ‚Ä‚­‚¾‚³‚¢B\n‘å•¶š‚Æ¬•¶š‚Í‹æ•Ê‚³‚ê‚Ü‚¹‚ñB";
     Message[ chinese_traditional ] = "±z¥²¶·¿é¤J¤@­Ó¥¿½Tªº¦WºÙ¡C\n±z¤£¥²°Ï§O¦r¥À¤j¤p¼g¡C";
     Message[ arabic ] = "íÌÈ ÅÏÎÇá ÇÓã æÇÖÍ.\náÇ íÊã ÇáÊİÑíŞ Èíä ÇáßÊÇÈÉ ÈÃÍÑİ ßÈíÑÉ Ãæ ÕÛíÑÉ.";
     Message[ dutch ] = "De naam moet uniek zijn.\nEr wordt geen onderscheid gemaakt tussen hoofdletters en kleine letters.";
@@ -1947,7 +1947,7 @@ String STR_PACKNGO_NEWMEDIUM
     Text[ swedish ] = "Lägg in nästa datamedium och tryck OK.";
     Text[ polish ] = "Wsuñ nastêpny noœnik danych i naciœnij przycisk OK.";
     Text[ portuguese_brazilian ] = "Insert the next media and press OK.";
-    Text[ japanese ] = "Ÿ‚Ì”}‘Ì‚ğ“ü‚ê‚Ä[OK]‚ğ¸Ø¯¸‚µ‚Ä‰º‚³‚¢B";
+    Text[ japanese ] = "Ÿ‚Ì”}‘Ì‚ğ“ü‚ê‚ÄmOKnÎŞÀİ‚ğ¸Ø¯¸‚µ‚Ü‚·B";
     Text[ korean ] = "´ÙÀ½ µ¥ÀÌÅÍ ¸ÅÃ¼¸¦ »ğÀÔÇÑ´ÙÀ½£Ï£Ë ¹öÆ°À» ´©¸£½Ê½Ã¿À.";
     Text[ chinese_simplified ] = "Çë²åÈëÏÂÒ»¸öÈíÅÌ²¢°´»÷È·¶¨(OK)°´Å¥¡£";
     Text[ chinese_traditional ] = "½Ğ±z©ñ¤J¤U¤@­ÓºÏ¤ù¡AµM¦Z«ö¤@¤U½T©w¡C";
