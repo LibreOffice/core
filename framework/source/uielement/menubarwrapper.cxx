@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menubarwrapper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 13:16:51 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 09:51:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,6 +180,8 @@ void SAL_CALL MenuBarWrapper::dispose() throw (::com::sun::star::uno::RuntimeExc
 // XInitialization
 void SAL_CALL MenuBarWrapper::initialize( const Sequence< Any >& aArguments ) throw ( Exception, RuntimeException )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "framework (cd100003) ::MenuBarWrapper::initialize" );
+
     ResetableGuard aLock( m_aLock );
 
     if ( m_bDisposed )
