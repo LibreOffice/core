@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-10 17:36:50 $
+ *  last change: $Author: svesik $ $Date: 2000-11-23 02:04:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@
 #include <vcl/group.hxx>
 #endif
 #ifndef __SGI_STL_SET
-#include <stl/set>
+#include <set>
 #endif
 #ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
@@ -633,6 +633,9 @@ private:
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2000/11/10 17:36:50  fs
+ *  small bug fixes
+ *
  *  Revision 1.4  2000/10/31 08:03:33  fs
  *  +selectDataSource - supporting an initial selecting when creating as service
  *
