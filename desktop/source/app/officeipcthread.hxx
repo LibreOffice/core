@@ -2,9 +2,9 @@
  *
  *  $RCSfile: officeipcthread.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 11:45:04 $
+ *  last change: $Author: vg $ $Date: 2003-12-16 13:31:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,9 +143,6 @@ class OfficeIPCThread : public vos::OThread
   protected:
     /// Working method which should be overridden
     virtual void SAL_CALL run();
-
-    // Called when run() is done
-    virtual void SAL_CALL onTerminated();
 
   public:
     enum Status
