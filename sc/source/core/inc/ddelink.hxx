@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ddelink.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 11:45:28 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:31:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,11 +62,15 @@
 #ifndef SC_DDELINK_HXX
 #define SC_DDELINK_HXX
 
+#ifndef SC_ADDRESS_HXX
+#include "address.hxx"
+#endif
+
 #ifndef _LNKBASE_HXX //autogen
 #include <so3/lnkbase.hxx>
 #endif
-#ifndef _SFXBRDCST_HXX //autogen
-#include <svtools/brdcst.hxx>
+#ifndef _SVT_BROADCAST_HXX
+#include <svtools/broadcast.hxx>
 #endif
 #ifndef SC_MATRIX_HXX
 #include "scmatrix.hxx"
@@ -75,8 +79,9 @@
 class ScDocument;
 class ScMultipleReadHeader;
 class ScMultipleWriteHeader;
+class SvStream;
 
-class ScDdeLink : public ::so3::SvBaseLink, public SfxBroadcaster
+class ScDdeLink : public ::so3::SvBaseLink, public SvtBroadcaster
 {
 private:
 static BOOL bIsInUpdate;
@@ -107,9 +112,9 @@ public:
                                             // von SvBaseLink ueberladen:
     virtual void    DataChanged( const String& rMimeType,
                                 const ::com::sun::star::uno::Any & rValue );
-    void            NewData(USHORT nCols, USHORT nRows);
+    void            NewData(SCSIZE nCols, SCSIZE nRows);
 
-                                            // von SfxBroadcaster ueberladen:
+                                            // von SvtBroadcaster ueberladen:
     virtual void    ListenersGone();
 
                                             // fuer Interpreter:
