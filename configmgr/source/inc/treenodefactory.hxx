@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treenodefactory.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2001-03-16 17:31:24 $
+ *  last change: $Author: jb $ $Date: 2001-06-11 08:22:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,8 +108,15 @@ namespace configmgr
                                     rtl::OUString const& _rTemplateModule,
                                     configuration::Attributes _aAttrs);
         //-----------------------------------------------
+
+    //= special case: Dummy ISubtree ============================================================
+        static std::auto_ptr<ISubtree> createDummyTree(
+                                    rtl::OUString const& aName);
+
+        //-----------------------------------------------
     };
 
+    OTreeNodeFactory& getDefaultTreeNodeFactory();
     //==========================================================================
     inline
     std::auto_ptr<INode> base_ptr(std::auto_ptr<ISubtree> pNode)

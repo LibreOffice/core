@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treenodefactory.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2001-03-16 17:31:24 $
+ *  last change: $Author: jb $ $Date: 2001-06-11 08:22:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,13 @@
 namespace configmgr
 {
 
+//= static default ============================================================
+OTreeNodeFactory& getDefaultTreeNodeFactory()
+{
+    static OTreeNodeFactory aDefaultFactory;
+    return aDefaultFactory;
+}
+
 //= ValueNodes ============================================================
 
 std::auto_ptr<ValueNode> OTreeNodeFactory::createValueNode(
@@ -108,6 +115,13 @@ std::auto_ptr<ValueNode>  OTreeNodeFactory::createNullValueNode(
 
 
 //= ISubtree ============================================================
+
+std::auto_ptr<ISubtree> OTreeNodeFactory::createDummyTree(rtl::OUString const& aName)
+{
+    return std::auto_ptr<ISubtree>( new Subtree(aName, configuration::Attributes()) );
+}
+
+//-----------------------------------------------
 
 std::auto_ptr<ISubtree> OTreeNodeFactory::createGroupNode(
                             rtl::OUString const& aName,
