@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prnmon.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2001-09-19 14:42:09 $
+ *  last change: $Author: os $ $Date: 2001-09-27 13:13:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@
 #include <svtools/asynclink.hxx>
 #endif
 
-#include <svtools/printoptions.hxx>
+#include <svtools/printwarningoptions.hxx>
 
 #pragma hdrstop
 
@@ -247,7 +247,7 @@ SfxPrintProgress::SfxPrintProgress( SfxViewShell* pViewSh, FASTBOOL bShow )
     pImp->pViewShell->GetViewFrame()->GetFrame()->Lock_Impl(TRUE);
     pImp->bShow = bShow;
     Lock();
-    if ( !SvtPrinterOptions().IsModifyDocumentOnPrintingAllowed() )
+    if ( !SvtPrintWarningOptions().IsModifyDocumentOnPrintingAllowed() )
     {
         pImp->bRestoreFlag = TRUE;
         pImp->bOldFlag = pViewSh->GetObjectShell()->IsEnableSetModified();

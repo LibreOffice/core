@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objxtor.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: mba $ $Date: 2001-09-13 12:18:31 $
+ *  last change: $Author: os $ $Date: 2001-09-27 13:13:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,10 @@
 #ifndef _SFXLSTNER_HXX //autogen
 #include <svtools/lstner.hxx>
 #endif
+
+#ifndef _SFX_HELP_HXX
+#include <sfxhelp.hxx>
+#endif
 #ifndef _SB_SBSTAR_HXX //autogen
 #include <basic/sbstar.hxx>
 #endif
@@ -109,6 +113,9 @@
 #endif
 #ifndef _EHDL_HXX
 #include <svtools/ehdl.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_PRINTWARNINGOPTIONS_HXX
+#include <svtools/printwarningoptions.hxx>
 #endif
 
 #include <svtools/urihelper.hxx>
@@ -144,6 +151,7 @@
 #include "imgmgr.hxx"
 #include "tbxconf.hxx"
 #include "accmgr.hxx"
+#include "helpid.hrc"
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::script;
@@ -507,6 +515,13 @@ sal_uInt16 SfxObjectShell::PrepareClose
             short nRet = RET_YES;
             if( SfxApplication::IsPlugin() == sal_False || bUI == 2 )
             {
+                //initiate help agent to inform about "print modifies the document"
+                SfxStamp aStamp = GetDocInfo().GetPrinted();
+                SvtPrintWarningOptions aPrintOptions;
+                if(aPrintOptions.IsModifyDocumentOnPrintingAllowed() && HasName() && aStamp.IsValid())
+                {
+                    SfxHelp::OpenHelpAgent(pFirst->GetFrame(), HID_CLOSE_WARNING);
+                }
                 QueryBox aQBox( &pFrame->GetWindow(), WB_YES_NO_CANCEL | WB_DEF_YES, aText );
                 aQBox.SetButtonText( BUTTONID_NO, SfxResId( STR_NOSAVEANDCLOSE ) );
                 aQBox.SetButtonText( BUTTONID_YES, SfxResId( STR_SAVEDOC ) );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewprn.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mba $ $Date: 2001-09-19 14:42:09 $
+ *  last change: $Author: os $ $Date: 2001-09-27 13:13:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@
 #include <app.hxx>
 #endif
 #include <svtools/useroptions.hxx>
-#include <svtools/printoptions.hxx>
+#include <svtools/printwarningoptions.hxx>
 #pragma hdrstop
 
 #include "viewsh.hxx"
@@ -678,7 +678,7 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
             aUserName.Erase();
 
         BOOL bOldFlag = pObjSh->IsEnableSetModified();
-        BOOL bDontModifyDoc = !SvtPrinterOptions().IsModifyDocumentOnPrintingAllowed();
+        BOOL bDontModifyDoc = !SvtPrintWarningOptions().IsModifyDocumentOnPrintingAllowed();
         if ( bDontModifyDoc && bOldFlag )
             pObjSh->EnableSetModified( FALSE );
 
