@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typeblop.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-08-17 13:09:50 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 10:24:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,15 @@
 #ifndef _COM_SUN_STAR_REFLECTION_XINTERFACETYPEDESCRIPTION_HPP_
 #include <com/sun/star/reflection/XInterfaceTypeDescription.hpp>
 #endif
+#ifndef _COM_SUN_STAR_REFLECTION_XCONSTANTSTYPEDESCRIPTION_HPP_
+#include <com/sun/star/reflection/XConstantsTypeDescription.hpp>
+#endif
+#ifndef _COM_SUN_STAR_REFLECTION_XCONSTANTTYPEDESCRIPTION_HPP_
+#include <com/sun/star/reflection/XConstantTypeDescription.hpp>
+#endif
+#ifndef _COM_SUN_STAR_REFLECTION_XMODULETYPEDESCRIPTION_HPP_
+#include <com/sun/star/reflection/XModuleTypeDescription.hpp>
+#endif
 #ifndef _COM_SUN_STAR_REFLECTION_XINTERFACEMETHODTYPEDESCRIPTION_HPP_
 #include <com/sun/star/reflection/XInterfaceMethodTypeDescription.hpp>
 #endif
@@ -116,95 +125,84 @@ using namespace rtl;
 
 static Reference< XHierarchicalNameAccess > xNameAccess;
 
-sal_uInt32 writeConstantData( const RegistryTypeWriterLoader& rLoader,
-                              const OUString& typeName,
-                              const Any& aTypeAny,
-                              sal_uInt8** pBlop )
+void writeConstantData( RegistryTypeWriter& rWriter, sal_uInt16 fieldIndex,
+                      const Reference< XConstantTypeDescription >& xConstant)
+
 {
-    sal_uInt32 lastIndex = typeName.lastIndexOf('.');
-    OUString uModuleName( typeName.copy(0, lastIndex) );
-    OUString uConstName( typeName.copy(lastIndex + 1) );
-
-    RegistryTypeWriter writer(rLoader, RT_TYPE_MODULE, uModuleName.replace('.', '/'),
-                              OUString(), 1, 0, 0);
-
     RTConstValue constValue;
     OUString uConstTypeName;
-    switch ( aTypeAny.getValueTypeClass() )
+    OUString uConstName = xConstant->getName();
+    Any aConstantAny = xConstant->getConstantValue();
+
+    switch ( aConstantAny.getValueTypeClass() )
     {
         case TypeClass_BOOLEAN:
             {
                 uConstTypeName = OUString( RTL_CONSTASCII_USTRINGPARAM("boolean") );
                 constValue.m_type = RT_TYPE_BOOL;
-                aTypeAny >>= constValue.m_value.aBool;
+                aConstantAny >>= constValue.m_value.aBool;
             }
             break;
         case TypeClass_BYTE:
             {
                 uConstTypeName = OUString( RTL_CONSTASCII_USTRINGPARAM("byte") );
                 constValue.m_type = RT_TYPE_BYTE;
-                aTypeAny >>= constValue.m_value.aByte;
+                aConstantAny >>= constValue.m_value.aByte;
             }
             break;
         case TypeClass_SHORT:
             {
                 uConstTypeName = OUString( RTL_CONSTASCII_USTRINGPARAM("short") );
                 constValue.m_type = RT_TYPE_INT16;
-                aTypeAny >>= constValue.m_value.aShort;
+                aConstantAny >>= constValue.m_value.aShort;
             }
             break;
         case TypeClass_UNSIGNED_SHORT:
             {
                 uConstTypeName = OUString( RTL_CONSTASCII_USTRINGPARAM("unsigned short") );
                 constValue.m_type = RT_TYPE_UINT16;
-                aTypeAny >>= constValue.m_value.aUShort;
+                aConstantAny >>= constValue.m_value.aUShort;
             }
             break;
         case TypeClass_LONG:
             {
                 uConstTypeName = OUString( RTL_CONSTASCII_USTRINGPARAM("long") );
                 constValue.m_type = RT_TYPE_INT32;
-                aTypeAny >>= constValue.m_value.aLong;
+                aConstantAny >>= constValue.m_value.aLong;
             }
             break;
         case TypeClass_UNSIGNED_LONG:
             {
                 uConstTypeName = OUString( RTL_CONSTASCII_USTRINGPARAM("unsigned long") );
                 constValue.m_type = RT_TYPE_UINT32;
-                aTypeAny >>= constValue.m_value.aULong;
+                aConstantAny >>= constValue.m_value.aULong;
             }
             break;
         case TypeClass_FLOAT:
             {
                 uConstTypeName = OUString( RTL_CONSTASCII_USTRINGPARAM("float") );
                 constValue.m_type = RT_TYPE_FLOAT;
-                aTypeAny >>= constValue.m_value.aFloat;
+                aConstantAny >>= constValue.m_value.aFloat;
             }
             break;
         case TypeClass_DOUBLE:
             {
                 uConstTypeName = OUString( RTL_CONSTASCII_USTRINGPARAM("double") );
                 constValue.m_type = RT_TYPE_DOUBLE;
-                aTypeAny >>= constValue.m_value.aDouble;
+                aConstantAny >>= constValue.m_value.aDouble;
             }
             break;
         case TypeClass_STRING:
             {
                 uConstTypeName = OUString( RTL_CONSTASCII_USTRINGPARAM("string") );
                 constValue.m_type = RT_TYPE_STRING;
-                constValue.m_value.aString = ((OUString*)aTypeAny.getValue())->getStr();
+                constValue.m_value.aString = ((OUString*)aConstantAny.getValue())->getStr();
             }
             break;
     }
 
-    writer.setFieldData(1, uConstName, uConstTypeName, OUString(),
+    rWriter.setFieldData(fieldIndex, uConstName, uConstTypeName, OUString(),
                         OUString(), RT_ACCESS_CONST, constValue);
-
-    sal_uInt32 length = writer.getBlopSize();
-    *pBlop = (sal_uInt8*)rtl_allocateMemory( length );
-    rtl_copyMemory(*pBlop, writer.getBlop(), length);
-
-    return length;
 }
 
 sal_uInt32 getInheritedMemberCount( Reference< XTypeDescription >& xType )
@@ -243,7 +241,7 @@ sal_uInt32 getInheritedMemberCount( Reference< XTypeDescription >& xType )
     return memberCount;
 }
 
-void writeMethodData( RegistryTypeWriter& rWriter, sal_uInt32 inheritedMmeberCount,
+void writeMethodData( RegistryTypeWriter& rWriter, sal_uInt32 calculatedMemberOffset,
                       const Reference< XInterfaceMemberTypeDescription >& xMember,
                       const Reference< XInterfaceMethodTypeDescription >& xMethod )
 {
@@ -255,7 +253,7 @@ void writeMethodData( RegistryTypeWriter& rWriter, sal_uInt32 inheritedMmeberCou
 
     Sequence< Reference< XMethodParameter > > parameters( xMethod->getParameters() );
     Sequence< Reference< XTypeDescription > > exceptions( xMethod->getExceptions() );
-    sal_uInt16 methodIndex = (sal_uInt16)(xMember->getPosition() - inheritedMmeberCount);
+    sal_uInt16 methodIndex = (sal_uInt16)(xMember->getPosition() - calculatedMemberOffset);
     sal_uInt16 paramCount = (sal_uInt16)parameters.getLength();
     sal_uInt16 exceptionCount = (sal_uInt16)exceptions.getLength();
 
@@ -316,18 +314,12 @@ sal_Bool SAL_CALL initTypeMapper( const sal_Char* pRegName )
                 if (xProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("DefaultContext") ) ) >>= xContext)
                 {
                     xContext->getValueByName(
-                        OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.reflection.TypeDescriptionManager") ) ) >>= xNAccess;
+                        OUString( RTL_CONSTASCII_USTRINGPARAM("/singletons/com.sun.star.reflection.theTypeDescriptionManager") ) ) >>= xNAccess;
                 }
             }
             catch (beans::UnknownPropertyException &)
             {
             }
-        }
-
-        if (! xNAccess.is())
-        {
-            xNAccess.set( xSMgr->createInstance(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.reflection.TypeDescriptionManager"))), UNO_QUERY );
         }
 
         if ( !xNAccess.is() )
@@ -362,11 +354,6 @@ sal_uInt32 SAL_CALL getTypeBlop(const sal_Char* pTypeName, sal_uInt8** pBlop)
         if ( !rtwLoader.isLoaded() )
             return length;
 
-        if ( aTypeAny.getValueTypeClass() != TypeClass_INTERFACE )
-        {
-            return writeConstantData( rtwLoader, uTypeName, aTypeAny, pBlop );
-        }
-
         Reference< XTypeDescription > xType;
         aTypeAny >>= xType;
 
@@ -375,6 +362,68 @@ sal_uInt32 SAL_CALL getTypeBlop(const sal_Char* pTypeName, sal_uInt8** pBlop)
 
         switch (xType->getTypeClass())
         {
+            case TypeClass_CONSTANTS:
+                {
+                    Reference< XConstantsTypeDescription > xCFace(xType, UNO_QUERY);
+
+                    if ( !xCFace.is() )
+                        return length;
+
+                  Sequence< Reference< XConstantTypeDescription > > constTypes( xCFace->getConstants());
+                    sal_uInt16 constCount = (sal_uInt16)constTypes.getLength();
+
+                    RegistryTypeWriter writer(rtwLoader, RT_TYPE_MODULE, uTypeName.replace('.', '/'),
+                                              OUString(), constCount, 0, 0);
+
+                  for (sal_uInt16 i=0; i < constCount; i++)
+                      writeConstantData(writer, i, constTypes[i]);
+
+                    length = writer.getBlopSize();
+                    *pBlop = (sal_uInt8*)rtl_allocateMemory( length );
+                    rtl_copyMemory(*pBlop, writer.getBlop(), length);
+                }
+                break;
+            case TypeClass_MODULE:
+                {
+                    Reference< XModuleTypeDescription > xMFace(xType, UNO_QUERY);
+
+                    if ( !xMFace.is() )
+                        return length;
+
+                  Sequence< Reference< XTypeDescription > > memberTypes( xMFace->getMembers());
+
+                    sal_uInt16 memberCount = (sal_uInt16)memberTypes.getLength();
+                    sal_uInt16 constCount = 0;
+
+                    for (sal_Int16 i=0; i < memberCount; i++)
+                    {
+                        if ( TypeClass_CONSTANT == memberTypes[i]->getTypeClass() )
+                            constCount++;
+                    }
+
+                    RegistryTypeWriter writer(rtwLoader, RT_TYPE_MODULE, uTypeName.replace('.', '/'),
+                                              OUString(), constCount, 0, 0);
+
+                    if ( 0 < constCount )
+                  {
+                      Reference< XConstantTypeDescription > xConst;
+                      sal_uInt16 fieldIndex = 0;
+                      for (i=0; i < memberCount; i++)
+                      {
+                          if ( TypeClass_CONSTANT == memberTypes[i]->getTypeClass() )
+                          {
+                              xConst = Reference< XConstantTypeDescription >(memberTypes[i], UNO_QUERY);
+
+                              writeConstantData(writer, ++fieldIndex, xConst);
+                          }
+                      }
+                  }
+
+                    length = writer.getBlopSize();
+                    *pBlop = (sal_uInt8*)rtl_allocateMemory( length );
+                    rtl_copyMemory(*pBlop, writer.getBlop(), length);
+                }
+                break;
             case TypeClass_INTERFACE:
                 {
                     Reference< XInterfaceTypeDescription > xIFace(xType, UNO_QUERY);
@@ -414,11 +463,15 @@ sal_uInt32 SAL_CALL getTypeBlop(const sal_Char* pTypeName, sal_uInt8** pBlop)
                     writer.setUik( rtUik );
 
                     RTFieldAccess attrAccess = RT_ACCESS_READWRITE;
+                    // reset attrCount, used for method index calculation
+                    attrCount = 0;
+
                     for (i=0; i < memberCount; i++)
                     {
                         xAttr = Reference< XInterfaceAttributeTypeDescription >(memberTypes[i], UNO_QUERY);
                         if ( xAttr.is() )
                         {
+                            ++attrCount;
                             if (xAttr->isReadOnly())
                             {
                                 attrAccess = RT_ACCESS_READONLY;
@@ -436,7 +489,7 @@ sal_uInt32 SAL_CALL getTypeBlop(const sal_Char* pTypeName, sal_uInt8** pBlop)
                         xMethod = Reference< XInterfaceMethodTypeDescription >(memberTypes[i], UNO_QUERY);
                         if ( xMethod.is() )
                         {
-                            writeMethodData( writer, inheritedMemberCount, memberTypes[i], xMethod );
+                            writeMethodData( writer, attrCount+inheritedMemberCount, memberTypes[i], xMethod );
                         }
                     }
 
@@ -453,6 +506,9 @@ sal_uInt32 SAL_CALL getTypeBlop(const sal_Char* pTypeName, sal_uInt8** pBlop)
                     {
                         rtTypeClass = RT_TYPE_EXCEPTION;
                     }
+#ifndef _COM_SUN_STAR_REFLECTION_XCONSTANTSTYPEDESCRIPTION_HPP_
+#include <com/sun/star/reflection/XConstantsTypeDescription.hpp>
+#endif
 
                     Reference< XCompoundTypeDescription > xComp(xType, UNO_QUERY);
 
