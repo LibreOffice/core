@@ -1,7 +1,7 @@
 /*
  * MultiStratumBackend.java
  *
- * Created on 24. März 2004, 13:48
+ * Created on 24. March 2004, 13:48
  */
 
 package mod._cfgmgr2;
