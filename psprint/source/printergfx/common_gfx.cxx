@@ -2,9 +2,9 @@
  *
  *  $RCSfile: common_gfx.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 14:24:07 $
+ *  last change: $Author: kz $ $Date: 2003-08-25 13:59:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,9 @@ static const sal_Int32 nMaxTextColumn = 80;
 GraphicsStatus::GraphicsStatus() :
         mnTextHeight( 0 ),
         mnTextWidth( 0 ),
-        mfLineWidth( -1 )
+        mfLineWidth( -1 ),
+        mbArtItalic( false ),
+        mbArtBold( false )
 {
 }
 
@@ -841,15 +843,20 @@ void
 PrinterGfx::PSSetFont ()
 {
     GraphicsStatus& rCurrent( currentState() );
-    if( maVirtualStatus.maFont           != rCurrent.maFont         ||
-        maVirtualStatus.mnTextHeight     != rCurrent.mnTextHeight   ||
-        maVirtualStatus.maEncoding       != rCurrent.maEncoding     ||
-        maVirtualStatus.mnTextWidth      != rCurrent.mnTextWidth )
+    if( maVirtualStatus.maFont          != rCurrent.maFont          ||
+        maVirtualStatus.mnTextHeight    != rCurrent.mnTextHeight    ||
+        maVirtualStatus.maEncoding      != rCurrent.maEncoding      ||
+        maVirtualStatus.mnTextWidth     != rCurrent.mnTextWidth     ||
+        maVirtualStatus.mbArtBold       != rCurrent.mbArtBold       ||
+        maVirtualStatus.mbArtItalic     != rCurrent.mbArtItalic
+        )
     {
         rCurrent.maFont              = maVirtualStatus.maFont;
         rCurrent.maEncoding          = maVirtualStatus.maEncoding;
         rCurrent.mnTextWidth         = maVirtualStatus.mnTextWidth;
         rCurrent.mnTextHeight        = maVirtualStatus.mnTextHeight;
+        rCurrent.mbArtItalic         = maVirtualStatus.mbArtItalic;
+        rCurrent.mbArtBold           = maVirtualStatus.mbArtBold;
 
         sal_Int32 nTextHeight = rCurrent.mnTextHeight;
         sal_Int32 nTextWidth  = rCurrent.mnTextWidth ? rCurrent.mnTextWidth
@@ -886,10 +893,24 @@ PrinterGfx::PSSetFont ()
                                                     pSetFont + nChar);
         }
 
-        nChar += psp::getValueOf (nTextWidth,   pSetFont + nChar);
-        nChar += psp::appendStr  (" ",          pSetFont + nChar);
-        nChar += psp::getValueOf (-nTextHeight, pSetFont + nChar);
-        nChar += psp::appendStr  (" matrix scale makefont setfont\n", pSetFont + nChar);
+        if( ! rCurrent.mbArtItalic )
+        {
+            nChar += psp::getValueOf (nTextWidth,   pSetFont + nChar);
+            nChar += psp::appendStr  (" ",          pSetFont + nChar);
+            nChar += psp::getValueOf (-nTextHeight, pSetFont + nChar);
+            nChar += psp::appendStr  (" matrix scale makefont setfont\n", pSetFont + nChar);
+        }
+        else // skew 15 degrees to right
+        {
+            nChar += psp::appendStr  ( " [",        pSetFont + nChar);
+            nChar += psp::getValueOf (nTextWidth,   pSetFont + nChar);
+            nChar += psp::appendStr  (" 0 ",        pSetFont + nChar);
+            nChar += psp::getValueOfDouble (pSetFont + nChar, 0.27*(double)nTextWidth, 3 );
+            nChar += psp::appendStr  ( " ",         pSetFont + nChar);
+            nChar += psp::getValueOf (-nTextHeight, pSetFont + nChar);
+
+            nChar += psp::appendStr  (" 0 0] makefont setfont\n", pSetFont + nChar);
+        }
 
         WritePS (mpPageBody, pSetFont);
     }
@@ -1160,17 +1181,40 @@ PrinterGfx::PSShowText (const sal_uChar* pStr, sal_Int16 nGlyphs, sal_Int16 nByt
         PSRotate (mnTextAngle);
     }
 
+    sal_Char pBuffer[256];
+    if( maVirtualStatus.mbArtBold )
+    {
+        sal_Int32 nLW = maVirtualStatus.mnTextWidth;
+        if( nLW == 0 )
+            nLW = maVirtualStatus.mnTextHeight;
+        else
+            nLW = nLW < maVirtualStatus.mnTextHeight ? nLW : maVirtualStatus.mnTextHeight;
+        psp::getValueOfDouble( pBuffer, (double)nLW / 30.0 );
+    }
     // dispatch to the drawing method
     if (pDeltaArray == NULL)
     {
         PSHexString (pStr, nBytes);
-        WritePS (mpPageBody, "show\n");
+
+        if( maVirtualStatus.mbArtBold )
+        {
+            WritePS( mpPageBody, pBuffer );
+            WritePS( mpPageBody, " bshow\n" );
+        }
+        else
+            WritePS (mpPageBody, "show\n");
     }
     else
     {
         PSHexString (pStr, nBytes);
         PSDeltaArray (pDeltaArray, nGlyphs - 1);
-        WritePS (mpPageBody, "xshow\n");
+        if( maVirtualStatus.mbArtBold )
+        {
+            WritePS( mpPageBody, pBuffer );
+            WritePS( mpPageBody, " bxshow\n" );
+        }
+        else
+            WritePS (mpPageBody, "xshow\n");
     }
 
     // restore the user coordinate system
@@ -1202,6 +1246,8 @@ PrinterGfx::DrawEPS( const Rectangle& rBoundingBox, void* pPtr, sal_uInt32 nSize
 {
     if( nSize == 0 )
         return sal_True;
+    if( ! mpPageBody )
+        return sal_False;
 
     sal_Bool bSuccess = sal_False;
 
