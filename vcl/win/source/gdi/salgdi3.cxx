@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 11:34:15 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 14:55:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,8 +66,6 @@
 #include <tools/svwin.h>
 #endif
 
-#define _SV_SALGDI3_CXX
-
 #ifndef _RTL_TENCINFO_H
 #include <rtl/tencinfo.h>
 #endif
@@ -99,24 +97,18 @@
 #ifndef _SV_FONT_HXX
 #include <font.hxx>
 #endif
-
-#ifdef ENABLE_CTL
 #ifndef _SV_SALLAYOUT_HXX
 #include <sallayout.hxx>
 #endif // _SV_SALLAYOUT_HXX
-#ifndef _SV_POLY_HXX
-#include <poly.hxx>
-#endif // _SV_POLY_HXX
-#endif // ENABLE_CTL
-
+#ifndef _TL_POLY_HXX
+#include <tools/poly.hxx>
+#endif
 #ifdef GCP_KERN_HACK
 #include <algorithm>
 #endif // GCP_KERN_HACK
-
 #ifndef _DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
-
 #ifndef __SUBFONT_H
 #include <psprint/list.h>
 #include <psprint/sft.h>
@@ -125,12 +117,6 @@
 // -----------
 // - Defines -
 // -----------
-
-//#ifdef FORCE_VERTICAL_NAME
-
-#ifdef WIN
-#define GDI_ERROR   (0xFFFFFFFFUL)
-#endif
 
 #define GLYPH_INC               (512UL)
 #define MAX_POLYCOUNT           (2048UL)
@@ -269,7 +255,7 @@ static BYTE ImplFamilyToWin( FontFamily eFamily )
 
 // -----------------------------------------------------------------------
 
-static FontWeight ImplWeightToSal( WinWeight nWeight )
+static FontWeight ImplWeightToSal( int nWeight )
 {
     if ( nWeight <= FW_THIN )
         return WEIGHT_THIN;
@@ -293,7 +279,7 @@ static FontWeight ImplWeightToSal( WinWeight nWeight )
 
 // -----------------------------------------------------------------------
 
-static WinWeight ImplWeightToWin( FontWeight eWeight )
+static int ImplWeightToWin( FontWeight eWeight )
 {
     switch ( eWeight )
     {
@@ -551,11 +537,6 @@ static void ImplSalGetVerticalFontNameW( HDC hDC, UniString& rName,
 {
     if (rName.Len() == 0 || rName.GetChar(0) == '@')
         return;
-
-#ifdef FORCE_VERTICAL_NAME
-    rName.Insert( (sal_Unicode)'@', 0 );
-    return;
-#endif // FORCE_VERTICAL_NAME
 
     // Vertical fonts starts with a @
     UniString aTemp = rName;
@@ -1535,7 +1516,7 @@ bool ImplAddTempFont( SalData& rSalData, const String& rFontFileURL )
     ::rtl::OUString aUSytemPath;
     OSL_VERIFY( !osl::FileBase::getSystemPathFromFileURL( rFontFileURL, aUSytemPath ) );
 
-#ifdef FR_PRIVATE
+#ifdef FR_PRIVATE   // wingdi.h, but only if _WIN32_WINNT >= 0x0500, which is currently not true.
     OSVERSIONINFO aVersion;
     aVersion.dwOSVersionInfoSize = sizeof(aVersion);
     if( ::GetVersionEx( &aVersion ) && (aVersion.dwMajorVersion >= 5) )
@@ -1543,7 +1524,7 @@ bool ImplAddTempFont( SalData& rSalData, const String& rFontFileURL )
         nRet = AddFontResourceExW( aUSytemPath.getStr(), FR_PRIVATE, NULL );
     }
     else
-#endif // FR_PRIVATE
+#endif
     {
         static int nCounter = 0;
         char aFileName[] = "soAA.fot";
@@ -1573,9 +1554,7 @@ bool ImplAddTempFont( SalData& rSalData, const String& rFontFileURL )
         }
     }
 
-    if( nRet > 0 )
-        return true;
-    return false;
+    return ( nRet > 0 ) ? true : false;
 }
 
 // -----------------------------------------------------------------------
@@ -1633,11 +1612,7 @@ String ImplGetFontNameFromFile( SalData& rSalData, const String& rFontFileURL )
     char aResourceName[512];
     int nMaxLen = sizeof(aResourceName)/sizeof(*aResourceName) - 16;
     int nLen = ::GetTempPathA( nMaxLen, aResourceName );
-#if (_MSC_VER < 1300)
-    ::strncpy( aResourceName + nLen, aFileName, std::max( 0, nMaxLen - nLen ));
-#else
-    ::strncpy( aResourceName + nLen, aFileName, max( 0, nMaxLen - nLen ));
-#endif
+    ::strncpy( aResourceName + nLen, aFileName, Max( 0, nMaxLen - nLen ));
     ::DeleteFileA( aResourceName );
 
     // Create font resource file (typically with a .fot file name extension).
@@ -1764,11 +1739,12 @@ ImplFontData* WinSalGraphics::AddTempDevFont( const String& rFontFileURL, const 
     pFontData->mbSubsettable= FALSE;
     pFontData->mbEmbeddable = FALSE;
 
-#if 0   // TODO: improve ImplFontData using "FONTRES:" from *.fot file
+    /*
+    // TODO: improve ImplFontData using "FONTRES:" from *.fot file
     pFontData->maSearchName = // using "FONTRES:" from file
     if( rFontName != pFontData->maName )
         pFontData->maMapName = aFontName;
-#endif
+    */
 
     return pFontData;
 }
