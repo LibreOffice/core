@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workwin.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mba $ $Date: 2002-09-11 15:43:49 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 15:47:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,12 +64,32 @@
 #ifndef _COM_SUN_STAR_FRAME_XDISPATCH_HPP_
 #include <com/sun/star/frame/XDispatch.hpp>
 #endif
+#ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
+#include <com/sun/star/frame/XFrame.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_UI_XUILEMENT_HPP_
+#include <drafts/com/sun/star/ui/XUIElement.hpp>
+#endif
+
+#ifndef _CPPUHELPER_WEAK_HXX_
+#include <cppuhelper/weak.hxx>
+#endif
+
+#ifndef _CPPUHELPER_PROPSHLP_HXX
+#include <cppuhelper/propshlp.hxx>
+#endif
 
 #define _SVSTDARR_USHORTS
 #include <svtools/svstdarr.hxx>     // SvUShorts
 
 #ifndef _IFACE_HXX //autogen
 #include <so3/iface.hxx>
+#endif
+#ifndef _RTL_USTRING_
+#include <rtl/ustring.hxx>
+#endif
+#ifndef _VOS_MUTEX_HXX_
+#include <vos/mutex.hxx>
 #endif
 
 #include "sfx.hrc"
@@ -84,6 +104,76 @@ class SfxInPlaceEnv_Impl;
 class SfxPlugInEnv_Impl;
 class SfxSplitWindow;
 class SfxWorkWindow;
+
+struct ThreadHelpBase
+{
+    //-------------------------------------------------------------------------------------------------------------
+    //  public methods
+    //-------------------------------------------------------------------------------------------------------------
+    public:
+        ThreadHelpBase( ::vos::IMutex& aMutex )
+                :   m_aLock( aMutex )
+                ,   m_pMutex( new osl::Mutex )
+        {
+        }
+
+        virtual ~ThreadHelpBase();
+
+    //-------------------------------------------------------------------------------------------------------------
+    //  public member
+    //  Make it mutable for using in const functions!
+    //-------------------------------------------------------------------------------------------------------------
+    public:
+        ::vos::IMutex&  m_aLock;
+        ::osl::Mutex*   m_pMutex;
+};
+
+class UIElementWrapper : public ::drafts::com::sun::star::ui::XUIElement    ,
+                         private ThreadHelpBase                             ,
+                         public  ::cppu::OBroadcastHelper                   ,
+                         public ::cppu::OPropertySetHelper                  ,
+                         public ::cppu::OWeakObject
+{
+    public:
+        UIElementWrapper( com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame, ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& rParent, SfxWorkWindow* pWorkWin, const rtl::OUString& aTbxId );
+        virtual ~UIElementWrapper();
+
+        // XInterface
+        virtual void SAL_CALL acquire() throw();
+        virtual void SAL_CALL release() throw();
+        virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw( ::com::sun::star::uno::RuntimeException );
+
+        // XUIElement
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getSettings(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL setSettings( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xSettings ) throw (::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getRealInterface(  ) throw (::com::sun::star::uno::RuntimeException);
+
+    //-------------------------------------------------------------------------------------------------------------
+    //  protected methods
+    //-------------------------------------------------------------------------------------------------------------
+    protected:
+
+        //  OPropertySetHelper
+        virtual sal_Bool                                            SAL_CALL convertFastPropertyValue        ( com::sun::star::uno::Any&        aConvertedValue ,
+                                                                                                               com::sun::star::uno::Any&        aOldValue       ,
+                                                                                                               sal_Int32                        nHandle         ,
+                                                                                                               const com::sun::star::uno::Any&  aValue          ) throw( com::sun::star::lang::IllegalArgumentException );
+        virtual void                                                SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32                        nHandle         ,
+                                                                                                               const com::sun::star::uno::Any&  aValue          ) throw( com::sun::star::uno::Exception                 );
+        virtual void                                                SAL_CALL getFastPropertyValue( com::sun::star::uno::Any&    aValue          ,
+                                                                                                   sal_Int32                    nHandle         ) const;
+        virtual ::cppu::IPropertyArrayHelper&                       SAL_CALL getInfoHelper();
+        virtual ::com::sun::star::uno::Reference< com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() throw (::com::sun::star::uno::RuntimeException);
+
+    private:
+        static const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > impl_getStaticPropertyDescriptor();
+
+        rtl::OUString       m_aType;
+        rtl::OUString       m_aName;
+        SfxToolBoxManager*  m_pTbxMgr;
+};
+
+com::sun::star::uno::Reference< drafts::com::sun::star::ui::XUIElement > SAL_CALL CreateToolBox( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& rParent, const ::rtl::OUString& aTbxId );
 
 //====================================================================
 // Dieser struct h"alt alle relevanten Informationen "uber Toolboxen bereit.
@@ -244,6 +334,9 @@ struct SfxSplitWin_Impl
 
 class SfxWorkWindow
 {
+    friend class UIElementWrapper;
+    friend com::sun::star::uno::Reference< ::drafts::com::sun::star::ui::XUIElement > CreateToolBox( com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame, const rtl::OUString& aTbxId );
+
 protected:
     SvUShorts               aSortedList;
     SfxStatBar_Impl         aStatBar;
@@ -266,6 +359,7 @@ protected:
     BOOL                    bDockingAllowed : 1;
     BOOL                    bAllChildsVisible : 1;
     BOOL                    bIsFullScreen : 1;
+    BOOL                    bShowStatusBar : 1;
 
 protected:
     void                    CreateChildWin_Impl(SfxChildWin_Impl*,BOOL);
