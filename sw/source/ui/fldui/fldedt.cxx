@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldedt.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-29 16:56:01 $
+ *  last change: $Author: hr $ $Date: 2004-05-11 10:26:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,9 +81,9 @@
 #include <svx/optgenrl.hxx>
 #endif
 
-#ifndef _ADDRDLG_HXX
-#include <addrdlg.hxx>
-#endif
+//CHINA001 #ifndef _ADDRDLG_HXX
+//CHINA001 #include <addrdlg.hxx>
+//CHINA001 #endif
 #ifndef _DOCUFLD_HXX
 #include <docufld.hxx>
 #endif
@@ -137,7 +137,8 @@
 #ifndef _FLDUI_HRC
 #include <fldui.hrc>
 #endif
-
+#include "swabstdlg.hxx" //CHINA001
+#include "dialog.hrc" //CHINA001
 
 /*--------------------------------------------------------------------
     Beschreibung:
@@ -431,10 +432,26 @@ IMPL_LINK( SwFldEditDlg, AddressHdl, PushButton *, pButton )
 
     }
     aSet.Put(SfxUInt16Item(SID_FIELD_GRABFOCUS, nEditPos));
-    SwAddrDlg aDlg( this, aSet );
-    if(RET_OK == aDlg.Execute())
-        pSh->UpdateFlds( *pCurFld );
+    //CHINA001 SwAddrDlg aDlg( this, aSet );
+    //CHINA001 aDlg.Execute();
+    SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
+    DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
 
+    AbstractSfxSingleTabDialog* pDlg = pFact->CreateSfxSingleTabDialog( this, aSet,ResId( RC_DLG_ADDR ));
+    DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+    if(RET_OK == pDlg->Execute())
+    {
+        //CHINA001 const SfxItemSet* pSfxItemSet = aDlg.GetOutputItemSet();
+        const SfxItemSet* pSfxItemSet = pDlg->GetOutputItemSet(); //CHINA001
+        const SfxPoolItem* pItem;
+        if( pSfxItemSet && SFX_ITEM_SET == pSfxItemSet->GetItemState(
+                SID_ATTR_ADDRESS, FALSE, &pItem ) )
+        {
+            ((SvxAddressItem*)pItem)->Store();
+            pSh->UpdateFlds( *pCurFld );
+        }
+    }
+    delete pDlg; //CHINA001
     return 0;
 }
 
