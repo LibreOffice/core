@@ -2,9 +2,9 @@
  *
  *  $RCSfile: color.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ssa $ $Date: 2002-11-19 13:55:28 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 17:09:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,6 +166,110 @@ BOOL Color::IsDark() const
 BOOL Color::IsBright() const
 {
     return GetLuminance() >= 245;
+}
+
+// -----------------------------------------------------------------------
+// color space conversion
+// -----------------------------------------------------------------------
+
+void Color::RGBtoHSB( USHORT& nHue, USHORT& nSat, USHORT& nBri ) const
+{
+    UINT8 c[3];
+    UINT8 cMax, cMin;
+
+    c[0] = GetRed();
+    c[1] = GetGreen();
+    c[2] = GetBlue();
+
+    cMax = c[0];
+    if( c[1] > cMax )
+        cMax = c[1];
+    if( c[2] > cMax )
+        cMax = c[2];
+
+    // Brightness = max(R, G, B);
+    nBri = cMax * 100 / 255;
+
+    cMin = c[0];
+    if( c[1] < cMin )
+        cMin = c[1];
+    if( c[2] < cMin )
+        cMin = c[2];
+
+    UINT8 cDelta = cMax - cMin;
+
+    // Saturation = max - min / max
+    if( nBri > 0 )
+        nSat = cDelta * 100 / cMax;
+    else
+        nSat = 0;
+
+    if( nSat == 0 )
+        nHue = 0; // Default = undefined
+    else
+    {
+        double dHue = 0.0;
+
+        if( c[0] == cMax )
+        {
+            dHue = (double)( c[1] - c[2] ) / (double)cDelta;
+        }
+        else if( c[1] == cMax )
+        {
+            dHue = 2.0 + (double)( c[2] - c[0] ) / (double)cDelta;
+        }
+        else if ( c[2] == cMax )
+        {
+            dHue = 4.0 + (double)( c[0] - c[1] ) / (double)cDelta;
+        }
+        dHue *= 60.0;
+
+        if( dHue < 0.0 )
+            dHue += 360.0;
+
+        nHue = (UINT16) dHue;
+    }
+}
+
+ColorData Color::HSBtoRGB( USHORT nHue, USHORT nSat, USHORT nBri )
+{
+    UINT8 cR=0,cG=0,cB=0;
+    UINT8 nB = (UINT8) ( nBri * 255 / 100 );
+
+    if( nSat == 0 )
+    {
+        cR = nB;
+        cG = nB;
+        cB = nB;
+    }
+    else
+    {
+        double dH = nHue;
+        double f;
+        UINT16 n;
+        if( dH == 360.0 )
+            dH = 0.0;
+
+        dH /= 60.0;
+        n = (UINT16) dH;
+        f = dH - n;
+
+        UINT8 a = (UINT8) ( nB * ( 100 - nSat ) / 100 );
+        UINT8 b = (UINT8) ( nB * ( 100 - ( (double)nSat * f + 0.5 ) ) / 100 );
+        UINT8 c = (UINT8) ( nB * ( 100 - ( (double)nSat * ( 1.0 - f ) + 0.5 ) ) / 100 );
+
+        switch( n )
+        {
+            case 0: cR = nB;    cG = c;     cB = a;     break;
+            case 1: cR = b;     cG = nB;    cB = a;     break;
+            case 2: cR = a;     cG = nB;    cB = c;     break;
+            case 3: cR = a;     cG = b;     cB = nB;    break;
+            case 4: cR = c;     cG = a;     cB = nB;    break;
+            case 5: cR = nB;    cG = a;     cB = b;     break;
+        }
+    }
+
+    return RGB_COLORDATA( cR, cG, cB );
 }
 
 // -----------------------------------------------------------------------
