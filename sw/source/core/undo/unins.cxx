@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unins.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 12:36:15 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:13:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,18 +69,15 @@
 #ifndef _UNOTOOLS_CHARCLASS_HXX
 #include <unotools/charclass.hxx>
 #endif
-#ifndef _SVSTOR_HXX //autogen
-#include <so3/svstor.hxx>
-#endif
-#ifndef _IPOBJ_HXX //autogen
-#include <so3/ipobj.hxx>
-#endif
+#include <sot/storage.hxx>
 #ifndef _SVX_KEEPITEM_HXX //autogen
 #include <svx/keepitem.hxx>
 #endif
 #ifndef _SVDOBJ_HXX //autogen
 #include <svx/svdobj.hxx>
 #endif
+
+#include <docsh.hxx>
 
 #ifndef _FMTCNTNT_HXX //autogen
 #include <fmtcntnt.hxx>
@@ -552,8 +549,14 @@ void SwUndoInsert::Repeat( SwUndoIter& rUndoIter )
             // StarView bietet noch nicht die Moeglichkeit ein StarOBJ zu kopieren
             SvStorageRef aRef = new SvStorage( aEmptyStr );
             SwOLEObj& rSwOLE = (SwOLEObj&)((SwOLENode*)pCNd)->GetOLEObj();
-            SvInPlaceObjectRef aNew((SvPersist*) rSwOLE.GetOleRef()->CopyObject( aRef ) );
-            rDoc.Insert( *rUndoIter.pAktPam, &aNew );
+
+            // temporary storage until object is inserted
+            // TODO/MBA: seems that here a physical copy is done - not as in drawing layer! Testing!
+            comphelper::EmbeddedObjectContainer aCnt;
+            ::rtl::OUString aName;
+            com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > aNew =
+                aCnt.CopyEmbeddedObject( rSwOLE.GetOleRef(), aName );
+            rDoc.Insert( *rUndoIter.pAktPam, aNew );
             break;
         }
     }
