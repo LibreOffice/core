@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparaimphint.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-14 12:15:00 $
+ *  last change: $Author: rt $ $Date: 2004-07-14 14:03:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,21 +212,17 @@ public:
     const OUString& GetStyleName() const { return sStyleName; }
     void SetVisitedStyleName( const OUString& s ) { sVisitedStyleName = s; }
     const OUString& GetVisitedStyleName() const { return sVisitedStyleName; }
-    XMLEventsImportContext* GetEventsContext() const;
-    void SetEventsContext( XMLEventsImportContext* pCtxt );
+    XMLEventsImportContext* GetEventsContext() const
+    {
+        return pEvents;
+    }
+    void SetEventsContext( XMLEventsImportContext* pCtxt )
+    {
+        pEvents = pCtxt;
+        if (pEvents != NULL)
+            pEvents->AddRef();
+    }
 };
-
-XMLEventsImportContext* XMLHyperlinkHint_Impl::GetEventsContext() const
-{
-    return pEvents;
-}
-
-void XMLHyperlinkHint_Impl::SetEventsContext( XMLEventsImportContext* pCtxt )
-{
-    pEvents = pCtxt;
-    if (pEvents != NULL)
-        pEvents->AddRef();
-}
 
 
 class XMLIndexMarkHint_Impl : public XMLHint_Impl
