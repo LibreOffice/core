@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.145 $
+ *  $Revision: 1.146 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-09 15:37:37 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 15:33:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -292,8 +292,25 @@ void SAL_CALL SfxMediumHandler_Impl::handle( const com::sun::star::uno::Referenc
 
 String ConvertDateTime_Impl(const SfxStamp &rTime, const LocaleDataWrapper& rWrapper);
 
+class SfxPoolCancelManager_Impl  :   public SfxCancelManager ,
+                                public SfxCancellable   ,
+                                public SfxListener      ,
+                                public SvRefBase
+{
+    SfxCancelManagerWeak    wParent;
+
+                            ~SfxPoolCancelManager_Impl();
+public:
+                            SfxPoolCancelManager_Impl( SfxCancelManager* pParent, const String& rName );
+    virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void            Cancel();
+};
+
+SV_DECL_IMPL_REF( SfxPoolCancelManager_Impl )
+
+
 //----------------------------------------------------------------
-SfxPoolCancelManager::SfxPoolCancelManager( SfxCancelManager* pParent, const String& rName )
+SfxPoolCancelManager_Impl::SfxPoolCancelManager_Impl( SfxCancelManager* pParent, const String& rName )
     : SfxCancelManager( pParent ),
       SfxCancellable( pParent ? pParent : this, rName ),
       wParent( pParent )
@@ -306,7 +323,7 @@ SfxPoolCancelManager::SfxPoolCancelManager( SfxCancelManager* pParent, const Str
 }
 
 //----------------------------------------------------------------
-SfxPoolCancelManager::~SfxPoolCancelManager()
+SfxPoolCancelManager_Impl::~SfxPoolCancelManager_Impl()
 {
     for( sal_uInt16 nPos = GetCancellableCount(); nPos--; )
     {
@@ -319,7 +336,7 @@ SfxPoolCancelManager::~SfxPoolCancelManager()
 
 
 //----------------------------------------------------------------
-void SfxPoolCancelManager::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+void SfxPoolCancelManager_Impl::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
     if( !GetCancellableCount() ) SetManager( 0 );
     else if( !GetManager() )
@@ -330,9 +347,9 @@ void SfxPoolCancelManager::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 }
 
 //----------------------------------------------------------------
-void SfxPoolCancelManager::Cancel()
+void SfxPoolCancelManager_Impl::Cancel()
 {
-    SfxPoolCancelManagerRef xThis = this;
+    SfxPoolCancelManager_ImplRef xThis = this;
     for( sal_uInt16 nPos = GetCancellableCount(); nPos--; )
     {
         SfxCancellable* pCbl = GetCancellable( nPos );
@@ -364,7 +381,7 @@ public:
     sal_Bool bDisposeStorage: 1;
     uno::Reference < embed::XStorage > xStorage;
 
-    SfxPoolCancelManagerRef xCancelManager;
+    SfxPoolCancelManager_ImplRef xCancelManager;
     SfxMedium*       pAntiImpl;
     SvEaMgr*         pEaMgr;
 
@@ -396,7 +413,7 @@ public:
     sal_Bool        m_bRemoveBackup;
     ::rtl::OUString m_aBackupURL;
 
-    SfxPoolCancelManager* GetCancelManager();
+    SfxPoolCancelManager_Impl* GetCancelManager();
 
     SfxMedium_Impl( SfxMedium* pAntiImplP );
     ~SfxMedium_Impl();
@@ -413,17 +430,17 @@ void SfxMedium::Cancel_Impl()
     SetError( ERRCODE_IO_GENERAL );
 }
 
-SfxPoolCancelManager* SfxMedium_Impl::GetCancelManager()
+SfxPoolCancelManager_Impl* SfxMedium_Impl::GetCancelManager()
 {
     if( !xCancelManager.Is() )
     {
         if( !bDontCreateCancellable )
-            xCancelManager = new SfxPoolCancelManager(
+            xCancelManager = new SfxPoolCancelManager_Impl(
                 wLoadTargetFrame ? wLoadTargetFrame->GetCancelManager() :
                 SFX_APP()->GetCancelManager(),
                 pAntiImpl->GetURLObject().GetURLNoPass() );
         else
-            xCancelManager = new SfxPoolCancelManager(
+            xCancelManager = new SfxPoolCancelManager_Impl(
                 0, pAntiImpl->GetURLObject().GetURLNoPass() );
     }
     return xCancelManager;
@@ -1237,9 +1254,9 @@ void SfxMedium::CloseStorage()
     pImp->bIsStorage = sal_False;
 }
 
-void SfxMedium::DontDisposeStorage_Impl()
+void SfxMedium::CanDisposeStorage_Impl( sal_Bool bDisposeStorage )
 {
-    pImp->bDisposeStorage = FALSE;
+    pImp->bDisposeStorage = bDisposeStorage;
 }
 
 //------------------------------------------------------------------
@@ -1920,13 +1937,13 @@ void SfxMedium::GetMedium_Impl()
 }
 
 //------------------------------------------------------------------
-SfxPoolCancelManager* SfxMedium::GetCancelManager_Impl() const
+SfxPoolCancelManager_Impl* SfxMedium::GetCancelManager_Impl() const
 {
     return pImp->GetCancelManager();
 }
 
 //------------------------------------------------------------------
-void SfxMedium::SetCancelManager_Impl( SfxPoolCancelManager* pMgr )
+void SfxMedium::SetCancelManager_Impl( SfxPoolCancelManager_Impl* pMgr )
 {
     pImp->xCancelManager = pMgr;
 }
@@ -2047,7 +2064,7 @@ void SfxMedium::Init_Impl()
 {
     Reference< XOutputStream > rOutStream;
     pImp->pVersions = NULL;
-    pImp->bDisposeStorage = TRUE;
+    pImp->bDisposeStorage = FALSE;
 
     SFX_ITEMSET_ARG( pSet, pSalvageItem, SfxStringItem, SID_DOC_SALVAGE, sal_False);
     if( aLogicName.Len() )
@@ -2328,7 +2345,7 @@ void SfxMedium::MoveStorageTo_Impl( SfxMedium* pMedium )
         pMedium->aName = aName;
         pMedium->pImp->xStorage = pImp->xStorage;
 
-        DontDisposeStorage_Impl();
+        CanDisposeStorage_Impl( sal_False );
     }
 }
 
