@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.h,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 13:37:17 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 17:54:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,10 @@
 #include <timer.hxx>
 #endif
 
+#ifndef _VCL_DLLAPI_H
+#include "dllapi.h"
+#endif
+
 #include <salunx.h>
 #include <list>
 
@@ -104,7 +108,7 @@ namespace vcl_sal { class WMAdaptor; class NetWMAdaptor; class GnomeWMAdaptor; }
 #define SHOWSTATE_NORMAL        1
 #define SHOWSTATE_HIDDEN        2
 
-class X11SalFrame : public SalFrame
+class VCL_DLLPUBLIC X11SalFrame : public SalFrame
 {
     friend class vcl_sal::WMAdaptor;
     friend class vcl_sal::NetWMAdaptor;
