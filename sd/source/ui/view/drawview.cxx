@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawview.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: aw $ $Date: 2001-11-07 14:27:51 $
+ *  last change: $Author: cl $ $Date: 2002-01-25 15:19:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -349,6 +349,19 @@ BOOL SdDrawView::SetAttributes(const SfxItemSet& rSet,
                         pSheet->GetItemSet().Put(aTempSet);
                         pSheet->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
 
+                        // now also broadcast any child sheets
+                        USHORT nChild;
+                        for( nChild = nDepth + 1; nChild < 10; nChild++ )
+                        {
+                            String aName(pPage->GetLayoutName());
+                            aName += (sal_Unicode)(' ');
+                            aName += String::CreateFromInt32( (sal_Int32)nChild );
+                            SfxStyleSheet* pSheet = (SfxStyleSheet*)pStShPool->Find(aName, SD_LT_FAMILY);
+
+                            if( pSheet )
+                                pSheet->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
+                        }
+
                         pPara = (Paragraph*)pList->Prev();
 
                         if( !pPara && nDepth > 1 &&  rSet.GetItemState( EE_PARA_NUMBULLET ) == SFX_ITEM_ON &&
@@ -411,7 +424,7 @@ BOOL SdDrawView::SetAttributes(const SfxItemSet& rSet,
                     {
                         // Presentation object outline
                         aTemplateName += String(SdResId(STR_LAYOUT_OUTLINE));
-                        for (USHORT nLevel = 9; nLevel == 10; nLevel--)
+                        for (USHORT nLevel = 9; nLevel > 0; nLevel--)
                         {
                             String aName(pPage->GetLayoutName());
                             aName += (sal_Unicode)(' ');
