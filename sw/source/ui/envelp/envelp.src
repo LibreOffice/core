@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envelp.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: nf $ $Date: 2001-08-29 15:52:33 $
+ *  last change: $Author: kz $ $Date: 2001-10-22 20:24:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@ String STR_NO_DRIVERS
     Text [ spanish ] = "No se han instalado controladores de bases de datos." ;
     Text [ english_us ] = "No database drivers installed." ;
     Text[ chinese_simplified ] = "жІЎжњ‰е®‰иЈ…ж•°жЌ®еє“й©±еЉЁзЁ‹еєЏгЂ‚";
-    Text[ russian ] = "Драйвер для базы данных не инсталирован.";
+    Text[ russian ] = "Драйвер для базы данных не инсталлирован.";
     Text[ polish ] = "Nie zainstalowany sterownik bazy danych.";
     Text[ japanese ] = "пѕѓпѕћпЅ°пѕЂпѕЌпѕћпЅ°пЅЅпѕ„пѕћпѕ—пѕЉпѕћгЃЊпЅІпѕќпЅЅпѕ„пЅ°пѕ™гЃ•г‚ЊгЃ¦гЃ„гЃѕгЃ›г‚“гЂ‚";
     Text[ chinese_traditional ] = "жІ’жњ‰е®‰иЈќиі‡ж–™еє«й©…е‹•зЁ‹ејЏгЂ‚";
@@ -206,6 +206,7 @@ String STR_SENDER_TOKENS
     Text[ catalan ] = "COMPANY;CR;FIRSTNAME; ;LASTNAME;CR;ADDRESS;CR;COUNTRY; ;POSTALCODE; ;CITY;CR;";
     Text[ finnish ] = "YRITYS;CR;ETUNIMI; ;SUKUNIMI;CR;OSOITE;CR;POSTITOIMIPAIKKA; ;OSAVALTIO; ;POSTINUMERO;CR;MAA;CR;";
 };
+
 
 
 
