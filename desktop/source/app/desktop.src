@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.src,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:53:57 $
+ *  last change: $Author: vg $ $Date: 2003-05-28 13:26:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1488,7 +1488,7 @@ InfoBox INFOBOX_CMDLINEHELP
 ModalDialog DLG_CMDLINEHELP
 {
     Text = "Help Message...";
-    Size = MAP_APPFONT(250, 335);
+    Size = MAP_APPFONT(250, 365);
     Border = True;
     SVLook = True;
     Moveable = True;
@@ -1513,14 +1513,14 @@ ModalDialog DLG_CMDLINEHELP
     };
     FixedText TXT_DLG_CMDLINEHELP_BOTTOM
     {
-        Size = MAP_APPFONT(240, 105);
+        Size = MAP_APPFONT(240, 155);
         Pos = MAP_APPFONT(5, 200);
         Text = "BOTTOM";
     };
     OKButton BTN_DLG_CMDLINEHELP_OK
     {
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Pos = MAP_APPFONT(95, 315);
+        Pos = MAP_APPFONT(95, 345);
         TabStop = TRUE ;
         DefButton = TRUE ;
     };
