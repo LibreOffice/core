@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appinit.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:43:17 $
+ *  last change: $Author: obo $ $Date: 2004-11-19 11:30:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -305,7 +305,6 @@ FASTBOOL SfxApplication::Initialize_Impl()
 
     pAcceleratorMgr = new SfxAcceleratorManager( pCfgMgr );
 
-    pImageMgr = new SfxImageManager( NULL );
     SfxNewHdl* pNewHdl = SfxNewHdl::GetOrCreate();
 
     // Die Strings muessen leider zur Laufzeit gehalten werden, da wir bei
