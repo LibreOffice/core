@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mmpreparemergepage.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-29 09:33:13 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 15:30:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,7 +228,8 @@ IMPL_LINK( SwMailMergePrepareMergePage, MoveHdl_Impl, void*, pCtrl)
 
     ::svx::ODataAccessDescriptor aDescriptor(aArgs);
     SwWrtShell& rSh = m_pWizard->GetSwView()->GetWrtShell();
-    rSh.GetNewDBMgr()->MergeNew(DBMGR_MERGE, rSh, aDescriptor);
+    SwMergeDescriptor aMergeDesc( DBMGR_MERGE, rSh, aDescriptor );
+    rSh.GetNewDBMgr()->MergeNew(aMergeDesc);
     return 0;
 }
 /*-- 27.05.2004 14:46:28---------------------------------------------------
