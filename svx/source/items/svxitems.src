@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxitems.src,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-29 02:04:46 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 20:34:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -247,7 +247,7 @@ String RID_SVXITEMS_SEARCHCMD_REPLACE_ALL
     Text[ russian ] = "Çàìåíèòü âñå";
     Text[ polish ] = "Zamieñ wszyst.";
     Text[ japanese ] = "‚·‚×‚Ä’uŠ·‚·‚é";
-    Text[ chinese_traditional ] = "¥ş³¡´À¥N";
+    Text[ chinese_traditional ] = "¥ş³¡¥N´À";
     Text[ arabic ] = "ÇÓÊÈÏÇá Çáßá";
     Text[ greek ] = "Áíôéêáô. üëá";
     Text[ korean ] = "¸ğµÎ ´ëÃ¼";
@@ -1033,11 +1033,11 @@ String RID_SVXITEMS_BRUSHSTYLE_BITMAP
     Text [ dutch ] = "Afbeelding" ;
     Text [ spanish ] = "Imagen" ;
     Text [ english_us ] = "Image" ;
-    Text[ chinese_simplified ] = "Î»Í¼";
+    Text[ chinese_simplified ] = "Í¼Ïñ";
     Text[ russian ] = "Òî÷å÷íûé ğèñóíîê";
     Text[ polish ] = "Rysunek";
     Text[ japanese ] = "²Ò°¼Ş";
-    Text[ chinese_traditional ] = "ÂI°}¹Ï";
+    Text[ chinese_traditional ] = "¼v¹³";
     Text[ arabic ] = "ÕæÑÉ";
     Text[ greek ] = "Åéêüíá";
     Text[ korean ] = "ºñÆ®¸Ê";
@@ -2661,7 +2661,7 @@ String RID_SVXITEMS_CASEMAP_GEMEINE
     Text[ russian ] = "Ñòğî÷íûå";
     Text[ polish ] = "Ma³e litery";
     Text[ japanese ] = "¬•¶š";
-    Text[ chinese_traditional ] = "¤p¼g";
+    Text[ chinese_traditional ] = "¤p¼g¦r¥À";
     Text[ arabic ] = "ÃÍÑİ ÕÛíÑÉ";
     Text[ greek ] = "ĞåæÜ";
     Text[ korean ] = "¼Ò¹®ÀÚ";
@@ -2931,7 +2931,7 @@ String RID_SVXITEMS_ADJUST_CENTER
     Text [ english_us ] = "Centered" ;
     Text[ chinese_simplified ] = "¾ÓÖĞ";
     Text[ russian ] = "Ïî öåíòğó";
-    Text[ polish ] = "Wyœrodkowany";
+    Text[ polish ] = "Do œrodka";
     Text[ japanese ] = "’†‰›‘µ‚¦";
     Text[ chinese_traditional ] = "¸m¤¤";
     Text[ arabic ] = "ÊæÓíØ";
@@ -3166,7 +3166,7 @@ String RID_SVXITEMS_TAB_ADJUST_CENTER
     Text [ english_us ] = "Centered" ;
     Text[ chinese_simplified ] = "¾ÓÖĞ";
     Text[ russian ] = "Ïî öåíòğó";
-    Text[ polish ] = "Wyœrodkowany";
+    Text[ polish ] = "Do œrodka";
     Text[ japanese ] = "’†‰›‘µ‚¦";
     Text[ chinese_traditional ] = "¸m¤¤";
     Text[ arabic ] = "ÊæÓíØ";
@@ -3451,7 +3451,7 @@ String RID_ATTR_CHAR_WORDLINEMODE
     Text [ english_us ] = "Individual Words" ;
     Text[ chinese_simplified ] = "Öğ×Ö";
     Text[ russian ] = "Òîëüêî ñëîâà";
-    Text[ polish ] = "Po s³owie";
+    Text[ polish ] = "Tylko s³owa";
     Text[ japanese ] = "’PŒê‚²‚Æ‚É‚·‚é";
     Text[ chinese_traditional ] = "³v¦r";
     Text[ arabic ] = "ÇáßáãÇÊ İŞØ";
@@ -3669,11 +3669,11 @@ String RID_ATTR_CHAR_CASEMAP
     Text [ dutch ] = "Effecten" ;
     Text [ spanish ] = "Efectos" ;
     Text [ english_us ] = "Effects" ;
-    Text[ chinese_simplified ] = "Ğ§¹û";
+    Text[ chinese_simplified ] = "ĞÑÄ¿×ÖÌå";
     Text[ russian ] = "İôôåêòû";
     Text[ polish ] = "Wyró¿nienie";
     Text[ japanese ] = "•¶ší";
-    Text[ chinese_traditional ] = "®ÄªG";
+    Text[ chinese_traditional ] = "¿ô¥Ø¦r«¬";
     Text[ arabic ] = "ÊÃËíÑÇÊ";
     Text[ language_user1 ] = " ";
     Text[ greek ] = "ÄéÜêñéóç";
@@ -4038,11 +4038,11 @@ String RID_ATTR_PARA_ORPHANS
     Text [ dutch ] = "Zwevende regels: weduwen" ;
     Text [ spanish ] = "Viudas" ;
     Text [ english_us ] = "Widows" ;
-    Text[ chinese_simplified ] = "ÓëÏß¶ËÍ¬Ò³";
+    Text[ chinese_simplified ] = "¶ÎÂäÖ®ÖĞ²»·ÖÒ³";
     Text[ russian ] = "Íà÷àëüíûå âèñÿ÷èå ñòğîêè";
     Text[ polish ] = "Bez oddz. ost. wiersza akap.";
     Text[ japanese ] = "’i—‘O‚Å‰üÍß°¼Ş";
-    Text[ chinese_traditional ] = "»P½uºİ¦P­¶";
+    Text[ chinese_traditional ] = "¬q¸¨¤§¤¤¤£¤À­¶";
     Text[ arabic ] = "ÇáÃÓØÑ ÇáÃÎíÑÉ ááİŞÑÉ";
     Text[ greek ] = "\"×Şñåò\"";
     Text[ korean ] = "¸¶Áö¸· ÇÑÁÙ";
@@ -4321,7 +4321,7 @@ String RID_SINGLE_LINE0
     Text [ portuguese_brazilian ] = "Einfach, Haarlinie" ;
     Text [ swedish ] = "Enkel, fin linje" ;
     Text [ danish ] = "Enkelt, hårfin streg" ;
-    Text [ italian ] = "Semplice, linea sottile" ;
+    Text [ italian ] = "Singola, linea sottile" ;
     Text [ spanish ] = "Sencillo, líneas finas" ;
     Text [ french ] = "Simple, ligne fine" ;
     Text [ dutch ] = "Enkel, haarlijn" ;
@@ -4348,7 +4348,7 @@ String RID_SINGLE_LINE1
     Text [ portuguese_brazilian ] = "Einfach, d?n" ;
     Text [ swedish ] = "Enkel, tunn" ;
     Text [ danish ] = "Enkelt, tynd" ;
-    Text [ italian ] = "Semplice, sottile" ;
+    Text [ italian ] = "Singola, sottile" ;
     Text [ spanish ] = "Sencilla, delgada" ;
     Text [ french ] = "Ligne fine" ;
     Text [ dutch ] = "Eenvoudig, dun" ;
@@ -4374,7 +4374,7 @@ String RID_SINGLE_LINE2
     Text [ portuguese_brazilian ] = "Einfach, dick" ;
     Text [ swedish ] = "Enkel, tjock" ;
     Text [ danish ] = "Enkelt, tyk" ;
-    Text [ italian ] = "Semplice, spesso" ;
+    Text [ italian ] = "Singola, spessa" ;
     Text [ spanish ] = "Sencilla, gruesa" ;
     Text [ french ] = "Ligne épaisse" ;
     Text [ dutch ] = "Eenvoudig, dik" ;
@@ -4400,7 +4400,7 @@ String RID_SINGLE_LINE3
     Text [ portuguese_brazilian ] = "Einfach, sehr dick" ;
     Text [ swedish ] = "Enkel, mycket tjock" ;
     Text [ danish ] = "Enkelt, meget tyk" ;
-    Text [ italian ] = "Semplice, molto spesso" ;
+    Text [ italian ] = "Singola, molto spessa" ;
     Text [ spanish ] = "Sencilla, muy gruesa" ;
     Text [ french ] = "Ligne extra épaisse" ;
     Text [ dutch ] = "Eenvoudig, zeer dik" ;
@@ -4426,7 +4426,7 @@ String RID_SINGLE_LINE4
     Text [ portuguese_brazilian ] = "Einfach, fett" ;
     Text [ swedish ] = "Enkel, fet" ;
     Text [ danish ] = "Enkelt, fed" ;
-    Text [ italian ] = "Semplice, grassetto" ;
+    Text [ italian ] = "Singola, grassetto" ;
     Text [ spanish ] = "Sencillo, negrita" ;
     Text [ french ] = "Ligne grasse" ;
     Text [ dutch ] = "Eenvoudig, vet" ;
@@ -4456,7 +4456,7 @@ String RID_DOUBLE_LINE0
     Text [ spanish ] = "Doble, Líneas finas, Espacio: pequeño" ;
     Text [ french ] = "Double, ligne fine, écart : petit" ;
     Text [ dutch ] = "Dubbel, haarlijn, afstand: klein" ;
-    Text[ chinese_simplified ] = "Ë«£»Ï¸Ïß£»¼ä¸ô£ºĞ¡";
+    Text[ chinese_simplified ] = "Ë«£¬Ï¸Ïß£¬¼ä¸ô£ºĞ¡";
     Text[ russian ] = "Äâîéíàÿ, î÷åíü òîíêàÿ ëèíèÿ, èíòåğâàë: êîğîòêèé";
     Text[ polish ] = "Podwójne, Bardzo cienkie linie, Odstêp: ma³y";
     Text[ japanese ] = "“ñdü¤‹É×¤ŠÔŠu:‹·‚¢";
@@ -4984,7 +4984,7 @@ String RID_SVXITEMS_VERJUST_CENTER
     Text = "Vertikal zentriert" ;
     Text [ ENGLISH ] = "Center vertically" ;
     Text [ norwegian ] = "Midtstill vertikal " ;
-    Text [ italian ] = "Centra verticalmente" ;
+    Text [ italian ] = "Centra in verticale" ;
     Text [ portuguese_brazilian ] = "Centrar verticalmente" ;
     Text [ portuguese ] = "Centrado na vertical" ;
     Text [ finnish ] = "Keskitetty pystysuunnassa" ;
@@ -5055,7 +5055,7 @@ String RID_SVXITEMS_ORI_STANDARD
     Text[ chinese_traditional ] = "¼Ğ·Ç¿é¤J¤è¦V";
     Text[ arabic ] = "ÇÊÌÇå ÇáßÊÇÈÉ ÇáÇİÊÑÇÖí";
     Text[ greek ] = "ĞñïåğéëïãŞ êáôåıèõíóçò ãñáöŞò";
-    Text[ korean ] = "¾²±â¹æÇâ ±âº»";
+    Text[ korean ] = "¾²±â¹æÇâ Ç¥ÁØ";
     Text[ turkish ] = "Standart yazma yönü";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Orientación predeterminada";
@@ -5137,7 +5137,7 @@ String RID_SVXITEMS_ORI_STACKED
     Text[ chinese_traditional ] = "­«Å|";
     Text[ arabic ] = "ãÊÑÇßãÉ";
     Text[ greek ] = "Óå óôïßâá";
-    Text[ korean ] = "»óÇÏ·Î";
+    Text[ korean ] = "À§·Î ½×±â";
     Text[ turkish ] = "Üst üste";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Apilado";
@@ -5320,7 +5320,7 @@ String RID_SVXITEMS_WORDLINE_TRUE
     Text [ english_us ] = "Individual words" ;
     Text[ chinese_simplified ] = "Öğ×Ö";
     Text[ russian ] = "Òîëüêî ñëîâà";
-    Text[ polish ] = "Po s³owie";
+    Text[ polish ] = "Tylko s³owa";
     Text[ japanese ] = "’PŒê‚²‚Æ‚É‚·‚é";
     Text[ chinese_traditional ] = "³v¦r";
     Text[ arabic ] = "ÇáßáãÇÊ İŞØ";
@@ -5347,7 +5347,7 @@ String RID_SVXITEMS_WORDLINE_FALSE
     Text [ english_us ] = "Not Words Only" ;
     Text[ chinese_simplified ] = "²»ÊÇÖğ×Ö";
     Text[ russian ] = "Íå òîëüêî ñëîâà";
-    Text[ polish ] = "Nie po s³owie";
+    Text[ polish ] = "Nie tylko s³owa";
     Text[ japanese ] = "’PŒê‚²‚Æ‚É‚µ‚È‚¢";
     Text[ chinese_traditional ] = "¤£¬O³v¦r";
     Text[ arabic ] = "áíÓ ßáãÉ ßáãÉ";
@@ -6156,7 +6156,7 @@ String RID_SVXITEMS_MARGIN_LEFT
     Text[ russian ] = "Ëåâîå ïîëå: ";
     Text[ polish ] = "Lewy margines: ";
     Text[ japanese ] = "¶—]”’: ";
-    Text[ chinese_traditional ] = "¥ªÃä¬É¡G ";
+    Text[ chinese_traditional ] = "¥ªÃä®Ø¡G ";
     Text[ arabic ] = "ÇáåÇãÔ ÇáÃíÓÑ: ";
     Text[ greek ] = "Áñéóôåñü ğåñéèşñéï: ";
     Text[ korean ] = "¿ŞÂÊ ¿©¹é: ";
@@ -6183,7 +6183,7 @@ String RID_SVXITEMS_MARGIN_TOP
     Text[ russian ] = "Âåğõíåå ïîëå: ";
     Text[ polish ] = "Górny margines: ";
     Text[ japanese ] = "ã—]”’: ";
-    Text[ chinese_traditional ] = "¤WÃä¬É¡G ";
+    Text[ chinese_traditional ] = "¤WÃä®Ø¡G ";
     Text[ arabic ] = "ÇáåÇãÔ ÇáÚáæí: ";
     Text[ greek ] = "¢íù ğåñéèşñéï: ";
     Text[ korean ] = "À§ ¿©¹é: ";
@@ -6210,7 +6210,7 @@ String RID_SVXITEMS_MARGIN_RIGHT
     Text[ russian ] = "Ïğàâîå ïîëå: ";
     Text[ polish ] = "Prawy margines: ";
     Text[ japanese ] = "‰E—]”’: ";
-    Text[ chinese_traditional ] = "¥kÃä¬É¡G ";
+    Text[ chinese_traditional ] = "¥kÃä®Ø¡G ";
     Text[ arabic ] = "ÇáåÇãÔ ÇáÃíãä: ";
     Text[ greek ] = "Äåîß ğåñéèşñéï: ";
     Text[ korean ] = "¿À¸¥ÂÊ ¿©¹é: ";
@@ -6237,7 +6237,7 @@ String RID_SVXITEMS_MARGIN_BOTTOM
     Text[ russian ] = "Íèæíåå ïîëå: ";
     Text[ polish ] = "Dolny margines: ";
     Text[ japanese ] = "‰º—]”’: ";
-    Text[ chinese_traditional ] = "¤UÃä¬É¡G ";
+    Text[ chinese_traditional ] = "¤UÃä®Ø¡G ";
     Text[ arabic ] = "ÇáåÇãÔ ÇáÓİáí: ";
     Text[ greek ] = "ÊÜôù ğåñéèşñéï: ";
     Text[ korean ] = "¾Æ·¡ ¿©¹é: ";
@@ -6322,7 +6322,7 @@ String RID_SVXITEMS_LRSPACE_LEFT
     Text[ chinese_traditional ] = "¥ªÁY±Æ ";
     Text[ arabic ] = "ÅÒÇÍÉ íÓÑì ";
     Text[ greek ] = "Åóï÷Ş áñéóôåñÜ ";
-    Text[ korean ] = "¿ŞÂÊ  µé¿©¾²±â ";
+    Text[ korean ] = "¿ŞÂÊ µé¿©¾²±â ";
     Text[ turkish ] = "Sol girinti ";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Sangría a la izquierda   ";
@@ -6376,7 +6376,7 @@ String RID_SVXITEMS_LRSPACE_RIGHT
     Text[ chinese_traditional ] = "¥kÁY±Æ ";
     Text[ arabic ] = "ÅÒÇÍÉ íãäì ";
     Text[ greek ] = "Åóï÷Ş äåîéÜ ";
-    Text[ korean ] = "¿À¸¥ÂÊ  µé¿©¾²±â ";
+    Text[ korean ] = "¿À¸¥ÂÊ µé¿©¾²±â ";
     Text[ turkish ] = "Sağ girinti ";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Sangría a la derecha   ";
@@ -7072,11 +7072,11 @@ String RID_SVXITEMS_ORPHANS_COMPLETE
     Text [ swedish ] = "Horungekontroll " ;
     Text [ dutch ] = "Zwevende regels: weduwen  " ;
     Text [ spanish ] = "Viudas   " ;
-    Text[ chinese_simplified ] = "ÓëÏß¶ËÍ¬Ò³ ";
+    Text[ chinese_simplified ] = "¶ÎÂäÖ®ÖĞ²»·ÖÒ³ ";
     Text[ russian ] = "Óïğàâëåíèå íà÷àëüíûìè âèñÿ÷èìè ñòğîêàìè ";
     Text[ polish ] = "Bez oddz. ost. wiersza akap. ";
     Text[ japanese ] = "’i—‘O‚Å‰üÍß°¼Ş ";
-    Text[ chinese_traditional ] = "»P½uºİ¦P­¶ ";
+    Text[ chinese_traditional ] = "¬q¸¨¤§¤¤¤£¤À­¶ ";
     Text[ arabic ] = "ÊÚÏíá ÇäİÕÇá ÓØÑ ÇáİŞÑÉ ÇáÃÎíÑ ";
     Text[ greek ] = "Êáíüíáò \"÷Şñáò\" ";
     Text[ korean ] = "¸¶Áö¸· ÁÙ ºĞ¸® ¹æÁö ";
@@ -7808,7 +7808,7 @@ String RID_SVXITEMS_FORBIDDEN_RULE_OFF
     Text[ polish ] = "Uwzglêdnij niedozwolone znaki na pocz¹tku i na koñcu wiersza";
     Text[ portuguese_brazilian ] = "Apply list of forbidden characters at line end and line start";
     Text[ japanese ] = "s“ª‚¨‚æ‚Ñs––‚Ì‹Ö‘¥•¶š‚Å‹Ö‘¥ˆ—‚ğs‚¤";
-    Text[ korean ] = "Çà ½ÃÀÛ°ú ³¡¿¡ ¾²´Â °ÍÀÌ ±İÁöµÈ ¹®ÀÚÀÇ ¸ñ·ÏÀ» ÂüÁ¶ÇÏ½Ê½Ã¿À";
+    Text[ korean ] = "Çà ½ÃÀÛ°ú ³¡¿¡ ÀÖ´Â ±İÁöµÈ ¹®ÀÚ ÂüÁ¶";
     Text[ chinese_simplified ] = "¹Ë¼°ÔÚĞĞÊ×ĞĞÄ©½ûÖ¹Ê¹ÓÃµÄ×Ö·û";
     Text[ chinese_traditional ] = "ÅU¤Î¦æ­º¦æ§À¸T¤î¨Ï¥Îªº¦r¤¸";
     Text[ turkish ] = "Apply list of forbidden characters at line end and line start";
@@ -7834,7 +7834,7 @@ String RID_SVXITEMS_FORBIDDEN_RULE_ON
     Text[ polish ] = "Nie uwzglêdniaj niedozwolonych znaków na pocz¹tku i na koñcu wiersza";
     Text[ portuguese_brazilian ] = "Don't Apply list of forbidden characters at line end and line start";
     Text[ japanese ] = "s“ª‚¨‚æ‚Ñs––‚Ì‹Ö‘¥•¶š‚ğ–³‹‚·‚é";
-    Text[ korean ] = "Çà ½ÃÀÛ°ú ³¡¿¡ ¾²´Â °ÍÀÌ ±İÁöµÈ ¹®ÀÚÀÇ ¸ñ·ÏÀ» ÂüÁ¶ÇÏÁö ¸¶½Ê½Ã¿À";
+    Text[ korean ] = "Çà ½ÃÀÛ°ú ³¡¿¡ ÀÖ´Â ±İÁöµÈ ¹®ÀÚ ÂüÁ¶ÇÏÁö ¾Ê±â";
     Text[ chinese_simplified ] = "²»¹Ë¼°ÔÚĞĞÊ×ĞĞÄ©½ûÖ¹Ê¹ÓÃµÄ×Ö·û";
     Text[ chinese_traditional ] = "¤£ÅU¤Î¦æ­º¦æ§À¸T¤î¨Ï¥Îªº¦r¤¸";
     Text[ turkish ] = "Don't Apply list of forbidden characters at line end and line start";
@@ -7908,7 +7908,7 @@ String RID_SVXITEMS_CHARROTATE_FITLINE
     Text[ italian ] = "Adatta alla riga";
     Text[ danish ] = " fit to line";
     Text[ swedish ] = " Anpassa till rad";
-    Text[ polish ] = "wyrównaj do wiersza";
+    Text[ polish ] = "Wyrównaj do wiersza";
     Text[ portuguese_brazilian ] = " fit to line";
     Text[ japanese ] = "s‚É‡‚í‚¹‚é";
     Text[ korean ] = " ÁÙ¿¡ ¸ÂÃß±â";
@@ -8009,7 +8009,7 @@ String RID_SVXITEMS_RELIEF_EMBOSSED
     Text[ italian ] = "Rilievo";
     Text[ danish ] = "Emboss";
     Text[ swedish ] = "Relief";
-    Text[ polish ] = "Relief";
+    Text[ polish ] = "Uwypuklenie";
     Text[ portuguese_brazilian ] = "Emboss";
     Text[ japanese ] = "•‚‚«’¤‚è";
     Text[ korean ] = "¾ç°¢";
@@ -8062,7 +8062,7 @@ String RID_SVXITEMS_PARAVERTALIGN_AUTO
     Text[ polish ] = "Automatyczne wyrównanie tekstu";
     Text[ portuguese_brazilian ] = "text alignment automatically";
     Text[ japanese ] = "©“®•¶š”z’u";
-    Text[ korean ] = "text alignment automatically";
+    Text[ korean ] = "ÀÚµ¿ ÅØ½ºÆ® ¸ÂÃã";
     Text[ chinese_simplified ] = "ÎÄ×Ö×Ô¶¯¶ÔÆë";
     Text[ chinese_traditional ] = "¤å¦r¦Û°Ê¹ï»ô";
     Text[ turkish ] = "text alignment automatically";
@@ -8087,7 +8087,7 @@ String RID_SVXITEMS_PARAVERTALIGN_BASELINE
     Text[ polish ] = "Wyrównanie tekstu do linii podstawowej";
     Text[ portuguese_brazilian ] = "text alignment baseline";
     Text[ japanese ] = "Šîü‚É•¶š”z’u";
-    Text[ korean ] = "text alignment baseline";
+    Text[ korean ] = "ÅØ½ºÆ® ±âÁØ¼± ¸ÂÃã";
     Text[ chinese_simplified ] = "ÎÄ×Ö¶ÔÆë»ùÏß";
     Text[ chinese_traditional ] = "¤å¦r©M°ò½u¹ï»ô";
     Text[ turkish ] = "text alignment baseline";
@@ -8112,7 +8112,7 @@ String RID_SVXITEMS_PARAVERTALIGN_TOP
     Text[ polish ] = "Wyrównanie tekstu do góry";
     Text[ portuguese_brazilian ] = "text alignment top";
     Text[ japanese ] = "ã‘µ‚¦‚Å•¶š”z’u";
-    Text[ korean ] = "text alignment top";
+    Text[ korean ] = "ÅØ½ºÆ® ¸ÂÃã. À§·Î";
     Text[ chinese_simplified ] = "ÎÄ×ÖÏòÉÏ¶ÔÆë";
     Text[ chinese_traditional ] = "¤å¦r¦V¤W¹ï»ô";
     Text[ turkish ] = "text alignment top";
@@ -8137,7 +8137,7 @@ String RID_SVXITEMS_PARAVERTALIGN_CENTER
     Text[ polish ] = "Wyœrodkowanie tekstu";
     Text[ portuguese_brazilian ] = "text alignment center";
     Text[ japanese ] = "’†‰›‘µ‚¦‚Å•¶š”z’u";
-    Text[ korean ] = "text alignment center";
+    Text[ korean ] = "ÅØ½ºÆ® ¸ÂÃã, °¡¿îµ¥";
     Text[ chinese_simplified ] = "ÎÄ×Ö¾ÓÖĞ¶ÔÆë";
     Text[ chinese_traditional ] = "¤å¦r¸m¤¤¹ï»ô";
     Text[ turkish ] = "text alignment center";
@@ -8162,7 +8162,7 @@ String RID_SVXITEMS_PARAVERTALIGN_BOTTOM
     Text[ polish ] = "Wyrównanie tekstu do do³u";
     Text[ portuguese_brazilian ] = "text alignment bottom";
     Text[ japanese ] = "‰º‘µ‚¦‚Å•¶š”z’u";
-    Text[ korean ] = "text alignment bottom";
+    Text[ korean ] = "ÅØ½ºÆ® ¸ÂÃã, ¾Æ·¡·Î";
     Text[ chinese_simplified ] = "ÎÄ×ÖÏòÏÂ¶ÔÆë";
     Text[ chinese_traditional ] = "¤å¦r¦V¤U¹ï»ô";
     Text[ turkish ] = "text alignment bottom";
@@ -8172,6 +8172,7 @@ String RID_SVXITEMS_PARAVERTALIGN_BOTTOM
 };
 
  // ********************************************************************** EOF
+
 
 
 
