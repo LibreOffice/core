@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dapitype.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 20:19:53 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 06:11:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,7 @@ ModalDialog RID_SCDLG_DAPITYPE
         Text[ turkish ] = "~Yürürlükteki seçim";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Selección a~ctual";
+        Text[ finnish ] = "~Nykyinen valinta";
     };
     RadioButton BTN_DATABASE
     {
@@ -147,6 +148,7 @@ ModalDialog RID_SCDLG_DAPITYPE
         Text[ turkish ] = "%PRODUCTNAME'de kayýtlý veri kaynaðý";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "F~uente de datos registrada en %PRODUCTNAME";
+        Text[ finnish ] = "~Tietolähde rekisteröity ohjelmaan %PRODUCTNAME";
     };
     RadioButton BTN_EXTERNAL
     {
@@ -175,6 +177,7 @@ ModalDialog RID_SCDLG_DAPITYPE
         Text[ turkish ] = "~Dýþ kaynak/arabirim";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Fuente externa/Interfaz";
+        Text[ finnish ] = "~Ulkoinen lähde/liittymä";
     };
     GroupBox GB_FRAME
     {
@@ -202,6 +205,7 @@ ModalDialog RID_SCDLG_DAPITYPE
         Text[ turkish ] = "Seçim";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Selección";
+        Text[ finnish ] = "Valinta";
     };
     Text[ english_us ] = "Select Source";
     Text[ portuguese ] = "Seleccionar fonte";
@@ -223,6 +227,7 @@ ModalDialog RID_SCDLG_DAPITYPE
     Text[ turkish ] = "Kaynak seç";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Seleccionar fuente";
+    Text[ finnish ] = "Valitse lähde";
 };
 
 
@@ -284,6 +289,7 @@ ModalDialog RID_SCDLG_DAPISERVICE
         Text[ turkish ] = "~Hizmet";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Servicio";
+        Text[ finnish ] = "~Palvelu";
     };
     ListBox LB_SERVICE
     {
@@ -319,6 +325,7 @@ ModalDialog RID_SCDLG_DAPISERVICE
         Text[ turkish ] = "~Kaynak";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Fuente";
+        Text[ finnish ] = "Läh~de";
     };
     Edit ED_SOURCE
     {
@@ -353,6 +360,7 @@ ModalDialog RID_SCDLG_DAPISERVICE
         Text[ turkish ] = "~Ad";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Nombre";
+        Text[ finnish ] = "~Nimi";
     };
     Edit ED_NAME
     {
@@ -387,6 +395,7 @@ ModalDialog RID_SCDLG_DAPISERVICE
         Text[ turkish ] = "~Kullanýcý";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Usuar~io";
+        Text[ finnish ] = "Käyt~täjä";
     };
     Edit ED_USER
     {
@@ -421,6 +430,7 @@ ModalDialog RID_SCDLG_DAPISERVICE
         Text[ turkish ] = "~Þifre";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Contraseña";
+        Text[ finnish ] = "~Salasana";
     };
     Edit ED_PASSWD
     {
@@ -456,6 +466,7 @@ ModalDialog RID_SCDLG_DAPISERVICE
         Text[ turkish ] = "Seçim";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Selección";
+        Text[ finnish ] = "Valinta";
     };
     Text[ english_us ] = "External Source";
     Text[ portuguese ] = "Fonte de dados externa";
@@ -477,6 +488,7 @@ ModalDialog RID_SCDLG_DAPISERVICE
     Text[ turkish ] = "Dýþ veri kaynaðý";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Fuente de datos externa";
+    Text[ finnish ] = "Ulkoinen lähde";
 };
 
 
@@ -539,6 +551,7 @@ ModalDialog RID_SCDLG_DAPIDATA
         Text[ turkish ] = "~Veritabaný";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Base de datos";
+        Text[ finnish ] = "~Tietokanta";
     };
     ListBox LB_DATABASE
     {
@@ -575,6 +588,7 @@ ModalDialog RID_SCDLG_DAPIDATA
         Text[ turkish ] = "Veri ka~ynaðý";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Fuente de d~atos";
+        Text[ finnish ] = "Tieto~lähde";
     };
     ComboBox CB_OBJECT
     {
@@ -611,6 +625,7 @@ ModalDialog RID_SCDLG_DAPIDATA
         Text[ turkish ] = "~Tür";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Tipo";
+        Text[ finnish ] = "~Tyyppi";
     };
     ListBox LB_OBJTYPE
     {
@@ -773,6 +788,13 @@ ModalDialog RID_SCDLG_DAPIDATA
         < "Sql" ; Default ; > ;
         < "Sql [Native]" ; Default ; > ;
     };
+    StringList [ finnish ] =
+    {
+            < "Lomake" ; Default ; > ;
+        < "Kysely" ; Default ; > ;
+        < "Sql" ; Default ; > ;
+        < "Sql [alkuperäinen]" ; Default ; > ;
+    };
     };
 
     GroupBox GB_FRAME
@@ -801,6 +823,7 @@ ModalDialog RID_SCDLG_DAPIDATA
         Text[ turkish ] = "Seçim";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Selección";
+        Text[ finnish ] = "Valinta";
     };
     Text[ english_us ] = "Select Data Source";
     Text[ portuguese ] = "Seleccionar fonte de dados";
@@ -822,6 +845,7 @@ ModalDialog RID_SCDLG_DAPIDATA
     Text[ turkish ] = "Veri kaynaðý seç";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Seleccionar fuente de datos";
+    Text[ finnish ] = "Valitse tietolähde";
 };
 
 
