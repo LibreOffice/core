@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_def.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hjs $ $Date: 2000-11-14 14:23:41 $
+#   last change: $Author: hjs $ $Date: 2000-11-15 10:28:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -122,13 +122,13 @@ $(DEF$(TNR)TARGETN) .PHONY : \
         $(DEF$(TNR)DEPN) \
         $(DEF$(TNR)EXPORTFILE)
 .ENDIF			# "$(UPDATER)"=="" || "$(solarlang)"!="deut" || "$(link_always)"==""
-# %_cwd is a 4nt special; don't exppect it to work in any other shell
-.IF "$(shell echo %_cwd | sed s/:.*/:/)"=="O:"
+# %_disk is a 4nt special; don't exppect it to work in any other shell
+.IF "$(shell +echo %_disk)"=="O"
 #
 # don't forget to hav the right DEFSTAG set!
 #
     +$(PERL) $(COMMON_ENV_TOOLS)$/cidef.pl update $(DEFSTAG)
-.ENDIF			# "$(shell echo %_cwd | sed s/:.*/:/)"=="O:"
+.ENDIF			# "$(shell +echo %_disk)"=="O"
     +-attrib -r defs\$(OUTPATH)
     @echo ------------------------------
     @echo Making Module-Definitionfile : $@
@@ -152,13 +152,13 @@ $(DEF$(TNR)TARGETN) .PHONY : \
 .ENDIF				# "$(USE_LDUMP2)"=!""
     +-$(RM) $(SHL$(TNR)TARGET).exp
 # now *\defs\$(OUTPATH)	exists, commit it
-# %_cwd is a 4nt special; don't exppect it to work in any other shell
-.IF "$(shell echo %_cwd | sed s/:.*/:/)"=="O:"
+# %_disk is a 4nt special; don't exppect it to work in any other shell
+.IF "$(shell +echo %_disk)"=="O"
 #
 # don't forget to hav the right DEFSTAG set!
 #
     +$(PERL) $(COMMON_ENV_TOOLS)$/cidef.pl commit
-.ENDIF			# "$(shell echo %_cwd | sed s/:.*/:/)"=="O:"
+.ENDIF			# "$(shell +echo %_disk)"=="O"
 .ENDIF				# "$(DEFLIB$(TNR)NAME)"!=""
 .IF "$(DEF$(TNR)EXPORT1)"!=""
     @echo $(DEF$(TNR)EXPORT1)										>>$@
