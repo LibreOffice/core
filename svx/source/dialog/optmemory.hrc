@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optmemory.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 18:46:48 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 13:09:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,36 +63,7 @@
 
 #include <svtools/controldims.hrc>
 
-
-// TabPage Sonstiges -----------------------------------------------------
-
-#define GB_UNDO                 50
-#define FT_UNDO                 51
-#define ED_UNDO                 52
-#define FL_FILEDLG              53
-#define CB_FILEDLG              54
-#define FT_GRAPHICCACHE_UNIT        55
-#define FT_GRAPHICOBJECTCACHE_UNIT  56
-#define FT_GRAPHICOBJECTTIME_UNIT   57
-#define FT_HELPAGENT_TIME_UNIT      58
-
-#define GB_GRAPHICCACHE         100
-#define FT_GRAPHICCACHE         101
-#define NF_GRAPHICCACHE         102
-#define FT_GRAPHICOBJECTCACHE   103
-#define NF_GRAPHICOBJECTCACHE   104
-#define FT_GRAPHICOBJECTTIME    105
-#define TF_GRAPHICOBJECTTIME    106
-
-#define GB_OLECACHE             110
-#define FT_OLECACHE             111
-#define NF_OLECACHE             112
-
-#define FL_QUICKLAUNCH          130
-#define CB_QUICKLAUNCH          131
-
-
-// defines for positions and sizes
+// defines for positions and sizes ---------------------------------------
 
 #define WHOLE_WIDTH             248
 
@@ -123,6 +94,26 @@
 #define WIDTH1                  DIFF( COL1, COL2 )
 #define WIDTH2                  DIFF( COL3, COL4 )
 #define WIDTH3                  DIFF( COL5, COL6 )
+// tabpage memory --------------------------------------------------------
 
+#define GB_UNDO                         10
+#define FT_UNDO                         11
+#define ED_UNDO                         12
+#define GB_GRAPHICCACHE                 13
+#define FT_GRAPHICCACHE                 14
+#define FT_GRAPHICCACHE_UNIT            15
+#define FT_GRAPHICOBJECTCACHE_UNIT      16
+#define FT_GRAPHICOBJECTTIME_UNIT       17
+#define NF_GRAPHICCACHE                 18
+#define FT_GRAPHICOBJECTCACHE           19
+#define NF_GRAPHICOBJECTCACHE           20
+#define FT_GRAPHICOBJECTTIME            21
+#define TF_GRAPHICOBJECTTIME            22
+#define GB_OLECACHE                     23
+#define FT_OLECACHE                     24
+#define NF_OLECACHE                     25
+#define FL_QUICKLAUNCH                  26
+#define CB_QUICKLAUNCH                  27
 
-#endif
+#endif // #ifndef _OFA_OPTMEMORY_HRC
+
