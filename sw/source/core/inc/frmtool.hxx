@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmtool.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-09 09:53:11 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 13:36:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,8 +150,11 @@ void RegistFlys( SwPageFrm*, const SwLayoutFrm* );
 void Notify( SwFlyFrm *pFly, SwPageFrm *pOld, const SwRect &rOld,
              const SwRect* pOldRect = 0 );
 
-void Notify_Background( SdrObject *pObj, SwPageFrm *pPage, const SwRect& rRect,
-                        const PrepareHint eHint, const BOOL bInva );
+void Notify_Background( const SdrObject* pObj,
+                        SwPageFrm* pPage,
+                        const SwRect& rRect,
+                        const PrepareHint eHint,
+                        const BOOL bInva );
 
 const SwFrm* GetVirtualUpper( const SwFrm* pFrm, const Point& rPos );
 
