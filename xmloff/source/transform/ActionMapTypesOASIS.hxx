@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ActionMapTypesOASIS.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-27 12:06:32 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 11:28:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,7 @@ enum ActionMapTypesOOo
     OASIS_DRAW_AREA_POLYGON_ACTIONS,
     OASIS_SCRIPT_ACTIONS,
     OASIS_DATETIME_ACTIONS,
+    OASIS_TABLE_STYLE_REF_ACTIONS,
     MAX_OASIS_ACTIONS
 };
 
