@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlcontent.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 14:07:04 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 09:06:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,15 @@
 
 
 // Constants ==================================================================
+
+// (0x002F) FILEPASS ----------------------------------------------------------
+
+const sal_uInt16 EXC_ID_FILEPASS            = 0x002F;
+
+const sal_uInt16 EXC_FILEPASS_BIFF5         = 0x0000;
+const sal_uInt16 EXC_FILEPASS_BIFF8         = 0x0001;
+const sal_uInt16 EXC_FILEPASS_BIFF8_STD     = 0x0001;
+const sal_uInt16 EXC_FILEPASS_BIFF8_STRONG  = 0x0002;
 
 // (0x00FC, 0x00FF) SST, EXTSST -----------------------------------------------
 
