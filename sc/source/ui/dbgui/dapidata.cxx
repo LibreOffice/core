@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dapidata.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2000-11-14 16:20:34 $
+ *  last change: $Author: nn $ $Date: 2000-12-12 15:08:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,15 +71,10 @@
 #include <vcl/waitobj.hxx>
 #include <comphelper/processfactory.hxx>
 
-#if SUPD<613
-#include <com/sun/star/data/XDatabaseFavorites.hpp>
-#include <com/sun/star/data/XDatabaseEngine.hpp>
-#include <com/sun/star/data/XDatabaseWorkspace.hpp>
-#include <com/sun/star/data/XDatabase.hpp>
-#endif
 #include <com/sun/star/sheet/DataImportMode.hpp>
-#include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/sdbcx/XTablesSupplier.hpp>
+#include <com/sun/star/sdb/XCompletedConnection.hpp>
 
 using namespace com::sun::star;
 
@@ -87,17 +82,25 @@ using namespace com::sun::star;
 #include "scresid.hxx"
 #include "sc.hrc"
 #include "dapitype.hrc"
+#include "miscuno.hxx"
 #include "dpsdbtab.hxx"         // ScImportSourceDesc
 
 //-------------------------------------------------------------------------
 
-#define DP_SERVICE_DBENGINE         "com.sun.star.data.DatabaseEngine"
+#define DP_SERVICE_DBCONTEXT        "com.sun.star.sdb.DatabaseContext"
+#define SC_SERVICE_INTHANDLER       "com.sun.star.sdb.InteractionHandler"
 
 //  entries in the "type" ListBox
-#define DP_TYPELIST_TABLE   0
-#define DP_TYPELIST_QUERY   1
-#define DP_TYPELIST_SQL     2
-#define DP_TYPELIST_SQLNAT  3
+//!#define DP_TYPELIST_TABLE    0
+//!#define DP_TYPELIST_QUERY    1
+//!#define DP_TYPELIST_SQL      2
+//!#define DP_TYPELIST_SQLNAT   3
+
+// until queries are implemented, remove the listbox entry
+#define DP_TYPELIST_TABLE           0
+#define DP_TYPELIST_QUERY_REMOVE    1
+#define DP_TYPELIST_SQL             1
+#define DP_TYPELIST_SQLNAT          2
 
 //-------------------------------------------------------------------------
 
@@ -117,25 +120,26 @@ ScDataPilotDatabaseDlg::ScDataPilotDatabaseDlg( Window* pParent ) :
 {
     FreeResource();
 
+    aLbType.RemoveEntry( (USHORT) DP_TYPELIST_QUERY_REMOVE );
+
     WaitObject aWait( this );       // initializing the database service the first time takes a while
 
-#if SUPD<613
     try
     {
         //  get database names
 
-        uno::Reference<data::XDatabaseFavorites> xFavorites(
+        uno::Reference<container::XNameAccess> xContext(
                 comphelper::getProcessServiceFactory()->createInstance(
-                    rtl::OUString::createFromAscii( DP_SERVICE_DBENGINE ) ),
+                    rtl::OUString::createFromAscii( DP_SERVICE_DBCONTEXT ) ),
                 uno::UNO_QUERY);
-        if (xFavorites.is())
+        if (xContext.is())
         {
-            uno::Sequence<beans::PropertyValue> aFavorites = xFavorites->getFavorites();
-            long nCount = aFavorites.getLength();
-            const beans::PropertyValue* pArray = aFavorites.getConstArray();
+            uno::Sequence<rtl::OUString> aNames = xContext->getElementNames();
+            long nCount = aNames.getLength();
+            const rtl::OUString* pArray = aNames.getConstArray();
             for (long nPos = 0; nPos < nCount; nPos++)
             {
-                String aName = pArray[nPos].Name;
+                String aName = pArray[nPos];
                 aLbDatabase.InsertEntry( aName );
             }
         }
@@ -144,7 +148,6 @@ ScDataPilotDatabaseDlg::ScDataPilotDatabaseDlg( Window* pParent ) :
     {
         DBG_ERROR("exception in database");
     }
-#endif
 
     aLbDatabase.SelectEntryPos( 0 );
     aLbType.SelectEntryPos( 0 );
@@ -170,8 +173,8 @@ void ScDataPilotDatabaseDlg::GetValues( ScImportSourceDesc& rDesc )
         rDesc.nType = sheet::DataImportMode_NONE;
     else if ( nSelect == DP_TYPELIST_TABLE )
         rDesc.nType = sheet::DataImportMode_TABLE;
-    else if ( nSelect == DP_TYPELIST_QUERY )
-        rDesc.nType = sheet::DataImportMode_QUERY;
+//! else if ( nSelect == DP_TYPELIST_QUERY )
+//!     rDesc.nType = sheet::DataImportMode_QUERY;
     else
         rDesc.nType = sheet::DataImportMode_SQL;
 
@@ -193,47 +196,53 @@ void ScDataPilotDatabaseDlg::FillObjects()
         return;
 
     USHORT nSelect = aLbType.GetSelectEntryPos();
-    if ( nSelect > DP_TYPELIST_QUERY )
+//! if ( nSelect > DP_TYPELIST_QUERY )
+    if ( nSelect > DP_TYPELIST_TABLE )
         return;                                 // only tables and queries
 
-#if SUPD<613
     try
     {
-        uno::Reference<data::XDatabaseEngine> xEngine(
+        uno::Reference<container::XNameAccess> xContext(
                 comphelper::getProcessServiceFactory()->createInstance(
-                    rtl::OUString::createFromAscii( DP_SERVICE_DBENGINE ) ),
+                    rtl::OUString::createFromAscii( DP_SERVICE_DBCONTEXT ) ),
                 uno::UNO_QUERY);
-        if ( !xEngine.is() ) return;
+        if ( !xContext.is() ) return;
 
-        // read default workspace (like in FmFormView::CreateFieldControl)
-
-        uno::Reference<container::XIndexAccess> xWsps( xEngine->getWorkspaces(), uno::UNO_QUERY );
-        if ( !xWsps.is() ) return;
-        uno::Any aElement( xWsps->getByIndex(0) );
-        uno::Reference<data::XDatabaseWorkspace> xWorkspace;
-        aElement >>= xWorkspace;
-
-        uno::Reference<data::XDatabase> xDatabase = xWorkspace->open( aDatabaseName );
-        uno::Reference<container::XNameAccess> xAccess;
+        uno::Sequence<rtl::OUString> aNames;
         if ( nSelect == DP_TYPELIST_TABLE )
         {
             //  get all tables
-            uno::Reference<data::XDatabaseConnection> xConnection( xDatabase, uno::UNO_QUERY );
-            if ( !xConnection.is() ) return;
-            xAccess = uno::Reference<container::XNameAccess>( xConnection->getTables(), uno::UNO_QUERY );
+
+            uno::Any aSourceAny = xContext->getByName( aDatabaseName );
+            uno::Reference<sdb::XCompletedConnection> xSource(
+                    ScUnoHelpFunctions::AnyToInterface( aSourceAny ), uno::UNO_QUERY );
+            if ( !xSource.is() ) return;
+
+            uno::Reference<task::XInteractionHandler> xHandler(
+                    comphelper::getProcessServiceFactory()->createInstance(
+                        rtl::OUString::createFromAscii( SC_SERVICE_INTHANDLER ) ),
+                    uno::UNO_QUERY);
+
+            uno::Reference<sdbc::XConnection> xConnection = xSource->connectWithCompletion( xHandler );
+            uno::Reference<sdbcx::XTablesSupplier> xTablesSupp( xConnection, uno::UNO_QUERY );
+            if ( !xTablesSupp.is() ) return;
+
+            uno::Reference<container::XNameAccess> xTables = xTablesSupp->getTables();
+            if ( !xTables.is() ) return;
+
+            aNames = xTables->getElementNames();
         }
         else
         {
-            // get all queries
-            xAccess = uno::Reference<container::XNameAccess>( xDatabase->getQueries(), uno::UNO_QUERY );
+            //  get all queries
+
+            DBG_ERROR("Queries not implemented yet");
         }
-        if( !xAccess.is() ) return;
 
         //  fill list
 
-        uno::Sequence<rtl::OUString> aSeq = xAccess->getElementNames();
-        long nCount = aSeq.getLength();
-        const rtl::OUString* pArray = aSeq.getConstArray();
+        long nCount = aNames.getLength();
+        const rtl::OUString* pArray = aNames.getConstArray();
         for( long nPos=0; nPos<nCount; nPos++ )
         {
             String aName = pArray[nPos];
@@ -245,7 +254,6 @@ void ScDataPilotDatabaseDlg::FillObjects()
         //  #71604# this may happen if an invalid database is selected -> no DBG_ERROR
         DBG_WARNING("exception in database");
     }
-#endif
 }
 
 
