@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fly.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: hjs $ $Date: 2003-09-25 10:49:24 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 14:13:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2649,6 +2649,7 @@ BOOL SwFlyFrm::GetContour( PolyPolygon&   rContour,
             if( !aClip.Height() )
                 aClip.Height( 1 );
             rContour.Clip( aClip.SVRect() );
+            rContour.Optimize(POLY_OPTIMIZE_CLOSE);
             bRet = TRUE;
         }
     }
