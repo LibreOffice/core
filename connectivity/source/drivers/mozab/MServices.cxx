@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MServices.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mmaher $ $Date: 2001-10-11 10:07:54 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 18:29:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,9 +97,9 @@ void REGISTER_PROVIDER(
         const Reference< ::com::sun::star::registry::XRegistryKey > & xKey)
 {
     OUString aMainKeyName;
-    aMainKeyName = OUString::createFromAscii("/");
+    aMainKeyName = OUString( RTL_CONSTASCII_USTRINGPARAM("/"));
     aMainKeyName += aServiceImplName;
-    aMainKeyName += OUString::createFromAscii("/UNO/SERVICES");
+    aMainKeyName += OUString( RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
 
     Reference< ::com::sun::star::registry::XRegistryKey >  xNewKey( xKey->createKey(aMainKeyName) );
     OSL_ENSURE(xNewKey.is(), "MOZAB::component_writeInfo : could not create a registry key !");
