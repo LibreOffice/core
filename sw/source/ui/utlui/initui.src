@@ -2,9 +2,9 @@
  *
  *  $RCSfile: initui.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-09 23:20:16 $
+ *  last change: $Author: kz $ $Date: 2001-04-26 20:27:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1031,10 +1031,10 @@ Resource RID_SW_SHELLRES
         Text[ portuguese ] = "Convert $(ARG1)";
         Text[ russian ] = "Преобразование $(ARG1)";
         Text[ greek ] = "МефбфспрЮ $(ARG1)";
-        Text[ dutch ] = "Convert $(ARG1)";
+        Text[ dutch ] = "Converteert $(ARG1)";
         Text[ french ] = "Conversion $(ARG1)";
         Text[ spanish ] = "Convertir $(ARG1)";
-        Text[ italian ] = "Convert $(ARG1)";
+        Text[ italian ] = "Conversione $(ARG1)";
         Text[ danish ] = "Convert $(ARG1)";
         Text[ swedish ] = "Konvertera $(ARG1)";
         Text[ polish ] = "Konwersja $(ARG1)";
@@ -1055,10 +1055,10 @@ Resource RID_SW_SHELLRES
         Text[ portuguese ] = "First convert $(ARG1)";
         Text[ russian ] = "Первое преобразование $(ARG1)";
         Text[ greek ] = "Рсюфз МефбфспрЮ $(ARG1)";
-        Text[ dutch ] = "First convert $(ARG1)";
+        Text[ dutch ] = "Eerste convertering $(ARG1)";
         Text[ french ] = "Premiиre conversion $(ARG1)";
         Text[ spanish ] = "Primer Convertir $(ARG1)";
-        Text[ italian ] = "First convert $(ARG1)";
+        Text[ italian ] = "Prima conversione $(ARG1)";
         Text[ danish ] = "First convert $(ARG1)";
         Text[ swedish ] = "Fцrsta konvertering $(ARG1)";
         Text[ polish ] = "Pierwsza konwersja $(ARG1)";
@@ -1079,10 +1079,10 @@ Resource RID_SW_SHELLRES
         Text[ portuguese ] = "Convert follow $(ARG1)";
         Text[ russian ] = "Последовательность преобразования $(ARG1)";
         Text[ greek ] = "МефбфспрЮ УхнЭчейб $(ARG1)";
-        Text[ dutch ] = "Convert follow $(ARG1)";
+        Text[ dutch ] = "Converteer volgende $(ARG1)";
         Text[ french ] = "Conversion suivante $(ARG1)";
         Text[ spanish ] = "Convertir, serie $(ARG1)";
-        Text[ italian ] = "Convert follow $(ARG1)";
+        Text[ italian ] = "Conversione seguente $(ARG1)";
         Text[ danish ] = "Convert follow $(ARG1)";
         Text[ swedish ] = "Konvertering fцljd $(ARG1)";
         Text[ polish ] = "Kolejnoњж konwersji $(ARG1)";
