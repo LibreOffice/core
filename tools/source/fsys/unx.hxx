@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unx.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:04:05 $
+ *  last change: $Author: vg $ $Date: 2003-05-28 08:36:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,12 +92,6 @@
 
 #include <time.h>
 #include <datetime.hxx>
-
-#ifndef localtime_r
-extern "C" {
-struct tm *localtime_r(const time_t *timep, struct tm *buffer);
-}
-#endif
 
 inline Time Unx2Time( time_t nTime )
 {
