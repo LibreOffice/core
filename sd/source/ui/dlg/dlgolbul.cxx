@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgolbul.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:15:37 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 17:26:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -271,7 +271,7 @@ void OutlineBulletDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
     }
 }
 
-const SfxItemSet* OutlineBulletDlg::GetOutputItemSet()
+const SfxItemSet* OutlineBulletDlg::GetOutputItemSet() const
 {
     SfxItemSet aSet( *SfxTabDialog::GetOutputItemSet() );
     pOutputSet->Put( aSet );
