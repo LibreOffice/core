@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-25 13:29:45 $
+ *  last change: $Author: cp $ $Date: 2001-10-29 18:13:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,7 +215,6 @@ static void doReparentPresentationDialogues( SalDisplay* pDisplay )
     pDisplay->GetXLib()->SetIgnoreXErrors( bIgnore );
 }
 
-
 // -=-= SalInstance =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 SalFrame *SalInstance::CreateFrame( SalFrame *pParent,
@@ -281,12 +280,14 @@ void SalFrameData::Init( ULONG nSalFrameStyle, SystemParentData* pParentData )
     int x = 0, y = 0;
     unsigned int w = 500, h = 500;
     XSetWindowAttributes Attributes;
-    int nAttrMask =
-        CWBackPixmap
-        | CWColormap
-        | CWOverrideRedirect
-        | CWEventMask
-        ;
+
+    int nAttrMask =   CWBorderPixel
+                    | CWBackPixmap
+                    | CWColormap
+                    | CWOverrideRedirect
+                    | CWEventMask
+                    ;
+    Attributes.border_pixel             = 0;
     Attributes.background_pixmap        = None;
     Attributes.colormap                 = GetDisplay()->GetColormap().GetXColormap();
     Attributes.override_redirect        = False;
@@ -419,7 +420,6 @@ void SalFrameData::Init( ULONG nSalFrameStyle, SystemParentData* pParentData )
         }
         if( IsOverrideRedirect() )
             Attributes.override_redirect = True;
-
         // default icon
         if( SelectAppIconPixmap( pDisplay_, mpParent ? mpParent->maFrameData.mnIconID : 1, 32,
                                  Hints.icon_pixmap, Hints.icon_mask ))
