@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScTabViewObj.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change:$Date: 2003-09-08 12:17:08 $
+ *  last change:$Date: 2003-12-11 12:13:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,12 +203,17 @@ public class ScTabViewObj extends TestCase {
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
+        tEnv.addObjRelation("XDispatchProvider.URL", ".uno:Copy") ;
+
         log.println("adding 'Sheet' as ObjRelation");
         tEnv.addObjRelation("Sheet", oSheet);
         tEnv.addObjRelation("Frame",aModel.getCurrentController().getFrame());
         tEnv.addObjRelation("SecondModel",aSecondModel);
         tEnv.addObjRelation("FirstModel",aModel);
 
+        //Relation for XControlAccess
+        tEnv.addObjRelation("DOCUMENT", UnoRuntime.queryInterface(XComponent.class,xSpreadsheetDoc));
+        tEnv.addObjRelation("XControlAccess.isSheet", Boolean.TRUE);
         //Relations for XSelectionSupplier
         XCell cell_1 = null;
         XCell cell_2 = null;
