@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-19 20:21:35 $
+ *  last change: $Author: kz $ $Date: 2001-07-24 20:47:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,7 +153,7 @@ TabPage TP_COLUMN
         Text[ swedish ] = "Fördela innehåll jämnt över ~alla kolumner";
         Text[ polish ] = "Roz³ó¿ zawartoœæ równomiernie na wszystkie kolumny";
         Text[ portuguese_brazilian ] = "Balance columns";
-        Text[ japanese ] = "“à—e‚ğ’i‘g‚İ‘S‘Ì‚Å‹Ï“™‚É”z•ª‚·‚é";
+        Text[ japanese ] = "“à—e‚ğŠe’i‚É‹Ï“™”z•ª‚·‚é";
         Text[ korean ] = "³»¿ëÀ» ¸ğµç ¿­¿¡ °ÉÃÄ ÀÏÁ¤ÇÏ°Ô ºĞ¹è";
         Text[ chinese_simplified ] = "¶Ô³Æµ÷ÕûÀ¸¿í";
         Text[ chinese_traditional ] = "¹ïºÙ½Õ¾ãÄæ¼e";
@@ -182,7 +182,7 @@ TabPage TP_COLUMN
         Text[ swedish ] = "Förinställningar";
         Text[ polish ] = "Ustawienia domyœlne";
         Text[ portuguese_brazilian ] = "Colunas";
-        Text[ japanese ] = "’i‘g‚İ";
+        Text[ japanese ] = "ÌßØ¾¯Ä";
         Text[ korean ] = "±âº»°ª";
         Text[ chinese_simplified ] = "Ô¤ÖÃ";
         Text[ chinese_traditional ] = "¹w³]";
@@ -210,7 +210,7 @@ TabPage TP_COLUMN
         Text[ swedish ] = "Kolumn";
         Text[ polish ] = "Kolumna";
         Text[ portuguese_brazilian ] = "Column";
-        Text[ japanese ] = "’i";
+        Text[ japanese ] = "’i”Ô†";
         Text[ korean ] = "¿­";
         Text[ chinese_simplified ] = "ÁĞ";
         Text[ chinese_traditional ] = "Äæ";
@@ -276,14 +276,14 @@ TabPage TP_COLUMN
         Text [ danish ] = "Bredde" ;
         Text [ portuguese ] = "Largura" ;
         Text [ portuguese_brazilian ] = "Breite" ;
-        Text[ chinese_simplified ] = "¿í";
+        Text[ chinese_simplified ] = "¿í¶È";
         Text[ russian ] = "Øèğèíà";
         Text[ polish ] = "Szer.";
-        Text[ japanese ] = "’i‚Ì•";
-        Text[ chinese_traditional ] = "¼e";
+        Text[ japanese ] = "•";
+        Text[ chinese_traditional ] = "¼e«×";
         Text[ arabic ] = "ÇáÚÑÖ";
         Text[ dutch ] = "Breedte";
-        Text[ chinese_simplified ] = "¿í";
+        Text[ chinese_simplified ] = "¿í¶È";
         Text[ greek ] = "ĞëÜôïò";
         Text[ korean ] = "³Êºñ";
         Text[ language_user1 ] = " ";
@@ -464,7 +464,7 @@ TabPage TP_COLUMN
         Text[ swedish ] = "Bredd och avstånd";
         Text[ polish ] = "Szerokoœæ i odstêp";
         Text[ portuguese_brazilian ] = "Largura da coluna";
-        Text[ japanese ] = "’i‚Ì•‚ÆŠÔŠu";
+        Text[ japanese ] = "•‚ÆŠÔŠu";
         Text[ korean ] = "³Êºñ¿Í °£°İ";
         Text[ chinese_simplified ] = "À¸¿íºÍ¼ä¸ô";
         Text[ chinese_traditional ] = "Äæ¼e¤Î¶¡¹j";
@@ -634,14 +634,14 @@ TabPage TP_COLUMN
         Text [ spanish ] = "A~ltura" ;
         Text [ english_us ] = "H~eight" ;
         Left = TRUE ;
-        Text[ chinese_simplified ] = "¸ß(~E)";
+        Text[ chinese_simplified ] = "¸ß¶È(~E)";
         Text[ russian ] = "Âûñîòà";
         Text[ polish ] = "Wys.";
         Text[ japanese ] = "‚‚³(~E)";
-        Text[ chinese_traditional ] = "°ª(~E)";
+        Text[ chinese_traditional ] = "°ª«×(~E)";
         Text[ arabic ] = "ÇáÇÑÊİÇÚ";
         Text[ dutch ] = "~Hoogte";
-        Text[ chinese_simplified ] = "¸ß(~E)";
+        Text[ chinese_simplified ] = "¸ß¶È(~E)";
         Text[ greek ] = "¾øïò";
         Text[ korean ] = "³ôÀÌ(~E)";
         Text[ language_user1 ] = " ";
@@ -879,7 +879,7 @@ TabPage TP_COLUMN
         Text[ chinese_simplified ] = "·Ö¸ôÏß";
         Text[ russian ] = "Ğàçäåëèòåëüíàÿ ëèíèÿ";
         Text[ polish ] = "Separator";
-        Text[ japanese ] = "‹«ŠEü‚ğˆø‚­";
+        Text[ japanese ] = "‹«ŠEü";
         Text[ chinese_traditional ] = "¤À¹j½u";
         Text[ arabic ] = "ÇáÎØ ÇáİÇÕá";
         Text[ dutch ] = "Scheidingslijn";
@@ -1174,6 +1174,7 @@ ModalDialog DLG_COLUMN
     Text[ catalan ] = "Columnas";
     Text[ finnish ] = "Sarakkeet";
 };
+
 
 
 
