@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inettbc.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-06 18:10:41 $
+ *  last change: $Author: mba $ $Date: 2000-12-18 08:58:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,8 @@
 #endif
 
 #include <svtools/urihelper.hxx>
+#include <svtools/pathoptions.hxx>
+#include <unotools/localfilehelper.hxx>
 
 #include "picklist.hxx"
 #include "sfx.hrc"
@@ -113,7 +115,7 @@ class SfxMatchContext_Impl : public ::vos::OThread
     virtual void SAL_CALL           run();
     virtual void SAL_CALL           Cancel();
     void                            Insert( const String& rCompletion, const String& rURL, BOOL bForce = FALSE);
-    void                            ReadFolder( const String& rURL, const String& rMatch );
+    void                            ReadFolder( const String& rURL, const String& rMatch, BOOL bSmart );
 public:
     static ::vos::OMutex*           GetMutex();
 
@@ -229,12 +231,12 @@ void SfxMatchContext_Impl::Insert( const String& rCompletion, const String& rURL
     aURLs.Insert( pURL, aURLs.Count() );
 }
 
-void SfxMatchContext_Impl::ReadFolder( const String& rURL, const String& rMatch )
+void SfxMatchContext_Impl::ReadFolder( const String& rURL, const String& rMatch, BOOL bSmart )
 {
     if( !SfxContentHelper::IsFolder( rURL ) )
         return;
 
-    INetURLObject aMatchObj( rMatch, INET_PROT_FILE );
+    INetURLObject aMatchObj( rMatch );
     String aMatchName;
     if ( rURL != aMatchObj.GetMainURL() )
     {
@@ -259,8 +261,9 @@ void SfxMatchContext_Impl::ReadFolder( const String& rURL, const String& rMatch 
         {
             // all names fit if matchstring is empty
             INetURLObject aObj( aURL );
-            sal_Unicode aDelimiter;
-            aObj.getFSysPath( INetURLObject::FSYS_DETECT, &aDelimiter );
+            sal_Unicode aDelimiter = '/';
+            if ( bSmart )
+                aObj.getFSysPath( INetURLObject::FSYS_DETECT, &aDelimiter );
             if ( bIsFolder )
                 aObj.setFinalSlash();
             String aMatch = aObj.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
@@ -272,6 +275,65 @@ void SfxMatchContext_Impl::ReadFolder( const String& rURL, const String& rMatch 
         }
     }
 }
+
+String ParseSmart( String aText, String aBaseURL, String aWorkDir )
+{
+    String aMatch;
+    USHORT nPos = aText.Search( ':' );
+    if( nPos != STRING_NOTFOUND && ( nPos != 1 || aText.Len() < 3 || aText.GetChar( 2 ) != '\\' ) )
+        // cannot be handled correctly by generic URLObject
+        return aMatch;
+
+    INetURLObject aURLObject;
+    if( aBaseURL.Len() )
+    {
+        INetProtocol eBaseProt = INetURLObject::CompareProtocolScheme( aBaseURL );
+        // if a base URL is set the string may be parsed relative
+        if( aText.Search( '/' ) == 0 )
+        {
+            // text starting with slashes means absolute file URLs
+            String aTemp = INetURLObject::GetScheme( eBaseProt );
+            aTemp += aText;
+            INetURLObject aTmp( aTemp );
+            if ( !aTmp.HasError() && aTmp.GetProtocol() != INET_PROT_NOT_VALID )
+                aMatch = aTemp;
+        }
+        else
+        {
+            String aSmart( aText );
+            INetURLObject aObj( aBaseURL );
+            if( aText.Search( '\\' ) == 0 )
+            {
+                // cut to first segment
+                String aTmp = INetURLObject::GetScheme( eBaseProt );
+                aTmp += '/';
+                aTmp += aObj.getName( 0, true, INetURLObject::DECODE_WITH_CHARSET );
+                aObj.SetURL( aTmp );
+                aSmart.Erase(0,1);
+            }
+
+            // base URL must be a directory !
+            aObj.setFinalSlash();
+
+            // take base URL and append current input
+            bool bWasAbsolute = FALSE;
+            INetURLObject aTmp( aObj.smartRel2Abs( aSmart, bWasAbsolute ) );
+            if ( aText.GetChar( aText.Len() - 1 ) == '.' )
+                // INetURLObject appends a final slash for the directories "." and "..", this is a bug!
+                // Remove it as a workaround
+                aTmp.removeFinalSlash();
+            if ( !aTmp.HasError() && aTmp.GetProtocol() != INET_PROT_NOT_VALID )
+                aMatch = aTmp.GetMainURL();
+        }
+    }
+    else
+    {
+        ::utl::LocalFileHelper::ConvertSystemPathToURL( aText, aWorkDir, aMatch );
+    }
+
+    return aMatch;
+}
+
 
 void SfxMatchContext_Impl::run()
 {
@@ -290,70 +352,43 @@ void SfxMatchContext_Impl::run()
         // no autocompletion for wildcards
         return;
 
-    String aMatch( aText );
-    INetURLObject aURLObject( aMatch, INET_PROT_FILE );
+    String aMatch;
+    String aWorkDir( SvtPathOptions().GetWorkPath() );
     INetProtocol eProt = INetURLObject::CompareProtocolScheme( aText );
+    INetProtocol eBaseProt = INetURLObject::CompareProtocolScheme( aBaseURL );
+    if ( !aBaseURL.Len() )
+        eBaseProt = INetURLObject::CompareProtocolScheme( aWorkDir );
     INetProtocol eSmartProt = pBox->GetSmartProtocol();
 
-    // check if it is or may be file protocol
-    if( !aURLObject.HasError() && ( eProt == INET_PROT_FILE || eProt == INET_PROT_NOT_VALID ) && ( eSmartProt == INET_PROT_FILE || eSmartProt == INET_PROT_NOT_VALID ) )
+    // if the user input is a valid URL, go on with it
+    // otherwise it could be parsed smart with a predefined smart protocol
+    // ( or if this is not set with the protocol of a predefined base URL )
+    if( eProt == INET_PROT_NOT_VALID || eProt == eSmartProt || eSmartProt == INET_PROT_NOT_VALID && eProt == eBaseProt )
     {
         // not stopped yet ?
         if( schedule() )
         {
-            USHORT nPos = aText.Search( ':' );
-            if( nPos != STRING_NOTFOUND && ( nPos != 1 || aText.Len() < 3 || aText.GetChar( 2 ) != '\\' ) )
-                // cannot be handled correctly by generic URLObject
-                return;
-
-            if( aBaseURL.Len() )
+            if ( eProt == INET_PROT_NOT_VALID )
+                aMatch = ParseSmart( aText, aBaseURL, aWorkDir );
+            else
+                aMatch = aText;
+            if ( aMatch.Len() )
             {
-                // if a base URL is set the string may be parsed relative
-                if( aText.Search( '/' ) == 0 )
+                INetURLObject aURLObject( aMatch );
+                String aMainURL( aURLObject.GetMainURL() );
+                if ( aMainURL.Len() )
                 {
-                    // text starting with slashes means absolute file URLs
-                    String aTmp = String::CreateFromAscii( "file://" );
-                    aTmp += aMatch;
-                    aURLObject.SetURL( aTmp );
-                    aMatch = aTmp;
-                }
-                else
-                {
-                    INetURLObject aObj( aBaseURL );
-                    if( aText.Search( '\\' ) == 0 )
-                    {
-                        // cut to first segment
-                        String aTmp = String::CreateFromAscii( "file:///" );
-                        aTmp += aObj.getName( 0, true, INetURLObject::DECODE_WITH_CHARSET );
-                        aObj.SetURL( aTmp );
-                        aMatch.Erase(0,1);
-                    }
+                    // if text input is a directory, it must be part of the match list! Until then it is scanned
+                    if ( SfxContentHelper::IsFolder( aMainURL ) && aURLObject.hasFinalSlash() )
+                        Insert( String(), aMatch );
+                    else
+                        // otherwise the parent folder will be taken
+                        aURLObject.removeSegment();
 
-                    // base URL must be a directory !
-                    aObj.setFinalSlash();
-
-                    // take base URL and append current input
-                    bool bWasAbsolute = FALSE;
-                    INetURLObject aTmp( aObj.smartRel2Abs( aMatch, bWasAbsolute ) );
-                    if ( aText.GetChar( aText.Len() - 1 ) == '.' )
-                        // INetURLObject appends a final slash for the directories "." and "..", this is a bug!
-                        // Remove it as a workaround
-                        aTmp.removeFinalSlash();
-
-                    aMatch = aTmp.GetMainURL();
-                    aURLObject.SetURL( aMatch );
+                    // scan directory and insert all matches
+                    ReadFolder( aURLObject.GetMainURL(), aMatch, eProt == INET_PROT_NOT_VALID );
                 }
             }
-
-            // if text input is a directory, it must be part of the match list! Until then it is scanned
-            if ( SfxContentHelper::IsFolder( aURLObject.GetMainURL()) && aURLObject.hasFinalSlash() )
-                Insert( String(), aMatch );
-            else
-                // otherwise the parent folder will be taken
-                aURLObject.removeSegment();
-
-            // scan directory and insert all matches
-            ReadFolder( aURLObject.GetMainURL(), aMatch );
         }
     }
 
@@ -584,8 +619,9 @@ BOOL SfxURLBox::Drop( const DropEvent &rEvt )
 
 // **************************************************************************
 
-void SfxURLBox::OpenURL( SfxPickEntry_Impl* pEntry, const String& rName, BOOL bNew ) const
+void SfxURLBox::OpenURL( const String& rName, BOOL bNew ) const
 {
+    SfxPickEntry_Impl* pEntry = SfxPickList_Impl::Get()->GetHistoryPickEntryFromTitle( rName );
     String aName;
     String aFilter;
     String aOptions;
@@ -602,16 +638,15 @@ void SfxURLBox::OpenURL( SfxPickEntry_Impl* pEntry, const String& rName, BOOL bN
     }
     else
     {
-/*
-        if ( rName.CompareToAscii( "vnd.sun.star.webdav:", 20 ) == 0 )
-        {
-            aName = String::CreateFromAscii("http:");
-            aName += rName.Copy(20);
-        }
+        INetURLObject aObj( rName );
+        if ( aObj.GetProtocol() == INET_PROT_NOT_VALID )
+            aName = ParseSmart( rName, aBaseURL, SvtPathOptions().GetWorkPath() );
         else
-*/
-            aName = URIHelper::SmartRelToAbs( rName );
+            aName = rName;
     }
+
+    if ( !aName.Len() )
+        return;
 
     SfxStringItem aUrl( SID_FILE_NAME, aName );
     SfxViewFrame *pViewFrame = bNew ? 0 : SfxViewFrame::Current();
@@ -865,12 +900,14 @@ IMPL_LINK( SfxURLToolBoxControl_Impl, SelectHdl, void*, pVoid )
 
     if ( !pURLBox->IsTravelSelect() && aName.Len() )
     {
+/*
         aName = URIHelper::SmartRelToAbs( aName );
         SfxPickList_Impl*  pPickList = SfxPickList_Impl::Get();
         SfxPickEntry_Impl* pEntry = pPickList->GetHistoryPickEntryFromTitle( aName );
         if ( !pEntry )
             pPickList->SetCurHistoryPos( pURLBox->GetEntryPos( aName ) );
-        pURLBox->OpenURL( pEntry, aName, FALSE );
+ */
+        pURLBox->OpenURL( aName, FALSE );
     }
 
     return 1L;
@@ -879,12 +916,25 @@ IMPL_LINK( SfxURLToolBoxControl_Impl, SelectHdl, void*, pVoid )
 IMPL_LINK( SfxURLToolBoxControl_Impl, OpenHdl, void*, pVoid )
 {
     SfxURLBox* pURLBox = GetURLBox();
-    SfxPickEntry_Impl* pEntry = SfxPickList_Impl::Get()->GetHistoryPickEntryFromTitle( pURLBox->GetText() );
-    pURLBox->OpenURL( pEntry, pURLBox->GetText(), pURLBox->IsCtrlOpen() );
+    pURLBox->OpenURL( pURLBox->GetText(), pURLBox->IsCtrlOpen() );
     SfxViewFrame* pFrm = SfxViewFrame::Current();
     if( pFrm )
         pFrm->GetFrame()->GrabFocusOnComponent_Impl();
     return 1L;
+}
+
+String SfxURLBox::GetURL()
+{
+    String aURL;
+    INetURLObject aObj( GetText() );
+    if ( aObj.GetProtocol() == INET_PROT_NOT_VALID )
+    {
+        String aName = ParseSmart( GetText(), aBaseURL, SvtPathOptions().GetWorkPath() );
+        if ( aName.Len() )
+            aObj.SetURL( aName );
+    }
+
+    return aObj.GetMainURL();
 }
 
 //***************************************************************************
@@ -929,17 +979,7 @@ void SfxURLToolBoxControl_Impl::StateChanged
         String aRep( pURL->GetValue() );
         INetURLObject aURL( aRep );
         INetProtocol eProt = aURL.GetProtocol();
-        if ( eProt == INET_PROT_FILE ||
-             eProt == INET_PROT_FTP  ||
-             eProt == INET_PROT_NEWS ||
-             eProt == INET_PROT_POP3 ||
-             eProt == INET_PROT_IMAP ||
-             eProt == INET_PROT_OUT  ||
-             eProt == INET_PROT_HTTP ||
-             eProt == INET_PROT_HTTPS )
-            pURLBox->SetText( aURL.GetURLNoPass() );
-        else
-            pURLBox->SetText( String() );
+        pURLBox->SetText( aURL.GetURLNoPass() );
     }
 }
 
