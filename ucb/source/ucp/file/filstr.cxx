@@ -1,3 +1,13 @@
+#ifndef _COM_SUN_STAR_IO_IOEXCEPTION_HPP_
+#include "com/sun/star/io/IOException.hpp"
+#endif
+#ifndef _COM_SUN_STAR_UNO_RUNTIMEEXCEPTION_HPP_
+#include "com/sun/star/uno/RuntimeException.hpp"
+#endif
+#ifndef _OSL_DIAGNOSE_H_
+#include "osl/diagnose.h"
+#endif
+
 #ifndef _FILSTR_HXX_
 #include "filstr.hxx"
 #endif
@@ -96,7 +106,18 @@ XStream_impl::XStream_impl( shell* pMyShell,const rtl::OUString& aUncPath )
 
 XStream_impl::~XStream_impl()
 {
-    closeStream();
+    try
+    {
+        closeStream();
+    }
+    catch (io::IOException const &)
+    {
+        OSL_ENSURE(false, "unexpected situation");
+    }
+    catch (uno::RuntimeException const &)
+    {
+        OSL_ENSURE(false, "unexpected situation");
+    }
 }
 
 
