@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: dvo $ $Date: 2001-03-29 16:26:25 $
+ *  last change: $Author: mib $ $Date: 2001-04-06 04:58:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -629,8 +629,11 @@ void XMLTextParagraphExport::exportListChange(
 
 XMLTextParagraphExport::XMLTextParagraphExport(
         SvXMLExport& rExp,
-        SvXMLAutoStylePoolP & rASP,
-        sal_Int32 nProg ) :
+        SvXMLAutoStylePoolP & rASP
+#if SUPD < 628 && !defined( TEST_MIB )
+        , sal_Int32 nProg
+#endif
+        ) :
     XMLStyleExport( rExp, OUString(), &rASP ),
 //  rExport( rExp ),
     rAutoStylePool( rASP ),
@@ -726,7 +729,11 @@ XMLTextParagraphExport::XMLTextParagraphExport(
     sRubyText(RTL_CONSTASCII_USTRINGPARAM("RubyText")),
     sRubyAdjust(RTL_CONSTASCII_USTRINGPARAM("RubyAdjust")),
     sRubyCharStyleName(RTL_CONSTASCII_USTRINGPARAM("RubyCharStyleName")),
+#if SUPD < 628 && !defined( TEST_MIB )
     nProgress( nProg )
+#else
+    bProgress( sal_False )
+#endif
 {
     UniReference < XMLPropertySetMapper > xPropMapper =
         new XMLTextPropertySetMapper( TEXT_PROP_MAP_PARA );
@@ -1301,7 +1308,7 @@ void XMLTextParagraphExport::exportParagraph(
     if( bProgress )
     {
         ProgressBarHelper *pProgress = GetExport().GetProgressBarHelper();
-            pProgress->SetValue( ++nProgress );
+            pProgress->SetValue( pProgress->GetValue()+1 );
     }
 
     Reference < XPropertySet > xPropSet( rTextContent, UNO_QUERY );

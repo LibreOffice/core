@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtstyle.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mtg $ $Date: 2001-03-30 10:29:33 $
+ *  last change: $Author: mib $ $Date: 2001-04-06 04:58:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,6 +175,16 @@ void XMLTextParagraphExport::exportStyleAttributes(
                                       sXML_master_page_name,
                                       sName );
         }
+    }
+
+#if SUPD < 628
+    if( nProgress )
+#else
+    if( bProgress )
+#endif
+    {
+        ProgressBarHelper *pProgress = GetExport().GetProgressBarHelper();
+            pProgress->SetValue( pProgress->GetValue()+2 );
     }
 }
 
