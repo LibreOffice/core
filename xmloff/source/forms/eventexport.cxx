@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventexport.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-02 15:55:28 $
+ *  last change: $Author: fs $ $Date: 2001-08-27 16:56:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@
 #ifndef _XMLOFF_FORMS_STRINGS_HXX_
 #include "strings.hxx"
 #endif
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
+#endif
 
 //.........................................................................
 namespace xmloff
@@ -105,11 +108,23 @@ namespace xmloff
             rMappedEvent.realloc(3);
             // ... the type
             rMappedEvent[0] = PropertyValue(EVENT_TYPE, -1, makeAny(pEvents->ScriptType), PropertyState_DIRECT_VALUE);
+
+            sLocalMacroName = pEvents->ScriptCode;
+            sLibrary = ::rtl::OUString();
+            if ( 0 == pEvents->ScriptType.compareToAscii( "StarBasic" ) )
+            {   // for StarBasic, the library name is part of the ScriptCode
+                sal_Int32 nPrefixLen = sLocalMacroName.indexOf( ':' );
+                DBG_ASSERT( 0 <= nPrefixLen, "OEventDescriptorMapper::OEventDescriptorMapper: invalid script code prefix!" );
+                if ( 0 <= nPrefixLen )
+                {
+                    sLibrary = sLocalMacroName.copy( 0, nPrefixLen );
+                    sLocalMacroName.copy( nPrefixLen + 1 );
+                }
+            }
+
             // the library
-            // (empty 'til now ... meaning not clear)
             rMappedEvent[1] = PropertyValue(EVENT_LIBRARY, -1, makeAny(sLibrary), PropertyState_DIRECT_VALUE);
             // and the macro name
-            sLocalMacroName = pEvents->ScriptCode;
             rMappedEvent[2] = PropertyValue(EVENT_LOCALMACRONAME, -1, makeAny(sLocalMacroName), PropertyState_DIRECT_VALUE);
         }
     }
@@ -173,6 +188,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/01/02 15:55:28  fs
+ *  initial checkin - helper for exporting script events
+ *
  *
  *  Revision 1.0 21.12.00 12:16:08  fs
  ************************************************************************/
