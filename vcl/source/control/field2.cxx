@@ -2,9 +2,9 @@
  *
  *  $RCSfile: field2.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2003-08-07 11:59:02 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 07:42:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2489,7 +2489,7 @@ static BOOL ImplTimeGetValue( const XubString& rStr, Time& rTime,
     if ( eFormat != TIMEF_SEC_CS )
     {
         if ( nSepPos == STRING_NOTFOUND )
-            return FALSE;
+            nSepPos = aStr.Len();
         nHour = (short)aStr.Copy( 0, nSepPos ).ToInt32();
         aStr.Erase( 0, nSepPos+1 );
 
