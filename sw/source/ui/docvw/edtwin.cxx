@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-08 13:01:56 $
+ *  last change: $Author: jp $ $Date: 2001-10-10 17:55:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1968,7 +1968,15 @@ void SwEditWin::MouseButtonDown(const MouseEvent& rMEvt)
                         {
                             rView.NoRotate();
                             rSh.HideCrsr();
-                            if( rSh.SelectObj( aDocPos, FALSE, rMEvt.IsMod1() ) )
+
+                            BOOL bUnLockView = !rSh.IsViewLocked();
+                            rSh.LockView( TRUE );
+                            BOOL bSelObj = rSh.SelectObj( aDocPos,
+                                                    FALSE, rMEvt.IsMod1() );
+                            if( bUnLockView )
+                                rSh.LockView( FALSE );
+
+                            if( bSelObj )
                             {
                                 // falls im Macro der Rahmen deselektiert
                                 // wurde, muss nur noch der Cursor
@@ -3398,6 +3406,9 @@ BOOL SwEditWin::EnterDrawMode(const MouseEvent& rMEvt, const Point& aDocPos)
 
     if ( pSdrView && pSdrView->IsTextEdit() )
     {
+        BOOL bUnLockView = !rSh.IsViewLocked();
+        rSh.LockView( TRUE );
+
         rSh.EndTextEdit(); // Danebengeklickt, Ende mit Edit
         rSh.SelectObj( aDocPos );
         if ( !rSh.IsObjSelected() && !rSh.IsFrmSelected() )
@@ -3408,6 +3419,8 @@ BOOL SwEditWin::EnterDrawMode(const MouseEvent& rMEvt, const Point& aDocPos)
             SwEditWin::nDDStartPosX = aDocPos.X();
             bFrmDrag = TRUE;
         }
+        if( bUnLockView )
+            rSh.LockView( FALSE );
         rView.AttrChangedNotify( &rSh );
         return TRUE;
     }
@@ -3906,226 +3919,4 @@ void QuickHelpData::FillStrArr( SwWrtShell& rSh, const String& rWord )
     }
 }
 
-
-/***********************************************************************
-
-        $Log: not supported by cvs2svn $
-        Revision 1.10  2001/09/11 15:10:28  jp
-        Task #91678#: 'selection clipbord' implemented
-
-        Revision 1.9  2001/05/08 19:13:33  jp
-        Bug #86635#: download filter avaiable
-
-        Revision 1.8  2001/04/18 07:49:09  ama
-        Fix #78807#: Anchor dragging with page scrolling
-
-        Revision 1.7  2001/03/23 15:55:45  jp
-        use new Drag&Drop / Clipboard API
-
-        Revision 1.6  2001/01/25 20:02:32  jp
-        use calendarwrapper instead of international
-
-        Revision 1.5  2000/11/29 14:52:48  jp
-        Bug #80898#: Start QuickHelp - set correct cursor flags
-
-        Revision 1.4  2000/11/13 12:12:22  jp
-        must/should changes in Command handler
-
-        Revision 1.3  2000/10/25 15:35:11  jp
-        use CharClass/BreakIt instead of old WordSelection
-
-        Revision 1.2  2000/10/05 12:13:21  jp
-        should change: remove image
-
-        Revision 1.1.1.1  2000/09/18 17:14:35  hr
-        initial import
-
-        Revision 1.776  2000/09/18 16:05:23  willem.vandorp
-        OpenOffice header added.
-
-        Revision 1.775  2000/09/08 08:12:50  os
-        Change: Set/Toggle/Has/Knows/Show/GetChildWindow
-
-        Revision 1.774  2000/09/07 16:06:14  os
-        change: SFX_DISPATCHER/SFX_BINDINGS removed
-
-        Revision 1.773  2000/09/07 15:59:21  os
-        change: SFX_DISPATCHER/SFX_BINDINGS removed
-
-        Revision 1.772  2000/07/18 18:30:46  jp
-        KeyInput: start a timer if AnyInput don't call the KeyInput again, for flush the data
-
-        Revision 1.771  2000/06/28 09:40:29  os
-        #76471# call FN_EDIT_FIELD via SfxBindings instead of SfxDispatcher
-
-        Revision 1.770  2000/06/13 14:56:20  os
-        #76167# character background color assignment corrected
-
-        Revision 1.769  2000/06/13 10:00:15  os
-        using UCB
-
-        Revision 1.768  2000/06/09 13:35:02  ama
-        Fix: No assert for COMMAND_CURSORPOS
-
-        Revision 1.767  2000/05/26 07:21:29  os
-        old SW Basic API Slots removed
-
-        Revision 1.766  2000/05/24 10:39:15  jp
-        Fix for solaris compiler
-
-        Revision 1.765  2000/05/19 13:12:42  jp
-        Changes for Unicode
-
-        Revision 1.764  2000/05/19 11:04:59  jp
-        Changes for Unicode
-
-        Revision 1.763  2000/05/10 11:54:57  os
-        Basic API removed
-
-        Revision 1.762  2000/05/09 14:46:33  os
-        BASIC interface partially removed
-
-        Revision 1.761  2000/05/03 09:04:35  os
-        #75368# prevent hyperlink execution if watercan mode is activated
-
-        Revision 1.760  2000/04/20 12:55:18  os
-        GetName() returns String&
-
-        Revision 1.759  2000/04/18 15:18:16  os
-        UNICODE
-
-        Revision 1.758  2000/03/03 15:16:59  os
-        StarView remainders removed
-
-        Revision 1.757  2000/02/11 14:44:59  hr
-        #70473# changes for unicode ( patched by automated patchtool )
-
-        Revision 1.756  2000/02/09 12:02:37  jp
-        Task #72684#: AutoText expand only with return-Key
-
-        Revision 1.755  2000/01/13 21:28:12  jp
-        Task #71894#: new Options for SW-AutoComplete
-
-        Revision 1.754  1999/12/06 18:19:55  jp
-        Bug #70535#: Wheelcommands - hide ShadowCursor
-
-        Revision 1.753  1999/11/10 09:38:34  ama
-        Fix #69089#: HitHandle and hit anchor
-
-        Revision 1.752  1999/10/19 12:24:44  os
-        call authority-entry dialog on double click
-
-        Revision 1.751  1999/10/12 14:33:19  jp
-        Bug #69139#: DTOR - stop QuickHelpData only if the WrtShell exist
-
-        Revision 1.750  1999/10/12 13:39:17  ama
-        Fix #69089#: Use sdr-anchor-handle
-
-        Revision 1.749  1999/10/11 20:10:29  jp
-        Bug #68496#: append paragraph behind a section
-
-        Revision 1.748  1999/10/08 09:42:58  os
-        #69059# last cast from GetpApp to SfxApplication* removed
-
-        Revision 1.747  1999/10/06 08:41:11  jp
-        Bug #68761#: MouseMove - use new function GetFmtFromAnyObj
-
-        Revision 1.746  1999/08/27 09:34:38  JP
-        no cast from GetpApp to SfxApp
-
-
-      Rev 1.745   27 Aug 1999 11:34:38   JP
-   no cast from GetpApp to SfxApp
-
-      Rev 1.744   06 Aug 1999 16:48:18   JP
-   Bug #68113#: MouseButtonDown - lockview before call SelectObject
-
-      Rev 1.743   06 Jul 1999 20:06:50   JP
-   Bug #67360#: MouseMove - check for aditional mode
-
-      Rev 1.742   17 Jun 1999 09:36:30   JP
-   Bug #66927#: KeyInput - fill AutoCompleteList only with words which has lower count of characters
-
-      Rev 1.741   27 May 1999 13:00:40   OS
-   Einf?gen/Bearbeiten von Spalten ueberarbeitet
-
-      Rev 1.740   11 May 1999 20:09:22   HJS
-   includes
-
-      Rev 1.739   27 Apr 1999 14:50:20   JP
-   Bug #65389#: MouseButtonUp - im HoldSelection auf jedenfall das EndDrag rufen
-
-      Rev 1.738   26 Apr 1999 12:20:14   KZ
-   #include <svtools/args.hxx> eingefuegt
-
-      Rev 1.737   23 Apr 1999 17:02:32   JP
-   Bug #65289#: MouseMove: synthetische Moves/ButtonDowns ignorieren
-
-      Rev 1.736   22 Apr 1999 12:33:40   JP
-   Bug #65171#: UpdatePointer - bei ApplyStyle den richtigen MousePointer setzen
-
-      Rev 1.735   19 Apr 1999 13:38:44   OS
-   #64780# Notizen und Scripts in geschuetzten Bereichen
-
-      Rev 1.734   01 Apr 1999 15:26:38   JP
-   Bug #64154#: KeyInput - beim AutoComplete die schon eingegebenen Buchstaben nicht entfernen
-
-      Rev 1.733   17 Mar 1999 11:31:40   JP
-   Task #63576#: KeyInput - das AutoComplete-Flag von der OffApp erfragen
-
-      Rev 1.732   10 Mar 1999 09:40:30   JP
-   Task #61405#: AutoCompletion von Woertern
-
-      Rev 1.731   09 Mar 1999 19:38:14   JP
-   Task #61405#: AutoCompletion von Woertern
-
-      Rev 1.730   08 Mar 1999 11:52:14   JP
-   Bug #62920#: aus readonly Docs Grafiken einfacher herausdraggen
-
-      Rev 1.729   01 Mar 1999 23:01:24   JP
-   Bug #62582#: InInProtectCntnt nur noch auswerten, wenn Cursor nicht im Readonly zugelassen ist
-
-      Rev 1.728   03 Feb 1999 13:59:58   JP
-   Bug #61399#: MouseButtonDown - CTRL auf Handels behandeln
-
-      Rev 1.727   28 Jan 1999 20:46:08   JP
-   Bug #61264#: MouseButtonDown - SHIFT-CTRL auf Handels behandeln
-
-      Rev 1.726   26 Jan 1999 11:01:24   AWO
-   Syntax
-
-      Rev 1.725   22 Jan 1999 16:56:44   JP
-   Bug Task #58677#: Crsr in Readonly Bereichen zulassen
-
-      Rev 1.724   20 Jan 1999 14:17:30   JP
-   Task #58677#: Crsr in Readonly Bereichen zulassen
-
-      Rev 1.723   19 Jan 1999 22:58:12   JP
-   Task #58677#: Crsr in Readonly Bereichen zulassen
-
-      Rev 1.722   17 Dec 1998 19:19:54   JP
-   Task #59490# ExtTextInput fuer japan./chine. Version
-
-      Rev 1.721   11 Dec 1998 12:47:42   MT
-   #59490# IME
-
-      Rev 1.720   11 Nov 1998 15:04:26   JP
-   Task #59308#: NoNum auch bei Outlines setzen
-
-      Rev 1.719   06 Nov 1998 14:43:04   OS
-   #57903# NumOff kann weg
-
-      Rev 1.718   03 Nov 1998 11:51:40   JP
-   Task #57916#: Vorbereitungen fuer den Selektionshandler vom Chart
-
-      Rev 1.717   25 Sep 1998 13:21:00   JP
-   Bug #56196#: KeyInput - Tab in der WebView ans Window weiterleiten, damit der SFX ggfs. was tun kann
-
-      Rev 1.716   24 Sep 1998 13:33:22   JP
-   Bug #55592#/#55931#: synthetische MouseMoves mit Ctrl-Taste sollten keine Selektion anfangen
-
-      Rev 1.715   10 Sep 1998 10:39:28   OS
-   #56290# Rahmenvorlage per Giesskanne auch ohne Selektion
-
-**********************************************************************/
 
