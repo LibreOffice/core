@@ -34,12 +34,12 @@ include $(SETTINGS)/stdtarget.mk
 
 #$(BIN_DIR)$(PS)rdbmaker -BUCR -bUCR -O$(OUT_BIN)$(PS)DocumentLoader.rdb $(TYPES) $(BIN_DIR)$(PS)$(DKREGISTRYNAME)
 
-$(TYPEFLAGFILE) : $(BIN_DIR)$(PS)$(DKREGISTRYNAME)
+$(TYPEFLAGFILE) : $(DKREGISTRYNAME)
 	@echo $(TYPEFILES)
 	-$(DEL) $@ $(OUT_BIN)$(PS)DocumentLoader.rdb
 	@echo Building for $(MAKECMDGOALS)
-	$(BIN_DIR)$(PS)cppumaker -BUCR -O$(OUT)$(PS)inc$(PS)examples $(TYPES) $(BIN_DIR)$(PS)$(DKREGISTRYNAME)
-	$(BIN_DIR)$(PS)regmerge $(OUT_BIN)$(PS)DocumentLoader.rdb / $(BIN_DIR)$(PS)$(DKREGISTRYNAME)
+	$(BIN_DIR)$(PS)cppumaker -BUCR -O$(OUT)$(PS)inc$(PS)examples $(TYPES) $(DKREGISTRYNAME)
+	$(BIN_DIR)$(PS)regmerge $(OUT_BIN)$(PS)DocumentLoader.rdb / $(DKREGISTRYNAME)
 	-$(DEL) $(REGISTERFLAGFILE)
 	@echo bla > $@
 
