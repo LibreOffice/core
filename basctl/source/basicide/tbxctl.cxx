@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxctl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 12:19:24 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:41:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,11 @@
 #include <idetemp.hxx>
 #include <sfx2/imagemgr.hxx>
 #include <svtools/aeitem.hxx>
+
+using namespace ::com::sun::star::uno;
+
+
+static ::rtl::OUString aSubToolBarResName( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/insertcontrolsbar" ) );
 
 SFX_IMPL_TOOLBOX_CONTROL( TbxControls, SfxAllEnumItem )
 
@@ -164,9 +169,48 @@ SfxPopupWindowType TbxControls::GetPopupWindowType() const
     return(SFX_POPUPWINDOW_ONTIMEOUT);
 }
 
+IMPL_STATIC_LINK( TbxControls, StateChangedHdl_Impl, StateChangedInfo*, pStateChangedInfo )
+{
+    try
+    {
+        if ( pStateChangedInfo )
+        {
+            Reference< ::drafts::com::sun::star::frame::XLayoutManager > xLayoutManager( pStateChangedInfo->xLayoutManager );
+            if ( xLayoutManager.is() )
+            {
+                if ( pStateChangedInfo->bDisabled )
+                {
+                    xLayoutManager->destroyElement( aSubToolBarResName );
+                }
+                else
+                {
+                    xLayoutManager->createElement( aSubToolBarResName );
+                    xLayoutManager->requestElement( aSubToolBarResName );
+                }
+            }
+        }
+    }
+    catch ( Exception& )
+    {
+        // no update
+    }
+
+    delete pStateChangedInfo;
+
+    return 0;
+}
+
 void TbxControls::StateChanged( USHORT nSID, SfxItemState eState,
   const SfxPoolItem* pState )
 {
+    if ( nSID == SID_CHOOSE_CONTROLS )
+    {
+        StateChangedInfo* pStateChangedInfo = new StateChangedInfo;
+        pStateChangedInfo->xLayoutManager = getLayoutManager();
+        pStateChangedInfo->bDisabled = eState & SFX_ITEM_DISABLED;
+        Application::PostUserEvent( STATIC_LINK( 0, TbxControls, StateChangedHdl_Impl ), pStateChangedInfo );
+    }
+
     if( pState )
     {
         SfxAllEnumItem* pItem = PTR_CAST(SfxAllEnumItem, pState);
@@ -240,10 +284,8 @@ void TbxControls::Select( USHORT nModifier )
 SfxPopupWindow* TbxControls::CreatePopupWindow()
 {
     if ( GetSlotId() == SID_CHOOSE_CONTROLS )
-    {
-        rtl::OUString aSubToolBarResName( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/insertcontrolsbar" ));
         createAndPositionSubToolBar( aSubToolBarResName );
-    }
+
 /*
     if (GetId() == SID_CHOOSE_CONTROLS)
     {
