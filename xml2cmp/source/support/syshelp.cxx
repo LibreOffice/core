@@ -2,9 +2,9 @@
  *
  *  $RCSfile: syshelp.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: np $ $Date: 2002-08-08 16:07:58 $
+ *  last change: $Author: hr $ $Date: 2003-04-15 18:43:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,8 +222,8 @@ GatherFileNames( List<Simstr> &     o_sFiles,
     if (++nAliveCounter % 100 == 1)
         std::cout << "." << std::flush;
 
-    strcpy(sFilter, i_sSrcDirectory);
-    strcat(sFilter,C_sXML_END);
+    strcpy(sFilter, i_sSrcDirectory);       // STRCPY SAFE HERE
+    strcat(sFilter,C_sXML_END);             // STRCAT SAFE HERE
 
     hFile = _findfirst( sFilter, &aEntry );
     for ( bFindMore = hFile == -1;
