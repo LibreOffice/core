@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxaccessiblecomponent.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mt $ $Date: 2002-03-13 12:17:30 $
+ *  last change: $Author: tbe $ $Date: 2002-03-25 10:31:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,15 @@
 #include <drafts/com/sun/star/accessibility/XAccessibleEventListener.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_AWT_KEYEVENT_HPP_
+#include <com/sun/star/awt/KeyEvent.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_KEYMODIFIER_HPP_
+#include <com/sun/star/awt/KeyModifier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_KEY_HPP_
+#include <com/sun/star/awt/Key.hpp>
+#endif
 
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
@@ -81,6 +90,11 @@
 #include <tools/debug.hxx>
 
 #include <unotools/accessiblestatesethelper.hxx>
+
+#ifndef MNEMONIC_CHAR
+#define MNEMONIC_CHAR               ((sal_Unicode)'~')
+#endif
+
 
 using namespace ::com::sun::star;
 using namespace ::drafts::com::sun::star;
@@ -571,7 +585,37 @@ void VCLXAccessibleComponent::grabFocus(  ) throw (uno::RuntimeException)
 uno::Any VCLXAccessibleComponent::getAccessibleKeyBinding() throw (uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-    return uno::Any();
+
+    uno::Any aRet;
+
+    if ( GetWindow() )
+    {
+        String sText = GetWindow()->GetText();
+        xub_StrLen nFound = sText.Search( MNEMONIC_CHAR );
+
+        if ( STRING_NOTFOUND != nFound && ++nFound < sText.Len() )
+        {
+            sText.ToUpperAscii();
+            sal_Unicode cChar = sText.GetChar( nFound );
+
+            if ( ( cChar >= '0' && cChar <= '9' ) || ( cChar >= 'A' && cChar <= 'Z' ) )
+            {
+                awt::KeyEvent aEvent;
+
+                if ( cChar >= '0' && cChar <= '9' )
+                    aEvent.KeyCode = awt::Key::NUM0 + cChar - '0';
+                else if ( cChar >= 'A' && cChar <= 'Z' )
+                    aEvent.KeyCode = awt::Key::A + cChar - 'A';
+
+                aEvent.KeyChar = cChar;
+                aEvent.KeyFunc = 0;
+                aEvent.Modifiers = awt::KeyModifier::MOD2;
+                aRet <<= aEvent;
+            }
+        }
+    }
+
+    return aRet;
 }
 
 // XAccessibleExtendedComponent
