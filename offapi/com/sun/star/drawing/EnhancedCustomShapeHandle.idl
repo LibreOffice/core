@@ -1,0 +1,135 @@
+/*************************************************************************
+ *
+ *  $RCSfile: EnhancedCustomShapeHandle.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: kz $ $Date: 2005-03-01 18:08:56 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_drawing_EnhancedCustomShapeHandle_idl__
+#define __com_sun_star_drawing_EnhancedCustomShapeHandle_idl__
+
+#ifndef __com_sun_star_drawing_EnhancedCustomShapeParameterPair_idl__
+#include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.idl>
+#endif
+
+//=============================================================================
+
+module com {  module sun {  module star {  module drawing {
+
+//=============================================================================
+
+/**
+  This service may be represented by a ::com::sun::star::beans::PropertyValue [].
+*/
+
+service EnhancedCustomShapeHandle
+{
+    /** Specifies if the x position of the handle is mirrored.
+    */
+    [optional, property] boolean MirroredX;
+
+    /** Specifies if the y position of the handle is mirrored.
+    */
+    [optional, property] boolean MirroredY;
+
+    /** Specifies if the handle directions are swapped if the shape is taller than wide.
+    */
+    [optional, property] boolean Switched;
+
+    /** If the property Polar is set, then the first value specifies the radius and the second
+        parameter the angle of the handle. Otherwise, if the handle is not polar, the first parameter
+        specifies the horizontal handle position, the vertical handle position is described by the
+        second parameter.
+    */
+    [optional, property] com::sun::star::drawing::EnhancedCustomShapeParameterPair Position;
+
+    /** If this attribute is set, the handle is a polar handle. The property specifies the center
+        position of the handle. If this attribute is set, the attributes RangeX and RangeY are ignored,
+        instead the attribute RadiusRange is used.
+    */
+    [optional, property] ::com::sun::star::drawing::EnhancedCustomShapeParameterPair Polar;
+
+    /** If the attribute RangeXMinimum is set, it specifies the horizontal minimum range of the handle.
+    */
+    [optional, property] ::com::sun::star::drawing::EnhancedCustomShapeParameter RangeXMinimum;
+
+    /** If the attribute RangeXMaximum is set, it specifies the horizontal maximum range of the handle.
+    */
+    [optional, property] ::com::sun::star::drawing::EnhancedCustomShapeParameter RangeXMaximum;
+
+    /** If the attribute RangeYMinimum is set, it specifies the vertical minimum range of the handle.
+    */
+    [optional, property] ::com::sun::star::drawing::EnhancedCustomShapeParameter RangeYMinimum;
+
+    /** If the attribute RangeYMaximum is set, it specifies the vertical maximum range of the handle.
+    */
+    [optional, property] ::com::sun::star::drawing::EnhancedCustomShapeParameter RangeYMaximum;
+
+    /** If this attribute is set, it specifies the minimum radius range that can be used for a polar handle.
+    */
+    [optional, property] ::com::sun::star::drawing::EnhancedCustomShapeParameter RadiusRangeMinimum;
+
+    /** If this attribute is set, it specifies the maximum radius range that can be used for a polar handle.
+    */
+    [optional, property] ::com::sun::star::drawing::EnhancedCustomShapeParameter RadiusRangeMaximum;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+
