@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lngsvcmgr.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: tl $ $Date: 2001-05-16 10:46:03 $
+ *  last change: $Author: tl $ $Date: 2001-06-06 10:47:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -656,7 +656,7 @@ LngSvcMgr::LngSvcMgr() :
     pAvailThesSvcs  = 0;
     pListenerHelper = 0;
 
-    aSaveTimer.SetTimeout( 5000 );
+    aSaveTimer.SetTimeout( 2000 );
     aSaveTimer.SetTimeoutHdl( LINK( this, LngSvcMgr, TimeOut ));
 }
 
@@ -1175,10 +1175,12 @@ void SAL_CALL
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    BOOL bCfgChgSuccess = TRUE;
-    INT16 nLanguage = LocaleToLanguage( rLocale );
+#ifdef DEBUG
+    const OUString *pImplNames = rServiceImplNames.getConstArray();
+#endif
 
-    if (bCfgChgSuccess  &&  LANGUAGE_NONE != nLanguage)
+    INT16 nLanguage = LocaleToLanguage( rLocale );
+    if (LANGUAGE_NONE != nLanguage)
     {
         if (0 == rServiceName.compareToAscii( SN_SPELLCHECKER ))
         {
@@ -1242,6 +1244,23 @@ BOOL LngSvcMgr::SaveCfgSvcs( const String &rServiceName )
 
         INT32 nLen = aLocales.getLength();
         const Locale *pLocale = aLocales.getConstArray();
+
+        Sequence< PropertyValue > aValues( nLen );
+        PropertyValue *pValues = aValues.getArray();
+        PropertyValue *pValue  = pValues;
+
+        // get node name to be used
+        const char *pNodeName = NULL;
+        if (pDsp == pSpellDsp)
+            pNodeName = "SpellCheckerList";
+        else if (pDsp == pThesDsp)
+            pNodeName = "ThesaurusList";
+        else if (pDsp == pHyphDsp)
+            pNodeName = "HyphenatorList";
+        else
+            DBG_ERROR( "node name missing" );
+        OUString aNodeName( A2OU(pNodeName) );
+
         for (INT32 i = 0;  i < nLen;  ++i)
         {
             Sequence< OUString > aSvcImplNames;
@@ -1266,35 +1285,14 @@ BOOL LngSvcMgr::SaveCfgSvcs( const String &rServiceName )
                 aCfgAny <<= aSvcImplNames;
             DBG_ASSERT( aCfgAny.hasValue(), "missing value for 'Any' type" );
 
-            // get node name to be used
-            const char *pNodeName = NULL;
-            if (pDsp == pSpellDsp)
-                pNodeName = "SpellCheckerList";
-            else if (pDsp == pThesDsp)
-                pNodeName = "ThesaurusList";
-            else if (pDsp == pHyphDsp)
-                pNodeName = "HyphenatorList";
-            else
-                DBG_ERROR( "node name missing" );
-            OUString aNodeName( A2OU(pNodeName) );
-
-            // build property value(s) to be set
-            Sequence< PropertyValue > aValues( 1 );
-            PropertyValue &rPropVal = aValues.getArray()[0];
             OUString aCfgLocaleStr( ConvertLanguageToIsoString(
                                         LocaleToLanguage( pLocale[i] ) ) );
-            rPropVal.Value  = aCfgAny;
-            rPropVal.Name   = aNodeName;
-            rPropVal.Name  += OUString::valueOf( (sal_Unicode)'/' );
-            rPropVal.Name  += aCfgLocaleStr;
-
-            // add new or replace existing entry.
-            //! First argument needs to be of <... cfg:type="set" ...> for
-            //! this function call. Second argument is sequence of
-            //! PropertyValues (name + value)
-            if (pNodeName)
-                bRes |= aCfg.SetSetProperties( aNodeName, aValues );
+            pValue->Value = aCfgAny;
+            pValue->Name  = aCfgLocaleStr;
+            pValue++;
         }
+        // change, add new or replace existing entries.
+        bRes |= aCfg.ReplaceSetProperties( aNodeName, aValues );
     }
 
     if( bRes )
@@ -1330,6 +1328,7 @@ static Sequence< OUString > GetLangSvcList( const Any &rVal )
             for (INT32 j = 0;  j < nSvcs;  ++j)
             {
                 OUString aImplName( pSvcName[j] );
+                DBG_ASSERT( aImplName.getLength(), "service impl-name missing" );
             }
         }
 #endif
@@ -1341,19 +1340,16 @@ static Sequence< OUString > GetLangSvcList( const Any &rVal )
 
 static Sequence< OUString > GetLangSvc( const Any &rVal )
 {
-    Sequence< OUString > aRes(1);
-
+    OUString aImplName;
     if (rVal.hasValue())
     {
-        rVal >>= aRes.getArray()[0];
-#ifdef DEBUG
-        OUString aImplName( aRes.getConstArray()[0] );
-#endif
+        rVal >>= aImplName;
+        //DBG_ASSERT( aImplName.getLength(), "service impl-name missing" );
     }
-    else
-    {
-        aRes.realloc( 0 );
-    }
+
+    Sequence< OUString > aRes( aImplName.getLength() ? 1 : 0 );
+    if (aRes.getLength())
+        aRes.getArray()[0] = aImplName;
 
     return aRes;
 }
@@ -1408,6 +1404,9 @@ Sequence< OUString > SAL_CALL
             aSvcImplNames = GetLangSvc( aValues.getConstArray()[0] );
     }
 
+#ifdef DEBUG
+    const OUString *pImplNames = aSvcImplNames.getConstArray();
+#endif
     return aSvcImplNames;
 }
 
