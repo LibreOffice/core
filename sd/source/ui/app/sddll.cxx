@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sddll.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 10:35:35 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 20:11:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,18 @@
 #endif
 #ifndef INCLUDED_SVTOOLS_MODULEOPTIONS_HXX
 #include <svtools/moduleoptions.hxx>
+#endif
+#ifndef _FM_FMOBJFAC_HXX
+#include <svx/fmobjfac.hxx>
+#endif
+#ifndef _SVX_SIIMPORT_HXX
+#include <svx/siimport.hxx>
+#endif
+#ifndef _SVDFIELD_HXX
+#include <svx/svdfield.hxx>
+#endif
+#ifndef _OBJFAC3D_HXX
+#include <svx/objfac3d.hxx>
 #endif
 
 #pragma hdrstop
@@ -151,6 +163,18 @@ void SdDLL::Init()
 
     // register your controllers here
     RegisterControllers();
+
+    // SvDraw-Felder registrieren
+    SdrRegisterFieldClasses();
+
+    // 3D-Objekt-Factory eintragen
+    E3dObjFactory();
+
+    // ::com::sun::star::form::component::Form-Objekt-Factory eintragen
+    FmFormObjFactory();
+
+    // factory for dummy import of old si-controls in 3.1 documents
+    SiImportFactory();
 
     // Objekt-Factory eintragen
     SdrObjFactory::InsertMakeUserDataHdl(LINK(&aSdObjectFactory, SdObjectFactory, MakeUserData));
