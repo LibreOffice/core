@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olemisc.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:55:17 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 15:10:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,8 @@
 #include <oleembobj.hxx>
 #include <olecomponent.hxx>
 
+#include "ownview.hxx"
+
 using namespace ::com::sun::star;
 
 //------------------------------------------------------
@@ -98,6 +100,7 @@ OleEmbeddedObject::OleEmbeddedObject( const uno::Reference< lang::XMultiServiceF
 , m_bStoreVisRepl( sal_True )
 , m_bNewVisReplInStream( sal_True )
 , m_bIsLink( sal_False )
+, m_pOwnView( NULL )
 {
 }
 
@@ -117,6 +120,7 @@ OleEmbeddedObject::OleEmbeddedObject( const uno::Reference< lang::XMultiServiceF
 , m_bStoreVisRepl( sal_True )
 , m_bNewVisReplInStream( sal_True )
 , m_bIsLink( bLink )
+, m_pOwnView( NULL )
 {
 }
 
@@ -242,6 +246,13 @@ void OleEmbeddedObject::Dispose()
         m_pInterfaceContainer->disposeAndClear( aSource );
         delete m_pInterfaceContainer;
         m_pInterfaceContainer = NULL;
+    }
+
+    if ( m_pOwnView )
+    {
+        m_pOwnView->Close();
+        m_pOwnView->release();
+        m_pOwnView = NULL;
     }
 
     if ( m_pOleComponent )
