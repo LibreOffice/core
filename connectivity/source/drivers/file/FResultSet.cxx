@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-17 10:32:56 $
+ *  last change: $Author: oj $ $Date: 2001-01-22 07:17:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -778,7 +778,16 @@ void SAL_CALL OResultSet::updateRow(  ) throw(SQLException, RuntimeException)
 {
     m_bRowUpdated = m_pTable->UpdateRow(m_aInsertRow.getBody(), m_aRow,Reference<XIndexAccess>(m_xColNames,UNO_QUERY));
     (*m_aInsertRow)[0] = (sal_Int32)(*m_aRow)[0];
-    m_aRow = m_aInsertRow;
+
+    OValueVector::iterator aIter = m_aInsertRow->begin();
+    for(sal_Int32 nPos = 0;aIter != m_aInsertRow->end();++aIter,++nPos)
+    {
+        if (aIter->isBound() )
+        {
+            (*m_aRow)[nPos] = (*aIter);
+        }
+    }
+    //  m_aRow = m_aInsertRow;
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OResultSet::deleteRow(  ) throw(SQLException, RuntimeException)
