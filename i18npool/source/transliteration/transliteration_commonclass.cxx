@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transliteration_commonclass.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-12 10:50:04 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 12:35:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,8 +127,8 @@ transliteration_commonclass::compareSubstring(
         sal_uInt32 strlen1;
         sal_uInt32 strlen2;
 
-        Sequence <long> offset1(2*len1);
-        Sequence <long> offset2(2*len2);
+        Sequence <sal_Int32> offset1(2*len1);
+        Sequence <sal_Int32> offset2(2*len2);
 
         OUString in_str1 = this->transliterate(str1, off1, len1, offset1);
         OUString in_str2 = this->transliterate(str2, off2, len2, offset2);
