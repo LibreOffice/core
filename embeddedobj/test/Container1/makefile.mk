@@ -1,11 +1,10 @@
-
 #*************************************************************************
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Date: 2004-07-23 15:14:46 $
+#   last change: $Date: 2004-10-04 19:57:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -69,6 +68,10 @@ PACKAGE = embeddedobj$/test
 # --- Settings -----------------------------------------------------
 .INCLUDE: settings.mk
 
+# EXEC_CLASSPATH_TMP = \
+# 	$(foreach,i,$(JARFILES) $(SOLARBINDIR)$/$i)$(PATH_SEPERATOR)
+# EXEC_CLASSPATH = \
+# 	$(strip $(subst,!,$(PATH_SEPERATOR) $(EXEC_CLASSPATH_TMP:s/ /!/)))
 
 #----- compile .java files -----------------------------------------
 
@@ -76,15 +79,21 @@ JARFILES        = ridl.jar unoil.jar jurt.jar juh.jar jut.jar java_uno.jar
 
 JAVAFILES  = \
     EmbedContApp.java\
-    EmbedContFrame.java
+    EmbedContFrame.java\
+    NativeView.java\
+    WindowHelper.java\
+    JavaWindowPeerFake.java\
+    BitmapPainter.java\
+    PaintThread.java
 
 CLASSFILES = $(patsubst %.java,$(OUT_COMP_CLASS)/%.class,$(JAVAFILES))
+
 
 # --- Targets ------------------------------------------------------
 
 .INCLUDE: target.mk
 
-ALL : \
+ALL : $(OUT)$/slo$/nativeview.obj
     JavaStorageTestExample
 
 JavaStorageTestExample : $(CLASSFILES)
@@ -94,11 +103,19 @@ JavaStorageTestExample : $(CLASSFILES)
     @echo "dmake run"
     @echo --------------------------------------------------------------------------------
 
+# $(OUT)$/slo$/nativeview.obj:
+    # cd nativelib; dmake debug=t; cd ..
+
+# echo $(SOLARBINDIR)
+# echo $(EXEC_CLASSPATH)
+
 run: $(CLASSFILES)
-    java -classpath "$(CLASSPATH)" EmbedContFrame
+    +set PATH=$(PATH)$(PATH_SEPERATOR)$(JDK14PATH)$/jre$/bin && \
+    java -classpath "$(OUT)$/class;$(OUT)$/lib;$(OUT)$/bin;$(JDK14PATH)$/jre$/bin;$(JDK14PATH)$/jre$/lib;$(CLASSPATH)" embeddedobj.test.EmbedContFrame
 
 debug: $(CLASSFILES)
-    jdb -classpath "$(CLASSPATH)" EmbedContFrame
+    +set PATH=$(PATH)$(PATH_SEPERATOR)$(JDK14PATH)$/jre$/bin && \
+    jdb -classpath "$(OUT)$/class;$(OUT)$/lib;$(OUT)$/bin;$(CLASSPATH)" embeddedobj.test.EmbedContFrame
 
 clean :
     -$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_CLASS))
