@@ -2,9 +2,9 @@
  *
  *  $RCSfile: types.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:52:17 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 12:15:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,23 +65,19 @@
 #include "typelib/typeclass.h"
 #include "typelib/typedescription.h"
 
-namespace {
+namespace bridges { namespace cpp_uno { namespace shared {
 
-bool isSimpleTypeClass(typelib_TypeClass typeClass) {
+bool isSimpleType(typelib_TypeClass typeClass) {
     return typeClass <= typelib_TypeClass_DOUBLE
         || typeClass == typelib_TypeClass_ENUM;
 }
 
-}
-
-namespace bridges { namespace cpp_uno { namespace shared {
-
 bool isSimpleType(typelib_TypeDescriptionReference const * type) {
-    return isSimpleTypeClass(type->eTypeClass);
+    return isSimpleType(type->eTypeClass);
 }
 
 bool isSimpleType(typelib_TypeDescription const * type) {
-    return isSimpleTypeClass(type->eTypeClass);
+    return isSimpleType(type->eTypeClass);
 }
 
 bool relatesToInterfaceType(typelib_TypeDescription const * type) {
