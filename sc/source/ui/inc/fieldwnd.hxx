@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fieldwnd.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:06:10 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 15:09:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,7 +117,6 @@ private:
     long                    nFieldSize;     /// Maximum count of fields.
     long                    nFieldCount;    /// Count of existing fields.
     long                    nFieldSelected; /// Currently selected field.
-    bool                    mbAppRTL;       /// true = Application in RTL display mode.
 
     com::sun::star::uno::WeakReference< ::drafts::com::sun::star::accessibility::XAccessible > xAccessible;
     ScAccessibleDataPilotControl* pAccessible;
