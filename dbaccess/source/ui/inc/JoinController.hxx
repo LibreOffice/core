@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinController.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-08 08:14:36 $
+ *  last change: $Author: oj $ $Date: 2002-08-19 07:29:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,9 +67,6 @@
 #ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
 #include <com/sun/star/sdbc/XConnection.hpp>
 #endif
-#ifndef _UNDO_HXX
-#include <svtools/undo.hxx>
-#endif
 #ifndef _COM_SUN_STAR_IO_XOBJECTOUTPUTSTREAM_HPP_
 #include <com/sun/star/io/XObjectOutputStream.hpp>
 #endif
@@ -100,7 +97,6 @@ namespace dbaui
     class OJoinController : public OJoinController_BASE
     {
     protected:
-        SfxUndoManager  m_aUndoManager;
         ::std::vector<OTableConnectionData*>    m_vTableConnectionData;
         ::std::vector<OTableWindowData*>        m_vTableData;
 
@@ -109,8 +105,6 @@ namespace dbaui
 
         OAddTableDlg*   m_pAddTabDlg;       // is set by the first call of execute, the owner is the design view
 
-        sal_Bool        m_bEditable;        // is the control readonly or not
-        sal_Bool        m_bModified;        // is the data modified
         sal_Bool        m_bViewsAllowed;    // true when the Add Table dialog should also show views
 
         // state of a feature. 'feature' may be the handle of a ::com::sun::star::util::URL somebody requested a dispatch interface for OR a toolbar slot.
@@ -121,6 +115,8 @@ namespace dbaui
         virtual ~OJoinController();
     public:
         OJoinController(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM);
+
+        virtual void setModified(sal_Bool _bModified=sal_True);
 
         /** erase the data in the data vector
             @param  _pData
@@ -134,22 +130,9 @@ namespace dbaui
         void SaveTabWinsPosSize( OJoinTableView::OTableWindowMap* pTabWinList, long nOffsetX, long nOffsetY );
 
         // should the statement be parsed by our own sql parser
-        sal_Bool        isReadOnly()            const { return !m_bEditable; }
-        sal_Bool        isModified()            const { return m_bModified; }
-        sal_Bool        isViewAllowed()         const { return m_bViewsAllowed; }
-
-        virtual void    setModified(sal_Bool _bModified=sal_True);
+        inline sal_Bool     isViewAllowed()         const { return m_bViewsAllowed; }
 
         void            SaveTabWinPosSize(OTableWindow* pTabWin, long nOffsetX, long nOffsetY);
-
-        // need for undo's and redo's
-        SfxUndoManager* getUndoMgr();
-
-        /** addUndoActionAndInvalidate adds an undo action to the undoManager,
-            additionally invalidates the UNDO and REDO slot
-            @param  pAction the undo action to add
-        */
-        void addUndoActionAndInvalidate(SfxUndoAction *pAction);
 
         // XEventListener
         virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException);

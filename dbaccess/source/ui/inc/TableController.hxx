@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-25 07:00:49 $
+ *  last change: $Author: oj $ $Date: 2002-08-19 07:29:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,9 +73,6 @@
 #ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATTER_HPP_
 #include <com/sun/star/util/XNumberFormatter.hpp>
 #endif
-#ifndef _UNDO_HXX
-#include <svtools/undo.hxx>
-#endif
 #ifndef _COM_SUN_STAR_IO_XOBJECTOUTPUTSTREAM_HPP_
 #include <com/sun/star/io/XObjectOutputStream.hpp>
 #endif
@@ -120,9 +117,8 @@ namespace dbaui
         OTypeInfo*      m_pTypeInfo;            // fall back when type is unkown because database driver has a failure
 
         sal_Bool        m_bAllowAutoIncrementValue; // no : 1 NO BIT , is true when the datasource has a AutoIncrementValue property in their info property
-        sal_Bool        m_bEditable : 1;        // is the control readonly or not
         sal_Bool        m_bModified : 1;        // is the data modified
-        sal_Bool        m_bNew : 1;             // is true when we create a new table
+        sal_Bool        m_bNew      : 1;        // is true when we create a new table
 
 
         void reSyncRows();
@@ -155,10 +151,9 @@ namespace dbaui
         void        doEditIndexes();
         sal_Bool    doSaveDoc(sal_Bool _bSaveAs);
 
+        virtual ~OTableController();
     public:
         OTableController(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM);
-
-        ~OTableController();
 
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       getTable() { return m_xTable;}
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >    getNumberFormatter() const  { return m_xFormatter; }
@@ -167,13 +162,12 @@ namespace dbaui
         sal_Bool isAddAllowed()     const;
         sal_Bool isDropAllowed()    const;
         sal_Bool isAlterAllowed()   const;
-        sal_Bool isReadOnly()       const { return !m_bEditable; }
-        sal_Bool isModified()       const { return m_bModified; }
+
 
         inline sal_Bool                 isAutoIncrementValueEnabled()   const { return m_bAllowAutoIncrementValue; }
         inline const ::rtl::OUString&   getAutoIncrementValue()         const { return m_sAutoIncrementValue; }
 
-        void     setModified(sal_Bool _bModified=sal_True);
+        virtual void setModified(sal_Bool _bModified=sal_True);
 
         //  const ::connectivity::OSQLParseNode* getParseTree() const { return m_aSqlIterator.getParseTree();}
         // need for undo's and redo's
