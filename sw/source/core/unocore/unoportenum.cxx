@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoportenum.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-10 21:12:38 $
+ *  last change: $Author: os $ $Date: 2001-01-23 15:02:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -555,14 +555,20 @@ Reference<XTextRange> lcl_ExportHints(SwpHints* pHints,
                     ePortionType = PORTION_TEXT;
                 break;
                 case RES_TXTATR_REFMARK:
-                    pUnoCrsr->Right(1);
-                    bAttrFound = sal_True;
+                    if(!pAttr->GetEnd())
+                    {
+                        pUnoCrsr->Right(1);
+                        bAttrFound = sal_True;
+                    }
                     lcl_InsertRefMarkPortion(
                         rPortionArr, pUnoCrsr, xParent, pAttr, FALSE);
                     ePortionType = PORTION_TEXT;
-                    if(*pUnoCrsr->GetPoint() < *pUnoCrsr->GetMark())
-                            pUnoCrsr->Exchange();
-                    pUnoCrsr->DeleteMark();
+                    if(!pAttr->GetEnd())
+                    {
+                        if(*pUnoCrsr->GetPoint() < *pUnoCrsr->GetMark())
+                                pUnoCrsr->Exchange();
+                        pUnoCrsr->DeleteMark();
+                    }
                 break;
                 default:
                     DBG_ERROR("was fuer ein Attribut?");
