@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtrtf.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 14:14:48 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:28:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -998,6 +998,8 @@ void SwRTFWriter::OutRTFFontTab()
 
 void SwRTFWriter::OutRTFStyleTab()
 {
+    USHORT n;
+
     // das 0-Style ist das Default, wird nie ausgegeben !!
     USHORT nArrLen = pDoc->GetTxtFmtColls()->Count();
     if( nArrLen <= 1 && pDoc->GetCharFmts()->Count() <= 1 )
@@ -1007,7 +1009,7 @@ void SwRTFWriter::OutRTFStyleTab()
     Strm() << SwRTFWriter::sNewLine << '{' << sRTF_STYLESHEET;
 
     // das Default-TextStyle wird nicht mit ausgegeben !!
-    for( USHORT n = 1; n < nArrLen; ++n )
+    for( n = 1; n < nArrLen; ++n )
     {
         const SwTxtFmtColl* pColl = (*pDoc->GetTxtFmtColls())[ n ];
         pAttrSet = &pColl->GetAttrSet();
@@ -1217,6 +1219,8 @@ void SwRTFWriter::OutBookmarks( xub_StrLen nCntntPos )
 
 void SwRTFWriter::OutFlyFrm()
 {
+    USHORT n;
+
     if( !pFlyPos )
         return;
 
@@ -1224,7 +1228,7 @@ void SwRTFWriter::OutFlyFrm()
     // und evt. auf das aktuelle Zeichen beziehen, aus.
 
     // suche nach dem Anfang der FlyFrames
-    for( USHORT n = 0; n < pFlyPos->Count() &&
+    for( n = 0; n < pFlyPos->Count() &&
             (*pFlyPos)[n]->GetNdIndex().GetIndex() <
                 pCurPam->GetPoint()->nNode.GetIndex(); ++n )
         ;
