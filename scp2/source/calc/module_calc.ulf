@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module_calc.ulf,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 16:16:17 $
+ *  last change: $Author: rt $ $Date: 2004-08-12 08:13:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,8 +64,8 @@ de = "%PRODUCTNAME Calc"
 en-US = "%PRODUCTNAME Calc"
 
 [STR_DESC_MODULE_PRG_CALC]
-de = "Die Tabellenkalkulation des %PRODUCTNAME."
-en-US = "The %PRODUCTNAME spreadsheet program."
+de = "Berechnungen ausführen, Informationen analysieren und Listen in Tabellen verwalten mit %PRODUCTNAME Calc."
+en-US = "Perform calculation, analyze information and manage lists in spreadsheets by using %PRODUCTNAME Calc."
 
 [STR_NAME_MODULE_PRG_CALC_BIN]
 de = "Programmodul"
