@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undoanim.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 18:17:47 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 17:30:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,7 +131,7 @@ void UndoAnimation::Undo()
 
         mpImpl->mpPage->mxAnimationNode = xClone;
         if( mpImpl->mpPage->mpMainSequence.get() )
-            mpImpl->mpPage->mpMainSequence->init( xClone );
+            mpImpl->mpPage->mpMainSequence->reset( xClone );
     }
     catch( Exception& e )
     {
@@ -147,7 +147,7 @@ void UndoAnimation::Redo()
         Reference< XCloneable > xCloneAble( mpImpl->mxNewNode, UNO_QUERY_THROW );
         mpImpl->mpPage->mxAnimationNode.set( xCloneAble->createClone(), UNO_QUERY_THROW );
         if( mpImpl->mpPage->mpMainSequence.get() )
-            mpImpl->mpPage->mpMainSequence->init( mpImpl->mpPage->mxAnimationNode );
+            mpImpl->mpPage->mpMainSequence->reset( mpImpl->mpPage->mxAnimationNode );
     }
     catch( Exception& e )
     {
