@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScIndexEnumeration_NamedRangesEnumeration.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change:$Date: 2004-01-05 19:13:21 $
+ *  last change:$Date: 2005-01-25 15:48:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ public class ScIndexEnumeration_NamedRangesEnumeration extends TestCase {
         } catch ( com.sun.star.uno.Exception e ) {
             // Some exception occures.FAILED
             e.printStackTrace( log );
-            throw new StatusException( "Couldn³t create document", e );
+            throw new StatusException( "Couldn't create document", e );
         }
     }
 
