@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.36 $
-# Date:        $Date: 2005-01-18 15:07:38 $
+# Version:     $Revision: 1.37 $
+# Date:        $Date: 2005-01-18 16:13:37 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -1747,6 +1747,7 @@ ToFile( "SYSTEM_ODBC_HEADERS","@SYSTEM_ODBC_HEADERS@","e" );
 ToFile( "SYSTEM_CURL",       "@SYSTEM_CURL@",      "e" );
 ToFile( "CURL_CFLAGS",       "@CURL_CFLAGS@",      "e" );
 ToFile( "CURL_LIBS",         "@CURL_LIBS@",        "e" );
+ToFile( "SYSTEM_BOOST",      "@SYSTEM_BOOST@",     "e" );
 ToFile( "SYSTEM_NAS",        "@SYSTEM_NAS@",       "e" );
 ToFile( "NAS_INCLUDES",      "@NAS_INCLUDES@",     "e" );
 ToFile( "SYSTEM_NEON",       "@SYSTEM_NEON@",      "e" );
