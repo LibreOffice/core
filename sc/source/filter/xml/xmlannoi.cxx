@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlannoi.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 08:01:03 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 12:54:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,8 @@ ScXMLAnnotationContext::ScXMLAnnotationContext( ScXMLImport& rImport,
     bDisplay(sal_False),
     bHasTextP(sal_False),
     bHasPos(sal_False),
-    pShapeContext(NULL)
+    pShapeContext(NULL),
+    pCellContext(pTempCellContext)
 {
     uno::Reference<drawing::XShapes> xShapes (GetScImport().GetTables().GetCurrentXShapes());
     if (xShapes.is())
@@ -124,13 +125,13 @@ ScXMLAnnotationContext::ScXMLAnnotationContext( ScXMLImport& rImport,
     pCellContext = pTempCellContext;
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetTableAnnotationAttrTokenMap();
-    for( sal_Int16 i=0; i < nAttrCount; i++ )
+    for( sal_Int16 i=0; i < nAttrCount; ++i )
     {
-        rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
+        const rtl::OUString& sAttrName(xAttrList->getNameByIndex( i ));
         rtl::OUString aLocalName;
         USHORT nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName );
-        rtl::OUString sValue = xAttrList->getValueByIndex( i );
+        const rtl::OUString& sValue(xAttrList->getValueByIndex( i ));
 
         switch( rAttrTokenMap.Get( nPrefix, aLocalName ) )
         {
@@ -209,7 +210,7 @@ SvXMLImportContext *ScXMLAnnotationContext::CreateChildContext( USHORT nPrefix,
         }
         if(nParagraphCount)
             sOUText.append(static_cast<sal_Unicode>('\n'));
-        nParagraphCount++;
+        ++nParagraphCount;
         pContext = new ScXMLContentContext( GetScImport(), nPrefix, rLName, xAttrList, sOUText);
     }*/
 
