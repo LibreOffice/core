@@ -2,9 +2,9 @@
  *
  *  $RCSfile: main.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hro $ $Date: 2003-06-06 11:21:57 $
+ *  last change: $Author: hro $ $Date: 2003-06-10 13:09:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -589,7 +589,7 @@ static void WriteSOAPRequest( FILE *fp )
     {
         fprintf( fp,
             "<item>\n"
-            "<key xsi:type=\"xsd:string\">description.txt</key>\n"
+            "<key xsi:type=\"xsd:string\">stack.txt</key>\n"
             "<value xsi:type=\"xsd:string\"><![CDATA[" );
         fcopy( fp, fpin );
         fprintf( fp, "]]></value></item>\n" );
