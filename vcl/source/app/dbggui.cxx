@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbggui.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cp $ $Date: 2002-05-16 10:35:16 $
+ *  last change: $Author: ssa $ $Date: 2002-11-27 09:19:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -280,15 +280,6 @@ static sal_Char* pDbgHelpText[] =
 "einzuschalten, da (kein Leak vorrausgesetzt) jeder zu erkennende "
 "Speicherueberschreiber waehrend der Laufzeit eines Programms gefunden "
 "werden sollte.\n",
-"\n",
-"SysAlloc\n",
-"Wenn dieses Flag gesetzt ist, wird Speicher mit direkten Systemfunktionen"
-"angefordert und der Memory-Manager von SV umgangen. Dadurch ist es moeglich"
-"leistungsfaehigere Memory-Test-Tools einzusetzen. Es ist jedoch darauf zu"
-"achten, das nicht auf jedem System die Memory-Funktionen vom Compiler"
-"gerufen werden, sondern die Systemfunktionen. Dadurch ist man unter"
-"Windows 16-Bit auf ca. 4000 news begrenzt und unter OS2 werden immer"
-"4096 KB Bloecke angefordert.\n",
 "\n",
 "Windows 16-Bit und Debug-Tests\n",
 "Achtung: Wenn Memory-Tests an sind (ausser Initilize) wird niemals "
@@ -585,7 +576,6 @@ private:
     CheckBox        maMemLeakReport;
     CheckBox        maMemNewDel;
     CheckBox        maMemXtor;
-    CheckBox        maMemSysAlloc;
     GroupBox        maBox2;
 
     CheckBox        maProf;
@@ -710,7 +700,6 @@ DbgDialog::DbgDialog() :
     maMemLeakReport( this ),
     maMemNewDel( this ),
     maMemXtor( this ),
-    maMemSysAlloc( this ),
     maBox2( this ),
     maProf( this ),
     maRes( this ),
@@ -874,19 +863,6 @@ DbgDialog::DbgDialog() :
         maMemXtor.Check( TRUE );
     maMemXtor.SetPosSizePixel( LogicToPixel( Point( 205, 65 ), aAppMap ),
                                aButtonSize );
-    }
-
-    {
-    maMemSysAlloc.Show();
-    maMemSysAlloc.SetText( XubString( RTL_CONSTASCII_USTRINGPARAM( "System ~Alloc" ) ) );
-    if ( pData->nTestFlags & DBG_TEST_MEM_SYSALLOC )
-    {
-        maMemSysAlloc.Check( TRUE );
-        ClickHdl( &maMemSysAlloc );
-    }
-    maMemSysAlloc.SetClickHdl( LINK( this, DbgDialog, ClickHdl ) );
-    maMemSysAlloc.SetPosSizePixel( LogicToPixel( Point( 270, 65 ), aAppMap ),
-                                   aButtonSize );
     }
 
     {
@@ -1203,9 +1179,6 @@ IMPL_LINK( DbgDialog, ClickHdl, Button*, pButton )
         if ( maMemXtor.IsChecked() )
             aData.nTestFlags |= DBG_TEST_MEM_XTOR;
 
-        if ( maMemSysAlloc.IsChecked() )
-            aData.nTestFlags |= DBG_TEST_MEM_SYSALLOC;
-
         if ( maProf.IsChecked() )
             aData.nTestFlags |= DBG_TEST_PROFILING;
 
@@ -1267,19 +1240,6 @@ IMPL_LINK( DbgDialog, ClickHdl, Button*, pButton )
         aInfoDialog.SetText( XubString( RTL_CONSTASCII_USTRINGPARAM( "Debug InfoReport" ) ) );
         aInfoDialog.SetInfoText( aInfoText );
         aInfoDialog.Execute();
-    }
-    else if ( pButton == &maMemSysAlloc )
-    {
-        BOOL bEnable = maMemSysAlloc.IsChecked() == 0;
-        maMemInit.Enable( bEnable );
-        maMemOverwrite.Enable( bEnable );
-        maMemOverwriteFree.Enable( bEnable );
-        maMemPtr.Enable( bEnable );
-        maMemReport.Enable( bEnable );
-        maMemTrace.Enable( bEnable );
-        maMemLeakReport.Enable( bEnable );
-        maMemNewDel.Enable( bEnable );
-        maMemXtor.Enable( bEnable );
     }
 
     return 0;
