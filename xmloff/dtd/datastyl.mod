@@ -1,6 +1,6 @@
 <!--
 
-   $Id: datastyl.mod,v 1.8 2001-07-24 15:01:42 dvo Exp $
+   $Id: datastyl.mod,v 1.9 2001-11-23 18:57:36 nn Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -58,9 +58,12 @@
 <!ENTITY % any-number "( number:number | number:scientific-number | number:fraction )">
 <!ENTITY % number-style-content "( (number:text,(%any-number;,number:text?)?) | (%any-number;,number:text?) )">
 <!ELEMENT number:number-style ( style:properties?, %number-style-content;, style:map* )>
-<!ELEMENT number:number EMPTY>
+<!ELEMENT number:number ( number:embedded-text* )>
 <!ELEMENT number:scientific-number EMPTY>
 <!ELEMENT number:fraction EMPTY>
+
+<!ELEMENT number:embedded-text (#PCDATA)>
+<!ATTLIST number:embedded-text number:position %integer; #REQUIRED>
 
 <!ENTITY % currency-symbol-and-text "number:currency-symbol,number:text?">
 <!ENTITY % number-and-text "number:number,number:text?">

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumfi.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: nn $ $Date: 2001-11-05 14:42:29 $
+ *  last change: $Author: nn $ $Date: 2001-11-23 18:55:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,22 @@ struct SvXMLNumFmtEntry
 typedef SvXMLNumFmtEntry* SvXMLNumFmtEntryPtr;
 SV_DECL_PTRARR_DEL( SvXMLNumFmtEntryArr, SvXMLNumFmtEntryPtr, 4, 4 );
 
+struct SvXMLEmbeddedElement
+{
+    sal_Int32       nFormatPos;
+    rtl::OUString   aText;
+
+    SvXMLEmbeddedElement( sal_Int32 nFP, const rtl::OUString& rT ) :
+        nFormatPos(nFP), aText(rT) {}
+
+    //  comparison operators for PTRARR sorting - sorted by position
+    BOOL operator ==( const SvXMLEmbeddedElement& r ) const { return nFormatPos == r.nFormatPos; }
+    BOOL operator < ( const SvXMLEmbeddedElement& r ) const { return nFormatPos <  r.nFormatPos; }
+};
+
+typedef SvXMLEmbeddedElement* SvXMLEmbeddedElementPtr;
+SV_DECL_PTRARR_SORT_DEL( SvXMLEmbeddedElementArr, SvXMLEmbeddedElementPtr, 0, 4 );
+
 //-------------------------------------------------------------------------
 
 class SvXMLNumImpData
@@ -139,6 +155,7 @@ struct SvXMLNumberInfo
     sal_Int32   nDenomDigits;
     sal_Bool    bGrouping;
     sal_Bool    bDecReplace;
+    SvXMLEmbeddedElementArr aEmbeddedElements;
 
     SvXMLNumberInfo()
     {
@@ -165,6 +182,31 @@ public:
                                     const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
     virtual     ~SvXMLNumFmtElementContext();
+
+    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
+                                    const rtl::OUString& rLocalName,
+                                    const ::com::sun::star::uno::Reference<
+                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
+    virtual void Characters( const rtl::OUString& rChars );
+    virtual void EndElement();
+
+    void    AddEmbeddedElement( sal_Int32 nFormatPos, const rtl::OUString& rContent );
+};
+
+
+class SvXMLNumFmtEmbeddedTextContext : public SvXMLImportContext
+{
+    SvXMLNumFmtElementContext&  rParent;
+    rtl::OUStringBuffer         aContent;
+    sal_Int32                   nTextPosition;
+
+public:
+                SvXMLNumFmtEmbeddedTextContext( SvXMLImport& rImport, USHORT nPrfx,
+                                    const rtl::OUString& rLName,
+                                    SvXMLNumFmtElementContext& rParentContext,
+                                    const ::com::sun::star::uno::Reference<
+                                        ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
+    virtual     ~SvXMLNumFmtEmbeddedTextContext();
 
     virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
                                     const rtl::OUString& rLocalName,
@@ -402,6 +444,7 @@ static __FAR_DATA SvXMLEnumMapEntry aFormatSourceMap[] =
 //-------------------------------------------------------------------------
 
 SV_IMPL_PTRARR( SvXMLNumFmtEntryArr, SvXMLNumFmtEntryPtr );
+SV_IMPL_OP_PTRARR_SORT( SvXMLEmbeddedElementArr, SvXMLEmbeddedElementPtr );
 
 //-------------------------------------------------------------------------
 
@@ -644,6 +687,59 @@ void SvXMLNumFmtPropContext::EndElement()
 
 //-------------------------------------------------------------------------
 
+//
+//  SvXMLNumFmtEmbeddedTextContext
+//
+
+SvXMLNumFmtEmbeddedTextContext::SvXMLNumFmtEmbeddedTextContext( SvXMLImport& rImport,
+                                    USHORT nPrfx, const rtl::OUString& rLName,
+                                    SvXMLNumFmtElementContext& rParentContext,
+                                    const uno::Reference<xml::sax::XAttributeList>& xAttrList ) :
+    SvXMLImportContext( rImport, nPrfx, rLName ),
+    rParent( rParentContext ),
+    nTextPosition( 0 )
+{
+    sal_Int32 nAttrVal;
+
+    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+    for( sal_Int16 i=0; i < nAttrCount; i++ )
+    {
+        OUString sAttrName = xAttrList->getNameByIndex( i );
+        OUString sValue = xAttrList->getValueByIndex( i );
+        OUString aLocalName;
+        sal_uInt16 nPrefix = rImport.GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
+        if ( nPrefix == XML_NAMESPACE_NUMBER && IsXMLToken( aLocalName, XML_POSITION ) )
+        {
+            if ( SvXMLUnitConverter::convertNumber( nAttrVal, sValue, 0 ) )
+                nTextPosition = nAttrVal;
+        }
+    }
+}
+
+SvXMLNumFmtEmbeddedTextContext::~SvXMLNumFmtEmbeddedTextContext()
+{
+}
+
+SvXMLImportContext* SvXMLNumFmtEmbeddedTextContext::CreateChildContext(
+                                    USHORT nPrfx, const rtl::OUString& rLName,
+                                    const uno::Reference<xml::sax::XAttributeList>& xAttrList )
+{
+    // no elements supported - use default context
+    return new SvXMLImportContext( GetImport(), nPrfx, rLName );
+}
+
+void SvXMLNumFmtEmbeddedTextContext::Characters( const rtl::OUString& rChars )
+{
+    aContent.append( rChars );
+}
+
+void SvXMLNumFmtEmbeddedTextContext::EndElement()
+{
+    rParent.AddEmbeddedElement( nTextPosition, aContent.makeStringAndClear() );
+}
+
+//-------------------------------------------------------------------------
+
 sal_Bool lcl_ValidChar( sal_Unicode cChar, sal_uInt16 nFormatType )
 {
     //  see ImpSvNumberformatScan::Next_Symbol
@@ -668,6 +764,26 @@ sal_Bool lcl_ValidChar( sal_Unicode cChar, sal_uInt16 nFormatType )
         return sal_True;
 
     return sal_False;
+}
+
+void lcl_EnquoteIfNecessary( rtl::OUStringBuffer& rContent, sal_uInt16 nFormatType )
+{
+    if ( ( rContent.getLength() == 1 &&
+            lcl_ValidChar( rContent.charAt(0), nFormatType ) ) ||
+         ( rContent.getLength() == 2 &&
+             lcl_ValidChar( rContent.charAt(0), nFormatType ) &&
+             rContent.charAt(1) == ' ' ) )
+    {
+        //  don't quote single separator characters like space or percent,
+        //  or separator characters followed by space (used in date formats)
+    }
+    else
+    {
+        //  quote string literals
+        //! escape quotes in string
+        rContent.insert( 0, (sal_Unicode) '"' );
+        rContent.append( (sal_Unicode) '"' );
+    }
 }
 
 //
@@ -767,13 +883,44 @@ SvXMLImportContext* SvXMLNumFmtElementContext::CreateChildContext(
                                     USHORT nPrfx, const rtl::OUString& rLName,
                                     const uno::Reference<xml::sax::XAttributeList>& xAttrList )
 {
-    // no elements supported - use default context
-    return new SvXMLImportContext( GetImport(), nPrfx, rLName );
+    //  only number:number supports number:embedded-text child element
+
+    if ( nType == XML_TOK_STYLE_NUMBER &&
+         nPrfx == XML_NAMESPACE_NUMBER && IsXMLToken( rLName, XML_EMBEDDED_TEXT ) )
+    {
+        return new SvXMLNumFmtEmbeddedTextContext( GetImport(), nPrfx, rLName, *this, xAttrList );
+    }
+    else
+        return new SvXMLImportContext( GetImport(), nPrfx, rLName );
 }
 
 void SvXMLNumFmtElementContext::Characters( const rtl::OUString& rChars )
 {
     aContent.append( rChars );
+}
+
+void SvXMLNumFmtElementContext::AddEmbeddedElement( sal_Int32 nFormatPos, const rtl::OUString& rContent )
+{
+    if ( rContent.getLength() )
+    {
+        SvXMLEmbeddedElement* pObj = new SvXMLEmbeddedElement( nFormatPos, rContent );
+        if ( !aNumInfo.aEmbeddedElements.Insert( pObj ) )
+        {
+            //  there's already an element at this position - append text to existing element
+
+            delete pObj;
+            USHORT nElementCount = aNumInfo.aEmbeddedElements.Count();
+            for (USHORT i=0; i<nElementCount; i++)
+            {
+                pObj = aNumInfo.aEmbeddedElements[i];
+                if ( pObj->nFormatPos == nFormatPos )
+                {
+                    pObj->aText += rContent;
+                    break;
+                }
+            }
+        }
+    }
 }
 
 void SvXMLNumFmtElementContext::EndElement()
@@ -799,22 +946,7 @@ void SvXMLNumFmtElementContext::EndElement()
             }
             if ( aContent.getLength() )
             {
-                if ( ( aContent.getLength() == 1 &&
-                        lcl_ValidChar( aContent.charAt(0), rParent.GetType() ) ) ||
-                     ( aContent.getLength() == 2 &&
-                         lcl_ValidChar( aContent.charAt(0), rParent.GetType() ) &&
-                         aContent.charAt(1) == ' ' ) )
-                {
-                    //  don't quote single separator characters like space or percent,
-                    //  or separator characters followed by space (used in date formats)
-                }
-                else
-                {
-                    //  quote string literals
-                    //! escape quotes in string
-                    aContent.insert( 0, (sal_Unicode) '"' );
-                    aContent.append( (sal_Unicode) '"' );
-                }
+                lcl_EnquoteIfNecessary( aContent, rParent.GetType() );
                 rParent.AddToCode( aContent.makeStringAndClear() );
             }
             break;
@@ -1462,10 +1594,56 @@ void SvXMLNumFormatContext::AddNumber( const SvXMLNumberInfo& rInfo )
     if ( rInfo.bDecReplace )
         nGenPrec = 0;               // generate format without decimals...
 
+    sal_Bool bGrouping = rInfo.bGrouping;
+    USHORT nEmbeddedCount = rInfo.aEmbeddedElements.Count();
+    if ( nEmbeddedCount )
+        bGrouping = sal_False;      // grouping and embedded characters can't be used together
+
     String aNumStr;
     sal_uInt32 nStdIndex = pFormatter->GetStandardIndex( nFormatLang );
     pFormatter->GenerateFormat( aNumStr, nStdIndex, nFormatLang,
-                                rInfo.bGrouping, sal_False, nGenPrec, nLeading );
+                                bGrouping, sal_False, nGenPrec, nLeading );
+
+    if ( nEmbeddedCount )
+    {
+        //  insert embedded strings into number string
+        //  only the integer part is supported
+        //  nZeroPos is the string position where format position 0 is inserted
+
+        xub_StrLen nZeroPos = aNumStr.Search( pData->GetLocaleData( nFormatLang ).getNumDecimalSep() );
+        if ( nZeroPos == STRING_NOTFOUND )
+            nZeroPos = aNumStr.Len();
+
+        //  aEmbeddedElements is sorted - last entry has the largest position (leftmost)
+        const SvXMLEmbeddedElement* pLastObj = rInfo.aEmbeddedElements[nEmbeddedCount - 1];
+        sal_Int32 nLastFormatPos = pLastObj->nFormatPos;
+        if ( nLastFormatPos >= nZeroPos )
+        {
+            //  add '#' characters so all embedded texts are really embedded in digits
+            //  (there always has to be a digit before the leftmost embedded text)
+
+            xub_StrLen nAddCount = (xub_StrLen)nLastFormatPos + 1 - nZeroPos;
+            String aDigitStr;
+            aDigitStr.Fill( nAddCount, (sal_Unicode)'#' );
+            aNumStr.Insert( aDigitStr, 0 );
+            nZeroPos += nAddCount;
+        }
+
+        //  aEmbeddedElements is sorted with ascending positions - loop is from right to left
+        for (USHORT nElement = 0; nElement < nEmbeddedCount; nElement++)
+        {
+            const SvXMLEmbeddedElement* pObj = rInfo.aEmbeddedElements[nElement];
+            sal_Int32 nFormatPos = pObj->nFormatPos;
+            sal_Int32 nInsertPos = nZeroPos - nFormatPos;
+            if ( nFormatPos >= 0 && nInsertPos >= 0 )
+            {
+                rtl::OUStringBuffer aContent( pObj->aText );
+                lcl_EnquoteIfNecessary( aContent, nType );
+
+                aNumStr.Insert( String( aContent.makeStringAndClear() ), (xub_StrLen)nInsertPos );
+            }
+        }
+    }
 
     aFormatCode.append( aNumStr );
 

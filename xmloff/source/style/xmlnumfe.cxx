@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumfe.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: nn $ $Date: 2001-10-25 17:27:23 $
+ *  last change: $Author: nn $ $Date: 2001-11-23 18:55:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,6 +163,25 @@ public:
     void GetWasUsed(uno::Sequence<sal_Int32>& rWasUsed);
     void SetWasUsed(const uno::Sequence<sal_Int32>& rWasUsed);
 };
+
+//-------------------------------------------------------------------------
+
+struct SvXMLEmbeddedTextEntry
+{
+    sal_uInt16      nSourcePos;     // position in NumberFormat (to skip later)
+    sal_Int32       nFormatPos;     // resulting position in embedded-text element
+    rtl::OUString   aText;
+
+    SvXMLEmbeddedTextEntry( sal_uInt16 nSP, sal_Int32 nFP, const rtl::OUString& rT ) :
+        nSourcePos(nSP), nFormatPos(nFP), aText(rT) {}
+};
+
+typedef SvXMLEmbeddedTextEntry* SvXMLEmbeddedTextEntryPtr;
+SV_DECL_PTRARR_DEL( SvXMLEmbeddedTextEntryArr, SvXMLEmbeddedTextEntryPtr, 4, 4 );
+
+//-------------------------------------------------------------------------
+
+SV_IMPL_PTRARR( SvXMLEmbeddedTextEntryArr, SvXMLEmbeddedTextEntryPtr );
 
 //-------------------------------------------------------------------------
 
@@ -612,7 +631,8 @@ void SvXMLNumFmtExport::WriteAMPMElement_Impl()
 
 void SvXMLNumFmtExport::WriteNumberElement_Impl(
                             sal_Int32 nDecimals, sal_Int32 nInteger,
-                            const OUString& rDashStr, sal_Bool bGrouping )
+                            const OUString& rDashStr, sal_Bool bGrouping,
+                            const SvXMLEmbeddedTextEntryArr& rEmbeddedEntries )
 {
     FinishTextElement_Impl();
 
@@ -644,7 +664,24 @@ void SvXMLNumFmtExport::WriteNumberElement_Impl(
     }
 
     SvXMLElementExport aElem( rExport, XML_NAMESPACE_NUMBER, XML_NUMBER,
-                              sal_True, sal_False );
+                              sal_True, sal_True );
+
+    //  number:embedded-text as child elements
+
+    sal_uInt16 nEntryCount = rEmbeddedEntries.Count();
+    for (sal_uInt16 nEntry=0; nEntry<nEntryCount; nEntry++)
+    {
+        SvXMLEmbeddedTextEntry* pObj = rEmbeddedEntries[nEntry];
+
+        //  position attribute
+        rExport.AddAttribute( XML_NAMESPACE_NUMBER, XML_POSITION,
+                                OUString::valueOf( pObj->nFormatPos ) );
+        SvXMLElementExport aChildElem( rExport, XML_NAMESPACE_NUMBER, XML_EMBEDDED_TEXT,
+                                          sal_True, sal_False );
+
+        //  text as element content
+        rExport.Characters( pObj->aText );
+    }
 }
 
 void SvXMLNumFmtExport::WriteScientificElement_Impl(
@@ -977,6 +1014,16 @@ OUString lcl_GetDefaultCalendar( SvNumberFormatter* pFormatter, LanguageType nLa
 
 //-------------------------------------------------------------------------
 
+sal_Bool lcl_IsInEmbedded( const SvXMLEmbeddedTextEntryArr& rEmbeddedEntries, sal_uInt16 nPos )
+{
+    sal_uInt16 nCount = rEmbeddedEntries.Count();
+    for (sal_uInt16 i=0; i<nCount; i++)
+        if ( rEmbeddedEntries[i]->nSourcePos == nPos )
+            return sal_True;
+
+    return sal_False;       // not found
+}
+
 //
 //  export one part (condition)
 //
@@ -1139,10 +1186,11 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
     //  format elements
     //
 
+    SvXMLEmbeddedTextEntryArr aEmbeddedEntries(0);
     if ( eBuiltIn == NF_NUMBER_STANDARD )
     {
         //  default number format contains just one number element
-        WriteNumberElement_Impl( -1, 1, OUString(), sal_False );
+        WriteNumberElement_Impl( -1, 1, OUString(), sal_False, aEmbeddedEntries );
         bAnyContent = sal_True;
     }
     else if ( eBuiltIn == NF_BOOLEAN )
@@ -1158,7 +1206,9 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
         sal_Bool bDecDashes  = sal_False;
         sal_Bool bExpFound   = sal_False;
         sal_Bool bCurrFound  = sal_False;
+        sal_Bool bInInteger  = sal_True;
         sal_Int32 nExpDigits = 0;
+        sal_Int32 nIntegerSymbols = 0;          // for embedded-text, including "#"
         OUString sCurrExt;
         OUString aCalendar;
         sal_uInt16 nPos = 0;
@@ -1178,9 +1228,15 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                         nExpDigits += pElemStr->Len();
                     else if ( !bDecDashes && pElemStr && pElemStr->GetChar(0) == '-' )
                         bDecDashes = TRUE;
+                    if ( bInInteger && pElemStr )
+                        nIntegerSymbols += pElemStr->Len();
+                    break;
+                case XMLNUM_SYMBOLTYPE_DECSEP:
+                    bInInteger = sal_False;
                     break;
                 case XMLNUM_SYMBOLTYPE_EXP:
-                    bExpFound = TRUE;               // following digits are exponent digits
+                    bExpFound = sal_True;           // following digits are exponent digits
+                    bInInteger = sal_False;
                     break;
                 case XMLNUM_SYMBOLTYPE_CURRENCY:
                     bCurrFound = TRUE;
@@ -1203,7 +1259,47 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
             ++nPos;
         }
 
-        //  second loop to write elements
+        //  collect strings for embedded-text (must be known before number element is written)
+
+        sal_Bool bAllowEmbedded = ( nFmtType == 0 || nFmtType == NUMBERFORMAT_NUMBER ||
+                                        nFmtType == NUMBERFORMAT_CURRENCY ||
+                                        nFmtType == NUMBERFORMAT_PERCENT );
+        if ( bAllowEmbedded )
+        {
+            sal_Int32 nDigitsPassed = 0;
+            nPos = 0;
+            bEnd = sal_False;
+            while (!bEnd)
+            {
+                short nElemType = rFormat.GetNumForType( nPart, nPos, sal_False );
+                const XubString* pElemStr = rFormat.GetNumForString( nPart, nPos, sal_False );
+
+                switch ( nElemType )
+                {
+                    case 0:
+                        bEnd = sal_True;                // end of format reached
+                        break;
+                    case XMLNUM_SYMBOLTYPE_DIGIT:
+                        if ( pElemStr )
+                            nDigitsPassed += pElemStr->Len();
+                        break;
+                    case XMLNUM_SYMBOLTYPE_STRING:
+                        if ( nDigitsPassed > 0 && nDigitsPassed < nIntegerSymbols && pElemStr )
+                        {
+                            //  text within the integer part of a number:number element
+
+                            sal_Int32 nEmbedPos = nIntegerSymbols - nDigitsPassed;
+
+                            SvXMLEmbeddedTextEntry* pObj = new SvXMLEmbeddedTextEntry( nPos, nEmbedPos, *pElemStr );
+                            aEmbeddedEntries.Insert( pObj, aEmbeddedEntries.Count() );
+                        }
+                        break;
+                }
+                ++nPos;
+            }
+        }
+
+        //  final loop to write elements
 
         sal_Bool bNumWritten = sal_False;
         sal_Bool bCurrencyWritten = sal_False;
@@ -1232,6 +1328,11 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                             //  as text element
                             //! difference between '.' and ',' is lost here
                         }
+                        else if ( lcl_IsInEmbedded( aEmbeddedEntries, nPos ) )
+                        {
+                            //  text is written as embedded-text child of the number,
+                            //  don't create a text element
+                        }
                         else if ( nFmtType == NUMBERFORMAT_CURRENCY && !bCurrFound && !bCurrencyWritten )
                         {
                             //  automatic currency symbol is implemented as part of
@@ -1245,7 +1346,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                     }
                     break;
                 case NF_KEY_GENERAL :
-                        WriteNumberElement_Impl( -1, 1, OUString(), sal_False );
+                        WriteNumberElement_Impl( -1, 1, OUString(), sal_False, aEmbeddedEntries );
                     break;
                 case NF_KEY_CCC:
                     if (pElemStr)
@@ -1312,7 +1413,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                                     if ( bDecDashes && nPrecision > 0 )
                                         sDashStr.Fill( nPrecision, '-' );
 
-                                    WriteNumberElement_Impl( nDecimals, nInteger, sDashStr, bThousand );
+                                    WriteNumberElement_Impl( nDecimals, nInteger, sDashStr, bThousand, aEmbeddedEntries );
                                     bAnyContent = sal_True;
                                 }
                                 break;
