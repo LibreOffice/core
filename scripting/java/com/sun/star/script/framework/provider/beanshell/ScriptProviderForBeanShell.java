@@ -2,9 +2,9 @@
 *
 *  $RCSfile: ScriptProviderForBeanShell.java,v $
 *
-*  $Revision: 1.2 $
+*  $Revision: 1.3 $
 *
-*  last change: $Author: toconnor $ $Date: 2003-10-29 15:01:15 $
+*  last change: $Author: rt $ $Date: 2004-01-05 13:27:41 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -84,6 +84,7 @@ import com.sun.star.script.CannotConvertException;
 import java.util.Properties;
 import java.util.StringTokenizer;
 import java.util.Vector;
+import java.util.Map;
 import java.io.*;
 
 import java.net.URL;
@@ -94,11 +95,12 @@ import bsh.BshClassManager;
 import bsh.Interpreter;
 
 import drafts.com.sun.star.script.provider.XScriptContext;
-import drafts.com.sun.star.script.framework.storage.XScriptInfo;
 import drafts.com.sun.star.script.provider.XScriptProvider;
 import drafts.com.sun.star.script.provider.XScript;
 
 import com.sun.star.script.framework.provider.*;
+import com.sun.star.script.framework.log.*;
+import com.sun.star.script.framework.browse.ScriptMetaData;
 
 public class ScriptProviderForBeanShell
 {
@@ -109,156 +111,23 @@ public class ScriptProviderForBeanShell
             super (ctx, "BeanShell");
         }
 
-        /**
-         *  The invoke method of the ScriptProviderForBeanShell runs the
-         *  BeanShell script specified in the URI
-         *
-         *
-         * @param scriptName        The scriptName is the language specific
-         *                          name of the script
-         *
-         * @param invocationCtx     The invocation context contains the
-         *                          documentStorageID and document reference
-         *                          for use in script name resolving
-         *
-         * @param aParams           All parameters; pure, out params are
-         *                          undefined in sequence, i.e., the value
-         *                          has to be ignored by the callee
-         *
-         * @param aOutParamIndex    Out indices
-         *
-         * @param aOutParam         Out parameters
-         *
-         * @returns                 The value returned from the function
-         *                          being invoked
-         *
-         * @throws IllegalArgumentException If there is no matching script name
-         *
-         * @throws CannotConvertException   If args do not match or cannot
-         *                                  be converted the those of the
-         *                                  invokee
-         *
-         * @throws InvocationTargetException If the running script throws
-         *                                   an exception this information
-         *                                   is captured and rethrown as
-         *                                   this exception type.
-         */
-
-        private Object invoke(  /*IN*/String scriptURI,
-                               /*IN*/Object invocationCtx,
-                               /*IN*/Object[]  params,
-                               /*OUT*/short[][]  aOutParamIndex,
-                               /*OUT*/Object[][]  aOutParam )
-
-        throws IllegalArgumentException, InvocationTargetException,
-               CannotConvertException
+        public XScript getScript( /*IN*/String scriptURI )
+            throws com.sun.star.uno.RuntimeException,
+                   com.sun.star.lang.IllegalArgumentException
         {
-            // Initialise the out paramters - not used at the moment
-            aOutParamIndex[0] = new short[0];
-            aOutParam[0] = new Object[0];
-
-            XPropertySet languageProps = m_xScriptInfo.getLanguageProperties();
-            String cp = null;
-
-            try {
-                cp = (String)languageProps.getPropertyValue(CLASSPATH);
-            }
-            catch (Exception e) {
-            }
-
-            if ( cp == null )
-                cp = "";
-
-            String parcelURI = m_xScriptInfo.getParcelURI();
-
-            if ( !parcelURI.endsWith( "/" ) )
+            ScriptMetaData scriptData = getScriptData( scriptURI );
+            if ( scriptData == null )
             {
-                parcelURI += "/";
+                throw new com.sun.star.uno.RuntimeException(
+                    "Cannot find script for URI: " + scriptURI );
             }
-
-            Vector classpath;
-            try {
-                classpath = PathUtils.buildClasspath(parcelURI, cp);
-            }
-            catch (MalformedURLException mue) {
-                throw new InvocationTargetException(mue.getMessage());
-            }
-
-            ClassLoader cl = null;
-            try {
-                cl = ClassLoaderFactory.getClassLoader(m_xContext,
-                    this.getClass().getClassLoader(), classpath);
-            }
-            catch (Exception e)
+            else
             {
-                throw new InvocationTargetException(e.getMessage());
+                ScriptImpl script = new ScriptImpl( m_xContext, scriptData, m_xInvocationContext );
+                return script;
             }
-            Interpreter interpreter = new Interpreter();
-
-            interpreter.getNameSpace().clear();
-            interpreter.setClassLoader(cl);
-
-            try {
-                interpreter.set("context",
-                    ScriptContext.createContext(invocationCtx,
-                        m_xContext, m_xMultiComponentFactory));
-            }
-            catch (bsh.EvalError e) {
-                throw new InvocationTargetException(e.getMessage());
-            }
-
-            InputStream is = null;;
-            try {
-                String script = parcelURI + m_xScriptInfo.getFunctionName();
-                Object result = null;
-
-
-                try {
-                    is = PathUtils.getScriptFileStream( script, m_xContext );
-                }
-                catch (IOException ioe) {
-                    throw new InvocationTargetException(ioe.getMessage());
-                }
-
-                if (is == null)
-                    throw new InvocationTargetException(
-                        "Couldn't read script: " + script);
-
-                result = interpreter.eval(new InputStreamReader(is));
-
-                if (result == null)
-                    return new Any(new Type(), null);
-                return result;
-            }
-            catch (Exception ex) {
-                throw new InvocationTargetException(ex.getMessage());
-            }
-            finally
-            {
-                if ( is != null )
-                {
-                    try
-                    {
-                        is.close();
-                    }
-                    catch ( Exception e )
-                    {
-                    }
-                }
-            }
-        }
-
-        public Object invoke( /*IN*/Object[] aParams,
-                            /*OUT*/short[][] aOutParamIndex,
-                            /*OUT*/Object[][] aOutParam )
-            throws IllegalArgumentException, CannotConvertException,
-                InvocationTargetException
-        {
-            return invoke(m_scriptURI, m_xInvocationContext, aParams,
-                            aOutParamIndex, aOutParam);
         }
     }
-
     /**
      * Returns a factory for creating the service.
      * This method is called by the <code>JavaLoader</code>
@@ -324,4 +193,140 @@ public class ScriptProviderForBeanShell
         }
         return false;
     }
+}
+
+class ScriptImpl implements XScript
+{
+    private ScriptMetaData metaData;
+    private XComponentContext m_xContext;
+    private XMultiComponentFactory m_xMultiComponentFactory;
+    private Object m_oInvokeContext;
+
+    ScriptImpl( XComponentContext ctx, ScriptMetaData metaData, Object oInvokeContext ) throws com.sun.star.uno.RuntimeException
+    {
+        this.metaData = metaData;
+        this.m_xContext = ctx;
+        this.m_oInvokeContext = oInvokeContext;
+
+        try
+        {
+            this.m_xMultiComponentFactory = m_xContext.getServiceManager();
+        }
+        catch ( Exception e )
+        {
+            e.printStackTrace();
+            throw new com.sun.star.uno.RuntimeException(
+                "Error constructing  ScriptImpl [beanshell]: "
+                + e.getMessage() );
+        }
+
+        LogUtils.DEBUG("ScriptImpl [beanshell] script data = " + metaData );
+    }
+        /**
+         *                          documentStorageID and document reference
+         *                          for use in script name resolving
+         *
+         * @param aParams           All parameters; pure, out params are
+         *                          undefined in sequence, i.e., the value
+         *                          has to be ignored by the callee
+         *
+         * @param aOutParamIndex    Out indices
+         *
+         * @param aOutParam         Out parameters
+         *
+         * @returns                 The value returned from the function
+         *                          being invoked
+         *
+         * @throws IllegalArgumentException If there is no matching script name
+         *
+         * @throws CannotConvertException   If args do not match or cannot
+         *                                  be converted the those of the
+         *                                  invokee
+         *
+         * @throws InvocationTargetException If the running script throws
+         *                                   an exception this information
+         *                                   is captured and rethrown as
+         *                                   this exception type.
+         */
+
+        public Object invoke( /*IN*/Object[] aParams,
+                            /*OUT*/short[][] aOutParamIndex,
+                            /*OUT*/Object[][] aOutParam )
+            throws IllegalArgumentException, CannotConvertException,
+                InvocationTargetException
+        {
+            // Initialise the out paramters - not used at the moment
+            aOutParamIndex[0] = new short[0];
+            aOutParam[0] = new Object[0];
+
+            String parcelURI = metaData.getParcelLocation();
+
+            if ( !parcelURI.endsWith( "/" ) )
+            {
+                parcelURI += "/";
+            }
+
+            ClassLoader cl = null;
+            try {
+                cl = ClassLoaderFactory.getURLClassLoader( metaData );
+            }
+            catch (Exception e)
+            {
+                throw new InvocationTargetException(e.getMessage());
+            }
+            Interpreter interpreter = new Interpreter();
+
+            interpreter.getNameSpace().clear();
+            interpreter.setClassLoader(cl);
+
+            try {
+                interpreter.set("context",
+                    ScriptContext.createContext(m_oInvokeContext,
+                        m_xContext, m_xMultiComponentFactory));
+            }
+            catch (bsh.EvalError e) {
+                throw new InvocationTargetException(e.getMessage());
+            }
+
+            InputStream is = null;;
+            try {
+                String script = parcelURI + metaData.getLanguageName();
+                Object result = null;
+
+
+                try {
+                    is = PathUtils.getScriptFileStream( script );
+                }
+                catch (IOException ioe) {
+                    throw new InvocationTargetException(ioe.getMessage());
+                }
+
+                if (is == null)
+                    throw new InvocationTargetException(
+                        "Couldn't read script: " + script);
+
+                result = interpreter.eval(new InputStreamReader(is));
+
+                if (result == null)
+                    return new Any(new Type(), null);
+                return result;
+            }
+            catch (Exception ex) {
+                throw new InvocationTargetException(ex.getMessage());
+            }
+            finally
+            {
+                if ( is != null )
+                {
+                    try
+                    {
+                        is.close();
+                    }
+                    catch ( Exception e )
+                    {
+                    }
+                }
+            }
+        }
+
 }
