@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ValueComparer.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 16:26:54 $
+ *  last change:$Date: 2003-01-31 10:16:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,12 +68,27 @@ import java.lang.reflect.Modifier;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.Enum;
 import com.sun.star.uno.XInterface;
+import com.sun.star.uno.Any;
+import com.sun.star.uno.AnyConverter;
 
 
 public class ValueComparer {
 
     // Method to change a Value, thought for properties
     public static boolean equalValue( Object first, Object second ) {
+
+        if (first instanceof com.sun.star.uno.Any) {
+            try {
+                first = AnyConverter.toObject(((Any) first).getType(),first);
+            } catch (com.sun.star.lang.IllegalArgumentException iae) {
+            }
+        }
+        if (second instanceof com.sun.star.uno.Any) {
+            try {
+                second = AnyConverter.toObject(((Any) second).getType(),second);
+            } catch (com.sun.star.lang.IllegalArgumentException iae) {
+            }
+        }
         boolean eq = false;
         try {
             if ( (first==null) || (second == null) ) {

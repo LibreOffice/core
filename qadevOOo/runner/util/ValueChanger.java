@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ValueChanger.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 16:26:54 $
+ *  last change:$Date: 2003-01-31 10:16:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,10 @@ import java.lang.reflect.Field ;
 import java.lang.reflect.Method ;
 import java.lang.reflect.Modifier ;
 import java.lang.reflect.Array ;
+import com.sun.star.uno.Any;
+import com.sun.star.uno.AnyConverter;
+
+
 
 public class ValueChanger {
 
@@ -78,6 +82,13 @@ public class ValueChanger {
  public static Object changePValue( Object oldValue ) {
 
    Object newValue = null;
+
+   if (oldValue instanceof com.sun.star.uno.Any) {
+     try {
+        oldValue = AnyConverter.toObject(((Any) oldValue).getType(),oldValue);
+     } catch (com.sun.star.lang.IllegalArgumentException iae) {
+     }
+   }
 
    if (oldValue == null)
      return null;
