@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lockfile.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: lo $ $Date: 2002-10-24 15:44:30 $
+ *  last change: $Author: lo $ $Date: 2002-11-06 14:44:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,9 +83,12 @@ namespace desktop {
         // contructs a new lockfile onject
         Lockfile(void);
 
-        // checks/creates the lockfile, asks user when lockfile is
+        // checks the lockfile, asks user when lockfile is
         // found and returns false when we may not continue
         sal_Bool check(void);
+
+        // removes the lockfile. should only be called in exceptional situations
+        void clean(void);
 
         // removes the lockfile
         ~Lockfile(void);
