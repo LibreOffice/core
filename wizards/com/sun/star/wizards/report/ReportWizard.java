@@ -1,11 +1,64 @@
-/*
- * fillCellBridge.java
+ /*************************************************************************
  *
- * Created on 14. März 2002, 14:42
+ *  $RCSfile: ReportWizard.java,v $
+ *
+ *  $Revision: 1.4 $
+ *
+ *  last change: $Author: bc $ $Date: 2002-05-15 15:04:29 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
  */
 
-//package calc;
-//package MyComponent;
+
 package com.sun.star.wizards.report;
 
 import com.sun.star.container.XIndexAccess;
@@ -53,6 +106,7 @@ import com.sun.star.lang.*;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.lang.XComponent;
+
 import com.sun.star.lang.EventObject;
 import com.sun.star.script.XInvocation;
 import com.sun.star.awt.XListBox;
@@ -85,8 +139,6 @@ import java.util.*;
  */
 public class ReportWizard {
     static long iStart;
-    static XMultiComponentFactory xMultiComponentFactory;
-    static XComponentContext xcomponentcontext;
     static XMultiServiceFactory xMSF;
     static Object xListBoxModel;
     static Object oDialogModel;
@@ -94,11 +146,10 @@ public class ReportWizard {
     static Hashtable ControlList;
     static XNameContainer xDlgNames;
     static XStatement xStatement;
-    static com.sun.star.sdbc.XConnection xDBConnection;
     static XDatabaseMetaData xDBMetaData;
     static XResultSet xResultSet;
     static XTextTable xTextTable;
-    static DBMetaData.CommandMetaData CurMetaData;
+    static DBMetaData.CommandMetaData CurDBMetaData;
     static String ReportFolderName;
     static final int SOCMDCANCEL = 1;
     static final int SOCMDHELP = 2;
@@ -199,7 +250,6 @@ public class ReportWizard {
     static String sWriterFilterName;
 
 
-
     public ReportWizard() {
     }
 
@@ -229,8 +279,7 @@ public class ReportWizard {
             short DBIndex = xDBListBox.getSelectedItemPos();
             String sDBName = sDatabaseList[DBIndex];
             if (DBMetaData.getConnection(CurReportDocument, sDBName) == true){
-        CurMetaData = new DBMetaData.CommandMetaData();
-        CurMetaData.DataSourceName = sDBName;
+        CurDBMetaData.DataSourceName = sDBName;
                 if (DBMetaData.getDBMetaData(CurReportDocument) == true){
                     UNODialogs.AssignPropertyToDialogControl(xDlgNameAccess, "lstTables", "Enabled", new Boolean(true));
                     UNODialogs.AssignPropertyToDialogControl(xDlgNameAccess, "lblTables", "Enabled", new Boolean(true));
@@ -342,7 +391,7 @@ public class ReportWizard {
          case SOCONTENTLST:
         CurReportDocument.ReportTextDocument.lockControllers();
         iPos = xContentListBox.getSelectedItemPos();
-        ReportDocument.loadSectionsfromTemplate(CurReportDocument, CurMetaData, ContentFiles[0][iPos]);
+        ReportDocument.loadSectionsfromTemplate(CurReportDocument, CurDBMetaData, ContentFiles[0][iPos]);
         ReportDocument.loadStyleTemplates(CurReportDocument, ContentFiles[0][iPos], "LoadTextStyles");
         CurReportDocument.ReportTextDocument.unlockControllers();
            break;
@@ -384,7 +433,7 @@ public class ReportWizard {
                 int iKey  =  getControlKey(actionEvent.Source);
                 switch (iKey) {
                     case SOFLDSLST:
-                       UNODialogs.MoveOrderedSelectedListBox(xDlgNameAccess, xFieldsListBox, xSelFieldsListBox, CurMetaData.FieldNames,  false);
+                       UNODialogs.MoveOrderedSelectedListBox(xDlgNameAccess, xFieldsListBox, xSelFieldsListBox, CurDBMetaData.FieldNames,  false);
                        break;
 
                     case SOCMDMOVESEL:
@@ -392,15 +441,15 @@ public class ReportWizard {
                         break;
 
                     case SOCMDMOVEALL:
-                        UNODialogs.FormMoveAll(xDlgNameAccess, xFieldsListBox, xSelFieldsListBox, CurMetaData.FieldNames);
+                        UNODialogs.FormMoveAll(xDlgNameAccess, xFieldsListBox, xSelFieldsListBox, CurDBMetaData.FieldNames);
                         break;
 
                     case SOCMDREMOVESEL:
-                        UNODialogs.MoveOrderedSelectedListBox(xDlgNameAccess, xFieldsListBox, xSelFieldsListBox, CurMetaData.FieldNames, false);
+                        UNODialogs.MoveOrderedSelectedListBox(xDlgNameAccess, xFieldsListBox, xSelFieldsListBox, CurDBMetaData.FieldNames, false);
                         break;
 
                     case SOCMDREMOVEALL:
-                        UNODialogs.MoveOrderedSelectedListBox(xDlgNameAccess, xFieldsListBox, xSelFieldsListBox, CurMetaData.FieldNames, true);
+                        UNODialogs.MoveOrderedSelectedListBox(xDlgNameAccess, xFieldsListBox, xSelFieldsListBox, CurDBMetaData.FieldNames, true);
                         break;
 
                     case SOCMDGOON:
@@ -467,27 +516,29 @@ public class ReportWizard {
         switch (iPage){
             case 1:
                 UNODialogs.AssignPropertyToDialogControl(xDlgNameAccess, "cmdBack", "Enabled", new Boolean(true));
-                CurMetaData.FieldNames = xSelFieldsListBox.getItems();
+                CurDBMetaData.FieldNames = xSelFieldsListBox.getItems();
                 fillSecondStep();
                 break;
             case 2:
                 String[] GroupFieldNames = new String[GroupFieldVector.size()];
                 GroupFieldVector.copyInto(GroupFieldNames);
-        CurMetaData.GroupFieldNames = GroupFieldNames;
+        CurDBMetaData.GroupFieldNames = GroupFieldNames;
         fillThirdStep();
                 break;
             case 3:
                 UNODialogs.AssignPropertyToDialogControl(xDlgNameAccess, "cmdGoOn", "Label", scmdReady);
                 setUpSortList();
         DBMetaData.setupWidthList();
-                xResultSet = DBMetaData.combineSelectStatement(xDBConnection, xDBMetaData, TableName, CurMetaData);
-//      ReportDocument.insertTextArrangement(CurReportDocument, ReportFolderName + "Example.stw", CurMetaData, null);
-        ReportDocument.setupRecordSection(CurReportDocument, ReportFolderName + "cnt-Default.stw", CurMetaData);
+                CurDBMetaData.ResultSet = DBMetaData.combineSelectStatement(CurDBMetaData.DBConnection, xDBMetaData, TableName, CurDBMetaData);
+//      ReportDocument.insertTextArrangement(CurReportDocument, ReportFolderName + "Example.stw", CurDBMetaData, null);
+        ReportDocument.setupRecordSection(CurReportDocument, ReportFolderName + "cnt-Default.stw", CurDBMetaData);
         fillFourthStep();
         break;
         case 4:
-        ReportDocument.storeReportDocument(xMSF, CurReportDocument.oComponent, CurMetaData);
-//      ReportDocument.createDBForm(CurReportDocument, CurMetaData);
+        ReportDocument.storeReportDocument(xMSF, CurReportDocument, CurDBMetaData);
+        XComponent xDBComponent = (XComponent) UnoRuntime.queryInterface(XComponent.class, CurDBMetaData.DBConnection);
+        xDBComponent.dispose();
+        ReportDocument.reconnectToDatabase(xMSF, CurDBMetaData, CurReportDocument);
         default:
                 break;
         }
@@ -579,10 +630,10 @@ public class ReportWizard {
 
     public static void setUpSortList(){
     try{
-        CurMetaData.SortFieldNames = new String[MaxSortIndex+1][2];
+        CurDBMetaData.SortFieldNames = new String[MaxSortIndex+1][2];
         for (int i=0;i<=MaxSortIndex;i++){
-            CurMetaData.SortFieldNames[i][0] = xSortListBox[i].getSelectedItem();
-            CurMetaData.SortFieldNames[i][1] = (String) UNODialogs.getPropertyOfDialogControl(xDlgNameAccess, "cmdSort_" + new Integer(i+1).toString(), "Tag");
+            CurDBMetaData.SortFieldNames[i][0] = xSortListBox[i].getSelectedItem();
+            CurDBMetaData.SortFieldNames[i][1] = (String) UNODialogs.getPropertyOfDialogControl(xDlgNameAccess, "cmdSort_" + new Integer(i+1).toString(), "Tag");
         }
     }
     catch( Exception exception ){
@@ -680,15 +731,15 @@ public class ReportWizard {
     try{
         boolean bDoEnable;
         int YPos = 60;
-        int FieldCount = CurMetaData.FieldNames.length;
-    int SortFieldCount = FieldCount + 1-CurMetaData.GroupFieldNames.length;
+        int FieldCount = CurDBMetaData.FieldNames.length;
+    int SortFieldCount = FieldCount + 1-CurDBMetaData.GroupFieldNames.length;
         String SortFieldNames[] = new String[SortFieldCount];
         SortFieldNames[0] = sNoSorting;
         String CurFieldName;
     int a = 1;
     for (int i = 0; i < FieldCount;i++){
-        CurFieldName = CurMetaData.FieldNames[i];
-        if (tools.FieldInList(CurMetaData.GroupFieldNames, CurFieldName) == -1){
+        CurFieldName = CurDBMetaData.FieldNames[i];
+        if (tools.FieldInList(CurDBMetaData.GroupFieldNames, CurFieldName) == -1){
         SortFieldNames[a] = CurFieldName;
         a +=1;
         }
@@ -719,7 +770,7 @@ public class ReportWizard {
 
     xGroupListBox = InsertListbox(xMSFDialogModel, xDlgNames, xDialogContainer, "lstGroup", SOGROUPLST,
                     new String[] {"Enabled", "Height", "PositionX", "PositionY", "Step", "StringItemList", "Width", "MultiSelection"},
-                            new Object[] {new Boolean(bGroupByIsSupported), new Integer(133), new Integer(6), new Integer(51), new Integer(2), CurMetaData.FieldNames, new Integer(100), new Boolean(true)});
+                            new Object[] {new Boolean(bGroupByIsSupported), new Integer(133), new Integer(6), new Integer(51), new Integer(2), CurDBMetaData.FieldNames, new Integer(100), new Boolean(true)});
 
        InsertControlModel("com.sun.star.awt.UnoControlFixedTextModel", xMSFDialogModel, xDlgNames, "lblGroups",
             new String[] {"Enabled", "Height", "PositionX", "PositionY", "Step", "Width", "Label"},
@@ -730,7 +781,7 @@ public class ReportWizard {
        InsertButton(xMSFDialogModel, xDlgNames, xDialogContainer, "cmdGroupIn", SOCMDGROUPIN,
             new String[] {"Enabled", "Height", "PositionX", "PositionY", "Step", "Width", "Label"},
             new Object[] {new Boolean(false), new Integer(14), new Integer(116), new Integer(118), new Integer(2), new Integer(14), "<<"});
-            GroupFieldVector = new java.util.Vector(CurMetaData.FieldNames.length);
+            GroupFieldVector = new java.util.Vector(CurDBMetaData.FieldNames.length);
     }
     catch( Exception exception ){
         exception.printStackTrace(System.out);
@@ -763,6 +814,8 @@ public class ReportWizard {
     xDesktop = tools.getDesktop( xMSF );
     getReportResources(xMSF);
     CurReportDocument =  new ReportDocument.RepWizardDocument();
+    CurDBMetaData = new DBMetaData.CommandMetaData();
+
     CurReportDocument.ReportTextDocument =  (XTextDocument) tools.createNewDocument(xDesktop, CurReportDocument.oComponent, "swriter");
     ReportDocument.initializeReportDocument(xMSF, CurReportDocument);
         ShowDialog(xMSF, CurReportDocument);
@@ -981,8 +1034,8 @@ public class ReportWizard {
 
     public static XMultiServiceFactory connect( String connectStr )
     throws com.sun.star.uno.Exception, com.sun.star.uno.RuntimeException, Exception {
-
-    xMultiComponentFactory = tools.getMultiComponentFactory();
+        XComponentContext xcomponentcontext = null;
+    XMultiComponentFactory xMultiComponentFactory = tools.getMultiComponentFactory();
         // create a connector, so that it can contact the office
         Object  xUrlResolver  = xMultiComponentFactory.createInstanceWithContext("com.sun.star.bridge.UnoUrlResolver", xcomponentcontext );
         XUnoUrlResolver urlResolver = (XUnoUrlResolver)UnoRuntime.queryInterface( XUnoUrlResolver.class, xUrlResolver );
