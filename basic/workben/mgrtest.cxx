@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mgrtest.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:12:12 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 19:43:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,8 +163,8 @@ TestWindow::~TestWindow()
 }
 
 TestWindow::TestWindow() :
-    WorkWindow( NULL, WB_APP | WB_STDWORK | WB_SVLOOK | WB_CLIPCHILDREN ) ,
-    aToolBox( this, WinBits( WB_BORDER | WB_SVLOOK | WB_SCROLL | WB_LINESPACING ) )
+    WorkWindow( NULL, WB_APP | WB_STDWORK | WB_3DLOOK | WB_CLIPCHILDREN ) ,
+    aToolBox( this, WinBits( WB_BORDER | WB_3DLOOK | WB_SCROLL | WB_LINESPACING ) )
 {
     nLibX = 0;
 
