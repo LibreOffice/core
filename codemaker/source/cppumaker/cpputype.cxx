@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpputype.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 03:11:58 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 14:45:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -322,9 +322,7 @@ CppuType::CppuType(typereg::Reader& typeReader,
     , m_reader(typeReader)
     , m_typeMgr(typeMgr)
     , m_dependencies(typeMgr, typeName)
-{
-    addSpecialDependencies();
-}
+{}
 
 CppuType::~CppuType()
 {
@@ -382,6 +380,7 @@ sal_Bool CppuType::dump(CppuOptions* pOptions)
     if (!m_dependencies.isValid()) {
         return false;
     }
+    addSpecialDependencies();
 
     sal_Bool ret = sal_False;
 
@@ -1430,7 +1429,9 @@ sal_Bool InterfaceType::dumpHFile(
         includes.add("com/sun/star/uno/RuntimeException");
     }
     includes.dump(o, 0);
-    o << "\n";
+    o << ("\nnamespace com { namespace sun { namespace star { namespace uno {\n"
+          "class Type;\n} } } }\n\n");
+
     if (codemaker::cppumaker::dumpNamespaceOpen(o, m_typeName, false)) {
         o << "\n";
     }
@@ -1439,9 +1440,7 @@ sal_Bool InterfaceType::dumpHFile(
         o << "\n";
     }
 
-    o << "\nnamespace com { namespace sun { namespace star { namespace uno {\n"
-      << "class Type;\n} } } }\n\n";
-
+    o << "\n";
     if (m_cppuTypeStatic)
         o << "static";
     else
@@ -1474,6 +1473,10 @@ sal_Bool InterfaceType::dumpDeclaration(FileStream& o)
     dumpAttributes(o);
     dumpMethods(o);
 
+    o << "\n" << indent()
+      << ("static inline ::com::sun::star::uno::Type const & SAL_CALL"
+          " static_type(void * = 0);\n");
+
     dec();
     o << "};\n\n";
 
@@ -1492,6 +1495,16 @@ sal_Bool InterfaceType::dumpHxxFile(
     o << "\n";
 
     dumpGetCppuType(o);
+
+    o << "\n::com::sun::star::uno::Type const & "
+      << scopedName(rtl::OString(), m_typeName)
+      << "::static_type(void *) {\n";
+    inc();
+    o << indent() << "return ::getCppuType(static_cast< ";
+    dumpType(o, m_typeName);
+    o << " * >(0));\n";
+    dec();
+    o << "}\n";
 
     o << "\n#endif // "<< headerDefine << "\n";
     return sal_True;
@@ -2343,6 +2356,7 @@ sal_Bool ConstantsType::dump(CppuOptions* pOptions)
     if (!m_dependencies.isValid()) {
         return false;
     }
+    addSpecialDependencies();
 
     sal_Bool ret = sal_False;
 
@@ -2791,13 +2805,12 @@ void StructureType::dumpLightGetCppuType(FileStream & out) {
         sal_uInt16 n = m_reader.getReferenceCount();
         for (sal_uInt16 i = 0; i < n; ++i) {
             out << indent()
-                << ("the_buffer.append(::rtl::OUStringToOString(::getCppuType("
-                    "static_cast< ");
+                << ("the_buffer.append(::rtl::OUStringToOString(getCppuType< ");
             dumpTypeParameterName(
                 out,
                 rtl::OUStringToOString(
                     m_reader.getReferenceTypeName(i), RTL_TEXTENCODING_UTF8));
-            out << " * >(0)).getTypeName(), RTL_TEXTENCODING_UTF8));\n";
+            out << " >().getTypeName(), RTL_TEXTENCODING_UTF8));\n";
             if (i != n - 1) {
                 out << indent() << "the_buffer.append(',');\n";
             }
@@ -2835,13 +2848,12 @@ void StructureType::dumpNormalGetCppuType(FileStream & out) {
         sal_uInt16 n = m_reader.getReferenceCount();
         for (sal_uInt16 i = 0; i < n; ++i) {
             out << indent()
-                << ("the_buffer.append(::rtl::OUStringToOString(::getCppuType("
-                    "static_cast< ");
+                << ("the_buffer.append(::rtl::OUStringToOString(getCppuType< ");
             dumpTypeParameterName(
                 out,
                 rtl::OUStringToOString(
                     m_reader.getReferenceTypeName(i), RTL_TEXTENCODING_UTF8));
-            out << " * >(0)).getTypeName(), RTL_TEXTENCODING_UTF8));\n";
+            out << " >().getTypeName(), RTL_TEXTENCODING_UTF8));\n";
             if (i != n - 1) {
                 out << indent() << "the_buffer.append(',');\n";
             }
@@ -2853,21 +2865,25 @@ void StructureType::dumpNormalGetCppuType(FileStream & out) {
     inc();
     sal_uInt16 fields = m_reader.getFieldCount();
     for (sal_uInt16 i = 0; i < fields; ++i) {
-        out << indent() << "::getCppuType(static_cast< ";
+        out << indent();
         rtl::OString type(
             rtl::OUStringToOString(
                 m_reader.getFieldTypeName(i), RTL_TEXTENCODING_UTF8));
         if ((m_reader.getFieldFlags(i) & RT_ACCESS_PARAMETERIZED_TYPE) != 0) {
+            out << "getCppuType< ";
             dumpTypeParameterName(out, type);
+            out << " >()";
         } else {
+            out << "::getCppuType(static_cast< ";
             dumpType(out, type);
+            out << " * >(0))";
         }
-        out << " * >(0)).getTypeLibType()" << (i == fields - 1 ? " };" : ",")
-            << "\n";
+        out << ".getTypeLibType()" << (i == fields - 1 ? " };" : ",") << "\n";
     }
     dec();
     if (isPolymorphic()) {
-        out << "static ::sal_Bool const the_parameterizedTypes[] = { ";
+        out << indent()
+            << "static ::sal_Bool const the_parameterizedTypes[] = { ";
         for (sal_uInt16 i = 0; i < fields; ++i) {
             if (i != 0) {
                 out << ", ";
@@ -2895,7 +2911,7 @@ void StructureType::dumpNormalGetCppuType(FileStream & out) {
                 m_reader.getSuperTypeName(0), RTL_TEXTENCODING_UTF8));
         out << " * >(0)).getTypeLibType()";
     }
-    out << ", " << fields << ", the_members,"
+    out << ", " << fields << ", the_members, "
         << (isPolymorphic() ? "the_parameterizedTypes" : "0") << ");\n";
     dec();
     out << indent() << "}\n" << indent()
@@ -2919,12 +2935,12 @@ void StructureType::dumpComprehensiveGetCppuType(FileStream & out) {
             << m_typeName.replace('/', '.') << "<\"));\n";
         sal_uInt16 n = m_reader.getReferenceCount();
         for (sal_uInt16 i = 0; i < n; ++i) {
-            out << indent() << "the_buffer.append(::getCppuType(static_cast< ";
+            out << indent() << "the_buffer.append(getCppuType< ";
             dumpTypeParameterName(
                 out,
                 rtl::OUStringToOString(
                     m_reader.getReferenceTypeName(i), RTL_TEXTENCODING_UTF8));
-            out << " * >(0)).getTypeName());\n";
+            out << " >().getTypeName());\n";
             if (i != n - 1) {
                 out << indent()
                     << ("the_buffer.append("
@@ -2957,12 +2973,11 @@ void StructureType::dumpComprehensiveGetCppuType(FileStream & out) {
                 sal_uInt32 n = static_cast< sal_uInt32 >(parameters.size() - 1);
                 out << indent()
                     << "::com::sun::star::uno::Type const & the_ptype" << n
-                    << " = ::getCppuType(static_cast< ";
+                    << " = getCppuType< ";
                 dumpTypeParameterName(out, type);
-                out << " * >(0));\n" << indent()
-                    << "::typelib_TypeClass the_pclass" << n
-                    << " = static_cast< ::typelib_TypeClass >(the_ptype" << n
-                    << ".getTypeClass());\n" << indent()
+                out << " >();\n" << indent() << "::typelib_TypeClass the_pclass"
+                    << n << " = static_cast< ::typelib_TypeClass >(the_ptype"
+                    << n << ".getTypeClass());\n" << indent()
                     << "::rtl::OUString the_pname" << n << "(the_ptype" << n
                     << ".getTypeName());\n";
             }
@@ -3152,7 +3167,7 @@ bool StructureType::isPolymorphic() const {
 
 void StructureType::dumpTemplateHead(FileStream & out) const {
     if (isPolymorphic()) {
-        out << "template<";
+        out << "template< ";
         for (sal_uInt16 i = 0; i < m_reader.getReferenceCount(); ++i) {
             if (i != 0) {
                 out << ", ";
@@ -3894,47 +3909,45 @@ sal_Bool ServiceType::dumpHxxFile(
     FileStream & o, codemaker::cppumaker::Includes & includes)
     throw (CannotDumpException)
 {
-    //TODO: Decide whether the types added to includes should rather be added to
-    // m_dependencies (and thus be generated during dumpDependedTypes):
-    includes.addReference();
-    includes.addRtlUstringH();
-    includes.addRtlUstringHxx();
-    includes.add("com/sun/star/lang/XMultiComponentFactory");
-    includes.add("com/sun/star/uno/DeploymentException");
-    includes.add("com/sun/star/uno/XComponentContext");
     sal_uInt16 ctors = m_reader.getMethodCount();
-    if (ctors == 0) {
-        includes.add("com/sun/star/uno/Exception");
-        includes.add("com/sun/star/uno/RuntimeException");
-    } else {
+    if (ctors > 0) {
+        //TODO: Decide whether the types added to includes should rather be
+        // added to m_dependencies (and thus be generated during
+        // dumpDependedTypes):
+        includes.addReference();
+        includes.addRtlUstringH();
+        includes.addRtlUstringHxx();
+        includes.add("com/sun/star/lang/XMultiComponentFactory");
+        includes.add("com/sun/star/uno/DeploymentException");
+        includes.add("com/sun/star/uno/XComponentContext");
         for (sal_uInt16 i = 0; i < ctors; ++i) {
-            if (!hasRestParameter(i)) {
-                includes.addAny();
-                includes.addSequence();
-            }
-            codemaker::ExceptionTree tree;
-            for (sal_uInt16 j = 0; j < m_reader.getMethodExceptionCount(i); ++j)
-            {
-                tree.add(
-                    rtl::OUStringToOString(
-                        m_reader.getMethodExceptionTypeName(i, j),
-                        RTL_TEXTENCODING_UTF8),
-                    m_typeMgr);
-            }
-            if (!tree.getRoot()->present) {
+            if (isDefaultConstructor(i)) {
                 includes.add("com/sun/star/uno/Exception");
                 includes.add("com/sun/star/uno/RuntimeException");
-                includeExceptions(includes, tree.getRoot());
+            } else {
+                if (!hasRestParameter(i)) {
+                    includes.addAny();
+                    includes.addSequence();
+                }
+                codemaker::ExceptionTree tree;
+                for (sal_uInt16 j = 0; j < m_reader.getMethodExceptionCount(i);
+                     ++j)
+                {
+                    tree.add(
+                        rtl::OUStringToOString(
+                            m_reader.getMethodExceptionTypeName(i, j),
+                            RTL_TEXTENCODING_UTF8),
+                        m_typeMgr);
+                }
+                if (!tree.getRoot()->present) {
+                    includes.add("com/sun/star/uno/Exception");
+                    includes.add("com/sun/star/uno/RuntimeException");
+                    includeExceptions(includes, tree.getRoot());
+                }
             }
         }
     }
     rtl::OString cppName(translateIdentifier(m_name, "service", isGlobal()));
-    rtl::OString fullName(m_typeName.replace('/', '.'));
-    rtl::OString baseName(
-        rtl::OUStringToOString(
-            m_reader.getSuperTypeName(0), RTL_TEXTENCODING_UTF8));
-    rtl::OString fullBaseName(baseName.replace('/', '.'));
-    rtl::OString scopedBaseName(scopedName(rtl::OString(), baseName));
     rtl::OString headerDefine(dumpHeaderDefine(o, "HPP"));
     o << "\n";
     includes.dump(o, 0);
@@ -3942,170 +3955,54 @@ sal_Bool ServiceType::dumpHxxFile(
     if (codemaker::cppumaker::dumpNamespaceOpen(o, m_typeName, false)) {
         o << "\n";
     }
-    o << "\nclass " << cppName << " {\npublic:\n";
+    o << "\nclass " << cppName << " {\n";
     inc();
-    if (ctors == 0) {
-        o << indent() << "static ::com::sun::star::uno::Reference< "
-          << scopedBaseName << " > "
-          << translateIdentifier("create", "method", false, &cppName)
-          << ("(::com::sun::star::uno::Reference<"
-              " ::com::sun::star::uno::XComponentContext > const &"
-              " the_context) {\n");
-        inc();
-        o << indent()
-          << ("::com::sun::star::uno::Reference<"
-              " ::com::sun::star::lang::XMultiComponentFactory > the_factory("
-              "the_context->getServiceManager());\n")
-          << indent() << "if (!the_factory.is()) {\n";
-        inc();
-        o << indent()
-          << ("throw ::com::sun::star::uno::DeploymentException("
-              "::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(\"component context"
-              " fails to supply service manager\")), the_context);\n");
-        dec();
-        o << indent() << "}\n" << indent()
-          << "::com::sun::star::uno::Reference< " << scopedBaseName
-          << " > the_instance;\n" << indent() << "try {\n";
-        inc();
-        o << indent() << "the_instance = ::com::sun::star::uno::Reference< "
-          << scopedBaseName
-          << (" >(the_factory->createInstanceWithContext("
-              "::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(\"")
-          << fullName
-          << "\")), the_context), ::com::sun::star::uno::UNO_QUERY);\n";
-        dec();
-        o << indent()
-          << "} catch (::com::sun::star::uno::RuntimeException &) {\n";
-        inc();
-        o << indent() << "throw;\n";
-        dec();
-        o << indent()
-          << "} catch (::com::sun::star::uno::Exception & the_exception) {\n";
-        inc();
-        o << indent()
-          << ("throw ::com::sun::star::uno::DeploymentException("
-              "::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("
-              "\"component context fails to supply service ")
-          << fullName << " of type " << fullBaseName
-          << ": \")) + the_exception.Message, the_context);\n";
-        dec();
-        o << indent() << "}\n" << indent() << "if (!the_instance.is()) {\n";
-        inc();
-        o << indent()
-          << ("throw ::com::sun::star::uno::DeploymentException("
-              "::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("
-              "\"component context fails to supply service ")
-          << fullName << " of type " << fullBaseName << "\")), the_context);\n";
-        dec();
-        o << indent() << "}\n" << indent() << "return the_instance;\n";
-        dec();
-        o << indent() << "}\n\n";
-    } else {
+    if (ctors > 0) {
+        rtl::OString fullName(m_typeName.replace('/', '.'));
+        rtl::OString baseName(
+            rtl::OUStringToOString(
+                m_reader.getSuperTypeName(0), RTL_TEXTENCODING_UTF8));
+        rtl::OString fullBaseName(baseName.replace('/', '.'));
+        rtl::OString scopedBaseName(scopedName(rtl::OString(), baseName));
+        o << "public:\n";
         for (sal_uInt16 i = 0; i < ctors; ++i) {
-            o << indent() << "static ::com::sun::star::uno::Reference< "
-              << scopedBaseName << " > "
-              << translateIdentifier(
-                  rtl::OUStringToOString(
-                      m_reader.getMethodName(i), RTL_TEXTENCODING_UTF8),
-                  "method", false, &cppName)
-              << ("(::com::sun::star::uno::Reference<"
-                  " ::com::sun::star::uno::XComponentContext > const &"
-                  " the_context");
-            sal_uInt16 params = m_reader.getMethodParameterCount(i);
-            bool rest = hasRestParameter(i);
-            {for (sal_uInt16 j = 0; j < params; ++j) {
-                o << ", ";
-                rtl::OStringBuffer buf;
-                if ((m_reader.getMethodParameterFlags(i, j) & RT_PARAM_REST)
-                    != 0)
-                {
-                    buf.append(RTL_CONSTASCII_STRINGPARAM("[]"));
-                }
-                buf.append(
-                    rtl::OUStringToOString(
-                        m_reader.getMethodParameterTypeName(i, j),
-                        RTL_TEXTENCODING_UTF8));
-                rtl::OString type(buf.makeStringAndClear());
-                bool byRef = passByReference(type);
-                dumpType(o, type, byRef, byRef);
-                o << " "
-                  << translateIdentifier(
-                      rtl::OUStringToOString(
-                          m_reader.getMethodParameterName(i, j),
-                          RTL_TEXTENCODING_UTF8),
-                      "param", false);
-            }}
-            o << ") {\n";
-            inc();
-            o << indent()
-                << ("::com::sun::star::uno::Reference<"
-                    " ::com::sun::star::lang::XMultiComponentFactory >"
-                    " the_factory(the_context->getServiceManager());\n")
-                << indent() << "if (!the_factory.is()) {\n";
-            inc();
-            o << indent()
-              << ("throw com::sun::star::uno::DeploymentException("
-                  "::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("
-                  "\"component context fails to supply service manager\")),"
-                  " the_context);\n");
-            dec();
-            o << indent() << "}\n";
-            if (!rest && params > 0) {
-                o << indent()
-                  << ("::com::sun::star::uno::Sequence<"
-                      " ::com::sun::star::uno::Any > the_arguments(")
-                  << params << ");\n";
-                for (sal_uInt16 j = 0; j < params; ++j) {
-                    o << indent() << "the_arguments[" << j << "] <<= "
-                      << translateIdentifier(
-                          rtl::OUStringToOString(
-                              m_reader.getMethodParameterName(i, j),
-                              RTL_TEXTENCODING_UTF8),
-                          "param", false)
-                      << ";\n";
-                }
-            }
-            o << indent() << "::com::sun::star::uno::Reference< "
-              << scopedBaseName << " > the_instance;\n";
-            codemaker::ExceptionTree tree;
-            sal_uInt16 exceptions = m_reader.getMethodExceptionCount(i);
-            {for (sal_uInt16 j = 0; j < exceptions; ++j) {
-                tree.add(
-                    rtl::OUStringToOString(
-                        m_reader.getMethodExceptionTypeName(i, j),
-                        RTL_TEXTENCODING_UTF8),
-                    m_typeMgr);
-            }}
-            if (!tree.getRoot()->present) {
-                o << indent() << "try {\n";
+            if (isDefaultConstructor(i)) {
+                o << indent() << "static ::com::sun::star::uno::Reference< "
+                  << scopedBaseName << " > "
+                  << translateIdentifier("create", "method", false, &cppName)
+                  << ("(::com::sun::star::uno::Reference<"
+                      " ::com::sun::star::uno::XComponentContext > const &"
+                      " the_context) {\n");
                 inc();
-            }
-            o << indent() << "the_instance = ::com::sun::star::uno::Reference< "
-              << scopedBaseName
-              << (" >(the_factory->createInstanceWithArgumentsAndContext("
-                  "::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(\"")
-              << fullName << "\")), ";
-            if (rest) {
-                o << translateIdentifier(
-                    rtl::OUStringToOString(
-                        m_reader.getMethodParameterName(i, 0),
-                        RTL_TEXTENCODING_UTF8),
-                    "param", false);
-            } else if (params == 0) {
-                o << ("::com::sun::star::uno::Sequence<"
-                      " ::com::sun::star::uno::Any >()");
-            } else {
-                o << "the_arguments";
-            }
-            o << ", the_context), ::com::sun::star::uno::UNO_QUERY);\n";
-            if (!tree.getRoot()->present) {
+                o << indent()
+                  << ("::com::sun::star::uno::Reference<"
+                      " ::com::sun::star::lang::XMultiComponentFactory >"
+                      " the_factory(the_context->getServiceManager());\n")
+                  << indent() << "if (!the_factory.is()) {\n";
+                inc();
+                o << indent()
+                  << ("throw ::com::sun::star::uno::DeploymentException("
+                      "::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(\"component"
+                      " context fails to supply service manager\")),"
+                      " the_context);\n");
+                dec();
+                o << indent() << "}\n" << indent()
+                  << "::com::sun::star::uno::Reference< " << scopedBaseName
+                  << " > the_instance;\n" << indent() << "try {\n";
+                inc();
+                o << indent()
+                  << "the_instance = ::com::sun::star::uno::Reference< "
+                  << scopedBaseName
+                  << (" >(the_factory->createInstanceWithContext("
+                      "::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(\"")
+                  << fullName
+                  << "\")), the_context), ::com::sun::star::uno::UNO_QUERY);\n";
                 dec();
                 o << indent()
                   << "} catch (::com::sun::star::uno::RuntimeException &) {\n";
                 inc();
                 o << indent() << "throw;\n";
                 dec();
-                dumpCatchClauses(o, tree.getRoot());
                 o << indent()
                   << ("} catch (::com::sun::star::uno::Exception &"
                       " the_exception) {\n");
@@ -4117,20 +4014,152 @@ sal_Bool ServiceType::dumpHxxFile(
                   << fullName << " of type " << fullBaseName
                   << ": \")) + the_exception.Message, the_context);\n";
                 dec();
+                o << indent() << "}\n" << indent()
+                  << "if (!the_instance.is()) {\n";
+                inc();
+                o << indent()
+                  << ("throw ::com::sun::star::uno::DeploymentException("
+                      "::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("
+                      "\"component context fails to supply service ")
+                  << fullName << " of type " << fullBaseName
+                  << "\")), the_context);\n";
+                dec();
+                o << indent() << "}\n" << indent() << "return the_instance;\n";
+                dec();
+                o << indent() << "}\n\n";
+            } else {
+                o << indent() << "static ::com::sun::star::uno::Reference< "
+                  << scopedBaseName << " > "
+                  << translateIdentifier(
+                      rtl::OUStringToOString(
+                          m_reader.getMethodName(i), RTL_TEXTENCODING_UTF8),
+                      "method", false, &cppName)
+                  << ("(::com::sun::star::uno::Reference<"
+                      " ::com::sun::star::uno::XComponentContext > const &"
+                      " the_context");
+                sal_uInt16 params = m_reader.getMethodParameterCount(i);
+                bool rest = hasRestParameter(i);
+                for (sal_uInt16 j = 0; j < params; ++j) {
+                    o << ", ";
+                    rtl::OStringBuffer buf;
+                    if ((m_reader.getMethodParameterFlags(i, j) & RT_PARAM_REST)
+                        != 0)
+                    {
+                        buf.append(RTL_CONSTASCII_STRINGPARAM("[]"));
+                    }
+                    buf.append(
+                        rtl::OUStringToOString(
+                            m_reader.getMethodParameterTypeName(i, j),
+                            RTL_TEXTENCODING_UTF8));
+                    rtl::OString type(buf.makeStringAndClear());
+                    bool byRef = passByReference(type);
+                    dumpType(o, type, byRef, byRef);
+                    o << " "
+                      << translateIdentifier(
+                          rtl::OUStringToOString(
+                              m_reader.getMethodParameterName(i, j),
+                              RTL_TEXTENCODING_UTF8),
+                          "param", false);
+                }
+                o << ") {\n";
+                inc();
+                o << indent()
+                  << ("::com::sun::star::uno::Reference<"
+                      " ::com::sun::star::lang::XMultiComponentFactory >"
+                      " the_factory(the_context->getServiceManager());\n")
+                  << indent() << "if (!the_factory.is()) {\n";
+                inc();
+                o << indent()
+                  << ("throw com::sun::star::uno::DeploymentException("
+                      "::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("
+                      "\"component context fails to supply service manager\")),"
+                      " the_context);\n");
+                dec();
                 o << indent() << "}\n";
+                if (!rest && params > 0) {
+                    o << indent()
+                      << ("::com::sun::star::uno::Sequence<"
+                          " ::com::sun::star::uno::Any > the_arguments(")
+                      << params << ");\n";
+                    for (sal_uInt16 j = 0; j < params; ++j) {
+                        o << indent() << "the_arguments[" << j << "] <<= "
+                          << translateIdentifier(
+                              rtl::OUStringToOString(
+                                  m_reader.getMethodParameterName(i, j),
+                                  RTL_TEXTENCODING_UTF8),
+                              "param", false)
+                          << ";\n";
+                    }
+                }
+                o << indent() << "::com::sun::star::uno::Reference< "
+                  << scopedBaseName << " > the_instance;\n";
+                codemaker::ExceptionTree tree;
+                sal_uInt16 exceptions = m_reader.getMethodExceptionCount(i);
+                for (sal_uInt16 j = 0; j < exceptions; ++j) {
+                    tree.add(
+                        rtl::OUStringToOString(
+                            m_reader.getMethodExceptionTypeName(i, j),
+                            RTL_TEXTENCODING_UTF8),
+                        m_typeMgr);
+                }
+                if (!tree.getRoot()->present) {
+                    o << indent() << "try {\n";
+                    inc();
+                }
+                o << indent()
+                  << "the_instance = ::com::sun::star::uno::Reference< "
+                  << scopedBaseName
+                  << (" >(the_factory->createInstanceWithArgumentsAndContext("
+                      "::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(\"")
+                  << fullName << "\")), ";
+                if (rest) {
+                    o << translateIdentifier(
+                        rtl::OUStringToOString(
+                            m_reader.getMethodParameterName(i, 0),
+                            RTL_TEXTENCODING_UTF8),
+                        "param", false);
+                } else if (params == 0) {
+                    o << ("::com::sun::star::uno::Sequence<"
+                          " ::com::sun::star::uno::Any >()");
+                } else {
+                    o << "the_arguments";
+                }
+                o << ", the_context), ::com::sun::star::uno::UNO_QUERY);\n";
+                if (!tree.getRoot()->present) {
+                    dec();
+                    o << indent()
+                      << ("} catch (::com::sun::star::uno::RuntimeException &)"
+                          " {\n");
+                    inc();
+                    o << indent() << "throw;\n";
+                    dec();
+                    dumpCatchClauses(o, tree.getRoot());
+                    o << indent()
+                      << ("} catch (::com::sun::star::uno::Exception &"
+                          " the_exception) {\n");
+                    inc();
+                    o << indent()
+                      << ("throw ::com::sun::star::uno::DeploymentException("
+                          "::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("
+                          "\"component context fails to supply service ")
+                      << fullName << " of type " << fullBaseName
+                      << ": \")) + the_exception.Message, the_context);\n";
+                    dec();
+                    o << indent() << "}\n";
+                }
+                o << indent() << "if (!the_instance.is()) {\n";
+                inc();
+                o << indent()
+                  << ("throw ::com::sun::star::uno::DeploymentException("
+                      "::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("
+                      "\"component context fails to supply service ")
+                  << fullName << " of type " << fullBaseName
+                  << "\")), the_context);\n";
+                dec();
+                o << indent() << "}\n" << indent() << "return the_instance;\n";
+                dec();
+                o << indent() << "}\n\n";
             }
-            o << indent() << "if (!the_instance.is()) {\n";
-            inc();
-            o << indent()
-              << ("throw ::com::sun::star::uno::DeploymentException("
-                  "::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("
-                  "\"component context fails to supply service ")
-              << fullName << " of type " << fullBaseName
-              << "\")), the_context);\n";
-            dec();
-            o << indent() << "}\n" << indent() << "return the_instance;\n";
-            dec();
-            o << indent() << "}\n\n";
         }
     }
     o << "private:\n";
@@ -4145,6 +4174,19 @@ sal_Bool ServiceType::dumpHxxFile(
     }
     o << "\n#endif // "<< headerDefine << "\n";
     return true;
+}
+
+void ServiceType::addSpecialDependencies() {
+    if (m_reader.getMethodCount() > 0) {
+        OSL_ASSERT(m_reader.getSuperTypeCount() == 1);
+        m_dependencies.add(
+            rtl::OUStringToOString(
+                m_reader.getSuperTypeName(0), RTL_TEXTENCODING_UTF8));
+    }
+}
+
+bool ServiceType::isDefaultConstructor(sal_uInt16 ctorIndex) const {
+    return m_reader.getMethodName(ctorIndex).getLength() == 0;
 }
 
 bool ServiceType::hasRestParameter(sal_uInt16 ctorIndex) const {
