@@ -2,9 +2,9 @@
  *
  *  $RCSfile: errorhandler.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 12:11:08 $
+ *  last change: $Author: obo $ $Date: 2003-10-20 13:07:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,6 +167,8 @@ static sal_Char* warningCodeToMessage(WarningCode wCode)
         return "request id conflict in inheritance tree: ";
     case WIDL_TYPE_IDENT_CONFLICT:
         return "type and parameter|member name are equal: ";
+    case WIDL_WRONG_NAMING_CONV:
+        return "type or identifier doesn't fulfill the UNO naming convention: ";
     }
     return "unkown warning";
 }
@@ -530,22 +532,47 @@ void ErrorHandler::error3(ErrorCode e, AstDeclaration* d1, AstDeclaration* d2, A
     idlc()->incErrorCount();
 }
 
+void ErrorHandler::warning0(WarningCode w, const sal_Char* warningmsg)
+{
+    if ( idlc()->getOptions()->isValid("-w") || idlc()->getOptions()->isValid("-we") ) {
+        warningHeader(w);
+        fprintf(stderr, "%s\n", warningmsg);
+    }
+
+    if ( idlc()->getOptions()->isValid("-we") )
+        idlc()->incErrorCount();
+    else
+        idlc()->incWarningCount();
+}
+
 void ErrorHandler::warning1(WarningCode w, AstDeclaration* d)
 {
-    warningHeader(w);
-    fprintf(stderr, "'%s'\n", d->getScopedName().getStr());
-    idlc()->incErrorCount();
+    if ( idlc()->getOptions()->isValid("-w") || idlc()->getOptions()->isValid("-we") ) {
+        warningHeader(w);
+        fprintf(stderr, "'%s'\n", d->getScopedName().getStr());
+    }
+
+    if ( idlc()->getOptions()->isValid("-we") )
+        idlc()->incErrorCount();
+    else
+        idlc()->incWarningCount();
 }
 
 void ErrorHandler::warning2(WarningCode w, AstDeclaration* d1, AstDeclaration* d2)
 {
-    warningHeader(w);
-    fprintf(stderr, "'%s', '%s'\n", d1->getScopedName().getStr(),
-            d2->getScopedName().getStr());
-    idlc()->incErrorCount();
+    if ( idlc()->getOptions()->isValid("-w") || idlc()->getOptions()->isValid("-we") ) {
+        warningHeader(w);
+        fprintf(stderr, "'%s', '%s'\n", d1->getScopedName().getStr(),
+                d2->getScopedName().getStr());
+    }
+
+    if ( idlc()->getOptions()->isValid("-we") )
+        idlc()->incErrorCount();
+    else
+        idlc()->incWarningCount();
 }
 
-void ErrorHandler::syntaxError(ParseState ps, sal_Int32 lineNumber, sal_Char* errmsg)
+void ErrorHandler::syntaxError(ParseState ps, sal_Int32 lineNumber,const  sal_Char* errmsg)
 {
     errorHeader(EIDL_SYNTAX_ERROR, lineNumber);
     fprintf(stderr, "%s: %s\n", parseStateToMessage(ps), errmsg);
