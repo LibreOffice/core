@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formtoolbars.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 11:26:11 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 12:22:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-#ifndef IMPROVEFORMS_SVX_SOURCE_FORM_FORMTOOLBARS_HXX
+#ifndef SVX_SOURCE_INC_FORMTOOLBARS_HXX
 #include "formtoolbars.hxx"
 #endif
 
@@ -87,16 +87,19 @@ namespace svxform
     //= FormToolboxes
     //====================================================================
     //--------------------------------------------------------------------
-    FormToolboxes::FormToolboxes( const Reference< XFrame >& _rxFrame )
-        :m_eDocumentType( eUnknownDocumentType )
+    FormToolboxes::FormToolboxes( const Reference< XFrame >& _rxFrame, DocumentType _eDocType )
+        :m_eDocumentType( _eDocType )
     {
         // the document type
-        Reference< XController > xController;
-        if ( _rxFrame.is() )
-            xController = _rxFrame->getController();
-        OSL_ENSURE( xController.is() && xController->getModel().is(), "FormToolboxes::FormToolboxes: can't determine the document type!" );
-        if ( xController.is() )
-            m_eDocumentType = DocumentClassification::classifyDocument( xController->getModel() );
+        if ( eUnknownDocumentType == m_eDocumentType )
+        {
+            Reference< XController > xController;
+            if ( _rxFrame.is() )
+                xController = _rxFrame->getController();
+            OSL_ENSURE( xController.is() && xController->getModel().is(), "FormToolboxes::FormToolboxes: can't determine the document type!" );
+            if ( xController.is() )
+                m_eDocumentType = DocumentClassification::classifyDocument( xController->getModel() );
+        }
 
         // the layout manager
         Reference< XPropertySet > xFrameProps( _rxFrame, UNO_QUERY );
@@ -142,24 +145,29 @@ namespace svxform
     //--------------------------------------------------------------------
     ::rtl::OUString FormToolboxes::getToolboxResourceName( USHORT _nSlotId ) const
     {
-        OSL_ENSURE( ( _nSlotId == SID_FM_MORE_CONTROLS ) || ( _nSlotId == SID_FM_FORM_DESIGN_TOOLS ),
+        OSL_ENSURE( ( _nSlotId == SID_FM_MORE_CONTROLS ) || ( _nSlotId == SID_FM_FORM_DESIGN_TOOLS ) || ( _nSlotId == SID_FM_CONFIG ),
             "FormToolboxes::getToolboxResourceName: unsupported slot!" );
 
-        const sal_Char* pToolBarName = NULL;
+        const sal_Char* pNames[3][3] = {
+            { "formcontrols", "xformcontrols", "databasecontrols" },
+            { "moreformcontrols", "morexformcontrols", "moredatabasecontrols" },
+            { "formdesign", "xformdesign", "databaseformdesign" }
+        };
+        sal_Int32 nDocIndex = 0, nToolbarIndex = 0;
         switch ( m_eDocumentType )
         {
-        case ::svxform::eEnhancedForm:
-            pToolBarName = ( _nSlotId == SID_FM_MORE_CONTROLS ) ? "morexformcontrols" : "xformdesign";
-            break;
-
-        case ::svxform::eDatabaseForm:
-            pToolBarName = ( _nSlotId == SID_FM_MORE_CONTROLS ) ? "moredatabasecontrols" : "databaseformdesign";
-            break;
-
-        default:
-            pToolBarName = ( _nSlotId == SID_FM_MORE_CONTROLS ) ? "moreformcontrols" : "formdesign";
-            break;
+        case ::svxform::eEnhancedForm:      nDocIndex = 1; break;
+        case ::svxform::eDatabaseForm:      nDocIndex = 2; break;
+        default:                            nDocIndex = 0; break;
         }
+        switch ( _nSlotId )
+        {
+        case SID_FM_MORE_CONTROLS:      nToolbarIndex = 1; break;
+        case SID_FM_FORM_DESIGN_TOOLS:  nToolbarIndex = 2; break;
+        default:                        nToolbarIndex = 0; break;
+        }
+
+        const sal_Char* pToolBarName = pNames[nToolbarIndex][nDocIndex];
 
         ::rtl::OUString aToolBarResStr( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/" ));
         aToolBarResStr += ::rtl::OUString::createFromAscii( pToolBarName );
