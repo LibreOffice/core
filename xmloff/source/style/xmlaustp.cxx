@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlaustp.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sab $ $Date: 2000-12-01 10:56:29 $
+ *  last change: $Author: fs $ $Date: 2001-05-28 15:05:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,9 @@
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include "xmlnmspe.hxx"
 #endif
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
+#endif
 
 #ifndef _XMLOFF_PAGEMASTERSTYLEMAP_HXX
 #include "PageMasterStyleMap.hxx"
@@ -112,6 +115,54 @@ void SvXMLAutoStylePoolP::exportStyleAttributes(
         const SvXMLUnitConverter& rUnitConverter,
         const SvXMLNamespaceMap& rNamespaceMap ) const
 {
+    if (XML_STYLE_FAMILY_SD_GRAPHICS_ID == nFamily)
+    {   // it's a graphics style
+        UniReference< XMLPropertySetMapper > aPropertyMapper = rPropExp.getPropertySetMapper();
+        DBG_ASSERT(aPropertyMapper.is(), "SvXMLAutoStylePoolP::exportStyleAttributes: invalid property set mapper!");
+
+#ifdef DBG_UTIL
+        sal_Bool bFoundControlShapeDataStyle = sal_False;
+#endif
+        for (   vector< XMLPropertyState >::const_iterator pProp = rProperties.begin();
+                pProp != rProperties.end();
+                ++pProp
+            )
+        {
+            if (pProp->mnIndex > -1)
+            {   // it's a valid property
+                if (CTF_SD_CONTROL_SHAPE_DATA_STYLE == aPropertyMapper->GetEntryContextId(pProp->mnIndex))
+                {   // it's the control shape data style property
+
+#ifdef DBG_UTIL
+                    if (bFoundControlShapeDataStyle)
+                    {
+                        DBG_ERROR("SvXMLAutoStylePoolP::exportStyleAttributes: found two properties with the ControlShapeDataStyle context id!");
+                        // already added the attribute for the first occurence
+                        break;
+                    }
+#endif
+                    // obtain the data style name
+                    ::rtl::OUString sControlDataStyleName;
+                    pProp->maValue >>= sControlDataStyleName;
+                    DBG_ASSERT(sControlDataStyleName.getLength(), "SvXMLAutoStylePoolP::exportStyleAttributes: invalid property value for the data style name!");
+
+                    // add the attribute
+                    rtl::OUString sAttrName( rNamespaceMap.GetQNameByKey( aPropertyMapper->GetEntryNameSpace(pProp->mnIndex), aPropertyMapper->GetEntryXMLName(pProp->mnIndex) ) );
+                    rAttrList.AddAttribute(sAttrName, ::xmloff::token::GetXMLToken(::xmloff::token::XML_CDATA), sControlDataStyleName);
+
+#ifdef DBG_UTIL
+                    // in a non-pro version, check if there is another property with the special context id we're handling here
+                    bFoundControlShapeDataStyle = sal_True;
+                    continue;
+#else
+                    // in a pro version, just leave the loop
+                    break;
+#endif
+                }
+            }
+        }
+    }
+
     if( nFamily == XML_STYLE_FAMILY_PAGE_MASTER )
     {
         for( vector< XMLPropertyState >::const_iterator pProp = rProperties.begin(); pProp != rProperties.end(); pProp++ )
