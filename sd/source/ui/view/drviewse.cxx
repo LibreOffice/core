@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewse.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: aw $ $Date: 2002-03-21 16:31:08 $
+ *  last change: $Author: aw $ $Date: 2002-05-06 13:43:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,6 +184,11 @@
 #include "optsitem.hxx"
 #endif
 
+// #98721#
+#ifndef _SVX_DATACCESSDESCRIPTOR_HXX_
+#include <svx/dataaccessdescriptor.hxx>
+#endif
+
 using namespace ::rtl;
 using namespace ::com::sun::star;
 
@@ -321,6 +326,42 @@ void SdDrawViewShell::FuPermanent(SfxRequest& rReq)
         {
             pFuActual = new FuConstUnoControl(this, pWindow, pDrView, pDoc, rReq);
             ((FuConstUnoControl*) pFuActual)->SetPermanent(bPermanent);
+            rReq.Done();
+        }
+        break;
+
+        // #98721#
+        case SID_FM_CREATE_FIELDCONTROL:
+        {
+            SFX_REQUEST_ARG( rReq, pDescriptorItem, SfxUnoAnyItem, SID_FM_DATACCESS_DESCRIPTOR, sal_False );
+            DBG_ASSERT( pDescriptorItem, "SdDrawViewShell::FuPermanent(SID_FM_CREATE_FIELDCONTROL): invalid request args!" );
+
+            if(pDescriptorItem)
+            {
+                // get the form view
+                FmFormView* pFormView = PTR_CAST(FmFormView, pDrView);
+                SdrPageView* pPageView = pFormView ? pFormView->GetPageViewPvNum(0) : NULL;
+
+                if(pPageView)
+                {
+                    ::svx::ODataAccessDescriptor aDescriptor(pDescriptorItem->GetValue());
+                    SdrObject* pNewDBField = pFormView->CreateFieldControl(aDescriptor);
+
+                    if(pNewDBField)
+                    {
+                        Rectangle aVisArea = pWindow->PixelToLogic(Rectangle(Point(0,0), pWindow->GetOutputSizePixel()));
+                        Point aObjPos(aVisArea.Center());
+                        Size aObjSize(pNewDBField->GetLogicRect().GetSize());
+                        aObjPos.X() -= aObjSize.Width() / 2;
+                        aObjPos.Y() -= aObjSize.Height() / 2;
+                        Rectangle aNewObjectRectangle(aObjPos, aObjSize);
+
+                        pNewDBField->SetLogicRect(aNewObjectRectangle);
+
+                        pView->InsertObject(pNewDBField, *pPageView, pView->IsSolidDraggingNow() ? SDRINSERT_NOBROADCAST : 0);
+                    }
+                }
+            }
             rReq.Done();
         }
         break;
