@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mt $ $Date: 2000-10-18 13:41:04 $
+ *  last change: $Author: hr $ $Date: 2000-10-30 18:29:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3658,7 +3658,7 @@ void OutputDevice::ImplDrawTextLines( long nX, long nY,
     {
         ::rtl::OUString aText( pStr, nLen );
         uno::Reference < text::XBreakIterator > xBI = vcl::unohelper::CreateBreakIterator();
-        uno::Reference< linguistic::XHyphenator > xHyph;
+        uno::Reference< linguistic2::XHyphenator > xHyph;
         text::LineBreakHyphenationOptions aHyphOptions( xHyph, 1 );
         text::LineBreakUserOptions aUserOptions;
 
@@ -3982,7 +3982,7 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
     {
         ::rtl::OUString aText( rStr );
         uno::Reference < text::XBreakIterator > xBI;
-        uno::Reference< linguistic::XHyphenator > xHyph;
+        uno::Reference< linguistic2::XHyphenator > xHyph;
         text::LineBreakHyphenationOptions aHyphOptions( xHyph, 1 );
         text::LineBreakUserOptions aUserOptions;
 
