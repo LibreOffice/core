@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: fme $ $Date: 2002-08-20 11:41:10 $
+#   last change: $Author: vg $ $Date: 2003-04-17 13:42:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,10 +64,6 @@ PRJ=..$/..$/..
 
 PRJNAME=sw
 TARGET=bastyp
-
-PROJECTPCH=core_pch
-PDBTARGET=core_pch
-PROJECTPCHSOURCE=..\core_1st\core_pch
 
 AUTOSEG=true
 
