@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JavaThreadPoolFactory.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 09:21:52 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 13:36:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,41 +59,52 @@
  *
  ************************************************************************/
 
-
 package com.sun.star.lib.uno.environments.remote;
 
-
-import java.io.UnsupportedEncodingException;
-
-import java.util.Enumeration;
-import java.util.Hashtable;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.WeakHashMap;
 
-import com.sun.star.uno.UnoRuntime;
+final class JavaThreadPoolFactory {
+    public JavaThreadPoolFactory() {}
 
+    public IThreadPool createThreadPool() {
+        return new JavaThreadPool(this);
+    }
 
-public class JavaThreadPoolFactory {
-    private static final boolean DEBUG = false;
+    public void addJobQueue(JobQueue jobQueue) {
+        synchronized (jobQueues) {
+            jobQueues.put(jobQueue.getThreadId(), jobQueue);
+        }
+    }
 
-    protected Hashtable _jobQueues  = new Hashtable();
+    public void removeJobQueue(JobQueue jobQueue) {
+        synchronized (jobQueues) {
+            jobQueues.remove(jobQueue.getThreadId());
+        }
+    }
 
+    public JobQueue getJobQueue(ThreadId threadId) {
+        synchronized (jobQueues) {
+            return (JobQueue) jobQueues.get(threadId);
+        }
+    }
 
-//      public JavaThreadPoolFactory() {
-//          new Thread() {
-//                  public void run() {
-//                      try {
-//                          while(true) {
-//                              list();
+    public JobQueue getAsyncJobQueue(ThreadId threadId) {
+        JobQueue q = getJobQueue(threadId);
+        return q == null ? null : q._async_jobQueue;
+    }
 
-//                              Thread.sleep(2000);
-//                          }
-//                      }
-//                      catch(InterruptedException interruptedException) {
-//                          System.err.println("lister interrupted:" + interruptedException);
-//                      }
-//                  }
-//              }.start();
-//      }
+    public void dispose(Object disposeId, Throwable throwable) {
+        JobQueue[] qs;
+        synchronized (jobQueues) {
+            Collection c = jobQueues.values();
+            qs = (JobQueue[]) c.toArray(new JobQueue[c.size()]);
+        }
+        for (int i = 0; i < qs.length; ++i) {
+            qs[i].dispose(disposeId, throwable);
+        }
+    }
 
     public static ThreadId getThreadId() {
         Thread t = Thread.currentThread();
@@ -113,55 +124,5 @@ public class JavaThreadPoolFactory {
     }
 
     private static final WeakHashMap threadIdMap = new WeakHashMap();
-
-    /**
-     * For debugging, lists the jobqueues
-     */
-    synchronized void list() {
-        Enumeration elements = _jobQueues.elements();
-
-        System.err.println("##### JavaThreadPoolFactory.list:");
-        while(elements.hasMoreElements()) {
-            System.err.println(" - " + elements.nextElement());
-        }
-    }
-
-    void addJobQueue(JobQueue jobQueue) {
-        if(DEBUG) System.err.println("##### "+ getClass().getName() + ".addJobQueue:" + jobQueue + " " + ((jobQueue._sync_jobQueue != null) ? jobQueue._sync_jobQueue._threadId : null));
-
-        _jobQueues.put(jobQueue.getThreadId(), jobQueue);
-    }
-
-    JobQueue getJobQueue(ThreadId threadId) {
-        return (JobQueue)_jobQueues.get(threadId);
-    }
-
-    void removeJobQueue(JobQueue jobQueue) {
-        _jobQueues.remove(jobQueue.getThreadId());
-    }
-
-
-    JobQueue getAsyncJobQueue(ThreadId threadId) {
-        JobQueue jobQueue = (JobQueue)_jobQueues.get(threadId);
-
-        JobQueue async_jobQueue = null;
-
-        if(jobQueue != null)
-            async_jobQueue = jobQueue._async_jobQueue;
-
-        if(DEBUG) System.err.println("##### "+ getClass().getName() + ".getAsyncJobQueue:" + jobQueue + " " + async_jobQueue);
-
-        return async_jobQueue;
-    }
-
-    public IThreadPool createThreadPool() {
-        return new JavaThreadPool(this);
-    }
-
-    void dispose(Object disposeId, Throwable throwable) {
-        Enumeration elements = _jobQueues.elements();
-
-        while(elements.hasMoreElements())
-            ((JobQueue)elements.nextElement()).dispose(disposeId, throwable);
-    }
+    private final HashMap jobQueues = new HashMap();
 }
