@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: bustamam $ $Date: 2001-05-05 01:29:10 $
+#   last change: $Author: os $ $Date: 2001-05-08 07:35:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,6 +86,7 @@ IDLFILES=\
     BibliographyDataField.idl\
     Bookmark.idl\
     Bookmarks.idl\
+    CellProperties.idl\
     ChainedTextFrame.idl\
     ChapterFormat.idl\
     ChapterNumberingRule.idl\
