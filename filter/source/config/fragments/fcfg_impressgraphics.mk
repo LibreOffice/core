@@ -1,3 +1,5 @@
+all_fragments+=impressgraphics
+
 # -----------------------------------------------
 # count = 20
 T4_IMPRESSGRAPHICS = \
@@ -64,6 +66,6 @@ CONTENTHANDLERS_4fcfg_impressgraphics = $(foreach,i,$(C4_IMPRESSGRAPHICS) conten
 # needed to get dependencies inside global makefile work!
 ALL_4fcfg_impressgraphics = \
     $(TYPES_4fcfg_impressgraphics) \
-    $(FILTERS_4fcfg_impressgraphics) \
+    $(foreach,i,$(FILTERS_4fcfg_base) $(MISC)$/$i) \
     $(FRAMELOADERS_4fcfg_impressgraphics) \
     $(CONTENTHANDLERS_4fcfg_impressgraphics)
