@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fieldwnd.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 12:30:04 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:20:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -357,23 +357,23 @@ bool ScDPFieldWindow::IsExistingIndex( size_t nIndex ) const
     return nIndex < aFieldArr.size();
 }
 
-size_t ScDPFieldWindow::CalcNewFieldIndex( short nDX, short nDY ) const
+size_t ScDPFieldWindow::CalcNewFieldIndex( SCsCOL nDX, SCsROW nDY ) const
 {
     size_t nNewField = nFieldSelected;
     switch( eType )
     {
         case TYPE_PAGE:
-            nNewField += nDX + nDY * MAX_PAGEFIELDS / 2;
+            nNewField += static_cast<SCsCOLROW>(nDX) + nDY * MAX_PAGEFIELDS / 2;
         break;
         case TYPE_COL:
-            nNewField += nDX + nDY * MAX_FIELDS / 2;
+            nNewField += static_cast<SCsCOLROW>(nDX) + nDY * MAX_FIELDS / 2;
         break;
         case TYPE_ROW:
         case TYPE_DATA:
             nNewField += nDY;
         break;
         case TYPE_SELECT:
-            nNewField += nDX * LINE_SIZE + nDY;
+            nNewField += static_cast<SCsCOLROW>(nDX) * LINE_SIZE + nDY;
         break;
     }
 
@@ -424,7 +424,7 @@ void ScDPFieldWindow::SetSelectionEnd()
     }
 }
 
-void ScDPFieldWindow::MoveSelection( USHORT nKeyCode, short nDX, short nDY )
+void ScDPFieldWindow::MoveSelection( USHORT nKeyCode, SCsCOL nDX, SCsROW nDY )
 {
     size_t nNewIndex = CalcNewFieldIndex( nDX, nDY );
     if( (eType == TYPE_SELECT) && (nNewIndex == nFieldSelected) )
@@ -470,7 +470,7 @@ void ScDPFieldWindow::MoveField( size_t nDestIndex )
     }
 }
 
-void ScDPFieldWindow::MoveFieldRel( short nDX, short nDY )
+void ScDPFieldWindow::MoveFieldRel( SCsCOL nDX, SCsROW nDY )
 {
     MoveField( CalcNewFieldIndex( nDX, nDY ) );
 }
