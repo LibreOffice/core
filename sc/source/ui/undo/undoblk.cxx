@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undoblk.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 18:11:33 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 16:03:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -947,6 +947,7 @@ void ScUndoPaste::DoChange( const BOOL bUndo )
         SetChangeTrack();
 
     ScRange aDrawRange( aBlockRange );
+    pDoc->ExtendMerge( aDrawRange, TRUE );      // only needed for single sheet (text/rtf etc.)
     USHORT nPaint = PAINT_GRID;
     if (bPaintAll)
     {
