@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: mtg $ $Date: 2001-10-01 10:03:09 $
+ *  last change: $Author: mtg $ $Date: 2001-10-09 14:52:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3650,7 +3650,8 @@ uno::Reference< table::XCellRange >  SwXCellRange::getCellRangeByPosition(
     uno::Reference< table::XCellRange >  aRet;
     SwFrmFmt* pFmt = GetFrmFmt();
     if(pFmt && getColumnCount() > nRight && getRowCount() > nBottom &&
-        nLeft <= nRight && nTop <= nBottom)
+        nLeft <= nRight && nTop <= nBottom
+        && nLeft >= 0 && nRight >= 0 && nTop >= 0 && nBottom >= 0 )
     {
         SwTable* pTable = SwTable::FindTable( pFmt );
         if(!pTable->IsTblComplex())
