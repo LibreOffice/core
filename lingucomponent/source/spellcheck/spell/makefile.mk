@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-26 13:03:01 $
+#   last change: $Author: hr $ $Date: 2004-03-09 12:42:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,16 +72,16 @@ USE_DEFFILE=TRUE
 MYSPELLLIB=-lmyspell
 .ENDIF # unx
 .IF "$(GUI)"=="WNT"
-MYSPELLLIB=libmyspell.lib
+MYSPELLLIB=myspell.lib
 .ENDIF # wnt
 .ENDIF
 
 .IF "$(ULINGULIB)"==""
 .IF "$(GUI)"=="UNX"
-ULINGULIB=-lulingu$(UPD)$(DLLPOSTFIX)
+ULINGULIB=-lulingu
 .ENDIF # unx
 .IF "$(GUI)"=="WNT"
-ULINGULIB=$(LIBPRE) ulingu.lib
+ULINGULIB=libulingu.lib
 .ENDIF # wnt
 .ENDIF
 
@@ -125,9 +125,9 @@ UNOTYPES=\
     com.sun.star.linguistic2.XThesaurus
 
 
-CXXFLAGS += -I..$/myspell -I..$/..$/lingutil
+CXXFLAGS +=  -I..$/myspell -I..$/..$/lingutil
 CFLAGSCXX += -I..$/myspell -I..$/..$/lingutil
-CFLAGSCC += -I..$/myspell -I..$/..$/lingutil
+CFLAGSCC +=  -I..$/myspell -I..$/..$/lingutil
 
 .IF "$(header)" == ""
 
