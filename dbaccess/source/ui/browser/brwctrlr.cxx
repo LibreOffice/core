@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-17 09:54:52 $
+ *  last change: $Author: fs $ $Date: 2001-02-13 11:20:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1287,12 +1287,14 @@ void SbaXDataBrowserController::ExecuteFilterSortCrit(sal_Bool bFilter)
 
             Reference< ::com::sun::star::form::XLoadable >  xReload(xFormSet, UNO_QUERY);
             FormErrorHelper aReportError(this);
-            xReload->reload();
+            if (xReload->isLoaded())
+                xReload->reload();
+            else
+                xReload->load();
         }
         catch(Exception&)
         {
         }
-        ;
     }
 
     if (errorOccured())
@@ -1314,12 +1316,14 @@ void SbaXDataBrowserController::ExecuteFilterSortCrit(sal_Bool bFilter)
         try
         {
             Reference< ::com::sun::star::form::XLoadable >  xReload(xFormSet, UNO_QUERY);
-            xReload->reload();
+            if (xReload->isLoaded())
+                xReload->reload();
+            else
+                xReload->load();
         }
         catch(Exception&)
         {
         }
-        ;
     }
     InvalidateFeature(ID_BROWSER_REMOVEFILTER);
 }
