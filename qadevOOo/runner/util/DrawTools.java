@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DrawTools.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 16:27:02 $
+ *  last change:$Date: 2003-02-05 13:23:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,9 @@ import util.DesktopTools;
 import util.InstCreator;
 import util.ShapeDsc;
 
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
+
 /**
  * contains helper methods for draw documents
  */
@@ -130,7 +133,8 @@ public class DrawTools {
     public static XDrawPage getDrawPage ( XComponent aDoc, int nr ) {
         XDrawPage oDP = null;
         try {
-            oDP = (XDrawPage) getDrawPages( aDoc ).getByIndex( nr );
+            oDP = (XDrawPage) AnyConverter.toObject(
+                new Type(XDrawPage.class),getDrawPages( aDoc ).getByIndex( nr ));
         } catch ( Exception e ) {
             throw new IllegalArgumentException( "Couldn't get drawpage" );
         }
