@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqliterator.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-01 13:10:17 $
+ *  last change: $Author: oj $ $Date: 2001-02-23 14:54:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@
 #ifndef _COM_SUN_STAR_SDBC_XDATABASEMETADATA_HPP_
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDBC_SQLWARNING_HPP_
+#include <com/sun/star/sdbc/SQLWarning.hpp>
+#endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
@@ -139,16 +142,19 @@ namespace connectivity
 
     class OSQLParseTreeIterator
     {
-      private:
-        const OSQLParseNode*        m_pParseTree;   // aktueller ParseTree
-        OSQLStatementType           m_eStatementType; // Art des Statements
-        OSQLTables                  m_aTables; // Alle Tabellen die im ParseTree und bei der Connection gefunden wurden
-        ::vos::ORef<OSQLColumns>    m_aSelectColumns; // alle Spalten aus dem Select-Clause
+    private:
+        ::com::sun::star::sdbc::SQLWarning  m_aWarning;         // conatins the error while iterating through the statement
+        const OSQLParseNode*                m_pParseTree;       // aktueller ParseTree
+        const OSQLParser*                   m_pParser;          // if set used for general error messages from the context
+        OSQLStatementType                   m_eStatementType;   // Art des Statements
+        OSQLTables                          m_aTables;          // Alle Tabellen die im ParseTree und bei der Connection gefunden wurden
+        ::vos::ORef<OSQLColumns>            m_aSelectColumns;   // alle Spalten aus dem Select-Clause
         ::comphelper::UStringMixEqual       m_aCaseEqual;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>     m_xTables;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>    m_xDatabaseMetaData;
 
+        void appendWarning(const ::rtl::OUString& _sErrMsg); // append warnings if m_pParser is set
         // F"ugt eine Tabelle in die Map ein
         void                traverseOneTableName(const OSQLParseNode * pTableName, const ::rtl::OUString & rTableRange);
         void                traverseORCriteria(OSQLParseNode * pSearchCondition);
@@ -179,7 +185,8 @@ namespace connectivity
         OSQLParseTreeIterator(const OSQLParseTreeIterator & rIter);
         OSQLParseTreeIterator(  const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _xTableSupplier ,
                                 const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>& _xDatabaseMetaData,
-                                const OSQLParseNode* pRoot);
+                                const OSQLParseNode* pRoot,
+                                const OSQLParser* _pParser = NULL);
         ~OSQLParseTreeIterator();
 
         void dispose();
@@ -187,6 +194,7 @@ namespace connectivity
         // Der zu analysierende/zu traversierende Parse Tree:
         // bei "Ubergabe von NULL wird der aktuelle Parsetree gel"oscht und der Fehlerstatus gecleared
         void setParseTree(const OSQLParseNode * pNewParseTree);
+        void setParser(const OSQLParser* _pParser) { m_pParser = _pParser; }
         const OSQLParseNode * getParseTree() const { return m_pParseTree; };
 
         // Teilbaueme bei einem select statement
@@ -195,6 +203,7 @@ namespace connectivity
         const OSQLParseNode* getGroupByTree() const;
         const OSQLParseNode* getHavingTree() const;
 
+        ::com::sun::star::sdbc::SQLWarning  getWarning() const { return m_aWarning; }
         // Statement-Typ (wird bereits in setParseTree gesetzt):
         OSQLStatementType getStatementType() const { return m_eStatementType; }
 

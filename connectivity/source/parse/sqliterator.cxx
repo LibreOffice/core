@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqliterator.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-01 13:09:54 $
+ *  last change: $Author: oj $ $Date: 2001-02-23 14:52:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,17 +109,20 @@ OSQLParseTreeIterator::OSQLParseTreeIterator()
     : m_pParseTree(NULL)
     , m_xTables(NULL)
     , m_xDatabaseMetaData(NULL)
+    ,m_pParser(NULL)
 {
     m_aSelectColumns = new OSQLColumns();
 }
 //-----------------------------------------------------------------------------
 OSQLParseTreeIterator::OSQLParseTreeIterator(const Reference< XNameAccess>& _xTables ,
                                              const Reference< XDatabaseMetaData>& _xDatabaseMetaData,
-                                             const OSQLParseNode* pRoot)
+                                             const OSQLParseNode* pRoot,
+                                             const OSQLParser* _pParser)
     : m_xTables(_xTables)
     , m_xDatabaseMetaData(_xDatabaseMetaData)
     , m_aTables(_xDatabaseMetaData->storesMixedCaseQuotedIdentifiers())
     , m_aCaseEqual(_xDatabaseMetaData->storesMixedCaseQuotedIdentifiers())
+    ,m_pParser(_pParser)
 {
     m_aSelectColumns = new OSQLColumns();// must be done because we need an empty column at zero
     setParseTree(pRoot);
@@ -129,6 +132,7 @@ OSQLParseTreeIterator::OSQLParseTreeIterator(const OSQLParseTreeIterator & rIter
     :m_xTables(NULL)
     ,m_pParseTree(NULL)
     , m_xDatabaseMetaData(NULL)
+    ,m_pParser(NULL)
 {
     OSL_ASSERT("OSQLParseTreeIterator: Copy-Konstruktor nicht implementiert!");
 }
@@ -166,6 +170,7 @@ void OSQLParseTreeIterator::setParseTree(const OSQLParseNode * pNewParseTree)
         return;
     }
 
+    m_aWarning = SQLWarning();
     //  m_aTables.setCaseSensitive(TablesAreSensitive());
 
 
@@ -257,6 +262,12 @@ void OSQLParseTreeIterator::traverseOneTableName(const OSQLParseNode * pTableNam
             }
             if(m_xTables->hasByName(aComposedName)) // the name can be changed before
                 m_xTables->getByName(aComposedName) >>= m_aTables[aTableRange];
+            else if(m_pParser)
+            {
+                ::rtl::OUString sErrMsg = m_pParser->getContext().getErrorMessage(OParseContext::ERROR_INVALID_TABLE);
+                sErrMsg = sErrMsg.replaceAt(sErrMsg.indexOf('#'),1,aTableName);
+                appendWarning(sErrMsg);
+            }
 
         }
         catch(Exception&)
@@ -534,7 +545,8 @@ void OSQLParseTreeIterator::traverseSelectColumnNames(const OSQLParseNode* pSele
 
     if (!pSelectNode || m_eStatementType != SQL_STATEMENT_SELECT || !m_aTables.size())
     {
-        //aIteratorStatus.setInvalidStatement();
+        if(m_pParser)
+            appendWarning(m_pParser->getContext().getErrorMessage(OParseContext::ERROR_GENERAL));
         return;
     }
 
@@ -1125,6 +1137,14 @@ void OSQLParseTreeIterator::appendColumns(const ::rtl::OUString& _rTableAlias,co
             Reference< XPropertySet> xCol = pColumn;
             m_aSelectColumns->push_back(xCol);
         }
+        else if(m_pParser)
+        {
+            ::rtl::OUString sErrMsg = m_pParser->getContext().getErrorMessage(OParseContext::ERROR_INVALID_COLUMN);
+            sErrMsg = sErrMsg.replaceAt(sErrMsg.indexOf('#'),1,*pBegin);
+            sErrMsg = sErrMsg.replaceAt(sErrMsg.indexOf('#'),1,_rTableAlias);
+            appendWarning(sErrMsg);
+        }
+
     }
 }
 //-----------------------------------------------------------------------------
@@ -1481,6 +1501,23 @@ sal_Bool OSQLParseTreeIterator::isTableNode(const OSQLParseNode* _pTableNode) co
     return _pTableNode && (SQL_ISRULE(_pTableNode,catalog_name) ||
                            SQL_ISRULE(_pTableNode,schema_name)  ||
                            SQL_ISRULE(_pTableNode,table_name));
+}
+// -----------------------------------------------------------------------------
+void OSQLParseTreeIterator::appendWarning(const ::rtl::OUString& _sErrMsg)
+{
+    OSL_ENSURE(m_pParser,"This should normally be checked outside!");
+    if(m_pParser)
+    {
+        if(m_aWarning.Message.getLength())
+        {
+            SQLWarning aWarning = m_aWarning;
+            while(aWarning.NextException.hasValue())
+                aWarning.NextException >>= aWarning;
+            aWarning.NextException <<= SQLWarning(_sErrMsg,NULL,::rtl::OUString::createFromAscii("HY0000"),1000,Any());
+        }
+        else
+            m_aWarning = SQLWarning(_sErrMsg,NULL,::rtl::OUString::createFromAscii("HY0000"),1000,Any());
+    }
 }
 
 
