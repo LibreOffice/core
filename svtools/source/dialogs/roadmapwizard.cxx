@@ -2,9 +2,9 @@
  *
  *  $RCSfile: roadmapwizard.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2004-11-26 20:41:02 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 11:16:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -211,7 +211,7 @@ namespace svt
     {
         DBG_CTOR( RoadmapWizard, CheckInvariants );
 
-        m_pImpl->pRoadmap = new ORoadmap( this, WB_DIALOGCONTROL );
+        m_pImpl->pRoadmap = new ORoadmap( this, WB_TABSTOP );
         m_pImpl->pRoadmap->SetText( String( _rRoadmapTitleResource ) );
         m_pImpl->pRoadmap->SetPosPixel( Point( 0, 0 ) );
         m_pImpl->pRoadmap->SetItemSelectHdl( LINK( this, RoadmapWizard, OnRoadmapItemSelected ) );
@@ -219,6 +219,11 @@ namespace svt
         Size aRoadmapSize =( LogicToPixel( Size( 85, 0 ), MAP_APPFONT ) );
         aRoadmapSize.Height() = GetSizePixel().Height();
         m_pImpl->pRoadmap->SetSizePixel( aRoadmapSize );
+
+        m_pImpl->pFixedLine = new FixedLine( this, WB_VERT );
+        m_pImpl->pFixedLine->Show();
+        m_pImpl->pFixedLine->SetPosPixel( Point( aRoadmapSize.Width() + 1, 0 ) );
+        m_pImpl->pFixedLine->SetSizePixel( Size( LogicToPixel( Size( 2, 0 ) ).Width(), aRoadmapSize.Height() ) );
 
         SetViewWindow( m_pImpl->pRoadmap );
         SetViewAlign( WINDOWALIGN_LEFT );
@@ -541,27 +546,31 @@ namespace svt
         m_pImpl->pRoadmap->EnableRoadmapItem( (RoadmapTypes::ItemId)_nState, _bEnable );
     }
 
+    //--------------------------------------------------------------------
     void RoadmapWizard::Resize()
     {
         OWizardMachine::Resize();
-        ResizeFixedLine();
+
+        if ( IsReallyShown() && !IsInInitShow() )
+            ResizeFixedLine();
     }
 
 
+    //--------------------------------------------------------------------
     void RoadmapWizard::StateChanged( StateChangedType nType )
     {
         WizardDialog::StateChanged( nType );
+
+        if ( nType == STATE_CHANGE_INITSHOW )
+            ResizeFixedLine();
     }
 
+    //--------------------------------------------------------------------
     void RoadmapWizard::ResizeFixedLine()
     {
-        if ( !m_pImpl->pFixedLine )
-        {
-            m_pImpl->pFixedLine = new FixedLine( this, WB_VERT );
-            m_pImpl->pFixedLine->Show( sal_True );
-        }
-        m_pImpl->pFixedLine->SetPosSizePixel( m_pImpl->pRoadmap->GetSizePixel().Width(), 0, 0, GetPageSizePixel().Height(),
-                                    WINDOW_POSSIZE_POS | WINDOW_POSSIZE_HEIGHT );
+        Size aSize( m_pImpl->pRoadmap->GetSizePixel() );
+        aSize.Width() = m_pImpl->pFixedLine->GetSizePixel().Width();
+        m_pImpl->pFixedLine->SetSizePixel( aSize );
     }
 
     //--------------------------------------------------------------------
