@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propres.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 06:00:50 $
+ *  last change: $Author: hjs $ $Date: 2001-05-12 06:49:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@ String RID_STR_STANDARD
     Text[ turkish ] = "Standart";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Predeterminado";
-    Text[ finnish ] = "Standard";
+    Text[ finnish ] = "Vakio";
 };
 String RID_STR_PROPPAGE_DEFAULT
 {
@@ -113,7 +113,7 @@ String RID_STR_PROPPAGE_DEFAULT
     Text[ turkish ] = "Genel";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "General";
-    Text[ finnish ] = "Allgemein";
+    Text[ finnish ] = "Yleistä";
 };
 String RID_STR_PROPPAGE_DATA
 {
@@ -139,7 +139,7 @@ String RID_STR_PROPPAGE_DATA
     Text[ turkish ] = "Veriler";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Datos";
-    Text[ finnish ] = "Daten";
+    Text[ finnish ] = "Tiedot";
 };
 String RID_STR_BOOL
 {
@@ -165,12 +165,15 @@ String RID_STR_BOOL
     Text[ turkish ] = "Hayýr;Evet";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "No;Sí";
-    Text[ finnish ] = "Nein;Ja";
+    Text[ finnish ] = "Ei;Kyllä";
 };
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2001/05/10 06:00:50  kz
+ *  Merge SRC631: 05/10/01 - 08:00:59 (NoBranch)
+ *
  *  Revision 1.4  2001/05/04 20:08:05  kz
  *  Merge SRC630: 05/04/01 - 22:08:03 (NoBranch)
  *
