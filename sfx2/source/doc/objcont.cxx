@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objcont.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2001-07-06 14:01:08 $
+ *  last change: $Author: mba $ $Date: 2001-07-20 10:24:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1899,7 +1899,14 @@ SfxObjectShellRef MakeObjectShellForOrganizer_Impl( const String& aTargetURL, BO
 SfxToolBoxConfig* SfxObjectShell::GetToolBoxConfig_Impl()
 {
     if ( !pImp->pTbxConfig )
+    {
         pImp->pTbxConfig = new SfxToolBoxConfig(
             GetConfigManager() ? pImp->pCfgMgr : SFX_APP()->GetConfigManager_Impl() );
+
+        const SfxFilter* pFilter = GetMedium()->GetFilter();
+        if ( pFilter && pFilter->GetFilterName().CompareToAscii("writer_web_HTML_help") == COMPARE_EQUAL )
+            pImp->pTbxConfig->SetStatusBarVisible( FALSE );
+    }
+
     return pImp->pTbxConfig;
 }
