@@ -2,9 +2,9 @@
  *
  *  $RCSfile: query.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-01 10:34:45 $
+ *  last change: $Author: fs $ $Date: 2001-03-09 09:21:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1102,92 +1102,6 @@ ToolBox RID_BRW_QUERYDESIGN_TOOLBOX
     {
         ToolBoxItem
         {
-            Identifier = ID_BROWSER_EDITDOC ;
-            HelpId = SID_EDITDOC ;
-            Text = "Bearbeiten" ;
-            Text [ ENGLISH ] = "Edit" ;
-        };
-        ToolBoxItem
-        {
-            Type = TOOLBOXITEM_SEPARATOR ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_NEWDOC ;
-            HelpId = SID_NEWDOC ;
-            Hide = TRUE;
-            Text = "Bearbeiten" ;
-            Text [ ENGLISH ] = "Bearbeiten" ;
-        };
-        ToolBoxItem
-        {
-            Identifier = ID_BROWSER_SAVEDOC ;
-            HelpId = SID_SAVEDOC ;
-            Text = "Speichern" ;
-            Text [ ENGLISH ] = "Save" ;
-        };
-        ToolBoxItem
-        {
-            Identifier = ID_BROWSER_SAVEASDOC ;
-            HelpId = SID_SAVEASDOC ;
-            Text = "Speichern als" ;
-            Text [ ENGLISH ] = "Save as" ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_PRINTDOCDIRECT ;
-            HelpId = SID_PRINTDOCDIRECT ;
-            Hide = TRUE;
-            Text = "Drucken" ;
-            Text [ ENGLISH ] = "Print" ;
-        };
-        ToolBoxItem
-        {
-            Type = TOOLBOXITEM_SEPARATOR ;
-        };
-        ToolBoxItem
-        {
-            Identifier = ID_BROWSER_CUT ;
-            HelpId = SID_CUT ;
-            MID_SBA_QRY_CUT
-        };
-        ToolBoxItem
-        {
-            Identifier = ID_BROWSER_COPY ;
-            HelpId = SID_COPY ;
-            MID_SBA_QRY_COPY
-        };
-        ToolBoxItem
-        {
-            Identifier = ID_BROWSER_PASTE ;
-            HelpId = SID_PASTE ;
-            MID_SBA_QRY_PASTE
-        };
-        ToolBoxItem
-        {
-            Type = TOOLBOXITEM_SEPARATOR ;
-        };
-        ToolBoxItem
-        {
-            Identifier = ID_BROWSER_UNDO ;
-            HelpId = SID_UNDO ;
-            Text = "Rückgängig" ;
-            Text [ ENGLISH ] = "Undo" ;
-        };
-        ToolBoxItem
-        {
-            Identifier = ID_BROWSER_REDO ;
-            HelpId = SID_REDO ;
-            Text = "Wiederherstellen" ;
-            Text [ ENGLISH ] = "Redo" ;
-
-        };
-        ToolBoxItem
-        {
-            Type = TOOLBOXITEM_SEPARATOR ;
-        };
-        ToolBoxItem
-        {
             Identifier = ID_BROWSER_QUERY_EXECUTE;
             HelpId = SID_FM_EXECUTE ;
             Text = "Ausführen" ;
@@ -1341,6 +1255,96 @@ ToolBox RID_BRW_QUERYDESIGN_TOOLBOX
             Text[ arabic ] = "Þíã æÇÖÍÉ";
             Text[ turkish ] = "Benzersiz deðerler";
             Text[ language_user1 ] = " ";
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = ID_BROWSER_EDITDOC ;
+            HelpId = SID_EDITDOC ;
+            Text = "Bearbeiten" ;
+            Text [ ENGLISH ] = "Edit" ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_NEWDOC ;
+            HelpId = SID_NEWDOC ;
+            Hide = TRUE;
+            Text = "Bearbeiten" ;
+            Text [ ENGLISH ] = "Bearbeiten" ;
+        };
+        ToolBoxItem
+        {
+            Identifier = ID_BROWSER_SAVEDOC ;
+            HelpId = SID_SAVEDOC ;
+            Text = "Speichern" ;
+            Text [ ENGLISH ] = "Save" ;
+        };
+        ToolBoxItem
+        {
+            Identifier = ID_BROWSER_SAVEASDOC ;
+            HelpId = SID_SAVEASDOC ;
+            Text = "Speichern als" ;
+            Text [ ENGLISH ] = "Save as" ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_PRINTDOCDIRECT ;
+            HelpId = SID_PRINTDOCDIRECT ;
+            Hide = TRUE;
+            Text = "Drucken" ;
+            Text [ ENGLISH ] = "Print" ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = ID_BROWSER_CUT ;
+            HelpId = SID_CUT ;
+            MID_SBA_QRY_CUT
+        };
+        ToolBoxItem
+        {
+            Identifier = ID_BROWSER_COPY ;
+            HelpId = SID_COPY ;
+            MID_SBA_QRY_COPY
+        };
+        ToolBoxItem
+        {
+            Identifier = ID_BROWSER_PASTE ;
+            HelpId = SID_PASTE ;
+            MID_SBA_QRY_PASTE
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = ID_BROWSER_UNDO ;
+            HelpId = SID_UNDO ;
+            Text = "Rückgängig" ;
+            Text [ ENGLISH ] = "Undo" ;
+        };
+        ToolBoxItem
+        {
+            Identifier = ID_BROWSER_REDO ;
+            HelpId = SID_REDO ;
+            Text = "Wiederherstellen" ;
+            Text [ ENGLISH ] = "Redo" ;
+
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
         };
 /*      ToolBoxItem
         {
