@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdedxv.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: cl $ $Date: 2001-11-05 13:49:28 $
+ *  last change: $Author: aw $ $Date: 2001-11-16 12:57:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1340,6 +1340,11 @@ BOOL SdrObjEditView::GetAttributes(SfxItemSet& rTargetSet, BOOL bOnlyHardAttr) c
         DBG_ASSERT(pTextEditOutlinerView!=NULL,"SdrObjEditView::GetAttributes(): pTextEditOutlinerView=NULL");
         DBG_ASSERT(pTextEditOutliner!=NULL,"SdrObjEditView::GetAttributes(): pTextEditOutliner=NULL");
 
+        // #92389# take care of bOnlyHardAttr(!)
+        if(!bOnlyHardAttr && pTextEditObj->GetStyleSheet())
+            rTargetSet.Put(pTextEditObj->GetStyleSheet()->GetItemSet());
+
+        // add object attributes
         rTargetSet.Put( pTextEditObj->GetItemSet() );
 
         if( pTextEditObj->GetOutlinerParaObject() )
