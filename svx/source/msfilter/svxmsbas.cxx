@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxmsbas.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cmc $ $Date: 2001-06-15 14:39:10 $
+ *  last change: $Author: ab $ $Date: 2001-08-02 12:10:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,14 @@
 #include <msvbasic.hxx>
 #endif
 
+#include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/script/XLibraryContainer.hpp>
+using namespace com::sun::star::container;
+using namespace com::sun::star::script;
+using namespace com::sun::star::uno;
+using namespace com::sun::star::lang;
+
+
 int SvxImportMSVBasic::Import( const String& rStorageName,
                                 const String &rSubStorageName,
                                 BOOL bAsComment, BOOL bStripped )
@@ -143,13 +151,25 @@ BOOL SvxImportMSVBasic::ImportCode_Impl( const String& rStorageName,
 //this method is removed in the Unicode-Version
 //      rDocSh.GetSbxObject();
 
+        Reference< XLibraryContainer > xLibContainer = rDocSh.GetBasicContainer();
         BasicManager *pBasicMan = rDocSh.GetBasicManager();
-        DBG_ASSERT( pBasicMan, "Wo ist der BasicManager?" );
+        DBG_ASSERT( xLibContainer.is(), "No BasicContainer!" );
 
-        StarBASIC *pBasic;
-        if( pBasicMan && (0 != (pBasic = pBasicMan->GetStdLib()) ) )
+        UINT16 nStreamCount = aVBA.GetNoStreams();
+        Reference< XNameContainer > xLib;
+        if( xLibContainer.is() && nStreamCount )
         {
-            for( UINT16 i=0; i<aVBA.GetNoStreams();i++)
+            String aLibName( String::CreateFromAscii(
+                    RTL_CONSTASCII_STRINGPARAM( "Standard" )));
+            if( !xLibContainer->hasByName( aLibName ) )
+                xLibContainer->createLibrary( aLibName );
+
+            Any aLibAny = xLibContainer->getByName( aLibName );
+            aLibAny >>= xLib;
+        }
+        if( xLib.is() )
+        {
+            for( UINT16 i=0; i<nStreamCount;i++)
             {
                 StringArray aDecompressed = aVBA.Decompress(i);
                 ByteString sByteBasic(aVBA.GetStreamName(i),
@@ -206,17 +226,19 @@ BOOL SvxImportMSVBasic::ImportCode_Impl( const String& rStorageName,
                             aDecompressed.Get(j)->InsertAscii("\nEnd Sub");
                         }
 
-                        SbModule *pModule = pBasic->MakeModule( sModule,
-                            *aDecompressed.Get(j));
-                        if( pModule )
-                        {
-                            pModule->Compile();
-                            bRet = TRUE;
-                        }
+                        ::rtl::OUString aModName( sModule );
+                        ::rtl::OUString aSource( *aDecompressed.Get(j) );
+                        Any aSourceAny;
+                        aSourceAny <<= aSource;
+                        if( xLib->hasByName( aModName ) )
+                            xLib->replaceByName( aModName, aSourceAny );
+                        else
+                            xLib->insertByName( aModName, aSourceAny );
+
+                        bRet = TRUE;
                     }
                 }
             }
-            pBasic->SetModified( FALSE );
         }
         SFX_APP()->LeaveBasicCall();
     }
