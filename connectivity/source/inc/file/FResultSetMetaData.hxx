@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSetMetaData.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-20 09:57:42 $
+ *  last change: $Author: fs $ $Date: 2001-04-12 15:08:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,11 +93,8 @@ namespace connectivity
 
         public:
             // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
-            OResultSetMetaData(const ::vos::ORef<connectivity::OSQLColumns>& _rxColumns,const ::rtl::OUString& _aTableName,OFileTable*  _pTable)
-                : m_xColumns(_rxColumns)
-                , m_aTableName(_aTableName)
-                , m_pTable(_pTable)
-            {}
+            OResultSetMetaData(const ::vos::ORef<connectivity::OSQLColumns>& _rxColumns,const ::rtl::OUString& _aTableName,OFileTable*  _pTable);
+
             ~OResultSetMetaData();
 
             /// Avoid ambigous cast error from the compiler.

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSetMetaData.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-15 08:53:01 $
+ *  last change: $Author: fs $ $Date: 2001-04-12 15:08:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,10 +80,20 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
+
+// -------------------------------------------------------------------------
+OResultSetMetaData::OResultSetMetaData(const ::vos::ORef<connectivity::OSQLColumns>& _rxColumns,const ::rtl::OUString& _aTableName,OFileTable*  _pTable)
+    : m_xColumns(_rxColumns)
+    , m_aTableName(_aTableName)
+    , m_pTable(_pTable)
+{
+}
+
 // -------------------------------------------------------------------------
 OResultSetMetaData::~OResultSetMetaData()
 {
 }
+
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL OResultSetMetaData::getColumnDisplaySize( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
