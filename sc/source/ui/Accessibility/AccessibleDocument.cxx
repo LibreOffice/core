@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocument.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-20 08:35:28 $
+ *  last change: $Author: sab $ $Date: 2002-08-21 11:07:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1204,7 +1204,7 @@ sal_Bool ScChildrenShapes::FindShape(const uno::Reference<drawing::XShape>& xSha
     aShape.xShape = xShape;
     ScShapeDataLess aLess;
     rItr = std::lower_bound(maZOrderedShapes.begin(), maZOrderedShapes.end(), &aShape, aLess);
-    if ((rItr != maZOrderedShapes.end()) && ((*rItr)->xShape.get() == xShape.get()))
+    if ((rItr != maZOrderedShapes.end()) && (*rItr != NULL) && ((*rItr)->xShape.get() == xShape.get()))
         bResult = sal_True; // if the shape is found
 
 #ifndef PRODUCT // test whether it finds truly the correct shape (perhaps it is not really sorted)
@@ -1851,7 +1851,10 @@ Rectangle ScAccessibleDocument::GetVisibleArea() const
     IsObjectValid();
     Rectangle aVisRect(GetBoundingBox());
 
-    aVisRect.SetPos(Point(0, 0));
+    Point aPoint(mpViewShell->GetViewData()->GetPixPos(meSplitPos)); // returns a negative Point
+    aPoint.setX(-aPoint.getX());
+    aPoint.setY(-aPoint.getY());
+    aVisRect.SetPos(aPoint);
 
     ScGridWindow* pWin = static_cast<ScGridWindow*>(mpViewShell->GetWindowByPos(meSplitPos));
     if (pWin)
@@ -1893,8 +1896,8 @@ Point ScAccessibleDocument::PixelToLogic (const Point& rPoint) const
     ScGridWindow* pWin = static_cast<ScGridWindow*>(mpViewShell->GetWindowByPos(meSplitPos));
     if (pWin)
     {
-        aPoint = pWin->PixelToLogic(rPoint, pWin->GetDrawMapMode());
         aPoint -= pWin->GetWindowExtentsRelative(NULL).TopLeft();
+        aPoint = pWin->PixelToLogic(rPoint, pWin->GetDrawMapMode());
     }
     return aPoint;
 }
