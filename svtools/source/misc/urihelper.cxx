@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urihelper.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2004-12-13 12:44:49 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 13:12:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,12 +66,39 @@
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
+#include "com/sun/star/lang/WrappedTargetRuntimeException.hpp"
+#include "com/sun/star/lang/XMultiComponentFactory.hpp"
+#include "com/sun/star/ucb/Command.hpp"
 #ifndef _COM_SUN_STAR_UCB_FILESYSTEMNOTATION_HPP_
 #include <com/sun/star/ucb/FileSystemNotation.hpp>
 #endif
+#include "com/sun/star/ucb/IllegalIdentifierException.hpp"
+#include "com/sun/star/ucb/UnsupportedCommandException.hpp"
+#include "com/sun/star/ucb/XCommandEnvironment.hpp"
+#include "com/sun/star/ucb/XCommandProcessor.hpp"
+#include "com/sun/star/ucb/XContent.hpp"
+#include "com/sun/star/ucb/XContentIdentifierFactory.hpp"
+#include "com/sun/star/ucb/XContentProvider.hpp"
 #ifndef _COM_SUN_STAR_UCB_XCONTENTPROVIDERMANAGER_HPP_
 #include <com/sun/star/ucb/XContentProviderManager.hpp>
 #endif
+#include "com/sun/star/uno/Any.hxx"
+#include "com/sun/star/uno/Exception.hpp"
+#include "com/sun/star/uno/Reference.hxx"
+#include "com/sun/star/uno/RuntimeException.hpp"
+#include "com/sun/star/uno/Sequence.hxx"
+#include "com/sun/star/uno/XComponentContext.hpp"
+#include "com/sun/star/uno/XInterface.hpp"
+#include "com/sun/star/uri/UriReferenceFactory.hpp"
+#include "com/sun/star/uri/XUriReference.hpp"
+#include "com/sun/star/uri/XUriReferenceFactory.hpp"
+#include "cppuhelper/exc_hlp.hxx"
+#include "comphelper/processfactory.hxx"
+#include "osl/diagnose.h"
+#include "rtl/ustrbuf.hxx"
+#include "rtl/ustring.h"
+#include "rtl/ustring.hxx"
+#include "sal/types.h"
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
@@ -92,6 +119,7 @@ namespace unnamed_svtools_urihelper {}
 using namespace unnamed_svtools_urihelper;
     // unnamed namespaces don't work well yet...
 
+namespace css = com::sun::star;
 using namespace com::sun;
 using namespace com::sun::star;
 
@@ -232,6 +260,180 @@ void URIHelper::SetMaybeFileHdl(Link const & rTheMaybeFileHdl)
 Link URIHelper::GetMaybeFileHdl()
 {
     return MaybeFileHdl::get();
+}
+
+namespace {
+
+// To improve performance, assume that if for any prefix URL of a given
+// hierarchical URL either a UCB content cannot be created, or the UCB content
+// does not support the getCasePreservingURL command, then this will hold for
+// any other prefix URL of the given URL, too:
+enum Result { Success, GeneralFailure, SpecificFailure };
+
+Result normalizePrefix(
+    css::uno::Reference< css::ucb::XContentProvider > const & broker,
+    rtl::OUString const & uriReference, rtl::OUString * normalized)
+{
+    OSL_ASSERT(broker.is() && normalized != 0);
+    css::uno::Reference< css::ucb::XContent > content;
+    try {
+        content = broker->queryContent(
+            css::uno::Reference< css::ucb::XContentIdentifierFactory >(
+                broker, css::uno::UNO_QUERY_THROW)->createContentIdentifier(
+                    uriReference));
+    } catch (css::ucb::IllegalIdentifierException &) {}
+    if (!content.is()) {
+        return GeneralFailure;
+    }
+    try {
+        bool ok
+            = (css::uno::Reference< css::ucb::XCommandProcessor >(
+                   content, css::uno::UNO_QUERY_THROW)->execute(
+                       css::ucb::Command(
+                           rtl::OUString(
+                               RTL_CONSTASCII_USTRINGPARAM(
+                                   "getCasePreservingURL")),
+                           -1, css::uno::Any()),
+                       0,
+                       css::uno::Reference< css::ucb::XCommandEnvironment >())
+               >>= *normalized);
+        OSL_ASSERT(ok);
+    } catch (css::uno::RuntimeException &) {
+        throw;
+    } catch (css::ucb::UnsupportedCommandException &) {
+        return GeneralFailure;
+    } catch (css::uno::Exception &) {
+        return SpecificFailure;
+    }
+    return Success;
+}
+
+rtl::OUString normalize(
+    css::uno::Reference< css::ucb::XContentProvider > const & broker,
+    css::uno::Reference< css::uri::XUriReferenceFactory > const & uriFactory,
+    rtl::OUString const & uriReference)
+{
+    // normalizePrefix can potentially fail (a typically example being a file
+    // URL that denotes a non-existing resource); in such a case, try to
+    // normalize as long a prefix of the given URL as possible (i.e., normalize
+    // all the existing directories within the path):
+    rtl::OUString normalized;
+    switch (normalizePrefix(broker, uriReference, &normalized)) {
+    case Success:
+        return normalized;
+    case GeneralFailure:
+        return uriReference;
+    }
+    css::uno::Reference< css::uri::XUriReference > ref(
+        uriFactory->parse(uriReference));
+    if (!ref.is() || !ref->isAbsolute() || !ref->isHierarchical()
+        || ref->hasRelativePath())
+    {
+        return uriReference;
+    }
+    sal_Int32 count = ref->getPathSegmentCount();
+    if (count < 2) {
+        return uriReference;
+    }
+    rtl::OUStringBuffer head(ref->getScheme());
+    head.append(static_cast< sal_Unicode >(':'));
+    if (ref->hasAuthority()) {
+        head.appendAscii(RTL_CONSTASCII_STRINGPARAM("//"));
+        head.append(ref->getAuthority());
+    }
+    for (sal_Int32 i = count - 1; i > 0; --i) {
+        rtl::OUStringBuffer buf(head);
+        for (sal_Int32 j = 0; j < i; ++j) {
+            buf.append(static_cast< sal_Unicode >('/'));
+            buf.append(ref->getPathSegment(j));
+        }
+        normalized = buf.makeStringAndClear();
+        if (normalizePrefix(broker, normalized, &normalized) != SpecificFailure)
+        {
+            buf.append(normalized);
+            for (sal_Int32 j = i; j < count; ++j) {
+                buf.append(static_cast< sal_Unicode >('/'));
+                buf.append(ref->getPathSegment(j));
+            }
+            if (ref->hasQuery()) {
+                buf.append(static_cast< sal_Unicode >('?'));
+                buf.append(ref->getQuery());
+            }
+            if (ref->hasFragment()) {
+                buf.append(static_cast< sal_Unicode >('#'));
+                buf.append(ref->getFragment());
+            }
+            return buf.makeStringAndClear();
+        }
+    }
+    return uriReference;
+}
+
+}
+
+css::uno::Reference< css::uri::XUriReference >
+URIHelper::normalizedMakeRelative(
+    css::uno::Reference< css::uno::XComponentContext > const & context,
+    rtl::OUString const & baseUriReference, rtl::OUString const & uriReference)
+{
+    OSL_ASSERT(context.is());
+    css::uno::Reference< css::lang::XMultiComponentFactory > componentFactory(
+        context->getServiceManager());
+    if (!componentFactory.is()) {
+        throw css::uno::RuntimeException(
+            rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM(
+                    "component context has no service manager")),
+            css::uno::Reference< css::uno::XInterface >());
+    }
+    css::uno::Sequence< css::uno::Any > args(2);
+    args[0] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Local"));
+    args[1] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Office"));
+    css::uno::Reference< css::ucb::XContentProvider > broker;
+    try {
+        broker = css::uno::Reference< css::ucb::XContentProvider >(
+            componentFactory->createInstanceWithArgumentsAndContext(
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM(
+                        "com.sun.star.ucb.UniversalContentBroker")),
+                args, context),
+            css::uno::UNO_QUERY_THROW);
+    } catch (css::uno::RuntimeException &) {
+        throw;
+    } catch (css::uno::Exception &) {
+        css::uno::Any exception(cppu::getCaughtException());
+        throw css::lang::WrappedTargetRuntimeException(
+            rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM(
+                    "creating com.sun.star.ucb.UniversalContentBroker failed")),
+            css::uno::Reference< css::uno::XInterface >(),
+            exception);
+    }
+    css::uno::Reference< css::uri::XUriReferenceFactory > uriFactory(
+        css::uri::UriReferenceFactory::create(context));
+    return uriFactory->makeRelative(
+        uriFactory->parse(normalize(broker, uriFactory, baseUriReference)),
+        uriFactory->parse(normalize(broker, uriFactory, uriReference)), true,
+        true, false);
+}
+
+rtl::OUString URIHelper::simpleNormalizedMakeRelative(
+    rtl::OUString const & baseUriReference, rtl::OUString const & uriReference)
+{
+    com::sun::star::uno::Reference< com::sun::star::uri::XUriReference > rel(
+        URIHelper::normalizedMakeRelative(
+            com::sun::star::uno::Reference<
+            com::sun::star::uno::XComponentContext >(
+                (com::sun::star::uno::Reference<
+                 com::sun::star::beans::XPropertySet >(
+                    comphelper::getProcessServiceFactory(),
+                    com::sun::star::uno::UNO_QUERY_THROW)->
+                 getPropertyValue(
+                     rtl::OUString(
+                         RTL_CONSTASCII_USTRINGPARAM("DefaultContext")))),
+                com::sun::star::uno::UNO_QUERY_THROW),
+            baseUriReference, uriReference));
+    return rel.is() ? rel->getUriReference() : uriReference;
 }
 
 //============================================================================
