@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idxmrk.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-12 07:16:43 $
+ *  last change: $Author: kz $ $Date: 2001-05-17 08:18:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,7 +265,7 @@
             Text [ ENGLISH ] = "~Index" ;                           \
             Text [ norwegian ] = "~Index" ;                         \
             Text [ italian ] = "Indice" ;                          \
-            Text [ portuguese_brazilian ] = "~Índice" ;             \
+            Text [ portuguese_brazilian ] = "~?ndice" ;             \
             Text [ portuguese ] = "~Índice" ;                       \
             Text [ finnish ] = "~Hakemisto" ;                       \
             Text [ danish ] = "Indeks" ;                           \
@@ -411,7 +411,7 @@
             Text [ ENGLISH ] = "~Level" ;                           \
             Text [ norwegian ] = "~Nivå" ;                          \
             Text [ italian ] = "Livello" ;                         \
-            Text [ portuguese_brazilian ] = "~Nível" ;              \
+            Text [ portuguese_brazilian ] = "~N?vel" ;              \
             Text [ portuguese ] = "~Nível" ;                        \
             Text [ finnish ] = "~Taso" ;                            \
             Text [ danish ] = "Niveau" ;                             \
@@ -716,7 +716,7 @@ String STR_IDXMRK_EDIT
     Text [ ENGLISH ] = "Edit index entry" ;
     Text [ norwegian ] = "Rediger stikkordregisterinngang" ;
     Text [ italian ] = "Modifica voce di indice" ;
-    Text [ portuguese_brazilian ] = "Editar entrada de índice" ;
+    Text [ portuguese_brazilian ] = "Editar entrada de ?ndice" ;
     Text [ portuguese ] = "Editar entrada de índice" ;
     Text [ finnish ] = "Muokkaa hakemistomerkintää" ;
     Text [ danish ] = "Rediger indekselement" ;
@@ -744,7 +744,7 @@ String STR_IDXMRK_INSERT
     Text [ ENGLISH ] = "Insert index entry" ;
     Text [ norwegian ] = "Sett inn oppføring i stikkkordregister" ;
     Text [ italian ] = "Inserisci voce di indice" ;
-    Text [ portuguese_brazilian ] = "Inserir entrada de índice" ;
+    Text [ portuguese_brazilian ] = "Inserir entrada de ?ndice" ;
     Text [ portuguese ] = "Inserir entrada no índice" ;
     Text [ finnish ] = "Lisää hakemistomerkintä" ;
     Text [ danish ] = "Indsæt indekselement" ;
@@ -814,7 +814,7 @@ String STR_IDXMRK_INSERT
             Text[ italian ] = "Dal contenuto del documento";\
             Text[ danish ] = "fra dokumentindholdet";\
             Text[ swedish ] = "~Från dokumentinnehåll";\
-            Text[ polish ] = "Z zawartoœci dokumentu";\
+            Text[ polish ] = "Z zawarto?ci dokumentu";\
             Text[ portuguese_brazilian ] = "From document content";\
             Text[ japanese ] = "ÄÞ·­ÒÝÄ‚©‚ç(~F)";\
             Text[ korean ] = "¹®¼­ ³»¿ëÀ¸·ÎºÎÅÍ(~F)";\
