@@ -2,9 +2,9 @@
  *
  *  $RCSfile: validat.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:04:02 $
+ *  last change: $Author: hjs $ $Date: 2003-08-19 11:35:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@
 #include <tools/urlobj.hxx>
 #include <rtl/math.hxx>
 #include <math.h>
-
+#include <memory>
 
 #include "validat.hxx"
 #include "document.hxx"
@@ -93,6 +93,8 @@
 #include "patattr.hxx"
 #include "rechead.hxx"
 #include "globstr.hrc"
+#include "rangenam.hxx"
+#include "dbcolect.hxx"
 
 //------------------------------------------------------------------------
 
@@ -110,10 +112,11 @@ ScValidationData::ScValidationData( ScValidationMode eMode, ScConditionMode eOpe
                             BOOL bCompileEnglish, BOOL bCompileXML ) :
     ScConditionEntry( eOper, rExpr1, rExpr2, pDocument, rPos, bCompileEnglish, bCompileXML ),
     nKey( 0 ),
-    eDataMode( eMode )
+    eDataMode( eMode ),
+    eErrorStyle( SC_VALERR_STOP ),
+    mnListType( ValidListType::UNSORTED )
 {
     bShowInput = bShowError = FALSE;
-    eErrorStyle = SC_VALERR_STOP;
 }
 
 ScValidationData::ScValidationData( ScValidationMode eMode, ScConditionMode eOper,
@@ -121,10 +124,11 @@ ScValidationData::ScValidationData( ScValidationMode eMode, ScConditionMode eOpe
                             ScDocument* pDocument, const ScAddress& rPos ) :
     ScConditionEntry( eOper, pArr1, pArr2, pDocument, rPos ),
     nKey( 0 ),
-    eDataMode( eMode )
+    eDataMode( eMode ),
+    eErrorStyle( SC_VALERR_STOP ),
+    mnListType( ValidListType::UNSORTED )
 {
     bShowInput = bShowError = FALSE;
-    eErrorStyle = SC_VALERR_STOP;
 }
 
 ScValidationData::ScValidationData( const ScValidationData& r ) :
@@ -134,6 +138,7 @@ ScValidationData::ScValidationData( const ScValidationData& r ) :
     bShowInput( r.bShowInput ),
     bShowError( r.bShowError ),
     eErrorStyle( r.eErrorStyle ),
+    mnListType( r.mnListType ),
     aInputTitle( r.aInputTitle ),
     aInputMessage( r.aInputMessage ),
     aErrorTitle( r.aErrorTitle ),
@@ -149,6 +154,7 @@ ScValidationData::ScValidationData( ScDocument* pDocument, const ScValidationDat
     bShowInput( r.bShowInput ),
     bShowError( r.bShowError ),
     eErrorStyle( r.eErrorStyle ),
+    mnListType( r.mnListType ),
     aInputTitle( r.aInputTitle ),
     aInputMessage( r.aInputMessage ),
     aErrorTitle( r.aErrorTitle ),
@@ -159,7 +165,8 @@ ScValidationData::ScValidationData( ScDocument* pDocument, const ScValidationDat
 
 ScValidationData::ScValidationData( SvStream& rStream, ScMultipleReadHeader& rHdr,
                                     ScDocument* pDocument ) :
-    ScConditionEntry( rStream, rHdr, pDocument )
+    ScConditionEntry( rStream, rHdr, pDocument ),
+    mnListType( ValidListType::UNSORTED )   // not imported/exported
 {
     //  im Datei-Header sind getrennte Eintraege fuer ScConditionEntry und ScValidationData
 
@@ -242,6 +249,7 @@ BOOL ScValidationData::EqualEntries( const ScValidationData& r ) const
             bShowInput      == r.bShowInput &&
             bShowError      == r.bShowError &&
             eErrorStyle     == r.eErrorStyle &&
+            mnListType      == r.mnListType &&
             aInputTitle     == r.aInputTitle &&
             aInputMessage   == r.aInputMessage &&
             aErrorTitle     == r.aErrorTitle &&
@@ -484,6 +492,9 @@ BOOL ScValidationData::IsDataValid( const String& rTest, const ScPatternAttr& rP
 
 BOOL ScValidationData::IsDataValid( ScBaseCell* pCell, const ScAddress& rPos ) const
 {
+    if( eDataMode == SC_VALID_LIST )
+        return IsListValid( pCell, rPos );
+
     double nVal = 0.0;
     String aString;
     BOOL bIsVal = TRUE;
@@ -547,7 +558,6 @@ BOOL ScValidationData::IsDataValid( ScBaseCell* pCell, const ScAddress& rPos ) c
             }
             break;
 
-        case SC_VALID_LIST:
         default:
             DBG_ERROR("hammanochnich");
             break;
@@ -556,7 +566,292 @@ BOOL ScValidationData::IsDataValid( ScBaseCell* pCell, const ScAddress& rPos ) c
     return bOk;
 }
 
-//------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
+
+namespace {
+
+/** Token array helper. Iterates over all string tokens.
+    @descr  The token array must contain separated string tokens only.
+    @param bSkipEmpty  true = Ignores string tokens with empty strings. */
+class ScStringTokenIterator
+{
+public:
+    inline explicit             ScStringTokenIterator( ScTokenArray& rTokArr, bool bSkipEmpty = true ) :
+                                    mrTokArr( rTokArr ), mbSkipEmpty( bSkipEmpty ), mbOk( true ) {}
+
+    /** Returns the string of the first string token or NULL on error or empty token array. */
+    const String*               First();
+    /** Returns the string of the next string token or NULL on error or end of token array. */
+    const String*               Next();
+
+    /** Returns false, if a wrong token has been found. Does NOT return false on end of token array. */
+    inline bool                 Ok() const { return mbOk; }
+
+private:
+    ScTokenArray&               mrTokArr;       /// The token array for iteration.
+    bool                        mbSkipEmpty;    /// Ignore empty strings.
+    bool                        mbOk;           /// true = correct token or end of token array.
+};
+
+const String* ScStringTokenIterator::First()
+{
+    mrTokArr.Reset();
+    mbOk = true;
+    return Next();
+}
+
+const String* ScStringTokenIterator::Next()
+{
+    if( !mbOk )
+        return NULL;
+
+    // seek to next non-separator token
+    const ScToken* pToken = mrTokArr.NextNoSpaces();
+    while( pToken && (pToken->GetOpCode() == ocSep) )
+        pToken = mrTokArr.NextNoSpaces();
+
+    mbOk = !pToken || (pToken->GetType() == svString);
+    const String* pString = (mbOk && pToken) ? &pToken->GetString() : NULL;
+    // string found but empty -> get next token; otherwise return it
+    return (mbSkipEmpty && pString && !pString->Len()) ? Next() : pString;
+}
+
+// ----------------------------------------------------------------------------
+
+/** Returns the number format of the passed cell, or the standard format. */
+ULONG lclGetCellFormat( ScDocument& rDoc, const ScAddress& rPos )
+{
+    const ScPatternAttr* pPattern = rDoc.GetPattern( rPos.Col(), rPos.Row(), rPos.Tab() );
+    if( !pPattern )
+        pPattern = rDoc.GetDefPattern();
+    return pPattern->GetNumberFormat( rDoc.GetFormatTable() );
+}
+
+/** Inserts the passed string object. Always takes ownership. pData is invalid after this call! */
+void lclInsertStringToCollection( TypedStrCollection& rStrColl, TypedStrData* pData, bool bSorted )
+{
+    if( !(bSorted ? rStrColl.Insert( pData ) : rStrColl.AtInsert( rStrColl.GetCount(), pData )) )
+        delete pData;
+}
+
+} // namespace
+
+// ----------------------------------------------------------------------------
+
+bool ScValidationData::GetRangeFromFormula( ScRange& rRange, const ScAddress& rBaseAddr, ScTokenArray& rTokArr, int nRecCount ) const
+{
+    if( nRecCount >= 42 )
+        return false;
+
+    bool bIsRange = false;          // range found from recursive call
+    bool bRangeFound = false;       // range found in current run
+
+    const ScToken* pToken = rTokArr.FirstNoSpaces();
+    /*  The test !rTokArr.NextNoSpaces() would result in returning an error, if any
+        other token follows. But specification says, just ignore the rest of the formula. */
+    if( pToken /*&& !rTokArr.NextNoSpaces()*/ )
+    {
+        switch( pToken->GetType() )
+        {
+            case svSingleRef:
+            case svDoubleRef:
+            {
+                // Single or double reference. Convert to absolute cell range in the document.
+                ComplRefData aRef;
+                if( pToken->GetType() == svSingleRef )
+                    aRef.Ref1 = aRef.Ref2 = pToken->GetSingleRef();
+                else
+                    aRef = pToken->GetDoubleRef();
+                aRef.CalcAbsIfRel( rBaseAddr );
+
+                if( aRef.Valid() && !aRef.IsDeleted() )
+                {
+                    rRange.aStart.Set( aRef.Ref1.nCol, aRef.Ref1.nRow, aRef.Ref1.nTab );
+                    rRange.aEnd.Set( aRef.Ref2.nCol, aRef.Ref2.nRow, aRef.Ref2.nTab );
+                    bRangeFound = true;
+                }
+            }
+            break;
+
+            case svIndex:
+            {
+                switch( pToken->GetOpCode() )
+                {
+                    case ocName:
+                    {
+                        // Defined name. Calls this function recursively with name definition.
+                        if( ScRangeData* pRangeData = GetDocument()->GetRangeName()->FindIndex( pToken->GetIndex() ) )
+                            if( ScTokenArray* pNameTokArr = pRangeData->GetCode() )
+                                bIsRange = GetRangeFromFormula( rRange, rBaseAddr, *pNameTokArr, nRecCount + 1 );
+                    }
+                    break;
+
+                    case ocDBArea:
+                    {
+                        // Database range. Gets cell range and evaluates the cells.
+                        if( ScDBCollection* pDBColl = GetDocument()->GetDBCollection() )
+                        {
+                            if( const ScDBData* pDBData = pDBColl->FindIndex( pToken->GetIndex() ) )
+                            {
+                                pDBData->GetArea( rRange );
+                                bRangeFound = true;
+                            }
+                        }
+                    }
+                    break;
+                }
+            }
+            break;
+        }
+    }
+
+    if( bRangeFound )
+    {
+        rRange.Justify();
+        // range is restricted to one table
+        rRange.aEnd.SetTab( rRange.aStart.Tab() );
+        // if the range has multiple rows, it is restricted to one column
+        if( rRange.aStart.Row() < rRange.aEnd.Row() )
+            rRange.aEnd.SetCol( rRange.aStart.Col() );
+        bIsRange = true;
+    }
+
+    return bIsRange;
+}
+
+// ----------------------------------------------------------------------------
+
+bool ScValidationData::HasSelectionList() const
+{
+    return (eDataMode == SC_VALID_LIST) && (mnListType != ValidListType::INVISIBLE);
+}
+
+bool ScValidationData::FillSelectionList( TypedStrCollection& rStrColl, const ScAddress rPos ) const
+{
+    bool bOk = false;
+
+    if( HasSelectionList() )
+    {
+        ::std::auto_ptr< ScTokenArray > pTokArr( CreateTokenArry( 0 ) );
+        bool bSortList = (mnListType == ValidListType::SORTEDASCENDING);
+
+        ScRange aSource;
+        if( GetRangeFromFormula( aSource, rPos, *pTokArr ) )
+        {
+            // *** formula results in a cell range ***
+
+            USHORT nTab = aSource.aStart.Tab();
+            for( USHORT nCol = aSource.aStart.Col(), nEndCol = aSource.aEnd.Col(); nCol <= nEndCol; ++nCol )
+            {
+                for( USHORT nRow = aSource.aStart.Row(), nEndRow = aSource.aEnd.Row(); nRow <= nEndRow; ++nRow )
+                {
+                    TypedStrData* pData = new TypedStrData( GetDocument(), nCol, nRow, nTab, TRUE );
+                    lclInsertStringToCollection( rStrColl, pData, bSortList );
+                }
+            }
+
+            bOk = true;
+        }
+        else
+        {
+            // *** try if formula is a string list ***
+
+            UINT32 nFormat = lclGetCellFormat( *GetDocument(), rPos );
+            ScStringTokenIterator aIt( *pTokArr );
+            for( const String* pString = aIt.First(); pString && aIt.Ok(); pString = aIt.Next() )
+            {
+                double fValue;
+                bool bIsValue = GetDocument()->GetFormatTable()->IsNumberFormat( *pString, nFormat, fValue );
+                TypedStrData* pData = new TypedStrData( *pString, fValue, bIsValue ? SC_STRTYPE_VALUE : SC_STRTYPE_STANDARD );
+                lclInsertStringToCollection( rStrColl, pData, bSortList );
+            }
+
+            bOk = aIt.Ok();
+        }
+
+    }
+
+    return bOk;
+}
+
+// ----------------------------------------------------------------------------
+
+bool ScValidationData::IsEqualToTokenArray( ScBaseCell* pCell, const ScAddress& rPos, const ScTokenArray& rTokArr ) const
+{
+    // create a condition entry that tests on equality and set the passed token array
+    ScConditionEntry aCondEntry( SC_COND_EQUAL, &rTokArr, NULL, GetDocument(), rPos );
+    return aCondEntry.IsCellValid( pCell, rPos );
+}
+
+bool ScValidationData::IsListValid( ScBaseCell* pCell, const ScAddress& rPos ) const
+{
+    bool bIsValid = false;
+
+    /*  Compare input cell with all supported tokens from the formula.
+        Currently a formula may contain:
+        1)  A list of strings (at least one string).
+        2)  A single cell or range reference.
+        3)  A single defined name (must contain a cell/range reference, another name, or DB range).
+        4)  A single database range.
+        If the range consists of one row or one column, all cells of a cell range are used.
+        Otherwise only the first column of a range will be evaluated. */
+
+    ::std::auto_ptr< ScTokenArray > pTokArr( CreateTokenArry( 0 ) );
+
+    ScRange aSource;
+    if( GetRangeFromFormula( aSource, rPos, *pTokArr ) )
+    {
+        // *** formula results in a cell range ***
+
+        SingleRefData aStartRef, aEndRef;
+        aStartRef.InitAddress( aSource.aStart );
+        aEndRef.InitAddress( aSource.aEnd );
+
+        for( SingleRefData aRef = aStartRef; !bIsValid && (aRef.nCol <= aEndRef.nCol); ++aRef.nCol )
+        {
+            for( aRef.nRow = aStartRef.nRow; !bIsValid && (aRef.nRow <= aEndRef.nRow); ++aRef.nRow )
+            {
+                // create a formula containing a single reference to the current cell
+                ScTokenArray aCondTokArr;
+                aCondTokArr.AddSingleReference( aRef );
+
+                bIsValid = IsEqualToTokenArray( pCell, rPos, aCondTokArr );
+            }
+        }
+    }
+    else
+    {
+        // *** try if formula is a string list ***
+
+        UINT32 nFormat = lclGetCellFormat( *GetDocument(), rPos );
+        ScStringTokenIterator aIt( *pTokArr );
+        for( const String* pString = aIt.First(); pString && aIt.Ok(); pString = aIt.Next() )
+        {
+            /*  Do not break the loop, if a valid string has been found.
+                This is to find invalid tokens following in the formula. */
+            if( !bIsValid )
+            {
+                // create a formula containing a single string or number
+                ScTokenArray aCondTokArr;
+                double fValue;
+                if( GetDocument()->GetFormatTable()->IsNumberFormat( *pString, nFormat, fValue ) )
+                    aCondTokArr.AddDouble( fValue );
+                else
+                    aCondTokArr.AddString( *pString );
+
+                bIsValid = IsEqualToTokenArray( pCell, rPos, aCondTokArr );
+            }
+        }
+
+        if( !aIt.Ok() )
+            bIsValid = false;
+    }
+
+    return bIsValid;
+}
+
+// ============================================================================
+// ============================================================================
 
 ScValidationDataList::ScValidationDataList(const ScValidationDataList& rList)
 {
@@ -663,7 +958,4 @@ BOOL ScValidationDataList::operator==( const ScValidationDataList& r ) const
 
     return bEqual;
 }
-
-
-
 
