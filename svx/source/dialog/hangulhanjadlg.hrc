@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hangulhanjadlg.hrc,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 15:46:44 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 14:14:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,11 +94,27 @@
 #define STR_HANGUL                  1
 #define STR_HANJA                   2
 
+#define FT_WORD                     10
+#define FT_AKTWORD                  11
+#define FT_NEWWORD                  12
+#define GB_AUDIT                    13
+#define BTN_IGNORE                  14
+#define BTN_IGNOREALL               15
+#define BTN_CHANGE                  16
+#define BTN_CHANGEALL               17
+#define FT_STATUS                   18
+#define BTN_SPL_CANCEL              19
+#define BTN_SPL_HELP                20
+#define ED_NEWWORD                  21
+#define FT_SUGGESTION               22
+
+
 
 // Hangul / Hanja Options Dialog
 
 #define FT_USERDEFDICT              1
 #define FL_OPTIONS                  2
+#define BTN_OPTIONS                 10
 
 #define LB_DICTS                    1
 
