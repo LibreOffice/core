@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resultsetmetadata.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2001-01-18 09:02:53 $
+ *  last change: $Author: kso $ $Date: 2001-01-26 11:28:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,7 +168,7 @@ struct ResultSetColumnData
 
 ResultSetColumnData::ResultSetColumnData()
 : isAutoIncrement( sal_False ),
-  isCaseSensitive( sal_False ),
+  isCaseSensitive( sal_True ),
   isSearchable( sal_False ),
   isCurrency( sal_False ),
   isNullable( ::com::sun::star::sdbc::ColumnValue::NULLABLE ),
