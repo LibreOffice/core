@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlview.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-15 18:22:12 $
+ *  last change: $Author: dl $ $Date: 2000-11-21 15:27:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1491,7 +1491,8 @@ BOOL SdOutlineView::PrepareClose(BOOL bUI)
             pPage->SetAutoLayout(pPage->GetAutoLayout());
 
             // zum naechsten Absatz der 0-ten Ebene
-            pPara = GetNextTitle(pPara);
+            if( pPara )
+                pPara = GetNextTitle(pPara);
         }
 
         if (bBegUndoDone)
