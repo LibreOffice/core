@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_app.mk,v $
 #
-#   $Revision: 1.46 $
+#   $Revision: 1.47 $
 #
-#   last change: $Author: hjs $ $Date: 2004-06-25 16:12:43 $
+#   last change: $Author: obo $ $Date: 2005-03-15 09:56:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -96,9 +96,20 @@ APP1 APP2 APP3 APP4 APP5 APP6 APP7 APP8 APP9 :
 # unroll begin
 
 .IF "$(APP$(TNR)LINKTYPE)" != ""
-#darf nur STATIC oder SHARED sein
+#must be either STATIC or SHARED
 APP$(TNR)LINKTYPEFLAG=$(APPLINK$(APP$(TNR)LINKTYPE))
 .ENDIF
+
+# decide how to link
+.IF "$(APP$(TNR)CODETYPE)"=="C"
+APP$(TNR)LINKER=$(LINKC)
+APP$(TNR)STDLIB=$(subst,CPPRUNTIME, $(STDLIB))
+APP$(TNR)LINKFLAGS=$(LINKCFLAGS)
+.ELSE			# "$(APP$(TNR)CODETYPE)"=="C"
+APP$(TNR)LINKER=$(LINK)
+APP$(TNR)STDLIB=$(subst,CPPRUNTIME,$(STDLIBCPP) $(STDLIB))
+APP$(TNR)LINKFLAGS=$(LINKFLAGS)
+.ENDIF			# "$(APP$(TNR)CODETYPE)"=="C"
 
 .IF "$(APP$(TNR)STACK)" != ""
 .IF "$(LINKFLAGSTACK)" != ""
@@ -107,6 +118,7 @@ APP$(TNR)STACKN=$(LINKFLAGSTACK)$(APP$(TNR)STACK)
 .ELSE
 APP$(TNR)STACKN=
 .ENDIF
+
 .IF "$(APP$(TNR)NOSAL)"==""
 .IF "$(TARGETTYPE)" == "GUI"
 APP$(TNR)OBJS+= $(STDOBJVCL)
@@ -147,9 +159,9 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
     @+-$(RM) $(MISC)$/$(@:b).strip
     @+echo $(STDSLO) $(APP$(TNR)OBJS:s/.obj/.o/) \
     `cat /dev/null $(APP$(TNR)LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
-    `dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(APP$(TNR)STDLIBS) $(STDLIB) $(STDLIB$(TNR))` \
-    $(APP$(TNR)LINKTYPEFLAG) $(APP$(TNR)STDLIBS) $(STDLIB) $(STDLIB$(TNR)) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
+    @+echo $(APP$(TNR)LINKER) $(APP$(TNR)LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
+    `dylib-link-list $(PRJNAME) $(SOLARVERSION)$/$(INPATH)$/lib $(PRJ)$/$(INPATH)$/lib $(APP$(TNR)STDLIBS) $(APP$(TNR)STDLIB) $(STDLIB$(TNR))` \
+    $(APP$(TNR)LINKTYPEFLAG) $(APP$(TNR)STDLIBS) $(APP$(TNR)STDLIB) $(STDLIB$(TNR)) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
 # Need to strip __objcInit symbol to avoid duplicate symbols when loading
@@ -164,10 +176,10 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
 .ELSE		# "$(OS)"=="MACOSX"
     @+echo unx
     @+-$(RM) $(MISC)$/$(@:b).cmd
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
+    @+echo $(APP$(TNR)LINKER) $(APP$(TNR)LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
     $(APP$(TNR)OBJS:s/.obj/.o/) "\" >  $(MISC)$/$(@:b).cmd
     @cat $(mktmp /dev/null $(APP$(TNR)LIBS)) | xargs -n 1 cat | sed s\#$(ROUT)\#$(OUT)\#g | sed 's#$$# \\#'  >> $(MISC)$/$(@:b).cmd
-    @+echo $(APP$(TNR)LINKTYPEFLAG) $(APP$(TNR)LIBSALCPPRT) $(APP$(TNR)STDLIBS) $(STDLIB) $(STDLIB$(TNR)) -o $@ >> $(MISC)$/$(@:b).cmd
+    @+echo $(APP$(TNR)LINKTYPEFLAG) $(APP$(TNR)LIBSALCPPRT) $(APP$(TNR)STDLIBS) $(APP$(TNR)STDLIB) $(STDLIB$(TNR)) -o $@ >> $(MISC)$/$(@:b).cmd
     cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
@@ -197,8 +209,8 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
     $(RC) -DWIN32 -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP$(TNR)LINKRES:b).rc
 .ENDIF			# "$(APP$(TNR)LINKRES)" != ""
 .IF "$(linkinc)" == ""
-    $(LINK) @$(mktmp \
-        $(LINKFLAGS) \
+    $(APP$(TNR)LINKER) @$(mktmp \
+        $(APP$(TNR)LINKFLAGS) \
         $(LINKFLAGSAPP) $(APP$(TNR)BASEX) \
         $(APP$(TNR)STACKN) \
         -out:$@ \
@@ -209,7 +221,7 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
         $(APP$(TNR)OBJS) \
         $(APP$(TNR)LIBS) \
         $(APP$(TNR)STDLIBS) \
-        $(STDLIB) $(STDLIB$(TNR)) \
+        $(APP$(TNR)STDLIB) $(STDLIB$(TNR)) \
         )
 .ELSE
         +-$(RM) $(MISC)\$(APP$(TNR)TARGET).lnk
@@ -217,7 +229,7 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
         +-$(RM) $(MISC)\linkobj.lst
         +for %_i in ($(MISC)\*.obj) do type %_i >> $(MISC)\linkobj.lst
     type $(mktmp,$(MISC)\$(APP$(TNR)TARGET).lst
-        $(LINKFLAGS) \
+        $(APP$(TNR)LINKFLAGS) \
         $(LINKFLAGSAPP) $(APP$(TNR)BASEX) \
         $(APP$(TNR)STACKN) \
         -out:$@ \
@@ -227,10 +239,10 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
         $(APP$(TNR)OBJS) \
         $(APP$(TNR)LIBS) \
         $(APP$(TNR)STDLIBS) \
-        $(STDLIB) $(STDLIB$(TNR)))
+        $(APP$(TNR)STDLIB) $(STDLIB$(TNR)))
         sed -e 's/\(\.\.\\\)\{2,4\}/..\\/g' $(MISC)\$(APP$(TNR)TARGETN:b)_linkobj.lst >> $(MISC)\$(APP$(TNR)TARGET).lst
         +if exist $(MISC)\$(APP$(TNR)TARGET).lst type $(MISC)\$(APP$(TNR)TARGET).lst  >> $(MISC)\$(APP$(TNR)TARGET).lnk
-        $(LINK) @$(MISC)\$(APP$(TNR)TARGET).lnk
+        $(APP$(TNR)LINKER) @$(MISC)\$(APP$(TNR)TARGET).lnk
 .ENDIF		# "$(linkinc)" == ""
 .IF "$(APP$(TNR)TARGET)" == "loader"
     +$(PERL) loader.pl $@
