@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoole2.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 15:42:45 $
+ *  last change: $Author: hr $ $Date: 2004-03-09 10:33:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -376,6 +376,7 @@ void SdrOle2Obj::Connect()
             }
             else
             {
+                pInfo->SetObj( *ppObjRef );
                 pInfo->SetDeleted(FALSE);
             }
 
