@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: ssa $ $Date: 2001-11-29 13:21:44 $
+ *  last change: $Author: mt $ $Date: 2001-11-29 17:37:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -483,7 +483,7 @@ static BOOL ImplHandleHelpEvent( Window* pMenuWindow, Menu* pMenu, USHORT nHighl
             if( pMenu->GetTipHelpText( nId ).Len() )
             {
                 // give user a chance to read the full filename
-                USHORT oldTimeout=ImplChangeTipTimeout( 60000, pMenuWindow );
+                ULONG oldTimeout=ImplChangeTipTimeout( 60000, pMenuWindow );
                 Help::ShowQuickHelp( pMenuWindow, aRect, pMenu->GetTipHelpText( nId ) );
                 ImplChangeTipTimeout( oldTimeout, pMenuWindow );
             }
@@ -497,7 +497,7 @@ static BOOL ImplHandleHelpEvent( Window* pMenuWindow, Menu* pMenu, USHORT nHighl
         if( pMenu->GetTipHelpText( nId ).Len() )
         {
             // give user a chance to read the full filename
-            USHORT oldTimeout=ImplChangeTipTimeout( 60000, pMenuWindow );
+            ULONG oldTimeout=ImplChangeTipTimeout( 60000, pMenuWindow );
             Help::ShowQuickHelp( pMenuWindow, aRect, pMenu->GetTipHelpText( nId ) );
             ImplChangeTipTimeout( oldTimeout, pMenuWindow );
         }
@@ -532,6 +532,8 @@ Menu::Menu()
 Menu::~Menu()
 {
     DBG_DTOR( Menu, NULL );
+
+    ImplCallEventListeners( VCLEVENT_OBJECT_DYING );
 
     if ( nEventId )
         Application::RemoveUserEvent( nEventId );
