@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: as $ $Date: 2000-10-31 14:41:06 $
+#   last change: $Author: sb $ $Date: 2000-11-03 17:49:37 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,8 +75,8 @@ TARGET=config
 SLOFILES = \
     $(SLO)$/pathoptions.obj \
     $(SLO)$/saveopt.obj		\
-        $(SLO)$/undoopt.obj             \
-        $(SLO)$/helpopt.obj             \
+    $(SLO)$/undoopt.obj             \
+    $(SLO)$/helpopt.obj             \
     $(SLO)$/useroptions.obj				\
     $(SLO)$/moduleoptions.obj			\
     $(SLO)$/securityoptions.obj			\
@@ -85,9 +85,9 @@ SLOFILES = \
     $(SLO)$/dialogoptions.obj			\
     $(SLO)$/internaloptions.obj			\
     $(SLO)$/startoptions.obj			\
-    $(SLO)$/historyoptions.obj
+    $(SLO)$/historyoptions.obj \
+    $(SLO)$/inetoptions.obj
 
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
-
