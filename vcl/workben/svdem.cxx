@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdem.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2001-12-13 14:40:14 $
+ *  last change: $Author: hr $ $Date: 2001-12-13 18:08:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 
 #include <sal/main.h>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
