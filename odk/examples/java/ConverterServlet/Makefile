@@ -37,14 +37,14 @@ $(OUT_COMP_CLASS) : $(OUT)
 
 $(OFFICE_CLASSES_DIR)/cos.jar : 
 	@echo --------------------------------------------------------------------------------
-	@echo You need the servlet support Java archive (cos.jar) for this example.
+	@echo You need the servlet support Java archive "$(QM)cos.jar$(QM)" for this example.
 	@echo You can download it from http://www.servlets.com/cos/index.html
 	@echo and then please copy it into your $(OFFICE_CLASSES_DIR) directory.
 	@echo --------------------------------------------------------------------------------
 
 $(OFFICE_CLASSES_DIR)/servlet.jar : 
 	@echo --------------------------------------------------------------------------------
-	@echo You need the servlet API (servlet.jar) for this example.
+	@echo You need the servlet API "$(QM)servlet.jar$(QM)" for this example.
 	@echo You can download it from http://java.sun.com/products/servlet/index.html
 	@echo and then please copy it into your $(OFFICE_CLASSES_DIR) directory.
 	@echo --------------------------------------------------------------------------------
