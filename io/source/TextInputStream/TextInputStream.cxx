@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextInputStream.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-18 14:57:56 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 20:22:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,13 +90,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::registry;
-
-#if defined( MACOSX ) && ( __GNUC__ < 3 )
-#include <com/sun/star/reflection/XInterfaceMemberTypeDescription.hpp>
-
-ClassData3 cppu::WeakImplHelper3<com::sun::star::io::XTextInputStream, com::sun::star::io::XActiveDataSink, com::sun::star::lang::XServiceInfo>::s_aCD(1);
-typelib_TypeDescriptionReference * com::sun::star::uno::Sequence<unsigned short>::s_pType;
-#endif
 
 namespace io_TextInputStream
 {
