@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jbu $ $Date: 2001-05-18 15:27:59 $
+ *  last change: $Author: jbu $ $Date: 2001-11-08 12:09:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,11 +74,12 @@ extern "C" {
     during the current process.
 
     The current implementation creates a 16-byte uuid without using
-    the ethernet address of system ( @see rtl_createUiid ). Thus the
-    identifier is very likely to be different from identifiers created
-    in other processes.
+    the ethernet address of system. Thus the
+    identifier is different from identifiers created
+    in other processes with a very probability.
 
     @param pTargetUUID 16 byte of memory
+    @see rtl_createUiid()
  */
 void SAL_CALL rtl_getGlobalProcessId( sal_uInt8 *pTargetUUID );
 
@@ -91,8 +92,8 @@ void SAL_CALL rtl_getGlobalProcessId( sal_uInt8 *pTargetUUID );
     @param nArg [in] The number of the argument to return.
     @param strCommandArg [out] The string receives the nArg-th command-line argument.
     @return osl_Process_E_None or does not return.
-    @see osl_getCommandArg
-    @see rtl_getCommandArgCount
+    @see osl_getCommandArg()
+    @see rtl_getCommandArgCount()
 */
 oslProcessError SAL_CALL rtl_getAppCommandArg(sal_uInt32 nArg, rtl_uString **strCommandArg);
 
@@ -103,8 +104,8 @@ oslProcessError SAL_CALL rtl_getAppCommandArg(sal_uInt32 nArg, rtl_uString **str
     ignored by this function.
 
     @return the number of commandline arguments passed to the main-function of this process.
-    @see osl_getCommandArgCount
-    @see rtl_getCommandArg
+    @see osl_getCommandArgCount()
+    @see rtl_getCommandArg()
 */
 sal_uInt32 SAL_CALL rtl_getAppCommandArgCount();
 
