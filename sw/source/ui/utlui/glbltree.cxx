@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glbltree.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:50 $
+ *  last change: $Author: os $ $Date: 2000-09-21 13:39:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -900,7 +900,7 @@ void SwGlobalTree::InsertRegion( const SwGlblDocContent* pCont,
                                 const String* pFileName )
 {
     String sFileName;
-    SwView *pView = ::GetActiveView();
+    SwView *pView = GetParentWindow()->GetCreateView();
     SwWrtShell &rSh = pView->GetWrtShell();
     String sFilePassword;
     if(!pFileName)
@@ -1170,7 +1170,7 @@ IMPL_LINK( SwGlobalTree, PopupHdl, Menu* , pMenu)
                 // Bereich mit dem Dok-Namen einfgen
                 // eigenes Dok in den Vordergrund
 
-                if(aFrmListener.IsValid())
+                if(aFrmListener.IsValid() && sNewFile.Len())
                 {
                     pGlobFrm->ToTop();
                     // durch das Update sind die Eintraege invalid
@@ -1332,7 +1332,7 @@ void    SwGlobalTree::ExecCommand(USHORT nCmd)
 --------------------------------------------------*/
 BOOL    SwGlobalTree::Update(BOOL bHard)
 {
-    SwView* pActView = ::GetActiveView();
+    SwView* pActView = GetParentWindow()->GetCreateView();
     BOOL bRet = FALSE;
     if(pActView)
     {
@@ -1494,185 +1494,4 @@ void SwLBoxString::Paint( const Point& rPos, SvLBox& rDev, USHORT nFlags,
     else
         SvLBoxString::Paint( rPos, rDev, nFlags, pEntry);
 }
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.57  2000/09/18 16:06:17  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.56  2000/09/07 15:59:35  os
-    change: SFX_DISPATCHER/SFX_BINDINGS removed
-
-    Revision 1.55  2000/09/06 09:57:09  os
-    #78501# force scrolling in QueryDrop
-
-    Revision 1.54  2000/08/24 10:42:23  os
-    #78054# survive closing of master document while SaveAs dialog is active
-
-    Revision 1.53  2000/07/03 08:54:59  jp
-    must changes for VCL
-
-    Revision 1.52  2000/06/26 13:12:59  os
-    INetURLObject::SmartRelToAbs removed
-
-    Revision 1.51  2000/05/23 19:54:20  jp
-    Bugfixes for Unicode
-
-    Revision 1.50  2000/03/23 14:59:30  os
-    #74356# goto index: use name - not title
-
-    Revision 1.49  2000/03/03 15:17:05  os
-    StarView remainders removed
-
-    Revision 1.48  2000/02/29 11:05:46  os
-    #73599# PullDownMenu: Ids/HelpIds corrected
-
-    Revision 1.47  2000/02/15 10:33:10  os
-    #72902# diable navigator in readonly documents
-
-    Revision 1.46  2000/02/11 15:00:36  hr
-    #70473# changes for unicode ( patched by automated patchtool )
-
-    Revision 1.45  2000/02/07 14:39:11  os
-    #72747# insert index into global documents
-
-    Revision 1.44  1999/12/09 12:29:12  os
-    #70284# show Bitmaps in hyperlink insert dialog# content.cxx glbltree.cxx navipi.hrc navipi.src
-
-    Revision 1.43  1999/09/10 08:36:15  os
-    GetTOXDescription with TOXTypes param
-
-    Revision 1.42  1999/08/25 13:24:42  OS
-    use SwMultiTOXTabDialog
-
-
-      Rev 1.41   25 Aug 1999 15:24:42   OS
-   use SwMultiTOXTabDialog
-
-      Rev 1.40   20 May 1999 11:02:24   OS
-   Ctrl-DoubleClick an Control weiterleiten - Docking
-
-      Rev 1.39   21 Apr 1999 09:42:58   OS
-   #65050# GPF im Update ohne View behoben
-
-      Rev 1.38   29 Mar 1999 12:23:38   OS
-   #63929# neuer Verzeichnisdialog vollstaendig
-
-      Rev 1.37   12 Nov 1998 15:07:26   JP
-   Bug #54342#: auch bei GlobalDocs das Filepasswort an die Section uebertragen
-
-      Rev 1.36   12 Nov 1998 14:27:20   OS
-   #59271# Referer mitschicken
-
-      Rev 1.35   04 Nov 1998 13:22:18   OS
-   #58673# Existenzanzeige der Teildokumente farbig
-
-      Rev 1.34   03 Nov 1998 14:39:22   OS
-   #58673# Existenzanzeige fuer Global-Teildokumente
-
-      Rev 1.33   02 Jul 1998 16:57:08   OM
-   #46638# Keine Grafiken auf Navigator droppen
-
-      Rev 1.32   29 Jun 1998 17:52:42   TJ
-   include
-
-      Rev 1.31   31 Mar 1998 15:30:44   OS
-   SetReadonlyUI von IsAllProtect abhaengig #49077#
-
-      Rev 1.30   13 Feb 1998 14:16:36   JP
-   statt selbst den InserDocDialog zu rufen, die neue Funktion GetFileFilterNameDlg rufen
-
-      Rev 1.29   23 Jan 1998 16:05:48   MA
-   includes
-
-      Rev 1.28   16 Jan 1998 14:18:46   OS
-   #46660# Text im QueryDrop ablehnen; #46636# nach Doppelclick Focus ins Doc
-
-      Rev 1.27   16 Jan 1998 11:03:06   OS
-    #46637# per DnD auch am Ende einfuegen
-   #46631# HTML nicht-readonly oeffnen
-
-      Rev 1.26   19 Dec 1997 09:06:50   OS
-   Change: UsrData im InsertEntry uebergben
-
-      Rev 1.25   21 Nov 1997 12:10:14   MA
-   includes
-
-      Rev 1.24   03 Nov 1997 13:59:24   MA
-   precomp entfernt
-
-      Rev 1.23   07 Oct 1997 08:36:32   OS
-   asynchrones Anzeigen der Dokumente, damit auch nicht-SW-Docs 'verknuepft' werden koennen #44346#
-
-      Rev 1.22   04 Sep 1997 17:15:56   MA
-   includes
-
-      Rev 1.21   29 Aug 1997 15:57:32   OS
-   PopupMenu::Execute mit Window* fuer VCL
-
-      Rev 1.20   29 Aug 1997 14:00:26   OS
-   DLL-Umbau
-
-      Rev 1.19   15 Aug 1997 12:16:06   OS
-   chartar/frmatr/txtatr aufgeteilt
-
-      Rev 1.18   08 Aug 1997 17:25:30   OM
-   Headerfile-Umstellung
-
-      Rev 1.17   23 Jul 1997 21:44:58   HJS
-   includes
-
-      Rev 1.16   18 Jul 1997 17:28:26   OS
-   Display fuer Update der UserData
-
-      Rev 1.15   18 Jul 1997 16:33:40   OS
-   hartes Update im RequestHelp #41845#
-
-      Rev 1.14   16 Jul 1997 14:12:34   OS
-   neues Dok: da kommt ein FrameItem, kein ViewFrameItem #41726#
-
-      Rev 1.13   15 Jul 1997 16:47:06   OS
-   HeplIds fuer PopUps
-
-      Rev 1.12   09 Jul 1997 17:45:30   HJS
-   includes
-
-      Rev 1.11   03 Jul 1997 16:25:20   OS
-   Update: nicht mit alten Sections, sondern mit ListBox-Inhalten vergleichen
-
-      Rev 1.10   02 Jul 1997 14:11:54   OS
-   InsertRegion: Token fuer Bereichsnamen herausfiltern
-
-      Rev 1.9   01 Jul 1997 09:43:44   OS
-   mind. den ersten Eintrag selektieren
-
-      Rev 1.8   27 Jun 1997 08:15:50   OS
-   SV-Defizit umpopoelt: nur die erste FileList ist echt
-
-      Rev 1.7   25 Jun 1997 20:35:38   HJS
-   includes
-
-      Rev 1.6   25 Jun 1997 16:37:18   OS
-   per Doppelclick Textposition anspringen bzw. gelinktes Doc laden
-
-      Rev 1.5   25 Jun 1997 08:59:38   OS
-   Neue Datei fuer Globaldokument
-
-      Rev 1.4   22 Jun 1997 15:36:32   OS
-   Drop von File-Listen
-
-      Rev 1.3   21 Jun 1997 14:12:22   OS
-   Bereiche mit Dateinamen versehen, RequsestHelp entsprechend impl.
-
-      Rev 1.2   19 Jun 1997 17:35:58   OS
-   Reste Globaldokumente
-
-      Rev 1.1   19 Jun 1997 11:04:58   OS
-   Update impl.
-
-      Rev 1.0   18 Jun 1997 13:07:18   OS
-   Initial revision.
-
-------------------------------------------------------------------------*/
-
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:50 $
+ *  last change: $Author: os $ $Date: 2000-09-21 13:39:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -581,6 +581,12 @@ IMPL_LINK( SwNavigationPI, ToolBoxClickHdl, ToolBox *, pBox )
 
     return TRUE;
 }
+/* -----------------------------19.09.00 15:16--------------------------------
+
+ ---------------------------------------------------------------------------*/
+SwNavHelpToolBox::SwNavHelpToolBox(SwNavigationPI* pParent, const ResId &rResId) :
+            SwHelpToolBox(pParent, rResId)
+{}
 /*-----------------19.06.97 09:09-------------------
 
 --------------------------------------------------*/
@@ -589,7 +595,7 @@ void __EXPORT SwNavHelpToolBox::MouseButtonDown(const MouseEvent &rEvt)
     if(rEvt.GetButtons() == MOUSE_LEFT &&
             FN_CREATE_NAVIGATION == GetItemId(rEvt.GetPosPixel()))
     {
-        SfxBindings& rBind = SfxViewFrame::Current()->GetBindings();
+        SfxBindings& rBind = ((SwNavigationPI*)GetParent())->GetCreateView()->GetViewFrame()->GetBindings();
         rBind.ENTERREGISTRATIONS();
         SwScrollNaviPopup* pPopup = new
             SwScrollNaviPopup(FN_SCROLL_NAVIGATION,
@@ -631,9 +637,9 @@ IMPL_LINK( SwNavigationPI, EditAction, NumEditAction *, pEdit )
     {
         if(aPageChgTimer.IsActive())
             aPageChgTimer.Stop();
-        pView->GetWrtShell().GotoPage((USHORT)pEdit->GetValue());
-        pView->GetEditWin().GrabFocus();
-        pView->GetViewFrame()->GetBindings().Invalidate(FN_STAT_PAGE);
+        pCreateView->GetWrtShell().GotoPage((USHORT)pEdit->GetValue());
+        pCreateView->GetEditWin().GrabFocus();
+        pCreateView->GetViewFrame()->GetBindings().Invalidate(FN_STAT_PAGE);
     }
     return 0;
 }
@@ -663,8 +669,9 @@ IMPL_LINK( SwNavigationPI, EditGetFocus, NumEditAction *, pEdit )
 
 BOOL __EXPORT SwNavigationPI::Close()
 {
-    SFX_APP()->GetBindings().Invalidate(SID_NAVIGATOR);
-    GetActiveView()->GetViewFrame()->GetDispatcher()->Execute(SID_NAVIGATOR);
+    SfxViewFrame* pVFrame = pCreateView->GetViewFrame();
+    pVFrame->GetBindings().Invalidate(SID_NAVIGATOR);
+    pVFrame->GetDispatcher()->Execute(SID_NAVIGATOR);
     return TRUE;
 }
 
@@ -864,8 +871,10 @@ SwNavigationPI::SwNavigationPI( SfxBindings* pBindings,
     pActContView(0),
     pContextWin(pCw),
     nWishWidth(0),
-    pConfig(SW_MOD()->GetNavigationConfig())
+    pConfig(SW_MOD()->GetNavigationConfig()),
+    pCreateView(::GetActiveView())
 {
+
     for(USHORT k = 0; k < aContentToolBox.GetItemCount(); k++)
             aContentToolBox.SetItemImage(aContentToolBox.GetItemId(k),
                     aContentImageList.GetImage(aContentToolBox.GetItemId(k)));
@@ -1259,7 +1268,7 @@ SwNavigationChild::SwNavigationChild( Window* pParent,
 {
     SwNavigationPI* pNavi  = new SwNavigationPI( pBindings, this, pParent );
     SetWindow( pNavi );
-    SfxViewFrame::Current()->GetBindings().Invalidate(SID_NAVIGATOR);
+    ::GetActiveView()->GetViewFrame()->GetBindings().Invalidate(SID_NAVIGATOR);
     String sExtra = pInfo->aExtraString;
 
     SwNavigationConfig* pNaviConfig = SW_MOD()->GetNavigationConfig();
@@ -1544,271 +1553,4 @@ IMPL_LINK( SwNavigationPI, PageEditModifyHdl, Edit*, EMPTYARG )
     aPageChgTimer.Start();
     return 0;
 }
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.231  2000/09/18 16:06:18  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.230  2000/09/08 15:11:58  os
-    use configuration service
-
-    Revision 1.229  2000/09/07 15:03:22  os
-    SFX_BINDINGS removed
-    #78618# CreateFromInt32
-
-    Revision 1.228  2000/07/03 08:55:03  jp
-    must changes for VCL
-
-    Revision 1.227  2000/05/24 13:48:35  hr
-    conflict between STLPORT and Workshop header
-
-    Revision 1.226  2000/05/23 19:54:27  jp
-    Bugfixes for Unicode
-
-    Revision 1.225  2000/04/18 15:14:08  os
-    UNICODE
-
-    Revision 1.224  2000/03/03 15:17:05  os
-    StarView remainders removed
-
-    Revision 1.223  2000/02/11 15:00:45  hr
-    #70473# changes for unicode ( patched by automated patchtool )
-
-    Revision 1.222  1999/10/25 07:26:56  os
-    #69021# prevent showing of controls if ZoomedIn
-
-    Revision 1.221  1999/09/10 08:36:52  os
-    Chg: ExtraData in resources
-
-    Revision 1.220  1999/06/09 11:29:42  JP
-    have to change: SvxINetBookmark -> INetBookmark
-
-
-      Rev 1.219   09 Jun 1999 13:29:42   JP
-   have to change: SvxINetBookmark -> INetBookmark
-
-      Rev 1.218   19 Apr 1999 17:14:48   JP
-   Bug #64992#: ClearEntry mit Leerstring verhindern
-
-      Rev 1.217   01 Apr 1999 11:14:08   OS
-   #64267# breiteres NumericField statt doppelter Separatoren
-
-      Rev 1.216   25 Jan 1999 13:50:10   JP
-   Task #58677#: Crsr in Readonly Bereichen zulassen
-
-      Rev 1.215   20 Jan 1999 17:09:18   AWO
-   #59398# FormatIds
-
-      Rev 1.214   11 Jan 1999 14:37:54   OS
-   #58637# nach Reload im Global-Dok mind. neu painten
-
-      Rev 1.213   05 Jan 1999 07:56:20   OS
-   #60618# Global-Toolbox auch am ImageManager registrieren
-
-      Rev 1.212   27 Nov 1998 14:59:04   AMA
-   Fix #59951#59825#: Unterscheiden zwischen Rahmen-,Seiten- und Bereichsspalten
-
-      Rev 1.211   03 Nov 1998 12:24:34   OS
-   58830# Enter/LeaveRegistrations
-
-      Rev 1.210   26 Oct 1998 10:00:00   OS
-   #58390# Seitenfeld springt Seite mit Zeitverzoegerung an
-
-      Rev 1.209   17 Aug 1998 16:11:22   OS
-   fuer die Doc-ListBox docshell-Title benutzen #54551#
-
-      Rev 1.208   29 Jul 1998 12:18:58   OS
-   FORCE_MAKE_VISIBLE benutzen -  #53787#
-
-      Rev 1.207   15 Jul 1998 12:53:06   OS
-   Navigator an der SwView registrieren #34794#
-
-      Rev 1.206   10 Jul 1998 14:03:10   MH
-   internal comp.err
-
-      Rev 1.205   02 Jul 1998 16:57:06   OM
-   #46638# Keine Grafiken auf Navigator droppen
-
-      Rev 1.204   24 Apr 1998 17:21:30   OS
-   ListBox-Hoehe nicht setzen #49766#
-
-      Rev 1.203   31 Mar 1998 15:31:10   OS
-   SetReadonlyUI von IsAllProtect abhaengig #49077#
-
-      Rev 1.202   17 Mar 1998 17:32:02   OS
-   Separator neben dem NumericField #47922#
-
-      Rev 1.201   12 Mar 1998 07:51:24   OS
-   Toolbox umsortiert #47922#
-
-      Rev 1.200   05 Feb 1998 07:47:40   OS
-   DocListBox im Globaldoc immer hiden #46777#
-
-      Rev 1.199   04 Feb 1998 14:28:04   OS
-   DocListbox verstecken, wenn sie zu weit oben liegt #46777#
-
-      Rev 1.198   12 Dec 1997 13:58:04   OS
-   neuer Bookmark-Typ
-
-      Rev 1.197   05 Dec 1997 16:51:44   OS
-   Numerierungsumbau
-
-      Rev 1.196   28 Nov 1997 14:00:22   OS
-   Status fuer SHOW_CONTENT_BOX im _ZoomIn/_ZoomOut setzen #45580#
-
-      Rev 1.195   21 Nov 1997 12:10:16   MA
-   includes
-
-      Rev 1.194   03 Nov 1997 13:59:28   MA
-   precomp entfernt
-
-      Rev 1.193   04 Sep 1997 17:15:58   MA
-   includes
-
-      Rev 1.192   29 Aug 1997 15:39:00   OS
-   PopupMenu::Execute mit Window* fuer VCL
-
-      Rev 1.191   17 Jul 1997 15:23:54   OS
-   nach Reload durch Notfy die TreeListBoxen aktualisieren #41775#
-
-      Rev 1.190   15 Jul 1997 11:31:00   OS
-   Ids fuer Navigator PullDown-Menues
-
-      Rev 1.189   08 Jul 1997 14:13:32   OS
-   ConfigItems von der App ans Module
-
-      Rev 1.188   03 Jul 1997 16:26:10   OS
-   ToggleTree: _ZoomOut gfs. zuerst rufen
-
-      Rev 1.187   23 Jun 1997 18:46:26   HJS
-   includes
-
-      Rev 1.186   21 Jun 1997 14:15:36   OS
-   typ. Anf.zeichen werden nicht mehr gebraucht, Font an den TreeListBoxen auf STDFONT_SWISS
-
-      Rev 1.185   20 Jun 1997 13:54:58   OS
-   Move ueber View-Methode
-
-      Rev 1.184   19 Jun 1997 17:36:40   OS
-   Reste Globaldokumente
-
-      Rev 1.183   19 Jun 1997 11:02:50   OS
-   ReadOnly-Handling, Toolbox: RequestHelp und MousebuttonDown
-
-      Rev 1.182   18 Jun 1997 13:20:52   OS
-   Segmentierung raus
-
-      Rev 1.181   18 Jun 1997 13:08:38   OS
-   Globaldokument: Eintraege verschieben, _ZoomIn/Out angepasst
-
-      Rev 1.180   17 Jun 1997 10:17:22   OS
-   Globaldokument Teil 4 - Drag and Drop
-
-      Rev 1.179   16 Jun 1997 12:01:22   OS
-   Globaldokument Teil 3
-
-      Rev 1.178   14 Jun 1997 08:50:00   OS
-   Globaldokument Teil 2
-
-      Rev 1.177   13 Jun 1997 07:36:06   OS
-   Erweiterung fuer Globaldokument
-
-      Rev 1.176   28 May 1997 11:58:14   OS
-   Expand/Collapse-Zustand merken
-
-      Rev 1.175   13 May 1997 11:48:38   OS
-   Vorwaertsbew. mit Children per Drag and Drop: selektierte Eintreage abziehen #39885#
-
-      Rev 1.174   16 Apr 1997 11:50:58   OS
-   EnableAsyncDrag() an der TreeListBox
-
-      Rev 1.173   14 Apr 1997 16:28:16   OS
-   HelpId fuer InhaltstypenListBox
-
-      Rev 1.172   08 Apr 1997 10:28:34   MA
-   includes
-
-      Rev 1.171   27 Mar 1997 11:59:52   OS
-   Get7SetMinOutputSizePixel am SfxDockingWindow
-
-      Rev 1.170   20 Feb 1997 17:02:08   OS
-   GotoRegion impl., Frame und Grafik getrennt
-
-      Rev 1.169   11 Feb 1997 14:21:48   OS
-   DropMode mit variablen Images
-
-      Rev 1.168   31 Jan 1997 13:35:44   OS
-   HelpIds fuer Navigator-Toolbox und -Listbox
-
-      Rev 1.167   10 Jan 1997 14:18:54   OS
-   ConfigItem jetzt richtig
-
-      Rev 1.166   27 Nov 1996 16:32:46   OS
-   ConfigItem mitpflegen
-
-      Rev 1.165   20 Nov 1996 16:20:58   OS
-   Verschieben von Ueberschriften nur, wenn sie selektiert sind
-
-      Rev 1.164   14 Nov 1996 19:01:38   OS
-   jetzt auch wieder als PCH
-
-      Rev 1.163   13 Nov 1996 14:30:52   OS
-   neues ConfigItem: SwNavigationConfig
-
-      Rev 1.162   12 Nov 1996 18:17:16   OS
-   Resizing: Wunschbreite merken
-
-      Rev 1.161   12 Nov 1996 17:10:18   OS
-   Resizing, _ZoomIn/Out funktionieren wieder
-
-      Rev 1.160   11 Nov 1996 10:54:12   MA
-   ResMgr
-
-      Rev 1.159   05 Nov 1996 16:55:34   OS
-   Resize auch wieder im gedockten Zustand
-
-      Rev 1.158   05 Nov 1996 15:27:16   OS
-   Umstellung auf ChildWindowContext
-
-      Rev 1.157   24 Oct 1996 13:36:44   JP
-   String Umstellung: [] -> GetChar()
-
-      Rev 1.156   02 Oct 1996 08:08:00   MA
-   Umstellung Enable/Disable
-
-      Rev 1.155   28 Aug 1996 15:42:34   OS
-   includes
-
-      Rev 1.154   27 Jul 1996 15:33:34   OS
-   UpdateListBox auch ohne akt. View aufrufen
-
-      Rev 1.153   22 Jul 1996 15:06:56   OS
-   zusammengefaltete Groesse...
-
-      Rev 1.152   12 Jul 1996 13:23:30   OS
-   Konfiguration sichern
-
-      Rev 1.151   09 Jul 1996 17:40:18   OS
-   Resize: Listbox auf Null verkleinern, wenn sie nicht unter die Toolbox passt
-
-      Rev 1.150   04 Jul 1996 16:15:02   OS
-   richtige Anzeige der Listbox auch ohne aktive SwView
-
-      Rev 1.149   03 Jul 1996 14:24:42   OS
-   Listboxanzeige umgebaut, feste Viewanzeige moeglich
-
-      Rev 1.148   01 Jul 1996 16:00:26   OS
-   komplette Kontextmenues, Outlinetiefe einstellbar
-
-      Rev 1.147   28 Jun 1996 15:20:38   OS
-   drei Modi fuer D&D, Kontextmenue
-
-      Rev 1.146   26 Jun 1996 16:08:44   OS
-   Dispatcher::Execute angepasst, ::GotoPage aktiviert wieder das Seitenzahlfeld
-
-      Rev 1.145   26 Jun 1996 14:29:10   OS
-   Sprungfunktionen vervollstaendigt, Tastatursteuerung
-
-------------------------------------------------------------------------*/
 
