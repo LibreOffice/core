@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resmgr.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 17:26:52 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 08:40:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1383,10 +1383,16 @@ ResMgr* ResMgr::CreateResMgr( const sal_Char* pPrefixName,
 
 //    aLanguage = aLocale.Language;             // compiles...
     //legal shortcut?
-    if ( ! aLocale.Language.equalsIgnoreAsciiCase(aLocale.Country))
+    if ( ! aLocale.Language.equalsIgnoreAsciiCase(aLocale.Country) &&
+        aLocale.Country.getLength() )
     {
         aLanguage += "-";
         aLanguage += ByteString(rtl::OUStringToOString(aLocale.Country, RTL_TEXTENCODING_UTF8));
+        if ( aLocale.Variant.getLength() )
+        {
+            aLanguage += "-";
+            aLanguage += ByteString(rtl::OUStringToOString(aLocale.Variant, RTL_TEXTENCODING_UTF8));
+        }
     }
 
     // Suchreihenfolge festlegen
