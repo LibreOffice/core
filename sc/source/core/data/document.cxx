@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:50:11 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:49:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -588,6 +588,8 @@ BOOL ScDocument::InsertRow( USHORT nStartCol, USHORT nStartTab,
                             USHORT nEndCol,   USHORT nEndTab,
                             USHORT nStartRow, USHORT nSize, ScDocument* pRefUndoDoc )
 {
+    USHORT i;
+
     PutInOrder( nStartCol, nEndCol );
     PutInOrder( nStartTab, nEndTab );
 
@@ -595,7 +597,7 @@ BOOL ScDocument::InsertRow( USHORT nStartCol, USHORT nStartTab,
     BOOL bRet = FALSE;
     BOOL bOldAutoCalc = GetAutoCalc();
     SetAutoCalc( FALSE );   // Mehrfachberechnungen vermeiden
-    for (USHORT i=nStartTab; i<=nEndTab && bTest; i++)
+    for ( i = nStartTab; i <= nEndTab && bTest; i++)
         if (pTab[i])
             bTest &= pTab[i]->TestInsertRow( nStartCol, nEndCol, nSize );
     if (bTest)
@@ -661,6 +663,8 @@ void ScDocument::DeleteRow( USHORT nStartCol, USHORT nStartTab,
                             USHORT nStartRow, USHORT nSize,
                             ScDocument* pRefUndoDoc, BOOL* pUndoOutline )
 {
+    USHORT i;
+
     PutInOrder( nStartCol, nEndCol );
     PutInOrder( nStartTab, nEndTab );
 
@@ -691,7 +695,7 @@ void ScDocument::DeleteRow( USHORT nStartCol, USHORT nStartTab,
     if (pUndoOutline)
         *pUndoOutline = FALSE;
 
-    for (USHORT i=nStartTab; i<=nEndTab; i++)
+    for ( i = nStartTab; i <= nEndTab; i++)
         if (pTab[i])
             pTab[i]->DeleteRow( nStartCol, nEndCol, nStartRow, nSize, pUndoOutline );
 
@@ -747,6 +751,8 @@ BOOL ScDocument::InsertCol( USHORT nStartRow, USHORT nStartTab,
                             USHORT nEndRow,   USHORT nEndTab,
                             USHORT nStartCol, USHORT nSize, ScDocument* pRefUndoDoc )
 {
+    USHORT i;
+
     PutInOrder( nStartRow, nEndRow );
     PutInOrder( nStartTab, nEndTab );
 
@@ -754,7 +760,7 @@ BOOL ScDocument::InsertCol( USHORT nStartRow, USHORT nStartTab,
     BOOL bRet = FALSE;
     BOOL bOldAutoCalc = GetAutoCalc();
     SetAutoCalc( FALSE );   // Mehrfachberechnungen vermeiden
-    for (USHORT i=nStartTab; i<=nEndTab && bTest; i++)
+    for ( i = nStartTab; i <= nEndTab && bTest; i++)
         if (pTab[i])
             bTest &= pTab[i]->TestInsertCol( nStartRow, nEndRow, nSize );
     if (bTest)
@@ -808,6 +814,8 @@ void ScDocument::DeleteCol(USHORT nStartRow, USHORT nStartTab, USHORT nEndRow, U
                                 USHORT nStartCol, USHORT nSize, ScDocument* pRefUndoDoc,
                                 BOOL* pUndoOutline )
 {
+    USHORT i;
+
     PutInOrder( nStartRow, nEndRow );
     PutInOrder( nStartTab, nEndTab );
 
@@ -838,7 +846,7 @@ void ScDocument::DeleteCol(USHORT nStartRow, USHORT nStartTab, USHORT nEndRow, U
     if (pUndoOutline)
         *pUndoOutline = FALSE;
 
-    for (USHORT i=nStartTab; i<=nEndTab; i++)
+    for ( i = nStartTab; i <= nEndTab; i++)
         if (pTab[i])
             pTab[i]->DeleteCol( nStartCol, nStartRow, nEndRow, nSize, pUndoOutline );
 
@@ -2315,11 +2323,13 @@ void ScDocument::CompileXML()
 
 void ScDocument::CalcAfterLoad()
 {
+    USHORT i;
+
     if (bIsClip)    // Excel-Dateien werden aus dem Clipboard in ein Clip-Doc geladen
         return;     // dann wird erst beim Einfuegen in das richtige Doc berechnet
 
     bCalcingAfterLoad = TRUE;
-    for (USHORT i=0; i<=MAXTAB; i++)
+    for ( i = 0; i <= MAXTAB; i++)
         if (pTab[i]) pTab[i]->CalcAfterLoad();
     for (i=0; i<=MAXTAB; i++)
         if (pTab[i]) pTab[i]->SetDirtyAfterLoad();
