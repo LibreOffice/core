@@ -2,9 +2,9 @@
 *
 *  $RCSfile: SQLQueryComposer.java,v $
 *
-*  $Revision: 1.2 $
+*  $Revision: 1.3 $
 *
-*  last change: $Author: kz $ $Date: 2004-05-19 12:41:25 $
+*  last change: $Author: obo $ $Date: 2005-01-06 09:34:14 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -233,7 +233,7 @@ public class SQLQueryComposer {
             if (_bincludeGrouping){
                 appendGroupByColumns();
                 if (CurDBMetaData.GroupByFilterConditions.length > 0)
-                    xQueryComposer.setStructuredHavingFilter(CurDBMetaData.GroupByFilterConditions);
+                    xQueryComposer.setStructuredHavingClause(CurDBMetaData.GroupByFilterConditions);
             }
             s = xQueryAnalyzer.getQuery();
             appendSortingcriteria();
