@@ -2,9 +2,9 @@
  *
  *  $RCSfile: contdlg.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-01 20:44:51 $
+ *  last change: $Author: kz $ $Date: 2002-08-05 21:13:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text[ korean ] = "적용";
                 Text[ turkish ] = "Uygula";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Asignar";
+                Text[ catalan ] = "Aplica";
                 Text[ finnish ] = "K�yt�";
                 Text[ thai ] = "ใช้";
             };
@@ -144,7 +144,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text[ korean ] = "작업 영역";
                 Text[ turkish ] = "�al��ma alan�";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "�rea de trabajo";
+                Text[ catalan ] = "�rea de treball";
                 Text[ finnish ] = "Ty�tila";
                 Text[ thai ] = "พื้นที่ทำงาน";
             };
@@ -179,7 +179,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text[ korean ] = "선택";
                 Text[ turkish ] = "Se�im";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Selecci�n";
+                Text[ catalan ] = "Selecciona";
                 Text[ finnish ] = "Valitse";
                 Text[ thai ] = "เลือก";
             };
@@ -210,7 +210,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text[ korean ] = "사각형";
                 Text[ turkish ] = "Dikd�rtgen";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Rect�ngulo";
+                Text[ catalan ] = "Rectangle";
                 Text[ finnish ] = "Suorakulmio";
                 Text[ thai ] = "สี่เหลี่ยม";
             };
@@ -272,7 +272,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text[ korean ] = "다각형";
                 Text[ turkish ] = "�okgen";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Pol�gono";
+                Text[ catalan ] = "Pol�gon";
                 Text[ finnish ] = "Polygoni";
                 Text[ thai ] = "หลายเหลี่ยม";
             };
@@ -324,7 +324,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text[ korean ] = "점 편집";
                 Text[ turkish ] = "Nokta d�zenle";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Modificar puntos";
+                Text[ catalan ] = "Edita els punts";
                 Text[ thai ] = "แก้ไขจุด";
             };
             ToolBoxItem
@@ -356,7 +356,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text[ korean ] = "점 이동";
                 Text[ turkish ] = "Nokta ta��";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Desplazar puntos";
+                Text[ catalan ] = "Mou els punts";
                 Text[ thai ] = "ย้ายจุด";
             };
             ToolBoxItem
@@ -388,7 +388,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text[ korean ] = "점 삽입";
                 Text[ turkish ] = "Nokta ekle";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Insertar puntos";
+                Text[ catalan ] = "Insereix punts";
                 Text[ thai ] = "แทรกจุด";
             };
             ToolBoxItem
@@ -418,7 +418,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text[ korean ] = "점 삭제";
                 Text[ turkish ] = "Nokta sil";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Eliminar puntos";
+                Text[ catalan ] = "Suprimeix els punts";
                 Text[ thai ] = "ลบจุด";
             };
             ToolBoxItem
@@ -450,7 +450,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text[ korean ] = "자동 외형선";
                 Text[ turkish ] = "Otomatik kontur";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Contorno autom�tico";
+                Text[ catalan ] = "Contorn autom�tic";
                 Text[ finnish ] = "Automaattinen ��riviiva";
                 Text[ thai ] = "แสดงรูปร่างอัตโนมัติ";
             };
@@ -486,7 +486,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text[ korean ] = "실행 취소 ";
                 Text[ turkish ] = "Geri al ";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Deshacer  ";
+                Text[ catalan ] = "Desf�s  ";
                 Text[ thai ] = "เลิกทำ ";
             };
             ToolBoxItem
@@ -546,7 +546,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text[ korean ] = "색 골라내기";
                 Text[ turkish ] = "Renk �rne�i al";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Pipeta";
+                Text[ catalan ] = "Comptagotes";
                 Text[ finnish ] = "V�rivalitsin";
                 Text[ thai ] = "ตัวหยดสี";
             };
@@ -634,7 +634,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
     Text[ korean ] = "윤곽 편집기";
     Text[ turkish ] = "Kontur edit�r�";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Editor de contornos";
+    Text[ catalan ] = "Editor del contorn";
     Text[ finnish ] = "��riviivaeditori";
     Text[ thai ] = "ตัวแก้ไขเส้นแสดงรูปร่าง";
 
@@ -695,7 +695,7 @@ String STR_CONTOURDLG_MODIFY
     Text[ korean ] = "윤곽이 수정되었습니다. \n변경을 저장하겠습니까?";
     Text[ turkish ] = "Kontur de�i�tirildi.\nDe�i�iklikler kaydedilsin mi?";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Se ha modificado el contorno de la imagen.\n�Desea guardar las modificaciones?";
+    Text[ catalan ] = "S'ha modificat el contorn.\nVoleu desar els canvis?";
     Text[ finnish ] = "��riviivaa on muokattu.\nTallennetaanko muutokset?";
     Text[ thai ] = "ดัดแปลงแก้ไขเส้นแสดงรูปร่างแล้ว\nคุณต้องการบันทึกการเปลี่ยนแปลงหรือไม่?";
 };
@@ -722,7 +722,7 @@ String STR_CONTOURDLG_NEWPIPETTE
     Text[ korean ] = "새로운 윤곽을 만드시겠습니까?";
     Text[ turkish ] = "Yeni bir kontur olu�turmak istiyor musunuz?";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "�Desea crear un contorno nuevo?";
+    Text[ catalan ] = "Voleu crear un contorn nou?";
     Text[ finnish ] = "Luodaanko uusi ��riviiva?";
     Text[ thai ] = "คุณต้องการสร้างเส้นแสดงรูปร่างใหม่หรือไม่?";
 };
@@ -749,7 +749,7 @@ String STR_CONTOURDLG_WORKPLACE
     Text[ korean ] = "새 작업 영역을 설정하면\n윤곽이 삭제됩니다.\n그래도 계속하겠습니까?";
     Text[ turkish ] = "Yeni bir �al��ma alan� belirlenmesi durumunda\nkontur silinecek.\nDevam etmek istiyor musunuz?";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Al establecer una nueva �rea de trabajo\nse eliminar� el contorno.\n�Desea realmente continuar?";
+    Text[ catalan ] = "En establir una nova �rea de treball\ns'eliminar� el contorn.\nVoleu continuar realment?";
     Text[ finnish ] = "Uuden ty�tilan m��ritt�minen\npoistaa ��riviivan.\nHaluatko jatkaa?";
     Text[ thai ] = "กำหนดพื้นที่ทำงานใหม่จะ\nเป็นเหตุให้เส้นแสดงรูปร่างถูกลบ\nคุณแน่ใจหรือไม่ที่ต้องการทำต่อ?";
 };
@@ -778,7 +778,7 @@ String STR_CONTOURDLG_LINKED
     Text[ korean ] = "이 그래픽은 문서에 연결되어 있습니다. 편집하기 위해 그래픽 연결을 해제하겠습니까?";
     Text[ turkish ] = "Bu grafik, belge ile ba�lant�l�. Grafi�i d�zenlemek i�in bu ba�lant�y� kald�rmak istiyor musunuz?";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Esta imagen est� vinculada al documento. �Desea deshacer el v�nculo para editar la imagen?";
+    Text[ catalan ] = "Aquesta imatge est� enlla�ada al document. Voleu desfer l'enlla� per editar la imatge?";
     Text[ thai ] = "เชื่อมโยงวัตถุกราฟิคนี้ไปยังเอกสาร คุณต้องการไม่เชื่อมโยงกราฟิคเพื่อแก้ไขมันหรือไม่?";
 };
 /******************************************************************************/
