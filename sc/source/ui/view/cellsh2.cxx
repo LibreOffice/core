@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh2.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2000-11-14 15:53:05 $
+ *  last change: $Author: nn $ $Date: 2001-01-16 17:58:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1023,14 +1023,14 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                         USHORT nTab = GetViewData()->GetTabNo();
                         ScValidationData aData( eMode, eOper, aExpr1, aExpr2, pDoc, aCursorPos );
                         aData.SetIgnoreBlank( bBlank );
-                        if (bShowHelp)
-                            aData.SetInput(aHelpTitle, aHelpText);
-                        else
-                            aData.ResetInput();
-                        if (bShowError)
-                            aData.SetError(aErrTitle, aErrText, eErrStyle);
-                        else
-                            aData.ResetError();
+
+                        aData.SetInput(aHelpTitle, aHelpText);      // sets bShowInput to TRUE
+                        if (!bShowHelp)
+                            aData.ResetInput();                     // reset only bShowInput
+
+                        aData.SetError(aErrTitle, aErrText, eErrStyle); // sets bShowError to TRUE
+                        if (!bShowError)
+                            aData.ResetError();                     // reset only bShowError
 
                         pTabViewShell->SetValidation( aData );
                         rReq.Done( *pOutSet );

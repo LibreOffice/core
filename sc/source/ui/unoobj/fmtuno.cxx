@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtuno.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2000-12-21 13:59:04 $
+ *  last change: $Author: nn $ $Date: 2001-01-16 17:59:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -634,13 +634,13 @@ ScValidationData* ScTableValidationObj::CreateValidationData( ScDocument* pDoc,
                                                    aExpr1, aExpr2, pDoc, aSrcPos,
                                                    bEnglish, bCompileXML );
     pRet->SetIgnoreBlank(bIgnoreBlank);
-    if (bShowInput)
-        pRet->SetInput( aInputTitle, aInputMessage );
-    else
+
+    // set strings for error / input even if disabled (and disable afterwards)
+    pRet->SetInput( aInputTitle, aInputMessage );
+    if (!bShowInput)
         pRet->ResetInput();
-    if (bShowError)
-        pRet->SetError( aErrorTitle, aErrorMessage, (ScValidErrorStyle)nErrorStyle );
-    else
+    pRet->SetError( aErrorTitle, aErrorMessage, (ScValidErrorStyle)nErrorStyle );
+    if (!bShowError)
         pRet->ResetError();
 
     return pRet;
