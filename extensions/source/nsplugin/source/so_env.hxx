@@ -2,9 +2,9 @@
  *
  *  $RCSfile: so_env.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 10:08:10 $
+ *  last change: $Author: kz $ $Date: 2004-11-26 16:02:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,5 +128,9 @@ int UnixToDosPath(char*);
 void NSP_WriteLog(int level,  const char* pFormat, ...);
 
 int restoreUTF8(char* pPath);
+
+char* NSP_getPluginName();
+
+char* NSP_getPluginDesc();
 
 #endif
