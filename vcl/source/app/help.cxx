@@ -2,9 +2,9 @@
  *
  *  $RCSfile: help.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ssa $ $Date: 2002-04-24 12:09:17 $
+ *  last change: $Author: ssa $ $Date: 2002-06-25 14:22:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -549,6 +549,13 @@ void HelpTextWindow::RequestHelp( const HelpEvent& rHEvt )
 {
     // Nur damit nicht von Window::RequestHelp() ein
     // ShowQuickHelp/ShowBalloonHelp am HelpTextWindow aufgerufen wird.
+}
+
+// -----------------------------------------------------------------------
+
+::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > HelpTextWindow::CreateAccessible()
+{
+    return ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > ();
 }
 
 // =======================================================================
