@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DrawViewWrapper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: iha $ $Date: 2003-10-28 16:10:57 $
+ *  last change: $Author: iha $ $Date: 2003-10-28 16:22:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,7 +199,7 @@ void DrawViewWrapper::InitRedraw( OutputDevice* pOut, const Region& rReg )
     this->E3dView::InitRedraw( pOut, rReg );
 }
 
-SdrObject* DrawViewWrapper::GetTextEditObject() const
+SdrObject* DrawViewWrapper::getTextEditObject() const
 {
     SdrObject* pTextObj = NULL;
     const SdrMarkList& rMarkList = this->GetMarkList();
