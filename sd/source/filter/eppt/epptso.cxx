@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epptso.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: sj $ $Date: 2001-08-15 12:45:44 $
+ *  last change: $Author: sj $ $Date: 2001-08-23 13:55:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1664,12 +1664,19 @@ void PPTWriter::ImplWriteParagraphs( SvStream& rOut, TextObj& rTextObj )
                 ( mpStyleSheet->IsHardAttribute( nInstance, pPara->bDepth, ParaAttr_LineFeed, nLineSpacing ) ) )
                 nPropertyFlags |= 0x00001000;
         }
-        if ( ( pPara->meLineSpacingBottom == ::com::sun::star::beans::PropertyState_DIRECT_VALUE ) ||
-            ( mpStyleSheet->IsHardAttribute( nInstance, pPara->bDepth, ParaAttr_LowerDist, pPara->mnLineSpacingBottom ) ) )
-            nPropertyFlags |= 0x00004000;
         if ( ( pPara->meLineSpacingTop == ::com::sun::star::beans::PropertyState_DIRECT_VALUE ) ||
             ( mpStyleSheet->IsHardAttribute( nInstance, pPara->bDepth, ParaAttr_UpperDist, pPara->mnLineSpacingTop ) ) )
             nPropertyFlags |= 0x00002000;
+        if ( ( pPara->meLineSpacingBottom == ::com::sun::star::beans::PropertyState_DIRECT_VALUE ) ||
+            ( mpStyleSheet->IsHardAttribute( nInstance, pPara->bDepth, ParaAttr_LowerDist, pPara->mnLineSpacingBottom ) ) )
+            nPropertyFlags |= 0x00004000;
+        if ( ( pPara->meForbiddenRules == ::com::sun::star::beans::PropertyState_DIRECT_VALUE ) ||
+            ( mpStyleSheet->IsHardAttribute( nInstance, pPara->bDepth, ParaAttr_UpperDist, pPara->mbForbiddenRules ) ) )
+            nPropertyFlags |= 0x00020000;
+        if ( ( pPara->meParagraphPunctation == ::com::sun::star::beans::PropertyState_DIRECT_VALUE ) ||
+            ( mpStyleSheet->IsHardAttribute( nInstance, pPara->bDepth, ParaAttr_UpperDist, pPara->mbParagraphPunctation ) ) )
+            nPropertyFlags |= 0x00080000;
+
 
         sal_Int32 nBuRealSize = pPara->nBulletRealSize;
         sal_Int16 nBulletFlags = pPara->nBulletFlags;
@@ -1706,6 +1713,15 @@ void PPTWriter::ImplWriteParagraphs( SvStream& rOut, TextObj& rTextObj )
             rOut << (sal_uInt16)( pPara->mnLineSpacingTop );
         if ( nPropertyFlags & 0x00004000 )
             rOut << (sal_uInt16)( pPara->mnLineSpacingBottom );
+        if ( nPropertyFlags & 0x000e0000 )
+        {
+            sal_uInt16 nAsianSettings = 0;
+            if ( pPara->mbForbiddenRules )
+                nAsianSettings |= 1;
+            if ( pPara->mbParagraphPunctation )
+                nAsianSettings |= 4;
+            rOut << nAsianSettings;
+        }
     }
 }
 
@@ -2786,6 +2802,14 @@ void ParagraphObj::ImplGetParagraphValues( PPTExBulletProvider& rBuProv, sal_Boo
         mnLineSpacingTop = (sal_Int16)(-( nSpacing / 4.40972 ) );
     }
     meLineSpacingTop = ePropState;
+
+    if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "ParaIsForbiddenRules" ) ), bGetPropStateValue ) )
+        mAny >>= mbForbiddenRules;
+    meForbiddenRules = ePropState;
+
+    if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "ParaIsHangingPunctuation" ) ), bGetPropStateValue ) )
+        mAny >>= mbParagraphPunctation;
+    meParagraphPunctation = ePropState;
 }
 
 void ParagraphObj::ImplConstruct( ParagraphObj& rParagraphObj )
@@ -2797,6 +2821,8 @@ void ParagraphObj::ImplConstruct( ParagraphObj& rParagraphObj )
     mnLineSpacingBottom = rParagraphObj.mnLineSpacingBottom;
     mbFirstParagraph = rParagraphObj.mbFirstParagraph;
     mbLastParagraph = rParagraphObj.mbLastParagraph;
+    mbParagraphPunctation = rParagraphObj.mbParagraphPunctation;
+    mbForbiddenRules = rParagraphObj.mbForbiddenRules;
 
     for ( void* pPtr = rParagraphObj.First(); pPtr; pPtr = rParagraphObj.Next() )
         Insert( new PortionObj( *(PortionObj*)pPtr ), LIST_APPEND );

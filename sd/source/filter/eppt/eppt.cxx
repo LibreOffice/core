@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eppt.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: sj $ $Date: 2001-06-20 11:52:54 $
+ *  last change: $Author: sj $ $Date: 2001-08-23 13:55:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2192,6 +2192,7 @@ PPTExParaSheet::PPTExParaSheet( int nInstance, sal_uInt16 nDefaultTab, PPTExBull
         rLev.mnTextOfs = nTextOfs;
         rLev.mnBulletOfs = nBulletOfs;
         rLev.mnDefaultTab = nDefaultTab;
+        rLev.mnAsianSettings = 2;
 
         rLev.mbExtendedBulletsUsed = FALSE;
         rLev.mnBulletId = 0xffff;
@@ -2238,6 +2239,18 @@ void PPTExParaSheet::SetStyleSheet( const ::com::sun::star::uno::Reference< ::co
         rLev.mnLowerDist = aParagraphObj.mnLineSpacingBottom;
     if ( aParagraphObj.meLineSpacingTop == ::com::sun::star::beans::PropertyState_DIRECT_VALUE )
         rLev.mnUpperDist = aParagraphObj.mnLineSpacingTop;
+    if ( aParagraphObj.meForbiddenRules == ::com::sun::star::beans::PropertyState_DIRECT_VALUE )
+    {
+        rLev.mnAsianSettings &=~1;
+        if ( aParagraphObj.mbForbiddenRules )
+            rLev.mnAsianSettings |= 1;
+    }
+    if ( aParagraphObj.meParagraphPunctation == ::com::sun::star::beans::PropertyState_DIRECT_VALUE )
+    {
+        rLev.mnAsianSettings &=~4;
+        if ( aParagraphObj.mbParagraphPunctation )
+            rLev.mnAsianSettings |= 4;
+    }
 
     rLev.mbIsBullet = aParagraphObj.mbIsBullet; //( ( aParagraphObj.nBulletFlags & 1 ) != 0 );
 
@@ -2321,7 +2334,7 @@ void PPTExParaSheet::Write( SvStream& rSt, PptEscherEx* pEx, sal_uInt16 nLev, sa
     rSt << rLev.mnDefaultTab
         << (sal_uInt16)0
         << (sal_uInt16)0
-        << (sal_uInt16)2
+        << rLev.mnAsianSettings
         << (sal_uInt16)0;
 }
 

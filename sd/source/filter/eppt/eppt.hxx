@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eppt.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: sj $ $Date: 2001-08-13 16:32:47 $
+ *  last change: $Author: sj $ $Date: 2001-08-23 13:55:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -485,6 +485,9 @@ enum PPTExTextAttr
     ParaAttr_TextOfs,
     ParaAttr_BulletOfs,
     ParaAttr_DefaultTab,
+    ParaAttr_AsianLB_1,
+    ParaAttr_AsianLB_2,
+    ParaAttr_AsianLB_3,
     CharAttr_Bold,
     CharAttr_Italic,
     CharAttr_Underline,
@@ -523,7 +526,7 @@ struct PPTExCharSheet
 
 struct PPTExParaLevel
 {
-    sal_Bool    mbIsBullet;
+    sal_Bool        mbIsBullet;
     sal_uInt16      mnBulletChar;
     sal_uInt16      mnBulletFont;
     sal_uInt16      mnBulletHeight;
@@ -542,6 +545,7 @@ struct PPTExParaLevel
     sal_uInt16      mnBulletStart;
     sal_uInt32      mnMappedNumType;
     sal_uInt32      mnNumberingType;
+    sal_uInt16      mnAsianSettings;
 
 };
 
@@ -804,11 +808,15 @@ class ParagraphObj : public List, public PropStateValue, public SOParagraph
         ::com::sun::star::beans::PropertyState  meLineSpacing;
         ::com::sun::star::beans::PropertyState  meLineSpacingTop;
         ::com::sun::star::beans::PropertyState  meLineSpacingBottom;
+        ::com::sun::star::beans::PropertyState  meForbiddenRules;
+        ::com::sun::star::beans::PropertyState  meParagraphPunctation;
 
         sal_uInt16          mnTextAdjust;
         sal_Int16           mnLineSpacing;
         sal_Int16           mnLineSpacingTop;
         sal_Int16           mnLineSpacingBottom;
+        sal_Bool            mbForbiddenRules;
+        sal_Bool            mbParagraphPunctation;
 
                         ParagraphObj( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent > & rXTextContentRef,
                             ParaFlags, FontCollection& rFontCollection,
