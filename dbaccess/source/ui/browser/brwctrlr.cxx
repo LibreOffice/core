@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-09 09:41:14 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 09:04:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,9 +87,6 @@
 #ifndef _COM_SUN_STAR_SDBC_XROWSETLISTENER_HPP_
 #include <com/sun/star/sdbc/XRowSetListener.hpp>
 #endif
-#ifndef _COM_SUN_STAR_SDB_XSQLQUERYCOMPOSERFACTORY_HPP_
-#include <com/sun/star/sdb/XSQLQueryComposerFactory.hpp>
-#endif
 #ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
 #include <com/sun/star/sdbc/XConnection.hpp>
 #endif
@@ -101,6 +98,9 @@
 #endif
 #ifndef _COM_SUN_STAR_SDB_XSQLERRORBROADCASTER_HPP_
 #include <com/sun/star/sdb/XSQLErrorBroadcaster.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDB_XSINGLESELECTQUERYANALYZER_HPP_
+#include <com/sun/star/sdb/XSingleSelectQueryAnalyzer.hpp>
 #endif
 #ifndef _COM_SUN_STAR_FORM_XLOADABLE_HPP_
 #include <com/sun/star/form/XLoadable.hpp>
@@ -737,6 +737,7 @@ sal_Bool SbaXDataBrowserController::Construct(Window* pParent)
         xFormSet->addPropertyChangeListener(PROPERTY_ACTIVECOMMAND, static_cast<XPropertyChangeListener*>(this));
         xFormSet->addPropertyChangeListener(PROPERTY_ORDER, static_cast<XPropertyChangeListener*>(this));
         xFormSet->addPropertyChangeListener(PROPERTY_FILTER, static_cast<XPropertyChangeListener*>(this));
+        xFormSet->addPropertyChangeListener(PROPERTY_HAVING_CLAUSE, static_cast<XPropertyChangeListener*>(this));
         xFormSet->addPropertyChangeListener(PROPERTY_APPLYFILTER, static_cast<XPropertyChangeListener*>(this));
     }
     Reference< ::com::sun::star::sdb::XSQLErrorBroadcaster >  xFormError(getRowSet(), UNO_QUERY);
@@ -938,6 +939,7 @@ void SbaXDataBrowserController::disposingFormModel(const ::com::sun::star::lang:
         xSourceSet->removePropertyChangeListener(PROPERTY_ACTIVECOMMAND, static_cast<XPropertyChangeListener*>(this));
         xSourceSet->removePropertyChangeListener(PROPERTY_ORDER, static_cast<XPropertyChangeListener*>(this));
         xSourceSet->removePropertyChangeListener(PROPERTY_FILTER, static_cast<XPropertyChangeListener*>(this));
+        xSourceSet->removePropertyChangeListener(PROPERTY_HAVING_CLAUSE, static_cast<XPropertyChangeListener*>(this));
         xSourceSet->removePropertyChangeListener(PROPERTY_APPLYFILTER, static_cast<XPropertyChangeListener*>(this));
     }
 
@@ -1049,7 +1051,15 @@ void SbaXDataBrowserController::propertyChange(const PropertyChangeEvent& evt) t
         {
             if (m_xParser->getFilter() != ::comphelper::getString(evt.NewValue))
             {
-                DO_SAFE( m_xParser->setFilter(::comphelper::getString(evt.NewValue)), "SbaXDataBrowserController::propertyChange : could not forward the new filter to my parser !" );
+                DO_SAFE( m_xComposer->setFilter(::comphelper::getString(evt.NewValue)), "SbaXDataBrowserController::propertyChange : could not forward the new filter to my parser !" );
+            }
+            InvalidateFeature(ID_BROWSER_REMOVEFILTER);
+        }
+        else if (evt.PropertyName.equals(PROPERTY_HAVING_CLAUSE))
+        {
+            if (m_xParser->getHavingClause() != ::comphelper::getString(evt.NewValue))
+            {
+                DO_SAFE( m_xComposer->setHavingClause(::comphelper::getString(evt.NewValue)), "SbaXDataBrowserController::propertyChange : could not forward the new filter to my parser !" );
             }
             InvalidateFeature(ID_BROWSER_REMOVEFILTER);
         }
@@ -1057,7 +1067,7 @@ void SbaXDataBrowserController::propertyChange(const PropertyChangeEvent& evt) t
         {
             if (m_xParser->getOrder() != ::comphelper::getString(evt.NewValue))
             {
-                DO_SAFE( m_xParser->setOrder(::comphelper::getString(evt.NewValue)), "SbaXDataBrowserController::propertyChange : could not forward the new order to my parser !" );
+                DO_SAFE( m_xComposer->setOrder(::comphelper::getString(evt.NewValue)), "SbaXDataBrowserController::propertyChange : could not forward the new order to my parser !" );
             }
             InvalidateFeature(ID_BROWSER_REMOVEFILTER);
         }
@@ -1212,6 +1222,7 @@ void SbaXDataBrowserController::disposing()
             xFormSet->removePropertyChangeListener(PROPERTY_ACTIVECOMMAND, static_cast<XPropertyChangeListener*>(this));
             xFormSet->removePropertyChangeListener(PROPERTY_ORDER, static_cast<XPropertyChangeListener*>(this));
             xFormSet->removePropertyChangeListener(PROPERTY_FILTER, static_cast<XPropertyChangeListener*>(this));
+            xFormSet->removePropertyChangeListener(PROPERTY_HAVING_CLAUSE, static_cast<XPropertyChangeListener*>(this));
             xFormSet->removePropertyChangeListener(PROPERTY_APPLYFILTER, static_cast<XPropertyChangeListener*>(this));
         }
 
@@ -1267,6 +1278,7 @@ void SbaXDataBrowserController::disposing()
     }
     try
     {
+        m_xComposer = NULL;
         ::comphelper::disposeComponent(m_xParser);
     }
     catch(Exception&)
@@ -1528,11 +1540,12 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId) const
                 if (!m_xParser.is())
                     break;
                 // any filter or sort order set ?
-                aReturn.bEnabled = m_xParser->getFilter().getLength() || m_xParser->getOrder().getLength();
+                aReturn.bEnabled = m_xParser->getFilter().getLength() || m_xParser->getHavingClause().getLength() || m_xParser->getOrder().getLength();
                 break;
 
             case ID_BROWSER_REFRESH:
-                aReturn.bEnabled = isValidCursor();
+                //  aReturn.bEnabled = isValidCursor();
+                aReturn.bEnabled = sal_True;
                 break;
 
             case ID_BROWSER_REDO:
@@ -1582,7 +1595,8 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId) const
                 aReturn.bEnabled = sal_False;
                 Reference< XPropertySet >  xActiveSet(getRowSet(), UNO_QUERY);
                 ::rtl::OUString aFilter = ::comphelper::getString(xActiveSet->getPropertyValue(PROPERTY_FILTER));
-                if (aFilter.getLength())
+                ::rtl::OUString aHaving = ::comphelper::getString(xActiveSet->getPropertyValue(PROPERTY_HAVING_CLAUSE));
+                if ( aFilter.getLength() || aHaving.getLength() )
                 {
                     aReturn.aState = xActiveSet->getPropertyValue(PROPERTY_APPLYFILTER);
                     aReturn.bEnabled = sal_True;
@@ -1638,7 +1652,7 @@ void SbaXDataBrowserController::applyParserOrder(const ::rtl::OUString& _rOldOrd
     if (!bSuccess)
     {
         xFormSet->setPropertyValue(PROPERTY_ORDER, makeAny(_rOldOrder));
-        DO_SAFE( m_xParser->setOrder(_rOldOrder), "SbaXDataBrowserController::applyParserOrder: could not restore the old order of my parser !" );
+        DO_SAFE( m_xComposer->setOrder(_rOldOrder), "SbaXDataBrowserController::applyParserOrder: could not restore the old order of my parser !" );
 
         try
         {
@@ -1657,7 +1671,7 @@ void SbaXDataBrowserController::applyParserOrder(const ::rtl::OUString& _rOldOrd
 }
 
 //------------------------------------------------------------------------------
-void SbaXDataBrowserController::applyParserFilter(const ::rtl::OUString& _rOldFilter, sal_Bool _bOldFilterApplied)
+void SbaXDataBrowserController::applyParserFilter(const ::rtl::OUString& _rOldFilter, sal_Bool _bOldFilterApplied,const ::rtl::OUString& _sOldHaving)
 {
     Reference< XPropertySet >  xFormSet(getRowSet(), UNO_QUERY);
     if (!m_xLoadable.is())
@@ -1673,6 +1687,7 @@ void SbaXDataBrowserController::applyParserFilter(const ::rtl::OUString& _rOldFi
     {
         FormErrorHelper aError(this);
         xFormSet->setPropertyValue(PROPERTY_FILTER, makeAny(m_xParser->getFilter()));
+        xFormSet->setPropertyValue(PROPERTY_HAVING_CLAUSE, makeAny(m_xParser->getHavingClause()));
         xFormSet->setPropertyValue(PROPERTY_APPLYFILTER, ::comphelper::makeBoolAny(sal_Bool(sal_True)));
 
         bSuccess = reloadForm(m_xLoadable);
@@ -1684,8 +1699,9 @@ void SbaXDataBrowserController::applyParserFilter(const ::rtl::OUString& _rOldFi
     if (!bSuccess)
     {
         xFormSet->setPropertyValue(PROPERTY_FILTER, makeAny(_rOldFilter));
+        xFormSet->setPropertyValue(PROPERTY_HAVING_CLAUSE, makeAny(_sOldHaving));
         xFormSet->setPropertyValue(PROPERTY_APPLYFILTER, ::comphelper::makeBoolAny(_bOldFilterApplied));
-        DO_SAFE( m_xParser->setFilter(_rOldFilter), "SbaXDataBrowserController::applyParserFilter: could not restore the old filter of my parser !" );
+        DO_SAFE( m_xComposer->setFilter(_rOldFilter), "SbaXDataBrowserController::applyParserFilter: could not restore the old filter of my parser !" );
 
         try
         {
@@ -1717,6 +1733,7 @@ void SbaXDataBrowserController::ExecuteFilterSortCrit(sal_Bool bFilter)
         return;
 
     ::rtl::OUString sOldVal = bFilter ? m_xParser->getFilter() : m_xParser->getOrder();
+    ::rtl::OUString sOldHaving = m_xParser->getHavingClause();
     try
     {
         Reference< ::com::sun::star::sdbcx::XColumnsSupplier> xSup = getColumnsSupplier();
@@ -1727,8 +1744,8 @@ void SbaXDataBrowserController::ExecuteFilterSortCrit(sal_Bool bFilter)
             String aFilter;
             if(!aDlg.Execute())
             {
-                if(bFilter) // reset the filter
-                    m_xParser->setFilter(sOldVal);
+                m_xComposer->setFilter(sOldVal);
+                m_xComposer->setHavingClause(sOldHaving);
                 return; // if so we don't need to actualize the grid
             }
             aFilter = aDlg.BuildWherePart();
@@ -1739,8 +1756,7 @@ void SbaXDataBrowserController::ExecuteFilterSortCrit(sal_Bool bFilter)
             String aOrder;
             if(!aDlg.Execute())
             {
-                if(bFilter) // reset the filter
-                    m_xParser->setOrder(sOldVal);
+                m_xComposer->setOrder(sOldVal);
                 return; // if so we don't need to actualize the grid
             }
             aDlg.BuildOrderPart();
@@ -1759,12 +1775,13 @@ void SbaXDataBrowserController::ExecuteFilterSortCrit(sal_Bool bFilter)
         try { bOldFilterApplied = ::comphelper::getBOOL(xFormSet->getPropertyValue(PROPERTY_APPLYFILTER)); } catch(Exception&) { } ;
     }
 
-    if (sOldVal.equals(sNewVal))
+    ::rtl::OUString sNewHaving = m_xParser->getHavingClause();
+    if ( sOldVal.equals(sNewVal) && (!bFilter || sOldHaving.equals(sNewHaving)) )
         // nothing to be done
         return;
 
     if (bFilter)
-        applyParserFilter(sOldVal, bOldFilterApplied);
+        applyParserFilter(sOldVal, bOldFilterApplied,sOldHaving);
     else
         applyParserOrder(sOldVal);
 
@@ -1913,7 +1930,7 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId, const Sequence< Property
             ::rtl::OUString sOldSort = m_xParser->getOrder();
             sal_Bool bParserSuccess;
             HANDLE_SQL_ERRORS(
-                m_xParser->setOrder(::rtl::OUString()); m_xParser->appendOrderByColumn(xField, bSortUp),
+                m_xComposer->setOrder(::rtl::OUString()); m_xComposer->appendOrderByColumn(xField, bSortUp),
                 bParserSuccess,
                 UniString(ModuleRes(SBA_BROWSER_SETTING_ORDER)),
                 "SbaXDataBrowserController::Execute : caught an exception while composing the new filter !"
@@ -1946,7 +1963,22 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId, const Sequence< Property
             if (!xField.is())
                 break;
 
+            // check if the column is a aggregate function
+            sal_Bool bHaving = sal_False;
+            ::rtl::OUString sName;
+            xField->getPropertyValue(PROPERTY_NAME) >>= sName;
+            Reference< XColumnsSupplier > xColumnsSupplier(m_xParser, UNO_QUERY);
+            Reference< ::com::sun::star::container::XNameAccess >  xCols = xColumnsSupplier.is() ? xColumnsSupplier->getColumns() : Reference< ::com::sun::star::container::XNameAccess > ();
+            if ( xCols.is() && xCols->hasByName(sName) )
+            {
+                Reference<XPropertySet> xProp(xCols->getByName(sName),UNO_QUERY);
+                static ::rtl::OUString sAgg(RTL_CONSTASCII_USTRINGPARAM("AggregateFunction"));
+                if ( xProp->getPropertySetInfo()->hasPropertyByName(sAgg) )
+                    xProp->getPropertyValue(sAgg) >>= bHaving;
+            }
+
             ::rtl::OUString sOldFilter = m_xParser->getFilter();
+            ::rtl::OUString sOldHaving = m_xParser->getHavingClause();
 
             Reference< XPropertySet >  xFormSet(getRowSet(), UNO_QUERY);
             sal_Bool bApplied = ::comphelper::getBOOL(xFormSet->getPropertyValue(PROPERTY_APPLYFILTER));
@@ -1954,19 +1986,33 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId, const Sequence< Property
             // -> completely overwrite it, else append one
             if (!bApplied)
             {
-                DO_SAFE( m_xParser->setFilter(::rtl::OUString()), "SbaXDataBrowserController::Execute : caught an exception while resetting the new filter !" );
+                DO_SAFE( (bHaving ? m_xComposer->setHavingClause(::rtl::OUString()) : m_xComposer->setFilter(::rtl::OUString())), "SbaXDataBrowserController::Execute : caught an exception while resetting the new filter !" );
             }
 
             sal_Bool bParserSuccess;
-            HANDLE_SQL_ERRORS(
-                m_xParser->appendFilterByColumn(xField),
-                bParserSuccess,
-                UniString(ModuleRes(SBA_BROWSER_SETTING_FILTER)),
-                "SbaXDataBrowserController::Execute : caught an exception while composing the new filter !"
-            )
+
+
+            if ( bHaving )
+            {
+                HANDLE_SQL_ERRORS(
+                    m_xComposer->appendHavingFilterByColumn(xField,sal_True),
+                    bParserSuccess,
+                    UniString(ModuleRes(SBA_BROWSER_SETTING_FILTER)),
+                    "SbaXDataBrowserController::Execute : caught an exception while composing the new filter !"
+                )
+            }
+            else
+            {
+                HANDLE_SQL_ERRORS(
+                    m_xComposer->appendFilterByColumn(xField,sal_True),
+                    bParserSuccess,
+                    UniString(ModuleRes(SBA_BROWSER_SETTING_FILTER)),
+                    "SbaXDataBrowserController::Execute : caught an exception while composing the new filter !"
+                )
+            }
 
             if (bParserSuccess)
-                applyParserFilter(sOldFilter, bApplied);
+                applyParserFilter(sOldFilter, bApplied,sOldHaving);
 
             InvalidateFeature(ID_BROWSER_REMOVEFILTER);
             InvalidateFeature(ID_BROWSER_FILTERED);
@@ -1991,6 +2037,7 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId, const Sequence< Property
             // sent
             Reference< XPropertySet >  xSet(getRowSet(), UNO_QUERY);
             xSet->setPropertyValue(PROPERTY_FILTER,makeAny(::rtl::OUString()));
+            xSet->setPropertyValue(PROPERTY_HAVING_CLAUSE,makeAny(::rtl::OUString()));
             xSet->setPropertyValue(PROPERTY_ORDER,makeAny(::rtl::OUString()));
             {
                 WaitObject aWO(getBrowserView());
@@ -2433,23 +2480,28 @@ void SbaXDataBrowserController::LoadFinished(sal_Bool /*bWasSynch*/)
             if (::comphelper::getBOOL(xFormSet->getPropertyValue(PROPERTY_USE_ESCAPE_PROCESSING)))
             {   // (only if the statement isn't native)
                 // (it is allowed to use the PROPERTY_ISPASSTHROUGH : _after_ loading a form it is valid)
-                Reference< ::com::sun::star::sdb::XSQLQueryComposerFactory >  xFactory(::dbtools::getConnection(getRowSet()), UNO_QUERY);
-                if (xFactory.is())
-                    m_xParser = xFactory->createQueryComposer();
+                Reference<XMultiServiceFactory> xFactory(::dbtools::getConnection(getRowSet()),UNO_QUERY);
+                if ( xFactory.is() )
+                {
+                    m_xParser.set(xFactory->createInstance(SERVICE_NAME_SINGLESELECTQUERYCOMPOSER),UNO_QUERY);
+                    m_xComposer.set(m_xParser,UNO_QUERY);
+                }
             }
 
             // initialize the parser with the current sql-statement of the form
-            if (m_xParser.is())
+            if ( m_xParser.is() )
             {
                 m_xParser->setQuery(::comphelper::getString(xFormSet->getPropertyValue(PROPERTY_ACTIVECOMMAND)));
-                m_xParser->setFilter(::comphelper::getString(xFormSet->getPropertyValue(PROPERTY_FILTER)));
-                m_xParser->setOrder(::comphelper::getString(xFormSet->getPropertyValue(PROPERTY_ORDER)));
+                m_xComposer->setFilter(::comphelper::getString(xFormSet->getPropertyValue(PROPERTY_FILTER)));
+                m_xComposer->setHavingClause(::comphelper::getString(xFormSet->getPropertyValue(PROPERTY_HAVING_CLAUSE)));
+                m_xComposer->setOrder(::comphelper::getString(xFormSet->getPropertyValue(PROPERTY_ORDER)));
             }
         }
         catch(Exception&)
         {
             DBG_WARNING("SbaXDataBrowserController::LoadFinished: something went wrong while creating the parser !");
             m_xParser = NULL;
+            m_xComposer = NULL;
             // no further handling, we ignore the error
         }
 
@@ -2487,6 +2539,7 @@ void SbaXDataBrowserController::unloaded(const EventObject& aEvent) throw( Runti
         // bound-field-dependent slots ....
     try
     {
+        m_xComposer = NULL;
         ::comphelper::disposeComponent(m_xParser);
     }
     catch(Exception&)
@@ -2545,7 +2598,7 @@ sal_Bool SbaXDataBrowserController::isValidCursor() const
 
     Reference<XPropertySet> xProp(m_xRowSet,UNO_QUERY);
     return ::cppu::any2bool(xProp->getPropertyValue(PROPERTY_ISNEW)) || !(m_xRowSet->isBeforeFirst() || m_xRowSet->isAfterLast()) ||
-            (m_xParser.is() && (m_xParser->getFilter().getLength() || m_xParser->getOrder().getLength()));
+            (m_xParser.is() && (m_xParser->getFilter().getLength() || m_xParser->getHavingClause().getLength() || m_xParser->getOrder().getLength()));
 }
 
 //==================================================================
