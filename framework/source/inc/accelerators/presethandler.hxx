@@ -2,9 +2,9 @@
  *
  *  $RCSfile: presethandler.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: as $ $Date: 2004-12-07 13:18:16 $
+ *  last change: $Author: vg $ $Date: 2005-02-24 17:11:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -547,6 +547,33 @@ class PresetHandler : private ThreadHelpBase // attention! Must be the first bas
                                                                                       sal_Bool         bShare);
 
         //---------------------------------------
+        /** @short  try to find the specified locale inside list of possible ones.
+
+            @descr  The lits of possible locale values was e.g. retrieved from the system
+                    (configuration, directory listing etcpp). The locale normaly represent
+                    the current office locale. This method search for a suitable item by using
+                    different algorithm.
+                    a) exact search
+                    b) search with using fallbacks
+
+            @param  lLocalizedValues
+                    list of ISO locale codes
+
+            @param  aLocale
+                    [IN ] the current office locale, which should be searched inside lLocalizedValues.
+                    [OUT] in case fallbacks was allowed, it contains afterwards the fallback locale.
+
+            @param  bAllowFallbacks
+                    enable/disable using of fallbacks
+
+            @return An iterator, which points directly into lLocalizedValue list.
+                    As a negative result the special iterator lLocalizedValues.end() will be returned.
+         */
+        ::std::vector< ::rtl::OUString >::const_iterator impl_findMatchingLocalizedValue(const ::std::vector< ::rtl::OUString >& lLocalizedValues,
+                                                                                               ::comphelper::Locale&             aLocale         ,
+                                                                                               sal_Bool                          bAllowFallbacks );
+
+        //---------------------------------------
         /** @short  open a config path ignoring errors (catching exceptions).
 
             @descr  We catch only normal exceptions here - no runtime exceptions.
@@ -566,14 +593,19 @@ class PresetHandler : private ThreadHelpBase // attention! Must be the first bas
                     force using of the share layer instead of the user layer.
 
             @param  aLocale
-                    the start locale ...
+                    [IN ] contains the start locale for searching localized sub dirs.
+                    [OUT] contains the locale of a found localized sub dir
+
+            @param  bAllowFallback
+                    enable/disable fallback handling for locales
 
             @return An opened storage in case method was successfully - null otherwise.
          */
-        css::uno::Reference< css::embed::XStorage > impl_openLocalizedPathIgnoringErrors(      ::rtl::OUString&      sPath  ,
-                                                                                               sal_Int32             eMode  ,
-                                                                                               sal_Bool              bShare ,
-                                                                                         const ::comphelper::Locale& aLocale);
+        css::uno::Reference< css::embed::XStorage > impl_openLocalizedPathIgnoringErrors(::rtl::OUString&      sPath         ,
+                                                                                         sal_Int32             eMode         ,
+                                                                                         sal_Bool              bShare        ,
+                                                                                         ::comphelper::Locale& aLocale       ,
+                                                                                         sal_Bool              bAllowFallback);
 
         //---------------------------------------
         /** @short  returns the names of all sub storages of specified storage.
