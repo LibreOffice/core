@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.55 $
+#   $Revision: 1.56 $
 #
-#   last change: $Author: hjs $ $Date: 2001-06-21 17:05:53 $
+#   last change: $Author: nf $ $Date: 2001-06-27 06:31:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -2329,15 +2329,21 @@ $(IMGLSTTARGET): $(IMGLST_SRS)
 .ENDIF
 
 .IF "$(XMLPROPERTIES)"!=""
+.IF "$(L10N-framework)"!=""
+XML_ISO_CODE*=-ISO99 $(L10N-framework)
+.ENDIF
 $(MISC)$/$(TARGET)_%.done : %.xrb
     native2ascii -encoding UTF8 $< $(MISC)$/$(<:b).interm$(TARGET)
-    @xmlex -i $(MISC)$/$(<:b).interm$(TARGET) -o $(CLASSDIR) -g -d $@
+    @xmlex -i $(MISC)$/$(<:b).interm$(TARGET) -o $(CLASSDIR) $(XML_ISO_CODE) -g -d $@
     @+$(RM)  $(MISC)$/$(<:b).interm$(TARGET) >& $(NULLDEV)
 .ENDIF			# "$(XMLPROPERTIES)"!=""
 
 .IF "$(XMLXULRES)"!=""
+.IF "$(L10N-framework)"!=""
+XML_ISO_CODE*=-ISO99 $(L10N-framework)
+.ENDIF
 $(MISC)$/$(TARGET)_xxl_%.done : %.xxl
-    @xmlex -i $(<:b).xxl -o $(OUT)$/xul$/locale -g:dtd -d $@
+    @xmlex -i $(<:b).xxl -o $(OUT)$/xul$/locale $(XML_ISO_CODE) -g:dtd -d $@
 .ENDIF			# "$(XMLXULRES)"!=""
 
 .INCLUDE : tg_sdi.mk
