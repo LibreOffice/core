@@ -1,40 +1,40 @@
-[writer]
+[text]
 en-US = "%PRODUCTNAME Text Document"
 de = "%PRODUCTNAME Textdokument"
 
-[writer-template]
+[text-template]
 en-US = "%PRODUCTNAME Text Document Template"
 de = "%PRODUCTNAME Textdokumentvorlage"
 
-[writer-global]
+[master-document]
 en-US = "%PRODUCTNAME Master Document"
 de = "%PRODUCTNAME Globaldokument"
 
-[writer-math]
+[formula]
 en-US = "%PRODUCTNAME Formula"
 de = "%PRODUCTNAME Formel"
 
-[impress]
+[presentation]
 en-US = "%PRODUCTNAME Presentation"
 de = "%PRODUCTNAME Präsentation"
 
-[impress-template]
+[presentation-template]
 en-US = "%PRODUCTNAME Presentation Template"
 de = "%PRODUCTNAME Präsentationsvorlage"
 
-[draw]
+[drawing]
 en-US = "%PRODUCTNAME Drawing"
 de = "%PRODUCTNAME Zeichnung"
 
-[draw-template]
+[drawing-template]
 en-US = "%PRODUCTNAME Drawing Template"
 de = "%PRODUCTNAME Zeichnungsvorlage"
 
-[calc]
+[spreadsheet]
 en-US = "%PRODUCTNAME Spreadsheet"
 de = "%PRODUCTNAME Tabelle"
 
-[calc-template]
+[spreadsheet-template]
 en-US = "%PRODUCTNAME Spreadsheet Template"
 de = "%PRODUCTNAME Tabellenvorlage"
 
