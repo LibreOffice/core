@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosett.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:29 $
+ *  last change: $Author: os $ $Date: 2000-09-27 13:57:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1781,24 +1781,27 @@ void SwXNumberingRules::setNumberingRuleByIndex(
                         sal_uInt16 nChCount = pFmts->Count();
 
                         SwCharFmt* pCharFmt = 0;
-                        for(sal_uInt16 j = 0; j< nChCount; j++)
+                        if(sCharFmtName.Len())
                         {
-                            SwCharFmt* pTmp = (*pFmts)[j];
-                            if(pTmp->GetName() == sCharFmtName)
+                            for(sal_uInt16 j = 0; j< nChCount; j++)
                             {
-                                pCharFmt = pTmp;
-                                break;
+                                SwCharFmt* pTmp = (*pFmts)[j];
+                                if(pTmp->GetName() == sCharFmtName)
+                                {
+                                    pCharFmt = pTmp;
+                                    break;
+                                }
                             }
-                        }
-                        if(!pCharFmt)
-                        {
+                            if(!pCharFmt)
+                            {
 
-                            SfxStyleSheetBase* pBase;
-                            SfxStyleSheetBasePool* pPool = pLocalDoc->GetDocShell()->GetStyleSheetPool();
-                            pBase = ((SfxStyleSheetBasePool*)pPool)->Find(sCharFmtName, SFX_STYLE_FAMILY_CHAR);
-                            if(!pBase)
-                                pBase = &pPool->Make(sCharFmtName, SFX_STYLE_FAMILY_CHAR);
-                            pCharFmt = ((SwDocStyleSheet*)pBase)->GetCharFmt();
+                                SfxStyleSheetBase* pBase;
+                                SfxStyleSheetBasePool* pPool = pLocalDoc->GetDocShell()->GetStyleSheetPool();
+                                pBase = ((SfxStyleSheetBasePool*)pPool)->Find(sCharFmtName, SFX_STYLE_FAMILY_CHAR);
+                                if(!pBase)
+                                    pBase = &pPool->Make(sCharFmtName, SFX_STYLE_FAMILY_CHAR);
+                                pCharFmt = ((SwDocStyleSheet*)pBase)->GetCharFmt();
+                            }
                         }
                         aFmt.SetCharFmt( pCharFmt );
                         sNewCharStyleNames[(sal_uInt16)nIndex] = sCharFmtName;
@@ -2326,6 +2329,9 @@ void SwXTextColumns::setColumns(const uno::Sequence< text::TextColumn >& rColumn
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/19 00:08:29  hr
+    initial import
+
     Revision 1.64  2000/09/18 16:04:35  willem.vandorp
     OpenOffice header added.
 
