@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtbl1.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2002-03-21 13:11:43 $
+ *  last change: $Author: fme $ $Date: 2002-11-05 15:49:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1181,9 +1181,11 @@ USHORT lcl_CalcCellFit( const SwLayoutFrm *pCell )
 {
     SwTwips nRet = 0;
     const SwFrm *pFrm = pCell->Lower(); //Die ganze Zelle.
+    SWRECTFN( pCell )
     while ( pFrm )
     {
-        const SwTwips nAdd = pFrm->Frm().Width() - pFrm->Prt().Width();
+        const SwTwips nAdd = (pFrm->Frm().*fnRect->fnGetWidth)() -
+                             (pFrm->Prt().*fnRect->fnGetWidth)();
         #ifdef HPUX
         nRet = Max( nRet, ((long)((SwTxtFrm*)pFrm)->CalcFitToContent() + nAdd) );
         #else
@@ -1192,7 +1194,8 @@ USHORT lcl_CalcCellFit( const SwLayoutFrm *pCell )
         pFrm = pFrm->GetNext();
     }
     //Umrandung und linker/rechter Rand wollen mit kalkuliert werden.
-    nRet += pCell->Frm().Width() - pCell->Prt().Width();
+    nRet += (pCell->Frm().*fnRect->fnGetWidth)() -
+            (pCell->Prt().*fnRect->fnGetWidth)();
 
     //Um Rechenungenauikeiten, die spaeter bei SwTable::SetTabCols enstehen,
     //auszugleichen, addieren wir noch ein bischen.
@@ -1220,6 +1223,8 @@ void lcl_CalcSubColValues( SvUShorts &rToFill, const SwTabCols &rCols,
                     ::lcl_CalcCellFit( pCell ) :
                     MINLAY + USHORT(pCell->Frm().Width() - pCell->Prt().Width());
 
+    SWRECTFN( pTab )
+
     for ( USHORT i = 0 ; i <= rCols.Count(); ++i )
     {
         long nColLeft  = i == 0             ? rCols.GetLeft()  : rCols[i-1];
@@ -1228,14 +1233,14 @@ void lcl_CalcSubColValues( SvUShorts &rToFill, const SwTabCols &rCols,
         nColRight += rCols.GetLeftMin();
 
         //Werte auf die Verhaeltnisse der Tabelle (Follows) anpassen.
-        if ( rCols.GetLeftMin() !=  USHORT(pTab->Frm().Left()) )
+        if ( rCols.GetLeftMin() !=  USHORT((pTab->Frm().*fnRect->fnGetLeft)()) )
         {
-            const long nDiff = pTab->Frm().Left() - rCols.GetLeftMin();
+            const long nDiff = (pTab->Frm().*fnRect->fnGetLeft)() - rCols.GetLeftMin();
             nColLeft  += nDiff;
             nColRight += nDiff;
         }
-        const long nCellLeft  = pCell->Frm().Left();
-        const long nCellRight = pCell->Frm().Right();
+        const long nCellLeft  = (pCell->Frm().*fnRect->fnGetLeft)();
+        const long nCellRight = (pCell->Frm().*fnRect->fnGetRight)();
 
         //Ueberschneidungsbetrag ermitteln.
         long nWidth = 0;
@@ -1284,12 +1289,17 @@ void lcl_CalcColValues( SvUShorts &rToFill, const SwTabCols &rCols,
         const SwTabFrm *pTab = pSelUnion->GetTable();
         const SwRect &rUnion = pSelUnion->GetUnion();
 
+        SWRECTFN( pTab )
+#ifdef BIDI
+        sal_Bool bRTL = pTab->IsRightToLeft();
+#endif
+
         const SwLayoutFrm *pCell = pTab->FirstCell();
         do
         {   if ( ::IsFrmInTblSel( rUnion, pCell ) )
             {
-                const long nCLeft  = pCell->Frm().Left();
-                const long nCRight = pCell->Frm().Right();
+                const long nCLeft  = (pCell->Frm().*fnRect->fnGetLeft)();
+                const long nCRight = (pCell->Frm().*fnRect->fnGetRight)();
 
                 BOOL bNotInCols = TRUE;
 
@@ -1298,15 +1308,24 @@ void lcl_CalcColValues( SvUShorts &rToFill, const SwTabCols &rCols,
                     USHORT nFit = rToFill[i];
                     long nColLeft  = i == 0             ? rCols.GetLeft()  : rCols[i-1];
                     long nColRight = i == rCols.Count() ? rCols.GetRight() : rCols[i];
+
+#ifdef BIDI
+                    if ( bRTL )
+                    {
+                        long nTmpRight = nColRight;
+                        nColRight = rCols.GetRight() - nColLeft;
+                        nColLeft = rCols.GetRight() - nTmpRight;
+                    }
+#endif
                     nColLeft  += rCols.GetLeftMin();
                     nColRight += rCols.GetLeftMin();
 
                     //Werte auf die Verhaeltnisse der Tabelle (Follows) anpassen.
                     long nLeftA  = nColLeft;
                     long nRightA = nColRight;
-                    if ( rCols.GetLeftMin() !=  USHORT(pTab->Frm().Left()) )
+                    if ( rCols.GetLeftMin() !=  USHORT((pTab->Frm().*fnRect->fnGetLeft)()) )
                     {
-                        const long nDiff = pTab->Frm().Left() - rCols.GetLeftMin();
+                        const long nDiff = (pTab->Frm().*fnRect->fnGetLeft)() - rCols.GetLeftMin();
                         nLeftA  += nDiff;
                         nRightA += nDiff;
                     }

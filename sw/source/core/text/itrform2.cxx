@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrform2.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: fme $ $Date: 2002-11-04 12:26:17 $
+ *  last change: $Author: fme $ $Date: 2002-11-05 15:51:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1989,7 +1989,15 @@ KSHORT SwTxtFormatter::_CalcFitToContent()
     sal_Bool bFull = sal_False;
     while( pPor && !IsStop() && !bFull)
     {
-        bFull = pPor->Format( GetInfo() );
+#ifdef BIDI
+        if( pPor->IsMultiPortion() && ( !pMulti || pMulti->IsBidi() ) )
+#else
+        if( pPor->IsMultiPortion() && !pMulti )
+#endif
+            bFull = BuildMultiPortion( GetInfo(), *((SwMultiPortion*)pPor) );
+        else
+            bFull = pPor->Format( GetInfo() );
+
         GetInfo().SetLast( pPor );
         while( pPor )
         {
