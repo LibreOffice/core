@@ -2,9 +2,9 @@
  *
  *  $RCSfile: anchoredobject.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 10:33:21 $
+ *  last change: $Author: vg $ $Date: 2005-02-22 08:19:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -909,12 +909,19 @@ Point SwAnchoredObject::GetRelPosToAnchorFrm() const
 
     OD 2005-01-06 #i30669#
     Usage: Needed layout information for WW8 export
+    OD 2005-01-27 #i33818# - add parameters <_bFollowTextFlow> and
+    <_obRelToTableCell>
+    If <_bFollowTextFlow> is set and object is anchored inside table,
+    the position relative to the table cell is determined. Output
+    parameter <_obRelToTableCell> reflects this situation
 
     @author OD
 */
-Point SwAnchoredObject::GetRelPosToPageFrm() const
+Point SwAnchoredObject::GetRelPosToPageFrm( const bool _bFollowTextFlow,
+                                            bool& _obRelToTableCell ) const
 {
     Point aRelPos;
+    _obRelToTableCell = false;
 
     ASSERT( GetAnchorFrm(),
             "<SwAnchoredObject::GetRelPosToPageFrm()> - missing anchor frame." );
@@ -922,7 +929,31 @@ Point SwAnchoredObject::GetRelPosToPageFrm() const
             "<SwAnchoredObject::GetRelPosToPageFrm()> - missing page frame." );
 
     aRelPos = GetObjRect().Pos();
-    aRelPos -= GetAnchorFrm()->FindPageFrm()->Frm().Pos();
+    // --> OD 2005-01-27 #i33818# - search for cell frame, if object has to
+    // follow the text flow.
+    const SwFrm* pFrm( 0L );
+    if ( _bFollowTextFlow )
+    {
+        pFrm = GetAnchorFrm()->GetUpper();
+        while ( !pFrm->IsCellFrm() && !pFrm->IsPageFrm() )
+        {
+            pFrm = pFrm->GetUpper();
+        }
+    }
+    else
+    {
+        pFrm = GetAnchorFrm()->FindPageFrm();
+    }
+    if ( pFrm->IsCellFrm() )
+    {
+        aRelPos -= ( pFrm->Frm().Pos() + pFrm->Prt().Pos() );
+        _obRelToTableCell = true;
+    }
+    else
+    {
+        aRelPos -= pFrm->Frm().Pos();
+    }
+    // <--
 
     return aRelPos;
 }
