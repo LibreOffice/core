@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:29:43 $
+ *  last change: $Author: kz $ $Date: 2003-12-09 12:21:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3706,7 +3706,10 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
             pImpRec->bDrawHell = TRUE;
         else
             pImpRec->bDrawHell = FALSE;
+        if (GetPropertyValue(DFF_Prop_fPrint) & 0x02)
+            pImpRec->bHidden = TRUE;
         pTextImpRec->bDrawHell  = pImpRec->bDrawHell;
+        pTextImpRec->bHidden = pImpRec->bHidden;
         pImpRec->nNextShapeId   = GetPropertyValue( DFF_Prop_hspNext, 0 );
         pTextImpRec->nNextShapeId=pImpRec->nNextShapeId;
 
@@ -5375,6 +5378,7 @@ SvxMSDffImportRec::SvxMSDffImportRec()
 {
       eLineStyle      = mso_lineSimple; // GPF-Bug #66227#
       bDrawHell       = FALSE;
+      bHidden         = FALSE;
 //    bInGroup        = FALSE;
       bReplaceByFly   = FALSE;
       bLastBoxInChain = TRUE;
@@ -5407,6 +5411,7 @@ SvxMSDffImportRec::SvxMSDffImportRec(const SvxMSDffImportRec& rCopy)
 {
     eLineStyle       = rCopy.eLineStyle; // GPF-Bug #66227#
     bDrawHell        = rCopy.bDrawHell;
+    bHidden          = rCopy.bHidden;
 //          bInGroup         = rCopy.bInGroup;
     bReplaceByFly    = rCopy.bReplaceByFly;
     bLastBoxInChain  = rCopy.bLastBoxInChain;
