@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-14 15:03:35 $
+ *  last change: $Author: oj $ $Date: 2001-02-23 15:21:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,6 +200,8 @@ namespace dbaccess
 
         // XNamed
         virtual ::rtl::OUString SAL_CALL getName() throw(::com::sun::star::uno::RuntimeException);
+        // com::sun::star::lang::XUnoTunnel
+        virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
 
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData> getMetaData() const { return m_xMetaData; }
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> getConnection() const { return m_xMetaData->getConnection(); }
