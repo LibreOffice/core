@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-06 07:48:37 $
+ *  last change: $Author: kz $ $Date: 2001-08-06 20:34:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1286,7 +1286,7 @@ String STR_HELP_BOOL_DEFAULT
     Text[ french ] = "Définissez la valeur à faire figurer comme valeur par défaut dans tous les nouveaux enregistrements.\\Si le champ ne doit pas adopter de valeur par défaut, choisissez la chaîne vide.";
     Text[ swedish ] = "Välj ett värde som skall visas som standard i varje ny infogad datapost.\nVälj den tomma strängen om fältet inte skall ha något standardvärde.";
     Text[ dutch ] = "Kies een waarde die in iedere nieuw ingevoegd record als standaard moet verschijnen.\nKies een lege string als u niet wilt dat het veld de standaardwaarde krijgt toegewezen.";
-    Text[ spanish ] = "Elija el valor que deba aparecer como estándar en cada registro de datos que se\ninserte de nuevo. Elija la secuencia vacía si el campo no ha de contener tal valor estándar.";
+    Text[ spanish ] = "Elija el valor que deba aparecer como predeterminado en cada registro de datos que se\ninserte de nuevo. Elija la secuencia vacía si el campo no ha de contener tal valor predeterminado.";
     Text[ english_us ] = "Select a value that is to appear in all new records as default.\nIf the field is not to have a default value, select the empty string.";
     Text[ chinese_simplified ] = "ÇëÑ¡ÔñÒ»¸öÓÃÓÚÃ¿ĞÂÔöÊı¾İÌõÄ¿µÄ±ê×¼ÊıÖµ¡£\nÈç¹û×Ö¶Î²»Ó¦º¬ÓĞÕâ¸ö±ê×¼ÊıÖµ£¬Äú¾ÍÑ¡ÔñÒ»¸ö¿Õ°×µÄ×Ö´®¡£";
     Text[ russian ] = "Âûáåğèòå çíà÷åíèå, êîòîğîå äîëæíî ïîÿâëÿòüñÿ â êàæäîé âíîâü ââåäåííîé çàïèñè êàê ñòàíäàğòíîå.\nÂûáåğèòå ïóñòóş ñòğîêó, åñëè ïîëå íå äîëæíî ñîäåğæàòü òàêîãî çíà÷åíèÿ.";
@@ -1573,7 +1573,7 @@ PushButton PB_FORMAT
     Text[ portuguese_brazilian ] = "Format...";
     Text[ japanese ] = "...";
     Text[ korean ] = "...";
-    Text[ chinese_simplified ] = "...";
+    Text[ chinese_simplified ] = "~...";
     Text[ chinese_traditional ] = "~...";
     Text[ turkish ] = "...";
     Text[ arabic ] = "...";
@@ -1813,7 +1813,7 @@ String STR_TABLEDESIGN_DATASOURCE_DELETED
     Text = "Der Tabellenfilter konnte nicht angepasst werden, da die Datenquelle gelöscht wurde.";
     Text [ english_us ] = "The table filter could not be saved because the datasource was deleted before.";
     Text [ english ] = "The table filter could not be saved because the datasource was deleted before.";
-    Text[ portuguese ] = "The table filter could not be saved because the datasource was deleted before.";
+    Text[ portuguese ] = "Foi impossível ajustar o filtro da tabela porque a fonte de dados foi eliminada.";
     Text[ russian ] = "Ñîãëàñîâàòü ôèëüòğ òàáëèöû íåâîçìîæíî, ïîñêîëüêó èñòî÷íèê äàííûõ óäàëåí.";
     Text[ greek ] = "The table filter could not be saved because the datasource was deleted before.";
     Text[ dutch ] = "De tabellenfilter kon niet worden aangepast, daar de gegevensbron werd gewist.";
@@ -1827,7 +1827,7 @@ String STR_TABLEDESIGN_DATASOURCE_DELETED
     Text[ portuguese_brazilian ] = "The table filter could not be saved because the datasource was deleted before.";
     Text[ japanese ] = "ÃŞ°À¿°½‚ªíœ‚³‚ê‚Ä‚µ‚Ü‚Á‚Ä‚¢‚é‚½‚ß‚ÉAÃ°ÌŞÙÌ¨ÙÀ‚ğ“K‡‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B";
     Text[ korean ] = "The table filter could not be saved because the datasource was deleted before.";
-    Text[ chinese_simplified ] = "The table filter could not be saved because the datasource was deleted before.";
+    Text[ chinese_simplified ] = "ÎŞ·¨µ÷Õû±í¸ñÉ¸Ñ¡£¬ÒòÎªÊı¾İÔ´ÒÑ¾­±»É¾³ı¡£";
     Text[ chinese_traditional ] = "µLªk½Õ¾ãªí®æ¿z¿ï¡A¦]?¸ê®Æ·½¤w¸g³Q§R°£¡C";
     Text[ turkish ] = "The table filter could not be saved because the datasource was deleted before.";
     Text[ arabic ] = "The table filter could not be saved because the datasource was deleted before.";
@@ -2223,6 +2223,7 @@ String STR_TABLEDESIGN_ALTER_ERROR
     Text[ arabic ] = "The column \"\\$column\\$\" could not be changed. Should instead the column definition be appended?";
     Text[ catalan ] = "The column \"\\$column\\$\" could not be changed. Should instead the column definition be appended?";
 };
+
 
 
 
