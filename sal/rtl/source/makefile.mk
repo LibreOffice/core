@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: sz $ $Date: 2001-09-24 13:32:38 $
+#   last change: $Author: mhu $ $Date: 2002-04-21 13:38:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,9 +72,7 @@ PROJECTPCHSOURCE=cont_pch
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
 # --- Files --------------------------------------------------------
 
@@ -128,10 +126,6 @@ OBJFILES=   $(OBJ)$/alloc.obj       \
             $(OBJ)$/tres.obj
 
 #.ENDIF
-
-EXCEPTIONSFILES=	$(SLO)$/macro.obj	\
-            $(OBJ)$/macro.obj
-
 
 .ENDIF
 

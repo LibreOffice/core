@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kr $ $Date: 2002-01-07 16:14:49 $
+ *  last change: $Author: mhu $ $Date: 2002-04-21 13:38:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,34 +58,161 @@
  *
  *
  ************************************************************************/
-#include <list>
-#include <stdio.h>
-
-#include <osl/process.h>
-#include <osl/file.h>
-#include <osl/diagnose.h>
-#include <osl/mutex.hxx>
-#include <osl/file.hxx>
-
-#include <rtl/bootstrap.h>
-#include <rtl/ustring.hxx>
-#include <rtl/ustrbuf.hxx>
-#include <rtl/byteseq.hxx>
 
 #include "macro.hxx"
 
-// I need C++ for static variables and for lists (stl) !
-// If we don't want C++, we need another solution for static vars !
-using namespace ::rtl;
-using namespace ::osl;
+#ifndef _OSL_DIAGNOSE_H_
+#include <osl/diagnose.h>
+#endif
+#ifndef _OSL_PROCESS_H_
+#include <osl/process.h>
+#endif
+#ifndef _OSL_FILE_HXX_
+#include <osl/file.hxx>
+#endif
+#ifndef _OSL_MUTEX_HXX_
+#include <osl/mutex.hxx>
+#endif
+
+#ifndef _RTL_ALLOC_H_
+#include <rtl/alloc.h>
+#endif
+#ifndef _RTL_BOOTSTRAP_H_
+#include <rtl/bootstrap.h>
+#endif
+#ifndef _RTL_STRING_HXX_
+#include <rtl/string.hxx>
+#endif
+#ifndef _RTL_USTRING_HXX_
+#include <rtl/ustring.hxx>
+#endif
+#ifndef _RTL_BYTESEQ_HXX_
+#include <rtl/byteseq.hxx>
+#endif
+
+#ifndef INCLUDED_LIST
+#include <list>
+#define INCLUDED_LIST
+#endif
+
+using rtl::OString;
+using rtl::OUString;
+
+using rtl::OStringToOUString;
+using rtl::OUStringToOString;
+
+//----------------------------------------------------------------------------
+
+template<typename T>
+struct MyAllocator
+{
+    typedef std::size_t    size_type;
+    typedef std::ptrdiff_t difference_type;
+
+    typedef T * pointer;
+    typedef const T * const_pointer;
+
+    typedef T & reference;
+    typedef const T & const_reference;
+
+    typedef T value_type;
+
+    template<typename U>
+    struct rebind
+    {
+        typedef MyAllocator<U> other;
+    };
+
+    pointer address (reference value) const
+    {
+        return &value;
+    }
+    const_pointer address (const_reference value) const
+    {
+        return &value;
+    }
+
+    MyAllocator (void)
+    {}
+
+    template<typename U>
+    MyAllocator (const MyAllocator<U> &)
+    {}
+
+    MyAllocator (const MyAllocator &)
+    {}
+
+    ~MyAllocator (void)
+    {}
+
+    size_type max_size() const
+    {
+        return size_type(-1)/sizeof(T);
+    }
+
+    pointer allocate (size_type n)
+    {
+        n *= sizeof(T);
+        return (pointer)rtl_allocateMemory(sal_uInt32(n));
+    }
+    void deallocate (pointer p, size_type n)
+    {
+        n *= sizeof(T);
+        rtl_freeMemory(p);
+    }
+
+    void construct (pointer p, const_reference value)
+    {
+        new ((void*)p) T(value);
+    }
+    void destroy (pointer p)
+    {
+        p->~T();
+    }
+};
+
+//----------------------------------------------------------------------------
+
+template<typename T, typename U>
+inline bool operator== (const MyAllocator<T> &, const MyAllocator<U> &)
+{
+    return true;
+}
+
+template<typename T, typename U>
+inline bool operator!= (const MyAllocator<T> &, const MyAllocator<U> &)
+{
+    return false;
+}
+
+//----------------------------------------------------------------------------
+// see stlport '_alloc.h' comments why old compilers require the hack below.
+//----------------------------------------------------------------------------
+
+#ifndef __STL_MEMBER_TEMPLATE_CLASSES
+namespace _STL
+{
+    template<typename T, typename U>
+    inline MyAllocator<U> & __stl_alloc_rebind (MyAllocator<T> & a, U const *)
+    {
+        return (MyAllocator<U>&)(a);
+    }
+}
+#endif /* __STL_MEMBER_TEMPLATE_CLASSES */
+
+//----------------------------------------------------------------------------
+
 
 struct rtl_bootstrap_NameValue
 {
-    ::rtl::OUString sName;
-    ::rtl::OUString sValue;
+    rtl::OUString sName;
+    rtl::OUString sValue;
 };
 
-typedef ::std::list< struct rtl_bootstrap_NameValue > NameValueList;
+typedef std::list<
+    rtl_bootstrap_NameValue,
+    MyAllocator< rtl_bootstrap_NameValue >
+> NameValueList;
 
 static sal_Bool getFromCommandLineArgs( rtl_uString **ppValue , rtl_uString *pName )
 {
@@ -109,7 +236,7 @@ static sal_Bool getFromCommandLineArgs( rtl_uString **ppValue , rtl_uString *pNa
                 if( nIndex >= 0 )
                 {
 
-                    struct rtl_bootstrap_NameValue nameValue;
+                    rtl_bootstrap_NameValue nameValue;
                     nameValue.sName = OUString( &(pArg->buffer[5]), nIndex - 5  );
                     nameValue.sValue = OUString( &(pArg->buffer[nIndex+1]) );
                     if( i == nArgCount-1 &&
@@ -308,7 +435,7 @@ static void fillFromIniFile(Bootstrap_Impl * pBootstrap_Impl, const OUString & i
     if(iniName.getLength()
     && osl_File_E_None == osl_openFile(iniName.pData, &handle, osl_File_OpenFlag_Read))
     {
-        ByteSequence seq;
+        rtl::ByteSequence seq;
         sal_uInt64 nSize = 0;
 
         getFileSize(handle, &nSize);
@@ -360,7 +487,7 @@ rtlBootstrapHandle SAL_CALL rtl_bootstrap_args_open(rtl_uString * pIniName)
     OUString iniName = OUString(pIniName);
 
     osl_getProcessWorkingDir(&workDir.pData);
-    FileBase::getAbsoluteFileURL(workDir, iniName, iniName);
+    osl::FileBase::getAbsoluteFileURL(workDir, iniName, iniName);
 
     Bootstrap_Impl * pBootstrap_Impl = new Bootstrap_Impl;
 
@@ -379,7 +506,7 @@ void SAL_CALL rtl_bootstrap_args_close(rtlBootstrapHandle handle)
 
 sal_Bool SAL_CALL rtl_bootstrap_get_from_handle(rtlBootstrapHandle handle, rtl_uString *pName, rtl_uString **ppValue, rtl_uString *pDefault)
 {
-    MutexGuard guard(Mutex::getGlobalMutex());
+    osl::MutexGuard guard(osl::Mutex::getGlobalMutex());
 
     sal_Bool found = sal_False;
     if(ppValue && pName)
@@ -423,14 +550,14 @@ void SAL_CALL rtl_bootstrap_get_iniName_from_handle(rtlBootstrapHandle handle, r
 
 void SAL_CALL rtl_bootstrap_setIniFileName( rtl_uString *pName )
 {
-    MutexGuard guard( Mutex::getGlobalMutex() );
+    osl::MutexGuard guard( osl::Mutex::getGlobalMutex() );
     OUString & file = getIniFileNameImpl();
     file = pName;
 }
 
 sal_Bool SAL_CALL rtl_bootstrap_get( rtl_uString *pName, rtl_uString **ppValue , rtl_uString *pDefault )
 {
-    MutexGuard guard( Mutex::getGlobalMutex() );
+    osl::MutexGuard guard( osl::Mutex::getGlobalMutex() );
 
     static Bootstrap_Impl * pBootstrap_Impl = 0;
 
