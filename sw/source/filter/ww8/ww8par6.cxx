@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2000-12-01 11:22:52 $
+ *  last change: $Author: cmc $ $Date: 2001-01-26 10:57:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1865,7 +1865,8 @@ static SvxBorderLine& Set1Border( BOOL bVer67, SvxBorderLine& rLine,
             case 13:
             case 15:
             case 14:
-            case 24:
+            //case 24: ##158## setting relief to this multiple of its width
+            //is overkill, lets leave it at its original width.
             case 25: nMSTotalWidth = 8*nMSLineWidth;break;
         }
 
@@ -4878,12 +4879,15 @@ short SwWW8ImplReader::ImportSprm( BYTE* pPos, short nSprmsLen, USHORT nId )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par6.cxx,v 1.6 2000-12-01 11:22:52 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par6.cxx,v 1.7 2001-01-26 10:57:04 cmc Exp $
 
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.6  2000/12/01 11:22:52  jp
+      Task #81077#: im-/export of CJK documents
+
       Revision 1.5  2000/11/28 15:22:49  khz
       #79657# avoid accessing NULL pointer when reading LVL properties
 
