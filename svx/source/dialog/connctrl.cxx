@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connctrl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2000-10-30 10:48:03 $
+ *  last change: $Author: cl $ $Date: 2002-06-06 07:46:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,7 @@
 
 #include "connctrl.hxx"
 #include "dialmgr.hxx"
+#include "dlgutil.hxx"
 
 /*************************************************************************
 |*
@@ -98,7 +99,7 @@ SvxXConnectionPreview::SvxXConnectionPreview( Window* pParent, const ResId& rRes
 
     SetMapMode( MAP_100TH_MM );
 
-    SetBackground( Wallpaper( Color( COL_WHITE ) ) );
+    SetStyles();
 }
 
 /*************************************************************************
@@ -389,4 +390,20 @@ void SvxXConnectionPreview::MouseButtonDown( const MouseEvent& rMEvt )
     }
 }
 
+void SvxXConnectionPreview::SetStyles()
+{
+    const StyleSettings& rStyles = Application::GetSettings().GetStyleSettings();
+    SetDrawMode( GetDisplayBackground().GetColor().IsDark() ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR );
+    SetBackground( Wallpaper( Color( rStyles.GetFieldColor() ) ) );
+}
+
+void SvxXConnectionPreview::DataChanged( const DataChangedEvent& rDCEvt )
+{
+    Control::DataChanged( rDCEvt );
+
+    if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+    {
+        SetStyles();
+    }
+}
 

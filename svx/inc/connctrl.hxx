@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connctrl.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:00:55 $
+ *  last change: $Author: cl $ $Date: 2002-06-06 07:45:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,7 @@ private:
     SdrObjList*         pObjList;
     const SdrView*      pView;
 
+    void    SetStyles();
 public:
             SvxXConnectionPreview( Window* pParent, const ResId& rResId,
                                 const SfxItemSet& rInAttrs );
@@ -102,6 +103,8 @@ public:
 
     void         Construct();
     void         SetView( const SdrView* pSdrView ) { pView = pSdrView; }
+
+    virtual void DataChanged( const DataChangedEvent& rDCEvt );
 };
 
 
