@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optcolor.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:29:18 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 14:27:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,12 +82,12 @@ TabPage RID_SVXPAGE_COLORCONFIG
         Text[ portuguese ] = "Color scheme";
         Text[ russian ] = "Color scheme";
         Text[ greek ] = "Color scheme";
-        Text[ dutch ] = "Color scheme";
+        Text[ dutch ] = "Kleurenschema";
         Text[ french ] = "Sch�ma de couleurs";
         Text[ spanish ] = "Esquema de colores";
         Text[ finnish ] = "Color scheme";
         Text[ italian ] = "Schema colori";
-        Text[ danish ] = "Color scheme";
+        Text[ danish ] = "Farveskema";
         Text[ swedish ] = "F�rgschema";
         Text[ polish ] = "Color scheme";
         Text[ portuguese_brazilian ] = "Esquema de cores";
@@ -103,6 +103,8 @@ TabPage RID_SVXPAGE_COLORCONFIG
         Text[ hebrew ] = "‮תיכנון צבעים‬";
         Text[ hindi ] = "Color scheme";
         Text[ slovak ] = "Farebná schéma";
+        Text[ hungarian ] = "Színséma";
+        Text[ slovenian ] = "Barvna shema";
     };
     FixedText FT_COLORSCHEME
     {
@@ -114,12 +116,12 @@ TabPage RID_SVXPAGE_COLORCONFIG
         Text[ portuguese ] = "Scheme";
         Text[ russian ] = "Scheme";
         Text[ greek ] = "Scheme";
-        Text[ dutch ] = "Scheme";
+        Text[ dutch ] = "Schema";
         Text[ french ] = "Sch�ma";
         Text[ spanish ] = "Esquema";
         Text[ finnish ] = "Scheme";
         Text[ italian ] = "Schema";
-        Text[ danish ] = "Scheme";
+        Text[ danish ] = "Skema";
         Text[ swedish ] = "Schema";
         Text[ polish ] = "Scheme";
         Text[ portuguese_brazilian ] = "Esquema";
@@ -135,6 +137,8 @@ TabPage RID_SVXPAGE_COLORCONFIG
         Text[ hebrew ] = "‮תכנון‬";
         Text[ hindi ] = "Scheme";
         Text[ slovak ] = "Schéma";
+        Text[ hungarian ] = "Séma";
+        Text[ slovenian ] = "Shema";
     };
     ListBox LB_COLORSCHEME
     {
@@ -175,6 +179,8 @@ TabPage RID_SVXPAGE_COLORCONFIG
         Text[ hebrew ] = "‮שמירה...‬";
         Text[ hindi ] = "Save...";
         Text[ slovak ] = "Uložiť...";
+        Text[ hungarian ] = "Mentés...";
+        Text[ slovenian ] = "Shrani...";
     };
     PushButton PB_DELETESCHEME
     {
@@ -207,6 +213,8 @@ TabPage RID_SVXPAGE_COLORCONFIG
         Text[ hebrew ] = "‮מחיקה‬";
         Text[ hindi ] = "Delete";
         Text[ slovak ] = "Zmazať";
+        Text[ hungarian ] = "Törlés";
+        Text[ slovenian ] = "Izbriši";
     };
     FixedLine FL_CUSTOMCOLORS
     {
@@ -219,12 +227,12 @@ TabPage RID_SVXPAGE_COLORCONFIG
         Text[ portuguese ] = "Scheme";
         Text[ russian ] = "Scheme";
         Text[ greek ] = "Scheme";
-        Text[ dutch ] = "Scheme";
+        Text[ dutch ] = "Gebruikerskleuren";
         Text[ french ] = "Couleurs personnalis�es";
         Text[ spanish ] = "Colores personalizados";
         Text[ finnish ] = "Scheme";
         Text[ italian ] = "Colori personalizzati";
-        Text[ danish ] = "Scheme";
+        Text[ danish ] = "Brugerdefinerede farver";
         Text[ swedish ] = "Anv�ndardefinierade f�rger";
         Text[ polish ] = "Scheme";
         Text[ portuguese_brazilian ] = "Cores personalizadas";
@@ -240,6 +248,8 @@ TabPage RID_SVXPAGE_COLORCONFIG
         Text[ hebrew ] = "‮תכנון‬";
         Text[ hindi ] = "Custom colors";
         Text[ slovak ] = "Vlastné farby";
+        Text[ hungarian ] = "Egyéni színek";
+        Text[ slovenian ] = "Barve po meri";
     };
     Control CT_COLORCONFIG
     {
@@ -283,6 +293,8 @@ TabPage RID_SVXPAGE_COLORCONFIG
             Text[ hebrew ] = "‮מופעל‬";
             Text[ hindi ] = "On";
             Text[ slovak ] = "Zapnúť";
+            Text[ hungarian ] = "Be";
+            Text[ slovenian ] = "Vključeno";
         };
         String ST_UIELEM
         {
@@ -292,12 +304,12 @@ TabPage RID_SVXPAGE_COLORCONFIG
             Text[ portuguese ] = "User interface elements";
             Text[ russian ] = "User interface elements";
             Text[ greek ] = "User interface elements";
-            Text[ dutch ] = "User interface elements";
+            Text[ dutch ] = "Elementen van gebruikersinterface";
             Text[ french ] = "�l�ment de l'interface utilisateur";
             Text[ spanish ] = "Elementos de la interfaz del usuario";
             Text[ finnish ] = "User interface elements";
             Text[ italian ] = "Elementi dell'interfaccia utente";
-            Text[ danish ] = "User interface elements";
+            Text[ danish ] = "Brugergr�nsefladeelementer";
             Text[ swedish ] = "Element p� anv�ndargr�nssnittet";
             Text[ polish ] = "User interface elements";
             Text[ portuguese_brazilian ] = "Elementos da interface do usu�rio";
@@ -313,6 +325,8 @@ TabPage RID_SVXPAGE_COLORCONFIG
             Text[ hebrew ] = "‮מרכיבי ממשק המשתמש‬";
             Text[ hindi ] = "User interface elements";
             Text[ slovak ] = "Použiť prvky rozhrania";
+            Text[ hungarian ] = "Felhasználói felület elemei";
+            Text[ slovenian ] = "Elementi upor. vmesnika";
         };
         String ST_COLSET
         {
@@ -322,12 +336,12 @@ TabPage RID_SVXPAGE_COLORCONFIG
             Text[ portuguese ] = "Color setting";
             Text[ russian ] = "Color setting";
             Text[ greek ] = "Color setting";
-            Text[ dutch ] = "Color setting";
+            Text[ dutch ] = "Kleureninstelling";
             Text[ french ] = "Param�tre de couleur";
             Text[ spanish ] = "Configuraci�n del color";
             Text[ finnish ] = "Color setting";
             Text[ italian ] = "Impostazione colori";
-            Text[ danish ] = "Color setting";
+            Text[ danish ] = "Farve";
             Text[ swedish ] = "F�rginst�llning";
             Text[ polish ] = "Color setting";
             Text[ portuguese_brazilian ] = "Configura��es de cores";
@@ -343,6 +357,8 @@ TabPage RID_SVXPAGE_COLORCONFIG
             Text[ hebrew ] = "‮קביעת צבע‬";
             Text[ hindi ] = "Color setting";
             Text[ slovak ] = "Nastavenia farieb";
+            Text[ hungarian ] = "Színbeállítás";
+            Text[ slovenian ] = "Nastavitve barv";
         };
         String ST_PREVIEW
         {
@@ -373,6 +389,8 @@ TabPage RID_SVXPAGE_COLORCONFIG
             Text[ hebrew ] = "‮תצוגה מקדימה‬";
             Text[ hindi ] = "Preview";
             Text[ slovak ] = "Náhľad";
+            Text[ hungarian ] = "Előnézet";
+            Text[ slovenian ] = "Predogled";
         };
         Window WN_SCROLL
         {
@@ -443,6 +461,8 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ hebrew ] = "‮כללי‬";
                 Text[ hindi ] = "सामान्य";
                 Text[ slovak ] = "Všeobecné";
+                Text[ hungarian ] = "Általános";
+                Text[ slovenian ] = "Splošno";
             };
 
             FixedText FT_DOCCOLOR
@@ -453,13 +473,13 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ english_us ] = "Document background";
                 Text[ portuguese ] = "Document color";
                 Text[ russian ] = "Document color";
-                Text[ greek ] = "Document color";
-                Text[ dutch ] = "Document color";
+                Text[ greek ] = "����� ��������";
+                Text[ dutch ] = "Documentachtergrond";
                 Text[ french ] = "Arri�re-plan des documents";
                 Text[ spanish ] = "Fondo del documento";
                 Text[ finnish ] = "Document color";
                 Text[ italian ] = "Colore di sfondo documento";
-                Text[ danish ] = "Document color";
+                Text[ danish ] = "Dokumentbaggrund";
                 Text[ swedish ] = "Dokumentbakgrund";
                 Text[ polish ] = "Document color";
                 Text[ portuguese_brazilian ] = "Plano de fundo do documento";
@@ -475,6 +495,8 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ hebrew ] = "‮רקע מסמך‬";
                 Text[ hindi ] = "Document background";
                 Text[ slovak ] = "Pozadie dokumentu";
+                Text[ hungarian ] = "Dokumentum háttere";
+                Text[ slovenian ] = "Ozadje dokumenta";
             };
             LB_WN( DOCCOLOR, 1 )
 
@@ -486,13 +508,13 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ english_us ] = "Text boundaries";
                 Text[ portuguese ] = "Document boundaries";
                 Text[ russian ] = "Document boundaries";
-                Text[ greek ] = "Document boundaries";
-                Text[ dutch ] = "Document boundaries";
+                Text[ greek ] = "���� ��������";
+                Text[ dutch ] = "Tekstbegrenzingen";
                 Text[ french ] = "D�limitations du texte";
                 Text[ spanish ] = "L�mites del texto";
                 Text[ finnish ] = "Document boundaries";
                 Text[ italian ] = "Margini del testo";
-                Text[ danish ] = "Document boundaries";
+                Text[ danish ] = "Tekstgr�nser";
                 Text[ swedish ] = "Textinramningar";
                 Text[ polish ] = "Document boundaries";
                 Text[ portuguese_brazilian ] = "Limites do documento";
@@ -508,6 +530,8 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ hebrew ] = "‮גבולות מסמך‬";
                 Text[ hindi ] = "टेक्स्ट् सीमा";
                 Text[ slovak ] = "Hranice textu";
+                Text[ hungarian ] = "Szövegszegélyek";
+                Text[ slovenian ] = "Meje besedila";
             };
             LB_WN( DOCBOUND, 2 )
 
@@ -519,13 +543,13 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ english_us ] = "Application background";
                 Text[ portuguese ] = "Application background";
                 Text[ russian ] = "Application background";
-                Text[ greek ] = "Application background";
-                Text[ dutch ] = "Application background";
+                Text[ greek ] = "����� ���������";
+                Text[ dutch ] = "Applicatie-achtergrond";
                 Text[ french ] = "Arri�re-plan de l'application";
                 Text[ spanish ] = "Fondo de la aplicaci�n";
                 Text[ finnish ] = "Application background";
                 Text[ italian ] = "Sfondo delle applicazioni";
-                Text[ danish ] = "Application background";
+                Text[ danish ] = "Programbaggrund";
                 Text[ swedish ] = "Bakgrund f�r till�mpning";
                 Text[ polish ] = "Application background";
                 Text[ portuguese_brazilian ] = "Plano de fundo da aplica��o";
@@ -541,6 +565,8 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ hebrew ] = "‮רקע יישום‬";
                 Text[ hindi ] = "Application background";
                 Text[ slovak ] = "Pozadie aplikácie";
+                Text[ hungarian ] = "Alkalmazás háttere";
+                Text[ slovenian ] = "Ozadje aplikacije";
             };
             LB_WN( APPBACKGROUND, 3 )
 
@@ -552,13 +578,13 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ english_us ] = "Object boundaries";
                 Text[ portuguese ] = "Object boundaries";
                 Text[ russian ] = "Object boundaries";
-                Text[ greek ] = "Object boundaries";
-                Text[ dutch ] = "Object boundaries";
+                Text[ greek ] = "���� ������������";
+                Text[ dutch ] = "Objectranden";
                 Text[ french ] = "Bordures des objets";
                 Text[ spanish ] = "Bordes del objeto";
                 Text[ finnish ] = "Object boundaries";
                 Text[ italian ] = "Contorno oggetto";
-                Text[ danish ] = "Object boundaries";
+                Text[ danish ] = "Objektgr�nser";
                 Text[ swedish ] = "Objektinramningar";
                 Text[ polish ] = "Object boundaries";
                 Text[ portuguese_brazilian ] = "Limites do objeto";
@@ -574,6 +600,8 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ hebrew ] = "‮גבולות עצם‬";
                 Text[ hindi ] = "Object boundaries";
                 Text[ slovak ] = "Hranice objektu";
+                Text[ hungarian ] = "Objektumszegélyek";
+                Text[ slovenian ] = "Meje predmetov";
             };
             LB_WN( OBJECTBOUNDARIES, 4 )
 
@@ -585,13 +613,13 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ english_us ] = "Table boundaries";
                 Text[ portuguese ] = "Table boundaries";
                 Text[ russian ] = "Table boundaries";
-                Text[ greek ] = "Table boundaries";
-                Text[ dutch ] = "Table boundaries";
+                Text[ greek ] = "���� ������";
+                Text[ dutch ] = "Tabelranden";
                 Text[ french ] = "Bordures des tableaux";
                 Text[ spanish ] = "Bordes de las tablas";
                 Text[ finnish ] = "Table boundaries";
                 Text[ italian ] = "Contorno tabella";
-                Text[ danish ] = "Table boundaries";
+                Text[ danish ] = "Tabelgr�nser";
                 Text[ swedish ] = "Tabellinramningar";
                 Text[ polish ] = "Table boundaries";
                 Text[ portuguese_brazilian ] = "Limites da tabela";
@@ -607,6 +635,8 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ hebrew ] = "‮גבולות טבלה‬";
                 Text[ hindi ] = "Table boundaries";
                 Text[ slovak ] = "Hranice tabuľky";
+                Text[ hungarian ] = "Táblázatszegélyek";
+                Text[ slovenian ] = "Meje tabel";
             };
             LB_WN( TABLEBOUNDARIES, 5 )
 
@@ -640,6 +670,8 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ hebrew ] = "‮צבע גופן‬";
                 Text[ hindi ] = "टेक्स्ट् का रंग";
                 Text[ slovak ] = "Farba písma";
+                Text[ hungarian ] = "Betűszín";
+                Text[ slovenian ] = "Barva pisave";
             };
             LB_WN( FONTCOLOR, 6 )
 
@@ -652,12 +684,12 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ portuguese ] = "Unvisited Links (new documents only)";
                 Text[ russian ] = "Unvisited Links (new documents only)";
                 Text[ greek ] = "Unvisited Links (new documents only)";
-                Text[ dutch ] = "Unvisited Links (new documents only)";
+                Text[ dutch ] = "Niet bezochte hyperlinks";
                 Text[ french ] = "Liens non visit�s";
                 Text[ spanish ] = "Enlaces no visitados ";
                 Text[ finnish ] = "Unvisited Links (new documents only)";
                 Text[ italian ] = "Collegamenti non attivati";
-                Text[ danish ] = "Unvisited Links (new documents only)";
+                Text[ danish ] = "Ubes�gte hyperlinks";
                 Text[ swedish ] = "Oanv�nda l�nkar";
                 Text[ polish ] = "Unvisited Links (new documents only)";
                 Text[ portuguese_brazilian ] = "Links n�o visitados (somente novos documentos)";
@@ -673,6 +705,8 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ hebrew ] = "‮קישורים שלא הופעלו‬";
                 Text[ hindi ] = "Unvisited links";
                 Text[ slovak ] = "Nenavštívené odkazy";
+                Text[ hungarian ] = "Nem látogatott hivatkozások";
+                Text[ slovenian ] = "Neobiskane povezave";
             };
             LB_WN( LINKS, 7 )
 
@@ -685,12 +719,12 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ portuguese ] = "Visited Links (new documents only)";
                 Text[ russian ] = "Visited Links (new documents only)";
                 Text[ greek ] = "Visited Links (new documents only)";
-                Text[ dutch ] = "Visited Links (new documents only)";
+                Text[ dutch ] = "Bezochte hyperlinks";
                 Text[ french ] = "Liens visit�s";
                 Text[ spanish ] = "Enlaces visitados";
                 Text[ finnish ] = "Visited Links (new documents only)";
                 Text[ italian ] = "Collegamenti attivati";
-                Text[ danish ] = "Visited Links (new documents only)";
+                Text[ danish ] = "Bes�gte hyperlinks";
                 Text[ swedish ] = "Anv�nda l�nkar";
                 Text[ polish ] = "Visited Links (new documents only)";
                 Text[ portuguese_brazilian ] = "Links visitados (somente novos documentos)";
@@ -706,6 +740,8 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ hebrew ] = "‮קישורים שהופעלו‬";
                 Text[ hindi ] = "Visited links";
                 Text[ slovak ] = "Navštívené odkazy";
+                Text[ hungarian ] = "Látogatott hivatkozások";
+                Text[ slovenian ] = "Obiskane povezave";
             };
             LB_WN( LINKSVISITED, 8 )
 
@@ -718,12 +754,12 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ portuguese ] = "Verifica��o autom�tica da ortografia";
                 Text[ russian ] = "������������ ����������";
                 Text[ greek ] = "��������� ������� �����������";
-                Text[ dutch ] = "AutoSpellcheck";
+                Text[ dutch ] = "Auto-Spellingcontrole";
                 Text[ french ] = "V�rification orthographique automatique";
                 Text[ spanish ] = "Revisi�n ortogr�fica autom�tica";
                 Text[ finnish ] = "AutoSpellcheck";
                 Text[ italian ] = "Controllo ortografico automatico";
-                Text[ danish ] = "AutoSpellcheck";
+                Text[ danish ] = "Automatisk stavekontrol";
                 Text[ swedish ] = "AutoR�ttstavning";
                 Text[ polish ] = "AutoSpellcheck";
                 Text[ portuguese_brazilian ] = "Verifica��o ortogr�fica autom�tica";
@@ -739,6 +775,8 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ hebrew ] = "‮איות אוטומטי‬";
                 Text[ hindi ] = "AutoSpellcheck";
                 Text[ slovak ] = "Automatická kontrola pravopisu";
+                Text[ hungarian ] = "Automatikus helyesírás-ellenőrzés";
+                Text[ slovenian ] = "Samodejno preverjanje črkovanja";
             };
             LB_WN( SPELL, 9 )
 
@@ -772,6 +810,8 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ hebrew ] = "‮מסמך טקסט‬";
                 Text[ hindi ] = "टेक्स्ट् लेखपत्र";
                 Text[ slovak ] = "Textový dokument";
+                Text[ hungarian ] = "Szöveges dokumentum";
+                Text[ slovenian ] = "Dokument z besedilom";
             };
 
             FixedText FT_WRITERTEXTGRID
@@ -804,6 +844,8 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ hebrew ] = "‮רשת‬";
                 Text[ hindi ] = "छपाई";
                 Text[ slovak ] = "Mriežka";
+                Text[ hungarian ] = "Rács";
+                Text[ slovenian ] = "Mreža";
             };
             LB_WN( WRITERTEXTGRID, 11 )
 
@@ -816,12 +858,12 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ portuguese ] = "Field shadings";
                 Text[ russian ] = "Field shadings";
                 Text[ greek ] = "Field shadings";
-                Text[ dutch ] = "Field shadings";
+                Text[ dutch ] = "Veldmarkeringen";
                 Text[ french ] = "Trame de fond pour les champs";
                 Text[ spanish ] = "Fondo del campo";
                 Text[ finnish ] = "Field shadings";
                 Text[ italian ] = "Sfondo del campo";
-                Text[ danish ] = "Field shadings";
+                Text[ danish ] = "Feltskygger";
                 Text[ swedish ] = "F�ltbakgrund";
                 Text[ polish ] = "Field shadings";
                 Text[ portuguese_brazilian ] = "Sombreamento de campo";
@@ -837,6 +879,8 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ hebrew ] = "‮הצללות שדה‬";
                 Text[ hindi ] = "Field shadings";
                 Text[ slovak ] = "Tieňovanie poľa";
+                Text[ hungarian ] = "Mezőárnyékolás";
+                Text[ slovenian ] = "Senčenja polja";
             };
             LB_WN( WRITERFIELDSHADINGS, 12 )
 
@@ -849,12 +893,12 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ portuguese ] = "Index and table shadings";
                 Text[ russian ] = "Index and table shadings";
                 Text[ greek ] = "Index and table shadings";
-                Text[ dutch ] = "Index and table shadings";
+                Text[ dutch ] = "Inhoudsopgave- en registermarkeringen";
                 Text[ french ] = "Trame de fond pour les index";
                 Text[ spanish ] = "Fondo del �ndice";
                 Text[ finnish ] = "Index and table shadings";
                 Text[ italian ] = "Sfondo indici";
-                Text[ danish ] = "Index and table shadings";
+                Text[ danish ] = "Indeks- og tabelskygger";
                 Text[ swedish ] = "F�rteckningsbakgrund";
                 Text[ polish ] = "Index and table shadings";
                 Text[ portuguese_brazilian ] = "Sombreamento de �ndice e tabela";
@@ -870,6 +914,8 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ hebrew ] = "‮הצללות אינדקס וטבלה‬";
                 Text[ hindi ] = "Index and table shadings";
                 Text[ slovak ] = "Tieňovanie tabuliek a indexov";
+                Text[ hungarian ] = "Jegyzékek árnyalása";
+                Text[ slovenian ] = "Senčenje kazala in tabel";
             };
             LB_WN( WRITERIDXSHADINGS, 13 )
 
@@ -882,12 +928,12 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ portuguese ] = "Note indicator";
                 Text[ russian ] = "Note indicator";
                 Text[ greek ] = "Note indicator";
-                Text[ dutch ] = "Note indicator";
+                Text[ dutch ] = "Aantekeningenaanwijzer";
                 Text[ french ] = "Indicateur de note";
                 Text[ spanish ] = "Indicador de notas";
                 Text[ finnish ] = "Note indicator";
                 Text[ italian ] = "Indicatore note";
-                Text[ danish ] = "Note indicator";
+                Text[ danish ] = "Noteindikator";
                 Text[ swedish ] = "Anteckningsmark�r";
                 Text[ polish ] = "Note indicator";
                 Text[ portuguese_brazilian ] = "Indicador de anota��o";
@@ -903,6 +949,8 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ hebrew ] = "‮סמן הערה‬";
                 Text[ hindi ] = "Note indicator";
                 Text[ slovak ] = "Indikátor poznámky";
+                Text[ hungarian ] = "Megjegyzésjelző";
+                Text[ slovenian ] = "Indikator opombe";
             };
             LB_WN( WRITERNOTESINDICATOR, 14 )
 
@@ -915,12 +963,12 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ portuguese ] = "Script indicator";
                 Text[ russian ] = "Script indicator";
                 Text[ greek ] = "Script indicator";
-                Text[ dutch ] = "Script indicator";
+                Text[ dutch ] = "Script aanwijzer";
                 Text[ french ] = "Indicateur de script";
                 Text[ spanish ] = "Indicador de scripts";
                 Text[ finnish ] = "Script indicator";
                 Text[ italian ] = "Indicatore script";
-                Text[ danish ] = "Script indicator";
+                Text[ danish ] = "Scriptindikator";
                 Text[ swedish ] = "Skriptindikator";
                 Text[ polish ] = "Script indicator";
                 Text[ portuguese_brazilian ] = "Indicador de script";
@@ -936,6 +984,8 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ hebrew ] = "‮סימן סקריפט‬";
                 Text[ hindi ] = "Script indicator";
                 Text[ slovak ] = "Indikátor skriptu";
+                Text[ hungarian ] = "Parancsfájljelző";
+                Text[ slovenian ] = "Indikator skripta";
             };
             LB_WN( WRITERSCRIPTINDICATOR, 15 )
 
@@ -948,12 +998,12 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ portuguese ] = "Section boundaries";
                 Text[ russian ] = "Section boundaries";
                 Text[ greek ] = "Section boundaries";
-                Text[ dutch ] = "Section boundaries";
+                Text[ dutch ] = "Sectiebegrenzingen";
                 Text[ french ] = "Bordures des sections";
                 Text[ spanish ] = "Bordes de la secci�n";
                 Text[ finnish ] = "Section boundaries";
                 Text[ italian ] = "Margini sezione";
-                Text[ danish ] = "Section boundaries";
+                Text[ danish ] = "Sektionsgr�nser";
                 Text[ swedish ] = "Inramningar av omr�den";
                 Text[ polish ] = "Section boundaries";
                 Text[ portuguese_brazilian ] = "Limites de se��o";
@@ -969,6 +1019,8 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ hebrew ] = "‮גבולות קטעים‬";
                 Text[ hindi ] = "Section boundaries";
                 Text[ slovak ] = "Hranice sekcie";
+                Text[ hungarian ] = "Szakaszszegélyek";
+                Text[ slovenian ] = "Meje odseka";
             };
             LB_WN( WRITERSECTIONBOUNDARIES, 16 )
 
@@ -980,12 +1032,12 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ portuguese ] = "Page breaks";
                 Text[ russian ] = "Page breaks";
                 Text[ greek ] = "Page breaks";
-                Text[ dutch ] = "Page breaks";
+                Text[ dutch ] = "Pagina-einden";
                 Text[ french ] = "Sauts de page et de colonne";
                 Text[ spanish ] = "Saltos de p�gina y de columna";
                 Text[ finnish ] = "Page breaks";
                 Text[ italian ] = "Interruzioni di pagina e di colonna";
-                Text[ danish ] = "Page breaks";
+                Text[ danish ] = "Side- og kolonneskift";
                 Text[ swedish ] = "Sid- och kolumnbrytningar";
                 Text[ polish ] = "Page breaks";
                 Text[ japanese ] = "改ページ";
@@ -1001,6 +1053,8 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ portuguese_brazilian ] = "Quebras de colunas e p�ginas";
                 Text[ hindi ] = "Page and column breaks";
                 Text[ slovak ] = "Zalomenia stránok a stĺpcov";
+                Text[ hungarian ] = "Oldal- és hasábtörések";
+                Text[ slovenian ] = "Prelomi strani in stolpcev";
             };
             LB_WN( WRITERPAGEBREAKS, 17 )
 
@@ -1034,6 +1088,8 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ hebrew ] = "‮סמן ישיר‬";
                 Text[ hindi ] = "सीधा कर्सर";
                 Text[ slovak ] = "Priamy kurzor";
+                Text[ hungarian ] = "Közvetlen kurzor";
+                Text[ slovenian ] = "Neposredna kazalka";
             };
             LB_WN( WRITERDIRECTCURSOR, 18 )
 
@@ -1067,6 +1123,8 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ hebrew ] = "‮מסמך LMTH‬";
                 Text[ hindi ] = "HTML Document";
                 Text[ slovak ] = "HTML dokument";
+                Text[ hungarian ] = "HTML-dokumentum";
+                Text[ slovenian ] = "HTML dokument";
             };
 
             FixedText FT_HTMLSGML
@@ -1083,7 +1141,7 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ spanish ] = "Resaltar sintaxis SGML";
                 Text[ finnish ] = "SGML syntax highlighting";
                 Text[ italian ] = "Evidenziazione sintassi SGML";
-                Text[ danish ] = "SGML syntax highlighting";
+                Text[ danish ] = "Fremh�velse af SGML-syntaks";
                 Text[ swedish ] = "Markering av SGML-syntax";
                 Text[ polish ] = "SGML syntax highlighting";
                 Text[ portuguese_brazilian ] = "Destaque da sintaxe SGML";
@@ -1099,6 +1157,8 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ hebrew ] = "‮הבלטת תחביר SGML‬";
                 Text[ hindi ] = "SGML syntax highlighting";
                 Text[ slovak ] = "Zvýraznenie SGML syntaxu";
+                Text[ hungarian ] = "SGML-szintaxiskiemelés";
+                Text[ slovenian ] = "Označevanje SGML sintakse";
             };
             LB_WN( HTMLSGML, 20 )
 
@@ -1116,7 +1176,7 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ spanish ] = "Resaltar comentario";
                 Text[ finnish ] = "Comment highlighting";
                 Text[ italian ] = "Evidenziazione commento";
-                Text[ danish ] = "Comment highlighting";
+                Text[ danish ] = "Fremh�velse af kommentar";
                 Text[ swedish ] = "Kommentarmarkering";
                 Text[ polish ] = "Comment highlighting";
                 Text[ portuguese_brazilian ] = "Destaque de coment�rio";
@@ -1132,6 +1192,8 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ hebrew ] = "‮הבלטת הערות‬";
                 Text[ hindi ] = "Comment highlighting";
                 Text[ slovak ] = "Zvýraznenie poznámky";
+                Text[ hungarian ] = "Megjegyzés kiemelése";
+                Text[ slovenian ] = "Označevanje komentarjev";
             };
             LB_WN( HTMLCOMMENT, 21 )
 
@@ -1149,7 +1211,7 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ spanish ] = "Resaltar palabra clave";
                 Text[ finnish ] = "Keyword highlighting";
                 Text[ italian ] = "Evidenziazione parola ricercata";
-                Text[ danish ] = "Keyword highlighting";
+                Text[ danish ] = "Fremh�velse af n�gleord";
                 Text[ swedish ] = "Nyckelordsmarkering";
                 Text[ polish ] = "Keyword highlighting";
                 Text[ portuguese_brazilian ] = "Destaque de palavra-chave";
@@ -1165,6 +1227,8 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ hebrew ] = "‮הבלטת מילות מפתח‬";
                 Text[ hindi ] = "Keyword highlighting";
                 Text[ slovak ] = "Zvýraznenie kľúčového slova";
+                Text[ hungarian ] = "Kulcsszó kiemelése";
+                Text[ slovenian ] = "Označevanje ključnih besed";
             };
             LB_WN( HTMLKEYWORD, 22 )
 
@@ -1198,6 +1262,8 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ hebrew ] = "‮טקסט‬";
                 Text[ hindi ] = "टेक्स्ट्";
                 Text[ slovak ] = "Text";
+                Text[ hungarian ] = "Szöveg";
+                Text[ slovenian ] = "Besedilo";
             };
             LB_WN( HTMLUNKNOWN, 23 )
 
@@ -1231,6 +1297,8 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ hebrew ] = "‮גליון עבודה‬";
                 Text[ hindi ] = "स्प्रेडशीट्";
                 Text[ slovak ] = "Zošit";
+                Text[ hungarian ] = "Munkafüzet";
+                Text[ slovenian ] = "Preglednica";
             };
 
             FixedText FT_CALCGRID
@@ -1242,12 +1310,12 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ portuguese ] = "Grid lines";
                 Text[ russian ] = "Grid lines";
                 Text[ greek ] = "Grid lines";
-                Text[ dutch ] = "Grid lines";
+                Text[ dutch ] = "Rasterlijnen";
                 Text[ french ] = "Lignes de la grille";
                 Text[ spanish ] = "L�neas de la cuadr�cula";
                 Text[ finnish ] = "Grid lines";
                 Text[ italian ] = "Linee della griglia";
-                Text[ danish ] = "Grid lines";
+                Text[ danish ] = "Gitterlinjer";
                 Text[ swedish ] = "Gitterlinjer";
                 Text[ polish ] = "Grid lines";
                 Text[ portuguese_brazilian ] = "Linhas da grade";
@@ -1263,6 +1331,8 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ hebrew ] = "‮קווי רשת‬";
                 Text[ hindi ] = "Grid lines";
                 Text[ slovak ] = "Čiary mriežky";
+                Text[ hungarian ] = "Rácsvonalak";
+                Text[ slovenian ] = "Mrežne črte";
             };
             LB_WN( CALCGRID, 25 )
 
@@ -1275,12 +1345,12 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ portuguese ] = "Page breaks";
                 Text[ russian ] = "Page breaks";
                 Text[ greek ] = "Page breaks";
-                Text[ dutch ] = "Page breaks";
+                Text[ dutch ] = "Pagina-einden";
                 Text[ french ] = "Sauts de page";
                 Text[ spanish ] = "Saltos de p�gina";
                 Text[ finnish ] = "Page breaks";
                 Text[ italian ] = "Interruzioni pagina";
-                Text[ danish ] = "Page breaks";
+                Text[ danish ] = "Sideskift";
                 Text[ swedish ] = "Sidbrytningar";
                 Text[ polish ] = "Page breaks";
                 Text[ portuguese_brazilian ] = "Quebras de p�ginas";
@@ -1296,6 +1366,8 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ hebrew ] = "‮מעברי דף‬";
                 Text[ hindi ] = "Page breaks";
                 Text[ slovak ] = "Zalomenie stránky";
+                Text[ hungarian ] = "Oldaltörés";
+                Text[ slovenian ] = "Prelomi strani";
             };
             LB_WN( CALCPAGEBREAK, 26 )
 
@@ -1308,12 +1380,12 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ portuguese ] = "Manual page breaks";
                 Text[ russian ] = "Manual page breaks";
                 Text[ greek ] = "Manual page breaks";
-                Text[ dutch ] = "Manual page breaks";
+                Text[ dutch ] = "Handmatige pagina-einden";
                 Text[ french ] = "Sauts de page manuels";
                 Text[ spanish ] = "Saltos de p�gina manuales";
                 Text[ finnish ] = "Manual page breaks";
                 Text[ italian ] = "Interruzioni pagina manuali";
-                Text[ danish ] = "Manual page breaks";
+                Text[ danish ] = "Manuelle sideskift";
                 Text[ swedish ] = "Manuella sidbrytningar";
                 Text[ polish ] = "Manual page breaks";
                 Text[ portuguese_brazilian ] = "Quebras de p�ginas manuais";
@@ -1329,6 +1401,8 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ hebrew ] = "‮מעברי דף ידניים‬";
                 Text[ hindi ] = "Manual page breaks";
                 Text[ slovak ] = "Ručné zalomenia stránky";
+                Text[ hungarian ] = "Kézi oldaltörés";
+                Text[ slovenian ] = "Ročni prelomi strani";
             };
             LB_WN( CALCPAGEBREAKMANUAL, 27 )
 
@@ -1341,12 +1415,12 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ portuguese ] = "Automatic page breaks";
                 Text[ russian ] = "Automatic page breaks";
                 Text[ greek ] = "Automatic page breaks";
-                Text[ dutch ] = "Automatic page breaks";
+                Text[ dutch ] = "Automatishe pagina-einden";
                 Text[ french ] = "Sauts de page automatiques";
                 Text[ spanish ] = "Saltos de p�gina autom�ticos";
                 Text[ finnish ] = "Automatic page breaks";
                 Text[ italian ] = "Interruzioni pagina automatiche";
-                Text[ danish ] = "Automatic page breaks";
+                Text[ danish ] = "Automatiske sideskift";
                 Text[ swedish ] = "Automatiska sidbrytningar";
                 Text[ polish ] = "Automatic page breaks";
                 Text[ portuguese_brazilian ] = "Quebras de p�gina autom�ticas";
@@ -1362,6 +1436,8 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ hebrew ] = "‮מעברי דף אוטומטיים‬";
                 Text[ hindi ] = "Automatic page breaks";
                 Text[ slovak ] = "Automatické zalomenia stránky";
+                Text[ hungarian ] = "Automatikus oldaltörés";
+                Text[ slovenian ] = "Samodejni prelomi strani";
             };
             LB_WN( CALCPAGEBREAKAUTO, 28 )
 
@@ -1379,7 +1455,7 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ spanish ] = "Detective";
                 Text[ finnish ] = "Detective";
                 Text[ italian ] = "Detective";
-                Text[ danish ] = "Detective";
+                Text[ danish ] = "Detektiv";
                 Text[ swedish ] = "Detektiv";
                 Text[ polish ] = "Detective";
                 Text[ portuguese_brazilian ] = "Auditor";
@@ -1395,6 +1471,8 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ hebrew ] = "‮הבלש‬";
                 Text[ hindi ] = "Detective";
                 Text[ slovak ] = "Detektív";
+                Text[ hungarian ] = "Detektív";
+                Text[ slovenian ] = "Detektiv";
             };
             LB_WN( CALCDETECTIVE, 29 )
 
@@ -1407,12 +1485,12 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ portuguese ] = "Detective error";
                 Text[ russian ] = "Detective error";
                 Text[ greek ] = "Detective error";
-                Text[ dutch ] = "Detective error";
+                Text[ dutch ] = "Detective fout";
                 Text[ french ] = "Erreur d'audit";
                 Text[ spanish ] = "Error de detective";
                 Text[ finnish ] = "Detective error";
                 Text[ italian ] = "Errore detective";
-                Text[ danish ] = "Detective error";
+                Text[ danish ] = "Detektivfejl";
                 Text[ swedish ] = "Detektivfel";
                 Text[ polish ] = "Detective error";
                 Text[ portuguese_brazilian ] = "Erro de auditor";
@@ -1428,6 +1506,8 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ hebrew ] = "‮שגיאת בלש‬";
                 Text[ hindi ] = "Detective error";
                 Text[ slovak ] = "Chyba detektíva";
+                Text[ hungarian ] = "Detektív hiba";
+                Text[ slovenian ] = "Napaka v detektivu";
             };
             LB_WN( CALCDETECTIVEERROR, 30 )
 
@@ -1445,7 +1525,7 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ spanish ] = "Referencias";
                 Text[ finnish ] = "Viitteet";
                 Text[ italian ] = "Riferimenti";
-                Text[ danish ] = "Referencer";
+                Text[ danish ] = "Henvisninger";
                 Text[ swedish ] = "Referenser";
                 Text[ polish ] = "Odwo�ania";
                 Text[ portuguese_brazilian ] = "Refer�ncias";
@@ -1461,6 +1541,8 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ hebrew ] = "‮הפניות‬";
                 Text[ hindi ] = "रेफरेन्स ";
                 Text[ slovak ] = "Odkazy";
+                Text[ hungarian ] = "Hivatkozások";
+                Text[ slovenian ] = "Sklici";
             };
             LB_WN( CALCREFERENCE, 31 )
 
@@ -1473,12 +1555,12 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ portuguese ] = "Notes background";
                 Text[ russian ] = "Notes background";
                 Text[ greek ] = "Notes background";
-                Text[ dutch ] = "Notes background";
+                Text[ dutch ] = "Aantekeningen achtergrond";
                 Text[ french ] = "Arri�re-plan des notes";
                 Text[ spanish ] = "Fondo de las notas";
                 Text[ finnish ] = "Notes background";
                 Text[ italian ] = "Sfondo note";
-                Text[ danish ] = "Notes background";
+                Text[ danish ] = "Notebaggrund";
                 Text[ swedish ] = "Anteckningsbakgrund";
                 Text[ polish ] = "Notes background";
                 Text[ portuguese_brazilian ] = "Plano de fundo de anota��es";
@@ -1494,6 +1576,8 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ hebrew ] = "‮רקע הערות‬";
                 Text[ hindi ] = "Notes background";
                 Text[ slovak ] = "Pozadie pre poznámky";
+                Text[ hungarian ] = "Megjegyzések háttere";
+                Text[ slovenian ] = "Ozadje opomb";
             };
             LB_WN( CALCNOTESBACKGROUND, 32 )
 
@@ -1506,12 +1590,12 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ portuguese ] = "Drawing / Presentation";
                 Text[ russian ] = "Drawing / Presentation";
                 Text[ greek ] = "Drawing / Presentation";
-                Text[ dutch ] = "Drawing / Presentation";
+                Text[ dutch ] = "Tekening / Presentatie";
                 Text[ french ] = "Dessin / Pr�sentation";
                 Text[ spanish ] = "Dibujo / Presentaci�n";
                 Text[ finnish ] = "Drawing / Presentation";
                 Text[ italian ] = "Disegno / presentazione";
-                Text[ danish ] = "Drawing / Presentation";
+                Text[ danish ] = "Tegning / Pr�sentation";
                 Text[ swedish ] = "Teckning/presentation";
                 Text[ polish ] = "Drawing / Presentation";
                 Text[ portuguese_brazilian ] = "Desenho / Apresenta��o";
@@ -1527,6 +1611,8 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ hebrew ] = "‮סרטוט \\ מצגת‬";
                 Text[ hindi ] = "Drawing / Presentation";
                 Text[ slovak ] = "Kresba / Prezentácia";
+                Text[ hungarian ] = "Rajz / Bemutató";
+                Text[ slovenian ] = "Risba / predstavitev";
             };
 
             FixedText FT_DRAWGRID
@@ -1559,6 +1645,8 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ hebrew ] = "‮רשת‬";
                 Text[ hindi ] = "छपाई";
                 Text[ slovak ] = "Mriežka";
+                Text[ hungarian ] = "Rács";
+                Text[ slovenian ] = "Mreža";
             };
             LB_WN( DRAWGRID, 34 )
 
@@ -1577,7 +1665,7 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ spanish ] = "Resaltar la sintaxis de base";
                 Text[ finnish ] = "Basic Syntax Highlighting";
                 Text[ italian ] = "Evidenziazione sintassi base";
-                Text[ danish ] = "Basic Syntax Highlighting";
+                Text[ danish ] = "Fremh�vning af Basic-syntaks";
                 Text[ swedish ] = "Markering av Basic-syntax";
                 Text[ polish ] = "Basic Syntax Highlighting";
                 Text[ portuguese_brazilian ] = "Destaque da sintaxe BASIC";
@@ -1593,6 +1681,8 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ hebrew ] = "‮הבלטת תחביר בייסיק‬";
                 Text[ hindi ] = "Basic Syntax Highlighting";
                 Text[ slovak ] = "Zvýraznenie základného syntaxu";
+                Text[ hungarian ] = "Egyszerű szintaxiskiemelés";
+                Text[ slovenian ] = "Označevanje Basic sintakse";
             };
 
             FixedText FT_BASICIDENTIFIER
@@ -1609,7 +1699,7 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ spanish ] = "Identificador";
                 Text[ finnish ] = "Identifier";
                 Text[ italian ] = "Identificatore";
-                Text[ danish ] = "Identifier";
+                Text[ danish ] = "Identifikator";
                 Text[ swedish ] = "Identifierare";
                 Text[ polish ] = "Identifier";
                 Text[ portuguese_brazilian ] = "Identificador";
@@ -1625,6 +1715,8 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ hebrew ] = "‮מזהה‬";
                 Text[ hindi ] = "Identifier";
                 Text[ slovak ] = "Identifikátor";
+                Text[ hungarian ] = "Azonosító";
+                Text[ slovenian ] = "Identifikator";
             };
             LB_WN( BASICIDENTIFIER, 36 )
 
@@ -1658,6 +1750,8 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ hebrew ] = "‮הערה‬";
                 Text[ hindi ] = "अपवाद";
                 Text[ slovak ] = "Komentár";
+                Text[ hungarian ] = "Megjegyzés";
+                Text[ slovenian ] = "Komentar";
             };
             LB_WN( BASICCOMMENT, 37 )
 
@@ -1691,6 +1785,8 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ hebrew ] = "‮מספר‬";
                 Text[ hindi ] = "दशांश डॉलर";
                 Text[ slovak ] = "Číslo";
+                Text[ hungarian ] = "Szám";
+                Text[ slovenian ] = "Število";
             };
             LB_WN( BASICNUMBER, 38 )
 
@@ -1708,7 +1804,7 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ spanish ] = "Cadena de caracteres";
                 Text[ finnish ] = "String";
                 Text[ italian ] = "String";
-                Text[ danish ] = "String";
+                Text[ danish ] = "Streng";
                 Text[ swedish ] = "Str�ng";
                 Text[ polish ] = "String";
                 Text[ portuguese_brazilian ] = "String";
@@ -1724,6 +1820,8 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ hebrew ] = "‮מחרוזת‬";
                 Text[ hindi ] = "String";
                 Text[ slovak ] = "Reťazec";
+                Text[ hungarian ] = "Karakterlánc";
+                Text[ slovenian ] = "Niz";
             };
             LB_WN( BASICSTRING, 39 )
 
@@ -1757,6 +1855,8 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ hebrew ] = "‮אופרטור‬";
                 Text[ hindi ] = "Operator";
                 Text[ slovak ] = "Operátor";
+                Text[ hungarian ] = "Operátor";
+                Text[ slovenian ] = "Operator";
             };
             LB_WN( BASICOPERATOR, 40 )
 
@@ -1774,7 +1874,7 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ spanish ] = "Expresi�n reservada";
                 Text[ finnish ] = "Reserved expression";
                 Text[ italian ] = "Espressione riservata";
-                Text[ danish ] = "Reserved expression";
+                Text[ danish ] = "Reserveret udtryk";
                 Text[ swedish ] = "Reserverat uttryck";
                 Text[ polish ] = "Reserved expression";
                 Text[ portuguese_brazilian ] = "Express�o reservada";
@@ -1790,6 +1890,8 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ hebrew ] = "‮ביטוי שמור‬";
                 Text[ hindi ] = "Reserved expression";
                 Text[ slovak ] = "Rezervovaný výraz";
+                Text[ hungarian ] = "Fenntartott kifejezés";
+                Text[ slovenian ] = "Rezervirani izraz";
             };
             LB_WN( BASICKEYWORD, 41 )
 
@@ -1823,6 +1925,8 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ hebrew ] = "‮שגיאה‬";
                 Text[ hindi ] = "गलती";
                 Text[ slovak ] = "Chyba";
+                Text[ hungarian ] = "Hiba";
+                Text[ slovenian ] = "Napaka";
             };
             LB_WN( BASICERROR, 42 )
 
@@ -1838,12 +1942,12 @@ QueryBox RID_SVXQB_DELETE_COLOR_CONFIG
     Message[ portuguese ] = "Do you really want to delete the color scheme?";
     Message[ russian ] = "Do you really want to delete the color scheme?";
     Message[ greek ] = "Do you really want to delete the color scheme?";
-    Message[ dutch ] = "Do you really want to delete the color scheme?";
+    Message[ dutch ] = "Wilt u werkelijk het kleurenschema verwijderen?";
     Message[ french ] = "Voulez-vous vraiment supprimer le sch�ma de couleur ?";
     Message[ spanish ] = "�Desea borrar el esquema de colores?";
     Message[ finnish ] = "Do you really want to delete the color scheme?";
     Message[ italian ] = "Volete eliminare lo schema colori?";
-    Message[ danish ] = "Do you really want to delete the color scheme?";
+    Message[ danish ] = "Er du sikker p�, at du vil slette farveskemaet?";
     Message[ swedish ] = "Vill du verkligen radera f�rgschemat?";
     Message[ polish ] = "Do you really want to delete the color scheme?";
     Message[ portuguese_brazilian ] = "Deseja realmente excluir o esquema de cores?";
@@ -1859,6 +1963,8 @@ QueryBox RID_SVXQB_DELETE_COLOR_CONFIG
     Message[ hebrew ] = "‮האם אכן למחוק את תכנון הצבעים?‬";
     Message[ hindi ] = "Do you really want to delete the color scheme?";
     Message[ slovak ] = "Určite chcete zmazať farebnú schému?";
+    Message[ hungarian ] = "Tényleg törli a színsémát?";
+    Message[ slovenian ] = "Ali ste prepričani, da želite izbrisati barvno shemo?";
 };
 String RID_SVXSTR_COLOR_CONFIG_DELETE
 {
@@ -1867,12 +1973,12 @@ String RID_SVXSTR_COLOR_CONFIG_DELETE
     Text[ portuguese ] = "Color Scheme Deletion";
     Text[ russian ] = "Color Scheme Deletion";
     Text[ greek ] = "Color Scheme Deletion";
-    Text[ dutch ] = "Color Scheme Deletion";
+    Text[ dutch ] = "Kleurenschema Verwijderen";
     Text[ french ] = "Confirmer la suppression du sch�ma";
     Text[ spanish ] = "Confirmar la supresi�n del esquema";
     Text[ finnish ] = "Color Scheme Deletion";
     Text[ italian ] = "Conferma eliminazione dello schema";
-    Text[ danish ] = "Color Scheme Deletion";
+    Text[ danish ] = "Sletning af farveskema";
     Text[ swedish ] = "Bekr�fta att schemat ska raderas";
     Text[ polish ] = "Color Scheme Deletion";
     Text[ portuguese_brazilian ] = "Exclus�o de esquema de cores";
@@ -1888,6 +1994,8 @@ String RID_SVXSTR_COLOR_CONFIG_DELETE
     Text[ hebrew ] = "‮מחיקת תכנון הצבעים‬";
     Text[ hindi ] = "Color Scheme Deletion";
     Text[ slovak ] = "Zistenie farebnej schémy";
+    Text[ hungarian ] = "Színséma törlése";
+    Text[ slovenian ] = "Brisanje barvne sheme";
 };
 String RID_SVXSTR_COLOR_CONFIG_SAVE1
 {
@@ -1896,12 +2004,12 @@ String RID_SVXSTR_COLOR_CONFIG_SAVE1
     Text[ portuguese ] = "Save scheme";
     Text[ russian ] = "Save scheme";
     Text[ greek ] = "Save scheme";
-    Text[ dutch ] = "Save scheme";
+    Text[ dutch ] = "Schema opslaan";
     Text[ french ] = "Enregistrer le sch�ma";
     Text[ spanish ] = "Guardar esquema";
     Text[ finnish ] = "Save scheme";
     Text[ italian ] = "Salva lo schema";
-    Text[ danish ] = "Save scheme";
+    Text[ danish ] = "Gem farveskema";
     Text[ swedish ] = "Spara schema";
     Text[ polish ] = "Save scheme";
     Text[ portuguese_brazilian ] = "Salvar esquema";
@@ -1917,6 +2025,8 @@ String RID_SVXSTR_COLOR_CONFIG_SAVE1
     Text[ hebrew ] = "‮שמירת התכנון‬";
     Text[ hindi ] = "Save scheme";
     Text[ slovak ] = "Uložiť schému";
+    Text[ hungarian ] = "Séma mentése";
+    Text[ slovenian ] = "Shrani shemo";
 };
 String RID_SVXSTR_COLOR_CONFIG_SAVE2
 {
@@ -1925,12 +2035,12 @@ String RID_SVXSTR_COLOR_CONFIG_SAVE2
     Text[ portuguese ] = "Name of color scheme";
     Text[ russian ] = "Name of color scheme";
     Text[ greek ] = "Name of color scheme";
-    Text[ dutch ] = "Name of color scheme";
+    Text[ dutch ] = "Naam van kleurenschema";
     Text[ french ] = "Nom du sch�ma de couleurs";
     Text[ spanish ] = "Nombre del esquema de colores";
     Text[ finnish ] = "Name of color scheme";
     Text[ italian ] = "Nome dello schema colori";
-    Text[ danish ] = "Name of color scheme";
+    Text[ danish ] = "Navn p� farveskema";
     Text[ swedish ] = "Namn p� f�rgschema";
     Text[ polish ] = "Name of color scheme";
     Text[ portuguese_brazilian ] = "Nome do esquema de cores";
@@ -1946,7 +2056,11 @@ String RID_SVXSTR_COLOR_CONFIG_SAVE2
     Text[ hebrew ] = "‮שם תכנון הצבעים‬";
     Text[ hindi ] = "Name of color scheme";
     Text[ slovak ] = "Názov farebnej schémy";
+    Text[ hungarian ] = "Színséma neve";
+    Text[ slovenian ] = "Ime barvne sheme";
 };
+
+
 
 
 
