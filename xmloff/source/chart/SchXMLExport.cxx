@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLExport.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: bm $ $Date: 2001-03-28 19:29:33 $
+ *  last change: $Author: bm $ $Date: 2001-03-30 13:06:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1488,7 +1488,8 @@ void SchXMLExportHelper::exportAxes( uno::Reference< chart::XDiagram > xDiagram,
     // y axis
     // -------
 
-    if( bHasYAxis )
+    if( bHasYAxis ||
+        ! ( bHasYAxis && bHasSecondaryYAxis ))  // no y axes at all => write at least primary
     {
         uno::Reference< chart::XAxisYSupplier > xAxisSupp( xDiagram, uno::UNO_QUERY );
         if( xAxisSupp.is())
