@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MetaExportComponent.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:35:45 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 08:14:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,8 +122,9 @@ using namespace ::xmloff::token;
 
 // #110680#
 XMLMetaExportComponent::XMLMetaExportComponent(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory)
-:   SvXMLExport( xServiceFactory, MAP_INCH, XML_META )
+    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
+        sal_uInt16 nFlags )
+:   SvXMLExport( xServiceFactory, MAP_INCH, XML_META, nFlags )
 {
 }
 
@@ -169,7 +170,7 @@ uno::Sequence< rtl::OUString > SAL_CALL XMLMetaExportComponent_getSupportedServi
     throw()
 {
     const rtl::OUString aServiceName(
-        RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.XMLMetaExporter" ) );
+        RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.XMLOasisMetaExporter" ) );
     const uno::Sequence< rtl::OUString > aSeq( &aServiceName, 1 );
     return aSeq;
 }
@@ -185,6 +186,29 @@ uno::Reference< uno::XInterface > SAL_CALL XMLMetaExportComponent_createInstance
 {
     // #110680#
     // return (cppu::OWeakObject*)new XMLMetaExportComponent;
-    return (cppu::OWeakObject*)new XMLMetaExportComponent(rSMgr);
+    return (cppu::OWeakObject*)new XMLMetaExportComponent(rSMgr, EXPORT_ALL|EXPORT_OASIS);
+}
+
+uno::Sequence< rtl::OUString > SAL_CALL XMLMetaExportOOO_getSupportedServiceNames()
+    throw()
+{
+    const rtl::OUString aServiceName(
+        RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.XMLMetaExporter" ) );
+    const uno::Sequence< rtl::OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
+}
+
+rtl::OUString SAL_CALL XMLMetaExportOOO_getImplementationName() throw()
+{
+    return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "XMLMetaExportOOo" ) );
+}
+
+uno::Reference< uno::XInterface > SAL_CALL XMLMetaExportOOO_createInstance(
+        const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
+    throw( uno::Exception )
+{
+    // #110680#
+    // return (cppu::OWeakObject*)new XMLMetaExportComponent;
+    return (cppu::OWeakObject*)new XMLMetaExportComponent(rSMgr, EXPORT_ALL);
 }
 
