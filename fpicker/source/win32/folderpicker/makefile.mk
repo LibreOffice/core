@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: tra $ $Date: 2001-06-28 11:16:09 $
+#   last change: $Author: jbu $ $Date: 2002-10-01 08:54:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,7 +66,7 @@ TARGET=fop
 #LIBTARGET=NO
 ENABLE_EXCEPTIONS=TRUE
 COMP1TYPELIST=$(TARGET)
-COMPRDB=$(SOLARBINDIR)$/applicat.rdb
+COMPRDB=$(SOLARBINDIR)$/types.rdb
 
 # --- Settings -----------------------------------------------------
 
@@ -83,7 +83,7 @@ SLOFILES=$(SLO)$/fopentry.obj\
          $(SLO)$/folderpicker.obj\
          $(SLO)$/WinFopImpl.obj\
          $(SLO)$/MtaFop.obj
-                        
+
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :	target.mk
