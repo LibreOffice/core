@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtfield.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-22 10:29:00 $
+ *  last change: $Author: fs $ $Date: 2001-08-24 06:44:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,9 @@
 #endif
 #ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
 #include <com/sun/star/lang/Locale.hpp>
+#endif
+#ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
+#include <svtools/syslocale.hxx>
 #endif
 
 using namespace ::com::sun::star::lang;
@@ -427,7 +430,19 @@ void FormattedField::SetFormatter(SvNumberFormatter* pFormatter, BOOL bResetForm
     if (bResetFormat)
     {
         m_pFormatter = pFormatter;
-        m_nFormatKey = 0;
+
+        // calc the default format key from the Office's UI locale
+        if ( m_pFormatter )
+        {
+            // get the Office's UI locale
+            const Locale& rSysLocale = SvtSysLocale().GetLocaleData().getLocale();
+            // translate
+            LanguageType eSysLanguage = ConvertIsoNamesToLanguage( rSysLocale.Language, rSysLocale.Country );
+            // get the standard numeric format for this language
+            m_nFormatKey = m_pFormatter->GetStandardFormat( NUMBERFORMAT_NUMBER, eSysLanguage );
+        }
+        else
+            m_nFormatKey = 0;
     }
     else
     {
