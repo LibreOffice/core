@@ -2,9 +2,9 @@
  *
  *  $RCSfile: new.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:28:14 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:42:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -490,7 +490,8 @@ IMPL_LINK( SfxNewFileDialog_Impl, Update, void *, EMPTYARG )
             SfxItemSet* pSet = new SfxAllItemSet( pSfxApp->GetPool() );
             pSet->Put( SfxBoolItem( SID_TEMPLATE, TRUE ) );
             pSet->Put( SfxBoolItem( SID_PREVIEW, TRUE ) );
-            if( lErr = pSfxApp->LoadTemplate( xDocShell, aFileName, TRUE, pSet ) )
+            lErr = pSfxApp->LoadTemplate( xDocShell, aFileName, TRUE, pSet );
+            if( lErr )
                 ErrorHandler::HandleError(lErr);
             Application::SetDefDialogParent( pParent );
             if ( !xDocShell.Is() )
@@ -690,20 +691,20 @@ void    SfxNewFileDialog_Impl::SetTemplateFlags(USHORT nSet)
 
 SfxNewFileDialog_Impl::SfxNewFileDialog_Impl(
     SfxNewFileDialog* pAntiImplP, USHORT nFl)
-    :   aOkBt( pAntiImplP, ResId( BT_OK ) ),
-        aCancelBt( pAntiImplP, ResId( BT_CANCEL ) ),
-        aTemplateLb( pAntiImplP, ResId( LB_TEMPLATE ) ),
-        aRegionFt( pAntiImplP, ResId( FT_REGION ) ),
-        aThemaFt( pAntiImplP, ResId( FT_THEMA ) ),
-        aPreviewWin( pAntiImplP, ResId( WIN_PREVIEW ) ),
-        aTemplateFt( pAntiImplP, ResId( FT_TEMPLATE ) ),
+    :   aRegionFt( pAntiImplP, ResId( FT_REGION ) ),
         aRegionLb( pAntiImplP, ResId( LB_REGION ) ),
-        aHelpBt( pAntiImplP, ResId( BT_HELP ) ),
-        aKeywordsEd( pAntiImplP, ResId( ED_KEYWORDS ) ),
-        aTitleEd( pAntiImplP, ResId( ED_TITLE ) ),
-        aThemaEd( pAntiImplP, ResId( ED_THEMA ) ),
-        pMoreBt( new MoreButton( pAntiImplP, ResId( BT_MORE ) ) ),
+        aTemplateFt( pAntiImplP, ResId( FT_TEMPLATE ) ),
+        aTemplateLb( pAntiImplP, ResId( LB_TEMPLATE ) ),
         aPreviewBtn( pAntiImplP, ResId( BTN_PREVIEW ) ),
+        aPreviewWin( pAntiImplP, ResId( WIN_PREVIEW ) ),
+        aTitleFt( pAntiImplP, ResId( FT_TITLE ) ),
+        aTitleEd( pAntiImplP, ResId( ED_TITLE ) ),
+        aThemaFt( pAntiImplP, ResId( FT_THEMA ) ),
+        aThemaEd( pAntiImplP, ResId( ED_THEMA ) ),
+        aKeywordsFt( pAntiImplP, ResId( FT_KEYWORDS ) ),
+        aKeywordsEd( pAntiImplP, ResId( ED_KEYWORDS ) ),
+        aDescFt( pAntiImplP, ResId( FT_DESC ) ),
+        aDescEd( pAntiImplP, ResId( ED_DESC ) ),
         aDocinfoGb( pAntiImplP, ResId( GB_DOCINFO ) ),
         aTextStyleCB( pAntiImplP, ResId(  CB_TEXT_STYLE )),
         aFrameStyleCB( pAntiImplP, ResId( CB_FRAME_STYLE )),
@@ -711,10 +712,10 @@ SfxNewFileDialog_Impl::SfxNewFileDialog_Impl(
         aNumStyleCB( pAntiImplP, ResId(   CB_NUM_STYLE  )),
         aMergeStyleCB( pAntiImplP, ResId( CB_MERGE_STYLE )),
         aLoadFilePB( pAntiImplP, ResId(   PB_LOAD_FILE )),
-        aTitleFt( pAntiImplP, ResId( FT_TITLE ) ),
-        aKeywordsFt( pAntiImplP, ResId( FT_KEYWORDS ) ),
-        aDescFt( pAntiImplP, ResId( FT_DESC ) ),
-        aDescEd( pAntiImplP, ResId( ED_DESC ) ),
+        aOkBt( pAntiImplP, ResId( BT_OK ) ),
+        aCancelBt( pAntiImplP, ResId( BT_CANCEL ) ),
+        aHelpBt( pAntiImplP, ResId( BT_HELP ) ),
+        pMoreBt( new MoreButton( pAntiImplP, ResId( BT_MORE ) ) ),
         aNone( ResId(STR_NONE) ),
         sLoadTemplate( ResId(STR_LOAD_TEMPLATE)),
         nFlags(nFl),
