@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.116 $
+ *  $Revision: 1.117 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-03 17:42:30 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 18:04:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -790,12 +790,12 @@ static int ImplGetTopDockingAreaHeight( Window *pWindow )
     BOOL bDone = FALSE;
     if( pWindow->ImplGetFrameWindow() )
     {
-        Window *pWin = pWindow->ImplGetFrameWindow()->mpFirstChild;
+        Window *pWin = pWindow->ImplGetFrameWindow()->mpWindowImpl->mpFirstChild;
         while( pWin && !bDone )
         {
             if( pWin->IsSystemWindow() )
             {
-                pWin = pWin->mpFirstChild;
+                pWin = pWin->mpWindowImpl->mpFirstChild;
                 while( pWin && !bDone )
                 {
                     DockingAreaWindow *pDockingArea = dynamic_cast< DockingAreaWindow* >( pWin );
@@ -806,12 +806,12 @@ static int ImplGetTopDockingAreaHeight( Window *pWindow )
                             height = pDockingArea->GetOutputSizePixel().Height();
                     }
                     else
-                        pWin = pWin->mpNext;
+                        pWin = pWin->mpWindowImpl->mpNext;
                 }
 
             }
             else
-                pWin = pWin->mpNext;
+                pWin = pWin->mpWindowImpl->mpNext;
         }
     }
     return height;
@@ -3365,7 +3365,7 @@ static void ImplInitMenuWindow( Window* pWin, BOOL bFont, BOOL bMenuBar )
 MenuFloatingWindow::MenuFloatingWindow( Menu* pMen, Window* pParent, WinBits nStyle ) :
     FloatingWindow( pParent, nStyle )
 {
-    mbMenuFloatingWindow= TRUE;
+    mpWindowImpl->mbMenuFloatingWindow= TRUE;
     pMenu               = pMen;
     pActivePopup        = 0;
     nSaveFocusId        = 0;
@@ -4516,7 +4516,7 @@ MenuBarWindow::MenuBarWindow( Window* pParent ) :
     aFloatBtn( this, WB_NOPOINTERFOCUS | WB_SMALLSTYLE | WB_RECTSTYLE ),
     aHideBtn( this, WB_NOPOINTERFOCUS | WB_SMALLSTYLE | WB_RECTSTYLE )
 {
-    mnType = WINDOW_MENUBARWINDOW;
+    mpWindowImpl->mnType = WINDOW_MENUBARWINDOW;
     pMenu = NULL;
     pActivePopup = NULL;
     nSaveFocusId = 0;
