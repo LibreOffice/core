@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseImportDescriptor.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:07:49 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 16:20:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,17 @@ service DatabaseImportDescriptor
         <member>DatabaseImportDescriptor::SourceType</member> attribute.</p>
      */
     [property] string SourceObject;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies whether the SQL statement is given directly to the database
+        or is parsed before.
+
+        @since #111775#
+
+     */
+    [optional, property] boolean IsNative;
+
 
 };
 
