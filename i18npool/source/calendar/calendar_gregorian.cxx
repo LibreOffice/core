@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calendar_gregorian.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: khong $ $Date: 2002-11-07 17:43:06 $
+ *  last change: $Author: khong $ $Date: 2002-11-15 21:29:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -368,10 +368,10 @@ Calendar_gregorian::isValid() throw(RuntimeException)
 // NatNum4                                                              NatNum9/9/11/11
 
 static sal_Int16 SAL_CALL NatNumForCalendar(const com::sun::star::lang::Locale& aLocale,
-        sal_Int32 nCalendarDisplayCode, sal_Int16 nNativeNumberMode )
+        sal_Int32 nCalendarDisplayCode, sal_Int16 nNativeNumberMode, sal_Int16 value )
 {
-    sal_Bool isShort = nCalendarDisplayCode == CalendarDisplayCode::SHORT_YEAR ||
-        nCalendarDisplayCode == CalendarDisplayCode::LONG_YEAR ||
+    sal_Bool isShort = (nCalendarDisplayCode == CalendarDisplayCode::SHORT_YEAR ||
+        nCalendarDisplayCode == CalendarDisplayCode::LONG_YEAR) && value >= 100 ||
         nCalendarDisplayCode == CalendarDisplayCode::SHORT_QUARTER ||
         nCalendarDisplayCode == CalendarDisplayCode::LONG_QUARTER;
     sal_Bool isChinese = aLocale.Language.equalsAscii("zh");
@@ -591,7 +591,7 @@ Calendar_gregorian::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 
         aOUStr = OUString::createFromAscii(aStr);
     }
     if (nNativeNumberMode > 0) {
-        sal_Int16 nNatNum = NatNumForCalendar(aLocale, nCalendarDisplayCode, nNativeNumberMode);
+        sal_Int16 nNatNum = NatNumForCalendar(aLocale, nCalendarDisplayCode, nNativeNumberMode, value);
         if (nNatNum > 0)
             return aNatNum.getNativeNumberString(aOUStr, aLocale, nNatNum);
     }
