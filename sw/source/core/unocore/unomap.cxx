@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:28 $
+ *  last change: $Author: os $ $Date: 2000-10-10 09:42:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1598,7 +1598,6 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
             {
                 static SfxItemPropertyMap aBookmarkPropertyMap_Impl [] =
                 {
-                    { SW_PROP_NAME(UNO_NAME_ANCHOR_TYPE),   RES_ANCHOR, &::getCppuType((const sal_Int16*)0), PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY, MID_ANCHOR_ANCHORTYPE},
                     { SW_PROP_NAME(UNO_LINK_DISPLAY_NAME),  FN_PARAM_LINK_DISPLAY_NAME,     &::getCppuType((const OUString*)0), PropertyAttribute::READONLY, 0xff},
                     { SW_PROP_NAME(UNO_NAME_ANCHOR_TYPE   ),    0,  &::getCppuType((const sal_Int16*)0),                PropertyAttribute::READONLY, MID_ANCHOR_ANCHORTYPE},
 #if (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || (defined(__GNUC__) && defined(__APPLE__))
@@ -1793,129 +1792,4 @@ sal_Bool SwItemPropertySet::FillItem(SfxItemSet& rSet, sal_uInt16 nWhich, sal_Bo
     return bRet;
 }
 
-/*------------------------------------------------------------------------
-    $Log: not supported by cvs2svn $
-    Revision 1.109  2000/09/18 16:04:32  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.108  2000/09/18 11:53:00  mib
-    bug fix for PageToggle
-
-    Revision 1.107  2000/09/15 07:21:53  os
-    FrameStyle->FrameStyleName
-
-    Revision 1.106  2000/09/12 11:42:58  os
-    #78682# support of service TextContent
-
-    Revision 1.105  2000/09/11 14:05:07  os
-     data type
-
-    Revision 1.104  2000/09/11 12:05:29  os
-    #78606# references to footnotes
-
-    Revision 1.103  2000/09/07 07:59:32  os
-    SwXTextPortion - new properties: IsCollapsed, IsStart
-
-    Revision 1.102  2000/09/05 15:14:52  os
-    string length available again
-
-    Revision 1.101  2000/09/04 12:50:47  os
-    TextPortionEnumeration almost completed
-
-    Revision 1.100  2000/09/01 14:33:51  os
-    properties added to SwXTextPortion
-
-    Revision 1.99  2000/08/31 15:08:34  os
-    DDECommand splitted into three parts
-
-    Revision 1.98  2000/08/29 08:04:50  os
-    Char/ParaUserDefinedAttributes
-
-    Revision 1.97  2000/08/25 08:46:33  os
-     +properties CharStrikeout, DropCapCharStyleName
-
-    Revision 1.96  2000/08/24 15:14:28  os
-    new Property: NumberingIsNumber
-
-    Revision 1.95  2000/08/22 12:58:36  os
-    Chg: ::getCppuType(Sequence<...>) workaround for Apple+GNUC too
-
-    Revision 1.94  2000/08/09 14:47:55  os
-    #77402# create a copy of uno::Type for getCppuType of Sequence<*>
-
-    Revision 1.93  2000/07/21 13:13:12  os
-    #76644# Category property at paragraph styles
-
-    Revision 1.92  2000/07/19 12:45:40  os
-    SvxEscapementItem: AutoEscapement property implemented
-
-    Revision 1.91  2000/07/19 10:58:22  os
-    properties added/renamed
-
-    Revision 1.90  2000/07/14 14:58:06  os
-    SwXStyle::which id of NumberingRules corrected
-
-    Revision 1.89  2000/07/11 13:44:26  os
-    new property: ParaFirstLineIndentRelative (paragraph style)
-
-    Revision 1.88  2000/07/03 13:27:04  os
-    #76457# SwXTextTable supports service TextContent
-
-    Revision 1.87  2000/06/29 12:20:14  os
-    new properties: Left/Right/Top/BottomMarginRelative
-
-    Revision 1.86  2000/06/28 15:42:40  os
-    new properties: CharFontStyleName/Family/CharSet/Pitch
-
-    Revision 1.85  2000/06/28 14:35:37  os
-    new properties: ParaWidows, ParaOrphans
-
-    Revision 1.84  2000/06/27 13:37:22  os
-    new Properties: IsAutoUpdate + DisplayName
-
-    Revision 1.83  2000/06/26 12:57:12  os
-    new Property: IsPhysical
-
-    Revision 1.82  2000/06/16 11:55:23  os
-    #75622# BackGraphicLocation/URL/Filter changed
-
-    Revision 1.81  2000/06/13 13:42:24  os
-    #75719# special handling of AnchorType of text tables
-
-    Revision 1.80  2000/05/26 07:21:48  os
-    old SW Basic API Slots removed
-
-    Revision 1.79  2000/03/27 10:21:10  os
-    UNO III
-
-    Revision 1.78  2000/03/21 15:42:24  os
-    UNOIII
-
-    Revision 1.77  2000/03/13 16:05:10  os
-    #73852# include
-
-    Revision 1.76  2000/03/13 14:36:59  os
-    #73852# CharLocale instead of CharLanguage
-
-    Revision 1.75  2000/02/14 14:34:23  jp
-    #70473# changes for unicode
-
-    Revision 1.73  2000/01/27 09:38:25  os
-    #70258# include
-
-    Revision 1.72  2000/01/26 15:55:13  os
-    #70258# new Property: UserDefinedAttributes
-
-    Revision 1.71  1999/12/16 10:23:25  os
-    #69273# Frame-Properties according to service description
-
-    Revision 1.70  1999/12/08 12:02:05  os
-    #70284# show Bitmaps in hyperlink insert dialog
-
-    Revision 1.69  1999/12/01 14:44:55  os
-    #70234# properties added
-
-
-
-------------------------------------------------------------------------*/
 
