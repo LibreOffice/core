@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dwfunctr.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 20:49:52 $
+ *  last change: $Author: kz $ $Date: 2001-04-06 07:40:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -337,7 +337,7 @@ DockingWindow FID_FUNCTION_BOX
         < "Статистические" ; Default ; > ;
         < "Таблица" ; Default ; > ;
         < "Текст" ; Default ; > ;
-        < "Надстройка" ; Default ; > ;
+        < "Дополнительно" ; Default ; > ;
     };
     StringList [ polish ] =
     {
