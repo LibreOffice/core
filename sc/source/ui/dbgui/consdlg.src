@@ -2,9 +2,9 @@
  *
  *  $RCSfile: consdlg.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 11:34:09 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 19:59:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,19 +66,8 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
     Hide = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 280 , 154 ) ;
-    Text = "Konsolidieren" ;
-    Text [ ENGLISH ] = "Consolidate" ;
-    Text [ norwegian ] = "Konsolider" ;
-    Text [ italian ] = "Consolida" ;
-    Text [ portuguese_brazilian ] = "Consolidar" ;
-    Text [ portuguese ] = "Consolidar" ;
-    Text [ finnish ] = "Yhdistä" ;
-    Text [ danish ] = "Konsolider" ;
-    Text [ french ] = "Consolider" ;
-    Text [ swedish ] = "Konsolidera" ;
-    Text [ dutch ] = "Consolideren" ;
-    Text [ spanish ] = "Consolidar" ;
-    Text [ english_us ] = "Consolidate" ;
+    Text [ de ] = "Konsolidieren" ;
+    Text [ en-US ] = "Consolidate" ;
     Moveable = TRUE ;
     Closeable = FALSE ;
     ListBox LB_FUNC
@@ -88,7 +77,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Size = MAP_APPFONT ( 212 , 90 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
-        StringList =
+        StringList [ de ] =
         {
             < "Summe" ; Default ; > ;
             < "Anzahl" ; Default ; > ;
@@ -102,161 +91,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
             < "Varianz (Stichprobe)" ; Default ; > ;
             < "Varianzen (Grundgesamtheit)" ; Default ; > ;
         };
-        StringList [ ENGLISH ] =
-        {
-            < "Summe" ; Default ; > ;
-            < "Anzahl" ; Default ; > ;
-            < "Mittelwert" ; Default ; > ;
-            < "Max" ; Default ; > ;
-            < "Min" ; Default ; > ;
-            < "Produkt" ; Default ; > ;
-            < "Anzahl (nur Zahlen)" ; Default ; > ;
-            < "StAbw (Stichprobe)" ; Default ; > ;
-            < "StAbwN (Grundgesamtheit)" ; Default ; > ;
-            < "Varianz (Stichprobe)" ; Default ; > ;
-            < "Varianzen (Grundgesamtheit)" ; Default ; > ;
-        };
-        StringList [ norwegian ] =
-        {
-            < "Summe" ; Default ; > ;
-            < "Anzahl" ; Default ; > ;
-            < "Mittelwert" ; Default ; > ;
-            < "Max" ; Default ; > ;
-            < "Min" ; Default ; > ;
-            < "Produkt" ; Default ; > ;
-            < "Anzahl (nur Zahlen)" ; Default ; > ;
-            < "StAbw (Stichprobe)" ; Default ; > ;
-            < "StAbwN (Grundgesamtheit)" ; Default ; > ;
-            < "Varianz (Stichprobe)" ; Default ; > ;
-            < "Varianzen (Grundgesamtheit)" ; Default ; > ;
-        };
-        StringList [ italian ] =
-        {
-            < "Somma" ; Default ; > ;
-            < "Numero" ; Default ; > ;
-            < "Media" ; Default ; > ;
-            < "Max" ; Default ; > ;
-            < "Min" ; Default ; > ;
-            < "Prodotto" ; Default ; > ;
-            < "Numero (solo numeri)" ; Default ; > ;
-            < "DevSt (campione)" ; Default ; > ;
-            < "DevStP (popolazione)" ; Default ; > ;
-            < "Varianza (campione)" ; Default ; > ;
-            < "VarP (popolazione)" ; Default ; > ;
-        };
-        StringList [ portuguese_brazilian ] =
-        {
-            < "Soma" ; Default ; > ;
-            < "Contagem" ; Default ; > ;
-            < "Média" ; Default ; > ;
-            < "Max" ; Default ; > ;
-            < "Min" ; Default ; > ;
-            < "Produto" ; Default ; > ;
-            < "Contagem  (somente números)" ; Default ; > ;
-            < "DesvPad (amostra)" ; Default ; > ;
-            < "DesvPadP (população)" ; Default ; > ;
-            < "Var (amostra)" ; Default ; > ;
-            < "VarP (população)" ; Default ; > ;
-        };
-        StringList [ portuguese ] =
-        {
-            < "Total" ; Default ; > ;
-            < "Contar" ; Default ; > ;
-            < "Média" ; Default ; > ;
-            < "Máx." ; Default ; > ;
-            < "Min." ; Default ; > ;
-            < "Produto" ; Default ; > ;
-            < "Contar (só números)" ; Default ; > ;
-            < "DesvPad (amostra)" ; Default ; > ;
-            < "DesvPadN (população)" ; Default ; > ;
-            < "Variância (amostra)" ; Default ; > ;
-            < "Variância P (população)" ; Default ; > ;
-        };
-        StringList [ finnish ] =
-        {
-            < "Summa" ; Default ; > ;
-            < "LASKE" ; Default ; > ;
-            < "Keskiarvo" ; Default ; > ;
-            < "MAKS" ; Default ; > ;
-            < "MIN" ; Default ; > ;
-            < "Tulo" ; Default ; > ;
-            < "LASKE (vain luvut)" ; Default ; > ;
-            < "KESKIHAJONTA (otos)" ; Default ; > ;
-            < "KESKIHAJONTAP (populaatio)" ; Default ; > ;
-            < "Var (otos)" ; Default ; > ;
-            < "VarP (Populaatio)" ; Default ; > ;
-        };
-        StringList [ danish ] =
-        {
-            < "Sum" ; Default ; > ;
-            < "Antal" ; Default ; > ;
-            < "Middel" ; Default ; > ;
-            < "Maks" ; Default ; > ;
-            < "Min" ; Default ; > ;
-            < "Produkt" ; Default ; > ;
-            < "Antal (kun tal)" ; Default ; > ;
-            < "Stdafv (stikprøve)" ; Default ; > ;
-            < "StdafvP (population)" ; Default ; > ;
-            < "Varians (stikprøve)" ; Default ; > ;
-            < "VariansP (population)" ; Default ; > ;
-        };
-        StringList [ french ] =
-        {
-            < "Somme" ; Default ; > ;
-            < "Nombre" ; Default ; > ;
-            < "Moyenne" ; Default ; > ;
-            < "Max" ; Default ; > ;
-            < "Min" ; Default ; > ;
-            < "Produit" ; Default ; > ;
-            < "Nombre (uniquement les nombres)" ; Default ; > ;
-            < "Ecartype (échantillon)" ; Default ; > ;
-            < "EcarTypeP (population)" ; Default ; > ;
-            < "Variance (échantillon)" ; Default ; > ;
-            < "VarianceP (population)" ; Default ; > ;
-        };
-        StringList [ swedish ] =
-        {
-            < "Summa" ; Default ; > ;
-            < "Antal" ; Default ; > ;
-            < "Medelvärde" ; Default ; > ;
-            < "Max" ; Default ; > ;
-            < "Min" ; Default ; > ;
-            < "Produkt" ; Default ; > ;
-            < "Antal (endast tal)" ; Default ; > ;
-            < "StdAv (stickprov)" ; Default ; > ;
-            < "StdAvP (population)" ; Default ; > ;
-            < "Varians (stickprov)" ; Default ; > ;
-            < "VariansP (population)" ; Default ; > ;
-        };
-        StringList [ dutch ] =
-        {
-            < "Som" ; Default ; > ;
-            < "Aantal" ; Default ; > ;
-            < "Gemiddelde waarde" ; Default ; > ;
-            < "Max" ; Default ; > ;
-            < "Min" ; Default ; > ;
-            < "Product" ; Default ; > ;
-            < "Aantal (alleen getallen)" ; Default ; > ;
-            < "StAfw (steekproef)" ; Default ; > ;
-            < "StAfwN (populatie)" ; Default ; > ;
-            < "Variantie (steekproef)" ; Default ; > ;
-            < "Variantie (populatie)" ; Default ; > ;
-        };
-        StringList [ spanish ] =
-        {
-            < "Suma" ; Default ; > ;
-            < "Cantidad" ; Default ; > ;
-            < "Promedio" ; Default ; > ;
-            < "Máx" ; Default ; > ;
-            < "Mín" ; Default ; > ;
-            < "Producto" ; Default ; > ;
-            < "Cantidad (sólo números)" ; Default ; > ;
-            < "DesvEst (Muestra)" ; Default ; > ;
-            < "DesvEstP (Población)" ; Default ; > ;
-            < "Variancia (muestra)" ; Default ; > ;
-            < "VarP (población)" ; Default ; > ;
-        };
-        StringList [ english_us ] =
+        StringList [ en-US ] =
         {
             < "Sum" ; Default ; > ;
             < "Count" ; Default ; > ;
@@ -270,133 +105,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
             < "Var (sample)" ; Default ; > ;
             < "VarP (population)" ; Default ; > ;
         };
-    StringList [ chinese_simplified ] =
-    {
-            < "æ€»è®¡" ; Default ; > ;
-        < "æ•°ç›®" ; Default ; > ;
-        < "å¹³å‡æ•°" ; Default ; > ;
-        < "æœ€å¤§" ; Default ; > ;
-        < "æœ€å°" ; Default ; > ;
-        < "ä¹˜ç§¯" ; Default ; > ;
-        < "æ•°ç›®(åªæ˜¯æ•°å­—)" ; Default ; > ;
-        < "æ ‡å‡†åå·®(æŠ½æ ·)" ; Default ; > ;
-        < "æ ‡å‡†åå·®(å…¨éƒ¨åŸºæ•°)" ; Default ; > ;
-        < "æ–¹å·®(æŠ½æ ·)" ; Default ; > ;
-        < "æ–¹å·®(å…¨éƒ¨åŸºæ•°)" ; Default ; > ;
-    };
-    StringList [ russian ] =
-    {
-            < "Ñóììà" ; Default ; > ;
-        < "Êîëè÷åñòâî" ; Default ; > ;
-        < "Ñğåäíåå çíà÷åíèå" ; Default ; > ;
-        < "Ìàêñèìóì" ; Default ; > ;
-        < "Ìèíèìóì" ; Default ; > ;
-        < "Ïğîèçâåäåíèå" ; Default ; > ;
-        < "Êîëè÷åñòâî (òîëüêî ÷èñëà)" ; Default ; > ;
-        < "Ñìåùåííîå îòêëîíåíèå (Îáğàçåö)" ; Default ; > ;
-        < "Íåñìåùåííîå îòêëîíåíèå (Ñîâîêóïíîñòü)" ; Default ; > ;
-        < "Ñìåùåííàÿ äèñïåğñèÿ (Îáğàçåö)" ; Default ; > ;
-        < "Íåñìåùåííàÿ äèñïåğñèÿ (Ñîâîêóïíîñòü)" ; Default ; > ;
-    };
-    StringList [ polish ] =
-    {
-            < "Suma" ; Default ; > ;
-        < "Liczba" ; Default ; > ;
-        < "Œrednia" ; Default ; > ;
-        < "Maks" ; Default ; > ;
-        < "Min" ; Default ; > ;
-        < "Iloczyn" ; Default ; > ;
-        < "Liczba (tylko liczby)" ; Default ; > ;
-        < "Odchylenie standardowe (Próbka)" ; Default ; > ;
-        < "Odch.stdc (populacja)" ; Default ; > ;
-        < "Wariancja (Próbka)" ; Default ; > ;
-        < "Wariancje (populacja)" ; Default ; > ;
-    };
-    StringList [ japanese ] =
-    {
-            < "åˆè¨ˆ" ; Default ; > ;
-        < "ç·æ•°" ; Default ; > ;
-        < "å¹³å‡å€¤" ; Default ; > ;
-        < "æœ€å¤§å€¤" ; Default ; > ;
-        < "æœ€å°å€¤" ; Default ; > ;
-        < "ç©" ; Default ; > ;
-        < "ç·æ•°(æ•°å€¤ã®ã¿)" ; Default ; > ;
-        < "StDev æ¨™æº–åå·®(æ¨™æœ¬)" ; Default ; > ;
-        < "StDevP æ¨™æº–åå·®(æ¯é›†å›£)" ; Default ; > ;
-        < "åˆ†æ•£(æ¨™æœ¬)" ; Default ; > ;
-        < "åˆ†æ•£(æ¯é›†å›£)" ; Default ; > ;
-    };
-    StringList [ chinese_traditional ] =
-    {
-            < "å°è¨ˆ" ; Default ; > ;
-        < "æ•¸ç›®" ; Default ; > ;
-        < "å¹³å‡å€¼" ; Default ; > ;
-        < "æœ€å¤§" ; Default ; > ;
-        < "æœ€å°" ; Default ; > ;
-        < "ä¹˜ç©" ; Default ; > ;
-        < "æ•¸ç›®(åªæ˜¯æ•¸å­—)" ; Default ; > ;
-        < "æ¨™æº–åå·®(æŠ½æ¨£)" ; Default ; > ;
-        < "æ¨™æº–åå·®(å…¨éƒ¨åŸºæ•¸)" ; Default ; > ;
-        < "æ–¹å·®(æŠ½æ¨£)" ; Default ; > ;
-        < "æ–¹å·®(å…¨éƒ¨åŸºæ•¸)" ; Default ; > ;
-    };
-    StringList [ arabic ] =
-    {
-            < "ÇáãÌãæÚ" ; Default ; > ;
-        < "Count" ; Default ; > ;
-        < "Average" ; Default ; > ;
-        < "Max" ; Default ; > ;
-        < "Min" ; Default ; > ;
-        < "Product" ; Default ; > ;
-        < "Count (ÇáÃÑŞÇã İŞØ)" ; Default ; > ;
-        < "StDev (ÚíäÉ)" ; Default ; > ;
-        < "StDevP (ÇáãÌÊãÚ)" ; Default ; > ;
-        < "VAR (ÚíäÉ)" ; Default ; > ;
-        < "VARP (ÇáãÌÊãÚ)" ; Default ; > ;
-    };
-    StringList [ greek ] =
-    {
-            < "¢èñïéóìá" ; Default ; > ;
-        < "Áñéèìüò" ; Default ; > ;
-        < "Ìİóç ôéìŞ" ; Default ; > ;
-        < "Max" ; Default ; > ;
-        < "Min" ; Default ; > ;
-        < "Product" ; Default ; > ;
-        < "ĞëŞèïò (ìüíï áñéèìïß)" ; Default ; > ;
-        < "StDev (Äåßãìá)" ; Default ; > ;
-        < "StDevP (Ğëçèõóìïı)" ; Default ; > ;
-        < "Var (Äåßãìá)" ; Default ; > ;
-        < "VarP (Ğëçèõóìïı)" ; Default ; > ;
-    };
-    StringList [ korean ] =
-    {
-            < "í•©ê³„" ; Default ; > ;
-        < "ê°’" ; Default ; > ;
-        < "í‰ê· ê°’" ; Default ; > ;
-        < "ìµœëŒ€" ; Default ; > ;
-        < "ìµœì†Œ" ; Default ; > ;
-        < "ê³±" ; Default ; > ;
-        < "ìˆ˜(ìˆ«ìë§Œ)" ; Default ; > ;
-        < "StDev(ìƒ˜í”Œ)" ; Default ; > ;
-        < "StDevP(ëª¨ì§‘ë‹¨)" ; Default ; > ;
-        < "ë¶„ì‚°(ìƒ˜í”Œ)" ; Default ; > ;
-        < "ë¶„ì‚°(ëª¨ì§‘ë‹¨)" ; Default ; > ;
-    };
-    StringList [ turkish ] =
-    {
-            < "Toplam" ; Default ; > ;
-        < "Say" ; Default ; > ;
-        < "Ortalama " ; Default ; > ;
-        < "Max" ; Default ; > ;
-        < "Min" ; Default ; > ;
-        < "Çarpım" ; Default ; > ;
-        < "Say (yalnızca sayıları)" ; Default ; > ;
-        < "StSapma (sample)" ; Default ; > ;
-        < "StSapmaP (popülasyon)" ; Default ; > ;
-        < "Değişken (örnek)" ; Default ; > ;
-        < "DeğişkenP (popülasyon)" ; Default ; > ;
-    };
-    StringList [ language_user1 ] =
+    StringList [ x-comment ] =
     {
             < " " ; Default ; > ;
         < " " ; Default ; > ;
@@ -410,118 +119,6 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         < " " ; Default ; > ;
         < " " ; Default ; > ;
     };
-    StringList [ catalan ] =
-    {
-            < "Suma" ; Default ; > ;
-        < "Compta" ; Default ; > ;
-        < "Mitjana" ; Default ; > ;
-        < "Màx." ; Default ; > ;
-        < "Mín." ; Default ; > ;
-        < "Producte" ; Default ; > ;
-        < "Compta (nomé?s els nombres)" ; Default ; > ;
-        < "StDev (mostra)" ; Default ; > ;
-        < "StDevP (població)" ; Default ; > ;
-        < "Var (mostra)" ; Default ; > ;
-        < "VarP (població)" ; Default ; > ;
-    };
-    StringList [ thai ] =
-    {
-         < "à¸œà¸¥à¸£à¸§à¸¡" ; Default ; > ;
-        < "à¸™à¸±à¸š" ; Default ; > ;
-        < "à¹€à¸‰à¸¥à¸µà¹ˆà¸¢" ; Default ; > ;
-        < "à¸¡à¸²à¸à¸—à¸µà¹ˆà¸ªà¸¸à¸”" ; Default ; > ;
-        < "à¸™à¹‰à¸­à¸¢à¸—à¸µà¹ˆà¸ªà¸¸à¸”" ; Default ; > ;
-        < "à¸œà¸¥à¸´à¸•à¸ à¸±à¸“à¸‘à¹Œ" ; Default ; > ;
-        < "à¸™à¸±à¸š (à¸ˆà¸³à¸™à¸§à¸™à¹€à¸—à¹ˆà¸²à¸™à¸±à¹‰à¸™)" ; Default ; > ;
-        < "StDev (à¸•à¸±à¸§à¸­à¸¢à¹ˆà¸²à¸‡)" ; Default ; > ;
-        < "StDevP (à¸›à¸£à¸°à¸Šà¸²à¸à¸£)" ; Default ; > ;
-        < "Var (à¸•à¸±à¸§à¸­à¸¢à¹ˆà¸²à¸‡)" ; Default ; > ;
-        < "VarP (à¸›à¸£à¸°à¸Šà¸²à¸à¸£)" ; Default ; > ;
-    };
-    StringList [ czech ] =
-    {
-         < "SouÄet" ; Default ; > ;
-        < "PoÄet" ; Default ; > ;
-        < "PrÅ¯mÄ›r" ; Default ; > ;
-        < "Max" ; Default ; > ;
-        < "Min" ; Default ; > ;
-        < "Produkt" ; Default ; > ;
-        < "PoÄet (pouze ÄÃ­sla)" ; Default ; > ;
-        < "StDev (vÃ½bÄ›r)" ; Default ; > ;
-        < "StDevP (zÃ¡kladnÃ­ soubor)" ; Default ; > ;
-        < "Var (vÃ½bÄ›r)" ; Default ; > ;
-            < "VarP (zÃ¡kladnÃ­ soubor)" ; Default ; > ;
-        };
-    StringList [ hebrew ] =
-    {
-         < "â€®×¡×›×•×â€¬" ; Default ; > ;
-        < "Anzahl" ; Default ; > ;
-        < "Mittelwert" ; Default ; > ;
-        < "Max" ; Default ; > ;
-        < "Min" ; Default ; > ;
-        < "Produkt" ; Default ; > ;
-        < "Anzahl (nur Zahlen)" ; Default ; > ;
-        < "StAbw (Stichprobe)" ; Default ; > ;
-        < "StAbwN (Grundgesamtheit)" ; Default ; > ;
-        < "Varianz (Stichprobe)" ; Default ; > ;
-            < "Varianzen (Grundgesamtheit)" ; Default ; > ;
-        };
-    StringList [ hindi ] =
-    {
-         < "à¤œà¥‹à¤¡" ; Default ; > ;
-        < "à¤—à¤¿à¤¨à¤¤à¥€" ; Default ; > ;
-        < "à¤®à¤¾à¤§à¥à¤¯" ; Default ; > ;
-        < "à¤…à¤§à¤¿à¤•à¤¤à¤®" ; Default ; > ;
-        < "à¤¨à¥à¤¯à¥‚à¤¨à¤¤à¤®" ; Default ; > ;
-        < "à¤—à¥à¤£à¤¨" ; Default ; > ;
-        < "à¤—à¤¿à¤¨à¤¤à¥€ (à¤•à¥‡à¤µà¤² à¤¸à¤‚à¤–à¥à¤¯à¤¾)" ; Default ; > ;
-        < "StDev (à¤¨à¤®à¥‚à¤¨à¤¾)" ; Default ; > ;
-        < "StDevP (à¤œà¤¨à¤¸à¤‚à¤–à¥à¤¯à¤¾)" ; Default ; > ;
-        < "Var (à¤¨à¤®à¥‚à¤¨à¤¾)" ; Default ; > ;
-            < "VarP (à¤œà¤¨à¤¸à¤‚à¤–à¥à¤¯à¤¾)" ; Default ; > ;
-        };
-    StringList [ slovak ] =
-    {
-         < "SÃºÄet" ; Default ; > ;
-        < "PoÄet" ; Default ; > ;
-        < "Priemer" ; Default ; > ;
-        < "Max" ; Default ; > ;
-        < "Min" ; Default ; > ;
-        < "Produkt" ; Default ; > ;
-        < "PoÄet (iba ÄÃ­sla)" ; Default ; > ;
-        < "Å tandOdch (vzorka)" ; Default ; > ;
-        < "Å tandOdchP (populÃ¡cia)" ; Default ; > ;
-        < "Var (vÃ½ber)" ; Default ; > ;
-        < "VarP (populÃ¡cia)" ; Default ; > ;
-    };
-    StringList [ hungarian ] =
-    {
-         < "Sum" ; Default ; > ;
-        < "Count" ; Default ; > ;
-        < "Average" ; Default ; > ;
-        < "Max" ; Default ; > ;
-        < "Min" ; Default ; > ;
-        < "Product" ; Default ; > ;
-        < "Count (csak szÃ¡mok)" ; Default ; > ;
-        < "StDev (minta)" ; Default ; > ;
-        < "StdevP (sokasÃ¡g)" ; Default ; > ;
-        < "Var (minta)" ; Default ; > ;
-            < "VarP (sokasÃ¡g)" ; Default ; > ;
-        };
-    StringList [ slovenian ] =
-    {
-         < "Vsota" ; Default ; > ;
-        < "SeÅ¡tevek" ; Default ; > ;
-        < "PovpreÄje" ; Default ; > ;
-        < "Maks" ; Default ; > ;
-        < "Min" ; Default ; > ;
-        < "Produkt" ; Default ; > ;
-        < "SeÅ¡tevek (samo Å¡tevke)" ; Default ; > ;
-        < "Stand. odklon (vzorec)" ; Default ; > ;
-        < "Stand. odklon pop. (celotna populacija)" ; Default ; > ;
-        < "Varianca (vzorec)" ; Default ; > ;
-            < "Varianca pop. (celotna populacija)" ; Default ; > ;
-        };
     };
     Edit ED_DATA_AREA
     {
@@ -539,77 +136,23 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
     };
     ImageButton RB_DATA_AREA
     {
-        QuickHelpText = "Verkleinern" ;
-        QuickHelpText [ ENGLISH ] = "Shrink" ;
+        QuickHelpText [ de ] = "Verkleinern" ;
         Pos = MAP_APPFONT ( 206 , 106 ) ;
         Size = MAP_APPFONT ( 12 , 12 ) ;
         TabStop = TRUE ;
-        QuickHelpText [ english_us ] = "Shrink" ;
-        QuickHelpText [ portuguese_brazilian ] = "Verkleinern" ;
-        QuickHelpText [ swedish ] = "Förminska" ;
-        QuickHelpText [ danish ] = "Formindsk" ;
-        QuickHelpText [ italian ] = "Zoom indietro" ;
-        QuickHelpText [ spanish ] = "Reducir" ;
-        QuickHelpText [ french ] = "Réduire" ;
-        QuickHelpText [ dutch ] = "Verkleinen" ;
-        QuickHelpText [ portuguese ] = "Afastar" ;
-        QuickHelpText[ russian ] = "Óìåíüøèòü";
-        QuickHelpText[ polish ] = "Pomniejsz";
-        QuickHelpText[ japanese ] = "ç¸®å°";
-        QuickHelpText[ chinese_simplified ] = "æœ€å°/æœ€å¤§";
-        QuickHelpText[ chinese_traditional ] = "ç¸®å°";
-        QuickHelpText[ arabic ] = "ÊÕÛíÑ";
-        QuickHelpText[ greek ] = "Óìßêñõíóç";
-        QuickHelpText[ korean ] = "ì¶•ì†Œ";
-        QuickHelpText[ language_user1 ] = " ";
-        QuickHelpText[ language_user1 ] = " ";
-        QuickHelpText[ turkish ] = "Verkleinern";
-        QuickHelpText[ catalan ] = "Redueix";
-        QuickHelpText[ finnish ] = "Kutista";
-        QuickHelpText[ thai ] = "Shrink";
-        QuickHelpText[ czech ] = "ZmenÅ¡it";
-        QuickHelpText[ hebrew ] = "Verkleinern";
-        QuickHelpText[ hindi ] = "à¤¸à¤¿à¤•à¥à¤¡à¤¨à¤¾";
-        QuickHelpText[ slovak ] = "ZmenÅ¡iÅ¥";
-        QuickHelpText[ hungarian ] = "ZsugorÃ­tÃ¡s";
-        QuickHelpText[ slovenian ] = "SkrÄi";
+        QuickHelpText [ en-US ] = "Shrink" ;
+        QuickHelpText [ x-comment ] = " ";
+        QuickHelpText [ x-comment ] = " ";
     };
     ImageButton RB_DEST_AREA
     {
-        QuickHelpText = "Verkleinern" ;
-        QuickHelpText [ ENGLISH ] = "Shrink" ;
+        QuickHelpText [ de ] = "Verkleinern" ;
         Pos = MAP_APPFONT ( 206 , 135 ) ;
         Size = MAP_APPFONT ( 12 , 12 ) ;
         TabStop = TRUE ;
-        QuickHelpText [ english_us ] = "Shrink" ;
-        QuickHelpText [ portuguese_brazilian ] = "Verkleinern" ;
-        QuickHelpText [ swedish ] = "Förminska" ;
-        QuickHelpText [ danish ] = "Formindsk" ;
-        QuickHelpText [ italian ] = "Zoom indietro" ;
-        QuickHelpText [ spanish ] = "Reducir" ;
-        QuickHelpText [ french ] = "Réduire" ;
-        QuickHelpText [ dutch ] = "Verkleinen" ;
-        QuickHelpText [ portuguese ] = "Afastar" ;
-        QuickHelpText[ russian ] = "Óìåíüøèòü";
-        QuickHelpText[ polish ] = "Pomniejsz";
-        QuickHelpText[ japanese ] = "ç¸®å°";
-        QuickHelpText[ chinese_simplified ] = "æœ€å°/æœ€å¤§";
-        QuickHelpText[ chinese_traditional ] = "ç¸®å°";
-        QuickHelpText[ arabic ] = "ÊÕÛíÑ";
-        QuickHelpText[ greek ] = "Óìßêñõíóç";
-        QuickHelpText[ korean ] = "ì¶•ì†Œ";
-        QuickHelpText[ language_user1 ] = " ";
-        QuickHelpText[ language_user1 ] = " ";
-        QuickHelpText[ turkish ] = "Verkleinern";
-        QuickHelpText[ catalan ] = "Redueix";
-        QuickHelpText[ finnish ] = "Kutista";
-        QuickHelpText[ thai ] = "Shrink";
-        QuickHelpText[ czech ] = "ZmenÅ¡it";
-        QuickHelpText[ hebrew ] = "Verkleinern";
-        QuickHelpText[ hindi ] = "à¤¸à¤¿à¤•à¥à¤¡à¤¨à¤¾";
-        QuickHelpText[ slovak ] = "ZmenÅ¡iÅ¥";
-        QuickHelpText[ hungarian ] = "ZsugorÃ­tÃ¡s";
-        QuickHelpText[ slovenian ] = "SkrÄi";
+        QuickHelpText [ en-US ] = "Shrink" ;
+        QuickHelpText [ x-comment ] = " ";
+        QuickHelpText [ x-comment ] = " ";
     };
     ListBox LB_DATA_AREA
     {
@@ -639,255 +182,56 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
     {
         Pos = MAP_APPFONT ( 6 , 6 ) ;
         Size = MAP_APPFONT ( 212 , 8 ) ;
-        Text = "Be~rechnungsvorschrift" ;
-        Text [ ENGLISH ] = "Fun~ction" ;
-        Text [ norwegian ] = "Fu~nksjon" ;
-        Text [ italian ] = "Fun~zione" ;
-        Text [ portuguese_brazilian ] = "~Função" ;
-        Text [ portuguese ] = "U~sar função" ;
-        Text [ finnish ] = "~Funktio" ;
-        Text [ danish ] = "~Funktion" ;
-        Text [ french ] = "~Fonction" ;
-        Text [ swedish ] = "Be~räkningsregler" ;
-        Text [ dutch ] = "Be~rekeningsvoorschrift" ;
-        Text [ spanish ] = "~Función" ;
-        Text [ english_us ] = "~Function" ;
-        Text[ chinese_simplified ] = "è®¡ç®—è§„åˆ™(~F)";
-        Text[ russian ] = "Ôóíêöèÿ";
-        Text[ polish ] = "~Funkcja";
-        Text[ japanese ] = "è¨ˆç®—æ–¹æ³•(~F)";
-        Text[ chinese_traditional ] = "è¨ˆç®—è¦å‰‡(~F)";
-        Text[ arabic ] = "ÇáÏÇáÉ";
-        Text[ greek ] = "Êáíüíáò õğïëïãéóìïı";
-        Text[ korean ] = "í•¨ìˆ˜(~F)";
-        Text[ turkish ] = "~Fonksiyon";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Funció";
-        Text[ thai ] = "~à¸Ÿà¸±à¸‡à¸à¹Œà¸Šà¸±à¹ˆà¸™";
-        Text[ czech ] = "Funkce";
-        Text[ hebrew ] = "Be~rechnungsvorschrift";
-        Text[ hindi ] = "~à¤«à¤‚à¤•à¥à¤¶à¤¨à¥";
-        Text[ slovak ] = "~Funkcia";
-        Text[ hungarian ] = "~FÃ¼ggvÃ©ny";
-        Text[ slovenian ] = "~Funkcija";
+        Text [ de ] = "Be~rechnungsvorschrift" ;
+        Text [ en-US ] = "~Function" ;
+        Text [ x-comment ] = " ";
     };
     FixedText FT_CONSAREAS
     {
         Pos = MAP_APPFONT ( 6 , 35 ) ;
         Size = MAP_APPFONT ( 212 , 8 ) ;
-        Text = "~Konsolidierungsbereiche" ;
-        Text [ ENGLISH ] = "Consoli~dation areas" ;
-        Text [ norwegian ] = "Konsoli~derings områder" ;
-        Text [ italian ] = "Aree di consolidamento" ;
-        Text [ portuguese_brazilian ] = "Áreas de ~Consolidação" ;
-        Text [ portuguese ] = "Áreas de consoli~dação" ;
-        Text [ finnish ] = "~Yhdistelyalueet" ;
-        Text [ danish ] = "~Konsolideringsområder" ;
-        Text [ french ] = "Plages de ~consolidation" ;
-        Text [ swedish ] = "~Konsolideringsområden" ;
-        Text [ dutch ] = "~Consolideringsbereik" ;
-        Text [ spanish ] = "Áreas de consolidación" ;
-        Text [ english_us ] = "~Consolidation ranges" ;
-        Text[ chinese_simplified ] = "åˆå¹¶è®¡ç®—æ•°æ®åŒºåŸŸ";
-        Text[ russian ] = "Îáëàñòè îáúåäèíåíèÿ";
-        Text[ polish ] = "~Obszary konsolidacji";
-        Text[ japanese ] = "çµ±åˆç¯„å›²(~C)";
-        Text[ chinese_traditional ] = "åˆä½µè¨ˆç®—å€åŸŸ(~C)";
-        Text[ arabic ] = "äØÇŞÇÊ ÇáÏãÌ";
-        Text[ greek ] = "Ğå~ñéï÷İò åíïğïßçóçò";
-        Text[ korean ] = "í†µí•© ë²”ìœ„(~C)";
-        Text[ turkish ] = "~Yoğunlaştırma çizgileri";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Àrees de ~consolidació";
-        Text[ thai ] = "~à¸£à¸§à¸šà¸£à¸§à¸¡à¸à¸·à¹‰à¸™à¸—à¸µà¹ˆ";
-        Text[ czech ] = "Oblasti konsolidace";
-        Text[ hebrew ] = "~Konsolidierungsbereiche";
-        Text[ hindi ] = "~à¤à¤•à¤¤à¥à¤°à¤¿à¤¤ à¤•à¥€ à¤¹à¥à¤¯à¥€ à¤µà¤¿à¤¸à¥à¤¤à¥€à¤°à¥à¤£";
-        Text[ slovak ] = "Oblasti konsolidÃ¡~cie";
-        Text[ hungarian ] = "Ã–~sszesÃ­tett tartomÃ¡nyok";
-        Text[ slovenian ] = "Ob~segi uskladitve";
+        Text [ de ] = "~Konsolidierungsbereiche" ;
+        Text [ en-US ] = "~Consolidation ranges" ;
     };
     FixedText FT_DATA_AREA
     {
         Pos = MAP_APPFONT ( 6 , 95 ) ;
         Size = MAP_APPFONT ( 212 , 8 ) ;
-        Text = "Quelldaten~bereich" ;
-        Text [ ENGLISH ] = "~Source data area" ;
-        Text [ norwegian ] = "~Kildedataområder" ;
-        Text [ italian ] = "Area dati di sorgente" ;
-        Text [ portuguese_brazilian ] = "Á~rea de origem dos dados" ;
-        Text [ portuguese ] = "~Área dos dados fonte" ;
-        Text [ finnish ] = "Lähdetietoalue" ;
-        Text [ danish ] = "K~ildedataområde" ;
-        Text [ french ] = "Plage de données source" ;
-        Text [ swedish ] = "Källdata~område" ;
-        Text [ dutch ] = "~Brongegevensbereik" ;
-        Text [ spanish ] = "~Área de datos fuente" ;
-        Text [ english_us ] = "~Source data range" ;
-        Text[ chinese_simplified ] = "æºæ•°æ®åŒºåŸŸ";
-        Text[ russian ] = "Îáëàñòü èñõîäíûõ äàííûõ";
-        Text[ polish ] = "O~bszar danych Ÿród³owych";
-        Text[ japanese ] = "ã‚½ãƒ¼ã‚¹ãƒ‡ãƒ¼ã‚¿ç¯„å›²(~S)";
-        Text[ chinese_traditional ] = "æºè³‡æ–™å€åŸŸ(~S)";
-        Text[ arabic ] = "äØÇŞ ÈíÇäÇÊ ÇáãÕÏÑ";
-        Text[ greek ] = "Ğåñéï÷Ş ğñïİëåõóçò äåäïìİíùí";
-        Text[ korean ] = "ì›ë³¸ ë°ì´í„° ë²”ìœ„(~S)";
-        Text[ turkish ] = "~Kaynak veri sınırı";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "F~ont de l'àrea de dades";
-        Text[ thai ] = "à¸à¸·à¹‰à¸™à¸—à¸µà¹ˆà¹~à¸«à¸¥à¹ˆà¸‡à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
-        Text[ czech ] = "ZdrojovÃ¡ oblast dat";
-        Text[ hebrew ] = "Quelldaten~bereich";
-        Text[ hindi ] = "~à¤®à¥‚à¤² à¤¡à¤¼à¥‰à¤Ÿà¤¾ à¤µà¤¿à¤¸à¥à¤¤à¥€à¤°à¥à¤£";
-        Text[ slovak ] = "OblasÅ¥ ~zdrojovÃ½ch dÃ¡t";
-        Text[ hungarian ] = "~ForrÃ¡sadat-tartomÃ¡ny";
-        Text[ slovenian ] = "~Obseg izvornih podatkov";
+        Text [ de ] = "Quelldaten~bereich" ;
+        Text [ en-US ] = "~Source data range" ;
     };
     FixedText FT_DEST_AREA
     {
         Pos = MAP_APPFONT ( 6 , 124 ) ;
         Size = MAP_APPFONT ( 212 , 8 ) ;
-        Text = "Er~gebnis ausgeben ab" ;
-        Text [ ENGLISH ] = "Result  a~t" ;
-        Text [ norwegian ] = "Resultat ~ved" ;
-        Text [ italian ] = "Risultato a partire da" ;
-        Text [ portuguese_brazilian ] = "Copiar resul~tados para" ;
-        Text [ portuguese ] = "~Resultado a partir de" ;
-        Text [ finnish ] = "~Kopioi tulokset kohteeseen" ;
-        Text [ danish ] = "Kopier resultater ~til" ;
-        Text [ french ] = "Destination" ;
-        Text [ swedish ] = "Resul~tat vid" ;
-        Text [ dutch ] = "Re~sultaat weergeven vanaf" ;
-        Text [ spanish ] = "Re~sultado a partir de" ;
-        Text [ english_us ] = "Copy results ~to" ;
-        Text[ chinese_simplified ] = "å¤åˆ¶ç»“æœåˆ°(~T)";
-        Text[ russian ] = "Ïîìåòèòü ğåçóëüòàò â";
-        Text[ polish ] = "~Kopiuj wyniki do";
-        Text[ japanese ] = "çµæœè²¼ã‚Šä»˜ã‘å…ˆ(~T)";
-        Text[ chinese_traditional ] = "è¤‡è£½çµæœåˆ°(~T)";
-        Text[ arabic ] = "äÓÎ ÇáäÊÇÆÌ Åáì";
-        Text[ greek ] = "ÅìöÜíéóç áğïôåëåóìÜôùí áğü";
-        Text[ korean ] = "ê²°ê³¼ ë³µì‚¬ ìœ„ì¹˜(~T)";
-        Text[ turkish ] = "Sonuçlar~ın gösterileceği yer";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Co~pia els resultats a";
-        Text[ thai ] = "à¸„à¸±à¸”à¸¥à¸­à¸à¸œà¸¥à¸¥à¸±à¸à¸˜à¹Œà¹„~à¸›à¸¢à¸±à¸‡";
-        Text[ czech ] = "KopÃ­rovat vÃ½sledky do";
-        Text[ hebrew ] = "Er~gebnis ausgeben ab";
-        Text[ hindi ] = "~à¤®à¥‡à¤‚ à¤¨à¤¤à¥€à¤œà¥‹à¤‚ à¤•à¥€ à¤ªà¥à¤°à¤¤à¤¿à¤²à¤¿à¤ªà¤¿";
-        Text[ slovak ] = "VÃ½sledky kopÃ­~rovania do";
-        Text[ hungarian ] = "EredmÃ©nyek ~mÃ¡solÃ¡sa ide:";
-        Text[ slovenian ] = "Kopiraj rezul~tate v";
+        Text [ de ] = "Er~gebnis ausgeben ab" ;
+        Text [ en-US ] = "Copy results ~to" ;
+        Text [ x-comment ] = " ";
     };
     CheckBox BTN_BYROW
     {
         Pos = MAP_APPFONT ( 12 , 165 ) ;
         Size = MAP_APPFONT ( 94 , 10 ) ;
-        Text = "Ze~ilenbeschriftungen" ;
-        Text [ ENGLISH ] = "by ro~ws" ;
-        Text [ norwegian ] = "etter ra~der" ;
-        Text [ italian ] = "Dicitura righe" ;
-        Text [ portuguese_brazilian ] = "~Rótulos das linhas" ;
-        Text [ portuguese ] = "Legenda para ~linhas" ;
-        Text [ finnish ] = "~Riviselitteet" ;
-        Text [ danish ] = "~Rækkeetiketter" ;
-        Text [ french ] = "Étiquettes de ligne" ;
-        Text [ swedish ] = "Ra~detiketter" ;
-        Text [ dutch ] = "~Rijkoppen" ;
-        Text [ spanish ] = "Títulos ~de fila" ;
-        Text [ english_us ] = "~Row labels" ;
+        Text [ de ] = "Ze~ilenbeschriftungen" ;
+        Text [ en-US ] = "~Row labels" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "è¡Œæ ‡é¢˜(~R)";
-        Text[ russian ] = "Ïîäïèñè ñòğîê";
-        Text[ polish ] = "~Etykiety wierszy";
-        Text[ japanese ] = "è¡Œã®é …ç›®æ¬„(~R)";
-        Text[ chinese_traditional ] = "åˆ—æ¨™ç±¤(~R)";
-        Text[ arabic ] = "ÚäÇæíä ÇáÕİæİ";
-        Text[ greek ] = "ÅğéóŞìáíóç ãñáììŞò";
-        Text[ korean ] = "í–‰ ë ˆì´ë¸”(~R)";
-        Text[ turkish ] = "~Satır etikerleri";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Eti~quetes de fila";
-        Text[ thai ] = "à¸›à¹‰à¸²à¸¢à¸Šà¸·à¹ˆà¸­à¹~à¸–à¸§";
-        Text[ czech ] = "Popisky Å™Ã¡dkÅ¯";
-        Text[ hebrew ] = "Ze~ilenbeschriftungen";
-        Text[ hindi ] = "~à¤ªà¤‚à¤•à¥à¤¤à¤¿ à¤²à¥‡à¤¬à¤¿à¤²à¥‡à¤‚";
-        Text[ slovak ] = "Popisky ~riadkov";
-        Text[ hungarian ] = "~SorcÃ­mkÃ©k";
-        Text[ slovenian ] = "Oznake v~rstic";
+        Text [ x-comment ] = " ";
     };
     CheckBox BTN_BYCOL
     {
         Pos = MAP_APPFONT ( 12 , 179 ) ;
         Size = MAP_APPFONT ( 94 , 10 ) ;
-        Text = "S~paltenbeschriftungen" ;
-        Text [ ENGLISH ] = "by colum~ns" ;
-        Text [ norwegian ] = "etter kolonn~er" ;
-        Text [ italian ] = "~Intestazioni colonne" ;
-        Text [ portuguese_brazilian ] = "Rótulos das c~olunas" ;
-        Text [ portuguese ] = "~Cabeçalhos de colunas" ;
-        Text [ finnish ] = "~Sarakeotsikot" ;
-        Text [ danish ] = "~Kolonneetiketter" ;
-        Text [ french ] = "Étiquettes de colonne" ;
-        Text [ swedish ] = "Kolum~netiketter" ;
-        Text [ dutch ] = "~Kolomkoppen" ;
-        Text [ spanish ] = "~Títulos de columna" ;
-        Text [ english_us ] = "C~olumn labels" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "åˆ—æ ‡ç­¾";
-        Text[ russian ] = "Çàãîëîâêè ñòîëáöîâ";
-        Text[ polish ] = "~Nag³ówki kolumn";
-        Text[ japanese ] = "åˆ—ã®é …ç›®æ¬„(~O)";
-        Text[ chinese_traditional ] = "æ¬„æ¨™ç±¤(~O)";
-        Text[ arabic ] = "ÑÄæÓ ÇáÃÚãÏÉ";
-        Text[ greek ] = "Êåöáëßäåò óôçëşí";
-        Text[ korean ] = "ì—´ ë ˆì´ë¸”(~O)";
-        Text[ turkish ] = "Süt~un etiketleri";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Capçaleres de c~olumna";
-        Text[ thai ] = "à¸ªà¹ˆà¸§à¸™à¸«à¸±à¸§à¸„~à¸­à¸¥à¸±à¸¡à¸ à¹Œ";
-        Text[ czech ] = "ZÃ¡hlavÃ­ sloupcÅ¯";
-        Text[ hebrew ] = "S~paltenbeschriftungen";
-        Text[ hindi ] = "à¤¸à¥à¤¤à¤‚~à¤­ à¤¶à¥€à¤°à¥à¤·à¤•à¥‡à¤‚";
-        Text[ slovak ] = "ZÃ¡hlavie stÄºpc~ov";
-        Text[ hungarian ] = "~OszlopcÃ­mkÃ©k";
-        Text[ slovenian ] = "Oznake st~olpcev";
+        Text [ de ] = "S~paltenbeschriftungen" ;
+        Text [ en-US ] = "C~olumn labels" ;
     };
     FixedLine FL_CONSBY
     {
         Pos = MAP_APPFONT ( 6 , 154 ) ;
         Size = MAP_APPFONT ( 103 , 8 ) ;
-        Text = "Konsolidieren nach" ;
-        Text [ ENGLISH ] = "Consolidate by" ;
-        Text [ norwegian ] = "Konsolidere ved " ;
-        Text [ italian ] = "Consolida per" ;
-        Text [ portuguese_brazilian ] = "Consolidar por" ;
-        Text [ portuguese ] = "Consolidar por" ;
-        Text [ finnish ] = "Yhdistä" ;
-        Text [ danish ] = "Konsolider efter" ;
-        Text [ french ] = "Consolider par" ;
-        Text [ swedish ] = "Konsolidera efter" ;
-        Text [ dutch ] = "Consolideren naar" ;
-        Text [ spanish ] = "Consolidar según" ;
-        Text [ english_us ] = "Consolidate by" ;
-        Text[ chinese_simplified ] = "åˆå¹¶æŒ‰ç…§";
-        Text[ russian ] = "Îáúåäèíèòü ïî";
-        Text[ polish ] = "Konsoliduj wed³ug";
-        Text[ japanese ] = "çµ±åˆã®åŸºæº–";
-        Text[ chinese_traditional ] = "åˆä½µæŒ‰ç…§";
-        Text[ arabic ] = "ÏãÌ Åáì";
-        Text[ greek ] = "Åíïğïßçóç ùò ğñïò";
-        Text[ korean ] = "í†µí•© ìœ„ì¹˜";
-        Text[ turkish ] = "Yoğunlaştıran";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Consolida segons";
-        Text[ thai ] = "à¸£à¸§à¸šà¸£à¸§à¸¡à¹‚à¸”à¸¢";
-        Text[ czech ] = "Konsolidovat podle";
-        Text[ hebrew ] = "Konsolidieren nach";
-        Text[ hindi ] = "Consolidate by";
-        Text[ slovak ] = "KonsolidovaÅ¥";
-        Text[ hungarian ] = "Ã–sszesÃ­tve:";
-        Text[ slovenian ] = "Uskladi z";
+        Text [ de ] = "Konsolidieren nach" ;
+        Text [ en-US ] = "Consolidate by" ;
+        Text [ x-comment ] = " ";
     };
     FixedLine FL_SEP
     {
@@ -899,73 +243,18 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 115 , 154 ) ;
         Size = MAP_APPFONT ( 103 , 8 ) ;
-        Text = "Optionen" ;
-        Text [ ENGLISH ] = "Options" ;
-        Text [ english_us ] = "Options" ;
-        Text [ portuguese_brazilian ] = "Opções" ;
-        Text [ swedish ] = "Alternativ" ;
-        Text [ danish ] = "Indstillinger" ;
-        Text [ italian ] = "Opzioni" ;
-        Text [ spanish ] = "Opciones" ;
-        Text [ french ] = "Options" ;
-        Text [ dutch ] = "Opties" ;
-        Text [ portuguese ] = "Opções" ;
-        Text[ chinese_simplified ] = "é€‰é¡¹";
-        Text[ russian ] = "Ïàğàìåòğû";
-        Text[ polish ] = "Opcje";
-        Text[ japanese ] = "ã‚ªãƒ—ã‚·ãƒ§ãƒ³";
-        Text[ chinese_traditional ] = "é¸é …";
-        Text[ arabic ] = "ÇáÎíÇÑÇÊ";
-        Text[ greek ] = "Åğéëïãİò";
-        Text[ korean ] = "ì˜µì…˜";
-        Text[ turkish ] = "Seçenekler";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Opcions";
-        Text[ finnish ] = "Asetukset";
-        Text[ thai ] = "à¸•à¸±à¸§à¹€à¸¥à¸·à¸­à¸";
-        Text[ czech ] = "Volby";
-        Text[ hebrew ] = "â€®××¤×©×¨×•×™×•×ªâ€¬";
-        Text[ hindi ] = "à¤µà¤¿à¤•à¤²à¥à¤ª";
-        Text[ slovak ] = "Nastavenia";
-        Text[ hungarian ] = "BeÃ¡llÃ­tÃ¡sok";
-        Text[ slovenian ] = "MoÅ¾nosti";
+        Text [ de ] = "Optionen" ;
+        Text [ en-US ] = "Options" ;
+        Text [ x-comment ] = " ";
     };
     CheckBox BTN_REFS
     {
         Pos = MAP_APPFONT ( 121 , 165 ) ;
         Size = MAP_APPFONT ( 94 , 10 ) ;
-        Text = "Mit Quelldaten ~verbinden" ;
-        Text [ ENGLISH ] = "Re~ference source data" ;
-        Text [ norwegian ] = "Re~feranse kildedata" ;
-        Text [ italian ] = "Collega con dati sorgente" ;
-        Text [ portuguese_brazilian ] = "Vincu~lar aos dados de origem" ;
-        Text [ portuguese ] = "~Ligar aos dados da fonte" ;
-        Text [ finnish ] = "Linkki lähdetietoihin" ;
-        Text [ danish ] = "Opret kæde til ki~ldedata" ;
-        Text [ french ] = "~Lier aux données source" ;
-        Text [ swedish ] = "R~eferensdata" ;
-        Text [ dutch ] = "~Met brongegevens verbinden" ;
-        Text [ spanish ] = "~Vincular con datos fuente" ;
-        Text [ english_us ] = "~Link to source data" ;
+        Text [ de ] = "Mit Quelldaten ~verbinden" ;
+        Text [ en-US ] = "~Link to source data" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "å’Œæºæ•°æ®è¿æ¥(~L)";
-        Text[ russian ] = "Ñâÿçàòü ñ èñõîäíûìè äàííûìè";
-        Text[ polish ] = "~Po³¹cz z danymi Ÿród³owymi";
-        Text[ japanese ] = "ã‚½ãƒ¼ã‚¹ãƒ‡ãƒ¼ã‚¿ã¸ãƒªãƒ³ã‚¯ã™ã‚‹(~L)";
-        Text[ chinese_traditional ] = "å’Œæºè³‡æ–™é€£çµ(~L)";
-        Text[ arabic ] = "ÑÈØ ÈÈíÇäÇÊ ÇáãÕÏÑ";
-        Text[ greek ] = "Óıíäåóç ìå äåäïìİíá ğñïİëåõóçò";
-        Text[ korean ] = "ì›ë³¸ ë°ì´í„°ì— ì—°ê²°(~L)";
-        Text[ turkish ] = "~Kaynak verilerine bağla";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "En~llaç a la font de dades";
-        Text[ thai ] = "à¹€~à¸Šà¸·à¹ˆà¸­à¸¡à¹‚à¸¢à¸‡à¹„à¸›à¸¢à¸±à¸‡à¹à¸«à¸¥à¹ˆà¸‡à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
-        Text[ czech ] = "Odkaz na zdrojovÃ¡ data";
-        Text[ hebrew ] = "Mit Quelldaten ~verbinden";
-        Text[ hindi ] = "à¤®à¥‚à¤² à¤¡à¤¼à¥‰à¤Ÿà¤¾ à¤•à¥‹ ~à¤²à¤¿à¤‚à¤• à¤•à¤°à¥‹";
-        Text[ slovak ] = "Od~kaz na zdrojovÃ© dÃ¡ta";
-        Text[ hungarian ] = "~Ã–sszekÃ¶tÃ©s a forrÃ¡sadattal";
-        Text[ slovenian ] = "~PoveÅ¾i z izvornimi podatki";
+        Text [ x-comment ] = " ";
     };
     OKButton BTN_OK
     {
@@ -998,120 +287,20 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
     {
         Pos = MAP_APPFONT ( 224 , 114 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text = "~Löschen" ;
-        Text [ ENGLISH ] = "~Remove" ;
-        Text [ norwegian ] = "~Fjern" ;
-        Text [ italian ] = "~Elimina" ;
-        Text [ portuguese_brazilian ] = "~Excluir" ;
-        Text [ portuguese ] = "E~liminar" ;
-        Text [ finnish ] = "~Poista" ;
-        Text [ danish ] = "~Slet" ;
-        Text [ french ] = "Supprimer" ;
-        Text [ swedish ] = "R~adera" ;
-        Text [ dutch ] = "~Wissen" ;
-        Text [ spanish ] = "~Borrar" ;
-        Text [ english_us ] = "~Delete" ;
+        Text [ de ] = "~Löschen" ;
+        Text [ en-US ] = "~Delete" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "åˆ é™¤(~D)";
-        Text[ russian ] = "Óäàëèòü";
-        Text[ polish ] = "~Usuñ";
-        Text[ japanese ] = "å‰Šé™¤(~D)";
-        Text[ chinese_traditional ] = "åˆªé™¤(~D)";
-        Text[ arabic ] = "ÍĞİ";
-        Text[ greek ] = "ÄéáãñáöŞ";
-        Text[ korean ] = "ì‚­ì œ(~D)";
-        Text[ turkish ] = "~Sil";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Suprimeix";
-        Text[ thai ] = "~à¸¥à¸š";
-        Text[ czech ] = "Smazat";
-        Text[ hebrew ] = "â€®××—×™×§×”â€¬";
-        Text[ hindi ] = "~à¤®à¤¿à¤Ÿà¤¾à¤“";
-        Text[ slovak ] = "~ZmazaÅ¥";
-        Text[ hungarian ] = "~TÃ¶rlÃ©s";
-        Text[ slovenian ] = "~IzbriÅ¡i";
+        Text [ x-comment ] = " ";
     };
     PushButton BTN_ADD
     {
         Pos = MAP_APPFONT ( 224 , 96 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text = "Hinzu~fügen" ;
-        Text [ ENGLISH ] = "~Add" ;
-        Text [ norwegian ] = "Leg~g til" ;
-        Text [ italian ] = "A~ggiungi" ;
-        Text [ portuguese_brazilian ] = "~Adicionar" ;
-        Text [ portuguese ] = "~Adicionar" ;
-        Text [ finnish ] = "~Lisää" ;
-        Text [ danish ] = "~Tilføj" ;
-        Text [ french ] = "Ajouter" ;
-        Text [ swedish ] = "~Lägg till" ;
-        Text [ dutch ] = "Toe~voegen" ;
-        Text [ spanish ] = "~Añadir" ;
-        Text [ english_us ] = "~Add" ;
+        Text [ de ] = "Hinzu~fügen" ;
+        Text [ en-US ] = "~Add" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "æ–°å¢(~A)";
-        Text[ russian ] = "Äîáàâèòü";
-        Text[ polish ] = "~Dodaj";
-        Text[ japanese ] = "è¿½åŠ (~A)";
-        Text[ chinese_traditional ] = "æ–°å¢(~A)";
-        Text[ arabic ] = "ÅÖÇİÉ";
-        Text[ greek ] = "Ğñïó~èŞêç";
-        Text[ korean ] = "ì¶”ê°€(~A)";
-        Text[ turkish ] = "~Ekle";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Afegeix";
-        Text[ thai ] = "à¹€~à¸à¸´à¹ˆà¸¡";
-        Text[ czech ] = "PÅ™idat";
-        Text[ hebrew ] = "â€®×”×•×¡×¤×”â€¬";
-        Text[ hindi ] = "~à¤œà¥‹à¤¡à¤¼à¥‹";
-        Text[ slovak ] = "Prid~aÅ¥";
-        Text[ hungarian ] = "~HozzÃ¡adÃ¡s";
-        Text[ slovenian ] = "~Dodaj";
+        Text [ x-comment ] = " ";
     };
-    Text[ chinese_simplified ] = "åˆå¹¶è®¡ç®—";
-    Text[ russian ] = "Îáúåäèíèòü";
-    Text[ polish ] = "Konsoliduj";
-    Text[ japanese ] = "çµ±åˆ";
-    Text[ chinese_traditional ] = "åˆä½µè¨ˆç®—";
-    Text[ arabic ] = "ÏãÌ";
-    Text[ greek ] = "Åíïğïßçóç";
-    Text[ korean ] = "í†µí•©";
-    Text[ turkish ] = "Birleştir";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Consolida";
-    Text[ thai ] = "à¸£à¸§à¸šà¸£à¸§à¸¡";
-    Text[ czech ] = "Konsolidovat";
-    Text[ hebrew ] = "Konsolidieren";
-    Text[ hindi ] = "à¤à¤•à¤¤à¥à¤°à¤¿à¤¤ à¤•à¤°à¥‹";
-    Text[ slovak ] = "KonsolidovaÅ¥";
-    Text[ hungarian ] = "Ã–sszesÃ­tÃ©s";
-    Text[ slovenian ] = "Uskladi";
+    Text [ x-comment ] = " ";
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
