@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: dvo $ $Date: 2002-06-03 12:35:54 $
+ *  last change: $Author: ama $ $Date: 2002-09-02 12:24:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1215,6 +1215,9 @@ public:
     inline const SwDocStat  &GetDocStat() const { return *pDocStat; }
     void SetDocStat( const SwDocStat& rStat );
     void UpdateDocStat( SwDocStat& rStat );
+
+    sal_uInt16 GetPageCount() const;
+    const Size GetPageSize( sal_uInt16 nPageNum ) const;
 
         //PageDescriptor-Schnittstelle
     sal_uInt16 GetPageDescCnt() const { return aPageDescs.Count(); }

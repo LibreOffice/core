@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fme $ $Date: 2002-08-13 07:09:29 $
+ *  last change: $Author: ama $ $Date: 2002-09-02 12:24:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -640,6 +640,26 @@ BOOL SwDoc::DelGlobalMacro(USHORT nEvent)
 void SwDoc::SetDocStat( const SwDocStat& rStat )
 {
     *pDocStat = rStat;
+}
+
+
+sal_uInt16 SwDoc::GetPageCount() const
+{
+    return GetRootFrm() ? GetRootFrm()->GetPageNum() : 0;
+}
+
+const Size SwDoc::GetPageSize( sal_uInt16 nPageNum ) const
+{
+    Size aSize;
+    if( GetRootFrm() && nPageNum )
+    {
+        const SwPageFrm* pPage = static_cast<const SwPageFrm*>
+                                 (GetRootFrm()->Lower());
+        while( --nPageNum && pPage->GetNext() )
+            pPage = static_cast<const SwPageFrm*>( pPage->GetNext() );
+        aSize = pPage->Frm().SSize();
+    }
+    return aSize;
 }
 
 
