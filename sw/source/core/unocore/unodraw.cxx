@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodraw.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: os $ $Date: 2001-05-21 12:40:40 $
+ *  last change: $Author: os $ $Date: 2001-05-22 13:33:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -460,7 +460,7 @@ Sequence< Type > SwXDrawPage::getTypes(  ) throw(RuntimeException)
     Sequence< uno::Type > aSvxTypes = GetSvxPage()->getTypes();
 
     long nIndex = aPageTypes.getLength();
-    aPageTypes.realloc(aPageTypes.getLength() + aSvxTypes.getLength());
+    aPageTypes.realloc(aPageTypes.getLength() + aSvxTypes.getLength() + 1);
 
     uno::Type* pPageTypes = aPageTypes.getArray();
     const uno::Type* pSvxTypes = aSvxTypes.getConstArray();
@@ -469,6 +469,7 @@ Sequence< Type > SwXDrawPage::getTypes(  ) throw(RuntimeException)
     {
         pPageTypes[nIndex++] = pSvxTypes[nPos];
     }
+    pPageTypes[nIndex] = ::getCppuType((Reference< ::com::sun::star::form::XFormsSupplier>*)0);
     return aPageTypes;
 }
 /*-- 22.01.99 11:33:44---------------------------------------------------
@@ -737,22 +738,6 @@ void SwXDrawPage::ungroup(const uno::Reference< drawing::XShapeGroup > & xShapeG
             pDoc->EndUndo( UNDO_END );
         }
         pPage->RemovePageView();
-    }
-}
-/* -----------------------------21.05.01 13:47--------------------------------
-
- ---------------------------------------------------------------------------*/
-Reference< XNameContainer > SwXDrawPage::getForms(  ) throw (RuntimeException)
-{
-    vos::OGuard  aGuard(Application::GetSolarMutex());
-    if(!pDoc)
-        throw uno::RuntimeException();
-    if(!pDoc->GetDrawModel())
-        return Reference< XNameContainer > ();
-    else
-    {
-        ((SwXDrawPage*)this)->GetSvxPage();
-        return pDrawPage->getForms();
     }
 }
 /* -----------------05.05.98 17:05-------------------

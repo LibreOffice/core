@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodraw.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-05-21 12:38:06 $
+ *  last change: $Author: os $ $Date: 2001-05-22 13:34:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,11 +82,8 @@
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSTATE_HPP_
 #include <com/sun/star/beans/XPropertyState.hpp>
 #endif
-#ifndef _COM_SUN_STAR_FORM_XFORMSSUPPLIER_HPP_
-#include <com/sun/star/form/XFormsSupplier.hpp>
-#endif
-#ifndef _CPPUHELPER_IMPLBASE4_HXX_
-#include <cppuhelper/implbase4.hxx> // helper for implementations
+#ifndef _CPPUHELPER_IMPLBASE3_HXX_
+#include <cppuhelper/implbase3.hxx> // helper for implementations
 #endif
 #ifndef _CPPUHELPER_IMPLBASE5_HXX_
 #include <cppuhelper/implbase5.hxx> // helper for implementations
@@ -133,9 +130,8 @@ public:
 /* -----------------09.12.98 08:57-------------------
  *
  * --------------------------------------------------*/
-typedef cppu::WeakAggImplHelper4
+typedef cppu::WeakAggImplHelper3
 <
-    ::com::sun::star::form::XFormsSupplier,
     ::com::sun::star::drawing::XDrawPage,
     ::com::sun::star::lang::XServiceInfo,
     ::com::sun::star::drawing::XShapeGrouper
@@ -168,9 +164,6 @@ public:
     //XShapeGrouper
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapeGroup >  SAL_CALL group(const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes > & xShapes) throw( ::com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL ungroup(const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapeGroup > & aGroup) throw( ::com::sun::star::uno::RuntimeException );
-
-    //XFormsSupplier
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > SAL_CALL getForms(  ) throw (::com::sun::star::uno::RuntimeException);
 
     //XServiceInfo
     virtual rtl::OUString SAL_CALL getImplementationName(void) throw( ::com::sun::star::uno::RuntimeException );
