@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2001-09-27 10:51:34 $
+ *  last change: $Author: mav $ $Date: 2002-01-11 18:07:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,8 @@ namespace com { namespace sun { namespace star { namespace ucb {
     class XContent;
     class XContentIdentifier;
     class XDynamicResultSet;
+    class XAnyCompareFactory;
+    struct NumberedSortingInfo;
 } } } }
 
 namespace ucb
@@ -141,6 +143,14 @@ class Content
 {
     vos::ORef< Content_Impl > m_xImpl;
 
+protected:
+    ::com::sun::star::uno::Any createCursorAny( const ::com::sun::star::uno::Sequence<
+                                                rtl::OUString >& rPropertyNames,
+                                                  ResultSetInclude eMode );
+
+    ::com::sun::star::uno::Any createCursorAny( const ::com::sun::star::uno::Sequence<
+                                                sal_Int32 >& rPropertyHandles,
+                                                  ResultSetInclude eMode );
 public:
     /**
       * Constructor.
@@ -633,6 +643,43 @@ public:
         throw( ::com::sun::star::ucb::CommandAbortedException,
                ::com::sun::star::uno::RuntimeException,
                ::com::sun::star::uno::Exception );
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XDynamicResultSet >
+    createSortedDynamicCursor( const ::com::sun::star::uno::Sequence< rtl::OUString >& rPropertyNames,
+                               const ::com::sun::star::uno::Sequence< ::com::sun::star::ucb::NumberedSortingInfo >& rSortInfo,
+                               ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XAnyCompareFactory > rAnyCompareFactory,
+                               ResultSetInclude eMode = INCLUDE_FOLDERS_AND_DOCUMENTS )
+        throw( ::com::sun::star::ucb::CommandAbortedException,
+               ::com::sun::star::uno::RuntimeException,
+               ::com::sun::star::uno::Exception );
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XDynamicResultSet >
+    createSortedDynamicCursor( const ::com::sun::star::uno::Sequence< sal_Int32 >& rPropertyHandles,
+                               const ::com::sun::star::uno::Sequence< ::com::sun::star::ucb::NumberedSortingInfo >& rSortInfo,
+                               ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XAnyCompareFactory > rAnyCompareFactory,
+                               ResultSetInclude eMode = INCLUDE_FOLDERS_AND_DOCUMENTS )
+        throw( ::com::sun::star::ucb::CommandAbortedException,
+               ::com::sun::star::uno::RuntimeException,
+               ::com::sun::star::uno::Exception );
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >
+    createSortedCursor( const ::com::sun::star::uno::Sequence< rtl::OUString >& rPropertyNames,
+                        const ::com::sun::star::uno::Sequence< ::com::sun::star::ucb::NumberedSortingInfo >& rSortInfo,
+                        ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XAnyCompareFactory > rAnyCompareFactory,
+                        ResultSetInclude eMode = INCLUDE_FOLDERS_AND_DOCUMENTS )
+        throw( ::com::sun::star::ucb::CommandAbortedException,
+               ::com::sun::star::uno::RuntimeException,
+               ::com::sun::star::uno::Exception );
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >
+    createSortedCursor( const ::com::sun::star::uno::Sequence< sal_Int32 >& rPropertyHandles,
+                               const ::com::sun::star::uno::Sequence< ::com::sun::star::ucb::NumberedSortingInfo >& rSortInfo,
+                               ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XAnyCompareFactory > rAnyCompareFactory,
+                               ResultSetInclude eMode = INCLUDE_FOLDERS_AND_DOCUMENTS )
+        throw( ::com::sun::star::ucb::CommandAbortedException,
+               ::com::sun::star::uno::RuntimeException,
+               ::com::sun::star::uno::Exception );
+
     /**
       * This methods gives read access to the content stream of a content (i.e
       * the content of a file located at the local file system).

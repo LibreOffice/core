@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-27 11:07:18 $
+ *  last change: $Author: mav $ $Date: 2002-01-11 18:06:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,6 +133,9 @@
 #ifndef _COM_SUN_STAR_UCB_XDYNAMICRESULTSET_HPP_
 #include <com/sun/star/ucb/XDynamicResultSet.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UCB_XSORTEDDYNAMICRESULTSETFACTORY_HPP_
+#include <com/sun/star/ucb/XSortedDynamicResultSetFactory.hpp>
+#endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSETINFO_HPP_
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #endif
@@ -251,6 +254,7 @@ public:
     Reference< XContent >          getContent() const { return m_xContent; }
     Reference< XCommandProcessor > getCommandProcessor();
     sal_Int32 getCommandId();
+    Reference< XMultiServiceFactory > getServiceManager() { return m_xSMgr; }
 
     Any  executeCommand( const Command& rCommand );
     void abortCommand();
@@ -859,9 +863,8 @@ void Content::abortCommand()
 }
 
 //=========================================================================
-Reference< XResultSet > Content::createCursor(
-                            const Sequence< rtl::OUString >& rPropertyNames,
-                            ResultSetInclude eMode )
+Any Content::createCursorAny( const Sequence< rtl::OUString >& rPropertyNames,
+                              ResultSetInclude eMode )
     throw( CommandAbortedException, RuntimeException, Exception )
 {
     sal_Int32 nCount = rPropertyNames.getLength();
@@ -889,28 +892,70 @@ Reference< XResultSet > Content::createCursor(
     aCommand.Handle   = -1; // n/a
     aCommand.Argument <<= aArg;
 
-    Any aResult = m_xImpl->executeCommand( aCommand );
+    return m_xImpl->executeCommand( aCommand );
+}
+
+//=========================================================================
+Any Content::createCursorAny( const Sequence< sal_Int32 >& rPropertyHandles,
+                              ResultSetInclude eMode )
+    throw( CommandAbortedException, RuntimeException, Exception )
+{
+    sal_Int32 nCount = rPropertyHandles.getLength();
+    Sequence< Property > aProps( nCount );
+    Property* pProps = aProps.getArray();
+    const sal_Int32* pHandles = rPropertyHandles.getConstArray();
+    for ( sal_Int32 n = 0; n < nCount; ++n )
+    {
+        Property& rProp = pProps[ n ];
+        rProp.Name   = rtl::OUString(); // n/a
+        rProp.Handle = pHandles[ n ];
+    }
+
+    OpenCommandArgument2 aArg;
+    aArg.Mode       = ( eMode == INCLUDE_FOLDERS_ONLY )
+                        ? OpenMode::FOLDERS
+                        : ( eMode == INCLUDE_DOCUMENTS_ONLY )
+                            ? OpenMode::DOCUMENTS : OpenMode::ALL;
+    aArg.Priority   = 0; // unused
+    aArg.Sink       = Reference< XInterface >(); // unused
+    aArg.Properties = aProps;
+
+    Command aCommand;
+    aCommand.Name     = rtl::OUString::createFromAscii( "open" );
+    aCommand.Handle   = -1; // n/a
+    aCommand.Argument <<= aArg;
+
+    return m_xImpl->executeCommand( aCommand );
+}
+
+//=========================================================================
+Reference< XResultSet > Content::createCursor(
+                            const Sequence< rtl::OUString >& rPropertyNames,
+                            ResultSetInclude eMode )
+    throw( CommandAbortedException, RuntimeException, Exception )
+{
+    Any aCursorAny = createCursorAny( rPropertyNames, eMode );
 
     Reference< XDynamicResultSet > xDynSet;
-    Reference< XResultSet > xStaticSet;
+    Reference< XResultSet > aResult;
 
-    aResult >>= xDynSet;
+    aCursorAny >>= xDynSet;
     if ( xDynSet.is() )
-        xStaticSet = xDynSet->getStaticResultSet();
+        aResult = xDynSet->getStaticResultSet();
 
-    OSL_ENSURE( xStaticSet.is(), "Content::createCursor - no cursor!" );
+    OSL_ENSURE( aResult.is(), "Content::createCursor - no cursor!" );
 
-     if ( !xStaticSet.is() )
+     if ( !aResult.is() )
     {
         // Former, the open command directly returned a XResultSet.
-        aResult >>= xStaticSet;
+        aCursorAny >>= aResult;
 
-        OSL_ENSURE( !xStaticSet.is(),
+        OSL_ENSURE( !aResult.is(),
                     "Content::createCursor - open-Command must "
                     "return a Reference< XDynnamicResultSet >!" );
     }
 
-    return xStaticSet;
+    return aResult;
 }
 
 //=========================================================================
@@ -919,53 +964,28 @@ Reference< XResultSet > Content::createCursor(
                             ResultSetInclude eMode )
     throw( CommandAbortedException, RuntimeException, Exception )
 {
-    sal_Int32 nCount = rPropertyHandles.getLength();
-    Sequence< Property > aProps( nCount );
-    Property* pProps = aProps.getArray();
-    const sal_Int32* pHandles = rPropertyHandles.getConstArray();
-    for ( sal_Int32 n = 0; n < nCount; ++n )
-    {
-        Property& rProp = pProps[ n ];
-        rProp.Name   = rtl::OUString(); // n/a
-        rProp.Handle = pHandles[ n ];
-    }
-
-    OpenCommandArgument2 aArg;
-    aArg.Mode       = ( eMode == INCLUDE_FOLDERS_ONLY )
-                        ? OpenMode::FOLDERS
-                        : ( eMode == INCLUDE_DOCUMENTS_ONLY )
-                            ? OpenMode::DOCUMENTS : OpenMode::ALL;
-    aArg.Priority   = 0; // unused
-    aArg.Sink       = Reference< XInterface >(); // unused
-    aArg.Properties = aProps;
-
-    Command aCommand;
-    aCommand.Name     = rtl::OUString::createFromAscii( "open" );
-    aCommand.Handle   = -1; // n/a
-    aCommand.Argument <<= aArg;
-
-    Any aResult = m_xImpl->executeCommand( aCommand );
+    Any aCursorAny = createCursorAny( rPropertyHandles, eMode );
 
     Reference< XDynamicResultSet > xDynSet;
-    Reference< XResultSet > xStaticSet;
+    Reference< XResultSet > aResult;
 
-    aResult >>= xDynSet;
+    aCursorAny >>= xDynSet;
     if ( xDynSet.is() )
-        xStaticSet = xDynSet->getStaticResultSet();
+        aResult = xDynSet->getStaticResultSet();
 
-    OSL_ENSURE( xStaticSet.is(), "Content::createCursor - no cursor!" );
+    OSL_ENSURE( aResult.is(), "Content::createCursor - no cursor!" );
 
-    if ( !xStaticSet.is() )
+     if ( !aResult.is() )
     {
         // Former, the open command directly returned a XResultSet.
-        aResult >>= xStaticSet;
+        aCursorAny >>= aResult;
 
-        OSL_ENSURE( !xStaticSet.is(),
+        OSL_ENSURE( !aResult.is(),
                     "Content::createCursor - open-Command must "
                     "return a Reference< XDynnamicResultSet >!" );
     }
 
-    return xStaticSet;
+    return aResult;
 }
 
 //=========================================================================
@@ -974,37 +994,12 @@ Reference< XDynamicResultSet > Content::createDynamicCursor(
                             ResultSetInclude eMode )
     throw( CommandAbortedException, RuntimeException, Exception )
 {
-    sal_Int32 nCount = rPropertyNames.getLength();
-    Sequence< Property > aProps( nCount );
-    Property* pProps = aProps.getArray();
-    const rtl::OUString* pNames = rPropertyNames.getConstArray();
-    for ( sal_Int32 n = 0; n < nCount; ++n )
-    {
-        Property& rProp = pProps[ n ];
-        rProp.Name   = pNames[ n ];
-        rProp.Handle = -1; // n/a
-    }
+    Reference< XDynamicResultSet > aResult;
+    createCursorAny( rPropertyNames, eMode ) >>= aResult;
 
-    OpenCommandArgument2 aArg;
-    aArg.Mode       = ( eMode == INCLUDE_FOLDERS_ONLY )
-                        ? OpenMode::FOLDERS
-                        : ( eMode == INCLUDE_DOCUMENTS_ONLY )
-                            ? OpenMode::DOCUMENTS : OpenMode::ALL;
-    aArg.Priority   = 0; // unused
-    aArg.Sink       = Reference< XInterface >(); // unused
-    aArg.Properties = aProps;
+    OSL_ENSURE( aResult.is(), "Content::createDynamicCursor - no cursor!" );
 
-    Command aCommand;
-    aCommand.Name     = rtl::OUString::createFromAscii( "open" );
-    aCommand.Handle   = -1; // n/a
-    aCommand.Argument <<= aArg;
-
-    Reference< XDynamicResultSet > xSet;
-    m_xImpl->executeCommand( aCommand ) >>= xSet;
-
-    OSL_ENSURE( xSet.is(), "Content::createDynamicCursor - no cursor!" );
-
-    return xSet;
+    return aResult;
 }
 
 //=========================================================================
@@ -1013,39 +1008,191 @@ Reference< XDynamicResultSet > Content::createDynamicCursor(
                             ResultSetInclude eMode )
     throw( CommandAbortedException, RuntimeException, Exception )
 {
-    sal_Int32 nCount = rPropertyHandles.getLength();
-    Sequence< Property > aProps( nCount );
-    Property* pProps = aProps.getArray();
-    const sal_Int32* pHandles = rPropertyHandles.getConstArray();
-    for ( sal_Int32 n = 0; n < nCount; ++n )
-    {
-        Property& rProp = pProps[ n ];
-        rProp.Name   = rtl::OUString(); // n/a
-        rProp.Handle = pHandles[ n ];
-    }
+    Reference< XDynamicResultSet > aResult;
+    createCursorAny( rPropertyHandles, eMode ) >>= aResult;
 
-    OpenCommandArgument2 aArg;
-    aArg.Mode       = ( eMode == INCLUDE_FOLDERS_ONLY )
-                        ? OpenMode::FOLDERS
-                        : ( eMode == INCLUDE_DOCUMENTS_ONLY )
-                            ? OpenMode::DOCUMENTS : OpenMode::ALL;
-    aArg.Priority   = 0; // unused
-    aArg.Sink       = Reference< XInterface >(); // unused
-    aArg.Properties = aProps;
+    OSL_ENSURE( aResult.is(), "Content::createDynamicCursor - no cursor!" );
 
-    Command aCommand;
-    aCommand.Name     = rtl::OUString::createFromAscii( "open" );
-    aCommand.Handle   = -1; // n/a
-    aCommand.Argument <<= aArg;
-
-    Reference< XDynamicResultSet > xSet;
-    m_xImpl->executeCommand( aCommand ) >>= xSet;
-
-    OSL_ENSURE( xSet.is(), "Content::createDynamicCursor - no cursor!" );
-
-    return xSet;
+    return aResult;
 }
 
+//=========================================================================
+Reference< XDynamicResultSet > Content::createSortedDynamicCursor(
+                            const Sequence< rtl::OUString >& rPropertyNames,
+                            const ::com::sun::star::uno::Sequence< ::com::sun::star::ucb::NumberedSortingInfo >& rSortInfo,
+                            Reference< XAnyCompareFactory > rAnyCompareFactory,
+                            ResultSetInclude eMode )
+    throw( CommandAbortedException, RuntimeException, Exception )
+{
+    Reference< XDynamicResultSet > aResult;
+    Reference< XDynamicResultSet > aOrigCursor = createDynamicCursor( rPropertyNames, eMode );
+
+    if( aOrigCursor.is() )
+    {
+        Reference< XMultiServiceFactory > aServiceManager = m_xImpl->getServiceManager();
+
+        if( aServiceManager.is() )
+        {
+            Reference< XSortedDynamicResultSetFactory > aSortFactory( aServiceManager->createInstance(
+                                rtl::OUString::createFromAscii( "com.sun.star.ucb.SortedDynamicResultSetFactory" )),
+                                UNO_QUERY );
+
+            aResult = aSortFactory->createSortedDynamicResultSet( aOrigCursor,
+                                                              rSortInfo,
+                                                              rAnyCompareFactory );
+        }
+
+        OSL_ENSURE( aResult.is(), "Content::createSortedDynamicCursor - no sorted cursor!\n" );
+
+        if( !aResult.is() )
+            aResult = aOrigCursor;
+    }
+
+    return aResult;
+}
+
+//=========================================================================
+Reference< XDynamicResultSet > Content::createSortedDynamicCursor(
+                            const Sequence< sal_Int32 >& rPropertyHandles,
+                            const ::com::sun::star::uno::Sequence< ::com::sun::star::ucb::NumberedSortingInfo >& rSortInfo,
+                            Reference< XAnyCompareFactory > rAnyCompareFactory,
+                            ResultSetInclude eMode )
+    throw( CommandAbortedException, RuntimeException, Exception )
+{
+    Reference< XDynamicResultSet > aResult;
+    Reference< XDynamicResultSet > aOrigCursor = createDynamicCursor( rPropertyHandles, eMode );
+
+    if( aOrigCursor.is() )
+    {
+        Reference< XMultiServiceFactory > aServiceManager = m_xImpl->getServiceManager();
+
+        if( aServiceManager.is() )
+        {
+            Reference< XSortedDynamicResultSetFactory > aSortFactory( aServiceManager->createInstance(
+                                rtl::OUString::createFromAscii( "com.sun.star.ucb.SortedDynamicResultSetFactory" )),
+                                UNO_QUERY );
+
+            aResult = aSortFactory->createSortedDynamicResultSet( aOrigCursor,
+                                                              rSortInfo,
+                                                              rAnyCompareFactory );
+        }
+
+        OSL_ENSURE( aResult.is(), "Content::createSortedDynamicCursor - no sorted cursor!\n" );
+
+        if( !aResult.is() )
+            aResult = aOrigCursor;
+    }
+
+    return aResult;
+}
+
+//=========================================================================
+Reference< XResultSet > Content::createSortedCursor(
+                            const Sequence< rtl::OUString >& rPropertyNames,
+                            const ::com::sun::star::uno::Sequence< ::com::sun::star::ucb::NumberedSortingInfo >& rSortInfo,
+                            Reference< XAnyCompareFactory > rAnyCompareFactory,
+                            ResultSetInclude eMode )
+    throw( CommandAbortedException, RuntimeException, Exception )
+{
+    Reference< XResultSet > aResult;
+    Reference< XDynamicResultSet > aDynSet;
+
+    Any aCursorAny = createCursorAny( rPropertyNames, eMode );
+
+    aCursorAny >>= aDynSet;
+
+    if( aDynSet.is() )
+    {
+        Reference< XDynamicResultSet > aDynResult;
+        Reference< XMultiServiceFactory > aServiceManager = m_xImpl->getServiceManager();
+
+        if( aServiceManager.is() )
+        {
+            Reference< XSortedDynamicResultSetFactory > aSortFactory( aServiceManager->createInstance(
+                                rtl::OUString::createFromAscii( "com.sun.star.ucb.SortedDynamicResultSetFactory" )),
+                                UNO_QUERY );
+
+            aDynResult = aSortFactory->createSortedDynamicResultSet( aDynSet,
+                                                              rSortInfo,
+                                                              rAnyCompareFactory );
+        }
+
+        OSL_ENSURE( aDynResult.is(), "Content::createSortedCursor - no sorted cursor!\n" );
+
+        if( aDynResult.is() )
+            aResult = aDynResult->getStaticResultSet();
+        else
+            aResult = aDynSet->getStaticResultSet();
+    }
+
+    OSL_ENSURE( aResult.is(), "Content::createSortedCursor - no cursor!" );
+
+    if ( !aResult.is() )
+    {
+        // Former, the open command directly returned a XResultSet.
+        aCursorAny >>= aResult;
+
+        OSL_ENSURE( !aResult.is(),
+                    "Content::createCursor - open-Command must "
+                    "return a Reference< XDynnamicResultSet >!" );
+    }
+
+    return aResult;
+}
+
+//=========================================================================
+Reference< XResultSet > Content::createSortedCursor(
+                            const Sequence< sal_Int32 >& rPropertyHandles,
+                            const ::com::sun::star::uno::Sequence< ::com::sun::star::ucb::NumberedSortingInfo >& rSortInfo,
+                            Reference< XAnyCompareFactory > rAnyCompareFactory,
+                            ResultSetInclude eMode )
+    throw( CommandAbortedException, RuntimeException, Exception )
+{
+    Reference< XResultSet > aResult;
+    Reference< XDynamicResultSet > aDynSet;
+
+    Any aCursorAny = createCursorAny( rPropertyHandles, eMode );
+
+    aCursorAny >>= aDynSet;
+
+    if( aDynSet.is() )
+    {
+        Reference< XDynamicResultSet > aDynResult;
+        Reference< XMultiServiceFactory > aServiceManager = m_xImpl->getServiceManager();
+
+        if( aServiceManager.is() )
+        {
+            Reference< XSortedDynamicResultSetFactory > aSortFactory( aServiceManager->createInstance(
+                                rtl::OUString::createFromAscii( "com.sun.star.ucb.SortedDynamicResultSetFactory" )),
+                                UNO_QUERY );
+
+            aDynResult = aSortFactory->createSortedDynamicResultSet( aDynSet,
+                                                              rSortInfo,
+                                                              rAnyCompareFactory );
+        }
+
+        OSL_ENSURE( aDynResult.is(), "Content::createSortedCursor - no sorted cursor!\n" );
+
+        if( aDynResult.is() )
+            aResult = aDynResult->getStaticResultSet();
+        else
+            aResult = aDynSet->getStaticResultSet();
+    }
+
+    OSL_ENSURE( aResult.is(), "Content::createSortedCursor - no cursor!" );
+
+    if ( !aResult.is() )
+    {
+        // Former, the open command directly returned a XResultSet.
+        aCursorAny >>= aResult;
+
+        OSL_ENSURE( !aResult.is(),
+                    "Content::createCursor - open-Command must "
+                    "return a Reference< XDynnamicResultSet >!" );
+    }
+
+    return aResult;
+}
 //=========================================================================
 Reference< XInputStream > Content::openStream()
     throw( CommandAbortedException, RuntimeException, Exception )
