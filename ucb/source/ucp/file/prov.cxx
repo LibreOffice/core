@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prov.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hro $ $Date: 2001-02-23 12:48:33 $
+ *  last change: $Author: kso $ $Date: 2001-03-13 08:13:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -449,7 +449,7 @@ FileProvider::supportsService(
                   const rtl::OUString& ServiceName )
   throw( uno::RuntimeException )
 {
-  return ServiceName == rtl::OUString::createFromAscii( "com.sun.star.ucb.FileProvider" );
+  return ServiceName == rtl::OUString::createFromAscii( "com.sun.star.ucb.FileContentProvider" );
 }
 
 
