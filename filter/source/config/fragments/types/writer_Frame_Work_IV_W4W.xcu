@@ -1,0 +1,12 @@
+    <node oor:name="writer_Frame_Work_IV_W4W" oor:op="replace">
+        <prop oor:name="DetectService"><value>com.sun.star.text.W4WFormatDetector</value></prop>
+        <prop oor:name="URLPattern"/>
+        <prop oor:name="Extensions"><value>fw4</value></prop>
+        <prop oor:name="MediaType"/>
+        <prop oor:name="Preferred"><value>false</value></prop>
+        <prop oor:name="PreferredFilter"><value>Frame Work IV  (W4W)</value></prop>
+        <prop oor:name="UIName">
+            <value xml:lang="en-US">Frame Work IV</value>
+        </prop>
+        <prop oor:name="ClipboardFormat"/>
+    </node>
