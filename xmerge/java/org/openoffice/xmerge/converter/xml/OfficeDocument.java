@@ -52,7 +52,6 @@
  *
  *
  ************************************************************************/
-
 package org.openoffice.xmerge.converter.xml;
 
 import java.io.InputStream;
@@ -370,7 +369,7 @@ public abstract class OfficeDocument
                     // document entries
                     continue;
                 }
-                else if (!type.equals("")) {
+                else { // FIX (HJ): allows empty MIME type
                     embeddedObjects.put(path, new EmbeddedBinaryObject(path, type, zip));
                 }
             }
@@ -575,11 +574,20 @@ public abstract class OfficeDocument
                    contentDoc = createDOM(TAG_OFFICE_DOCUMENT_CONTENT);
                    rootElement=contentDoc.getDocumentElement();
                    rootNode = (Node)rootElement;
+
+                   // FIX (HJ): Include office:font-decls in content DOM
+                   nodeList= newDoc.getElementsByTagName(TAG_OFFICE_FONT_DECLS);
+                   if (nodeList.getLength()>0){
+                       tmpNode = contentDoc.importNode(nodeList.item(0),true);
+                       rootNode.appendChild(tmpNode);
+                   }
+
                    nodeList= newDoc.getElementsByTagName(TAG_OFFICE_AUTOMATIC_STYLES);
                    if (nodeList.getLength()>0){
                   tmpNode = contentDoc.importNode(nodeList.item(0),true);
                   rootNode.appendChild(tmpNode);
                    }
+
                     nodeList= newDoc.getElementsByTagName(TAG_OFFICE_BODY);
                    if (nodeList.getLength()>0){
                   tmpNode = contentDoc.importNode(nodeList.item(0),true);
@@ -590,10 +598,32 @@ public abstract class OfficeDocument
                    styleDoc = createDOM(TAG_OFFICE_DOCUMENT_STYLES);
                    rootElement=styleDoc.getDocumentElement();
                    rootNode = (Node)rootElement;
+
+                   // FIX (HJ): Include office:font-decls in styles DOM
+                   nodeList= newDoc.getElementsByTagName(TAG_OFFICE_FONT_DECLS);
+                   if (nodeList.getLength()>0){
+                      tmpNode = styleDoc.importNode(nodeList.item(0),true);
+                      rootNode.appendChild(tmpNode);
+                   }
+
                    nodeList= newDoc.getElementsByTagName(TAG_OFFICE_STYLES);
                    if (nodeList.getLength()>0){
                   tmpNode = styleDoc.importNode(nodeList.item(0),true);
                   rootNode.appendChild(tmpNode);
+                   }
+
+                   // FIX (HJ): Include office:automatic-styles in styles DOM
+                   nodeList= newDoc.getElementsByTagName(TAG_OFFICE_AUTOMATIC_STYLES);
+                   if (nodeList.getLength()>0){
+                      tmpNode = styleDoc.importNode(nodeList.item(0),true);
+                      rootNode.appendChild(tmpNode);
+                   }
+
+                   // FIX (HJ): Include office:master-styles in styles DOM
+                   nodeList= newDoc.getElementsByTagName(TAG_OFFICE_MASTER_STYLES);
+                   if (nodeList.getLength()>0){
+                       tmpNode = styleDoc.importNode(nodeList.item(0),true);
+                       rootNode.appendChild(tmpNode);
                    }
 
            /*Settings*/
@@ -652,6 +682,14 @@ public abstract class OfficeDocument
 
         return doc;
     }
+
+
+    /**
+     * Method to return the MIME type of the document.
+     *
+     * @return  String  The document's MIME type.
+     */
+    protected abstract String getDocumentMimeType();
 
 
     /**
@@ -771,7 +809,11 @@ public abstract class OfficeDocument
         rootElement.setAttribute("xmlns:form","http://openoffice.org/2000/form" );
         rootElement.setAttribute("xmlns:script","http://openoffice.org/2000/script" );
         rootElement.setAttribute("xmlns:config","http://openoffice.org/2001/config" );
-        //rootElement.setAttribute("office:class","spreadsheet" );
+        // #i41033# OASIS format needs the "office:class" set.
+        if(getDocumentMimeType() == SXC_MIME_TYPE)
+            rootElement.setAttribute("office:class","spreadsheet" );
+        else if(getDocumentMimeType() == SXW_MIME_TYPE)
+            rootElement.setAttribute("office:class","text" );
         rootElement.setAttribute("office:version","1.0");
 
 
@@ -1093,6 +1135,8 @@ public abstract class OfficeDocument
      *  current StarOffice 6.0 generated XML files.  Since this
      *  hack really needs to go away, I don't want to spend
      *  too much time in making it a perfect hack.</p>
+     *  FIX (HJ): Removed requirement for DOCTYPE to be in one line
+     *  FIX (HJ): No longer removes newlines
      *
      *  @param  is  <code>InputStream</code> to be filtered.
      *
@@ -1120,15 +1164,32 @@ public abstract class OfficeDocument
                 if (eIndex > -1) {
 
                     buffer.append(str.substring(eIndex + 1, str.length()));
+                    // FIX (HJ): Preserve the newline
+                    buffer.append("\n");
 
                 } else {
 
-                    throw new IOException("Invalid XML");
+                    // FIX (HJ): More than one line. Search for '>' in following lines
+                    boolean bOK = false;
+                    while ((str = br.readLine())!=null) {
+                        eIndex = str.indexOf('>');
+                        if (eIndex>-1) {
+                            buffer.append(str.substring(eIndex+1));
+                            // FIX (HJ): Preserve the newline
+                            buffer.append("\n");
+                            bOK = true;
+                            break;
+                        }
+                    }
+
+                    if (!bOK) { throw new IOException("Invalid XML"); }
                 }
 
             } else {
 
                 buffer.append(str);
+                // FIX (HJ): Preserve the newline
+                buffer.append("\n");
             }
         }
 
@@ -1165,14 +1226,6 @@ public abstract class OfficeDocument
         StringReader r = new StringReader(sBuf.toString());
         return r;
     }
-
-
-    /**
-     * Method to return the MIME type of the document.
-     *
-     * @return  String  The document's MIME type.
-     */
-    protected abstract String getDocumentMimeType();
 
 
     /**
