@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fupoor.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: aw $ $Date: 2002-03-04 17:47:19 $
+ *  last change: $Author: aw $ $Date: 2002-03-12 18:12:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -648,6 +648,9 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
                         if(0 != nX || 0 != nY)
                         {
                             pView->MoveAllMarked(Size(nX, nY));
+
+                            // #97016# II
+                            pView->MakeVisible(pView->GetAllMarkedRect(), *pWindow);
                         }
                     }
                     else
