@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgmerge.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: nf $ $Date: 2001-05-30 12:10:22 $
+ *  last change: $Author: nf $ $Date: 2001-05-31 09:44:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,7 @@ extern char *GetOutputFile( int argc, char* argv[])
     bEnableExport = FALSE;
     bMergeMode = FALSE;
     bErrorLog = TRUE;
-    bUTF8 = FALSE;
+    bUTF8 = TRUE;
     sPrj = "";
     sPrjRoot = "";
     sInputFileName = "";
@@ -141,6 +141,10 @@ extern char *GetOutputFile( int argc, char* argv[])
         else if ( ByteString( argv[ i ] ).ToUpperAscii() == "-UTF8" ) {
             nState = STATE_UTF8;
             bUTF8 = TRUE;
+        }
+        else if ( ByteString( argv[ i ] ).ToUpperAscii() == "-NOUTF8" ) {
+            nState = STATE_UTF8;
+            bUTF8 = FALSE;
         }
         else if ( ByteString( argv[ i ] ).ToUpperAscii() == "-L" ) {
             nState = STATE_LANGUAGES;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lngex.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nf $ $Date: 2001-05-28 08:25:29 $
+ *  last change: $Author: nf $ $Date: 2001-05-31 09:44:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ BOOL ParseCommandLine( int argc, char* argv[])
     bEnableExport = FALSE;
     bMergeMode = FALSE;
     bErrorLog = TRUE;
-    bUTF8 = FALSE;
+    bUTF8 = TRUE;
     sPrj = "";
     sPrjRoot = "";
     Export::sLanguages = "";
@@ -126,6 +126,10 @@ BOOL ParseCommandLine( int argc, char* argv[])
         else if ( ByteString( argv[ i ]).ToUpperAscii() == "-UTF8" ) {
             nState = STATE_UTF8;
             bUTF8 = TRUE;
+        }
+        else if ( ByteString( argv[ i ]).ToUpperAscii() == "-NOUTF8" ) {
+            nState = STATE_UTF8;
+            bUTF8 = FALSE;
         }
         else if (( ByteString( argv[ i ]) == "-l" ) || ( argv[ i ] == "-L" )) {
             nState = STATE_LANGUAGES;
@@ -182,7 +186,7 @@ BOOL ParseCommandLine( int argc, char* argv[])
 void Help()
 /*****************************************************************************/
 {
-    fprintf( stdout, "Syntax:LNGEX[-p Prj][-r PrjRoot]-i FileIn -o FileOut[-m DataBase][-e][-b][-u][-UTF8][-L l1,l2,...]\n" );
+    fprintf( stdout, "Syntax:LNGEX[-p Prj][-r PrjRoot]-i FileIn -o FileOut[-m DataBase][-e][-b][-u][-NOUTF8][-L l1,l2,...]\n" );
     fprintf( stdout, " Prj:      Project\n" );
     fprintf( stdout, " PrjRoot:  Path to project root (..\\.. etc.)\n" );
     fprintf( stdout, " FileIn:   Source file (*.lng)\n" );
@@ -191,7 +195,7 @@ void Help()
     fprintf( stdout, " -e: no function\n" );
     fprintf( stdout, " -b: no function\n" );
     fprintf( stdout, " -u: no function\n" );
-    fprintf( stdout, " -UTF8: enable UTF8 as language independent encoding\n" );
+    fprintf( stdout, " -NOUTF8: disable UTF8 as language independent encoding\n" );
     fprintf( stdout, " -L: Restrict the handled languages. l1,l2,... are elements of (01,33,46,49...)\n" );
     fprintf( stdout, "     A fallback language can be defined like this: l1=f1.\n" );
     fprintf( stdout, "     f1, f2,... are also elements of (01,33,46,49...)\n" );
