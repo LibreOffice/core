@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: fs $ $Date: 2002-07-12 08:51:03 $
+ *  last change: $Author: tl $ $Date: 2002-07-15 14:07:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -807,7 +807,7 @@
                 <!-- UIHints: Tools  AutoCorrect/AutoFormat  Options - Replace dashes -->
                 <value>true</value>
                 <info>
-                    <desc xml:lang="en-US">Specifies, if dashes should be replaced automatically</desc>
+                    <desc xml:lang="en-US">Specifies, if minus signs should be replaced by dashes automatically</desc>
                     <label xml:lang="en-US">Replace dashes</label>
                 </info>
             </prop>
