@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.hrc,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 14:52:49 $
+ *  last change: $Author: vg $ $Date: 2005-02-24 15:05:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,6 @@
 #ifndef _SD_CFGID_HXX
 #include "cfgids.hxx"
 #endif
-
 #define STR_DEFAULTVIEW         (RID_APP_START)
 #define STR_SPECIALVIEW         (RID_APP_START+1)
 #define STR_DIAVIEW             (RID_APP_START+2)
@@ -263,9 +262,6 @@
 
 #define STR_FORMAT_HTML             (RID_APP_START+166)
 
-#define STR_IMPRESS_DOCUMENT_FULLTYPE_31  (RID_APP_START+167)
-#define STR_IMPRESS_DOCUMENT_FULLTYPE_40  (RID_APP_START+168)
-#define STR_IMPRESS_DOCUMENT_FULLTYPE_50  (RID_APP_START+169)
 #define STR_IMPRESS_DOCUMENT_FULLTYPE_60  (RID_APP_START+170)
 
 /*
@@ -583,7 +579,6 @@
 
 #define STR_GRAPHIC                         (RID_APP_START+498)
 #define STR_GRAPHIC_DOCUMENT                (RID_APP_START+499)
-#define STR_GRAPHIC_DOCUMENT_FULLTYPE_50    (RID_APP_START+500)
 #define STR_GRAPHIC_DOCUMENT_FULLTYPE_60    (RID_APP_START+501)
 
 #define STR_FIX                             (RID_APP_START+502)
