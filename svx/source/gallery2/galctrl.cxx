@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galctrl.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:03:01 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 13:49:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,12 +220,12 @@ void GalleryPreview::KeyInput( const KeyEvent& rKEvt )
             break;
 
             case( KEY_LEFT ):
-            case( KEY_DOWN ):
+            case( KEY_UP ):
                 pBrowser->Travel( GALLERYBROWSERTRAVEL_PREVIOUS );
             break;
 
             case( KEY_RIGHT ):
-            case( KEY_UP ):
+            case( KEY_DOWN ):
                 pBrowser->Travel( GALLERYBROWSERTRAVEL_NEXT );
             break;
 
