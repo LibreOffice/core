@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLStarBasicExportHandler.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dvo $ $Date: 2001-08-03 18:14:08 $
+ *  last change: $Author: vg $ $Date: 2003-05-26 08:34:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,7 @@ using ::com::sun::star::beans::PropertyValue;
 XMLStarBasicExportHandler::XMLStarBasicExportHandler() :
     sStarBasic(RTL_CONSTASCII_USTRINGPARAM("StarBasic")),
     sStarOffice(RTL_CONSTASCII_USTRINGPARAM("StarOffice")),
+    sApplication(RTL_CONSTASCII_USTRINGPARAM("application")),
     sLibrary(RTL_CONSTASCII_USTRINGPARAM("Library")),
     sMacroName(RTL_CONSTASCII_USTRINGPARAM("MacroName"))
 {
@@ -121,7 +122,7 @@ void XMLStarBasicExportHandler::Export(
             rValues[i].Value >>= sTmp;
             rExport.AddAttribute(
                 XML_NAMESPACE_SCRIPT, XML_LOCATION,
-                sTmp.equalsIgnoreAsciiCase(sStarOffice) ? XML_APPLICATION
+                (sTmp.equalsIgnoreAsciiCase(sApplication) || sTmp.equalsIgnoreAsciiCase(sStarOffice) ) ? XML_APPLICATION
                                                         : XML_DOCUMENT );
         }
         else if (sMacroName.equals(rValues[i].Name))
