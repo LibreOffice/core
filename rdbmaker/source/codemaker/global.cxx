@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jsc $ $Date: 2001-11-26 12:20:23 $
+ *  last change: $Author: hr $ $Date: 2002-02-21 12:13:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #if defined(SAL_W32) || defined(SAL_OS2)
 #include <io.h>
 #include <direct.h>

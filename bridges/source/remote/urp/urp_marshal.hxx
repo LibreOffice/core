@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_marshal.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jbu $ $Date: 2001-08-31 16:16:52 $
+ *  last change: $Author: hr $ $Date: 2002-02-21 12:11:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,8 @@
  ************************************************************************/
 #ifndef _URP_MARSHAL_HXX_
 #define _URP_MARSHAL_HXX_
+
+#include <string.h>
 
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jvmargs.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cp $ $Date: 2002-01-20 20:11:04 $
+ *  last change: $Author: hr $ $Date: 2002-02-21 12:14:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,8 @@
 
 #endif
 
+
+#include <string.h>
 
 #include "jvmargs.hxx"
 
