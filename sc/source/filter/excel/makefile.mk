@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:45:11 $
+#   last change: $Author: dr $ $Date: 2001-01-19 11:31:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -101,7 +101,6 @@ CXXFILES = \
         exctools.cxx \
         excobj.cxx \
         excchart.cxx \
-        excchrta.cxx \
         functab.cxx \
         frmbase.cxx \
         exccomp.cxx \
@@ -129,15 +128,10 @@ SLOFILES =	\
         $(SLO)$/exctools.obj \
         $(SLO)$/excobj.obj \
         $(SLO)$/excchart.obj \
-        $(SLO)$/excchrta.obj \
         $(SLO)$/functab.obj \
         $(SLO)$/frmbase.obj \
         $(SLO)$/exccomp.obj \
         $(SLO)$/biffdump.obj
-
-
-EXCEPTIONSFILES = \
-        $(SLO)$/excchrta.obj
 
 # --- Targets -------------------------------------------------------
 

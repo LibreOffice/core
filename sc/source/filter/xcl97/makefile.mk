@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: dr $ $Date: 2000-11-29 09:19:26 $
+#   last change: $Author: dr $ $Date: 2001-01-19 11:33:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,9 +86,11 @@ CXXFILES = \
         xcl97exp.cxx						\
         xcl97rch.cxx						\
         xcl97rec.cxx						\
+        XclImpCharts.cxx					\
+        XclImpChartsApi.cxx					\
         XclImpPivotTables.cxx				\
-        XclExpPivotTables.cxx				\
         XclImpChangeTrack.cxx				\
+        XclExpPivotTables.cxx				\
         XclExpChangeTrack.cxx
 
 
@@ -98,14 +100,17 @@ SLOFILES =	\
         $(SLO)$/xcl97exp.obj				\
         $(SLO)$/xcl97rch.obj				\
         $(SLO)$/xcl97rec.obj				\
+        $(SLO)$/XclImpCharts.obj			\
+        $(SLO)$/XclImpChartsApi.obj			\
         $(SLO)$/XclImpPivotTables.obj		\
-        $(SLO)$/XclExpPivotTables.obj		\
         $(SLO)$/XclImpChangeTrack.obj		\
+        $(SLO)$/XclExpPivotTables.obj		\
         $(SLO)$/XclExpChangeTrack.obj
 
 
 EXCEPTIONSFILES = \
         $(SLO)$/xcl97rch.obj				\
+        $(SLO)$/XclImpChartsApi.obj			\
         $(SLO)$/XclExpPivotTables.obj
 
 

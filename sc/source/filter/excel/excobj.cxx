@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excobj.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dr $ $Date: 2000-12-18 14:24:51 $
+ *  last change: $Author: dr $ $Date: 2001-01-19 11:31:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,8 +141,11 @@
 #include "imp_op.hxx"
 #include "excimp8.hxx"
 #include "fontbuff.hxx"
-#include "excchart.hxx"
 #include "fltprgrs.hxx"
+
+#ifndef _SC_XCLIMPCHARTS_HXX
+#include "XclImpCharts.hxx"
+#endif
 
 using namespace com::sun::star;
 
