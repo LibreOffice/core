@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomlstr.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:27 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 17:03:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,10 @@ SvxUnoShapeModifyListener::~SvxUnoShapeModifyListener() throw()
 void SAL_CALL SvxUnoShapeModifyListener::modified(const lang::EventObject& aEvent) throw( uno::RuntimeException )
 {
     if( mpObj )
-        mpObj->SendRepaintBroadcast();
+    {
+        mpObj->SetChanged();
+        mpObj->BroadcastObjectChange();
+    }
 }
 
 // ::com::sun::star::lang::XEventListener
