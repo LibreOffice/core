@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.hxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 14:13:42 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 11:54:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,6 +138,9 @@ protected:
     sal_Bool         bHasEncryptedEntries;
     sal_Bool         bUseManifest;
     sal_Bool         bForceRecovery;
+
+    sal_Bool        m_bPackageFormat;
+
     InitialisationMode eMode;
 
     ::com::sun::star::uno::Reference < com::sun::star::container::XNameContainer > xRootFolder;
@@ -159,6 +162,7 @@ public:
     virtual ~ZipPackage( void );
     ZipFile& getZipFile() { return *pZipFile;}
     const com::sun::star::uno::Sequence < sal_Int8 > & getEncryptionKey ( ) {return aEncryptionKey;}
+    const sal_Bool isInPackageFormat() { return m_bPackageFormat; }
 
     // XInitialization
     virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments )
