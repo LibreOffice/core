@@ -2,9 +2,9 @@
  *
  *  $RCSfile: biffdump.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: dr $ $Date: 2002-08-08 13:27:26 $
+ *  last change: $Author: dr $ $Date: 2002-08-09 05:42:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -7269,7 +7269,7 @@ Biff8RecDumper::Biff8RecDumper( RootData& rRootData, BOOL _bBIFF8 ) :
     pLevelPre = pLevelPreStringNT;
 
     nMaxBodyLines = 1024;
-    bEndLoading = bSkip = bSkipOffset = bReadContRecs = bBlankLine = FALSE;
+    bEndLoading = bSkip = bSkipOffset = bReadContRecs = bBlankLine = bExportBookStream = FALSE;
     bWarnings = TRUE;
 
     pDumpModes = NULL;
