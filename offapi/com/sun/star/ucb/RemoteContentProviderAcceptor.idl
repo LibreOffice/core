@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RemoteContentProviderAcceptor.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:10:24 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 01:23:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,14 +64,14 @@
 
 module com { module sun { module star { module ucb {
 
-interface XRemoteContentProviderAcceptor;
-interface XRemoteContentProviderActivator;
+ published interface XRemoteContentProviderAcceptor;
+ published interface XRemoteContentProviderActivator;
 
 //============================================================================
 /** allows content providers running in remote processes to be registered at
     the local content provider broker.
  */
-service RemoteContentProviderAcceptor
+published service RemoteContentProviderAcceptor
 {
     //------------------------------------------------------------------------
     /** This interface provides the base functionality to register and
