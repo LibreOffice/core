@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strtmpl.c,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dbo $ $Date: 2002-06-07 16:40:22 $
+ *  last change: $Author: sb $ $Date: 2002-06-25 09:03:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -754,6 +754,7 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( valueOfInt32 )( IMPL_RTL_STRCODE* pStr,
     sal_Char    aBuf[RTL_STR_MAX_VALUEOFINT32];
     sal_Char*   pBuf = aBuf;
     sal_Int32   nLen = 0;
+    sal_uInt32  nValue;
 
     /* Radix must be valid */
     if ( (nRadix < RTL_STR_MIN_RADIX) || (nRadix > RTL_STR_MAX_RADIX) )
@@ -765,21 +766,24 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( valueOfInt32 )( IMPL_RTL_STRCODE* pStr,
         *pStr = '-';
         pStr++;
         nLen++;
-        n = -n;
+        nValue = -n; /* FIXME this code is not portable for n == -2147483648
+                        (smallest negative value for sal_Int32) */
     }
+    else
+        nValue = n;
 
     /* create a recursive buffer with all values, except the last one */
     do
     {
-        sal_Char nDigit = (sal_Char)(n % nRadix);
-        n /= nRadix;
+        sal_Char nDigit = (sal_Char)(nValue % nRadix);
+        nValue /= nRadix;
         if ( nDigit > 9 )
             *pBuf = (nDigit-10) + 'a';
         else
             *pBuf = (nDigit + '0' );
         pBuf++;
     }
-    while ( n > 0 );
+    while ( nValue > 0 );
 
     /* copy the values in the right direction into the destination buffer */
     do
@@ -804,6 +808,7 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( valueOfInt64 )( IMPL_RTL_STRCODE* pStr,
     sal_Char    aBuf[RTL_STR_MAX_VALUEOFINT64];
     sal_Char*   pBuf = aBuf;
     sal_Int32   nLen = 0;
+    sal_uInt64  nValue;
 
     /* Radix must be valid */
     if ( (nRadix < RTL_STR_MIN_RADIX) || (nRadix > RTL_STR_MAX_RADIX) )
@@ -815,21 +820,25 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( valueOfInt64 )( IMPL_RTL_STRCODE* pStr,
         *pStr = '-';
         pStr++;
         nLen++;
-        n = -n;
+        nValue = -n; /* FIXME this code is not portable for
+                        n == -9223372036854775808 (smallest negative value for
+                        sal_Int64) */
     }
+    else
+        nValue = n;
 
     /* create a recursive buffer with all values, except the last one */
     do
     {
-        sal_Char nDigit = (sal_Char)(n % nRadix);
-        n /= nRadix;
+        sal_Char nDigit = (sal_Char)(nValue % nRadix);
+        nValue /= nRadix;
         if ( nDigit > 9 )
             *pBuf = (nDigit-10) + 'a';
         else
             *pBuf = (nDigit + '0' );
         pBuf++;
     }
-    while ( n > 0 );
+    while ( nValue > 0 );
 
     /* copy the values in the right direction into the destination buffer */
     do
