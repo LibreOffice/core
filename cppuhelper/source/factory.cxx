@@ -2,9 +2,9 @@
  *
  *  $RCSfile: factory.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: dbo $ $Date: 2001-10-15 13:37:05 $
+ *  last change: $Author: hr $ $Date: 2002-08-15 12:26:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -881,6 +881,10 @@ sal_Bool SAL_CALL ORegistryFactoryHelper::releaseOnNotification() throw(::com::s
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
+#if defined(MACOSX)
+// Initialize static template data here to break circular reference to libstatic
+ClassData3 WeakImplHelper3< XServiceInfo, XSingleServiceFactory, XUnloadingPreference >::s_aCD(3);
+#endif
 
 class OFactoryProxyHelper : public WeakImplHelper3< XServiceInfo, XSingleServiceFactory,
                                                     XUnloadingPreference >
