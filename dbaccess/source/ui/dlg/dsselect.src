@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsselect.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 15:15:49 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 17:30:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,63 +74,16 @@ ModalDialog DLG_DATASOURCE_SELECTION
     Closeable = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 218 , 118 ) ;
-    Text = "Datenquelle" ;
-    Text [ ENGLISH ] = "Data Source" ;
-    Text [ norwegian ] = "Data Source" ;
-    Text [ italian ] = "Sorgente dati" ;
-    Text [ portuguese_brazilian ] = "Fonte de Dados" ;
-    Text [ portuguese ] = "Fonte de dados" ;
-    Text [ finnish ] = "Tietolähde" ;
-    Text [ danish ] = "Datakilde" ;
-    Text [ french ] = "Source de données" ;
-    Text [ swedish ] = "Datakälla" ;
-    Text [ dutch ] = "Gegevensbron" ;
-    Text [ spanish ] = "Fuente de datos" ;
-    Text [ english_us ] = "Data Source" ;
-    Text[ chinese_simplified ] = "æ•°æ®æº";
-    Text[ russian ] = "Èñòî÷íèê äàííûõ";
-    Text[ polish ] = "ród³o danych";
-    Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ã‚½ãƒ¼ã‚¹";
-    Text[ chinese_traditional ] = "è³‡æ–™æº";
-    Text[ arabic ] = "ãÕÏÑ ÇáÈíÇäÇÊ";
-    Text[ greek ] = "Ğñïİëåõóç äåäïìİíùí";
-    Text[ korean ] = "ë°ì´í„° ì›ë³¸";
-    Text[ turkish ] = "Veri Kaynak Kodu";
-    Text[ language_user1 ] = " ";
+    Text [ de ] = "Datenquelle" ;
+    Text [ en-US ] = "Data Source" ;
+    Text [ x-comment ] = " ";
 
     FixedText FT_DESCRIPTION
     {
         Pos = MAP_APPFONT ( 6 , 6 ) ;
         Size = MAP_APPFONT ( 154 , 10 ) ;
-        Text = "Wählen Sie eine Datenquelle:";
-        Text [ english ] = "Choose a data source:";
-        Text [ english_us ] = "Choose a data source:";
-        Text[ portuguese ] = "Seleccionar fonte de dados:";
-        Text[ russian ] = "Âûáåğèòå èñòî÷íèê äàííûõ:";
-        Text[ greek ] = "Åğéëİîôå ìéá ğñïİëåõóç äåäïìİíùí:";
-        Text[ dutch ] = "Kies een gegevensbron:";
-        Text[ french ] = "Choisissez une source de données :";
-        Text[ spanish ] = "Seleccione una fuente de datos:";
-        Text[ italian ] = "Scegli una sorgente dati:";
-        Text[ danish ] = "Vælg en datakilde:";
-        Text[ swedish ] = "Välj en datakälla:";
-        Text[ polish ] = "Wybierz Ÿród³o danych:";
-        Text[ portuguese_brazilian ] = "Selecione uma fonte de dados:";
-        Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ã‚½ãƒ¼ã‚¹ã‚’é¸æŠã—ã¾ã™:";
-        Text[ korean ] = "ë°ì´í„° ì›ë³¸ì„ ì„ íƒí•˜ì‹­ì‹œì˜¤:";
-        Text[ chinese_simplified ] = "è¯·æ‚¨é€‰æ‹©ä¸€ä¸ªæ•°æ®æºï¼š";
-        Text[ chinese_traditional ] = "é¸æ“‡è³‡æ–™æºï¼š";
-        Text[ turkish ] = "Veri kaynağı seçin:";
-        Text[ arabic ] = "ÇÎÊÑ ãÕÏÑ ÈíÇäÇÊ:";
-        Text[ catalan ] = "Trieu una font de dades:";
-        Text[ finnish ] = "Valitse tietolähde:";
-        Text[ thai ] = "à¹€à¸¥à¸·à¸­à¸à¹à¸«à¸¥à¹ˆà¸‡à¸‚à¹‰à¸­à¸¡à¸¹à¸¥:";
-        Text[ czech ] = "Vyberte zdroj dat:";
-        Text[ hebrew ] = "WÃ¤hlen Sie eine Datenquelle:";
-        Text[ hindi ] = "à¤à¤• à¤¡à¤¼à¥‰à¤Ÿà¤¾ à¤®à¥‚à¤² à¤šà¥à¤¨à¥‹:";
-        Text[ slovak ] = "VybraÅ¥ zdroj dÃ¡t:";
-        Text[ hungarian ] = "VÃ¡lasszon adatforrÃ¡st:";
-        Text[ slovenian ] = "Izberite vir podatkov:";
+        Text [ de ] = "Wählen Sie eine Datenquelle:";
+        Text [ en-US ] = "Choose a data source:";
     };
     ListBox LB_DATASOURCE
     {
@@ -167,115 +120,32 @@ ModalDialog DLG_DATASOURCE_SELECTION
         TabStop = TRUE ;
         Disable = TRUE ;
         Hide = TRUE ;
-        Text = "Verwalten..." ;
-        Text [ ENGLISH ] = "Manage..." ;
-        Text [ english_us ] = "Organize..." ;
-        Text [ portuguese ] = "Gerir..." ;
-        Text [ portuguese_brazilian ] = "Organizar..." ;
-        Text [ swedish ] = "Administrera..." ;
-        Text [ danish ] = "Administrer..." ;
-        Text [ italian ] = "Gestione..." ;
-        Text [ spanish ] = "Administrar..." ;
-        Text [ french ] = "Gérer..." ;
-        Text [ dutch ] = "Beheren..." ;
-        Text[ chinese_simplified ] = "ç®¡ç†...";
-        Text[ russian ] = "Íàñòğîéêà...";
-        Text[ polish ] = "Zarz¹dzaj...";
-        Text[ japanese ] = "ç®¡ç†...";
-        Text[ chinese_traditional ] = "ç®¡ç†...";
-        Text[ arabic ] = "ÅÏÇÑÉ...";
-        Text[ greek ] = "Äéá÷åßñéóç...";
-        Text[ korean ] = "ê´€ë¦¬...";
-        Text[ turkish ] = "Düzenle...";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Organitza...";
-        Text[ finnish ] = "Järjestä...";
-        Text[ thai ] = "à¸ˆà¸±à¸”à¸à¸²à¸£...";
-        Text[ czech ] = "UspoÅ™Ã¡dat...";
-        Text[ hebrew ] = "â€®× ×™×”×•×œ...â€¬";
-        Text[ hindi ] = "à¤µà¥à¤¯à¤µà¤¸à¥à¤¥à¤¾ à¤•à¤°à¤¨à¤¾...";
-        Text[ slovak ] = "UsporiadaÅ¥...";
-        Text[ hungarian ] = "SzervezÅ‘...";
-        Text[ slovenian ] = "Organiziraj...";
+        Text [ de ] = "Verwalten..." ;
+        Text [ en-US ] = "Organize..." ;
+        Text [ x-comment ] = " ";
     };
     String STR_LOCAL_DATASOURCES
     {
-        Text = "lokale Datenquellen" ;
-        Text [ ENGLISH ] = "local Data Sources" ;
-        Text [ norwegian ] = "Data Sources" ;
-        Text [ italian ] = "Sorgente dati locale" ;
-        Text [ portuguese_brazilian ] = "Fontes de dados locais" ;
-        Text [ portuguese ] = "Fontes de dados locais" ;
-        Text [ finnish ] = "paikalliset tietolähteet" ;
-        Text [ danish ] = "lokale datakilder" ;
-        Text [ french ] = "Sources de données locale" ;
-        Text [ swedish ] = "lokala datakällor" ;
-        Text [ dutch ] = "lokale gegevensbronnen" ;
-        Text [ spanish ] = "fuentes de datos locales" ;
-        Text [ english_us ] = "local data sources" ;
-        Text[ chinese_simplified ] = "æœ¬æœºçš„æ•°æ®æº";
-        Text[ russian ] = "ëîêàëüíûå èñòî÷íèêè äàííûõ";
-        Text[ polish ] = "lokalne Ÿród³a danych";
-        Text[ japanese ] = "ãƒ­ãƒ¼ã‚«ãƒ«ãƒ‡ãƒ¼ã‚¿ã‚½ãƒ¼ã‚¹";
-        Text[ chinese_traditional ] = "æœ¬æ©Ÿçš„è³‡æ–™æº";
-        Text[ arabic ] = "ãÕÇÏÑ ÈíÇäÇÊ ãÍáíÉ";
-        Text[ greek ] = "ôïğéêİò ğñïåëåıóåéò äåäïìİíùí";
-        Text[ korean ] = "ë¡œì»¬ ë°ì´í„° ì›ë³¸";
-        Text[ turkish ] = "Yerel veri kaynakları";
-        Text[ catalan ] = "fonts locals de dades";
-        Text[ thai ] = "à¹à¸«à¸¥à¹ˆà¸‡à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸—à¹‰à¸­à¸‡à¸–à¸´à¹ˆà¸™";
-        Text[ czech ] = "LokÃ¡lnÃ­ zdroje dat";
-        Text[ hebrew ] = "lokale Datenquellen";
-        Text[ hindi ] = "à¤¸à¥à¤¥à¤¾à¤¨à¤¿à¤• à¤¡à¤¼à¥‰à¤Ÿà¤¾ à¤®à¥‚à¤²";
-        Text[ slovak ] = "LokÃ¡lne zdroje dÃ¡t";
-        Text[ hungarian ] = "Helyi adatforrÃ¡sok";
-        Text[ slovenian ] = "lokalni viri podatkov";
+        Text [ de ] = "lokale Datenquellen" ;
+        Text [ en-US ] = "local data sources" ;
     };
     String STR_COULDNOTLOAD_CONFIGLIB
     {
-        Text = "Die Programmbibliothek #lib# konnte nicht geladen werden oder ist defekt. Die ODBC-Datenquellen-Konfiguration ist nicht verfügbar.";
-        Text [ english ] = "The program library #lib# could not be loaded or is corrupted. The ODBC data source configuration is not available.";
-        Text [ english_us ] = "Could not load the program library #lib# or it is corrupted. The ODBC data source configuration is not available.";
-        Text[ portuguese ] = "Ou foi impossível carregar a biblioteca #lib# do programa ou esta está com defeito. A configuração da fonte de dados ODBC não está disponível.";
-        Text[ russian ] = "Íåâîçìîæíî çàãğóçèòü áèáëèîòåêó ïğîãğàììû #lib# (âåğîÿòíî îíà ïîâğåæäåíà). Íàñòğîéêà èñòî÷íèêà äàííûõ ODBC íåäîñòóïíà.";
-        Text[ greek ] = "Äåí Şôáí äõíáôŞ ç öüñôùóç ôçò âéâëéïèŞêçò ğñïãñáììÜôùí #lib# Ş åßíáé êáôåóôñáììİíç. Ç ñıèìéóç äéáìüñöùóçò ôçò ğñïİëåõóçò äåäïìİíùí ODBC äåí åßíáé äéáèİóéìç.";
-        Text[ dutch ] = "De programmabibliotheek #lib# kan niet worden geladen of is defect. De functie ODBC gegevensbron kiezen is niet beschikbaar.";
-        Text[ french ] = "La bibliothèque de programme #lib# n'a pas pu être chargée ou est défectueuse. La configuration de la source de données ODBC n'est pas disponible.";
-        Text[ spanish ] = "No se pudo cargar la biblioteca de programa #lib#, quizás esté dañada. La configuración de fuente de datos ODBC no está disponible.";
-        Text[ italian ] = "Impossibile caricare la libreria programma #lib# oppure è difettosa. La configurazione della sorgente dati ODBC non è disponibile.";
-        Text[ danish ] = "Programbiblioteket #lib# kunne ikke indlæses eller er beskadiget. Den valgte ODBC-datakildekonfiguration er ikke tilgængelig.";
-        Text[ swedish ] = "Det gick inte att ladda programbiblioteket #lib# eller så är det defekt. Konfigurationen av ODBC-datakällor är inte tillgänglig.";
-        Text[ polish ] = "Nie mo¿na za³adowaæ biblioteki programu #lib# albo jest ona uszkodzona. Konfiguracja Ÿród³a danych ODBC jest niemo¿liwa.";
-        Text[ portuguese_brazilian ] = "Não foi possível carregar a biblioteca de programa #lib# ou então ela está corrompida. A configuração da fonte de dados ODBC não está disponível. ";
-        Text[ japanese ] = "#lib# ãƒ—ãƒ­ã‚°ãƒ©ãƒ ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã‚’èª­ã¿è¾¼ã‚ãªã‹ã£ãŸã‹ã€ã¾ãŸã¯ãã‚Œè‡ªä½“ã«ãƒˆãƒ©ãƒ–ãƒ«ãŒã‚ã‚Šã¾ã™ã€‚ODBC ãƒ‡ãƒ¼ã‚¿ã‚½ãƒ¼ã‚¹ã®è¨­å®šã¯ã§ãã¾ã›ã‚“ã€‚";
-        Text[ korean ] = "í”„ë¡œê·¸ë¨ ë¼ì´ë¸ŒëŸ¬ë¦¬ #lib#ì„(ë¥¼) ë¡œë“œí•  ìˆ˜ ì—†ê±°ë‚˜ ë¼ì´ë¸ŒëŸ¬ë¦¬ì— ì˜¤ë¥˜ê°€ ìˆìŠµë‹ˆë‹¤. ODBC ë°ì´í„° ì›ë³¸ ì„¤ì •ì„ í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤.";
-        Text[ chinese_simplified ] = "æ— æ³•è£…å…¥ç¨‹åºåº“ #lib# æˆ–å·²ç»æŸåã€‚æ— æ³•é…ç½® ODBC æ•°æ®æºã€‚";
-        Text[ chinese_traditional ] = "ç„¡æ³•è¼‰å…¥ç¨‹å¼åº« #lib# æˆ–å·²ç¶“æåã€‚ç„¡æ³•è¨­å®š ODBC è³‡æ–™æºã€‚";
-        Text[ turkish ] = "Program kitalığı #lib# yüklenemedi veya bozulmuş.ODBC veri kaynağı konfigürasyonu uygun değil.";
-        Text[ arabic ] = "ÅãÇ Ãäå ÊÚĞÑ ÊÍãíá ãßÊÈÉ ÇáÈÑäÇãÌ #lib#¡ Ãæ ÃäåÇ ãÚØæÈÉ. Êßæíä ãÕÇÏÑ ÈíÇäÇÊ ODBC ÛíÑ ãÊæİÑ.";
-        Text[ catalan ] = "No s'ha pogut carregar la biblioteca de programes #lib# o està corrompuda. La configuració de la font de dades ODBC no està disponible.";
-        Text[ finnish ] = "Ohjelmakirjaston #lib# lataaminen ei onnistunut tai kirjasto on vioittunut. ODBC-tietolähteiden kokoonpano ei ole käytettävissä.";
-        Text[ thai ] = "à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¹‚à¸«à¸¥à¸”à¸Šà¸¸à¸”à¸„à¸³à¸ªà¸±à¹ˆà¸‡à¹‚à¸›à¸£à¹à¸à¸£à¸¡ #lib# à¸«à¸£à¸·à¸­à¹ƒà¸Šà¹‰à¸¡à¸±à¸™à¸œà¸´à¸” à¹‚à¸„à¸£à¸‡à¹à¸šà¸šà¹à¸«à¸¥à¹ˆà¸‡à¸‚à¹‰à¸­à¸¡à¸¹à¸¥ ODBC  à¹ƒà¸Šà¹‰à¹„à¸¡à¹ˆà¹„à¸”à¹‰";
-        Text[ czech ] = "Nebylo moÅ¾no naÄÃ­st knihovnu programu #lib# nebo je poÅ¡kozena. NastavenÃ­ zdroje dat ODBC nenÃ­ moÅ¾nÃ©.";
-        Text[ hebrew ] = "Die Programmbibliothek #lib# konnte nicht geladen werden oder ist defekt. Die ODBC-Datenquellen-Konfiguration ist nicht verfÃ¼gbar.";
-        Text[ hindi ] = "à¤ªà¥à¤°à¥‹à¤—à¥à¤°à¤¾à¤® à¤²à¥ˆà¤¬à¥à¤°à¤°à¥€ #lib# à¤•à¥‹ à¤²à¥‹à¤¡à¤¼ à¤¨à¤¹à¥€à¤‚ à¤•à¤° à¤¸à¤•à¤¤à¥‡ à¤¹à¥ˆ à¤…à¤¥à¤µà¤¾ à¤¦à¥‹à¤·à¤¯à¥à¤•à¥à¤¤ à¤¹à¥ˆ à¥¤ ODBC à¤¡à¤¼à¥‰à¤Ÿà¤¾ à¤®à¥‚à¤² à¤°à¥‚à¤ªà¤°à¥‡à¤–à¤¾ à¤…à¤¨à¥à¤ªà¤²à¤¬à¥à¤§ à¤¹à¥ˆ à¥¤";
-        Text[ slovak ] = "ProgramovÃ¡ kniÅ¾nica #lib# nemohla byÅ¥ naÄÃ­tanÃ¡, alebo je poÅ¡kodenÃ¡. Nastavenie ODBC zdroja dÃ¡t nieje moÅ¾nÃ©.";
-        Text[ hungarian ] = "A kÃ¶vetkezÅ‘ programkÃ¶nyvtÃ¡r nem tÃ¶lthetÅ‘ be: #lib#. Az ODBC-adatforrÃ¡s beÃ¡llÃ­tÃ¡sai nem Ã©rhetÅ‘ek el.";
-        Text[ slovenian ] = "Programske knjiÅ¾nice #lib# ni mogoÄe naloÅ¾iti ali pa je okvarjena. Konfiguracija ODBC vira podatkov ni na voljo.";
+        Text [ de ] = "Die Programmbibliothek #lib# konnte nicht geladen werden oder ist defekt. Die ODBC-Datenquellen-Konfiguration ist nicht verfügbar.";
+        Text [ en-US ] = "Could not load the program library #lib# or it is corrupted. The ODBC data source configuration is not available.";
     };
-    Text[ catalan ] = "Font de dades";
-    Text[ thai ] = "à¹à¸«à¸¥à¹ˆà¸‡à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
-    Text[ czech ] = "Zdroj dat";
-    Text[ hebrew ] = "â€®××§×•×¨ ×”× ×ª×•× ×™×â€¬";
-    Text[ hindi ] = "à¤¡à¤¼à¥‰à¤Ÿà¤¾ à¤®à¥‚à¤²";
-    Text[ slovak ] = "Zdroj dÃ¡t";
-    Text[ hungarian ] = "AdatforrÃ¡s";
-    Text[ slovenian ] = "Vir podatkov";
 };
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.37.26.3  2004/04/21 05:48:58  hjs
+ *  RESYNC: (1.37-1.38); FILE MERGED
+ *
+ *  Revision 1.38  2003/12/17 15:15:49  vg
+ *  INTEGRATION: CWS geordi2q11 (1.37.72); FILE MERGED
+ *  2003/12/16 11:05:12 hr 1.37.72.1: #111934#: join CWS ooo111fix1
+ *
  *  Revision 1.37.72.1  2003/12/16 11:05:12  hr
  *  #111934#: join CWS ooo111fix1
  *
