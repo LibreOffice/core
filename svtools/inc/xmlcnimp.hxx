@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcnimp.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:54 $
+ *  last change: $Author: jl $ $Date: 2001-03-22 15:49:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,9 +94,9 @@ public:
 
     int  operator ==( const SvXMLAttrContainerItem_Impl& rCmp ) const;
 
-    BOOL AddAttr( const ::rtl::OUString& rLName, const NAMESPACE_RTL(OUString)& rValue );
-    BOOL AddAttr( const ::rtl::OUString& rPrefix, const NAMESPACE_RTL(OUString)& rNamespace,
-                    const ::rtl::OUString& rLName, const NAMESPACE_RTL(OUString)& rValue );
+    BOOL AddAttr( const ::rtl::OUString& rLName, const ::rtl::OUString& rValue );
+    BOOL AddAttr( const ::rtl::OUString& rPrefix, const ::rtl::OUString& rNamespace,
+                    const ::rtl::OUString& rLName, const ::rtl::OUString& rValue );
     BOOL AddAttr( const ::rtl::OUString& rPrefix,
                   const ::rtl::OUString& rLName,
                   const ::rtl::OUString& rValue );
@@ -113,10 +113,10 @@ public:
     inline const ::rtl::OUString& GetPrefix( sal_uInt16 i ) const;
 
     BOOL SetAt( sal_uInt16 i,
-                const ::rtl::OUString& rLName, const NAMESPACE_RTL(OUString)& rValue );
+                const ::rtl::OUString& rLName, const ::rtl::OUString& rValue );
     BOOL SetAt( sal_uInt16 i,
-                const ::rtl::OUString& rPrefix, const NAMESPACE_RTL(OUString)& rNamespace,
-                const ::rtl::OUString& rLName, const NAMESPACE_RTL(OUString)& rValue );
+                const ::rtl::OUString& rPrefix, const ::rtl::OUString& rNamespace,
+                const ::rtl::OUString& rLName, const ::rtl::OUString& rValue );
     BOOL SetAt( sal_uInt16 i,
                 const ::rtl::OUString& rPrefix,
                 const ::rtl::OUString& rLName,

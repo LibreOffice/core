@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlg2.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:58 $
+ *  last change: $Author: jl $ $Date: 2001-03-22 15:50:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -362,7 +362,7 @@ IMPL_LINK( ImpPathDialog, ClickHdl, Button*, pBtn )
     else
     if ( pBtn == pHomeBtn )
     {
-        NAMESPACE_RTL( OUString )aHomeDir;
+        ::rtl::OUString aHomeDir;
         NAMESPACE_VOS( OSecurity ) aSecurity;
         if ( aSecurity.getHomeDir( aHomeDir ) )
         {
