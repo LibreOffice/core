@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: cmc $ $Date: 2001-02-08 13:10:54 $
+#   last change: $Author: hjs $ $Date: 2001-08-23 13:30:57 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -144,25 +144,11 @@ LIB1OBJFILES= \
 
 
 # --- Targets ------------------------------------------------------
-.IF "$(depend)" == ""
-all: \
-    $(INCCOM)$/swdll0.hxx   \
-     $(SLO)$/swdll.obj    \
-    $(SLO)$/swmodule.obj \
-    ALLTAR
-.ENDIF
 
 .INCLUDE :  target.mk
 
-.IF "$(GUI)"=="OS2"
-$(INCCOM)$/swdll0.hxx: makefile.mk
-    echo #define DLL_NAME "sw$(UPD)$(DLLPOSTFIX)" >$@
-.ENDIF
-
-.IF "$(GUI)"=="MAC"
-$(INCCOM)$/swdll0.hxx: makefile.mk
-    echo "$(HASHMARK)define DLL_NAME ¶"sw$(UPD)$(DLLPOSTFIX).dll¶"" > $@
-.ENDIF
+$(SLO)$/swdll.obj : $(INCCOM)$/swdll0.hxx
+$(SLO)$/swmodule.obj : $(INCCOM)$/swdll0.hxx
 
 .IF "$(GUIBASE)"=="WIN"
 $(INCCOM)$/swdll0.hxx: makefile.mk
