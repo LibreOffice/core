@@ -2,9 +2,9 @@
  *
  *  $RCSfile: KeyGenerator.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:28:33 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 16:30:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -70,7 +70,8 @@ class UniqueColumnValue
         if ( CommandType.COMMAND == aCommandType.intValue() )
         {
             // get the connection from the form
-            XConnection xFormConn = (XConnection)xForm.getPropertyValue( "ActiveConnection" );
+            XConnection xFormConn = (XConnection)UnoRuntime.queryInterface( XConnection.class,
+                xForm.getPropertyValue( "ActiveConnection" ) );
             // and let it create a composer for us
             XSQLQueryComposerFactory xComposerFac =
                 (XSQLQueryComposerFactory)UnoRuntime.queryInterface(
@@ -374,11 +375,12 @@ public class KeyGenerator
         @param sFieldName
             specifies the field which's value should be manipulated
     */
-    public KeyGenerator( XPropertySet xForm, String sFieldName, XMultiServiceFactory xMSF )
+    public KeyGenerator( XPropertySet xForm, String sFieldName,
+                         XComponentContext xCtx )
     {
         m_xForm = xForm;
 
-        DocumentHelper aDocument = DocumentHelper.getDocumentForComponent( xForm, xMSF );
+        DocumentHelper aDocument = DocumentHelper.getDocumentForComponent( xForm, xCtx );
 
         m_aResetKeyGenerator = new KeyGeneratorForReset( sFieldName, aDocument.getCurrentView() );
         m_aUpdateKeyGenerator = new KeyGeneratorForUpdate( sFieldName );
