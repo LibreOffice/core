@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-11 10:53:18 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 10:54:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1500,20 +1500,6 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
             else
                 xController = Reference < XController >( xComp, UNO_QUERY );
 
-            BOOL bIsBlankTarget = ( aTarget.compareToAscii( "_blank" ) == COMPARE_EQUAL || aTarget.compareToAscii( "_default" ) == COMPARE_EQUAL );
-            if ( !xController.is() && bIsBlankTarget )
-            {
-                // a blank frame would have been created in findFrame; in this case I am the owner and I must delete it
-                Reference < XCloseable > xClose( xFrame, UNO_QUERY );
-                Reference < XDesktop > xDesktop( xFrame, UNO_QUERY );
-                if ( !xDesktop.is() )
-                {
-                    if ( xClose.is() )
-                        xClose->close(sal_True);
-                    else
-                        xFrame->dispose();
-                }
-            }
         }
         else
         {
