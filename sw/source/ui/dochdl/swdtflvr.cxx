@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 10:26:40 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 15:56:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1370,8 +1370,10 @@ int SwTransferable::PasteData( TransferableDataHelper& rData,
         }
 
         if( bDelSel )
-            pAction = new SwTrnsfrActionAndUndo( &rSh, UNDO_INSERT, NULL,
+            // --> FME 2004-10-19 #i34830#
+            pAction = new SwTrnsfrActionAndUndo( &rSh, UNDO_PASTE_CLIPBOARD, NULL,
                                                  TRUE );
+            // <--
     }
 
     SwTransferable* pTrans;
