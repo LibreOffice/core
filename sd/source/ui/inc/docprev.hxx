@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docprev.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 10:57:57 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:11:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,6 @@
 #endif
 
 class GDIMetaFile;
-struct SdrPaintProcRec;
 
 class SdDocPreviewWin : public Control, public SfxListener
 {
@@ -109,8 +108,6 @@ protected:
     virtual void SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType, const SfxHint& rHint, const TypeId& rHintType);
 
     void updateViewSettings();
-
-    DECL_LINK(PaintProc, SdrPaintProcRec*);
 
 public:
                     SdDocPreviewWin( Window* pParent, const ResId& rResId );
