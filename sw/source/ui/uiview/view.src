@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:03:47 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:16:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -407,7 +407,7 @@ InfoBox MSG_ERR_INSERT_GLOS
     MESSAGE[ japanese ] = "ε…¥ε›ζ”―ζ΄γδ½ζγ§γγΎγ›γ‚“γ§γ—γγ€‚";
     MESSAGE[ chinese_traditional ] = "η„΅ζ³•ε»Ίη«‹θ‡ªε‹•ε–ζ–‡ι›†γ€‚";
     MESSAGE[ arabic ] = ".ΚΪΠΡ ΕΦΗέΙ ΗαδΥ ΗαΚαήΗΖν";
-    MESSAGE[ greek ] = "Δεν ήταν δυνατόν να προστεθεί το ΑυτοΚείμενο.";
+    MESSAGE[ greek ] = "Δεν ήταν δυνατόν να προστεθεί το αυτόματο κείμενο.";
     MESSAGE[ korean ] = "μλ™ ν…μ¤νΈλ¥Ό λ§λ“¤μ§€ λª»ν–μµλ‹λ‹¤.";
     MESSAGE[ turkish ] = "Otomatik metin yaratύlamadύ.";
     MESSAGE[ language_user1 ] = " ";
@@ -466,7 +466,7 @@ InfoBox MSG_ERR_NO_FAX
     Message[ turkish ] = "Tools/Options/%1/Print altύnda tanύmlύ faks yoktur.";
     Message[ language_user1 ] = " ";
     Message[ russian ] = "Β Ρεπβθρ/Οΰπΰμεςπϋ/%1/Τΰκρ-οπθνςεπ νε σρςΰνξβλεν.";
-    Message[ greek ] = "Δεν έχει οριστεί εκτυπωτής για Fax στη διαδρομή Εργαλεία/Επιλογές/%1/Εκτύπωση.";
+    Message[ greek ] = "Δεν έχει οριστεί εκτυπωτής για φαξ στη διαδρομή Εργαλεία/Επιλογές/%1/Εκτύπωση.";
     Message[ japanese ] = "γƒ„γƒΌγƒ« β†’ γ‚ªγƒ—γ‚·γƒ§γƒ³ β†’ %1 β†’ ε°ε·γ§ Fax γƒ—γƒªγƒ³γ‚Ώγθ¨­ε®γ•γ‚γ¦γ„γΎγ›γ‚“γ€‚";
     Message[ korean ] = "λ„κµ¬ -> μµμ… -> %1 -> μΈμ‡„μ—μ„ ν©μ¤ ν”„λ¦°ν„°κ°€ μ„¤μ •λμ§€ μ•μ•μµλ‹λ‹¤.";
     Message[ chinese_simplified ] = "ε¨ε·¥ε…·/ι€‰ι΅Ή/%1/ζ‰“ε°ζΊε¤„ζ²΅ζ‰θ®Ύε®δΌ ηζ‰“ε°ζΊγ€‚";
@@ -656,7 +656,7 @@ String STR_NOGLOS1
     TEXT[ japanese ] = "ε…¥ε›ζ”―ζ΄γ®γ‚·γƒ§γƒΌγƒγ‚«γƒƒγƒγ€";
     TEXT[ chinese_traditional ] = "θ‡ªε‹•ε–ζ–‡ι›†ηΈ®ε―«<";
     TEXT[ arabic ] = "δΥ ΗαΚαήΗΖν ααΗΞΚΥΗΡ '";
-    TEXT[ greek ] = "ΑυτοΚείμενο για τα αρχικά '";
+    TEXT[ greek ] = "Αυτόματο κείμενο για τα αρχικά '";
     TEXT[ korean ] = "μλ™ ν…μ¤νΈ λ°”λ΅ κ°€κΈ° '";
     TEXT[ turkish ] = "Otomatik metin kύsayolu '";
     TEXT[ language_user1 ] = " ";
@@ -755,7 +755,7 @@ String STR_ERROR_NOLANG
     TEXT[ japanese ] = "γƒγ‚§γƒƒγ‚―γ—γη―„ε›²γ«γ―θ¨€θªγθ¨­ε®γ•γ‚γ¦γ„γΎγ›γ‚“γ€‚";
     TEXT[ chinese_traditional ] = "ε¨ε·²η¶“ζªΆζ¥η„ε€εε…§ζ²’ζ‰θ¨­ε®δ»»δ½•δΈ€ε€‹θªθ¨€γ€‚";
     TEXT[ arabic ] = ".αγ νΚγ ΚΝΟνΟ ΓνΙ αΫΙ έν ΗαδΨΗή ΗαγΟήή ένε";
-    TEXT[ greek ] = "Δεν ορίστηκε γλώσσα για την ελεγχόμενη περιοχή.";
+    TEXT[ greek ] = "Δεν ορίστηκε γλώσσα για την ελεγχόμενη ενότητα.";
     TEXT[ korean ] = "κ²€μƒ‰λ κµ¬μ—­μ—λ” μ„¤μ •λ μ–Έμ–΄κ°€ μ—†μµλ‹λ‹¤.";
     TEXT[ turkish ] = "Denetlenen bφlόmde dil seηilmedi.";
     TEXT[ language_user1 ] = " ";
@@ -819,7 +819,7 @@ String STR_NB_REPLACED
     Text[ japanese ] = "XX ε€‹γ®ζ¤η΄Άγ‚­γƒΌγη½®ζ›γ•γ‚γΎγ—γγ€‚";
     Text[ chinese_traditional ] = "ζε°‹ι …η›®θΆ« XX ζ¬΅δ»£ζ›Ώγ€‚";
     Text[ arabic ] = "Κγ ΗΣΚΘΟΗα ΘνΗδΗΚ ΗαΘΝΛ ΧΧΧ γΡΙ.";
-    Text[ greek ] = "Ζητούμενο στοιχείο αντικαταστάθηκε XX φορές.";
+    Text[ greek ] = "Το αναζητούμενο στοιχείο αντικαταστάθηκε XX φορές.";
     Text[ korean ] = "κ²€μƒ‰ ν‚¤κ°€ XXλ² λ°”λ€μ—μµλ‹λ‹¤.";
     Text[ turkish ] = "Arama terimi XX kez deπiώtirildi.";
     Text[ language_user1 ] = " ";
@@ -849,7 +849,7 @@ String RID_TOOLS_TOOLBOX
     Text[ japanese ] = "ζ¨™ζΊ–γƒ„γƒΌγƒ«γƒγƒΌ";
     Text[ chinese_traditional ] = "δΈ»ε·¥ε…·ε—";
     Text[ arabic ] = "ΤΡνΨ ΗαΓΟζΗΚ";
-    Text[ greek ] = "Γραμμή εργαλείων";
+    Text[ greek ] = "Κύρια γραμμή εργαλείων";
     Text[ korean ] = "μ£Ό λ„κµ¬ λª¨μ";
     Text[ turkish ] = "Ana araη ηubuπu";
     Text[ language_user1 ] = " ";
@@ -1348,6 +1348,7 @@ Menu MN_SRCVIEW_POPUPMENU
         };
     };
 };
+
 
 
 
