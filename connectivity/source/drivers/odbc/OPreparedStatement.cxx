@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OPreparedStatement.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 16:06:43 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 10:50:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -414,7 +414,7 @@ void OPreparedStatement::setParameter(sal_Int32 parameterIndex,sal_Int32 _nType,
 
     checkParameterIndex(parameterIndex);
     sal_Int32 nRealSize = _nSize;
-    SQLSMALLINT fSqlType = OTools::jdbcTypeToOdbc(_nType);
+    SQLSMALLINT fSqlType = static_cast<SQLSMALLINT>(OTools::jdbcTypeToOdbc(_nType));
     if( fSqlType == SQL_CHAR    || fSqlType == SQL_VARCHAR ||
         fSqlType == SQL_DECIMAL || fSqlType == SQL_NUMERIC)
         ++nRealSize;
@@ -1020,7 +1020,7 @@ void OPreparedStatement::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,cons
                 OStatement_Base::setFastPropertyValue_NoBroadcast(nHandle,rValue);
         }
     }
-    catch(const SQLException& e)
+    catch(const SQLException&)
     {
         //  throw Exception(e.Message,*this);
     }
