@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swbreak.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-10 06:36:08 $
+ *  last change: $Author: kz $ $Date: 2001-05-17 08:28:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@ ModalDialog DLG_BREAK
     Text [ ENGLISH ] = "Insert Break" ;
     Text [ norwegian ] = "Sett inn Skift" ;
     Text [ italian ] = "Inserisci interruzione" ;
-    Text [ portuguese_brazilian ] = "Inserir Interrupção" ;
+    Text [ portuguese_brazilian ] = "Inserir Interrup??o" ;
     Text [ portuguese ] = "Inserir quebra" ;
     Text [ finnish ] = "Lisää vaihto" ;
     Text [ danish ] = "Indsæt skift" ;
@@ -146,7 +146,7 @@ ModalDialog DLG_BREAK
         Text [ ENGLISH ] = "~Page break" ;
         Text [ norwegian ] = "~Sideskift" ;
         Text [ italian ] = "In~terruzione pagina" ;
-        Text [ portuguese_brazilian ] = "~Quebra de página" ;
+        Text [ portuguese_brazilian ] = "~Quebra de p?gina" ;
         Text [ portuguese ] = "~Quebra de página" ;
         Text [ finnish ] = "~Sivunvaihto" ;
         Text [ danish ] = "Sideskift" ;
@@ -372,7 +372,7 @@ ModalDialog DLG_BREAK
         Text [ English ] = "Change page number" ;
         Text [ norwegian ] = "Endre sidenummer" ;
         Text [ italian ] = "Cambia numero pagina" ;
-        Text [ portuguese_brazilian ] = "Mudar número de página" ;
+        Text [ portuguese_brazilian ] = "Mudar n?ero de p?gina" ;
         Text [ portuguese ] = "Alterar número de página" ;
         Text [ finnish ] = "~Muuta sivunumero" ;
         Text [ danish ] = "Modificer sidetal" ;
