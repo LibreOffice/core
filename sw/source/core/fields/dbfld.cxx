@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbfld.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-21 11:22:31 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 14:03:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -349,6 +349,7 @@ String SwDBField::GetOldContent()
 String SwDBField::Expand() const
 {
     String sRet;
+
     if(0 ==(GetSubType() & SUB_INVISIBLE))
         sRet = lcl_DBTrennConv(aContent);
     return sRet;
@@ -618,6 +619,12 @@ SwDBData SwDBNameInfField::GetDBData(SwDoc* pDoc)
     else
         aRet = pDoc->GetDBData();
     return aRet;
+}
+
+// #111840#
+void SwDBNameInfField::SetDBData(const SwDBData & rDBData)
+{
+    aDBData = rDBData;
 }
 
 //------------------------------------------------------------------------------
