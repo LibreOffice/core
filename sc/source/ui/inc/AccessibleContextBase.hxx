@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleContextBase.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: sab $ $Date: 2002-05-23 13:46:09 $
+ *  last change: $Author: sab $ $Date: 2002-05-24 15:13:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,9 +96,6 @@
 #endif
 #ifndef _COM_SUN_STAR_LANG_INDEXOUTOFBOUNDSEXCEPTION_HPP_
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XFOCUSLISTENER_HPP_
-#include <com/sun/star/awt/XFocusListener.hpp>
 #endif
 #ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
@@ -202,17 +199,6 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
 
     virtual sal_Bool SAL_CALL isVisible(  )
-        throw (::com::sun::star::uno::RuntimeException);
-
-    virtual sal_Bool SAL_CALL isFocusTraversable(  )
-        throw (::com::sun::star::uno::RuntimeException);
-
-    virtual void SAL_CALL addFocusListener(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFocusListener >& xListener )
-        throw (::com::sun::star::uno::RuntimeException);
-
-    virtual void SAL_CALL removeFocusListener(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFocusListener >& xListener )
         throw (::com::sun::star::uno::RuntimeException);
 
     virtual void SAL_CALL grabFocus(  )
@@ -353,11 +339,11 @@ protected:
         throw (::com::sun::star::uno::RuntimeException);
 
     /// Return the object's current bounding box relative to the desktop.
-    virtual Rectangle GetBoundingBoxOnScreen(void)
+    virtual Rectangle GetBoundingBoxOnScreen(void) const
         throw (::com::sun::star::uno::RuntimeException);
 
     /// Return the object's current bounding box relative to the parent object.
-    virtual Rectangle GetBoundingBox(void)
+    virtual Rectangle GetBoundingBox(void) const
         throw (::com::sun::star::uno::RuntimeException);
 
 public:
@@ -370,12 +356,12 @@ protected:
     void CommitDefunc() const;
 
     /// Calls all FocusListener to tell they that the focus is gained.
-    void CommitFocusGained(const com::sun::star::awt::FocusEvent& rFocusEvent) const;
+    void CommitFocusGained() const;
 
     /// Calls all FocusListener to tell they that the focus is lost.
-    void CommitFocusLost(const com::sun::star::awt::FocusEvent& rFocusEvent) const;
+    void CommitFocusLost() const;
 
-    sal_Bool IsDefunc() { return rBHelper.bDisposed; }
+    sal_Bool IsDefunc() const { return rBHelper.bDisposed; }
 
 private:
     /// Reference to the parent object.
@@ -395,9 +381,6 @@ private:
 
     /// List of property change listeners.
     cppu::OInterfaceContainerHelper* mpEventListeners;
-
-    /// List of focus listeners.
-    cppu::OInterfaceContainerHelper* mpFocusListeners;
 
     /** This is the role of this object.
     */

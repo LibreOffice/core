@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleContextBase.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: sab $ $Date: 2002-04-19 17:54:59 $
+ *  last change: $Author: sab $ $Date: 2002-05-24 15:14:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,8 +116,7 @@ ScAccessibleContextBase::ScAccessibleContextBase(
     ScAccessibleContextBaseWeakImpl(m_aMutex),
     maRole(aRole),
     mxParent(rxParent),
-    mpEventListeners(NULL),
-    mpFocusListeners(NULL)
+    mpEventListeners(NULL)
 {
     DBG_CTOR(ScAccessibleContextBase, NULL);
 }
@@ -158,7 +157,7 @@ void SAL_CALL ScAccessibleContextBase::disposing()
     // hold reference to make sure that the destructor is not called
     uno::Reference< XAccessibleContext > xOwnContext(this);
 
-    if (mpEventListeners || mpFocusListeners)
+    if (mpEventListeners)
     {
         lang::EventObject aEvent;
         aEvent.Source = static_cast<cppu::OWeakObject*>(this);
@@ -166,11 +165,6 @@ void SAL_CALL ScAccessibleContextBase::disposing()
         {
             mpEventListeners->disposeAndClear(aEvent);
             DELETEZ( mpEventListeners );
-        }
-        if (mpFocusListeners)
-        {
-            mpFocusListeners->disposeAndClear(aEvent);
-            DELETEZ( mpFocusListeners );
         }
     }
 
@@ -294,40 +288,6 @@ sal_Bool SAL_CALL ScAccessibleContextBase::isVisible(  )
         throw (uno::RuntimeException)
 {
     return sal_True;
-}
-
-sal_Bool SAL_CALL ScAccessibleContextBase::isFocusTraversable(  )
-        throw (uno::RuntimeException)
-{
-    return sal_False;
-}
-
-void SAL_CALL ScAccessibleContextBase::addFocusListener(
-    const uno::Reference< awt::XFocusListener >& xListener )
-        throw (uno::RuntimeException)
-{
-    if (xListener.is())
-    {
-        ScUnoGuard aGuard;
-        if (!IsDefunc())
-        {
-            if (!mpFocusListeners)
-                mpFocusListeners = new cppu::OInterfaceContainerHelper(m_aMutex);
-            mpFocusListeners->addInterface(xListener);
-        }
-    }
-}
-
-void SAL_CALL ScAccessibleContextBase::removeFocusListener(
-    const uno::Reference< awt::XFocusListener >& xListener )
-        throw (uno::RuntimeException)
-{
-    if (xListener.is())
-    {
-        ScUnoGuard aGuard;
-        if (!IsDefunc() && mpFocusListeners)
-            mpFocusListeners->removeInterface(xListener);
-    }
 }
 
 void SAL_CALL ScAccessibleContextBase::grabFocus(  )
@@ -661,86 +621,34 @@ void ScAccessibleContextBase::CommitDefunc() const
     CommitChange(aEvent);
 }
 
-void ScAccessibleContextBase::CommitFocusGained(const awt::FocusEvent& rFocusEvent) const
+void ScAccessibleContextBase::CommitFocusGained() const
 {
-    if (mpFocusListeners)
-    {
-        //  Call all listeners.
-        uno::Sequence< uno::Reference< uno::XInterface > > aListeners = mpFocusListeners->getElements();
-        sal_uInt32 nLength(aListeners.getLength());
-        if (nLength)
-        {
-            const uno::Reference< uno::XInterface >* pInterfaces = aListeners.getConstArray();
-            if (pInterfaces)
-            {
-                sal_uInt32 i(0);
-                while (i < nLength)
-                {
-                    try
-                    {
-                        while(i < nLength)
-                        {
-                            static_cast< awt::XFocusListener* >(pInterfaces->get())->focusGained(rFocusEvent);
-                            ++pInterfaces;
-                            ++i;
-                        }
-                    }
-                    catch(uno::RuntimeException&)
-                    {
-                        DBG_ERROR("a object is gone without to remove from Broadcaster");
-                        ++pInterfaces;
-                        ++i;
-                    }
-                }
-            }
-        }
-    }
+    AccessibleEventObject aEvent;
+    aEvent.EventId = AccessibleEventId::ACCESSIBLE_STATE_EVENT;
+    aEvent.Source = uno::Reference< XAccessible >(const_cast<ScAccessibleContextBase*>(this));
+    aEvent.NewValue <<= AccessibleStateType::FOCUSED;
+
+    CommitChange(aEvent);
 }
 
-void ScAccessibleContextBase::CommitFocusLost(const awt::FocusEvent& rFocusEvent) const
+void ScAccessibleContextBase::CommitFocusLost() const
 {
-    if (mpFocusListeners)
-    {
-        //  Call all listeners.
-        uno::Sequence< uno::Reference< uno::XInterface > > aListeners = mpFocusListeners->getElements();
-        sal_uInt32 nLength(aListeners.getLength());
-        if (nLength)
-        {
-            const uno::Reference< uno::XInterface >* pInterfaces = aListeners.getConstArray();
-            if (pInterfaces)
-            {
-                sal_uInt32 i(0);
-                while (i < nLength)
-                {
-                    try
-                    {
-                        while(i < nLength)
-                        {
-                            static_cast< awt::XFocusListener* >(pInterfaces->get())->focusLost(rFocusEvent);
-                            ++pInterfaces;
-                            ++i;
-                        }
-                    }
-                    catch(uno::RuntimeException&)
-                    {
-                        DBG_ERROR("a object is gone without to remove from Broadcaster");
-                        ++pInterfaces;
-                        ++i;
-                    }
-                }
-            }
-        }
-    }
+    AccessibleEventObject aEvent;
+    aEvent.EventId = AccessibleEventId::ACCESSIBLE_STATE_EVENT;
+    aEvent.Source = uno::Reference< XAccessible >(const_cast<ScAccessibleContextBase*>(this));
+    aEvent.OldValue <<= AccessibleStateType::FOCUSED;
+
+    CommitChange(aEvent);
 }
 
-Rectangle ScAccessibleContextBase::GetBoundingBoxOnScreen(void)
+Rectangle ScAccessibleContextBase::GetBoundingBoxOnScreen(void) const
         throw (uno::RuntimeException)
 {
     DBG_ERROR("not implemented");
     return Rectangle();
 }
 
-Rectangle ScAccessibleContextBase::GetBoundingBox(void)
+Rectangle ScAccessibleContextBase::GetBoundingBox(void) const
         throw (uno::RuntimeException)
 {
     DBG_ERROR("not implemented");
