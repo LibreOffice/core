@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoApp.java,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kr $ $Date: 2000-11-24 16:33:49 $
+ *  last change: $Author: kr $ $Date: 2000-12-21 09:50:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,8 @@
 package com.sun.star.tools.uno;
 
 
+import java.applet.Applet;
+
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
@@ -100,7 +102,7 @@ import com.sun.star.uno.Type;
  * It removes the need for writing UNO applications in Java.
  * <p>
  */
-public class UnoApp {
+public class UnoApp extends Applet {
     static public final boolean DEBUG = false;
 
     /**
@@ -414,11 +416,11 @@ public class UnoApp {
         /**
          * <code>set</code> is called while parsing the arguments.
          * <p>
-         * @param unoApp   the <code>unoApp</code> to use for this option
+         * @param compContext   the <code>compContext</code> to use for this option
          * @param args     an <code>String</code> array with the arguments
          * @param index    the index of the current argument
          */
-        abstract void set(UnoApp unoApp, String args[], int index[]) throws Exception;
+        abstract void set(CompContext compContext, String args[], int index[]) throws Exception;
 
         /**
          * Create is called while trying to get the result object.
@@ -427,7 +429,7 @@ public class UnoApp {
          * @param xMultiServiceFactory  the service manager to use
          * @param args                  the args for the object instantiation
          */
-        Object create(UnoApp unoApp) throws Exception {
+        Object create(CompContext compContext) throws Exception {
             throw new Exception("not implemented");
         }
     }
@@ -444,21 +446,21 @@ public class UnoApp {
             super(__key, __help);
         }
 
-        void set(UnoApp unoApp, String args[], int index[]) throws Exception {
+        void set(CompContext compContext, String args[], int index[]) throws Exception {
             String serviceName = args[index[0] ++];
 
-            unoApp._context = serviceName;
-            unoApp._creator = this;
+            compContext._context = serviceName;
+            compContext._creator = this;
         }
 
-        Object create(UnoApp unoApp) throws Exception {
+        Object create(CompContext compContext) throws Exception {
             Object object = null;
 
-            if(unoApp._args != null && unoApp._args.length != 0)
-                object = unoApp._xMultiServiceFactory.createInstanceWithArguments((String)unoApp._context, unoApp._args);
+            if(compContext._args != null && compContext._args.length != 0)
+                object = compContext._xMultiServiceFactory.createInstanceWithArguments((String)compContext._context, compContext._args);
 
             else
-                object = unoApp._xMultiServiceFactory.createInstance((String)unoApp._context);
+                object = compContext._xMultiServiceFactory.createInstance((String)compContext._context);
 
             return object;
         }
@@ -477,15 +479,15 @@ public class UnoApp {
             super(__key, __help);
         }
 
-        void set(UnoApp unoApp, String args[], int index[]) throws Exception {
-            unoApp._context = RegistryServiceFactory.create(args[index[0] ++]);
-            unoApp._creator = this;
+        void set(CompContext compContext, String args[], int index[]) throws Exception {
+            compContext._context = RegistryServiceFactory.create(args[index[0] ++]);
+            compContext._creator = this;
 
-            if(DEBUG) System.err.println("##### " + getClass().getName() + " - got RegistryServiceFactory:" + unoApp._context);
+            if(DEBUG) System.err.println("##### " + getClass().getName() + " - got RegistryServiceFactory:" + compContext._context);
         }
 
-        Object create(UnoApp unoApp) throws Exception {
-            return unoApp._context;
+        Object create(CompContext compContext) throws Exception {
+            return compContext._context;
         }
 
     }
@@ -503,15 +505,15 @@ public class UnoApp {
             super(__key, __help);
         }
 
-        void set(UnoApp unoApp, String args[], int index[]) throws Exception {
-            unoApp._context = RegistryServiceFactory.create(args[index[0] ++], args[index[0] ++]);
-            unoApp._creator = this;
+        void set(CompContext compContext, String args[], int index[]) throws Exception {
+            compContext._context = RegistryServiceFactory.create(args[index[0] ++], args[index[0] ++]);
+            compContext._creator = this;
 
-            if(DEBUG) System.err.println("##### " + getClass().getName() + " - got RegistryServiceFactory:" + unoApp._context);
+            if(DEBUG) System.err.println("##### " + getClass().getName() + " - got RegistryServiceFactory:" + compContext._context);
         }
 
-        Object create(UnoApp unoApp) throws Exception {
-            return unoApp._context;
+        Object create(CompContext compContext) throws Exception {
+            return compContext._context;
         }
 
     }
@@ -528,19 +530,19 @@ public class UnoApp {
             super(__key, __help);
         }
 
-        void set(UnoApp unoApp, String args[], int index[]) throws Exception {
-            unoApp._context = args[index[0] ++];
-            unoApp._uno_url = (String)unoApp._context;
-            unoApp._creator = this;
+        void set(CompContext compContext, String args[], int index[]) throws Exception {
+            compContext._context = args[index[0] ++];
+            compContext._uno_url = (String)compContext._context;
+            compContext._creator = this;
         }
 
-        Object create(UnoApp unoApp) throws Exception {
-            unoApp._uno_url = null;
+        Object create(CompContext compContext) throws Exception {
+            compContext._uno_url = null;
 
             XUnoUrlResolver urlResolver = (XUnoUrlResolver)UnoRuntime.queryInterface(XUnoUrlResolver.class,
-                                                                                     unoApp._xMultiServiceFactory.createInstance("com.sun.star.bridge.UnoUrlResolver"));
+                                                                                     compContext._xMultiServiceFactory.createInstance("com.sun.star.bridge.UnoUrlResolver"));
 
-            return urlResolver.resolve((String)unoApp._context);
+            return urlResolver.resolve((String)compContext._context);
         }
     }
 
@@ -556,20 +558,20 @@ public class UnoApp {
             super(__key, __help);
         }
 
-        void set(UnoApp unoApp, String args[], int index[]) throws Exception {
+        void set(CompContext compContext, String args[], int index[]) throws Exception {
             if(DEBUG) System.err.println("##### " + getClass().getName() + ".set:" + args[0]);
 
-            unoApp._context = args[index[0] ++];
-            unoApp._creator = this;
+            compContext._context = args[index[0] ++];
+            compContext._creator = this;
         }
 
-        Object create(UnoApp unoApp) throws Exception {
-            String componentName = (String)unoApp._context;
+        Object create(CompContext compContext) throws Exception {
+            String componentName = (String)compContext._context;
 
             XImplementationLoader loader = (XImplementationLoader)UnoRuntime.queryInterface(XImplementationLoader.class,
-                                                                                            unoApp._xMultiServiceFactory.createInstance("com.sun.star.loader.Java"));
+                                                                                            compContext._xMultiServiceFactory.createInstance("com.sun.star.loader.Java"));
 
-            Object serviceManager = unoApp._xMultiServiceFactory.createInstance("com.sun.star.lang.ServiceManager");
+            Object serviceManager = compContext._xMultiServiceFactory.createInstance("com.sun.star.lang.ServiceManager");
             XSet serviceManager_xSet = (XSet)UnoRuntime.queryInterface(XSet.class, serviceManager);
 
             XRegistryKey xRegistryKey = new RegistryKey("ROOT");
@@ -607,7 +609,7 @@ public class UnoApp {
             super(__key, __help);
         }
 
-        void set(UnoApp unoApp, String args[], int index[]) throws Exception {
+        void set(CompContext compContext, String args[], int index[]) throws Exception {
             String arg = args[index[0] ++];
 
             if(DEBUG) System.err.println("##### " + getClass().getName() + ".set:" + arg);
@@ -624,10 +626,10 @@ public class UnoApp {
             comps.addElement(arg);
 
             // now use the XSet interface at the ServiceManager to add the factory of the loader
-              XSet xSet = (XSet) UnoRuntime.queryInterface(XSet.class, unoApp._xMultiServiceFactory);
+              XSet xSet = (XSet) UnoRuntime.queryInterface(XSet.class, compContext._xMultiServiceFactory);
 
             for(int i = 0; i < comps.size(); ++ i) {
-                Object object = new UnoApp((String)comps.elementAt(i)).getObject();
+                Object object = new CompContext((String)comps.elementAt(i)).getObject();
 
                 XSingleServiceFactory xSingleServiceFactory = (XSingleServiceFactory)UnoRuntime.queryInterface(XSingleServiceFactory.class,
                                                                                                                object);
@@ -662,14 +664,14 @@ public class UnoApp {
             super(__key, __help);
         }
 
-        void set(UnoApp unoApp, String args[], int index[]) throws Exception {
+        void set(CompContext compContext, String args[], int index[]) throws Exception {
             Object obj_args[] = new Object[args.length - index[0]];
 
             int i = 0;
             while(index[0] < args.length)
-                obj_args[i ++] = new UnoApp(args[index[0] ++]).getObject();
+                obj_args[i ++] = new CompContext(args[index[0] ++]).getObject();
 
-            unoApp._args = obj_args;
+            compContext._args = obj_args;
         }
     }
 
@@ -684,8 +686,8 @@ public class UnoApp {
             super(__key, __help);
         }
 
-        void set(UnoApp unoApp, String args[], int index[]) throws Exception {
-            unoApp._singleAccept = true;
+        void set(CompContext compContext, String args[], int index[]) throws Exception {
+            compContext._singleAccept = true;
         }
     }
 
@@ -700,7 +702,7 @@ public class UnoApp {
             super(__key, __help);
         }
 
-        void set(UnoApp unoApp, String args[], int index[]) {
+        void set(CompContext compContext, String args[], int index[]) {
             System.out.println("usage: UnoApp [option]*");
 
             Enumeration elements = __options.elements();
@@ -738,12 +740,12 @@ public class UnoApp {
         // arguments with included spaces.
         String arg = mergeString(args);
 
-        UnoApp unoApp = new UnoApp(arg);
+        CompContext compContext = new CompContext(arg);
 
-        Object object = unoApp.getObject();
+        Object object = compContext.getObject();
 
-        if(unoApp._uno_url != null) // see, if we have to export the object
-            export(unoApp._xMultiServiceFactory, unoApp._uno_url, object, unoApp._singleAccept);
+        if(compContext._uno_url != null) // see, if we have to export the object
+            export(compContext._xMultiServiceFactory, compContext._uno_url, object, compContext._singleAccept);
         else {
             XMain xMain = (XMain)UnoRuntime.queryInterface(XMain.class, object);
 
@@ -755,84 +757,113 @@ public class UnoApp {
     }
 
 
-    /* The membders of an UnoApp */
-    Option _creator = null; // the creator gets set by option which provide objects
-    Object _context = null; // the context for object creation
-    Object _args[]  = null; // the args for object creation
-    String _uno_url = null; // the url for object export
-    XMultiServiceFactory _xMultiServiceFactory; // the service manager for object creation
-    boolean _singleAccept = false;  // if export object, only export once
+    static class CompContext {
+        /* The membders of an CompContext */
+        Option _creator = null; // the creator gets set by option which provide objects
+        Object _context = null; // the context for object creation
+        Object _args[]  = null; // the args for object creation
+        String _uno_url = null; // the url for object export
+        XMultiServiceFactory _xMultiServiceFactory; // the service manager for object creation
+        boolean _singleAccept = false;  // if export object, only export once
 
-    /**
-     * Initializes <code>UnoApp</code>.
-     * If string only is one word and the word does not start with "-"
-     * set the context with string.
-     * <p>
-     * @param  string   the arguments
-     */
-    UnoApp(String string) throws Exception {
-        _xMultiServiceFactory = createSimpleServiceManager();
+        /**
+         * Initializes <code>CompContext</code>.
+         * If string only is one word and the word does not start with "-"
+         * set the context with string.
+         * <p>
+         * @param  string   the arguments
+         */
+        CompContext(String string) throws Exception {
+            _xMultiServiceFactory = createSimpleServiceManager();
 
-        String args[] = parseString(string);
+            String args[] = parseString(string);
 
-        if(args.length == 1 && args[0].charAt(0) != '-')
-            _context = string;
-        else
-            parseArgs(args);
-    }
+            if(args.length == 1 && args[0].charAt(0) != '-')
+                _context = string;
+            else
+                parseArgs(args);
+        }
 
-    /**
-     * Initializes <code>UnoApp</code>.
-     * If args contains only one word and the word does not start with "-"
-     * set the context with string.
-     * <p>
-     * @param  string   the arguments
-     */
-    UnoApp(String args[]) throws Exception {
-        _xMultiServiceFactory = createSimpleServiceManager();
+        /**
+         * Initializes <code>CompContext</code>.
+         * If args contains only one word and the word does not start with "-"
+         * set the context with string.
+         * <p>
+         * @param  string   the arguments
+         */
+        CompContext(String args[]) throws Exception {
+            _xMultiServiceFactory = createSimpleServiceManager();
 
-        if(args.length == 1 && args[0].charAt(0) != '-')
-            _context = args[0];
-        else
-            parseArgs(args);
-    }
+            if(args.length == 1 && args[0].charAt(0) != '-')
+                _context = args[0];
+            else
+                parseArgs(args);
+        }
 
-    /**
-     * Interprets the args as a sequence of option names
-     * followed by option parameters.
-     * <p>
-     * @param args   the arguments
-     */
-    protected void parseArgs(String args[]) throws Exception {
-        int i[] = new int[1];
-        while(i[0] < args.length) {
-            Option option = (Option)__options.get(args[i[0]]);
-            if(option == null) {
-                System.err.println("unknown option:" + args[i[0]]);
-                return;
+        /**
+         * Interprets the args as a sequence of option names
+         * followed by option parameters.
+         * <p>
+         * @param args   the arguments
+         */
+        protected void parseArgs(String args[]) throws Exception {
+            int i[] = new int[1];
+            while(i[0] < args.length) {
+                Option option = (Option)__options.get(args[i[0]]);
+                if(option == null) {
+                    System.err.println("unknown option:" + args[i[0]]);
+                    return;
+                }
+
+                ++ i[0];
+
+                option.set(this, args, i);
             }
+        }
 
-            ++ i[0];
+        /**
+         * Gets the object described by this <code>compContext</code>.
+         * If no creator is set, returns the context as object.
+         * <p>
+         * @return  the object
+         */
+        Object getObject () throws Exception {
+            Object object = null;
 
-            option.set(this, args, i);
+            if(_creator == null)
+                object = _context;
+
+            else
+                object = _creator.create(this);
+
+            return object;
         }
     }
 
-    /**
-     * Gets the object described by this <code>unoApp</code>.
-     * If no creator is set, returns the context as object.
-     * <p>
-     * @return  the object
-     */
-    Object getObject () throws Exception {
-        Object object = null;
 
-        if(_creator == null)
-            object = _context;
+    /* overwrite the applet methods */
+    public void init() {
+        System.err.println("##### " + getClass().getName() + ".init");
 
-        else
-            object = _creator.create(this);
+        try {
+            String args = getParameter("params");
 
-        return object;
+            main(new String[]{args});
+        }
+        catch(Exception exception) {
+            System.err.println("error - " + exception);
+        }
+    }
+
+    public void start() {
+        System.err.println("##### " + getClass().getName() + ".start");
+    }
+
+    public void stop() {
+        System.err.println("##### " + getClass().getName() + ".stop");
+    }
+
+    public void destroy() {
+        System.err.println("##### " + getClass().getName() + ".init");
     }
 }
