@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-01 10:11:47 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:34:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -449,7 +449,7 @@ FmXGridPeer* SbaXGridControl::imp_CreatePeer(Window* pParent)
     {
         try
         {
-            if (::comphelper::getINT16(xModelSet->getPropertyValue(::rtl::OUString::createFromAscii("Border"))))
+            if (::comphelper::getINT16(xModelSet->getPropertyValue(PROPERTY_BORDER)))
                 nStyle |= WB_BORDER;
         }
         catch(Exception&)
@@ -1356,24 +1356,6 @@ void SbaGridControl::AfterDrop()
 
 
 //------------------------------------------------------------------------------
-void SbaGridControl::setDataSource(const Reference< XRowSet > & rCursor, sal_uInt16 nOpts)
-{
-    FmGridControl::setDataSource(rCursor, nOpts);
-
-    // for DnD we need a query composer
-    Reference< XPropertySet >   xFormSet = getDataSource();
-    Reference< ::com::sun::star::form::XForm >  xForm(xFormSet, UNO_QUERY);
-    if (xForm.is() && xFormSet.is() && ::comphelper::getBOOL(xFormSet->getPropertyValue(PROPERTY_USE_ESCAPE_PROCESSING)))
-    {   //  (only if the statement isn't native)
-        Reference< XSQLQueryComposerFactory >  xFactory(::dbtools::getConnection(Reference< XRowSet > (xFormSet,UNO_QUERY)), UNO_QUERY);
-        if (xFactory.is())
-            m_xComposer = xFactory->createQueryComposer();
-    }
-    else
-        m_xComposer = NULL;
-}
-
-//------------------------------------------------------------------------------
 Reference< XPropertySet >  SbaGridControl::getField(sal_uInt16 nModelPos)
 {
     Reference< XPropertySet >  xEmptyReturn;
@@ -1383,10 +1365,9 @@ Reference< XPropertySet >  SbaGridControl::getField(sal_uInt16 nModelPos)
         Reference< XIndexAccess >  xCols(GetPeer()->getColumns(), UNO_QUERY);
         if ( xCols.is() && xCols->getCount() > nModelPos )
         {
-            Reference< XPropertySet >  xCol;
-            xCols->getByIndex(nModelPos) >>= xCol;
+            Reference< XPropertySet >  xCol(xCols->getByIndex(nModelPos),UNO_QUERY);
             if ( xCol.is() )
-                xCol->getPropertyValue(PROPERTY_BOUNDFIELD) >>= xEmptyReturn;
+                xEmptyReturn.set(xCol->getPropertyValue(PROPERTY_BOUNDFIELD),UNO_QUERY);
         }
         else
             OSL_ENSURE(0,"SbaGridControl::getField getColumns returns NULL or ModelPos is > than count!");
@@ -1560,11 +1541,11 @@ void SbaGridControl::DoColumnDrag(sal_uInt16 nColumnPos)
 
         sal_uInt16 nModelPos = GetModelColumnPos(GetColumnIdFromViewPos(nColumnPos));
         Reference< XIndexContainer >  xCols(GetPeer()->getColumns(), UNO_QUERY);
-        xCols->getByIndex(nModelPos) >>= xAffectedCol;
+        xAffectedCol.set(xCols->getByIndex(nModelPos),UNO_QUERY);
         if (xAffectedCol.is())
         {
             xAffectedCol->getPropertyValue(PROPERTY_CONTROLSOURCE) >>= sField;
-            xAffectedCol->getPropertyValue(PROPERTY_BOUNDFIELD) >>= xAffectedField;
+            xAffectedField.set(xAffectedCol->getPropertyValue(PROPERTY_BOUNDFIELD),UNO_QUERY);
         }
     }
     catch(Exception&)
@@ -1893,7 +1874,7 @@ IMPL_LINK(SbaGridControl, AsynchDropEvent, void*, EMPTY_ARG)
         if ( !bCountFinal )
             setDataSource(NULL); // deattach from grid control
         Reference< XResultSetUpdate > xResultSetUpdate(xDataSource,UNO_QUERY);
-        ODatabaseImportExport* pImExport = new ORowSetImportExport(this,xResultSetUpdate,getServiceManager());
+        ODatabaseImportExport* pImExport = new ORowSetImportExport(this,xResultSetUpdate,m_aDataDescriptor,getServiceManager());
         Reference<XEventListener> xHolder = pImExport;
         pImExport->initialize(m_aDataDescriptor);
         Hide();
