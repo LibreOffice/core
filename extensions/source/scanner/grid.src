@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grid.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 18:20:26 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 11:26:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,35 +91,8 @@ ModalDialog GRID_DIALOG
     {
         Pos = MAP_APPFONT( 245, 65 );
         Size = MAP_APPFONT( 50, 15 );
-        Text = "Setzen";
-        Text [ English ] = "Set";
-        Text[ english_us ] = "Set";
-        Text[ portuguese ] = "Definir";
-        Text[ russian ] = "Óñòàíîâèòü";
-        Text[ greek ] = "Ïñéóìüò";
-        Text[ dutch ] = "Zetten";
-        Text[ french ] = "Restaurer";
-        Text[ spanish ] = "Definir";
-        Text[ italian ] = "Imposta";
-        Text[ danish ] = "Definer";
-        Text[ swedish ] = "Definiera";
-        Text[ polish ] = "Ustaw";
-        Text[ portuguese_brazilian ] = "Definir";
-        Text[ japanese ] = "è¨­å®š";
-        Text[ korean ] = "ì„¤ì •";
-        Text[ chinese_simplified ] = "è®¾å®š";
-        Text[ chinese_traditional ] = "æŒ‡å®š";
-        Text[ arabic ] = "ÊÚííä";
-        Text[ turkish ] = "Tanımla";
-        Text[ catalan ] = "Defineix";
-        Text[ finnish ] = "Määritä";
-        Text[ thai ] = "à¸•à¸±à¹‰à¸‡à¸„à¹ˆà¸²";
-        Text[ czech ] = "Nastavit";
-        Text[ hebrew ] = "Setzen";
-        Text[ hindi ] = "à¤¸à¥‡à¤Ÿà¥à¤Ÿ à¤•à¤°à¥‹";
-        Text[ slovak ] = "NastaviÅ¥";
-        Text[ hungarian ] = "BeÃ¡llÃ­tÃ¡s";
-        Text[ slovenian ] = "Nastavi";
+        Text [ de ] = "Setzen";
+        Text [ en-US ] = "Set";
     };
     Bitmap GRID_DIALOG_HANDLE_BMP
     {
@@ -127,131 +100,23 @@ ModalDialog GRID_DIALOG
     };
     String RESET_TYPE_LINEAR_ASCENDING
     {
-        Text = "Linear steigend";
-        Text [ English ] = "Linear ascending";
-        Text[ english_us ] = "Linear ascending";
-        Text[ portuguese ] = "Linear crescente";
-        Text[ russian ] = "Ëèíåéíîå âîçğàñòàíèå";
-        Text[ greek ] = "ÃñáììéêŞ áıîçóç";
-        Text[ dutch ] = "Lineair stijgend";
-        Text[ french ] = "Croissance linéaire";
-        Text[ spanish ] = "Lineal ascendente";
-        Text[ italian ] = "Lineare crescente";
-        Text[ danish ] = "Lineær stigende";
-        Text[ swedish ] = "Linjärt stigande";
-        Text[ polish ] = "Rosn¹ce liniowo";
-        Text[ portuguese_brazilian ] = "Linear crescente";
-        Text[ japanese ] = "ã¾ã£ã™ãã«ä¸Šæ˜‡";
-        Text[ korean ] = "ì˜¤ë¦„ì°¨ìˆœ ì„ í˜•";
-        Text[ chinese_simplified ] = "çº¿æ€§ä¸Šå‡";
-        Text[ chinese_traditional ] = "ç·šæ€§ä¸Šæ˜‡";
-        Text[ arabic ] = "ÎØí ÊÕÇÚÏí";
-        Text[ turkish ] = "Doğrusal artış";
-        Text[ catalan ] = "Ascensió lineal";
-        Text[ finnish ] = "Lineaarinen nouseva";
-        Text[ thai ] = "à¸ˆà¸²à¸à¸™à¹‰à¸­à¸¢à¹„à¸›à¸¡à¸²à¸à¹à¸šà¸šà¹€à¸ªà¹‰à¸™à¸•à¸£à¸‡";
-        Text[ czech ] = "LineÃ¡rnÄ› stoupajÃ­cÃ­";
-        Text[ hebrew ] = "Linear steigend";
-        Text[ hindi ] = "à¤¸à¤‚à¤•à¥à¤šà¤¿à¤¤ à¤†à¤°à¥‹à¤¹à¤£ à¤•à¥à¤°à¤®";
-        Text[ slovak ] = "LineÃ¡rne stÃºpajÃºci";
-        Text[ hungarian ] = "Egyenletesen nÃ¶vekvÅ‘";
-        Text[ slovenian ] = "Linearno naraÅ¡ÄajoÄe";
+        Text [ de ] = "Linear steigend";
+        Text [ en-US ] = "Linear ascending";
     };
     String RESET_TYPE_LINEAR_DESCENDING
     {
-        Text = "Linear fallend";
-        Text [ English ] = "Linear descending";
-        Text[ english_us ] = "Linear descending";
-        Text[ portuguese ] = "Linear decrescente";
-        Text[ russian ] = "Ëèíåéíîå óáûâàíèå";
-        Text[ greek ] = "ÃñáììéêŞ ìåßùóç";
-        Text[ dutch ] = "Lineair dalend";
-        Text[ french ] = "Décroissance linéaire";
-        Text[ spanish ] = "Lineal descendente";
-        Text[ italian ] = "Lineare descrescente";
-        Text[ danish ] = "Lineær faldende";
-        Text[ swedish ] = "Linjärt fallande";
-        Text[ polish ] = "Malej¹ce liniowo";
-        Text[ portuguese_brazilian ] = "Linear decrescente";
-        Text[ japanese ] = "ã¾ã£ã™ãã«ä¸‹é™";
-        Text[ korean ] = "ë‚´ë¦¼ì°¨ìˆœ ì„ í˜•";
-        Text[ chinese_simplified ] = "çº¿æ€§ä¸‹é™";
-        Text[ chinese_traditional ] = "ç·šæ€§ä¸‹é™";
-        Text[ arabic ] = "ÎØí ÊäÇÒáí";
-        Text[ turkish ] = "Doğrusal düşüş";
-        Text[ catalan ] = "Descens lineal";
-        Text[ finnish ] = "Lineaarinen laskeva";
-        Text[ thai ] = "à¸ˆà¸²à¸à¸¡à¸²à¸à¹„à¸›à¸™à¹‰à¸­à¸¢à¹à¸šà¸šà¹€à¸ªà¹‰à¸™à¸•à¸£à¸‡";
-        Text[ czech ] = "LineÃ¡rnÄ› klesajÃ­cÃ­";
-        Text[ hebrew ] = "Linear fallend";
-        Text[ hindi ] = "à¤¸à¤‚à¤•à¥à¤šà¤¿à¤¤ à¤…à¤µà¤°à¥‹à¤¹à¤£";
-        Text[ slovak ] = "LineÃ¡rne klesajÃºci";
-        Text[ hungarian ] = "Egyenletesen csÃ¶kkenÅ‘";
-        Text[ slovenian ] = "Linearno padajoÄe";
+        Text [ de ] = "Linear fallend";
+        Text [ en-US ] = "Linear descending";
     };
     String RESET_TYPE_RESET
     {
-        Text = "Originalwerte";
-        Text [ English ] = "Original values";
-        Text[ english_us ] = "Original values";
-        Text[ portuguese ] = "Valores originais";
-        Text[ russian ] = "Èñõîäíûå çíà÷åíèÿ";
-        Text[ greek ] = "Áñ÷éêİò ôéìİò";
-        Text[ dutch ] = "Oorspronkelijke waarden";
-        Text[ french ] = "Restaurer les valeurs d'origine";
-        Text[ spanish ] = "Valores originales";
-        Text[ italian ] = "Valori originali";
-        Text[ danish ] = "Originalværdier";
-        Text[ swedish ] = "Originalvärden";
-        Text[ polish ] = "Wartoœci oryginalne";
-        Text[ portuguese_brazilian ] = "Valores originais";
-        Text[ japanese ] = "ã‚ªãƒªã‚¸ãƒŠãƒ«å€¤";
-        Text[ korean ] = "ì›ë˜ê°’";
-        Text[ chinese_simplified ] = "åŸå§‹æ•°å€¼";
-        Text[ chinese_traditional ] = "åŸå§‹å€¼";
-        Text[ arabic ] = "ÇáŞíã ÇáÃÕáíÉ";
-        Text[ turkish ] = "Asıl değerler";
-        Text[ catalan ] = "Valors originals";
-        Text[ finnish ] = "Alkuperäiset arvot";
-        Text[ thai ] = "à¸„à¹ˆà¸²à¹€à¸”à¸´à¸¡";
-        Text[ czech ] = "PÅ¯vodnÃ­ hodnoty";
-        Text[ hebrew ] = "Originalwerte";
-        Text[ hindi ] = "à¤¯à¤¥à¤¾à¤°à¥à¤¥ à¤®à¥‚à¤²à¥à¤¯";
-        Text[ slovak ] = "PÃ´vodnÃ© hodnoty";
-        Text[ hungarian ] = "Eredeti Ã©rtÃ©kek";
-        Text[ slovenian ] = "Izvirne vrednosti";
+        Text [ de ] = "Originalwerte";
+        Text [ en-US ] = "Original values";
     };
     String RESET_TYPE_EXPONENTIAL
     {
-        Text = "Exponentiell wachsend";
-        Text [ English ] = "Exponential raise";
-        Text[ english_us ] = "Exponential increasing";
-        Text[ portuguese ] = "Exponencial crescente";
-        Text[ russian ] = "Âîçğàñòàíèå ïî ıêñïîíåíòå";
-        Text[ greek ] = "ÅêèåôéêŞ áıîçóç";
-        Text[ dutch ] = "Exponentiele groei";
-        Text[ french ] = "Croissance exponentielle";
-        Text[ spanish ] = "Exponencial aumentando";
-        Text[ italian ] = "Esponenziale crescente";
-        Text[ danish ] = "Eksponentiel vækst";
-        Text[ swedish ] = "Exponentiellt växande";
-        Text[ polish ] = "Rosn¹ce wyk³adniczo";
-        Text[ portuguese_brazilian ] = "Exponencial crescente";
-        Text[ japanese ] = "æ€¥æ¿€ã«å¢—ã‚„ã™";
-        Text[ korean ] = "ì˜¤ë¦„ ì§€ìˆ˜";
-        Text[ chinese_simplified ] = "æŒ‡æ•°å‹å¢é•¿";
-        Text[ chinese_traditional ] = "å†ªæ•¸å¼éå¢";
-        Text[ arabic ] = "ÊÒÇíÏ ÃÓí";
-        Text[ turkish ] = "Üstel artış";
-        Text[ catalan ] = "Increment exponencial";
-        Text[ finnish ] = "Eksponentiaalinen lisäys";
-        Text[ thai ] = "à¹€à¸à¸´à¹ˆà¸¡à¸‚à¸¶à¹‰à¸™à¹à¸šà¸šà¸¢à¸à¸à¸³à¸¥à¸±à¸‡";
-        Text[ czech ] = "ExponenciÃ¡lnÄ› rostoucÃ­";
-        Text[ hebrew ] = "Exponentiell wachsend";
-        Text[ hindi ] = "à¤à¤•à¥à¤¸à¥à¤ªà¥‹à¤¨à¥‡à¤¶à¥à¤¯à¤² à¤ªà¥à¤°à¤•à¤¾à¤° à¤¸à¥‡ à¤¬à¤¢à¤¨à¤¾";
-        Text[ slovak ] = "ExponenciÃ¡lne rastÃºci";
-        Text[ hungarian ] = "ExponenciÃ¡lisan nÃ¶vekvÅ‘";
-        Text[ slovenian ] = "Eksponentna rast";
+        Text [ de ] = "Exponentiell wachsend";
+        Text [ en-US ] = "Exponential increasing";
     };
 };
 
