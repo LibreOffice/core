@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSectionExport.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:35:07 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:00:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1370,7 +1370,7 @@ void XMLSectionExport::ExportIndexTemplateElement(
     sal_Bool bBibliographyDataOK = sal_False;
 
     // With Tab Stop #i21237#
-    sal_Bool bWithTabStop;
+    sal_Bool bWithTabStop = sal_False;
     sal_Bool bWithTabStopOK = sal_False;
 
     // token type
