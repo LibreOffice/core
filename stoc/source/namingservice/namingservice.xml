@@ -9,7 +9,7 @@
 <Name>  com.sun.star.comp.stoc.NamingService    </Name>
 
 <Description>
-    This component provides ...
+The naming service allows the registration and retrieval of objects.
 </Description>
 
 <ModuleName>    namingservice   </ModuleName>
@@ -27,8 +27,8 @@
 <ProjectBuildDependency>    sal         </ProjectBuildDependency>
 
 <RuntimeModuleDependency>   cppuhelper  </RuntimeModuleDependency>
-<RuntimeModuleDependency>   cppu1       </RuntimeModuleDependency>
-<RuntimeModuleDependency>   sal1        </RuntimeModuleDependency>
+<RuntimeModuleDependency>   cppu2       </RuntimeModuleDependency>
+<RuntimeModuleDependency>   sal2        </RuntimeModuleDependency>
 
 <Type>  com.sun.star.lang.XComponent                    </Type>
 <Type>  com.sun.star.lang.IllegalArgumentException      </Type>

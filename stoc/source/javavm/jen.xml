@@ -4,12 +4,15 @@
 <COMPONENTDESCRIPTION
     xmlns:xlink="http://www.w3.org/1999/xlink/Namespace" >
 
-<Author> Juergen Schmidt </Author>
+<Author> Kay Ramme </Author>
 
 <Name>  com.sun.star.comp.stoc.JavaVirtualMachine   </Name>
 
 <Description>
-    This component provides ...
+The Java VM service manages the creation of java vms.
+It takes a look at the UNO runtime and tries to find a java environment.
+If an java environment already exists, no new vm is created, instead
+the existing vm given back.
 </Description>
 
 <ModuleName>    jen </ModuleName>
@@ -33,8 +36,8 @@
 <RuntimeModuleDependency>   cppuhelper  </RuntimeModuleDependency>
 <RuntimeModuleDependency>   cppu1       </RuntimeModuleDependency>
 <RuntimeModuleDependency>   tl(COM)     </RuntimeModuleDependency>
-<RuntimeModuleDependency>   vos1$(COM)  </RuntimeModuleDependency>
-<RuntimeModuleDependency>   sal1        </RuntimeModuleDependency>
+<RuntimeModuleDependency>   vos2$(COM)  </RuntimeModuleDependency>
+<RuntimeModuleDependency>   sal2        </RuntimeModuleDependency>
 
 <Type>  com.sun.star.java.XJavaVM                       </Type>
 <Type>  com.sun.star.java.XJavaVM                       </Type>
