@@ -2,9 +2,9 @@
  *
  *  $RCSfile: align.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 20:34:37 $
+ *  last change: $Author: kz $ $Date: 2001-03-28 12:31:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,7 +115,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ dutch ] = "~Standaard";
         Text[ chinese_simplified ] = "±ê×¼(~D)";
         Text[ greek ] = "ÐñïåðéëïãÞ";
-        Text[ korean ] = "±âº»";
+        Text[ korean ] = "±âº»(~D)";
         Text[ turkish ] = "Standar~t";
         Text[ language_user1 ] = " ";
     };
@@ -196,14 +196,14 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text [ dutch ] = "~Rechts" ;
         Text [ spanish ] = "~Derecha" ;
         Text [ english_us ] = "R~ight" ;
-        Text[ chinese_simplified ] = "ÓÒ(~R)";
+        Text[ chinese_simplified ] = "ÓÒ(~I)";
         Text[ russian ] = "Ñïðàâà";
         Text[ polish ] = "Do prawe~j";
-        Text[ japanese ] = "‰E‘µ‚¦(~R)";
-        Text[ chinese_traditional ] = "¦V¥k(~R)";
+        Text[ japanese ] = "‰E‘µ‚¦(~I)";
+        Text[ chinese_traditional ] = "¦V¥k(~I)";
         Text[ arabic ] = "íãíä";
         Text[ dutch ] = "~Rechts";
-        Text[ chinese_simplified ] = "ÓÒ(~R)";
+        Text[ chinese_simplified ] = "ÓÒ(~I)";
         Text[ greek ] = "ÄåîéÜ";
         Text[ korean ] = "¿À¸¥ÂÊ(~I)";
         Text[ turkish ] = "Sa~ð";
@@ -245,25 +245,25 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Size = MAP_APPFONT ( 30 , 8 ) ;
         Text = "Einzu~g" ;
         Text [ English ] = "~Indent" ;
-        Text [ english_us ] = "Indent" ;
-        Text [ swedish ] = "Indrag" ;
+        Text [ english_us ] = "I~ndent" ;
+        Text [ swedish ] = "Indra~g" ;
         Text [ danish ] = "Indrykning" ;
         Text [ italian ] = "Rientro" ;
         Text [ spanish ] = "Sangría" ;
-        Text [ french ] = "Retrait" ;
+        Text [ french ] = "~Retrait" ;
         Text [ dutch ] = "Inspringing" ;
         Text [ portuguese_brazilian ] = "Einzu~g" ;
         Text [ portuguese ] = "Avanço" ;
-        Text[ chinese_simplified ] = "Ëõ½ø(~I)";
+        Text[ chinese_simplified ] = "Ëõ½ø(~N)";
         Text[ russian ] = "Îòñòóï";
         Text[ polish ] = "Wciêcie";
-        Text[ japanese ] = "²ÝÃÞÝÄ";
-        Text[ chinese_traditional ] = "ÁY±Æ(~I)";
+        Text[ japanese ] = "²ÝÃÞÝÄ(~N)";
+        Text[ chinese_traditional ] = "ÁY±Æ(~N)";
         Text[ arabic ] = "ÇáÅÒÇÍÉ";
         Text[ dutch ] = "Inspringing";
-        Text[ chinese_simplified ] = "Ëõ½ø(~I)";
+        Text[ chinese_simplified ] = "Ëõ½ø(~N)";
         Text[ greek ] = "Åóï÷Þ";
-        Text[ korean ] = "µé¿©¾²±â";
+        Text[ korean ] = "µé¿©¾²±â(~N)";
         Text[ turkish ] = "Girinti";
         Text[ language_user1 ] = " ";
     };
@@ -335,7 +335,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ dutch ] = "~Standaard";
         Text[ chinese_simplified ] = "±ê×¼(~S)";
         Text[ greek ] = "ÐñïåðéëïãÞ";
-        Text[ korean ] = "Ç¥ÁØ";
+        Text[ korean ] = "Ç¥ÁØ(~S)";
         Text[ turkish ] = "Sta~ndart";
         Text[ language_user1 ] = " ";
     };
@@ -483,9 +483,9 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Size = MAP_APPFONT ( 31 , 10 ) ;
         Text = "G~rad" ;
         Text [ ENGLISH ] = "Degrees" ;
-        Text [ english_us ] = "Degrees" ;
+        Text [ english_us ] = "De~grees" ;
         Text [ portuguese_brazilian ] = "Gra~d" ;
-        Text [ swedish ] = "Gra~der" ;
+        Text [ swedish ] = "G~rader" ;
         Text [ danish ] = "grader" ;
         Text [ italian ] = "Gra~di" ;
         Text [ spanish ] = "~Grados" ;
@@ -495,13 +495,13 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ chinese_simplified ] = "½Ç¶È(~G)";
         Text[ russian ] = "Ãðàäóñ";
         Text[ polish ] = "Stopieñ";
-        Text[ japanese ] = "“x";
+        Text[ japanese ] = "“x(~G)";
         Text[ chinese_traditional ] = "¨¤«×(~G)";
         Text[ arabic ] = "ÏÑÌÉ/ÏÑÌÇÊ";
         Text[ dutch ] = "Gra~den";
         Text[ chinese_simplified ] = "½Ç¶È(~G)";
-        Text[ greek ] = "Ìïßñåò";
-        Text[ korean ] = "µµ";
+        Text[ greek ] = "Ìïß~ñåò";
+        Text[ korean ] = "µµ(~G)";
         Text[ turkish ] = "De~rece";
         Text[ language_user1 ] = " ";
     };
