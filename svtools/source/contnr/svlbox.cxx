@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svlbox.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-04 07:38:22 $
+ *  last change: $Author: dv $ $Date: 2001-07-17 12:53:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1377,7 +1377,7 @@ IMPL_LINK( SvLBox, TextEditEndedHdl_Impl, SvInplaceEdit2 *, pSvInplaceEdit )
     // delete pEdCtrl;
     // pEdCtrl = 0;
     nImpFlags &= (~SVLBOX_IN_EDT);
-//  GrabFocus();
+    GrabFocus();
     return 0;
 }
 
