@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwshc.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 12:08:35 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 14:14:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -332,8 +332,10 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
         {
             //  all settings must be in pDialogDPObject
 
-            GetViewData()->SetRefTabNo( GetViewData()->GetTabNo() );
-            pResult = new ScDPLayoutDlg( pB, pCW, pParent, pDialogDPObject );
+            if( pDialogDPObject )
+            {
+                GetViewData()->SetRefTabNo( GetViewData()->GetTabNo() );
+                pResult = new ScDPLayoutDlg( pB, pCW, pParent, *pDialogDPObject );
 
 #if 0
             ScDocument*     pDoc = GetViewData()->GetDocument();
@@ -437,6 +439,7 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
                 delete aLabelArr[p];
             delete [] aLabelArr;
 #endif
+            }
         }
         break;
 
