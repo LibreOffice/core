@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epptso.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-01 12:05:00 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:44:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3253,10 +3253,12 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_u
         mnTextSize = 0;
     if ( mnTextSize )
     {
+        ParagraphObj* pPara;
         TextObj aTextObj( mXText, nTextInstance, maFontCollection, (PPTExBulletProvider&)*this );
         aTextObj.Write( &rOut );
 
         sal_uInt32 nSize, nPos = rOut.Tell();
+
         rOut << (sal_uInt32)( EPP_StyleTextPropAtom << 16 ) << (sal_uInt32)0;
         ImplWriteParagraphs( rOut, aTextObj );
         ImplWritePortions( rOut, aTextObj );
@@ -3265,7 +3267,7 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_u
         rOut << (sal_uInt32)( nSize - 8 );
         rOut.SeekRel( nSize - 8 );
 
-        for ( ParagraphObj* pPara = aTextObj.First(); pPara; pPara = aTextObj.Next() )
+        for ( pPara = aTextObj.First(); pPara; pPara = aTextObj.Next() )
         {
             for ( PortionObj* pPortion = (PortionObj*)pPara->First(); pPortion; pPortion = (PortionObj*)pPara->Next() )
             {
