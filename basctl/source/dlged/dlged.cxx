@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlged.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: tbe $ $Date: 2001-11-14 11:12:04 $
+ *  last change: $Author: tbe $ $Date: 2002-01-22 09:06:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -538,25 +538,25 @@ IMPL_LINK( DlgEditor, PaintTimeout, Timer *, EMPTYARG )
 
 void DlgEditor::SetMode( DlgEdMode eNewMode )
 {
-    if ( eMode != eNewMode )
+    if ( eNewMode != eMode )
     {
-        if ( pFunc )
-            delete pFunc;
+        delete pFunc;
+
+        if ( eNewMode == DLGED_INSERT )
+            pFunc = new DlgEdFuncInsert( this );
+        else
+            pFunc = new DlgEdFuncSelect( this );
+
+        if ( eNewMode == DLGED_READONLY )
+            pSdrModel->SetReadOnly( TRUE );
+        else
+            pSdrModel->SetReadOnly( FALSE );
     }
 
-    eMode = eNewMode;
-    if ( eMode == DLGED_INSERT )
-        pFunc = new DlgEdFuncInsert( this );
-    else
-        pFunc = new DlgEdFuncSelect( this );
-
-    if ( eMode == DLGED_TEST )
+    if ( eNewMode == DLGED_TEST )
         ShowDialog();
 
-    if ( eMode == DLGED_READONLY )
-        pSdrModel->SetReadOnly( TRUE );
-    else
-        pSdrModel->SetReadOnly( FALSE );
+    eMode = eNewMode;
 }
 
 //----------------------------------------------------------------------------

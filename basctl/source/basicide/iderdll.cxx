@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iderdll.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: tbe $ $Date: 2001-11-02 13:45:09 $
+ *  last change: $Author: tbe $ $Date: 2002-01-22 09:05:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,8 @@
 #include <bastypes.hxx>
 #include <basdoc.hxx>
 #include <basicmod.hxx>
+#include <propbrw.hxx>
+
 
 #define ITEMID_SEARCH   0
 #include <svx/srchitem.hxx>
@@ -173,6 +175,8 @@ void BasicIDEDLL::Init()
     BasicDocShell::RegisterInterface( pMod );
     BasicIDEShell::RegisterFactory( SVX_INTERFACE_BASIDE_VIEWSH );
     BasicIDEShell::RegisterInterface( pMod );
+
+    PropBrwMgr::RegisterChildWindow();
 }
 
 /*************************************************************************
@@ -182,6 +186,11 @@ void BasicIDEDLL::Init()
 \************************************************************************/
 void BasicIDEDLL::Exit()
 {
+    // the BasicIDEModule must be destroyed
+    BasicIDEModuleDummy** ppShlPtr = (BasicIDEModuleDummy**) GetAppData(SHL_IDE);
+    delete (*ppShlPtr);
+    (*ppShlPtr) = NULL;
+
     DELETEZ( pBasicIDEDLL );
 }
 

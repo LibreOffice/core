@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgedfac.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: tbe $ $Date: 2001-09-17 11:24:17 $
+ *  last change: $Author: tbe $ $Date: 2002-01-22 09:06:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,10 +72,6 @@
 #include <dlgeddef.hxx>
 #endif
 
-#ifndef _BASCTL_PROPBRW_HXX
-#include "propbrw.hxx"
-#endif
-
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
 #include <com/sun/star/container/XNameContainer.hpp>
 #endif
@@ -99,8 +95,6 @@ using namespace ::com::sun::star;
 DlgEdFactory::DlgEdFactory()
 {
     SdrObjFactory::InsertMakeObjectHdl( LINK(this, DlgEdFactory, MakeObject) );
-
-    PropBrwMgr::RegisterChildWindow();
 }
 
 //----------------------------------------------------------------------------

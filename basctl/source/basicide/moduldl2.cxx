@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldl2.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: tbe $ $Date: 2001-12-18 11:26:25 $
+ *  last change: $Author: tbe $ $Date: 2002-01-22 09:05:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,8 +203,15 @@ BasicCheckBox::BasicCheckBox( Window* pParent, const ResId& rResId ) :
 __EXPORT BasicCheckBox::~BasicCheckBox()
 {
     delete pCheckButton;
-}
 
+    // delete user data
+    SvLBoxEntry* pEntry = First();
+    while ( pEntry )
+    {
+        delete (BasicLibUserData*)pEntry->GetUserData();
+        pEntry = Next( pEntry );
+    }
+}
 
 //----------------------------------------------------------------------------
 
