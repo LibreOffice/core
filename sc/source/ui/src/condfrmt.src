@@ -2,9 +2,9 @@
  *
  *  $RCSfile: condfrmt.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: dr $ $Date: 2002-09-19 08:45:34 $
+ *  last change: $Author: kz $ $Date: 2002-11-27 16:53:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -342,7 +342,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
             < "gelijk aan" ; Default ; > ;
             < "kleiner dan" ; Default ; > ;
             < "groter dan" ; Default ; > ;
-            < "kleiner dan  of gelijk aan" ; Default ; > ;
+            < "kleiner dan of gelijk aan" ; Default ; > ;
             < "groter dan of gelijk aan" ; Default ; > ;
             < "niet gelijk aan" ; Default ; > ;
             < "tussen" ; Default ; > ;
@@ -366,7 +366,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         < "·ÓÎ¸¯Â ˜ÂÏ" ; Default ; > ;
         < "ÏÂÌ¸¯Â ËÎË ‡‚ÌÓ" ; Default ; > ;
         < "·ÓÎ¸¯Â ËÎË ‡‚ÌÓ" ; Default ; > ;
-        < "ÌÂ‡‚ÌÓ" ; Default ; > ;
+        < "ÌÂ ‡‚ÌÓ" ; Default ; > ;
         < "ÏÂÊ‰Û" ; Default ; > ;
         < "‚ÌÂ" ; Default ; > ;
     };
@@ -471,14 +471,14 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     };
     StringList [ finnish ] =
     {
-            < "yht‰ suuri kuin " ; Default ; > ;
-        < "v‰hemm‰n kuin" ; Default ; > ;
+            < "yht‰ suuri kuin" ; Default ; > ;
+        < "pienempi kuin" ; Default ; > ;
         < "suurempi kuin" ; Default ; > ;
         < "pienempi tai yht‰ suuri kuin" ; Default ; > ;
-        < "suurempi tai yht‰suuri kuin" ; Default ; > ;
-        < "ei yht‰ suuri kuin" ; Default ; > ;
-        < "V‰liss‰" ; Default ; > ;
-        < "ei v‰liss‰" ; Default ; > ;
+        < "suurempi tai yht‰ suuri kuin" ; Default ; > ;
+        < "eri suuri kuin" ; Default ; > ;
+        < "v‰lill‰" ; Default ; > ;
+        < "ei v‰lilt‰" ; Default ; > ;
     };
     StringList [ thai ] =
     {
@@ -625,7 +625,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Text[ turkish ] = "H¸cre biÁimi";
         Text[ language_user1 ] = "\"Vorlagen\" Styles are always capitalized no matter where they show up. EM15.5.00";
         Text[ catalan ] = "Estil de la cel.la";
-        Text[ finnish ] = "~Solun tyyli";
+        Text[ finnish ] = "Solun tyyli";
         Text[ thai ] = "‡∏•‡∏±‡∏Å‡∏©‡∏ì‡∏∞‡πÄ‡∏ã‡∏•‡∏•‡πå";
     };
     ListBox LB_COND1_TEMPLATE
@@ -937,7 +937,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         < "·ÓÎ¸¯Â ˜ÂÏ" ; Default ; > ;
         < "ÏÂÌ¸¯Â ËÎË ‡‚ÌÓ" ; Default ; > ;
         < "·ÓÎ¸¯Â ËÎË ‡‚ÌÓ" ; Default ; > ;
-        < "ÌÂ‡‚ÌÓ" ; Default ; > ;
+        < "ÌÂ ‡‚ÌÓ" ; Default ; > ;
         < "ÏÂÊ‰Û" ; Default ; > ;
         < "‚ÌÂ" ; Default ; > ;
     };
@@ -1042,14 +1042,14 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     };
     StringList [ finnish ] =
     {
-            < "yht‰ suuri kuin " ; Default ; > ;
-        < "v‰hemm‰n kuin" ; Default ; > ;
+            < "yht‰ suuri kuin" ; Default ; > ;
+        < "pienempi kuin" ; Default ; > ;
         < "suurempi kuin" ; Default ; > ;
         < "pienempi tai yht‰ suuri kuin" ; Default ; > ;
-        < "suurempi tai yht‰suuri kuin" ; Default ; > ;
-        < "ei yht‰ suuri kuin" ; Default ; > ;
-        < "V‰liss‰" ; Default ; > ;
-        < "ei v‰liss‰" ; Default ; > ;
+        < "suurempi tai yht‰ suuri kuin" ; Default ; > ;
+        < "eri suuri kuin" ; Default ; > ;
+        < "v‰lill‰" ; Default ; > ;
+        < "ei v‰lilt‰" ; Default ; > ;
     };
     StringList [ thai ] =
     {
@@ -1196,7 +1196,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Text[ turkish ] = "H¸cre biÁimi";
         Text[ language_user1 ] = "\"Vorlagen\" Styles are always capitalized no matter where they show up. EM15.5.00";
         Text[ catalan ] = "Estil de la cel.la";
-        Text[ finnish ] = "~Solun tyyli";
+        Text[ finnish ] = "Solun tyyli";
         Text[ thai ] = "‡∏•‡∏±‡∏Å‡∏©‡∏ì‡∏∞‡πÄ‡∏ã‡∏•‡∏•‡πå";
     };
     ListBox LB_COND2_TEMPLATE
@@ -1508,7 +1508,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         < "·ÓÎ¸¯Â ˜ÂÏ" ; Default ; > ;
         < "ÏÂÌ¸¯Â ËÎË ‡‚ÌÓ" ; Default ; > ;
         < "·ÓÎ¸¯Â ËÎË ‡‚ÌÓ" ; Default ; > ;
-        < "ÌÂ‡‚ÌÓ" ; Default ; > ;
+        < "ÌÂ ‡‚ÌÓ" ; Default ; > ;
         < "ÏÂÊ‰Û" ; Default ; > ;
         < "‚ÌÂ" ; Default ; > ;
     };
@@ -1613,14 +1613,14 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     };
     StringList [ finnish ] =
     {
-            < "yht‰ suuri kuin " ; Default ; > ;
-        < "v‰hemm‰n kuin" ; Default ; > ;
+            < "yht‰ suuri kuin" ; Default ; > ;
+        < "pienempi kuin" ; Default ; > ;
         < "suurempi kuin" ; Default ; > ;
         < "pienempi tai yht‰ suuri kuin" ; Default ; > ;
-        < "suurempi tai yht‰suuri kuin" ; Default ; > ;
-        < "ei yht‰ suuri kuin" ; Default ; > ;
-        < "V‰liss‰" ; Default ; > ;
-        < "ei v‰liss‰" ; Default ; > ;
+        < "suurempi tai yht‰ suuri kuin" ; Default ; > ;
+        < "eri suuri kuin" ; Default ; > ;
+        < "v‰lill‰" ; Default ; > ;
+        < "ei v‰lilt‰" ; Default ; > ;
     };
     StringList [ thai ] =
     {
@@ -1767,7 +1767,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Text[ turkish ] = "H¸cre biÁimi";
         Text[ language_user1 ] = "\"Vorlagen\" Styles are always capitalized no matter where they show up. EM15.5.00";
         Text[ catalan ] = "Estil de la cel.la";
-        Text[ finnish ] = "~Solun tyyli";
+        Text[ finnish ] = "Solun tyyli";
         Text[ thai ] = "‡∏•‡∏±‡∏Å‡∏©‡∏ì‡∏∞‡πÄ‡∏ã‡∏•‡∏•‡πå";
     };
     ListBox LB_COND3_TEMPLATE
