@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docu_pe2.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:15:44 $
+ *  last change: $Author: vg $ $Date: 2003-06-10 11:35:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,18 @@ namespace csi
 namespace dsapi
 {
 
+// Special handling for OOo1.1 release:
+//
+// Currently this is a one time solution to set all
+//   @since tags to value "OpenOffice.org 1.1"
+//   This has to be changed for the next version!
+//   There has to be a commandline flag and a replacement for StarOffice.
+//
+//  // KORR in future (before next release)
+//
+int G_nDO_Special_Since_OOo11 = 0;  // 0 = normal, 1 = OpenOffice 1.1, 2 = StarOffice 6.1
+String G_sDocuVersionString;            // Text to be used, if G_nDO_Special_Since_OOo11 ==1 or == 2.
+
 
 const char *        AtTagTitle(
                         const Tok_AtTag &   i_rToken );
@@ -150,8 +162,13 @@ SapiDocu_PE::Process_AtTag( const Tok_AtTag & i_rToken )
     else if (i_rToken.Id() == Tok_AtTag::deprecated)
     {
         pDocu->SetDeprecated();
-        pCurAtTag = new DT_StdAtTag("");
-        fCurTokenAddFunction = &SapiDocu_PE::AddDocuToken2CurAtTag;
+        pCurAtTag = new DT_StdAtTag("");    // Dummy that will not be used.
+        fCurTokenAddFunction = &SapiDocu_PE::AddDocuToken2Deprecated;
+    }
+    else if (i_rToken.Id() == Tok_AtTag::since)
+    {
+        pCurAtTag = new DT_SinceAtTag;
+        fCurTokenAddFunction = &SapiDocu_PE::SetCurSinceAtTagVersion;
     }
     else
     {
@@ -367,6 +384,13 @@ SapiDocu_PE::AddDocuToken2Description( DYN ary::info::DocuToken & let_drNewToken
 }
 
 void
+SapiDocu_PE::AddDocuToken2Deprecated( DYN ary::info::DocuToken & let_drNewToken )
+{
+    csv_assert(pDocu);
+    pDocu->AddToken2DeprecatedText(let_drNewToken);
+}
+
+void
 SapiDocu_PE::AddDocuToken2CurAtTag( DYN ary::info::DocuToken & let_drNewToken )
 {
     csv_assert(pCurAtTag);
@@ -399,6 +423,40 @@ SapiDocu_PE::SetCurSeeAlsoAtTagLinkText( DYN ary::info::DocuToken & let_drNewTok
     fCurTokenAddFunction = &SapiDocu_PE::AddDocuToken2CurAtTag;
 }
 
+
+void
+SapiDocu_PE::SetCurSinceAtTagVersion( DYN ary::info::DocuToken & let_drNewToken )
+{
+    csv_assert(pCurAtTag);
+
+    // BEGIN Special handling for OOo1.1 release
+
+    // Standard case:
+    if (G_nDO_Special_Since_OOo11 == 0)
+    {
+           pCurAtTag->AddToken(let_drNewToken);
+        fCurTokenAddFunction = &SapiDocu_PE::AddDocuToken2CurAtTag;
+        return;
+    }
+
+    // Special cases:
+    if (G_nDO_Special_Since_OOo11 == 1)
+    {   // Case OpenOffice 1.1:
+//      static const String sOOo11_("OpenOffice.org 1.1");
+        pCurAtTag->AddToken(*new DT_TextToken(G_sDocuVersionString));
+    }
+    else if (G_nDO_Special_Since_OOo11 == 2)
+    {   // Case StarOffice 6.1:
+//      static const String sSO61_("StarOffice 6.1");
+        pCurAtTag->AddToken(*new DT_TextToken(G_sDocuVersionString));
+    }
+
+    delete &let_drNewToken;
+    fCurTokenAddFunction = &SapiDocu_PE::AddDocuToken2Void;
+
+    // END Special handling for OOo1.1 release
+}
+
 const char *
 AtTagTitle( const Tok_AtTag & i_rToken )
 {
@@ -410,13 +468,14 @@ AtTagTitle( const Tok_AtTag & i_rToken )
         case Tok_AtTag::e_return:   return "Returns";
         case Tok_AtTag::e_throw:    return "Throws";
         case Tok_AtTag::example:    return "Example";
-        case Tok_AtTag::deprecated: return "";
+        case Tok_AtTag::deprecated: return "Deprecated";
         case Tok_AtTag::suspicious: return "";
         case Tok_AtTag::missing:    return "";
         case Tok_AtTag::incomplete: return "";
         case Tok_AtTag::version:    return "";
         case Tok_AtTag::guarantees: return "Guarantees";
         case Tok_AtTag::exception:  return "Exception";
+        case Tok_AtTag::since:      return "Since version";
     }
     return i_rToken.Text();
 }
