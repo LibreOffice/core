@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txencbox.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: er $ $Date: 2002-07-29 15:09:37 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 16:12:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,8 +70,17 @@
 #ifndef SVX_DBCHARSETHELPER_HXX
 #include "dbcharsethelper.hxx"
 #endif
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
 #ifndef _RTL_TENCINFO_H
 #include <rtl/tencinfo.h>
+#endif
+#ifndef _RTL_LOCALE_H_
+#include <rtl/locale.h>
+#endif
+#ifndef _OSL_NLSUPPORT_H_
+#include <osl/nlsupport.h>
 #endif
 
 //========================================================================
@@ -212,11 +221,36 @@ void SvxTextEncodingBox::FillFromDbTextEncodingMap(
 
 //------------------------------------------------------------------------
 
+// static
+rtl_TextEncoding SvxTextEncodingBox::GetBestMimeEncoding()
+{
+    const sal_Char* pCharSet = rtl_getBestMimeCharsetFromTextEncoding(
+            gsl_getSystemTextEncoding() );
+    if ( !pCharSet )
+    {
+        // If the system locale is unknown to us, e.g. LC_ALL=xx, match the UI
+        // language if possible.
+        ::com::sun::star::lang::Locale aLocale(
+                Application::GetSettings().GetUILocale() );
+        rtl_Locale * pLocale = rtl_locale_register( aLocale.Language.getStr(),
+                aLocale.Country.getStr(), aLocale.Variant.getStr() );
+        rtl_TextEncoding nEnc = osl_getTextEncodingFromLocale( pLocale );
+        pCharSet = rtl_getBestMimeCharsetFromTextEncoding( nEnc );
+    }
+    rtl_TextEncoding nRet;
+    if ( pCharSet )
+        nRet = rtl_getTextEncodingFromMimeCharset( pCharSet );
+    else
+        nRet = RTL_TEXTENCODING_UTF8;
+    return nRet;
+}
+
+//------------------------------------------------------------------------
+
 void SvxTextEncodingBox::FillWithMimeAndSelectBest()
 {
     FillFromTextEncodingTable( sal_False, 0xffffffff, RTL_TEXTENCODING_INFO_MIME );
-    const sal_Char* pCharSet = rtl_getBestMimeCharsetFromTextEncoding( gsl_getSystemTextEncoding() );
-    rtl_TextEncoding nEnc = rtl_getTextEncodingFromMimeCharset( pCharSet );
+    rtl_TextEncoding nEnc = GetBestMimeEncoding();
     SelectTextEncoding( nEnc );
 }
 
