@@ -2,9 +2,9 @@
  *
  *  $RCSfile: anchoreddrawobject.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-27 12:31:25 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 13:46:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -316,8 +316,12 @@ void SwAnchoredDrawObject::MakeObjPos()
     if ( mbNotYetPositioned )
     {
         mbNotYetPositioned = false;
-        if ( GetFrmFmt().GetPositionLayoutDir() ==
+        // --> OD 2004-09-29 #117975# - perform conversion of positioning
+        // attributes only for 'master' drawing objects
+        if ( !GetDrawObj()->ISA(SwDrawVirtObj) &&
+             GetFrmFmt().GetPositionLayoutDir() ==
                     com::sun::star::text::PositionLayoutDir::PositionInHoriL2R )
+        // <--
         {
             // --> OD 2004-10-19 #i35798# - set positioning attributes
             _SetPositioningAttr();
@@ -568,9 +572,14 @@ void SwAnchoredDrawObject::InvalidateObjPos()
             _InvalidatePage( pPageFrmRegisteredAt );
         }
         // <--
-        SwPageFrm* pPageFrmOfAnchor = &GetPageFrmOfAnchor();
-        if ( pPageFrmOfAnchor != pPageFrm &&
+        // --> OD 2004-09-23 #i33751#, #i34060# - method <GetPageFrmOfAnchor()>
+        // is replaced by method <FindPageFrmOfAnchor()>. It's return value
+        // have to be checked.
+        SwPageFrm* pPageFrmOfAnchor = FindPageFrmOfAnchor();
+        if ( pPageFrmOfAnchor &&
+             pPageFrmOfAnchor != pPageFrm &&
              pPageFrmOfAnchor != pPageFrmRegisteredAt )
+        // <--
         {
             _InvalidatePage( pPageFrmOfAnchor );
         }
