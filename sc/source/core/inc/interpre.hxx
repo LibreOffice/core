@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpre.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-28 16:51:27 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 07:58:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -291,6 +291,8 @@ BOOL DoubleRefToPosSingleRef( const ScRange& rRange, ScAddress& rAdr );
 double GetDouble();
 BOOL GetBool() { return GetDouble() != 0.0; }
 const String& GetString();
+// pop matrix and obtain one element, upper left or according to jump matrix
+ScMatValType GetDoubleOrStringFromMatrix( double& rDouble, String& rString );
 ScMatrixRef CreateMatrixFromDoubleRef(
         SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
         SCCOL nCol2, SCROW nRow2, SCTAB nTab2 );
