@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDrawDocumentView.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: af $ $Date: 2002-06-28 14:43:35 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 17:04:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@ public:
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::frame::XController>& rxController,
         const ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::accessibility::XAccessible>& rxParent);
+        ::com::sun::star::accessibility::XAccessible>& rxParent);
 
     virtual ~AccessibleDrawDocumentView (void);
 
@@ -108,7 +108,7 @@ public:
         getAccessibleChildCount (void)
         throw (::com::sun::star::uno::RuntimeException);
 
-    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible> SAL_CALL
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible> SAL_CALL
         getAccessibleChild (long nIndex)
         throw (::com::sun::star::uno::RuntimeException);
 
