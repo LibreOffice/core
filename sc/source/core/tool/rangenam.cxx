@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rangenam.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:38:25 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 17:54:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -377,11 +377,12 @@ void ScRangeData::UpdateReference(  UpdateRefMode eUpdateRefMode,
     pCode->Reset();
     if( pCode->GetNextReference() )
     {
+        BOOL bSharedFormula = ((eType & RT_SHARED) == RT_SHARED);
         ScCompiler aComp( pDoc, aPos, *pCode );
         BOOL bRelRef = aComp.UpdateNameReference( eUpdateRefMode, r,
                                                     nDx, nDy, nDz,
-                                                    bChanged);
-        if (eType&RT_SHARED)
+                                                    bChanged, bSharedFormula);
+        if (bSharedFormula)
         {
             if (bRelRef)
                 eType = eType | RT_SHAREDMOD;
