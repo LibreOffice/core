@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cmc $ $Date: 2000-11-14 10:13:10 $
+ *  last change: $Author: fs $ $Date: 2000-11-17 18:59:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,6 +175,8 @@ void SvXMLExport::_InitCtor()
                                   sXML_n_number, XML_NAMESPACE_NUMBER );
     pNamespaceMap->AddAtIndex( XML_NAMESPACE_MATH, sXML_np_math,
                                   sXML_n_math, XML_NAMESPACE_MATH );
+    pNamespaceMap->AddAtIndex( XML_NAMESPACE_FORM, sXML_namespace_form,
+                                  sXML_url_form, XML_NAMESPACE_FORM );
 
 
     xAttrList = (xml::sax::XAttributeList*)pAttrList;
@@ -645,9 +647,15 @@ SchXMLExportHelper* SvXMLExport::CreateChartExport()
     return new SchXMLExportHelper(*this,*GetAutoStylePool().get());
 }
 
+=======
 XMLFontAutoStylePool* SvXMLExport::CreateFontAutoStylePool()
 {
     return new XMLFontAutoStylePool( *this );
+}
+
+xmloff::OFormLayerXMLExport* SvXMLExport::CreateFormlayerExport()
+{
+    return new xmloff::OFormLayerXMLExport(*this);
 }
 
 OUString SvXMLExport::getDataStyleName(const sal_Int32 nNumberFormat) const
