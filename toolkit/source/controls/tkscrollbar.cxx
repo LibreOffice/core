@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tkscrollbar.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-11 11:58:44 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 12:49:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,7 @@ namespace toolkit
         ImplRegisterProperty( BASEPROPERTY_HELPTEXT );
         ImplRegisterProperty( BASEPROPERTY_HELPURL );
         ImplRegisterProperty( BASEPROPERTY_LINEINCREMENT );
+        ImplRegisterProperty( BASEPROPERTY_LIVE_SCROLL );
         ImplRegisterProperty( BASEPROPERTY_ORIENTATION );
         ImplRegisterProperty( BASEPROPERTY_PRINTABLE );
         ImplRegisterProperty( BASEPROPERTY_REPEAT_DELAY );
@@ -119,6 +120,8 @@ namespace toolkit
     {
         switch ( nPropId )
         {
+        case BASEPROPERTY_LIVE_SCROLL:
+            return uno::makeAny( (sal_Bool)sal_False );
         case BASEPROPERTY_DEFAULTCONTROL:
             return uno::makeAny( ::rtl::OUString::createFromAscii( szServiceName_UnoControlScrollBar ) );
 
