@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smres.src,v $
  *
- *  $Revision: 1.95 $
+ *  $Revision: 1.96 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 16:20:20 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 11:35:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -12128,10 +12128,10 @@ String STR_MATH_DOCUMENT_FULLTYPE_60
     Text[ catalan ] = "%PRODUCTNAME 6.0 F�rmula";
     Text[ finnish ] = "%PRODUCTNAME 6.0 -kaava";
     Text[ thai ] = "สูตรคำนวณ %PRODUCTNAME 6.0 ";
-    Text[ czech ] = "%PRODUCTNAME 6.0 Formula";
+    Text[ czech ] = "Vzorec %PRODUCTNAME %PRODUCTVERSION";
     Text[ hebrew ] = "‮נוסחת %PRODUCTNAME 6.0‬";
     Text[ hindi ] = "%PRODUCTNAME 6.0 सूत्र";
-    Text[ slovak ] = "%PRODUCTNAME 6.0 vzorec";
+    Text[ slovak ] = "%PRODUCTNAME %PRODUCTVERSION vzorec";
 };
 String STR_MATH_DOCUMENT_FULLTYPE_50
 {
@@ -12159,7 +12159,7 @@ String STR_MATH_DOCUMENT_FULLTYPE_50
     Text[ catalan ] = "%PRODUCTNAME 5.0 F�rmula";
     Text[ finnish ] = "%PRODUCTNAME 5.0 -kaava";
     Text[ thai ] = "สูตรคำนวณ %PRODUCTNAME 5.0 ";
-    Text[ czech ] = "%PRODUCTNAME 5.0 Formula";
+    Text[ czech ] = "Vzorec %PRODUCTNAME 5.0 Formula";
     Text[ hebrew ] = "‮נוסחת %PRODUCTNAME 5.0‬";
     Text[ hindi ] = "%PRODUCTNAME 5.0 सूत्र";
     Text[ slovak ] = "%PRODUCTNAME 5.0 Vzorec";
@@ -12191,7 +12191,7 @@ String STR_MATH_DOCUMENT_FULLTYPE_40
     Text[ catalan ] = "%PRODUCTNAME 4.0 F�rmula";
     Text[ finnish ] = "%PRODUCTNAME 4.0 -kaava";
     Text[ thai ] = "สูตรคำนวณ %PRODUCTNAME 4.0 ";
-    Text[ czech ] = "%PRODUCTNAME 4.0 Formula";
+    Text[ czech ] = "Vzorec %PRODUCTNAME 4.0";
     Text[ hebrew ] = "‮נוסחת %PRODUCTNAME 4.0‬";
     Text[ hindi ] = "%PRODUCTNAME 4.0 सूत्र";
     Text[ slovak ] = "%PRODUCTNAME 4.0 vzorec";
@@ -12223,7 +12223,7 @@ String STR_MATH_DOCUMENT_FULLTYPE_31
     Text[ catalan ] = "%PRODUCTNAME 3.0 F�rmula";
     Text[ finnish ] = "%PRODUCTNAME 3.0 -kaava";
     Text[ thai ] = "สูตรคำนวณ %PRODUCTNAME 3.0 ";
-    Text[ czech ] = "%PRODUCTNAME 3.0 Formula";
+    Text[ czech ] = "Vzorec %PRODUCTNAME 3.0";
     Text[ hebrew ] = "‮נוסחת %PRODUCTNAME 3.0‬";
     Text[ hindi ] = "%PRODUCTNAME 3.0 सूत्र";
     Text[ slovak ] = "%PRODUCTNAME 3.0 vzorec";
@@ -12463,7 +12463,24 @@ String RID_ERR_RGROUPEXPECTED
     Text [ dutch ] = "'}' verwacht" ;
     Text [ swedish ] = "'}' f�rv�ntad" ;
     Text [ danish ] = "'}' forventes" ;
-    Text [ portuguese_brazilian ] = "� necess�rio \"}\"" ;
+    Text [ portuguese_brazilian ] = "� necess�rio \"}\"";   Text[ portuguese ] = "'}' necess�ria";
+    Text[ russian ] = "'}' ���������";
+    Text[ slovak ] = "Očakávaná '}'";
+    Text[ polish ] = "Oczekiwano znaku '}'";
+    Text[ japanese ] = "'}'が必要です";
+    Text[ korean ] = "'}' 가 필요함";
+    Text[ turkish ] = "'}' gerekli";
+    Text[ thai ] = "'}' คาดคิด";
+
+    Text[ finnish ] = "T�h�n tarvitaan '}'";
+    Text[ czech ] = "Očekávána '}'";
+    Text[ chinese_simplified ] = "期待 '}'";
+    Text[ chinese_traditional ] = "期待<}>";
+    Text[ arabic ] = "����� '}'";
+    Text[ hebrew ] = "‮צפויה '}'‬";
+    Text[ catalan ] = "Es necessita '}'";
+    Text[ hindi ] = "'}' की प्रतीक्षा";
+
     Text [ portuguese ] = "'}' necess�ria" ;
     Text[ russian ] = "'}' ���������";
     Text[ polish ] = "Oczekiwano znaku '}'";
@@ -13198,6 +13215,62 @@ String RID_MATH_TOOLBOX
     Text[ hindi ] = "मुख्य औज़ार पट्टी";
     Text[ slovak ] = "Hlavný panel nástrojov";
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
