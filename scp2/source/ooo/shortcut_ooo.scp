@@ -2,9 +2,9 @@
 *
 *  $RCSfile: shortcut_ooo.scp,v $
 *
-*  $Revision: 1.13 $
+*  $Revision: 1.14 $
 *
-*  last change: $Author: obo $ $Date: 2004-11-17 13:00:57 $
+*  last change: $Author: rt $ $Date: 2004-12-16 10:53:07 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -362,19 +362,6 @@ Shortcut gid_Shortcut_Lib_Salhelper_3
     Styles = (NETWORK,RELATIVE);
 End
 
-#endif
-
-#if ! (defined (FREEBSD) || defined (NETBSD) || defined(MACOSX) )
-#if ( defined( _gcc3 ) && ( defined( C300 ) || defined( C322 ) ))
-
-Shortcut gid_Shortcut_Lib_Stdc
-    FileID = gid_File_Lib_Stdc;
-    Dir = gid_Dir_Program;
-    Name = STRING(libstdc++.so);
-    Styles = (NETWORK,RELATIVE);
-End
-
-#endif
 #endif
 
 #ifdef UNX
