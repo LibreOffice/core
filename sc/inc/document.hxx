@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:51:18 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 09:07:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1149,6 +1149,9 @@ public:
 
     USHORT          GetColWidth( SCCOL nCol, SCTAB nTab ) const;
     USHORT          GetRowHeight( SCROW nRow, SCTAB nTab ) const;
+    ULONG           GetRowHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab ) const;
+    ULONG           GetScaledRowHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab, double fScale ) const;
+    const ScSummableCompressedArray< SCROW, USHORT> & GetRowHeightArray( SCTAB nTab ) const;
     ULONG           GetColOffset( SCCOL nCol, SCTAB nTab ) const;
     ULONG           GetRowOffset( SCROW nRow, SCTAB nTab ) const;
 
@@ -1157,7 +1160,21 @@ public:
 
     USHORT          GetCommonWidth( SCCOL nEndCol, SCTAB nTab ) const;
 
-    inline USHORT   FastGetRowHeight( SCROW nRow, SCTAB nTab ) const;       // ohne Ueberpruefungen!
+                    // All FastGet...() methods have no check for valid nTab!
+                    // They access ScCompressedArray objects, so using the
+                    // single row taking ones in loops to access a sequence of
+                    // single rows is no good idea! Use specialized range
+                    // taking methods instead, or iterators.
+    inline ULONG    FastGetRowHeight( SCROW nStartRow, SCROW nEndRow,
+                        SCTAB nTab ) const;
+    inline ULONG    FastGetScaledRowHeight( SCROW nStartRow, SCROW nEndRow,
+                        SCTAB nTab, double fScale ) const;
+    inline USHORT   FastGetRowHeight( SCROW nRow, SCTAB nTab ) const;
+    inline SCROW    FastGetRowForHeight( SCTAB nTab, ULONG nHeight ) const;
+    inline SCROW    FastGetFirstNonHiddenRow( SCROW nStartRow, SCTAB nTab ) const;
+                    /** No check for flags whether row is hidden, height value
+                        is returned unconditionally. */
+    inline USHORT   FastGetOriginalRowHeight( SCROW nRow, SCTAB nTab ) const;
 
     SCROW           GetHiddenRowCount( SCROW nRow, SCTAB nTab ) const;
 
@@ -1183,9 +1200,13 @@ public:
     void            ShowRows(SCROW nRow1, SCROW nRow2, SCTAB nTab, BOOL bShow);
     void            SetColFlags( SCCOL nCol, SCTAB nTab, BYTE nNewFlags );
     void            SetRowFlags( SCROW nRow, SCTAB nTab, BYTE nNewFlags );
+    void            SetRowFlags( SCROW nStartRow, SCROW nEndRow, SCTAB nTab, BYTE nNewFlags );
 
     BYTE            GetColFlags( SCCOL nCol, SCTAB nTab ) const;
     BYTE            GetRowFlags( SCROW nRow, SCTAB nTab ) const;
+
+    const ScBitMaskCompressedArray< SCROW, BYTE> & GetRowFlagsArray( SCTAB nTab ) const;
+          ScBitMaskCompressedArray< SCROW, BYTE> & GetRowFlagsArrayModifiable( SCTAB nTab );
 
                     /// @return  the index of the last column with any set flags (auto-pagebreak is ignored).
     SCCOL           GetLastFlaggedCol( SCTAB nTab ) const;
@@ -1639,12 +1660,58 @@ private: // CLOOK-Impl-Methoden
 };
 
 
-inline USHORT ScDocument::FastGetRowHeight( SCROW nRow, SCTAB nTab ) const
+inline ULONG ScDocument::FastGetRowHeight( SCROW nStartRow, SCROW nEndRow,
+        SCTAB nTab ) const
 {
-    return ( pTab[nTab]->pRowFlags[nRow] & CR_HIDDEN ) ? 0 : pTab[nTab]->pRowHeight[nRow];
+    return pTab[nTab]->pRowFlags->SumCoupledArrayForCondition( nStartRow,
+            nEndRow, CR_HIDDEN, 0, *(pTab[nTab]->pRowHeight));
 }
 
+inline ULONG ScDocument::FastGetScaledRowHeight( SCROW nStartRow, SCROW nEndRow,
+        SCTAB nTab, double fScale ) const
+{
+    return pTab[nTab]->pRowFlags->SumScaledCoupledArrayForCondition( nStartRow,
+            nEndRow, CR_HIDDEN, 0, *(pTab[nTab]->pRowHeight), fScale);
+}
 
+inline USHORT ScDocument::FastGetRowHeight( SCROW nRow, SCTAB nTab ) const
+{
+    return ( pTab[nTab]->pRowFlags->GetValue(nRow) & CR_HIDDEN ) ? 0 :
+        pTab[nTab]->pRowHeight->GetValue(nRow);
+}
+
+inline SCROW ScDocument::FastGetRowForHeight( SCTAB nTab, ULONG nHeight ) const
+{
+    ScCoupledCompressedArrayIterator< SCROW, BYTE, USHORT> aIter(
+            *(pTab[nTab]->pRowFlags), 0, MAXROW, CR_HIDDEN, 0,
+            *(pTab[nTab]->pRowHeight));
+    ULONG nSum = 0;
+    for ( ; aIter; aIter.NextRange() )
+    {
+        ULONG nNew = *aIter * (aIter.GetRangeEnd() - aIter.GetRangeStart() + 1);
+        if (nSum + nNew > nHeight)
+        {
+            for ( ; aIter && nSum <= nHeight; ++aIter )
+            {
+                nSum += *aIter;
+            }
+            return aIter.GetPos();
+        }
+        nSum += nNew;
+    }
+    return aIter.GetPos();
+}
+
+inline SCROW ScDocument::FastGetFirstNonHiddenRow( SCROW nStartRow, SCTAB nTab) const
+{
+    return pTab[nTab]->pRowFlags->GetFirstForCondition( nStartRow, MAXROW,
+            CR_HIDDEN, 0);
+}
+
+inline USHORT ScDocument::FastGetOriginalRowHeight( SCROW nRow, SCTAB nTab ) const
+{
+    return pTab[nTab]->pRowHeight->GetValue(nRow);
+}
 
 #endif
 
