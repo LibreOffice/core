@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshap4.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 16:33:30 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 09:14:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,10 @@
 #include <com/sun/star/embed/XLinkageSupport.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
+#include <com/sun/star/task/XInteractionHandler.hpp>
+#endif
+
 #define _SVX_USE_UNOGLOBALS_
 
 #ifndef _SVDOOLE2_HXX
@@ -92,6 +96,7 @@
 #endif
 
 #include <sfx2/objsh.hxx>
+#include <sfx2/docfile.hxx>
 
 #ifndef _SVDMODEL_HXX
 #include "svdmodel.hxx"
@@ -342,6 +347,17 @@ sal_Bool SvxOle2Shape::createLink( const ::rtl::OUString& aLinkURL )
     uno::Sequence< beans::PropertyValue > aMediaDescr( 1 );
     aMediaDescr[0].Name = ::rtl::OUString::createFromAscii( "URL" );
     aMediaDescr[0].Value <<= aLinkURL;
+
+    if ( pPersist->GetMedium() )
+    {
+        uno::Reference< task::XInteractionHandler > xInteraction = pPersist->GetMedium()->GetInteractionHandler();
+        if ( xInteraction.is() )
+        {
+            aMediaDescr.realloc( 2 );
+            aMediaDescr[1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "InteractionHandler" ) );
+            aMediaDescr[1].Value <<= xInteraction;
+        }
+    }
 
     //TODO/LATER: how to cope with creation failure?!
     uno::Reference< embed::XEmbeddedObject > xObj =
