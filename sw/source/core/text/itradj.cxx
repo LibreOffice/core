@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itradj.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-05 15:22:26 $
+ *  last change: $Author: fme $ $Date: 2001-06-13 08:31:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,9 +80,14 @@
 #include "pordrop.hxx"       // CalcFlyAdjust()
 #include "pormulti.hxx"
 
+#ifndef _PORTAB_HXX
+#include <portab.hxx>
+#endif
 #ifndef _DOC_HXX
 #include <doc.hxx>
 #endif
+
+#define MIN_TAB_WIDTH 60
 
 /*************************************************************************
  *                    SwTxtAdjuster::FormatBlock()
@@ -262,19 +267,17 @@ void SwTxtAdjuster::CalcNewBlock( SwLineLayout *pCurr,
 USHORT SwTxtAdjuster::CalcKanaAdj( SwLineLayout* pCurr )
 {
     ASSERT( pCurr->Height(), "SwTxtAdjuster::CalcBlockAdjust: missing CalcLine()" );
+    ASSERT( !pCurr->GetpKanaComp(), "pKanaComp already exists!!" );
 
-    if( !pCurr->GetpKanaComp() )
-    {
-        SvUShorts *pNewKana = new SvUShorts;
-        pCurr->SetKanaComp( pNewKana );
-    }
+    SvUShorts *pNewKana = new SvUShorts;
+    pCurr->SetKanaComp( pNewKana );
 
-    USHORT nNull = 0;
+    const USHORT nNull = 0;
     MSHORT nKanaIdx = 0;
     long nKanaDiffSum = 0;
-    sal_Bool bRepaint = sal_False;
     USHORT nRepaintOfst = 0;
     USHORT nX = 0;
+    sal_Bool bNoCompression = sal_False;
 
     // Nicht vergessen:
     // CalcRightMargin() setzt pCurr->Width() auf die Zeilenbreite !
@@ -300,7 +303,7 @@ USHORT SwTxtAdjuster::CalcKanaAdj( SwLineLayout* pCurr )
             // we store the beginning of the first compressable portion
             // for repaint
             if ( nMaxWidthDiff && !nRepaintOfst )
-                nRepaintOfst = nX;
+                nRepaintOfst = nX + GetLeftMargin();
         }
         else if( pPos->InGlueGrp() )
         {
@@ -310,7 +313,29 @@ USHORT SwTxtAdjuster::CalcKanaAdj( SwLineLayout* pCurr )
                     pCurr->GetKanaComp().Insert( nNull, nKanaIdx );
                 if( nKanaDiffSum )
                 {
-                    USHORT nRest = ((SwGluePortion*)pPos)->GetPrtGlue();
+                    USHORT nRest;
+
+                    if ( pPos->InTabGrp() )
+                    {
+                        nRest = ! bNoCompression &&
+                                ( pPos->Width() > MIN_TAB_WIDTH ) ?
+                                pPos->Width() - MIN_TAB_WIDTH :
+                                0;
+
+                        // for simplifying the handling of left, right ... tabs,
+                        // we do expand portions, which are lying behind
+                        // those special tabs
+                        bNoCompression = !pPos->IsTabLeftPortion();
+                    }
+                    else
+                    {
+                        nRest = ! bNoCompression ?
+                                ((SwGluePortion*)pPos)->GetPrtGlue() :
+                                0;
+
+                        bNoCompression = sal_False;
+                    }
+
                     ULONG nCompress = ( 10000 * nRest ) / nKanaDiffSum;
 
                     if ( nCompress >= 10000 )
@@ -320,13 +345,6 @@ USHORT SwTxtAdjuster::CalcKanaAdj( SwLineLayout* pCurr )
 
                     else
                         nCompress = 10000 - nCompress;
-
-                    // setting a new compress value has to be done carefully:
-                    // changing an existing value means:
-                    // a) the first part of the line has been recycled and
-                    // b) nevertheless, this part also has to be repainted
-                    if ( nCompress != ( pCurr->GetKanaComp() )[ nKanaIdx ] )
-                        bRepaint = sal_True;
 
                     ( pCurr->GetKanaComp() )[ nKanaIdx ] = (USHORT)nCompress;
                     nKanaDiffSum = 0;
@@ -350,7 +368,7 @@ USHORT SwTxtAdjuster::CalcKanaAdj( SwLineLayout* pCurr )
     {
         if ( pPos->InTxtGrp() )
         {
-            USHORT nMinWidth = pPos->Width();
+            const USHORT nMinWidth = pPos->Width();
 
             // get maximum portion width from info structure, calculated
             // during text formatting
@@ -366,13 +384,18 @@ USHORT SwTxtAdjuster::CalcKanaAdj( SwLineLayout* pCurr )
         }
         else if( pPos->InGlueGrp() && pPos->InFixMargGrp() )
         {
-            long nTmpDiff = pPos->Width()-((SwGluePortion*)pPos)->GetFixWidth();
             if( nCompress )
             {
                 nKanaDiffSum *= nCompress;
                 nKanaDiffSum /= 10000;
             }
+
             pPos->Width( pPos->Width() - nDecompress );
+
+            if ( pPos->InTabGrp() )
+                // set fix width to width
+                ((SwTabPortion*)pPos)->SetFixWidth( pPos->Width() );
+
             const SvUShorts& rKanaComp = pCurr->GetKanaComp();
             if ( ++nKanaIdx < rKanaComp.Count() )
                 nCompress = ( pCurr->GetKanaComp() )[ nKanaIdx ];
@@ -383,10 +406,7 @@ USHORT SwTxtAdjuster::CalcKanaAdj( SwLineLayout* pCurr )
         pPos = pPos->GetPortion();
     }
 
-    if ( bRepaint )
-        return nRepaintOfst;
-    else
-        return USHRT_MAX;
+    return nRepaintOfst;
 }
 
 /*************************************************************************

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmform.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ama $ $Date: 2001-05-15 07:29:19 $
+ *  last change: $Author: fme $ $Date: 2001-06-13 08:31:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1577,6 +1577,10 @@ void SwTxtFrm::_Format( SwParaPortion *pPara )
         pPara->FormatReset();
         if( pBlink && pPara->IsBlinking() )
             pBlink->Delete( pPara );
+
+        // delete pSpaceAdd und pKanaComp
+        pPara->FinishSpaceAdd();
+        pPara->FinishKanaComp();
         pPara->ResetFlags();
         pPara->SetPrepMustFit( bMustFit );
     }

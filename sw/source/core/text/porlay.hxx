@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porlay.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-28 16:20:44 $
+ *  last change: $Author: fme $ $Date: 2001-06-13 08:31:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,6 +227,7 @@ public:
     { if ( !pSpaceAdd ) CreateSpaceAdd(); else (*pSpaceAdd)[0] = 0; }
     inline void SetKanaComp( SvUShorts* pNew ){ pKanaComp = pNew; }
     inline void FinishSpaceAdd() { delete pSpaceAdd; pSpaceAdd = NULL; }
+    inline void FinishKanaComp() { delete pKanaComp; pKanaComp = NULL; }
     inline SvShorts* GetpSpaceAdd() const { return pSpaceAdd; }
     inline SvShorts& GetSpaceAdd() { return *pSpaceAdd; }
     inline SvUShorts* GetpKanaComp() const { return pKanaComp; }
@@ -360,12 +361,10 @@ inline void SwLineLayout::ResetFlags()
     bFormatAdj = bDummy = bFntChg = bTab = bEndHyph = bMidHyph = bFly
     = bRest = bBlinking = bClipping = bContent = bRedline
     = bForcedLeftMargin = bHanging = sal_False;
-    pSpaceAdd = NULL;
-    pKanaComp = NULL;
 }
 
 inline SwLineLayout::SwLineLayout()
-    : pNext(0), nRealHeight(0)
+    : pNext( 0 ), nRealHeight( 0 ), pSpaceAdd( 0 ), pKanaComp( 0 )
 {
     ResetFlags();
     SetWhichPor( POR_LAY );
