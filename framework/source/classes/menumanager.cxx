@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menumanager.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: as $ $Date: 2002-05-23 12:51:32 $
+ *  last change: $Author: cd $ $Date: 2002-07-29 13:44:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1069,6 +1069,7 @@ IMPL_LINK( MenuManager, Select, Menu *, pMenu )
                         {
                             Window* pWin = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
                             pWin->GrabFocus();
+                            pWin->ToTop( TOTOP_RESTOREWHENMIN );
                             break;
                         }
 
