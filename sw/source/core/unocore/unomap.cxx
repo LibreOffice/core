@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.172 $
+ *  $Revision: 1.173 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-08 11:16:31 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 13:46:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2368,6 +2368,8 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     { SW_PROP_NMID(UNO_NAME_PRINT_OPTIONS),         WID_PRINT_OPTIONS,          CPPU_E2T(CPPUTYPE_PROPERTYVALUES),  PROPERTY_NONE, 0},
                     { SW_PROP_NMID(UNO_NAME_SAVE_AS_SINGLE_FILE),   WID_SAVE_AS_SINGLE_FILE,    CPPU_E2T(CPPUTYPE_BOOLEAN),         PROPERTY_NONE, 0},
                     { SW_PROP_NMID(UNO_NAME_SAVE_FILTER),           WID_SAVE_FILTER,            CPPU_E2T(CPPUTYPE_OUSTRING),        PROPERTY_NONE, 0},
+                    { SW_PROP_NMID(UNO_NAME_SAVE_FILTER_OPTIONS),   WID_SAVE_FILTER_OPTIONS,    CPPU_E2T(CPPUTYPE_OUSTRING),        PROPERTY_NONE, 0},
+                    { SW_PROP_NMID(UNO_NAME_SAVE_FILTER_DATA),      WID_SAVE_FILTER_DATA,       CPPU_E2T(CPPUTYPE_PROPERTYVALUES),        PROPERTY_NONE, 0},
                     { SW_PROP_NMID(UNO_NAME_COPIES_TO),             WID_COPIES_TO,              CPPU_E2T(CPPUTYPE_OUSTRINGS),       PROPERTY_NONE, 0},
                     { SW_PROP_NMID(UNO_NAME_BLIND_COPIES_TO),       WID_BLIND_COPIES_TO,        CPPU_E2T(CPPUTYPE_OUSTRINGS),       PROPERTY_NONE, 0},
                     { SW_PROP_NMID(UNO_NAME_IN_SERVER_PASSWORD),     WID_IN_SERVER_PASSWORD,     CPPU_E2T(CPPUTYPE_OUSTRING),    PROPERTY_NONE, 0},
