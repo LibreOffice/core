@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: kso $ $Date: 2000-11-15 07:59:09 $
+#   last change: $Author: kso $ $Date: 2001-10-24 08:22:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,6 +64,7 @@ PRJ=..$/..
 
 PRJNAME=UCBEXPLORER
 TARGET=ucbexplorer
+TARGETTYPE=GUI
 LIBTARGET=NO
 ENABLE_EXCEPTIONS=TRUE
 
