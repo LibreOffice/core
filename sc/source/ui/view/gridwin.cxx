@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: nn $ $Date: 2001-10-18 20:31:07 $
+ *  last change: $Author: nn $ $Date: 2001-10-26 18:18:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2687,16 +2687,17 @@ sal_Int8 ScGridWindow::AcceptDrop( const AcceptDropEvent& rEvt )
         }
         else
         {
-#ifdef OLD_DND
-            if ( !IsMyModel(rData.pSdrView) )               // drawing within the document
-                if ( rEvt.IsDefaultAction() && rEvt.GetAction() == DROP_MOVE )
-                    rEvt.SetAction( DROP_COPY );
-#endif
+            sal_Int8 nMyAction = rEvt.mnAction;
+
+            if ( !rData.pDrawTransfer ||
+                    !IsMyModel(rData.pDrawTransfer->GetDragSourceView()) )      // drawing within the document
+                if ( rEvt.mbDefault && nMyAction == DND_ACTION_MOVE )
+                    nMyAction = DND_ACTION_COPY;
 
             ScDocument* pThisDoc = pViewData->GetDocument();
             SdrObject* pHitObj = pThisDoc->GetObjectAtPoint(
                         pViewData->GetTabNo(), PixelToLogic(rEvt.maPosPixel) );
-            if ( pHitObj && rEvt.mnAction == DND_ACTION_LINK && !rData.pDrawTransfer )
+            if ( pHitObj && nMyAction == DND_ACTION_LINK && !rData.pDrawTransfer )
             {
                 if ( IsDropFormatSupported(SOT_FORMATSTR_ID_SVXB)
                     || IsDropFormatSupported(SOT_FORMAT_GDIMETAFILE)
@@ -2704,7 +2705,7 @@ sal_Int8 ScGridWindow::AcceptDrop( const AcceptDropEvent& rEvt )
                 {
                     //  graphic dragged onto drawing object
                     DrawMarkDropObj( pHitObj );
-                    nRet = rEvt.mnAction;
+                    nRet = nMyAction;
                 }
             }
             if (!nRet)
@@ -2712,13 +2713,13 @@ sal_Int8 ScGridWindow::AcceptDrop( const AcceptDropEvent& rEvt )
 
             if (!nRet)
             {
-                switch ( rEvt.mnAction )
+                switch ( nMyAction )
                 {
                     case DND_ACTION_COPY:
                     case DND_ACTION_MOVE:
                     case DND_ACTION_COPYMOVE:
                         {
-                            BOOL bMove = ( rEvt.mnAction == DND_ACTION_MOVE );
+                            BOOL bMove = ( nMyAction == DND_ACTION_MOVE );
                             if ( IsDropFormatSupported( SOT_FORMATSTR_ID_EMBED_SOURCE ) ||
                                  IsDropFormatSupported( SOT_FORMATSTR_ID_LINK_SOURCE ) ||
                                  IsDropFormatSupported( SOT_FORMATSTR_ID_EMBED_SOURCE_OLE ) ||
@@ -2743,7 +2744,7 @@ sal_Int8 ScGridWindow::AcceptDrop( const AcceptDropEvent& rEvt )
                                      IsDropFormatSupported( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK ) ||
                                      IsDropFormatSupported( SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR ) ) ) )
                             {
-                                nRet = rEvt.mnAction;
+                                nRet = nMyAction;
                             }
                         }
                         break;
@@ -2757,7 +2758,7 @@ sal_Int8 ScGridWindow::AcceptDrop( const AcceptDropEvent& rEvt )
                              IsDropFormatSupported( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK ) ||
                              IsDropFormatSupported( SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR ) )
                         {
-                            nRet = rEvt.mnAction;
+                            nRet = nMyAction;
                         }
                         break;
                 }
@@ -3159,7 +3160,7 @@ sal_Int8 ScGridWindow::ExecuteDrop( const ExecuteDropEvent& rEvt )
     {
         bPasteIsDrop = TRUE;
         bDone = pViewData->GetView()->PasteDataFormat(
-                    nFormatId, rEvt.maDropEvent.Transferable, nPosX, nPosY, &aLogicPos );
+                    nFormatId, rEvt.maDropEvent.Transferable, nPosX, nPosY, &aLogicPos, bIsLink );
         bPasteIsDrop = FALSE;
     }
 
