@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_library_ooo.scp,v $
 *
-*  $Revision: 1.59 $
+*  $Revision: 1.60 $
 *
-*  last change: $Author: rt $ $Date: 2004-10-28 13:45:10 $
+*  last change: $Author: pjunck $ $Date: 2004-11-03 08:07:05 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -1554,22 +1554,25 @@ STD_UNO_LIB_FILE( gid_File_Lib_Sfx , sfx)
 
 #ifdef WNT
 
-File gid_File_Lib_Shlxthdl
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Program;
-    Name = "shlxthdl.dll";
-End
-
-#endif
-
-#ifdef WNT
-
 File gid_File_Lib_OOoFilt
     TXT_FILE_BODY;
     Styles = (PACKED);
     Dir = gid_Dir_Program;
     Name = "ooofilt.dll";
+End
+
+File gid_File_Lib_OOoFiltProxy
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Program;
+    Name = "ooofiltproxy.dll";
+End
+
+File gid_File_Lib_Instooofiltmsi
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Program;
+    Name = "instooofiltmsi.dll";
 End
 
 #endif
