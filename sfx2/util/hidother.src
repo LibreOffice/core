@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-05 08:33:02 $
+ *  last change: $Author: pb $ $Date: 2001-06-01 06:31:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,4 +210,6 @@ hidspecial HID_CNT_SENT_VIEW_SENT_ARTICLES      { HelpID = HID_CNT_SENT_VIEW_SEN
 hidspecial HID_CNT_SENT_VIEW_UNSENT_ARTICLES    { HelpID = HID_CNT_SENT_VIEW_UNSENT_ARTICLES; };
 hidspecial HID_CNT_SENT_VIEW_MARKED_ARTICLES    { HelpID = HID_CNT_SENT_VIEW_MARKED_ARTICLES; };
 hidspecial HID_TABDLG_APPLY_BTN                 { HelpID = HID_TABDLG_APPLY_BTN; };
+hidspecial HID_FILEDLG_LINK_CB                  { HelpID = HID_FILEDLG_LINK_CB; };
+hidspecial HID_FILEDLG_PREVIEW_CB               { HelpID = HID_FILEDLG_PREVIEW_CB; };
 
