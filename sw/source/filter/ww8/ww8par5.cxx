@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par5.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: cmc $ $Date: 2002-09-20 11:29:16 $
+ *  last change: $Author: cmc $ $Date: 2002-10-10 16:49:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -620,19 +620,51 @@ static SvxExtNumType GetNumberPara(String& rStr, bool bAllowPageDesc = false)
 }
 
 static ULONG MSDateTimeFormatToSwFormat(String& rParams,
-    SvNumberFormatter *pFormatter, USHORT nLang)
+    SvNumberFormatter *pFormatter, USHORT nLang, bool &rbForceJapanese)
 {
     // tell the Formatter about the new entry
     UINT16 nCheckPos = 0;
     INT16  nType = NUMBERFORMAT_DEFINED;
     ULONG  nKey = 0;
 
+    rParams.EraseAllChars('\'');
+
+    rbForceJapanese = false;
+    static const char aJapanese[] =
+    {
+        'E', 'O', 'A', 'e', 'a', 'o', 'g', 'G'
+    };
+
+    for (int i=0; i < sizeof(aJapanese); ++i)
+    {
+        if (STRING_NOTFOUND != rParams.Search(aJapanese[i]))
+        {
+            rbForceJapanese = true;
+            break;
+        }
+    }
+
+    rParams.SearchAndReplaceAll(CREATE_CONST_ASC("EE"),
+        CREATE_CONST_ASC("YYYY"));
+    rParams.SearchAndReplaceAll('O', 'M');
+    rParams.SearchAndReplaceAll('A', 'D');
+    rParams.SearchAndReplaceAll(CREATE_CONST_ASC("ee"),
+        CREATE_CONST_ASC("yyyy"));
+    rParams.SearchAndReplaceAll('o', 'm');
+
+    if (rbForceJapanese)
+    {
+        rParams.Insert(CREATE_CONST_ASC("[NatNum1][$-411]"),0);
+//        rParams.Insert(CREATE_CONST_ASC("[~gengou]"),0);
+    }
+
     pFormatter->PutEntry(rParams, nCheckPos, nType, nKey, nLang);
 
     return nKey;
 }
 
-short SwWW8ImplReader::GetTimeDatePara(String& rStr, ULONG& rFormat)
+short SwWW8ImplReader::GetTimeDatePara(String& rStr, ULONG& rFormat,
+    bool &rbForceJapanese)
 {
     SvNumberFormatter* pFormatter = rDoc.GetNumberFormatter();
     String sParams( FindPara( rStr, '@', '@' ) );// Date/Time
@@ -668,13 +700,11 @@ short SwWW8ImplReader::GetTimeDatePara(String& rStr, ULONG& rFormat)
         return NUMBERFORMAT_DATE;
     }
 
-    sParams.EraseAllChars('\'');
-
     const SvxLanguageItem& rLang = (const SvxLanguageItem&)(rDoc.GetAttrPool().
         GetDefaultItem( RES_CHRATR_LANGUAGE ));
 
     ULONG nFmtIdx = MSDateTimeFormatToSwFormat(sParams, pFormatter,
-        rLang.GetValue());
+        rLang.GetValue(), rbForceJapanese);
     short nNumFmtType = NUMBERFORMAT_UNDEFINED;
     if (nFmtIdx)
         nNumFmtType = pFormatter->GetType(nFmtIdx);
@@ -1497,9 +1527,10 @@ eF_ResT SwWW8ImplReader::Read_F_DocInfo( WW8FieldDesc* pF, String& rStr )
 
     ULONG nFormat = 0;
 
+    bool bForceJapanese = false;
     if( bDateTime )
     {
-        short nDT = GetTimeDatePara(rStr, nFormat);
+        short nDT = GetTimeDatePara(rStr, nFormat, bForceJapanese);
         switch( nDT )
         {
             case NUMBERFORMAT_DATE:
@@ -1519,7 +1550,20 @@ eF_ResT SwWW8ImplReader::Read_F_DocInfo( WW8FieldDesc* pF, String& rStr )
 
     SwDocInfoField aFld( (SwDocInfoFieldType*)
         rDoc.GetSysFldType( RES_DOCINFOFLD ), nSub|nReg, nFormat );
-    rDoc.Insert( *pPaM, SwFmtFld( aFld ) );
+
+    if (bForceJapanese)
+    {
+        NewAttr(SvxLanguageItem(LANGUAGE_JAPANESE, RES_CHRATR_LANGUAGE));
+        NewAttr(SvxLanguageItem(LANGUAGE_JAPANESE, RES_CHRATR_CJK_LANGUAGE));
+    }
+
+    rDoc.Insert(*pPaM, SwFmtFld(aFld));
+
+    if (bForceJapanese)
+    {
+        pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_CHRATR_CJK_LANGUAGE);
+        pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_CHRATR_LANGUAGE);
+    }
     return FLD_OK;
 }
 
@@ -1549,7 +1593,8 @@ eF_ResT SwWW8ImplReader::Read_F_DateTime( WW8FieldDesc*pF, String& rStr )
 {                                               // Datum/Uhrzeit - Feld
     ULONG nFormat = 0;
 
-    short nDT = GetTimeDatePara(rStr, nFormat);
+    bool bForceJapanese;
+    short nDT = GetTimeDatePara(rStr, nFormat, bForceJapanese);
 
     if( NUMBERFORMAT_UNDEFINED == nDT )             // no D/T-Formatstring
     {
@@ -1567,17 +1612,28 @@ eF_ResT SwWW8ImplReader::Read_F_DateTime( WW8FieldDesc*pF, String& rStr )
         }
     }
 
-    if( nDT & NUMBERFORMAT_DATE )
+    if (bForceJapanese)
     {
-        SwDateTimeField aFld( (SwDateTimeFieldType*)
-                        rDoc.GetSysFldType( RES_DATETIMEFLD ), DATEFLD, nFormat );
+        NewAttr(SvxLanguageItem(LANGUAGE_JAPANESE, RES_CHRATR_LANGUAGE));
+        NewAttr(SvxLanguageItem(LANGUAGE_JAPANESE, RES_CHRATR_CJK_LANGUAGE));
+    }
+    if (nDT & NUMBERFORMAT_DATE)
+    {
+        SwDateTimeField aFld((SwDateTimeFieldType*)
+            rDoc.GetSysFldType(RES_DATETIMEFLD ), DATEFLD, nFormat);
         rDoc.Insert( *pPaM, SwFmtFld( aFld ) );
     }
-    else if( nDT == NUMBERFORMAT_TIME )
+    else if (nDT == NUMBERFORMAT_TIME)
     {
-        SwDateTimeField aFld( (SwDateTimeFieldType*)
-                        rDoc.GetSysFldType( RES_DATETIMEFLD ), TIMEFLD, nFormat );
+        SwDateTimeField aFld((SwDateTimeFieldType*)
+            rDoc.GetSysFldType(RES_DATETIMEFLD), TIMEFLD, nFormat);
         rDoc.Insert( *pPaM, SwFmtFld( aFld ) );
+    }
+
+    if (bForceJapanese)
+    {
+        pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_CHRATR_CJK_LANGUAGE);
+        pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_CHRATR_LANGUAGE);
     }
 
     return FLD_OK;
