@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configitem.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2000-09-25 13:38:47 $
+ *  last change: $Author: os $ $Date: 2000-09-28 13:23:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -258,8 +258,13 @@ Sequence< Any > ConfigItem::GetProperties(const Sequence< OUString >& rNames)
     #ifdef DBG_UTIL
             catch(Exception& rEx)
             {
-                ByteString sMsg("Exception from XHierarchicalNameAccess: ");
+                ByteString sMsg("XHierarchicalNameAccess: ");
                 sMsg += ByteString(String(rEx.Message), RTL_TEXTENCODING_ASCII_US);
+                sMsg += '\n';
+                sMsg += ByteString(String(ConfigManager::GetConfigBaseURL()), RTL_TEXTENCODING_ASCII_US);
+                sMsg += ByteString(String(sSubTree), RTL_TEXTENCODING_ASCII_US);
+                sMsg += '/';
+                sMsg += ByteString(String(pNames[i]), RTL_TEXTENCODING_ASCII_US);
                 DBG_ERROR(sMsg.GetBuffer())
             }
 #else
