@@ -2,9 +2,9 @@
  *
  *  $RCSfile: about.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: as $ $Date: 2000-11-08 14:25:46 $
+ *  last change: $Author: pb $ $Date: 2001-04-10 07:52:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,13 +75,19 @@
 #endif
 #pragma hdrstop
 
+#include <tools/stream.hxx>
+#include <tools/urlobj.hxx>
+#include <svtools/pathoptions.hxx>
+#include <unotools/configmgr.hxx>
+#ifndef _COM_SUN_STAR_UNO_ANY_H_
+#include <com/sun/star/uno/Any.h>
+#endif
+
+#include "sfxuno.hxx"
 #include "about.hxx"
 #include "sfxresid.hxx"
 #include "sfxdefs.hxx"
 #include "app.hxx"
-#if SUPD<613//MUSTINI
-#include "inimgr.hxx"
-#endif
 
 #include "dialog.hrc"
 
@@ -152,9 +158,21 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId, const String& rVerS
     bNormal ( TRUE )
 
 {
-#if SUPD<613//MUSTINI
-    SfxIniManager* pIniMgr = SFX_INIMANAGER();
-#endif
+    // load image depends on productname ("StarOffice", "StarSuite",...)
+    ::com::sun::star::uno::Any aRet = ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTNAME );
+    rtl::OUString aTmp;
+    aRet >>= aTmp;
+    String aBmpFileName = aTmp;
+    aBmpFileName += String( DEFINE_CONST_UNICODE("_about.bmp") );
+    INetURLObject aObj( SvtPathOptions().GetModulePath(), INET_PROT_FILE );
+    aObj.insertName( aBmpFileName );
+    SvFileStream aStrm( aObj.PathToFileName(), STREAM_STD_READ );
+    if ( !aStrm.GetError() )
+    {
+        Bitmap aBmp;
+        aStrm >> aBmp;
+        aAppLogo = Image( aBmp );
+    }
 
     // Transparenter Font
     Font aFont = GetFont();
@@ -165,7 +183,7 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId, const String& rVerS
     String aStr = aVersionText.GetText();
     String aMinor;
     USHORT nDemo = SvDemo::GetDemoKind( Application::GetAppName() );
-    USHORT nProductVersion = ProductVersion::GetVersion().ToInt32();
+    USHORT nProductVersion = (USHORT)ProductVersion::GetVersion().ToInt32();
     String aVersion( String::CreateFromInt32( nProductVersion / 10 ) );
     aVersion += 0x002E ; // 2Eh ^= '.'
     aVersion += ( String::CreateFromInt32( nProductVersion % 10 ) );
@@ -374,7 +392,7 @@ void AboutDialog::Paint( const Rectangle& rRect )
             if ( nVal )
             {
                 // Versionsnummern gibt es nur in den fetten Zeilen
-                USHORT nProductVersion = ProductVersion::GetVersion().ToInt32();
+                USHORT nProductVersion = (USHORT)ProductVersion::GetVersion().ToInt32();
                 String aVersion = String::CreateFromInt32( nProductVersion / 10 );
                 aVersion += '.';
                 aVersion += String::CreateFromInt32( nProductVersion % 10 );
@@ -418,5 +436,4 @@ void AboutDialog::Paint( const Rectangle& rRect )
     }
     nEnd = nPos - 4;
 }
-
 
