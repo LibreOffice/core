@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edglbldc.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:01:03 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:03:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,9 @@ USHORT SwEditShell::GetGlobalDocContent( SwGlblDocContents& rArr ) const
 
     // dann alle gelinkten Bereiche auf der obersten Ebene
     const SwSectionFmts& rSectFmts = pDoc->GetSections();
-    for( USHORT n = rSectFmts.Count(); n; )
+    USHORT n;
+
+    for( n = rSectFmts.Count(); n; )
     {
         const SwSection* pSect = rSectFmts[ --n ]->GetGlobalDocSection();
         if( pSect )
