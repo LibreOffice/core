@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoole2.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 09:14:42 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:05:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -465,6 +465,9 @@ FASTBOOL SdrOle2Obj::IsEmpty() const
 
 void SdrOle2Obj::Connect()
 {
+    if( IsEmptyPresObj() )
+        return;
+
     if( mpImpl->mbConnected )
     {
         DBG_ERROR("Connect() called on connected object!");
@@ -700,9 +703,12 @@ void SdrOle2Obj::AddListeners_Impl()
 
 void SdrOle2Obj::Disconnect()
 {
+    if( IsEmptyPresObj() )
+        return;
+
     if( !mpImpl->mbConnected )
     {
-        DBG_ERROR("Connect() called on disconnected object!");
+        DBG_ERROR("Disconnect() called on disconnected object!");
         return;
     }
 
@@ -795,7 +801,7 @@ void SdrOle2Obj::SetModel(SdrModel* pNewModel)
     DBG_ASSERT( pSrcPers || !mpImpl->mbConnected, "Connected object without a model?!" );
     RemoveListeners_Impl();
 
-    if( pDestPers && pSrcPers )
+    if( pDestPers && pSrcPers && !IsEmptyPresObj() )
     {
         // move the objects' storage; ObjectRef remains the same, but PersistName may change
         ::rtl::OUString aTmp;
@@ -820,7 +826,7 @@ void SdrOle2Obj::SetModel(SdrModel* pNewModel)
 
     SdrRectObj::SetModel( pNewModel );
 
-    if( pDestPers )
+    if( pDestPers && !IsEmptyPresObj() )
     {
         if ( !pSrcPers )
             // object wasn't connected, now it should
