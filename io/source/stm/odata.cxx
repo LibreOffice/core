@@ -2,9 +2,9 @@
  *
  *  $RCSfile: odata.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jbu $ $Date: 2001-06-22 16:32:57 $
+ *  last change: $Author: obo $ $Date: 2001-09-21 15:37:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1011,9 +1011,9 @@ public:
     ~OObjectOutputStream();
 
 public:
-    Any     SAL_CALL queryInterface( const Type &type );
-    void    SAL_CALL acquire()                       { ODataOutputStream::acquire(); }
-    void    SAL_CALL release()                       { ODataOutputStream::release(); }
+        Any             SAL_CALL queryInterface( const Type &type ) throw (::com::sun::star::uno::RuntimeException);
+        void    SAL_CALL acquire() throw()                                       { ODataOutputStream::acquire(); }
+        void    SAL_CALL release() throw()                                       { ODataOutputStream::release(); }
 
 public:
     // XOutputStream
@@ -1057,7 +1057,7 @@ public:
                 { ODataOutputStream::writeUTF( Value );}
 
     // XObjectOutputStream
-    virtual void SAL_CALL writeObject( const Reference< XPersistObject > & r );
+        virtual void SAL_CALL writeObject( const Reference< XPersistObject > & r ) throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
 
 public: // XMarkableStream
     virtual sal_Int32 SAL_CALL createMark(void)                 throw (IOException, RuntimeException);
@@ -1092,7 +1092,7 @@ OObjectOutputStream::~OObjectOutputStream()
     g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
 }
 
-Any OObjectOutputStream::queryInterface( const Type &aType )
+Any OObjectOutputStream::queryInterface( const Type &aType ) throw (::com::sun::star::uno::RuntimeException)
 {
     Any a = ::cppu::queryInterface(
         aType ,
@@ -1106,7 +1106,7 @@ Any OObjectOutputStream::queryInterface( const Type &aType )
     return ODataOutputStream::queryInterface( aType );
 
 }
-void OObjectOutputStream::writeObject( const Reference< XPersistObject > & xPObj )
+void OObjectOutputStream::writeObject( const Reference< XPersistObject > & xPObj ) throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
 {
 
     connectToMarkable();
@@ -1349,9 +1349,9 @@ public:
     ~OObjectInputStream();
 
 public:
-    Any     SAL_CALL queryInterface( const Type &type );
-    void    SAL_CALL acquire()                       { ODataInputStream::acquire(); }
-    void    SAL_CALL release()                       { ODataInputStream::release(); }
+        Any             SAL_CALL queryInterface( const Type &type ) throw();
+        void    SAL_CALL acquire() throw()                                       { ODataInputStream::acquire(); }
+        void    SAL_CALL release() throw()                                       { ODataInputStream::release(); }
 
 public: // XInputStream
     virtual sal_Int32 SAL_CALL readBytes(Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead)
@@ -1403,7 +1403,7 @@ public: // XDataInputStream
                 { return ODataInputStream::readUTF(); }
 
 public: // XObjectInputStream
-    virtual Reference< XPersistObject > SAL_CALL readObject( );
+        virtual Reference< XPersistObject > SAL_CALL readObject( ) throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
 
 public: // XMarkableStream
     virtual sal_Int32 SAL_CALL createMark(void)
@@ -1441,7 +1441,7 @@ OObjectInputStream::~OObjectInputStream()
     g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
 }
 
-Any OObjectInputStream::queryInterface( const Type &aType )
+Any OObjectInputStream::queryInterface( const Type &aType ) throw ()
 {
     Any a = ::cppu::queryInterface(
         aType ,
@@ -1456,7 +1456,7 @@ Any OObjectInputStream::queryInterface( const Type &aType )
 
 }
 
-Reference< XPersistObject >  OObjectInputStream::readObject()
+Reference< XPersistObject >  OObjectInputStream::readObject() throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
 {
     // check if chain contains a XMarkableStream
     connectToMarkable();
