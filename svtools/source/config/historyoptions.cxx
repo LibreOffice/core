@@ -2,9 +2,9 @@
  *
  *  $RCSfile: historyoptions.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2000-10-31 14:39:08 $
+ *  last change: $Author: as $ $Date: 2000-11-01 14:53:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,32 +100,58 @@ using namespace ::utl                   ;
 using namespace ::rtl                   ;
 using namespace ::osl                   ;
 using namespace ::com::sun::star::uno   ;
+using namespace ::com::sun::star::beans ;
 
 //_________________________________________________________________________________________________________________
 //  const
 //_________________________________________________________________________________________________________________
 
-#define ROOTNODE_HISTORY                OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Common/History/"   ))
-#define DEFAULT_PICKLISTSIZE            0
-#define DEFAULT_PICKLIST                Sequence< OUString >()
-#define DEFAULT_HISTORYSIZE             0
-#define DEFAULT_HISTORY                 Sequence< OUString >()
+#define ROOTNODE_HISTORY                        OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Common/History/"   ))
+#define DEFAULT_PICKLISTSIZE                    0
+#define DEFAULT_HISTORYSIZE                     0
 
-#define PROPERTYNAME_PICKLISTSIZE       OUString(RTL_CONSTASCII_USTRINGPARAM("Picklist/Size"            ))
-#define PROPERTYNAME_PICKLIST           OUString(RTL_CONSTASCII_USTRINGPARAM("Picklist/List"            ))
-#define PROPERTYNAME_HISTORYSIZE        OUString(RTL_CONSTASCII_USTRINGPARAM("History/Size"             ))
-#define PROPERTYNAME_HISTORY            OUString(RTL_CONSTASCII_USTRINGPARAM("History/List"             ))
-
-#define PROPERTYHANDLE_PICKLISTSIZE     0
-#define PROPERTYHANDLE_PICKLIST         1
-#define PROPERTYHANDLE_HISTORYSIZE      2
-#define PROPERTYHANDLE_HISTORY          3
-
-#define PROPERTYCOUNT                   4
+#define PROPERTYNAME_PICKLISTSIZE               OUString(RTL_CONSTASCII_USTRINGPARAM("PickListSize"             ))
+#define PROPERTYNAME_HISTORYSIZE                OUString(RTL_CONSTASCII_USTRINGPARAM("Size"                     ))
+#define PROPERTYNAME_PICKLIST                   OUString(RTL_CONSTASCII_USTRINGPARAM("PickList/"                ))
+#define PROPERTYNAME_HISTORY                    OUString(RTL_CONSTASCII_USTRINGPARAM("List/"                    ))
+#define PROPERTYNAME_HISTORYITEM_URL            OUString(RTL_CONSTASCII_USTRINGPARAM("/URL"                     ))
+#define PROPERTYNAME_HISTORYITEM_FILTER         OUString(RTL_CONSTASCII_USTRINGPARAM("/Filter"                  ))
+#define PROPERTYNAME_HISTORYITEM_TITLE          OUString(RTL_CONSTASCII_USTRINGPARAM("/Title"                   ))
+#define PROPERTYNAME_HISTORYITEM_PASSWORD       OUString(RTL_CONSTASCII_USTRINGPARAM("/Password"                ))
+#define OFFSET_URL                              0
+#define OFFSET_FILTER                           1
+#define OFFSET_TITLE                            2
+#define OFFSET_PASSWORD                         3
+#define PROPERTYHANDLE_PICKLISTSIZE             0
+#define PROPERTYHANDLE_HISTORYSIZE              PROPERTYHANDLE_PICKLISTSIZE+1   //!!!
+#define PATHDELIMITER                           OUString(RTL_CONSTASCII_USTRINGPARAM("/"))
 
 //_________________________________________________________________________________________________________________
 //  private declarations!
 //_________________________________________________________________________________________________________________
+
+struct IMPL_THistoryItem
+{
+    IMPL_THistoryItem()
+    {
+    }
+
+    IMPL_THistoryItem(  const   OUString&   sNewURL         ,
+                        const   OUString&   sNewFilter      ,
+                        const   OUString&   sNewTitle       ,
+                        const   OUString&   sNewPassword    )
+    {
+        sURL        = sNewURL       ;
+        sFilter     = sNewFilter    ;
+        sTitle      = sNewTitle     ;
+        sPassword   = sNewPassword  ;
+    }
+
+    OUString    sURL        ;
+    OUString    sFilter     ;
+    OUString    sTitle      ;
+    OUString    sPassword   ;
+};
 
 class SvtHistoryOptions_Impl : public ConfigItem
 {
@@ -194,11 +220,16 @@ class SvtHistoryOptions_Impl : public ConfigItem
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        sal_uInt32              GetSize     ( EHistoryType eHistory                     ) const ;
-        void                    SetSize     ( EHistoryType eHistory, sal_uInt32 nSize       )       ;
-        void                    Clear       ( EHistoryType eHistory                     )       ;
-        Sequence< OUString >    GetList     ( EHistoryType eHistory                     ) const ;
-        void                    AppendItem  ( EHistoryType eHistory, const OUSTRING& sItem  )       ;
+        sal_uInt32                              GetSize     (           EHistoryType    eHistory    ) const ;
+        void                                    SetSize     (           EHistoryType    eHistory    ,
+                                                                        sal_uInt32      nSize       )       ;
+        void                                    Clear       (           EHistoryType    eHistory    )       ;
+        Sequence< Sequence< PropertyValue > >   GetList     (           EHistoryType    eHistory    ) const ;
+        void                                    AppendItem  (           EHistoryType    eHistory    ,
+                                                                const   OUString&       sURL        ,
+                                                                const   OUString&       sFilter     ,
+                                                                const   OUString&       sTitle      ,
+                                                                const   OUString&       sPassword   )       ;
 
     //-------------------------------------------------------------------------------------------------------------
     //  private methods
@@ -208,38 +239,34 @@ class SvtHistoryOptions_Impl : public ConfigItem
 
         /*-****************************************************************************************************//**
             @short      return list of key names of ouer configuration management which represent oue module tree
-            @descr      These methods return a static const list of key names. We need it to get needed values from our
-                        configuration management.
+            @descr      These methods return the current list of key names! We need it to get needed values from our
+                        configuration management and support dynamical history lists!
 
             @seealso    -
 
             @param      -
-            @return     A list of needed configuration keys is returned.
+            @return     A list of configuration key names is returned.
 
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        static Sequence< OUString > impl_GetPropertyNames();
+        Sequence< OUString > impl_GetPropertyNames();
 
         /*-****************************************************************************************************//**
-            @short      convert routines from/to deque/sequences
+            @short      convert routine
             @descr      Intern we hold ouer values in a deque. Sometimes we need his content as a return sequence.
-                        Or the user will set a sequence ... then we must convert it to ouer internal format.
-                        That is the reason for these methods!
+                        Then we must convert ouer internal format to extern.
+                        That is the reason for these method!
 
             @seealso    -
 
             @param      "aList" list in deque format.
-            @param      "seqList" list in sequence format.
             @return     A list which right format is returned.
 
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        Sequence< OUString >    impl_GetSequenceFromList(   const   deque< OUString >&      aList       ) const ;
-        void                    impl_SetSequenceOnList  (   const   Sequence< OUString >&   seqSource   ,
-                                                                    deque< OUString >&      aList       ,
-                                                                    sal_uInt32              nMaxCount   )       ;
+        Sequence< Sequence< PropertyValue > > impl_GetSequenceFromList( const deque< IMPL_THistoryItem >& aList ) const ;
 
     //-------------------------------------------------------------------------------------------------------------
     //  private member
@@ -247,10 +274,10 @@ class SvtHistoryOptions_Impl : public ConfigItem
 
     private:
 
-        deque< OUString >   m_aPicklist     ;
-        sal_uInt32          m_nPicklistSize ;
-        deque< OUString >   m_aHistory      ;
-        sal_uInt32          m_nHistorySize  ;
+        deque< IMPL_THistoryItem >  m_aPicklist     ;
+        sal_uInt32                  m_nPicklistSize ;
+        deque< IMPL_THistoryItem >  m_aHistory      ;
+        sal_uInt32                  m_nHistorySize  ;
 };
 
 //_________________________________________________________________________________________________________________
@@ -267,7 +294,8 @@ SvtHistoryOptions_Impl::SvtHistoryOptions_Impl()
     ,   m_nPicklistSize     ( 0                 )
     ,   m_nHistorySize      ( 0                 )
 {
-    // Use our static list of configuration keys to get his values.
+    // Use our list snapshot of configuration keys to get his values.
+    // See impl_GetPropertyNames() for further informations.
     Sequence< OUString >    seqNames    = impl_GetPropertyNames (           );
     Sequence< Any >         seqValues   = GetProperties         ( seqNames  );
 
@@ -277,51 +305,72 @@ SvtHistoryOptions_Impl::SvtHistoryOptions_Impl()
     DBG_ASSERT( !(seqNames.getLength()!=seqValues.getLength()), "SvtHistoryOptions_Impl::SvtHistoryOptions_Impl()\nI miss some values of configuration keys!\n" );
 
     // Copy values from list in right order to ouer internal member.
-    sal_Int32 nPropertyCount = seqValues.getLength();
-    for( sal_Int32 nProperty=0; nProperty<nPropertyCount; ++nProperty )
+    // Attention: List for names and values have an internal construction pattern!
+    // zB:
+    //      Name                        Value
+    //      /Picklist/Size              2
+    //      /History/Size               3
+    //      /Picklist/List/1/URL        "file://a"
+    //      /Picklist/List/1/Filter     "writer-..."
+    //      /Picklist/List/1/Title      "Test1"
+    //      /Picklist/List/1/Password   "lysemyf1"
+    //      /Picklist/List/2/URL        "file://b"
+    //      /Picklist/List/2/Filter     "calc-..."
+    //      /Picklist/List/2/Title      "Test2"
+    //      /Picklist/List/2/Password   "lysemyf2"
+    //      /History/List/2/URL         "http://blub"
+    //      /History/List/2/Filter      "html-..."
+    //      /History/List/2/Title       "blub"
+    //      /History/List/2/Password    "xxx"
+    //      ... and so on ...
+
+    // First we must read sizes of ouer history lists => the first to values.
+    // We need these informations to work correctly with follow keys!
+    seqValues[PROPERTYHANDLE_PICKLISTSIZE] >>= m_nPicklistSize;
+    seqValues[PROPERTYHANDLE_HISTORYSIZE ] >>= m_nHistorySize ;
+
+    // Safe impossible cases.
+    // I think a size of 0 isn't relay meaningful.
+    DBG_ASSERT( !(m_nPicklistSize<1 || m_nHistorySize<1), "SvtHistoryOptions_Impl::SvtHistoryOptions_Impl()\nI think a history size of 0 isn't relay meaningful!\n" );
+
+    IMPL_THistoryItem aItem;
+    sal_uInt32 nPosition = PROPERTYHANDLE_HISTORYSIZE+1;
+    // Get names/values for picklist.
+    // 4 subkeys for every item!
+    for( sal_Int32 nItem=0; nItem<m_nPicklistSize; ++nItem )
     {
-        // Safe impossible cases.
-        // Check any for valid value.
-        DBG_ASSERT( !(seqValues[nProperty].hasValue()==sal_False), "SvtHistoryOptions_Impl::SvtHistoryOptions_Impl()\nInvalid property value detected!\n" );
-        switch( nProperty )
-        {
-            case PROPERTYHANDLE_PICKLISTSIZE    :   {
-                                                        DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_UNSIGNED_LONG), "SvtHistoryOptions_Impl::SvtHistoryOptions_Impl()\nWho has changed the value type of \"Office.Common\\History\\Picklist\\Size\"?" );
-                                                        seqValues[nProperty] >>= m_nPicklistSize;
-                                                        DBG_ASSERT(!(m_nPicklistSize<1), "SvtHistoryOptions_Impl::SvtHistoryOptions_Impl()\nA picklist size of 0 isn't realy possible ...!\n");
-                                                    }
-                                                    break;
-
-            case PROPERTYHANDLE_PICKLIST        :   {
-                                                        DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_SEQUENCE), "SvtHistoryOptions_Impl::SvtHistoryOptions_Impl()\nWho has changed the value type of \"Office.Common\\History\\Picklist\\List\"?" );
-                                                        Sequence< OUString > seqPicklist;
-                                                        seqValues[nProperty] >>= seqPicklist;
-                                                        DBG_ASSERT(!(seqPicklist.getLength()>m_nPicklistSize), "SvtHistoryOptions_Impl::SvtHistoryOptions_Impl()\nInconsitency in configuration detected! Picklist is greater then his max size.\n" )
-                                                        impl_SetSequenceOnList( seqPicklist, m_aPicklist, m_nPicklistSize );
-                                                    }
-                                                    break;
-
-            case PROPERTYHANDLE_HISTORYSIZE     :   {
-                                                        DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_UNSIGNED_LONG), "SvtHistoryOptions_Impl::SvtHistoryOptions_Impl()\nWho has changed the value type of \"Office.Common\\History\\History\\Size\"?" );
-                                                        seqValues[nProperty] >>= m_nHistorySize;
-                                                        DBG_ASSERT(!(m_nHistorySize<1), "SvtHistoryOptions_Impl::SvtHistoryOptions_Impl()\nA history size of 0 isn't realy possible ...!\n");
-                                                    }
-                                                    break;
-
-            case PROPERTYHANDLE_HISTORY         :   {
-                                                        DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_SEQUENCE), "SvtHistoryOptions_Impl::SvtHistoryOptions_Impl()\nWho has changed the value type of \"Office.Common\\History\\History\\List\"?" );
-                                                        Sequence< OUString > seqHistory;
-                                                        seqValues[nProperty] >>= seqHistory;
-                                                        DBG_ASSERT(!(seqHistory.getLength()>m_nHistorySize), "SvtHistoryOptions_Impl::SvtHistoryOptions_Impl()\nInconsitency in configuration detected! History is greater then his max size.\n" )
-                                                        impl_SetSequenceOnList( seqHistory, m_aHistory, m_nHistorySize );
-                                                    }
-                                                    break;
-        }
+        seqValues[nPosition+OFFSET_URL      ] >>= aItem.sURL        ;
+        seqValues[nPosition+OFFSET_FILTER   ] >>= aItem.sFilter     ;
+        seqValues[nPosition+OFFSET_TITLE    ] >>= aItem.sTitle      ;
+        seqValues[nPosition+OFFSET_PASSWORD ] >>= aItem.sPassword   ;
+        m_aPicklist.push_front( aItem );
+        ++nPosition;
     }
 
+    // Attention: Don't reset nPosition here!
+
+    // Get names/values for picklist.
+    // 4 subkeys for every item!
+    for( nItem=0; nItem<m_nHistorySize; ++nItem )
+    {
+        seqValues[nPosition+OFFSET_URL      ] >>= aItem.sURL        ;
+        seqValues[nPosition+OFFSET_FILTER   ] >>= aItem.sFilter     ;
+        seqValues[nPosition+OFFSET_TITLE    ] >>= aItem.sTitle      ;
+        seqValues[nPosition+OFFSET_PASSWORD ] >>= aItem.sPassword   ;
+        m_aHistory.push_front( aItem );
+        ++nPosition;
+    }
+
+/*TODO: Not used in the moment! see Notify() ...
     // Enable notification mechanism of ouer baseclass.
     // We need it to get information about changes outside these class on ouer used configuration keys!
-    EnableNotification( seqNames );
+    Sequence< OUString > seqNotifications( seqNames );
+    sal_Int32 nNotifyCount = seqNames.getLength();
+    seqNotifications.realloc( nNotifyCount+PROPERTYCOUNT_LISTNODES );
+    seqNotification[nNotifyCount  ] = PROPERTYNAME_PICKLIST;
+    seqNotification[nNotifyCount+1] = PROPERTYNAME_HISTORY ;
+    EnableNotification( seqNotification );
+*/
 }
 
 //*****************************************************************************************************************
@@ -341,54 +390,7 @@ SvtHistoryOptions_Impl::~SvtHistoryOptions_Impl()
 //*****************************************************************************************************************
 void SvtHistoryOptions_Impl::Notify( const Sequence< OUString >& seqPropertyNames )
 {
-    // Use given list of configuration keys to get his values.
-    Sequence< Any > seqValues = GetProperties( seqPropertyNames );
-
-    // Safe impossible cases.
-    // We need values from ALL configuration keys.
-    // Follow assignment use order of values in relation to our list of key names!
-    DBG_ASSERT( !(seqPropertyNames.getLength()!=seqValues.getLength()), "SvtHistoryOptions_Impl::Notify()\nI miss some values of configuration keys!\n" );
-
-    // Copy values from list in right order to ouer internal member.
-    // Attention: Use order of names to get right value in value list!
-    sal_Int32 nPropertyCount = seqPropertyNames.getLength();
-    for( sal_Int32 nProperty=0; nProperty<nPropertyCount; ++nProperty )
-    {
-        // Safe impossible cases.
-        // Check any for valid value.
-        DBG_ASSERT( !(seqValues[nProperty].hasValue()==sal_False), "SvtHistoryOptions_Impl::Notify()\nInvalid property value detected!\n" );
-        if( seqPropertyNames[nProperty] == PROPERTYNAME_PICKLISTSIZE )
-        {
-            DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_UNSIGNED_LONG), "SvtHistoryOptions_Impl::Notify()\nWho has changed the value type of \"Office.Common\\History\\Picklist\\Size\"?" );
-            seqValues[nProperty] >>= m_nPicklistSize;
-            DBG_ASSERT(!(m_nPicklistSize<1), "SvtHistoryOptions_Impl::Notify()\nA picklist size of 0 isn't realy possible ...!\n");
-        }
-        else
-        if( seqPropertyNames[nProperty] == PROPERTYNAME_PICKLIST )
-        {
-            DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_SEQUENCE), "SvtHistoryOptions_Impl::Notify()\nWho has changed the value type of \"Office.Common\\History\\Picklist\\List\"?" );
-            Sequence< OUString > seqPicklist;
-            seqValues[nProperty] >>= seqPicklist;
-            DBG_ASSERT(!(seqPicklist.getLength()>m_nPicklistSize), "SvtHistoryOptions_Impl::Notify()\nInconsitency in configuration detected! Picklist is greater then his max size.\n" )
-            impl_SetSequenceOnList( seqPicklist, m_aPicklist, m_nPicklistSize );
-        }
-        else
-        if( seqPropertyNames[nProperty] == PROPERTYNAME_HISTORYSIZE )
-        {
-            DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_UNSIGNED_LONG), "SvtHistoryOptions_Impl::Notify()\nWho has changed the value type of \"Office.Common\\History\\History\\Size\"?" );
-            seqValues[nProperty] >>= m_nHistorySize;
-            DBG_ASSERT(!(m_nHistorySize<1), "SvtHistoryOptions_Impl::Notify()\nA history size of 0 isn't realy possible ...!\n");
-        }
-        else
-        if( seqPropertyNames[nProperty] == PROPERTYNAME_HISTORY )
-        {
-            DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_SEQUENCE), "SvtHistoryOptions_Impl::Notify()\nWho has changed the value type of \"Office.Common\\History\\History\\List\"?" );
-            Sequence< OUString > seqHistory;
-            seqValues[nProperty] >>= seqHistory;
-            DBG_ASSERT(!(seqHistory.getLength()>m_nHistorySize), "SvtHistoryOptions_Impl::Notify()\nInconsitency in configuration detected! History is greater then his max size.\n" )
-            impl_SetSequenceOnList( seqHistory, m_aHistory, m_nHistorySize );
-        }
-    }
+    DBG_ASSERT( sal_False, "SvtHistoryOptions_Impl::Notify()\nNot implemented yet! I don't know how I can handle a dynamical list of unknown properties ...\n" );
 }
 
 //*****************************************************************************************************************
@@ -396,37 +398,56 @@ void SvtHistoryOptions_Impl::Notify( const Sequence< OUString >& seqPropertyName
 //*****************************************************************************************************************
 void SvtHistoryOptions_Impl::Commit()
 {
-    // Get names of supported properties, create a list for values and copy current values to it.
-    Sequence< OUString >    seqNames    = impl_GetPropertyNames ();
-    sal_Int32               nCount      = seqNames.getLength    ();
-    Sequence< Any >         seqValues   ( nCount );
-    for( sal_Int32 nProperty=0; nProperty<nCount; ++nProperty )
+    // First write fix properties.
+    Sequence< OUString >    seqFixPropertyNames ( 2 );
+    Sequence< Any >         seqFixPropertyValues( 2 );
+    seqFixPropertyNames [PROPERTYHANDLE_PICKLISTSIZE] =   PROPERTYNAME_PICKLISTSIZE ;
+    seqFixPropertyNames [PROPERTYHANDLE_HISTORYSIZE ] =   PROPERTYNAME_HISTORYSIZE  ;
+    seqFixPropertyValues[PROPERTYHANDLE_PICKLISTSIZE] <<= m_nPicklistSize           ;
+    seqFixPropertyValues[PROPERTYHANDLE_HISTORYSIZE ] <<= m_nHistorySize            ;
+    PutProperties( seqFixPropertyNames, seqFixPropertyValues );
+
+    // Write set of dynamic properties then.
+    ClearNodeSet( PROPERTYNAME_PICKLIST );
+    ClearNodeSet( PROPERTYNAME_HISTORY  );
+
+    IMPL_THistoryItem               aItem                   ;
+    OUString                    sNode                   ;
+    Sequence< PropertyValue >   seqPropertyValues( 4 )  ;
+
+    // Copy picklist entries to save-list!
+    for( sal_uInt32 nItem=0; nItem<m_nPicklistSize; ++nItem )
     {
-        switch( nProperty )
-        {
-            case PROPERTYHANDLE_PICKLISTSIZE    :   {
-                                                        seqValues[nProperty] <<= m_nPicklistSize;
-                                                    }
-                                                    break;
+        aItem = m_aPicklist[nItem];
+        seqPropertyValues[OFFSET_URL        ].Name  =   PROPERTYNAME_HISTORYITEM_URL        ;
+        seqPropertyValues[OFFSET_FILTER     ].Name  =   PROPERTYNAME_HISTORYITEM_FILTER     ;
+        seqPropertyValues[OFFSET_TITLE      ].Name  =   PROPERTYNAME_HISTORYITEM_TITLE      ;
+        seqPropertyValues[OFFSET_PASSWORD   ].Name  =   PROPERTYNAME_HISTORYITEM_PASSWORD   ;
+        seqPropertyValues[OFFSET_URL        ].Value <<= aItem.sURL                          ;
+        seqPropertyValues[OFFSET_FILTER     ].Value <<= aItem.sFilter                       ;
+        seqPropertyValues[OFFSET_TITLE      ].Value <<= aItem.sTitle                        ;
+        seqPropertyValues[OFFSET_PASSWORD   ].Value <<= aItem.sPassword                     ;
 
-            case PROPERTYHANDLE_PICKLIST        :   {
-                                                        seqValues[nProperty] <<= impl_GetSequenceFromList( m_aPicklist );
-                                                    }
-                                                    break;
-
-            case PROPERTYHANDLE_HISTORYSIZE     :   {
-                                                        seqValues[nProperty] <<= m_nHistorySize;
-                                                    }
-                                                    break;
-
-            case PROPERTYHANDLE_HISTORY         :   {
-                                                        seqValues[nProperty] <<= impl_GetSequenceFromList( m_aHistory );
-                                                    }
-                                                    break;
-        }
+        sNode = PROPERTYNAME_PICKLIST + OUString::valueOf( (sal_Int32)nItem ) + PATHDELIMITER;
+        SetSetProperties( sNode, seqPropertyValues );
     }
-    // Set properties in configuration.
-    PutProperties( seqNames, seqValues );
+
+    // Copy URL-list entries to save-list!
+    for( nItem=0; nItem<m_nHistorySize; ++nItem )
+    {
+        aItem = m_aHistory[nItem];
+        seqPropertyValues[OFFSET_URL        ].Name  =   PROPERTYNAME_HISTORYITEM_URL        ;
+        seqPropertyValues[OFFSET_FILTER     ].Name  =   PROPERTYNAME_HISTORYITEM_FILTER     ;
+        seqPropertyValues[OFFSET_TITLE      ].Name  =   PROPERTYNAME_HISTORYITEM_TITLE      ;
+        seqPropertyValues[OFFSET_PASSWORD   ].Name  =   PROPERTYNAME_HISTORYITEM_PASSWORD   ;
+        seqPropertyValues[OFFSET_URL        ].Value <<= aItem.sURL                          ;
+        seqPropertyValues[OFFSET_FILTER     ].Value <<= aItem.sFilter                       ;
+        seqPropertyValues[OFFSET_TITLE      ].Value <<= aItem.sTitle                        ;
+        seqPropertyValues[OFFSET_PASSWORD   ].Value <<= aItem.sPassword                     ;
+
+        sNode = PROPERTYNAME_HISTORY + OUString::valueOf( (sal_Int32)nItem ) + PATHDELIMITER;
+        SetSetProperties( sNode, seqPropertyValues );
+    }
 }
 
 //*****************************************************************************************************************
@@ -519,10 +540,10 @@ void SvtHistoryOptions_Impl::Clear( EHistoryType eHistory )
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
-Sequence< OUString > SvtHistoryOptions_Impl::GetList( EHistoryType eHistory ) const
+Sequence< Sequence< PropertyValue > > SvtHistoryOptions_Impl::GetList( EHistoryType eHistory ) const
 {
     // Set default return value.
-    Sequence< OUString > seqReturn;
+    Sequence< Sequence< PropertyValue > > seqReturn;
     // Set right list for return.
     switch( eHistory )
     {
@@ -542,8 +563,14 @@ Sequence< OUString > SvtHistoryOptions_Impl::GetList( EHistoryType eHistory ) co
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
-void SvtHistoryOptions_Impl::AppendItem( EHistoryType eHistory, const OUSTRING& sItem )
+void SvtHistoryOptions_Impl::AppendItem(            EHistoryType    eHistory    ,
+                                            const   OUString&       sURL        ,
+                                            const   OUString&       sFilter     ,
+                                            const   OUString&       sTitle      ,
+                                            const   OUString&       sPassword   )
 {
+    IMPL_THistoryItem aItem( sURL, sFilter, sTitle, sPassword );
+
     switch( eHistory )
     {
         case ePICKLIST  :   {
@@ -553,7 +580,7 @@ void SvtHistoryOptions_Impl::AppendItem( EHistoryType eHistory, const OUSTRING& 
                                     m_aPicklist.pop_back();
                                 }
                                 // Append new item to list.
-                                m_aPicklist.push_front( sItem );
+                                m_aPicklist.push_front( aItem );
                             }
                             break;
 
@@ -564,7 +591,7 @@ void SvtHistoryOptions_Impl::AppendItem( EHistoryType eHistory, const OUSTRING& 
                                     m_aHistory.pop_back();
                                 }
                                 // Append new item to list.
-                                m_aHistory.push_front( sItem );
+                                m_aHistory.push_front( aItem );
                             }
                             break;
     }
@@ -575,57 +602,73 @@ void SvtHistoryOptions_Impl::AppendItem( EHistoryType eHistory, const OUSTRING& 
 //*****************************************************************************************************************
 Sequence< OUString > SvtHistoryOptions_Impl::impl_GetPropertyNames()
 {
-    // Build static list of configuration key names.
-    static const OUString pProperties[] =
+    // First get ALL names of current existing list items in configuration!
+    Sequence< OUString > seqPicklistItems = GetNodeNames( PROPERTYNAME_PICKLIST );
+    Sequence< OUString > seqHistoryItems  = GetNodeNames( PROPERTYNAME_HISTORY  );
+    // Get information about list counts ...
+    sal_uInt32 nPicklistCount = seqPicklistItems.getLength();
+    sal_uInt32 nHistoryCount  = seqHistoryItems.getLength ();
+    // ... and create a property list with right size! (+2...see fix properties below!)
+    Sequence< OUString > seqProperties( 2 + (nPicklistCount*4) + (nHistoryCount*4) );
+
+    // Add names of fix properties to list.
+    seqProperties[PROPERTYHANDLE_PICKLISTSIZE]  =   PROPERTYNAME_PICKLISTSIZE   ;
+    seqProperties[PROPERTYHANDLE_HISTORYSIZE ]  =   PROPERTYNAME_HISTORYSIZE    ;
+
+    sal_uInt32 nPosition = PROPERTYHANDLE_HISTORYSIZE+1;
+    // Add names for picklist to list.
+    // 4 subkeys for every item!
+    // nPosition is the start point of an history item, nItem an index into right list of node names!
+    for( sal_Int32 nItem=0; nItem<nPicklistCount; ++nItem )
     {
-        PROPERTYNAME_PICKLISTSIZE   ,
-        PROPERTYNAME_PICKLIST       ,
-        PROPERTYNAME_HISTORYSIZE    ,
-        PROPERTYNAME_HISTORY        ,
-    };
-    // Initialize return sequence with these list ...
-    static const Sequence< OUString > seqPropertyNames( pProperties, PROPERTYCOUNT );
-    // ... and return it.
-    return seqPropertyNames;
+        seqProperties[nPosition+OFFSET_URL      ] = PROPERTYNAME_PICKLIST + seqPicklistItems[nItem] + PROPERTYNAME_HISTORYITEM_URL      ;
+        seqProperties[nPosition+OFFSET_FILTER   ] = PROPERTYNAME_PICKLIST + seqPicklistItems[nItem] + PROPERTYNAME_HISTORYITEM_FILTER   ;
+        seqProperties[nPosition+OFFSET_TITLE    ] = PROPERTYNAME_PICKLIST + seqPicklistItems[nItem] + PROPERTYNAME_HISTORYITEM_TITLE    ;
+        seqProperties[nPosition+OFFSET_PASSWORD ] = PROPERTYNAME_PICKLIST + seqPicklistItems[nItem] + PROPERTYNAME_HISTORYITEM_PASSWORD ;
+        ++nPosition;
+    }
+
+    // Attention: Don't reset nPosition here!
+
+    // Add names for URL-list to list.
+    // 4 subkeys for every item!
+    // nPosition is the start point of an history item, nItem an index into right list of node names!
+    for( nItem=0; nItem<nHistoryCount; ++nItem )
+    {
+        seqProperties[nPosition+OFFSET_URL      ] = PROPERTYNAME_HISTORY + seqHistoryItems[nItem] + PROPERTYNAME_HISTORYITEM_URL        ;
+        seqProperties[nPosition+OFFSET_FILTER   ] = PROPERTYNAME_HISTORY + seqHistoryItems[nItem] + PROPERTYNAME_HISTORYITEM_FILTER     ;
+        seqProperties[nPosition+OFFSET_TITLE    ] = PROPERTYNAME_HISTORY + seqHistoryItems[nItem] + PROPERTYNAME_HISTORYITEM_TITLE      ;
+        seqProperties[nPosition+OFFSET_PASSWORD ] = PROPERTYNAME_HISTORY + seqHistoryItems[nItem] + PROPERTYNAME_HISTORYITEM_PASSWORD   ;
+        ++nPosition;
+    }
+
+    // Return result.
+    return seqProperties;
 }
 
 //*****************************************************************************************************************
 //  private method
 //*****************************************************************************************************************
-Sequence< OUString > SvtHistoryOptions_Impl::impl_GetSequenceFromList( const deque< OUString >& aList ) const
+Sequence< Sequence< PropertyValue > > SvtHistoryOptions_Impl::impl_GetSequenceFromList( const deque< IMPL_THistoryItem >& aList ) const
 {
     // Initialize return sequence with right size.
     sal_Int32 nCount = aList.size();
-    Sequence< OUString > seqResult( nCount );
+    Sequence< Sequence< PropertyValue > >   seqResult( nCount );
+    Sequence< PropertyValue >               seqProperties( 4 );
     // Copy items from given to return list.
     for( sal_Int32 nItem=0; nItem<nCount; ++nItem )
     {
-        seqResult[nItem] = aList[nItem];
+        seqProperties[OFFSET_URL        ].Name  =   PROPERTYNAME_HISTORYITEM_URL        ;
+        seqProperties[OFFSET_FILTER     ].Name  =   PROPERTYNAME_HISTORYITEM_FILTER     ;
+        seqProperties[OFFSET_TITLE      ].Name  =   PROPERTYNAME_HISTORYITEM_TITLE      ;
+        seqProperties[OFFSET_PASSWORD   ].Name  =   PROPERTYNAME_HISTORYITEM_PASSWORD   ;
+        seqProperties[OFFSET_URL        ].Value <<= aList[nItem].sURL                   ;
+        seqProperties[OFFSET_FILTER     ].Value <<= aList[nItem].sFilter                ;
+        seqProperties[OFFSET_TITLE      ].Value <<= aList[nItem].sTitle                 ;
+        seqProperties[OFFSET_PASSWORD   ].Value <<= aList[nItem].sPassword              ;
+        seqResult[nItem] = seqProperties;
     }
     return seqResult;
-}
-
-//*****************************************************************************************************************
-//  private method
-//*****************************************************************************************************************
-void SvtHistoryOptions_Impl::impl_SetSequenceOnList( const Sequence< OUString >& seqSource, deque< OUString >& aList, sal_uInt32 nMaxCount )
-{
-    // Attention: We could not enlarge ouer internal lists!
-    // We must truncate to much items.
-    // The capacity of a deque is ouer maxsize ... see SetSize() for further informations.
-
-    // Get right count of source items to copy in return list!
-    aList.clear();
-    sal_Int32 nCount = seqSource.getLength();
-    if( nCount > nMaxCount )
-    {
-        nCount = nMaxCount;
-    }
-    // Copy items from given to return list.
-    for( sal_Int32 nItem=0; nItem<nCount; ++nItem )
-    {
-        aList.push_front( seqSource[nItem] );
-    }
 }
 
 //*****************************************************************************************************************
@@ -642,7 +685,7 @@ sal_Int32                   SvtHistoryOptions::m_nRefCount      = 0     ;
 SvtHistoryOptions::SvtHistoryOptions()
 {
     // Global access, must be guarded (multithreading!).
-    MutexGuard aGuard( GetInitMutex() );
+    MutexGuard aGuard( GetOwnStaticMutex() );
     // Increase ouer refcount ...
     ++m_nRefCount;
     // ... and initialize ouer data container only if it not already exist!
@@ -658,7 +701,7 @@ SvtHistoryOptions::SvtHistoryOptions()
 SvtHistoryOptions::~SvtHistoryOptions()
 {
     // Global access, must be guarded (multithreading!)
-    MutexGuard aGuard( GetInitMutex() );
+    MutexGuard aGuard( GetOwnStaticMutex() );
     // Decrease ouer refcount.
     --m_nRefCount;
     // If last instance was deleted ...
@@ -675,7 +718,7 @@ SvtHistoryOptions::~SvtHistoryOptions()
 //*****************************************************************************************************************
 sal_uInt32 SvtHistoryOptions::GetSize( EHistoryType eHistory ) const
 {
-    MutexGuard aGuard( GetInitMutex() );
+    MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->GetSize( eHistory );
 }
 
@@ -684,7 +727,7 @@ sal_uInt32 SvtHistoryOptions::GetSize( EHistoryType eHistory ) const
 //*****************************************************************************************************************
 void SvtHistoryOptions::SetSize( EHistoryType eHistory, sal_uInt32 nSize )
 {
-    MutexGuard aGuard( GetInitMutex() );
+    MutexGuard aGuard( GetOwnStaticMutex() );
     m_pDataContainer->SetSize( eHistory, nSize );
 }
 
@@ -693,32 +736,36 @@ void SvtHistoryOptions::SetSize( EHistoryType eHistory, sal_uInt32 nSize )
 //*****************************************************************************************************************
 void SvtHistoryOptions::Clear( EHistoryType eHistory )
 {
-    MutexGuard aGuard( GetInitMutex() );
+    MutexGuard aGuard( GetOwnStaticMutex() );
     m_pDataContainer->Clear( eHistory );
 }
 
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
-Sequence< OUString > SvtHistoryOptions::GetList( EHistoryType eHistory ) const
+Sequence< Sequence< PropertyValue > > SvtHistoryOptions::GetList( EHistoryType eHistory ) const
 {
-    MutexGuard aGuard( GetInitMutex() );
+    MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->GetList( eHistory );
 }
 
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
-void SvtHistoryOptions::AppendItem( EHistoryType eHistory, const OUSTRING& sItem )
+void SvtHistoryOptions::AppendItem(         EHistoryType    eHistory    ,
+                                    const   OUString&       sURL        ,
+                                    const   OUString&       sFilter     ,
+                                    const   OUString&       sTitle      ,
+                                    const   OUString&       sPassword   )
 {
-    MutexGuard aGuard( GetInitMutex() );
-    m_pDataContainer->AppendItem( eHistory, sItem );
+    MutexGuard aGuard( GetOwnStaticMutex() );
+    m_pDataContainer->AppendItem( eHistory, sURL, sFilter, sTitle, sPassword );
 }
 
 //*****************************************************************************************************************
 //  private method
 //*****************************************************************************************************************
-Mutex& SvtHistoryOptions::GetInitMutex()
+Mutex& SvtHistoryOptions::GetOwnStaticMutex()
 {
     // Initialize static mutex only for one time!
     static Mutex* pMutex = NULL;
