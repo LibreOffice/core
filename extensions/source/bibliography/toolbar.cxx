@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbar.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2002-05-07 13:49:06 $
+ *  last change: $Author: os $ $Date: 2002-05-15 12:18:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -599,7 +599,7 @@ void BibToolBar::DataChanged( const DataChangedEvent& rDCEvt )
     if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
          (rDCEvt.GetFlags() & SETTINGS_STYLE) )
             ApplyImageList();
-    Window::DataChanged( rDCEvt );
+    ToolBox::DataChanged( rDCEvt );
 }
 /* -----------------------------07.05.2002 15:09------------------------------
 
