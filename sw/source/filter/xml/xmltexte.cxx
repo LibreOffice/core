@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltexte.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 09:10:50 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 11:25:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,9 @@
 #endif
 #ifndef _COM_SUN_STAR_EMBED_ASPECTS_HPP_
 #include <com/sun/star/embed/Aspects.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_NOVISUALAREASIZEEXCEPTION_HPP_
+#include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
 #endif
 #ifndef _COM_SUN_STAR_DOCUMENT_XEMBEDDEDOBJECTSUPPLIER_HPP_
 #include <com/sun/star/document/XEmbeddedObjectSupplier.hpp>
@@ -357,7 +360,17 @@ void lcl_addOutplaceProperties(
     {
         //TODO/LATER: only VisAreaSize is available!
         //const Rectangle& rVisArea = pEmbed->GetVisArea();
-        awt::Size aSz = xObj->getVisualAreaSize( embed::Aspects::MSOLE_CONTENT );
+        awt::Size aSz;
+        try
+        {
+            aSz = xObj->getVisualAreaSize( embed::Aspects::MSOLE_CONTENT );
+        }
+        catch( embed::NoVisualAreaSizeException& )
+        {
+            DBG_ERROR( "Can't get visual area size!\n" );
+            aSz.Width = 5000;
+            aSz.Height = 5000;
+        }
 
         if( aSz.Width && aSz.Height )
         {
@@ -602,9 +615,9 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
             {
                 sURL = OUString( sEmbeddedObjectProtocol );
                 sURL += rOLEObj.GetCurrentPersistName();
-                sURL = GetExport().AddEmbeddedObject( sURL );
             }
 
+            sURL = GetExport().AddEmbeddedObject( sURL );
             lcl_addURL( rExport, sURL, sal_False );
         }
         if( SV_EMBEDDED_OWN == nType && pOLENd->GetChartTblName().Len() )
