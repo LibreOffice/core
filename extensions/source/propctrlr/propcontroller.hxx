@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propcontroller.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-19 14:08:05 $
+ *  last change: $Author: fs $ $Date: 2001-03-21 15:42:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -347,6 +347,11 @@ namespace pcr
         void initFormStuff();
         void deinitFormStuff();
 
+        sal_Bool        implGetCheckFontProperty(const ::rtl::OUString& _rPropName, ::com::sun::star::uno::Any& _rValue);
+        ::rtl::OUString implGetStringFontProperty(const ::rtl::OUString& _rPropName, const ::rtl::OUString& _rDefault);
+        sal_Int16       implGetInt16FontProperty(const ::rtl::OUString& _rPropName, const sal_Int16 _nDefault);
+        float           implGetFloatFontProperty(const ::rtl::OUString& _rPropName, const float _nDefault);
+
         ::rtl::OUString convertSimpleToString(const ::com::sun::star::uno::Any& _rValue);
 
         sal_Bool Construct(Window* _pParentWin);
@@ -364,6 +369,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2001/02/19 14:08:05  fs
+ *  #83649# correctly eval the return value of getIntrospecteeProperty / #84041# infrastructure for activating pages from outside
+ *
  *  Revision 1.3  2001/02/05 08:58:27  fs
  *  #83468# +m_nClassId
  *
