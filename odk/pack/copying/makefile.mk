@@ -16,16 +16,21 @@ DIRLIST = \
     $(DESTDIRJAVAEXAMPLES)		 	\
     $(DESTDIRJAVAEXAMPLES)$/draw		\
     $(DESTDIRJAVAEXAMPLES)$/calc		\
+    $(DESTDIRJAVAEXAMPLES)$/calc$/ChartTypeChange		\
     $(DESTDIRJAVAEXAMPLES)$/writer		\
     $(DESTDIRJAVAEXAMPLES)$/Car		\
     $(DESTDIRJAVAEXAMPLES)$/CalcAddins	\
     $(DESTDIRJAVAEXAMPLES)$/com$/sun$/star$/comp$/demo	\
+    $(DESTDIRJAVAEXAMPLES)$/ConverterServlet		\
     $(DESTDIRJAVAEXAMPLES)$/DocumentConverter		\
     $(DESTDIRJAVAEXAMPLES)$/DocumentLoader	\
     $(DESTDIRJAVAEXAMPLES)$/DocumentPrinter	\
     $(DESTDIRJAVAEXAMPLES)$/DocumentSaver	\
     $(DESTDIRJAVAEXAMPLES)$/GraphicsInserter	\
     $(DESTDIRJAVAEXAMPLES)$/Inspector	\
+    $(DESTDIRJAVAEXAMPLES)$/NotesAccess	\
+    $(DESTDIRJAVAEXAMPLES)$/ToDo	\
+    $(DESTDIRJAVAEXAMPLES)$/WriterSelctor	\
     $(DESTDIRBASICEXAMPLES)		 	\
     $(DESTDIRBASICEXAMPLES)$/drawing 	\
     $(DESTDIRBASICEXAMPLES)$/forms_and_controls	 	\
@@ -56,6 +61,13 @@ JAVA_CALC= \
     $(DESTDIRJAVAEXAMPLES)$/calc$/makefile.mk	   		\
     $(DESTDIRJAVAEXAMPLES)$/calc$/Makefile	  	 		\
     $(DESTDIRJAVAEXAMPLES)$/calc$/README
+
+JAVA_CALC_CHARTTYPECHANGE= \
+    $(DESTDIRJAVAEXAMPLES)$/calc$/ChartTypeChange$/ChartTypeChange.java		   	\
+    $(DESTDIRJAVAEXAMPLES)$/calc$/ChartTypeChange$/ChartTypeChange.sxc		\
+    $(DESTDIRJAVAEXAMPLES)$/calc$/ChartTypeChange$/makefile.mk	   		\
+    $(DESTDIRJAVAEXAMPLES)$/calc$/ChartTypeChange$/Makefile	  	 		\
+    $(DESTDIRJAVAEXAMPLES)$/calc$/ChartTypeChange$/README
 
 JAVA_WRITER= \
     $(DESTDIRJAVAEXAMPLES)$/writer$/SWriter.java	   		\
@@ -97,6 +109,13 @@ JAVA_DEMOCOMP= \
     $(DESTDIRJAVAEXAMPLES)$/com$/sun$/star$/comp$/demo$/SCalcDemo.java	\
     $(DESTDIRJAVAEXAMPLES)$/com$/sun$/star$/comp$/demo$/SDrawDemo.java	\
     $(DESTDIRJAVAEXAMPLES)$/com$/sun$/star$/comp$/demo$/SWriterDemo.java
+
+JAVA_CONVERTERSERVLET= \
+    $(DESTDIRJAVAEXAMPLES)$/ConverterServlet$/ConverterServlet.html	\
+    $(DESTDIRJAVAEXAMPLES)$/ConverterServlet$/ConverterServlet.java	\
+    $(DESTDIRJAVAEXAMPLES)$/ConverterServlet$/Makefile			\
+    $(DESTDIRJAVAEXAMPLES)$/ConverterServlet$/makefile.mk      \
+    $(DESTDIRJAVAEXAMPLES)$/ConverterServlet$/README
 
 JAVA_DOCUMENTCONVERTER= \
     $(DESTDIRJAVAEXAMPLES)$/DocumentConverter$/DocumentConverter.java	\
@@ -142,6 +161,27 @@ JAVA_INSPECTOR= \
     $(DESTDIRJAVAEXAMPLES)$/Inspector$/XInstanceInspector.idl \
     $(DESTDIRJAVAEXAMPLES)$/Inspector$/README
 
+JAVA_NOTESACCESS= \
+    $(DESTDIRJAVAEXAMPLES)$/NotesAccess$/NotesAccess.java \
+    $(DESTDIRJAVAEXAMPLES)$/NotesAccess$/Makefile \
+    $(DESTDIRJAVAEXAMPLES)$/NotesAccess$/makefile.mk \
+    $(DESTDIRJAVAEXAMPLES)$/NotesAccess$/Stocks.nsf \
+    $(DESTDIRJAVAEXAMPLES)$/NotesAccess$/README
+
+JAVA_TODO= \
+    $(DESTDIRJAVAEXAMPLES)$/ToDo$/ToDo.java \
+    $(DESTDIRJAVAEXAMPLES)$/ToDo$/Test.java \
+    $(DESTDIRJAVAEXAMPLES)$/ToDo$/ToDo.sxc  \
+    $(DESTDIRJAVAEXAMPLES)$/ToDo$/ToDo.xml  \
+    $(DESTDIRJAVAEXAMPLES)$/ToDo$/XToDo.idl  \
+    $(DESTDIRJAVAEXAMPLES)$/ToDo$/makefile.mk \
+    $(DESTDIRJAVAEXAMPLES)$/ToDo$/Manifest
+
+JAVA_WRITERSELECTOR= \
+    $(DESTDIRJAVAEXAMPLES)$/WriterSelector$/WriterSelector.java \
+    $(DESTDIRJAVAEXAMPLES)$/WriterSelector$/Makefile \
+    $(DESTDIRJAVAEXAMPLES)$/WriterSelector$/makefile.mk \
+    $(DESTDIRJAVAEXAMPLES)$/WriterSelector$/README
 
 BASIC_EXAMPLES= \
     $(DESTDIRBASICEXAMPLES)$/index.html				\
@@ -166,16 +206,21 @@ EXAMPLESLIST= \
     $(CPP_OFFICECLIENT) \
     $(JAVA_DRAW)        \
     $(JAVA_CALC)        \
+    $(JAVA_CALC_CHARTTYPECHANGE)        \
     $(JAVA_CAR)         \
     $(JAVA_WRITER)      \
     $(JAVA_CALCADDINS)  \
     $(JAVA_DEMOCOMP)    \
+    $(JAVA_CONVERTERSERVLET)    \
     $(JAVA_DOCUMENTCONVERTER)      \
     $(JAVA_DOCUMENTLOADER)         \
     $(JAVA_DOCUMENTPRINTER)        \
     $(JAVA_DOCUMENTSAVER)          \
     $(JAVA_GRAPHICSINSERTER)       \
     $(JAVA_INSPECTOR)              \
+    $(JAVA_NOTESACCESS)            \
+    $(JAVA_TODO)                   \
+    $(JAVA_WRITERSELECTOR)         \
     $(BASIC_EXAMPLES)
 
 IDLLIST={$(subst,/,$/ $(shell $(FIND) $(IDLOUT) -type f -print))}
