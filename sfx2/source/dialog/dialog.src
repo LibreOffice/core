@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-11 18:10:57 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 19:26:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,7 @@ String STR_RESET
     TEXT[ korean ] = "¿ø·¡´ë·Î(~R)";
     TEXT[ turkish ] = "~Geri";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "~Restablecer";
 };
 String STR_APPLY
 {
@@ -137,6 +138,7 @@ String STR_APPLY
     Text[ chinese_traditional ] = "®M¥Î";
     Text[ turkish ] = "Apply";
     Text[ arabic ] = "ÊØÈíÞ";
+    Text[ catalan ] = "Aplicar";
 };
 String STR_INTERNET
 {
@@ -161,6 +163,7 @@ String STR_INTERNET
     Text[ korean ] = "(ÀÎÅÍ³Ý)";
     Text[ turkish ] = "(Internet)";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "(Internet)";
 };
 String STR_BASEFMT
 {
@@ -187,6 +190,7 @@ String STR_BASEFMT
     Text[ korean ] = "±âº»¼­½Ä";
     Text[ turkish ] = "Temel format";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Formato ~base";
 };
 CheckBox CB_USE_PASSWD
 {
@@ -214,6 +218,7 @@ CheckBox CB_USE_PASSWD
     Text[ korean ] = "ÆÐ½º¿öµå(~P)";
     Text[ turkish ] = "~Þifre";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "~Contraseña";
 };
 CheckBox CB_READ_ONLY
 {
@@ -241,6 +246,7 @@ CheckBox CB_READ_ONLY
     Text[ korean ] = "ÀÐ±â Àü¿ë(~R)";
     Text[ turkish ] = "Salt okunur";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "~Solo lectura";
 };
 PushButton CB_FILE
 {
@@ -266,6 +272,7 @@ PushButton CB_FILE
     Text[ korean ] = "ÆÄÀÏ ½Ã½ºÅÛ(~F)";
     Text[ turkish ] = "Dosya sistemi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Sistema de ~archivos";
 };
 PushButton CB_URL
 {
@@ -291,6 +298,7 @@ PushButton CB_URL
     Text[ korean ] = "ÀÎÅÍ³Ý(~E)";
     Text[ turkish ] = "Internet";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "~Internet";
 };
 PushButton BTN_MANAGER
 {
@@ -318,6 +326,7 @@ PushButton BTN_MANAGER
     Text[ korean ] = "°ü¸®ÀÚ(~M)...";
     Text[ turkish ] = "~Yönetici...";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "~Administrador...";
 };
 PushButton BTN_STANDARD
 {
@@ -345,6 +354,7 @@ PushButton BTN_STANDARD
     Text[ korean ] = "±âÁØ(~H)";
     Text[ turkish ] = "Standart";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "~Predeterminado";
 };
 String STR_PATH_NOT_FOUND1
 {
@@ -371,6 +381,7 @@ String STR_PATH_NOT_FOUND1
     Text[ korean ] = "µð·ºÅä¸®'";
     Text[ turkish ] = "Dizin '";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "El directorio '";
 };
 String STR_PATH_NOT_FOUND2
 {
@@ -397,6 +408,7 @@ String STR_PATH_NOT_FOUND2
     Text[ korean ] = "' ¾ø½À´Ï´Ù.";
     Text[ turkish ] = "' mevcut deðil.";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "' no existe.";
 };
 InfoBox MSG_ERROR_PASSWD
 {
@@ -425,6 +437,7 @@ InfoBox MSG_ERROR_PASSWD
     MESSAGE[ korean ] = "ÆÐ½º¿öµå°¡ Æ²¸³´Ï´Ù.";
     MESSAGE[ turkish ] = "Yanlýþ þifre";
     MESSAGE[ language_user1 ] = " ";
+    MESSAGE[ catalan ] = "Contraseña no válida.";
 };
 String STR_FILEDLG_INSERT
 {
@@ -451,6 +464,7 @@ String STR_FILEDLG_INSERT
     Text[ korean ] = "ÆÄÀÏ »ðÀÔ";
     Text[ turkish ] = "Dosya ekle";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Insertar archivo";
 };
 String STR_TABPAGE_MANAGESTYLES
 {
@@ -477,6 +491,7 @@ String STR_TABPAGE_MANAGESTYLES
     Text[ korean ] = "°ü¸®";
     Text[ turkish ] = "Yönet";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Administrar";
 };
 InfoBox MSG_TABPAGE_INVALIDNAME
 {
@@ -505,6 +520,7 @@ InfoBox MSG_TABPAGE_INVALIDNAME
     Message[ korean ] = "ÀÌ ÀÌ¸§Àº ÀÌ¹Ì ¼­½ÄÆÄÀÏ¿¡ »ç¿ëÁßÀÔ´Ï´Ù.";
     Message[ turkish ] = "Bu ad bir þablon adý olarak kullanýlýyor.";
     Message[ language_user1 ] = " ";
+    Message[ catalan ] = "Este nombre ya es usado para una plantilla.";
 };
 InfoBox MSG_TABPAGE_INVALIDSTYLE
 {
@@ -533,6 +549,7 @@ InfoBox MSG_TABPAGE_INVALIDSTYLE
     Message[ korean ] = "ÀÌ ¼­½ÄÀº ¾ø½À´Ï´Ù.";
     Message[ turkish ] = "Bu þablon mevcut deðil.";
     Message[ language_user1 ] = "All \"Vorlagen\" /Styles are written with a capital S.10.5.00EM";
+    Message[ catalan ] = "Este estilo no existe.";
 };
 InfoBox MSG_TABPAGE_INVALIDPARENT
 {
@@ -561,6 +578,7 @@ InfoBox MSG_TABPAGE_INVALIDPARENT
     Message[ korean ] = "ÀÌ ¼­½ÄÆÄÀÏÀº ±âº»¼­½ÄÆÄÀÏ·Î »ç¿ëÇÒ ¼ö ¾ø½À´Ï´Ù. \nÀç±Í°¡¡¡¹ß»ýÇÒ¼ö ÀÖ±â ¶§¹®ÀÔ´Ï´Ù.";
     Message[ turkish ] = "Bu þablon (özyineleme nedeniyle)\n temel þablon olarak kullanýlamaz.";
     Message[ language_user1 ] = " ";
+    Message[ catalan ] = "Esta plantilla no se puede utilizar como plantilla base,\nya que podría provocar una referencia recursiva.";
 };
 InfoBox MSG_POOL_STYLE_NAME
 {
@@ -587,6 +605,7 @@ InfoBox MSG_POOL_STYLE_NAME
     MESSAGE[ korean ] = "ÀÌ ÀÌ¸§Àº ÀÌ¹Ì ±âº»¼­½ÄÀÇ ÀÌ¸§ÀÔ´Ï´Ù.\n´Ù¸¥ ÀÌ¸§À» ¼±ÅÃÇÏ½Ê½Ã¿À.";
     MESSAGE[ turkish ] = "Bu ad bir standart þablon adý olarak kullanýlýyor.\nBaþka bir ad seçin.";
     MESSAGE[ language_user1 ] = "All \"Vorlagen\" /Styles are written with a capital S.10.5.00EM";
+    MESSAGE[ catalan ] = "El nombre ya está usado por un estilo predeterminado.\nElija otro nombre por favor.";
 };
 QueryBox MSG_OVERWRITE_STYLE
 {
@@ -615,6 +634,7 @@ QueryBox MSG_OVERWRITE_STYLE
     Message[ korean ] = "¼­½ÄÆÄÀÏÀÌ ÀÌ¹Ì ÀÖ½À´Ï´Ù. µ¤¾î¾º¿ì½Ã°Ú½À´Ï±î?";
     Message[ turkish ] = "Þablon mevcut durumda. Üzerine yazýlsýn mý?";
     Message[ language_user1 ] = " ";
+    Message[ catalan ] = "El estilo ya existe. ¿Desea sobrescribirlo?";
 };
 String STR_DELETE_STYLE
 {
@@ -639,6 +659,7 @@ String STR_DELETE_STYLE
     Text[ korean ] = "¼­½Ä$1À» (¸¦) Á¤¸» »èÁ¦ÇÏ½Ã°Ú½À´Ï±î?";
     Text[ turkish ] = "$1 þablonlarýný gerçekten silmek istiyor musunuz?";
     Text[ language_user1 ] = "All \"Vorlagen\" /Styles are written with a capital S.10.5.00EM";
+    Text[ catalan ] = "¿Desea realmente eliminar el estilo $1?";
 };
 String STR_DELETE_STYLE_USED
 {
@@ -663,6 +684,7 @@ String STR_DELETE_STYLE_USED
     Text[ korean ] = "»ç¿ëÀÚ´Â »ç¿ëµÈ ¼­½ÄÀ» »èÁ¦ÇÏ°í ÀÖ½À´Ï´Ù!\n";
     Text[ turkish ] = "Kullanýlan bir þablonu siliyorsunuz!\n";
     Text[ language_user1 ] = "All \"Vorlagen\" /Styles are written with a capital S.10.5.00EM";
+    Text[ catalan ] = "¡Usted está borrando un estilo que ha sido aplicado!\n";
 };
 Image BMP_COLLAPSED
 {
@@ -711,6 +733,7 @@ Menu MN_CONTEXT_TEMPLDLG
             Text[ korean ] = "»õ·Î...";
             Text[ turkish ] = "Yeni...";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Nuevo...";
         };
         MenuItem
         {
@@ -739,6 +762,7 @@ Menu MN_CONTEXT_TEMPLDLG
             Text[ korean ] = "º¯°æ...";
             Text[ turkish ] = "Deðiþtir...";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Modificar...";
         };
         MenuItem
         {
@@ -767,6 +791,7 @@ Menu MN_CONTEXT_TEMPLDLG
             Text[ korean ] = "»èÁ¦...";
             Text[ turkish ] = "Sil...";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Eliminar...";
         };
     };
 };
@@ -795,6 +820,7 @@ String STR_BASICMACROS
     TEXT[ korean ] = "BASIC  ¸ÅÅ©·Î";
     TEXT[ turkish ] = "BASIC makrolarý";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Macros BASIC";
 };
 InfoBox MSG_LAYOUT_NOT_LOADING
 {
@@ -823,6 +849,7 @@ InfoBox MSG_LAYOUT_NOT_LOADING
     MESSAGE[ korean ] = "¹®¼­¸¦ ·¹ÀÌ¾Æ¿ô ¾øÀÌ ·Îµå ÁßÀÔ´Ï´Ù.";
     MESSAGE[ turkish ] = "Belge sayfa düzeni olmadan yükleniyor.";
     MESSAGE[ language_user1 ] = " ";
+    MESSAGE[ catalan ] = "Cargando el documento sin diseño.";
 };
 Accelerator ACC_LAYOUT_NOT_LOADING
 {
@@ -863,6 +890,7 @@ ErrorBox MSG_ERR_CANT_EDIT_OLD_FORMAT
     Message[ korean ] = "ÀÌ \nÆÄÀÏ¼­½ÄÀ¸·Î µÈ ¹®¼­ÀÇ ¹®¼­Á¤º¸´Â ÆíÁýÇÒ ¼ö ¾ø½À´Ï´Ù.";
     Message[ turkish ] = "Bu dosya formatýndaki belgelerin belge bilgileri iþlenemez";
     Message[ language_user1 ] = " ";
+    Message[ catalan ] = "La información de documentos no se puede editar en este\nformato de archivo.";
 };
  //------------------------------------------------------------------------
 ErrorBox MSG_ERR_CANT_EDIT_OPEN_DOCS
@@ -888,6 +916,7 @@ ErrorBox MSG_ERR_CANT_EDIT_OPEN_DOCS
     Message[ korean ] = "ÇöÀç ÆíÁýÁßÀÎ \n¹®¼­ÀÇ ¹®¼­Á¤º¸´Â ¹®¼­°ü¸®ÀÚ¿¡ ÀÇÇØ ÆíÁýµÉ ¼ö ¾ø½À´Ï´Ù.";
     Message[ turkish ] = "Þu an kullanýlan belgelerin belge bilgileri belge yöneticisi tarafýndan iþlenemez.";
     Message[ language_user1 ] = " ";
+    Message[ catalan ] = "La información acerca de los documentos que se están editando\nno puede ser editada por el administrador de documentos.";
 };
 ModalDialog RID_URLOPEN
 {
@@ -938,6 +967,7 @@ ModalDialog RID_URLOPEN
     };
     Text[ turkish ] = "URL gir";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Entrar URL";
 };
 Menu RID_AUTOHIDE
 {
@@ -968,6 +998,7 @@ Menu RID_AUTOHIDE
             Text[ korean ] = "¼û±â±â";
             Text[ turkish ] = "Gizle";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Ocultar";
         };
     };
 };
@@ -994,6 +1025,7 @@ String RID_AUTOHIDE
     Text[ korean ] = "¼û±âÁö ¾Ê±â";
     Text[ turkish ] = "Gizleme";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "No ocultar";
 };
 String SID_NAVIGATOR
 {
@@ -1018,6 +1050,7 @@ String SID_NAVIGATOR
     Text[ korean ] = "³×ºñ°ÔÀÌÅÍ";
     Text[ turkish ] = "Navigatör";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Navegador";
 };
 
 ErrorBox MSG_ERROR_WRONG_CONFIRM
@@ -1045,6 +1078,7 @@ ErrorBox MSG_ERROR_WRONG_CONFIRM
     MESSAGE[ arabic ] = "ÊÃßíÏ ÛíÑ ÕÍíÍ áßáãÉ ÇáÓÑ";
     MESSAGE[ turkish ] = "Þifre onayý hatalý";
     MESSAGE[ language_user1 ] = " ";
+    MESSAGE[ catalan ] = "Confirmación errónea de la contraseña";
 };
 
 // ******************************************************************* EOF
