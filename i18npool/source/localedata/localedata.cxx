@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localedata.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2004-05-28 16:40:25 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 12:26:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,6 +171,11 @@ static const struct {
         { "uk_UA",  lcl_DATA_EURO, "uk" },
         { "ro_RO",  lcl_DATA_EURO, "ro" },
         { "cy_GB",  lcl_DATA_EURO, "cy" },
+        { "bg_BG",  lcl_DATA_EURO, "bg" },
+        { "sh_YU",  lcl_DATA_EURO, "sh" },
+        { "sr_YU",  lcl_DATA_EURO, "sr" },
+        { "hr_HR",  lcl_DATA_EURO, "hr" },
+        { "bs_BA",  lcl_DATA_EURO, "bs" },
 
         { "ja_JP",  lcl_DATA_OTHERS, "ja" },
         { "ko_KR",  lcl_DATA_OTHERS, "ko" },
@@ -197,9 +202,12 @@ static const struct {
         { "af_ZA",  lcl_DATA_OTHERS, "af" },
         { "hu_HU",  lcl_DATA_OTHERS, "hu" },
         { "id_ID",  lcl_DATA_OTHERS, "id" },
+        { "ms_MY",  lcl_DATA_OTHERS, "ms" },
+        { "ia",     lcl_DATA_OTHERS, "ia" },
+        { "mn_MN",  lcl_DATA_OTHERS, "mn" },
+        { "az_AZ",  lcl_DATA_OTHERS, "az" },
 
 //      { "be_BY",  lcl_DATA, "be" },
-//      { "bg_BG",  lcl_DATA, "bg" },
 //      { "br_AE",  lcl_DATA, "br" },
 
 };
