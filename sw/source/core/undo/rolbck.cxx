@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rolbck.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-17 16:24:29 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 14:06:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -748,6 +748,11 @@ BOOL SwHstryBookmark::IsEqualBookmark( const SwBookmark& rBkmk )
             nKeyCode == (rBkmk.GetKeyCode().GetCode() |
                         rBkmk.GetKeyCode().GetModifier())
             ? TRUE : FALSE;
+}
+
+const String & SwHstryBookmark::GetName() const
+{
+    return aName;
 }
 
 /*************************************************************************/
