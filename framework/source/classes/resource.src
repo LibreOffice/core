@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resource.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 17:15:25 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:50:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,9 +71,9 @@ String STR_MENU_ADDONS
     Text[ greek ] = "Add-Ons";
     Text[ dutch ] = "Add-Ons";
     Text[ french ] = "Add-ons";
-    Text[ spanish ] = "Add-Ons";
+    Text[ spanish ] = "Complementos (add-ons)";
     Text[ finnish ] = "Add-Ons";
-    Text[ italian ] = "Complementari";
+    Text[ italian ] = "Add-on";
     Text[ danish ] = "Add-Ons";
     Text[ swedish ] = "Till�gg";
     Text[ polish ] = "Add-Ons";
@@ -82,14 +82,27 @@ String STR_MENU_ADDONS
     Text[ korean ] = "Add-Ons";
     Text[ chinese_simplified ] = "Add-Ons";
     Text[ chinese_traditional ] = "附加元件";
-    Text[ turkish ] = "Add-Ons";
+    Text[ turkish ] = "Eklentiler";
     Text[ arabic ] = "Add-Ons";
     Text[ catalan ] = "Add-Ons";
     Text[ thai ] = "Add-Ons";
+    Text[ czech ] = "Add-Ons";
+    Text[ hebrew ] = "Add-Ons";
+    Text[ hindi ] = "Add-Ons";
 };
 
 String STR_MENU_ADDONHELP
 {
     Text = "Add-~On-Hilfe" ;
     Text [ english_us ] = "Add-~On Help" ;
+    Text[ french ] = "Aide de l'add-on";
+    Text[ spanish ] = "~Complemento (add-on) - Ayuda";
+    Text[ italian ] = "Guida complementari";
+    Text[ swedish ] = "Ti~ll�ggshj�lp";
+    Text[ japanese ] = "アドオンヘルプ";
+    Text[ korean ] = "Add-On 도움말";
+    Text[ chinese_simplified ] = "Add-~On 帮助";
+    Text[ chinese_traditional ] = "Add-~On 說明";
 };
+
+
