@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parawin.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:06:06 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 17:07:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,7 @@
     QuickHelpText[ danish ] = "Formindsk";  \
     QuickHelpText[ swedish ] = "F�rminska"; \
     QuickHelpText[ polish ] = "Pomniejsz";  \
-    QuickHelpText[ portuguese_brazilian ] = "Shrink";   \
+    QuickHelpText[ portuguese_brazilian ] = "Reduzir";  \
     QuickHelpText[ japanese ] = "縮小";   \
     QuickHelpText[ chinese_simplified ] = "缩小"; \
     QuickHelpText[ chinese_traditional ] = "縮小";    \
@@ -114,7 +114,10 @@
     QuickHelpText[ turkish ] = "Verkleinern";   \
     QuickHelpText[ catalan ] = "Redueix";   \
     QuickHelpText[ finnish ] = "Kutista";   \
-    QuickHelpText[ thai ] = "Shrink";
+    QuickHelpText[ thai ] = "Shrink";   \
+    QuickHelpText[ czech ] = "Zmenšit";    \
+    QuickHelpText[ hebrew ] = "Verkleinern";    \
+    QuickHelpText[ hindi ] = "सिकुडना";
 
  //---------------------------------------------------------------------------
 
@@ -144,17 +147,20 @@ TabPage RID_SCTAB_PARAMETER
         Text[ italian ] = "Funzione sconosciuta";
         Text[ danish ] = "Ukendt funktion";
         Text[ swedish ] = "Ok�nd funktion";
-        Text[ polish ] = "Nieznana funkcja.";
-        Text[ portuguese_brazilian ] = "Unknown function.";
+        Text[ polish ] = "Nieznana funkcja";
+        Text[ portuguese_brazilian ] = "Fun��o desconhecida";
         Text[ japanese ] = "不明な関数";
         Text[ korean ] = "알수 없는 함수";
         Text[ chinese_simplified ] = "不明的函数";
         Text[ chinese_traditional ] = "不明的函數";
         Text[ arabic ] = "���� ��� ������";
-        Text[ turkish ] = "Bilinmeyen i�lev";
+        Text[ turkish ] = "Bilinmeyen fonksiyon";
         Text[ catalan ] = "Funci� desconeguda";
         Text[ finnish ] = "Tuntematon funktio";
         Text[ thai ] = "ไม่รู้จักฟังก์ชั่น";
+        Text[ czech ] = "Neznámá funkce";
+        Text[ hebrew ] = "‮פונקציה לא מוכרת‬";
+        Text[ hindi ] = "अज्ञात फंक्शन्";
     };
 
     FixedText FT_PARNAME
@@ -235,6 +241,15 @@ TabPage RID_SCTAB_PARAMETER
         MaskColor = SC_HC_MASKCOLOR;
     };
 };
+
+
+
+
+
+
+
+
+
 
 
 
