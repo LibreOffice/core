@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crnrdlg.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 06:19:52 $
+ *  last change: $Author: kz $ $Date: 2001-05-12 06:59:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -361,7 +361,7 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
     Text[ chinese_traditional ] = "©wΈqΌΠΓD°Ο°μ";
     Text[ arabic ] = "ΚΪΡνέ δΨΗή ΗαΪδζδΙ";
     Text[ greek ] = "Ορισμός περιοχής επιγραφής";
-    Text[ korean ] = "¶σΊ§±ΈΏª Α¤ΐΗ";
+    Text[ korean ] = "¶σΊ§ΏµΏª Α¤ΐΗ";
     Text[ turkish ] = "Baώlύk aralύπύnύ belirle";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Definir αrea de etiqueta";
