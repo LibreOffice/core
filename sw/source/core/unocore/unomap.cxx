@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.107 $
+ *  $Revision: 1.108 $
  *
- *  last change: $Author: dvo $ $Date: 2001-08-23 09:38:30 $
+ *  last change: $Author: mtg $ $Date: 2001-09-03 14:57:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -793,7 +793,7 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     { SW_PROP_NMID(UNO_NAME_IS_LANDSCAPE), SID_ATTR_PAGE,           CPPU_E2T(CPPUTYPE_BOOLEAN),             PROPERTY_NONE ,MID_PAGE_ORIENTATION   },
                     { SW_PROP_NMID(UNO_NAME_NUMBERING_TYPE), SID_ATTR_PAGE,             CPPU_E2T(CPPUTYPE_INT16),           PROPERTY_NONE , MID_PAGE_NUMTYPE       },
                     { SW_PROP_NMID(UNO_NAME_PAGE_STYLE_LAYOUT), SID_ATTR_PAGE,          CPPU_E2T(CPPUTYPE_PAGESTYLELAY),    PROPERTY_NONE ,MID_PAGE_LAYOUT     },
-                    { SW_PROP_NMID(UNO_NAME_PRINTER_PAPER_TRAY), RES_PAPER_BIN,             CPPU_E2T(CPPUTYPE_INT8),            PROPERTY_NONE , 0 },
+                    { SW_PROP_NMID(UNO_NAME_PRINTER_PAPER_TRAY), RES_PAPER_BIN,             CPPU_E2T(CPPUTYPE_OUSTRING),            PROPERTY_NONE , 0 },
 //                  { SW_PROP_NMID(UNO_NAME_REGISTER_MODE_ACTIVE), SID_SWREGISTER_MODE,     CPPU_E2T(CPPUTYPE_BOOLEAN),             PROPERTY_NONE , 0 },
                     { SW_PROP_NMID(UNO_NAME_REGISTER_PARAGRAPH_STYLE), SID_SWREGISTER_COLLECTION,   CPPU_E2T(CPPUTYPE_OUSTRING),        PROPERTY_NONE , 0 },
                     { SW_PROP_NMID(UNO_NAME_SIZE), SID_ATTR_PAGE_SIZE,  CPPU_E2T(CPPUTYPE_AWTSIZE),             PROPERTY_NONE,   MID_SIZE_SIZE|CONVERT_TWIPS},
