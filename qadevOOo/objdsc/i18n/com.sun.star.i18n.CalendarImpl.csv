@@ -21,3 +21,4 @@
 "CalendarImpl";"com::sun::star::lang::XServiceInfo";"getImplementationName()"
 "CalendarImpl";"com::sun::star::lang::XServiceInfo";"supportsService()"
 "CalendarImpl";"com::sun::star::lang::XServiceInfo";"getSupportedServiceNames()"
+"CalendarImpl";"com::sun::star::i18n::XExtendedCalendar#optional";"getDisplayString()"
