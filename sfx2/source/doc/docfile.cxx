@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-13 13:14:16 $
+ *  last change: $Author: mba $ $Date: 2000-11-13 13:23:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1424,7 +1424,6 @@ void SfxMedium::GetMedium_Impl()
                     && bIsWritable && bAllowReadOnlyMode )
             {
                 // later error code will be corrected to ERRCODE_ACCESS_DENIED !
-                xLockBytes = ::utl::UcbLockBytes:: CreateLockBytes( GetContent(), nStorOpenMode, pHandler );
                 QueryBox aBox( 0, SfxResId(MSG_OPEN_READONLY) );
                 BOOL bSilent = TRUE;    // don't ask at the moment
                 if ( bSilent || RET_YES == aBox.Execute() )
@@ -1432,11 +1431,11 @@ void SfxMedium::GetMedium_Impl()
                     GetItemSet()->Put( SfxBoolItem(SID_DOC_READONLY, sal_True));
                     SetOpenMode(SFX_STREAM_READONLY, sal_False);
                     ResetError();
-                    xLockBytes = ::utl::UcbLockBytes:: CreateLockBytes( GetContent(), nStorOpenMode, pHandler );
+                    xLockBytes = ::utl::UcbLockBytes::CreateLockBytes( GetContent(), nStorOpenMode, pHandler );
                 }
             }
             else
-                Done_Impl( xLockBytes->GetError() );
+                Done_Impl( xLockBytes.Is() ? xLockBytes->GetError() : ERRCODE_IO_NOTSUPPORTED );
         }
 
         if ( xLockBytes.Is() )
