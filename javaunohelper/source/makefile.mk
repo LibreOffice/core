@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-26 12:23:48 $
+#   last change: $Author: vg $ $Date: 2003-04-15 13:40:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -124,13 +124,14 @@ SHL1STDLIBS= \
         $(CPPULIB)		\
         $(CPPUHELPERLIB)
 
+SHL1VERSIONMAP = javaunohelper.map
+
 SHL1DEPN=
 SHL1IMPLIB=i$(SHL1TARGET)
 SHL1LIBS=$(LIB1TARGET)
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 
 DEF1NAME=$(SHL1TARGET)
-DEF1EXPORTFILE=exports.dxp
 
 # ------------------------------------------------------------------
 
@@ -143,13 +144,14 @@ SHL2TARGET=juh
 SHL2STDLIBS= \
         $(SALLIB)
 
+SHL2VERSIONMAP = javaunohelper.map
+
 SHL2DEPN=
 SHL2IMPLIB=i$(SHL2TARGET)
 SHL2LIBS=$(LIB2TARGET)
 SHL2DEF=$(MISC)$/$(SHL2TARGET).def
 
 DEF2NAME=$(SHL2TARGET)
-DEF2EXPORTFILE=exports.dxp
 
 # --- Targets ------------------------------------------------------
 
