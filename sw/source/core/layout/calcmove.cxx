@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calcmove.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-01 07:43:32 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 12:59:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,7 +173,10 @@ BOOL SwCntntFrm::ShouldBwdMoved( SwLayoutFrm *pNewUpper, BOOL, BOOL & )
         if( Abs( (pNewUpper->Prt().*fnRectX->fnGetWidth)() -
                  (GetUpper()->Prt().*fnRect->fnGetWidth)() ) > 1 )
             nMoveAnyway = 2; // Damit kommt nur noch ein _WouldFit mit Umhaengen in Frage
-        if ( (nMoveAnyway |= BwdMoveNecessary( pOldPage, Frm() )) < 3 )
+
+        // OD 2004-05-26 #i25904# - do *not* move backward,
+        // if <nMoveAnyway> equals 3 and no space is left in new upper.
+        nMoveAnyway |= BwdMoveNecessary( pOldPage, Frm() );
         {
             SwTwips nSpace = 0;
             SwRect aRect( pNewUpper->Prt() );
@@ -216,19 +219,20 @@ BOOL SwCntntFrm::ShouldBwdMoved( SwLayoutFrm *pNewUpper, BOOL, BOOL & )
             }
 
             nMoveAnyway |= BwdMoveNecessary( pNewPage, aRect);
+
+            //determine space left in new upper frame
+            nSpace = (aRect.*fnRectX->fnGetHeight)();
+
+            if ( IsInFtn() || GetAttrSet()->GetDoc()->IsBrowseMode() ||
+                 pNewUpper->IsCellFrm() ||
+                 ( pNewUpper->IsInSct() && ( pNewUpper->IsSctFrm() ||
+                   ( pNewUpper->IsColBodyFrm() &&
+                     !pNewUpper->GetUpper()->GetPrev() &&
+                     !pNewUpper->GetUpper()->GetNext() ) ) ) )
+                nSpace += pNewUpper->Grow( LONG_MAX PHEIGHT, TRUE );
+
             if ( nMoveAnyway < 3 )
             {
-                //Zur Verfuegung stehenden Raum berechnen.
-                nSpace = (aRect.*fnRectX->fnGetHeight)();
-
-                if ( IsInFtn() || GetAttrSet()->GetDoc()->IsBrowseMode() ||
-                     pNewUpper->IsCellFrm() ||
-                     ( pNewUpper->IsInSct() && ( pNewUpper->IsSctFrm() ||
-                       ( pNewUpper->IsColBodyFrm() &&
-                         !pNewUpper->GetUpper()->GetPrev() &&
-                         !pNewUpper->GetUpper()->GetNext() ) ) ) )
-                    nSpace += pNewUpper->Grow( LONG_MAX PHEIGHT, TRUE );
-
                 if ( nSpace )
                 {
                     //Keine Beruecksichtigung der Fussnoten die an dem Absatz
@@ -254,8 +258,15 @@ BOOL SwCntntFrm::ShouldBwdMoved( SwLayoutFrm *pNewUpper, BOOL, BOOL & )
                 else
                     return FALSE; // Kein Platz, dann ist es sinnlos, zurueckzufliessen
             }
+            else
+            {
+                // OD 2004-05-26 #i25904# - check for space left in new upper
+                if ( nSpace )
+                    return TRUE;
+                else
+                    return FALSE;
+            }
         }
-        return TRUE;
     }
     return  FALSE;
 }
