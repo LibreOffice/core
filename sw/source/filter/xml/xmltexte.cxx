@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltexte.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mtg $ $Date: 2001-03-09 16:05:22 $
+ *  last change: $Author: mib $ $Date: 2001-03-16 12:50:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -269,7 +269,7 @@ SwXMLTextParagraphExport::~SwXMLTextParagraphExport()
 void SwXMLTextParagraphExport::getTextEmbeddedObjectProperties(
     const Reference < XPropertySet >& rPropSet,
     OUString& rURL,
-    OUString& rClassId  ) const
+    sal_Bool& rExtern ) const
 {
     SwOLENode *pOLENd = GetNoTxtNode( rPropSet )->GetOLENode();
     SwOLEObj& rOLEObj = pOLENd->GetOLEObj();
@@ -281,8 +281,7 @@ void SwXMLTextParagraphExport::getTextEmbeddedObjectProperties(
     if( pInfo )
     {
         SvGlobalName aClassName( pInfo->GetClassName() );
-        if( !SvFactory::IsIntern( aClassName, 0 ) )
-            rClassId = aClassName.GetHexName();
+        rExtern = !SvFactory::IsIntern( aClassName, 0 );
     }
 }
 
