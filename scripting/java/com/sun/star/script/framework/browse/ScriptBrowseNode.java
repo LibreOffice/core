@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptBrowseNode.java,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-23 13:56:24 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 13:56:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,9 @@
 
 package com.sun.star.script.framework.browse;
 
-import drafts.com.sun.star.script.browse.XBrowseNode;
-import drafts.com.sun.star.script.browse.BrowseNodeTypes;
-import drafts.com.sun.star.script.provider.XScriptContext;
+import com.sun.star.script.browse.XBrowseNode;
+import com.sun.star.script.browse.BrowseNodeTypes;
+import com.sun.star.script.provider.XScriptContext;
 
 import com.sun.star.beans.PropertyAttribute;
 import com.sun.star.lib.uno.helper.PropertySet;
@@ -162,7 +162,7 @@ public class ScriptBrowseNode extends PropertySet
             (short)0, "renamable");
         registerProperty("URI", new Type(String.class),
             (short)0, "uri");
-        registerProperty("DESCRIPTION", new Type(String.class),
+        registerProperty("Description", new Type(String.class),
             (short)0, "description");
     }
 
