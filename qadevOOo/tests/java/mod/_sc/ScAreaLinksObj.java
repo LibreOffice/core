@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScAreaLinksObj.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change:$Date: 2004-01-05 18:48:56 $
+ *  last change:$Date: 2005-01-25 15:42:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 package mod._sc;
 
 import java.io.PrintWriter;
@@ -117,7 +116,7 @@ public class ScAreaLinksObj extends TestCase {
         } catch ( com.sun.star.uno.Exception e ) {
             // Some exception occures.FAILED
             e.printStackTrace( log );
-            throw new StatusException( "Couldn³t create document", e );
+            throw new StatusException( "Couldn't create document", e );
         }
 
     }
