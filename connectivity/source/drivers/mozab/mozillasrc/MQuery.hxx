@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MQuery.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 10:43:02 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 18:33:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,12 @@
 #include "MColumnAlias.hxx"
 #endif
 #include <connectivity/FValue.hxx>
+#ifndef _CONNECTIVITY_MAB_NS_DECLARES_HXX_
+#include "MNSDeclares.hxx"
+#endif
+#ifndef _THREAD_HXX_
+#include <osl/thread.hxx>
+#endif
 
 namespace connectivity
 {
@@ -182,6 +188,7 @@ namespace connectivity
 
         };
 
+        //PROXY_RELATED
         class MQuery
         {
             /*
@@ -244,60 +251,73 @@ namespace connectivity
             void construct();
         protected:
             ::osl::Mutex                    m_aMutex;
+#if OSL_DEBUG_LEVEL > 0
+            oslThreadIdentifier m_oThreadID;
+#endif
 
         public:
             /*
              * - Contains accessors to the members of this class.
              * - executeQuery() initiates a non-blocking query.
              */
-            void                            setAttributes( ::std::vector< ::rtl::OUString>&);
-            const ::std::vector< ::rtl::OUString> &getAttributes(void) const;
+            sal_Int32                       executeQuery(OConnection* _pCon);    //PROXIED_FUNCTION
+            sal_Int32                       executeQueryProxied(OConnection* _pCon); //Used only by MNSMozabProxy
 
-            void                            setAddressbook( ::rtl::OUString&);
-            ::rtl::OUString                 getAddressbook(void) const;
+            sal_Int32                       createNewCard(); //return Row count number PROXIED_FUNCTION
+            sal_Int32                       deleteRow(const sal_Int32 rowIndex); //PROXIED_FUNCTION
+            sal_Int32                       commitRow(const sal_Int32 rowIndex); //PROXIED_FUNCTION
+            sal_Bool                        resyncRow(sal_Int32 nDBRow);         //PROXIED_FUNCTION
+
+            sal_Bool                        isWritable();                        //PROXIED_FUNCTION
+
+            sal_uInt32                      InsertLoginInfo(OConnection* _pCon); //ACCESSED_IN_PROXY
+
+            void                            setAttributes( ::std::vector< ::rtl::OUString>&);           //PROXY_RELATED
+            const                           ::std::vector< ::rtl::OUString> &getAttributes(void) const; //PROXY_RELATED
+
+            void                            setAddressbook( ::rtl::OUString&);  //PROXY_RELATED
+            ::rtl::OUString                 getAddressbook(void) const;         //PROXY_RELATED
 
             const ::std::map< ::rtl::OUString,::rtl::OUString>&
                                             getColumnAliasMap() const { return m_aColumnAliasMap; }
 
             void                            setExpression( MQueryExpression &_expr );
 
-            void                            setMaxNrOfReturns( const sal_Int32);
-            sal_Int32                       getMaxNrOfReturns(void) const;
+            void                            setMaxNrOfReturns( const sal_Int32); //PROXY_RELATED
+            sal_Int32                       getMaxNrOfReturns(void) const;       //PROXY_RELATED
 
-            void                            setQuerySubDirs( sal_Bool&);
-            sal_Bool                        getQuerySubDirs(void) const;
+            void                            setQuerySubDirs( sal_Bool&);         //PROXY_RELATED
+            sal_Bool                        getQuerySubDirs(void) const;         //PROXY_RELATED
 
-            sal_Int32                       executeQuery(OConnection* _pCon);
-
-            sal_Int32                       getRowCount( void );
-
-            sal_uInt32                      getRealRowCount( void );
-
-            sal_Bool                        queryComplete( void );
-
-            sal_Bool                        waitForQueryComplete( void );
-
-            sal_Bool                        checkRowAvailable( sal_Int32 nDBRow );
-
+            sal_Int32                       getRowCount( void );                 //PROXY_RELATED
+            sal_uInt32                      getRealRowCount( void );             //PROXY_RELATED
+            sal_Bool                        queryComplete( void );               //PROXY_RELATED
+            sal_Bool                        waitForQueryComplete( void );        //PROXY_RELATED
+            sal_Bool                        checkRowAvailable( sal_Int32 nDBRow );//PROXY_RELATED
             sal_Bool                        getRowValue( connectivity::ORowSetValue& rValue,
                                                          sal_Int32 nDBRow,
                                                          const rtl::OUString& aDBColumnName,
-                                                         sal_Int32 nType ) const;
+                                                         sal_Int32 nType ) const;//PROXY_RELATED
+            sal_Bool                        setRowValue( connectivity::ORowSetValue& rValue,
+                                                         sal_Int32 nDBRow,
+                                                         const rtl::OUString& aDBColumnName,
+                                                         sal_Int32 nType ) const;//PROXY_RELATED
+            sal_Int32                       getRowStates(sal_Int32 nDBRow);      //PROXY_RELATED
+            sal_Bool                        setRowStates(sal_Int32 nDBRow,sal_Int32 aState); //PROXY_RELATED
 
-            sal_Bool                        errorOccurred() const
+            sal_Bool                        errorOccurred() const   //PROXY_RELATED
                                             { return m_aErrorOccurred; };
 
-            const ::rtl::OUString&          getErrorString() const
+            const ::rtl::OUString&           getErrorString() const //PROXY_RELATED
                                             { return m_aErrorString; };
 
-            sal_uInt32 InsertLoginInfo(OConnection* _pCon);
 
         public:
-            MQuery();
-            MQuery(const ::std::map< ::rtl::OUString, ::rtl::OUString> &);
-            virtual ~MQuery();
-            static MNameMapper* CreateNameMapper();
-            static void FreeNameMapper( MNameMapper* _ptr );
+            MQuery();                                                       //PROXY_RELATED
+            MQuery(const ::std::map< ::rtl::OUString, ::rtl::OUString> &);  //PROXY_RELATED
+            virtual ~MQuery();                                              //PROXY_RELATED
+            static MNameMapper* CreateNameMapper(); //PROXY_RELATED
+            static void FreeNameMapper( MNameMapper* _ptr ); //PROXY_RELATED
         };
     }
 }
