@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bmpmask.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2002-05-16 14:41:12 $
+ *  last change: $Author: nf $ $Date: 2002-06-13 13:36:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,7 +191,7 @@ DockingWindow RID_SVXDLG_BMPMASK
         Text[ chinese_traditional ] = "ζ›Ώδ»£ζ...";
         Text[ arabic ] = "ΗΣΚΘΟΗα Θά...";
         Text[ greek ] = "Αντικατάσταση με...";
-        Text[ korean ] = "λ°”κΏ€ μƒ‰μƒ";
+        Text[ korean ] = "λ°”κΏ€ μƒ‰μƒ...";
         Text[ turkish ] = "Yeni renk...";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Reemplazar con...";
