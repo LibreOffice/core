@@ -2,9 +2,9 @@
  *
  *  $RCSfile: generalpage.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-30 07:44:07 $
+ *  last change: $Author: fs $ $Date: 2001-05-30 15:10:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,6 +144,9 @@
 #endif
 #ifndef _COM_SUN_STAR_UI_XEXECUTABLEDIALOG_HPP_
 #include <com/sun/star/ui/XExecutableDialog.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UCB_COMMANDABORTEDEXCEPTION_HPP_
+#include <com/sun/star/ucb/CommandAbortedException.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SDBC_XROW_HPP_
 #include <com/sun/star/sdbc/XRow.hpp>
@@ -1167,6 +1170,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.6  2001/05/30 07:44:07  fs
+ *  #87403# removed an obsolete ifdef FS_PRIV_DEBUG
+ *
  *  Revision 1.5  2001/05/30 06:48:21  fs
  *  #87531# +SERVICE_EXTENDED_ADABAS_DRIVER (instead of hard coding the string)
  *
