@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 15:39:55 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 17:07:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3479,10 +3479,10 @@ WarningBox MSG_DATA_SOURCES_UNAVAILABLE
 
 String RID_MODULE_TOOLBOX
 {
-    TEXT = "Funktionsleiste" ;
-    TEXT [ english ] = "Function bar" ;
+    TEXT = "Funktionsleiste (Lesemodus)" ;
+    TEXT [ english ] = "Function Bar (viewing mode)" ;
     Text [ dutch ] = "Werkbalk" ;
-    Text [ english_us ] = "Function Bar" ;
+    Text [ english_us ] = "Function Bar (viewing mode)" ;
     Text [ italian ] = "Barra delle funzioni" ;
     Text [ spanish ] = "Barra de funciones" ;
     Text [ french ] = "Barre de fonctions" ;
