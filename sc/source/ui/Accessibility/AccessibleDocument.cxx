@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocument.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 17:11:04 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 15:42:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -471,7 +471,8 @@ void ScChildrenShapes::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
         if (pSdrHint)
         {
             SdrObject* pObj = const_cast<SdrObject*>(pSdrHint->GetObject());
-            if (pObj && /*(pObj->GetLayer() != SC_LAYER_INTERN) && */(pObj->GetPage() == GetDrawPage()))
+            if (pObj && /*(pObj->GetLayer() != SC_LAYER_INTERN) && */(pObj->GetPage() == GetDrawPage()) &&
+                (pObj->GetPage() == pObj->GetObjList()) ) //#108480# only do something if the object lies direct on the page
             {
                 switch (pSdrHint->GetKind())
                 {
