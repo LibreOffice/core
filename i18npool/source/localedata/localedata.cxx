@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localedata.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: khong $ $Date: 2002-08-16 17:04:58 $
+ *  last change: $Author: khong $ $Date: 2002-08-29 00:37:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -255,7 +255,9 @@ Sequence< CalendarItem > &LocaleData::getCalendarItemByName(const OUString& name
 {
     if (!ref_name.equals(name)) {
         sal_Int32 index = 0;
-        Locale loc(name.getToken(0, under, index), name.getToken(0, under, index), OUString());
+        OUString language = name.getToken(0, under, index);
+        OUString country = name.getToken(0, under, index);
+        Locale loc(language, country, OUString());
         Sequence < Calendar > cals;
         if (loc == rLocale) {
         cals = calendarsSeq;
@@ -276,7 +278,8 @@ Sequence< CalendarItem > &LocaleData::getCalendarItemByName(const OUString& name
             Locale(OUString::createFromAscii("en"), OUString::createFromAscii("US"), OUString()));
         if (cals.getLength() > 0)
             ref_cal = cals[0];
-        throw RuntimeException();
+        else
+            throw RuntimeException();
         }
         ref_name = name;
     }
