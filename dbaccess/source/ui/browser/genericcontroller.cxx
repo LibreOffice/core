@@ -2,9 +2,9 @@
  *
  *  $RCSfile: genericcontroller.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 12:03:46 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 14:31:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,10 @@
 #ifndef DBAUI_TOOLS_HXX
 #include "UITools.hxx"
 #endif
+#ifndef _DBAUI_COMMON_TYPES_HXX_
+#include "commontypes.hxx"
+#endif
+
 #ifndef _SV_WAITOBJ_HXX
 #include <vcl/waitobj.hxx>
 #endif
@@ -162,6 +166,10 @@ using namespace ::comphelper;
 #define ALL_FEATURES    -1
 
 // -------------------------------------------------------------------------
+typedef ::std::hash_map< sal_Int16, sal_Int16 > CommandHashMap;
+typedef ::std::list< DispatchInformation > DispatchInfoList;
+
+// -------------------------------------------------------------------------
 const ::rtl::OUString& getConfirmDeletionURL()
 {
     static const ::rtl::OUString sConfirmDeletionURL( RTL_CONSTASCII_USTRINGPARAM( ".uno:FormSlots/ConfirmDeletion" ) );
@@ -177,6 +185,9 @@ OGenericUnoController::OGenericUnoController(const Reference< XMultiServiceFacto
     ,m_bCurrentlyModified(sal_False)
     ,m_bFrameUiActive(sal_False)
     ,m_pView(NULL)
+#if OSL_DEBUG_LEVEL >= 2
+    ,m_bDescribingSupportedFeatures( false )
+#endif
 {
     try
     {
@@ -186,6 +197,12 @@ OGenericUnoController::OGenericUnoController(const Reference< XMultiServiceFacto
     {
     }
 }
+
+// -----------------------------------------------------------------------------
+OGenericUnoController::~OGenericUnoController()
+{
+}
+
 // -----------------------------------------------------------------------------
 sal_Bool OGenericUnoController::Construct(Window* pParent)
 {
@@ -197,7 +214,13 @@ sal_Bool OGenericUnoController::Construct(Window* pParent)
         getView()->Show();
     }
 
-    AddSupportedFeatures();
+#if OSL_DEBUG_LEVEL >= 2
+    m_bDescribingSupportedFeatures = true;
+#endif
+    describeSupportedFeatures();
+#if OSL_DEBUG_LEVEL >= 2
+    m_bDescribingSupportedFeatures = false;
+#endif
 
     // create the database context
     DBG_ASSERT(m_xMultiServiceFacatory.is(), "OGenericUnoController::Construct need a service factory!");
@@ -374,25 +397,28 @@ void OGenericUnoController::updateTitle()
 {
 }
 // -----------------------------------------------------------------------------
-struct DispatchCollector : public ::std::unary_function< SupportedFeatures::value_type, void>
+struct CommandCollector : public ::std::unary_function< SupportedFeatures::value_type, void>
 {
-    DECLARE_STL_USTRINGACCESS_MAP(sal_Bool,TDispatches);
-    sal_uInt16 m_nFeature;
-    mutable TDispatches m_aFeatures;
-    DispatchCollector(sal_uInt16 _nFeature) : m_nFeature(_nFeature){}
-
-    void operator() (const SupportedFeatures::value_type& lhs) const
+    sal_uInt16  m_nFeature;
+    StringBag&  m_rFeatureCommands;
+    CommandCollector( sal_uInt16 _nFeature, StringBag& _rFeatureCommands )
+        :m_nFeature        ( _nFeature         )
+        ,m_rFeatureCommands( _rFeatureCommands )
     {
-        if ( lhs.second == m_nFeature )
-            m_aFeatures.insert(TDispatches::value_type(lhs.first,sal_False));
+    }
+
+    void operator() ( const SupportedFeatures::value_type& lhs )
+    {
+        if ( lhs.second.nFeatureId == m_nFeature )
+            m_rFeatureCommands.insert( lhs.first );
     }
 };
 
 // -----------------------------------------------------------------------
 void OGenericUnoController::ImplBroadcastFeatureState(const ::rtl::OUString& _rFeature, const Reference< XStatusListener > & xListener, sal_Bool _bIgnoreCache)
 {
-    sal_uInt16 nFeat = (sal_uInt16)m_aSupportedFeatures[_rFeature];
-    FeatureState aFeatState(GetState(nFeat));
+    sal_uInt16 nFeat = m_aSupportedFeatures[ _rFeature ].nFeatureId;
+    FeatureState aFeatState( GetState( nFeat ) );
 
     FeatureState& rCachedState = m_aStateCache[nFeat];  // creates if neccessary
 
@@ -448,8 +474,12 @@ void OGenericUnoController::ImplBroadcastFeatureState(const ::rtl::OUString& _rF
         xListener->statusChanged(aEvent);
     else
     {   // no -> iterate through all listeners responsible for the URL
-        DispatchCollector aDispatchCollector(nFeat);
-        aDispatchCollector = ::std::for_each(m_aSupportedFeatures.begin(),m_aSupportedFeatures.end(),aDispatchCollector);
+        StringBag aFeatureCommands;
+        ::std::for_each(
+            m_aSupportedFeatures.begin(),
+            m_aSupportedFeatures.end(),
+            CommandCollector( nFeat, aFeatureCommands )
+        );
 
         DispatchIterator iterSearch = m_arrStatusListener.begin();
         DispatchIterator iterEnd = m_arrStatusListener.end();
@@ -457,7 +487,7 @@ void OGenericUnoController::ImplBroadcastFeatureState(const ::rtl::OUString& _rF
         while (iterSearch != iterEnd)
         {
             DispatchTarget& rCurrent = *iterSearch;
-            if ( aDispatchCollector.m_aFeatures.find(rCurrent.aURL.Complete) != aDispatchCollector.m_aFeatures.end() )
+            if ( aFeatureCommands.find( rCurrent.aURL.Complete ) != aFeatureCommands.end() )
             {
                 aEvent.FeatureURL.Complete = rCurrent.aURL.Complete;
                 if (m_xUrlTransformer.is())
@@ -473,7 +503,7 @@ void OGenericUnoController::ImplBroadcastFeatureState(const ::rtl::OUString& _rF
 // -----------------------------------------------------------------------
 void OGenericUnoController::InvalidateFeature(const ::rtl::OUString& _rURLPath, const Reference< XStatusListener > & _xListener, sal_Bool _bForceBroadcast)
 {
-    ImplInvalidateFeature( m_aSupportedFeatures[_rURLPath], _xListener, _bForceBroadcast );
+    ImplInvalidateFeature( m_aSupportedFeatures[ _rURLPath ].nFeatureId, _xListener, _bForceBroadcast );
 }
 
 // -----------------------------------------------------------------------------
@@ -504,9 +534,10 @@ void OGenericUnoController::InvalidateFeature_Impl()
             SupportedFeatures::iterator aFeaturePos = ::std::find_if(
                 m_aSupportedFeatures.begin(),
                 m_aSupportedFeatures.end(),
-                ::std::bind2nd( SupportedFeaturesFunc(), aNextFeature.nId )
+                ::std::bind2nd( SupportedFeaturesEqualId(), aNextFeature.nId )
             );
 
+            OSL_ENSURE( m_aSupportedFeatures.end() != aFeaturePos, "OGenericUnoController::InvalidateFeature_Impl: out of interest: please tell FS how you got this assertion ..." );
             if ( m_aSupportedFeatures.end() != aFeaturePos )
                 // we really know this feature
                 ImplBroadcastFeatureState( aFeaturePos->first, aNextFeature.xListener, aNextFeature.bForceBroadcast );
@@ -560,11 +591,12 @@ void OGenericUnoController::InvalidateAll_Impl()
 {
     // ---------------------------------
     // invalidate all aupported features
-    SupportedFeatures::const_iterator aIter = m_aSupportedFeatures.begin();
-    for(;aIter != m_aSupportedFeatures.end();++aIter)
-    {
-        ImplBroadcastFeatureState(aIter->first, Reference< XStatusListener > (), sal_True);
-    }
+
+    for (   SupportedFeatures::const_iterator aIter = m_aSupportedFeatures.begin();
+            aIter != m_aSupportedFeatures.end();
+            ++aIter
+        )
+        ImplBroadcastFeatureState( aIter->first, NULL, sal_True );
 
     {
         ::osl::MutexGuard aGuard( m_aFeatureMutex);
@@ -685,9 +717,9 @@ void OGenericUnoController::removeStatusListener(const Reference< XStatusListene
     SupportedFeatures::const_iterator aIter = m_aSupportedFeatures.find(_rURL.Complete);
     if (aIter != m_aSupportedFeatures.end())
     {   // clear the cache for that feature
-        StateCacheIterator aCachePos = m_aStateCache.find((sal_uInt16)aIter->second);
-        if (aCachePos != m_aStateCache.end())
-            m_aStateCache.erase(aCachePos);
+        StateCacheIterator aCachePos = m_aStateCache.find( aIter->second.nFeatureId );
+        if ( aCachePos != m_aStateCache.end() )
+            m_aStateCache.erase( aCachePos );
     }
 
     // now remove the listener from the deque
@@ -745,19 +777,36 @@ void OGenericUnoController::frameAction(const FrameActionEvent& aEvent) throw( R
         m_bFrameUiActive =  ( FrameAction_FRAME_UI_ACTIVATED == aEvent.Action )
                         ||  ( FrameAction_FRAME_ACTIVATED == aEvent.Action );
 }
+
 //------------------------------------------------------------------------------
-void OGenericUnoController::AddSupportedFeatures()
+void OGenericUnoController::implDescribeSupportedFeature( const sal_Char* _pAsciiCommandURL,
+        sal_uInt16 _nFeatureId, sal_Int16 _nCommandGroup )
+{
+#if OSL_DEBUG_LEVEL >= 2
+    OSL_ENSURE( m_bDescribingSupportedFeatures, "OGenericUnoController::implDescribeSupportedFeature: bad timing for this call!" );
+#endif
+
+    ControllerFeature aFeature;
+    aFeature.Command = ::rtl::OUString::createFromAscii( _pAsciiCommandURL );
+    aFeature.nFeatureId = _nFeatureId;
+    aFeature.GroupId = _nCommandGroup;
+
+#if OSL_DEBUG_LEVEL > 0
+    OSL_ENSURE( m_aSupportedFeatures.find( aFeature.Command ) == m_aSupportedFeatures.end(),
+        "OGenericUnoController::implDescribeSupportedFeature: this feature is already there!" );
+#endif
+    m_aSupportedFeatures[ aFeature.Command ] = aFeature;
+}
+
+//------------------------------------------------------------------------------
+void OGenericUnoController::describeSupportedFeatures()
 {
     // add all supported features
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:Copy")]                    = ID_BROWSER_COPY;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:Cut")]                     = ID_BROWSER_CUT;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:Paste")]                   = ID_BROWSER_PASTE;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:ClipboardFormatItems")]    = ID_BROWSER_CLIPBOARD_FORMAT_ITEMS;
-        // since
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DSBEditDoc")]              = ID_BROWSER_EDITDOC;
-
-    // TODO disable .uno:ConfigureDialog
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:ConfigureDialog")]         = 99;
+    implDescribeSupportedFeature( ".uno:Copy", ID_BROWSER_COPY, CommandGroup::EDIT );
+    implDescribeSupportedFeature( ".uno:Cut", ID_BROWSER_CUT, CommandGroup::EDIT );
+    implDescribeSupportedFeature( ".uno:Paste", ID_BROWSER_PASTE, CommandGroup::EDIT );
+    implDescribeSupportedFeature( ".uno:ClipboardFormatItems", ID_BROWSER_CLIPBOARD_FORMAT_ITEMS );
+    implDescribeSupportedFeature( ".uno:DSBEditDoc", ID_BROWSER_EDITDOC, CommandGroup::DOCUMENT );
 }
 
 //------------------------------------------------------------------------------
@@ -804,7 +853,7 @@ URL OGenericUnoController::getURLForId(sal_Int32 _nId) const
         SupportedFeatures::const_iterator aIter = ::std::find_if(
             m_aSupportedFeatures.begin(),
             m_aSupportedFeatures.end(),
-            ::std::bind2nd( SupportedFeaturesFunc(), _nId )
+            ::std::bind2nd( SupportedFeaturesEqualId(), _nId )
         );
 
         if ( m_aSupportedFeatures.end() != aIter && aIter->first.getLength() )
@@ -989,19 +1038,19 @@ sal_Bool SAL_CALL OGenericUnoController::attachModel(const Reference< XModel > &
 // -----------------------------------------------------------------------------
 void OGenericUnoController::executeUnChecked(const ::com::sun::star::util::URL& _rCommand, const Sequence< PropertyValue >& aArgs)
 {
-    SupportedFeatures::const_iterator aIter = m_aSupportedFeatures.find(_rCommand.Complete);
+    SupportedFeatures::const_iterator aIter = m_aSupportedFeatures.find( _rCommand.Complete );
     if (aIter != m_aSupportedFeatures.end())
-        Execute( static_cast<sal_uInt16>(aIter->second),aArgs );
+        Execute( aIter->second.nFeatureId, aArgs );
 }
 // -----------------------------------------------------------------------------
 void OGenericUnoController::executeChecked(const ::com::sun::star::util::URL& _rCommand, const Sequence< PropertyValue >& aArgs)
 {
-    SupportedFeatures::const_iterator aIter = m_aSupportedFeatures.find(_rCommand.Complete);
-    if (aIter != m_aSupportedFeatures.end())
+    SupportedFeatures::const_iterator aIter = m_aSupportedFeatures.find( _rCommand.Complete );
+    if ( aIter != m_aSupportedFeatures.end() )
     {
-        sal_uInt16 nSlotId = static_cast<sal_uInt16>(aIter->second);
-        if ( GetState( nSlotId ).bEnabled )
-            Execute( nSlotId, aArgs );
+        sal_uInt16 nFeatureId = aIter->second.nFeatureId;
+        if ( GetState( nFeatureId ).bEnabled )
+            Execute( nFeatureId, aArgs );
     }
 }
 // -----------------------------------------------------------------------------
@@ -1178,19 +1227,68 @@ void OGenericUnoController::executeChecked(sal_uInt16 _nCommandId, const Sequenc
     if ( isCommandEnabled(_nCommandId) )
         Execute(_nCommandId, aArgs);
 }
+
 // -----------------------------------------------------------------------------
 sal_Bool OGenericUnoController::isCommandEnabled(sal_uInt16 _nCommandId) const
 {
     return GetState( _nCommandId ).bEnabled;
 }
+
 // -----------------------------------------------------------------------------
 sal_Bool OGenericUnoController::isCommandEnabled(const ::com::sun::star::util::URL& _rCommand) const
 {
     OSL_ENSURE(_rCommand.Complete.getLength(),"Empty command url!");
     sal_Bool bIsEnabled = sal_False;
-    SupportedFeatures::const_iterator aIter = m_aSupportedFeatures.find(_rCommand.Complete);
-    if (aIter != m_aSupportedFeatures.end())
-        bIsEnabled = isCommandEnabled(static_cast<sal_uInt16>(aIter->second));
+    SupportedFeatures::const_iterator aIter = m_aSupportedFeatures.find( _rCommand.Complete );
+    if ( aIter != m_aSupportedFeatures.end() )
+        bIsEnabled = isCommandEnabled( aIter->second.nFeatureId );
 
     return bIsEnabled;
+}
+
+// -----------------------------------------------------------------------------
+Sequence< ::sal_Int16 > SAL_CALL OGenericUnoController::getSupportedCommandGroups() throw (RuntimeException)
+{
+    CommandHashMap aCmdHashMap;
+    for (   SupportedFeatures::const_iterator aIter = m_aSupportedFeatures.begin();
+            aIter != m_aSupportedFeatures.end();
+            ++aIter
+        )
+        aCmdHashMap.insert( CommandHashMap::value_type( aIter->second.GroupId, 0 ));
+
+    Sequence< sal_Int16 > aCommandGroups( aCmdHashMap.size() );
+    ::std::transform( aCmdHashMap.begin(),
+        aCmdHashMap.end(),
+        aCommandGroups.getArray(),
+        ::std::select1st< CommandHashMap::value_type >()
+    );
+
+    return aCommandGroups;
+}
+
+// -----------------------------------------------------------------------------
+Sequence< DispatchInformation > SAL_CALL OGenericUnoController::getConfigurableDispatchInformation( ::sal_Int16 CommandGroup ) throw (RuntimeException)
+{
+    DispatchInfoList    aInformationList;
+    DispatchInformation aDispatchInfo;
+    for (   SupportedFeatures::const_iterator aIter = m_aSupportedFeatures.begin();
+            aIter != m_aSupportedFeatures.end();
+            ++aIter
+        )
+    {
+        if ( sal_Int16( aIter->second.GroupId ) == CommandGroup )
+        {
+            aDispatchInfo = aIter->second;
+            aInformationList.push_back( aDispatchInfo );
+        }
+    }
+
+    Sequence< DispatchInformation > aInformation( aInformationList.size() );
+    ::std::transform( aInformationList.begin(),
+        aInformationList.end(),
+        aInformation.getArray(),
+        ::std::identity< DispatchInformation >()
+    );
+
+    return aInformation;
 }
