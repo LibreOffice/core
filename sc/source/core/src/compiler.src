@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:16 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 20:41:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1934,7 +1934,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ english_us ] = "ODD" ;
         Text[ chinese_simplified ] = "ODD";
         Text[ russian ] = "Õ≈◊≈“";
-        Text[ polish ] = "ZAOK.DO.NPARZ";
+        Text[ polish ] = "ZAOKR.DO.NPARZ";
         Text[ japanese ] = "ODD";
         Text[ chinese_traditional ] = "ODD";
         Text[ arabic ] = "ODD";
@@ -3856,7 +3856,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ swedish ] = "ZGZ" ;
         Text [ danish ] = "RRI" ;
         Text [ italian ] = "ZGZ" ;
-        Text [ spanish ] = "ZGZ" ;
+        Text [ spanish ] = "INT.RENDIMIENTO" ;
         Text [ french ] = "RENTINVEST" ;
         Text [ dutch ] = "ZGZ" ;
         Text[ chinese_simplified ] = "ZGZ";
@@ -3888,7 +3888,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ spanish ] = "VF" ;
         Text [ english_us ] = "FV" ;
         Text[ chinese_simplified ] = "FV";
-        Text[ russian ] = "¡«";
+        Text[ russian ] = "¡Á";
         Text[ polish ] = "FV";
         Text[ japanese ] = "FV";
         Text[ chinese_traditional ] = "FV";
@@ -4029,7 +4029,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ english_us ] = "CUMIPMT" ;
         Text[ chinese_simplified ] = "CUMIPMT";
         Text[ russian ] = "Œ¡ŸœÀ¿“¿";
-        Text[ polish ] = "CUMIPMT";
+        Text[ polish ] = "IPMT";
         Text[ japanese ] = "CUMIPMT";
         Text[ chinese_traditional ] = "CUMIPMT";
         Text[ arabic ] = "CUMIPMT";
@@ -4057,7 +4057,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ english_us ] = "CUMPRINC" ;
         Text[ chinese_simplified ] = "CUMPRINC";
         Text[ russian ] = "Œ¡ŸƒŒ’Œƒ";
-        Text[ polish ] = "CUMIPMT";
+        Text[ polish ] = "PMT";
         Text[ japanese ] = "CUMPRINC";
         Text[ chinese_traditional ] = "CUMPRINC";
         Text[ arabic ] = "CUMPRINC";
@@ -4808,7 +4808,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ portuguese ] = "ÕNDICE" ;
         Text [ finnish ] = "INDEX" ;
         Text [ danish ] = "INDEKS" ;
-        Text [ french ] = "INDICE" ;
+        Text [ french ] = "INDEX" ;
         Text [ swedish ] = "INDEX" ;
         Text [ dutch ] = "INDEX" ;
         Text [ spanish ] = "ÕNDICE" ;
@@ -5393,7 +5393,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ norwegian ] = "M≈LSÿK" ;
         Text [ italian ] = "RICERCA VALORE DESTINAZIONE" ;
         Text [ portuguese_brazilian ] = "BUSCADEOBJETIVO" ;
-        Text [ portuguese ] = "ATINGIROBJECTIVO" ;
+        Text [ portuguese ] = "RESOLVER" ;
         Text [ finnish ] = "GOALSEEK" ;
         Text [ danish ] = "M≈LSÿGNING" ;
         Text [ french ] = "CHERCHEVALCIBLE" ;
