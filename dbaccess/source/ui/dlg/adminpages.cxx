@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adminpages.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-07 14:27:53 $
+ *  last change: $Author: fs $ $Date: 2000-12-07 15:04:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -827,6 +827,7 @@ sal_Bool OCommonBehaviourTabPage::FillItemSet(SfxItemSet& _rSet)
         if (m_pUserName->GetText() != m_pUserName->GetSavedValue())
         {
             _rSet.Put(SfxStringItem(DSID_USER, m_pUserName->GetText()));
+            _rSet.Put(SfxStringItem(DSID_PASSWORD, String()));
             bChangedSomething = sal_True;
         }
 
@@ -1824,6 +1825,9 @@ IMPL_LINK( OTableSubscriptionPage, OnRadioButtonClicked, Button*, pButton )
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.21  2000/12/07 14:27:53  fs
+ *  #80939# clear the tables list when cancelling the password dialog
+ *
  *  Revision 1.20  2000/12/07 14:15:42  oj
  *  #81131# check installed adabas dbs
  *
