@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globstr.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2000-10-27 15:54:14 $
+ *  last change: $Author: kz $ $Date: 2000-11-03 16:27:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1370,7 +1370,7 @@ Resource RID_GLOBSTR
         Text[ dutch ] = "Celopmaakprofiel toepassen";
         Text[ french ] = "Éditer le style de cellule";
         Text[ spanish ] = "Editar estilo de celda";
-        Text[ italian ] = "Edit cell style";
+        Text[ italian ] = "Modifica modello di cella";
         Text[ danish ] = "Rediger celletypografi";
         Text[ swedish ] = "Redigera cellformatmall";
         Text[ polish ] = "Edytuj styl komórki";
@@ -1393,7 +1393,7 @@ Resource RID_GLOBSTR
         Text[ dutch ] = "Pagina-opmaakprofiel toepassen";
         Text[ french ] = "Appliquer le style de page";
         Text[ spanish ] = "Aplicar estilo de página";
-        Text[ italian ] = "Apply page style";
+        Text[ italian ] = "Applica modello di pagina";
         Text[ danish ] = "Anvend sidetypografi";
         Text[ swedish ] = "Använd sidformatmall";
         Text[ polish ] = "Zastosuj styl strony";
@@ -1416,7 +1416,7 @@ Resource RID_GLOBSTR
         Text[ dutch ] = "Pagina-opmaakprofiel bewerken";
         Text[ french ] = "Éditer le style de page";
         Text[ spanish ] = "Editar estilo de página";
-        Text[ italian ] = "Edit page style";
+        Text[ italian ] = "Modifica modello di pagina";
         Text[ danish ] = "Rediger sidetypografi";
         Text[ swedish ] = "Redigera sidformatmall";
         Text[ polish ] = "Edytuj styl strony";
