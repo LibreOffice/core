@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfly.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-11 11:28:25 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 13:44:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,37 +205,9 @@
 // OD 03.07.2003 #108784# - change return type from <pointer> to <reference>
 const SwFrm& lcl_TheAnchor( const SdrObject* pObj )
 {
-    // OD 03.07.2003 #108784# - adjustments for support of drawing objects in
-    // header/footer.
-    const SwFrm* pRet = 0L;
-    if ( pObj->ISA(SwVirtFlyDrawObj) )
-    {
-        pRet = static_cast<const SwVirtFlyDrawObj*>(pObj)->GetFlyFrm()->GetAnchor();
-    }
-    else
-    {
-        SwDrawContact* pDrawContact =
-                static_cast<SwDrawContact*>(GetUserCall( pObj ));
-        if ( pObj->ISA(SwDrawVirtObj) )
-        {
-            const SwDrawVirtObj* pDrawVirtObj = static_cast<const SwDrawVirtObj*>(pObj);
-            pRet = pDrawVirtObj->GetAnchorFrm();
-
-            // error handling, if no anchor frame is found.
-            if ( !pRet )
-            {
-                // assert, if no anchor frame found at 'virtual' drawing object
-                // and return anchor frame of 'master' drawing object.
-                ASSERT( false, "<lcl_TheAnchor(..)> - virtual drawing object with no anchor frame!" );
-                pRet = pDrawContact->GetAnchor();
-            }
-        }
-        else
-        {
-            pRet = pDrawContact->GetAnchor();
-        }
-    }
-
+    // OD 2004-03-29 #i26791#
+    SwContact* pContact = static_cast<SwContact*>(GetUserCall( pObj ));
+    const SwFrm* pRet = pContact->GetAnchoredObj( pObj )->GetAnchorFrm();
     ASSERT( pRet, "<lcl_TheAnchor(..)> - no anchor frame found!" );
 
     return *pRet;
