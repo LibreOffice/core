@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpptwrp.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 10:30:05 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 20:11:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,7 @@
 #include <sfx2/interno.hxx>
 #include <svx/msoleexp.hxx>
 #include <svx/svxmsbas.hxx>
-#include <offmgr/app.hxx>
-#include <offmgr/fltrcfg.hxx>
+#include <svtools/fltrcfg.hxx>
 
 #include "sdpptwrp.hxx"
 #include "pptin.hxx"
@@ -177,23 +176,19 @@ sal_Bool SdPPTFilter::Export()
             if( PPTExport && ( xStorRef = mrMedium.GetOutputStorage() ).Is() )
             {
                 sal_uInt32          nCnvrtFlags = 0;
-                OfficeApplication*  pApplication = OFF_APP();
-
-                if( pApplication )
+                SvtFilterOptions* pFilterOptions = SvtFilterOptions::Get();
+                if ( pFilterOptions )
                 {
-                    OfaFilterOptions* pFilterOptions = pApplication->GetFilterOptions();
-                    if ( pFilterOptions )
-                    {
-                        if ( pFilterOptions->IsMath2MathType() )
-                            nCnvrtFlags |= OLE_STARMATH_2_MATHTYPE;
-                        if ( pFilterOptions->IsWriter2WinWord() )
-                            nCnvrtFlags |= OLE_STARWRITER_2_WINWORD;
-                        if ( pFilterOptions->IsCalc2Excel() )
-                            nCnvrtFlags |= OLE_STARCALC_2_EXCEL;
-                        if ( pFilterOptions->IsImpress2PowerPoint() )
-                            nCnvrtFlags |= OLE_STARIMPRESS_2_POWERPOINT;
-                    }
+                    if ( pFilterOptions->IsMath2MathType() )
+                        nCnvrtFlags |= OLE_STARMATH_2_MATHTYPE;
+                    if ( pFilterOptions->IsWriter2WinWord() )
+                        nCnvrtFlags |= OLE_STARWRITER_2_WINWORD;
+                    if ( pFilterOptions->IsCalc2Excel() )
+                        nCnvrtFlags |= OLE_STARCALC_2_EXCEL;
+                    if ( pFilterOptions->IsImpress2PowerPoint() )
+                        nCnvrtFlags |= OLE_STARIMPRESS_2_POWERPOINT;
                 }
+
                 mrDocument.SetSwapGraphicsMode( SDR_SWAPGRAPHICSMODE_TEMP );
 
                 if( mbShowProgress )
@@ -209,41 +204,36 @@ sal_Bool SdPPTFilter::Export()
 
 void SdPPTFilter::PreSaveBasic()
 {
-    OfficeApplication*  pApplication = OFF_APP();
-    if( pApplication )
+    SvtFilterOptions* pFilterOptions = SvtFilterOptions::Get();
+    if( pFilterOptions && pFilterOptions->IsLoadPPointBasicStorage() )
     {
-        OfaFilterOptions* pFilterOptions = pApplication->GetFilterOptions();
-        if( pFilterOptions && pFilterOptions->IsLoadPPointBasicStorage() )
-        {
-            SvStorageRef xDest( new SvStorage( new SvMemoryStream(), TRUE ) );
-            SvxImportMSVBasic aMSVBas( (SfxObjectShell&) mrDocShell, *xDest, FALSE, FALSE );
-            aMSVBas.SaveOrDelMSVBAStorage( TRUE, String( RTL_CONSTASCII_USTRINGPARAM("_MS_VBA_Overhead") ) );
+        SvStorageRef xDest( new SvStorage( new SvMemoryStream(), TRUE ) );
+        SvxImportMSVBasic aMSVBas( (SfxObjectShell&) mrDocShell, *xDest, FALSE, FALSE );
+        aMSVBas.SaveOrDelMSVBAStorage( TRUE, String( RTL_CONSTASCII_USTRINGPARAM("_MS_VBA_Overhead") ) );
 
-            SvStorageRef xOverhead = xDest->OpenStorage( String( RTL_CONSTASCII_USTRINGPARAM("_MS_VBA_Overhead") ) );
-            if ( xOverhead.Is() && ( xOverhead->GetError() == SVSTREAM_OK ) )
+        SvStorageRef xOverhead = xDest->OpenStorage( String( RTL_CONSTASCII_USTRINGPARAM("_MS_VBA_Overhead") ) );
+        if ( xOverhead.Is() && ( xOverhead->GetError() == SVSTREAM_OK ) )
+        {
+            SvStorageRef xOverhead2 = xOverhead->OpenStorage( String( RTL_CONSTASCII_USTRINGPARAM("_MS_VBA_Overhead") ) );
+            if ( xOverhead2.Is() && ( xOverhead2->GetError() == SVSTREAM_OK ) )
             {
-                SvStorageRef xOverhead2 = xOverhead->OpenStorage( String( RTL_CONSTASCII_USTRINGPARAM("_MS_VBA_Overhead") ) );
-                if ( xOverhead2.Is() && ( xOverhead2->GetError() == SVSTREAM_OK ) )
+                SvStorageStreamRef xTemp = xOverhead2->OpenStream( String( RTL_CONSTASCII_USTRINGPARAM("_MS_VBA_Overhead2") ) );
+                if ( xTemp.Is() && ( xTemp->GetError() == SVSTREAM_OK ) )
                 {
-                    SvStorageStreamRef xTemp = xOverhead2->OpenStream( String( RTL_CONSTASCII_USTRINGPARAM("_MS_VBA_Overhead2") ) );
-                    if ( xTemp.Is() && ( xTemp->GetError() == SVSTREAM_OK ) )
+                    UINT32 nLen = xTemp->GetSize();
+                    if ( nLen )
                     {
-                        UINT32 nLen = xTemp->GetSize();
-                        if ( nLen )
+                        char* pTemp = new char[ nLen ];
+                        if ( pTemp )
                         {
-                            char* pTemp = new char[ nLen ];
-                            if ( pTemp )
-                            {
-                                xTemp->Seek( STREAM_SEEK_TO_BEGIN );
-                                xTemp->Read( pTemp, nLen );
-                                pBas = new SvMemoryStream( pTemp, nLen, STREAM_READ );
-                                pBas->ObjectOwnsMemory( TRUE );
-                            }
+                            xTemp->Seek( STREAM_SEEK_TO_BEGIN );
+                            xTemp->Read( pTemp, nLen );
+                            pBas = new SvMemoryStream( pTemp, nLen, STREAM_READ );
+                            pBas->ObjectOwnsMemory( TRUE );
                         }
                     }
                 }
             }
         }
     }
-
 }
