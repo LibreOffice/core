@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iodetect.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 13:46:21 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:36:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,7 +112,7 @@ struct SwIoDetect
         { if( fnGetWriter ) (*fnGetWriter)(rNm,xWrt); else xWrt = WriterRef(0); }
 #endif
 
-    const sal_Char* IsReader(const sal_Char* pHeader, ULONG nLen,
+    const sal_Char* IsReader(const sal_Char* pHeader, ULONG nLen_,
         const String &rFileName) const;
 };
 
@@ -163,40 +163,41 @@ const USHORT MAXFILTER =
 #define FORAMTNAME_SWGLOB   "StarWriter/Global 4.0"
 
 
-sal_Char __FAR_DATA FILTER_SWG[]    = "SWG";
-sal_Char __FAR_DATA FILTER_SW3[]    = "CSW3";
-sal_Char __FAR_DATA FILTER_SW4[]    = "CSW4";
-sal_Char __FAR_DATA FILTER_SW5[]    = "CSW5";
-sal_Char __FAR_DATA FILTER_BAS[]    = "BAS";
-sal_Char __FAR_DATA FILTER_RTF[]    = "RTF";
-sal_Char __FAR_DATA FILTER_W4W[]    = "W4W";
-sal_Char __FAR_DATA FILTER_SWGV[]   = "SWGV";
-sal_Char __FAR_DATA FILTER_SW3V[]   = "CSW3V";
-sal_Char __FAR_DATA FILTER_SW4V[]   = "CSW4V";
-sal_Char __FAR_DATA FILTER_SW5V[]   = "CSW5V";
-sal_Char __FAR_DATA FILTER_SWW4V[]  = "CSW4VWEB";
-sal_Char __FAR_DATA FILTER_SWW5V[]  = "CSW5VWEB";
-sal_Char __FAR_DATA sSwg1[]         = "SWG1";
-sal_Char __FAR_DATA sRtfWH[]        = "WH_RTF";
-sal_Char __FAR_DATA sCExcel[]       = "CEXCEL";
-sal_Char __FAR_DATA sExcel[]        = "EXCEL";
-sal_Char __FAR_DATA sLotusD[]       = "LOTUSD";
-sal_Char __FAR_DATA sLotusW[]       = "LOTUSW";
-sal_Char __FAR_DATA sHTML[]         = "HTML";
-sal_Char __FAR_DATA sWW1[]          = "WW1";
-sal_Char __FAR_DATA sWW5[]          = "WW6";
-sal_Char __FAR_DATA sWW6[]          = "CWW6";
-sal_Char __FAR_DATA FILTER_WW8[]    = "CWW8";
-sal_Char __FAR_DATA FILTER_TEXT_DLG[] = "TEXT_DLG";
-sal_Char __FAR_DATA FILTER_TEXT[]   = "TEXT";
-sal_Char __FAR_DATA sW4W_Int[]      = "W4_INT";
-sal_Char __FAR_DATA sDebug[]        = "DEBUG";
-sal_Char __FAR_DATA sUndo[]         = "UNDO";
-sal_Char __FAR_DATA FILTER_XML[]    = "CXML";
-sal_Char __FAR_DATA FILTER_XMLV[]   = "CXMLV";
-sal_Char __FAR_DATA FILTER_XMLVW[]  = "CXMLVWEB";
-sal_Char __FAR_DATA sSwDos[]        = "SW6";
+const sal_Char __FAR_DATA FILTER_SWG[]  = "SWG";
+const sal_Char __FAR_DATA FILTER_SW3[]  = "CSW3";
+const sal_Char __FAR_DATA FILTER_SW4[]  = "CSW4";
+const sal_Char __FAR_DATA FILTER_SW5[]  = "CSW5";
+const sal_Char __FAR_DATA FILTER_BAS[]  = "BAS";
+const sal_Char __FAR_DATA FILTER_RTF[]  = "RTF";
+const sal_Char __FAR_DATA FILTER_W4W[]  = "W4W";
+const sal_Char __FAR_DATA FILTER_SWGV[] = "SWGV";
+const sal_Char __FAR_DATA FILTER_SW3V[] = "CSW3V";
+const sal_Char __FAR_DATA FILTER_SW4V[] = "CSW4V";
+const sal_Char __FAR_DATA FILTER_SW5V[] = "CSW5V";
+const sal_Char __FAR_DATA FILTER_SWW4V[]    = "CSW4VWEB";
+const sal_Char __FAR_DATA FILTER_SWW5V[]    = "CSW5VWEB";
+const sal_Char __FAR_DATA sSwg1[]         = "SWG1";
+const sal_Char __FAR_DATA sRtfWH[]      = "WH_RTF";
+const sal_Char __FAR_DATA sCExcel[]     = "CEXCEL";
+const sal_Char __FAR_DATA sExcel[]      = "EXCEL";
+const sal_Char __FAR_DATA sLotusD[]     = "LOTUSD";
+const sal_Char __FAR_DATA sLotusW[]     = "LOTUSW";
+const sal_Char __FAR_DATA sHTML[]       = "HTML";
+const sal_Char __FAR_DATA sWW1[]            = "WW1";
+const sal_Char __FAR_DATA sWW5[]            = "WW6";
+const sal_Char __FAR_DATA sWW6[]            = "CWW6";
+const sal_Char __FAR_DATA FILTER_WW8[]  = "CWW8";
+const sal_Char __FAR_DATA FILTER_TEXT_DLG[] = "TEXT_DLG";
+const sal_Char __FAR_DATA FILTER_TEXT[]     = "TEXT";
+const sal_Char __FAR_DATA sW4W_Int[]        = "W4_INT";
+const sal_Char __FAR_DATA sDebug[]      = "DEBUG";
+const sal_Char __FAR_DATA sUndo[]       = "UNDO";
+const sal_Char __FAR_DATA FILTER_XML[]  = "CXML";
+const sal_Char __FAR_DATA FILTER_XMLV[]     = "CXMLV";
+const sal_Char __FAR_DATA FILTER_XMLVW[]    = "CXMLVWEB";
+const sal_Char __FAR_DATA sSwDos[]      = "SW6";
 
+const sal_Char * SwGetFILTER_WW8() { return &(FILTER_WW8[0]); }
 
 SwIoDetect aReaderWriter[ MAXFILTER ] =
 {
@@ -259,7 +260,7 @@ struct W1_FIB
 #define WW3B
 #endif
 
-const sal_Char* SwIoDetect::IsReader(const sal_Char* pHeader, ULONG nLen,
+const sal_Char* SwIoDetect::IsReader(const sal_Char* pHeader, ULONG nLen_,
     const String &rFileName) const
 {
     int bRet = FALSE;
@@ -308,9 +309,9 @@ const sal_Char* SwIoDetect::IsReader(const sal_Char* pHeader, ULONG nLen,
                   0 == strncmp( sSw6_FormatEnd, pHeader + 12 + 1, 4 );
     }
     else if (FILTER_TEXT == pName)
-        bRet = SwIoSystem::IsDetectableText(pHeader, nLen);
+        bRet = SwIoSystem::IsDetectableText(pHeader, nLen_);
     else if (FILTER_W4W == pName)
-    bRet = SwIoSystem::IsDetectableW4W(rFileName);
+        bRet = SwIoSystem::IsDetectableW4W(rFileName);
     return bRet ? pName : 0;
 }
 
