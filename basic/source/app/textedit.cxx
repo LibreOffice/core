@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textedit.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:12:09 $
+ *  last change: $Author: gh $ $Date: 2000-10-24 11:28:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 #ifndef _SYSTEM_HXX //autogen
 #include <vcl/system.hxx>
 #endif
+#include <tools/intn.hxx>
 #ifndef _STREAM_HXX //autogen
 #include <tools/stream.hxx>
 #endif
@@ -584,7 +585,7 @@ SbxBase* TextEditImp::GetSbxAtMousePos( String &aWord )
     Point aDocPos = pTextView->GetDocPos( aPos );
     aWord = pTextEngine->GetWord( pTextEngine->GetPaM( aDocPos ) );
 
-    if ( aWord.Len() && !Application::GetAppInternational().IsNumeric( aWord ) )
+    if ( aWord.Len() /*&& !Application::GetAppInternational().IsNumeric( aWord )*/ )
     {
         xub_StrLen nLastChar = aWord.Len()-1;
         String aSuffixes = CUniString( cSuffixes );
