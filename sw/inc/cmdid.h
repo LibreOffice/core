@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdid.h,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:38:31 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 13:32:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -887,7 +887,9 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_UNO_HEADER_EAT_SPACING           (FN_EXTRA2 + 92)
 #define FN_UNO_FOOTER_EAT_SPACING           (FN_EXTRA2 + 93)
 #define FN_UNO_CHARFMT_SEQUENCE             (FN_EXTRA2 + 94)
-
+#define FN_UNO_CLSID                        (FN_EXTRA2 + 95)
+#define FN_UNO_MODEL                        (FN_EXTRA2 + 96)
+#define FN_UNO_COMPONENT                    (FN_EXTRA2 + 97)
 /*--------------------------------------------------------------------
     Bereich: Hilfe
  --------------------------------------------------------------------*/
