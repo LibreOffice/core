@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: cmc $ $Date: 2002-11-07 16:54:16 $
+ *  last change: $Author: aidan $ $Date: 2002-11-28 16:01:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2876,7 +2876,7 @@ ULONG SwWW8Writer::ReplaceCr( BYTE nChar )
             rStrm >> nUCode;
         else
         {
-            rStrm >> nUCode;
+            rStrm >> nBCode;
             nUCode = nBCode;
         }
         //If the last char was a cr
