@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.179 $
+ *  $Revision: 1.180 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:55:54 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 13:41:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,6 @@
 
 #define _SV_WINDOW_CXX
 
-#ifndef REMOTE_APPSERVER
 #ifndef _SV_SVSYS_HXX
 #include <svsys.h>
 #endif
@@ -79,7 +78,6 @@
 #endif
 #ifndef _SV_SALGDI_HXX
 #include <salgdi.hxx>
-#endif
 #endif
 
 #include <unohelp.hxx>
@@ -187,20 +185,6 @@
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #endif
 
-
-#ifdef REMOTE_APPSERVER
-#include "rmwindow.hxx"
-#include "xevthdl.hxx"
-#include "rmevents.hxx"
-#include "rmoutdev.hxx"
-#ifndef _ISOLANG_HXX
-#include <tools/isolang.hxx>
-#endif
-#include "com/sun/star/portal/client/XRmFrameWindow.hpp"
-#include "com/sun/star/uno/Any.hxx"
-#include "com/sun/star/uno/Reference.hxx"
-#endif
-
 #include <unowrap.hxx>
 #include <dndlcon.hxx>
 #include <dndevdis.hxx>
@@ -210,7 +194,7 @@
 #include <unotools/confignode.hxx>
 #endif
 
-#pragma hdrstop
+
 
 using namespace rtl;
 using namespace ::com::sun::star::uno;
@@ -658,37 +642,18 @@ void Window::ImplInitData( WindowType nType )
     mbSuppressAccessibilityEvents = FALSE; // TRUE: do not send any accessibility events
     mbEnableRTL         = TRUE;         // TRUE: this outdev will be mirrored if RTL window layout (UI mirroring) is globally active
     mbDrawSelectionBackground = FALSE;  // TRUE: draws transparent window background to indicate (toolbox) selection
-#ifdef REMOTE_APPSERVER
-    mpRmEvents          = NULL;
-
-    Font aFont = maInputContext.GetFont();
-    aFont.SetCharSet( gsl_getSystemTextEncoding() );
-    maInputContext.SetFont( aFont );
-#endif
 }
 
 // -----------------------------------------------------------------------
 
-#ifdef REMOTE_APPSERVER
-void Window::ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pSystemParentData )
-{
-    static ::com::sun::star::uno::Any aVoid;
-    ImplInit( pParent, nStyle, aVoid );
-}
-#else
 void Window::ImplInit( Window* pParent, WinBits nStyle, const ::com::sun::star::uno::Any& aSystemWorkWindowToken )
 {
     ImplInit( pParent, nStyle, NULL );
 }
-#endif
 
 // -----------------------------------------------------------------------
 
-#ifndef REMOTE_APPSERVER
 void Window::ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pSystemParentData )
-#else
-void Window::ImplInit( Window* pParent, WinBits nStyle, const ::com::sun::star::uno::Any& aSystemWorkWindowToken )
-#endif
 {
     DBG_ASSERT( mbFrame || pParent, "Window::Window(): pParent == NULL" );
 
@@ -729,7 +694,6 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, const ::com::sun::star::
     if ( mbFrame )
     {
         // create frame
-#ifndef REMOTE_APPSERVER
         ULONG nFrameStyle = 0;
 
         if ( nStyle & WB_MOVEABLE )
@@ -766,31 +730,6 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, const ::com::sun::star::
         if ( !pFrame )
             GetpApp()->Exception( EXC_SYSOBJNOTCREATED );
         pFrame->SetCallback( this, ImplWindowFrameProc );
-#else
-        if ( !(nStyle & WB_MOVEABLE) &&
-            (mbFloatWin || ((GetType() == WINDOW_BORDERWINDOW) && ((ImplBorderWindow*)this)->mbFloatWindow) ) )
-            nStyle = WB_SYSTEMFLOATWIN; // window corresponds to a float win on the server
-
-        RmFrameWindow* pParentFrame = pParent ? pParent->mpFrame : NULL;;
-        star::uno::Reference< star::portal::client::XRmFrameWindow >
-            xClientWindow;
-        star::uno::Any aToken;
-        if (!(aSystemWorkWindowToken >>= xClientWindow))
-            aToken = aSystemWorkWindowToken;
-        RmFrameWindow* pFrame = new RmFrameWindow(this, xClientWindow);
-        if ( !pFrame->IsValid() )
-        {
-            delete pFrame;
-            pFrame = NULL;
-            GetpApp()->Exception( EXC_SYSOBJNOTCREATED );
-        }
-        else
-        {
-            pFrame->Create( nStyle, pFrame->GetEventHdlInterface(), GetAccessible()->getAccessibleContext(),
-                            aToken,
-                            pParentFrame ? pParentFrame->GetFrameInterface() : REF( NMSP_CLIENT::XRmFrameWindow )() );
-        }
-#endif
 
         // set window frame data
         mpFrameData     = new ImplFrameData;
@@ -849,7 +788,6 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, const ::com::sun::star::
 
     if ( mbFrame )
     {
-#ifndef REMOTE_APPSERVER
         if ( pParent )
         {
             mpFrameData->mnDPIX     = pParent->mpFrameData->mnDPIX;
@@ -865,37 +803,7 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, const ::com::sun::star::
                 mpGraphics->GetScreenFontResolution( mpFrameData->mnFontDPIX, mpFrameData->mnFontDPIY );
             }
         }
-#else
-        const REF( NMSP_CLIENT::XRmFrameWindow )& rxWindow = mpFrame->GetFrameInterface();
-        REF( NMSP_CLIENT::XRmOutputDevice ) xOutDev( mpFrame->GetOutdevInterface() );
 
-        if ( rxWindow.is() && xOutDev.is() )
-        {
-            mpGraphics = new ImplServerGraphics;
-            mpGraphics->SetInterface( xOutDev );
-            if ( pParent )
-            {
-                mpFrameData->mnDPIX     = pParent->mpFrameData->mnDPIX;
-                mpFrameData->mnDPIY     = pParent->mpFrameData->mnDPIY;
-                mpFrameData->mnFontDPIX = pParent->mpFrameData->mnFontDPIX;
-                mpFrameData->mnFontDPIY = pParent->mpFrameData->mnFontDPIY;
-            }
-            else
-            {
-                // We currently assume, that we have only one display
-                static NMSP_CLIENT::RmFrameResolutions aResl = mpFrame->GetFrameResolutions();
-                mpFrameData->mnDPIX     = aResl.DPIx;
-                mpFrameData->mnDPIY     = aResl.DPIy;
-                mpFrameData->mnFontDPIX = aResl.FontDPIx;
-                mpFrameData->mnFontDPIY = aResl.FontDPIy;
-                mpGraphics->SetWindowResolution( aResl.DPIx, aResl.DPIy, aResl.Depth );
-                if ( !mpFrameData->mpFontList->Count() )
-                    mpGraphics->GetDevFontList( mpFrameData->mpFontList );
-            }
-        }
-#endif
-
-#ifndef REMOTE_APPSERVER
         // delay settings initialization until first "real" frame
         // this relies on the IntroWindow not needing any system settings
         if ( !pSVData->maAppData.mbSettingsInit &&
@@ -907,7 +815,6 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, const ::com::sun::star::
             OutputDevice::SetSettings( *pSVData->maAppData.mpSettings );
             pSVData->maAppData.mbSettingsInit = TRUE;
         }
-#endif
 
         // If we create a Window with default size, query this
         // size directly, because we want resize all Controls to
@@ -970,13 +877,8 @@ void Window::ImplSetFrameParent( const Window* pParent )
             DBG_ASSERT( mpFrame != pFrameWindow->mpFrame, "SetFrameParent to own" );
             DBG_ASSERT( mpFrame, "no frame" );
 
-#ifndef REMOTE_APPSERVER
             SalFrame* pParentFrame = pParent ? pParent->mpFrame : NULL;
             pFrameWindow->mpFrame->SetParent( pParentFrame );
-#else
-            RmFrameWindow* pParentFrame = pParent ? pParent->mpFrame : NULL;
-            pFrameWindow->mpFrame->SetParent( pParentFrame ? pParentFrame->GetFrameInterface() : REF( NMSP_CLIENT::XRmFrameWindow )() );
-#endif
         }
         pFrameWindow = pFrameWindow->mpFrameData->mpNextFrame;
     }
@@ -997,9 +899,6 @@ void Window::ImplInsertWindow( Window* pParent )
         mpFrame         = pFrameParent->mpFrame;
         mpFrameWindow   = pFrameParent;
         mbFrame         = FALSE;
-#ifdef REMOTE_APPSERVER
-        mpGraphics      = mpFrameWindow->mpGraphics;
-#endif
 
         // search overlap window and insert window in list
         if ( ImplIsOverlapWindow() )
@@ -1083,11 +982,7 @@ void Window::ImplRemoveWindow( BOOL bRemoveFrameData )
     if ( bRemoveFrameData )
     {
         // Graphic freigeben
-#ifndef REMOTE_APPSERVER
         ImplReleaseGraphics();
-#else
-        ImplReleaseServerGraphics();
-#endif
     }
 }
 
@@ -1319,7 +1214,6 @@ ImplWinData* Window::ImplGetWinData() const
 
 // -----------------------------------------------------------------------
 
-#ifndef REMOTE_APPSERVER
 SalGraphics* Window::ImplGetFrameGraphics() const
 {
     if ( mpFrameWindow->mpGraphics )
@@ -1329,7 +1223,6 @@ SalGraphics* Window::ImplGetFrameGraphics() const
     mpFrameWindow->mpGraphics->ResetClipRegion();
     return mpFrameWindow->mpGraphics;
 }
-#endif
 
 // -----------------------------------------------------------------------
 
@@ -1381,13 +1274,11 @@ Window* Window::ImplFindWindow( const Point& rFramePos )
 USHORT Window::ImplHitTest( const Point& rFramePos )
 {
     Point aFramePos( rFramePos );
-#ifndef REMOTE_APPSERVER
     if( ImplHasMirroredGraphics() && !IsRTLEnabled() )
     {
         // - RTL - re-mirror frame pos at this window
         ImplReMirror( aFramePos );
     }
-#endif
     Rectangle aRect( Point( mnOutOffX, mnOutOffY ), Size( mnOutWidth, mnOutHeight ) );
     if ( !aRect.IsInside( aFramePos ) )
         return 0;
@@ -1714,7 +1605,6 @@ void Window::ImplLogicToPoint( Font& rFont ) const
 
 // -----------------------------------------------------------------------
 
-#ifndef REMOTE_APPSERVER
 BOOL Window::ImplSysObjClip( const Region* pOldRegion )
 {
     BOOL bUpdate = TRUE;
@@ -1839,14 +1729,11 @@ void Window::ImplUpdateSysObjClip()
         mpFrameWindow->ImplUpdateSysObjOverlapsClip();
 }
 
-#endif
-
 // -----------------------------------------------------------------------
 
 BOOL Window::ImplSetClipFlagChilds( BOOL bSysObjOnlySmaller )
 {
     BOOL bUpdate = TRUE;
-#ifndef REMOTE_APPSERVER
     if ( mpSysObj )
     {
         Region* pOldRegion = NULL;
@@ -1875,7 +1762,6 @@ BOOL Window::ImplSetClipFlagChilds( BOOL bSysObjOnlySmaller )
             delete pOldRegion;
     }
     else
-#endif
     {
     mbInitClipRegion = TRUE;
     mbInitWinClipRegion = TRUE;
@@ -2361,14 +2247,12 @@ void Window::ImplCallPaint( const Region* pRegion, USHORT nPaintFlags )
             Region      aPaintRegion( maInvalidateRegion );
             Rectangle   aPaintRect = aPaintRegion.GetBoundRect();
 
-#ifndef REMOTE_APPSERVER
             // - RTL - re-mirror paint rect and region at this window
             if( ImplHasMirroredGraphics() && !IsRTLEnabled() )
             {
                 ImplReMirror( aPaintRect );
                 ImplReMirror( aPaintRegion );
             }
-#endif
             aPaintRect = ImplDevicePixelToLogic( aPaintRect);
             mpPaintRegion = &aPaintRegion;
             maInvalidateRegion.SetEmpty();
@@ -2881,7 +2765,6 @@ void Window::ImplScroll( const Rectangle& rRect,
                 InvertTracking( *(mpWinData->mpTrackRect), mpWinData->mnTrackFlags );
         }
 
-#ifndef REMOTE_APPSERVER
         SalGraphics* pGraphics = ImplGetFrameGraphics();
         if ( pGraphics )
         {
@@ -2897,17 +2780,6 @@ void Window::ImplScroll( const Rectangle& rRect,
                                  rRect.GetWidth(), rRect.GetHeight(),
                                  SAL_COPYAREA_WINDOWINVALIDATE, this );
         }
-#else
-        ImplServerGraphics* pGraphics = ImplGetServerGraphics( TRUE );
-        if ( pGraphics )
-        {
-            pGraphics->SetClipRegion( aRegion );
-            pGraphics->CopyArea( rRect.Left()+nHorzScroll, rRect.Top()+nVertScroll,
-                                 rRect.Left(), rRect.Top(),
-                                 rRect.GetWidth(), rRect.GetHeight(),
-                                 COPYAREA_WINDOWINVALIDATE );
-        }
-#endif
 
         if ( mpWinData )
         {
@@ -2951,12 +2823,8 @@ void Window::ImplScroll( const Rectangle& rRect,
                 pWindow->maPos.X()  += nHorzScroll;
                 pWindow->mnY        += nVertScroll;
                 pWindow->maPos.Y()  += nVertScroll;
-#ifndef REMOTE_APPSERVER
                 if ( pWindow->ImplUpdatePos() )
                     pWindow->ImplUpdateSysObjPos();
-#else
-                pWindow->ImplUpdatePos();
-#endif
                 if ( pWindow->IsReallyVisible() )
                     pWindow->ImplSetClipFlag();
                 if ( pWindow->mpClientWindow )
@@ -3022,12 +2890,7 @@ void Window::ImplUpdateWindowPtr( Window* pWindow )
     if ( mpFrameWindow != pWindow->mpFrameWindow )
     {
         // Graphic freigeben
-#ifndef REMOTE_APPSERVER
         ImplReleaseGraphics();
-#else
-        ImplReleaseServerGraphics();
-        mpGraphics = pWindow->mpFrameWindow->mpGraphics;
-#endif
     }
 
     mpFrameData     = pWindow->mpFrameData;
@@ -3069,12 +2932,8 @@ void Window::ImplUpdateOverlapWindowPtr( BOOL bNewFrame )
     ImplInsertWindow( ImplGetParent() );
     mpRealParent = pRealParent;
     ImplUpdateWindowPtr();
-#ifndef REMOTE_APPSERVER
     if ( ImplUpdatePos() )
         ImplUpdateSysObjPos();
-#else
-    ImplUpdatePos();
-#endif
 
     if ( bNewFrame )
     {
@@ -3118,17 +2977,14 @@ BOOL Window::ImplUpdatePos()
         pChild = pChild->mpNext;
     }
 
-#ifndef REMOTE_APPSERVER
     if ( mpSysObj )
         bSysChild = TRUE;
-#endif
 
     return bSysChild;
 }
 
 // -----------------------------------------------------------------------
 
-#ifndef REMOTE_APPSERVER
 void Window::ImplUpdateSysObjPos()
 {
     if ( mpSysObj )
@@ -3141,8 +2997,6 @@ void Window::ImplUpdateSysObjPos()
         pChild = pChild->mpNext;
     }
 }
-#endif
-
 // -----------------------------------------------------------------------
 
 void Window::ImplPosSizeWindow( long nX, long nY,
@@ -3212,7 +3066,6 @@ void Window::ImplPosSizeWindow( long nX, long nY,
         //if ( nX != mnX )
         // --- RTL ---  (compare the screen coordinates)
         Point aPtDev( Point( nX+mnOutOffX, 0 ) );
-#ifndef REMOTE_APPSERVER
         if( ImplHasMirroredGraphics() )
         {
             mpGraphics->mirror( aPtDev.X(), this );
@@ -3227,7 +3080,6 @@ void Window::ImplPosSizeWindow( long nX, long nY,
                 }
             }
         }
-#endif
         if ( mnAbsScreenX != aPtDev.X() || nX != mnX )
         {
             if ( bCopyBits && !pOverlapRegion )
@@ -3272,14 +3124,9 @@ void Window::ImplPosSizeWindow( long nX, long nY,
 */
     if ( bNewPos || bNewSize )
     {
-#ifndef REMOTE_APPSERVER
         BOOL bUpdateSysObjPos = FALSE;
         if ( bNewPos )
             bUpdateSysObjPos = ImplUpdatePos();
-#else
-        if ( bNewPos )
-            ImplUpdatePos();
-#endif
 
         if ( mpClientWindow )
         {
@@ -3331,9 +3178,7 @@ void Window::ImplPosSizeWindow( long nX, long nY,
                 mbCallResize = TRUE;
         }
 
-#ifndef REMOTE_APPSERVER
         BOOL bUpdateSysObjClip = FALSE;
-#endif
         if ( IsReallyVisible() )
         {
             if ( bNewPos || bNewSize )
@@ -3344,11 +3189,7 @@ void Window::ImplPosSizeWindow( long nX, long nY,
                 if ( mpFrameData->mpFirstBackWin )
                     ImplInvalidateAllOverlapBackgrounds();
                 // Clip-Flag neu setzen
-#ifndef REMOTE_APPSERVER
                 bUpdateSysObjClip = !ImplSetClipFlag( TRUE );
-#else
-                ImplSetClipFlag();
-#endif
             }
 
             // Fensterinhalt invalidieren ?
@@ -3380,7 +3221,6 @@ void Window::ImplPosSizeWindow( long nX, long nY,
                                                                      Size( nOldOutWidth, nOldOutHeight ) ),
                                                           mnOutOffX-nOldOutOffX, mnOutOffY-nOldOutOffY,
                                                           TRUE );
-#ifndef REMOTE_APPSERVER
                             SalGraphics* pGraphics = ImplGetFrameGraphics();
                             if ( pGraphics )
                             {
@@ -3397,19 +3237,6 @@ void Window::ImplPosSizeWindow( long nX, long nY,
                             }
                             else
                                 bInvalidate = TRUE;
-#else
-                            ImplServerGraphics* pGraphics = ImplGetServerGraphics( TRUE );
-                            if ( pGraphics )
-                            {
-                                pGraphics->SetClipRegion( aRegion );
-                                pGraphics->CopyArea( mnOutOffX, mnOutOffY,
-                                                     nOldOutOffX, nOldOutOffY,
-                                                     nOldOutWidth, nOldOutHeight,
-                                                     COPYAREA_WINDOWINVALIDATE );
-                            }
-                            else
-                                bInvalidate = TRUE;
-#endif
                             if ( !bInvalidate )
                             {
                                 if ( !pOverlapRegion->IsEmpty() )
@@ -3449,7 +3276,6 @@ void Window::ImplPosSizeWindow( long nX, long nY,
             }
         }
 
-#ifndef REMOTE_APPSERVER
         // System-Objekte anpassen
         if ( bUpdateSysObjClip )
             ImplUpdateSysObjClip();
@@ -3457,7 +3283,6 @@ void Window::ImplPosSizeWindow( long nX, long nY,
             ImplUpdateSysObjPos();
         if ( bNewSize && mpSysObj )
             mpSysObj->SetPosSize( mnOutOffX, mnOutOffY, mnOutWidth, mnOutHeight );
-#endif
     }
 
     if ( pOverlapRegion )
@@ -3550,7 +3375,6 @@ void Window::ImplToTop( USHORT nFlags )
              !mpFrameData->mbInSysObjFocusHdl &&
              !mpFrameData->mbInSysObjToTopHdl )
         {
-#ifndef REMOTE_APPSERVER
             // do not bring floating windows on the client to top
             if( !ImplGetClientWindow() || !(ImplGetClientWindow()->GetStyle() & WB_SYSTEMFLOATWIN) )
             {
@@ -3563,9 +3387,6 @@ void Window::ImplToTop( USHORT nFlags )
                     nSysFlags = SAL_FRAME_TOTOP_GRABFOCUS_ONLY;
                 mpFrame->ToTop( nSysFlags );
             }
-#else
-            mpFrame->ToTop( nFlags );
-#endif
         }
     }
     else
@@ -3942,13 +3763,8 @@ void Window::ImplGrabFocus( USHORT nFlags )
     }
 
     BOOL bHasFocus = TRUE;
-#ifndef REMOTE_APPSERVER
         if ( !mpSysObj && !mpFrameData->mbHasFocus )
             bHasFocus = FALSE;
-#else
-        if ( !mpFrameData->mbHasFocus )
-            bHasFocus = FALSE;
-#endif
 
     BOOL bMustNotGrabFocus = FALSE;
     // #100242#, check parent hierarchy if some floater prohibits grab focus
@@ -3990,11 +3806,7 @@ void Window::ImplGrabFocus( USHORT nFlags )
                 // Hier setzen wir schon den Focus um, da ToTop() den Focus
                 // nicht auf ein anderes Fenster setzen darf
                 //DBG_WARNING( "Window::GrabFocus() - Frame doesn't have the focus" );
-#ifndef REMOTE_APPSERVER
                 mpFrame->ToTop( SAL_FRAME_TOTOP_GRABFOCUS | SAL_FRAME_TOTOP_GRABFOCUS_ONLY );
-#else
-                mpFrame->ToTop(0);
-#endif
                 return;
             }
         }
@@ -4149,14 +3961,12 @@ void Window::ImplGrabFocus( USHORT nFlags )
 
         if ( pSVData->maWinData.mpFocusWin == this )
         {
-#ifndef REMOTE_APPSERVER
             if ( mpSysObj )
             {
                 mpFrameData->mpFocusWin = this;
                 if ( !mpFrameData->mbInSysObjFocusHdl )
                     mpSysObj->GrabFocus();
             }
-#endif
 
             if ( pSVData->maWinData.mpFocusWin == this )
             {
@@ -4200,7 +4010,6 @@ void Window::ImplNewInputContext()
 
     pFocusWin->mpFrameData->maOldInputContext = rInputContext;
 
-#ifndef REMOTE_APPSERVER
     SalInputContext         aNewContext;
     const Font&             rFont = rInputContext.GetFont();
     const XubString&        rFontName = rFont.GetName();
@@ -4228,10 +4037,6 @@ void Window::ImplNewInputContext()
 
     if ( pFontEntry )
         pFocusWin->mpFontCache->Release( pFontEntry );
-#else
-    const Font& rFont       = rInputContext.GetFont();
-    pFocusWin->ImplGetFrame()->SetInputContext( rFont, rInputContext.GetOptions() );
-#endif
 }
 
 // -----------------------------------------------------------------------
@@ -4526,22 +4331,6 @@ Window::~Window()
     if ( pSVData->maWinData.mpLastDeacWin == this )
         pSVData->maWinData.mpLastDeacWin = NULL;
 
-#ifdef REMOTE_APPSERVER
-    {
-    // Events als ungueltig markieren...
-    vos::OGuard aGuard( pSVData->mpWindowObjectMutex );
-    if ( mpRmEvents )
-    {
-        ExtRmEvent* p = mpRmEvents;
-        while ( p )
-        {
-            p->MarkInvalid();
-            p = p->GetNextWindowEvent();
-        }
-    }
-    }
-#endif
-
     if ( mbFrame )
     {
         if ( mpFrameData->mnFocusId )
@@ -4551,11 +4340,7 @@ Window::~Window()
     }
 
     // Graphic freigeben
-#ifndef REMOTE_APPSERVER
     ImplReleaseGraphics();
-#else
-    ImplReleaseServerGraphics();
-#endif
 
     // Evt. anderen Funktion mitteilen, das das Fenster geloescht
     // wurde
@@ -4605,18 +4390,9 @@ Window::~Window()
                 pSysWin = pSysWin->mpFrameData->mpNextFrame;
             pSysWin->mpFrameData->mpNextFrame = mpFrameData->mpNextFrame;
         }
-#ifndef REMOTE_APPSERVER
         mpFrame->SetCallback( NULL, NULL );
         pSVData->mpDefInst->DestroyFrame( mpFrame );
-#else
-        REF( NMSP_CLIENT::XRmOutputDevice ) aTmp;
-        mpGraphics->SetInterface( aTmp );
-        delete mpFrame;
-#endif
         delete mpFrameData;
-#ifdef REMOTE_APPSERVER
-        delete mpGraphics;
-#endif
     }
 
     if ( mpChildClipRegion )
@@ -5186,7 +4962,6 @@ BOOL Window::PostUserEvent( ULONG& rEventId, ULONG nEvent, void* pEventData )
     pSVEvent->mbCall    = TRUE;
     ImplAddDel( &(pSVEvent->maDelData) );
     rEventId = (ULONG)pSVEvent;
-#ifndef REMOTE_APPSERVER
     if ( mpFrame->PostEvent( pSVEvent ) )
         return TRUE;
     else
@@ -5196,11 +4971,6 @@ BOOL Window::PostUserEvent( ULONG& rEventId, ULONG nEvent, void* pEventData )
         delete pSVEvent;
         return FALSE;
     }
-#else
-    ExtRmEvent* pEvt = new ExtRmEvent( RMEVENT_USEREVENT, NULL, pSVEvent );
-    ImplPostEvent( pEvt );
-    return TRUE;
-#endif
 }
 
 // -----------------------------------------------------------------------
@@ -5217,7 +4987,6 @@ BOOL Window::PostUserEvent( ULONG& rEventId, const Link& rLink, void* pCaller )
     pSVEvent->mbCall    = TRUE;
     ImplAddDel( &(pSVEvent->maDelData) );
     rEventId = (ULONG)pSVEvent;
-#ifndef REMOTE_APPSERVER
     if ( mpFrame->PostEvent( pSVEvent ) )
         return TRUE;
     else
@@ -5227,11 +4996,6 @@ BOOL Window::PostUserEvent( ULONG& rEventId, const Link& rLink, void* pCaller )
         delete pSVEvent;
         return FALSE;
     }
-#else
-    ExtRmEvent* pEvt = new ExtRmEvent( RMEVENT_USEREVENT, NULL, pSVEvent );
-    ImplPostEvent( pEvt );
-    return TRUE;
-#endif
 }
 
 // -----------------------------------------------------------------------
@@ -5500,10 +5264,6 @@ void Window::SetCursorRect( const Rectangle* pRect, long nExtTextInputWidth )
 
     pWinData->mnCursorExtWidth = nExtTextInputWidth;
 
-#ifdef REMOTE_APPSERVER
-    // update remote cursor pos
-    ImplUpdateCursorRect( this );
-#endif
 }
 
 // -----------------------------------------------------------------------
@@ -5931,12 +5691,8 @@ void Window::SetParent( Window* pNewParent )
     if ( mnParentClipMode & PARENTCLIPMODE_CLIP )
         pNewParent->mbClipChildren = TRUE;
     ImplUpdateWindowPtr();
-#ifndef REMOTE_APPSERVER
     if ( ImplUpdatePos() )
         ImplUpdateSysObjPos();
-#else
-    ImplUpdatePos();
-#endif
 
     // Wenn sich das Overlap-Window geaendert hat, dann muss getestet werden,
     // ob auch OverlapWindow die das Child-Fenster als Parent gehabt haben
@@ -6263,10 +6019,8 @@ void Window::Enable( BOOL bEnable, BOOL bChild )
     if ( mbDisabled != !bEnable )
     {
         mbDisabled = !bEnable;
-#ifndef REMOTE_APPSERVER
         if ( mpSysObj )
             mpSysObj->Enable( bEnable && !mbInputDisabled );
-#endif
 //      if ( mbFrame )
 //          mpFrame->Enable( bEnable && !mbInputDisabled );
         StateChanged( STATE_CHANGE_ENABLE );
@@ -6318,10 +6072,8 @@ void Window::EnableInput( BOOL bEnable, BOOL bChild )
         if ( mbInputDisabled != !bEnable )
         {
             mbInputDisabled = !bEnable;
-#ifndef REMOTE_APPSERVER
             if ( mpSysObj )
                 mpSysObj->Enable( !mbDisabled && bEnable );
-#endif
 //          if ( mbFrame )
 //              mpFrame->Enable( !mbDisabled && bEnable );
         }
@@ -6694,7 +6446,6 @@ void Window::SetPosSizePixel( long nX, long nY,
             nHeight = pWindow->mnOutHeight;
 
 
-#ifndef REMOTE_APPSERVER
         USHORT nSysFlags=0;
         if( nFlags & WINDOW_POSSIZE_WIDTH )
             nSysFlags |= SAL_FRAME_POSSIZE_WIDTH;
@@ -6740,9 +6491,6 @@ void Window::SetPosSizePixel( long nX, long nY,
         if( nFlags & WINDOW_POSSIZE_Y )
             nSysFlags |= SAL_FRAME_POSSIZE_Y;
         pWindow->mpFrame->SetPosSize( nX, nY, nWidth, nHeight, nSysFlags );
-#else
-        pWindow->mpFrame->SetPosSize( nX, nY, nWidth, nHeight, nFlags );
-#endif
         // Resize should be called directly. If we havn't
         // set the correct size, we get a second resize from
         // the system with the correct size. This can be happend
@@ -7103,12 +6851,7 @@ void Window::Update()
 void Window::Flush()
 {
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
-
-#ifdef REMOTE_APPSERVER
-    // !!!!!
-#else
     mpFrame->Flush();
-#endif
 }
 
 // -----------------------------------------------------------------------
@@ -7117,13 +6860,7 @@ void Window::Sync()
 {
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
-#ifdef REMOTE_APPSERVER
-    // Wir rufen eine syncrone Funktion, um uns zu syncronisieren
-    long nDummy;
-    mpFrame->GetClientSize( nDummy, nDummy );
-#else
     mpFrame->Sync();
-#endif
 }
 
 // -----------------------------------------------------------------------
@@ -7292,7 +7029,6 @@ void Window::SetPointerPosPixel( const Point& rPos )
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     Point aPos = ImplOutputToFrame( rPos );
-#ifndef REMOTE_APPSERVER
     if( ImplHasMirroredGraphics() )
     {
         if( !IsRTLEnabled() )
@@ -7303,7 +7039,6 @@ void Window::SetPointerPosPixel( const Point& rPos )
         // mirroring is required here, SetPointerPos bypasses SalGraphics
         mpGraphics->mirror( aPos.X(), this );
     }
-#endif
     mpFrame->SetPointerPos( aPos.X(), aPos.Y() );
 }
 
@@ -7314,13 +7049,11 @@ Point Window::GetPointerPosPixel()
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
     Point aPos( mpFrameData->mnLastMouseX, mpFrameData->mnLastMouseY );
-#ifndef REMOTE_APPSERVER
     if( ImplHasMirroredGraphics() && !IsRTLEnabled() )
     {
         // --- RTL --- (re-mirror mouse pos at this window)
         ImplReMirror( aPos );
     }
-#endif
     return ImplFrameToOutput( aPos );
 }
 
@@ -7629,11 +7362,7 @@ const SystemEnvData* Window::GetSystemData() const
 {
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
-#ifndef REMOTE_APPSERVER
     return mpFrame ? mpFrame->GetSystemData() : NULL;
-#else
-    return NULL;
-#endif
 }
 
 ::com::sun::star::uno::Any Window::GetSystemDataAny() const
@@ -7820,11 +7549,6 @@ Reference< XDragSource > Window::GetDragSource()
         {
             try
             {
-#ifdef REMOTE_APPSERVER
-                if ( mpFrame->IsValid() )
-                    mpFrame->GetDragSourceDropTarget( mpFrameData->mxDragSource, mpFrameData->mxDropTarget );
-#else
-
                 Reference< XMultiServiceFactory > xFactory = vcl::unohelper::GetMultiServiceFactory();
                 if ( xFactory.is() )
                 {
@@ -7858,7 +7582,6 @@ Reference< XDragSource > Window::GetDragSource()
                             mpFrameData->mxDropTarget = Reference< XDropTarget > ( xFactory->createInstanceWithArguments( aDropTargetSN, aDropTargetAL ), UNO_QUERY );
                     }
                 }
-#endif
             }
 
             // createInstance can throw any exception
@@ -7913,10 +7636,6 @@ Reference< XClipboard > Window::GetClipboard()
         {
             try
             {
-#ifdef REMOTE_APPSERVER
-                if ( mpFrame->IsValid() )
-                    mpFrame->GetFrameInterface()->GetClipboardAndSelection( mpFrameData->mxClipboard, mpFrameData->mxSelection );
-#else
                 Reference< XMultiServiceFactory > xFactory( vcl::unohelper::GetMultiServiceFactory() );
 
                 if( xFactory.is() )
@@ -7940,7 +7659,6 @@ Reference< XClipboard > Window::GetClipboard()
                     }
 #endif
                 }
-#endif
             }
 
             // createInstance can throw any exception
@@ -7969,11 +7687,6 @@ Reference< XClipboard > Window::GetSelection()
         {
             try
             {
-#ifdef REMOTE_APPSERVER
-                if ( mpFrame->IsValid() )
-                    mpFrame->GetFrameInterface()->GetClipboardAndSelection( mpFrameData->mxClipboard, mpFrameData->mxSelection );
-#else
-
                 Reference< XMultiServiceFactory > xFactory( vcl::unohelper::GetMultiServiceFactory() );
 
                 if( xFactory.is() )
@@ -7995,8 +7708,6 @@ Reference< XClipboard > Window::GetSelection()
                     mpFrameData->mxSelection = s_xSelection;
 #   endif
                 }
-
-#endif
             }
 
             // createInstance can throw any exception
