@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configunoreg.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-27 10:40:25 $
+ *  last change: $Author: cyrillem $ $Date: 2002-06-17 14:34:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,6 +253,11 @@ extern "C" sal_Bool SAL_CALL component_writeInfo(
         RegisterService(configmgr::xml::getSchemaParserServiceInfo(), xKey);
         RegisterService(configmgr::xml::getLayerParserServiceInfo(), xKey);
         RegisterService(configmgr::xml::getLayerWriterServiceInfo(), xKey);
+        RegisterService(configmgr::localbe::getLocalBackendServiceInfo(),
+                        xKey) ;
+        RegisterService(
+                configmgr::backend::getSingleBackendAdapterServiceInfo(),
+                xKey) ;
         // im/export
 #if 0
         RegisterService(configmgr::getDataExportServiceInfo(), xKey);
@@ -318,6 +323,16 @@ extern "C" void* SAL_CALL component_getFactory(
             configmgr::xml::getLayerWriterServiceInfo(),
             &configmgr::xml::instantiateLayerWriter,
             ::cppu::createSingleFactory)
+        ||
+        aReq.CreateService(
+                configmgr::localbe::getLocalBackendServiceInfo(),
+                configmgr::localbe::instantiateLocalBackend,
+                cppu::createSingleFactory)
+        ||
+        aReq.CreateService(
+                configmgr::backend::getSingleBackendAdapterServiceInfo(),
+                configmgr::backend::instantiateSingleBackendAdapter,
+                cppu::createSingleFactory)
         ||
         false;
 
