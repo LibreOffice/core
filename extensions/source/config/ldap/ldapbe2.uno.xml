@@ -1,0 +1,45 @@
+c<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module-description PUBLIC "-//StarOffice/DTD ComponentDescription 1.0//EN" "module-description.dtd">
+<module-description xmlns:xlink="http://www.w3.org/1999/xlink">
+    <module-name>ldapbe2.uno</module-name>
+    <component-description>
+        <author>Sarah Smith</author>
+        <name>com.sun.star.comp.configuration.backend.LdapUserProfileBe</name>
+        <description>The LdapUserProfileBe accesses User Profile settings form a configured LDAP repository</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>C++</language>
+        <status value="final"/>
+        <supported-service>com.sun.star.configuration.backend.LdapUserProfileBe</supported-service>
+        <supported-service>com.sun.star.configuration.backend.PlatformBackend</supported-service>
+        <supported-service>com.sun.star.configuration.backend.SingleLayerStratum</supported-service>
+        <service-dependency>com.sun.star.configuration.backend.LayerDescriber</service-dependency>
+        <type>com.sun.star.configuration.CannotLoadConfigurationException</type>
+        <type>com.sun.star.configuration.backend.BackendAccessException</type>
+        <type>com.sun.star.configuration.backend.XLayer</type>
+        <type>com.sun.star.configuration.backend.XUpdateHandler</type>
+        <type>com.sun.star.configuration.backend.XSingleLayerStratum</type>
+        <type>com.sun.star.uno.XComponentContext</type>
+        <type>com.sun.star.lang.IllegalArgumentException</type>
+        <type>com.sun.star.lang.XInitialization</type>
+        <type>com.sun.star.lang.XMultiServiceFactory</type>
+        <type>com.sun.star.lang.XServiceInfo</type>
+        <type>com.sun.star.lang.XSingleServiceFactory</type>
+        <type>com.sun.star.lang.XSingleComponentFactory</type>
+        <type>com.sun.star.lang.XTypeProvider</type>
+        <type>com.sun.star.registry.XRegistryKey</type>
+        <type>com.sun.star.uno.Any</type>
+        <type>com.sun.star.uno.Sequence</type>
+       </component-description>
+       <project-build-dependency>   comphelper  </project-build-dependency>
+       <project-build-dependency>   vos         </project-build-dependency>
+       <project-build-dependency>   cppuhelper  </project-build-dependency>
+       <project-build-dependency>   salhelper   </project-build-dependency>
+       <project-build-dependency>   cppu        </project-build-dependency>
+       <project-build-dependency>   sal         </project-build-dependency>
+       <runtime-module-dependency>  comphelp2$(COM)     </runtime-module-dependency>
+       <runtime-module-dependency>  vos2$(COM)          </runtime-module-dependency>
+       <runtime-module-dependency>  cppuhelper3$(COM)   </runtime-module-dependency>
+       <runtime-module-dependency>  salhelper3$(COM)    </runtime-module-dependency>
+       <runtime-module-dependency>  cppu3       </runtime-module-dependency>
+       <runtime-module-dependency>  sal3        </runtime-module-dependency>
+</module-description>
