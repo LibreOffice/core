@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: er $ $Date: 2001-03-14 15:57:39 $
+ *  last change: $Author: gt $ $Date: 2001-05-10 13:44:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -995,10 +995,15 @@ String** ScFormulaUtil::GetArgStrings( const String& rFormula,
 
 inline BOOL IsFormulaText( const String& rStr, xub_StrLen nPos )
 {
-    // In internationalized versions function names may contain a dot
+    if( ScGlobal::pCharClass->isLetterNumeric( rStr, nPos ) )
+        return TRUE;
+    else
+    {   // In internationalized versions function names may contain a dot
+        //  and in every version also an underscore... ;-)
+        sal_Unicode c = rStr.GetChar(nPos);
+        return c == '.' || c == '_';
+    }
 
-    return ScGlobal::pCharClass->isLetterNumeric( rStr, nPos ) ||
-        rStr.GetChar(nPos) == '.';
 }
 
 xub_StrLen ScFormulaUtil::GetFunctionStart( const String&   rFormula,
