@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexdialog.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:49:29 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 10:53:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,7 @@ ModalDialog DLG_INDEXDESIGN
         //  Size = MAP_APPFONT ( DIALOG_SIZE_X - 14 , 14 ) ;
         ButtonType = BUTTON_SYMBOL;
         Align = BOXALIGN_TOP;
+        HelpId = HID_INDEX_DIALOG_ACTION_TB;
         Customize = FALSE;
         ItemImageList = IMG_INDEX_DLG_SC ;
 
