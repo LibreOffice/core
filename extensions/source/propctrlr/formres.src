@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formres.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 20:46:22 $
+ *  last change: $Author: fs $ $Date: 2001-03-20 16:33:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3159,7 +3159,7 @@ String RID_STR_EVT_APPROVEROWCHANGE
 {
     Text = "Vor der Datensatzδnderung" ;
     Text [ English ] = "Before row change" ;
-    Text [ english_us ] = "Before record change" ;
+    Text [ english_us ] = "Before row change" ;
     Text[ portuguese ] = "Antes de modificar registo de dados";
     Text[ russian ] = "Οεπεδ θημενενθεμ ηΰοθρθ";
     Text[ greek ] = "Πριν την αλλαγή της εγγραφής";
@@ -3182,7 +3182,7 @@ String RID_STR_EVT_ROWCHANGE
 {
     Text = "Nach der Datensatzδnderung" ;
     Text [ English ] = "After row change" ;
-    Text [ english_us ] = "After record change" ;
+    Text [ english_us ] = "After row change" ;
     Text[ portuguese ] = "Depois de modificar registo de dados";
     Text[ russian ] = "Οξρλε θημενενθÿ ηΰοθρθ";
     Text[ greek ] = "Μετά την αλλαγή της εγγραφής";
@@ -3964,6 +3964,9 @@ String RID_STR_STEP
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.7  2001/03/09 20:46:22  kz
+ *  Merge SRC624: 09.03.01 - 21:46:00 (NoBranch)
+ *
  *  Revision 1.6  2001/03/07 14:36:18  tbe
  *  added step property
  *
