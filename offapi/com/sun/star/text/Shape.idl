@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Shape.idl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 11:04:08 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 16:03:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -231,7 +231,7 @@ published service Shape
         transformation property of the included service com::sun::star::drawing::Shape
         converted to the horizontal left-to-right layout.</p>
 
-        @since #i28749#
+        @since OOo 2.0.0
     */
     [optional, readonly, property] com::sun::star::drawing::HomogenMatrix3 TransformationInHoriL2R;
     //-------------------------------------------------------------------------
@@ -240,7 +240,7 @@ published service Shape
 
         <p>Valid values are given by <member>PositionLayoutDir</member></p>
 
-        @since #i28749#
+        @since OOo 2.0.0
      */
     [optional, property] short PositionLayoutDir;
     //-------------------------------------------------------------------------
@@ -252,7 +252,7 @@ published service Shape
         start position property of the included service com::sun::star::drawing::Shape
         converted to the horizontal left-to-right layout.</p>
 
-        @since #i36248#
+        @since OOo 2.0.0
     */
     [optional, readonly, property] com::sun::star::awt::Point StartPositionInHoriL2R;
     //-------------------------------------------------------------------------
@@ -264,7 +264,7 @@ published service Shape
         end position property of the included service com::sun::star::drawing::Shape
         converted to the horizontal left-to-right layout.</p>
 
-        @since #i36248#
+        @since OOo 2.0.0
     */
     [optional, readonly, property] com::sun::star::awt::Point EndPositionInHoriL2R;
 };
