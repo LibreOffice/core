@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpoption.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-04-04 06:56:09 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 15:21:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,3 +126,4 @@
 #define FT_PAGEHEIGHT               38
 #define FT_SCALE                    39
 
+#define CB_USE_PRINTER_METRICS 40
