@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE toolbar:toolbar PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "toolbar.dtd">
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
- <toolbar:toolbaritem xlink:href=".uno:EditDoc" toolbar:helpid="helpid:6312" toolbar:text="" toolbar:style="" />
- <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:Save" toolbar:helpid="helpid:5505" toolbar:text="" />
- <toolbar:toolbaritem xlink:href=".uno:SaveAs" toolbar:helpid="helpid:5502" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:SaveAs" toolbar:helpid="helpid:5502" toolbar:text="" toolbar:visible="false" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:EditDoc" toolbar:helpid="helpid:6312" toolbar:text="" toolbar:style="" toolbar:visible="false" />
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:DBIndexDesign" toolbar:helpid="helpid:12251" toolbar:text="" />
  <toolbar:toolbarseparator/>
