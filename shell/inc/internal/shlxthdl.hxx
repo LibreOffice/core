@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shlxthdl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-07 10:54:09 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 14:24:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,5 +75,9 @@ const CLSID CLSID_COLUMN_HANDLER =
 // {63542C48-9552-494a-84F7-73AA6A7C99C1}
 const CLSID CLSID_PROPERTYSHEET_HANDLER =
 { 0x63542c48, 0x9552, 0x494a, { 0x84, 0xf7, 0x73, 0xaa, 0x6a, 0x7c, 0x99, 0xc1 } };
+
+// {3B092F0C-7696-40e3-A80F-68D74DA84210}
+const CLSID CLSID_THUMBVIEWER_HANDLER =
+{ 0x3b092f0c, 0x7696, 0x40e3, { 0xa8, 0xf, 0x68, 0xd7, 0x4d, 0xa8, 0x42, 0x10 } };
 
 #endif
