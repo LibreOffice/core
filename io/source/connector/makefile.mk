@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: obr $ $Date: 2000-11-06 11:57:37 $
+#   last change: $Author: hr $ $Date: 2000-11-13 15:47:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,7 +67,7 @@ TARGET=connectr
 ENABLE_EXCEPTIONS=TRUE
 NO_BSYMBOLIC=TRUE
 COMP1TYPELIST=$(TARGET)
-COMPRDB=$(SOLARBINDIR)$/applicat.rdb
+COMPRDB=$(SOLARBINDIR)$/udkapi.rdb
 
 # --- Settings -----------------------------------------------------
 .INCLUDE :  svpre.mk
@@ -75,8 +75,8 @@ COMPRDB=$(SOLARBINDIR)$/applicat.rdb
 .INCLUDE :  sv.mk
 # ------------------------------------------------------------------
 
-UNOUCRDEP=$(SOLARBINDIR)$/applicat.rdb
-UNOUCRRDB=$(SOLARBINDIR)$/applicat.rdb
+UNOUCRDEP=$(SOLARBINDIR)$/udkapi.rdb
+UNOUCRRDB=$(SOLARBINDIR)$/udkapi.rdb
 UNOUCROUT=$(OUT)$/inc$/connector
 INCPRE+= $(UNOUCROUT)
 

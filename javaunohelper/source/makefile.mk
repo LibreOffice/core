@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: pluby $ $Date: 2000-10-10 03:19:11 $
+#   last change: $Author: hr $ $Date: 2000-11-13 15:46:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,8 +77,8 @@ BOOTSTRAP_SERVICE=TRUE
 
 # ------------------------------------------------------------------
 
-UNOUCRDEP=	$(SOLARBINDIR)$/applicat.rdb
-UNOUCRRDB=	$(SOLARBINDIR)$/applicat.rdb
+UNOUCRDEP=	$(SOLARBINDIR)$/udkapi.rdb
+UNOUCRRDB=	$(SOLARBINDIR)$/udkapi.rdb
 
 .IF "$(BOOTSTRAP_SERVICE)" == "TRUE"
 UNOUCROUT=	$(OUT)$/inc$/comprehensive
