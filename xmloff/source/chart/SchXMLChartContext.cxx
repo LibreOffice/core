@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLChartContext.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: af $ $Date: 2001-06-25 12:21:40 $
+ *  last change: $Author: bm $ $Date: 2001-06-26 13:08:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,6 +153,7 @@ static __FAR_DATA SvXMLEnumMapEntry aXMLChartClassMap[] =
     { XML_BAR,          XML_CHART_CLASS_BAR     },
     { XML_STOCK,        XML_CHART_CLASS_STOCK   },
     { XML_BUBBLE,       XML_CHART_CLASS_BUBBLE  },
+    { XML_ADD_IN,       XML_CHART_CLASS_ADDIN   },
     { XML_TOKEN_INVALID, 0 }
 };
 
@@ -248,6 +249,11 @@ void SchXMLChartContext::StartElement( const uno::Reference< xml::sax::XAttribut
                                 break;
                             case XML_CHART_CLASS_ADDIN:
                                 // service is taken from add-in-name attribute
+
+                                // for service charts assume domain in base type
+                                // if base type doesn't use a domain this is ok,
+                                // the data just grows bigger
+                                bDomainForDefaultDataNeeded = sal_True;
                                 break;
                         }
                     }
