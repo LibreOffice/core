@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 12:29:52 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 16:00:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -245,4 +245,8 @@ String RID_STR_COLUMN_ALTER_BY_INDEX
     Text [ de ] = "Der Treiber unterstützt das Verändern einer Spaltendefinition, anhand des Indexes, nicht.";
     Text [ en-US ] = "The driver does not support the modification of column descriptions by changing the index.";
 };
-
+String RID_STR_FILE_DOES_NOT_EXIST
+{
+    Text [ de ] ="Die Datei \"$file$\" existiert nicht.";
+    Text[ en-US ] = "The file \"$file$\" does not exist.";
+};
