@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: rt $ $Date: 2002-07-25 08:05:10 $
+#   last change: $Author: kz $ $Date: 2003-08-25 15:03:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,7 +73,8 @@ TARGET=uimisc
 
 # ... resource files ............................
 
-SRCFILES =	\
+SRS1NAME=$(TARGET)
+SRC1FILES =	\
         dbumiscres.src	\
         WizardPages.src
 
