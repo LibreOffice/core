@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontmanager.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: pl $ $Date: 2001-11-09 15:44:34 $
+ *  last change: $Author: pl $ $Date: 2001-11-16 12:53:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1391,8 +1391,8 @@ bool PrintFontManager::analyzeTrueTypeFile( PrintFont* pFont ) const
         if( pFont->m_nLeading == 0 )
             pFont->m_nLeading = 15 * (pFont->m_nAscend+pFont->m_nDescend) / 100;
 
-        if( pFont->m_nAscend && pFont->m_nDescend )
-            pFont->m_aGlobalMetricX.height = pFont->m_aGlobalMetricY.height = pFont->m_nAscend + pFont->m_nDescend;
+        if( pFont->m_nAscend )
+            pFont->m_aGlobalMetricX.height = pFont->m_aGlobalMetricY.height = pFont->m_nAscend;
 
         // get type flags
         pTTFontFile->m_nTypeFlags = (unsigned int)aInfo.typeFlags;
