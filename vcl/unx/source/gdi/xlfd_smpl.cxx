@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlfd_smpl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:11:23 $
+ *  last change: $Author: kz $ $Date: 2004-03-25 14:52:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -286,7 +286,7 @@ Xlfd::ToString( ByteString &rString ) const
     rString += '-'; rString += ByteString::CreateFromInt32( mnPointSize );
     rString += '-'; rString += ByteString::CreateFromInt32( mnResolutionX );
     rString += '-'; rString += ByteString::CreateFromInt32( mnResolutionY );
-    rString += '-'; rString += mcSpacing;
+    rString += '-'; rString += static_cast< char >(mcSpacing);
     rString += '-'; rString += ByteString::CreateFromInt32( mnAverageWidth );
 
     AppendAttribute( mpFactory->RetrieveCharset(mnCharset), rString );
