@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsselect.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:52:24 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:48:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,7 @@
 #include "commontypes.hxx"
 #endif
 
+class SfxItemSet;
 //.........................................................................
 namespace dbaui
 {
@@ -104,9 +105,11 @@ protected:
     CancelButton    m_aCancel;
     HelpButton      m_aHelp;
     PushButton      m_aManageDatasources;
+    PushButton      m_aCreateAdabasDB;
+    SfxItemSet*     m_pOutputSet;
 
 public:
-    ODatasourceSelectDialog(Window* _pParent, const StringBag& _rDatasources, DATASOURCE_TYPE _eType);
+    ODatasourceSelectDialog(Window* _pParent, const StringBag& _rDatasources, DATASOURCE_TYPE _eType,SfxItemSet* _pOutputSet = NULL);
 
     inline String   GetSelected() const { return m_aDatasource.GetSelectEntry();}
     void            Select( const String& _rEntry ) { m_aDatasource.SelectEntry(_rEntry); }
@@ -114,6 +117,7 @@ public:
 protected:
     DECL_LINK( ListDblClickHdl, ListBox * );
     DECL_LINK( ManageClickHdl, PushButton * );
+    DECL_LINK( CreateDBClickHdl, PushButton * );
     void fillListBox(const StringBag& _rDatasources);
 };
 
