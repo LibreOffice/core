@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Linguistic.xcs,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 16:16:58 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 13:38:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,72 +62,18 @@
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
 <oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Linguistic" oor:package="org.openoffice.Office" xml:lang="en-US"> <info>
 		<author>TL</author>
-		<desc xml:lang="en-US">Contains linguistic (spell checking, hyphenation, thesaurus) related configurations.</desc>
+		<desc >Contains linguistic (spell checking, hyphenation, thesaurus) related configurations.</desc>
 	</info>
 	<component>
 		<group oor:name="General">
 			<info>
-				<desc xml:lang="en-US">Contains general settings for the linguistic configurations.</desc>
-				<desc xml:lang="el">Contains general settings for the linguistic configurations.</desc>
-				<desc xml:lang="nl">Contains general settings for the linguistic configurations.</desc>
-				<desc xml:lang="fr">Contains general settings for the linguistic configurations.</desc>
-				<desc xml:lang="fi">Contains general settings for the linguistic configurations.</desc>
-				<desc xml:lang="cs">Contains general settings for the linguistic configurations.</desc>
-				<desc xml:lang="da">Contains general settings for the linguistic configurations.</desc>
-				<desc xml:lang="zh-CN">含有语言配置的一般设定。</desc>
-				<desc xml:lang="zh-TW">Contains general settings for the linguistic configurations.</desc>
-				<desc xml:lang="ar">Contains general settings for the linguistic configurations.</desc>
-				<desc xml:lang="he">Contains general settings for the linguistic configurations.</desc>
-				<desc xml:lang="ca">Contains general settings for the linguistic configurations.</desc>
-				<desc xml:lang="pt">Contains general settings for the linguistic configurations.</desc>
-				<desc xml:lang="ru">Contains general settings for the linguistic configurations.</desc>
-				<desc xml:lang="es">Contains general settings for the linguistic configurations.</desc>
-				<desc xml:lang="it">Contains general settings for the linguistic configurations.</desc>
-				<desc xml:lang="sv">Contains general settings for the linguistic configurations.</desc>
-				<desc xml:lang="pl">Contains general settings for the linguistic configurations.</desc>
-				<desc xml:lang="pt-BR">Contains general settings for the linguistic configurations.</desc>
-				<desc xml:lang="ja">言語設定について、全般的な設定が含まれます。</desc>
-				<desc xml:lang="ko">Contains general settings for the linguistic configurations.</desc>
-				<desc xml:lang="tr">Contains general settings for the linguistic configurations.</desc>
-				<desc xml:lang="th">Contains general settings for the linguistic configurations.</desc>
-				<desc xml:lang="hi-IN">Contains general settings for the linguistic configurations.</desc>
-				<desc xml:lang="x-comment">Contains general settings for the linguistic configurations.</desc>
-				<desc xml:lang="hu">Contains general settings for the linguistic configurations.</desc>
-				<desc xml:lang="sk">Contains general settings for the linguistic configurations.</desc>
-				<desc xml:lang="sl">Contains general settings for the linguistic configurations.</desc>
+				<desc>Contains general settings for the linguistic configurations.</desc>
 			</info>
 			<prop oor:name="IsIgnoreControlCharacters" oor:type="xs:boolean">
 				<!-- OldLocation: NEW -->
 				<info>
 					<author>TL</author>
-					<desc xml:lang="en-US">Ignores the control characters (ASCII characters &lt; 32) for spell checking, hyphenation and the thesaurus.</desc>
-					<desc xml:lang="el">Ignores the control characters (ASCII characters &lt; 32) for spell checking, hyphenation and the thesaurus.</desc>
-					<desc xml:lang="nl">Ignores the control characters (ASCII characters &lt; 32) for spell checking, hyphenation and the thesaurus.</desc>
-					<desc xml:lang="fr">Ignores the control characters (ASCII characters &lt; 32) for spell checking, hyphenation and the thesaurus.</desc>
-					<desc xml:lang="fi">Ignores the control characters (ASCII characters &lt; 32) for spell checking, hyphenation and the thesaurus.</desc>
-					<desc xml:lang="cs">Ignores the control characters (ASCII characters &lt; 32) for spell checking, hyphenation and the thesaurus.</desc>
-					<desc xml:lang="da">Ignores the control characters (ASCII characters &lt; 32) for spell checking, hyphenation and the thesaurus.</desc>
-					<desc xml:lang="zh-CN">在拼写检查、连字符和同义词词典中忽略控制字符 (ASCII 字符 &lt; 32)。</desc>
-					<desc xml:lang="zh-TW">Ignores the control characters (ASCII characters &lt; 32) for spell checking, hyphenation and the thesaurus.</desc>
-					<desc xml:lang="ar">Ignores the control characters (ASCII characters &lt; 32) for spell checking, hyphenation and the thesaurus.</desc>
-					<desc xml:lang="he">Ignores the control characters (ASCII characters &lt; 32) for spell checking, hyphenation and the thesaurus.</desc>
-					<desc xml:lang="ca">Ignores the control characters (ASCII characters &lt; 32) for spell checking, hyphenation and the thesaurus.</desc>
-					<desc xml:lang="pt">Ignores the control characters (ASCII characters &lt; 32) for spell checking, hyphenation and the thesaurus.</desc>
-					<desc xml:lang="ru">Ignores the control characters (ASCII characters &lt; 32) for spell checking, hyphenation and the thesaurus.</desc>
-					<desc xml:lang="es">Ignores the control characters (ASCII characters &lt; 32) for spell checking, hyphenation and the thesaurus.</desc>
-					<desc xml:lang="it">Ignores the control characters (ASCII characters &lt; 32) for spell checking, hyphenation and the thesaurus.</desc>
-					<desc xml:lang="sv">Ignores the control characters (ASCII characters &lt; 32) for spell checking, hyphenation and the thesaurus.</desc>
-					<desc xml:lang="pl">Ignores the control characters (ASCII characters &lt; 32) for spell checking, hyphenation and the thesaurus.</desc>
-					<desc xml:lang="pt-BR">Ignores the control characters (ASCII characters &lt; 32) for spell checking, hyphenation and the thesaurus.</desc>
-					<desc xml:lang="ja">スペルチェック、ハイフネーション、および類義語辞典で、制御文字 (32 未満の ASCII 文字) を無視します。</desc>
-					<desc xml:lang="ko">Ignores the control characters (ASCII characters &lt; 32) for spell checking, hyphenation and the thesaurus.</desc>
-					<desc xml:lang="tr">Ignores the control characters (ASCII characters &lt; 32) for spell checking, hyphenation and the thesaurus.</desc>
-					<desc xml:lang="th">Ignores the control characters (ASCII characters &lt; 32) for spell checking, hyphenation and the thesaurus.</desc>
-					<desc xml:lang="hi-IN">Ignores the control characters (ASCII characters &lt; 32) for spell checking, hyphenation and the thesaurus.</desc>
-					<desc xml:lang="x-comment">Ignores the control characters (ASCII characters &lt; 32) for spell checking, hyphenation and the thesaurus.</desc>
-					<desc xml:lang="hu">Ignores the control characters (ASCII characters &lt; 32) for spell checking, hyphenation and the thesaurus.</desc>
-					<desc xml:lang="sk">Ignores the control characters (ASCII characters &lt; 32) for spell checking, hyphenation and the thesaurus.</desc>
-					<desc xml:lang="sl">Ignores the control characters (ASCII characters &lt; 32) for spell checking, hyphenation and the thesaurus.</desc>
+					<desc>Ignores the control characters (ASCII characters &lt; 32) for spell checking, hyphenation and the thesaurus.</desc>
 				</info>
 				<value>true</value>
 			</prop>
@@ -137,62 +83,8 @@
 				<!-- UIHints: Tools - Options - General - Language -->
 				<info>
 					<author>TL</author>
-					<desc xml:lang="en-US">Specifies the default document language.</desc>
-						<desc xml:lang="el">Specifies the default document language.</desc>
-						<desc xml:lang="nl">Specifies the default document language.</desc>
-						<desc xml:lang="fr">Specifies the default document language.</desc>
-						<desc xml:lang="fi">Specifies the default document language.</desc>
-						<desc xml:lang="cs">Specifies the default document language.</desc>
-						<desc xml:lang="da">Specifies the default document language.</desc>
-						<desc xml:lang="zh-CN">指定默认文档语言。</desc>
-						<desc xml:lang="zh-TW">Specifies the default document language.</desc>
-						<desc xml:lang="ar">Specifies the default document language.</desc>
-						<desc xml:lang="he">Specifies the default document language.</desc>
-						<desc xml:lang="ca">Specifies the default document language.</desc>
-						<desc xml:lang="pt">Specifies the default document language.</desc>
-						<desc xml:lang="ru">Specifies the default document language.</desc>
-						<desc xml:lang="es">Specifies the default document language.</desc>
-						<desc xml:lang="it">Specifies the default document language.</desc>
-						<desc xml:lang="sv">Specifies the default document language.</desc>
-						<desc xml:lang="pl">Specifies the default document language.</desc>
-						<desc xml:lang="pt-BR">Specifies the default document language.</desc>
-						<desc xml:lang="ja">標準のドキュメント言語を指定します。</desc>
-						<desc xml:lang="ko">Specifies the default document language.</desc>
-						<desc xml:lang="tr">Specifies the default document language.</desc>
-						<desc xml:lang="th">Specifies the default document language.</desc>
-						<desc xml:lang="hi-IN">Specifies the default document language.</desc>
-						<desc xml:lang="x-comment">Specifies the default document language.</desc>
-						<desc xml:lang="hu">Specifies the default document language.</desc>
-						<desc xml:lang="sk">Specifies the default document language.</desc>
-						<desc xml:lang="sl">Specifies the default document language.</desc>
-					<label xml:lang="en-US">Default language</label>
-					<label xml:lang="el">Default language</label>
-					<label xml:lang="nl">Standaardtaal</label>
-					<label xml:lang="fr">Default language</label>
-					<label xml:lang="fi">Default language</label>
-					<label xml:lang="cs">Default language</label>
-					<label xml:lang="da">Default language</label>
-					<label xml:lang="zh-CN">默认语言</label>
-					<label xml:lang="zh-TW">Default language</label>
-					<label xml:lang="ar">Default language</label>
-					<label xml:lang="he">Default language</label>
-					<label xml:lang="ca">Default language</label>
-					<label xml:lang="pt">Default language</label>
-					<label xml:lang="ru">Default language</label>
-					<label xml:lang="es">Default language</label>
-					<label xml:lang="it">Default language</label>
-					<label xml:lang="sv">Default language</label>
-					<label xml:lang="pl">Default language</label>
-					<label xml:lang="pt-BR">Default language</label>
-					<label xml:lang="ja">標準言語</label>
-					<label xml:lang="ko">Default language</label>
-					<label xml:lang="tr">Default language</label>
-					<label xml:lang="th">Default language</label>
-					<label xml:lang="hi-IN">Default language</label>
-					<label xml:lang="x-comment">Default language</label>
-					<label xml:lang="hu">Default language</label>
-					<label xml:lang="sk">Default language</label>
-					<label xml:lang="sl">Default language</label>
+					<desc>Specifies the default document language.</desc>
+					<label>Default language</label>
 				</info>
 				<value>en-US</value>
 			</prop>
@@ -201,62 +93,8 @@
 				<!-- UIHints: Tools - Options - General - Language -->
 				<info>
 					<author>TL</author>
-					<desc xml:lang="en-US">Specifies the default document CJK language.</desc>
-						<desc xml:lang="el">Specifies the default document CJK language.</desc>
-						<desc xml:lang="nl">Specifies the default document CJK language.</desc>
-						<desc xml:lang="fr">Specifies the default document CJK language.</desc>
-						<desc xml:lang="fi">Specifies the default document CJK language.</desc>
-						<desc xml:lang="cs">Specifies the default document CJK language.</desc>
-						<desc xml:lang="da">Specifies the default document CJK language.</desc>
-						<desc xml:lang="zh-CN">指定默认文档中日韩语言。</desc>
-						<desc xml:lang="zh-TW">Specifies the default document CJK language.</desc>
-						<desc xml:lang="ar">Specifies the default document CJK language.</desc>
-						<desc xml:lang="he">Specifies the default document CJK language.</desc>
-						<desc xml:lang="ca">Specifies the default document CJK language.</desc>
-						<desc xml:lang="pt">Specifies the default document CJK language.</desc>
-						<desc xml:lang="ru">Specifies the default document CJK language.</desc>
-						<desc xml:lang="es">Specifies the default document CJK language.</desc>
-						<desc xml:lang="it">Specifies the default document CJK language.</desc>
-						<desc xml:lang="sv">Specifies the default document CJK language.</desc>
-						<desc xml:lang="pl">Specifies the default document CJK language.</desc>
-						<desc xml:lang="pt-BR">Specifies the default document CJK language.</desc>
-						<desc xml:lang="ja">標準のドキュメント CJK 言語を指定します。</desc>
-						<desc xml:lang="ko">Specifies the default document CJK language.</desc>
-						<desc xml:lang="tr">Specifies the default document CJK language.</desc>
-						<desc xml:lang="th">Specifies the default document CJK language.</desc>
-						<desc xml:lang="hi-IN">Specifies the default document CJK language.</desc>
-						<desc xml:lang="x-comment">Specifies the default document CJK language.</desc>
-						<desc xml:lang="hu">Specifies the default document CJK language.</desc>
-						<desc xml:lang="sk">Specifies the default document CJK language.</desc>
-						<desc xml:lang="sl">Specifies the default document CJK language.</desc>
-					<label xml:lang="en-US">Default language for CJK linguistics</label>
-					<label xml:lang="el">Default language for CJK linguistics</label>
-					<label xml:lang="nl">Standaardtaal voor CJK linguïstiek</label>
-					<label xml:lang="fr">Default language for CJK linguistics</label>
-					<label xml:lang="fi">Default language for CJK linguistics</label>
-					<label xml:lang="cs">Default language for CJK linguistics</label>
-					<label xml:lang="da">Default language for CJK linguistics</label>
-					<label xml:lang="zh-CN">中日韩语言的默认语言</label>
-					<label xml:lang="zh-TW">Default language for CJK linguistics</label>
-					<label xml:lang="ar">Default language for CJK linguistics</label>
-					<label xml:lang="he">Default language for CJK linguistics</label>
-					<label xml:lang="ca">Default language for CJK linguistics</label>
-					<label xml:lang="pt">Default language for CJK linguistics</label>
-					<label xml:lang="ru">Default language for CJK linguistics</label>
-					<label xml:lang="es">Default language for CJK linguistics</label>
-					<label xml:lang="it">Default language for CJK linguistics</label>
-					<label xml:lang="sv">Default language for CJK linguistics</label>
-					<label xml:lang="pl">Default language for CJK linguistics</label>
-					<label xml:lang="pt-BR">Default language for CJK linguistics</label>
-					<label xml:lang="ja">CJK 言語の標準言語</label>
-					<label xml:lang="ko">Default language for CJK linguistics</label>
-					<label xml:lang="tr">Default language for CJK linguistics</label>
-					<label xml:lang="th">Default language for CJK linguistics</label>
-					<label xml:lang="hi-IN">Default language for CJK linguistics</label>
-					<label xml:lang="x-comment">Default language for CJK linguistics</label>
-					<label xml:lang="hu">Default language for CJK linguistics</label>
-					<label xml:lang="sk">Default language for CJK linguistics</label>
-					<label xml:lang="sl">Default language for CJK linguistics</label>
+					<desc>Specifies the default document CJK language.</desc>
+					<label>Default language for CJK linguistics</label>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -266,62 +104,8 @@
 				<!-- UIHints: Tools - Options - General - Language -->
 				<info>
 					<author>TL</author>
-					<desc xml:lang="en-US">Specifies the default document CTL language.</desc>
-						<desc xml:lang="el">Specifies the default document CTL language.</desc>
-						<desc xml:lang="nl">Specifies the default document CTL language.</desc>
-						<desc xml:lang="fr">Specifies the default document CTL language.</desc>
-						<desc xml:lang="fi">Specifies the default document CTL language.</desc>
-						<desc xml:lang="cs">Specifies the default document CTL language.</desc>
-						<desc xml:lang="da">Specifies the default document CTL language.</desc>
-						<desc xml:lang="zh-CN">指定默认文档复杂文字版式语言。</desc>
-						<desc xml:lang="zh-TW">Specifies the default document CTL language.</desc>
-						<desc xml:lang="ar">Specifies the default document CTL language.</desc>
-						<desc xml:lang="he">Specifies the default document CTL language.</desc>
-						<desc xml:lang="ca">Specifies the default document CTL language.</desc>
-						<desc xml:lang="pt">Specifies the default document CTL language.</desc>
-						<desc xml:lang="ru">Specifies the default document CTL language.</desc>
-						<desc xml:lang="es">Specifies the default document CTL language.</desc>
-						<desc xml:lang="it">Specifies the default document CTL language.</desc>
-						<desc xml:lang="sv">Specifies the default document CTL language.</desc>
-						<desc xml:lang="pl">Specifies the default document CTL language.</desc>
-						<desc xml:lang="pt-BR">Specifies the default document CTL language.</desc>
-						<desc xml:lang="ja">標準のドキュメント CTL 言語を指定します。</desc>
-						<desc xml:lang="ko">Specifies the default document CTL language.</desc>
-						<desc xml:lang="tr">Specifies the default document CTL language.</desc>
-						<desc xml:lang="th">Specifies the default document CTL language.</desc>
-						<desc xml:lang="hi-IN">Specifies the default document CTL language.</desc>
-						<desc xml:lang="x-comment">Specifies the default document CTL language.</desc>
-						<desc xml:lang="hu">Specifies the default document CTL language.</desc>
-						<desc xml:lang="sk">Specifies the default document CTL language.</desc>
-						<desc xml:lang="sl">Specifies the default document CTL language.</desc>
-					<label xml:lang="en-US">Default language for CTL linguistics</label>
-					<label xml:lang="el">Default language for CTL linguistics</label>
-					<label xml:lang="nl">Standaardtaal voor CJK linguïstiek</label>
-					<label xml:lang="fr">Default language for CTL linguistics</label>
-					<label xml:lang="fi">Default language for CTL linguistics</label>
-					<label xml:lang="cs">Default language for CTL linguistics</label>
-					<label xml:lang="da">Default language for CTL linguistics</label>
-					<label xml:lang="zh-CN">复杂文字版式语言的默认语言</label>
-					<label xml:lang="zh-TW">Default language for CTL linguistics</label>
-					<label xml:lang="ar">Default language for CTL linguistics</label>
-					<label xml:lang="he">Default language for CTL linguistics</label>
-					<label xml:lang="ca">Default language for CTL linguistics</label>
-					<label xml:lang="pt">Default language for CTL linguistics</label>
-					<label xml:lang="ru">Default language for CTL linguistics</label>
-					<label xml:lang="es">Default language for CTL linguistics</label>
-					<label xml:lang="it">Default language for CTL linguistics</label>
-					<label xml:lang="sv">Default language for CTL linguistics</label>
-					<label xml:lang="pl">Default language for CTL linguistics</label>
-					<label xml:lang="pt-BR">Default language for CTL linguistics</label>
-					<label xml:lang="ja">CTL 言語の標準言語</label>
-					<label xml:lang="ko">Default language for CTL linguistics</label>
-					<label xml:lang="tr">Default language for CTL linguistics</label>
-					<label xml:lang="th">Default language for CTL linguistics</label>
-					<label xml:lang="hi-IN">Default language for CTL linguistics</label>
-					<label xml:lang="x-comment">Default language for CTL linguistics</label>
-					<label xml:lang="hu">Default language for CTL linguistics</label>
-					<label xml:lang="sk">Default language for CTL linguistics</label>
-					<label xml:lang="sl">Default language for CTL linguistics</label>
+					<desc>Specifies the default document CTL language.</desc>
+					<label>Default language for CTL linguistics</label>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -332,95 +116,14 @@
 				<!-- UIHints: Tools - Options - General - Language -->
 				<info>
 					<author>TL</author>
-					<desc xml:lang="en-US">Determines if the Old German spelling should be used (true) or not (false).</desc>
-						<desc xml:lang="el">Determines if the Old German spelling should be used (true) or not (false).</desc>
-						<desc xml:lang="nl">Determines if the Old German spelling should be used (true) or not (false).</desc>
-						<desc xml:lang="fr">Determines if the Old German spelling should be used (true) or not (false).</desc>
-						<desc xml:lang="fi">Determines if the Old German spelling should be used (true) or not (false).</desc>
-						<desc xml:lang="cs">Determines if the Old German spelling should be used (true) or not (false).</desc>
-						<desc xml:lang="da">Determines if the Old German spelling should be used (true) or not (false).</desc>
-						<desc xml:lang="zh-CN">确定是 (true) 否 (false) 使用旧式德语拼写。</desc>
-						<desc xml:lang="zh-TW">Determines if the Old German spelling should be used (true) or not (false).</desc>
-						<desc xml:lang="ar">Determines if the Old German spelling should be used (true) or not (false).</desc>
-						<desc xml:lang="he">Determines if the Old German spelling should be used (true) or not (false).</desc>
-						<desc xml:lang="ca">Determines if the Old German spelling should be used (true) or not (false).</desc>
-						<desc xml:lang="pt">Determines if the Old German spelling should be used (true) or not (false).</desc>
-						<desc xml:lang="ru">Determines if the Old German spelling should be used (true) or not (false).</desc>
-						<desc xml:lang="es">Determines if the Old German spelling should be used (true) or not (false).</desc>
-						<desc xml:lang="it">Determines if the Old German spelling should be used (true) or not (false).</desc>
-						<desc xml:lang="sv">Determines if the Old German spelling should be used (true) or not (false).</desc>
-						<desc xml:lang="pl">Determines if the Old German spelling should be used (true) or not (false).</desc>
-						<desc xml:lang="pt-BR">Determines if the Old German spelling should be used (true) or not (false).</desc>
-						<desc xml:lang="ja">旧ドイツ語正書法を使用するかどうかを指定します (使用する場合は true、そうでない場合は false)。</desc>
-						<desc xml:lang="ko">Determines if the Old German spelling should be used (true) or not (false).</desc>
-						<desc xml:lang="tr">Determines if the Old German spelling should be used (true) or not (false).</desc>
-						<desc xml:lang="th">Determines if the Old German spelling should be used (true) or not (false).</desc>
-						<desc xml:lang="hi-IN">Determines if the Old German spelling should be used (true) or not (false).</desc>
-						<desc xml:lang="x-comment">Determines if the Old German spelling should be used (true) or not (false).</desc>
-						<desc xml:lang="hu">Determines if the Old German spelling should be used (true) or not (false).</desc>
-						<desc xml:lang="sk">Determines if the Old German spelling should be used (true) or not (false).</desc>
-						<desc xml:lang="sl">Determines if the Old German spelling should be used (true) or not (false).</desc>
-					<label xml:lang="en-US">Old German spelling</label>
-					<label xml:lang="el">Old German spelling</label>
-					<label xml:lang="nl">Oudduitse spelling</label>
-					<label xml:lang="fr">Old German spelling</label>
-					<label xml:lang="fi">Old German spelling</label>
-					<label xml:lang="cs">Old German spelling</label>
-					<label xml:lang="da">Old German spelling</label>
-					<label xml:lang="zh-CN">旧式德语拼写检查</label>
-					<label xml:lang="zh-TW">Old German spelling</label>
-					<label xml:lang="ar">Old German spelling</label>
-					<label xml:lang="he">Old German spelling</label>
-					<label xml:lang="ca">Old German spelling</label>
-					<label xml:lang="pt">Old German spelling</label>
-					<label xml:lang="ru">Old German spelling</label>
-					<label xml:lang="es">Old German spelling</label>
-					<label xml:lang="it">Old German spelling</label>
-					<label xml:lang="sv">Old German spelling</label>
-					<label xml:lang="pl">Old German spelling</label>
-					<label xml:lang="pt-BR">Old German spelling</label>
-					<label xml:lang="ja">旧ドイツ語正書法</label>
-					<label xml:lang="ko">Old German spelling</label>
-					<label xml:lang="tr">Old German spelling</label>
-					<label xml:lang="th">Old German spelling</label>
-					<label xml:lang="hi-IN">Old German spelling</label>
-					<label xml:lang="x-comment">Old German spelling</label>
-					<label xml:lang="hu">Old German spelling</label>
-					<label xml:lang="sk">Old German spelling</label>
-					<label xml:lang="sl">Old German spelling</label>
+					<desc>Determines if the Old German spelling should be used (true) or not (false).</desc>
+					<label>Old German spelling</label>
 				</info>
 				<value>false</value>
 			</prop>
 			<group oor:name="DictionaryList">
 				<info>
-					<desc xml:lang="en-US">Defines which personal dictionaries are used.</desc>
-					<desc xml:lang="el">Defines which personal dictionaries are used.</desc>
-					<desc xml:lang="nl">Defines which personal dictionaries are used.</desc>
-					<desc xml:lang="fr">Defines which personal dictionaries are used.</desc>
-					<desc xml:lang="fi">Defines which personal dictionaries are used.</desc>
-					<desc xml:lang="cs">Defines which personal dictionaries are used.</desc>
-					<desc xml:lang="da">Defines which personal dictionaries are used.</desc>
-					<desc xml:lang="zh-CN">定义使用哪个个人字典。</desc>
-					<desc xml:lang="zh-TW">Defines which personal dictionaries are used.</desc>
-					<desc xml:lang="ar">Defines which personal dictionaries are used.</desc>
-					<desc xml:lang="he">Defines which personal dictionaries are used.</desc>
-					<desc xml:lang="ca">Defines which personal dictionaries are used.</desc>
-					<desc xml:lang="pt">Defines which personal dictionaries are used.</desc>
-					<desc xml:lang="ru">Defines which personal dictionaries are used.</desc>
-					<desc xml:lang="es">Defines which personal dictionaries are used.</desc>
-					<desc xml:lang="it">Defines which personal dictionaries are used.</desc>
-					<desc xml:lang="sv">Defines which personal dictionaries are used.</desc>
-					<desc xml:lang="pl">Defines which personal dictionaries are used.</desc>
-					<desc xml:lang="pt-BR">Defines which personal dictionaries are used.</desc>
-					<desc xml:lang="ja">使用する個人用辞書を定義します。</desc>
-					<desc xml:lang="ko">Defines which personal dictionaries are used.</desc>
-					<desc xml:lang="tr">Defines which personal dictionaries are used.</desc>
-					<desc xml:lang="th">Defines which personal dictionaries are used.</desc>
-					<desc xml:lang="hi-IN">Defines which personal dictionaries are used.</desc>
-					<desc xml:lang="x-comment">Defines which personal dictionaries are used.</desc>
-					<desc xml:lang="hu">Defines which personal dictionaries are used.</desc>
-					<desc xml:lang="sk">Defines which personal dictionaries are used.</desc>
-					<desc xml:lang="sl">Defines which personal dictionaries are used.</desc>
+					<desc>Defines which personal dictionaries are used.</desc>
 				</info>
 				<prop oor:name="ActiveDictionaries" oor:type="oor:string-list">
 					<!-- OldPath: Active-Dictionaries -->
@@ -428,62 +131,8 @@
 					<!-- UIHints: Tools - Options - General - Language -->
 					<info>
 						<author>TL</author>
-						<desc xml:lang="en-US">Specifies the custom dictionaries to be used. The Ignore list (IgnoreAllList (All)) is administered in the RAM only for the current spellcheck.</desc>
-							<desc xml:lang="el">Specifies the custom dictionaries to be used. The Ignore list (IgnoreAllList (All)) is administered in the RAM only for the current spellcheck.</desc>
-							<desc xml:lang="nl">Specifies the custom dictionaries to be used. The Ignore list (IgnoreAllList (All)) is administered in the RAM only for the current spellcheck.</desc>
-							<desc xml:lang="fr">Specifies the custom dictionaries to be used. The Ignore list (IgnoreAllList (All)) is administered in the RAM only for the current spellcheck.</desc>
-							<desc xml:lang="fi">Specifies the custom dictionaries to be used. The Ignore list (IgnoreAllList (All)) is administered in the RAM only for the current spellcheck.</desc>
-							<desc xml:lang="cs">Specifies the custom dictionaries to be used. The Ignore list (IgnoreAllList (All)) is administered in the RAM only for the current spellcheck.</desc>
-							<desc xml:lang="da">Specifies the custom dictionaries to be used. The Ignore list (IgnoreAllList (All)) is administered in the RAM only for the current spellcheck.</desc>
-							<desc xml:lang="zh-CN">指定要使用的自定字典。“忽略”列单 (IgnoreAllList (All)) 在 RAM中管理，仅用于当前的拼写检查。</desc>
-							<desc xml:lang="zh-TW">Specifies the custom dictionaries to be used. The Ignore list (IgnoreAllList (All)) is administered in the RAM only for the current spellcheck.</desc>
-							<desc xml:lang="ar">Specifies the custom dictionaries to be used. The Ignore list (IgnoreAllList (All)) is administered in the RAM only for the current spellcheck.</desc>
-							<desc xml:lang="he">Specifies the custom dictionaries to be used. The Ignore list (IgnoreAllList (All)) is administered in the RAM only for the current spellcheck.</desc>
-							<desc xml:lang="ca">Specifies the custom dictionaries to be used. The Ignore list (IgnoreAllList (All)) is administered in the RAM only for the current spellcheck.</desc>
-							<desc xml:lang="pt">Specifies the custom dictionaries to be used. The Ignore list (IgnoreAllList (All)) is administered in the RAM only for the current spellcheck.</desc>
-							<desc xml:lang="ru">Specifies the custom dictionaries to be used. The Ignore list (IgnoreAllList (All)) is administered in the RAM only for the current spellcheck.</desc>
-							<desc xml:lang="es">Specifies the custom dictionaries to be used. The Ignore list (IgnoreAllList (All)) is administered in the RAM only for the current spellcheck.</desc>
-							<desc xml:lang="it">Specifies the custom dictionaries to be used. The Ignore list (IgnoreAllList (All)) is administered in the RAM only for the current spellcheck.</desc>
-							<desc xml:lang="sv">Specifies the custom dictionaries to be used. The Ignore list (IgnoreAllList (All)) is administered in the RAM only for the current spellcheck.</desc>
-							<desc xml:lang="pl">Specifies the custom dictionaries to be used. The Ignore list (IgnoreAllList (All)) is administered in the RAM only for the current spellcheck.</desc>
-							<desc xml:lang="pt-BR">Specifies the custom dictionaries to be used. The Ignore list (IgnoreAllList (All)) is administered in the RAM only for the current spellcheck.</desc>
-							<desc xml:lang="ja">使用するユーザー定義辞書を指定します。無視リスト (IgnoreAllList (All)) は、RAM 内で管理され、現在のスペルチェックに対してのみ適用されます。</desc>
-							<desc xml:lang="ko">Specifies the custom dictionaries to be used. The Ignore list (IgnoreAllList (All)) is administered in the RAM only for the current spellcheck.</desc>
-							<desc xml:lang="tr">Specifies the custom dictionaries to be used. The Ignore list (IgnoreAllList (All)) is administered in the RAM only for the current spellcheck.</desc>
-							<desc xml:lang="th">Specifies the custom dictionaries to be used. The Ignore list (IgnoreAllList (All)) is administered in the RAM only for the current spellcheck.</desc>
-							<desc xml:lang="hi-IN">Specifies the custom dictionaries to be used. The Ignore list (IgnoreAllList (All)) is administered in the RAM only for the current spellcheck.</desc>
-							<desc xml:lang="x-comment">Specifies the custom dictionaries to be used. The Ignore list (IgnoreAllList (All)) is administered in the RAM only for the current spellcheck.</desc>
-							<desc xml:lang="hu">Specifies the custom dictionaries to be used. The Ignore list (IgnoreAllList (All)) is administered in the RAM only for the current spellcheck.</desc>
-							<desc xml:lang="sk">Specifies the custom dictionaries to be used. The Ignore list (IgnoreAllList (All)) is administered in the RAM only for the current spellcheck.</desc>
-							<desc xml:lang="sl">Specifies the custom dictionaries to be used. The Ignore list (IgnoreAllList (All)) is administered in the RAM only for the current spellcheck.</desc>
-						<label xml:lang="en-US">Custom dictionaries</label>
-						<label xml:lang="el">Λεξικά χρήστη</label>
-						<label xml:lang="nl">Gebruikerswoordenboek</label>
-						<label xml:lang="fr">Dictionnaires de l&apos;utilisateur</label>
-						<label xml:lang="fi">Mukautetut sanakirjat</label>
-						<label xml:lang="cs">Custom dictionaries</label>
-						<label xml:lang="da">Brugerordbøger</label>
-						<label xml:lang="zh-CN">使用者字典</label>
-						<label xml:lang="zh-TW">自訂詞典</label>
-						<label xml:lang="ar">قواميس المستخدم</label>
-						<label xml:lang="he">Custom dictionaries</label>
-						<label xml:lang="ca">Custom dictionaries</label>
-						<label xml:lang="pt">Dicionário do utilizador</label>
-						<label xml:lang="ru">Словари пользователя</label>
-						<label xml:lang="es">Diccionarios de usuario</label>
-						<label xml:lang="it">Dizionari utente</label>
-						<label xml:lang="sv">Användarordlistor</label>
-						<label xml:lang="pl">Custom dictionaries</label>
-						<label xml:lang="pt-BR">Custom dictionaries</label>
-						<label xml:lang="ja">ユーザー定義辞書</label>
-						<label xml:lang="ko">사용자정의 사전</label>
-						<label xml:lang="tr">Kullanıcı sözlükleri</label>
-						<label xml:lang="th">Custom dictionaries</label>
-						<label xml:lang="hi-IN">Custom dictionaries</label>
-						<label xml:lang="x-comment">Custom dictionaries</label>
-						<label xml:lang="hu">Custom dictionaries</label>
-						<label xml:lang="sk">Custom dictionaries</label>
-						<label xml:lang="sl">Custom dictionaries</label>
+						<desc>Specifies the custom dictionaries to be used. The Ignore list (IgnoreAllList (All)) is administered in the RAM only for the current spellcheck.</desc>
+						<label>Custom dictionaries</label>
 					</info>
 					<value oor:separator=";">IgnoreAllList;soffice.dic;standard.dic;sun.dic</value>
 				</prop>
@@ -491,34 +140,7 @@
 					<!-- OldLocation: NEW -->
 					<info>
 						<author>TL</author>
-						<desc xml:lang="en-US">Determines if personal dictionaries should be used for spell checking and hyphenation.</desc>
-						<desc xml:lang="el">Determines if personal dictionaries should be used for spell checking and hyphenation.</desc>
-						<desc xml:lang="nl">Determines if personal dictionaries should be used for spell checking and hyphenation.</desc>
-						<desc xml:lang="fr">Determines if personal dictionaries should be used for spell checking and hyphenation.</desc>
-						<desc xml:lang="fi">Determines if personal dictionaries should be used for spell checking and hyphenation.</desc>
-						<desc xml:lang="cs">Determines if personal dictionaries should be used for spell checking and hyphenation.</desc>
-						<desc xml:lang="da">Determines if personal dictionaries should be used for spell checking and hyphenation.</desc>
-						<desc xml:lang="zh-CN">确定是否在拼写检查和连字符中采用个人字典。</desc>
-						<desc xml:lang="zh-TW">Determines if personal dictionaries should be used for spell checking and hyphenation.</desc>
-						<desc xml:lang="ar">Determines if personal dictionaries should be used for spell checking and hyphenation.</desc>
-						<desc xml:lang="he">Determines if personal dictionaries should be used for spell checking and hyphenation.</desc>
-						<desc xml:lang="ca">Determines if personal dictionaries should be used for spell checking and hyphenation.</desc>
-						<desc xml:lang="pt">Determines if personal dictionaries should be used for spell checking and hyphenation.</desc>
-						<desc xml:lang="ru">Determines if personal dictionaries should be used for spell checking and hyphenation.</desc>
-						<desc xml:lang="es">Determines if personal dictionaries should be used for spell checking and hyphenation.</desc>
-						<desc xml:lang="it">Determines if personal dictionaries should be used for spell checking and hyphenation.</desc>
-						<desc xml:lang="sv">Determines if personal dictionaries should be used for spell checking and hyphenation.</desc>
-						<desc xml:lang="pl">Determines if personal dictionaries should be used for spell checking and hyphenation.</desc>
-						<desc xml:lang="pt-BR">Determines if personal dictionaries should be used for spell checking and hyphenation.</desc>
-						<desc xml:lang="ja">スペルチェックおよびハイフネーションに対して、個人用辞書を使用するかどうかを指定します。</desc>
-						<desc xml:lang="ko">Determines if personal dictionaries should be used for spell checking and hyphenation.</desc>
-						<desc xml:lang="tr">Determines if personal dictionaries should be used for spell checking and hyphenation.</desc>
-						<desc xml:lang="th">Determines if personal dictionaries should be used for spell checking and hyphenation.</desc>
-						<desc xml:lang="hi-IN">Determines if personal dictionaries should be used for spell checking and hyphenation.</desc>
-						<desc xml:lang="x-comment">Determines if personal dictionaries should be used for spell checking and hyphenation.</desc>
-						<desc xml:lang="hu">Determines if personal dictionaries should be used for spell checking and hyphenation.</desc>
-						<desc xml:lang="sk">Determines if personal dictionaries should be used for spell checking and hyphenation.</desc>
-						<desc xml:lang="sl">Determines if personal dictionaries should be used for spell checking and hyphenation.</desc>
+						<desc>Determines if personal dictionaries should be used for spell checking and hyphenation.</desc>
 					</info>
 					<value>true</value>
 				</prop>
@@ -526,79 +148,52 @@
 		</group>
         <group oor:name="TextConversion">
             <info>
-                    <desc xml:lang="en-US">Defines settings used by the text conversion.</desc>
+                    <desc>Defines settings used by the text conversion.</desc>
             </info>
             <prop oor:name="ActiveConversionDictionaries" oor:type="oor:string-list">
                     <!-- OldLocation: NEW -->
                     <info>
-                            <desc xml:lang="en-US">Specifies the user dictionaries to be used. </desc>
-                            <label xml:lang="en-US">Active text conversion user dictionaries</label>
+                            <desc>Specifies the user dictionaries to be used. </desc>
+                            <label>Active text conversion user dictionaries</label>
                     </info>
                     <value/>
             </prop>
             <prop oor:name="IsIgnorePostPositionalWord" oor:type="xs:boolean">
                     <!-- OldLocation: NEW -->
                     <info>
-                            <desc xml:lang="en-US">Specifies if post positionals should be ignored when looking for Korean entries.</desc>
-                            <label xml:lang="en-US">Ignore post positional word</label>
+                            <desc>Specifies if post positionals should be ignored when looking for Korean entries.</desc>
+                            <label>Ignore post positional word</label>
                     </info>
                     <value>true</value>
             </prop>
             <prop oor:name="IsAutoCloseDialog" oor:type="xs:boolean">
                     <!-- OldLocation: NEW -->
                     <info>
-                            <desc xml:lang="en-US">Specifies if the dialog should be closed automatically after the conversion of the current text portion is processed.</desc>
-                            <label xml:lang="en-US">Auto close dialog</label>
+                            <desc>Specifies if the dialog should be closed automatically after the conversion of the current text portion is processed.</desc>
+                            <label>Auto close dialog</label>
                     </info>
                     <value>false</value>
             </prop>
             <prop oor:name="IsShowEntriesRecentlyUsedFirst" oor:type="xs:boolean">
                     <!-- OldLocation: NEW -->
                     <info>
-                            <desc xml:lang="en-US">Specifies if entries that were recently used as replacements should be listed first.</desc>
-                            <label xml:lang="en-US">Show entries recently used first</label>
+                            <desc>Specifies if entries that were recently used as replacements should be listed first.</desc>
+                            <label>Show entries recently used first</label>
                     </info>
                     <value>false</value>
             </prop>
             <prop oor:name="IsAutoReplaceUniqueEntries" oor:type="xs:boolean">
                     <!-- OldLocation: NEW -->
                     <info>
-                            <desc xml:lang="en-US">Specifies if entries for which have only one possible replacement should be replaced automatically.</desc>
-                            <label xml:lang="en-US">Auto replace unique entries</label>
+                            <desc>Specifies if entries for which have only one possible replacement should be replaced automatically.</desc>
+                            <label>Auto replace unique entries</label>
                     </info>
                     <value>false</value>
             </prop>
         </group>
 		<group oor:name="SpellChecking">
 			<info>
-				<desc xml:lang="en-US">Contains spell checking-relevant settings.</desc>
-				<desc xml:lang="el">Contains spell checking-relevant settings.</desc>
-				<desc xml:lang="nl">Contains spell checking-relevant settings.</desc>
-				<desc xml:lang="fr">Contains spell checking-relevant settings.</desc>
-				<desc xml:lang="fi">Contains spell checking-relevant settings.</desc>
-				<desc xml:lang="cs">Contains spell checking-relevant settings.</desc>
-				<desc xml:lang="da">Contains spell checking-relevant settings.</desc>
-				<desc xml:lang="zh-CN">含有与拼写检查相关的设定。</desc>
-				<desc xml:lang="zh-TW">Contains spell checking-relevant settings.</desc>
-				<desc xml:lang="ar">Contains spell checking-relevant settings.</desc>
-				<desc xml:lang="he">Contains spell checking-relevant settings.</desc>
-				<desc xml:lang="ca">Contains spell checking-relevant settings.</desc>
-				<desc xml:lang="pt">Contains spell checking-relevant settings.</desc>
-				<desc xml:lang="ru">Contains spell checking-relevant settings.</desc>
-				<desc xml:lang="es">Contains spell checking-relevant settings.</desc>
-				<desc xml:lang="it">Contains spell checking-relevant settings.</desc>
-				<desc xml:lang="sv">Contains spell checking-relevant settings.</desc>
-				<desc xml:lang="pl">Contains spell checking-relevant settings.</desc>
-				<desc xml:lang="pt-BR">Contains spell checking-relevant settings.</desc>
-				<desc xml:lang="ja">スペルチェックに関連する設定が含まれます。</desc>
-				<desc xml:lang="ko">Contains spell checking-relevant settings.</desc>
-				<desc xml:lang="tr">Contains spell checking-relevant settings.</desc>
-				<desc xml:lang="th">Contains spell checking-relevant settings.</desc>
-				<desc xml:lang="hi-IN">Contains spell checking-relevant settings.</desc>
-				<desc xml:lang="x-comment">Contains spell checking-relevant settings.</desc>
-				<desc xml:lang="hu">Contains spell checking-relevant settings.</desc>
-				<desc xml:lang="sk">Contains spell checking-relevant settings.</desc>
-				<desc xml:lang="sl">Contains spell checking-relevant settings.</desc>
+				<desc>Contains spell checking-relevant settings.</desc>
 			</info>
 			<prop oor:name="IsSpellUpperCase" oor:type="xs:boolean">
 				<!-- OldPath: MiscOptions / SpellOptions -->
@@ -606,62 +201,8 @@
 				<!-- UIHints: Tools - Options - General - Language -->
 				<info>
 					<author>TL</author>
-					<desc xml:lang="en-US">Specifies whether to include uppercase words in the spellcheck process.</desc>
-						<desc xml:lang="el">Specifies whether to include uppercase words in the spellcheck process.</desc>
-						<desc xml:lang="nl">Specifies whether to include uppercase words in the spellcheck process.</desc>
-						<desc xml:lang="fr">Specifies whether to include uppercase words in the spellcheck process.</desc>
-						<desc xml:lang="fi">Specifies whether to include uppercase words in the spellcheck process.</desc>
-						<desc xml:lang="cs">Specifies whether to include uppercase words in the spellcheck process.</desc>
-						<desc xml:lang="da">Specifies whether to include uppercase words in the spellcheck process.</desc>
-						<desc xml:lang="zh-CN">指定是否在拼写检查过程中包括全部大写的字。</desc>
-						<desc xml:lang="zh-TW">Specifies whether to include uppercase words in the spellcheck process.</desc>
-						<desc xml:lang="ar">Specifies whether to include uppercase words in the spellcheck process.</desc>
-						<desc xml:lang="he">Specifies whether to include uppercase words in the spellcheck process.</desc>
-						<desc xml:lang="ca">Specifies whether to include uppercase words in the spellcheck process.</desc>
-						<desc xml:lang="pt">Specifies whether to include uppercase words in the spellcheck process.</desc>
-						<desc xml:lang="ru">Specifies whether to include uppercase words in the spellcheck process.</desc>
-						<desc xml:lang="es">Specifies whether to include uppercase words in the spellcheck process.</desc>
-						<desc xml:lang="it">Specifies whether to include uppercase words in the spellcheck process.</desc>
-						<desc xml:lang="sv">Specifies whether to include uppercase words in the spellcheck process.</desc>
-						<desc xml:lang="pl">Specifies whether to include uppercase words in the spellcheck process.</desc>
-						<desc xml:lang="pt-BR">Specifies whether to include uppercase words in the spellcheck process.</desc>
-						<desc xml:lang="ja">スペルチェックプロセスに大文字の単語を含めるかどうかを指定します。</desc>
-						<desc xml:lang="ko">Specifies whether to include uppercase words in the spellcheck process.</desc>
-						<desc xml:lang="tr">Specifies whether to include uppercase words in the spellcheck process.</desc>
-						<desc xml:lang="th">Specifies whether to include uppercase words in the spellcheck process.</desc>
-						<desc xml:lang="hi-IN">Specifies whether to include uppercase words in the spellcheck process.</desc>
-						<desc xml:lang="x-comment">Specifies whether to include uppercase words in the spellcheck process.</desc>
-						<desc xml:lang="hu">Specifies whether to include uppercase words in the spellcheck process.</desc>
-						<desc xml:lang="sk">Specifies whether to include uppercase words in the spellcheck process.</desc>
-						<desc xml:lang="sl">Specifies whether to include uppercase words in the spellcheck process.</desc>
-					<label xml:lang="en-US">Spell uppercase words</label>
-					<label xml:lang="el">Spell uppercase words</label>
-					<label xml:lang="nl">Spelling controleren van in hoofdletters geschreven woorden</label>
-					<label xml:lang="fr">Spell uppercase words</label>
-					<label xml:lang="fi">Spell uppercase words</label>
-					<label xml:lang="cs">Spell uppercase words</label>
-					<label xml:lang="da">Spell uppercase words</label>
-					<label xml:lang="zh-CN">检查大写字母</label>
-					<label xml:lang="zh-TW">Spell uppercase words</label>
-					<label xml:lang="ar">Spell uppercase words</label>
-					<label xml:lang="he">Spell uppercase words</label>
-					<label xml:lang="ca">Spell uppercase words</label>
-					<label xml:lang="pt">Spell uppercase words</label>
-					<label xml:lang="ru">Spell uppercase words</label>
-					<label xml:lang="es">Spell uppercase words</label>
-					<label xml:lang="it">Spell uppercase words</label>
-					<label xml:lang="sv">Spell uppercase words</label>
-					<label xml:lang="pl">Spell uppercase words</label>
-					<label xml:lang="pt-BR">Spell uppercase words</label>
-					<label xml:lang="ja">大文字の単語をスペルチェック</label>
-					<label xml:lang="ko">Spell uppercase words</label>
-					<label xml:lang="tr">Spell uppercase words</label>
-					<label xml:lang="th">Spell uppercase words</label>
-					<label xml:lang="hi-IN">Spell uppercase words</label>
-					<label xml:lang="x-comment">Spell uppercase words</label>
-					<label xml:lang="hu">Spell uppercase words</label>
-					<label xml:lang="sk">Spell uppercase words</label>
-					<label xml:lang="sl">Spell uppercase words</label>
+					<desc>Specifies whether to include uppercase words in the spellcheck process.</desc>
+					<label>Spell uppercase words</label>
 				</info>
 				<value>false</value>
 			</prop>
@@ -671,62 +212,8 @@
 				<!-- UIHints: Tools - Options - General - Language -->
 				<info>
 					<author>TL</author>
-					<desc xml:lang="en-US">Specifies whether to check the spelling of words which contain numbers as well as letters.</desc>
-						<desc xml:lang="el">Specifies whether to check the spelling of words which contain numbers as well as letters.</desc>
-						<desc xml:lang="nl">Specifies whether to check the spelling of words which contain numbers as well as letters.</desc>
-						<desc xml:lang="fr">Specifies whether to check the spelling of words which contain numbers as well as letters.</desc>
-						<desc xml:lang="fi">Specifies whether to check the spelling of words which contain numbers as well as letters.</desc>
-						<desc xml:lang="cs">Specifies whether to check the spelling of words which contain numbers as well as letters.</desc>
-						<desc xml:lang="da">Specifies whether to check the spelling of words which contain numbers as well as letters.</desc>
-						<desc xml:lang="zh-CN">指定是否检查含有数字和字母的字。</desc>
-						<desc xml:lang="zh-TW">Specifies whether to check the spelling of words which contain numbers as well as letters.</desc>
-						<desc xml:lang="ar">Specifies whether to check the spelling of words which contain numbers as well as letters.</desc>
-						<desc xml:lang="he">Specifies whether to check the spelling of words which contain numbers as well as letters.</desc>
-						<desc xml:lang="ca">Specifies whether to check the spelling of words which contain numbers as well as letters.</desc>
-						<desc xml:lang="pt">Specifies whether to check the spelling of words which contain numbers as well as letters.</desc>
-						<desc xml:lang="ru">Specifies whether to check the spelling of words which contain numbers as well as letters.</desc>
-						<desc xml:lang="es">Specifies whether to check the spelling of words which contain numbers as well as letters.</desc>
-						<desc xml:lang="it">Specifies whether to check the spelling of words which contain numbers as well as letters.</desc>
-						<desc xml:lang="sv">Specifies whether to check the spelling of words which contain numbers as well as letters.</desc>
-						<desc xml:lang="pl">Specifies whether to check the spelling of words which contain numbers as well as letters.</desc>
-						<desc xml:lang="pt-BR">Specifies whether to check the spelling of words which contain numbers as well as letters.</desc>
-						<desc xml:lang="ja">文字だけでなく数字も含む単語のスペルをチェックするかどうかを指定します。</desc>
-						<desc xml:lang="ko">Specifies whether to check the spelling of words which contain numbers as well as letters.</desc>
-						<desc xml:lang="tr">Specifies whether to check the spelling of words which contain numbers as well as letters.</desc>
-						<desc xml:lang="th">Specifies whether to check the spelling of words which contain numbers as well as letters.</desc>
-						<desc xml:lang="hi-IN">Specifies whether to check the spelling of words which contain numbers as well as letters.</desc>
-						<desc xml:lang="x-comment">Specifies whether to check the spelling of words which contain numbers as well as letters.</desc>
-						<desc xml:lang="hu">Specifies whether to check the spelling of words which contain numbers as well as letters.</desc>
-						<desc xml:lang="sk">Specifies whether to check the spelling of words which contain numbers as well as letters.</desc>
-						<desc xml:lang="sl">Specifies whether to check the spelling of words which contain numbers as well as letters.</desc>
-					<label xml:lang="en-US">Spell words with digits</label>
-					<label xml:lang="el">Spell words with digits</label>
-					<label xml:lang="nl">Spelling controleren van woorden met cijfers</label>
-					<label xml:lang="fr">Spell words with digits</label>
-					<label xml:lang="fi">Spell words with digits</label>
-					<label xml:lang="cs">Spell words with digits</label>
-					<label xml:lang="da">Spell words with digits</label>
-					<label xml:lang="zh-CN">检查带编号的字</label>
-					<label xml:lang="zh-TW">Spell words with digits</label>
-					<label xml:lang="ar">Spell words with digits</label>
-					<label xml:lang="he">Spell words with digits</label>
-					<label xml:lang="ca">Spell words with digits</label>
-					<label xml:lang="pt">Spell words with digits</label>
-					<label xml:lang="ru">Spell words with digits</label>
-					<label xml:lang="es">Spell words with digits</label>
-					<label xml:lang="it">Spell words with digits</label>
-					<label xml:lang="sv">Spell words with digits</label>
-					<label xml:lang="pl">Spell words with digits</label>
-					<label xml:lang="pt-BR">Spell words with digits</label>
-					<label xml:lang="ja">数字を含む単語のスペルチェック</label>
-					<label xml:lang="ko">Spell words with digits</label>
-					<label xml:lang="tr">Spell words with digits</label>
-					<label xml:lang="th">Spell words with digits</label>
-					<label xml:lang="hi-IN">Spell words with digits</label>
-					<label xml:lang="x-comment">Spell words with digits</label>
-					<label xml:lang="hu">Spell words with digits</label>
-					<label xml:lang="sk">Spell words with digits</label>
-					<label xml:lang="sl">Spell words with digits</label>
+					<desc>Specifies whether to check the spelling of words which contain numbers as well as letters.</desc>
+					<label>Spell words with digits</label>
 				</info>
 				<value>false</value>
 			</prop>
@@ -736,62 +223,8 @@
 				<!-- UIHints: Tools - Options - General - Language -->
 				<info>
 					<author>TL</author>
-					<desc xml:lang="en-US">Checks the correct use of capitalization.</desc>
-						<desc xml:lang="el">Checks the correct use of capitalization.</desc>
-						<desc xml:lang="nl">Controleer correct gebruik van hoofdletters.</desc>
-						<desc xml:lang="fr">Checks the correct use of capitalization.</desc>
-						<desc xml:lang="fi">Checks the correct use of capitalization.</desc>
-						<desc xml:lang="cs">Checks the correct use of capitalization.</desc>
-						<desc xml:lang="da">Checks the correct use of capitalization.</desc>
-						<desc xml:lang="zh-CN">检查是否正确使用了大写。</desc>
-						<desc xml:lang="zh-TW">Checks the correct use of capitalization.</desc>
-						<desc xml:lang="ar">Checks the correct use of capitalization.</desc>
-						<desc xml:lang="he">Checks the correct use of capitalization.</desc>
-						<desc xml:lang="ca">Checks the correct use of capitalization.</desc>
-						<desc xml:lang="pt">Checks the correct use of capitalization.</desc>
-						<desc xml:lang="ru">Checks the correct use of capitalization.</desc>
-						<desc xml:lang="es">Checks the correct use of capitalization.</desc>
-						<desc xml:lang="it">Checks the correct use of capitalization.</desc>
-						<desc xml:lang="sv">Checks the correct use of capitalization.</desc>
-						<desc xml:lang="pl">Checks the correct use of capitalization.</desc>
-						<desc xml:lang="pt-BR">Checks the correct use of capitalization.</desc>
-						<desc xml:lang="ja">大文字と小文字の使用が正しいかどうかをチェックします。</desc>
-						<desc xml:lang="ko">Checks the correct use of capitalization.</desc>
-						<desc xml:lang="tr">Checks the correct use of capitalization.</desc>
-						<desc xml:lang="th">Checks the correct use of capitalization.</desc>
-						<desc xml:lang="hi-IN">Checks the correct use of capitalization.</desc>
-						<desc xml:lang="x-comment">Checks the correct use of capitalization.</desc>
-						<desc xml:lang="hu">Checks the correct use of capitalization.</desc>
-						<desc xml:lang="sk">Checks the correct use of capitalization.</desc>
-						<desc xml:lang="sl">Checks the correct use of capitalization.</desc>
-					<label xml:lang="en-US">Check capitalization</label>
-					<label xml:lang="el">Έλεγχος κεφαλαία/πεζά</label>
-					<label xml:lang="nl">Hoofd-/kleine letters controleren</label>
-					<label xml:lang="fr">Vérifier la casse</label>
-					<label xml:lang="fi">Tarkista isot kirjaimet</label>
-					<label xml:lang="cs">Zkontrolovat velká písmena</label>
-					<label xml:lang="da">Kontroller store og små bogstaver</label>
-					<label xml:lang="zh-CN">检查字母大小写</label>
-					<label xml:lang="zh-TW">檢查字母大小寫</label>
-					<label xml:lang="ar">تدقيق الكتابة بأحرف كبيرة أو صغيرة</label>
-					<label xml:lang="he">‮בדיקת שימוש באותיות גדולות‬</label>
-					<label xml:lang="ca">Revisa majúscules</label>
-					<label xml:lang="pt">Verificar maiúsculas/minúsculas</label>
-					<label xml:lang="ru">Проверять регистр</label>
-					<label xml:lang="es">Revisar mayúsculas</label>
-					<label xml:lang="it">Maiuscole e minuscole</label>
-					<label xml:lang="sv">Kontrollera stor och liten bokstav</label>
-					<label xml:lang="pl">Sprawdź pisownię małą i wielką literą</label>
-					<label xml:lang="pt-BR">Verificar palavras em Maiúsculas</label>
-					<label xml:lang="ja">大文字と小文字のスペルチェック</label>
-					<label xml:lang="ko">대문자/소문자 검사</label>
-					<label xml:lang="tr">İlk harfi büyük olanları denetle</label>
-					<label xml:lang="th">ตรวจสอบตัวพิมพ์ใหญ่</label>
-					<label xml:lang="hi-IN">केपिटलैज़ेशन् की जाँच</label>
-					<label xml:lang="x-comment">Check capitalization</label>
-					<label xml:lang="sk">Kontrolovať veľké písmená</label>
-					<label xml:lang="hu">Check capitalization</label>
-					<label xml:lang="sl">Check capitalization</label>
+					<desc>Checks the correct use of capitalization.</desc>
+					<label>Check capitalization</label>
 				</info>
 				<value>true</value>
 			</prop>
@@ -801,62 +234,8 @@
 				<!-- UIHints: Tools - Options - General - Language -->
 				<info>
 					<author>TL</author>
-					<desc xml:lang="en-US">Hides the wavy lines that underline possible spelling errors when AutoSpellcheck is active.</desc>
-						<desc xml:lang="el">Hides the wavy lines that underline possible spelling errors when AutoSpellcheck is active.</desc>
-						<desc xml:lang="nl">Verberg de golflijntjes die mogelijke spelfouten markeren wanneer AutoSpellingcontrole actief is.</desc>
-						<desc xml:lang="fr">Hides the wavy lines that underline possible spelling errors when AutoSpellcheck is active.</desc>
-						<desc xml:lang="fi">Hides the wavy lines that underline possible spelling errors when AutoSpellcheck is active.</desc>
-						<desc xml:lang="cs">Hides the wavy lines that underline possible spelling errors when AutoSpellcheck is active.</desc>
-						<desc xml:lang="da">Hides the wavy lines that underline possible spelling errors when AutoSpellcheck is active.</desc>
-						<desc xml:lang="zh-CN">使用自动拼写检查时，隐入划在可能的拼写错误下的波浪线。</desc>
-						<desc xml:lang="zh-TW">Hides the wavy lines that underline possible spelling errors when AutoSpellcheck is active.</desc>
-						<desc xml:lang="ar">Hides the wavy lines that underline possible spelling errors when AutoSpellcheck is active.</desc>
-						<desc xml:lang="he">Hides the wavy lines that underline possible spelling errors when AutoSpellcheck is active.</desc>
-						<desc xml:lang="ca">Hides the wavy lines that underline possible spelling errors when AutoSpellcheck is active.</desc>
-						<desc xml:lang="pt">Hides the wavy lines that underline possible spelling errors when AutoSpellcheck is active.</desc>
-						<desc xml:lang="ru">Hides the wavy lines that underline possible spelling errors when AutoSpellcheck is active.</desc>
-						<desc xml:lang="es">Hides the wavy lines that underline possible spelling errors when AutoSpellcheck is active.</desc>
-						<desc xml:lang="it">Hides the wavy lines that underline possible spelling errors when AutoSpellcheck is active.</desc>
-						<desc xml:lang="sv">Hides the wavy lines that underline possible spelling errors when AutoSpellcheck is active.</desc>
-						<desc xml:lang="pl">Hides the wavy lines that underline possible spelling errors when AutoSpellcheck is active.</desc>
-						<desc xml:lang="pt-BR">Hides the wavy lines that underline possible spelling errors when AutoSpellcheck is active.</desc>
-						<desc xml:lang="ja">自動スペルチェックをアクティブにした場合に、スペルエラーの可能性がある部分の下に波線を表示しません。</desc>
-						<desc xml:lang="ko">Hides the wavy lines that underline possible spelling errors when AutoSpellcheck is active.</desc>
-						<desc xml:lang="tr">Hides the wavy lines that underline possible spelling errors when AutoSpellcheck is active.</desc>
-						<desc xml:lang="th">Hides the wavy lines that underline possible spelling errors when AutoSpellcheck is active.</desc>
-						<desc xml:lang="hi-IN">Hides the wavy lines that underline possible spelling errors when AutoSpellcheck is active.</desc>
-						<desc xml:lang="x-comment">Hides the wavy lines that underline possible spelling errors when AutoSpellcheck is active.</desc>
-						<desc xml:lang="hu">Hides the wavy lines that underline possible spelling errors when AutoSpellcheck is active.</desc>
-						<desc xml:lang="sk">Hides the wavy lines that underline possible spelling errors when AutoSpellcheck is active.</desc>
-						<desc xml:lang="sl">Hides the wavy lines that underline possible spelling errors when AutoSpellcheck is active.</desc>
-					<label xml:lang="en-US">Hide markings</label>
-					<label xml:lang="el">Hide markings</label>
-					<label xml:lang="nl">Markeringen verbergen</label>
-					<label xml:lang="fr">Hide markings</label>
-					<label xml:lang="fi">Hide markings</label>
-					<label xml:lang="cs">Hide markings</label>
-					<label xml:lang="da">Hide markings</label>
-					<label xml:lang="zh-CN">隐入标记</label>
-					<label xml:lang="zh-TW">Hide markings</label>
-					<label xml:lang="ar">Hide markings</label>
-					<label xml:lang="he">Hide markings</label>
-					<label xml:lang="ca">Hide markings</label>
-					<label xml:lang="pt">Hide markings</label>
-					<label xml:lang="ru">Hide markings</label>
-					<label xml:lang="es">Hide markings</label>
-					<label xml:lang="it">Hide markings</label>
-					<label xml:lang="sv">Hide markings</label>
-					<label xml:lang="pl">Hide markings</label>
-					<label xml:lang="pt-BR">Hide markings</label>
-					<label xml:lang="ja">マーキングを非表示</label>
-					<label xml:lang="ko">Hide markings</label>
-					<label xml:lang="tr">Hide markings</label>
-					<label xml:lang="th">Hide markings</label>
-					<label xml:lang="hi-IN">Hide markings</label>
-					<label xml:lang="x-comment">Hide markings</label>
-					<label xml:lang="hu">Hide markings</label>
-					<label xml:lang="sk">Hide markings</label>
-					<label xml:lang="sl">Hide markings</label>
+					<desc>Hides the wavy lines that underline possible spelling errors when AutoSpellcheck is active.</desc>
+					<label>Hide markings</label>
 				</info>
 				<value>false</value>
 			</prop>
@@ -866,62 +245,8 @@
 				<!-- UIHints: Tools - Options - General - Language -->
 				<info>
 					<author>TL</author>
-					<desc xml:lang="en-US">Checks spelling automatically.</desc>
-						<desc xml:lang="el">Checks spelling automatically.</desc>
-						<desc xml:lang="nl">Automatisch de spelling controleren.</desc>
-						<desc xml:lang="fr">Checks spelling automatically.</desc>
-						<desc xml:lang="fi">Checks spelling automatically.</desc>
-						<desc xml:lang="cs">Checks spelling automatically.</desc>
-						<desc xml:lang="da">Checks spelling automatically.</desc>
-						<desc xml:lang="zh-CN">自动检查拼写。</desc>
-						<desc xml:lang="zh-TW">Checks spelling automatically.</desc>
-						<desc xml:lang="ar">Checks spelling automatically.</desc>
-						<desc xml:lang="he">Checks spelling automatically.</desc>
-						<desc xml:lang="ca">Checks spelling automatically.</desc>
-						<desc xml:lang="pt">Checks spelling automatically.</desc>
-						<desc xml:lang="ru">Checks spelling automatically.</desc>
-						<desc xml:lang="es">Checks spelling automatically.</desc>
-						<desc xml:lang="it">Checks spelling automatically.</desc>
-						<desc xml:lang="sv">Checks spelling automatically.</desc>
-						<desc xml:lang="pl">Checks spelling automatically.</desc>
-						<desc xml:lang="pt-BR">Checks spelling automatically.</desc>
-						<desc xml:lang="ja">スペルを自動的にチェック</desc>
-						<desc xml:lang="ko">Checks spelling automatically.</desc>
-						<desc xml:lang="tr">Checks spelling automatically.</desc>
-						<desc xml:lang="th">Checks spelling automatically.</desc>
-						<desc xml:lang="hi-IN">Checks spelling automatically.</desc>
-						<desc xml:lang="x-comment">Checks spelling automatically.</desc>
-						<desc xml:lang="hu">Checks spelling automatically.</desc>
-						<desc xml:lang="sk">Checks spelling automatically.</desc>
-						<desc xml:lang="sl">Checks spelling automatically.</desc>
-					<label xml:lang="en-US">Automatic spellchecking</label>
-					<label xml:lang="el">Automatic spellchecking</label>
-					<label xml:lang="nl">Automatische spellingcontrole</label>
-					<label xml:lang="fr">Automatic spellchecking</label>
-					<label xml:lang="fi">Automatic spellchecking</label>
-					<label xml:lang="cs">Automatic spellchecking</label>
-					<label xml:lang="da">Automatic spellchecking</label>
-					<label xml:lang="zh-CN">自动检查</label>
-					<label xml:lang="zh-TW">Automatic spellchecking</label>
-					<label xml:lang="ar">Automatic spellchecking</label>
-					<label xml:lang="he">Automatic spellchecking</label>
-					<label xml:lang="ca">Automatic spellchecking</label>
-					<label xml:lang="pt">Automatic spellchecking</label>
-					<label xml:lang="ru">Automatic spellchecking</label>
-					<label xml:lang="es">Automatic spellchecking</label>
-					<label xml:lang="it">Automatic spellchecking</label>
-					<label xml:lang="sv">Automatic spellchecking</label>
-					<label xml:lang="pl">Automatic spellchecking</label>
-					<label xml:lang="pt-BR">Automatic spellchecking</label>
-					<label xml:lang="ja">自動スペルチェック</label>
-					<label xml:lang="ko">Automatic spellchecking</label>
-					<label xml:lang="tr">Automatic spellchecking</label>
-					<label xml:lang="th">Automatic spellchecking</label>
-					<label xml:lang="hi-IN">Automatic spellchecking</label>
-					<label xml:lang="x-comment">Automatic spellchecking</label>
-					<label xml:lang="hu">Automatic spellchecking</label>
-					<label xml:lang="sk">Automatic spellchecking</label>
-					<label xml:lang="sl">Automatic spellchecking</label>
+					<desc>Checks spelling automatically.</desc>
+					<label>Automatic spellchecking</label>
 				</info>
 				<value>false</value>
 			</prop>
@@ -931,62 +256,8 @@
 				<!-- UIHints: Tools - Options - General - Language -->
 				<info>
 					<author>TL</author>
-					<desc xml:lang="en-US">Allows spellchecking in headers, footers, and frames.</desc>
-						<desc xml:lang="el">Allows spellchecking in headers, footers, and frames.</desc>
-						<desc xml:lang="nl">Staat spellingcontrole van koptekst, voettekst en kaders toe.</desc>
-						<desc xml:lang="fr">Allows spellchecking in headers, footers, and frames.</desc>
-						<desc xml:lang="fi">Allows spellchecking in headers, footers, and frames.</desc>
-						<desc xml:lang="cs">Allows spellchecking in headers, footers, and frames.</desc>
-						<desc xml:lang="da">Allows spellchecking in headers, footers, and frames.</desc>
-						<desc xml:lang="zh-CN">允许在页眉、页脚和框中检查拼写。</desc>
-						<desc xml:lang="zh-TW">Allows spellchecking in headers, footers, and frames.</desc>
-						<desc xml:lang="ar">Allows spellchecking in headers, footers, and frames.</desc>
-						<desc xml:lang="he">Allows spellchecking in headers, footers, and frames.</desc>
-						<desc xml:lang="ca">Allows spellchecking in headers, footers, and frames.</desc>
-						<desc xml:lang="pt">Allows spellchecking in headers, footers, and frames.</desc>
-						<desc xml:lang="ru">Allows spellchecking in headers, footers, and frames.</desc>
-						<desc xml:lang="es">Allows spellchecking in headers, footers, and frames.</desc>
-						<desc xml:lang="it">Allows spellchecking in headers, footers, and frames.</desc>
-						<desc xml:lang="sv">Allows spellchecking in headers, footers, and frames.</desc>
-						<desc xml:lang="pl">Allows spellchecking in headers, footers, and frames.</desc>
-						<desc xml:lang="pt-BR">Allows spellchecking in headers, footers, and frames.</desc>
-						<desc xml:lang="ja">ヘッダ、フッタ、フレーム内のスペルチェックを許可します</desc>
-						<desc xml:lang="ko">Allows spellchecking in headers, footers, and frames.</desc>
-						<desc xml:lang="tr">Allows spellchecking in headers, footers, and frames.</desc>
-						<desc xml:lang="th">Allows spellchecking in headers, footers, and frames.</desc>
-						<desc xml:lang="hi-IN">Allows spellchecking in headers, footers, and frames.</desc>
-						<desc xml:lang="x-comment">Allows spellchecking in headers, footers, and frames.</desc>
-						<desc xml:lang="hu">Allows spellchecking in headers, footers, and frames.</desc>
-						<desc xml:lang="sk">Allows spellchecking in headers, footers, and frames.</desc>
-						<desc xml:lang="sl">Allows spellchecking in headers, footers, and frames.</desc>
-					<label xml:lang="en-US">Check spelljng in special regions</label>
-					<label xml:lang="el">Check spelljng in special regions</label>
-					<label xml:lang="nl">Controleer de spelling in speciale bereiken</label>
-					<label xml:lang="fr">Check spelljng in special regions</label>
-					<label xml:lang="fi">Check spelljng in special regions</label>
-					<label xml:lang="cs">Check spelljng in special regions</label>
-					<label xml:lang="da">Check spelljng in special regions</label>
-					<label xml:lang="zh-CN">检查特殊区域</label>
-					<label xml:lang="zh-TW">Check spelljng in special regions</label>
-					<label xml:lang="ar">Check spelljng in special regions</label>
-					<label xml:lang="he">Check spelljng in special regions</label>
-					<label xml:lang="ca">Check spelljng in special regions</label>
-					<label xml:lang="pt">Check spelljng in special regions</label>
-					<label xml:lang="ru">Check spelljng in special regions</label>
-					<label xml:lang="es">Check spelljng in special regions</label>
-					<label xml:lang="it">Check spelljng in special regions</label>
-					<label xml:lang="sv">Check spelljng in special regions</label>
-					<label xml:lang="pl">Check spelljng in special regions</label>
-					<label xml:lang="pt-BR">Check spelljng in special regions</label>
-					<label xml:lang="ja">特別範囲内のスペルチェック</label>
-					<label xml:lang="ko">Check spelljng in special regions</label>
-					<label xml:lang="tr">Check spelljng in special regions</label>
-					<label xml:lang="th">Check spelljng in special regions</label>
-					<label xml:lang="hi-IN">Check spelljng in special regions</label>
-					<label xml:lang="x-comment">Check spelljng in special regions</label>
-					<label xml:lang="hu">Check spelljng in special regions</label>
-					<label xml:lang="sk">Check spelljng in special regions</label>
-					<label xml:lang="sl">Check spelljng in special regions</label>
+					<desc>Allows spellchecking in headers, footers, and frames.</desc>
+					<label>Check spelljng in special regions</label>
 				</info>
 				<value>true</value>
 			</prop>
@@ -996,62 +267,8 @@
 				<!-- UIHints: Tools - Options - General - Language -->
 				<info>
 					<author>TL</author>
-					<desc xml:lang="en-US">Checks spelling in all languages.</desc>
-						<desc xml:lang="el">Checks spelling in all languages.</desc>
-						<desc xml:lang="nl">Controleert de spelling in alle talen.</desc>
-						<desc xml:lang="fr">Checks spelling in all languages.</desc>
-						<desc xml:lang="fi">Checks spelling in all languages.</desc>
-						<desc xml:lang="cs">Checks spelling in all languages.</desc>
-						<desc xml:lang="da">Checks spelling in all languages.</desc>
-						<desc xml:lang="zh-CN">检查所有语言的拼写。</desc>
-						<desc xml:lang="zh-TW">Checks spelling in all languages.</desc>
-						<desc xml:lang="ar">Checks spelling in all languages.</desc>
-						<desc xml:lang="he">Checks spelling in all languages.</desc>
-						<desc xml:lang="ca">Checks spelling in all languages.</desc>
-						<desc xml:lang="pt">Checks spelling in all languages.</desc>
-						<desc xml:lang="ru">Checks spelling in all languages.</desc>
-						<desc xml:lang="es">Checks spelling in all languages.</desc>
-						<desc xml:lang="it">Checks spelling in all languages.</desc>
-						<desc xml:lang="sv">Checks spelling in all languages.</desc>
-						<desc xml:lang="pl">Checks spelling in all languages.</desc>
-						<desc xml:lang="pt-BR">Checks spelling in all languages.</desc>
-						<desc xml:lang="ja">すべての言語でスペルをチェックします。</desc>
-						<desc xml:lang="ko">Checks spelling in all languages.</desc>
-						<desc xml:lang="tr">Checks spelling in all languages.</desc>
-						<desc xml:lang="th">Checks spelling in all languages.</desc>
-						<desc xml:lang="hi-IN">Checks spelling in all languages.</desc>
-						<desc xml:lang="x-comment">Checks spelling in all languages.</desc>
-						<desc xml:lang="hu">Checks spelling in all languages.</desc>
-						<desc xml:lang="sk">Checks spelling in all languages.</desc>
-						<desc xml:lang="sl">Checks spelling in all languages.</desc>
-					<label xml:lang="en-US">Check spelling in all languages</label>
-					<label xml:lang="el">Check spelling in all languages</label>
-					<label xml:lang="nl">Controleer de spelling in alle talen</label>
-					<label xml:lang="fr">Check spelling in all languages</label>
-					<label xml:lang="fi">Check spelling in all languages</label>
-					<label xml:lang="cs">Check spelling in all languages</label>
-					<label xml:lang="da">Check spelling in all languages</label>
-					<label xml:lang="zh-CN">检查所有的语言</label>
-					<label xml:lang="zh-TW">Check spelling in all languages</label>
-					<label xml:lang="ar">Check spelling in all languages</label>
-					<label xml:lang="he">Check spelling in all languages</label>
-					<label xml:lang="ca">Check spelling in all languages</label>
-					<label xml:lang="pt">Check spelling in all languages</label>
-					<label xml:lang="ru">Check spelling in all languages</label>
-					<label xml:lang="es">Check spelling in all languages</label>
-					<label xml:lang="it">Check spelling in all languages</label>
-					<label xml:lang="sv">Check spelling in all languages</label>
-					<label xml:lang="pl">Check spelling in all languages</label>
-					<label xml:lang="pt-BR">Check spelling in all languages</label>
-					<label xml:lang="ja">すべての言語でスペルチェック</label>
-					<label xml:lang="ko">Check spelling in all languages</label>
-					<label xml:lang="tr">Check spelling in all languages</label>
-					<label xml:lang="th">Check spelling in all languages</label>
-					<label xml:lang="hi-IN">Check spelling in all languages</label>
-					<label xml:lang="x-comment">Check spelling in all languages</label>
-					<label xml:lang="hu">Check spelling in all languages</label>
-					<label xml:lang="sk">Check spelling in all languages</label>
-					<label xml:lang="sl">Check spelling in all languages</label>
+					<desc>Checks spelling in all languages.</desc>
+					<label>Check spelling in all languages</label>
 				</info>
 				<value>false</value>
 			</prop>
@@ -1061,96 +278,15 @@
 				<!-- UIHints: Tools - Options - General - Language -->
 				<info>
 					<author>TL</author>
-					<desc xml:lang="en-US">Advances backwards through the text for spell checking.</desc>
-						<desc xml:lang="el">Advances backwards through the text for spell checking.</desc>
-						<desc xml:lang="nl">Controleer de spelling van de tekst van achter naar voren.</desc>
-						<desc xml:lang="fr">Advances backwards through the text for spell checking.</desc>
-						<desc xml:lang="fi">Advances backwards through the text for spell checking.</desc>
-						<desc xml:lang="cs">Advances backwards through the text for spell checking.</desc>
-						<desc xml:lang="da">Advances backwards through the text for spell checking.</desc>
-						<desc xml:lang="zh-CN">向后检查文字的拼写。</desc>
-						<desc xml:lang="zh-TW">Advances backwards through the text for spell checking.</desc>
-						<desc xml:lang="ar">Advances backwards through the text for spell checking.</desc>
-						<desc xml:lang="he">Advances backwards through the text for spell checking.</desc>
-						<desc xml:lang="ca">Advances backwards through the text for spell checking.</desc>
-						<desc xml:lang="pt">Advances backwards through the text for spell checking.</desc>
-						<desc xml:lang="ru">Advances backwards through the text for spell checking.</desc>
-						<desc xml:lang="es">Advances backwards through the text for spell checking.</desc>
-						<desc xml:lang="it">Advances backwards through the text for spell checking.</desc>
-						<desc xml:lang="sv">Advances backwards through the text for spell checking.</desc>
-						<desc xml:lang="pl">Advances backwards through the text for spell checking.</desc>
-						<desc xml:lang="pt-BR">Advances backwards through the text for spell checking.</desc>
-						<desc xml:lang="ja">テキストを逆方向にスペルチェックします。</desc>
-						<desc xml:lang="ko">Advances backwards through the text for spell checking.</desc>
-						<desc xml:lang="tr">Advances backwards through the text for spell checking.</desc>
-						<desc xml:lang="th">Advances backwards through the text for spell checking.</desc>
-						<desc xml:lang="hi-IN">Advances backwards through the text for spell checking.</desc>
-						<desc xml:lang="x-comment">Advances backwards through the text for spell checking.</desc>
-						<desc xml:lang="hu">Advances backwards through the text for spell checking.</desc>
-						<desc xml:lang="sk">Advances backwards through the text for spell checking.</desc>
-						<desc xml:lang="sl">Advances backwards through the text for spell checking.</desc>
-					<label xml:lang="en-US">Reverse direction.</label>
-					<label xml:lang="el">Reverse direction.</label>
-					<label xml:lang="nl">Richting omkeren.</label>
-					<label xml:lang="fr">Reverse direction.</label>
-					<label xml:lang="fi">Reverse direction.</label>
-					<label xml:lang="cs">Reverse direction.</label>
-					<label xml:lang="da">Reverse direction.</label>
-					<label xml:lang="zh-CN">反向。</label>
-					<label xml:lang="zh-TW">Reverse direction.</label>
-					<label xml:lang="ar">Reverse direction.</label>
-					<label xml:lang="he">Reverse direction.</label>
-					<label xml:lang="ca">Reverse direction.</label>
-					<label xml:lang="pt">Reverse direction.</label>
-					<label xml:lang="ru">Reverse direction.</label>
-					<label xml:lang="es">Reverse direction.</label>
-					<label xml:lang="it">Reverse direction.</label>
-					<label xml:lang="sv">Reverse direction.</label>
-					<label xml:lang="pl">Reverse direction.</label>
-					<label xml:lang="pt-BR">Reverse direction.</label>
-					<label xml:lang="ja">逆方向</label>
-					<label xml:lang="ko">Reverse direction.</label>
-					<label xml:lang="tr">Reverse direction.</label>
-					<label xml:lang="th">Reverse direction.</label>
-					<label xml:lang="hi-IN">Reverse direction.</label>
-					<label xml:lang="x-comment">Reverse direction.</label>
-					<label xml:lang="hu">Reverse direction.</label>
-					<label xml:lang="sk">Reverse direction.</label>
-					<label xml:lang="sl">Reverse direction.</label>
+					<desc>Advances backwards through the text for spell checking.</desc>
+					<label>Reverse direction.</label>
 				</info>
 				<value>false</value>
 			</prop>
 		</group>
 		<group oor:name="Hyphenation">
 			<info>
-				<desc xml:lang="en-US">Contains hyphenation relevant settings.</desc>
-				<desc xml:lang="el">Contains hyphenation relevant settings.</desc>
-				<desc xml:lang="nl">Contains hyphenation relevant settings.</desc>
-				<desc xml:lang="fr">Contains hyphenation relevant settings.</desc>
-				<desc xml:lang="fi">Contains hyphenation relevant settings.</desc>
-				<desc xml:lang="cs">Contains hyphenation relevant settings.</desc>
-				<desc xml:lang="da">Contains hyphenation relevant settings.</desc>
-				<desc xml:lang="zh-CN">含有与连字符相关的设定。</desc>
-				<desc xml:lang="zh-TW">Contains hyphenation relevant settings.</desc>
-				<desc xml:lang="ar">Contains hyphenation relevant settings.</desc>
-				<desc xml:lang="he">Contains hyphenation relevant settings.</desc>
-				<desc xml:lang="ca">Contains hyphenation relevant settings.</desc>
-				<desc xml:lang="pt">Contains hyphenation relevant settings.</desc>
-				<desc xml:lang="ru">Contains hyphenation relevant settings.</desc>
-				<desc xml:lang="es">Contains hyphenation relevant settings.</desc>
-				<desc xml:lang="it">Contains hyphenation relevant settings.</desc>
-				<desc xml:lang="sv">Contains hyphenation relevant settings.</desc>
-				<desc xml:lang="pl">Contains hyphenation relevant settings.</desc>
-				<desc xml:lang="pt-BR">Contains hyphenation relevant settings.</desc>
-				<desc xml:lang="ja">ハイフネーションに関連する設定が含まれます。</desc>
-				<desc xml:lang="ko">Contains hyphenation relevant settings.</desc>
-				<desc xml:lang="tr">Contains hyphenation relevant settings.</desc>
-				<desc xml:lang="th">Contains hyphenation relevant settings.</desc>
-				<desc xml:lang="hi-IN">Contains hyphenation relevant settings.</desc>
-				<desc xml:lang="x-comment">Contains hyphenation relevant settings.</desc>
-				<desc xml:lang="hu">Contains hyphenation relevant settings.</desc>
-				<desc xml:lang="sk">Contains hyphenation relevant settings.</desc>
-				<desc xml:lang="sl">Contains hyphenation relevant settings.</desc>
+				<desc>Contains hyphenation relevant settings.</desc>
 			</info>
 			<prop oor:name="MinLeading" oor:type="xs:short">
 				<!-- OldPath: HyphMinLeading -->
@@ -1158,126 +294,18 @@
 				<!-- UIHints: Tools - Options - General - Language -->
 				<info>
 					<author>TL</author>
-					<desc xml:lang="en-US">Specifies the minimum number of characters of the hyphenated word required at the end of the line.</desc>
-						<desc xml:lang="el">Specifies the minimum number of characters of the hyphenated word required at the end of the line.</desc>
-						<desc xml:lang="nl">Specifies the minimum number of characters of the hyphenated word required at the end of the line.</desc>
-						<desc xml:lang="fr">Specifies the minimum number of characters of the hyphenated word required at the end of the line.</desc>
-						<desc xml:lang="fi">Specifies the minimum number of characters of the hyphenated word required at the end of the line.</desc>
-						<desc xml:lang="cs">Specifies the minimum number of characters of the hyphenated word required at the end of the line.</desc>
-						<desc xml:lang="da">Specifies the minimum number of characters of the hyphenated word required at the end of the line.</desc>
-						<desc xml:lang="zh-CN">指定以连字符连接的字在行末含有的最小字符数。</desc>
-						<desc xml:lang="zh-TW">Specifies the minimum number of characters of the hyphenated word required at the end of the line.</desc>
-						<desc xml:lang="ar">Specifies the minimum number of characters of the hyphenated word required at the end of the line.</desc>
-						<desc xml:lang="he">Specifies the minimum number of characters of the hyphenated word required at the end of the line.</desc>
-						<desc xml:lang="ca">Specifies the minimum number of characters of the hyphenated word required at the end of the line.</desc>
-						<desc xml:lang="pt">Specifies the minimum number of characters of the hyphenated word required at the end of the line.</desc>
-						<desc xml:lang="ru">Specifies the minimum number of characters of the hyphenated word required at the end of the line.</desc>
-						<desc xml:lang="es">Specifies the minimum number of characters of the hyphenated word required at the end of the line.</desc>
-						<desc xml:lang="it">Specifies the minimum number of characters of the hyphenated word required at the end of the line.</desc>
-						<desc xml:lang="sv">Specifies the minimum number of characters of the hyphenated word required at the end of the line.</desc>
-						<desc xml:lang="pl">Specifies the minimum number of characters of the hyphenated word required at the end of the line.</desc>
-						<desc xml:lang="pt-BR">Specifies the minimum number of characters of the hyphenated word required at the end of the line.</desc>
-						<desc xml:lang="ja">ハイフネーションを適用する単語に要求される行の末尾の最低文字数を指定します。</desc>
-						<desc xml:lang="ko">Specifies the minimum number of characters of the hyphenated word required at the end of the line.</desc>
-						<desc xml:lang="tr">Specifies the minimum number of characters of the hyphenated word required at the end of the line.</desc>
-						<desc xml:lang="th">Specifies the minimum number of characters of the hyphenated word required at the end of the line.</desc>
-						<desc xml:lang="hi-IN">Specifies the minimum number of characters of the hyphenated word required at the end of the line.</desc>
-						<desc xml:lang="x-comment">Specifies the minimum number of characters of the hyphenated word required at the end of the line.</desc>
-						<desc xml:lang="hu">Specifies the minimum number of characters of the hyphenated word required at the end of the line.</desc>
-						<desc xml:lang="sk">Specifies the minimum number of characters of the hyphenated word required at the end of the line.</desc>
-						<desc xml:lang="sl">Specifies the minimum number of characters of the hyphenated word required at the end of the line.</desc>
-					<label xml:lang="en-US">Characters per syllable before hyphen</label>
-					<label xml:lang="el">Characters per syllable before hyphen</label>
-					<label xml:lang="nl">Karakters per lettergreep voor afbreekstreep</label>
-					<label xml:lang="fr">Characters per syllable before hyphen</label>
-					<label xml:lang="fi">Characters per syllable before hyphen</label>
-					<label xml:lang="cs">Characters per syllable before hyphen</label>
-					<label xml:lang="da">Characters per syllable before hyphen</label>
-					<label xml:lang="zh-CN">连字符之前的字母数</label>
-					<label xml:lang="zh-TW">Characters per syllable before hyphen</label>
-					<label xml:lang="ar">Characters per syllable before hyphen</label>
-					<label xml:lang="he">Characters per syllable before hyphen</label>
-					<label xml:lang="ca">Characters per syllable before hyphen</label>
-					<label xml:lang="pt">Characters per syllable before hyphen</label>
-					<label xml:lang="ru">Characters per syllable before hyphen</label>
-					<label xml:lang="es">Characters per syllable before hyphen</label>
-					<label xml:lang="it">Characters per syllable before hyphen</label>
-					<label xml:lang="sv">Characters per syllable before hyphen</label>
-					<label xml:lang="pl">Characters per syllable before hyphen</label>
-					<label xml:lang="pt-BR">Characters per syllable before hyphen</label>
-					<label xml:lang="ja">改行前文字数</label>
-					<label xml:lang="ko">Characters per syllable before hyphen</label>
-					<label xml:lang="tr">Characters per syllable before hyphen</label>
-					<label xml:lang="th">Characters per syllable before hyphen</label>
-					<label xml:lang="hi-IN">Characters per syllable before hyphen</label>
-					<label xml:lang="x-comment">Characters per syllable before hyphen</label>
-					<label xml:lang="hu">Characters per syllable before hyphen</label>
-					<label xml:lang="sk">Characters per syllable before hyphen</label>
-					<label xml:lang="sl">Characters per syllable before hyphen</label>
+					<desc>Specifies the minimum number of characters of the hyphenated word required at the end of the line.</desc>
+					<label>Characters per syllable before hyphen</label>
 				</info>
 				<constraints>
 					<minInclusive oor:value="2">
 						<info>
-							<desc xml:lang="en-US">Specifies the minimum value allowed.</desc>
-							<desc xml:lang="el">Specifies the minimum value allowed.</desc>
-							<desc xml:lang="nl">Specifies the minimum value allowed.</desc>
-							<desc xml:lang="fr">Specifies the minimum value allowed.</desc>
-							<desc xml:lang="fi">Specifies the minimum value allowed.</desc>
-							<desc xml:lang="cs">Specifies the minimum value allowed.</desc>
-							<desc xml:lang="da">Specifies the minimum value allowed.</desc>
-							<desc xml:lang="zh-CN">指定所允许的最小值。</desc>
-							<desc xml:lang="zh-TW">Specifies the minimum value allowed.</desc>
-							<desc xml:lang="ar">Specifies the minimum value allowed.</desc>
-							<desc xml:lang="he">Specifies the minimum value allowed.</desc>
-							<desc xml:lang="ca">Specifies the minimum value allowed.</desc>
-							<desc xml:lang="pt">Specifies the minimum value allowed.</desc>
-							<desc xml:lang="ru">Specifies the minimum value allowed.</desc>
-							<desc xml:lang="es">Specifies the minimum value allowed.</desc>
-							<desc xml:lang="it">Specifies the minimum value allowed.</desc>
-							<desc xml:lang="sv">Specifies the minimum value allowed.</desc>
-							<desc xml:lang="pl">Specifies the minimum value allowed.</desc>
-							<desc xml:lang="pt-BR">Specifies the minimum value allowed.</desc>
-							<desc xml:lang="ja">許可する最小値を指定します。</desc>
-							<desc xml:lang="ko">Specifies the minimum value allowed.</desc>
-							<desc xml:lang="tr">Specifies the minimum value allowed.</desc>
-							<desc xml:lang="th">Specifies the minimum value allowed.</desc>
-							<desc xml:lang="hi-IN">Specifies the minimum value allowed.</desc>
-							<desc xml:lang="x-comment">Specifies the minimum value allowed.</desc>
-							<desc xml:lang="sk">Specifies the minimum value allowed.</desc>
-							<desc xml:lang="hu">Specifies the minimum value allowed.</desc>
-							<desc xml:lang="sl">Specifies the minimum value allowed.</desc>
+							<desc>Specifies the minimum value allowed.</desc>
 						</info>
 					</minInclusive>
 					<maxInclusive oor:value="9">
 						<info>
-							<desc xml:lang="en-US">Specifies the maximum value allowed.</desc>
-							<desc xml:lang="el">Specifies the maximum value allowed.</desc>
-							<desc xml:lang="nl">Specifies the maximum value allowed.</desc>
-							<desc xml:lang="fr">Specifies the maximum value allowed.</desc>
-							<desc xml:lang="fi">Specifies the maximum value allowed.</desc>
-							<desc xml:lang="cs">Specifies the maximum value allowed.</desc>
-							<desc xml:lang="da">Specifies the maximum value allowed.</desc>
-							<desc xml:lang="zh-CN">Specifies the maximum value allowed.</desc>
-							<desc xml:lang="zh-TW">Specifies the maximum value allowed.</desc>
-							<desc xml:lang="ar">Specifies the maximum value allowed.</desc>
-							<desc xml:lang="he">Specifies the maximum value allowed.</desc>
-							<desc xml:lang="ca">Specifies the maximum value allowed.</desc>
-							<desc xml:lang="pt">Specifies the maximum value allowed.</desc>
-							<desc xml:lang="ru">Specifies the maximum value allowed.</desc>
-							<desc xml:lang="es">Specifies the maximum value allowed.</desc>
-							<desc xml:lang="it">Specifies the maximum value allowed.</desc>
-							<desc xml:lang="sv">Specifies the maximum value allowed.</desc>
-							<desc xml:lang="pl">Specifies the maximum value allowed.</desc>
-							<desc xml:lang="pt-BR">Specifies the maximum value allowed.</desc>
-							<desc xml:lang="ja">許可する最大値を指定します。</desc>
-							<desc xml:lang="ko">Specifies the maximum value allowed.</desc>
-							<desc xml:lang="tr">Specifies the maximum value allowed.</desc>
-							<desc xml:lang="th">Specifies the maximum value allowed.</desc>
-							<desc xml:lang="hi-IN">Specifies the maximum value allowed.</desc>
-							<desc xml:lang="x-comment">Specifies the maximum value allowed.</desc>
-							<desc xml:lang="sk">Specifies the maximum value allowed.</desc>
-							<desc xml:lang="hu">Specifies the maximum value allowed.</desc>
-							<desc xml:lang="sl">Specifies the maximum value allowed.</desc>
+							<desc>Specifies the maximum value allowed.</desc>
 						</info>
 					</maxInclusive>
 				</constraints>
@@ -1289,126 +317,18 @@
 				<!-- UIHints: Tools - Options - General - Language -->
 				<info>
 					<author>TL</author>
-					<desc xml:lang="en-US">Specifies the minimum number of characters of the hyphenated word required at the next line.</desc>
-						<desc xml:lang="el">Specifies the minimum number of characters of the hyphenated word required at the next line.</desc>
-						<desc xml:lang="nl">Specifies the minimum number of characters of the hyphenated word required at the next line.</desc>
-						<desc xml:lang="fr">Specifies the minimum number of characters of the hyphenated word required at the next line.</desc>
-						<desc xml:lang="fi">Specifies the minimum number of characters of the hyphenated word required at the next line.</desc>
-						<desc xml:lang="cs">Specifies the minimum number of characters of the hyphenated word required at the next line.</desc>
-						<desc xml:lang="da">Specifies the minimum number of characters of the hyphenated word required at the next line.</desc>
-						<desc xml:lang="zh-CN">指定以连字符连接的字在下一行中含有的最小字符数。</desc>
-						<desc xml:lang="zh-TW">Specifies the minimum number of characters of the hyphenated word required at the next line.</desc>
-						<desc xml:lang="ar">Specifies the minimum number of characters of the hyphenated word required at the next line.</desc>
-						<desc xml:lang="he">Specifies the minimum number of characters of the hyphenated word required at the next line.</desc>
-						<desc xml:lang="ca">Specifies the minimum number of characters of the hyphenated word required at the next line.</desc>
-						<desc xml:lang="pt">Specifies the minimum number of characters of the hyphenated word required at the next line.</desc>
-						<desc xml:lang="ru">Specifies the minimum number of characters of the hyphenated word required at the next line.</desc>
-						<desc xml:lang="es">Specifies the minimum number of characters of the hyphenated word required at the next line.</desc>
-						<desc xml:lang="it">Specifies the minimum number of characters of the hyphenated word required at the next line.</desc>
-						<desc xml:lang="sv">Specifies the minimum number of characters of the hyphenated word required at the next line.</desc>
-						<desc xml:lang="pl">Specifies the minimum number of characters of the hyphenated word required at the next line.</desc>
-						<desc xml:lang="pt-BR">Specifies the minimum number of characters of the hyphenated word required at the next line.</desc>
-						<desc xml:lang="ja">ハイフネーションを適用する単語に要求される次行の最低文字数を指定します。</desc>
-						<desc xml:lang="ko">Specifies the minimum number of characters of the hyphenated word required at the next line.</desc>
-						<desc xml:lang="tr">Specifies the minimum number of characters of the hyphenated word required at the next line.</desc>
-						<desc xml:lang="th">Specifies the minimum number of characters of the hyphenated word required at the next line.</desc>
-						<desc xml:lang="hi-IN">Specifies the minimum number of characters of the hyphenated word required at the next line.</desc>
-						<desc xml:lang="x-comment">Specifies the minimum number of characters of the hyphenated word required at the next line.</desc>
-						<desc xml:lang="hu">Specifies the minimum number of characters of the hyphenated word required at the next line.</desc>
-						<desc xml:lang="sk">Specifies the minimum number of characters of the hyphenated word required at the next line.</desc>
-						<desc xml:lang="sl">Specifies the minimum number of characters of the hyphenated word required at the next line.</desc>
-					<label xml:lang="en-US">Characters per syllable after hyphen</label>
-					<label xml:lang="el">Characters per syllable after hyphen</label>
-					<label xml:lang="nl">Karakters per lettergreep achter afbreekstreep</label>
-					<label xml:lang="fr">Characters per syllable after hyphen</label>
-					<label xml:lang="fi">Characters per syllable after hyphen</label>
-					<label xml:lang="cs">Characters per syllable after hyphen</label>
-					<label xml:lang="da">Characters per syllable after hyphen</label>
-					<label xml:lang="zh-CN">连字符之后的字母数</label>
-					<label xml:lang="zh-TW">Characters per syllable after hyphen</label>
-					<label xml:lang="ar">Characters per syllable after hyphen</label>
-					<label xml:lang="he">Characters per syllable after hyphen</label>
-					<label xml:lang="ca">Characters per syllable after hyphen</label>
-					<label xml:lang="pt">Characters per syllable after hyphen</label>
-					<label xml:lang="ru">Characters per syllable after hyphen</label>
-					<label xml:lang="es">Characters per syllable after hyphen</label>
-					<label xml:lang="it">Characters per syllable after hyphen</label>
-					<label xml:lang="sv">Characters per syllable after hyphen</label>
-					<label xml:lang="pl">Characters per syllable after hyphen</label>
-					<label xml:lang="pt-BR">Characters per syllable after hyphen</label>
-					<label xml:lang="ja">改行後文字数</label>
-					<label xml:lang="ko">Characters per syllable after hyphen</label>
-					<label xml:lang="tr">Characters per syllable after hyphen</label>
-					<label xml:lang="th">Characters per syllable after hyphen</label>
-					<label xml:lang="hi-IN">Characters per syllable after hyphen</label>
-					<label xml:lang="x-comment">Characters per syllable after hyphen</label>
-					<label xml:lang="hu">Characters per syllable after hyphen</label>
-					<label xml:lang="sk">Characters per syllable after hyphen</label>
-					<label xml:lang="sl">Characters per syllable after hyphen</label>
+					<desc>Specifies the minimum number of characters of the hyphenated word required at the next line.</desc>
+					<label>Characters per syllable after hyphen</label>
 				</info>
 				<constraints>
 					<minInclusive oor:value="2">
 						<info>
-							<desc xml:lang="en-US">Specifies the minimum value allowed.</desc>
-							<desc xml:lang="el">Specifies the minimum value allowed.</desc>
-							<desc xml:lang="nl">Specifies the minimum value allowed.</desc>
-							<desc xml:lang="fr">Specifies the minimum value allowed.</desc>
-							<desc xml:lang="fi">Specifies the minimum value allowed.</desc>
-							<desc xml:lang="cs">Specifies the minimum value allowed.</desc>
-							<desc xml:lang="da">Specifies the minimum value allowed.</desc>
-							<desc xml:lang="zh-CN">指定所允许的最小值。</desc>
-							<desc xml:lang="zh-TW">Specifies the minimum value allowed.</desc>
-							<desc xml:lang="ar">Specifies the minimum value allowed.</desc>
-							<desc xml:lang="he">Specifies the minimum value allowed.</desc>
-							<desc xml:lang="ca">Specifies the minimum value allowed.</desc>
-							<desc xml:lang="pt">Specifies the minimum value allowed.</desc>
-							<desc xml:lang="ru">Specifies the minimum value allowed.</desc>
-							<desc xml:lang="es">Specifies the minimum value allowed.</desc>
-							<desc xml:lang="it">Specifies the minimum value allowed.</desc>
-							<desc xml:lang="sv">Specifies the minimum value allowed.</desc>
-							<desc xml:lang="pl">Specifies the minimum value allowed.</desc>
-							<desc xml:lang="pt-BR">Specifies the minimum value allowed.</desc>
-							<desc xml:lang="ja">許可する最小値を指定します。</desc>
-							<desc xml:lang="ko">Specifies the minimum value allowed.</desc>
-							<desc xml:lang="tr">Specifies the minimum value allowed.</desc>
-							<desc xml:lang="th">Specifies the minimum value allowed.</desc>
-							<desc xml:lang="hi-IN">Specifies the minimum value allowed.</desc>
-							<desc xml:lang="x-comment">Specifies the minimum value allowed.</desc>
-							<desc xml:lang="sk">Specifies the minimum value allowed.</desc>
-							<desc xml:lang="hu">Specifies the minimum value allowed.</desc>
-							<desc xml:lang="sl">Specifies the minimum value allowed.</desc>
+							<desc>Specifies the minimum value allowed.</desc>
 						</info>
 					</minInclusive>
 					<maxInclusive oor:value="9">
 						<info>
-							<desc xml:lang="en-US">Specifies the maximum value allowed.</desc>
-							<desc xml:lang="el">Specifies the maximum value allowed.</desc>
-							<desc xml:lang="nl">Specifies the maximum value allowed.</desc>
-							<desc xml:lang="fr">Specifies the maximum value allowed.</desc>
-							<desc xml:lang="fi">Specifies the maximum value allowed.</desc>
-							<desc xml:lang="cs">Specifies the maximum value allowed.</desc>
-							<desc xml:lang="da">Specifies the maximum value allowed.</desc>
-							<desc xml:lang="zh-CN">Specifies the maximum value allowed.</desc>
-							<desc xml:lang="zh-TW">Specifies the maximum value allowed.</desc>
-							<desc xml:lang="ar">Specifies the maximum value allowed.</desc>
-							<desc xml:lang="he">Specifies the maximum value allowed.</desc>
-							<desc xml:lang="ca">Specifies the maximum value allowed.</desc>
-							<desc xml:lang="pt">Specifies the maximum value allowed.</desc>
-							<desc xml:lang="ru">Specifies the maximum value allowed.</desc>
-							<desc xml:lang="es">Specifies the maximum value allowed.</desc>
-							<desc xml:lang="it">Specifies the maximum value allowed.</desc>
-							<desc xml:lang="sv">Specifies the maximum value allowed.</desc>
-							<desc xml:lang="pl">Specifies the maximum value allowed.</desc>
-							<desc xml:lang="pt-BR">Specifies the maximum value allowed.</desc>
-							<desc xml:lang="ja">許可する最大値を指定します。</desc>
-							<desc xml:lang="ko">Specifies the maximum value allowed.</desc>
-							<desc xml:lang="tr">Specifies the maximum value allowed.</desc>
-							<desc xml:lang="th">Specifies the maximum value allowed.</desc>
-							<desc xml:lang="hi-IN">Specifies the maximum value allowed.</desc>
-							<desc xml:lang="x-comment">Specifies the maximum value allowed.</desc>
-							<desc xml:lang="sk">Specifies the maximum value allowed.</desc>
-							<desc xml:lang="hu">Specifies the maximum value allowed.</desc>
-							<desc xml:lang="sl">Specifies the maximum value allowed.</desc>
+							<desc>Specifies the maximum value allowed.</desc>
 						</info>
 					</maxInclusive>
 				</constraints>
@@ -1419,126 +339,18 @@
 				<!-- OldLocation: soffice.ini -->
 				<info>
 					<author>TL</author>
-					<desc xml:lang="en-US">Specifies the minimum word length to allow a hyphenation.</desc>
-						<desc xml:lang="el">Specifies the minimum word length to allow a hyphenation.</desc>
-						<desc xml:lang="nl">Specifies the minimum word length to allow a hyphenation.</desc>
-						<desc xml:lang="fr">Specifies the minimum word length to allow a hyphenation.</desc>
-						<desc xml:lang="fi">Specifies the minimum word length to allow a hyphenation.</desc>
-						<desc xml:lang="cs">Specifies the minimum word length to allow a hyphenation.</desc>
-						<desc xml:lang="da">Specifies the minimum word length to allow a hyphenation.</desc>
-						<desc xml:lang="zh-CN">指定允许使用连字符连接的最小字长。</desc>
-						<desc xml:lang="zh-TW">Specifies the minimum word length to allow a hyphenation.</desc>
-						<desc xml:lang="ar">Specifies the minimum word length to allow a hyphenation.</desc>
-						<desc xml:lang="he">Specifies the minimum word length to allow a hyphenation.</desc>
-						<desc xml:lang="ca">Specifies the minimum word length to allow a hyphenation.</desc>
-						<desc xml:lang="pt">Specifies the minimum word length to allow a hyphenation.</desc>
-						<desc xml:lang="ru">Specifies the minimum word length to allow a hyphenation.</desc>
-						<desc xml:lang="es">Specifies the minimum word length to allow a hyphenation.</desc>
-						<desc xml:lang="it">Specifies the minimum word length to allow a hyphenation.</desc>
-						<desc xml:lang="sv">Specifies the minimum word length to allow a hyphenation.</desc>
-						<desc xml:lang="pl">Specifies the minimum word length to allow a hyphenation.</desc>
-						<desc xml:lang="pt-BR">Specifies the minimum word length to allow a hyphenation.</desc>
-						<desc xml:lang="ja">ハイフネーションを許容する最小の単語の長さを指定します。</desc>
-						<desc xml:lang="ko">Specifies the minimum word length to allow a hyphenation.</desc>
-						<desc xml:lang="tr">Specifies the minimum word length to allow a hyphenation.</desc>
-						<desc xml:lang="th">Specifies the minimum word length to allow a hyphenation.</desc>
-						<desc xml:lang="hi-IN">Specifies the minimum word length to allow a hyphenation.</desc>
-						<desc xml:lang="x-comment">Specifies the minimum word length to allow a hyphenation.</desc>
-						<desc xml:lang="hu">Specifies the minimum word length to allow a hyphenation.</desc>
-						<desc xml:lang="sk">Specifies the minimum word length to allow a hyphenation.</desc>
-						<desc xml:lang="sl">Specifies the minimum word length to allow a hyphenation.</desc>
-					<label xml:lang="en-US">Minimal word length</label>
-					<label xml:lang="el">Ελάχιστο μήκος λέξης</label>
-					<label xml:lang="nl">Minimale woordlengte</label>
-					<label xml:lang="fr">Longueur de mot minimum</label>
-					<label xml:lang="fi">Sanojen vähimmäispituus</label>
-					<label xml:lang="cs">Minimal word length</label>
-					<label xml:lang="da">Minimal word length</label>
-					<label xml:lang="zh-CN">使用连字符时最少的字母数</label>
-					<label xml:lang="zh-TW">最短的字詞</label>
-					<label xml:lang="ar">الطول الأدنى للكلمة</label>
-					<label xml:lang="he">‮אורך מילה מזערי‬</label>
-					<label xml:lang="ca">Mida mínima de la paraula</label>
-					<label xml:lang="pt">Comprimento mínimo de palavras</label>
-					<label xml:lang="ru">Минимальная длина слова</label>
-					<label xml:lang="es">Tamñana minímo de palabra</label>
-					<label xml:lang="it">Lunghezza minima della parola</label>
-					<label xml:lang="sv">Minimal word length</label>
-					<label xml:lang="pl">Minimal word length</label>
-					<label xml:lang="pt-BR">Comprimento mínimo de palavras</label>
-					<label xml:lang="ja">最小の単語の長さ</label>
-					<label xml:lang="ko">최소 단어 길이</label>
-					<label xml:lang="tr">En kısa kelime uzunluğu</label>
-					<label xml:lang="th">ความยาวคำที่น้อยที่สุด</label>
-					<label xml:lang="hi-IN">न्यूनतम शब्द विस्तार</label>
-					<label xml:lang="x-comment">Minimal word length</label>
-					<label xml:lang="hu">Minimal word length</label>
-					<label xml:lang="sk">Minimal word length</label>
-					<label xml:lang="sl">Minimal word length</label>
+					<desc>Specifies the minimum word length to allow a hyphenation.</desc>
+					<label>Minimal word length</label>
 				</info>
 				<constraints>
 					<minInclusive oor:value="2">
 						<info>
-							<desc xml:lang="en-US">Specifies the minimum value allowed.</desc>
-							<desc xml:lang="el">Specifies the minimum value allowed.</desc>
-							<desc xml:lang="nl">Specifies the minimum value allowed.</desc>
-							<desc xml:lang="fr">Specifies the minimum value allowed.</desc>
-							<desc xml:lang="fi">Specifies the minimum value allowed.</desc>
-							<desc xml:lang="cs">Specifies the minimum value allowed.</desc>
-							<desc xml:lang="da">Specifies the minimum value allowed.</desc>
-							<desc xml:lang="zh-CN">指定所允许的最小值。</desc>
-							<desc xml:lang="zh-TW">Specifies the minimum value allowed.</desc>
-							<desc xml:lang="ar">Specifies the minimum value allowed.</desc>
-							<desc xml:lang="he">Specifies the minimum value allowed.</desc>
-							<desc xml:lang="ca">Specifies the minimum value allowed.</desc>
-							<desc xml:lang="pt">Specifies the minimum value allowed.</desc>
-							<desc xml:lang="ru">Specifies the minimum value allowed.</desc>
-							<desc xml:lang="es">Specifies the minimum value allowed.</desc>
-							<desc xml:lang="it">Specifies the minimum value allowed.</desc>
-							<desc xml:lang="sv">Specifies the minimum value allowed.</desc>
-							<desc xml:lang="pl">Specifies the minimum value allowed.</desc>
-							<desc xml:lang="pt-BR">Specifies the minimum value allowed.</desc>
-							<desc xml:lang="ja">許可する最小値を指定します。</desc>
-							<desc xml:lang="ko">Specifies the minimum value allowed.</desc>
-							<desc xml:lang="tr">Specifies the minimum value allowed.</desc>
-							<desc xml:lang="th">Specifies the minimum value allowed.</desc>
-							<desc xml:lang="hi-IN">Specifies the minimum value allowed.</desc>
-							<desc xml:lang="x-comment">Specifies the minimum value allowed.</desc>
-							<desc xml:lang="sk">Specifies the minimum value allowed.</desc>
-							<desc xml:lang="hu">Specifies the minimum value allowed.</desc>
-							<desc xml:lang="sl">Specifies the minimum value allowed.</desc>
+							<desc>Specifies the minimum value allowed.</desc>
 						</info>
 					</minInclusive>
 					<maxInclusive oor:value="9">
 						<info>
-							<desc xml:lang="en-US">Specifies the maximum value allowed.</desc>
-							<desc xml:lang="el">Specifies the maximum value allowed.</desc>
-							<desc xml:lang="nl">Specifies the maximum value allowed.</desc>
-							<desc xml:lang="fr">Specifies the maximum value allowed.</desc>
-							<desc xml:lang="fi">Specifies the maximum value allowed.</desc>
-							<desc xml:lang="cs">Specifies the maximum value allowed.</desc>
-							<desc xml:lang="da">Specifies the maximum value allowed.</desc>
-							<desc xml:lang="zh-CN">Specifies the maximum value allowed.</desc>
-							<desc xml:lang="zh-TW">Specifies the maximum value allowed.</desc>
-							<desc xml:lang="ar">Specifies the maximum value allowed.</desc>
-							<desc xml:lang="he">Specifies the maximum value allowed.</desc>
-							<desc xml:lang="ca">Specifies the maximum value allowed.</desc>
-							<desc xml:lang="pt">Specifies the maximum value allowed.</desc>
-							<desc xml:lang="ru">Specifies the maximum value allowed.</desc>
-							<desc xml:lang="es">Specifies the maximum value allowed.</desc>
-							<desc xml:lang="it">Specifies the maximum value allowed.</desc>
-							<desc xml:lang="sv">Specifies the maximum value allowed.</desc>
-							<desc xml:lang="pl">Specifies the maximum value allowed.</desc>
-							<desc xml:lang="pt-BR">Specifies the maximum value allowed.</desc>
-							<desc xml:lang="ja">許可する最大値を指定します。</desc>
-							<desc xml:lang="ko">Specifies the maximum value allowed.</desc>
-							<desc xml:lang="tr">Specifies the maximum value allowed.</desc>
-							<desc xml:lang="th">Specifies the maximum value allowed.</desc>
-							<desc xml:lang="hi-IN">Specifies the maximum value allowed.</desc>
-							<desc xml:lang="x-comment">Specifies the maximum value allowed.</desc>
-							<desc xml:lang="sk">Specifies the maximum value allowed.</desc>
-							<desc xml:lang="hu">Specifies the maximum value allowed.</desc>
-							<desc xml:lang="sl">Specifies the maximum value allowed.</desc>
+							<desc>Specifies the maximum value allowed.</desc>
 						</info>
 					</maxInclusive>
 				</constraints>
@@ -1550,62 +362,8 @@
 				<!-- UIHints: Tools - Options - General - Language -->
 				<info>
 					<author>TL</author>
-					<desc xml:lang="en-US">Allows hyphenation in headers, footers, and frames.</desc>
-						<desc xml:lang="el">Allows hyphenation in headers, footers, and frames.</desc>
-						<desc xml:lang="nl">Staat woordafbreking in koptekst, voettekst en kaders toe.</desc>
-						<desc xml:lang="fr">Allows hyphenation in headers, footers, and frames.</desc>
-						<desc xml:lang="fi">Allows hyphenation in headers, footers, and frames.</desc>
-						<desc xml:lang="cs">Allows hyphenation in headers, footers, and frames.</desc>
-						<desc xml:lang="da">Allows hyphenation in headers, footers, and frames.</desc>
-						<desc xml:lang="zh-CN">允许在页眉、页脚和框中使用连字符。</desc>
-						<desc xml:lang="zh-TW">Allows hyphenation in headers, footers, and frames.</desc>
-						<desc xml:lang="ar">Allows hyphenation in headers, footers, and frames.</desc>
-						<desc xml:lang="he">Allows hyphenation in headers, footers, and frames.</desc>
-						<desc xml:lang="ca">Allows hyphenation in headers, footers, and frames.</desc>
-						<desc xml:lang="pt">Allows hyphenation in headers, footers, and frames.</desc>
-						<desc xml:lang="ru">Allows hyphenation in headers, footers, and frames.</desc>
-						<desc xml:lang="es">Allows hyphenation in headers, footers, and frames.</desc>
-						<desc xml:lang="it">Allows hyphenation in headers, footers, and frames.</desc>
-						<desc xml:lang="sv">Allows hyphenation in headers, footers, and frames.</desc>
-						<desc xml:lang="pl">Allows hyphenation in headers, footers, and frames.</desc>
-						<desc xml:lang="pt-BR">Allows hyphenation in headers, footers, and frames.</desc>
-						<desc xml:lang="ja">ヘッダ、フッタ、フレーム内のハイフネーションを許可します</desc>
-						<desc xml:lang="ko">Allows hyphenation in headers, footers, and frames.</desc>
-						<desc xml:lang="tr">Allows hyphenation in headers, footers, and frames.</desc>
-						<desc xml:lang="th">Allows hyphenation in headers, footers, and frames.</desc>
-						<desc xml:lang="hi-IN">Allows hyphenation in headers, footers, and frames.</desc>
-						<desc xml:lang="x-comment">Allows hyphenation in headers, footers, and frames.</desc>
-						<desc xml:lang="hu">Allows hyphenation in headers, footers, and frames.</desc>
-						<desc xml:lang="sk">Allows hyphenation in headers, footers, and frames.</desc>
-						<desc xml:lang="sl">Allows hyphenation in headers, footers, and frames.</desc>
-					<label xml:lang="en-US">Hyphenate in special regions.</label>
-					<label xml:lang="el">Hyphenate in special regions.</label>
-					<label xml:lang="nl">Woordafbreking in speciale bereiken.</label>
-					<label xml:lang="fr">Hyphenate in special regions.</label>
-					<label xml:lang="fi">Hyphenate in special regions.</label>
-					<label xml:lang="cs">Hyphenate in special regions.</label>
-					<label xml:lang="da">Hyphenate in special regions.</label>
-					<label xml:lang="zh-CN">分开特殊区域</label>
-					<label xml:lang="zh-TW">Hyphenate in special regions.</label>
-					<label xml:lang="ar">Hyphenate in special regions.</label>
-					<label xml:lang="he">Hyphenate in special regions.</label>
-					<label xml:lang="ca">Hyphenate in special regions.</label>
-					<label xml:lang="pt">Hyphenate in special regions.</label>
-					<label xml:lang="ru">Hyphenate in special regions.</label>
-					<label xml:lang="es">Hyphenate in special regions.</label>
-					<label xml:lang="it">Hyphenate in special regions.</label>
-					<label xml:lang="sv">Hyphenate in special regions.</label>
-					<label xml:lang="pl">Hyphenate in special regions.</label>
-					<label xml:lang="pt-BR">Hyphenate in special regions.</label>
-					<label xml:lang="ja">特別範囲のハイフネーション</label>
-					<label xml:lang="ko">Hyphenate in special regions.</label>
-					<label xml:lang="tr">Hyphenate in special regions.</label>
-					<label xml:lang="th">Hyphenate in special regions.</label>
-					<label xml:lang="hi-IN">Hyphenate in special regions.</label>
-					<label xml:lang="x-comment">Hyphenate in special regions.</label>
-					<label xml:lang="hu">Hyphenate in special regions.</label>
-					<label xml:lang="sk">Hyphenate in special regions.</label>
-					<label xml:lang="sl">Hyphenate in special regions.</label>
+					<desc>Allows hyphenation in headers, footers, and frames.</desc>
+					<label>Hyphenate in special regions.</label>
 				</info>
 				<value>true</value>
 			</prop>
@@ -1615,287 +373,44 @@
 				<!-- UIHints: Tools - Options - General - Language -->
 				<info>
 					<author>TL</author>
-					<desc xml:lang="en-US">Allows for automatic insertion of soft hyphens.</desc>
-						<desc xml:lang="el">Allows for automatic insertion of soft hyphens.</desc>
-						<desc xml:lang="nl">Staat automatische invoeging van zachte afbreekstreepjes toe.</desc>
-						<desc xml:lang="fr">Allows for automatic insertion of soft hyphens.</desc>
-						<desc xml:lang="fi">Allows for automatic insertion of soft hyphens.</desc>
-						<desc xml:lang="cs">Allows for automatic insertion of soft hyphens.</desc>
-						<desc xml:lang="da">Allows for automatic insertion of soft hyphens.</desc>
-						<desc xml:lang="zh-CN">允许自动插入软连字符。</desc>
-						<desc xml:lang="zh-TW">Allows for automatic insertion of soft hyphens.</desc>
-						<desc xml:lang="ar">Allows for automatic insertion of soft hyphens.</desc>
-						<desc xml:lang="he">Allows for automatic insertion of soft hyphens.</desc>
-						<desc xml:lang="ca">Allows for automatic insertion of soft hyphens.</desc>
-						<desc xml:lang="pt">Allows for automatic insertion of soft hyphens.</desc>
-						<desc xml:lang="ru">Allows for automatic insertion of soft hyphens.</desc>
-						<desc xml:lang="es">Allows for automatic insertion of soft hyphens.</desc>
-						<desc xml:lang="it">Allows for automatic insertion of soft hyphens.</desc>
-						<desc xml:lang="sv">Allows for automatic insertion of soft hyphens.</desc>
-						<desc xml:lang="pl">Allows for automatic insertion of soft hyphens.</desc>
-						<desc xml:lang="pt-BR">Allows for automatic insertion of soft hyphens.</desc>
-						<desc xml:lang="ja">ソフトハイフンの自動挿入を許可します。</desc>
-						<desc xml:lang="ko">Allows for automatic insertion of soft hyphens.</desc>
-						<desc xml:lang="tr">Allows for automatic insertion of soft hyphens.</desc>
-						<desc xml:lang="th">Allows for automatic insertion of soft hyphens.</desc>
-						<desc xml:lang="hi-IN">Allows for automatic insertion of soft hyphens.</desc>
-						<desc xml:lang="x-comment">Allows for automatic insertion of soft hyphens.</desc>
-						<desc xml:lang="hu">Allows for automatic insertion of soft hyphens.</desc>
-						<desc xml:lang="sk">Allows for automatic insertion of soft hyphens.</desc>
-						<desc xml:lang="sl">Allows for automatic insertion of soft hyphens.</desc>
-					<label xml:lang="en-US">Automatic hyphention.</label>
-					<label xml:lang="el">Automatic hyphention.</label>
-					<label xml:lang="nl">Automatische woordafbreking.</label>
-					<label xml:lang="fr">Automatic hyphention.</label>
-					<label xml:lang="fi">Automatic hyphention.</label>
-					<label xml:lang="cs">Automatic hyphention.</label>
-					<label xml:lang="da">Automatic hyphention.</label>
-					<label xml:lang="zh-CN">自动分开</label>
-					<label xml:lang="zh-TW">Automatic hyphention.</label>
-					<label xml:lang="ar">Automatic hyphention.</label>
-					<label xml:lang="he">Automatic hyphention.</label>
-					<label xml:lang="ca">Automatic hyphention.</label>
-					<label xml:lang="pt">Automatic hyphention.</label>
-					<label xml:lang="ru">Automatic hyphention.</label>
-					<label xml:lang="es">Automatic hyphention.</label>
-					<label xml:lang="it">Automatic hyphention.</label>
-					<label xml:lang="sv">Automatic hyphention.</label>
-					<label xml:lang="pl">Automatic hyphention.</label>
-					<label xml:lang="pt-BR">Automatic hyphention.</label>
-					<label xml:lang="ja">確認なしのハイフネーション</label>
-					<label xml:lang="ko">Automatic hyphention.</label>
-					<label xml:lang="tr">Automatic hyphention.</label>
-					<label xml:lang="th">Automatic hyphention.</label>
-					<label xml:lang="hi-IN">Automatic hyphention.</label>
-					<label xml:lang="x-comment">Automatic hyphention.</label>
-					<label xml:lang="hu">Automatic hyphention.</label>
-					<label xml:lang="sk">Automatic hyphention.</label>
-					<label xml:lang="sl">Automatic hyphention.</label>
+					<desc>Allows for automatic insertion of soft hyphens.</desc>
+					<label>Automatic hyphention.</label>
 				</info>
 				<value>false</value>
 			</prop>
 		</group>
 		<group oor:name="ServiceManager">
 			<info>
-				<desc xml:lang="en-US">Contains settings for the service manager that are used to access/configure the usage of the various linguistic service implementations.</desc>
-				<desc xml:lang="el">Contains settings for the service manager that are used to access/configure the usage of the various linguistic service implementations.</desc>
-				<desc xml:lang="nl">Contains settings for the service manager that are used to access/configure the usage of the various linguistic service implementations.</desc>
-				<desc xml:lang="fr">Contains settings for the service manager that are used to access/configure the usage of the various linguistic service implementations.</desc>
-				<desc xml:lang="fi">Contains settings for the service manager that are used to access/configure the usage of the various linguistic service implementations.</desc>
-				<desc xml:lang="cs">Contains settings for the service manager that are used to access/configure the usage of the various linguistic service implementations.</desc>
-				<desc xml:lang="da">Contains settings for the service manager that are used to access/configure the usage of the various linguistic service implementations.</desc>
-				<desc xml:lang="zh-CN">含有用于访问/配置各种语言服务实现方案的用法的服务管理器设定。</desc>
-				<desc xml:lang="zh-TW">Contains settings for the service manager that are used to access/configure the usage of the various linguistic service implementations.</desc>
-				<desc xml:lang="ar">Contains settings for the service manager that are used to access/configure the usage of the various linguistic service implementations.</desc>
-				<desc xml:lang="he">Contains settings for the service manager that are used to access/configure the usage of the various linguistic service implementations.</desc>
-				<desc xml:lang="ca">Contains settings for the service manager that are used to access/configure the usage of the various linguistic service implementations.</desc>
-				<desc xml:lang="pt">Contains settings for the service manager that are used to access/configure the usage of the various linguistic service implementations.</desc>
-				<desc xml:lang="ru">Contains settings for the service manager that are used to access/configure the usage of the various linguistic service implementations.</desc>
-				<desc xml:lang="es">Contains settings for the service manager that are used to access/configure the usage of the various linguistic service implementations.</desc>
-				<desc xml:lang="it">Contains settings for the service manager that are used to access/configure the usage of the various linguistic service implementations.</desc>
-				<desc xml:lang="sv">Contains settings for the service manager that are used to access/configure the usage of the various linguistic service implementations.</desc>
-				<desc xml:lang="pl">Contains settings for the service manager that are used to access/configure the usage of the various linguistic service implementations.</desc>
-				<desc xml:lang="pt-BR">Contains settings for the service manager that are used to access/configure the usage of the various linguistic service implementations.</desc>
-				<desc xml:lang="ja">サービスマネージャの設定が含まれます。この設定は、各種言語のサービス実装の使用方法にアクセスし、それを設定する目的で使用されます。</desc>
-				<desc xml:lang="ko">Contains settings for the service manager that are used to access/configure the usage of the various linguistic service implementations.</desc>
-				<desc xml:lang="tr">Contains settings for the service manager that are used to access/configure the usage of the various linguistic service implementations.</desc>
-				<desc xml:lang="th">Contains settings for the service manager that are used to access/configure the usage of the various linguistic service implementations.</desc>
-				<desc xml:lang="hi-IN">Contains settings for the service manager that are used to access/configure the usage of the various linguistic service implementations.</desc>
-				<desc xml:lang="x-comment">Contains settings for the service manager that are used to access/configure the usage of the various linguistic service implementations.</desc>
-				<desc xml:lang="hu">Contains settings for the service manager that are used to access/configure the usage of the various linguistic service implementations.</desc>
-				<desc xml:lang="sk">Contains settings for the service manager that are used to access/configure the usage of the various linguistic service implementations.</desc>
-				<desc xml:lang="sl">Contains settings for the service manager that are used to access/configure the usage of the various linguistic service implementations.</desc>
+				<desc>Contains settings for the service manager that are used to access/configure the usage of the various linguistic service implementations.</desc>
 			</info>
 			<group oor:name="SpellCheckerList" oor:extensible="true">
 				<info>
-					<desc xml:lang="en-US">Contains a list of languages and spell-checking-service entries. Only languages listed will be supported.</desc>
-					<desc xml:lang="el">Contains a list of languages and spell-checking-service entries. Only languages listed will be supported.</desc>
-					<desc xml:lang="nl">Contains a list of languages and spell-checking-service entries. Only languages listed will be supported.</desc>
-					<desc xml:lang="fr">Contains a list of languages and spell-checking-service entries. Only languages listed will be supported.</desc>
-					<desc xml:lang="fi">Contains a list of languages and spell-checking-service entries. Only languages listed will be supported.</desc>
-					<desc xml:lang="cs">Contains a list of languages and spell-checking-service entries. Only languages listed will be supported.</desc>
-					<desc xml:lang="da">Contains a list of languages and spell-checking-service entries. Only languages listed will be supported.</desc>
-					<desc xml:lang="zh-CN">含有语言和拼写检查服务条目的列单。仅支持列出的语言。</desc>
-					<desc xml:lang="zh-TW">Contains a list of languages and spell-checking-service entries. Only languages listed will be supported.</desc>
-					<desc xml:lang="ar">Contains a list of languages and spell-checking-service entries. Only languages listed will be supported.</desc>
-					<desc xml:lang="he">Contains a list of languages and spell-checking-service entries. Only languages listed will be supported.</desc>
-					<desc xml:lang="ca">Contains a list of languages and spell-checking-service entries. Only languages listed will be supported.</desc>
-					<desc xml:lang="pt">Contains a list of languages and spell-checking-service entries. Only languages listed will be supported.</desc>
-					<desc xml:lang="ru">Contains a list of languages and spell-checking-service entries. Only languages listed will be supported.</desc>
-					<desc xml:lang="es">Contains a list of languages and spell-checking-service entries. Only languages listed will be supported.</desc>
-					<desc xml:lang="it">Contains a list of languages and spell-checking-service entries. Only languages listed will be supported.</desc>
-					<desc xml:lang="sv">Contains a list of languages and spell-checking-service entries. Only languages listed will be supported.</desc>
-					<desc xml:lang="pl">Contains a list of languages and spell-checking-service entries. Only languages listed will be supported.</desc>
-					<desc xml:lang="pt-BR">Contains a list of languages and spell-checking-service entries. Only languages listed will be supported.</desc>
-					<desc xml:lang="ja">言語サービスおよびスペルチェックサービスの項目リストが含まれます。リストの言語のみがサポートされます。</desc>
-					<desc xml:lang="ko">Contains a list of languages and spell-checking-service entries. Only languages listed will be supported.</desc>
-					<desc xml:lang="tr">Contains a list of languages and spell-checking-service entries. Only languages listed will be supported.</desc>
-					<desc xml:lang="th">Contains a list of languages and spell-checking-service entries. Only languages listed will be supported.</desc>
-					<desc xml:lang="hi-IN">Contains a list of languages and spell-checking-service entries. Only languages listed will be supported.</desc>
-					<desc xml:lang="x-comment">Contains a list of languages and spell-checking-service entries. Only languages listed will be supported.</desc>
-					<desc xml:lang="hu">Contains a list of languages and spell-checking-service entries. Only languages listed will be supported.</desc>
-					<desc xml:lang="sk">Contains a list of languages and spell-checking-service entries. Only languages listed will be supported.</desc>
-					<desc xml:lang="sl">Contains a list of languages and spell-checking-service entries. Only languages listed will be supported.</desc>
+					<desc>Contains a list of languages and spell-checking-service entries. Only languages listed will be supported.</desc>
 				</info>
 			</group>
 			<group oor:name="ThesaurusList" oor:extensible="true">
 				<info>
-					<desc xml:lang="en-US">Contains a list of languages and thesaurus-service entries. Only languages listed will be supported.</desc>
-					<desc xml:lang="el">Contains a list of languages and thesaurus-service entries. Only languages listed will be supported.</desc>
-					<desc xml:lang="nl">Contains a list of languages and thesaurus-service entries. Only languages listed will be supported.</desc>
-					<desc xml:lang="fr">Contains a list of languages and thesaurus-service entries. Only languages listed will be supported.</desc>
-					<desc xml:lang="fi">Contains a list of languages and thesaurus-service entries. Only languages listed will be supported.</desc>
-					<desc xml:lang="cs">Contains a list of languages and thesaurus-service entries. Only languages listed will be supported.</desc>
-					<desc xml:lang="da">Contains a list of languages and thesaurus-service entries. Only languages listed will be supported.</desc>
-					<desc xml:lang="zh-CN">含有语言和同义词词典服务条目的列单。仅支持列出的语言。</desc>
-					<desc xml:lang="zh-TW">Contains a list of languages and thesaurus-service entries. Only languages listed will be supported.</desc>
-					<desc xml:lang="ar">Contains a list of languages and thesaurus-service entries. Only languages listed will be supported.</desc>
-					<desc xml:lang="he">Contains a list of languages and thesaurus-service entries. Only languages listed will be supported.</desc>
-					<desc xml:lang="ca">Contains a list of languages and thesaurus-service entries. Only languages listed will be supported.</desc>
-					<desc xml:lang="pt">Contains a list of languages and thesaurus-service entries. Only languages listed will be supported.</desc>
-					<desc xml:lang="ru">Contains a list of languages and thesaurus-service entries. Only languages listed will be supported.</desc>
-					<desc xml:lang="es">Contains a list of languages and thesaurus-service entries. Only languages listed will be supported.</desc>
-					<desc xml:lang="it">Contains a list of languages and thesaurus-service entries. Only languages listed will be supported.</desc>
-					<desc xml:lang="sv">Contains a list of languages and thesaurus-service entries. Only languages listed will be supported.</desc>
-					<desc xml:lang="pl">Contains a list of languages and thesaurus-service entries. Only languages listed will be supported.</desc>
-					<desc xml:lang="pt-BR">Contains a list of languages and thesaurus-service entries. Only languages listed will be supported.</desc>
-					<desc xml:lang="ja">言語サービスおよび類義語辞典サービスの項目リストが含まれます。リストの言語のみがサポートされます。</desc>
-					<desc xml:lang="ko">Contains a list of languages and thesaurus-service entries. Only languages listed will be supported.</desc>
-					<desc xml:lang="tr">Contains a list of languages and thesaurus-service entries. Only languages listed will be supported.</desc>
-					<desc xml:lang="th">Contains a list of languages and thesaurus-service entries. Only languages listed will be supported.</desc>
-					<desc xml:lang="hi-IN">Contains a list of languages and thesaurus-service entries. Only languages listed will be supported.</desc>
-					<desc xml:lang="x-comment">Contains a list of languages and thesaurus-service entries. Only languages listed will be supported.</desc>
-					<desc xml:lang="hu">Contains a list of languages and thesaurus-service entries. Only languages listed will be supported.</desc>
-					<desc xml:lang="sk">Contains a list of languages and thesaurus-service entries. Only languages listed will be supported.</desc>
-					<desc xml:lang="sl">Contains a list of languages and thesaurus-service entries. Only languages listed will be supported.</desc>
+					<desc>Contains a list of languages and thesaurus-service entries. Only languages listed will be supported.</desc>
 				</info>
 			</group>
 			<group oor:name="HyphenatorList" oor:extensible="true">
 				<info>
-					<desc xml:lang="en-US">Contains a list of languages and hyphenation-service pairs. Only the languages that are listed are supported.</desc>
-					<desc xml:lang="el">Contains a list of languages and hyphenation-service pairs. Only the languages that are listed are supported.</desc>
-					<desc xml:lang="nl">Contains a list of languages and hyphenation-service pairs. Only the languages that are listed are supported.</desc>
-					<desc xml:lang="fr">Contains a list of languages and hyphenation-service pairs. Only the languages that are listed are supported.</desc>
-					<desc xml:lang="fi">Contains a list of languages and hyphenation-service pairs. Only the languages that are listed are supported.</desc>
-					<desc xml:lang="cs">Contains a list of languages and hyphenation-service pairs. Only the languages that are listed are supported.</desc>
-					<desc xml:lang="da">Contains a list of languages and hyphenation-service pairs. Only the languages that are listed are supported.</desc>
-					<desc xml:lang="zh-CN">含有语言和连字符服务对的列单。仅支持列出的语言。</desc>
-					<desc xml:lang="zh-TW">Contains a list of languages and hyphenation-service pairs. Only the languages that are listed are supported.</desc>
-					<desc xml:lang="ar">Contains a list of languages and hyphenation-service pairs. Only the languages that are listed are supported.</desc>
-					<desc xml:lang="he">Contains a list of languages and hyphenation-service pairs. Only the languages that are listed are supported.</desc>
-					<desc xml:lang="ca">Contains a list of languages and hyphenation-service pairs. Only the languages that are listed are supported.</desc>
-					<desc xml:lang="pt">Contains a list of languages and hyphenation-service pairs. Only the languages that are listed are supported.</desc>
-					<desc xml:lang="ru">Contains a list of languages and hyphenation-service pairs. Only the languages that are listed are supported.</desc>
-					<desc xml:lang="es">Contains a list of languages and hyphenation-service pairs. Only the languages that are listed are supported.</desc>
-					<desc xml:lang="it">Contains a list of languages and hyphenation-service pairs. Only the languages that are listed are supported.</desc>
-					<desc xml:lang="sv">Contains a list of languages and hyphenation-service pairs. Only the languages that are listed are supported.</desc>
-					<desc xml:lang="pl">Contains a list of languages and hyphenation-service pairs. Only the languages that are listed are supported.</desc>
-					<desc xml:lang="pt-BR">Contains a list of languages and hyphenation-service pairs. Only the languages that are listed are supported.</desc>
-					<desc xml:lang="ja">言語サービスおよびハイフネーションサービスのペアの設定から成るリストが含まれます。リストの言語のみがサポートされます。</desc>
-					<desc xml:lang="ko">Contains a list of languages and hyphenation-service pairs. Only the languages that are listed are supported.</desc>
-					<desc xml:lang="tr">Contains a list of languages and hyphenation-service pairs. Only the languages that are listed are supported.</desc>
-					<desc xml:lang="th">Contains a list of languages and hyphenation-service pairs. Only the languages that are listed are supported.</desc>
-					<desc xml:lang="hi-IN">Contains a list of languages and hyphenation-service pairs. Only the languages that are listed are supported.</desc>
-					<desc xml:lang="x-comment">Contains a list of languages and hyphenation-service pairs. Only the languages that are listed are supported.</desc>
-					<desc xml:lang="hu">Contains a list of languages and hyphenation-service pairs. Only the languages that are listed are supported.</desc>
-					<desc xml:lang="sk">Contains a list of languages and hyphenation-service pairs. Only the languages that are listed are supported.</desc>
-					<desc xml:lang="sl">Contains a list of languages and hyphenation-service pairs. Only the languages that are listed are supported.</desc>
+					<desc>Contains a list of languages and hyphenation-service pairs. Only the languages that are listed are supported.</desc>
 				</info>
 			</group>
 			<group oor:name="LastFoundSpellCheckers" oor:extensible="true">
 				<info>
-					<desc xml:lang="en-US">Contains a list of languages and spell-checking-service entries. The entries represent those languages/spellcheckers that were available the last time. New languages/spellcheckers (those available this time but not the last time) will be activated automatically.</desc>
-					<desc xml:lang="el">Contains a list of languages and spell-checking-service entries. The entries represent those languages/spellcheckers that were available the last time. New languages/spellcheckers (those available this time but not the last time) will be activated automatically.</desc>
-					<desc xml:lang="nl">Contains a list of languages and spell-checking-service entries. The entries represent those languages/spellcheckers that were available the last time. New languages/spellcheckers (those available this time but not the last time) will be activated automatically.</desc>
-					<desc xml:lang="fr">Contains a list of languages and spell-checking-service entries. The entries represent those languages/spellcheckers that were available the last time. New languages/spellcheckers (those available this time but not the last time) will be activated automatically.</desc>
-					<desc xml:lang="fi">Contains a list of languages and spell-checking-service entries. The entries represent those languages/spellcheckers that were available the last time. New languages/spellcheckers (those available this time but not the last time) will be activated automatically.</desc>
-					<desc xml:lang="cs">Contains a list of languages and spell-checking-service entries. The entries represent those languages/spellcheckers that were available the last time. New languages/spellcheckers (those available this time but not the last time) will be activated automatically.</desc>
-					<desc xml:lang="da">Contains a list of languages and spell-checking-service entries. The entries represent those languages/spellcheckers that were available the last time. New languages/spellcheckers (those available this time but not the last time) will be activated automatically.</desc>
-					<desc xml:lang="zh-CN">含有语言和拼写检查服务条目的列单。这些条目代表那些上次可用的语言/拼写检查器。新语言/拼写检查 (此次可用而上次不可用) 将自动启动。</desc>
-					<desc xml:lang="zh-TW">Contains a list of languages and spell-checking-service entries. The entries represent those languages/spellcheckers that were available the last time. New languages/spellcheckers (those available this time but not the last time) will be activated automatically.</desc>
-					<desc xml:lang="ar">Contains a list of languages and spell-checking-service entries. The entries represent those languages/spellcheckers that were available the last time. New languages/spellcheckers (those available this time but not the last time) will be activated automatically.</desc>
-					<desc xml:lang="he">Contains a list of languages and spell-checking-service entries. The entries represent those languages/spellcheckers that were available the last time. New languages/spellcheckers (those available this time but not the last time) will be activated automatically.</desc>
-					<desc xml:lang="ca">Contains a list of languages and spell-checking-service entries. The entries represent those languages/spellcheckers that were available the last time. New languages/spellcheckers (those available this time but not the last time) will be activated automatically.</desc>
-					<desc xml:lang="pt">Contains a list of languages and spell-checking-service entries. The entries represent those languages/spellcheckers that were available the last time. New languages/spellcheckers (those available this time but not the last time) will be activated automatically.</desc>
-					<desc xml:lang="ru">Contains a list of languages and spell-checking-service entries. The entries represent those languages/spellcheckers that were available the last time. New languages/spellcheckers (those available this time but not the last time) will be activated automatically.</desc>
-					<desc xml:lang="es">Contains a list of languages and spell-checking-service entries. The entries represent those languages/spellcheckers that were available the last time. New languages/spellcheckers (those available this time but not the last time) will be activated automatically.</desc>
-					<desc xml:lang="it">Contains a list of languages and spell-checking-service entries. The entries represent those languages/spellcheckers that were available the last time. New languages/spellcheckers (those available this time but not the last time) will be activated automatically.</desc>
-					<desc xml:lang="sv">Contains a list of languages and spell-checking-service entries. The entries represent those languages/spellcheckers that were available the last time. New languages/spellcheckers (those available this time but not the last time) will be activated automatically.</desc>
-					<desc xml:lang="pl">Contains a list of languages and spell-checking-service entries. The entries represent those languages/spellcheckers that were available the last time. New languages/spellcheckers (those available this time but not the last time) will be activated automatically.</desc>
-					<desc xml:lang="pt-BR">Contains a list of languages and spell-checking-service entries. The entries represent those languages/spellcheckers that were available the last time. New languages/spellcheckers (those available this time but not the last time) will be activated automatically.</desc>
-					<desc xml:lang="ja">言語サービスおよびスペルチェックサービスの項目リストが含まれます。前回に利用可能だった言語/スペルチェッカーの項目を表わします。新しい言語/スペルチェッカー (前回利用可能ではなく、今回利用可能になったもの) を自動的にアクティブにします。</desc>
-					<desc xml:lang="ko">Contains a list of languages and spell-checking-service entries. The entries represent those languages/spellcheckers that were available the last time. New languages/spellcheckers (those available this time but not the last time) will be activated automatically.</desc>
-					<desc xml:lang="tr">Contains a list of languages and spell-checking-service entries. The entries represent those languages/spellcheckers that were available the last time. New languages/spellcheckers (those available this time but not the last time) will be activated automatically.</desc>
-					<desc xml:lang="th">Contains a list of languages and spell-checking-service entries. The entries represent those languages/spellcheckers that were available the last time. New languages/spellcheckers (those available this time but not the last time) will be activated automatically.</desc>
-					<desc xml:lang="hi-IN">Contains a list of languages and spell-checking-service entries. The entries represent those languages/spellcheckers that were available the last time. New languages/spellcheckers (those available this time but not the last time) will be activated automatically.</desc>
-					<desc xml:lang="x-comment">Contains a list of languages and spell-checking-service entries. The entries represent those languages/spellcheckers that were available the last time. New languages/spellcheckers (those available this time but not the last time) will be activated automatically.</desc>
-					<desc xml:lang="hu">Contains a list of languages and spell-checking-service entries. The entries represent those languages/spellcheckers that were available the last time. New languages/spellcheckers (those available this time but not the last time) will be activated automatically.</desc>
-					<desc xml:lang="sk">Contains a list of languages and spell-checking-service entries. The entries represent those languages/spellcheckers that were available the last time. New languages/spellcheckers (those available this time but not the last time) will be activated automatically.</desc>
-					<desc xml:lang="sl">Contains a list of languages and spell-checking-service entries. The entries represent those languages/spellcheckers that were available the last time. New languages/spellcheckers (those available this time but not the last time) will be activated automatically.</desc>
+					<desc>Contains a list of languages and spell-checking-service entries. The entries represent those languages/spellcheckers that were available the last time. New languages/spellcheckers (those available this time but not the last time) will be activated automatically.</desc>
 				</info>
 			</group>
 			<group oor:name="LastFoundThesauri" oor:extensible="true">
 				<info>
-					<desc xml:lang="en-US">Contains a list of languages and thesaurus-service entries. The entries represent those languages/thesauri that were available the last time. New languages/thesauri (those available this time but not the last time) will be activated automatically.</desc>
-					<desc xml:lang="el">Contains a list of languages and thesaurus-service entries. The entries represent those languages/thesauri that were available the last time. New languages/thesauri (those available this time but not the last time) will be activated automatically.</desc>
-					<desc xml:lang="nl">Contains a list of languages and thesaurus-service entries. The entries represent those languages/thesauri that were available the last time. New languages/thesauri (those available this time but not the last time) will be activated automatically.</desc>
-					<desc xml:lang="fr">Contains a list of languages and thesaurus-service entries. The entries represent those languages/thesauri that were available the last time. New languages/thesauri (those available this time but not the last time) will be activated automatically.</desc>
-					<desc xml:lang="fi">Contains a list of languages and thesaurus-service entries. The entries represent those languages/thesauri that were available the last time. New languages/thesauri (those available this time but not the last time) will be activated automatically.</desc>
-					<desc xml:lang="cs">Contains a list of languages and thesaurus-service entries. The entries represent those languages/thesauri that were available the last time. New languages/thesauri (those available this time but not the last time) will be activated automatically.</desc>
-					<desc xml:lang="da">Contains a list of languages and thesaurus-service entries. The entries represent those languages/thesauri that were available the last time. New languages/thesauri (those available this time but not the last time) will be activated automatically.</desc>
-					<desc xml:lang="zh-CN">含有语言和同义词词典服务条目的列单。这些条目代表那些上次可用的语言/同义词词典。新语言/同义词词典 (此次可用而上次不可用) 将自动启动。</desc>
-					<desc xml:lang="zh-TW">Contains a list of languages and thesaurus-service entries. The entries represent those languages/thesauri that were available the last time. New languages/thesauri (those available this time but not the last time) will be activated automatically.</desc>
-					<desc xml:lang="ar">Contains a list of languages and thesaurus-service entries. The entries represent those languages/thesauri that were available the last time. New languages/thesauri (those available this time but not the last time) will be activated automatically.</desc>
-					<desc xml:lang="he">Contains a list of languages and thesaurus-service entries. The entries represent those languages/thesauri that were available the last time. New languages/thesauri (those available this time but not the last time) will be activated automatically.</desc>
-					<desc xml:lang="ca">Contains a list of languages and thesaurus-service entries. The entries represent those languages/thesauri that were available the last time. New languages/thesauri (those available this time but not the last time) will be activated automatically.</desc>
-					<desc xml:lang="pt">Contains a list of languages and thesaurus-service entries. The entries represent those languages/thesauri that were available the last time. New languages/thesauri (those available this time but not the last time) will be activated automatically.</desc>
-					<desc xml:lang="ru">Contains a list of languages and thesaurus-service entries. The entries represent those languages/thesauri that were available the last time. New languages/thesauri (those available this time but not the last time) will be activated automatically.</desc>
-					<desc xml:lang="es">Contains a list of languages and thesaurus-service entries. The entries represent those languages/thesauri that were available the last time. New languages/thesauri (those available this time but not the last time) will be activated automatically.</desc>
-					<desc xml:lang="it">Contains a list of languages and thesaurus-service entries. The entries represent those languages/thesauri that were available the last time. New languages/thesauri (those available this time but not the last time) will be activated automatically.</desc>
-					<desc xml:lang="sv">Contains a list of languages and thesaurus-service entries. The entries represent those languages/thesauri that were available the last time. New languages/thesauri (those available this time but not the last time) will be activated automatically.</desc>
-					<desc xml:lang="pl">Contains a list of languages and thesaurus-service entries. The entries represent those languages/thesauri that were available the last time. New languages/thesauri (those available this time but not the last time) will be activated automatically.</desc>
-					<desc xml:lang="pt-BR">Contains a list of languages and thesaurus-service entries. The entries represent those languages/thesauri that were available the last time. New languages/thesauri (those available this time but not the last time) will be activated automatically.</desc>
-					<desc xml:lang="ja">言語サービスおよび類義語辞典サービスの項目リストが含まれます。前回に利用可能だった言語/類義語辞典の項目を表わします。新しい言語/スペルチェッカー (前回利用可能ではなく、今回利用可能になったもの) を自動的にアクティブにします。</desc>
-					<desc xml:lang="ko">Contains a list of languages and thesaurus-service entries. The entries represent those languages/thesauri that were available the last time. New languages/thesauri (those available this time but not the last time) will be activated automatically.</desc>
-					<desc xml:lang="tr">Contains a list of languages and thesaurus-service entries. The entries represent those languages/thesauri that were available the last time. New languages/thesauri (those available this time but not the last time) will be activated automatically.</desc>
-					<desc xml:lang="th">Contains a list of languages and thesaurus-service entries. The entries represent those languages/thesauri that were available the last time. New languages/thesauri (those available this time but not the last time) will be activated automatically.</desc>
-					<desc xml:lang="hi-IN">Contains a list of languages and thesaurus-service entries. The entries represent those languages/thesauri that were available the last time. New languages/thesauri (those available this time but not the last time) will be activated automatically.</desc>
-					<desc xml:lang="x-comment">Contains a list of languages and thesaurus-service entries. The entries represent those languages/thesauri that were available the last time. New languages/thesauri (those available this time but not the last time) will be activated automatically.</desc>
-					<desc xml:lang="hu">Contains a list of languages and thesaurus-service entries. The entries represent those languages/thesauri that were available the last time. New languages/thesauri (those available this time but not the last time) will be activated automatically.</desc>
-					<desc xml:lang="sk">Contains a list of languages and thesaurus-service entries. The entries represent those languages/thesauri that were available the last time. New languages/thesauri (those available this time but not the last time) will be activated automatically.</desc>
-					<desc xml:lang="sl">Contains a list of languages and thesaurus-service entries. The entries represent those languages/thesauri that were available the last time. New languages/thesauri (those available this time but not the last time) will be activated automatically.</desc>
+					<desc>Contains a list of languages and thesaurus-service entries. The entries represent those languages/thesauri that were available the last time. New languages/thesauri (those available this time but not the last time) will be activated automatically.</desc>
 				</info>
 			</group>
 			<group oor:name="LastFoundHyphenators" oor:extensible="true">
 				<info>
-					<desc xml:lang="en-US">Contains a list of languages and hyphenation-service pairs. The entries represent those languages/hyphenators that were available the last time. New languages/hyphenators (those available this time but not the last time) will be activated automatically.</desc>
-					<desc xml:lang="el">Contains a list of languages and hyphenation-service pairs. The entries represent those languages/hyphenators that were available the last time. New languages/hyphenators (those available this time but not the last time) will be activated automatically.</desc>
-					<desc xml:lang="nl">Contains a list of languages and hyphenation-service pairs. The entries represent those languages/hyphenators that were available the last time. New languages/hyphenators (those available this time but not the last time) will be activated automatically.</desc>
-					<desc xml:lang="fr">Contains a list of languages and hyphenation-service pairs. The entries represent those languages/hyphenators that were available the last time. New languages/hyphenators (those available this time but not the last time) will be activated automatically.</desc>
-					<desc xml:lang="fi">Contains a list of languages and hyphenation-service pairs. The entries represent those languages/hyphenators that were available the last time. New languages/hyphenators (those available this time but not the last time) will be activated automatically.</desc>
-					<desc xml:lang="cs">Contains a list of languages and hyphenation-service pairs. The entries represent those languages/hyphenators that were available the last time. New languages/hyphenators (those available this time but not the last time) will be activated automatically.</desc>
-					<desc xml:lang="da">Contains a list of languages and hyphenation-service pairs. The entries represent those languages/hyphenators that were available the last time. New languages/hyphenators (those available this time but not the last time) will be activated automatically.</desc>
-					<desc xml:lang="zh-CN">含有语言和连字符服务对的列单。这些条目代表那些上次可用的语言/连字符。新语言/连字符 (此次可用而上次不可用) 将自动启动。</desc>
-					<desc xml:lang="zh-TW">Contains a list of languages and hyphenation-service pairs. The entries represent those languages/hyphenators that were available the last time. New languages/hyphenators (those available this time but not the last time) will be activated automatically.</desc>
-					<desc xml:lang="ar">Contains a list of languages and hyphenation-service pairs. The entries represent those languages/hyphenators that were available the last time. New languages/hyphenators (those available this time but not the last time) will be activated automatically.</desc>
-					<desc xml:lang="he">Contains a list of languages and hyphenation-service pairs. The entries represent those languages/hyphenators that were available the last time. New languages/hyphenators (those available this time but not the last time) will be activated automatically.</desc>
-					<desc xml:lang="ca">Contains a list of languages and hyphenation-service pairs. The entries represent those languages/hyphenators that were available the last time. New languages/hyphenators (those available this time but not the last time) will be activated automatically.</desc>
-					<desc xml:lang="pt">Contains a list of languages and hyphenation-service pairs. The entries represent those languages/hyphenators that were available the last time. New languages/hyphenators (those available this time but not the last time) will be activated automatically.</desc>
-					<desc xml:lang="ru">Contains a list of languages and hyphenation-service pairs. The entries represent those languages/hyphenators that were available the last time. New languages/hyphenators (those available this time but not the last time) will be activated automatically.</desc>
-					<desc xml:lang="es">Contains a list of languages and hyphenation-service pairs. The entries represent those languages/hyphenators that were available the last time. New languages/hyphenators (those available this time but not the last time) will be activated automatically.</desc>
-					<desc xml:lang="it">Contains a list of languages and hyphenation-service pairs. The entries represent those languages/hyphenators that were available the last time. New languages/hyphenators (those available this time but not the last time) will be activated automatically.</desc>
-					<desc xml:lang="sv">Contains a list of languages and hyphenation-service pairs. The entries represent those languages/hyphenators that were available the last time. New languages/hyphenators (those available this time but not the last time) will be activated automatically.</desc>
-					<desc xml:lang="pl">Contains a list of languages and hyphenation-service pairs. The entries represent those languages/hyphenators that were available the last time. New languages/hyphenators (those available this time but not the last time) will be activated automatically.</desc>
-					<desc xml:lang="pt-BR">Contains a list of languages and hyphenation-service pairs. The entries represent those languages/hyphenators that were available the last time. New languages/hyphenators (those available this time but not the last time) will be activated automatically.</desc>
-					<desc xml:lang="ja">言語サービスおよびハイフネーションサービスのペアの設定から成るリストが含まれます。前回に利用可能だった言語/類義語辞典の項目を表わします。新しい言語/ハイフネーション機能 (前回利用可能ではなく、今回利用可能になったもの) を自動的にアクティブにします。</desc>
-					<desc xml:lang="ko">Contains a list of languages and hyphenation-service pairs. The entries represent those languages/hyphenators that were available the last time. New languages/hyphenators (those available this time but not the last time) will be activated automatically.</desc>
-					<desc xml:lang="tr">Contains a list of languages and hyphenation-service pairs. The entries represent those languages/hyphenators that were available the last time. New languages/hyphenators (those available this time but not the last time) will be activated automatically.</desc>
-					<desc xml:lang="th">Contains a list of languages and hyphenation-service pairs. The entries represent those languages/hyphenators that were available the last time. New languages/hyphenators (those available this time but not the last time) will be activated automatically.</desc>
-					<desc xml:lang="hi-IN">Contains a list of languages and hyphenation-service pairs. The entries represent those languages/hyphenators that were available the last time. New languages/hyphenators (those available this time but not the last time) will be activated automatically.</desc>
-					<desc xml:lang="x-comment">Contains a list of languages and hyphenation-service pairs. The entries represent those languages/hyphenators that were available the last time. New languages/hyphenators (those available this time but not the last time) will be activated automatically.</desc>
-					<desc xml:lang="hu">Contains a list of languages and hyphenation-service pairs. The entries represent those languages/hyphenators that were available the last time. New languages/hyphenators (those available this time but not the last time) will be activated automatically.</desc>
-					<desc xml:lang="sk">Contains a list of languages and hyphenation-service pairs. The entries represent those languages/hyphenators that were available the last time. New languages/hyphenators (those available this time but not the last time) will be activated automatically.</desc>
-					<desc xml:lang="sl">Contains a list of languages and hyphenation-service pairs. The entries represent those languages/hyphenators that were available the last time. New languages/hyphenators (those available this time but not the last time) will be activated automatically.</desc>
+					<desc>Contains a list of languages and hyphenation-service pairs. The entries represent those languages/hyphenators that were available the last time. New languages/hyphenators (those available this time but not the last time) will be activated automatically.</desc>
 				</info>
 			</group>
 		</group>
