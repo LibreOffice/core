@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-09 15:54:16 $
+ *  last change: $Author: cmc $ $Date: 2002-07-10 16:36:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1139,14 +1139,25 @@ BOOL SwWW8ImplReader::MustCloseSection(long nTxtPos)
     BOOL bSectionWasJustClosed = pAfterSection && nTxtPos;
     if( bSectionWasJustClosed )
     {
+        /*
+        #96598#
+        When a section is created it is created with an empty para inside it.
+        We should never want this para.
+        */
+#if 1
+        rDoc.DelFullPara(*pPaM);
+#else
         // remove preceeding Node
         // if a  0x0d  came immediately before
         if( 0 == pPaM->GetPoint()->nContent.GetIndex() )
             JoinNode( pPaM );
+#endif
         // set PaM behind section
         pPaM->GetPoint()->nNode = *pAfterSection;
         pPaM->GetPoint()->nContent.Assign(pPaM->GetCntntNode(), 0);
 
+        ASSERT(!pPaM->GetNode()->IsEndNode(),
+            "WW8: I want to see an example of this to ease my mind");
         if (pPaM->GetNode()->IsEndNode())
             rDoc.AppendTxtNode(*pPaM->GetPoint());
 
@@ -1162,11 +1173,13 @@ BOOL SwWW8ImplReader::MustCloseSection(long nTxtPos)
 // mit Attributen un KF-Texten fuellt.
 // Dieses Vorgehen ist noetig geworden, da die UEbersetzung der verschiedenen
 // Seiten-Attribute zu stark verflochten ist.
-
-void SwWW8ImplReader::CreateSep(const long nTxtPos,BOOL bMustHaveBreak)
+void SwWW8ImplReader::CreateSep(const long nTxtPos, BOOL bMustHaveBreak)
 {
-    //#i1909# #100688# section/page breaks should not occur in tables, word
-    //itself ignores them in this case.
+    /*
+    #i1909# #100688# section/page breaks should not occur in tables, word
+    itself ignores them in this case. The bug is truly that this filter
+    created such documents in the past!
+    */
     if (nTable)
         return;
 
@@ -2969,7 +2982,7 @@ BOOL SwWW8ImplReader::JoinNode( SwPaM* pPam, BOOL bStealAttr )
     SwNodeIndex aPref( pPam->GetPoint()->nNode, -1 );
 
     SwTxtNode* pNode = aPref.GetNode().GetTxtNode();
-    if( pNode )
+    if (pNode)
     {
         pPaM->GetPoint()->nNode = aPref;
         pPaM->GetPoint()->nContent.Assign( pNode, pNode->GetTxt().Len() );
@@ -2977,6 +2990,7 @@ BOOL SwWW8ImplReader::JoinNode( SwPaM* pPam, BOOL bStealAttr )
         if( bStealAttr )
             pCtrlStck->StealAttr( pPam->GetPoint() );
         pNode->JoinNext();
+
         bRet = TRUE;
     }
     return bRet;
