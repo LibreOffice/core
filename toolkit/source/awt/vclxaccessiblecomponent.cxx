@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxaccessiblecomponent.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ssa $ $Date: 2002-05-31 08:01:34 $
+ *  last change: $Author: tbe $ $Date: 2002-05-31 16:38:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -643,29 +643,23 @@ uno::Any VCLXAccessibleComponent::getAccessibleKeyBinding() throw (uno::RuntimeE
 
     if ( GetWindow() )
     {
-        String sText = GetWindow()->GetText();
-        xub_StrLen nFound = sText.Search( MNEMONIC_CHAR );
+        KeyEvent aVclKeyEvent = GetWindow()->GetActivationKey();
+        KeyCode aVclKeyCode = aVclKeyEvent.GetKeyCode();
+        awt::KeyEvent aKeyEvent;
 
-        if ( STRING_NOTFOUND != nFound && ++nFound < sText.Len() )
-        {
-            sText.ToUpperAscii();
-            sal_Unicode cChar = sText.GetChar( nFound );
+        aKeyEvent.Modifiers = 0;
+        if ( aVclKeyCode.IsShift() )
+            aKeyEvent.Modifiers |= awt::KeyModifier::SHIFT;
+        if ( aVclKeyCode.IsMod1() )
+            aKeyEvent.Modifiers |= awt::KeyModifier::MOD1;
+        if ( aVclKeyCode.IsMod2() )
+            aKeyEvent.Modifiers |= awt::KeyModifier::MOD2;
 
-            if ( ( cChar >= '0' && cChar <= '9' ) || ( cChar >= 'A' && cChar <= 'Z' ) )
-            {
-                awt::KeyEvent aEvent;
+        aKeyEvent.KeyCode = aVclKeyCode.GetCode();
+        aKeyEvent.KeyChar = aVclKeyEvent.GetCharCode();
+        aKeyEvent.KeyFunc = aVclKeyCode.GetFunction();
 
-                if ( cChar >= '0' && cChar <= '9' )
-                    aEvent.KeyCode = awt::Key::NUM0 + cChar - '0';
-                else if ( cChar >= 'A' && cChar <= 'Z' )
-                    aEvent.KeyCode = awt::Key::A + cChar - 'A';
-
-                aEvent.KeyChar = cChar;
-                aEvent.KeyFunc = 0;
-                aEvent.Modifiers = awt::KeyModifier::MOD2;
-                aRet <<= aEvent;
-            }
-        }
+        aRet <<= aKeyEvent;
     }
 
     return aRet;
