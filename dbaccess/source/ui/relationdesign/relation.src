@@ -2,9 +2,9 @@
  *
  *  $RCSfile: relation.src,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:56:23 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 18:03:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -254,7 +254,7 @@ String STR_QUERY_REL_EDIT_RELATION
     Text [ english_us ] = "This relation already exsits. Do you want to edit it?" ;
     Text[ portuguese ] = "Esta relaηγo jα existe. Editar?";
     Text[ russian ] = "έςΰ ρβÿηό σζε ρσωερςβσες. Θημενθςό εε?";
-    Text[ greek ] = "Η σχέση αυτή υπάρχει ήδη. Θέλετε να την επεξεργαστείτε;";
+    Text[ greek ] = "Αυτή η σχέση υπάρχει ήδη. Θέλετε να την επεξεργαστείτε;";
     Text[ dutch ] = "Deze relatie bestaat reeds. Wilt u deze bewerken?";
     Text[ french ] = "Cette relation existe dιjΰ. Voulez-vous l'ιditer ?";
     Text[ spanish ] = "Esta relaciσn ya existe. ΏDesea editarla?";
@@ -481,7 +481,7 @@ Menu RID_RELATION_DESIGN_MAIN_MENU
                     Text[ english_us ] = "Redo";
                     Text[ portuguese ] = "Restaurar";
                     Text[ russian ] = "Βεπνσςό";
-                    Text[ greek ] = "Επαναφορά";
+                    Text[ greek ] = "Επανεκτέλεση";
                     Text[ dutch ] = "Herstellen";
                     Text[ french ] = "Restaurer";
                     Text[ spanish ] = "Restaurar";
@@ -563,7 +563,7 @@ Menu RID_RELATION_DESIGN_MAIN_MENU
             Text[ danish ] = "~Indsζt";
             Text[ swedish ] = "~Infoga";
             Text[ polish ] = "Wstaw";
-            Text[ portuguese_brazilian ] = "~Insert";
+            Text[ portuguese_brazilian ] = "~Inserir";
             Text[ japanese ] = "ζΏε…¥(~I)";
             Text[ korean ] = "μ‚½μ…(~I)";
             Text[ chinese_simplified ] = "ζ’ε…¥(~I)";
@@ -644,7 +644,7 @@ String STR_QUERY_REL_DELETE_WINDOW
     Text[ english_us ] = "When you delete this table all corresponding relations will be deleted as well. Continue?";
     Text[ portuguese ] = "Se eliminar esta tabela serγo tambιm eliminadas todas as relaηυes correspondentes. Continuar?";
     Text[ russian ] = "Σδΰλενθε ύςξι ςΰαλθφϋ οξβλεχες ηΰ ρξαξι σδΰλενθε βρευ ξςνξρÿωθυρÿ κ νει ρβÿηει. Οπξδξλζθςό?";
-    Text[ greek ] = "When you delete this table all corresponding relations will be deleted as well. Continue?";
+    Text[ greek ] = " Όταν διαγράψετε αυτό τον πίνακα, θα διαγραφούν επίσης και όλες οι αντίστοιχες σχέσεις. Θέλετε να συνεχίσετε;";
     Text[ dutch ] = "Als u deze tabel wist, worden alle bijbehorende relaties eveneens gewist. Wilt u doorgaan?";
     Text[ french ] = "Supprimer cette table entraξne la suppression des relations associιes. Continuer ?";
     Text[ spanish ] = "Si borra esta tabla se borrarαn tambiιn todas las relaciones correspondientes. ΏDesea continuar?";
@@ -653,7 +653,7 @@ String STR_QUERY_REL_DELETE_WINDOW
     Text[ danish ] = "Hvis du sletter denne tabel, slettes ogsε alle tilhψrende relationer. Vil du fortsζtte?";
     Text[ swedish ] = "Om du raderar den hδr tabellen raderas δven alla tillhφrande relationer. Vill du fortsδtta?";
     Text[ polish ] = "Wraz z tabelΉ zostanΉ usuniκte wszystkie przynaleΏne relacje. Kontynuowaζ?";
-    Text[ portuguese_brazilian ] = "Quando vocκ excluir esta tabela, todas as relaηυes correspondentes serγo excluidas. Deseja continuar ?";
+    Text[ portuguese_brazilian ] = "Ao excluir esta tabela, todas as relaηυes correspondentes serγo excluνdas Deseja continuar ?";
     Text[ japanese ] = "γ“γ®γƒ†γƒΌγƒ–γƒ«γ‚’ε‰ι™¤γ™γ‚‹γ¨γ€γ“γ‚γ«ε±γ™γ‚‹γ™γΉγ¦γ®γƒªγƒ¬γƒΌγ‚·γƒ§γƒ³γ‚‚ε‰ι™¤γ•γ‚γ¦γ—γΎγ™γ€‚η¶θ΅γ—γΎγ™γ‹γ€‚";
     Text[ korean ] = "μ΄ ν…μ΄λΈ”μ„ μ‚­μ ν•λ©΄ ν•΄λ‹Ήν•λ” λª¨λ“  κ΄€κ³„ μ—­μ‹ μ‚­μ λ©λ‹λ‹¤. κ³„μ†ν•μ‹κ² μµλ‹κΉ?";
     Text[ chinese_simplified ] = "ε¦‚ζε ι™¤θΏ™δΈªθ΅¨ζ ΌοΌε°±δΌδΈ€εε ι™¤ζ‰€ζ‰η„δ»ε±ε…³η³»γ€‚θ¦η»§η»­οΌ";
@@ -667,6 +667,7 @@ String STR_QUERY_REL_DELETE_WINDOW
     Text[ hindi ] = "ΰ¤‡ΰ¤Έ ΰ¤Έΰ¤Ύΰ¤°ΰ¤£ΰ¥€ ΰ¤•ΰ¥‹ ΰ¤®ΰ¤Ώΰ¤ΰ¤Ύΰ¤¨ΰ¥‡ ΰ¤•ΰ¥‡ ΰ¤Έΰ¤®ΰ¤― ΰ¤‡ΰ¤Έΰ¤•ΰ¥‡ ΰ¤Έΰ¤¬ ΰ¤Έΰ¤®ΰ¥ΰ¤¬ΰ¤¨ΰ¥ΰ¤§ ΰ¤­ΰ¥€ ΰ¤®ΰ¤Ώΰ¤ ΰ¤ΰ¤Ύΰ¤ΰ¤—ΰ¤Ύ ΰ¥¤ ΰ¤ΰ¤Ύΰ¤°ΰ¥€ ΰ¤°ΰ¤–ΰ¤¨ΰ¤Ύ ΰ¤Ήΰ¥?";
     Text[ slovak ] = "ZmazanΓ­m tejto tabuΔΎky zmaΕΎete tieΕΎ vΕ΅etky zodpovedajΓΊce relΓ΅cie.PokraΔovaΕ¥?";
 };
+
 
 
 
