@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cption.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2001-08-16 16:49:56 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 12:39:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,40 +117,49 @@
 class SwFldMgr;
 class SwView;
 
+#include "optload.hxx"
 #include "swlbox.hxx"
 
 class SwCaptionDialog : public SvxStandardDialog
 {
-    class SwCptComboBox : public ComboBox
+    class CategoryBox : public ComboBox
     {
     public:
-        SwCptComboBox( Window* pParent, const ResId& rResId )
+        CategoryBox( Window* pParent, const ResId& rResId )
             : ComboBox( pParent, rResId )
         {}
-        virtual long PreNotify( NotifyEvent& rNEvt );
+
+        virtual long    PreNotify( NotifyEvent& rNEvt );
     };
 
-    FixedText    aSampleText;
-    FixedText    aCategoryText;
-    SwCptComboBox aCategoryBox;
-    FixedText    aFormatText;
-    ListBox      aFormatBox;
+//  FixedText    aSampleText;
     FixedText    aTextText;
     Edit         aTextEdit;
+    FixedLine    aSettingsFL;
+    FixedText    aCategoryText;
+    CategoryBox  aCategoryBox;
+    FixedText    aFormatText;
+    ListBox      aFormatBox;
+    FixedText    aSepText;
+    Edit         aSepEdit;
     FixedText    aPosText;
     ListBox      aPosBox;
-    CheckBox     aCopyAttributesCB;
-    FixedText    aObjectNameFT;
-    NoSpaceEdit  aObjectNameED;
-    FixedLine    aSettingsFL;
     OKButton     aOKButton;
     CancelButton aCancelButton;
     HelpButton   aHelpButton;
+    PushButton   aAutoCaptionButton;
     PushButton   aOptionButton;
+
+    String       sNone;
+
+    SwCaptionPreview aPrevWin;
 
     SwView       &rView;    //Suchen per aktive ::com::sun::star::sdbcx::View vermeiden.
     SwFldMgr     *pMgr;     //Ptr um das include zu sparen
-    sal_uInt16       eType;
+    sal_uInt16   eType;
+
+    String       sCharacterStyle;
+    bool         bCopyAttributes;
 
     String          sObjectName;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    xNameAccess;
@@ -159,6 +168,7 @@ class SwCaptionDialog : public SvxStandardDialog
     DECL_LINK( SelectHdl, ListBox * );
     DECL_LINK( ModifyHdl, Edit * );
     DECL_LINK( OptionHdl, Button * );
+    DECL_LINK( CaptionHdl, PushButton*);
 
     virtual void Apply();
 
