@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: svtools_AccessibleBrowseBox.xba,v $ 
 '*
-'*  $Revision: 1.3 $ 
+'*  $Revision: 1.4 $ 
 '*
-'*  last change:$Date: 2003-03-26 14:54:20 $ 
+'*  last change:$Date: 2003-05-27 12:17:39 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -103,7 +103,7 @@ On Error Goto ErrHndl
     oWin = createUnoService("com.sun.star.awt.Toolkit").getActiveTopWindow()
 
     xRoot = utils.at_getAccessibleObject(oWin)
-    oObj = utils.at_getAccessibleObjectForRole(xRoot, 32)
+    oObj = utils.at_getAccessibleObjectForRole(xRoot, com.sun.star.accessibility.AccessibleRole.PANEL)
     Out.log(oObj.getImplementationName)
 
     Dim frame1 As Object, frame2 As Object
@@ -118,7 +118,7 @@ ErrHndl:
 End Sub
 
 Sub DisposeObj()
-    oDoc.dispose()
+    utils.closeObject(oDoc)
 End Sub
 
 Sub fireEvent()
