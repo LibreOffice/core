@@ -1,6 +1,6 @@
 <!-- edited with XML Spy v3.5 NT (http://www.xmlspy.com) by Sascha Ballach (Star Office GmbH) -->
 <!--
-	$Id: table.mod,v 1.24 2001-02-23 14:15:30 sab Exp $
+	$Id: table.mod,v 1.25 2001-03-01 15:17:04 sab Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -302,6 +302,7 @@
 	table:precision-as-shown %boolean; "false"
 	table:search-criteria-must-apply-to-whole-cell %boolean; "true"
 	table:automatic-find-labels %boolean; "true"
+	table:null-year %positiveInteger; "1930"
 >
 <!ELEMENT table:null-date EMPTY>
 <!ATTLIST table:null-date
