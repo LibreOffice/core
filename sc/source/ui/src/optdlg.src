@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:56:45 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 20:04:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,6 +238,18 @@ StringList [ catalan ] =\
          < "Zobraziť" ; Default ; > ;\
         < "Skryť" ; Default ; > ;\
         < "Zástupné znaky" ; Default ; > ;\
+    };\
+    StringList [ hungarian ] = \
+    {\
+         < "Megjelenítés" ; Default ; > ;\
+        < "Elrejtés" ; Default ; > ;\
+        < "Helykitöltők" ; Default ; > ;\
+    };\
+    StringList [ slovenian ] = \
+    {\
+         < "Pokaži" ; Default ; > ;\
+        < "Skrij" ; Default ; > ;\
+        < "Ograde" ; Default ; > ;\
     };
 
 /**************************************************************************/
@@ -264,7 +276,7 @@ TabPage RID_SCPAGE_CALC
         Text [ portuguese_brazilian ] = "~Itera��es" ;
         Text [ portuguese ] = "~Itera��es" ;
         Text [ finnish ] = "~Iteroinnit" ;
-        Text [ danish ] = "Iterationer" ;
+        Text [ danish ] = "~Iterationer" ;
         Text [ french ] = "~It�rations" ;
         Text [ swedish ] = "~Iterationer" ;
         Text [ dutch ] = "~Iteraties" ;
@@ -286,6 +298,8 @@ TabPage RID_SCPAGE_CALC
         Text[ hebrew ] = "~Iterationen";
         Text[ hindi ] = "~अइटरेशन्स";
         Text[ slovak ] = "~Iterácie";
+        Text[ hungarian ] = "~Iterációk";
+        Text[ slovenian ] = "Ponov~itve";
     };
     FixedText FT_STEPS
     {
@@ -298,7 +312,7 @@ TabPage RID_SCPAGE_CALC
         Text [ portuguese_brazilian ] = "~Passos" ;
         Text [ portuguese ] = "~Passos" ;
         Text [ finnish ] = "~Vaiheet" ;
-        Text [ danish ] = "T~rin" ;
+        Text [ danish ] = "~Trin" ;
         Text [ french ] = "P~as" ;
         Text [ swedish ] = "~Steg" ;
         Text [ dutch ] = "S~tappen" ;
@@ -320,6 +334,8 @@ TabPage RID_SCPAGE_CALC
         Text[ hebrew ] = "Sch~ritte";
         Text[ hindi ] = "~स्टेप्स";
         Text[ slovak ] = "K~roky";
+        Text[ hungarian ] = "~Lépések";
+        Text[ slovenian ] = "~Koraki";
     };
     FixedText FT_EPS
     {
@@ -333,7 +349,7 @@ TabPage RID_SCPAGE_CALC
         Text [ spanish ] = "~Alteraci�n m�nima" ;
         Text [ french ] = "~Valeur de changement min." ;
         Text [ swedish ] = "Minsta �ndrings~v�rde" ;
-        Text [ danish ] = "Minimal �ndringsv�rdi" ;
+        Text [ danish ] = "~Minimal �ndringsv�rdi" ;
         WordBreak = TRUE ;
         Text [ portuguese_brazilian ] = "~M�nimo Valor de Altera��o" ;
         Text [ portuguese ] = "~Valor de altera��o m�nimo" ;
@@ -354,6 +370,8 @@ TabPage RID_SCPAGE_CALC
         Text[ hebrew ] = "Minimaler Änderungs~wert";
         Text[ hindi ] = "~न्यूनतम परिवर्तन";
         Text[ slovak ] = "~Minimálna zmena";
+        Text[ hungarian ] = "~Minimális változás";
+        Text[ slovenian ] = "N~ajmanjša sprememba";
     };
     NumericField ED_STEPS
     {
@@ -382,7 +400,7 @@ TabPage RID_SCPAGE_CALC
         Text [ portuguese_brazilian ] = "Refer�ncias iterativas" ;
         Text [ portuguese ] = "~Refer�ncias circulares" ;
         Text [ finnish ] = "Iterointiviitteet" ;
-        Text [ danish ] = "Cirkul�re referencer" ;
+        Text [ danish ] = "Iterative referencer" ;
         Text [ french ] = "R�f�rences circulaires" ;
         Text [ swedish ] = "Cirkul�ra referenser" ;
         Text [ dutch ] = "Cirkelverwijzingen" ;
@@ -404,6 +422,8 @@ TabPage RID_SCPAGE_CALC
         Text[ hebrew ] = "Zirkuläre Referenzen";
         Text[ hindi ] = "अइटरेटिव रेफरेन्स";
         Text[ slovak ] = "Iteračné odkazy";
+        Text[ hungarian ] = "Ismétlődő hivatkozások";
+        Text[ slovenian ] = "Ponavljalni sklici";
     };
     RadioButton BTN_DATESTD
     {
@@ -465,6 +485,10 @@ TabPage RID_SCPAGE_CALC
         QuickHelpText[ hindi ] = "मूल्य 0 12/30/1899 से अनुरूप";
         Text[ slovak ] = "12/30/1899 (výc~hodzie)";
         QuickHelpText[ slovak ] = "Hodnota 0 zodpovedá 12/30/1899";
+        Text[ hungarian ] = "1899. dec. 30. (ala~pértelmezés)";
+        Text[ slovenian ] = "30.12.1899 (priv~zeto)";
+        QuickHelpText[ hungarian ] = "0 értéke: 1899. dec. 30.";
+        QuickHelpText[ slovenian ] = "Vrednost 0 pomeni 30.12.1899";
     };
     RadioButton BTN_DATESC10
     {
@@ -527,6 +551,10 @@ TabPage RID_SCPAGE_CALC
         QuickHelpText[ hindi ] = "मूल्य 0 01/01/1900 से अनुरूप";
         Text[ slovak ] = "01/01/1900 (Star~Calc 1.0)";
         QuickHelpText[ slovak ] = "Hodnota 0 zodpovedá 01/01/1900";
+        Text[ hungarian ] = "1900. jan. 1. (Star~Calc 1.0)";
+        Text[ slovenian ] = "01.01.1900 (Star~Calc 1.0)";
+        QuickHelpText[ hungarian ] = "0 értéke: 1900. jan. 1.";
+        QuickHelpText[ slovenian ] = "Vrednost 0 pomeni 1.1.1900";
     };
     RadioButton BTN_DATE1904
     {
@@ -542,7 +570,7 @@ TabPage RID_SCPAGE_CALC
         Text [ portuguese_brazilian ] = "~01/01/1904" ;
         Text [ portuguese ] = "~01/01/1904" ;
         Text [ finnish ] = "~01/01/1904" ;
-        Text [ danish ] = "01-01-1904" ;
+        Text [ danish ] = "~01.01.1904" ;
         Text [ french ] = "~01.01.1904" ;
         Text [ swedish ] = "~1904-01-01" ;
         Text [ dutch ] = "~01.01.1904" ;
@@ -582,13 +610,17 @@ TabPage RID_SCPAGE_CALC
         Text[ czech ] = "01/01/1904";
         Text[ hebrew ] = "~01.01.1904";
         QuickHelpText[ czech ] = "0 odpovídá 01/01/1904";
-        QuickHelpText[ danish ] = "0 corresponds to 01/01/1904";
+        QuickHelpText[ danish ] = "0 svarer til 01.01.1904";
         QuickHelpText[ hebrew ] = "Wert 0 entspricht dem 01.01.1904";
         Text[ hindi ] = "~01/01/1904";
         QuickHelpText[ portuguese_brazilian ] = "0 corresponde a 01/01/1904";
         QuickHelpText[ hindi ] = "0 01/01/1904 से अनुरूप";
         Text[ slovak ] = "~01/01/1904";
         QuickHelpText[ slovak ] = "0 zodpovedá 01/01/1904";
+        Text[ hungarian ] = "19~04. jan. 1.";
+        Text[ slovenian ] = "~01.01.1904";
+        QuickHelpText[ hungarian ] = "0 értéke: 1904. jan. 1.";
+        QuickHelpText[ slovenian ] = "0 pomeni 1.1.1904";
     };
     FixedLine FL_SEPARATOR
     {
@@ -628,6 +660,8 @@ TabPage RID_SCPAGE_CALC
         Text[ hebrew ] = "‮תאריך‬";
         Text[ hindi ] = "दिनांक";
         Text[ slovak ] = "Dátum";
+        Text[ hungarian ] = "Dátum";
+        Text[ slovenian ] = "Datum";
     };
     FixedLine FL_H_SEPARATOR
     {
@@ -645,7 +679,7 @@ TabPage RID_SCPAGE_CALC
         Text [ portuguese_brazilian ] = "~Casas decimais" ;
         Text [ portuguese ] = "~Casas decimais" ;
         Text [ finnish ] = "~Desimaaleja" ;
-        Text [ danish ] = "Antal decimaler" ;
+        Text [ danish ] = "~Antal decimaler" ;
         Text [ french ] = "D�cimales" ;
         Text [ swedish ] = "Antal ~decimaler" ;
         Text [ dutch ] = "~Aantal decimalen" ;
@@ -668,6 +702,8 @@ TabPage RID_SCPAGE_CALC
         Text[ hebrew ] = "Nach~kommastellen";
         Text[ hindi ] = "~दशांश स्थान";
         Text[ slovak ] = "~Desatinné miesta";
+        Text[ hungarian ] = "~Tizedeshelyek";
+        Text[ slovenian ] = "~Decimalna mesta";
     };
     NumericField ED_PREC
     {
@@ -690,7 +726,7 @@ TabPage RID_SCPAGE_CALC
         Text [ french ] = "Respecter la casse" ;
         Text [ dutch ] = "H~oofdletters/kleine letters" ;
         Text [ spanish ] = "~May�sculas/min�sculas" ;
-        Text [ danish ] = "Forskel p� store og sm� bogstaver" ;
+        Text [ danish ] = "~STORE og sm� bogstaver" ;
         Text [ swedish ] = "Versalk�nsli~g" ;
         Text [ finnish ] = "Kirjainkoon e~rottelu" ;
         Text [ english_us ] = "Case se~nsitive" ;
@@ -710,6 +746,8 @@ TabPage RID_SCPAGE_CALC
         Text[ hebrew ] = "~Groß-/Kleinschreibung beachten";
         Text[ hindi ] = "केस स~चेतन";
         Text[ slovak ] = "Rozlišovať malé/veľké písme~ná";
+        Text[ hungarian ] = "Kis- és ~nagybetűk megkülönböztetése";
+        Text[ slovenian ] = "Razl~ikuj velike in male črke";
     };
     CheckBox BTN_CALC
     {
@@ -724,7 +762,7 @@ TabPage RID_SCPAGE_CALC
         Text [ french ] = "Exactitude comme affich�" ;
         Text [ dutch ] = "~Precisie zoals weergegeven" ;
         Text [ spanish ] = "Precisi�n como mostrado" ;
-        Text [ danish ] = "Pr�sision som vist" ;
+        Text [ danish ] = "~N�jagtighed som vist" ;
         Text [ swedish ] = "~Precision som visat" ;
         Text [ finnish ] = "~Tarkkuus n�ytetyn mukaan" ;
         Text [ english_us ] = "~Precision as shown" ;
@@ -744,6 +782,8 @@ TabPage RID_SCPAGE_CALC
         Text[ hebrew ] = "Gena~uigkeit wie angezeigt";
         Text[ hindi ] = "~Precision as shown";
         Text[ slovak ] = "~Presnosť podľa zobrazenia";
+        Text[ hungarian ] = "~A belső pontosság a kijelzett pontossággal egyezzen meg";
+        Text[ slovenian ] = "Natančnost kot ~prikazano";
     };
     CheckBox BTN_MATCH
     {
@@ -757,7 +797,7 @@ TabPage RID_SCPAGE_CALC
         Text [ french ] = "Crit�res de recherche = et <> doivent correspondre � des cellules enti�res" ;
         Text [ dutch ] = "~Zoekcriteria = en <> moeten op hele cellen toepasbaar zijn" ;
         Text [ swedish ] = "S�~kkriterier = och <> m�ste matcha hela celler" ;
-        Text [ danish ] = "S�gekriterier = og <> skal svare til hele celler" ;
+        Text [ danish ] = "S�gekriterier = og <> skal anvendes p� ~hele celler" ;
         Text [ portuguese_brazilian ] = "~Crit�rios de pesquisa = e <> devem ser aplicadas �s c�lulas inteiras" ;
         Text [ portuguese ] = "~Crit�rios de localiza��o = e <> devem ajustar-se �s c�lulas inteiras" ;
         Text[ chinese_simplified ] = "搜寻范围 = 和 <> 必须适用全部的单元格(~W)";
@@ -766,7 +806,7 @@ TabPage RID_SCPAGE_CALC
         Text[ japanese ] = "検索条件 = と <> はセル全体に適用(~W)";
         Text[ chinese_traditional ] = "搜尋範圍 = 和 <> 必須適用全部的儲存格(~W)";
         Text[ arabic ] = "��� �� ����� ������ ����� = � <> ��� ����� �����";
-        Text[ greek ] = "�� �������� ���������� = ��� <> ������ �� ���������� �� �������� �����";
+        Text[ greek ] = "�� �������� ���������� = ��� <> ������ �� ������������ �� �������� �����";
         Text[ korean ] = "검색 기준 = 과 <> 를 전체 셀에 적용(~W)";
         Text[ turkish ] = "Ara �l��tleri = ve <> t�m h�creler ile e�le�melidir";
         Text[ language_user1 ] = " ";
@@ -777,6 +817,8 @@ TabPage RID_SCPAGE_CALC
         Text[ hebrew ] = "Suchkri~terien = und <> müssen auf ganze Zellen zutreffen";
         Text[ hindi ] = "~पूरा कोष्ठों केलिए खोज सिद्धान्त = और <> को लागू करना है ";
         Text[ slovak ] = "Výhľadávacie kritérium = a <> musí byť platné pre celé ~bunky";
+        Text[ hungarian ] = "A~z = és a <> keresési feltétel csak teljes cellán alkalmazható";
+        Text[ slovenian ] = "Iskalna pogoja = in <> morata biti upora~bljena za cele celice";
     };
     CheckBox BTN_REGEX
     {
@@ -788,9 +830,9 @@ TabPage RID_SCPAGE_CALC
         Text [ italian ] = "Permetti espressioni regolari nelle ~formule" ;
         Text [ spanish ] = "Permitir expresiones regulares en f�rmulas" ;
         Text [ french ] = "Autoriser les caract�res g�n�riques dans les ~formules" ;
-        Text [ dutch ] = "Gangbare uitdrukkingen in ~formules mogelijk" ;
+        Text [ dutch ] = "Reguliere expressies in ~formules mogelijk" ;
         Text [ swedish ] = "Till�t regulj�ra uttryck i ~formler" ;
-        Text [ danish ] = "Tillad regul�re udtryk i ~formler" ;
+        Text [ danish ] = "Aktiver regul�re udtryk i ~formler" ;
         Text [ portuguese_brazilian ] = "Habilitar express�es regulares nas ~f�rmulas" ;
         Text [ portuguese ] = "Permitir express�es regulares em ~f�rmulas" ;
         Text[ chinese_simplified ] = "允许公式含有常规表达式(~E)";
@@ -810,6 +852,8 @@ TabPage RID_SCPAGE_CALC
         Text[ hebrew ] = "Reguläre Ausdrücke in ~Formeln ermöglichen";
         Text[ hindi ] = "सूत्रों में रहनेवाला नियमित वर्णन को ~सक्षम करो";
         Text[ slovak ] = "Povoliť r~egulárne výrazy vo vzorcoch";
+        Text[ hungarian ] = "~Reguláris kifejezések engedélyezése a képletekben";
+        Text[ slovenian ] = "V formulah omogoči r~egularne izraze";
     };
     CheckBox BTN_LOOKUP
     {
@@ -823,7 +867,7 @@ TabPage RID_SCPAGE_CALC
         Text [ french ] = "Rechercher automatiquement les �~tiquettes de colonnes et lignes" ;
         Text [ dutch ] = "Rij- en ~kolomkoppen automatisch zoeken" ;
         Text [ swedish ] = "S�k kolumn-/rad~etiketter automatiskt" ;
-        Text [ danish ] = "S�g kolonne-/r�kkeetiketter automatisk" ;
+        Text [ danish ] = "S�g kolonne-/r�kkeetiketter ~automatisk" ;
         Text [ portuguese_brazilian ] = "Localizar r�tulos de colunas e linhas ~automaticamente" ;
         Text [ portuguese ] = "Localizar r�tulos de colunas e linhas ~automaticamente" ;
         Text[ chinese_simplified ] = "自动搜寻列行数据标志(~A)";
@@ -843,6 +887,8 @@ TabPage RID_SCPAGE_CALC
         Text[ hebrew ] = "Spalten-/Zeilen~beschriftungen automatisch suchen";
         Text[ hindi ] = "स्तंभ और पक्ति लेबिलों को ~स्वचालित प्रकार से अन्वेषण करो ";
         Text[ slovak ] = "~Automaticky nájsť popisky stĺpcov a riadkov ";
+        Text[ hungarian ] = "Oszlop- és sorcímkék a~utomatikus megkeresése";
+        Text[ slovenian ] = "S~amodejno poišči oznake stolpcev in vrstic";
     };
 };
 
@@ -870,7 +916,7 @@ TabPage RID_SCPAGE_USERLISTS
         Text [ portuguese_brazilian ] = "L~istas" ;
         Text [ portuguese ] = "L~istas" ;
         Text [ finnish ] = "Luettelo~t" ;
-        Text [ danish ] = "Lister" ;
+        Text [ danish ] = "~Lister" ;
         Text [ french ] = "L~istes" ;
         Text [ swedish ] = "L~istor" ;
         Text [ dutch ] = "Li~jsten" ;
@@ -892,6 +938,8 @@ TabPage RID_SCPAGE_USERLISTS
         Text[ hebrew ] = "L~isten";
         Text[ hindi ] = "~सूचियाँ";
         Text[ slovak ] = "~Zoznamy";
+        Text[ hungarian ] = "~Listák";
+        Text[ slovenian ] = "~Seznami";
     };
     ListBox LB_LISTS
     {
@@ -911,7 +959,7 @@ TabPage RID_SCPAGE_USERLISTS
         Text [ portuguese_brazilian ] = "En~tradas" ;
         Text [ portuguese ] = "En~tradas" ;
         Text [ finnish ] = "~Merkinn�t" ;
-        Text [ danish ] = "Elementer" ;
+        Text [ danish ] = "~Elementer" ;
         Text [ french ] = "En~tr�es" ;
         Text [ swedish ] = "~Poster" ;
         Text [ dutch ] = "~Items" ;
@@ -933,6 +981,8 @@ TabPage RID_SCPAGE_USERLISTS
         Text[ hebrew ] = "Ein~träge";
         Text[ hindi ] = "~प्रविष्टियाँ";
         Text[ slovak ] = "~Položky";
+        Text[ hungarian ] = "~Bejegyzések";
+        Text[ slovenian ] = "~Vnosi";
     };
     MultiLineEdit ED_ENTRIES
     {
@@ -982,6 +1032,8 @@ TabPage RID_SCPAGE_USERLISTS
         Text[ hebrew ] = "Liste kopieren ~aus";
         Text[ hindi ] = "~से सूची की प्रतिलिपि";
         Text[ slovak ] = "Kopírovať zozna~m z";
+        Text[ hungarian ] = "Lista ~másolása innen";
+        Text[ slovenian ] = "Kopiraj se~znam iz";
     };
     PushButton BTN_NEW
     {
@@ -994,7 +1046,7 @@ TabPage RID_SCPAGE_USERLISTS
         Text [ portuguese_brazilian ] = "~Novo" ;
         Text [ portuguese ] = "~Novo" ;
         Text [ finnish ] = "~Uusi" ;
-        Text [ danish ] = "Ny" ;
+        Text [ danish ] = "~Ny" ;
         Text [ french ] = "~Nouveau" ;
         Text [ swedish ] = "~Nytt" ;
         Text [ dutch ] = "~Nieuw" ;
@@ -1016,6 +1068,8 @@ TabPage RID_SCPAGE_USERLISTS
         Text[ hebrew ] = "‮חדש‬";
         Text[ hindi ] = "~नया";
         Text[ slovak ] = "~Nový";
+        Text[ hungarian ] = "Ú~j";
+        Text[ slovenian ] = "~Nov";
     };
     PushButton BTN_ADD
     {
@@ -1029,7 +1083,7 @@ TabPage RID_SCPAGE_USERLISTS
         Text [ portuguese_brazilian ] = "~Adicionar" ;
         Text [ portuguese ] = "~Adicionar" ;
         Text [ finnish ] = "~Lis��" ;
-        Text [ danish ] = "T~ilf�j" ;
+        Text [ danish ] = "~Tilf�j" ;
         Text [ french ] = "Ajouter" ;
         Text [ swedish ] = "~L�gg till" ;
         Text [ dutch ] = "To~evoegen" ;
@@ -1052,6 +1106,8 @@ TabPage RID_SCPAGE_USERLISTS
         Text[ hebrew ] = "‮הוספה‬";
         Text[ hindi ] = "~जोड़ो";
         Text[ slovak ] = "Prid~ať";
+        Text[ hungarian ] = "~Hozzáadás";
+        Text[ slovenian ] = "~Dodaj";
     };
     PushButton BTN_REMOVE
     {
@@ -1065,7 +1121,7 @@ TabPage RID_SCPAGE_USERLISTS
         Text [ portuguese_brazilian ] = "~Excluir" ;
         Text [ portuguese ] = "~Eliminar" ;
         Text [ finnish ] = "Poi~sta" ;
-        Text [ danish ] = "Slet" ;
+        Text [ danish ] = "~Slet" ;
         Text [ french ] = "Supprimer" ;
         Text [ swedish ] = "~Radera" ;
         Text [ dutch ] = "~Wissen" ;
@@ -1087,6 +1143,8 @@ TabPage RID_SCPAGE_USERLISTS
         Text[ hebrew ] = "‮מחיקה‬";
         Text[ hindi ] = "~मिटाओ";
         Text[ slovak ] = "~Zmazať";
+        Text[ hungarian ] = "~Törlés";
+        Text[ slovenian ] = "~Izbriši";
     };
     PushButton BTN_COPY
     {
@@ -1099,7 +1157,7 @@ TabPage RID_SCPAGE_USERLISTS
         Text [ portuguese_brazilian ] = "~Copiar" ;
         Text [ portuguese ] = "~Copiar" ;
         Text [ finnish ] = "Ko~pioi" ;
-        Text [ danish ] = "Kopier" ;
+        Text [ danish ] = "K~opier" ;
         Text [ french ] = "~Copier" ;
         Text [ swedish ] = "~Kopiera" ;
         Text [ dutch ] = "~Kopi�ren" ;
@@ -1121,6 +1179,8 @@ TabPage RID_SCPAGE_USERLISTS
         Text[ hebrew ] = "‮העתקה‬";
         Text[ hindi ] = "~प्रतिलिपि";
         Text[ slovak ] = "~Kopírovať";
+        Text[ hungarian ] = "~Másolás";
+        Text[ slovenian ] = "Kopir~aj";
     };
     String STR_DISMISS
     {
@@ -1132,7 +1192,7 @@ TabPage RID_SCPAGE_USERLISTS
         Text [ french ] = "~Rejeter" ;
         Text [ dutch ] = "~Verwerpen" ;
         Text [ swedish ] = "I~gnorera" ;
-        Text [ danish ] = "Forkast" ;
+        Text [ danish ] = "~Forkast" ;
         Text [ portuguese_brazilian ] = "~Descartar" ;
         Text [ portuguese ] = "~Rejeitar" ;
         Text[ chinese_simplified ] = "舍弃(~D)";
@@ -1152,6 +1212,8 @@ TabPage RID_SCPAGE_USERLISTS
         Text[ hebrew ] = "‮התעלמות משינויים‬";
         Text[ hindi ] = "~उपेक्षा";
         Text[ slovak ] = "Zaho~diť";
+        Text[ hungarian ] = "~Elvetés";
+        Text[ slovenian ] = "~Zavrzi";
     };
     String STR_QUERYREMOVE
     {
@@ -1163,7 +1225,7 @@ TabPage RID_SCPAGE_USERLISTS
         Text [ portuguese_brazilian ] = "Deseja realmente excluir\n#\nda lista de entradas?" ;
         Text [ portuguese ] = "Eliminar a entrada \n#\n?" ;
         Text [ finnish ] = "Poistetaanko merkint�\n#\n?" ;
-        Text [ danish ] = "Er du sikker p�, at du vil fjerne elementet\n#\n?" ;
+        Text [ danish ] = "Er du sikker p�, at du vil slette elementet\n#\n?" ;
         Text [ french ] = "�tes-vous s�r de vouloir supprimer l'entr�e\n#\n ?" ;
         Text [ swedish ] = "Skall posten\n#\nraderas?" ;
         Text [ dutch ] = "Wilt u \n#\nverwijderen?" ;
@@ -1185,6 +1247,8 @@ TabPage RID_SCPAGE_USERLISTS
         Text[ hebrew ] = "Soll der Eintrag\n#\ngelöscht werden?";
         Text[ hindi ] = "प्रविष्टि\n#\nको मिटाना है?";
         Text[ slovak ] = "Má byť položka\n#\nodstránená?";
+        Text[ hungarian ] = "Törli a(z)\n#\nbejegyzést?";
+        Text[ slovenian ] = "Ali želite izbrisati\nvnos\n#?";
     };
     String STR_COPYLIST
     {
@@ -1216,6 +1280,8 @@ TabPage RID_SCPAGE_USERLISTS
         Text[ hebrew ] = "Liste kopieren";
         Text[ hindi ] = "सूची का प्रतिलिपि";
         Text[ slovak ] = "Kopírovať zoznam";
+        Text[ hungarian ] = "Lista másolása";
+        Text[ slovenian ] = "Kopiraj seznam";
     };
     String STR_COPYFROM
     {
@@ -1247,6 +1313,8 @@ TabPage RID_SCPAGE_USERLISTS
         Text[ hebrew ] = "Liste aus";
         Text[ hindi ] = "से सूची";
         Text[ slovak ] = "Zoznam z";
+        Text[ hungarian ] = "Lista innen:";
+        Text[ slovenian ] = "Seznam iz";
     };
     String STR_COPYERR
     {
@@ -1258,7 +1326,7 @@ TabPage RID_SCPAGE_USERLISTS
         Text [ spanish ] = "Las celdas sin texto se han ignorado." ;
         Text [ french ] = "Les cellules sans texte ont �t� ignor�es." ;
         Text [ swedish ] = "Celler utan enkel text har ignorerats." ;
-        Text [ danish ] = "Celler uden enkelt tekst blev ignoreret." ;
+        Text [ danish ] = "Celler uden tekst blev ignoreret." ;
         Text [ portuguese_brazilian ] = "As c�lulas sem texto foram ignoradas." ;
         Text [ portuguese ] = "As c�lulas sem texto foram ignoradas." ;
         Text[ chinese_simplified ] = "忽略不含文字的单元格。";
@@ -1278,6 +1346,8 @@ TabPage RID_SCPAGE_USERLISTS
         Text[ hebrew ] = "Zellen ohne einfachen Text wurden ignoriert.";
         Text[ hindi ] = "टेक्स्ट् रहित कोष्ठों को उपेक्षा किया है ।";
         Text[ slovak ] = "Bunky bez textu boli ignorované.";
+        Text[ hungarian ] = "Üres cellák mellőzve.";
+        Text[ slovenian ] = "Celice brez besedila so bile prezrte.";
     };
 };
 
@@ -1325,6 +1395,8 @@ TabPage RID_SCPAGE_CONTENT
         Text[ hebrew ] = "Optische Hilfen";
         Text[ hindi ] = "दृष्टि-सम्बन्धी सहायता";
         Text[ slovak ] = "Pomôcky zobrazenia";
+        Text[ hungarian ] = "Vizuális segítségek";
+        Text[ slovenian ] = "Vizualni pripomočki";
     };
     CheckBox CB_GRID
     {
@@ -1337,7 +1409,7 @@ TabPage RID_SCPAGE_CONTENT
         Text [ portuguese_brazilian ] = "Linhas da ~grade" ;
         Text [ portuguese ] = "~Linhas da grelha" ;
         Text [ finnish ] = "Ruudukko" ;
-        Text [ danish ] = "~Gitterlinier" ;
+        Text [ danish ] = "~Gitterlinjer" ;
         Text [ french ] = "Lignes de la grille" ;
         Text [ swedish ] = "~Gitterlinjer" ;
         Text [ dutch ] = "~Rasterlijnen" ;
@@ -1359,6 +1431,8 @@ TabPage RID_SCPAGE_CONTENT
         Text[ hebrew ] = "~Gitterlinien";
         Text[ hindi ] = "~जाल रेखाएँ";
         Text[ slovak ] = "Ria~dky mriežky";
+        Text[ hungarian ] = "~Rácsvonalak";
+        Text[ slovenian ] = "~Mrežne črte";
     };
     FixedText FT_COLOR
     {
@@ -1393,6 +1467,8 @@ TabPage RID_SCPAGE_CONTENT
         Text[ hebrew ] = "‮צבע‬";
         Text[ hindi ] = "~रंग";
         Text[ slovak ] = "~Farba";
+        Text[ hungarian ] = "S~zín";
+        Text[ slovenian ] = "~Barva";
     };
     ListBox LB_COLOR
     {
@@ -1434,6 +1510,8 @@ TabPage RID_SCPAGE_CONTENT
         Text[ hebrew ] = "~Seitenumbrüche";
         Text[ hindi ] = "~पृष्ठ खण्डन";
         Text[ slovak ] = "~Zalomenia stránky";
+        Text[ hungarian ] = "~Oldaltörések";
+        Text[ slovenian ] = "Prelomi s~trani";
     };
     CheckBox CB_GUIDELINE
     {
@@ -1449,7 +1527,7 @@ TabPage RID_SCPAGE_CONTENT
         Text[ french ] = "Rep�res lors du d�placement";
         Text[ spanish ] = "~Gu�as al desplazar";
         Text[ italian ] = "Linee griglia durante il movimento";
-        Text[ danish ] = "H~j�lpelinjer under bev�gelsen";
+        Text[ danish ] = "~Hj�lpelinjer ved flytning";
         Text[ swedish ] = "Hj�lpl~injer n�r objekt flyttas";
         Text[ polish ] = "Prowadnic~e przy przesuwaniu";
         Text[ portuguese_brazilian ] = "~Guias ao mover objetos";
@@ -1466,6 +1544,8 @@ TabPage RID_SCPAGE_CONTENT
         Text[ hebrew ] = "H~ilfslinien während der Bewegung";
         Text[ hindi ] = "स्थान परिवर्तन ~के समय सहायक";
         Text[ slovak ] = "Vo~dítka pri pohybe";
+        Text[ hungarian ] = "Veze~tővonalak látszanak áthelyezéskor";
+        Text[ slovenian ] = "Vodila ~med premikanjem";
     };
     CheckBox CB_HANDLES
     {
@@ -1481,7 +1561,7 @@ TabPage RID_SCPAGE_CONTENT
         Text[ french ] = "Poign�es simples";
         Text[ spanish ] = "Agarraderas sencillas";
         Text[ italian ] = "Maniglie semplici";
-        Text[ danish ] = "~Enkelte h�ndtag";
+        Text[ danish ] = "~Enkle h�ndtag";
         Text[ swedish ] = "~Enkla handtag";
         Text[ polish ] = "Zwyk�e uc~hwyty";
         Text[ portuguese_brazilian ] = "Al�as ~simples";
@@ -1499,6 +1579,8 @@ TabPage RID_SCPAGE_CONTENT
         Text[ hebrew ] = "~Einfache Griffe";
         Text[ hindi ] = "~सामान्य हॉन्डलें";
         Text[ slovak ] = "Jednoduché úchy~tky";
+        Text[ hungarian ] = "~Egyszerű fogantyúk";
+        Text[ slovenian ] = "Eno~stavne ročice";
     };
     CheckBox CB_BIGHANDLES
     {
@@ -1532,6 +1614,8 @@ TabPage RID_SCPAGE_CONTENT
         Text[ hebrew ] = "Gr~oße Griffe";
         Text[ hindi ] = "~बड़ा हॉन्डलें";
         Text[ slovak ] = "Veľ~ké úchytky";
+        Text[ hungarian ] = "~Nagy fogantyúk";
+        Text[ slovenian ] = "Ve~like ročice";
     };
     FixedLine FL_SEPARATOR1
     {
@@ -1571,6 +1655,8 @@ TabPage RID_SCPAGE_CONTENT
         Text[ hebrew ] = "Anzeigen";
         Text[ hindi ] = "दिखाओ";
         Text[ slovak ] = "Zobraziť";
+        Text[ hungarian ] = "Megjelenítés";
+        Text[ slovenian ] = "Prikaz";
     };
     CheckBox CB_FORMULA
     {
@@ -1605,6 +1691,8 @@ TabPage RID_SCPAGE_CONTENT
         Text[ hebrew ] = "~Formeln";
         Text[ hindi ] = "~सूत्र";
         Text[ slovak ] = "Vzorc~e";
+        Text[ hungarian ] = "~Képletek";
+        Text[ slovenian ] = "~Formule";
     };
     CheckBox CB_NIL
     {
@@ -1617,7 +1705,7 @@ TabPage RID_SCPAGE_CONTENT
         Text [ portuguese_brazilian ] = "~Valores zero" ;
         Text [ portuguese ] = "~Valores zero" ;
         Text [ finnish ] = "Nolla-arvot" ;
-        Text [ danish ] = "Nulv�rdier" ;
+        Text [ danish ] = "N~ulv�rdier" ;
         Text [ french ] = "Valeurs ~z�ro" ;
         Text [ swedish ] = "~Nollv�rden" ;
         Text [ dutch ] = "~Nulwaarden" ;
@@ -1639,6 +1727,8 @@ TabPage RID_SCPAGE_CONTENT
         Text[ hebrew ] = "~Nullwerte";
         Text[ hindi ] = "शून्य मू~ल्य";
         Text[ slovak ] = "N~ulové hodnoty";
+        Text[ hungarian ] = "N~ulla értékek";
+        Text[ slovenian ] = "Ničelne vre~dnosti";
     };
     CheckBox CB_ANNOT
     {
@@ -1673,6 +1763,8 @@ TabPage RID_SCPAGE_CONTENT
         Text[ hebrew ] = "Noti~zanzeiger";
         Text[ hindi ] = "~टिप्पणी निदर्शक";
         Text[ slovak ] = "I~ndikátor poznámky";
+        Text[ hungarian ] = "Jeg~yzetmutatók";
+        Text[ slovenian ] = "Indikator ~opombe";
     };
     CheckBox CB_VALUE
     {
@@ -1707,6 +1799,8 @@ TabPage RID_SCPAGE_CONTENT
         Text[ hebrew ] = "Werte her~vorheben";
         Text[ hindi ] = "मूल्य को वि~शेष प्रकार से दिखाना";
         Text[ slovak ] = "Zvýraznen~ie hodnoty";
+        Text[ hungarian ] = "Értékk~iemelés";
+        Text[ slovenian ] = "Poudarjanje vrednost~i";
     };
     CheckBox CB_ANCHOR
     {
@@ -1717,7 +1811,7 @@ TabPage RID_SCPAGE_CONTENT
         Text [ dutch ] = "~Anker" ;
         Text [ english_us ] = "~Anchor" ;
         Text [ swedish ] = "~Ankare" ;
-        Text [ danish ] = "An~ker" ;
+        Text [ danish ] = "~Forankring" ;
         Text [ italian ] = "Ancoraggio" ;
         Text [ spanish ] = "~Ancla" ;
         Text [ french ] = "~Ancre" ;
@@ -1740,6 +1834,8 @@ TabPage RID_SCPAGE_CONTENT
         Text[ hebrew ] = "‮עוגן‬";
         Text[ hindi ] = "~जोड़";
         Text[ slovak ] = "~Ukotvenie";
+        Text[ hungarian ] = "~Horgony";
+        Text[ slovenian ] = "Za~sidraj";
     };
     CheckBox CB_CLIP
     {
@@ -1773,6 +1869,8 @@ TabPage RID_SCPAGE_CONTENT
         Text[ hebrew ] = "~Textüberlauf";
         Text[ hindi ] = "टे~क्स्ट् अधिकता";
         Text[ slovak ] = "Pretečenie te~xtu";
+        Text[ hungarian ] = "Szövegtúl~csordulás";
+        Text[ slovenian ] = "Prekoračitev be~sedila";
     };
     CheckBox CB_RFIND
     {
@@ -1783,7 +1881,7 @@ TabPage RID_SCPAGE_CONTENT
         Text [ english_us ] = "Show references in color" ;
         Text [ portuguese_brazilian ] = "Mostrar refer�ncias com cores" ;
         Text [ swedish ] = "Visa ~referenser i f�rg" ;
-        Text [ danish ] = "Vis referen~cer med farver" ;
+        Text [ danish ] = "Vis referencer i farver" ;
         Text [ italian ] = "Mostra i riferimenti in colore" ;
         Text [ spanish ] = "~Mostrar referencias en color" ;
         Text [ french ] = "Affichage des r�f�rences en couleur" ;
@@ -1806,6 +1904,8 @@ TabPage RID_SCPAGE_CONTENT
         Text[ hebrew ] = "~Referenzen farbig anzeigen";
         Text[ hindi ] = "रेफरेन्स को रंग में दिखाओ";
         Text[ slovak ] = "Zobraziť odkazy farebne";
+        Text[ hungarian ] = "Hivatkozások jelölése színekkel";
+        Text[ slovenian ] = "Pokaži sklice v barvah";
     };
     FixedLine GB_OBJECT
     {
@@ -1840,6 +1940,8 @@ TabPage RID_SCPAGE_CONTENT
         Text[ hebrew ] = "Objekte";
         Text[ hindi ] = "वस्तु";
         Text[ slovak ] = "Objekty";
+        Text[ hungarian ] = "Objektumok";
+        Text[ slovenian ] = "Predmeti";
     };
     FixedText FT_OBJGRF
     {
@@ -1874,6 +1976,8 @@ TabPage RID_SCPAGE_CONTENT
         Text[ hebrew ] = "Ob~jekte/Grafiken";
         Text[ hindi ] = "व~स्तु/सुचित्र";
         Text[ slovak ] = "Ob~jekty/Obrázky";
+        Text[ hungarian ] = "O~bjektumok és képek";
+        Text[ slovenian ] = "P~redmeti/grafika";
     };
     ListBox LB_OBJGRF
     {
@@ -1891,7 +1995,7 @@ TabPage RID_SCPAGE_CONTENT
         Text [ portuguese_brazilian ] = "~Gr�ficos" ;
         Text [ portuguese ] = "~Gr�ficos" ;
         Text [ finnish ] = "~Kaaviot" ;
-        Text [ danish ] = "Diagrammer" ;
+        Text [ danish ] = "Diag~rammer" ;
         Text [ french ] = "Diagrammes" ;
         Text [ swedish ] = "~Diagram" ;
         Text [ dutch ] = "~Diagrammen" ;
@@ -1913,6 +2017,8 @@ TabPage RID_SCPAGE_CONTENT
         Text[ hebrew ] = "~Diagramme";
         Text[ hindi ] = "चा~र्ट";
         Text[ slovak ] = "G~rafy";
+        Text[ hungarian ] = "~Diagramok";
+        Text[ slovenian ] = "G~rafikoni";
     };
     ListBox LB_DIAGRAM
     {
@@ -1930,7 +2036,7 @@ TabPage RID_SCPAGE_CONTENT
         Text [ portuguese_brazilian ] = "Objetos de ~desenho" ;
         Text [ portuguese ] = "Objectos de ~desenho" ;
         Text [ finnish ] = "Piirroso~bjektit" ;
-        Text [ danish ] = "Teg~neobjekter" ;
+        Text [ danish ] = "~Tegneobjekter" ;
         Text [ french ] = "Objets de d~essin" ;
         Text [ swedish ] = "Ritobje~kt" ;
         Text [ dutch ] = "~Tekenobjecten" ;
@@ -1952,6 +2058,8 @@ TabPage RID_SCPAGE_CONTENT
         Text[ hebrew ] = "Zei~chenobjekte";
         Text[ hindi ] = "~रेखाचित्र वस्तु";
         Text[ slovak ] = "Kres~ba";
+        Text[ hungarian ] = "R~ajzobjektumok";
+        Text[ slovenian ] = "~Risani predmeti";
     };
     ListBox LB_DRAW
     {
@@ -1996,6 +2104,8 @@ TabPage RID_SCPAGE_CONTENT
         Text[ hebrew ] = "‮חלונות‬";
         Text[ hindi ] = "विन्डो";
         Text[ slovak ] = "Okno";
+        Text[ hungarian ] = "Ablak";
+        Text[ slovenian ] = "Okno";
     };
     CheckBox CB_ROWCOLHEADER
     {
@@ -2030,6 +2140,8 @@ TabPage RID_SCPAGE_CONTENT
         Text[ hebrew ] = "Zeilen- und Spaltenk~öpfe";
         Text[ hindi ] = "स्तं~भ/पंक्ति शीर्षकें";
         Text[ slovak ] = "~Hlavičky stĺpcov/riadkov";
+        Text[ hungarian ] = "Oszlo~p- és sorfejlécek";
+        Text[ slovenian ] = "Glave stolp~cev/vrstic";
     };
     CheckBox CB_HSCROLL
     {
@@ -2042,7 +2154,7 @@ TabPage RID_SCPAGE_CONTENT
         Text [ portuguese_brazilian ] = "~Barra de rolagem horizontal" ;
         Text [ portuguese ] = "~Barra de deslocamento ~horizontal" ;
         Text [ finnish ] = "Vaakavierityspalkki" ;
-        Text [ danish ] = "~Vandret rullepanel" ;
+        Text [ danish ] = "~Vandret rullebj�lke" ;
         Text [ french ] = "Barre de d�filement ~horizontale" ;
         Text [ swedish ] = "Horisontell r~ullningslist" ;
         Text [ dutch ] = "Horizontale beelds~chuifbalk" ;
@@ -2064,6 +2176,8 @@ TabPage RID_SCPAGE_CONTENT
         Text[ hebrew ] = "~Horizontale Bildlaufleiste";
         Text[ hindi ] = "सम~तल स्क्रॉल पट्टी";
         Text[ slovak ] = "Vo~dorovná posuvná lišta";
+        Text[ hungarian ] = "Vízszintes ~görgetősáv";
+        Text[ slovenian ] = "Vodo~ravni drsni trak";
     };
     CheckBox CB_VSCROLL
     {
@@ -2076,7 +2190,7 @@ TabPage RID_SCPAGE_CONTENT
         Text [ portuguese_brazilian ] = "Barra de rolagem ~vertical" ;
         Text [ portuguese ] = "Barra de deslocamento ~vertical" ;
         Text [ finnish ] = "Pystyvierityspalkki" ;
-        Text [ danish ] = "Lodret r~ullepanel" ;
+        Text [ danish ] = "~Lodret rullebj�lke" ;
         Text [ french ] = "Barre de d�filement ~verticale" ;
         Text [ swedish ] = "Vertika~l rullningslist" ;
         Text [ dutch ] = "Verticale ~beeldschuifbalk" ;
@@ -2098,6 +2212,8 @@ TabPage RID_SCPAGE_CONTENT
         Text[ hebrew ] = "‮פס גלילה אנכי‬";
         Text[ hindi ] = "~लंबरूप स्क्रॉल पट्टी";
         Text[ slovak ] = "Z~vislá posuvná lišta";
+        Text[ hungarian ] = "~Függőleges görgetősáv";
+        Text[ slovenian ] = "~Navpični drsni trak";
     };
     CheckBox CB_TBLREG
     {
@@ -2110,7 +2226,7 @@ TabPage RID_SCPAGE_CONTENT
         Text [ portuguese_brazilian ] = "~Abas das planilhas" ;
         Text [ portuguese ] = "~Separadores de folhas" ;
         Text [ finnish ] = "Taulukonvalitsimet" ;
-        Text [ danish ] = "~Regnearksfaner" ;
+        Text [ danish ] = "~Arkfaner" ;
         Text [ french ] = "Onglets des feuilles" ;
         Text [ swedish ] = "Ta~bellflik" ;
         Text [ dutch ] = "Werkbladenreg~ister" ;
@@ -2132,6 +2248,8 @@ TabPage RID_SCPAGE_CONTENT
         Text[ hebrew ] = "Ta~bellenregister";
         Text[ hindi ] = "शी~ट् टॉब्स";
         Text[ slovak ] = "Zál~ožky listov";
+        Text[ hungarian ] = "~Munkafüzetfülek";
+        Text[ slovenian ] = "J~ezički listov";
     };
     CheckBox CB_OUTLINE
     {
@@ -2166,6 +2284,8 @@ TabPage RID_SCPAGE_CONTENT
         Text[ hebrew ] = "Glieder~ungssymbole";
         Text[ hindi ] = "~बाहरी रूपरेखा संकेत";
         Text[ slovak ] = "Symboly ~osnovy";
+        Text[ hungarian ] = "Váz~latjelek";
+        Text[ slovenian ] = "~Oriši simbole";
     };
 };
 
@@ -2197,7 +2317,7 @@ TabPage RID_SCPAGE_LAYOUT
         Text[ french ] = "M�triques";
         Text[ spanish ] = "M�tricas";
         Text[ italian ] = "Metrici";
-        Text[ danish ] = "Metrik";
+        Text[ danish ] = "Metrisk";
         Text[ swedish ] = "Metriker";
         Text[ polish ] = "Miara";
         Text[ portuguese_brazilian ] = "M�tricas";
@@ -2214,6 +2334,8 @@ TabPage RID_SCPAGE_LAYOUT
         Text[ hebrew ] = "Metriken";
         Text[ hindi ] = "मेट्रिक्स";
         Text[ slovak ] = "Merné systémy";
+        Text[ hungarian ] = "Méretek";
+        Text[ slovenian ] = "Metrike";
     };
     FixedText FT_UNIT
     {
@@ -2246,6 +2368,8 @@ TabPage RID_SCPAGE_LAYOUT
         Text[ hebrew ] = "~Maßeinheit";
         Text[ hindi ] = "नाप ~यूनिट्";
         Text[ slovak ] = "Merná jedn~otka";
+        Text[ hungarian ] = "~Mértékegység";
+        Text[ slovenian ] = "Merska ~enota";
     };
     ListBox LB_UNIT
     {
@@ -2604,6 +2728,30 @@ TabPage RID_SCPAGE_LAYOUT
         < "Pika" ; FUNIT_PICA ; > ;
         < "Bod" ; FUNIT_POINT ; > ;
     };
+    ItemList [ hungarian ] =
+    {
+         < "milliméter" ; FUNIT_MM ; > ;
+        < "centiméter" ; FUNIT_CM ; > ;
+        < "méter" ; FUNIT_M ; > ;
+        < "kilométer" ; FUNIT_KM ; > ;
+        < "hüvelyk" ; FUNIT_INCH ; > ;
+        < "láb" ; FUNIT_FOOT ; > ;
+        < "mérföld" ; FUNIT_MILE ; > ;
+        < "pica" ; FUNIT_PICA ; > ;
+        < "pont" ; FUNIT_POINT ; > ;
+    };
+    ItemList [ slovenian ] =
+    {
+         < "Milimeter" ; FUNIT_MM ; > ;
+        < "Centimeter" ; FUNIT_CM ; > ;
+        < "Meter" ; FUNIT_M ; > ;
+        < "Kilometer" ; FUNIT_KM ; > ;
+        < "Palec" ; FUNIT_INCH ; > ;
+        < "Čevelj" ; FUNIT_FOOT ; > ;
+        < "Milje" ; FUNIT_MILE ; > ;
+        < "Cicero" ; FUNIT_PICA ; > ;
+        < "Točka" ; FUNIT_POINT ; > ;
+    };
     };
     FixedText FT_TAB
     {
@@ -2636,6 +2784,8 @@ TabPage RID_SCPAGE_LAYOUT
         Text[ hebrew ] = "‮עצירות טאב‬";
         Text[ hindi ] = "~टॉब रुकावट";
         Text[ slovak ] = "~Tabulátory";
+        Text[ hungarian ] = "~Tabulátorpozíció";
+        Text[ slovenian ] = "~Tabulatorska mesta";
     };
     MetricField MF_TAB
     {
@@ -2671,7 +2821,7 @@ TabPage RID_SCPAGE_LAYOUT
         Text[ french ] = "Actualisation";
         Text[ spanish ] = "Actualizaci�n";
         Text[ italian ] = "Aggiorna";
-        Text[ danish ] = "Opdatering";
+        Text[ danish ] = "Opdaterer";
         Text[ swedish ] = "Uppdatering";
         Text[ polish ] = "Aktualizacja";
         Text[ portuguese_brazilian ] = "Atualizar dados";
@@ -2690,6 +2840,8 @@ TabPage RID_SCPAGE_LAYOUT
         Text[ hebrew ] = "Aktualisierung";
         Text[ hindi ] = "अपडेट् करना";
         Text[ slovak ] = "Aktualizácia";
+        Text[ hungarian ] = "Frissítés";
+        Text[ slovenian ] = "Posodabljanje";
     };
     FixedText FT_UPDATE_LINKS
     {
@@ -2723,6 +2875,8 @@ TabPage RID_SCPAGE_LAYOUT
         Text[ hebrew ] = "Verknüpfungen beim Laden aktualisieren";
         Text[ hindi ] = "खोलने के समय लिंक्स को अपडेट् करना";
         Text[ slovak ] = "Aktualizovať odkazy pri otvorení";
+        Text[ hungarian ] = "Hivatkozások frissítése megnyitáskor";
+        Text[ slovenian ] = "Med odpiranjem posodobi povezave";
     };
     RadioButton RB_ALWAYS
     {
@@ -2757,6 +2911,8 @@ TabPage RID_SCPAGE_LAYOUT
         Text[ hebrew ] = "~Immer";
         Text[ hindi ] = "~हमेशा";
         Text[ slovak ] = "Vž~dy";
+        Text[ hungarian ] = "Min~dig";
+        Text[ slovenian ] = "~Vedno";
     };
     RadioButton RB_REQUEST
     {
@@ -2791,6 +2947,8 @@ TabPage RID_SCPAGE_LAYOUT
         Text[ hebrew ] = "Auf Nach~frage";
         Text[ hindi ] = "~निवेदन करने पर";
         Text[ slovak ] = "Pýt~ať sa";
+        Text[ hungarian ] = "~Kérésre";
+        Text[ slovenian ] = "~Na zahtevo";
     };
     RadioButton RB_NEVER
     {
@@ -2825,6 +2983,8 @@ TabPage RID_SCPAGE_LAYOUT
         Text[ hebrew ] = "~Nie";
         Text[ hindi ] = "~कभी नहीं";
         Text[ slovak ] = "~Nikdy";
+        Text[ hungarian ] = "S~oha";
+        Text[ slovenian ] = "~Nikoli";
     };
     FixedLine GB_OPTIONS
     {
@@ -2857,6 +3017,8 @@ TabPage RID_SCPAGE_LAYOUT
         Text[ hebrew ] = "Eingabeeinstellungen";
         Text[ hindi ] = "इनपुट् निर्धारण";
         Text[ slovak ] = "Zadajte nastavenia";
+        Text[ hungarian ] = "Beviteli beállítások";
+        Text[ slovenian ] = "Nastavitve vhoda";
     };
     CheckBox CB_ALIGN
     {
@@ -2867,7 +3029,7 @@ TabPage RID_SCPAGE_LAYOUT
         Text [ dutch ] = "Na bevestiging met Enter volgt de ~selectie" ;
         Text [ english_us ] = "Press Enter to ~move selection" ;
         Text [ swedish ] = "Tryck Retur f�r att flytta m~arkering" ;
-        Text [ danish ] = "Bekr�ftelse af indtastning angiver mar~keringen efter" ;
+        Text [ danish ] = "Tryk Enter for at flytte ~markeringen" ;
         Text [ italian ] = "Premi invio per passare alla prossima selezione" ;
         Text [ spanish ] = "~Pulse Intro para desplazar la selecci�n" ;
         Text [ french ] = "Touche Entr�e pour d�placer la ~s�lection" ;
@@ -2890,6 +3052,8 @@ TabPage RID_SCPAGE_LAYOUT
         Text[ hebrew ] = "Eingabebestätigung setzt die ~Selektion nach";
         Text[ hindi ] = "~चुनाव का स्थान परिवर्तन करने केलिए कृपया ऐन्टर कीजिए ";
         Text[ slovak ] = "Stlačte E~nter pre posunutie výberu";
+        Text[ hungarian ] = "Enter billentyűvel mozog a kijelölés";
+        Text[ slovenian ] = "S tipko Enter se izbor pre~makne";
     };
     ListBox LB_ALIGN
     {
@@ -2935,10 +3099,10 @@ TabPage RID_SCPAGE_LAYOUT
         };
         stringlist [ danish ] =
         {
-            < "nederst" ; Default ; > ;
-            < "til h�jre" ; Default ; > ;
-            < "�verst" ; Default ; > ;
-            < "til venstre" ; Default ; > ;
+            < "Nedad" ; Default ; > ;
+            < "H�jre" ; Default ; > ;
+            < "Opad" ; Default ; > ;
+            < "Venstre" ; Default ; > ;
         };
         stringlist [ italian ] =
         {
@@ -3094,6 +3258,20 @@ TabPage RID_SCPAGE_LAYOUT
         < "Hore" ; Default ; > ;
         < "Vľavo" ; Default ; > ;
     };
+    StringList [ hungarian ] =
+    {
+         < "Le" ; Default ; > ;
+        < "Jobbra" ; Default ; > ;
+        < "Fel" ; Default ; > ;
+        < "Balra" ; Default ; > ;
+    };
+    StringList [ slovenian ] =
+    {
+         < "Navzdol" ; Default ; > ;
+        < "Desno" ; Default ; > ;
+        < "Navzgor" ; Default ; > ;
+        < "Levo" ; Default ; > ;
+    };
     };
     CheckBox CB_EDITMODE
     {
@@ -3103,7 +3281,7 @@ TabPage RID_SCPAGE_LAYOUT
         Text [ ENGLISH ] = "Return key switches ~edit mode on" ;
         Text [ english_us ] = "Press Enter to switch to ~edit mode" ;
         Text [ swedish ] = "Retur v�xlar till r~edigeringsl�ge" ;
-        Text [ danish ] = "Med Enter skiftes til ~redigeringsmodus" ;
+        Text [ danish ] = "Tryk Enter for at skifte til r~edigeringstilstand" ;
         Text [ italian ] = "Passa al modo modifica con Invio" ;
         Text [ spanish ] = "~Puse Intro para activar el modo Editar" ;
         Text [ french ] = "Touche Entr�e pour basculer dans le mode ~�dition" ;
@@ -3127,6 +3305,8 @@ TabPage RID_SCPAGE_LAYOUT
         Text[ hebrew ] = "Eingabetaste schaltet in den ~Editmodus";
         Text[ hindi ] = "~संपादन प्रकार में जाने केलिए कृपया ऐन्टर कीजिए";
         Text[ slovak ] = "Stlačte Enter pre prepnutie do ~editovacieho módu";
+        Text[ hungarian ] = "Váltás szerkesztési módba az Enter billentyűvel";
+        Text[ slovenian ] = "Pritisnite Enter za ur~ejevalni način";
     };
     CheckBox CB_FORMAT
     {
@@ -3160,6 +3340,8 @@ TabPage RID_SCPAGE_LAYOUT
         Text[ hebrew ] = "Formatierung ~ausdehnen";
         Text[ hindi ] = "रचना को ~विस्तार करो";
         Text[ slovak ] = "Rozšírené ~formátovanie";
+        Text[ hungarian ] = "~Formázás kiterjesztése";
+        Text[ slovenian ] = "Razširi ~oblikovanje";
     };
     CheckBox CB_EXPREF
     {
@@ -3170,7 +3352,7 @@ TabPage RID_SCPAGE_LAYOUT
         Text [ english_us ] = "Expand ~references when new columns/rows are inserted" ;
         Text [ portuguese_brazilian ] = "Expandir ~refer�ncias ao inserir novas colunas ou linhas" ;
         Text [ swedish ] = "Ut�ka ~referenser i kanterna n�r kolumner/rader infogas" ;
-        Text [ danish ] = "Udvid refere~ncer i margenen ved inds�tning af kolonner/r�kker" ;
+        Text [ danish ] = "Udvid refere~ncer n�r der inds�ttes nye kolonner/r�kker" ;
         Text [ italian ] = "Amplia i riferimenti nell'inserimento di colonne/righe ai bordi rispettivi" ;
         Text [ spanish ] = "~Expandir referencias al insertar filas/columnas en los bordes" ;
         Text [ french ] = "Expansion des ~r�f�rences si insertion de colonnes ou lignes" ;
@@ -3193,6 +3375,8 @@ TabPage RID_SCPAGE_LAYOUT
         Text[ hebrew ] = "~Referenzen beim Spalten-/Zeileneinfügen an deren Rändern ausdehnen";
         Text[ hindi ] = "नया स्तंभें/पंक्तियों को जोड़ने के समय रेफरेन्स को विस्तृत करो";
         Text[ slovak ] = "~Rozšíriť odkazy pri vsunutí nových stĺpcov/riadkov";
+        Text[ hungarian ] = "Hivatkozások kite~rjesztése új sorok vagy oszlopok beszúrásakor";
+        Text[ slovenian ] = "Razširi ~sklice, kadar vstavljaš nove stolpce/vrstice";
     };
     CheckBox CB_MARKHDR
     {
@@ -3203,7 +3387,7 @@ TabPage RID_SCPAGE_LAYOUT
         Text [ english_us ] = "Highlight sele~ction in column/row headers" ;
         Text [ portuguese_brazilian ] = "~Destacar sele��o nos cabe�alhos de coluna e linhas" ;
         Text [ swedish ] = "Framh�v markering i ko~lumn-/radhuvuden" ;
-        Text [ danish ] = "Fremh�v mark~ering i kolonne-/r�kkeoverskrifter" ;
+        Text [ danish ] = "Fremh�v ~markering i kolonne-/r�kkeoverskrifter" ;
         Text [ italian ] = "Evidenzia la se~lezione nell'intestazione di colonne/righe" ;
         Text [ spanish ] = "Destacar selecci�n en los encabezamientos de columna y l�neas" ;
         Text [ french ] = "~Mise en �vidence de la s�lection dans les en-t�tes de lignes ou colonnes" ;
@@ -3226,6 +3410,8 @@ TabPage RID_SCPAGE_LAYOUT
         Text[ hebrew ] = "Se~lektion in Spalten-/Zeilenköpfen hervorheben";
         Text[ hindi ] = "स्तंभ/पंक्ति का शीर्षकों में चु~नाव को विशेष प्रकार से दिखाओ";
         Text[ slovak ] = "Zvýrazniť výber v hlavičkách stĺp~cov/riadkov";
+        Text[ hungarian ] = "Sor- és os~zlopfejlécek kiemelése kijelöléskor";
+        Text[ slovenian ] = "Označi iz~bor v glavah stolpcev/vrstic";
     };
     CheckBox CB_TEXTFMT
     {
@@ -3237,12 +3423,12 @@ TabPage RID_SCPAGE_LAYOUT
         Text[ portuguese ] = "~Utilizar par�metros da impressora para a formata��o do texto";
         Text[ russian ] = "��������� ��� �������������� ������ ��������� ��������";
         Text[ greek ] = "����� ~���������� ��������� ��� ��� ����������� ��� ��������";
-        Text[ dutch ] = "~Printermaten voor tekstopmaak gebruiken";
+        Text[ dutch ] = "~Printermetrieken voor tekstopmaak gebruiken";
         Text[ french ] = "Utilisation des param�tres de l'imprimante pour le formatage du texte";
         Text[ spanish ] = "Utilizar los par�metros de la impresora para formatear el texto";
         Text[ finnish ] = "K�yt� tulostimen mittoja tekstin muotoilussa";
         Text[ italian ] = "~Usa i parametri della stampante per la formattazione del testo";
-        Text[ danish ] = "Bru~g printerm�l til tekstformatering";
+        Text[ danish ] = "Brug printerens m�l til tekstformatering";
         Text[ swedish ] = "Anv�nd s~krivarm�tt f�r textformatering";
         Text[ polish ] = "Do sformatowania tekstu u�yj metryki drukarki";
         Text[ portuguese_brazilian ] = "Usar m�tricas da impressora para a formata��o do texto";
@@ -3258,6 +3444,8 @@ TabPage RID_SCPAGE_LAYOUT
         Text[ hebrew ] = "~Druckermaße für Textformatierung verwenden";
         Text[ hindi ] = "टेक्स्ट् का रचना करने केलिए मुद्रक मेट्रिक्स का उपयोग करो ";
         Text[ slovak ] = "Použiť mierky tlačiarne pri formátovaní textu";
+        Text[ hungarian ] = "A nyomtató mérettáblázatának használata a szövegformázáshoz ";
+        Text[ slovenian ] = "Za oblikovanje besedila uporabi tiskalnikovo metriko";
     };
     CheckBox CB_REPLWARN
     {
@@ -3269,12 +3457,12 @@ TabPage RID_SCPAGE_LAYOUT
         Text[ portuguese ] = "Show overwrite ~warning when pasting data";
         Text[ russian ] = "Show overwrite ~warning when pasting data";
         Text[ greek ] = "Show overwrite ~warning when pasting data";
-        Text[ dutch ] = "Show overwrite ~warning when pasting data";
+        Text[ dutch ] = "Toon \"overschrijven\" ~waarschuwing bij plakken van gegevens";
         Text[ french ] = "Afficher un avertissement au moment de l'insertion de donn�es (�crasement)";
         Text[ spanish ] = "~Mostrar aviso de sobrescritura al insertar los datos";
         Text[ finnish ] = "Show overwrite ~warning when pasting data";
         Text[ italian ] = "Mostra avviso di rischio di soprascrittura";
-        Text[ danish ] = "Show overwrite ~warning when pasting data";
+        Text[ danish ] = "Advar om overskrivning n�r data inds�ttes";
         Text[ swedish ] = "Visa ~varning f�r att skriva �ver n�r data klistras in";
         Text[ polish ] = "Show overwrite ~warning when pasting data";
         Text[ japanese ] = "データを挿入する際、データ上書きの確認をする(~W)";
@@ -3290,6 +3478,8 @@ TabPage RID_SCPAGE_LAYOUT
         Text[ thai ] = "Show overwrite ~warning when pasting data";
         Text[ hindi ] = "Show overwrite ~warning when pasting data";
         Text[ slovak ] = "Ukázať varovanie pred prepisom dát počas ~vkladania";
+        Text[ hungarian ] = "Felülírási f~igyelmeztetés megjelenítése az adatok beillesztésekor";
+        Text[ slovenian ] = "Pri lepljenju pokaži ~opozorilo o prepisu podatkov.";
     };
 };
 
@@ -3337,6 +3527,8 @@ TabPage RID_SCPAGE_PRINT
         Text[ hebrew ] = "‮עמודים‬";
         Text[ hindi ] = "पृष्ठ";
         Text[ slovak ] = "Stránky";
+        Text[ hungarian ] = "Oldalak";
+        Text[ slovenian ] = "Strani";
     };
     CheckBox BTN_SKIPEMPTYPAGES
     {
@@ -3369,6 +3561,8 @@ TabPage RID_SCPAGE_PRINT
         Text[ hebrew ] = "~Ausgabe leerer Seiten unterdrücken";
         Text[ hindi ] = "खाली पृष्ठों का औटपुट् को ~दबाओ";
         Text[ slovak ] = "Potlačiť výstup prázdnych ~strán";
+        Text[ hungarian ] = "Ü~res oldalak kihagyása";
+        Text[ slovenian ] = "~Potlači izhod praznih strani";
     };
     FixedLine FL_SHEETS
     {
@@ -3385,7 +3579,7 @@ TabPage RID_SCPAGE_PRINT
         Text[ spanish ] = "Hojas";
         Text[ finnish ] = "Taulukot";
         Text[ italian ] = "Tabelle";
-        Text[ danish ] = "Tabeller";
+        Text[ danish ] = "Ark";
         Text[ swedish ] = "Tabeller";
         Text[ polish ] = "Arkusze";
         Text[ portuguese_brazilian ] = "Planilhas";
@@ -3401,6 +3595,8 @@ TabPage RID_SCPAGE_PRINT
         Text[ hebrew ] = "Tabellen";
         Text[ hindi ] = "शीट्";
         Text[ slovak ] = "Listy";
+        Text[ hungarian ] = "Munkalapok";
+        Text[ slovenian ] = "Delovni listi";
     };
     CheckBox BTN_SELECTEDSHEETS
     {
@@ -3417,7 +3613,7 @@ TabPage RID_SCPAGE_PRINT
         Text[ spanish ] = "~Imprimir s�lo hojas seleccionadas";
         Text[ finnish ] = "Tulosta vain ~valitut taulukot";
         Text[ italian ] = "~Stampa solo tabelle selezionate";
-        Text[ danish ] = "Udskriv ~kun markerede tabeller";
+        Text[ danish ] = "Udskriv ~kun markerede ark";
         Text[ swedish ] = "Skriv ~bara ut markerade tabeller";
         Text[ polish ] = "~Drukuj tylko zaznaczone tabele";
         Text[ portuguese_brazilian ] = "~Imprimir somente as planilhas selecionadas";
@@ -3433,58 +3629,7 @@ TabPage RID_SCPAGE_PRINT
         Text[ hebrew ] = "~Nur ausgewählte Tabellen drucken";
         Text[ hindi ] = "केवल चुने हुए शीटों का ~छपाई करो";
         Text[ slovak ] = "~Tlačiť len vybrané listy";
+        Text[ hungarian ] = "~Csak a kiválasztott munkalapok nyomtatása";
+        Text[ slovenian ] = "~Natisni samo izbrane liste";
     };
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
