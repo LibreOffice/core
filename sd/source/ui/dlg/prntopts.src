@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prntopts.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: os $ $Date: 2001-05-04 09:19:35 $
+ *  last change: $Author: obo $ $Date: 2001-05-10 07:16:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@ TabPage TP_PRINT_OPTIONS
     Text [ spanish ] = "Opciones" ;
     Text [ danish ] = "Indstillinger" ;
     Text [ swedish ] = "Alternativ" ;
-    Text [ finnish ] = "Options" ;
+    Text [ finnish ] = "Asetukset" ;
     Text [ english_us ] = "Options" ;
     Hide = TRUE;
     FixedLine GRP_PRINT
@@ -90,7 +90,7 @@ TabPage TP_PRINT_OPTIONS
         Text [ italian ] = "Contenuto" ;
         Text [ portuguese_brazilian ] = "Conteúdo" ;
         Text [ portuguese ] = "Conteúdo" ;
-        Text [ finnish ] = "Sisältö" ;
+        Text [ finnish ] = "Inhalt" ;
         Text [ danish ] = "Indhold" ;
         Text [ french ] = "Contenu" ;
         Text [ swedish ] = "Innehåll" ;
@@ -107,6 +107,7 @@ TabPage TP_PRINT_OPTIONS
         Text[ korean ] = "³»¿ë";
         Text[ turkish ] = "Ýçerik";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Contenido";
     };
     CheckBox CBX_DRAW
     {
@@ -134,6 +135,8 @@ TabPage TP_PRINT_OPTIONS
         Text[ korean ] = "±×¸®±â(~D)";
         Text[ turkish ] = "Çizim";
         Text[ language_user1 ] = " ";
+        Text[ finnish ] = "~Piirros";
+        Text[ catalan ] = "~Dibujo";
     };
     CheckBox CBX_NOTES
     {
@@ -161,6 +164,8 @@ TabPage TP_PRINT_OPTIONS
         Text[ korean ] = "¸Þ¸ð(~N)";
         Text[ turkish ] = "Notlar";
         Text[ language_user1 ] = " ";
+        Text[ finnish ] = "~Huomautukset";
+        Text[ catalan ] = "~Notas";
     };
     CheckBox CBX_HANDOUTS
     {
@@ -170,7 +175,7 @@ TabPage TP_PRINT_OPTIONS
         Text [ ENGLISH ] = "Handouts" ;
         TabStop = TRUE ;
         Text [ dutch ] = "~Folder" ;
-        Text [ english_us ] = "H~andouts" ;
+        Text [ english_us ] = "Hando~uts" ;
         Text [ italian ] = "Stampati" ;
         Text [ spanish ] = "Vo~lante" ;
         Text [ french ] = "Pr~ospectus" ;
@@ -188,6 +193,8 @@ TabPage TP_PRINT_OPTIONS
         Text[ korean ] = "À¯ÀÎ¹°(~A)";
         Text[ turkish ] = "Slayt sýralayýcýsý";
         Text[ language_user1 ] = " ";
+        Text[ finnish ] = "E~sitteet";
+        Text[ catalan ] = "Vo~lante";
     };
     CheckBox CBX_OUTLINE
     {
@@ -196,7 +203,7 @@ TabPage TP_PRINT_OPTIONS
         Text = "~Gliederung" ;
         Text [ ENGLISH ] = "Outliner" ;
         TabStop = TRUE ;
-        Text [ english_us ] = "~Outline" ;
+        Text [ english_us ] = "Out~line" ;
         Text [ italian ] = "~Struttura" ;
         Text [ spanish ] = "Es~quema" ;
         Text [ french ] = "Plan" ;
@@ -215,6 +222,8 @@ TabPage TP_PRINT_OPTIONS
         Text[ korean ] = "´Ù´Ü°è(~O)";
         Text[ turkish ] = "Anahat";
         Text[ language_user1 ] = " ";
+        Text[ finnish ] = "~Jäsennys";
+        Text[ catalan ] = "Es~quema";
     };
     FixedLine FL_SEPARATOR1
     {
@@ -246,6 +255,8 @@ TabPage TP_PRINT_OPTIONS
         Text[ korean ] = "Ãâ·Â¡¡Ç°Áú";
         Text[ turkish ] = "Çýktý kalitesi";
         Text[ language_user1 ] = " ";
+        Text[ finnish ] = "Ausgabequalität";
+        Text[ catalan ] = "Calidad de impresión";
     };
     RadioButton RBT_COLOR
     {
@@ -273,6 +284,8 @@ TabPage TP_PRINT_OPTIONS
         Text[ korean ] = "±âº»";
         Text[ turkish ] = "Standart";
         Text[ language_user1 ] = " ";
+        Text[ finnish ] = "Oletusarvo";
+        Text[ catalan ] = "Predeterminado";
     };
     RadioButton RBT_GRAYSCALE
     {
@@ -300,6 +313,8 @@ TabPage TP_PRINT_OPTIONS
         Text[ korean ] = "È¸»öµµ";
         Text[ turkish ] = "Gri tonlarý";
         Text[ language_user1 ] = " ";
+        Text[ finnish ] = "Harmaasävy";
+        Text[ catalan ] = "Escala de grises";
     };
     RadioButton RBT_BLACKWHITE
     {
@@ -327,6 +342,8 @@ TabPage TP_PRINT_OPTIONS
         Text[ korean ] = "Èæ¹é";
         Text[ turkish ] = "Siyah-beyaz";
         Text[ language_user1 ] = " ";
+        Text[ finnish ] = "Mustavalkoinen";
+        Text[ catalan ] = "Blanco y negro";
     };
     FixedLine GRP_PRINT_EXT
     {
@@ -338,7 +355,7 @@ TabPage TP_PRINT_OPTIONS
         Text [ italian ] = "Stampa di" ;
         Text [ portuguese_brazilian ] = "Imprimir" ;
         Text [ portuguese ] = "Imprimir" ;
-        Text [ finnish ] = "Tulosta" ;
+        Text [ finnish ] = "Drucken von" ;
         Text [ danish ] = "Udskriv" ;
         Text [ french ] = "Imprimer" ;
         Text [ swedish ] = "Skriv ut" ;
@@ -355,6 +372,7 @@ TabPage TP_PRINT_OPTIONS
         Text[ korean ] = "ÀÎ¼â";
         Text[ turkish ] = "Yazdýr";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Imprimir de";
     };
     CheckBox CBX_PAGENAME
     {
@@ -366,7 +384,7 @@ TabPage TP_PRINT_OPTIONS
         Text [ italian ] = "Nome pagina" ;
         Text [ portuguese_brazilian ] = "Nome da ~página" ;
         Text [ portuguese ] = "Nome da ~página" ;
-        Text [ finnish ] = "Sivun ~nimi" ;
+        Text [ finnish ] = "~Sivun nimi" ;
         Text [ danish ] = "Sidenavn" ;
         Text [ french ] = "~Nom de la page" ;
         Text [ swedish ] = "Sid~namn" ;
@@ -384,6 +402,7 @@ TabPage TP_PRINT_OPTIONS
         Text[ korean ] = "ÂÊ ÀÌ¸§(~P)";
         Text[ turkish ] = "Sayfa adý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "No~mbre de página";
     };
     CheckBox CBX_DATE
     {
@@ -395,7 +414,7 @@ TabPage TP_PRINT_OPTIONS
         Text [ italian ] = "Data" ;
         Text [ portuguese_brazilian ] = "~Data" ;
         Text [ portuguese ] = "~Data" ;
-        Text [ finnish ] = "~Päivämäärä" ;
+        Text [ finnish ] = "Päivä~määrä" ;
         Text [ danish ] = "Dato" ;
         Text [ french ] = "~Date" ;
         Text [ swedish ] = "Dat~um" ;
@@ -413,6 +432,7 @@ TabPage TP_PRINT_OPTIONS
         Text[ korean ] = "³¯Â¥(~A)";
         Text[ turkish ] = "Tarih";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Fecha";
     };
     CheckBox CBX_TIME
     {
@@ -424,7 +444,7 @@ TabPage TP_PRINT_OPTIONS
         Text [ italian ] = "Orario" ;
         Text [ portuguese_brazilian ] = "~Hora" ;
         Text [ portuguese ] = "~Hora" ;
-        Text [ finnish ] = "~Aika" ;
+        Text [ finnish ] = "Ai~ka" ;
         Text [ danish ] = "Tid" ;
         Text [ french ] = "~Heure" ;
         Text [ swedish ] = "~Tid" ;
@@ -442,6 +462,7 @@ TabPage TP_PRINT_OPTIONS
         Text[ korean ] = "½Ã°£(~M)";
         Text[ turkish ] = "Saat";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Hora";
     };
     CheckBox CBX_HIDDEN_PAGES
     {
@@ -470,6 +491,8 @@ TabPage TP_PRINT_OPTIONS
         Text[ korean ] = "¼û°ÜÁø ÂÊ(~I)";
         Text[ turkish ] = "Gizli sayfalar";
         Text[ language_user1 ] = " ";
+        Text[ finnish ] = "Piilo~sivut";
+        Text[ catalan ] = "Páginas ~ocultas";
     };
     FixedLine FL_SEPARATOR2
     {
@@ -486,7 +509,7 @@ TabPage TP_PRINT_OPTIONS
         Text [ italian ] = "Opzioni pagina" ;
         Text [ portuguese_brazilian ] = "Opções da página" ;
         Text [ portuguese ] = "Opções da página" ;
-        Text [ finnish ] = "Sivumääritykset" ;
+        Text [ finnish ] = "Seitenoptionen" ;
         Text [ danish ] = "Sideindstillinger" ;
         Text [ french ] = "Options de la page" ;
         Text [ swedish ] = "Sidalternativ" ;
@@ -503,6 +526,7 @@ TabPage TP_PRINT_OPTIONS
         Text[ korean ] = "ÂÊ ¿É¼Ç";
         Text[ turkish ] = "Sayfa seçenekleri";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Opciones de página";
     };
     RadioButton RBT_DEFAULT
     {
@@ -530,6 +554,8 @@ TabPage TP_PRINT_OPTIONS
         Text[ korean ] = "±âº»(~S)";
         Text[ turkish ] = "Standart";
         Text[ language_user1 ] = " ";
+        Text[ finnish ] = "~Vakio";
+        Text[ catalan ] = "~Predeterminado";
     };
     RadioButton RBT_PAGESIZE
     {
@@ -559,6 +585,7 @@ TabPage TP_PRINT_OPTIONS
         Text[ korean ] = "ÂÊ Å©±â¿¡ ¸ÂÃã(~F)";
         Text[ turkish ] = "Sayfaya sýðdýr";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Aj~ustar al tamaño de la página";
     };
     RadioButton RBT_PAGETILE
     {
@@ -586,6 +613,8 @@ TabPage TP_PRINT_OPTIONS
         Text[ korean ] = "ÂÊ ¹ÙµÏÆÇ½Ä ¹è¿­(~T)";
         Text[ turkish ] = "Sayfalarý döþe";
         Text[ language_user1 ] = " ";
+        Text[ finnish ] = "~Sivut vierekkäin";
+        Text[ catalan ] = "Páginas como a~zulejos";
     };
     RadioButton RBT_BOOKLET
     {
@@ -613,6 +642,8 @@ TabPage TP_PRINT_OPTIONS
         Text[ korean ] = "ÆÊÇÃ·¿(~R)";
         Text[ turkish ] = "Broþür";
         Text[ language_user1 ] = " ";
+        Text[ finnish ] = "E~site";
+        Text[ catalan ] = "~Prospecto";
     };
     CheckBox CBX_FRONT
     {
@@ -640,6 +671,8 @@ TabPage TP_PRINT_OPTIONS
         Text[ korean ] = "¾Õ ÂÊ(~O)";
         Text[ turkish ] = "Ön sayfa";
         Text[ language_user1 ] = " ";
+        Text[ finnish ] = "Etu~puoli";
+        Text[ catalan ] = "~Anverso";
     };
     CheckBox CBX_BACK
     {
@@ -667,6 +700,8 @@ TabPage TP_PRINT_OPTIONS
         Text[ korean ] = "µÞ ÂÊ(~C)";
         Text[ turkish ] = "Arka sayfa";
         Text[ language_user1 ] = " ";
+        Text[ finnish ] = "Taka~puoli";
+        Text[ catalan ] = "Re~verso";
     };
     CheckBox CBX_PAPERBIN
     {
@@ -693,6 +728,8 @@ TabPage TP_PRINT_OPTIONS
         Text[ korean ] = "ÇÁ¸°ÅÍ ¼³Á¤¿¡¡¡µû¸¥ ¿ëÁö °ø±Þ(~E)";
         Text[ turkish ] = "Kaðýt kaynaðý yazýcý ayarlarýndaki gibi";
         Text[ language_user1 ] = " ";
+        Text[ finnish ] = "Tulostin~asetusten paperilokero";
+        Text[ catalan ] = "De la configuración de la ~impresora";
     };
     Text[ chinese_simplified ] = "Ñ¡Ïî";
     Text[ russian ] = "Ïàðàìåòðû";
@@ -704,5 +741,6 @@ TabPage TP_PRINT_OPTIONS
     Text[ korean ] = "¿É¼Ç";
     Text[ turkish ] = "Seçenekler";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Opciones";
 };
 
