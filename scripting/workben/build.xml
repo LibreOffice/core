@@ -3,9 +3,9 @@
 #
 #   $RCSfile: build.xml,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: dfoster $ $Date: 2003-02-13 14:34:08 $
+#   last change: $Author: npower $ $Date: 2003-02-18 13:10:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -88,6 +88,16 @@
     <pathelement location="${solar.jar}/ridl.jar"/>
     <pathelement location="${solar.jar}/sandbox.jar"/>
   </path>
+  <path id="scriptexampleclasspath">
+    <pathelement location="${prj}/../unoil/${inpath}/class/unoil.jar"/>
+    <pathelement location="${solar.jar}/jurt.jar"/>
+    <pathelement location="${solar.jar}/jut.jar"/>
+    <pathelement location="${solar.jar}/juh.jar"/>
+    <pathelement location="${solar.jar}/java_uno.jar"/>
+    <pathelement location="${solar.jar}/ridl.jar"/>
+    <pathelement location="${solar.jar}/sandbox.jar"/>
+    <pathelement location="${out}/class/ScriptRuntimeForJava.jar"/>
+  </path>
 
   <!-- ===================== Set up build conditionals ========================= -->
   <target name="product.test">
@@ -149,20 +159,20 @@
     <copy file="${prj}/examples/java/MemoryUsage.java" todir="${out}/class/examples/java/MemoryUsage/"/>
     <copy file="${prj}/examples/java/ExampleSpreadSheet.sxc" todir="${out}/class/examples/java/MemoryUsage/"/>
 
-    <mkdir dir="${out}/class/examples/java/EventHelper"/>
-    <javac srcdir="${prj}/examples/java/" destdir="${out}/class/examples/java/EventHelper/"
-              includes="**/EventHelper.java" classpathref="idlclasspath"
+    <mkdir dir="${out}/class/examples/java/ScriptFrmwrkHelper"/>
+    <javac srcdir="${prj}/examples/java/" destdir="${out}/class/examples/java/ScriptFrmwrkHelper/"
+              includes="**/ScriptFrmwrkHelper.java" classpathref="scriptexampleclasspath"
        debug="${debug}" optimize="${optimize}" deprecation="on"/>
-    <copy todir="${out}/class/examples/java/EventHelper/">
+    <copy todir="${out}/class/examples/java/ScriptFrmwrkHelper/">
         <fileset dir="${prj}/examples/java/">
-            <include name="**/EventHelper.java"/>
+            <include name="**/ScriptFrmwrkHelper.java"/>
         </fileset>
     </copy>
-    <copy file="${prj}/examples/java/EventHelperParcel.xml" tofile="${out}/class/examples/java/EventHelper/parcel-descriptor.xml"/>
-    <jar jarfile="${out}/class/examples/java/EventHelper/EventHelper.jar"
-        basedir="${out}/class/examples/java/EventHelper"
+    <copy file="${prj}/examples/java/ScriptFrameWkHelperParcel.xml" tofile="${out}/class/examples/java/ScriptFrmwrkHelper/parcel-descriptor.xml"/>
+    <jar jarfile="${out}/class/examples/java/ScriptFrmwrkHelper/ScriptFrmwrkHelper.jar"
+        basedir="${out}/class/examples/java/ScriptFrmwrkHelper"
         includes="**/*.java,**/*.class,**/*.xml"
-        excludes="${out}/class/examples/java/EventHelper/EventHelper.jar">
+        excludes="${out}/class/examples/java/ScriptFrmwrkHelper/ScriptFrmwrkHelper.jar">
         <manifest>
             <attribute name="Built-By" value="Sun Microsystems"/>
             <attribute name="ScriptFramework-Version" value="${sfversion}"/>
@@ -186,10 +196,6 @@
         <arg value="${prj}/../offapi/wntmsci9${proext}/ucr/dcsssfstorage.db"/>
         <arg value="${prj}/../offapi/wntmsci9${proext}/ucr/dcsssfsecurity.db"/>
     </exec>
-    <!-- <copy file="/tmp/ScriptFramework.rdb"
-        todir="${out}/class/sframework/"/>
-    <copy file="/net/cdelab18/scriptdev/duncanf/SRX644/scripting/workben/sf.rdb"
-        todir="${out}/class/sframework/"/> -->
     <copy file="${out}/class/ScriptRuntimeForJava.jar"
         todir="${out}/class/sframework/"/>
     <copy file="${out}/class/ScriptFramework.jar"
@@ -204,7 +210,7 @@
     <copy file="${prj}/../unoil/wntmsci9${proext}/class/unoil.jar"
         todir="${out}/class/sframework/skip_registration"/>
   </target>
-  <target name="buildunopackage_win7" depends="build.conditions" if="win7.build">
+<!--  <target name="buildunopackage_win7" depends="build.conditions" if="win7.build">
     <mkdir dir="${out}/class/sframeworkinstall/sframework"/>
     <mkdir dir="${out}/class/sframework"/>
     <!-- <exec executable="regmerge">
@@ -232,7 +238,7 @@
     <mkdir dir="${out}/class/sframework/skip_registration"/>
     <copy file="${prj}/../unoil/wntmsci7${proext}/class/unoil.jar"
         todir="${out}/class/sframework/skip_registration"/>
-  </target>
+  </target> -->
   <target name="buildunopackage_linux" depends="build.conditions" if="linx86.build">
     <mkdir dir="${out}/class/sframeworkinstall/sframework"/>
     <mkdir dir="${out}/class/sframework"/>
@@ -291,7 +297,8 @@
     <copy file="${prj}/../unoil/unxsols4${proext}/class/unoil.jar"
         todir="${out}/class/sframework/skip_registration"/>
   </target>
-  <target name="buildunopackage" depends="buildunopackage_win9,buildunopackage_win7,buildunopackage_linux,buildunopackage_solaris">
+  <target name="buildunopackage" depends="buildunopackage_win9,buildunopackage_linux,buildunopackage_solaris">
+  <!-- <target name="buildunopackage" depends="buildunopackage_win9,buildunopackage_win7,buildunopackage_linux,buildunopackage_solaris"> -->
     <zip zipfile="${out}/class/sframeworkinstall/sframework/ooscriptframe.zip"
         basedir="${out}/class/sframework">
     </zip>
