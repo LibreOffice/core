@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ama $ $Date: 2001-02-15 13:38:51 $
+ *  last change: $Author: ama $ $Date: 2001-03-06 13:14:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,9 @@
 #endif
 #ifndef _SVX_SRIPTSPACEITEM_HXX
 #include <svx/scriptspaceitem.hxx>
+#endif
+#ifndef _SVX_BRSHITEM_HXX //autogen
+#include <svx/brshitem.hxx>
 #endif
 #ifndef _SVX_SPLWRAP_HXX
 #include <svx/splwrap.hxx>
@@ -174,6 +177,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::linguistic2;
 
 #define C2U(cChar) rtl::OUString::createFromAscii(cChar)
+#define DARK_COLOR 153
 
 // steht im number.cxx
 extern const sal_Char __FAR_DATA sBulletFntName[];
@@ -486,6 +490,28 @@ void SwTxtPaintInfo::_DrawText( const XubString &rText, const SwLinePortion &rPo
         if( !pBlink->IsVisible() )
             return;
     }
+    Color *pOldCol;
+    if( GetFont()->IsAutomaticCol() )
+    {
+        pOldCol = new Color( GetFont()->GetColor() );
+        const Color* pCol = GetFont()->GetBackColor();
+        if( !pCol )
+        {
+            const SvxBrushItem* pItem;
+            SwRect aOrigBackRect;
+            BOOL bBlack = TRUE;
+            if( GetTxtFrm()->GetBackgroundBrush( pItem, pCol, aOrigBackRect,
+                FALSE ) && !pItem->GetColor().GetTransparency() )
+                pCol = &pItem->GetColor();
+        }
+        if( pCol &&
+            DARK_COLOR < pCol->GetRed() + pCol->GetGreen() + pCol->GetBlue() )
+            bBlack = FALSE;
+        Color aCol( bBlack ? COL_BLACK : COL_WHITE );
+        GetFont()->SetColor( aCol );
+    }
+    else
+        pOldCol = NULL;
 
     short nSpaceAdd = ( rPor.IsBlankPortion() || rPor.IsDropPortion() ||
                         rPor.InNumberGrp() ) ? 0 : GetSpaceAdd();
@@ -526,6 +552,11 @@ void SwTxtPaintInfo::_DrawText( const XubString &rText, const SwLinePortion &rPo
             aDrawInf.SetSpace( nSpaceAdd );
             pFnt->_DrawText( aDrawInf );
         }
+    }
+    if( pOldCol )
+    {
+        GetFont()->SetColor( *pOldCol );
+        delete pOldCol;
     }
 }
 
