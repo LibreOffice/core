@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basedispatcher.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cd $ $Date: 2001-11-13 13:51:50 $
+ *  last change: $Author: mba $ $Date: 2001-11-21 12:45:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,8 +110,8 @@
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_FRAME_XDISPATCH_HPP_
-#include <com/sun/star/frame/XDispatch.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XNOTIFYINGDISPATCH_HPP_
+#include <com/sun/star/frame/XNotifyingDispatch.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_UTIL_URL_HPP_
@@ -126,8 +126,8 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_FRAME_XSTATUSLISTENER_HPP_
-#include <com/sun/star/frame/XStatusListener.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XDISPATCHRESULTLISTENER_HPP_
+#include <com/sun/star/frame/XDispatchResultListener.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_FRAME_XFRAMELOADER_HPP_
@@ -346,7 +346,7 @@ class LoaderThreads : private ::std::vector< LoadBinding >
 
     @implements     XInterface
                     XDispatch
-                    XStatusListener
+                    XDispatchResultListener
                     XLoadEventListener
                     XEventListener
 
@@ -359,8 +359,8 @@ class LoaderThreads : private ::std::vector< LoadBinding >
 *//*-*************************************************************************************************************/
 class BaseDispatcher    :   // interfaces
                             public    css::lang::XTypeProvider                 ,
-                            public    css::frame::XDispatch                    ,
-                            public    css::frame::XStatusListener              ,   // => XEventListener
+                            public    css::frame::XNotifyingDispatch           ,
+                            public    css::frame::XDispatchResultListener      ,   // => XEventListener
                             public    css::frame::XLoadEventListener           ,   // => XEventListener too!
                             // baseclasses
                             // Order is neccessary for right initialization!
@@ -381,6 +381,11 @@ class BaseDispatcher    :   // interfaces
         DECLARE_XINTERFACE
         DECLARE_XTYPEPROVIDER
 
+        //  XNotifyingDispatch
+        virtual void SAL_CALL dispatchWithNotification ( const css::util::URL& aURL,
+                                                      const css::uno::Sequence< css::beans::PropertyValue >& aArgs,
+                                                      const css::uno::Reference< css::frame::XDispatchResultListener >& Listener ) throw ( css::uno::RuntimeException);
+
         //  XDispatch
         virtual void SAL_CALL dispatch              ( const css::util::URL&                                     aURL       ,
                                                       const css::uno::Sequence< css::beans::PropertyValue >&    lArguments ) throw( css::uno::RuntimeException ) = 0;
@@ -389,8 +394,8 @@ class BaseDispatcher    :   // interfaces
         virtual void SAL_CALL removeStatusListener  ( const css::uno::Reference< css::frame::XStatusListener >& xListener  ,
                                                       const css::util::URL&                                     aURL       ) throw( css::uno::RuntimeException );
 
-        //   XStatusListener
-        virtual void SAL_CALL statusChanged         ( const css::frame::FeatureStateEvent&                      aEvent     ) throw( css::uno::RuntimeException );
+        //   XDispatchResultListener
+        virtual void SAL_CALL dispatchFinished      ( const css::frame::DispatchResultEvent&                    aEvent     ) throw( css::uno::RuntimeException );
 
         //   XLoadEventListener
         virtual void SAL_CALL loadFinished          ( const css::uno::Reference< css::frame::XFrameLoader >&    xLoader    ) throw( css::uno::RuntimeException );
@@ -467,7 +472,7 @@ class BaseDispatcher    :   // interfaces
         void            implts_disableFrame         ( const css::uno::Reference< css::frame::XFrame >&        xFrame          );
         sal_Bool        implts_deactivateController ( const css::uno::Reference< css::frame::XController >&   xController     );
         sal_Bool        implts_reactivateController ( const css::uno::Reference< css::frame::XController >&   xController     );
-        void            implts_sendStatusEvent      ( const css::uno::Reference< css::frame::XFrame >&        xEventSource    ,
+        void            implts_sendResultEvent      ( const css::uno::Reference< css::frame::XFrame >&        xEventSource    ,
                                                       const ::rtl::OUString&                                  sURL            ,
                                                             sal_Bool                                          bLoadState      );
 /*DRAFT void            implts_updateHistory        ( const SvtHistoryItem&                                   rItem           ,
@@ -507,6 +512,7 @@ class BaseDispatcher    :   // interfaces
     private:
         LoaderThreads                                               m_aLoaderThreads      ;   /// list of bindings between handler/loader, tasks and loaded URLs
         ListenerHash                                                m_aListenerContainer  ;   /// hash table for listener at specified URLs
+        ListenerHash                                                m_aResultListenerContainer  ;   /// hash table for listener at specified URLs
 
 };      //  class BaseDispatcher
 
