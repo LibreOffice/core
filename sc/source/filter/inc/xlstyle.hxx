@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlstyle.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:28:47 $
+ *  last change: $Author: rt $ $Date: 2004-05-18 12:45:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -279,6 +279,12 @@ const sal_uInt16 EXC_COLOR_WINDOWTEXT3      = 24;       /// System window text c
 const sal_uInt16 EXC_COLOR_WINDOWBACK3      = 25;       /// System window background color (BIFF3-BIFF4).
 const sal_uInt16 EXC_COLOR_WINDOWTEXT       = 64;       /// System window text color (>=BIFF5).
 const sal_uInt16 EXC_COLOR_WINDOWBACK       = 65;       /// System window background color (>=BIFF5).
+const sal_uInt16 EXC_COLOR_BUTTONBACK       = 67;       /// System button background color (face color).
+const sal_uInt16 EXC_COLOR_WINDOWTEXT_CH    = 77;       /// System window text color (BIFF8 charts).
+const sal_uInt16 EXC_COLOR_WINDOWBACK_CH    = 78;       /// System window background color (BIFF8 charts).
+const sal_uInt16 EXC_COLOR_BORDERAUTO_CH    = 79;       /// Automatic frame border (BIFF8 charts).
+const sal_uInt16 EXC_COLOR_NOTEBACK         = 80;       /// Note background color.
+const sal_uInt16 EXC_COLOR_NOTETEXT         = 81;       /// Note text color.
 const sal_uInt16 EXC_COLOR_FONTAUTO         = 0x7FFF;   /// Font auto color (system window text color).
 
 // (0x0293) STYLE -------------------------------------------------------------
@@ -330,6 +336,9 @@ private:
     const ColorData*            mpColorTable;       /// The table with RGB values.
     ColorData                   mnWindowText;       /// System window text color.
     ColorData                   mnWindowBack;       /// System window background color.
+    ColorData                   mnFaceColor;        /// System button background color.
+    ColorData                   mnNoteText;         /// Note text color.
+    ColorData                   mnNoteBack;         /// Note background color.
     sal_uInt32                  mnTableSize;        /// The color table size.
 };
 
