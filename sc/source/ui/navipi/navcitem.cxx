@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navcitem.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:03 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:48:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,11 +109,11 @@ void __EXPORT ScNavigatorControllerItem::StateChanged( USHORT nSID, SfxItemState
                     ScAddress aScAddress;
                     aScAddress.Parse( aAddress );
 
-                    USHORT nCol = aScAddress.Col()+1;
-                    USHORT nRow = aScAddress.Row()+1;
+                    SCCOL nCol = aScAddress.Col()+1;
+                    SCROW nRow = aScAddress.Row()+1;
 
-//                  USHORT nCol = (USHORT)pCellPosItem->GetValue().X()+1;
-//                  USHORT nRow = (USHORT)pCellPosItem->GetValue().Y()+1;
+//                  SCCOL nCol = (USHORT)pCellPosItem->GetValue().X()+1;
+//                  SCROW nRow = (USHORT)pCellPosItem->GetValue().Y()+1;
 
                     rNavigatorDlg.UpdateColumn( &nCol );
                     rNavigatorDlg.UpdateRow   ( &nRow );
@@ -132,7 +132,7 @@ void __EXPORT ScNavigatorControllerItem::StateChanged( USHORT nSID, SfxItemState
                 //  Tabelle fuer Basic ist 1-basiert
                 if ( pTabItem && pTabItem->GetValue() )
                 {
-                    USHORT nTab = pTabItem->GetValue() - 1;
+                    SCTAB nTab = pTabItem->GetValue() - 1;
 
                     rNavigatorDlg.UpdateTable( &nTab );
                     rNavigatorDlg.UpdateColumn();
