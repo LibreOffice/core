@@ -2,9 +2,9 @@
  *
  *  $RCSfile: astdeclaration.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:44:35 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:07:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,8 @@ AstDeclaration::AstDeclaration(NodeType type, const OString& name, AstScope* pSc
 
     if ( idlc()->isDocValid() )
         m_documentation = OStringToOUString(idlc()->getDocumentation(), RTL_TEXTENCODING_UTF8);
+
+    m_bPublished = idlc()->isPublished();
 }
 
 
@@ -165,24 +167,23 @@ void AstDeclaration::setName(const ::rtl::OString& name)
     m_fullName = convertName(m_scopedName);
 }
 
-sal_Bool AstDeclaration::isType() const
-{
-    sal_Bool bIsType = sal_False;
+bool AstDeclaration::isType() const {
+    switch (m_nodeType) {
+    case NT_interface:
+    case NT_instantiated_struct:
+    case NT_union:
+    case NT_enum:
+    case NT_sequence:
+    case NT_array:
+    case NT_typedef:
+    case NT_predefined:
+    case NT_type_parameter:
+        return true;
 
-    switch (m_nodeType)
-    {
-        case NT_interface:
-        case NT_struct:
-        case NT_union:
-        case NT_enum:
-        case NT_sequence:
-        case NT_array:
-        case NT_typedef:
-        case NT_predefined:
-            bIsType = sal_True;
+    default:
+        OSL_ASSERT(m_nodeType != NT_struct); // see AstStruct::isType
+        return false;
     }
-
-    return bIsType;
 }
 
 sal_Bool AstDeclaration::hasAncestor(AstDeclaration* pDecl)
