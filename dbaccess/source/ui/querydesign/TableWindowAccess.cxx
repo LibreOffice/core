@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableWindowAccess.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 17:22:58 $
+ *  last change: $Author: vg $ $Date: 2003-06-25 11:05:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,12 @@
 #ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLERELATIONTYPE_HPP_
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 #endif
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
+#include <com/sun/star/accessibility/AccessibleStateType.hpp>
+#endif
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
+#include <com/sun/star/accessibility/AccessibleEventId.hpp>
+#endif
 #ifndef _COMPHELPER_SEQUENCE_HXX_
 #include <comphelper/sequence.hxx>
 #endif
@@ -102,29 +108,27 @@ namespace dbaui
     //  using namespace ::com::sun::star::awt;
     using namespace ::com::sun::star;
 
-    OTableWindowAccess::OTableWindowAccess(const Reference< XAccessible>& _xParent,
-                                            OTableWindow* _pTable)
-        :OAccessibleBase(_pTable,_xParent)
+    OTableWindowAccess::OTableWindowAccess(OTableWindow* _pTable)
+        :VCLXAccessibleComponent(_pTable->GetComponentInterface().is() ? _pTable->GetWindowPeer() : NULL)
         ,m_pTable(_pTable)
     {
-        OSL_ENSURE(m_pTable,"Table isn't valid!");
     }
     // -----------------------------------------------------------------------------
     void SAL_CALL OTableWindowAccess::disposing()
     {
         m_pTable = NULL;
-        OAccessibleBase::disposing();
+        VCLXAccessibleComponent::disposing();
     }
     // -----------------------------------------------------------------------------
     Any SAL_CALL OTableWindowAccess::queryInterface( const Type& aType ) throw (RuntimeException)
     {
-        Any aRet(OAccessibleBase::queryInterface( aType ));
+        Any aRet(VCLXAccessibleComponent::queryInterface( aType ));
         return aRet.hasValue() ? aRet : OTableWindowAccess_BASE::queryInterface( aType );
     }
     // -----------------------------------------------------------------------------
     Sequence< Type > SAL_CALL OTableWindowAccess::getTypes(  ) throw (RuntimeException)
     {
-        return ::comphelper::concatSequences(OAccessibleBase::getTypes(),OTableWindowAccess_BASE::getTypes());
+        return ::comphelper::concatSequences(VCLXAccessibleComponent::getTypes(),OTableWindowAccess_BASE::getTypes());
     }
     // -----------------------------------------------------------------------------
     ::rtl::OUString SAL_CALL OTableWindowAccess::getImplementationName() throw(RuntimeException)
@@ -214,6 +218,22 @@ namespace dbaui
         return aRet;
     }
     // -----------------------------------------------------------------------------
+    Reference< XAccessible > OTableWindowAccess::getParentChild(sal_Int32 _nIndex)
+    {
+        Reference< XAccessible > xReturn;
+        Reference< XAccessible > xParent = getAccessibleParent();
+        if ( xParent.is() )
+        {
+            Reference< XAccessibleContext > xParentContext = xParent->getAccessibleContext();
+            if ( xParentContext.is() )
+            {
+                xReturn = xParentContext->getAccessibleChild(_nIndex);
+            }
+        }
+        return xReturn;
+    }
+    // -----------------------------------------------------------------------------
+
     sal_Int32 SAL_CALL OTableWindowAccess::getRelationCount(  ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex  );
@@ -232,7 +252,7 @@ namespace dbaui
             OJoinTableView* pView = m_pTable->getTableView();
             ::std::vector<OTableConnection*>::const_iterator aIter = pView->getTableConnections(m_pTable) + nIndex;
             aRet.TargetSet.realloc(1);
-            aRet.TargetSet[0] = m_xParentContext->getAccessibleChild(aIter - pView->getTableConnections()->begin());
+            aRet.TargetSet[0] = getParentChild(aIter - pView->getTableConnections()->begin());
             aRet.RelationType = AccessibleRelationType::CONTROLLER_FOR;
         }
         return aRet;
@@ -257,7 +277,7 @@ namespace dbaui
             ::std::vector< Reference<XInterface> > aRelations;
             aRelations.reserve(5); // just guessing
             for (; aIter != pConnectionList->end() ; ++aIter )
-                aRelations.push_back(m_xParentContext->getAccessibleChild(aIter - pConnectionList->begin()));
+                aRelations.push_back(getParentChild(aIter - pConnectionList->begin()));
 
             Sequence< Reference<XInterface> > aSeq(aRelations.begin(),aRelations.size());
             return AccessibleRelation(AccessibleRelationType::CONTROLLER_FOR,aSeq);
@@ -284,6 +304,12 @@ namespace dbaui
         return sAccessibleName;
     }
     // -----------------------------------------------------------------------------
+    Reference< XAccessibleContext > SAL_CALL OTableWindowAccess::getAccessibleContext(  ) throw (::com::sun::star::uno::RuntimeException)
+    {
+        return this;
+    }
+    // -----------------------------------------------------------------------------
+
 }
 // -----------------------------------------------------------------------------
 
