@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objserv.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: mba $ $Date: 2002-10-28 12:54:17 $
+ *  last change: $Author: mba $ $Date: 2002-11-04 09:11:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1513,8 +1513,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             BOOL bOK = FALSE;
             const String aOldURL( INetURLObject::GetBaseURL() );
             if( ShallSetBaseURL_Impl( aMedium ) )
-                INetURLObject::SetBaseURL(
-                    aMedium.GetURLObject().GetMainURL() );
+                INetURLObject::SetBaseURL( aMedium.GetBaseURL() );
             else
                 INetURLObject::SetBaseURL( String() );
 

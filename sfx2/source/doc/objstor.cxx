@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.109 $
+ *  $Revision: 1.110 $
  *
- *  last change: $Author: mba $ $Date: 2002-09-30 16:16:54 $
+ *  last change: $Author: mba $ $Date: 2002-11-04 09:11:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -545,7 +545,7 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
             ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aName, aBaseURL );
         }
         else
-            aBaseURL = pMed->GetName();
+            aBaseURL = pMed->GetBaseURL();
     }
 
     SfxApplication* pApp = SFX_APP();
@@ -1338,7 +1338,7 @@ sal_Bool SfxObjectShell::DoSaveAs( SfxMedium &rMedium )
     const String aOldURL( INetURLObject::GetBaseURL() );
     if( GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
         if ( ShallSetBaseURL_Impl( rMedium ) )
-            INetURLObject::SetBaseURL( rMedium.GetName() );
+            INetURLObject::SetBaseURL( rMedium.GetBaseURL() );
         else
             INetURLObject::SetBaseURL( String() );
 
@@ -1765,7 +1765,7 @@ sal_Bool SfxObjectShell::DoSave_Impl( const SfxItemSet* pArgs )
     const String aOldURL( INetURLObject::GetBaseURL() );
     if( GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
         if ( ShallSetBaseURL_Impl(*pMedium) )
-            INetURLObject::SetBaseURL( pMedium->GetName() );
+            INetURLObject::SetBaseURL( pMedium->GetBaseURL() );
         else
             INetURLObject::SetBaseURL( String() );
 
@@ -2040,7 +2040,7 @@ sal_Bool SfxObjectShell::PreDoSaveAs_Impl
     const String aOldURL( INetURLObject::GetBaseURL() );
     if( GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
         if ( ShallSetBaseURL_Impl(*pNewFile) )
-            INetURLObject::SetBaseURL( pNewFile->GetName() );
+            INetURLObject::SetBaseURL( pNewFile->GetBaseURL() );
         else
             INetURLObject::SetBaseURL( String() );
 

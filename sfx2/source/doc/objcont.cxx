@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objcont.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: mba $ $Date: 2002-08-23 10:43:47 $
+ *  last change: $Author: mba $ $Date: 2002-11-04 09:11:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1672,58 +1672,8 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
         }
 
         if( !aFoundName.Len() && aTemplName.Len() )
-        {
-            // if the template filename did not lead to success, try the template logical name
-            if ( aTempl.GetFull( String(), aTemplName, aFoundName ) )
-            {
-                // template was found
-                // check if template filename differs from the specified one
-                // if comparing filenames is enabled ask user, otherwise accept the different file name
-/*
-                // Actually searching is not enabled -> ask AK/LHO
-                if( aTemplFileName.Len() && aTemplFileName != aFoundName )
-                {
-                    // template with given template name was found but with a different filename
-                    SfxMedium aSfxMedium( aFoundName, STREAM_READ | STREAM_SHARE_DENYNONE, FALSE );
-                    const SfxFilter* pFilter = NULL;
-                    SFX_APP()->GetFilterMatcher().GuessFilter( aSfxMedium, &pFilter, SFX_FILTER_IMPORT | SFX_FILTER_TEMPLATE );
-                    if ( pFilter && pFilter->GetFilterContainer() == pFile->GetFilter()->GetFilterContainer() )
-                    {
-                        String aMsg( SfxResId( STR_TEMPL_MOVED ) );
-                        aMsg.SearchAndReplace( DEFINE_CONST_UNICODE( "$(TEMPLATE)" ), aTemplName );
-                        aMsg.SearchAndReplace( DEFINE_CONST_UNICODE( "$(FOUND)" ), aFoundName );
-                        if( QueryBox( 0, WB_YES_NO, aMsg ).Execute() == RET_YES )
-                        {
-                            pInfo->SetTemplateFileName( aFoundName );
-                            FlushDocInfo();
-                            SetModified( TRUE );
-                        }
-                        else
-                            aFoundName.Erase();
-                    }
-                    else
-                        aFoundName.Erase();
-                }
-*/
-            }
-
-            if ( !aFoundName.Len() )
-            {
-                // template not found, ask user for removing template link
-                // but only if template name is set, not if only a template filename is given
-                String aMsg( SfxResId( STR_TEMPL_RESET ) );
-                aMsg.SearchAndReplace( DEFINE_CONST_UNICODE( "$(TEMPLATE)" ), aTemplName );
-                if( bCanUpdateFromTemplate == document::UpdateDocMode::ACCORDING_TO_CONFIG
-                 && QueryBox( GetDialogParent(), WB_YES_NO, aMsg ).Execute() == RET_NO )
-                {
-                    String aStr;
-                    pInfo->SetTemplateFileName( aStr );
-                    pInfo->SetTemplateName( aStr );
-                    FlushDocInfo();
-                    SetModified( TRUE );
-                }
-            }
-        }
+            // if the template filename did not lead to success, try to get a file name for the logical template name
+            aTempl.GetFull( String(), aTemplName, aFoundName );
     }
 
     if ( aFoundName.Len() )

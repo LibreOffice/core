@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objmisc.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: mba $ $Date: 2002-09-11 10:08:55 $
+ *  last change: $Author: mba $ $Date: 2002-11-04 09:11:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1322,7 +1322,7 @@ const String& SfxObjectShell::GetBaseURL() const
     else if ( pMedium->GetFilter() && ( pMedium->GetFilter()->GetFilterFlags() & SFX_FILTER_PACKED ) )
         return pMedium->GetPhysicalName();
     else
-        return pMedium->GetName();
+        return pMedium->GetBaseURL();
 }
 
 String SfxObjectShell::QueryTitle( SfxTitleQuery eType ) const
