@@ -46,6 +46,22 @@ F4_IMPRESS = \
     impress8_draw
 
 # -----------------------------------------------
+# count = 12
+F4_UI_IMPRESS = \
+    MS_PowerPoint_97_Vorlage_ui \
+    StarDraw_3_0_Vorlage__StarImpress__ui \
+    StarDraw_5_0_Vorlage__StarImpress__ui \
+    impress_StarOffice_XML_Draw_ui \
+    StarImpress_4_0_Vorlage_ui \
+    StarImpress_5_0_Vorlage_ui \
+    StarImpress_5_0__packed__ui \
+    StarOffice_XML__Impress__ui \
+    impress_StarOffice_XML_Impress_Template_ui \
+    impress8_ui \
+    impress8_template_ui \
+    impress8_draw_ui
+    
+# -----------------------------------------------
 # count = 0
 L4_GLOBAL =
 
@@ -54,15 +70,22 @@ L4_GLOBAL =
 C4_GLOBAL =
 
 # -----------------------------------------------
-TYPES_4fcfg_impress           = $(foreach,i,$(T4_IMPRESS) types$/$i.xcu          )
-FILTERS_4fcfg_impress         = $(foreach,i,$(F4_IMPRESS) filters$/$i.xcu        )
-FRAMELOADERS_4fcfg_impress    = $(foreach,i,$(L4_IMPRESS) frameloaders$/$i.xcu   )
-CONTENTHANDLERS_4fcfg_impress = $(foreach,i,$(C4_IMPRESS) contenthandlers$/$i.xcu)
+TYPES_4fcfg_impress           = $(foreach,i,$(T4_IMPRESS)    types$/$i.xcu                   )
+FILTERS_4fcfg_impress         = $(foreach,i,$(F4_IMPRESS)    filters$/$i.xcu                 )
+UI_FILTERS_4fcfg_impress      = $(foreach,i,$(F4_UI_IMPRESS) $(DIR_LOCFRAG)$/filters$/$i.xcu )
+FRAMELOADERS_4fcfg_impress    = $(foreach,i,$(L4_IMPRESS)    frameloaders$/$i.xcu            )
+CONTENTHANDLERS_4fcfg_impress = $(foreach,i,$(C4_IMPRESS)    contenthandlers$/$i.xcu         )
 
 # -----------------------------------------------
 # needed to get dependencies inside global makefile work!
 ALL_4fcfg_impress = \
     $(TYPES_4fcfg_impress) \
-    $(foreach,i,$(FILTERS_4fcfg_base) $(MISC)$/$i) \
+    $(FILTERS_4fcfg_impress) \
+    $(UI_FILTERS_4fcfg_impress) \
     $(FRAMELOADERS_4fcfg_impress) \
     $(CONTENTHANDLERS_4fcfg_impress)
+    
+ALL_UI_FILTERS+=$(UI_FILTERS_4fcfg_impress)
+    
+ALL_PACKAGES+=impress
+
