@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objserv.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: mav $ $Date: 2002-06-20 07:53:45 $
+ *  last change: $Author: mba $ $Date: 2002-07-03 16:35:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1469,8 +1469,6 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
             case SID_DOCINFO:
                 if ( 0 != ( pImp->eFlags & SFXOBJECTSHELL_NODOCINFO ) )
                     rSet.DisableItem( nWhich );
-                else
-                    rSet.Put( SfxDocumentInfoItem( GetTitle(), GetDocInfo() ) );
                 break;
 
             case SID_CLOSEDOC:
