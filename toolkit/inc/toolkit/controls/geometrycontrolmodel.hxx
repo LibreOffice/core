@@ -2,9 +2,9 @@
  *
  *  $RCSfile: geometrycontrolmodel.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fs $ $Date: 2001-09-05 06:40:48 $
+ *  last change: $Author: fs $ $Date: 2002-01-08 13:17:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,8 +80,8 @@
 #ifndef _CPPUHELPER_WEAKAGG_HXX_
 #include <cppuhelper/weakagg.hxx>
 #endif
-#ifndef _CPPUHELPER_IMPLBASE2_HXX_
-#include <cppuhelper/implbase2.hxx>
+#ifndef _CPPUHELPER_COMPBASE2_HXX_
+#include <cppuhelper/compbase2.hxx>
 #endif
 #ifndef _COM_SUN_STAR_UTIL_XCLONEABLE_HPP_
 #include <com/sun/star/util/XCloneable.hpp>
@@ -104,9 +104,9 @@ FORWARD_DECLARE_INTERFACE( script, XNameContainer )
     //====================================================================
     //= OGeometryControlModel_Base
     //====================================================================
-    typedef ::cppu::WeakAggImplHelper2  <   ::com::sun::star::util::XCloneable
-                                        ,   ::com::sun::star::script::XScriptEventsSupplier
-                                        >   OGCM_Base;
+    typedef ::cppu::WeakAggComponentImplHelper2 <   ::com::sun::star::util::XCloneable
+                                                ,   ::com::sun::star::script::XScriptEventsSupplier
+                                                >   OGCM_Base;
     class OGeometryControlModel_Base
         :public ::comphelper::OMutexAndBroadcastHelper
         ,public ::comphelper::OPropertySetAggregationHelper
@@ -200,6 +200,9 @@ FORWARD_DECLARE_INTERFACE( script, XNameContainer )
         virtual OGeometryControlModel_Base* createClone_Impl(
             ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable >& _rxAggregateInstance) = 0;
 
+        // XComponent
+        virtual void SAL_CALL disposing();
+
     protected:
         void registerProperties();
     };
@@ -258,6 +261,9 @@ FORWARD_DECLARE_INTERFACE( script, XNameContainer )
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.10  2001/09/05 06:40:48  fs
+ *  #88891# override the XTypeProvider methods
+ *
  *  Revision 1.9  2001/03/23 14:47:31  tbe
  *  removed HelpText property from geometry model
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: geometrycontrolmodel.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: jbu $ $Date: 2001-11-23 17:37:21 $
+ *  last change: $Author: fs $ $Date: 2002-01-08 13:21:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,17 +126,16 @@
     //====================================================================
     //--------------------------------------------------------------------
     OGeometryControlModel_Base::OGeometryControlModel_Base(::com::sun::star::uno::XAggregation* _pAggregateInstance)
-        :OPropertySetAggregationHelper(m_aBHelper)
-        ,OPropertyContainer(m_aBHelper)
+        :OPropertySetAggregationHelper( m_aBHelper )
+        ,OPropertyContainer( m_aBHelper )
+        ,OGCM_Base( m_aMutex )
         ,m_nPosX(0)
         ,m_nPosY(0)
         ,m_nWidth(0)
         ,m_nHeight(0)
         ,m_bCloneable(sal_False)
-        ,m_aName(::rtl::OUString())
         ,m_nTabIndex(-1)
         ,m_nStep(0)
-        ,m_aTag(::rtl::OUString())
     {
         OSL_ENSURE(NULL != _pAggregateInstance, "OGeometryControlModel_Base::OGeometryControlModel_Base: invalid aggregate!");
 
@@ -159,13 +158,16 @@
 
     //--------------------------------------------------------------------
     OGeometryControlModel_Base::OGeometryControlModel_Base(Reference< XCloneable >& _rxAggregateInstance)
-        :OPropertySetAggregationHelper(m_aBHelper)
-        ,OPropertyContainer(m_aBHelper)
+        :OPropertySetAggregationHelper( m_aBHelper )
+        ,OPropertyContainer( m_aBHelper )
+        ,OGCM_Base( m_aMutex )
         ,m_nPosX(0)
         ,m_nPosY(0)
         ,m_nWidth(0)
         ,m_nHeight(0)
         ,m_bCloneable(_rxAggregateInstance.is())
+        ,m_nTabIndex(-1)
+        ,m_nStep(0)
     {
         increment(m_refCount);
         {
@@ -314,12 +316,6 @@
         if (!aReturn.hasValue() && m_xAggregate.is())
             aReturn = m_xAggregate->queryAggregation(_rType);
             // the interfaces our aggregate can provide
-
-        if (!aReturn.hasValue() && m_xAggregate.is())
-        {
-            aReturn = ::cppu::queryInterface( _rType,
-                static_cast< ::com::sun::star::script::XScriptEventsSupplier* >( this ) );
-        }
 
         return aReturn;
     }
@@ -474,6 +470,17 @@
         return mxEventContainer;
     }
 
+    //--------------------------------------------------------------------
+    void SAL_CALL OGeometryControlModel_Base::disposing()
+    {
+        OGCM_Base::disposing();
+        OPropertySetAggregationHelper::disposing();
+
+        Reference<XComponent>  xComp;
+        if ( query_aggregation( m_xAggregate, xComp ) )
+            xComp->dispose();
+    }
+
 //........................................................................
 // }    // namespace toolkit
 //........................................................................
@@ -481,6 +488,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.14  2001/11/23 17:37:21  jbu
+ *  #95097# temporary bug on solaris platforms fixed
+ *
  *  Revision 1.13  2001/09/05 06:41:27  fs
  *  #88891# override the XTypeProvider methods
  *
