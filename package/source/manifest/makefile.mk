@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: mtg $ $Date: 2001-04-27 14:56:05 $
+#   last change: $Author: rt $ $Date: 2001-11-29 13:46:46 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -89,9 +89,6 @@ SLOFILES= \
 CPPUMAKERFLAGS=
 #UNOUCROUT=$(OUT)$/inc
 #INCPRE+=$(UNOUCROUT)
-
-UNOUCRDEP=  $(SOLARBINDIR)$/offapi.rdb
-UNOUCRRDB=  $(SOLARBINDIR)$/offapi.rdb
 
 UNOTYPES=\
     com.sun.star.packages.manifest.XManifestReader \
