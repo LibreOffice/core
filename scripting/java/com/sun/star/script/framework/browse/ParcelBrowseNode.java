@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ParcelBrowseNode.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dfoster $ $Date: 2003-10-09 14:37:43 $
+ *  last change: $Author: toconnor $ $Date: 2003-10-15 17:18:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,7 @@ import java.util.*;
 public class ParcelBrowseNode extends PropertySet implements XBrowseNode  {
 
     private ParcelDescriptor pd;
+    private File dir;
     private String name;
     private String location;
     private Collection browsenodes;
@@ -91,6 +92,7 @@ public class ParcelBrowseNode extends PropertySet implements XBrowseNode  {
 
     public ParcelBrowseNode(XComponentContext ctx, File dir) {
         this(dir.getName());
+        this.dir = dir;
         this.m_XCtx = ctx;
         this.location = PathUtils.toScriptLocation(  m_XCtx, dir.getAbsolutePath() );
         this.pd = ParcelDescriptor.getParcelDescriptor(dir);
@@ -146,7 +148,14 @@ public class ParcelBrowseNode extends PropertySet implements XBrowseNode  {
 
             if (entries != null) {
                 for (int i = 0; i < entries.length; i++) {
-                    browsenodes.add(new ScriptBrowseNode(entries[i], location));
+                    ScriptBrowseNode sbn;
+                    if (dir != null) {
+                        sbn = new ScriptBrowseNode(entries[i], location, dir);
+                    }
+                    else {
+                        sbn = new ScriptBrowseNode(entries[i], location);
+                    }
+                    browsenodes.add(sbn);
                 }
             }
         }
