@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLElement.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dfoster $ $Date: 2002-09-20 14:33:54 $
+ *  last change: $Author: npower $ $Date: 2002-10-24 10:37:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@ namespace scripting_impl
 void XMLElement::addAttribute( OUString const & rAttrName, OUString const & rValue )
 SAL_THROW( () )
 {
-    OSL_TRACE("XMLElement::addAttribute\n");
+    OSL_TRACE( "XMLElement::addAttribute\n" );
 
     _attrNames.push_back( rAttrName );
     _attrValues.push_back( rValue );
@@ -82,7 +82,7 @@ SAL_THROW( () )
 void XMLElement::addSubElement( Reference< xml::sax::XAttributeList > const & xElem )
 SAL_THROW( () )
 {
-    OSL_TRACE("XMLElement::addSubElement\n");
+    OSL_TRACE( "XMLElement::addSubElement\n" );
 
     _subElems.push_back( xElem );
 }
@@ -91,15 +91,15 @@ SAL_THROW( () )
 Reference< xml::sax::XAttributeList > XMLElement::getSubElement( sal_Int32 nIndex )
 SAL_THROW( () )
 {
-    OSL_TRACE("XMLElement::getSubElement\n");
+    OSL_TRACE( "XMLElement::getSubElement\n" );
 
-    return _subElems[ (size_t)nIndex ];
+    return _subElems[ ( size_t )nIndex ];
 }
 
 //*************************************************************************
 void XMLElement::dumpSubElements( Reference< xml::sax::XExtendedDocumentHandler > const & xOut )
 {
-    OSL_TRACE("+++++ XMLElement::dumpSubElement\n");
+    OSL_TRACE( "+++++ XMLElement::dumpSubElement\n" );
 
     for ( size_t nPos = 0; nPos < _subElems.size(); ++nPos )
     {
@@ -111,12 +111,12 @@ void XMLElement::dumpSubElements( Reference< xml::sax::XExtendedDocumentHandler 
 //*************************************************************************
 void XMLElement::dump( Reference< xml::sax::XExtendedDocumentHandler > const & xOut )
 {
-    OSL_TRACE("XMLElement::dump\n");
+    OSL_TRACE( "XMLElement::dump\n" );
 
     xOut->ignorableWhitespace( OUString() );
     xOut->startElement( _name, static_cast< xml::sax::XAttributeList * >( this ) );
     // Write out CDATA
-    if(_chars.getLength() > 0)
+    if( _chars.getLength() > 0 )
     {
         xOut->ignorableWhitespace( OUString() );
         xOut->characters( _chars );
@@ -130,28 +130,28 @@ void XMLElement::dump( Reference< xml::sax::XExtendedDocumentHandler > const & x
 //*************************************************************************
 // XAttributeList
 sal_Int16 XMLElement::getLength()
-throw (RuntimeException)
+throw ( RuntimeException )
 {
-    OSL_TRACE("XMLElement::getLength\n");
+    OSL_TRACE( "XMLElement::getLength\n" );
 
     return _attrNames.size();
 }
 
 //*************************************************************************
 OUString XMLElement::getNameByIndex( sal_Int16 nPos )
-throw (RuntimeException)
+throw ( RuntimeException )
 {
-    OSL_TRACE("XMLElement::getNameByIndex\n");
-    OSL_ASSERT( (size_t)nPos < _attrNames.size() );
+    OSL_TRACE( "XMLElement::getNameByIndex\n" );
+    OSL_ASSERT( ( size_t )nPos < _attrNames.size() );
 
     return _attrNames[ nPos ];
 }
 
 //*************************************************************************
 OUString XMLElement::getTypeByIndex( sal_Int16 nPos )
-throw (RuntimeException)
+throw ( RuntimeException )
 {
-    OSL_TRACE("XMLElement::getTypeByIndex\n");
+    OSL_TRACE( "XMLElement::getTypeByIndex\n" );
     OSL_ASSERT( (size_t)nPos < _attrNames.size() );
 
     // xxx todo
@@ -160,28 +160,28 @@ throw (RuntimeException)
 
 //*************************************************************************
 OUString XMLElement::getTypeByName( OUString const & rName )
-throw (RuntimeException)
+throw ( RuntimeException )
 {
-    OSL_TRACE("XMLElement::getTypeByName\n");
+    OSL_TRACE( "XMLElement::getTypeByName\n" );
     // xxx todo
     return OUString();
 }
 
 //*************************************************************************
 OUString XMLElement::getValueByIndex( sal_Int16 nPos )
-throw (RuntimeException)
+throw ( RuntimeException )
 {
-    OSL_TRACE("XMLElement::getValueByIndex\n");
-    OSL_ASSERT( (size_t)nPos < _attrNames.size() );
+    OSL_TRACE( "XMLElement::getValueByIndex\n" );
+    OSL_ASSERT( ( size_t )nPos < _attrNames.size() );
 
     return _attrValues[ nPos ];
 }
 
 //*************************************************************************
 OUString XMLElement::getValueByName( OUString const & rName )
-throw (RuntimeException)
+throw ( RuntimeException )
 {
-    OSL_TRACE("XMLElement::getValueByName\n");
+    OSL_TRACE( "XMLElement::getValueByName\n" );
 
     for ( size_t nPos = 0; nPos < _attrNames.size(); ++nPos )
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLElement.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: npower $ $Date: 2002-10-01 10:45:14 $
+ *  last change: $Author: npower $ $Date: 2002-10-24 10:37:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,17 +145,17 @@ public:
 
     // XAttributeList
     virtual sal_Int16 SAL_CALL getLength()
-    throw (css::uno::RuntimeException);
+        throw ( css::uno::RuntimeException );
     virtual ::rtl::OUString SAL_CALL getNameByIndex( sal_Int16 nPos )
-    throw (css::uno::RuntimeException);
+         throw ( css::uno::RuntimeException );
     virtual ::rtl::OUString SAL_CALL getTypeByIndex( sal_Int16 nPos )
-    throw (css::uno::RuntimeException);
+        throw ( css::uno::RuntimeException );
     virtual ::rtl::OUString SAL_CALL getTypeByName( ::rtl::OUString const & rName )
-    throw (css::uno::RuntimeException);
+        throw ( css::uno::RuntimeException );
     virtual ::rtl::OUString SAL_CALL getValueByIndex( sal_Int16 nPos )
-    throw (css::uno::RuntimeException);
+        throw ( css::uno::RuntimeException );
     virtual ::rtl::OUString SAL_CALL getValueByName( ::rtl::OUString const & rName )
-    throw (css::uno::RuntimeException);
+        throw ( css::uno::RuntimeException );
 
 protected:
     ::rtl::OUString _name;

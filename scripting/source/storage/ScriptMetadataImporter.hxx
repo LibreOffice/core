@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptMetadataImporter.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dfoster $ $Date: 2002-10-23 14:22:02 $
+ *  last change: $Author: npower $ $Date: 2002-10-24 10:37:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,8 +72,8 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
-#include "ScriptData.hxx"
 
+#include "ScriptData.hxx"
 
 namespace scripting_impl
 {
@@ -105,7 +105,7 @@ public:
         const & xInput, const ::rtl::OUString & parcelURI,
         InfoImpls_vec & io_ScriptDatas )
         throw ( css::xml::sax::SAXException, css::io::IOException,
-            css::uno::RuntimeException);
+            css::uno::RuntimeException );
 
     /**
      * Constructor for the meta-data parser
