@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pvfundlg.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-21 20:50:32 $
+ *  last change: $Author: kz $ $Date: 2001-08-24 10:20:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -538,7 +538,7 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         Text[ swedish ] = "Visa objekt utan data";
         Text[ polish ] = "Poka� elementy bez danych";
         Text[ portuguese_brazilian ] = "Show elements without data";
-        Text[ japanese ] = "ﾃﾞｰﾀなしで要素の表示(~E)";
+        Text[ japanese ] = "ﾃﾞｰﾀのない要素を表示する(~E)";
         Text[ korean ] = "데이터 없이 요소 보기(~E)";
         Text[ chinese_simplified ] = "显示不含数据的条目(~E)";
         Text[ chinese_traditional ] = "顯示無數據的單元(~E)";
@@ -646,7 +646,7 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         Text[ chinese_simplified ] = "函数";
         Text[ russian ] = "�������";
         Text[ polish ] = "Funkcja";
-        Text[ japanese ] = "関数";
+        Text[ japanese ] = "計算方法";
         Text[ chinese_traditional ] = "函數";
         Text[ arabic ] = "Function";
         Text[ greek ] = "���������";
@@ -673,6 +673,7 @@ ModalDialog RID_SCDLG_PIVOTSUBT
     Text[ catalan ] = "Campo de datos";
     Text[ finnish ] = "Tietokentt�";
 };
+
 
 
 
