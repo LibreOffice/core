@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.48 $
+#   $Revision: 1.49 $
 #
-#   last change: $Author: rt $ $Date: 2004-08-20 14:13:37 $
+#   last change: $Author: rt $ $Date: 2004-10-28 16:30:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,7 +74,9 @@ GEN_HID_OTHER=TRUE
 
 VERINFONAME=verinfo
 
-TARGETOBJS=   $(OBJ)$/app.obj					\
+TARGETOBJS=	\
+            $(OBJ)$/main.obj				\
+            $(OBJ)$/app.obj					\
             $(OBJ)$/lockfile.obj			\
             $(OBJ)$/lockfile2.obj			\
             $(OBJ)$/intro.obj				\
@@ -124,6 +126,7 @@ RESLIB1IMAGES=		$(PRJ)$/res
 RESLIB1SRSFILES=	$(SRS)$/desktop.srs
 
 APP1TARGET=so$/$(TARGET)
+APP1NOSAL=TRUE
 APP1STDLIBS=			\
     $(VCLLIB)			\
     $(SVLLIB)           \
@@ -227,6 +230,7 @@ APP4LINKRES=$(MISC)$/$(APP4TARGET).res
 
 
 APP5TARGET=soffice
+APP5NOSAL=TRUE
 APP5STDLIBS=			\
     $(VCLLIB)			\
     $(SVLLIB)			\
@@ -239,7 +243,7 @@ APP5STDLIBS=			\
     $(CPPUHELPERLIB)	\
     $(CPPULIB)			\
     $(SALLIB)			\
-     $(TKLIB)     \
+    $(TKLIB)     \
     $(JVMFWKLIB)       
 
 APP5OBJS=$(TARGETOBJS)
