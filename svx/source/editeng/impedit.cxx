@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mt $ $Date: 2001-06-22 12:25:41 $
+ *  last change: $Author: pl $ $Date: 2001-06-27 10:54:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1593,13 +1593,13 @@ void ImpEditView::drop( const ::com::sun::star::datatransfer::dnd::DropTargetDro
     if ( bChanges )
         rDTDE.Context->acceptDrop( rDTDE.DropAction );
 
-    rDTDE.Context->dropComplete( bChanges );
-
     if ( !pDragAndDropInfo->bStarterOfDD )
     {
         delete pDragAndDropInfo;
         pDragAndDropInfo = NULL;
     }
+
+    rDTDE.Context->dropComplete( bChanges );
 }
 
 void ImpEditView::dragEnter( const ::com::sun::star::datatransfer::dnd::DropTargetDragEnterEvent& rDTDEE ) throw (::com::sun::star::uno::RuntimeException)
