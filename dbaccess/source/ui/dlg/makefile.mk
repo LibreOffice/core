@@ -2,9 +2,9 @@
  #
  #  $RCSfile: makefile.mk,v $
  #
- #  $Revision: 1.20 $
+ #  $Revision: 1.21 $
  #
- #  last change: $Author: fs $ $Date: 2001-06-25 16:05:58 $
+ #  last change: $Author: oj $ $Date: 2002-04-29 08:27:33 $
  #
  #  The Contents of this file are made available subject to the terms of
  #  either of the following licenses
@@ -67,7 +67,7 @@ TARGET=uidlg
 # --- Settings ----------------------------------
 
 .INCLUDE : settings.mk
-
+IMGLST_SRS=$(SRS)$/$(TARGET).srs
 # --- Files -------------------------------------
 
 # ... resource files ............................
@@ -158,6 +158,9 @@ EXCEPTIONSFILES=	\
  #########################################################################
  # history:
  #	$Log: not supported by cvs2svn $
+ #	Revision 1.20  2001/06/25 16:05:58  fs
+ #	#88004# +datasourceselector.cxx / +datasourcemap.cxx
+ #	
  #	Revision 1.19  2001/06/20 07:10:07  oj
  #	#88434# new page for user admin
  #	

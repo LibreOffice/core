@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexdialog.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: oj $ $Date: 2002-03-19 07:24:06 $
+ *  last change: $Author: oj $ $Date: 2002-04-29 08:27:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 #ifndef _DBAUI_INDEXDIALOG_HRC_
 #include "indexdialog.hrc"
 #endif
+#ifndef DBACCESS_UI_BROWSER_ID_HXX
+#include "browserids.hxx"
+#endif
 #ifndef _DBA_DBACCESS_HELPID_HRC_
 #include "dbaccess_helpid.hrc"
 #endif
@@ -75,6 +78,58 @@
 #define BUTTON_SIZE_Y       14
 
 #define LIST_WIDTH          70
+
+#define IL_TOOL \
+    MaskColor   = Color {\
+    Red   = 0xC000;\
+    Green = 0xC000;\
+    Blue  = 0xC000;\
+    };\
+\
+    IdList = {\
+        ID_INDEX_NEW;\
+        ID_INDEX_DROP;\
+        ID_INDEX_RENAME;\
+        ID_INDEX_SAVE;\
+        ID_INDEX_RESET;\
+        };\
+    IdCount = {\
+    5;\
+    }
+
+ImageList IMG_INDEX_DLG_SC
+{
+    ImageBitmap = Bitmap
+    {
+        File = "sc_idx.bmp";
+    };
+    IL_TOOL ;
+};
+ImageList IMG_INDEX_DLG_SCH
+{
+    ImageBitmap = Bitmap
+    {
+        File = "sch_idx.bmp";
+    };
+    IL_TOOL ;
+};
+ImageList IMG_INDEX_DLG_LC
+{
+    ImageBitmap = Bitmap
+    {
+        File = "lc_idx.bmp";
+    };
+    IL_TOOL ;
+};
+ImageList IMG_INDEX_DLG_LCH
+{
+    ImageBitmap = Bitmap
+    {
+        File = "lch_idx.bmp";
+    };
+    IL_TOOL ;
+};
+
 
 ModalDialog DLG_INDEXDESIGN
 {
@@ -90,10 +145,11 @@ ModalDialog DLG_INDEXDESIGN
     ToolBox TLB_ACTIONS
     {
         Pos = MAP_APPFONT ( 6 , 6 ) ;
-        Size = MAP_APPFONT ( DIALOG_SIZE_X - 14 , 14 ) ;
+        //  Size = MAP_APPFONT ( DIALOG_SIZE_X - 14 , 14 ) ;
         ButtonType = BUTTON_SYMBOL;
         Align = BOXALIGN_TOP;
         Customize = FALSE;
+        ItemImageList = IMG_INDEX_DLG_SC ;
 
         ItemList =
         {
@@ -102,7 +158,6 @@ ModalDialog DLG_INDEXDESIGN
                 Identifier = ID_INDEX_NEW;
                 HelpId = HID_DLGIDX_NEWINDEX;
                 Command = ".index:createNew";
-                ItemBitmap = Bitmap { File = "indexnew_sc.bmp"; };
                 Text = "neuer Index" ;
                 Text [ english ] = "new index" ;
                 Text [ english_us ] = "New Index" ;
@@ -131,7 +186,6 @@ ModalDialog DLG_INDEXDESIGN
                 Identifier = ID_INDEX_DROP;
                 HelpId = HID_DLGIDX_DROPINDEX;
                 Command = ".index:dropCurrent";
-                ItemBitmap = Bitmap { File = "indexdrop_sc.bmp"; };
                 Text = "aktuellen Index löschen" ;
                 Text [ english ] = "drop current index" ;
                 Text [ english_us ] = "Delete Current Index" ;
@@ -160,7 +214,6 @@ ModalDialog DLG_INDEXDESIGN
                 Identifier = ID_INDEX_RENAME;
                 HelpId = HID_DLGIDX_RENAMEINDEX;
                 Command = ".index:renameCurrent";
-                ItemBitmap = Bitmap { File = "indexrename_sc.bmp"; };
                 Text = "aktuellen Index umbenennen" ;
                 Text [ english ] = "rename current index" ;
                 Text [ english_us ] = "Rename Current Index" ;
@@ -189,7 +242,6 @@ ModalDialog DLG_INDEXDESIGN
                 Identifier = ID_INDEX_SAVE;
                 HelpId = HID_DLGIDX_SAVEINDEX;
                 Command = ".index:saveCurrent";
-                ItemBitmap = Bitmap { File = "indexsave_sc.bmp"; };
                 Text = "aktuellen Index speichern" ;
                 Text [ english ] = "save current index" ;
                 Text [ english_us ] = "Save Current Index" ;
@@ -218,7 +270,6 @@ ModalDialog DLG_INDEXDESIGN
                 Identifier = ID_INDEX_RESET;
                 HelpId = HID_DLGIDX_RESETINDEX;
                 Command = ".index:resetCurrent";
-                ItemBitmap = Bitmap { File = "indexreset_sc.bmp"; };
                 Text = "aktuellen Index zurücksetzen" ;
                 Text [ english ] = "reset current index" ;
                 Text [ english_us ] = "Reset Current Index" ;
@@ -598,6 +649,11 @@ Image IMG_PKEYICON
     ImageBitmap = Bitmap { File = "pkey.bmp"; };
     MaskColor = Color { Red = 0xFFFF; Green = 0x0; Blue = 0xFFFF; };
 };
+Image IMG_PKEYICON_SCH
+{
+    ImageBitmap = Bitmap { File = "pkey_sch.bmp"; };
+    MaskColor = Color { Red = 0xFFFF; Green = 0x0; Blue = 0xFFFF; };
+};
 
 ErrorBox ERR_NEED_INDEX_FIELDS
 {
@@ -758,6 +814,9 @@ String STR_INDEXDESIGN_DOUBLE_COLUMN_NAME
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.22  2002/03/19 07:24:06  oj
+ *  #97274# enable tabstop
+ *
  *  Revision 1.21  2001/08/29 14:18:04  kz
  *  Merge SRC638: 29.08.01 - 16:17:26
  *

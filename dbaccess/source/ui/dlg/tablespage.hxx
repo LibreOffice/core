@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablespage.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-28 08:21:15 $
+ *  last change: $Author: oj $ $Date: 2002-04-29 08:27:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,9 @@
 #ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
 #endif
+#ifndef DBAUI_TOOLBOXHELPER_HXX
+#include "ToolBoxHelper.hxx"
+#endif
 
 //.........................................................................
 namespace dbaui
@@ -93,6 +96,7 @@ namespace dbaui
     class OTableSubscriptionPage
             :public OGenericAdministrationPage
             ,public OContainerListener
+            ,public OToolBoxHelper
     {
         friend class ODbAdminDialog;
 
@@ -139,6 +143,21 @@ namespace dbaui
         virtual OPageSettings*  createViewSettings();
         virtual void            fillViewSettings(OPageSettings* _pSettings);
         virtual void            restoreViewSettings(const OPageSettings* _pSettings);
+
+        virtual void StateChanged( StateChangedType nStateChange );
+        virtual void DataChanged( const DataChangedEvent& rDCEvt );
+
+        /** will be called whenthe id of the image list is needed.
+            @param  _eBitmapSet
+                <svtools/imgdef.hxx>
+            @param  _bHiContast
+                <TRUE/> when in high contrast mode.
+        */
+        virtual sal_Int16 getImageListId(sal_Int16 _eBitmapSet,sal_Bool _bHiContast) const;
+
+        /** will be called when the controls need to be resized.
+        */
+        virtual void resizeControls(const Size& _rDiff);
 
     protected:
         void SetAdminDialog(ODbAdminDialog* _pDialog) { m_pAdminDialog = _pDialog; }
@@ -237,6 +256,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2001/08/28 08:21:15  fs
+ *  #91573# enable the items (drop/add/edit) only if the connection is capable
+ *
  *  Revision 1.4  2001/08/15 08:49:57  fs
  *  #89822# doToolboxAction -> onToolBoxAction (now virtual in the base class)
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablespage.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-16 15:25:04 $
+ *  last change: $Author: oj $ $Date: 2002-04-29 08:27:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,6 +146,9 @@
 #ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
 #endif
+#ifndef _SVTOOLS_IMGDEF_HXX
+#include <svtools/imgdef.hxx>
+#endif
 
 #define RET_ALL     10
 
@@ -176,7 +179,7 @@ namespace dbaui
         ,OContainerListener( m_aNotifierMutex )
         ,m_aTables              (this, ResId(FL_SEPARATOR1))
         ,m_aActions             (this, ResId(TLB_ACTIONS))
-        ,m_aTablesList          (this, ResId(CTL_TABLESUBSCRIPTION))
+        ,m_aTablesList          (this, ResId(CTL_TABLESUBSCRIPTION),sal_False)
         ,m_aExplanation         (this, ResId(FT_FILTER_EXPLANATION))
         ,m_aColumnsLine         (this, ResId(FL_SEPARATOR2))
         ,m_aSuppressVersionColumns(this, ResId(CB_SUPPRESVERSIONCL))
@@ -190,8 +193,6 @@ namespace dbaui
         m_aTablesList.SetCheckHandler(getControlModifiedLink());
         m_aSuppressVersionColumns.SetClickHdl(getControlModifiedLink());
 
-        m_aActions.SetOutStyle(TOOLBOX_STYLE_FLAT);
-            // TODO: need the global application style for this ....
         m_aActions.SetSelectHdl(LINK(this, OTableSubscriptionPage, OnToolboxClicked));
         lcl_removeToolboxItemShortcuts(m_aActions);
 
@@ -206,6 +207,8 @@ namespace dbaui
         m_aTablesList.Clear();
 
         FreeResource();
+
+        setToolBox(&m_aActions);
 
         m_aTablesList.SetCheckButtonHdl(LINK(this, OTableSubscriptionPage, OnTreeEntryChecked));
         m_aTablesList.SetCheckHandler(LINK(this, OTableSubscriptionPage, OnTreeEntryChecked));
@@ -228,6 +231,64 @@ namespace dbaui
         retireNotifiers();
     }
 
+    // -----------------------------------------------------------------------------
+    void OTableSubscriptionPage::StateChanged( StateChangedType nType )
+    {
+        OGenericAdministrationPage::StateChanged( nType );
+
+        if ( nType == STATE_CHANGE_CONTROLBACKGROUND )
+        {
+            // Check if we need to get new images for normal/high contrast mode
+            checkImageList();
+            m_aTablesList.notifyHiContrastChanged();
+        }
+        else if ( nType == STATE_CHANGE_TEXT )
+        {
+            // The physical toolbar changed its outlook and shows another logical toolbar!
+            // We have to set the correct high contrast mode on the new tbx manager.
+            //  checkImageList();
+        }
+    }
+    // -----------------------------------------------------------------------------
+    void OTableSubscriptionPage::DataChanged( const DataChangedEvent& rDCEvt )
+    {
+        OGenericAdministrationPage::DataChanged( rDCEvt );
+
+        if ((( rDCEvt.GetType() == DATACHANGED_SETTINGS )   ||
+            ( rDCEvt.GetType() == DATACHANGED_DISPLAY   ))  &&
+            ( rDCEvt.GetFlags() & SETTINGS_STYLE        ))
+        {
+            // Check if we need to get new images for normal/high contrast mode
+            checkImageList();
+            m_aTablesList.notifyHiContrastChanged();
+        }
+    }
+    //------------------------------------------------------------------
+    sal_Int16 OTableSubscriptionPage::getImageListId(sal_Int16 _eBitmapSet,sal_Bool _bHiContast) const
+    {
+        sal_Int16 nN = IMG_TABLESUBCRIPTION_SC;
+        sal_Int16 nH = IMG_TABLESUBCRIPTION_SCH;
+        if ( _eBitmapSet == SFX_SYMBOLS_LARGE )
+        {
+            nN = IMG_TABLESUBCRIPTION_LC;
+            nH = IMG_TABLESUBCRIPTION_LCH;
+        }
+
+        return _bHiContast ? nH : nN;
+    }
+    //------------------------------------------------------------------
+    void OTableSubscriptionPage::resizeControls(const Size& _rDiff)
+    {
+        if ( _rDiff.Height() )
+        {
+            Size aOldSize = m_aTablesList.GetSizePixel();
+            aOldSize.Height() -= _rDiff.Height();
+            m_aTablesList.SetPosSizePixel(
+                    m_aTablesList.GetPosPixel()+Point(0,_rDiff.Height()),
+                    aOldSize
+                    );
+        }
+    }
     //------------------------------------------------------------------------
     void OTableSubscriptionPage::retireNotifiers()
     {
@@ -1416,38 +1477,8 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
- *  Revision 1.10  2001/10/31 17:45:21  hr
- *  #92924#: cast
- *
- *  Revision 1.9  2001/10/26 14:06:22  oj
- *  #93784# do not ask for catalog when supported
- *
- *  Revision 1.8.4.1  2001/10/26 16:16:04  hr
- *  #92924#: cast
- *
- *  Revision 1.8  2001/08/28 08:21:15  fs
- *  #91573# enable the items (drop/add/edit) only if the connection is capable
- *
- *  Revision 1.7  2001/08/15 14:08:08  fs
- *  #88194# dropSelection: add the all button only if more than one table is left
- *
- *  Revision 1.6  2001/08/15 08:50:24  fs
- *  #89822# doToolboxAction -> onToolBoxAction / enable KEY_DELETE
- *
- *  Revision 1.5  2001/08/14 14:12:22  fs
- *  #86945# add notifiers to the tables container of newly opened table design components
- *
- *  Revision 1.4  2001/08/14 12:10:12  fs
- *  preparations for #86945# (be a container listener ...)
- *
- *  Revision 1.3  2001/08/01 08:31:26  fs
- *  #88530# collectDetailedSelection: don't change anything if not connected
- *
- *  Revision 1.2  2001/07/31 16:01:33  fs
- *  #88530# changes to operate the dialog in a mode where no type change is possible
- *
- *  Revision 1.1  2001/05/29 09:59:39  fs
- *  initial checkin - outsourced the class from commonpages
+ *  Revision 1.11  2001/11/16 15:25:04  oj
+ *  #94891# use &Class::method instead of Class::method
  *
  *
  *  Revision 1.0 29.05.01 11:10:11  fs

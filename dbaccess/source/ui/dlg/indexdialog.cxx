@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexdialog.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-05 10:12:52 $
+ *  last change: $Author: oj $ $Date: 2002-04-29 08:27:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,12 @@
 #ifndef DBAUI_TOOLS_HXX
 #include "UITools.hxx"
 #endif
-
+#ifndef _SVTOOLS_IMGDEF_HXX
+#include <svtools/imgdef.hxx>
+#endif
+#ifndef DBACCESS_UI_BROWSER_ID_HXX
+#include "browserids.hxx"
+#endif
 //......................................................................
 namespace dbaui
 {
@@ -238,8 +243,6 @@ namespace dbaui
     {
         FreeResource();
 
-        m_aActions.SetOutStyle(TOOLBOX_STYLE_FLAT);
-            // TODO: need the global application style for this ....
         m_aActions.SetSelectHdl(LINK(this, DbaIndexDialog, OnIndexAction));
 
         m_aIndexes.SetSelectHdl(LINK(this, DbaIndexDialog, OnIndexSelected));
@@ -247,6 +250,8 @@ namespace dbaui
         m_aIndexes.SetSelectionMode(SINGLE_SELECTION);
         m_aIndexes.SetHighlightRange();
         m_pFields->Init(_rFieldNames);
+
+        setToolBox(&m_aActions);
 
         m_pIndexes = new OIndexCollection();
         try
@@ -261,6 +266,7 @@ namespace dbaui
         {
             OSL_ENSURE(sal_False, "DbaIndexDialog::DbaIndexDialog: could not retrieve basic information from the UNO collection!");
         }
+
         fillIndexList();
 
         m_aUnique.SetClickHdl(LINK(this, DbaIndexDialog, OnModified));
@@ -341,7 +347,8 @@ namespace dbaui
     //------------------------------------------------------------------
     void DbaIndexDialog::fillIndexList()
     {
-        Image aPKeyIcon(ModuleRes(IMG_PKEYICON));
+        sal_Bool bHiContrast = GetBackground().GetColor().IsDark();
+        Image aPKeyIcon(ModuleRes( bHiContrast ? IMG_PKEYICON_SCH : IMG_PKEYICON));
         // fill the list with the index names
         m_aIndexes.Clear();
         OIndexCollection::iterator aIndexLoop = m_pIndexes->begin();
@@ -874,6 +881,82 @@ namespace dbaui
         updateToolbox();
         return 0L;
     }
+    // -----------------------------------------------------------------------------
+    void DbaIndexDialog::StateChanged( StateChangedType nType )
+    {
+        ModalDialog::StateChanged( nType );
+
+        if ( nType == STATE_CHANGE_CONTROLBACKGROUND )
+        {
+            // Check if we need to get new images for normal/high contrast mode
+            checkImageList();
+        }
+        else if ( nType == STATE_CHANGE_TEXT )
+        {
+            // The physical toolbar changed its outlook and shows another logical toolbar!
+            // We have to set the correct high contrast mode on the new tbx manager.
+            //  pMgr->SetHiContrast( IsHiContrastMode() );
+            checkImageList();
+        }
+    }
+    // -----------------------------------------------------------------------------
+    void DbaIndexDialog::DataChanged( const DataChangedEvent& rDCEvt )
+    {
+        ModalDialog::DataChanged( rDCEvt );
+
+        if ((( rDCEvt.GetType() == DATACHANGED_SETTINGS )   ||
+            ( rDCEvt.GetType() == DATACHANGED_DISPLAY   ))  &&
+            ( rDCEvt.GetFlags() & SETTINGS_STYLE        ))
+        {
+            // Check if we need to get new images for normal/high contrast mode
+            checkImageList();
+        }
+    }
+    //------------------------------------------------------------------
+    sal_Int16 DbaIndexDialog::getImageListId(sal_Int16 _eBitmapSet,sal_Bool _bHiContast) const
+    {
+        sal_Int16 nN = IMG_INDEX_DLG_SC;
+        sal_Int16 nH = IMG_INDEX_DLG_SCH;
+        if ( _eBitmapSet == SFX_SYMBOLS_LARGE )
+        {
+            nN = IMG_INDEX_DLG_LC;
+            nH = IMG_INDEX_DLG_LCH;
+        }
+
+        return _bHiContast ? nH : nN;
+    }
+    //------------------------------------------------------------------
+    void DbaIndexDialog::resizeControls(const Size& _rDiff)
+    {
+        // we use large images so we must change them
+        Size aTbNewSize = m_aActions.GetSizePixel();
+        if ( _rDiff.Width() || _rDiff.Height() )
+        {
+            Size aDlgSize = GetSizePixel();
+            // adjust size of dlg
+            SetSizePixel(Size(aDlgSize.Width() + _rDiff.Width(),
+                              aDlgSize.Height() + _rDiff.Height())
+                        );
+            Size aIndexSize = m_aIndexes.GetSizePixel();
+            m_aIndexes.SetPosSizePixel(m_aIndexes.GetPosPixel() + Point(0,_rDiff.Height()),
+                                    Size(aIndexSize.Width() + _rDiff.Width(),
+                                         aIndexSize.Height()));
+
+            //now move the rest to the left side
+            Point aMove(_rDiff.Width(),_rDiff.Height());
+            m_aIndexDetails.SetPosPixel(m_aIndexDetails.GetPosPixel() + aMove);
+            m_aDescriptionLabel.SetPosPixel(m_aDescriptionLabel.GetPosPixel() + aMove);
+            m_aDescription.SetPosPixel(m_aDescription.GetPosPixel() + aMove);
+            m_aUnique.SetPosPixel(m_aUnique.GetPosPixel() + aMove);
+            m_aFieldsLabel.SetPosPixel(m_aFieldsLabel.GetPosPixel() + aMove);
+            OSL_ENSURE(m_pFields,"NO valid fields!");
+            m_pFields->SetPosPixel(m_pFields->GetPosPixel() + aMove);
+            m_aClose.SetPosPixel(m_aClose.GetPosPixel() + aMove);
+            m_aHelp.SetPosPixel(m_aHelp.GetPosPixel() + aMove);
+
+            Invalidate();
+        }
+    }
 
 //......................................................................
 }   // namespace dbaui
@@ -882,6 +965,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.12  2001/11/05 10:12:52  oj
+ *  #94031# set unique flag every time
+ *
  *  Revision 1.11  2001/05/23 14:50:18  fs
  *  #86860# OnIndexSelected: don't cancel the editing of the previously selected index
  *
@@ -890,30 +976,6 @@ namespace dbaui
  *
  *  Revision 1.9  2001/05/11 15:22:33  fs
  *  #86788# recognize an active editing when closing / #86860# property check for index name conflicts
- *
- *  Revision 1.8  2001/05/02 11:44:34  fs
- *  #86434# don't allow to enter an already used index name
- *
- *  Revision 1.7  2001/04/27 14:19:42  fs
- *  #86464# IsModified before SaveModified
- *
- *  Revision 1.6  2001/04/02 12:05:06  fs
- *  #85275# added a help button
- *
- *  Revision 1.5  2001/03/30 14:10:22  oj
- *  #85298##85297# correct index impl
- *
- *  Revision 1.4  2001/03/29 10:04:47  fs
- *  corrected some minor issues
- *
- *  Revision 1.3  2001/03/22 07:44:54  avy
- *  Some error checked for linux
- *
- *  Revision 1.2  2001/03/19 05:59:23  fs
- *  check plausibility before saving
- *
- *  Revision 1.1  2001/03/16 16:23:02  fs
- *  initial checkin - index design dialog and friends
  *
  *
  *  Revision 1.0 07.03.01 12:16:06  fs

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqlmessage.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fs $ $Date: 2001-12-10 11:19:16 $
+ *  last change: $Author: oj $ $Date: 2002-04-29 08:27:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,9 @@
 #ifndef _DBA_DBACCESS_HELPID_HRC_
 #include "dbaccess_helpid.hrc"
 #endif
+#ifndef DBAUI_TOOLS_HXX
+#include "UITools.hxx"
+#endif
 
 #define BUTTONID_MORE   BUTTONID_RETRY + 1
 
@@ -163,8 +166,10 @@ OExceptionChainDialog::OExceptionChainDialog(Window* pParent, const Any& _rStart
     m_aExceptionList.SetWindowBits(WB_HASLINES | WB_HASLINESATROOT | WB_HASBUTTONS | WB_HASBUTTONSATROOT | WB_HSCROLL);
 
     m_aExceptionList.SetSelectHdl(LINK(this, OExceptionChainDialog, OnExceptionSelected));
-    ModuleRes aPlusButton(BMP_PLUSBUTTON);
-    ModuleRes aMinusButton(BMP_MINUSBUTTON);
+    sal_Bool bHiContrast = isHiContrast(this);
+
+    ModuleRes aPlusButton( bHiContrast ? BMP_PLUSBUTTON_SCH : BMP_PLUSBUTTON);
+    ModuleRes aMinusButton( bHiContrast ? BMP_MINUSBUTTON_SCH : BMP_MINUSBUTTON);
     Bitmap  aPlusButtonBitmap(aPlusButton);
     Bitmap  aMinusButtonBitmap(aMinusButton);
     Image aCollapsedImage(aPlusButtonBitmap);
@@ -179,9 +184,9 @@ OExceptionChainDialog::OExceptionChainDialog(Window* pParent, const Any& _rStart
     DBG_ASSERT(aInfo.isValid(), "OExceptionChainDialog::OExceptionChainDialog : invalid chain start !");
     SQLExceptionIteratorHelper aIter(aInfo);
 
-    Image   aErrorImage(ModuleRes(BMP_EXCEPTION_ERROR)),
-            aWarningImage(ModuleRes(BMP_EXCEPTION_WARNING)),
-            m_aInfoImage(ModuleRes(BMP_EXCEPTION_INFO));
+    Image   aErrorImage(    ModuleRes( bHiContrast ? BMP_EXCEPTION_ERROR_SCH    : BMP_EXCEPTION_ERROR)),
+            aWarningImage(  ModuleRes( bHiContrast ? BMP_EXCEPTION_WARNING_SCH  : BMP_EXCEPTION_WARNING)),
+            m_aInfoImage(   ModuleRes( bHiContrast ? BMP_EXCEPTION_INFO_SCH     : BMP_EXCEPTION_INFO));
 
     SQLExceptionInfo aCurrent;
     while (aIter.hasMoreElements())
@@ -575,6 +580,9 @@ IMPL_LINK( OSQLMessageBox, ButtonClickHdl, Button *, pButton )
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.11  2001/12/10 11:19:16  fs
+ *  #95540# for the 'more' dialog, use the error dialog as direct parent
+ *
  *  Revision 1.10  2001/11/29 11:21:37  pb
  *  fix: #93646# message FixedText is not a label
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexdialog.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-02 12:05:06 $
+ *  last change: $Author: oj $ $Date: 2002-04-29 08:27:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,18 +80,14 @@
 
 #define HB_HELP             1
 
-
-#define ID_INDEX_NEW        1
-#define ID_INDEX_DROP       2
-#define ID_INDEX_RENAME     3
-#define ID_INDEX_SAVE       4
-#define ID_INDEX_RESET      5
-
 #endif // _DBAUI_INDEXDIALOG_HRC_
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2001/04/02 12:05:06  fs
+ *  #85275# added a help button
+ *
  *  Revision 1.1  2001/03/16 16:23:09  fs
  *  initial checkin - index design dialog and friends
  *
