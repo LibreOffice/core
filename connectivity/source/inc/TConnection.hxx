@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TConnection.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-25 09:05:38 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:11:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,7 @@ namespace connectivity
                                                 ::com::sun::star::lang::XUnoTunnel
                                             > OMetaConnection_BASE;
 
-    class SAL_NO_VTABLE OMetaConnection : public OMetaConnection_BASE
+    class OMetaConnection : public OMetaConnection_BASE
     {
     protected:
         ::osl::Mutex        m_aMutex;
