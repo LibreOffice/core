@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdhtmlfilter.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 10:17:58 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 17:24:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,8 @@ public:
 
 private:
     DECL_LINK( IOProgressHdl, USHORT* );
+    bool mbHideSpell;
+
 };
 
 #endif // _SD_SDHTMLFILTER_HXX
