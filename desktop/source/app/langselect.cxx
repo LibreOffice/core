@@ -2,8 +2,8 @@
  *
  *  $RCSfile: langselect.cxx,v $
  *
- *  $Revision: 1.12 $
- *  last change: $Author: rt $ $Date: 2004-11-09 15:15:15 $
+ *  $Revision: 1.13 $
+ *  last change: $Author: obo $ $Date: 2005-01-27 12:27:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,15 +208,17 @@ Reference< XNameAccess > LanguageSelection::getConfigAccess(const sal_Char* pPat
 
         // get configuration provider
         Reference< XMultiServiceFactory > theMSF = comphelper::getProcessServiceFactory();
-        Reference< XMultiServiceFactory > theConfigProvider = Reference< XMultiServiceFactory > (
+        if (theMSF.is()) {
+            Reference< XMultiServiceFactory > theConfigProvider = Reference< XMultiServiceFactory > (
                 theMSF->createInstance( sConfigSrvc ),UNO_QUERY_THROW );
 
-        // access the provider
-        Sequence< Any > theArgs(1);
-        theArgs[ 0 ] <<= sConfigURL;
-        xNameAccess = Reference< XNameAccess > (
+            // access the provider
+            Sequence< Any > theArgs(1);
+            theArgs[ 0 ] <<= sConfigURL;
+            xNameAccess = Reference< XNameAccess > (
                 theConfigProvider->createInstanceWithArguments(
-                sAccessSrvc, theArgs ), UNO_QUERY_THROW );
+                    sAccessSrvc, theArgs ), UNO_QUERY_THROW );
+        }
     } catch (com::sun::star::uno::Exception& e)
     {
         OString aMsg = OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US);
