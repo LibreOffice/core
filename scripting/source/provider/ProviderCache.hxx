@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ProviderCache.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-23 14:10:59 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 13:58:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,6 @@
 #define _FRAMEWORK_SCRIPT_PROVIDER_PROVIDERCACHE_HXX_
 
 #include <hash_map>
-
 #include <osl/mutex.hxx>
 #include <rtl/ustring>
 #include <cppuhelper/implbase1.hxx>
