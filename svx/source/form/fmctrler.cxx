@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmctrler.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:38:56 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 12:38:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -565,11 +565,15 @@ void FmXFormController::setCurrentFilterPosition(sal_Int32 nPos)
         {
             // set the text for all filters
             OSL_ENSURE(m_aFilters.size() > m_nCurrentFilterPosition && m_nCurrentFilterPosition >= 0,"m_nCurrentFilterPosition too big");
-            FmFilterRow& rRow = m_aFilters[m_nCurrentFilterPosition];
-            for (FmFilterRow::const_iterator iter2 = rRow.begin();
-                 iter2 != rRow.end(); iter2++)
+            if ( m_nCurrentFilterPosition >= 0 && m_nCurrentFilterPosition < m_aFilters.size() )
             {
-                (*iter2).first->setText((*iter2).second);
+
+                FmFilterRow& rRow = m_aFilters[m_nCurrentFilterPosition];
+                for (FmFilterRow::const_iterator iter2 = rRow.begin();
+                     iter2 != rRow.end(); iter2++)
+                {
+                    (*iter2).first->setText((*iter2).second);
+                }
             }
         }
     }
@@ -1064,7 +1068,7 @@ void SAL_CALL FmXFormController::textChanged(const ::com::sun::star::awt::TextEv
         ::rtl::OUString aText = xText->getText();
 
         // Suchen der aktuellen Row
-        OSL_ENSURE(m_aFilters.size() < m_nCurrentFilterPosition && m_nCurrentFilterPosition >= 0,"m_nCurrentFilterPosition too big");
+        OSL_ENSURE(m_aFilters.size() > m_nCurrentFilterPosition && m_nCurrentFilterPosition >= 0,"m_nCurrentFilterPosition too big");
         if ( m_nCurrentFilterPosition >= 0 && m_nCurrentFilterPosition < m_aFilters.size() )
         {
             FmFilterRow& rRow = m_aFilters[m_nCurrentFilterPosition];
