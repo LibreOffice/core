@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-03 19:17:52 $
+ *  last change: $Author: fs $ $Date: 2001-05-08 12:08:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2424,9 +2424,26 @@ String STR_QUERY_DROP_DOCUMENT_LINK
         "Note: Only the assigment of the document to the data source will be dropped, not the document itself.";
 };
 
+String STR_ASK_FOR_DIRECTORY_CREATION
+{
+    Text = "Das Verzeichnis\n\n$path$\n\nexistiert nicht. Soll es angelegt werden?";
+    Text [ english ] = "The directory\n\n$path$\n\ndoes not exist. Do you wish to create it?";
+    Text [ english_us ] = "The directory\n\n$path$\n\ndoes not exist. Do you wish to create it?";
+};
+
+String STR_COULD_NOT_CREATE_DIRECTORY
+{
+    Text = "Das Verzeichnis $name$ konnte nicht angelegt werden.";
+    Text [ english ] = "The directory $name$ could not be created.";
+    Text [ english_us ] = "The directory $name$ could not be created.";
+};
+
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.42  2001/05/03 19:17:52  kz
+ *  Merge SRC630: 03.05.01 - 21:16:46 (NoBranch)
+ *
  *  Revision 1.41  2001/04/26 11:40:21  fs
  *  file is alive, again - added support for data source associated bookmarks
  *
