@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docufld.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2000-11-17 14:36:46 $
+ *  last change: $Author: os $ $Date: 2000-11-22 16:49:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1208,7 +1208,9 @@ BOOL SwDocInfoField::QueryValue( uno::Any& rAny, const String& rProperty ) const
         rAny <<= rtl::OUString(Expand());
     else if(rProperty.EqualsAscii(UNO_NAME_IS_DATE))
     {
-        sal_Bool bVal = 0 != (nSubType & DI_SUB_DATE);
+        sal_uInt16 nExtSub = nSubType & 0xff00;
+        nExtSub &= ~DI_SUB_FIXED;
+        sal_Bool bVal = (nExtSub == DI_SUB_DATE);
         rAny.setValue(&bVal, ::getBooleanCppuType());
     }
 
@@ -1261,16 +1263,11 @@ BOOL SwDocInfoField::PutValue( const uno::Any& rAny, const String& rProperty )
     }
     else if(rProperty.EqualsAscii(UNO_NAME_IS_DATE))
     {
+        nSubType &= 0xf0ff;
         if(*(sal_Bool*)rAny.getValue())
-        {
             nSubType |= DI_SUB_DATE;
-            nSubType &= ~DI_SUB_TIME;
-        }
         else
-        {
             nSubType |= DI_SUB_TIME;
-            nSubType &= ~DI_SUB_DATE;
-        }
     }
 #ifdef DBG_UTIL
     else
