@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table2.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:50:42 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:50:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -375,8 +375,9 @@ void ScTable::CopyToClip(USHORT nCol1, USHORT nRow1, USHORT nCol2, USHORT nRow2,
     if (ValidColRow(nCol1, nRow1) && ValidColRow(nCol2, nRow2))
     {
         //  Inhalte kopieren
+        USHORT i;
 
-        for (USHORT i = nCol1; i <= nCol2; i++)
+        for ( i = nCol1; i <= nCol2; i++)
             aCol[i].CopyToClip(nRow1, nRow2, pTable->aCol[i], bKeepScenarioFlags);
 
         //  copy widths/heights, and only "hidden", "filtered" and "manual" flags
@@ -410,12 +411,14 @@ void ScTable::CopyFromClip(USHORT nCol1, USHORT nRow1, USHORT nCol2, USHORT nRow
                             short nDx, short nDy, USHORT nInsFlag,
                             BOOL bAsLink, BOOL bSkipAttrForEmpty, ScTable* pTable)
 {
+    USHORT i;
+
     if (nCol2 > MAXCOL) nCol2 = MAXCOL;
     if (nRow2 > MAXROW) nRow2 = MAXROW;
     if (ValidColRow(nCol1, nRow1) && ValidColRow(nCol2, nRow2))
     {
         nRecalcLvl++;
-        for (USHORT i = nCol1; i <= nCol2; i++)
+        for ( i = nCol1; i <= nCol2; i++)
             aCol[i].CopyFromClip(nRow1, nRow2, nDy, nInsFlag, bAsLink, bSkipAttrForEmpty, pTable->aCol[i - nDx]);
 
         if ((nInsFlag & IDF_ATTRIB) != 0)
@@ -699,11 +702,12 @@ void ScTable::UndoToTable(USHORT nCol1, USHORT nRow1, USHORT nCol2, USHORT nRow2
     {
         BOOL bWidth  = (nRow1==0 && nRow2==MAXROW && pColWidth && pDestTab->pColWidth);
         BOOL bHeight = (nCol1==0 && nCol2==MAXCOL && pRowHeight && pDestTab->pRowHeight);
+        USHORT i;
 
         if (bWidth||bHeight)
             nRecalcLvl++;
 
-        for (USHORT i=0; i<=MAXCOL; i++)
+        for ( i = 0; i <= MAXCOL; i++)
         {
             if ( i >= nCol1 && i <= nCol2 )
                 aCol[i].UndoToColumn(nRow1, nRow2, nFlags, bMarked, pDestTab->aCol[i],
