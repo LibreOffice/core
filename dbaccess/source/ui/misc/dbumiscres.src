@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbumiscres.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-10 12:20:04 $
+ *  last change: $Author: kz $ $Date: 2001-05-12 06:34:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,7 @@ Resource RSC_DATASOURCE_TYPES
         Text[ polish ] = "Adabas;JDBC;ODBC;dBase;ADO;Tekst;Arkusz kalkulacyjny";
         Text[ portuguese_brazilian ] = "Adabas;JDBC;ODBC;dBase;Text";
         Text[ japanese ] = "Adabas;JDBC;ODBC;dBase;ADO;√∑Ωƒ;ï\\åvéZƒﬁ∑≠“››ƒ";
-        Text[ korean ] = "Adabas;JDBC;ODBC;dBase;Text";
+        Text[ korean ] = "Adabas;JDBC;ODBC;dBase;≈ÿΩ∫∆Æ";
         Text[ chinese_simplified ] = "Adabas;JDBC;ODBC;dBase;ADO;Œƒ◊÷;π§◊˜±ÌŒƒµµ";
         Text[ chinese_traditional ] = "Adabas;JDBC;ODBC;dBase;ADO;§Â¶r;§uß@™Ì§Â•Û";
         Text[ turkish ] = "Adabas;JDBC;ODBC;dBase;Text";
@@ -121,6 +121,25 @@ Resource RSC_CHARSETS
         Text [ english_us ] = "Ansi;Mac;IBMPC (437);IBMPC (850)/DOS;IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);System;UTF-8" ;
 
         Text[ language_user1 ] = "Please be carefull with the number/ordering of (semicolon-separated) tokens in the string.";
+        Text[ portuguese ] = "Ansi;Mac;IBMPC (437);IBMPC (850)/DOS;IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);Sistema;UTF-8";
+        Text[ russian ] = "Ansi;Mac;IBMPC (437);IBMPC (850)/DOS;IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);—ËÒÚÂÏ‡;UTF-8";
+        Text[ greek ] = "Ansi;Mac;IBMPC (437);IBMPC (850)/ DOS;IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);”˝ÛÙÁÏ·";
+        Text[ dutch ] = "Ansi;Mac;IBMPC (437);IBMPC (850)/DOS;IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);Systeem;UTF-8";
+        Text[ french ] = "Ansi;Mac;IBMPC (437);IBMPC (850)/ DOS;IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);SystËme;UTF-8";
+        Text[ spanish ] = "Ansi;Mac;IBMPC (437);IBMPC (850)/DOS;IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);Sistema;UTF-8";
+        Text[ finnish ] = "Ansi;Mac;DOS;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);System";
+        Text[ italian ] = "Ansi;Mac;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);Sistema";
+        Text[ danish ] = "Ansi;Mac;Dos;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);System";
+        Text[ swedish ] = "Ansi;Mac;IBMPC (437);IBMPC (850)/DOS;IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);System;UTF-8";
+        Text[ polish ] = "Ansi;Mac;IBMPC(437);IBMPC (850)/DOS;IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);System;UTF-8";
+        Text[ portuguese_brazilian ] = "Ansi;Mac;Dos;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);Sistema";
+        Text[ japanese ] = "Ansi;Mac;IBMPC (437);IBMPC (850)/ DOS;IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);ºΩ√—;UTF-8";
+        Text[ korean ] = "Ansi;Mac;Dos;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);System";
+        Text[ chinese_simplified ] = "Ansi;Mac;IBMPC (437);IBMPC (850)/ DOS;IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);œµÕ≥;UTF-8";
+        Text[ chinese_traditional ] = "Ansi;Mac;IBMPC (437);IBMPC (850)/ DOS;IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);®t≤Œ;UTF-8";
+        Text[ turkish ] = "Ansi;Mac;Dos;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);Sistem";
+        Text[ arabic ] = "Ansi;Mac;IBMPC (437);IBMPC (850)/ DOS;IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);‰Ÿ«„";
+        Text[ catalan ] = "Ansi;Mac;IBMPC (437);IBMPC (850)/DOS;IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);Sistema";
     };
 };
 
@@ -168,7 +187,7 @@ String STR_OBJECT_ALREADY_EXSISTS
     Text[ polish ] = "B≥πd w trakcie tworzenia!";
     Text[ portuguese_brazilian ] = "Error while creating!";
     Text[ japanese ] = "çÏê¨Ç∑ÇÈÇ∆Ç´ÇÃ¥◊∞ÅB";
-    Text[ korean ] = "Error while creating!";
+    Text[ korean ] = "ª˝º∫Ω√ø° ø¿∑˘!";
     Text[ chinese_simplified ] = "‘⁄…˙≥… ±∑¢…˙“ª∏ˆ¥ÌŒÛ£°";
     Text[ chinese_traditional ] = "¶b´ÿ•ﬂÆ…µo•Õø˘ª~";
     Text[ turkish ] = "Error while creating!";
@@ -248,6 +267,9 @@ String STR_BUTTON_TEXT_ALL
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.20  2001/05/10 12:20:04  fs
+ *  #86223# new strings
+ *
  *  Revision 1.19  2001/05/10 05:46:03  rt
  *  Merge SRC631: 10.05.01 - 07:45:14 (NoBranch)
  *
