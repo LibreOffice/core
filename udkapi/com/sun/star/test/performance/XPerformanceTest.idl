@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XPerformanceTest.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dbo $ $Date: 2002-01-23 08:52:21 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 16:34:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ module performance
 
 /** struct of simple types to be carried
 */
-struct SimpleTypes
+published struct SimpleTypes
 {
     boolean                    Bool;
     char                       Char;
@@ -94,7 +94,7 @@ struct SimpleTypes
 };
 /** struct ComplexTypes adding Sequence, String, Interface, Any to SimpleTypes
 */
-struct ComplexTypes : SimpleTypes
+published struct ComplexTypes : SimpleTypes
 {
     sequence< long >           Sequence;
     string                     String;
@@ -117,7 +117,7 @@ struct ComplexTypes : SimpleTypes
     <li>raising RuntimeException</li>
     </ul>
 */
-interface XPerformanceTest : com::sun::star::uno::XInterface
+published interface XPerformanceTest : com::sun::star::uno::XInterface
 {
     [oneway] void async();
     void sync();
