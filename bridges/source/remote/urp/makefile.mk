@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-15 14:42:16 $
+#   last change: $Author: hr $ $Date: 2004-02-02 18:13:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,12 +75,6 @@ USE_DEFFILE=TRUE
 .INCLUDE :  sv.mk
 
 # ------------------------------------------------------------------
-
-.IF "$(COM)$(OS)" == "GCCMACOSX"
-CFLAGS += -Duno_initEnvironment=$(TARGET)uno_initEnvironment \
-      -Duno_ext_getMapping=$(TARGET)uno_ext_getMapping
-.ENDIF
-
 
 SLOFILES= 	\
         $(SLO)$/urp_environment.obj \
