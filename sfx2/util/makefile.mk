@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.24 $
+#   $Revision: 1.25 $
 #
-#   last change: $Author: hr $ $Date: 2002-08-15 15:37:41 $
+#   last change: $Author: obo $ $Date: 2002-09-20 12:37:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -150,10 +150,9 @@ SHL1STDLIBS+=\
         shell32.lib \
         gdi32.lib \
         ole32.lib \
-        uuid.lib
-        
-SHL1STDLIBS+=user9x.lib
-
+        uuid.lib  \
+        uwinapi.lib \
+        unicows.lib
 .ENDIF
 
 
