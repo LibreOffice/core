@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scmod.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-18 11:02:57 $
+ *  last change: $Author: gt $ $Date: 2002-08-09 13:03:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,9 @@
 
 #include <offmgr/hyprlink.hxx>
 #include <offmgr/osplcfg.hxx>
+#ifndef _OFFAPP_INTERNATIONALOPTIONS_HXX_
+#include <offmgr/internationaloptions.hxx>
+#endif
 #include <svtools/ehdl.hxx>
 #include <svtools/accessibilityoptions.hxx>
 #include <vcl/status.hxx>
@@ -2032,18 +2035,21 @@ void ScModule::ApplyItemSet( USHORT nId, const SfxItemSet& rSet )
 
 SfxTabPage*  ScModule::CreateTabPage( USHORT nId, Window* pParent, const SfxItemSet& rSet )
 {
-    SfxTabPage*  pRet = 0;
+    SfxTabPage* pRet = NULL;
     switch(nId)
     {
-        case SID_SC_TP_LAYOUT:      pRet = ScTpLayoutOptions::Create(pParent, rSet); break;
-        case SID_SC_TP_CONTENT:     pRet = ScTpContentOptions::Create(pParent, rSet); break;
-        case SID_SC_TP_GRID:        pRet = SvxGridTabPage::Create(pParent, rSet); break;
-        case SID_SC_TP_USERLISTS:   pRet = ScTpUserLists::Create(pParent, rSet); break;
-        case SID_SC_TP_CALC:        pRet = ScTpCalcOptions::Create(pParent, rSet); break;
-        case SID_SC_TP_CHANGES:     pRet = ScRedlineOptionsTabPage::Create(pParent, rSet); break;
-        case RID_SC_TP_PRINT:       pRet = ScTpPrintOptions::Create(pParent, rSet); break;
+        case SID_SC_TP_LAYOUT:          pRet = ScTpLayoutOptions::Create(pParent, rSet); break;
+        case SID_SC_TP_CONTENT:         pRet = ScTpContentOptions::Create(pParent, rSet); break;
+        case SID_SC_TP_GRID:            pRet = SvxGridTabPage::Create(pParent, rSet); break;
+        case SID_SC_TP_USERLISTS:       pRet = ScTpUserLists::Create(pParent, rSet); break;
+        case SID_SC_TP_CALC:            pRet = ScTpCalcOptions::Create(pParent, rSet); break;
+        case SID_SC_TP_CHANGES:         pRet = ScRedlineOptionsTabPage::Create(pParent, rSet); break;
+        case RID_SC_TP_PRINT:           pRet = ScTpPrintOptions::Create(pParent, rSet); break;
+        case RID_OFA_TP_INTERNATIONAL:  pRet = ::offapp::InternationalOptionsPage::CreateSc( pParent, rSet ); break;
     }
-    DBG_ASSERT(pRet, "Id unbekannt")
+
+    DBG_ASSERT( pRet, "ScModule::CreateTabPage(): no valid ID for TabPage!" );
+
     return pRet;
 }
 
