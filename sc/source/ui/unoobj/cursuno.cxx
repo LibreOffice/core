@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cursuno.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2001-09-28 17:08:20 $
+ *  last change: $Author: hr $ $Date: 2001-10-23 11:39:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,12 +107,12 @@ uno::Any SAL_CALL ScCellCursorObj::queryInterface( const uno::Type& rType ) thro
     return ScCellRangeObj::queryInterface( rType );
 }
 
-void SAL_CALL ScCellCursorObj::acquire() throw(uno::RuntimeException)
+void SAL_CALL ScCellCursorObj::acquire() throw()
 {
     ScCellRangeObj::acquire();
 }
 
-void SAL_CALL ScCellCursorObj::release() throw(uno::RuntimeException)
+void SAL_CALL ScCellCursorObj::release() throw()
 {
     ScCellRangeObj::release();
 }

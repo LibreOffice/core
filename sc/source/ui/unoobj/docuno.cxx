@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docuno.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: sab $ $Date: 2001-10-16 12:41:32 $
+ *  last change: $Author: hr $ $Date: 2001-10-23 11:39:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -341,12 +341,12 @@ uno::Any SAL_CALL ScModelObj::queryInterface( const uno::Type& rType )
     return aRet;
 }
 
-void SAL_CALL ScModelObj::acquire() throw(uno::RuntimeException)
+void SAL_CALL ScModelObj::acquire() throw()
 {
     SfxBaseModel::acquire();
 }
 
-void SAL_CALL ScModelObj::release() throw(uno::RuntimeException)
+void SAL_CALL ScModelObj::release() throw()
 {
     SfxBaseModel::release();
 }

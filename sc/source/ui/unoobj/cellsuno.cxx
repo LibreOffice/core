@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsuno.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: nn $ $Date: 2001-09-28 17:08:20 $
+ *  last change: $Author: hr $ $Date: 2001-10-23 11:39:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1421,12 +1421,12 @@ uno::Any SAL_CALL ScCellRangesBase::queryInterface( const uno::Type& rType )
     return OWeakObject::queryInterface( rType );
 }
 
-void SAL_CALL ScCellRangesBase::acquire() throw(uno::RuntimeException)
+void SAL_CALL ScCellRangesBase::acquire() throw()
 {
     OWeakObject::acquire();
 }
 
-void SAL_CALL ScCellRangesBase::release() throw(uno::RuntimeException)
+void SAL_CALL ScCellRangesBase::release() throw()
 {
     OWeakObject::release();
 }
@@ -3668,12 +3668,12 @@ uno::Any SAL_CALL ScCellRangesObj::queryInterface( const uno::Type& rType )
     return ScCellRangesBase::queryInterface( rType );
 }
 
-void SAL_CALL ScCellRangesObj::acquire() throw(uno::RuntimeException)
+void SAL_CALL ScCellRangesObj::acquire() throw()
 {
     ScCellRangesBase::acquire();
 }
 
-void SAL_CALL ScCellRangesObj::release() throw(uno::RuntimeException)
+void SAL_CALL ScCellRangesObj::release() throw()
 {
     ScCellRangesBase::release();
 }
@@ -4323,12 +4323,12 @@ uno::Any SAL_CALL ScCellRangeObj::queryInterface( const uno::Type& rType )
     return ScCellRangesBase::queryInterface( rType );
 }
 
-void SAL_CALL ScCellRangeObj::acquire() throw(uno::RuntimeException)
+void SAL_CALL ScCellRangeObj::acquire() throw()
 {
     ScCellRangesBase::acquire();
 }
 
-void SAL_CALL ScCellRangeObj::release() throw(uno::RuntimeException)
+void SAL_CALL ScCellRangeObj::release() throw()
 {
     ScCellRangesBase::release();
 }
@@ -5455,12 +5455,12 @@ uno::Any SAL_CALL ScCellObj::queryInterface( const uno::Type& rType ) throw(uno:
     return ScCellRangeObj::queryInterface( rType );
 }
 
-void SAL_CALL ScCellObj::acquire() throw(uno::RuntimeException)
+void SAL_CALL ScCellObj::acquire() throw()
 {
     ScCellRangeObj::acquire();
 }
 
-void SAL_CALL ScCellObj::release() throw(uno::RuntimeException)
+void SAL_CALL ScCellObj::release() throw()
 {
     ScCellRangeObj::release();
 }
@@ -6195,12 +6195,12 @@ uno::Any SAL_CALL ScTableSheetObj::queryInterface( const uno::Type& rType ) thro
     return ScCellRangeObj::queryInterface( rType );
 }
 
-void SAL_CALL ScTableSheetObj::acquire() throw(uno::RuntimeException)
+void SAL_CALL ScTableSheetObj::acquire() throw()
 {
     ScCellRangeObj::acquire();
 }
 
-void SAL_CALL ScTableSheetObj::release() throw(uno::RuntimeException)
+void SAL_CALL ScTableSheetObj::release() throw()
 {
     ScCellRangeObj::release();
 }
@@ -7603,12 +7603,12 @@ uno::Any SAL_CALL ScTableColumnObj::queryInterface( const uno::Type& rType ) thr
     return ScCellRangeObj::queryInterface( rType );
 }
 
-void SAL_CALL ScTableColumnObj::acquire() throw(uno::RuntimeException)
+void SAL_CALL ScTableColumnObj::acquire() throw()
 {
     ScCellRangeObj::acquire();
 }
 
-void SAL_CALL ScTableColumnObj::release() throw(uno::RuntimeException)
+void SAL_CALL ScTableColumnObj::release() throw()
 {
     ScCellRangeObj::release();
 }

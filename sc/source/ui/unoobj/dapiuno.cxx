@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dapiuno.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2001-01-17 18:28:36 $
+ *  last change: $Author: hr $ $Date: 2001-10-23 11:39:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -687,12 +687,12 @@ uno::Any SAL_CALL ScDataPilotDescriptorBase::queryInterface( const uno::Type& rT
     return OWeakObject::queryInterface( rType );
 }
 
-void SAL_CALL ScDataPilotDescriptorBase::acquire() throw(uno::RuntimeException)
+void SAL_CALL ScDataPilotDescriptorBase::acquire() throw()
 {
     OWeakObject::acquire();
 }
 
-void SAL_CALL ScDataPilotDescriptorBase::release() throw(uno::RuntimeException)
+void SAL_CALL ScDataPilotDescriptorBase::release() throw()
 {
     OWeakObject::release();
 }
@@ -887,12 +887,12 @@ uno::Any SAL_CALL ScDataPilotTableObj::queryInterface( const uno::Type& rType )
     return ScDataPilotDescriptorBase::queryInterface( rType );
 }
 
-void SAL_CALL ScDataPilotTableObj::acquire() throw(uno::RuntimeException)
+void SAL_CALL ScDataPilotTableObj::acquire() throw()
 {
     ScDataPilotDescriptorBase::acquire();
 }
 
-void SAL_CALL ScDataPilotTableObj::release() throw(uno::RuntimeException)
+void SAL_CALL ScDataPilotTableObj::release() throw()
 {
     ScDataPilotDescriptorBase::release();
 }

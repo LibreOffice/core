@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fielduno.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-31 18:08:32 $
+ *  last change: $Author: hr $ $Date: 2001-10-23 11:39:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -469,12 +469,12 @@ uno::Any SAL_CALL ScCellFieldObj::queryInterface( const uno::Type& rType )
     return OComponentHelper::queryInterface( rType );
 }
 
-void SAL_CALL ScCellFieldObj::acquire() throw(uno::RuntimeException)
+void SAL_CALL ScCellFieldObj::acquire() throw()
 {
     OComponentHelper::acquire();
 }
 
-void SAL_CALL ScCellFieldObj::release() throw(uno::RuntimeException)
+void SAL_CALL ScCellFieldObj::release() throw()
 {
     OComponentHelper::release();
 }
@@ -1081,12 +1081,12 @@ uno::Any SAL_CALL ScHeaderFieldObj::queryInterface( const uno::Type& rType )
     return OComponentHelper::queryInterface( rType );
 }
 
-void SAL_CALL ScHeaderFieldObj::acquire() throw(uno::RuntimeException)
+void SAL_CALL ScHeaderFieldObj::acquire() throw()
 {
     OComponentHelper::acquire();
 }
 
-void SAL_CALL ScHeaderFieldObj::release() throw(uno::RuntimeException)
+void SAL_CALL ScHeaderFieldObj::release() throw()
 {
     OComponentHelper::release();
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeuno.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-27 15:27:37 $
+ *  last change: $Author: hr $ $Date: 2001-10-23 11:39:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,12 +149,12 @@ uno::Any SAL_CALL ScShapeObj::queryInterface( const uno::Type& rType )
     return aRet;
 }
 
-void SAL_CALL ScShapeObj::acquire() throw(uno::RuntimeException)
+void SAL_CALL ScShapeObj::acquire() throw()
 {
     OWeakObject::acquire();
 }
 
-void SAL_CALL ScShapeObj::release() throw(uno::RuntimeException)
+void SAL_CALL ScShapeObj::release() throw()
 {
     OWeakObject::release();
 }
