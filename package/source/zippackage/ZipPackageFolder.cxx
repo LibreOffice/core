@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageFolder.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: mtg $ $Date: 2001-10-02 22:16:04 $
+ *  last change: $Author: mtg $ $Date: 2001-10-02 22:23:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,10 +94,6 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
 #endif
-#ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
-#include <cppuhelper/typeprovider.hxx>
-#endif
-
 
 using namespace com::sun::star::packages::zip::ZipConstants;
 using namespace com::sun::star::packages::zip;
