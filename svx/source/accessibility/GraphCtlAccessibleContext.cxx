@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GraphCtlAccessibleContext.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 12:54:44 $
+ *  last change: $Author: hr $ $Date: 2003-06-26 11:10:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,14 +170,28 @@ SvxGraphCtrlAccessibleContext::SvxGraphCtrlAccessibleContext(
     mxParent( rxParent ),
     mpControl( &rRepr ),
     mbDisposed( sal_False ),
-    mnClientId( 0 )
+    mnClientId( 0 ),
+    mpModel (NULL),
+    mpPage (NULL),
+    mpView (NULL)
 {
-    mpModel = mpControl->GetSdrModel();
-    mpPage = (SdrPage*)mpModel->GetPage( 0 );
-    mpView = mpControl->GetSdrView();
+    if (mpControl != NULL)
+    {
+        mpModel = mpControl->GetSdrModel();
+        if (mpModel != NULL)
+            mpPage = (SdrPage*)mpModel->GetPage( 0 );
+        mpView = mpControl->GetSdrView();
 
-    if( mpModel == NULL || mpPage == NULL || mpView == NULL )
-        mbDisposed = true;
+        if( mpModel == NULL || mpPage == NULL || mpView == NULL )
+        {
+            mbDisposed = true;
+            // Set all the pointers to NULL just in case they are used as
+            // a disposed flag.
+            mpModel = NULL;
+            mpPage = NULL;
+            mpView = NULL;
+        }
+    }
 
     if( pName )
     {
@@ -831,6 +845,39 @@ void SvxGraphCtrlAccessibleContext::setDescription( const OUString& rDescr )
 
     msDescription = rDescr;
 }
+
+
+
+
+/** Replace the model, page, and view pointers by the ones provided
+    (explicitly and implicitly).
+*/
+void SvxGraphCtrlAccessibleContext::setModelAndView (
+    SdrModel* pModel,
+    SdrView* pView)
+{
+    OGuard aGuard (Application::GetSolarMutex());
+
+    mpModel = pModel;
+    if (mpModel != NULL)
+        mpPage = (SdrPage*)mpModel->GetPage( 0 );
+    mpView = pView;
+
+    if (mpModel == NULL || mpPage == NULL || mpView == NULL)
+    {
+        mbDisposed = true;
+
+        // Set all the pointers to NULL just in case they are used as
+        // a disposed flag.
+        mpModel = NULL;
+        mpPage = NULL;
+        mpView = NULL;
+    }
+
+    maTreeInfo.SetSdrView (mpView);
+}
+
+
 
 //-----------------------------------------------------------------------------
 
