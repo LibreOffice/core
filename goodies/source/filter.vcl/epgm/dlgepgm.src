@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgepgm.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 18:23:28 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 12:31:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,9 +67,8 @@ ModalDialog DLG_EXPORT_EPGM
     Size = MAP_APPFONT ( 133 , 63 ) ;
     Moveable = TRUE ;
     Closeable = TRUE ;
-    Text = "PGM Optionen" ;
-    Text [ ENGLISH ] = "PGM options" ;
-    Text [ english_us ] = "PGM Options" ;
+    Text [ de ] = "PGM Optionen" ;
+    Text [ en-US ] = "PGM Options" ;
     OKButton BTN_OK
     {
         Pos = MAP_APPFONT ( 73 , 6 ) ;
@@ -93,144 +92,29 @@ ModalDialog DLG_EXPORT_EPGM
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 60 , 8 ) ;
-        Text = "Datei Format" ;
-        Text [ ENGLISH ] = "file format" ;
-        Text[ italian ] = "Formato file";
-        Text[ portuguese_brazilian ] = "Formato do arquivo";
-        Text[ portuguese ] = "Formato do ficheiro";
-        Text[ danish ] = "Filformat";
-        Text[ french ] = "Format de fichier";
-        Text[ swedish ] = "Filformat";
-        Text[ dutch ] = "Bestandsindeling";
-        Text[ spanish ] = "Formato de archivo";
-        Text[ english_us ] = "File format";
-        Text[ chinese_simplified ] = "æ–‡ä»¶æ ¼å¼";
-        Text[ russian ] = "Ôîğìàò ôàéëà";
-        Text[ polish ] = "Format pliku";
-        Text[ japanese ] = "ãƒ•ã‚¡ã‚¤ãƒ«ã®æ›¸å¼";
-        Text[ chinese_traditional ] = "æª”æ¡ˆæ ¼å¼";
-        Text[ arabic ] = "ÊäÓíŞ Çáãáİ";
-        Text[ dutch ] = "Bestandsindeling";
-        Text[ chinese_simplified ] = "æ–‡ä»¶æ ¼å¼";
-        Text[ greek ] = "ÌïñöŞ áñ÷åßïõ";
-        Text[ korean ] = "íŒŒì¼ í˜•ì‹";
-        Text[ turkish ] = "Dosya Biçemi";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Format del fitxer";
-        Text[ finnish ] = "Tiedostomuoto";
-        Text[ thai ] = "à¸£à¸¹à¸›à¹à¸šà¸šà¹à¸Ÿà¹‰à¸¡";
-        Text[ czech ] = "FormÃ¡t souboru";
-        Text[ hebrew ] = "â€®×¡×•×’ ×§×•×‘×¥â€¬";
-        Text[ hindi ] = "à¤«à¤¾à¤‡à¤² à¤°à¤šà¤¨à¤¾";
-        Text[ slovak ] = "FormÃ¡t sÃºboru";
-        Text[ hungarian ] = "FÃ¡jlformÃ¡tum";
-        Text[ slovenian ] = "Oblika zapisa datoteke";
+        Text [ de ] = "Datei Format" ;
+        Text [ en-US ] = "File format";
+        Text [ x-comment ] = " ";
     };
     RadioButton RB_RAW
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 45 , 10 ) ;
-        Text = "~Binär" ;
-        Text [ ENGLISH ] = "~raw" ;
+        Text [ de ] = "~Binär" ;
         TabStop = TRUE ;
-        Text[ italian ] = "~Binario";
-        Text[ portuguese_brazilian ] = "~Binário";
-        Text[ portuguese ] = "~Binário";
-        Text[ danish ] = "~Binær";
-        Text[ french ] = "~Binaire";
-        Text[ swedish ] = "~Binär";
-        Text[ dutch ] = "~Binair";
-        Text[ spanish ] = "~Binario";
-        Text[ english_us ] = "~Binary";
-        Text[ chinese_simplified ] = "äºŒå…ƒ(~B)";
-        Text[ russian ] = "Áèíàğíûé";
-        Text[ polish ] = "~Binarny";
-        Text[ japanese ] = "ãƒã‚¤ãƒŠãƒª(~B)";
-        Text[ language_user1 ] = " ";
-        Text[ chinese_traditional ] = "äºŒå…ƒ(~B)";
-        Text[ arabic ] = "ËäÇÆí";
-        Text[ dutch ] = "~Binair";
-        Text[ chinese_simplified ] = "äºŒå…ƒ(~B)";
-        Text[ greek ] = "Äõáäéêü";
-        Text[ korean ] = "ë°”ì´ë„ˆë¦¬(~B)";
-        Text[ turkish ] = "~İkili";
-        Text[ catalan ] = "~Binari";
-        Text[ finnish ] = "~Binaari";
-        Text[ thai ] = "à¹€~à¸¥à¸‚à¸à¸²à¸™à¸ªà¸­à¸‡";
-        Text[ czech ] = "BinÃ¡rnÃ­";
-        Text[ hebrew ] = "â€®×‘×™× ×¨×™â€¬";
-        Text[ hindi ] = "~à¤¬à¥ˆà¤¨à¤°à¥€";
-        Text[ slovak ] = "~BinÃ¡rny";
-        Text[ hungarian ] = "~BinÃ¡ris";
-        Text[ slovenian ] = "~DvojiÅ¡ko";
+        Text [ en-US ] = "~Binary";
+        Text [ x-comment ] = " ";
     };
     RadioButton RB_ASCII
     {
         Pos = MAP_APPFONT ( 12 , 28 ) ;
         Size = MAP_APPFONT ( 45 , 10 ) ;
-        Text = "~Text" ;
-        Text [ ENGLISH ] = "~text" ;
+        Text [ de ] = "~Text" ;
         TabStop = TRUE ;
-        Text[ italian ] = "~Testo";
-        Text[ portuguese_brazilian ] = "~Texto";
-        Text[ portuguese ] = "~Texto";
-        Text[ danish ] = "~Tekst";
-        Text[ french ] = "Texte";
-        Text[ swedish ] = "~Text";
-        Text[ dutch ] = "~Tekst";
-        Text[ spanish ] = "~Texto";
-        Text[ english_us ] = "~Text";
-        Text[ chinese_simplified ] = "æ–‡å­—(~T)";
-        Text[ russian ] = "Òåêñò";
-        Text[ polish ] = "~Tekstowy";
-        Text[ japanese ] = "ãƒ†ã‚­ã‚¹ãƒˆ(~T)";
-        Text[ chinese_traditional ] = "æ–‡å­—(~T)";
-        Text[ arabic ] = "ÇáäÕ";
-        Text[ dutch ] = "~Tekst";
-        Text[ chinese_simplified ] = "æ–‡å­—(~T)";
-        Text[ greek ] = "Êåßìåíï";
-        Text[ korean ] = "í…ìŠ¤íŠ¸(~T)";
-        Text[ turkish ] = "~Metin";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Text";
-        Text[ finnish ] = "~Teksti";
-        Text[ thai ] = "~à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡";
-        Text[ czech ] = "TextovÃ½";
-        Text[ hebrew ] = "â€®×˜×§×¡×˜â€¬";
-        Text[ hindi ] = "~à¤Ÿà¥‡à¤•à¥à¤¸à¥à¤Ÿà¥";
-        Text[ slovak ] = "~TextovÃ½";
-        Text[ hungarian ] = "S~zÃ¶veg";
-        Text[ slovenian ] = "~Besedilo";
+        Text [ en-US ] = "~Text";
+        Text [ x-comment ] = " ";
     };
-    Text[ italian ] = "Opzioni PGM";
-    Text[ portuguese_brazilian ] = "Opções PGM";
-    Text[ portuguese ] = "Opções PGM";
-    Text[ danish ] = "PGM indstillinger";
-    Text[ french ] = "Options PGM";
-    Text[ swedish ] = "PGM-alternativ";
-    Text[ dutch ] = "PGM-opties";
-    Text[ spanish ] = "Opciones PGM";
-    Text[ chinese_simplified ] = "PGM é€‰é¡¹";
-    Text[ russian ] = "Ïàğàìåòğû PGM";
-    Text[ polish ] = "Opcje PGM";
-    Text[ japanese ] = "PGM ã‚ªãƒ—ã‚·ãƒ§ãƒ³";
-    Text[ chinese_traditional ] = "PGMé¸é …";
-    Text[ arabic ] = "PGM ÎíÇÑÇÊ";
-    Text[ dutch ] = "PGM-opties";
-    Text[ chinese_simplified ] = "PGM é€‰é¡¹";
-    Text[ greek ] = "Åğéëïãİò PGM";
-    Text[ korean ] = "PGM ì˜µì…˜";
-    Text[ turkish ] = "PGM seçenekleri";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Opcions PGM";
-    Text[ finnish ] = "PGM-vientiasetukset";
-    Text[ thai ] = "à¸•à¸±à¸§à¹€à¸¥à¸·à¸­à¸ PGM ";
-    Text[ czech ] = "Volby pro formÃ¡t PGM";
-    Text[ hebrew ] = "â€®××¤×©×¨×•×™×•×ª PGMâ€¬";
-    Text[ hindi ] = "PGM à¤µà¤¿à¤•à¤²à¥à¤ª";
-    Text[ slovak ] = "MoÅ¾nosti pre formÃ¡t PGM";
-    Text[ hungarian ] = "PGM-beÃ¡llÃ­tÃ¡sok";
-    Text[ slovenian ] = "MoÅ¾nosti za PGM";
+    Text [ x-comment ] = " ";
 };
 
 
