@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: jbu $ $Date: 2001-10-11 15:37:10 $
+ *  last change: $Author: hdu $ $Date: 2001-10-26 10:21:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2093,6 +2093,12 @@ String GetSubsFontName( const String& rName, ULONG nFlags )
     String aName;
     String aOrgName = GetFontToken( rName, 0 );
     ImplGetEnglishSearchFontName( aOrgName );
+
+    // #93662# do not try to replace StarSymbol with MS only font
+    if( nFlags == (SUBSFONT_MS|SUBSFONT_ONLYONE)
+    ||  ( aOrgName.EqualsAscii( "starsymbol" )
+      &&  aOrgName.EqualsAscii( "opensymbol" ) ) )
+    return aName;
 
     // Search Font in FontList
     const ImplFontNameAttr* pFontAttr = ImplGetFontNameAttr( aOrgName );
