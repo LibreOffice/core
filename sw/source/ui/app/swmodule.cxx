@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swmodule.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-29 16:55:15 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 09:57:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,9 @@
 #endif
 #ifndef _SVX_VERT_TEXT_TBXCTRL_HXX
 #include <svx/verttexttbxctrl.hxx>
+#endif
+#ifndef _SVX_FORMATPAINTBRUSHCTRL_HXX
+#include <svx/formatpaintbrushctrl.hxx>
 #endif
 #ifndef _CONTDLG_HXX_ //autogen
 #include <svx/contdlg.hxx>
@@ -547,6 +550,7 @@ void SwDLL::RegisterControls()
     SvxClipBoardControl::RegisterControl(SID_PASTE, pMod );
     SvxUndoRedoControl::RegisterControl(SID_UNDO, pMod );
     SvxUndoRedoControl::RegisterControl(SID_REDO, pMod );
+    svx::FormatPaintBrushToolBoxControl::RegisterControl(SID_FORMATPAINTBRUSH, pMod );
 
     SvxFillToolBoxControl::RegisterControl(SID_ATTR_FILL_STYLE, pMod );
     SvxLineStyleToolBoxControl::RegisterControl(SID_ATTR_LINE_STYLE, pMod );
