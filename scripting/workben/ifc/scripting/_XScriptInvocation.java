@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XScriptInvocation.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2002-12-10 14:12:05 $
+ *  last change:$Date: 2003-03-05 15:29:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Collection;
 
-import drafts.com.sun.star.script.framework.XScriptInvocation;
+import drafts.com.sun.star.script.framework.runtime.XScriptInvocation;
 import drafts.com.sun.star.script.framework.storage.XScriptStorageManager;
 
 import com.sun.star.lang.XMultiServiceFactory;

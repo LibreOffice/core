@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XScriptNameResolver.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-02-25 16:22:04 $
+ *  last change:$Date: 2003-03-05 15:29:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Collection;
 
-import drafts.com.sun.star.script.framework.XScriptNameResolver;
+import drafts.com.sun.star.script.framework.runtime.XScriptNameResolver;
 import drafts.com.sun.star.script.framework.storage.XScriptInfo;
 import drafts.com.sun.star.script.framework.storage.XScriptStorageManager;
 
