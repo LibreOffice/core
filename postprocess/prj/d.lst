@@ -1,2 +1,2 @@
-..\%COMMON_OUTDIR%\bin\uiconfig.zip %COMMON_DEST%\bin%_EXT%\uiconfig.zip
+..\%__SRC%\bin\uiconfig.zip %COMMON_DEST%\bin%_EXT%\uiconfig.zip
 
