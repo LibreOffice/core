@@ -60,7 +60,6 @@ import java.io.ByteArrayInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.Vector;
-import java.util.Stack;
 
 import org.openoffice.xmerge.util.Debug;
 import org.openoffice.xmerge.util.IntArrayList;
@@ -136,62 +135,6 @@ final class PocketExcelEncoder extends SpreadsheetEncoder {
     }
 
     /**
-     *  This method returns the priority of operators for the RPN conversion
-     *
-     *  @return the operator priority level
-     */
-    private int getPriority(String op) {
-
-        int operatorPriority = -1;
-
-        if (op.equals("("))
-            operatorPriority = 1;
-        else if (op.equals("+"))
-            operatorPriority = 2;
-        else if (op.equals("-"))
-            operatorPriority = 2;
-        else if (op.equals("*"))
-            operatorPriority = 3;
-        else if (op.equals("/"))
-            operatorPriority = 3;
-        else if (op.equals("^"))
-            operatorPriority = 4;
-
-        return(operatorPriority);
-    }
-
-    /**
-     * This is a necessary evil because we don't currently support functions.
-     * Hopefully one day we will and we will not have to validate every single
-     * cell
-     *
-     *  @param the cell contents to be verified
-     */
-    private boolean validateCell(String cell) {
-
-        boolean validCell = false;
-
-        if (cell.equals("+") ||
-            cell.equals("-") ||
-            cell.equals("*") ||
-            cell.equals("/") ||
-            cell.equals("(") ||
-            cell.equals(")") ||
-            cell.equals("^")) {
-            validCell = true;
-        } else {
-            for(int i = 0;i<cell.length();i++) {
-                char ch = cell.charAt(i);
-                if((ch>='0') && (ch<='9')) {
-                    validCell = true;
-                    break;
-                    }
-            }
-        }
-        return validCell;
-    }
-
-    /**
      *  This method converts a String containing a formula in infix notation
      *  to a String in Reverse Polish Notation (RPN)
      *
@@ -201,11 +144,6 @@ final class PocketExcelEncoder extends SpreadsheetEncoder {
 
         Debug.log(Debug.TRACE,"parseFormula : " + formula);
 
-        Stack aStack = new Stack();
-        String nextChar;
-        String topOfStack;
-        String outputString = "=";
-        String inputString;
         StringBuffer inFormula = new StringBuffer(formula);
         StringBuffer outFormula = new StringBuffer();
 
@@ -280,81 +218,7 @@ final class PocketExcelEncoder extends SpreadsheetEncoder {
             }
         }
 
-        inputString = outFormula.toString();
-
-        for (int i = 1;i<=inputString.length()-1;i++) {
-
-            char ch = inputString.charAt(i);        // Check to see if this is a cell or an operator
-            if(((ch>='a') && (ch<='z')) || (ch>='A') && (ch<='Z'))  {
-                int interval = 1;
-                char nextRef = inputString.charAt(i+interval);
-                if(((nextRef>='a') && (nextRef<='z')) || (nextRef>='A') && (nextRef<='Z')) { // if cell col > 26
-                    interval++;
-                    nextRef = inputString.charAt(i+interval);
-                }
-                while(nextRef>='0' && nextRef<='9') { // Keep reading until we reach another operator or cell reference
-                    interval++;
-                    if((i+interval)<inputString.length())
-                        nextRef = inputString.charAt(i+interval);
-                    else
-                        nextRef = 0;
-                }
-                nextChar = inputString.substring(i,i+interval); // if cell then read all of the cell reference
-                i += interval-1;
-            } else if(ch>='0' && ch<='9') {
-                int numInterval = 1;
-                char nextRef;
-                if((i+numInterval)<inputString.length()) {
-                    nextRef = inputString.charAt(i+numInterval);
-                    while(nextRef>='0' && nextRef<='9') {
-                        numInterval++;
-                        if((i+numInterval)<inputString.length())
-                            nextRef = inputString.charAt(i+numInterval);
-                        else
-                            nextRef = 0;
-                    }
-                }
-                nextChar = inputString.substring(i,i+numInterval);
-                i += numInterval-1;
-            } else
-                nextChar = inputString.substring(i,i+1);
-
-            if(!validateCell(nextChar))
-                return "";
-
-            if (nextChar.equals(")")) {
-                topOfStack = (String)aStack.pop();
-                while (!topOfStack.equals("(") && !aStack.empty()) {
-                    outputString += topOfStack + ".";
-                    topOfStack = (String)aStack.pop();
-                }
-            } else if (nextChar.equals("(") || i==1) {
-                    aStack.push(nextChar);
-            } else if ( nextChar.equals("+") ||
-                        nextChar.equals("-") ||
-                        nextChar.equals("*") ||
-                        nextChar.equals("/") ||
-                        nextChar.equals("^")) {
-
-                if(!aStack.empty()) {
-                    topOfStack = (String)aStack.peek();
-                while (getPriority(nextChar) <= getPriority(topOfStack) && !aStack.empty()) {
-                    topOfStack = (String)aStack.pop();
-                    outputString += topOfStack + ".";
-                    if(!aStack.empty())
-                        topOfStack = (String)aStack.peek();
-                    }
-                }
-                aStack.push(nextChar);
-            } else {
-                outputString += nextChar + ".";
-            }
-        }
-        while(!aStack.empty()) {
-            topOfStack = (String)aStack.pop();
-            outputString += topOfStack + ".";
-        }
-        return outputString;
+        return outFormula.toString();
     }
 
     /**

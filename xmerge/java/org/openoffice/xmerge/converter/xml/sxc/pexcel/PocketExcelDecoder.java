@@ -262,66 +262,6 @@ final class PocketExcelDecoder extends SpreadsheetDecoder {
     }
 
     /**
-     * Parses a Pexcel Formula in Reverse Polish Notation into an sxc formula
-     * that uses infix notation
-     *
-     *  @return the parsed formula using infix notation
-     */
-    protected String parseFormula(String inputString) {
-
-        Debug.log(Debug.TRACE,"parseFormula : " + inputString);
-
-        Stack myStack = new Stack();
-        String nextChar;
-        String topOfStack;
-        String outputString = "=";
-        String op1,op2;
-
-        for (int i = 1;i<inputString.length();i++) {
-            char ch = inputString.charAt(i);        // Check to see if this is a cell or an operator
-            int interval=0;
-            while(ch!='.') {
-                interval++;
-                ch = inputString.charAt(i+interval);
-            }
-            nextChar = inputString.substring(i,i+interval);
-            i += interval;
-
-            ch = nextChar.charAt(0);
-            if(ch>='0' && ch<='9') {
-                Double myDo = new Double(Double.longBitsToDouble(Long.parseLong(nextChar)));
-                nextChar = myDo.toString();
-                }
-
-            if (    nextChar.equals("+") ||
-                    nextChar.equals("-") ||
-                    nextChar.equals("*") ||
-                    nextChar.equals("/") ||
-                    nextChar.equals("^")) {
-
-                op2 = (String)myStack.pop();
-                if(!myStack.empty()) {
-                    op1 = (String)myStack.pop();
-
-                    outputString += op1;
-                    outputString += nextChar;
-                    outputString += op2;
-                } else {
-                    outputString += nextChar;
-                    outputString += op2;
-                }
-            } else {
-                myStack.push(nextChar);
-            }
-        }
-        while(!myStack.empty()) {
-            topOfStack = (String)myStack.pop();
-            outputString += topOfStack;
-        }
-        return outputString;
-    }
-
-    /**
      *  This method returns the contents of the current cell.
      *
      *  @return  The contents of the current cell.  Returns
@@ -341,9 +281,6 @@ final class PocketExcelDecoder extends SpreadsheetDecoder {
                                     + "," + cell.getCol() + ") to an empty string");
                 System.err.println("Error msg: " + e.getMessage());
             }
-        }
-        if (contents.startsWith("=")) {
-            contents = parseFormula(contents);
         }
         return contents;
     }
