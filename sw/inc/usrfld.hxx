@@ -2,9 +2,9 @@
  *
  *  $RCSfile: usrfld.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-24 18:43:03 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:42:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,13 @@
 #ifndef _USRFLD_HXX
 #define _USRFLD_HXX
 
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
+#endif
+
+#ifndef _FLDBAS_HXX
 #include "fldbas.hxx"
+#endif
 
 class SfxPoolItem;
 class SwCalc;
@@ -71,7 +77,7 @@ class SwDoc;
     Beschreibung: Benutzerfelder
  --------------------------------------------------------------------*/
 
-class SwUserFieldType : public SwValueFieldType
+class SW_DLLPUBLIC SwUserFieldType : public SwValueFieldType
 {
     BOOL    bValidValue : 1;
     BOOL    bDeleted : 1;
