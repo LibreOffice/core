@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: os $ $Date: 2002-09-27 11:50:44 $
+ *  last change: $Author: os $ $Date: 2002-10-17 13:23:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -590,19 +590,6 @@ void lcl_SetTwipValue(MetricField& rMetric, long nValue)
  ---------------------------------------------------------------------------*/
 USHORT lcl_ChangeResIdToVerticalOrRTL(USHORT nResId, BOOL bVertical, BOOL bRTL)
 {
-    //exchange horizontal strings with vertical strings and vice versa
-    ResIdPair_Impl aHoriVertIds[] =
-    {
-        {STR_LEFT,           STR_TOP},
-        {STR_RIGHT,          STR_BOTTOM},
-        {STR_CENTER_HORI,    STR_CENTER_VERT},
-        {STR_FROMTOP,        STR_FROMRIGHT},
-        {STR_REL_PG_LEFT,    STR_REL_PG_TOP},
-        {STR_REL_PG_RIGHT,   STR_REL_PG_BOTTOM} ,
-        {STR_REL_FRM_LEFT,   STR_REL_FRM_TOP},
-        {STR_REL_FRM_RIGHT,  STR_REL_FRM_BOTTOM},
-        {0, 0}
-    };
     //special handling of STR_FROMLEFT
     if(STR_FROMLEFT == nResId)
     {
@@ -613,17 +600,47 @@ USHORT lcl_ChangeResIdToVerticalOrRTL(USHORT nResId, BOOL bVertical, BOOL bRTL)
     }
     if(bVertical)
     {
-        USHORT nIndex = 0;
-        while(aHoriVertIds[nIndex].nHori)
+        //exchange horizontal strings with vertical strings and vice versa
+        static const ResIdPair_Impl aHoriIds[] =
         {
-            if(aHoriVertIds[nIndex].nHori == nResId)
+            {STR_LEFT,           STR_TOP},
+            {STR_RIGHT,          STR_BOTTOM},
+            {STR_CENTER_HORI,    STR_CENTER_VERT},
+            {STR_FROMTOP,        STR_FROMRIGHT},
+            {STR_REL_PG_LEFT,    STR_REL_PG_TOP},
+            {STR_REL_PG_RIGHT,   STR_REL_PG_BOTTOM} ,
+            {STR_REL_FRM_LEFT,   STR_REL_FRM_TOP},
+            {STR_REL_FRM_RIGHT,  STR_REL_FRM_BOTTOM},
+            {0, 0}
+        };
+        static const ResIdPair_Impl aVertIds[] =
+        {
+            {STR_TOP,            STR_RIGHT},
+            {STR_BOTTOM,         STR_LEFT },
+            {STR_CENTER_VERT,    STR_CENTER_HORI},
+            {STR_FROMTOP,        STR_FROMRIGHT },
+            {STR_REL_PG_TOP,     STR_REL_PG_LEFT },
+            {STR_REL_PG_BOTTOM,  STR_REL_PG_RIGHT } ,
+            {STR_REL_FRM_TOP,    STR_REL_FRM_LEFT },
+            {STR_REL_FRM_BOTTOM, STR_REL_FRM_RIGHT },
+            {0, 0}
+        };
+        USHORT nIndex = 0;
+        while(aHoriIds[nIndex].nHori)
+        {
+            if(aHoriIds[nIndex].nHori == nResId)
             {
-                nResId = aHoriVertIds[nIndex].nVert;
-                break;
+                nResId = aHoriIds[nIndex].nVert;
+                return nResId;
             }
-            else if(aHoriVertIds[nIndex].nVert == nResId)
+            nIndex++;
+        }
+        nIndex = 0;
+        while(aVertIds[nIndex].nHori)
+        {
+            if(aVertIds[nIndex].nHori == nResId)
             {
-                nResId = aHoriVertIds[nIndex].nHori;
+                nResId = aVertIds[nIndex].nVert;
                 break;
             }
             nIndex++;
