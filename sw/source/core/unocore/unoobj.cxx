@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: os $ $Date: 2000-11-15 15:00:48 $
+ *  last change: $Author: os $ $Date: 2000-11-17 10:51:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3797,11 +3797,17 @@ uno::Reference< XText >  SwXTextRange::getText(void) throw( uno::RuntimeExceptio
             ((SwModify*)aObjectDepend.GetRegisteredIn())->
                     Remove(&((SwXTextRange*)this)->aObjectDepend);
         }
-        else if(eRangePosition == RANGE_IN_CELL &&
-            aObjectDepend.GetRegisteredIn())
+        else if(eRangePosition == RANGE_IS_TABLE &&
+            aObjectDepend.GetRegisteredIn() )
         {
-            //die Tabelle muss schon einen Parent kennen!
-            DBG_WARNING("not implemented")
+            SwFrmFmt* pTblFmt = (SwFrmFmt*)aObjectDepend.GetRegisteredIn();
+            SwDoc* pDoc = pTblFmt->GetDoc();
+            SwTable* pTable = SwTable::FindTable( pTblFmt );
+            SwTableNode* pTblNode = pTable->GetTableNode();
+            SwPosition aPosition( *pTblNode );
+            Reference< XTextRange >  xRange = CreateTextRangeFromPosition(pDoc,
+                        aPosition, 0);
+            xParentText = xRange->getText();
         }
         else
         {
