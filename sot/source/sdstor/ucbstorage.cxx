@@ -818,7 +818,7 @@ BOOL UCBStorage_Impl::Insert( ::ucb::Content *pContent )
     pNames[0] = ::rtl::OUString::createFromAscii("Title");
     Any* pValues = aValues.getArray();
     pValues[0] <<= ::rtl::OUString( m_aName );
-    ::rtl::OUString aType = ::rtl::OUString::createFromAscii( "application/package-folder" );
+    ::rtl::OUString aType = ::rtl::OUString::createFromAscii( "application/vnd.sun.star.pkg-folder" );
 
     // remove old content, create an "empty" new one and initialize it by inserting
     DELETEZ( m_pContent );
