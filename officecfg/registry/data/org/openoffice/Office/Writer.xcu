@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Writer.xcu,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dg $ $Date: 2002-05-19 23:07:33 $
+ *  last change: $Author: kz $ $Date: 2002-06-10 14:46:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@
               <value xml:lang="pl">Tabela</value>
               <value xml:lang="pt-BR">Table</value>
               <value xml:lang="ja">表</value>
-              <value xml:lang="ko">시트</value>
+              <value xml:lang="ko">표</value>
               <value xml:lang="zh-CN">表格</value>
               <value xml:lang="zh-TW">表格</value>
               <value xml:lang="tr">Table</value>
@@ -141,7 +141,7 @@
               <value xml:lang="pl">Ilustracja</value>
               <value xml:lang="pt-BR">Illustration</value>
               <value xml:lang="ja">イラストレーション</value>
-              <value xml:lang="ko">사진</value>
+              <value xml:lang="ko">그림</value>
               <value xml:lang="zh-CN">插图</value>
               <value xml:lang="zh-TW">插圖</value>
               <value xml:lang="tr">Illustration</value>
@@ -172,7 +172,7 @@
               <value xml:lang="pl">Ilustracja</value>
               <value xml:lang="pt-BR">Illustration</value>
               <value xml:lang="ja">イラストレーション</value>
-              <value xml:lang="ko">사진</value>
+              <value xml:lang="ko">그림</value>
               <value xml:lang="zh-CN">插图</value>
               <value xml:lang="zh-TW">插圖</value>
               <value xml:lang="tr">Illustration</value>
@@ -201,7 +201,7 @@
               <value xml:lang="pl">Ilustracja</value>
               <value xml:lang="pt-BR">Illustration</value>
               <value xml:lang="ja">イラストレーション</value>
-              <value xml:lang="ko">사진</value>
+              <value xml:lang="ko">그림</value>
               <value xml:lang="zh-CN">插图</value>
               <value xml:lang="zh-TW">插圖</value>
               <value xml:lang="tr">Illustration</value>
@@ -230,7 +230,7 @@
               <value xml:lang="pl">Ilustracja</value>
               <value xml:lang="pt-BR">Illustration</value>
               <value xml:lang="ja">イラストレーション</value>
-              <value xml:lang="ko">사진</value>
+              <value xml:lang="ko">그림</value>
               <value xml:lang="zh-CN">插图</value>
               <value xml:lang="zh-TW">插圖</value>
               <value xml:lang="tr">Illustration</value>
@@ -259,7 +259,7 @@
               <value xml:lang="pl">Ilustracja</value>
               <value xml:lang="pt-BR">Illustration</value>
               <value xml:lang="ja">イラストレーション</value>
-              <value xml:lang="ko">사진</value>
+              <value xml:lang="ko">그림</value>
               <value xml:lang="zh-CN">插图</value>
               <value xml:lang="zh-TW">插圖</value>
               <value xml:lang="tr">Illustration</value>
@@ -288,7 +288,7 @@
               <value xml:lang="pl">Ilustracja</value>
               <value xml:lang="pt-BR">Illustration</value>
               <value xml:lang="ja">イラストレーション</value>
-              <value xml:lang="ko">사진</value>
+              <value xml:lang="ko">그림</value>
               <value xml:lang="zh-CN">插图</value>
               <value xml:lang="zh-TW">插圖</value>
               <value xml:lang="tr">Illustration</value>
@@ -317,7 +317,7 @@
               <value xml:lang="pl">Ilustracja</value>
               <value xml:lang="pt-BR">Illustration</value>
               <value xml:lang="ja">イラストレーション</value>
-              <value xml:lang="ko">사진</value>
+              <value xml:lang="ko">그림</value>
               <value xml:lang="zh-CN">插图</value>
               <value xml:lang="zh-TW">插圖</value>
               <value xml:lang="tr">Illustration</value>
@@ -346,7 +346,7 @@
               <value xml:lang="pl">Ilustracja</value>
               <value xml:lang="pt-BR">Illustration</value>
               <value xml:lang="ja">イラストレーション</value>
-              <value xml:lang="ko">사진</value>
+              <value xml:lang="ko">그림</value>
               <value xml:lang="zh-CN">插图</value>
               <value xml:lang="zh-TW">插圖</value>
               <value xml:lang="tr">Illustration</value>
