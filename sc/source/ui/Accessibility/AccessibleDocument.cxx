@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocument.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: sab $ $Date: 2002-07-04 11:51:06 $
+ *  last change: $Author: sab $ $Date: 2002-07-08 09:45:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1069,7 +1069,8 @@ ScAccessibleDocument::ScAccessibleDocument(
     meSplitPos(eSplitPos),
     mpAccessibleSpreadsheet(NULL),
     mpChildrenShapes(NULL),
-    mbCompleteSheetSelected(sal_False)
+    mbCompleteSheetSelected(sal_False),
+    mpTempAccEdit(NULL)
 {
     if (pViewShell)
     {
@@ -1171,14 +1172,28 @@ IMPL_LINK( ScAccessibleDocument, WindowChildEventListener, VclSimpleEvent*, pEve
 
 void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    if (rHint.ISA( ScAccGridViewChangeHint ) )
+    if (rHint.ISA( ScAccGridWinFocusLostHint ) )
     {
-        const ScAccGridViewChangeHint& rRef = (const ScAccGridViewChangeHint&)rHint;
-        if ((rRef.GetOldGridWin() == meSplitPos) ||
-            (rRef.GetNewGridWin() == meSplitPos))
+        const ScAccGridWinFocusLostHint& rRef = (const ScAccGridWinFocusLostHint&)rHint;
+        if (rRef.GetOldGridWin() == meSplitPos)
         {
-            if (rRef.GetOldGridWin() == meSplitPos)
+            if (mxTempAcc.is() && mpTempAccEdit)
+                mpTempAccEdit->LostFocus();
+            else if (mpAccessibleSpreadsheet)
+                mpAccessibleSpreadsheet->LostFocus();
+            else
                 CommitFocusLost();
+        }
+    }
+    else if (rHint.ISA( ScAccGridWinFocusGotHint ) )
+    {
+        const ScAccGridWinFocusGotHint& rRef = (const ScAccGridWinFocusGotHint&)rHint;
+        if (rRef.GetNewGridWin() == meSplitPos)
+        {
+            if (mxTempAcc.is() && mpTempAccEdit)
+                mpTempAccEdit->GotFocus();
+            else if (mpAccessibleSpreadsheet)
+                mpAccessibleSpreadsheet->GotFocus();
             else
                 CommitFocusGained();
         }
@@ -1212,14 +1227,23 @@ void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         {
             if (mpViewShell && mpViewShell->GetViewData()->GetEditView(meSplitPos))
             {
-                uno::Reference<XAccessible> xAcc = new ScAccessibleEditObject(this, mpViewShell->GetViewData()->GetEditView(meSplitPos), mpViewShell->GetWindowByPos(meSplitPos), sal_True);
+                DBG_ASSERT(!mpTempAccEdit, "EditObject should be gone");
+                mpTempAccEdit = new ScAccessibleEditObject(this, mpViewShell->GetViewData()->GetEditView(meSplitPos), mpViewShell->GetWindowByPos(meSplitPos), sal_True);
+                uno::Reference<XAccessible> xAcc = mpTempAccEdit;
+                if (mpViewShell->GetWindowByPos(meSplitPos)->HasFocus())
+                    mpTempAccEdit->GotFocus();
+
                 AddChild(xAcc, sal_True);
             }
         }
         else if ((rRef.GetId() == SC_HINT_ACC_LEAVEEDITMODE))
         {
+            DBG_ASSERT(mpTempAccEdit, "here should be a EditObject");
             if (mxTempAcc.is())
+            {
+                mpTempAccEdit = NULL;
                 RemoveChild(mxTempAcc, sal_True);
+            }
         }
     }
 

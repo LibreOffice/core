@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocument.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: sab $ $Date: 2002-06-10 15:10:39 $
+ *  last change: $Author: sab $ $Date: 2002-07-08 09:41:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,7 @@
 class ScTabViewShell;
 class ScAccessibleSpreadsheet;
 class ScChildrenShapes;
+class ScAccessibleEditObject;
 
 namespace accessibility
 {
@@ -336,6 +337,7 @@ private:
     ScSplitPos      meSplitPos;
     ScAccessibleSpreadsheet* mpAccessibleSpreadsheet;
     ScChildrenShapes* mpChildrenShapes;
+    ScAccessibleEditObject* mpTempAccEdit;
     com::sun::star::uno::Reference<drafts::com::sun::star::accessibility::XAccessible> mxTempAcc;
     sal_Bool mbCompleteSheetSelected;
 
