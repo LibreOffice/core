@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-26 20:15:00 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 20:47:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,7 @@ TabPage TP_COLUMN
         Text[ korean ] = "°³¼ö(~A)";
         Text[ language_user1 ] = " ";
         Text[ turkish ] = "S~ayı";
+        Text[ catalan ] = "~Cantidad";
     };
     NumericField ED_NUMBER
     {
@@ -144,7 +145,7 @@ TabPage TP_COLUMN
         Text [ ENGLISH ] = "Balance columns" ;
         Hide = TRUE;
         Text[ english_us ] = "Evenly distribute contents to all columns";
-        Text[ portuguese ] = "Optimizar ~colunas";
+        Text[ portuguese ] = "~Distribuir conteúdo em todas as colunas por igual";
         Text[ russian ] = "Ğàñïğåäåëèòü ğàâíîìåğíî ñîäåğæèìîå âî âñåõ êîëîíêàõ";
         Text[ greek ] = "ºóç êáôáíïìŞ ôïõ ğåñéå÷ïìİíïõ óå üëåò ôéò óôŞëåò";
         Text[ dutch ] = "Inhoud gelijkmatig verdelen over ~kolommen";
@@ -161,6 +162,7 @@ TabPage TP_COLUMN
         Text[ chinese_traditional ] = "¹ïºÙ½Õ¾ãÄæ¼e";
         Text[ arabic ] = "ÊæÒíÚ ÇáãÍÊæíÇÊ Úáì ßá ÇáÃÚãÏÉ ÈÇáÊÓÇæí";
         Text[ turkish ] = "S~ütunları dengele";
+        Text[ catalan ] = "~Optimar columnas";
     };
     FixedLine FL_COLUMNS
     {
@@ -191,6 +193,7 @@ TabPage TP_COLUMN
         Text[ korean ] = "¿­";
         Text[ language_user1 ] = " ";
         Text[ turkish ] = "Sütun";
+        Text[ catalan ] = "Columnas";
     };
 
     Window WN_BSP
@@ -264,6 +267,7 @@ TabPage TP_COLUMN
         Text[ korean ] = "³Êºñ";
         Text[ language_user1 ] = " ";
         Text[ turkish ] = "Genişlik";
+        Text[ catalan ] = "Ancho";
     };
     MetricField ED_1
     {
@@ -347,6 +351,7 @@ TabPage TP_COLUMN
         Text[ korean ] = "°£°İ";
         Text[ language_user1 ] = " ";
         Text[ turkish ] = "Aralık";
+        Text[ catalan ] = "Espacio";
     };
     MetricField ED_DIST1
     {
@@ -414,6 +419,7 @@ TabPage TP_COLUMN
         Text[ korean ] = "ÀÚµ¿ ³Êºñ(~W)";
         Text[ language_user1 ] = " ";
         Text[ turkish ] = "O~tomatik genişlik";
+        Text[ catalan ] = "Ancho ~automático";
     };
     FixedLine FL_LAYOUT
     {
@@ -444,6 +450,7 @@ TabPage TP_COLUMN
         Text[ korean ] = "¿­ ³Êºñ";
         Text[ language_user1 ] = " ";
         Text[ turkish ] = "Sütun genişliği";
+        Text[ catalan ] = "Ancho de columna";
     };
 
     FixedText FT_STYLE
@@ -476,6 +483,7 @@ TabPage TP_COLUMN
         Text[ korean ] = "Á¾·ù(~L)";
         Text[ language_user1 ] = " ";
         Text[ turkish ] = "T~ür";
+        Text[ catalan ] = "~Tipo";
     };
     ListBox LB_STYLE
     {
@@ -583,6 +591,10 @@ TabPage TP_COLUMN
     {
              < "Yok" ; Default ; > ;
     };
+    StringList [ catalan ] =
+    {
+             < "Ninguno" ; Default ; > ;
+    };
     };
     FixedText FT_HEIGHT
     {
@@ -614,6 +626,7 @@ TabPage TP_COLUMN
         Text[ korean ] = "³ôÀÌ(~H)";
         Text[ language_user1 ] = " ";
         Text[ turkish ] = "~Yüks.";
+        Text[ catalan ] = "A~ltura";
     };
     MetricField ED_HEIGHT
     {
@@ -660,6 +673,7 @@ TabPage TP_COLUMN
         Text[ korean ] = "À§Ä¡(~P)";
         Text[ language_user1 ] = " ";
         Text[ turkish ] = "~Konum";
+        Text[ catalan ] = "~Posición";
     };
     ListBox LB_POSITION
     {
@@ -817,6 +831,12 @@ TabPage TP_COLUMN
         < "Orta" ; Default ; > ;
         < "Alt" ; Default ; > ;
     };
+    StringList [ catalan ] =
+    {
+            < "Arriba" ; Default ; > ;
+        < "Centrado" ; Default ; > ;
+        < "Abajo" ; Default ; > ;
+    };
     };
     FixedLine FL_LINETYPE
     {
@@ -847,6 +867,7 @@ TabPage TP_COLUMN
         Text[ korean ] = "±¸ºĞÀÚ";
         Text[ language_user1 ] = " ";
         Text[ turkish ] = "Ayırma çizgisi";
+        Text[ catalan ] = "Línea de separación";
     };
     Text[ chinese_simplified ] = "À¸";
     Text[ russian ] = "Êîëîíêè";
@@ -860,6 +881,7 @@ TabPage TP_COLUMN
     Text[ korean ] = "¿­";
     Text[ language_user1 ] = " ";
     Text[ turkish ] = "Sütun";
+    Text[ catalan ] = "Columnas";
 };
 
 ModalDialog DLG_COLUMN
@@ -915,6 +937,7 @@ ModalDialog DLG_COLUMN
         Text[ arabic ] = "ÊØÈíŞ Úáì:";
         Text[ language_user1 ] = " ";
         Text[ turkish ] = "~Uygulanacağı yer:";
+        Text[ catalan ] = "~Aplicar a:";
     };
     ListBox LB_APPLY_TO
     {
@@ -1090,6 +1113,14 @@ ModalDialog DLG_COLUMN
         < "Çerçeve" ;               LISTBOX_FRAME       ; > ;
         < "Sayfa biçimi: " ;        LISTBOX_PAGE        ; > ;
     };
+    StringList [ catalan ] =
+    {
+            < "Selección" ;         LISTBOX_PAGE        ; > ;
+        < "Área actual" ;       LISTBOX_PAGE        ; > ;
+        < "Áreas seleccionadas" ;       LISTBOX_PAGE        ; > ;
+        < "Marco" ;         LISTBOX_PAGE        ; > ;
+        < "Estilo de página: " ;        LISTBOX_PAGE        ; > ;
+    };
     };
     Text[ english_us ] = "Columns";
     Text[ portuguese ] = "Colunas";
@@ -1110,4 +1141,5 @@ ModalDialog DLG_COLUMN
     Text[ arabic ] = "ÃÚãÏÉ";
     Text[ language_user1 ] = " ";
     Text[ turkish ] = "Sütun";
+    Text[ catalan ] = "Columnas";
 };
