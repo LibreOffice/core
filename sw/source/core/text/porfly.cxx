@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porfly.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:36:09 $
+ *  last change: $Author: obo $ $Date: 2004-08-16 07:27:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -389,40 +389,6 @@ SwFlyCntPortion::SwFlyCntPortion( const SwTxtFrm& rFrm,
     SetWhichPor( POR_FLYCNT );
 }
 
-// ============================================================================
-// OD 2004-04-13 #i26791#
-// helper class for notify that positioning of drawing object is in progress
-// ============================================================================
-class SwObjPositioningInProgress
-{
-    private:
-        SwAnchoredDrawObject* mpAnchoredDrawObj;
-
-    public:
-        SwObjPositioningInProgress( const bool _bIsDrawObj,
-                                    SdrObject* _pSdrObj );
-        ~SwObjPositioningInProgress();
-};
-
-SwObjPositioningInProgress::SwObjPositioningInProgress( const bool _bIsDrawObj,
-                                                        SdrObject* _pSdrObj ) :
-    mpAnchoredDrawObj( 0L )
-{
-    if ( _bIsDrawObj )
-    {
-        mpAnchoredDrawObj = static_cast<SwAnchoredDrawObject*>(
-                        ::GetUserCall( _pSdrObj )->GetAnchoredObj( _pSdrObj ));
-        mpAnchoredDrawObj->SetPositioningInProgress( true );
-    }
-}
-
-SwObjPositioningInProgress::~SwObjPositioningInProgress()
-{
-    if ( mpAnchoredDrawObj )
-    {
-        mpAnchoredDrawObj->SetPositioningInProgress( false );
-    }
-}
 
 /*************************************************************************
  *                  SwFlyCntPortion::SetBase()
