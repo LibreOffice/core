@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 17:01:27 $
+#   last change: $Author: cl $ $Date: 2001-03-19 09:16:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,6 +83,13 @@ CXXFILES =				\
         unotext2.cxx	\
         unofield.cxx	
 
+SVXLIGHTOBJFILES=\
+        $(OBJ)$/unoedsrc.obj	\
+        $(OBJ)$/unofored.obj	\
+        $(OBJ)$/unoforou.obj	\
+        $(OBJ)$/unotext.obj		\
+        $(OBJ)$/unotext2.obj	\
+        $(OBJ)$/unofield.obj
 
 SLOFILES =	\
         $(SLO)$/unoedsrc.obj	\

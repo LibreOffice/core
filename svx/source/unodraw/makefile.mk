@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: cl $ $Date: 2001-03-04 22:50:23 $
+#   last change: $Author: cl $ $Date: 2001-03-19 09:13:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -99,6 +99,31 @@ CXXFILES =				\
         unomtabl.cxx	\
         unodtabl.cxx	\
         gluepts.cxx
+
+SVXLIGHTOBJFILES=\
+        $(OBJ)$/unopool.obj \
+        $(OBJ)$/XPropertyTable.obj \
+        $(OBJ)$/UnoNameItemTable.obj \
+        $(OBJ)$/unoshape.obj	\
+        $(OBJ)$/unoipset.obj	\
+        $(OBJ)$/unoctabl.obj	\
+        $(OBJ)$/unoshap2.obj	\
+        $(OBJ)$/unoshap3.obj	\
+        $(OBJ)$/unopage.obj		\
+        $(OBJ)$/unoshtxt.obj	\
+        $(OBJ)$/unoshcol.obj	\
+        $(OBJ)$/unoprov.obj		\
+        $(OBJ)$/unomod.obj      \
+        $(OBJ)$/unonrule.obj	\
+        $(OBJ)$/unofdesc.obj	\
+        $(OBJ)$/unomlstr.obj	\
+        $(OBJ)$/unogtabl.obj	\
+        $(OBJ)$/unohtabl.obj	\
+        $(OBJ)$/unobtabl.obj	\
+        $(OBJ)$/unottabl.obj	\
+        $(OBJ)$/unomtabl.obj	\
+        $(OBJ)$/unodtabl.obj	\
+        $(OBJ)$/gluepts.obj
 
 SLOFILES =	\
         $(SLO)$/unopool.obj \

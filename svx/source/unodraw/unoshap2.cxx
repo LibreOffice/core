@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshap2.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-08 11:37:51 $
+ *  last change: $Author: cl $ $Date: 2001-03-19 09:13:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1263,9 +1263,7 @@ uno::Sequence< OUString > SAL_CALL SvxShapePolyPolygonBezier::getSupportedServic
 #ifndef _SVDOGRAF_HXX
 #include <svdograf.hxx>
 #endif
-#ifndef _SFX_DOCFILT_HACK_HXX
-#include <sfx2/docfilt.hxx>
-#endif
+#ifndef SVX_LIGHT
 #ifndef _SFXDOCFILE_HXX
 #include <sfx2/docfile.hxx>
 #endif
@@ -1274,6 +1272,7 @@ uno::Sequence< OUString > SAL_CALL SvxShapePolyPolygonBezier::getSupportedServic
 #endif
 #ifndef _SFX_FCONTNR_HXX
 #include <sfx2/fcontnr.hxx>
+#endif
 #endif
 
 #include "toolkit/unohlp.hxx"
@@ -1345,14 +1344,16 @@ void SAL_CALL SvxGraphicObject::setPropertyValue( const OUString& aPropertyName,
                  ( aGrafURL.GetToken( 0, ':' ) != String( RTL_CONSTASCII_STRINGPARAM( UNO_NAME_GRAPHOBJ_URLPKGPREFIX ) ).GetToken( 0, ':' ) ) )
         {
             // normal link
+            String              aFilterName;
+#ifndef SVX_LIGHT
             const SfxFilter*    pSfxFilter = NULL;
             SfxMedium           aSfxMedium( aURL, STREAM_READ | STREAM_SHARE_DENYNONE, FALSE );
-            String              aFilterName;
 
             SFX_APP()->GetFilterMatcher().GuessFilter( aSfxMedium, &pSfxFilter, SFX_FILTER_IMPORT, SFX_FILTER_NOTINSTALLED | SFX_FILTER_EXECUTABLE );
 
             if( !pSfxFilter )
             {
+#endif
                 INetURLObject aURLObj( aURL );
 
                 if( aURLObj.GetProtocol() == INET_PROT_NOT_VALID )
@@ -1368,9 +1369,11 @@ void SAL_CALL SvxGraphicObject::setPropertyValue( const OUString& aPropertyName,
                     GraphicFilter* pGrfFilter = GetGrfFilter();
                     aFilterName = pGrfFilter->GetImportFormatName( pGrfFilter->GetImportFormatNumberForShortName( aURLObj.getExtension() ) );
                 }
+#ifndef SVX_LIGHT
             }
             else
                 aFilterName = pSfxFilter->GetFilterName();
+#endif
 
             ((SdrGrafObj*)pObj)->SetGraphicLink( aURL, aFilterName );
         }

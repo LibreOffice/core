@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-08 14:44:48 $
+ *  last change: $Author: cl $ $Date: 2001-03-19 09:13:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,24 +97,25 @@
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
 #endif
+#ifndef SVX_LIGHT
 #ifndef _SVSTOR_HXX
 #include <so3/svstor.hxx>
 #endif
-#ifndef _CPPUHELPER_EXTRACT_HXX_
-#include <cppuhelper/extract.hxx>
 #endif
+#include <comphelper/extract.hxx>
 
 #include <toolkit/unohlp.hxx>
 
 #include <rtl/uuid.h>
 #include <rtl/memory.h>
 
+#ifndef SVX_LIGHT
 #ifndef _IPOBJ_HXX
 #include <so3/ipobj.hxx>
 #endif
-
 #ifndef _SFX_OBJSH_HXX
 #include <sfx2/objsh.hxx>
+#endif
 #endif
 
 #ifndef _SVX_XFLBSTIT_HXX
@@ -1110,6 +1111,7 @@ void SAL_CALL SvxShape::setPropertyValue( const OUString& rPropertyName, const u
         }
         case OWN_ATTR_CLSID:
         {
+#ifndef SVX_LIGHT
             OUString aCLSID;
             if( rVal >>= aCLSID )
             {
@@ -1185,6 +1187,7 @@ void SAL_CALL SvxShape::setPropertyValue( const OUString& rPropertyName, const u
                     }
                 }
             }
+#endif
             break;
         }
         case OWN_ATTR_EDGE_START_OBJ:
@@ -1535,6 +1538,7 @@ uno::Any SAL_CALL SvxShape::getPropertyValue( const OUString& PropertyName )
         {
             case OWN_ATTR_INTERNAL_OLE:
             {
+#ifndef SVX_LIGHT
                 sal_Bool bInternal = sal_False;
                 if( pObj && pObj->ISA(SdrOle2Obj))
                 {
@@ -1546,6 +1550,7 @@ uno::Any SAL_CALL SvxShape::getPropertyValue( const OUString& PropertyName )
                     }
                 }
                 aAny = uno::Any( &bInternal, ::getBooleanCppuType() );
+#endif
                 break;
             }
             case OWN_ATTR_TRANSFORMATION:
@@ -1655,6 +1660,7 @@ uno::Any SAL_CALL SvxShape::getPropertyValue( const OUString& PropertyName )
             case OWN_ATTR_OLESIZE:
             {
                 awt::Size aSize;
+#ifndef SVX_LIGHT
                 if( pObj->ISA(SdrOle2Obj))
                 {
                     SdrOle2Obj& aObj = *(SdrOle2Obj*)pObj;
@@ -1665,6 +1671,7 @@ uno::Any SAL_CALL SvxShape::getPropertyValue( const OUString& PropertyName )
                         aSize = awt::Size( aTmpSize.Width(), aTmpSize.Height() );
                     }
                 }
+#endif
                 aAny <<= aSize;
                 break;
             }
@@ -1690,6 +1697,7 @@ uno::Any SAL_CALL SvxShape::getPropertyValue( const OUString& PropertyName )
             case OWN_ATTR_CLSID:
             {
                 OUString aCLSID;
+#ifndef SVX_LIGHT
                 if( pObj && pObj->ISA(SdrOle2Obj))
                 {
                     const SvInPlaceObjectRef& rIPRef = ((SdrOle2Obj*)pObj)->GetObjRef();
@@ -1699,6 +1707,7 @@ uno::Any SAL_CALL SvxShape::getPropertyValue( const OUString& PropertyName )
                         aCLSID = rClassName.GetHexName();
                     }
                 }
+#endif
                 aAny <<= aCLSID;
                 break;
             }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlgrhlp.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mh $
+ *  last change: $Author: cl $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,9 @@
 #ifndef _SVSTOR_HXX
 #include <so3/svstor.hxx>
 #endif
+#ifndef _SOT_STORAGE_HXX
+#include <sot/storage.hxx>
+#endif
 #ifndef _GRFMGR_HXX
 #include <goodies/grfmgr.hxx>
 #endif
@@ -102,7 +105,7 @@ enum SvXMLGraphicHelperMode
 // - SvXMLGraphicHelper -
 // ----------------------
 
-class SvStorage;
+class SotStorage;
 
 class SvXMLGraphicHelper : public ::cppu::WeakComponentImplHelper1< ::com::sun::star::document::XGraphicObjectResolver >
 {
@@ -114,8 +117,8 @@ private:
     typedef ::_STL::set< ::rtl::OUString >                      URLSet;
 
     ::osl::Mutex                maMutex;
-    SvStorage*                  mpRootStorage;
-    SvStorageRef                mxGraphicStorage;
+    SotStorage*                 mpRootStorage;
+    SotStorageRef               mxGraphicStorage;
     ::rtl::OUString             maCurStorageName;
     URLPairVector               maGrfURLs;
     GraphicObjectVector         maGrfObjs;
@@ -128,8 +131,8 @@ private:
     sal_Bool                    ImplGetStreamNames( const ::rtl::OUString& rURLStr,
                                                     ::rtl::OUString& rPictureStorageName,
                                                     ::rtl::OUString& rPictureStreamName );
-    SvStorageRef                ImplGetGraphicStorage( const ::rtl::OUString& rPictureStorageName );
-    SvStorageStreamRef          ImplGetGraphicStream( const ::rtl::OUString& rPictureStorageName,
+    SotStorageRef               ImplGetGraphicStorage( const ::rtl::OUString& rPictureStorageName );
+    SotStorageStreamRef         ImplGetGraphicStream( const ::rtl::OUString& rPictureStorageName,
                                                       const ::rtl::OUString& rPictureStreamName,
                                                       BOOL bTruncate );
     Graphic                     ImplReadGraphic( const ::rtl::OUString& rPictureStorageName,
@@ -144,13 +147,13 @@ protected:
 
                                 SvXMLGraphicHelper();
                                 ~SvXMLGraphicHelper();
-    void                        Init( SvStorage& rXMLStorage,
+    void                        Init( SotStorage& rXMLStorage,
                                       SvXMLGraphicHelperMode eCreateMode,
                                       BOOL bDirect );
 
 public:
 
-    static SvXMLGraphicHelper*  Create( SvStorage& rXMLStorage,
+    static SvXMLGraphicHelper*  Create( SotStorage& rXMLStorage,
                                         SvXMLGraphicHelperMode eCreateMode,
                                         BOOL bDirect = TRUE );
     static void                 Destroy( SvXMLGraphicHelper* pSvXMLGraphicHelper );

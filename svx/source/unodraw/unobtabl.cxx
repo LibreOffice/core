@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unobtabl.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-31 19:35:22 $
+ *  last change: $Author: cl $ $Date: 2001-03-19 09:13:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,8 +73,10 @@
 #ifndef _SVX_XIT_HXX
 #include <xit.hxx>
 #endif
+#ifndef SVX_LIGHT
 #ifndef _SFXDOCFILE_HXX
 #include <sfx2/docfile.hxx>
+#endif
 #endif
 
 #ifndef _SVX_UNONAMEITEMTABLE_HXX_
@@ -151,6 +153,13 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoBitmapTable_createInstance( Sdr
     return *new SvxUnoBitmapTable(pModel);
 }
 
+#ifndef _STREAM_HXX
+#include <tools/stream.hxx>
+#endif
+#ifndef _UNOTOOLS_LOCALFILEHELPER_HXX
+#include <unotools/localfilehelper.hxx>
+#endif
+
 /** returns a GraphicObject for this URL */
 GraphicObject CreateGraphicObjectFromURL( const ::rtl::OUString &rURL ) throw()
 {
@@ -164,12 +173,21 @@ GraphicObject CreateGraphicObjectFromURL( const ::rtl::OUString &rURL ) throw()
     }
     else
     {
+        Graphic     aGraphic;
+
+#ifndef SVX_LIGHT
         SfxMedium   aMedium( aURL, STREAM_READ, TRUE );
         SvStream*   pStream = aMedium.GetInStream();
-        Graphic     aGraphic;
 
         if( pStream )
             GraphicConverter::Import( *pStream, aGraphic );
+#else
+        String aSystemPath( rURL );
+        utl::LocalFileHelper::ConvertURLToSystemPath( aSystemPath, aSystemPath );
+        SvFileStream aFile( aSystemPath, STREAM_READ );
+        GraphicConverter::Import( aFile, aGraphic );
+#endif
+
 
         return GraphicObject( aGraphic );
     }
