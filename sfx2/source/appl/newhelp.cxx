@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2000-12-08 13:19:00 $
+ *  last change: $Author: obo $ $Date: 2000-12-08 14:07:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,8 +198,9 @@ void IndexTabPage_Impl::InitializeIndex()
 
     try
     {
-        ::rtl::OUString aURL( HELP_URL );
-        aURL += aFactory;
+        ::rtl::OUString aURL = HELP_URL;
+        ::rtl::OUString _aFactory( aFactory );
+        aURL += _aFactory;
         Content aCnt( aURL, Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > xInfo = aCnt.getProperties();
         if ( xInfo->hasPropertyByName( PROPERTY_KEYWORDLIST ) )
