@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoadmin.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:53:08 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:24:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,13 +101,6 @@
 
 #define THISREF()   static_cast< XServiceInfo* >(this)
 
-using namespace dbaui;
-
-extern "C" void SAL_CALL createRegistryInfo_ODatabaseAdministrationDialog()
-{
-    static OMultiInstanceAutoRegistration< ODatabaseAdministrationDialog > aAutoRegistration;
-}
-
 //.........................................................................
 namespace dbaui
 {
@@ -126,6 +119,9 @@ ODatabaseAdministrationDialog::ODatabaseAdministrationDialog(const Reference< XM
     ,m_pItemPoolDefaults(NULL)
     ,m_pCollection(NULL)
 {
+    m_pCollection = new ODsnTypeCollection();
+    m_pCollection->initUserDriverTypes(m_xORB);
+    ODbAdminDialog::createItemSet(m_pDatasourceItems, m_pItemPool, m_pItemPoolDefaults, m_pCollection);
 }
 
 //-------------------------------------------------------------------------
@@ -143,131 +139,12 @@ ODatabaseAdministrationDialog::~ODatabaseAdministrationDialog()
     delete m_pCollection;
     m_pCollection = NULL;
 }
-
-//-------------------------------------------------------------------------
-Sequence<sal_Int8> SAL_CALL ODatabaseAdministrationDialog::getImplementationId(  ) throw(RuntimeException)
-{
-    static ::cppu::OImplementationId aId;
-    return aId.getImplementationId();
-}
-
-//-------------------------------------------------------------------------
-Reference< XInterface > SAL_CALL ODatabaseAdministrationDialog::Create(const Reference< XMultiServiceFactory >& _rxFactory)
-{
-    return *(new ODatabaseAdministrationDialog(_rxFactory));
-}
-
-//-------------------------------------------------------------------------
-::rtl::OUString SAL_CALL ODatabaseAdministrationDialog::getImplementationName() throw(RuntimeException)
-{
-    return getImplementationName_Static();
-}
-
-//-------------------------------------------------------------------------
-::rtl::OUString ODatabaseAdministrationDialog::getImplementationName_Static() throw(RuntimeException)
-{
-    return ::rtl::OUString::createFromAscii("org.openoffice.comp.dbu.ODatasourceAdministrationDialog");
-}
-
-//-------------------------------------------------------------------------
-::comphelper::StringSequence SAL_CALL ODatabaseAdministrationDialog::getSupportedServiceNames() throw(RuntimeException)
-{
-    return getSupportedServiceNames_Static();
-}
-
-//-------------------------------------------------------------------------
-::comphelper::StringSequence ODatabaseAdministrationDialog::getSupportedServiceNames_Static() throw(RuntimeException)
-{
-    ::comphelper::StringSequence aSupported(1);
-    aSupported.getArray()[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdb.DatasourceAdministrationDialog");
-    return aSupported;
-}
-
-//-------------------------------------------------------------------------
-Reference<XPropertySetInfo>  SAL_CALL ODatabaseAdministrationDialog::getPropertySetInfo() throw(RuntimeException)
-{
-    Reference<XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
-    return xInfo;
-}
-
-//-------------------------------------------------------------------------
-::cppu::IPropertyArrayHelper& ODatabaseAdministrationDialog::getInfoHelper()
-{
-    return *const_cast<ODatabaseAdministrationDialog*>(this)->getArrayHelper();
-}
-
-//------------------------------------------------------------------------------
-::cppu::IPropertyArrayHelper* ODatabaseAdministrationDialog::createArrayHelper( ) const
-{
-    Sequence< Property > aProps;
-    describeProperties(aProps);
-    return new ::cppu::OPropertyArrayHelper(aProps);
-}
-
 //-------------------------------------------------------------------------
 void ODatabaseAdministrationDialog::destroyDialog()
 {
     ODatabaseAdministrationDialogBase::destroyDialog();
     ODbAdminDialog::destroyItemSet(m_pDatasourceItems, m_pItemPool, m_pItemPoolDefaults);
 }
-
-//------------------------------------------------------------------------------
-Dialog* ODatabaseAdministrationDialog::createDialog(Window* _pParent)
-{
-    if (!m_pCollection)
-    {
-        m_pCollection = new ODsnTypeCollection();
-        m_pCollection->initUserDriverTypes(m_xORB);
-    }
-
-    ODbAdminDialog::createItemSet(m_pDatasourceItems, m_pItemPool, m_pItemPoolDefaults, m_pCollection);
-    ODbAdminDialog* pDialog = new ODbAdminDialog(_pParent, m_pDatasourceItems, m_xORB);
-
-    // the mode which the dialog should operate in
-    implSetOperationMode(pDialog);
-
-    // the initial selection
-    if (m_sInitialSelection.getLength())
-        pDialog->selectDataSource(m_sInitialSelection);
-
-    return pDialog;
-}
-
-//------------------------------------------------------------------------------
-void ODatabaseAdministrationDialog::implSetOperationMode(ODbAdminDialog* _pDialog)
-{
-    // .........................................................................
-    // some checks
-    DBG_ASSERT(_pDialog, "ODatabaseAdministrationDialog::implSetOperationMode: invalid dialog!");
-    if (!_pDialog)
-        return;
-
-    DBG_ASSERT(!_pDialog->IsInExecute(), "ODatabaseAdministrationDialog::implSetOperationMode: not to be called if the dialog is beeing executed!");
-    if (_pDialog->IsInExecute())
-        return;
-
-    // .........................................................................
-    // translate the string into an OperationMode
-    ODbAdminDialog::OperationMode eMode = ODbAdminDialog::omFull;
-    if (0 == m_sOperationMode.compareToAscii("SingleEdit"))
-        eMode = ODbAdminDialog::omSingleEdit;
-    else if (0 == m_sOperationMode.compareToAscii("SingleEditFixedType"))
-        eMode = ODbAdminDialog::omSingleEditFixedType;
-#ifdef DBG_UTIL
-    else if ((0 != m_sOperationMode.compareToAscii("AdministrateAll")) && (0 != m_sOperationMode.getLength()))
-        DBG_ERROR("ODatabaseAdministrationDialog::implSetOperationMode: unsupported (unknown) mode!");
-#endif
-
-    // .........................................................................
-    // forward the mode to the dialog
-    if (_pDialog->getMode() == eMode)
-        // nothing to to
-        return;
-
-    // and now really set the mode
-    _pDialog->setMode(eMode);
-}
-
 //------------------------------------------------------------------------------
 void ODatabaseAdministrationDialog::implInitialize(const Any& _rValue)
 {
@@ -276,20 +153,11 @@ void ODatabaseAdministrationDialog::implInitialize(const Any& _rValue)
     {
         if (0 == aProperty.Name.compareToAscii("InitialSelection"))
         {
-            aProperty.Value >>= m_sInitialSelection;
-            if (m_pDialog)
-                static_cast<ODbAdminDialog*>(m_pDialog)->selectDataSource(m_sInitialSelection);
-            return;
-        }
-        if (0 == aProperty.Name.compareToAscii("Mode"))
-        {
-            aProperty.Value >>= m_sOperationMode;
-            if (m_pDialog)
-                implSetOperationMode(static_cast<ODbAdminDialog*>(m_pDialog));
-            return;
+            m_aInitialSelection = aProperty.Value;
         }
     }
-    ODatabaseAdministrationDialogBase::implInitialize(_rValue);
+    else
+        ODatabaseAdministrationDialogBase::implInitialize(_rValue);
 }
 
 //.........................................................................
