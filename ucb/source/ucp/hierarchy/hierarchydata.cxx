@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hierarchydata.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-16 14:54:18 $
+ *  last change: $Author: kso $ $Date: 2000-11-17 09:03:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -292,9 +292,12 @@ sal_Bool HierarchyEntry::getData( HierarchyEntryData& rData )
     Any aTargetURL;
     if ( getData( aTitle, aTargetURL, sal_False, Any() ) )
     {
-        if ( ( aTitle >>= rData.aTitle )
-             && ( aTargetURL >>= rData.aTargetURL ) )
-            return sal_True;
+        if ( !( aTitle >>= rData.aTitle ) ||
+             !( aTargetURL >>= rData.aTargetURL ) )
+            VOS_ENSURE( sal_False,
+                        "HierarchyEntry::getData - Wrong Any type!" );
+
+        return sal_True;
     }
     return sal_False;
 }
