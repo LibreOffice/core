@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ListBox.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-02 10:28:06 $
+ *  last change: $Author: fs $ $Date: 2001-04-02 13:32:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,9 @@
 #include <connectivity/dbconversion.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATTYPES_HPP_
+#include <com/sun/star/util/XNumberFormatTypes.hpp>
+#endif
 #ifndef _COM_SUN_STAR_SDB_SQLERROREVENT_HPP_
 #include <com/sun/star/sdb/SQLErrorEvent.hpp>
 #endif
@@ -135,9 +138,19 @@
 #ifndef _COM_SUN_STAR_SDB_SQLCONTEXT_HPP_
 #include <com/sun/star/sdb/SQLContext.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDB_COMMANDTYPE_HPP_
+#include <com/sun/star/sdb/CommandType.hpp>
+#endif
+#ifndef _CONNECTIVITY_DBTOOLS_HXX_
+#include <connectivity/dbtools.hxx>
+#endif
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
+#ifndef _ISOLANG_HXX
+#include <tools/isolang.hxx>
+#endif
 
-
-using namespace dbtools;
 
 //.........................................................................
 namespace frm
@@ -153,6 +166,7 @@ using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
+using namespace ::dbtools;
 
 //==================================================================
 //= OListBoxModel
@@ -590,7 +604,14 @@ void OListBoxModel::loadData()
         return;
     }
 
-    Reference<XResultSet> xListCursor;
+    Reference< XRowSet > xContentRowSet(m_xServiceFactory->createInstance(SRV_SDB_ROWSET), UNO_QUERY);
+    Reference< XPropertySet > xContentSetProperties(xContentRowSet, UNO_QUERY);
+    Reference<XResultSet> xListCursor(xContentSetProperties, UNO_QUERY);
+    if (!xListCursor.is())
+    {
+        DBG_ERROR("OListBoxModel::loadData: could not instantiate a RowSet!");
+        return;
+    }
 
     // Wenn der ListSourceType keine Werteliste ist,
     // muss die String-Seq zu einem String zusammengefasst werden
@@ -606,9 +627,9 @@ void OListBoxModel::loadData()
     if (m_aBoundColumn.getValueType().getTypeClass() == TypeClass_SHORT)
         m_aBoundColumn >>= nBoundColumn;
 
-    Reference<XStatement> xStmt;
     try
     {
+        sal_Bool bExecute = sal_False;
         switch (m_eListSourceType)
         {
             case ListSourceType_TABLEFIELDS:
@@ -695,30 +716,34 @@ void OListBoxModel::loadData()
                 aStatement += ::rtl::OUString::createFromAscii(" FROM ");
                 aStatement += quoteTableName(xMeta, sListSource);
 
-                xStmt = xConnection->createStatement();
-                xListCursor = xStmt->executeQuery(aStatement);
+                xContentSetProperties->setPropertyValue(PROPERTY_COMMAND, makeAny(aStatement));
+                bExecute = sal_True;
             }   break;
             case ListSourceType_QUERY:
             {
                 Reference<XQueriesSupplier> xSupplyQueries(xConnection, UNO_QUERY);
                 Reference<XPropertySet> xQuery(*(InterfaceRef*)xSupplyQueries->getQueries()->getByName(sListSource).getValue(), UNO_QUERY);
-                xStmt = xConnection->createStatement();
-                Reference<XPropertySet>(xStmt, UNO_QUERY)->setPropertyValue(PROPERTY_ESCAPE_PROCESSING, xQuery->getPropertyValue(PROPERTY_ESCAPE_PROCESSING));
+                xContentSetProperties->setPropertyValue(PROPERTY_ESCAPE_PROCESSING, xQuery->getPropertyValue(PROPERTY_ESCAPE_PROCESSING));
 
-                ::rtl::OUString sCommand;
-                xQuery->getPropertyValue(PROPERTY_COMMAND) >>= sCommand;
-                xListCursor = xStmt->executeQuery(sCommand);
+                xContentSetProperties->setPropertyValue(PROPERTY_COMMAND, xQuery->getPropertyValue(PROPERTY_COMMAND));
+                bExecute = sal_True;
             }   break;
             default:
             {
-                xStmt = xConnection->createStatement();
                 if (ListSourceType_SQLPASSTHROUGH == m_eListSourceType)
-                {
-                    Reference<XPropertySet> xStatementProps(xStmt, UNO_QUERY);
-                    xStatementProps->setPropertyValue(PROPERTY_ESCAPE_PROCESSING, ::cppu::bool2any((sal_False)));
-                }
-                xListCursor = xStmt->executeQuery(sListSource);
+                    xContentSetProperties->setPropertyValue(PROPERTY_ESCAPE_PROCESSING, ::cppu::bool2any((sal_False)));
+                xContentSetProperties->setPropertyValue(PROPERTY_COMMAND, makeAny(sListSource));
+                bExecute = sal_True;
             }
+        }
+
+        if (bExecute)
+        {
+            Reference< XPropertySet > xFormProps(xForm, UNO_QUERY);
+
+            xContentSetProperties->setPropertyValue(PROPERTY_COMMANDTYPE, makeAny(CommandType::COMMAND));
+            xContentSetProperties->setPropertyValue(PROPERTY_DATASOURCE, xFormProps->getPropertyValue(PROPERTY_DATASOURCE));
+            xContentRowSet->execute();
         }
     }
     catch(SQLException& eSQL)
@@ -770,23 +795,42 @@ void OListBoxModel::loadData()
                     return;
                 }
 
+                Reference<XNumberFormatsSupplier> xSupplier = getNumberFormats(xConnection, sal_False, m_xServiceFactory);
+
                 ::com::sun::star::util::Date aNullDate(DBTypeConversion::getStandardDate());
                 sal_Int32 nFormatKey = 0;
                 sal_Int32 nFieldType = DataType::OTHER;
                 sal_Int16 nKeyType   = NumberFormat::UNDEFINED;
+                sal_Bool bHaveFormat = sal_False;
+                Reference<XPropertySet> xFieldAsSet(xDataField, UNO_QUERY);
                 try
                 {
-                    Reference<XPropertySet> xFieldAsSet(xDataField, UNO_QUERY);
                     xFieldAsSet->getPropertyValue(PROPERTY_FIELDTYPE) >>= nFieldType;
-                    xFieldAsSet->getPropertyValue(PROPERTY_FORMATKEY) >>= nFormatKey;
+                    bHaveFormat = (xFieldAsSet->getPropertyValue(PROPERTY_FORMATKEY) >>= nFormatKey);
                 }
                 catch(Exception&)
                 {
                     DBG_ERROR("OListBoxModel::loadData: could not obtain the field type and/or format key of the bound column!");
                 }
 
+                if (!bHaveFormat)
+                {
+                    String sLanguage, sCountry;
+                    ConvertLanguageToIsoNames(Application::GetAppInternational().GetLanguage(), sLanguage, sCountry);
+                    Locale aAppLanguage(
+                        sLanguage,
+                        sCountry,
+                        ::rtl::OUString());
+
+                    if (xSupplier.is())
+                    {
+                        Reference< XNumberFormatTypes > xNumTypes(xSupplier->getNumberFormats(), UNO_QUERY);
+                        if (xNumTypes.is())
+                            nFormatKey = getDefaultNumberFormat(xFieldAsSet, xNumTypes, aAppLanguage);
+                    }
+                }
+
                 Reference<XNumberFormatter> xFormatter;
-                Reference<XNumberFormatsSupplier> xSupplier = getNumberFormats(xConnection, sal_False, m_xServiceFactory);
                 if (xSupplier.is())
                 {
                     xFormatter = Reference<XNumberFormatter>(
