@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-01 11:01:49 $
+ *  last change: $Author: kz $ $Date: 2001-06-05 22:00:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,7 +160,7 @@ String STR_FILE_NOT_FOUND
     Text[ italian ] = "Non è stato possibile trovare il file \"%1\" nel percorso \"%2\".";
     Text[ danish ] = "Det var ikke muligt at finde filen \"%1\" på sti \"%2\".";
     Text[ swedish ] = "Filen \"%1\" kunde inte hittas i sökväg \"%2\".";
-    Text[ polish ] = "Nie znaleziono pliku \"%1\" w ?cie¿ce \"%2\".";
+    Text[ polish ] = "Nie znaleziono pliku \"%1\" w œcie¿ce \"%2\".";
     Text[ portuguese_brazilian ] = "The file \"%1\" could not be found.";
     Text[ japanese ] = "Ì§²Ùu%1v‚ÍÊß½u%2v‚ÉŒ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½B";
     Text[ korean ] = "\"%1\" ÆÄÀÏÀ»\"%2\" °æ·Î¿¡¼­ Ã£Áö¡¡¸øÇß½À´Ï´Ù.";
@@ -367,6 +367,26 @@ TabDialog DLG_MULTI_TOX
         Size = MAP_APPFONT (  200, 10 ) ;
         Text = "~Vorschau" ;
         Text [ ENGLISH ] = "Show ~preview" ;
+        Text[ english_us ] = "Sho~w preview";
+        Text[ portuguese ] = "~Mostrar Previsualizar";
+        Text[ russian ] = "Âêëş÷èòü ïğîñìîòğ";
+        Text[ greek ] = "Åì~öÜíéóç ğñïåğéóêüğçóçò";
+        Text[ dutch ] = "~Voorbeeld weergeven";
+        Text[ french ] = "Afficher l'~aperçu";
+        Text[ spanish ] = "Previsuali~zación";
+        Text[ finnish ] = "Näytä ~esikatselu";
+        Text[ italian ] = "Mostra anteprima";
+        Text[ danish ] = "Vis eksempel";
+        Text[ swedish ] = "F~örhandsvisning";
+        Text[ polish ] = "Wyœwietl podgl¹d";
+        Text[ portuguese_brazilian ] = "Show ~preview";
+        Text[ japanese ] = "ÌßÚËŞ­°‚Ì•\\¦(~W)";
+        Text[ korean ] = "¹Ì¸®º¸±â ³ªÅ¸³»±â(~W)";
+        Text[ chinese_simplified ] = "ÏÔÊ¾Ô¤ÀÀ(~W)";
+        Text[ chinese_traditional ] = "Åã¥Ü¹wÄı(~W)";
+        Text[ turkish ] = "Önizlemeyi görüntüle";
+        Text[ arabic ] = "ÅÙåÇÑ ÇáãÚÇíäÉ";
+        Text[ catalan ] = "Previsuali~zación";
     };
     Text[ english_us ] = "Insert Index";
     Text[ portuguese ] = "Inserir índice";
@@ -429,7 +449,7 @@ TabPage TP_TOX_SELECT
         Text[ spanish ] = "Tipo y título";
         Text[ italian ] = "Tipo e titolo";
         Text[ danish ] = "Type og overskrift";
-        Text[ swedish ] = "Typ och titel";
+        Text[ swedish ] = "Typ och rubrik";
         Text[ polish ] = "Typ i tytu³";
         Text[ portuguese_brazilian ] = "Type and title";
         Text[ japanese ] = "í—Ş‚ÆÀ²ÄÙ";
@@ -457,7 +477,7 @@ TabPage TP_TOX_SELECT
         Text[ spanish ] = "Títu~lo";
         Text[ italian ] = "T~itolo";
         Text[ danish ] = "Overskrift";
-        Text[ swedish ] = "T~itel";
+        Text[ swedish ] = "Rubr~ik";
         Text[ polish ] = "Tytu³";
         Text[ portuguese_brazilian ] = "Title";
         Text[ japanese ] = "À²ÄÙ(~T)";
@@ -642,7 +662,7 @@ TabPage TP_TOX_SELECT
     };
     StringList [ polish ] =
     {
-            < "Spis tre?ci" ;   TO_CONTENT      ;> ;
+            < "Spis treœci" ;   TO_CONTENT      ;> ;
         < "Skorowidz" ;     TO_INDEX        ;> ;
         < "Spis obrazów" ; TO_ILLUSTRATION ;> ;
         < "Spis tabel" ;    TO_TABLE        ;> ;
@@ -776,6 +796,26 @@ TabPage TP_TOX_SELECT
         Size = MAP_APPFONT ( 248, 8 ) ;
         Text = "~Verzeichnis erstellen" ;
         Text [ ENGLISH ] = "Create index of" ;
+        Text[ english_us ] = "Create index of";
+        Text[ portuguese ] = "Create index of";
+        Text[ russian ] = "Create index of";
+        Text[ greek ] = "Create index of";
+        Text[ dutch ] = "Create index of";
+        Text[ french ] = "Create index of";
+        Text[ spanish ] = "Create index of";
+        Text[ finnish ] = "Create index of";
+        Text[ italian ] = "Create index of";
+        Text[ danish ] = "Create index of";
+        Text[ swedish ] = "Skapa förte~ckning";
+        Text[ polish ] = "Create index of";
+        Text[ portuguese_brazilian ] = "Create index of";
+        Text[ japanese ] = "Create index of";
+        Text[ korean ] = "Create index of";
+        Text[ chinese_simplified ] = "Create index of";
+        Text[ chinese_traditional ] = "Create index of";
+        Text[ turkish ] = "Create index of";
+        Text[ arabic ] = "Create index of";
+        Text[ catalan ] = "Create index of";
     };
     FixedText       FT_AREA
     {
@@ -783,6 +823,26 @@ TabPage TP_TOX_SELECT
         Size = MAP_APPFONT (  30, 8 ) ;
         Text = "Für" ;
         Text [ ENGLISH ] = "Type" ;
+        Text[ english_us ] = "Type";
+        Text[ portuguese ] = "Type";
+        Text[ russian ] = "Type";
+        Text[ greek ] = "Type";
+        Text[ dutch ] = "Type";
+        Text[ french ] = "Type";
+        Text[ spanish ] = "Type";
+        Text[ finnish ] = "Type";
+        Text[ italian ] = "Type";
+        Text[ danish ] = "Type";
+        Text[ swedish ] = "För";
+        Text[ polish ] = "Type";
+        Text[ portuguese_brazilian ] = "Type";
+        Text[ japanese ] = "Type";
+        Text[ korean ] = "Type";
+        Text[ chinese_simplified ] = "Type";
+        Text[ chinese_traditional ] = "Type";
+        Text[ turkish ] = "Type";
+        Text[ arabic ] = "Type";
+        Text[ catalan ] = "Type";
     };
     ListBox         LB_AREA
     {
@@ -926,6 +986,26 @@ TabPage TP_TOX_SELECT
         Size = MAP_APPFONT ( 80 , 8 ) ;
         Text = "Ebenen auswerten" ;
         Text [ ENGLISH ] = "Evaluation level" ;
+        Text[ english_us ] = "Evaluation level";
+        Text[ portuguese ] = "A~valiar até nível";
+        Text[ russian ] = "Îöåíèòü äî óğîâíÿ";
+        Text[ greek ] = "Áğïôßìçóç ùò åğßğåäï";
+        Text[ dutch ] = "~Aantal niveaus";
+        Text[ french ] = "~Niveau de profondeur souhaité";
+        Text[ spanish ] = "E~valuar hasta nivel";
+        Text[ finnish ] = "Arviointitaso";
+        Text[ italian ] = "Val~uta fino a livello";
+        Text[ danish ] = "Evaluer indtil niveau";
+        Text[ swedish ] = "Utvärdera nivåer";
+        Text[ polish ] = "Ewaluuj do poziomu";
+        Text[ portuguese_brazilian ] = "Evaluation level";
+        Text[ japanese ] = "Ÿ‚ÌÚÍŞÙ‚Ü‚Å“K—p";
+        Text[ korean ] = "Æò°¡£¬°èÃş±îÁö";
+        Text[ chinese_simplified ] = "°üÀ¨±êÌâ¼¶±ğ";
+        Text[ chinese_traditional ] = "¥]¬A¼ĞÃD¯Å§O";
+        Text[ turkish ] = "Şu düzeye kadar:";
+        Text[ arabic ] = "ÊŞííã ÍÊì ÇáãÓÊæì";
+        Text[ catalan ] = "E~valuar hasta nivel";
     };
     FixedLine        FL_CREATEFROM
     {
@@ -1387,7 +1467,7 @@ TabPage TP_TOX_SELECT
         Text[ italian ] = "Riunisci con ~seg. o segg.";
         Text[ danish ] = "Kombiner med f. eller ff.";
         Text[ swedish ] = "Kombinera med ~f eller ff";
-        Text[ polish ] = "Stre?æ za pomoc¹ s lub ss";
+        Text[ polish ] = "Streœæ za pomoc¹ s lub ss";
         Text[ portuguese_brazilian ] = "Combine identical entries with ~pp.";
         Text[ japanese ] = "‘±‚«Íß°¼Ş‚ğ ~p ‚Ü‚½‚Í pp ‚Å•\\¦";
         Text[ korean ] = "~f ¶Ç´Â ff µ¿ÀÏÇ×¸ñÀ» ÇÏ³ª·Î ¹­À½";
@@ -1775,7 +1855,7 @@ TabPage TP_TOX_SELECT
         Text[ italian ] = "Livello dal capitolo ~sorgente";
         Text[ danish ] = "Niveau fra kildekapitel";
         Text[ swedish ] = "Nivå från urs~prungskapitel";
-        Text[ polish ] = "Poziom ze ?ród³a";
+        Text[ polish ] = "Poziom ze Ÿród³a";
         Text[ portuguese_brazilian ] = "Use level from source";
         Text[ japanese ] = "‚à‚Æ‚ÌÍ‚ÌÚÍŞÙ";
         Text[ korean ] = "¿ø·¡ Àå¿¡¼­ÀÇ ¼öÁØ »ç¿ë";
@@ -2034,7 +2114,7 @@ TabPage TP_TOX_SELECT
         Text[ spanish ] = "Crear de los siguientes objetos";
         Text[ italian ] = "Crea dai seguenti oggetti";
         Text[ danish ] = "Opret ud fra følgende objekter";
-        Text[ swedish ] = "Skapa utifrån följande objekt";
+        Text[ swedish ] = "Skapa från följande objekt";
         Text[ polish ] = "Utwórz z nastêpuj¹cych obiektów";
         Text[ portuguese_brazilian ] = "Create from the following objects";
         Text[ japanese ] = "Ÿ‚ÌµÌŞ¼Şª¸Ä‚©‚çì¬";
@@ -2159,10 +2239,10 @@ TabPage TP_TOX_SELECT
         Text[ italian ] = "File di selezione per indice analitico (*.sdi)";
         Text[ danish ] = "Markeringsfil for stikordsregister (*.sdi)";
         Text[ swedish ] = "Markeringsfil för sakregister (*.sdi)";
-        Text[ polish ] = "Plik zaznaczaj¹cy dla zestawu hase³ (*.sdi) ";
+        Text[ polish ] = "Plik selekcyjny, przeznaczony dla skorowidza (*.sdi)";
         Text[ portuguese_brazilian ] = "Mark up file for index";
         Text[ japanese ] = "õˆø—p‚Ì‘I‘ğÌ§²Ù (*.sdi)";
-        Text[ korean ] = "Å°¿öµå »öÀÎÀ» À§ÇÑ ¸¶Ä¿ ÆÄÀÏ (*.sdi)";
+        Text[ korean ] = "Å°¿öµå »öÀÎÀ» À§ÇÑ ¼±ÅÃ Ç¥½Ã ÆÄÀÏ (*.sdi)";
         Text[ chinese_simplified ] = "ÓÃÓÚË÷ÒıÄ¿Â¼µÄ±ê¼ÇÎÄ¼ş(*.sdi)";
         Text[ chinese_traditional ] = "¥Î©ó¯Á¤Ş¥Ø¿ıªº¼Ğ°OÀÉ®×(*.sdi)";
         Text[ arabic ] = "ãáİ ÇáÊÍÏíÏ ááİåÑÓ ÇáÃÈÌÏí (*.sdi)";
@@ -2899,7 +2979,7 @@ TabPage TP_TOX_ENTRY
         Size = MAP_APPFONT ( 40, 14 ) ;
         Text = "H~yperlink" ;
         Text [ ENGLISH ] = "Hyperlink" ;
-        Text[ english_us ] = "~Hyperlink";
+        Text[ english_us ] = "H~yperlink";
         Text[ portuguese ] = "~Hiperligação";
         Text[ russian ] = "Ãèïåğññûëêà";
         Text[ greek ] = "Õğåñ-óıíäåóç";
@@ -3308,6 +3388,26 @@ TabPage TP_TOX_ENTRY
         Size = MAP_APPFONT ( 100, 10 ) ;
         Text = "Rechtsbündig" ;
         Text [ ENGLISH ] = "Right border" ;
+        Text[ english_us ] = "T~o right margin";
+        Text[ portuguese ] = "Na margem ~direita";
+        Text[ russian ] = "Â ïğàâîì ïîëå";
+        Text[ greek ] = "Óôï äåîß ğåñéèşñéï";
+        Text[ dutch ] = "Aan rechter ~marge";
+        Text[ french ] = "Bord ~droit";
+        Text[ spanish ] = "Al bor~de derecho";
+        Text[ finnish ] = "Oikea ~yläreuna";
+        Text[ italian ] = "Bordo dest~ro";
+        Text[ danish ] = "Ved højre margen";
+        Text[ swedish ] = "Högerjusterad";
+        Text[ polish ] = "Z prawej krawêdzi";
+        Text[ portuguese_brazilian ] = "Right border";
+        Text[ japanese ] = "Íß°¼Ş‰E’[‚Ö(~O)";
+        Text[ korean ] = "¿À¸¥ÂÊ ¿©¹é(~O)";
+        Text[ chinese_simplified ] = "ÓÒ±ß¿Õ°×(~O)";
+        Text[ chinese_traditional ] = "¦b¥kÃäªÅ¥Õ¤W(~O)";
+        Text[ turkish ] = "Sağ kenar";
+        Text[ arabic ] = "Úáì ÇáåÇãÔ ÇáÃíãä";
+        Text[ catalan ] = "Al bor~de derecho";
     };
     FixedLine FL_ENTRY
     {
@@ -3528,7 +3628,7 @@ TabPage TP_TOX_ENTRY
         Text[ italian ] = "Contenuto";
         Text[ danish ] = "Indhold";
         Text[ swedish ] = "I~nnehåll";
-        Text[ polish ] = "Zawarto?æ";
+        Text[ polish ] = "Zawartoœæ";
         Text[ portuguese_brazilian ] = "Sort by content";
         Text[ japanese ] = "“à—e‡(~C)";
         Text[ korean ] = "³»¿ë(~C)";
@@ -3555,7 +3655,7 @@ TabPage TP_TOX_ENTRY
         Text[ spanish ] = "Ordenar según";
         Text[ italian ] = "Ordine per";
         Text[ danish ] = "Sorter efter";
-        Text[ swedish ] = "Sortering efter ...";
+        Text[ swedish ] = "Sortering efter";
         Text[ polish ] = "Sortuj wed³ug";
         Text[ portuguese_brazilian ] = "Sort by ...";
         Text[ japanese ] = "•\\¦‡˜";
@@ -3603,7 +3703,7 @@ TabPage TP_TOX_ENTRY
         QuickHelpText[ italian ] = "Crescente";
         QuickHelpText[ danish ] = "Stigende";
         QuickHelpText[ swedish ] = "Stigande";
-        QuickHelpText[ polish ] = "Rosn¹co";
+        QuickHelpText[ polish ] = "Rosn¹co!";
         QuickHelpText[ portuguese_brazilian ] = "Ascending";
         QuickHelpText[ japanese ] = "¸‡!";
         QuickHelpText[ korean ] = "¿À¸§Â÷¼ø!";
@@ -3638,7 +3738,7 @@ TabPage TP_TOX_ENTRY
         QuickHelpText[ italian ] = "Decrescente";
         QuickHelpText[ danish ] = "Faldende";
         QuickHelpText[ swedish ] = "Fallande";
-        QuickHelpText[ polish ] = "Malej¹co";
+        QuickHelpText[ polish ] = "Malej¹co!";
         QuickHelpText[ portuguese_brazilian ] = "Descending";
         QuickHelpText[ japanese ] = "~‡!";
         QuickHelpText[ korean ] = "³»¸²Â÷¼ø!";
@@ -3674,7 +3774,7 @@ TabPage TP_TOX_ENTRY
         QuickHelpText[ italian ] = "Crescente";
         QuickHelpText[ danish ] = "Stigende";
         QuickHelpText[ swedish ] = "Stigande";
-        QuickHelpText[ polish ] = "Rosn¹co";
+        QuickHelpText[ polish ] = "Rosn¹co!";
         QuickHelpText[ portuguese_brazilian ] = "Ascending";
         QuickHelpText[ japanese ] = "¸‡!";
         QuickHelpText[ korean ] = "¿À¸§Â÷¼ø!";
@@ -3709,7 +3809,7 @@ TabPage TP_TOX_ENTRY
         QuickHelpText[ italian ] = "Decrescente";
         QuickHelpText[ danish ] = "Faldende";
         QuickHelpText[ swedish ] = "Fallande";
-        QuickHelpText[ polish ] = "Malej¹co";
+        QuickHelpText[ polish ] = "Malej¹co!";
         QuickHelpText[ portuguese_brazilian ] = "Descending";
         QuickHelpText[ japanese ] = "~‡!";
         QuickHelpText[ korean ] = "³»¸²Â÷¼ø!";
@@ -3745,7 +3845,7 @@ TabPage TP_TOX_ENTRY
         QuickHelpText[ italian ] = "Crescente";
         QuickHelpText[ danish ] = "Stigende";
         QuickHelpText[ swedish ] = "Stigande";
-        QuickHelpText[ polish ] = "Rosn¹co";
+        QuickHelpText[ polish ] = "Rosn¹co!";
         QuickHelpText[ portuguese_brazilian ] = "Ascending";
         QuickHelpText[ japanese ] = "¸‡!";
         QuickHelpText[ korean ] = "¿À¸§Â÷¼ø!";
@@ -3780,7 +3880,7 @@ TabPage TP_TOX_ENTRY
         QuickHelpText[ italian ] = "Decrescente";
         QuickHelpText[ danish ] = "Faldende";
         QuickHelpText[ swedish ] = "Fallande";
-        QuickHelpText[ polish ] = "Malej¹co";
+        QuickHelpText[ polish ] = "Malej¹co!";
         QuickHelpText[ portuguese_brazilian ] = "Descending";
         QuickHelpText[ japanese ] = "~‡!";
         QuickHelpText[ korean ] = "³»¸²Â÷¼ø!";
@@ -4027,7 +4127,7 @@ TabPage TP_TOX_STYLES
         Text [ portuguese_brazilian ] = "Sta~ndard" ;
         Text[ chinese_simplified ] = "±ê×¼(~D)";
         Text[ russian ] = "Ñòàíäàğò";
-        Text[ polish ] = "Domy?lnie";
+        Text[ polish ] = "Domyœlnie";
         Text[ japanese ] = "•W€(~D)";
         Text[ language_user1 ] = " ";
         Text[ chinese_traditional ] = "¼Ğ·Ç(~D)";
@@ -4380,8 +4480,8 @@ ModalDialog DLG_CREATE_AUTOMARK
             Text[ portuguese_brazilian ] = "1. Key";
             Text[ japanese ] = "•ª—ŞÀ²ÄÙ1";
             Text[ korean ] = "1.Å°";
-            Text[ chinese_simplified ] = "1. Ö÷¹Ø¼ü×Ö";
-            Text[ chinese_traditional ] = "²Ä¤@­Ó¥DÃöÁä¦r";
+            Text[ chinese_simplified ] = "µÚÒ»¸ö¹Ø¼ü×Ö";
+            Text[ chinese_traditional ] = "²Ä¤@­ÓÃöÁä¦r";
             Text[ arabic ] = "ÇáãİÊÇÍ ÇáÃæá";
             Text[ turkish ] = "1. Anahtar";
             Text[ catalan ] = "1era clave";
@@ -4405,8 +4505,8 @@ ModalDialog DLG_CREATE_AUTOMARK
             Text[ portuguese_brazilian ] = "2. Key";
             Text[ japanese ] = "•ª—ŞÀ²ÄÙ2";
             Text[ korean ] = "2.Å°";
-            Text[ chinese_simplified ] = "2. Ö÷¹Ø¼ü×Ö";
-            Text[ chinese_traditional ] = "²Ä¤G­Ó¥DÃöÁä¦r";
+            Text[ chinese_simplified ] = "µÚ¶ş¸ö¹Ø¼ü×Ö";
+            Text[ chinese_traditional ] = "²Ä¤G­ÓÃöÁä¦r";
             Text[ arabic ] = "ÇáãİÊÇÍ ÇáËÇäí";
             Text[ turkish ] = "2. Anahtar";
             Text[ catalan ] = "2da llave";
@@ -4480,7 +4580,7 @@ ModalDialog DLG_CREATE_AUTOMARK
             Text[ portuguese_brazilian ] = "Whole words";
             Text[ japanese ] = "’PŒê‚Æ‚µ‚Ä";
             Text[ korean ] = "ÀüÃ¼´Ü¾î";
-            Text[ chinese_simplified ] = "Õû¸ö´Ê";
+            Text[ chinese_simplified ] = "Õû¸ö×Ö";
             Text[ chinese_traditional ] = "§¹¾ãªº¦rµü";
             Text[ arabic ] = "ßáãÇÊ ßÇãáÉ";
             Text[ turkish ] = "Tam sözcükler";
