@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fecopy.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 09:43:51 $
+ *  last change: $Author: vg $ $Date: 2003-07-04 13:20:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1016,9 +1016,11 @@ BOOL SwFEShell::Paste( SwDoc* pClpDoc )
                         FLY_IN_CNTNT == aAnchor.GetAnchorId() )
                     {
                         SwPosition* pPos = PCURCRSR->GetPoint();
+                        // #108784# allow shapes (no controls) in header/footer
                         if( RES_DRAWFRMFMT == rCpyFmt.Which() &&
-                            GetDoc()->IsInHeaderFooter( pPos->nNode ))
-                            continue;       // Header / Footer  -> nicht kopieren!!!
+                            GetDoc()->IsInHeaderFooter( pPos->nNode ) &&
+                            CheckControlLayer( rCpyFmt.FindSdrObject() ) )
+                            continue;
 
                         aAnchor.SetAnchor( pPos );
                     }
