@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dv $ $Date: 2001-07-26 12:04:53 $
+ *  last change: $Author: cd $ $Date: 2001-08-03 18:07:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1025,6 +1025,7 @@ void SfxStatusBarConfigPage::Apply( SfxStatusBarManager* pStbMgr )
     {
         pStbMgr->UseDefault();
         pStbMgr->SetDefault(TRUE);
+        pStbMgr->StoreConfig();
         return;
     }
 
@@ -1040,6 +1041,7 @@ void SfxStatusBarConfigPage::Apply( SfxStatusBarManager* pStbMgr )
             pStbMgr->AddItem(nId, nWidth);
         }
     }
+    pStbMgr->StoreConfig();
 }
 
 IMPL_LINK( SfxStatusBarConfigPage, Default, PushButton *, pPushButton )
@@ -1058,7 +1060,9 @@ IMPL_LINK( SfxStatusBarConfigPage, Default, PushButton *, pPushButton )
     aEntriesBox.Invalidate();
 
     pMgr = pOld;
+    StatusBar* pBar = pStbMgr->GetStatusBar();
     delete pStbMgr;
+    delete pBar;
     return 0;
 }
 
@@ -1119,7 +1123,10 @@ IMPL_LINK( SfxStatusBarConfigPage, Load, Button *, pButton )
             aEntriesBox.bModified = TRUE;
             pMgr = pOld;
 
+            StatusBar* pBar = pStbMgr->GetStatusBar();
             delete pStbMgr;
+            delete pBar;
+
             if ( bCreated )
                 delete pCfgMgr;
             else
@@ -1177,11 +1184,14 @@ IMPL_LINK( SfxStatusBarConfigPage, Save, Button *, pButton )
             // create new StatusBarManager and apply changes
             SfxStatusBarManager* pStbMgr = new SfxStatusBarManager( this, *pMgr, pCfgMgr );
             Apply( pStbMgr );
-            pStbMgr->SetModified( TRUE );
+            pStbMgr->SetDefault( FALSE );
             pCfgMgr->StoreConfigItem( *pStbMgr );
             pCfgMgr->StoreConfiguration();
 
+            StatusBar* pBar = pStbMgr->GetStatusBar();
             delete pStbMgr;
+            delete pBar;
+
             if ( bCreated )
                 delete pCfgMgr;
         }
