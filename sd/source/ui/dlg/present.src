@@ -2,9 +2,9 @@
  *
  *  $RCSfile: present.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 13:04:44 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:11:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,7 @@ ModalDialog DLG_START_PRESENTATION
         Text[ japanese ] = "γ‚Ήγƒ©γ‚¤γƒ‰γ®ζ‡ε®";
         Text[ chinese_traditional ] = "η―„ε";
         Text[ arabic ] = "ΗαΝΜγ";
-        Text[ greek ] = "Εύρος";
+        Text[ greek ] = "Περιοχή";
         Text[ korean ] = "λ²”μ„";
         Text[ turkish ] = "Aralύk";
         Text[ language_user1 ] = " ";
@@ -551,14 +551,14 @@ ModalDialog DLG_START_PRESENTATION
         Text [ spanish ] = "Avan~ce manual de diapositivas" ;
         Text [ english_us ] = "Change slides ~manually" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "ζ‰‹ε·¥ζ›΄ζΆεΉ»η―η‰‡(~C)";
+        Text[ chinese_simplified ] = "ζ‰‹ε·¥ζ›΄ζΆεΉ»η―η‰‡(~M)";
         Text[ russian ] = "Ρμενΰ ρλΰιδΰ βπσχνσώ";
         Text[ polish ] = "Zmieniaj slajd~y rκcznie";
-        Text[ japanese ] = "ζ‰‹ε‹•γ§η”»ιΆε‡γ‚ζ›Ώγ(~C)";
-        Text[ chinese_traditional ] = "ζ‰‹ε‹•θ®ζ›ζ•ε½±η‰‡(~C)";
+        Text[ japanese ] = "ζ‰‹ε‹•γ§η”»ιΆε‡γ‚ζ›Ώγ(~M)";
+        Text[ chinese_traditional ] = "ζ‰‹ε‹•θ®ζ›ζ•ε½±η‰‡(~M)";
         Text[ arabic ] = "ΚΫννΡ ΗαΤΡνΝΙ νΟζνΗπ";
         Text[ greek ] = "Αλλαγή δια~φανειών (slides) χειροκίνητα";
-        Text[ korean ] = "μλ™μΌλ΅ μ¬λΌμ΄λ“ μ „ν™(~C)";
+        Text[ korean ] = "μλ™μΌλ΅ μ¬λΌμ΄λ“ μ „ν™(~M)";
         Text[ turkish ] = "Manόel slayt geηiώi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Canvia les diapositives manualment";
@@ -589,7 +589,7 @@ ModalDialog DLG_START_PRESENTATION
         Text[ chinese_simplified ] = "ζΎη¤ΊιΌ ζ ‡(~V)";
         Text[ russian ] = "Οξκΰηΰςό σκΰηΰςελό μϋψθ";
         Text[ polish ] = "~Wskanik myszy widoczny";
-        Text[ japanese ] = "γƒγ‚¦γ‚Ήγƒγ‚¤γƒ³γ‚Ώγη›®γ«θ¦‹γγ‚‹(~V)";
+        Text[ japanese ] = "γƒγ‚¦γ‚Ήγƒγ‚¤γƒ³γ‚Ώγ‚’θ΅¨η¤Ίγ™γ‚‹(~V)";
         Text[ chinese_traditional ] = "ι΅―η¤ΊιΌ ζ¨™(~V)";
         Text[ arabic ] = "γΔΤΡ ΗαγΗζΣ γΡΖν";
         Text[ greek ] = "Δείκτης ποντικιού ορατός";
@@ -657,10 +657,10 @@ ModalDialog DLG_START_PRESENTATION
         Text[ chinese_simplified ] = "ζΎη¤Ίε©ζ‰‹(~N)";
         Text[ russian ] = "Οξκΰηΰςό Νΰβθγΰςξπ";
         Text[ polish ] = "N~awigator widoczny";
-        Text[ japanese ] = "γƒγƒ“γ‚²γƒΌγ‚Ώγη›®γ«θ¦‹γγ‚‹(~N)";
+        Text[ japanese ] = "γƒγƒ“γ‚²γƒΌγ‚Ώγ‚’θ΅¨η¤Ίγ™γ‚‹(~N)";
         Text[ chinese_traditional ] = "ι΅―η¤Ίε©ζ‰‹(~N)";
         Text[ arabic ] = "ΗαδΗένΜνΚζΡ γΡΖν";
-        Text[ greek ] = "Navigator ορατός";
+        Text[ greek ] = "Περιήγηση ορατή";
         Text[ korean ] = "λ„¤λΉ„κ²μ΄ν„° ν‘μ‹(~N)";
         Text[ turkish ] = "Tarayύcύyύ gφrόntόle";
         Text[ language_user1 ] = " ";
@@ -728,10 +728,10 @@ ModalDialog DLG_START_PRESENTATION
         Text[ japanese ] = "θƒζ™―γ‚’γ‚―γƒªγƒƒγ‚―γ—γ¦η”»ιΆε‡γ‚ζ›Ώγ(~K)";
         Text[ chinese_traditional ] = "ζ‰δΈ€δΈ‹ιΌ ιµθ®ζ›΄η°΅ε ±(~K)";
         Text[ arabic ] = "ΚΫννΡ ΗαΤΡνΝΙ ΪδΟ ΗαδήΡ έζή ΗαΞαένΙ";
-        Text[ greek ] = "Αλλαγή διαφάνειας (slides) με ~κλικ του φόντου";
+        Text[ greek ] = "Αλλαγή διαφάν. (slides) με ~κλικ του φόντου";
         Text[ korean ] = "λ°°κ²½μ„ ν΄λ¦­ν•΄μ„ μ¬λΌμ΄λ“λ¥Ό μ „ν™ν•¨(~K)";
         Text[ turkish ] = "Artalana tύklayύnca slayt deπiώtir";
-        Text[ language_user1 ] = "RB: bitte auf die Lδnge des Textes achten. Der Text soll nicht die Lδnge des deutschen Textes όberschreiten.";
+        Text[ language_user1 ] = "; RB: bitte auf die Lδnge des Textes achten. Der Text soll nicht die Lδnge des deutschen Textes όberschreiten.";
         Text[ catalan ] = "Canvia les diapositives fent ~clic al fons";
         Text[ finnish ] = "Dianvaihto ~taustaa napsauttamalla";
         Text[ thai ] = "ΰΉ€ΰΈ›ΰΈ¥ΰΈµΰΉΰΈΆΰΈ™ΰΈ ΰΈ²ΰΈΰΈ™ΰΈ΄ΰΉΰΈ‡ΰΉ‚ΰΈ”ΰΈΆΰΈΰΈ²ΰΈ£ΰΈ„~ΰΈ¥ΰΈ΄ΰΉΰΈΰΈΰΈ™ΰΈΰΈ·ΰΉ‰ΰΈ™ΰΈ«ΰΈ¥ΰΈ±ΰΈ‡";
@@ -788,6 +788,7 @@ ModalDialog DLG_START_PRESENTATION
     Text[ hindi ] = "ΰ¤Έΰ¥ΰ¤²ΰ¤‡ΰ¤΅ ΰ¤¦ΰ¤Ώΰ¤–ΰ¤Ύΰ¤“";
     Text[ slovak ] = "PrezentΓ΅cia";
 };
+
 
 
 
