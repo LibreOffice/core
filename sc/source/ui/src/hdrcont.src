@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hdrcont.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-08 18:08:11 $
+ *  last change: $Author: kz $ $Date: 2001-01-26 21:11:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -239,7 +239,7 @@ Menu RID_POPUP_ROWHEADER
             Text[ russian ] = "Îïòèìàëüíàÿ âûñîòà ñòğîêè...";
             Text[ polish ] = "Optymalna wysokoœæ wierszy...";
             Text[ japanese ] = "Å“K‚Ès‚Ì‚‚³(~R)...";
-            Text[ chinese_traditional ] = "³ÌÓì¦C°ª(~R)...";
+            Text[ chinese_traditional ] = "³Ì¾A¦C°ª(~R)...";
             Text[ arabic ] = "...ÇáÇÑÊİÇÚ ÇáÃãËá ááÕİ";
             Text[ greek ] = "Âİëôéóô~ï ıøïò ãñáììŞò...";
             Text[ korean ] = "ÃÖÀûÀÇ  Çà ³ôÀÌ(~R)...";
@@ -486,7 +486,7 @@ Menu RID_POPUP_COLHEADER
             Text[ russian ] = "Îïòèìàëüíàÿ øèğèíà ñòîëáöîâ...";
             Text[ polish ] = "Optymalna szerokoœæ kolumny...";
             Text[ japanese ] = "Å“K‚È—ñ•(~P)...";
-            Text[ chinese_traditional ] = "³ÌÓìÄæ¼e(~P)...";
+            Text[ chinese_traditional ] = "³Ì¾AÄæ¼e(~P)...";
             Text[ arabic ] = "ÇáÚÑÖ ÇáÃãËá ááÚãæÏ...";
             Text[ greek ] = "Âİëôéóô~ï ğëÜôïò óôŞëçò...";
             Text[ korean ] = "ÃÖÀûÀÇ ¿­ ³Êºñ(~P)...";
