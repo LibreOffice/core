@@ -2,9 +2,9 @@
  *
  *  $RCSfile: generalpage.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-15 07:28:33 $
+ *  last change: $Author: fs $ $Date: 2001-08-20 11:31:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -621,8 +621,9 @@ namespace dbaui
         // is the current data source type "AddressBook"?
         sal_Bool bEditingAddressBook = (DST_ADDRESSBOOK == m_eCurrentSelection);
 
-        // don't allow sub-type changes in case of LDAP
-        m_aBrowseConnection.Enable( !( bSingleTypeEdit && bEditingAddressBook ) );
+        // don't allow sub-type changes in case of the address book in single-edit mode
+        if ( bSingleTypeEdit && bEditingAddressBook )
+            m_aBrowseConnection.Disable( );
 
         if (_bSaveValue)
         {
@@ -1382,6 +1383,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.22  2001/08/15 07:28:33  fs
+ *  #90803# properly set the cache size
+ *
  *  Revision 1.21  2001/08/07 16:05:04  fs
  *  #88431# commitURL: use the pure (untranslated) URL
  *
