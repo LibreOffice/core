@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optload.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:33 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 21:13:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -261,9 +261,9 @@ TabPage TP_OPTLOAD_PAGE
         Text [ English ] = "Update fields automatically" ;
         Text[ english_us ] = "Update ~fields automatically";
         Text[ portuguese ] = "Actualizar ~campos automaticamente";
-        Text[ russian ] = "Обновлять автоматически поля";
+        Text[ russian ] = "Обновлять поля автоматически";
         Text[ dutch ] = "V~eldopdrachten automatisch actualiseren";
-        Text[ french ] = "Actualiser automatiquement les ~instructions de champ";
+        Text[ french ] = "Actualiser automatiquement les ~champs";
         Text[ spanish ] = "Actualizar ~campos automбticamente";
         Text[ italian ] = "Aggiorna i comandi di campo automaticamente";
         Text[ danish ] = "Opdater felter automatisk";
@@ -287,7 +287,7 @@ TabPage TP_OPTLOAD_PAGE
         Text [ English ] = "Update charts automatically" ;
         Text[ english_us ] = "Update ~charts automatically";
         Text[ portuguese ] = "Actualizar ~grбficos automaticamente";
-        Text[ russian ] = "Обновлять автоматически диаграммы";
+        Text[ russian ] = "Обновлять диаграммы автоматически";
         Text[ dutch ] = "~Diagrammen automatisch actualiseren";
         Text[ french ] = "Actualiser automatiquement les diagrammes";
         Text[ spanish ] = "Actualizar ~diagramas automбticamente";
