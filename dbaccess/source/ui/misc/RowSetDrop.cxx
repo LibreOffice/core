@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetDrop.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-02 08:19:41 $
+ *  last change: $Author: hr $ $Date: 2001-10-31 18:08:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,8 @@
 #ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
 #endif
+
+#include <functional>
 
 using namespace dbaui;
 using namespace ::com::sun::star::uno;
