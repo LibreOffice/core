@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntcap.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fme $ $Date: 2001-10-11 12:45:41 $
+ *  last change: $Author: fme $ $Date: 2002-01-21 12:02:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -371,6 +371,12 @@ void SwDoCapitalCrsrOfst::Do()
             aDrawInf.SetOfst( nOfst );
             aDrawInf.SetKern( rInf.GetKern() );
             aDrawInf.SetKanaComp( rInf.GetKanaComp() );
+
+#ifdef VERTICAL_LAYOUT
+            aDrawInf.SetFrm( rInf.GetFrm() );
+            aDrawInf.SetFont( rInf.GetFont() );
+#endif
+
             if ( rInf.GetUpper() )
             {
                 aDrawInf.SetSpace( 0 );
