@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view2.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 12:44:41 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 17:25:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1081,7 +1081,10 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
 
             if( rShell.IsFrmSelected() || rShell.IsObjSelected() )
             {
-                rSet.Put( SvxSizeItem( SID_TABLE_CELL, rShell.GetObjSize()));
+                // #i39171# Don't put a SvxSizeItem into a slot which is defined as SfxStringItem.
+                // SvxPosSizeStatusBarControl no longer resets to empty display if only one slot
+                // has no item, so SID_TABLE_CELL can remain empty (the SvxSizeItem is supplied
+                // in SID_ATTR_SIZE).
             }
             else
             {
