@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sj $ $Date: 2000-10-20 12:07:49 $
+ *  last change: $Author: sj $ $Date: 2000-10-24 15:07:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3221,6 +3221,8 @@ SdrObject* SvxMSDffManager::ImportObj( SvStream& rSt, void* pClientData,
                          ApplyAttributes( rSt, aSet, pRet );
                         if ( !GetPropertyValue( DFF_Prop_gtextSize, 0 ) )
                             aSet.Put( SvxFontHeightItem( ScalePt( 24 << 16 ) ) );
+                        if ( aObjData.eShapeType == mso_sptTextBox )
+                            aSet.Put( SdrTextMinFrameHeightItem( aBoundRect.GetHeight() ) );
                         pRet->SetModel( pSdrModel );
                         pRet->NbcSetAttributes( aSet, FALSE );
                         // Rotieren
