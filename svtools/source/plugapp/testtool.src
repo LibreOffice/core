@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testtool.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 20:07:27 $
+ *  last change: $Author: kz $ $Date: 2001-03-01 22:38:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -280,7 +280,7 @@ WorkWindow TT_INLINE_TRANSLATION {
     Text[ RUSSIAN ] = "Inplace Translation";
     Text[ SWEDISH ] = "Ny översättning";
     Text[ CHINESE_SIMPLIFIED ] = "·­Òë¹¤¾ß";
-    Text[ PORTUGUESE ] = "Translation In Place";
+    Text[ PORTUGUESE ] = "Nova tradução";
     Moveable = TRUE;
     Sizeable = TRUE;
     Closeable = TRUE;
