@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: dvo $ $Date: 2001-03-02 21:02:30 $
+ *  last change: $Author: cl $ $Date: 2001-03-04 17:28:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -297,7 +297,10 @@ SvXMLImportContext *SwXMLImport::CreateContext(
     SvXMLImportContext *pContext = 0;
 
     if( XML_NAMESPACE_OFFICE==nPrefix &&
-        rLocalName.compareToAscii( sXML_document ) == 0 )
+        ( 0 == rLocalName.compareToAscii(sXML_document) ||
+          0 == rLocalName.compareToAscii(sXML_document_meta) ||
+          0 == rLocalName.compareToAscii(sXML_document_styles) ||
+          0 == rLocalName.compareToAscii(sXML_document_content) ))
         pContext = new SwXMLDocContext_Impl( *this, nPrefix, rLocalName,
                                              xAttrList );
     else
