@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_bridgeimpl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2000-09-29 08:42:05 $
+ *  last change: $Author: jbu $ $Date: 2001-02-27 18:01:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,7 +139,8 @@ struct urp_BridgeImpl :
 
     OWriterThread *m_pWriter;
     OReaderThread *m_pReader;
-    FILE *m_pLogFile;
+    ::rtl::OString m_sLogFileName;
+    FILE          *m_pLogFile;
     ::osl::Condition m_cndWaitForThreads;
 
     struct Properties m_properties;
