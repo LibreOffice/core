@@ -1,6 +1,6 @@
 LIBPSPRINT_1_0 {
     global:
-        __1cDpsp*;
+        *psp*;
     local:
         *;
 };
