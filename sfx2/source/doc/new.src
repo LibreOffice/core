@@ -2,9 +2,9 @@
  *
  *  $RCSfile: new.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2001-06-18 11:21:24 $
+ *  last change: $Author: kz $ $Date: 2001-06-29 02:06:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,7 +163,7 @@ ModalDialog DLG_NEW_FILE
         Text[ chinese_traditional ] = "¼Ë¦¡(~T)";
         Text[ arabic ] = "ŞæÇáÈ";
         Text[ greek ] = "Ğñüôõğá";
-        Text[ korean ] = "¼­½ÄÆÄÀÏ(~T)";
+        Text[ korean ] = "¼­½Ä ÆÄÀÏ(~T)";
         Text[ turkish ] = "~Şablon";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "P~lantillas";
@@ -287,19 +287,21 @@ ModalDialog DLG_NEW_FILE
         Text [ spanish ] = "Te~xto" ;
         Text [ french ] = "~Texte" ;
         Text [ dutch ] = "~Tekst" ;
-        Text [ swedish ] = "Text" ;
+        Text [ swedish ] = "Te~xt" ;
         Text [ danish ] = "Tekst" ;
         Text [ portuguese ] = "~Texto" ;
         Text [ portuguese_brazilian ] = "Text" ;
         Text[ chinese_simplified ] = "ÎÄ×Ö(~X)";
         Text[ russian ] = "Òåêñò";
         Text[ polish ] = "Tekst";
-        Text[ japanese ] = "•¶‘(~X)";
+        Text[ japanese ] = "•¶š(~X)";
         Text[ chinese_traditional ] = "¤å¦r(~X)";
         Text[ arabic ] = "äÕ";
         Text[ greek ] = "Êåßìåíï";
         Text[ korean ] = "ÅØ½ºÆ®(~X)";
         Text[ turkish ] = "~Metin";
+        Text[ finnish ] = "Teks~ti";
+        Text[ catalan ] = "Te~xt";
     };
     CheckBox CB_FRAME_STYLE
     {
@@ -313,7 +315,7 @@ ModalDialog DLG_NEW_FILE
         Text [ spanish ] = "~Marco" ;
         Text [ french ] = "~Cadres" ;
         Text [ dutch ] = "~Kader" ;
-        Text [ swedish ] = "Ram" ;
+        Text [ swedish ] = "~Ram" ;
         Text [ danish ] = "Ramme" ;
         Text [ portuguese_brazilian ] = "Rahmen" ;
         Text [ portuguese ] = "Mol~dura" ;
@@ -326,6 +328,8 @@ ModalDialog DLG_NEW_FILE
         Text[ greek ] = "Ğåñßãñáììá";
         Text[ korean ] = "ÇÁ·¹ÀÓ(~F)";
         Text[ turkish ] = "Çerçeve";
+        Text[ finnish ] = "~Frame";
+        Text[ catalan ] = "~Frame";
     };
     CheckBox CB_PAGE_STYLE
     {
@@ -339,7 +343,7 @@ ModalDialog DLG_NEW_FILE
         Text [ spanish ] = "Págin~as" ;
         Text [ french ] = "~Pages" ;
         Text [ dutch ] = "~pagina's" ;
-        Text [ swedish ] = "Sidor" ;
+        Text [ swedish ] = "~Sidor" ;
         Text [ danish ] = "Sider" ;
         Text [ portuguese ] = "~Páginas" ;
         Text [ portuguese_brazilian ] = "Seiten" ;
@@ -352,6 +356,8 @@ ModalDialog DLG_NEW_FILE
         Text[ greek ] = "Óåëßäåò";
         Text[ korean ] = "ÆäÀÌÁö(~P)";
         Text[ turkish ] = "Sayfa";
+        Text[ finnish ] = "~Pages";
+        Text[ catalan ] = "~Pages";
     };
     CheckBox CB_NUM_STYLE
     {
@@ -363,7 +369,7 @@ ModalDialog DLG_NEW_FILE
         Text [ portuguese ] = "~Numeração" ;
         Text [ english_us ] = "N~umbering" ;
         Text [ portuguese_brazilian ] = "Numerierung" ;
-        Text [ swedish ] = "Numrering" ;
+        Text [ swedish ] = "N~umrering" ;
         Text [ danish ] = "Nummerering" ;
         Text [ italian ] = "N~umerazione" ;
         Text [ spanish ] = "Nu~meración" ;
@@ -378,6 +384,8 @@ ModalDialog DLG_NEW_FILE
         Text[ greek ] = "Áñßèìçóç";
         Text[ korean ] = "¹øÈ£ ¸Å±â±â(~U)";
         Text[ turkish ] = "Numaralama";
+        Text[ finnish ] = "N~umbering";
+        Text[ catalan ] = "N~umbering";
     };
     CheckBox CB_MERGE_STYLE
     {
@@ -391,9 +399,9 @@ ModalDialog DLG_NEW_FILE
         Text [ italian ] = "Sovrascrivi" ;
         Text [ spanish ] = "So~brescribir" ;
         Text [ french ] = "~Écraser" ;
-        Text [ swedish ] = "Skriv över" ;
+        Text [ swedish ] = "Skri~v över" ;
         Text [ danish ] = "Overskriv" ;
-        Text [ portuguese ] = "~Sobregravar" ;
+        Text [ portuguese ] = "~Substituir" ;
         Text [ portuguese_brazilian ] = "Überschreiben" ;
         Text[ chinese_simplified ] = "¸²Ğ´(~O)";
         Text[ russian ] = "Çàìåíèòü";
@@ -404,6 +412,8 @@ ModalDialog DLG_NEW_FILE
         Text[ greek ] = "ÁíôéêáôÜóôáóç";
         Text[ korean ] = "µ¤¾î¾²±â(~O)";
         Text[ turkish ] = "Üzerine yaz";
+        Text[ finnish ] = "~Overwrite";
+        Text[ catalan ] = "~Overwrite";
     };
     PushButton PB_LOAD_FILE
     {
@@ -412,29 +422,51 @@ ModalDialog DLG_NEW_FILE
         Hide = TRUE;
         Text = "Aus Datei..." ;
         Text [ English ] = "From file..." ;
+        Text[ english_us ] = "From File...";
+        Text[ portuguese ] = "Do ficheiro...";
+        Text[ russian ] = "From file...";
+        Text[ greek ] = "From file...";
+        Text[ dutch ] = "From file...";
+        Text[ french ] = "From file...";
+        Text[ spanish ] = "De archivo...";
+        Text[ finnish ] = "From file...";
+        Text[ italian ] = "Da file...";
+        Text[ danish ] = "From file...";
+        Text[ swedish ] = "Från fil...";
+        Text[ polish ] = "Z pliku...";
+        Text[ portuguese_brazilian ] = "From file...";
+        Text[ japanese ] = "Ì§²Ù‚©‚ç...";
+        Text[ korean ] = "From file...";
+        Text[ chinese_simplified ] = "´ÓÎÄ¼ş...";
+        Text[ chinese_traditional ] = "±qÀÉ®×...";
+        Text[ turkish ] = "From file...";
+        Text[ arabic ] = "From file...";
+        Text[ catalan ] = "From file...";
     };
     String STR_LOAD_TEMPLATE
     {
         Text = "Vorlagen laden" ;
         Text [ English ] = "Load templates" ;
-        Text [ english_us ] = "Load Templates" ;
+        Text [ english_us ] = "Load templates" ;
         Text [ italian ] = "Carica modelli" ;
-        Text [ spanish ] = "Cargar estilos" ;
+        Text [ spanish ] = "Cargar plantillas" ;
         Text [ french ] = "Chargement de styles" ;
         Text [ dutch ] = "Opmaakprofielen laden" ;
         Text [ swedish ] = "Ladda mallar" ;
         Text [ danish ] = "Indlæs typografier" ;
         Text [ portuguese ] = "Carregar estilos" ;
         Text [ portuguese_brazilian ] = "Vorlagen laden" ;
-        Text[ chinese_simplified ] = "×°ÔØÑùÊ½";
+        Text[ chinese_simplified ] = "×°ÈëÑùÊ½";
         Text[ russian ] = "Çàãğóçèòü øàáëîíû";
-        Text[ polish ] = "Za³aduj style";
-        Text[ japanese ] = "ÃİÌßÚ°Ä‚Ì“Ç‚İ‚İ";
-        Text[ chinese_traditional ] = "¸Ë¸ü¼Ë¦¡";
+        Text[ polish ] = "£aduj style";
+        Text[ japanese ] = "½À²Ù‚Ì“Ç‚İ‚İ";
+        Text[ chinese_traditional ] = "¸ü¤J¼Ë¦¡";
         Text[ arabic ] = "ÊÍãíá ÃäãÇØ";
         Text[ greek ] = "ÅéóáãùãŞ ğñïôığùí";
         Text[ korean ] = "À¯Çü °¡Á®¿À±â";
         Text[ turkish ] = "Biçim yükle";
+        Text[ finnish ] = "Load Templates";
+        Text[ catalan ] = "Load Templates";
     };
     FixedText FT_TITLE
     {
@@ -609,3 +641,4 @@ ModalDialog DLG_NEW_FILE
     Text[ catalan ] = "Nuevo";
 };
  // ********************************************************************** EOF
+
