@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: mt $ $Date: 2002-02-25 16:30:39 $
+ *  last change: $Author: ssa $ $Date: 2002-03-04 17:09:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3866,6 +3866,12 @@ void Window::ImplGrabFocus( USHORT nFlags )
                     mpCursor->ImplShow();
                 mbInFocusHdl = TRUE;
                 mnGetFocusFlags = nFlags;
+                // if we're changing focus due to closing a popup floating window
+                // notify the new focus window so it can restore the inner focus
+                // eg, toolboxes can select their recent active item
+                if( pOldFocusWindow &&
+                    ( pOldFocusWindow->GetDialogControlFlags() & WINDOW_DLGCTRL_FLOATWIN_POPUPMODEEND_CANCEL ) )
+                    mnGetFocusFlags |= GETFOCUS_FLOATWIN_POPUPMODEEND_CANCEL;
                 NotifyEvent aNEvt( EVENT_GETFOCUS, this );
                 if ( !ImplCallPreNotify( aNEvt ) )
                     GetFocus();

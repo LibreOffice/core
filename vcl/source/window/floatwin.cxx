@@ -2,9 +2,9 @@
  *
  *  $RCSfile: floatwin.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: pl $ $Date: 2002-01-15 18:51:12 $
+ *  last change: $Author: ssa $ $Date: 2002-03-04 17:07:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,6 +227,11 @@ void FloatingWindow::ImplLoadRes( const ResId& rResId )
 
 FloatingWindow::~FloatingWindow()
 {
+    if( mbPopupModeCanceled )
+        // indicates that ESC key was pressed
+        // will be handled in Window::ImplGrabFocus()
+        SetDialogControlFlags( GetDialogControlFlags() | WINDOW_DLGCTRL_FLOATWIN_POPUPMODEEND_CANCEL );
+
     if ( IsInPopupMode() )
         EndPopupMode( FLOATWIN_POPUPMODEEND_CANCEL | FLOATWIN_POPUPMODEEND_CLOSEALL | FLOATWIN_POPUPMODEEND_DONTCALLHDL );
 

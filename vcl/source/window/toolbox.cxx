@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ssa $ $Date: 2002-02-28 18:40:42 $
+ *  last change: $Author: ssa $ $Date: 2002-03-04 17:07:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1372,6 +1372,7 @@ void ToolBox::ImplInit( Window* pParent, WinBits nStyle )
     meAlign           = WINDOWALIGN_TOP;
     meLastStyle       = POINTER_ARROW;
     mnWinStyle        = nStyle;
+    mnLastFocusItemId          = 0;
 
 
     maTimer.SetTimeoutHdl( LINK( this, ToolBox, ImplUpdateHdl ) );
@@ -3836,11 +3837,17 @@ long ToolBox::Notify( NotifyEvent& rNEvt )
         if( rNEvt.GetWindow() == this )
         {
             // the toolbar itself got the focus
-            if( (GetGetFocusFlags() & (GETFOCUS_BACKWARD|GETFOCUS_TAB) ) == (GETFOCUS_BACKWARD|GETFOCUS_TAB))
+            if( (GetGetFocusFlags() & GETFOCUS_FLOATWIN_POPUPMODEEND_CANCEL) && mnLastFocusItemId != 0 )
+                // restore last item
+                ImplChangeHighlight( ImplGetItem( mnLastFocusItemId ) );
+            else if( (GetGetFocusFlags() & (GETFOCUS_BACKWARD|GETFOCUS_TAB) ) == (GETFOCUS_BACKWARD|GETFOCUS_TAB))
                 // Shift-TAB was pressed in the parent
                 ImplChangeHighlightUpDn( FALSE );
             else
                 ImplChangeHighlightUpDn( TRUE );
+
+            mnLastFocusItemId = 0;
+
             return true;
         }
         else
@@ -4406,6 +4413,7 @@ void ToolBox::KeyInput( const KeyEvent& rKEvt )
                 }
 
                 mnDownItemId = mnCurItemId = mnHighItemId;
+                mnLastFocusItemId = mnCurItemId; // save item id for possible later focus restore
                 ImplToolItem* pItem = ImplGetItem( mnHighItemId );
 
                 mbDummy1_Shift = TRUE;
