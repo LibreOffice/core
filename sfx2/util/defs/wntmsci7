@@ -7149,3 +7149,11 @@ _TI2?AVSAXException@sax@xml@star@sun@com@@
 ?queryInterface@?$WeakImplHelper2@VXFolderPicker@dialogs@ui@star@sun@com@@VXServiceInfo@lang@456@@cppu@@WBI@AA?AVAny@uno@star@sun@com@@ABVType@4567@@Z
 ?release@?$WeakImplHelper2@VXFolderPicker@dialogs@ui@star@sun@com@@VXServiceInfo@lang@456@@cppu@@WBI@AAXXZ
 ??1TransferableObjectDescriptor@@QAE@XZ
+?OpenHelpAgent@SfxHelp@@QAEXPAVSfxFrame@@K@Z
+??1?$Reference@VXContentEnumerationAccess@container@star@sun@com@@@uno@star@sun@com@@QAE@XZ
+?__query@?$Reference@VXContentEnumerationAccess@container@star@sun@com@@@uno@star@sun@com@@CAPAVXContentEnumerationAccess@container@345@PAVXInterface@2345@@Z
+?__query@?$Reference@VXSet@container@star@sun@com@@@uno@star@sun@com@@CAPAVXSet@container@345@PAVXInterface@2345@@Z
+?makeAny@uno@star@sun@com@@YA?AVAny@1234@ABV?$Reference@VXInterface@uno@star@sun@com@@@1234@@Z
+?registerFactories@FileDialogHelper@sfx2@@CAXV?$Reference@VXMultiServiceFactory@lang@star@sun@com@@@uno@star@sun@com@@@Z
+?s_pType_com_sun_star_container_XContentEnumerationAccess@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXContentEnumerationAccess@container@star@sun@com@@@3456@@Z@4PAU_typelib_TypeDescriptionReference@@A
+?set@?$Reference@VXEnumeration@container@star@sun@com@@@uno@star@sun@com@@QAAEPAVXEnumeration@container@345@@Z
