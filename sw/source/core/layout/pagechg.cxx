@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagechg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-02 11:36:09 $
+ *  last change: $Author: ama $ $Date: 2001-04-10 09:11:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -322,9 +322,20 @@ void MA_FASTCALL lcl_MakeObjs( const SwSpzFrmFmts &rTbl, SwPageFrm *pPage )
         SdrObject *pSdrObj;
         SwFrmFmt *pFmt = rTbl[i];
         const SwFmtAnchor &rAnch = pFmt->GetAnchor();
-        if ( rAnch.GetPageNum() == pPage->GetPhyPageNum() &&
-             !rAnch.GetCntntAnchor() )
+        if ( rAnch.GetPageNum() == pPage->GetPhyPageNum() )
         {
+            if( rAnch.GetCntntAnchor() )
+            {
+                if( FLY_PAGE == rAnch.GetAnchorId() )
+                {
+                    SwFmtAnchor aAnch( rAnch );
+                    aAnch.SetAnchor( 0 );
+                    pFmt->SetAttr( aAnch );
+                }
+                else
+                    continue;
+            }
+
             //Wird ein Rahmen oder ein SdrObject beschrieben?
             BOOL bSdrObj = RES_DRAWFRMFMT == pFmt->Which();
             pSdrObj = 0;
