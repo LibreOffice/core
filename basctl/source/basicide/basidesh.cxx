@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basidesh.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 17:45:10 $
+ *  last change: $Author: vg $ $Date: 2003-04-11 17:37:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -639,6 +639,8 @@ void __EXPORT BasicIDEShell::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId&,
                     rBindings.Update( SID_BASICSTOP );
                     rBindings.Invalidate( SID_BASICIDE_TOGGLEBRKPNT );
                     rBindings.Update( SID_BASICIDE_TOGGLEBRKPNT );
+                    rBindings.Invalidate( SID_BASICIDE_MANAGEBRKPNTS );
+                    rBindings.Update( SID_BASICIDE_MANAGEBRKPNTS );
                     rBindings.Invalidate( SID_BASICIDE_MODULEDLG );
                     rBindings.Update( SID_BASICIDE_MODULEDLG );
                     rBindings.Invalidate( SID_BASICLOAD );
@@ -921,6 +923,7 @@ void BasicIDEShell::InvalidateBasicIDESlots()
         rBindings.Invalidate( SID_BASICSTEPOVER );
         rBindings.Invalidate( SID_BASICSTEPOUT );
         rBindings.Invalidate( SID_BASICIDE_TOGGLEBRKPNT );
+        rBindings.Invalidate( SID_BASICIDE_MANAGEBRKPNTS );
         rBindings.Invalidate( SID_BASICIDE_ADDWATCH );
         rBindings.Invalidate( SID_BASICIDE_REMOVEWATCH );
         rBindings.Invalidate( SID_CHOOSE_CONTROLS );
