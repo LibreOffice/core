@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: as $ $Date: 2001-12-05 13:28:39 $
+#   last change: $Author: vg $ $Date: 2003-04-24 12:56:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,7 +62,7 @@
 PRJ=..$/..
 PRJINC=..$/inc
 
-PRJNAME=abpource
+PRJNAME=extensions
 TARGET=abp
 USE_DEFFILE=TRUE
 
