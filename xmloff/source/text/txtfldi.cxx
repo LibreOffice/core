@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfldi.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-24 16:49:52 $
+ *  last change: $Author: dvo $ $Date: 2001-01-25 14:05:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3410,9 +3410,9 @@ XMLAnnotationImportContext::XMLAnnotationImportContext(
         sPropertyAuthor(RTL_CONSTASCII_USTRINGPARAM(sAPI_author)),
         sPropertyContent(RTL_CONSTASCII_USTRINGPARAM(sAPI_content)),
         sPropertyDate(RTL_CONSTASCII_USTRINGPARAM(sAPI_date)),
-        bDateOK(sal_False),
-        bAuthorOK(sal_False)
+        bDateOK(sal_False)
 {
+    bValid = sal_True;
 }
 
 void XMLAnnotationImportContext::ProcessAttribute(
@@ -3436,15 +3436,12 @@ void XMLAnnotationImportContext::ProcessAttribute(
 
         case XML_TOK_TEXTFIELD_OFFICE_AUTHOR:
             sAuthor = sAttrValue;
-            bAuthorOK = sal_True;
             break;
 
         default:
             // ignore
             break;
     }
-
-    bValid = bDateOK && bAuthorOK;
 }
 
 SvXMLImportContext* XMLAnnotationImportContext::CreateChildContext(
@@ -3461,11 +3458,15 @@ void XMLAnnotationImportContext::PrepareField(
 {
     Any aAny;
 
+    // import (possibly empty) author
     aAny <<= sAuthor;
     xPropertySet->setPropertyValue(sPropertyAuthor, aAny);
 
-    aAny <<= aDate;
-    xPropertySet->setPropertyValue(sPropertyDate, aAny);
+    if (bDateOK)
+    {
+        aAny <<= aDate;
+        xPropertySet->setPropertyValue(sPropertyDate, aAny);
+    }
 
     // delete last paragraph mark (if necessary)
     OUString sBuffer = aTextBuffer.makeStringAndClear();
@@ -3473,7 +3474,6 @@ void XMLAnnotationImportContext::PrepareField(
     {
         sBuffer = sBuffer.copy(0, sBuffer.getLength()-1);
     }
-
     aAny <<= sBuffer;
     xPropertySet->setPropertyValue(sPropertyContent, aAny);
 }

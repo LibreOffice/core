@@ -1,5 +1,5 @@
 <!--
-	$Id: office.mod,v 1.25 2001-01-24 16:47:57 dvo Exp $
+	$Id: office.mod,v 1.26 2001-01-25 14:05:35 dvo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -165,7 +165,7 @@
 <!-- limitation: in the current implementation, only plain text inside of 
      paragraphs is supported -->
 <!ELEMENT office:annotation (text:p)*>
-<!ATTLIST office:annotation office:author %string; #REQUIRED>
+<!ATTLIST office:annotation office:author %string; #IMPLIED>
 <!ATTLIST office:annotation office:create-date %date; #IMPLIED>
 <!ATTLIST office:annotation office:create-date-string %string; #IMPLIED>
 <!ATTLIST office:annotation office:display %boolean; "false">
