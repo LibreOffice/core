@@ -1,5 +1,6 @@
 mkdir: %COMMON_DEST%\bin%_EXT%\hid
 mkdir: %COMMON_DEST%\res%_EXT%
+mkdir: %COMMON_DEST%\pck%_EXT%\openoffice
 mkdir: %_DEST%\xml%_EXT%\uiconfig
 mkdir: %_DEST%\xml%_EXT%\uiconfig\global
 mkdir: %_DEST%\xml%_EXT%\uiconfig\global\accelerator
