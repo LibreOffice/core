@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewoptions.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mba $ $Date: 2000-12-08 10:59:27 $
+ *  last change: $Author: mh $ $Date: 2001-01-31 15:53:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@
 #endif
 
 #ifndef __SGI_STL_HASH_MAP
-#include <stl/hash_map>
+#include <hash_map>
 #endif
 
 //_________________________________________________________________________________________________________________
