@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXHeadFootText.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-02-06 11:19:42 $
+ *  last change:$Date: 2003-04-07 08:02:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,6 +199,8 @@ public class SwXHeadFootText extends TestCase {
             log.println( "Switching on footer" );
             PropSet.setPropertyValue("FooterIsOn", new Boolean(true));
             log.println( "Get header text" );
+            oObj = (XText) UnoRuntime.queryInterface(
+                        XText.class, PropSet.getPropertyValue("HeaderText"));
         } catch ( com.sun.star.lang.WrappedTargetException e ) {
             e.printStackTrace(log);
             throw new StatusException("Couldn't set/get propertyValue...", e);
@@ -213,8 +215,7 @@ public class SwXHeadFootText extends TestCase {
             throw new StatusException("Couldn't set/get propertyValue...", e);
         }
 
-        // get the bodytext of textdocument here
-        oObj = xTextDoc.getText();
+        System.out.println("IName: "+util.utils.getImplName(oObj));
 
         log.println( "creating a new environment for bodytext object" );
         TestEnvironment tEnv = new TestEnvironment( oObj );
