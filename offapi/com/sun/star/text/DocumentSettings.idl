@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DocumentSettings.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 17:04:53 $
+ *  last change: $Author: kz $ $Date: 2004-03-23 11:30:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,6 +177,24 @@ service DocumentSettings
 
     */
     [optional, property] boolean UseFormerLineSpacing;
+    // ------------------------------------------------------------
+    /** specifies if paragraph and table spacing is added at the
+        bottom of table cells
+
+        @since #106629#
+
+        <p>This property controls, if the spacing of the last paragraph
+        respectively table of a table cell is added at the bottom of this
+        table cells
+        If <TRUE\> (default for documents since OpenOffice.org 2.0),
+        the spacing of the last paragraph respectively table of a table
+        cell is added at the bottom of this table cell.
+        If <FALSE\> (typically for documents till OpenOffice.org 1.1),
+        the spacing of the last paragraph respectively table of a table
+        cell isn't added at the bottom of this table cell.</p>
+
+    */
+    [optional, property] boolean AddParaSpacingToTableCells;
 };
 
 //=============================================================================
