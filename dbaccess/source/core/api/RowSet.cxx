@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-14 13:28:20 $
+ *  last change: $Author: oj $ $Date: 2000-11-15 15:57:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,6 +265,7 @@ ORowSet::ORowSet(const Reference< ::com::sun::star::lang::XMultiServiceFactory >
     ,m_bRebuildConnOnExecute(sal_False)
     ,m_bNew(sal_False)
     ,m_bIsBookmarable(sal_True)
+    ,m_bCanUpdateInsertedRows(sal_True)
     ,m_pTables(NULL)
 {
     m_pMySelf = this;
@@ -291,7 +292,7 @@ ORowSet::ORowSet(const Reference< ::com::sun::star::lang::XMultiServiceFactory >
 
     // sdbcx.ResultSet Properties
     registerProperty(PROPERTY_ISBOOKMARKABLE,       PROPERTY_ID_ISBOOKMARKABLE,         nRT,                            &m_bIsBookmarable,      ::getBooleanCppuType());
-
+    registerProperty(PROPERTY_CANUPDATEINSERTEDROWS,PROPERTY_ID_CANUPDATEINSERTEDROWS,  nRT,                            &m_bCanUpdateInsertedRows,      ::getBooleanCppuType());
     // sdbc.ResultSet Properties
     //  registerProperty(PROPERTY_CURSORNAME,           PROPERTY_ID_CURSORNAME,             PropertyAttribute::READONLY,    &m_aCursorName,         ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
     registerProperty(PROPERTY_RESULTSETCONCURRENCY, PROPERTY_ID_RESULTSETCONCURRENCY,   PropertyAttribute::TRANSIENT,   &m_nResultSetConcurrency,::getCppuType(reinterpret_cast< sal_Int32*>(NULL)));
@@ -990,6 +991,8 @@ void SAL_CALL ORowSet::insertRow(  ) throw(SQLException, RuntimeException)
         // fire property modified
         if(!m_bModified)
             fireProperty(PROPERTY_ID_ISMODIFIED,sal_False,sal_True);
+        ORowSetMatrix::iterator aOldValues = m_pCache->m_pMatrix->end();
+        ORowSetBase::firePropertyChange(aOldValues);
         fireRowcount();
     }
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-14 13:28:20 $
+ *  last change: $Author: oj $ $Date: 2000-11-15 15:57:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -438,35 +438,46 @@ void ODBTable::refreshKeys()
 // -------------------------------------------------------------------------
 void ODBTable::refreshIndexes()
 {
-    /*
-    Any aVal;
-    if(m_CatalogName.getLength())
-        aVal <<= m_CatalogName;
-
     ::std::vector< ::rtl::OUString> aVector;
-    // fill indexes
-    Reference< XResultSet > xResult = m_xMetaData->getIndexInfo(aVal,
-    m_SchemaName,m_Name,sal_False,sal_False);
-
-    if(xResult.is())
+    Reference<XNameAccess> xNames;
+    if(m_xTable.is())
     {
-        Reference< XRow > xRow(xResult,UNO_QUERY);
-        ::rtl::OUString aName,aDot = ::rtl::OUString::createFromAscii(".");
-        while(xResult->next())
+        Reference<XIndexesSupplier> xIndexSup(m_xTable,UNO_QUERY);
+        xNames = xIndexSup->getIndexes();
+        Sequence< ::rtl::OUString> aNames = xNames->getElementNames();
+        const ::rtl::OUString* pBegin   = aNames.getConstArray();
+        const ::rtl::OUString* pEnd     = pBegin + aNames.getLength();
+        for(;pBegin != pEnd;++pBegin)
+            aVector.push_back(*pBegin);
+    }
+    else
+    {
+        Any aVal;
+        if(m_CatalogName.getLength())
+            aVal <<= m_CatalogName;
+
+        // fill indexes
+        Reference< XResultSet > xResult = m_xMetaData->getIndexInfo(aVal,m_SchemaName,m_Name,sal_False,sal_False);
+
+        if(xResult.is())
         {
-            aName = xRow->getString(5);
-            if(aName.getLength())
-                aName += aDot;
-            aName += xRow->getString(6);
-            if(aName.getLength())
-                aVector.push_back(aName);
+            Reference< XRow > xRow(xResult,UNO_QUERY);
+            ::rtl::OUString aName,aDot = ::rtl::OUString::createFromAscii(".");
+            while(xResult->next())
+            {
+                aName = xRow->getString(5);
+                if(aName.getLength())
+                    aName += aDot;
+                aName += xRow->getString(6);
+                if(aName.getLength())
+                    aVector.push_back(aName);
+            }
         }
     }
 
     if(m_pIndexes)
         delete m_pIndexes;
-    m_pIndexes  = new OIndexes(this,m_aMutex,aVector);
-    */
+    m_pIndexes  = new OIndexes(this,xNames,m_aMutex,aVector);
 }
 // -----------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL ODBTable::getName() throw(RuntimeException)

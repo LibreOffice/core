@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetCache.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-14 13:28:20 $
+ *  last change: $Author: oj $ $Date: 2000-11-15 15:57:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,9 @@
 #endif
 #ifndef _DBHELPER_DBEXCEPTION_HXX_
 #include <connectivity/dbexception.hxx>
+#endif
+#ifndef _COMPHELPER_PROPERTY_HXX_
+#include <comphelper/property.hxx>
 #endif
 
 using namespace dbaccess;
@@ -210,10 +213,14 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
     else
     {
         if(!bAllKeysFound || (xProp->getPropertySetInfo()->hasPropertyByName(PROPERTY_RESULTSETTYPE) &&
-                              comphelper::getINT32(xProp->getPropertyValue(PROPERTY_RESULTSETTYPE)) == ResultSetType::FORWARD_ONLY))
+            comphelper::getINT32(xProp->getPropertyValue(PROPERTY_RESULTSETTYPE)) == ResultSetType::FORWARD_ONLY) ||
+            !(comphelper::hasProperty(PROPERTY_CANUPDATEINSERTEDROWS,xProp) && any2bool(xProp->getPropertyValue(PROPERTY_CANUPDATEINSERTEDROWS))))
         {
             m_pCacheSet = new OStaticSet(_xRs);
-            m_nPrivileges = Privilege::SELECT;
+            if(bAllKeysFound)
+                m_nPrivileges |= Privilege::INSERT | Privilege::DELETE | Privilege::UPDATE;
+            else
+                m_nPrivileges = Privilege::SELECT;
         }
         else
         {
@@ -810,7 +817,7 @@ sal_Bool SAL_CALL ORowSetCache::isFirst(  ) throw(SQLException, RuntimeException
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ORowSetCache::isLast(  ) throw(SQLException, RuntimeException)
 {
-    return m_bRowCountFinal ? m_bLast : m_pCacheSet->isLast();
+    return m_bRowCountFinal ? (m_nPosition==m_nRowCount) : m_pCacheSet->isLast();
 }
 // -------------------------------------------------------------------------
 void SAL_CALL ORowSetCache::beforeFirst(  ) throw(SQLException, RuntimeException)
@@ -1489,6 +1496,9 @@ void SAL_CALL ORowSetCache::clearWarnings(  ) throw(SQLException, RuntimeExcepti
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.13  2000/11/14 13:28:20  oj
+    change for rowset when getRow returns 0
+
     Revision 1.12  2000/11/10 16:05:41  oj
     check for afterlast and before first
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetBase.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-14 13:28:20 $
+ *  last change: $Author: oj $ $Date: 2000-11-15 15:57:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -483,6 +483,7 @@ sal_Bool SAL_CALL ORowSetBase::moveToBookmark( const Any& bookmark ) throw(SQLEx
     sal_Bool bRet = m_pCache->moveToBookmark(bookmark);
     if(bRet)
     {
+        m_bAfterLast    = m_bBeforeFirst = sal_False; // all false because we stand on a valid row
         m_aBookmark     = bookmark;
         m_aCurrentRow   = m_pCache->m_aMatrixIter;
         notifyAllListenersCursorMoved();
@@ -776,23 +777,24 @@ sal_Bool SAL_CALL ORowSetBase::first(  ) throw(SQLException, RuntimeException)
     m_bAfterLast = m_bBeforeFirst = sal_False; // all false
 
     sal_Bool bMoved = sal_False;
-    if(!isFirst())
+    if(!isFirst() || bWasNew)
     {
         notifyAllListenersCursorBeforeMove();
         bMoved = sal_True;
     }
 
     sal_Bool bRet = m_pCache->first();
-    if(bMoved && bRet)
+    if(bRet)
     {
         m_aBookmark     = m_pCache->getBookmark();
         m_aCurrentRow   = m_pCache->m_aMatrixIter;
-        notifyAllListenersCursorMoved();
+        if(bMoved)
+            notifyAllListenersCursorMoved();
         firePropertyChange(aOldValues);
     }
     else
     {
-        m_bAfterLast = m_bBeforeFirst = sal_True; // all false
+        m_bAfterLast = m_bBeforeFirst = sal_True; // all true
         m_aCurrentRow   = m_pCache->getEnd();
     }
     fireRowcount();
@@ -821,22 +823,23 @@ sal_Bool SAL_CALL ORowSetBase::last(  ) throw(SQLException, RuntimeException)
     m_bAfterLast = m_bBeforeFirst = sal_False; // all false
 
     sal_Bool bMoved = sal_False;
-    if(!isLast())
+    if(!isLast() || bWasNew)
     {
         notifyAllListenersCursorBeforeMove();
         bMoved = sal_True;
     }
     sal_Bool bRet = m_pCache->last();
-    if(bMoved && bRet)
+    if(bRet)
     {
         m_aBookmark     = m_pCache->getBookmark();
         m_aCurrentRow   = m_pCache->m_aMatrixIter;
-        notifyAllListenersCursorMoved();
+        if(bMoved)
+            notifyAllListenersCursorMoved();
         firePropertyChange(aOldValues);
     }
     else
     {
-        m_bAfterLast = m_bBeforeFirst = sal_True; // all false
+        m_bAfterLast    = m_bBeforeFirst = sal_True; // all true
         m_aCurrentRow   = m_pCache->getEnd();
     }
 
@@ -1089,7 +1092,7 @@ void ORowSetBase::firePropertyChange(const ORowSetMatrix::iterator& _rOldRow)
             }
         }
     }
-    catch(...)
+    catch(Exception&)
     {
         OSL_ENSHURE(0,"firePropertyChange: Exception");
     }

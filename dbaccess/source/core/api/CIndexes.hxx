@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CIndexes.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:15:37 $
+ *  last change: $Author: oj $ $Date: 2000-11-15 15:57:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,7 @@ namespace dbaccess
 {
     class OIndexes : public connectivity::sdbcx::OCollection
     {
+        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > m_xIndexes;
         ODBTable*   m_pTable;
     protected:
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed > createObject(const ::rtl::OUString& _rName);
@@ -83,6 +84,7 @@ namespace dbaccess
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createEmptyObject();
     public:
         OIndexes(ODBTable* _pTable,
+                 const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxIndexes,
                  ::osl::Mutex& _rMutex,
                  const ::std::vector< ::rtl::OUString> &_rVector
                  ) : connectivity::sdbcx::OCollection(*_pTable,sal_True,_rMutex,_rVector)

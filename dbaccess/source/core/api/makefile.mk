@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: oj $ $Date: 2000-10-25 07:30:24 $
+#   last change: $Author: oj $ $Date: 2000-11-15 15:57:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,6 +81,7 @@ SLOFILES=	\
         $(SLO)$/CRowSetColumn.obj		\
         $(SLO)$/querycomposer.obj		\
         $(SLO)$/CIndex.obj				\
+        $(SLO)$/CIndexes.obj			\
         $(SLO)$/CIndexColumns.obj		\
         $(SLO)$/CKey.obj				\
         $(SLO)$/CKeys.obj				\

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 14:40:45 $
+ *  last change: $Author: oj $ $Date: 2000-11-15 15:57:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,6 +185,7 @@ namespace dbaccess
         sal_Bool                    m_bRebuildConnOnExecute ;
         sal_Bool                    m_bIsBookmarable ;
         sal_Bool                    m_bNew ;
+        sal_Bool                    m_bCanUpdateInsertedRows;
 
     private:
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >  calcConnection() throw( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException );
@@ -436,6 +437,9 @@ namespace dbaccess
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.8  2000/11/03 14:40:45  oj
+    some problems with refcount resolved
+
     Revision 1.7  2000/10/31 15:21:51  fs
     added XCompletedExecution interface & implementation
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: KeySet.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-30 09:24:02 $
+ *  last change: $Author: oj $ $Date: 2000-11-15 15:57:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,10 @@ OKeySet::OKeySet(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc:
 // -------------------------------------------------------------------------
 Any SAL_CALL OKeySet::getBookmark( const ORowSetRow& _rRow ) throw(SQLException, RuntimeException)
 {
-    return makeAny(m_xDriverSet->getRow());
+    sal_Int32 nPos = m_xDriverSet->getRow();
+    if(!nPos)
+        return Any();
+    return makeAny(nPos);
 }
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL OKeySet::compareBookmarks( const Any& first, const Any& second ) throw(SQLException, RuntimeException)
@@ -276,6 +279,9 @@ void SAL_CALL OKeySet::moveToCurrentRow(  ) throw(SQLException, RuntimeException
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2000/10/30 09:24:02  oj
+    use tablecontainer if no tablesupplier is supported
+
     Revision 1.4  2000/10/25 07:30:24  oj
     make strings unique for lib's
 
