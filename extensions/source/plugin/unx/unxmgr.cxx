@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unxmgr.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:18:20 $
+ *  last change: $Author: vg $ $Date: 2003-05-28 12:39:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,22 +67,54 @@
 #include <vcl/svapp.hxx>
 #include <plugin/impl.hxx>
 
+using namespace rtl;
 using namespace std;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::plugin;
 
 // Unix specific implementation
-static PluginDescription** CheckPlugin( const ByteString& rPath, int& rDescriptions )
+static bool CheckPlugin( const ByteString& rPath, list< PluginDescription* >& rDescriptions )
 {
+#if OSL_DEBUG_LEVEL > 1
+    fprintf( stderr, "Trying plugin %s ... ", rPath.GetBuffer() );
+#endif
+
+    xub_StrLen nPos = rPath.SearchBackward( '/' );
+    if( nPos == STRING_NOTFOUND )
+    {
+#if OSL_DEBUG_LEVEL > 1
+        fprintf( stderr, "no absolute path to plugin\n" );
+#endif
+        return false;
+    }
+
+    ByteString aBaseName = rPath.Copy( nPos+1 );
+    if( aBaseName.Equals( "libnullplugin.so" ) )
+    {
+#if OSL_DEBUG_LEVEL > 1
+        fprintf( stderr, "don't like %s\n", aBaseName.GetBuffer() );
+#endif
+        return false;
+    }
+
+    struct stat aStat;
+    if( stat( rPath.GetBuffer(), &aStat ) || ! S_ISREG( aStat.st_mode ) )
+    {
+#if OSL_DEBUG_LEVEL > 1
+        fprintf( stderr, "%s is not a regular file\n", rPath.GetBuffer() );
+#endif
+        return false;
+    }
+
+
     rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
-    PluginDescription** pRet = NULL;
-    rDescriptions = 0;
 
     ByteString aCommand( "pluginapp.bin \"" );
     aCommand.Append( rPath );
     aCommand.Append( '"' );
 
     FILE* pResult = popen( aCommand.GetBuffer(), "r" );
+    int nDescriptions = 0;
     if( pResult )
     {
         ByteString aMIME;
@@ -94,28 +126,41 @@ static PluginDescription** CheckPlugin( const ByteString& rPath, int& rDescripti
         {
             if( aMIME.GetChar( aMIME.Len()-1 ) == '\n' )
                 aMIME.Erase( aMIME.Len()-1 );
-            char cTok = ';';
-            if( aMIME.GetTokenCount( ';' ) > 2 )
-                cTok = ';';
-            if( aMIME.GetTokenCount( ':' ) > 2 )
-                cTok = ':';
-            ByteString aExtension = aMIME.GetToken( 1, cTok );
-            int nExtensions = aExtension.GetTokenCount( ',' );
-            pRet = new PluginDescription*[ nExtensions ];
-            for( int i = 0; i < nExtensions; i++ )
+            xub_StrLen nIndex = 0;
+            while( nIndex != STRING_NOTFOUND )
             {
-                pRet[i] = new PluginDescription;
-                pRet[i]->PluginName = String( rPath, aEncoding );
-                pRet[i]->Mimetype   = String( aMIME.GetToken( 0, cTok ), aEncoding );
+                ByteString aType = aMIME.GetToken( 0, ';', nIndex );
+
+                PluginDescription* pNew = new PluginDescription;
+                pNew->PluginName    = String( rPath, aEncoding );
+                pNew->Mimetype  = String( aType.GetToken( 0, ':' ), aEncoding );
                 ByteString aExt( "*." );
-                aExt += aExtension.GetToken( i, ',' ).EraseLeadingChars().EraseTrailingChars();
-                pRet[i]->Extension  = String( aExt, aEncoding );
-                pRet[i]->Description= String( aMIME.GetToken( 2, cTok ), aEncoding );
+                aExt += aType.GetToken( 1, ':' ).EraseLeadingChars().EraseTrailingChars();
+                pNew->Extension = String( aExt, aEncoding );
+                pNew->Description= String( aType.GetToken( 2, ':' ), aEncoding );
+                rDescriptions.push_back( pNew );
+#if OSL_DEBUG_LEVEL > 1
+                fprintf( stderr, "Mimetype: %s\nExtension: %s\n"
+                         "Description: %s\n",
+                         OUStringToOString( pNew->Mimetype, aEncoding ).getStr(),
+                         OUStringToOString( pNew->Extension, aEncoding ).getStr(),
+                         OUStringToOString( pNew->Description, aEncoding ).getStr()
+                         );
+#endif
             }
-            rDescriptions = nExtensions;
         }
+#if OSL_DEBUG_LEVEL > 1
+        else
+            fprintf( stderr, "result of \"%s\" contains no mimtype:\n%s\n",
+                     aCommand.GetBuffer(),
+                     aMIME.GetBuffer() );
+#endif
     }
-    return pRet;
+#if OSL_DEBUG_LEVEL > 1
+    else
+        fprintf( stderr, "command \"%s\" failed\n", aCommand.GetBuffer() );
+#endif
+    return nDescriptions > 0;
 }
 
 Sequence<PluginDescription> XPluginManager_Impl::getPluginDescriptions() throw()
@@ -166,52 +211,45 @@ Sequence<PluginDescription> XPluginManager_Impl::getPluginDescriptions() throw()
                 struct dirent* pDirEnt = NULL;
                 while( pDIR && ! readdir_r( pDIR, (struct dirent*)aBuffer, &pDirEnt ) && pDirEnt )
                 {
-                    struct stat aStat;
-                    ByteString aFileName( aPath );
-                    aFileName += "/";
-                    aFileName += ((struct dirent*)aBuffer)->d_name;
-                    if( ! stat( aFileName.GetBuffer(), &aStat )
-                        && S_ISREG( aStat.st_mode )
-                        && strncmp( ((struct dirent*)aBuffer)->d_name, "libnullplugin", 13 )
-                        // cannot use flash since it needs a java runtime
-                        && strncmp( ((struct dirent*)aBuffer)->d_name, "libflashplayer.so", 17 )
-                        )
+                    char* pBaseName = ((struct dirent*)aBuffer)->d_name;
+                    if( pBaseName[0] != '.' ||
+                        pBaseName[1] != '.' ||
+                        pBaseName[2] != 0 )
                     {
-#if OSL_DEBUG_LEVEL > 1
-                        fprintf( stderr, "Trying plugin %s ... ", aFileName.GetBuffer() );
-#endif
-                        int nStructs;
-                        PluginDescription** pStructs =
-                            CheckPlugin( aFileName, nStructs );
-                        if( pStructs )
-                        {
-#if OSL_DEBUG_LEVEL > 1
-                            fprintf( stderr, "success: %d\n", nStructs );
-#endif
-                            for( int i = 0; i < nStructs; i++ )
-                            {
-                                aPlugins.push_back( pStructs[i] );
-#if OSL_DEBUG_LEVEL > 1
-                                fprintf( stderr, "Mimetype: %s\nExtension: %s\n"
-                                         "Description: %s\n",
-                                         ::rtl::OUStringToOString( pStructs[i]->Mimetype, aEncoding ).getStr(),
-                                         ::rtl::OUStringToOString( pStructs[i]->Extension, aEncoding ).getStr(),
-                                         ::rtl::OUStringToOString( pStructs[i]->Description, aEncoding ).getStr()
-                                         );
-#endif
-                            }
-                            delete pStructs;
-                        }
-#if OSL_DEBUG_LEVEL > 1
-                        else
-                            fprintf(stderr, "failed\n" );
-#endif
+                        ByteString aFileName( aPath );
+                        aFileName += "/";
+                        aFileName += pBaseName;
+                        CheckPlugin( aFileName, aPlugins );
                     }
                 }
                 if( pDIR )
                     closedir( pDIR );
             }
         }
+
+        // try ~/.mozilla/pluginreg.dat
+        ByteString aMozPluginreg( pHome );
+        aMozPluginreg.Append( "/.mozilla/pluginreg.dat" );
+        FILE* fp = fopen( aMozPluginreg.GetBuffer(), "r" );
+        if( fp )
+        {
+#if OSL_DEBUG_LEVEL > 1
+            fprintf( stderr, "parsing %s\n", aMozPluginreg.GetBuffer() );
+#endif
+            char aLine[1024];
+            while( fgets( aLine, sizeof( aLine ), fp ) )
+            {
+                int nLineLen = strlen( aLine );
+                int nDotPos;
+                for( nDotPos = nLineLen-1; nDotPos > 0 && aLine[nDotPos] != ':'; nDotPos-- )
+                    ;
+                if( aLine[0] == '/' && aLine[nDotPos] == ':' && aLine[nDotPos+1] == '$' )
+                    CheckPlugin( ByteString( aLine, nDotPos ), aPlugins );
+            }
+            fclose( fp );
+        }
+
+        // create return value
         aDescriptions = Sequence<PluginDescription>( aPlugins.size() );
 #if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "found %d plugins\n", aPlugins.size() );
