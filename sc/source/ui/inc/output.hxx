@@ -2,9 +2,9 @@
  *
  *  $RCSfile: output.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 16:04:26 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:47:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,6 +196,12 @@ private:
                                     USHORT nHorJustify, BOOL bCellIsValue,
                                     BOOL bBreak, BOOL bOverwrite,
                                     Rectangle& rAlignRect, Rectangle& rClipRect,
+                                    BOOL& rLeftClip, BOOL& rRightClip );
+
+    void            ShrinkEditEngine( EditEngine& rEngine, const Rectangle& rAlignRect,
+                                    long nLeftM, long nTopM, long nRightM, long nBottomM,
+                                    BOOL bWidth, USHORT nOrient, long nAttrRotate, BOOL bPixelToLogic,
+                                    long& rEngineWidth, long& rEngineHeight, long& rNeededPixel,
                                     BOOL& rLeftClip, BOOL& rRightClip );
 
     void            SetSyntaxColor( Font* pFont, ScBaseCell* pCell );
