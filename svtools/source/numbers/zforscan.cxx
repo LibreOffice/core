@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforscan.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: er $ $Date: 2001-03-20 17:30:24 $
+ *  last change: $Author: er $ $Date: 2001-04-12 13:15:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -620,29 +620,48 @@ short ImpSvNumberformatScan::Next_Symbol( const String& rStr,
                             short nTmpType = GetKeyWord( rStr, nPos-1 );
                             if ( nTmpType )
                             {
-                                eType = nTmpType;
-                                xub_StrLen nLen = sKeyword[eType].Len();
-                                sSymbol = rStr.Copy( nPos-1, nLen );
-                                if ( eType == NF_KEY_E || IsAmbiguousE( eType ) )
+                                BOOL bCurrency = FALSE;
+                                // "Automatic" currency may start with keyword,
+                                // like "Esc." and 'E'
+                                if ( nPos-1 + sCurString.Len() <= rStr.Len() &&
+                                    sCurString.Search( sKeyword[nTmpType] ) == 0 )
                                 {
-                                    sal_Unicode cNext = rStr.GetChar(nPos);
-                                    switch ( cNext )
-                                    {
-                                        case '+' :
-                                        case '-' :  // E+ E- combine to one symbol
-                                            sSymbol += cNext;
-                                            eType = NF_KEY_E;
-                                            nPos++;
-                                        break;
-                                        case '0' :
-                                        case '#' :  // scientific E without sign
-                                            eType = NF_KEY_E;
-                                        break;
-                                    }
+                                    String aTest( rStr.Copy( nPos-1, sCurString.Len() ) );
+                                    pChrCls->toUpper( aTest );
+                                    if ( aTest == sCurString )
+                                        bCurrency = TRUE;
                                 }
-                                nPos--;
-                                nPos += nLen;
-                                eState = SsStop;
+                                if ( bCurrency )
+                                {
+                                    eState = SsGetWord;
+                                    sSymbol += cToken;
+                                }
+                                else
+                                {
+                                    eType = nTmpType;
+                                    xub_StrLen nLen = sKeyword[eType].Len();
+                                    sSymbol = rStr.Copy( nPos-1, nLen );
+                                    if ( eType == NF_KEY_E || IsAmbiguousE( eType ) )
+                                    {
+                                        sal_Unicode cNext = rStr.GetChar(nPos);
+                                        switch ( cNext )
+                                        {
+                                            case '+' :
+                                            case '-' :  // E+ E- combine to one symbol
+                                                sSymbol += cNext;
+                                                eType = NF_KEY_E;
+                                                nPos++;
+                                            break;
+                                            case '0' :
+                                            case '#' :  // scientific E without sign
+                                                eType = NF_KEY_E;
+                                            break;
+                                        }
+                                    }
+                                    nPos--;
+                                    nPos += nLen;
+                                    eState = SsStop;
+                                }
                             }
                             else
                             {
