@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnume.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: cl $ $Date: 2002-03-01 14:11:09 $
+ *  last change: $Author: hr $ $Date: 2004-05-11 11:34:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -422,7 +422,7 @@ void SvxXMLNumRuleExport::exportLevelStyle( INT32 nLevel,
         nSpaceBefore += nMinLabelWidth;
         nMinLabelWidth = -nMinLabelWidth;
         OUStringBuffer sBuffer;
-        if( nSpaceBefore > 0 )
+        if( nSpaceBefore != 0 )
         {
             GetExport().GetMM100UnitConverter().convertMeasure( sBuffer, nSpaceBefore );
             GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_SPACE_BEFORE,
