@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shells.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-12 22:33:24 $
+ *  last change: $Author: kz $ $Date: 2001-01-19 20:50:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -428,7 +428,7 @@ String STR_REDLINE_AUTOFMT
     TEXT[ portuguese ] = "AutoFormato";
     TEXT[ danish ] = "AutoFormat";
     TEXT[ french ] = "AutoFormat";
-    TEXT[ swedish ] = "AutoFormat";
+    TEXT[ swedish ] = "Autoformat";
     TEXT[ dutch ] = "AutoOpmaak";
     TEXT[ spanish ] = "AutoFormato";
     TEXT[ english_us ] = "AutoFormat";
@@ -532,7 +532,7 @@ String STR_REDLINE_TITLE
     Text[ portuguese ] = "AutoFormato";
     Text[ danish ] = "AutoFormat";
     Text[ french ] = "AutoFormat";
-    Text[ swedish ] = "AutoFormat";
+    Text[ swedish ] = "Autoformat";
     Text[ dutch ] = "AutoOpmaak";
     Text[ spanish ] = "AutoFormato";
     Text[ english_us ] = "AutoFormat";
@@ -558,7 +558,7 @@ String STR_REDLINE_MSG
     Text[ portuguese ] = "Concluído AutoFormato.\nPoderá aceitar ou rejeitar todas as modificações de\numa só vez ou uma a uma.";
     Text[ danish ] = "AutoFormat er fuldført.\nDu kan nu acceptere eller forkaste alle ændringer,\neller acceptere eller forkaste dem enkeltvis.";
     Text[ french ] = "L'AutoFormat a terminé.\nVous pouvez choisir d'en accepter ou rejeter en une seule fois toutes les modifications, ou\n de vous faire afficher toutes les modifications pour les revoir.";
-    Text[ swedish ] = "AutoFormat är färdigt.\nDu kan acceptera eller kasta bort alla ändringar eller\nacceptera eller kasta bort enstaka ändringar.";
+    Text[ swedish ] = "Autoformatet är färdigt.\nDu kan acceptera eller kasta bort alla ändringar eller\nacceptera eller kasta bort enstaka ändringar.";
     Text[ dutch ] = "AutoOpmaak voltooid.\nU kunt nu alle wijzigingen accepteren of verwerpen,\nof afzonderlijke wijzigingen accepteren of verwerpen.";
     Text[ spanish ] = "El AutoFormato ha concluido.\nAhora puede aceptar o rechazar todos los cambios\na la vez o uno por uno.";
     Text[ english_us ] = "AutoFormat completed.\nYou can accept or reject all changes,\nor accept or reject particular changes.";
