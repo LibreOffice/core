@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imp_op.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:13 $
+ *  last change: $Author: dr $ $Date: 2000-12-18 14:21:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,14 @@ public:
     virtual FltError    Read( void );
 
     ScExtDocOptions&    GetExtOpt( void );
+
+    static SvMemoryStream* CreateContinueStream(
+                            SvStream& rStream,                  // input stream
+                            const UINT16 nBaseRecordLen,        // size of start record
+                            UINT32& rSummaryLen,                // return: size of memory stream
+                            UINT32& rNextPureRecord,            // return: position of next regular record
+                            const BOOL bForceSingle = FALSE,    // force creating a stream without continue record
+                            UINT32List* pCutPosList = NULL );   // list of stream position (im mem stream)
 };
 
 

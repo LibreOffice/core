@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impop.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: gt $ $Date: 2000-11-30 10:39:03 $
+ *  last change: $Author: dr $ $Date: 2000-12-18 14:25:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,87 @@
 #include "excform.hxx"
 #include "flttools.hxx"
 
+
+
+// static
+SvMemoryStream* ImportTyp::CreateContinueStream(
+        SvStream& rStream,
+        const UINT16 nBaseRecordLen,
+        UINT32& rSummaryLen,
+        UINT32& rNextPureRecord,
+        const BOOL bForceSingle,
+        UINT32List* pCutPosList )
+{
+    DBG_ASSERT( nBaseRecordLen, "ImportTyp::CreateContinueStream - no record content" );
+
+    const UINT32        nStartPos = rStream.Tell();
+    UINT16              nId;
+    SvMemoryStream*     pMemStr = NULL;
+    UINT32              nNextRecord = nStartPos;
+
+    rStream.SeekRel( nBaseRecordLen );
+    rStream >> nId;
+
+    rStream.Seek( nStartPos );
+
+    if( nId == 0x003C )
+    {// Struktur mit Folge-Records
+        UINT16          nBufferLen = nBaseRecordLen;
+        UINT16          nLen = nBaseRecordLen;
+        sal_Char*       pBuffer = new sal_Char[ nBufferLen ];
+
+        pMemStr = new SvMemoryStream;
+
+        rStream.Read( pBuffer, nLen );
+        pMemStr->Write( pBuffer, nLen );
+
+        rStream >> nId >> nLen;
+
+        do
+        {
+            if( nLen > nBufferLen )
+            {
+                delete[] pBuffer;
+                nBufferLen = nLen;
+                pBuffer = new sal_Char[ nBufferLen ];
+            }
+
+            rStream.Read( pBuffer, nLen );
+
+            if( pCutPosList )
+                pCutPosList->Append( pMemStr->Tell() ); // Schnittstelle merken
+
+            pMemStr->Write( pBuffer, nLen );
+
+            rStream >> nId >> nLen;
+        }
+        while( nId == 0x003C );
+
+        rSummaryLen = pMemStr->Tell();
+        pMemStr->Seek( STREAM_SEEK_TO_END );
+
+        rNextPureRecord = rStream.Tell() - 4;
+
+        delete[] pBuffer;
+    }
+    else
+    {// 'Pure' Record
+        rNextPureRecord = nStartPos + nBaseRecordLen;
+        if( bForceSingle )
+        {
+            pMemStr = new SvMemoryStream;
+            sal_Char* pBuffer = new sal_Char[ nBaseRecordLen ];
+
+            rStream.Read( pBuffer, nBaseRecordLen );
+            pMemStr->Write( pBuffer, nBaseRecordLen );
+
+            delete[] pBuffer;
+        }
+        rSummaryLen = nBaseRecordLen;
+    }
+
+    return pMemStr;
+}
 
 
 
