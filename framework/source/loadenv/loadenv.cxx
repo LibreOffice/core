@@ -2,9 +2,9 @@
  *
  *  $RCSfile: loadenv.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-21 13:27:42 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 16:15:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 //_______________________________________________
 // includes of own project
 
@@ -108,6 +107,10 @@
 
 #ifndef __FRAMEWORK_THREADHELP_RESETABLEGUARD_HXX_
 #include <threadhelp/resetableguard.hxx>
+#endif
+
+#ifndef __FRAMEWORK_PROPERTIES_H_
+#include <properties.h>
 #endif
 
 #ifndef __FRAMEWORK_PROTOCOLS_H_
@@ -254,6 +257,10 @@
 
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
 #include <unotools/processfactory.hxx>
+#endif
+
+#ifndef _COMPHELPER_CONFIGURATIONHELPER_HXX_
+#include <comphelper/configurationhelper.hxx>
 #endif
 
 #ifndef _RTL_USTRBUF_HXX_
@@ -1142,7 +1149,8 @@ sal_Bool LoadEnv::impl_loadContent()
     css::uno::Reference< css::frame::XFrame > xTargetFrame = m_xTargetFrame;
 
     // OK - there is a valid target frame.
-    // But may be it contains already a valid document.
+    // But may be it contains already a document.
+    // Then we have to ask it, if it allows recylcing of this frame .-)
     css::uno::Reference< css::frame::XController > xOldDoc = xTargetFrame->getController();
     if (xOldDoc.is())
     {
@@ -1150,6 +1158,11 @@ sal_Bool LoadEnv::impl_loadContent()
         if (!m_bReactivateControllerOnError)
             throw LoadEnvException(LoadEnvException::ID_COULD_NOT_SUSPEND_CONTROLLER);
     }
+
+    // Now we have a valid frame ... and type detection was already done.
+    // We should apply the module dependend window position and size to the
+    // frame window.
+    impl_applyPersistentWindowState(xTargetFrame->getContainerWindow());
 
     // Don't forget to lock task for following load process. Otherwise it could die
     // during this operation runs by terminating the office or closing this task via api.
@@ -1688,6 +1701,86 @@ void LoadEnv::impl_makeFrameWindowVisible(const css::uno::Reference< css::awt::X
         xTopWindow->toFront();
     }
 */
+}
+
+/*-----------------------------------------------
+    15.03.2005 11:12
+-----------------------------------------------*/
+void LoadEnv::impl_applyPersistentWindowState(const css::uno::Reference< css::awt::XWindow >& xWindow)
+{
+    static ::rtl::OUString PACKAGE_SETUP_MODULES = ::rtl::OUString::createFromAscii("/org.openoffice.Setup/Office/Factories");
+
+    // no window -> action not possible
+    if (!xWindow.is())
+        return;
+
+    // window already visible -> do nothing! If we use a "recycle frame" for loading ...
+    // the current position and size must be used.
+    css::uno::Reference< css::awt::XWindow2 > xVisibleCheck(xWindow, css::uno::UNO_QUERY);
+    if (
+        (xVisibleCheck.is()        ) &&
+        (xVisibleCheck->isVisible())
+       )
+       return;
+
+    Window*  pWindow       = VCLUnoHelper::GetWindow(xWindow);
+    sal_Bool bSystemWindow = pWindow->IsSystemWindow();
+    sal_Bool bWorkWindow   = (pWindow->GetType() == WINDOW_WORKWINDOW);
+
+    if (!bSystemWindow && !bWorkWindow)
+        return;
+
+    SystemWindow* pSystemWindow = (SystemWindow*)pWindow;
+    WorkWindow*   pWorkWindow   = (WorkWindow*  )pWindow;
+
+    // dont overwrite this special state!
+    if (pWorkWindow->IsMinimized())
+        return;
+
+    // SAFE ->
+    ReadGuard aReadLock(m_aLock);
+
+    // no filter -> no module -> no persistent window state
+    ::rtl::OUString sFilter = m_lMediaDescriptor.getUnpackedValueOrDefault(
+                                    ::comphelper::MediaDescriptor::PROP_FILTERNAME(),
+                                    ::rtl::OUString());
+    if (!sFilter.getLength())
+        return;
+
+    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xSMGR;
+
+    aReadLock.unlock();
+    // <- SAFE
+
+    try
+    {
+        // retrieve the module name from the filter configuration
+        css::uno::Reference< css::container::XNameAccess > xFilterCfg(
+            xSMGR->createInstance(SERVICENAME_FILTERFACTORY),
+            css::uno::UNO_QUERY_THROW);
+        ::comphelper::SequenceAsHashMap lProps (xFilterCfg->getByName(sFilter));
+        ::rtl::OUString                 sModule = lProps.getUnpackedValueOrDefault(FILTER_PROPNAME_DOCUMENTSERVICE, ::rtl::OUString());
+
+        // get access to the configuration of this office module
+        css::uno::Reference< css::container::XNameAccess > xModuleCfg(::comphelper::ConfigurationHelper::openConfig(
+                                                                        xSMGR,
+                                                                        PACKAGE_SETUP_MODULES,
+                                                                        ::comphelper::ConfigurationHelper::E_READONLY),
+                                                                      css::uno::UNO_QUERY_THROW);
+
+        // read window state from the configuration
+        // and apply it on the window.
+        // Do nothing, if no configuration entry exists!
+        css::uno::Any   aWindowState = ::comphelper::ConfigurationHelper::readRelativeKey(xModuleCfg, sModule, OFFICEFACTORY_PROPNAME_WINDOWATTRIBUTES);
+        ::rtl::OUString sWindowState ;
+        aWindowState >>= sWindowState;
+        if (sWindowState.getLength())
+            pSystemWindow->SetWindowState(U2B_ENC(sWindowState,RTL_TEXTENCODING_UTF8));
+    }
+    catch(const css::uno::RuntimeException& exRun)
+        { throw exRun; }
+    catch(const css::uno::Exception&)
+        {}
 }
 
 } // namespace framework
