@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hr $ $Date: 2003-09-29 14:54:36 $
+#   last change: $Author: hr $ $Date: 2004-02-02 19:20:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,7 +81,13 @@ SLOFILES=$(SLO)$/recently_used_file.obj \
          $(SLO)$/recently_used_file_handler.obj
 
 SHL1TARGET=recentfile
+
+# static libs must come at end of linker list on MacOSX
+.IF "$(OS)" == "MACOSX"
+SHL1STDLIBS= $(SALLIB) $(EXPATASCII3RDLIB)
+.ELSE
 SHL1STDLIBS=$(EXPATASCII3RDLIB) $(SALLIB)
+.ENDIF # MACOSX
 
 SHL1LIBS=$(SLB)$/xmlparser.lib
 SHL1OBJS=$(SLOFILES)
