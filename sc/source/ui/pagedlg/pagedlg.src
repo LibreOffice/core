@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagedlg.src,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-26 20:03:48 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 15:15:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,8 +129,8 @@ ModelessDialog RID_SCDLG_AREAS
     ImageButton RB_PRINTAREA
     {
         QuickHelpText [ de ] = "Verkleinern" ;
-        Pos = MAP_APPFONT ( 239 , 14 ) ;
-        Size = MAP_APPFONT ( 12 , 12 ) ;
+        Pos = MAP_APPFONT ( 239 , 13 ) ;
+        Size = MAP_APPFONT ( 13 , 15 ) ;
         TabStop = FALSE ;
         QuickHelpText [ en-US ] = "Shrink" ;
     };
@@ -172,8 +172,8 @@ ModelessDialog RID_SCDLG_AREAS
     ImageButton RB_REPEATROW
     {
         QuickHelpText [ de ] = "Verkleinern" ;
-        Pos = MAP_APPFONT ( 239 , 43 ) ;
-        Size = MAP_APPFONT ( 12 , 12 ) ;
+        Pos = MAP_APPFONT ( 239 , 42 ) ;
+        Size = MAP_APPFONT ( 13 , 15 ) ;
         TabStop = FALSE ;
         QuickHelpText [ en-US ] = "Shrink" ;
     };
@@ -215,8 +215,8 @@ ModelessDialog RID_SCDLG_AREAS
     ImageButton RB_REPEATCOL
     {
         QuickHelpText [ de ] = "Verkleinern" ;
-        Pos = MAP_APPFONT ( 239 , 72 ) ;
-        Size = MAP_APPFONT ( 12 , 12 ) ;
+        Pos = MAP_APPFONT ( 239 , 71 ) ;
+        Size = MAP_APPFONT ( 13 , 15 ) ;
         TabStop = FALSE ;
         QuickHelpText [ en-US ] = "Shrink" ;
     };
