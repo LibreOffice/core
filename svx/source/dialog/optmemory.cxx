@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optmemory.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 16:46:26 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 08:32:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -354,8 +354,13 @@ void OfaMemoryOptionsPage::Reset( const SfxItemSet& rSet )
     // OLECache
     aNfOLECache.SetValue( Max( aCacheOptions.GetWriterOLE_Objects(), aCacheOptions.GetDrawingEngineOLE_Objects() ) );
 
-    if ( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_QUICKLAUNCHER, FALSE, &pItem ) )
-        aQuickLaunchCB.Check(((SfxBoolItem*)pItem)->GetValue());
+    SfxItemState eState = rSet.GetItemState( SID_ATTR_QUICKLAUNCHER, FALSE, &pItem );
+    if ( SFX_ITEM_SET == eState )
+        aQuickLaunchCB.Check( ( (SfxBoolItem*)pItem )->GetValue() );
+    else if ( SFX_ITEM_DISABLED == eState )
+        // quickstart not installed
+        aQuickLaunchCB.Disable();
+
     aQuickLaunchCB.SaveValue();
 }
 
