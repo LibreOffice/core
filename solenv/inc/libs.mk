@@ -2,9 +2,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.28 $
+#   $Revision: 1.29 $
 #
-#   last change: $Author: obo $ $Date: 2001-07-04 14:45:55 $
+#   last change: $Author: hr $ $Date: 2001-07-10 12:40:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -159,6 +159,7 @@ BASICLIB=-lsb$(UPD)$(DLLPOSTFIX)
 BASICLIGHTLIB=-lsbl$(UPD)$(DLLPOSTFIX)
 SDBLIB=-lsdb$(UPD)$(DLLPOSTFIX)
 DBTOOLSLIB=-ldbtools$(DBTOOLS_MAJOR)
+SYNCACCLIB=-lsyncacc1
 HM2LIBSH=-lhmwrpdll
 HM2LIBST=-lhmwrap
 LINGULIB=$(HM2LIBST)
@@ -312,6 +313,7 @@ BASCTLLIB=$(LIBPRE) basctl.lib
 SVXLLIB=$(LIBPRE) svxl.lib
 SDBLIB=$(LIBPRE) sdb.lib
 DBTOOLSLIB=$(LIBPRE) idbtools.lib
+SYNCACCLIB=$(LIBPRE) isyncacc1.lib
 HM2LIBSH=$(LIBPRE) hmwrpdll.lib
 HM2LIBST=$(LIBPRE) hmwrap.lib
 LINGULIB=$(HM2LIBST)
