@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outliner.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 16:47:24 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 11:31:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -269,6 +269,8 @@ String RID_OUTLUNDO_INSERT
     TEXT[ hindi ] = "जोड़ो";
     TEXT[ slovak ] = "Vložiť";
 };
+
+
 
 
 
