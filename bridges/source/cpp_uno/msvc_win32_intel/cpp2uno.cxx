@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpp2uno.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:46:18 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 13:26:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -499,4 +499,16 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
         code = codeSnippet(code, functionOffset++, vtableOffset);
     }
     return code;
+}
+
+void bridges::cpp_uno::shared::VtableFactory::flushCode(
+    unsigned char const * begin, unsigned char const * end)
+{
+    DWORD old_protect;
+#if OSL_DEBUG_LEVEL > 0
+    BOOL success =
+#endif
+    VirtualProtect( const_cast<unsigned char *>(begin), end - begin,
+                    PAGE_EXECUTE_READWRITE, &old_protect );
+    OSL_ENSURE( success, "VirtualProtect() failed!" );
 }
