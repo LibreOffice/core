@@ -2,9 +2,9 @@
  *
  *  $RCSfile: initui.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2001-03-21 21:05:20 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 06:55:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -309,7 +309,7 @@ Resource RID_SW_SHELLRES
         TEXT [ norwegian ] = "** Feil tidsformat **" ;
         TEXT [ italian ] = "** Formato orario errato **" ;
         TEXT [ portuguese_brazilian ] = "** Formato de tempo errado**" ;
-        TEXT [ portuguese ] = "** Formato de tempo errado**" ;
+        TEXT [ portuguese ] = "** Formato de hora errado**" ;
         TEXT [ finnish ] = "** Väärä aikamuoto **" ;
         TEXT [ danish ] = "** Forkert tidsformat **" ;
         TEXT [ french ] = "** Format d'heure erroné **" ;
@@ -1950,8 +1950,8 @@ String STR_AUTH_FIELD_NOTE
     Text[ swedish ] = "Not";
     Text[ polish ] = "Notatka";
     Text[ portuguese_brazilian ] = "Note";
-    Text[ japanese ] = "ºÒÝÄ";
-    Text[ korean ] = "¸Þ¸ð";
+    Text[ japanese ] = "ºÒÝÄ(~E)";
+    Text[ korean ] = "¸Þ¸ð(~E)";
     Text[ chinese_simplified ] = "±¸×¢(~E)";
     Text[ chinese_traditional ] = "³Æµù(~E)";
     Text[ arabic ] = "ãáÇÍÙÉ";
