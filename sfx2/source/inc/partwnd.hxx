@@ -2,9 +2,9 @@
  *
  *  $RCSfile: partwnd.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-23 12:06:48 $
+ *  last change: $Author: rt $ $Date: 2000-10-24 08:37:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,9 +74,9 @@ namespace com
             namespace frame
             {
                 class XFrame;
-            };
-        };
-    };
+            }
+        }
+    }
 };
 
 #include "childwin.hxx"
