@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dockwin.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-29 17:01:14 $
+ *  last change: $Author: mba $ $Date: 2001-11-30 13:53:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,6 +178,8 @@ BOOL SfxDockingWindow::PrepareToggleFloatingMode()
     }
     else if ( pMgr )
     {
+        pImp->aWinState = GetFloatingWindow()->GetWindowState();
+
         // Testen, ob es erlaubt ist, anzudocken
         if (CheckAlignment(GetAlignment(),pImp->GetLastAlignment()) ==
             SFX_ALIGN_NOALIGNMENT)
@@ -771,6 +773,16 @@ void SfxDockingWindow::Initialize_Impl()
     if ( !pMgr )
         // Bugfix #39771
         return;
+
+    Point aPos = GetFloatingPos();
+    if ( aPos == Point() )
+    {
+        SfxViewFrame *pFrame = pBindings->GetDispatcher_Impl()->GetFrame();
+        Window* pEditWin = pFrame->GetViewShell()->GetWindow();
+        aPos = pEditWin->OutputToScreenPixel( pEditWin->GetPosPixel() );
+        aPos = GetParent()->ScreenToOutputPixel( aPos );
+        SetFloatingPos( aPos );
+    }
 
     FloatingWindow* pFloatWin = GetFloatingWindow();
     if ( pFloatWin )

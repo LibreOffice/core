@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templdlg.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-21 12:44:07 $
+ *  last change: $Author: mba $ $Date: 2001-11-30 13:53:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2721,17 +2721,12 @@ void SfxTemplateDialog::StateChanged( StateChangedType nStateChange )
 {
     if ( nStateChange == STATE_CHANGE_INITSHOW )
     {
-        // find topmost parent
-        Window* pTopParent = GetParent();
-        Window* pNewParent = pTopParent->GetParent();
-        while( pNewParent )
-        {
-            pTopParent = pNewParent;
-            pNewParent = pTopParent->GetParent();
-        }
+        SfxViewFrame *pFrame = GetBindings().GetDispatcher_Impl()->GetFrame();
+        Window* pEditWin = pFrame->GetViewShell()->GetWindow();
 
-        Size aSize = pTopParent->GetSizePixel();
-        Point aPoint = pTopParent->GetPosPixel();
+        Size aSize = pEditWin->GetSizePixel();
+        Point aPoint = pEditWin->OutputToScreenPixel( pEditWin->GetPosPixel() );
+        aPoint = GetParent()->ScreenToOutputPixel( aPoint );
         Size aWinSize = GetSizePixel();
         aPoint.X() += aSize.Width() - aWinSize.Width() - 20;
         aPoint.Y() += aSize.Height() / 2 - aWinSize.Height() / 2;
