@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-15 16:44:10 $
+ *  last change: $Author: cl $ $Date: 2001-01-16 20:18:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2015,6 +2015,68 @@ OUString SAL_CALL SvxShape::getImplementationName()
     return OUString( RTL_CONSTASCII_USTRINGPARAM("SvxShape") );
 }
 
+#define STAR_NAMESPACE "com.sun.star."
+
+const char* sUNO_service_style_ParagraphProperties          = STAR_NAMESPACE "style.ParagraphProperties";
+const char* sUNO_service_style_CharacterProperties          = STAR_NAMESPACE "style.CharacterProperties";
+
+const char* sUNO_service_drawing_ShadowDescriptor           = STAR_NAMESPACE "drawing.ShadowDescriptor";
+const char* sUNO_service_drawing_RotationDescriptor         = STAR_NAMESPACE "drawing.RotationDescriptor";
+
+const char* sUNO_service_drawing_Text                       = STAR_NAMESPACE "drawing.Text";
+const char* sUNO_service_drawing_GroupShape                 = STAR_NAMESPACE "drawing.GroupShape";
+
+const char* sUNO_service_drawing_PolyPolygonDescriptor      = STAR_NAMESPACE "drawing.PolyPolygonDescriptor";
+const char* sUNO_service_drawing_PolyPolygonBezierDescriptor= STAR_NAMESPACE "drawing.PolyPolygonBezierDescriptor";
+
+const char* sUNO_service_drawing_AreaShapeDescriptor        = STAR_NAMESPACE "drawing.AreaShapeDescriptor";
+const char* sUNO_service_drawing_AreaShape                  = STAR_NAMESPACE "drawing.AreaShape";
+
+const char* sUNO_service_drawing_LineShapeDescriptor        = STAR_NAMESPACE "drawing.LineShapeDescriptor";
+const char* sUNO_service_drawing_LineShape                  = STAR_NAMESPACE "drawing.LineShape";
+
+const char* sUNO_service_drawing_ShapeDescriptor            = STAR_NAMESPACE "drawing.ShapeDescriptor";
+const char* sUNO_service_drawing_Shape                      = STAR_NAMESPACE "drawing.Shape";
+
+const char* sUNO_service_drawing_RectangleShapeDescriptor   = STAR_NAMESPACE "drawing.RectangleShapeDescriptor";
+const char* sUNO_service_drawing_RectangleShape             = STAR_NAMESPACE "drawing.RectangleShape";
+
+const char* sUNO_service_drawing_EllipseShapeDescriptor     = STAR_NAMESPACE "drawing.EllipseShapeDescriptor";
+const char* sUNO_service_drawing_EllipseShape               = STAR_NAMESPACE "drawing.EllipseShape";
+
+const char* sUNO_service_drawing_PolyPolygonShapeDescriptor = STAR_NAMESPACE "drawing.PolyPolygonShapeDescriptor";
+const char* sUNO_service_drawing_PolyPolygonShape           = STAR_NAMESPACE "drawing.PolyPolygonShape";
+
+const char* sUNO_service_drawing_PolyLineShapeDescriptor    = STAR_NAMESPACE "drawing.PolyLineShapeDescriptor";
+const char* sUNO_service_drawing_PolyLineShape              = STAR_NAMESPACE "drawing.PolyLineShape";
+
+const char* sUNO_service_drawing_OpenBezierShapeDescriptor  = STAR_NAMESPACE "drawing.OpenBezierShapeDescriptor";
+const char* sUNO_service_drawing_OpenBezierShape            = STAR_NAMESPACE "drawing.OpenBezierShape";
+
+const char* sUNO_service_drawing_ClosedBezierShapeDescriptor= STAR_NAMESPACE "drawing.ClosedBezierShapeDescriptor";
+const char* sUNO_service_drawing_ClosedBezierShape          = STAR_NAMESPACE "drawing.ClosedBezierShape";
+
+const char* sUNO_service_drawing_TextShapeDescriptor        = STAR_NAMESPACE "drawing.TextShapeDescriptor";
+const char* sUNO_service_drawing_TextShape                  = STAR_NAMESPACE "drawing.TextShape";
+
+const char* sUNO_service_drawing_GraphicObjectShapeDescriptor = STAR_NAMESPACE "drawing.GraphicObjectShapeDescriptor";
+const char* sUNO_service_drawing_GraphicObjectShape           = STAR_NAMESPACE "drawing.GraphicObjectShape";
+
+const char* sUNO_service_drawing_OLE2Shape                  = STAR_NAMESPACE "drawing.OLE2Shape";
+const char* sUNO_service_drawing_PageShape                  = STAR_NAMESPACE "drawing.PageShape";
+
+const char* sUNO_service_drawing_CaptionShapeDescriptor     = STAR_NAMESPACE "drawing.CaptionShapeDescriptor";
+const char* sUNO_service_drawing_CaptionShape               = STAR_NAMESPACE "drawing.CaptionShape";
+
+const char* sUNO_service_drawing_MeasureShapeDescriptor     = STAR_NAMESPACE "drawing.MeasureShapeDescriptor";
+const char* sUNO_service_drawing_MeasureShape               = STAR_NAMESPACE "drawing.MeasureShape";
+
+const char* sUNO_service_drawing_FrameShape                 = STAR_NAMESPACE "drawing.FrameShape";
+const char* sUNO_service_drawing_ControlShape               = STAR_NAMESPACE "drawing.ControlShape";
+
+const char* sUNO_service_drawing_ConnectorShapeDescriptor   = STAR_NAMESPACE "drawing.ConnectorShapeDescriptor";
+const char* sUNO_service_drawing_ConnectorShape             = STAR_NAMESPACE "drawing.ConnectorShape";
+
 uno::Sequence< OUString > SAL_CALL SvxShape::getSupportedServiceNames()
     throw(uno::RuntimeException)
 {
@@ -2025,24 +2087,269 @@ uno::Sequence< OUString > SAL_CALL SvxShape::getSupportedServiceNames()
     if( xInfo.is() )
         aSeq = xInfo->getSupportedServiceNames();
 
-    addToSequence( aSeq, 3, "com.sun.star.style.ParagraphProperties",
-                            "com.sun.star.drawing.ShapeDescriptor",
-                            "com.sun.star.drawing.Shape");
-
-
     if( pObj && pObj->GetObjInventor() == SdrInventor)
     {
-        switch(pObj->GetObjIdentifier())
+        const UINT16 nIdent = pObj->GetObjIdentifier();
+
+        switch(nIdent)
         {
+        case OBJ_GRUP:
+            addToSequence( aSeq, 3, sUNO_service_drawing_ShapeDescriptor,
+                                    sUNO_service_drawing_Shape,
+                                    sUNO_service_drawing_GroupShape);
+            break;
+        case OBJ_LINE:
+            addToSequence( aSeq, 8, sUNO_service_drawing_ShapeDescriptor,
+                                    sUNO_service_drawing_Shape,
+
+                                    sUNO_service_style_ParagraphProperties,
+                                    sUNO_service_drawing_Text,
+
+                                    sUNO_service_drawing_PolyPolygonDescriptor,
+
+                                    sUNO_service_drawing_ShadowDescriptor,
+
+                                    sUNO_service_drawing_LineShapeDescriptor,
+                                    sUNO_service_drawing_LineShape);
+            break;
+
+        case OBJ_RECT:
+            addToSequence( aSeq, 11,sUNO_service_drawing_ShapeDescriptor,
+                                    sUNO_service_drawing_Shape,
+
+                                    sUNO_service_style_ParagraphProperties,
+                                    sUNO_service_drawing_Text,
+
+                                    sUNO_service_drawing_ShadowDescriptor,
+                                    sUNO_service_drawing_RotationDescriptor,
+
+                                    sUNO_service_drawing_LineShapeDescriptor,
+
+                                    sUNO_service_drawing_AreaShapeDescriptor,
+                                    sUNO_service_drawing_AreaShape,
+
+                                    sUNO_service_drawing_RectangleShapeDescriptor,
+                                    sUNO_service_drawing_RectangleShape);
+            break;
+
+        case OBJ_CIRC:
+        case OBJ_SECT:
+        case OBJ_CARC:
+        case OBJ_CCUT:
+            addToSequence( aSeq, 11,sUNO_service_drawing_ShapeDescriptor,
+                                    sUNO_service_drawing_Shape,
+
+                                    sUNO_service_style_ParagraphProperties,
+                                    sUNO_service_drawing_Text,
+
+                                    sUNO_service_drawing_ShadowDescriptor,
+                                    sUNO_service_drawing_RotationDescriptor,
+
+                                    sUNO_service_drawing_LineShapeDescriptor,
+
+                                    sUNO_service_drawing_AreaShapeDescriptor,
+                                    sUNO_service_drawing_AreaShape,
+
+                                    sUNO_service_drawing_EllipseShapeDescriptor,
+                                    sUNO_service_drawing_EllipseShape);
+            break;
+
+        case OBJ_PATHPLIN:
+        case OBJ_PLIN:
+            addToSequence( aSeq, 10,sUNO_service_drawing_ShapeDescriptor,
+                                    sUNO_service_drawing_Shape,
+
+                                    sUNO_service_style_ParagraphProperties,
+                                    sUNO_service_drawing_Text,
+
+                                    sUNO_service_drawing_ShadowDescriptor,
+                                    sUNO_service_drawing_RotationDescriptor,
+
+                                    sUNO_service_drawing_PolyPolygonDescriptor,
+
+                                    sUNO_service_drawing_LineShapeDescriptor,
+
+                                    sUNO_service_drawing_PolyLineShapeDescriptor,
+                                    sUNO_service_drawing_PolyLineShape);
+            break;
+
+        case OBJ_PATHPOLY:
+        case OBJ_POLY:
+            addToSequence( aSeq, 12,sUNO_service_drawing_ShapeDescriptor,
+                                    sUNO_service_drawing_Shape,
+
+                                    sUNO_service_style_ParagraphProperties,
+                                    sUNO_service_drawing_Text,
+
+                                    sUNO_service_drawing_ShadowDescriptor,
+                                    sUNO_service_drawing_RotationDescriptor,
+
+                                    sUNO_service_drawing_PolyPolygonDescriptor,
+
+                                    sUNO_service_drawing_LineShapeDescriptor,
+
+                                    sUNO_service_drawing_AreaShapeDescriptor,
+                                    sUNO_service_drawing_AreaShape,
+
+                                    sUNO_service_drawing_PolyPolygonShapeDescriptor,
+                                    sUNO_service_drawing_PolyPolygonShape);
+            break;
+
+        case OBJ_FREELINE:
+        case OBJ_PATHLINE:
+            addToSequence( aSeq, 10,sUNO_service_drawing_ShapeDescriptor,
+                                    sUNO_service_drawing_Shape,
+
+                                    sUNO_service_style_ParagraphProperties,
+                                    sUNO_service_drawing_Text,
+
+                                    sUNO_service_drawing_ShadowDescriptor,
+                                    sUNO_service_drawing_RotationDescriptor,
+
+                                    sUNO_service_drawing_PolyPolygonBezierDescriptor,
+
+                                    sUNO_service_drawing_LineShapeDescriptor,
+
+                                    sUNO_service_drawing_OpenBezierShapeDescriptor,
+                                    sUNO_service_drawing_OpenBezierShape);
+            break;
+
+        case OBJ_FREEFILL:
+        case OBJ_PATHFILL:
+            addToSequence( aSeq, 12,sUNO_service_drawing_ShapeDescriptor,
+                                    sUNO_service_drawing_Shape,
+
+                                    sUNO_service_style_ParagraphProperties,
+                                    sUNO_service_drawing_Text,
+
+                                    sUNO_service_drawing_ShadowDescriptor,
+                                    sUNO_service_drawing_RotationDescriptor,
+
+                                    sUNO_service_drawing_PolyPolygonBezierDescriptor,
+
+                                    sUNO_service_drawing_LineShapeDescriptor,
+
+                                    sUNO_service_drawing_AreaShapeDescriptor,
+                                    sUNO_service_drawing_AreaShape,
+
+                                    sUNO_service_drawing_ClosedBezierShapeDescriptor,
+                                    sUNO_service_drawing_ClosedBezierShape);
+            break;
+
+        case OBJ_OUTLINETEXT:
+        case OBJ_TITLETEXT:
         case OBJ_TEXT:
-            addToSequence( aSeq, 1, "com.sun.star.drawing.TextShape" );
+            addToSequence( aSeq, 11,sUNO_service_drawing_ShapeDescriptor,
+                                    sUNO_service_drawing_Shape,
+
+                                    sUNO_service_style_ParagraphProperties,
+                                    sUNO_service_drawing_Text,
+
+                                    sUNO_service_drawing_ShadowDescriptor,
+                                    sUNO_service_drawing_RotationDescriptor,
+
+                                    sUNO_service_drawing_LineShapeDescriptor,
+
+                                    sUNO_service_drawing_AreaShapeDescriptor,
+                                    sUNO_service_drawing_AreaShape,
+
+                                    sUNO_service_drawing_TextShapeDescriptor,
+                                    sUNO_service_drawing_TextShape);
             break;
+
+        case OBJ_GRAF:
+            addToSequence( aSeq, 8, sUNO_service_drawing_ShapeDescriptor,
+                                    sUNO_service_drawing_Shape,
+
+                                    sUNO_service_style_ParagraphProperties,
+                                    sUNO_service_drawing_Text,
+
+                                    sUNO_service_drawing_ShadowDescriptor,
+                                    sUNO_service_drawing_RotationDescriptor,
+
+                                    sUNO_service_drawing_GraphicObjectShapeDescriptor,
+                                    sUNO_service_drawing_GraphicObjectShape);
+            break;
+
         case OBJ_OLE2:
-            addToSequence( aSeq, 1, "com.sun.star.drawing.OLE2Shape" );
+            addToSequence( aSeq, 3, sUNO_service_drawing_ShapeDescriptor,
+                                    sUNO_service_drawing_Shape,
+
+                                    sUNO_service_drawing_OLE2Shape);
             break;
+
+        case OBJ_CAPTION:
+            addToSequence( aSeq, 13,sUNO_service_drawing_ShapeDescriptor,
+                                    sUNO_service_drawing_Shape,
+
+                                    sUNO_service_style_ParagraphProperties,
+                                    sUNO_service_drawing_Text,
+
+                                    sUNO_service_drawing_ShadowDescriptor,
+                                    sUNO_service_drawing_RotationDescriptor,
+
+                                    sUNO_service_drawing_LineShapeDescriptor,
+
+                                    sUNO_service_drawing_AreaShapeDescriptor,
+                                    sUNO_service_drawing_AreaShape,
+
+                                    sUNO_service_drawing_TextShapeDescriptor,
+                                    sUNO_service_drawing_TextShape,
+
+                                    sUNO_service_drawing_CaptionShapeDescriptor,
+                                    sUNO_service_drawing_CaptionShape);
+            break;
+
         case OBJ_PAGE:
-            addToSequence( aSeq, 1, "com.sun.star.drawing.PageShape" );
+            addToSequence( aSeq, 3, sUNO_service_drawing_ShapeDescriptor,
+                                    sUNO_service_drawing_Shape,
+
+                                    sUNO_service_drawing_PageShape);
             break;
+
+        case OBJ_MEASURE:
+            addToSequence( aSeq, 8, sUNO_service_drawing_ShapeDescriptor,
+                                    sUNO_service_drawing_Shape,
+
+                                    sUNO_service_style_ParagraphProperties,
+                                    sUNO_service_drawing_Text,
+
+                                    sUNO_service_drawing_ShadowDescriptor,
+
+                                    sUNO_service_drawing_LineShapeDescriptor,
+
+                                    sUNO_service_drawing_MeasureShapeDescriptor,
+                                    sUNO_service_drawing_MeasureShape);
+            break;
+
+        case OBJ_FRAME:
+            addToSequence( aSeq, 3, sUNO_service_drawing_ShapeDescriptor,
+                                    sUNO_service_drawing_Shape,
+
+                                    sUNO_service_drawing_FrameShape);
+            break;
+
+        case OBJ_UNO:
+            addToSequence( aSeq, 3, sUNO_service_drawing_ShapeDescriptor,
+                                    sUNO_service_drawing_Shape,
+
+                                    sUNO_service_drawing_ControlShape);
+            break;
+        case OBJ_EDGE:
+            addToSequence( aSeq, 7, sUNO_service_drawing_ShapeDescriptor,
+                                    sUNO_service_drawing_Shape,
+
+                                    sUNO_service_style_ParagraphProperties,
+                                    sUNO_service_drawing_Text,
+
+                                    sUNO_service_drawing_ShadowDescriptor,
+
+                                    sUNO_service_drawing_ConnectorShapeDescriptor,
+                                    sUNO_service_drawing_ConnectorShape);
+            break;
+
+        return aSeq;
+
         }
     }
 
@@ -2101,15 +2408,7 @@ void SAL_CALL SvxShapeRect::release() throw(uno::RuntimeException)
 //----------------------------------------------------------------------
 uno::Sequence< OUString > SvxShapeRect::getSupportedServiceNames(void) throw( uno::RuntimeException )
 {
-    uno::Sequence< OUString > aSeq( SvxShape::getSupportedServiceNames() );
-    addToSequence( aSeq, 7, "com.sun.star.drawing.AreaShapeDescriptor",
-                            "com.sun.star.drawing.AreaShape",
-                            "com.sun.star.drawing.LineShape",
-                            "com.sun.star.drawing.RectangleShape",
-                            "com.sun.star.drawing.Text",
-                            "com.sun.star.drawing.RotationDescriptor",
-                            "com.sun.star.drawing.ShadowDescriptor");
-    return aSeq;
+    return SvxShape::getSupportedServiceNames();
 }
 
 /** returns a StarOffice API wrapper for the given SdrObject */

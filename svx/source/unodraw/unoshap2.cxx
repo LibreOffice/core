@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshap2.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-15 17:03:14 $
+ *  last change: $Author: cl $ $Date: 2001-01-16 20:18:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -395,9 +395,7 @@ sal_Bool SAL_CALL SvxShapeGroup::hasElements() throw( uno::RuntimeException )
 uno::Sequence< OUString > SAL_CALL SvxShapeGroup::getSupportedServiceNames()
     throw(uno::RuntimeException)
 {
-    uno::Sequence< OUString > aSeq( SvxShape::getSupportedServiceNames() );
-    addToSequence( aSeq, 1, "com.sun.star.drawing.GroupShape" );
-    return aSeq;
+    return SvxShape::getSupportedServiceNames();
 }
 
 /***********************************************************************
@@ -577,14 +575,7 @@ void SAL_CALL SvxShapeConnector::disconnectEnd( const uno::Reference< drawing::X
 //----------------------------------------------------------------------
 uno::Sequence< OUString > SAL_CALL SvxShapeConnector::getSupportedServiceNames() throw( uno::RuntimeException )
 {
-    uno::Sequence< OUString > aSeq( SvxShape::getSupportedServiceNames() );
-    addToSequence( aSeq, 6, "com.sun.star.drawing.ConnectorShapeDescriptor",
-                            "com.sun.star.drawing.ConnectorShape",
-                            "com.sun.star.drawing.LineShapeDescriptor",
-                            "com.sun.star.drawing.Text",
-                            "com.sun.star.drawing.RotationDescriptor",
-                            "com.sun.star.drawing.ShadowDescriptor");
-    return aSeq;
+    return SvxShape::getSupportedServiceNames();
 }
 
 /***********************************************************************
@@ -733,9 +724,7 @@ void SAL_CALL SvxShapeControl::setControl( const Reference< awt::XControlModel >
 // XServiceInfo
 uno::Sequence< OUString > SAL_CALL SvxShapeControl::getSupportedServiceNames() throw( uno::RuntimeException )
 {
-    uno::Sequence< OUString > aSeq( SvxShape::getSupportedServiceNames() );
-    addToSequence( aSeq, 1, "com.sun.star.drawing.ControlShape" );
-    return aSeq;
+    return SvxShape::getSupportedServiceNames();
 }
 
 /***********************************************************************
@@ -756,15 +745,7 @@ SvxShapeDimensioning::~SvxShapeDimensioning() throw()
 // ::com::sun::star::lang::XServiceInfo
 uno::Sequence< OUString > SAL_CALL SvxShapeDimensioning::getSupportedServiceNames() throw( uno::RuntimeException )
 {
-    uno::Sequence< OUString > aSeq( SvxShape::getSupportedServiceNames() );
-    addToSequence( aSeq, 7, "com.sun.star.drawing.LineShapeDescriptor",
-                            "com.sun.star.drawing.LineShape",
-                            "com.sun.star.drawing.DimensioningShapeDescriptor",
-                            "com.sun.star.drawing.DimensioningShape",
-                            "com.sun.star.drawing.Text",
-                            "com.sun.star.drawing.RotationDescriptor",
-                            "com.sun.star.drawing.ShadowDescriptor" );
-    return aSeq;
+    return SvxShape::getSupportedServiceNames();
 }
 
 /***********************************************************************
@@ -786,17 +767,7 @@ SvxShapeCircle::~SvxShapeCircle() throw()
 // XServiceInfo
 uno::Sequence< OUString > SAL_CALL SvxShapeCircle::getSupportedServiceNames() throw( uno::RuntimeException )
 {
-    uno::Sequence< OUString > aSeq( SvxShape::getSupportedServiceNames() );
-    addToSequence( aSeq, 9, "com.sun.star.drawing.LineShapeDescriptor",
-                            "com.sun.star.drawing.LineShape",
-                            "com.sun.star.drawing.AreaShapeDescriptor",
-                            "com.sun.star.drawing.AreaShape",
-                            "com.sun.star.drawing.EllipseShapeDescriptor",
-                            "com.sun.star.drawing.EllipseShape",
-                            "com.sun.star.drawing.Text",
-                            "com.sun.star.drawing.RotationDescriptor",
-                            "com.sun.star.drawing.ShadowDescriptor");
-    return aSeq;
+    return SvxShape::getSupportedServiceNames();
 }
 
 /***********************************************************************
@@ -1005,17 +976,7 @@ const XPolyPolygon& SvxShapePolyPolygon::GetPolygon() const throw()
 // ::com::sun::star::lang::XServiceInfo
 uno::Sequence< OUString > SAL_CALL SvxShapePolyPolygon::getSupportedServiceNames() throw( uno::RuntimeException )
 {
-    uno::Sequence< OUString > aSeq( SvxShape::getSupportedServiceNames() );
-    addToSequence( aSeq, 9, "com.sun.star.drawing.LineShapeDescriptor",
-                            "com.sun.star.drawing.LineShape",
-                            "com.sun.star.drawing.AreaShapeDescriptor",
-                            "com.sun.star.drawing.AreaShape",
-                            "com.sun.star.drawing.PolyPolygonShapeDescriptor",
-                            "com.sun.star.drawing.PolyPolygonShape",
-                            "com.sun.star.drawing.Text",
-                            "com.sun.star.drawing.RotationDescriptor",
-                            "com.sun.star.drawing.ShadowDescriptor" );
-    return aSeq;
+    return SvxShape::getSupportedServiceNames();
 }
 
 /***********************************************************************
@@ -1189,17 +1150,7 @@ const XPolyPolygon& SvxShapePolyPolygonBezier::GetPolygon() const throw()
 // ::com::sun::star::lang::XServiceInfo
 uno::Sequence< OUString > SAL_CALL SvxShapePolyPolygonBezier::getSupportedServiceNames() throw( uno::RuntimeException )
 {
-    uno::Sequence< OUString > aSeq( SvxShape::getSupportedServiceNames() );
-    addToSequence( aSeq, 9, "com.sun.star.drawing.LineShapeDescriptor",
-                            "com.sun.star.drawing.LineShape",
-                            "com.sun.star.drawing.AreaShapeDescriptor",
-                            "com.sun.star.drawing.AreaShape",
-                            "com.sun.star.drawing.PolyPolygonBezierShapeDescriptor",
-                            "com.sun.star.drawing.PolyPolygonBezierShape",
-                            "com.sun.star.drawing.Text",
-                            "com.sun.star.drawing.RotationDescriptor",
-                            "com.sun.star.drawing.ShadowDescriptor" );
-    return aSeq;
+    return SvxShape::getSupportedServiceNames();
 }
 
 /***********************************************************************
@@ -1404,14 +1355,7 @@ uno::Any SAL_CALL SvxGraphicObject::getPropertyValue( const OUString& aPropertyN
 uno::Sequence< OUString > SAL_CALL SvxGraphicObject::getSupportedServiceNames()
     throw( uno::RuntimeException )
 {
-    uno::Sequence< OUString > aSeq( SvxShape::getSupportedServiceNames() );
-    addToSequence( aSeq, 6, "com.sun.star.drawing.AreaShape",
-                            "com.sun.star.drawing.GraphicObjectShapeDescriptor",
-                            "com.sun.star.drawing.GraphicObjectShape",
-                            "com.sun.star.drawing.Text",
-                            "com.sun.star.drawing.RotationDescriptor",
-                            "com.sun.star.drawing.ShadowDescriptor");
-    return aSeq;
+    return SvxShape::getSupportedServiceNames();
 }
 
 
