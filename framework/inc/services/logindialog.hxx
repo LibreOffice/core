@@ -2,9 +2,9 @@
  *
  *  $RCSfile: logindialog.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cd $ $Date: 2001-10-01 09:56:05 $
+ *  last change: $Author: cd $ $Date: 2001-10-05 11:04:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -244,6 +244,8 @@ namespace framework{
 #define SECTION_SECURE                          SECTION_DEFAULTPORTS
 #define SECTION_COMPRESSEDSECURE                SECTION_DEFAULTPORTS
 #define SECTION_COMPRESSED                      SECTION_DEFAULTPORTS
+#define SECTION_HTTP                            SECTION_DEFAULTPORTS
+#define SECTION_HTTPS                           SECTION_DEFAULTPORTS
 #define SECTION_SERVER_X                        SECTION_SERVERHISTORY
 
 #define KEY_USERNAME                            "UserName"
@@ -258,6 +260,8 @@ namespace framework{
 #define KEY_SECURITYPROXY                       "SecurityProxy"
 #define KEY_USESECURITYPROXY                    "UseProxy"
 #define KEY_DIALOG                              "dialog"
+#define KEY_HTTP                                "http"
+#define KEY_HTTPS                               "https"
 
 #define PROPERTYNAME_CONNECTIONTYPE             DECLARE_ASCII("ConnectionType"                  )
 #define PROPERTYNAME_LANGUAGE                   DECLARE_ASCII("Language"                        )
@@ -273,6 +277,8 @@ namespace framework{
 #define PROPERTYNAME_SECURE                     DECLARE_ASCII("secure"                          )
 #define PROPERTYNAME_USEPROXY                   DECLARE_ASCII("UseProxy"                        )
 #define PROPERTYNAME_DIALOG                     DECLARE_ASCII("Dialog"                          )
+#define PROPERTYNAME_HTTP                       DECLARE_ASCII("http"                            )
+#define PROPERTYNAME_HTTPS                      DECLARE_ASCII("https"                           )
 
 #define PROPERTYHANDLE_CONNECTIONTYPE           1
 #define PROPERTYHANDLE_LANGUAGE                 2
@@ -288,8 +294,10 @@ namespace framework{
 #define PROPERTYHANDLE_SECURITYPROXY            12
 #define PROPERTYHANDLE_USEPROXY                 13
 #define PROPERTYHANDLE_DIALOG                   14
+#define PROPERTYHANDLE_HTTP                     15
+#define PROPERTYHANDLE_HTTPS                    16
 
-#define PROPERTYCOUNT                           14
+#define PROPERTYCOUNT                           16
 
 //_________________________________________________________________________________________________________________
 //  exported definitions
@@ -307,6 +315,8 @@ struct tIMPL_DialogData
     sal_Int32               nPortSecure             ;
     sal_Int32               nPortCompressedSecure   ;
     sal_Int32               nPortCompressed         ;
+    sal_Int32               nPortHttp               ;
+    sal_Int32               nPortHttps              ;
     ANY                     aParentWindow           ;
     OUSTRING                sSecurityProxy          ;
     OUSTRING                sUseProxy               ;
@@ -325,6 +335,8 @@ struct tIMPL_DialogData
         ,   nPortSecure             ( 0                                     )
         ,   nPortCompressedSecure   ( 0                                     )
         ,   nPortCompressed         ( 0                                     )
+        ,   nPortHttp               ( 0                                     )
+        ,   nPortHttps              ( 0                                     )
         ,   aParentWindow           (                                       )
         ,   sSecurityProxy          ( OUSTRING()                            )
         ,   sUseProxy               ( OUSTRING()                            )
@@ -345,6 +357,8 @@ struct tIMPL_DialogData
         ,   nPortSecure             ( aCopyDataSet.nPortSecure              )
         ,   nPortCompressedSecure   ( aCopyDataSet.nPortCompressedSecure    )
         ,   nPortCompressed         ( aCopyDataSet.nPortCompressed          )
+        ,   nPortHttp               ( aCopyDataSet.nPortHttp                )
+        ,   nPortHttps              ( aCopyDataSet.nPortHttps               )
         ,   aParentWindow           ( aCopyDataSet.aParentWindow            )
         ,   sSecurityProxy          ( aCopyDataSet.sSecurityProxy           )
         ,   sUseProxy               ( aCopyDataSet.sUseProxy                )
@@ -366,6 +380,8 @@ struct tIMPL_DialogData
         nPortSecure             = aCopyDataSet.nPortSecure              ;
         nPortCompressedSecure   = aCopyDataSet.nPortCompressedSecure    ;
         nPortCompressed         = aCopyDataSet.nPortCompressed          ;
+        nPortHttp               = aCopyDataSet.nPortHttp                ;
+        nPortHttps              = aCopyDataSet.nPortHttps               ;
         aParentWindow           = aCopyDataSet.aParentWindow            ;
         sSecurityProxy          = aCopyDataSet.sSecurityProxy           ;
         sUseProxy               = aCopyDataSet.sUseProxy                ;
@@ -915,6 +931,8 @@ class LoginDialog   :   public XTYPEPROVIDER                ,
         void                    impl_writePortSecure            (           sal_Int32               nPort           );
         void                    impl_writePortCompressedSecure  (           sal_Int32               nPort           );
         void                    impl_writePortCompressed        (           sal_Int32               nPort           );
+        void                    impl_writePortHttp              (           sal_Int32               nPort           );
+        void                    impl_writePortHttps             (           sal_Int32               nPort           );
         void                    impl_writeSecurityProxy         (   const   OUSTRING&               sSecurityProxy  );
         void                    impl_writeUseProxy              (   const   OUSTRING&               sUseProxy       );
         void                    impl_writeDialog                (   const   OUSTRING&               sDialog         );
@@ -928,6 +946,8 @@ class LoginDialog   :   public XTYPEPROVIDER                ,
         sal_Int32               impl_readPortSecure             (                                                   );
         sal_Int32               impl_readPortCompressedSecure   (                                                   );
         sal_Int32               impl_readPortCompressed         (                                                   );
+        sal_Int32               impl_readPortHttp               (                                                   );
+        sal_Int32               impl_readPortHttps              (                                                   );
         OUSTRING                impl_readSecurityProxy          (                                                   );
         OUSTRING                impl_readUseProxy               (                                                   );
         OUSTRING                impl_readDialog                 (                                                   );
