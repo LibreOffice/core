@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prov.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-16 14:53:36 $
+ *  last change: $Author: abi $ $Date: 2000-10-17 12:39:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -777,4 +777,35 @@ FileProvider::removeVetoableChangeListener(
 
 
 
+// XFileIdentifierConverter
 
+rtl::OUString SAL_CALL FileProvider::getHostName()
+    throw( uno::RuntimeException )
+{
+    initProperties();
+    return m_HostName;
+}
+
+rtl::OUString SAL_CALL FileProvider::getFileURLFromNormalizedPath( const rtl::OUString& NormalizedPath )
+    throw( IllegalIdentifierException,
+           uno::RuntimeException )
+{
+    rtl::OUString aUrl;
+    sal_Bool err = m_pMyShell->getUrlFromUnq( NormalizedPath,aUrl );
+    if( err )
+        throw IllegalIdentifierException();
+
+    return aUrl;
+}
+
+rtl::OUString SAL_CALL FileProvider::getNormalizedPathFromFileURL( const rtl::OUString& FileURL )
+    throw( IllegalIdentifierException,
+           uno::RuntimeException )
+{
+    rtl::OUString aUnq;
+    sal_Bool err = m_pMyShell->getUnqFromUrl( FileURL,aUnq );
+    if( err )
+        throw IllegalIdentifierException();
+
+    return aUnq;
+}

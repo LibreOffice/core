@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prov.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-16 14:53:36 $
+ *  last change: $Author: abi $ $Date: 2000-10-17 12:39:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,9 @@
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UCB_XFILEIDENTIFIERCONVERTER_HPP_
+#include <com/sun/star/ucb/XFileIdentifierConverter.hpp>
+#endif
 
 // FileProvider
 
@@ -106,7 +109,8 @@ namespace fileaccess {
         public com::sun::star::lang::XServiceInfo,
         public com::sun::star::ucb::XContentProvider,
         public com::sun::star::ucb::XContentIdentifierFactory,
-        public com::sun::star::beans::XPropertySet
+        public com::sun::star::beans::XPropertySet,
+        public com::sun::star::ucb::XFileIdentifierConverter
     {
         friend class BaseContent;
     public:
@@ -235,6 +239,21 @@ namespace fileaccess {
             throw( com::sun::star::beans::UnknownPropertyException,
                    com::sun::star::lang::WrappedTargetException,
                    com::sun::star::uno::RuntimeException);
+
+
+        // XFileIdentifierConverter
+
+        virtual rtl::OUString SAL_CALL getHostName()
+            throw( com::sun::star::uno::RuntimeException );
+
+        virtual rtl::OUString SAL_CALL getFileURLFromNormalizedPath( const rtl::OUString& NormalizedPath )
+            throw( com::sun::star::ucb::IllegalIdentifierException,
+                   com::sun::star::uno::RuntimeException );
+
+        virtual rtl::OUString SAL_CALL getNormalizedPathFromFileURL( const rtl::OUString& FileURL )
+            throw( com::sun::star::ucb::IllegalIdentifierException,
+                   com::sun::star::uno::RuntimeException );
+
 
     private:
         // Members
