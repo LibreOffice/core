@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlpars.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 13:37:39 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 20:27:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,12 +74,7 @@
 #include <svx/eeitem.hxx>
 #define ITEMID_FIELD EE_FEATURE_FIELD
 
-#ifndef _OFF_APP_HXX //autogen
-#include <offmgr/app.hxx>
-#endif
-#ifndef _OFA_HTMLCFG_HXX //autogen
-#include <offmgr/htmlcfg.hxx>
-#endif
+#include <svx/htmlcfg.hxx>
 #include <svx/algitem.hxx>
 #ifndef _SVX_COLRITEM_HXX //autogen
 #include <svx/colritem.hxx>
@@ -135,7 +130,7 @@ ScHTMLParser::ScHTMLParser( EditEngine* pEditEngine, ScDocument* pDoc ) :
     ScEEParser( pEditEngine ),
     mpDoc( pDoc )
 {
-    OfaHtmlOptions* pHtmlOptions = ((OfficeApplication*)SFX_APP())->GetHtmlOptions();
+    SvxHtmlOptions* pHtmlOptions = SvxHtmlOptions::Get();
     for( sal_uInt16 nIndex = 0; nIndex < SC_HTML_FONTSIZES; ++nIndex )
         maFontHeights[ nIndex ] = pHtmlOptions->GetFontSize( nIndex ) * 20;
 }
