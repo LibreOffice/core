@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindow.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2001-09-28 09:38:18 $
+ *  last change: $Author: mt $ $Date: 2001-11-27 10:31:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,15 @@
 #ifndef _COM_SUN_STAR_AWT_XGraphics_HPP_
 #include <com/sun/star/awt/XGraphics.hpp>
 #endif
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HDL_
+#include <drafts/com/sun/star/accessibility/XAccessible.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLECONTEXT_HDL_
+#include <drafts/com/sun/star/accessibility/XAccessibleContext.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLECOMPONENT_HDL_
+#include <drafts/com/sun/star/accessibility/XAccessibleComponent.hpp>
+#endif
 
 #ifndef _CPPUHELPER_WEAK_HXX_
 #include <cppuhelper/weak.hxx>
@@ -95,7 +104,14 @@
 
 #include <tools/gen.hxx>    // Size
 
+#ifndef _LINK_HXX
+#include <tools/link.hxx>
+#endif
+
 class Window;
+class VclSimpleEvent;
+class VclWindowEvent;
+
 
 //  ----------------------------------------------------
 //  class VCLXWINDOW
@@ -105,6 +121,9 @@ class VCLXWindow :  public ::com::sun::star::awt::XWindow,
                     public ::com::sun::star::awt::XVclWindowPeer,
                     public ::com::sun::star::awt::XLayoutConstrains,
                     public ::com::sun::star::awt::XView,
+                    public ::drafts::com::sun::star::accessibility::XAccessible,
+                    public ::drafts::com::sun::star::accessibility::XAccessibleContext,
+                    public ::drafts::com::sun::star::accessibility::XAccessibleComponent,
                     public VCLXDevice
 {
 private:
@@ -121,11 +140,22 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPointer>  mxPointer;
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics> mxViewGraphics;
 
+    ULONG                           nDummy1;
+    ULONG                           nDummy2;
+    void*                           pDummy1;
+    void*                           pDummy2;
+
     sal_Bool                        mbDisposing;
     sal_Bool                        mbDesignMode;
+    sal_Bool                        mbAccessible;
+
 
 protected:
     Size            ImplCalcWindowSize( const Size& rOutSz ) const;
+    DECL_LINK(      WindowEventHdl, VclSimpleEvent* );
+
+    virtual void    ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
+
 
 public:
     VCLXWindow();
@@ -214,7 +244,57 @@ public:
     void SAL_CALL draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL setZoom( float fZoomX, float fZoomY ) throw(::com::sun::star::uno::RuntimeException);
 
+    // ::drafts::com::sun::star::accessibility::XAccessible
+    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) throw (::com::sun::star::uno::RuntimeException);
 
+    // ::drafts::com::sun::star::accessibility::XAccessibleContext
+    sal_Int32 SAL_CALL getAccessibleChildCount(  ) throw (::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int32 i ) throw (::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > SAL_CALL getAccessibleParent(  ) throw (::com::sun::star::uno::RuntimeException);
+    sal_Int32 SAL_CALL getAccessibleIndexInParent(  ) throw (::com::sun::star::uno::RuntimeException);
+    sal_Int16 SAL_CALL getAccessibleRole(  ) throw (::com::sun::star::uno::RuntimeException);
+    ::rtl::OUString SAL_CALL getAccessibleDescription(  ) throw (::com::sun::star::uno::RuntimeException);
+    ::rtl::OUString SAL_CALL getAccessibleName(  ) throw (::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleRelationSet > SAL_CALL getAccessibleRelationSet(  ) throw (::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleStateSet > SAL_CALL getAccessibleStateSet(  ) throw (::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::lang::Locale SAL_CALL getLocale(  ) throw (::drafts::com::sun::star::accessibility::IllegalComponentStateException, ::com::sun::star::uno::RuntimeException);
+    void SAL_CALL addPropertyChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+    void SAL_CALL removePropertyChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+    void SAL_CALL setAccessibleDescription( const ::rtl::OUString& sNewDescription ) throw (::com::sun::star::uno::RuntimeException);
+    void SAL_CALL setAccessibleName( const ::rtl::OUString& sNewName ) throw (::com::sun::star::uno::RuntimeException);
+    void SAL_CALL setAccessibleParent( const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible >& xNewParent ) throw (::com::sun::star::uno::RuntimeException);
+
+    // ::drafts::com::sun::star::accessibility::XAccessibleComponent
+    sal_Bool SAL_CALL contains( const ::com::sun::star::awt::Point& aPoint ) throw (::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > SAL_CALL getAccessibleAt( const ::com::sun::star::awt::Point& aPoint ) throw (::com::sun::star::uno::RuntimeException);
+    sal_Int32 SAL_CALL getForeground(  ) throw (::com::sun::star::uno::RuntimeException);
+//    void SAL_CALL setForeground( sal_Int32 aColor ) throw (::com::sun::star::uno::RuntimeException);
+    sal_Int32 SAL_CALL getBackground(  ) throw (::com::sun::star::uno::RuntimeException);
+//    void SAL_CALL setBackground( sal_Int32 aColor ) throw (::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::awt::Rectangle SAL_CALL getBounds(  ) throw (::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::awt::Point SAL_CALL getLocation(  ) throw (::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::awt::Point SAL_CALL getLocationOnScreen(  ) throw (::com::sun::star::uno::RuntimeException);
+    void SAL_CALL setLocation( const ::com::sun::star::awt::Point& aRelativePosition ) throw (::com::sun::star::uno::RuntimeException);
+//    ::com::sun::star::awt::Size SAL_CALL getSize(  ) throw (::com::sun::star::uno::RuntimeException);
+    void SAL_CALL setSize( const ::com::sun::star::awt::Size& aSize ) throw (::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFont > SAL_CALL getFont(  ) throw (::com::sun::star::uno::RuntimeException);
+    void SAL_CALL setFont( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFont >& xFont ) throw (::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::awt::FontDescriptor SAL_CALL getFontMetrics( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFont >& xFont ) throw (::com::sun::star::uno::RuntimeException);
+    sal_Bool SAL_CALL isShowing(  ) throw (::com::sun::star::uno::RuntimeException);
+    sal_Bool SAL_CALL isVisible(  ) throw (::com::sun::star::uno::RuntimeException);
+//    void SAL_CALL setVisible( sal_Bool bVisibility ) throw (::com::sun::star::uno::RuntimeException);
+    sal_Bool SAL_CALL isFocusTraversable(  ) throw (::com::sun::star::uno::RuntimeException);
+//    void SAL_CALL addFocusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFocusListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+//    void SAL_CALL removeFocusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFocusListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+    void SAL_CALL grabFocus(  ) throw (::com::sun::star::uno::RuntimeException);
+    void SAL_CALL setBounds( const ::com::sun::star::awt::Rectangle& aBoundingBox ) throw (::com::sun::star::uno::RuntimeException);
+    sal_Int32 SAL_CALL getCursor(  ) throw (::com::sun::star::uno::RuntimeException);
+    void SAL_CALL setCursor( sal_Int32 nCursorIndex ) throw (::com::sun::star::uno::RuntimeException);
+    sal_Bool SAL_CALL isEnabled(  ) throw (::com::sun::star::uno::RuntimeException);
+    void SAL_CALL setEnabled( sal_Bool bEnabledState ) throw (::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Any SAL_CALL getAccessibleKeyBinding(  ) throw (::com::sun::star::uno::RuntimeException);
+    ::rtl::OUString SAL_CALL getTitledBorderText(  ) throw (::com::sun::star::uno::RuntimeException);
+    ::rtl::OUString SAL_CALL getToolTipText(  ) throw (::com::sun::star::uno::RuntimeException);
 };
 
 

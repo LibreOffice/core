@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindow.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mt $ $Date: 2001-06-01 11:21:55 $
+ *  last change: $Author: mt $ $Date: 2001-11-27 10:32:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,21 @@
  ************************************************************************/
 
 
+#ifndef _COM_SUN_STAR_AWT_WINDOWEVENT_HPP_
+#include <com/sun/star/awt/WindowEvent.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_KEYEVENT_HPP_
+#include <com/sun/star/awt/KeyEvent.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_KEYMODIFIER_HPP_
+#include <com/sun/star/awt/KeyModifier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_MOUSEEVENT_HPP_
+#include <com/sun/star/awt/MouseEvent.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_MOUSEBUTTON_HPP_
+#include <com/sun/star/awt/MouseButton.hpp>
+#endif
 #ifndef _COM_SUN_STAR_AWT_XTOPWINDOW_HPP_
 #include <com/sun/star/awt/XTopWindow.hpp>
 #endif
@@ -81,6 +96,62 @@
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <tools/color.hxx>
+
+// Mit Out-Parameter besser als Rueckgabewert, wegen Ref-Objekt...
+
+void ImplInitWindowEvent( ::com::sun::star::awt::WindowEvent& rEvent, Window* pWindow )
+{
+    Point aPos = pWindow->GetPosPixel();
+    Size aSz = pWindow->GetSizePixel();
+
+    rEvent.X = aPos.X();
+    rEvent.Y = aPos.Y();
+
+    rEvent.Width = aSz.Width();
+    rEvent.Height = aSz.Height();
+
+    pWindow->GetBorder( rEvent.LeftInset, rEvent.TopInset, rEvent.RightInset, rEvent.BottomInset );
+}
+
+void ImplInitKeyEvent( ::com::sun::star::awt::KeyEvent& rEvent, const KeyEvent& rEvt )
+{
+    rEvent.Modifiers = 0;
+    if ( rEvt.GetKeyCode().IsShift() )
+        rEvent.Modifiers |= ::com::sun::star::awt::KeyModifier::SHIFT;
+    if ( rEvt.GetKeyCode().IsMod1() )
+        rEvent.Modifiers |= ::com::sun::star::awt::KeyModifier::MOD1;
+    if ( rEvt.GetKeyCode().IsMod2() )
+        rEvent.Modifiers |= ::com::sun::star::awt::KeyModifier::MOD2;
+
+    rEvent.KeyCode = rEvt.GetKeyCode().GetCode();
+    rEvent.KeyChar = (unsigned char)rEvt.GetCharCode();
+    rEvent.KeyFunc = rEvt.GetKeyCode().GetFunction();
+}
+
+void ImplInitMouseEvent( ::com::sun::star::awt::MouseEvent& rEvent, const MouseEvent& rEvt )
+{
+    rEvent.Modifiers = 0;
+    if ( rEvt.IsShift() )
+        rEvent.Modifiers |= ::com::sun::star::awt::KeyModifier::SHIFT;
+    if ( rEvt.IsMod1() )
+    rEvent.Modifiers |= ::com::sun::star::awt::KeyModifier::MOD1;
+    if ( rEvt.IsMod2() )
+        rEvent.Modifiers |= ::com::sun::star::awt::KeyModifier::MOD2;
+
+    rEvent.Buttons = 0;
+    if ( rEvt.IsLeft() )
+        rEvent.Buttons |= ::com::sun::star::awt::MouseButton::LEFT;
+    if ( rEvt.IsRight() )
+        rEvent.Buttons |= ::com::sun::star::awt::MouseButton::RIGHT;
+    if ( rEvt.IsMiddle() )
+        rEvent.Buttons |= ::com::sun::star::awt::MouseButton::MIDDLE;
+
+    rEvent.X = rEvt.GetPosPixel().X();
+    rEvent.Y = rEvt.GetPosPixel().Y();
+    rEvent.ClickCount = rEvt.GetClicks();
+    rEvent.PopupTrigger = sal_False;
+}
+
 
 //  ----------------------------------------------------
 //  class VCLXWindow
@@ -108,7 +179,278 @@ VCLXWindow::~VCLXWindow()
 
 void VCLXWindow::SetWindow( Window* pWindow )
 {
+    if ( GetWindow() )
+        GetWindow()->RemoveEventListener( LINK( this, VCLXWindow, WindowEventHdl ) );
+
     SetOutputDevice( pWindow );
+
+    pWindow->AddEventListener( LINK( this, VCLXWindow, WindowEventHdl ) );
+}
+
+IMPL_LINK( VCLXWindow, WindowEventHdl, VclSimpleEvent*, pEvent )
+{
+    DBG_ASSERT( pEvent && pEvent->ISA( VclWindowEvent ), "Unknown WindowEvent!" );
+    if ( pEvent && pEvent->ISA( VclWindowEvent ) )
+    {
+        DBG_ASSERT( ((VclWindowEvent*)pEvent)->GetWindow() && GetWindow(), "Window???" );
+        ProcessWindowEvent( *(VclWindowEvent*)pEvent );
+    }
+    return 0;
+}
+
+void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
+{
+    switch ( rVclWindowEvent.GetId() )
+    {
+        case VCLEVENT_WINDOW_PAINT:
+        {
+            if ( GetPaintListeners().getLength() )
+            {
+                ::com::sun::star::awt::PaintEvent aEvent;
+                aEvent.Source = (::cppu::OWeakObject*)this;
+                aEvent.UpdateRect = AWTRectangle( *(Rectangle*)rVclWindowEvent.GetData() );
+                aEvent.Count = 0;
+                GetPaintListeners().windowPaint( aEvent );
+            }
+        }
+        break;
+        case VCLEVENT_WINDOW_MOVE:
+        {
+            if ( GetWindowListeners().getLength() )
+            {
+                ::com::sun::star::awt::WindowEvent aEvent;
+                aEvent.Source = (::cppu::OWeakObject*)this;
+                ImplInitWindowEvent( aEvent, rVclWindowEvent.GetWindow() );
+                GetWindowListeners().windowMoved( aEvent );
+            }
+        }
+        break;
+        case VCLEVENT_WINDOW_RESIZE:
+        {
+            if ( GetWindowListeners().getLength() )
+            {
+                ::com::sun::star::awt::WindowEvent aEvent;
+                aEvent.Source = (::cppu::OWeakObject*)this;
+                ImplInitWindowEvent( aEvent, rVclWindowEvent.GetWindow() );
+                GetWindowListeners().windowResized( aEvent );
+            }
+        }
+        break;
+        case VCLEVENT_WINDOW_SHOW:
+        {
+            if ( GetWindowListeners().getLength() )
+            {
+                ::com::sun::star::awt::WindowEvent aEvent;
+                aEvent.Source = (::cppu::OWeakObject*)this;
+                ImplInitWindowEvent( aEvent, rVclWindowEvent.GetWindow() );
+                GetWindowListeners().windowShown( aEvent );
+            }
+
+            // For TopWindows this means opened...
+            if ( GetTopWindowListeners().getLength() )
+            {
+                ::com::sun::star::lang::EventObject aEvent;
+                aEvent.Source = (::cppu::OWeakObject*)this;
+                GetTopWindowListeners().windowOpened( aEvent );
+            }
+        }
+        break;
+        case VCLEVENT_WINDOW_HIDE:
+        {
+            if ( GetWindowListeners().getLength() )
+            {
+                ::com::sun::star::awt::WindowEvent aEvent;
+                aEvent.Source = (::cppu::OWeakObject*)this;
+                ImplInitWindowEvent( aEvent, rVclWindowEvent.GetWindow() );
+                GetWindowListeners().windowHidden( aEvent );
+            }
+
+            // For TopWindows this means closed...
+            if ( GetTopWindowListeners().getLength() )
+            {
+                ::com::sun::star::lang::EventObject aEvent;
+                aEvent.Source = (::cppu::OWeakObject*)this;
+                GetTopWindowListeners().windowClosed( aEvent );
+            }
+        }
+        break;
+        case VCLEVENT_WINDOW_ACTIVATE:
+        {
+            if ( GetTopWindowListeners().getLength() )
+            {
+                ::com::sun::star::lang::EventObject aEvent;
+                aEvent.Source = (::cppu::OWeakObject*)this;
+                GetTopWindowListeners().windowActivated( aEvent );
+            }
+        }
+        break;
+        case VCLEVENT_WINDOW_DEACTIVATE:
+        {
+            if ( GetTopWindowListeners().getLength() )
+            {
+                ::com::sun::star::lang::EventObject aEvent;
+                aEvent.Source = (::cppu::OWeakObject*)this;
+                GetTopWindowListeners().windowDeactivated( aEvent );
+            }
+        }
+        break;
+        case VCLEVENT_WINDOW_CLOSE:
+        {
+            if ( GetTopWindowListeners().getLength() )
+            {
+                ::com::sun::star::lang::EventObject aEvent;
+                aEvent.Source = (::cppu::OWeakObject*)this;
+                GetTopWindowListeners().windowClosing( aEvent );
+            }
+        }
+        break;
+        case VCLEVENT_WINDOW_GETFOCUS:
+        {
+            if ( GetFocusListeners().getLength() )
+            {
+                ::com::sun::star::awt::FocusEvent aEvent;
+                aEvent.Source = (::cppu::OWeakObject*)this;
+                aEvent.FocusFlags = rVclWindowEvent.GetWindow()->GetGetFocusFlags();
+                aEvent.Temporary = sal_False;
+                GetFocusListeners().focusGained( aEvent );
+            }
+        }
+        break;
+        case VCLEVENT_WINDOW_LOSEFOCUS:
+        {
+            if ( GetFocusListeners().getLength() )
+            {
+                ::com::sun::star::awt::FocusEvent aEvent;
+                aEvent.Source = (::cppu::OWeakObject*)this;
+                aEvent.FocusFlags = rVclWindowEvent.GetWindow()->GetGetFocusFlags();
+                aEvent.Temporary = sal_False;
+
+                Window* pNext = Application::GetFocusWindow();
+                if ( pNext )
+                {
+                    // Bei zusammengesetzten Controls interessiert sich keiner fuer das Innenleben:
+                    Window* pNextC = pNext;
+                    while ( pNextC && !pNextC->IsCompoundControl() )
+                        pNextC = pNextC->GetParent();
+                    if ( pNextC )
+                        pNext = pNextC;
+
+                    pNext->GetComponentInterface( sal_True );
+                    aEvent.NextFocus = (::cppu::OWeakObject*)pNext->GetWindowPeer();
+                }
+                GetFocusListeners().focusLost( aEvent );
+            }
+        }
+        break;
+        case VCLEVENT_WINDOW_MINIMIZE:
+        {
+            if ( GetTopWindowListeners().getLength() )
+            {
+                ::com::sun::star::lang::EventObject aEvent;
+                aEvent.Source = (::cppu::OWeakObject*)this;
+                GetTopWindowListeners().windowMinimized( aEvent );
+            }
+        }
+        break;
+        case VCLEVENT_WINDOW_NORMALIZE:
+        {
+            if ( GetTopWindowListeners().getLength() )
+            {
+                ::com::sun::star::lang::EventObject aEvent;
+                aEvent.Source = (::cppu::OWeakObject*)this;
+                GetTopWindowListeners().windowNormalized( aEvent );
+            }
+        }
+        break;
+        case VCLEVENT_WINDOW_KEYINPUT:
+        {
+            if ( GetKeyListeners().getLength() )
+            {
+                ::com::sun::star::awt::KeyEvent aEvent;
+                aEvent.Source = (::cppu::OWeakObject*)this;
+                ImplInitKeyEvent( aEvent, *(KeyEvent*)rVclWindowEvent.GetData() );
+                GetKeyListeners().keyPressed( aEvent );
+            }
+        }
+        break;
+        case VCLEVENT_WINDOW_KEYUP:
+        {
+            if ( GetKeyListeners().getLength() )
+            {
+                ::com::sun::star::awt::KeyEvent aEvent;
+                aEvent.Source = (::cppu::OWeakObject*)this;
+                ImplInitKeyEvent( aEvent, *(KeyEvent*)rVclWindowEvent.GetData() );
+                GetKeyListeners().keyReleased( aEvent );
+            }
+        }
+        break;
+        case VCLEVENT_WINDOW_COMMAND:
+        {
+            CommandEvent* pCmdEvt = (CommandEvent*)rVclWindowEvent.GetData();
+            if ( GetMouseListeners().getLength() && pCmdEvt->IsMouseEvent() && ( pCmdEvt->GetCommand() == COMMAND_CONTEXTMENU ) )
+            {
+                // COMMAND_CONTEXTMENU als mousePressed mit PopupTrigger = sal_True versenden...
+                MouseEvent aMEvt( ((CommandEvent*)rVclWindowEvent.GetData())->GetMousePosPixel(), 1, MOUSE_SIMPLECLICK, MOUSE_LEFT, 0 );
+                ::com::sun::star::awt::MouseEvent aEvent;
+                aEvent.Source = (::cppu::OWeakObject*)this;
+                ImplInitMouseEvent( aEvent, aMEvt );
+                aEvent.PopupTrigger = sal_True;
+                GetMouseListeners().mousePressed( aEvent );
+            }
+        }
+        break;
+        case VCLEVENT_WINDOW_MOUSEMOVE:
+        {
+            MouseEvent* pMouseEvt = (MouseEvent*)rVclWindowEvent.GetData();
+            if ( GetMouseListeners().getLength() && ( pMouseEvt->IsEnterWindow() || pMouseEvt->IsLeaveWindow() ) )
+            {
+                ::com::sun::star::awt::MouseEvent aEvent;
+                aEvent.Source = (::cppu::OWeakObject*)this;
+                ImplInitMouseEvent( aEvent, *pMouseEvt );
+
+                if ( pMouseEvt->IsEnterWindow() )
+                    GetMouseListeners().mouseEntered( aEvent );
+                else
+                    GetMouseListeners().mouseExited( aEvent );
+            }
+
+            if ( GetMouseMotionListeners().getLength() && !pMouseEvt->IsEnterWindow() && !pMouseEvt->IsLeaveWindow() )
+            {
+                ::com::sun::star::awt::MouseEvent aEvent;
+                aEvent.Source = (::cppu::OWeakObject*)this;
+                ImplInitMouseEvent( aEvent, *pMouseEvt );
+                aEvent.ClickCount = 0;  // #92138#
+
+                if ( pMouseEvt->GetMode() & MOUSE_SIMPLEMOVE )
+                    GetMouseMotionListeners().mouseMoved( aEvent );
+                else
+                    GetMouseMotionListeners().mouseDragged( aEvent );
+            }
+        }
+        break;
+        case VCLEVENT_WINDOW_MOUSEBUTTONDOWN:
+        {
+            if ( GetMouseListeners().getLength() )
+            {
+                ::com::sun::star::awt::MouseEvent aEvent;
+                aEvent.Source = (::cppu::OWeakObject*)this;
+                ImplInitMouseEvent( aEvent, *(MouseEvent*)rVclWindowEvent.GetData() );
+                GetMouseListeners().mousePressed( aEvent );
+            }
+        }
+        break;
+        case VCLEVENT_WINDOW_MOUSEBUTTONUP:
+        {
+            if ( GetMouseListeners().getLength() )
+            {
+                ::com::sun::star::awt::MouseEvent aEvent;
+                aEvent.Source = (::cppu::OWeakObject*)this;
+                ImplInitMouseEvent( aEvent, *(MouseEvent*)rVclWindowEvent.GetData() );
+                GetMouseListeners().mouseReleased( aEvent );
+            }
+        }
+        break;
+    }
 }
 
 Size VCLXWindow::ImplCalcWindowSize( const Size& rOutSz ) const
@@ -136,7 +478,10 @@ Size VCLXWindow::ImplCalcWindowSize( const Size& rOutSz ) const
                                         SAL_STATIC_CAST( ::com::sun::star::awt::XWindowPeer*, this ),
                                         SAL_STATIC_CAST( ::com::sun::star::awt::XVclWindowPeer*, this ),
                                         SAL_STATIC_CAST( ::com::sun::star::awt::XLayoutConstrains*, this ),
-                                        SAL_STATIC_CAST( ::com::sun::star::awt::XView*, this ) );
+                                        SAL_STATIC_CAST( ::com::sun::star::awt::XView*, this ),
+                                        SAL_STATIC_CAST( ::drafts::com::sun::star::accessibility::XAccessible*, this ),
+                                        SAL_STATIC_CAST( ::drafts::com::sun::star::accessibility::XAccessibleContext*, this ),
+                                        SAL_STATIC_CAST( ::drafts::com::sun::star::accessibility::XAccessibleComponent*, this ) );
     return (aRet.hasValue() ? aRet : VCLXDevice::queryInterface( rType ));
 }
 
@@ -151,6 +496,9 @@ IMPL_XTYPEPROVIDER_START( VCLXWindow )
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XVclWindowPeer>* ) NULL ),
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XLayoutConstrains>* ) NULL ),
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XView>* ) NULL ),
+    getCppuType( ( ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible>* ) NULL ),
+    getCppuType( ( ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext>* ) NULL ),
+    getCppuType( ( ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleComponent>* ) NULL ),
     VCLXDevice::getTypes()
 IMPL_XTYPEPROVIDER_END
 
@@ -1008,10 +1356,235 @@ void VCLXWindow::setZoom( float fZoomX, float fZoomY ) throw(::com::sun::star::u
         GetWindow()->SetZoom( Fraction( fZoomX ) );
 }
 
+// ::drafts::com::sun::star::accessibility::XAccessible
+::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > VCLXWindow::getAccessibleContext(  ) throw (::com::sun::star::uno::RuntimeException)
+{
+    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > xAcc( (::cppu::OWeakObject*)this, ::com::sun::star::uno::UNO_QUERY );
+    return xAcc;
+}
+
+// ::drafts::com::sun::star::accessibility::XAccessibleContext
+sal_Int32 VCLXWindow::getAccessibleChildCount(  ) throw (::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+    return 0;
+}
+
+::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > VCLXWindow::getAccessibleChild( sal_Int32 i ) throw (::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+    return NULL;
+}
+
+::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > VCLXWindow::getAccessibleParent(  ) throw (::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+    return NULL;
+}
+
+sal_Int32 VCLXWindow::getAccessibleIndexInParent(  ) throw (::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+    return 0;
+}
+
+sal_Int16 VCLXWindow::getAccessibleRole(  ) throw (::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+    return 0;
+}
+
+::rtl::OUString VCLXWindow::getAccessibleDescription(  ) throw (::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+    return ::rtl::OUString();
+}
+
+::rtl::OUString VCLXWindow::getAccessibleName(  ) throw (::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+    return ::rtl::OUString();
+}
+
+::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleRelationSet > VCLXWindow::getAccessibleRelationSet(  ) throw (::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+    return NULL;
+}
+
+::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleStateSet > VCLXWindow::getAccessibleStateSet(  ) throw (::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+    return NULL;
+}
+
+::com::sun::star::lang::Locale VCLXWindow::getLocale(  ) throw (::drafts::com::sun::star::accessibility::IllegalComponentStateException, ::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+    return ::com::sun::star::lang::Locale();
+}
+
+void VCLXWindow::addPropertyChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& xListener ) throw (::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+}
+
+void VCLXWindow::removePropertyChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& xListener ) throw (::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+}
+
+void VCLXWindow::setAccessibleDescription( const ::rtl::OUString& sNewDescription ) throw (::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+}
+
+void VCLXWindow::setAccessibleName( const ::rtl::OUString& sNewName ) throw (::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+}
+
+void VCLXWindow::setAccessibleParent( const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible >& xNewParent ) throw (::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+}
 
 
+// ::drafts::com::sun::star::accessibility::XAccessibleComponent
+sal_Bool VCLXWindow::contains( const ::com::sun::star::awt::Point& aPoint ) throw (::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+    return sal_False;
+}
 
+::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > VCLXWindow::getAccessibleAt( const ::com::sun::star::awt::Point& aPoint ) throw (::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+    return NULL;
+}
 
+sal_Int32 VCLXWindow::getForeground(  ) throw (::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+    return 0;
+}
 
+sal_Int32 VCLXWindow::getBackground(  ) throw (::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+    return 0;
+}
 
+::com::sun::star::awt::Rectangle VCLXWindow::getBounds(  ) throw (::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+    return ::com::sun::star::awt::Rectangle();
+}
+
+::com::sun::star::awt::Point VCLXWindow::getLocation(  ) throw (::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+    return ::com::sun::star::awt::Point();
+}
+
+::com::sun::star::awt::Point VCLXWindow::getLocationOnScreen(  ) throw (::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+    return ::com::sun::star::awt::Point();
+}
+
+void VCLXWindow::setLocation( const ::com::sun::star::awt::Point& aRelativePosition ) throw (::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+}
+
+void VCLXWindow::setSize( const ::com::sun::star::awt::Size& aSize ) throw (::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+}
+
+::com::sun::star::uno::Reference< ::com::sun::star::awt::XFont > VCLXWindow::getFont(  ) throw (::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+    return NULL;
+}
+
+void VCLXWindow::setFont( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFont >& xFont ) throw (::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+}
+
+::com::sun::star::awt::FontDescriptor VCLXWindow::getFontMetrics( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFont >& xFont ) throw (::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+    return ::com::sun::star::awt::FontDescriptor();
+}
+
+sal_Bool VCLXWindow::isShowing(  ) throw (::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+    return FALSE;
+}
+
+sal_Bool VCLXWindow::isVisible(  ) throw (::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+    return FALSE;
+}
+
+sal_Bool VCLXWindow::isFocusTraversable(  ) throw (::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+    return FALSE;
+}
+
+void VCLXWindow::grabFocus(  ) throw (::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+}
+
+void VCLXWindow::setBounds( const ::com::sun::star::awt::Rectangle& aBoundingBox ) throw (::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+}
+
+sal_Int32 VCLXWindow::getCursor(  ) throw (::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+    return 0;
+}
+
+void VCLXWindow::setCursor( sal_Int32 nCursorIndex ) throw (::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+}
+
+sal_Bool VCLXWindow::isEnabled(  ) throw (::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+    return FALSE;
+}
+
+void VCLXWindow::setEnabled( sal_Bool bEnabledState ) throw (::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+}
+
+::com::sun::star::uno::Any VCLXWindow::getAccessibleKeyBinding(  ) throw (::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+    return ::com::sun::star::uno::Any();
+}
+
+::rtl::OUString VCLXWindow::getTitledBorderText(  ) throw (::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+    return ::rtl::OUString();
+}
+
+::rtl::OUString VCLXWindow::getToolTipText(  ) throw (::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+    return ::rtl::OUString();
+}
 
