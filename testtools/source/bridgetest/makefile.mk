@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: hr $ $Date: 2004-02-02 20:33:55 $
+#   last change: $Author: obo $ $Date: 2004-06-03 15:00:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -114,8 +114,6 @@ UNOTYPES= \
         com.sun.star.loader.XImplementationLoader \
         com.sun.star.registry.XRegistryKey	\
         com.sun.star.container.XSet		\
-        com.sun.star.test.bridge.XBridgeTest 	\
-        com.sun.star.test.bridge.XBridgeTest2   \
         com.sun.star.bridge.XUnoUrlResolver		\
             com.sun.star.lang.XSingleComponentFactory	\
         com.sun.star.uno.XComponentContext          
@@ -184,6 +182,7 @@ ALL : \
 $(DESTDIR)$/uno_types.rdb : $(SOLARBINDIR)$/udkapi.rdb
     echo $(DESTDIR)
     $(GNUCOPY) -p $? $@
+    $(REGMERGE) $@ / $(BIN)$/bridgetest.rdb
 
 $(DESTDIR)$/bridgetest_inprocess$(BATCH_SUFFIX) : bridgetest_inprocess
     $(GNUCOPY) -p $? $@
@@ -205,7 +204,7 @@ MY_JARS=java_uno.jar ridl.jar sandbox.jar jurt.jar juh.jar
 
 # CLASSPATH, which regcomp needs to be run
 MY_CLASSPATH_TMP=$(foreach,i,$(MY_JARS) $(SOLARBINDIR)$/$i)$(PATH_SEPERATOR)$(XCLASSPATH)
-MY_CLASSPATH=$(strip $(subst,!,$(PATH_SEPERATOR) $(MY_CLASSPATH_TMP:s/ /!/)))
+MY_CLASSPATH=$(strip $(subst,!,$(PATH_SEPERATOR) $(MY_CLASSPATH_TMP:s/ /!/)))$(PATH_SEPERATOR)..$/class
 
 $(DESTDIR)$/bridgetest_javaserver$(BATCH_SUFFIX) : makefile.mk
     -rm -f $@
