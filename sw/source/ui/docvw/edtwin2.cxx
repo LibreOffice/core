@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin2.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:35 $
+ *  last change: $Author: os $ $Date: 2000-10-19 13:25:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,7 +125,12 @@
 #include <svx/svdpagv.hxx>
 #endif
 
-
+#ifndef _SWMODULE_HXX //autogen
+#include <swmodule.hxx>
+#endif
+#ifndef _MODCFG_HXX
+#include <modcfg.hxx>
+#endif
 #ifndef _VIEW_HXX
 #include <view.hxx>
 #endif
@@ -319,47 +324,51 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
 
             default:
                 {
-                    const SwField* pFld = aCntntAtPos.aFnd.pFld;
-                    switch( pFld->Which() )
+                    SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
+                    if(!pModOpt->IsHideFieldTips())
                     {
-                    case RES_SETEXPFLD:
-                    case RES_TABLEFLD:
-                    case RES_GETEXPFLD:
-                    {
-                        USHORT nOldSubType = pFld->GetSubType();
-                        ((SwField*)pFld)->SetSubType(SUB_CMD);
-                        sTxt = pFld->Expand();
-                        ((SwField*)pFld)->SetSubType(nOldSubType);
-                    }
-                    break;
-
-                    case RES_POSTITFLD:
-                    case RES_INPUTFLD:  // BubbleHelp, da der Hinweis ggf ziemlich lang sein kann
-                        bBalloon = TRUE;
-                        /* no break */
-                    case RES_JUMPEDITFLD:
-                        sTxt = pFld->GetPar2();
+                        const SwField* pFld = aCntntAtPos.aFnd.pFld;
+                        switch( pFld->Which() )
+                        {
+                        case RES_SETEXPFLD:
+                        case RES_TABLEFLD:
+                        case RES_GETEXPFLD:
+                        {
+                            USHORT nOldSubType = pFld->GetSubType();
+                            ((SwField*)pFld)->SetSubType(SUB_CMD);
+                            sTxt = pFld->Expand();
+                            ((SwField*)pFld)->SetSubType(nOldSubType);
+                        }
                         break;
 
-                    case RES_DBFLD:
-                        sTxt = ((SwDBField*)pFld)->GetCntnt(TRUE);
-                        break;
+                        case RES_POSTITFLD:
+                        case RES_INPUTFLD:  // BubbleHelp, da der Hinweis ggf ziemlich lang sein kann
+                            bBalloon = TRUE;
+                            /* no break */
+                        case RES_JUMPEDITFLD:
+                            sTxt = pFld->GetPar2();
+                            break;
 
-                    case RES_USERFLD:
-                    case RES_HIDDENTXTFLD:
-                        sTxt = pFld->GetPar1();
-                        break;
+                        case RES_DBFLD:
+                            sTxt = ((SwDBField*)pFld)->GetCntnt(TRUE);
+                            break;
 
-                    case RES_DOCSTATFLD:
-                        break;
+                        case RES_USERFLD:
+                        case RES_HIDDENTXTFLD:
+                            sTxt = pFld->GetPar1();
+                            break;
 
-                    case RES_MACROFLD:
-                        sTxt = ((const SwMacroField*)pFld)->GetMacro();
-                        break;
+                        case RES_DOCSTATFLD:
+                            break;
 
-                    case RES_GETREFFLD:
-                        sTxt = ((SwGetRefField*)pFld)->GetSetRefName();
-                        break;
+                        case RES_MACROFLD:
+                            sTxt = ((const SwMacroField*)pFld)->GetMacro();
+                            break;
+
+                        case RES_GETREFFLD:
+                            sTxt = ((SwGetRefField*)pFld)->GetSetRefName();
+                            break;
+                        }
                     }
 
                     if( !sTxt.Len() )
@@ -514,181 +523,4 @@ void  SwEditWin::Paint(const Rectangle& rRect)
         pShadCrsr->Paint();
 }
 
-
-/***********************************************************************
-
-        $Log: not supported by cvs2svn $
-        Revision 1.77  2000/09/18 16:05:23  willem.vandorp
-        OpenOffice header added.
-
-        Revision 1.76  2000/08/31 11:38:26  jp
-        RequestHelp: get the correct string for the TableValue
-
-        Revision 1.75  2000/08/15 18:58:30  jp
-        Task #77160#: use URIHelper class instead of GetUrlNoPass
-
-        Revision 1.74  2000/04/18 15:18:17  os
-        UNICODE
-
-        Revision 1.73  2000/03/03 15:16:59  os
-        StarView remainders removed
-
-        Revision 1.72  2000/02/11 14:44:54  hr
-        #70473# changes for unicode ( patched by automated patchtool )
-
-        Revision 1.71  1999/07/22 07:05:40  OS
-        #67715# QuickHelp for RefMarks
-
-
-      Rev 1.70   22 Jul 1999 09:05:40   OS
-   #67715# QuickHelp for RefMarks
-
-      Rev 1.69   14 Jun 1999 13:28:24   JP
-   Task #66520#: show TOX-TypeName and TOX-Entry by RequestHelp
-
-      Rev 1.68   02 Jun 1999 11:04:42   JP
-   Task #66520#: Verzeichniseintraege ohne Bereich per TipHilfe anzeigen
-
-      Rev 1.67   29 Jan 1999 11:48:08   MH
-   add: header
-
-      Rev 1.66   09 Oct 1998 17:01:28   JP
-   Bug #57741#: neue ResourceIds
-
-      Rev 1.65   17 Jul 1998 15:23:52   OM
-   #53182# TipHilfe fuer Macrofelder
-
-      Rev 1.64   09 Jun 1998 15:31:26   OM
-   VC-Controls entfernt
-
-      Rev 1.63   02 Apr 1998 11:38:54   OS
-   SET_CURR_SHELL im RequestHelp
-
-      Rev 1.62   25 Mar 1998 18:44:34   JP
-   Bug #48368#: RequestHelp - falls Felder keine TipHilfe haben, dann frage mal nach Redlines
-
-      Rev 1.61   13 Mar 1998 14:09:36   OM
-   #48150# BubbleHelp fuer Eingabefeld
-
-      Rev 1.60   04 Feb 1998 19:47:42   JP
-   neu: SetRedlineComment - Kommentar am RedlineObject setzen
-
-      Rev 1.59   23 Jan 1998 14:53:02   JP
-   neu: Quick/Tip-Hilfe fuer Fuss-/Endnoten
-
-      Rev 1.58   15 Jan 1998 13:16:14   JP
-   neu: TipHilfe fuer Redlines
-
-      Rev 1.57   07 Jan 1998 13:37:36   OS
-   Hosentraeger und Guertel: im Paint Existenz der wrtsh an der view testen #46436#
-
-      Rev 1.56   28 Nov 1997 18:43:00   MA
-   includes
-
-      Rev 1.55   25 Nov 1997 10:33:02   MA
-   includes
-
-      Rev 1.54   11 Nov 1997 14:04:06   MA
-   precomp entfernt
-
-      Rev 1.53   06 Nov 1997 20:45:48   JP
-   RequestHelp: fuer !PRODUCT bei Balloon die akt. Attributierung anzeigen
-
-      Rev 1.52   03 Nov 1997 16:13:46   JP
-   neu: Optionen/-Page/Basic-Schnittst. fuer ShadowCursor
-
-      Rev 1.51   24 Oct 1997 18:37:02   JP
-   neu: ShadowCursor
-
-      Rev 1.50   02 Oct 1997 15:22:32   OM
-   Feldumstellung
-
-      Rev 1.49   15 Sep 1997 09:58:48   OM
-   Auf vorhandene SdrView pruefen
-
-      Rev 1.48   12 Sep 1997 17:19:00   OM
-   Quickhelp fuer Drawtext-Objekte
-
-      Rev 1.47   11 Aug 1997 15:54:08   OM
-   #42625# Kein Passwort in Tip-Hilfe anzeigen
-
-      Rev 1.46   11 Aug 1997 12:20:24   MH
-   chg: header, ::Paint nach edtwin2.cxx verschoben
-
-      Rev 1.45   07 Aug 1997 15:00:16   OM
-   Headerfile-Umstellung
-
-      Rev 1.44   05 Aug 1997 12:27:56   MH
-   chg: header
-
-      Rev 1.43   03 Jul 1997 13:09:32   OV
-   #41226# VCMouseButtonDown: bVCAction=FALSE, wenn kein VCControl getroffen
-
-      Rev 1.42   02 May 1997 19:54:28   NF
-   includes...
-
-      Rev 1.41   11 Apr 1997 11:25:48   MA
-   includes
-
-      Rev 1.40   03 Apr 1997 17:22:28   TRI
-   includes
-
-      Rev 1.39   15 Feb 1997 14:54:54   JP
-   TipHilfe: TabellenFormel/-Value anzeigen
-
-      Rev 1.38   08 Nov 1996 11:40:22   HJS
-   include w.g. positivdefine
-
-      Rev 1.37   07 Nov 1996 14:32:58   MA
-   immer Balloon fuer Notizen
-
-      Rev 1.36   05 Nov 1996 15:34:42   JP
-   GotoRefMark: Parameter erweitert fuer erweiterte RefMarks
-
-      Rev 1.35   22 Oct 1996 14:03:08   JP
-   RequestHelp: RefFelder umgestellt auf neu SS
-
-      Rev 1.34   25 Sep 1996 14:11:00   OM
-   Neue Datenbanktrenner
-
-      Rev 1.33   02 Sep 1996 18:42:36   JP
-   INetFeld entfernt
-
-      Rev 1.32   28 Aug 1996 11:31:22   OS
-   PCH-Header korrigiert
-
-      Rev 1.31   28 Aug 1996 11:25:48   OS
-   includes
-
-      Rev 1.30   26 Aug 1996 12:35:16   OS
-   wieder mit PCH
-
-      Rev 1.29   14 Aug 1996 15:23:10   JP
-   svdraw.hxx entfernt
-
-      Rev 1.28   08 Aug 1996 10:03:16   JP
-   GetFldAtPos ersetzt durch GetCntntAtPos
-
-      Rev 1.27   07 Aug 1996 14:59:12   JP
-   Umstellung fuer Upd. 330
-
-      Rev 1.26   01 Jul 1996 15:27:56   HJS
-   define raus
-
-      Rev 1.25   13 Jun 1996 14:44:02   MA
-   splitt sihxx
-
-      Rev 1.24   24 May 1996 16:49:28   OM
-   QuickHelp von ExpressionFields wandeln
-
-      Rev 1.23   06 May 1996 09:26:10   OS
-   kein PCH wg. positiv-define
-
-      Rev 1.22   30 Apr 1996 17:51:14   HJS
-   docfilt darf nicht ausdefined sein
-
-      Rev 1.21   22 Mar 1996 15:16:50   HJS
-   umstellung 311
-
-**********************************************************************/
 

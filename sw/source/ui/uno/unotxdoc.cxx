@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:49 $
+ *  last change: $Author: os $ $Date: 2000-10-19 13:26:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1855,6 +1855,9 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName,
             pDocShell->GetDoc()->SetTOIAutoMarkURL(sURL);
         }
         break;
+        case WID_DOC_HIDE_TIPS :
+            SW_MOD()->GetModuleConfig()->SetHideFieldTips(*(sal_Bool*)aValue.getValue());
+        break;
         default:
         {
             const SfxPoolItem& rItem = pDocShell->GetDoc()->GetDefault(pMap->nWID);
@@ -1923,6 +1926,12 @@ Any SwXTextDocument::getPropertyValue(const OUString& rPropertyName)
         break;
         case WID_DOC_AUTO_MARK_URL :
             aAny <<= OUString(pDocShell->GetDoc()->GetTOIAutoMarkURL());
+        break;
+        case WID_DOC_HIDE_TIPS :
+        {
+            BOOL bTemp = SW_MOD()->GetModuleConfig()->IsHideFieldTips();
+            aAny.setValue(&bTemp, ::getBooleanCppuType());
+        }
         break;
         default:
         {
@@ -2638,181 +2647,4 @@ Sequence< OUString > SwXOutlineTarget::getSupportedServiceNames(void) throw( Run
     return aRet;
 }
 
-
-/*------------------------------------------------------------------------
-    $Log: not supported by cvs2svn $
-    Revision 1.147  2000/09/18 16:06:16  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.146  2000/07/13 14:01:14  os
-    set flag in reactivate
-
-    Revision 1.145  2000/07/13 12:37:08  os
-    new: SwXTextDocument::reactivate()
-
-    Revision 1.144  2000/07/10 12:32:18  os
-    chg: acquire/release don't throw exceptions
-
-    Revision 1.143  2000/06/29 13:44:35  os
-    getTypes: add XMultiServiceFactory
-
-    Revision 1.142  2000/06/22 16:22:13  os
-    #76361# getTypes corrected
-
-    Revision 1.141  2000/06/20 08:06:00  os
-    operator new/delete
-
-    Revision 1.140  2000/06/16 13:48:13  os
-    UNO3 errors removed
-
-    Revision 1.139  2000/05/18 11:09:17  os
-    UpdateDocStat: call optimized
-
-    Revision 1.138  2000/05/16 09:15:14  os
-    project usr removed
-
-    Revision 1.137  2000/04/11 08:05:00  os
-    UNICODE
-
-    Revision 1.136  2000/03/31 06:05:50  os
-    UNO III: toolkit includes
-
-    Revision 1.135  2000/03/27 10:36:31  os
-    UNO III
-
-    Revision 1.134  2000/03/21 15:39:44  os
-    UNOIII
-
-    Revision 1.133  2000/03/13 14:31:57  os
-    #73853# #73852# CharLocale instead of CharLanguage
-
-    Revision 1.132  2000/02/21 07:54:39  os
-    #73237# util::XRefreshable implemented
-
-    Revision 1.131  2000/02/14 14:25:35  os
-    #70473# Unicode
-
-    Revision 1.130  2000/02/11 13:46:39  os
-    #72210# SvxLanguageItem supports Locale
-
-    Revision 1.129  2000/02/02 13:43:10  os
-    #69861# Chg: XPropertyState; #72424# Chg: beans::PropertyValue
-
-    Revision 1.128  2000/01/05 10:28:49  os
-    #71466# Search: set cursor to the real start of document body
-
-    Revision 1.127  1999/12/08 12:01:45  os
-    #70284# show Bitmaps in hyperlink insert dialog
-
-    Revision 1.126  1999/12/01 15:33:44  os
-    #70173# enable search for hyperlink attribute
-
-    Revision 1.125  1999/12/01 14:22:40  os
-    #70174# search corrected
-
-    Revision 1.124  1999/11/25 15:37:50  os
-    headers corrected
-
-    Revision 1.123  1999/11/22 10:37:38  os
-    missing headers added
-
-    Revision 1.122  1999/11/19 16:38:03  os
-    modules renamed
-
-    Revision 1.121  1999/11/03 10:25:32  os
-    U2S!
-
-    Revision 1.120  1999/11/02 11:05:18  os
-    hyperlink interface completed
-
-    Revision 1.119  1999/10/29 11:34:18  os
-    support util::XModifiable
-
-    Revision 1.118  1999/10/26 14:33:34  os
-    LinkTargetSupplier
-
-    Revision 1.117  1999/10/15 10:58:40  os
-    Chg: XCntent- container::XChild
-
-    Revision 1.116  1999/09/14 13:45:34  os
-    Redlining properties
-
-    Revision 1.115  1999/09/14 13:35:06  os
-    Redlining properties; AutoMarkURL;
-
-    Revision 1.114  1999/08/26 09:44:30  HR
-    select/getSelection corrected
-
-
-      Rev 1.113   26 Aug 1999 11:44:30   HR
-   select/getSelection corrected
-
-      Rev 1.112   26 Aug 1999 11:29:54   OS
-   getSelection/select with Any
-
-      Rev 1.111   18 Aug 1999 10:52:22   OS
-   #67026# util::XModifiable now supported
-
-      Rev 1.110   21 Jul 1999 13:30:24   JP
-   WhichId-Ranges of SfxItemSets: EndId is inclusive
-
-      Rev 1.109   20 Jul 1999 09:00:50   OS
-   #67613# findNext: accept SwXTextRange
-
-      Rev 1.108   07 Jul 1999 08:14:10   OS
-   property map sorted
-
-      Rev 1.107   24 Jun 1999 12:01:48   OS
-   #66843# document statistic properties
-
-      Rev 1.106   24 Jun 1999 09:20:06   OS
-   #67048# util::XPropertyReplace implemented
-
-      Rev 1.105   26 May 1999 08:01:54   OS
-   #66180# Suche nach Styles
-
-      Rev 1.104   10 May 1999 15:12:28   OS
-   #66000# XPropertySet am Doc fuer util::Language
-
-      Rev 1.103   07 May 1999 14:25:20   KZ
-   numfrm -> numbform geaendert
-
-      Rev 1.102   05 May 1999 14:07:06   OS
-   #64655# DocumentIndexes wiederbelebt
-
-      Rev 1.101   04 May 1999 10:54:40   OS
-   #65415# getCurrentSelection
-
-      Rev 1.100   22 Apr 1999 16:09:04   OS
-   #65194# throw -> throw
-
-      Rev 1.99   22 Apr 1999 15:28:52   OS
-   #65124# not implemented - nur noch DBG_WARNING
-
-      Rev 1.98   07 Apr 1999 12:36:10   OS
-   #62304# NumberFormatter erst im Dtor deaggregieren
-
-      Rev 1.97   07 Apr 1999 11:27:28   OS
-   #62304# neues NumberFormatter - Object
-
-      Rev 1.96   07 Apr 1999 10:26:30   OS
-   #60348# richtiges Shape liefern
-
-      Rev 1.95   25 Mar 1999 14:55:22   OS
-   #62541# Exceptions fuer falsche Parameter bei setPagePrintSettings
-
-      Rev 1.94   18 Mar 1999 12:35:50   OS
-   #62984# neue Ableitung vom Svx
-
-      Rev 1.93   15 Mar 1999 14:38:24   OS
-   #62845# Makro fuer ServiceInfo jetzt auch fuer OS/2
-
-      Rev 1.92   15 Mar 1999 11:35:40   OS
-   #63370# Direktzugriff statt cast
-
-      Rev 1.91   12 Mar 1999 09:57:04   OS
-   #62845# XServiceInfo impl.
-
-
-------------------------------------------------------------------------*/
 
