@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbwizsetup.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-29 15:42:39 $
+ *  last change: $Author: hr $ $Date: 2004-12-13 12:23:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1094,7 +1094,7 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
         {
             if ( aFileDlg.Execute() == ERRCODE_NONE )
             {
-                m_aDocURL = aFileDlg.GetPath();
+                m_aDocURL = INetURLObject(aFileDlg.GetPath());
 
                 if( m_aDocURL.GetProtocol() != INET_PROT_NOT_VALID )
                 {
