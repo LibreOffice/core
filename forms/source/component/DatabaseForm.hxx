@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseForm.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 10:36:30 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 14:23:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -535,6 +535,11 @@ public:
     inline void submitNBC( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>& Control, const ::com::sun::star::awt::MouseEvent& MouseEvt );
 
 protected:
+    // OPropertySetAggregationHelper overridables
+    virtual void SAL_CALL forwardingPropertyValue( sal_Int32 _nHandle );
+    virtual void SAL_CALL forwardedPropertyValue( sal_Int32 _nHandle, bool _bSuccess );
+
+    // OInterfaceContainer overridables
     virtual void implInserted( const ElementDescription* _pElement );
     virtual void implRemoved(const InterfaceRef& _rxObject);
 
