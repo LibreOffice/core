@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cdouthdl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:17 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:23:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,8 +75,8 @@
 #include <rtl/ustrbuf.hxx>
 #endif
 
-#ifndef _VCL_VCLENUM_HXX
-#include <vcl/vclenum.hxx>
+#ifndef _COM_SUN_STAR_AWT_FONTSTRIKEOUT_HPP
+#include <com/sun/star/awt/FontStrikeout.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_UNO_ANY_HXX_
@@ -89,40 +89,164 @@
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::awt;
 using namespace ::xmloff::token;
 
-SvXMLEnumMapEntry pXML_Crossedout_Enum[] =
+SvXMLEnumMapEntry pXML_CrossedoutType_Enum[] =
 {
-    { XML_CROSSEDOUT_NONE,      STRIKEOUT_NONE },
-    { XML_CROSSEDOUT_SINGLE,    STRIKEOUT_SINGLE },
-    { XML_CROSSEDOUT_DOUBLE,    STRIKEOUT_DOUBLE },
-    { XML_CROSSEDOUT_THICK,     STRIKEOUT_BOLD },
-    { XML_CROSSEDOUT_SLASH,     STRIKEOUT_SLASH },
-    { XML_CROSSEDOUT_CROSS,     STRIKEOUT_X }
+    { XML_NONE,                 FontStrikeout::NONE },
+    { XML_SINGLE,   FontStrikeout::SINGLE },
+    { XML_DOUBLE,               FontStrikeout::DOUBLE },
+    { XML_SINGLE,    FontStrikeout::BOLD },
+    { XML_SINGLE,    FontStrikeout::SLASH },
+    { XML_SINGLE,    FontStrikeout::X },
+    { XML_TOKEN_INVALID,                0 }
+};
+
+SvXMLEnumMapEntry pXML_CrossedoutStyle_Enum[] =
+{
+    { XML_NONE,                         FontStrikeout::NONE },
+    { XML_SOLID,                        FontStrikeout::SINGLE },
+    { XML_SOLID,                        FontStrikeout::DOUBLE },
+    { XML_SOLID,                        FontStrikeout::BOLD },
+    { XML_SOLID,                        FontStrikeout::SLASH },
+    { XML_SOLID,                        FontStrikeout::X },
+    { XML_DOTTED,               FontStrikeout::SINGLE },
+    { XML_DASH,             FontStrikeout::SINGLE },
+    { XML_LONG_DASH,            FontStrikeout::SINGLE },
+    { XML_DOT_DASH,         FontStrikeout::SINGLE },
+    { XML_DOT_DOT_DASH,     FontStrikeout::SINGLE },
+    { XML_WAVE,             FontStrikeout::SINGLE },
+    { XML_TOKEN_INVALID,                0 }
+};
+
+SvXMLEnumMapEntry pXML_CrossedoutWidth_Enum[] =
+{
+    { XML_AUTO,                 FontStrikeout::NONE },
+    { XML_AUTO,                 FontStrikeout::SINGLE },
+    { XML_AUTO,                 FontStrikeout::DOUBLE },
+    { XML_BOLD,     FontStrikeout::BOLD },
+    { XML_AUTO,                 FontStrikeout::SLASH },
+    { XML_AUTO,                 FontStrikeout::X },
+    { XML_THIN,                 FontStrikeout::NONE },
+    { XML_MEDIUM,               FontStrikeout::NONE },
+    { XML_THICK,                FontStrikeout::NONE },
+    { XML_TOKEN_INVALID,                0 }
 };
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-// class XMLPosturePropHdl
+// class XMLCrossedOutTypePropHdl
 //
 
-XMLCrossedOutPropHdl::~XMLCrossedOutPropHdl()
+XMLCrossedOutTypePropHdl::~XMLCrossedOutTypePropHdl()
 {
     // nothing to do
 }
 
-sal_Bool XMLCrossedOutPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+sal_Bool XMLCrossedOutTypePropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
 {
     sal_Bool bRet = sal_False;
-    sal_uInt16 eCross;
+    sal_uInt16 eNewStrikeout;
 
-    if( ( bRet = rUnitConverter.convertEnum( eCross, rStrImpValue, pXML_Crossedout_Enum ) ) )
-        rValue <<= (sal_Int16)eCross;
+    if( ( bRet = rUnitConverter.convertEnum( eNewStrikeout, rStrImpValue,
+                                             pXML_CrossedoutType_Enum ) ) )
+    {
+        // multi property: style and width might be set already.
+        // If the old value is NONE, the new is used unchanged.
+        sal_Int16 eStrikeout;
+        if( (rValue >>= eStrikeout) && FontStrikeout::NONE!=eStrikeout )
+        {
+            switch( eNewStrikeout )
+            {
+            case FontStrikeout::NONE:
+            case FontStrikeout::SINGLE:
+                // keep existing line style
+                eNewStrikeout = eStrikeout;
+                break;
+            case FontStrikeout::DOUBLE:
+                // A double line style has priority over a solid or a bold
+                // line style,
+                // but not about any other line style
+                switch( eStrikeout )
+                {
+                case FontStrikeout::SINGLE:
+                case FontStrikeout::BOLD:
+                    break;
+                default:
+                    // If a double line style is not supported for the existing
+                    // value, keep the new one
+                    eNewStrikeout = eStrikeout;
+                    break;
+                }
+                break;
+            default:
+                OSL_ENSURE( bRet, "unexpected line type value" );
+                break;
+            }
+            if( eNewStrikeout != eStrikeout )
+                rValue <<= (sal_Int16)eNewStrikeout;
+        }
+        else
+        {
+            rValue <<= (sal_Int16)eNewStrikeout;
+        }
+    }
 
     return bRet;
 }
 
-sal_Bool XMLCrossedOutPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+sal_Bool XMLCrossedOutTypePropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+{
+    sal_Bool bRet = sal_False;
+    sal_Int16 nValue;
+    OUStringBuffer aOut;
+
+    if( (rValue >>= nValue) && FontStrikeout::DOUBLE==nValue )
+    {
+        if( ( bRet = rUnitConverter.convertEnum( aOut, (sal_uInt16)nValue, pXML_CrossedoutType_Enum ) ) )
+            rStrExpValue = aOut.makeStringAndClear();
+    }
+
+    return bRet;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// class XMLCrossedOutStylePropHdl
+//
+
+XMLCrossedOutStylePropHdl::~XMLCrossedOutStylePropHdl()
+{
+    // nothing to do
+}
+
+sal_Bool XMLCrossedOutStylePropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+{
+    sal_Bool bRet = sal_False;
+    sal_uInt16 eNewStrikeout;
+
+    if( ( bRet = rUnitConverter.convertEnum( eNewStrikeout, rStrImpValue,
+                                             pXML_CrossedoutStyle_Enum ) ) )
+    {
+        // multi property: style and width might be set already.
+        // If the old value is NONE, the new is used unchanged.
+        sal_Int16 eStrikeout;
+        if( (rValue >>= eStrikeout) && FontStrikeout::NONE!=eStrikeout )
+        {
+            // one NONE a SINGLE are possible new values. For both, the
+            // existing value is kept.
+        }
+        else
+        {
+            rValue <<= (sal_Int16)eNewStrikeout;
+        }
+    }
+
+    return bRet;
+}
+
+sal_Bool XMLCrossedOutStylePropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
 {
     sal_Bool bRet = sal_False;
     sal_Int16 nValue;
@@ -130,8 +254,124 @@ sal_Bool XMLCrossedOutPropHdl::exportXML( OUString& rStrExpValue, const uno::Any
 
     if( rValue >>= nValue )
     {
-        if( ( bRet = rUnitConverter.convertEnum( aOut, (sal_uInt16)nValue, pXML_Crossedout_Enum ) ) )
+        if( ( bRet = rUnitConverter.convertEnum( aOut, (sal_uInt16)nValue,
+                                                 pXML_CrossedoutStyle_Enum ) ) )
             rStrExpValue = aOut.makeStringAndClear();
+    }
+
+    return bRet;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// class XMLCrossedOutWidthPropHdl
+//
+
+XMLCrossedOutWidthPropHdl::~XMLCrossedOutWidthPropHdl()
+{
+    // nothing to do
+}
+
+sal_Bool XMLCrossedOutWidthPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+{
+    sal_Bool bRet = sal_False;
+    sal_uInt16 eNewStrikeout;
+
+    if( ( bRet = rUnitConverter.convertEnum( eNewStrikeout, rStrImpValue,
+                                             pXML_CrossedoutWidth_Enum ) ) )
+    {
+        // multi property: style and width might be set already.
+        // If the old value is NONE, the new is used unchanged.
+        sal_Int16 eStrikeout;
+        if( (rValue >>= eStrikeout) && FontStrikeout::NONE!=eStrikeout )
+        {
+            switch( eNewStrikeout )
+            {
+            case FontStrikeout::NONE:
+                // keep existing line style
+                eNewStrikeout = eStrikeout;
+                break;
+            case FontStrikeout::BOLD:
+                switch( eStrikeout )
+                {
+                case FontStrikeout::SINGLE:
+                    break;
+                default:
+                    // If a double line style is not supported for the existing
+                    // value, keep the new one
+                    eNewStrikeout = eStrikeout;
+                    break;
+                }
+            default:
+                OSL_ENSURE( bRet, "unexpected line type value" );
+                break;
+            }
+            if( eNewStrikeout != eStrikeout )
+                rValue <<= (sal_Int16)eNewStrikeout;
+        }
+        else
+        {
+            rValue <<= (sal_Int16)eNewStrikeout;
+        }
+    }
+
+    return bRet;
+}
+
+sal_Bool XMLCrossedOutWidthPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+{
+    sal_Bool bRet = sal_False;
+    sal_Int16 nValue;
+    OUStringBuffer aOut;
+
+    if( (rValue >>= nValue) && (FontStrikeout::BOLD == nValue) )
+    {
+        if( ( bRet = rUnitConverter.convertEnum( aOut, (sal_uInt16)nValue,
+                                                 pXML_CrossedoutWidth_Enum ) ) )
+            rStrExpValue = aOut.makeStringAndClear();
+    }
+
+    return bRet;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// class XMLCrossedOutTextPropHdl
+//
+
+XMLCrossedOutTextPropHdl::~XMLCrossedOutTextPropHdl()
+{
+    // nothing to do
+}
+
+sal_Bool XMLCrossedOutTextPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+{
+    sal_Bool bRet = sal_False;
+
+    if( rStrImpValue.getLength() )
+    {
+        sal_Int16 eStrikeout = ('/' == rStrImpValue[0]
+                                        ? FontStrikeout::SLASH
+                                        : FontStrikeout::X);
+        rValue <<= (sal_Int16)eStrikeout;
+        bRet = sal_True;
+    }
+
+    return bRet;
+}
+
+sal_Bool XMLCrossedOutTextPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+{
+    sal_Bool bRet = sal_False;
+    sal_Int16 nValue;
+
+    if( (rValue >>= nValue) &&
+        (FontStrikeout::SLASH == nValue || FontStrikeout::X == nValue) )
+    {
+        rStrExpValue = OUString::valueOf(
+            static_cast< sal_Unicode>( FontStrikeout::SLASH == nValue ? '/'
+                                                                      : 'X' ) );
+        bRet = sal_True;
     }
 
     return bRet;
