@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svimpbox.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pb $ $Date: 2002-06-12 07:52:28 $
+ *  last change: $Author: fs $ $Date: 2002-07-19 13:21:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,6 +142,11 @@ private:
 
     VclEventListeners   maEventListeners;
 
+    static Image        s_aDefCollapsed;
+    static Image        s_aDefExpanded;
+    static Image        s_aDefCollapsedHC;
+    static Image        s_aDefExpandedHC;
+
     // Node Bitmaps
     enum ImageType
     {
@@ -255,6 +260,8 @@ private:
                             { return pCursor->HasChilds() || pCursor->HasChildsOnDemand(); }
     inline BOOL         IsNowExpandable() const     // if element at cursor can be expanded at this moment
                             { return IsExpandable() && !pView->IsExpanded( pCursor ); }
+
+    static  void        implInitDefaultNodeImages();
 public:
     SvImpLBox( SvTreeListBox* pView, SvLBoxTreeList*, WinBits nWinStyle );
     ~SvImpLBox();
@@ -327,6 +334,9 @@ public:
     inline void         SetDefaultEntryColBmp( const Image& _rImg, BmpColorMode _eMode = BMP_COLOR_NORMAL );
     inline const Image& GetDefaultEntryExpBmp( BmpColorMode _eMode = BMP_COLOR_NORMAL );
     inline const Image& GetDefaultEntryColBmp( BmpColorMode _eMode = BMP_COLOR_NORMAL );
+
+    static const Image& GetDefaultExpandedNodeImage( BmpColorMode _eMode = BMP_COLOR_NORMAL );
+    static const Image& GetDefaultCollapsedNodeImage( BmpColorMode _eMode = BMP_COLOR_NORMAL );
 
     const Size&         GetOutputSize() const { return aOutputSize;}
     void                KeyUp( BOOL bPageUp, BOOL bNotifyScroll = TRUE );

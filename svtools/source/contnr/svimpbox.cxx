@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svimpbox.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: pb $ $Date: 2002-06-12 08:03:02 $
+ *  last change: $Author: fs $ $Date: 2002-07-19 13:25:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,10 +77,25 @@
 #ifndef _SVLBOX_HXX
 #include <svlbox.hxx>
 #endif
+#ifndef _SVIMPLBOX_HXX
 #include <svimpbox.hxx>
+#endif
 
+#ifndef _SVTOOLS_SVTDATA_HXX
+#include "svtdata.hxx"
+#endif
+
+#ifndef _SVTOOLS_HRC
+#include "svtools.hrc"
+#endif
 
 #define NODE_BMP_TABDIST_NOTVALID -2000000
+
+Image   SvImpLBox::s_aDefCollapsed;
+Image   SvImpLBox::s_aDefExpanded;
+Image   SvImpLBox::s_aDefCollapsedHC;
+Image   SvImpLBox::s_aDefExpandedHC;
+
 
 SvImpLBox::SvImpLBox( SvTreeListBox* pLBView, SvLBoxTreeList* pLBTree, WinBits nWinStyle) :
     aVerSBar( pLBView, WB_DRAG | WB_VSCROLL ),
@@ -3290,6 +3305,33 @@ void SvImpLBox::CancelPendingEdit()
     if( aEditTimer.IsActive() )
         aEditTimer.Stop();
     nFlags &= ~F_START_EDITTIMER;
+}
+
+// -----------------------------------------------------------------------
+void SvImpLBox::implInitDefaultNodeImages()
+{
+    if ( !!s_aDefCollapsed )
+        // assume that all or nothing is initialized
+        return;
+
+    s_aDefCollapsed = Image( SvtResId( RID_IMG_TREENODE_COLLAPSED ) );
+    s_aDefCollapsedHC = Image( SvtResId( RID_IMG_TREENODE_COLLAPSED_HC ) );
+    s_aDefExpanded = Image( SvtResId( RID_IMG_TREENODE_EXPANDED ) );
+    s_aDefExpandedHC = Image( SvtResId( RID_IMG_TREENODE_EXPANDED_HC ) );
+}
+
+// -----------------------------------------------------------------------
+const Image& SvImpLBox::GetDefaultExpandedNodeImage( BmpColorMode _eMode )
+{
+    implInitDefaultNodeImages();
+    return ( BMP_COLOR_NORMAL == _eMode ) ? s_aDefExpanded : s_aDefExpandedHC;
+}
+
+// -----------------------------------------------------------------------
+const Image& SvImpLBox::GetDefaultCollapsedNodeImage( BmpColorMode _eMode )
+{
+    implInitDefaultNodeImages();
+    return ( BMP_COLOR_NORMAL == _eMode ) ? s_aDefCollapsed : s_aDefCollapsedHC;
 }
 
 // -----------------------------------------------------------------------
