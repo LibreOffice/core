@@ -2,9 +2,9 @@
  *
  *  $RCSfile: subtdlg.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 07:01:27 $
+ *  last change: $Author: kz $ $Date: 2001-05-17 08:40:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
         Text [ FRENCH ] = "Saut de page entre les grou~pes" ;
         Text [ ITALIAN ] = "Interruzione di pagina ~per ogni cambio di gruppo" ;
         Text [ DUTCH ] = "~Nieuwe pagina voor elke groep" ;
-        Text [ PORTUGUESE_BRAZILIAN ] = "Quebra de pßgina para cada grup~o" ;
+        Text [ PORTUGUESE_BRAZILIAN ] = "Quebra de p?gina para cada grup~o" ;
         Text [ SWEDISH ] = "Sidbrytning för varje grupp" ;
         Text [ PORTUGUESE ] = "Nova página para cada grupo" ;
         TabStop = TRUE ;
@@ -112,7 +112,7 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
         Text [ FRENCH ] = "~Respecter la casse" ;
         Text [ ITALIAN ] = "~Maiuscole/minuscole" ;
         Text [ DUTCH ] = "~Hoofdletters/kleine letters belangrijk" ;
-        Text [ PORTUGUESE_BRAZILIAN ] = "~Sensİvel a mai sculas/min sculas" ;
+        Text [ PORTUGUESE_BRAZILIAN ] = "~Sens?vel a mai sculas/min sculas" ;
         Text [ SWEDISH ] = "Versalkänsli~g" ;
         Text [ PORTUGUESE ] = "~Maiúsculas/Minúsculas" ;
         TabStop = TRUE ;
@@ -142,13 +142,13 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
         Text [ FRENCH ] = "~Trier au préalable la plage selon les groupes" ;
         Text [ ITALIAN ] = "Ordinare prima l'area a gruppi" ;
         Text [ DUTCH ] = "~Bereik eerst op groepen sorteren" ;
-        Text [ PORTUGUESE_BRAZILIAN ] = "Pre~classificar área de acordo com os grupos" ;
+        Text [ PORTUGUESE_BRAZILIAN ] = "Pre~classificar ?rea de acordo com os grupos" ;
         Text [ SWEDISH ] = "~Sortera området efter grupper först" ;
         Text [ PORTUGUESE ] = "~Ordenar primeiro área de acordo com os grupos" ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "ÇøÓòÏÈ°´ÕÕĞ¡×éÅÅĞò(~S)";
         Text[ russian ] = "Ñîğòèğîâàòü îáëàñòü ñíà÷àëà ïî ãğóïïàì";
-        Text[ polish ] = "Przesortuj wczeœniej o~bszar wed³ug grup";
+        Text[ polish ] = "Przesortuj wcze?niej o~bszar wed³ug grup";
         Text[ japanese ] = "”ÍˆÍ‚ğ‚ ‚ç‚©‚¶‚ß¸ŞÙ°Ìß•Ê‚É•À‚×‚é(~S)";
         Text[ chinese_traditional ] = "°Ï°ì¥ı«ö·Ó¸s²Õ±Æ§Ç(~S)";
         Text[ arabic ] = "İÑÒ ÇáäØÇŞ ŞÈá Ğáß ÍÓÈ ÇáãÌãæÚÇÊ";
@@ -203,13 +203,13 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
         Text [ FRENCH ] = "Ordre de tri ~utilisateur" ;
         Text [ ITALIAN ] = "Sequenza d'ordine ~definita dall'utente" ;
         Text [ DUTCH ] = "~Gebruikergedefinieerde sorteervolgorde" ;
-        Text [ PORTUGUESE_BRAZILIAN ] = "~PrecedÛncia de ordenaşÒo definida pelo usußrio" ;
+        Text [ PORTUGUESE_BRAZILIAN ] = "~Preced?ncia de ordena??o definida pelo usu?rio" ;
         Text [ SWEDISH ] = "A~nvändardefinierad sorteringsordning" ;
         Text [ PORTUGUESE ] = "Ordem de classificação definida pelo ~utilizador" ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "Ê¹ÓÃÕß×Ô¶¨µÄÅÅĞò¹æÔò(~U)";
         Text[ russian ] = "Ïîğÿäîê ñîğòèğîâêè ïîëüçîâàòåëÿ";
-        Text[ polish ] = "~Kolejnoœæ sortowania okreœl. przez u¿ytkownika";
+        Text[ polish ] = "~Kolejno?æ sortowania okre?l. przez u¿ytkownika";
         Text[ japanese ] = "‡˜‚Ìw’è(~U)";
         Text[ chinese_traditional ] = "¨Ï¥ÎªÌ¦Û­q±Æ§Ç³W«h(~U)";
         Text[ arabic ] = "ÊÑÊíÈ ÇáİÑÒ ÊÈÚÇğ áÊÚÑíİ ÇáãÓÊÎÏã";
@@ -385,7 +385,7 @@ TabPage RID_SUBTBASE
         Text [ english_us ] = "~Calculate subtotals for" ;
         Text[ chinese_simplified ] = "·ÖÀà»ã×Ü¼ÆËã(~C)";
         Text[ russian ] = "Âû÷èñëèòü ïğîìåæóòî÷íûå èòîãè äëÿ";
-        Text[ polish ] = "Oblicz sumy poœrednie dla";
+        Text[ polish ] = "Oblicz sumy po?rednie dla";
         Text[ japanese ] = "¬Œv‚ğo‚·€–Ú(~C)";
         Text[ chinese_traditional ] = "¤p­p¥Î©ó(~C)";
         Text[ arabic ] = "ÍÓÇÈ ÇáãÌÇãíÚ ÇáİÑÚíÉ áÜ";
@@ -411,7 +411,7 @@ TabPage RID_SUBTBASE
         Text [ ENGLISH ] = "Funct~ion" ;
         Text [ norwegian ] = "Funks~jon" ;
         Text [ italian ] = "Funz~ione" ;
-        Text [ portuguese_brazilian ] = "Funç~ao" ;
+        Text [ portuguese_brazilian ] = "Fun?~ao" ;
         Text [ portuguese ] = "Usar fu~nção" ;
         Text [ finnish ] = "Käytä ~funktiota" ;
         Text [ danish ] = "Beregningsfunktion" ;
@@ -654,11 +654,11 @@ TabPage RID_SUBTBASE
     {
             < "Suma" ; Default ; > ;
         < "Liczba" ; Default ; > ;
-        < "Œrednia wartoœæ" ; Default ; > ;
+        < "?rednia warto?æ" ; Default ; > ;
         < "Max" ; Default ; > ;
         < "Min" ; Default ; > ;
         < "Produkt" ; Default ; > ;
-        < "Iloœæ (tylko cyfry)" ; Default ; > ;
+        < "Ilo?æ (tylko cyfry)" ; Default ; > ;
         < "Odchylenie standardowe (Próbka)" ; Default ; > ;
         < "OdchStdc (Populacja)" ; Default ; > ;
         < "Wariancja (Próbka)" ; Default ; > ;
@@ -913,7 +913,7 @@ TabDialog RID_SCDLG_SUBTOTALS
                 Text [ ENGLISH ] = "Options" ;
                 Text [ norwegian ] = "Options" ;
                 Text [ italian ] = "Opzioni" ;
-                Text [ portuguese_brazilian ] = "Opções" ;
+                Text [ portuguese_brazilian ] = "Op??s" ;
                 Text [ portuguese ] = "Opções" ;
                 Text [ finnish ] = "Asetukset" ;
                 Text [ danish ] = "Indstillinger" ;
@@ -969,7 +969,7 @@ TabDialog RID_SCDLG_SUBTOTALS
     };
     Text[ chinese_simplified ] = "·ÖÀà»ã×Ü";
     Text[ russian ] = "Ïğîìåæóòî÷íûå èòîãè";
-    Text[ polish ] = "Sumy poœrednie";
+    Text[ polish ] = "Sumy po?rednie";
     Text[ japanese ] = "¬Œv";
     Text[ chinese_traditional ] = "¤p­p";
     Text[ arabic ] = "ÇáãÌÇãíÚ ÇáİÑÚíÉ";
