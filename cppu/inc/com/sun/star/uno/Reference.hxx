@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Reference.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-14 11:54:07 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 03:18:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,9 @@
 
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
 #include <com/sun/star/uno/Reference.h>
+#endif
+#ifndef _COM_SUN_STAR_UNO_RUNTIMEEXCEPTION_HPP_
+#include <com/sun/star/uno/RuntimeException.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UNO_XINTERFACE_HDL_
 #include <com/sun/star/uno/XInterface.hdl>
