@@ -101,6 +101,8 @@ UDK_3_0_0 {
 UDK_3.1 {
     global:
         typelib_static_mi_interface_type_init;
+        typelib_static_struct_type_init;
         typelib_typedescription_newExtendedInterfaceAttribute;
         typelib_typedescription_newMIInterface;
+        typelib_typedescription_newStruct;
 } UDK_3_0_0;
