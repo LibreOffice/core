@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: ssa $ $Date: 2002-04-15 12:47:29 $
+ *  last change: $Author: ssa $ $Date: 2002-04-16 08:07:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5016,7 +5016,7 @@ void ToolBox::ImplChangeHighlight( ImplToolItem* pItem, BOOL bNoGrabFocus )
             }
 
             mnHighItemId = pItem->mnId;
-            ImplDrawItem( aPos, 2 );
+            ImplDrawItem( aPos, mbSelection ? 1 : 2 );
             if( mbSelection )
                 mnCurPos = aPos;
             ImplShowFocus();
