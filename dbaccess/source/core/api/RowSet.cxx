@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-12 09:32:26 $
+ *  last change: $Author: fs $ $Date: 2001-04-18 12:46:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -367,8 +367,11 @@ void SAL_CALL ORowSet::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const 
     {
         case PROPERTY_ID_ACTIVECONNECTION:
             // the new connection
-            m_aActiveConnection >>= m_xActiveConnection;
-            setActiveConnection(m_xActiveConnection, sal_False);
+            {
+                Reference< XConnection > xNewConnection;
+                m_aActiveConnection >>= xNewConnection;
+                setActiveConnection(xNewConnection, sal_False);
+            }
 
             m_bOwnConnection        = sal_False;
             m_bCreateStatement      = sal_True;
