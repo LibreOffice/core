@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: cp $ $Date: 2001-06-08 10:52:27 $
+ *  last change: $Author: cp $ $Date: 2001-06-12 12:00:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2109,6 +2109,7 @@ long SalFrameData::HandleKeyEvent( XKeyEvent *pEvent )
         nSize = 1;
     }
 
+    // PreeditCallback preedit style: commit the string and close preedit mode
     if (   mpInputContext != NULL
         && mpInputContext->UseContext()
         && mpInputContext->IsPreeditMode()
@@ -2119,6 +2120,17 @@ long SalFrameData::HandleKeyEvent( XKeyEvent *pEvent )
             mpInputContext->CommitStringCallback( pString, nSize );
     }
     else
+    // PreeditPosition preedit style: not in preedit mode, but event is just
+    // longer than 1 unicode char
+    if (   mpInputContext != NULL
+        && mpInputContext->UseContext()
+        && nSize > 1
+        && KeyRelease != pEvent->type )
+    {
+        mpInputContext->CommitKeyEvent(pString, nSize);
+    }
+    else
+    // normal single character keyinput
     {
         aKeyEvt.mnCode     = nKeyCode | nModCode;
         aKeyEvt.mnRepeat   = 0;
@@ -2146,6 +2158,12 @@ long SalFrameData::HandleKeyEvent( XKeyEvent *pEvent )
             }
         }
     }
+
+      //
+      // update the spot location for PreeditPosition IME style
+      //
+    if (mpInputContext != NULL && mpInputContext->UseContext())
+        mpInputContext->UpdateSpotLocation();
 
     free (pBuffer);
     return True;
