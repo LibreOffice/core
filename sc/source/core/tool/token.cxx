@@ -2,9 +2,9 @@
  *
  *  $RCSfile: token.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: er $ $Date: 2001-10-12 12:32:37 $
+ *  last change: $Author: er $ $Date: 2001-10-18 09:03:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -568,7 +568,26 @@ BOOL ScToken::Is3DRef() const
 }
 
 
-// virtual dummy methods
+BOOL ScToken::IsRPNReferenceAbsName() const
+{
+    if ( GetRef() == 1 && GetOpCode() == ocPush )
+    {   // only in RPN and not ocColRowNameAuto or similar
+        switch ( GetType() )
+        {
+            case svDoubleRef :
+                if ( !GetSingleRef2().IsRelName() )
+                    return TRUE;
+            //! fallthru
+            case svSingleRef :
+                if ( !GetSingleRef().IsRelName() )
+                    return TRUE;
+        }
+    }
+    return FALSE;
+}
+
+
+// --- virtual dummy methods -------------------------------------------------
 
 BYTE ScToken::GetByte() const
 {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2001-02-13 18:51:12 $
+ *  last change: $Author: er $ $Date: 2001-10-18 08:56:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -417,7 +417,7 @@ public:
     void        EndListening( SfxListener& rLst, USHORT nRow );
     void        MoveListeners( ScBroadcasterList& rSource, USHORT nDestRow );
     void        StartAllListeners();
-    void        StartRelNameListeners();
+    void        StartNameListeners( BOOL bOnlyRelNames );
     void        SetRelNameDirty();
 
     void        CompileDBFormula();

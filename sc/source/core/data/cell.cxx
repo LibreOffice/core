@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cell.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: er $ $Date: 2001-10-12 12:31:57 $
+ *  last change: $Author: er $ $Date: 2001-10-18 08:59:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,7 +243,7 @@ void ScBaseCell::SetBroadcaster(ScBroadcasterList* pNew)
     pBroadcaster = pNew;
 }
 
-void ScBaseCell::StartListeningTo( ScDocument* pDoc, BOOL bOnlyRelNames )
+void ScBaseCell::StartListeningTo( ScDocument* pDoc, USHORT nOnlyNames )
 {
     if ( eCellType == CELLTYPE_FORMULA && !pDoc->IsClipOrUndo()
             && !pDoc->GetNoListening()
@@ -266,8 +266,20 @@ void ScBaseCell::StartListeningTo( ScDocument* pDoc, BOOL bOnlyRelNames )
                 SingleRefData& rRef1 = t->GetSingleRef();
                 SingleRefData& rRef2 = (eType == svDoubleRef ?
                     t->GetDoubleRef().Ref2 : rRef1);
-                if ( !bOnlyRelNames || (bOnlyRelNames
-                    && (rRef1.IsRelName() || rRef2.IsRelName())))
+                BOOL bDo;
+                if ( !nOnlyNames )
+                    bDo = TRUE;
+                else
+                {
+                    bDo = FALSE;
+                    if ( nOnlyNames & SC_LISTENING_NAMES_REL )
+                        bDo |= (rRef1.IsRelName() || rRef2.IsRelName());
+                    if ( nOnlyNames & SC_LISTENING_NAMES_ABS )
+                        bDo |= t->IsRPNReferenceAbsName();
+                    if ( nOnlyNames & SC_LISTENING_EXCEPT )
+                        bDo = !bDo;
+                }
+                if ( bDo )
                 {
                     switch( eType )
                     {
@@ -330,7 +342,7 @@ void ScBaseCell::StartListeningTo( ScDocument* pDoc, BOOL bOnlyRelNames )
 //  pArr gesetzt -> Referenzen von anderer Zelle nehmen
 // dann muss auch aPos uebergeben werden!
 
-void ScBaseCell::EndListeningTo( ScDocument* pDoc, BOOL bOnlyRelNames,
+void ScBaseCell::EndListeningTo( ScDocument* pDoc, USHORT nOnlyNames,
         ScTokenArray* pArr, ScAddress aPos )
 {
     if ( eCellType == CELLTYPE_FORMULA && !pDoc->IsClipOrUndo()
@@ -357,8 +369,20 @@ void ScBaseCell::EndListeningTo( ScDocument* pDoc, BOOL bOnlyRelNames,
                 SingleRefData& rRef1 = t->GetSingleRef();
                 SingleRefData& rRef2 = (eType == svDoubleRef ?
                     t->GetDoubleRef().Ref2 : rRef1);
-                if ( !bOnlyRelNames || (bOnlyRelNames
-                    && (rRef1.IsRelName() || rRef2.IsRelName())))
+                BOOL bDo;
+                if ( !nOnlyNames )
+                    bDo = TRUE;
+                else
+                {
+                    bDo = FALSE;
+                    if ( nOnlyNames & SC_LISTENING_NAMES_REL )
+                        bDo |= (rRef1.IsRelName() || rRef2.IsRelName());
+                    if ( nOnlyNames & SC_LISTENING_NAMES_ABS )
+                        bDo |= t->IsRPNReferenceAbsName();
+                    if ( nOnlyNames & SC_LISTENING_EXCEPT )
+                        bDo = !bDo;
+                }
+                if ( bDo )
                 {
                     switch( t->GetType() )
                     {

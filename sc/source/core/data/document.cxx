@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: sab $ $Date: 2001-09-27 10:30:12 $
+ *  last change: $Author: er $ $Date: 2001-10-18 08:59:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -618,10 +618,10 @@ BOOL ScDocument::InsertRow( USHORT nStartCol, USHORT nStartTab,
             StartAllListeners();
         }
         else
-        {   // RelNames wurden in UpdateReference abgehaengt
+        {   // RelName listeners have been removed in UpdateReference
             for (i=nStartTab; i<=nEndTab; i++)
                 if (pTab[i])
-                    pTab[i]->StartRelNameListeners();
+                    pTab[i]->StartNameListeners( TRUE );
             // #69592# at least all cells using range names pointing relative to the moved range must recalculate
             for (i=0; i<=MAXTAB; i++)
                 if (pTab[i])
@@ -684,10 +684,10 @@ void ScDocument::DeleteRow( USHORT nStartCol, USHORT nStartTab,
             pTab[i]->DeleteRow( nStartCol, nEndCol, nStartRow, nSize, pUndoOutline );
 
     if ( nStartRow+nSize <= MAXROW )
-    {   // RelNames wurden in UpdateReference abgehaengt
+    {   // Name listeners have been removed in UpdateReference
         for (i=nStartTab; i<=nEndTab; i++)
             if (pTab[i])
-                pTab[i]->StartRelNameListeners();
+                pTab[i]->StartNameListeners( FALSE );
         // #69592# at least all cells using range names pointing relative to the moved range must recalculate
         for (i=0; i<=MAXTAB; i++)
             if (pTab[i])
@@ -763,10 +763,10 @@ BOOL ScDocument::InsertCol( USHORT nStartRow, USHORT nStartTab,
             StartAllListeners();
         }
         else
-        {   // RelNames wurden in UpdateReference abgehaengt
+        {   // RelName listeners have been removed in UpdateReference
             for (i=nStartTab; i<=nEndTab; i++)
                 if (pTab[i])
-                    pTab[i]->StartRelNameListeners();
+                    pTab[i]->StartNameListeners( TRUE );
             // #69592# at least all cells using range names pointing relative to the moved range must recalculate
             for (i=0; i<=MAXTAB; i++)
                 if (pTab[i])
@@ -828,10 +828,10 @@ void ScDocument::DeleteCol(USHORT nStartRow, USHORT nStartTab, USHORT nEndRow, U
             pTab[i]->DeleteCol( nStartCol, nStartRow, nEndRow, nSize, pUndoOutline );
 
     if ( nStartCol+nSize <= MAXCOL )
-    {   // RelNames wurden in UpdateReference abgehaengt
+    {   // Name listeners have been removed in UpdateReference
         for (i=nStartTab; i<=nEndTab; i++)
             if (pTab[i])
-                pTab[i]->StartRelNameListeners();
+                pTab[i]->StartNameListeners( FALSE );
         // #69592# at least all cells using range names pointing relative to the moved range must recalculate
         for (i=0; i<=MAXTAB; i++)
             if (pTab[i])

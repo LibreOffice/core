@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cell2.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: er $ $Date: 2001-10-08 18:40:50 $
+ *  last change: $Author: er $ $Date: 2001-10-18 08:59:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -858,9 +858,9 @@ void ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
             bHasRelName = HasRelNameReference();
             bNewRelName = (bHasRelName && eUpdateRefMode != URM_COPY);
             if ( bNewListening )
-                EndListeningTo( pDocument, FALSE, pOld, aOldPos );
+                EndListeningTo( pDocument, 0, pOld, aOldPos );
             else if ( bNewRelName )
-                EndListeningTo( pDocument, TRUE, pOld, aOldPos );
+                EndListeningTo( pDocument, SC_LISTENING_NAMES_REL, pOld, aOldPos );
                 // RelNameRefs werden immer mitverschoben
         }
         else
@@ -908,13 +908,21 @@ void ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
             bNeedDirty = TRUE;
         }
         if ( !bInDeleteUndo )
-        {   // bei ChangeTrack Delete-Reject werden in InsertCol/Row die
-            // Listener neu aufgesezt
+        {   // In ChangeTrack Delete-Reject listeners are established in
+            // InsertCol/InsertRow
             if ( bNewListening )
-                StartListeningTo( pDocument );
+            {
+                if ( eUpdateRefMode == URM_INSDEL && !bIsInsert )
+                    StartListeningTo( pDocument, SC_LISTENING_EXCEPT |
+                        SC_LISTENING_NAMES_ABS | SC_LISTENING_NAMES_REL );
+                    // Deletes establish listeners on names _after_
+                    // UpdateReference and the following Delete
+                else
+                    StartListeningTo( pDocument, 0 );
+            }
             else if ( bNewRelName && eUpdateRefMode != URM_INSDEL )
-                StartListeningTo( pDocument, TRUE );
-                // bei Insert/Delete RelNameListening/SetDirty erst spaeter
+                StartListeningTo( pDocument, SC_LISTENING_NAMES_REL );
+                // Insert/Delete RelNameListening/SetDirty follows later
         }
         if ( bNeedDirty && (!(eUpdateRefMode == URM_INSDEL && bHasRelName) || pRangeData) )
         {   // Referenzen abgeschnitten, ungueltig o.ae.?

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column3.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2001-03-14 18:05:33 $
+ *  last change: $Author: er $ $Date: 2001-10-18 08:59:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1097,20 +1097,24 @@ void ScColumn::StartAllListeners()
 }
 
 
-void ScColumn::StartRelNameListeners()
+void ScColumn::StartNameListeners( BOOL bOnlyRelNames )
 {
     if (pItems)
+    {
+        USHORT nNameListening = (bOnlyRelNames ? SC_LISTENING_NAMES_REL :
+            SC_LISTENING_NAMES_REL | SC_LISTENING_NAMES_ABS);
         for (USHORT i = 0; i < nCount; i++)
         {
             ScBaseCell* pCell = pItems[i].pCell;
             if ( pCell->GetCellType() == CELLTYPE_FORMULA )
             {
                 USHORT nRow = pItems[i].nRow;
-                ((ScFormulaCell*)pCell)->StartListeningTo( pDocument, TRUE );
+                ((ScFormulaCell*)pCell)->StartListeningTo( pDocument, nNameListening );
                 if ( nRow != pItems[i].nRow )
                     Search( nRow, i );      // Listener eingefuegt?
             }
         }
+    }
 }
 
 

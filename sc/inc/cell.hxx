@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cell.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: er $ $Date: 2001-10-12 12:31:07 $
+ *  last change: $Author: er $ $Date: 2001-10-18 08:56:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,11 @@
 // set (in nScriptType) if type has not been determined yet
 #define SC_SCRIPTTYPE_UNKNOWN   0x08
 
+// For StartListeningTo()/EndListeningTo() restricted to absolute/relative names
+#define SC_LISTENING_NAMES_REL  0x01
+#define SC_LISTENING_NAMES_ABS  0x02
+#define SC_LISTENING_EXCEPT     0x04
+
 class ScDocument;
 class EditTextObject;
 class ScMatrix;
@@ -146,10 +151,11 @@ public:
                         // String- oder EditCell
     static ScBaseCell* CreateTextCell( const String& rString, ScDocument* );
 
+    // nOnlyNames may be one or more of SC_LISTENING_NAMES_*
     void            StartListeningTo( ScDocument* pDoc,
-                                      BOOL bOnlyRelNames = FALSE );
+                                      USHORT nOnlyNames = 0 );
     void            EndListeningTo( ScDocument* pDoc,
-                                    BOOL bOnlyRelNames = FALSE,
+                                    USHORT nOnlyNames = 0,
                                     ScTokenArray* pArr = NULL,
                                     ScAddress aPos = ScAddress() );
 

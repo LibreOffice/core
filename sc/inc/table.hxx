@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: er $ $Date: 2001-09-05 09:41:14 $
+ *  last change: $Author: er $ $Date: 2001-10-18 08:56:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -692,7 +692,7 @@ private:
     void        StartListening( const ScAddress& rAddress, SfxListener* pListener );
     void        EndListening( const ScAddress& rAddress, SfxListener* pListener );
     void        StartAllListeners();
-    void        StartRelNameListeners();
+    void        StartNameListeners( BOOL bOnlyRelNames );
     void        SetRelNameDirty();
 
     USHORT      FillMaxRot( RowInfo* pRowInfo, USHORT nArrCount, USHORT nX1, USHORT nX2,

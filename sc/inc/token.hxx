@@ -2,9 +2,9 @@
  *
  *  $RCSfile: token.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: er $ $Date: 2001-10-12 12:31:07 $
+ *  last change: $Author: er $ $Date: 2001-10-18 08:56:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,6 +170,11 @@ public:
     virtual BOOL                operator==( const ScToken& rToken ) const;
             BOOL                TextEqual( const ScToken& rToken ) const;
             BOOL                Is3DRef() const;    // reference with 3D flag set
+
+    // If token in RPN resulted from resolving a name and contains an absolute
+    // reference. Token must be obtained through ScTokenArray::GetNextReferenceRPN()
+    // or similar.
+            BOOL                IsRPNReferenceAbsName() const;
 
     static  size_t              GetStrLenBytes( xub_StrLen nLen )
                                     { return nLen * sizeof(sal_Unicode); }
