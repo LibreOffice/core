@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.src,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: nf $ $Date: 2002-06-13 14:04:59 $
+ *  last change: $Author: os $ $Date: 2002-06-19 11:00:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1931,11 +1931,42 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text[ catalan ] = "SeparaciÛn sil·bica";
         Text[ thai ] = "‡πÉ‡∏™‡πà‡∏¢‡∏±‡∏ï‡∏¥‡∏†‡∏±‡∏á‡∏Ñ‡πå";
     };
+    FixedLine FL_OPTIONS
+    {
+        Pos = MAP_APPFONT ( 6 , 64 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text = "Zus‰tze" ;
+        Text [ ENGLISH ] = "Options" ;
+        Text [ norwegian ] = "Options" ;
+        Text [ italian ] = "Extra" ;
+        Text [ portuguese_brazilian ] = "Op??s" ;
+        Text [ portuguese ] = "OpÁıes" ;
+        Text [ finnish ] = "Asetukset" ;
+        Text [ danish ] = "Supplerende" ;
+        Text [ french ] = "Options" ;
+        Text [ swedish ] = "Till‰gg" ;
+        Text [ dutch ] = "Overige" ;
+        Text [ spanish ] = "Opciones" ;
+        Text [ english_us ] = "Options" ;
+        Group = TRUE ;
+        Text[ chinese_simplified ] = "ÈÄâÈ°π";
+        Text[ russian ] = "ƒÓÔÓÎÌËÚÂÎ¸ÌÓ";
+        Text[ polish ] = "Opcje";
+        Text[ japanese ] = "„Ç™„Éó„Ç∑„Éß„É≥";
+        Text[ chinese_traditional ] = "ÈÅ∏È†Ö";
+        Text[ arabic ] = "«·ŒÌ«—« ";
+        Text[ greek ] = "–Ò¸ÛËÂÙ·";
+        Text[ korean ] = "ÏòµÏÖò";
+        Text[ turkish ] = "SeÁenekler";
+        Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Opciones";
+        Text[ thai ] = "‡∏ï‡∏±‡∏ß‡πÄ‡∏•‡∏∑‡∏≠‡∏Å";
+    };
     TriStateBox BTN_PAGEBREAK
     {
          //         Disable = TRUE;
-        Pos = MAP_APPFONT ( 12 , 75 ) ;
-        Size = MAP_APPFONT ( 80 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 76 ) ;
+        Size = MAP_APPFONT ( 61 , 10 ) ;
         Text = "~Umbruch" ;
         Text [ ENGLISH ] = "~Break" ;
         Text [ norwegian ] = "~Skift" ;
@@ -1963,138 +1994,59 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text[ catalan ] = "~Salto";
         Text[ thai ] = "‡∏ï‡∏±‡∏ß‡πÅ~‡∏ö‡πà‡∏á";
     };
-    RadioButton BTN_BREAKPAGE
+    FixedText FT_BREAKTYPE
     {
-         //         Disable = TRUE;
+        Pos = MAP_APPFONT ( 75 , 77 ) ;
+        Size = MAP_APPFONT ( 20 , 10 ) ;
+        Text = "~Typ" ;
+        Text [ ENGLISH ] = "T~ype" ;
+    };
+    ListBox LB_BREAKTYPE
+    {
+        Border = TRUE ;
         Pos = MAP_APPFONT ( 98 , 75 ) ;
-        Size = MAP_APPFONT ( 70 , 10 ) ;
-        Text = "~Seite" ;
-        Text [ ENGLISH ] = "~Page" ;
-        Text [ norwegian ] = "~Page" ;
-        Text [ italian ] = "Pagina" ;
-        Text [ portuguese_brazilian ] = "~P?gina" ;
-        Text [ portuguese ] = "~P·gina" ;
-        Text [ finnish ] = "~Sivu" ;
-        Text [ danish ] = "Side" ;
-        Text [ french ] = "~Page" ;
-        Text [ swedish ] = "Si~da" ;
-        Text [ dutch ] = "~Pagina" ;
-        Text [ spanish ] = "P·~gina" ;
-        Text [ english_us ] = "~Page" ;
-        Group = TRUE ;
-        Check = TRUE ;
-        Text[ chinese_simplified ] = "È°µ(~P)";
-        Text[ russian ] = "—Ú‡ÌËˆ‡";
-        Text[ polish ] = "~Strona";
-        Text[ japanese ] = "„Éö„Éº„Ç∏(~P)";
-        Text[ chinese_traditional ] = "È†Å(~P)";
-        Text[ arabic ] = "«·’›Õ…";
-        Text[ greek ] = "”ÂÎﬂ‰·";
-        Text[ korean ] = "ÌéòÏù¥ÏßÄ(~P)";
-        Text[ turkish ] = "~Sayfa";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "P·~gina";
-        Text[ thai ] = "~‡∏´‡∏ô‡πâ‡∏≤";
+        Size = MAP_APPFONT ( 61 , 50 ) ;
+        DropDown = TRUE ;
+        StringList =
+        {
+            < "Seite" ; 0; > ;
+            < "Spalte" ; 1; > ;
+        };
+        StringList [ ENGLISH ] =
+        {
+            < "Page" ; 0; > ;
+            < "Column" ; 1; > ;
+        };
     };
-    RadioButton BTN_BREAKCOLUMN
+    FixedText FT_BREAKPOSITION
     {
-         //         Disable = TRUE;
-        Pos = MAP_APPFONT ( 176 , 75 ) ;
-        Size = MAP_APPFONT ( 70 , 10 ) ;
-        Text = "S~palte" ;
-        Text [ ENGLISH ] = "~Column" ;
-        Text [ norwegian ] = "~Kolonne" ;
-        Text [ italian ] = "~Colonna" ;
-        Text [ portuguese_brazilian ] = "~Coluna" ;
-        Text [ portuguese ] = "~Coluna" ;
-        Text [ finnish ] = "~Sarake" ;
-        Text [ danish ] = "Spalte" ;
-        Text [ french ] = "Colonne" ;
-        Text [ swedish ] = "~Kolumn" ;
-        Text [ dutch ] = "~Kolom" ;
-        Text [ spanish ] = "Columna" ;
-        Text [ english_us ] = "Colu~mn" ;
-        Text[ chinese_simplified ] = "Âàó(~M)";
-        Text[ russian ] = "—ÚÓÎ·Âˆ";
-        Text[ polish ] = "Kolumna";
-        Text[ japanese ] = "Âàó(~M)";
-        Text[ chinese_traditional ] = "Ê¨Ñ(~M)";
-        Text[ arabic ] = "⁄„Êœ";
-        Text[ greek ] = "”ÙﬁÎÁ";
-        Text[ korean ] = "Ïó¥(~M)";
-        Text[ turkish ] = "S~¸tun";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Columna";
-        Text[ thai ] = "‡∏Ñ‡∏≠~‡∏•‡∏±‡∏°‡∏ô‡πå";
+        Pos = MAP_APPFONT ( 163 , 77 ) ;
+        Size = MAP_APPFONT ( 45 , 10 ) ;
+        Right = TRUE;
+        Text = "~Position" ;
+        Text [ ENGLISH ] = "~Position" ;
     };
-    RadioButton BTN_PAGEBREAKBEFORE
+    ListBox LB_BREAKPOSITION
     {
-         //         Disable = TRUE;
-        Pos = MAP_APPFONT ( 98 , 89 ) ;
-        Size = MAP_APPFONT ( 70 , 10 ) ;
-        Text = "~davor" ;
-        Text [ ENGLISH ] = "be~fore" ;
-        Text [ norwegian ] = "f~¯r" ;
-        Text [ italian ] = "Prima" ;
-        Text [ portuguese_brazilian ] = "an~tes" ;
-        Text [ portuguese ] = "An~tes" ;
-        Text [ finnish ] = "En~nen" ;
-        Text [ danish ] = "F¯r" ;
-        Text [ french ] = "Avant" ;
-        Text [ swedish ] = "Fˆ~re" ;
-        Text [ dutch ] = "~voor" ;
-        Text [ spanish ] = "De~lante" ;
-        Text [ english_us ] = "Be~fore" ;
-        Group = TRUE ;
-        Check = TRUE ;
-        Text[ chinese_simplified ] = "Ââç‰∫é(~F)";
-        Text[ russian ] = "‰Ó";
-        Text[ polish ] = "prz~ed";
-        Text[ japanese ] = "ÊÆµËêΩ„ÅÆÂâç(~F)";
-        Text[ chinese_traditional ] = "ÂâçÊñº(~F)";
-        Text[ arabic ] = "ﬁ»·";
-        Text[ greek ] = "–ÒÈÌ ·¸";
-        Text[ korean ] = "Í∑∏ Ï†Ñ(~F)";
-        Text[ turkish ] = "~sonra";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "De~lante";
-        Text[ thai ] = "‡∏Å‡πà~‡∏≠‡∏ô";
-    };
-    RadioButton BTN_PAGEBREAKAFTER
-    {
-         //         Disable = TRUE;
-        Pos = MAP_APPFONT ( 176 , 89 ) ;
-        Size = MAP_APPFONT ( 70 , 10 ) ;
-        Text = "da~nach" ;
-        Text [ ENGLISH ] = "aft~er" ;
-        Text [ norwegian ] = "ett~er" ;
-        Text [ italian ] = "Dopo" ;
-        Text [ portuguese_brazilian ] = "dep~ois" ;
-        Text [ portuguese ] = "Dep~ois" ;
-        Text [ finnish ] = "J‰l~keen" ;
-        Text [ danish ] = "Efter" ;
-        Text [ french ] = "AprËs" ;
-        Text [ swedish ] = "Eft~er" ;
-        Text [ dutch ] = "~na" ;
-        Text [ spanish ] = "De~tr·s" ;
-        Text [ english_us ] = "Aft~er" ;
-        Text[ chinese_simplified ] = "‰πãÂêé(~E)";
-        Text[ russian ] = "ÔÓÒÎÂ";
-        Text[ polish ] = "z~a";
-        Text[ japanese ] = "ÊÆµËêΩ„ÅÆÂæå(~E)";
-        Text[ chinese_traditional ] = "‰πãÂæå(~E)";
-        Text[ arabic ] = "»⁄œ";
-        Text[ greek ] = "ÏÂÙ‹ ·¸";
-        Text[ korean ] = "Í∑∏ Îã§Ïùå(~E)";
-        Text[ turkish ] = "~ˆnce";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "de~tr·s";
-        Text[ thai ] = "‡∏´‡∏•‡∏±~‡∏á‡∏à‡∏≤‡∏Å";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 211 , 75 ) ;
+        Size = MAP_APPFONT ( 40 , 50 ) ;
+        DropDown = TRUE ;
+        StringList =
+        {
+            < "Davor" ; 0; > ;
+            < "Danach" ; 1; > ;
+        };
+        StringList [ ENGLISH ] =
+        {
+            < "Before" ; 0; > ;
+            < "After" ; 1; > ;
+        };
     };
     TriStateBox BTN_PAGECOLL
     {
          //         Disable = TRUE;
-        Pos = MAP_APPFONT (12 , 105 ) ;
+        Pos = MAP_APPFONT (12 , 91 ) ;
         Size = MAP_APPFONT ( 80 , 10 ) ;
         Text = "mit Seitenvor~lage" ;
         Text [ ENGLISH ] = "With temp~late" ;
@@ -2126,16 +2078,16 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
     ListBox LB_PAGECOLL
     {
          //         Disable = TRUE;
-        Pos = MAP_APPFONT ( 98 , 103 ) ;
+        Pos = MAP_APPFONT ( 98 , 90 ) ;
         Size = MAP_APPFONT ( 61 , 50 ) ;
         DropDown = TRUE ;
         Sort = TRUE;
     };
     FixedText FT_PAGENUM
     {
-        Pos = MAP_APPFONT ( 163 , 105 ) ;
-        Size = MAP_APPFONT ( 57 , 8 ) ;
-        Center = TRUE ;
+        Pos = MAP_APPFONT ( 163 , 91 ) ;
+        Size = MAP_APPFONT ( 45 , 8 ) ;
+        Right = TRUE ;
         Text = "Se~itennummer" ;
         Text [ ENGLISH ] = "Page number" ;
         Text [ english_us ] = "Page ~number" ;
@@ -2164,7 +2116,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
     NumericField ED_PAGENUM
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 221 , 103 ) ;
+        Pos = MAP_APPFONT ( 211 , 90 ) ;
         Size = MAP_APPFONT ( 26 , 12 ) ;
         Left = TRUE ;
         Repeat = TRUE ;
@@ -2177,8 +2129,8 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
     };
     TriStateBox BTN_KEEPTOGETHER
     {
-        Pos = MAP_APPFONT ( 12 , 119 ) ;
-        Size = MAP_APPFONT ( 150 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 106 ) ;
+        Size = MAP_APPFONT ( 115 , 10 ) ;
         Text = "Absatz ni~cht trennen" ;
         Text [ ENGLISH ] = "~Keep together" ;
         Text [ norwegian ] = "~Hold sammen" ;
@@ -2208,8 +2160,8 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
     };
     TriStateBox CB_KEEPTOGETHER
     {
-        Pos = MAP_APPFONT ( 12 , 133 ) ;
-        Size = MAP_APPFONT ( 150 , 10 ) ;
+        Pos = MAP_APPFONT ( 130, 106 ) ;
+        Size = MAP_APPFONT ( 120 , 10 ) ;
         Text = "Abs‰~tze zusammenhalten" ;
         Text [ ENGLISH ] = "Kee~p paragraphs together" ;
         Text [ norwegian ] = "Holde~r avsnittene samlet" ;
@@ -2239,8 +2191,8 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
     TriStateBox BTN_ORPHANS
     {
         Disable = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 147 ) ;
-        Size = MAP_APPFONT ( 150 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 121 ) ;
+        Size = MAP_APPFONT ( 115 , 10 ) ;
         Text = "Schuster~jungenregelung" ;
         Text [ ENGLISH ] = "~Orphan control" ;
         Group = TRUE ;
@@ -2271,7 +2223,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
     {
         Disable = TRUE ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 176 , 146 ) ;
+        Pos = MAP_APPFONT ( 130 , 120 ) ;
         Size = MAP_APPFONT ( 26 , 12 ) ;
         Group = TRUE ;
         Left = TRUE ;
@@ -2286,7 +2238,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
     FixedText FT_ORPHANS
     {
         Disable = TRUE ;
-        Pos = MAP_APPFONT ( 205 , 148 ) ;
+        Pos = MAP_APPFONT ( 160 , 121 ) ;
         Size = MAP_APPFONT ( 40 , 8 ) ;
         Text = "Zeilen" ;
         Text [ ENGLISH ] = "Rows" ;
@@ -2318,8 +2270,8 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
     TriStateBox BTN_WIDOWS
     {
         Disable = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 163 ) ;
-        Size = MAP_APPFONT ( 150 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 137 ) ;
+        Size = MAP_APPFONT ( 115 , 10 ) ;
         Text = "Hu~renkinderregelung" ;
         Text [ ENGLISH ] = "~Widow control" ;
         Group = TRUE ;
@@ -2350,7 +2302,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
     {
         Disable = TRUE ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 176 , 162 ) ;
+        Pos = MAP_APPFONT ( 130 , 136 ) ;
         Size = MAP_APPFONT ( 26 , 12 ) ;
         Group = TRUE ;
         Left = TRUE ;
@@ -2365,7 +2317,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
     FixedText FT_WIDOWS
     {
         Disable = TRUE ;
-        Pos = MAP_APPFONT ( 205 , 164 ) ;
+        Pos = MAP_APPFONT ( 160 , 137 ) ;
         Size = MAP_APPFONT ( 40 , 8 ) ;
         Text = "Zeilen" ;
         Text [ ENGLISH ] = "Rows" ;
@@ -2394,36 +2346,41 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text[ catalan ] = "LÌneas";
         Text[ thai ] = "‡∏ö‡∏£‡∏£‡∏ó‡∏±‡∏î";
     };
-    FixedLine FL_OPTIONS
+    FixedLine   FL_PROPERTIES
     {
-        Pos = MAP_APPFONT ( 6 , 64 ) ;
+        Pos = MAP_APPFONT ( 6 , 154 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text = "Zus‰tze" ;
-        Text [ ENGLISH ] = "Options" ;
-        Text [ norwegian ] = "Options" ;
-        Text [ italian ] = "Extra" ;
-        Text [ portuguese_brazilian ] = "Op??s" ;
-        Text [ portuguese ] = "OpÁıes" ;
-        Text [ finnish ] = "Asetukset" ;
-        Text [ danish ] = "Supplerende" ;
-        Text [ french ] = "Options" ;
-        Text [ swedish ] = "Till‰gg" ;
-        Text [ dutch ] = "Overige" ;
-        Text [ spanish ] = "Opciones" ;
-        Text [ english_us ] = "Options" ;
-        Group = TRUE ;
-        Text[ chinese_simplified ] = "ÈÄâÈ°π";
-        Text[ russian ] = "ƒÓÔÓÎÌËÚÂÎ¸ÌÓ";
-        Text[ polish ] = "Opcje";
-        Text[ japanese ] = "„Ç™„Éó„Ç∑„Éß„É≥";
-        Text[ chinese_traditional ] = "ÈÅ∏È†Ö";
-        Text[ arabic ] = "«·ŒÌ«—« ";
-        Text[ greek ] = "–Ò¸ÛËÂÙ·";
-        Text[ korean ] = "ÏòµÏÖò";
-        Text[ turkish ] = "SeÁenekler";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Opciones";
-        Text[ thai ] = "‡∏ï‡∏±‡∏ß‡πÄ‡∏•‡∏∑‡∏≠‡∏Å";
+        Hide = TRUE ;
+        Text = "Eigenschaften" ;
+        Text [ ENGLISH ] = "Properties" ;
+    };
+    FixedText   FT_TEXTDIRECTION
+    {
+        Pos = MAP_APPFONT ( 12 , 167 ) ;
+        Size = MAP_APPFONT ( 60 , 8 ) ;
+        Hide = TRUE ;
+        Text = "~Textfluss" ;
+        Text [ ENGLISH ] = "Text ~direction" ;
+    };
+    ListBox     LB_TEXTDIRECTION
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 75 , 165 ) ;
+        Size = MAP_APPFONT ( 176 , 50 ) ;
+        DropDown = TRUE ;
+        Hide = TRUE ;
+        StringList =
+        {
+            < "Links nach rechts" ; 0; > ;
+            < "Rechts nach links" ; 1; > ;
+            < "Einstellungen des ¸bergeordneten Objektes verwenden" ; 4; > ;
+        };
+        StringList [ ENGLISH ] =
+        {
+            < "Left-to-right" ; 0; > ;
+            < "Right-to-left" ; 1; > ;
+            < "Use superordinate settings" ; 4; > ;
+        };
     };
     Text[ chinese_simplified ] = "Êç¢Ë°åÂíåÂàÜÈ°µ";
     Text[ russian ] = "œÓÎÓÊÂÌËÂ Ì‡ ÒÚ‡ÌËˆÂ";
