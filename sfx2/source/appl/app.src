@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-05 20:19:49 $
+ *  last change: $Author: pb $ $Date: 2002-08-13 13:25:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4314,3 +4314,19 @@ String STR_QUICKSTART_LNKNAME
     Text[ thai ] = "%PRODUCTNAME %PRODUCTVERSION";
 };
 
+WarningBox RID_SECURITY_WARNING_HYPERLINK
+{
+    HelpId = HID_WARNING_SECURITY_HYPERLINK;
+    Buttons = WB_YES_NO ;
+    DefButton = WB_DEF_NO ;
+    Message = "Dieser Hyperlink wird \"%s\" öffnen. Wollen Sie fortfahren?" ;
+    Message [ english ] = "This hyperlink is going to open \"%s\". Do you want to proceed?" ;
+    Message [ english_us ] = "This hyperlink is going to open \"%s\". Do you want to proceed?" ;
+};
+
+String RID_SECURITY_WARNING_TITLE
+{
+    Text = "Sicherheitswarnung" ;
+    Text [ENGLISH] = "Security Warning" ;
+    Text[ english_us ] = "Security Warning" ;
+};

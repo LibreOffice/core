@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.hrc,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: os $ $Date: 2002-08-01 11:38:30 $
+ *  last change: $Author: pb $ $Date: 2002-08-13 13:25:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -284,6 +284,9 @@
 #define IMG_HELP_TOOLBOX_HCL_BOOKMARKS          (RID_SFX_APP_START+176)
 #define IMG_HELP_TOOLBOX_HCL_SEARCHDIALOG       (RID_SFX_APP_START+177)
 #define IMG_HELP_TOOLBOX_HCL_COPY               (RID_SFX_APP_START+178)
+
+#define RID_SECURITY_WARNING_HYPERLINK          (RID_SFX_APP_START + 180)
+#define RID_SECURITY_WARNING_TITLE              (RID_SFX_APP_START + 181)
 
 #endif // #ifndef _SFX_APP_HRC
 

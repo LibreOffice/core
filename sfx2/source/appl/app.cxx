@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-09 14:13:18 $
+ *  last change: $Author: pb $ $Date: 2002-08-13 13:26:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -241,6 +241,7 @@
 #ifndef _SVTOOLS_TTPROPS_HXX // handmade
 #include <svtools/ttprops.hxx>
 #endif
+#include <svtools/extendedsecurityoptions.hxx>
 
 // Static member
 SfxApplication* SfxApplication::pApp = NULL;
@@ -262,6 +263,8 @@ static SvtFontOptions *pFontOptions = NULL;
 static SvtInternalOptions *pInternalOptions = NULL;
 static SvtSysLocaleOptions *pSysLocaleOptions = NULL;
 static SvtSysLocale *pSysLocale = NULL;
+static SvtExtendedSecurityOptions* pExtendedSecurityOptions = NULL;
+
 
 class SfxPropertyHandler : public PropertyHandler
 {
@@ -482,6 +485,7 @@ SfxApplication::SfxApplication()
     pFontOptions = new SvtFontOptions;
     pInternalOptions = new SvtInternalOptions;
     pSysLocaleOptions = new SvtSysLocaleOptions;
+    pExtendedSecurityOptions = new SvtExtendedSecurityOptions;
     SvtViewOptions::AcquireOptions();
 #if SUPD>637
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "} precreate svtools options objects" );
@@ -588,6 +592,7 @@ SfxApplication::~SfxApplication()
     delete pInternalOptions;
     delete pSysLocaleOptions;
     delete pSysLocale;
+    delete pExtendedSecurityOptions;
 
     if ( !bDowning )
         Deinitialize();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: as $ $Date: 2002-08-07 11:47:27 $
+ *  last change: $Author: pb $ $Date: 2002-08-13 13:30:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,6 +151,7 @@
 #ifndef _OSL_FILE_HXX_
 #include <osl/file.hxx>
 #endif
+#include <svtools/extendedsecurityoptions.hxx>
 
 #pragma hdrstop
 
@@ -1064,6 +1065,46 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
                                                     ::rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer" )), UNO_QUERY );
             xTrans->parseStrict( aURL );
 
+            INetProtocol aINetProtocol = INetURLObject( aURL.Complete ).GetProtocol();
+            SvtExtendedSecurityOptions aExtendedSecurityOptions;
+            SvtExtendedSecurityOptions::OpenHyperlinkMode eMode = aExtendedSecurityOptions.GetOpenHyperlinkMode();
+            if ( eMode == SvtExtendedSecurityOptions::OPEN_WITHSECURITYCHECK )
+            {
+                if ( aINetProtocol == INET_PROT_FILE )
+                {
+                    // Check if file URL is a directory. This is not insecure!
+                    osl::Directory aDir( aURL.Main );
+                    sal_Bool bIsDir = ( aDir.open() == osl::Directory::E_None );
+
+                    if ( !bIsDir && !aExtendedSecurityOptions.IsSecureHyperlink( aURL.Complete ))
+                    {
+                        // Security check for local files depending on the extension
+                        vos::OGuard aGuard( Application::GetSolarMutex() );
+                        Window *pWindow = SFX_APP()->GetTopWindow();
+
+                        String aSecurityWarningBoxTitle( SfxResId( RID_SECURITY_WARNING_TITLE ));
+                        WarningBox  aSecurityWarningBox( pWindow, SfxResId( RID_SECURITY_WARNING_HYPERLINK ));
+                        aSecurityWarningBox.SetText( aSecurityWarningBoxTitle );
+
+                        // Replace %s with the real file name
+                        String aMsgText = aSecurityWarningBox.GetMessText();
+                        String aMainURL( aURL.Main );
+                        String aFileName;
+
+                        utl::LocalFileHelper::ConvertURLToPhysicalName( aMainURL, aFileName );
+                        aMsgText.SearchAndReplaceAscii( "%s", aFileName );
+                        aSecurityWarningBox.SetMessText( aMsgText );
+
+                        if( aSecurityWarningBox.Execute() == RET_NO )
+                            return;
+                    }
+                }
+            }
+            else if ( eMode == SvtExtendedSecurityOptions::OPEN_NEVER )
+            {
+                return;
+            }
+
             aTypeName = xTypeDetection->queryTypeByURL( aURL.Main );
             SfxFilterMatcher& rMatcher = SFX_APP()->GetFilterMatcher();
             const SfxFilter* pFilter = rMatcher.GetFilter4EA( aTypeName );
@@ -1074,9 +1115,6 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
                                                     ::rtl::OUString::createFromAscii( "com.sun.star.system.SystemShellExecute" )), UNO_QUERY );
                 if ( xSystemShellExecute.is() )
                 {
-                    INetURLObject aObj( aURL.Complete );
-
-                    INetProtocol aINetProtocol = aObj.GetProtocol();
                     if ( aINetProtocol == INET_PROT_FTP ||
                          aINetProtocol == INET_PROT_HTTP ||
                          aINetProtocol == INET_PROT_HTTPS )
