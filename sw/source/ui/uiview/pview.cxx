@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pview.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: os $ $Date: 2002-12-04 12:17:32 $
+ *  last change: $Author: os $ $Date: 2002-12-06 14:15:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -967,13 +967,13 @@ void SwPagePreViewWin::CalcWish( BYTE nNewRow, BYTE nNewCol )
         FN_PREVIEW_ZOOM,
         FN_START_OF_DOCUMENT, FN_END_OF_DOCUMENT, FN_PAGEUP, FN_PAGEDOWN,
         FN_STAT_ZOOM,
-        FN_SHOW_TWO_PAGES, FN_SHOW_FOUR_PAGES,
+        FN_SHOW_TWO_PAGES, FN_SHOW_MULTIPLE_PAGES,
         0
     };
     SfxBindings& rBindings = mrView.GetViewFrame()->GetBindings();
     rBindings.Invalidate( aInval );
     rBindings.Update( FN_SHOW_TWO_PAGES );
-    rBindings.Update( FN_SHOW_FOUR_PAGES );
+    rBindings.Update( FN_SHOW_MULTIPLE_PAGES );
 }
 /*--------------------------------------------------------------------
     Beschreibung:
@@ -1268,7 +1268,7 @@ void  SwPagePreView::Execute( SfxRequest &rReq )
         case FN_STAT_ZOOM:
             break;
 
-        case FN_SHOW_FOUR_PAGES:
+        case FN_SHOW_MULTIPLE_PAGES:
         {
             const SfxItemSet *pArgs = rReq.GetArgs();
             if( pArgs && pArgs->Count() >= 2 )
@@ -1571,7 +1571,7 @@ void  SwPagePreView::GetState( SfxItemSet& rSet )
             }
         }
         break;
-        case FN_SHOW_FOUR_PAGES:
+        case FN_SHOW_MULTIPLE_PAGES:
         //should never be disabled
         break;
 
