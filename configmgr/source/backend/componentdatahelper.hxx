@@ -2,9 +2,9 @@
  *
  *  $RCSfile: componentdatahelper.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 14:55:33 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 08:46:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,6 +196,8 @@ namespace configmgr
                 CFG_UNO_THROW1( configuration::backend::MalformedDataException );
             ValueNode * addPropertyToCurrent(std::auto_ptr<ValueNode> _aNode, bool _bMayReplace = false)
                 CFG_UNO_THROW1( configuration::backend::MalformedDataException );
+
+            void markCurrentMerged();
 
             // Logging support
             Logger const & getLogger() const { return m_aLogger; }
