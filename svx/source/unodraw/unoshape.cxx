@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.96 $
+ *  $Revision: 1.97 $
  *
- *  last change: $Author: cl $ $Date: 2002-05-23 13:01:01 $
+ *  last change: $Author: cl $ $Date: 2002-05-24 13:01:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2828,8 +2828,8 @@ beans::PropertyState SAL_CALL SvxShape::_getPropertyState( const OUString& Prope
             return beans::PropertyState_AMBIGUOUS_VALUE;
         }
     }
-    else if(( pMap->nWID >= OWN_ATTR_VALUE_START && pMap->nWID <= OWN_ATTR_VALUE_END ) ||
-       ( pMap->nWID >= SDRATTR_NOTPERSIST_FIRST && pMap->nWID <= SDRATTR_NOTPERSIST_LAST ))
+    else if((( pMap->nWID >= OWN_ATTR_VALUE_START && pMap->nWID <= OWN_ATTR_VALUE_END ) ||
+       ( pMap->nWID >= SDRATTR_NOTPERSIST_FIRST && pMap->nWID <= SDRATTR_NOTPERSIST_LAST )) && ( pMap->nWID != SDRATTR_TEXTDIRECTION ) )
     {
         return beans::PropertyState_DIRECT_VALUE;
     }
@@ -2837,19 +2837,45 @@ beans::PropertyState SAL_CALL SvxShape::_getPropertyState( const OUString& Prope
     {
         const SfxItemSet& rSet = pObj->GetItemSet();
 
+        beans::PropertyState eState;
+
         switch( rSet.GetItemState( pMap->nWID, sal_False ) )
         {
         case SFX_ITEM_READONLY:
         case SFX_ITEM_SET:
-            return beans::PropertyState_DIRECT_VALUE;
+            eState = beans::PropertyState_DIRECT_VALUE;
+            break;
         case SFX_ITEM_DEFAULT:
-            return beans::PropertyState_DEFAULT_VALUE;
-        case SFX_ITEM_UNKNOWN:
-        case SFX_ITEM_DONTCARE:
-        case SFX_ITEM_DISABLED:
+            eState = beans::PropertyState_DEFAULT_VALUE;
+            break;
+//      case SFX_ITEM_UNKNOWN:
+//      case SFX_ITEM_DONTCARE:
+//      case SFX_ITEM_DISABLED:
         default:
-            return beans::PropertyState_AMBIGUOUS_VALUE;
+            eState = beans::PropertyState_AMBIGUOUS_VALUE;
+            break;
         }
+
+        // if a item is set, this doesn't mean we want it :)
+        if( ( beans::PropertyState_DIRECT_VALUE == eState ) )
+        {
+            switch( pMap->nWID )
+            {
+            case XATTR_FILLBITMAP:
+            case XATTR_FILLGRADIENT:
+            case XATTR_FILLHATCH:
+            case XATTR_FILLFLOATTRANSPARENCE:
+            case XATTR_LINEEND:
+            case XATTR_LINESTART:
+            case XATTR_LINEDASH:
+                {
+                    NameOrIndex* pItem = (NameOrIndex*)rSet.GetItem((USHORT)pMap->nWID);
+                    if( ( pItem == NULL ) || ( pItem->GetName().Len() == 0) )
+                        eState = beans::PropertyState_DEFAULT_VALUE;
+                }
+            }
+        }
+        return eState;
     }
 }
 
