@@ -2,9 +2,9 @@
  *
  *  $RCSfile: popup.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 13:46:54 $
+ *  last change: $Author: rt $ $Date: 2004-07-15 07:46:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -299,15 +299,15 @@ Menu RID_TASKPANE_MASTERPAGESSELECTOR_POPUP
         {
             Identifier = SID_TP_APPLY_TO_ALL_SLIDES;
             HelpID = SID_TP_APPLY_TO_ALL_SLIDES;
-            Text = "Für alle Folien übernehmen" ;
-            Text [ english_us ] = "Apply to All Slides";
+            Text [ de ] = "Für alle Folien übernehmen" ;
+            Text [ en-US ] = "Apply to All Slides";
         };
         MenuItem
         {
             Identifier = SID_TP_APPLY_TO_SELECTED_SLIDES;
             HelpID = SID_TP_APPLY_TO_SELECTED_SLIDES;
-            Text = "Für ausgewählte Folien übernehmen" ;
-            Text [ english_us ] = "Apply to Selected Slides";
+            Text [ de ] = "Für ausgewählte Folien übernehmen" ;
+            Text [ en-US ] = "Apply to Selected Slides";
         };
 
         SEPARATOR
@@ -316,15 +316,15 @@ Menu RID_TASKPANE_MASTERPAGESSELECTOR_POPUP
         {
             Identifier = SID_TP_SHOW_LARGE_PREVIEW;
             HelpID = SID_TP_SHOW_LARGE_PREVIEW;
-            Text = "Große Vorschau anzeigen";
-            Text[ english_us ] = "Show large Preview";
+            Text [ de ] = "Große Vorschau anzeigen";
+            Text[ en-US ] = "Show large Preview";
         };
         MenuItem
         {
             Identifier = SID_TP_SHOW_SMALL_PREVIEW;
             HelpID = SID_TP_SHOW_SMALL_PREVIEW;
-            Text = "Kleine Vorschau anzeigen";
-            Text[ english_us ] = "Show small Preview";
+            Text [ de ] = "Kleine Vorschau anzeigen";
+            Text[ en-US ] = "Show small Preview";
         };
     };
 };
@@ -337,8 +337,8 @@ Menu RID_TASKPANE_LAYOUTMENU_POPUP
         {
             Identifier = SID_TP_APPLY_TO_SELECTED_SLIDES;
             HelpID = SID_TP_APPLY_TO_SELECTED_SLIDES;
-            Text = "Für ausgewählte Folien übernehmen" ;
-            Text [ english_us ] = "Apply to Selected Slides";
+            Text [ de ] = "Für ausgewählte Folien übernehmen" ;
+            Text [ en-US ] = "Apply to Selected Slides";
         };
 
         SEPARATOR
@@ -347,8 +347,8 @@ Menu RID_TASKPANE_LAYOUTMENU_POPUP
         {
             Identifier = SID_INSERTPAGE;
             HelpID = SID_INSERTPAGE;
-            Text = "Seite einfügen";
-            Text[ english_us ] = "Insert page";
+            Text [ de ] = "Seite einfügen";
+            Text [ en-US ] = "Insert page";
         };
     };
 };
