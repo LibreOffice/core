@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxlngs.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: hr $ $Date: 2005-02-11 15:30:15 $
+#   last change: $Author: vg $ $Date: 2005-02-16 16:45:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -151,7 +151,7 @@ DYNAMIC		= -Wl,-Bdynamic
 LINK*=$(CC)
 
 # default linker flags
-# LINKFLAGSRUNPATH*=-Wl,-rpath\''$$ORIGIN'\'
+LINKFLAGSRUNPATH*=-Wl,-rpath\''$$ORIGIN'\'
 LINKFLAGS=-z combreloc $(LINKFLAGSRUNPATH)
 
 # linker flags for linking applications
