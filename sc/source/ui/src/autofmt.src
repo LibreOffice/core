@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autofmt.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 17:19:26 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 12:54:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -965,6 +965,10 @@ ModalDialog RID_SCDLG_AUTOFORMAT
     Text[ hindi ] = "स्वचालित रचना";
     Text[ slovak ] = "Automatický formát";
 };
+
+
+
+
 
 
 
