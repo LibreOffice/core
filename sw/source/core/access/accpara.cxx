@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accpara.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 16:12:39 $
+ *  last change: $Author: vg $ $Date: 2003-04-28 17:44:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,6 +196,8 @@
 #ifndef _TOOLS_COLOR_HXX
 #include <tools/color.hxx>
 #endif
+
+#include <comphelper/accessibletexthelper.hxx>
 
 #include <algorithm>
 
@@ -507,6 +509,11 @@ void SwAccessibleParagraph::_InvalidateContent( sal_Bool bVisibleDataFired )
         // The text is changed
         AccessibleEventObject aEvent;
         aEvent.EventId = AccessibleEventId::TEXT_CHANGED;
+
+        // determine exact changes between sOldText and rText
+        comphelper::OCommonAccessibleText::implInitTextChangedEvent(
+            sOldText, rText,
+            aEvent.OldValue, aEvent.NewValue );
 
         FireAccessibleEvent( aEvent );
     }
