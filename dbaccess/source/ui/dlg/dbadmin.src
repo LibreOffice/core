@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: kz $ $Date: 2001-09-27 20:40:25 $
+ *  last change: $Author: kz $ $Date: 2001-10-02 21:00:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3084,7 +3084,7 @@ String STR_QUERY_DROP_DOCUMENT_LINK
     Text[ greek ] = "Do you want to delete the document link \"$name$\"?\n\nNote: Only the assigment of the document to the data source will be dropped, not the document itself.";
     Text[ dutch ] = "Wilt u de documentenkoppeling \"$name$\" wissen?\n\nLet op: alleen de link van dit document met de gegevensbron wordt gewist.";
     Text[ french ] = "Voulez-vous supprimer le lien \"$name$\" (document) ?\n\nRemarque : la suppression ne concernera que l'assignation de ce document à la base de données et pas le document en soi.";
-    Text[ spanish ] = "¿Desea eliminar el vínculo de documento &quot;$name$&quot;?\n\nNota: Sólo se eliminará la asignación de este documento a la fuente de datos, no el documento en sí.";
+    Text[ spanish ] = "¿Desea eliminar el vínculo de documento \"$name$\"?\n\nNota: Sólo se eliminará la asignación de este documento a la fuente de datos, no el documento en sí.";
     Text[ finnish ] = "Wollen Sie die Dokument-Verknüpfung \"$name$\" löschen?\n\nHinweis: Es wird lediglich die Zuordnung dieses Dokumentes zu der Datenquelle gelöscht, nicht das Dokument selber.";
     Text[ italian ] = "Volete eliminare il collegamento al documento \"$name$\"?\n\nNota: l'operazione annulla solo l'assegnazione del documento alla sorgente, non il documento stesso.";
     Text[ danish ] = "Do you want to delete the document link \"$name$\"?\n\nNote: Only the assigment of the document to the data source will be dropped, not the document itself.";
@@ -3361,6 +3361,9 @@ String STR_HINT_CONNECTION_NOT_CAPABLE
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.73  2001/09/27 20:40:25  kz
+ *  Merge SRC641: 27.09.01 - 22:39:41
+ *
  *  Revision 1.72  2001/09/25 13:24:37  oj
  *  #91719# implementing the XRename handling
  *
@@ -3375,6 +3378,7 @@ String STR_HINT_CONNECTION_NOT_CAPABLE
  *
  *  Revision 1.0 20.09.00 10:58:47  fs
  ************************************************************************/
+
 
 
 
