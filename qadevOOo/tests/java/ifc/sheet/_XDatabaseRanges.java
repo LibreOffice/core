@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XDatabaseRanges.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:12:27 $
+ *  last change:$Date: 2003-09-08 11:01:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,10 @@
 
 package ifc.sheet;
 
+import lib.MultiMethodTest;
+
 import com.sun.star.sheet.XDatabaseRanges;
 import com.sun.star.table.CellRangeAddress;
-import lib.MultiMethodTest;
 
 /**
 * Testing <code>com.sun.star.sheet.XDatabaseRanges</code>
