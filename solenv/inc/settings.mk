@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.121 $
+#   $Revision: 1.122 $
 #
-#   last change: $Author: hjs $ $Date: 2002-08-06 12:39:21 $
+#   last change: $Author: hjs $ $Date: 2002-08-22 13:27:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -1228,6 +1228,7 @@ RDBMAKER*=rdbmaker
 JAVA*=java
 SCPCOMP*=scpcomp
 SCPLINK*=scplink
+LZIP*=lzip
 CPPLCC*=cpplcc
 
 .IF "$(DISABLE_ENHANCED_COMID)"==""

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: wnt.mk,v $
 #
-#   $Revision: 1.37 $
+#   $Revision: 1.38 $
 #
-#   last change: $Author: hjs $ $Date: 2002-08-07 19:52:52 $
+#   last change: $Author: hjs $ $Date: 2002-08-22 13:27:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -543,6 +543,7 @@ JAVAC=guw.pl javac
 JAVA=guw.pl java
 SCPCOMP=guw.pl scpcomp
 SCPLINK=guw.pl scplink
+LZIP=guw.pl -env lzip
 CPPLCC=guw.pl cpplcc
 MAKEDEPEND=guw.pl makedepend
 .ENDIF			# "$(USE_SHELL)"=="4nt"
