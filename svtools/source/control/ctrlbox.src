@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrlbox.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:57 $
+ *  last change: $Author: cp $ $Date: 2001-03-12 16:01:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,4 +82,60 @@ IMAGE RID_IMG_BITMAPFONT
     ImageBitmap = Bitmap { File = "bmpfont.bmp" ; };
     MaskColor = IMAGE_STDBTN_COLOR ;
 };
+
+
+/*
+ * ressources for CollatorRessource / CollatorRessourceData resp.
+ */
+
+String STR_SVT_COLLATE_NORMAL
+{
+    /* default or normal sorting algorithm */
+    Text = "Normal" ;
+     Text [ ENGLISH ] = "Normal" ;
+};
+
+String STR_SVT_COLLATE_CHARSET
+{
+    /* default or normal sorting algorithm */
+    Text = "Charset" ;
+     Text [ ENGLISH ] = "Character Set" ;
+};
+
+String STR_SVT_COLLATE_DICTIONARY
+{
+    /* german dictionary word order / sorting */
+    Text = "Dictionary" ;
+    Text [ ENGLISH ] = "Dictionary" ;
+};
+
+String STR_SVT_COLLATE_PINYIN
+{
+    /* chinese sorting algorithm */
+    Text = "Pinyin" ;
+    Text [ ENGLISH ] = "Pinyin" ;
+};
+
+String STR_SVT_COLLATE_STROKE
+{
+    /* chinese sorting algorithm */
+    Text = "Stroke" ;
+    Text [ ENGLISH ] = "Stroke" ;
+};
+
+String STR_SVT_COLLATE_RADICAL
+{
+    /* chinese sorting algorithm */
+    Text = "Radical" ;
+    Text [ ENGLISH ] = "Radical" ;
+};
+
+String STR_SVT_COLLATE_ZHUYIN
+{
+    /* chinese sorting algorithm */
+    Text = "Zhuyin" ;
+    Text [ ENGLISH ] = "Zhuyin" ;
+};
+
+
 
