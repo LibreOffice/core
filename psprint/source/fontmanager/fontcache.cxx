@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontcache.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: pl $ $Date: 2002-02-28 11:49:51 $
+ *  last change: $Author: pl $ $Date: 2002-03-01 09:31:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -275,7 +275,7 @@ void FontCache::flush()
 
 void FontCache::read( const OString& rPath )
 {
-    String aFilePath( ByteString( rPath ), osl_getThreadTextEncoding() );
+    String aFilePath = String( ByteString( rPath ), osl_getThreadTextEncoding() );
     aFilePath.AppendAscii( "/pspfontcache" );
     PrintFontManager& rManager( PrintFontManager::get() );
     MultiAtomProvider* pAtoms = rManager.m_pAtoms;
