@@ -2,9 +2,9 @@
 *
 *  $RCSfile: CommandMetaData.java,v $
 *
-*  $Revision: 1.4 $
+*  $Revision: 1.5 $
 *
-*  last change: $Author: pjunck $ $Date: 2004-10-27 13:29:47 $
+*  last change: $Author: vg $ $Date: 2005-02-21 13:52:45 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -57,24 +57,21 @@
 *  Contributor(s): _______________________________________
 *
 */
-
 package com.sun.star.wizards.db;
 
 import com.sun.star.wizards.common.Properties;
 import com.sun.star.wizards.common.*;
-import com.sun.star.lang.IllegalArgumentException;
-import com.sun.star.lang.IndexOutOfBoundsException;
-import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.sdbc.SQLException;
 import com.sun.star.sdbcx.KeyType;
 import com.sun.star.sdbcx.XColumnsSupplier;
 import com.sun.star.sdbcx.XKeysSupplier;
 import com.sun.star.uno.AnyConverter;
+import com.sun.star.awt.VclWindowPeerAttribute;
 import com.sun.star.beans.*;
 import com.sun.star.uno.UnoRuntime;
 import java.util.*;
 import com.sun.star.lang.Locale;
-import com.sun.star.util.XNumberFormats;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.embed.EntryInitModes;
@@ -94,11 +91,16 @@ public class CommandMetaData extends DBMetaData {
     public int[] FieldTypes;
     private int CommandType;
     private String Command;
+    boolean bCatalogAtStart = true;
+    String sCatalogSep = "";
+    String sIdentifierQuote = "";
+    boolean bCommandComposerAttributesalreadyRetrieved = false;
+
 
     private XIndexAccess xIndexKeys;
 
-    public CommandMetaData(XMultiServiceFactory xMSF, Locale CharLocale, XNumberFormats NumberFormats) {
-        super(xMSF, CharLocale, NumberFormats);
+    public CommandMetaData(XMultiServiceFactory xMSF, Locale _aLocale, NumberFormatter oNumberFormatter) {
+        super(xMSF, _aLocale, oNumberFormatter);
     }
 
     public CommandMetaData(XMultiServiceFactory xMSF) {
@@ -128,6 +130,30 @@ public class CommandMetaData extends DBMetaData {
         }
     }
 
+
+    public void prependSortFieldNames(String[] _fieldnames){
+        Vector aSortFields = new Vector();
+        for (int i = 0; i < _fieldnames.length; i++){
+            String[] sSortFieldName = new String[2];
+            sSortFieldName[0] = _fieldnames[i];
+            int index = JavaTools.FieldInTable(SortFieldNames, _fieldnames[i]);
+            if (index > -1)
+                sSortFieldName[1] = SortFieldNames[index][1];
+            else
+                sSortFieldName[1] = "ASC";
+            aSortFields.add(sSortFieldName);
+        }
+        for (int i = 0; i < SortFieldNames.length; i++){
+            if (JavaTools.FieldInList(_fieldnames, SortFieldNames[i][0]) == -1){
+                aSortFields.add(SortFieldNames[i]);
+            }
+        }
+        SortFieldNames = new String[aSortFields.size()][2];
+        aSortFields.toArray(SortFieldNames);
+    }
+
+
+
     public FieldColumn getFieldColumn(String _ColumnName) {
         for (int i = 0; i < FieldNames.length; i++) {
             if (DBFieldColumns[i].FieldName.equals(_ColumnName))
@@ -148,7 +174,7 @@ public class CommandMetaData extends DBMetaData {
         this.FieldNames = _FieldNames;
     }
 
-    public void getFieldNamesOfCommand(String _commandname, int _commandtype, boolean _bAppendMode) {
+    public boolean getFieldNamesOfCommand(String _commandname, int _commandtype, boolean _bAppendMode) {
         try {
             Object oField;
             java.util.Vector ResultFieldNames = new java.util.Vector(10);
@@ -171,22 +197,29 @@ public class CommandMetaData extends DBMetaData {
                 FieldTypes = new int[FieldNames.length];
                 AllFieldNames = new String[ResultFieldNames.size()];
                 ResultFieldNames.copyInto(AllFieldNames);
+                return true;
             }
         } catch (Exception exception) {
             exception.printStackTrace(System.out);
         }
+        Resource oResource = new Resource(xMSF, "Database", "dbw");
+        String sMsgNoFieldsFromCommand = oResource.getResText(RID_DB_COMMON + 45);
+        sMsgNoFieldsFromCommand = JavaTools.replaceSubString(sMsgNoFieldsFromCommand, _commandname, "%NAME");
+        showMessageBox("ErrorBox", VclWindowPeerAttribute.OK, sMsgNoFieldsFromCommand);
+        return false;
     }
+
 
     /**
      * @return Returns the command.
      */
-    public String getCommand() {
+    public String getCommandName() {
         return Command;
     }
     /**
      * @param command The command to set.
      */
-    public void setCommand(String _command) {
+    public void setCommandName(String _command) {
         Command = _command;
     }
 
@@ -352,7 +385,6 @@ public class CommandMetaData extends DBMetaData {
             XDesktop xDesktop = Desktop.getDesktop(xMSF);
             XComponentLoader xLoader = (XComponentLoader) UnoRuntime.queryInterface(XComponentLoader.class, xDesktop);
             xLoader.loadComponentFromURL(surl, "_default", FrameSearchFlag.TASKS | FrameSearchFlag.CREATE, _rArgs);
-            //TODO ".component:DB/TableDesign"
         } catch (Exception exception) {
             exception.printStackTrace(System.out);
         }
@@ -428,6 +460,47 @@ public class CommandMetaData extends DBMetaData {
     } catch (Exception e) {
         e.printStackTrace(System.out);
     }}
+
+
+    public void setCommandComposingAttributes(){
+    try {
+        boolean bCatalogAtStart = xDBMetaData.isCatalogAtStart();
+        sCatalogSep = xDBMetaData.getCatalogSeparator();
+        sIdentifierQuote = xDBMetaData.getIdentifierQuoteString();
+        bCommandComposerAttributesalreadyRetrieved = true;
+    } catch (SQLException e) {
+        e.printStackTrace(System.out);
+    }}
+
+
+    /**
+     * @return Returns the bCatalogAtStart.
+     */
+    public boolean isCatalogAtStart() {
+        if (!bCommandComposerAttributesalreadyRetrieved)
+            setCommandComposingAttributes();
+        return bCatalogAtStart;
+    }
+
+    /**
+     * @return Returns the sCatalogSep.
+     */
+    public String getCatalogSeparator() {
+        if (!bCommandComposerAttributesalreadyRetrieved)
+            setCommandComposingAttributes();
+        return sCatalogSep;
+    }
+
+    /**
+     * @return Returns the sIdentifierQuote.
+     */
+    public String getIdentifierQuote() {
+        if (!bCommandComposerAttributesalreadyRetrieved)
+            setCommandComposingAttributes();
+        return sIdentifierQuote;
+    }
+
+
 
 
 }
