@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implbase.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-16 17:52:12 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 23:15:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,33 +79,6 @@ using namespace ::osl;
 using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-
-#if defined( MACOSX ) && ( __GNUC__ < 3 )
-// Initialize static template data here to break circular reference to libstatic
-#include <com/sun/star/registry/XSimpleRegistry.hpp>
-#include <com/sun/star/beans/PropertyChangeEvent.hpp>
-#include <com/sun/star/beans/Property.hpp>
-#include <com/sun/star/reflection/XIdlMethod.hpp>
-#include <com/sun/star/reflection/XIdlClass.hpp>
-#include <com/sun/star/reflection/XMethodParameter.hpp>
-#include <com/sun/star/reflection/XInterfaceMemberTypeDescription.hpp>
-typelib_TypeDescriptionReference * com::sun::star::uno::Sequence<com::sun::star::uno::Type>::s_pType;
-typelib_TypeDescriptionReference * com::sun::star::uno::Sequence<signed char>::s_pType;
-typelib_TypeDescriptionReference * com::sun::star::uno::Sequence<com::sun::star::uno::Any>::s_pType;
-typelib_TypeDescriptionReference * com::sun::star::uno::Sequence<com::sun::star::uno::Reference<com::sun::star::registry::XSimpleRegistry> >::s_pType;
-typelib_TypeDescriptionReference * com::sun::star::uno::Sequence<com::sun::star::beans::PropertyChangeEvent>::s_pType;
-typelib_TypeDescriptionReference * com::sun::star::uno::Sequence<com::sun::star::beans::Property>::s_pType;
-typelib_TypeDescriptionReference * com::sun::star::uno::Sequence<com::sun::star::uno::Reference<com::sun::star::uno::XInterface> >::s_pType;
-typelib_TypeDescriptionReference * com::sun::star::uno::Sequence<long>::s_pType;
-typelib_TypeDescriptionReference * com::sun::star::uno::Sequence<rtl::OUString>::s_pType;
-typelib_TypeDescriptionReference * com::sun::star::uno::Sequence<com::sun::star::uno::Reference<com::sun::star::reflection::XIdlMethod> >::s_pType;
-typelib_TypeDescriptionReference * com::sun::star::uno::Sequence<com::sun::star::uno::Reference<com::sun::star::reflection::XIdlClass> >::s_pType;
-typelib_TypeDescriptionReference * com::sun::star::uno::Sequence<com::sun::star::uno::Reference<com::sun::star::reflection::XIdlField> >::s_pType;
-typelib_TypeDescriptionReference * com::sun::star::uno::Sequence<com::sun::star::uno::Reference<com::sun::star::registry::XRegistryKey> >::s_pType;
-typelib_TypeDescriptionReference * com::sun::star::uno::Sequence<com::sun::star::uno::Reference<com::sun::star::reflection::XMethodParameter> >::s_pType;
-typelib_TypeDescriptionReference * com::sun::star::uno::Sequence<com::sun::star::uno::Reference<com::sun::star::reflection::XTypeDescription> >::s_pType;
-typelib_TypeDescriptionReference * com::sun::star::uno::Sequence<com::sun::star::uno::Reference<com::sun::star::reflection::XInterfaceMemberTypeDescription> >::s_pType;
-#endif
 
 namespace cppu
 {
