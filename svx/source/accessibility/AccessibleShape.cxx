@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleShape.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: af $ $Date: 2002-07-04 14:03:47 $
+ *  last change: $Author: af $ $Date: 2002-07-24 13:23:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -567,6 +567,11 @@ awt::Rectangle SAL_CALL AccessibleShape::getBounds (void)
     }
 
     // Transform coordinates from internal to pixel.
+    if (maShapeTreeInfo.GetViewForwarder() == NULL)
+        throw uno::RuntimeException (::rtl::OUString (
+            RTL_CONSTASCII_USTRINGPARAM(
+                "AccessibleShape has no valid view forwarder")),
+            static_cast<uno::XWeak*>(this));
     ::Size aPixelSize = maShapeTreeInfo.GetViewForwarder()->LogicToPixel (
         ::Size (aBoundingBox.Width, aBoundingBox.Height));
     ::Point aPixelPosition = maShapeTreeInfo.GetViewForwarder()->LogicToPixel (
