@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javaoptions.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jsc $ $Date: 2002-11-21 10:49:33 $
+ *  last change: $Author: obo $ $Date: 2003-10-20 13:09:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,7 +188,36 @@ sal_Bool JavaOptions::initOptions(int ac, char* av[], sal_Bool bCmdFile)
                         m_options["-T"] = OString(s);
                     }
                     break;
+                case 'G':
+                    if (av[i][2] == 'c')
+                    {
+                        if (av[i][3] != '\0')
+                        {
+                            OString tmp("'-Gc', please check");
+                            if (i <= ac - 1)
+                            {
+                                tmp += " your input '" + OString(av[i]) + "'";
+                            }
 
+                            throw IllegalArgument(tmp);
+                        }
+
+                        m_options["-Gc"] = OString("");
+                        break;
+                    } else
+                    if (av[i][2] != '\0')
+                    {
+                        OString tmp("'-G', please check");
+                        if (i <= ac - 1)
+                        {
+                            tmp += " your input '" + OString(av[i]) + "'";
+                        }
+
+                        throw IllegalArgument(tmp);
+                    }
+
+                    m_options["-G"] = OString("");
+                    break;
                 case 'X': // support for eXtra type rdbs
                 {
                     if (av[i][2] == '\0')
@@ -280,6 +309,8 @@ OString JavaOptions::prepareHelp()
     help += "    -B<name>   = name specifies the base node. All types are searched under this\n";
     help += "                 node. Default is the root '/' of the registry files.\n";
     help += "    -nD        = no dependent types are generated.\n";
+    help += "    -G         = generate only target files which does not exists.\n";
+    help += "    -Gc        = generate only target files which content will be changed.\n";
     help += "    -X<file>   = extra types which will not be taken into account for generation.\n";
     help += prepareVersion();
 
