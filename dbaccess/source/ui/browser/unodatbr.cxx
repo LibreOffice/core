@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.104 $
+ *  $Revision: 1.105 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-29 06:32:52 $
+ *  last change: $Author: fs $ $Date: 2001-08-30 14:35:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3991,7 +3991,8 @@ sal_Bool SbaTableQueryBrowser::implGetQuerySignature( ::rtl::OUString& _rCommand
         ::rtl::OUString sDataSourceName;
         ::rtl::OUString sCommand;
         sal_Int32       nCommandType = CommandType::COMMAND;
-        ODataAccessDescriptor aDesc( Reference< XPropertySet >( getRowSet(), UNO_QUERY ) );
+        Reference< XPropertySet > xRowsetProps( getRowSet(), UNO_QUERY );
+        ODataAccessDescriptor aDesc( xRowsetProps );
         aDesc[ daDataSource ]   >>= sDataSourceName;
         aDesc[ daCommand ]      >>= sCommand;
         aDesc[ daCommandType ]  >>= nCommandType;
