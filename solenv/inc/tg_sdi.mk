@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_sdi.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: hr $ $Date: 2003-04-28 16:45:32 $
+#   last change: $Author: kz $ $Date: 2003-08-25 14:47:38 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,11 +85,7 @@ $(SDI5TARGET) .NULL : SDI5
 
 .IF "$(MULTI_SDI_FLAG)" == ""
 SDI0 SDI1 SDI2 SDI3 SDI4 SDI5 :
-.IF "$(GUI)" != "MAC"
-    @+dmake $(SDI$(TNR)TARGET) MULTI_SDI_FLAG=true TNR:=$(TNR) $(MFLAGS) $(CALLMACROS)
-.ELSE
-    @+dmake "$(SDI$(TNR)TARGET)" MULTI_SDI_FLAG=true TNR:=$(TNR) $(MFLAGS) $(CALLMACROS)
-.ENDIF
+    @+dmake $(SDI$(TNR)TARGET) $(HIDSID$(TNR)PARTICLE) MULTI_SDI_FLAG=true TNR:=$(TNR) $(MFLAGS) $(CALLMACROS)
 .ELSE			# "$(MULTI_SDI_FLAG)" == ""
 
 .IF "$(make_srs_deps)"==""
@@ -110,8 +106,21 @@ $(SDI$(TNR)TARGET): $(SVSDI$(TNR)DEPEND) $(SDI$(TNR)NAME).sdi
     -fz$(MISCX)$/$(SDI$(TNR)NAME).sid	\
     $(SDI$(TNR)NAME).sdi -I$(MISCX) -I$(SVSDIINC) -I$(INC) -I$(INCLUDE) -I$(SOLARVER)$/$(UPD)$/$(INPATH)$/inc )
 
+$(HIDSID$(TNR)PARTICLE): $(MISCX)$/$(SDI$(TNR)NAME).sid
+    @echo ------------------------------
+    @echo Making: $@
+.IF "$(USE_SHELL)"=="4nt"
+    @$(TYPE) $(MISCX)$/$(SDI$(TNR)NAME).sid | $(AWK) "$$1==\"#define\" { print $$2, $$3 }" > $@.$(ROUT).tmp
+.ELSE
+    @$(TYPE) $(MISCX)$/$(SDI$(TNR)NAME).sid | $(AWK) '$$1=="#define" { print $$2, $$3 }' > $@.$(ROUT).tmp
+.ENDIF
+    @+$(RENAME) $@.$(ROUT).tmp $@
+
+
 .ELSE			# "$(make_srs_deps)"==""
 $(SDI$(TNR)TARGET): $(SVSDI$(TNR)DEPEND)
+    @+echo jetzt nicht...
+$(HIDSID$(TNR)PARTICLE):
     @+echo jetzt nicht...
 .ENDIF			# "$(make_srs_deps)"==""
 .ENDIF			# "$(MULTI_SDI_FLAG)" == ""
