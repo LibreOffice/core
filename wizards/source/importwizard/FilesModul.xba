@@ -123,7 +123,6 @@ Dim sOldExtension as String
 		OpenProperties(1).Name = &quot;AsTemplate&quot;
 
 		MaxFileIndex = Ubound(FilesList(),1)
-		Msgbox &quot;Jetzt gehts los!&quot;
 		For i = 0 To MaxFileIndex
 			If bCancelTask Then
 				bConversionIsRunnig = False
