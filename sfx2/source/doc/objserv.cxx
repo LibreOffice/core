@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objserv.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: mba $ $Date: 2002-10-07 10:03:37 $
+ *  last change: $Author: mav $ $Date: 2002-10-21 16:00:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -395,9 +395,6 @@ sal_Bool SfxObjectShell::GUISaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
     {
         // Preselect PDF-Filter for EXPORT
         pFilt = GetFactory().GetFilterContainer()->GetFilter4Extension( String::CreateFromAscii( ".pdf" ), SFX_FILTER_EXPORT );
-        DBG_ASSERT( pFilt, "Kein Filter zum Speichern" );
-        if ( !pFilt )
-            return sal_False;
     }
     else
     {
@@ -408,9 +405,11 @@ sal_Bool SfxObjectShell::GUISaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
                     || !bSaveTo && !pFilt->CanImport() // SaveAs case
                     || pFilt->IsInternal() );
             pFilt = GetFactory().GetFilter( ++nActFilt ) );
-
-        DBG_ASSERT( pFilt, "Kein Filter zum Speichern" );
     }
+
+    DBG_ASSERT( pFilt, "Kein Filter zum Speichern" );
+    if ( !pFilt )
+        return sal_False;
 
     String aFilterName;
     if( pFilt )
