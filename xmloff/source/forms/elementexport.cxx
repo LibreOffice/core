@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementexport.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-25 13:32:38 $
+ *  last change: $Author: mib $ $Date: 2001-07-04 14:03:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1417,11 +1417,11 @@ namespace xmloff
         {
             static FormAttributes eStringPropertyIds[] =
             {
-                faName, faAction, faCommand, faDatasource, faFilter, faOrder
+                faName, /*faAction,*/ faCommand, faDatasource, faFilter, faOrder
             };
             static const sal_Char* pStringPropertyNames[] =
             {
-                PROPERTY_NAME, PROPERTY_TARGETURL, PROPERTY_COMMAND, PROPERTY_DATASOURCENAME, PROPERTY_FILTER, PROPERTY_ORDER
+                PROPERTY_NAME, /*PROPERTY_TARGETURL,*/ PROPERTY_COMMAND, PROPERTY_DATASOURCENAME, PROPERTY_FILTER, PROPERTY_ORDER
             };
             sal_Int32 nIdCount = sizeof(eStringPropertyIds) / sizeof(eStringPropertyIds[0]);
         #ifdef DBG_UTIL
@@ -1536,6 +1536,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.18  2001/06/25 13:32:38  fs
+ *  #88691# TargetURL property value must be saved relative to own document
+ *
  *  Revision 1.17  2001/06/14 13:39:35  fs
  *  #88016# corrected the condition for the assertion
  *
