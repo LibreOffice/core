@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews3.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:43:31 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:31:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,8 +159,8 @@
 #ifndef SD_FU_POOR_HXX
 #include "fupoor.hxx"
 #endif
-#ifndef SD_FU_SLIDE_SHOW_HXX
-#include "fuslshow.hxx"
+#ifndef _SD_SLIDESHOW_HXX
+#include "slideshow.hxx"
 #endif
 #ifndef SD_FRAME_VIEW
 #include "FrameView.hxx"
@@ -253,11 +253,11 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
         {
             BOOL bWasBasic = FALSE;
 
-            // Seitenwechsel in der Diashow abspielen
-            if (pFuSlideShow && rReq.GetArgs())
+            // switch page in running slide show
+            if(mpSlideShow && rReq.GetArgs())
             {
                 SFX_REQUEST_ARG(rReq, pWhatPage, SfxUInt32Item, ID_VAL_WHATPAGE, FALSE);
-                pFuSlideShow->JumpToPage((USHORT)pWhatPage->GetValue());
+                mpSlideShow->jumpToPageNumber((sal_Int32)((pWhatPage->GetValue()-1)>>1));
             }
             else
             {
@@ -561,9 +561,9 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
 
                 if (pBookmark)
                 {
-                    if (pFuSlideShow)
+                    if(mpSlideShow)
                     {
-                        pFuSlideShow->JumpToBookmark(sBookmark);
+                        mpSlideShow->jumpToBookmark(sBookmark);
                     }
                     else
                     {
