@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tres.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: bmahbod $ $Date: 2001-06-21 01:43:56 $
+ *  last change: $Author: bmahbod $ $Date: 2001-06-21 02:20:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,7 +159,7 @@ class TestResult {
     //--------------------------------------------------------------------
 
     // <method_getLogTCSResultStr>
-    sal_Char *getLogTCSResultStr( const sal_Bool bTestCaseState )
+    const sal_Char *getLogTCSResultStr( const sal_Bool bTestCaseState )
     {
         if ( bTestCaseState )
         {
