@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableWindow.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-28 14:26:45 $
+ *  last change: $Author: oj $ $Date: 2001-11-09 12:20:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,6 +161,7 @@ namespace dbaui
 
         void                        SetTitle( const ::rtl::OUString& rTit );
         void                        SetBoldTitle( BOOL bBold );
+        void                        setActive(sal_Bool _bActive = sal_True);
 
         void                        Remove();
         BOOL                        IsActive(){ return m_bActive; }
@@ -178,7 +179,6 @@ namespace dbaui
         // window override
         virtual void                StateChanged( StateChangedType nStateChange );
         virtual void                GetFocus();
-        virtual void                LoseFocus();
 
         // Linien neu zeichnen
         void InvalidateLines();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableWindow.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-26 07:49:36 $
+ *  last change: $Author: oj $ $Date: 2001-11-09 12:20:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -555,17 +555,16 @@ void OTableWindow::SetBoldTitle( BOOL bBold )
 void OTableWindow::GetFocus()
 {
     Window::GetFocus();
-    SetBoldTitle( TRUE );
-    m_bActive = TRUE;
+    // we have to forward the focus to our listbox to enable keystokes
+    if(m_pListBox)
+        m_pListBox->GrabFocus();
 }
-
-//------------------------------------------------------------------------------
-void OTableWindow::LoseFocus()
+// -----------------------------------------------------------------------------
+void OTableWindow::setActive(sal_Bool _bActive)
 {
-    Window::LoseFocus();
-    SetBoldTitle( FALSE );
-    m_bActive = FALSE;
-    if (m_pListBox && m_pListBox->GetSelectionCount() != 0)
+    SetBoldTitle( _bActive );
+    m_bActive = _bActive;
+    if (!_bActive && m_pListBox && m_pListBox->GetSelectionCount() != 0)
         m_pListBox->SelectAll(FALSE);
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableWindowListBox.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-26 07:49:36 $
+ *  last change: $Author: oj $ $Date: 2001-11-09 12:20:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -391,12 +391,17 @@ sal_Int8 OTableWindowListBox::ExecuteDrop( const ExecuteDropEvent& _rEvt )
 //------------------------------------------------------------------------------
 void OTableWindowListBox::LoseFocus()
 {
+    if(m_pTabWin)
+        m_pTabWin->setActive(sal_False);
     SvTreeListBox::LoseFocus();
 }
 
 //------------------------------------------------------------------------------
 void OTableWindowListBox::GetFocus()
 {
+    if(m_pTabWin)
+        m_pTabWin->setActive();
+
     if (GetCurEntry() != NULL)
     {
         if (GetSelectionCount() == 0)
@@ -406,8 +411,8 @@ void OTableWindowListBox::GetFocus()
     }
     SvTreeListBox::GetFocus();
 
-    if(m_pTabWin)
-        m_pTabWin->GrabFocus();
+//  if(m_pTabWin)
+//      m_pTabWin->GrabFocus();
 }
 
 //------------------------------------------------------------------------------
