@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scstring.src,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-22 21:22:48 $
+ *  last change: $Author: aw $ $Date: 2002-03-22 10:22:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3035,6 +3035,35 @@ String SCSTR_UNDO_GRAFFILTER
     Text[ finnish ] = "Grafiikkasuodatin";
 };
 
+// #98185#
+String STR_CAPTION_DEFAULT_TEXT
+{
+    Text = "Text" ;
+    Text [ ENGLISH ] = "Text" ;
+    Text [ english_us ] = "Text" ;
+    Text [ italian ] = "Testo" ;
+    Text [ spanish ] = "Texto" ;
+    Text [ french ] = "Texte" ;
+    Text [ dutch ] = "Tekst" ;
+    Text [ swedish ] = "Text" ;
+    Text [ danish ] = "Tekst" ;
+    Text [ portuguese_brazilian ] = "Text" ;
+    Text [ portuguese ] = "Texto" ;
+    Text[ chinese_simplified ] = "ζ–‡ε­—";
+    Text[ russian ] = "Òεκρς";
+    Text[ polish ] = "Tekst";
+    Text[ japanese ] = "οΎƒο½·ο½½οΎ„";
+    Text[ chinese_traditional ] = "ζ–‡ε­—";
+    Text[ arabic ] = "ΗαδΥ";
+    Text[ dutch ] = "Tekst";
+    Text[ chinese_simplified ] = "ζ–‡ε­—";
+    Text[ greek ] = "Κείμενο";
+    Text[ korean ] = "ν…μ¤νΈ";
+    Text[ turkish ] = "Metin";
+    Text[ language_user1 ] = " ";
+    Text[ finnish ] = "Teksti";
+    Text[ catalan ] = "Text";
+};
 
 
 
