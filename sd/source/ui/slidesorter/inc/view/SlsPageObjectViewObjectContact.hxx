@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsPageObjectViewObjectContact.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:23:38 $
+ *  last change: $Author: rt $ $Date: 2004-08-04 08:57:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,10 +190,6 @@ private:
     static const sal_Int32 mnFadeEffectIndicatorOffset;
     /// Gap between border of page object and number rectangle.
     static const sal_Int32 mnPageNumberOffset;
-    /// The animation indicator that is displayed at the bottom left corner.
-    static Image saFadeEffectIndicator;
-    static Image saFadeEffectIndicatorHC;
-    static bool sbImagesInitialized;
 
     /** This flag is set to <FALSE/> when PrepareDelete() is called to
         indicate that further calls made to it must not call outside.
@@ -265,8 +261,6 @@ private:
     */
     void PaintPageNumber (
         ::sdr::contact::DisplayInfo& rDisplayInfo);
-
-    static void InitializeImages (void);
 };
 
 } } } // end of namespace ::sd::slidesorter::view
