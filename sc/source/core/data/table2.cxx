@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table2.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 16:20:02 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:50:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,7 @@
 // STATIC DATA -----------------------------------------------------------
 
 void lcl_LoadRange( SvStream& rStream, ScRange** ppRange );
-void lcl_SaveRange( SvStream& rStream, ScRange* pRange );
+void lcl_SaveRange( SvStream& rStream, const ScRange* pRange );
 
 
 
@@ -2674,8 +2674,7 @@ BOOL ScTable::Load( SvStream& rStream, USHORT nVersion, ScProgress* pProgress )
                         {
                             ScRange aRange;
                             rStream >> aRange;
-                            SetPrintRangeCount( 1 );
-                            SetPrintRange( 0, aRange );
+                            SetPrintRange( aRange );
                         }
 
                         lcl_LoadRange( rStream, &pRepeatColRange );
@@ -2692,11 +2691,11 @@ BOOL ScTable::Load( SvStream& rStream, USHORT nVersion, ScProgress* pProgress )
                         if ( nNewCount )
                         {
                             ScRange aTmp;
-                            SetPrintRangeCount( nNewCount );
+                            ClearPrintRanges();
                             for (i=0; i<nNewCount; i++)
                             {
                                 rStream >> aTmp;
-                                SetPrintRange( i, aTmp );
+                                AddPrintRange( aTmp );
                             }
                         }
                     }
@@ -2811,7 +2810,7 @@ void lcl_LoadRange( SvStream& rStream, ScRange** ppRange )
 }
 
 
-void lcl_SaveRange( SvStream& rStream, ScRange* pRange )
+void lcl_SaveRange( SvStream& rStream, const ScRange* pRange )
 {
     if ( pRange )
     {
@@ -2914,8 +2913,8 @@ BOOL ScTable::Save( SvStream& rStream, long& rSavedDocCells, ScProgress* pProgre
 
         rStream.WriteByteString( aPageStyle, rStream.GetStreamCharSet() );
 
-        if ( pPrintRanges && nPrintRangeCount == 1 )        // kompatibel zu alten Versionen
-            lcl_SaveRange( rStream, pPrintRanges );         // (nur wenn genau ein Bereich)
+        if ( GetPrintRangeCount() == 1 )                    // kompatibel zu alten Versionen
+            lcl_SaveRange( rStream, &aPrintRanges[0] );     // (nur wenn genau ein Bereich)
         else
             lcl_SaveRange( rStream, NULL );
         lcl_SaveRange( rStream, pRepeatColRange );
@@ -2923,12 +2922,12 @@ BOOL ScTable::Save( SvStream& rStream, long& rSavedDocCells, ScProgress* pProgre
 
         rStream << bVisible;
 
-        if ( pPrintRanges && nPrintRangeCount>1 )           // einzelner Bereich schon oben
+        if ( GetPrintRangeCount() > 1 )                     // einzelner Bereich schon oben
         {
-            rStream << nPrintRangeCount;                    // ab Version 314c
-            if ( nPrintRangeCount > 1 )
-                for ( i=0; i<nPrintRangeCount; i++)
-                    rStream << pPrintRanges[i];
+            rStream << GetPrintRangeCount();                // ab Version 314c
+            if ( GetPrintRangeCount() > 1 )
+                for ( i=0; i<GetPrintRangeCount(); i++)
+                    rStream << aPrintRanges[i];
         }
         else
             rStream << (USHORT) 0;
