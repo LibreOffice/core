@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawvie4.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: nn $ $Date: 2002-07-15 14:29:12 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 14:05:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,7 @@
 #include <sch/schdll0.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdograf.hxx>
+#include <svx/svdogrp.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdundo.hxx>
@@ -121,6 +122,21 @@ void lcl_CheckOle( const SdrMarkList& rMarkList, BOOL& rAnyOle, BOOL& rOneOle )
             rAnyOle = TRUE;
             rOneOle = (nCount == 1);
             break;
+        }
+        else if ( pObj->ISA(SdrObjGroup) )
+        {
+            SdrObjListIter aIter( *pObj, IM_DEEPNOGROUPS );
+            SdrObject* pSubObj = aIter.Next();
+            while (pSubObj)
+            {
+                if ( pSubObj->GetObjIdentifier() == OBJ_OLE2 )
+                {
+                    rAnyOle = TRUE;
+                    // rOneOle remains FALSE - a group isn't treated like a single OLE object
+                    return;
+                }
+                pSubObj = aIter.Next();
+            }
         }
     }
 }
