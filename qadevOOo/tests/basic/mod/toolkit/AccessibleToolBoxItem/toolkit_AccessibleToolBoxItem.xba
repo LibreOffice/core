@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: toolkit_AccessibleToolBoxItem.xba,v $ 
 '*
-'*  $Revision: 1.4 $ 
+'*  $Revision: 1.5 $ 
 '*
-'*  last change:$Date: 2003-05-27 12:23:20 $ 
+'*  last change:$Date: 2003-06-11 16:33:12 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -73,6 +73,7 @@ option explicit
 
 ' REQUIRED VARIABLES for interface/service tests:
 Global accText As String
+Global readOnly as Boolean
 
 
 Sub CreateObj()
@@ -90,9 +91,10 @@ On Error Goto ErrHndl
     wait(1000)
     oWin = tk.getActiveTopWindow()
     xRoot = utils.at_getAccessibleObject(oWin)
-    oObj = utils.at_getAccessibleObjectForRole(xRoot, com.sun.star.accessibility.AccessibleRole.PUSH_BUTTON,"Bold")
-    Out.Log("Implementation Name: "+oObj.getImplementationName())
+    oObj = utils.at_getAccessibleObjectForRole(xRoot, _
+                 com.sun.star.accessibility.AccessibleRole.TOGGLE_BUTTON,"Bold")
     accText = oObj.getText()
+    readOnly = true
 
 Exit Sub
 ErrHndl:
