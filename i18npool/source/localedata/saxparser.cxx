@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saxparser.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bustamam $ $Date: 2002-03-16 18:48:06 $
+ *  last change: $Author: khong $ $Date: 2002-07-11 17:24:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,13 +174,13 @@ class TestDocumentHandler :
     public WeakImplHelper3< XExtendedDocumentHandler , XEntityResolver , XErrorHandler >
 {
 public:
-    TestDocumentHandler(const char* local, const char* outFile ) :
-      of(outFile), nbOfCurrencies(0), nbOfCalendars(0), nbOfCollations(0),
+    TestDocumentHandler(const char* locale, const char* outFile ) :
+      of(outFile, locale), nbOfCurrencies(0), nbOfCalendars(0), nbOfCollations(0),
       nbOfFormatElements(0), nbOfDays(50), nbOfMonths(50), nbOfEras(10),
       nbOfTransliterations(0), isStartDayOfWeek(false), foundDefaultName(false),
       flag(-1), foundVarient(false), openElement(false), rootNode(0)
     {
-        strcpy(theLocale, local);
+        strcpy(theLocale, locale);
     }
 
     ~TestDocumentHandler(  )
@@ -220,15 +220,19 @@ public: // ExtendedDocumentHandler
     {
     printf( "parsing document %s started\n", theLocale);
     of.writeAsciiString("#include <sal/types.h>\n\n\n");
+#if SUPD > 618
+    of.writeAsciiString("#include <stdio.h> // debug printfs\n\n");
+#endif // SUPD > 618
+    of.writeAsciiString("extern \"C\" {\n\n");
     }
 
     virtual void SAL_CALL endDocument(void) throw (SAXException, RuntimeException)
     {
         if (rootNode)
             rootNode->generateCode(of);
-        writeStaticFunctions();
         printf( "parsing document %s finished\n", theLocale);
 
+        of.writeAsciiString("} // extern \"C\"\n\n");
         of.closeOutput();
     }
 
@@ -264,97 +268,6 @@ public: // ExtendedDocumentHandler
           return;
     }
 
-
-
-    void writeStaticFunctions() {
-
-#if SUPD > 618
-             of.writeAsciiString("#include <stdio.h> // debug printfs\n\n");
-#endif // SUPD > 618
-        of.writeAsciiString("extern \"C\" {\n\n");
-
-        of.writeAsciiString("sal_Unicode **  SAL_CALL getAllCurrencies_");
-        of.writeAsciiString(theLocale);
-        of.writeAsciiString("(sal_Int16& count)\n{\n");
-        of.writeAsciiString("\tcount = currencyCount;\n");
-        of.writeAsciiString("\treturn (sal_Unicode**)currencies;\n}\n\n");
-
-        of.writeAsciiString("sal_Unicode **  SAL_CALL getAllCalendars_");
-        of.writeAsciiString(theLocale);
-        of.writeAsciiString("(sal_Int16& count)\n{\n");
-        of.writeAsciiString("\tcount = calendarsCount;\n");
-        of.writeAsciiString("\treturn (sal_Unicode**)calendars;\n}\n\n");
-
-        of.writeAsciiString("sal_Unicode **  SAL_CALL getLocaleItem_");
-        of.writeAsciiString(theLocale);
-        of.writeAsciiString("(sal_Int16& count)\n{\n");
-        of.writeAsciiString("\tcount = 0;\n");
-        of.writeAsciiString("\treturn (sal_Unicode**)LCType;\n}\n\n");
-
-        of.writeAsciiString("sal_Unicode **  SAL_CALL getAllFormats_");
-        of.writeAsciiString(theLocale);
-        of.writeAsciiString("(sal_Int16& count)\n{\n");
-        of.writeAsciiString("\tcount = FormatElementsCount;\n");
-        of.writeAsciiString("\treturn (sal_Unicode**)FormatElementsArray;\n}\n\n");
-
-
-        of.writeAsciiString("sal_Unicode **  SAL_CALL getTransliterations_");
-        of.writeAsciiString(theLocale);
-        of.writeAsciiString("(sal_Int16& count)\n{\n");
-        of.writeAsciiString("\tcount = nbOfTransliterations;\n");
-        of.writeAsciiString("\treturn (sal_Unicode**)LCTransliterationsArray;\n}\n\n");
-
-        of.writeAsciiString("sal_Unicode **  SAL_CALL getCollatorImplementation_");
-        of.writeAsciiString(theLocale);
-        of.writeAsciiString("(sal_Int16& count)\n{\n");
-        of.writeAsciiString("\tcount = nbOfCollations;\n");
-        of.writeAsciiString("\treturn (sal_Unicode**)LCCollatorArray;\n}\n\n");
-
-        of.writeAsciiString("sal_Unicode **  SAL_CALL getCollationOptions_");
-        of.writeAsciiString(theLocale);
-        of.writeAsciiString("(sal_Int16& count)\n{\n");
-        of.writeAsciiString("\tcount = nbOfCollationOptions;\n");
-        of.writeAsciiString("\treturn (sal_Unicode**)collationOptions;\n}\n\n");
-
-        of.writeAsciiString("sal_Unicode **  SAL_CALL getLCInfo_");
-        of.writeAsciiString(theLocale);
-        of.writeAsciiString("(sal_Int16& count)\n{\n");
-        of.writeAsciiString("\tcount = 0;\n");
-        of.writeAsciiString("\treturn (sal_Unicode**)LCInfoArray;\n}\n\n");
-
-        of.writeAsciiString("sal_Unicode **  SAL_CALL getForbiddenCharacters_");
-        of.writeAsciiString(theLocale);
-        of.writeAsciiString("(sal_Int16& count)\n{\n");
-        of.writeAsciiString("\tcount = 2;\n");
-        of.writeAsciiString("\treturn (sal_Unicode**)LCForbiddenCharactersArray;\n}\n\n");
-
-        of.writeAsciiString("sal_Unicode **  SAL_CALL getReservedWords_");
-        of.writeAsciiString(theLocale);
-        of.writeAsciiString("(sal_Int16& count)\n{\n");
-        of.writeAsciiString("\tcount = nbOfReservedWords;\n");
-        of.writeAsciiString("\treturn (sal_Unicode**)LCReservedWordsArray;\n}\n\n");
-
-#if SUPD > 618
-        of.writeAsciiString("const sal_Unicode ***  SAL_CALL getContinuousNumberingLevels_");
-        of.writeAsciiString(theLocale);
-        of.writeAsciiString("( sal_Int16& nStyles, sal_Int16& nAttributes )\n{\n");
-        of.writeAsciiString("\tnStyles     = continuousNbOfStyles;\n");
-        of.writeAsciiString("\tnAttributes = continuousNbOfAttributesPerStyle;\n");
-          of.writeAsciiString("\treturn LCContinuousNumberingLevelsArray;\n}\n\n");
-
-        of.writeAsciiString("const sal_Unicode ****  SAL_CALL getOutlineNumberingLevels_");
-        of.writeAsciiString(theLocale);
-        of.writeAsciiString("( sal_Int16& nStyles, sal_Int16& nLevels, sal_Int16& nAttributes )\n{\n");
-        of.writeAsciiString("\tnStyles     = outlineNbOfStyles;\n");
-        of.writeAsciiString("\tnLevels     = outlineNbOfLevelsPerStyle;\n");
-        of.writeAsciiString("\tnAttributes = outlineNbOfAttributesPerLevel;\n");
-        of.writeAsciiString("\treturn LCOutlineNumberingLevelsArray;\n}\n\n");
-
-#endif // SUPD > 618
-        of.writeAsciiString("} // extern \"C\"\n\n");
-
-
-    }
     virtual void SAL_CALL ignorableWhitespace(const OUString& aWhitespaces) throw (SAXException,RuntimeException)
     {
    }

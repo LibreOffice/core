@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LocaleNode.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bustamam $ $Date: 2002-03-15 19:09:54 $
+ *  last change: $Author: khong $ $Date: 2002-07-11 17:24:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,7 @@
 #include <stdlib.h>
 #include "LocaleNode.hxx"
 
-LocaleNode :: LocaleNode (const OUString& name,
-                const Reference< XAttributeList > & attr)
+LocaleNode :: LocaleNode (const OUString& name, const Reference< XAttributeList > & attr)
 {
     aName = name;
     xAttribs = new Attr(attr);
@@ -105,8 +104,8 @@ void LocaleNode::setParent ( LocaleNode * node) {
     parent = node;
 }
 
-LocaleNode * LocaleNode::findNode ( const OUString & name) {
-    if (name == aName)
+LocaleNode * LocaleNode::findNode ( const sal_Char *name) {
+    if (aName.equalsAscii(name))
         return this;
     for (int i = 0; i< nChildren; i++)  {
         LocaleNode *n=children[i]->findNode(name);
@@ -132,36 +131,32 @@ void printf_String( const char* fmt, ::rtl::OUString str )
      printf( fmt, buf );
 }
 
-LocaleNode* LocaleNode::createNode (const OUString& name,
-                                    const Reference< XAttributeList > & attr)
+LocaleNode* LocaleNode::createNode (const OUString& name, const Reference< XAttributeList > & attr)
 {
-    ::rtl::OUString str(name);
-
-    if(str.equals(::rtl::OUString::createFromAscii("LC_INFO")))
+    if (name.equalsAscii("LC_INFO"))
         return new LCInfoNode (name,attr);
-    if (str.equals(::rtl::OUString::createFromAscii("LC_CTYPE")))
+    if (name.equalsAscii("LC_CTYPE"))
         return new LCCTYPENode (name,attr);
-    if (str.equals(::rtl::OUString::createFromAscii("LC_FORMAT")))
+    if (name.equalsAscii("LC_FORMAT"))
         return new LCFormatNode (name,attr);
-    if (str.equals(::rtl::OUString::createFromAscii("LC_CALENDAR")))
+    if (name.equalsAscii("LC_CALENDAR"))
         return new LCCalendarNode (name,attr);
-    if (str.equals(::rtl::OUString::createFromAscii("LC_CURRENCY")))
+    if (name.equalsAscii("LC_CURRENCY"))
         return new LCCurrencyNode (name,attr);
-    if (str.equals(::rtl::OUString::createFromAscii("LC_TRANSLITERATION")))
+    if (name.equalsAscii("LC_TRANSLITERATION"))
         return new LCTransliterationNode (name,attr);
-    if (str.equals(::rtl::OUString::createFromAscii("LC_COLLATION")))
+    if (name.equalsAscii("LC_COLLATION"))
         return new LCCollationNode (name,attr);
-    if (str.equals(::rtl::OUString::createFromAscii("LC_SEARCH")))
+    if (name.equalsAscii("LC_SEARCH"))
         return new LCSearchNode (name,attr);
-    if (str.equals(::rtl::OUString::createFromAscii("LC_MISC")))
+    if (name.equalsAscii("LC_MISC"))
         return new LCMiscNode (name,attr);
-      if (str.equals(::rtl::OUString::createFromAscii("LC_NumberingLevel")))
+      if (name.equalsAscii("LC_NumberingLevel"))
                 return new LCNumberingLevelNode (name, attr);
-      if (str.equals(::rtl::OUString::createFromAscii("LC_OutLineNumberingLevel")))
+      if (name.equalsAscii("LC_OutLineNumberingLevel"))
                 return new LCOutlineNumberingLevelNode (name, attr);
 
     return new LocaleNode(name,attr);
-
 }
 
 
@@ -249,19 +244,19 @@ void LocaleNode :: generateCode (const OFileWriter &of) {
 
 void LCInfoNode::generateCode (const OFileWriter &of) {
 
-    LocaleNode * languageNode = findNode(::rtl::OUString::createFromAscii("Language"));
-    LocaleNode * countryNode = findNode(::rtl::OUString::createFromAscii("Country"));
-    LocaleNode * varientNode = findNode(::rtl::OUString::createFromAscii("Varient"));
+    LocaleNode * languageNode = findNode("Language");
+    LocaleNode * countryNode = findNode("Country");
+    LocaleNode * varientNode = findNode("Varient");
 
     if (languageNode) {
-        writeParameter(of,"langID", languageNode->getChildAt(0)->getValue());
-        writeParameter(of,"langDefaultName", languageNode->getChildAt(1)->getValue());
+        of.writeParameter("langID", languageNode->getChildAt(0)->getValue());
+        of.writeParameter("langDefaultName", languageNode->getChildAt(1)->getValue());
     }
     if (countryNode) {
-        writeParameter(of,"countryID", countryNode->getChildAt(0)->getValue());
-        writeParameter(of,"countryDefaultName", countryNode->getChildAt(1)->getValue());
+        of.writeParameter("countryID", countryNode->getChildAt(0)->getValue());
+        of.writeParameter("countryDefaultName", countryNode->getChildAt(1)->getValue());
     }
-    writeParameter(of,"Varient", ::rtl::OUString::createFromAscii(""));
+    of.writeParameter("Varient", ::rtl::OUString::createFromAscii(""));
     of.writeAsciiString("\nstatic const sal_Unicode* LCInfoArray[] = {\n");
     of.writeAsciiString("\tlangID,\n");
     of.writeAsciiString("\tlangDefaultName,\n");
@@ -269,46 +264,52 @@ void LCInfoNode::generateCode (const OFileWriter &of) {
     of.writeAsciiString("\tcountryDefaultName,\n");
     of.writeAsciiString("\tVarient\n");
     of.writeAsciiString("};\n\n");
+    of.writeFunction("getLCInfo_", "0", "LCInfoArray");
 }
 
 void LCCTYPENode::generateCode (const OFileWriter &of) {
-    ::rtl::OUString str =   getAttr() -> getValueByName(::rtl::OUString::createFromAscii("unoid"));
-    LocaleNode * sepNode = findNode(::rtl::OUString::createFromAscii("DateSeparator"));
+    ::rtl::OUString useLocale =   getAttr() -> getValueByName("use");
+    if (useLocale.getLength() > 0) {
+        of.writeUseFunction("getLocaleItem_", useLocale);
+        return;
+    }
+    ::rtl::OUString str =   getAttr() -> getValueByName("unoid");
+    LocaleNode * sepNode = findNode("DateSeparator");
     of.writeAsciiString("\n\n");
-    writeParameter(of,"LC_CTYPE_Unoid", str);;
-    writeParameter(of,"dateSeparator", sepNode->getValue());
-    sepNode = findNode(::rtl::OUString::createFromAscii("ThousandSeparator"));
-    writeParameter(of,"thousandSeparator", sepNode -> getValue());
-    sepNode = findNode(::rtl::OUString::createFromAscii("DecimalSeparator"));
-    writeParameter(of,"decimalSeparator", sepNode -> getValue());
-    sepNode = findNode(::rtl::OUString::createFromAscii("TimeSeparator"));
-    writeParameter(of,"timeSeparator", sepNode -> getValue());
-    sepNode = findNode(::rtl::OUString::createFromAscii("Time100SecSeparator"));
-    writeParameter(of,"time100SecSeparator", sepNode -> getValue());
-    sepNode = findNode(::rtl::OUString::createFromAscii("ListSeparator"));
-    writeParameter(of,"listSeparator", sepNode -> getValue());
-    sepNode = findNode(::rtl::OUString::createFromAscii("QuotationStart"));
-    writeParameter(of,"quotationStart", sepNode -> getValue());
-    sepNode = findNode(::rtl::OUString::createFromAscii("QuotationEnd"));
-    writeParameter(of,"quotationEnd",  sepNode -> getValue());
-    sepNode = findNode(::rtl::OUString::createFromAscii("DoubleQuotationStart"));
-    writeParameter(of,"doubleQuotationStart",  sepNode -> getValue());
-    sepNode = findNode(::rtl::OUString::createFromAscii("DoubleQuotationEnd"));
-    writeParameter(of,"doubleQuotationEnd",  sepNode -> getValue());
-    sepNode = findNode(::rtl::OUString::createFromAscii("TimeAM"));
-    writeParameter(of,"timeAM",  sepNode -> getValue());
-    sepNode = findNode(::rtl::OUString::createFromAscii("TimePM"));
-    writeParameter(of,"timePM",  sepNode -> getValue());
-    sepNode = findNode(::rtl::OUString::createFromAscii("MeasurementSystem"));
-    writeParameter(of,"measurementSystem", sepNode -> getValue());
-    sepNode = findNode(::rtl::OUString::createFromAscii("LongDateDayOfWeekSeparator"));
-    writeParameter(of,"LongDateDayOfWeekSeparator", sepNode -> getValue());
-    sepNode = findNode(::rtl::OUString::createFromAscii("LongDateDaySeparator"));
-    writeParameter(of,"LongDateDaySeparator", sepNode -> getValue());
-    sepNode = findNode(::rtl::OUString::createFromAscii("LongDateMonthSeparator"));
-    writeParameter(of,"LongDateMonthSeparator", sepNode -> getValue());
-    sepNode = findNode(::rtl::OUString::createFromAscii("LongDateYearSeparator"));
-    writeParameter(of,"LongDateYearSeparator", sepNode -> getValue());
+    of.writeParameter("LC_CTYPE_Unoid", str);;
+    of.writeParameter("dateSeparator", sepNode->getValue());
+    sepNode = findNode("ThousandSeparator");
+    of.writeParameter("thousandSeparator", sepNode -> getValue());
+    sepNode = findNode("DecimalSeparator");
+    of.writeParameter("decimalSeparator", sepNode -> getValue());
+    sepNode = findNode("TimeSeparator");
+    of.writeParameter("timeSeparator", sepNode -> getValue());
+    sepNode = findNode("Time100SecSeparator");
+    of.writeParameter("time100SecSeparator", sepNode -> getValue());
+    sepNode = findNode("ListSeparator");
+    of.writeParameter("listSeparator", sepNode -> getValue());
+    sepNode = findNode("QuotationStart");
+    of.writeParameter("quotationStart", sepNode -> getValue());
+    sepNode = findNode("QuotationEnd");
+    of.writeParameter("quotationEnd",  sepNode -> getValue());
+    sepNode = findNode("DoubleQuotationStart");
+    of.writeParameter("doubleQuotationStart",  sepNode -> getValue());
+    sepNode = findNode("DoubleQuotationEnd");
+    of.writeParameter("doubleQuotationEnd",  sepNode -> getValue());
+    sepNode = findNode("TimeAM");
+    of.writeParameter("timeAM",  sepNode -> getValue());
+    sepNode = findNode("TimePM");
+    of.writeParameter("timePM",  sepNode -> getValue());
+    sepNode = findNode("MeasurementSystem");
+    of.writeParameter("measurementSystem", sepNode -> getValue());
+    sepNode = findNode("LongDateDayOfWeekSeparator");
+    of.writeParameter("LongDateDayOfWeekSeparator", sepNode -> getValue());
+    sepNode = findNode("LongDateDaySeparator");
+    of.writeParameter("LongDateDaySeparator", sepNode -> getValue());
+    sepNode = findNode("LongDateMonthSeparator");
+    of.writeParameter("LongDateMonthSeparator", sepNode -> getValue());
+    sepNode = findNode("LongDateYearSeparator");
+    of.writeParameter("LongDateYearSeparator", sepNode -> getValue());
 
     of.writeAsciiString("\nstatic const sal_Unicode* LCType[] = {\n");
     of.writeAsciiString("\tLC_CTYPE_Unoid,\n");
@@ -330,37 +331,45 @@ void LCCTYPENode::generateCode (const OFileWriter &of) {
     of.writeAsciiString("\tLongDateMonthSeparator,\n");
     of.writeAsciiString("\tLongDateYearSeparator\n");
     of.writeAsciiString("};\n\n");
-
+    of.writeFunction("getLocaleItem_", "0", "LCType");
 }
 
 void LCFormatNode::generateCode (const OFileWriter &of) {
-sal_Int32 formatCount = 0;
+    of.writeParameter("currencyFrom", getAttr() -> getValueByName("from"));
+    of.writeParameter("currencyTo", getAttr() -> getValueByName("to"));
+    ::rtl::OUString useLocale =   getAttr() -> getValueByName("use");
+    if (useLocale.getLength() > 0) {
+        of.writeUseFunction("getAllFormats_", useLocale, "currencyFrom", "currencyTo");
+        return;
+    }
+    sal_Int32 formatCount = 0;
     for (sal_Int16 i = 0; i< getNumberOfChildren() ; i++,formatCount++) {
         LocaleNode * currNode = getChildAt (i);
             ::rtl::OUString str;
 //      currNode -> print();
                const Attr *  currNodeAttr = currNode->getAttr();
             //printf ("getLen() = %d\n", currNode->getAttr()->getLength());
-            str = currNodeAttr -> getValueByName(::rtl::OUString::createFromAscii("msgid"));
-            writeParameter(of,"FormatKey", str, formatCount);
-            str = currNodeAttr -> getValueByName(::rtl::OUString::createFromAscii("default"));
-            writeDefaultParameter(of,"FormatElement", str, formatCount);
-            str = currNodeAttr -> getValueByName(::rtl::OUString::createFromAscii("type"));
-            writeParameter(of,"FormatType", str, formatCount);
-            str = currNodeAttr -> getValueByName(::rtl::OUString::createFromAscii("usage"));
-            writeParameter(of,"FormatUsage", str, formatCount);
-            str = currNodeAttr -> getValueByName(::rtl::OUString::createFromAscii("formatindex"));
+            str = currNodeAttr -> getValueByName("msgid");
+            of.writeParameter("FormatKey", str, formatCount);
+            str = currNodeAttr -> getValueByName("default");
+            of.writeDefaultParameter("FormatElement", str, formatCount);
+            str = currNodeAttr -> getValueByName("type");
+            of.writeParameter("FormatType", str, formatCount);
+            str = currNodeAttr -> getValueByName("usage");
+            of.writeParameter("FormatUsage", str, formatCount);
+            str = currNodeAttr -> getValueByName("formatindex");
             sal_Int16 formatindex = (sal_Int16)str.toInt32();
-            writeIntParameter(of,"Formatindex", formatCount, formatindex);
+            of.writeIntParameter("Formatindex", formatCount, formatindex);
 
-            LocaleNode * n = currNode -> findNode(::rtl::OUString::createFromAscii("FormatCode"));
+            LocaleNode * n = currNode -> findNode("FormatCode");
+            if (n) {
+                of.writeParameter("FormatCode", n->getValue(), formatCount);
+            }
+            n = currNode -> findNode("DefaultName");
             if (n)
-                    writeParameter(of,"FormatCode", n->getValue(), formatCount);
-            n = currNode -> findNode(::rtl::OUString::createFromAscii("DefaultName"));
-            if (n)
-                writeParameter(of ,"FormatDefaultName", n->getValue(), formatCount);
+                of.writeParameter("FormatDefaultName", n->getValue(), formatCount);
             else
-                writeParameter(of,"FormatDefaultName", ::rtl::OUString::createFromAscii(""), formatCount);
+                of.writeParameter("FormatDefaultName", ::rtl::OUString::createFromAscii(""), formatCount);
 
         }
         of.writeAsciiString("\nstatic const sal_Int16 ");
@@ -409,9 +418,17 @@ sal_Int32 formatCount = 0;
             of.writeAsciiString(",\n");
         }
         of.writeAsciiString("};\n\n");
+
+        of.writeFunction("getAllFormats_", "FormatElementsCount", "FormatElementsArray", "currencyFrom", "currencyTo");
 }
 
 void LCCollationNode::generateCode (const OFileWriter &of) {
+    ::rtl::OUString useLocale =   getAttr() -> getValueByName("use");
+    if (useLocale.getLength() > 0) {
+        of.writeUseFunction("getCollatorImplementation_", useLocale);
+        of.writeUseFunction("getCollationOptions_", useLocale);
+        return;
+    }
     sal_Int16 nbOfCollations = 0;
     sal_Int16 nbOfCollationOptions;
     for (sal_Int16 i = 0; i< getNumberOfChildren();i++) {
@@ -419,10 +436,10 @@ void LCCollationNode::generateCode (const OFileWriter &of) {
         if( currNode->getName().compareToAscii("Collator") == 0 )
         {
             ::rtl::OUString str;
-            str = currNode->getAttr() -> getValueByName(::rtl::OUString::createFromAscii("unoid"));
-            writeParameter(of,"CollatorID", str, i);
-            str = currNode -> getAttr() -> getValueByName(::rtl::OUString::createFromAscii("default"));
-            writeDefaultParameter(of,"Collator", str, i);
+            str = currNode->getAttr() -> getValueByName("unoid");
+            of.writeParameter("CollatorID", str, i);
+            str = currNode -> getAttr() -> getValueByName("default");
+            of.writeDefaultParameter("Collator", str, i);
             of.writeAsciiString("\n");
 
             nbOfCollations++;
@@ -433,7 +450,7 @@ void LCCollationNode::generateCode (const OFileWriter &of) {
             nbOfCollationOptions = pCollationOptions->getNumberOfChildren();
             for( int i=0; i<nbOfCollationOptions; i++ )
             {
-                writeParameter( of, "collationOption", pCollationOptions->getChildAt( i )->getValue(), i );
+                of.writeParameter("collationOption", pCollationOptions->getChildAt( i )->getValue(), i );
             }
 
             of.writeAsciiString("static const sal_Int16 nbOfCollationOptions = ");
@@ -465,21 +482,28 @@ void LCCollationNode::generateCode (const OFileWriter &of) {
         of.writeAsciiString( ", " );
     }
     of.writeAsciiString("NULL };\n");
+    of.writeFunction("getCollatorImplementation_", "nbOfCollations", "LCCollatorArray");
+    of.writeFunction("getCollationOptions_", "nbOfCollationOptions", "collationOptions");
 }
 
 void LCSearchNode::generateCode (const OFileWriter &of)
 {
+    ::rtl::OUString useLocale =   getAttr() -> getValueByName("use");
+    if (useLocale.getLength() > 0) {
+        of.writeUseFunction("getSearchOptions_", useLocale);
+        return;
+    }
+
     if( getNumberOfChildren() != 1 )
     {
         exit(1);
     }
-
     int i;
     LocaleNode* pSearchOptions = getChildAt( 0 );
     int         nSearchOptions = pSearchOptions->getNumberOfChildren();
     for( i=0; i<nSearchOptions; i++ )
     {
-        writeParameter( of, "searchOption", pSearchOptions->getChildAt( i )->getValue(), i );
+        of.writeParameter("searchOption", pSearchOptions->getChildAt( i )->getValue(), i );
     }
 
     of.writeAsciiString("static const sal_Int16 nbOfSearchOptions = ");
@@ -494,10 +518,15 @@ void LCSearchNode::generateCode (const OFileWriter &of)
         of.writeAsciiString( ", " );
     }
     of.writeAsciiString("NULL };\n");
-
+    of.writeFunction("getSearchOptions_", "nbOfSearchOptions", "searchOptions");
 }
 
 void LCCalendarNode::generateCode (const OFileWriter &of) {
+    ::rtl::OUString useLocale =   getAttr() -> getValueByName("use");
+    if (useLocale.getLength() > 0) {
+        of.writeUseFunction("getAllCalendars_", useLocale);
+        return;
+    }
     sal_Int16 nbOfCalendars = getNumberOfChildren();
     ::rtl::OUString str;
     sal_Int16 * nbOfDays = new sal_Int16[nbOfCalendars];
@@ -507,22 +536,22 @@ void LCCalendarNode::generateCode (const OFileWriter &of) {
 
     for (sal_Int16 i = 0; i < nbOfCalendars; i++) {
         LocaleNode * calNode = getChildAt (i);
-        str = calNode -> getAttr() -> getValueByName(::rtl::OUString::createFromAscii("unoid"));
-        writeParameter(of, "calendarID", str, i);
+        str = calNode -> getAttr() -> getValueByName("unoid");
+        of.writeParameter( "calendarID", str, i);
         of.writeAsciiString("\n");
-        str = calNode -> getAttr() -> getValueByName(::rtl::OUString::createFromAscii("default"));
-        writeDefaultParameter(of,"Calendar", str, i);
+        str = calNode -> getAttr() -> getValueByName("default");
+        of.writeDefaultParameter("Calendar", str, i);
         LocaleNode * daysNode = calNode -> getChildAt(0);
         nbOfDays[i] = daysNode->getNumberOfChildren();
         // Generate Days of Week
         sal_Char *elementTag = "day";
         for (sal_Int16 j = 0; j < nbOfDays[i]; j++) {
             LocaleNode *currNode = daysNode -> getChildAt(j);
-            writeParameter(of,"dayID", currNode->getChildAt(0)->getValue(), i, j);
+            of.writeParameter("dayID", currNode->getChildAt(0)->getValue(), i, j);
             of.writeAsciiString("\n");
-            writeParameter(of,elementTag, "DefaultAbbrvName",currNode->getChildAt(1)->getValue() ,i, j);
+            of.writeParameter(elementTag, "DefaultAbbrvName",currNode->getChildAt(1)->getValue() ,i, j);
             of.writeAsciiString("\n");
-            writeParameter(of,elementTag, "DefaultFullName",currNode->getChildAt(2)->getValue() , i, j);
+            of.writeParameter(elementTag, "DefaultFullName",currNode->getChildAt(2)->getValue() , i, j);
             of.writeAsciiString("\n");
         }
 
@@ -532,11 +561,11 @@ void LCCalendarNode::generateCode (const OFileWriter &of) {
         elementTag = "month";
         for (j = 0; j < nbOfMonths[i]; j++) {
             LocaleNode *currNode = monthsNode -> getChildAt(j);
-            writeParameter(of,"monthID", currNode->getChildAt(0)->getValue(), i, j);
+            of.writeParameter("monthID", currNode->getChildAt(0)->getValue(), i, j);
             of.writeAsciiString("\n");
-            writeParameter(of,elementTag, "DefaultAbbrvName",currNode->getChildAt(1)->getValue() ,i, j);
+            of.writeParameter(elementTag, "DefaultAbbrvName",currNode->getChildAt(1)->getValue() ,i, j);
             of.writeAsciiString("\n");
-            writeParameter(of,elementTag, "DefaultFullName",currNode->getChildAt(2)->getValue() , i, j);
+            of.writeParameter(elementTag, "DefaultFullName",currNode->getChildAt(2)->getValue() , i, j);
             of.writeAsciiString("\n");
         }
         LocaleNode * erasNode = calNode -> getChildAt(2);
@@ -545,18 +574,17 @@ void LCCalendarNode::generateCode (const OFileWriter &of) {
         elementTag = "era";
         for (j = 0; j < nbOfEras[i]; j++) {
             LocaleNode *currNode = erasNode -> getChildAt(j);
-            writeParameter(of,"eraID", currNode->getChildAt(0)->getValue(), i, j);
+            of.writeParameter("eraID", currNode->getChildAt(0)->getValue(), i, j);
             of.writeAsciiString("\n");
-            writeParameter(of,elementTag, "DefaultAbbrvName",currNode->getChildAt(1)->getValue() ,i, j);
+            of.writeParameter(elementTag, "DefaultAbbrvName",currNode->getChildAt(1)->getValue() ,i, j);
             of.writeAsciiString("\n");
-            writeParameter(of,elementTag, "DefaultFullName",currNode->getChildAt(2)->getValue() , i, j);
+            of.writeParameter(elementTag, "DefaultFullName",currNode->getChildAt(2)->getValue() , i, j);
             of.writeAsciiString("\n");
         }
-        writeParameter(of,"startDayOfWeek", calNode ->getChildAt(3)-> getChildAt(0)->getValue(),
-                            i);
+        of.writeParameter("startDayOfWeek", calNode ->getChildAt(3)-> getChildAt(0)->getValue(), i);
         of.writeAsciiString("\n");
         str = calNode ->getChildAt(4)-> getValue();
-        writeIntParameter(of,"minimalDaysInFirstWeek", i,
+        of.writeIntParameter("minimalDaysInFirstWeek", i,
                         str . toInt32());
         of.writeAsciiString("\n");
         }
@@ -622,7 +650,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) {
         }
 
         of.writeAsciiString("};\n\n");
-
+        of.writeFunction("getAllCalendars_", "calendarsCount", "calendars");
 
     delete []nbOfDays;
     delete []nbOfMonths;
@@ -630,25 +658,30 @@ void LCCalendarNode::generateCode (const OFileWriter &of) {
 }
 
 void LCCurrencyNode :: generateCode (const OFileWriter &of) {
+    ::rtl::OUString useLocale =   getAttr() -> getValueByName("use");
+    if (useLocale.getLength() > 0) {
+        of.writeUseFunction("getAllCurrencies_", useLocale);
+        return;
+    }
     sal_Int16 nbOfCurrencies = 0;
     ::rtl::OUString str;
     for (sal_Int16 i = 0; i < getNumberOfChildren(); i++,nbOfCurrencies++) {
         LocaleNode * calNode = getChildAt (i);
-        str = calNode->getAttr() -> getValueByName(::rtl::OUString::createFromAscii("default"));
-        writeDefaultParameter(of,"Currency", str, nbOfCurrencies);
-        str = calNode->getAttr() -> getValueByName(::rtl::OUString::createFromAscii("usedInCompatibleFormatCodes"));
-        writeDefaultParameter(of,"CurrencyUsedInCompatibleFormatCodes", str, nbOfCurrencies);
-        str = calNode -> findNode (::rtl::OUString::createFromAscii("CurrencyID")) -> getValue();
-        writeParameter(of,"currencyID", str, nbOfCurrencies);
-        str = calNode -> findNode (::rtl::OUString::createFromAscii("CurrencySymbol")) -> getValue();
-        writeParameter(of,"currencySymbol", str, nbOfCurrencies);
-        str = calNode -> findNode (::rtl::OUString::createFromAscii("BankSymbol")) -> getValue();
-        writeParameter(of,"bankSymbol", str, nbOfCurrencies);
-        str = calNode -> findNode (::rtl::OUString::createFromAscii("CurrencyName")) -> getValue();
-        writeParameter(of,"currencyName", str, nbOfCurrencies);
-        str = calNode -> findNode (::rtl::OUString::createFromAscii("DecimalPlaces")) -> getValue();
+        str = calNode->getAttr() -> getValueByName("default");
+        of.writeDefaultParameter("Currency", str, nbOfCurrencies);
+        str = calNode->getAttr() -> getValueByName("usedInCompatibleFormatCodes");
+        of.writeDefaultParameter("CurrencyUsedInCompatibleFormatCodes", str, nbOfCurrencies);
+        str = calNode -> findNode ("CurrencyID") -> getValue();
+        of.writeParameter("currencyID", str, nbOfCurrencies);
+        str = calNode -> findNode ("CurrencySymbol") -> getValue();
+        of.writeParameter("currencySymbol", str, nbOfCurrencies);
+        str = calNode -> findNode ("BankSymbol") -> getValue();
+        of.writeParameter("bankSymbol", str, nbOfCurrencies);
+        str = calNode -> findNode ("CurrencyName") -> getValue();
+        of.writeParameter("currencyName", str, nbOfCurrencies);
+        str = calNode -> findNode ("DecimalPlaces") -> getValue();
         sal_Int16 nDecimalPlaces = (sal_Int16)str.toInt32();
-        writeIntParameter(of,"currencyDecimalPlaces", nbOfCurrencies, nDecimalPlaces);
+        of.writeIntParameter("currencyDecimalPlaces", nbOfCurrencies, nDecimalPlaces);
         of.writeAsciiString("\n");
     };
 
@@ -680,16 +713,21 @@ void LCCurrencyNode :: generateCode (const OFileWriter &of) {
         of.writeAsciiString(",\n");
     }
     of.writeAsciiString("};\n\n");
-
+    of.writeFunction("getAllCurrencies_", "currencyCount", "currencies");
 }
 
 void LCTransliterationNode::generateCode (const OFileWriter &of) {
+    ::rtl::OUString useLocale =   getAttr() -> getValueByName("use");
+    if (useLocale.getLength() > 0) {
+        of.writeUseFunction("getTransliterations_", useLocale);
+        return;
+    }
     sal_Int16 nbOfModules = 0;
     ::rtl::OUString str;
     for (sal_Int16 i = 0; i < getNumberOfChildren(); i++,nbOfModules++) {
         LocaleNode * calNode = getChildAt (i);
         str = calNode->getAttr() -> getValueByIndex(0);
-        writeParameter(of,"Transliteration", str, nbOfModules);
+        of.writeParameter("Transliteration", str, nbOfModules);
     }
     of.writeAsciiString("static const sal_Int16 nbOfTransliterations = ");
     of.writeInt(nbOfModules);
@@ -702,20 +740,25 @@ void LCTransliterationNode::generateCode (const OFileWriter &of) {
         of.writeAsciiString(",\n");
     }
     of.writeAsciiString("};\n\n");
-
-
+    of.writeFunction("getTransliterations_", "nbOfTransliterations", "LCTransliterationsArray");
 }
 
 void LCMiscNode::generateCode (const OFileWriter &of) {
-    LocaleNode * reserveNode = findNode(::rtl::OUString::createFromAscii("ReservedWords"));
-    LocaleNode * forbidNode = findNode(::rtl::OUString::createFromAscii("ForbiddenCharacters"));
+    ::rtl::OUString useLocale =   getAttr() -> getValueByName("use");
+    if (useLocale.getLength() > 0) {
+    of.writeUseFunction("getForbiddenCharacters_", useLocale);
+    of.writeUseFunction("getReservedWords_", useLocale);
+    return;
+    }
+    LocaleNode * reserveNode = findNode("ReservedWords");
+    LocaleNode * forbidNode = findNode("ForbiddenCharacters");
 
     sal_Int16 nbOfWords = 0;
     ::rtl::OUString str;
     for (sal_Int16 i = 0; i < reserveNode->getNumberOfChildren(); i++,nbOfWords++) {
         LocaleNode * curNode = reserveNode->getChildAt (i);
           str = curNode -> getValue();
-          writeParameter(of,"ReservedWord", str, nbOfWords);
+          of.writeParameter("ReservedWord", str, nbOfWords);
     }
     of.writeAsciiString("static const sal_Int16 nbOfReservedWords = ");
     of.writeInt(nbOfWords);
@@ -729,26 +772,29 @@ void LCMiscNode::generateCode (const OFileWriter &of) {
     of.writeAsciiString("};\n\n");
 
     if (forbidNode)    {
-         writeParameter(of, "forbiddenBegin", forbidNode -> getChildAt(0)->getValue());
-         writeParameter(of, "forbiddenEnd", forbidNode -> getChildAt(1)->getValue());
+         of.writeParameter( "forbiddenBegin", forbidNode -> getChildAt(0)->getValue());
+         of.writeParameter( "forbiddenEnd", forbidNode -> getChildAt(1)->getValue());
     } else {
-         writeParameter(of, "forbiddenBegin", ::rtl::OUString::createFromAscii(""));
-         writeParameter(of, "forbiddenEnd", ::rtl::OUString::createFromAscii(""));
+         of.writeParameter( "forbiddenBegin", ::rtl::OUString::createFromAscii(""));
+         of.writeParameter( "forbiddenEnd", ::rtl::OUString::createFromAscii(""));
     }
     of.writeAsciiString("\nstatic const sal_Unicode* LCForbiddenCharactersArray[] = {\n");
     of.writeAsciiString("\tforbiddenBegin,\n");
     of.writeAsciiString("\tforbiddenEnd\n");
     of.writeAsciiString("};\n\n");
-}
-inline
-::rtl::OUString C2U( const char* s )
-{
-     return ::rtl::OUString::createFromAscii( s );
+    of.writeFunction("getForbiddenCharacters_", "2", "LCForbiddenCharactersArray");
+    of.writeFunction("getReservedWords_", "nbOfReservedWords", "LCReservedWordsArray");
 }
 
 void LCNumberingLevelNode::generateCode (const OFileWriter &of)
 {
      of.writeAsciiString("// ---> ContinuousNumbering\n");
+#if SUPD > 618
+    ::rtl::OUString useLocale =   getAttr() -> getValueByName("use");
+    if (useLocale.getLength() > 0) {
+    of.writeUseFunction2("getContinuousNumberingLevels_", useLocale);
+    return;
+    }
 
      // hard code number of attributes per style.
      const int   nAttributes = 4;
@@ -763,8 +809,8 @@ void LCNumberingLevelNode::generateCode (const OFileWriter &of)
           for( int j=0; j<nAttributes; j++ )
           {
                const char* name = attr[j];
-               OUString   value = q->getValueByName( C2U(name) );
-               writeParameter( of, "continuous", name, value, i );
+               OUString   value = q->getValueByName( name );
+               of.writeParameter("continuous", name, value, i );
           }
      }
 
@@ -804,7 +850,9 @@ void LCNumberingLevelNode::generateCode (const OFileWriter &of)
           of.writeAsciiString( ",\n");
      }
      of.writeAsciiString("\t0\n};\n\n");
-
+     of.writeFunction2("getContinuousNumberingLevels_", "continuousNbOfStyles",
+            "continuousNbOfAttributesPerStyle", "LCContinuousNumberingLevelsArray");
+#endif // SUPD > 618
 }
 
 #include <assert.h>
@@ -812,6 +860,12 @@ void LCNumberingLevelNode::generateCode (const OFileWriter &of)
 void LCOutlineNumberingLevelNode::generateCode (const OFileWriter &of)
 {
      of.writeAsciiString("// ---> OutlineNumbering\n");
+#if SUPD > 618
+    ::rtl::OUString useLocale =   getAttr() -> getValueByName("use");
+    if (useLocale.getLength() > 0) {
+    of.writeUseFunction3("getOutlineNumberingLevels_", useLocale);
+    return;
+    }
 
      // hardcode number of attributes per level
      const int   nAttributes = 10;
@@ -843,8 +897,8 @@ void LCOutlineNumberingLevelNode::generateCode (const OFileWriter &of)
                for( int k=0; k<nAttributes; k++ )
                {
                     const char* name = attr[k];
-                    OUString   value = q->getValueByName( C2U(name) );
-                    writeParameter( of, "outline", name, value, i, j );
+                    OUString   value = q->getValueByName( name );
+                    of.writeParameter("outline", name, value, i, j );
                }
           }
      }
@@ -933,104 +987,9 @@ void LCOutlineNumberingLevelNode::generateCode (const OFileWriter &of)
           of.writeAsciiString(",\n");
      }
      of.writeAsciiString("\tNULL\n};\n\n");
-}
-
-void  LocaleNode::writeIntParameter(const OFileWriter & of,
-    const sal_Char* pAsciiStr, const sal_Int16 count, sal_Int16 val) {
-    of.writeAsciiString("static const sal_Unicode ");
-    of.writeAsciiString(pAsciiStr);
-    of.writeInt(count);
-    of.writeAsciiString("[] = {");
-    of.writeInt(val);
-    of.writeAsciiString("};\n");
-}
-
-void   LocaleNode::writeDefaultParameter(const OFileWriter & of,const sal_Char* pAsciiStr, const ::rtl::OUString& str, sal_Int16 count) {
-    of.writeAsciiString("static const sal_Unicode default");
-    of.writeAsciiString(pAsciiStr);
-    of.writeInt(count);
-    of.writeAsciiString("[] = {");
-    if(str.equals(::rtl::OUString::createFromAscii("true")))
-        of.writeAsciiString("1};\n");
-    else
-        of.writeAsciiString("0};\n");
-    }
-
-void  LocaleNode::writeDefaultParameter(const OFileWriter & of,const sal_Char* pAsciiStr, const ::rtl::OUString& str) {
-        of.writeAsciiString("static const sal_Unicode default");
-        of.writeAsciiString(pAsciiStr);
-        of.writeAsciiString("[] = {");
-        if(str.equals(::rtl::OUString::createFromAscii("true")))
-            of.writeAsciiString("1};\n");
-        else
-            of.writeAsciiString("0};\n");
-}
-
-void  LocaleNode::writeParameter(const OFileWriter & of,const sal_Char* pAsciiStr, const ::rtl::OUString& aChars) {
-            of.writeAsciiString("static const sal_Unicode ");
-            of.writeAsciiString(pAsciiStr);
-            of.writeAsciiString("[");
-            of.writeAsciiString("] = {");
-            of.writeStringCharacters(aChars);
-            of.writeAsciiString("0x0};\n");
-}
-
-void   LocaleNode::writeParameter(const OFileWriter & of,const sal_Char* pAsciiStr, const ::rtl::OUString& aChars, sal_Int16 count) {
-            of.writeAsciiString("static const sal_Unicode ");
-            of.writeAsciiString(pAsciiStr);
-            of.writeInt(count);
-            of.writeAsciiString("[");
-            of.writeAsciiString("] = {");
-            of.writeStringCharacters(aChars);
-            of.writeAsciiString("0x0};\n");
-}
-
-void   LocaleNode::writeParameter(const OFileWriter & of,const sal_Char* pAsciiStr, const ::rtl::OUString& aChars, sal_Int16 count0, sal_Int16 count1) {
-            of.writeAsciiString("static const sal_Unicode ");
-            of.writeAsciiString(pAsciiStr);
-            of.writeInt(count0);
-            of.writeInt(count1);
-            of.writeAsciiString("[");
-            of.writeAsciiString("] = {");
-            of.writeStringCharacters(aChars);
-            of.writeAsciiString("0x0};\n");
-}
-
-void   LocaleNode::writeParameter(const OFileWriter & of,const sal_Char* pTagStr, const sal_Char* pAsciiStr,
-                                          const ::rtl::OUString& aChars, const sal_Int16 count) {
-            of.writeAsciiString("static const sal_Unicode ");
-            of.writeAsciiString(pTagStr);
-            of.writeAsciiString(pAsciiStr);
-            of.writeInt(count);
-            of.writeAsciiString("[");
-            of.writeAsciiString("] = {");
-            of.writeStringCharacters(aChars);
-            of.writeAsciiString("0x0};\n");
-}
-
-void   LocaleNode::writeParameter(const OFileWriter & of,const sal_Char* pTagStr,
-                                         const sal_Char* pAsciiStr, const ::rtl::OUString& aChars) {
-            of.writeAsciiString("static const sal_Unicode ");
-            of.writeAsciiString(pTagStr);
-            of.writeAsciiString(pAsciiStr);
-            of.writeAsciiString("[");
-            of.writeAsciiString("] = {");
-            of.writeStringCharacters(aChars);
-            of.writeAsciiString("0x0};\n");
-}
-
-void   LocaleNode::writeParameter(const OFileWriter & of,const sal_Char* pTagStr,
-                                          const sal_Char* pAsciiStr, const ::rtl::OUString& aChars,
-                                          sal_Int16 count0, sal_Int16 count1) {
-            of.writeAsciiString("static const sal_Unicode ");
-            of.writeAsciiString(pTagStr);
-            of.writeAsciiString(pAsciiStr);
-            of.writeInt(count0);
-            of.writeInt(count1);
-            of.writeAsciiString("[");
-            of.writeAsciiString("] = {");
-            of.writeStringCharacters(aChars);
-            of.writeAsciiString("0x0};\n");
+     of.writeFunction3("getOutlineNumberingLevels_", "outlineNbOfStyles", "outlineNbOfLevelsPerStyle",
+            "outlineNbOfAttributesPerLevel", "LCOutlineNumberingLevelsArray");
+#endif // SUPD > 618
 }
 
 Attr::Attr (const Reference< XAttributeList > & attr) {
@@ -1043,15 +1002,12 @@ Attr::Attr (const Reference< XAttributeList > & attr) {
     }
 }
 
-OUString Attr::getValueByName (const OUString & str) const {
+OUString Attr::getValueByName (const sal_Char *str) const {
     int len = name.getLength();
-    OUString result;
-    for (int i = 0;i<len;i++) {
-        if (name[i] == str) {
+    for (int i = 0;i<len;i++)
+        if (name[i].equalsAscii(str))
             return value[i];
-            }
-            }
-    return result;
+    return OUString();
 }
 sal_Int32 Attr::getLength() const{
     return name.getLength();

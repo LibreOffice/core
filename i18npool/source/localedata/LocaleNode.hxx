@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LocaleNode.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bustamam $ $Date: 2002-03-15 19:09:54 $
+ *  last change: $Author: khong $ $Date: 2002-07-11 17:24:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,15 +94,33 @@ class OFileWriter
 {
 public:
 
-OFileWriter(const char *pcFile );
+OFileWriter(const char *pcFile, const char *locale );
 ~OFileWriter();
     virtual void  writeStringCharacters(const ::rtl::OUString& str) const;
     virtual void  writeAsciiString(const char *str)const ;
     virtual void  writeInt(sal_Int16 nb) const;
+    virtual void  writeFunction(const char *func, const char *count, const char *array) const;
+    virtual void  writeUseFunction(const char *func, const ::rtl::OUString& useLocale) const;
+    virtual void  writeFunction(const char *func, const char *count, const char *array, const char *from, const char *to) const;
+    virtual void  writeUseFunction(const char *func, const ::rtl::OUString& useLocale, const char *from, const char *to) const;
+    virtual void  writeFunction2(const char *func, const char *style, const char* attr, const char *array) const;
+    virtual void  writeUseFunction2(const char *func, const ::rtl::OUString& useLocale) const;
+    virtual void  writeFunction3(const char *func, const char *style, const char* levels, const char* attr, const char *array) const;
+    virtual void  writeUseFunction3(const char *func, const ::rtl::OUString& useLocale) const;
+    virtual void  writeIntParameter(const sal_Char* pAsciiStr, const sal_Int16 count, sal_Int16 val) const;
+    virtual void  writeDefaultParameter(const sal_Char* pAsciiStr, const ::rtl::OUString& str, sal_Int16 count) const;
+    virtual void  writeDefaultParameter(const sal_Char* pAsciiStr, const ::rtl::OUString& str) const;
+    virtual void  writeParameter(const sal_Char* pAsciiStr, const ::rtl::OUString& aChars) const;
+    virtual void  writeParameter(const sal_Char* pAsciiStr, const ::rtl::OUString& aChars, sal_Int16 count) const;
+    virtual void  writeParameter(const sal_Char* pAsciiStr, const ::rtl::OUString& aChars, sal_Int16 count0, sal_Int16 count1) const;
+    virtual void  writeParameter(const sal_Char* pTagStr, const sal_Char* pAsciiStr, const ::rtl::OUString& aChars, const sal_Int16 count) const;
+    virtual void  writeParameter(const sal_Char* pTagStr, const sal_Char* pAsciiStr, const ::rtl::OUString& aChars) const;
+    virtual void  writeParameter(const sal_Char* pTagStr, const sal_Char* pAsciiStr, const ::rtl::OUString& aChars, sal_Int16 count0, sal_Int16 count1) const;
     virtual void  flush(void) const ;
     virtual void  closeOutput(void) const;
 private:
     char m_pcFile[1024];
+    char theLocale[50];
     FILE *m_f;
 };
 
@@ -112,7 +130,7 @@ class Attr {
 
 public:
     Attr (const Reference< XAttributeList > & attr);
-    OUString getValueByName (const OUString & str) const;
+    OUString getValueByName (const sal_Char *str) const;
     sal_Int32 getLength() const;
     OUString getTypeByIndex (sal_Int32 idx) const;
     OUString getValueByIndex (sal_Int32 idx) const ;
@@ -129,31 +147,20 @@ class LocaleNode{
     sal_Int32 childArrSize;
     //inline LocaleNode() { ; }
 public:
-    LocaleNode (const OUString& name,
-                const Reference< XAttributeList > & attr);
+    LocaleNode (const OUString& name, const Reference< XAttributeList > & attr);
     inline void setValue(const OUString &oValue) { aValue = oValue; };
     inline const OUString getName() { return aName; };
     inline const OUString getValue() { return aValue; };
     inline const Attr* getAttr() { return xAttribs; };
     inline const sal_Int32 getNumberOfChildren () { return nChildren; };
     inline  LocaleNode * getChildAt (sal_Int32 idx) { return children[idx] ; };
-    LocaleNode * findNode ( const OUString&  name);
+    LocaleNode * findNode ( const sal_Char *name);
     void print () ;
     void printR () ;
     ~LocaleNode();
     void addChild (  LocaleNode * node);
     virtual void generateCode (const OFileWriter &of);
     static LocaleNode* createNode (const OUString& name,const Reference< XAttributeList > & attr);
-protected:
-    void  writeIntParameter(const OFileWriter & of,const sal_Char* pAsciiStr, const sal_Int16 count, sal_Int16 val);
-    void  writeDefaultParameter(const OFileWriter & of,const sal_Char* pAsciiStr, const ::rtl::OUString& str, sal_Int16 count);
-    void  writeDefaultParameter(const OFileWriter & of,const sal_Char* pAsciiStr, const ::rtl::OUString& str);
-    void  writeParameter(const OFileWriter & of,const sal_Char* pAsciiStr, const ::rtl::OUString& aChars);
-    void  writeParameter(const OFileWriter & of,const sal_Char* pAsciiStr, const ::rtl::OUString& aChars, sal_Int16 count);
-    void  writeParameter(const OFileWriter & of,const sal_Char* pAsciiStr, const ::rtl::OUString& aChars, sal_Int16 count0, sal_Int16 count1);
-    void  writeParameter(const OFileWriter & of,const sal_Char* pTagStr, const sal_Char* pAsciiStr, const ::rtl::OUString& aChars, const sal_Int16 count) ;
-    void  writeParameter(const OFileWriter & of, const sal_Char* pTagStr, const sal_Char* pAsciiStr, const ::rtl::OUString& aChars);
-    void  writeParameter(const OFileWriter & of,const sal_Char* pTagStr, const sal_Char* pAsciiStr, const ::rtl::OUString& aChars, sal_Int16 count0, sal_Int16 count1) ;
 };
 
 class LCInfoNode : public LocaleNode {

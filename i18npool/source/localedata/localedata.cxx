@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localedata.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: er $ $Date: 2002-07-01 11:58:12 $
+ *  last change: $Author: khong $ $Date: 2002-07-11 17:24:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,7 @@ static sal_Char charBuffer[256];
 typedef sal_Unicode**   (SAL_CALL * MyFunc_Type)( sal_Int16&);
 typedef sal_Unicode***  (SAL_CALL * MyFunc_Type2)( sal_Int16&, sal_Int16& );
 typedef sal_Unicode**** (SAL_CALL * MyFunc_Type3)( sal_Int16&, sal_Int16&, sal_Int16& );
+typedef sal_Unicode**   (SAL_CALL * MyFunc_FormatCode)( sal_Int16&, sal_Unicode*&, sal_Unicode*& );
 
 static const char *lcl_DATA_EN = "localedata_en";
 static const char *lcl_DATA_ES = "localedata_es";
@@ -332,21 +333,55 @@ LocaleData::getAllCurrencies( const Locale& rLocale ) throw(RuntimeException)
     }
 }
 
+// return a string resulting from replacing all occurrences of 'oldStr' string
+// in 'formatCode' string with 'newStr' string
+static sal_Unicode* SAL_CALL replace(sal_Unicode *formatCode, sal_Unicode* oldStr, sal_Unicode* newStr)
+{
+// make reasonable assumption of maximum length of formatCode.
+#define MAX_FORMATCODE_LENTH 512
+    static sal_Unicode str[MAX_FORMATCODE_LENTH];
+
+    if (oldStr[0] == 0) // no replacement requires
+    return formatCode;
+
+    sal_Int32 i = 0, k = 0;
+    while (formatCode[i] > 0 && k < MAX_FORMATCODE_LENTH) {
+    sal_Int32 j = 0, last = k;
+    // search oldStr in formatCode
+    while (formatCode[i] > 0 && oldStr[j] > 0 && k < MAX_FORMATCODE_LENTH) {
+        str[k++] = formatCode[i];
+        if (formatCode[i++] != oldStr[j++])
+        break;
+    }
+    if (oldStr[j] == 0) {
+        // matched string found, do replacement
+        k = last; j = 0;
+        while (newStr[j] > 0 && k < MAX_FORMATCODE_LENTH)
+        str[k++] = newStr[j++];
+    }
+    }
+    if (k >= MAX_FORMATCODE_LENTH) // could not complete replacement, return original formatCode
+    return formatCode;
+
+    str[k] = 0;
+    return str;
+}
 
 Sequence< FormatElement > SAL_CALL
 LocaleData::getAllFormats( const Locale& rLocale ) throw(RuntimeException)
 {
     sal_Int16 formatCount = 0;
+    sal_Unicode *from, *to;
     sal_Unicode **formatArray = NULL;
 
-    MyFunc_Type func = (MyFunc_Type) getFunctionSymbol( rLocale, "getAllFormats" );
+    MyFunc_FormatCode func = (MyFunc_FormatCode) getFunctionSymbol( rLocale, "getAllFormats" );
 
     if ( func ) {
-        formatArray = func(formatCount);
+        formatArray = func(formatCount, from, to);
 
         Sequence< FormatElement > seq(formatCount);
         for(int i = 0, nOff = 0; i < formatCount; i++, nOff += 7 ) {
-        FormatElement elem(formatArray[nOff],
+        FormatElement elem(replace(formatArray[nOff], from, to),
         formatArray[nOff+ 1],
         formatArray[nOff + 2],
         formatArray[nOff + 3],
