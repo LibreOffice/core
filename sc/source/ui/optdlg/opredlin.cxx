@@ -2,9 +2,9 @@
  *
  *  $RCSfile: opredlin.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:06:23 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 20:34:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,6 @@
 #include <svx/dlgutil.hxx>
 #include <svx/drawitem.hxx>
 #include <svx/xtable.hxx>
-#include <offmgr/app.hxx>
 
 #include "appoptio.hxx"
 #include "scmod.hxx"
@@ -209,7 +208,7 @@ BOOL __EXPORT ScRedlineOptionsTabPage::FillItemSet( SfxItemSet& rSet )
 void __EXPORT ScRedlineOptionsTabPage::Reset( const SfxItemSet& rSet )
 {
 
-    XColorTable* pColorTbl = OFF_APP()->GetStdColorTable();
+    XColorTable* pColorTbl = XColorTable::GetStdColorTable();
     aContentColorLB.InsertEntry(aAuthorStr);
     aMoveColorLB.InsertEntry(aAuthorStr);
     aInsertColorLB.InsertEntry(aAuthorStr);
