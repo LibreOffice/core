@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MarkerStyle.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-24 18:48:25 $
+ *  last change: $Author: aw $ $Date: 2001-03-08 17:41:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,10 +63,6 @@
 #include "MarkerStyle.hxx"
 #endif
 
-#ifndef _COM_SUN_STAR_DRAWING_POINTSEQUENCE_HPP_
-#include <com/sun/star/drawing/PointSequence.hpp>
-#endif
-
 #ifndef _XEXPTRANSFORM_HXX
 #include "xexptran.hxx"
 #endif
@@ -97,6 +93,10 @@
 
 #ifndef _RTL_USTRING_
 #include<rtl/ustring>
+#endif
+
+#ifndef _COM_SUN_STAR_DRAWING_POLYPOLYGONBEZIERCOORDS_HPP_
+#include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
 #endif
 
 using namespace ::com::sun::star;
@@ -134,19 +134,19 @@ sal_Bool XMLMarkerStyle::importXML( const uno::Reference< xml::sax::XAttributeLi
 }
 
 sal_Bool XMLMarkerStyle::ImpExportXML( const uno::Reference< xml::sax::XDocumentHandler > & rHandler,
-                                       const SvXMLNamespaceMap& rNamespaceMap, const SvXMLUnitConverter& rUnitConverter,
-                                       const OUString& rStrName, const uno::Any& rValue )
+   const SvXMLNamespaceMap& rNamespaceMap, const SvXMLUnitConverter& rUnitConverter,
+   const OUString& rStrName, const uno::Any& rValue )
 {
-    sal_Bool bRet = sal_False;
-    drawing::PointSequence aPointSequence;
+    sal_Bool bRet(sal_False);
 
-    if( rStrName.getLength() )
+    if(rStrName.getLength())
     {
-        if( rValue >>= aPointSequence )
+        drawing::PolyPolygonBezierCoords aBezier;
+
+        if(rValue >>= aBezier)
         {
             pAttrList = new SvXMLAttributeList();   // Do NOT delete me !!
-            ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > xAttrList( pAttrList );
-
+            uno::Reference< xml::sax::XAttributeList > xAttrList( pAttrList );
             OUString aStrValue;
             OUStringBuffer aOut;
 
@@ -157,39 +157,75 @@ sal_Bool XMLMarkerStyle::ImpExportXML( const uno::Reference< xml::sax::XDocument
 
             /////////////////
             // Viewbox (viewBox="0 0 1500 1000")
-            const awt::Point *pPoints = aPointSequence.getConstArray();
-            sal_Int32 nPointCount = aPointSequence.getLength();
-            sal_Int32 nMinX = 0, nMaxX = 0, nMinY = 0, nMaxY = 0;
+            sal_Int32 nMinX(0x7fffffff);
+            sal_Int32 nMaxX(0x80000000);
+            sal_Int32 nMinY(0x7fffffff);
+            sal_Int32 nMaxY(0x80000000);
+            sal_Int32 nOuterCnt(aBezier.Coordinates.getLength());
+            drawing::PointSequence* pOuterSequence = aBezier.Coordinates.getArray();
+            sal_Int32 a, b;
+            sal_Bool bClosed(sal_False);
 
-            for( sal_Int32 i = 0; i<nPointCount; i++ )
+            for(a = 0L; a < nOuterCnt; a++)
             {
-                const awt::Point aPoint = pPoints[i];
+                drawing::PointSequence* pSequence = pOuterSequence++;
+                const awt::Point *pPoints = pSequence->getConstArray();
+                sal_Int32 nPointCount(pSequence->getLength());
 
-                if( aPoint.X < nMinX )
-                    nMinX = aPoint.X;
-                if( aPoint.X > nMaxX )
-                    nMaxX = aPoint.X;
-                if( aPoint.Y < nMinY )
-                    nMinY = aPoint.Y;
-                if( aPoint.Y > nMaxY )
-                    nMaxY = aPoint.Y;
+                if(nPointCount)
+                {
+                    const awt::Point aStart = pPoints[0];
+                    const awt::Point aEnd = pPoints[nPointCount - 1];
+
+                    if(aStart.X == aEnd.X && aStart.Y == aEnd.Y)
+                    {
+                        bClosed = sal_True;
+                    }
+                }
+
+                for(b = 0L; b < nPointCount; b++)
+                {
+                    const awt::Point aPoint = pPoints[b];
+
+                    if( aPoint.X < nMinX )
+                        nMinX = aPoint.X;
+
+                    if( aPoint.X > nMaxX )
+                        nMaxX = aPoint.X;
+
+                    if( aPoint.Y < nMinY )
+                        nMinY = aPoint.Y;
+
+                    if( aPoint.Y > nMaxY )
+                        nMaxY = aPoint.Y;
+                }
             }
 
-            sal_Int32 nDifX = nMaxX - nMinX;
-            sal_Int32 nDifY = nMaxY - nMinY;
-            nDifX = nDifX >= 0 ? nDifX : -nDifX;
-            nDifY = nDifY >= 0 ? nDifY : -nDifY;
+            sal_Int32 nDifX(nMaxX - nMinX);
+            sal_Int32 nDifY(nMaxY - nMinY);
 
             SdXMLImExViewBox aViewBox( 0, 0, nDifX, nDifY );
             AddAttribute( XML_NAMESPACE_SVG, sXML_viewBox, aViewBox.GetExportString( rUnitConverter ) );
 
             /////////////////
             // Pathdata
-            SdXMLImExPointsElement aPoints( &aPointSequence, aViewBox, awt::Point( 0, 0 ),
-                                            awt::Size( aViewBox.GetWidth(), aViewBox.GetHeight() ),
-                                            rUnitConverter );
+            pOuterSequence = aBezier.Coordinates.getArray();
+            drawing::FlagSequence*  pOuterFlags = aBezier.Flags.getArray();
+            SdXMLImExSvgDElement aSvgDElement(aViewBox);
 
-            AddAttribute( XML_NAMESPACE_SVG, sXML_d, aPoints.GetExportString() );
+            for(a = 0L; a < nOuterCnt; a++)
+            {
+                drawing::PointSequence* pSequence = pOuterSequence++;
+                drawing::FlagSequence* pFlags = pOuterFlags++;
+
+                aSvgDElement.AddPolygon(pSequence, pFlags,
+                    awt::Point( 0, 0 ),
+                    awt::Size( aViewBox.GetWidth(), aViewBox.GetHeight() ),
+                    rUnitConverter, bClosed);
+            }
+
+            // write point array
+            AddAttribute(XML_NAMESPACE_SVG, sXML_d, aSvgDElement.GetExportString());
 
             /////////////////
             // Do Write
@@ -207,16 +243,14 @@ sal_Bool XMLMarkerStyle::ImpExportXML( const uno::Reference< xml::sax::XDocument
 }
 
 sal_Bool XMLMarkerStyle::ImpImportXML( const SvXMLUnitConverter& rUnitConverter,
-                                           const uno::Reference< xml::sax::XAttributeList >& xAttrList,
-                                           uno::Any& rValue, OUString& rStrName )
+    const uno::Reference< xml::sax::XAttributeList >& xAttrList,
+    uno::Any& rValue, OUString& rStrName )
 {
     sal_Bool bRet           = sal_False;
     sal_Bool bHasViewBox    = sal_False;
     sal_Bool bHasPathData   = sal_False;
 
     SdXMLImExViewBox* pViewBox = NULL;
-
-    drawing::PointSequence aPointSequence;
 
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i = 0; i < nAttrCount; i++ )
@@ -229,31 +263,58 @@ sal_Bool XMLMarkerStyle::ImpImportXML( const SvXMLUnitConverter& rUnitConverter,
         if( aStrAttrName.compareToAscii( RTL_CONSTASCII_STRINGPARAM( sXML_name ) ) == 0 )
         {
             rStrName = aStrValue;
-
-        } else if( aStrAttrName.compareToAscii( RTL_CONSTASCII_STRINGPARAM( sXML_viewBox ) ) == 0 )
+        }
+        else if( aStrAttrName.compareToAscii( RTL_CONSTASCII_STRINGPARAM( sXML_viewBox ) ) == 0 )
         {
             pViewBox = new SdXMLImExViewBox( aStrValue, rUnitConverter );
             bHasViewBox = sal_True;
 
-        } else if( bHasViewBox && aStrAttrName.compareToAscii( RTL_CONSTASCII_STRINGPARAM( sXML_d ) ) == 0 )
+        }
+        else if( bHasViewBox && aStrAttrName.compareToAscii( RTL_CONSTASCII_STRINGPARAM( sXML_d ) ) == 0 )
         {
-            SdXMLImExPointsElement aPoints( aStrValue, *pViewBox, awt::Point( 0, 0 ),
-                                            awt::Size( pViewBox->GetWidth(), pViewBox->GetHeight() ),
-                                            rUnitConverter );
-            const drawing::PointSequenceSequence& rSequence = aPoints.GetPointSequenceSequence();
-            if( rSequence.getLength() )
-            {
-                const drawing::PointSequence *pSequences = rSequence.getConstArray();
+            SdXMLImExSvgDElement aPoints(aStrValue, *pViewBox, awt::Point( 0, 0 ),
+                awt::Size( pViewBox->GetWidth(), pViewBox->GetHeight() ),
+                rUnitConverter );
 
-                aPointSequence = drawing::PointSequence( pSequences[0] );
+            if(aPoints.IsCurve())
+            {
+                drawing::PolyPolygonBezierCoords aSourcePolyPolygon(
+                    aPoints.GetPointSequenceSequence(),
+                    aPoints.GetFlagSequenceSequence());
+                rValue <<= aSourcePolyPolygon;
             }
+            else
+            {
+                drawing::PolyPolygonBezierCoords aSourcePolyPolygon;
+                aSourcePolyPolygon.Coordinates = aPoints.GetPointSequenceSequence();
+                aSourcePolyPolygon.Flags.realloc(aSourcePolyPolygon.Coordinates.getLength());
+
+                // Zeiger auf innere sequences holen
+                const drawing::PointSequence* pInnerSequence = aSourcePolyPolygon.Coordinates.getConstArray();
+                drawing::FlagSequence* pInnerSequenceFlags = aSourcePolyPolygon.Flags.getArray();
+
+                for(sal_Int32 a(0); a < aSourcePolyPolygon.Coordinates.getLength(); a++)
+                {
+                    pInnerSequenceFlags->realloc(pInnerSequence->getLength());
+                    drawing::PolygonFlags* pPolyFlags = pInnerSequenceFlags->getArray();
+
+                    for(sal_Int32 b(0); b < pInnerSequence->getLength(); b++)
+                        *pPolyFlags++ = drawing::PolygonFlags_NORMAL;
+
+                    // next run
+                    pInnerSequence++;
+                    pInnerSequenceFlags++;
+                }
+
+                rValue <<= aSourcePolyPolygon;
+            }
+
+            bHasPathData = sal_True;
         }
     }
 
     if( pViewBox )
         delete pViewBox;
-
-    rValue <<= aPointSequence;
 
     bRet = bHasViewBox && bHasPathData;
 
