@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prltempl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:33 $
+ *  last change: $Author: cl $ $Date: 2000-11-15 13:31:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,28 +163,27 @@ __EXPORT SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg( SfxObjectShell* pDocS
         pOutSet = new SfxItemSet( rStyleBase.GetItemSet() );
         pOutSet->ClearItem();
 
-        USHORT nWhich = aInputSet.GetPool()->GetWhich(SID_ATTR_NUMBERING_RULE);
         const SfxPoolItem *pItem = NULL;
 
         // Fals in diesem Stylesheet kein Bullet Item ist, holen wir uns
         // das aus dem 'Outline 1' Stylesheet.
-        if( SFX_ITEM_SET != aInputSet.GetItemState(nWhich, FALSE, &pItem ))
+        if( SFX_ITEM_SET != aInputSet.GetItemState(EE_PARA_NUMBULLET, FALSE, &pItem ))
         {
             String aStyleName((SdResId(STR_PSEUDOSHEET_OUTLINE)));
             aStyleName.AppendAscii( RTL_CONSTASCII_STRINGPARAM( " 1" ) );
             SfxStyleSheetBase* pFirstStyleSheet = pSSPool->Find( aStyleName, SFX_STYLE_FAMILY_PSEUDO);
 
             if(pFirstStyleSheet)
-                if( SFX_ITEM_SET == pFirstStyleSheet->GetItemSet().GetItemState(nWhich, FALSE, &pItem) )
+                if( SFX_ITEM_SET == pFirstStyleSheet->GetItemSet().GetItemState(EE_PARA_NUMBULLET, FALSE, &pItem) )
                     aInputSet.Put( *pItem );
         }
 
         // Jetzt noch das mapping von 10er auf 9er und des lrspace.
-        if( SFX_ITEM_SET == aInputSet.GetItemState(nWhich, FALSE) )
+        if( SFX_ITEM_SET == aInputSet.GetItemState(EE_PARA_NUMBULLET, FALSE) )
         {
             SdBulletMapper::PreMapNumBulletForDialog( aInputSet );
 
-            SvxNumBulletItem* pBulletItem = (SvxNumBulletItem*)aInputSet.GetItem(nWhich);
+            SvxNumBulletItem* pBulletItem = (SvxNumBulletItem*)aInputSet.GetItem(EE_PARA_NUMBULLET);
             SvxNumRule* pRule = pBulletItem->GetNumRule();
             if(pRule)
             {
@@ -406,9 +405,7 @@ const SfxItemSet* SdPresLayoutTemplateDlg::GetOutputItemSet()
         pOutSet->Put( *SfxTabDialog::GetOutputItemSet() );
 
         const SvxNumBulletItem *pSvxNumBulletItem = NULL;
-        USHORT nWhich = pOutSet->GetPool()->GetWhich(SID_ATTR_NUMBERING_RULE);
-
-        if( SFX_ITEM_SET == pOutSet->GetItemState(nWhich, FALSE, (const SfxPoolItem**)&pSvxNumBulletItem ))
+        if( SFX_ITEM_SET == pOutSet->GetItemState(EE_PARA_NUMBULLET, FALSE, (const SfxPoolItem**)&pSvxNumBulletItem ))
             SdBulletMapper::MapFontsInNumRule( *pSvxNumBulletItem->GetNumRule(), *pOutSet );
 
         // Wenn das lrspace geaendert wurde muss die Aenderung in das
@@ -417,7 +414,7 @@ const SfxItemSet* SdPresLayoutTemplateDlg::GetOutputItemSet()
         {
             BOOL bNumBulletHasChanged = pSvxNumBulletItem != NULL;
             if( !bNumBulletHasChanged )
-                pSvxNumBulletItem = (SvxNumBulletItem*)aInputSet.GetItem(nWhich);
+                pSvxNumBulletItem = (SvxNumBulletItem*)aInputSet.GetItem(EE_PARA_NUMBULLET);
 
             if( pSvxNumBulletItem )
             {
@@ -436,7 +433,7 @@ const SfxItemSet* SdPresLayoutTemplateDlg::GetOutputItemSet()
             }
 
             if( !bNumBulletHasChanged && pSvxNumBulletItem )
-                pOutSet->Put( SvxNumBulletItem( *pSvxNumBulletItem->GetNumRule(), nWhich ) );
+                pOutSet->Put( SvxNumBulletItem( *pSvxNumBulletItem->GetNumRule(), EE_PARA_NUMBULLET ) );
         }
 
         SdBulletMapper::PostMapNumBulletForDialog( *pOutSet );
