@@ -2,9 +2,9 @@
  *
  *  $RCSfile: HDriver.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 09:40:32 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 14:55:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,12 +96,20 @@
 #ifndef _COM_SUN_STAR_FRAME_XDESKTOP_HPP_
 #include <com/sun/star/frame/XDesktop.hpp>
 #endif
+#ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
+#include <com/sun/star/lang/Locale.hpp>
+#endif
 #ifndef CONNECTIVITY_HSQLDB_TERMINATELISTENER_HXX
 #include "HTerminateListener.hxx"
 #endif
-
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
+#endif
 #ifndef _OSL_FILE_H_
 #include <osl/file.h>
+#endif
+#ifndef _OSL_PROCESS_H_
+#include <osl/process.h>
 #endif
 //........................................................................
 namespace connectivity
@@ -228,6 +236,8 @@ namespace connectivity
                         ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HY0000"))
                         ,1000,Any());
 
+                bool bIsNewDatabase = !xStorage->hasElements();
+
                 Sequence< PropertyValue > aConvertedProperties(8);
                 sal_Int32 nPos = 0;
                 aConvertedProperties[nPos].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("storage_key"));
@@ -267,6 +277,11 @@ namespace connectivity
                     StorageContainer::revokeStorage(sKey,NULL);
                     throw e;
                 }
+
+                // if the storage is completely empty, then we just created a new HSQLDB
+                // In this case, do some initializations.
+                if ( bIsNewDatabase && xOrig.is() )
+                    onConnectedNewDatabase( xOrig );
 
                 if ( xOrig.is() )
                 {
@@ -546,6 +561,232 @@ namespace connectivity
     void SAL_CALL ODriverDelegator::reverted( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException)
     {
     }
+    //------------------------------------------------------------------
+    namespace
+    {
+        //..............................................................
+        const sal_Char* lcl_getCollationForLocale( const ::rtl::OUString& _rLocaleString, bool _bAcceptCountryMismatch = false )
+        {
+            static const sal_Char* pTranslations[] =
+            {
+                "af-ZA", "Afrikaans",
+                "am-ET", "Amharic",
+                "ar", "Arabic",
+                "as-IN", "Assamese",
+                "az-AZ", "Azerbaijani_Latin",
+                "az-cyrillic", "Azerbaijani_Cyrillic",
+                "be-BY", "Belarusian",
+                "bg-BG", "Bulgarian",
+                "bn-IN", "Bengali",
+                "bo-CN", "Tibetan",
+                "bs-BA", "Bosnian",
+                "ca-ES", "Catalan",
+                "cs-CZ", "Czech",
+                "cy-GB", "Welsh",
+                "da-DK", "Danish",
+                "de-DE", "German",
+                "el-GR", "Greek",
+                "en-US", "Latin1_General",
+                "es-ES", "Spanish",
+                "et-EE", "Estonian",
+                "eu", "Basque",
+                "fi-FI", "Finnish",
+                "fr-FR", "French",
+                "gn-PY", "Guarani",
+                "gu-IN", "Gujarati",
+                "ha-NG", "Hausa",
+                "he-IL", "Hebrew",
+                "hi-IN", "Hindi",
+                "hr-HR", "Croatian",
+                "hu-HU", "Hungarian",
+                "hy-AM", "Armenian",
+                "id-ID", "Indonesian",
+                "ig-NG", "Igbo",
+                "is-IS", "Icelandic",
+                "it-IT", "Italian",
+                "iu-CA", "Inuktitut",
+                "ja-JP", "Japanese",
+                "ka-GE", "Georgian",
+                "kk-KZ", "Kazakh",
+                "km-KH", "Khmer",
+                "kn-IN", "Kannada",
+                "ko-KR", "Korean",
+                "kok-IN", "Konkani",
+                "ks", "Kashmiri",
+                "ky-KG", "Kirghiz",
+                "lo-LA", "Lao",
+                "lt-LT", "Lithuanian",
+                "lv-LV", "Latvian",
+                "mi-NZ", "Maori",
+                "mk-MK", "Macedonian",
+                "ml-IN", "Malayalam",
+                "mn-MN", "Mongolian",
+                "mni-IN", "Manipuri",
+                "mr-IN", "Marathi",
+                "ms-MY", "Malay",
+                "mt-MT", "Maltese",
+                "my-MM", "Burmese",
+                "nb-NO", "Danish_Norwegian",
+                "ne-NP", "Nepali",
+                "nl-NL", "Dutch",
+                "nn-NO", "Norwegian",
+                "or-IN", "Oriya",
+                "pa-IN", "Punjabi",
+                "pl-PL", "Polish",
+                "ps-AF", "Pashto",
+                "pt-PT", "Portuguese",
+                "ro-RO", "Romanian",
+                "ru-RU", "Russian",
+                "sa-IN", "Sanskrit",
+                "sd-IN", "Sindhi",
+                "sk-SK", "Slovak",
+                "sl-SI", "Slovenian",
+                "so-SO", "Somali",
+                "sq-AL", "Albanian",
+                "sr-YU", "Serbian_Cyrillic",
+                "sv-SE", "Swedish",
+                "sw-KE", "Swahili",
+                "ta-IN", "Tamil",
+                "te-IN", "Telugu",
+                "tg-TJ", "Tajik",
+                "th-TH", "Thai",
+                "tk-TM", "Turkmen",
+                "tn-BW", "Tswana",
+                "tr-TR", "Turkish",
+                "tt-RU", "Tatar",
+                "uk-UA", "Ukrainian",
+                "ur-PK", "Urdu",
+                "uz-UZ", "Uzbek_Latin",
+                "ven-ZA", "Venda",
+                "vi-VN", "Vietnamese",
+                "yo-NG", "Yoruba",
+                "zh-CN", "Chinese",
+                "zu-ZA", "Zulu",
+                NULL, NULL
+            };
+
+            ::rtl::OUString sLocaleString( _rLocaleString );
+            sal_Char nCompareTermination = 0;
+
+            if ( _bAcceptCountryMismatch )
+            {
+                // strip the country part from the compare string
+                sal_Int32 nCountrySep = sLocaleString.indexOf( '-' );
+                if ( nCountrySep > -1 )
+                    sLocaleString = sLocaleString.copy( 0, nCountrySep );
+
+                // the entries in the translation table are compared until the
+                // - character only, not until the terminating 0
+                nCompareTermination = '-';
+            }
+
+            const sal_Char** pLookup = pTranslations;
+            for ( ; *pLookup; ++pLookup )
+            {
+                sal_Int32 nCompareUntil = 0;
+                while ( (*pLookup)[ nCompareUntil ] != nCompareTermination )
+                    ++nCompareUntil;
+
+                if ( sLocaleString.equalsAsciiL( *pLookup, nCompareUntil ) )
+                    return *( pLookup + 1 );
+            }
+
+            if ( !_bAcceptCountryMismatch )
+                // second round, this time without matching the country
+                return lcl_getCollationForLocale( _rLocaleString, true );
+
+            OSL_ENSURE( false, "lcl_getCollationForLocale: unknown locale string, falling back to Latin1_General!" );
+            return "Latin1_General";
+        }
+
+        //..............................................................
+        ::rtl::OUString lcl_getSystemLocale( const Reference< XMultiServiceFactory >& _rxORB )
+        {
+            ::rtl::OUString sLocaleString = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "en-US" ) );
+            try
+            {
+                //.........................................................
+                Reference< XMultiServiceFactory > xConfigProvider(
+                    _rxORB->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.configuration.ConfigurationProvider" ) ),
+                    UNO_QUERY
+                );
+                OSL_ENSURE( xConfigProvider.is(), "lcl_getSystemLocale: could not create the config provider!" );
+
+                if ( !xConfigProvider.is() )
+                    return sLocaleString;
+
+                //.........................................................
+                // arguments for creating the config access
+                Sequence< Any > aArguments(2);
+                // the path to the node to open
+                ::rtl::OUString sNodePath = ::rtl::OUString::createFromAscii ("/org.openoffice.Setup/L10N" );
+                aArguments[0] <<= PropertyValue( ::rtl::OUString::createFromAscii( "nodepath"), 0,
+                    makeAny( sNodePath ), PropertyState_DIRECT_VALUE
+                );
+                // the depth: -1 means unlimited
+                aArguments[1] <<= PropertyValue(
+                    ::rtl::OUString::createFromAscii( "depth"), 0,
+                    makeAny( (sal_Int32)-1 ), PropertyState_DIRECT_VALUE
+                );
+
+                //.........................................................
+                // create the access
+                Reference< XPropertySet > xNode(
+                    xConfigProvider->createInstanceWithArguments(
+                        ::rtl::OUString::createFromAscii( "com.sun.star.configuration.ConfigurationAccess" ),
+                        aArguments ),
+                    UNO_QUERY );
+                OSL_ENSURE( xNode.is(), "lcl_getSystemLocale: invalid access returned (should throw an exception instead)!" );
+
+                //.........................................................
+                // ask for the system locale setting
+                if ( xNode.is() )
+                    xNode->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooSetupSystemLocale" ) ) ) >>= sLocaleString;
+            }
+            catch( const Exception& )
+            {
+                OSL_ENSURE( sal_False, "lcl_getSystemLocale: caught an exception!" );
+            }
+            if ( !sLocaleString.getLength() )
+            {
+                rtl_Locale* pProcessLocale = NULL;
+                osl_getProcessLocale( &pProcessLocale );
+
+                ::rtl::OUStringBuffer aProcLocale;
+                aProcLocale.append( pProcessLocale->Language->buffer, pProcessLocale->Language->length );
+                if ( pProcessLocale->Country->length )
+                {
+                    aProcLocale.appendAscii( "-" );
+                    aProcLocale.append( pProcessLocale->Country->buffer, pProcessLocale->Country->length );
+                }
+                sLocaleString = aProcLocale.makeStringAndClear();
+            }
+            return sLocaleString;
+        }
+    }
+    //------------------------------------------------------------------
+    void ODriverDelegator::onConnectedNewDatabase( const Reference< XConnection >& _rxConnection )
+    {
+        try
+        {
+            Reference< XStatement > xStatement = _rxConnection->createStatement();
+            OSL_ENSURE( xStatement.is(), "ODriverDelegator::onConnectedNewDatabase: could not create a statement!" );
+            if ( xStatement.is() )
+            {
+                ::rtl::OUStringBuffer aStatement;
+                aStatement.appendAscii( "SET DATABASE COLLATION \"" );
+                aStatement.appendAscii( lcl_getCollationForLocale( lcl_getSystemLocale( m_xFactory ) ) );
+                aStatement.appendAscii( "\"" );
+
+                xStatement->execute( aStatement.makeStringAndClear() );
+            }
+        }
+        catch( const Exception& e )
+        {
+            OSL_ENSURE( sal_False, "ODriverDelegator::onConnectedNewDatabase: caught an exception!" );
+        }
+    }
+
     //------------------------------------------------------------------
     //------------------------------------------------------------------
 //........................................................................
