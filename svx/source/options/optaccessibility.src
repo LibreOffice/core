@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optaccessibility.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:42:13 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:23:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,7 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text[ czech ] = "Různé volby";
         Text[ hebrew ] = "Sonstige Optionen";
         Text[ hindi ] = "मिला जुला विकल्प";
+        Text[ slovak ] = "Rôzne nastavenia";
     };
     CheckBox CB_ACCESSIBILITY_TOOL
     {
@@ -119,7 +120,7 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text[ finnish ] = "Support ~assistive technology tools (program restart required)";
         Text[ italian ] = "Supporto per facilitare l'accesso da parte di persone disabili (riavviare il programma)";
         Text[ danish ] = "Support ~assistive technology tools (program restart required)";
-        Text[ swedish ] = "St�d f�r hj�lpprogram f�r funktionsnedsatta personer (program m�ste startas om)";
+        Text[ swedish ] = "St�d f�r hj�lp~program f�r anv�ndare med funktionshinder (program m�ste startas om)";
         Text[ polish ] = "Support ~assistive technology tools (program restart required)";
         Text[ portuguese_brazilian ] = "Support ~assistive technology tools (program restart required)";
         Text[ japanese ] = "ユーザー補助機能の支援（プログラム再起動が必要）";
@@ -133,6 +134,7 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text[ czech ] = "Podpora pro asistenční nástroje (vyžaduje restart programu)";
         Text[ hebrew ] = "‮תמיכה בכלי טכנולוגיה מסייעים (דורשת אתחול התוכנית)‬";
         Text[ hindi ] = "Support ~assistive technology tools (program restart required)";
+        Text[ slovak ] = "Podpora nástrojov ~assistive technology (potrebný reštart programu)";
     };
     CheckBox CB_TEXTSELECTION
     {
@@ -164,6 +166,7 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text[ czech ] = "Použít kurzor výběru textu pro dokumenty pouze pro čtení";
         Text[ hebrew ] = "‮להשתמש בסמן בחירת טקסט גם במסמכים לקריאה בלבד‬";
         Text[ hindi ] = "Use te~xt selection cursor in read-only text documents";
+        Text[ slovak ] = "Použiť kurzor výberu te~xtu v dokumentoch len na čítanie.";
     };
     CheckBox CB_SYSTEM_FONT
     {
@@ -196,6 +199,7 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text[ czech ] = "Použít písmo systému pro uživatelské rozhraní";
         Text[ hebrew ] = "‮להשתמש בגופן מערכת בממשק המשתמש‬";
         Text[ hindi ] = "Use system ~font for user interface";
+        Text[ slovak ] = "Použiť systémové ~písmo pre užívateľské rozhranie";
     };
     CheckBox CB_ANIMATED_GRAPHICS
     {
@@ -228,6 +232,7 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text[ czech ] = "Povolit animované obrázky";
         Text[ hebrew ] = "‮לאפשר אנימציה גרפית‬";
         Text[ hindi ] = "Allow animated ~graphics";
+        Text[ slovak ] = "Povoliť animované o~brázky";
     };
     CheckBox CB_ANIMATED_TEXTS
     {
@@ -260,6 +265,7 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text[ czech ] = "Povolit animovaný text";
         Text[ hebrew ] = "‮לאפשר אנימציה טקסטואלית‬";
         Text[ hindi ] = "Allow animated ~text";
+        Text[ slovak ] = "Povoliť animovaný ~text";
     };
     CheckBox CB_TIPHELP
     {
@@ -292,6 +298,7 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text[ czech ] = "Tipy nápovědy zmizí po ";
         Text[ hebrew ] = "‮כתוביות עזרה נעלמות אחרי‬";
         Text[ hindi ] = "~Help tips disappear after ";
+        Text[ slovak ] = "~Tipy Pomocníka zmiznú po  ";
     };
     NumericField NF_TIPHELP
     {
@@ -336,6 +343,7 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text[ czech ] = "sekundách";
         Text[ hebrew ] = "‮שניות‬";
         Text[ hindi ] = "seconds";
+        Text[ slovak ] = "sekundách";
     };
     FixedLine FL_HC_OPTIONS
     {
@@ -367,6 +375,7 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text[ czech ] = "Parametry pro zobrazení s vysokým kontrastem";
         Text[ hebrew ] = "Optionen für die Kontrastdarstellung";
         Text[ hindi ] = "Options for high contrast appearance";
+        Text[ slovak ] = "Nastavenia pre vysoký kontrast";
     };
     CheckBox CB_AUTO_DETECT_HC
     {
@@ -399,6 +408,7 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text[ czech ] = "Automaticky detekovat, zda je v operačním systému aktivní vysokokontrastní zobrazení";
         Text[ hebrew ] = "~Kontrastdarstellungsmodus des Betriebssystems automatisch erkennen";
         Text[ hindi ] = "Automatically ~detect high contrast mode of operating system";
+        Text[ slovak ] = "Aut~omatické zistenie vysoko kontrastného módu operačného systému";
     };
     CheckBox CB_AUTOMATIC_FONT_COLOR
     {
@@ -431,6 +441,7 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text[ portuguese_brazilian ] = "Use automatic font ~color for screen display";
         Text[ thai ] = "Use automatic font ~color for screen display";
         Text[ hindi ] = "Use automatic font ~color for screen display";
+        Text[ slovak ] = "Použiť automati~ckú farbu písma pre zobrazenie na obrazovke";
     };
     CheckBox CB_PAGE_PREVIEWS
     {
@@ -463,8 +474,11 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
         Text[ portuguese_brazilian ] = "~Use system colors for page previews";
         Text[ thai ] = "~Use system colors for page previews";
         Text[ hindi ] = "~Use system colors for page previews";
+        Text[ slovak ] = "Po~užiť systémové farby pre náhľady stránok";
     };
 };
+
+
 
 
 
