@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerfactory.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-01 13:53:17 $
+ *  last change: $Author: dg $ $Date: 2000-12-03 11:52:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -259,8 +259,6 @@ namespace configmgr
             const Sequence< OUString > & rServiceNames
         )
     {
-        OSL_ENSHURE(0 == rComponentName.compareToAscii(OConfigurationProvider::staticServiceInfo.implementationName),
-            "configmgr::createProviderFactory : invalid argument !");
         return new OProviderFactory(rServiceManager, pCreateFunction);
     }
 
@@ -271,6 +269,9 @@ namespace configmgr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2000/12/01 13:53:17  fs
+ *  initial checkin - afctory for configuration provider(s)
+ *
  *
  *  Revision 1.0 30.11.00 19:05:35  fs
  ************************************************************************/

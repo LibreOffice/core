@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configunoreg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-01 14:05:49 $
+ *  last change: $Author: dg $ $Date: 2000-12-03 11:52:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -276,7 +276,7 @@ extern "C" void* SAL_CALL component_getFactory(
         aReq.CreateProvider(
             &configmgr::OAdminProvider::staticServiceInfo,
             &configmgr::instantiateAdminProvider,
-            ::cppu::createSingleFactory)
+            ::configmgr::createProviderFactory)
         ||
         aReq.CreateProvider(
             configmgr::getConfigurationRegistryServiceInfo(),
