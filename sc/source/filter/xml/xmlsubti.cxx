@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsubti.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:16 $
+ *  last change: $Author: sab $ $Date: 2000-11-06 17:45:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,10 @@
 #include "global.hxx"
 #include "xmlstyli.hxx"
 #include "xmlimprt.hxx"
+#include "document.hxx"
+#ifndef _SC_XMLCONVERTER_HXX
+#include "XMLConverter.hxx"
+#endif
 
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/nmspmap.hxx>
@@ -236,7 +240,21 @@ void ScMyTables::NewSheet(const rtl::OUString& sTableName, const rtl::OUString& 
         {
             if (nCurrentSheet > 0)
             {
-                xSheets->insertNewByName(sTableName, nCurrentSheet);
+                try
+                {
+                    xSheets->insertNewByName(sTableName, nCurrentSheet);
+                }
+                catch ( uno::RuntimeException& )
+                {
+                    ScDocument *pDoc = ScXMLConverter::GetScDocument(rImport.GetModel());
+                    if (pDoc)
+                    {
+                        String sTabName = String::CreateFromAscii("Table");
+                        pDoc->CreateValidTabName(sTabName);
+                        rtl::OUString sOUTabName(sTabName);
+                        xSheets->insertNewByName(sOUTabName, nCurrentSheet);
+                    }
+                }
             }
             uno::Reference <container::XIndexAccess> xIndex( xSheets, uno::UNO_QUERY );
             if ( xIndex.is() )
@@ -249,7 +267,21 @@ void ScMyTables::NewSheet(const rtl::OUString& sTableName, const rtl::OUString& 
                     {
                         uno::Reference < container::XNamed > xNamed(xSheet, uno::UNO_QUERY );
                         if ( xNamed.is() )
-                            xNamed->setName(sTableName);
+                            try
+                            {
+                                xNamed->setName(sTableName);
+                            }
+                            catch ( uno::RuntimeException& )
+                            {
+                                ScDocument *pDoc = ScXMLConverter::GetScDocument(rImport.GetModel());
+                                if (pDoc)
+                                {
+                                    String sTabName = String::CreateFromAscii("Table");
+                                    pDoc->CreateValidTabName(sTabName);
+                                    rtl::OUString sOUTabName(sTabName);
+                                    xNamed->setName(sOUTabName);
+                                }
+                            }
                     }
                     uno::Reference <beans::XPropertySet> xProperties(xSheet, uno::UNO_QUERY);
                     if (xProperties.is())
