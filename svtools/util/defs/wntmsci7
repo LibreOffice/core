@@ -9008,3 +9008,12 @@ WideCharListToMultiByteList
 ?ResetDefaultSystemCurrency@SvNumberFormatter@@QAEXXZ
 ?SetDefaultSystemCurrency@SvNumberFormatter@@SAXABVString@@G@Z
 lpfnGetWindowTextW
+??0?$Reference@VXPropertiesChangeListener@beans@star@sun@com@@@uno@star@sun@com@@QAE@ABV01234@@Z
+??1?$Reference@VXProxySettings@system@star@sun@com@@@uno@star@sun@com@@QAE@XZ
+??1Entry@Impl@SvtInetOptions@@QAE@XZ
+??1Impl@SvtInetOptions@@EAE@XZ
+??1Listener@Impl@SvtInetOptions@@QAE@XZ
+?__query@?$Reference@VXProxySettings@system@star@sun@com@@@uno@star@sun@com@@CAPAVXProxySettings@system@345@PAVXInterface@2345@@Z
+?makeAny@uno@star@sun@com@@YA?AVAny@1234@ABJ@Z
+?s_pType_com_sun_star_system_XProxySettings@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXProxySettings@system@star@sun@com@@@3456@@Z@4PAU_typelib_TypeDescriptionReference@@A
+?set@?$Reference@VXProxySettings@system@star@sun@com@@@uno@star@sun@com@@QAAEPAVXProxySettings@system@345@@Z
