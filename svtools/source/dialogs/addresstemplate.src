@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addresstemplate.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-12 20:11:37 $
+ *  last change: $Author: obo $ $Date: 2001-01-19 20:13:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,7 +157,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
         Text[ dutch ] = "~Beheren ...";
         Text[ french ] = "~Gιrer ...";
         Text[ spanish ] = "~Administrar ...";
-        Text[ italian ] = "~Amministrare ...";
+        Text[ italian ] = "~Amministra...";
         Text[ danish ] = "~Administrate ...";
         Text[ swedish ] = "~Administrera ...";
         Text[ polish ] = "ZarzΉdzaj ...";
@@ -596,7 +596,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
         Text = "Anrede";
         Text [ english ] = "Addr. form";
         Text [ english_us ] = "Addr. Form";
-        Text[ portuguese ] = "Addr. form";
+        Text[ portuguese ] = "Vocativo";
     Text[ russian ] = "Ξαπΰωενθε";
     Text[ greek ] = "Προσφώνηση";
     Text[ dutch ] = "Aanhef";
@@ -642,7 +642,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
         Text = "Anrede";
         Text [ english ] = "Salutation";
         Text [ english_us ] = "Salutation";
-        Text[ portuguese ] = "Salutation";
+        Text[ portuguese ] = "Vocativo";
     Text[ russian ] = "Ξαπΰωενθε";
     Text[ greek ] = "Προσφώνηση";
     Text[ dutch ] = "Aanhef";
@@ -665,7 +665,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
         Text = "Telefon priv.";
         Text [ english ] = "Telephon Home";
         Text [ english_us ] = "Tel: Home";
-        Text[ portuguese ] = "Telephon Home";
+        Text[ portuguese ] = "Telefone (priv.)";
     Text[ russian ] = "Òελετξν (δξμ.)";
     Text[ greek ] = "Τηλέφωνο (Οικία)";
     Text[ dutch ] = "Telefoon privι";
@@ -688,7 +688,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
         Text = "Telefon gesch.";
         Text [ english ] = "Telephon Work";
         Text [ english_us ] = "Tel: Work";
-        Text[ portuguese ] = "Telephon Work";
+        Text[ portuguese ] = "Telefone (emprego)";
     Text[ russian ] = "Òελετξν (πΰα.)";
     Text[ greek ] = "Τηλέφωνο (Εργασία)";
     Text[ dutch ] = "Telefoon bedrijf";
@@ -711,7 +711,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
         Text = "FAX";
         Text [ english ] = "FAX";
         Text [ english_us ] = "FAX";
-        Text[ portuguese ] = "FAX";
+        Text[ portuguese ] = "Fax";
     Text[ russian ] = "ΤΐΚΡ";
     Text[ greek ] = "FAX";
     Text[ dutch ] = "FAX";
@@ -734,7 +734,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
         Text = "E-Mail";
         Text [ english ] = "E-Mail";
         Text [ english_us ] = "E-mail";
-        Text[ portuguese ] = "E-Mail";
+        Text[ portuguese ] = "E-mail";
     Text[ russian ] = "ΐδπερ ύλ. οξχςϋ";
     Text[ greek ] = "E-Mail";
     Text[ dutch ] = "E-mail";
@@ -780,7 +780,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
         Text = "Notiz";
         Text [ english ] = "Note";
         Text [ english_us ] = "Note";
-        Text[ portuguese ] = "Note";
+        Text[ portuguese ] = "Anotaηυes";
     Text[ russian ] = "Οπθμεχΰνθε";
     Text[ greek ] = "Σημείωση";
     Text[ dutch ] = "Aantekening";
@@ -803,7 +803,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
         Text = "Benutzer 1";
         Text [ english ] = "User 1";
         Text [ english_us ] = "User 1";
-        Text[ portuguese ] = "User 1";
+        Text[ portuguese ] = "Utilizador 1";
     Text[ russian ] = "Οξλόηξβΰςελό 1";
     Text[ greek ] = "Χρήστης 1";
     Text[ dutch ] = "Gebruiker 1";
@@ -826,7 +826,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
         Text = "Benutzer 2";
         Text [ english ] = "User 2";
         Text [ english_us ] = "User 2";
-        Text[ portuguese ] = "User 2";
+        Text[ portuguese ] = "Utilizador 2";
     Text[ russian ] = "Οξλόηξβΰςελό 2";
     Text[ greek ] = "Χρήστης 2";
     Text[ dutch ] = "Gebruiker 2";
@@ -849,7 +849,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
         Text = "Benutzer 3";
         Text [ english ] = "User 3";
         Text [ english_us ] = "User 3";
-        Text[ portuguese ] = "User 3";
+        Text[ portuguese ] = "Utilizador 3";
     Text[ russian ] = "Οξλόηξβΰςελό 3";
     Text[ greek ] = "Χρήστης 3";
     Text[ dutch ] = "Gebruiker 3";
@@ -872,7 +872,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
         Text = "Benutzer 4";
         Text [ english ] = "User 4";
         Text [ english_us ] = "User 4";
-        Text[ portuguese ] = "User 4";
+        Text[ portuguese ] = "Utilizador 4";
     Text[ russian ] = "Οξλόηξβΰςελό 4";
     Text[ greek ] = "Χρήστης 4";
     Text[ dutch ] = "Gebruiker 4";
@@ -920,7 +920,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
         Text [ english ] = "State";
         Text [ english_us ] = "State";
         Text[ language_user1 ] = "der punkt in \"German (49) Bund.land \" ist wahrscheinlich ein \"es\" in punktgr?se -100 (j.). In Holland gibt es keine Bundeslδnder. Was machen wir mit der άbersetzung?";
-    Text[ portuguese ] = "State";
+    Text[ portuguese ] = "Estado";
     Text[ russian ] = "Ξαλΰρςό";
     Text[ greek ] = "Νομός";
     Text[ dutch ] = "Provincie/Regio";
@@ -943,7 +943,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
         Text = "Telefon Bόro";
         Text [ english ] = "Telephon Office";
         Text [ english_us ] = "Tel: Office";
-        Text[ portuguese ] = "Telephon Office";
+        Text[ portuguese ] = "Telefone (emprego)";
     Text[ russian ] = "Òελετξν (πΰα.)";
     Text[ greek ] = "Τηλέφωνο (Γραφείο)";
     Text[ dutch ] = "Telefoon kantoor";
@@ -989,7 +989,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
         Text = "Handy";
         Text [ english ] = "Mobile";
         Text [ english_us ] = "Mobile";
-        Text[ portuguese ] = "Mobile";
+        Text[ portuguese ] = "Telemσvel";
     Text[ russian ] = "Μξαθλόνϋι";
     Text[ greek ] = "Κινητό";
     Text[ dutch ] = "Mobile";
@@ -1012,7 +1012,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
         Text = "Telefon andere";
         Text [ english ] = "Telephon other";
         Text [ english_us ] = "Tel: Other";
-        Text[ portuguese ] = "Telephon other";
+        Text[ portuguese ] = "Telefone (outros)";
     Text[ russian ] = "Òελετξν (δπσγξι)";
     Text[ greek ] = "Τηλέφωνο (Διάφορα)";
     Text[ dutch ] = "Telefoon andere";
@@ -1035,7 +1035,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
         Text = "Kalender";
         Text [ english ] = "Calendar";
         Text [ english_us ] = "Calendar";
-        Text[ portuguese ] = "Calendar";
+        Text[ portuguese ] = "Agenda";
     Text[ russian ] = "Κΰλενδΰπό";
     Text[ greek ] = "Ημερολόγιο";
     Text[ dutch ] = "Agenda";
@@ -1058,7 +1058,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
         Text = "Einladen";
         Text [ english ] = "Invite";
         Text [ english_us ] = "Invite";
-        Text[ portuguese ] = "Invite";
+        Text[ portuguese ] = "Convocar";
     Text[ russian ] = "Οπθγλΰρθςό";
     Text[ greek ] = "Πρόσκληση";
     Text[ dutch ] = "Uitnodigen";
