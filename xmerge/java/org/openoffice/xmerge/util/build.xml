@@ -140,6 +140,7 @@
             <include name="${package}/Debug.java"/>
             <include name="${package}/EndianConverter.java"/>
             <include name="${package}/OfficeUtil.java"/>
+            <include name="${package}/ActiveSyncDriver.java"/>
         </javac>
         <copy todir="${build.class}/${package}">
             <fileset dir=".">
