@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: mba $ $Date: 2002-09-04 08:50:42 $
+ *  last change: $Author: mba $ $Date: 2002-09-20 16:02:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,8 +129,9 @@
 #include "topfrm.hxx"
 #include "workwin.hxx"
 #include "fsetvwsh.hxx"
-#include <sfxuno.hxx>
-#include <msgpool.hxx>
+#include "sfxuno.hxx"
+#include "msgpool.hxx"
+#include "objshimp.hxx"
 
 #ifdef DBG_UTIL
 #include "frmhtmlw.hxx"
@@ -286,7 +287,7 @@ sal_Bool SfxFrame::DoClose()
         try
         {
             Reference< XCloseable > xCloseable  ( pImp->xFrame, UNO_QUERY );
-            if (xCloseable.is())
+            if ( !GetCurrentDocument()->Get_Impl()->bDisposing && xCloseable.is())
                 xCloseable->close(sal_True);
             else if ( pImp->xFrame.is() )
                 pImp->xFrame->dispose();

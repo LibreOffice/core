@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-19 15:52:12 $
+ *  last change: $Author: mba $ $Date: 2002-09-20 16:02:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -655,6 +655,7 @@ void SAL_CALL SfxBaseModel::dispose() throw(::com::sun::star::uno::RuntimeExcept
         // Bei dispose keine Speichern-R"uckfrage
         if ( pShell->IsEnableSetModified() && !pShell->Get_Impl()->bClosing )
             pShell->SetModified( sal_False );
+        pShell->Get_Impl()->bDisposing = TRUE;
         SfxObjectShellClose_Impl( 0, (void*) pShell );
     }
 

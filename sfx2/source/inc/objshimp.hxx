@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objshimp.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mav $ $Date: 2002-06-21 08:54:21 $
+ *  last change: $Author: mba $ $Date: 2002-09-20 16:02:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,6 +166,7 @@ struct SfxObjectShell_Impl
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >             xModel;
     sal_uInt16              nStyleFilter;
     sal_Int16                nMacroMode;
+    sal_Bool                bDisposing;
 
     SfxObjectShell_Impl() :
         pAccMgr(0),
@@ -225,6 +226,7 @@ struct SfxObjectShell_Impl
         bLoadingWindows( sal_False )
         , nStyleFilter( 0 )
         , nMacroMode( -1 )
+        , bDisposing( sal_False )
     {}
     ~SfxObjectShell_Impl();
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objxtor.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-10 16:27:51 $
+ *  last change: $Author: mba $ $Date: 2002-09-20 16:02:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -332,7 +332,7 @@ sal_Bool SfxObjectShell::Close()
     if ( !pImp->bClosing )
     {
         // falls noch ein Progress l"auft, nicht schlie\sen
-        if ( GetProgress() )
+        if ( !pImp->bDisposing && GetProgress() )
             return sal_False;
 
         // aus Document-Liste austragen
