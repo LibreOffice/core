@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-30 16:22:17 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 16:22:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1043,7 +1043,6 @@ static void ImplGetLogFontFromFontSelect( HDC hDC,
 
 USHORT WinSalGraphics::SetFont( ImplFontSelectData* pFont, int nFallbackLevel )
 {
-    DBG_ASSERT( pFont->mpFontEntry, "WinSalGraphics mpFontEntry==NULL");
     DBG_ASSERT( pFont->mpFontData, "WinSalGraphics mpFontData==NULL");
     mpWinFontEntry[ nFallbackLevel ] = reinterpret_cast<ImplWinFontEntry*>( pFont->mpFontEntry );
     mpWinFontData[ nFallbackLevel ] = reinterpret_cast<ImplWinFontData*>( pFont->mpFontData );
