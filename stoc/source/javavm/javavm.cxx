@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javavm.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: vg $ $Date: 2003-10-09 10:23:47 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 19:27:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1104,7 +1104,7 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
                             static_cast<
                                 css::java::JavaNotConfiguredException * >(0))))
                 {
-#if defined LINUX || defined FREEBSD
+#if defined LINUX || defined FREEBSD || defined NETBSD
                     // Because of LD_LIBRARY_PATH, even javaldx --use-links does
                     // not work sometimes:
                     m_bDontCreateJvm = true;
@@ -1116,7 +1116,7 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
                                      css::java::MissingJavaRuntimeException * >(
                                          0))))
                 {
-#if defined LINUX || defined FREEBSD
+#if defined LINUX || defined FREEBSD || defined NETBSD
                     // Because of LD_LIBRARY_PATH, even javaldx --use-links does
                     // not work sometimes:
                     m_bDontCreateJvm = true;
@@ -1604,7 +1604,7 @@ JavaVM * JavaVirtualMachine::createJavaVM(stoc_javavm::JVM const & jvm,
     // On linux we load jvm with RTLD_GLOBAL. This is necessary for debugging, because
     // libjdwp.so need a symbol (fork1) from libjvm which it only gets if the jvm is loaded
     // witd RTLD_GLOBAL. On Solaris libjdwp.so is correctly linked with libjvm.so
-#if defined(LINUX)|| defined(FREEBSD)
+#if defined(LINUX)|| defined(FREEBSD) || defined NETBSD
     if(!m_aJavaLib.load(jvm.getRuntimeLib(), SAL_LOADMODULE_GLOBAL | SAL_LOADMODULE_NOW))
 #else
     if(!m_aJavaLib.load(jvm.getRuntimeLib()))
