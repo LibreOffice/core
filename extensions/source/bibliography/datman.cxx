@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datman.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-19 11:54:03 $
+ *  last change: $Author: os $ $Date: 2001-05-04 13:57:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1216,6 +1216,7 @@ void BibDataManager::setActiveDataSource(const rtl::OUString& rURL)
 {
     //unloadDatabase();
     rtl::OUString uTable;
+    rtl::OUString sTmp(aDataSourceURL);
     aDataSourceURL = rURL;
     Reference< XPropertySet >  aPropertySet(xForm, UNO_QUERY );
     if(aPropertySet.is())
@@ -1224,6 +1225,11 @@ void BibDataManager::setActiveDataSource(const rtl::OUString& rURL)
         aPropertySet->getPropertyValue(C2U("ActiveConnection")) >>= xOldConnection;
 
         Reference< sdbc::XConnection >  xConnection = getConnection(rURL);
+        if(!xConnection.is())
+        {
+            aDataSourceURL = sTmp;
+            return;
+        }
         Any aVal; aVal <<= xConnection;
         aPropertySet->setPropertyValue(C2U("ActiveConnection"), aVal);
         Reference< sdb::XSQLQueryComposerFactory >  xFactory(xConnection, UNO_QUERY);
