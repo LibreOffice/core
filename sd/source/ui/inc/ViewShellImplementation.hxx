@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ViewShellImplementation.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 16:35:23 $
+ *  last change: $Author: obo $ $Date: 2005-01-25 15:16:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,15 @@ public:
         SfxRequest& rRequest,
         SdPage* pCurrentPage,
         PageKind ePageKind);
+
+    /** Assign the given layout to the given page.  This method is at the
+        moment merely a front end for ProcessModifyPageSlot.
+        @param pPage
+            If a NULL pointer is given then this call is ignored.
+    */
+    void AssignLayout (
+        SdPage* pPage,
+        AutoLayout aLayout);
 
     /** Determine the view id of the view shell.  This corresponds to the
         view id stored in the SfxViewFrame class.
