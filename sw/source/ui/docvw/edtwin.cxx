@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:49:22 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 09:58:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -341,6 +341,9 @@
 #include <numrule.hxx>
 #include <pagedesc.hxx>
 #include <svtools/ruler.hxx> // #i23726#
+#ifndef _SWFORMATCLIPBOARD_HXX
+#include "formatclipboard.hxx"
+#endif
 
 //JP 11.10.2001: enable test code for bug fix 91313
 #if !defined( PRODUCT ) && (OSL_DEBUG_LEVEL > 1)
@@ -491,8 +494,14 @@ void SwEditWin::UpdatePointer(const Point &rLPt, USHORT nModifier )
             SwRect aRect;
             SwRect* pRect = &aRect;
             const SwFrmFmt* pFmt = 0;
-            if(!pApplyTempl->nColor &&
-                    pApplyTempl->eType == SFX_STYLE_FAMILY_FRAME &&
+
+            bool bFrameIsValidTarget = false;
+            if( pApplyTempl->pFormatClipboard )
+                bFrameIsValidTarget = pApplyTempl->pFormatClipboard->HasContentForThisType( SwWrtShell::SEL_FRM );
+            else if( !pApplyTempl->nColor )
+                bFrameIsValidTarget = ( pApplyTempl->eType == SFX_STYLE_FAMILY_FRAME );
+
+            if( bFrameIsValidTarget &&
                         0 !=(pFmt = rSh.GetFmtFromObj( rLPt, &pRect )) &&
                         PTR_CAST(SwFlyFrmFmt, pFmt))
             {
@@ -1175,6 +1184,14 @@ void SwEditWin::ChangeDrawing( BYTE nDir )
 
 void SwEditWin::KeyInput(const KeyEvent &rKEvt)
 {
+    if( rKEvt.GetKeyCode().GetCode() == KEY_ESCAPE &&
+        pApplyTempl && pApplyTempl->pFormatClipboard )
+    {
+        pApplyTempl->pFormatClipboard->Erase();
+        SetApplyTemplate(SwApplyTemplate());
+        rView.GetViewFrame()->GetBindings().Invalidate(SID_FORMATPAINTBRUSH);
+    }
+
     SfxObjectShell *pObjSh = (SfxObjectShell*)rView.GetViewFrame()->GetObjectShell();
     if ( bLockInput || pObjSh && pObjSh->GetProgress() )
         // Wenn die Rechenleiste aktiv ist oder
@@ -2348,9 +2365,20 @@ void SwEditWin::RstMBDownFlags()
 
 
 
-void SwEditWin::MouseButtonDown(const MouseEvent& rMEvt)
+void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
 {
+    MouseEvent rMEvt(_rMEvt);
+
     GrabFocus();
+
+    //ignore key modifiers for format paintbrush
+    {
+        BOOL bExecFormatPaintbrush = pApplyTempl && pApplyTempl->pFormatClipboard
+                                &&  pApplyTempl->pFormatClipboard->HasContent();
+        if( bExecFormatPaintbrush )
+            rMEvt = MouseEvent( _rMEvt.GetPosPixel(), _rMEvt.GetClicks(),
+                                    _rMEvt.GetMode(), _rMEvt.GetButtons() );
+    }
 
     bWasShdwCrsr = 0 != pShadCrsr;
     if( bWasShdwCrsr )
@@ -3055,8 +3083,19 @@ void SwEditWin::MouseButtonDown(const MouseEvent& rMEvt)
  --------------------------------------------------------------------*/
 
 
-void SwEditWin::MouseMove(const MouseEvent& rMEvt)
+void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
 {
+    MouseEvent rMEvt(_rMEvt);
+
+    //ignore key modifiers for format paintbrush
+    {
+        BOOL bExecFormatPaintbrush = pApplyTempl && pApplyTempl->pFormatClipboard
+                                &&  pApplyTempl->pFormatClipboard->HasContent();
+        if( bExecFormatPaintbrush )
+            rMEvt = MouseEvent( _rMEvt.GetPosPixel(), _rMEvt.GetClicks(),
+                                    _rMEvt.GetMode(), _rMEvt.GetButtons() );
+    }
+
     // solange eine Action laeuft sollte das MouseMove abgeklemmt sein
     // Ansonsten gibt es den Bug 40102
     SwWrtShell &rSh = rView.GetWrtShell();
@@ -3825,7 +3864,31 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
     if( pApplyTempl )
     {
         int eSelection = rSh.GetSelectionType();
-        if( pApplyTempl->nColor )
+        SwFormatClipboard* pFormatClipboard = pApplyTempl->pFormatClipboard;
+        if( pFormatClipboard )//apply format paintbrush
+        {
+            //get some parameters
+            SwWrtShell& rWrtShell = rView.GetWrtShell();
+            SfxStyleSheetBasePool* pPool=0;
+            bool bNoCharacterFormats = false;
+            bool bNoParagraphFormats = false;
+            {
+                SwDocShell* pDocSh = rView.GetDocShell();
+                if(pDocSh)
+                    pPool = pDocSh->GetStyleSheetPool();
+                if( (rMEvt.GetModifier()&KEY_MOD1) && (rMEvt.GetModifier()&KEY_SHIFT) )
+                    bNoCharacterFormats = true;
+                else if( rMEvt.GetModifier() & KEY_MOD1 )
+                    bNoParagraphFormats = true;
+            }
+            //execute paste
+            pFormatClipboard->Paste( rWrtShell, pPool, bNoCharacterFormats, bNoParagraphFormats );
+
+            //if the clipboard is empty after paste remove the ApplyTemplate
+            if(!pFormatClipboard->HasContent())
+                SetApplyTemplate(SwApplyTemplate());
+        }
+        else if( pApplyTempl->nColor )
         {
             USHORT nId = 0;
             switch( pApplyTempl->nColor )
@@ -3969,7 +4032,15 @@ void SwEditWin::SetApplyTemplate(const SwApplyTemplate &rTempl)
     DELETEZ(pApplyTempl);
     SwWrtShell &rSh = rView.GetWrtShell();
 
-    if(rTempl.nColor)
+    if(rTempl.pFormatClipboard)
+    {
+        pApplyTempl = new SwApplyTemplate( rTempl );
+              SetPointer( POINTER_FILL );//@todo #i20119# maybe better a new brush pointer here in future
+              rSh.NoEdit( FALSE );
+              bIdle = rSh.GetViewOptions()->IsIdle();
+              ((SwViewOption *)rSh.GetViewOptions())->SetIdle( FALSE );
+    }
+    else if(rTempl.nColor)
     {
         pApplyTempl = new SwApplyTemplate( rTempl );
         SetPointer( POINTER_FILL );
