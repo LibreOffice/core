@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.src,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-13 08:39:17 $
+ *  last change: $Author: kz $ $Date: 2002-09-13 14:32:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2439,7 +2439,27 @@ String RID_SVXSTR_SECURITY_ADDPATH
 {
     Text = "Das Verzeichnis in die Liste der sicheren Pfade aufnehmen: " ;
     Text [ENGLISH] = "Add this directory  to the list of secure paths: " ;
-    Text[ english_us ] = "Add this directory  to the list of secure paths: " ;
+    Text[ english_us ] = "Add this directory to the list of secure paths: " ;
+    Text[ portuguese ] = "Add this directory  to the list of secure paths: ";
+    Text[ russian ] = "Add this directory  to the list of secure paths: ";
+    Text[ greek ] = "Add this directory  to the list of secure paths: ";
+    Text[ dutch ] = "Add this directory  to the list of secure paths: ";
+    Text[ french ] = "Add this directory  to the list of secure paths: ";
+    Text[ spanish ] = "A�ada este directorio a la lista de rutas seguras: ";
+    Text[ finnish ] = "Add this directory  to the list of secure paths: ";
+    Text[ italian ] = "Add this directory  to the list of secure paths: ";
+    Text[ danish ] = "Add this directory  to the list of secure paths: ";
+    Text[ swedish ] = "Add this directory  to the list of secure paths: ";
+    Text[ polish ] = "Add this directory  to the list of secure paths: ";
+    Text[ portuguese_brazilian ] = "Add this directory  to the list of secure paths: ";
+    Text[ japanese ] = "このディレクトリをセキュリティパスのリストに追加する。 ";
+    Text[ korean ] = "이 디렉토리를 안전 경로 목록에 추가: ";
+    Text[ chinese_simplified ] = "将这个目录加入安全路径的列单：";
+    Text[ chinese_traditional ] = "將這個目錄加入安全路徑的清單：";
+    Text[ turkish ] = "Add this directory  to the list of secure paths: ";
+    Text[ arabic ] = "Add this directory  to the list of secure paths: ";
+    Text[ catalan ] = "Add this directory  to the list of secure paths: ";
+    Text[ thai ] = "Add this directory  to the list of secure paths: ";
 };
 
 // ******************************************************************* EOF
