@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshel.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 13:14:18 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-28 13:36:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -422,10 +422,18 @@ void ViewShell::Construct(void)
     GetObjectBarManager().EnableObjectBarSwitching();
 }
 
+
+
+
 void ViewShell::Init (void)
 {
     SfxViewShell* pViewShell = GetViewShell();
     OSL_ASSERT (pViewShell!=NULL);
+
+    if (mpImpl->mbIsMainViewShell)
+        GetViewShellBase().UpdateController();
+
+    mpImpl->mbIsInitialized = true;
 }
 
 
@@ -434,6 +442,8 @@ void ViewShell::Init (void)
 void ViewShell::Exit (void)
 {
     Deactivate (TRUE);
+
+    SetIsMainViewShell (false);
 
     // Enable object bar switching so that Clear() deactivates every object
     // bar cleanly.
@@ -840,7 +850,7 @@ void ViewShell::SetupRulers (void)
     {
         long nHRulerOfs = 0;
 
-        if ( !mpVerticalRuler.get() != NULL )
+        if ( mpVerticalRuler.get() == NULL )
         {
             mpVerticalRuler.reset(CreateVRuler(GetActiveWindow()));
             if ( mpVerticalRuler.get() != NULL )
@@ -850,7 +860,7 @@ void ViewShell::SetupRulers (void)
                 mpVerticalRuler->Show();
             }
         }
-        if ( !mpHorizontalRuler.get() != NULL )
+        if ( mpHorizontalRuler.get() == NULL )
         {
             mpHorizontalRuler.reset(CreateHRuler(GetActiveWindow(), TRUE));
             if ( mpHorizontalRuler.get() != NULL )
@@ -1720,7 +1730,7 @@ SfxShell* ViewShellObjectBarFactory::CreateShell (
     SfxShell* pShell = NULL;
 
     ShellCache::iterator aI (maShellCache.find(nId));
-    if (aI == maShellCache.end())
+    if (aI == maShellCache.end() || aI->second!=NULL)
     {
         ::sd::View* pView = mrViewShell.GetView();
         switch (nId)
@@ -1785,7 +1795,21 @@ SfxShell* ViewShellObjectBarFactory::CreateShell (
 
 void ViewShellObjectBarFactory::ReleaseShell (SfxShell* pShell)
 {
-    // Do nothing because the shells are stored in a cache.
+    // The cache is not yet working properly (we had to set a new view at an
+    // object bar that where re-used for that view) so the shell of released
+    // object bars are destroyed.
+    for (ShellCache::iterator aI(maShellCache.begin());
+         aI!=maShellCache.end();
+         aI++)
+    {
+        if (aI->second == pShell)
+        {
+            delete pShell;
+            aI->second = NULL;
+            maShellCache.erase (aI);
+            break;
+        }
+    }
 }
 
 } // end of anonymous namespace
