@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumfe.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: sab $ $Date: 2001-06-13 17:05:00 $
+ *  last change: $Author: nn $ $Date: 2001-06-13 19:35:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1143,7 +1143,14 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
     //
 
     NfIndexTableOffset eBuiltIn = pFormatter->GetIndexTableOffset( nKey );
-    short nFmtType = rFormat.GetType() & ~NUMBERFORMAT_DEFINED;
+
+    short nFmtType = 0;
+    sal_Bool bThousand = sal_False;
+    sal_uInt16 nPrecision = 0;
+    sal_uInt16 nLeading = 0;
+    rFormat.GetNumForInfo( nPart, nFmtType, bThousand, nPrecision, nLeading);
+    nFmtType &= ~NUMBERFORMAT_DEFINED;
+
     OUString sType;
     switch ( nFmtType )
     {
@@ -1183,14 +1190,6 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
     OUString sElem = pNamespaceMap->GetQNameByKey( XML_NAMESPACE_NUMBER, sType );
     OUString sAttrName, sAttrValue;
     sal_Bool bUserDef = ( ( rFormat.GetType() & NUMBERFORMAT_DEFINED ) != 0 );
-
-    //! get FormatInfo from each part separately
-
-    sal_Bool bThousand = sal_False;
-    sal_Bool bRed = sal_False;
-    sal_uInt16 nPrecision = 0;
-    sal_uInt16 nLeading = 0;
-    rFormat.GetFormatSpecialInfo( bThousand, bRed, nPrecision, nLeading);
 
     //
     //  common attributes for format
@@ -1284,6 +1283,10 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
     if (pCol)
         WriteColorElement_Impl(*pCol);
 
+    //  detect if there is "real" content, excluding color and maps
+    //! move to implementation of Write... methods?
+    sal_Bool bAnyContent = sal_False;
+
     //
     //  format elements
     //
@@ -1292,11 +1295,13 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
     {
         //  default number format contains just one number element
         WriteNumberElement_Impl( -1, 1, OUString(), sal_False );
+        bAnyContent = sal_True;
     }
     else if ( eBuiltIn == NF_BOOLEAN )
     {
         //  boolean format contains just one boolean element
         WriteBooleanElement_Impl();
+        bAnyContent = sal_True;
     }
     else
     {
@@ -1385,6 +1390,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                             //  normal text -> search for the symbol
                             bCurrencyWritten = WriteTextWithCurrency_Impl( *pElemStr,
                                 SvNumberFormatter::ConvertLanguageToLocale( nLang ) );
+                            bAnyContent = sal_True;
                         }
                         else
                             AddToTextElement_Impl( *pElemStr );
@@ -1402,6 +1408,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                             //  pElemStr is "CCC"
 
                             WriteCurrencyElement_Impl( *pElemStr, OUString() );
+                            bAnyContent = sal_True;
                             bCurrencyWritten = sal_True;
                         }
                     }
@@ -1414,6 +1421,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                         else
                         {
                             WriteCurrencyElement_Impl( *pElemStr, sCurrExt );
+                            bAnyContent = sal_True;
                             bCurrencyWritten = sal_True;
                         }
                     }
@@ -1454,13 +1462,16 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                                         sDashStr.Fill( nPrecision, '-' );
 
                                     WriteNumberElement_Impl( nDecimals, nInteger, sDashStr, bThousand );
+                                    bAnyContent = sal_True;
                                 }
                                 break;
                             case NUMBERFORMAT_SCIENTIFIC:
                                 WriteScientificElement_Impl( nPrecision, nLeading, bThousand, nExpDigits );
+                                bAnyContent = sal_True;
                                 break;
                             case NUMBERFORMAT_FRACTION:
                                 WriteFractionElement_Impl( nLeading, bThousand, nPrecision, nPrecision );
+                                bAnyContent = sal_True;
                                 break;
                         }
 
@@ -1469,7 +1480,10 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                     break;
                 case XMLNUM_SYMBOLTYPE_DEL:
                     if ( pElemStr && *pElemStr == XubString('@') )
+                    {
                         WriteTextContentElement_Impl();
+                        bAnyContent = sal_True;
+                    }
                     break;
 
                 case XMLNUM_SYMBOLTYPE_CALENDAR:
@@ -1484,6 +1498,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                     {
                         sal_Bool bLong = ( nElemType == NF_KEY_DD );
                         WriteDayElement_Impl( aCalendar, ( bSystemDate ? bLongSysDate : bLong ) );
+                        bAnyContent = sal_True;
                     }
                     break;
                 case NF_KEY_DDD:
@@ -1505,6 +1520,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                         sal_Bool bLong = ( nElemType == NF_KEY_NNN || nElemType == NF_KEY_NNNN ||
                                            nElemType == NF_KEY_DDDD || nElemType == NF_KEY_AAAA );
                         WriteDayOfWeekElement_Impl( aCalAttr, ( bSystemDate ? bLongSysDate : bLong ) );
+                        bAnyContent = sal_True;
                         if ( nElemType == NF_KEY_NNNN )
                         {
                             //  write additional text element for separator
@@ -1523,6 +1539,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                         sal_Bool bText = ( nElemType == NF_KEY_MMM || nElemType == NF_KEY_MMMM ||
                                             nElemType == NF_KEY_MMMMM );
                         WriteMonthElement_Impl( aCalendar, ( bSystemDate ? bLongSysDate : bLong ), bText );
+                        bAnyContent = sal_True;
                     }
                     break;
                 case NF_KEY_YY:
@@ -1536,6 +1553,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                         sal_Bool bLong = ( nElemType == NF_KEY_YYYY || nElemType == NF_KEY_EEC ||
                                             nElemType == NF_KEY_R );
                         WriteYearElement_Impl( aCalendar, ( bSystemDate ? bLongSysDate : bLong ) );
+                        bAnyContent = sal_True;
                     }
                     break;
                 case NF_KEY_G:
@@ -1546,6 +1564,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                         //! distinguish GG and GGG and RR
                         sal_Bool bLong = ( nElemType == NF_KEY_GGG || nElemType == NF_KEY_RR );
                         WriteEraElement_Impl( aCalendar, ( bSystemDate ? bLongSysDate : bLong ) );
+                        bAnyContent = sal_True;
                         if ( nElemType == NF_KEY_RR )
                         {
                             //  calendar attribute for RR is set in first loop
@@ -1558,10 +1577,12 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                     {
                         sal_Bool bLong = ( nElemType == NF_KEY_QQ );
                         WriteQuarterElement_Impl( aCalendar, ( bSystemDate ? bLongSysDate : bLong ) );
+                        bAnyContent = sal_True;
                     }
                     break;
                 case NF_KEY_WW:
                     WriteWeekElement_Impl( aCalendar );
+                    bAnyContent = sal_True;
                     break;
 
                 // time elements (bSystemDate is not used):
@@ -1569,23 +1590,43 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                 case NF_KEY_H:
                 case NF_KEY_HH:
                     WriteHoursElement_Impl( nElemType == NF_KEY_HH );
+                    bAnyContent = sal_True;
                     break;
                 case NF_KEY_MI:
                 case NF_KEY_MMI:
                     WriteMinutesElement_Impl( nElemType == NF_KEY_MMI );
+                    bAnyContent = sal_True;
                     break;
                 case NF_KEY_S:
                 case NF_KEY_SS:
                     WriteSecondsElement_Impl( ( nElemType == NF_KEY_SS ), nPrecision );
+                    bAnyContent = sal_True;
                     break;
                 case NF_KEY_AMPM:
                 case NF_KEY_AP:
                     WriteAMPMElement_Impl();        // short/long?
+                    bAnyContent = sal_True;
                     break;
             }
             nPrevType = nElemType;
             ++nPos;
         }
+    }
+
+    if ( sTextContent.getLength() )
+        bAnyContent = sal_True;     // element written in FinishTextElement_Impl
+
+    FinishTextElement_Impl();       // final text element - before maps
+
+    if ( !bAnyContent )
+    {
+        //  for an empty format, write an empty text element
+
+        OUString sTextElem = pNamespaceMap->GetQNameByKey( XML_NAMESPACE_NUMBER,
+                                OUString::createFromAscii( sXML_text ) );
+        xHandler->ignorableWhitespace( sWS );
+        xHandler->startElement( sTextElem, xAttrList );
+        xHandler->endElement( sTextElem );
     }
 
     //
@@ -1600,8 +1641,6 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
         WriteMapElement_Impl( eOp1, fLimit1, nKey, 0 );
         WriteMapElement_Impl( eOp2, fLimit2, nKey, 1 );
     }
-
-    FinishTextElement_Impl();       // final text element
 
     xHandler->ignorableWhitespace( sWS );
     xHandler->endElement( sElem );
