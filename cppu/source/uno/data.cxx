@@ -2,9 +2,9 @@
  *
  *  $RCSfile: data.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 03:19:28 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:48:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@
 #include "copy.hxx"
 #include "assign.hxx"
 #include "eq.hxx"
+
+#include "boost/static_assert.hpp"
+
 
 using namespace ::cppu;
 using namespace ::rtl;
@@ -534,6 +537,10 @@ public:
 };
 BinaryCompatible_Impl::BinaryCompatible_Impl()
 {
+    BOOST_STATIC_ASSERT( ((sal_Bool) true) == sal_True &&
+                         (1 != 0) == sal_True );
+    BOOST_STATIC_ASSERT( ((sal_Bool) false) == sal_False &&
+                         (1 == 0) == sal_False );
 #ifdef MAX_ALIGNMENT_4
     // max alignment is 4
     BINTEST_VERIFYOFFSET( AlignSize_Impl, dDouble, 4 );
