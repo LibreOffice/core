@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fly.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ama $ $Date: 2001-11-07 13:21:46 $
+ *  last change: $Author: ama $ $Date: 2001-12-07 15:58:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1305,7 +1305,7 @@ void CalcCntnt( SwLayoutFrm *pLay, BOOL bNoColl )
 
             //Dumm aber wahr, die Flys muessen mitkalkuliert werden.
             BOOL bAgain = FALSE;
-            if ( pFrm->GetDrawObjs() )
+            if ( pFrm->GetDrawObjs() && pLay->IsAnLower( pFrm ) )
             {
                 USHORT nCnt = pFrm->GetDrawObjs()->Count();
                 for ( USHORT i = 0; i < nCnt; ++i )
