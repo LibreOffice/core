@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: th $ $Date: 2000-11-23 19:21:23 $
+ *  last change: $Author: th $ $Date: 2000-11-24 18:54:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,7 +186,15 @@ SalFrame* ImplSalCreateFrame( SalInstance* pInst,
 #endif
     }
     else
-        nSysStyle |= WS_POPUP;
+    {
+        // Hack, because we want have a default position for our
+        // document windows. In the future we want use
+        if ( (nSalFrameStyle & (SAL_FRAME_STYLE_SIZEABLE | SAL_FRAME_STYLE_MOVEABLE)) ==
+             (SAL_FRAME_STYLE_SIZEABLE | SAL_FRAME_STYLE_MOVEABLE) )
+            nSysStyle |= WS_OVERLAPPED;
+        else
+            nSysStyle |= WS_POPUP;
+    }
     if ( nSalFrameStyle & SAL_FRAME_STYLE_SIZEABLE )
     {
         pFrame->maFrameData.mbSizeBorder = TRUE;
@@ -232,7 +240,21 @@ SalFrame* ImplSalCreateFrame( SalInstance* pInst,
             pFrame->maFrameData.mbOverwriteState = FALSE;
     }
     else
+    {
         pFrame->maFrameData.mnShowState = SW_SHOWNORMAL;
+
+        // Document Windows are also maximized, if the current Document Window
+        // is also maximized
+        if ( (nSalFrameStyle & (SAL_FRAME_STYLE_SIZEABLE | SAL_FRAME_STYLE_MOVEABLE | SAL_FRAME_STYLE_MAXABLE)) ==
+             (SAL_FRAME_STYLE_SIZEABLE | SAL_FRAME_STYLE_MOVEABLE | SAL_FRAME_STYLE_MAXABLE) )
+        {
+            HWND hWnd = GetForegroundWindow();
+            if ( hWnd && IsMaximized( hWnd ) &&
+                 (GetWindowInstance( hWnd ) == pInst->maInstData.mhInst) &&
+                 ((GetWindowStyle( hWnd ) & (WS_POPUP | WS_MAXIMIZEBOX | WS_THICKFRAME)) == (WS_MAXIMIZEBOX | WS_THICKFRAME)) )
+                pFrame->maFrameData.mnShowState = SW_SHOWMAXIMIZED;
+        }
+    }
 
     // create frame
     if ( aSalShlData.mbWNT )
@@ -474,6 +496,42 @@ static UINT ImplSalGetWheelScrollLines()
 
 // -----------------------------------------------------------------------
 
+static void ImplSalCalcBorder( const SalFrame* pFrame,
+                               int& rLeft, int& rTop, int& rRight, int& rBottom )
+{
+    // set window to screen size
+    int nFrameX;
+    int nFrameY;
+    int nCaptionY;
+
+    if ( pFrame->maFrameData.mbSizeBorder )
+    {
+        nFrameX = GetSystemMetrics( SM_CXFRAME );
+        nFrameY = GetSystemMetrics( SM_CYFRAME );
+    }
+    else if ( pFrame->maFrameData.mbBorder )
+    {
+        nFrameX = GetSystemMetrics( SM_CXBORDER );
+        nFrameY = GetSystemMetrics( SM_CYBORDER );
+    }
+    else
+    {
+        nFrameX = 0;
+        nFrameY = 0;
+    }
+    if ( pFrame->maFrameData.mbCaption )
+        nCaptionY = GetSystemMetrics( SM_CYCAPTION );
+    else
+        nCaptionY = 0;
+
+    rLeft   = nFrameX;
+    rTop    = nFrameY+nCaptionY;
+    rRight  = nFrameX;
+    rBottom = nFrameY;
+}
+
+// -----------------------------------------------------------------------
+
 static void ImplSalCalcFullScreenSize( const SalFrame* pFrame,
                                        int& rX, int& rY, int& rDX, int& rDY )
 {
@@ -543,6 +601,11 @@ SalFrame::SalFrame()
     maFrameData.mpGraphics          = NULL;
     maFrameData.mpInst              = NULL;
     maFrameData.mpProc              = ImplSalCallbackDummy;
+    maFrameData.mnShowState         = SW_SHOWNORMAL;
+    maFrameData.mnWidth             = 0;
+    maFrameData.mnHeight            = 0;
+    maFrameData.mnMinWidth          = 0;
+    maFrameData.mnMinHeight         = 0;
     maFrameData.mnInputLang         = 0;
     maFrameData.mnInputCodePage     = 0;
     maFrameData.mbGraphics          = FALSE;
@@ -777,6 +840,8 @@ void SalFrame::Enable( BOOL bEnable )
 
 void SalFrame::SetMinClientSize( long nWidth, long nHeight )
 {
+    maFrameData.mnMinWidth  = nWidth;
+    maFrameData.mnMinHeight = nHeight;
 }
 
 // -----------------------------------------------------------------------
@@ -3124,9 +3189,10 @@ static int ImplHandleMinMax( HWND hWnd, LPARAM lParam )
         SalFrame* pFrame = GetWindowPtr( hWnd );
         if ( pFrame )
         {
+            MINMAXINFO* pMinMax = (MINMAXINFO*)lParam;
+
             if ( pFrame->maFrameData.mbFullScreen )
             {
-                MINMAXINFO* pMinMax = (MINMAXINFO*)lParam;
                 int         nX;
                 int         nY;
                 int         nDX;
@@ -3151,6 +3217,23 @@ static int ImplHandleMinMax( HWND hWnd, LPARAM lParam )
                 pMinMax->ptMinTrackSize.y = nDY;
 
                 bRet = TRUE;
+            }
+
+            if ( pFrame->maFrameData.mnMinWidth || pFrame->maFrameData.mnMinHeight )
+            {
+                int nMinWidth   = pFrame->maFrameData.mnMinWidth;
+                int nMinHeight  = pFrame->maFrameData.mnMinHeight;
+                int nLeft;
+                int nTop;
+                int nRight;
+                int nBottom;
+                ImplSalCalcBorder( pFrame, nLeft, nTop, nRight, nBottom );
+                nMinWidth  += nLeft+nRight;
+                nMinHeight += nTop+nBottom;
+                if ( pMinMax->ptMinTrackSize.x < nMinWidth )
+                     pMinMax->ptMinTrackSize.x = nMinWidth;
+                if (  pMinMax->ptMinTrackSize.y < nMinHeight )
+                     pMinMax->ptMinTrackSize.y = nMinHeight;
             }
         }
 
