@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: rt $ $Date: 2004-09-24 10:31:56 $
+#   last change: $Author: vg $ $Date: 2005-02-21 13:53:38 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -59,7 +59,6 @@
 #
 #
 #*************************************************************************
-
 PRJ=..$/..$/..
 
 PRJNAME=sc
@@ -163,7 +162,8 @@ SLOFILES =  \
         $(SLO)$/cellsh4.obj\
         $(SLO)$/formatsh.obj\
         $(SLO)$/pgbrksh.obj\
-        $(SLO)$/viewdata.obj
+        $(SLO)$/viewdata.obj\
+        $(SLO)$/scextopt.obj
 
 .IF "$(OS)$(COM)$(CPUNAME)"=="LINUXGCCSPARC"
     NOOPTFILES= \
