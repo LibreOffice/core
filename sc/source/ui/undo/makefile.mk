@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:45:06 $
+#   last change: $Author: nn $ $Date: 2000-10-30 11:36:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,6 +84,7 @@ AUTOSEG=true
 CXXFILES = \
         target.cxx \
         refundo.cxx \
+        areasave.cxx \
         undobase.cxx \
         undoutil.cxx \
         undocell.cxx \
@@ -101,6 +102,7 @@ CXXFILES = \
 SLOFILES =  \
         $(SLO)$/target.obj \
         $(SLO)$/refundo.obj \
+        $(SLO)$/areasave.obj \
         $(SLO)$/undobase.obj \
         $(SLO)$/undoutil.obj \
         $(SLO)$/undocell.obj \
