@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lngprops.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tl $ $Date: 2001-02-02 11:16:51 $
+ *  last change: $Author: tl $ $Date: 2001-05-08 12:42:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,10 +86,6 @@
 #define WID_IS_HYPH_AUTO                    UPH_IS_HYPH_AUTO
 #define WID_IS_HYPH_SPECIAL                 UPH_IS_HYPH_SPECIAL
 #define WID_IS_WRAP_REVERSE                 UPH_IS_WRAP_REVERSE
-#define WID_IS_STANDARD_HYPHENATOR          UPH_IS_STANDARD_HYPHENATOR
-#define WID_IS_STANDARD_SPELL_CHECKER       UPH_IS_STANDARD_SPELL_CHECKER
-#define WID_IS_STANDARD_THESAURUS           UPH_IS_STANDARD_THESAURUS
-#define WID_OTHER_LINGU_INDEX               UPH_OTHER_LINGU_INDEX
 #define WID_DEFAULT_LANGUAGE                UPH_DEFAULT_LANGUAGE
 #define WID_DEFAULT_LOCALE_CJK              UPH_DEFAULT_LOCALE_CJK
 #define WID_DEFAULT_LOCALE_CTL              UPH_DEFAULT_LOCALE_CTL
