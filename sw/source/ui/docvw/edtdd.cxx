@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtdd.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-04 13:27:31 $
+ *  last change: $Author: rt $ $Date: 2004-01-05 16:01:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -539,10 +539,6 @@ sal_Int8 SwEditWin::AcceptDrop( const AcceptDropEvent& rEvt )
                 if( pMView && !pMView->IsDesignMode() )
                     return DND_ACTION_NONE;
             }
-            //controls cannot be created for the complete table
-            if(EXCHG_IN_ACTION_LINK == nDropAction &&
-                SOT_FORMATSTR_ID_SBA_DATAEXCHANGE == nDropFormat)
-                return DND_ACTION_NONE;
         }
 
         if ( EXCHG_IN_ACTION_DEFAULT != nEventAction )
