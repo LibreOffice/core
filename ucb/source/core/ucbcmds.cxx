@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbcmds.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kso $ $Date: 2001-03-29 11:54:22 $
+ *  last change: $Author: kso $ $Date: 2001-04-20 15:40:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,8 +63,6 @@
                                 TODO
  **************************************************************************
 
- - nameclash handling
-
  *************************************************************************/
 
 #ifndef _OSL_DIAGNOSE_H_
@@ -85,6 +83,9 @@
 #ifndef _COM_SUN_STAR_IO_XOUTPUTSTREAM_HPP_
 #include <com/sun/star/io/XOutputStream.hpp>
 #endif
+#ifndef _COM_SUN_STAR_IO_XSEEKABLE_HPP_
+#include <com/sun/star/io/XSeekable.hpp>
+#endif
 #ifndef _COM_SUN_STAR_SDBC_XROW_HPP_
 #include <com/sun/star/sdbc/XRow.hpp>
 #endif
@@ -99,6 +100,9 @@
 #endif
 #ifndef _COM_SUN_STAR_UCB_INTERACTIVEBADTRANSFRERURLEXCEPTION_HPP_
 #include <com/sun/star/ucb/InteractiveBadTransferURLException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UCB_NAMECLASH_HPP_
+#include <com/sun/star/ucb/NameClash.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UCB_OPENCOMMANDARGUMENT2_HPP_
 #include <com/sun/star/ucb/OpenCommandArgument2.hpp>
@@ -814,8 +818,24 @@ static void globalTransfer( const uno::Reference<
     try
     {
         InsertCommandArgument aArg;
-        aArg.Data            = xInputStream;
-        aArg.ReplaceExisting = sal_False; // ReplaceExisting;
+        aArg.Data = xInputStream;
+
+        switch ( rArg.NameClash )
+        {
+            case NameClash::OVERWRITE:
+                aArg.ReplaceExisting = sal_True;
+                break;
+
+            case NameClash::ERROR:
+            case NameClash::RENAME:
+                aArg.ReplaceExisting = sal_False;
+                break;
+
+            default:
+                aArg.ReplaceExisting = sal_False;
+                OSL_ENSURE( sal_False, "Unknown nameclash value!" );
+                break;
+        }
 
         Command aInsertCommand( rtl::OUString::createFromAscii( "insert" ),
                                   -1,
@@ -823,17 +843,152 @@ static void globalTransfer( const uno::Reference<
 
         xCommandProcessorN->execute( aInsertCommand, 0, xEnv );
     }
-/*
     catch ( CommandAbortedException const & )
     {
-        // @@@ nameclash handling code
+        // @@@ The exception may have thousands of other reasons than
+        //     a NameClash...! insert command should throw a special exception
+        //     if a name clash occurs.
+
+        if ( rArg.NameClash == NameClash::RENAME )
+        {
+            // "invent" a new valid title.
+
+            sal_Int32 nTry = 0;
+
+            // Obtain old title.
+            uno::Sequence< beans::Property > aProps( 1 );
+            aProps[ 0 ].Name   = rtl::OUString::createFromAscii( "Title" );
+            aProps[ 0 ].Handle = -1;
+
+            Command aGetPropsCommand(
+                    rtl::OUString::createFromAscii( "getPropertyValues" ),
+                    -1,
+                    uno::makeAny( aProps ) );
+
+            uno::Reference< sdbc::XRow > xRow;
+            xCommandProcessorN->execute( aGetPropsCommand, 0, xEnv ) >>= xRow;
+
+            if ( !xRow.is() )
+                ucb_commands::abort( "Unable to get properties from object!" );
+
+            rtl::OUString aOldTitle = xRow->getString( 1 );
+             if ( !aOldTitle.getLength() )
+                ucb_commands::abort( "Unable to get title from object!" );
+
+            // Some pseudo-intelligence for not destroying file extensions...
+            rtl::OUString aOldTitlePre;
+            rtl::OUString aOldTitlePost;
+            sal_Int32 nPos = aOldTitle.lastIndexOf( '.' );
+            if ( nPos != -1 )
+            {
+                aOldTitlePre = aOldTitle.copy( 0, nPos );
+                aOldTitlePost = aOldTitle.copy( nPos );
+            }
+            else
+                aOldTitlePre = aOldTitle;
+
+            if ( nPos > 0 )
+                aOldTitlePre += rtl::OUString::createFromAscii( "_" );
+
+            sal_Bool bContinue = sal_True;
+            do
+            {
+                nTry++;
+
+                rtl::OUString aNewTitle = aOldTitlePre;
+                aNewTitle += rtl::OUString::valueOf( nTry );
+                aNewTitle += aOldTitlePost;
+
+                uno::Sequence< beans::PropertyValue > aValues( 1 );
+                aValues[ 0 ].Name   = rtl::OUString::createFromAscii( "Title" );
+                aValues[ 0 ].Handle = -1;
+                aValues[ 0 ].Value <<= aNewTitle;
+
+                Command aSetPropsCommand(
+                        rtl::OUString::createFromAscii( "setPropertyValues" ),
+                        -1,
+                        uno::makeAny( aValues ) );
+
+                // Set new title
+                xCommandProcessorN->execute( aSetPropsCommand, 0, xEnv );
+
+                // Retry inserting the content.
+                try
+                {
+                    // Previous try may have read from stream. Seek to begin
+                    // (if optional interface XSeekable is supported) or get
+                    // a new stream.
+                    if ( xInputStream.is() )
+                    {
+                        uno::Reference< io::XSeekable > xSeekable(
+                                            xInputStream, uno::UNO_QUERY );
+                        if ( xSeekable.is() )
+                        {
+                            try
+                            {
+                                xSeekable->seek( 0 );
+                            }
+                            catch ( lang::IllegalArgumentException const & )
+                            {
+                                xInputStream = 0;
+                            }
+                            catch ( io::IOException const & )
+                            {
+                                xInputStream = 0;
+                            }
+                        }
+                        else
+                            xInputStream = 0;
+
+                        if ( !xInputStream.is() )
+                        {
+                            xInputStream = getInputStream( xSMgr,
+                                                           xCommandProcessorS,
+                                                           xEnv );
+                            if ( !xInputStream.is() )
+                                ucb_commands::abort(
+                                        "Unable to get Inputstream!" );
+                        }
+                    }
+
+                    InsertCommandArgument aArg;
+                    aArg.Data = xInputStream;
+                    aArg.ReplaceExisting = sal_False;
+
+                    Command aInsertCommand(
+                                rtl::OUString::createFromAscii( "insert" ),
+                                  -1,
+                                  uno::makeAny( aArg ) );
+
+                    xCommandProcessorN->execute( aInsertCommand, 0, xEnv );
+
+                    // Success!
+                    bContinue = sal_False;
+                }
+                catch ( CommandAbortedException const & )
+                {
+                }
+            }
+            while ( bContinue && ( nTry < 50 ) );
+
+            if ( nTry == 50 )
+            {
+                OSL_ENSURE( sal_False, "Cannot insert new object!" );
+                throw;
+            }
+        }
+        else
+        {
+            OSL_ENSURE( sal_False, "Cannot insert new object!" );
+            throw;
+        }
     }
-*/
     catch ( uno::Exception const & )
     {
         OSL_ENSURE( sal_False, "Cannot insert new object!" );
         throw;
     }
+
 
     //////////////////////////////////////////////////////////////////////
     //
