@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: mtg $ $Date: 2001-10-02 22:04:04 $
+ *  last change: $Author: mtg $ $Date: 2001-11-15 19:58:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,8 @@
 #ifndef _ZIP_PACKAGE_HXX
 #define _ZIP_PACKAGE_HXX
 
-#ifndef _CPPUHELPER_IMPLBASE6_HXX_
-#include <cppuhelper/implbase6.hxx>
+#ifndef _CPPUHELPER_IMPLBASE7_HXX_
+#include <cppuhelper/implbase7.hxx>
 #endif
 #ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -70,29 +70,11 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XHIERARCHICALNAMEACCESS_HPP_
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #endif
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
 #ifndef _COM_SUN_STAR_LANG_XSINGLESERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #endif
-#ifndef _COM_SUN_STAR_IO_XSTREAM_HPP_
-#include <com/sun/star/io/XStream.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_HPP_
-#include <com/sun/star/io/XInputStream.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_XOUTPUTSTREAM_HPP_
-#include <com/sun/star/io/XOutputStream.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_XSEEKABLE_HPP_
-#include <com/sun/star/io/XSeekable.hpp>
-#endif
 #ifndef _COM_SUN_STAR_UTIL_XCHANGESBATCH_HPP_
 #include <com/sun/star/util/XChangesBatch.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
-#include <com/sun/star/container/XNameContainer.hpp>
 #endif
 #ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
 #include <com/sun/star/lang/XUnoTunnel.hpp>
@@ -100,21 +82,27 @@
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
-#ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
-#include <com/sun/star/task/XInteractionHandler.hpp>
+#ifndef _COM_SUN_STAR_LANG_XPSERVICEINFO_HPP_
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
 #ifndef _HASHMAPS_HXX
 #include <HashMaps.hxx>
 #endif
-#ifndef _OSL_FILE_HXX_
-#include <osl/file.hxx>
+#ifndef _COM_SUN_STAR_LANG_ILLEGALARGUMENTEXCEPTION_HPP_
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #endif
-#include <vector>
-
+#ifndef _OSL_FILE_H_
+#include <osl/file.h>
+#endif
 class ZipPackageFolder;
 class ZipFile;
 class ByteGrabber;
-
+namespace com { namespace sun { namespace star {
+    namespace container { class XNameContainer; }
+    namespace io { class XStream; class XOutputStream; class XInputStream; class XSeekable; }
+    namespace lang { class XMultiServiceFactory; }
+    namespace task { class XInteractionHandler; }
+} } }
 enum SegmentEnum
 {
     e_Aborted = -1000,
@@ -131,11 +119,12 @@ enum InitialisationMode
     e_IMode_XStream
 };
 
-class ZipPackage : public cppu::WeakImplHelper6
+class ZipPackage : public cppu::WeakImplHelper7
                     <
                        com::sun::star::lang::XInitialization,
                        com::sun::star::lang::XSingleServiceFactory,
                        com::sun::star::lang::XUnoTunnel,
+                       com::sun::star::lang::XServiceInfo,
                        com::sun::star::container::XHierarchicalNameAccess,
                        com::sun::star::util::XChangesBatch,
                        com::sun::star::beans::XPropertySet
@@ -145,9 +134,9 @@ protected:
     ::com::sun::star::uno::Sequence < sal_Int8 > aEncryptionKey;
     FolderHash       aRecent;
     ::rtl::OUString  sURL;
-    sal_Int32        nSegmentSize;
     sal_Bool         bHasEncryptedEntries;
     InitialisationMode eMode;
+    sal_Int32        nSegmentSize;
 
     ::com::sun::star::uno::Reference < com::sun::star::container::XNameContainer > xRootFolder;
     ::com::sun::star::uno::Reference < com::sun::star::io::XStream > xStream;
@@ -160,6 +149,8 @@ protected:
     ZipFile          *pZipFile;
 
     void getZipFileContents();
+    void writeTempFile();
+    // Pack'n'go functions
     // this one is for removable media
     SegmentEnum writeSegment(
                        const ::rtl::OUString & rFileName,
@@ -181,7 +172,6 @@ protected:
     sal_Int32 RequestDisk ( ::rtl::OUString &rMountPath, sal_Int16 nDiskNum);
     void unSpanFile ( );
     sal_Bool checkEnd ( com::sun::star::uno::Sequence < sal_Int8 > &rSequence );
-    void writeTempFile();
 
 public:
     ZipPackage (const ::com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > &xNewFactory);
@@ -230,11 +220,18 @@ public:
     virtual void SAL_CALL removeVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener )
         throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
+    // XServiceInfo
+    virtual ::rtl::OUString SAL_CALL getImplementationName(  )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  )
+        throw (::com::sun::star::uno::RuntimeException);
+
     // Uno componentiseralation
-    static ::rtl::OUString getImplementationName();
-    static ::com::sun::star::uno::Sequence < ::rtl::OUString > getSupportedServiceNames();
+    static ::rtl::OUString static_getImplementationName();
+    static ::com::sun::star::uno::Sequence < ::rtl::OUString > static_getSupportedServiceNames();
     static ::com::sun::star::uno::Reference < com::sun::star::lang::XSingleServiceFactory > createServiceFactory( com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > const & rServiceFactory );
-    virtual sal_Bool SAL_CALL supportsService(rtl::OUString const & rServiceName)
-        throw (com::sun::star::uno::RuntimeException);
+    sal_Bool SAL_CALL static_supportsService(rtl::OUString const & rServiceName);
 };
 #endif
