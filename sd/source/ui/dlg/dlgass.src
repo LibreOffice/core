@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgass.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-02 20:39:29 $
+ *  last change: $Author: kz $ $Date: 2002-11-27 17:03:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@ ModalDialog DLG_ASS
         Text [ ENGLISH ] = "Pre~view";
         Text[ english_us ] = "~Preview";
         Text[ portuguese ] = "~Previsualizar";
-        Text[ russian ] = "Ïğîñìîòğ";
+        Text[ russian ] = "Ïğåäâàğèòåëüíûé ïğîñìîòğ";
         Text[ dutch ] = "V~oorbeeld";
         Text[ french ] = "Aperçu";
         Text[ spanish ] = "Pre~visualización";
@@ -108,7 +108,7 @@ ModalDialog DLG_ASS
         Text[ turkish ] = "Önizleme";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Pre~visualització";
-        Text[ finnish ] = "~Esikatselu";
+        Text[ finnish ] = "Esikatselu";
         Text[ thai ] = "à¹~à¸ªà¸”à¸‡à¸•à¸±à¸§à¸­à¸¢à¹ˆà¸²à¸‡";
     };
 
@@ -122,7 +122,7 @@ ModalDialog DLG_ASS
         Text [ english_us ] = "~Do not show this dialog again" ;
         Text[ portuguese ] = "~Não mostrar mais esta caixa de diálogo";
         Text[ russian ] = "İòîò äèàëîã âïğåäü íå ïîêàçûâàòü";
-        Text[ dutch ] = "Deze dialoog ~niet meer weergeven";
+        Text[ dutch ] = "Dit dialoogvenster ~niet meer weergeven";
         Text[ french ] = "~Ne plus afficher la boîte de dialogue";
         Text[ spanish ] = "~No mostrar más este diálogo";
         Text[ italian ] = "Non mostrare più questo dialogo";
@@ -213,7 +213,7 @@ ModalDialog DLG_ASS
         Text[ turkish ] = "Boş sunu";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Presentació buida";
-        Text[ finnish ] = "~Tyhjennä esitys";
+        Text[ finnish ] = "~Tyhjä esitys";
         Text[ thai ] = "à¸à¸²à¸£à¸™à¸³à¹€à¸ªà¸™à¸­~à¸§à¹ˆà¸²à¸‡à¹€à¸›à¸¥à¹ˆà¸²";
     };
 
@@ -243,7 +243,7 @@ ModalDialog DLG_ASS
         Text[ turkish ] = "Şablon";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Des de la plantilla";
-        Text[ finnish ] = "~Mallipohjasta";
+        Text[ finnish ] = "~Mallista";
         Text[ thai ] = "~à¸ˆà¸²à¸à¹à¸¡à¹ˆà¹à¸šà¸š";
     };
 
@@ -255,7 +255,7 @@ ModalDialog DLG_ASS
         Text [ ENGLISH ] = "~Open existing presentation";
         Text[ english_us ] = "~Open existing presentation";
         Text[ portuguese ] = "Abrir ~uma apresentação existente";
-        Text[ russian ] = "Îòêğûòü îäíó èç ïğåçåíòàöèé";
+        Text[ russian ] = "Îòêğûòü ñóùåñòâóşùóş ïğåçåíòàöèş";
         Text[ dutch ] = "Een bestaande presentatie ~openen";
         Text[ french ] = "~Ouvrir une présentation existante";
         Text[ spanish ] = "~Abrir una presentación existente";
@@ -342,7 +342,7 @@ ModalDialog DLG_ASS
         Text[ turkish ] = "Bir sayfa biçimi seçin";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Escolliu un ~estil de pàgina";
-        Text[ finnish ] = "~Valitse sivun tyyli";
+        Text[ finnish ] = "Valitse ~diamalli";
         Text[ thai ] = "à¹€~à¸¥à¸·à¸­à¸à¸¥à¸±à¸à¸©à¸“à¸°à¸«à¸™à¹‰à¸²";
     };
 
@@ -380,7 +380,7 @@ ModalDialog DLG_ASS
         Text [ portuguese ] = "Seleccione o meio de apresentação" ;
         Text [ portuguese_brazilian ] = "W?hlen Sie das Medium Ihrer Pr?sentation" ;
         Text[ chinese_simplified ] = "è¯·é€‰æ‹©æ‰“å°æ¼”ç¤ºæ–‡ç¨¿çš„åª’ä½“ã€‚";
-        Text[ russian ] = "Ñğåäñòâî ïîêàçà ïğåçåíòàöèè";
+        Text[ russian ] = "Ñïîñîá îòîáğàæåíèÿ ïğåçåíòàöèè";
         Text[ polish ] = "Wybierz medium prezentacji";
         Text[ japanese ] = "ãƒ—ãƒ¬ã‚¼ãƒ³ãƒ†ãƒ¼ã‚·ãƒ§ãƒ³ã®ç™ºè¡¨æ–¹æ³•ã‚’é¸æŠã—ã¾ã™";
         Text[ chinese_traditional ] = "è«‹é¸æ“‡ä¸€å€‹åˆ—å°ç°¡å ±çš„åª’é«”";
@@ -421,7 +421,7 @@ ModalDialog DLG_ASS
         Text[ turkish ] = "Aslı";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Original";
-        Text[ finnish ] = "~Alkuperäinen";
+        Text[ finnish ] = "Alkuperäinen";
         Text[ thai ] = "~à¸•à¹‰à¸™à¸‰à¸šà¸±à¸š";
     };
 
@@ -452,7 +452,7 @@ ModalDialog DLG_ASS
         Text[ turkish ] = "Ekran";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Pantalla";
-        Text[ finnish ] = "~Näyttö";
+        Text[ finnish ] = "Näyttö";
         Text[ thai ] = "à¸ˆà¸­~à¸ à¸²à¸";
     };
 
@@ -474,7 +474,7 @@ ModalDialog DLG_ASS
         Text [ portuguese ] = "~Diapositivo" ;
         Text[ chinese_simplified ] = "å¹»ç¯ç‰‡(~D)";
         Text[ polish ] = "Slajd";
-        Text[ russian ] = "Äèàïîçèòèâû";
+        Text[ russian ] = "Ñëàéä";
         Text[ portuguese_brazilian ] = "Folie";
         Text[ japanese ] = "ã‚¹ãƒ©ã‚¤ãƒ‰(~D)";
         Text[ chinese_traditional ] = "æŠ•å½±ç‰‡(~D)";
@@ -484,7 +484,7 @@ ModalDialog DLG_ASS
         Text[ turkish ] = "Slayt";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Diapositiva";
-        Text[ finnish ] = "~Diakuva";
+        Text[ finnish ] = "Dia";
         Text[ thai ] = "à¸ à¸²à¸~à¸™à¸´à¹ˆà¸‡";
     };
 
@@ -506,7 +506,7 @@ ModalDialog DLG_ASS
         Text [ portuguese_brazilian ] = "Papier" ;
         Text [ portuguese ] = "~Transparente" ;
         Text[ chinese_simplified ] = "é€æ˜ç®”(~V)";
-        Text[ russian ] = "Ïîëèıñòåğí. ïëåíêà";
+        Text[ russian ] = "Ïëåíêà";
         Text[ polish ] = "Folia";
         Text[ japanese ] = "OHPã‚·ãƒ¼ãƒˆ(~V)";
         Text[ chinese_traditional ] = "é€æ˜è† ç´™(~V)";
@@ -516,7 +516,7 @@ ModalDialog DLG_ASS
         Text[ turkish ] = "Tepegöz";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Transparència";
-        Text[ finnish ] = "~Piirtoheitinkalvo";
+        Text[ finnish ] = "Piirtoheitinkalvo";
         Text[ thai ] = "à¹à¸œà¹ˆà¸™à¸‡à¸²à¸™à¹‚à¸­à¹€~à¸§à¸­à¸£à¹Œà¹€à¸®à¸”";
     };
 
@@ -548,7 +548,7 @@ ModalDialog DLG_ASS
         Text[ turkish ] = "Kağıt";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "P~aper";
-        Text[ finnish ] = "~Paperi";
+        Text[ finnish ] = "Paperi";
         Text[ thai ] = "à¸à¸£à¸°~à¸”à¸²à¸©";
     };
 
@@ -590,7 +590,7 @@ ModalDialog DLG_ASS
         Text[ turkish ] = "Bir slayt geçişi seçin";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Escolliu la transició entre diapositives";
-        Text[ finnish ] = "Valitse dian siirtymä";
+        Text[ finnish ] = "Valitse dian vaihtuminen";
         Text[ thai ] = "à¹€à¸¥à¸·à¸­à¸à¸ à¸²à¸à¹€à¸„à¸¥à¸·à¹ˆà¸­à¸™à¹„à¸«à¸§";
     };
 
@@ -621,7 +621,7 @@ ModalDialog DLG_ASS
         Text[ turkish ] = "Efekt:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Efecte:";
-        Text[ finnish ] = "~Vaikutus:";
+        Text[ finnish ] = "Tehoste";
         Text[ thai ] = "~à¸¥à¸±à¸à¸©à¸“à¸°à¸à¸´à¹€à¸¨à¸©:";
     };
 
@@ -662,7 +662,7 @@ ModalDialog DLG_ASS
         Text[ turkish ] = "Hız:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Velocitat:";
-        Text[ finnish ] = "~Nopeus:";
+        Text[ finnish ] = "Nopeus";
         Text[ thai ] = "~à¸„à¸§à¸²à¸¡à¹€à¸£à¹‡à¸§:";
     };
 
@@ -685,7 +685,7 @@ ModalDialog DLG_ASS
         Text [ ENGLISH ] = "Choose the presentation kind";
         Text[ english_us ] = "Select the presentation type";
         Text[ portuguese ] = "Seleccione o tipo de apresentação";
-        Text[ russian ] = "Âûáåğèòå ñïîñîá ïîêàçà";
+        Text[ russian ] = "Âûáåğèòå òèï ïğåçåíòàöèè";
         Text[ dutch ] = "Kies het type presentatie";
         Text[ french ] = "Type de présentation";
         Text[ spanish ] = "Elija el tipo de presentación";
@@ -716,7 +716,7 @@ ModalDialog DLG_ASS
         Text [ ENGLISH ] = "~Standard";
         Text[ english_us ] = "~Default";
         Text[ portuguese ] = "~Padrão";
-        Text[ russian ] = "~Ñòàíäàğòíûé";
+        Text[ russian ] = "~Ïî óìîë÷àíèş";
         Text[ dutch ] = "~Standaard";
         Text[ french ] = "Standard";
         Text[ spanish ] = "Predeterminado";
@@ -734,7 +734,7 @@ ModalDialog DLG_ASS
         Text[ turkish ] = "Standart";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Per ~defecte";
-        Text[ finnish ] = "~Oletusarvo";
+        Text[ finnish ] = "~Oletus";
         Text[ thai ] = "~à¸„à¹ˆà¸²à¹€à¸£à¸´à¹ˆà¸¡à¸•à¹‰à¸™";
     };
 
@@ -747,7 +747,7 @@ ModalDialog DLG_ASS
         Text [ ENGLISH ] = "~Auto";
         Text[ english_us ] = "~Automatic";
         Text[ portuguese ] = "~Automático";
-        Text[ russian ] = "~Àâòîìàòè÷åñêèé";
+        Text[ russian ] = "~Àâòîìàòè÷åñêè";
         Text[ dutch ] = "~Automatisch";
         Text[ french ] = "Automatique";
         Text[ spanish ] = "~Automático";
@@ -778,7 +778,7 @@ ModalDialog DLG_ASS
         Text [ ENGLISH ] = "~Duration of page";
         Text[ english_us ] = "D~uration of page";
         Text[ portuguese ] = "~Duração - página";
-        Text[ russian ] = "Ïîêàç ñëàéäà";
+        Text[ russian ] = "Çàäåğæêà íà ñòğàíèöå";
         Text[ dutch ] = "~Duur per dia";
         Text[ french ] = "Durée d'affichage";
         Text[ spanish ] = "Duració~n página";
@@ -796,7 +796,7 @@ ModalDialog DLG_ASS
         Text[ turkish ] = "Durma süresi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Duració de la pàgina";
-        Text[ finnish ] = "~Sivun kesto";
+        Text[ finnish ] = "Sivun kesto";
         Text[ thai ] = "à¸£à¸°~à¸¢à¸°à¹€à¸§à¸¥à¸²à¸‚à¸­à¸‡à¸«à¸™à¹‰à¸²";
     };
 
@@ -834,7 +834,7 @@ ModalDialog DLG_ASS
         Text [ ENGLISH ] = "~Duration of pause";
         Text[ english_us ] = "Du~ration of pause";
         Text[ portuguese ] = "Duração - ~pausa";
-        Text[ russian ] = "Ïàóçà";
+        Text[ russian ] = "Äëèòåëüíîñòü ïàóçû";
         Text[ dutch ] = "~Duur pauze";
         Text[ french ] = "Durée de la pause";
         Text[ spanish ] = "~Duración pausa";
@@ -852,7 +852,7 @@ ModalDialog DLG_ASS
         Text[ turkish ] = "Ara verme sü.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Du~rada de la pausa";
-        Text[ finnish ] = "~Tauon kesto";
+        Text[ finnish ] = "Tauon kesto";
         Text[ thai ] = "à¸Šà¹ˆà¸§~à¸‡à¹€à¸§à¸¥à¸²à¸à¸²à¸£à¸«à¸¢à¸¸à¸”";
     };
 
@@ -909,7 +909,7 @@ ModalDialog DLG_ASS
         Text[ turkish ] = "Logo görüntüle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Mostra el logotip";
-        Text[ finnish ] = "~Näytä logo";
+        Text[ finnish ] = "Näytä lo~go";
         Text[ thai ] = "à¹à¸ª~à¸”à¸‡à¹‚à¸¥à¹‚à¸à¹‰";
     };
 
@@ -941,7 +941,7 @@ ModalDialog DLG_ASS
         Text [ portuguese ] = "Descreva as suas ideias de base" ;
         Text [ portuguese_brazilian ] = "Nennen Sie Ihre Grundgedanken" ;
         Text[ chinese_simplified ] = "è¯·è¾“å…¥æ‚¨çš„åŸºæœ¬è®¾æƒ³ã€‚";
-        Text[ russian ] = "Íàçîâèòå Âàøè îñíîâíûå èäåè";
+        Text[ russian ] = "Îïèøèòå îñíîâíûå èäåè";
         Text[ polish ] = "Przedstaw g³ówne idee";
         Text[ japanese ] = "è¡¨ç¤ºã™ã‚‹é …ç›®ã‚’å…¥åŠ›ã—ã¾ã™";
         Text[ chinese_traditional ] = "è«‹è¼¸å…¥æ‚¨çš„åŸºæœ¬è¨­æƒ³";
@@ -972,7 +972,7 @@ ModalDialog DLG_ASS
         Text [ portuguese ] = "Qual é o seu nome ou o nome da sua empresa?" ;
         Text [ portuguese_brazilian ] = "Wie ist Ihr Name oder der Name Ihrer Firma?" ;
         Text[ chinese_simplified ] = "è¯·è¾“å…¥æ‚¨çš„å§“åå’Œå…¬å¸åç§°ã€‚";
-        Text[ russian ] = "Íàçîâèòå Âàøå èìÿ è íàèìåíîâàíèå Âàøåé îğãàíèçàöèè";
+        Text[ russian ] = "Èìÿ è/èëè íàçâàíèå âàøåé îğãàíèçàöèè.";
         Text[ polish ] = "Podaj proszê swoje nazwisko oraz nazwê swojej firmy";
         Text[ japanese ] = "ç™ºè¡¨è€…ã®åå‰ã¾ãŸã¯ä¼šç¤¾åã¯";
 
@@ -983,7 +983,7 @@ ModalDialog DLG_ASS
         Text[ turkish ] = "Adınız ya da firmanızın adı nedir?";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Quin és el seu nom o el de la seva companyia?";
-        Text[ finnish ] = "Mikä on yrityksesi nimi?";
+        Text[ finnish ] = "Mikä on nimesi tai yrityksesi nimi?";
         Text[ thai ] = "à¸„à¸¸à¸“à¸Šà¸·à¹ˆà¸­à¸­à¸°à¹„à¸£à¸«à¸£à¸·à¸­à¸šà¸£à¸´à¸©à¸±à¸—à¸„à¸¸à¸“à¸Šà¸·à¹ˆà¸­à¸­à¸°à¹„à¸£?";
     };
     Edit EDT_PAGE4_ASKNAME
@@ -1001,7 +1001,7 @@ ModalDialog DLG_ASS
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Was ist der Themenbereich Ihrer Präsentation?" ;
         Text [ ENGLISH ] = "What is the topic of Your presentation?" ;
-        Text [ dutch ] = "Wat is het onderwerp van uw presentatie ?" ;
+        Text [ dutch ] = "Wat is het onderwerp van uw presentatie?" ;
         Text [ english_us ] = "What is the subject of your presentation?" ;
         Text [ italian ] = "Qual è il campo di argomenti della vostra presentazione?" ;
         Text [ spanish ] = "¿Cuál es la temática de su presentación?" ;
@@ -1011,7 +1011,7 @@ ModalDialog DLG_ASS
         Text [ portuguese ] = "Qual é o tema da sua apresentação?" ;
         Text [ portuguese_brazilian ] = "Was ist der Themenbereich Ihrer Pr?sentation?" ;
         Text[ chinese_simplified ] = "æ¼”ç¤ºæ–‡ç¨¿çš„ä¸»é¢˜åŒ…æ‹¬å“ªäº›æ–¹é¢ï¼Ÿ";
-        Text[ russian ] = "Íàçîâèòå òåìó Âàøåé ïğåçåíòàöèè";
+        Text[ russian ] = "Òåìà âàøåé ïğåçåíòàöèè.";
         Text[ polish ] = "Co jest tematem twojej prezentacji?";
         Text[ japanese ] = "ãƒ—ãƒ¬ã‚¼ãƒ³ãƒ†ãƒ¼ã‚·ãƒ§ãƒ³ã®ãƒ†ãƒ¼ãƒç¯„å›²ã¯";
         Text[ chinese_traditional ] = "ç°¡å ±ä¸»é¡ŒåŒ…æ‹¬é‚£äº›æ–¹é¢ï¼Ÿ";
@@ -1021,7 +1021,7 @@ ModalDialog DLG_ASS
         Text[ turkish ] = "Sununuzun konusu nedir?";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Quina és la temàtica de la seva presentació?";
-        Text[ finnish ] = "Mikä on esityksen aihe?";
+        Text[ finnish ] = "Mikä on esityksesi aihe?";
         Text[ thai ] = "à¸Šà¸·à¹ˆà¸­à¹€à¸£à¸·à¹ˆà¸­à¸‡à¸—à¸µà¹ˆà¸„à¸¸à¸“à¸ˆà¸°à¸™à¸³à¹€à¸ªà¸™à¸­à¸Šà¸·à¹ˆà¸­à¹€à¸£à¸·à¹ˆà¸­à¸‡à¸­à¸°à¹„à¸£?";
     };
     Edit EDT_PAGE4_ASKTOPIC
@@ -1039,7 +1039,7 @@ ModalDialog DLG_ASS
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Weitere darzustellende Gedanken?" ;
         Text [ ENGLISH ] = "Further things to be mentioned?" ;
-        Text [ dutch ] = "Verdere ideeën die u wilt realiseren?" ;
+        Text [ dutch ] = "Andere ideeën die u wilt realiseren?" ;
         Text [ english_us ] = "Further ideas to be presented?" ;
         Text [ italian ] = "Ulteriori idee da rappresentare?" ;
         Text [ spanish ] = "¿Otras ideas a presentar?" ;
@@ -1049,7 +1049,7 @@ ModalDialog DLG_ASS
         Text [ portuguese ] = "Outras ideias a apresentar?" ;
         Text [ portuguese_brazilian ] = "Weitere darzustellende Gedanken?" ;
         Text[ chinese_simplified ] = "è¿˜éœ€è¦åŠ å…¥å…¶ä»–çš„è®¾æƒ³ï¼Ÿ";
-        Text[ russian ] = "Íàçîâèòå Âàøè äîïîëíèòåëüíûå èäåè";
+        Text[ russian ] = "Äîïîëíåíèÿ è ïğèìå÷àíèÿ.";
         Text[ polish ] = "Dodatkowe pomys³y do uwzglêdnienia w prezentacji?";
         Text[ japanese ] = "ãã®ä»–ã«è¡¨ç¤ºã—ãŸã„æƒ…å ±ã¯";
         Text[ chinese_traditional ] = "é‚„è¦åŠ å…¥å…¶ä»–çš„è¨­æƒ³ï¼Ÿ";
@@ -1092,7 +1092,7 @@ ModalDialog DLG_ASS
         Text [ ENGLISH ] = "~Choose your pages";
         Text[ english_us ] = "Ch~oose your pages";
         Text[ portuguese ] = "~Seleccione as páginas que deseja";
-        Text[ russian ] = "Âûáåğèòå íåîáõîäèìûå ñëàéäû";
+        Text[ russian ] = "Âûáåğèòå âàøè ñòğàíèöû";
         Text[ dutch ] = "~Kies de gewenste pagina's";
         Text[ french ] = "Sélectionnez les pages souhaitées";
         Text[ spanish ] = "~Elija las páginas que desee";
@@ -1133,7 +1133,7 @@ ModalDialog DLG_ASS
         Text [ ENGLISH ] = "~Create summary";
         Text[ english_us ] = "C~reate summary";
         Text[ portuguese ] = "~Criar resumo";
-        Text[ russian ] = "~Ñîçäàòü ğåçşìå";
+        Text[ russian ] = "~Äîáàâèòü ñïèñîê ñëàéäîâ";
         Text[ dutch ] = "~Samenvatting maken";
         Text[ french ] = "Créer un récapitulatif";
         Text[ spanish ] = "Crear resumen";
@@ -1151,7 +1151,7 @@ ModalDialog DLG_ASS
         Text[ turkish ] = "Özet oluştur";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "C~rea un resum";
-        Text[ finnish ] = "~Luo yhteenveto";
+        Text[ finnish ] = "Luo ~yhteenveto";
         Text[ thai ] = "à¸ª~à¸£à¹‰à¸²à¸‡à¸šà¸—à¸ªà¸£à¸¸à¸›";
     };
 
@@ -1200,7 +1200,7 @@ ModalDialog DLG_ASS
         Text[ turkish ] = "<< Geri";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "<< ~Enrere";
-        Text[ finnish ] = "<< Edellinen";
+        Text[ finnish ] = "<< ~Edellinen";
         Text[ thai ] = "<< ~à¸à¸¥à¸±à¸š";
     };
 
@@ -1270,7 +1270,7 @@ ModalDialog DLG_ASS
     };
     Text[ english_us ] = "AutoPilot Presentation";
     Text[ portuguese ] = "AutoPiloto Apresentação";
-    Text[ russian ] = "Àâòîïèëîò ïğåçåíòàöèé";
+    Text[ russian ] = "Ìàñòåğ ïğåçåíòàöèé";
     Text[ dutch ] = "AutoPiloot Presentatie";
     Text[ french ] = "AutoPilote de présentation";
     Text[ spanish ] = "AutoPiloto Presentación";
@@ -1288,6 +1288,6 @@ ModalDialog DLG_ASS
     Text[ turkish ] = "Sunu OtoPilotu";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Presentació de l'AutoPilot";
-    Text[ finnish ] = "Automaattinen esityksen ohjaus";
+    Text[ finnish ] = "Ohjattu esityksen luominen";
     Text[ thai ] = "à¸™à¸³à¸£à¹ˆà¸­à¸‡à¸à¸²à¸£à¸™à¸³à¹€à¸ªà¸™à¸­à¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´ ";
 };
