@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagemgr.src,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 13:11:59 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:42:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,7 +202,7 @@ String STR_DESCRIPTION_SOURCEFILE
     Text [ arabic ] = "ΗαΤνέΡΙ ΗαγΥΟΡνΙ";
     Text[ dutch ] = "Broncode";
     Text[ chinese_simplified ] = "ζΊζ–‡ζ¬";
-    Text[ greek ] = "Κωδικός προέλευσης";
+    Text[ greek ] = "Πηγαίος κώδικας";
     Text[ korean ] = "μ†μ¤ μ½”λ“";
     Text[ turkish ] = "Kaynak kod";
     Text[ finnish ] = "Lδhdekoodi";
@@ -266,7 +266,7 @@ String STR_DESCRIPTION_GRAPHIC_DOC
     Text [ arabic ] = "ΥζΡΙ";
     Text[ dutch ] = "Afbeelding";
     Text[ chinese_simplified ] = "ε›Ύε½Ά";
-    Text[ greek ] = "Γραφικό";
+    Text[ greek ] = "Γραφικά";
     Text[ korean ] = "κ·Έλ¦Ό";
     Text[ turkish ] = "Grafik";
     Text[ finnish ] = "Grafiikka";
@@ -298,7 +298,7 @@ String STR_DESCRIPTION_CFGFILE
     Text [ arabic ] = "γαέ ΗαΚίζνδ";
     Text[ dutch ] = "Configuratiebestand";
     Text[ chinese_simplified ] = "ι…η½®ζ–‡δ»¶";
-    Text[ greek ] = "Αρχείο παραμέτρων";
+    Text[ greek ] = "Αρχείο διαμόρφωσης";
     Text[ korean ] = "κµ¬μ„± νμΌ";
     Text[ turkish ] = "Yapύlandύrma dosyasύ";
     Text[ finnish ] = "Kokoonpanotiedosto";
@@ -481,7 +481,7 @@ String STR_DESCRIPTION_HTMLFILE
     Text [ swedish ] = "HTML-dokument" ;
     Text [ danish ] = "Internet-dokument" ;
     Text [ portuguese ] = "Documento Internet" ;
-    Text [ portuguese_brazilian ] = "Documento Internet" ;
+    Text [ portuguese_brazilian ] = "Documento da internet" ;
     Text [ chinese_simplified ] = "HTML ζ–‡ζ΅£";
     Text [ russian ] = "Δξκσμενς θνςεπνεςΰ";
     Text [ polish ] = "Dokument internetowy";
@@ -554,7 +554,7 @@ String STR_DESCRIPTION_LOGFILE
     Text [ arabic ] = "γαέ ΗαΘΡζΚζίζα";
     Text[ dutch ] = "Protocolbestand";
     Text[ chinese_simplified ] = "θ®°ε½•ζ–‡δ»¶";
-    Text[ greek ] = "Αρχείο πρωτοκόλλου";
+    Text[ greek ] = "Αρχείο καταγραφής";
     Text[ korean ] = "λ΅κ·Έ νμΌ";
     Text[ turkish ] = "Kayύt dosyasύ";
     Text[ finnish ] = "Lokitiedosto";
@@ -586,7 +586,7 @@ String STR_DESCRIPTION_SMATH_DOC
     Text [ arabic ] = "%PRODUCTNAME ΥνΫΙ";
     Text[ dutch ] = "%PRODUCTNAME formule";
     Text[ chinese_simplified ] = "%PRODUCTNAME ε…¬εΌ";
-    Text[ greek ] = "Τύπος (%PRODUCTNAME)";
+    Text[ greek ] = "Τύπος %PRODUCTNAME";
     Text[ korean ] = "%PRODUCTNAME μμ‹";
     Text[ turkish ] = "%PRODUCTNAME formόlό";
     Text[ finnish ] = "%PRODUCTNAME-kaava";
@@ -650,7 +650,7 @@ String STR_DESCRIPTION_SDRAW_DOC
     Text [ arabic ] = "%PRODUCTNAME ΡΣγΙ";
     Text[ dutch ] = "%PRODUCTNAME tekening";
     Text[ chinese_simplified ] = "%PRODUCTNAME η»ε›Ύ";
-    Text[ greek ] = "Σχέδιο (%PRODUCTNAME)";
+    Text[ greek ] = "Σχέδιο %PRODUCTNAME";
     Text[ korean ] = "%PRODUCTNAME κ·Έλ¦¬κΈ°";
     Text[ turkish ] = "%PRODUCTNAME ηizim";
     Text[ finnish ] = "%PRODUCTNAME-piirros";
@@ -682,7 +682,7 @@ String STR_DESCRIPTION_SCALC_DOC
     Text [ arabic ] = "%PRODUCTNAME ΜΟζα";
     Text[ dutch ] = "%PRODUCTNAME werkblad";
     Text[ chinese_simplified ] = "%PRODUCTNAME ε·¥δ½θ΅¨";
-    Text[ greek ] = "Πίνακας %PRODUCTNAME";
+    Text[ greek ] = "Υπολογιστικό φύλλο %PRODUCTNAME";
     Text[ korean ] = "%PRODUCTNAME μ¤ν”„λ λ“μ‹νΈ";
     Text[ turkish ] = "%PRODUCTNAME hesap ηizelgesi";
     Text[ finnish ] = "%PRODUCTNAME-laskentataulukko";
@@ -714,7 +714,7 @@ String STR_DESCRIPTION_SIMPRESS_DOC
     Text [ arabic ] = "ΗαΚήΟνγν %PRODUCTNAME ΪΡΦ";
     Text[ dutch ] = "%PRODUCTNAME presentatie";
     Text[ chinese_simplified ] = "%PRODUCTNAME ζΌ”η¤Ίζ–‡η¨Ώ";
-    Text[ greek ] = "Παρουσίαση (%PRODUCTNAME)";
+    Text[ greek ] = "Παρουσίαση %PRODUCTNAME";
     Text[ korean ] = "%PRODUCTNAME ν”„λ μ  ν…μ΄μ…";
     Text[ turkish ] = "%PRODUCTNAME sunumu";
     Text[ finnish ] = "%PRODUCTNAME-esitys";
@@ -778,7 +778,7 @@ String STR_DESCRIPTION_GLOBALDOC
     Text [ arabic ] = "(%PRODUCTNAME text) γΣΚδΟ ΤΗγα";
     Text[ dutch ] = "%PRODUCTNAME Tekst Masterdocument";
     Text[ chinese_simplified ] = "%PRODUCTNAME ζ–‡ζ¬ δΈ»ζ§ζ–‡ζ΅£";
-    Text[ greek ] = "Κείμενο κυρίου έγγραφου %PRODUCTNAME";
+    Text[ greek ] = "Κείμενο πρωτεύοντος έγγραφου %PRODUCTNAME";
     Text[ korean ] = "%PRODUCTNAME ν…μ¤νΈ λ§μ¤ν„° λ¬Έμ„";
     Text[ turkish ] = "%PRODUCTNAME Metin ana belgesi";
     Text[ finnish ] = "%PRODUCTNAME perustekstitiedosto";
@@ -810,7 +810,7 @@ String STR_DESCRIPTION_SIMAGE_DOC
     Text [ arabic ] = "%PRODUCTNAME ΥζΡΙ";
     Text[ dutch ] = "%PRODUCTNAME afbeelding";
     Text[ chinese_simplified ] = "%PRODUCTNAME ε›Ύεƒ";
-    Text[ greek ] = "%PRODUCTNAME - Εικόνα";
+    Text[ greek ] = "Εικόνα %PRODUCTNAME";
     Text[ korean ] = "%PRODUCTNAME μ΄λ―Έμ§€";
     Text[ turkish ] = "%PRODUCTNAME resmi";
     Text[ finnish ] = "%PRODUCTNAME-kuva";
@@ -906,7 +906,7 @@ String STR_DESCRIPTION_SOFFICE_TEMPLATE_DOC
     Text [ arabic ] = "ήΗαΘ%PRODUCTNAME ";
     Text[ dutch ] = "%PRODUCTNAME sjabloon";
     Text[ chinese_simplified ] = "%PRODUCTNAME ζ ·εΌ";
-    Text[ greek ] = "%PRODUCTNAME - Πρότυπο";
+    Text[ greek ] = "Πρότυπο %PRODUCTNAME";
     Text[ korean ] = "%PRODUCTNAME μ„μ‹ νμΌ";
     Text[ turkish ] = "%PRODUCTNAME ήablonu";
     Text[ finnish ] = "%PRODUCTNAME-malli";
@@ -970,7 +970,7 @@ String STR_DESCRIPTION_EXCEL_TEMPLATE_DOC
     Text [ arabic ] = "ήΗαΘMS Excel ";
     Text[ dutch ] = "MS Excel-sjabloon";
     Text[ chinese_simplified ] = "MS Excel ζ¨΅ζΏ";
-    Text[ greek ] = "MS Excel - Πρότυπο";
+    Text[ greek ] = "Πρότυπο MS Excel";
     Text[ korean ] = "MS Excel μ„μ‹ νμΌ";
     Text[ turkish ] = "MS Excel ώablonu";
     Text[ finnish ] = "MS Excel -malli";
@@ -1002,7 +1002,7 @@ String STR_DESCRIPTION_BATCHFILE
     Text[ arabic ] = "γαέ γΪΗαΜΙ ΟυέΪΙ";
     Text[ dutch ] = "Batchbestand";
     Text[ chinese_simplified ] = "ζ‰Ήζ–‡δ»¶";
-    Text[ greek ] = "Αρχείο πολλαπλών εντολών (Batch file)";
+    Text[ greek ] = "Αρχείο δέσμης";
     Text[ korean ] = "μΌκ΄„ μ²λ¦¬ νμΌ";
     Text[ turkish ] = "Toplu iώ dosyasύ";
     Text[ finnish ] = "Erδajotiedosto";
@@ -1114,7 +1114,7 @@ String STR_DESCRIPTION_FACTORY_CALC
     Text[ english_us ] = "Spreadsheet";
     Text[ portuguese ] = "Folha de cαlculo";
     Text[ russian ] = "έλεκςπξννΰÿ ςΰαλθφΰ";
-    Text[ greek ] = "Κείμενο πίνακα";
+    Text[ greek ] = "Υπολογιστικό φύλλο";
     Text[ dutch ] = "Werkbladdocument";
     Text[ french ] = "Classeur";
     Text[ spanish ] = "Hoja de cαlculo";
@@ -1234,7 +1234,7 @@ String STR_DESCRIPTION_FACTORY_GLOBALDOC
     Text[ english_us ] = "Master document";
     Text[ portuguese ] = "Documento-mestre";
     Text[ russian ] = "Ρξρςΰβνξι δξκσμενς";
-    Text[ greek ] = "Κύριο έγγραφο";
+    Text[ greek ] = "Πρωτεύον έγγραφο";
     Text[ dutch ] = "Masterdocument";
     Text[ french ] = "Document maξtre";
     Text[ spanish ] = "Documento maestro";
@@ -1292,7 +1292,7 @@ String STR_DESCRIPTION_CALC_TEMPLATE
     Text [ english_us ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Spreadsheet Template" ;
     Text[ portuguese ] = "%PRODUCTNAME 6.0 Modelo de folha de cαlculo";
     Text[ russian ] = "Ψΰαλξν ύλεκςπξννξι ςΰαλθφϋ %PRODUCTNAME 6.0";
-    Text[ greek ] = "%PRODUCTNAME 6.0 Tabledocument Template";
+    Text[ greek ] = "Πρότυπο υπολογιστικών φύλλων %PRODUCTNAME 6.0";
     Text[ dutch ] = "%productname% 6.0 Werkbladsjabloon";
     Text[ french ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Modθle de classeur";
     Text[ spanish ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION - Plantilla de hoja de cαlculo";
@@ -1321,7 +1321,7 @@ String STR_DESCRIPTION_DRAW_TEMPLATE
     Text [ english_us ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Drawing Template" ;
     Text[ portuguese ] = "%PRODUCTNAME 6.0 Modelo de desenho";
     Text[ russian ] = "Ψΰαλξν πθρσνκΰ %PRODUCTNAME 6.0";
-    Text[ greek ] = "%PRODUCTNAME 6.0 Drawing Template";
+    Text[ greek ] = "Πρότυπο σχεδίων %PRODUCTNAME 6.0";
     Text[ dutch ] = "%PRODUCTNAME 6.0 Tekeningsjabloon";
     Text[ french ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Modθle de dessin";
     Text[ spanish ] = "Plantilla de dibujo %PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION ";
@@ -1350,7 +1350,7 @@ String STR_DESCRIPTION_IMPRESS_TEMPLATE
     Text [ english_us ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Presentation Template" ;
     Text[ portuguese ] = "%PRODUCTNAME 6.0 Modelo de apresentaηγo";
     Text[ russian ] = "Ψΰαλξν οπεηενςΰφθθ %PRODUCTNAME 6.0";
-    Text[ greek ] = "%PRODUCTNAME 6.0 Presentation Template";
+    Text[ greek ] = "Πρότυπο παρουσιάσεων %PRODUCTNAME 6.0";
     Text[ dutch ] = "%PRODUCTNAME 6.0 Presentatiesjabloon";
     Text[ french ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Modθle de prιsentation";
     Text[ spanish ] = "Plantilla de presentaciσn %PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION   ";
@@ -1379,7 +1379,7 @@ String STR_DESCRIPTION_WRITER_TEMPLATE
     Text [ english_us ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Text Document Template" ;
     Text[ portuguese ] = "%PRODUCTNAME 6.0 Modelo de texto";
     Text[ russian ] = "Ψΰαλξν ςεκρςΰ %PRODUCTNAME 6.0";
-    Text[ greek ] = "%PRODUCTNAME 6.0 Textdocument Template";
+    Text[ greek ] = "Πρότυπο εγγράφων κειμένου %PRODUCTNAME 6.0";
     Text[ dutch ] = "%productname% 6.0 Tekstdocumentsjabloon";
     Text[ french ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Modθle de texte";
     Text[ spanish ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Plantilla de documento de texto";
@@ -1437,7 +1437,7 @@ String STR_DESCRIPTION_FLOPPY_VOLUME
     Text [ english_us ] = "Disk drive" ;
     Text[ portuguese ] = "Floppy disk";
     Text[ russian ] = "Δθρκξβξδ";
-    Text[ greek ] = "Floppy disk";
+    Text[ greek ] = "Μονάδα δισκέτας";
     Text[ dutch ] = "Diskettestation";
     Text[ french ] = "Unitι disquette";
     Text[ spanish ] = "Unidad de disco";
@@ -1466,7 +1466,7 @@ String STR_DESCRIPTION_CDROM_VOLUME
     Text [ english_us ] = "CD-ROM drive" ;
     Text[ portuguese ] = "Leitor CD-ROM";
     Text[ russian ] = "Οπθβξδ δλÿ κξμοΰκς-δθρκξβ";
-    Text[ greek ] = "Συσκευή CD-ROM";
+    Text[ greek ] = "Μονάδα CD-ROM";
     Text[ dutch ] = "Cd-romstation";
     Text[ french ] = "Unitι CD-ROM";
     Text[ spanish ] = "Unidad de CD ROM ";
@@ -1525,7 +1525,7 @@ String STR_DESCRIPTION_POWERPOINT
     Text[ english_us ] = "MS PowerPoint Document";
     Text[ portuguese ] = "MS PowerPoint Document";
     Text[ russian ] = "Δξκσμενς MS PowerPoint";
-    Text[ greek ] = "MS PowerPoint Document";
+    Text[ greek ] = "Έγγραφο του MS PowerPoint";
     Text[ dutch ] = "MS PowerPoint-document";
     Text[ french ] = "Document MS PowerPoint";
     Text[ spanish ] = "Documento de MS PowerPoint ";
@@ -1556,7 +1556,7 @@ String STR_DESCRIPTION_POWERPOINT_TEMPLATE
     Text[ english_us ] = "MS PowerPoint Template";
     Text[ portuguese ] = "MS PowerPoint Template";
     Text[ russian ] = "Ψΰαλξν MS PowerPoint";
-    Text[ greek ] = "MS PowerPoint Template";
+    Text[ greek ] = "Πρότυπο MS PowerPoint";
     Text[ dutch ] = "MS PowerPoint-sjabloon";
     Text[ french ] = "Modθle MS PowerPoint";
     Text[ spanish ] = "Plantilla MS PowerPoint ";
@@ -1587,7 +1587,7 @@ String STR_DESCRIPTION_POWERPOINT_SHOW
     Text[ english_us ] = "MS PowerPoint Show";
     Text[ portuguese ] = "MS PowerPoint Show";
     Text[ russian ] = "Δεμξνρςπΰφθÿ MS PowerPoint";
-    Text[ greek ] = "MS PowerPoint Show";
+    Text[ greek ] = "Προβολή του MS PowerPoint";
     Text[ dutch ] = "MS PowerPoint-presentatie";
     Text[ french ] = "Diaporama MS PowerPoint";
     Text[ spanish ] = "MS PowerPoint Show";
@@ -1630,7 +1630,7 @@ String STR_DESCRIPTION_SXMATH_DOC
     Text[ finnish ] = "%PRODUCTNAME 6.0 Formula";
     Text[ danish ] = "%PRODUCTNAME 6.0 Formula";
     Text[ polish ] = "%PRODUCTNAME 6.0 Formula";
-    Text[ portuguese_brazilian ] = "%PRODUCTNAME 6.0 Formula";
+    Text[ portuguese_brazilian ] = "Fσrmula %PRODUCTNAME 6.0";
     Text[ turkish ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Formόlό";
     Text[ arabic ] = "%PRODUCTNAME 6.0 Formula";
     Text[ catalan ] = "%PRODUCTNAME 6.0 Formula";
@@ -1660,7 +1660,7 @@ String STR_DESCRIPTION_SXCHART_DOC
     Text[ finnish ] = "%PRODUCTNAME 6.0 Chart";
     Text[ danish ] = "%PRODUCTNAME 6.0 Chart";
     Text[ polish ] = "%PRODUCTNAME 6.0 Chart";
-    Text[ portuguese_brazilian ] = "%PRODUCTNAME 6.0 Chart";
+    Text[ portuguese_brazilian ] = "Grαfico %PRODUCTNAME 6.0";
     Text[ turkish ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Haritasύ";
     Text[ arabic ] = "%PRODUCTNAME 6.0 Chart";
     Text[ catalan ] = "%PRODUCTNAME 6.0 Chart";
@@ -1690,7 +1690,7 @@ String STR_DESCRIPTION_SXDRAW_DOC
     Text[ finnish ] = "%PRODUCTNAME 6.0 Drawing";
     Text[ danish ] = "%PRODUCTNAME 6.0 Drawing";
     Text[ polish ] = "%PRODUCTNAME 6.0 Drawing";
-    Text[ portuguese_brazilian ] = "%PRODUCTNAME 6.0 Drawing";
+    Text[ portuguese_brazilian ] = "Desenho %PRODUCTNAME 6.0";
     Text[ turkish ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMARVERSION Ηizimi";
     Text[ arabic ] = "%PRODUCTNAME 6.0 Drawing";
     Text[ catalan ] = "%PRODUCTNAME 6.0 Drawing";
@@ -1720,7 +1720,7 @@ String STR_DESCRIPTION_SXCALC_DOC
     Text[ finnish ] = "%PRODUCTNAME 6.0 Spreadsheet";
     Text[ danish ] = "%PRODUCTNAME 6.0 Spreadsheet";
     Text[ polish ] = "%PRODUCTNAME 6.0 Spreadsheet";
-    Text[ portuguese_brazilian ] = "%PRODUCTNAME 6.0 Spreadsheet";
+    Text[ portuguese_brazilian ] = "Planilha %PRODUCTNAME 6.0";
     Text[ turkish ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Hesap Ηizelgesi";
     Text[ arabic ] = "%PRODUCTNAME 6.0 Spreadsheet";
     Text[ catalan ] = "%PRODUCTNAME 6.0 Spreadsheet";
@@ -1750,7 +1750,7 @@ String STR_DESCRIPTION_SXIMPRESS_DOC
     Text[ finnish ] = "%PRODUCTNAME 6.0 Presentation";
     Text[ danish ] = "%PRODUCTNAME 6.0 Presentation";
     Text[ polish ] = "%PRODUCTNAME 6.0 Presentation";
-    Text[ portuguese_brazilian ] = "%PRODUCTNAME 6.0 Presentation";
+    Text[ portuguese_brazilian ] = "Apresentaηγo %PRODUCTNAME 6.0";
     Text[ turkish ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Sunumu";
     Text[ arabic ] = "%PRODUCTNAME 6.0 Presentation";
     Text[ catalan ] = "%PRODUCTNAME 6.0 Presentation";
@@ -1780,7 +1780,7 @@ String STR_DESCRIPTION_SXWRITER_DOC
     Text[ finnish ] = "%PRODUCTNAME 6.0 Text Document";
     Text[ danish ] = "%PRODUCTNAME 6.0 Text Document";
     Text[ polish ] = "%PRODUCTNAME 6.0 Text Document";
-    Text[ portuguese_brazilian ] = "%PRODUCTNAME 6.0 Text Document";
+    Text[ portuguese_brazilian ] = "Documento de texto %PRODUCTNAME 6.0";
     Text[ turkish ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Metin Belgesi";
     Text[ arabic ] = "%PRODUCTNAME 6.0 Text Document";
     Text[ catalan ] = "%PRODUCTNAME 6.0 Text Document";
@@ -1810,7 +1810,7 @@ String STR_DESCRIPTION_SXGLOBAL_DOC
     Text[ finnish ] = "%PRODUCTNAME 6.0 Master Document";
     Text[ danish ] = "%PRODUCTNAME 6.0 Master Document";
     Text[ polish ] = "%PRODUCTNAME 6.0 Master Document";
-    Text[ portuguese_brazilian ] = "%PRODUCTNAME 6.0 Master Document";
+    Text[ portuguese_brazilian ] = "Documento Mestre %PRODUCTNAME 6.0";
     Text[ turkish ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Ana Belgesi";
     Text[ arabic ] = "%PRODUCTNAME 6.0 Master Document";
     Text[ catalan ] = "%PRODUCTNAME 6.0 Master Document";
@@ -1840,7 +1840,7 @@ String STR_DESCRIPTION_MATHML_DOC
     Text[ finnish ] = "MathML Document";
     Text[ danish ] = "MathML Document";
     Text[ polish ] = "MathML Document";
-    Text[ portuguese_brazilian ] = "MathML Document";
+    Text[ portuguese_brazilian ] = "Documento MathML";
     Text[ turkish ] = "MathML Belgesi";
     Text[ arabic ] = "MathML Document";
     Text[ catalan ] = "MathML Document";
@@ -1850,6 +1850,7 @@ String STR_DESCRIPTION_MATHML_DOC
     Text[ hindi ] = "MathML Document";
     Text[ slovak ] = "MathML Dokument";
 };
+
 
 
 
