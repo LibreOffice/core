@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dpobject.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-23 12:52:45 $
+ *  last change: $Author: hr $ $Date: 2004-08-03 11:31:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,9 +70,11 @@
 #include "dpobject.hxx"
 #include "dptabsrc.hxx"
 #include "dpsave.hxx"
+#include "dpdimsave.hxx"
 #include "dpoutput.hxx"
 #include "dpshttab.hxx"
 #include "dpsdbtab.hxx"
+#include "dpgroup.hxx"
 #include "document.hxx"
 #include "rechead.hxx"
 #include "pivot.hxx"        // PIVOT_DATA_FIELD
@@ -380,6 +382,10 @@ void ScDPObject::CreateOutput()
 
 void ScDPObject::CreateObjects()
 {
+    // if groups are involved, create a new source with the ScDPGroupTableData
+    if ( bSettingsChanged && pSaveData && pSaveData->GetExistingDimensionData() )
+        xSource = NULL;
+
     if (!xSource.is())
     {
         //! cache DPSource and/or Output?
@@ -388,25 +394,40 @@ void ScDPObject::CreateObjects()
 
         DELETEZ( pOutput );     // not valid when xSource is changed
 
-        if ( pImpDesc )
-        {
-            ScDatabaseDPData* pData = new ScDatabaseDPData( pDoc->GetServiceManager(), *pImpDesc );
-            xSource = new ScDPSource( pData );
-        }
-        else if ( pServDesc )
+        if ( pServDesc )
         {
             xSource = CreateSource( *pServDesc );
         }
 
-        if ( !xSource.is() )    // sheet data or error in above cases
+        if ( !xSource.is() )    // database or sheet data, or error in CreateSource
         {
-            DBG_ASSERT( !pImpDesc && !pServDesc, "DPSource could not be created" );
-            if (!pSheetDesc)
+            DBG_ASSERT( !pServDesc, "DPSource could not be created" );
+
+            ScDPTableData* pData = NULL;
+            if ( pImpDesc )
             {
-                DBG_ERROR("no source descriptor");
-                pSheetDesc = new ScSheetSourceDesc;     // dummy defaults
+                // database data
+                pData = new ScDatabaseDPData( pDoc->GetServiceManager(), *pImpDesc );
             }
-            ScSheetDPData* pData = new ScSheetDPData( pDoc, *pSheetDesc );
+            else
+            {
+                // cell data
+                if (!pSheetDesc)
+                {
+                    DBG_ERROR("no source descriptor");
+                    pSheetDesc = new ScSheetSourceDesc;     // dummy defaults
+                }
+                pData = new ScSheetDPData( pDoc, *pSheetDesc );
+            }
+
+            // grouping (for cell or database data)
+            if ( pSaveData && pSaveData->GetExistingDimensionData() )
+            {
+                ScDPGroupTableData* pGroupData = new ScDPGroupTableData( pData, pDoc );
+                pSaveData->GetExistingDimensionData()->WriteToData( *pGroupData );
+                pData = pGroupData;
+            }
+
             xSource = new ScDPSource( pData );
         }
 
@@ -601,6 +622,25 @@ void ScDPObject::WriteRefsTo( ScDPObject& r ) const
     r.SetOutRange( aOutRange );
     if ( pSheetDesc )
         r.SetSheetDesc( *pSheetDesc );
+}
+
+BOOL ScDPObject::IsDimNameInUse( const String& rName ) const
+{
+    if ( xSource.is() )
+    {
+        uno::Reference<container::XNameAccess> xDimsName = xSource->getDimensions();
+        if ( xDimsName.is() )
+        {
+            rtl::OUString aCompare( rName );
+            uno::Sequence<rtl::OUString> aNames = xDimsName->getElementNames();
+            long nCount = aNames.getLength();
+            const rtl::OUString* pArr = aNames.getConstArray();
+            for (long nPos=0; nPos<nCount; nPos++)
+                if ( pArr[nPos] == aCompare )            //! ignore case
+                    return TRUE;
+        }
+    }
+    return FALSE;   // not found
 }
 
 String ScDPObject::GetDimName( long nDim, BOOL& rIsDataLayout )
