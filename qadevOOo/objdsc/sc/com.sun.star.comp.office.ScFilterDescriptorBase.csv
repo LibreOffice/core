@@ -5,7 +5,7 @@
 "ScFilterDescriptorBase";"com::sun::star::sheet::SheetFilterDescriptor";"UseRegularExpressions"
 "ScFilterDescriptorBase";"com::sun::star::sheet::SheetFilterDescriptor";"SaveOutputPosition"
 "ScFilterDescriptorBase";"com::sun::star::sheet::SheetFilterDescriptor";"Orientation"
-"ScFilterDescriptorBase";"com::sun::star::sheet::SheetFilterDescriptor";"containsPointHeader"
+"ScFilterDescriptorBase";"com::sun::star::sheet::SheetFilterDescriptor";"ContainsHeader"
 "ScFilterDescriptorBase";"com::sun::star::sheet::SheetFilterDescriptor";"CopyOutputData"
 "ScFilterDescriptorBase";"com::sun::star::sheet::SheetFilterDescriptor";"OutputPosition"
 "ScFilterDescriptorBase";"com::sun::star::sheet::SheetFilterDescriptor";"MaxFieldCount"
