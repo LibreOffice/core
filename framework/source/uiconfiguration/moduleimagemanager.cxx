@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduleimagemanager.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 16:59:05 $
+ *  last change: $Author: obo $ $Date: 2004-07-07 11:27:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -683,8 +683,8 @@ sal_Bool ModuleImageManager::implts_storeUserImages(
                 if ( xBitmapStream.is() )
                 {
                     SvStream* pSvStream = utl::UcbStreamHelper::CreateStream( xBitmapStream );
-                    vcl::PNGWriter aPngWriter( *pSvStream );
-                    aPngWriter.Write( pImageList->GetBitmapEx() );
+                    vcl::PNGWriter aPngWriter( pImageList->GetBitmapEx() );
+                    aPngWriter.Write( *pSvStream );
                     delete pSvStream;
 
                     // Commit user bitmaps storage

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uiconfigurationmanager.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 16:59:47 $
+ *  last change: $Author: obo $ $Date: 2004-07-07 11:28:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -287,8 +287,8 @@ void UIConfigurationManager::impl_preloadUIElementTypeList( sal_Int16 nElementTy
                 sal_Int32 nIndex = aUIElementNames[n].lastIndexOf( '.' );
                 if (( nIndex > 0 ) && ( nIndex < aUIElementNames[n].getLength() ))
                 {
-                    OUString aExtension( aUIElementNames[n].copy( nIndex+1 ));
-                    OUString aUIElementName( aUIElementNames[n].copy( 0, nIndex ));
+                    rtl::OUString aExtension( aUIElementNames[n].copy( nIndex+1 ));
+                    rtl::OUString aUIElementName( aUIElementNames[n].copy( 0, nIndex ));
 
                     if (( aUIElementName.getLength() > 0 ) &&
                         ( aExtension.equalsIgnoreAsciiCaseAsciiL( "xml", 3 )))
