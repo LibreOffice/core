@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpp2uno.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2000-12-21 14:47:44 $
+ *  last change: $Author: dbo $ $Date: 2001-03-08 14:37:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,8 @@
  *
  *
  ************************************************************************/
+#define SAL_THROW( exc ) throw exc
+
 #define LEAK_STATIC_DATA
 //  #define TRACE(x) OSL_TRACE(x)
 #define TRACE(x)
@@ -459,7 +461,7 @@ const MediateClassData::ClassDataBuffer* MediateClassData::getClassData( typelib
 }
 
 //==================================================================================================
-void cpp_vtable_call( int nTableEntry, void** pCallStack )
+int cpp_vtable_call( int nTableEntry, void** pCallStack )
 {
     long nRegReturn[2];
     typelib_TypeClass aType =
@@ -488,9 +490,12 @@ void cpp_vtable_call( int nTableEntry, void** pCallStack )
             pCallStack[ 17 ] = (void*) nRegReturn[ 0 ];
             break;
     }
+    return aType;
 }
 
 enum SpecialReturnType { None, ReturnFloat, ReturnDouble };
+
+extern "C" void privateSnippetExecutor();
 
 //__________________________________________________________________________________________________
 void MediateClassData::createVTable( ClassDataBuffer* pBuffer, typelib_InterfaceTypeDescription* pType )
@@ -551,7 +556,7 @@ void MediateClassData::createVTable( ClassDataBuffer* pBuffer, typelib_Interface
         TYPELIB_DANGER_RELEASE( pMember );
     }
 
-    const int nSnippetSize = 256;
+    const int nSnippetSize = 32;
      int nSize = aSpecialReturn.size();
      char * pSpace = (char *)rtl_allocateMemory( ((nSize+3)*sizeof(void *)) + (nSize * nSnippetSize) );
      pBuffer->m_pVTable = (void**)pSpace;
@@ -574,94 +579,29 @@ void MediateClassData::createVTable( ClassDataBuffer* pBuffer, typelib_Interface
             nTablePos |= 0x80000000;
         aComplexReturn.pop_front();
          pvft[nPos+3] = codeSnip;
-        /*generate this code:
-         *  save %sp, -104, %sp
-         *  st %i0, [ %fp + 68 ]
-         *  st %i1, [ %fp + 72 ]
-         *  st %i2, [ %fp + 76 ]
-         *  st %i3, [ %fp + 80 ]
-         *  st %i4, [ %fp + 84 ]
-         *  st %i5, [ %fp + 88 ]
-         *                          prepare vtable entry
-         *  sethi %hi( nTablePos ), %o0
-         *  or    %lo( nTablePos ), %o0
-         *
-         *  ( if complex return, set high bit )
-         *
-         *  mov   %fp, %o1          prepare stack
-         *  call cpp_vtable_call
-         *  nop
-         *  ld [ %fp + 68 ], %i0    restore (perhaps changed) registers
-         *  ld [ %fp + 72 ], %i1
-         *  ld [ %fp + 76 ], %i2
-         *  ld [ %fp + 80 ], %i3
-         *  ld [ %fp + 84 ], %i4
-         *  ld [ %fp + 88 ], %i5
-         *
-         *  ( if double return value, get (%i0, %i1) into %f0
-         *          std %i0, [ %fp - 8 ]
-         *          ldd [ %fp - 8 ], %f0
-         *
-         *  ( if float return value, get (%i0) into %f0
-         *          ld [ %fp + 68 ], %f0
-         *
-         *  jmp %i7+8               return
-         *  restore
-         *exception cleanup code
-         *  call __Crun::ex_rethrow_q
-         *  nop
-         */
-        *codeSnip++ = 0x9de3bf98;
-        *codeSnip++ = 0xf027a044;
-        *codeSnip++ = 0xf227a048;
-        *codeSnip++ = 0xf427a04c;
-        *codeSnip++ = 0xf627a050;
-        *codeSnip++ = 0xf827a054;
-        *codeSnip++ = 0xfa27a058;
-        *codeSnip++ = 0x11000000 | (nTablePos >> 10);
-        *codeSnip++ = 0x90122000 | (nTablePos & 1023);
-        *codeSnip++ = 0x9210001e;
-        unsigned long rel32 = (unsigned long)cpp_vtable_call - ((unsigned long)codeSnip);
-        *codeSnip++ = 0x40000000 | (rel32 >> 2 );
-        *codeSnip++ = 0x01000000;
-        *codeSnip++ = 0xf007a044;
-        *codeSnip++ = 0xf207a048;
-        *codeSnip++ = 0xf407a04c;
-        *codeSnip++ = 0xf607a050;
-        *codeSnip++ = 0xf807a054;
-        *codeSnip++ = 0xfa07a058;
-
-        switch( eRet )
-        {
-            case ReturnFloat:
-                *codeSnip++ = 0xc107a044;
-                break;
-            case ReturnDouble:
-                *codeSnip++ = 0xf03fbff8;
-                *codeSnip++ = 0xc11fbff8;
-                break;
-            default:
-                break;
-        }
-
-        unsigned long* exc_frame = codeSnip;
-        *codeSnip++ = 0x81c7e008;
-        *codeSnip++ = 0x81e80000;
-        unsigned long* exc_handler = codeSnip;
-        *codeSnip++ = 0x40000000 | (((unsigned long)__Crun::ex_rethrow_q) >> 2);
-        *codeSnip++ = 0x01000000;
-
-        unsigned long* frame_info = new unsigned long[5];
-        memset( frame_info, 0, 5*sizeof(unsigned long) );
-        frame_info[ 0 ] = (unsigned long)exc_frame;
-        frame_info[ 2 ] = (unsigned long)(exc_handler);
-        _ex_register( frame_info, 1 );
+        /* generate this code:
+          st %o0, [%sp+68]
+          sethi %hi(privateSnippetExecutor), %o0
+          or %lo(privateSnippetExecutor),%o0,%o0
+          sethi %hi(nTablePos), %g1
+          or %lo(nTablePos), %g1, %g1
+          jmpl %o0, %g0
+          nop
+        */
+        *codeSnip++ = 0xd023a044;
+          *codeSnip++ = 0x11000000 | ((unsigned long)privateSnippetExecutor >> 10);
+          *codeSnip++ = 0x90122000 | ((unsigned long)privateSnippetExecutor  & 0x3ff);
+          *codeSnip++ = 0x03000000 | (nTablePos >> 10);
+          *codeSnip++ = 0x82106000 | (nTablePos & 0x3ff);
+        *codeSnip++ = 0x81c20000;
+          *codeSnip++ = 0x01000000;
      }
 }
 
 //==================================================================================================
 extern "C" void SAL_CALL cppu_cppInterfaceProxy_patchVtable(
-    XInterface * pCppI, typelib_InterfaceTypeDescription * pTypeDescr ) throw ()
+    XInterface * pCppI, typelib_InterfaceTypeDescription * pTypeDescr )
+    SAL_THROW( () )
 {
     static MediateClassData * s_pMediateClassData = 0;
     if (! s_pMediateClassData)
@@ -683,13 +623,15 @@ extern "C" void SAL_CALL cppu_cppInterfaceProxy_patchVtable(
 }
 
 //##################################################################################################
-extern "C" SAL_DLLEXPORT void SAL_CALL uno_initEnvironment( uno_Environment * pCppEnv ) throw ()
+extern "C" SAL_DLLEXPORT void SAL_CALL uno_initEnvironment( uno_Environment * pCppEnv )
+    SAL_THROW( () )
 {
     CPPU_CURRENT_NAMESPACE::cppu_cppenv_initEnvironment( pCppEnv );
 }
 //##################################################################################################
 extern "C" SAL_DLLEXPORT void SAL_CALL uno_ext_getMapping(
-    uno_Mapping ** ppMapping, uno_Environment * pFrom, uno_Environment * pTo ) throw ()
+    uno_Mapping ** ppMapping, uno_Environment * pFrom, uno_Environment * pTo )
+    SAL_THROW( () )
 {
     CPPU_CURRENT_NAMESPACE::cppu_ext_getMapping( ppMapping, pFrom, pTo );
 }

@@ -1,28 +1,59 @@
+.global privateSnippetExecutor
+.type privateSnippetExecutor,2
+privateSnippetExecutor:
+		save %sp, -104, %sp
+		! %i0 saved by codeSnippet
+		st %i1, [%fp+72]
+		st %i2, [%fp+76]
+		st %i3, [%fp+80]
+		st %i4, [%fp+84]
+		st %i5, [%fp+88]
+		mov %g1, %o0
+		mov %fp, %o1
+		call __1cHsunpro5Pcpp_vtable_call6Fippv_i_
+		nop
+.privateSnippetExecutorExceptionPosition:
+		subcc %o0, 11, %g0
+		bne .noDouble
+		nop
+		ld [%fp+68], %i0
+		ld [%fp+72], %i1
+		std %i0, [%fp-8]
+		ldd [%fp-8], %f0
+		ba .noFloat
+		nop
+.noDouble:
+		subcc %o0, 10, %g0
+		bne .noFloat
+		nop
+		ld [%fp+68], %f0
+.noFloat:
+		ld [%fp+68], %i0
+		ld [%fp+72], %i1
+		ld [%fp+76], %i2
+		ld [%fp+80], %i3
+		ld [%fp+84], %i4
+		ld [%fp+88], %i5
+		ret
+		restore
+.size privateSnippetExecutor,(.-privateSnippetExecutor)
+.align 8
+
+	
 .global callVirtualMethod
 .type callVirtualMethod,2
 callVirtualMethod:
 		! allocate FIRST stack to have own local registers
-		save		%sp, -96, %sp
-		! copy in to out parameters for second stackframe
-		mov		%i0, %o0
-		mov		%i1, %o1
-		mov		%i2, %o2
-		mov		%i3, %o3
-		mov		%i4, %o4
-		mov		%i5, %o5
-		
-		! decide wether there are more than 6 parameter
-		mov		-96, %l3			! default stack space
-		subcc		%i5, 6, %l5
-		ble		allocateSecondStack
-		nop
-		sll		%l5, 2, %l5
-		sub		%l3, %l5, %l3
-allocateSecondStack:
-		save		%sp, %l3, %sp		! allocate new stack
+		sethi		 %hi(-96), %g1
+		or		 %g1, %lo(-96), %g1
+		subcc		 %g1, %o5, %g1
+		subcc		 %g1, %o5, %g1
+		subcc		 %g1, %o5, %g1
+		subcc		 %g1, %o5, %g1
+		save		%sp, %g1, %sp
 		! copy stack longs if necessary
 		subcc		%i5, 6, %l5
-		ble		copyRegisters
+		ble		.copyRegisters
 		nop
 
 		! prepare source location
@@ -31,49 +62,49 @@ allocateSecondStack:
 		! prepare real stack
 		add		%sp, 92, %l3
 		
-copyLong:
-		ld			[%l4+0], %l0
-		st			%l0, [%l3]
+.copyLong:
+		ld		[%l4+0], %l0
+		st		%l0, [%l3]
 		add		%l4, 4, %l4
 		add		%l3, 4, %l3
 		deccc		%l5
-		bne		copyLong
+		bne		.copyLong
 		nop
-copyRegisters:
+.copyRegisters:
 		mov		%i5, %l5
 		mov		%i4, %l4
 
-		ld			[%l4], %o0
+		ld		[%l4], %o0
 		add		%l4, 4, %l4
 		deccc		%l5
-		ble		doCall
+		ble		.doCall
 
-		ld			[%l4], %o1
+		ld		[%l4], %o1
 		add		%l4, 4, %l4
 		deccc		%l5
-		ble		doCall
+		ble		.doCall
 
-		ld			[%l4], %o2
+		ld		[%l4], %o2
 		add		%l4, 4, %l4
 		deccc		%l5
-		ble		doCall
+		ble		.doCall
 
 		ld			[%l4], %o3
 		add		%l4, 4, %l4
 		deccc		%l5
-		ble		doCall
+		ble		.doCall
 
 		ld			[%l4], %o4
 		add		%l4, 4, %l4
 		deccc		%l5
-		ble		doCall
+		ble		.doCall
 
 		ld			[%l4], %o5
 		add		%l4, 4, %l4
 
 		! prepare complex return pointer
 		st			%i2, [%sp+64]
-doCall:
+.doCall:
 		! get virtual table entry
 		mov		%i1, %l1
 		add		%l1, 2, %l1
@@ -83,83 +114,93 @@ doCall:
 		ld			[%l1], %l0
 		jmpl		%l0,%o7
 		nop
-.global callVirtualMethodExceptionHandler
-.type callVirtualMethodExceptionHandler,2
-callVirtualMethodExceptionHandler:
+.callVirtualMethodExceptionPosition:
 		! handle returns
 
 		!byte types
 		subcc %i3, 2, %l3		! typelib_TypeClass_BOOLEAN
-		be handleByte
+		be .handleByte
 		subcc %i3, 3, %l3		! typelib_TypeClass_BYTE
-		be handleByte
+		be .handleByte
 
 		! half word types
 		subcc %i3, 4, %l3		! typelib_TypeClass_SHORT
-		be handleShort
+		be .handleShort
 		subcc %i3, 5, %l3		! typelib_TypeClass_UNSIGNED_SHORT
-		be handleShort
+		be .handleShort
 		subcc %i3, 1, %l3		! typelib_TypeClass_CHAR (sal_Unicode==sal_uInt16)
-		be handleShort
+		be .handleShort
 
 		! word types
 		subcc %i3, 6, %l3		! typelib_TypeClass_LONG
-		be handleWord
+		be .handleWord
 		subcc %i3, 7, %l3		! typelib_TypeClass_UNSIGNED_LONG
-		be handleWord
+		be .handleWord
 		subcc %i3, 15, %l3	! typelib_TypeClass_ENUM
-		be handleWord
+		be .handleWord
 
 		! double word types
 		subcc %i3, 8, %l3		! typelib_TypeClass_HYPER
-		be handleDoubleWord
+		be .handleDoubleWord
 		subcc %i3, 9, %l3		! typelib_TypeClass_UNSIGNED_HYPER
-		be handleDoubleWord
+		be .handleDoubleWord
 
 		! float
 		subcc %i3, 10, %l3	! typelib_TypeClass_FLOAT
-		be handleFloat
+		be .handleFloat
 
 		! double
 		subcc %i3, 11, %l3	! typelib_TypeClass_DOUBLE
-		be handleDouble
+		be .handleDouble
 
 		! default: return void
 		nop					! empty prefetch
-		ba doRestore
+		ba .doRestore
 		nop
-handleByte:
+.handleByte:
 		stb %o0, [%i2]
-		ba doRestore
+		ba .doRestore
 		nop
-handleShort:
+.handleShort:
 		sth %o0, [%i2]
-		ba doRestore
+		ba .doRestore
 		nop
-handleWord:
+.handleWord:
 		st %o0, [%i2]
-		ba doRestore
+		ba .doRestore
 		nop
-handleDoubleWord:
+.handleDoubleWord:
 		st %o0, [%i2]
 		st %o1, [%i2+4]
-		ba doRestore
+		ba .doRestore
 		nop
-handleFloat:
+.handleFloat:
 		st %f0, [%i2]
-		ba doRestore
+		ba .doRestore
 		nop
-handleDouble:
+.handleDouble:
 		std %f0, [%fp-8]
 		ldd [%fp-8], %o0
 		st %o0, [%i2]
 		st %o1, [%i2+4]
-		ba doRestore
+		ba .doRestore
 		nop
-doRestore:
-		restore	! stack frame for called method
+.doRestore:
 		ret
 		restore	! stack frame for own locals
-.size callVirtualMethodExceptionHandler,(.-callVirtualMethodExceptionHandler)
 .size callVirtualMethod,(.-callVirtualMethod)
 .align 8
+
+.rethrow_handler:
+		call	__1cG__CrunMex_rethrow_q6F_v_
+		nop
+
+.section	".exception_ranges",#alloc
+.word		%r_disp32(.privateSnippetExecutorExceptionPosition)
+.word		0
+.word		.rethrow_handler-.privateSnippetExecutorExceptionPosition
+.word		0,0
+.word		%r_disp32(.callVirtualMethodExceptionPosition)
+.word		0
+.word		.rethrow_handler-.callVirtualMethodExceptionPosition
+.word		0,0

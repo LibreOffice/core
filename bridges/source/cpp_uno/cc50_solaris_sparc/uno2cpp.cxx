@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uno2cpp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2000-12-21 14:47:44 $
+ *  last change: $Author: dbo $ $Date: 2001-03-08 14:37:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+#define SAL_THROW( exc ) throw exc
 
 #include <alloca.h>
 #include <map>
@@ -74,6 +75,8 @@
 #ifndef _BRIDGES_CPP_UNO_TYPE_MISC_HXX_
 #include <bridges/cpp_uno/type_misc.hxx>
 #endif
+
+//#include <com/sun/star/lang/IllegalArgumentException.hdl>
 
 #include "cc50_solaris_sparc.hxx"
 
@@ -297,7 +300,8 @@ static void cpp_call(
 //==================================================================================================
 extern "C" void SAL_CALL cppu_unoInterfaceProxy_dispatch(
     uno_Interface * pUnoI, const typelib_TypeDescription * pMemberDescr,
-    void * pReturn, void * pArgs[], uno_Any ** ppException ) throw ()
+    void * pReturn, void * pArgs[], uno_Any ** ppException )
+    SAL_THROW( () )
 {
     // is my surrogate
     cppu_unoInterfaceProxy * pThis = (cppu_unoInterfaceProxy *)pUnoI;
