@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-24 17:36:29 $
+#   last change: $Author: vg $ $Date: 2003-05-22 13:06:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,36 +73,37 @@ PACKAGE=com$/sun$/star$/accessibility
 # ------------------------------------------------------------------------
 
 IDLFILES=\
-    AccessBridge.idl								\
-    Accessible.idl									\
-    AccessibleContext.idl							\
-    AccessibleEventId.idl							\
-    AccessibleEventObject.idl						\
-    AccessibleRelation.idl							\
-    AccessibleRelationType.idl						\
-    AccessibleRole.idl								\
-    AccessibleStateType.idl							\
-    AccessibleTableModelChange.idl					\
-    AccessibleTableModelChangeType.idl				\
-    AccessibleTextType.idl							\
-    IllegalAccessibleComponentStateException.idl	\
-    XAccessible.idl									\
-    XAccessibleAction.idl							\
-    XAccessibleComponent.idl						\
-    XAccessibleContext.idl							\
-    XAccessibleEditableText.idl						\
-    XAccessibleEventBroadcaster.idl					\
-    XAccessibleEventListener.idl					\
-    XAccessibleExtendedComponent.idl				\
-    XAccessibleHyperlink.idl						\
-    XAccessibleHypertext.idl						\
-    XAccessibleImage.idl							\
+    AccessBridge.idl                                \
+    Accessible.idl                                  \
+    AccessibleContext.idl                           \
+    AccessibleEventId.idl                           \
+    AccessibleEventObject.idl                       \
+    AccessibleRelation.idl                          \
+    AccessibleRelationType.idl                      \
+    AccessibleRole.idl                              \
+    AccessibleStateType.idl                         \
+    AccessibleTableModelChange.idl                  \
+    AccessibleTableModelChangeType.idl              \
+    AccessibleTextType.idl                          \
+    IllegalAccessibleComponentStateException.idl    \
+    TextSegment.idl                                 \
+    XAccessible.idl                                 \
+    XAccessibleAction.idl                           \
+    XAccessibleComponent.idl                        \
+    XAccessibleContext.idl                          \
+    XAccessibleEditableText.idl                     \
+    XAccessibleEventBroadcaster.idl                 \
+    XAccessibleEventListener.idl                    \
+    XAccessibleExtendedComponent.idl                \
+    XAccessibleHyperlink.idl                        \
+    XAccessibleHypertext.idl                        \
+    XAccessibleImage.idl                            \
     XAccessibleKeyBinding.idl                       \
-    XAccessibleRelationSet.idl						\
-    XAccessibleSelection.idl						\
-    XAccessibleStateSet.idl							\
-    XAccessibleTable.idl							\
-    XAccessibleText.idl								\
+    XAccessibleRelationSet.idl                      \
+    XAccessibleSelection.idl                        \
+    XAccessibleStateSet.idl                         \
+    XAccessibleTable.idl                            \
+    XAccessibleText.idl                             \
     XAccessibleValue.idl
 
 # ------------------------------------------------------------------
