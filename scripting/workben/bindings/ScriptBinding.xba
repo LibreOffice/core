@@ -1619,8 +1619,14 @@ sub LangLocComboListener()
     
     if ( location = &quot;Filesystem&quot; ) and ( language &lt;&gt; &quot;Java&quot; ) then
     	bindingDialog.Model.Browse.enabled = true
+    	if not (dialogName = &quot;EditDebug&quot;) then
+    		bindingDialog.Model.fsonly.enabled = true
+    	end if
     else
     	bindingDialog.Model.Browse.enabled = false
+    	if not (dialogName = &quot;EditDebug&quot;) then
+    		bindingDialog.Model.fsonly.enabled = false
+    	end if
     endif
     
     &apos; extra dialog dependant processing

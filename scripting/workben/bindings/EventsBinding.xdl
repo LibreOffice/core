@@ -54,6 +54,6 @@
   <dlg:text dlg:id="Label9" dlg:tab-index="20" dlg:left="12" dlg:top="49" dlg:width="23" dlg:height="8" dlg:value="Script"/>
   <dlg:text dlg:id="Label10" dlg:tab-index="21" dlg:left="103" dlg:top="-19" dlg:width="3" dlg:height="0" dlg:value="Label10"/>
   <dlg:text dlg:style-id="0" dlg:id="AddOn" dlg:tab-index="22" dlg:disabled="true" dlg:left="17" dlg:top="144" dlg:width="38" dlg:height="10" dlg:value="[Add-on&apos;s only]"/>
-  <dlg:text dlg:id="Label2" dlg:tab-index="23" dlg:disabled="true" dlg:left="13" dlg:top="86" dlg:width="45" dlg:height="8" dlg:value="[Filesystem only]"/>
+  <dlg:text dlg:id="fsonly" dlg:tab-index="23" dlg:disabled="true" dlg:left="13" dlg:top="86" dlg:width="45" dlg:height="8" dlg:value="[Filesystem only]"/>
  </dlg:bulletinboard>
 </dlg:window>
