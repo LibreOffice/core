@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlex.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 11:11:21 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:13:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,7 @@
  *
  ************************************************************************/
 
+#include "htmlex.hxx"
 
 #ifndef _COM_SUN_STAR_DOCUMENT_XEXPORTER_HPP_
 #include <com/sun/star/document/XExporter.hpp>
@@ -223,7 +224,6 @@
 #include "anminfo.hxx"
 #include "imapinfo.hxx"
 #include "sdresid.hxx"
-#include "htmlex.hxx"
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -241,7 +241,7 @@ using namespace ::com::sun::star::document;
 #define S2H( str ) StringToHTMLString( str )
 
 // bei Aenderungen auch NUM_BUTTONS in pubdlg.hxx aendern!!
-char *pButtonNames[NUM_BUTTONS] =
+static const char *pButtonNames[NUM_BUTTONS] =
 {
     "first0.gif", "first1.gif", "prev0.gif", "prev1.gif",
     "next0.gif", "next1.gif", "last0.gif", "last1.gif",
@@ -2242,7 +2242,7 @@ function CollapseOutline()
 }
 */
 
-char* JS_NavigateAbs =
+static const char* JS_NavigateAbs =
     "function NavigateAbs( nPage )\r\n"
     "{\r\n"
     "  frames[\"show\"].location.href = \"img\" + nPage + \".$EXT\";\r\n"
@@ -2262,7 +2262,7 @@ char* JS_NavigateAbs =
     "  }\r\n"
     "}\r\n\r\n";
 
-char* JS_NavigateRel =
+static const char* JS_NavigateRel =
     "function NavigateRel( nDelta )\r\n"
     "{\r\n"
     "  var nPage = parseInt(nCurrentPage) + parseInt(nDelta);\r\n"
@@ -2272,14 +2272,14 @@ char* JS_NavigateRel =
     "  }\r\n"
     "}\r\n\r\n";
 
-char* JS_ExpandOutline =
+static const char* JS_ExpandOutline =
     "function ExpandOutline()\r\n"
     "{\r\n"
     "  frames[\"navbar2\"].location.href = \"navbar4.$EXT\";\r\n"
     "  frames[\"outline\"].location.href = \"outline1.$EXT\";\r\n"
     "}\r\n\r\n";
 
-char * JS_CollapseOutline =
+static const char * JS_CollapseOutline =
     "function CollapseOutline()\r\n"
     "{\r\n"
     "  frames[\"navbar2\"].location.href = \"navbar3.$EXT\";\r\n"
@@ -3189,7 +3189,7 @@ bool HtmlExport::CopyScript( const String& rPath, const String& rSource, const S
     return nErr == 0;
 }
 
-char * ASP_Scripts[] = { "common.inc", "webcast.asp", "show.asp", "savepic.asp", "poll.asp", "editpic.asp" };
+static const char * ASP_Scripts[] = { "common.inc", "webcast.asp", "show.asp", "savepic.asp", "poll.asp", "editpic.asp" };
 
 /** erzeugt und speichert die für WebShow benötigte ASP Scripte */
 bool HtmlExport::CreateASPScripts()
@@ -3210,7 +3210,7 @@ bool HtmlExport::CreateASPScripts()
 }
 
 
-char *PERL_Scripts[] = { "webcast.pl", "common.pl", "editpic.pl", "poll.pl", "savepic.pl", "show.pl" };
+static const char *PERL_Scripts[] = { "webcast.pl", "common.pl", "editpic.pl", "poll.pl", "savepic.pl", "show.pl" };
 
 /** erzeugt und speichert die für WebShow benötigte PERL Scripte */
 bool HtmlExport::CreatePERLScripts()
