@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localedata.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: khong $ $Date: 2002-08-13 07:20:20 $
+ *  last change: $Author: khong $ $Date: 2002-08-16 04:24:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,6 +191,8 @@ static const struct {
 
 };
 
+static const sal_Unicode under = sal_Unicode('_');
+
 static const sal_Int16 nbOfLocales = sizeof(aDllsTable) / sizeof(aDllsTable[0]);
 
 LocaleData::~LocaleData(){
@@ -243,6 +245,36 @@ LocaleData::getLocaleItem( const Locale& rLocale ) throw(RuntimeException)
     }
 }
 
+#define REF_DAYS 0
+#define REF_MONTHS 1
+#define REF_ERAS 2
+
+Sequence< CalendarItem > &LocaleData::getCalendarItemByName(OUString& name, sal_Int16 item)
+    throw(RuntimeException)
+{
+    if (!ref_name.equals(name)) {
+        sal_Int32 index = 0;
+        Sequence < Calendar > cals = getAllCalendars(
+        Locale(name.getToken(0, under, index), name.getToken(0, under, index), OUString()));
+        OUString& id = name.getToken(0, under, index);
+        for (index = 0; index < cals.getLength(); index++) {
+        if (id.equals(cals[index].Name)) {
+            ref_cal = cals[index];
+            break;
+        }
+        }
+        // Refered locale does not found, return name for en_US locale.
+        if (index == cals.getLength()) {
+        cals = getAllCalendars(
+            Locale(OUString::createFromAscii("en"), OUString::createFromAscii("US"), OUString()));
+        if (cals.getLength() > 0)
+            ref_cal = cals[0];
+        throw RuntimeException();
+        }
+        ref_name = name;
+    }
+    return item == REF_DAYS ? ref_cal.Days : item == REF_MONTHS ? ref_cal.Months : ref_cal.Eras;
+}
 
 
 Sequence< Calendar > SAL_CALL
@@ -268,23 +300,38 @@ LocaleData::getAllCalendars( const Locale& rLocale ) throw(RuntimeException)
         offset++;
         sal_Bool defaultCalendar = allCalendars[offset][0];
         offset++;
-        for(j = 0; j < allCalendars[0][i]; j++) {
+        if (OUString(allCalendars[offset]).equalsAscii("ref")) {
+            days = getCalendarItemByName(OUString(allCalendars[offset+1]), REF_DAYS);
+            offset += 2;
+        } else {
+            for(j = 0; j < allCalendars[0][i]; j++) {
             CalendarItem day(allCalendars[offset],
-            allCalendars[offset+1], allCalendars[offset+2]);
+                allCalendars[offset+1], allCalendars[offset+2]);
             days[j] = day;
             offset += 3;
+            }
         }
-        for(j = 0; j < allCalendars[1][i]; j++) {
+        if (OUString(allCalendars[offset]).equalsAscii("ref")) {
+            months = getCalendarItemByName(OUString(allCalendars[offset+1]), REF_MONTHS);
+            offset += 2;
+        } else {
+            for(j = 0; j < allCalendars[1][i]; j++) {
             CalendarItem month(allCalendars[offset],
-            allCalendars[offset+1], allCalendars[offset+2]);
+                allCalendars[offset+1], allCalendars[offset+2]);
             months[j] = month;
             offset += 3;
+            }
         }
-        for(j = 0; j < allCalendars[2][i]; j++) {
+        if (OUString(allCalendars[offset]).equalsAscii("ref")) {
+            eras = getCalendarItemByName(OUString(allCalendars[offset+1]), REF_ERAS);
+            offset += 2;
+        } else {
+            for(j = 0; j < allCalendars[2][i]; j++) {
             CalendarItem era(allCalendars[offset],
-            allCalendars[offset+1], allCalendars[offset+2]);
+                allCalendars[offset+1], allCalendars[offset+2]);
             eras[j] = era;
             offset += 3;
+            }
         }
         OUString startOfWeekDay(allCalendars[offset]);
         offset++;
@@ -784,8 +831,6 @@ LocaleData::getOutlineNumberingLevels( const lang::Locale& rLocale ) throw(Runti
 /////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////helper functions///////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////
-
-static const sal_Unicode under = sal_Unicode('_');
 
 void* SAL_CALL LocaleData::getFunctionSymbol( const Locale& rLocale, const sal_Char* pFunction )
     throw(RuntimeException)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LocaleNode.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: khong $ $Date: 2002-08-01 19:16:25 $
+ *  last change: $Author: khong $ $Date: 2002-08-16 04:24:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -534,59 +534,99 @@ void LCCalendarNode::generateCode (const OFileWriter &of) {
     sal_Int16 * nbOfEras = new sal_Int16[nbOfCalendars];
 
 
-    for (sal_Int16 i = 0; i < nbOfCalendars; i++) {
+    for (sal_Int16 j, i = 0; i < nbOfCalendars; i++) {
         LocaleNode * calNode = getChildAt (i);
         str = calNode -> getAttr() -> getValueByName("unoid");
         of.writeParameter( "calendarID", str, i);
-        of.writeAsciiString("\n");
         str = calNode -> getAttr() -> getValueByName("default");
         of.writeDefaultParameter("Calendar", str, i);
-        LocaleNode * daysNode = calNode -> getChildAt(0);
-        nbOfDays[i] = daysNode->getNumberOfChildren();
+
         // Generate Days of Week
-        sal_Char *elementTag = "day";
-        for (sal_Int16 j = 0; j < nbOfDays[i]; j++) {
-            LocaleNode *currNode = daysNode -> getChildAt(j);
-            of.writeParameter("dayID", currNode->getChildAt(0)->getValue(), i, j);
-            of.writeAsciiString("\n");
-            of.writeParameter(elementTag, "DefaultAbbrvName",currNode->getChildAt(1)->getValue() ,i, j);
-            of.writeAsciiString("\n");
-            of.writeParameter(elementTag, "DefaultFullName",currNode->getChildAt(2)->getValue() , i, j);
-            of.writeAsciiString("\n");
+        sal_Char *elementTag;
+        LocaleNode * daysNode = NULL;
+        ::rtl::OUString ref_name = calNode->getChildAt(0)->getAttr()->getValueByName("ref");
+        if (ref_name.getLength() > 0 && i > 0) {
+            for (j = 0; j < i; j++) {
+            str = getChildAt(j)->getAttr()->getValueByName("unoid");
+            if (str.equals(ref_name))
+                daysNode = getChildAt(j)->getChildAt(0);
+            }
+        }
+        if (ref_name.getLength() > 0 && daysNode == NULL) {
+            of.writeParameter("dayRef", OUString::createFromAscii("ref"), i);
+            of.writeParameter("dayRefName", ref_name, i);
+            nbOfDays[i] = 0;
+        } else {
+            if (daysNode == NULL)
+            daysNode = calNode -> getChildAt(0);
+            nbOfDays[i] = daysNode->getNumberOfChildren();
+            elementTag = "day";
+            for (j = 0; j < nbOfDays[i]; j++) {
+                LocaleNode *currNode = daysNode -> getChildAt(j);
+                of.writeParameter("dayID", currNode->getChildAt(0)->getValue(), i, j);
+                of.writeParameter(elementTag, "DefaultAbbrvName",currNode->getChildAt(1)->getValue() ,i, j);
+                of.writeParameter(elementTag, "DefaultFullName",currNode->getChildAt(2)->getValue() , i, j);
+            }
         }
 
-        LocaleNode * monthsNode = calNode -> getChildAt(1);
-        nbOfMonths[i] = monthsNode->getNumberOfChildren();
         // Generate Months of Year
-        elementTag = "month";
-        for (j = 0; j < nbOfMonths[i]; j++) {
-            LocaleNode *currNode = monthsNode -> getChildAt(j);
-            of.writeParameter("monthID", currNode->getChildAt(0)->getValue(), i, j);
-            of.writeAsciiString("\n");
-            of.writeParameter(elementTag, "DefaultAbbrvName",currNode->getChildAt(1)->getValue() ,i, j);
-            of.writeAsciiString("\n");
-            of.writeParameter(elementTag, "DefaultFullName",currNode->getChildAt(2)->getValue() , i, j);
-            of.writeAsciiString("\n");
+        LocaleNode * monthsNode = NULL;
+        ref_name = calNode->getChildAt(1)->getAttr()->getValueByName("ref");
+        if (ref_name.getLength() > 0 && i > 0) {
+            for (j = 0; j < i; j++) {
+            str = getChildAt(j)->getAttr()->getValueByName("unoid");
+            if (str.equals(ref_name))
+                monthsNode = getChildAt(j)->getChildAt(1);
+            }
         }
-        LocaleNode * erasNode = calNode -> getChildAt(2);
-        nbOfEras[i] = erasNode->getNumberOfChildren();
-        // Generate Months of Year
-        elementTag = "era";
-        for (j = 0; j < nbOfEras[i]; j++) {
-            LocaleNode *currNode = erasNode -> getChildAt(j);
-            of.writeParameter("eraID", currNode->getChildAt(0)->getValue(), i, j);
-            of.writeAsciiString("\n");
-            of.writeParameter(elementTag, "DefaultAbbrvName",currNode->getChildAt(1)->getValue() ,i, j);
-            of.writeAsciiString("\n");
-            of.writeParameter(elementTag, "DefaultFullName",currNode->getChildAt(2)->getValue() , i, j);
-            of.writeAsciiString("\n");
+        if (ref_name.getLength() > 0 && monthsNode == NULL) {
+            of.writeParameter("monthRef", OUString::createFromAscii("ref"), i);
+            of.writeParameter("monthRefName", ref_name, i);
+            nbOfMonths[i] = 0;
+        } else {
+            if (monthsNode == NULL)
+            monthsNode = calNode -> getChildAt(1);
+            nbOfMonths[i] = monthsNode->getNumberOfChildren();
+            elementTag = "month";
+            for (j = 0; j < nbOfMonths[i]; j++) {
+                LocaleNode *currNode = monthsNode -> getChildAt(j);
+                of.writeParameter("monthID", currNode->getChildAt(0)->getValue(), i, j);
+                of.writeParameter(elementTag, "DefaultAbbrvName",currNode->getChildAt(1)->getValue() ,i, j);
+                of.writeParameter(elementTag, "DefaultFullName",currNode->getChildAt(2)->getValue() , i, j);
+            }
+        }
+
+        // Generate Era name
+        LocaleNode * erasNode = NULL;
+        ref_name =   calNode -> getChildAt(2) ->getAttr()->getValueByName("ref");
+        if (ref_name.getLength() > 0 && i > 0) {
+            for (j = 0; j < i; j++) {
+            str = getChildAt(j)->getAttr()->getValueByName("unoid");
+            if (str.equals(ref_name))
+                erasNode = getChildAt(j)->getChildAt(2);
+            }
+        }
+        if (ref_name.getLength() > 0 && erasNode == NULL) {
+            of.writeParameter("eraRef", OUString::createFromAscii("ref"), i);
+            of.writeParameter("eraRefName", ref_name, i);
+            nbOfEras[i] = 0;
+        } else {
+            if (erasNode == NULL)
+            erasNode = calNode -> getChildAt(2);
+            nbOfEras[i] = erasNode->getNumberOfChildren();
+            elementTag = "era";
+            for (j = 0; j < nbOfEras[i]; j++) {
+                LocaleNode *currNode = erasNode -> getChildAt(j);
+                of.writeParameter("eraID", currNode->getChildAt(0)->getValue(), i, j);
+                of.writeAsciiString("\n");
+                of.writeParameter(elementTag, "DefaultAbbrvName",currNode->getChildAt(1)->getValue() ,i, j);
+                of.writeParameter(elementTag, "DefaultFullName",currNode->getChildAt(2)->getValue() , i, j);
+            }
         }
         of.writeParameter("startDayOfWeek", calNode ->getChildAt(3)-> getChildAt(0)->getValue(), i);
-        of.writeAsciiString("\n");
         str = calNode ->getChildAt(4)-> getValue();
         of.writeIntParameter("minimalDaysInFirstWeek", i,
                         str . toInt32());
-        of.writeAsciiString("\n");
         }
         of.writeAsciiString("static const sal_Int16 calendarsCount = ");
         of.writeInt(nbOfCalendars);
@@ -628,22 +668,43 @@ void LCCalendarNode::generateCode (const OFileWriter &of) {
             of.writeAsciiString("\tdefaultCalendar");
             of.writeInt(i);
             of.writeAsciiString(",\n");
-            for(sal_Int16 j = 0; j < nbOfDays[i]; j++) {
-                of.writeAsciiString("\tdayID");
-                of.writeInt(i); of.writeInt(j); of.writeAsciiString(",\n");
-                of.writeAsciiString("\tdayDefaultAbbrvName");
-                of.writeInt(i); of.writeInt(j); of.writeAsciiString(",\n");
-                of.writeAsciiString("\tdayDefaultFullName");of.writeInt(i); of.writeInt(j); of.writeAsciiString(",\n");
+            if (nbOfDays[i] == 0) {
+                of.writeAsciiString("\tdayRef");
+                of.writeInt(i); of.writeAsciiString(",\n");
+                of.writeAsciiString("\tdayRefName");
+                of.writeInt(i); of.writeAsciiString(",\n");
+            } else {
+                for(sal_Int16 j = 0; j < nbOfDays[i]; j++) {
+                    of.writeAsciiString("\tdayID");
+                    of.writeInt(i); of.writeInt(j); of.writeAsciiString(",\n");
+                    of.writeAsciiString("\tdayDefaultAbbrvName");
+                    of.writeInt(i); of.writeInt(j); of.writeAsciiString(",\n");
+                    of.writeAsciiString("\tdayDefaultFullName");of.writeInt(i); of.writeInt(j); of.writeAsciiString(",\n");
+                }
             }
-            for(j = 0; j < nbOfMonths[i]; j++) {
-                of.writeAsciiString("\tmonthID");of.writeInt(i);of.writeInt(j);of.writeAsciiString(",\n");
-                of.writeAsciiString("\tmonthDefaultAbbrvName");of.writeInt(i);of.writeInt(j);of.writeAsciiString(",\n");
-                of.writeAsciiString("\tmonthDefaultFullName");of.writeInt(i);of.writeInt(j);of.writeAsciiString(",\n");
+            if (nbOfMonths[i] == 0) {
+                of.writeAsciiString("\tmonthRef");
+                of.writeInt(i); of.writeAsciiString(",\n");
+                of.writeAsciiString("\tmonthRefName");
+                of.writeInt(i); of.writeAsciiString(",\n");
+            } else {
+                for(j = 0; j < nbOfMonths[i]; j++) {
+                    of.writeAsciiString("\tmonthID");of.writeInt(i);of.writeInt(j);of.writeAsciiString(",\n");
+                    of.writeAsciiString("\tmonthDefaultAbbrvName");of.writeInt(i);of.writeInt(j);of.writeAsciiString(",\n");
+                    of.writeAsciiString("\tmonthDefaultFullName");of.writeInt(i);of.writeInt(j);of.writeAsciiString(",\n");
+                }
             }
-            for(j = 0; j < nbOfEras[i]; j++) {
-                of.writeAsciiString("\teraID"); of.writeInt(i); of.writeInt(j); of.writeAsciiString(",\n");
-                of.writeAsciiString("\teraDefaultAbbrvName");of.writeInt(i);of.writeInt(j);of.writeAsciiString(",\n");
-                of.writeAsciiString("\teraDefaultFullName");of.writeInt(i);of.writeInt(j);of.writeAsciiString(",\n");
+            if (nbOfEras[i] == 0) {
+                of.writeAsciiString("\teraRef");
+                of.writeInt(i); of.writeAsciiString(",\n");
+                of.writeAsciiString("\teraRefName");
+                of.writeInt(i); of.writeAsciiString(",\n");
+            } else {
+                for(j = 0; j < nbOfEras[i]; j++) {
+                    of.writeAsciiString("\teraID"); of.writeInt(i); of.writeInt(j); of.writeAsciiString(",\n");
+                    of.writeAsciiString("\teraDefaultAbbrvName");of.writeInt(i);of.writeInt(j);of.writeAsciiString(",\n");
+                    of.writeAsciiString("\teraDefaultFullName");of.writeInt(i);of.writeInt(j);of.writeAsciiString(",\n");
+                }
             }
             of.writeAsciiString("\tstartDayOfWeek");of.writeInt(i); of.writeAsciiString(",\n");
             of.writeAsciiString("\tminimalDaysInFirstWeek");of.writeInt(i); of.writeAsciiString(",\n");
@@ -1029,6 +1090,7 @@ OUString Attr::getValueByName (const sal_Char *str) const {
             return value[i];
     return OUString();
 }
+
 sal_Int32 Attr::getLength() const{
     return name.getLength();
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localedata.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: bustamam $ $Date: 2002-03-19 00:42:02 $
+ *  last change: $Author: khong $ $Date: 2002-08-16 04:25:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,6 +166,11 @@ private :
 
     void* SAL_CALL getFunctionSymbol( const com::sun::star::lang::Locale& rLocale, const sal_Char* pFunction ) throw( com::sun::star::uno::RuntimeException );
     void* SAL_CALL getFunctionSymbolByName( const rtl::OUString& localeName, const sal_Char* pFunction );
+    com::sun::star::i18n::Calendar ref_cal;
+    rtl::OUString ref_name;
+    com::sun::star::uno::Sequence< com::sun::star::i18n::CalendarItem > &
+        getCalendarItemByName(rtl::OUString& name,
+        sal_Int16 item) throw( com::sun::star::uno::RuntimeException );
 };
 
 } } } }
