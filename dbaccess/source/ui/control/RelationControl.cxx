@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelationControl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-08 09:26:00 $
+ *  last change: $Author: oj $ $Date: 2002-11-21 15:28:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -307,19 +307,22 @@ namespace dbaui
     BOOL ORelationControl::SaveModified()
     {
         DBG_CHKTHIS(ORelationControl,NULL);
-        OSL_ENSURE((sal_Int32)m_pConnData->GetConnLineDataList()->size() > GetCurRow(),"Invalid Index!");
-
-        String sFieldName(m_pListCell->GetSelectEntry());
-
-        OConnectionLineDataRef pConnLineData = (*m_pConnData->GetConnLineDataList())[GetCurRow()];
-        switch( getColumnIdent( GetCurColumnId() ) )
+        if ( GetCurRow() != BROWSER_ENDOFSELECTION )
         {
-        case SOURCE_COLUMN:
-            pConnLineData->SetSourceFieldName( sFieldName );
-            break;
-        case DEST_COLUMN:
-            pConnLineData->SetDestFieldName( sFieldName );
-            break;
+            OSL_ENSURE((sal_Int32)m_pConnData->GetConnLineDataList()->size() > GetCurRow(),"Invalid Index!");
+
+            String sFieldName(m_pListCell->GetSelectEntry());
+
+            OConnectionLineDataRef pConnLineData = (*m_pConnData->GetConnLineDataList())[GetCurRow()];
+            switch( getColumnIdent( GetCurColumnId() ) )
+            {
+            case SOURCE_COLUMN:
+                pConnLineData->SetSourceFieldName( sFieldName );
+                break;
+            case DEST_COLUMN:
+                pConnLineData->SetDestFieldName( sFieldName );
+                break;
+            }
         }
 
         return TRUE;
@@ -464,11 +467,11 @@ namespace dbaui
         if ( _pSource && _pDest )
         {
             m_xSourceDef = _pSource->GetTable();
-            SetColumnTitle(1, _pSource->GetWinName());
+            SetColumnTitle(1, _pSource->GetName());
 
 
             m_xDestDef = _pDest->GetTable();
-            SetColumnTitle(2, _pDest->GetWinName());
+            SetColumnTitle(2, _pDest->GetName());
 
             const OJoinTableView* pView = _pSource->getTableView();
             OTableConnection* pConn = pView->GetTabConn(_pSource,_pDest);
