@@ -2,7 +2,7 @@
  *
  *  $RCSfile: xmlgrhlp.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
  *  last change: $Author: kz $
  *
@@ -85,6 +85,10 @@
 #include <com/sun/star/embed/XStorage.hpp>
 #endif
 
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
 // ----------------------
 // - SvXMLGraphicHelper -
 // ----------------------
@@ -99,7 +103,7 @@ enum SvXMLGraphicHelperMode
 // - SvXMLGraphicHelper -
 // ----------------------
 
-class SvXMLGraphicHelper : public ::cppu::WeakComponentImplHelper2< ::com::sun::star::document::XGraphicObjectResolver,
+class SVX_DLLPUBLIC SvXMLGraphicHelper : public ::cppu::WeakComponentImplHelper2<   ::com::sun::star::document::XGraphicObjectResolver,
                                                                     ::com::sun::star::document::XBinaryStreamResolver >
 {
 private:
@@ -121,20 +125,20 @@ private:
     SvXMLGraphicHelperMode      meCreateMode;
     sal_Bool                    mbDirect;
 
-    sal_Bool                    ImplGetStreamNames( const ::rtl::OUString& rURLStr,
+    SVX_DLLPRIVATE sal_Bool                 ImplGetStreamNames( const ::rtl::OUString& rURLStr,
                                                     ::rtl::OUString& rPictureStorageName,
                                                     ::rtl::OUString& rPictureStreamName );
-    ::com::sun::star::uno::Reference < ::com::sun::star::embed::XStorage > ImplGetGraphicStorage( const ::rtl::OUString& rPictureStorageName );
-    ::com::sun::star::uno::Reference < ::com::sun::star::io::XStream > ImplGetGraphicStream( const ::rtl::OUString& rPictureStorageName,
+    SVX_DLLPRIVATE ::com::sun::star::uno::Reference < ::com::sun::star::embed::XStorage > ImplGetGraphicStorage( const ::rtl::OUString& rPictureStorageName );
+    SVX_DLLPRIVATE ::com::sun::star::uno::Reference < ::com::sun::star::io::XStream > ImplGetGraphicStream( const ::rtl::OUString& rPictureStorageName,
                                                       const ::rtl::OUString& rPictureStreamName,
                                                       BOOL bTruncate );
-    String                      ImplGetGraphicMimeType( const String& rFileName ) const;
-    Graphic                     ImplReadGraphic( const ::rtl::OUString& rPictureStorageName,
+    SVX_DLLPRIVATE String                      ImplGetGraphicMimeType( const String& rFileName ) const;
+    SVX_DLLPRIVATE Graphic                      ImplReadGraphic( const ::rtl::OUString& rPictureStorageName,
                                                  const ::rtl::OUString& rPictureStreamName );
-    sal_Bool                    ImplWriteGraphic( const ::rtl::OUString& rPictureStorageName,
+    SVX_DLLPRIVATE sal_Bool                 ImplWriteGraphic( const ::rtl::OUString& rPictureStorageName,
                                                   const ::rtl::OUString& rPictureStreamName,
                                                   const ::rtl::OUString& rGraphicId );
-    void                        ImplInsertGraphicURL( const ::rtl::OUString& rURLStr, sal_uInt32 nInsertPos );
+    SVX_DLLPRIVATE void                     ImplInsertGraphicURL( const ::rtl::OUString& rURLStr, sal_uInt32 nInsertPos );
 
 protected:
                                 SvXMLGraphicHelper();
