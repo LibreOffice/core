@@ -2,9 +2,9 @@
  *
  *  $RCSfile: importwi.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:35:45 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 14:06:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,6 +185,7 @@ String sHelpButton
     Text[ czech ] = "Nápověda";
     Text[ hebrew ] = "‮עזרה‬";
     Text[ hindi ] = "~सहायता";
+    Text[ slovak ] = "~Pomocník";
 };
 
 String sCancelButton
@@ -217,6 +218,7 @@ String sCancelButton
     Text[ czech ] = "Zrušit";
     Text[ hebrew ] = "‮ביטול‬";
     Text[ hindi ] = "~रद्द करो";
+    Text[ slovak ] = "~Zrušiť";
 };
 
 String sBackButton
@@ -249,6 +251,7 @@ String sBackButton
     Text[ czech ] = "<< Zpět";
     Text[ hebrew ] = "‮<< הקודם‬";
     Text[ hindi ] = "<< ~पीछे";
+    Text[ slovak ] = "<<~Späť";
 };
 
 String sNextButton
@@ -281,6 +284,7 @@ String sNextButton
     Text[ czech ] = "Další >>";
     Text[ hebrew ] = "‮הבא >>‬";
     Text[ hindi ] = "जा~री रखो >>";
+    Text[ slovak ] = "Ďa~lší >>";
 };
 
 String sBeginButton
@@ -313,6 +317,7 @@ String sBeginButton
     Text[ czech ] = "Konvertovat";
     Text[ hebrew ] = "‮המרה‬";
     Text[ hindi ] = "~बदलो";
+    Text[ slovak ] = "~Konvertovať";
 };
 
 String sCloseButton
@@ -343,6 +348,7 @@ String sCloseButton
     Text[ czech ] = "Zavřít";
     Text[ hebrew ] = "‮סגירה‬";
     Text[ hindi ] = "~बन्द करो";
+    Text[ slovak ] = "~Zavrieť";
 };
 
 String sWelcometextLabel1
@@ -375,6 +381,7 @@ String sWelcometextLabel1
     Text[ czech ] = "Tento průvodce konvertuje původní dokumenty StarOffice a Microsoft Office do nového XML formátu %PRODUCTNAME.";
     Text[ hebrew ] = "‮טייס אוטומטי זה ממיר מסמכים מצורת StarOffice הישנה, ומצורת Microsoft Office לצורת %PRODUCTNAME XML החדשה.‬";
     Text[ hindi ] = "इस ओटोपैलट् पुराना StarOffice रचना में रहनेवाला लेखपत्र और Microsoft Office लेखपत्रों को नया %PRODUCTNAME XML रचना में बदलता है । ";
+    Text[ slovak ] = "Tento Sprievodca konvertuje dokumenty v starom formáte StarOffice a dokumenty Microsoft Office do nového %PRODUCTNAME XML formátu.";
 };
 
 String sWelcometextLabel2
@@ -408,6 +415,7 @@ String sWelcometextLabel2
     Text[ czech ] = "Pozor: Není možné konvertovat makra Visual Basicu. Tato makra vložená do dokumentů nebudou po konverzi fungovat.";
     Text[ hebrew ] = "‮שימו לב, כאשר ממירים מסמכי Microsoft המאקראוים ה-VBA המצורפים אליהם יפסיקו לתפקד.‬";
     Text[ hindi ] = "कृपया ध्यान दीजिए कि Microsoft लेखपत्रों बदलने के समय अगर कोई भी जुडा हुआ VBA मॉक्रो है, तो वह अपना कार्य से वंचित हो सकता है ।";
+    Text[ slovak ] = "Pozor: Pri konverzii dokumentov Microsoft strácajú priložené VBA makrá funkčnosť.";
 };
 
 String sWelcometextLabel3
@@ -438,6 +446,7 @@ String sWelcometextLabel3
     Text[ czech ] = "Vyberte typ dokumentů pro konverzi:";
     Text[ hebrew ] = "‮בחירת סוג הקבצים להמרה‬";
     Text[ hindi ] = "बदलने केलिए लेखपत्र वर्ग को चुनो:";
+    Text[ slovak ] = "Vyberte typ dokumentu na konverziu:";
 };
 
 
@@ -472,6 +481,7 @@ String sMSTemplateCheckbox_1_
     Text[ czech ] = "Šablony z Wordu";
     Text[ hebrew ] = "‮תבניות Word‬";
     Text[ hindi ] = "वर्ड नमूनें";
+    Text[ slovak ] = "Šablóny pre Word";
 };
 
 String sMSTemplateCheckbox_2_
@@ -504,6 +514,7 @@ String sMSTemplateCheckbox_2_
     Text[ czech ] = "Šablony z Excelu";
     Text[ hebrew ] = "‮תבניות Excel‬";
     Text[ hindi ] = "एक्सेल नमूनें";
+    Text[ slovak ] = "Šablóny pre Excel";
 };
 
 String sMSTemplateCheckbox_3_
@@ -536,6 +547,7 @@ String sMSTemplateCheckbox_3_
     Text[ czech ] = "Šablony z PowerPointu";
     Text[ hebrew ] = "‮תבניות PowerPoint‬";
     Text[ hindi ] = "पवरपोइन्ट नमूनें";
+    Text[ slovak ] = "Šablóny z PowerPoint";
 };
 
 String sMSDocumentCheckbox_1_
@@ -568,6 +580,7 @@ String sMSDocumentCheckbox_1_
     Text[ czech ] = "Soubory ve Wordu";
     Text[ hebrew ] = "‮מסמכי Word‬";
     Text[ hindi ] = "वर्ड लेखपत्रें";
+    Text[ slovak ] = "Dokumenty Word";
 };
 
 String sMSDocumentCheckbox_2_
@@ -600,6 +613,7 @@ String sMSDocumentCheckbox_2_
     Text[ czech ] = "Soubory v Excelu";
     Text[ hebrew ] = "‮מסמכי Excel‬";
     Text[ hindi ] = "एक्सेल लेखपत्रें";
+    Text[ slovak ] = "Dokumenty Excel";
 };
 
 String sMSDocumentCheckbox_3_
@@ -632,6 +646,7 @@ String sMSDocumentCheckbox_3_
     Text[ czech ] = "Soubory v PowerPointu";
     Text[ hebrew ] = "‮מסמכי PowerPoint‬";
     Text[ hindi ] = "पवरपोइन्ट लेखपत्रें";
+    Text[ slovak ] = "Dokumenty PowerPoint";
 };
 
 
@@ -665,6 +680,7 @@ String sSearchInSubDir
     Text[ czech ] = "Včetně podadresářů";
     Text[ hebrew ] = "‮כולל תתי ספריות‬";
     Text[ hindi ] = "अधीन डैरक्टरियों को सम्मिलित कर रहा है";
+    Text[ slovak ] = "Vrátane podadresárov";
 };
 
 
@@ -697,6 +713,7 @@ String sMSContainerName
     Text[ czech ] = "Microsoft Office";
     Text[ hebrew ] = "‮Microsoft Office‬";
     Text[ hindi ] = "Microsoft Office";
+    Text[ slovak ] = "Microsoft Office";
 };
 
 
@@ -731,6 +748,7 @@ String sSummaryHeader
     Text[ czech ] = "Výsledek:";
     Text[ hebrew ] = "‮סיכום:‬";
     Text[ hindi ] = "सारांश:";
+    Text[ slovak ] = "Súhrn:";
 };
 
 String sTextImportLabel
@@ -761,6 +779,7 @@ String sTextImportLabel
     Text[ czech ] = "Importovat z:";
     Text[ hebrew ] = "‮יבוא מתוך:‬";
     Text[ hindi ] = "से आयात:";
+    Text[ slovak ] = "Importovať z:";
 };
 
 
@@ -794,6 +813,7 @@ String sTextExportLabel
     Text[ czech ] = "Uložit jako:";
     Text[ hebrew ] = "‮שמירה ל:‬";
     Text[ hindi ] = "को संचित करो:";
+    Text[ slovak ] = "Uložiť do:";
 };
 
 
@@ -828,6 +848,7 @@ String sGroupnameDefault
     Text[ czech ] = "Importované_šablony";
     Text[ hebrew ] = "‮תבניות_מיובאות‬";
     Text[ hindi ] = "आयात की हुयी नमूनें";
+    Text[ slovak ] = "Importované šablóny";
 };
 
 
@@ -861,6 +882,7 @@ String sProgressDesc1
     Text[ czech ] = "Průběh:";
     Text[ hebrew ] = "‮התקדמות:‬";
     Text[ hindi ] = "प्रस्थान करो: ";
+    Text[ slovak ] = "Priebeh: ";
 };
 
 String sProgressOneDoc
@@ -893,6 +915,7 @@ String sProgressOneDoc
     Text[ czech ] = "Dokument";
     Text[ hebrew ] = "‮מסמך‬";
     Text[ hindi ] = "लेखपत्र";
+    Text[ slovak ] = "Dokument";
 };
 
 String sProgressMoreDocs
@@ -925,6 +948,7 @@ String sProgressMoreDocs
     Text[ czech ] = "Dokumenty";
     Text[ hebrew ] = "‮מסמכים‬";
     Text[ hindi ] = "लेखपत्रें";
+    Text[ slovak ] = "Dokumenty";
 };
 
 
@@ -956,6 +980,7 @@ String sProgressMoreTemplates
     Text[ czech ] = "Šablony";
     Text[ hebrew ] = "‮תבניות‬";
     Text[ hindi ] = "नमूनें";
+    Text[ slovak ] = "Šablóny";
 };
 
 
@@ -989,6 +1014,7 @@ String sNoDirCreation
     Text[ czech ] = "Adresář '%1' nemůže být vytvořen: ";
     Text[ hebrew ] = "‮לא ניתן ליצור את הספרית ה '%1': ‬";
     Text[ hindi ] = "'%1' डैरक्टरी को उत्पन्न नहीं कर सकते है: ";
+    Text[ slovak ] = "Adresár '%1' sa nedá vytvoriť: ";
 };
 
 
@@ -1022,6 +1048,7 @@ String sMsgDirNotThere
     Text[ czech ] = "Adresář '%1' neexistuje.";
     Text[ hebrew ] = "‮ספרית '%1' אינה קיימת!‬";
     Text[ hindi ] = "'%1' डैरक्टरी अस्तित्व में नहीं है ।";
+    Text[ slovak ] = "Adresár '%1' neexistuje.";
 };
 
 
@@ -1054,6 +1081,7 @@ String sQueryfornewCreation
     Text[ czech ] = "Má být založen?";
     Text[ hebrew ] = "‮האם ליצור אותו\\ה עכשיו?‬";
     Text[ hindi ] = "आप इसको अभी उत्पन्न करना चाहते है?";
+    Text[ slovak ] = "Prajete si ho vytvoriť teraz?";
 };
 
 
@@ -1087,6 +1115,7 @@ String sFileExists
     Text[ czech ] = "Soubor '<1>' již existuje.<CR>Má být přepsán?";
     Text[ hebrew ] = "‮הקובץ '<1>' הכבר קיים. <CR>אם להחליף?‬";
     Text[ hindi ] = "'<1>' फाइल पहिले से ही अस्तित्व में है ।<CR>आप सको ओवररइट करना चाहते है?";
+    Text[ slovak ] = "Súbor <1> už existuje.<CR> Chcete ho prepísať?";
 };
 
 String sMorePathsError3
@@ -1119,6 +1148,7 @@ String sMorePathsError3
     Text[ czech ] = "Adresáře neexistují";
     Text[ hebrew ] = "‮ספריות אינן קיימות‬";
     Text[ hindi ] = "डैरक्टरियाँ अस्तित्व में नहीं है";
+    Text[ slovak ] = "Adresáre neexistujú";
 };
 
 
@@ -1150,6 +1180,7 @@ String sOverwriteallFiles
     Text[ czech ] = "Přejete si přepsat dokument bez dotazu?";
     Text[ hebrew ] = "‮האם להחליף מסמכים מבלי לשאול?‬";
     Text[ hindi ] = "Do you want to overwrite documents without being asked?";
+    Text[ slovak ] = "Chcete aby boli dokumety prepísané bez opýtania?";
 };
 
 
@@ -1181,6 +1212,7 @@ String sreeditMacro
     Text[ czech ] = "Makro dokumentu je třeba zrevidovat.";
     Text[ hebrew ] = "‮יש צורך לעדכן את המקרו‬";
     Text[ hindi ] = "Document macro has to be revised.";
+    Text[ slovak ] = "Makro k dokumetu musí byť prepísané.";
 };
 
 String scouldNotsaveDocument
@@ -1211,6 +1243,7 @@ String scouldNotsaveDocument
     Text[ czech ] = "Dokument '<1>' nelze uložit.";
     Text[ hebrew ] = "‮לא ניתן לשמור מסמך '<1>'.‬";
     Text[ hindi ] = "Document '<1>' could not be saved.";
+    Text[ slovak ] = "Dokument '<1>' nemohol byť uložený.";
 };
 
 
@@ -1242,6 +1275,7 @@ String scouldNotopenDocument
     Text[ czech ] = "Dokument '<1>' nelze otevřít.";
     Text[ hebrew ] = "‮לא ניתן לפתוח מסמך '<1>'.‬";
     Text[ hindi ] = "Document '<1>' could not be opened.";
+    Text[ slovak ] = "Dokument '<1>' nemohol byť otvorený.";
 };
 
 
@@ -1276,6 +1310,7 @@ String sConvertError1
     Text[ czech ] = "Opravdu chcete teď ukončit konverzi?";
     Text[ hebrew ] = "‮האם אכן להפסיק את ההמרה כעת?‬";
     Text[ hindi ] = "आप सचमुच इस समय बदनेवाला कार्य को समाप्त करना चाहते है?";
+    Text[ slovak ] = "Želáte si zrušiť konverziu?";
 };
 
 String sConvertError2
@@ -1308,6 +1343,7 @@ String sConvertError2
     Text[ czech ] = "Zrušit průvodce";
     Text[ hebrew ] = "‮בטל טייס אוטומטי‬";
     Text[ hindi ] = "ओटोपैलट रद्द करो";
+    Text[ slovak ] = "Zrušiť Sprievodcu";
 };
 
 String sRTErrorDesc
@@ -1340,6 +1376,7 @@ String sRTErrorDesc
     Text[ czech ] = "Při běhu průvodce došlo k neočekávané chybě.";
     Text[ hebrew ] = "‮שגיאה בלתי צפויה בטייס האוטומטי.‬";
     Text[ hindi ] = "ओटोपैलट् में प्रतीक्षा न करने योग्य गलती घटित हुआ । ";
+    Text[ slovak ] = "V Sprievodcovi sa vyskytla neočakávaná chyba";
 };
 
 String sRTErrorHeader
@@ -1372,6 +1409,7 @@ String sRTErrorHeader
     Text[ czech ] = "Chyba";
     Text[ hebrew ] = "‮שגיאה‬";
     Text[ hindi ] = "गलती";
+    Text[ slovak ] = "Chyba";
 };
 
 
@@ -1405,6 +1443,7 @@ String sPathDialogMessage
     Text[ czech ] = "Vyberte, prosím, adresář";
     Text[ hebrew ] = "‮בחירת ספריה‬";
     Text[ hindi ] = "डैरक्टरी चुनो";
+    Text[ slovak ] = "Vyberte adresár";
 };
 
 String sDialogTitle
@@ -1435,6 +1474,7 @@ String sDialogTitle
     Text[ czech ] = "Konvertor dokumentů";
     Text[ hebrew ] = "‮ממיר מסמכים‬";
     Text[ hindi ] = "लेखपत्र बदलनेवाला";
+    Text[ slovak ] = "Konvertor dokumentov";
 };
 
 String sProgressPage1
@@ -1465,6 +1505,7 @@ String sProgressPage1
     Text[ czech ] = "Průběh";
     Text[ hebrew ] = "‮התקדמות‬";
     Text[ hindi ] = "प्रस्थान करो";
+    Text[ slovak ] = "Priebeh";
 };
 
 String sProgressPage2
@@ -1495,6 +1536,7 @@ String sProgressPage2
     Text[ czech ] = "Shromažďuji dokumenty pro konverzi:";
     Text[ hebrew ] = "‮איחזור מסמכים מתאימים:‬";
     Text[ hindi ] = "अनुरूप लेखपत्रों को प्राप्त कर रहा है:";
+    Text[ slovak ] = "Zhromažďujem dokumenty pre konverziu:";
 };
 
 String sProgressPage3
@@ -1525,6 +1567,7 @@ String sProgressPage3
     Text[ czech ] = "Probíhá konverze dokumentů";
     Text[ hebrew ] = "‮ממיר מסמכים‬";
     Text[ hindi ] = "लेखपत्रों को बदल रहा है";
+    Text[ slovak ] = "Prebieha konverzia dokumentov";
 };
 
 
@@ -1556,6 +1599,7 @@ String sProgressFound
     Text[ czech ] = "Nalezeno:";
     Text[ hebrew ] = "‮אותרו:‬";
     Text[ hindi ] = "प्राप्त हुआ:";
+    Text[ slovak ] = "Nájdené:";
 };
 
 
@@ -1588,6 +1632,7 @@ String sProgressPage5
     Text[ czech ] = "%1";
     Text[ hebrew ] = "‮%1 נמצא‬";
     Text[ hindi ] = "%1 प्राप्त हुआ";
+    Text[ slovak ] = "%1 nájdený";
 };
 
 String sReady
@@ -1618,6 +1663,7 @@ String sReady
     Text[ czech ] = "Ukončeno";
     Text[ hebrew ] = "‮הסתיים‬";
     Text[ hindi ] = "समाप्त हुआ!";
+    Text[ slovak ] = "Ukončené";
 };
 
 
@@ -1651,6 +1697,7 @@ String sXMLTemplateCheckbox_1_
     Text[ czech ] = "Šablony textových souborů";
     Text[ hebrew ] = "‮תבניות טקסט‬";
     Text[ hindi ] = "टेक्स्ट् नमूनें";
+    Text[ slovak ] = "Šablóny textových súborov";
 };
 
 String sXMLTemplateCheckbox_2_
@@ -1683,6 +1730,7 @@ String sXMLTemplateCheckbox_2_
     Text[ czech ] = "Šablony tabulek";
     Text[ hebrew ] = "‮תבניות גליונות אלקטרוניים‬";
     Text[ hindi ] = "स्प्रेडशीट् नमूनें";
+    Text[ slovak ] = "Šablóny zošitov";
 };
 
 String sXMLTemplateCheckbox_3_
@@ -1715,6 +1763,7 @@ String sXMLTemplateCheckbox_3_
     Text[ czech ] = "Šablony prezentací";
     Text[ hebrew ] = "‮תבניות שרטוטים/מצגות‬";
     Text[ hindi ] = "रेखाचित्र/प्रस्तुति नमूनें";
+    Text[ slovak ] = "Šablóny kresieb/prezentácií";
 };
 
 String sXMLTemplateCheckbox_4_
@@ -1745,6 +1794,7 @@ String sXMLTemplateCheckbox_4_
     Text[ czech ] = "Hlavní dokumenty";
     Text[ hebrew ] = "‮מסמך אב‬";
     Text[ hindi ] = "मास्टर लेखपत्रें";
+    Text[ slovak ] = "Hlavné dokumenty";
 };
 
 
@@ -1778,6 +1828,7 @@ String sXMLDocumentCheckbox_1_
     Text[ czech ] = "Textové soubory";
     Text[ hebrew ] = "‮מסמכי טקסט‬";
     Text[ hindi ] = "टेक्स्ट् लेखपत्रें";
+    Text[ slovak ] = "Textové dokumenty";
 };
 
 String sXMLDocumentCheckbox_2_
@@ -1810,6 +1861,7 @@ String sXMLDocumentCheckbox_2_
     Text[ czech ] = "Sešity";
     Text[ hebrew ] = "‮גליונות אלקטרוניים‬";
     Text[ hindi ] = "स्प्रेडशीट् लेखपत्रें";
+    Text[ slovak ] = "Zošity";
 };
 
 String sXMLDocumentCheckbox_3_
@@ -1842,6 +1894,7 @@ String sXMLDocumentCheckbox_3_
     Text[ czech ] = "Prezentace";
     Text[ hebrew ] = "‮מסמכי שרטוט/מצגות‬";
     Text[ hindi ] = "रेखाचित्र/प्रस्तुति लेखपत्रें";
+    Text[ slovak ] = "Kresby/prezentácie";
 };
 
 
@@ -1873,6 +1926,7 @@ String sXMLDocumentCheckbox_4_
     Text[ czech ] = "Hlavní dokumenty/vzorce";
     Text[ hebrew ] = "‮מסמכי אב/נוסחאות‬";
     Text[ hindi ] = "मास्टर लेखपत्रें/सूत्र";
+    Text[ slovak ] = "Hlavné dokumenty/vzorce";
 };
 
 String sXMLHelperApplications_1
@@ -1904,6 +1958,7 @@ String sXMLHelperApplications_1
     Text[ czech ] = "Hlavní dokumenty";
     Text[ hebrew ] = "‮מסמכי אב‬";
     Text[ hindi ] = "मास्टर लेखपत्रें";
+    Text[ slovak ] = "Hlavné dokumenty";
 };
 
 String sXMLHelperApplications_2
@@ -1934,6 +1989,7 @@ String sXMLHelperApplications_2
     Text[ czech ] = "Vzorce";
     Text[ hebrew ] = "‮נוסחאות‬";
     Text[ hindi ] = "सूत्रें";
+    Text[ slovak ] = "Vzorce";
 };
 
 
@@ -1965,6 +2021,7 @@ String sSourceDocuments
     Text[ czech ] = "Zdrojové dokumenty";
     Text[ hebrew ] = "‮מסמכי מקור‬";
     Text[ hindi ] = "मूल लेखपत्रें";
+    Text[ slovak ] = "Zdrojové dokumenty";
 };
 
 
@@ -1996,6 +2053,7 @@ String sTargetDocuments
     Text[ czech ] = "Cílové dokumenty";
     Text[ hebrew ] = "‮מסמכי יעד‬";
     Text[ hindi ] = "लक्ष्य लेखपत्रें";
+    Text[ slovak ] = "Cieľové dokumenty";
 };
 
 String sCreateLogfile
@@ -2026,6 +2084,7 @@ String sCreateLogfile
     Text[ czech ] = "Vytvořit soubor se záznamem";
     Text[ hebrew ] = "‮יצירת קובץ מעקב פעולות‬";
     Text[ hindi ] = "लॉग फाइल उत्पन्न करो";
+    Text[ slovak ] = "Vytvoriť súbor so záznamom";
 };
 
 
@@ -2057,6 +2116,7 @@ String sLogfileSummary
     Text[ portuguese_brazilian ] = "<COUNT> documents converted";
     Text[ thai ] = "<COUNT> documents converted";
     Text[ hindi ] = "<COUNT> documents converted";
+    Text[ slovak ] = "<COUNT> konvertovaných dokumentov";
 };
 
 
@@ -2089,6 +2149,7 @@ String sLogfileHelpText
     Text[ czech ] = "Soubor se záznamem bude vytvořen ve vašem pracovním adresáři";
     Text[ hebrew ] = "‮קובץ מעקב יוצר בספריה הנוכחית‬";
     Text[ hindi ] = "आपका कार्य डैरक्टरी में लॉग फाइल को उत्पन्न किया जायेगा";
+    Text[ slovak ] = "Súbor so záznamom bude vytvorený vo Vašom pracovnom adresári";
 };
 
 
@@ -2120,6 +2181,7 @@ String sshowLogfile
     Text[ czech ] = "Zobrazit soubor se záznamem";
     Text[ hebrew ] = "‮הצג קבצי מעקב‬";
     Text[ hindi ] = "Show log file";
+    Text[ slovak ] = "Zobraziť súbor so záznamom (log)";
 };
 
 
@@ -2153,6 +2215,7 @@ String sSumInclusiveSubDir
     Text[ czech ] = "Všechny podadresáře budou vzaty v potaz";
     Text[ hebrew ] = "‮הפעולה תופעל על כל תתי הספריות‬";
     Text[ hindi ] = "सब अधीन डैरक्टरियों को हिसाब में लिया जाएगा";
+    Text[ slovak ] = "Všetky adresáre budú spracované.";
 };
 
 String sSumSaveDokumente
@@ -2185,6 +2248,7 @@ String sSumSaveDokumente
     Text[ czech ] = "Budou exportovány do tohoto adresáře:";
     Text[ hebrew ] = "‮אלה ייוצאו לספריה הבאה:‬";
     Text[ hindi ] = "इनको निम्नलिखित डैरक्टरी से निर्यात किया जायेगा:";
+    Text[ slovak ] = "Tieto budú exportované do nasledujúceho adresára:";
 };
 
 
@@ -2218,6 +2282,7 @@ String sSumSOTextDocuments
     Text[ czech ] = "Všechny textové dokumenty %PRODUCTNAME obsažené v tomto adresáři budou importovány: ";
     Text[ hebrew ] = "‮כל מסמכי הטקסט של %PRODUCTNAME בספריות הבאות ייובאו:‬";
     Text[ hindi ] = "निम्नलिखित डैरक्टरी में रहनेवाला सब %PRODUCTNAME टेक्स्ट् लेखपत्रों को आयात किया जायेगा:";
+    Text[ slovak ] = "Všetky textové dokumenty %PRODUCTNAME obsiahnuté v nasledujúcom adresári budú importované";
 };
 
 
@@ -2251,6 +2316,7 @@ String sSumSOTableDocuments
     Text[ czech ] = "Všechny tabulky %PRODUCTNAME obsažené v tomto adresáři budou importovány: ";
     Text[ hebrew ] = "‮כל הגליונות של %PRODUCTNAME בספריות הבאות ייובאו:‬";
     Text[ hindi ] = "निम्नलिखित डैरक्टरी में रहनेवाला सब %PRODUCTNAME स्प्रेडशीट्स को आयात किया जायेगा:";
+    Text[ slovak ] = " Všetky zošity %PRODUCTNAME obsiahnuté v nasledujúcom adresári budú importované";
 };
 
 
@@ -2284,6 +2350,7 @@ String sSumSODrawDocuments
     Text[ czech ] = "Všechny prezentace a kresby %PRODUCTNAME obsažené v tomto adresáři budou importovány: ";
     Text[ hebrew ] = "‮כל הציורים והמצגות של %PRODUCTNAME  בספריות הבאות ייובאו:‬";
     Text[ hindi ] = "निम्नलिखित डैरक्टरी में रहनेवाला सब %PRODUCTNAME रेखाचित्र और प्रस्तुति लेखपत्रों को आयात किया जायेगा:";
+    Text[ slovak ] = "Všetky kresby a prezentácie %PRODUCTNAME obsiahnuté v nasledujúcom adresári budú importované:";
 };
 
 
@@ -2317,6 +2384,7 @@ String sSumSOMathDocuments
     Text[ czech ] = "Všechny vzorce %PRODUCTNAME obsažené v tomto adresáři budou importovány: ";
     Text[ hebrew ] = "‮כל מסמכי הנוסחה של %PRODUCTNAME בספריות הבאות ייובאו:‬";
     Text[ hindi ] = "निम्नलिखित डैरक्टरी में रहनेवाला सब %PRODUCTNAME सूत्र लेखपत्रों को आयात किया जायेगा:";
+    Text[ slovak ] = "Všetky vzorce %PRODUCTNAME obsiahnuté v nasledujúcom adresári budú importované ";
 };
 
 
@@ -2350,6 +2418,7 @@ String sSumSOTextTemplates
     Text[ czech ] = "Všechny textové šablony %PRODUCTNAME obsažené v tomto adresáři budou importovány: ";
     Text[ hebrew ] = "‮כל תבניות הטקסט של %PRODUCTNAME בספריות הבאות תיובאנה:‬";
     Text[ hindi ] = "निम्नलिखित डैरक्टरी में रहनेवाला सब %PRODUCTNAME टेक्स्ट् नमूनों को आयात किया जायेगा:";
+    Text[ slovak ] = "Všetky textové šablóny %PRODUCTNAME obsiahnuté v nasledujúcom adresári budú importované:";
 };
 
 
@@ -2383,6 +2452,7 @@ String sSumSOTableTemplates
     Text[ czech ] = "Všechny šablony tabulek %PRODUCTNAME obsažené v tomto adresáři budou importovány: ";
     Text[ hebrew ] = "‮כל תבניות הטבלא של %PRODUCTNAME בספריות הבאות תיובאנה:‬";
     Text[ hindi ] = "निम्नलिखित डैरक्टरी में रहनेवाला सब %PRODUCTNAME सारणी नमूनों को आयात किया जायेगा:";
+    Text[ slovak ] = "Všetky tabuľkové šablóny %PRODUCTNAME obsiahnuté v nasledujúcom adresári budú importované:";
 };
 
 
@@ -2416,6 +2486,7 @@ String sSumSODrawTemplates
     Text[ czech ] = "Všechny šablony prezentací a kreseb %PRODUCTNAME obsažené v tomto adresáři budou importovány: ";
     Text[ hebrew ] = "‮כל תבניות הציור והמצגות של %PRODUCTNAME בספריה הבאה תיובאנה:‬";
     Text[ hindi ] = "निम्नलिखित डैरक्टरी में रहनेवाला सब %PRODUCTNAME रेखाचित्र और प्रस्तुति नमूनों को आयात किया जायेगा:";
+    Text[ slovak ] = "Všetky šablóny kresieb a prezentácií %PRODUCTNAME obsiahnuté v nasledujúcom adresári budú importované:";
 };
 
 String sSumSOGlobalDocuments
@@ -2449,6 +2520,7 @@ String sSumSOGlobalDocuments
     Text[ czech ] = "Všechny hlavní dokumenty %PRODUCTNAME obsažené v tomto adresáři budou importovány: ";
     Text[ hebrew ] = "‮כל מסמכי האב של%PRODUCTNAME  בספריה הבאה ייובאו:‬";
     Text[ hindi ] = "निम्नलिखित डैरक्टरी में रहनेवाला सब %PRODUCTNAME मास्टर लेखपत्रों को आयात किया जायेगा:";
+    Text[ slovak ] = "Všetky hlavné dokumenty %PRODUCTNAME obsiahnuté v nasledujúcom adresári budú importované:";
 };
 
 
@@ -2482,6 +2554,7 @@ String sSumMSTextDocuments
     Text[ czech ] = "Všechny Wordovské dokumenty obsažené v tomto adresáři budou importovány:";
     Text[ hebrew ] = "‮כל מסמכי ה Word בספריה הבאה ייובאו:‬";
     Text[ hindi ] = "निम्नलिखित डैरक्टरी में रहनेवाला सब वर्ड लेखपत्रों को आयात किया जायेगा:";
+    Text[ slovak ] = "Všetky dokumenty Word obsiahnuté v nasledujúcom adresári budú importované:";
 };
 
 
@@ -2515,6 +2588,7 @@ String sSumMSTableDocuments
     Text[ czech ] = "Všechny Excelové dokumenty obsažené v tomto adresáři budou importovány:";
     Text[ hebrew ] = "‮כל מסמכי ה Excel בספריה הבאה ייובאו:‬";
     Text[ hindi ] = "निम्नलिखित डैरक्टरी में रहनेवाला सब एक्सेल लेखपत्रों को आयात किया जायेगा:";
+    Text[ slovak ] = "Všetky dokumenty Excel obsiahnuté v nasledujúcom adresári budú importované:";
 };
 
 
@@ -2548,6 +2622,7 @@ String sSumMSDrawDocuments
     Text[ czech ] = "Všechny dokumenty PowerPointu obsažené v tomto adresáři budou importovány:";
     Text[ hebrew ] = "‮כל מסמכי ה PowerPoint בספריה הבאה ייובאו:‬";
     Text[ hindi ] = "निम्नलिखित डैरक्टरी में रहनेवाला सब पवरपोइन्ट लेखपत्रों को आयात किया जायेगा:";
+    Text[ slovak ] = "Všetky dokumenty PowerPoint obsiahnuté v nasledujúcom adresári budú importované:";
 };
 
 
@@ -2581,6 +2656,7 @@ String sSumMSTextTemplates
     Text[ czech ] = "Všechny Wordovské šablony obsažené v tomto adresáři budou importovány:";
     Text[ hebrew ] = "‮כל תבניות ה Word בספריה הבאה תיובאנה:‬";
     Text[ hindi ] = "निम्नलिखित डैरक्टरी में रहनेवाला सब वर्ड नमूनों को आयात किया जायेगा:";
+    Text[ slovak ] = "Všetky šablóny Word obsiahnuté v nasledujúcom adresári budú importované:";
 };
 
 
@@ -2614,6 +2690,7 @@ String sSumMSTableTemplates
     Text[ czech ] = "Všechny Excelové šablony obsažené v tomto adresáři budou importovány:";
     Text[ hebrew ] = "‮כל תבניות ה Excel בספריה הבאה תיובאנה:‬";
     Text[ hindi ] = "निम्नलिखित डैरक्टरी में रहनेवाला सब एक्सेल नमूनों को आयात किया जायेगा:";
+    Text[ slovak ] = "Všetky šablóny Excel obsiahnuté v nasledujúcom adresári budú importované:";
 };
 
 
@@ -2647,7 +2724,10 @@ String sSumMSDrawTemplates
     Text[ czech ] = "Všechny šablony PowerPointu obsažené v tomto adresáři budou importovány:";
     Text[ hebrew ] = "‮כל תבניות ה PowerPoint בספריה הבאה תיובאנה:‬";
     Text[ hindi ] = "निम्नलिखित डैरक्टरी में रहनेवाला सब पवरपोइन्ट नमूनों को आयात किया जायेगा:";
+    Text[ slovak ] = "Všetky šablóny PowerPoint obsiahnuté v nasledujúcom adresári budú importované:";
 };
+
+
 
 
 
