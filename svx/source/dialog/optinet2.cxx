@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optinet2.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 13:13:12 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 13:56:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,6 +217,38 @@
 #include <osl/file.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMEREPLACE_HPP_
+#include <com/sun/star/container/XNameReplace.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
+#include <com/sun/star/container/XNameAccess.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
+#include <com/sun/star/beans/PropertyValue.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSTATE_HPP_
+#include <com/sun/star/beans/XPropertyState.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_UTIL_XCHANGESBATCH_HPP_
+#include <com/sun/star/util/XChangesBatch.hpp>
+#endif
+
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+
+namespace beans     = ::com::sun::star::beans;
+namespace container = ::com::sun::star::container;
+namespace util      = ::com::sun::star::util;
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::rtl;
@@ -356,7 +388,12 @@ SvxProxyTabPage::SvxProxyTabPage(Window* pParent, const SfxItemSet& rSet ) :
     aNoProxyForED     (this, ResId( ED_NOPROXYFOR     )),
     aNoProxyDescFT    (this, ResId( ED_NOPROXYDESC    )),
     sFromBrowser        (       ResId( ST_PROXY_FROM_BROWSER ) ),
-    pInetOptions( new SvtInetOptions)
+    aProxyModePN(RTL_CONSTASCII_USTRINGPARAM("ooInetProxyType")),
+    aHttpProxyPN(RTL_CONSTASCII_USTRINGPARAM("ooInetHTTPProxyName")),
+    aHttpPortPN(RTL_CONSTASCII_USTRINGPARAM("ooInetHTTPProxyPort")),
+    aFtpProxyPN(RTL_CONSTASCII_USTRINGPARAM("ooInetFTPProxyName")),
+    aFtpPortPN(RTL_CONSTASCII_USTRINGPARAM("ooInetFTPProxyPort")),
+    aNoProxyDescPN(RTL_CONSTASCII_USTRINGPARAM("ooInetNoProxy"))
 {
     FreeResource();
 
@@ -367,6 +404,36 @@ SvxProxyTabPage::SvxProxyTabPage(Window* pParent, const SfxItemSet& rSet ) :
     aFtpPortED.SetLoseFocusHdl( aLink );
 
     aProxyModeLB.SetSelectHdl(LINK( this, SvxProxyTabPage, ProxyHdl_Impl ));
+
+    Reference< lang::XMultiServiceFactory > xServiceManager(
+        ::comphelper::getProcessServiceFactory());
+
+    if( xServiceManager.is() )
+    {
+        try
+        {
+            uno::Reference< lang::XMultiServiceFactory > xConfigurationProvider =
+                Reference< lang::XMultiServiceFactory > ( xServiceManager->createInstance( rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationProvider" ) ) ),
+                UNO_QUERY_THROW);
+
+            OUString aConfigRoot(RTL_CONSTASCII_USTRINGPARAM( "org.openoffice.Inet/Settings" ) );
+
+            beans::PropertyValue aProperty;
+            aProperty.Name  = OUString(RTL_CONSTASCII_USTRINGPARAM( "nodepath" ));
+            aProperty.Value = makeAny( aConfigRoot );
+
+            Sequence< Any > aArgumentList( 1 );
+            aArgumentList[0] = makeAny( aProperty );
+
+            m_xConfigurationUpdateAccess = xConfigurationProvider->createInstanceWithArguments( rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationUpdateAccess" ) ),
+                    aArgumentList );
+        }
+
+        catch (uno::RuntimeException e) {
+        }
+    }
 
     if(SfxApplication::IsPlugin())
     {
@@ -389,7 +456,6 @@ SvxProxyTabPage::SvxProxyTabPage(Window* pParent, const SfxItemSet& rSet ) :
 
 SvxProxyTabPage::~SvxProxyTabPage()
 {
-    delete pInetOptions;
 }
 
 /*-----------------12.08.96 14.55-------------------
@@ -401,44 +467,168 @@ SfxTabPage* SvxProxyTabPage::Create(Window* pParent, const SfxItemSet& rAttrSet 
     return new SvxProxyTabPage(pParent, rAttrSet);
 }
 
+/*-----------------02.09.04 14.55-------------------
+
+--------------------------------------------------*/
+
+void SvxProxyTabPage::ReadConfigData_Impl()
+{
+    try {
+        Reference< container::XNameAccess > xNameAccess(m_xConfigurationUpdateAccess, UNO_QUERY_THROW);
+
+        sal_Int32 nIntValue;
+        OUString  aStringValue;
+
+        if( xNameAccess->getByName(aProxyModePN) >>= nIntValue )
+        {
+            aProxyModeLB.SelectEntryPos( (USHORT) nIntValue );
+        }
+
+        if( xNameAccess->getByName(aHttpProxyPN) >>= aStringValue )
+        {
+            aHttpProxyED.SetText( aStringValue );
+        }
+
+        if( xNameAccess->getByName(aHttpPortPN) >>= nIntValue )
+        {
+            aHttpPortED.SetText( String::CreateFromInt32( nIntValue ));
+        }
+
+        if( xNameAccess->getByName(aFtpProxyPN) >>= aStringValue )
+        {
+            aFtpProxyED.SetText( aStringValue );
+        }
+
+        if( xNameAccess->getByName(aFtpPortPN) >>= nIntValue )
+        {
+            aFtpPortED.SetText( String::CreateFromInt32( nIntValue ));
+        }
+
+        if( xNameAccess->getByName(aNoProxyDescPN) >>= aStringValue )
+        {
+            aNoProxyForED.SetText( aStringValue );
+        }
+    }
+
+    catch(container::NoSuchElementException e) {
+        OSL_TRACE( "SvxProxyTabPage::ReadConfigData_Impl: NoSuchElementException caught" );
+    }
+
+    catch(lang::WrappedTargetException e) {
+        OSL_TRACE( "SvxProxyTabPage::ReadConfigData_Impl: WrappedTargetException caught" );
+    }
+
+    catch(uno::RuntimeException e) {
+        OSL_TRACE( "SvxProxyTabPage::ReadConfigData_Impl: RuntimeException caught" );
+    }
+
+}
+
+/*-----------------02.09.04 14.55-------------------
+
+--------------------------------------------------*/
+
+void SvxProxyTabPage::ReadConfigDefaults_Impl()
+{
+    try
+    {
+        Reference< beans::XPropertyState > xPropertyState(m_xConfigurationUpdateAccess, UNO_QUERY_THROW);
+
+        sal_Int32 nIntValue;
+        OUString  aStringValue;
+
+        if( xPropertyState->getPropertyDefault(aHttpProxyPN) >>= aStringValue )
+        {
+            aHttpProxyED.SetText( aStringValue );
+        }
+
+        if( xPropertyState->getPropertyDefault(aHttpPortPN) >>= nIntValue )
+        {
+            aHttpPortED.SetText( String::CreateFromInt32( nIntValue ));
+        }
+
+        if( xPropertyState->getPropertyDefault(aFtpProxyPN) >>= aStringValue )
+        {
+            aFtpProxyED.SetText( aStringValue );
+        }
+
+        if( xPropertyState->getPropertyDefault(aFtpPortPN) >>= nIntValue )
+        {
+            aFtpPortED.SetText( String::CreateFromInt32( nIntValue ));
+        }
+
+        if( xPropertyState->getPropertyDefault(aNoProxyDescPN) >>= aStringValue )
+        {
+            aNoProxyForED.SetText( aStringValue );
+        }
+    }
+    catch(beans::UnknownPropertyException e)
+    {
+        OSL_TRACE( "SvxProxyTabPage::RestoreConfigDefaults_Impl: UnknownPropertyException caught" );
+    }
+
+    catch(lang::WrappedTargetException e) {
+        OSL_TRACE( "SvxProxyTabPage::RestoreConfigDefaults_Impl: WrappedTargetException caught" );
+    }
+
+    catch(uno::RuntimeException e)
+    {
+        OSL_TRACE( "SvxProxyTabPage::RestoreConfigDefaults_Impl: RuntimeException caught" );
+    }
+}
+
+/*-----------------02.09.04 14.55-------------------
+
+--------------------------------------------------*/
+
+void SvxProxyTabPage::RestoreConfigDefaults_Impl()
+{
+    try
+    {
+        Reference< beans::XPropertyState > xPropertyState(m_xConfigurationUpdateAccess, UNO_QUERY_THROW);
+
+        xPropertyState->setPropertyToDefault(aProxyModePN);
+        xPropertyState->setPropertyToDefault(aHttpProxyPN);
+        xPropertyState->setPropertyToDefault(aHttpPortPN);
+        xPropertyState->setPropertyToDefault(aFtpProxyPN);
+        xPropertyState->setPropertyToDefault(aFtpPortPN);
+        xPropertyState->setPropertyToDefault(aNoProxyDescPN);
+
+        Reference< util::XChangesBatch > xChangesBatch(m_xConfigurationUpdateAccess, UNO_QUERY_THROW);
+        xChangesBatch->commitChanges();
+    }
+
+    catch(beans::UnknownPropertyException e)
+    {
+        OSL_TRACE( "SvxProxyTabPage::RestoreConfigDefaults_Impl: UnknownPropertyException caught" );
+    }
+
+    catch(lang::WrappedTargetException e) {
+        OSL_TRACE( "SvxProxyTabPage::RestoreConfigDefaults_Impl: WrappedTargetException caught" );
+    }
+
+    catch(uno::RuntimeException e)
+    {
+        OSL_TRACE( "SvxProxyTabPage::RestoreConfigDefaults_Impl: RuntimeException caught" );
+    }
+}
+
 /*-----------------12.08.96 14.55-------------------
 
 --------------------------------------------------*/
 
 void SvxProxyTabPage::Reset(const SfxItemSet&)
 {
-    //none == 0, manual == 2 , automatic only in PluginMode
-    USHORT nPos = 0;
-    BOOL bEnableProxyControls = FALSE;
-    switch(pInetOptions->GetProxyType())
-    {
-        case SvtInetOptions::NONE:      nPos = 0; break;
-        case SvtInetOptions::MANUAL:
-            nPos = 1;
-            bEnableProxyControls = TRUE;
-        break;
-        case SvtInetOptions::AUTOMATIC:
-            nPos = aProxyModeLB.GetEntryCount() == 3 ? 2 : 0;
-        break;
-    }
-    aProxyModeLB.SelectEntryPos( nPos );
+    ReadConfigData_Impl();
+
     aProxyModeLB.SaveValue();
-    EnableControls_Impl( bEnableProxyControls );
-
-    aHttpProxyED.SetText( pInetOptions->GetProxyHttpName() );
     aHttpProxyED.SaveValue();
-    aHttpPortED.SetText(
-        String::CreateFromInt32( pInetOptions->GetProxyHttpPort() ));
     aHttpPortED.SaveValue();
-
-    aFtpProxyED.SetText( pInetOptions->GetProxyFtpName() );
     aFtpProxyED.SaveValue();
-    aFtpPortED.SetText(
-        String::CreateFromInt32( pInetOptions->GetProxyFtpPort() ));
     aFtpPortED.SaveValue();
-
-    aNoProxyForED.SetText( pInetOptions->GetProxyNoProxy() );
     aNoProxyForED.SaveValue();
+
+    EnableControls_Impl( aProxyModeLB.GetSelectEntryPos() == 2 );
 }
 
 /*-----------------12.08.96 16.34-------------------
@@ -448,45 +638,81 @@ void SvxProxyTabPage::Reset(const SfxItemSet&)
 BOOL SvxProxyTabPage::FillItemSet(SfxItemSet& rSet)
 {
     BOOL bModified=FALSE;
-    USHORT nSelPos = aProxyModeLB.GetSelectEntryPos();
-    if(aProxyModeLB.GetSavedValue() != nSelPos)
-    {
-        SvtInetOptions::ProxyType eSet = SvtInetOptions::NONE;
-        switch(nSelPos)
+
+    try {
+        Reference< beans::XPropertySet > xPropertySet(m_xConfigurationUpdateAccess, UNO_QUERY_THROW );
+
+        USHORT nSelPos = aProxyModeLB.GetSelectEntryPos();
+        if(aProxyModeLB.GetSavedValue() != nSelPos)
         {
-//            case  0: eSet  = SvtInetOptions::NONE;     break;
-            case  1: eSet  = SvtInetOptions::MANUAL;   break;
-            case  2: eSet  = SvtInetOptions::AUTOMATIC;break;
+            if( nSelPos == 1 )
+            {
+                RestoreConfigDefaults_Impl();
+                return TRUE;
+            }
+
+            xPropertySet->setPropertyValue(aProxyModePN,
+                makeAny((sal_Int32) nSelPos));
+            bModified = TRUE;
         }
-        pInetOptions->SetProxyType(eSet);
-        bModified = TRUE;
-    }
-    if(aHttpProxyED.GetSavedValue() != aHttpProxyED.GetText())
-    {
-        pInetOptions->SetProxyHttpName(aHttpProxyED.GetText());
-        bModified = TRUE;
+
+        if(aHttpProxyED.GetSavedValue() != aHttpProxyED.GetText())
+        {
+            xPropertySet->setPropertyValue( aHttpProxyPN,
+                makeAny(rtl::OUString(aHttpProxyED.GetText())));
+            bModified = TRUE;
+        }
+
+        if ( aHttpPortED.GetSavedValue() != aHttpPortED.GetText() )
+        {
+            xPropertySet->setPropertyValue( aHttpPortPN,
+                makeAny(aHttpPortED.GetText().ToInt32()));
+            bModified = TRUE;
+        }
+
+        if(aFtpProxyED.GetSavedValue() != aFtpProxyED.GetText())
+        {
+            xPropertySet->setPropertyValue( aFtpProxyPN,
+                makeAny( rtl::OUString(aFtpProxyED.GetText())));
+            bModified = TRUE;
+        }
+
+        if ( aFtpPortED.GetSavedValue() != aFtpPortED.GetText() )
+        {
+            xPropertySet->setPropertyValue( aFtpPortPN,
+                makeAny(aFtpPortED.GetText().ToInt32()));
+            bModified = TRUE;
+        }
+
+        if ( aNoProxyForED.GetSavedValue() != aNoProxyForED.GetText() )
+        {
+            xPropertySet->setPropertyValue( aNoProxyDescPN,
+                makeAny( rtl::OUString(aNoProxyForED.GetText())));
+            bModified = TRUE;
+        }
+
+        Reference< util::XChangesBatch > xChangesBatch(m_xConfigurationUpdateAccess, UNO_QUERY_THROW);
+        xChangesBatch->commitChanges();
     }
 
-    if ( aHttpPortED.GetSavedValue() != aHttpPortED.GetText() )
-    {
-        pInetOptions->SetProxyHttpPort(aHttpPortED.GetText().ToInt32());
-        bModified = TRUE;
-    }
-    if(aFtpProxyED.GetSavedValue() != aFtpProxyED.GetText())
-    {
-        pInetOptions->SetProxyFtpName(aFtpProxyED.GetText());
-        bModified = TRUE;
+    catch(lang::IllegalArgumentException e) {
+        OSL_TRACE( "SvxProxyTabPage::FillItemSet: IllegalArgumentException caught" );
     }
 
-    if ( aFtpPortED.GetSavedValue() != aFtpPortED.GetText() )
-    {
-        pInetOptions->SetProxyFtpPort(aFtpPortED.GetText().ToInt32());
-        bModified = TRUE;
+    catch(beans::UnknownPropertyException e) {
+        OSL_TRACE( "SvxProxyTabPage::FillItemSet: UnknownPropertyException caught" );
     }
-    if ( aNoProxyForED.GetSavedValue() != aNoProxyForED.GetText() )
-    {
-        pInetOptions->SetProxyNoProxy(aNoProxyForED.GetText());
-        bModified = TRUE;
+
+    catch(beans::PropertyVetoException e) {
+        OSL_TRACE( "SvxProxyTabPage::FillItemSet: PropertyVetoException caught" );
+    }
+
+    catch(lang::WrappedTargetException e) {
+        OSL_TRACE( "SvxProxyTabPage::FillItemSet: WrappedTargetException caught" );
+    }
+
+    catch(uno::RuntimeException e) {
+        OSL_TRACE( "SvxProxyTabPage::FillItemSet: RuntimeException caught" );
     }
 
     return bModified;
@@ -515,8 +741,15 @@ void SvxProxyTabPage::EnableControls_Impl(BOOL bEnable)
 
 IMPL_LINK( SvxProxyTabPage, ProxyHdl_Impl, ListBox *, pBox )
 {
-    BOOL bEnableProxyControls = pBox->GetSelectEntryPos() == 1;
-    EnableControls_Impl(bEnableProxyControls);
+    USHORT nPos = pBox->GetSelectEntryPos();
+
+    // Restore original system values
+    if( nPos == 1 )
+    {
+        ReadConfigDefaults_Impl();
+    }
+
+    EnableControls_Impl(nPos == 2);
     return 0;
 }
 
