@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlexp.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2004-12-13 12:47:46 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 13:17:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,11 +204,11 @@ extern BOOL bOderSo;
 
 //========================================================================
 
-FltError ScExportHTML( SvStream& rStrm, ScDocument* pDoc,
+FltError ScExportHTML( SvStream& rStrm, const String& rBaseURL, ScDocument* pDoc,
         const ScRange& rRange, const CharSet eNach, BOOL bAll,
         const String& rStreamPath, String& rNonConvertibleChars )
 {
-    ScHTMLExport aEx( rStrm, pDoc, rRange, bAll, rStreamPath );
+    ScHTMLExport aEx( rStrm, rBaseURL, pDoc, rRange, bAll, rStreamPath );
     FltError nErr = aEx.Write();
     rNonConvertibleChars = aEx.GetNonConvertibleChars();
     return nErr;
@@ -300,11 +300,12 @@ void lcl_WriteTeamInfo( SvStream& rStrm, rtl_TextEncoding eDestEnc )
 
 //////////////////////////////////////////////////////////////////////////////
 
-ScHTMLExport::ScHTMLExport( SvStream& rStrmP, ScDocument* pDocP,
+ScHTMLExport::ScHTMLExport( SvStream& rStrmP, const String& rBaseURL, ScDocument* pDocP,
                             const ScRange& rRangeP,
                             BOOL bAllP, const String& rStreamPathP ) :
     ScExportBase( rStrmP, pDocP, rRangeP ),
     aStreamPath( rStreamPathP ),
+    aBaseURL( rBaseURL ),
     pAppWin( Application::GetDefaultDevice() ),
     pSrcArr( NULL ),
     pDestArr( NULL ),
@@ -431,12 +432,12 @@ void ScHTMLExport::WriteHeader()
 
     if ( pDoc->IsClipOrUndo() )
     {   // no real DocInfo available, but some META information like charset needed
-        SfxFrameHTMLWriter::Out_DocInfo( rStrm, NULL, sIndent, eDestEnc, &aNonConvertibleChars );
+        SfxFrameHTMLWriter::Out_DocInfo( rStrm, aBaseURL, NULL, sIndent, eDestEnc, &aNonConvertibleChars );
     }
     else
     {
         SfxDocumentInfo& rInfo      = pDoc->GetDocumentShell()->GetDocInfo();
-        SfxFrameHTMLWriter::Out_DocInfo( rStrm, &rInfo, sIndent, eDestEnc, &aNonConvertibleChars );
+        SfxFrameHTMLWriter::Out_DocInfo( rStrm, aBaseURL, &rInfo, sIndent, eDestEnc, &aNonConvertibleChars );
         OUT_LF();
 
         //----------------------------------------------------------
@@ -695,7 +696,9 @@ void ScHTMLExport::WriteBody()
                     _STRINGCONST( "JPG" ), XOUTBMP_USE_NATIVE_IF_POSSIBLE );
                 if( !nErr )     // fehlerhaft, da ist nichts auszugeben
                 {
-                    aGrfNm = URIHelper::SmartRelToAbs( aGrfNm );
+                    aGrfNm = URIHelper::SmartRel2Abs(
+                            INetURLObject(aBaseURL),
+                            aGrfNm, URIHelper::GetMaybeFileHdl(), true, false);
                     if ( HasCId() )
                         MakeCIdURL( aGrfNm );
                     pLink = &aGrfNm;
@@ -712,13 +715,17 @@ void ScHTMLExport::WriteBody()
                     MakeCIdURL( aGrfNm );
             }
             else
-                aGrfNm = URIHelper::SmartRelToAbs( aGrfNm );
+                aGrfNm = URIHelper::SmartRel2Abs(
+                        INetURLObject(aBaseURL),
+                        aGrfNm, URIHelper::GetMaybeFileHdl(), true, false);
             pLink = &aGrfNm;
         }
         if( pLink )
         {
             rStrm << ' ' << sHTML_O_background << "=\"";
-            OUT_STR( INetURLObject::AbsToRel( *pLink ) ) << '\"';
+            OUT_STR( URIHelper::simpleNormalizedMakeRelative(
+                        aBaseURL,
+                        *pLink ) ) << '\"';
         }
     }
     if ( !aHTMLStyle.aBackgroundColor.GetTransparency() )
