@@ -2,9 +2,9 @@
  *
  *  $RCSfile: showcols.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-01 20:25:05 $
+ *  last change: $Author: hjs $ $Date: 2001-05-04 19:38:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,7 @@ ModalDialog RID_SVX_DLG_SHOWGRIDCOLUMNS
         Text[ chinese_traditional ] = "¥H¤UªºÄæ¬OÁô¤Jªº¡C½Ğ±z¿ï¨ú­nÅã¥ÜªºÄæ¡AµM¦Z«ö¤@¤U½T©w¡C";
         Text[ arabic ] = "åĞå ÇáÃÚãÏÉ ãÎİíÉ ÍÇáíÇğ. ÇáÑÌÇÁ ÊÍÏíÏ ÇáÃÚãÏÉ ÇáÊí ÊÑíÏ ÅÙåÇÑåÇ¡ Ëã ÇáäŞÑ İæŞ \"ÍÓäÇğ\"";
         Text[ turkish ] = "Şu sütunlar şu an gizlenmiş durumda. Tekrar görüntülemek istediklerinizi seçin ve \"Tamam\" düğmesini tıklayın.";
+        Text[ catalan ] = "Las siguientes columnas están por ahora ocultas. Seleccione las que deban mostrarse y pulse sobre Aceptar.";
     };
 
     ListBox 1
@@ -143,5 +144,6 @@ ModalDialog RID_SVX_DLG_SHOWGRIDCOLUMNS
     Text[ arabic ] = "ÅÙåÇÑ ÇáÃÚãÏÉ";
     Text[ turkish ] = "Sütunları görüntüle";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Mostrar columnas";
 };
 
