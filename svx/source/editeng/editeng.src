@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-15 20:53:35 $
+ *  last change: $Author: rt $ $Date: 2000-12-08 17:46:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -307,7 +307,7 @@ Menu RID_MENU_SPELL
             Text[ russian ] = "~Ïğàâîïèñàíèå";
             Text[ polish ] = "~Pisownia";
             Text[ japanese ] = "•¶ÍZ³(~S)";
-            Text[ chinese_traditional ] = "«÷¦r(~S)";
+            Text[ chinese_traditional ] = "«÷¼gÀË¬d(~S)";
             Text[ arabic ] = "ÊÏ~ŞíŞ ÅãáÇÆí";
             Text[ dutch ] = "~Spellingcontrole";
             Text[ chinese_simplified ] = "Æ´Ğ´¼ì²é(~S)";
