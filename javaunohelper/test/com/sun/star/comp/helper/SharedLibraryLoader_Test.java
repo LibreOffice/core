@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SharedLibraryLoader_Test.java,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:31:32 $
+ *  last change: $Author: rt $ $Date: 2003-04-23 17:13:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,9 +87,9 @@ import com.sun.star.registry.XSimpleRegistry;
 public class SharedLibraryLoader_Test {
 
     private static final String NATIVE_SERVICE_MANAGER_IMP_NAME = "com.sun.star.comp.stoc.OServiceManager";
-    private static final String NATIVE_SERVICE_MANAGER_LIB_NAME = "smgr";
+    private static final String NATIVE_SERVICE_MANAGER_LIB_NAME = "servicemgr.uno";
     private static final String NATIVE_REGISTRY_IMP_NAME = "com.sun.star.comp.stoc.SimpleRegistry";
-    private static final String NATIVE_REGISTRY_LIB_NAME = "simreg";
+    private static final String NATIVE_REGISTRY_LIB_NAME = "simplereg.uno";
 
     private static XMultiServiceFactory     nativeServiceManager        = null;
     private static XSingleServiceFactory    sharedLibraryLoaderFactory  = null;
