@@ -2,9 +2,9 @@
  *
  *  $RCSfile: virtmenu.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mba $ $Date: 2001-05-14 11:01:27 $
+ *  last change: $Author: mba $ $Date: 2001-05-14 16:56:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -639,7 +639,7 @@ IMPL_LINK( SfxVirtualMenu, Activate, Menu *, pMenu )
         for ( USHORT nPos = 0; nPos < nCount; ++nPos )
         {
             USHORT nId = (pItems+nPos)->GetId();
-            if ( nId && nId < START_ITEMID_WINDOWLIST )
+            if ( nId && nId > END_ITEMID_WINDOWLIST )
                 pBindings->Update(nId);
         }
 
