@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormShellManager.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:50:00 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 15:03:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,32 +75,15 @@ FormShellManager::FormShellManager (ViewShellBase& rBase)
     : mrBase(rBase),
       meStackPosition(SP_UNKNOWN)
 {
-    ViewShell* pShell = mrBase.GetMainViewShell();
+    // Register at the PaneManager to be informed about changes in the
+    // center pane.
+    mrBase.GetPaneManager().AddEventListener (
+        LINK(
+            this,
+            FormShellManager,
+            PaneManagerEventHandler));
 
-    if (pShell != NULL)
-    {
-        RegisterAtCenterPane (pShell);
-
-        // Register at the PaneManager to be informed about changes in the
-        // center pane.
-        mrBase.GetPaneManager().AddEventListener (
-            LINK(
-                this,
-                FormShellManager,
-                PaneManagerEventHandler));
-
-        // Register at the form shell.
-        FmFormShell* pFormShell = static_cast<FmFormShell*>(
-            pShell->GetObjectBarManager().GetObjectBar(RID_FORMLAYER_TOOLBOX));
-        if (pFormShell != NULL)
-        {
-            pFormShell->SetControlActivationHandler(
-                LINK(
-                    this,
-                    FormShellManager,
-                    FormControlActivated));
-        }
-    }
+    RegisterAtCenterPane();
 }
 
 
@@ -108,60 +91,90 @@ FormShellManager::FormShellManager (ViewShellBase& rBase)
 
 FormShellManager::~FormShellManager (void)
 {
-    ViewShell* pShell = mrBase.GetMainViewShell();
+    UnregisterAtCenterPane();
 
-    if (pShell != NULL)
-    {
-        UnregisterAtCenterPane (pShell);
-
-        // Unregister at the PaneManager.
-        mrBase.GetPaneManager().RemoveEventListener (
-            LINK(
-                this,
-                FormShellManager,
-                PaneManagerEventHandler));
-
-
-        // Unregister at the form shell.
-        FmFormShell* pFormShell = static_cast<FmFormShell*>(
-            pShell->GetObjectBarManager().GetObjectBar(RID_FORMLAYER_TOOLBOX));
-        if (pFormShell != NULL)
-        {
-            pFormShell->SetControlActivationHandler(Link());
-        }
-    }
+    // Unregister at the PaneManager.
+    mrBase.GetPaneManager().RemoveEventListener (
+        LINK(
+            this,
+            FormShellManager,
+            PaneManagerEventHandler));
 }
 
 
 
 
-void FormShellManager::RegisterAtCenterPane (ViewShell* pShell)
+void FormShellManager::RegisterAtCenterPane (void)
 {
-    ::Window* pWindow = NULL;
-    if (pShell != NULL)
-        pWindow = pShell->GetActiveWindow();
-    if (pWindow != NULL)
+    do
+    {
+        ViewShell* pShell = mrBase.GetMainViewShell();
+        if (pShell == NULL)
+            break;
+
+        ::Window* pWindow = pShell->GetActiveWindow();
+        if (pWindow == NULL)
+            break;
+
+        // Register at the window to get informed when to move the form
+        // shell to the bottom of the shell stack.
         pWindow->AddEventListener(
             LINK(
                 this,
                 FormShellManager,
                 WindowEventHandler));
+
+        // Register at the form shell to get informed when to move the shell
+        // to the top of the shell stack.
+        FmFormShell* pFormShell = static_cast<FmFormShell*>(
+            pShell->GetObjectBarManager().GetObjectBar(RID_FORMLAYER_TOOLBOX));
+        if (pFormShell == NULL)
+            break;
+        pFormShell->SetControlActivationHandler(
+            LINK(
+                this,
+                FormShellManager,
+                FormControlActivated));
+
+        // Move the form shell to the correct position.
+        if (meStackPosition == SP_ABOVE_VIEW_SHELL)
+            pShell->GetObjectBarManager().MoveToTop(RID_FORMLAYER_TOOLBOX);
+        else
+            pShell->GetObjectBarManager().MoveBelowShell(RID_FORMLAYER_TOOLBOX);
+    }
+    while (false);
 }
 
 
 
 
-void FormShellManager::UnregisterAtCenterPane (ViewShell* pShell)
+void FormShellManager::UnregisterAtCenterPane (void)
 {
-    ::Window* pWindow = NULL;
-    if (pShell != NULL)
-        pWindow = pShell->GetActiveWindow();
-    if (pWindow != NULL)
+    do
+    {
+        ViewShell* pShell = mrBase.GetMainViewShell();
+        if (pShell == NULL)
+            break;
+
+        ::Window* pWindow = pShell->GetActiveWindow();
+        if (pWindow == NULL)
+            break;
+
+        // Unregister from the window.
         pWindow->RemoveEventListener(
             LINK(
                 this,
                 FormShellManager,
                 WindowEventHandler));
+
+        // Unregister form at the form shell.
+        FmFormShell* pFormShell = static_cast<FmFormShell*>(
+            pShell->GetObjectBarManager().GetObjectBar(RID_FORMLAYER_TOOLBOX));
+        if (pFormShell == NULL)
+            break;
+        pFormShell->SetControlActivationHandler(Link());
+    }
+    while (false);
 }
 
 
@@ -192,11 +205,11 @@ IMPL_LINK(FormShellManager, PaneManagerEventHandler, PaneManagerEvent*, pEvent)
         switch (pEvent->meEventId)
         {
             case PaneManagerEvent::EID_VIEW_SHELL_REMOVED:
-                UnregisterAtCenterPane (pEvent->mpShell);
+                UnregisterAtCenterPane();
                 break;
 
             case PaneManagerEvent::EID_VIEW_SHELL_ADDED:
-                RegisterAtCenterPane (pEvent->mpShell);
+                RegisterAtCenterPane();
                 break;
         }
     }
