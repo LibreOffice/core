@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabledlg.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 11:27:39 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 16:56:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,14 +116,11 @@
 #ifndef _FMTTSPLT_HXX //autogen
 #include <fmtlsplt.hxx>
 #endif
+
+#include <svx/htmlcfg.hxx>
+
 #ifndef _FMTROWSPLT_HXX //autogen
 #include <fmtrowsplt.hxx>
-#endif
-#ifndef _OFA_HTMLCFG_HXX //autogen
-#include <offmgr/htmlcfg.hxx>
-#endif
-#ifndef _OFF_APP_HXX //autogen
-#include <offmgr/app.hxx>
 #endif
 #ifndef _SVX_HTMLMODE_HXX
 #include <svx/htmlmode.hxx>
@@ -1835,7 +1832,7 @@ BOOL  SwTextFlowPage::FillItemSet( SfxItemSet& rSet )
 void   SwTextFlowPage::Reset( const SfxItemSet& rSet )
 {
     const SfxPoolItem* pItem;
-    OfaHtmlOptions* pHtmlOpt = OFF_APP()->GetHtmlOptions();
+    SvxHtmlOptions* pHtmlOpt = SvxHtmlOptions::Get();
     BOOL bFlowAllowed = !bHtmlMode || pHtmlOpt->IsPrintLayoutExtension();
     if(bFlowAllowed)
     {
