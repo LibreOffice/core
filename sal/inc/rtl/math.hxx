@@ -2,9 +2,9 @@
  *
  *  $RCSfile: math.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 16:45:48 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 16:35:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,7 +228,7 @@ inline double pow10Exp(double fValue, int nExp)
     given values scaled by 2^-48 (4 bits roundoff stripped).
 
     @ATTENTION
-    ApproxEqual( value!=0.0, 0.0 ) _never_ yields true.
+    approxEqual( value!=0.0, 0.0 ) _never_ yields true.
  */
 inline bool approxEqual(double a, double b)
 {
@@ -241,13 +241,13 @@ inline bool approxEqual(double a, double b)
 
 /** Add two values.
 
-    If signs differ and the absolute values are equal according to ApproxEqual()
+    If signs differ and the absolute values are equal according to approxEqual()
     the method returns 0.0 instead of calculating the sum.
 
     If you wanted to sum up multiple values it would be convenient not to call
-    ApproxAdd() for each value but instead remember the first value not equal to
+    approxAdd() for each value but instead remember the first value not equal to
     0.0, add all other values using normal + operator, and with the result and
-    the remembered value call ApproxAdd().
+    the remembered value call approxAdd().
  */
 inline double approxAdd(double a, double b)
 {
@@ -259,7 +259,7 @@ inline double approxAdd(double a, double b)
 
 /** Substract two values (a-b).
 
-    If signs are identical and the values are equal according to ApproxEqual()
+    If signs are identical and the values are equal according to approxEqual()
     the method returns 0.0 instead of calculating the substraction.
  */
 inline double approxSub(double a, double b)
@@ -269,7 +269,7 @@ inline double approxSub(double a, double b)
     return a - b;
 }
 
-/** floor() method taking ApproxEqual() into account.
+/** floor() method taking approxEqual() into account.
 
     Use for expected integer values being calculated by double functions.
 
@@ -279,12 +279,14 @@ inline double approxSub(double a, double b)
 inline double approxFloor(double a)
 {
     double b = floor( a );
-    if ( approxEqual( a - 1.0, b ) )
+    // The second approxEqual() is necessary for values that are near the limit
+    // of numbers representable with 4 bits stripped off. (#i12446#)
+    if ( approxEqual( a - 1.0, b ) && !approxEqual( a, b ) )
         return b + 1.0;
     return b;
 }
 
-/** ceil() method taking ApproxEqual() into account.
+/** ceil() method taking approxEqual() into account.
 
     Use for expected integer values being calculated by double functions.
 
@@ -294,7 +296,9 @@ inline double approxFloor(double a)
 inline double approxCeil(double a)
 {
     double b = ceil( a );
-    if ( approxEqual( a + 1.0, b ) )
+    // The second approxEqual() is necessary for values that are near the limit
+    // of numbers representable with 4 bits stripped off. (#i12446#)
+    if ( approxEqual( a + 1.0, b ) && !approxEqual( a, b ) )
         return b - 1.0;
     return b;
 }
