@@ -113,18 +113,27 @@ public class ActiveSyncDriver {
             return true;
         }
 
+
         /*
          * The XMergeSync.dll should will have checked for the presence of the
          * jars at the same location already.
+         *
+         * Because they can be installed separately, though, the MIME types need
+         * to be check to see which one to load.
          */
-        File jarWord = new File(ooClassDir + "pocketword.jar");
-        File jarExcel = new File(ooClassDir + "pexcel.jar");
+        File pluginJar = null;
+        if (srcMime.equals("staroffice/sxw") || srcMime.equals("application/x-pocket-word"))
+        {
+            pluginJar = new File(ooClassDir + "pocketWord.jar");
+        }
+        else if (srcMime.equals("staroffice/sxc") || srcMime.equals("application/x-pocket-excel"))
+        {
+            pluginJar = new File(ooClassDir + "pexcel.jar");
+        }
 
-        ConverterInfoReader cirWord  = new ConverterInfoReader(jarWord.toURL().toString(), false);
-        ConverterInfoReader cirExcel = new ConverterInfoReader(jarExcel.toURL().toString(), false);
+        ConverterInfoReader cirPlugin = new ConverterInfoReader(pluginJar.toURL().toString(), false);
 
-        ConverterInfoMgr.addPlugIn(cirWord.getConverterInfoEnumeration());
-        ConverterInfoMgr.addPlugIn(cirExcel.getConverterInfoEnumeration());
+        ConverterInfoMgr.addPlugIn(cirPlugin.getConverterInfoEnumeration());
 
         ConverterFactory cf = new ConverterFactory();
         Convert conv = cf.getConverter(srcMime, dstMime);
