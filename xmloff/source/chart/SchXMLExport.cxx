@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLExport.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: bm $ $Date: 2001-06-01 12:36:19 $
+ *  last change: $Author: af $ $Date: 2001-06-07 13:40:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1116,7 +1116,15 @@ void SchXMLExportHelper::exportPlotArea( uno::Reference< chart::XDiagram > xDiag
                     else
                         aASName = GetAutoStylePoolP().Find( nStyleFamily, aPropertyStates );
 
-                    if( nElement )  // The first element is skipped because it can not be compared to a previous one.
+                    //  The following conditional realizes a run-length compression.  For every run of data
+                    //  points with the same style only one point is written together with a repeat count.
+                    //  The style of the current data point is compared with that of the last data point.
+                    //  If they differ, then the _last_ data point and, if greater than 1, the repreat count
+                    //  are written, else the repeat count is increased but no output takes place.
+                    //  This has two consequences: 1. the first data point is skipped,
+                    //  because it can not be compared to a predecessor and 2. the last data point (or series
+                    //  of data points with the same style) is written outside and after the enclosing loop.
+                    if( nElement )
                     {
                         if( aASName.equals( aLastASName ))
                         {
@@ -1124,25 +1132,34 @@ void SchXMLExportHelper::exportPlotArea( uno::Reference< chart::XDiagram > xDiag
                         }
                         else
                         {
-                            // write last style
+                            //  Write the style of the last data point(s).
+
+                            //  Write reapeat counter (if data point run contains more than one point).
                             if( nRepeated > 1 )
                             {
                                 mrExport.AddAttribute( XML_NAMESPACE_CHART, sXML_repeated,
                                                        rtl::OUString::valueOf( (sal_Int64)( nRepeated ) ));
                             }
 
+                            //  Write style if it is present and is not the same as that of the data series.
                             if( aLastASName.getLength() &&
                                 ! aLastASName.equals( aSeriesASName ))
                             {
                                 mrExport.AddAttribute( XML_NAMESPACE_CHART, sXML_style_name, aLastASName );
                             }
+
+                            //  Write the actual point data.
                             SvXMLElementExport aPoint( mrExport, XML_NAMESPACE_CHART, sXML_data_point, sal_True, sal_True );
 
-                            // reset repeat counter for new style
+                            //  Reset repeat counter for the new style.
                             nRepeated = 1;
                             aLastASName = aASName;
                         }
                     }
+                    else
+                        //  Remember the name of the first data point's style as that of the next point's
+                        //  predecessor.
+                        aLastASName = aASName;
                 }
                 else
                 {
@@ -1150,9 +1167,9 @@ void SchXMLExportHelper::exportPlotArea( uno::Reference< chart::XDiagram > xDiag
                         GetAutoStylePoolP().Add( nStyleFamily, aPropertyStates );
                 }
                 aPropertyStates.clear();
-            } // for
+            }   //  End of loop over data points.
 
-            // write autostyle for last data point(s) read
+            //  Now write the style for the last data point(s).
             if( bExportContent )
             {
                 if( nRepeated > 1 )
