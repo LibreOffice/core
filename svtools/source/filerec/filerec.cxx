@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filerec.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mhu $ $Date: 2002-06-28 17:48:20 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 13:18:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,9 @@
 #pragma hdrstop
 
 #include "filerec.hxx"
+#ifndef _OSL_ENDIAN_H_
+#include <osl/endian.h>
+#endif
 
 //========================================================================
 
@@ -844,7 +847,7 @@ UINT32 SfxMultiVarRecordWriter::Close( FASTBOOL bSeekToEndOfRec )
         // Content-Offset-Tabelle schreiben
         UINT32 nContentOfsPos = _pStream->Tell();
         //! darf man das so einr"ucken?
-        #if defined(__LITTLEENDIAN)
+        #if defined(OSL_LITENDIAN)
             _pStream->Write( _aContentOfs.GetData(),
                              sizeof(UINT32)*_nContentCount );
         #else
@@ -929,7 +932,7 @@ FASTBOOL SfxMultiRecordReader::ReadHeader_Impl()
             _pStream->Seek( _nContentSize );
         _pContentOfs = new UINT32[_nContentCount];
         //! darf man jetzt so einr"ucken
-        #if defined(__LITTLEENDIAN)
+        #if defined(OSL_LITENDIAN)
             _pStream->Read( _pContentOfs, sizeof(UINT32)*_nContentCount );
         #else
             for ( USHORT n = 0; n < _nContentCount; ++n )
