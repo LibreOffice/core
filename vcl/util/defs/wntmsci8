@@ -8782,3 +8782,5 @@ _real@40f86a0000000000
 ?swap@_STL@@YAXAAU?$equal_to@VOUString@rtl@@@1@0@Z
 ?swap@_STL@@YAXAAUOUStringHash@rtl@@0@Z
 ?swap@_STL@@YAXAAV?$_STLP_alloc_proxy@IU?$_Hashtable_node@U?$pair@$$CBVOUString@rtl@@VBitmapEx@@@_STL@@@_STL@@V?$allocator@U?$_Hashtable_node@U?$pair@$$CBVOUString@rtl@@VBitmapEx@@@_STL@@@_STL@@@2@@1@0@Z
+?bezierSequenceFromPolygon@?A0xeafaaed0@unotools@vcl@@YA?AV?$Sequence@URealBezierSegment2D@geometry@star@sun@com@drafts@@@uno@star@sun@com@@ABVPolygon@@@Z
+?pointSequenceFromPolygon@?A0xeafaaed0@unotools@vcl@@YA?AV?$Sequence@URealPoint2D@geometry@star@sun@com@drafts@@@uno@star@sun@com@@ABVPolygon@@@Z
