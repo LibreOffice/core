@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 14:56:38 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 11:19:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1019,7 +1019,7 @@ QueryBox MSG_QUERY_OPENASTEMPLATE
     Message [ spanish ] = "Este documento no se puede editar, posiblemente los derechos de acceso no son suficientes. їDesea editar una copia del documento?" ;
     Message [ french ] = "Ce document ne peut pas кtre йditй (droits d'accиs insuffisants). Souhaitez-vous poursuivre votre travail avec une copie du document ?" ;
     Message [ dutch ] = "Het document kan (bijvoorbeeld vanwege ontbrekende rechten)\nniet geopend worden ter bewerking. Wilt u het als sjabloon\nvoor een nieuw document gebruiken?" ;
-    Message[ chinese_simplified ] = "иї™дёЄж–‡д»¶дёЌиѓЅиў«ж‰“ејЂзј–иѕ‘(дѕ‹е¦‚жІЎжњ‰иЇ»еЏ–жќѓеЉ›)гЂ‚\nи¦ЃдЅїз”Ёиї™дёЄж ·ејЏжќҐе»єз«‹дёЂдёЄж–°ж–‡д»¶еђ—пјџ";
+    Message[ chinese_simplified ] = "ж— жі•зј–иѕ‘ж­¤ж–‡жЎЈпјЊеЏЇиѓЅз”Ёж€·жІЎжњ‰и®їй—®жќѓй™ђгЂ‚ж‚Ёи¦Ѓзј–иѕ‘ж–‡жЎЈе‰Їжњ¬еђ—пјџ";
     Message[ russian ] = "Невозможно открыть этот документ для редактирования\n(возможно из-за отсутствия прав). Использовать его в качестве шаблона\nдля нового документа?";
     Message[ polish ] = "Nie moїna otworzyж dokumentu do edycji,\nprawdopodobnie z powodu braku uprawnieс. Czy chcesz uїyж go\njako szablonu nowego dokumentu?";
     Message[ japanese ] = "г‚ўг‚Їг‚»г‚№гЃ™г‚‹жЁ©е€©гЃЊгЃЄгЃ„гЃЄгЃ©гЃ®зђ†з”±гЃ§гЂЃгЃ“гЃ®гѓ‰г‚­гѓҐгѓЎгѓігѓ€гЃЇз·Ёй›†гЃ§гЃЌгЃѕгЃ›г‚“гЂ‚гѓ‰г‚­гѓҐгѓЎгѓігѓ€гЃ®г‚ігѓ”гѓјгЃЁгЃ—гЃ¦з·Ёй›†гЃ—гЃѕгЃ™гЃ‹гЂ‚";
