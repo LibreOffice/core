@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mnemonic.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pl $ $Date: 2002-03-25 15:34:46 $
+ *  last change: $Author: pl $ $Date: 2002-03-26 11:58:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -301,36 +301,39 @@ BOOL ImplMnemonicGenerator::CreateMnemonic( XubString& rKey )
         }
     }
 
-    /*
-     *  #97809# if all else fails use the first character of a word
-     *  anyway and live with duplicate mnemonics
-     */
-    nIndex = 0;
-    do
+    if( ! bChanged )
     {
-        c = aKey.GetChar( nIndex );
-
-        nMnemonicIndex = ImplGetMnemonicIndex( c );
-        if ( nMnemonicIndex != MNEMONIC_INDEX_NOTFOUND )
-        {
-            maMnemonics[nMnemonicIndex] = 0;
-            rKey.Insert( MNEMONIC_CHAR, nIndex );
-            bChanged = TRUE;
-            break;
-        }
-
-        // Search for next word
+        /*
+         *  #97809# if all else fails use the first character of a word
+         *  anyway and live with duplicate mnemonics
+         */
+        nIndex = 0;
         do
         {
-            nIndex++;
             c = aKey.GetChar( nIndex );
-            if ( c == ' ' )
+
+            nMnemonicIndex = ImplGetMnemonicIndex( c );
+            if ( nMnemonicIndex != MNEMONIC_INDEX_NOTFOUND )
+            {
+                maMnemonics[nMnemonicIndex] = 0;
+                rKey.Insert( MNEMONIC_CHAR, nIndex );
+                bChanged = TRUE;
                 break;
+            }
+
+            // Search for next word
+            do
+            {
+                nIndex++;
+                c = aKey.GetChar( nIndex );
+                if ( c == ' ' )
+                    break;
+            }
+            while ( nIndex < nLen );
+            nIndex++;
         }
         while ( nIndex < nLen );
-        nIndex++;
     }
-    while ( nIndex < nLen );
 
     return bChanged;
 }
