@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i_module.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:12:48 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:15:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,8 @@
 #include <ary/idl/i_typedef.hxx>
 #include <ary/idl/i_constgroup.hxx>
 #include <ary/idl/i_singleton.hxx>
+#include <ary/idl/i_siservice.hxx>
+#include <ary/idl/i_sisingleton.hxx>
 #include <ary/idl/ihost_ce.hxx>
 #include <ary/idl/ip_ce.hxx>
 #include <nametreenode.hxx>
@@ -242,6 +244,7 @@ attr::Get_AllChildrenSeparated( std::vector< const CodeEntity* > & o_nestedModul
             case Module::class_id:
                         o_nestedModules.push_back(pCe);
                         break;
+            case SglIfcService::class_id:
             case Service::class_id:
                         o_services.push_back(pCe);
                         break;
@@ -263,6 +266,7 @@ attr::Get_AllChildrenSeparated( std::vector< const CodeEntity* > & o_nestedModul
             case ConstantsGroup::class_id:
                         o_constantGroups.push_back(pCe);
                         break;
+            case SglIfcSingleton::class_id:
             case Singleton::class_id:
                         o_singletons.push_back(pCe);
                         break;
