@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svparser.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 17:47:22 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 13:58:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,7 +172,7 @@ SvParser::~SvParser()
         (pTokenStack+n)->TokenStackType::~TokenStackType();
     delete (void*) pTokenStack;
 #else
-    __DELETE(nTokenStackSize) pTokenStack;
+    delete [] pTokenStack;
 #endif
 }
 
