@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: gh $ $Date: 2002-07-04 10:41:40 $
+ *  last change: $Author: as $ $Date: 2002-07-08 13:40:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1099,6 +1099,9 @@ USHORT Desktop::Exception(USHORT nError)
             if ( !(aVal>>=xTask) || ! xTask.is() )
                 continue;
 
+            try
+            {
+
             // ask for controller
             Reference< ::com::sun::star::frame::XController > xCtrl = xTask->getController();
             if ( xCtrl.is() )
@@ -1164,6 +1167,12 @@ USHORT Desktop::Exception(USHORT nError)
                     }
                 }
             }
+
+            }
+            // ignore tasks, which are realy dead.
+            // They can't be recovered ... but may some follow ones.
+            catch( ::com::sun::star::uno::Exception& )
+            {}
         }
 
         if ( !pArgs->IsNoRestore() && ( nError & EXC_MAJORTYPE ) != EXC_DISPLAY && ( nError & EXC_MAJORTYPE ) != EXC_REMOTE )
