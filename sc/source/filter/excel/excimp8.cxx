@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-21 12:16:00 $
+ *  last change: $Author: dr $ $Date: 2002-11-27 15:12:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1131,7 +1131,7 @@ void ImportExcel8::PostDocLoad( void )
     ImportExcel::PostDocLoad();
 
     // Scenarien bemachen! ACHTUNG: Hier wird Tabellen-Anzahl im Dokument erhoeht!!
-    if( aScenList.Count() )
+    if( !pD->IsClipboard() && aScenList.Count() )
     {
         pD->UpdateChartListenerCollection();    // references in charts must be updated
 
