@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2003-09-29 14:41:26 $
+ *  last change: $Author: rt $ $Date: 2004-01-07 16:27:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -374,6 +374,17 @@ Bootstrap_Impl::~Bootstrap_Impl()
         rtl_bootstrap_args_close( _base_ini );
 }
 
+// #111772#
+// ensure the given file url has no final slash
+inline void EnsureNoFinalSlash(rtl_uString** file_url)
+{
+    sal_Int32 l = rtl_uString_getLength(*file_url);
+    if (rtl_ustr_lastIndexOfChar((*file_url)->buffer, '/') == (l-1))
+    {
+        (*file_url)->buffer[l-1] = 0;
+        (*file_url)->length--;
+    }
+}
 
 sal_Bool Bootstrap_Impl::getValue(
     rtl_uString * pName, rtl_uString ** ppValue, rtl_uString * pDefault ) const
@@ -419,6 +430,7 @@ sal_Bool Bootstrap_Impl::getValue(
                     {
                         oslSecurity security = osl_getCurrentSecurity();
                         osl_getConfigDir(security, ppValue);
+                        EnsureNoFinalSlash(ppValue);
                         osl_freeSecurityHandle(security);
                         further_macro_expansion = false;
                     }
@@ -426,12 +438,14 @@ sal_Bool Bootstrap_Impl::getValue(
                     {
                         oslSecurity security = osl_getCurrentSecurity();
                         osl_getHomeDir(security, ppValue);
+                        EnsureNoFinalSlash(ppValue);
                         osl_freeSecurityHandle(security);
                         further_macro_expansion = false;
                     }
                     else if (name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("SYSBINDIR") ))
                     {
                         getExecutableDirectory(ppValue);
+                        EnsureNoFinalSlash(ppValue);
                         further_macro_expansion = false;
                     }
                     else
