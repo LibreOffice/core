@@ -17,30 +17,30 @@ mkdir: %_DEST%\inc%_EXT%\toolkit\controls
 
 ..\util\toolkit.xml %_DEST%\xml%_EXT%\toolkit.xml
 
-hedabu: ..\inc\toolkit\awt\vclxaccessiblecomponent.hxx %_DEST%\inc%_EXT%\toolkit\awt\vclxaccessiblecomponent.hxx
-hedabu: ..\inc\toolkit\awt\vclxcontainer.hxx %_DEST%\inc%_EXT%\toolkit\awt\vclxcontainer.hxx
-hedabu: ..\inc\toolkit\awt\vclxdevice.hxx %_DEST%\inc%_EXT%\toolkit\awt\vclxdevice.hxx
-hedabu: ..\inc\toolkit\awt\vclxfont.hxx %_DEST%\inc%_EXT%\toolkit\awt\vclxfont.hxx
-hedabu: ..\inc\toolkit\awt\vclxtopwindow.hxx %_DEST%\inc%_EXT%\toolkit\awt\vclxtopwindow.hxx
-hedabu: ..\inc\toolkit\awt\vclxwindow.hxx %_DEST%\inc%_EXT%\toolkit\awt\vclxwindow.hxx
-hedabu: ..\inc\toolkit\awt\vclxwindows.hxx %_DEST%\inc%_EXT%\toolkit\awt\vclxwindows.hxx
-hedabu: ..\inc\toolkit\awt\vclxmenu.hxx %_DEST%\inc%_EXT%\toolkit\awt\vclxmenu.hxx
+..\inc\toolkit\awt\vclxaccessiblecomponent.hxx %_DEST%\inc%_EXT%\toolkit\awt\vclxaccessiblecomponent.hxx
+..\inc\toolkit\awt\vclxcontainer.hxx %_DEST%\inc%_EXT%\toolkit\awt\vclxcontainer.hxx
+..\inc\toolkit\awt\vclxdevice.hxx %_DEST%\inc%_EXT%\toolkit\awt\vclxdevice.hxx
+..\inc\toolkit\awt\vclxfont.hxx %_DEST%\inc%_EXT%\toolkit\awt\vclxfont.hxx
+..\inc\toolkit\awt\vclxtopwindow.hxx %_DEST%\inc%_EXT%\toolkit\awt\vclxtopwindow.hxx
+..\inc\toolkit\awt\vclxwindow.hxx %_DEST%\inc%_EXT%\toolkit\awt\vclxwindow.hxx
+..\inc\toolkit\awt\vclxwindows.hxx %_DEST%\inc%_EXT%\toolkit\awt\vclxwindows.hxx
+..\inc\toolkit\awt\vclxmenu.hxx %_DEST%\inc%_EXT%\toolkit\awt\vclxmenu.hxx
 
-hedabu: ..\inc\toolkit\controls\unocontrol.hxx %_DEST%\inc%_EXT%\toolkit\controls\unocontrol.hxx
-hedabu: ..\inc\toolkit\controls\unocontrols.hxx %_DEST%\inc%_EXT%\toolkit\controls\unocontrols.hxx
-hedabu: ..\inc\toolkit\controls\unocontrolmodel.hxx %_DEST%\inc%_EXT%\toolkit\controls\unocontrolmodel.hxx
-hedabu: ..\inc\toolkit\controls\unocontrolbase.hxx %_DEST%\inc%_EXT%\toolkit\controls\unocontrolbase.hxx
-hedabu: ..\inc\toolkit\helper\servicenames.hxx %_DEST%\inc%_EXT%\toolkit\helper\servicenames.hxx
+..\inc\toolkit\controls\unocontrol.hxx %_DEST%\inc%_EXT%\toolkit\controls\unocontrol.hxx
+..\inc\toolkit\controls\unocontrols.hxx %_DEST%\inc%_EXT%\toolkit\controls\unocontrols.hxx
+..\inc\toolkit\controls\unocontrolmodel.hxx %_DEST%\inc%_EXT%\toolkit\controls\unocontrolmodel.hxx
+..\inc\toolkit\controls\unocontrolbase.hxx %_DEST%\inc%_EXT%\toolkit\controls\unocontrolbase.hxx
+..\inc\toolkit\helper\servicenames.hxx %_DEST%\inc%_EXT%\toolkit\helper\servicenames.hxx
 
-hedabu: ..\inc\toolkit\helper\emptyfontdescriptor.hxx %_DEST%\inc%_EXT%\toolkit\helper\emptyfontdescriptor.hxx
-hedabu: ..\inc\toolkit\helper\vclunohelper.hxx %_DEST%\inc%_EXT%\toolkit\helper\vclunohelper.hxx
-hedabu: ..\inc\toolkit\helper\convert.hxx %_DEST%\inc%_EXT%\toolkit\helper\convert.hxx
-hedabu: ..\inc\toolkit\helper\property.hxx %_DEST%\inc%_EXT%\toolkit\helper\property.hxx
-hedabu: ..\inc\toolkit\helper\macros.hxx %_DEST%\inc%_EXT%\toolkit\helper\macros.hxx
-hedabu: ..\inc\toolkit\helper\mutexhelper.hxx %_DEST%\inc%_EXT%\toolkit\helper\mutexhelper.hxx
-hedabu: ..\inc\toolkit\helper\mutexandbroadcasthelper.hxx %_DEST%\inc%_EXT%\toolkit\helper\mutexandbroadcasthelper.hxx
-hedabu: ..\inc\toolkit\helper\listenermultiplexer.hxx %_DEST%\inc%_EXT%\toolkit\helper\listenermultiplexer.hxx
-hedabu: ..\inc\toolkit\helper\unowrapper.hxx %_DEST%\inc%_EXT%\toolkit\helper\unowrapper.hxx
-hedabu: ..\inc\toolkit\helper\externallock.hxx %_DEST%\inc%_EXT%\toolkit\helper\externallock.hxx
+..\inc\toolkit\helper\emptyfontdescriptor.hxx %_DEST%\inc%_EXT%\toolkit\helper\emptyfontdescriptor.hxx
+..\inc\toolkit\helper\vclunohelper.hxx %_DEST%\inc%_EXT%\toolkit\helper\vclunohelper.hxx
+..\inc\toolkit\helper\convert.hxx %_DEST%\inc%_EXT%\toolkit\helper\convert.hxx
+..\inc\toolkit\helper\property.hxx %_DEST%\inc%_EXT%\toolkit\helper\property.hxx
+..\inc\toolkit\helper\macros.hxx %_DEST%\inc%_EXT%\toolkit\helper\macros.hxx
+..\inc\toolkit\helper\mutexhelper.hxx %_DEST%\inc%_EXT%\toolkit\helper\mutexhelper.hxx
+..\inc\toolkit\helper\mutexandbroadcasthelper.hxx %_DEST%\inc%_EXT%\toolkit\helper\mutexandbroadcasthelper.hxx
+..\inc\toolkit\helper\listenermultiplexer.hxx %_DEST%\inc%_EXT%\toolkit\helper\listenermultiplexer.hxx
+..\inc\toolkit\helper\unowrapper.hxx %_DEST%\inc%_EXT%\toolkit\helper\unowrapper.hxx
+..\inc\toolkit\helper\externallock.hxx %_DEST%\inc%_EXT%\toolkit\helper\externallock.hxx
 
-hedabu: ..\inc\toolkit\helper\vclunohelper.hxx %_DEST%\inc%_EXT%\toolkit\unohlp.hxx
+..\inc\toolkit\helper\vclunohelper.hxx %_DEST%\inc%_EXT%\toolkit\unohlp.hxx

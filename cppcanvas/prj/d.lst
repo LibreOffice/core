@@ -3,17 +3,17 @@
 ..\%__SRC%\lib\lib*.* %_DEST%\lib%_EXT%\lib*.*
 
 mkdir: %_DEST%\inc%_EXT%\cppcanvas
-hedabu: ..\inc\cppcanvas\bitmap.hxx %_DEST%\inc%_EXT%\cppcanvas\bitmap.hxx
-hedabu: ..\inc\cppcanvas\bitmapcanvas.hxx %_DEST%\inc%_EXT%\cppcanvas\bitmapcanvas.hxx
-hedabu: ..\inc\cppcanvas\canvas.hxx %_DEST%\inc%_EXT%\cppcanvas\canvas.hxx
-hedabu: ..\inc\cppcanvas\canvasgraphic.hxx %_DEST%\inc%_EXT%\cppcanvas\canvasgraphic.hxx
-hedabu: ..\inc\cppcanvas\color.hxx %_DEST%\inc%_EXT%\cppcanvas\color.hxx
-hedabu: ..\inc\cppcanvas\customsprite.hxx %_DEST%\inc%_EXT%\cppcanvas\customsprite.hxx
-hedabu: ..\inc\cppcanvas\font.hxx %_DEST%\inc%_EXT%\cppcanvas\font.hxx
-hedabu: ..\inc\cppcanvas\polypolygon.hxx %_DEST%\inc%_EXT%\cppcanvas\polypolygon.hxx
-hedabu: ..\inc\cppcanvas\renderer.hxx %_DEST%\inc%_EXT%\cppcanvas\renderer.hxx
-hedabu: ..\inc\cppcanvas\sprite.hxx %_DEST%\inc%_EXT%\cppcanvas\sprite.hxx
-hedabu: ..\inc\cppcanvas\spritecanvas.hxx %_DEST%\inc%_EXT%\cppcanvas\spritecanvas.hxx
-hedabu: ..\inc\cppcanvas\text.hxx %_DEST%\inc%_EXT%\cppcanvas\text.hxx
-hedabu: ..\inc\cppcanvas\vclfactory.hxx %_DEST%\inc%_EXT%\cppcanvas\vclfactory.hxx
-hedabu: ..\inc\cppcanvas\basegfxfactory.hxx %_DEST%\inc%_EXT%\cppcanvas\basegfxfactory.hxx
+..\inc\cppcanvas\bitmap.hxx %_DEST%\inc%_EXT%\cppcanvas\bitmap.hxx
+..\inc\cppcanvas\bitmapcanvas.hxx %_DEST%\inc%_EXT%\cppcanvas\bitmapcanvas.hxx
+..\inc\cppcanvas\canvas.hxx %_DEST%\inc%_EXT%\cppcanvas\canvas.hxx
+..\inc\cppcanvas\canvasgraphic.hxx %_DEST%\inc%_EXT%\cppcanvas\canvasgraphic.hxx
+..\inc\cppcanvas\color.hxx %_DEST%\inc%_EXT%\cppcanvas\color.hxx
+..\inc\cppcanvas\customsprite.hxx %_DEST%\inc%_EXT%\cppcanvas\customsprite.hxx
+..\inc\cppcanvas\font.hxx %_DEST%\inc%_EXT%\cppcanvas\font.hxx
+..\inc\cppcanvas\polypolygon.hxx %_DEST%\inc%_EXT%\cppcanvas\polypolygon.hxx
+..\inc\cppcanvas\renderer.hxx %_DEST%\inc%_EXT%\cppcanvas\renderer.hxx
+..\inc\cppcanvas\sprite.hxx %_DEST%\inc%_EXT%\cppcanvas\sprite.hxx
+..\inc\cppcanvas\spritecanvas.hxx %_DEST%\inc%_EXT%\cppcanvas\spritecanvas.hxx
+..\inc\cppcanvas\text.hxx %_DEST%\inc%_EXT%\cppcanvas\text.hxx
+..\inc\cppcanvas\vclfactory.hxx %_DEST%\inc%_EXT%\cppcanvas\vclfactory.hxx
+..\inc\cppcanvas\basegfxfactory.hxx %_DEST%\inc%_EXT%\cppcanvas\basegfxfactory.hxx

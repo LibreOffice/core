@@ -6,7 +6,7 @@
 ..\%__SRC%\class\javacanvas*.jar %_DEST%\bin%_EXT%\javacanvas*.jar
 
 mkdir: %_DEST%\inc%_EXT%\canvas
-hedabu: ..\inc\canvas\canvastools.hxx %_DEST%\inc%_EXT%\canvas\canvastools.hxx
-hedabu: ..\inc\canvas\elapsedtime.hxx %_DEST%\inc%_EXT%\canvas\elapsedtime.hxx
-hedabu: ..\inc\canvas\vclwrapper.hxx %_DEST%\inc%_EXT%\canvas\vclwrapper.hxx
-hedabu: ..\inc\canvas\verbosetrace.hxx %_DEST%\inc%_EXT%\canvas\verbosetrace.hxx
+..\inc\canvas\canvastools.hxx %_DEST%\inc%_EXT%\canvas\canvastools.hxx
+..\inc\canvas\elapsedtime.hxx %_DEST%\inc%_EXT%\canvas\elapsedtime.hxx
+..\inc\canvas\vclwrapper.hxx %_DEST%\inc%_EXT%\canvas\vclwrapper.hxx
+..\inc\canvas\verbosetrace.hxx %_DEST%\inc%_EXT%\canvas\verbosetrace.hxx
