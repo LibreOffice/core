@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmliteme.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dvo $ $Date: 2001-07-09 20:10:42 $
+ *  last change: $Author: dvo $ $Date: 2001-10-26 12:02:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,11 +174,10 @@ public:
                                     const SfxItemSet *pSet = NULL ) const;
 
     virtual void handleElementItem(
-            const Reference< xml::sax::XDocumentHandler > & rHandler,
+            SvXMLExport& rExport,
             const SvXMLItemMapEntry& rEntry,
             const SfxPoolItem& rItem,
             const SvXMLUnitConverter& rUnitConverter,
-            const SvXMLNamespaceMap& rNamespaceMap,
             const SfxItemSet& rSet,
             sal_uInt16 nFlags ) const;
 
@@ -287,11 +286,10 @@ void SwXMLTableItemMapper_Impl::handleSpecialItem(
 /** this method is called for every item that has the
     MID_FLAG_ELEMENT_EXPORT flag set */
 void SwXMLTableItemMapper_Impl::handleElementItem(
-        const Reference< xml::sax::XDocumentHandler > & rHandler,
+        SvXMLExport& rExport,
         const SvXMLItemMapEntry& rEntry,
         const SfxPoolItem& rItem,
         const SvXMLUnitConverter& rUnitConverter,
-        const SvXMLNamespaceMap& rNamespaceMap,
         const SfxItemSet&,
         sal_uInt16 ) const
 {

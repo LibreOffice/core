@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexpit.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2001-07-09 20:10:42 $
+ *  last change: $Author: dvo $ $Date: 2001-10-26 12:02:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,31 +69,9 @@
 #include <tools/ref.hxx>
 #endif
 
-
-#ifndef _COM_SUN_STAR_XML_SAX_SAXPARSEEXCEPTION_HPP_
-#include <com/sun/star/xml/sax/SAXParseException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_XML_SAX_XEXTENDEDDOCUMENTHANDLER_HPP_
-#include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
-#endif
-#ifndef _COM_SUN_STAR_XML_SAX_SAXEXCEPTION_HPP_
-#include <com/sun/star/xml/sax/SAXException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_XML_SAX_XDOCUMENTHANDLER_HPP_
-#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-#endif
-#ifndef _COM_SUN_STAR_XML_SAX_XATTRIBUTELIST_HPP_
-#include <com/sun/star/xml/sax/XAttributeList.hpp>
-#endif
-#ifndef _COM_SUN_STAR_XML_SAX_XLOCATOR_HPP_
-#include <com/sun/star/xml/sax/XLocator.hpp>
-#endif
-
 #ifndef _XMLITMAP_HXX
 #include "xmlitmap.hxx"
 #endif
-
-namespace rtl { class OUString; }
 
 #define XML_EXPORT_FLAG_DEFAULTS    0x0001      // export also default items
 #define XML_EXPORT_FLAG_DEEP        0x0002      // export also items from
@@ -102,12 +80,15 @@ namespace rtl { class OUString; }
                                                 // even if its empty
 #define XML_EXPORT_FLAG_IGN_WS      0x0008
 
+namespace rtl { class OUString; }
 class SvXMLUnitConverter;
 class SfxPoolItem;
 class SfxItemSet;
 class SvXMLAttributeList;
 class SvXMLNamespaceMap;
 class SvUShorts;
+class SvXMLExport;
+
 
 class SvXMLExportItemMapper
 {
@@ -131,9 +112,8 @@ protected:
                     const SfxItemSet *pSet ) const;
 
 
-    void exportElementItems(  const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > & rHandler,
+    void exportElementItems(  SvXMLExport& rExport,
                               const SvXMLUnitConverter& rUnitConverter,
-                              const SvXMLNamespaceMap& rNamespaceMap,
                               const SfxItemSet &rSet,
                               sal_uInt16 nFlags,
                               const SvUShorts& rIndexArray ) const;
@@ -161,10 +141,9 @@ public:
                     const SvXMLNamespaceMap& rNamespaceMap,
                     sal_uInt16 nFlags = 0 ) const;
 
-    void exportXML( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > & rHandler,
+    void exportXML( SvXMLExport& rExport,
                     const SfxItemSet& rSet,
                     const SvXMLUnitConverter& rUnitConverter,
-                    const SvXMLNamespaceMap& rNamespaceMap,
                     sal_uInt16 nFlags = 0 ) const;
 
     /** this method is called for every item that has the
@@ -187,11 +166,10 @@ public:
 
     /** this method is called for every item that has the
         MID_FLAG_ELEMENT_EXPORT flag set */
-    virtual void handleElementItem( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > & rHandler,
+    virtual void handleElementItem( SvXMLExport& rExport,
                                     const SvXMLItemMapEntry& rEntry,
                                     const SfxPoolItem& rItem,
                                     const SvXMLUnitConverter& rUnitConverter,
-                                    const SvXMLNamespaceMap& rNamespaceMap,
                                     const SfxItemSet& rSet,
                                     sal_uInt16 nFlags ) const;
 

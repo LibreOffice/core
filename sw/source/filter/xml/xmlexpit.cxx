@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexpit.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mib $ $Date: 2001-08-14 07:54:45 $
+ *  last change: $Author: dvo $ $Date: 2001-10-26 12:02:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,10 @@
 
 #ifndef _SVX_XMLCNITM_HXX
 #include <svx/xmlcnitm.hxx>
+#endif
+
+#ifndef _XMLOFF_XMLEXP_HXX
+#include <xmloff/xmlexp.hxx>
 #endif
 
 #ifndef _SVSTDARR_USHORTS
@@ -304,9 +308,8 @@ void SvXMLExportItemMapper::exportXML( SvXMLAttributeList& rAttrList,
 }
 
 void SvXMLExportItemMapper::exportElementItems(
-                          const uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > & rHandler,
+                          SvXMLExport& rExport,
                           const SvXMLUnitConverter& rUnitConverter,
-                          const SvXMLNamespaceMap& rNamespaceMap,
                           const SfxItemSet &rSet,
                           sal_uInt16 nFlags,
                           const SvUShorts& rIndexArray ) const
@@ -314,7 +317,6 @@ void SvXMLExportItemMapper::exportElementItems(
     const sal_uInt16 nCount = rIndexArray.Count();
 
     sal_Bool bItemsExported = sal_False;
-    OUString sWS( GetXMLToken(XML_WS) );
     for( sal_uInt16 nIndex = 0; nIndex < nCount; nIndex++ )
     {
         const sal_uInt16 nElement = rIndexArray.GetObject( nIndex );
@@ -326,15 +328,15 @@ void SvXMLExportItemMapper::exportElementItems(
         // do we have an item?
         if(pItem)
         {
-            rHandler->ignorableWhitespace( sWS );
-            handleElementItem( rHandler, *pEntry, *pItem, rUnitConverter,
-                               rNamespaceMap, rSet, nFlags);
+            rExport.IgnorableWhitespace();
+            handleElementItem( rExport, *pEntry, *pItem, rUnitConverter,
+                               rSet, nFlags);
             bItemsExported = sal_True;
         }
     }
 
     if( bItemsExported )
-        rHandler->ignorableWhitespace( sWS );
+        rExport.IgnorableWhitespace();
 }
 
 /** returns the item with the givin WhichId from the given ItemSet if its
@@ -413,39 +415,29 @@ void SvXMLExportItemMapper::exportXML( SvXMLAttributeList& rAttrList,
     }
 }
 
-void SvXMLExportItemMapper::exportXML( const uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > & rHandler,
+void SvXMLExportItemMapper::exportXML( SvXMLExport& rExport,
                     const SfxItemSet& rSet,
                     const SvXMLUnitConverter& rUnitConverter,
-                    const SvXMLNamespaceMap& rNamespaceMap,
                     sal_uInt16 nFlags ) const
 {
-    SvXMLAttributeList *pAttrList = new SvXMLAttributeList();
-    uno::Reference< ::com::sun::star::xml::sax::XAttributeList >  xAttrList = pAttrList;
-
     SvUShorts aIndexArray;
 
-    exportXML( *pAttrList, rSet, rUnitConverter, rNamespaceMap,
-               nFlags, &aIndexArray );
+    exportXML( rExport.GetAttrList(), rSet, rUnitConverter,
+               rExport.GetNamespaceMap(), nFlags, &aIndexArray );
 
-    if( pAttrList->getLength() > 0L ||
+    if( rExport.GetAttrList().getLength() > 0L ||
         (nFlags & XML_EXPORT_FLAG_EMPTY) != 0 ||
         aIndexArray.Count() != 0 )
     {
         if( (nFlags & XML_EXPORT_FLAG_IGN_WS) != 0 )
         {
-            OUString sWS( GetXMLToken(XML_WS) );
-            rHandler->ignorableWhitespace( sWS );
+            rExport.IgnorableWhitespace();
         }
 
-        OUString sLName( GetXMLToken(XML_PROPERTIES) );
-        OUString sName =
-            rNamespaceMap.GetQNameByKey( XML_NAMESPACE_STYLE, sLName );
-        rHandler->startElement( sName, xAttrList );
-
-        exportElementItems( rHandler, rUnitConverter, rNamespaceMap,
+        SvXMLElementExport aElem( rExport, XML_NAMESPACE_STYLE, XML_PROPERTIES,
+                                  sal_False, sal_False );
+        exportElementItems( rExport, rUnitConverter,
                             rSet, nFlags, aIndexArray );
-
-        rHandler->endElement( sName );
     }
 }
 
@@ -475,11 +467,10 @@ void SvXMLExportItemMapper::handleNoItem( SvXMLAttributeList& rAttrList,
 /** this method is called for every item that has the
     MID_FLAG_ELEMENT_EXPORT flag set */
 void SvXMLExportItemMapper::handleElementItem(
-                        const uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > & rHandler,
+                        SvXMLExport& rExport,
                         const SvXMLItemMapEntry& rEntry,
                         const SfxPoolItem& rItem,
                         const SvXMLUnitConverter& rUnitConverter,
-                        const SvXMLNamespaceMap& rNamespaceMap,
                         const SfxItemSet& rSet,
                         sal_uInt16 nFlags ) const
 {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfmte.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: dvo $ $Date: 2001-10-25 21:04:55 $
+ *  last change: $Author: dvo $ $Date: 2001-10-26 12:02:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,10 +234,9 @@ void SwXMLExport::ExportFmt( const SwFmt& rFmt, enum XMLTokenEnum eFamily )
             SvXMLExportItemMapper& rItemMapper = GetTableItemMapper();
             rItemMapper.setMapEntries( xItemMap );
 
-            GetTableItemMapper().exportXML( GetDocHandler(),
+            GetTableItemMapper().exportXML( *this,
                                            rFmt.GetAttrSet(),
                                            GetTwipUnitConverter(),
-                                           GetNamespaceMap(),
                                            XML_EXPORT_FLAG_IGN_WS );
         }
     }
