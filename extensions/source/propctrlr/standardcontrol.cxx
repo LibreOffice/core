@@ -2,9 +2,9 @@
  *
  *  $RCSfile: standardcontrol.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 11:25:15 $
+ *  last change: $Author: rt $ $Date: 2004-07-06 13:46:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -881,7 +881,7 @@ namespace pcr
     //------------------------------------------------------------------
     OMultilineEditControl::OMultilineEditControl( Window* pParent,sal_Bool bEd, WinBits nWinStyle)
             :OCommonBehaviourControl(this)
-            ,Control(pParent,((nWinStyle | WB_DIALOGCONTROL)& (~WB_READONLY| ~WB_DROPDOWN)))
+            ,Edit(pParent,((nWinStyle | WB_DIALOGCONTROL)& (~WB_READONLY| ~WB_DROPDOWN)))
             ,m_pFloatingEdit(NULL)
             ,m_pDropdownButton(NULL)
             ,m_pImplEdit(NULL)
@@ -889,6 +889,7 @@ namespace pcr
             ,m_bEdit(bEd)
     {
         m_pImplEdit = new MultiLineEdit(this,WB_TABSTOP|WB_IGNORETAB| WB_NOBORDER| nWinStyle& WB_READONLY);
+        SetSubEdit( m_pImplEdit );
         m_pImplEdit->Show();
 
         if (nWinStyle & WB_DROPDOWN)
@@ -898,7 +899,6 @@ namespace pcr
             m_pDropdownButton->SetClickHdl( LINK( this, OMultilineEditControl, DropDownHdl ) );
             m_pDropdownButton->Show();
         }
-        SetBackground(m_pImplEdit->GetBackground());
 
         m_pFloatingEdit = new OMultilineFloatingEdit(this); //FloatingWindow
 
@@ -1048,7 +1048,7 @@ namespace pcr
 
         if (m_bEdit)
         {
-            m_pImplEdit->SetText(aStr);
+            SetText(aStr);
         }
         else
         {
@@ -1081,7 +1081,7 @@ namespace pcr
                     }
                 }
             }
-            m_pImplEdit->SetText(aOutput);
+            SetText(aOutput);
         }
     }
 
@@ -1089,16 +1089,9 @@ namespace pcr
     ::rtl::OUString OMultilineEditControl::GetProperty() const
     {
         if (m_bEdit)
-            return m_pImplEdit->GetText();
+            return GetText();
         else
             return m_pFloatingEdit->getEdit()->GetText();
-    }
-
-    //------------------------------------------------------------------
-    void OMultilineEditControl::GetFocus()
-    {
-        if ( m_pImplEdit )
-            m_pImplEdit->GetFocus();
     }
 
     //------------------------------------------------------------------
@@ -1127,11 +1120,11 @@ namespace pcr
             else if (KEYGROUP_CURSOR==aKeyCode.GetGroup()|| nKey==KEY_HELP
                     || aKeyCode.GetGroup()==KEYGROUP_FKEYS  || m_bEdit)
             {
-                nResult=Control::PreNotify(rNEvt);
+                nResult=Edit::PreNotify(rNEvt);
             }
             else if (!m_bEdit)
             {
-                Selection aSel=m_pImplEdit->GetSelection();
+                Selection aSel = GetSelection();
                 if (aSel.Min()!=aSel.Max())
                 {
                     aSel.Min()=FindPos(aSel.Min());
@@ -1151,7 +1144,7 @@ namespace pcr
             }
         }
         else
-            nResult=Control::PreNotify(rNEvt);
+            nResult=Edit::PreNotify(rNEvt);
 
         return nResult;
     }
@@ -1163,7 +1156,7 @@ namespace pcr
         sal_uInt16 nDiff=0;
         String aOutput;
         String aStr=m_pFloatingEdit->getEdit()->GetText();
-        String aStr1=m_pImplEdit->GetText();
+        String aStr1 = GetText();
 
         if ((nSinglePos == 0) || (nSinglePos == aStr1.Len()))
         {
@@ -1218,7 +1211,7 @@ namespace pcr
     {
 
         String aStr = m_pFloatingEdit->getEdit()->GetText();
-        String aStr2 = m_pImplEdit->GetText();
+        String aStr2 = GetText();
         ShowDropDown(sal_False);
 
         if (aStr!=aStr2 || !m_bEdit)
