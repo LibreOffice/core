@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmtreemodel.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 13:47:55 $
+ *  last change: $Author: hr $ $Date: 2002-02-19 13:10:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,7 +160,7 @@ SubtreeChange::SubtreeChange(const SubtreeChange& _aObj, DeepChildCopy)
 // -----------------------------------------------------------------------------
 std::auto_ptr<Change> SubtreeChange::clone() const
 {
-    return new SubtreeChange(*this, DeepChildCopy());
+    return std::auto_ptr<Change>(new SubtreeChange(*this, DeepChildCopy()));
 }
 //--------------------------------------------------------------------------
 void SubtreeChange::addChange(std::auto_ptr<Change> aChange)
