@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.147 $
+ *  $Revision: 1.148 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-04 15:35:24 $
+ *  last change: $Author: cl $ $Date: 2001-05-07 14:27:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -339,6 +339,8 @@ XML_CONSTASCII_ACTION( sXML_calculation_settings, "calculation-settings" );
 XML_CONSTASCII_ACTION( sXML_calendar, "calendar" );
 XML_CONSTASCII_ACTION( sXML_capitalize_entries, "capitalize-entries" );
 XML_CONSTASCII_ACTION( sXML_caption, "caption" );
+XML_CONSTASCII_ACTION( sXML_caption_point_x, "caption-point-x" );
+XML_CONSTASCII_ACTION( sXML_caption_point_y, "caption-point-y" );
 XML_CONSTASCII_ACTION( sXML_caption_sequence_format, "caption-sequence-format" );
 XML_CONSTASCII_ACTION( sXML_caption_sequence_name, "caption-sequence-name" );
 XML_CONSTASCII_ACTION( sXML_case_sensitive, "case-sensitive");
