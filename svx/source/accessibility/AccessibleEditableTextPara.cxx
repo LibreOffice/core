@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleEditableTextPara.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 15:56:51 $
+ *  last change: $Author: vg $ $Date: 2003-05-19 12:50:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,6 +178,7 @@ namespace accessibility
     DBG_NAME( AccessibleEditableTextPara )
 
     AccessibleEditableTextPara::AccessibleEditableTextPara( const uno::Reference< XAccessible >& rParent ) :
+        AccessibleTextParaInterfaceBase( m_aMutex ),
         mnParagraphIndex( 0 ),
         mnIndexInParent( 0 ),
         mpEditSource( NULL ),
