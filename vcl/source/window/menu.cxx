@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: pl $ $Date: 2002-10-18 13:58:18 $
+ *  last change: $Author: ssa $ $Date: 2002-10-23 15:47:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3956,7 +3956,7 @@ MenuBarWindow::MenuBarWindow( Window* pParent ) :
 
     aCloser.InsertItem( IID_DOCUMENTCLOSE,
         GetSettings().GetStyleSettings().GetMenuBarColor().IsDark() ? aCloser.maImageHC : aCloser.maImage, 0 );
-    aCloser.SetClickHdl( LINK( this, MenuBarWindow, CloserHdl ) );
+    aCloser.SetSelectHdl( LINK( this, MenuBarWindow, CloserHdl ) );
     aCloser.SetQuickHelpText( IID_DOCUMENTCLOSE, XubString( ResId( SV_HELPTEXT_CLOSEDOCUMENT, pResMgr ) ) );
 
     aFloatBtn.SetClickHdl( LINK( this, MenuBarWindow, FloatHdl ) );
