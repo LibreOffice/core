@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docbm.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 13:48:36 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 16:33:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -393,7 +393,9 @@ void _DelBookmarks( const SwNodeIndex& rStt, const SwNodeIndex& rEnd,
     // Die neue Zuordung erfolgt nach dem Moven.
     SwDoc* pDoc = rStt.GetNode().GetDoc();
     const SwBookmarks& rBkmks = pDoc->GetBookmarks();
-    for( USHORT nCnt = 0; nCnt < rBkmks.Count(); ++nCnt )
+    USHORT nCnt;
+
+    for( nCnt = 0; nCnt < rBkmks.Count(); ++nCnt )
     {
         // liegt auf der Position ??
         int eType = BKMK_POS_NONE;
