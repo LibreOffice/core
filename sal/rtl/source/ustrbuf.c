@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ustrbuf.c,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sb $ $Date: 2001-10-15 08:07:57 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 13:37:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,6 +181,24 @@ void SAL_CALL rtl_uStringbuffer_insert( rtl_uString ** This,
         (*This)->length = nOldLen + len;
         pBuf[ nOldLen + len ] = 0;
     }
+}
+
+void rtl_uStringbuffer_insertUtf32(
+    rtl_uString ** pThis, sal_Int32 * capacity, sal_Int32 offset, sal_uInt32 c)
+{
+    sal_Unicode buf[2];
+    sal_Int32 len;
+    OSL_ASSERT(c <= 0x10FFFF && !(c >= 0xD800 && c <= 0xDFFF));
+    if (c <= 0xFFFF) {
+        buf[0] = c;
+        len = 1;
+    } else {
+        c -= 0x10000;
+        buf[0] = (c >> 10) | 0xD800;
+        buf[1] = (c & 0x3FF) | 0xDC00;
+        len = 2;
+    }
+    rtl_uStringbuffer_insert(pThis, capacity, offset, buf, len);
 }
 
 /*************************************************************************
