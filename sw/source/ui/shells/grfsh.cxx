@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfsh.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: os $ $Date: 2001-11-21 14:35:51 $
+ *  last change: $Author: os $ $Date: 2002-05-27 13:02:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -324,7 +324,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                 rSh.StartUndo(UNDO_START);
                 const SfxPoolItem* pItem;
                 SfxItemSet* pSet = (SfxItemSet*)pDlg->GetOutputItemSet();
-
+                rReq.Done(*pSet);
                 // change the 2 frmsize SizeItems to the correct SwFrmSizeItem
                 if( SFX_ITEM_SET == pSet->GetItemState(
                                 SID_ATTR_GRAF_FRMSIZE, FALSE, &pItem ))

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh1.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jp $ $Date: 2001-11-15 13:17:56 $
+ *  last change: $Author: os $ $Date: 2002-05-27 13:02:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -576,6 +576,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     }
                     else
                         rWrtSh.SetAttr( aTmpSet );
+                    rReq.Done(aTmpSet);
                     if(bInsert)
                     {
                         rWrtSh.SwapPam();
@@ -698,6 +699,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                             nNumStart = USHRT_MAX;
                         rWrtSh.SetNodeNumStart(nNumStart);
                     }
+                    rReq.Done( *pSet );
                 }
                 delete pDlg;
             }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmsh.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-09-12 11:50:51 $
+ *  last change: $Author: os $ $Date: 2002-05-27 13:02:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -494,6 +494,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                     const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
                     if(pOutSet)
                     {
+                        rReq.Done(*pOutSet);
                         if(nSel & SwWrtShell::SEL_OLE &&
                         SFX_ITEM_SET == pOutSet->GetItemState(FN_KEEP_ASPECT_RATIO, TRUE, &pItem))
                         {

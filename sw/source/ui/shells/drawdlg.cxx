@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdlg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-06-12 10:10:21 $
+ *  last change: $Author: os $ $Date: 2002-05-27 13:02:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,6 +143,7 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
                 {
                     pSh->StartAction();
                     pView->SetAttributes(*pDlg->GetOutputItemSet());
+                    rReq.Done(*(pDlg->GetOutputItemSet()));
                     pSh->EndAction();
                 }
             }
@@ -301,6 +302,9 @@ void SwDrawShell::GetDrawAttrState(SfxItemSet& rSet)
       Source Code Control System - History
 
       $Log: not supported by cvs2svn $
+      Revision 1.2  2001/06/12 10:10:21  os
+      #87794# action block moved behind Execute()
+
       Revision 1.1.1.1  2000/09/18 17:14:46  hr
       initial import
 

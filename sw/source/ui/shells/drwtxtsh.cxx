@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwtxtsh.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-25 09:27:10 $
+ *  last change: $Author: os $ $Date: 2002-05-27 13:02:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -551,7 +551,10 @@ void SwDrawTextShell::ExecDraw(SfxRequest &rReq)
                 if (nResult == RET_OK)
                 {
                     if (pSdrView->HasMarkedObj())
+                    {
                         pSdrView->SetAttributes(*pDlg->GetOutputItemSet());
+                        rReq.Done(*(pDlg->GetOutputItemSet()));
+                    }
                 }
                 delete( pDlg );
             }

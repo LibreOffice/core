@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basesh.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: os $ $Date: 2002-04-29 11:26:26 $
+ *  last change: $Author: os $ $Date: 2002-05-27 13:02:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2355,6 +2355,10 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
         break;
         default:DBG_ERROR("falscher Dispatcher (basesh.cxx)");
     }
+    if(pOutSet)
+        rReq.Done(*pOutSet);
+    else
+        rReq.Done();
 }
 
 /*--------------------------------------------------------------------
