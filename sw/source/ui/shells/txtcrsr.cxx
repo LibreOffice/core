@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtcrsr.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:44:56 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 16:06:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,7 +118,7 @@
 void SwTextShell::ExecBasicMove(SfxRequest &rReq)
 {
     SwWrtShell &rSh = GetShell();
-    GetView().GetEditWin().FlushInBuffer( &rSh );
+    GetView().GetEditWin().FlushInBuffer();
     const SfxItemSet *pArgs = rReq.GetArgs();
     BOOL bSelect = FALSE;
     USHORT nCount = 1;
@@ -163,7 +163,7 @@ void SwTextShell::ExecBasicMove(SfxRequest &rReq)
 void SwTextShell::ExecMove(SfxRequest &rReq)
 {
     SwWrtShell &rSh = GetShell();
-    GetView().GetEditWin().FlushInBuffer( &rSh );
+    GetView().GetEditWin().FlushInBuffer();
 
     USHORT nSlot = rReq.GetSlot();
     BOOL bRet = FALSE;
@@ -200,7 +200,7 @@ void SwTextShell::ExecMove(SfxRequest &rReq)
 void SwTextShell::ExecMovePage(SfxRequest &rReq)
 {
     SwWrtShell &rSh = GetShell();
-    GetView().GetEditWin().FlushInBuffer( &rSh );
+    GetView().GetEditWin().FlushInBuffer();
 
     USHORT nSlot = rReq.GetSlot();
     switch( nSlot )
@@ -247,7 +247,7 @@ void SwTextShell::ExecMoveCol(SfxRequest &rReq)
 void SwTextShell::ExecMoveLingu(SfxRequest &rReq)
 {
     SwWrtShell &rSh = GetShell();
-    GetView().GetEditWin().FlushInBuffer( GetShellPtr() );
+    GetView().GetEditWin().FlushInBuffer();
 
     USHORT nSlot = rReq.GetSlot();
     BOOL bRet = FALSE;
