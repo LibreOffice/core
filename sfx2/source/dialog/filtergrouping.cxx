@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtergrouping.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-28 17:00:48 $
+ *  last change: $Author: fs $ $Date: 2001-12-07 09:31:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,9 @@
 #ifndef _ALGORITHM_
 #include <algorithm>
 #endif
+#ifndef _SFX_OBJFAC_HXX
+#include <sfx2/docfac.hxx>
+#endif
 
 //........................................................................
 namespace sfx2
@@ -155,7 +158,7 @@ namespace sfx2
     listbox. Selecting means that all the files matching one of the "sub-filters" are displayed (in the example above,
     this would be "*.sdw", "*.doc" and so on).</p>
 
-    <p>Now the are two types of filter classes: global ones and local ones. "Text documents" is a global class. As
+    <p>Now there are two types of filter classes: global ones and local ones. "Text documents" is a global class. As
     well as "Spreadsheets". Or "Web pages".<br/>
     Let's have a look at a local class: The filters "MS Word 95" and "MS WinWord 6.0" together form the class
     "Microsoft Word 6.0 / 95" (don't ask for the reasons. At least not me. Ask the PM). There are a lot of such
@@ -185,20 +188,21 @@ namespace sfx2
     list).</p>
 
     <p>If you got it, go try understanding this file :).</p>
+
     */
 
 
     //====================================================================
 
     typedef StringPair                          FilterDescriptor;   // a single filter or a filter class (display name and filter mask)
-    typedef ::std::list< FilterDescriptor >     FilterGroup;            // a list of single filter entries
+    typedef ::std::list< FilterDescriptor >     FilterGroup;        // a list of single filter entries
     typedef ::std::list< FilterGroup >          GroupedFilterList;  // a list of all filters, already grouped
 
     /// the logical name of a filter
     typedef ::rtl::OUString                     FilterName;
 
     // a struct which holds references from a logical filter name to a filter group entry
-    // used quick lookup of classes (means class entries - entries representing a class)
+    // used for quick lookup of classes (means class entries - entries representing a class)
     // which a given filter may belong to
     typedef ::std::map< ::rtl::OUString, FilterGroup::iterator >    FilterGroupEntryReferrer;
 
@@ -211,6 +215,8 @@ namespace sfx2
 
     typedef ::std::list< FilterClass >                                  FilterClassList;
     typedef ::std::map< ::rtl::OUString, FilterClassList::iterator >    FilterClassReferrer;
+
+    typedef ::std::vector< ::rtl::OUString >                            StringArray;
 
 // =======================================================================
 // = reading of configuration data
@@ -292,14 +298,22 @@ namespace sfx2
     };
 
     //--------------------------------------------------------------------
-    void lcl_ReadGlobalFilters( const OConfigurationNode& _rFilterClassification, FilterClassList& _rGlobalClasses )
+    void lcl_ReadGlobalFilters( const OConfigurationNode& _rFilterClassification, FilterClassList& _rGlobalClasses, StringArray& _rGlobalClassNames )
     {
         _rGlobalClasses.clear();
+        _rGlobalClassNames.clear();
 
         //같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같
         // get the list describing the order of all global classes
         Sequence< ::rtl::OUString > aGlobalClasses;
         _rFilterClassification.getNodeValue( ::rtl::OUString::createFromAscii( "GlobalFilters/Order" ) ) >>= aGlobalClasses;
+
+        const ::rtl::OUString* pNames = aGlobalClasses.getConstArray();
+        const ::rtl::OUString* pNamesEnd = pNames + aGlobalClasses.getLength();
+
+        // copy the logical names
+        _rGlobalClassNames.resize( aGlobalClasses.getLength() );
+        ::std::copy( pNames, pNamesEnd, _rGlobalClassNames.begin() );
 
         // Global classes are presented in an own group, so their order matters (while the order of the
         // "local classes" doesn't).
@@ -307,8 +321,8 @@ namespace sfx2
         // are returned from the configuration - it is completely undefined, and we need a _defined_ order.
         FilterClassReferrer aClassReferrer;
         ::std::for_each(
-            aGlobalClasses.getConstArray(),
-            aGlobalClasses.getConstArray() + aGlobalClasses.getLength(),
+            pNames,
+            pNamesEnd,
             CreateEmptyClassRememberPos( _rGlobalClasses, aClassReferrer )
         );
             // now _rGlobalClasses contains a dummy entry for each global class,
@@ -369,7 +383,7 @@ namespace sfx2
     }
 
     //--------------------------------------------------------------------
-    void lcl_ReadClassification( FilterClassList& _rGlobalClasses, FilterClassList& _rLocalClasses )
+    void lcl_ReadClassification( FilterClassList& _rGlobalClasses, StringArray& _rGlobalClassNames, FilterClassList& _rLocalClasses )
     {
         //같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같
         // open our config node
@@ -382,7 +396,7 @@ namespace sfx2
 
         //같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같
         // go for the global classes
-        lcl_ReadGlobalFilters( aFilterClassification, _rGlobalClasses );
+        lcl_ReadGlobalFilters( aFilterClassification, _rGlobalClasses, _rGlobalClassNames );
 
         //같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같
         // fo for the local classes
@@ -633,12 +647,19 @@ namespace sfx2
         // 같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같�
         // read the classification of filters
         FilterClassList aGlobalClasses, aLocalClasses;
-        lcl_ReadClassification( aGlobalClasses, aLocalClasses );
+        StringArray aGlobalClassNames;
+        lcl_ReadClassification( aGlobalClasses, aGlobalClassNames, aLocalClasses );
 
         // 같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같�
         // for the global filter classes
         FilterGroupEntryReferrer aGlobalClassesRef;
         lcl_InitGlobalClasses( _rAllFilters, aGlobalClasses, aGlobalClassesRef );
+
+        // insert as much placeholders (FilterGroup's) into _rAllFilter for groups as we have global classes
+        // (this assumes that both numbers are the same, which, speaking strictly, must not hold - but it does, as we know ...)
+        sal_Int32 nGlobalClasses = aGlobalClasses.size();
+        while ( nGlobalClasses-- )
+            _rAllFilters.push_back( );
 
         // 같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같�
         // for the local classes:
@@ -679,10 +700,39 @@ namespace sfx2
             const SfxFilterContainer* pContainer = pFilter->GetFilterContainer();
             if ( pContainer != pCurrentGroupsContainer )
             {   // we reached a new group
-                // -> insert a new entry in our overall-list
-                aCurrentGroup = _rAllFilters.insert( _rAllFilters.end() );
+
+                // retrieve the document service name of the new group
+                const SfxFactoryFilterContainer* pFacFilterContainer =
+                    static_cast< const SfxFactoryFilterContainer* >( pContainer );
+                    // an SfxFilterContainer is always an SfxFactoryFilterContainer - according to mba@openoffice.org
+                ::rtl::OUString sDocServName = pFacFilterContainer->GetFactory().GetDocumentServiceName();
+
+                // look for the place in _rAllFilters where this ne group belongs - this is determined
+                // by the order of classes in aGlobalClassNames
+                GroupedFilterList::iterator aGroupPos = _rAllFilters.begin();
+                DBG_ASSERT( aGroupPos != _rAllFilters.end(),
+                    "sfx2::lcl_GroupAndClassify: invalid all-filters array here!" );
+                    // the loop below will work on invalid objects else ...
+                ++aGroupPos;
+                const ::rtl::OUString* pGlobalClassNames = aGlobalClassNames.begin();
+                while   (   ( aGroupPos != _rAllFilters.end() )
+                        &&  ( *pGlobalClassNames != sDocServName )
+                        )
+                {
+                    ++pGlobalClassNames;
+                    ++aGroupPos;
+                }
+                if ( aGroupPos != _rAllFilters.end() )
+                    // we found a global class name which matchies the doc service name -> fill the filters of this
+                    // group in the respective prepared group
+                    aCurrentGroup = aGroupPos;
+                else
+                    // insert a new entry in our overall-list
+                    aCurrentGroup = _rAllFilters.insert( _rAllFilters.end() );
+
                 // remember the container to properly detect the next group
                 pCurrentGroupsContainer = pContainer;
+
             }
 
             DBG_ASSERT( aCurrentGroup != _rAllFilters.end(), "sfx2::lcl_GroupAndClassify: invalid current group!" );
@@ -747,13 +797,13 @@ namespace sfx2
         // current SfxFilterMatcherIter
 
         FilterGroup& rGlobalFilters = _rAllFilters.front();
-        FilterGroup aNonEmptyGlobalsFilters;
+        FilterGroup aNonEmptyGlobalFilters;
         ::std::for_each(
             rGlobalFilters.begin(),
             rGlobalFilters.end(),
-            CopyNonEmptyFilter( aNonEmptyGlobalsFilters )
+            CopyNonEmptyFilter( aNonEmptyGlobalFilters )
         );
-        rGlobalFilters.swap( aNonEmptyGlobalsFilters );
+        rGlobalFilters.swap( aNonEmptyGlobalFilters );
     }
 
     //--------------------------------------------------------------------
@@ -973,6 +1023,9 @@ namespace sfx2
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.8  2001/11/28 17:00:48  mba
+ *  #78650#: filter names without module prefixes
+ *
  *  Revision 1.7  2001/10/25 02:21:18  svesik
  *  Remove sfx2/ from #include statement so also builds in a fresh, from
  *  scratch build
