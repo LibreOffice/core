@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numtotext_cjk.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: khong $ $Date: 2002-05-31 07:03:43 $
+ *  last change: $Author: khong $ $Date: 2002-08-07 00:19:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,10 @@ TRANSLITERATION_NUMTOTEXT_CJK ( InformalHangul_ko )
 TRANSLITERATION_NUMTOTEXT_CJK ( FormalLower_ko )
 TRANSLITERATION_NUMTOTEXT_CJK ( FormalUpper_ko )
 TRANSLITERATION_NUMTOTEXT_CJK ( FormalHangul_ko )
+TRANSLITERATION_NUMTOTEXT_CJK ( HangulJamo_ko )
+TRANSLITERATION_NUMTOTEXT_CJK ( HangulSyllable_ko )
+TRANSLITERATION_NUMTOTEXT_CJK ( HangulCircledJamo_ko )
+TRANSLITERATION_NUMTOTEXT_CJK ( HangulCircledSyllable_ko )
 TRANSLITERATION_NUMTOTEXT_CJK ( KanjiLongModern_ja_JP )
 TRANSLITERATION_NUMTOTEXT_CJK ( KanjiLongTraditional_ja_JP )
 TRANSLITERATION_NUMTOTEXT_CJK ( KanjiShortModern_ja_JP )
