@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbnamdlg.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:55:04 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 20:02:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@ ModelessDialog RID_SCDLG_DBNAMES
     Text [ portuguese_brazilian ] = "Definir Intervalo do Banco de Dados" ;
     Text [ portuguese ] = "Definir base de dados" ;
     Text [ finnish ] = "M��rit� tietokannan alue" ;
-    Text [ danish ] = "Definer database" ;
+    Text [ danish ] = "Definer databaseomr�de" ;
     Text [ french ] = "D�finition d'une plage de base de donn�es" ;
     Text [ swedish ] = "Definiera databasomr�de" ;
     Text [ dutch ] = "Databasebereik defini�ren" ;
@@ -93,7 +93,7 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text [ portuguese_brazilian ] = "~Nome" ;
         Text [ portuguese ] = "~Nome" ;
         Text [ finnish ] = "~Nimi" ;
-        Text [ danish ] = "~Navn" ;
+        Text [ danish ] = "Na~vn" ;
         Text [ french ] = "Nom" ;
         Text [ swedish ] = "~Namn" ;
         Text [ dutch ] = "~Naam" ;
@@ -115,6 +115,8 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text[ hebrew ] = "~Name";
         Text[ hindi ] = "ना~म";
         Text[ slovak ] = "~Názov";
+        Text[ hungarian ] = "~Név";
+        Text[ slovenian ] = "I~me";
     };
     ComboBox ED_NAME
     {
@@ -156,6 +158,8 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text[ hebrew ] = "~Bereich";
         Text[ hindi ] = "~फैलाव";
         Text[ slovak ] = "~Rozsah";
+        Text[ hungarian ] = "Ta~rtomány";
+        Text[ slovenian ] = "~Obseg";
     };
     Edit ED_DBAREA
     {
@@ -197,6 +201,8 @@ ModelessDialog RID_SCDLG_DBNAMES
         QuickHelpText[ hebrew ] = "Verkleinern";
         QuickHelpText[ hindi ] = "सिकुडना";
         QuickHelpText[ slovak ] = "Zmenšiť";
+        QuickHelpText[ hungarian ] = "Zsugorítás";
+        QuickHelpText[ slovenian ] = "Skrči";
     };
     FixedLine FL_OPTIONS
     {
@@ -231,6 +237,8 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text[ hebrew ] = "‮אפשרויות‬";
         Text[ hindi ] = "ऑप्शन्स";
         Text[ slovak ] = "Nastavenia";
+        Text[ hungarian ] = "Beállítások";
+        Text[ slovenian ] = "Možnosti";
     };
     CheckBox BTN_HEADER
     {
@@ -244,7 +252,7 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text [ portuguese_brazilian ] = "Cont�m cabe�alhos de ~colunas" ;
         Text [ portuguese ] = "Incluir ~cabe�alhos de colunas" ;
         Text [ finnish ] = "~Sis�lt�� sarakeotsikot" ;
-        Text [ danish ] = "Indeholder kolonneoverskrifter" ;
+        Text [ danish ] = "~Indeholder kolonneetiketter" ;
         Text [ french ] = "Contient des �tiquettes de colonne" ;
         Text [ swedish ] = "Inneh�ller ~kolumnetiketter" ;
         Text [ dutch ] = "bevat ~kolomkoppen" ;
@@ -267,6 +275,8 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text[ hebrew ] = "enthält ~Spaltenbeschriftungen";
         Text[ hindi ] = "स्तंभ शीर्षकों को स~म्मिलित किया है";
         Text[ slovak ] = "O~bsahuje záhlavia stĺpcov";
+        Text[ hungarian ] = "Oszlop~címkéket tartalmaz";
+        Text[ slovenian ] = "V~sebuje oznake stolpcev";
     };
     CheckBox BTN_SIZE
     {
@@ -280,7 +290,7 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text [ english_us ] = "Insert or delete ~cells" ;
         Text [ portuguese_brazilian ] = "Inserir ou excluir ~c�lulas" ;
         Text [ swedish ] = "Infoga/radera ~celler" ;
-        Text [ danish ] = "Inds�t/slet celler" ;
+        Text [ danish ] = "Inds�t eller slet ~celler" ;
         Text [ italian ] = "Inserisci/elimina celle" ;
         Text [ spanish ] = "~Insertar / borrar celdas" ;
         Text [ french ] = "~Ins�rer/supprimer des cellules" ;
@@ -302,6 +312,8 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text[ hebrew ] = "Zellen ~einfügen/löschen";
         Text[ hindi ] = "~कोष्ठों को जोड़ो अथवा मिटाओ";
         Text[ slovak ] = "Vložiť ale~bo zmazať bunky";
+        Text[ hungarian ] = "~Cellák beszúrása vagy törlése";
+        Text[ slovenian ] = "Vstavi ali izbriši ~celice";
     };
     CheckBox BTN_FORMAT
     {
@@ -314,7 +326,7 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text [ english_us ] = "Keep ~formatting" ;
         Text [ portuguese_brazilian ] = "~Manter formata��o" ;
         Text [ swedish ] = "Beh�ll ~formatering" ;
-        Text [ danish ] = "Bevar ~formatering" ;
+        Text [ danish ] = "Behold ~formatering" ;
         Text [ italian ] = "~Mantieni formattazione" ;
         Text [ spanish ] = "Co~nservar el formato" ;
         Text [ french ] = "Conserver le ~formatage" ;
@@ -337,6 +349,8 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text[ hebrew ] = "~Formatierung beibehalten";
         Text[ hindi ] = "~रचना करते रहो";
         Text[ slovak ] = "Ponechať ~formátovanie";
+        Text[ hungarian ] = "~Formázás megtartása";
+        Text[ slovenian ] = "Obdrži o~blikovanje";
     };
     CheckBox BTN_STRIPDATA
     {
@@ -349,7 +363,7 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text [ english_us ] = "Don't save ~imported data" ;
         Text [ portuguese_brazilian ] = "~N�o salvar dados importados" ;
         Text [ swedish ] = "~Spara inte importerade data" ;
-        Text [ danish ] = "Ikke gemme importerede data" ;
+        Text [ danish ] = "Gem ikke ~importerede data" ;
         Text [ italian ] = "Non salvare i dati ~importati" ;
         Text [ spanish ] = "N~o guardar los datos importados" ;
         Text [ french ] = "~Ne pas enregistrer les donn�es import�es" ;
@@ -372,6 +386,8 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text[ hebrew ] = "~Importierte Daten nicht speichern";
         Text[ hindi ] = "~निर्यात किया हुआ ड़ॉटा को संचित मत करो";
         Text[ slovak ] = "Neukladať ~importované dáta";
+        Text[ hungarian ] = "~Ne mentsen importált adatot";
+        Text[ slovenian ] = "Ne shrani uvožen~ih podatkov";
     };
     FixedText FT_SOURCE
     {
@@ -406,6 +422,8 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text[ hebrew ] = "Quelle:";
         Text[ hindi ] = "मूल:";
         Text[ slovak ] = "Zdroj:";
+        Text[ hungarian ] = "Forrás:";
+        Text[ slovenian ] = "Vir:";
     };
     FixedText FT_OPERATIONS
     {
@@ -440,6 +458,8 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text[ hebrew ] = "Operationen:";
         Text[ hindi ] = "कार्य:";
         Text[ slovak ] = "Operácie:";
+        Text[ hungarian ] = "Műveletek:";
+        Text[ slovenian ] = "Operacije:";
     };
     OKButton BTN_OK
     {
@@ -464,7 +484,7 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text [ portuguese_brazilian ] = "~Adicionar" ;
         Text [ portuguese ] = "~Adicionar" ;
         Text [ finnish ] = "~Lis��" ;
-        Text [ danish ] = "Til~f�j" ;
+        Text [ danish ] = "~Tilf�j" ;
         Text [ french ] = "Ajouter" ;
         Text [ swedish ] = "L�gg ~till" ;
         Text [ dutch ] = "Toe~voegen" ;
@@ -488,6 +508,8 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text[ hebrew ] = "‮הוספה‬";
         Text[ hindi ] = "~जोड़ो";
         Text[ slovak ] = "Prid~ať";
+        Text[ hungarian ] = "~Hozzáadás";
+        Text[ slovenian ] = "~Dodaj";
     };
     PushButton BTN_REMOVE
     {
@@ -500,7 +522,7 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text [ portuguese_brazilian ] = "~Excluir" ;
         Text [ portuguese ] = "~Eliminar" ;
         Text [ finnish ] = "~Poista" ;
-        Text [ danish ] = "Slet" ;
+        Text [ danish ] = "~Slet" ;
         Text [ french ] = "Supprimer" ;
         Text [ swedish ] = "~Radera" ;
         Text [ dutch ] = "~Wissen" ;
@@ -523,6 +545,8 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text[ hebrew ] = "‮מחיקה‬";
         Text[ hindi ] = "~मिटाओ";
         Text[ slovak ] = "~Zmazať";
+        Text[ hungarian ] = "~Törlés";
+        Text[ slovenian ] = "~Izbriši";
     };
     HelpButton BTN_HELP
     {
@@ -547,7 +571,7 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text [ portuguese_brazilian ] = "~Adicionar" ;
         Text [ portuguese ] = "~Adicionar" ;
         Text [ finnish ] = "~Lis��" ;
-        Text [ danish ] = "Tilf�j" ;
+        Text [ danish ] = "~Tilf�j" ;
         Text [ french ] = "Ajouter" ;
         Text [ swedish ] = "~L�gg till" ;
         Text [ dutch ] = "Toe~voegen" ;
@@ -569,6 +593,8 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text[ hebrew ] = "‮הוספה‬";
         Text[ hindi ] = "~जोड़ो";
         Text[ slovak ] = "Prid~ať";
+        Text[ hungarian ] = "~Hozzáadás";
+        Text[ slovenian ] = "~Dodaj";
     };
     String STR_MODIFY
     {
@@ -579,7 +605,7 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text [ portuguese_brazilian ] = "~Modificar" ;
         Text [ portuguese ] = "~Modificar" ;
         Text [ finnish ] = "~Muuta" ;
-        Text [ danish ] = "Modificer" ;
+        Text [ danish ] = "~Modificer" ;
         Text [ french ] = "Modifier" ;
         Text [ swedish ] = "~�ndra" ;
         Text [ dutch ] = "Wij~zigen" ;
@@ -601,6 +627,8 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text[ hebrew ] = "~Ändern";
         Text[ hindi ] = "सु~धारो";
         Text[ slovak ] = "Zmen~iť";
+        Text[ hungarian ] = "~Módosítás";
+        Text[ slovenian ] = "S~premeni";
     };
     String STR_DB_INVALID
     {
@@ -632,6 +660,8 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text[ hebrew ] = "Ungültiger Bereich";
         Text[ hindi ] = "अमान्य फैलाव";
         Text[ slovak ] = "Neplatný rozsah";
+        Text[ hungarian ] = "Érvénytelen tartomány";
+        Text[ slovenian ] = "Neveljaven obseg";
     };
     Text[ chinese_simplified ] = "定义数据库区域";
     Text[ russian ] = "���������� �������� ������";
@@ -649,7 +679,10 @@ ModelessDialog RID_SCDLG_DBNAMES
     Text[ hebrew ] = "Datenbankbereich festlegen";
     Text[ hindi ] = "लेखासंचय फैलाव को परिभाषा दो";
     Text[ slovak ] = "Definovať rozsah databázy";
+    Text[ hungarian ] = "Adatbázis-tartomány meghatározása";
+    Text[ slovenian ] = "Določi obseg zbirke podatkov";
 };
+
 
 
 
