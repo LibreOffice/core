@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optuno.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2001-05-15 18:14:10 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 13:11:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,7 @@ sal_Bool ScDocOptionsHelper::setPropertyValue( ScDocOptions& rOptions,
     //! use map (with new identifiers)
 
     sal_Bool bKnown = sal_True;
-    String aString = aPropertyName;
+    String aString(aPropertyName);
 
     if ( aString.EqualsAscii( SC_UNO_CALCASSHOWN ) )
         rOptions.SetCalcAsShown( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
@@ -166,7 +166,7 @@ uno::Any ScDocOptionsHelper::getPropertyValue(
 {
     //! use map (with new identifiers)
 
-    String aString = aPropertyName;
+    String aString(aPropertyName);
     uno::Any aRet;
 
     if ( aString.EqualsAscii( SC_UNO_CALCASSHOWN ) )
@@ -234,7 +234,7 @@ uno::Any SAL_CALL ScDocOptionsObj::getPropertyValue( const rtl::OUString& aPrope
 {
     ScUnoGuard aGuard;
 
-    uno::Any aRet = ScDocOptionsHelper::getPropertyValue( aOptions, aPropertyName );
+    uno::Any aRet(ScDocOptionsHelper::getPropertyValue( aOptions, aPropertyName ));
     if ( !aRet.hasValue() )
         aRet =  ScModelObj::getPropertyValue( aPropertyName );
 
