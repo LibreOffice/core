@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iderdll.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tbe $ $Date: 2001-07-25 11:39:43 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:28:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,8 +80,6 @@ public:
     BasicIDEData*   GetExtraData();
     static void     Init();
     static void     Exit();
-    static void     LibInit();
-    static void     LibExit();
     static BasicIDEDLL* GetDLL();
 };
 
