@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbnamdlg.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 20:02:05 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 11:36:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #include "dbnamdlg.hrc"
 ModelessDialog RID_SCDLG_DBNAMES
 {
@@ -259,7 +258,7 @@ ModelessDialog RID_SCDLG_DBNAMES
         Text [ spanish ] = "Contiene títulos de ~columnas" ;
         Text [ english_us ] = "Co~ntains column labels" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "åŒ…å«åˆ—æ ‡é¢˜(~N)";
+        Text[ chinese_simplified ] = "åŒ…å«åˆ—æ ‡ç­¾";
         Text[ russian ] = "Ñîäåğæèò çàãîëîâêè ñòîëáöîâ";
         Text[ polish ] = "Zawie~ra nag³ówki kolumn";
         Text[ japanese ] = "åˆ—ã®é …ç›®æ¬„ã‚’å«ã‚€(~N)";
