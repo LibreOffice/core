@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textitem.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 16:08:03 $
+ *  last change: $Author: rt $ $Date: 2004-05-07 15:51:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1163,7 +1163,7 @@ sal_Bool SvxFontHeightItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
         case MID_FONTHEIGHT_DIFF:
         {
             nHeight = lcl_GetRealHeight_Impl(nHeight, nProp, ePropUnit, bConvert);
-            float fValue;
+            float fValue = 0;
             if(!(rVal >>= fValue))
             {
                 sal_Int32 nValue;
@@ -3669,12 +3669,11 @@ const SfxPoolItem* SvxScriptSetItem::GetItemOfScriptSet(
     return pI;
 }
 
-const SfxPoolItem* SvxScriptSetItem::GetItemOfScript( USHORT nScript ) const
+const SfxPoolItem* SvxScriptSetItem::GetItemOfScript( USHORT nSlotId, const SfxItemSet& rSet, USHORT nScript )
 {
     USHORT nLatin, nAsian, nComplex;
-    GetWhichIds( nLatin, nAsian, nComplex );
+    GetWhichIds( nSlotId, rSet, nLatin, nAsian, nComplex );
 
-    const SfxItemSet& rSet = GetItemSet();
     const SfxPoolItem *pRet, *pAsn, *pCmplx;
     switch( nScript )
     {
@@ -3722,6 +3721,10 @@ const SfxPoolItem* SvxScriptSetItem::GetItemOfScript( USHORT nScript ) const
     return pRet;
 }
 
+const SfxPoolItem* SvxScriptSetItem::GetItemOfScript( USHORT nScript ) const
+{
+    return GetItemOfScript( Which(), GetItemSet(), nScript );
+}
 
 void SvxScriptSetItem::PutItemForScriptType( USHORT nScriptType,
                                              const SfxPoolItem& rItem )
@@ -3748,14 +3751,19 @@ void SvxScriptSetItem::PutItemForScriptType( USHORT nScriptType,
     delete pCpy;
 }
 
-void SvxScriptSetItem::GetWhichIds( USHORT& rLatin, USHORT& rAsian,
-                                    USHORT& rComplex ) const
+void SvxScriptSetItem::GetWhichIds( USHORT nSlotId, const SfxItemSet& rSet, USHORT& rLatin, USHORT& rAsian, USHORT& rComplex )
 {
-    const SfxItemPool& rPool = *GetItemSet().GetPool();
-    GetSlotIds( Which(), rLatin, rAsian, rComplex );
+    const SfxItemPool& rPool = *rSet.GetPool();
+    GetSlotIds( nSlotId, rLatin, rAsian, rComplex );
     rLatin = rPool.GetWhich( rLatin );
     rAsian = rPool.GetWhich( rAsian );
     rComplex = rPool.GetWhich( rComplex );
+}
+
+void SvxScriptSetItem::GetWhichIds( USHORT& rLatin, USHORT& rAsian,
+                                    USHORT& rComplex ) const
+{
+    GetWhichIds( Which(), GetItemSet(), rLatin, rAsian, rComplex );
 }
 
 void SvxScriptSetItem::GetSlotIds( USHORT nSlotId, USHORT& rLatin,
