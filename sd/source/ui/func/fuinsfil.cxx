@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuinsfil.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 12:11:57 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 15:16:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,9 +97,6 @@
 #ifndef _SVDOUTL_HXX //autogen
 #include <svx/svdoutl.hxx>
 #endif
-#ifndef _SFXSTBMGR_HXX //autogen
-#include <sfx2/stbmgr.hxx>
-#endif
 #ifndef _FILEDLGHELPER_HXX
 #include <sfx2/filedlghelper.hxx>
 #endif
@@ -160,6 +157,7 @@
 #include "OutlineViewShell.hxx"
 #endif
 #include "DrawDocShell.hxx"
+#include "GraphicDocShell.hxx"
 #include "app.hrc"
 #include "unmovss.hxx"
 //CHINA001 #include "inspagob.hxx"
@@ -207,16 +205,24 @@ FuInsertFile::FuInsertFile (
         sfx2::FileDialogHelper      aFileDialog( WB_OPEN | SFXWB_INSERT | WB_STDMODAL );
         Reference< XFilePicker >    xFilePicker( aFileDialog.GetFilePicker(), UNO_QUERY );
         Reference< XFilterManager > xFilterManager( xFilePicker, UNO_QUERY );
-        String aCont;
+        String aOwnCont;
+        String aOtherCont;
         const SfxFilter*            pFilter = NULL;
 
         aFileDialog.SetTitle( String( SdResId(STR_DLG_INSERT_PAGES_FROM_FILE ) ) );
 
         if( pDoc->GetDocumentType() == DOCUMENT_TYPE_IMPRESS )
-            aCont = String( RTL_CONSTASCII_USTRINGPARAM( "simpress" ) );
+        {
+            aOwnCont = String( RTL_CONSTASCII_USTRINGPARAM( "simpress" ) );
+            aOtherCont = String( RTL_CONSTASCII_USTRINGPARAM( "sdraw" ) ) ;
+        }
         else
-            aCont = String( RTL_CONSTASCII_USTRINGPARAM( "sdraw" ) ) ;
-        SfxFilterMatcher aMatch( aCont );
+        {
+            aOtherCont = String( RTL_CONSTASCII_USTRINGPARAM( "simpress" ) );
+            aOwnCont = String( RTL_CONSTASCII_USTRINGPARAM( "sdraw" ) ) ;
+        }
+
+        SfxFilterMatcher aMatch( aOwnCont );
 
         if( xFilterManager.is() )
         {
@@ -230,22 +236,51 @@ FuInsertFile::FuInsertFile (
                 xFilterManager->setCurrentFilter( aAllSpec ); // set default-filter (<All>)
 
                 // Get main filter
-                pFilter = SfxFilter::GetDefaultFilterFromFactory( aCont );
+                pFilter = SfxFilter::GetDefaultFilterFromFactory( aOwnCont );
                 if( pFilter )
                     xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
 
-                // Get Draw filter for Impress and Impress filter for Draw as secondary filter
-                if( pDoc->GetDocumentType() == DOCUMENT_TYPE_IMPRESS )
-                    aExt = UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( ".sxd" ) );
-                else
-                    aExt = UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( ".sxi" ) );
+                // get cross filter
+                pFilter = SfxFilter::GetDefaultFilterFromFactory( aOtherCont );
+                if( pFilter )
+                {
+                    pFilter = aMatch.GetFilter4Extension( pFilter->GetDefaultExtension() );
+                    if ( pFilter )
+                        xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
+                }
 
+                // get femplate filter
+                if( pDoc->GetDocumentType() == DOCUMENT_TYPE_IMPRESS )
+                    pFilter = DrawDocShell::Factory().GetTemplateFilter();
+                else
+                    pFilter = GraphicDocShell::Factory().GetTemplateFilter();
+                if( pFilter )
+                    xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
+
+                // get Powerpoint filter
+                aExt = UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( ".ppt" ) );
                 pFilter = aMatch.GetFilter4Extension( aExt );
                 if( pFilter )
                     xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
 
-                // Get other filters
-                pFilter = aMatch.GetFilter4ClipBoardId( SOT_FORMATSTR_ID_STARIMPRESS_50 );
+                // Get other draw/impress filters
+                pFilter = aMatch.GetFilter4ClipBoardId( SOT_FORMATSTR_ID_STARIMPRESS_60, SFX_FILTER_IMPORT, SFX_FILTER_TEMPLATEPATH );
+                if( pFilter )
+                    xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
+
+                pFilter = aMatch.GetFilter4ClipBoardId( SOT_FORMATSTR_ID_STARIMPRESS_60, SFX_FILTER_TEMPLATEPATH );
+                if( pFilter )
+                    xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
+
+                pFilter = aMatch.GetFilter4ClipBoardId( SOT_FORMATSTR_ID_STARDRAW_60, SFX_FILTER_IMPORT, SFX_FILTER_TEMPLATEPATH  );
+                if( pFilter )
+                    xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
+
+                pFilter = aMatch.GetFilter4ClipBoardId( SOT_FORMATSTR_ID_STARDRAW_60, SFX_FILTER_TEMPLATEPATH  );
+                if( pFilter )
+                    xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
+
+                pFilter = aMatch.GetFilter4ClipBoardId( SOT_FORMATSTR_ID_STARIMPRESS_50, SFX_FILTER_IMPORT, SFX_FILTER_TEMPLATEPATH  );
                 if( pFilter )
                     xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
 
@@ -253,7 +288,7 @@ FuInsertFile::FuInsertFile (
                 if( pFilter )
                     xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
 
-                pFilter = aMatch.GetFilter4ClipBoardId( SOT_FORMATSTR_ID_STARDRAW_50 );
+                pFilter = aMatch.GetFilter4ClipBoardId( SOT_FORMATSTR_ID_STARDRAW_50, SFX_FILTER_IMPORT, SFX_FILTER_TEMPLATEPATH  );
                 if( pFilter )
                     xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
 
@@ -261,7 +296,7 @@ FuInsertFile::FuInsertFile (
                 if( pFilter )
                     xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
 
-                pFilter = aMatch.GetFilter4ClipBoardId( SOT_FORMATSTR_ID_STARDRAW_40 );
+                pFilter = aMatch.GetFilter4ClipBoardId( SOT_FORMATSTR_ID_STARDRAW_40, SFX_FILTER_IMPORT, SFX_FILTER_TEMPLATEPATH  );
                 if( pFilter )
                     xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
 
@@ -269,7 +304,7 @@ FuInsertFile::FuInsertFile (
                 if( pFilter )
                     xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
 
-                pFilter = aMatch.GetFilter4ClipBoardId( SOT_FORMATSTR_ID_STARDRAW );
+                pFilter = aMatch.GetFilter4ClipBoardId( SOT_FORMATSTR_ID_STARDRAW, SFX_FILTER_IMPORT, SFX_FILTER_TEMPLATEPATH  );
                 if( pFilter )
                     xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
 
@@ -310,8 +345,6 @@ FuInsertFile::FuInsertFile (
 
         if( pFilterName )
             aFilterName = pFilterName->GetValue ();
-        else
-            aFilterName = UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "*.sdd" ) );
     }
 
     pDocSh->SetWaitCursor( TRUE );
@@ -326,65 +359,55 @@ FuInsertFile::FuInsertFile (
     {
         pMedium->SetFilter( pFilter );
         aFilterName = pFilter->GetFilterName();
-    }
 
-    if( pMedium->IsStorage() )
-    {
-        // Storage
-        uno::Reference < embed::XStorage > xStorage = pMedium->GetStorage();
-        if( xStorage.is() )
+        if( pMedium->IsStorage() || ( pMedium->GetInStream() && SotStorage::IsStorageFile( pMedium->GetInStream() ) ) )
         {
-            uno::Reference < container::XNameAccess > xAccess (xStorage, uno::UNO_QUERY);
-            sal_Bool bIsStream = xAccess->hasByName( pStarDrawXMLContent ) && xStorage->isStreamElement( pStarDrawXMLContent ) ||
-                xAccess->hasByName( pStarDrawOldXMLContent ) && xStorage->isStreamElement( pStarDrawOldXMLContent );
-
-            if ( bIsStream &&
-                    ( !pFilter ||
-                    ( pFilter->GetServiceName().EqualsAscii( "com.sun.star.presentation.PresentationDocument" ) ||
-                      pFilter->GetServiceName().EqualsAscii( "com.sun.star.drawing.DrawingDocument" ) ) ) )
+            if ( pFilter->GetServiceName().EqualsAscii( "com.sun.star.presentation.PresentationDocument" ) ||
+                 pFilter->GetServiceName().EqualsAscii( "com.sun.star.drawing.DrawingDocument" ) )
             {
-                pMedium->Close();
-
+                // Draw, Impress or PowerPoint document
+                // the ownership of the Medium is transferred
                 if( bDrawMode )
                     InsSDDinDrMode( pMedium );
                 else
                     InsSDDinOlMode( pMedium );
 
+                // don't delete Medium here, ownership of pMedium has changed in this case
                 bInserted = TRUE;
             }
         }
-    }
-    else if( pFilter )
-    {
-        BOOL bFound = ( ::std::find( aFilterVector.begin(), aFilterVector.end(), pFilter->GetMimeType() ) != aFilterVector.end() );
-        if( !bFound &&
-            ( aFilterName.SearchAscii( "Text" ) != STRING_NOTFOUND ||
-              aFilterName.SearchAscii( "Rich" ) != STRING_NOTFOUND ||
-              aFilterName.SearchAscii( "RTF" )  != STRING_NOTFOUND ||
-              aFilterName.SearchAscii( "HTML" ) != STRING_NOTFOUND ) )
+        else
         {
-            bFound = TRUE;
+            BOOL bFound = ( ::std::find( aFilterVector.begin(), aFilterVector.end(), pFilter->GetMimeType() ) != aFilterVector.end() );
+            if( !bFound &&
+                ( aFilterName.SearchAscii( "Text" ) != STRING_NOTFOUND ||
+                aFilterName.SearchAscii( "Rich" ) != STRING_NOTFOUND ||
+                aFilterName.SearchAscii( "RTF" )  != STRING_NOTFOUND ||
+                aFilterName.SearchAscii( "HTML" ) != STRING_NOTFOUND ) )
+            {
+                bFound = TRUE;
+            }
+
+            if( bFound )
+            {
+                if( bDrawMode )
+                    InsTextOrRTFinDrMode(pMedium);
+                else
+                    InsTextOrRTFinOlMode(pMedium);
+
+                bInserted = TRUE;
+                delete pMedium;
+            }
         }
-
-        if( bFound )
-        {
-            if( bDrawMode )
-                InsTextOrRTFinDrMode(pMedium);
-            else
-                InsTextOrRTFinOlMode(pMedium);
-
-            bInserted = TRUE;
-        }
-
     }
 
-    delete pMedium;
     pDocSh->SetWaitCursor( FALSE );
 
     if( !bInserted )
     {
         ErrorBox aErrorBox( pWindow, WB_OK, String( SdResId( STR_READ_DATA_ERROR ) ) );
         aErrorBox.Execute();
+        delete pMedium;
     }
 }
 
@@ -418,17 +441,17 @@ BOOL FuInsertFile::InsSDDinDrMode(SfxMedium* pMedium)
     List* pBookmarkList = NULL;
 
     pDocSh->SetWaitCursor( FALSE );
-//CHINA001  SdInsertPagesObjsDlg* pDlg = new SdInsertPagesObjsDlg( NULL, pDoc,
-//CHINA001  pMedium, aFile );
-    SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();//CHINA001
-    DBG_ASSERT(pFact, "SdAbstractDialogFactory fail!");//CHINA001
+    SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
+    DBG_ASSERT(pFact, "SdAbstractDialogFactory fail!");
+
+    // dialog now becomes owner of Medium
     AbstractSdInsertPagesObjsDlg* pDlg = pFact->CreateSdInsertPagesObjsDlg(ResId( DLG_INSERT_PAGES_OBJS ), NULL, pDoc,
                                                     pMedium, aFile );
-    DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+    DBG_ASSERT(pDlg, "Dialogdiet fail!");
     // Ev. wird eine QueryBox geoeffnet ("Links aktualisieren?"),
     // daher wird der Dialog der aktuelle DefModalDialogParent
     ::Window* pDefParent = GetpApp()->GetDefDialogParent();
-    GetpApp()->SetDefDialogParent(pDlg->GetWindow()); //CHINA001 GetpApp()->SetDefDialogParent(pDlg);
+    GetpApp()->SetDefDialogParent(pDlg->GetWindow());
 
     USHORT nRet = pDlg->Execute();
 
@@ -832,7 +855,7 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
 
 // -----------------------------------------------------------------------------
 
-void FuInsertFile::InsSDDinOlMode(SfxMedium* pMedium)
+BOOL FuInsertFile::InsSDDinOlMode(SfxMedium* pMedium)
 {
     OutlineView* pOlView = static_cast<OutlineView*>(pView);
 
@@ -869,7 +892,11 @@ void FuInsertFile::InsSDDinOlMode(SfxMedium* pMedium)
         pOutliner->SetBeginMovingHdl(aOldBeginMovingHdl);
         pOutliner->SetEndMovingHdl(aOldEndMovingHdl);
         pOutliner->SetStatusEventHdl(aOldStatusEventHdl);
+
+        return TRUE;
     }
+    else
+        return FALSE;
 }
 
 // -----------------------------------------------------------------------------
