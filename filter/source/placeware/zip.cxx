@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zip.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2002-10-23 19:30:48 $
+ *  last change: $Author: hr $ $Date: 2003-07-16 18:01:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@ struct ZipEntry
 };
 
 /** put one byte inside this stream */
-static osl::File::RC putc( unsigned char c, osl::File& rFile )
+static osl::File::RC putC( unsigned char c, osl::File& rFile )
 {
     sal_uInt64 nBytesWritten;
     osl::File::RC nRC = rFile.write( &c, 1, nBytesWritten );
@@ -103,9 +103,9 @@ void ZipFile::writeShort( sal_Int16 s)
 {
     if( !isError() )
     {
-        mnRC = putc( s & 0xff, mrFile );
+        mnRC = putC( s & 0xff, mrFile );
         if( !isError() )
-            mnRC = putc( (s >> 8) & 0xff, mrFile );
+            mnRC = putC( (s >> 8) & 0xff, mrFile );
     }
 }
 
@@ -115,16 +115,16 @@ void ZipFile::writeLong( sal_Int32 l )
 {
     if( !isError() )
     {
-        mnRC = putc(l & 0xff, mrFile);
+        mnRC = putC(l & 0xff, mrFile);
         if( !isError() )
         {
-            mnRC = putc((l >> 8) & 0xff, mrFile);
+            mnRC = putC((l >> 8) & 0xff, mrFile);
             if( !isError() )
             {
-                mnRC = putc((l >> 16) & 0xff, mrFile);
+                mnRC = putC((l >> 16) & 0xff, mrFile);
                 if( !isError() )
                 {
-                    mnRC = putc((l >> 24) & 0xff, mrFile);
+                    mnRC = putC((l >> 24) & 0xff, mrFile);
                 }
             }
         }
@@ -178,7 +178,7 @@ void ZipFile::writeDummyLocalHeader(ZipEntry *e)
         e->offset = static_cast< sal_Int32 >( nPosition );
 
         for (i = 0; (i < len) && !isError(); ++i)
-            mnRC = putc(0, mrFile);
+            mnRC = putC(0, mrFile);
     }
 }
 
