@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocumentView.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Date: 2003-04-28 12:30:03 $
+ *  last change: $Date: 2003-05-27 13:19:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 package mod._sch;
 
 import lib.TestCase;
+import com.sun.star.lang.XMultiServiceFactory;
 import lib.TestParameters;
 import java.io.PrintWriter;
 import lib.TestEnvironment;
@@ -97,7 +98,7 @@ public class AccessibleDocumentView extends TestCase {
 
         AccessibilityTools at = new AccessibilityTools();
 
-        XWindow xWindow = at.getCurrentWindow(Param.getMSF(), aModel);
+        XWindow xWindow = at.getCurrentWindow((XMultiServiceFactory)Param.getMSF(), aModel);
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
         at.getAccessibleObjectForRole(xRoot, AccessibleRole.DOCUMENT);
@@ -153,7 +154,7 @@ public class AccessibleDocumentView extends TestCase {
      */
     protected void initialize(TestParameters Param, PrintWriter log) {
         log.println( "creating a text document" );
-        SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)Param.getMSF());
         try {
             log.println( "creating a chartdocument" );
             xChartDoc = SOF.createChartDoc(null);
