@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_ext.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: hjs $ $Date: 2001-10-19 16:23:55 $
+#   last change: $Author: hjs $ $Date: 2001-10-29 18:26:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -101,21 +101,21 @@ clean:
     +cd $(P_BUILD_DIR) && $(BUILD_ACTION) $(BUILD_FLAGS) clean
     +$(RM) $(PACKAGE_DIR)$/$(BUILD_FLAG_FILE)
     
-
-$(MISC)$/%.tar : $(PRJ)$/download$/%.tar.gz
+$(MISC)$/%.unpack : $(PRJ)$/download$/%.tar.gz
     @+-$(RM) $@
-    +gunzip -c $< > $@
+    @+echo $(assign UNPACKCMD := gunzip -c $(BACK_PATH)download$/$(TARFILE_NAME).tar.gz | tar -xvf - ) > $(NULLDEV)
+    @+$(COPY) $(mktmp $(UNPACKCMD)) $@
 
-$(MISC)$/%.tar : $(PRJ)$/download$/%.tar
+$(MISC)$/%.unpack : $(PRJ)$/download$/%.tar
     @+-$(RM) $@
-    +$(COPY) $< $@
+    +echo $(assign UNPACKCMD := tar -xvf $(BACK_PATH)download$/$(TARFILE_NAME).tar) > $(NULLDEV)
+    @+$(COPY) $(mktmp $(UNPACKCMD)) $@
 
-#unntar
-$(PACKAGE_DIR)$/$(UNTAR_FLAG_FILE) : $(MISC)$/$(TARFILE_NAME).tar
+#untar
+$(PACKAGE_DIR)$/$(UNTAR_FLAG_FILE) : $(PRJ)$/$(ROUT)$/misc$/$(TARFILE_NAME).unpack
     @+-$(MKDIR) $(PACKAGE_DIR:d)
     @+-$(MKDIR) $(PACKAGE_DIR)
-# see tg_zip.mk
-    +cd $(PACKAGE_DIR) && tar -xvf $(BACK_PATH)$(ROUT)$/misc$/$(TARFILE_NAME).tar && $(TOUCH) $(UNTAR_FLAG_FILE)
+    +cd $(PACKAGE_DIR) && $(shell +$(TYPE) $(PRJ)$/$(ROUT)$/misc$/$(TARFILE_NAME).unpack) && $(TOUCH) $(UNTAR_FLAG_FILE)
     @+echo make writeable...
 .IF "$(GUI)"=="WNT"
     @+cd $(PACKAGE_DIR) && attrib /s -r  >& $(NULLDEV) && $(TOUCH) $(UNTAR_FLAG_FILE)
@@ -123,12 +123,13 @@ $(PACKAGE_DIR)$/$(UNTAR_FLAG_FILE) : $(MISC)$/$(TARFILE_NAME).tar
     @+cd $(PACKAGE_DIR) && chmod -R +w * && $(TOUCH) $(UNTAR_FLAG_FILE)
 .ENDIF			# "$(GUI)"=="WNT"
 
+
 #add new files to patch
 $(PACKAGE_DIR)$/$(ADD_FILES_FLAG_FILE) : $(T_ADDITIONAL_FILES) $(PACKAGE_DIR)$/$(UNTAR_FLAG_FILE)
 .IF "$(GUI)"=="WNT"
-    @+if not exist $@ $(TOUCH) $@
+    @$(TOUCH) $@
 .ELSE			# "$(GUI)"=="WNT"
-    @+-test ! -e $@ && $(TOUCH) $@
+    @$(TOUCH) $@
 .ENDIF			# "$(GUI)"=="WNT"
 
 #patch
@@ -145,6 +146,7 @@ $(PACKAGE_DIR)$/$(PATCH_FLAG_FILE) : $(PACKAGE_DIR)$/$(ADD_FILES_FLAG_FILE)
 .ENDIF			# "$(PATCH_FILE_NAME)"=="none" ||	"$(PATCH_FILE_NAME)"==""
 
 $(PACKAGE_DIR)$/$(CONFIGURE_FLAG_FILE) : $(PACKAGE_DIR)$/$(PATCH_FLAG_FILE)
+    @+-$(RM) $@ >& $(NULLDEV)
 .IF "$(CONFIGURE_ACTION)" == "none" || "$(CONFIGURE_ACTION)"==""
     +$(TOUCH) $(PACKAGE_DIR)$/$(CONFIGURE_FLAG_FILE)
 .ELSE			# "$(CONFIGURE_ACTION)"=="none" || "$(CONFIGURE_ACTION)"==""
@@ -155,16 +157,17 @@ $(PACKAGE_DIR)$/$(CONFIGURE_FLAG_FILE) : $(PACKAGE_DIR)$/$(PATCH_FLAG_FILE)
 
     
 $(PACKAGE_DIR)$/$(BUILD_FLAG_FILE) : $(PACKAGE_DIR)$/$(CONFIGURE_FLAG_FILE)
+    @+-$(RM) $@ >& $(NULLDEV)
 .IF "$(BUILD_ACTION)"=="none" ||	"$(BUILD_ACTION)"==""
     +$(TOUCH) $(PACKAGE_DIR)$/$(BUILD_FLAG_FILE)
 .ELSE			# "$(BUILD_ACTION)"=="none" ||	"$(BUILD_ACTION)"==""
     +-$(MKDIR) $(P_BUILD_DIR)
-    @+-$(RM) $@
     +cd $(P_BUILD_DIR) && $(BUILD_ACTION) $(BUILD_FLAGS) && $(TOUCH) $(BUILD_FLAG_FILE)
     +mv $(P_BUILD_DIR)$/$(BUILD_FLAG_FILE) $(PACKAGE_DIR)$/$(BUILD_FLAG_FILE)
 .ENDIF			# "$(BUILD_ACTION)"=="none" ||	"$(BUILD_ACTION)"==""
 
 $(PACKAGE_DIR)$/$(INSTALL_FLAG_FILE) : $(PACKAGE_DIR)$/$(BUILD_FLAG_FILE)
+    @+-$(RM) $@ >& $(NULLDEV)
 .IF "$(INSTALL_ACTION)"=="none" ||	"$(INSTALL_ACTION)"==""
     +$(TOUCH) $(PACKAGE_DIR)$/$(INSTALL_FLAG_FILE)
 .ELSE			# "$(INSTALL_ACTION)"=="none" ||	"$(INSTALL_ACTION)"==""
@@ -197,10 +200,10 @@ $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE) : $(PACKAGE_DIR)$/$(INSTALL_FLAG_FILE)
 .ENDIF			# "$(OUT2BIN)"!=""
     +$(TOUCH) $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE)
 
-$(MISC)$/$(TARFILE_ROOTDIR) : $(MISC)$/$(TARFILE_NAME).tar
+$(MISC)$/$(TARFILE_ROOTDIR) : $(MISC)$/$(TARFILE_NAME).unpack
     @+-mv $(MISC)$/$(TARFILE_ROOTDIR) $(MISC)$/$(TARFILE_ROOTDIR).old
     @+-rm -rf $(MISC)$/$(TARFILE_ROOTDIR).old
-    +cd $(MISC) && tar -xvf $(TARFILE_NAME).tar
+    +cd $(MISC) && $(subst,$(BACK_PATH),..$/..$/ $(shell +$(TYPE) $(PRJ)$/$(ROUT)$/misc$/$(TARFILE_NAME).unpack))
 .IF "$(GUI)"=="UNX"	
     +$(TOUCH) $@
 .ENDIF			# "$(GUI)"=="UNX"	
