@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appmain.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 15:41:14 $
+ *  last change: $Author: hr $ $Date: 2004-03-09 11:03:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,10 @@
 #include <svtools/helpopt.hxx>
 #include <vos/process.hxx>
 #include <framework/sfxhelperfunctions.hxx>
+#include <rtl/ustring.hxx>
+#include <com/sun/star/uno/Exception.hpp>
+#include <com/sun/star/uno/RuntimeException.hpp>
+#include <com/sun/star/uno/Reference.hxx>
 
 #include "appimp.hxx"
 #include "sfxtypes.hxx"
@@ -349,8 +353,13 @@ void SfxApplication::InitLabelResMgr( const char* pLabelPrefix )
 
         // keine separate Label-DLL vorhanden?
         if ( !pAppData_Impl->pLabelResMgr )
-            // dann den ResMgr vom Executable verwenden
-            pAppData_Impl->pLabelResMgr = new ResMgr;
+        {
+            // maybe corrupted installation
+            throw (::com::sun::star::uno::RuntimeException(
+                ::rtl::OUString::createFromAscii("iso resource could not be loaded by SfxApplication"),
+                ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >()));
+
+        }
     }
     else
     {
