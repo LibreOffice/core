@@ -2,9 +2,9 @@
  *
  *  $RCSfile: escherex.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:03:37 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 14:47:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,7 +238,7 @@ EscherPropertyContainer::~EscherPropertyContainer()
         while ( nSortCount-- )
             delete[] pSortStruct[ nSortCount ].pBuf;
     }
-    delete pSortStruct;
+    delete[] pSortStruct;
 };
 
 void EscherPropertyContainer::AddOpt( sal_uInt16 nPropID, sal_uInt32 nPropValue, sal_Bool bBlib )
