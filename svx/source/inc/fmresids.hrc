@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmresids.hrc,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 16:07:13 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 11:01:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,7 @@
 #define RID_SVXIMG_FIELD                            (RID_FORMS_START +27)
 #define RID_SVXIMG_SCROLLBAR                        SID_FM_SCROLLBAR
 #define RID_SVXIMG_SPINBUTTON                       SID_FM_SPINBUTTON
+#define RID_SVXIMG_NAVIGATIONBAR                    SID_FM_NAVIGATIONBAR
 
 // Dialog-Id's -----------------------------------------------------------
 #define RID_SVXTBX_FORM                             (RID_FORMS_START + 1)
@@ -252,8 +253,10 @@
 #define RID_STR_EMPTY_IS_NULL                       (RID_FORMS_START +170)
 #define RID_STR_DECIMAL_ACCURACY                    (RID_FORMS_START +171)
     // FREE
+    // FREE
+    // FREE
 #define RID_STR_DEFAULT_BUTTON                      (RID_FORMS_START +175)
-
+#define RID_STR_PROPTITLE_NAVBAR                    (RID_FORMS_START +176)
 #define RID_STR_PROPTITLE_PUSHBUTTON                (RID_FORMS_START +177)
 #define RID_STR_PROPTITLE_RADIOBUTTON               (RID_FORMS_START +178)
 #define RID_STR_PROPTITLE_CHECKBOX                  (RID_FORMS_START +179)
@@ -349,6 +352,7 @@
 #define RID_STR_HIDDEN_CLASSNAME                    (RID_CLASSNAMES_START + 19)
 #define RID_STR_CLASSNAME_SCROLLBAR                 (RID_CLASSNAMES_START + 20)
 #define RID_STR_CLASSNAME_SPINBUTTON                (RID_CLASSNAMES_START + 21)
+#define RID_STR_NAVBAR_CLASSNAME                    (RID_CLASSNAMES_START + 22)
 
 // Events
 #define RID_STR_EVT_START                           (RID_FORMS_START +400)
