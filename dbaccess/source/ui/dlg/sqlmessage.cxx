@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqlmessage.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 14:50:04 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:16:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,7 +195,7 @@ OExceptionChainDialog::OExceptionChainDialog(Window* pParent, const Any& _rStart
             bHave22018 = pCurrentException->SQLState.equalsAscii( "22018" );
 
             SvLBoxEntry* pListEntry = NULL;
-            void* pUserData = new SQLExceptionInfo(aCurrent);
+            SQLExceptionInfo* pUserData = new SQLExceptionInfo(aCurrent);
 
             switch (aCurrent.getType())
             {
@@ -274,23 +274,32 @@ IMPL_LINK(OExceptionChainDialog, OnExceptionSelected, void*, EMPTYARG)
         const SQLException* pException = (const SQLException*)aInfo;
 
         String sText;
-        if ( pException->SQLState.getLength() )
+        if (   ( aInfo.getType() == SQLExceptionInfo::SQL_CONTEXT )
+            &&  ( m_aExceptionList.GetParent( pSelected ) != NULL )
+            )
         {
-            sText += m_sStatusLabel;
-            sText.AppendAscii(": ");
-            sText += pException->SQLState.getStr();
-            sText.AppendAscii("\n");
+            sText = static_cast< const SQLContext* >( pException )->Details;
         }
-        if ( pException->ErrorCode )
+        else
         {
-            sText += m_sErrorCodeLabel;
-            sText.AppendAscii(": ");
-            sText += String::CreateFromInt32( pException->ErrorCode );
-            sText.AppendAscii("\n");
+            if ( pException->SQLState.getLength() )
+            {
+                sText += m_sStatusLabel;
+                sText.AppendAscii(": ");
+                sText += pException->SQLState.getStr();
+                sText.AppendAscii("\n");
+            }
+            if ( pException->ErrorCode )
+            {
+                sText += m_sErrorCodeLabel;
+                sText.AppendAscii(": ");
+                sText += String::CreateFromInt32( pException->ErrorCode );
+                sText.AppendAscii("\n");
+            }
+            if ( sText.Len() )
+                sText.AppendAscii( "\n" );
+            sText += String( pException->Message );
         }
-        if ( sText.Len() )
-            sText.AppendAscii( "\n" );
-        sText += String( pException->Message );
         m_aExceptionText.SetText(sText);
     }
 
@@ -321,9 +330,6 @@ void OSQLMessageBox::Construct(const UniString& rTitle,
     m_aTitle.SetPosSizePixel(LogicToPixel(Point(45, 6),MAP_APPFONT),
                              LogicToPixel(Size(169, 20),MAP_APPFONT));
 
-    Font  aFont = m_aTitle.GetFont();
-    aFont.SetWeight(WEIGHT_SEMIBOLD);
-    m_aTitle.SetFont(aFont);
     m_aTitle.Show();
 
     m_aMessage.SetStyle( m_aMessage.GetStyle() | WB_NOLABEL );
