@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XPrinter.idl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-27 09:04:32 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 17:41:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,7 @@
     a <type scope="com::sun::star::beans">PropertyVetoException</type> is
     thrown.</p>
  */
-interface XPrinter: com::sun::star::awt::XPrinterPropertySet
+published interface XPrinter: com::sun::star::awt::XPrinterPropertySet
 {
     //-------------------------------------------------------------------------
 
