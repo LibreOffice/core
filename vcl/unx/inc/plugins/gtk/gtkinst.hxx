@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gtkinst.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 15:55:23 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 12:10:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,7 @@ public:
     virtual ~GtkInstance();
 
     virtual SalFrame*           CreateFrame( SalFrame* pParent, ULONG nStyle );
+    virtual SalFrame*           CreateChildFrame( SystemParentData* pParent, ULONG nStyle );
     virtual SalObject*          CreateObject( SalFrame* pParent );
     virtual SalSystem*          CreateSalSystem();
 };
