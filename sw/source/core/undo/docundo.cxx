@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docundo.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:23:18 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 14:06:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,9 @@
 #endif
 #ifndef _DOCARY_HXX
 #include <docary.hxx>
+#endif
+#ifndef _UNDO_HRC
+#include <undo.hrc>
 #endif
 
 USHORT SwDoc::nUndoActions = UNDO_ACTION_COUNT;     // anzahl von Undo-Action
@@ -432,7 +435,7 @@ BOOL SwDoc::Undo( SwUndoIter& rUndoIter )
 // setzt Undoklammerung auf, liefert nUndoId der Klammerung
 
 
-USHORT SwDoc::StartUndo( USHORT nUndoId )
+USHORT SwDoc::StartUndo( USHORT nUndoId, const SwRewriter * pRewriter )
 {
     if( !bUndo )
         return 0;
@@ -440,13 +443,19 @@ USHORT SwDoc::StartUndo( USHORT nUndoId )
     if( !nUndoId )
         nUndoId = UNDO_START;
 
-    AppendUndo( new SwUndoStart( nUndoId ));
+    SwUndoStart * pUndo = new SwUndoStart( nUndoId );
+
+    if (pRewriter)
+        pUndo->SetRewriter(*pRewriter);
+
+    AppendUndo(pUndo);
+
     return nUndoId;
 }
 // schliesst Klammerung der nUndoId, nicht vom UI benutzt
 
 
-USHORT SwDoc::EndUndo(USHORT nUndoId)
+USHORT SwDoc::EndUndo(USHORT nUndoId, const SwRewriter * pRewriter)
 {
     USHORT nSize = nUndoPos;
     if( !bUndo || !nSize-- )
@@ -541,26 +550,35 @@ USHORT SwDoc::EndUndo(USHORT nUndoId)
 
 // nur zum Testen der Start/End-Verpointerung vom Start/End Undo
 #ifndef PRODUCT
-{
-    USHORT nEndCnt = 1, nCnt = pUndos->Count(), nId;
-    while( nCnt )
     {
-        if( UNDO_START == ( nId = (*pUndos)[ --nCnt ]->GetId()) )
+        USHORT nEndCnt = 1, nCnt = pUndos->Count(), nId;
+        while( nCnt )
         {
-            if( !nEndCnt )      // falls mal ein Start ohne Ende vorhanden ist
-                continue;
-            --nEndCnt;
-            if( !nEndCnt )      // hier ist der Anfang
+            if( UNDO_START == ( nId = (*pUndos)[ --nCnt ]->GetId()) )
+            {
+                if( !nEndCnt ) // falls mal ein Start ohne Ende vorhanden ist
+                    continue;
+                --nEndCnt;
+                if( !nEndCnt )      // hier ist der Anfang
+                    break;
+            }
+            else if( UNDO_END == nId )
+                ++nEndCnt;
+            else if( !nEndCnt )
                 break;
         }
-        else if( UNDO_END == nId )
-            ++nEndCnt;
-        else if( !nEndCnt )
-            break;
+        ASSERT( nCnt == pUndos->Count() - nSize,
+                "Start-Ende falsch geklammert" );
     }
-    ASSERT( nCnt == pUndos->Count() - nSize, "Start-Ende falsch geklammert" );
-}
 #endif
+
+    if (pRewriter)
+    {
+        ((SwUndoStart *) pUndo)->SetRewriter(*pRewriter);
+        pUndoEnd->SetRewriter(*pRewriter);
+    }
+    else
+        pUndoEnd->SetRewriter(((SwUndoStart *) pUndo)->GetRewriter());
 
     AppendUndo( pUndoEnd );
     return nUndoId;
@@ -569,52 +587,95 @@ USHORT SwDoc::EndUndo(USHORT nUndoId)
 // liefert die Id der letzten Undofaehigen Aktion zurueck oder 0
 // fuellt ggf. VARARR mit User-UndoIds
 
+String SwDoc::GetUndoIdsStr( String* pStr, SwUndoIds *pUndoIds) const
+{
+    String aTmpStr;
+    USHORT nId;
+
+    if (pStr != NULL)
+    {
+        GetUndoIds( pStr, pUndoIds);
+        aTmpStr = *pStr;
+    }
+    else
+        GetUndoIds( &aTmpStr, pUndoIds);
+
+    if (nId <= UNDO_END)
+        return String();
+
+    return aTmpStr;
+}
+
 
 USHORT SwDoc::GetUndoIds( String* pStr, SwUndoIds *pUndoIds) const
 {
-    USHORT nSize = nUndoPos;
+    int nSize = nUndoPos;
     if ( nSize-- == 0 )
         return 0;
 
     USHORT nId;
     SwUndo* pUndo;
+
     String sTmp;
-    if( pUndoIds )
-        pStr = &sTmp;
+    if( pUndoIds && pStr)
+        *pStr = sTmp;
 
     do {
         USHORT nUndoEndPos = USHRT_MAX;
-        if( UNDO_END == (nId = (pUndo = (*pUndos)[nSize])->GetId() ))
-        {
+        pUndo = (*pUndos)[nSize];
+        nId = pUndo->GetId();
+        if( UNDO_END == nId )
             nUndoEndPos = nSize;
-            while( nSize &&
-                   UNDO_END == (nId = ((SwUndoEnd*)pUndo)->GetUserId()) )
-            {
-                nSize--;
-                if( UNDO_END != (nId = (pUndo = (*pUndos)[nSize])->GetId() ))
-                    break;
-            }
-        }
 
-        switch( pUndo->GetId() )
+        switch( nId )
         {
         case UNDO_START:
             nId = ((SwUndoStart*)pUndo)->GetUserId();
             break;
+        case UNDO_END:
+            nId = ((SwUndoStart*)pUndo)->GetUserId();
+
+            if (UNDO_END == nId)
+            {
+                nSize--;
+                while (nSize >= 0)
+                {
+                    SwUndo * pTmpUndo = (*pUndos)[nSize];
+                    if (pTmpUndo->GetId() != UNDO_END ||
+                        ((SwUndoEnd *) pTmpUndo)->GetUserId()
+                        != UNDO_END)
+                    {
+                        nId = pTmpUndo->GetId();
+
+                        if (UNDO_END == nId)
+                            nId = ((SwUndoEnd *) pTmpUndo)->GetUserId();
+
+                        pUndo = pTmpUndo;
+
+                        break;
+                    }
+
+                    nSize--;
+                }
+            }
+            break;
         case UNDO_REDLINE:
             nId = ((SwUndoRedline*)pUndo)->GetUserId();
             break;
-        case UNDO_DRAWUNDO:
-            if( pStr )
-                *pStr = ((SwSdrUndo*)pUndo)->GetComment();
+        default:
             break;
         }
+
+        sTmp = pUndo->GetComment();
+
+        if( pStr )
+            *pStr = sTmp;
 
         if( !nSize && UNDO_END == nId )
             nId = 0;
         else if( pUndoIds )
         {
-            SwUndoIdAndName* pNew = new SwUndoIdAndName( nId, pStr );
+            SwUndoIdAndName* pNew = new SwUndoIdAndName( nId, &sTmp );
             pUndoIds->Insert( pNew, pUndoIds->Count() );
 
             if( USHRT_MAX != nUndoEndPos )
@@ -764,6 +825,26 @@ BOOL SwDoc::Redo( SwUndoIter& rUndoIter )
 // liefert die Id der letzten Redofaehigen Aktion zurueck oder 0
 // fuellt ggf. VARARR mit User-RedoIds
 
+String SwDoc::GetRedoIdsStr( String* pStr, SwUndoIds *pRedoIds ) const
+{
+    String aTmpStr;
+    USHORT nId;
+
+    if (pStr != NULL)
+    {
+        nId = GetRedoIds( pStr, pRedoIds );
+        aTmpStr = *pStr;
+    }
+    else
+        nId = GetRedoIds( &aTmpStr, pRedoIds );
+
+
+    if (nId <= UNDO_END)
+        return String();
+
+    return aTmpStr;
+}
+
 
 USHORT SwDoc::GetRedoIds( String* pStr, SwUndoIds *pRedoIds ) const
 {
@@ -773,8 +854,8 @@ USHORT SwDoc::GetRedoIds( String* pStr, SwUndoIds *pRedoIds ) const
 
     SwUndo* pUndo;
     String sTmp;
-    if( pRedoIds )
-        pStr = &sTmp;
+    if( pRedoIds && pStr)
+        *pStr = sTmp;
 
     do {
 
@@ -783,13 +864,16 @@ USHORT SwDoc::GetRedoIds( String* pStr, SwUndoIds *pRedoIds ) const
         if( UNDO_START == ( nId = ( pUndo = (*pUndos)[nSize] )->GetId() ) )
             nUndoSttPos = nSize;
 
+        sTmp = pUndo->GetComment();
+
         if( USHRT_MAX == nUndoSttPos ||  // no UndoStart
             UNDO_START != ( nId = ((SwUndoStart*)pUndo)->GetUserId() ) )
         {
             if( UNDO_REDLINE == nId )
                 nId = ((SwUndoRedline*)pUndo)->GetUserId();
-            else if( pStr && UNDO_DRAWUNDO == nId )
-                *pStr = ((SwSdrUndo*)pUndo)->GetComment();
+
+            if( pStr )
+                *pStr = sTmp;
         }
         else
         {
@@ -805,17 +889,20 @@ USHORT SwDoc::GetRedoIds( String* pStr, SwUndoIds *pRedoIds ) const
 
             if( !nSize )
                 nId = 0;
-            else if( pStr && UNDO_DRAWUNDO == nId )
-                *pStr = ((SwSdrUndo*)pUndo)->GetComment();
             else if( UNDO_REDLINE == nId )
                 nId = ((SwUndoRedline*)pUndo)->GetUserId();
+
+            sTmp = pUndo->GetComment();
+
+            if( pStr )
+                *pStr = sTmp;
 
             nSize = nUndoSttPos;
         }
 
         if( pRedoIds )
         {
-            SwUndoIdAndName* pNew = new SwUndoIdAndName( nId, pStr );
+            SwUndoIdAndName* pNew = new SwUndoIdAndName( nId, &sTmp );
             pRedoIds->Insert( pNew, pRedoIds->Count() );
 
             if( USHRT_MAX != nUndoSttPos )
@@ -877,6 +964,24 @@ BOOL SwDoc::Repeat( SwUndoIter& rUndoIter, USHORT nRepeatCnt )
 // liefert die Id der letzten Repeatfaehigen Aktion zurueck oder 0
 // fuellt ggf. VARARR mit User-RedoIds
 
+String SwDoc::GetRepeatIdsStr(String* pStr, SwUndoIds *pRepeatIds) const
+{
+    String aTmpStr;
+    USHORT nId;
+
+    if ( pStr != NULL)
+    {
+        nId = GetRepeatIds(pStr, pRepeatIds);
+        aTmpStr = *pStr;
+    }
+    else
+        nId = GetRepeatIds(&aTmpStr, pRepeatIds);
+
+    if (nId <= UNDO_END)
+        return String();
+
+    return aTmpStr;
+}
 
 USHORT SwDoc::GetRepeatIds(String* pStr, SwUndoIds *pRepeatIds) const
 {
