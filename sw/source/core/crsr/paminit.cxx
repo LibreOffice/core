@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paminit.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 15:25:52 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:16:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -166,3 +165,27 @@ void _InitPam()
 #endif
 
 
+SwWhichPara SwuiGetfnParaCurr() //CHINA001
+{
+    return fnParaCurr;
+}
+SwPosPara SwuiGetfnParaStart() //CHINA001
+{
+     return  fnParaStart;
+}
+SwWhichTable SwuiGetfnTablePrev() //CHINA001
+{
+    return fnTablePrev;
+}
+SwPosTable SwuiGetfnTableStart() //CHINA001
+{
+    return fnTableStart;
+}
+SwWhichTable SwuiGetfnTableCurr() //CHINA001
+{
+    return fnTableCurr;
+}
+SwPosTable SwuiGetfnTableEnd() //CHINA001
+{
+    return fnTableEnd;
+}
