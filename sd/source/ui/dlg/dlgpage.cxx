@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgpage.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 20:13:35 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 15:43:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,9 +64,9 @@
 #define ITEMID_HATCH_LIST       SID_HATCH_LIST
 #define ITEMID_BITMAP_LIST      SID_BITMAP_LIST
 #include <svtools/intitem.hxx> //add CHINA001
-#ifndef _SVX_PAGE_HXX
-#include <svx/page.hxx>
-#endif
+//CHINA001 #ifndef _SVX_PAGE_HXX
+//CHINA001 #include <svx/page.hxx>
+//CHINA001 #endif
 #ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>
 #endif
@@ -84,6 +84,11 @@
 
 #include "DrawDocShell.hxx"
 
+#ifndef _AEITEM_HXX //CHINA001
+#include <svtools/aeitem.hxx> //CHINA001
+#endif //CHINA001
+#include <svx/flagsdef.hxx> //CHINA001
+#include <svx/svxenum.hxx> //CHINA001
 
 /*************************************************************************
 |*
@@ -112,8 +117,8 @@ SdPageDlg::SdPageDlg( SfxObjectShell* pDocSh, Window* pParent, const SfxItemSet*
 
     FreeResource();
 
-    AddTabPage( RID_SVXPAGE_PAGE, SvxPageDescPage::Create, 0);
-    AddTabPage( RID_SVXPAGE_AREA);//CHINA001 AddTabPage( RID_SVXPAGE_AREA, SvxAreaTabPage::Create, 0 );
+    AddTabPage( RID_SVXPAGE_PAGE); //CHINA001 AddTabPage( RID_SVXPAGE_PAGE, SvxPageDescPage::Create, 0);
+    AddTabPage( RID_SVXPAGE_AREA); //CHINA001 AddTabPage( RID_SVXPAGE_AREA, SvxAreaTabPage::Create, 0 );
 
 
     nDlgType = 1; // Vorlagen-Dialog
@@ -138,11 +143,16 @@ SdPageDlg::SdPageDlg( SfxObjectShell* pDocSh, Window* pParent, const SfxItemSet*
 
 void SdPageDlg::PageCreated(USHORT nId, SfxTabPage& rPage)
 {
+    SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
     switch(nId)
     {
     case RID_SVXPAGE_PAGE:
-        ( (SvxPageDescPage&) rPage).SetMode(SVX_PAGE_MODE_PRESENTATION);
-        ( (SvxPageDescPage&) rPage).SetPaperFormatRanges( SVX_PAPER_A0, SVX_PAPER_E );
+        //CHINA001 ( (SvxPageDescPage&) rPage).SetMode(SVX_PAGE_MODE_PRESENTATION);
+        //CHINA001 ( (SvxPageDescPage&) rPage).SetPaperFormatRanges( SVX_PAPER_A0, SVX_PAPER_E );
+        aSet.Put (SfxAllEnumItem((const USHORT)SID_ENUM_PAGE_MODE, SVX_PAGE_MODE_PRESENTATION)); //CHINA001
+        aSet.Put (SfxAllEnumItem((const USHORT)SID_PAPER_START, SVX_PAPER_A0)); //CHINA001
+        aSet.Put (SfxAllEnumItem((const USHORT)SID_PAPER_END, SVX_PAPER_E)); //CHINA001
+        rPage.PageCreated(aSet); //CHINA001
         break;
     case RID_SVXPAGE_AREA:
 //CHINA001      ( (SvxAreaTabPage&) rPage ).SetColorTable( pColorTab );
@@ -157,7 +167,6 @@ void SdPageDlg::PageCreated(USHORT nId, SfxTabPage& rPage)
 //CHINA001      ( (SvxAreaTabPage&) rPage ).SetBmpChgd( &nBitmapListState );
 //CHINA001      ( (SvxAreaTabPage&) rPage ).SetColorChgd( &nColorTableState );
 //CHINA001      ( (SvxAreaTabPage&) rPage ).Construct();
-            SfxAllItemSet aSet(*(GetRefreshedSet()->GetPool()));
             aSet.Put (SvxColorTableItem(pColorTab,SID_COLOR_TABLE));
             aSet.Put (SvxGradientListItem(pGradientList,SID_GRADIENT_LIST));
             aSet.Put (SvxHatchListItem(pHatchingList,SID_HATCH_LIST));
