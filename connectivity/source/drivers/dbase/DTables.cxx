@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTables.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 08:43:41 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 15:25:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,7 @@
 #endif
 
 using namespace ::comphelper;
+using namespace connectivity;
 using namespace connectivity::dbase;
 using namespace connectivity::file;
 using namespace ::com::sun::star::uno;
@@ -107,13 +108,13 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
 namespace starutil      = ::com::sun::star::util;
 
-Reference< XNamed > ODbaseTables::createObject(const ::rtl::OUString& _rName)
+sdbcx::ObjectType ODbaseTables::createObject(const ::rtl::OUString& _rName)
 {
     ::rtl::OUString aName,aSchema;
     ODbaseTable* pRet = new ODbaseTable(this,(ODbaseConnection*)static_cast<OFileCatalog&>(m_rParent).getConnection(),
                                         _rName,::rtl::OUString::createFromAscii("TABLE"));
 
-    Reference< XNamed > xRet = pRet;
+    sdbcx::ObjectType xRet = pRet;
     pRet->construct();
     return xRet;
 }
@@ -185,13 +186,6 @@ Any SAL_CALL ODbaseTables::queryInterface( const Type & rType ) throw(RuntimeExc
 {
     typedef sdbcx::OCollection OTables_BASE;
     return OTables_BASE::queryInterface(rType);
-}
-// -----------------------------------------------------------------------------
-Reference< XNamed > ODbaseTables::cloneObject(const Reference< XPropertySet >& _xDescriptor)
-{
-    Reference< XNamed > xName(_xDescriptor,UNO_QUERY);
-    OSL_ENSURE(xName.is(),"Must be a XName interface here !");
-    return xName.is() ? createObject(xName->getName()) : Reference< XNamed >();
 }
 // -----------------------------------------------------------------------------
 
