@@ -2,9 +2,9 @@
  *
  *  $RCSfile: staticdbtools_s.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 17:18:16 $
+ *  last change: $Author: rt $ $Date: 2004-09-09 10:03:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,9 +223,15 @@ namespace connectivity
                 ::dbtools::SQLExceptionInfo* _pErrorInfo = NULL
             )   SAL_THROW( ( ) );
 
+        // ------------------------------------------------
         virtual sal_Bool isDataSourcePropertyEnabled(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _xProp
                                         ,const ::rtl::OUString& _sProperty,
                                         sal_Bool _bDefault = sal_False) const;
+
+        // ------------------------------------------------
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >
+            getComponentContextConnection( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxComponent );
+
         // disambiguate IReference
         // ------------------------------------------------
         virtual oslInterlockedCount SAL_CALL acquire();
