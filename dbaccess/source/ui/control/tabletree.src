@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabletree.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2001-11-16 22:30:20 $
+ *  last change: $Author: pb $ $Date: 2001-11-29 11:24:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,7 +199,7 @@ String STR_NOREGISTEREDDRIVER
 
 String STR_COULDNOTCONNECT
 {
-    Text = "Es konnte keine Verbindung für die URL #connurl# aufgebaut werden.";
+    Text = "Es konnte keine Verbindung für den URL #connurl# aufgebaut werden.";
     Text [ english ] = "A connection could not be established for URL #connurl#.";
     Text [ english_us ] = "A connection could not be established for URL #connurl#.";
     Text[ portuguese ] = "Foi impossível estabelecer ligação para o URL #connurl#.";
@@ -224,7 +224,7 @@ String STR_COULDNOTCONNECT
 };
 String STR_COULDNOTCONNECT_PLEASECHECK
 {
-    Text = "Bitte ueberpruefen Sie die aktuellen Einstellungen, zum Beispiel hinsichtlich Benutzername und Passwort.";
+    Text = "Bitte überprüfen Sie die aktuellen Einstellungen, zum Beispiel hinsichtlich Benutzername und Passwort.";
     Text [ english ] = "Please check the current settings, e.g. with respect to user name and password.";
     Text [ english_us ] = "Please check the current settings, e.g. regarding user name and password.";
     Text[ portuguese ] = "Verifique as definições actuais, por exemplo, nome de utilizador e senha.";
@@ -351,6 +351,9 @@ String STR_ALL_TABLES_AND_VIEWS
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.19  2001/11/16 22:30:20  vg
+ *  Merge SRC638: 16.11.01 - 22:30:53
+ *
  *  Revision 1.18  2001/08/29 13:52:35  kz
  *  Merge SRC638: 29.08.01 - 15:51:47
  *
