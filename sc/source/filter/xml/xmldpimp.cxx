@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldpimp.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 12:29:01 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 14:08:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,25 @@
 #include <xmloff/nmspmap.hxx>
 #ifndef _XMLOFF_XMLTOKEN_HXX
 #include <xmloff/xmltoken.hxx>
+#endif
+#ifndef _XMLOFF_XMLNMSPE_HXX
+#include <xmloff/xmlnmspe.hxx>
+#endif
+
+#ifndef _COM_SUN_STAR_SHEET_DATAPILOTFIELDREFERENCETYPE_HPP_
+#include <com/sun/star/sheet/DataPilotFieldReferenceType.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SHEET_DATAPILOTFIELDREFERENCEITEMTYPE_HPP_
+#include <com/sun/star/sheet/DataPilotFieldReferenceItemType.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SHEET_DATAPILOTFIELDSHOWITEMSMODE_HPP_
+#include <com/sun/star/sheet/DataPilotFieldShowItemsMode.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SHEET_DATAPILOTFIELDSORTMODE_HPP_
+#include <com/sun/star/sheet/DataPilotFieldSortMode.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SHEET_DATAPILOTFIELDLAYOUTMODE_HPP_
+#include <com/sun/star/sheet/DataPilotFieldLayoutMode.hpp>
 #endif
 
 //#include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
@@ -780,6 +799,9 @@ SvXMLImportContext *ScXMLDataPilotFieldContext::CreateChildContext( USHORT nPref
         case XML_TOK_DATA_PILOT_FIELD_ELEM_DATA_PILOT_LEVEL :
             pContext = new ScXMLDataPilotLevelContext(GetScImport(), nPrefix, rLName, xAttrList, this);
         break;
+        case XML_TOK_DATA_PILOT_FIELD_ELEM_DATA_PILOT_REFERENCE :
+            pContext = new ScXMLDataPilotFieldReferenceContext(GetScImport(), nPrefix, rLName, xAttrList, this);
+        break;
     }
 
     if( !pContext )
@@ -802,6 +824,73 @@ void ScXMLDataPilotFieldContext::EndElement()
         }
         pDataPilotTable->AddDimension(pDim);
     }
+}
+
+ScXMLDataPilotFieldReferenceContext::ScXMLDataPilotFieldReferenceContext( ScXMLImport& rImport, USHORT nPrfx,
+                        const ::rtl::OUString& rLName,
+                        const uno::Reference<xml::sax::XAttributeList>& xAttrList,
+                        ScXMLDataPilotFieldContext* pDataPilotField) :
+    SvXMLImportContext( rImport, nPrfx, rLName )
+{
+    sheet::DataPilotFieldReference aReference;
+
+    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+    const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetDataPilotLevelAttrTokenMap();
+    for( sal_Int16 i=0; i < nAttrCount; i++ )
+    {
+        rtl::OUString sAttrName(xAttrList->getNameByIndex( i ));
+        rtl::OUString aLocalName;
+        USHORT nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
+                                            sAttrName, &aLocalName );
+        rtl::OUString sValue(xAttrList->getValueByIndex( i ));
+
+        if ( nPrefix == XML_NAMESPACE_TABLE )
+        {
+            if (IsXMLToken(aLocalName, XML_TYPE))
+            {
+                if (IsXMLToken(sValue, XML_NONE))
+                    aReference.ReferenceType = sheet::DataPilotFieldReferenceType::NONE;
+                else if (IsXMLToken(sValue, XML_MEMBER_DIFFERENCE))
+                    aReference.ReferenceType = sheet::DataPilotFieldReferenceType::ITEM_DIFFERENCE;
+                else if (IsXMLToken(sValue, XML_MEMBER_PERCENTAGE))
+                    aReference.ReferenceType = sheet::DataPilotFieldReferenceType::ITEM_PERCENTAGE;
+                else if (IsXMLToken(sValue, XML_MEMBER_PERCENTAGE_DIFFERENCE))
+                    aReference.ReferenceType = sheet::DataPilotFieldReferenceType::ITEM_PERCENTAGE_DIFFERENCE;
+                else if (IsXMLToken(sValue, XML_RUNNING_TOTAL))
+                    aReference.ReferenceType = sheet::DataPilotFieldReferenceType::RUNNING_TOTAL;
+                else if (IsXMLToken(sValue, XML_ROW_PERCENTAGE))
+                    aReference.ReferenceType = sheet::DataPilotFieldReferenceType::ROW_PERCENTAGE;
+                else if (IsXMLToken(sValue, XML_COLUMN_PERCENTAGE))
+                    aReference.ReferenceType = sheet::DataPilotFieldReferenceType::COLUMN_PERCENTAGE;
+                else if (IsXMLToken(sValue, XML_TOTAL_PERCENTAGE))
+                    aReference.ReferenceType = sheet::DataPilotFieldReferenceType::TOTAL_PERCENTAGE;
+                else if (IsXMLToken(sValue, XML_INDEX))
+                    aReference.ReferenceType = sheet::DataPilotFieldReferenceType::INDEX;
+            }
+            else if (IsXMLToken(aLocalName, XML_FIELD_NAME))
+            {
+                aReference.ReferenceField = sValue;
+            }
+            else if (IsXMLToken(aLocalName, XML_MEMBER_TYPE))
+            {
+                if (IsXMLToken(sValue, XML_NAMED))
+                    aReference.ReferenceItemType = sheet::DataPilotFieldReferenceItemType::NAMED;
+                else if (IsXMLToken(sValue, XML_PREVIOUS))
+                    aReference.ReferenceItemType = sheet::DataPilotFieldReferenceItemType::PREVIOUS;
+                else if (IsXMLToken(sValue, XML_NEXT))
+                    aReference.ReferenceItemType = sheet::DataPilotFieldReferenceItemType::NEXT;
+            }
+            else if (IsXMLToken(aLocalName, XML_MEMBER_NAME))
+            {
+                aReference.ReferenceItemName = sValue;
+            }
+        }
+    }
+    pDataPilotField->SetFieldReference(aReference);
+}
+
+ScXMLDataPilotFieldReferenceContext::~ScXMLDataPilotFieldReferenceContext()
+{
 }
 
 ScXMLDataPilotLevelContext::ScXMLDataPilotLevelContext( ScXMLImport& rImport,
@@ -854,6 +943,15 @@ SvXMLImportContext *ScXMLDataPilotLevelContext::CreateChildContext( USHORT nPref
         case XML_TOK_DATA_PILOT_LEVEL_ELEM_DATA_PILOT_MEMBERS :
             pContext = new ScXMLDataPilotMembersContext(GetScImport(), nPrefix, rLName, xAttrList, pDataPilotField);
         break;
+        case XML_TOK_DATA_PILOT_FIELD_ELEM_DATA_PILOT_DISPLAY_INFO :
+            pContext = new ScXMLDataPilotDisplayInfoContext(GetScImport(), nPrefix, rLName, xAttrList, pDataPilotField);
+        break;
+        case XML_TOK_DATA_PILOT_FIELD_ELEM_DATA_PILOT_SORT_INFO :
+            pContext = new ScXMLDataPilotSortInfoContext(GetScImport(), nPrefix, rLName, xAttrList, pDataPilotField);
+        break;
+        case XML_TOK_DATA_PILOT_FIELD_ELEM_DATA_PILOT_LAYOUT_INFO :
+            pContext = new ScXMLDataPilotLayoutInfoContext(GetScImport(), nPrefix, rLName, xAttrList, pDataPilotField);
+        break;
     }
 
     if( !pContext )
@@ -863,6 +961,153 @@ SvXMLImportContext *ScXMLDataPilotLevelContext::CreateChildContext( USHORT nPref
 }
 
 void ScXMLDataPilotLevelContext::EndElement()
+{
+}
+
+ScXMLDataPilotDisplayInfoContext::ScXMLDataPilotDisplayInfoContext( ScXMLImport& rImport, USHORT nPrfx,
+                        const ::rtl::OUString& rLName,
+                        const ::com::sun::star::uno::Reference<
+                        ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
+                        ScXMLDataPilotFieldContext* pDataPilotField) :
+    SvXMLImportContext( rImport, nPrfx, rLName )
+{
+    sheet::DataPilotFieldAutoShowInfo aInfo;
+
+    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+    const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetDataPilotLevelAttrTokenMap();
+    for( sal_Int16 i=0; i < nAttrCount; i++ )
+    {
+        rtl::OUString sAttrName(xAttrList->getNameByIndex( i ));
+        rtl::OUString aLocalName;
+        USHORT nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
+                                            sAttrName, &aLocalName );
+        rtl::OUString sValue(xAttrList->getValueByIndex( i ));
+
+        if ( nPrefix == XML_NAMESPACE_TABLE )
+        {
+            if (IsXMLToken(aLocalName, XML_ENABLED))
+            {
+                if (IsXMLToken(sValue, XML_TRUE))
+                    aInfo.IsEnabled = sal_True;
+                else
+                    aInfo.IsEnabled = sal_False;
+            }
+            else if (IsXMLToken(aLocalName, XML_DISPLAY_MEMBER_MODE))
+            {
+                if (IsXMLToken(sValue, XML_FROM_TOP))
+                    aInfo.ShowItemsMode = sheet::DataPilotFieldShowItemsMode::FROM_TOP;
+                else if (IsXMLToken(sValue, XML_FROM_BOTTOM))
+                    aInfo.ShowItemsMode = sheet::DataPilotFieldShowItemsMode::FROM_BOTTOM;
+            }
+            else if (IsXMLToken(aLocalName, XML_MEMBER_COUNT))
+            {
+                aInfo.ItemCount = sValue.toInt32();
+            }
+            else if (IsXMLToken(aLocalName, XML_DATA_FIELD))
+            {
+                aInfo.DataField = sValue;
+            }
+        }
+    }
+    pDataPilotField->SetAutoShowInfo(aInfo);
+}
+
+ScXMLDataPilotDisplayInfoContext::~ScXMLDataPilotDisplayInfoContext()
+{
+}
+
+ScXMLDataPilotSortInfoContext::ScXMLDataPilotSortInfoContext( ScXMLImport& rImport, USHORT nPrfx,
+                        const ::rtl::OUString& rLName,
+                        const ::com::sun::star::uno::Reference<
+                        ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
+                        ScXMLDataPilotFieldContext* pDataPilotField) :
+    SvXMLImportContext( rImport, nPrfx, rLName )
+{
+    sheet::DataPilotFieldSortInfo aInfo;
+
+    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+    const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetDataPilotLevelAttrTokenMap();
+    for( sal_Int16 i=0; i < nAttrCount; i++ )
+    {
+        rtl::OUString sAttrName(xAttrList->getNameByIndex( i ));
+        rtl::OUString aLocalName;
+        USHORT nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
+                                            sAttrName, &aLocalName );
+        rtl::OUString sValue(xAttrList->getValueByIndex( i ));
+
+        if ( nPrefix == XML_NAMESPACE_TABLE )
+        {
+            if (IsXMLToken(aLocalName, XML_ORDER))
+            {
+                if (IsXMLToken(sValue, XML_ASCENDING))
+                    aInfo.IsAscending = sal_True;
+                else if (IsXMLToken(sValue, XML_DESCENDING))
+                    aInfo.IsAscending = sal_False;
+            }
+            else if (IsXMLToken(aLocalName, XML_SORT_MODE))
+            {
+                if (IsXMLToken(sValue, XML_NONE))
+                    aInfo.Mode = sheet::DataPilotFieldSortMode::NONE;
+                else if (IsXMLToken(sValue, XML_MANUAL))
+                    aInfo.Mode = sheet::DataPilotFieldSortMode::MANUAL;
+                else if (IsXMLToken(sValue, XML_NAME))
+                    aInfo.Mode = sheet::DataPilotFieldSortMode::NAME;
+                else if (IsXMLToken(sValue, XML_DATA))
+                    aInfo.Mode = sheet::DataPilotFieldSortMode::DATA;
+            }
+            else if (IsXMLToken(aLocalName, XML_DATA_FIELD))
+                aInfo.Field = sValue;
+        }
+    }
+    pDataPilotField->SetSortInfo(aInfo);
+}
+
+ScXMLDataPilotSortInfoContext::~ScXMLDataPilotSortInfoContext()
+{
+}
+
+ScXMLDataPilotLayoutInfoContext::ScXMLDataPilotLayoutInfoContext( ScXMLImport& rImport, USHORT nPrfx,
+                        const ::rtl::OUString& rLName,
+                        const ::com::sun::star::uno::Reference<
+                        ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
+                        ScXMLDataPilotFieldContext* pDataPilotField) :
+    SvXMLImportContext( rImport, nPrfx, rLName )
+{
+    sheet::DataPilotFieldLayoutInfo aInfo;
+
+    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+    const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetDataPilotLevelAttrTokenMap();
+    for( sal_Int16 i=0; i < nAttrCount; i++ )
+    {
+        rtl::OUString sAttrName(xAttrList->getNameByIndex( i ));
+        rtl::OUString aLocalName;
+        USHORT nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
+                                            sAttrName, &aLocalName );
+        rtl::OUString sValue(xAttrList->getValueByIndex( i ));
+
+        if ( nPrefix == XML_NAMESPACE_TABLE )
+        {
+            if (IsXMLToken(aLocalName, XML_ADD_EMPTY_LINE))
+            {
+                if (IsXMLToken(sValue, XML_TRUE))
+                    aInfo.AddEmptyLines = sal_True;
+                else
+                    aInfo.AddEmptyLines = sal_False;
+            }
+            else if (IsXMLToken(aLocalName, XML_LAYOUT_MODE))
+            {
+                if (IsXMLToken(sValue, XML_TABULAR_LAYOUT))
+                    aInfo.LayoutMode = sheet::DataPilotFieldLayoutMode::TABULAR_LAYOUT;
+                else if (IsXMLToken(sValue, XML_OUTLINE_SUBTOTALS_TOP))
+                    aInfo.LayoutMode = sheet::DataPilotFieldLayoutMode::OUTLINE_SUBTOTALS_TOP;
+                else if (IsXMLToken(sValue, XML_OUTLINE_SUBTOTALS_BOTTOM))
+                    aInfo.LayoutMode = sheet::DataPilotFieldLayoutMode::OUTLINE_SUBTOTALS_BOTTOM;
+            }
+        }
+    }
+    pDataPilotField->SetLayoutInfo(aInfo);}
+
+ScXMLDataPilotLayoutInfoContext::~ScXMLDataPilotLayoutInfoContext()
 {
 }
 
