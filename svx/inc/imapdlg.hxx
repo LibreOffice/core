@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imapdlg.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cl $ $Date: 2002-07-11 10:56:24 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 14:47:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,10 @@
 #include <vcl/status.hxx>
 #endif
 
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
 
 #ifndef _GOMISC_HXX
 class ImageMap;
@@ -114,7 +118,7 @@ class ImageMap;
 class Graphic;
 class TargetList;
 
-class SvxIMapDlgChildWindow : public SfxChildWindow
+class SVX_DLLPUBLIC SvxIMapDlgChildWindow : public SfxChildWindow
 {
  public:
 
@@ -163,7 +167,7 @@ public:
 
 class IMapOwnData;
 
-class SvxIMapDlg : public SfxModelessDialog // SfxFloatingWindow
+class SVX_DLLPUBLIC SvxIMapDlg : public SfxModelessDialog // SfxFloatingWindow
 {
     friend class IMapOwnData;
     friend class IMapWindow;
