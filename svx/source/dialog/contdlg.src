@@ -2,9 +2,9 @@
  *
  *  $RCSfile: contdlg.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 21:10:38 $
+ *  last change: $Author: kz $ $Date: 2001-07-17 20:34:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text[ russian ] = "Ïğèìåíèòü";
                 Text[ polish ] = "Przypisz";
                 Text[ japanese ] = "“K—p";
-                Text[ chinese_traditional ] = "¨Ï¥Î";
+                Text[ chinese_traditional ] = "«ü©w";
                 Text[ arabic ] = "ÊÚííä";
                 Text[ greek ] = "Áíôéóôïß÷éóç";
                 Text[ korean ] = "Àû¿ë";
@@ -344,11 +344,11 @@ FloatingWindow RID_SVXDLG_CONTOUR
                     ImageBitmap = Bitmap { File = "sc10126.bmp" ; };
                     MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
                 };
-                Text[ chinese_simplified ] = "±à¼­µã";
+                Text[ chinese_simplified ] = "±à¼­½Óµã";
                 Text[ russian ] = "Ïğàâêà òî÷åê";
                 Text[ polish ] = "Edytuj punkty";
                 Text[ japanese ] = "§Œä“_‚Ì•ÒW";
-                Text[ chinese_traditional ] = "­×§ïÂI";
+                Text[ chinese_traditional ] = "½s¿è±µÂI";
                 Text[ arabic ] = "ÊÍÑíÑ ÇáäŞÇØ";
                 Text[ greek ] = "Åğåîåñãáóßá óçìåßùí";
                 Text[ korean ] = "Á¡ ÆíÁı";
@@ -380,11 +380,11 @@ FloatingWindow RID_SVXDLG_CONTOUR
                     ImageBitmap = Bitmap { File = "sc10121.bmp" ; };
                     MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
                 };
-                Text[ chinese_simplified ] = "ÒÆ¶¯µã";
+                Text[ chinese_simplified ] = "ÒÆ¶¯½Óµã";
                 Text[ russian ] = "Ïåğåìåñòèòü òî÷êè";
                 Text[ polish ] = "Przesuñ punkty";
                 Text[ japanese ] = "§Œä“_‚ÌˆÚ“®";
-                Text[ chinese_traditional ] = "²¾°ÊÂI";
+                Text[ chinese_traditional ] = "²¾°Ê±µÂI";
                 Text[ arabic ] = "ÅÒÇÍÉ ÇáäŞÇØ";
                 Text[ greek ] = "Ìåôáêßíçóç óçìåßùí";
                 Text[ korean ] = "Á¡ ÀÌµ¿";
@@ -419,11 +419,11 @@ FloatingWindow RID_SVXDLG_CONTOUR
                     MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
                 };
                 /* ### ACHTUNG: Neuer Text in Resource? Neue Punkte einfügen oder anhängen : Neue Punkte einf³gen oder anhõngen */
-                Text[ chinese_simplified ] = "²åÈëµã";
+                Text[ chinese_simplified ] = "²åÈë½Óµã";
                 Text[ russian ] = "Âñòàâèòü òî÷êè";
                 Text[ polish ] = "Wstaw punkty";
                 Text[ japanese ] = "§Œä“_‚Ì‘}“ü";
-                Text[ chinese_traditional ] = "´¡¤JÂI";
+                Text[ chinese_traditional ] = "´¡¤J±µÂI";
                 Text[ arabic ] = "ÅÏÑÇÌ äŞÇØ";
                 Text[ greek ] = "ĞñïóèŞêç óçìåßùí";
                 Text[ korean ] = "Á¡ »ğÀÔ";
@@ -456,11 +456,11 @@ FloatingWindow RID_SVXDLG_CONTOUR
                     MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
                 };
                 /* ### ACHTUNG: Neuer Text in Resource? Markierte Punkte löschen : Markierte Punkte l÷schen */
-                Text[ chinese_simplified ] = "É¾³ıµã";
+                Text[ chinese_simplified ] = "É¾³ı½Óµã";
                 Text[ russian ] = "Óäàëèòü òî÷êè";
                 Text[ polish ] = "Usuñ punkty";
                 Text[ japanese ] = "§Œä“_‚Ìíœ";
-                Text[ chinese_traditional ] = "§R°£ÂI";
+                Text[ chinese_traditional ] = "§R°£±µÂI";
                 Text[ arabic ] = "ÍĞİ äŞÇØ";
                 Text[ greek ] = "ÄéáãñáöŞ óçìåßùí";
                 Text[ korean ] = "Á¡ »èÁ¦";
@@ -818,6 +818,7 @@ String STR_CONTOURDLG_LINKED
     Text[ catalan ] = "Esta imagen está vinculada al documento. ¿Desea deshacer el vínculo para editar la imagen?";
 };
 /******************************************************************************/
+
 
 
 
