@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldui.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2001-04-26 20:17:48 $
+ *  last change: $Author: hjs $ $Date: 2001-05-04 21:03:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,7 @@ String STR_FLD_EDIT_DLG
     Text[ korean ] = "ÆÄÀÏ ÆíÁý";
     Text[ turkish ] = "Alan öðesi düzenle";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Editar campos";
 };
 /*--------------------------------------------------------------------
     Beschreibung: Strings fuer die Types
@@ -122,6 +123,7 @@ String STR_DATEFLD
     TEXT[ korean ] = "³¯Â¥";
     TEXT[ turkish ] = "Tarih";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Fecha";
 };
 String STR_TIMEFLD
 {
@@ -148,6 +150,7 @@ String STR_TIMEFLD
     TEXT[ korean ] = "½Ã°£";
     TEXT[ turkish ] = "Saat";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Hora";
 };
 String STR_FILENAMEFLD
 {
@@ -174,6 +177,7 @@ String STR_FILENAMEFLD
     TEXT[ korean ] = "ÆÄÀÏ ÀÌ¸§";
     TEXT[ turkish ] = "Dosya adý";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Nombre del archivo";
 };
 String STR_DBNAMEFLD
 {
@@ -200,6 +204,7 @@ String STR_DBNAMEFLD
     TEXT[ korean ] = "µ¥ÀÌÅÍº£ÀÌ½º ÀÌ¸§";
     TEXT[ turkish ] = "Veritabaný adý";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Nombre de base de datos";
 };
 String STR_CHAPTERFLD
 {
@@ -226,6 +231,7 @@ String STR_CHAPTERFLD
     TEXT[ greek ] = "ÊåöÜëáéï";
     TEXT[ korean ] = "Àå";
     TEXT[ turkish ] = "Bölüm";
+    TEXT[ catalan ] = "Capítulo";
 };
 String STR_PAGENUMBERFLD
 {
@@ -252,6 +258,7 @@ String STR_PAGENUMBERFLD
     TEXT[ korean ] = "ÂÊ ¹øÈ£";
     TEXT[ turkish ] = "Sayfa numarasý";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Número de página";
 };
 String STR_DOCSTATFLD
 {
@@ -278,6 +285,7 @@ String STR_DOCSTATFLD
     TEXT[ korean ] = "Åë°è";
     TEXT[ turkish ] = "Ýstatistik";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Estadística";
 };
 String STR_AUTHORFLD
 {
@@ -302,6 +310,7 @@ String STR_AUTHORFLD
     Text[ korean ] = "ÀÛ¼ºÀÚ";
     Text[ turkish ] = "Yazan";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Usuario";
 };
 String STR_TEMPLNAMEFLD
 {
@@ -328,6 +337,7 @@ String STR_TEMPLNAMEFLD
     TEXT[ korean ] = "¹®¼­  ¼­½ÄÆÄÀÏ";
     TEXT[ turkish ] = "Belge þablonu";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Plantilla";
 };
 String STR_EXTUSERFLD
 {
@@ -354,6 +364,7 @@ String STR_EXTUSERFLD
     TEXT[ korean ] = "º¸³½ »ç¶÷";
     TEXT[ turkish ] = "Gönderen";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Remitente";
 };
  //
  // Bereich Funktionen
@@ -383,6 +394,7 @@ String STR_SETFLD
     TEXT[ korean ] = "º¯¼ö ¼³Á¤";
     TEXT[ turkish ] = "Deðiþken tanýmla";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Establecer variable";
 };
 String STR_GETFLD
 {
@@ -409,6 +421,7 @@ String STR_GETFLD
     TEXT[ korean ] = "º¯¼ö º¸ÀÌ±â";
     TEXT[ turkish ] = "Deðiþken görüntüle";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Mostrar variable";
 };
 String STR_FORMELFLD
 {
@@ -435,6 +448,7 @@ String STR_FORMELFLD
     TEXT[ korean ] = "¼ö½Ä »ðÀÔ";
     TEXT[ turkish ] = "Formül ekle";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Insertar fórmula";
 };
 String STR_INPUTFLD
 {
@@ -461,6 +475,7 @@ String STR_INPUTFLD
     TEXT[ korean ] = "ÀÔ·ÂÇÊµå";
     TEXT[ turkish ] = "Giriþ alaný";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Campo de entrada";
 };
 String STR_SETINPUTFLD
 {
@@ -490,6 +505,7 @@ String STR_SETINPUTFLD
     Text[ korean ] = "ÀÔ·ÂÇÊµå(º¯¼ö)";
     Text[ turkish ] = "Giriþ alaný (deðiþken)";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Campo de entrada (variable)";
 };
 String STR_USRINPUTFLD
 {
@@ -514,6 +530,7 @@ String STR_USRINPUTFLD
     Text[ korean ] = "ÀÔ·ÂÇÊµå (»ç¿ëÀÚ)";
     Text[ turkish ] = "Giriþ alaný (Kullanýcý)";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Campo de entrada (Usuario)";
 };
 String STR_CONDTXTFLD
 {
@@ -540,6 +557,7 @@ String STR_CONDTXTFLD
     TEXT[ korean ] = "Á¶°ÇÀû ÅØ½ºÆ®";
     TEXT[ turkish ] = "Koþullu metin";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Texto condicionado";
 };
 String STR_DDEFLD
 {
@@ -566,6 +584,7 @@ String STR_DDEFLD
     TEXT[ korean ] = "DDE ÇÊµå";
     TEXT[ turkish ] = "DDE alaný";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Campo DDE";
 };
 String STR_MACROFLD
 {
@@ -592,6 +611,7 @@ String STR_MACROFLD
     TEXT[ korean ] = "¸ÅÅ©·Î ½ÇÇà";
     TEXT[ turkish ] = "Makroyu çalýþtýr";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Ejecutar macro";
 };
 String STR_SEQFLD
 {
@@ -618,6 +638,7 @@ String STR_SEQFLD
     TEXT[ korean ] = "¼ýÀÚ ¹üÀ§";
     TEXT[ turkish ] = "Numara aralýðý";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Secuencia";
 };
 String STR_SETREFPAGEFLD
 {
@@ -642,6 +663,7 @@ String STR_SETREFPAGEFLD
     Text[ korean ] = "ÂÊ º¯¼ö ¼³Á¤";
     Text[ turkish ] = "Sayfa deðiþkeni tanýmla";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Determinar variable de página";
 };
 String STR_GETREFPAGEFLD
 {
@@ -666,6 +688,7 @@ String STR_GETREFPAGEFLD
     Text[ korean ] = "ÂÊ º¯¼ö º¸ÀÌ±â";
     Text[ turkish ] = "Sayfa deðiþkenini görüntüle";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Mostrar variable de página";
 };
 String STR_INTERNETFLD
 {
@@ -690,6 +713,7 @@ String STR_INTERNETFLD
     Text[ korean ] = "URL ·Îµå";
     Text[ turkish ] = "URL'yi yükle";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Cargar URL";
 };
 String STR_JUMPEDITFLD
 {
@@ -714,13 +738,14 @@ String STR_JUMPEDITFLD
     Text[ korean ] = "ÇÃ·¹ÀÌ½ºÈ¦´õ";
     Text[ turkish ] = "Genel arama  karakteri";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "~Comodín";
 };
 String STR_COMBINED_CHARS
 {
     TEXT = "Zeichen kombinieren" ;
     TEXT [ English ] = "Combine characters" ;
     TEXT[ english_us ] = "Combine characters";
-    TEXT[ portuguese ] = "Combine characters";
+    TEXT[ portuguese ] = "Combinar caracteres";
     TEXT[ russian ] = "Êîìáèíèðîâàòü çíàêè";
     TEXT[ greek ] = "Óõíäõáóìüò ÷áñáêôÞñùí";
     TEXT[ dutch ] = "Tekens combineren";
@@ -737,6 +762,7 @@ String STR_COMBINED_CHARS
     TEXT[ chinese_traditional ] = "¦r¤¸²Õ¦X";
     TEXT[ turkish ] = "Combine characters";
     TEXT[ arabic ] = "Öã ÇáÃÍÑÝ";
+    TEXT[ catalan ] = "Combinar caracteres";
 };
 
  //
@@ -767,6 +793,7 @@ String STR_SETREFFLD
     TEXT[ korean ] = "ÂüÁ¶ ¼³Á¤";
     TEXT[ turkish ] = "Referans tanýmla";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Establecer referencia";
 };
 String STR_GETREFFLD
 {
@@ -793,6 +820,7 @@ String STR_GETREFFLD
     TEXT[ korean ] = "ÂüÁ¶ »ðÀÔ";
     TEXT[ turkish ] = "Referans ekle";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Insertar referencia";
 };
  //
  //  Bereich Datenbank
@@ -822,6 +850,7 @@ String STR_DBFLD
     TEXT[ korean ] = "Æû¡¡·¹ÅÍ ÇÊµå";
     TEXT[ turkish ] = "Standart mektup";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Campo de carta en serie";
 };
 String STR_DBNEXTSETFLD
 {
@@ -848,6 +877,7 @@ String STR_DBNEXTSETFLD
     TEXT[ korean ] = "´ÙÀ½ ·¹ÄÚµå";
     TEXT[ turkish ] = "Sonraki veri kümesi";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Registro siguiente";
 };
 String STR_DBNUMSETFLD
 {
@@ -874,6 +904,7 @@ String STR_DBNUMSETFLD
     TEXT[ korean ] = "ÀÓÀÇÀÇ ·¹ÄÚµå";
     TEXT[ turkish ] = "Herhangi bir veri kümesi";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Cualquier registro";
 };
 String STR_DBSETNUMBERFLD
 {
@@ -900,6 +931,7 @@ String STR_DBSETNUMBERFLD
     TEXT[ korean ] = "·¹ÄÚµå ¹øÈ£";
     TEXT[ turkish ] = "Veri kümesi numarasý";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Número de registro";
 };
 String STR_PREVPAGEFLD
 {
@@ -926,6 +958,7 @@ String STR_PREVPAGEFLD
     TEXT[ korean ] = "ÀÌÀü ÂÊ";
     TEXT[ turkish ] = "Önceki sayfa";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Página anterior";
 };
 String STR_NEXTPAGEFLD
 {
@@ -952,6 +985,7 @@ String STR_NEXTPAGEFLD
     TEXT[ korean ] = "´ÙÀ½ ÂÊ";
     TEXT[ turkish ] = "Sonraki sayfa";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Página siguiente";
 };
 String STR_HIDDENTXTFLD
 {
@@ -978,6 +1012,7 @@ String STR_HIDDENTXTFLD
     TEXT[ korean ] = "¼û°ÜÁø ÅØ½ºÆ®";
     TEXT[ turkish ] = "Gizli";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Texto oculto";
 };
  //
  //  Bereich Benutzerfelder
@@ -1007,6 +1042,7 @@ String STR_USERFLD
     TEXT[ korean ] = "»ç¿ëÀÚ ÇÊµå";
     TEXT[ turkish ] = "Kullanýcý alaný";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Campo del usuario";
 };
 String STR_POSTITFLD
 {
@@ -1033,6 +1069,7 @@ String STR_POSTITFLD
     TEXT[ korean ] = "¸Þ¸ð";
     TEXT[ turkish ] = "Not";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Nota";
 };
 String STR_SCRIPTFLD
 {
@@ -1057,6 +1094,7 @@ String STR_SCRIPTFLD
     Text[ korean ] = "½ºÅ©¸³Æ®";
     Text[ turkish ] = "Script";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Script";
 };
 String STR_AUTHORITY
 {
@@ -1081,6 +1119,7 @@ String STR_AUTHORITY
     TEXT[ arabic ] = "ÅÏÎÇá Ýí ÝåÑÓ ÇáãÑÇÌÚ";
     TEXT[ turkish ] = "Kaynakça giriþi";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Entrada bibliografía";
 };
 String STR_HIDDENPARAFLD
 {
@@ -1107,6 +1146,7 @@ String STR_HIDDENPARAFLD
     TEXT[ korean ] = "¼û°ÜÁø ´Ü¶ô";
     TEXT[ turkish ] = "Gizli paragraf";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Párrafo oculto";
 };
  //
  // Bereich DokumentInfo
@@ -1136,6 +1176,7 @@ String STR_DOCINFOFLD
     TEXT[ korean ] = "¹®¼­ Á¤º¸";
     TEXT[ turkish ] = "Belge bilgileri";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Información del documento";
 };
 /*--------------------------------------------------------------------
     Beschreibung: SubCmd-Strings
@@ -1163,6 +1204,7 @@ String FLD_DATE_STD
     TEXT[ korean ] = "³¯Â¥";
     TEXT[ turkish ] = "Tarih";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Fecha";
 };
 String FLD_DATE_FIX
 {
@@ -1189,6 +1231,7 @@ String FLD_DATE_FIX
     TEXT[ korean ] = "³¯Â¥(°íÁ¤µÊ)";
     TEXT[ turkish ] = "Tarih (sabit)";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Fecha (fija)";
 };
 String FLD_TIME_STD
 {
@@ -1213,6 +1256,7 @@ String FLD_TIME_STD
     TEXT[ korean ] = "½Ã°£";
     TEXT[ turkish ] = "Saat";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Hora";
 };
 String FLD_TIME_FIX
 {
@@ -1239,6 +1283,7 @@ String FLD_TIME_FIX
     TEXT[ korean ] = "½Ã°£ (°íÁ¤µÊ)";
     TEXT[ turkish ] = "Saat (sabit)";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Hora (fija)";
 };
  //
  //  SubCmd Statistik
@@ -1268,6 +1313,7 @@ String FLD_STAT_TABLE
     TEXT[ korean ] = "Ç¥";
     TEXT[ turkish ] = "Tablo";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Tablas";
 };
 String FLD_STAT_CHAR
 {
@@ -1294,6 +1340,7 @@ String FLD_STAT_CHAR
     TEXT[ greek ] = "×áñáêôÞñåò";
     TEXT[ korean ] = "¹®ÀÚ";
     TEXT[ turkish ] = "Karakter";
+    TEXT[ catalan ] = "Caracteres";
 };
 String FLD_STAT_WORD
 {
@@ -1320,6 +1367,7 @@ String FLD_STAT_WORD
     TEXT[ korean ] = "´Ü¾î";
     TEXT[ turkish ] = "Sözcük";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Palabras";
 };
 String FLD_STAT_PARA
 {
@@ -1346,6 +1394,7 @@ String FLD_STAT_PARA
     TEXT[ korean ] = "´Ü¶ô";
     TEXT[ turkish ] = "Paragraf";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Párrafos";
 };
 String FLD_STAT_GRF
 {
@@ -1372,6 +1421,7 @@ String FLD_STAT_GRF
     TEXT[ korean ] = "±×·¡ÇÈ";
     TEXT[ turkish ] = "Grafik";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Imágenes";
 };
 String FLD_STAT_OBJ
 {
@@ -1398,6 +1448,7 @@ String FLD_STAT_OBJ
     TEXT[ korean ] = "°³Ã¼";
     TEXT[ turkish ] = "Nesne";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Objetos";
 };
 String FLD_STAT_PAGE
 {
@@ -1424,6 +1475,7 @@ String FLD_STAT_PAGE
     TEXT[ korean ] = "ÂÊ";
     TEXT[ turkish ] = "Sayfa";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Páginas";
 };
  //  SubCmd DDETypen
  //
@@ -1452,6 +1504,7 @@ String FMT_DDE_HOT
     TEXT[ korean ] = "DDE ÀÚµ¿";
     TEXT[ turkish ] = "Otomatik DDE";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "DDE automático";
 };
 String FMT_DDE_NORMAL
 {
@@ -1478,6 +1531,7 @@ String FMT_DDE_NORMAL
     TEXT[ korean ] = "DDE ¼öµ¿";
     TEXT[ turkish ] = "Manüel DDE";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "DDE manual";
 };
 String FLD_INPUT_TEXT
 {
@@ -1511,6 +1565,7 @@ String FLD_EU_FIRMA
     TEXT[ korean ] = "È¸»ç";
     TEXT[ turkish ] = "Þirket";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Empresa";
 };
 String FLD_EU_VORNAME
 {
@@ -1537,6 +1592,7 @@ String FLD_EU_VORNAME
     TEXT[ korean ] = "¼º";
     TEXT[ turkish ] = "Ad";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Nombre";
 };
 String FLD_EU_NAME
 {
@@ -1561,6 +1617,7 @@ String FLD_EU_NAME
     Text[ korean ] = "ÀÌ¸§";
     Text[ turkish ] = "Soyad";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Apellidos";
 };
 String FLD_EU_ABK
 {
@@ -1587,6 +1644,7 @@ String FLD_EU_ABK
     TEXT[ korean ] = "¸Ó¸®±ÛÀÚ";
     TEXT[ turkish ] = "Baþharfler";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Iniciales";
 };
 String FLD_EU_STRASSE
 {
@@ -1613,6 +1671,7 @@ String FLD_EU_STRASSE
     TEXT[ korean ] = "ÁÖ¼Ò¹øÁö";
     TEXT[ turkish ] = "Sokak";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Calle";
 };
 String FLD_EU_LAND
 {
@@ -1639,6 +1698,7 @@ String FLD_EU_LAND
     TEXT[ korean ] = "±¹°¡";
     TEXT[ turkish ] = "Ülke";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "País";
 };
 String FLD_EU_PLZ
 {
@@ -1665,6 +1725,7 @@ String FLD_EU_PLZ
     TEXT[ korean ] = "¿ìÆò¹øÈ£";
     TEXT[ turkish ] = "P.Kodu";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "CP";
 };
 String FLD_EU_ORT
 {
@@ -1691,6 +1752,7 @@ String FLD_EU_ORT
     TEXT[ korean ] = "½Ã";
     TEXT[ turkish ] = "Þehir";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Ciudad";
 };
 String FLD_EU_TITEL
 {
@@ -1717,6 +1779,7 @@ String FLD_EU_TITEL
     TEXT[ korean ] = "Á¦¸ñ";
     TEXT[ turkish ] = "Unvan";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Título";
 };
 String FLD_EU_POS
 {
@@ -1743,6 +1806,7 @@ String FLD_EU_POS
     TEXT[ korean ] = "Á÷À§";
     TEXT[ turkish ] = "Pozisyon";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Posición";
 };
 String FLD_EU_TELPRIV
 {
@@ -1769,6 +1833,7 @@ String FLD_EU_TELPRIV
     TEXT[ korean ] = "ÀüÈ­¹øÈ£ (ÀÚÅÃ)";
     TEXT[ turkish ] = "Tlf. (Ev)";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Tel. (Priv.)";
 };
 String FLD_EU_TELFIRMA
 {
@@ -1795,6 +1860,7 @@ String FLD_EU_TELFIRMA
     TEXT[ korean ] = "ÀüÈ­¹øÈ£ (Á÷Àå)";
     TEXT[ turkish ] = "Tlf. (Ýþ)";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Tel. (Emp.)";
 };
 String FLD_EU_FAX
 {
@@ -1823,6 +1889,7 @@ String FLD_EU_EMAIL
     Text[ korean ] = "e-mail";
     Text[ turkish ] = "E-posta";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "E-mail";
 };
 String FLD_EU_STATE
 {
@@ -1847,6 +1914,7 @@ String FLD_EU_STATE
     Text[ korean ] = "ÁÖ";
     Text[ turkish ] = "Ýl";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Estado";
 };
 String FLD_PAGEREF_OFF
 {
@@ -1871,6 +1939,7 @@ String FLD_PAGEREF_OFF
     Text[ korean ] = "ÇØÁ¦";
     Text[ turkish ] = "kapalý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "de";
 };
 String FLD_PAGEREF_ON
 {
@@ -1895,6 +1964,7 @@ String FLD_PAGEREF_ON
     Text[ korean ] = "ÀÛµ¿";
     Text[ turkish ] = "Açýk";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "en";
 };
 /*--------------------------------------------------------------------
     Beschreibung: Pfadname
@@ -1925,6 +1995,7 @@ String FMT_FF_NAME
     TEXT[ korean ] = "ÆÄÀÏ ÀÌ¸§";
     TEXT[ turkish ] = "Dosya adý";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Nombre del archivo";
 };
 String FMT_FF_NAME_NOEXT
 {
@@ -1949,6 +2020,7 @@ String FMT_FF_NAME_NOEXT
     Text[ korean ] = "È®ÀåÀÚ ¾ø´Â ÆÄÀÏ ÀÌ¸§";
     Text[ turkish ] = "Uzantýsýz dosya adý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Nombre del archivo sin extensión";
 };
 String FMT_FF_PATHNAME
 {
@@ -1975,6 +2047,7 @@ String FMT_FF_PATHNAME
     TEXT[ korean ] = "°æ·Î/ÆÄÀÏ ÀÌ¸§";
     TEXT[ turkish ] = "Veri yolu/Dosya adý";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Ruta de acceso/Nombre de archivo";
 };
 String FMT_FF_PATH
 {
@@ -2000,6 +2073,7 @@ String FMT_FF_PATH
     TEXT[ greek ] = "ÄéáäñïìÞ";
     TEXT[ korean ] = "°æ·Î";
     TEXT[ turkish ] = "Veri yolu";
+    TEXT[ catalan ] = "Ruta";
 };
 String FMT_FF_UI_NAME
 {
@@ -2024,6 +2098,7 @@ String FMT_FF_UI_NAME
     Text[ korean ] = "¼­½Ä";
     Text[ turkish ] = "Þablon";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Plantilla";
 };
 String FMT_FF_UI_RANGE
 {
@@ -2048,6 +2123,7 @@ String FMT_FF_UI_RANGE
     Text[ korean ] = "¿µ¿ª";
     Text[ turkish ] = "Aralýk";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Area";
 };
 /*--------------------------------------------------------------------
     Beschreibung: Format Kapitel
@@ -2077,6 +2153,7 @@ String FMT_CHAPTER_NAME
     TEXT[ greek ] = "¼íïìá êåöáëáßïõ";
     TEXT[ korean ] = "Àå ÀÌ¸§";
     TEXT[ turkish ] = "Bölüm adý";
+    TEXT[ catalan ] = "Nombre del capítulo";
 };
 String FMT_CHAPTER_NO
 {
@@ -2101,6 +2178,7 @@ String FMT_CHAPTER_NO
     Text[ korean ] = "Àå ¹øÈ£";
     Text[ turkish ] = "Bölüm numarasý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Número del capítulo";
 };
 String FMT_CHAPTER_NO_NOSEPARATOR
 {
@@ -2125,6 +2203,7 @@ String FMT_CHAPTER_NO_NOSEPARATOR
     Text[ korean ] = "±¸ºÐÀÚ ¾ø´Â Àå ¹øÈ£";
     Text[ turkish ] = "Ayýrma iþareti içermeyen bölüm numarasý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Número de capítulo sin separador";
 };
 String FMT_CHAPTER_NAMENO
 {
@@ -2150,6 +2229,7 @@ String FMT_CHAPTER_NAMENO
     Text[ korean ] = "Àå ¹øÈ£¿Í ÀÌ¸§";
     Text[ turkish ] = "Bölüm numarasý ve adý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Número y nombre";
 };
 /*--------------------------------------------------------------------
     Beschreibung: Formate
@@ -2195,6 +2275,7 @@ String FMT_NUM_ROMAN
     TEXT[ korean ] = "·Î¸¶½Ä (I II III)";
     TEXT[ turkish ] = "Roma (I II III)";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Romanos (I II III)";
 };
 String FMT_NUM_SROMAN
 {
@@ -2221,6 +2302,7 @@ String FMT_NUM_SROMAN
     TEXT[ korean ] = "·Î¸¶½Ä (i ii iii)";
     TEXT[ turkish ] = "Roma (i ii iii)";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Romanos (i ii iii)";
 };
 String FMT_NUM_ARABIC
 {
@@ -2247,6 +2329,7 @@ String FMT_NUM_ARABIC
     TEXT[ korean ] = "¾Æ¶óºñ¾Æ ½Ä (1 2 3)";
     TEXT[ turkish ] = "Arap (1 2 3)";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Árabes (1 2 3)";
 };
 String FMT_NUM_PAGEDESC
 {
@@ -2273,6 +2356,7 @@ String FMT_NUM_PAGEDESC
     TEXT[ korean ] = "ÂÊ À¯ÇüÃ³·³";
     TEXT[ turkish ] = "Sayfa biçimi gibi";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Como estilo de página";
 };
 String FMT_NUM_PAGESPECIAL
 {
@@ -2297,6 +2381,7 @@ String FMT_NUM_PAGESPECIAL
     Text[ korean ] = "ÅØ½ºÆ®";
     Text[ turkish ] = "Metin";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Texto";
 };
 /*--------------------------------------------------------------------
     Beschreibung: Author
@@ -2326,6 +2411,7 @@ String FMT_AUTHOR_NAME
     TEXT[ korean ] = "ÀÌ¸§";
     TEXT[ turkish ] = "Ad";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Nombre";
 };
 String FMT_AUTHOR_SCUT
 {
@@ -2352,6 +2438,7 @@ String FMT_AUTHOR_SCUT
     TEXT[ korean ] = "¸Ó¸®±ÛÀÚ";
     TEXT[ turkish ] = "Baþharfler";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Iniciales";
 };
 /*--------------------------------------------------------------------
     Beschreibung:   Varibale setzen
@@ -2379,6 +2466,7 @@ String FMT_SETVAR_SYS
     Text[ korean ] = "½Ã½ºÅÛ";
     Text[ turkish ] = "Sistem";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Sistema";
 };
 String FMT_SETVAR_TEXT
 {
@@ -2403,6 +2491,7 @@ String FMT_SETVAR_TEXT
     Text[ korean ] = "ÅØ½ºÆ®";
     Text[ turkish ] = "Metin";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Texto";
 };
 String FMT_GETVAR_NAME
 {
@@ -2427,6 +2516,7 @@ String FMT_GETVAR_NAME
     Text[ korean ] = "ÀÌ¸§";
     Text[ turkish ] = "Ad";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Nombre";
 };
 String FMT_GETVAR_TEXT
 {
@@ -2451,6 +2541,7 @@ String FMT_GETVAR_TEXT
     Text[ korean ] = "ÅØ½ºÆ®";
     Text[ turkish ] = "Metin";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Texto";
 };
 String FMT_USERVAR_CMD
 {
@@ -2475,6 +2566,7 @@ String FMT_USERVAR_CMD
     Text[ korean ] = "¼ö½Ä";
     Text[ turkish ] = "Formül";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Fórmula";
 };
 String FMT_USERVAR_TEXT
 {
@@ -2499,6 +2591,7 @@ String FMT_USERVAR_TEXT
     Text[ korean ] = "ÅØ½ºÆ®";
     Text[ turkish ] = "Metin";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Texto";
 };
 String FMT_DBFLD_DB
 {
@@ -2523,6 +2616,7 @@ String FMT_DBFLD_DB
     Text[ korean ] = "µ¥ÀÌÅÍº£ÀÌ½º";
     Text[ turkish ] = "Veritabaný";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Base de datos";
 };
 String FMT_DBFLD_SYS
 {
@@ -2547,6 +2641,7 @@ String FMT_DBFLD_SYS
     Text[ korean ] = "½Ã½ºÅÛ";
     Text[ turkish ] = "Sistem";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Sistema";
 };
 /*--------------------------------------------------------------------
     Beschreibung: Ablagefelder
@@ -2576,6 +2671,7 @@ String FMT_REG_AUTHOR
     TEXT[ korean ] = "ÀÛ¼ºÀÚ";
     TEXT[ turkish ] = "Yazan";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Autor";
 };
 String FMT_REG_TIME
 {
@@ -2602,6 +2698,7 @@ String FMT_REG_TIME
     TEXT[ korean ] = "½Ã°£";
     TEXT[ turkish ] = "Saat";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Hora";
 };
 String FMT_REG_DATE
 {
@@ -2628,6 +2725,7 @@ String FMT_REG_DATE
     TEXT[ korean ] = "ÀÏÀÚ";
     TEXT[ turkish ] = "Tarih";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Fecha";
 };
 /*--------------------------------------------------------------------
     Beschreibung: Formate Referenzen
@@ -2657,6 +2755,7 @@ String FMT_REF_TEXT
     TEXT[ korean ] = "ÂüÁ¶";
     TEXT[ turkish ] = "Referans metni";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Texto de referencia";
 };
 String FMT_REF_PAGE
 {
@@ -2683,6 +2782,7 @@ String FMT_REF_PAGE
     TEXT[ korean ] = "ÂÊ";
     TEXT[ turkish ] = "Sayfa";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Página";
 };
 String FMT_REF_CHAPTER
 {
@@ -2709,6 +2809,7 @@ String FMT_REF_CHAPTER
     TEXT[ greek ] = "ÊåöÜëáéï";
     TEXT[ korean ] = "Àå";
     TEXT[ turkish ] = "Bölüm";
+    TEXT[ catalan ] = "Capítulo";
 };
 String FMT_REF_UPDOWN
 {
@@ -2733,6 +2834,7 @@ String FMT_REF_UPDOWN
     Text[ korean ] = "À§/¾Æ·¡";
     Text[ turkish ] = "Üstte/Altta";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Encima/Debajo";
 };
 String FMT_REF_PAGE_PGDSC
 {
@@ -2759,6 +2861,7 @@ String FMT_REF_PAGE_PGDSC
     TEXT[ korean ] = "ÂÊ À¯ÇüÃ³·³";
     TEXT[ turkish ] = "Sayfa biçimi gibi";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Como estilo de página";
 };
 String FMT_REF_ONLYNUMBER
 {
@@ -2783,6 +2886,7 @@ String FMT_REF_ONLYNUMBER
     Text[ korean ] = "¹üÁÖ¿Í ¹øÈ£";
     Text[ turkish ] = "Kategori ve numara";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Categoría y número";
 };
 String FMT_REF_ONLYCAPTION
 {
@@ -2807,6 +2911,7 @@ String FMT_REF_ONLYCAPTION
     Text[ korean ] = "Ä¸¼Ç ÅØ½ºÆ®";
     Text[ turkish ] = "Altyazý metni";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Texto de etiqueta";
 };
 String FMT_REF_ONLYSEQNO
 {
@@ -2831,6 +2936,7 @@ String FMT_REF_ONLYSEQNO
     TEXT[ korean ] = "¹øÈ£";
     TEXT[ turkish ] = "Numara";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Número";
 };
 /*--------------------------------------------------------------------
     Beschreibung: Platzhalter
@@ -2858,6 +2964,7 @@ String FMT_MARK_TEXT
     Text[ korean ] = "ÅØ½ºÆ®";
     Text[ turkish ] = "Metin";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Texto";
 };
 String FMT_MARK_TABLE
 {
@@ -2884,6 +2991,7 @@ String FMT_MARK_TABLE
     Text[ korean ] = "Ç¥";
     Text[ turkish ] = "Tablo";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Tabla";
 };
 String FMT_MARK_FRAME
 {
@@ -2910,6 +3018,7 @@ String FMT_MARK_FRAME
     Text[ korean ] = "ÅØ½ºÆ® »óÀÚ";
     Text[ turkish ] = "Çerçeve";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Marco";
 };
 String FMT_MARK_GRAFIC
 {
@@ -2936,6 +3045,7 @@ String FMT_MARK_GRAFIC
     Text[ korean ] = "±×·¡ÇÈ";
     Text[ turkish ] = "Grafik";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Imagen";
 };
 String FMT_MARK_OLE
 {
@@ -2962,6 +3072,7 @@ String FMT_MARK_OLE
     Text[ korean ] = "°³Ã¼";
     Text[ turkish ] = "Nesne";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Objeto";
 };
 /*--------------------------------------------------------------------
     Beschreibung: Nur-Text
@@ -2998,6 +3109,7 @@ String STR_ALL
     Text[ korean ] = "ÀüÃ¼";
     Text[ turkish ] = "Tümü";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Todo";
 };
 String STR_INSERT
 {
@@ -3024,6 +3136,7 @@ String STR_INSERT
     Text[ korean ] = "»ðÀÔ";
     Text[ turkish ] = "Ekle";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Insertar";
 };
 /*--------------------------------------------------------------------
     Beschreibung:   AustauschStrings fuer Edit/NameFT
@@ -3053,6 +3166,7 @@ String STR_COND
     TEXT[ korean ] = "Á¶°Ç(~C)";
     TEXT[ turkish ] = "Koþul";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "~Condición";
 };
 String STR_TEXT
 {
@@ -3079,6 +3193,7 @@ String STR_TEXT
     TEXT[ korean ] = "´ÙÀ½, ±âÅ¸";
     TEXT[ turkish ] = "O halde, Yoksa";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Entonces, si no";
 };
 String STR_DDE_CMD
 {
@@ -3105,6 +3220,7 @@ String STR_DDE_CMD
     TEXT[ korean ] = "DDE ¹®Àå";
     TEXT[ turkish ] = "DDE deyimi";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Instrucción DDE";
 };
 String STR_INSTEXT
 {
@@ -3131,6 +3247,7 @@ String STR_INSTEXT
     TEXT[ korean ] = "ÅØ½ºÆ® »ðÀÔ(~E)";
     TEXT[ turkish ] = "Metin ekle";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "I~nsertar texto";
 };
 String STR_MACNAME
 {
@@ -3157,6 +3274,7 @@ String STR_MACNAME
     TEXT[ korean ] = "¸ÅÅ©·Î ÀÌ¸§(~M)";
     TEXT[ turkish ] = "Makro ~adý";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Nombre de la ~macro";
 };
 String STR_PROMPT
 {
@@ -3183,13 +3301,14 @@ String STR_PROMPT
     TEXT[ korean ] = "ÂüÁ¶(~R)";
     TEXT[ turkish ] = "Bilgi";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "I~ndicación";
 };
 String STR_COMBCHRS_FT
 {
     TEXT = "Ze~ichen" ;
     TEXT [ English ] = "Ch~aracters" ;
     TEXT[ english_us ] = "Ch~aracters";
-    TEXT[ portuguese ] = "Ch~aracters";
+    TEXT[ portuguese ] = "~Caracteres";
     TEXT[ russian ] = "Çíàêè";
     TEXT[ greek ] = "×áñáêôÞñåò";
     TEXT[ dutch ] = "~Tekens";
@@ -3206,6 +3325,7 @@ String STR_COMBCHRS_FT
     TEXT[ chinese_traditional ] = "¦r¤¸(~A)";
     TEXT[ turkish ] = "Ch~aracters";
     TEXT[ arabic ] = "ÃÍÑÝ";
+    TEXT[ catalan ] = "C~arácter";
 };
 String STR_SETNO
 {
@@ -3232,6 +3352,7 @@ String STR_SETNO
     TEXT[ korean ] = "·¹ÄÚµå ¹øÈ£";
     TEXT[ turkish ] = "Veri kaydý numarasý";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Número de registro";
 };
 String STR_OFFSET
 {
@@ -3258,6 +3379,7 @@ String STR_OFFSET
     TEXT[ korean ] = "¼öÁ¤(~F)";
     TEXT[ turkish ] = "Düzeltme";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "C~orrección";
 };
 String STR_VALUE
 {
@@ -3284,6 +3406,7 @@ String STR_VALUE
     Text[ korean ] = "°ª";
     Text[ turkish ] = "De~ðer";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "~Valor";
 };
 String STR_FORMULA
 {
@@ -3308,6 +3431,7 @@ String STR_FORMULA
     Text[ korean ] = "¼ö½Ä";
     Text[ turkish ] = "Formül";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Fórmula";
 };
 String STR_LEVEL
 {
@@ -3334,6 +3458,7 @@ String STR_LEVEL
     TEXT[ korean ] = "°èÃþ";
     TEXT[ turkish ] = "Düzey";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "Nivel ";
 };
 String STR_URLPROMPT
 {
@@ -3358,6 +3483,7 @@ String STR_URLPROMPT
     Text[ korean ] = "~URL";
     Text[ turkish ] = "~URL";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "~URL";
 };
 String STR_ALL_DATABASE
 {
@@ -3382,6 +3508,7 @@ String STR_ALL_DATABASE
     Text[ korean ] = "<ÀüÃ¼>";
     Text[ turkish ] = "<Tümü>";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "<Todos>";
 };
 ImageButton BTN_FLDEDT_PREV
 {
@@ -3427,4 +3554,5 @@ PushButton PB_FLDEDT_ADDRESS
     Text[ korean ] = "ÆíÁý";
     Text[ turkish ] = "Düzenle";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Editar";
 };
