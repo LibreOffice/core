@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: gh $ $Date: 2002-11-07 15:14:04 $
+#   last change: $Author: vg $ $Date: 2003-04-15 13:55:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,7 +64,6 @@ PRJ=..$/..$/..
 PRJNAME=extensions
 TARGET=pl
 TARGETTYPE=GUI
-USE_DEFFILE=TRUE
 
 # --- Settings -----------------------------------------------------
 
@@ -77,46 +76,45 @@ LIB1FILES  = \
     $(SLB)$/plbase.lib	\
     $(SHL1LINKLIB)
 
-SHL1TARGET= $(TARGET)$(UPD)$(DLLPOSTFIX)
-
 .IF "$(GUI)" == "UNX"
 SHL1LINKLIB = $(SLB)$/plunx.lib
-.ENDIF
+.IF "$(OS)" == "SOLARIS"
+SHL1OWNLIBS = -lsocket
+.ENDIF # SOLARIS
+.ENDIF # UNX
 
 .IF "$(GUI)" == "WNT"
 SHL1LINKLIB = $(SLB)$/plwin.lib
-SHL1OWNLIB = \
+SHL1OWNLIBS = \
     version.lib	\
     ole32.lib	\
     advapi32.lib
-.ENDIF
+.ENDIF # WNT
 
 .IF "$(GUI)" == "OS2"
 SHL1LINKLIB = $(SLB)$/plos2.lib
-.ENDIF
+.ENDIF # OS2
 
-SHL1STDLIBS=\
-    $(SHL1OWNLIB)		\
-    $(SVTOOLLIB)		\
-    $(SVLLIB)			\
-    $(VCLLIB)			\
-    $(TOOLSLIB)			\
-    $(UCBHELPERLIB)		\
+SHL1TARGET= $(TARGET)$(UPD)$(DLLPOSTFIX)
+SHL1IMPLIB= i$(TARGET)
+
+SHL1VERSIONMAP=exports.map
+SHL1DEF=$(MISC)$/$(SHL1TARGET).def
+DEF1NAME=$(SHL1TARGET)
+
+SHL1LIBS=$(LIB1TARGET)
+SHL1STDLIBS= \
     $(TKLIB)			\
+    $(VCLLIB)			\
+    $(SVLLIB)			\
+    $(TOOLSLIB)			\
     $(VOSLIB)			\
+    $(UCBHELPERLIB)		\
     $(CPPUHELPERLIB)	\
     $(CPPULIB)			\
     $(SALLIB)
 
-#SHL1DEPN=  $(SLB)/sfx.lib $(L)$/itools.lib $(L)$/ivcl.lib
-SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
-SHL1IMPLIB = i$(TARGET)
-
-SHL1LIBS = $(LIB1TARGET)
-
-
-DEF1NAME	=$(SHL1TARGET)
-DEF1EXPORTFILE=	exports.dxp
+SHL1STDLIBS+=$(SHL1OWNLIBS)
 
 # --- Targets ------------------------------------------------------
 
