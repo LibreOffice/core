@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.24 $
+#   $Revision: 1.25 $
 #
-#   last change: $Author: kz $ $Date: 2004-10-04 17:40:47 $
+#   last change: $Author: obo $ $Date: 2004-11-16 14:23:50 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,6 +74,7 @@ PACKAGE=com$/sun$/star$/frame
 
 IDLFILES=\
     BorderWidths.idl\
+    CommandGroup.idl\
     Components.idl\
     ContentHandler.idl\
     ContentHandlerFactory.idl\
@@ -83,6 +84,7 @@ IDLFILES=\
     DesktopTasks.idl\
     DispatchDescriptor.idl\
     DispatchHelper.idl\
+    DispatchInformation.idl\
     DispatchProvider.idl\
     DispatchRecorder.idl\
     DispatchRecorderSupplier.idl\
@@ -124,6 +126,7 @@ IDLFILES=\
     XDesktopTask.idl\
     XDispatch.idl\
     XDispatchHelper.idl\
+    XDispatchInformationProvider.idl\
     XDispatchProvider.idl\
     XDispatchProviderInterception.idl\
     XDispatchProviderInterceptor.idl\
@@ -141,6 +144,8 @@ IDLFILES=\
     XFrameSetModel.idl\
     XFramesSupplier.idl\
     XInterceptorInfo.idl\
+    XLayoutManagerEventBroadcaster.idl\
+    XLayoutManagerListener.idl\
     XLoadable.idl\
     XLoadEventListener.idl\
     XModel.idl\
@@ -151,6 +156,7 @@ IDLFILES=\
     XStatusListener.idl\
     XStatusbarController.idl\
     XStorable.idl\
+    XSubToolbarController.idl\
     XSynchronousDispatch.idl\
     XSynchronousFrameLoader.idl\
     XTask.idl\
