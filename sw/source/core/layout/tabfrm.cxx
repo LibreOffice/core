@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabfrm.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: ama $ $Date: 2002-05-13 13:30:49 $
+ *  last change: $Author: ama $ $Date: 2002-06-24 09:37:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1938,7 +1938,10 @@ void SwTabFrm::_UpdateAttr( SfxPoolItem *pOld, SfxPoolItem *pNew,
             if ( !IsFollow() )
                 rInvFlags |= 0x40;
             break;
-
+        case RES_FRAMEDIR :
+            SetDerivedR2L( sal_False );
+            CheckDirChange();
+            break;
         case RES_UL_SPACE:
             rInvFlags |= 0x1C;
             /* kein Break hier */
