@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpage_animations.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-25 15:14:09 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 15:38:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,13 +187,13 @@ deprecated_FadeEffect_conversion_table[] =
     { FadeEffect_FADE_FROM_BOTTOM,          "wipe-up" },
     { FadeEffect_FADE_TO_CENTER,            "box-in" },
     { FadeEffect_FADE_FROM_CENTER,          "box-out" },
-    { FadeEffect_MOVE_FROM_LEFT,            "cover-left" },
+    { FadeEffect_MOVE_FROM_LEFT,            "cover-right" },
     { FadeEffect_MOVE_FROM_TOP,             "cover-down" },
-    { FadeEffect_MOVE_FROM_RIGHT,           "cover-right" },
+    { FadeEffect_MOVE_FROM_RIGHT,           "cover-left" },
     { FadeEffect_MOVE_FROM_BOTTOM,          "cover-up" },
-    { FadeEffect_ROLL_FROM_LEFT,            "push-left" },
+    { FadeEffect_ROLL_FROM_LEFT,            "push-right" },
     { FadeEffect_ROLL_FROM_TOP,             "push-down" },
-    { FadeEffect_ROLL_FROM_RIGHT,           "push-right" },
+    { FadeEffect_ROLL_FROM_RIGHT,           "push-left" },
     { FadeEffect_ROLL_FROM_BOTTOM,          "push-up" },
     { FadeEffect_VERTICAL_STRIPES,          "venetian-blinds-vertical" },
     { FadeEffect_HORIZONTAL_STRIPES,        "venetian-blinds-horizontal" },
@@ -209,14 +209,14 @@ deprecated_FadeEffect_conversion_table[] =
     { FadeEffect_OPEN_HORIZONTAL,           "split-vertical-out" },
     { FadeEffect_SPIRALIN_LEFT,             "spiral-wipe-top-left-clockwise" },
     { FadeEffect_SPIRALIN_RIGHT,            "spiral-wipe-top-right-counter-clockwise" },
-    { FadeEffect_SPIRALOUT_LEFT,            "reverse-spiral-wipe-bottom-right-counter-clockwise" },
-    { FadeEffect_SPIRALOUT_RIGHT,           "reverse-spiral-wipe-bottom-left-counter-clockwise" },
+    { FadeEffect_SPIRALOUT_LEFT,            "spiral-wipe-out-to-bottom-right-clockwise" },
+    { FadeEffect_SPIRALOUT_RIGHT,           "spiral-wipe-out-to-bottom-left-counter-clockwise" },
     { FadeEffect_DISSOLVE,                  "dissolve" },
     { FadeEffect_WAVYLINE_FROM_LEFT,        "snake-wipe-top-left-vertical" },
     { FadeEffect_WAVYLINE_FROM_TOP,         "snake-wipe-top-left-horizontal" },
     { FadeEffect_WAVYLINE_FROM_RIGHT,       "snake-wipe-bottom-right-vertical" },
     { FadeEffect_WAVYLINE_FROM_BOTTOM,      "snake-wipe-bottom-right-horizontal" },
-    { FadeEffect_RANDOM,                    "random" },
+    { FadeEffect_RANDOM,                    "random-transition" },
     { FadeEffect_STRETCH_FROM_LEFT,         "wipe-right" }, // todo
     { FadeEffect_STRETCH_FROM_TOP,          "wipe-down" },  // todo
     { FadeEffect_STRETCH_FROM_RIGHT,        "wipe-left" },  // todo
@@ -235,8 +235,8 @@ deprecated_FadeEffect_conversion_table[] =
     { FadeEffect_UNCOVER_TO_LOWERRIGHT,     "uncover-right-down" },
     { FadeEffect_UNCOVER_TO_BOTTOM,         "uncover-down" },
     { FadeEffect_UNCOVER_TO_LOWERLEFT,      "uncover-left-down" },
-    { FadeEffect_VERTICAL_CHECKERBOARD,     "checkerboard-across" },
-    { FadeEffect_HORIZONTAL_CHECKERBOARD,   "checkerboard-down" },
+    { FadeEffect_VERTICAL_CHECKERBOARD,     "checkerboard-down" },
+    { FadeEffect_HORIZONTAL_CHECKERBOARD,   "checkerboard-across" },
 
 // the following effects have where not supported in OOo 1.0,
 // so we match to a similiar effect
