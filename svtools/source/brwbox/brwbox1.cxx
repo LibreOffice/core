@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwbox1.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2003-08-07 11:48:11 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 13:20:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,9 +184,9 @@ void BrowseBox::Construct( BrowserMode nMode )
     bScrolling = FALSE;
     bSelectionIsVisible = FALSE;
     bNotToggleSel = FALSE;
-    bDrag = FALSE;
+    bRowDividerDrag = FALSE;
     bHit = FALSE;
-    bRubber = FALSE;
+    mbInteractiveRowHeight = FALSE;
     bHideSelect = FALSE;
     bHideCursor = NO_CURSOR_HIDE;
     nRowCount = 0;
