@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eppt.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sj $ $Date: 2000-10-27 12:06:45 $
+ *  last change: $Author: sj $ $Date: 2000-11-03 18:00:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -952,7 +952,6 @@ class PPTWriter : public GroupTable, public PropValue, public PPTExBulletProvide
                                                 const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet,
                                                     sal_Bool bIsGroup, sal_Int32 nAngle, sal_uInt32& nNewShapeType, sal_uInt32& nReplace, List& rAdjustmentList,
                                                         Rectangle& rPolyBoundRect );
-        sal_Bool            ImplIsMetaFile();
         sal_Bool            ImplGetGraphic( ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet > & rXPropSet,
                                                 const String&, sal_Bool bFillBitmap, sal_Bool bOle = FALSE );
 

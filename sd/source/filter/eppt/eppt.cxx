@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eppt.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sj $ $Date: 2000-10-27 12:06:59 $
+ *  last change: $Author: sj $ $Date: 2000-11-03 18:00:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1720,7 +1720,7 @@ void PPTWriter::ImplWriteBackground( ::com::sun::star::uno::Reference< ::com::su
 
         case ::com::sun::star::drawing::FillStyle_BITMAP :
         {
-            if ( ImplGetGraphic( rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "FillBitmap" ) ), TRUE ) )
+            if ( ImplGetGraphic( rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "FillBitmapURL" ) ), TRUE ) )
             {
                 mp_EscherEx->AddOpt( _Escher_Prop_shadowColor, 0x8000001 );         // stock valued fill color
                 mp_EscherEx->AddOpt( _Escher_Prop_fNoFillHitTest, 0x140014 );

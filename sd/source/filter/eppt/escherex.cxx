@@ -2,9 +2,9 @@
  *
  *  $RCSfile: escherex.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:45 $
+ *  last change: $Author: sj $ $Date: 2000-11-03 18:01:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,57 +179,69 @@ UINT32 _EscherPersistTable::PtReplaceOrInsert( UINT32 nID, UINT32 nOfs )
 // ---------------------------------------------------------------------------------------------
 // ---------------------------------------------------------------------------------------------
 
-_EscherBlibEntry::_EscherBlibEntry( SvMemoryStream& rStream, _Escher_BlibType eBlibType, UINT32 nPictureOffset )
+_EscherBlibEntry::_EscherBlibEntry( sal_uInt32 nPictureOffset, const GraphicObject& rObject, const ByteString& rId,
+                                        const GraphicAttr* pGraphicAttr ) :
+    mbIsEmpty       ( TRUE ),
+    mnPictureOffset ( nPictureOffset )
 {
-    UINT32* pPtr = &mnIdentifier[0];
-    UINT32 nLenght, nType, nPos, nCRC, nOldPos = rStream.Tell();
-    rStream.Seek( STREAM_SEEK_TO_END );
-    mnSize = rStream.Tell();
-    rStream.Seek( STREAM_SEEK_TO_BEGIN );
-    mnPictureOffset = nPictureOffset;
-    meBlibType = eBlibType;
-    switch( eBlibType )         // Bitmap ID ermitteln, um keine doppelten Grafiken abzuspeichern
+    mbIsNativeGraphicPossible = ( pGraphicAttr == NULL );
+    meBlibType = UNKNOWN;
+    mnSize = 0;
+
+    sal_uInt32      nLen = rId.Len();
+    const sal_Char* pData = rId.GetBuffer();
+    GraphicType     eType( rObject.GetType() );
+    if ( nLen && pData && ( eType != GRAPHIC_NONE ) )
     {
-        case PEG :
+        mnIdentifier[ 0 ] = rtl_crc32( 0,pData, nLen );
+
+        mnIdentifier[ 1 ] = 0;
+
+        if ( pGraphicAttr )
         {
-            nCRC = rtl_crc32( 0, rStream.GetData(), mnSize );
-            nLenght = mnSize;
-            nPos = 0;
-        }
-        break;
-        case PNG :
-        {
-            rStream.SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
-            rStream.SeekRel( 8 );
-            do
+            if ( pGraphicAttr->IsSpecialDrawMode()
+                    || pGraphicAttr->IsMirrored()
+                         || pGraphicAttr->IsCropped()
+                            || pGraphicAttr->IsRotated()
+                                || pGraphicAttr->IsTransparent()
+                                    || pGraphicAttr->IsAdjusted() )
             {
-                rStream >> nLenght >> nType;                // wir ermitteln die den Identifier anhand der Checksumme des PNG IDat chunks
-                nPos = rStream.Tell() + nLenght;            // naechste chunk position
-                if ( nPos >= mnSize )                       // kein IDAT -> break;
-                    break;
-                rStream.Seek( nPos );
-                rStream >> nCRC;
+                SvMemoryStream aSt( sizeof( GraphicAttr ) );
+                aSt << (sal_uInt16)pGraphicAttr->GetDrawMode()
+                    << pGraphicAttr->GetMirrorFlags()
+                    << pGraphicAttr->GetLeftCrop()
+                    << pGraphicAttr->GetTopCrop()
+                    << pGraphicAttr->GetRightCrop()
+                    << pGraphicAttr->GetBottomCrop()
+                    << pGraphicAttr->GetRotation()
+                    << pGraphicAttr->GetLuminance()
+                    << pGraphicAttr->GetContrast()
+                    << pGraphicAttr->GetChannelR()
+                    << pGraphicAttr->GetChannelG()
+                    << pGraphicAttr->GetChannelB()
+                    << pGraphicAttr->GetGamma()
+                    << (BOOL)( pGraphicAttr->IsInvert() == TRUE )
+                    << pGraphicAttr->GetTransparency();
+                mnIdentifier[ 1 ] = rtl_crc32( 0, aSt.GetData(), aSt.Tell() );
             }
-            while ( nType != 0x49444154 );                  // IDAT chunk suchen
+            else
+                mbIsNativeGraphicPossible = TRUE;
         }
-        break;
-        case EMF :
-        case WMF :
+        sal_uInt32 i, nTmp, n1, n2;
+        n1 = n2 = 0;
+        for ( i = 0; i < nLen; i++ )
         {
-            if ( mnSize > 8 )
-            {
-                rStream.SeekRel( mnSize - 8 );
-                rStream >> nPos >> nCRC;                    // ( Komprimiertes UINT32 + Checksumme des ZCodec ) ergeben einen Teil der UID
-                nLenght = mnSize;
-            }
+            nTmp = n2 >> 28;    // rotating 4 bit
+            n2 <<= 4;
+            n2 |= n1 >> 28;
+            n1 <<= 4;
+            n1 |= nTmp;
+            n1 ^= *pData++ - '0';
         }
-        break;
+        mnIdentifier[ 2 ] = n1;
+        mnIdentifier[ 3 ] = n2;
+        mbIsEmpty = FALSE;
     }
-    *pPtr++ = nCRC;                                         // LitteEndian / BigEndian ist fuer die Checksumme egal
-    *pPtr++ = nLenght;
-    *pPtr++ = nPos;
-    *pPtr = 0;
-    rStream.Seek( nOldPos );
 };
 
 // ---------------------------------------------------------------------------------------------
@@ -242,8 +254,6 @@ _EscherBlibEntry::~_EscherBlibEntry()
 
 BOOL _EscherBlibEntry::operator==( const _EscherBlibEntry& r_EscherBlibEntry ) const
 {
-    if ( meBlibType != r_EscherBlibEntry.meBlibType )
-        return FALSE;
     for ( int i = 0; i < 3; i++ )
     {
         if ( mnIdentifier[ i ] != r_EscherBlibEntry.mnIdentifier[ i ] )
@@ -484,75 +494,175 @@ UINT32 _EscherGraphicProvider::ImplInsertBlib( _EscherBlibEntry* p_EscherBlibEnt
     return mnBlibEntrys;
 }
 
-UINT32 _EscherGraphicProvider::ImplGetBlibID( SvMemoryStream& rSource, _Escher_BlibType eBlibType, const _Escher_GDIStruct* pGDI )
+sal_uInt32 _EscherGraphicProvider::ImplGetBlibID( const ByteString& rId, const Rectangle& rBoundRect,
+                                                    const GraphicAttr* pGraphicAttr )
 {
-    _EscherBlibEntry* p_EscherBlibEntry = new _EscherBlibEntry( rSource, eBlibType, mrPicOutStrm.Tell() );
-    for ( UINT32 i = 0; i < mnBlibEntrys; i++ )
-    {
-        if ( *( mpBlibEntrys[ i ] ) == *p_EscherBlibEntry )
-        {
-            delete p_EscherBlibEntry;
-            return i + 1;
-        }
-    }
+    sal_uInt32          nBlibId = 0;
+    GraphicAttr*        pAttr = NULL;
+    const GraphicAttr*  pAttrUsed = pGraphicAttr;
+    GraphicObject       aGraphicObject( rId );
 
-    UINT32 nAtomSize = 0;
-    if ( mnFlags & _E_GRAPH_PROV_USE_INSTANCES )
+    if ( pAttrUsed
+            && pAttrUsed->GetRotation()
+                && ( aGraphicObject.GetType() == GRAPHIC_GDIMETAFILE )
+                    && ( mnFlags & _E_GRAPH_PROV_DO_NOT_ROTATE_METAFILES ) )
     {
-        mrPicOutStrm << (UINT32)( 0x7f90000 | (UINT16)( mnBlibEntrys << 4 ) )
-                     << (UINT32)0;
-        nAtomSize = mrPicOutStrm.Tell();
-        if ( eBlibType == PNG )
-            mrPicOutStrm << (UINT16)0x0606;
-        else if ( eBlibType == WMF )
-            mrPicOutStrm << (UINT16)0x0403;
+        pAttr = new GraphicAttr;
+        *pAttr = *pAttrUsed;
+        pAttr->SetRotation( 0 );
+        pAttrUsed = pAttr;
     }
-    UINT32 nInstance;
-    switch ( eBlibType )
+    _EscherBlibEntry* p_EscherBlibEntry = new _EscherBlibEntry( mrPicOutStrm.Tell(), aGraphicObject, rId, pAttrUsed );
+    if ( !p_EscherBlibEntry->IsEmpty() )
     {
-        case PEG :
-        case PNG :
+        for ( UINT32 i = 0; i < mnBlibEntrys; i++ )
         {
-            nInstance = ( eBlibType == PNG ) ? 0xf01e6e00 : 0xf01d46a0;
-            mrPicOutStrm << nInstance << (UINT32)( p_EscherBlibEntry->mnSize + 17 );
-            mrPicOutStrm.Write( p_EscherBlibEntry->mnIdentifier, 16 );
-            mrPicOutStrm << (BYTE)0xff;
-            mrPicOutStrm.Write( rSource.GetData(), p_EscherBlibEntry->mnSize );
+            if ( *( mpBlibEntrys[ i ] ) == *p_EscherBlibEntry )
+            {
+                delete p_EscherBlibEntry;
+                return i + 1;
+            }
         }
-        break;
-        case EMF :
-        case WMF :
-        {
-            nInstance = ( eBlibType == WMF ) ? 0xf01b2170 : 0xf01a3d50;
-            mrPicOutStrm << nInstance << (UINT32)( p_EscherBlibEntry->mnSize + 0x42 );
-            mrPicOutStrm.Write( p_EscherBlibEntry->mnIdentifier, 16 );
-            mrPicOutStrm.Write( p_EscherBlibEntry->mnIdentifier, 16 );
-            UINT32 nWidth = pGDI->GDIBoundRect.GetWidth() * 360;
-            UINT32 nHeight = pGDI->GDIBoundRect.GetHeight() * 360;
-            double fWidth = (double)pGDI->GDIBoundRect.GetWidth() / 10000.0 * 1027.0;
-            double fHeight = (double)pGDI->GDIBoundRect.GetHeight() / 10000.0 * 1027.0;
 
-            mrPicOutStrm    << (UINT32)( pGDI->GDIUncompressedSize )// WMFSize ohne FileHeader
-                            << (INT32)0         // da die Originalgroesse des WMF's (ohne FileHeader)
-                            << (INT32)0         // nicht mehr feststellbar ist, schreiben wir 10cm / x
-                            << (INT32)fWidth
-                            << (INT32)fHeight
-                            << nWidth
-                            << nHeight
-                            << (UINT32)( p_EscherBlibEntry->mnSize )
-                            << (UINT16)0xfe00;                      // compression Flags
-            mrPicOutStrm.Write( rSource.GetData(), p_EscherBlibEntry->mnSize );
+        sal_Bool            bUseNativeGraphic( FALSE );
+
+        Graphic             aGraphic( aGraphicObject.GetTransformedGraphic( pAttrUsed ) );
+        GfxLink             aGraphicLink;
+        SvMemoryStream      aStream;
+
+        const sal_uInt8*    pGraphicAry = NULL;
+
+        if ( p_EscherBlibEntry->mbIsNativeGraphicPossible && aGraphic.IsLink() )
+        {
+            aGraphicLink = aGraphic.GetLink();
+
+            p_EscherBlibEntry->mnSize = aGraphicLink.GetDataSize();
+            pGraphicAry = aGraphicLink.GetData();
+
+            if ( p_EscherBlibEntry->mnSize && pGraphicAry )
+            {
+                switch ( aGraphicLink.GetType() )
+                {
+                    case GFX_LINK_TYPE_NATIVE_JPG : p_EscherBlibEntry->meBlibType = PEG; break;
+                    case GFX_LINK_TYPE_NATIVE_PNG : p_EscherBlibEntry->meBlibType = PNG; break;
+                    case GFX_LINK_TYPE_NATIVE_WMF :
+                    {
+                        if ( pGraphicAry && ( p_EscherBlibEntry->mnSize > 0x2c ) )
+                        {
+                            if ( ( pGraphicAry[ 0x28 ] == 0x20 ) && ( pGraphicAry[ 0x29 ] == 0x45 )     // check the magic
+                                && ( pGraphicAry[ 0x2a ] == 0x4d ) && ( pGraphicAry[ 0x2b ] == 0x46 ) ) // number ( emf detection )
+                            {
+                                p_EscherBlibEntry->meBlibType = EMF;
+                            }
+                            else
+                            {
+                                p_EscherBlibEntry->meBlibType = WMF;
+                                if ( ( pGraphicAry[ 0 ] == 0xd7 ) && ( pGraphicAry[ 1 ] == 0xcd )
+                                    && ( pGraphicAry[ 2 ] == 0xc6 ) && ( pGraphicAry[ 3 ] == 0x9a ) )
+                                {   // we have to get rid of the metafileheader
+                                    pGraphicAry += 22;
+                                    p_EscherBlibEntry->mnSize -= 22;
+                                }
+                            }
+                        }
+                    }
+                    break;
+                }
+                if ( p_EscherBlibEntry->meBlibType != UNKNOWN )
+                    bUseNativeGraphic = TRUE;
+            }
         }
-        break;
+        if ( !bUseNativeGraphic )
+        {
+            GraphicType eGraphicType = aGraphic.GetType();
+            if ( ( eGraphicType == GRAPHIC_BITMAP ) || ( eGraphicType == GRAPHIC_GDIMETAFILE ) )
+            {
+                sal_uInt32 nErrCode = GraphicConverter::Export( aStream, aGraphic, ( eGraphicType == GRAPHIC_BITMAP ) ? CVT_PNG  : CVT_WMF );
+                if ( nErrCode == ERRCODE_NONE )
+                {
+                    p_EscherBlibEntry->meBlibType = ( eGraphicType == GRAPHIC_BITMAP ) ? PNG : WMF;
+                    aStream.Seek( STREAM_SEEK_TO_END );
+                    p_EscherBlibEntry->mnSize = aStream.Tell();
+                    pGraphicAry = (sal_uInt8*)aStream.GetData();
+
+                    if ( p_EscherBlibEntry->meBlibType == WMF )     // the fileheader is not used
+                    {
+                        p_EscherBlibEntry->mnSize -= 22;
+                        pGraphicAry += 22;
+                    }
+                }
+            }
+        }
+        if ( p_EscherBlibEntry->mnSize && pGraphicAry && ( p_EscherBlibEntry->meBlibType != UNKNOWN ) )
+        {
+            sal_uInt32 nAtomSize = 0;
+            sal_uInt32 nInstance, nUncompressedSize = p_EscherBlibEntry->mnSize;
+
+            if ( mnFlags & _E_GRAPH_PROV_USE_INSTANCES )
+            {
+                mrPicOutStrm << (UINT32)( 0x7f90000 | (UINT16)( mnBlibEntrys << 4 ) )
+                             << (UINT32)0;
+                nAtomSize = mrPicOutStrm.Tell();
+                 if ( p_EscherBlibEntry->meBlibType == PNG )
+                    mrPicOutStrm << (UINT16)0x0606;
+                else if ( p_EscherBlibEntry->meBlibType == WMF )
+                    mrPicOutStrm << (UINT16)0x0403;
+            }
+            if ( ( p_EscherBlibEntry->meBlibType == PEG ) || ( p_EscherBlibEntry->meBlibType == PNG ) )
+            {
+                nInstance = ( p_EscherBlibEntry->meBlibType == PNG ) ? 0xf01e6e00 : 0xf01d46a0;
+                mrPicOutStrm << nInstance << (sal_uInt32)( p_EscherBlibEntry->mnSize + 17 );
+                mrPicOutStrm.Write( p_EscherBlibEntry->mnIdentifier, 16 );
+                mrPicOutStrm << (BYTE)0xff;
+                mrPicOutStrm.Write( pGraphicAry, p_EscherBlibEntry->mnSize );
+            }
+            else
+            {
+                ZCodec aZCodec( 0x8000, 0x8000 );
+                aZCodec.BeginCompression();
+                SvMemoryStream aDestStrm;
+                aZCodec.Write( aDestStrm, pGraphicAry, p_EscherBlibEntry->mnSize );
+                aZCodec.EndCompression();
+                aDestStrm.Seek( STREAM_SEEK_TO_END );
+                p_EscherBlibEntry->mnSize = aDestStrm.Tell();
+                pGraphicAry = (sal_uInt8*)aDestStrm.GetData();
+                if ( p_EscherBlibEntry->mnSize && pGraphicAry )
+                {
+                    nInstance = ( p_EscherBlibEntry->meBlibType == WMF ) ? 0xf01b2170 : 0xf01a3d50;
+                    mrPicOutStrm << nInstance << (sal_uInt32)( p_EscherBlibEntry->mnSize + 0x42 );
+                    mrPicOutStrm.Write( p_EscherBlibEntry->mnIdentifier, 16 );
+                    mrPicOutStrm.Write( p_EscherBlibEntry->mnIdentifier, 16 );
+                    UINT32 nWidth = rBoundRect.GetWidth() * 360;
+                    UINT32 nHeight = rBoundRect.GetHeight() * 360;
+                    double fWidth = (double)rBoundRect.GetWidth() / 10000.0 * 1027.0;
+                    double fHeight = (double)rBoundRect.GetHeight() / 10000.0 * 1027.0;
+                    mrPicOutStrm    << nUncompressedSize    // WMFSize ohne FileHeader
+                                    << (sal_Int32)0         // da die Originalgroesse des WMF's (ohne FileHeader)
+                                    << (sal_Int32)0         // nicht mehr feststellbar ist, schreiben wir 10cm / x
+                                    << (sal_Int32)fWidth
+                                    << (sal_Int32)fHeight
+                                    << nWidth
+                                    << nHeight
+                                    << p_EscherBlibEntry->mnSize
+                                    << (sal_uInt16)0xfe00;  // compression Flags
+                    mrPicOutStrm.Write( pGraphicAry, p_EscherBlibEntry->mnSize );
+                }
+            }
+            if ( nAtomSize )
+            {
+                sal_uInt32  nPos = mrPicOutStrm.Tell();
+                mrPicOutStrm.Seek( nAtomSize - 4 );
+                mrPicOutStrm << (sal_uInt32)( nPos - nAtomSize );
+                mrPicOutStrm.Seek( nPos );
+            }
+            nBlibId = ImplInsertBlib( p_EscherBlibEntry ), p_EscherBlibEntry = NULL;
+        }
     }
-    if ( nAtomSize )
-    {
-        UINT32 nPos = mrPicOutStrm.Tell();
-        mrPicOutStrm.Seek( nAtomSize - 4 );
-        mrPicOutStrm << (UINT32)( nPos - nAtomSize );
-        mrPicOutStrm.Seek( nPos );
-    }
-    return ImplInsertBlib( p_EscherBlibEntry );
+    if ( p_EscherBlibEntry )
+        delete p_EscherBlibEntry;
+    if ( pAttr )
+        delete pAttr;
+    return nBlibId;
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -1178,54 +1288,16 @@ void _EscherEx::WriteGradient( const ::com::sun::star::awt::Gradient* pGradient 
 
 // ---------------------------------------------------------------------------------------------
 
-UINT32 _EscherEx::AddGraphic( SvStorageStream& rStrm, const Graphic& rGraphic )
+UINT32 _EscherEx::AddGraphic( SvStorageStream& rStrm, const ByteString& rUniqueId,
+                                const Rectangle& rBoundRect, const GraphicAttr* pGraphicAttr )
 {
-    if ( !mpGraphicProvider )
-        mpGraphicProvider = new _EscherGraphicProvider( rStrm );
-
-    UINT32 nErrCode, nId = 0;
-    GraphicType eGraphicType = rGraphic.GetType();
-    if ( ( eGraphicType == GRAPHIC_BITMAP ) || ( eGraphicType == GRAPHIC_GDIMETAFILE ) )
+    sal_uInt32 nBlibId = 0;
+    if ( rUniqueId.Len() )
     {
-        SvMemoryStream aDestStrm;
+        if ( !mpGraphicProvider )
+            mpGraphicProvider = new _EscherGraphicProvider( rStrm );
 
-        nErrCode = GraphicConverter::Export( aDestStrm, rGraphic, ( eGraphicType == GRAPHIC_BITMAP ) ? CVT_PNG  : CVT_WMF );
-        if ( nErrCode == ERRCODE_NONE )
-        {
-            return mpGraphicProvider->ImplGetBlibID( aDestStrm, ( eGraphicType == GRAPHIC_BITMAP ) ? PNG : WMF );
-        }
+        nBlibId = mpGraphicProvider->ImplGetBlibID( rUniqueId, rBoundRect, pGraphicAttr );
     }
-    return nId;
+    return nBlibId;
 }
-
-// ---------------------------------------------------------------------------------------------
-
-UINT32 _EscherEx::AddGraphic( SvStorageStream& rStrm, const BYTE* pSource,
-                                UINT32 nSize, const Rectangle& rRect, _Escher_BlibType eBlipType )
-{
-    _Escher_GDIStruct aGDIStruct;
-    aGDIStruct.GDIBoundRect = rRect;
-    aGDIStruct.GDISize = rRect.GetSize();
-    aGDIStruct.GDIUncompressedSize = nSize;
-
-    if ( !mpGraphicProvider )
-        mpGraphicProvider = new _EscherGraphicProvider( rStrm );
-
-    if ( ( eBlipType == PEG ) || ( eBlipType == PNG ) )
-    {
-        SvMemoryStream aDestStrm( (char*)pSource, nSize, STREAM_READ );
-        aDestStrm.ObjectOwnsMemory( FALSE );
-        return mpGraphicProvider->ImplGetBlibID( aDestStrm, eBlipType, &aGDIStruct );
-    }
-    else
-    {
-        ZCodec aZCodec( 0x8000, 0x8000 );
-        aZCodec.BeginCompression();
-        SvMemoryStream aDestStrm;
-        aZCodec.Write( aDestStrm, pSource, nSize );
-        aZCodec.EndCompression();
-        return mpGraphicProvider->ImplGetBlibID( aDestStrm, eBlipType, &aGDIStruct );
-    }
-}
-
-

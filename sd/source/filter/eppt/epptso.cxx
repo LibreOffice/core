@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epptso.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sj $ $Date: 2000-10-30 11:42:38 $
+ *  last change: $Author: sj $ $Date: 2000-11-03 18:01:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,7 +222,7 @@ sal_Int16 EncodeAnyTosal_Int16( ::com::sun::star::uno::Any& rAny )
 
 PPTExBulletProvider::PPTExBulletProvider()
 {
-    pGraphicProv = new _EscherGraphicProvider( aBuExPictureStream, _E_GRAPH_PROV_USE_INSTANCES );
+    pGraphicProv = new _EscherGraphicProvider( aBuExPictureStream, _E_GRAPH_PROV_USE_INSTANCES  | _E_GRAPH_PROV_DO_NOT_ROTATE_METAFILES );
 }
 
 PPTExBulletProvider::~PPTExBulletProvider()
@@ -235,27 +235,20 @@ sal_uInt16 PPTExBulletProvider::GetId( Graphic& rGraphic )
     sal_uInt16 nRetValue = 0xffff;
     if ( !!rGraphic )
     {
-        sal_uInt32 nErrCode, nId = 0;
-        GraphicType eGraphicType = rGraphic.GetType();
-        if ( ( eGraphicType == GRAPHIC_BITMAP ) || ( eGraphicType == GRAPHIC_GDIMETAFILE ) )
+        sal_uInt32 nId = 0;
+        if ( rGraphic.GetType() == GRAPHIC_BITMAP )
         {
-            SvMemoryStream aDestStrm;
-
-            nErrCode = GraphicConverter::Export( aDestStrm, rGraphic, ( eGraphicType == GRAPHIC_BITMAP ) ? CVT_PNG  : CVT_WMF );
-            if ( nErrCode == ERRCODE_NONE )
-            {
-                sal_uInt32 nId;
-                if ( eGraphicType == GRAPHIC_BITMAP )
-                    nId = pGraphicProv->ImplGetBlibID( aDestStrm, PNG );
-                else
-                {
-//                  sal_uInt32 nId = pGraphicProv->ImplGetBlibID( aDestStrm, WMF );
-                    nId = 0;
-                }
-                if ( nId && ( nId < 0x10000 ) )
-                    nRetValue = (sal_uInt16)nId - 1;
-            }
+            Rectangle   aRect;
+            GraphicObject aGraphicObject( rGraphic );
+            nId = pGraphicProv->ImplGetBlibID( aGraphicObject.GetUniqueID(), aRect, NULL );
         }
+        else
+        {
+//          sal_uInt32 nId = pGraphicProv->ImplGetBlibID( aDestStrm, WMF );
+            nId = 0;
+        }
+        if ( nId && ( nId < 0x10000 ) )
+            nRetValue = (sal_uInt16)nId - 1;
     }
     return nRetValue;
 }
@@ -1499,7 +1492,7 @@ void PPTWriter::ImplWriteFillBundle( sal_Bool bEdge )
 
             case ::com::sun::star::drawing::FillStyle_BITMAP :
             {
-                ImplGetGraphic( mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "FillBitmap" ) ), TRUE );
+                ImplGetGraphic( mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "FillBitmapURL" ) ), TRUE );
                 mp_EscherEx->AddOpt( _Escher_Prop_fNoFillHitTest, 0x140014 );
                 mp_EscherEx->AddOpt( _Escher_Prop_fillBackColor, nFillBackColor  );
             }
@@ -4828,7 +4821,7 @@ void PPTWriter::ImplWritePage( SolverContainer& aSolverContainer, PageType ePage
                     {
                         ADD_SHAPE( _Escher_ShpInst_Rectangle, 0xa00 );      // Flags: Connector | HasSpt
                         mp_EscherEx->BeginCount();
-                        if ( ImplGetGraphic( mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "GraphicObjectFillBitmap" ) ), TRUE ) )
+                        if ( ImplGetGraphic( mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "GraphicURL" ) ), TRUE ) )
                         {
                             mp_EscherEx->AddOpt( _Escher_Prop_WrapText, _Escher_WrapNone );
                             mp_EscherEx->AddOpt( _Escher_Prop_AnchorText, _Escher_AnchorMiddle );
@@ -4842,7 +4835,7 @@ void PPTWriter::ImplWritePage( SolverContainer& aSolverContainer, PageType ePage
                     {
                         ADD_SHAPE( _Escher_ShpInst_PictureFrame, 0xa00 );
                         mp_EscherEx->BeginCount();
-                        if ( ImplGetGraphic( mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "GraphicObjectFillBitmap" ) ), FALSE ) )
+                        if ( ImplGetGraphic( mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "GraphicURL" ) ), FALSE ) )
                             mp_EscherEx->AddOpt( _Escher_Prop_LockAgainstGrouping, 0x800080 );
                     }
                     sal_uInt32 nPicFlags = 0;
@@ -5436,169 +5429,120 @@ void PPTWriter::ImplWritePage( SolverContainer& aSolverContainer, PageType ePage
 
 // ---------------------------------------------------------------------------------------------
 
-sal_Bool PPTWriter::ImplIsMetaFile()
-{
-    if ( !ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "GraphicObjectFillBitmap" ) ) ) )
-        return FALSE;
-
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XBitmap >xBitmap;
-    return ( ::cppu::extractInterface( xBitmap, mAny ) == FALSE );
-}
-
-// ---------------------------------------------------------------------------------------------
-
 sal_Bool PPTWriter::ImplGetGraphic( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet, const String& rSource, sal_Bool bFillBitmap, sal_Bool bOle )
 {
-    _Escher_BlibType                            eBlipType( UNKNOWN );
-    ::com::sun::star::uno::Sequence<sal_uInt8>  aSeq;
+    sal_Bool        bRetValue = FALSE;
+    sal_Bool        bMirrored = FALSE;
+    sal_Bool        bBitmapTile = FALSE;
+    GraphicAttr*    pGraphicAttr = NULL;
+    GraphicObject   aGraphicObject;
+    String          aGraphicUrl;
+    ByteString      aUniqueId;
 
-    const sal_uInt8*    pAry = NULL;
-    sal_uInt32          nAryLen = 0;
-    sal_Bool            bMirrored = FALSE;
+    ::com::sun::star::uno::Any aAny;
 
-    if ( ImplGetPropertyValue( rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "IsMirrored" ) ) ) )
-        mAny >>= bMirrored;
+    if ( GetPropertyValue( aAny, rXPropSet, rSource ) )
+    {
+        ::com::sun::star::awt::Size aSize( mXShape->getSize() );
+        Point aEmptyPoint;
+        Rectangle aRect( aEmptyPoint, Size( aSize.Width, aSize.Height ) );
 
-    sal_Bool bCanExportNative = ( ( bMirrored == FALSE ) && ( mnAngle == 0 ) ) || ( bFillBitmap == TRUE );
-
-    if ( bCanExportNative )     // ppt does not support rotated or mirrored grafics,
-    {                           // so we can't use the native format
-        GfxLinkType eLinkType( GFX_LINK_TYPE_NONE );
-        if ( ImplGetPropertyValue( rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "LinkType" ) ) ) )
-            eLinkType = (GfxLinkType)(*(sal_Int32*)mAny.getValue());
-
-        switch ( eLinkType )
+        if ( rSource == String( RTL_CONSTASCII_USTRINGPARAM( "MetaFile" ) ) )
         {
-//          case GFX_LINK_TYPE_NATIVE_PCT :
-//          case GFX_LINK_TYPE_NATIVE_MET :
-//          case GFX_LINK_TYPE_NATIVE_TIF :
-//          case GFX_LINK_TYPE_NATIVE_GIF :
-//          case GFX_LINK_TYPE_EPS_BUFFER :
-//          case GFX_LINK_TYPE_USER       :
-//          case GFX_LINK_TYPE_NONE :
+            ::com::sun::star::uno::Sequence<sal_uInt8> aSeq = *(::com::sun::star::uno::Sequence<sal_uInt8>*)aAny.getValue();
+            const sal_uInt8*    pAry = aSeq.getArray();
+            sal_uInt32          nAryLen = aSeq.getLength();
 
-            case GFX_LINK_TYPE_NATIVE_JPG :
-            case GFX_LINK_TYPE_NATIVE_PNG :
-            case GFX_LINK_TYPE_NATIVE_WMF :
+            if ( pAry && nAryLen )
             {
-                sal_Bool bUseNative = ImplGetPropertyValue( rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "NativeFormat" ) ) );
-
-                if ( bUseNative )
-                    bUseNative = mAny.hasValue();
-                if ( bUseNative )
+                Graphic         aGraphic;
+                SvMemoryStream  aTemp( (void*)pAry, nAryLen, STREAM_READ );
+                sal_uInt32 nErrCode = GraphicConverter::Import( aTemp, aGraphic, CVT_WMF );
+                if ( nErrCode == ERRCODE_NONE )
                 {
-                    aSeq = *(::com::sun::star::uno::Sequence<sal_uInt8>*)mAny.getValue();
-                    pAry = aSeq.getArray();
-                    nAryLen = aSeq.getLength();
-
-                    switch ( eLinkType )
-                    {
-                        case GFX_LINK_TYPE_NATIVE_JPG : eBlipType = PEG; break;
-                        case GFX_LINK_TYPE_NATIVE_PNG : eBlipType = PNG; break;
-                        case GFX_LINK_TYPE_NATIVE_WMF :
-                        {
-                            sal_uInt32 nLen = aSeq.getLength();
-                            if ( nLen > 0x2c )
-                            {
-                                if ( ( pAry[ 0x28 ] == 0x20 ) && ( pAry[ 0x29 ] == 0x45 )       // check the magic
-                                    && ( pAry[ 0x2a ] == 0x4d ) && ( pAry[ 0x2b ] == 0x46 ) )   // number ( emf detection )
-                                {
-                                    eBlipType = EMF;
-                                }
-                                else
-                                {
-                                    eBlipType = WMF;
-                                    if ( ( pAry[ 0 ] == 0xd7 ) && ( pAry[ 1 ] == 0xcd )
-                                        && ( pAry[ 2 ] == 0xc6 ) && ( pAry[ 3 ] == 0x9a ) )
-                                    {   // we have to get rid of the metafileheader
-                                        pAry += 22;
-                                        nLen -= 22;
-                                    }
-                                }
-                            }
-                        }
-                        break;
-                    }
+                    aGraphicObject = aGraphic;
+                    aUniqueId = aGraphicObject.GetUniqueID();
                 }
             }
-            break;
         }
-    }
-    if ( !pAry && ImplGetPropertyValue( rXPropSet, rSource ) )
-    {
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XBitmap >xBitmap;
-        if ( ::cppu::extractInterface( xBitmap, mAny ) )
+        else if ( rSource == String( RTL_CONSTASCII_USTRINGPARAM( "Bitmap" ) ) )
+        {
+            ::com::sun::star::uno::Reference< ::com::sun::star::awt::XBitmap >xBitmap;
+            if ( ::cppu::extractInterface( xBitmap, aAny ) )
+            {
+                ::com::sun::star::uno::Reference< ::com::sun::star::awt::XBitmap > xBitmap;
+                if ( aAny >>= xBitmap )
+                {
+                    BitmapEx    aBitmapEx( VCLUnoHelper::GetBitmap( xBitmap ) );
+                    Graphic     aGraphic( aBitmapEx );
+                    aGraphicObject = aGraphic;
+                    aUniqueId = aGraphicObject.GetUniqueID();
+                }
+            }
+        }
+        else if ( rSource == String( RTL_CONSTASCII_USTRINGPARAM( "FillBitmapURL" ) ) )
+        {
+            aGraphicUrl = *(::rtl::OUString*)aAny.getValue();
+        }
+        else if ( rSource == String( RTL_CONSTASCII_USTRINGPARAM( "GraphicURL" ) ) )
+        {
+            aGraphicUrl = *(::rtl::OUString*)aAny.getValue();
+        }
+        if ( aGraphicUrl.Len() )
+        {
+            xub_StrLen nIndex = aGraphicUrl.Search( (sal_Unicode)':', 0 );
+            if ( nIndex != STRING_NOTFOUND )
+            {
+                nIndex++;
+                if ( aGraphicUrl.Len() > nIndex  )
+                    aUniqueId = ByteString( aGraphicUrl, nIndex, aGraphicUrl.Len() - nIndex, RTL_TEXTENCODING_UTF8 );
+            }
+        }
+        if ( aUniqueId.Len() )
         {
             if ( !mpPicStrm )
                 mpPicStrm = mrStg->OpenStream( String( RTL_CONSTASCII_USTRINGPARAM( "Pictures" ) ) );
             if ( mpPicStrm )
             {
-                ::com::sun::star::uno::Reference< ::com::sun::star::awt::XBitmap > xBitmap;
-                if ( mAny >>= xBitmap )
+                if ( GetPropertyValue( aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "IsMirrored" ) ) ) )
+                    aAny >>= bMirrored;
+                if ( rSource == String( RTL_CONSTASCII_USTRINGPARAM( "FillBitmap" ) ) )
                 {
-                    BitmapEx aBitmapEx( VCLUnoHelper::GetBitmap( xBitmap ) );
-                    sal_Bool bBitmapTile = FALSE;
-                    if ( rSource == String( RTL_CONSTASCII_USTRINGPARAM( "FillBitmap" ) ) )
+                    if ( GetPropertyValue( aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "FillBitmapTile" ) ) ) )
+                        aAny >>= bBitmapTile;
+                }
+                if ( !bFillBitmap )
+                {
+                    if ( bMirrored || mnAngle )
                     {
-                        if ( ImplGetPropertyValue( rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "FillBitmapTile" ) ) ) )
-                            mAny >>= bBitmapTile;
-                    }
-                    if ( ( rSource == String( RTL_CONSTASCII_USTRINGPARAM( "FillBitmap" ) )) && bBitmapTile )
-                        mp_EscherEx->AddOpt( _Escher_Prop_fillType, _Escher_FillTexture );
-                    else
-                    {
-                        if ( mnAngle && ( bFillBitmap == FALSE ) )  // ppoint does not rotate graphics !
+                        mnAngle = ( mnAngle + 5 ) / 10;
+                        pGraphicAttr = new GraphicAttr;
+                        pGraphicAttr->SetRotation( mnAngle );
+                        if ( bMirrored )
+                            pGraphicAttr->SetMirrorFlags( BMP_MIRROR_HORZ );
+                        if ( mnAngle )  // ppoint does not rotate graphics !
                         {
-                            mnAngle = ( mnAngle + 5 ) / 10;
                             Polygon aPoly( maRect );
                             aPoly.Rotate( maRect.TopLeft(), mnAngle );
                             maRect = aPoly.GetBoundRect();
-                            aBitmapEx.Rotate( mnAngle, COL_TRANSPARENT );
                             mnAngle = 0;
                         }
-                        if ( bMirrored && ( bFillBitmap == FALSE ) )
-                        {
-                            aBitmapEx.Mirror( BMP_MIRROR_HORZ );
-                        }
-                        mp_EscherEx->AddOpt( _Escher_Prop_fillType, _Escher_FillPicture );
                     }
-                    mp_EscherEx->AddOpt( ( bFillBitmap )
-                        ? _Escher_Prop_fillBlip
-                        : _Escher_Prop_pib, mp_EscherEx->AddGraphic( *mpPicStrm, Graphic( aBitmapEx ) ), TRUE );
-                    return TRUE;
                 }
+                if ( ( rSource == String( RTL_CONSTASCII_USTRINGPARAM( "FillBitmap" ) ) ) && bBitmapTile )
+                    mp_EscherEx->AddOpt( _Escher_Prop_fillType, _Escher_FillTexture );
+                else
+                    mp_EscherEx->AddOpt( _Escher_Prop_fillType, _Escher_FillPicture );
+
+                mp_EscherEx->AddOpt( ( bFillBitmap )
+                    ? _Escher_Prop_fillBlip
+                    : _Escher_Prop_pib, mp_EscherEx->AddGraphic( *mpPicStrm, aUniqueId, aRect, pGraphicAttr ), TRUE );
+                bRetValue = TRUE;
             }
         }
-        else
-        {
-            aSeq = *(::com::sun::star::uno::Sequence<sal_uInt8>*)mAny.getValue();
-            pAry = aSeq.getArray();
-            nAryLen = aSeq.getLength();
-            eBlipType = WMF;
-        }
+        delete pGraphicAttr;
     }
-    if ( pAry && ( eBlipType != UNKNOWN ) )
-    {
-        if ( !mpPicStrm )
-            mpPicStrm = mrStg->OpenStream( String( RTL_CONSTASCII_USTRINGPARAM( "Pictures" ) ) );
-        if ( mpPicStrm )
-        {
-            ::com::sun::star::awt::Size aSize( mXShape->getSize() );
-            Point aEmptyPoint;
-            Rectangle aRect( aEmptyPoint, Size( aSize.Width, aSize.Height ) );
-            if ( bOle && ImplGetPropertyValue( rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "OriginalSize" ) ) ) )
-            {
-                if ( mAny.getValueType() == ::getCppuType( (::com::sun::star::awt::Size*)0) )
-                {
-                    ::com::sun::star::awt::Size aSize( *(::com::sun::star::awt::Size*)mAny.getValue() );
-                    aRect = Rectangle( Point(), Size( aSize.Width, aSize.Height ) );
-                }
-            }
-            mp_EscherEx->AddOpt( _Escher_Prop_pib, mp_EscherEx->AddGraphic( *mpPicStrm, pAry, aSeq.getLength(), aRect, eBlipType ), TRUE );
-            return TRUE;
-        }
-    }
-    return FALSE;
+    return bRetValue;
 }
 
 //  -----------------------------------------------------------------------

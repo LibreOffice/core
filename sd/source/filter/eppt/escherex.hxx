@@ -2,9 +2,9 @@
  *
  *  $RCSfile: escherex.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:45 $
+ *  last change: $Author: sj $ $Date: 2000-11-03 18:02:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@
 #endif
 #ifndef _COM_SUN_STAR_AWT_GRADIENT_HPP_
 #include <com/sun/star/awt/Gradient.hpp>
+#endif
+#ifndef _GRFMGR_HXX
+#include <goodies/grfmgr.hxx>
 #endif
 
         /*Record Name       FBT-Value   Instance                  Contents                                                          Wrd Exl PPt Ver*/
@@ -1035,10 +1038,17 @@ class _EscherBlibEntry
         _Escher_BlibType    meBlibType;
         UINT32              mnIdentifier[ 4 ];
 
+        sal_Bool            mbIsEmpty;
+        sal_Bool            mbIsNativeGraphicPossible;
+
     public:
 
-                        _EscherBlibEntry( SvMemoryStream& rStream, _Escher_BlibType eBlibType, UINT32 nPicOffset );
+                        _EscherBlibEntry( sal_uInt32 nPictureOffset, const GraphicObject& rObj,
+                                                const ByteString& rId, const GraphicAttr* pAttr = NULL );
                         ~_EscherBlibEntry();
+
+        sal_Bool        IsEmpty() const { return mbIsEmpty; };
+
 
         BOOL            operator==( const _EscherBlibEntry& ) const;
 };
@@ -1065,24 +1075,26 @@ class _EscherPersistTable
 
 // ---------------------------------------------------------------------------------------------
 
-#define _E_GRAPH_PROV_USE_INSTANCES 1
+#define _E_GRAPH_PROV_USE_INSTANCES             1
+#define _E_GRAPH_PROV_DO_NOT_ROTATE_METAFILES   2
 
 class _EscherGraphicProvider
 {
-        UINT32      mnFlags;
-        SvStream&   mrPicOutStrm;
+        sal_uInt32              mnFlags;
+        SvStream&               mrPicOutStrm;
 
-        UINT32      ImplInsertBlib( _EscherBlibEntry* p_EscherBlibEntry );
+        UINT32                  ImplInsertBlib( _EscherBlibEntry* p_EscherBlibEntry );
 
     public :
 
         _EscherBlibEntry**      mpBlibEntrys;
-        UINT32      mnBlibBufSize;
-        UINT32      mnBlibEntrys;
+        UINT32                  mnBlibBufSize;
+        UINT32                  mnBlibEntrys;
 
-        UINT32      ImplGetBlibID( SvMemoryStream& rStrm, _Escher_BlibType eBlibType, const _Escher_GDIStruct* pStruct = NULL );
+        sal_uInt32  ImplGetBlibID( const ByteString& rGraphicId, const Rectangle& rBoundRect,
+                                    const GraphicAttr* pGrafikAttr = NULL );
 
-                    _EscherGraphicProvider( SvStream& rSt, UINT32 nFlags = 0 );
+                    _EscherGraphicProvider( SvStream& rSt, sal_uInt32 nFlags = _E_GRAPH_PROV_DO_NOT_ROTATE_METAFILES );
                     ~_EscherGraphicProvider();
 
 };
@@ -1197,9 +1209,9 @@ class _EscherEx : public _EscherPersistTable
         UINT32  GetColor( const Color& rColor, BOOL bSwap = TRUE );
         UINT32  GetGradientColor( const ::com::sun::star::awt::Gradient* pGradient, UINT32 bStartColor );
         void    WriteGradient( const ::com::sun::star::awt::Gradient* pGradient );
-        UINT32  AddGraphic( SvStorageStream& rPicStrm, const Graphic& rGraphic );
-        UINT32  AddGraphic( SvStorageStream& rPicStrm, const BYTE* pSource,
-                    UINT32 nSize, const Rectangle&, _Escher_BlibType eBlipType );
+
+        UINT32  AddGraphic( SvStorageStream& rPicStrm, const ByteString& rUniqueId,
+                                const Rectangle& rBoundRect, const GraphicAttr* pGraphicAttr = NULL );
 
         UINT32  DrawingGroupContainerSize();
         void    WriteDrawingGroupContainer( SvStream& rSt );
