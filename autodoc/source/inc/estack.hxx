@@ -2,9 +2,9 @@
  *
  *  $RCSfile: estack.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:27 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 15:27:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,8 +81,8 @@ class EStack : private std::slist<ELEM>
     base &              Base()                  { return *this; }
 
   public:
-    typedef ELEM                                value_type;
-    typedef std::slist<ELEM>::size_type         size_type;
+    typedef ELEM                                    value_type;
+    typedef typename std::slist<ELEM>::size_type    size_type;
 
     // LIFECYCLE
                         EStack()                {}
