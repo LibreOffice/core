@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwbox2.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 12:32:23 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:28:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -670,7 +670,7 @@ void BrowseBox::Resize()
 
     // calculate the size of the data window
     long nDataHeight = GetOutputSizePixel().Height() - GetTitleHeight();
-    if ( aHScroll.IsVisible() )
+    if ( aHScroll.IsVisible() || ( nControlAreaWidth != USHRT_MAX ) )
         nDataHeight -= nSBSize;
 
     long nDataWidth = GetOutputSizePixel().Width();
@@ -1282,9 +1282,9 @@ void BrowseBox::UpdateScrollbars()
         if ( aHScroll.IsVisible() )
         {
             aHScroll.Hide();
-            Size aNewSize( aDataWinSize );
-            aNewSize.Height() = GetOutputSizePixel().Height() - GetTitleHeight();
-            aDataWinSize = aNewSize;
+            aDataWinSize.Height() = GetOutputSizePixel().Height() - GetTitleHeight();
+            if ( nControlAreaWidth != USHRT_MAX )
+                aDataWinSize.Height() -= nCornerSize;
         }
     }
     else if ( !aHScroll.IsVisible() )
@@ -1352,13 +1352,25 @@ void BrowseBox::UpdateScrollbars()
 
     // needs corner-window?
     // (do that AFTER positioning BOTH scrollbars)
-    if ( aHScroll.IsVisible() && pVScroll && pVScroll->IsVisible() )
+    ULONG nActualCorderWidth = 0;
+    if (aHScroll.IsVisible() && pVScroll && pVScroll->IsVisible() )
+    {
+        // if we have both scrollbars, the corner window fills the point of intersection of these two
+        nActualCorderWidth = nCornerSize;
+    }
+    else if ( !aHScroll.IsVisible() && ( nControlAreaWidth != USHRT_MAX ) )
+    {
+        // if we have no horizontal scrollbar, but a control area, we need the corner window to
+        // fill the space between the control are and the right border
+        nActualCorderWidth = GetOutputSizePixel().Width() - nControlAreaWidth;
+    }
+    if ( nActualCorderWidth )
     {
         if ( !getDataWindow()->pCornerWin )
-            getDataWindow()->pCornerWin = new ScrollBarBox( this, WB_3DLOOK );
+            getDataWindow()->pCornerWin = new ScrollBarBox( this, 0 );
         getDataWindow()->pCornerWin->SetPosSizePixel(
-            Point( pVScroll->GetPosPixel().X(), aHScroll.GetPosPixel().Y() ),
-            Size( nCornerSize, nCornerSize ) );
+            Point( GetOutputSizePixel().Width() - nActualCorderWidth, aHScroll.GetPosPixel().Y() ),
+            Size( nActualCorderWidth, nCornerSize ) );
         getDataWindow()->pCornerWin->Show();
     }
     else
