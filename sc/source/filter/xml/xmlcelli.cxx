@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcelli.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 15:42:08 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 10:00:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -316,6 +316,15 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
                     }
                 }
                 break;
+            case 15 :
+                {
+                    if (IsXMLToken(aLocalName, XML_CONTENT_VALIDATION_NAME)) //#109340# the string in this constant is different to the name; should be changed ASAP
+                    {
+                        DBG_ASSERT(!pContentValidationName, "here should be only one Validation Name");
+                        pContentValidationName = new rtl::OUString(sValue);
+                    }
+                }
+                break;
             case 19 :
                 {
                     if (IsXMLToken(aLocalName, XML_NUMBER_ROWS_SPANNED))
@@ -338,11 +347,6 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
                 {
                     if (IsXMLToken(aLocalName, XML_NUMBER_COLUMNS_REPEATED))
                         nCellsRepeated = sValue.toInt32();
-                    else if (IsXMLToken(aLocalName, XML_CONTENT_VALIDATION_NAME))
-                    {
-                        DBG_ASSERT(!pContentValidationName, "here should be only one Validation Name");
-                        pContentValidationName = new rtl::OUString(sValue);
-                    }
                 }
                 break;
             case 26 :
