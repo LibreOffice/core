@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hr $ $Date: 2001-06-13 15:11:27 $
+#   last change: $Author: hr $ $Date: 2001-06-13 15:16:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,8 +65,6 @@ PRJ=..
 PRJNAME=soltools
 TARGET=soltools_giparser
 TARGETTYPE=CUI
-LIBTARGET=NO
-
 
 
 # --- Settings -----------------------------------------------------
