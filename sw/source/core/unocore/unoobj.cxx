@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: os $ $Date: 2000-10-20 08:57:03 $
+ *  last change: $Author: os $ $Date: 2000-10-23 11:23:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4340,7 +4340,7 @@ XTextRangeArr*  SwXTextRanges::GetRangesArray()
                     uno::Any aLayout = xPropSet->getPropertyValue(C2U(UNO_NAME_PAGE_STYLE_LAYOUT));
 
                      style::PageStyleLayout eLayout = *(style::PageStyleLayout*)aLayout.getValue();
-                    uno::Any aShare = xPropSet->getPropertyValue(C2U(UNO_NAME_HEADER_SHARE_CONTENT));
+                    uno::Any aShare = xPropSet->getPropertyValue(C2U(UNO_NAME_HEADER_IS_SHARED));
                     sal_Bool bShare;
                     aShare >>= bShare;
                     sal_Bool bLeft = sal_False;

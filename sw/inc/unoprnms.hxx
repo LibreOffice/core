@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2000-10-19 13:24:20 $
+ *  last change: $Author: os $ $Date: 2000-10-23 11:22:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,7 +160,7 @@ extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_FLASH                       
 extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_KERNING                     ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_LOCALE                          ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_BACK_COLOR                  ;
-extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_TRANSPARENT_BACKGROUND      ;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_BACK_TRANSPARENT        ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_PARA_LINE_SPACING                    ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_PARA_TOP_MARGIN              ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_PARA_BOTTOM_MARGIN             ;
@@ -214,7 +214,7 @@ extern const SwPropNameLen __FAR_DATA UNO_NAME_BACK_COLOR                       
 extern const SwPropNameLen __FAR_DATA UNO_NAME_PARA_BACK_COLOR              ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_PARA_WIDOWS                  ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_PARA_ORPHANS                   ;
-extern const SwPropNameLen __FAR_DATA UNO_NAME_PARA_TRANSPARENT_BACKGROUND    ;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_PARA_BACK_TRANSPARENT    ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_POSITION_END_OF_DOC            ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_POSITION_PROTECTED             ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_ALTERNATIVE_TEXT               ;
@@ -274,7 +274,7 @@ extern const SwPropNameLen __FAR_DATA UNO_NAME_SOLID_MARK_HANDLES             ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_TABLES                         ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_TEXT_FRAMES                    ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_TEXT_COLUMNS                   ;
-extern const SwPropNameLen __FAR_DATA UNO_NAME_TRANSPARENT_BACKGROUND         ;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_BACK_TRANSPARENT         ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_USE_PP                         ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_USER_METRIC                    ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_ANCHOR_TYPE                  ;
@@ -421,7 +421,7 @@ extern const SwPropNameLen __FAR_DATA UNO_NAME_FOOTER_TEXT_LEFT               ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_FOOTER_TEXT_RIGHT              ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_HEADER_BACK_COLOR                ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_HEADER_GRAPHIC                 ;
-extern const SwPropNameLen __FAR_DATA UNO_NAME_HEADER_TRANSPARENT_BACKGROUND  ;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_HEADER_BACK_TRANSPARENT  ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_HEADER_LEFT_BORDER               ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_HEADER_RIGHT_BORDER          ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_HEADER_TOP_BORDER                ;
@@ -429,13 +429,13 @@ extern const SwPropNameLen __FAR_DATA UNO_NAME_HEADER_BOTTOM_BORDER           ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_HEADER_BORDER_DISTANCE         ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_HEADER_SHADOW_FORMAT             ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_HEADER_BODY_DISTANCE         ;
-extern const SwPropNameLen __FAR_DATA UNO_NAME_HEADER_IS_DYNAMIC_DISTANCE     ;
-extern const SwPropNameLen __FAR_DATA UNO_NAME_HEADER_SHARE_CONTENT           ;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_HEADER_IS_DYNAMIC_HEIGHT     ;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_HEADER_IS_SHARED           ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_HEADER_HEIGHT                  ;
-extern const SwPropNameLen __FAR_DATA UNO_NAME_HEADER_ON                        ;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_HEADER_IS_ON                     ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_FOOTER_BACK_COLOR                ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_FOOTER_GRAPHIC                 ;
-extern const SwPropNameLen __FAR_DATA UNO_NAME_FOOTER_TRANSPARENT_BACKGROUND  ;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_FOOTER_BACK_TRANSPARENT  ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_FOOTER_LEFT_BORDER               ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_FOOTER_RIGHT_BORDER          ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_FOOTER_TOP_BORDER                ;
@@ -443,10 +443,10 @@ extern const SwPropNameLen __FAR_DATA UNO_NAME_FOOTER_BOTTOM_BORDER           ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_FOOTER_BORDER_DISTANCE         ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_FOOTER_SHADOW_FORMAT             ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_FOOTER_BODY_DISTANCE         ;
-extern const SwPropNameLen __FAR_DATA UNO_NAME_FOOTER_IS_DYNAMIC_DISTANCE     ;
-extern const SwPropNameLen __FAR_DATA UNO_NAME_FOOTER_SHARE_CONTENT         ;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_FOOTER_IS_DYNAMIC_HEIGHT     ;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_FOOTER_IS_SHARED         ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_FOOTER_HEIGHT                  ;
-extern const SwPropNameLen __FAR_DATA UNO_NAME_FOOTER_ON                        ;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_FOOTER_IS_ON                     ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_OVERWRITE_STYLES               ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_LOAD_NUMBERING_STYLES          ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_LOAD_PAGE_STYLES               ;
@@ -542,6 +542,8 @@ extern const SwPropNameLen __FAR_DATA UNO_NAME_FOOTER_TOP_BORDER_DISTANCE       
 extern const SwPropNameLen __FAR_DATA UNO_NAME_FOOTER_BOTTOM_BORDER_DISTANCE            ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_PARA_IS_NUMBERING_RESTART;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_HIDE_FIELD_TIPS;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_HEADER_USER_DEFINED_ATTRIBUTES;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_FOOTER_USER_DEFINED_ATTRIBUTES;
 
 #endif
 

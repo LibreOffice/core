@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2000-10-19 13:44:34 $
+ *  last change: $Author: os $ $Date: 2000-10-23 11:23:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,7 +156,7 @@ const SwPropNameLen __FAR_DATA  UNO_NAME_CHAR_FLASH                             
 const SwPropNameLen __FAR_DATA  UNO_NAME_CHAR_KERNING                           (MAP_CHAR_LEN("CharKerning"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_CHAR_LOCALE                            (MAP_CHAR_LEN("CharLocale"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_CHAR_BACK_COLOR                        (MAP_CHAR_LEN("CharBackColor"));
-const SwPropNameLen __FAR_DATA  UNO_NAME_CHAR_TRANSPARENT_BACKGROUND            (MAP_CHAR_LEN("CharBackTransparent"));
+const SwPropNameLen __FAR_DATA  UNO_NAME_CHAR_BACK_TRANSPARENT          (MAP_CHAR_LEN("CharBackTransparent"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_PARA_LINE_SPACING                      (MAP_CHAR_LEN("ParaLineSpacing"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_PARA_TOP_MARGIN                        (MAP_CHAR_LEN("ParaTopMargin"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_PARA_BOTTOM_MARGIN                     (MAP_CHAR_LEN("ParaBottomMargin"));
@@ -210,7 +210,7 @@ const SwPropNameLen __FAR_DATA  UNO_NAME_BACK_COLOR                             
 const SwPropNameLen __FAR_DATA  UNO_NAME_PARA_BACK_COLOR                        (MAP_CHAR_LEN("ParaBackColor"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_PARA_WIDOWS                            (MAP_CHAR_LEN("ParaWidows"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_PARA_ORPHANS                           (MAP_CHAR_LEN("ParaOrphans"));
-const SwPropNameLen __FAR_DATA  UNO_NAME_PARA_TRANSPARENT_BACKGROUND            (MAP_CHAR_LEN("ParaBackTransparent"));
+const SwPropNameLen __FAR_DATA  UNO_NAME_PARA_BACK_TRANSPARENT          (MAP_CHAR_LEN("ParaBackTransparent"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_POSITION_END_OF_DOC                    (MAP_CHAR_LEN("PositionEndOfDoc"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_POSITION_PROTECTED                     (MAP_CHAR_LEN("PositionProtected"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_ALTERNATIVE_TEXT                       (MAP_CHAR_LEN("AlternativeText"));
@@ -270,7 +270,7 @@ const SwPropNameLen __FAR_DATA  UNO_NAME_SOLID_MARK_HANDLES                     
 const SwPropNameLen __FAR_DATA  UNO_NAME_TABLES                                 (MAP_CHAR_LEN("Tables"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_TEXT_FRAMES                            (MAP_CHAR_LEN("TextFrames"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_TEXT_COLUMNS                           (MAP_CHAR_LEN("TextColumns"));
-const SwPropNameLen __FAR_DATA  UNO_NAME_TRANSPARENT_BACKGROUND                 (MAP_CHAR_LEN("BackTransparent"));
+const SwPropNameLen __FAR_DATA  UNO_NAME_BACK_TRANSPARENT               (MAP_CHAR_LEN("BackTransparent"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_USE_PP                                 (MAP_CHAR_LEN("UsePP"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_USER_METRIC                            (MAP_CHAR_LEN("UserMetric"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_ANCHOR_TYPE                            (MAP_CHAR_LEN("AnchorType"));
@@ -417,7 +417,7 @@ const SwPropNameLen __FAR_DATA  UNO_NAME_FOOTER_TEXT_LEFT                       
 const SwPropNameLen __FAR_DATA  UNO_NAME_FOOTER_TEXT_RIGHT                      (MAP_CHAR_LEN("FooterTextRight"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_HEADER_BACK_COLOR                      (MAP_CHAR_LEN("HeaderBackColor"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_HEADER_GRAPHIC                         (MAP_CHAR_LEN("HeaderBackGraphic"));
-const SwPropNameLen __FAR_DATA  UNO_NAME_HEADER_TRANSPARENT_BACKGROUND          (MAP_CHAR_LEN("HeaderBackTransparent"));
+const SwPropNameLen __FAR_DATA  UNO_NAME_HEADER_BACK_TRANSPARENT        (MAP_CHAR_LEN("HeaderBackTransparent"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_HEADER_LEFT_BORDER                     (MAP_CHAR_LEN("HeaderLeftBorder"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_HEADER_RIGHT_BORDER                    (MAP_CHAR_LEN("HeaderRightBorder"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_HEADER_TOP_BORDER                      (MAP_CHAR_LEN("HeaderTopBorder"));
@@ -425,13 +425,13 @@ const SwPropNameLen __FAR_DATA  UNO_NAME_HEADER_BOTTOM_BORDER                   
 const SwPropNameLen __FAR_DATA  UNO_NAME_HEADER_BORDER_DISTANCE                 (MAP_CHAR_LEN("HeaderBorderDistance"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_HEADER_SHADOW_FORMAT                   (MAP_CHAR_LEN("HeaderShadowFormat"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_HEADER_BODY_DISTANCE                   (MAP_CHAR_LEN("HeaderBodyDistance"));
-const SwPropNameLen __FAR_DATA  UNO_NAME_HEADER_IS_DYNAMIC_DISTANCE             (MAP_CHAR_LEN("HeaderIsDynamicDistance"));
-const SwPropNameLen __FAR_DATA  UNO_NAME_HEADER_SHARE_CONTENT                   (MAP_CHAR_LEN("HeaderShareContent"));
+const SwPropNameLen __FAR_DATA  UNO_NAME_HEADER_IS_DYNAMIC_HEIGHT               (MAP_CHAR_LEN("HeaderIsDynamicHeight"));
+const SwPropNameLen __FAR_DATA  UNO_NAME_HEADER_IS_SHARED                       (MAP_CHAR_LEN("HeaderIsShared"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_HEADER_HEIGHT                          (MAP_CHAR_LEN("HeaderHeight"));
-const SwPropNameLen __FAR_DATA  UNO_NAME_HEADER_ON                              (MAP_CHAR_LEN("HeaderOn"));
+const SwPropNameLen __FAR_DATA  UNO_NAME_HEADER_IS_ON                           (MAP_CHAR_LEN("HeaderIsOn"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_FOOTER_BACK_COLOR                      (MAP_CHAR_LEN("FooterBackColor"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_FOOTER_GRAPHIC                         (MAP_CHAR_LEN("FooterBackGraphic"));
-const SwPropNameLen __FAR_DATA  UNO_NAME_FOOTER_TRANSPARENT_BACKGROUND          (MAP_CHAR_LEN("FooterBackTransparent"));
+const SwPropNameLen __FAR_DATA  UNO_NAME_FOOTER_BACK_TRANSPARENT                (MAP_CHAR_LEN("FooterBackTransparent"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_FOOTER_LEFT_BORDER                     (MAP_CHAR_LEN("FooterLeftBorder"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_FOOTER_RIGHT_BORDER                    (MAP_CHAR_LEN("FooterRightBorder"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_FOOTER_TOP_BORDER                      (MAP_CHAR_LEN("FooterTopBorder"));
@@ -439,10 +439,10 @@ const SwPropNameLen __FAR_DATA  UNO_NAME_FOOTER_BOTTOM_BORDER                   
 const SwPropNameLen __FAR_DATA  UNO_NAME_FOOTER_BORDER_DISTANCE                 (MAP_CHAR_LEN("FooterBorderDistance"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_FOOTER_SHADOW_FORMAT                   (MAP_CHAR_LEN("FooterShadowFormat"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_FOOTER_BODY_DISTANCE                   (MAP_CHAR_LEN("FooterBodyDistance"));
-const SwPropNameLen __FAR_DATA  UNO_NAME_FOOTER_IS_DYNAMIC_DISTANCE             (MAP_CHAR_LEN("FooterIsDynamicDistance"));
-const SwPropNameLen __FAR_DATA  UNO_NAME_FOOTER_SHARE_CONTENT                   (MAP_CHAR_LEN("FooterShareContent"));
+const SwPropNameLen __FAR_DATA  UNO_NAME_FOOTER_IS_DYNAMIC_HEIGHT               (MAP_CHAR_LEN("FooterIsDynamicHeight"));
+const SwPropNameLen __FAR_DATA  UNO_NAME_FOOTER_IS_SHARED                       (MAP_CHAR_LEN("FooterIsShared"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_FOOTER_HEIGHT                          (MAP_CHAR_LEN("FooterHeight"));
-const SwPropNameLen __FAR_DATA  UNO_NAME_FOOTER_ON                              (MAP_CHAR_LEN("FooterOn"));
+const SwPropNameLen __FAR_DATA  UNO_NAME_FOOTER_IS_ON                           (MAP_CHAR_LEN("FooterIsOn"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_OVERWRITE_STYLES                       (MAP_CHAR_LEN("OverwriteStyles"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_LOAD_NUMBERING_STYLES                  (MAP_CHAR_LEN("LoadNumberingStyles"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_LOAD_PAGE_STYLES                       (MAP_CHAR_LEN("LoadPageStyles"));
@@ -531,11 +531,15 @@ const SwPropNameLen __FAR_DATA UNO_NAME_HEADER_LEFT_BORDER_DISTANCE             
 const SwPropNameLen __FAR_DATA UNO_NAME_HEADER_RIGHT_BORDER_DISTANCE            (MAP_CHAR_LEN("HeaderRightBorderDistance"));
 const SwPropNameLen __FAR_DATA UNO_NAME_HEADER_TOP_BORDER_DISTANCE              (MAP_CHAR_LEN("HeaderTopBorderDistance"));
 const SwPropNameLen __FAR_DATA UNO_NAME_HEADER_BOTTOM_BORDER_DISTANCE           (MAP_CHAR_LEN("HeaderBottomBorderDistance"));
+const SwPropNameLen __FAR_DATA UNO_NAME_HEADER_USER_DEFINED_ATTRIBUTES          (MAP_CHAR_LEN("HeaderUserDefinedAttributes"));
 
 const SwPropNameLen __FAR_DATA UNO_NAME_FOOTER_LEFT_BORDER_DISTANCE             (MAP_CHAR_LEN("FooterLeftBorderDistance"));
 const SwPropNameLen __FAR_DATA UNO_NAME_FOOTER_RIGHT_BORDER_DISTANCE            (MAP_CHAR_LEN("FooterRightBorderDistance"));
 const SwPropNameLen __FAR_DATA UNO_NAME_FOOTER_TOP_BORDER_DISTANCE              (MAP_CHAR_LEN("FooterTopBorderDistance"));
 const SwPropNameLen __FAR_DATA UNO_NAME_FOOTER_BOTTOM_BORDER_DISTANCE           (MAP_CHAR_LEN("FooterBottomBorderDistance"));
+const SwPropNameLen __FAR_DATA UNO_NAME_FOOTER_USER_DEFINED_ATTRIBUTES          (MAP_CHAR_LEN("FooterUserDefinedAttributes"));
+
+
 const SwPropNameLen __FAR_DATA UNO_NAME_PARA_IS_NUMBERING_RESTART               (MAP_CHAR_LEN("ParaIsNumberingRestart"));
 const SwPropNameLen __FAR_DATA UNO_NAME_HIDE_FIELD_TIPS                         (MAP_CHAR_LEN("HideFieldTips"));
 
