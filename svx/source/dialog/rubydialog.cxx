@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rubydialog.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: thb $ $Date: 2001-07-26 10:54:04 $
+ *  last change: $Author: os $ $Date: 2001-11-02 11:11:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,15 @@
 #ifndef _COM_SUN_STAR_TEXT_RUBYADJUST_HPP_
 #include <com/sun/star/text/RubyAdjust.hpp>
 #endif
+#ifndef _COM_SUN_STAR_VIEW_XSELECTIONCHANGELISTENER_HPP_
+#include <com/sun/star/view/XSelectionChangeListener.hpp>
+#endif
+#ifndef _COM_SUN_STAR_VIEW_XSELECTIONSUPPLIER_HPP_
+#include <com/sun/star/view/XSelectionSupplier.hpp>
+#endif
+#ifndef _CPPUHELPER_IMPLBASE3_HXX_
+#include <cppuhelper/implbase1.hxx>
+#endif
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::frame;
@@ -116,6 +125,8 @@ using namespace com::sun::star::text;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::style;
 using namespace com::sun::star::text;
+using namespace com::sun::star::view;
+using namespace com::sun::star::lang;
 using namespace com::sun::star::container;
 using namespace rtl;
 
@@ -156,13 +167,126 @@ SfxChildWinInfo SvxRubyChildWindow::GetInfo() const
 /* -----------------------------09.01.01 17:17--------------------------------
 
  ---------------------------------------------------------------------------*/
-struct SvxRubyData_Impl
+class SvxRubyData_Impl : public cppu::WeakImplHelper1
+                                <  ::com::sun::star::view::XSelectionChangeListener >
 {
     Reference<XModel>               xModel;
     Reference<XRubySelection>       xSelection;
     Sequence<PropertyValues>        aRubyValues;
-};
+    Reference<XController>          xController;
+    sal_Bool                        bHasSelectionChanged;
+    public:
+        SvxRubyData_Impl();
+        ~SvxRubyData_Impl();
 
+    void    SetController(Reference<XController> xCtrl);
+    Reference<XModel>               GetModel()
+                                    {
+                                        if(!xController.is())
+                                            xModel = 0;
+                                        else
+                                            xModel = xController->getModel();
+                                        return xModel;
+                                    }
+    sal_Bool                        HasSelectionChanged() const{return bHasSelectionChanged;}
+    Reference<XRubySelection>       GetRubySelection()
+                                    {
+                                        xSelection = Reference<XRubySelection>(xController, UNO_QUERY);
+                                        return xSelection;
+                                    }
+    void                            UpdateRubyValues(sal_Bool bAutoUpdate)
+                                    {
+                                        if(!xSelection.is())
+                                            aRubyValues.realloc(0);
+                                        else
+                                            aRubyValues = xSelection->getRubyList(bAutoUpdate);
+                                        bHasSelectionChanged = sal_False;
+                                    }
+    Sequence<PropertyValues>&       GetRubyValues() {return aRubyValues;}
+    void                            AssertOneEntry();
+
+    virtual void SAL_CALL selectionChanged( const ::com::sun::star::lang::EventObject& aEvent ) throw (RuntimeException);
+    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (RuntimeException);
+
+};
+//-----------------------------------------------------------------------------
+SvxRubyData_Impl::SvxRubyData_Impl() :
+    bHasSelectionChanged(sal_False)
+{
+}
+//-----------------------------------------------------------------------------
+SvxRubyData_Impl::~SvxRubyData_Impl()
+{
+    m_refCount++;
+    try
+    {
+        Reference<XSelectionSupplier> xSelSupp(xController, UNO_QUERY);
+        if(xSelSupp.is())
+            xSelSupp->removeSelectionChangeListener(this);
+    }
+    catch(Exception&)
+    {}
+    m_refCount--;
+}
+//-----------------------------------------------------------------------------
+void    SvxRubyData_Impl::SetController(Reference<XController> xCtrl)
+{
+    if(xCtrl.get() != xController.get())
+    {
+        try
+        {
+            Reference<XSelectionSupplier> xSelSupp(xController, UNO_QUERY);
+            if(xSelSupp.is())
+                xSelSupp->removeSelectionChangeListener(this);
+
+            bHasSelectionChanged = sal_True;
+            xController = xCtrl;
+            xSelSupp = Reference<XSelectionSupplier>(xController, UNO_QUERY);
+            if(xSelSupp.is())
+                xSelSupp->addSelectionChangeListener(this);
+        }
+        catch(Exception&)
+        {}
+    }
+}
+//-----------------------------------------------------------------------------
+void SvxRubyData_Impl::selectionChanged( const EventObject& aEvent ) throw (RuntimeException)
+{
+    bHasSelectionChanged = sal_True;
+}
+//-----------------------------------------------------------------------------
+void SvxRubyData_Impl::disposing( const EventObject& Source ) throw (RuntimeException)
+{
+    try
+    {
+        Reference<XSelectionSupplier> xSelSupp(xController, UNO_QUERY);
+        if(xSelSupp.is())
+            xSelSupp->removeSelectionChangeListener(this);
+    }
+    catch(Exception&)
+    {}
+    xController = 0;
+}
+//-----------------------------------------------------------------------------
+void  SvxRubyData_Impl::AssertOneEntry()
+{
+    //create one entry
+    if(!aRubyValues.getLength())
+    {
+        aRubyValues.realloc(1);
+        Sequence<PropertyValue>& rValues = aRubyValues.getArray()[0];
+        rValues.realloc(5);
+        PropertyValue* pValues = rValues.getArray();
+        pValues[0].Name = C2U(cRubyBaseText);
+        pValues[1].Name = C2U(cRubyText);
+        pValues[2].Name = C2U(cRubyAdjust);
+        pValues[3].Name = C2U(cRubyIsAbove);
+        pValues[4].Name = C2U(cRubyCharStyleName);
+    }
+}
+/* ---------------------------------------------------------------------------
+
+ ---------------------------------------------------------------------------*/
 SvxRubyDialog::SvxRubyDialog( SfxBindings *pBind, SfxChildWindow *pCW,
                                     Window* pParent, const ResId& rResId ) :
     SfxModelessDialog( pBind, pCW, pParent, rResId ),
@@ -269,15 +393,19 @@ void SvxRubyDialog::Activate()
     //get selection from current view frame
     SfxViewFrame* pCurFrm = SfxViewFrame::Current();
     Reference< XController > xCtrl = pCurFrm->GetFrame()->GetController();
-    Reference< XRubySelection > xRubySel(xCtrl, UNO_QUERY);
-    EnableControls(xRubySel.is());
-    if(xRubySel.is())
+    pImpl->SetController(xCtrl);
+    if(pImpl->HasSelectionChanged())
     {
-        Reference< XModel > xModel = xCtrl->getModel();
-        if(!pImpl->xModel.is() && pImpl->xModel.get() != xModel.get())
+
+        Reference< XRubySelection > xRubySel = pImpl->GetRubySelection();
+        pImpl->UpdateRubyValues(aAutoDetectionCB.IsChecked());
+        EnableControls(xRubySel.is());
+        if(xRubySel.is())
         {
-            Reference<XStyleFamiliesSupplier> xSupplier(xModel, UNO_QUERY);
+            Reference< XModel > xModel = pImpl->GetModel();
+            const String sCharStyleSelect = aCharStyleLB.GetSelectEntry();
             ClearCharStyleList();
+            Reference<XStyleFamiliesSupplier> xSupplier(xModel, UNO_QUERY);
             if(xSupplier.is())
             {
                 try
@@ -326,13 +454,12 @@ void SvxRubyDialog::Activate()
                 {
                     DBG_ERROR("exception in style access")
                 }
-
+                if(sCharStyleSelect.Len())
+                    aCharStyleLB.SelectEntry(sCharStyleSelect);
             }
             aCharStyleLB.Enable(xSupplier.is());
             aCharStyleFT.Enable(xSupplier.is());
         }
-        pImpl->xSelection = xRubySel;
-        pImpl->aRubyValues = xRubySel->getRubyList(aAutoDetectionCB.IsChecked());
         Update();
         aPreviewWin.Invalidate();
     }
@@ -343,8 +470,6 @@ void SvxRubyDialog::Activate()
 void    SvxRubyDialog::Deactivate()
 {
     SfxModelessDialog::Deactivate();
-    pImpl->xSelection = 0;
-    pImpl->aRubyValues.realloc(0);
 }
 /* -----------------------------30.01.01 15:35--------------------------------
 
@@ -352,10 +477,11 @@ void    SvxRubyDialog::Deactivate()
 void SvxRubyDialog::SetText(sal_Int32 nPos, Edit& rLeft, Edit& rRight)
 {
     OUString sLeft, sRight;
-    BOOL bEnable = pImpl->aRubyValues.getLength() > nPos;
+    const Sequence<PropertyValues>&  aRubyValues = pImpl->GetRubyValues();
+    BOOL bEnable = aRubyValues.getLength() > nPos;
     if(bEnable)
     {
-        const Sequence<PropertyValue> aProps = pImpl->aRubyValues.getConstArray()[nPos];
+        const Sequence<PropertyValue> aProps = aRubyValues.getConstArray()[nPos];
         const PropertyValue* pProps = aProps.getConstArray();
         for(sal_Int32 nProp = 0; nProp < aProps.getLength(); nProp++)
         {
@@ -384,9 +510,10 @@ void SvxRubyDialog::GetText()
             (aEditArr[i]->GetText() != aEditArr[i]->GetSavedValue() ||
             aEditArr[i + 1]->GetText() != aEditArr[i + 1]->GetSavedValue()))
         {
-            DBG_ASSERT(pImpl->aRubyValues.getLength() > (i / 2 + nLastPos), "wrong index" )
+            Sequence<PropertyValues>& aRubyValues = pImpl->GetRubyValues();
+            DBG_ASSERT(aRubyValues.getLength() > (i / 2 + nLastPos), "wrong index" )
             SetModified(TRUE);
-            Sequence<PropertyValue> &rProps = pImpl->aRubyValues.getArray()[i / 2 + nLastPos];
+            Sequence<PropertyValue> &rProps = aRubyValues.getArray()[i / 2 + nLastPos];
             PropertyValue* pProps = rProps.getArray();
             for(sal_Int32 nProp = 0; nProp < rProps.getLength(); nProp++)
             {
@@ -401,7 +528,8 @@ void SvxRubyDialog::GetText()
 //-----------------------------------------------------------------------------
 void SvxRubyDialog::Update()
 {
-    sal_Int32 nLen = pImpl->aRubyValues.getLength();
+    const Sequence<PropertyValues>& aRubyValues = pImpl->GetRubyValues();
+    sal_Int32 nLen = aRubyValues.getLength();
     aScrollSB.Enable(nLen > 4);
     aScrollSB.SetRange( Range(0, nLen > 4 ? nLen - 4 : 0));
     aScrollSB.SetThumbPos(0);
@@ -414,8 +542,8 @@ void SvxRubyDialog::Update()
     sal_Bool bCharStyleEqual = sal_True;
     for(sal_Int32 nRuby = 0; nRuby < nLen; nRuby++)
     {
-        Sequence<PropertyValue> &rProps = pImpl->aRubyValues.getArray()[nRuby];
-        PropertyValue* pProps = rProps.getArray();
+        const Sequence<PropertyValue> &rProps = aRubyValues.getConstArray()[nRuby];
+        const PropertyValue* pProps = rProps.getConstArray();
         for(sal_Int32 nProp = 0; nProp < rProps.getLength(); nProp++)
         {
             sal_Int16 nTmp;
@@ -511,7 +639,8 @@ IMPL_LINK(SvxRubyDialog, ScrollHdl_Impl, ScrollBar*, pScroll)
  ---------------------------------------------------------------------------*/
 IMPL_LINK(SvxRubyDialog, ApplyHdl_Impl, PushButton*, EMPTYARG)
 {
-    if(!pImpl->aRubyValues.getLength())
+    const Sequence<PropertyValues>&  aRubyValues = pImpl->GetRubyValues();
+    if(!aRubyValues.getLength())
     {
         AssertOneEntry();
         PositionHdl_Impl(&aPositionLB);
@@ -519,11 +648,12 @@ IMPL_LINK(SvxRubyDialog, ApplyHdl_Impl, PushButton*, EMPTYARG)
         CharStyleHdl_Impl(&aCharStyleLB);
     }
     GetText();
-    if(IsModified() && pImpl->xSelection.is())
+    Reference<XRubySelection>  xSelection = pImpl->GetRubySelection();
+    if(IsModified() && xSelection.is())
     {
         try
         {
-            pImpl->xSelection->setRubyList(pImpl->aRubyValues, aAutoDetectionCB.IsChecked());
+            xSelection->setRubyList(aRubyValues, aAutoDetectionCB.IsChecked());
         }
         catch(Exception& )
         {
@@ -560,11 +690,8 @@ IMPL_LINK(SvxRubyDialog, StylistHdl_Impl, PushButton*, EMPTYARG)
  ---------------------------------------------------------------------------*/
 IMPL_LINK(SvxRubyDialog, AutomaticHdl_Impl, CheckBox*, pBox)
 {
-    if( pImpl->xSelection.is())
-    {
-        pImpl->aRubyValues = pImpl->xSelection->getRubyList(aAutoDetectionCB.IsChecked());
-        Update();
-    }
+    pImpl->UpdateRubyValues(pBox->IsChecked());
+    Update();
     return 0;
 }
 /* -----------------------------31.01.01 16:37--------------------------------
@@ -574,9 +701,10 @@ IMPL_LINK(SvxRubyDialog, AdjustHdl_Impl, ListBox*, pBox)
 {
     AssertOneEntry();
     sal_Int16 nAdjust = pBox->GetSelectEntryPos();
-    for(sal_Int32 nRuby = 0; nRuby < pImpl->aRubyValues.getLength(); nRuby++)
+    Sequence<PropertyValues>&  aRubyValues = pImpl->GetRubyValues();
+    for(sal_Int32 nRuby = 0; nRuby < aRubyValues.getLength(); nRuby++)
     {
-        Sequence<PropertyValue> &rProps = pImpl->aRubyValues.getArray()[nRuby];
+        Sequence<PropertyValue> &rProps = aRubyValues.getArray()[nRuby];
         PropertyValue* pProps = rProps.getArray();
         for(sal_Int32 nProp = 0; nProp < rProps.getLength(); nProp++)
         {
@@ -596,9 +724,10 @@ IMPL_LINK(SvxRubyDialog, PositionHdl_Impl, ListBox*, pBox)
     AssertOneEntry();
     sal_Bool bAbove = !pBox->GetSelectEntryPos();
     const Type& rType = ::getBooleanCppuType();
-    for(sal_Int32 nRuby = 0; nRuby < pImpl->aRubyValues.getLength(); nRuby++)
+    Sequence<PropertyValues>&  aRubyValues = pImpl->GetRubyValues();
+    for(sal_Int32 nRuby = 0; nRuby < aRubyValues.getLength(); nRuby++)
     {
-        Sequence<PropertyValue> &rProps = pImpl->aRubyValues.getArray()[nRuby];
+        Sequence<PropertyValue> &rProps = aRubyValues.getArray()[nRuby];
         PropertyValue* pProps = rProps.getArray();
         for(sal_Int32 nProp = 0; nProp < rProps.getLength(); nProp++)
         {
@@ -619,9 +748,10 @@ IMPL_LINK(SvxRubyDialog, CharStyleHdl_Impl, ListBox*, pBox)
     OUString sStyleName;
     if(LISTBOX_ENTRY_NOTFOUND != aCharStyleLB.GetSelectEntryPos())
         sStyleName = *(OUString*) aCharStyleLB.GetEntryData(aCharStyleLB.GetSelectEntryPos());
-    for(sal_Int32 nRuby = 0; nRuby < pImpl->aRubyValues.getLength(); nRuby++)
+    Sequence<PropertyValues>&  aRubyValues = pImpl->GetRubyValues();
+    for(sal_Int32 nRuby = 0; nRuby < aRubyValues.getLength(); nRuby++)
     {
-        Sequence<PropertyValue> &rProps = pImpl->aRubyValues.getArray()[nRuby];
+        Sequence<PropertyValue> &rProps = aRubyValues.getArray()[nRuby];
         PropertyValue* pProps = rProps.getArray();
         for(sal_Int32 nProp = 0; nProp < rProps.getLength(); nProp++)
         {
@@ -715,19 +845,7 @@ IMPL_LINK(SvxRubyDialog, EditJumpHdl_Impl, sal_Int32*, pParam)
  ---------------------------------------------------------------------------*/
 void SvxRubyDialog::AssertOneEntry()
 {
-    //create one entry
-    if(!pImpl->aRubyValues.getLength())
-    {
-        pImpl->aRubyValues.realloc(1);
-        Sequence<PropertyValue>& rValues = pImpl->aRubyValues.getArray()[0];
-        rValues.realloc(5);
-        PropertyValue* pValues = rValues.getArray();
-        pValues[0].Name = C2U(cRubyBaseText);
-        pValues[1].Name = C2U(cRubyText);
-        pValues[2].Name = C2U(cRubyAdjust);
-        pValues[3].Name = C2U(cRubyIsAbove);
-        pValues[4].Name = C2U(cRubyCharStyleName);
-    }
+    pImpl->AssertOneEntry();
 }
 /* -----------------------------29.01.01 15:44--------------------------------
 

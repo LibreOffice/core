@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rubydialog.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2001-07-20 13:56:49 $
+ *  last change: $Author: os $ $Date: 2001-11-02 11:11:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,7 @@ class SvxRubyChildWindow : public SfxChildWindow
     SFX_DECL_CHILDWINDOW( SvxRubyChildWindow );
 
 };
-struct SvxRubyData_Impl;
+class SvxRubyData_Impl;
 class RubyEdit  : public Edit
 {
     Link    aScrollHdl;
