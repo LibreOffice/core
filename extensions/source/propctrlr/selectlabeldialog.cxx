@@ -2,9 +2,9 @@
  *
  *  $RCSfile: selectlabeldialog.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-12 11:32:49 $
+ *  last change: $Author: rt $ $Date: 2001-01-18 14:45:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,7 @@ namespace pcr
     //========================================================================
     // OSelectLabelDialog
     //========================================================================
-    DBG_NAME(OSelectLabelDialog);
+    DBG_NAME(OSelectLabelDialog)
     //------------------------------------------------------------------------
     OSelectLabelDialog::OSelectLabelDialog( Window* pParent, Reference< XPropertySet >  _xControlModel )
         :ModalDialog(pParent, ModuleRes(RID_DLG_SELECTLABELCONTROL))
@@ -366,6 +366,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/01/12 11:32:49  fs
+ *  initial checkin - outsourced the form property browser
+ *
  *
  *  Revision 1.0 09.01.01 14:06:16  fs
  ************************************************************************/

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formcontroller.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-12 17:02:53 $
+ *  last change: $Author: rt $ $Date: 2001-01-18 14:45:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2355,8 +2355,8 @@ namespace pcr
             if (nPropId==PROPERTY_ID_TRISTATE)
             {
                 OLineDescriptor aProperty;
-
-                aProperty.sName             =   (String)PROPERTY_DEFAULTCHECKED;
+                String fPropName = PROPERTY_DEFAULTCHECKED;
+                aProperty.sName             = fPropName;
                 aProperty.sTitle            =   m_pPropertyInfo->getPropertyTranslation(PROPERTY_ID_DEFAULT_CHECKED);
                 aProperty.nHelpId           =   m_pPropertyInfo->getPropertyHelpId(PROPERTY_ID_DEFAULT_CHECKED);
                 aProperty.eControlType      =   BCT_LISTBOX;
@@ -2498,6 +2498,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2001/01/12 17:02:53  fs
+ *  StringToAny: corrected the evaluation of booleans
+ *
  *  Revision 1.2  2001/01/12 14:44:49  fs
  *  don't hold the form info service statically - caused problems 'cause it was the last ModuleResourceClient and destroyed upon unloaded the library
  *

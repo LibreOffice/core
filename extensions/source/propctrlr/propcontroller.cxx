@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propcontroller.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-12 14:44:49 $
+ *  last change: $Author: rt $ $Date: 2001-01-18 14:45:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,7 +150,7 @@ namespace pcr
     //========================================================================
     //= OPropertyBrowserController
     //========================================================================
-    DBG_NAME(OPropertyBrowserController);
+    DBG_NAME(OPropertyBrowserController)
     //------------------------------------------------------------------------
     OPropertyBrowserController::OPropertyBrowserController(const Reference< XMultiServiceFactory >& _rxORB)
             :OPropertyChangeListener(m_aMutex)
@@ -876,6 +876,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2001/01/12 14:44:49  fs
+ *  don't hold the form info service statically - caused problems 'cause it was the last ModuleResourceClient and destroyed upon unloaded the library
+ *
  *  Revision 1.1  2001/01/12 11:31:03  fs
  *  initial checkin - outsourced the form property browser
  *

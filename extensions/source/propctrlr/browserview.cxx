@@ -2,9 +2,9 @@
  *
  *  $RCSfile: browserview.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-12 11:26:10 $
+ *  last change: $Author: rt $ $Date: 2001-01-18 14:45:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@ namespace pcr
     //========================================================================
     //= class OPropertyBrowserView
     //========================================================================
-    DBG_NAME(OPropertyBrowserView);
+    DBG_NAME(OPropertyBrowserView)
     //------------------------------------------------------------------------
     OPropertyBrowserView::OPropertyBrowserView( const Reference< XMultiServiceFactory >& _rxORB,
                                  Window* _pParent, WinBits nBits)
@@ -174,6 +174,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/01/12 11:26:10  fs
+ *  initial checkin - outsourced the form property browser
+ *
  *
  *  Revision 1.0 08.01.01 11:05:54  fs
  ************************************************************************/

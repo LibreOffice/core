@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyeditor.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-12 11:31:24 $
+ *  last change: $Author: rt $ $Date: 2001-01-18 14:45:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@ namespace pcr
     //==================================================================
     // class OPropertyEditor
     //==================================================================
-    DBG_NAME(OPropertyEditor);
+    DBG_NAME(OPropertyEditor)
     //------------------------------------------------------------------
     OPropertyEditor::OPropertyEditor( Window* pParent, WinBits nWinStyle)
             :Control(pParent, nWinStyle)
@@ -414,6 +414,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/01/12 11:31:24  fs
+ *  initial checkin - outsourced the form property browser
+ *
  *
  *  Revision 1.0 08.01.01 15:38:46  fs
  ************************************************************************/
