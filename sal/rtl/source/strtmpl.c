@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strtmpl.c,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: th $ $Date: 2001-03-19 11:05:46 $
+ *  last change: $Author: th $ $Date: 2001-03-20 14:23:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -491,10 +491,9 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( valueOfInt32 )( IMPL_RTL_STRCODE* pStr,
                                                      sal_Int32 n,
                                                      sal_Int16 nRadix )
 {
-    const sal_Char*     pDigits = rtl_ImplGetDigits();
     IMPL_RTL_STRCODE    aBuf[RTL_STR_MAX_VALUEOFINT32];
     IMPL_RTL_STRCODE*   pBuf = aBuf;
-    sal_Int32           nLen = 1;
+    sal_Int32           nLen = 0;
 
     /* Radix must be valid */
     if ( (nRadix < RTL_STR_MIN_RADIX) || (nRadix > RTL_STR_MAX_RADIX) )
@@ -510,25 +509,27 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( valueOfInt32 )( IMPL_RTL_STRCODE* pStr,
     }
 
     /* create a recursive buffer with all values, except the last one */
-    while ( n > nRadix )
+    do
     {
-        *pBuf = pDigits[n % nRadix];
-        pBuf++;
+        sal_Int32 nDigit = (n % nRadix);
         n /= nRadix;
+        if ( nDigit > 9 )
+            *pBuf = (nDigit-10) + 'a';
+        else
+            *pBuf = (nDigit + '0' );
+        pBuf++;
     }
-
-    /* add last digit and the terminating NULL-character */
-    *pStr = pDigits[n];
-    pStr++;
+    while ( n > 0 );
 
     /* copy the values in the right direction into the destination buffer */
-    while ( pBuf != aBuf )
+    do
     {
         pBuf--;
         *pStr = *pBuf;
         pStr++;
         nLen++;
     }
+    while ( pBuf != aBuf );
     *pStr = 0;
 
     return nLen;
@@ -540,10 +541,9 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( valueOfInt64 )( IMPL_RTL_STRCODE* pStr,
                                                      sal_Int64 n,
                                                      sal_Int16 nRadix )
 {
-    const sal_Char*     pDigits = rtl_ImplGetDigits();
     IMPL_RTL_STRCODE    aBuf[RTL_STR_MAX_VALUEOFINT64];
     IMPL_RTL_STRCODE*   pBuf = aBuf;
-    sal_Int32           nLen = 1;
+    sal_Int32           nLen = 0;
 
     /* Radix must be valid */
     if ( (nRadix < RTL_STR_MIN_RADIX) || (nRadix > RTL_STR_MAX_RADIX) )
@@ -559,25 +559,27 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( valueOfInt64 )( IMPL_RTL_STRCODE* pStr,
     }
 
     /* create a recursive buffer with all values, except the last one */
-    while ( n > nRadix )
+    do
     {
-        *pBuf = pDigits[n % nRadix];
-        pBuf++;
+        sal_Int64 nDigit = (n % nRadix);
         n /= nRadix;
+        if ( nDigit > 9 )
+            *pBuf = (nDigit-10) + 'a';
+        else
+            *pBuf = (nDigit + '0' );
+        pBuf++;
     }
-
-    /* add last digit and the terminating NULL-character */
-    *pStr = pDigits[n];
-    pStr++;
+    while ( n > 0 );
 
     /* copy the values in the right direction into the destination buffer */
-    while ( pBuf != aBuf )
+    do
     {
         pBuf--;
         *pStr = *pBuf;
         pStr++;
         nLen++;
     }
+    while ( pBuf != aBuf );
     *pStr = 0;
 
     return nLen;
@@ -691,6 +693,8 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( toInt32 )( const IMPL_RTL_STRCODE* pStr,
     }
     else
     {
+        if ( *pStr == '+' )
+            pStr++;
         bNeg = sal_False;
         nLimit = -INT32_MAX_VALUE;
     }
@@ -753,6 +757,8 @@ sal_Int64 SAL_CALL IMPL_RTL_STRNAME( toInt64 )( const IMPL_RTL_STRCODE* pStr,
     }
     else
     {
+        if ( *pStr == '+' )
+            pStr++;
         bNeg = sal_False;
         nLimit = -INT64_MAX_VALUE;
     }
