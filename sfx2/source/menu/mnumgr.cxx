@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mnumgr.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: pb $ $Date: 2001-07-10 08:46:20 $
+ *  last change: $Author: cd $ $Date: 2001-08-03 18:21:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -459,7 +459,10 @@ int SfxMenuManager::Load( SvStream& rStream )
     {
         Menu* pSVMenu = LoadMenu( rStream );
         if ( pSVMenu )
+        {
             Construct_Impl( pSVMenu, FALSE );
+            SetDefault( FALSE );
+        }
         else
             UseDefault();
     }
@@ -1491,11 +1494,14 @@ int SfxMenuBarManager::Load( SotStorage& rStorage )
     {
         Menu *pSVMenu = LoadMenuBar( *xStream );
         if ( pSVMenu )
+        {
             Construct_Impl( pSVMenu, FALSE );
-        if ( pSVMenu != NULL )
+            SetDefault( FALSE );
             return ERR_OK;
+        }
         else
-            return ERR_READ;
+            UseDefault();
+        return ERR_READ;
     }
 }
 
