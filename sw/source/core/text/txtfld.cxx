@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfld.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 14:04:34 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 13:44:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,10 +119,10 @@ sal_Bool lcl_IsInBody( SwFrm *pFrm )
         return sal_True;
     else
     {
-        SwFrm *pTmp = pFrm;
-        SwFlyFrm *pFly;
+        const SwFrm *pTmp = pFrm;
+        const SwFlyFrm *pFly;
         while ( 0 != (pFly = pTmp->FindFlyFrm()) )
-            pTmp = pFly->GetAnchor();
+            pTmp = pFly->GetAnchorFrm();
         return pTmp->IsInDocBody();
     }
 }
