@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svtabbx.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 10:24:06 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 15:48:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,15 +85,15 @@
 #include "AccessibleBrowseBoxHeaderBar.hxx"
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleStateType.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
+#include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleEventId.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
+#include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #endif
 
 using namespace ::com::sun::star::uno;
-using namespace ::drafts::com::sun::star::accessibility;
+using namespace ::com::sun::star::accessibility;
 
 #define MYTABMASK \
     ( SV_LBOXTAB_ADJUST_RIGHT | SV_LBOXTAB_ADJUST_LEFT | SV_LBOXTAB_ADJUST_CENTER | SV_LBOXTAB_ADJUST_NUMERIC )
@@ -1083,8 +1083,8 @@ void SvHeaderTabListBox::FillAccessibleStateSet( ::utl::AccessibleStateSetHelper
                 _rStateSet.AddState( AccessibleStateType::VISIBLE );
             if ( _eType == ::svt::BBTYPE_TABLE )
             {
-                _rStateSet.AddState( AccessibleStateType::MANAGES_DESCENDANT );
-                _rStateSet.AddState( AccessibleStateType::MULTISELECTABLE );
+                _rStateSet.AddState( AccessibleStateType::MANAGES_DESCENDANTS );
+                _rStateSet.AddState( AccessibleStateType::MULTI_SELECTABLE );
             }
             break;
         }
