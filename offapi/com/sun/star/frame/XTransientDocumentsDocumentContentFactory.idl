@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTransientDocumentsDocumentContentFactory.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 11:56:22 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 16:13:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@ module com { module sun { module star { module frame {
      @see      com::sun::star::document::OfficeDocument
      @see      com::sun::star::ucb::TransientDocumentsDocumentContent
 
-     @since #112920#
+     @since OOo 2.0.0
 */
 interface XTransientDocumentsDocumentContentFactory : com::sun::star::uno::XInterface
 {
