@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextureKind2.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-22 11:57:25 $
+ *  last change: $Author: arellano $ $Date: 2001-04-24 00:02:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@ enum TextureKind2
     INTENSITY,
     //-------------------------------------------------------------------------
 
-    /** With this mode the lighting is ignored and only the
+    /** With this mode, the lighting is ignored and only the
         texture color information is used.
      */
     COLOR
