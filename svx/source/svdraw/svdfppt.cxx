@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: sj $ $Date: 2001-06-27 07:40:04 $
+ *  last change: $Author: sj $ $Date: 2001-06-28 08:32:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2513,6 +2513,55 @@ sal_Bool SdrPowerPointImport::SeekToDocument( DffRecordHeader* pRecHd ) const
     return bRet;
 }
 
+sal_Bool SdrPowerPointImport::SeekToContentOfProgTag( sal_Int32 nVersion, SvStream& rSt,
+                                const DffRecordHeader& rSourceHd, DffRecordHeader& rContentHd )
+{
+    sal_Bool    bRetValue = sal_False;
+    sal_uInt32  nOldPos = rSt.Tell();
+
+    DffRecordHeader aProgTagsHd, aProgTagBinaryDataHd;
+
+    rSourceHd.SeekToContent( rSt );
+    if ( SeekToRec( rSt, PPT_PST_ProgTags, rSourceHd.GetRecEndFilePos(), &aProgTagsHd ) )
+    {
+        while( SeekToRec( rSt, PPT_PST_ProgBinaryTag, aProgTagsHd.GetRecEndFilePos(), &aProgTagBinaryDataHd ) )
+        {
+            rSt >> rContentHd;
+            if ( rContentHd.nRecType == PPT_PST_CString )
+            {
+                sal_uInt16  n = 6;
+                sal_uInt32  i = rContentHd.nRecLen >> 1;
+                if ( i > n )
+                {
+                    String aPre, aSuf;
+                    sal_Unicode *pTmp = aPre.AllocBuffer( n );
+                    while ( n-- )
+                        rSt >> *pTmp++;
+                    n = (sal_uInt16)( i - 6 );
+                    pTmp = aSuf.AllocBuffer( n );
+                    while ( n-- )
+                        rSt >> *pTmp++;
+                    sal_Int32 nV = aSuf.ToInt32();
+                    if ( ( nV == nVersion ) && ( aPre == String( RTL_CONSTASCII_USTRINGPARAM( "___PPT" ) ) ) )
+                    {
+                        rContentHd.SeekToEndOfRecord( rSt );
+                        rSt >> rContentHd;
+                        if ( rContentHd.nRecType == PPT_PST_BinaryTagData )
+                        {
+                            bRetValue = sal_True;
+                            break;
+                        }
+                    }
+                }
+            }
+            aProgTagBinaryDataHd.SeekToEndOfRecord( rSt );
+        }
+    }
+    if ( !bRetValue )
+        rSt.Seek( nOldPos );
+    return bRetValue;
+}
+
 UINT32 SdrPowerPointImport::GetAktPageId()
 {
     PptSlidePersistList* pList = GetPageList( eAktPageKind );
@@ -3718,49 +3767,6 @@ BOOL PPTExtParaProv::GetGraphic( UINT32 nInstance, Graphic& rGraph ) const
     return FALSE;
 }
 
-BOOL PPTExtParaProv::SeekToContentOfBinaryData( SvStream& rSt, const DffRecordHeader& rProgTagBinaryDataHd,
-                                                    DffRecordHeader& rContentHd )
-{
-    BOOL bRetValue = FALSE;
-    UINT32 nOldPos = rSt.Tell();
-
-    rProgTagBinaryDataHd.SeekToContent( rSt );
-
-    rSt >> rContentHd;
-    if ( rContentHd.nRecType == PPT_PST_CString )
-    {
-        sal_uInt16  n = 6;
-        sal_uInt32  i = rContentHd.nRecLen >> 1;
-        if ( i > n )
-        {
-            String aPre, aSuf;
-            sal_Unicode *pTmp = aPre.AllocBuffer( n );
-            while ( n-- )
-                rSt >> *pTmp++;
-            n = (sal_uInt16)( i - 6 );
-            pTmp = aSuf.AllocBuffer( n );
-            while ( n-- )
-                rSt >> *pTmp++;
-            sal_Int32 nVersion = aSuf.ToInt32();
-            if ( ( nVersion >= 9 ) && ( aPre == String( RTL_CONSTASCII_USTRINGPARAM( "___PPT" ) ) ) )
-            {
-                rContentHd.SeekToEndOfRecord( rSt );
-                rSt >> rContentHd;
-                if ( rContentHd.nRecType == PPT_PST_BinaryTagData )
-                    bRetValue = TRUE;
-            }
-        }
-    }
-    if ( !bRetValue )
-        rSt.Seek( nOldPos );
-    return bRetValue;
-}
-
-BOOL PPTExtParaProv::SeekToContent( SvStream& rSt, const DffRecordHeader& rProgTagBinaryDataHd, DffRecordHeader& rContentHd )
-{
-    return SeekToContentOfBinaryData( rSt, rProgTagBinaryDataHd, rContentHd );
-}
-
 PPTExtParaProv::PPTExtParaProv( SdrPowerPointImport& rMan, SvStream& rSt, const DffRecordHeader* pHd ) :
     bStyles         ( FALSE ),
     bGraphics       ( FALSE )
@@ -3771,18 +3777,12 @@ PPTExtParaProv::PPTExtParaProv( SdrPowerPointImport& rMan, SvStream& rSt, const 
 
     DffRecordHeader aHd;
     DffRecordHeader aContentDataHd;
-    DffRecordHeader aProgTagHd;
-    DffRecordHeader aProgTagBinaryDataHd;
 
     const DffRecordHeader* pListHd = rMan.aDocRecManager.GetRecordHeader( PPT_PST_List, SEEK_FROM_BEGINNING );
     while( pListHd )
     {
         pListHd->SeekToContent( rSt );
-        if ( !rMan.SeekToRec( rSt, PPT_PST_ProgTags, pListHd->GetRecEndFilePos(), &aProgTagHd ) )
-            break;
-        if ( !rMan.SeekToRec( rSt, PPT_PST_ProgBinaryTag, aProgTagHd.GetRecEndFilePos(), &aProgTagBinaryDataHd ) )
-            break;
-        if ( !SeekToContentOfBinaryData( rSt, aProgTagBinaryDataHd, aContentDataHd ) )
+        if ( !rMan.SeekToContentOfProgTag( 9, rSt, *pListHd, aContentDataHd ) )
             break;
         while ( ( rSt.GetError() == 0 ) && ( rSt.Tell() < aContentDataHd.GetRecEndFilePos() ) )
         {
@@ -3858,12 +3858,7 @@ PPTExtParaProv::PPTExtParaProv( SdrPowerPointImport& rMan, SvStream& rSt, const 
 
     while( pHd )
     {   // get the extended paragraph styles on mainmaster ( graphical bullets, num ruling ... )
-        pHd->SeekToContent( rSt );
-        if ( !rMan.SeekToRec( rSt, PPT_PST_ProgTags, pHd->GetRecEndFilePos(), &aProgTagHd ) )
-            break;
-        if ( !rMan.SeekToRec( rSt, PPT_PST_ProgBinaryTag, aProgTagHd.GetRecEndFilePos(), &aProgTagBinaryDataHd ) )
-            break;
-        if ( !SeekToContentOfBinaryData( rSt, aProgTagBinaryDataHd, aContentDataHd ) )
+        if ( !rMan.SeekToContentOfProgTag( 9, rSt, *pHd, aContentDataHd ) )
             break;
         while ( ( rSt.GetError() == 0 ) && ( rSt.Tell() < aContentDataHd.GetRecEndFilePos() ) )
         {
@@ -6500,9 +6495,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
             }
             rIn.Seek( nOldPos );
             DffRecordHeader aProgTagHd;
-            if ( rSdrPowerPointImport.SeekToRec( rIn, PPT_PST_ProgTags, aClientDataContainerHd.GetRecEndFilePos(), &aProgTagHd )
-                    && rSdrPowerPointImport.SeekToRec( rIn, PPT_PST_ProgBinaryTag, aProgTagHd.GetRecEndFilePos(), &aProgTagHd )
-                        && pExtParaProv->SeekToContent( rIn, aProgTagHd, aProgTagHd ) )
+            if ( rSdrPowerPointImport.SeekToContentOfProgTag( 9, rIn, aClientDataContainerHd, aProgTagHd ) )
             {
                 rIn >> aExtParaHd;
             }
