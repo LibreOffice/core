@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FilterConfigItem.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sj $ $Date: 2002-09-16 09:50:58 $
+ *  last change: $Author: sj $ $Date: 2002-11-28 10:07:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -385,8 +385,8 @@ Size FilterConfigItem::ReadSize( const OUString& rKey, const Size& rDefault )
     Any aAny;
     Size aRetValue( rDefault );
 
-    const OUString sWidth( RTL_CONSTASCII_USTRINGPARAM( "Width" ) );
-    const OUString sHeight( RTL_CONSTASCII_USTRINGPARAM( "Height" ) );
+    const OUString sWidth( RTL_CONSTASCII_USTRINGPARAM( "LogicalWidth" ) );
+    const OUString sHeight( RTL_CONSTASCII_USTRINGPARAM( "LogicalHeight" ) );
 
     Reference< XPropertySet > aXPropSet;
     try
@@ -513,8 +513,8 @@ void FilterConfigItem::WriteInt32( const OUString& rKey, sal_Int32 nNewValue )
 
 void FilterConfigItem::WriteSize( const OUString& rKey, const Size& rNewValue )
 {
-    const OUString sWidth( RTL_CONSTASCII_USTRINGPARAM( "Width" ) );
-    const OUString sHeight( RTL_CONSTASCII_USTRINGPARAM( "Height" ) );
+    const OUString sWidth( RTL_CONSTASCII_USTRINGPARAM( "LogicalWidth" ) );
+    const OUString sHeight( RTL_CONSTASCII_USTRINGPARAM( "LogicalHeight" ) );
 
     PropertyValue aWidth;
     aWidth.Name = sWidth;
