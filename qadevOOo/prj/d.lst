@@ -1,2 +1,1 @@
-..\%__SRC%\class\OOoRunner.jar %_DEST%\bin%_EXT%\OOoRunner.jar
-
+..\%__SRC%\class\OOoRunner*.jar %_DEST%\bin%_EXT%
