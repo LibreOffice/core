@@ -1,4 +1,4 @@
-[%TITLE%]
+﻿[%TITLE%]
 en-US = "Title"
 de = "Titel"
 
@@ -32,11 +32,11 @@ de = "Schlüsselwörter:"
 
 [%COMMENTS%]
 en-US = "Comments"
-de = "Kommentare"
+de = "Kommentar"
 
 [%COMMENTS_COLON%]
 en-US = "Comments:"
-de = "Kommentare:"
+de = "Kommentar:"
 
 [%PAGES%]
 en-US = "Pages"
@@ -115,20 +115,20 @@ en-US = "Modified:"
 de = "Geändert am:"
 
 [%DOCUMENT_NUMBER%]
-en-US = "Document number"
-de = "Dokumentnummer"
+en-US = "Revision number"
+de = "Version"
 
 [%DOCUMENT_NUMBER_COLON%]
-en-US = "Document number:"
-de = "Dokumentnummer:"
+en-US = "Revision number:"
+de = "Version:"
 
 [%EDITING_TIME%]
-en-US = "Editing time"
-de = "Bearbeitungszeit"
+en-US = "Total editing time"
+de = "Gesamtbearbeitungszeit"
 
 [%EDITING_TIME_COLON%]
-en-US = "Editing time:"
-de = "Bearbeitungszeit:"
+en-US = "Total editing time:"
+de = "Gesamtbearbeitungszeit:"
 
 [%DESCRIPTION%]
 en-US = "Description"
@@ -138,7 +138,13 @@ de = "Beschreibung"
 en-US = "Description:"
 de = "Beschreibung:"
 
+[%SIZE_COLON%]
+en-US = "Size:"
+de = "Größe:"
 
+[%TYPE_COLON%]
+en-US = "Type:"
+de = "Typ:"
 
 
 
