@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartDocument.idl,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 17:56:04 $
+ *  last change: $Author: hr $ $Date: 2004-08-03 13:21:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,8 @@ published service ChartDocument
         data to a chart via the improved data connection method using
         an <type scope="com::sun::star::chart2">XDataProvider</type>.
      */
-    [optional] interface ::com::sun::star::chart2::XDataReceiver;
+    // BM: #i32138# XDataReceiver is not yet published
+//    [optional] interface ::com::sun::star::chart2::XDataReceiver;
 
     //-------------------------------------------------------------------------
 
