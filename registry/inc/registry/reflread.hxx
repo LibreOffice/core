@@ -2,9 +2,9 @@
  *
  *  $RCSfile: reflread.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-14 09:37:08 $
+ *  last change: $Author: vg $ $Date: 2001-05-14 16:10:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,7 +143,7 @@ class RegistryTypeReaderLoader
 public:
     RegistryTypeReaderLoader()
         : ::salhelper::ODynamicLoader<RegistryTypeReader_Api>
-            (::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SAL_MODULENAME( "reg" LIBRARY_VERSION ) ) ),
+            (::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SAL_MODULENAME_WITH_VERSION( "reg", LIBRARY_VERSION ) ) ),
              ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(REGISTRY_TYPE_READER_INIT_FUNCTION_NAME) ))
         {}
 
