@@ -32,7 +32,7 @@ CommandLine::CommandLine(size_t argc, char* argv[], const std::string& ArgPrefix
 
 /** Return the argument count
 */
-size_t CommandLine::GetArgumentCount() const
+size_t CommandLine::get_arg_count() const
 {
     return m_argc;
 }
@@ -48,7 +48,7 @@ size_t CommandLine::GetArgumentCount() const
     @throws std::out_of_range exception
     if the given index is to high
 */
-std::string CommandLine::GetArgument(size_t Index) const
+std::string CommandLine::get_arg(size_t Index) const
 {
     OSL_PRECOND(Index < m_argc, "Index out of range");
 
@@ -66,7 +66,7 @@ std::string CommandLine::GetArgument(size_t Index) const
     If the are no argument names the returned
     container is empty.
 */
-StringListPtr_t CommandLine::GetArgumentNames() const
+StringListPtr_t CommandLine::get_arg_names() const
 {
     StringListPtr_t arg_cont(new StringList_t());
 
@@ -74,7 +74,7 @@ StringListPtr_t CommandLine::GetArgumentNames() const
     {
         std::string argn = m_argv[i];
 
-        if (IsArgumentName(argn))
+        if (is_arg_name(argn))
             arg_cont->push_back(argn);
     }
 
@@ -97,7 +97,7 @@ StringListPtr_t CommandLine::GetArgumentNames() const
     if the specified argument could not be
     found
 */
-std::string CommandLine::GetArgument(const std::string& ArgumentName) const
+std::string CommandLine::get_arg(const std::string& ArgumentName) const
 {
     std::string arg_value;
     size_t i;
@@ -105,7 +105,7 @@ std::string CommandLine::GetArgument(const std::string& ArgumentName) const
     {
         std::string arg = m_argv[i];
 
-        if (ArgumentName == arg && ((i+1) < m_argc) && !IsArgumentName(m_argv[i+1]))
+        if (ArgumentName == arg && ((i+1) < m_argc) && !is_arg_name(m_argv[i+1]))
         {
             arg_value = m_argv[i+1];
             break;
@@ -132,7 +132,7 @@ std::string CommandLine::GetArgument(const std::string& ArgumentName) const
     @throws std::invalid_argument exception if
     the prefix is empty
 */
-void CommandLine::SetArgumentPrefix(const std::string& Prefix)
+void CommandLine::set_arg_prefix(const std::string& Prefix)
 {
     OSL_PRECOND(Prefix.length(), "Empty argument prefix!");
 
@@ -145,7 +145,7 @@ void CommandLine::SetArgumentPrefix(const std::string& Prefix)
 
 /** Returns whether a given argument is an argument name
 */
-bool CommandLine::IsArgumentName(const std::string& Argument) const
+bool CommandLine::is_arg_name(const std::string& Argument) const
 {
     return (0 == Argument.compare(0, m_argprefix.length(), m_argprefix));
 }
