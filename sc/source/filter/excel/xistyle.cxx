@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xistyle.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2003-05-21 07:59:22 $
+ *  last change: $Author: vg $ $Date: 2003-05-27 15:07:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1198,19 +1198,20 @@ void XclImpXF::UpdateUsedFlags( const XclImpXF& rParentXF )
 {
     /*  Enables mb***Used flags, if the formatting attributes differ from
         the passed XF record. In cell XFs Excel uses the cell attributes,
-        if they differ from the parent style XF. */
+        if they differ from the parent style XF.
+        #109899# ...or if the respective flag is not set in parent style XF. */
     if( !mbProtUsed )
-        mbProtUsed = !(maProtection == rParentXF.maProtection);
+        mbProtUsed = !rParentXF.mbProtUsed || !(maProtection == rParentXF.maProtection);
     if( !mbFontUsed )
-        mbFontUsed = (mnFont != rParentXF.mnFont);
+        mbFontUsed = !rParentXF.mbFontUsed || (mnFont != rParentXF.mnFont);
     if( !mbFmtUsed )
-        mbFmtUsed = (mnNumFmt != rParentXF.mnNumFmt);
+        mbFmtUsed = !rParentXF.mbFmtUsed || (mnNumFmt != rParentXF.mnNumFmt);
     if( !mbAlignUsed )
-        mbAlignUsed = !(maAlignment == rParentXF.maAlignment);
+        mbAlignUsed = !rParentXF.mbAlignUsed || !(maAlignment == rParentXF.maAlignment);
     if( !mbBorderUsed )
-        mbBorderUsed = !(maBorder == rParentXF.maBorder);
+        mbBorderUsed = !rParentXF.mbBorderUsed || !(maBorder == rParentXF.maBorder);
     if( !mbAreaUsed )
-        mbAreaUsed = !(maArea == rParentXF.maArea);
+        mbAreaUsed = !rParentXF.mbAreaUsed || !(maArea == rParentXF.maArea);
 }
 
 const ScPatternAttr& XclImpXF::CreatePattern( bool bSkipPoolDefs )
