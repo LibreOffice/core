@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winwmf.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-17 16:06:17 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 14:16:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 #endif
 #ifndef _RTL_TENCINFO_H
 #include <rtl/tencinfo.h>
+#endif
+#ifndef _OSL_ENDIAN_H_
+#include <osl/endian.h>
 #endif
 
 //====================== MS-Windows-defines ===============================
@@ -843,7 +846,7 @@ void WMFReader::ReadRecordParams( USHORT nFunction )
                     sal_uInt32 nEscLen = nLen - 14;
                     if ( nEscLen <= ( nRecSize * 2 ) )
                     {
-#ifdef __BIGENDIAN
+#ifdef OSL_BIGENDIAN
                         sal_uInt32 i, nTmp = SWAPLONG( nEsc );
                         sal_uInt32 nCheckSum = rtl_crc32( 0, &nTmp, 4 );
 #else
