@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dapiuno.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 12:21:48 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:05:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,13 +153,13 @@ class ScDataPilotTablesObj : public cppu::WeakImplHelper4<
 {
 private:
     ScDocShell*             pDocShell;
-    USHORT                  nTab;
+    SCTAB                   nTab;
 
-    ScDataPilotTableObj*    GetObjectByIndex_Impl(USHORT nIndex);
+    ScDataPilotTableObj*    GetObjectByIndex_Impl(SCSIZE nIndex);
     ScDataPilotTableObj*    GetObjectByName_Impl(const ::rtl::OUString& aName);
 
 public:
-                            ScDataPilotTablesObj(ScDocShell* pDocSh, USHORT nT);
+                            ScDataPilotTablesObj(ScDocShell* pDocSh, SCTAB nT);
     virtual                 ~ScDataPilotTablesObj();
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
@@ -358,11 +358,11 @@ class ScDataPilotTableObj : public ScDataPilotDescriptorBase,
                             public com::sun::star::sheet::XDataPilotTable
 {
 private:
-    USHORT                  nTab;
+    SCTAB                   nTab;
     String                  aName;
 
 public:
-                            ScDataPilotTableObj(ScDocShell* pDocSh, USHORT nT, const String& rN);
+                            ScDataPilotTableObj(ScDocShell* pDocSh, SCTAB nT, const String& rN);
     virtual                 ~ScDataPilotTableObj();
 
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
@@ -413,7 +413,7 @@ private:
     ScDataPilotDescriptorBase*  pParent;
     USHORT                      nType;  // DataPilotFieldOrientation oder SC_FIELDORIENT_ALL
 
-    ScDataPilotFieldObj*    GetObjectByIndex_Impl(SCCOLROW nIndex) const;
+    ScDataPilotFieldObj*    GetObjectByIndex_Impl(SCSIZE nIndex) const;
     ScDataPilotFieldObj*    GetObjectByName_Impl(const ::rtl::OUString& aName) const;
 
 public:
@@ -467,13 +467,13 @@ private:
     SfxItemPropertySet          aPropSet;
     ScDataPilotDescriptorBase*  pParent;
     USHORT                      nSourceType;
-    SCCOLROW                    nSourcePos;
+    SCSIZE                      nSourcePos;
     USHORT                      nLastFunc;      // valid while type is HIDDEN (or PAGE)
 
 
 public:
                             ScDataPilotFieldObj(ScDataPilotDescriptorBase* pPar,
-                                                    USHORT nST, SCCOLROW nSP);
+                                                    USHORT nST, SCSIZE nSP);
     virtual                 ~ScDataPilotFieldObj();
 
                             // XNamed
@@ -553,12 +553,12 @@ class ScDataPilotItemsObj : public cppu::WeakImplHelper4<
 {
 private:
     ScDataPilotDescriptorBase*  pParent;
-    SCCOLROW                    nSourcePos; // of the field
+    SCSIZE                      nSourcePos; // of the field
 
-    ScDataPilotItemObj* GetObjectByIndex_Impl(SCCOLROW nIndex) const;
+    ScDataPilotItemObj* GetObjectByIndex_Impl(SCSIZE nIndex) const;
 
 public:
-                            ScDataPilotItemsObj(ScDataPilotDescriptorBase* pPar, SCCOLROW nSP);
+                            ScDataPilotItemsObj(ScDataPilotDescriptorBase* pPar, SCSIZE nSP);
     virtual                 ~ScDataPilotItemsObj();
 
                             // XNameAccess
@@ -604,12 +604,12 @@ class ScDataPilotItemObj : public cppu::WeakImplHelper3<
 private:
     SfxItemPropertySet          aPropSet;
     ScDataPilotDescriptorBase*  pParent;
-    SCCOLROW                    nSourcePos;
-    SCCOLROW                    nIndex;
+    SCSIZE                      nSourcePos;
+    SCSIZE                      nIndex;
 
 
 public:
-                            ScDataPilotItemObj(ScDataPilotDescriptorBase* pPar, SCCOLROW nSP, SCCOLROW nI);
+                            ScDataPilotItemObj(ScDataPilotDescriptorBase* pPar, SCSIZE nSP, SCSIZE nI);
     virtual                 ~ScDataPilotItemObj();
 
                             // XNamed
