@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acorrect.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:59:34 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 16:25:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,9 +68,6 @@
 #include <hintids.hxx>
 #endif
 
-#ifndef _OFF_APP_HXX //autogen
-#include <offmgr/app.hxx>
-#endif
 #ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
 #endif
@@ -117,6 +114,8 @@
 #ifndef _VISCRS_HXX
 #include <viscrs.hxx>
 #endif
+
+#include <svx/acorrcfg.hxx>
 
 class _PaMIntoCrsrShellRing
 {
@@ -520,7 +519,7 @@ void SwAutoCorrExceptWord::CheckChar( const SwPosition& rPos, sal_Unicode cChr )
         rPos.nContent.GetIndex() == nCntnt )
     {
         // die akt. Autokorrektur besorgen:
-        SvxAutoCorrect* pACorr = OFF_APP()->GetAutoCorrect();
+        SvxAutoCorrect* pACorr = SvxAutoCorrCfg::Get()->GetAutoCorrect();
 
         // dann in die Liste aufnehmen:
         if( CptlSttWrd & nFlags )
