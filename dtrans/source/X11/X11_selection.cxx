@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_selection.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: pl $ $Date: 2002-02-20 12:35:35 $
+ *  last change: $Author: hr $ $Date: 2002-02-20 13:26:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,7 +221,7 @@ rtl_TextEncoding x11::getTextPlainEncoding( const OUString& rMimeType )
 
 ::std::hash_map< OUString, SelectionManager*, OUStringHash >& SelectionManager::getInstances()
 {
-    ::std::hash_map< OUString, SelectionManager*, OUStringHash > aInstances;
+    static ::std::hash_map< OUString, SelectionManager*, OUStringHash > aInstances;
     return aInstances;
 }
 
