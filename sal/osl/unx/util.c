@@ -2,9 +2,9 @@
  *
  *  $RCSfile: util.c,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:17:21 $
+ *  last change: $Author: hr $ $Date: 2001-02-27 14:38:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -319,5 +319,52 @@ static char* osl_decodeEtherAddr(const char *ptr, char* buff)
             (ptr[3] & 0377), (ptr[4] & 0377), (ptr[5] & 0377));
     return(buff);
 }
+
+#if defined ( SOLARIS ) && defined ( SPARC )
+#include <sys/types.h>
+#include <sys/processor.h>
+
+/*****************************************************************************/
+/* osl_InitSparcV9 */
+/*****************************************************************************/
+
+void osl_InterlockedCountSetV9(sal_Bool bV9);
+
+/*
+ * osl_InitSparcV9() should be executed as early as possible. We place it in the
+ * .init section of sal
+ */
+#if defined ( __SUNPRO_C ) || defined ( __SUNPRO_CC )
+void osl_InitSparcV9(void);
+#pragma init (osl_InitSparcV9)
+#elif defined ( __GNUC__ )
+void osl_InitSparcV9(void)  __attribute__((constructor));
+#endif
+
+void osl_InitSparcV9(void)
+{
+    /* processor_info() identifies SPARCV8 (ie sun4c machines) simply as "sparc"
+     * and SPARCV9 (ie ultra sparcs, sun4u) as "sparcv9". Since we know that we
+     * run at least on a SPARCV8 architecture or better, any processor type != "sparc"
+     * and != "i386" is considered to be SPARCV9 or better
+     *
+     * This way we are certain that this will still work if someone names SPARCV10
+     * "foobar"
+     */
+    processor_info_t aInfo;
+    int rc;
+
+    rc = processor_info(0, &aInfo);
+
+    if ( rc != -1 ) {
+        if ( !strcmp( "sparc", aInfo.pi_processor_type )    /* SPARCV8 */
+            || !strcmp( "i386", aInfo.pi_processor_type ) ) /* can't happen, but ... */
+            return;
+        /* we are reasonably certain to be on sparcv9/sparcv8plus or better */
+        osl_InterlockedCountSetV9(sal_True);
+    }
+}
+
+#endif
 
 
