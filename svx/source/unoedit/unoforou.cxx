@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoforou.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-26 09:07:27 $
+ *  last change: $Author: vg $ $Date: 2003-06-24 07:40:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -346,25 +346,44 @@ Rectangle SvxOutlinerForwarder::GetCharBounds( USHORT nPara, USHORT nIndex ) con
     // don't rotate for vertical text.
     Size aSize( rOutliner.CalcTextSize() );
     ::std::swap( aSize.Width(), aSize.Height() );
+    bool bIsVertical( rOutliner.IsVertical() == TRUE );
 
     // #108900# Handle virtual position one-past-the end of the string
     if( nIndex >= GetTextLen(nPara) )
     {
-        // #109151# Don't use paper height, but line height instead
-        Rectangle aLast(0,0,0,rOutliner.GetLineHeight(nPara,0));
+        Rectangle aLast;
 
         if( nIndex )
+        {
+            // use last character, if possible
             aLast = rOutliner.GetEditEngine().GetCharacterBounds( EPosition(nPara, nIndex-1) );
 
-        aLast.Move( aLast.Right() - aLast.Left(), 0 );
-        aLast.SetSize( Size(1, aLast.GetHeight()) );
-        return SvxEditSourceHelper::EEToUserSpace( aLast, aSize, rOutliner.IsVertical() == TRUE );
+            // move at end of this last character, make one pixel wide
+            aLast.Move( aLast.Right() - aLast.Left(), 0 );
+            aLast.SetSize( Size(1, aLast.GetHeight()) );
+
+            // take care for CTL
+            aLast = SvxEditSourceHelper::EEToUserSpace( aLast, aSize, bIsVertical );
+        }
+        else
+        {
+            // #109864# Bounds must lie within the paragraph
+            aLast = GetParaBounds( nPara );
+
+            // #109151# Don't use paragraph height, but line height
+            // instead. aLast is already CTL-correct
+            if( bIsVertical)
+                aLast.SetSize( Size( rOutliner.GetLineHeight(nPara,0), 1 ) );
+            else
+                aLast.SetSize( Size( 1, rOutliner.GetLineHeight(nPara,0) ) );
+        }
+
+        return aLast;
     }
     else
     {
         return SvxEditSourceHelper::EEToUserSpace( rOutliner.GetEditEngine().GetCharacterBounds( EPosition(nPara, nIndex) ),
-                                                   aSize,
-                                                   rOutliner.IsVertical() == TRUE );
+                                                   aSize, bIsVertical );
     }
 }
 
