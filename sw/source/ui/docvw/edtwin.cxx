@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 12:19:16 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:08:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1618,19 +1618,10 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 case KEY_BACKSPACE | KEY_SHIFT:
                     if( !rSh.HasReadonlySel() )
                     {
-                        BOOL bOutline = FALSE;
-#ifdef TASK_59308
-                        const SwTxtFmtColl* pColl;
-                        if( !rSh.SwCrsrShell::HasSelection() &&
-                            0 != ( pColl = rSh.GetCurTxtFmtColl() ) &&
-                            NO_NUMBERING != pColl->GetOutlineLevel() &&
-                            NO_NUMBERING == rSh.GetNumLevel( FALSE ) )
-                            bOutline = TRUE;
-#endif
-
+                        // #115901#
                         if( rSh.NumOrNoNum(
                                     KEY_BACKSPACE != rKeyCode.GetFullCode(),
-                                    TRUE, bOutline ))
+                                    TRUE))
                             eKeyState = KS_NumOrNoNum;
                     }
                     break;
