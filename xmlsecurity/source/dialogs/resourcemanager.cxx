@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resourcemanager.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:52:58 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 18:05:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,9 +213,9 @@ namespace XmlSec
 
     String GetContentPart( const String& _rRawString, const String& _rPartId )
     {
-        String      s;
+        String s;
 
-        xub_StrLen  nContStart = _rRawString.Search( _rPartId );
+        xub_StrLen nContStart = _rRawString.Search( _rPartId );
         if( nContStart != STRING_NOTFOUND )
         {
             nContStart += _rPartId.Len();
@@ -227,6 +227,36 @@ namespace XmlSec
         }
 
         return s;
+    }
+
+    /**
+     * This Method should consider some string like "C=CN-XXX , O=SUN-XXX , CN=Jack" ,
+     * here the first CN represent china , and the second CN represent the common name ,
+     * so I changed the method to handle this .
+     * By CP , mailto : chandler.peng@sun.com
+     **/
+    String GetContentPart( const String& _rRawString )
+    {
+        // search over some parts to find a string
+        //static char* aIDs[] = { "CN", "OU", "O", "E", NULL };
+        static char* aIDs[] = { "CN=", "OU=", "O=", "E=", NULL };// By CP
+        String sPart;
+        int i = 0;
+        while ( aIDs[i] )
+        {
+            String sPartId = String::CreateFromAscii( aIDs[i++] );
+            xub_StrLen nContStart = _rRawString.Search( sPartId );
+            if ( nContStart != STRING_NOTFOUND )
+            {
+                nContStart += sPartId.Len();
+                //++nContStart;                   // now it's start of content, directly after Id // delete By CP
+                xub_StrLen nContEnd = _rRawString.Search( sal_Unicode( ',' ), nContStart );
+                sPart = String( _rRawString, nContStart, nContEnd - nContStart );
+                break;
+            }
+        }
+
+        return sPart;
     }
 
     String GetHexString( const ::com::sun::star::uno::Sequence< sal_Int8 >& _rSeq, const char* _pSep, UINT16 _nLineBreak )
