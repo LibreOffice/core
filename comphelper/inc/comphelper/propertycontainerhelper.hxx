@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertycontainerhelper.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2004-01-20 09:05:06 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 15:59:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,9 @@
 #ifndef __SGI_STL_VECTOR
 #include <vector>
 #endif
+#ifndef INCLUDED_COMPHELPERDLLAPI_H
+#include "comphelper/comphelperdllapi.h"
+#endif
 
 //.........................................................................
 namespace comphelper
@@ -85,7 +88,7 @@ namespace comphelper
     The property values are usually held in derived classes, but can also be given to the
     responsibility of this class here.
 */
-class OPropertyContainerHelper
+class COMPHELPER_DLLPUBLIC OPropertyContainerHelper
 {
     typedef ::std::vector< ::com::sun::star::uno::Any > PropertyContainer;
     typedef PropertyContainer::iterator                 PropertyContainerIterator;
@@ -128,7 +131,7 @@ public:
 
 private:
     // comparing two property descriptions
-    struct PropertyDescriptionCompareByHandle : public ::std::binary_function< PropertyDescription, PropertyDescription, bool >
+    struct COMPHELPER_DLLPRIVATE PropertyDescriptionCompareByHandle : public ::std::binary_function< PropertyDescription, PropertyDescription, bool >
     {
         bool operator() (const PropertyDescription& x, const PropertyDescription& y) const
         {
@@ -136,7 +139,7 @@ private:
         }
     };
     // comparing two property descriptions
-    struct PropertyDescriptionHandleCompare : public ::std::binary_function< PropertyDescription, sal_Int32, bool >
+    struct COMPHELPER_DLLPRIVATE PropertyDescriptionHandleCompare : public ::std::binary_function< PropertyDescription, sal_Int32, bool >
     {
         bool operator() (const PropertyDescription& x, const sal_Int32& y) const
         {
@@ -241,14 +244,14 @@ protected:
 
 private:
     /// insertion of _rProp into m_aProperties, keeping the sort order
-    void    implPushBackProperty(const PropertyDescription& _rProp);
+    COMPHELPER_DLLPRIVATE void  implPushBackProperty(const PropertyDescription& _rProp);
 
     /// search the PropertyDescription for the given handle (within m_aProperties)
-    PropertiesIterator  searchHandle(sal_Int32 _nHandle);
+    COMPHELPER_DLLPRIVATE PropertiesIterator    searchHandle(sal_Int32 _nHandle);
 
 private:
-    OPropertyContainerHelper( const OPropertyContainerHelper& );            // never implemented
-    OPropertyContainerHelper& operator=( const OPropertyContainerHelper& ); // never implemented
+    COMPHELPER_DLLPRIVATE OPropertyContainerHelper( const OPropertyContainerHelper& );            // never implemented
+    COMPHELPER_DLLPRIVATE OPropertyContainerHelper& operator=( const OPropertyContainerHelper& ); // never implemented
 };
 
 //.........................................................................
