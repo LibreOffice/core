@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtffld.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-25 07:39:32 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 14:13:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1020,6 +1020,7 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
 
 void SwRTFParser::ReadField()
 {
+    bReadSwFly = false; //#it may be that any uses of this need to be removed and replaced
     int nRet = 0;
     int nOpenBrakets = 1;       // die erste wurde schon vorher erkannt !!
     int bFldInst = FALSE, bFldRslt = FALSE;
