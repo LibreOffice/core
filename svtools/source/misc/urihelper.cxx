@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urihelper.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sb $ $Date: 2001-08-21 12:14:22 $
+ *  last change: $Author: sb $ $Date: 2002-07-08 11:57:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -433,7 +433,7 @@ URIHelper::FindFirstURLInText(UniString const & rText,
     //    \W "ftp" 2*("." label) ["/" *wchar] ["#" 1*wchar] \W
     //
     // 5th Production (http):
-    //    \W label 2*("." label) ["/" *wchar] ["#" 1*wchar] \W
+    //    \W "www" 2*("." label) ["/" *wchar] ["#" 1*wchar] \W
     //
     // 6th Production (file):
     //    \W "//" (domain / IPv6reference) ["/" *wchar] ["#" 1*wchar] \W
@@ -516,7 +516,17 @@ URIHelper::FindFirstURLInText(UniString const & rText,
                         if (scanDomain(rText, &i, rEnd) > 0)
                             nURIEnd = i;
                     }
-                    else if (nLabels >= 3) // 4th, 5th
+                    else if (nLabels >= 3
+                             && rText.GetChar(nPos + 3) == '.'
+                             && ((rText.GetChar(nPos) == 'w'
+                                  && rText.GetChar(nPos + 1) == 'w'
+                                  && rText.GetChar(nPos + 2) == 'w')
+                                 || (rText.GetChar(nPos) == 'f'
+                                     && rText.GetChar(nPos + 1) == 't'
+                                     && rText.GetChar(nPos + 2) == 'p')))
+                        // 4th, 5th
+                        // (note that rText.GetChar(nPos + 3) is guaranteed to
+                        // be valid)
                     {
                         nURIEnd = i;
                         if (i != rEnd && rText.GetChar(i) == '/')
