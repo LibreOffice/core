@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: fs $ $Date: 2002-08-13 14:02:34 $
+ *  last change: $Author: os $ $Date: 2002-08-14 11:01:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4794,13 +4794,20 @@ Relevant on platforms where file/folder picker integration is implemented.</desc
 					<!-- UIHints: setup -->
 					<value>false</value>
 					<info>
-						<desc xml:lang="en-US">Specifies, wheter CTL font settings are available (true) or not (false).</desc>
+                        <desc xml:lang="en-US">Specifies, whether CTL font settings are available (true) or not (false).</desc>
 					</info>
 				</prop>
-				<info>
+                <prop oor:name="CTLSequenceChecking" oor:type="xs:boolean">
+					<!-- UIHints: setup -->
+					<value>false</value>
+					<info>
+                        <desc xml:lang="en-US">Specifies, whether CTL strings are checked for the correct input sequence(true) or not (false).</desc>
+					</info>
+				</prop>
+                <info>
 					<desc xml:lang="en-US">Contains settings for the languages with complex text layout (Hebrew, Arabic, Thai,...).</desc>
 				</info>
-			</group>
+            </group>
 		</group>
 		<group oor:name="Startup">
 			<!-- Responsible: AS -->
