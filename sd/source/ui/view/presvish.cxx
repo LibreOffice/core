@@ -2,9 +2,9 @@
  *
  *  $RCSfile: presvish.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2001-08-07 15:06:26 $
+ *  last change: $Author: ka $ $Date: 2001-08-13 10:39:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,13 @@ SdPresViewShell::SdPresViewShell( SfxViewFrame* pFrame, const SdDrawViewShell& r
 
 SdPresViewShell::~SdPresViewShell()
 {
+    if( GetViewFrame() && GetViewFrame()->GetTopFrame() )
+    {
+        WorkWindow* pWorkWindow = (WorkWindow*) GetViewFrame()->GetTopFrame()->GetWindow().GetParent();
+
+        if( pWorkWindow )
+            pWorkWindow->StartPresentationMode( FALSE, pFuSlideShow ? pFuSlideShow->IsAlwaysOnTop() : 0 );
+    }
 }
 
 // -----------------------------------------------------------------------------
