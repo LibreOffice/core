@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: avy $ $Date: 2001-03-30 10:16:15 $
+ *  last change: $Author: oj $ $Date: 2001-03-30 12:07:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -304,7 +304,7 @@ ODbaseTable::ODbaseTable(ODbaseConnection* _pConnection)
         :ODbaseTable_BASE(_pConnection)
         ,m_pMemoStream(NULL)
         ,m_bWriteableMemo(sal_False)
-        ,rBHelper(cppu::OPropertySetHelper::rBHelper)
+        ,rBHelper(OTable_TYPEDEF::rBHelper)
 {
     // initialize the header
     m_aHeader.db_typ    = dBaseIII;
@@ -326,7 +326,7 @@ ODbaseTable::ODbaseTable(ODbaseConnection* _pConnection,
                                   _CatalogName)
                 ,m_pMemoStream(NULL)
                 ,m_bWriteableMemo(sal_False)
-                ,rBHelper(cppu::OPropertySetHelper::rBHelper)
+                ,rBHelper(OTable_TYPEDEF::rBHelper)
 {
 }
 // -----------------------------------------------------------------------------
@@ -450,32 +450,39 @@ BOOL ODbaseTable::ReadMemoHeader()
 String ODbaseTable::getEntry()
 {
     ::rtl::OUString aURL;
-    Reference< XResultSet > xDir = m_pConnection->getDir()->getStaticResultSet();
-    Reference< XRow> xRow(xDir,UNO_QUERY);
-    ::rtl::OUString sName;
-    ::rtl::OUString sExt;
-    ::rtl::OUString sNeededExt(m_pConnection->getExtension());
-    sal_Int32 nExtLen = sNeededExt.getLength();
-    sal_Int32 nExtLenWithSep = nExtLen + 1;
-    xDir->beforeFirst();
-    while(xDir->next())
+    try
     {
-        sName = xRow->getString(1);
-
-        // cut the extension
-        sExt = sName.copy(sName.getLength() - nExtLen);
-        sName = sName.copy(0, sName.getLength() - nExtLenWithSep);
-
-        // name and extension have to coincide
-        if ((sName == m_Name) && (sExt == sNeededExt))
+        Reference< XResultSet > xDir = m_pConnection->getDir()->getStaticResultSet();
+        Reference< XRow> xRow(xDir,UNO_QUERY);
+        ::rtl::OUString sName;
+        ::rtl::OUString sExt;
+        ::rtl::OUString sNeededExt(m_pConnection->getExtension());
+        sal_Int32 nExtLen = sNeededExt.getLength();
+        sal_Int32 nExtLenWithSep = nExtLen + 1;
+        xDir->beforeFirst();
+        while(xDir->next())
         {
-            Reference< XContentAccess > xContentAccess( xDir, UNO_QUERY );
-            aURL = xContentAccess->queryContentIdentifierString();
-            break;
+            sName = xRow->getString(1);
+
+            // cut the extension
+            sExt = sName.copy(sName.getLength() - nExtLen);
+            sName = sName.copy(0, sName.getLength() - nExtLenWithSep);
+
+            // name and extension have to coincide
+            if ((sName == m_Name) && (sExt == sNeededExt))
+            {
+                Reference< XContentAccess > xContentAccess( xDir, UNO_QUERY );
+                aURL = xContentAccess->queryContentIdentifierString();
+                break;
+            }
         }
+        xDir->beforeFirst(); // move back to before first record
     }
-    xDir->beforeFirst(); // move back to before first record
-    return aURL.getStr();
+    catch(Exception&)
+    {
+        OSL_ASSERT(0);
+    }
+    return aURL;
 }
 // -------------------------------------------------------------------------
 void ODbaseTable::refreshColumns()
@@ -1121,7 +1128,7 @@ BOOL ODbaseTable::CreateFile(const INetURLObject& aFile, BOOL& bCreateMemo)
             ::rtl::OUString sMsg = ::rtl::OUString::createFromAscii("Invalid column name length for column: ");
             sMsg += aName;
             sMsg += ::rtl::OUString::createFromAscii("!");
-            throw SQLException(sMsg,*this,::rtl::OUString::createFromAscii("HY0000"),1000,Any());
+            throw SQLException(sMsg,*this,SQLSTATE_GENERAL,1000,Any());
         }
 
         ByteString aCol(aName.getStr(), getConnection()->getTextEncoding());
@@ -1159,7 +1166,7 @@ BOOL ODbaseTable::CreateFile(const INetURLObject& aFile, BOOL& bCreateMemo)
                     ::rtl::OUString sMsg = ::rtl::OUString::createFromAscii("Invalid column type for column: ");
                     sMsg += aName;
                     sMsg += ::rtl::OUString::createFromAscii("!");
-                    throw SQLException(sMsg,*this,::rtl::OUString::createFromAscii("HY0000"),1000,Any());
+                    throw SQLException(sMsg,*this,SQLSTATE_GENERAL,1000,Any());
                 }
         }
 
@@ -1180,7 +1187,7 @@ BOOL ODbaseTable::CreateFile(const INetURLObject& aFile, BOOL& bCreateMemo)
                     ::rtl::OUString sMsg = ::rtl::OUString::createFromAscii("Invalid precision for column: ");
                     sMsg += aName;
                     sMsg += ::rtl::OUString::createFromAscii("!");
-                    throw SQLException(sMsg,*this,::rtl::OUString::createFromAscii("HY0000"),1000,Any());
+                    throw SQLException(sMsg,*this,SQLSTATE_GENERAL,1000,Any());
                 }
                 (*m_pFileStream) << (BYTE) Min((ULONG)nPrecision, 255UL);      //Feldlänge
                 nRecLength += (USHORT)Min((ULONG)nPrecision, 255UL);
@@ -1195,7 +1202,7 @@ BOOL ODbaseTable::CreateFile(const INetURLObject& aFile, BOOL& bCreateMemo)
                     ::rtl::OUString sMsg = ::rtl::OUString::createFromAscii("Precision is less than scale for column: ");
                     sMsg += aName;
                     sMsg += ::rtl::OUString::createFromAscii("!");
-                    throw SQLException(sMsg,*this,::rtl::OUString::createFromAscii("HY0000"),1000,Any());
+                    throw SQLException(sMsg,*this,SQLSTATE_GENERAL,1000,Any());
                     break;
                 }
                 if (getBOOL(xCol->getPropertyValue(PROPERTY_ISCURRENCY))) // Currency wird gesondert behandelt
@@ -1234,7 +1241,7 @@ BOOL ODbaseTable::CreateFile(const INetURLObject& aFile, BOOL& bCreateMemo)
                     ::rtl::OUString sMsg = ::rtl::OUString::createFromAscii("Invalid column type for column: ");
                     sMsg += aName;
                     sMsg += ::rtl::OUString::createFromAscii("!");
-                    throw SQLException(sMsg,*this,::rtl::OUString::createFromAscii("HY0000"),1000,Any());
+                    throw SQLException(sMsg,*this,SQLSTATE_GENERAL,1000,Any());
                 }
         }
         m_pFileStream->Write(aBuffer, 14);
@@ -1721,7 +1728,7 @@ BOOL ODbaseTable::UpdateBuffer(OValueVector& rRow, OValueRow pOrgRow,const Refer
                 {
                     // es existiert kein eindeutiger Wert
                     ::rtl::OUString sMsg = ::rtl::OUString::createFromAscii("Dupilcate value found!");
-                    throw SQLException(sMsg,*this,::rtl::OUString::createFromAscii("HY0000"),1000,Any());
+                    throw SQLException(sMsg,*this,SQLSTATE_GENERAL,1000,Any());
                 }
             }
         }
@@ -1890,7 +1897,7 @@ BOOL ODbaseTable::UpdateBuffer(OValueVector& rRow, OValueRow pOrgRow,const Refer
             ::rtl::OUString sMsg = ::rtl::OUString::createFromAscii("Invalid value for column: ");
             sMsg += aColName;
             sMsg += ::rtl::OUString::createFromAscii("!");
-            throw SQLException(sMsg,*this,::rtl::OUString::createFromAscii("HY0000"),1000,Any());
+            throw SQLException(sMsg,*this,SQLSTATE_GENERAL,1000,Any());
         }
         // Und weiter ...
         nByteOffset += nLen;
@@ -1929,7 +1936,7 @@ void SAL_CALL ODbaseTable::alterColumnByIndex( sal_Int32 index, const Reference<
     if (rBHelper.bDisposed)
         throw DisposedException();
     if(index < 0 || index >= m_pColumns->getCount())
-        throw IndexOutOfBoundsException();
+        throw IndexOutOfBoundsException(::rtl::OUString::valueOf(index),*this);
 
     Reference<XDataDescriptorFactory> xOldColumn;
     m_pColumns->getByIndex(index) >>= xOldColumn;
@@ -1941,7 +1948,7 @@ void ODbaseTable::alterColumn(sal_Int32 index,
                               const Reference< XDataDescriptorFactory >& xOldColumn )
 {
     if(index < 0 || index >= m_pColumns->getCount())
-        throw IndexOutOfBoundsException();
+        throw IndexOutOfBoundsException(::rtl::OUString::valueOf(index),*this);
 
     OSL_ENSURE(descriptor.is(),"descriptor can not be null!");
     OSL_ENSURE(xOldColumn.is(),"xOldColumn can not be null!");
@@ -2112,31 +2119,31 @@ String ODbaseTable::createTempFile()
     String sName(m_Name);
     TempFile aTempFile(sName,&sExt,&sTempName);
     if(!aTempFile.IsValid())
-        throw SQLException(::rtl::OUString::createFromAscii("Error while alter table!"),NULL,::rtl::OUString::createFromAscii("HY0000"),1000,Any());
+        throw SQLException(::rtl::OUString::createFromAscii("Error while alter table!"),NULL,SQLSTATE_GENERAL,1000,Any());
 
     INetURLObject aURL;
     aURL.SetSmartProtocol(INET_PROT_FILE);
     aURL.SetURL(aTempFile.GetURL());
-
-    Content aContent(aURL.GetURLNoPass(),Reference<XCommandEnvironment>());
-    try
-    {
-        if (aContent.isDocument())
-        {
-            // Hack fuer Bug #30609 , nur wenn das File existiert und die Laenge > 0 gibt es einen Fehler
-            SvStream* pFileStream = ::utl::UcbStreamHelper::CreateStream( aURL.GetURLNoPass(),STREAM_READ);
-
-            if (pFileStream && pFileStream->Seek(STREAM_SEEK_TO_END))
-            {
-                //  aStatus.SetError(ERRCODE_IO_ALREADYEXISTS,TABLE,aFile.GetFull());
-                return String();
-            }
-            delete pFileStream;
-        }
-    }
-    catch(Exception&) // a exception is thrown when no file exists
-    {
-    }
+//
+//  Content aContent(aURL.GetURLNoPass(),Reference<XCommandEnvironment>());
+//  try
+//  {
+//      if (aContent.isDocument())
+//      {
+//          // Hack fuer Bug #30609 , nur wenn das File existiert und die Laenge > 0 gibt es einen Fehler
+//          SvStream* pFileStream = ::utl::UcbStreamHelper::CreateStream( aURL.GetURLNoPass(),STREAM_READ);
+//
+//          if (pFileStream && pFileStream->Seek(STREAM_SEEK_TO_END))
+//          {
+//              //  aStatus.SetError(ERRCODE_IO_ALREADYEXISTS,TABLE,aFile.GetFull());
+//              return String();
+//          }
+//          delete pFileStream;
+//      }
+//  }
+//  catch(Exception&) // a exception is thrown when no file exists
+//  {
+//  }
     String sNewName(aURL.getName());
     sNewName.Erase(sNewName.Len() - sExt.Len());
     return sNewName;
