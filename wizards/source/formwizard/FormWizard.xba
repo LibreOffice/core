@@ -99,8 +99,7 @@ Dim i as Integer
 	ImportStyles()
 	ToggleWindow(True)
 	oDialogModel.imgTheme.ImageURL = FormPath &amp; &quot;FormWizard_1.bmp&quot;
-&apos;	DlgFormDB.Execute()
-	DlgFormDB.Visible = True
+	DlgFormDB.Execute()
 	Exit Sub
 
 GlobalError:
