@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: obo $ $Date: 2004-06-03 15:00:56 $
+#   last change: $Author: rt $ $Date: 2004-07-23 14:47:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -69,28 +69,14 @@ NO_BSYMBOLIC=TRUE
 ENABLE_EXCEPTIONS=TRUE
 LIBTARGET=NO
 
-# --- Settings -----------------------------------------------------
+.INCLUDE: settings.mk
 
-.INCLUDE :  svpre.mk
-.INCLUDE :  settings.mk
-DLLPRE =
-.INCLUDE :  sv.mk
+DLLPRE = # no leading "lib" on .so files
 
-# ------------------------------------------------------------------
 .IF "$(GUI)"=="WNT"
-MY_DLLPOSTFIX=.dll
-DESTDIR=$(BIN)
 BATCH_SUFFIX=.bat
 GIVE_EXEC_RIGHTS=@echo
-WINTARGETS=$(DESTDIR)$/regcomp.exe $(DESTDIR)$/uno.exe 
-
 .ELSE
-.IF "$(OS)"=="MACOSX"
-MY_DLLPOSTFIX=.dylib
-.ELSE
-MY_DLLPOSTFIX=.so
-.ENDIF
-DESTDIR=$(OUT)$/lib
 BATCH_INPROCESS=bridgetest_inprocess
 GIVE_EXEC_RIGHTS=chmod +x 
 .ENDIF
@@ -159,40 +145,40 @@ SHL2VERSIONMAP=component.map
 
 
 .IF "$(SOLAR_JAVA)" != ""
+JARFILES = java_uno.jar jurt.jar ridl.jar
 JAVATARGETS=\
-    $(DESTDIR)$/bridgetest_javaserver$(BATCH_SUFFIX) \
-    $(DESTDIR)$/bridgetest_inprocess_java$(BATCH_SUFFIX)
+    $(DLLDEST)$/bridgetest_javaserver$(BATCH_SUFFIX) \
+    $(DLLDEST)$/bridgetest_inprocess_java$(BATCH_SUFFIX)
 .ENDIF
 
 # --- Targets ------------------------------------------------------
 ALL : \
         ALLTAR \
-        $(DESTDIR)$/uno_types.rdb \
-        $(DESTDIR)$/uno_services.rdb \
-        $(DESTDIR)$/bridgetest_inprocess$(BATCH_SUFFIX) \
-        $(DESTDIR)$/bridgetest_server$(BATCH_SUFFIX) \
-        $(DESTDIR)$/bridgetest_client$(BATCH_SUFFIX) \
-        $(JAVATARGETS) \
-        $(WINTARGETS) \
+        $(DLLDEST)$/uno_types.rdb \
+        $(DLLDEST)$/uno_services.rdb \
+        $(DLLDEST)$/bridgetest_inprocess$(BATCH_SUFFIX) \
+        $(DLLDEST)$/bridgetest_server$(BATCH_SUFFIX) \
+        $(DLLDEST)$/bridgetest_client$(BATCH_SUFFIX) \
+        $(JAVATARGETS)
 
 .INCLUDE :	target.mk
 
 #################################################################
 
-$(DESTDIR)$/uno_types.rdb : $(SOLARBINDIR)$/udkapi.rdb
-    echo $(DESTDIR)
+$(DLLDEST)$/uno_types.rdb : $(SOLARBINDIR)$/udkapi.rdb
+    echo $(DLLDEST)
     $(GNUCOPY) -p $? $@
     $(REGMERGE) $@ / $(BIN)$/bridgetest.rdb
 
-$(DESTDIR)$/bridgetest_inprocess$(BATCH_SUFFIX) : bridgetest_inprocess
+$(DLLDEST)$/bridgetest_inprocess$(BATCH_SUFFIX) : bridgetest_inprocess
     $(GNUCOPY) -p $? $@
     $(GIVE_EXEC_RIGHTS) $@
 
-$(DESTDIR)$/bridgetest_client$(BATCH_SUFFIX) : bridgetest_client
+$(DLLDEST)$/bridgetest_client$(BATCH_SUFFIX) : bridgetest_client
     $(GNUCOPY) -p $? $@
     $(GIVE_EXEC_RIGHTS) $@
 
-$(DESTDIR)$/bridgetest_server$(BATCH_SUFFIX) : bridgetest_server
+$(DLLDEST)$/bridgetest_server$(BATCH_SUFFIX) : bridgetest_server
     $(GNUCOPY) -p $? $@
     $(GIVE_EXEC_RIGHTS) $@
 
@@ -200,13 +186,13 @@ $(DESTDIR)$/bridgetest_server$(BATCH_SUFFIX) : bridgetest_server
 .IF "$(SOLAR_JAVA)" != ""
 NULLSTR=
 # jar-files, which regcomp needs so that it can use java
-MY_JARS=java_uno.jar ridl.jar sandbox.jar jurt.jar juh.jar
+MY_JARS=java_uno.jar ridl.jar jurt.jar juh.jar
 
 # CLASSPATH, which regcomp needs to be run
 MY_CLASSPATH_TMP=$(foreach,i,$(MY_JARS) $(SOLARBINDIR)$/$i)$(PATH_SEPERATOR)$(XCLASSPATH)
 MY_CLASSPATH=$(strip $(subst,!,$(PATH_SEPERATOR) $(MY_CLASSPATH_TMP:s/ /!/)))$(PATH_SEPERATOR)..$/class
 
-$(DESTDIR)$/bridgetest_javaserver$(BATCH_SUFFIX) : makefile.mk
+$(DLLDEST)$/bridgetest_javaserver$(BATCH_SUFFIX) : makefile.mk
     -rm -f $@
     +echo java -classpath $(MY_CLASSPATH)$(PATH_SEPERATOR)..$/class$/testComponent.jar \
         com.sun.star.comp.bridge.TestComponentMain \
@@ -214,7 +200,7 @@ $(DESTDIR)$/bridgetest_javaserver$(BATCH_SUFFIX) : makefile.mk
         > $@
     $(GIVE_EXEC_RIGHTS) $@
 
-$(DESTDIR)$/bridgetest_inprocess_java$(BATCH_SUFFIX) : makefile.mk
+$(DLLDEST)$/bridgetest_inprocess_java$(BATCH_SUFFIX) : makefile.mk
     -rm -f $@
 .IF "$(GUI)"=="WNT"
     +echo set CLASSPATH=$(MY_CLASSPATH) >> $@
@@ -226,38 +212,38 @@ $(DESTDIR)$/bridgetest_inprocess_java$(BATCH_SUFFIX) : makefile.mk
     $(GIVE_EXEC_RIGHTS) $@
 .ENDIF
 
-.IF "$(GUI)"=="WNT"
-JAVA_TEST_COMPONENT = $(subst,\,/ file:///$(PWD:d))class/testComponent.jar
+.IF "$(GUI)" == "WNT"
+FILEURLPREFIX = file:///
 .ELSE
-JAVA_TEST_COMPONENT = $(subst,\,/ file://$(PWD:d))class/testComponent.jar
+FILEURLPREFIX = file://
 .ENDIF
 
-# I can't make a dependency on shared libraries, because dependent targets
-# get the .setdir current directory. AAARGGGGGG !
-$(DESTDIR)$/uno_services.rdb .SETDIR=$(DESTDIR) : $(WINTARGETS)
-    regcomp -register -br uno_types.rdb -r uno_services.rdb \
-        -c bridgetest.uno$(MY_DLLPOSTFIX)	\
-        -c cppobj.uno$(MY_DLLPOSTFIX)		\
-        -c connector.uno$(MY_DLLPOSTFIX)		\
-        -c acceptor.uno$(MY_DLLPOSTFIX)		\
-        -c bridgefac.uno$(MY_DLLPOSTFIX)		\
-        -c remotebridge.uno$(MY_DLLPOSTFIX)	\
-        -c uuresolver.uno$(MY_DLLPOSTFIX)
+$(DLLDEST)$/uno_services.rdb .ERRREMOVE: $(DLLDEST)$/uno_types.rdb \
+        $(DLLDEST)$/bridgetest.uno$(DLLPOST) $(DLLDEST)$/cppobj.uno$(DLLPOST) \
+        $(MISC)$/$(TARGET)$/bootstrap.rdb
+    - $(MKDIR) $(@:d)
+    $(REGCOMP) -register -br $(DLLDEST)$/uno_types.rdb -r $@ \
+        -c acceptor.uno$(DLLPOST) \
+        -c bridgefac.uno$(DLLPOST) \
+        -c connector.uno$(DLLPOST) \
+        -c remotebridge.uno$(DLLPOST) \
+        -c uuresolver.uno$(DLLPOST) \
+        -c \
+    $(subst,$/,/ $(FILEURLPREFIX)$(PWD)$/$(DLLDEST)$/bridgetest.uno$(DLLPOST)) \
+        -c \
+        $(subst,$/,/ $(FILEURLPREFIX)$(PWD)$/$(DLLDEST)$/cppobj.uno$(DLLPOST))
 .IF "$(SOLAR_JAVA)" != ""
-    regcomp -register -br uno_types.rdb -r uno_services.rdb \
-        -c javaloader.uno$(MY_DLLPOSTFIX)	\
-        -c javavm.uno$(MY_DLLPOSTFIX)
-    regcomp -register -br uno_types.rdb -br uno_services.rdb -r uno_services.rdb \
-        -c $(JAVA_TEST_COMPONENT) \
-        -l com.sun.star.loader.Java \
-        -classpath $(MY_CLASSPATH)
+    $(REGCOMP) -register -br $(DLLDEST)$/uno_types.rdb -r $@ \
+        -c javaloader.uno$(DLLPOST) -c javavm.uno$(DLLPOST)
+    $(REGCOMP) -register  -br $(MISC)$/$(TARGET)$/bootstrap.rdb -r $@ -c \
+        $(subst,$/,/ $(FILEURLPREFIX)$(PWD)$/$(CLASSDIR)$/testComponent.jar) \
+        -classpath $(CLASSPATH)
 .ENDIF
 
-$(DESTDIR)$/regcomp.exe : $(SOLARBINDIR)$/regcomp.exe
-    -rm -f $@
-    cp $? $@
-
-$(DESTDIR)$/uno.exe : $(SOLARBINDIR)$/uno.exe
-    -rm -f $@
-    cp $? $@
-
+$(MISC)$/$(TARGET)$/bootstrap.rdb .ERRREMOVE:
+    - $(MKDIR) $(@:d)
+    + $(COPY) $(SOLARBINDIR)$/types.rdb $@
+.IF "$(SOLAR_JAVA)" != ""
+    $(REGCOMP) -register -r $@ -c javaloader.uno$(DLLPOST) \
+        -c javavm.uno$(DLLPOST)
+.ENDIF
