@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: mav $ $Date: 2001-05-02 13:05:47 $
+#   last change: $Author: sb $ $Date: 2001-05-03 10:09:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -178,6 +178,7 @@ IDLFILES=\
     RemoteContentProviderAcceptor.idl\
     RemoteContentProviderChangeAction.idl\
     RemoteContentProviderChangeEvent.idl\
+    RemoteProxyContentProvider.idl\
     RecipientInfo.idl\
     ResultSetException.idl\
     Rule.idl\
