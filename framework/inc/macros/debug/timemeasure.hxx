@@ -2,9 +2,9 @@
  *
  *  $RCSfile: timemeasure.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2001-05-21 06:12:32 $
+ *  last change: $Author: as $ $Date: 2001-06-05 10:18:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,7 +160,7 @@
         If right testmode is'nt set - implements these macros empty!
     _____________________________________________________________________________________________________________*/
 
-    #undef  LOGFILE_EVENTDEBUG
+    #undef  LOGFILE_TIMEMEASURE
     #define START_TIMEMEASURE( NSTART, NEND )
     #define STOP_TIMEMEASURE( NSTART, NEND, NTIME )
     #define LOG_TIMEMEASURE( SOPERATION, NTIME )
