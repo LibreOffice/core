@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrols.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: fs $ $Date: 2002-07-29 13:45:56 $
+ *  last change: $Author: fs $ $Date: 2002-08-16 09:15:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1689,6 +1689,7 @@ UnoControlImageControlModel::UnoControlImageControlModel()
     ImplRegisterProperty( BASEPROPERTY_IMAGEURL );
     ImplRegisterProperty( BASEPROPERTY_PRINTABLE );
     ImplRegisterProperty( BASEPROPERTY_SCALEIMAGE );
+    ImplRegisterProperty( BASEPROPERTY_TABSTOP );
 }
 
 uno::Any UnoControlImageControlModel::queryAggregation( const uno::Type & rType ) throw(uno::RuntimeException)
