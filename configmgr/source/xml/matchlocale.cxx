@@ -2,9 +2,9 @@
  *
  *  $RCSfile: matchlocale.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 16:26:53 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 13:30:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -257,6 +257,28 @@ LocaleSequence makeLocaleSequence(uno::Sequence<lang::Locale> const& aUnoLocales
     return makeLocaleSeq_impl(aUnoLocales_);
 }
 // -----------------------------------------------------------------------------
+
+uno::Sequence<OUString> makeIsoSequence(LocaleSequence const& aLocales_)
+{
+    LocaleSequence::size_type const nLocaleCount = aLocales_.size();
+    sal_Int32 const nSeqSize = sal_Int32(nLocaleCount);
+    OSL_ASSERT( nSeqSize >= 0 && sal_uInt32(nSeqSize) == nLocaleCount );
+
+    uno::Sequence<OUString> aResult(nSeqSize);
+    std::transform(aLocales_.begin(), aLocales_.end(), aResult.getArray(), &makeIsoLocale);
+
+    return aResult;
+}
+uno::Sequence<Locale>   makeUnoSequence(LocaleSequence const& aLocales_)
+{
+    LocaleSequence::size_type const nLocaleCount = aLocales_.size();
+    sal_Int32 const nSeqSize = sal_Int32(nLocaleCount);
+    OSL_ASSERT( nSeqSize >= 0 && sal_uInt32(nSeqSize) == nLocaleCount );
+
+    uno::Sequence<Locale> aResult( &aLocales_.front(), nSeqSize );
+    return aResult;
+}
+// -----------------------------------------------------------------------------
 bool designatesAllLocales(Locale const& aLocale_)
 {
     return aLocale_.Language.equalsAscii(c_sAnyLanguage);
@@ -331,6 +353,22 @@ MatchResult match(Locale const& aLocale_, LocaleSequence const& aTarget_)
         }
     }
     return MatchResult();
+}
+// -----------------------------------------------------------------------------
+
+bool isMatch(Locale const& aLocale_, LocaleSequence const& aTarget_, MatchQuality eRequiredQuality_)
+{
+    SequencePos const nEnd = aTarget_.size();
+
+    for (SequencePos nPos = 0; nPos < nEnd; ++nPos)
+    {
+        MatchQuality eQuality = match(aLocale_, aTarget_[nPos]);
+        if (eQuality >= eRequiredQuality_)
+        {
+            return true;
+        }
+    }
+    return false;
 }
 // -----------------------------------------------------------------------------
 
