@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE toolbar:toolbar PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "toolbar.dtd">
+<toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
+ <toolbar:toolbaritem xlink:href=".uno:WrapOff" toolbar:helpid="helpid:20472" toolbar:text="" toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:WrapLeft" toolbar:helpid="helpid:20572" toolbar:text="" toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:WrapRight" toolbar:helpid="helpid:20573" toolbar:text="" toolbar:style="radio" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:ImageMapDialog" toolbar:helpid="helpid:10371" toolbar:text="" toolbar:style="radio" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:AlignLeft" toolbar:helpid="helpid:20475" toolbar:text="" toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:AlignRight" toolbar:helpid="helpid:20476" toolbar:text="" toolbar:style="radio" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:AlignTop" toolbar:helpid="helpid:20478" toolbar:text="" toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:AlignVerticalCenter" toolbar:helpid="helpid:20480" toolbar:text="" toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:AlignBottom" toolbar:helpid="helpid:20479" toolbar:text="" toolbar:style="radio" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:SetBorderStyle" toolbar:helpid="helpid:10187" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:LineStyle" toolbar:helpid="helpid:10200" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:FrameLineColor" toolbar:helpid="helpid:10201" toolbar:text="" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:BackgroundColor" toolbar:helpid="helpid:10185" toolbar:text="" toolbar:style="dropdown" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:FrameDialog" toolbar:helpid="helpid:20456" toolbar:text="" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:BringToFront" toolbar:helpid="helpid:10286" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:SendToBack" toolbar:helpid="helpid:10287" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:ToggleAnchorType" toolbar:helpid="helpid:20349" toolbar:text="" />
+</toolbar:toolbar>
