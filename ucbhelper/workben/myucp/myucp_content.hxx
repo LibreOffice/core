@@ -2,9 +2,9 @@
  *
  *  $RCSfile: myucp_content.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2000-11-17 15:38:10 $
+ *  last change: $Author: armin $ $Date: 2001-03-08 10:02:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,7 @@
 #define _MYUCP_CONTENT_HXX
 
 #ifndef __LIST__
-#include <stl/list>
+#include <list>
 #endif
 #ifndef _VOS_REF_HXX_
 #include <vos/ref.hxx>
