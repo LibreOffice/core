@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: pluby $ $Date: 2001-03-02 07:20:17 $
+#   last change: $Author: pluby $ $Date: 2001-03-07 06:16:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -116,7 +116,10 @@ LIB1OBJFILES=$(SLOFILES)
 
 SHL1TARGET=$(TARGET)$(UCP_VERSION)
 SHL1IMPLIB=i$(TARGET)
+.IF "$(OS)"=="MACOSX"
+.ELSE
 SHL1VERSIONMAP=exports.map
+.ENDIF
 
 # @@@ Add additional libs here.
 

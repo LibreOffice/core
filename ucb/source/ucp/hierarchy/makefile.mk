@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: pluby $ $Date: 2001-03-02 07:20:08 $
+#   last change: $Author: pluby $ $Date: 2001-03-07 06:16:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -95,7 +95,10 @@ LIB1OBJFILES=$(SLOFILES)
 
 SHL1TARGET=$(TARGET)$(UCPHIER_MAJOR)
 SHL1IMPLIB=i$(TARGET)
+.IF "$(OS)"=="MACOSX"
+.ELSE
 SHL1VERSIONMAP=	$(TARGET).map
+.ENDIF
 
 SHL1STDLIBS=\
     $(CPPUHELPERLIB) \
