@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: ssa $ $Date: 2002-11-13 13:21:50 $
+ *  last change: $Author: ssa $ $Date: 2002-11-18 12:58:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2948,6 +2948,11 @@ MenuFloatingWindow::~MenuFloatingWindow()
         Application::AccessNotify( AccessNotification( ACCESS_EVENT_POPUPMENU_END, pMenu ) );
 
     aHighlightChangedTimer.Stop();
+
+    // #95056# invalidate screen area covered by system window
+    // so this can be taken into account if the commandhandler performs a scroll operation
+    Rectangle aInvRect( GetWindowExtentsRelative( GetParent() ) );
+    GetParent()->Invalidate( aInvRect );
 }
 
 void MenuFloatingWindow::Resize()
