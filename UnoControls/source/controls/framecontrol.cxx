@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framecontrol.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:11:17 $
+ *  last change: $Author: jbu $ $Date: 2000-10-09 10:13:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,7 +131,7 @@ namespace unocontrols{
 FrameControl::FrameControl( const Reference< XMultiServiceFactory >& xFactory )
     : BaseControl                   ( xFactory                                                                              )
     , OBroadcastHelper              ( m_aMutex                                                                              )
-    , OPropertySetHelper            ( *SAL_STATIC_CAST( OBroadcastHelperVar< OMultiTypeInterfaceContainerHelper >*, this )  )
+    , OPropertySetHelper            ( *SAL_STATIC_CAST( OBroadcastHelper *, this )  )
     , m_aInterfaceContainer         ( m_aMutex                                                                              )
     , m_aConnectionPointContainer   ( m_aMutex                                                                              )
 {
