@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formcontroller.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-26 06:32:03 $
+ *  last change: $Author: tbe $ $Date: 2001-04-26 09:14:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2010,9 +2010,15 @@ namespace pcr
                     pProperty->bIsLocked = sal_True;
                     pProperty->bHasBrowseButton = sal_True;
                     pProperty->nUniqueButtonId = UID_PROP_DLG_BACKGROUNDCOLOR;
-
                 }
-
+                else if (nPropId== PROPERTY_ID_FILLCOLOR )
+                {
+                    bFilter = sal_False;
+                    pProperty->eControlType = BCT_COLORBOX;  //@ new ColorListbox
+                    pProperty->bIsLocked = sal_True;
+                    pProperty->bHasBrowseButton = sal_True;
+                    pProperty->nUniqueButtonId = UID_PROP_DLG_FILLCOLOR;
+                }
                 else if (nPropId == PROPERTY_ID_LABEL)
                 {
                     pProperty->eControlType = BCT_MEDIT;
@@ -2498,7 +2504,7 @@ namespace pcr
 
             //////////////////////////////////////////////////////////////////////
             // Color
-            else if (nPropId == PROPERTY_ID_BACKGROUNDCOLOR )
+            else if (nPropId == PROPERTY_ID_BACKGROUNDCOLOR || nPropId == PROPERTY_ID_FILLCOLOR )
             {
                 sal_uInt32 nColor = aVal.ToInt32();
                 Color aColor( nColor );
@@ -2772,6 +2778,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.16  2001/04/26 06:32:03  fs
+ *  #86017# limit the decimal accuracy to 20
+ *
  *  Revision 1.15  2001/04/12 06:30:10  fs
  *  #84694# +recalcConnection: show an error when trying to open a new connection
  *
