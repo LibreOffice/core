@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridctrl.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-25 10:01:58 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 15:49:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -463,7 +463,7 @@ DbGridControl::NavigationBar::NavigationBar(Window* pParent, WinBits nStyle)
     m_aPrevBtn.SetSymbol(SYMBOL_PREV);
     m_aNextBtn.SetSymbol(SYMBOL_NEXT);
     m_aLastBtn.SetSymbol(SYMBOL_LAST);
-    m_aNewBtn.SetImage(((DbGridControl*)pParent)->GetImage(DbGridControl_Base::NEW));
+    m_aNewBtn.SetModeImage(((DbGridControl*)pParent)->GetImage(DbGridControl_Base::NEW));
 
     m_aFirstBtn.SetHelpId(HID_GRID_TRAVEL_FIRST);
     m_aPrevBtn.SetHelpId(HID_GRID_TRAVEL_PREV);
