@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:05:28 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:26:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,6 @@
 
 #include <tools/solar.h>
 #include <string.h>
-#include <assert.h>
 
 #include "filter.hxx"
 #include "document.hxx"
