@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.27 $
+#   $Revision: 1.28 $
 #
-#   last change: $Author: rt $ $Date: 2005-01-11 14:57:53 $
+#   last change: $Author: kz $ $Date: 2005-01-18 16:10:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,23 +77,21 @@ EXCEPTIONSFILES=\
         $(SLO)$/mailmodel.obj		\
         $(SLO)$/cfg.obj				\
         $(SLO)$/partwnd.obj         \
-        $(SLO)$/menucfg.obj         \
-        $(SLO)$/templdlg.obj        \
+                $(SLO)$/templdlg.obj        \
         $(SLO)$/itemconnect.obj     \
         $(SLO)$/acccfg.obj			\
         $(SLO)$/recfloat.obj
 
 SLOFILES =\
         $(EXCEPTIONSFILES)			\
-        $(SLO)$/sfxdlg.obj            \
+                $(SLO)$/macropg.obj            \
+                $(SLO)$/sfxdlg.obj            \
         $(SLO)$/about.obj			\
         $(SLO)$/basedlgs.obj		\
         $(SLO)$/dinfdlg.obj			\
         $(SLO)$/dinfedt.obj			\
         $(SLO)$/dockwin.obj			\
-        $(SLO)$/eventdlg.obj		\
         $(SLO)$/intro.obj			\
-        $(SLO)$/macropg.obj			\
         $(SLO)$/mailchildwin.obj	\
         $(SLO)$/mailwindow.obj		\
         $(SLO)$/mgetempl.obj		\
@@ -111,7 +109,6 @@ SLOFILES =\
         $(SLO)$/tplpitem.obj		\
         $(SLO)$/versdlg.obj			\
         $(SLO)$/printopt.obj		\
-        $(SLO)$/cfgtreelstbox.obj	\
         $(SLO)$/srchdlg.obj
 
 SRS1NAME=$(TARGET)
