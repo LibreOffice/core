@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 16:52:31 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:43:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4066,7 +4066,10 @@ void SfxViewFrame::ShowChildWindow( USHORT nId, BOOL bVisible )
 {
     SfxWorkWindow* pWork = GetWorkWindow_Impl( nId );
     if ( pWork )
+    {
+        GetDispatcher()->Update_Impl(sal_True);
         pWork->ShowChildWindow_Impl(nId, bVisible, TRUE );
+    }
 }
 
 //--------------------------------------------------------------------
