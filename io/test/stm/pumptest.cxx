@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pumptest.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:24:19 $
+ *  last change: $Author: jbu $ $Date: 2001-01-25 14:06:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,15 +120,18 @@ public:
 
 private:
     void testSimple( const Reference < XInterface > & );
+    void testWrongUsage( const Reference < XInterface > & );
 
 private:
     Sequence<Any>  m_seqExceptions;
     Sequence<OUString> m_seqErrors;
     Sequence<OUString> m_seqWarnings;
+    Reference< XMultiServiceFactory > m_rSmgr;
 
 };
 
-OPumpTest::OPumpTest( const Reference< XMultiServiceFactory > &rFactory )
+OPumpTest::OPumpTest( const Reference< XMultiServiceFactory > &rFactory ) :
+    m_rSmgr( rFactory )
 {
 
 }
@@ -175,6 +178,10 @@ sal_Int32 OPumpTest::test(
             if( 0 == hTestHandle ) {
                 testInvariant( TestName , TestObject );
             }
+            else if ( 1 == hTestHandle )
+            {
+                testWrongUsage( TestObject);
+            }
         }
         catch( Exception & e )
         {
@@ -188,7 +195,7 @@ sal_Int32 OPumpTest::test(
 
         hTestHandle ++;
 
-        if( 1 == hTestHandle )
+        if( 2 == hTestHandle )
         {
             // all tests finished.
             hTestHandle = -1;
@@ -236,6 +243,27 @@ void OPumpTest::testSimple( const Reference < XInterface > &r )
 {
     // jbu todo: add sensible test
 
+}
+
+void OPumpTest::testWrongUsage( const Reference< XInterface > &r )
+{
+    Reference< XActiveDataSource > rSource ( r, UNO_QUERY );
+    Reference< XActiveDataSink > rSink( r , UNO_QUERY );
+    Reference< XActiveDataControl > rControl( r, UNO_QUERY );
+
+    Reference< XInputStream > rIn( m_rSmgr->createInstance(
+        OUString::createFromAscii( "com.sun.star.io.DataInputStream" )),UNO_QUERY);
+    Reference< XOutputStream > rOut( m_rSmgr->createInstance(
+        OUString::createFromAscii( "com.sun.star.io.DataOutputStream" )),UNO_QUERY);
+
+    rSink->setInputStream( rIn );
+    rSource->setOutputStream( rOut );
+
+    rControl->start();
+
+    //wait a second, so that the pumpthread can terminate
+    TimeValue w = {1,1};
+    osl_waitThread( &w );
 }
 
 Reference< XInterface > SAL_CALL OPumpTest_CreateInstance( const Reference< XMultiServiceFactory > & rSMgr ) throw( Exception )
