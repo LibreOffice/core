@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objuno.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-27 13:19:55 $
+ *  last change: $Author: dv $ $Date: 2000-12-07 10:11:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,8 @@
 #include <objshimp.hxx>
 
 #include <osl/mutex.hxx>
+#include <vos/mutex.hxx>
+
 using namespace vos;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
@@ -792,6 +794,8 @@ SfxStandaloneDocumentInfoObject::~SfxStandaloneDocumentInfoObject()
 
 SvStorage* SfxStandaloneDocumentInfoObject::GetStorage_Impl( const String& rName, sal_Bool bWrite )
 {
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
     // Medium erstellen
     if ( _pMedium )
         delete _pMedium;
