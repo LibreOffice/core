@@ -2,9 +2,9 @@
  *
  *  $RCSfile: float3d.src,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: cl $ $Date: 2002-06-03 09:01:44 $
+ *  last change: $Author: vg $ $Date: 2002-06-10 20:10:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -525,7 +525,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text [ swedish ] = "Favoriter" ;
         Text [ danish ] = "Favoriter" ;
         Text [ italian ] = "Preferiti" ;
-        Text [ spanish ] = "Favoritos" ;
+        Text [ spanish ] = "~Favoritos" ;
         Text [ french ] = "Favoris" ;
         Text [ dutch ] = "Favorieten" ;
         Text [ portuguese ] = "Favoritos" ;
@@ -538,7 +538,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text[ dutch ] = "Favorieten";
         Text[ chinese_simplified ] = "æ”¶è—";
         Text[ greek ] = "ĞñïôéìŞóåéò";
-        Text[ korean ] = "ì¦ê²¨ ì°¾ê¸°";
+        Text[ korean ] = "ì¦ê²¨ì°¾ê¸°";
         Text[ turkish ] = "Sık kullanılanlar";
         Text[ catalan ] = "Favoritos";
         Text[ finnish ] = "Suosikit";
@@ -625,18 +625,18 @@ DockingWindow RID_SVXFLOAT_3D
         Text [ swedish ] = "Horisontell" ;
         Text [ danish ] = "Vandret" ;
         Text [ italian ] = "Orizzontale" ;
-        Text [ spanish ] = "Horizontal" ;
-        Text [ french ] = "horizontaux" ;
+        Text [ spanish ] = "~Horizontal" ;
+        Text [ french ] = "Horizontal" ;
         Text [ dutch ] = "Horizontaal" ;
         Text [ portuguese ] = "Horizontal" ;
-        Text[ chinese_simplified ] = "æ°´å¹³æ–¹å‘";
+        Text[ chinese_simplified ] = "æ°´å¹³";
         Text[ russian ] = "Ãîğèçîíòàëüíî";
         Text[ polish ] = "Poziomo";
-        Text[ japanese ] = "æ°´å¹³";
+        Text[ japanese ] = "æ°´å¹³ã«";
         Text[ chinese_traditional ] = "æ°´å¹³";
         Text[ arabic ] = "ÃİŞí";
         Text[ dutch ] = "Horizontaal";
-        Text[ chinese_simplified ] = "æ°´å¹³æ–¹å‘";
+        Text[ chinese_simplified ] = "æ°´å¹³";
         Text[ greek ] = "Ïñéæüíôéá";
         Text[ korean ] = "ìˆ˜í‰";
         Text[ turkish ] = "Yatay";
@@ -667,18 +667,18 @@ DockingWindow RID_SVXFLOAT_3D
         Text [ swedish ] = "Vertikal" ;
         Text [ danish ] = "Lodret" ;
         Text [ italian ] = "Verticale" ;
-        Text [ spanish ] = "Vertical" ;
-        Text [ french ] = "verticaux" ;
+        Text [ spanish ] = "~Vertical" ;
+        Text [ french ] = "Vertical" ;
         Text [ dutch ] = "Verticaal" ;
         Text [ portuguese ] = "Vertical" ;
-        Text[ chinese_simplified ] = "å‚ç›´æ–¹å‘";
+        Text[ chinese_simplified ] = "å‚ç›´";
         Text[ russian ] = "Âåğòèêàëüíî";
         Text[ polish ] = "Pionowo";
-        Text[ japanese ] = "å‚ç›´";
+        Text[ japanese ] = "å‚ç›´ã«";
         Text[ chinese_traditional ] = "å‚ç›´";
         Text[ arabic ] = "ÑÃÓí";
         Text[ dutch ] = "Verticaal";
-        Text[ chinese_simplified ] = "å‚ç›´æ–¹å‘";
+        Text[ chinese_simplified ] = "å‚ç›´";
         Text[ greek ] = "Êáôáêüñõöá";
         Text[ korean ] = "ìˆ˜ì§";
         Text[ turkish ] = "Dikey";
@@ -709,7 +709,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text [ swedish ] = "Segment" ;
         Text [ danish ] = "Segmenter" ;
         Text [ italian ] = "Segmenti" ;
-        Text [ spanish ] = "Segmentos" ;
+        Text [ spanish ] = "~Segmentos" ;
         Text [ french ] = "Segments" ;
         Text [ dutch ] = "Segmenten" ;
         Text [ portuguese ] = "Segmentos" ;
@@ -738,7 +738,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text [ swedish ] = "Rundade kanter" ;
         Text [ danish ] = "Kant-afrunding" ;
         Text [ italian ] = "Bordi arrotondati" ;
-        Text [ spanish ] = "Aristas redondeadas" ;
+        Text [ spanish ] = "~Aristas redondeadas" ;
         Text [ french ] = "Arrondi d'arêtes" ;
         Text [ dutch ] = "Kantenronding" ;
         Text [ portuguese ] = "Arredondar arestas" ;
@@ -782,7 +782,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text [ swedish ] = "Djupskalning" ;
         Text [ danish ] = "Dybdeskalering" ;
         Text [ italian ] = "Scala profondità" ;
-        Text [ spanish ] = "Escala de profundidad" ;
+        Text [ spanish ] = "~Escala de profundidad" ;
         Text [ french ] = "Échelle de profondeur" ;
         Text [ dutch ] = "Diepte op schaal brengen" ;
         Text[ chinese_simplified ] = "æ·±åº¦æ¯”ä¾‹";
@@ -824,7 +824,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text [ swedish ] = "Slutvinkel" ;
         Text [ danish ] = "Slutvinkel" ;
         Text [ italian ] = "Angolo finale" ;
-        Text [ spanish ] = "Ángulo final" ;
+        Text [ spanish ] = "~Ángulo final" ;
         Text [ french ] = "Angle final" ;
         Text [ dutch ] = "Eindhoek" ;
         Text [ portuguese ] = "Ângulo de rotação" ;
@@ -837,7 +837,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text[ dutch ] = "Eindhoek";
         Text[ chinese_simplified ] = "æœ€ç»ˆè§’åº¦";
         Text[ greek ] = "ÔåëéêŞ ãùíßá";
-        Text[ korean ] = "ìµœì¢…ê°";
+        Text[ korean ] = "íšŒì „ê°ë„";
         Text[ turkish ] = "Dönüş açısı";
         Text[ catalan ] = "Ángulo final";
         Text[ finnish ] = "Kiertokulma";
@@ -889,7 +889,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text [ swedish ] = "Djup" ;
         Text [ danish ] = "Dybde" ;
         Text [ italian ] = "Profondità" ;
-        Text [ spanish ] = "Profundidad" ;
+        Text [ spanish ] = "~Profundidad" ;
         Text [ french ] = "Profondeur" ;
         Text [ dutch ] = "Diepte" ;
         Text [ portuguese ] = "Profundidade" ;
@@ -1204,7 +1204,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text [ swedish ] = "Läge" ;
         Text [ danish ] = "Modus" ;
         Text [ italian ] = "Modo" ;
-        Text [ spanish ] = "Modo" ;
+        Text [ spanish ] = "~Modo" ;
         Text [ french ] = "Mode" ;
         Text [ dutch ] = "Modus" ;
         Text [ portuguese ] = "Modo" ;
@@ -1424,7 +1424,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text [ swedish ] = "Papperslutning" ;
         Text [ danish ] = "Papirhældning" ;
         Text [ italian ] = "Inclinazione carta" ;
-        Text [ spanish ] = "Ángulo superficie" ;
+        Text [ spanish ] = "~Inclinación del papel" ;
         Text [ french ] = "Inclinaison papier" ;
         Text [ dutch ] = "Helling" ;
         Text [ portuguese ] = "Ângulo do papel" ;
@@ -1517,7 +1517,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text [ swedish ] = "Avstånd" ;
         Text [ danish ] = "Afstand" ;
         Text [ italian ] = "Distanza" ;
-        Text [ spanish ] = "Distancia" ;
+        Text [ spanish ] = "~Distancia" ;
         Text [ french ] = "Distance" ;
         Text [ dutch ] = "Afstand" ;
         Text [ portuguese ] = "Distância" ;
@@ -1563,7 +1563,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text [ swedish ] = "Brännvidd" ;
         Text [ danish ] = "Brændvidde" ;
         Text [ italian ] = "Ampiezza focale" ;
-        Text [ spanish ] = "Distancia focal" ;
+        Text [ spanish ] = "~Distancia focal" ;
         Text [ french ] = "Focale" ;
         Text [ dutch ] = "Focus" ;
         Text [ portuguese ] = "Distância focal" ;
@@ -2119,7 +2119,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text [ swedish ] = "Omgivningsljus" ;
         Text [ danish ] = "Omgivelseslys" ;
         Text [ italian ] = "Luce ambientale" ;
-        Text [ spanish ] = "Luz ambiental" ;
+        Text [ spanish ] = "~Luz ambiental" ;
         Text [ french ] = "Lumière ambiante" ;
         Text [ dutch ] = "Omgevingslicht" ;
         Text [ portuguese ] = "Luz ambiente" ;
@@ -2178,7 +2178,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text [ swedish ] = "Typ" ;
         Text [ danish ] = "Type" ;
         Text [ italian ] = "Tipo" ;
-        Text [ spanish ] = "Tipo" ;
+        Text [ spanish ] = "~Tipo" ;
         Text [ french ] = "Type" ;
         Text [ dutch ] = "Type" ;
         Text [ portuguese ] = "Tipo" ;
@@ -2277,7 +2277,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text [ swedish ] = "Läge" ;
         Text [ danish ] = "Modus" ;
         Text [ italian ] = "Modo" ;
-        Text [ spanish ] = "Modo" ;
+        Text [ spanish ] = "~Modo" ;
         Text [ french ] = "Mode" ;
         Text [ dutch ] = "Modus" ;
         Text [ portuguese ] = "Modo" ;
@@ -2411,7 +2411,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text [ swedish ] = "Projektion X" ;
         Text [ danish ] = "Projektion X" ;
         Text [ italian ] = "Proiezione X" ;
-        Text [ spanish ] = "Proyección X" ;
+        Text [ spanish ] = "~Proyección X" ;
         Text [ french ] = "Projection X" ;
         Text [ dutch ] = "Projectie X" ;
         Text [ portuguese ] = "Projecção X" ;
@@ -2424,7 +2424,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text[ dutch ] = "Projectie X";
         Text[ chinese_simplified ] = "æŠ•å½± X";
         Text[ greek ] = "ĞñïâïëŞ X";
-        Text[ korean ] = "í”„ë¡œì ì…˜ X";
+        Text[ korean ] = "íˆ¬ì˜ìƒ X";
         Text[ turkish ] = "İzdüşüm X";
         Text[ catalan ] = "Proyección X";
         Text[ finnish ] = "Projektio X";
@@ -2545,7 +2545,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text [ swedish ] = "Projektion Y" ;
         Text [ danish ] = "Projektion Y" ;
         Text [ italian ] = "Proiezione Y" ;
-        Text [ spanish ] = "Proyección Y" ;
+        Text [ spanish ] = "~Proyección Y" ;
         Text [ french ] = "Projection Y" ;
         Text [ dutch ] = "Projectie Y" ;
         Text [ portuguese ] = "Projecção Y" ;
@@ -2558,7 +2558,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text[ dutch ] = "Projectie Y";
         Text[ chinese_simplified ] = "æŠ•å½± Y";
         Text[ greek ] = "ĞñïâïëŞ Y";
-        Text[ korean ] = "í”„ë¡œì ì…˜ Y";
+        Text[ korean ] = "íˆ¬ì˜ìƒ Y";
         Text[ turkish ] = "İzdüşüm Y";
         Text[ catalan ] = "Proyección Y";
         Text[ finnish ] = "Projektio Y";
@@ -2679,7 +2679,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text [ swedish ] = "Filtrera" ;
         Text [ danish ] = "Filtrer" ;
         Text [ italian ] = "Filtra" ;
-        Text [ spanish ] = "Filtrar" ;
+        Text [ spanish ] = "~Filtrar" ;
         Text [ french ] = "Filtrer" ;
         Text [ dutch ] = "Filteren" ;
         Text [ portuguese ] = "Filtros" ;
@@ -2784,7 +2784,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text [ swedish ] = "Favoriter" ;
         Text [ danish ] = "Favoriter" ;
         Text [ italian ] = "Preferiti" ;
-        Text [ spanish ] = "Favoritos" ;
+        Text [ spanish ] = "~Favoritos" ;
         Text [ french ] = "Favoris" ;
         Text [ dutch ] = "Favorieten" ;
         Text [ portuguese ] = "Favoritos" ;
@@ -3046,7 +3046,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text [ swedish ] = "Objektfärg" ;
         Text [ danish ] = "Objektfarve" ;
         Text [ italian ] = "Colore oggetto" ;
-        Text [ spanish ] = "Color del objeto" ;
+        Text [ spanish ] = "~Color del objeto" ;
         Text [ french ] = "Couleur d'objet" ;
         Text [ dutch ] = "Objectkleur" ;
         Text [ portuguese ] = "Cor do objecto" ;
@@ -3118,7 +3118,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text [ swedish ] = "Lysfärg" ;
         Text [ danish ] = "Lysfarve" ;
         Text [ italian ] = "Illuminazione" ;
-        Text [ spanish ] = "Iluminación" ;
+        Text [ spanish ] = "~Iluminación" ;
         Text [ french ] = "Luminescence" ;
         Text [ dutch ] = "Lichtgevende kleur" ;
         Text [ portuguese ] = "Cor de iluminação" ;
@@ -3190,7 +3190,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text [ swedish ] = "Färg" ;
         Text [ danish ] = "Farve" ;
         Text [ italian ] = "Colore" ;
-        Text [ spanish ] = "Color" ;
+        Text [ spanish ] = "~Color" ;
         Text [ french ] = "Couleur" ;
         Text [ dutch ] = "Kleur" ;
         Text [ portuguese ] = "Cor" ;
@@ -3203,7 +3203,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text[ dutch ] = "Kleur";
         Text[ chinese_simplified ] = "é¢œè‰²";
         Text[ greek ] = "×ñşìá";
-        Text[ korean ] = "ìƒ‰ìƒ";
+        Text[ korean ] = "ìƒ‰";
         Text[ turkish ] = "Renk";
         Text[ catalan ] = "Color";
         Text[ finnish ] = "Väri";
@@ -3262,7 +3262,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text [ swedish ] = "Intensitet" ;
         Text [ danish ] = "Intensitet" ;
         Text [ italian ] = "Intensità" ;
-        Text [ spanish ] = "Intensidad" ;
+        Text [ spanish ] = "~Intensidad" ;
         Text [ french ] = "Intensité" ;
         Text [ dutch ] = "Intensiteit" ;
         Text [ portuguese ] = "Intensidade" ;
@@ -3275,7 +3275,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text[ dutch ] = "Intensiteit";
         Text[ chinese_simplified ] = "å¼ºåº¦";
         Text[ greek ] = "¸íôáóç";
-        Text[ korean ] = "ë†ë„";
+        Text[ korean ] = "ê°•ë„";
         Text[ turkish ] = "Yoğunluk";
         Text[ catalan ] = "Intensidad";
         Text[ finnish ] = "Intensiteetti";
@@ -3648,8 +3648,9 @@ String RID_SVXFLOAT3D_FIX_X
     Text[ chinese_traditional ] = "X";
     Text[ turkish ] = "X";
     Text[ arabic ] = "X";
-    Text[ catalan ] = "X";
+    Text[ catalan ] = "Nombre";
     Text[ finnish ] = "X";
+    Text[ thai ] = "à¸•à¸±à¸§à¹€à¸¥à¸‚";
 };
 String RID_SVXFLOAT3D_FIX_Y
 {
