@@ -14,6 +14,7 @@
 #include "so_activex_i.c"
 #include "SOActiveX.h"
 
+#include <comphelper\documentconstants.hxx>
 
 CComModule _Module;
 
@@ -56,21 +57,36 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 /////////////////////////////////////////////////////////////////////////////
 // DllRegisterServer - Adds entries to the system registry
 
-#define SUPPORTED_EXT_NUM 10
-const char* aFileExt[] = { ".sds", ".sda", ".sdd", ".sdc", ".sdw",
-                           ".sxw", ".sxc", ".sxi", ".sxd", ".sxg" };
+// for now database component and chart are always installed
+#define SUPPORTED_EXT_NUM 19
+const char* aFileExt[] = { ".sds", ".sda", ".sdd", ".sdc", ".sdw", ".smf",
+                           ".sxw", ".sxc", ".sxi", ".sxd", ".sxg", ".sxm",
+                           ".odt", ".odm", ".odg", ".odp", ".ods", ".odf", ".odb"};
 const char* aMimeType[] = { "application/vnd.stardivision.chart",
                           "application/vnd.stardivision.draw",
                           "application/vnd.stardivision.impress",
                           "application/vnd.stardivision.calc",
                           "application/vnd.stardivision.writer",
+                          "application/vnd.stardivision.math",
 
                           "application/vnd.sun.xml.writer",
                           "application/vnd.sun.xml.calc",
                           "application/vnd.sun.xml.impress",
                           "application/vnd.sun.xml.draw",
-                          "application/vnd.sun.xml.writer.global" };
-const int nForModes[] = { 1, 2, 4, 8, 16, 16, 8, 4, 2, 16 };
+                          "application/vnd.sun.xml.writer.global",
+                          "application/vnd.sun.xml.math",
+
+                          MIMETYPE_OASIS_OPENDOCUMENT_TEXT_ASCII,
+                          MIMETYPE_OASIS_OPENDOCUMENT_TEXT_GLOBAL_ASCII,
+                          MIMETYPE_OASIS_OPENDOCUMENT_DRAWING_ASCII,
+                          MIMETYPE_OASIS_OPENDOCUMENT_PRESENTATION_ASCII,
+                          MIMETYPE_OASIS_OPENDOCUMENT_SPREADSHEET_ASCII,
+                          MIMETYPE_OASIS_OPENDOCUMENT_FORMULA_ASCII,
+                          MIMETYPE_OASIS_OPENDOCUMENT_DATABASE_ASCII };
+
+const int nForModes[] = {  1,  2,  4,  8, 16, 32,
+                          16,  8,  4,  2, 16, 32,
+                          16, 16,  2,  4,  8, 32, 1 };
 
 const char* aClassID = "{67F2A879-82D5-4A6D-8CC5-FFB3C114B69D}";
 const char* aTypeLib = "{61FA3F13-8061-4796-B055-3697ED28CB38}";
