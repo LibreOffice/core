@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colrowst.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2001-02-06 16:19:02 $
+ *  last change: $Author: dr $ $Date: 2001-02-27 14:53:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -293,33 +293,64 @@ inline void FltColumn::SetXF( UINT16 nRow, UINT16 nNewXF )
 
 // --------------------------------------------------- class FltTabelle --
 
+struct FltCellMerge
+{
+    FltCellMerge*           pNext;
+    UINT16                  nFirstCol;
+    UINT16                  nFirstRow;
+    UINT16                  nLastCol;
+    UINT16                  nLastRow;
+
+    inline                  FltCellMerge( UINT16 nCol, UINT16 nRow ) :
+                                pNext( NULL ),
+                                nFirstCol( nCol ), nFirstRow( nRow ),
+                                nLastCol( nCol ), nLastRow( nRow ) {}
+    inline                  FltCellMerge( UINT16 nCol1, UINT16 nRow1, UINT16 nCol2, UINT16 nRow2 ) :
+                                pNext( NULL ),
+                                nFirstCol( nCol1 ), nFirstRow( nRow1 ),
+                                nLastCol( nCol2 ), nLastRow( nRow2 ) {}
+};
+
 class FltTabelle : public ExcRoot
 {
 private:
-    struct CELLMERGE
-    {
-        CELLMERGE*      pNext;
-        UINT16          nRow;
-        UINT16          nFirst; // Cols
-        UINT16          nLast;
+    FltColumn**             pData;  // Array mit Column-Daten
+    UINT16                  nSize;
+    UINT16                  nLastCol;
 
-                        CELLMERGE( const UINT16 nR, const UINT16 nC )
-                        { pNext = NULL; nRow = nR; nFirst = nLast = nC; }
-};
+    FltCellMerge*           pFirst;
+    FltCellMerge*           pLast;
+    FltCellMerge*           pCurr;
 
-    FltColumn**         pData;  // Array mit Column-Daten
-    UINT16              nSize;
-    UINT16              nLastCol;
+    inline FltCellMerge*    First() { return (pCurr = pFirst); }
+    inline FltCellMerge*    Next()  { return (pCurr = (pCurr ? pCurr->pNext : NULL)); }
+    inline FltCellMerge*    Last()  { return (pCurr = pLast); }
+    void                    Append( FltCellMerge* pNew );
+    void                    DeleteList();
 
-    CELLMERGE*          pFirstCellMerge;
-    CELLMERGE*          pLastCellMerge;
+    inline void             AppendMerge( UINT16 nCol, UINT16 nRow );
+    void                    SetBorderLine( const FltCellMerge& rMerge, USHORT nTab, USHORT nLine );
+
 public:
-                        FltTabelle( RootData* pRD );
-                        ~FltTabelle();
-    void                SetXF( UINT16 nCol, UINT16 nRow, UINT16 nNewXF, const BOOL bBlank = FALSE );
-    void                Reset( void );
-    void                Apply( const UINT16 nTab );
+                            FltTabelle( RootData* pRD );
+                            ~FltTabelle();
+
+    void                    SetXF( UINT16 nCol, UINT16 nRow, UINT16 nNewXF, const BOOL bBlank = FALSE );
+    inline void             AppendMerge( UINT16 nCol1, UINT16 nRow1, UINT16 nCol2, UINT16 nRow2 );
+
+    void                    Reset( void );
+    void                    Apply( const UINT16 nTab );
 };
+
+inline void FltTabelle::AppendMerge( UINT16 nCol, UINT16 nRow )
+{
+    Append( new FltCellMerge( nCol, nRow ) );
+}
+
+inline void FltTabelle::AppendMerge( UINT16 nCol1, UINT16 nRow1, UINT16 nCol2, UINT16 nRow2 )
+{
+    Append( new FltCellMerge( nCol1, nRow1, nCol2, nRow2 ) );
+}
 
 // -----------------------------------------------------------------------
 

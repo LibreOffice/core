@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colrowst.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dr $ $Date: 2001-02-06 16:14:36 $
+ *  last change: $Author: dr $ $Date: 2001-02-27 14:53:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,13 +70,16 @@
 
 #include <string.h>
 
-#include "document.hxx"
-#include "scextopt.hxx"
-
-#ifndef _SC_XCLIMPSTREAM_HXX
-#include "XclImpStream.hxx"
+#ifndef SC_ITEMS_HXX
+#include "scitems.hxx"
+#endif
+#ifndef _SVX_BOXITEM_HXX
+#include <svx/boxitem.hxx>
 #endif
 
+#include "document.hxx"
+#include "scextopt.hxx"
+#include "XclImpStream.hxx"
 #include "root.hxx"
 #include "xfbuff.hxx"
 
@@ -758,7 +761,7 @@ FltTabelle::FltTabelle( RootData* pRD ) : ExcRoot( pRD )
     for( UINT16 nC = 1 ; nC < nSize ; nC++ )
         pData[ nC ] = NULL;
 
-    pFirstCellMerge = pLastCellMerge = NULL;
+    pFirst = pLast = pCurr = NULL;
 }
 
 
@@ -770,20 +773,30 @@ FltTabelle::~FltTabelle()
 
     delete [] pData;
 
-    if( pFirstCellMerge )
+    DeleteList();
+}
+
+
+void FltTabelle::Append( FltCellMerge* pNew )
+{
+    if( pLast )
+        pLast->pNext = pNew;
+    else
+        pFirst = pNew;
+    pLast = pNew;
+}
+
+
+void FltTabelle::DeleteList()
+{
+    FltCellMerge* pDel;
+    while( pFirst )
     {
-        CELLMERGE*  pN;
-        CELLMERGE*  pDel = pFirstCellMerge;
-        while( pDel )
-        {
-            pN = pDel->pNext;
-            delete pDel;
-            pDel = pN;
-        }
-#ifdef _DEBUG
-        pFirstCellMerge = pLastCellMerge = NULL;
-#endif
+        pDel = pFirst;
+        pFirst = pFirst->pNext;
+        delete pDel;
     }
+    pFirst = pLast = pCurr = NULL;
 }
 
 
@@ -809,30 +822,10 @@ void FltTabelle::SetXF( UINT16 nCol, UINT16 nRow, UINT16 nNewXF, const BOOL bBla
 
     if( pXFData && pXFData->HorizAlign() == EHA_CentAcrSel )
     {
-        if( pFirstCellMerge )
-        {
-            CELLMERGE*      p;
-            if( bBlank )
-            {
-                p = pLastCellMerge;
-                if( p->nLast + 1 == nCol )
-                    p->nLast = nCol;
-                else
-                {
-                    p = new CELLMERGE( nRow, nCol );
-                    pLastCellMerge->pNext = p;
-                    pLastCellMerge = p;
-                }
-            }
-            else
-            {
-                p = new CELLMERGE( nRow, nCol );
-                pLastCellMerge->pNext = p;
-                pLastCellMerge = p;
-            }
-        }
+        if( bBlank && pLast && (pLast->nLastCol + 1 == nCol) )
+            pLast->nLastCol = nCol;
         else
-            pFirstCellMerge = pLastCellMerge = new CELLMERGE( nRow, nCol );
+            AppendMerge( nCol, nRow );
     }
 
     pData[ nCol ]->SetXF( nRow, nNewXF );
@@ -844,19 +837,23 @@ void FltTabelle::Reset( void )
     for( UINT16 nC = 0 ; nC <= nLastCol ; nC++ )
         if( pData[ nC ] ) pData[ nC ]->Reset();
 
-    if( pFirstCellMerge )
-    {
-        CELLMERGE*  pN;
-        CELLMERGE*  pDel = pFirstCellMerge;
-        while( pDel )
-        {
-            pN = pDel->pNext;
-            delete pDel;
-            pDel = pN;
-        }
+    DeleteList();
+}
 
-        pFirstCellMerge = pLastCellMerge = NULL;
-    }
+
+void FltTabelle::SetBorderLine( const FltCellMerge& rMerge, USHORT nTab, USHORT nLine )
+{
+    USHORT nFromCol = (nLine == BOX_LINE_RIGHT) ? rMerge.nLastCol : rMerge.nFirstCol;
+    USHORT nFromRow = (nLine == BOX_LINE_BOTTOM) ? rMerge.nLastRow : rMerge.nFirstRow;
+
+    const SvxBoxItem* pFromItem = (const SvxBoxItem*)
+        pExcRoot->pDoc->GetAttr( nFromCol, nFromRow, nTab, ATTR_BORDER );
+    const SvxBoxItem* pToItem = (const SvxBoxItem*)
+        pExcRoot->pDoc->GetAttr( rMerge.nFirstCol, rMerge.nFirstRow, nTab, ATTR_BORDER );
+
+    SvxBoxItem aNewItem( *pToItem );
+    aNewItem.SetLine( pFromItem->GetLine( nLine ), nLine );
+    pExcRoot->pDoc->ApplyAttr( rMerge.nFirstCol, rMerge.nFirstRow, nTab, aNewItem );
 }
 
 
@@ -865,16 +862,14 @@ void FltTabelle::Apply( const UINT16 nTab )
     for( UINT16 nC = 0 ; nC <= nLastCol ; nC++ )
         if( pData[ nC ] ) pData[ nC ]->Apply( nTab );
 
-    if( pFirstCellMerge )
+    for( FltCellMerge* pMerge = First(); pMerge; pMerge = Next() )
     {
-        CELLMERGE*      p = pFirstCellMerge;
-        ScDocument*     pDoc = pExcRoot->pDoc;
-
-        while( p )
-        {
-            pDoc->DoMerge( nTab, p->nFirst, p->nRow, p->nLast, p->nRow );
-            p = p->pNext;
-        }
+        if( pMerge->nFirstCol != pMerge->nLastCol )     // get right border
+            SetBorderLine( *pMerge, nTab, BOX_LINE_RIGHT );
+        if( pMerge->nFirstRow != pMerge->nLastRow )     // get lower border
+            SetBorderLine( *pMerge, nTab, BOX_LINE_BOTTOM );
+        pExcRoot->pDoc->DoMerge( nTab, pMerge->nFirstCol, pMerge->nFirstRow,
+            pMerge->nLastCol, pMerge->nLastRow );
     }
 }
 

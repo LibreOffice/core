@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: dr $ $Date: 2001-02-26 06:55:35 $
+ *  last change: $Author: dr $ $Date: 2001-02-27 14:53:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1968,7 +1968,7 @@ void ImportExcel8::Cellmerging( void )
         if( nC2 > MAXCOL )
             nC2 = MAXCOL;
 
-        pD->DoMerge( nTab, nC1, nR1, nC2, nR2 );
+        pFltTab->AppendMerge( nC1, nR1, nC2, nR2 );
         n--;
     }
 }
