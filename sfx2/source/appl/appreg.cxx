@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appreg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:27 $
+ *  last change: $Author: willem.vandorp $ $Date: 2000-09-29 14:06:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,13 +58,6 @@
  *
  *
  ************************************************************************/
- //==================================================================
-// class SfxApplication: Register...
-//
-// Copyright 2000 Sun Microsystems, Inc.
-// $Author: hr $ $Date: 2000-09-18 16:52:27 $ $Revision: 1.1.1.1 $
-// $Logfile:   T:/sfx2/source/appl/appreg.cxv  $ $Workfile:   appreg.CXX  $
-//------------------------------------------------------------------
 
 #ifndef _SV_CONFIG_HXX
 #include <vcl/config.hxx>

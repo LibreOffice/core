@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appmisc.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2000-09-28 11:37:29 $
+ *  last change: $Author: willem.vandorp $ $Date: 2000-09-29 14:06:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,13 +58,6 @@
  *
  *
  ************************************************************************/
- //==================================================================
-// class SfxApplication: Interface, Array-Impls und allerlei anderes
-//
-// Copyright 2000 Sun Microsystems, Inc. All rights reserved.
-// $Author: mba $ $Date: 2000-09-28 11:37:29 $ $Revision: 1.3 $
-// $Logfile:   T:/sfx2/source/appl/appmisc.cxv  $ $Workfile:   APPMISC.CXX  $
-//------------------------------------------------------------------
 
 #ifndef _SV_STATUS_HXX
 #include <vcl/status.hxx>
