@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WTypeSelect.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2002-01-22 07:22:37 $
+ *  last change: $Author: oj $ $Date: 2002-02-06 07:44:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,9 @@ namespace dbaui
     {
         sal_Bool                m_bPKey;
         sal_Bool                IsPrimaryKeyAllowed() const;
+        void                    setPrimaryKey(  OFieldDescription* _pFieldDescr,
+                                                sal_uInt16 _nPos,
+                                                sal_Bool _bSet=sal_False);
     protected:
         virtual long            PreNotify( NotifyEvent& rNEvt );
     public:

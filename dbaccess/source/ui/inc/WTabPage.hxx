@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WTabPage.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-23 14:59:01 $
+ *  last change: $Author: oj $ $Date: 2002-02-06 07:44:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,6 @@ namespace dbaui
         virtual String      GetTitle() const    = 0;
 
         sal_Bool            IsFirstTime() const { return m_bFirstTime; }
-
     };
 }
 #endif // DBAUI_WIZ_TABBPAGE_HXX

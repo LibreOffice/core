@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableWindowListBox.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-11 08:38:14 $
+ *  last change: $Author: oj $ $Date: 2002-02-06 07:44:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,7 @@ namespace dbaui
         virtual void dragFinished( );
 
 
+
     public:
         OTableWindowListBox(OTableWindow* pParent, const String& rDatabaseName, const String& rTableName);
         virtual ~OTableWindowListBox();
@@ -128,6 +129,9 @@ namespace dbaui
         virtual void        StartDrag( sal_Int8 nAction, const Point& rPosPixel );
         virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt );
         virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt );
+
+        // window
+        virtual void Command(const CommandEvent& rEvt);
 
         OTableWindow* GetTabWin(){ return m_pTabWin; }
         SvLBoxEntry* GetEntryFromText( const String& rEntryText );

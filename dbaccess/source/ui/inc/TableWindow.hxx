@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableWindow.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-09 12:20:17 $
+ *  last change: $Author: oj $ $Date: 2002-02-06 07:44:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,8 @@ namespace dbaui
 
         OTableWindowData*       m_pData;
         ::rtl::OUString         m_strInitialWinName;
+        sal_Int32               m_nMoveCount;           // how often the arrow keys was pressed
+        sal_Int32               m_nMoveIncrement;       // how many pixel we should move
         UINT16                  m_nSizingFlags;
         BOOL                    m_bActive;
 
@@ -130,7 +132,6 @@ namespace dbaui
         virtual void    MouseMove( const MouseEvent& rEvt );
         virtual void    MouseButtonDown( const MouseEvent& rEvt );
         virtual void    KeyInput( const KeyEvent& rEvt );
-
         virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 
         virtual OTableWindowListBox*    CreateListBox();
@@ -179,6 +180,11 @@ namespace dbaui
         // window override
         virtual void                StateChanged( StateChangedType nStateChange );
         virtual void                GetFocus();
+        virtual long                PreNotify( NotifyEvent& rNEvt );
+        virtual void                Command(const CommandEvent& rEvt);
+
+        // Accessibility
+        virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > CreateAccessible();
 
         // Linien neu zeichnen
         void InvalidateLines();
