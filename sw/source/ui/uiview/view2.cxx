@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view2.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 12:31:09 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 12:20:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -754,12 +754,6 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
             pWrtShell->SetDefault( *pItem );
         }
         break;
-        case FN_INSERT_HEADER:
-            pWrtShell->SetHeadInBrowse(!pWrtShell->IsHeadInBrowse());
-            break;
-        case FN_INSERT_FOOTER:
-            pWrtShell->SetFootInBrowse(!pWrtShell->IsFootInBrowse());
-            break;
         case FN_SCROLL_NEXT_PREV:
             if(pArgs && pArgs->GetItemState(FN_SCROLL_NEXT_PREV, FALSE, &pItem))
             {
