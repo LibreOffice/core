@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PostCommandArgument2.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2001-06-26 14:23:57 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 01:21:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ module com { module sun { module star { module ucb {
     @see XCommandProcessor
     @see WebDAVDocumentContent
 */
-struct PostCommandArgument2 : PostCommandArgument
+published struct PostCommandArgument2 : PostCommandArgument
 {
     //-------------------------------------------------------------------------
     /** The media type (mime type) for the data to post.
