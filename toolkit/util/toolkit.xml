@@ -10,7 +10,7 @@
         <description>Toolkit...</description>
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
-        <status value="depricated"/>
+        <status value="final"/>
         <supported-service>com.sun.star.awt.Toolkit</supported-service>
     </component-description>
 
@@ -20,7 +20,7 @@
         <description>UnoControlContainer...</description>
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
-        <status value="depricated"/>
+        <status value="final"/>
         <supported-service>com.sun.star.awt.UnoControlContainer</supported-service>
     </component-description>
 
@@ -30,7 +30,7 @@
         <description>UnoControlContainerModel...</description>
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
-        <status value="depricated"/>
+        <status value="final"/>
         <supported-service>com.sun.star.awt.UnoControlContainerModel</supported-service>
     </component-description>
 
@@ -40,7 +40,7 @@
         <description>TabController...</description>
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
-        <status value="depricated"/>
+        <status value="final"/>
         <supported-service>com.sun.star.awt.TabController</supported-service>
     </component-description>
 
@@ -50,7 +50,7 @@
         <description>TabControllerModel...</description>
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
-        <status value="depricated"/>
+        <status value="final"/>
         <supported-service>com.sun.star.awt.TabControllerModel</supported-service>
     </component-description>
 
@@ -60,7 +60,7 @@
         <description>UnoControlDialog...</description>
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
-        <status value="depricated"/>
+        <status value="final"/>
         <supported-service>com.sun.star.awt.UnoControlDialog</supported-service>
     </component-description>
 
@@ -70,7 +70,7 @@
         <description>UnoControlDialogModel...</description>
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
-        <status value="depricated"/>
+        <status value="final"/>
         <supported-service>com.sun.star.awt.UnoControlDialogModel</supported-service>
     </component-description>
 
@@ -80,7 +80,7 @@
         <description>UnoControlEdit...</description>
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
-        <status value="depricated"/>
+        <status value="final"/>
         <supported-service>com.sun.star.awt.UnoControlEdit</supported-service>
     </component-description>
 
@@ -90,7 +90,7 @@
         <description>UnoControlEditModel...</description>
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
-        <status value="depricated"/>
+        <status value="final"/>
         <supported-service>com.sun.star.awt.UnoControlEditModel</supported-service>
     </component-description>
 
@@ -100,7 +100,7 @@
         <description>UnoControlFileControl...</description>
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
-        <status value="depricated"/>
+        <status value="final"/>
         <supported-service>com.sun.star.awt.UnoControlFileControl</supported-service>
     </component-description>
 
@@ -110,7 +110,7 @@
         <description>UnoControlFileControlModel...</description>
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
-        <status value="depricated"/>
+        <status value="final"/>
         <supported-service>com.sun.star.awt.UnoControlFileControlModel</supported-service>
     </component-description>
 
@@ -120,7 +120,7 @@
         <description>UnoControlButton...</description>
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
-        <status value="depricated"/>
+        <status value="final"/>
         <supported-service>com.sun.star.awt.UnoControlButton</supported-service>
     </component-description>
 
@@ -130,7 +130,7 @@
         <description>UnoControlButtonModel...</description>
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
-        <status value="depricated"/>
+        <status value="final"/>
         <supported-service>com.sun.star.awt.UnoControlButtonModel</supported-service>
     </component-description>
 
@@ -140,7 +140,7 @@
         <description>UnoControlImageButton...</description>
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
-        <status value="depricated"/>
+        <status value="final"/>
         <supported-service>com.sun.star.awt.UnoControlImageButton</supported-service>
     </component-description>
 
@@ -150,7 +150,7 @@
         <description>UnoControlImageButtonModel...</description>
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
-        <status value="depricated"/>
+        <status value="final"/>
         <supported-service>com.sun.star.awt.UnoControlImageButtonModel</supported-service>
     </component-description>
 
@@ -160,7 +160,7 @@
         <description>UnoControlImageControl...</description>
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
-        <status value="depricated"/>
+        <status value="final"/>
         <supported-service>com.sun.star.awt.UnoControlImageControl</supported-service>
     </component-description>
 
@@ -170,7 +170,7 @@
         <description>UnoControlImageControlModel...</description>
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
-        <status value="depricated"/>
+        <status value="final"/>
         <supported-service>com.sun.star.awt.UnoControlImageControlModel</supported-service>
     </component-description>
 
@@ -180,7 +180,7 @@
         <description>UnoControlRadioButton...</description>
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
-        <status value="depricated"/>
+        <status value="final"/>
         <supported-service>com.sun.star.awt.UnoControlRadioButton</supported-service>
     </component-description>
 
@@ -190,7 +190,7 @@
         <description>UnoControlRadioButtonModel...</description>
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
-        <status value="depricated"/>
+        <status value="final"/>
         <supported-service>com.sun.star.awt.UnoControlRadioButtonModel</supported-service>
     </component-description>
 
@@ -200,7 +200,7 @@
         <description>UnoControlCheckBox...</description>
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
-        <status value="depricated"/>
+        <status value="final"/>
         <supported-service>com.sun.star.awt.UnoControlCheckBox</supported-service>
     </component-description>
 
@@ -210,7 +210,7 @@
         <description>UnoControlCheckBoxModel...</description>
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
-        <status value="depricated"/>
+        <status value="final"/>
         <supported-service>com.sun.star.awt.UnoControlCheckBoxModel</supported-service>
     </component-description>
 
@@ -220,7 +220,7 @@
         <description>UnoControlListBox...</description>
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
-        <status value="depricated"/>
+        <status value="final"/>
         <supported-service>com.sun.star.awt.UnoControlListBox</supported-service>
     </component-description>
 
@@ -230,7 +230,7 @@
         <description>UnoControlListBoxModel...</description>
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
-        <status value="depricated"/>
+        <status value="final"/>
         <supported-service>com.sun.star.awt.UnoControlListBoxModel</supported-service>
     </component-description>
 
@@ -240,7 +240,7 @@
         <description>UnoControlComboBox...</description>
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
-        <status value="depricated"/>
+        <status value="final"/>
         <supported-service>com.sun.star.awt.UnoControlComboBox</supported-service>
     </component-description>
 
@@ -250,7 +250,7 @@
         <description>UnoControlComboBoxModel...</description>
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
-        <status value="depricated"/>
+        <status value="final"/>
         <supported-service>com.sun.star.awt.UnoControlComboBoxModel</supported-service>
     </component-description>
 
@@ -260,7 +260,7 @@
         <description>UnoControlFixedText...</description>
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
-        <status value="depricated"/>
+        <status value="final"/>
         <supported-service>com.sun.star.awt.UnoControlFixedText</supported-service>
     </component-description>
 
@@ -270,7 +270,7 @@
         <description>UnoControlFixedTextModel...</description>
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
-        <status value="depricated"/>
+        <status value="final"/>
         <supported-service>com.sun.star.awt.UnoControlFixedTextModel</supported-service>
     </component-description>
 
@@ -280,7 +280,7 @@
         <description>UnoControlGroupBox...</description>
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
-        <status value="depricated"/>
+        <status value="final"/>
         <supported-service>com.sun.star.awt.UnoControlGroupBox</supported-service>
     </component-description>
 
@@ -290,7 +290,7 @@
         <description>UnoControlGroupBoxModel...</description>
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
-        <status value="depricated"/>
+        <status value="final"/>
         <supported-service>com.sun.star.awt.UnoControlGroupBoxModel</supported-service>
     </component-description>
 
@@ -300,7 +300,7 @@
         <description>UnoControlDateField...</description>
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
-        <status value="depricated"/>
+        <status value="final"/>
         <supported-service>com.sun.star.awt.UnoControlDateField</supported-service>
     </component-description>
 
@@ -310,7 +310,7 @@
         <description>UnoControlDateFieldModel...</description>
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
-        <status value="depricated"/>
+        <status value="final"/>
         <supported-service>com.sun.star.awt.UnoControlDateFieldModel</supported-service>
     </component-description>
 
@@ -320,7 +320,7 @@
         <description>UnoControlTimeField...</description>
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
-        <status value="depricated"/>
+        <status value="final"/>
         <supported-service>com.sun.star.awt.UnoControlTimeField</supported-service>
     </component-description>
 
@@ -330,7 +330,7 @@
         <description>UnoControlTimeFieldModel...</description>
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
-        <status value="depricated"/>
+        <status value="final"/>
         <supported-service>com.sun.star.awt.UnoControlTimeFieldModel</supported-service>
     </component-description>
 
@@ -340,7 +340,7 @@
         <description>UnoControlNumericField...</description>
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
-        <status value="depricated"/>
+        <status value="final"/>
         <supported-service>com.sun.star.awt.UnoControlNumericField</supported-service>
     </component-description>
 
@@ -350,7 +350,7 @@
         <description>UnoControlNumericFieldModel...</description>
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
-        <status value="depricated"/>
+        <status value="final"/>
         <supported-service>com.sun.star.awt.UnoControlNumericFieldModel</supported-service>
     </component-description>
 
@@ -360,7 +360,7 @@
         <description>UnoControlCurrencyField...</description>
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
-        <status value="depricated"/>
+        <status value="final"/>
         <supported-service>com.sun.star.awt.UnoControlCurrencyField</supported-service>
     </component-description>
 
@@ -370,7 +370,7 @@
         <description>UnoControlCurrencyFieldModel...</description>
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
-        <status value="depricated"/>
+        <status value="final"/>
         <supported-service>com.sun.star.awt.UnoControlCurrencyFieldModel</supported-service>
     </component-description>
 
@@ -380,7 +380,7 @@
         <description>UnoControlPatternField...</description>
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
-        <status value="depricated"/>
+        <status value="final"/>
         <supported-service>com.sun.star.awt.UnoControlPatternField</supported-service>
     </component-description>
 
@@ -390,7 +390,7 @@
         <description>UnoControlPatternFieldModel...</description>
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
-        <status value="depricated"/>
+        <status value="final"/>
         <supported-service>com.sun.star.awt.UnoControlPatternFieldModel</supported-service>
     </component-description>
 
@@ -400,7 +400,7 @@
         <description>UnoControlFormattedField...</description>
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
-        <status value="depricated"/>
+        <status value="final"/>
         <supported-service>com.sun.star.awt.UnoControlFormattedField</supported-service>
     </component-description>
 
@@ -410,7 +410,7 @@
         <description>UnoControlFormattedFieldModel...</description>
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
-        <status value="depricated"/>
+        <status value="final"/>
         <supported-service>com.sun.star.awt.UnoControlFormattedFieldModel</supported-service>
     </component-description>
 
@@ -420,7 +420,7 @@
         <description>PrinterServer...</description>
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
-        <status value="depricated"/>
+        <status value="final"/>
         <supported-service>com.sun.star.awt.PrinterServer</supported-service>
     </component-description>
 
