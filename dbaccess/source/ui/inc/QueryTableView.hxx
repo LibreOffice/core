@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryTableView.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-23 09:47:54 $
+ *  last change: $Author: oj $ $Date: 2001-04-30 13:03:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,8 +131,6 @@ namespace dbaui
         void DropConnection(OQueryTableConnection* pConn);
             // Entfernen einer Connection aus meiner Struktur
 
-        // alle TabWins verstecken (NICHT loeschen, sie werden in eine Undo-Action gepackt)
-        void    HideTabWins();
             // das resultiert effektiv in einem voelligen Leeren des Abfrageentwurfs, da alle Fenster versteckt werden, und dabei
             // natuerlich alle Connections an diesen Fenstern und alle Abfrage-Spalten, die auf diesen Tabellen basierten.
 

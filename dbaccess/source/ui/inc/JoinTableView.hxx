@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinTableView.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-28 10:10:01 $
+ *  last change: $Author: oj $ $Date: 2001-04-30 13:03:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,6 +175,9 @@ namespace dbaui
 
         virtual void AddTabWin(const ::rtl::OUString& _rComposedName, const ::rtl::OUString& rWinName, BOOL bNewTable = FALSE);
         virtual void RemoveTabWin( OTableWindow* pTabWin );
+
+        // alle TabWins verstecken (NICHT loeschen, sie werden in eine Undo-Action gepackt)
+        virtual void    HideTabWins();
 
         virtual void AddConnection(const OJoinExchangeData& jxdSource, const OJoinExchangeData& jxdDest);
         virtual BOOL RemoveConnection(OTableConnection* pConn);
