@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XPackageRegistry.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 11:54:54 $
+ *  last change: $Author: kz $ $Date: 2004-06-11 11:51:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,60 +62,45 @@
 #if ! defined INCLUDED_com_sun_star_deployment_XPackageRegistry_idl
 #define INCLUDED_com_sun_star_deployment_XPackageRegistry_idl
 
-#include <com/sun/star/deployment/DeploymentException.idl>
-#include <com/sun/star/ucb/XCommandEnvironment.idl>
-#include <com/sun/star/deployment/Package.idl>
+#include <com/sun/star/deployment/XPackage.idl>
 
 
 module com { module sun { module star { module deployment {
 
-/** Interface to register or revoke an UNO package.
+/** Interface to bind an UNO package.
 
     @since #i20304#
- */
-interface XPackageRegistry : com::sun::star::uno::XInterface
+*/
+interface XPackageRegistry
 {
     /** binds a package URL to a <type>Package</type> handle.
+        The returned UNO package handle ought to late-initialize itself,
+        thus the process of binding must not be an expensive operation, because
+        it is not abortable.
 
-        @param xPackage
-               <type>Package</type> handle
         @param url
                package URL, must be UCB conform
         @param mediaType
-               MediaType of package
+               media type of package, empty string if to be detected
         @param xCmdEnv
                command environment for error and progress handling
         @return
-               <TRUE/> if successful, <FALSE/> if ignored errors occured
+               <type>XPackage</type> handle
     */
-    boolean bindPackage(
-        [out] XPackage /* service Package */ xPackage,
+    XPackage bindPackage(
         [in] string url,
         [in] string mediaType,
         [in] com::sun::star::ucb::XCommandEnvironment xCmdEnv )
-        raises (DeploymentException);
+        raises (DeploymentException,
+                com::sun::star::ucb::CommandFailedException,
+                com::sun::star::lang::IllegalArgumentException);
 
-    /** detects the media-type of an URL.
+    /** gets the supported media types of this registry(backend).
 
-        @param url
-               URL
         @return
-               MediaType of URL, or empty string
+                supported media types
     */
-    string detectMediaType( [in] string url );
-
-    /** Expert feature: Tries to repair a registry.
-        <p>
-        Please use this in case of suspected inconsistencies only.
-        </p>
-
-        @param xCmdEnv
-               command environment for error and progress handling
-        @return
-               <TRUE/> if successful, <FALSE/> if ignored errors occured
-    */
-    boolean repair( [in] com::sun::star::ucb::XCommandEnvironment xCmdEnv )
-        raises (DeploymentException);
+    sequence<string> getSupportedMediaTypes();
 };
 
 }; }; }; };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XPackageManagerFactory.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 11:54:44 $
+ *  last change: $Author: kz $ $Date: 2004-06-11 11:51:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,19 +63,27 @@
 #define INCLUDED_com_sun_star_deployment_XPackageManagerFactory_idl
 
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#include <com/sun/star/deployment/PackageManager.idl>
+#include <com/sun/star/deployment/XPackageManager.idl>
 
 
 module com { module sun { module star { module deployment {
 
-/** Interface to obtain a package manager object.
+/** The <type>XPackageManagerFactory</type> interface is used to obtain
+    <type>XPackageManager</type> instances.
+    <p>
+    You have to use the singleton
+    <code>
+    /singletons/com.sun.star.deployment.thePackageManagerFactory
+    </code>
+    exclusively.
+    </p>
 
     @since #i20304#
- */
-interface XPackageManagerFactory : com::sun::star::uno::XInterface
+*/
+interface XPackageManagerFactory
 {
     /** Method to create (or reusing and already existing)
-        <type>PackageManager</type> object to add or remove UNO packages
+        <type>XPackageManager</type> object to add or remove UNO packages
         persistently.
         <p>
         Packages for context strings <code>"user"</code> and
@@ -86,7 +94,7 @@ interface XPackageManagerFactory : com::sun::star::uno::XInterface
         <p>
         Document contexts (<code>"vnd.sun.star.pkg:..."</code>,
         <code>"vnd.sun.star.tdoc:..."</code>) will get a
-        <type>PackageManager</type> object that stores packages
+        <type>XPackageManager</type> object that stores packages
         in the given document and modify the manifest.
         </p>
         <p>
@@ -119,13 +127,11 @@ interface XPackageManagerFactory : com::sun::star::uno::XInterface
                </li>
                </ul>
         @return
-               <type>PackageManager</type> object
+               <type>XPackageManager</type> object
         @throw <type scope="com::sun::star::lang">
-               IllegalArgumentException</type>
-               in case of an invalid context
+               IllegalArgumentException</type> in case of an invalid context
     */
-    XPackageManager /* service PackageManager */ getPackageManager(
-        [in] string context )
+    XPackageManager getPackageManager( [in] string context )
         raises (com::sun::star::lang::IllegalArgumentException);
 };
 
