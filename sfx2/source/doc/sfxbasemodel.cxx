@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 13:36:40 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 10:15:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -604,6 +604,7 @@ SEQUENCE< UNOTYPE > SAL_CALL SfxBaseModel::getTypes() throw( RUNTIMEEXCEPTION )
                                                          ::getCppuType(( const REFERENCE< XDOCUMENTSUBSTORAGESUPPLIER >*)NULL ) ,
                                                          ::getCppuType(( const REFERENCE< XSCRIPTPROVIDERSUPPLIER >*)NULL ) ,
                                                          ::getCppuType(( const REFERENCE< XCLOSEBROADCASTER      >*)NULL ) ,
+                                                         ::getCppuType(( const REFERENCE< XUICONFIGURATIONMANAGERSUPPLIER >*)NULL ) ,
                                                          aTypeCollectionFirst.getTypes()                                   );
 
             // ... and set his address to static pointer!
@@ -1264,6 +1265,7 @@ REFERENCE< XINTERFACE > SAL_CALL SfxBaseModel::getCurrentSelection() throw(::com
         if ( xDocView.is() )
         {
             ANY xSel = xDocView->getSelection();
+
     // automatisch auskommentiert - Wird von UNO III nicht weiter unterstuetzt!
     //      return xSel.getReflection() == XINTERFACE_getReflection()
     //      return xSel.getValueType() == ::getCppuType((const XINTERFACE*)0)
@@ -2170,6 +2172,10 @@ void SAL_CALL SfxBaseModel::load(   const SEQUENCE< PROPERTYVALUE >& seqArgument
                 pMedium->SetName( String(), sal_True );
                 pMedium->Init_Impl();
 
+                // drop resource
+                m_pData->m_pObjectShell->SetNoName();
+                m_pData->m_pObjectShell->InvalidateName();
+
                 if( m_pData->m_pObjectShell->IsOwnStorageFormat_Impl( *pMedium ) )
                 {
                     // untitled document must be based on temporary storage
@@ -2197,10 +2203,6 @@ void SAL_CALL SfxBaseModel::load(   const SEQUENCE< PROPERTYVALUE >& seqArgument
                 // notifications about possible changes in readonly state and document info
                 m_pData->m_pObjectShell->Broadcast( SfxSimpleHint(SFX_HINT_MODECHANGED) );
                 m_pData->m_pObjectShell->Broadcast( SfxDocumentInfoHint( &m_pData->m_pObjectShell->GetDocInfo() ) );
-
-                // drop resource
-                m_pData->m_pObjectShell->SetNoName();
-                m_pData->m_pObjectShell->InvalidateName();
 
                 // created untitled document can't be modified
                 m_pData->m_pObjectShell->SetModified( sal_False );
