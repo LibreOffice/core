@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabline.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-12 21:44:00 $
+ *  last change: $Author: kz $ $Date: 2001-01-26 21:15:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1849,7 +1849,7 @@ TabPage RID_SVXPAGE_LINEEND_DEF
         Text[ russian ] = "Νξβϋε κξνφϋ λθνθθ Βϋ οξλσχθςε οσςεμ δξαΰβλενθÿ βϋδελεννξγξ ξαϊεκςΰ";
         Text[ polish ] = "Nowe koρcσwki linii otrzymasz przez dodanie wybranego obiektu";
         Text[ japanese ] = "V‚µ‚Άό’[‚πµΜήΌήªΈΔ‚Μ’Η‰Α‚Ι‚ζ‚Α‚Δμ¬";
-        Text[ chinese_traditional ] = "±z―ΰ°χ³zΉL·sΌWΏοΎά¤@­Σª«¥σ¨Σ¥Ν¦¨¤@­Σ·sªΊ½uΊέ΅C";
+        Text[ chinese_traditional ] = "±z―ΰ°χ³zΉL·sΌWΏοΎά¤@­Σª«¥σ¨Σ«Ψ¥ί·sªΊ½uΊέ΅C";
         Text[ arabic ] = "νγίδί ΗαΝΥζα Ϊαμ δεΗνΗΚ ΜΟνΟΙ ααΞΨ Ϊδ ΨΡνή ΕΟΡΗΜ ίΗΖδ γΝΟΟ";
         Text[ greek ] = "Για να δημιουργήσετε νέες 'αρχές' γραμμής, προσθέστε ένα επιλεγμένο αντικείμενο";
         Text[ korean ] = "»υ·ΞΏξ ΐ―ΗόΐΗ Θ­»μΗ¥Έ¦ ΈΈµι±βΐ§ΗΟΏ© Ό±ΕΓµΘ °³ΓΌΈ¦ Γί°΅";
