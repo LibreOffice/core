@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewdraw.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 14:07:00 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 13:25:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,12 @@
 #endif
 
 
+#ifndef _SVX_FONTWORK_BAR_HXX
+#include <svx/fontworkbar.hxx>
+#endif
+#ifndef _SVX_FONTWORK_GALLERY_DIALOG_HXX
+#include <svx/fontworkgallery.hxx>
+#endif
 #ifndef _EEITEM_HXX //autogen
 #include <svx/eeitem.hxx>
 #endif
@@ -162,6 +168,7 @@
 #include "conpoly.hxx"
 #include "conarc.hxx"
 #include "conform.hxx"
+#include "concustomshape.hxx"
 #include "dselect.hxx"
 #include "edtwin.hxx"
 
@@ -179,8 +186,6 @@ using namespace ::com::sun::star;
 /*--------------------------------------------------------------------
     Beschreibung:   Drawing-Ids ausfuehren
  --------------------------------------------------------------------*/
-
-
 
 void SwView::ExecDraw(SfxRequest& rReq)
 {
@@ -270,6 +275,55 @@ void SwView::ExecDraw(SfxRequest& rReq)
             }
         }
     }
+    else if ( nSlotId == SID_FONTWORK_GALLERY_FLOATER )
+    {
+        Window*  pWindow = &( pWrtShell->GetView().GetViewFrame()->GetWindow() );
+
+        if ( pWindow )
+            pWindow->EnterWait();
+
+        if( !pWrtShell->HasDrawView() )
+            pWrtShell->MakeDrawView();
+
+        pSdrView = pWrtShell->GetDrawView();
+        if ( pSdrView )
+        {
+            SdrObject* pObj = NULL;
+            svx::FontWorkGalleryDialog aDlg( pSdrView, pWindow, nSlotId );
+            aDlg.SetSdrObjectRef( &pObj, pSdrView->GetModel() );
+            aDlg.Execute();
+            if ( pObj )
+            {
+                Size            aDocSz( pWrtShell->GetDocSize() );
+                const SwRect&   rVisArea = pWrtShell->VisArea();
+                Point           aPos( rVisArea.Center() );
+                Size            aSize;
+                Size            aPrefSize( pObj->GetSnapRect().GetSize() );
+
+                if( rVisArea.Width() > aDocSz.Width())
+                    aPos.X() = aDocSz.Width() / 2 + rVisArea.Left();
+
+                if(rVisArea.Height() > aDocSz.Height())
+                    aPos.Y() = aDocSz.Height() / 2 + rVisArea.Top();
+
+                if( aPrefSize.Width() && aPrefSize.Height() )
+                {
+                    if( pWindow )
+                        aSize = pWindow->PixelToLogic( aPrefSize, MAP_TWIP );
+                    else
+                        aSize = Application::GetDefaultDevice()->PixelToLogic( aPrefSize, MAP_TWIP );
+                }
+                else
+                    aSize = Size( 2835, 2835 );
+
+                pWrtShell->EnterStdMode();
+                pWrtShell->SwFEShell::Insert( *pObj, 0, 0, &aPos );
+                rReq.Ignore ();
+            }
+        }
+        if( pWindow )
+            pWindow->LeaveWait();
+    }
 
     if (nSlotId == nDrawSfxId || bDeselect)
     {
@@ -337,6 +391,29 @@ void SwView::ExecDraw(SfxRequest& rReq)
                 nSlotId = pIdentifierItem->GetValue();
             pFuncPtr = new ConstFormControl(pWrtShell, pEditWin, this);
             nFormSfxId = nSlotId;
+        }
+        break;
+
+        case SID_DRAWTBX_CS_BASIC :
+        case SID_DRAWTBX_CS_SYMBOL :
+        case SID_DRAWTBX_CS_ARROW :
+        case SID_DRAWTBX_CS_FLOWCHART :
+        case SID_DRAWTBX_CS_CALLOUT :
+        case SID_DRAWTBX_CS_STAR :
+        case SID_DRAW_CS_ID :
+        {
+            pFuncPtr = new ConstCustomShape(pWrtShell, pEditWin, this, rReq );
+            if ( nSlotId != SID_DRAW_CS_ID )
+            {
+                SFX_REQUEST_ARG( rReq, pEnumCommand, SfxStringItem, nSlotId, sal_False );
+                if ( pEnumCommand )
+                {
+                    aCurrShapeEnumCommand[ nSlotId - SID_DRAWTBX_CS_BASIC ] = pEnumCommand->GetValue();
+                    SfxBindings& rBind = GetViewFrame()->GetBindings();
+                    rBind.Invalidate( nSlotId );
+                    rBind.Update( nSlotId );
+                }
+            }
         }
         break;
 
