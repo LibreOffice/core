@@ -2327,3 +2327,9 @@ __CT??_R0?AVSQLException@sdbc@star@sun@com@@@8??0SQLException@sdbc@star@sun@com@
 ?checkColumnIndex@OResultSetMetaData@file@connectivity@@AAEXJ@Z
 ?copy@OUString@rtl@@QBE?AV12@JJ@Z
 ?clearInsertRow@OResultSet@file@connectivity@@IAEXXZ
+??0?$_STL_alloc_proxy@PAFFV?$allocator@F@_STL@@@_STL@@QAE@ABV?$allocator@F@1@PAF@Z
+??1?$_STL_alloc_proxy@PAFFV?$allocator@F@_STL@@@_STL@@QAE@XZ
+??1?$_Vector_base@FV?$allocator@F@_STL@@@_STL@@QAE@XZ
+??1?$allocator@F@_STL@@QAE@XZ
+??1?$vector@FV?$allocator@F@_STL@@@_STL@@QAE@XZ
+?fill_n@_STL@@YAPAFPAFIABF@Z
