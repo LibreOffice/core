@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compbase12.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dbo $ $Date: 2001-11-09 13:49:15 $
+ *  last change: $Author: hr $ $Date: 2003-07-16 17:48:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,8 @@
 #include <cppuhelper/implbase12.hxx>
 #endif
 
-#ifdef MACOSX /* use old impl helpers for macosx */
+#if defined( MACOSX ) && ( __GNUC__ < 3 )
+/* use old impl helpers for macosx */
 
 #ifndef _CPPUHELPER_COMPBASE_HXX_
 #include <cppuhelper/compbase.hxx>
