@@ -2,9 +2,9 @@
  *
  *  $RCSfile: progress.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:27:50 $
+ *  last change: $Author: vg $ $Date: 2003-06-12 09:42:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,7 +216,7 @@ extern ULONG Get10ThSec();
 
 void SfxProgress_Impl::Enable_Impl( BOOL bEnable )
 {
-    SfxObjectShell* pDoc = bAllDocs ? NULL : xObjSh;
+    SfxObjectShell* pDoc = bAllDocs ? NULL : (SfxObjectShell*) xObjSh;
     SfxViewFrame *pFrame= SfxViewFrame::GetFirst(pDoc);
     while ( pFrame )
     {
