@@ -2,8 +2,9 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.100 $
- *  last change: $Author: vg $ $Date: 2004-01-06 13:57:59 $
+ *  $Revision: 1.101 $
+ *
+ *  last change: $Author: hr $ $Date: 2004-02-02 18:23:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +117,14 @@
 #include <svapp.hxx>
 #include <settings.hxx>
 #include <tools/lang.hxx>
+
+#if defined( FT_NEXT_SHORT ) && !defined( NEXT_Short )
+// Account for differing versions of freetype...
+#define NEXT_Short( x )  FT_NEXT_SHORT( x )
+#define NEXT_UShort( x ) FT_NEXT_USHORT( x )
+#define NEXT_Long( x )   FT_NEXT_LONG( x )
+#define NEXT_ULong( x )  FT_NEXT_ULONG( x )
+#endif
 
 // -----------------------------------------------------------------------
 
@@ -349,7 +358,7 @@ const unsigned char* FtFontInfo::GetTable( const char* pTag, ULONG* pLength ) co
     const unsigned char* p = pBuffer + 12;
     if( nFormat == 0x74746366 )         // TTC_MAGIC
         p += GetUInt( p + 4 * mnFaceNum );
-    else if( nFormat != 0x00010000 )    // TTF_MAGIC
+    else if( (nFormat!=0x00010000) && (nFormat!=0x74727565) )    // TTF_MAGIC and Apple TTF Magic
         return NULL;
 
     // walk table directory until match
@@ -495,8 +504,11 @@ long FreetypeManager::AddFontDir( const String& rUrlName )
 
             // TODO: prefer unicode names if available
             // TODO: prefer locale specific names if available?
-            aFontData.maName        = String::CreateFromAscii( aFaceFT->family_name );
-            aFontData.maStyleName   = String::CreateFromAscii( aFaceFT->style_name );
+            if ( aFaceFT->family_name )
+                aFontData.maName        = String::CreateFromAscii( aFaceFT->family_name );
+
+            if ( aFaceFT->style_name )
+                aFontData.maStyleName   = String::CreateFromAscii( aFaceFT->style_name );
 
             aFontData.mnWidth   = 0;
             aFontData.mnHeight  = 0;
@@ -1434,71 +1446,154 @@ ULONG FreetypeServerFont::GetKernPairs( ImplKernPairData** ppKernPairs ) const
     const FT_Byte* pBuffer = pKern;
     USHORT nVersion = GetUShort( pBuffer+0 );
     USHORT nTableCnt = GetUShort( pBuffer+2 );
-    pBuffer += 4;
-    if( nVersion != 0 )     // ignore Apple's versions for now
-        nTableCnt = 0;
-    for( USHORT nTableIdx = 0; nTableIdx < nTableCnt; ++nTableIdx )
+
+    // Microsoft/Old TrueType style kern table
+    if ( nVersion == 0 )
     {
-        USHORT nSubVersion  = GetUShort( pBuffer+0 );
-        USHORT nSubLength   = GetUShort( pBuffer+2 );
-        USHORT nSubCoverage = GetUShort( pBuffer+4 );
-        pBuffer += 6;
-        if( (nSubCoverage&0x03) != 0x01 )   // no interest in minimum info here
-            continue;
-        switch( nSubCoverage >> 8 )
+        pBuffer += 4;
+
+        for( USHORT nTableIdx = 0; nTableIdx < nTableCnt; ++nTableIdx )
         {
-            case 0: // version 0, kerning format 0
+            USHORT nSubVersion  = GetUShort( pBuffer+0 );
+            USHORT nSubLength   = GetUShort( pBuffer+2 );
+            USHORT nSubCoverage = GetUShort( pBuffer+4 );
+            pBuffer += 6;
+            if( (nSubCoverage&0x03) != 0x01 )   // no interest in minimum info here
+                continue;
+            switch( nSubCoverage >> 8 )
             {
-                USHORT nPairs = GetUShort( pBuffer );
-                pBuffer += 8;   // skip search hints
-                aKernGlyphVector.reserve( aKernGlyphVector.size() + nPairs );
-                for( int i = 0; i < nPairs; ++i )
+                case 0: // version 0, kerning format 0
                 {
-                    aKernPair.mnChar1 = GetUShort( pBuffer+0 );
-                    aKernPair.mnChar2 = GetUShort( pBuffer+2 );
-                    //long nUnscaledKern= GetSShort( pBuffer );
-                    pBuffer += 6;
-                    aKernGlyphVector.push_back( aKernPair );
-                }
-            }
-            break;
-
-            case 2: // version 0, kerning format 2
-            {
-                const FT_Byte* pSubTable = pBuffer;
-                //USHORT nRowWidth  = GetUShort( pBuffer+0 );
-                USHORT nOfsLeft     = GetUShort( pBuffer+2 );
-                USHORT nOfsRight    = GetUShort( pBuffer+4 );
-                USHORT nOfsArray    = GetUShort( pBuffer+6 );
-                pBuffer += 8;
-
-                const FT_Byte* pTmp = pSubTable + nOfsLeft;
-                USHORT nFirstLeft   = GetUShort( pTmp+0 );
-                USHORT nLastLeft    = GetUShort( pTmp+2 ) + nFirstLeft - 1;
-
-                pTmp = pSubTable + nOfsRight;
-                USHORT nFirstRight  = GetUShort( pTmp+0 );
-                USHORT nLastRight   = GetUShort( pTmp+2 ) + nFirstRight - 1;
-
-                ULONG nPairs = (ULONG)(nLastLeft - nFirstLeft + 1) * (nLastRight - nFirstRight + 1);
-                aKernGlyphVector.reserve( aKernGlyphVector.size() + nPairs );
-
-                pTmp = pSubTable + nOfsArray;
-                for( int nLeft = nFirstLeft; nLeft < nLastLeft; ++nLeft )
-                {
-                    aKernPair.mnChar1 = nLeft;
-                    for( int nRight = 0; nRight < nLastRight; ++nRight )
+                    USHORT nPairs = GetUShort( pBuffer );
+                    pBuffer += 8;   // skip search hints
+                    aKernGlyphVector.reserve( aKernGlyphVector.size() + nPairs );
+                    for( int i = 0; i < nPairs; ++i )
                     {
-                        if( GetUShort( pTmp ) != 0 )
-                        {
-                            aKernPair.mnChar2 = nRight;
-                            aKernGlyphVector.push_back( aKernPair );
-                        }
-                        pTmp += 2;
+                        aKernPair.mnChar1 = GetUShort( pBuffer+0 );
+                        aKernPair.mnChar2 = GetUShort( pBuffer+2 );
+                        //long nUnscaledKern= GetSShort( pBuffer );
+                        pBuffer += 6;
+                        aKernGlyphVector.push_back( aKernPair );
                     }
                 }
+                break;
+
+                case 2: // version 0, kerning format 2
+                {
+                    const FT_Byte* pSubTable = pBuffer;
+                    //USHORT nRowWidth  = GetUShort( pBuffer+0 );
+                    USHORT nOfsLeft     = GetUShort( pBuffer+2 );
+                    USHORT nOfsRight    = GetUShort( pBuffer+4 );
+                    USHORT nOfsArray    = GetUShort( pBuffer+6 );
+                    pBuffer += 8;
+
+                    const FT_Byte* pTmp = pSubTable + nOfsLeft;
+                    USHORT nFirstLeft   = GetUShort( pTmp+0 );
+                    USHORT nLastLeft    = GetUShort( pTmp+2 ) + nFirstLeft - 1;
+
+                    pTmp = pSubTable + nOfsRight;
+                    USHORT nFirstRight  = GetUShort( pTmp+0 );
+                    USHORT nLastRight   = GetUShort( pTmp+2 ) + nFirstRight - 1;
+
+                    ULONG nPairs = (ULONG)(nLastLeft - nFirstLeft + 1) * (nLastRight - nFirstRight + 1);
+                    aKernGlyphVector.reserve( aKernGlyphVector.size() + nPairs );
+
+                    pTmp = pSubTable + nOfsArray;
+                    for( int nLeft = nFirstLeft; nLeft < nLastLeft; ++nLeft )
+                    {
+                        aKernPair.mnChar1 = nLeft;
+                        for( int nRight = 0; nRight < nLastRight; ++nRight )
+                        {
+                            if( GetUShort( pTmp ) != 0 )
+                            {
+                                aKernPair.mnChar2 = nRight;
+                                aKernGlyphVector.push_back( aKernPair );
+                            }
+                            pTmp += 2;
+                        }
+                    }
+                }
+                break;
             }
-            break;
+        }
+    }
+
+    // Apple New style kern table
+    pBuffer = pKern;
+    nVersion = NEXT_ULong( pBuffer );
+    nTableCnt = NEXT_ULong( pBuffer );
+    if ( nVersion == 0x00010000 )
+    {
+        for( USHORT nTableIdx = 0; nTableIdx < nTableCnt; ++nTableIdx )
+        {
+            ULONG  nLength  = NEXT_ULong( pBuffer );
+            USHORT nCoverage   = NEXT_UShort( pBuffer );
+            USHORT nTupleIndex = NEXT_UShort( pBuffer );
+
+            // Get kerning type
+            sal_Bool bKernVertical     = nCoverage & 0x8000;
+            sal_Bool bKernCrossStream  = nCoverage & 0x4000;
+            sal_Bool bKernVariation    = nCoverage & 0x2000;
+
+            // Kerning sub-table format, 0 through 3
+            sal_uInt8 nSubTableFormat  = nCoverage & 0x00FF;
+
+            switch( nSubTableFormat )
+            {
+                case 0: // version 0, kerning format 0
+                {
+                    USHORT nPairs = NEXT_UShort( pBuffer );
+                    pBuffer += 6;   // skip search hints
+                    aKernGlyphVector.reserve( aKernGlyphVector.size() + nPairs );
+                    for( int i = 0; i < nPairs; ++i )
+                    {
+                        aKernPair.mnChar1 = NEXT_UShort( pBuffer );
+                        aKernPair.mnChar2 = NEXT_UShort( pBuffer );
+                        /*long nUnscaledKern=*/ NEXT_Short( pBuffer );
+                        aKernGlyphVector.push_back( aKernPair );
+                    }
+                }
+                break;
+
+                case 2: // version 0, kerning format 2
+                {
+                    const FT_Byte* pSubTable = pBuffer;
+                    /*USHORT nRowWidth  =*/ NEXT_UShort( pBuffer );
+                    USHORT nOfsLeft     = NEXT_UShort( pBuffer );
+                    USHORT nOfsRight    = NEXT_UShort( pBuffer );
+                    USHORT nOfsArray    = NEXT_UShort( pBuffer );
+
+                    const FT_Byte* pTmp = pSubTable + nOfsLeft;
+                    USHORT nFirstLeft   = NEXT_UShort( pTmp );
+                    USHORT nLastLeft    = NEXT_UShort( pTmp ) + nFirstLeft - 1;
+
+                    pTmp = pSubTable + nOfsRight;
+                    USHORT nFirstRight  = NEXT_UShort( pTmp );
+                    USHORT nLastRight   = NEXT_UShort( pTmp ) + nFirstRight - 1;
+
+                    ULONG nPairs = (ULONG)(nLastLeft - nFirstLeft + 1) * (nLastRight - nFirstRight + 1);
+                    aKernGlyphVector.reserve( aKernGlyphVector.size() + nPairs );
+
+                    pTmp = pSubTable + nOfsArray;
+                    for( int nLeft = nFirstLeft; nLeft < nLastLeft; ++nLeft )
+                    {
+                        aKernPair.mnChar1 = nLeft;
+                        for( int nRight = 0; nRight < nLastRight; ++nRight )
+                        {
+                            if( NEXT_Short( pTmp ) != 0 )
+                            {
+                                aKernPair.mnChar2 = nRight;
+                                aKernGlyphVector.push_back( aKernPair );
+                            }
+                        }
+                    }
+                }
+                break;
+
+                default:
+                    fprintf( stderr, "gcach_ftyp.cxx:  Found unsupported Apple-style kern subtable type %d.\n", nSubTableFormat );
+                    break;
+            }
         }
     }
 
@@ -1704,6 +1799,9 @@ static int FT_cubic_to( FT_Vector* /*const*/ p1, FT_Vector* /*const*/ p2, FT_Vec
 
 bool FreetypeServerFont::GetGlyphOutline( int nGlyphIndex, PolyPolygon& rPolyPoly ) const
 {
+    if( maSizeFT )
+        pFTActivateSize( maSizeFT );
+
     rPolyPoly.Clear();
 
     int nGlyphFlags;
