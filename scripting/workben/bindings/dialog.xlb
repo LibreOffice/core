@@ -5,4 +5,5 @@
  <library:element library:name="EventsBinding"/>
  <library:element library:name="HelpBinding"/>
  <library:element library:name="KeyBinding"/>
+ <library:element library:name="EditDebug"/>
 </library:library>

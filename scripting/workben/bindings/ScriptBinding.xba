@@ -210,6 +210,21 @@ Sub updateMapWithDisabledKeys()
 
 End Sub
 
+Sub ExecuteEditDebug()
+        
+	locations = Array ( &quot;User&quot;, &quot;Share&quot; )
+	languages = Array ( &quot;BeanShell&quot;, &quot;Rhino&quot; )
+	dialogName = &quot;EditDebug&quot;
+
+	bindingDialog = LoadDialog( &quot;ScriptBindingLibrary&quot;, &quot;EditDebug&quot; )
+
+	PopulateLanguageCombo()
+	PopulateLocationCombo()
+	PopulateScriptList( languages(0), locations(0) )
+
+	bindingDialog.execute()	
+End Sub
+
 Sub ExecuteKeyBinding()
 	dialogName = &quot;Key&quot;
     createAndPopulateKeyArrays()
@@ -1493,12 +1508,13 @@ sub LangLocComboListener()
 	
     &apos;Enable/disable Assign button
     scriptList = bindingDialog.getControl( &quot;ScriptList&quot; )
-    if scriptList.getSelectedItem() = &quot;&quot; then
-        bindingDialog.Model.NewButton.enabled = false
-    else
-	&apos;	bindingDialog.Model.NewButton.enabled = true
+    if not (dialogName = &quot;EditDebug&quot;) then
+        if scriptList.getSelectedItem() = &quot;&quot; then
+            bindingDialog.Model.NewButton.enabled = false
+        else
+	    &apos;	bindingDialog.Model.NewButton.enabled = true
+        end if
     end if
-    
     
     &apos; extra dialog dependant processing
     if dialogName = &quot;Menu&quot; then
@@ -1589,6 +1605,94 @@ end sub
 
 REM ------ Event Handling Functions (Buttons) ------
 
+Sub DoBrowseAndEdit()
+    Dim oFilePicker As Object, oSimpleFileAccess As Object
+    Dim oSettings As Object, oPathSettings As Object
+    Dim sFileURL As String
+    Dim sFiles As Variant
+
+    bshfilter = &quot;BeanShell (*.bsh)&quot;
+    rhinofilter = &quot;Rhino (*.js)&quot;
+
+    REM file dialog
+    oFilePicker = CreateUnoService( &quot;com.sun.star.ui.dialogs.FilePicker&quot; )
+
+    oFilePicker.AppendFilter( bshfilter, &quot;*.bsh&quot; )
+    oFilePicker.AppendFilter( rhinofilter, &quot;*.js&quot; )
+    &apos; oFilePicker.SetCurrentFilter( &quot;BeanShell (*.bsh)&quot; )
+
+    If sFileURL = &quot;&quot; Then
+        oSettings = CreateUnoService( &quot;com.sun.star.frame.Settings&quot; )
+        oPathSettings = oSettings.getByName( &quot;PathSettings&quot; )
+        sFileURL = oPathSettings.getPropertyValue( &quot;Work&quot; )
+    End If
+
+    REM set display directory
+    oSimpleFileAccess = CreateUnoService( &quot;com.sun.star.ucb.SimpleFileAccess&quot; )
+
+    If oSimpleFileAccess.exists( sFileURL ) And oSimpleFileAccess.isFolder( sFileURL ) Then
+        oFilePicker.setDisplayDirectory( sFileURL )
+    End If
+
+    REM execute file dialog
+    If oFilePicker.execute() Then
+        sFiles = oFilePicker.getFiles()
+
+        sFileURL = sFiles(0)
+
+        If oSimpleFileAccess.exists( sFileURL ) Then
+            If (oFilePicker.GetCurrentFilter = bshfilter) then
+                RunDebugger(&quot;BeanShell&quot;, sFileURL, &quot;&quot;)
+            ElseIf (oFilePicker.GetCurrentFilter = rhinofilter) then
+                RunDebugger(&quot;Rhino&quot;, sFileURL, &quot;&quot;)
+            End If
+        End If
+        bindingDialog.endExecute()
+    End If
+End Sub
+
+Sub RunDebugger(lang as String, uri as String, filename as String)
+    dim document   as object
+    dim dispatcher as object
+    dim parser     as object
+    dim url        as new com.sun.star.util.URL
+
+    document = ThisComponent.CurrentController.Frame
+    parser   = createUnoService(&quot;com.sun.star.util.URLTransformer&quot;)
+    dim args(2) as new com.sun.star.beans.PropertyValue
+    args(0).Name = &quot;language&quot;
+    args(0).Value = lang
+    args(1).Name = &quot;uri&quot;
+    args(1).Value = uri
+    args(2).Name = &quot;filename&quot;
+    args(2).Value = filename
+
+    url.Complete = &quot;script://DebugRunner.Debug?&quot; _
+        + &quot;language=Java&amp;function=DebugRunner.go&quot; _
+        + &quot;&amp;location=user&quot;
+
+    parser.parseStrict(url)
+    disp = document.queryDispatch(url,&quot;&quot;,0)
+    disp.dispatch(url, args())
+End Sub
+
+sub DoEdit()
+    Dim scriptInfo as Object
+
+    menuScriptList = bindingDialog.getControl( &quot;ScriptList&quot; )
+    selectedScript = menuScriptList.getSelectedItem()
+
+    scripts() = scriptDisplayList(0)
+    for n = LBOUND( scripts() ) to UBOUND( scripts() )
+        if ( scripts( n ).Name = selectedScript ) then
+            scriptInfo = scripts( n ).Value
+            exit for
+        end if
+    next n
+
+    RunDebugger(scriptInfo.getLanguage, scriptInfo.getParcelURI, scriptInfo.getFunctionName)
+    bindingDialog.endExecute()
+end sub
 
 sub MenuOKButton()
 	WriteXMLFromArray()
