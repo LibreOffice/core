@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.29 $
+#   $Revision: 1.30 $
 #
-#   last change: $Author: kz $ $Date: 2004-02-25 17:44:17 $
+#   last change: $Author: rt $ $Date: 2004-06-14 09:36:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -98,6 +98,7 @@ SRC1FILES =\
     resource.src
 
 RESLIB1NAME=		fwe
+RESLIB1IMAGES=		$(PRJ)$/res
 RESLIB1SRSFILES= 	$(SRS)$/$(TARGET).srs
 RESLIB1DEPN=		resource.src	\
                     resource.hrc	\
