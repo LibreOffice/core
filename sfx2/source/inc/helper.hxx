@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2000-12-08 12:48:08 $
+ *  last change: $Author: pb $ $Date: 2001-07-14 12:35:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,10 @@ public:
                                 GetFolderContents( const String& rFolder, sal_Bool bFolder, sal_Bool bSorted = sal_False );
     static ::com::sun::star::uno::Sequence< ::rtl::OUString >
                                 GetFolderContentProperties( const String& rFolder, sal_Bool bFolder );
-    static ::com::sun::star::uno::Sequence< ::rtl::OUString > GetResultSet( const String& rURL );
+    static ::com::sun::star::uno::Sequence< ::rtl::OUString >
+                                GetResultSet( const String& rURL );
+    static ::com::sun::star::uno::Sequence< ::rtl::OUString >
+                                GetHelpTreeViewContents( const String& rURL );
 
     static sal_Bool             CopyTo( const String& rSource, const String& rDest );
     static sal_Bool             MoveTo( const String& rSource, const String& rDest, sal_Int32 nNameClash = com::sun::star::ucb::NameClash::ERROR );

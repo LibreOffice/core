@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helper.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: pb $ $Date: 2001-07-10 07:24:52 $
+ *  last change: $Author: pb $ $Date: 2001-07-14 12:36:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -634,6 +634,89 @@ Sequence < OUString > SfxContentHelper::GetResultSet( const String& rURL )
             delete pEntry;
         }
         delete pList;
+        return aRet;
+    }
+    else
+        return Sequence < OUString > ();
+}
+
+// -----------------------------------------------------------------------
+
+Sequence< OUString > SfxContentHelper::GetHelpTreeViewContents( const String& rURL )
+{
+    StringList_Impl* pProperties = NULL;
+    try
+    {
+        Reference< XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
+        Reference< XInteractionHandler > xInteractionHandler = Reference< XInteractionHandler > (
+                    xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.task.InteractionHandler") ) ), UNO_QUERY );
+
+        Content aCnt( rURL, new ::ucb::CommandEnvironment( xInteractionHandler, Reference< XProgressHandler >() ) );
+        Reference< XResultSet > xResultSet;
+        Sequence< OUString > aProps(2);
+        OUString* pProps = aProps.getArray();
+        pProps[0] = OUString::createFromAscii( "Title" );
+        pProps[1] = OUString::createFromAscii( "IsFolder" );
+
+        try
+        {
+            Reference< com::sun::star::ucb::XDynamicResultSet > xDynResultSet;
+            xDynResultSet = aCnt.createDynamicCursor( aProps, INCLUDE_FOLDERS_AND_DOCUMENTS );
+            if ( xDynResultSet.is() )
+                xResultSet = xDynResultSet->getStaticResultSet();
+        }
+        catch( ::com::sun::star::ucb::CommandAbortedException& )
+        {
+        }
+        catch( ::com::sun::star::uno::Exception& )
+        {
+        }
+
+        if ( xResultSet.is() )
+        {
+            pProperties = new StringList_Impl;
+            Reference< com::sun::star::sdbc::XRow > xRow( xResultSet, UNO_QUERY );
+            Reference< com::sun::star::ucb::XContentAccess > xContentAccess( xResultSet, UNO_QUERY );
+
+            try
+            {
+                while ( xResultSet->next() )
+                {
+                    String aTitle( xRow->getString(1) );
+                    sal_Bool bFolder = xRow->getBoolean(2);
+                    String aRow = aTitle;
+                    aRow += '\t';
+                    aRow += String( xContentAccess->queryContentIdentifierString() );
+                    aRow += '\t';
+                    aRow += bFolder ? '1' : '0';
+                    OUString* pRow = new OUString( aRow );
+                    pProperties->Insert( pRow, LIST_APPEND );
+                }
+            }
+            catch( ::com::sun::star::ucb::CommandAbortedException& )
+            {
+            }
+            catch( ::com::sun::star::uno::Exception& )
+            {
+            }
+        }
+    }
+    catch( ::com::sun::star::uno::Exception& )
+    {
+    }
+
+    if ( pProperties )
+    {
+        ULONG nCount = pProperties->Count();
+        Sequence < OUString > aRet( nCount );
+        OUString* pRet = aRet.getArray();
+        for ( ULONG i = 0; i < nCount; ++i )
+        {
+            OUString* pProperty = pProperties->GetObject(i);
+            pRet[i] = *( pProperty );
+            delete pProperty;
+        }
+        delete pProperties;
         return aRet;
     }
     else
