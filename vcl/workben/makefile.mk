@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: mm $ $Date: 2001-02-22 16:03:13 $
+#   last change: $Author: cp $ $Date: 2001-02-23 18:37:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,11 +80,12 @@ OBJFILES=		$(OBJ)$/svdem.obj
 
 APP1NOSAL=		TRUE
 APP1TARGET= 	$(TARGET)
-APP1OBJS=		$(OBJFILES) \
+APP1OBJS=		$(OBJFILES)
 
 #				$(OBJ)$/salmain.obj
 
 APP1STDLIBS=	$(CPPULIB)			\
+                $(VCLLIB)			\
                 $(TOOLSLIB) 		\
                 $(SALLIB)			\
                 $(VOSLIB)			\
