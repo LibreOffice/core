@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: rt $ $Date: 2004-02-10 15:48:29 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 16:40:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -7615,7 +7615,7 @@
 						<desc xml:lang="hu">Specifies additional folders containing a global user interface configuration. The final user interface configuration is merged from UserConfig and from these folders.</desc>
 						<desc xml:lang="sl">Specifies additional folders containing a global user interface configuration. The final user interface configuration is merged from UserConfig and from these folders.</desc>
 					</info>
-					<value oor:separator=":"/>
+					<value oor:separator=":">$(insturl)/share/config</value>
 				</prop>
 				<prop oor:name="UserConfig" oor:type="xs:string">
 					<info>
