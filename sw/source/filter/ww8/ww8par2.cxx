@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.104 $
+ *  $Revision: 1.105 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-04 12:55:41 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 15:50:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2281,7 +2281,7 @@ void WW8TabDesc::SetSizePosition(SwFrmFmt* pFrmFmt)
     if (pFrmFmt)
     {
         SwFmtFrmSize aSize = pFrmFmt->GetFrmSize();
-        aSize.SetSizeType(ATT_MIN_SIZE);
+        aSize.SetHeightSizeType(ATT_MIN_SIZE);
         aSize.SetHeight(MINLAY);
         pFrmFmt->SetAttr(aSize);
         pTable->GetFrmFmt()->SetAttr(SwFmtHoriOrient(0,HORI_FULL));
@@ -3192,12 +3192,12 @@ void WW8TabDesc::AdjustNewBand()
         SwFmtFrmSize aF( ATT_MIN_SIZE, 0, 0 );  // default
 
         if (pActBand->nLineHeight == 0)    // 0 = Auto
-            aF.SetSizeType( ATT_VAR_SIZE );
+            aF.SetHeightSizeType( ATT_VAR_SIZE );
         else
         {
             if (pActBand->nLineHeight < 0) // Pos = min, Neg = exakt
             {
-                aF.SetSizeType(ATT_FIX_SIZE);
+                aF.SetHeightSizeType(ATT_FIX_SIZE);
                 pActBand->nLineHeight = -pActBand->nLineHeight;
             }
             if (pActBand->nLineHeight < MINLAY) // nicht erlaubte Zeilenhoehe
