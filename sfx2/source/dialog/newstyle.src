@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newstyle.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 18:14:13 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 13:18:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,6 +188,8 @@ ModalDialog DLG_NEW_STYLE_BY_EXAMPLE
     Text[ hindi ] = "शैली उत्पन्न करो";
     Text[ slovak ] = "Vytvoriť štýl";
 };
+
+
 
 
 
