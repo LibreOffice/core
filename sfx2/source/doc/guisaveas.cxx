@@ -2,9 +2,9 @@
  *
  *  $RCSfile: guisaveas.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-02-02 17:00:56 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 17:01:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -848,41 +848,46 @@ sal_Bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
         nOldFiltFlags = aOldFiltPropsHM.getUnpackedValueOrDefault( ::rtl::OUString::createFromAscii( "Flags" ),
                                                                     (sal_Int32)0 );
 
-        // bSetStandardName == true means that user agreed to store document in SO format
-        // while he tried to close stored in external format document and got warning
+        // bSetStandardName == true means that user agreed to store document in the default (default default ;-)) format
         if ( bSetStandardName || ( nOldFiltFlags & nMust ) != nMust || nOldFiltFlags & nDont )
         {
+            ::rtl::OUString aTypeName;
+            ::comphelper::SequenceAsHashMap aPropsHM( GetDocServiceAnyFilter( 294, 80 ) );  // import,export,default,!alien,!templatepath
+            ::rtl::OUString aFilterUIName = aPropsHM.getUnpackedValueOrDefault(
+                                            ::rtl::OUString::createFromAscii( "UIName" ),
+                                            ::rtl::OUString() );
+            aTypeName = aPropsHM.getUnpackedValueOrDefault(
+                                            ::rtl::OUString::createFromAscii( "Type" ),
+                                            ::rtl::OUString() );
+
             if( aLastName.getLength() )
             {
                 INetURLObject aObj( aLastName );
-                ::rtl::OUString aTypeName = aPreselectedFilterPropsHM.getUnpackedValueOrDefault(
-                                                        ::rtl::OUString::createFromAscii( "Type" ),
-                                                        ::rtl::OUString() );
-
-                uno::Reference< container::XNameAccess > xTypeDetection = uno::Reference< container::XNameAccess >(
-                                m_pOwner->GetServiceFactory()->createInstance(
-                                        ::rtl::OUString::createFromAscii( "com.sun.star.document.TypeDetection" ) ),
-                                uno::UNO_QUERY );
-                if ( xTypeDetection.is() )
+                if ( aTypeName.getLength() )
                 {
-                    uno::Sequence< beans::PropertyValue > aTypeNameProps;
-                    if ( ( xTypeDetection->getByName( aTypeName ) >>= aTypeNameProps ) && aTypeNameProps.getLength() )
+                    uno::Reference< container::XNameAccess > xTypeDetection = uno::Reference< container::XNameAccess >(
+                                    m_pOwner->GetServiceFactory()->createInstance(
+                                            ::rtl::OUString::createFromAscii( "com.sun.star.document.TypeDetection" ) ),
+                                    uno::UNO_QUERY );
+                    if ( xTypeDetection.is() )
                     {
-                        ::comphelper::SequenceAsHashMap aTypeNamePropsHM( aTypeNameProps );
-                        uno::Sequence< ::rtl::OUString > aExtensions = aTypeNamePropsHM.getUnpackedValueOrDefault(
-                                                        ::rtl::OUString::createFromAscii( "Extension" ),
-                                                        ::uno::Sequence< ::rtl::OUString >() );
-                        if ( aExtensions.getLength() )
-                            aObj.SetExtension( aExtensions[0] );
+                        uno::Sequence< beans::PropertyValue > aTypeNameProps;
+                        if ( ( xTypeDetection->getByName( aTypeName ) >>= aTypeNameProps ) && aTypeNameProps.getLength() )
+                        {
+                            ::comphelper::SequenceAsHashMap aTypeNamePropsHM( aTypeNameProps );
+                            uno::Sequence< ::rtl::OUString > aExtensions = aTypeNamePropsHM.getUnpackedValueOrDefault(
+                                                            ::rtl::OUString::createFromAscii( "Extension" ),
+                                                            ::uno::Sequence< ::rtl::OUString >() );
+                            if ( aExtensions.getLength() )
+                                aObj.SetExtension( aExtensions[0] );
+                        }
                     }
                 }
 
                 pFileDlg->SetDisplayDirectory( aObj.GetMainURL( INetURLObject::NO_DECODE ) );
             }
 
-            pFileDlg->SetCurrentFilter( aPreselectedFilterPropsHM.getUnpackedValueOrDefault(
-                                                        ::rtl::OUString::createFromAscii( "UIName" ),
-                                                        ::rtl::OUString() ) );
+            pFileDlg->SetCurrentFilter( aFilterUIName );
         }
         else
         {
@@ -903,7 +908,6 @@ sal_Bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
     if ( xSel.is() && xSel->getSelection().hasValue() )
         GetMediaDescr()[::rtl::OUString::createFromAscii( "SelectionOnly" )] <<= sal_True;
 
-
     // This is a temporary hardcoded solution must be removed when
     // dialogs do not need parameters in SidSet representation any more
     sal_uInt16 nSlotID = getSlotIDFromMode( nStoreMode );
@@ -919,16 +923,15 @@ sal_Bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
                          aDialogParams,
                          NULL );
 
-    ::rtl::OUString aFilterName = aPreselectedFilterPropsHM.getUnpackedValueOrDefault(
-                                                                    ::rtl::OUString::createFromAscii( "Name" ),
-                                                                    ::rtl::OUString() );
-    String aStringTypeFN( aFilterName );
+    // aStringTypeFN is a pure output parameter, pDialogParams is an in/out parameter
+    String aStringTypeFN;
     if ( pFileDlg->Execute( pDialogParams, aStringTypeFN ) != ERRCODE_NONE )
     {
         delete pFileDlg;
         throw task::ErrorCodeIOException( ::rtl::OUString(), uno::Reference< uno::XInterface >(), ERRCODE_IO_ABORT );
     }
-    aFilterName = aStringTypeFN;
+
+    ::rtl::OUString aFilterName = aStringTypeFN;
 
     uno::Sequence< beans::PropertyValue > aPropsFromDialog;
     TransformItems( nSlotID, *pDialogParams, aPropsFromDialog, NULL );
@@ -1241,21 +1244,26 @@ sal_Bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >&
         while ( !bExit )
         {
             bUseFilterOptions = aModelData.OutputFileDialog( nStoreMode, aFilterProps, bSetStandardName );
-
-            ::rtl::OUString aFilterName = aModelData.GetMediaDescr().getUnpackedValueOrDefault(
-                                                                            ::rtl::OUString::createFromAscii( "FilterName" ),
-                                                                            ::rtl::OUString() );
-            sal_Int8 nStatusSave = aModelData.CheckFilter( aFilterName );
-            if ( nStatusSave == STATUS_SAVEAS_STANDARDNAME )
+            if ( nStoreMode == SAVEAS_REQUESTED )
             {
-                // switch to best filter
-                bSetStandardName = sal_True;
+                // in case of saving check filter for possible alien warning
+                ::rtl::OUString aFilterName = aModelData.GetMediaDescr().getUnpackedValueOrDefault(
+                                                                                ::rtl::OUString::createFromAscii( "FilterName" ),
+                                                                                ::rtl::OUString() );
+                sal_Int8 nStatusSave = aModelData.CheckFilter( aFilterName );
+                if ( nStatusSave == STATUS_SAVEAS_STANDARDNAME )
+                {
+                    // switch to best filter
+                    bSetStandardName = sal_True;
+                }
+                else if ( nStatusSave == STATUS_SAVE )
+                {
+                    // user confirmed alien filter or "good" filter is used
+                    bExit = sal_True;
+                }
             }
-            else if ( nStatusSave == STATUS_SAVE )
-            {
-                // user confirmed alien filter or "good" filter is used
+            else
                 bExit = sal_True;
-            }
         }
 
         bDialogUsed = sal_True;
