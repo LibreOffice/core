@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appinit.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mba $ $Date: 2000-09-28 11:34:33 $
+ *  last change: $Author: mba $ $Date: 2000-10-04 17:34:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,7 +170,9 @@
 #include "picklist.hxx"
 #include "plugobj.hxx"
 #include "progress.hxx"
+#if SUPD<608
 #include "saveopt.hxx"
+#endif
 #include "sfxhelp.hxx"
 #include "sfxresid.hxx"
 #include "sfxtypes.hxx"
@@ -719,7 +721,9 @@ FASTBOOL SfxApplication::Initialize_Impl()
     pAcceleratorMgr = new SfxAcceleratorManager;
 
     pImageMgr = new SfxImageManager;
+#if SUPD<608
     pOptions = new SfxOptions;
+#endif
     SfxNewHdl* pNewHdl = SfxNewHdl::GetOrCreate();
 
     // Die Strings muessen leider zur Laufzeit gehalten werden, da wir bei

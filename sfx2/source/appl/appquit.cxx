@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appquit.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2000-09-28 11:38:27 $
+ *  last change: $Author: mba $ $Date: 2000-10-04 17:34:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,6 @@
 #include "imgmgr.hxx"
 #include "templdlg.hxx"
 #include "tbxconf.hxx"
-#include "saveopt.hxx"
 #include "msgpool.hxx"
 #include "frameobj.hxx"
 #include "docfile.hxx"
@@ -313,7 +312,6 @@ void SfxApplication::Deinitialize()
 
     DELETEZ(pInterfaces);
     DELETEZ(pImageMgr);
-    DELETEZ(pOptions);
 
     // free administration managers
     DELETEZ(pImp->pAutoSaveTimer);

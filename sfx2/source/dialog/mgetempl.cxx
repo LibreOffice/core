@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mgetempl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mba $ $Date: 2000-09-28 11:43:15 $
+ *  last change: $Author: mba $ $Date: 2000-10-04 17:36:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,6 @@
 #include "sfxtypes.hxx"
 #include "sfxresid.hxx"
 #include "module.hxx"
-#include "saveopt.hxx"
 
 #include "sfx.hrc"
 #include "dialog.hrc"
@@ -370,13 +369,12 @@ void SfxManageStyleSheetPage::SetDescriptionText_Impl()
 {
     SfxApplication* pSfxApp = SFX_APP();
     SfxMapUnit eUnit = SFX_MAPUNIT_CM;
-    FieldUnit eFieldUnit = pSfxApp->GetOptions().GetMetric();
+//    FieldUnit eFieldUnit = pSfxApp->GetOptions().GetMetric();
+    FieldUnit eFieldUnit( FUNIT_CM );
     SfxModule* pModule = pSfxApp->GetActiveModule();
-
     if ( pModule )
     {
         const SfxPoolItem* pItem = pModule->GetItem( SID_ATTR_METRIC );
-
         if ( pItem )
             eFieldUnit = (FieldUnit)( (SfxUInt16Item*)pItem )->GetValue();
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appserv.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pb $ $Date: 2000-09-26 11:03:29 $
+ *  last change: $Author: mba $ $Date: 2000-10-04 17:34:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,7 +161,6 @@
 #include "minfitem.hxx"
 #include "event.hxx"
 #include "cfgmgr.hxx"
-#include "saveopt.hxx"
 #include "accmgr.hxx"
 #include "mnumgr.hxx"
 #include "intfrm.hxx"
@@ -830,7 +829,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                 Help::EnableBalloonHelp();
             else
                 Help::DisableBalloonHelp();
-            GetOptions().SetHelpBalloons(bOn);
+            SvtHelpOptions().SetHelpBalloons(bOn);
             bDone = TRUE;
 
             // ggf. recorden
@@ -853,7 +852,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                 Help::EnableQuickHelp();
             else
                 Help::DisableQuickHelp();
-            GetOptions().SetHelpTips(bOn);
+            SvtHelpOptions().SetHelpTips(bOn);
             Invalidate(SID_HELPTIPS);
             bDone = TRUE;
 

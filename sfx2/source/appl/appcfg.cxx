@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appcfg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mba $ $Date: 2000-09-28 11:33:15 $
+ *  last change: $Author: mba $ $Date: 2000-10-04 17:34:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,6 +136,8 @@
 #include <tools/urlobj.hxx>
 #include <tools/wldcrd.hxx>
 #include <svtools/saveopt.hxx>
+#include <svtools/helpopt.hxx>
+#include <svtools/undoopt.hxx>
 
 #include "viewfrm.hxx"
 #include "sfxhelp.hxx"
@@ -143,7 +145,6 @@
 #include "dispatch.hxx"
 #include "objsh.hxx"
 #include "objshimp.hxx"
-#include "saveopt.hxx"
 #include "viewsh.hxx"
 #include "request.hxx"
 #include "evntconf.hxx"
@@ -249,6 +250,8 @@ BOOL SfxApplication::GetOptions( SfxItemSet& rSet )
 
     const USHORT *pRanges = rSet.GetRanges();
     SvtSaveOptions aSaveOptions;
+    SvtUndoOptions aUndoOptions;
+    SvtHelpOptions aHelpOptions;
     while ( *pRanges )
     {
         for(USHORT nWhich = *pRanges++; nWhich <= *pRanges; ++nWhich)
@@ -330,34 +333,29 @@ BOOL SfxApplication::GetOptions( SfxItemSet& rSet )
 //                                pOptions->GetMetric() ) ) )
 //                        bRet = TRUE;
                     break;
-                case SID_DOCMANAGER :
-                    if(rSet.Put( SfxStringItem ( rPool.GetWhich( SID_DOCMANAGER ),
-                                 pOptions->GetDocumentManagerConfig() ) ) )
-                        bRet = TRUE;
-                    break;
                 case SID_HELPBALLOONS :
                     if(rSet.Put( SfxBoolItem ( rPool.GetWhich( SID_HELPBALLOONS ),
-                               pOptions->IsHelpBalloons() ) ) )
+                               aHelpOptions.IsExtendedHelp() ) ) )
                         bRet = TRUE;
                     break;
                 case SID_HELPTIPS :
                     if(rSet.Put( SfxBoolItem ( rPool.GetWhich( SID_HELPTIPS ),
-                               pOptions->IsHelpTips() ) ) )
+                               aHelpOptions.IsHelpTips() ) ) )
                         bRet = TRUE;
                     break;
                 case SID_ATTR_AUTOHELPAGENT :
                     if(rSet.Put( SfxBoolItem ( rPool.GetWhich( SID_ATTR_AUTOHELPAGENT ),
-                               pOptions->IsAutoHelpAgent() ) ) )
+                               aHelpOptions.IsHelpAgentAutoStartMode() ) ) )
                         bRet = TRUE;
                     break;
                 case SID_ATTR_WELCOMESCREEN :
                     if(rSet.Put( SfxBoolItem ( rPool.GetWhich( SID_ATTR_WELCOMESCREEN ),
-                               pOptions->IsWelcomeScreen() ) ) )
+                               aHelpOptions.IsWelcomeScreen() ) ) )
                         bRet = TRUE;
                     break;
                 case SID_ATTR_UNDO_COUNT :
                     if(rSet.Put( SfxUInt16Item ( rPool.GetWhich( SID_ATTR_UNDO_COUNT ),
-                                 pOptions->GetUndoCount() ) ) )
+                                 aUndoOptions.GetUndoCount() ) ) )
                         bRet = TRUE;
                     break;
                 case SID_INET_HOMEPAGE   :
@@ -752,6 +750,8 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
 
     SfxToolBoxConfig *pTbxCfg = SfxToolBoxConfig::GetOrCreate();
     SvtSaveOptions aSaveOptions;
+    SvtUndoOptions aUndoOptions;
+    SvtHelpOptions aHelpOptions;
     if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_ATTR_BUTTON_OUTSTYLE3D), TRUE, &pItem) )
     {
         DBG_ASSERT(pItem->ISA(SfxBoolItem), "BoolItem expected");
@@ -853,32 +853,25 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
 //        pOptions->SetMetric((FieldUnit)((const SfxUInt16Item*)pItem)->GetValue());
     }
 
-    // Docmanager
-    if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_DOCMANAGER), TRUE, &pItem))
-    {
-        DBG_ASSERT(pItem->ISA(SfxStringItem), "StringItem expected");
-        pOptions->SetDocumentManagerConfig(((const SfxStringItem *)pItem)->GetValue());
-    }
-
     // HelpBalloons
     if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_HELPBALLOONS), TRUE, &pItem))
     {
         DBG_ASSERT(pItem->ISA(SfxBoolItem), "BoolItem expected");
-        pOptions->SetHelpBalloons(((const SfxBoolItem *)pItem)->GetValue());
+        aHelpOptions.SetExtendedHelp(((const SfxBoolItem *)pItem)->GetValue());
     }
 
     // HelpTips
     if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_HELPTIPS), TRUE, &pItem))
     {
         DBG_ASSERT(pItem->ISA(SfxBoolItem), "BoolItem expected");
-        pOptions->SetHelpTips(((const SfxBoolItem *)pItem)->GetValue());
+        aHelpOptions.SetHelpTips(((const SfxBoolItem *)pItem)->GetValue());
     }
 
     // AutoHelpAgent
     if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_ATTR_AUTOHELPAGENT ), TRUE, &pItem))
     {
         DBG_ASSERT(pItem->ISA(SfxBoolItem), "BoolItem expected");
-        pOptions->SetAutoHelpAgent( ((const SfxBoolItem *)pItem)->GetValue() );
+        aHelpOptions.SetHelpAgentAutoStartMode( ((const SfxBoolItem *)pItem)->GetValue() );
     }
 
     // AutoHelpAgent-Reset
@@ -895,7 +888,7 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_ATTR_WELCOMESCREEN ), TRUE, &pItem))
     {
         DBG_ASSERT(pItem->ISA(SfxBoolItem), "BoolItem expected");
-        pOptions->SetWelcomeScreen( ((const SfxBoolItem *)pItem)->GetValue() );
+        aHelpOptions.SetWelcomeScreen( ((const SfxBoolItem *)pItem)->GetValue() );
     }
 
     // WelcomeScreen
@@ -933,7 +926,7 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     {
         DBG_ASSERT(pItem->ISA(SfxUInt16Item), "UInt16Item expected");
         USHORT nUndoCount = ((const SfxUInt16Item*)pItem)->GetValue();
-        pOptions->SetUndoCount( nUndoCount );
+        aUndoOptions.SetUndoCount( nUndoCount );
 
         // um alle Undo-Manager zu erwischen: "uber alle Frames iterieren
         for ( SfxViewFrame *pFrame = SfxViewFrame::GetFirst();

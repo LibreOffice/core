@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appmain.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2000-09-28 11:35:40 $
+ *  last change: $Author: mba $ $Date: 2000-10-04 17:34:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,7 @@
 
 #include <svtools/itempool.hxx>
 #include <svtools/urihelper.hxx>
+#include <svtools/helpopt.hxx>
 
 #include "appimp.hxx"
 #include "sfxtypes.hxx"
@@ -106,7 +107,6 @@
 #include "mnumgr.hxx"
 #include "stbmgr.hxx"
 #include "imgmgr.hxx"
-#include "saveopt.hxx"
 #include "eacopier.hxx"
 #include "appuno.hxx"
 #include "objuno.hxx"
@@ -498,7 +498,7 @@ IMPL_LINK( SfxApplication, StartWelcomeScreenHdl_Impl, void*, EMPTYARG )
     delete pTimer;
     pTimer = NULL;
 
-    if ( GetOptions().IsWelcomeScreen() )
+    if ( SvtHelpOptions().IsWelcomeScreen() )
     {
 /*
         ULONG nId = 0;

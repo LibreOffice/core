@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appmisc.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: willem.vandorp $ $Date: 2000-09-29 14:06:01 $
+ *  last change: $Author: mba $ $Date: 2000-10-04 17:34:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,6 @@
 #include "intro.hxx"
 #include "about.hxx"
 #include "fcontnr.hxx"
-#include "saveopt.hxx"
 #include "sfxlocal.hrc"
 #include "sfx.hrc"
 #include "app.hrc"
@@ -685,7 +684,7 @@ void SfxApplication::StoreConfig()
 
 {
     // Workingset schreiben?
-//    if ( pOptions->IsSaveWorkingSet() )
+//    if ( SvtOptions().IsSaveWorkingSet() )
 //        SfxTaskManager::SaveWorkingSet();
 //(mba/task): Implementierung fehlt
 

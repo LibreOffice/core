@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatch.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:29 $
+ *  last change: $Author: mba $ $Date: 2000-10-04 17:35:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,7 @@
 
 #define _SVSTDARR_ULONGS
 #include <svtools/svstdarr.hxx>
+#include <svtools/helpopt.hxx>
 
 #pragma hdrstop
 
@@ -113,7 +114,6 @@
 #include "mnumgr.hxx"
 #include "childwin.hxx"
 #include "docfac.hxx"
-#include "saveopt.hxx"
 #include "ipenv.hxx"
 #include "msgpool.hxx"
 #include "module.hxx"
@@ -361,7 +361,7 @@ int SfxDispatcher::Call_Impl( SfxShell& rShell, const SfxSlot &rSlot, SfxRequest
                 // Bei neuen/komplizierten Funktionen den HelpAgent feuern...
                 Help* pHelp = Application::GetHelp();
                 if ( pHelp )
-                    ((SfxHelp_Impl*)pHelp)->SlotExecutedOrFocusChanged( rReq.GetSlot(), sal_True, pSfxApp->GetOptions().IsAutoHelpAgent() );
+                    ((SfxHelp_Impl*)pHelp)->SlotExecutedOrFocusChanged( rReq.GetSlot(), sal_True, SvtHelpOptions().IsHelpAgentAutoStartMode() );
 
                 SfxExecFunc pFunc = rSlot.GetExecFnc();
                 rShell.CallExec( pFunc, rReq );

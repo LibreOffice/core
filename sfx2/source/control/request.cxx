@@ -2,9 +2,9 @@
  *
  *  $RCSfile: request.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:29 $
+ *  last change: $Author: mba $ $Date: 2000-10-04 17:35:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,6 @@
 #include "sfxtypes.hxx"
 #include "msg.hxx"
 #include "objsh.hxx"
-#include "saveopt.hxx"
 #include "viewfrm.hxx"
 #include "viewsh.hxx"
 #include "app.hxx"

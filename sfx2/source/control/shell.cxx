@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:29 $
+ *  last change: $Author: mba $ $Date: 2000-10-04 17:35:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,8 @@
 #include <svtools/sbx.hxx>
 #endif
 
+#include <svtools/undoopt.hxx>
+
 #pragma hdrstop
 
 #include "shell.hxx"
@@ -93,7 +95,6 @@
 #include "sfxtypes.hxx"
 #include "request.hxx"
 #include "mnumgr.hxx"
-#include "saveopt.hxx"
 #include "statcach.hxx"
 
 //====================================================================
@@ -546,7 +547,7 @@ void SfxShell::SetUndoManager( SfxUndoManager *pNewUndoMgr )
 {
     pUndoMgr = pNewUndoMgr;
     if ( pUndoMgr )
-        pUndoMgr->SetMaxUndoActionCount( SFX_APP()->GetOptions().GetUndoCount() );
+        pUndoMgr->SetMaxUndoActionCount( SvtUndoOptions().GetUndoCount() );
 }
 
 //--------------------------------------------------------------------

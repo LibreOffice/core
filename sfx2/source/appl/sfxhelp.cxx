@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxhelp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mba $ $Date: 2000-09-28 11:39:26 $
+ *  last change: $Author: mba $ $Date: 2000-10-04 17:34:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,8 +109,6 @@
 #include <automation/automation.hxx>
 #pragma hdrstop
 
-#include <saveopt.hxx>  // Welcome-Screen Optionen
-
 #ifndef _SFXENUMITEM_HXX //autogen
 #include <svtools/eitem.hxx>
 #endif
@@ -120,6 +118,7 @@
 #endif
 
 #include <tools/urlobj.hxx>
+#include <svtools/helpopt.hxx>
 
 #include <helpid.hrc>
 #include <app.hxx>
@@ -1272,7 +1271,7 @@ IMPL_LINK( SfxHelpTipsWindow, CloseButtonHdl, Button*, EMPTYARG )
 
 IMPL_LINK( SfxHelpTipsWindow, CheckBoxHdl, CheckBox*, EMPTYARG )
 {
-    SFX_APP()->GetOptions().SetWelcomeScreen( !maCheckBox.IsChecked() );
+    SvtHelpOptions().SetWelcomeScreen( !maCheckBox.IsChecked() );
     return 0;
 }
 

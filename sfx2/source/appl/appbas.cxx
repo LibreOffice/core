@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appbas.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pb $ $Date: 2000-09-26 11:03:29 $
+ *  last change: $Author: mba $ $Date: 2000-10-04 17:34:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,6 +136,8 @@
 #include <svtools/ehdl.hxx>
 #endif
 
+#include <svtools/undoopt.hxx>
+
 #pragma hdrstop
 
 #include "appuno.hxx"
@@ -155,7 +157,6 @@
 #include "tplpitem.hxx"
 #include "minfitem.hxx"
 #include "app.hrc"
-#include "saveopt.hxx"
 #include "evntconf.hxx"
 #include "macrconf.hxx"
 #include "request.hxx"
@@ -945,7 +946,7 @@ void SfxApplication::PropExec_Impl( SfxRequest &rReq )
         case SID_ATTR_UNDO_COUNT:
         {
             SFX_REQUEST_ARG(rReq, pCountItem, SfxUInt16Item, nSID, sal_False);
-            GetOptions().SetUndoCount( pCountItem->GetValue() );
+            SvtUndoOptions().SetUndoCount( pCountItem->GetValue() );
             break;
         }
 
@@ -1149,7 +1150,7 @@ void SfxApplication::PropState_Impl( SfxItemSet &rSet )
                 break;
 
             case SID_ATTR_UNDO_COUNT:
-                rSet.Put( SfxUInt16Item( SID_ATTR_UNDO_COUNT, GetOptions().GetUndoCount() ) );
+                rSet.Put( SfxUInt16Item( SID_ATTR_UNDO_COUNT, SvtUndoOptions().GetUndoCount() ) );
                 break;
 
 #if 0
