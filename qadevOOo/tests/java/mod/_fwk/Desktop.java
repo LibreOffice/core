@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Desktop.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:15:29 $
+ *  last change:$Date: 2003-05-27 12:46:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,7 @@ import lib.TestEnvironment;
 import lib.StatusException;
 import lib.Status;
 import com.sun.star.uno.XInterface;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.frame.XDesktop;
@@ -133,7 +134,7 @@ public class Desktop extends TestCase {
     protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
 
         // get a soffice factory object
-        SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)Param.getMSF());
 
         String url = util.utils.getFullTestURL("XDocumentInsertable.sxw");
 
@@ -149,7 +150,7 @@ public class Desktop extends TestCase {
         XInterface oObj = null;
 
         try {
-            oObj = (XInterface)Param.getMSF().createInstance(
+            oObj = (XInterface)((XMultiServiceFactory)Param.getMSF()).createInstance(
                 "com.sun.star.comp.framework.Desktop");
         } catch(com.sun.star.uno.Exception e) {
             e.printStackTrace(log);
