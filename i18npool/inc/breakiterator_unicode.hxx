@@ -2,9 +2,9 @@
  *
  *  $RCSfile: breakiterator_unicode.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: khong $ $Date: 2002-08-02 15:56:42 $
+ *  last change: $Author: khong $ $Date: 2002-09-26 01:34:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,9 +111,14 @@ protected:
     sal_Char *cBreakIterator;
     Boundary result; // for word break iterator
 
-private:
     icu::BreakIterator *characterBreak, *editWordBreak, *dictWordBreak,
                 *countWordBreak, *sentenceBreak, *lineBreak;
+    virtual icu::BreakIterator* SAL_CALL loadICUWordBreakIterator(const com::sun::star::lang::Locale& rLocale,
+    sal_Int16 rWordType) throw( com::sun::star::uno::RuntimeException);
+};
+
+class BreakIterator_ca : public BreakIterator_Unicode
+{
     icu::BreakIterator* SAL_CALL loadICUWordBreakIterator(const com::sun::star::lang::Locale& rLocale,
     sal_Int16 rWordType) throw( com::sun::star::uno::RuntimeException);
 };

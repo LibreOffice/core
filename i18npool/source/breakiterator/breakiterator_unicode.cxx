@@ -2,9 +2,9 @@
  *
  *  $RCSfile: breakiterator_unicode.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: khong $ $Date: 2002-08-30 18:44:35 $
+ *  last change: $Author: khong $ $Date: 2002-09-26 01:34:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,7 @@
 #include <unicode.hxx>
 #include <unicode/locid.h>
 #include <unicode/rbbi.h>
+#include <data/dict_word_ca.h>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -141,6 +142,27 @@ icu::BreakIterator* SAL_CALL BreakIterator_Unicode::loadICUWordBreakIterator(con
         if (!editWordBreak) editWordBreak = loadICUBreakIterator(rLocale, "edit_word", LOAD_WORD_BREAKITERATOR);
         return editWordBreak;
     }
+}
+
+static icu::BreakIterator* loadICURuleBasedBreakIterator(sal_Char* ruleString)
+{
+    UParseError parseError;
+    parseError.line = 0;
+    parseError.offset = 0;
+    return new RuleBasedBreakIterator(UnicodeString(ruleString), parseError, status);
+}
+
+icu::BreakIterator* SAL_CALL BreakIterator_ca::loadICUWordBreakIterator(const lang::Locale& rLocale,
+    sal_Int16 rWordType) throw(RuntimeException)
+{
+    if (rWordType == WordType::DICTIONARY_WORD) {
+        if (! dictWordBreak) {
+        dictWordBreak = loadICURuleBasedBreakIterator(dict_word_ca);
+        if ( !U_SUCCESS(status) ) throw ERROR;
+        }
+        return dictWordBreak;
+    } else
+        return BreakIterator_Unicode::loadICUWordBreakIterator(rLocale, rWordType);
 }
 
 sal_Int32 SAL_CALL BreakIterator_Unicode::nextCharacters( const OUString& Text,
