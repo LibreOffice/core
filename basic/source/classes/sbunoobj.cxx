@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbunoobj.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ab $ $Date: 2002-04-08 14:26:04 $
+ *  last change: $Author: ab $ $Date: 2002-04-12 11:49:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1715,10 +1715,11 @@ SbxVariable* SbUnoObject::Find( const XubString& rName, SbxClassType t )
 
     // Neu 4.3.1999: Properties on Demand anlegen, daher jetzt perIntrospectionAccess
     // suchen, ob doch eine Property oder Methode des geforderten Namens existiert
-    if( !pRes && mxExactName.is() )
+    if( !pRes )
     {
-        OUString aUNonCaseName( rName );
-        OUString aUName = mxExactName->getExactName( aUNonCaseName );
+        OUString aUName( rName );
+        if( mxExactName.is() )
+            aUName = mxExactName->getExactName( aUName );
         if( mxUnoAccess.is() )
         {
             if( aUName.getLength() )
