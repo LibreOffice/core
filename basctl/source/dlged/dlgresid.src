@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgresid.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2001-03-21 21:11:38 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 07:08:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,19 +113,19 @@ String RID_STR_BRWTITLE_PROPERTIES
     Text[ english_us ] = "Properties: ";
     Text[ portuguese ] = "Propriedades:  ";
     Text[ russian ] = "Ñâîéñòâà: ";
-    Text[ greek ] = "Properties: ";
+    Text[ greek ] = "Éäéüôçôåò: ";
     Text[ dutch ] = "Eigenschappen:";
-    Text[ french ] = "Properties: ";
+    Text[ french ] = "Propriétés : ";
     Text[ spanish ] = "Properties: ";
-    Text[ italian ] = "Properties: ";
+    Text[ italian ] = "Proprietà: ";
     Text[ danish ] = "Properties: ";
     Text[ swedish ] = "Egenskaper: ";
     Text[ polish ] = "W³aœciwoœci: ";
     Text[ portuguese_brazilian ] = "Properties: ";
-    Text[ japanese ] = "Properties: ";
+    Text[ japanese ] = "ÌßÛÊßÃ¨: ";
     Text[ korean ] = "Properties: ";
-    Text[ chinese_simplified ] = "Properties: ";
-    Text[ chinese_traditional ] = "Properties: ";
+    Text[ chinese_simplified ] = "ÊôĞÔ£º";
+    Text[ chinese_traditional ] = "Äİ©Ê¡G";
     Text[ turkish ] = "Properties: ";
     Text[ arabic ] = "Properties: ";
 };
@@ -136,19 +136,19 @@ String RID_STR_BRWTITLE_NO_PROPERTIES
     Text[ english_us ] = "No Control marked";
     Text[ portuguese ] = "Nenhum controlo seleccionado";
     Text[ russian ] = "Íè îäèí ıëåìåíò óïğàâëåíèÿ íå âûäåëåí";
-    Text[ greek ] = "No Control marked";
+    Text[ greek ] = "Äåí İãéíå åğéëïãŞ óôïé÷åßïõ åëİã÷ïõ";
     Text[ dutch ] = "Geen controle-element";
-    Text[ french ] = "No Control marked";
+    Text[ french ] = "Aucun élément de contrôle marqué";
     Text[ spanish ] = "No Control marked";
-    Text[ italian ] = "No Control marked";
+    Text[ italian ] = "Nessun elemento di controllo selezionato";
     Text[ danish ] = "No Control marked";
     Text[ swedish ] = "Inget kontrollelement markerat";
     Text[ polish ] = "Nie zaznaczono formantu";
     Text[ portuguese_brazilian ] = "No Control marked";
-    Text[ japanese ] = "No Control marked";
+    Text[ japanese ] = "ºİÄÛ°Ù—v‘f‚Ì‘I‘ğ‚È‚µ";
     Text[ korean ] = "No Control marked";
-    Text[ chinese_simplified ] = "No Control marked";
-    Text[ chinese_traditional ] = "No Control marked";
+    Text[ chinese_simplified ] = "Ã»ÓĞÑ¡Ôñ¿ØÖÆÏî";
+    Text[ chinese_traditional ] = "¨S¦³¿ï¨ú±±¨î¶µ";
     Text[ turkish ] = "No Control marked";
     Text[ arabic ] = "No Control marked";
 };
@@ -159,19 +159,19 @@ String RID_STR_BRWTITLE_MULTISELECT
     Text[ english_us ] = "Multiselection";
     Text[ portuguese ] = "Multi-selecção";
     Text[ russian ] = "Ãğóïïîâîå âûäåëåíèå";
-    Text[ greek ] = "Multiselection";
+    Text[ greek ] = "ĞïëëáğëŞ åğéëïãŞ";
     Text[ dutch ] = "Meervoudige selectie";
-    Text[ french ] = "Multiselection";
+    Text[ french ] = "Sélection multiple";
     Text[ spanish ] = "Multiselection";
-    Text[ italian ] = "Multiselection";
+    Text[ italian ] = "Selezione multipla";
     Text[ danish ] = "Multiselection";
     Text[ swedish ] = "Multimarkering";
     Text[ polish ] = "Wybór wielokrotny";
     Text[ portuguese_brazilian ] = "Multiselection";
-    Text[ japanese ] = "Multiselection";
+    Text[ japanese ] = "•¡”‘I‘ğ";
     Text[ korean ] = "Multiselection";
-    Text[ chinese_simplified ] = "Multiselection";
-    Text[ chinese_traditional ] = "Multiselection";
+    Text[ chinese_simplified ] = "¶àÖØÑ¡Ôñ";
+    Text[ chinese_traditional ] = "¦h­«¿ï¨ú";
     Text[ turkish ] = "Multiselection";
     Text[ arabic ] = "Multiselection";
 };
