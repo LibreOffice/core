@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SelectionBrowseBox.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-30 13:35:55 $
+ *  last change: $Author: oj $ $Date: 2001-09-27 06:19:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,9 @@
 #ifndef _DBU_RESOURCE_HRC_
 #include "dbu_resource.hrc"
 #endif
+#ifndef _DBA_DBACCESS_HELPID_HRC_
 #include "dbaccess_helpid.hrc"
+#endif
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
@@ -628,144 +630,73 @@ sal_Bool OSelectionBrowseBox::SaveModified()
             case BROW_FIELD_ROW:
             {
                 String aFieldName(m_pFieldCell->GetText());
-
-                sal_Bool bIsPredicate = sal_False;
-                // wenn das Ergebnis ein Praedikat -> OK
-                String aTest(aFieldName);
-
-                OQueryTableWindow* pWin = static_cast<OQueryTableWindow*>(pEntry->GetTabWindow());
-
-                if (!pWin && (aFieldName.GetTokenCount('.') == 2))
-                    pWin = static_cast<OQueryTableWindow*>(getDesignView()->getTableView()->GetWindow(aFieldName.GetToken(0, '.')));
-
-                Reference<XPropertySet> xColumn;
-                sal_Bool bAsterix = sal_False;
-                if (pWin)
+                if (!aFieldName.Len())
                 {
-                    Reference<XNameAccess> xColumns = pWin->GetOriginalColumns();
-                    if(xColumns.is())
-                    {
-                        if (aFieldName.GetTokenCount('.') == 2 && xColumns->hasByName(aFieldName.GetToken(1,'.')))  // falls alias.Feld angegeben
-                            ::cppu::extractInterface(xColumn,xColumns->getByName(aFieldName.GetToken(1,'.')));
-                        else if(xColumns->hasByName(aFieldName))
-                            ::cppu::extractInterface(xColumn,xColumns->getByName(aFieldName));
-                        else if(aFieldName.GetTokenCount('.') == 2 && aFieldName.GetToken(1,'.').GetChar(0) == '*')
-                            bAsterix = sal_True;
-                    }
-                }
-
-                if(!xColumn.is() && !bAsterix) // only when text not a column of the table
-                {
-                    ::rtl::OUString aErrorMsg;
-                    bIsPredicate = sal_True; // #72670#
-                    OQueryController* pController = static_cast<OQueryController*>(static_cast<OQueryController*>(getDesignView()->getController()));
-
-                    ::connectivity::OSQLParser* pParser = pController->getParser();
-                    OSQLParseNode* pParseNode = pParser->predicateTree(aErrorMsg, aTest,
-                                                                        pController->getNumberFormatter(),
-                                                                        xColumn);
-                    if (pParseNode)
-                    {
-
-                        bListAction = sal_True;
-                        static_cast<OQueryController*>(getDesignView()->getController())->getUndoMgr()->EnterListAction(String(),String());
-                        appendUndoAction(pEntry->IsVisible() ? g_strOne : g_strZero,g_strZero,BROW_VIS_ROW);
-
-                        pEntry->SetVisible(sal_False);
-                        bWasEmpty = sal_False; // XXXXX
-                        delete pParseNode;
-                        pEntry->SetFunctionType(FKT_CONDITION);
-                        RowModified(GetBrowseRow(BROW_VIS_ROW), GetCurColumnId());
-                    }
-                    else
-                        pEntry->SetFunctionType(FKT_OTHER);
-                }
-
-                xub_StrLen nCount(aFieldName.GetTokenCount('('));
-                if(nCount < 2 && !bIsPredicate) // keine Funktion
-                {
-                    if (aFieldName.GetTokenCount('.') == 2) // falls alias.Feld angegeben
-                    {
-                        String sTableAlias(aFieldName.GetToken(0, '.'));
-                        aFieldName = aFieldName.GetToken(1,'.');
-
-                        // das erste Token in das Tabellenfeld eintragen (und entsprechend den Entry anpassen)
-                        if(!bListAction)
-                        {
-                            bListAction = sal_True;
-                            static_cast<OQueryController*>(getDesignView()->getController())->getUndoMgr()->EnterListAction(String(),String());
-                        }
-                        appendUndoAction(pEntry->GetAlias(),sTableAlias,BROW_TABLE_ROW);
-
-                        pEntry->SetAlias(sTableAlias);
-                        if(m_bVisibleRow[BROW_TABLE_ROW])
-                            RowModified(GetBrowseRow(BROW_TABLE_ROW), GetCurColumnId());
-
-                        OJoinTableView::OTableWindowMap* pTabWinList = getDesignView()->getTableView()->GetTabWinMap();
-                        if (pTabWinList)
-                        {
-                            OJoinTableView::OTableWindowMapIterator aIter = pTabWinList->find(sTableAlias);
-                            if(aIter != pTabWinList->end())
-                            {
-                                OQueryTableWindow* pEntryTab = static_cast<OQueryTableWindow*>(aIter->second);
-                                if (pEntryTab)
-                                {
-                                    //  appendUndoAction(pEntry->GetDatabase(),sTableAlias,GetBrowseRow(BROW_TABLE_ROW));
-                                    pEntry->SetDatabase(pEntryTab->GetComposedName());
-                                    pEntry->SetTable(pEntryTab->GetTableName());
-                                    pEntry->SetTabWindow(pEntryTab);
-                                }
-                            }
-                        }
-                    }
-                    strOldCellContents = pEntry->GetField();
-                    pEntry->SetField(aFieldName);
-                    sNewValue = aFieldName;
-
-                    // Falls nur COUNT(*) erlaubt wird
-                    Reference< XConnection> xConnection = static_cast<OQueryController*>(getDesignView()->getController())->getConnection();
-                    if(!xConnection.is())
-                        break;
-
-                    Reference< XDatabaseMetaData >  xMetaData = xConnection->getMetaData();
-                    if(aFieldName.GetChar(0) != '*' && pEntry->GetFunction().getLength())
-                    {
-                        if(!bListAction)
-                        {
-                            bListAction = sal_True;
-                            static_cast<OQueryController*>(getDesignView()->getController())->getUndoMgr()->EnterListAction(String(),String());
-                        }
-                        appendUndoAction(pEntry->GetFunction(),String(),BROW_FUNCTION_ROW);
-                        pEntry->SetFunction(::rtl::OUString());
-                        m_pFunctionCell->SelectEntryPos(0);
-                        if(!m_bVisibleRow[BROW_FUNCTION_ROW])
-                        {
-                            SetRowVisible(BROW_FUNCTION_ROW, sal_True);
-                        }
-                        RowModified(GetBrowseRow(BROW_FUNCTION_ROW), GetCurColumnId());
-                    }
-                    pEntry->SetFunctionType(FKT_NONE);
+                    ::std::replace(getFields()->begin(),getFields()->end(),pEntry,new OTableFieldDesc);
+                    sal_uInt16 nCol = GetCurColumnId();
+                    for (int i = 0; i < m_nVisibleCount; i++)   // Spalte neu zeichnen
+                        RowModified(i,nCol);
                 }
                 else
-                {   // Funktion eingegeben
-                    // m_pFieldCell auf Inhalt der Funktion setzen und pEntry mit ganzem Wert setzen
-                    // BROW_FUNCTION_ROW setzen
-                    strOldCellContents = pEntry->GetField();
+                {
+                    sal_Bool bIsPredicate = sal_False;
+                    // wenn das Ergebnis ein Praedikat -> OK
+                    String aTest(aFieldName);
 
-                    String aFkt(aFieldName.GetToken(0,'('));
+                    OQueryTableWindow* pWin = static_cast<OQueryTableWindow*>(pEntry->GetTabWindow());
 
-                    if(pEntry->GetFunctionType() != FKT_CONDITION && GetFunktionName(aFkt))
+                    if (!pWin && (aFieldName.GetTokenCount('.') == 2))
+                        pWin = static_cast<OQueryTableWindow*>(getDesignView()->getTableView()->GetWindow(aFieldName.GetToken(0, '.')));
+
+                    Reference<XPropertySet> xColumn;
+                    sal_Bool bAsterix = sal_False;
+                    if (pWin)
                     {
-                        // ist Aggregatefuntkion
-                        pEntry->SetFunction(aFkt);
-                        String aParameter(aFieldName.GetToken(1,'('));
-                        aParameter = aParameter.GetToken(aParameter.GetTokenCount()-1,')');
-                        pEntry->SetField(aParameter); // nur die Parameter einf"ugen
-                        pEntry->SetFunctionType(FKT_AGGREGATE);
-                        if (aParameter.GetTokenCount('.') == 2) // falls alias.Feld angegeben
+                        Reference<XNameAccess> xColumns = pWin->GetOriginalColumns();
+                        if(xColumns.is())
                         {
-                            String sTableAlias(aParameter.GetToken(0, '.'));
-                            aParameter = aParameter.GetToken(1,'.');
+                            if (aFieldName.GetTokenCount('.') == 2 && xColumns->hasByName(aFieldName.GetToken(1,'.')))  // falls alias.Feld angegeben
+                                ::cppu::extractInterface(xColumn,xColumns->getByName(aFieldName.GetToken(1,'.')));
+                            else if(xColumns->hasByName(aFieldName))
+                                ::cppu::extractInterface(xColumn,xColumns->getByName(aFieldName));
+                            else if(aFieldName.GetTokenCount('.') == 2 && aFieldName.GetToken(1,'.').GetChar(0) == '*')
+                                bAsterix = sal_True;
+                        }
+                    }
+
+                    if(!xColumn.is() && !bAsterix) // only when text not a column of the table
+                    {
+                        ::rtl::OUString aErrorMsg;
+                        bIsPredicate = sal_True; // #72670#
+                        OQueryController* pController = static_cast<OQueryController*>(static_cast<OQueryController*>(getDesignView()->getController()));
+
+                        ::connectivity::OSQLParser* pParser = pController->getParser();
+                        OSQLParseNode* pParseNode = pParser->predicateTree(aErrorMsg, aTest,
+                                                                            pController->getNumberFormatter(),
+                                                                            xColumn);
+                        if (pParseNode)
+                        {
+                            bListAction = sal_True;
+                            static_cast<OQueryController*>(getDesignView()->getController())->getUndoMgr()->EnterListAction(String(),String());
+                            appendUndoAction(pEntry->IsVisible() ? g_strOne : g_strZero,g_strZero,BROW_VIS_ROW);
+
+                            pEntry->SetVisible(sal_False);
+                            bWasEmpty = sal_False; // XXXXX
+                            delete pParseNode;
+                            pEntry->SetFunctionType(FKT_CONDITION);
+                            RowModified(GetBrowseRow(BROW_VIS_ROW), GetCurColumnId());
+                        }
+                        else
+                            pEntry->SetFunctionType(FKT_OTHER);
+                    }
+
+                    xub_StrLen nCount(aFieldName.GetTokenCount('('));
+                    if(nCount < 2 && !bIsPredicate) // keine Funktion
+                    {
+                        if (aFieldName.GetTokenCount('.') == 2) // falls alias.Feld angegeben
+                        {
+                            String sTableAlias(aFieldName.GetToken(0, '.'));
+                            aFieldName = aFieldName.GetToken(1,'.');
 
                             // das erste Token in das Tabellenfeld eintragen (und entsprechend den Entry anpassen)
                             if(!bListAction)
@@ -774,6 +705,7 @@ sal_Bool OSelectionBrowseBox::SaveModified()
                                 static_cast<OQueryController*>(getDesignView()->getController())->getUndoMgr()->EnterListAction(String(),String());
                             }
                             appendUndoAction(pEntry->GetAlias(),sTableAlias,BROW_TABLE_ROW);
+
                             pEntry->SetAlias(sTableAlias);
                             if(m_bVisibleRow[BROW_TABLE_ROW])
                                 RowModified(GetBrowseRow(BROW_TABLE_ROW), GetCurColumnId());
@@ -785,77 +717,147 @@ sal_Bool OSelectionBrowseBox::SaveModified()
                                 if(aIter != pTabWinList->end())
                                 {
                                     OQueryTableWindow* pEntryTab = static_cast<OQueryTableWindow*>(aIter->second);
-                                    pEntry->SetDatabase(pEntryTab->GetComposedName());
-                                    pEntry->SetTable(pEntryTab->GetTableName());
-                                    pEntry->SetTabWindow(pEntryTab);
+                                    if (pEntryTab)
+                                    {
+                                        //  appendUndoAction(pEntry->GetDatabase(),sTableAlias,GetBrowseRow(BROW_TABLE_ROW));
+                                        pEntry->SetDatabase(pEntryTab->GetComposedName());
+                                        pEntry->SetTable(pEntryTab->GetTableName());
+                                        pEntry->SetTabWindow(pEntryTab);
+                                    }
                                 }
                             }
+                        }
+                        strOldCellContents = pEntry->GetField();
+                        pEntry->SetField(aFieldName);
+                        sNewValue = aFieldName;
+
+                        // Falls nur COUNT(*) erlaubt wird
+                        Reference< XConnection> xConnection = static_cast<OQueryController*>(getDesignView()->getController())->getConnection();
+                        if(!xConnection.is())
+                            break;
+
+                        Reference< XDatabaseMetaData >  xMetaData = xConnection->getMetaData();
+                        if(aFieldName.GetChar(0) != '*' && pEntry->GetFunction().getLength())
+                        {
+                            if(!bListAction)
+                            {
+                                bListAction = sal_True;
+                                static_cast<OQueryController*>(getDesignView()->getController())->getUndoMgr()->EnterListAction(String(),String());
+                            }
+                            appendUndoAction(pEntry->GetFunction(),String(),BROW_FUNCTION_ROW);
+                            pEntry->SetFunction(::rtl::OUString());
+                            m_pFunctionCell->SelectEntryPos(0);
+                            if(!m_bVisibleRow[BROW_FUNCTION_ROW])
+                            {
+                                SetRowVisible(BROW_FUNCTION_ROW, sal_True);
+                            }
+                            RowModified(GetBrowseRow(BROW_FUNCTION_ROW), GetCurColumnId());
+                        }
+                        pEntry->SetFunctionType(FKT_NONE);
+                    }
+                    else
+                    {   // Funktion eingegeben
+                        // m_pFieldCell auf Inhalt der Funktion setzen und pEntry mit ganzem Wert setzen
+                        // BROW_FUNCTION_ROW setzen
+                        strOldCellContents = pEntry->GetField();
+
+                        String aFkt(aFieldName.GetToken(0,'('));
+
+                        if(pEntry->GetFunctionType() != FKT_CONDITION && GetFunktionName(aFkt))
+                        {
+                            // ist Aggregatefuntkion
+                            pEntry->SetFunction(aFkt);
+                            String aParameter(aFieldName.GetToken(1,'('));
+                            aParameter = aParameter.GetToken(aParameter.GetTokenCount()-1,')');
+                            pEntry->SetField(aParameter); // nur die Parameter einf"ugen
+                            pEntry->SetFunctionType(FKT_AGGREGATE);
+                            if (aParameter.GetTokenCount('.') == 2) // falls alias.Feld angegeben
+                            {
+                                String sTableAlias(aParameter.GetToken(0, '.'));
+                                aParameter = aParameter.GetToken(1,'.');
+
+                                // das erste Token in das Tabellenfeld eintragen (und entsprechend den Entry anpassen)
+                                if(!bListAction)
+                                {
+                                    bListAction = sal_True;
+                                    static_cast<OQueryController*>(getDesignView()->getController())->getUndoMgr()->EnterListAction(String(),String());
+                                }
+                                appendUndoAction(pEntry->GetAlias(),sTableAlias,BROW_TABLE_ROW);
+                                pEntry->SetAlias(sTableAlias);
+                                if(m_bVisibleRow[BROW_TABLE_ROW])
+                                    RowModified(GetBrowseRow(BROW_TABLE_ROW), GetCurColumnId());
+
+                                OJoinTableView::OTableWindowMap* pTabWinList = getDesignView()->getTableView()->GetTabWinMap();
+                                if (pTabWinList)
+                                {
+                                    OJoinTableView::OTableWindowMapIterator aIter = pTabWinList->find(sTableAlias);
+                                    if(aIter != pTabWinList->end())
+                                    {
+                                        OQueryTableWindow* pEntryTab = static_cast<OQueryTableWindow*>(aIter->second);
+                                        pEntry->SetDatabase(pEntryTab->GetComposedName());
+                                        pEntry->SetTable(pEntryTab->GetTableName());
+                                        pEntry->SetTabWindow(pEntryTab);
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                // nur eine Tabelle vorhanden oder der Benutzer hat vergessen diese anzugeben
+                                // also einfach die erst beste nehmen
+                                OJoinTableView::OTableWindowMap* pTabWinList = getDesignView()->getTableView()->GetTabWinMap();
+                                if(pTabWinList)
+                                {
+                                    OQueryTableWindow* pEntryTab = static_cast<OQueryTableWindow*>(pTabWinList->begin()->second);
+                                    if (pEntryTab)
+                                    {
+                                        pEntry->SetDatabase(pEntryTab->GetComposedName());
+                                        if(!bListAction)
+                                        {
+                                            bListAction = sal_True;
+                                            static_cast<OQueryController*>(getDesignView()->getController())->getUndoMgr()->EnterListAction(String(),String());
+                                        }
+                                        appendUndoAction(pEntry->GetTable(),pEntryTab->GetTableName(),BROW_TABLE_ROW);
+
+                                        pEntry->SetTable(pEntryTab->GetTableName());
+                                        pEntry->SetAlias(pEntry->GetTable());
+                                        pEntry->SetTabWindow(pEntryTab);
+                                    }
+                                }
+                            }
+
+                            if(!bListAction)
+                            {
+                                bListAction = sal_True;
+                                static_cast<OQueryController*>(getDesignView()->getController())->getUndoMgr()->EnterListAction(String(),String());
+                            }
+                            appendUndoAction(pEntry->GetFunction(),aFkt,BROW_FUNCTION_ROW);
+                            m_pFieldCell->SetText(aParameter);
+                            m_pFunctionCell->SelectEntry(aFkt);
+                            if(!m_bVisibleRow[BROW_FUNCTION_ROW])
+                                SetRowVisible(BROW_FUNCTION_ROW, sal_True);
+
+
+                            RowModified(GetBrowseRow(BROW_FUNCTION_ROW), GetCurColumnId());
+                            RowModified(GetBrowseRow(BROW_TABLE_ROW), GetCurColumnId());
                         }
                         else
                         {
-                            // nur eine Tabelle vorhanden oder der Benutzer hat vergessen diese anzugeben
-                            // also einfach die erst beste nehmen
-                            OJoinTableView::OTableWindowMap* pTabWinList = getDesignView()->getTableView()->GetTabWinMap();
-                            if(pTabWinList)
+                            pEntry->SetField(aFieldName);
+                            pEntry->SetAlias(String());
+                            if(!bListAction)
                             {
-                                OQueryTableWindow* pEntryTab = static_cast<OQueryTableWindow*>(pTabWinList->begin()->second);
-                                if (pEntryTab)
-                                {
-                                    pEntry->SetDatabase(pEntryTab->GetComposedName());
-                                    if(!bListAction)
-                                    {
-                                        bListAction = sal_True;
-                                        static_cast<OQueryController*>(getDesignView()->getController())->getUndoMgr()->EnterListAction(String(),String());
-                                    }
-                                    appendUndoAction(pEntry->GetTable(),pEntryTab->GetTableName(),BROW_TABLE_ROW);
-
-                                    pEntry->SetTable(pEntryTab->GetTableName());
-                                    pEntry->SetAlias(pEntry->GetTable());
-                                    pEntry->SetTabWindow(pEntryTab);
-                                }
+                                bListAction = sal_True;
+                                static_cast<OQueryController*>(getDesignView()->getController())->getUndoMgr()->EnterListAction(String(),String());
                             }
+                            appendUndoAction(pEntry->GetTable(),String(),BROW_TABLE_ROW);
+                            pEntry->SetTable(String());
+                            pEntry->SetTabWindow(NULL);
+                            m_pFieldCell->SetText(aFieldName);
+                            m_pFunctionCell->SelectEntryPos(0);
+                            if(m_bVisibleRow[BROW_TABLE_ROW])
+                                RowModified(GetBrowseRow(BROW_TABLE_ROW), GetCurColumnId());
                         }
-
-                        if(!bListAction)
-                        {
-                            bListAction = sal_True;
-                            static_cast<OQueryController*>(getDesignView()->getController())->getUndoMgr()->EnterListAction(String(),String());
-                        }
-                        appendUndoAction(pEntry->GetFunction(),aFkt,BROW_FUNCTION_ROW);
-                        m_pFieldCell->SetText(aParameter);
-                        m_pFunctionCell->SelectEntry(aFkt);
-                        if(!m_bVisibleRow[BROW_FUNCTION_ROW])
-                            SetRowVisible(BROW_FUNCTION_ROW, sal_True);
-
-
-                        RowModified(GetBrowseRow(BROW_FUNCTION_ROW), GetCurColumnId());
-                        RowModified(GetBrowseRow(BROW_TABLE_ROW), GetCurColumnId());
                     }
-                    else
-                    {
-                        pEntry->SetField(aFieldName);
-                        pEntry->SetAlias(String());
-                        if(!bListAction)
-                        {
-                            bListAction = sal_True;
-                            static_cast<OQueryController*>(getDesignView()->getController())->getUndoMgr()->EnterListAction(String(),String());
-                        }
-                        appendUndoAction(pEntry->GetTable(),String(),BROW_TABLE_ROW);
-                        pEntry->SetTable(String());
-                        pEntry->SetTabWindow(NULL);
-                        m_pFieldCell->SetText(aFieldName);
-                        m_pFunctionCell->SelectEntryPos(0);
-                        if(m_bVisibleRow[BROW_TABLE_ROW])
-                            RowModified(GetBrowseRow(BROW_TABLE_ROW), GetCurColumnId());
-                    }
-                }
-
-                if (!aFieldName.Len())
-                {
-                    ::std::replace(getFields()->begin(),getFields()->end(),pEntry,new OTableFieldDesc);
-                    sal_uInt16 nCol = GetCurColumnId();
-                    for (int i = 0; i < m_nVisibleCount; i++)   // Spalte neu zeichnen
-                        RowModified(i,nCol);
                 }
                 sNewValue = pEntry->GetField();
                 pController->InvalidateFeature( ID_BROWSER_QUERY_EXECUTE );
@@ -965,21 +967,10 @@ sal_Bool OSelectionBrowseBox::SaveModified()
                 ::rtl::OUString aCrit;
                 if(aText.Len())
                 {
-                    ::connectivity::OSQLParser* pParser = static_cast<OQueryController*>(getDesignView()->getController())->getParser();
-                    OQueryTableWindow* pWin = static_cast<OQueryTableWindow*>(pEntry->GetTabWindow());
-
-                    String aTest(aText);
-
-                    Reference<XPropertySet> xColumn;
-                    if (pWin)
-                    {
-                        Reference<XNameAccess> xColumns = pWin->GetOriginalColumns();
-                        if (xColumns.is() && xColumns->hasByName(pEntry->GetField()))
-                            ::cppu::extractInterface(xColumn,xColumns->getByName(pEntry->GetField()));
-                    }
-
                     ::rtl::OUString aErrorMsg;
-                    OSQLParseNode* pParseNode = pParser->predicateTree(aErrorMsg, aTest, static_cast<OQueryController*>(getDesignView()->getController())->getNumberFormatter(), xColumn);
+                    Reference<XPropertySet> xColumn;
+                    OSQLParseNode* pParseNode = getDesignView()->getPredicateTreeFromEntry(pEntry,aText,aErrorMsg,xColumn);
+
                     if (pParseNode)
                     {
                         pParseNode->parseNodeToPredicateStr(aCrit,
@@ -1002,18 +993,22 @@ sal_Bool OSelectionBrowseBox::SaveModified()
                                 case DataType::CHAR:
                                 case DataType::VARCHAR:
                                 case DataType::LONGVARCHAR:
-                                    if(aTest.GetChar(0) != '\'' || aTest.GetChar(aTest.Len() -1) != '\'')
+                                    if(aText.GetChar(0) != '\'' || aText.GetChar(aText.Len() -1) != '\'')
                                     {
-                                        aTest.SearchAndReplaceAll(String::CreateFromAscii("'"),String::CreateFromAscii("''"));
+                                        aText.SearchAndReplaceAll(String::CreateFromAscii("'"),String::CreateFromAscii("''"));
                                         String aTmp(String::CreateFromAscii("'"));
-                                        (aTmp += aTest) += String::CreateFromAscii("'");
-                                        aTest = aTmp;
+                                        (aTmp += aText) += String::CreateFromAscii("'");
+                                        aText = aTmp;
                                     }
                                     break;
                                 default:
                                     ;
                             }
-                            pParseNode = pParser->predicateTree(aErrorMsg, aTest, static_cast<OQueryController*>(getDesignView()->getController())->getNumberFormatter(), xColumn);
+                            ::connectivity::OSQLParser* pParser = static_cast<OQueryController*>(getDesignView()->getController())->getParser();
+                            pParseNode = pParser->predicateTree(aErrorMsg,
+                                                                aText,
+                                                                static_cast<OQueryController*>(getDesignView()->getController())->getNumberFormatter(),
+                                                                xColumn);
                             if (pParseNode)
                             {
                                 pParseNode->parseNodeToPredicateStr(aCrit,
@@ -1041,6 +1036,7 @@ sal_Bool OSelectionBrowseBox::SaveModified()
                             bError = sal_True;
                         }
                     }
+                    //  }
                 }
                 strOldCellContents = pEntry->GetCriteria(nIdx);
                 pEntry->SetCriteria(nIdx, aCrit);
@@ -1726,11 +1722,13 @@ void OSelectionBrowseBox::ArrangeControls(sal_uInt16& nX, sal_uInt16 nY)
 }
 
 //------------------------------------------------------------------------------
-void OSelectionBrowseBox::Save()
+sal_Bool OSelectionBrowseBox::Save()
 {
     DBG_CHKTHIS(OSelectionBrowseBox,NULL);
+    sal_Bool bRet = sal_True;
     if (IsModified())
-        SaveModified();
+        bRet = SaveModified();
+    return bRet;
 }
 
 //------------------------------------------------------------------------------

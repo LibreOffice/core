@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryDesignView.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-23 14:23:57 $
+ *  last change: $Author: oj $ $Date: 2001-09-27 06:19:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,9 @@
 #endif
 #ifndef DBAUI_ENUMTYPES_HXX
 #include "QEnumTypes.hxx"
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
 #endif
 
 namespace connectivity
@@ -186,6 +189,8 @@ namespace dbaui
         virtual void clear();
         // set the view readonly or not
         virtual void setReadOnly(sal_Bool _bReadOnly);
+        // check if the statement is correct when not returning false
+        virtual sal_Bool checkStatement();
         // set the statement for representation
         virtual void setStatement(const ::rtl::OUString& _rsStatement);
         // returns the current sql statement
@@ -219,6 +224,11 @@ namespace dbaui
         void SaveUIConfig();
         void stopTimer();
         void startTimer();
+
+        ::connectivity::OSQLParseNode* getPredicateTreeFromEntry(   OTableFieldDesc* pEntry,
+                                                                    const String& _sCriteria,
+                                                                    ::rtl::OUString& _rsErrorMessage,
+                                                                    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxColumn);
     protected:
         // return the Rectangle where I can paint myself
         virtual void resizeDocumentView(Rectangle& rRect);

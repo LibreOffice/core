@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-23 14:23:57 $
+ *  last change: $Author: oj $ $Date: 2001-09-27 06:19:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,7 +224,7 @@ namespace dbaui
 
     protected:
         virtual OTableWindowData* createTableWindowData();
-        virtual OJoinDesignView*    getJoinView();
+        virtual OJoinDesignView*  getJoinView();
     };
 }
 #endif // DBAUI_QUERYCONTROLLER_HXX

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-25 13:24:37 $
+ *  last change: $Author: oj $ $Date: 2001-09-27 06:19:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -401,6 +401,7 @@ void OQueryController::Execute(sal_uInt16 _nId)
             getContainer()->paste();
             break;
         case ID_BROWSER_SQL:
+            if(getContainer()->checkStatement())
             {
                 try
                 {
@@ -487,10 +488,8 @@ void OQueryController::Execute(sal_uInt16 _nId)
             setModified(sal_True);
             break;
         case ID_BROWSER_QUERY_EXECUTE:
-            {
+            if(getContainer()->checkStatement())
                 executeQuery();
-
-            }
             break;
         case ID_QUERY_ZOOM_IN:
             {
@@ -638,35 +637,38 @@ void SAL_CALL OQueryController::initialize( const Sequence< Any >& aArguments ) 
                     {
                     }
                     setQueryComposer();
-                    ::rtl::OUString aErrorMsg;
-                    ::connectivity::OSQLParseNode* pNode = m_pSqlParser->parseTree(aErrorMsg,m_sStatement,m_bDesign);
-                    //  m_pParseNode = pNode;
-                    if(pNode)
+                    if(m_bEsacpeProcessing)
                     {
-                        if(m_pSqlIterator)
+                        ::rtl::OUString aErrorMsg;
+                        ::connectivity::OSQLParseNode* pNode = m_pSqlParser->parseTree(aErrorMsg,m_sStatement,m_bDesign);
+                        //  m_pParseNode = pNode;
+                        if(pNode)
                         {
-                            delete m_pSqlIterator->getParseTree();
-                            m_pSqlIterator->setParseTree(pNode);
-                            m_pSqlIterator->traverseAll();
-                            SQLWarning aWarning = m_pSqlIterator->getWarning();
-                            if(aWarning.Message.getLength())
+                            if(m_pSqlIterator)
                             {
-                                showError(SQLExceptionInfo(aWarning));
+                                delete m_pSqlIterator->getParseTree();
+                                m_pSqlIterator->setParseTree(pNode);
+                                m_pSqlIterator->traverseAll();
+                                SQLWarning aWarning = m_pSqlIterator->getWarning();
+                                if(aWarning.Message.getLength())
+                                {
+                                    showError(SQLExceptionInfo(aWarning));
+                                    m_bDesign = sal_False;
+                                }
+                            }
+                            else
+                            {
+                                delete pNode;
                                 m_bDesign = sal_False;
                             }
                         }
                         else
                         {
-                            delete pNode;
-                            m_bDesign = sal_False;
+                            String aTitle(ModuleRes(STR_SVT_SQL_SYNTAX_ERROR));
+                            OSQLMessageBox aDlg(getView(),aTitle,aErrorMsg);
+                            aDlg.Execute();
+                            m_bDesign = sal_False; // the statement can't be parsed so we show the text view
                         }
-                    }
-                    else
-                    {
-                        String aTitle(ModuleRes(STR_SVT_SQL_SYNTAX_ERROR));
-                        OSQLMessageBox aDlg(getView(),aTitle,aErrorMsg);
-                        aDlg.Execute();
-                        m_bDesign = sal_False; // the statement can't be parsed so we show the text view
                     }
                 }
             }

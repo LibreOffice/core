@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryViewSwitch.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-23 14:39:09 $
+ *  last change: $Author: oj $ $Date: 2001-09-27 06:19:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,6 +140,13 @@ void OQueryViewSwitch::resizeDocumentView(Rectangle& _rPlayground)
     // just for completeness: there is no space left, we occupied it all ...
     _rPlayground.SetPos( _rPlayground.BottomRight() );
     _rPlayground.SetSize( Size( 0, 0 ) );
+}
+// -----------------------------------------------------------------------------
+sal_Bool OQueryViewSwitch::checkStatement()
+{
+    if(m_pTextView->IsVisible())
+        return m_pTextView->checkStatement();
+    return m_pDesignView->checkStatement();
 }
 // -----------------------------------------------------------------------------
 ::rtl::OUString OQueryViewSwitch::getStatement()

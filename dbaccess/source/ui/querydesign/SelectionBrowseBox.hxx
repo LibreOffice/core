@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SelectionBrowseBox.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-29 08:40:31 $
+ *  last change: $Author: oj $ $Date: 2001-09-27 06:19:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,7 +152,7 @@ namespace dbaui
         void                        AddOrder(const OTableFieldDesc& rInfo, const EOrderDir eDir, sal_uInt16& nPos);
         void                        ClearAll();
         OTableFieldDesc*            AppendNewCol( sal_uInt16 nCnt=1 );
-        void                        Save();
+        sal_Bool                    Save();
         OQueryDesignView*           getDesignView();
         OQueryDesignView*           getDesignView() const;
         void                        SetColWidth();

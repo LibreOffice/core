@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontainerwindow.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-23 14:25:36 $
+ *  last change: $Author: oj $ $Date: 2001-09-27 06:19:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,6 +142,7 @@ namespace dbaui
 
         void setReadOnly( sal_Bool _bReadOnly )                             { m_pViewSwitch->setReadOnly( _bReadOnly ); }
 
+        sal_Bool checkStatement()                                           { return m_pViewSwitch->checkStatement( ); }
         ::rtl::OUString getStatement()                                      { return m_pViewSwitch->getStatement( ); }
         void setStatement( const ::rtl::OUString& _rsStatement )            { m_pViewSwitch->setStatement( _rsStatement ); }
 
@@ -169,6 +170,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/08/23 14:25:36  fs
+ *  initial checkin - outsourced from QueryTextView.hxx (the container window for the query design)
+ *
  *
  *  Revision 1.0 23.08.01 12:08:57  fs
  ************************************************************************/

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryTextView.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-20 12:56:16 $
+ *  last change: $Author: oj $ $Date: 2001-09-27 06:19:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,6 +145,12 @@ void OQueryTextView::Resize()
 {
     Window::Resize();
     m_pEdit->SetSizePixel( GetOutputSizePixel() );
+}
+// -----------------------------------------------------------------------------
+// check if the statement is correct when not returning false
+sal_Bool OQueryTextView::checkStatement()
+{
+    return sal_True;
 }
 // -----------------------------------------------------------------------------
 ::rtl::OUString OQueryTextView::getStatement()
