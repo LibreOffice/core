@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbu_resource.hrc,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-10 16:12:38 $
+ *  last change: $Author: oj $ $Date: 2000-12-12 12:30:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,9 @@
 #define DLG_PARAMETERS                  RID_DIALOG_START +  5
 #define DLG_FILTERCRIT                  RID_DIALOG_START +  6
 #define DLG_ORDERCRIT                   RID_DIALOG_START +  7
+#define DLG_ROWHEIGHT                   RID_DIALOG_START +  8
+#define DLG_COLWIDTH                    RID_DIALOG_START +  9
+#define DLG_ATTR                        RID_DIALOG_START + 10
 
 //========================================================================
 // tab pages
@@ -212,6 +215,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.14  2000/12/10 16:12:38  fs
+ *  RID_STR_QUERIES-/-TABLES_CONTAINER
+ *
  *  Revision 1.13  2000/12/08 21:12:18  fs
  *  +MENU_BROWSERTREE_CONTEXT
  *
