@@ -37,9 +37,9 @@
  *
  *  $RCSfile: parseAFM.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 10:49:26 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 13:47:25 $
  *
  ************************************************************************/
 
@@ -787,8 +787,7 @@ static int parseCharMetrics( FILE* fp, register FontInfo* fi)
                 break;
             case CHARNAME:
                 keyword = token(fp);
-                temp->name = (char *) malloc(strlen(keyword) + 1);
-                strcpy(temp->name, keyword);
+                temp->name = (char *)strdup(keyword);
                 break;
             case CHARBBOX:
                 temp->charBBox.llx = atoi(token(fp));
@@ -809,11 +808,9 @@ static int parseCharMetrics( FILE* fp, register FontInfo* fi)
 
                 *tail = (Ligature *) calloc(1, sizeof(Ligature));
                 keyword = token(fp);
-                (*tail)->succ = (char *) malloc(strlen(keyword) + 1);
-                strcpy((*tail)->succ, keyword);
+                (*tail)->succ = (char *)strdup(keyword);
                 keyword = token(fp);
-                (*tail)->lig = (char *) malloc(strlen(keyword) + 1);
-                strcpy((*tail)->lig, keyword);
+                (*tail)->lig = (char *)strdup(keyword);
                 break; }
             case ENDCHARMETRICS:
                 cont = false;;
