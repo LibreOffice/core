@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appinit.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 17:30:17 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 12:01:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@
 #ifndef _COM_SUN_STAR_UNO_EXCEPTION_HPP_
 #include <com/sun/star/uno/Exception.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UNO_XCURRENTCONTEXT_HPP_
+#include <com/sun/star/uno/XCurrentContext.hpp>
+#endif
 #ifndef _COM_SUN_STAR_PACKAGES_ZIP_ZIPIOEXCEPTION_HPP_
 #include <com/sun/star/packages/zip/ZipIOException.hpp>
 #endif
@@ -87,7 +90,15 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XCONTENTENUMERATIONACCESS_HPP_
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
 #endif
-
+#ifndef  _COM_SUN_STAR_UCB_XCONTENTPROVIDERMANAGER_HPP_
+#include <com/sun/star/ucb/XContentProviderManager.hpp>
+#endif
+#ifndef  _COM_SUN_STAR_UCB_XCONTENTPROVIDERFACTORY_HPP_
+#include <com/sun/star/ucb/XContentProviderFactory.hpp>
+#endif
+#ifndef _UNO_CURRENT_CONTEXT_HXX_
+#include <uno/current_context.hxx>
+#endif
 #ifndef _CPPUHELPER_SERVICEFACTORY_HXX_
 #include <cppuhelper/servicefactory.hxx>
 #endif
@@ -163,6 +174,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::registry;
+using namespace ::com::sun::star::ucb;
 
 namespace desktop
 {
@@ -204,7 +216,48 @@ static bool configureUcb(bool bServer, rtl::OUString const & rPortalConnect)
     aArgs[4] <<= rtl::OUString::createFromAscii("PORTAL");
     aArgs[5] <<= aPortal.makeStringAndClear();
 
-    return ::ucb::ContentBroker::initialize( xServiceFactory, aArgs ) != false;
+    bool ret =
+        ::ucb::ContentBroker::initialize( xServiceFactory, aArgs ) != false;
+
+    // register GnomeUCP if necessary
+    ::ucb::ContentBroker* cb = ::ucb::ContentBroker::get();
+    if(cb) {
+        try {
+            Reference< XCurrentContext > xCurrentContext(
+                getCurrentContext());
+            if (xCurrentContext.is())
+            {
+                Any aValue = xCurrentContext->getValueByName(
+                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                       "system.desktop-environment" ) )
+                );
+                rtl::OUString aDesktopEnvironment;
+                if ((aValue >>= aDesktopEnvironment)
+                    && aDesktopEnvironment.equalsAscii("GNOME"))
+                {
+                    Reference<XContentProviderManager> xCPM =
+                        cb->getContentProviderManagerInterface();
+                    Reference<XContentProviderFactory> xCPF(
+                        xServiceFactory->createInstance(
+                            rtl::OUString::createFromAscii(
+                                "com.sun.star.ucb.ContentProviderProxyFactory")),
+                        UNO_QUERY);
+                    if(xCPF.is())
+                        xCPM->registerContentProvider(
+                            xCPF->createContentProvider(
+                                rtl::OUString::createFromAscii(
+                                    "com.sun.star.ucb.GnomeVFSContentProvider"
+                                )
+                            ),
+                            rtl::OUString::createFromAscii(".*"),
+                            false);
+                }
+            }
+        } catch (RuntimeException e) {
+        }
+    }
+
+    return ret;;
 }
 
 sal_Bool Desktop::InitializeInstallation( const OUString& rAppFilename )
