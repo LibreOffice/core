@@ -2,9 +2,9 @@
  *
  *  $RCSfile: export.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: nf $ $Date: 2001-06-07 15:02:22 $
+ *  last change: $Author: nf $ $Date: 2001-06-25 10:08:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1270,8 +1270,6 @@ BOOL Export::WriteData( ResData *pResData, BOOL bCreateNew )
         return TRUE;
 //  fprintf( stdout, "." );
 
-    FillInFallbacks( pResData );
-
        // mandatory to export: german and eng. and/or enus
     if (( pResData->sText[ GERMAN_INDEX ].Len() &&
             ( pResData->sText[ ENGLISH_US_INDEX ].Len() ||
@@ -1286,6 +1284,8 @@ BOOL Export::WriteData( ResData *pResData, BOOL bCreateNew )
             ( pResData->sTitle[ ENGLISH_US_INDEX ].Len() ||
                 pResData->sTitle[ ENGLISH_INDEX ].Len())))
     {
+        FillInFallbacks( pResData );
+
         ByteString sGID = pResData->sGId;
         ByteString sLID;
         if ( !sGID.Len())

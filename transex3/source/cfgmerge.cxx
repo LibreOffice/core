@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgmerge.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: nf $ $Date: 2001-06-19 10:42:11 $
+ *  last change: $Author: nf $ $Date: 2001-06-25 10:08:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -630,13 +630,13 @@ void CfgExport::WorkOnRessourceEnd()
 /*****************************************************************************/
 {
     if ( pOutputStream && bLocalize ) {
-        pStackData->FillInFallbacks();
-
         if ( pStackData->sText[ GERMAN_INDEX ].Len() &&
             ( pStackData->sText[ ENGLISH_US_INDEX ].Len() ||
                 pStackData->sText[ ENGLISH_INDEX ].Len())
             )
         {
+            pStackData->FillInFallbacks();
+
             ByteString sFallback = pStackData->sText[ GERMAN_INDEX ];
             if ( pStackData->sText[ ENGLISH_US_INDEX ].Len())
                 sFallback = pStackData->sText[ ENGLISH_US_INDEX ];
