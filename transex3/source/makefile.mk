@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 17:03:26 $
+#   last change: $Author: nf $ $Date: 2000-11-20 13:49:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,7 +85,6 @@ OBJFILES=   			\
     $(OBJ)$/wtratree.obj	\
     $(OBJ)$/wtranode.obj
 
-
 APP1TARGET=	$(TARGET)
 APP1STACK=	16000
 APP1OBJS=   $(OBJ)$/src_yy.obj
@@ -118,11 +117,17 @@ APP6STACK=  16000
 APP6OBJS=   $(OBJ)$/xmlmerge.obj $(OBJ)$/xml_yy.obj $(OBJ)$/merge.obj $(OBJ)$/export2.obj $(OBJ)$/utf8conv.obj
 APP6STDLIBS=$(STATIC_LIBS)
 
+APP6TARGET= cfgex
+APP6STACK=  16000
+APP6OBJS=   $(OBJ)$/cfgmerge.obj $(OBJ)$/cfg_yy.obj $(OBJ)$/merge.obj $(OBJ)$/export2.obj $(OBJ)$/utf8conv.obj
+APP6STDLIBS=$(STATIC_LIBS)
+
 DEPOBJFILES=$(APP1OBJS) $(APP2OBJS) $(APP3OBJS) $(APP4OBJS) $(APP5OBJS) $(APP6OBJS)
 
 .IF "$(depend)" == ""
 ALL : 	$(MISC)$/src_yy.c 	\
         $(MISC)$/xml_yy.c	\
+        $(MISC)$/cfg_yy.c	\
         ALLTAR
 .ELSE
 ALL : 	\
@@ -138,3 +143,6 @@ $(MISC)$/src_yy.c : srclex.l
 
 $(MISC)$/xml_yy.c : xmllex.l
     +flex -l -8 -o$(MISC)$/xml_yy.c xmllex.l
+
+$(MISC)$/cfg_yy.c : cfglex.l
+    +flex -l -8 -o$(MISC)$/cfg_yy.c cfglex.l
