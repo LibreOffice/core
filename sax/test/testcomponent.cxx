@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testcomponent.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2000-10-13 06:49:10 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:32:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,9 +77,6 @@
 
 #include <vos/dynload.hxx>
 #include <vos/diagnose.hxx>
-
-#include <assert.h>
-
 
 using namespace ::rtl;
 using namespace ::cppu;
