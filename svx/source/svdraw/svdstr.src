@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdstr.src,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-28 17:14:57 $
+ *  last change: $Author: kz $ $Date: 2002-04-19 20:08:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5818,7 +5818,7 @@ String STR_ExchangeDD
     Text[ russian ] = "Ïåğåòàùèòü %O";
     Text[ polish ] = "Przeci¹gnij i upuœæ %O";
     Text[ japanese ] = "%O ã‚’ãƒ‰ãƒ©ãƒƒã‚°ï¼†ãƒ‰ãƒ­ãƒƒãƒ—";
-    Text[ chinese_traditional ] = "æ‹–æ›³ %O";
+    Text[ chinese_traditional ] = "æ‹–æ”¾ %O";
     Text[ arabic ] = "ÓÍÈ æ ÅÓŞÇØ %O";
     Text[ dutch ] = "Slepen&neerzetten %O";
     Text[ chinese_simplified ] = "æ‹–æ”¾ %O";
@@ -5849,7 +5849,7 @@ String STR_ExchangeDDPaste
     Text[ russian ] = "Âñòàâèòü ğåæèì ïåğåòàñêèâàíèÿ";
     Text[ polish ] = "Wstaw Przeci¹gnij i upuœæ";
     Text[ japanese ] = "ãƒ‰ãƒ©ãƒƒã‚°ï¼†ãƒ‰ãƒ­ãƒƒãƒ—ã§æŒ¿å…¥";
-    Text[ chinese_traditional ] = "æ’å…¥æ‹–æ›³å…§å®¹";
+    Text[ chinese_traditional ] = "æ’å…¥æ‹–æ”¾å…§å®¹";
     Text[ arabic ] = "ÅÏÑÇÌ ÓÍÈ æ ÅÓŞÇØ";
     Text[ dutch ] = "Plakken via slepen&neerzetten";
     Text[ chinese_simplified ] = "æ’å…¥æ‹–æ”¾å†…å®¹";
