@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tstring.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:04:53 $
+ *  last change: $Author: hr $ $Date: 2003-08-13 17:23:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 
 #include <string.h>
 
+#include "osl/diagnose.h"
 #ifndef _OSL_INTERLCK_H
 #include <osl/interlck.h>
 #endif
@@ -179,6 +180,7 @@ float ByteString::ToFloat() const
 {
     DBG_CHKTHIS( ByteString, DbgCheckByteString );
 
+    OSL_ENSURE(false, "ByteString::ToFloat unusable");
     return 0;
 }
 
@@ -188,6 +190,7 @@ double ByteString::ToDouble() const
 {
     DBG_CHKTHIS( ByteString, DbgCheckByteString );
 
+    OSL_ENSURE(false, "ByteString::ToDouble unusable");
     return 0;
 }
 
