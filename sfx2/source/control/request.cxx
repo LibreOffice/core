@@ -2,7 +2,7 @@
 // class SfxRequest
 //
 // (C) 1996 - 2000 StarDivision GmbH, Hamburg, Germany
-// $Author: mba $ $Date: 2002-08-29 12:25:22 $ $Revision: 1.12 $
+// $Author: rt $ $Date: 2003-09-19 07:58:55 $ $Revision: 1.13 $
 // $Logfile:   T:/sfx2/source/control/request.cxv  $ $Workfile:   REQUEST.CXX  $
 //------------------------------------------------------------------*/
 
@@ -56,6 +56,7 @@
 #include "viewfrm.hxx"
 #include "macro.hxx"
 #include "objface.hxx"
+#include "appuno.hxx"
 
 //===================================================================
 
@@ -246,6 +247,30 @@ SfxRequest::SfxRequest
     pImp->pSlot = 0;
     pImp->nCallMode = nMode;
     pImp->bUseTarget = FALSE;
+}
+
+SfxRequest::SfxRequest
+(
+    const SfxSlot* pSlot,   // auszuf"uhrende <Slot-Id>
+    const com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >& rArgs,
+    SfxCallMode     nMode,      // Synch/API/...
+    SfxItemPool&    rPool       // ggf. f"ur das SfxItemSet f"ur Parameter
+)
+:   nSlot(pSlot->GetSlotId()),
+    pArgs(new SfxAllItemSet(rPool)),
+    pImp( new SfxRequest_Impl(this) )
+{
+    DBG_MEMTEST();
+
+    pImp->bDone = FALSE;
+    pImp->bIgnored = FALSE;
+    pImp->SetPool( &rPool );
+    pImp->pRetVal = 0;
+    pImp->pShell = 0;
+    pImp->pSlot = 0;
+    pImp->nCallMode = nMode;
+    pImp->bUseTarget = FALSE;
+    TransformParameters( nSlot, rArgs, *pArgs, pSlot );
 }
 
 //-----------------------------------------------------------------------
