@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XChartDataArray.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:08:10 $
+ *  last change:$Date: 2003-09-08 10:19:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,10 +61,11 @@
 
 package ifc.chart;
 
-import com.sun.star.chart.XChartDataArray;
 import lib.MultiMethodTest;
-import lib.StatusException;
 import lib.Status;
+import lib.StatusException;
+
+import com.sun.star.chart.XChartDataArray;
 
 /**
 * Testing <code>com.sun.star.chart.XChartDataArray</code>
