@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: pb $ $Date: 2002-07-31 08:59:15 $
+ *  last change: $Author: obr $ $Date: 2002-07-31 12:40:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -636,27 +636,76 @@
 			<prop oor:name="Counter" oor:type="xs:int"/>
 		</group>
 		<group oor:name="MailCommandLineProfile">
-			<!-- OldPath:  -->
-			<!-- OldLocation:  -->
 			<!-- Responsible: OBR -->
 			<info>
-				<desc xml:lang="en-US">Command line description for external mail applications.</desc>
+				<desc xml:lang="en-US">Command line profile for external mail applications.</desc>
 			</info>
 			<group oor:name="FormatStrings">
-				<prop oor:name="base" oor:type="xs:string"/>
-				<prop oor:name="from" oor:type="xs:string"/>
-				<prop oor:name="to" oor:type="xs:string"/>
-				<prop oor:name="cc" oor:type="xs:string"/>
-				<prop oor:name="bcc" oor:type="xs:string"/>
-				<prop oor:name="subject" oor:type="xs:string"/>
-				<prop oor:name="attachment" oor:type="xs:string"/>
-				<prop oor:name="body" oor:type="xs:string"/>
+				<info>
+					<desc xml:lang="en-US">The different string tokens for "to" and "cc" etc. adresses will be concated to create the command line</desc>
+				</info>
+				<prop oor:name="base" oor:type="xs:string">
+					<info>
+						<desc xml:lang="en-US">Fixed text (optional) preceding the mail arguments</desc>
+					</info>
+				</prop>
+				<prop oor:name="from" oor:type="xs:string">
+					<info>
+						<desc xml:lang="en-US">The string token describing the from address field</desc>
+					</info>
+				</prop>
+				<prop oor:name="to" oor:type="xs:string">
+					<info>
+						<desc xml:lang="en-US">The string token describing the to address field</desc>
+					</info>
+				</prop>
+				<prop oor:name="cc" oor:type="xs:string">
+					<info>
+						<desc xml:lang="en-US">The string token describing the cc address field</desc>
+					</info>
+				</prop>
+				<prop oor:name="bcc" oor:type="xs:string">
+					<info>
+						<desc xml:lang="en-US">The string token describing the bcc address field</desc>
+					</info>
+				</prop>
+				<prop oor:name="subject" oor:type="xs:string">
+					<info>
+						<desc xml:lang="en-US">The string token describing the subject</desc>
+					</info>
+				</prop>
+				<prop oor:name="attachment" oor:type="xs:string">
+					<info>
+						<desc xml:lang="en-US">The string token describing the attachments of the message</desc>
+					</info>
+				</prop>
+				<prop oor:name="body" oor:type="xs:string">
+					<info>
+						<desc xml:lang="en-US">The string token describing the body of the message</desc>
+					</info>
+				</prop>
 			</group>
 			<group oor:name="EnumDelimiters">
-				<prop oor:name="base" oor:type="xs:string"/>
-				<prop oor:name="cc" oor:type="xs:string"/>
-				<prop oor:name="bcc" oor:type="xs:string"/>
-				<prop oor:name="attachment" oor:type="xs:string"/>
+				<prop oor:name="base" oor:type="xs:string">
+					<info>
+						<desc xml:lang="en-US">The delimiter used between the external mailer name and the to field</desc>
+					</info>
+				</prop>
+				<prop oor:name="cc" oor:type="xs:string">
+					<info>
+						<desc xml:lang="en-US">The delimiters between different cc addressees</desc>
+					</info>
+				</prop>
+				<prop oor:name="bcc" oor:type="xs:string">
+					<info>
+						<desc xml:lang="en-US">The delimiters between different bcc addressees</desc>
+					</info>
+				</prop>
+				<prop oor:name="attachment" oor:type="xs:string">
+					<info>
+						<desc xml:lang="en-US">The delimiters between different attachments</desc>
+					</info>
+				</prop>
 			</group>
 		</group>
 		<group oor:name="JobDescription">
