@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xeformula.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-09 15:03:07 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 10:44:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef SC_XEFORMULA_HXX
 #include "xeformula.hxx"
 #endif
@@ -281,6 +280,7 @@ public:
 private:
     void                Init( XclExpFomulaType eType );
     void                Init( XclExpFomulaType eType, const ScTokenArray& rScTokArr, const ScAddress* pScPos );
+    void                FinalizeFormula();
     XclExpTokenArrayRef CreateTokenArray();
     inline sal_uInt16   GetSize() const { return static_cast< sal_uInt16 >( maTokVec.size() ); }
 
@@ -392,6 +392,7 @@ private:
     void                Overwrite( sal_uInt16 nWriteToPos, sal_uInt16 nOffset );
     void                WriteDistance( sal_uInt16 nWriteToPos, sal_uInt16 nStartPos );
 
+    bool                IsSpaceToken( sal_uInt16 nPos ) const;
     void                RemoveTrailingParen();
 
     // ------------------------------------------------------------------------
@@ -482,8 +483,16 @@ XclExpTokenArrayRef XclExpFmlaCompImpl::CreateFormula(
         /*  Do unknown tokens follow? Calc accepts "comments" following a formula,
             i.e.: =1+1;"This is a comment". Ignore this without error. */
         bool bUnknownTail = aTokData.Is() && (aTokData.GetOpCode() != ocSep);
-        // Tokens left or token array too long? -> error
-        mbOk = mbOk && !bUnknownTail && (maTokVec.size() <= EXC_TOKARR_MAXLEN);
+        // Tokens left? -> error
+        mbOk = mbOk && !bUnknownTail;
+    }
+
+    if( mbOk )
+    {
+        // finalizing, i.e. add tAttr-volatile token
+        FinalizeFormula();
+        // Token array too long? -> error
+        mbOk = maTokVec.size() <= EXC_TOKARR_MAXLEN;
     }
 
     if( !mbOk )
@@ -571,16 +580,23 @@ void XclExpFmlaCompImpl::Init( XclExpFomulaType eType, const ScTokenArray& rScTo
         maTokArrIt.Init( mxOwnScTokArr.is() ? *mxOwnScTokArr : rScTokArr, false );
 }
 
-XclExpTokenArrayRef XclExpFmlaCompImpl::CreateTokenArray()
+void XclExpFmlaCompImpl::FinalizeFormula()
 {
     // Volatile? Add a tAttr-volatile token at the beginning of the token array.
     if( mbVolatile )
     {
-        Insert( 0, 4 );
-        maTokVec[ 0 ] = EXC_TOKID_ATTR;
-        maTokVec[ 1 ] = EXC_TOK_ATTR_VOLATILE;
+        // tAttr-space token can be extended with volatile flag
+        if( !IsSpaceToken( 0 ) )
+        {
+            Insert( 0, 4 );
+            maTokVec[ 0 ] = EXC_TOKID_ATTR;
+        }
+        maTokVec[ 1 ] |= EXC_TOK_ATTR_VOLATILE;
     }
+}
 
+XclExpTokenArrayRef XclExpFmlaCompImpl::CreateTokenArray()
+{
     return XclExpTokenArrayRef( new XclExpTokenArray( maTokVec, mbVolatile ) );
 }
 
@@ -1028,7 +1044,7 @@ void XclExpFmlaCompImpl::ProcessDdeLink( const XclExpTokenData& rTokData, sal_uI
     {
         // TODO: DDE not implemented in BIFF5/7 - but do not stop compiling completely
         sal_uInt16 nExtSheet, nExtName;
-        if( (GetBiff() >= xlBiff8) && GetLinkManager().InsertDde( nExtSheet, nExtName, aApplic, aTopic, aItem ) )
+        if( !maCfg.mb2DRefOnly && (GetBiff() >= xlBiff8) && GetLinkManager().InsertDde( nExtSheet, nExtName, aApplic, aTopic, aItem ) )
             AppendNameXToken( nExtSheet, nExtName, nExpClass, rTokData.mnSpaces );
         else
             AppendErrorToken( EXC_ERR_NA, rTokData.mnSpaces );
@@ -1219,7 +1235,15 @@ XclExpTokenData XclExpFmlaCompImpl::ProcessParam( XclExpTokenData aTokData, XclE
         bool bOldIsArrExp = mbIsArrExp;
         UpdateArrExpFlag( nExpClass, rFuncData.GetReturnClass() );
         // process the parameter, stop at next ocClose or ocSep
-        aTokData = Expression( aTokData, nExpClass, true );
+        /*  #i37355# insert tMissArg token for missing parameters --
+            Excel import filter adds ocMissing token (handled in Factor()),
+            but Calc itself does not do this if a new formula is entered. */
+        switch( aTokData.GetOpCode() )
+        {
+            case ocSep:
+            case ocClose:   AppendMissingToken();   break;  // empty parameter
+            default:        aTokData = Expression( aTokData, nExpClass, true );
+        }
         // restore old expected ARR class mode
         SetArrExpFlag( bOldIsArrExp );
         // finalize the parameter and add special tokens, i.e. for IF or CHOOSE parameters
@@ -1279,7 +1303,7 @@ void XclExpFmlaCompImpl::AppendDefaultParam( XclExpFuncData& rFuncData )
             // try to export an add-in function call
             const String& rScFuncName = rFuncData.GetExtFuncName();
             String aXclFuncName;
-            if( ScGlobal::GetAddInCollection()->GetExcelName( rScFuncName, GetUILanguage(), aXclFuncName ) )
+            if( !maCfg.mb2DRefOnly && ScGlobal::GetAddInCollection()->GetExcelName( rScFuncName, GetUILanguage(), aXclFuncName ) )
             {
                 sal_uInt16 nExtSheet, nExtName;
                 GetLinkManager().InsertAddIn( nExtSheet, nExtName, aXclFuncName );
@@ -1893,13 +1917,21 @@ void XclExpFmlaCompImpl::WriteDistance( sal_uInt16 nWriteToPos, sal_uInt16 nStar
     Overwrite( nWriteToPos, GetSize() - nStartPos );
 }
 
+bool XclExpFmlaCompImpl::IsSpaceToken( sal_uInt16 nPos ) const
+{
+    return
+        (static_cast< size_t >( nPos + 4 ) <= maTokVec.size()) &&
+        (maTokVec[ nPos ] == EXC_TOKID_ATTR) &&
+        (maTokVec[ nPos + 1 ] == EXC_TOK_ATTR_SPACE);
+}
+
 void XclExpFmlaCompImpl::RemoveTrailingParen()
 {
     // remove trailing tParen token
     if( !maTokVec.empty() && (maTokVec.back() == EXC_TOKID_PAREN) )
         maTokVec.pop_back();
     // remove remaining tAttr-space tokens
-    while( (maTokVec.size() >= 4) && (*(maTokVec.end() - 4) == EXC_TOKID_ATTR) && (*(maTokVec.end() - 3) == EXC_TOK_ATTR_SPACE) )
+    while( (maTokVec.size() >= 4) && IsSpaceToken( GetSize() - 4 ) )
         maTokVec.erase( maTokVec.end() - 4, maTokVec.end() );
 }
 
