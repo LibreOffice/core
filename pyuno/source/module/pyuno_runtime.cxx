@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pyuno_runtime.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 18:46:50 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 19:30:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,7 @@ using com::sun::star::lang::XUnoTunnel;
 using com::sun::star::reflection::XIdlReflection;
 using com::sun::star::script::XTypeConverter;
 using com::sun::star::script::XInvocationAdapterFactory2;
+using com::sun::star::script::XInvocation;
 using com::sun::star::beans::XMaterialHolder;
 using com::sun::star::beans::XIntrospection;
 
@@ -562,12 +563,15 @@ static Sequence< Type > invokeGetTypes( const Runtime & r , PyObject * o )
         if( types.is() && PyTuple_Check( types.get() ) )
         {
             int size = PyTuple_Size( types.get() );
-            ret.realloc( size );
+
+            // add the XUnoTunnel interface  for uno object identity concept (hack)
+            ret.realloc( size + 1 );
             for( int i = 0 ; i < size ; i ++ )
             {
                 Any a = r.pyObject2Any(PyTuple_GetItem(types.get(),i));
                 a >>= ret[i];
             }
+            ret[size] = getCppuType( (Reference< com::sun::star::lang::XUnoTunnel> *) 0 );
         }
     }
     return ret;
@@ -794,23 +798,41 @@ Any Runtime::pyObject2Any ( const PyRef & source, enum ConversionMode mode ) con
         else
         {
             Reference< XInterface > mappedObject;
+            Reference< XInvocation > adapterObject;
 
-            // can be improved in the 643 source tree with an improved
-            // invocation adapter factory
-            if( ! mappedObject.is() )
+            // instance already mapped out to the world ?
+            PyRef2Adapter::iterator ii = impl->cargo->mappedObjects.find( PyRef( o ) );
+            if( ii != impl->cargo->mappedObjects.end() )
+            {
+                adapterObject = ii->second;
+            }
+
+            if( adapterObject.is() )
+            {
+                // object got already bridged !
+                Reference< com::sun::star::lang::XUnoTunnel > tunnel( adapterObject, UNO_QUERY );
+
+                Adapter *pAdapter = ( Adapter * )
+                    tunnel->getSomething( ::pyuno::Adapter::getUnoTunnelImplementationId() );
+
+                mappedObject = impl->cargo->xAdapterFactory->createAdapter(
+                    adapterObject, pAdapter->getWrappedTypes() );
+            }
+            else
             {
                 Sequence< Type > interfaces = invokeGetTypes( *this, o );
-                //implementsInterfaces( *this, o );
                 if( interfaces.getLength() )
                 {
-                    Adapter *pAdapter = new Adapter( o , *this);
+                    Adapter *pAdapter = new Adapter( o , *this, interfaces );
                     mappedObject =
                         getImpl()->cargo->xAdapterFactory->createAdapter(
                             pAdapter, interfaces );
-                    pAdapter->setUnoAdapter( mappedObject );
+
+                    // keep a list of exported objects to ensure object identity !
+                    impl->cargo->mappedObjects[ PyRef(o) ] =
+                        com::sun::star::uno::WeakReference< XInvocation > ( pAdapter );
                 }
             }
-
             if( mappedObject.is() )
             {
                 a = com::sun::star::uno::makeAny( mappedObject );
