@@ -464,6 +464,8 @@ UDK_3_0_0 {
         rtl_bootstrap_args_close;
         rtl_bootstrap_get_from_handle;
         rtl_bootstrap_get_iniName_from_handle;
+    rtl_bootstrap_expandMacros_from_handle;
+    rtl_bootstrap_expandMacros;
         rtl_getAppCommandArgCount;
         rtl_getAppCommandArg;
 
