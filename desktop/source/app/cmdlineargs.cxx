@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdlineargs.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cd $ $Date: 2001-12-20 09:00:47 $
+ *  last change: $Author: cd $ $Date: 2002-02-26 08:18:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,85 +98,26 @@ void CommandLineArgs::ParseCommandLine_Impl( const ::vos::OExtCommandLine& aExtC
     sal_Bool    bPrintEvent     = sal_False;
     sal_Bool    bPrintToEvent   = sal_False;
     sal_Bool    bOpenEvent      = sal_True;
+    sal_Bool    bForceOpenEvent = sal_True;
+    sal_Bool    bForceNewEvent  = sal_True;
     sal_Int32   bPrinterName    = sal_False;
 
     ::vos::OExtCommandLine aCmdLine;
-    sal_uInt32 nCount = aCmdLine.getCommandArgCount();
+
+    sal_uInt32      nCount = aCmdLine.getCommandArgCount();
+    ::rtl::OUString aDummy;
+    String          aArguments;
+
+    // Extract cmdline parameters and concat them to the cmdline string format
     for( sal_uInt32 i=0; i < nCount; i++ )
     {
-        ::rtl::OUString aArg;
-        aCmdLine.getCommandArg( i, aArg );
-        String aArgStr = aArg;
-
-        // unknown command line parameter ?
-        if ( !InterpretCommandLineParameter( aArg ))
-        {
-            const xub_Unicode* pArg = aArgStr.GetBuffer();
-
-            // only with '-', because Unix uses / as root-dir!!
-            if ( *pArg == (sal_Unicode)'-' )
-            {
-                pArg++;
-
-                // a switch
-                if ( (*pArg == (sal_Unicode)'p') ||
-                     (*pArg == (sal_Unicode)'P') )
-                {
-                    if ( aArgStr.EqualsIgnoreCaseAscii( "-pt" ))
-                    {
-                        bPrintEvent = sal_False;
-                        bPrintToEvent = sal_True;
-
-                        bPrinterName = sal_True;
-                    }
-                    else
-                    {
-                        bPrintEvent = sal_True;
-                        bPrintToEvent = sal_False;
-                    }
-
-                    bOpenEvent = FALSE;    // no more open events
-                }
-            }
-            else
-            {
-                if ( bPrinterName && bPrintToEvent )
-                {
-                    // first argument after "-pt" this must be the printer name
-                    m_aPrinterName = aArgStr;
-                    m_bPrinterName = sal_True;
-                    bPrinterName = sal_False;
-                }
-                else
-                {
-                    // interpreted as file name
-                    if ( bOpenEvent )
-                    {
-                        // append open event
-                        if ( m_aOpenList.getLength() > 0 )
-                            m_aOpenList += ::rtl::OUString::valueOf( (sal_Unicode)APPEVENT_PARAM_DELIMITER );
-                        m_aOpenList += aArgStr;
-                        m_bOpenList = sal_True;
-                    }
-                    else if ( bPrintEvent )
-                    {
-                        // append print event
-                        if( m_aPrintList.getLength() )
-                            m_aPrintList += ::rtl::OUString::valueOf( (sal_Unicode)APPEVENT_PARAM_DELIMITER );
-                        m_aPrintList += aArgStr;
-                        m_bPrintList = sal_True;
-                    }
-                    else
-                    {
-                        if ( m_aPrintToList.getLength() )
-                            m_aPrintToList += ::rtl::OUString::valueOf( (sal_Unicode)APPEVENT_PARAM_DELIMITER );
-                        m_aPrintToList += aArgStr;
-                        m_bPrintToList = sal_True;
-                    }
-                }
-            }
-        }
+        aCmdLine.getCommandArg( i, aDummy );
+        aArguments += String( aDummy );
+        aArguments += '|';
     }
+
+    // Parse string as a cmdline string
+    ParseCommandLine_String( ::rtl::OUString( aArguments ));
 }
 
 void CommandLineArgs::ParseCommandLine_String( const ::rtl::OUString& aCmdLineString )
@@ -186,6 +127,8 @@ void CommandLineArgs::ParseCommandLine_String( const ::rtl::OUString& aCmdLineSt
     sal_Bool    bOpenEvent      = sal_True;
     sal_Bool    bPrintToEvent   = sal_False;
     sal_Bool    bPrinterName    = sal_False;
+    sal_Bool    bForceOpenEvent = sal_True;
+    sal_Bool    bForceNewEvent  = sal_True;
 
     sal_Int32 nIndex = 0;
     do
@@ -200,19 +143,35 @@ void CommandLineArgs::ParseCommandLine_String( const ::rtl::OUString& aCmdLineSt
                 if ( aArgStr.GetChar(0) == '-' )
                 {
                     // handle this argument as an option
-                    if ( aArgStr.EqualsIgnoreCaseAscii( "-p" ))
+                    if ( aArgStr.EqualsIgnoreCaseAscii( "-n" ))
                     {
-                        bPrintEvent = sal_True;
-                        bPrintToEvent = sal_False;
+                        // force new documents based on the following documents
+                        bForceNewEvent  = sal_True;
+                        bOpenEvent      = sal_False;
+                        bForceOpenEvent = sal_False;
+                    }
+                    else if ( aArgStr.EqualsIgnoreCaseAscii( "-o" ))
+                    {
+                        // force open documents regards if they are templates or not
+                        bForceOpenEvent = sal_True;
+                        bOpenEvent      = sal_False;
+                        bForceNewEvent  = sal_False;
                     }
                     else if ( aArgStr.EqualsIgnoreCaseAscii( "-pt" ))
                     {
+                        // Print to special printer
                         bPrintEvent = sal_False;
                         bPrintToEvent = sal_True;
+                        bOpenEvent = sal_False;
                         bPrinterName = sal_True;
                     }
-
-                    bOpenEvent  = sal_False;    // Ab hier keine OpenEvents mehr
+                    else if ( aArgStr.EqualsIgnoreCaseAscii( "-p" ))
+                    {
+                        // Print to default printer
+                        bPrintEvent = sal_True;
+                        bPrintToEvent = sal_False;
+                        bOpenEvent = sal_False;
+                    }
                 }
                 else
                 {
@@ -242,12 +201,26 @@ void CommandLineArgs::ParseCommandLine_String( const ::rtl::OUString& aCmdLineSt
                             m_aPrintList += aArgStr;
                             m_bPrintList = sal_True;
                         }
-                        else
+                        else if ( bPrintToEvent )
                         {
                             if ( m_aPrintToList.getLength() )
                                 m_aPrintToList += ::rtl::OUString::valueOf( (sal_Unicode)APPEVENT_PARAM_DELIMITER );
                             m_aPrintToList += aArgStr;
                             m_bPrintToList = sal_True;
+                        }
+                        else if ( bForceNewEvent )
+                        {
+                            if ( m_aForceNewList.getLength() )
+                                m_aForceNewList += ::rtl::OUString::valueOf( (sal_Unicode)APPEVENT_PARAM_DELIMITER );
+                            m_aForceNewList += aArgStr;
+                            m_bForceNewList = sal_True;
+                        }
+                        else if ( bForceOpenEvent )
+                        {
+                            if ( m_aForceOpenList.getLength() )
+                                m_aForceOpenList += ::rtl::OUString::valueOf( (sal_Unicode)APPEVENT_PARAM_DELIMITER );
+                            m_aForceOpenList += aArgStr;
+                            m_bForceOpenList = sal_True;
                         }
                     }
                 }
@@ -371,6 +344,8 @@ void CommandLineArgs::ResetParamValues()
     m_bVersionString        = sal_False;
     m_bPrintToList          = sal_False;
     m_bPrinterName          = sal_False;
+    m_bForceOpenList        = sal_False;
+    m_bForceNewList         = sal_False;
 }
 
 } // namespace desktop
