@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hr $ $Date: 2004-08-03 14:39:30 $
+#   last change: $Author: rt $ $Date: 2004-10-22 08:06:44 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,6 +75,20 @@ LDAP_MAJOR=2
 .INCLUDE : settings.mk
 DLLPRE =
 
+.IF "$(LDAPSDKINCLUDES)" == ""
+
+.IF "$(WITH_MOZILLA)" == "NO"
+# This logic (when to not build the ldapbe lib) needs to be reflected
+# in scp2/source/ooo/makefile.mk for defining WITHOUT_LDAP
+all:
+    @echo "         Build of LDAP configuration backend skipped - disabled"
+.ENDIF
+
+# TODO: Add support for SYSTEM_MOZILLA
+LDAPSDKINCLUDES = -I$(SOLARINCDIR)$/mozilla
+.ENDIF
+
+SOLARINC+= $(LDAPSDKINCLUDES)
 # --- Files ---
 
 
@@ -96,6 +110,7 @@ SHL1STDLIBS=    \
         $(LDAPSDKLIB) \
         $(CPPUHELPERLIB) \
         $(CPPULIB) \
+        $(SALHELPERLIB) \
         $(SALLIB)
 
 DEF1NAME=$(SHL1TARGET)
