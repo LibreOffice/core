@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: kz $ $Date: 2004-01-28 14:37:42 $
+#   last change: $Author: rt $ $Date: 2004-11-26 14:32:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,7 +75,8 @@ BOOTSTRAP_SERVICE=	FALSE
 # --- Generate -----------------------------------------------------
 
 SLOFILES=           \
-                    $(SLO)$/loadenv.obj         \
+                    $(SLO)$/loadenv.obj              \
+                    $(SLO)$/loaddispatchlistener.obj \
                     $(SLO)$/targethelper.obj
 
 # --- Targets ------------------------------------------------------
