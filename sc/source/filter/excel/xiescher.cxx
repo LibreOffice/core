@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xiescher.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-24 11:54:56 $
+ *  last change: $Author: hr $ $Date: 2003-08-07 15:29:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,6 +163,9 @@
 #endif
 #ifndef SC_XLOCX_HXX
 #include "xlocx.hxx"
+#endif
+#ifndef SC_XLTRACER_HXX
+#include "xltracer.hxx"
 #endif
 #ifndef SC_XILINK_HXX
 #include "xilink.hxx"
@@ -1171,7 +1174,7 @@ XclImpObjData* XclImpEscherObjList::FindObjData( sal_uInt32 nStrmPos ) const
 XclImpDffManager::XclImpDffManager(
         const XclImpRoot& rRoot, XclImpObjectManager& rObjManager,
         sal_Int32 nOffsDgg, SvStream* pStData, SdrModel* pSdrModel, sal_Int32 nApplicationScale ) :
-    SvxMSDffManager( rObjManager.GetEscherStream(), nOffsDgg, pStData, pSdrModel, nApplicationScale, COL_DEFAULT, 24, NULL ),
+    SvxMSDffManager( rObjManager.GetEscherStream(), nOffsDgg, pStData, pSdrModel, nApplicationScale, COL_DEFAULT, 24, NULL, &rRoot.GetTracer().GetBaseTracer() ),
     XclImpRoot( rRoot ),
     mrObjManager( rObjManager ),
     mnOleImpFlags( 0 )
