@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtswtbl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2001-09-28 07:50:20 $
+ *  last change: $Author: cmc $ $Date: 2002-04-24 10:16:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,8 +132,8 @@ SwVertOrient SwWriteTableCell::GetVertOri() const
 
 //-----------------------------------------------------------------------
 
-SwWriteTableRow::SwWriteTableRow( long nPosition )
-    : nPos(nPosition), pBackground( 0 ),
+SwWriteTableRow::SwWriteTableRow( long nPosition, BOOL bUseLayoutHeights )
+    : nPos(nPosition), mbUseLayoutHeights(bUseLayoutHeights), pBackground( 0 ),
     bTopBorder(TRUE), bBottomBorder(TRUE),
     nTopBorder(USHRT_MAX), nBottomBorder(USHRT_MAX)
 {
@@ -509,8 +509,7 @@ void SwWriteTable::CollectTableRowsCols( long nStartRPos,
         if( nLine < nLines-1 || nParentLineHeight==0  )
         {
             nRPos += GetLineHeight( pLine );
-            SwWriteTableRow *pRow = new SwWriteTableRow( nRPos );
-
+            SwWriteTableRow *pRow = new SwWriteTableRow( nRPos, bUseLayoutHeights);
             USHORT nRow;
             if( aRows.Seek_Entry( pRow, &nRow ) )
                 delete pRow;
@@ -522,11 +521,11 @@ void SwWriteTable::CollectTableRowsCols( long nStartRPos,
             long nCheckPos = nRPos + GetLineHeight( pLine );
             nRPos = nStartRPos + nParentLineHeight;
 #ifndef PRODUCT
-            SwWriteTableRow aRow( nStartRPos + nParentLineHeight );
+            SwWriteTableRow aRow( nStartRPos + nParentLineHeight, bUseLayoutHeights );
             ASSERT( aRows.Seek_Entry(&aRow),
                     "Parent-Zeile nicht gefunden" );
             ASSERT( !bUseLayoutHeights ||
-                    SwWriteTableRow(nCheckPos) == SwWriteTableRow(nRPos),
+                    SwWriteTableRow(nCheckPos,bUseLayoutHeights) == SwWriteTableRow(nRPos,bUseLayoutHeights),
                     "Hoehe der Zeilen stimmt nicht mit Parent ueberein" );
 #endif
         }
@@ -628,7 +627,7 @@ void SwWriteTable::FillTableRowsCols( long nStartRPos, USHORT nStartRow,
 
         // Und ihren Index
         USHORT nOldRow = nRow;
-        SwWriteTableRow aRow( nRPos );
+        SwWriteTableRow aRow( nRPos,bUseLayoutHeights );
         BOOL bFound = aRows.Seek_Entry( &aRow, &nRow );
         ASSERT( bFound, "Wo ist die Zeile geblieben?" );
 
@@ -861,7 +860,7 @@ SwWriteTable::SwWriteTable( const SwHTMLTableLayout *pLayoutInfo )
     for( nRow=0; nRow<nRows; nRow++ )
     {
         SwWriteTableRow *pRow =
-            new SwWriteTableRow( (nRow+1)*ROW_DFLT_HEIGHT );
+            new SwWriteTableRow( (nRow+1)*ROW_DFLT_HEIGHT, bUseLayoutHeights );
         pRow->nTopBorder = 0;
         pRow->nBottomBorder = 0;
         aRows.Insert( pRow );

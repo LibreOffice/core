@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtswtbl.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:54 $
+ *  last change: $Author: cmc $ $Date: 2002-04-24 10:16:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,11 +165,10 @@ SV_DECL_PTRARR_DEL( SwWriteTableCells, SwWriteTableCellPtr, 5, 5 )
 class SwWriteTableRow
 {
     SwWriteTableCells aCells;       // Alle Zellen der Rows
-
     const SvxBrushItem *pBackground;// Hintergrund
 
     long nPos;                  // End-Position (twips) der Zeile
-
+    BOOL mbUseLayoutHeights;
 public:
 
     USHORT nTopBorder;              // Dicke der oberen/unteren Umrandugen
@@ -178,7 +177,7 @@ public:
     BOOL bTopBorder : 1;            // Welche Umrandungen sind da?
     BOOL bBottomBorder : 1;
 
-    SwWriteTableRow( long nPos );
+    SwWriteTableRow( long nPos, BOOL bUseLayoutHeights );
 
     SwWriteTableCell *AddCell( const SwTableBox *pBox,
                                  USHORT nRow, USHORT nCol,
@@ -205,15 +204,15 @@ public:
 inline int SwWriteTableRow::operator==( const SwWriteTableRow& rRow ) const
 {
     // etwas Unschaerfe zulassen
-    return (nPos >= rRow.nPos ? nPos - rRow.nPos
-                               : rRow.nPos - nPos ) <= ROWFUZZY;
+    return (nPos >= rRow.nPos ?  nPos - rRow.nPos : rRow.nPos - nPos ) <=
+        (mbUseLayoutHeights ? 0 : ROWFUZZY);
 }
 
 inline int SwWriteTableRow::operator<( const SwWriteTableRow& rRow ) const
 {
     // Da wir hier nur die Wahrheits-Grade 0 und 1 kennen, lassen wir lieber
     // auch nicht zu, dass x==y und x<y gleichzeitig gilt ;-)
-    return nPos < rRow.nPos - ROWFUZZY;
+    return nPos < rRow.nPos - (mbUseLayoutHeights ? 0 : ROWFUZZY);
 }
 
 typedef SwWriteTableRow *SwWriteTableRowPtr;
