@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lbenv.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: pliao $ $Date: 2001-02-07 03:40:08 $
+ *  last change: $Author: dbo $ $Date: 2001-02-16 16:29:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -508,11 +508,12 @@ static void SAL_CALL defenv_acquire( uno_Environment * pEnv )
 static void SAL_CALL defenv_release( uno_Environment * pEnv )
     throw ()
 {
-    MutexGuard aGuard( getEnvironmentsData().aMutex );
+    ClearableMutexGuard aGuard( getEnvironmentsData().aMutex );
     if (! osl_decrementInterlockedCount( &((uno_DefaultEnvironment *)pEnv)->nRef ))
     {
         getEnvironmentsData().revokeEnvironment( pEnv );
-        delete (uno_DefaultEnvironment *)pEnv;
+        aGuard.clear();
+        delete (uno_DefaultEnvironment *)pEnv; // invokes dispose callback...
     }
 }
 //--------------------------------------------------------------------------------------------------
