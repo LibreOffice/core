@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ManifestImport.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mtg $ $Date: 2001-05-08 13:56:22 $
+ *  last change: $Author: mtg $ $Date: 2001-09-05 19:26:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,8 @@ protected:
     const ::rtl::OUString sIterationCountAttribute;
     const ::rtl::OUString sAlgorithmNameAttribute;
     const ::rtl::OUString sKeyDerivationNameAttribute;
+    const ::rtl::OUString sChecksumAttribute;
+    const ::rtl::OUString sChecksumTypeAttribute;
 
     const ::rtl::OUString sFullPathProperty;
     const ::rtl::OUString sMediaTypeProperty;
@@ -116,10 +118,12 @@ protected:
     const ::rtl::OUString sSaltProperty;
     const ::rtl::OUString sInitialisationVectorProperty;
     const ::rtl::OUString sSizeProperty;
+    const ::rtl::OUString sDigestProperty;
 
     const ::rtl::OUString sWhiteSpace;
     const ::rtl::OUString sBlowfish;
     const ::rtl::OUString sPBKDF2;
+    const ::rtl::OUString sMD5;
 
 public:
     ManifestImport( std::vector < ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue > > & rNewVector );
