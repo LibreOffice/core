@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxww.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dl $ $Date: 2001-06-07 08:52:48 $
+ *  last change: $Author: mba $ $Date: 2001-06-11 08:32:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 
 #pragma hdrstop
 
+#include <sfx2/bindings.hxx>
 #include <svx/svxids.hrc>
 #include <svx/grafctrl.hxx>
 #ifndef _SVTOOLS_CJKOPTIONS_HXX
@@ -342,7 +343,7 @@ void SdTbxControl::StateChanged( USHORT nSId,
             }
             else
             {
-                Image  aImage = SFX_IMAGEMANAGER()->GetImage( nImage, SD_MOD() );
+                Image  aImage = GetBindings().GetImageManager()->GetImage( nImage, SD_MOD() );
                 // Es kann u.U. ein Default-Image zurueckgegeben werden,
                 // welches eine Breite von 0 haben soll
                 // if( aImage.GetSizePixel().Width() > 0 )

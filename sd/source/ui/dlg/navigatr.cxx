@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navigatr.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ka $ $Date: 2001-04-04 16:39:56 $
+ *  last change: $Author: mba $ $Date: 2001-06-11 08:32:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,7 +154,7 @@ __EXPORT SdNavigatorWin::SdNavigatorWin( Window* pParent,
     aToolbox.SetOutputSizePixel( aTbxSize );
     aToolbox.SetSelectHdl( LINK( this, SdNavigatorWin, SelectToolboxHdl ) );
     aToolbox.SetClickHdl( LINK( this, SdNavigatorWin, ClickToolboxHdl ) );
-    SFX_IMAGEMANAGER()->RegisterToolBox( &aToolbox, SFX_TOOLBOX_CHANGEOUTSTYLE );
+    pBindings->GetImageManager()->RegisterToolBox( &aToolbox, SFX_TOOLBOX_CHANGEOUTSTYLE );
 
     // TreeListBox
     aTlbObjects.SetDoubleClickHdl( LINK( this, SdNavigatorWin, ClickObjectHdl ) );
@@ -174,7 +174,7 @@ __EXPORT SdNavigatorWin::SdNavigatorWin( Window* pParent,
 
 __EXPORT SdNavigatorWin::~SdNavigatorWin()
 {
-    SFX_IMAGEMANAGER()->ReleaseToolBox( &aToolbox );
+    pBindings->GetImageManager()->ReleaseToolBox( &aToolbox );
 
     delete pNavigatorCtrlItem;
     delete pPageNameCtrlItem;
