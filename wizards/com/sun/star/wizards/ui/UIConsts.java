@@ -5,7 +5,6 @@
  * Window>Preferences>Java>Code Generation>Code and Comments
  */
 package com.sun.star.wizards.ui;
-
 /**
  * @author rpiterman
  *
@@ -22,6 +21,7 @@ public interface UIConsts {
     public static final int RID_TABLE = 2500;
     public static final Integer INVISIBLESTEP = new Integer(99);
     public static final String  INFOIMAGEURL = "private:resource/dbu/image/19205";
+
     /**
      * The tabindex of the navigation buttons in a wizard must be assigned a very
      * high tabindex because on every step their taborder must appear at the end
