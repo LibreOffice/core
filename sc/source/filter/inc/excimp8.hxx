@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.hxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:05:00 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 16:27:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,7 +125,7 @@ class ExcCondForm : private ExcRoot, private XclImpRoot
         virtual                 ~ExcCondForm();
 
         void                    Read( XclImpStream& rIn );
-        void                    ReadCf( XclImpStream& rIn, ExcelToSc& rFormConverter );
+        void                    ReadCf( XclImpStream& rIn, ExcelToSc& rFormConverter, sal_uInt32 nListIndex );
         void                    Apply( void );
 };
 
@@ -139,6 +139,8 @@ class ExcCondFormList : protected List
     public:
         virtual                 ~ExcCondFormList();
         inline void             Append( ExcCondForm* pNew );
+
+                                List::Count;
 
         void                    Apply( void );
 };
