@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_environment.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:28:57 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 09:20:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -427,7 +427,7 @@ using namespace bridges_urp;
 
 
 //##################################################################################################
-extern "C" SAL_DLLEXPORT void SAL_CALL uno_initEnvironment(
+extern "C" void SAL_CALL uno_initEnvironment(
     uno_Environment * pEnvRemote )
 {
     g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
@@ -536,7 +536,7 @@ extern "C" SAL_DLLEXPORT void SAL_CALL uno_initEnvironment(
 
 
 //##################################################################################################
-extern "C" SAL_DLLEXPORT void SAL_CALL uno_ext_getMapping(
+extern "C" void SAL_CALL uno_ext_getMapping(
     uno_Mapping ** ppMapping,
     uno_Environment * pFrom,
     uno_Environment * pTo )
