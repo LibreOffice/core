@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undobj.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 08:14:39 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 13:50:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -269,6 +269,12 @@ SwUndo::SwUndo( USHORT nI )
     : nId(nI), nOrigRedlineMode(REDLINE_NONE), pComment(NULL),
       bCacheComment(true)
 {
+}
+
+bool SwUndo::IsDelBox() const
+{
+    return GetId() == UNDO_COL_DELETE || GetId() == UNDO_ROW_DELETE ||
+        GetId() == UNDO_TABLE_DELBOX;
 }
 
 SwUndo::~SwUndo()
@@ -552,6 +558,7 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
                     *pEnd = &rMark == pStt ? &rPoint : &rMark;
 
     SwDoc* pDoc = rMark.nNode.GetNode().GetDoc();
+
     BOOL bDoesUndo = pDoc->DoesUndo();
     pDoc->DoUndo( FALSE );
 
@@ -662,7 +669,7 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
 
                         bool bTmp;
                         if (0 != pAPos &&
-                            !( DELCNT_CHKNOCNTNT & nDelCntntType ))
+                            ( DELCNT_CHKNOCNTNT & nDelCntntType ))
                             bTmp = pStt->nNode <= pAPos->nNode &&
                                 pAPos->nNode < pEnd->nNode;
                         else
@@ -682,7 +689,7 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
 
                             // nur den Anker verchieben ??
                             if( 0 != pAPos && // #i9456#
-                                !( DELCNT_CHKNOCNTNT & nDelCntntType ))
+                                ( DELCNT_CHKNOCNTNT & nDelCntntType ))
                             {
                                 if (rPoint.nNode.GetIndex() ==
                                     pAPos->nNode.GetIndex())
