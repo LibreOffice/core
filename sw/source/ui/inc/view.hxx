@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.hxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:23:57 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 13:23:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -287,6 +287,10 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     SwFormatClipboard   *pFormatClipboard; //holds data for format paintbrush
 
     int                 nSelectionType;
+
+    static const int MASTERENUMCOMMANDS = 6;
+
+    String          aCurrShapeEnumCommand[ MASTERENUMCOMMANDS ];
 
     // Aktueller Drawmode
     USHORT          nDrawSfxId;
