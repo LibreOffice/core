@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ContentResultSet.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kso $ $Date: 2001-01-23 11:06:15 $
+ *  last change: $Author: mi $ $Date: 2001-01-31 08:40:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -257,7 +257,7 @@ service ContentResultSet
 
         The implememtation of this service is optional.
      */
-    [optional] service com::sun::star::sdbc::ResultSet;
+    service com::sun::star::sdbc::ResultSet;
 };
 
 //=============================================================================
