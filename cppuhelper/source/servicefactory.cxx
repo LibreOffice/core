@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servicefactory.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kr $ $Date: 2001-06-15 14:20:13 $
+ *  last change: $Author: dbo $ $Date: 2001-06-25 14:15:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -260,16 +260,16 @@ static Reference< XComponentContext > initializeSF(
     ContextEntry_Init context_values[ 4 ];
     // smgr
     context_values[ 0 ].bLateInitService = false;
-    context_values[ 0 ].name = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.lang.ServiceManager") );
-    context_values[ 0 ].value = makeAny( xSF );
+    context_values[ 0 ].name = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.lang.theServiceManager") );
+    context_values[ 0 ].value <<= xSF;
     // tdmgr
     context_values[ 1 ].bLateInitService = true;
-    context_values[ 1 ].name = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.reflection.TypeDescriptionManager") );
-    context_values[ 1 ].value = makeAny( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.reflection.TypeDescriptionManager") ) );
+    context_values[ 1 ].name = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.reflection.theTypeDescriptionManager") );
+    context_values[ 1 ].value <<= OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.reflection.TypeDescriptionManager") );
     // tdmgr: cache size
     context_values[ 2 ].bLateInitService = false;
     context_values[ 2 ].name = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.stoc.TypeDescriptionManager.CacheSize") );
-    context_values[ 2 ].value = makeAny( (sal_Int32)512 );
+    context_values[ 2 ].value <<= (sal_Int32)512;
     sal_Int32 nEntries = 3;
 
     if (types_xRegistry.is())
@@ -300,7 +300,7 @@ static Reference< XComponentContext > initializeSF(
 
     Reference< container::XHierarchicalNameAccess > xTDMgr;
     if (xContext->getValueByName( OUString( RTL_CONSTASCII_USTRINGPARAM(
-        "com.sun.star.reflection.TypeDescriptionManager") ) ) >>= xTDMgr)
+        "com.sun.star.reflection.theTypeDescriptionManager") ) ) >>= xTDMgr)
     {
         installTypeDescriptionManager( xTDMgr );
     }

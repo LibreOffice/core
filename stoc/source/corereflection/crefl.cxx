@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crefl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jbu $ $Date: 2001-06-22 15:41:59 $
+ *  last change: $Author: dbo $ $Date: 2001-06-25 14:12:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,7 @@ IdlReflectionServiceImpl::IdlReflectionServiceImpl(
 {
     g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
     xContext->getValueByName( OUString(
-        RTL_CONSTASCII_USTRINGPARAM("com.sun.star.reflection.TypeDescriptionManager") ) ) >>= _xTDMgr;
+        RTL_CONSTASCII_USTRINGPARAM("com.sun.star.reflection.theTypeDescriptionManager") ) ) >>= _xTDMgr;
     OSL_ENSURE( _xTDMgr.is(), "### cannot get \"com.sun.star.reflection.TypeDescriptionManager\"!" );
 }
 //__________________________________________________________________________________________________

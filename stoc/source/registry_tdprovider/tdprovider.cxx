@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdprovider.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jbu $ $Date: 2001-06-22 16:21:00 $
+ *  last change: $Author: dbo $ $Date: 2001-06-25 14:13:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,7 +175,7 @@ ProviderImpl::ProviderImpl( const Reference< XComponentContext > & xContext )
 {
     g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
     xContext->getValueByName(
-        OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.reflection.TypeDescriptionManager") ) ) >>= _xTDMgr;
+        OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.reflection.theTypeDescriptionManager") ) ) >>= _xTDMgr;
     OSL_ENSURE( _xTDMgr.is(), "### cannot get single instance \"TypeDescriptionManager\" from context!" );
 
     // registries to read from
