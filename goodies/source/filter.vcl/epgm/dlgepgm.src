@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgepgm.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 14:03:43 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:54:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,6 +224,7 @@ ModalDialog DLG_EXPORT_EPGM
     Text[ hindi ] = "PGM विकल्प";
     Text[ slovak ] = "Možnosti pre formát PGM";
 };
+
 
 
 
