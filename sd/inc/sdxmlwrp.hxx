@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlwrp.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-03 12:17:31 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 10:19:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,16 +76,19 @@ enum SdXMLFilterMode
 
 class SdXMLFilter : public SdFilter
 {
-private:
-    SdXMLFilterMode meFilterMode;
-
 public:
-
-                            SdXMLFilter( SfxMedium& rMedium, SdDrawDocShell& rDocShell, sal_Bool bShowProgress, SdXMLFilterMode eFilterMode = SDXMLMODE_Normal );
-                            ~SdXMLFilter();
+    SdXMLFilter(
+        SfxMedium& rMedium,
+        ::sd::DrawDocShell& rDocShell,
+        sal_Bool bShowProgress,
+        SdXMLFilterMode eFilterMode = SDXMLMODE_Normal);
+    virtual ~SdXMLFilter (void);
 
     virtual sal_Bool        Import();
     virtual sal_Bool        Export();
+
+private:
+    SdXMLFilterMode meFilterMode;
 };
 
 #endif  // _SDXMLWRP_HXX
