@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pubdlg.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:39:25 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:33:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,7 @@ ModalDialog DLG_PUBLISHING
         Text[ spanish ] = "Asignar dise�o";
         Text[ finnish ] = "Liit� rakenne";
         Text[ italian ] = "Assegna disegno";
-        Text[ danish ] = "Assign design:";
+        Text[ danish ] = "Tildel design:";
         Text[ swedish ] = "Tilldela design";
         Text[ polish ] = "Przypisz projekt";
         Text[ portuguese_brazilian ] = "Atribuir esbo�o :";
@@ -123,6 +123,8 @@ ModalDialog DLG_PUBLISHING
         Text[ hebrew ] = "Design zuweisen";
         Text[ hindi ] = "Assign design";
         Text[ slovak ] = "Priradiť design";
+        Text[ hungarian ] = "Látványterv hozzárendelése";
+        Text[ slovenian ] = "Dodeli oblikovanje";
     };
 
     RadioButton PAGE1_NEW_DESIGN
@@ -157,6 +159,8 @@ ModalDialog DLG_PUBLISHING
         Text[ hebrew ] = "~Neues Design";
         Text[ hindi ] = "New design";
         Text[ slovak ] = "Nový design";
+        Text[ hungarian ] = "Új látványterv";
+        Text[ slovenian ] = "Novo oblikovanje";
     };
 
     RadioButton PAGE1_OLD_DESIGN
@@ -191,6 +195,8 @@ ModalDialog DLG_PUBLISHING
         Text[ hebrew ] = "~Existierendes Design";
         Text[ hindi ] = "Existing Design";
         Text[ slovak ] = "Existujúci design";
+        Text[ hungarian ] = "Létező látványterv";
+        Text[ slovenian ] = "Obstoječe oblikovanje";
     };
 
     ListBox PAGE1_DESIGNS
@@ -236,6 +242,8 @@ ModalDialog DLG_PUBLISHING
         Text[ hebrew ] = "Markiertes Design ~löschen";
         Text[ hindi ] = "Delete Selected Design";
         Text[ slovak ] = "Zmazať vybraný design";
+        Text[ hungarian ] = "Kijelölt látványterv törlése";
+        Text[ slovenian ] = "Izbriši izbrano oblikovanje";
     };
 
     FixedText PAGE1_DESC
@@ -247,7 +255,7 @@ ModalDialog DLG_PUBLISHING
         Text[ italian ] = "Scegliete un design esistente, oppure createne uno nuovo";
         Text[ portuguese_brazilian ] = "Selecione um esbo�o existente ou crie um novo :";
         Text[ portuguese ] = "Seleccione um design existente ou crie um novo:";
-        Text[ danish ] = "V�lg venligst et eksisterende design eller opret et nyt";
+        Text[ danish ] = "V�lg et eksisterende design eller opret et nyt";
         Text[ french ] = "S�lectionnez un design existant ou cr�ez-en un nouveau";
         Text[ swedish ] = "V�lj en existerande design eller skapa en ny";
         Text[ dutch ] = "Kies een bestaand design of maak een nieuw";
@@ -270,6 +278,8 @@ ModalDialog DLG_PUBLISHING
         Text[ hebrew ] = "Wählen Sie ein existierendes Design, oder erstellen Sie ein neues";
         Text[ hindi ] = "Select an existing design or create a new one";
         Text[ slovak ] = "Vybrať existujúci design alebo vytvoriť nový";
+        Text[ hungarian ] = "Meglévő látványterv kiválasztása vagy új létrehozása";
+        Text[ slovenian ] = "Izberi obstoječe oblikovanje ali ustvari novega";
     };
 
 
@@ -319,6 +329,8 @@ ModalDialog DLG_PUBLISHING
         Text[ hebrew ] = "Art der Veröffentlichung";
         Text[ hindi ] = "Publication type";
         Text[ slovak ] = "Druh publikácie";
+        Text[ hungarian ] = "Kiadványtípus";
+        Text[ slovenian ] = "Vrsta objave";
     };
 
     RadioButton PAGE2_STANDARD
@@ -353,6 +365,8 @@ ModalDialog DLG_PUBLISHING
         Text[ hebrew ] = "Standard ~HTML Format";
         Text[ hindi ] = "Standard H~TML format";
         Text[ slovak ] = "Štandardný H~TML formát";
+        Text[ hungarian ] = "Szabványos H~TML formátum";
+        Text[ slovenian ] = "Standardna H~TML oblika zapisa";
     };
 
     RadioButton PAGE2_FRAMES
@@ -369,7 +383,7 @@ ModalDialog DLG_PUBLISHING
         Text[ french ] = "Format HTML standard avec cadres";
         Text[ spanish ] = "HTML predeterminado con ~frames";
         Text[ italian ] = "HTML standard con ~frame";
-        Text[ danish ] = "Standard HTML med frames";
+        Text[ danish ] = "Standard HTML med ~rammer";
         Text[ swedish ] = "Standard-HTML med ~ramar";
         Text[ polish ] = "HTML standardowy z ramkami";
         Text[ portuguese_brazilian ] = "~Frames de navegador";
@@ -387,6 +401,8 @@ ModalDialog DLG_PUBLISHING
         Text[ hebrew ] = "Standard HTML mit ~Frames";
         Text[ hindi ] = "Standard HTML with ~frames";
         Text[ slovak ] = "Štan~dardný HTML s rámcami";
+        Text[ hungarian ] = "Szabványos HTML ~keretekkel";
+        Text[ slovenian ] = "Standardna HTML oblika z ~okviri";
     };
 
     RadioButton PAGE2_KIOSK
@@ -403,7 +419,7 @@ ModalDialog DLG_PUBLISHING
         Text[ french ] = "Automatique";
         Text[ spanish ] = "~Autom�tico";
         Text[ italian ] = "~Automatico";
-        Text[ danish ] = "Automatisk";
+        Text[ danish ] = "~Automatisk";
         Text[ swedish ] = "Aut~omatisk";
         Text[ polish ] = "~Automatycznie";
         Text[ portuguese_brazilian ] = "~Autom�tico";
@@ -421,6 +437,8 @@ ModalDialog DLG_PUBLISHING
         Text[ hebrew ] = "‮אוטומטי‬";
         Text[ hindi ] = "~Automatic";
         Text[ slovak ] = "~Automaticky";
+        Text[ hungarian ] = "~Automatikus";
+        Text[ slovenian ] = "S~amodejno";
     };
 
     RadioButton PAGE2_WEBCAST
@@ -437,7 +455,7 @@ ModalDialog DLG_PUBLISHING
         Text[ french ] = "WebCast";
         Text[ spanish ] = "~WebCast";
         Text[ italian ] = "~WebCast";
-        Text[ danish ] = "WebCast";
+        Text[ danish ] = "~WebCast";
         Text[ swedish ] = "~WebCast";
         Text[ polish ] = "Prezentacja w sieci ~WWW";
         Text[ portuguese_brazilian ] = "~WebCast";
@@ -454,6 +472,8 @@ ModalDialog DLG_PUBLISHING
         Text[ hebrew ] = "~WebCast";
         Text[ hindi ] = "~WebCast";
         Text[ slovak ] = "~WebCast";
+        Text[ hungarian ] = "~WebCast";
+        Text[ slovenian ] = "~WebCast";
     };
 
     FixedBitmap PAGE2_NOFRAMES_FB
@@ -515,7 +535,7 @@ ModalDialog DLG_PUBLISHING
         Text[ spanish ] = "Opciones";
         Text[ finnish ] = "Lis�ykset";
         Text[ italian ] = "Extra";
-        Text[ danish ] = "Additions";
+        Text[ danish ] = "Indstillinger";
         Text[ swedish ] = "Alternativ";
         Text[ polish ] = "Dodatki";
         Text[ portuguese_brazilian ] = "Adi��es";
@@ -531,6 +551,8 @@ ModalDialog DLG_PUBLISHING
         Text[ hebrew ] = "‮אפשרויות‬";
         Text[ hindi ] = "Options";
         Text[ slovak ] = "Nastavenia";
+        Text[ hungarian ] = "Beállítások";
+        Text[ slovenian ] = "Možnosti";
     };
 
     CheckBox PAGE2_CONTENT
@@ -565,6 +587,8 @@ ModalDialog DLG_PUBLISHING
         Text[ hebrew ] = "~Titelseite erzeugen";
         Text[ hindi ] = "Create title page";
         Text[ slovak ] = "Vytvoriť titulnú stránku";
+        Text[ hungarian ] = "Címlap létrehozása";
+        Text[ slovenian ] = "Ustvari naslovno stran";
     };
 
     FixedLine PAGE2_VERT
@@ -606,6 +630,8 @@ ModalDialog DLG_PUBLISHING
         Text[ hebrew ] = "~Notizen anzeigen";
         Text[ hindi ] = "Show notes";
         Text[ slovak ] = "Zobraziť poznámky";
+        Text[ hungarian ] = "Jegyzetek megjelenítése";
+        Text[ slovenian ] = "Pokaži opombe";
     };
 
     ///////////////////////////////
@@ -643,6 +669,8 @@ ModalDialog DLG_PUBLISHING
         Text[ hebrew ] = "Seitenwechsel";
         Text[ hindi ] = "Advance slides";
         Text[ slovak ] = "Prechod na ďalší snímok";
+        Text[ hungarian ] = "Dia továbbítása";
+        Text[ slovenian ] = "Premikanje med diapozitivi";
     };
 
     RadioButton PAGE2_CHG_DEFAULT
@@ -660,7 +688,7 @@ ModalDialog DLG_PUBLISHING
         Text[ french ] = "Comme indiqu� dans le document";
         Text[ spanish ] = "~Como indicado en el documento";
         Text[ italian ] = "Come specificato nel documento";
-        Text[ danish ] = "Som angivet i dokumentet";
+        Text[ danish ] = "~Som angivet i dokumentet";
         Text[ swedish ] = "Som angivet i dokumentet";
         Text[ polish ] = "Jak podano w dokumencie";
         Text[ portuguese_brazilian ] = "Temporiza��es do ~documento, se houverem";
@@ -677,6 +705,8 @@ ModalDialog DLG_PUBLISHING
         Text[ hebrew ] = "~Wie im Dokument angegeben";
         Text[ hindi ] = "~As stated in document";
         Text[ slovak ] = "~Ako je uvedené v dokumente";
+        Text[ hungarian ] = "~Ahogy a dokumentumban meg van adva";
+        Text[ slovenian ] = "~Kot je navedeno v dokumentu";
     };
 
     RadioButton PAGE2_CHG_AUTO
@@ -694,7 +724,7 @@ ModalDialog DLG_PUBLISHING
         Text[ french ] = "Automatique";
         Text[ spanish ] = "~Autom�tico";
         Text[ italian ] = "Automatico";
-        Text[ danish ] = "Automatisk";
+        Text[ danish ] = "~Automatisk";
         Text[ swedish ] = "A~utomatisk";
         Text[ polish ] = "~Automatycznie";
         Text[ portuguese_brazilian ] = "~Autom�tico";
@@ -712,6 +742,8 @@ ModalDialog DLG_PUBLISHING
         Text[ hebrew ] = "‮אוטומטי‬";
         Text[ hindi ] = "~Automatic";
         Text[ slovak ] = "~Automaticky";
+        Text[ hungarian ] = "~Automatikus";
+        Text[ slovenian ] = "S~amodejno";
     };
 
     FixedText PAGE2_DURATION_TXT
@@ -728,7 +760,7 @@ ModalDialog DLG_PUBLISHING
         Text[ french ] = "Dur�e d'affichage :";
         Text[ spanish ] = "~Tiempo de visualizaci�n:";
         Text[ italian ] = "~Durata:";
-        Text[ danish ] = "Sidevisningstid:";
+        Text[ danish ] = "~Diasvisningstid:";
         Text[ swedish ] = "Tid per ~sida:";
         Text[ polish ] = "~Czas projekcji:";
         Text[ portuguese_brazilian ] = "~Dura��o";
@@ -745,6 +777,8 @@ ModalDialog DLG_PUBLISHING
         Text[ hebrew ] = "~Standdauer:";
         Text[ hindi ] = "~Slide view time:";
         Text[ slovak ] = "Ča~s zobrazovanej prezentácie";
+        Text[ hungarian ] = "Dia meg~jelenítési ideje:";
+        Text[ slovenian ] = "Čas prikaza ~diapozitiva:";
     };
 
     TimeField PAGE2_DURATION_TMF
@@ -796,6 +830,8 @@ ModalDialog DLG_PUBLISHING
         QuickHelpText[ hebrew ] = "Stand~dauer";
         QuickHelpText[ hindi ] = "~Duration of page";
         QuickHelpText[ slovak ] = "~Dĺžka pohľadu na stránku";
+        QuickHelpText[ hungarian ] = "~Oldal megjelenítésének időtartama";
+        QuickHelpText[ slovenian ] = "Trajanje strani";
     };
 
     CheckBox PAGE2_ENDLESS
@@ -812,7 +848,7 @@ ModalDialog DLG_PUBLISHING
         Text[ french ] = "Continu";
         Text[ spanish ] = "~Continuo";
         Text[ italian ] = "~Continuo";
-        Text[ danish ] = "Endel�s";
+        Text[ danish ] = "~Endel�s";
         Text[ swedish ] = "Kontinu~erlig";
         Text[ polish ] = "~Bez ko�ca";
         Text[ portuguese_brazilian ] = "~Infinita";
@@ -830,6 +866,8 @@ ModalDialog DLG_PUBLISHING
         Text[ hebrew ] = "~Endlos";
         Text[ hindi ] = "~Endless";
         Text[ slovak ] = "N~ekonečná";
+        Text[ hungarian ] = "~Végtelen";
+        Text[ slovenian ] = "Neskončno";
     };
 
     /////////////////////////////////
@@ -867,6 +905,8 @@ ModalDialog DLG_PUBLISHING
         Text[ hebrew ] = "WebCast";
         Text[ hindi ] = "WebCast";
         Text[ slovak ] = "WebCast";
+        Text[ hungarian ] = "WebCast";
+        Text[ slovenian ] = "WebCast";
     };
 
     RadioButton PAGE2_ASP
@@ -883,7 +923,7 @@ ModalDialog DLG_PUBLISHING
         Text[ french ] = "Active Server Pages (ASP)";
         Text[ spanish ] = "~Active Server Pages (ASP)";
         Text[ italian ] = "~Active Server Pages (ASP)";
-        Text[ danish ] = "Active Server Pages (ASP)";
+        Text[ danish ] = "~Active Server Pages (ASP)";
         Text[ swedish ] = "~Active Server Pages (ASP)";
         Text[ polish ] = "~Active Server Pages (ASP)";
         Text[ portuguese_brazilian ] = "~Active Server Pages (ASP)";
@@ -900,6 +940,8 @@ ModalDialog DLG_PUBLISHING
         Text[ hebrew ] = "~Active Server Pages (ASP)";
         Text[ hindi ] = "~Active Server Pages (ASP)";
         Text[ slovak ] = "~Aktívne serverové stránky (ASP)";
+        Text[ hungarian ] = "~ASP (Active Server Pages)";
+        Text[ slovenian ] = "~Active Server Pages (ASP)";
     };
 
     RadioButton PAGE2_PERL
@@ -933,6 +975,8 @@ ModalDialog DLG_PUBLISHING
         Text[ hebrew ] = "~Perl";
         Text[ hindi ] = "Perl";
         Text[ slovak ] = "Perl";
+        Text[ hungarian ] = "Perl";
+        Text[ slovenian ] = "Perl";
     };
 
     FixedText PAGE2_INDEX_TXT
@@ -949,7 +993,7 @@ ModalDialog DLG_PUBLISHING
         Text[ french ] = "URL pour les auditeurs";
         Text[ spanish ] = "~URL para los oyentes";
         Text[ italian ] = "~URL per ascoltatori";
-        Text[ danish ] = "URL for tilh�rere";
+        Text[ danish ] = "~URL for tilh�rere";
         Text[ swedish ] = "~URL f�r �h�rare";
         Text[ polish ] = "~URL dla s�uchacza";
         Text[ portuguese_brazilian ] = "~URL para o beamer";
@@ -967,6 +1011,8 @@ ModalDialog DLG_PUBLISHING
         Text[ hebrew ] = "~URL für Zuhörer";
         Text[ hindi ] = "~URL for listeners";
         Text[ slovak ] = "~URL pre poslucháčov";
+        Text[ hungarian ] = "~Figyelők URL-je";
+        Text[ slovenian ] = "~URL za poslušalce";
     };
 
     Edit PAGE2_INDEX
@@ -991,7 +1037,7 @@ ModalDialog DLG_PUBLISHING
         Text[ french ] = "URL pour la pr�sentation :";
         Text[ spanish ] = "URL para la ~presentaci�n:";
         Text[ italian ] = "URL per ~presentazione:";
-        Text[ danish ] = "URL for pr�sentation";
+        Text[ danish ] = "URL for ~pr�sentation";
         Text[ swedish ] = "URL f�r ~presentation:";
         Text[ polish ] = "URL dla prezentacji";
         Text[ portuguese_brazilian ] = "URL para a a~presenta��o";
@@ -1009,6 +1055,8 @@ ModalDialog DLG_PUBLISHING
         Text[ hebrew ] = "URL für ~Präsentation:";
         Text[ hindi ] = "URL for ~presentation:";
         Text[ slovak ] = "URL pre ~prezentáciu";
+        Text[ hungarian ] = "~Bemutatók elérési útvonala";
+        Text[ slovenian ] = "URL ~predstavitve:";
     };
 
     Edit PAGE2_URL
@@ -1033,7 +1081,7 @@ ModalDialog DLG_PUBLISHING
         Text[ french ] = "URL pour les scripts Perl :";
         Text[ spanish ] = "URL para scripts ~perl:";
         Text[ italian ] = "URL per ~perl scripts:";
-        Text[ danish ] = "URL for perl scripts";
+        Text[ danish ] = "URL for ~Perl-scripts";
         Text[ swedish ] = "URL f�r p~erl-skript:";
         Text[ polish ] = "URL dla skrypt�w perl";
         Text[ portuguese_brazilian ] = "URL para scripts ~perl";
@@ -1050,6 +1098,8 @@ ModalDialog DLG_PUBLISHING
         Text[ hebrew ] = "URL für ~Perl Skripte:";
         Text[ hindi ] = "URL for ~Perl scripts:";
         Text[ slovak ] = "URL pre ~perl skripty";
+        Text[ hungarian ] = "~Perl-parancsfájlok elérési útvonala";
+        Text[ slovenian ] = "URL za ~Perl skripte:";
     };
 
     Edit PAGE2_CGI
@@ -1094,7 +1144,7 @@ ModalDialog DLG_PUBLISHING
         Text[ spanish ] = "Guardar im�genes como";
         Text[ finnish ] = "Tallenna grafiikat";
         Text[ italian ] = "Salva le immagini come";
-        Text[ danish ] = "Save graphics";
+        Text[ danish ] = "Gem grafik som";
         Text[ swedish ] = "Spara grafik som";
         Text[ polish ] = "Zapisz grafiki";
         Text[ portuguese_brazilian ] = "Salvar figura";
@@ -1110,6 +1160,8 @@ ModalDialog DLG_PUBLISHING
         Text[ hebrew ] = "Grafiken speichern als";
         Text[ hindi ] = "Save graphics as";
         Text[ slovak ] = "Uložiť obrázok ako";
+        Text[ hungarian ] = "Grafikák mentése ebben a formátumban:";
+        Text[ slovenian ] = "Shrani grafiko kot";
     };
 
     RadioButton PAGE3_GIF
@@ -1121,7 +1173,7 @@ ModalDialog DLG_PUBLISHING
         Text[ italian ] = "~GIF";
         Text[ portuguese_brazilian ] = "~GIF";
         Text[ portuguese ] = "~GIF - Graphics Interchange Format";
-        Text[ danish ] = "GIF - Graphics Interchange Format";
+        Text[ danish ] = "~GIF";
         Text[ french ] = "GIF";
         Text[ swedish ] = "~GIF";
         Text[ dutch ] = "~GIF - Graphics Interchange-Format";
@@ -1143,6 +1195,8 @@ ModalDialog DLG_PUBLISHING
         Text[ hebrew ] = "~GIF";
         Text[ hindi ] = "~GIF";
         Text[ slovak ] = "~GIF";
+        Text[ hungarian ] = "~GIF";
+        Text[ slovenian ] = "~GIF";
     };
 
     RadioButton PAGE3_JPG
@@ -1154,7 +1208,7 @@ ModalDialog DLG_PUBLISHING
         Text[ italian ] = "~JPG";
         Text[ portuguese_brazilian ] = "Formato comprimido ~JPG";
         Text[ portuguese ] = "~JPG - Formato de ficheiro comprimido";
-        Text[ danish ] = "JPG - komprimeret format";
+        Text[ danish ] = "~JPG";
         Text[ french ] = "JPG";
         Text[ swedish ] = "~JPG";
         Text[ dutch ] = "~JPG - gecomprimeerd formaat";
@@ -1176,6 +1230,8 @@ ModalDialog DLG_PUBLISHING
         Text[ hebrew ] = "~JPG";
         Text[ hindi ] = "~JPG";
         Text[ slovak ] = "~JPG";
+        Text[ hungarian ] = "~JPG";
+        Text[ slovenian ] = "~JPG";
     };
 
     ComboBox PAGE3_QUALITY
@@ -1201,7 +1257,7 @@ ModalDialog DLG_PUBLISHING
         Text[ spanish ] = "Calidad";
         Text[ finnish ] = "Tiivistys";
         Text[ italian ] = "Qualit�";
-        Text[ danish ] = "Komprimeringsv�rdi:";
+        Text[ danish ] = "Kvalitet";
         Text[ swedish ] = "Kvalitet";
         Text[ polish ] = "Kompresja:";
         Text[ portuguese_brazilian ] = "Compress�o :";
@@ -1217,6 +1273,8 @@ ModalDialog DLG_PUBLISHING
         Text[ hebrew ] = "Qualität";
         Text[ hindi ] = "गुण";
         Text[ slovak ] = "Kvalita";
+        Text[ hungarian ] = "Minőség";
+        Text[ slovenian ] = "Kakovost";
     };
 
     FixedLine PAGE3_VERT
@@ -1245,7 +1303,7 @@ ModalDialog DLG_PUBLISHING
         Text[ spanish ] = "Resoluci�n del monitor";
         Text[ finnish ] = "N�yt�n erottelutarkkuus";
         Text[ italian ] = "Risoluzione monitor";
-        Text[ danish ] = "Display resolution";
+        Text[ danish ] = "Sk�rmopl�sning";
         Text[ swedish ] = "Bildsk�rmsuppl�sning";
         Text[ polish ] = "Rozdzieloczo�� ekranu";
         Text[ portuguese_brazilian ] = "Resolu��o da tela";
@@ -1261,6 +1319,8 @@ ModalDialog DLG_PUBLISHING
         Text[ hebrew ] = "Monitorauflösung";
         Text[ hindi ] = "Monitor resolution";
         Text[ slovak ] = "Rozlíšenie monitora";
+        Text[ hungarian ] = "Monitor felbontása";
+        Text[ slovenian ] = "Ločljivost zaslona";
     };
 
     RadioButton PAGE3_RESOLUTION_1
@@ -1272,7 +1332,7 @@ ModalDialog DLG_PUBLISHING
         Text[ italian ] = "Risoluzione bassa (~640x480 pixel)";
         Text[ portuguese_brazilian ] = "Baixa resolu��o (~640x480 pixel)";
         Text[ portuguese ] = "Baixa resolu��o (~640x480 pix�is)";
-        Text[ danish ] = "Lav opl�sning (640x480 pixel)";
+        Text[ danish ] = "Lav opl�sning (~640x480 pixel)";
         Text[ french ] = "Faible r�solution (640x480 pixels)";
         Text[ swedish ] = "L�g uppl�sning (~640x480 pixel)";
         Text[ dutch ] = "Lage resolutie (~640x480 pixels)";
@@ -1294,6 +1354,8 @@ ModalDialog DLG_PUBLISHING
         Text[ hebrew ] = "Niedrige Auflösung (~640x480 Pixel)";
         Text[ hindi ] = "Low resolution (~640x480 pixels)";
         Text[ slovak ] = "Nízke rozlíšenie (~640x480 bodov)";
+        Text[ hungarian ] = "Alacsony felbontás (~640x480 képpont)";
+        Text[ slovenian ] = "Nizka ločljivost (~640x480 točk)";
     };
 
     RadioButton PAGE3_RESOLUTION_2
@@ -1305,7 +1367,7 @@ ModalDialog DLG_PUBLISHING
         Text[ italian ] = "Risoluzione media (~800x600 pixel)";
         Text[ portuguese_brazilian ] = "Resolu��o m�dia (~800x600 pixel)";
         Text[ portuguese ] = "M�dia resolu��o (~800x600 pix�is)";
-        Text[ danish ] = "Medium opl�sning (800x600 pixel)";
+        Text[ danish ] = "Medium opl�sning (~800x600 pixel)";
         Text[ french ] = "R�solution moyenne (800x600 pixels)";
         Text[ swedish ] = "Mediumuppl�sning (~800x600 pixel)";
         Text[ dutch ] = "Medium resolutie (~800x600 pixels)";
@@ -1327,6 +1389,8 @@ ModalDialog DLG_PUBLISHING
         Text[ hebrew ] = "Mittlere Auflösung (~800x600 Pixel)";
         Text[ hindi ] = "Medium resolution (~800x600 pixels)";
         Text[ slovak ] = "Stredné rozlíšenie (~800x600 bodov)";
+        Text[ hungarian ] = "Közepes felbontás (~800x600 képpont)";
+        Text[ slovenian ] = "Srednja ločljivost (~800x600 točk)";
     };
 
     RadioButton PAGE3_RESOLUTION_3
@@ -1338,7 +1402,7 @@ ModalDialog DLG_PUBLISHING
         Text[ italian ] = "Alta risoluzione (~1024x768 pixel)";
         Text[ portuguese_brazilian ] = "Alta resolu��o (~1024x768 pixel)";
         Text[ portuguese ] = "Alta resolu��o (~1024x768 pix�is)";
-        Text[ danish ] = "H�j opl�sning (1024x768 pixel)";
+        Text[ danish ] = "H�j opl�sning (~1024x768 pixel)";
         Text[ french ] = "Haute r�solution (1024x768 pixels)";
         Text[ swedish ] = "H�g uppl�sning (~1024x768 pixel)";
         Text[ dutch ] = "Hoge resolutie (~1024x768 pixels)";
@@ -1360,6 +1424,8 @@ ModalDialog DLG_PUBLISHING
         Text[ hebrew ] = "Hohe Auflösung (~1024x768 Pixel)";
         Text[ hindi ] = "High resolution (~1024x768 pixels)";
         Text[ slovak ] = "Vysoké rozlíšenie (~1024x768 bodov)";
+        Text[ hungarian ] = "Nagy felbontás (~1024x768 képpont)";
+        Text[ slovenian ] = "Visoka ločljivost (~1024x768 točk)";
     };
 
     ////////////////
@@ -1398,6 +1464,8 @@ ModalDialog DLG_PUBLISHING
         Text[ hebrew ] = "‮אפקטים‬";
         Text[ hindi ] = "Effects";
         Text[ slovak ] = "Efekty";
+        Text[ hungarian ] = "Hatások";
+        Text[ slovenian ] = "Učinki";
     };
 
     CheckBox PAGE3_SLD_SOUND
@@ -1415,7 +1483,7 @@ ModalDialog DLG_PUBLISHING
         Text[ french ] = "Exporter les sons de changement de page";
         Text[ spanish ] = "~Exportar sonidos de la transici�n de diapositivas";
         Text[ italian ] = "Esporta suoni al cambio di pagina";
-        Text[ danish ] = "Eksporter lyde ved sideovergang";
+        Text[ danish ] = "~Eksporter lyde ved diasovergang";
         Text[ swedish ] = "E~xportera ljud vid sidv�xling";
         Text[ polish ] = "~Eksportuj d�wi�ki przy zmianie strony";
         Text[ portuguese_brazilian ] = "~Exportar sons ao mudar de p�gina";
@@ -1432,6 +1500,8 @@ ModalDialog DLG_PUBLISHING
         Text[ hebrew ] = "~Klänge beim Seitenwechsel exportieren";
         Text[ hindi ] = "~Export sounds when slide advances";
         Text[ slovak ] = "~Exportovať zvuk keď sa posunie snímok";
+        Text[ hungarian ] = "~Diaátmenetek közötti hanghatások exportálása";
+        Text[ slovenian ] = "~Izvozi zvok pri menjavi diapozitiva";
     };
 
     ////////////////////////////////////////
@@ -1478,6 +1548,8 @@ ModalDialog DLG_PUBLISHING
         Text[ hebrew ] = "Informationen für die Titelseite";
         Text[ hindi ] = "Information for the title page";
         Text[ slovak ] = "Informácia na titulnú stránku";
+        Text[ hungarian ] = "Információk a címlaphoz";
+        Text[ slovenian ] = "Podatki za naslovno stran";
     };
 
     FixedText PAGE4_AUTHOR_TXT
@@ -1495,7 +1567,7 @@ ModalDialog DLG_PUBLISHING
         Text[ spanish ] = "~Autor";
         Text[ finnish ] = "~Laatija";
         Text[ italian ] = "~Autore";
-        Text[ danish ] = "Forfatter:";
+        Text[ danish ] = "F~orfatter";
         Text[ swedish ] = "Sk~apad av";
         Text[ polish ] = "Autor:";
         Text[ portuguese_brazilian ] = "~Autor:";
@@ -1511,6 +1583,8 @@ ModalDialog DLG_PUBLISHING
         Text[ hebrew ] = "‮מחבר‬";
         Text[ hindi ] = "~Author";
         Text[ slovak ] = "~Autor";
+        Text[ hungarian ] = "~Szerző";
+        Text[ slovenian ] = "~Avtor";
     };
 
     Edit PAGE4_AUTHOR
@@ -1537,7 +1611,7 @@ ModalDialog DLG_PUBLISHING
         Text[ spanish ] = "Direcci�n de correo ~electr�nico";
         Text[ finnish ] = "S�hk�~postiosoite";
         Text[ italian ] = "Indirizzo e~Mail";
-        Text[ danish ] = "E-mail-adresse:";
+        Text[ danish ] = "E-~mail:";
         Text[ swedish ] = "E-~postadress:";
         Text[ polish ] = "Adres e-mail:";
         Text[ portuguese_brazilian ] = "~Endere�o de e-mail:";
@@ -1553,6 +1627,8 @@ ModalDialog DLG_PUBLISHING
         Text[ hebrew ] = "E-~Mail-Adresse";
         Text[ hindi ] = "E-~mail address";
         Text[ slovak ] = "E-~mailová adresa";
+        Text[ hungarian ] = "E-~mail cím";
+        Text[ slovenian ] = "E-~poštni naslov";
     };
 
     Edit PAGE4_EMAIL_EDIT
@@ -1595,6 +1671,8 @@ ModalDialog DLG_PUBLISHING
         Text[ hebrew ] = "Ihre ~Homepage";
         Text[ hindi ] = "Your hom~epage";
         Text[ slovak ] = "Vaša dom~ovská stránka";
+        Text[ hungarian ] = "~Honlap";
+        Text[ slovenian ] = "Domača ~stran";
     };
 
     Edit PAGE4_WWW_EDIT
@@ -1620,7 +1698,7 @@ ModalDialog DLG_PUBLISHING
         Text[ spanish ] = "~M�s informaci�n:";
         Text[ finnish ] = "~Lis�tietoja";
         Text[ italian ] = "Ulteriori ~informazioni";
-        Text[ danish ] = "Flere\ninformationer:";
+        Text[ danish ] = "Flere ~oplysninger:";
         Text[ swedish ] = "Mer ~information";
         Text[ polish ] = "Dodatkowe informacje:";
         Text[ portuguese_brazilian ] = "~Informa��es\nadicionais";
@@ -1636,6 +1714,8 @@ ModalDialog DLG_PUBLISHING
         Text[ hebrew ] = "Weitere ~Informationen";
         Text[ hindi ] = "Additional ~information";
         Text[ slovak ] = "Ďalšie ~informácie";
+        Text[ hungarian ] = "További ~információk";
+        Text[ slovenian ] = "Dodatne ~informacije";
     };
 
     MultiLineEdit PAGE4_MISC
@@ -1658,7 +1738,7 @@ ModalDialog DLG_PUBLISHING
         Text[ italian ] = "Collegamento alla copia della presentazione ~originale";
         Text[ portuguese_brazilian ] = "~Incluir um link para uma c�pia da apresenta��o original";
         Text[ portuguese ] = "~Ligar a c�pia da apresenta��o original";
-        Text[ danish ] = "K�de til kopi af originalpr�sentationen";
+        Text[ danish ] = "Hyperlink til kopi af ~originalpr�sentationen";
         Text[ french ] = "Lien vers la copie de la pr�sentation d'origine";
         Text[ swedish ] = "L�nk till kopia av ~originalpresentationen";
         Text[ dutch ] = "Koppeling naar de kopie van de ~originele presentatie";
@@ -1680,6 +1760,8 @@ ModalDialog DLG_PUBLISHING
         Text[ hebrew ] = "Link auf Kopie der ~Originalpräsentation";
         Text[ hindi ] = "Link to a copy of the ~original presentation";
         Text[ slovak ] = "Odkaz na kópiu ~originálnej prezentácie";
+        Text[ hungarian ] = "Az eredeti bemutató egy másolatára mutató ~hivatkozás";
+        Text[ slovenian ] = "Poveži s kopijo ~izvirne predstavitve";
     };
 
     CheckBox PAGE4_CREATED
@@ -1692,7 +1774,7 @@ ModalDialog DLG_PUBLISHING
         Text[ italian ] = "Nota: 'Creato con %PRODUCTNAME'";
         Text[ portuguese_brazilian ] = "Criado com %PRODUCTNAME";
         Text[ portuguese ] = "Observa��o: 'Criado com %PRODUCTNAME'";
-        Text[ danish ] = "Henvisning: 'Oprettet med %PRODUCTNAME'";
+        Text[ danish ] = "Note: 'Oprettet med %PRODUCTNAME'";
         Text[ french ] = "Remarque : 'Cr�� avec %PRODUCTNAME'";
         Text[ swedish ] = "Skapat med %PRODUCTNAME";
         Text[ dutch ] = "N.B.: Gemaakt met %PRODUCTNAME";
@@ -1714,6 +1796,8 @@ ModalDialog DLG_PUBLISHING
         Text[ hebrew ] = "Hinweis: 'Erzeugt mit %PRODUCTNAME'";
         Text[ hindi ] = "Note: 'Created with %PRODUCTNAME'";
         Text[ slovak ] = "Poznámka: 'vytvorené pomocou %PRODUCTNAME'";
+        Text[ hungarian ] = "Megjegyzés: \"Készült az %PRODUCTNAME segítségével\"";
+        Text[ slovenian ] = "Opomba: 'Ustvarjeno s programom %PRODUCTNAME'";
     };
 
     /////////////////////
@@ -1761,6 +1845,8 @@ ModalDialog DLG_PUBLISHING
         Text[ hebrew ] = "Schaltflächenstil auswählen";
         Text[ hindi ] = "Select button style";
         Text[ slovak ] = "Vybrať štýl tlačítok";
+        Text[ hungarian ] = "Gombstílus választása";
+        Text[ slovenian ] = "Izberite slog gumba";
     };
 
     CheckBox PAGE5_TEXTONLY
@@ -1772,7 +1858,7 @@ ModalDialog DLG_PUBLISHING
         Text[ italian ] = "Solo ~testo";
         Text[ portuguese_brazilian ] = "Somente ~texto";
         Text[ portuguese ] = "~S� texto";
-        Text[ danish ] = "Kun tekst";
+        Text[ danish ] = "~Kun tekst";
         Text[ french ] = "Uniquement du texte";
         Text[ swedish ] = "Bara t~ext";
         Text[ dutch ] = "~Alleen tekst";
@@ -1795,6 +1881,8 @@ ModalDialog DLG_PUBLISHING
         Text[ hebrew ] = "Nur ~Text";
         Text[ hindi ] = "~Text only";
         Text[ slovak ] = "Iba ~text";
+        Text[ hungarian ] = "~Csak szöveg";
+        Text[ slovenian ] = "Samo ~besedilo";
     };
 
     Control PAGE5_BUTTONS
@@ -1850,6 +1938,8 @@ ModalDialog DLG_PUBLISHING
         Text[ hebrew ] = "Farbschema auswählen";
         Text[ hindi ] = "Select color scheme";
         Text[ slovak ] = "Vybrať farebnú schému";
+        Text[ hungarian ] = "Színséma választása";
+        Text[ slovenian ] = "Izberite barvno shemo";
     };
 
     RadioButton PAGE6_DOCCOLORS
@@ -1861,7 +1951,7 @@ ModalDialog DLG_PUBLISHING
         Text[ italian ] = "Applica schema colori del documento";
         Text[ portuguese_brazilian ] = "A~plicar esquema de cores do documento";
         Text[ portuguese ] = "A~plicar esquema de cores do documento";
-        Text[ danish ] = "Overtag farveskema fra dokument";
+        Text[ danish ] = "~Overtag farveskema fra dokument";
         Text[ french ] = "Appliquer le sch�ma de couleurs du document";
         Text[ swedish ] = "�verta f�rgschema fr�n dokument";
         Text[ dutch ] = "K~leurenschema uit het document overnemen";
@@ -1884,6 +1974,8 @@ ModalDialog DLG_PUBLISHING
         Text[ hebrew ] = "Farbschema aus Dokument ü~bernehmen";
         Text[ hindi ] = "~Apply color scheme from document";
         Text[ slovak ] = "Použiť schému f~arieb z dokumentu";
+        Text[ hungarian ] = "~Dokumentum színsémájának alkalmazása";
+        Text[ slovenian ] = "~Uporabi barvno shemo iz dokumenta";
     };
 
     RadioButton PAGE6_DEFAULT
@@ -1917,6 +2009,8 @@ ModalDialog DLG_PUBLISHING
         Text[ hebrew ] = "~Browser Farben verwenden";
         Text[ hindi ] = "Use ~browser colors";
         Text[ slovak ] = "Použiť far~by prehliadača";
+        Text[ hungarian ] = "~Böngészőszínek használata";
+        Text[ slovenian ] = "Uporabi ~barve brskalnika";
     };
 
     RadioButton PAGE6_USER
@@ -1928,7 +2022,7 @@ ModalDialog DLG_PUBLISHING
         Text[ italian ] = "Usa schema colori personale";
         Text[ portuguese_brazilian ] = "Usar ~esquema de cores personalizado";
         Text[ portuguese ] = "Usar ~esquema de cores personalizado";
-        Text[ danish ] = "Brug brugerdefineret farveskema";
+        Text[ danish ] = "~Anvend brugerdefineret farveskema";
         Text[ french ] = "Utiliser un sch�ma de couleurs personnalis�";
         Text[ swedish ] = "Anv�nd ~eget f�rgschema";
         Text[ dutch ] = "~Eigen kleurenschema gebruiken";
@@ -1950,6 +2044,8 @@ ModalDialog DLG_PUBLISHING
         Text[ hebrew ] = "~Eigenes Farbschema verwenden";
         Text[ hindi ] = "~Use custom color scheme";
         Text[ slovak ] = "Po~užiť vlastnú farebnú schému";
+        Text[ hungarian ] = "~Egyéni színséma használata";
+        Text[ slovenian ] = "~Uporabi barvno shemo po meri";
     };
 
     PushButton PAGE6_TEXT
@@ -1984,6 +2080,8 @@ ModalDialog DLG_PUBLISHING
         Text[ hebrew ] = "‮טקסט‬";
         Text[ hindi ] = "Text";
         Text[ slovak ] = "Text";
+        Text[ hungarian ] = "Szöveg";
+        Text[ slovenian ] = "Besedilo";
     };
 
     PushButton PAGE6_LINK
@@ -1995,7 +2093,7 @@ ModalDialog DLG_PUBLISHING
         Text[ italian ] = "Hyper~link";
         Text[ portuguese_brazilian ] = "Hiper~link";
         Text[ portuguese ] = "Hiper~liga��o";
-        Text[ danish ] = "Hyperlink";
+        Text[ danish ] = "H~yperlink";
         Text[ french ] = "Hyperlien";
         Text[ swedish ] = "Hyper~l�nk";
         Text[ dutch ] = "Hyper~link";
@@ -2018,6 +2116,8 @@ ModalDialog DLG_PUBLISHING
         Text[ hebrew ] = "Hyper~link";
         Text[ hindi ] = "Hyper~link";
         Text[ slovak ] = "Hypertextový od~kaz";
+        Text[ hungarian ] = "Hiper~hivatkozás";
+        Text[ slovenian ] = "Hiper~povezava";
     };
 
     PushButton PAGE6_ALINK
@@ -2052,6 +2152,8 @@ ModalDialog DLG_PUBLISHING
         Text[ hebrew ] = "~Aktiver Link";
         Text[ hindi ] = "Active Li~nk";
         Text[ slovak ] = "Aktív~ny odkaz";
+        Text[ hungarian ] = "~Aktív hivatkozás";
+        Text[ slovenian ] = "Aktiv~na povezava";
     };
 
     PushButton PAGE6_VLINK
@@ -2063,7 +2165,7 @@ ModalDialog DLG_PUBLISHING
         Text[ italian ] = "Link visitato";
         Text[ portuguese_brazilian ] = "Hiperlink ~visitado";
         Text[ portuguese ] = "Link ~visitado";
-        Text[ danish ] = "Bes�gt hyperlink";
+        Text[ danish ] = "B~es�gt hyperlink";
         Text[ french ] = "Lien visit�";
         Text[ swedish ] = "An~v�nd l�nk";
         Text[ dutch ] = "~Bezochte link";
@@ -2085,6 +2187,8 @@ ModalDialog DLG_PUBLISHING
         Text[ hebrew ] = "~Gesichteter Link";
         Text[ hindi ] = "~Visited Link";
         Text[ slovak ] = "Navští~vený odkaz";
+        Text[ hungarian ] = "~Látogatott hivatkozás";
+        Text[ slovenian ] = "~Obiskana povezava";
     };
 
     Control PAGE6_PREVIEW
@@ -2125,6 +2229,8 @@ ModalDialog DLG_PUBLISHING
         Text[ hebrew ] = "‮רקע‬";
         Text[ hindi ] = "Bac~kground";
         Text[ slovak ] = "Poza~die";
+        Text[ hungarian ] = "Há~ttér";
+        Text[ slovenian ] = "~Ozadje";
     };
 
     // generell
@@ -2169,6 +2275,8 @@ ModalDialog DLG_PUBLISHING
         Text[ hebrew ] = "<< ‮הקודם‬";
         Text[ hindi ] = "<< Back";
         Text[ slovak ] = "<< Späť";
+        Text[ hungarian ] = "<< Vissza";
+        Text[ slovenian ] = "<< Nazaj";
     };
 
     PushButton BUT_NEXT
@@ -2206,6 +2314,8 @@ ModalDialog DLG_PUBLISHING
         Text[ hebrew ] = "‮הבא‬ >>";
         Text[ hindi ] = "Next >>";
         Text[ slovak ] = "Ďalší >>";
+        Text[ hungarian ] = "Tovább >>";
+        Text[ slovenian ] = "Naprej >>";
     };
 
     OKButton BUT_FINISH
@@ -2222,7 +2332,7 @@ ModalDialog DLG_PUBLISHING
         Text [ spanish ] = "~Crear" ;
         Text [ french ] = "Cr�er" ;
         Text [ swedish ] = "~F�rdigst�ll" ;
-        Text [ danish ] = "Udf�r" ;
+        Text [ danish ] = "~Opret" ;
         Text [ portuguese ] = "~Criar" ;
         Text [ portuguese_brazilian ] = "~Criar" ;
         Text[ chinese_simplified ] = "完成(~C)";
@@ -2242,6 +2352,8 @@ ModalDialog DLG_PUBLISHING
         Text[ hebrew ] = "~Fertig stellen";
         Text[ hindi ] = "~Create";
         Text[ slovak ] = "V~ytvoriť";
+        Text[ hungarian ] = "~Létrehozás";
+        Text[ slovenian ] = "~Ustvari";
     };
 
     CancelButton BUT_CANCEL
@@ -2277,6 +2389,8 @@ ModalDialog DLG_PUBLISHING
     Text[ hebrew ] = "HTML-Export";
     Text[ hindi ] = "HTML Export";
     Text[ slovak ] = "Exportovať HTML";
+    Text[ hungarian ] = "Exportálás HTML formátumba";
+    Text[ slovenian ] = "Izvoz v HTML";
 };
 
 ModalDialog DLG_DESIGNNAME
@@ -2309,7 +2423,7 @@ ModalDialog DLG_DESIGNNAME
         Text[ italian ] = "~Salva";
         Text[ portuguese_brazilian ] = "~Salvar";
         Text[ portuguese ] = "~Guardar";
-        Text[ danish ] = "Gem";
+        Text[ danish ] = "~Gem";
         Text[ french ] = "Enregistrer";
         Text[ swedish ] = "~Spara";
         Text[ dutch ] = "~Opslaan";
@@ -2332,6 +2446,8 @@ ModalDialog DLG_DESIGNNAME
         Text[ hebrew ] = "‮שמירה‬";
         Text[ hindi ] = "~Save";
         Text[ slovak ] = "~Uložiť";
+        Text[ hungarian ] = "M~entés";
+        Text[ slovenian ] = "~Shrani";
     };
 
     CancelButton BTN_NOSAVE
@@ -2368,6 +2484,8 @@ ModalDialog DLG_DESIGNNAME
         Text[ hebrew ] = "~Nicht speichern";
         Text[ hindi ] = "Do Not Save";
         Text[ slovak ] = "Neukladať";
+        Text[ hungarian ] = "Ne mentse";
+        Text[ slovenian ] = "Ne shrani";
     };
     Text[ italian ] = "Nome per il design HTML";
     Text[ portuguese_brazilian ] = "Nome para configura��o HTML";
@@ -2395,7 +2513,10 @@ ModalDialog DLG_DESIGNNAME
     Text[ hebrew ] = "Name fuer HTML-Design";
     Text[ hindi ] = "Name HTML Design";
     Text[ slovak ] = "Názov HTML návrhu";
+    Text[ hungarian ] = "HTML-terv neve";
+    Text[ slovenian ] = "Poimenuj HTML oblikovanje";
 };
+
 
 
 
