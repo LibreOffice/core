@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_selection.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: pl $ $Date: 2001-02-07 17:59:21 $
+ *  last change: $Author: pl $ $Date: 2001-02-08 14:06:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1500,6 +1500,16 @@ void SelectionManager::sendDropPosition( bool bForce, Time eventTime )
         dtde.DropAction     = m_nUserDragAction;
         dtde.SourceActions  = m_nSourceActions;
         it->second->dragOver( dtde );
+        if( m_xDragSourceListener.is() )
+        {
+            DragSourceDragEvent dsde;
+            dsde.Source             = static_cast< OWeakObject* >(this);
+            dsde.DragSourceContext  = static_cast< XDragSourceContext* >(this);
+            dsde.DragSource         = static_cast< XDragSource* >(this);
+            dsde.DropAction         = m_nUserDragAction;
+            dsde.UserAction         = m_nUserDragAction;
+            m_xDragSourceListener->dragOver( dsde );
+        }
     }
     else if( bForce ||
 
