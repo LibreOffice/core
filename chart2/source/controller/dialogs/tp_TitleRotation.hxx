@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tp_TitleRotation.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dr $ $Date: 2004-08-04 14:14:26 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 08:46:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,10 +72,17 @@
 #ifndef _SFXTABDLG_HXX
 #include <sfx2/tabdlg.hxx>
 #endif
-// header for SvxWinOrientation
-#ifndef SVX_ORIENTHELPER_HXX //autogen
+
+#ifndef SVX_DIALCONTROL_HXX
+#include <svx/dialcontrol.hxx>
+#endif
+#ifndef SVX_WRAPFIELD_HXX
+#include <svx/wrapfield.hxx>
+#endif
+#ifndef SVX_ORIENTHELPER_HXX
 #include <svx/orienthelper.hxx>
 #endif
+
 /*
 // header for class ValueSet
 #ifndef _VALUESET_HXX
@@ -107,9 +114,12 @@ private:
 
 
     //Seit 4/1998 koennen Texte frei gedreht werden: SID_ATTR_ALIGN_DEGREES
-#if 0 // DR: TODO new control types
-    svx::OrientationHelper  aWinOrient;
-#endif
+    FixedLine               aFlAlign;
+    svx::DialControl        aCtrlDial;
+    FixedText               aFtRotate;
+    svx::WrapField          aNfRotate;
+    TriStateBox             aCbStacked;
+    svx::OrientationHelper  aOrientHlp;
 
 //  CheckBox    aCbxTextOverlap;
 
