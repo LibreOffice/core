@@ -13915,3 +13915,17 @@ WriteJPEG
 ?setLabel@OControlAccess@svt@@QAEXFABVOUString@rtl@@@Z
 ?setValue@OControlAccess@svt@@QAEXFFABVAny@uno@star@sun@com@@@Z
 ?getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Sequence@UProperty@beans@star@sun@com@@@2345@@Z
+??0?$pair@PAV?$ORef@UTemplateContent@svt@@@vos@@PAV12@@_STL@@QAE@ABQAV?$ORef@UTemplateContent@svt@@@vos@@0@Z
+??0?$pair@PAV?$ORef@UTemplateContent@svt@@@vos@@PAV12@@_STL@@QAE@ABU01@@Z
+?push_back@?$vector@V?$ORef@UTemplateContent@svt@@@vos@@V?$allocator@V?$ORef@UTemplateContent@svt@@@vos@@@_STL@@@_STL@@QAEXABV?$ORef@UTemplateContent@svt@@@vos@@@Z
+??0?$_STL_alloc_proxy@IJV?$allocator@J@_STL@@@_STL@@QAE@ABV?$allocator@J@1@I@Z
+??0?$_STL_alloc_proxy@PAPAJPAJV?$allocator@J@_STL@@@_STL@@QAE@ABV?$allocator@J@1@PAPAJ@Z
+?erase@?$vector@FV?$allocator@F@_STL@@@_STL@@QAEPAFPAF0@Z
+??0?$pair@$$CBVOUString@rtl@@V12@@_STL@@QAE@ABVOUString@rtl@@0@Z
+?destroy_node@?$_Rb_tree@VOUString@rtl@@V12@U?$_Identity@VOUString@rtl@@@_STL@@U?$less@VOUString@rtl@@@4@V?$allocator@VOUString@rtl@@@4@@_STL@@IAEXPAU?$_Rb_tree_node@VOUString@rtl@@@2@@Z
+?end@?$_Rb_tree@VOUString@rtl@@V12@U?$_Identity@VOUString@rtl@@@_STL@@U?$less@VOUString@rtl@@@4@V?$allocator@VOUString@rtl@@@4@@_STL@@QBE?AU?$_Rb_tree_iterator@VOUString@rtl@@U?$_Const_traits@VOUString@rtl@@@_STL@@@2@XZ
+?end@?$map@VOUString@rtl@@V12@UUStringLess@comphelper@@V?$allocator@U?$pair@$$CBVOUString@rtl@@V12@@_STL@@@_STL@@@_STL@@QAE?AU?$_Rb_tree_iterator@U?$pair@$$CBVOUString@rtl@@V12@@_STL@@U?$_Nonconst_traits@U?$pair@$$CBVOUString@rtl@@V12@@_STL@@@2@@2@XZ
+?find@?$_Rb_tree@VOUString@rtl@@V12@U?$_Identity@VOUString@rtl@@@_STL@@U?$less@VOUString@rtl@@@4@V?$allocator@VOUString@rtl@@@4@@_STL@@QBE?AU?$_Rb_tree_iterator@VOUString@rtl@@U?$_Const_traits@VOUString@rtl@@@_STL@@@2@ABVOUString@rtl@@@Z
+?lower_bound@?$map@VOUString@rtl@@V12@UUStringLess@comphelper@@V?$allocator@U?$pair@$$CBVOUString@rtl@@V12@@_STL@@@_STL@@@_STL@@QAE?AU?$_Rb_tree_iterator@U?$pair@$$CBVOUString@rtl@@V12@@_STL@@U?$_Nonconst_traits@U?$pair@$$CBVOUString@rtl@@V12@@_STL@@@2@@2@ABVOUString@rtl@@@Z
+?_M_reserve_map_at_front@?$deque@JV?$allocator@J@_STL@@@_STL@@IAEXI@Z
+??1NamedValue@beans@star@sun@com@@QAE@XZ
