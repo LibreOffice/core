@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfshex.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2001-07-23 10:04:56 $
+ *  last change: $Author: dv $ $Date: 2001-07-25 15:50:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,7 +160,7 @@ BOOL SwTextShell::InsertGraphicDlg()
     SwDocShell* pDocShell = rVw.GetDocShell();
     USHORT nHtmlMode = ::GetHtmlMode(pDocShell);
     // im HTML-Mode nur verknuepft einfuegen
-    FileDialogHelper* pFileDlg = new FileDialogHelper( SFXWB_GRAPHIC );
+    FileDialogHelper* pFileDlg = new FileDialogHelper( SFXWB_GRAPHIC | SFXWB_SHOWSTYLES );
     pFileDlg->SetTitle(SW_RESSTR(STR_INSERT_GRAPHIC ));
     Reference < XFilePicker > xFP = pFileDlg->GetFilePicker();
     Reference < XFilePickerControlAccess > xCtrlAcc(xFP, UNO_QUERY);
