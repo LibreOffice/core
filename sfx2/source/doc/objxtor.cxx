@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objxtor.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: os $ $Date: 2001-09-10 14:41:03 $
+ *  last change: $Author: mba $ $Date: 2001-09-13 12:18:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -249,7 +249,6 @@ SfxObjectShell::~SfxObjectShell()
         pImp->xModel->dispose();
 
     String aPhysName = pMedium->GetPhysicalName();
-    DELETEX(pMedium);
     DELETEX(pImp->pEventConfig);
     DELETEX(pImp->pImageManager);
     DELETEX(pImp->pTbxConfig);
@@ -276,9 +275,14 @@ SfxObjectShell::~SfxObjectShell()
     if ( pImp->xModel.is() )
         pImp->xModel = ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > ();
 
+    if ( pMedium->IsTemporary() )
+        HandsOff();
+
+    DELETEX( pMedium );
+
     if ( pImp->aTempName.Len() )
     {
-        if ( aPhysName == pImp->aTempName )
+        if ( aPhysName == pImp->aTempName && !IsHandsOff() )
             HandsOff();
         String aTmp;
         ::utl::LocalFileHelper::ConvertPhysicalNameToURL( pImp->aTempName, aTmp );
