@@ -2,6 +2,7 @@ mkdir: %COMMON_DEST%\bin%_EXT%\hid
 mkdir: %_DEST%\xml%_EXT%\uiconfig
 mkdir: %_DEST%\xml%_EXT%\uiconfig\scalc
 mkdir: %_DEST%\xml%_EXT%\uiconfig\scalc\menubar
+mkdir: %_DEST%\xml%_EXT%\uiconfig\scalc\toolbar
 
 ..\%COMMON_OUTDIR%\misc\*.hid %COMMON_DEST%\bin%_EXT%\hid\*.hid
 ..\inc\sc.lst %_DEST%\inc%_EXT%\sc.lst
@@ -25,5 +26,6 @@ mkdir: %_DEST%\inc\%_EXT%\sc
 ..\xml\*.xml %_DEST%\xml%_EXT%\*.xml
 
 ..\uiconfig\scalc\menubar\*.xml %_DEST%\xml%_EXT%\uiconfig\scalc\menubar\*.xml
+..\uiconfig\scalc\toolbar\*.xml %_DEST%\xml%_EXT%\uiconfig\scalc\toolbar\*.xml
 
 dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
