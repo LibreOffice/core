@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltshell.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 16:45:57 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 14:07:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,8 @@
  ************************************************************************/
 #ifndef _FLTSHELL_HXX
 #define _FLTSHELL_HXX
+
+#include <deque>
 
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
@@ -143,13 +145,11 @@ public:
     BOOL MakeRegion(SwDoc* pDoc, SwPaM& rRegion, BOOL bCheck );
 };
 
-// ein Stack fuer die gesamten Text-Attribute
-typedef SwFltStackEntry* SwFltStackEntryPtr;
-
-SV_DECL_PTRARR(SwFltControlStackEntries,SwFltStackEntryPtr,5,10)
-
-class SwFltControlStack : public SwFltControlStackEntries
+class SwFltControlStack
 {
+    typedef std::deque<SwFltStackEntry*> Entries;
+    typedef Entries::iterator myEIter;
+    Entries maEntries;
     friend class SwFltShell;
 
     ULONG nFieldFlags;
@@ -184,9 +184,7 @@ public:
     BOOL IsFlagSet(Flags no) const  { return ::SwFltGetFlag(nFieldFlags, no);}
 
     void NewAttr(const SwPosition& rPos, const SfxPoolItem & rAttr );
-//  BOOL SetAttr(const SwPosition& rPos, USHORT nAttrId=0, BOOL bTstEnde=TRUE);
-                // SetAttr mit Handle fuer verschachtelte Attrs, z.B. Bookmarks
-    BOOL SetAttr(const SwPosition& rPos, USHORT nAttrId=0, BOOL bTstEnde=TRUE,
+    void SetAttr(const SwPosition& rPos, USHORT nAttrId=0, BOOL bTstEnde=TRUE,
                  long nHand = LONG_MAX);
 
     void StealAttr(const SwPosition* pPos, USHORT nAttrId = 0);
@@ -197,6 +195,11 @@ public:
     const SfxPoolItem* GetOpenStackAttr(const SwPosition& rPos, USHORT nWhich);
     const SfxPoolItem* GetFmtAttr(const SwPosition& rPos, USHORT nWhich);
     void Delete(const SwPaM &rPam);
+
+    Entries::size_type Count() { return maEntries.size(); }
+    SwFltStackEntry* operator[](Entries::size_type nIndex)
+         { return maEntries[nIndex]; }
+    void DeleteAndDestroy(Entries::size_type nCnt);
 };
 
 class SwFltAnchor : public SfxPoolItem
@@ -672,3 +675,5 @@ public:
 void UpdatePageDescs(SwDoc &rDoc, sal_uInt16 nInPageDescOffset);
 
 #endif
+
+/* vi:set tabstop=4 shiftwidth=4 expandtab: */
