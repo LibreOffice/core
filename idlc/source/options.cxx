@@ -2,9 +2,9 @@
  *
  *  $RCSfile: options.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-20 13:08:00 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:48:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,9 @@
  *
  *
  ************************************************************************/
+
 #include <stdio.h>
+#include /*MSVC trouble: <cstring>*/ <string.h>
 
 #ifndef _IDLC_OPTIONS_HXX_
 #include <idlc/options.hxx>
@@ -66,13 +68,12 @@
 
 using namespace rtl;
 
-Options::Options()
+Options::Options(): m_stdin(false)
 {
 }
 
 Options::~Options()
 {
-
 }
 
 sal_Bool Options::initOptions(int ac, char* av[], sal_Bool bCmdFile)
@@ -243,6 +244,13 @@ sal_Bool Options::initOptions(int ac, char* av[], sal_Bool bCmdFile)
                     exit(0);
                 }
                 break;
+            case 's':
+                if (/*MSVC trouble: std::*/strcmp(&av[i][2], "tdin") == 0)
+                {
+                    m_stdin = true;
+                    break;
+                }
+                // fall through
             default:
                 throw IllegalArgument("the option is unknown" + OString(av[i]));
                 break;
@@ -296,24 +304,28 @@ sal_Bool Options::initOptions(int ac, char* av[], sal_Bool bCmdFile)
 OString Options::prepareHelp()
 {
     OString help("\nusing: ");
-    help += m_program + " [-options] file_1 ... file_n | @<filename>\n";
-    help += "    file_n      = file_n specifies one or more idl files.\n";
+    help += m_program
+        + " [-options] <file_1> ... <file_n> | @<filename> | -stdin\n";
+    help += "    <file_n>    = file_n specifies one or more idl files.\n";
     help += "                  Only files with the extension '.idl' are valid.\n";
     help += "    @<filename> = filename specifies the name of a command file.\n";
+    help += "    -stdin      = read idl file from standard input.\n";
     help += "  Options:\n";
-    help += "    -O<path>   = path describes the output directory.\n";
-    help += "                 The generated output is a registry file with\n";
-    help += "                 the same name as the idl input file.\n";
-    help += "    -I<path>   = path specifies a directory where are include\n";
-    help += "                 files will be searched by the preprocessor.\n";
-    help += "                 Multiple directories could be combined with ';'.\n";
-    help += "    -D<name>   = name defines a macro for the preprocessor.\n";
-    help += "    -C         = generate complete type information, including\n";
-    help += "                 additional service information and documentation.\n";
-    help += "    -cid       = check if identifiers fulfill the UNO naming convention.\n";
-    help += "    -w         = display warning messages.\n";
-    help += "    -we        = treat warnings as errors.\n";
-    help += "    -h|-?      = print this help message and exit.\n";
+    help += "    -O<path>    = path specifies the output directory.\n";
+    help += "                  The generated output is a registry file with\n";
+    help += "                  the same name as the idl input file (or 'stdin'\n";
+    help += "                  for -stdin).\n";
+    help += "    -I<path>    = path specifies a directory where include\n";
+    help += "                  files will be searched by the preprocessor.\n";
+    help += "                  Multiple directories can be combined with ';'.\n";
+    help += "    -D<name>    = name defines a macro for the preprocessor.\n";
+    help += "    -C          = generate complete type information, including\n";
+    help += "                  documentation.\n";
+    help += "    -cid        = check if identifiers fulfill the UNO naming\n";
+    help += "                  requirements.\n";
+    help += "    -w          = display warning messages.\n";
+    help += "    -we         = treat warnings as errors.\n";
+    help += "    -h|-?       = print this help message and exit.\n";
     help += prepareVersion();
 
     return help;
@@ -322,7 +334,7 @@ OString Options::prepareHelp()
 OString Options::prepareVersion()
 {
     OString version("\nSun Microsystems (R) ");
-    version += m_program + " Version 1.0\n\n";
+    version += m_program + " Version 1.1\n\n";
     return version;
 }
 
@@ -361,30 +373,3 @@ const OptionMap& Options::getOptions()
 {
     return m_options;
 }
-
-sal_uInt16 Options::getNumberOfInputFiles() const
-{
-    return m_inputFiles.size();
-}
-
-const OString Options::getInputFile(sal_uInt16 index)
-    throw( IllegalArgument )
-{
-    const OString ret;
-
-    if (index < m_inputFiles.size())
-    {
-        return m_inputFiles[index];
-    } else
-    {
-        throw IllegalArgument("index is out of bound.");
-    }
-
-    return ret;
-}
-
-const StringVector& Options::getInputFiles()
-{
-    return m_inputFiles;
-}
-
