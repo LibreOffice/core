@@ -19541,3 +19541,4 @@ _TI2?AVWrappedTargetException@lang@star@sun@com@@
 ?LinkStubMakeObject@SiImportFactory@@SAJPAX0@Z
 ?MakeObject@SiImportFactory@@QAEJPAVSdrObjFactory@@@Z
 ?ReadData@SiImportRect@@UAEXABVSdrObjIOHeader@@AAVSvStream@@@Z
+?Store@SvxNumberFormat@@QAEAAVSvStream@@AAV2@PAX@Z
