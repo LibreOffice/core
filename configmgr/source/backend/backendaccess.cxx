@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backendaccess.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cyrillem $ $Date: 2002-06-13 16:45:34 $
+ *  last change: $Author: cyrillem $ $Date: 2002-07-03 13:38:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,10 @@
 #include "updatedispatch.hxx"
 #endif // CONFIGMGR_BACKEND_UPDATEDISPATCHER_HXX
 
+#ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_XCOMPOSITELAYER_HPP_
+#include <drafts/com/sun/star/configuration/backend/XCompositeLayer.hpp>
+#endif // _COM_SUN_STAR_CONFIGURATION_BACKEND_XCOMPOSITELAYER_HPP_
+
 namespace configmgr { namespace backend {
 
 //==============================================================================
@@ -92,6 +96,28 @@ BackendAccess::BackendAccess(
 BackendAccess::~BackendAccess(void) {}
 //------------------------------------------------------------------------------
 
+static rtl::OUString findBestLocale(
+        const uno::Sequence<rtl::OUString>& aLocales,
+        const rtl::OUString& aWanted) {
+    rtl::OUString fallback ;
+
+    for (sal_Int32 i = 0 ; i < aLocales.getLength() ; ++ i) {
+        if (aLocales [i].equals(aWanted)) { return aWanted ; }
+        if (fallback.getLength() == 0) {
+            sal_Int32 compLength = aWanted.getLength() ;
+
+            if (aLocales [i].getLength() < compLength) {
+                compLength = aLocales [i].getLength() ;
+            }
+            if (aLocales [i].compareTo(aWanted, compLength) == 0) {
+                fallback = aLocales [i] ;
+            }
+        }
+    }
+    return fallback ;
+}
+//------------------------------------------------------------------------------
+
 static NodeResult merge(
         const uno::Reference<lang::XMultiServiceFactory>& aFactory,
         MergedComponentData& aData,
@@ -101,13 +127,21 @@ static NodeResult merge(
         const AbsolutePath& aRootPath)
 {
     for (sal_Int32 i = 0 ; i < aNbLayers ; ++ i) {
-        LayerMergeHandler *merger = new LayerMergeHandler(
-                                            aFactory, aData, aLocale) ;
-        uno::Reference<backenduno::XLayerHandler> layerHandler = merger ;
-
         //TODO Reactivate once the method is implemented
         //promoteToDefault(aData) ;
-        aLayers [i]->readData(layerHandler) ;
+        aLayers [i]->readData(new LayerMergeHandler(aFactory, aData, aLocale)) ;
+        uno::Reference<backenduno::XCompositeLayer> compositeLayer(
+                aLayers [i], uno::UNO_QUERY) ;
+
+        if (compositeLayer.is()) {
+            rtl::OUString bestLocale = findBestLocale(
+                    compositeLayer->listSubLayerIds(), aLocale) ;
+
+            if (bestLocale.getLength() > 0) {
+                compositeLayer->readSubLayerData(new LayerMergeHandler(
+                            aFactory, aData, aLocale), bestLocale) ;
+            }
+        }
     }
     NodeInstance retCode(aData.extractSchemaTree(), aRootPath) ;
 
