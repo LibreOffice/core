@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdedtv.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: aw $ $Date: 2002-12-09 15:53:33 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 14:48:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,11 @@
 #include "svdpoev.hxx"  // fuer die PolyPossiblities
 #include "svdstr.hrc"   // Namen aus der Resource
 #include "svdglob.hxx"  // StringCache
+
+// #i13033#
+#ifndef _CLONELIST_HXX_
+#include <clonelist.hxx>
+#endif
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -325,29 +330,58 @@ void SdrEditView::MoveLayer(const XubString& rName, USHORT nNewPos)
 
 void SdrEditView::EndUndo()
 {
-    pMod->EndUndo();
-    if (pMod->GetUndoBracketLevel()==0) {
+    // #i13033#
+    // Comparison changed to 1L since EndUndo() is called later now
+    // and EndUndo WILL change count to count-1
+    if(1L == pMod->GetUndoBracketLevel())
+    {
         ImpBroadcastEdgesOfMarkedNodes();
     }
+
+    // #i13033#
+    // moved to bottom to still have access to UNDOs inside of
+    // ImpBroadcastEdgesOfMarkedNodes()
+    pMod->EndUndo();
 }
 
 void SdrEditView::ImpBroadcastEdgesOfMarkedNodes()
 {
     ForceEdgesOfMarkedNodes();
-    ULONG nMarkedEdgeAnz=aMarkedEdges.GetMarkCount();
-    USHORT i;
-    for (i=0; i<nMarkedEdgeAnz; i++) {
-        SdrMark* pEM=aMarkedEdges.GetMark(i);
-        SdrObject* pEdgeTmp=pEM->GetObj();
-        SdrEdgeObj* pEdge=PTR_CAST(SdrEdgeObj,pEdgeTmp);
-        if (pEdge!=NULL && TRUE) {
-            SdrObject* pObj1=pEdge->GetConnectedNode(FALSE);
-            SdrObject* pObj2=pEdge->GetConnectedNode(TRUE);
-            if (pObj1!=NULL && !IsObjMarked(pObj1) && !pEdge->CheckNodeConnection(FALSE)) pEdge->DisconnectFromNode(FALSE);
-            if (pObj2!=NULL && !IsObjMarked(pObj2) && !pEdge->CheckNodeConnection(TRUE)) pEdge->DisconnectFromNode(TRUE);
+
+    // #i13033#
+    // New mechanism to search for necessary disconnections for
+    // changed connectors inside the transitive hull of all at
+    // the beginning of UNDO selected objects
+    for(sal_uInt32 a(0L); a < maAllMarkedObjects.Count(); a++)
+    {
+        SdrEdgeObj* pEdge = PTR_CAST(SdrEdgeObj, (SdrObject*)maAllMarkedObjects.GetObject(a));
+
+        if(pEdge)
+        {
+            SdrObject* pObj1 = pEdge->GetConnectedNode(sal_False);
+            SdrObject* pObj2 = pEdge->GetConnectedNode(sal_True);
+
+            if(pObj1
+                && LIST_ENTRY_NOTFOUND == maAllMarkedObjects.GetPos(pObj1)
+                && !pEdge->CheckNodeConnection(sal_False))
+            {
+                AddUndo(new SdrUndoGeoObj(*pEdge));
+                pEdge->DisconnectFromNode(sal_False);
+            }
+
+            if(pObj2
+                && LIST_ENTRY_NOTFOUND == maAllMarkedObjects.GetPos(pObj2)
+                && !pEdge->CheckNodeConnection(sal_True))
+            {
+                AddUndo(new SdrUndoGeoObj(*pEdge));
+                pEdge->DisconnectFromNode(sal_True);
+            }
         }
     }
-    nMarkedEdgeAnz=aMarkedEdgesOfMarkedNodes.GetMarkCount();
+
+    ULONG nMarkedEdgeAnz=aMarkedEdgesOfMarkedNodes.GetMarkCount();
+    USHORT i;
+
     for (i=0; i<nMarkedEdgeAnz; i++) {
         SdrMark* pEM=aMarkedEdgesOfMarkedNodes.GetMark(i);
         SdrObject* pEdgeTmp=pEM->GetObj();
@@ -740,7 +774,10 @@ void SdrEditView::CopyMarkedObj()
     }
     aSourceObjectsForCopy.ForceSort();
 
-    SdrMarkList aCopiedObjects;
+    // #i13033#
+    // New mechanism to re-create the connections of cloned connectors
+    CloneList aCloneList;
+
     aMark.Clear();
     ULONG nCloneErrCnt=0;
     ULONG nMarkAnz=aSourceObjectsForCopy.GetMarkCount();
@@ -754,7 +791,10 @@ void SdrEditView::CopyMarkedObj()
             AddUndo(new SdrUndoCopyObj(*pO));
             SdrMark aME(*pM);
             aME.SetObj(pO);
-            aCopiedObjects.InsertEntry(aME);
+
+            // aCopiedObjects.InsertEntry(aME);
+            aCloneList.AddPair(pM->GetObj(), pO);
+
             if (pM->GetUser()==0) { // Sonst war's nur eine mitzukierende Edge
                 aMark.InsertEntry(aME);
             }
@@ -762,62 +802,13 @@ void SdrEditView::CopyMarkedObj()
             nCloneErrCnt++;
         }
     }
-    // und nun zu den Konnektoren
-    // Die Objekte der MarkList aCopiedObjects werden auf die MarkList
-    // aSourceObjectsForCopy abgebildet und so die Objektverbindungen
-    // hergestellt.
-    // Aehnliche Implementation an folgenden Stellen:
-    //    void SdrObjList::CopyObjects(const SdrObjList& rSrcList)
-    //    SdrModel* SdrExchangeView::GetMarkedObjModel() const
-    //    BOOL SdrExchangeView::Paste(const SdrModel& rMod,...)
-    //    void SdrEditView::CopyMarkedObj()
-    if (nCloneErrCnt==0) {
-        for (nm=0; nm<nMarkAnz; nm++) {
-            SdrMark* pM=aSourceObjectsForCopy.GetMark(nm);
-            SdrObject* pO=pM->GetObj();
-            SdrEdgeObj* pSrcEdge=PTR_CAST(SdrEdgeObj,pO);
-            if (pSrcEdge!=NULL) {
-                SdrObject* pSrcNode1=pSrcEdge->GetConnectedNode(TRUE);
-                SdrObject* pSrcNode2=pSrcEdge->GetConnectedNode(FALSE);
-                if (pSrcNode1!=NULL && pSrcNode1->GetObjList()!=pSrcEdge->GetObjList()) pSrcNode1=NULL; // Listenuebergreifend
-                if (pSrcNode2!=NULL && pSrcNode2->GetObjList()!=pSrcEdge->GetObjList()) pSrcNode2=NULL; // ist (noch) nicht
-                if (pSrcNode1!=NULL || pSrcNode2!=NULL) {
-                    SdrMark* pEdgeMark=aCopiedObjects.GetMark(nm);
-                    BOOL bMitkopiert=pEdgeMark->GetUser()!=0;
-                    SdrObject* pDstEdgeTmp=pEdgeMark->GetObj();
-                    SdrEdgeObj* pDstEdge=PTR_CAST(SdrEdgeObj,pDstEdgeTmp);
-                    if (pDstEdge!=NULL) {
-                        if (pSrcNode1!=NULL) {
-                            ULONG nDstNode1=aSourceObjectsForCopy.FindObject(pSrcNode1);
-                            SdrObject* pDstNode1=NULL;
-                            if (nDstNode1!=CONTAINER_ENTRY_NOTFOUND) {
-                                pDstNode1=aCopiedObjects.GetMark(nDstNode1)->GetObj();
-                            } else if (bMitkopiert) {
-                                pDstNode1=pSrcNode1; // an den SourceNode Connekten wenn Edge mitkopiert
-                            }
-                            if (pDstNode1!=NULL) { // Node war sonst wohl nicht markiert
-                                pDstEdge->ConnectToNode(TRUE,pDstNode1);
-                            }
-                        }
-                        if (pSrcNode2!=NULL) {
-                            ULONG nDstNode2=aSourceObjectsForCopy.FindObject(pSrcNode2);
-                            SdrObject* pDstNode2=NULL;
-                            if (nDstNode2!=CONTAINER_ENTRY_NOTFOUND) {
-                                pDstNode2=aCopiedObjects.GetMark(nDstNode2)->GetObj();
-                            } else if (bMitkopiert) {
-                                pDstNode2=pSrcNode2; // an den SourceNode Connekten wenn Edge mitkopiert
-                            }
-                            if (pDstNode2!=NULL) { // Node war sonst wohl nicht markiert
-                                pDstEdge->ConnectToNode(FALSE,pDstNode2);
-                            }
-                        }
-                    } else {
-                        DBG_ERROR("SdrEditView::CopyMarkedObj(): pDstEdge==NULL!");
-                    }
-                }
-            }
-        }
-    } else {
+
+    // #i13033#
+    // New mechanism to re-create the connections of cloned connectors
+    aCloneList.CopyConnections();
+
+    if(0L != nCloneErrCnt)
+    {
 #ifdef DBG_UTIL
         ByteString aStr("SdrEditView::CopyMarkedObj(): Fehler beim Clonen ");
 
