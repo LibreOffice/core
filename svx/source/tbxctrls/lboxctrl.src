@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lboxctrl.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 14:35:49 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 14:16:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,9 +91,8 @@ FloatingWindow RID_SVXTBX_UNDO_REDO_CTRL
 
 String RID_SVXSTR_NUM_UNDO_ACTIONS
 {
-    Text = "Rόckgδngig $(ARG1) Aktion(en)" ;
-    Text [ENGLISH] = "Undo $(ARG1) action(s)" ;
-    Text[ english_us ] = "Undo $(ARG1) action(s)";
+    Text = "Rόckgδngig $(ARG1) Aktionen" ;
+    Text[ english_us ] = "Undo $(ARG1) actions";
     Text[ portuguese ] = "Anular operaηγo $(ARG1)";
     Text[ russian ] = "Ξςμενθςό $(ARG1)";
     Text[ greek ] = "Αναίρεση της(ων) ενέργειας(ών) $(ARG1)";
@@ -122,11 +121,16 @@ String RID_SVXSTR_NUM_UNDO_ACTIONS
     Text[ slovenian ] = "Razveljavi $(ARG1) dejanje/a";
 };
 
+String RID_SVXSTR_NUM_UNDO_ACTION
+{
+    Text = "Rόckgδngig $(ARG1) Aktion" ;
+    Text[ english_us ] = "Undo $(ARG1) action" ;
+};
+
 String RID_SVXSTR_NUM_REDO_ACTIONS
 {
-    Text = "Wiederherstellen $(ARG1) Aktion(en)" ;
-    Text [ENGLISH] = "Redo $(ARG1) action(s)" ;
-    Text[ english_us ] = "Redo $(ARG1) action(s)";
+    Text = "Wiederherstellen $(ARG1) Aktionen" ;
+    Text[ english_us ] = "Redo $(ARG1) actions";
     Text[ portuguese ] = "Restaurar operaηγo $(ARG1)";
     Text[ russian ] = "Βεπνσςό $(ARG1)";
     Text[ greek ] = "Επανεκτέλεση $(ARG1) ενέργειας(ών)";
@@ -155,32 +159,8 @@ String RID_SVXSTR_NUM_REDO_ACTIONS
     Text[ slovenian ] = "Uveljavi $(ARG1) dejanje/a";
 };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+String RID_SVXSTR_NUM_REDO_ACTION
+{
+    Text = "Wiederherstellen $(ARG1) Aktion" ;
+    Text[ english_us ] = "Redo $(ARG1) action";
+};
