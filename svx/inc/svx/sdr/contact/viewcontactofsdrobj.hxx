@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewcontactofsdrobj.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 17:45:29 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 13:31:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@
 #endif
 
 #ifndef SDTAKITM_HXX
-#include <sdtakitm.hxx>
+#include <svx/sdtakitm.hxx>
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
