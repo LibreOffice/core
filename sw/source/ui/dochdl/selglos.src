@@ -2,9 +2,9 @@
  *
  *  $RCSfile: selglos.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 20:37:41 $
+ *  last change: $Author: hjs $ $Date: 2001-05-04 20:41:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,6 +133,7 @@ ModalDialog DLG_SEL_GLOS
         Text[ korean ] = "ÀÚµ¿ÅØ½ºÆ® ¹Ù·Î°¡±â ";
         Text[ turkish ] = "Otomatik metin kýsaltmasý ";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "AutoTexto para abreviatura  ";
     };
     ListBox LB_GLOS
     {
@@ -152,4 +153,5 @@ ModalDialog DLG_SEL_GLOS
     Text[ korean ] = "ÀÚµ¿ÅØ½ºÆ® »ðÀÔ";
     Text[ turkish ] = "Otomatik metin ekle";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Insertar AutoTexto";
 };
