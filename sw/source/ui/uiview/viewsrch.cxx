@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsrch.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 15:18:08 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 08:49:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,6 +127,9 @@
 #include <vcl/wrkwin.hxx>
 #endif
 
+#ifndef _SWMODULE_HXX
+#include <swmodule.hxx>
+#endif
 #ifndef _SWWAIT_HXX
 #include <swwait.hxx>
 #endif
@@ -464,8 +467,7 @@ void SwView::ExecSearch(SfxRequest& rReq, BOOL bNoMessage)
             aArr.Insert(    aNormalAttr,
                             sizeof( aNormalAttr ) / sizeof( aNormalAttr[0] ),
                             0 );
-            SvtCTLOptions aCTLOpt;
-            if( aCTLOpt.IsCTLFontEnabled() )
+            if( SW_MOD()->GetCTLOptions().IsCTLFontEnabled() )
                 aArr.Insert(    aCTLAttr,
                                 sizeof( aCTLAttr ) / sizeof( aCTLAttr[0] ),
                                 14 );
