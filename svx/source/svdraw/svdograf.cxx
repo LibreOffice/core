@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdograf.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: cl $ $Date: 2002-05-08 09:43:28 $
+ *  last change: $Author: aw $ $Date: 2002-05-15 13:25:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -933,6 +933,24 @@ FASTBOOL SdrGrafObj::Paint( ExtOutputDevice& rOut, const SdrPaintInfoRec& rInfoR
                 {
                     eAnimMode= ((SdrPaintView&) rInfoRec.pPV->GetView()).GetAnimationMode();
                     bEnable = eAnimMode != SDR_ANIMATION_DISABLE;
+                }
+
+                // #98825# Look if graphics animation is disabled by
+                // accessibility options
+                if(bEnable)
+                {
+                    const SdrView& rTargetView = rInfoRec.pPV->GetView();
+                    const SvtAccessibilityOptions& rOpt = ((SdrView&)rTargetView).getAccessibilityOptions();
+                    sal_Bool bIsAllowedAnimatedGraphics = rOpt.GetIsAllowAnimatedGraphics();
+
+                    if(!bIsAllowedAnimatedGraphics)
+                    {
+                        bEnable = FALSE;
+
+                        // extra work to be done to make graphic visible at all
+                        pGraphic->StopAnimation();
+                        pGraphic->Draw(pOutDev, aLogPos, aLogSize, &aAttr);
+                    }
                 }
 
                 if( bEnable )
