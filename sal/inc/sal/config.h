@@ -2,9 +2,9 @@
  *
  *  $RCSfile: config.h,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:17:15 $
+ *  last change: $Author: obr $ $Date: 2000-11-01 11:34:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,7 @@ extern "C" {
 
 #ifdef WIN32
 #define SAL_W32
+#define SAL_DLLEXTENSION ".dll"
 
 /* No warning for: C++ Exception Specification ignored */
 #pragma warning( disable : 4290 )
@@ -98,20 +99,36 @@ extern "C" {
 /* BR: 16bit fuer Borland-Compiler */
 #ifdef __BORLANDC__
 #define SAL_W16
+#define SAL_DLLEXTENSION ".dll"
 #endif
 /* BR: 16bit fuer Borland-Compiler */
 
 #ifdef OS2
 #define SAL_OS2
+#define SAL_DLLEXTENSION ".dll"
 #endif
 
 #ifdef MAC
 #define SAL_MAC
+#define SAL_DLLEXTENSION ".dll"
 #endif
 
-#if defined(SOLARIS) || defined(LINUX) || defined(NETBSD) || \
-    defined(SCO) || defined(MACOSX)
+#if defined(SOLARIS) || defined(LINUX) || defined(NETBSD) || defined(SCO)
 #define SAL_UNX
+#define SAL_DLLEXTENSION ".so"
+#define SAL_DLLPREFIX "lib"
+#endif
+
+#ifdef MACOSX
+#define SAL_UNX
+#define SAL_DLLEXTENSION ".dylib.framework"
+#define SAL_DLLPREFIX "lib"
+#endif
+
+#ifdef HPUX
+#define SAL_UNX
+#define SAL_DLLEXTENSION ".sl"
+#define SAL_DLLPREFIX "lib"
 #endif
 
 #ifdef sun
