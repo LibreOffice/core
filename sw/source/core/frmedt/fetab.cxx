@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fetab.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 14:56:22 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 09:13:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,6 +180,7 @@
 #define COLFUZZY 20L
 
 inline BOOL IsSame( long nA, long nB ) { return  Abs(nA-nB) <= COLFUZZY; }
+inline BOOL IsNear( long nA, long nB, long nTolerance ) { return Abs( nA - nB ) <= nTolerance; }
 
 // table column cache
 SwTabCols *pLastCols   = 0;
@@ -1620,37 +1621,115 @@ const SwFrm *lcl_FindFrmInTab( const SwLayoutFrm *pLay, const Point &rPt, SwTwip
     {
         if ( pFrm->Frm().IsNear( rPt, nFuzzy ) )
         {
-            if ( pFrm->IsCellFrm() && ((SwCellFrm*)pFrm)->Lower() &&
-                 ( !((SwCellFrm*)pFrm)->Lower()->IsLayoutFrm() ||
-                    ((SwCellFrm*)pFrm)->Lower()->IsSctFrm() ) )
-                return pFrm;
             if ( pFrm->IsLayoutFrm() )
             {
-                const SwFrm *pTmp = ::lcl_FindFrmInTab( (SwLayoutFrm*)pFrm, rPt, nFuzzy);
+                const SwFrm *pTmp = ::lcl_FindFrmInTab( (SwLayoutFrm*)pFrm, rPt, nFuzzy );
                 if ( pTmp )
                     return pTmp;
             }
-            break;
+
+            return pFrm;
         }
+
         pFrm = pFrm->FindNext();
-    };
+    }
 
     return 0;
 }
 
 const SwFrm *lcl_FindFrm( const SwLayoutFrm *pLay, const Point &rPt,
-                          SwTwips nFuzzy, bool* pbRow )
+                          SwTwips nFuzzy, bool* pbRow, bool* pbCol )
 {
+    // bMouseMoveRowCols :
+    // Method is called for
+    // - Moving columns/rows with the mouse or
+    // - Enhanced table selection
+    const bool bMouseMoveRowCols = 0 == pbCol;
+
+    bool bCloseToRow = false;
+    bool bCloseToCol = false;
+
     const SwFrm *pFrm = pLay->ContainsCntnt();
+
     if ( pFrm )
     {
         do
         {
             if ( pFrm->IsInTab() )
                 pFrm = ((SwFrm*)pFrm)->ImplFindTabFrm();
+
             if ( pFrm->IsTabFrm() )
             {
-                const SwFrm *pTmp = ::lcl_FindFrmInTab( (SwLayoutFrm*)pFrm, rPt, nFuzzy );
+                Point aPt( rPt );
+                bool bSearchForFrmInTab = true;
+                SwTwips nTmpFuzzy = nFuzzy;
+
+                if ( !bMouseMoveRowCols )
+                {
+                    // We ignore nested tables for the enhanced table selection:
+                    while ( pFrm->GetUpper()->IsInTab() )
+                        pFrm = pFrm->GetUpper()->FindTabFrm();
+
+                    // We first check if the given point is 'close' to the left or top
+                    // border of the table frame:
+                    ASSERT( pFrm, "Nested table frame without outer table" )
+                    SWRECTFN( pFrm )
+                    const bool bRTL = pFrm->IsRightToLeft();
+
+                    SwRect aTabRect = pFrm->Prt();
+                    aTabRect.Pos() += pFrm->Frm().Pos();
+
+                    const SwTwips nLeft = bRTL ?
+                                          (aTabRect.*fnRect->fnGetRight)() :
+                                          (aTabRect.*fnRect->fnGetLeft)();
+                    const SwTwips nTop  = (aTabRect.*fnRect->fnGetTop)();
+
+                    SwTwips& rPointX = bVert ? aPt.Y() : aPt.X();
+                    SwTwips& rPointY = bVert ? aPt.X() : aPt.Y();
+
+                    const SwTwips nXDiff = (*fnRect->fnXDiff)( nLeft, rPointX ) * ( bRTL ? (-1) : 1 );
+                    const SwTwips nYDiff = (*fnRect->fnYDiff)( nTop, rPointY );
+
+                    bCloseToRow = nXDiff > 0 && nXDiff < nFuzzy;
+                    bCloseToCol = nYDiff > 0 && nYDiff < nFuzzy;
+
+                    if ( bCloseToCol && 2 * nYDiff > nFuzzy )
+                    {
+                        const SwFrm* pPrev = pFrm->GetPrev();
+                        if ( pPrev )
+                        {
+                            SwRect aPrevRect = pPrev->Prt();
+                            aPrevRect.Pos() += pPrev->Frm().Pos();
+
+                            if( aPrevRect.IsInside( rPt ) )
+                            {
+                                bCloseToCol = false;
+                            }
+                        }
+
+                    }
+
+                    // If we found the point to be 'close' to the left or top border
+                    // of the table frame, we adjust the point to be on that border:
+                    if ( bCloseToRow && bCloseToCol )
+                        aPt = bRTL ? aTabRect.TopRight() : (aTabRect.*fnRect->fnGetPos)();
+                    else if ( bCloseToRow )
+                        rPointX = nLeft;
+                    else if ( bCloseToCol )
+                        rPointY = nTop;
+
+                    if ( !bCloseToRow && !bCloseToCol )
+                        bSearchForFrmInTab = false;
+
+                    // Since the point has been adjusted, we call lcl_FindFrmInTab()
+                    // with a fuzzy value of 1:
+                    nTmpFuzzy = 1;
+                }
+
+                const SwFrm* pTmp = bSearchForFrmInTab ?
+                                    ::lcl_FindFrmInTab( (SwLayoutFrm*)pFrm, aPt, nTmpFuzzy ) :
+                                    0;
+
                 if ( pTmp )
                 {
                     pFrm = pTmp;
@@ -1661,25 +1740,66 @@ const SwFrm *lcl_FindFrm( const SwLayoutFrm *pLay, const Point &rPt,
 
         } while ( pFrm && pLay->IsAnLower( pFrm ) );
     }
+
     if ( pFrm && pFrm->IsInTab() && pLay->IsAnLower( pFrm ) )
     {
         do
-        {   while ( pFrm && !pFrm->IsCellFrm() )
-                pFrm = pFrm->GetUpper();
+        {
+            // We allow mouse drag of table borders within nested tables,
+            // but disallow hotspot selection of nested tables.
+            if ( bMouseMoveRowCols )
+            {
+                while ( pFrm && !pFrm->IsCellFrm() )
+                    pFrm = pFrm->GetUpper();
+            }
+
             if ( pFrm )
             {
-                if ( ::IsSame(pFrm->Frm().Left(), rPt.X()) ||
-                     ::IsSame(pFrm->Frm().Right(),rPt.X()) )
+                // --> FME 2004-07-30 #i32329# Enhanced table selection
+                // used for hotspot selection of tab/cols/rows
+                if ( !bMouseMoveRowCols )
                 {
-                    if ( pbRow ) *pbRow = false;
-                    return pFrm;
+
+                    ASSERT( pbCol && pbRow, "pbCol or pbRow missing" )
+
+                    if ( bCloseToRow || bCloseToCol )
+                    {
+                        *pbRow = bCloseToRow;
+                        *pbCol = bCloseToCol;
+                         return pFrm;
+                    }
                 }
-                if ( ::IsSame(pFrm->Frm().Top(), rPt.Y()) ||
-                     ::IsSame(pFrm->Frm().Bottom(),rPt.Y()) )
+                // <--
+                else
                 {
-                    if ( pbRow ) *pbRow = true;
-                    return pFrm;
+                    // used for mouse move of columns/rows
+                    const SwTabFrm* pTabFrm = pFrm->FindTabFrm();
+                    SwRect aTabRect = pTabFrm->Prt();
+                    aTabRect.Pos() += pTabFrm->Frm().Pos();
+
+                    SWRECTFN( pTabFrm )
+
+                    const SwTwips nTabTop  = (aTabRect.*fnRect->fnGetTop)();
+                    const SwTwips nMouseTop  = bVert ? rPt.X() : rPt.Y();
+
+                    // Do not allow to drag upper table border:
+                    if ( !::IsSame( nTabTop, nMouseTop ) )
+                    {
+                        if ( ::IsSame( pFrm->Frm().Left(), rPt.X() ) ||
+                             ::IsSame( pFrm->Frm().Right(),rPt.X() ) )
+                        {
+                            if ( pbRow ) *pbRow = false;
+                            return pFrm;
+                        }
+                        if ( ::IsSame( pFrm->Frm().Top(), rPt.Y() ) ||
+                             ::IsSame( pFrm->Frm().Bottom(),rPt.Y() ) )
+                        {
+                            if ( pbRow ) *pbRow = true;
+                            return pFrm;
+                        }
+                    }
                 }
+
                 pFrm = pFrm->GetUpper();
             }
         } while ( pFrm );
@@ -1687,17 +1807,27 @@ const SwFrm *lcl_FindFrm( const SwLayoutFrm *pLay, const Point &rPt,
     return 0;
 }
 
-const SwFrm *SwFEShell::GetBox( const Point &rPt, bool* pbRow ) const
+//
+// pbCol  = 0 => Used for moving table rows/cols with mouse
+// pbCol != 0 => Used for selecting table/rows/cols
+//
+#define ENHANCED_TABLE_SELECTION_FUZZY 10
+
+const SwFrm* SwFEShell::GetBox( const Point &rPt, bool* pbRow, bool* pbCol ) const
 {
     const SwPageFrm *pPage = (SwPageFrm*)GetLayout()->Lower();
     Window* pOutWin = GetWin();
     SwTwips nFuzzy = COLFUZZY;
-    if(pOutWin)
+    if( pOutWin )
     {
-        Size aTmp(RULER_MOUSE_MARGINWIDTH, RULER_MOUSE_MARGINWIDTH);
-        aTmp = pOutWin->PixelToLogic(aTmp);
+        // --> FME 2004-07-30 #i32329# Enhanced table selection
+        SwTwips nSize = pbCol ? ENHANCED_TABLE_SELECTION_FUZZY : RULER_MOUSE_MARGINWIDTH;
+        // <--
+        Size aTmp( nSize, nSize );
+        aTmp = pOutWin->PixelToLogic( aTmp );
         nFuzzy = aTmp.Width();
     }
+
     while ( pPage && !pPage->Frm().IsNear( rPt, nFuzzy ) )
         pPage = (SwPageFrm*)pPage->GetNext();
 
@@ -1718,19 +1848,88 @@ const SwFrm *SwFEShell::GetBox( const Point &rPt, bool* pbRow ) const
                 if ( pObj->ISA(SwFlyFrm) )
                 {
                     pFrm = lcl_FindFrm( static_cast<SwFlyFrm*>(pObj),
-                                        rPt, nFuzzy, pbRow );
+                                        rPt, nFuzzy, pbRow, pbCol );
                 }
             }
         }
         const SwLayoutFrm *pLay = (SwLayoutFrm*)pPage->Lower();
         while ( pLay && !pFrm )
         {
-            pFrm = lcl_FindFrm( pLay, rPt, nFuzzy, pbRow );
+            pFrm = lcl_FindFrm( pLay, rPt, nFuzzy, pbRow, pbCol );
             pLay = (SwLayoutFrm*)pLay->GetNext();
         }
     }
     return pFrm;
 }
+
+// --> FME 2004-07-30 #i32329# Enhanced table selection
+bool SwFEShell::SelTblRowCol( const Point& rPt )
+{
+    bool bRet = false;
+    bool bRow = 0;
+    bool bCol = 0;
+    const SwCellFrm* pFrm =
+            static_cast<const SwCellFrm*>(GetBox( rPt, &bRow, &bCol ) );
+
+    if( pFrm )
+    {
+        while( pFrm->Lower()->IsRowFrm() )
+            pFrm = (SwCellFrm*)((SwLayoutFrm*)pFrm->Lower())->Lower();
+        if( pFrm && pFrm->GetTabBox()->GetSttNd() &&
+            pFrm->GetTabBox()->GetSttNd()->IsInProtectSect() )
+            pFrm = 0;
+    }
+
+    if( pFrm )
+    {
+        const SwTabFrm* pTabFrm = pFrm->FindTabFrm();
+        {
+            const SwCntntFrm* pCntnt = pFrm->ContainsCntnt();
+            while ( pCntnt && pFrm->IsAnLower( pCntnt ) )
+            {
+                const SwTabFrm* pTmpTab = pCntnt->FindTabFrm();
+                if ( pTmpTab != pTabFrm )
+                {
+                    pCntnt = pTmpTab->FindLastCntnt();
+                    if ( pCntnt )
+                        pCntnt = pCntnt->FindNextCnt();
+                }
+                else
+                    break;
+            }
+
+            if ( pCntnt && pCntnt->IsTxtFrm() )
+            {
+                SwPosition aPos( *pCntnt->GetNode() );
+
+                SwCursor* pCurCrsr = GetSwCrsr();
+                SwCrsrSaveState aSaveState( *pCurCrsr );
+
+                *pCurCrsr->GetPoint() = aPos;
+                if ( pCurCrsr->IsInProtectTable( TRUE ) )
+                {
+                    pCurCrsr->RestoreSavePos();
+                }
+                else
+                {
+                    if ( bRow && bCol )
+                    {
+                        bRet = SwCrsrShell::SelTbl();
+                    }
+                    else if ( bRow )
+                    {
+                        bRet = SwCrsrShell::_SelTblRowOrCol( true, true );
+                    }
+                    else if ( bCol )
+                        bRet = SwCrsrShell::SelTblCol();
+                }
+            }
+        }
+    }
+
+    return bRet;
+}
+// <--
 
 
 /*************************************************************************
@@ -1743,8 +1942,21 @@ const SwFrm *SwFEShell::GetBox( const Point &rPt, bool* pbRow ) const
 |*************************************************************************/
 BYTE SwFEShell::WhichMouseTabCol( const Point &rPt ) const
 {
-    bool bRow;
-    SwCellFrm* pFrm = (SwCellFrm*)GetBox( rPt, &bRow );
+    BYTE nRet = SW_TABCOL_NONE;
+    bool bRow = false;
+    bool bCol = false;
+    bool bSelect = false;
+
+    // First try: Do we get the row/col move cursor?
+    SwCellFrm* pFrm = (SwCellFrm*)GetBox( rPt, &bRow, 0 );
+
+    if ( !pFrm )
+    {
+        // Second try: Do we get the row/col/tab selection cursor?
+        pFrm = (SwCellFrm*)GetBox( rPt, &bRow, &bCol );
+        bSelect = true;
+    }
+
     if( pFrm )
     {
         while( pFrm->Lower()->IsRowFrm() )
@@ -1753,14 +1965,57 @@ BYTE SwFEShell::WhichMouseTabCol( const Point &rPt ) const
             pFrm->GetTabBox()->GetSttNd()->IsInProtectSect() )
             pFrm = 0;
     }
+
     if( pFrm )
     {
-        if ( pFrm->IsVertical() )
-            return bRow ? SW_TABCOL_VERT : SW_TABROW_VERT;
+        if ( !bSelect )
+        {
+            if ( pFrm->IsVertical() )
+                nRet = bRow ? SW_TABCOL_VERT : SW_TABROW_VERT;
+            else
+                nRet = bRow ? SW_TABROW_HORI : SW_TABCOL_HORI;
+        }
         else
-            return bRow ? SW_TABROW_HORI : SW_TABCOL_HORI;
+        {
+            const SwTabFrm* pTabFrm = pFrm->FindTabFrm();
+            if ( pFrm->IsVertical() )
+            {
+                if ( bRow && bCol )
+                {
+                    nRet = SW_TABSEL_VERT;
+                }
+                else if ( bRow )
+                {
+                    nRet = SW_TABROWSEL_VERT;
+                }
+                else if ( bCol )
+                {
+                    nRet = SW_TABCOLSEL_VERT;
+                }
+            }
+            else
+            {
+                if ( bRow && bCol )
+                {
+                    nRet =  pTabFrm->IsRightToLeft() ?
+                            SW_TABSEL_HORI_RTL :
+                            SW_TABSEL_HORI;
+                }
+                else if ( bRow )
+                {
+                    nRet = pTabFrm->IsRightToLeft() ?
+                           SW_TABROWSEL_HORI_RTL :
+                           SW_TABROWSEL_HORI;
+                }
+                else if ( bCol )
+                {
+                    nRet = SW_TABCOLSEL_HORI;
+                }
+            }
+        }
     }
-    return SW_TABCOL_NONE;
+
+    return nRet;
 }
 
 // -> #i23726#
