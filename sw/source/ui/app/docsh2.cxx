@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: os $ $Date: 2001-09-25 07:05:33 $
+ *  last change: $Author: os $ $Date: 2001-10-10 11:44:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1272,21 +1272,21 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     SwTxtFmtColl &rTxtColl = pWrtShell->GetTxtFmtColl(i);
                     if( !rTxtColl.IsDefault() && rTxtColl.IsAtDocNodeSet() )
                     {
-                        if(!sStartTemplate.getLength())
+                        if( MAXLEVEL >= rTxtColl.GetOutlineLevel() && ( !pFnd ||
+                            pFnd->GetOutlineLevel() > rTxtColl.GetOutlineLevel() ))
                         {
-                            if( MAXLEVEL >= rTxtColl.GetOutlineLevel() && ( !pFnd ||
-                                pFnd->GetOutlineLevel() > rTxtColl.GetOutlineLevel() ))
-                                    pFnd = &rTxtColl;
-                            else if( !pAny )
-                                pAny = &rTxtColl;
-                            sStartTemplate = pFnd ? pFnd->GetName()
-                                                  : pAny ? pAny->GetName()
-                                                           : aEmptyStr;
-                            nSelect = (sal_Int16)nIdx;
+                                nSelect = (sal_Int16)nIdx;
+                                pFnd = &rTxtColl;
+                                sStartTemplate = rTxtColl.GetName();
                         }
+                        else if( !pAny )
+                            pAny = &rTxtColl;
                         pEntries[nIdx++] = rTxtColl.GetName();
                     }
                 }
+                if(!sStartTemplate.getLength() && pAny)
+                    sStartTemplate = pAny->GetName();
+
                 aListBoxEntries.realloc(nIdx);
 
                 try
