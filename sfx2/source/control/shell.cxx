@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:49:48 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 16:08:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1390,7 +1390,7 @@ void SfxShell::SetVerbs(const com::sun::star::uno::Sequence < com::sun::star::em
 
         // Verb-Slots m"ussen asynchron ausgef"uhrt werden, da sie w"ahrend
         // des Ausf"uhrens zerst"ort werden k"onnten
-        pNewSlot->nFlags = SFX_SLOT_ASYNCHRON;
+        pNewSlot->nFlags = SFX_SLOT_ASYNCHRON | SFX_SLOT_CONTAINER;
         pNewSlot->nMasterSlotId = 0;
         pNewSlot->nValue = 0;
         pNewSlot->fnExec = SFX_STUB_PTR(SfxShell,VerbExec);
