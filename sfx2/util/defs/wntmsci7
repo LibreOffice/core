@@ -8286,3 +8286,6 @@ _TI3?AVWrappedTargetRuntimeException@lang@star@sun@com@@
 ?lcl_translateBasic2Uno@?%O:\SRX641\src\sfx2\source\doc\objmisc.cxx1060414095@@YAXABVSbxVariableRef@@PAX@Z
 ?lcl_translateBasic2Uno@?%O:\SRC641\src\sfx2\source\doc\objmisc.cxx2034327927@@YAXABVSbxVariableRef@@PAX@Z
 ?lcl_translateBasic2Uno@?%O:\SRC641\src\sfx2\source\doc\objmisc.cxx1079118263@@YAXABVSbxVariableRef@@PAX@Z
+?AdjustMacroMode@SfxObjectShell@@QAEXABVString@@@Z
+?lcl_translateBasic2Uno@?%O:\SRX641\src\sfx2\source\doc\objmisc.cxx45584564@@YAXABVSbxVariableRef@@PAX@Z
+?ReInitFromComponent@SfxDocumentTemplates@@QAEXXZ
