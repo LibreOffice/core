@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwbox3.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:51:34 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 15:46:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,11 +82,11 @@
 #ifndef _SVTOOLS_BRWIMPL_HXX
 #include "brwimpl.hxx"
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleStateType.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
+#include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleRole.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HPP_
+#include <com/sun/star/accessibility/AccessibleRole.hpp>
 #endif
 #ifndef _SVTOOLS_ACCESSIBILEBROWSEBOXTABLECELL_HXX
 #include "AccessibleBrowseBoxTableCell.hxx"
@@ -100,8 +100,8 @@
 using ::rtl::OUString;
 using ::svt::AccessibleBrowseBox;
 using namespace ::com::sun::star::uno;
-using ::drafts::com::sun::star::accessibility::XAccessible;
-using namespace ::drafts::com::sun::star::accessibility;
+using ::com::sun::star::accessibility::XAccessible;
+using namespace ::com::sun::star::accessibility;
 
 // ============================================================================
 namespace svt
@@ -358,7 +358,7 @@ void BrowseBox::FillAccessibleStateSet(
             if ( IsReallyVisible() )
                 rStateSet.AddState( AccessibleStateType::VISIBLE );
             if ( eObjType == ::svt::BBTYPE_TABLE )
-                rStateSet.AddState( AccessibleStateType::MANAGES_DESCENDANT );
+                rStateSet.AddState( AccessibleStateType::MANAGES_DESCENDANTS );
 
             break;
         case ::svt::BBTYPE_ROWHEADERBAR:
@@ -366,14 +366,14 @@ void BrowseBox::FillAccessibleStateSet(
             rStateSet.AddState( AccessibleStateType::VISIBLE );
             if ( GetSelectRowCount() )
                 rStateSet.AddState( AccessibleStateType::FOCUSED );
-            rStateSet.AddState( AccessibleStateType::MANAGES_DESCENDANT );
+            rStateSet.AddState( AccessibleStateType::MANAGES_DESCENDANTS );
             break;
         case ::svt::BBTYPE_COLUMNHEADERBAR:
             rStateSet.AddState( AccessibleStateType::FOCUSABLE );
             rStateSet.AddState( AccessibleStateType::VISIBLE );
             if ( GetSelectColumnCount() )
                 rStateSet.AddState( AccessibleStateType::FOCUSED );
-            rStateSet.AddState( AccessibleStateType::MANAGES_DESCENDANT );
+            rStateSet.AddState( AccessibleStateType::MANAGES_DESCENDANTS );
             break;
         case ::svt::BBTYPE_TABLECELL:
             {
