@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optinet2.src,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: nf $ $Date: 2001-06-18 13:38:35 $
+ *  last change: $Author: obo $ $Date: 2001-06-29 02:09:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,7 +222,7 @@ TabPage RID_SVXPAGE_INET_PROXY
     StringList [ italian ] =
     {
              < "Nessuno" ; > ;
-        < "Automatico" ; > ;
+        < "Manuale" ; > ;
     };
     StringList [ danish ] =
     {
@@ -503,7 +503,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text[ russian ] = "Áåç ïðîêñè äëÿ ";
         Text[ polish ] = "Brak Proxy dla";
         Text[ japanese ] = "ÌßÛ·¼‚È‚µ(~N)";
-        Text[ chinese_traditional ] = "¥N²z¦øªA¾¹¤£Óì¥Î©ó(~N)";
+        Text[ chinese_traditional ] = "¥N²z¦øªA¾¹¤£¾A¥Î©ó(~N)";
         Text[ arabic ] = "áÇ íæÌÏ Proxy áÜ:";
         Text[ greek ] = "~ÊáíÝíá Proxy ãéá";
         Text[ korean ] = "ÇÁ·Ï½Ã ¾øÀ½(~N):";
@@ -1905,7 +1905,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         {
             < "Illimitato" ; > ;
             < "Senza" ; > ;
-            < "Host" ; > ;
+            < "Computer" ; > ;
         };
         stringlist [ spanish ] =
         {
@@ -2060,7 +2060,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text [ portuguese_brazilian ] = "Ausf?ren" ;
         Text [ swedish ] = "F~rige" ;
         Text [ danish ] = "PlugIns" ;
-        Text [ italian ] = "PlugIns" ;
+        Text [ italian ] = "A~bilita" ;
         Text [ spanish ] = "Validar" ;
         Text [ french ] = "Valider" ;
         Text [ dutch ] = "PlugIns" ;
@@ -2088,7 +2088,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text [ portuguese_brazilian ] = "~Plugins" ;
         Text [ swedish ] = "~Plug-ins" ;
         Text [ danish ] = "aktiver" ;
-        Text [ italian ] = "Abilita" ;
+        Text [ italian ] = "~PlugIn" ;
         Text [ spanish ] = "Plug-ins" ;
         Text [ french ] = "Plug-ins" ;
         Text [ dutch ] = "V~rijgeven" ;
@@ -2260,6 +2260,7 @@ ModalDialog RID_SVXDLG_OPT_JAVASCRIPT_DISABLE
 };
 
  // ******************************************************************* EOF
+
 
 
 
