@@ -2,9 +2,9 @@
  *
  *  $RCSfile: button.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 13:10:05 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 13:15:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,6 @@
  *
  ************************************************************************/
 
-#define _SV_BUTTON_CXX
-
 #include <tools/debug.hxx>
 
 #ifndef _SV_SVIDS_HRC
@@ -93,8 +91,8 @@
 #ifndef _SV_FIXED_HXX
 #include <fixed.hxx>
 #endif
-#ifndef _SV_POLY_HXX
-#include <poly.hxx>
+#ifndef _TL_POLY_HXX
+#include <tools/poly.hxx>
 #endif
 #ifndef _SV_BUTTON_HXX
 #include <button.hxx>
@@ -104,7 +102,7 @@
 #endif
 
 #ifndef _SV_RC_H
-#include <rc.h>
+#include <tools/rc.h>
 #endif
 
 
@@ -841,7 +839,6 @@ void PushButton::ImplDrawPushButton( bool bLayout )
     if( !bLayout )
         HideFocus();
 
-    const StyleSettings&    rStyleSettings = GetSettings().GetStyleSettings();
     USHORT                  nButtonStyle = mnButtonState;
     Point                   aPoint;
     Size                    aOutSz( GetOutputSizePixel() );
