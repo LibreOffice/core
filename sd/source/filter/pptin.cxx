@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pptin.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 15:09:57 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 14:56:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -981,11 +981,11 @@ sal_Bool ImplSdPPTImport::Import()
                 if ( HasMasterPage( nPageNum, PPT_SLIDEPAGE ) )     // try to get the LayoutName from the masterpage
                 {
                     sal_uInt16 nMasterNum = GetMasterPageIndex( nAktPageNum, eAktPageKind );
-                    pPage->InsertMasterPage( nMasterNum );
+                    pPage->TRG_SetMasterPage(*pSdrModel->GetMasterPage(nMasterNum));
                     PptSlidePersistList* pPageList = GetPageList( PPT_MASTERPAGE );
                     if ( pPageList && nMasterNum < pPageList->Count() )
                         pMasterPersist = (*pPageList)[ nMasterNum ];
-                    pPage->SetLayoutName( ( (SdPage*)pPage->GetMasterPage( 0 ) )->GetLayoutName() );
+                    pPage->SetLayoutName(((SdPage&)pPage->TRG_GetMasterPage()).GetLayoutName());
                 }
                 ImportPage( pPage, pMasterPersist );
                 SetHeaderFooterPageSettings( pPage, pMasterPersist );
@@ -1008,23 +1008,23 @@ sal_Bool ImplSdPPTImport::Import()
                     PptSlidePersistEntry* pMasterPersist = NULL;
                     if ( HasMasterPage( nNotesPageIndex, PPT_NOTEPAGE ) ) // try to get the LayoutName from the masterpage
                     {
-                        pNotesPage->InsertMasterPage( nNotesMasterNum );
+                        pNotesPage->TRG_SetMasterPage(*pSdrModel->GetMasterPage(nNotesMasterNum));
                         PptSlidePersistList* pPageList = GetPageList( PPT_MASTERPAGE );
                         if ( pPageList && nNotesMasterNum < pPageList->Count() )
                             pMasterPersist = (*pPageList)[ nNotesMasterNum ];
-                        pNotesPage->SetLayoutName( ( (SdPage*)pNotesPage->GetMasterPage( 0 ) )->GetLayoutName() );
+                        pNotesPage->SetLayoutName( ((SdPage&)pNotesPage->TRG_GetMasterPage()).GetLayoutName() );
                     }
                     ImportPage( pNotesPage, pMasterPersist );
                     SetHeaderFooterPageSettings( pNotesPage, pMasterPersist );
                     pNotesPage->SetPageKind( PK_NOTES );
-                    pNotesPage->InsertMasterPage( nNotesMasterNum );
+                    pNotesPage->TRG_SetMasterPage(*pSdrModel->GetMasterPage(nNotesMasterNum));
                     pNotesPage->SetAutoLayout( AUTOLAYOUT_NOTES, FALSE );
                     pSdrModel->InsertPage( pNotesPage );
                 }
                 else
                 {
                     pNotesPage->SetPageKind( PK_NOTES );
-                    pNotesPage->InsertMasterPage( nNotesMasterNum );
+                    pNotesPage->TRG_SetMasterPage(*pSdrModel->GetMasterPage(nNotesMasterNum));
                     pNotesPage->SetAutoLayout( AUTOLAYOUT_NOTES, TRUE );
                     pSdrModel->InsertPage( pNotesPage );
                     SdrObject* pPageObj = pNotesPage->GetPresObj( PRESOBJ_PAGE, 1 );
@@ -1488,11 +1488,11 @@ void ImplSdPPTImport::ImportPageEffect( SdPage* pPage )
         {
             if ( ! ( pActualSlidePersist->aSlideAtom.nFlags & 1 ) ) // do not follow master objects ?
             {
-                if ( pPage->GetMasterPageCount() )
+                if(pPage->TRG_HasMasterPage())
                 {
-                    SetOfByte aVisibleLayers = pPage->GetMasterPageVisibleLayers( 0 );
-                    aVisibleLayers.Set( nBackgroundObjectsLayerID, FALSE );
-                    pPage->SetMasterPageVisibleLayers( aVisibleLayers, 0 );
+                    SetOfByte aVisibleLayers = pPage->TRG_GetMasterPageVisibleLayers();
+                    aVisibleLayers.Set(nBackgroundObjectsLayerID, FALSE);
+                    pPage->TRG_SetMasterPageVisibleLayers(aVisibleLayers);
                 }
             }
         }
@@ -2590,8 +2590,8 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
 
                             if ( ( eAktPageKind != PPT_NOTEPAGE ) && ( pSlideLayout->aPlacementId[ i ] != -1 ) )
                             {
-                                SdrObject* pTitleObj = ((SdPage*)pPage->GetMasterPage(0))->GetPresObj( PRESOBJ_TITLE );
-                                SdrObject* pOutlineObj = ((SdPage*)pPage->GetMasterPage(0))->GetPresObj( PRESOBJ_OUTLINE );
+                                SdrObject* pTitleObj = ((SdPage&)pPage->TRG_GetMasterPage()).GetPresObj( PRESOBJ_TITLE );
+                                SdrObject* pOutlineObj = ((SdPage&)pPage->TRG_GetMasterPage()).GetPresObj( PRESOBJ_OUTLINE );
 
                                 Rectangle aTitleRect;
                                 Rectangle aOutlineRect;
