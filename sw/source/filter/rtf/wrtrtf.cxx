@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtrtf.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:28:07 $
+ *  last change: $Author: kz $ $Date: 2003-12-09 11:45:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -941,12 +941,12 @@ break;
     */
     sal_uInt8 nChSet = 0;
     rtl_TextEncoding eChrSet = rFont.GetCharSet();
-    nChSet = sw::types::rtl_TextEncodingToWinCharset(eChrSet);
+    nChSet = sw::ms::rtl_TextEncodingToWinCharset(eChrSet);
     eChrSet = rtl_getTextEncodingFromWindowsCharset(nChSet);
     if (!FontCharsetSufficient(sFntNm, sAltNm, eChrSet))
     {
         eChrSet = RTL_TEXTENCODING_UNICODE;
-        nChSet = sw::types::rtl_TextEncodingToWinCharset(eChrSet);
+        nChSet = sw::ms::rtl_TextEncodingToWinCharset(eChrSet);
     eChrSet = rtl_getTextEncodingFromWindowsCharset(nChSet);
     }
 
