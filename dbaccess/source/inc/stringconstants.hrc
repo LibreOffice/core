@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stringconstants.hrc,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-24 13:08:02 $
+ *  last change: $Author: fs $ $Date: 2000-10-27 08:05:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,18 @@
 
 #ifndef _DBASHARED_STRINGCONSTANTS_HRC_
 #define _DBASHARED_STRINGCONSTANTS_HRC_
+
+#ifndef STRINGCONSTANTS_INCLUDED_INDIRECT
+#error "don't include this file directly! use dbastrings.hrc or dbustrings.hrc instead!"
+#endif
+
+#ifndef _SAL_TYPES_H_
+#include <sal/types.h>
+#endif
+#ifndef _RTL_USTRING_HXX_
+#include <rtl/ustring.hxx>
+#endif
+
 //============================================================
 //= a helper for static ascii pseudo-unicode strings
 //============================================================
