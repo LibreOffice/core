@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scfuncs.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-29 12:23:44 $
+ *  last change: $Author: kz $ $Date: 2000-12-01 09:03:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,7 +200,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ dutch ] = "Het cellenbereik met de gegevens";
             Text[ chinese_simplified ] = "Ί¬ΣΠΚύΎέµΔµ¥ΤªΈρΗψΣς";
             Text[ greek ] = "Η περιοχή κελιών με τα δεδομένα.";
-            Text[ korean ] = "µ¥ΐΜΕΝ°΅  ΖχΗΤµΗΎξ ΐΦ΄Β ΏµΏª";
+            Text[ korean ] = "µ¥ΐΜΕΝ°΅  ΖχΗΤµΗΎξ ΐΦ΄Β ΌΏ Ήόΐ§";
             Text[ turkish ] = "Verileri iηeren hόcre aralύπύ";
             Text[ language_user1 ] = " ";
         };
@@ -329,7 +329,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ dutch ] = "Geeft het cellenbereik met de zoekcriteria aan.";
             Text[ chinese_simplified ] = "Ί¬ΣΠΛΡΡ°ΜυΌώµΔµ¥ΤªΈρΗψΣς΅£";
             Text[ greek ] = "Ορίζει την περιοχή κελιών με τα κριτήρια αναζήτησης.";
-            Text[ korean ] = "Γ£±β ±βΑΨΐΜ ΖχΗΤµΗΎξ ΐΦ΄Β ΌΏ ΏµΏªΐ» Α¤ΐΗ";
+            Text[ korean ] = "°Λ»φ ±βΑΨΐ» ΖχΗΤΗΟ°ν ΐΦ΄Β ΌΏ ΏµΏªΐ» Α¤ΐΗ";
             Text[ turkish ] = "Arama φlηόtlerini iηeren hόcre aralύπύnύ tanύmlar.";
             Text[ language_user1 ] = " ";
         };
@@ -435,7 +435,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ dutch ] = "Het cellenbereik met de gegevens";
             Text[ chinese_simplified ] = "Ί¬ΣΠΚύΎέµΔµ¥ΤªΈρΗψΣς";
             Text[ greek ] = "Η περιοχή κελιών με τα δεδομένα.";
-            Text[ korean ] = "µ¥ΐΜΕΝΈ¦ ΖχΗΤΗΟ°ν ΐΦ΄Β ΏµΏª";
+            Text[ korean ] = "µ¥ΐΜΕΝ°΅ ΖχΗΤµΗΎξ ΐΦ΄Β ΌΏ Ήόΐ§";
             Text[ turkish ] = "Verileri iηeren hόcre aralύπύ";
             Text[ language_user1 ] = " ";
         };
@@ -564,7 +564,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ dutch ] = "Geeft het cellenbereik met de zoekcriteria aan.";
             Text[ chinese_simplified ] = "Ί¬ΣΠΛΡΡ°ΜυΌώµΔµ¥ΤªΈρΗψΣς΅£";
             Text[ greek ] = "Ορίζει την περιοχή κελιών με τα κριτήρια αναζήτησης.";
-            Text[ korean ] = "Γ£±β ±βΑΨΐ» ΖχΗΤΗΟ΄Β ΌΏ ΏµΏªΐ» Α¤ΐΗ";
+            Text[ korean ] = "°Λ»φ ±βΑΨΐ» ΖχΗΤΗΟ°ν ΐΦ΄Β ΌΏ ΏµΏªΐ» Α¤ΐΗ";
             Text[ turkish ] = "Arama φlηόtlerini iηeren hόcre aralύπύnύ tanύmlar.";
             Text[ language_user1 ] = " ";
         };
@@ -670,7 +670,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ dutch ] = "Het cellenbereik met de gegevens";
             Text[ chinese_simplified ] = "Ί¬ΚύΎέµΔµ¥ΤªΈρΗψΣς";
             Text[ greek ] = "Η περιοχή κελιών με τα δεδομένα.";
-            Text[ korean ] = "µ¥ΐΜΕΝΈ¦ ΖχΗΤΗΟ°ν ΐΦ΄Β ΌΏΐΗ Ήόΐ§";
+            Text[ korean ] = "µ¥ΐΜΕΝΈ¦ ΖχΗΤΗΟ°ν ΐΦ΄Β ΌΏ Ήόΐ§";
             Text[ turkish ] = "Verileri iηeren hόcre aralύπύ";
             Text[ language_user1 ] = " ";
         };
@@ -799,7 +799,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ dutch ] = "Geeft het cellenbereik met de zoekcriteria aan.";
             Text[ chinese_simplified ] = "Ί¬ΣΠΛΡΡ°ΜυΌώµΔµ¥ΤªΈρΗψΣς΅£";
             Text[ greek ] = "Ορίζει την περιοχή κελιών με τα κριτήρια αναζήτησης.";
-            Text[ korean ] = "Γ£±β ±βΑΨΐΜ ΖχΗΤµΗΎξ ΐΦ΄Β ΌΏ ΏµΏªΐ» Α¤ΐΗ";
+            Text[ korean ] = "°Λ»φ ±βΑΨΐ» ΖχΗΤΗΟ°ν ΐΦ΄Β ΌΏ ΏµΏªΐ» Α¤ΐΗ";
             Text[ turkish ] = "Arama φlηόtlerini iηeren hόcre aralύπύnύ tanύmlar.";
             Text[ language_user1 ] = " ";
         };
@@ -835,7 +835,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ dutch ] = "Geeft de inhoud van de cel in een gegevensbereik waarvan de inhoud voldoet aan de zoekcriteria.";
             Text[ chinese_simplified ] = "Θ·¶¨Ò»ΈφΚύΎέΗψΣςΔΪ·ϋΊΟΛΡΡ°ΜυΌώµΔµΪÒ»Έφµ¥ΤªΈρµΔΔΪΘέ΅£";
             Text[ greek ] = "Δίνει το περιεχόμενο ενός κελιού μιας περιοχής δεδομένων, του οποίο το περιεχόμενο εκπληρώνει τα κριτήρια αναζήτησης.";
-            Text[ korean ] = "Γ£±β ±βΑΨΏ΅ ΈΒ΄Β µ¥ΐΜΕΝ ΏµΏªΐΗ ΌΏΐΗ ³»Ώλΐ» Α¤ΐΗ";
+            Text[ korean ] = "°Λ»φ ±βΑΨΏ΅ ΈΒ΄Β µ¥ΐΜΕΝ ΏµΏªΐΗ ΌΏ ³»Ώλΐ» Α¤ΐΗ";
             Text[ turkish ] = "Veri aralύπύnda olup iηeriπi arama φlηόtlerine uyan hόcrenin iηeriπini verir.";
             Text[ language_user1 ] = " ";
         };
@@ -1034,7 +1034,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ dutch ] = "Geeft het cellenbereik met de zoekcriteria aan.";
             Text[ chinese_simplified ] = "Θ·¶¨Ί¬ΣΠΛΡΡ°ΜυΌώµΔµ¥ΤªΈρΗψΣς΅£";
             Text[ greek ] = "Ορίζει την περιοχή κελιών με τα κριτήρια αναζήτησης.";
-            Text[ korean ] = "Γ£±β ±βΑΨΐ» ΖχΗΤΗΟ΄Β ΌΏ ΏµΏªΐ» Α¤ΐΗ";
+            Text[ korean ] = "°Λ»φ ±βΑΨΐ» ΖχΗΤΗΟ°ν ΐΦ΄Β ΌΏ ΏµΏªΐ» Α¤ΐΗ";
             Text[ turkish ] = "Arama φlηόtlerini iηeren hόcre aralύπύnύ tanύmlar.";
             Text[ language_user1 ] = " ";
         };
@@ -1070,7 +1070,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ dutch ] = "Bepaalt de maximumwaarde van alle cellen van een gegevensbereik waarvan de inhoud voldoet aan de zoekcriteria.";
             Text[ chinese_simplified ] = "ΥÒ³φΚύΎέΗψΣςΦΠ·ϋΊΟΛΡΡ°ΜυΌώµΔµ¥ΤªΈρµΔΧξ΄σΚύΦµ΅£";
             Text[ greek ] = "Καθορίζει .την μέγιστη τιμή όλων των κελιών μιας περιοχής δεδομένων, της οποίας τα περιεχόμενα επαληθεύουν τα κριτήρια αναζήτησης.";
-            Text[ korean ] = "Γ£±β ±βΑΨΏ΅ »σΐΐΗΟ΄Β µ¥ΐΜΕΝ ΏµΏªΐΗ Έπµη ΌΏΐΗ ΓΦ΄λ°ªΐ» °αΑ¤.";
+            Text[ korean ] = "°Λ»φ ±βΑΨΏ΅ »σΐΐΗΟ΄Β µ¥ΐΜΕΝ ΏµΏªΐΗ Έπµη ΌΏΐΗ ΓΦ΄λ°ªΐ» °αΑ¤.";
             Text[ turkish ] = "Veri aralύπύnda olup iηerikleri arama φlηόtlerine uyan tόm hόcrelerin azami deπerini verir.";
             Text[ language_user1 ] = " ";
         };
@@ -1305,7 +1305,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ dutch ] = "Bepaalt de minimumwaarde van alle cellen van een gegevensbereik, waarvan de inhoud aan de criteria voldoet.";
             Text[ chinese_simplified ] = "ΥÒ³φΚύΎέΗψΣςΦΠ·ϋΊΟΛΡΡ°ΜυΌώµΔµ¥ΤªΈρΦΠµΔΧξΠ΅ΚύΦµ΅£";
             Text[ greek ] = "Καθορίζει .την ελάχιστη τιμή όλων των κελιών μιας περιοχής δεδομένων, της οποίας τα περιεχόμενα επαληθεύουν τα κριτήρια αναζήτησης.";
-            Text[ korean ] = "Γ£±β ±βΑΨΏ΅ »σΐΐΗΟ΄Β µ¥ΐΜΕΝ ΏµΏªΐΗ Έπµη ΌΏΐΗ ΓΦΌÒ°ªΐ» °αΑ¤.";
+            Text[ korean ] = "°Λ»φ ±βΑΨΏ΅ »σΐΐΗΟ΄Β µ¥ΐΜΕΝ ΏµΏªΐΗ Έπµη ΌΏΐΗ ΓΦΌÒ°ªΐ» °αΑ¤.";
             Text[ turkish ] = "Veri aralύπύnda olup iηerikleri arama φlηόtlerine uyan tόm hόcrelerin asgari deπerini verir.";
             Text[ language_user1 ] = " ";
         };
@@ -2209,7 +2209,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ dutch ] = "Geeft het cellenbereik met de zoekcriteria aan.";
             Text[ chinese_simplified ] = "Θ·¶¨Ί¬ΣΠΛΡΡ°ΜυΌώµΔµ¥ΤªΈρΗψΣς΅£";
             Text[ greek ] = "Ορίζει την περιοχή κελιών με τα κριτήρια αναζήτησης.";
-            Text[ korean ] = "Γ£±β ±βΑΨΐ» ΖχΗΤΗΟ΄Β ΐΦ΄Β ΌΏ Ήόΐ§Έ¦ Α¤ΐΗ";
+            Text[ korean ] = "°Λ»φ ±βΑΨΐ»  ΖχΗΤΗΟ°ν ΐΦ΄Β ΌΏ ΏµΏªΐ» Α¤ΐΗ";
             Text[ turkish ] = "Arama φlηόtlerini iηeren hόcre aralύπύnύ tanύmlar.";
             Text[ language_user1 ] = " ";
         };
@@ -2444,7 +2444,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ dutch ] = "Geeft het cellenbereik met de zoekcriteria aan.";
             Text[ chinese_simplified ] = "Θ·¶¨Ί¬ΣΠΛΡΡ°ΜυΌώµΔµ¥ΤªΈρΗψΣς΅£";
             Text[ greek ] = "Ορίζει την περιοχή κελιών με τα κριτήρια αναζήτησης.";
-            Text[ korean ] = "Γ£±β ±βΑΨΐ» ΖχΗΤΗΟ°ν ΐΦ΄Β ΌΏ Ήόΐ§Έ¦ Α¤ΐΗ";
+            Text[ korean ] = "°Λ»φ ±βΑΨΐ» ΖχΗΤΗΟ°ν ΐΦ΄Β ΌΏ ΏµΏªΐ»  Α¤ΐΗ";
             Text[ turkish ] = "Arama φlηόtlerini iηeren hόcre aralύπύnύ tanύmlar.";
             Text[ language_user1 ] = " ";
         };
@@ -2480,7 +2480,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ dutch ] = "Bepaalt de variantie van alle cellen van een gegevensbereik, waarvan de inhoud aan de zoekcriteria voldoet.";
             Text[ chinese_simplified ] = "ΉΐΛγÒ»ΈφΚύΎέΗψΣςΔΪ·ϋΊΟΛΡΡ°ΜυΌώµΔΛωΣΠµ¥ΤªΈρΦΠΚύΎέµΔ·½²ξ΅£";
             Text[ greek ] = "Υπολογίζει τη διακύμανση όλων των κελιών της περιοχής δεδομένων, των οποίων τα περιεχόμενα επαληθεύουν τα κριτήρια αναζήτησης.";
-            Text[ korean ] = "³»ΏλΐΜ Γ£±β ±βΑΨΏ΅ »σΐΐΗΟ΄Β µ¥ΐΜΕΝ Ήόΐ§ΐΗ Έπµη ΌΏΐΗ Ί―ΌφΈ¦ °αΑ¤.";
+            Text[ korean ] = "³»ΏλΐΜ °Λ»φ ±βΑΨΏ΅ »σΐΐΗΟ΄Β µ¥ΐΜΕΝ Ήόΐ§ΐΗ Έπµη ΌΏΐΗ Ί―ΌφΈ¦ °αΑ¤.";
             Text[ turkish ] = "Veri aralύπύnda olup iηerikleri arama φlηόtlerine uyan tόm hόcrelerin varyansύnύ belirler.";
             Text[ language_user1 ] = " ";
         };
@@ -2679,7 +2679,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ dutch ] = "Geeft het cellenbereik met de zoekcriteria aan.";
             Text[ chinese_simplified ] = "Θ·¶¨Ί¬ΣΠΛΡΡ°ΜυΌώµΔµ¥ΤªΈρΗψΣς΅£";
             Text[ greek ] = "Ορίζει την περιοχή κελιών με τα κριτήρια αναζήτησης.";
-            Text[ korean ] = "Γ£±β ±βΑΨΐ» ΖχΗΤΗΟ°ν ΐΦ΄Β ΌΏ Ήόΐ§Έ¦ Α¤ΐΗ";
+            Text[ korean ] = "°Λ»φ ±βΑΨΐ» ΖχΗΤΗΟ°ν ΐΦ΄Β ΌΏ ΏµΏªΐ» Α¤ΐΗ";
             Text[ turkish ] = "Arama φlηόtlerini iηeren hόcre aralύπύnύ tanύmlar.";
             Text[ language_user1 ] = " ";
         };
@@ -2715,7 +2715,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ dutch ] = "Bepaalt de variantie m.b.t. de hele populatie van alle cellen van een gegevensbereik, waarvan de inhoud aan de zoekcriteria voldoet.";
             Text[ chinese_simplified ] = "ΌΖΛγÒ»ΈφΚύΎέΗψΣςΔΪ·ϋΊΟΛΡΡ°ΜυΌώµΔΛωΣΠµ¥ΤªΈρΦΠΚύΎέµΔΧάΜε·½²ξ΅£";
             Text[ greek ] = "Υπολογίζει τη διακύμανση του πληθυσμού με βάση όλα τα κελιά της περιοχής δεδομένων, των οποίων τα περιεχόμενα επαληθεύουν τα κριτήρια αναζήτησης.";
-            Text[ korean ] = "³»ΏλΐΜ Γ£±β ±βΑΨΏ΅ »σΐΐΗΟ΄Β µ¥ΐΜΕΝ ΏµΏªΏ΅ ΐΦ΄Β Έπµη ΌΏΐΗ  ΐόΓΌΏΝ °ό·Γ, Ί―ΌφΈ¦ °αΑ¤.";
+            Text[ korean ] = "³»ΏλΐΜ °Λ»φ ±βΑΨΏ΅ »σΐΐΗΟ΄Β µ¥ΐΜΕΝ ΏµΏªΐΗ Έπµη ΌΏΐΗ  ΐόΓΌΏΝ °ό·Γ, Ί―ΌφΈ¦ °αΑ¤.";
             Text[ turkish ] = "Veri aralύπύnda olup iηerikleri arama φlηόtlerine uyan tόm hόcrelerin popόlasyonu ile ilgili varyansύ belirler.";
             Text[ language_user1 ] = " ";
         };
@@ -2785,7 +2785,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ dutch ] = "Het cellenbereik met de gegevens";
             Text[ chinese_simplified ] = "Ί¬ΣΠΚύΎέµΔµ¥ΤªΈρΗψΣς΅£";
             Text[ greek ] = "Η περιοχή κελιών με τα δεδομένα.";
-            Text[ korean ] = "µ¥ΐΜΕΝΈ¦ ΖχΗΤΗΟ°ν ΐΦ΄Β ΌΏ Ήόΐ§";
+            Text[ korean ] = "µ¥ΐΜΕΝ°΅ ΖχΗΤµΗΎξ ΐΦ΄Β ΌΏ Ήόΐ§";
             Text[ turkish ] = "Verileri iηeren hόcre aralύπύ";
             Text[ language_user1 ] = " ";
         };
@@ -2951,7 +2951,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ dutch ] = "Converteert een bepaalde datum naar een serieel getal.";
             Text[ chinese_simplified ] = "ΞªΈψ¶¨µΔΘΥΖΪΜαΉ©Ò»ΈφΔΪ²ΏΠςΑΠΚύ΅£";
             Text[ greek ] = "Δίνει τον εσωτερικό αριθμό για τη δεδομένη ημερομηνία.";
-            Text[ korean ] = "ΑΦΎξΑψ ΐΟΐΪΐΗ ³»ΊΞΐϋ ΐΟΌφΈ¦ Α¦°ψ";
+            Text[ korean ] = "ΑΦΎξΑψ ³―Β¥ΐΗ ³»ΊΞ ΌύΐΪΈ¦  Α¦°ψ";
             Text[ turkish ] = "Belirtilen tarih iηin bir iη sayύ όretir.";
             Text[ language_user1 ] = " ";
         };
@@ -3236,30 +3236,30 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
          // Description of Parameter 1
         {
             /* ### ACHTUNG: Neuer Text in Resource? Ein in Anfόhrungszeichen eingeschlossener Text, der ein Datum in einem StarCalc Datumsformat wiedergibt. : Ein in Anf³hrungszeichen eingeschlossener Text, der ein Datum in einem StarCalc Datumsformat wiedergibt. */
-            Text = "Ein in Anfόhrungszeichen eingeschlossener Text, der ein Datum in einem StarOffice Datumsformat wiedergibt." ;
+            Text = "Ein in Anfόhrungszeichen eingeschlossener Text, der ein Datum in einem %PRODUCTNAME Datumsformat wiedergibt." ;
             Text [ english ] = "is text that returns a date" ;
             Text [ norwegian ] = "Ein in Anfόhrungszeichen eingeschlossener Text, der ein Datum in einem StarCalc Datumsformat wiedergibt." ;
-            Text [ italian ] = "il testo tra virgolette che riproduce una data in formato StarOffice." ;
-            Text [ portuguese_brazilian ] = "Ein in Anfόhrungszeichen eingeschlossener Text, der ein Datum in einem StarOffice Calc Datumsformat wiedergibt." ;
-            Text [ portuguese ] = "Um texto entre aspas que devolve uma data com um formato do StarOffice." ;
+            Text [ italian ] = "il testo tra virgolette che riproduce una data in formato %PRODUCTNAME." ;
+            Text [ portuguese_brazilian ] = "Ein in Anfόhrungszeichen eingeschlossener Text, der ein Datum in einem %PRODUCTNAME Calc Datumsformat wiedergibt." ;
+            Text [ portuguese ] = "Um texto entre aspas que devolve uma data com um formato do %PRODUCTNAME." ;
             Text [ finnish ] = "Ein in Anfόhrungszeichen eingeschlossener Text, der ein Datum in einem StarCalc Datumsformat wiedergibt." ;
-            Text [ danish ] = "Tekst i anfψrselstegn som reprζsenterer en dato i et StarOffice datoformat." ;
-            Text [ french ] = "Un texte entre guillemets qui renvoie une date dans un format de date de StarOffice." ;
-            Text [ swedish ] = "En inom citationstecken skriven text, som returnerar ett datum i nεgot av StarOffice Calcs datumformat." ;
-            Text [ dutch ] = "Een tekst tussen aanhalingstekens met een datum in een StarOffice Calc-datumsformaat." ;
-            Text [ spanish ] = "Un texto entre comillas que serα devuelto en un formato de fecha de StarOffice." ;
-            Text [ english_us ] = "A text enclosed in quotation marks which returns a date in a StarOffice date format." ;
-            Text[ chinese_simplified ] = "ÒύΊΕΔΪµΔΧΦ΄®Χª»»³Ι StarOffice ΘΥΖΪΈρΚ½΅£";
-            Text[ russian ] = "Òεκρς β κΰβϋχκΰυ, βϋδΰώωθι δΰςσ β τξπμΰςε δΰςϋ StarOffice.";
-            Text[ polish ] = "Wstawiony w cudzys³σw tekst, ktσry wyznacza datκ w formacie daty StarOffice.";
-            Text[ japanese ] = "Έ«Γ°Ό®έΟ°Έ‚ΕΝ‚ρ‚Ύ“ϊ•t‚π•\\‚·•¶—ρ‚π StarOffice ‚Μ“ϊ•t•\\¦`®‚Εw’θ‚µ‚ά‚·B";
-            Text[ chinese_traditional ] = "±N¤ήΈΉ¤ΊªΊ¤ε¦rΒΰΕά¦¨StarOffice ¤ι΄Α®ζ¦΅΅C";
-            Text[ arabic ] = "δΥ γΝΗΨ ΘΪαΗγΗΚ ΚδΥνΥ νγΛα ΚΗΡνΞΗπ ΘΓΝΟ ΚδΣνήΗΚ ΗαΚΗΡνΞ έν  StarOffice Calc.";
-            Text[ dutch ] = "Een tekst tussen aanhalingstekens met een datum in een StarOffice Calc-datumsformaat.";
-            Text[ chinese_simplified ] = "ÒύΊΕΔΪµΔΧΦ΄®Χª»»³Ι StarOffice ΘΥΖΪΈρΚ½΅£";
-            Text[ greek ] = "Ένα κείμενο σε εισαγωγικά, το οποίο επιστρέφει μια ημερομηνία σε μορφή ημερομηνίας του StarOffice Calc.";
-            Text[ korean ] = "ΐΞΏλΊΞΘ£ ΎΘΏ΅ µιΎξ ΐΦ΄Β ΕΨ½ΊΖ®·ΞΌ­ StarOffice ³―Β¥Ό­½ΔΏ΅ ΐΦ΄Β ³―Β¥Έ¦ ³ªΕΈ³ΐ΄Ο΄Ω.";
-            Text[ turkish ] = "StarOffice tarih formatύnda tarih bilgisi veren tύrnak iώaretleri iηindeki metin.";
+            Text [ danish ] = "Tekst i anfψrselstegn som reprζsenterer en dato i et %PRODUCTNAME datoformat." ;
+            Text [ french ] = "Un texte entre guillemets qui renvoie une date dans un format de date de %PRODUCTNAME." ;
+            Text [ swedish ] = "En inom citationstecken skriven text, som returnerar ett datum i nεgot av %PRODUCTNAME Calcs datumformat." ;
+            Text [ dutch ] = "Een tekst tussen aanhalingstekens met een datum in een %PRODUCTNAME Calc-datumsformaat." ;
+            Text [ spanish ] = "Un texto entre comillas que serα devuelto en un formato de fecha de %PRODUCTNAME." ;
+            Text [ english_us ] = "A text enclosed in quotation marks which returns a date in a %PRODUCTNAME date format." ;
+            Text[ chinese_simplified ] = "ÒύΊΕΔΪµΔΧΦ΄®Χª»»³Ι %PRODUCTNAME ΘΥΖΪΈρΚ½΅£";
+            Text[ russian ] = "Òεκρς β κΰβϋχκΰυ, βϋδΰώωθι δΰςσ β τξπμΰςε δΰςϋ %PRODUCTNAME.";
+            Text[ polish ] = "Wstawiony w cudzys³σw tekst, ktσry wyznacza datκ w formacie daty %PRODUCTNAME.";
+            Text[ japanese ] = "Έ«Γ°Ό®έΟ°Έ‚ΕΝ‚ρ‚Ύ“ϊ•t‚π•\\‚·•¶—ρ‚π %PRODUCTNAME ‚Μ“ϊ•t•\\¦`®‚Εw’θ‚µ‚ά‚·B";
+            Text[ chinese_traditional ] = "±N¤ήΈΉ¤ΊªΊ¤ε¦rΒΰΕά¦¨%PRODUCTNAME ¤ι΄Α®ζ¦΅΅C";
+            Text[ arabic ] = "δΥ γΝΗΨ ΘΪαΗγΗΚ ΚδΥνΥ νγΛα ΚΗΡνΞΗπ ΘΓΝΟ ΚδΣνήΗΚ ΗαΚΗΡνΞ έν  %PRODUCTNAME Calc.";
+            Text[ dutch ] = "Een tekst tussen aanhalingstekens met een datum in een %PRODUCTNAME Calc-datumsformaat.";
+            Text[ chinese_simplified ] = "ÒύΊΕΔΪµΔΧΦ΄®Χª»»³Ι %PRODUCTNAME ΘΥΖΪΈρΚ½΅£";
+            Text[ greek ] = "Ένα κείμενο σε εισαγωγικά, το οποίο επιστρέφει μια ημερομηνία σε μορφή ημερομηνίας του %PRODUCTNAME Calc.";
+            Text[ korean ] = "ΐΞΏλΊΞΘ£ ΎΘΏ΅ µιΎξ ΐΦ΄Β ΕΨ½ΊΖ®·ΞΌ­ %PRODUCTNAME ³―Β¥Ό­½ΔΏ΅ ΐΦ΄Β ³―Β¥Έ¦ ³ªΕΈ³ΐ΄Ο΄Ω.";
+            Text[ turkish ] = "%PRODUCTNAME tarih formatύnda tarih bilgisi veren tύrnak iώaretleri iηindeki metin.";
             Text[ language_user1 ] = " ";
         };
     };
@@ -3353,7 +3353,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ french ] = "Le numιro de sιrie de la date." ;
             Text [ swedish ] = "Internt tal fφr datum." ;
             Text [ dutch ] = "Serieel getal van de datum." ;
-            Text [ spanish ] = "Es el cσdigo de fecha y hora que StarOffice Calc usa para los cαlculos de fecha y hora." ;
+            Text [ spanish ] = "Es el cσdigo de fecha y hora que %PRODUCTNAME Calc usa para los cαlculos de fecha y hora." ;
             Text [ english_us ] = "The internal number for the date." ;
             Text[ chinese_simplified ] = "ΘΥΖΪµΔΟµΝ³ΔΪ²ΏΠςΚύ΅£";
             Text[ russian ] = "Κξδ δΰςΰ-βπεμÿ, θροξλόησεμϋι δλÿ βϋχθρλενθι δΰςϋ θ βπεμενθ.";
@@ -3400,7 +3400,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ dutch ] = "Bepaalt het aantal dagen tussen twee data op basis van 360 dagen per jaar.";
             Text[ chinese_simplified ] = "°΄ΥΥÒ»Δκ360ΜμµΔΉζΤς£¬ΌΖΛγΑ½ΈφΘΥΖΪΦ®ΌδµΔΟΰ²ξΜμΚύ΅£";
             Text[ greek ] = "Καθορίζει την διαφορά ημερών δύο ημερομηνιών λαμβάνοντας υπόψη 360 ημέρες/έτος.";
-            Text[ korean ] = "³β 360ΐΟΏ΅±Ω°ΕΗΡ µΞ ΐΟΐΪ°£ ΐΟΌφΐΗ ΒχΐΜΈ¦ °θ»κ";
+            Text[ korean ] = "360ΐΟ/³βΏ΅ ±Ω°Ε, µΞ ΐΟΐΪ°£ ³―Β¥Έ¦ °θ»κ";
             Text[ turkish ] = "360 gόnlό yύl hesaplamasύnda iki tarih arasύndaki gόn farkύnύ hesaplar.";
             Text[ language_user1 ] = " ";
         };
@@ -3470,7 +3470,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ dutch ] = "Oudere datum ter bepaling van het aantal dagen.";
             Text[ chinese_simplified ] = "ΌΖΛγΑ½ΈφΘΥΖΪΟΰ²ξΜμΚύΚ±½ΟΤηµΔΔΗΈφΘΥΖΪ΅£";
             Text[ greek ] = "Αρχική ημερομηνία για τον υπολογισμό της διαφοράς ημερών.";
-            Text[ korean ] = "ΐΟΌφ ΒχΐΜ °θ»κΏ΅Ό­ΐΗ ½ΓΐΫ ΐΟΐΪ";
+            Text[ korean ] = "³―Β¥ °θ»κΏ΅Ό­ΐΗ ½ΓΐΫ ΐΟΐΪ";
             Text[ turkish ] = "Gόn farkύ hesabύ iηin erken olan tarih.";
             Text[ language_user1 ] = " ";
         };
@@ -3534,7 +3534,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ dutch ] = "Jongere datum ter bepaling van het aantal dagen.";
             Text[ chinese_simplified ] = "ΌΖΛγΑ½ΈφΘΥΖΪΟΰ²ξΜμΚύΚ±½ΟΝνµΔΔΗΈφΘΥΖΪ΅£";
             Text[ greek ] = "Η τελική ημερομηνία για τον υπολογισμό της διαφοράς ημερών.";
-            Text[ korean ] = "ΐΟΌφ ΒχΐΜ °θ»κΏ΅Ό­ΐΗ Έ¶ΑφΈ· ΐΟΐΪ";
+            Text[ korean ] = "³―Β¥ °θ»κΏ΅Ό­ΐΗ Έ¶ΑφΈ· ΐΟΐΪ";
             Text[ turkish ] = "Gόn farkύ hesabύ iηin geη olan tarih.";
             Text[ language_user1 ] = " ";
         };
@@ -3598,7 +3598,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ dutch ] = "Wijze van bepaling van het aantal dagen. Methode = 0 betekent VS-methode (NASD), Methode = 1 betekent Europese methode.";
             Text[ chinese_simplified ] = "ΉΉ³Ι²ξΚύµΔ·½Κ½΅£type = 0 ±νΚΎΓΐΉϊ·½Κ½(NASD)£¬ \ntype = 1 ±νΚΎΕ·Φή·½Κ½΅£";
             Text[ greek ] = "Τύπος υπολογισμού διαφοράς: Τύπος = 0 σημαίνει Μέθοδος Η.Π.Α. (NASD), Τύπος = 1 σημαίνει Ευρωπαϊκή μέθοδος.";
-            Text[ korean ] = "Ύη½ΔΏ΅ »ηΏλµΘ ΈήΌÒµεΐΗ ΒχΐΜ : ΕΈΐΤ = 1 ΐΊ US  ΈήΌÒµε(NASD), ΕΈΐΤ = 0ΐΊ ΐ―·΄ ΈήΌÒµεΈ¦ °΅Έ®Εµ΄Ο΄Ω.";
+            Text[ korean ] = "Ύη½ΔΏ΅ »ηΏλµΘ ΈήΌÒµεΐΗ ΑΎ·ω : ΕΈΐΤ = 1 ΐΊ US  ΈήΌÒµε(NASD), ΕΈΐΤ = 0ΐΊ ΐ―·΄ ΈήΌÒµεΈ¦ ³ªΕΈ³ΐ΄Ο΄Ω.";
             Text[ turkish ] = "Fark hesaplama yφntemi: Tόr = 1, ABD'de kullanύlan yφntem (NASD), tόr = 0 ise Avrupa'da kullanύlan yφntemidir.";
             Text[ language_user1 ] = " ";
         };
@@ -3693,7 +3693,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ french ] = "Le numιro de sιrie de l'heure." ;
             Text [ swedish ] = "Internt tidsvδrde." ;
             Text [ dutch ] = "Tijdswaarde als serieel getal." ;
-            Text [ spanish ] = "Es el cσdigo de fecha-hora que StarOffice Calc usa para los cαlculos de fecha y hora." ;
+            Text [ spanish ] = "Es el cσdigo de fecha-hora que %PRODUCTNAME Calc usa para los cαlculos de fecha y hora." ;
             Text [ english_us ] = "Internal time value" ;
             Text[ chinese_simplified ] = "ΟµΝ³ΔΪ²ΏΚ±ΌδΦµ΅£";
             Text[ russian ] = "Κξδ δΰςΰ-βπεμÿ, θροξλόησεμϋι δλÿ βϋχθρλενθι ρ δΰςΰμθ θ οπεθξδΰμθ βπεμενθ.";
@@ -3799,7 +3799,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ french ] = "Le numιro de sιrie de l'heure." ;
             Text [ swedish ] = "Internt tidsvδrde." ;
             Text [ dutch ] = "Tijdswaarde als serieel getal." ;
-            Text [ spanish ] = "Es el cσdigo de fecha-hora que StarOffice Calc usa para los cαlculos de fecha y hora." ;
+            Text [ spanish ] = "Es el cσdigo de fecha-hora que %PRODUCTNAME Calc usa para los cαlculos de fecha y hora." ;
             Text [ english_us ] = "Internal time value." ;
             Text[ chinese_simplified ] = "ΟµΝ³ΔΪ²ΏΚ±ΌδΦµ΅£";
             Text[ russian ] = "Κξδ δΰςΰ-βπεμÿ, θροξλόησεμϋι δλÿ βϋχθρλενθι ρ δΰςΰμθ θ οπεθξδΰμθ βπεμενθ.";
@@ -3905,7 +3905,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ french ] = "Le numιro de sιrie de la date." ;
             Text [ swedish ] = "Internt tal fφr datum." ;
             Text [ dutch ] = "Datum als serieel getal." ;
-            Text [ spanish ] = "Es el cσdigo de fecha-hora que StarOffice Calc usa para los cαlculos de fecha y hora." ;
+            Text [ spanish ] = "Es el cσdigo de fecha-hora que %PRODUCTNAME Calc usa para los cαlculos de fecha y hora." ;
             Text [ english_us ] = "The internal number of the date." ;
             Text[ chinese_simplified ] = "ΘΥΖΪµΔΟµΝ³ΔΪ²ΏΠςΚύ΅£";
             Text[ russian ] = "Κξδ δΰςΰ-βπεμÿ, θροξλόησεμϋι δλÿ βϋχθρλενθι ρ δΰςΰμθ θ οπεθξδΰμθ βπεμενθ.";
@@ -4053,7 +4053,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ french ] = "Le numιro de sιrie de l'heure." ;
             Text [ swedish ] = "Internt tidsvδrde." ;
             Text [ dutch ] = "Tijdswaarde als serieel getal." ;
-            Text [ spanish ] = "Es el cσdigo de fecha-hora que StarOffice Calc usa para los cαlculos de fecha y hora." ;
+            Text [ spanish ] = "Es el cσdigo de fecha-hora que %PRODUCTNAME Calc usa para los cαlculos de fecha y hora." ;
             Text [ english_us ] = "The internal time value." ;
             Text[ chinese_simplified ] = "ΟµΝ³ΔΪ²ΏΚ±ΌδΦµ΅£";
             Text[ russian ] = "Κξδ δΰςΰ-βπεμÿ, θροξλόησεμϋι δλÿ βϋχθρλενθι ρ δΰςΰμθ θ οπεθξδΰμθ βπεμενθ.";
@@ -4388,30 +4388,30 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
          // Description of Parameter 1
         {
             /* ### ACHTUNG: Neuer Text in Resource? Ein in Anfόhrungszeichen eingeschlossener Text, der eine Zeitangabe in einem StarCalc Zeitformat wiedergibt. : Ein in Anf³hrungszeichen eingeschlossener Text, der eine Zeitangabe in einem StarCalc Zeitformat wiedergibt. */
-            Text = "Ein in Anfόhrungszeichen eingeschlossener Text, der eine Zeitangabe in einem StarOffice Zeitformat wiedergibt." ;
+            Text = "Ein in Anfόhrungszeichen eingeschlossener Text, der eine Zeitangabe in einem %PRODUCTNAME Zeitformat wiedergibt." ;
             Text [ english ] = "is a text string that gives a time in any one of the StarCalc time formats" ;
             Text [ norwegian ] = "Ein in Anfόhrungszeichen eingeschlossener Text, der eine Zeitangabe in einem StarCalc Zeitformat wiedergibt." ;
-            Text [ italian ] = "il testo tra virgolette che riproduce un'indicazione oraria in formato StarOffice." ;
-            Text [ portuguese_brazilian ] = "Ein in Anfόhrungszeichen eingeschlossener Text, der eine Zeitangabe in einem StarOffice Calc Zeitformat wiedergibt." ;
-            Text [ portuguese ] = "Um texto que fornece uma hora num dos vαrios formatos de horas do StarOffice." ;
+            Text [ italian ] = "il testo tra virgolette che riproduce un'indicazione oraria in formato %PRODUCTNAME." ;
+            Text [ portuguese_brazilian ] = "Ein in Anfόhrungszeichen eingeschlossener Text, der eine Zeitangabe in einem %PRODUCTNAME Calc Zeitformat wiedergibt." ;
+            Text [ portuguese ] = "Um texto que fornece uma hora num dos vαrios formatos de horas do %PRODUCTNAME." ;
             Text [ finnish ] = "Ein in Anfόhrungszeichen eingeschlossener Text, der eine Zeitangabe in einem StarCalc Zeitformat wiedergibt." ;
-            Text [ danish ] = "Tekst i anfψrselstegn som reprζsenterer et klokkeslζt i et StarOffice datoformat." ;
-            Text [ french ] = "Un texte entre guillemets qui renvoie une heure dans un format d'heure de StarOffice." ;
-            Text [ swedish ] = "En inom citationstecken skriven text, som returnerar en tid i nεgot av StarOffice Calcs tidsformat." ;
-            Text [ dutch ] = "Een tekst tussen aanhalingstekens met een tijdsaanduiding in een StarOffice Calc tijdformaat." ;
-            Text [ spanish ] = "Un texto entre comillas que devuelve una hora en uno de los formatos horarios de StarOffice." ;
-            Text [ english_us ] = "A text enclosed in quotation marks which returns a time in a StarOffice time format." ;
-            Text[ chinese_simplified ] = "ÒύΊΕΔΪµΔΧΦ΄®Χª»»³Ι StarOffice  Κ±ΌδΈρΚ½΅£";
-            Text[ russian ] = "Òεκρς β κΰβϋχκΰυ, βϋδΰώωθι βπεμÿ β τξπμΰςε βπεμενθ StarOffice.";
-            Text[ polish ] = "Wstawiony w cudzys³σw tekst, ktσry wyznacza datκ w formacie czasu StarOffice.";
-            Text[ japanese ] = "Έ«Γ°Ό®έΟ°Έ‚ΕΝ‚ρ‚ΎΤ‚π•\\‚·•¶—ρ‚π StarOffice ‚ΜΤ•\\¦`®‚Εw’θ‚µ‚ά‚·B";
-            Text[ chinese_traditional ] = "¤@­Σ¤ήΈΉ¤ΊªΊ¦r¦κΒΰ΄«¦¨¤@­Σ StarOffice ®Ι¶΅®ζ¦΅΅C";
-            Text[ arabic ] = "δΥ γΝΗΨ ΘΪαΗγΗΚ ΚδΥνΥ νγΛα ΗαζήΚ ΘΓΝΟ ΚδΣνήΗΚ ΗαζήΚ έν  StarOffice.";
-            Text[ dutch ] = "Een tekst tussen aanhalingstekens met een tijdsaanduiding in een StarOffice Calc tijdformaat.";
-            Text[ chinese_simplified ] = "ÒύΊΕΔΪµΔΧΦ΄®Χª»»³Ι StarOffice  Κ±ΌδΈρΚ½΅£";
-            Text[ greek ] = "Ένα κείμενο σε εισαγωγικά, το οποίο επιστρέφει μια ώρα σε μορφή ώρας του StarOffice Calc.";
-            Text[ korean ] = "ΐΞΏλΊΞΘ£ ΎΘΏ΅ µιΎξ ΐΦ΄Β ΕΨ½ΊΖ®·ΞΌ­ StarOffice ½Γ°£Ό­½ΔΏ΅ ΐΦ΄Β ½Γ°£ΐ» ³ªΕΈ³ΐ΄Ο΄Ω.";
-            Text[ turkish ] = "StarOffice zaman formatύnda zaman bilgisi veren tύrnak iώaretleri iηindeki metin.";
+            Text [ danish ] = "Tekst i anfψrselstegn som reprζsenterer et klokkeslζt i et %PRODUCTNAME datoformat." ;
+            Text [ french ] = "Un texte entre guillemets qui renvoie une heure dans un format d'heure de %PRODUCTNAME." ;
+            Text [ swedish ] = "En inom citationstecken skriven text, som returnerar en tid i nεgot av %PRODUCTNAME Calcs tidsformat." ;
+            Text [ dutch ] = "Een tekst tussen aanhalingstekens met een tijdsaanduiding in een %PRODUCTNAME Calc tijdformaat." ;
+            Text [ spanish ] = "Un texto entre comillas que devuelve una hora en uno de los formatos horarios de %PRODUCTNAME." ;
+            Text [ english_us ] = "A text enclosed in quotation marks which returns a time in a %PRODUCTNAME time format." ;
+            Text[ chinese_simplified ] = "ÒύΊΕΔΪµΔΧΦ΄®Χª»»³Ι %PRODUCTNAME  Κ±ΌδΈρΚ½΅£";
+            Text[ russian ] = "Òεκρς β κΰβϋχκΰυ, βϋδΰώωθι βπεμÿ β τξπμΰςε βπεμενθ %PRODUCTNAME.";
+            Text[ polish ] = "Wstawiony w cudzys³σw tekst, ktσry wyznacza datκ w formacie czasu %PRODUCTNAME.";
+            Text[ japanese ] = "Έ«Γ°Ό®έΟ°Έ‚ΕΝ‚ρ‚ΎΤ‚π•\\‚·•¶—ρ‚π %PRODUCTNAME ‚ΜΤ•\\¦`®‚Εw’θ‚µ‚ά‚·B";
+            Text[ chinese_traditional ] = "¤@­Σ¤ήΈΉ¤ΊªΊ¦r¦κΒΰ΄«¦¨¤@­Σ %PRODUCTNAME ®Ι¶΅®ζ¦΅΅C";
+            Text[ arabic ] = "δΥ γΝΗΨ ΘΪαΗγΗΚ ΚδΥνΥ νγΛα ΗαζήΚ ΘΓΝΟ ΚδΣνήΗΚ ΗαζήΚ έν  %PRODUCTNAME.";
+            Text[ dutch ] = "Een tekst tussen aanhalingstekens met een tijdsaanduiding in een %PRODUCTNAME Calc tijdformaat.";
+            Text[ chinese_simplified ] = "ÒύΊΕΔΪµΔΧΦ΄®Χª»»³Ι %PRODUCTNAME  Κ±ΌδΈρΚ½΅£";
+            Text[ greek ] = "Ένα κείμενο σε εισαγωγικά, το οποίο επιστρέφει μια ώρα σε μορφή ώρας του %PRODUCTNAME Calc.";
+            Text[ korean ] = "ΐΞΏλΊΞΘ£ ΎΘΏ΅ µιΎξ ΐΦ΄Β ΕΨ½ΊΖ®·ΞΌ­ %PRODUCTNAME ½Γ°£Ό­½ΔΏ΅ ΐΦ΄Β ½Γ°£ΐ» ³ªΕΈ³ΐ΄Ο΄Ω.";
+            Text[ turkish ] = "%PRODUCTNAME zaman formatύnda zaman bilgisi veren tύrnak iώaretleri iηindeki metin.";
             Text[ language_user1 ] = " ";
         };
     };
@@ -4547,7 +4547,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ french ] = "Le numιro de sιrie de la date." ;
             Text [ swedish ] = "Internt tal fφr datum." ;
             Text [ dutch ] = "Serieel getal van de datum." ;
-            Text [ spanish ] = "Es el cσdigo de fecha-hora que StarOffice Calc usa para los cαlculos de fecha y hora." ;
+            Text [ spanish ] = "Es el cσdigo de fecha-hora que %PRODUCTNAME Calc usa para los cαlculos de fecha y hora." ;
             Text [ english_us ] = "The internal number for the date." ;
             Text[ chinese_simplified ] = "ΘΥΖΪµΔΟµΝ³ΔΪ²ΏΚύΧΦ΅£";
             Text[ russian ] = "Κξδ δΰςΰ-βπεμÿ, θροξλόησεμϋι δλÿ βϋχθρλενθι ρ δΰςΰμθ θ οπεθξδΰμθ βπεμενθ.";
@@ -4717,7 +4717,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ french ] = "Le numιro de sιrie de la date." ;
             Text [ swedish ] = "Internt tal fφr datum." ;
             Text [ dutch ] = "De datum als serieel getal." ;
-            Text [ spanish ] = "Es el cσdigo de fecha-hora que StarOffice Calc usa para los cαlculos de fecha y hora." ;
+            Text [ spanish ] = "Es el cσdigo de fecha-hora que %PRODUCTNAME Calc usa para los cαlculos de fecha y hora." ;
             Text [ english_us ] = "Internal number of the date." ;
             Text[ chinese_simplified ] = "ΘΥΖΪµΔΟµΝ³ΔΪ²ΏΚύΧΦ΅£";
             Text[ russian ] = "Κξδ δΰςΰ-βπεμÿ, θροξλόησεμϋι δλÿ βϋχθρλενθι ρ δΰςΰμθ θ οπεθξδΰμθ βπεμενθ.";
@@ -4834,7 +4834,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ dutch ] = "Jongere datum ter bepaling van het aantal dagen.";
             Text[ chinese_simplified ] = "ΌΖΛγΑ½ΈφΘΥΖΪΟΰ²ξΜμΚύΚ±½ΟΝνµΔΔΗΈφΘΥΖΪ΅£";
             Text[ greek ] = "Τελική ημερομηνία για τον υπολογισμό της διαφοράς ημερών.";
-            Text[ korean ] = "ΐΟΌφ ΒχΐΜ °θ»κΏ΅Ό­ΐΗ Έ¶ΑφΈ· ΐΟΐΪ.";
+            Text[ korean ] = "³―Β¥ °θ»κΏ΅Ό­ΐΗ Έ¶ΑφΈ· ΐΟΐΪ.";
             Text[ turkish ] = "Gόn farkύ hesabύ iηin geη olan tarih.";
             Text[ language_user1 ] = " ";
         };
@@ -4898,7 +4898,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ dutch ] = "Oudere datum ter bepaling van het aantal dagen.";
             Text[ chinese_simplified ] = "ΌΖΛγΑ½ΈφΘΥΖΪΟΰ²ξΜμΚύΚ±½ΟΤηµΔΔΗΈφΘΥΖΪ΅£";
             Text[ greek ] = "Αρχική ημερομηνία για τον υπολογισμό της διαφοράς ημερών.";
-            Text[ korean ] = "ΐΟΌφ ΒχΐΜ °θ»κΏ΅Ό­ΐΗ ½ΓΐΫ ΐΟΐΪ";
+            Text[ korean ] = "³―Β¥ °θ»κΏ΅Ό­ΐΗ ½ΓΐΫ ΐΟΐΪ";
             Text[ turkish ] = "Gόn farkύ hesabύ iηin erken olan tarih.";
             Text[ language_user1 ] = " ";
         };
@@ -14697,7 +14697,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ dutch ] = "Cellenbereik waarin de zoekcriteria worden aangegeven.";
             Text[ chinese_simplified ] = "ΦΈ¶¨µΔΜυΌώ΅£";
             Text[ greek ] = "Περιοχή κελιών, στην οποία υπάρχουν τα κριτήρια αναζήτησης.";
-            Text[ korean ] = "Γ£±β ±βΑΨΐΜ ΑΦΎξΑψ ΌΏ ΏµΏª.";
+            Text[ korean ] = "°Λ»φ ±βΑΨΐΜ ΑΦΎξΑψ ΌΏ ΏµΏª.";
             Text[ turkish ] = "Arama φlηόtlerinin belirtildiπi hόcre aralύπύ.";
             Text[ language_user1 ] = " ";
         };
@@ -14729,7 +14729,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ dutch ] = "Som-bereik";
             Text[ chinese_simplified ] = "sum_range";
             Text[ greek ] = "Sum_range";
-            Text[ korean ] = "ΗΥ°θ_ΏµΏª";
+            Text[ korean ] = "ΗΥ°θ_Ήόΐ§";
             Text[ turkish ] = "Toplam aralύπύ";
             Text[ language_user1 ] = " ";
         };
@@ -14761,7 +14761,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ dutch ] = "Bereik waarvan de waarden worden opgeteld.";
             Text[ chinese_simplified ] = "ΠθÒªΗσΊΝµΔµ¥ΤªΈρΗψΣς΅£";
             Text[ greek ] = "Περιοχή από την οποία αθροίζονται οι τιμές.";
-            Text[ korean ] = "°ªΐΜ ΗΥ°θµΗ΄Β ΏµΏª.";
+            Text[ korean ] = "°ªΐΜ ΗΥ°θµΗ΄Β Ήόΐ§.";
             Text[ turkish ] = "Toplanacak deπerlerin bulunduπu aralύk.";
             Text[ language_user1 ] = " ";
         };
@@ -18785,7 +18785,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ dutch ] = "Bereik  ";
             Text[ chinese_simplified ] = "Range ";
             Text[ greek ] = "Περιοχή ";
-            Text[ korean ] = "ΏµΏª ";
+            Text[ korean ] = "Ήόΐ§ ";
             Text[ turkish ] = "Aralύk ";
             Text[ language_user1 ] = " ";
         };
@@ -18818,7 +18818,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ dutch ] = "Het cellenbereik waarover u een berekening wilt maken.";
             Text[ chinese_simplified ] = "ΣΓΐ΄ΌΖΛγ·Φΐΰ»γΧάµΔµ¥ΤªΈρΗψΣς΅£";
             Text[ greek ] = "Η περιοχή, της οποίας τα κελιά θα ληφθούν υπόψη.";
-            Text[ korean ] = "ΌΏΐ» °ν·ΑΗΨΎί ΗΟ΄Β ΏµΏª.";
+            Text[ korean ] = "ΌΏΐΜ °ν·ΑµΗ΄Β Ήόΐ§.";
             Text[ turkish ] = "Hόcreleri dikkate alύnacak aralύk.";
             Text[ language_user1 ] = " ";
         };
@@ -20042,7 +20042,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ dutch ] = "Als aangegeven en niet gelijk aan nul, dan wordt bij een negatief getal en stapgrootte naar boven afgerond..";
             Text[ chinese_simplified ] = "ΘηΉϋΙθ¶¨²»µΘΣΪΑγ£¬ΤΪΈΊΚύΊΝΈΊ»ωΚύµΔΗιΏφΟΒΡΨ\nΎψ¶ΤΦµΤφ΄σµΔ·½ΟςΙαΘλ΅£";
             Text[ greek ] = "Αν ορίζεται και είναι διάφορο του μηδενός, τότε στη περίπτωση αρνητικού αριθμού και βήματος γίνεται στρογγυλοποίηση προς τα πάνω αναλογικά προς το ποσό.";
-            Text[ korean ] = "Έπµε°΅ 0ΐΈ·Ξ ΑφΑ¤µΗΎξ ΐΦΑφ ΎΚΐΈΈι Έ¶ΐΜ³Κ½ΊΌφΏΝ ΐ―ΘΏΌύΐΪΐΗ °ζΏμ ±έΎΧΏ΅ µϋ¶σ ΉέΏΓΈ²µΛ΄Ο΄Ω.";
+            Text[ korean ] = "Έπµε°΅ 0ΐΈ·Ξ ΑφΑ¤µΗΎξ ΐΦΑφ ΎΚΐΈΈι Έ¶ΐΜ³Κ½Ί ΌύΐΪΏΝ ΐ―ΘΏΌύΐΪΐΗ °ζΏμ °ªΏ΅ µϋ¶σ ΉέΏΓΈ²µΛ΄Ο΄Ω.";
             Text[ turkish ] = "Belirtildiπinde ve sύfύra eώit olmadύπύnda, negatif sayύlar ve adύmlar iηin meblaπa gφre yukarύ yuvarlama yapύlύr.";
             Text[ language_user1 ] = " ";
         };
@@ -31996,7 +31996,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ dutch ] = "Het aantal gunstige uitkomsten in de steekproef.";
             Text[ chinese_simplified ] = "³ιΡωµΔ³ΙΉ¦ΚύΔΏ΅£";
             Text[ greek ] = "Το πλήθος των επιτυχιών του δείγματος.";
-            Text[ korean ] = "Η¥Ί»ΐΗ ΐΟ·Γ ΉψΘ£";
+            Text[ korean ] = "»ωΗΓΐΗ ΐΟ·Γ ΉψΘ£";
             Text[ turkish ] = "Φrnekteki baώarύ sayύsύ.";
             Text[ language_user1 ] = " ";
         };
@@ -33582,7 +33582,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ dutch ] = "Berekent het gemiddelde van de verschuiving";
             Text[ chinese_simplified ] = "·Φ²ΌµΔΛγΚυΖ½ΎωΦµ΅£";
             Text[ greek ] = "Η μέση τιμή κατά την οποία θα γίνει η μετακίνηση.";
-            Text[ korean ] = "ΐΜµΏΏ΅ ΐΜΏλµΗ΄Β Αί°£°ªΐΤ΄Ο΄Ω.";
+            Text[ korean ] = "ΐΜµΏΏ΅ ΐΜΏλµΗ΄Β Αί°£°ª.";
             Text[ turkish ] = "Taώύma iηin kullanύlan ortalama deπer.";
             Text[ language_user1 ] = " ";
         };
@@ -33682,7 +33682,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ dutch ] = "Berekent het aantal variaties van elementen zonder herhaling.";
             Text[ chinese_simplified ] = "ΤΪΈψ¶¨ΤªΛΨΧάΚύµΔΗιΏφΟΒΌΖΛγΡ΅Θ΅ΘτΈΙΤªΛΨµΔ\nΕΕΑΠΚύ(²»ΤΚΠνΦΨΈ΄ΕΕΑΠ)΅£";
             Text[ greek ] = "Υπολογίζει το πλήθος μεταθέσεων στοιχείων χωρίς επανάληψη.";
-            Text[ korean ] = "ΉέΊΉ ΎψΐΜ ΏδΌÒΐΗ ΑΦΎξΑψ ΉψΘ£ΐΗ Δ΅Θ―µΘ ΌφΈ¦ ΉέΘ―.";
+            Text[ korean ] = "ΉέΊΉΎψΐΜ, ΏδΌÒΐΗ ΑΦΎξΑψ ΉψΘ£ΐΗ Δ΅Θ―µΘ ΌφΈ¦ °θ»κ.";
             Text[ turkish ] = "Yinelenmeyen φπeler varyasyonlarύ sayύsύnύ hesaplar.";
             Text[ language_user1 ] = " ";
         };
@@ -36593,7 +36593,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ dutch ] = "Rij";
             Text[ chinese_simplified ] = "row_num";
             Text[ greek ] = "Γραμμή";
-            Text[ korean ] = "Ώ­";
+            Text[ korean ] = "Ηΰ";
             Text[ turkish ] = "Satύr";
             Text[ language_user1 ] = " ";
         };
@@ -36689,7 +36689,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ dutch ] = "Het kolomnummer van de cel.";
             Text[ chinese_simplified ] = "µ¥ΤªΈρµΔΑΠΊΕ";
             Text[ greek ] = "Ο αριθμός στήλης του κελιού.";
-            Text[ korean ] = "ΌΏΐΗ Ώ­ΉψΘ£ΐΤ΄Ο΄Ω.";
+            Text[ korean ] = "ΌΏΐΗ Ώ­ ΉψΘ£.";
             Text[ turkish ] = "Hόcrenin sόtun numarasύ.";
             Text[ language_user1 ] = " ";
         };
@@ -37133,7 +37133,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ dutch ] = "Geeft het kolomnummer van een verwijzing.";
             Text[ chinese_simplified ] = "Θ·¶¨Ò»ΈφÒύΣΓµΔΔΪ²ΏΑΠΊΕ΅£";
             Text[ greek ] = "Ορίζει τον εσωτερικό αριθμό στήλης μιας αναφοράς.";
-            Text[ korean ] = "ΒόΑ¶ΐΗ ³»ΊΞ Ώ­ ΉψΘ£Έ¦ ΉέΘ―.";
+            Text[ korean ] = "ΒόΑ¶³»ΐΗ Ώ­ ΉψΘ£Έ¦ °αΑ¤.";
             Text[ turkish ] = "Referansύn iη sόtun numarasύnύ bulur.";
             Text[ language_user1 ] = " ";
         };
@@ -38334,7 +38334,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ dutch ] = "Definieert een verwijzing naar een cel uit een aangegeven bereik.";
             Text[ chinese_simplified ] = "·΄ΐ΅Ò»ΈφΈψ¶¨ΗψΣςΦΠµΔµ¥ΤªΈρÒύΣΓΔΪΘέ΅£";
             Text[ greek ] = "Ορίζει μια αναφορά σε ένα κελί μια επιλεγμένης περιοχής.";
-            Text[ korean ] = "Α¤ΐΗµΘ ΏµΏªΐΗ ΌΏ ΒόΑ¶Έ¦ °αΑ¤.";
+            Text[ korean ] = "Α¤ΐΗµΘ ΏµΏªΐΗ ΌΏΏ΅ ΄λΗΡ ΒόΑ¶Έ¦  °αΑ¤.";
             Text[ turkish ] = "Belirtilen aralύktan bir hόcre referansύ tanύmlar.";
             Text[ language_user1 ] = " ";
         };
@@ -38436,7 +38436,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ dutch ] = "Rij";
             Text[ chinese_simplified ] = "row_num";
             Text[ greek ] = "Γραμμή";
-            Text[ korean ] = "Ώ­";
+            Text[ korean ] = "Ηΰ";
             Text[ turkish ] = "Satύr";
             Text[ language_user1 ] = " ";
         };
@@ -39106,7 +39106,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ dutch ] = "De matrix (het bereik) waarin wordt gezocht.";
             Text[ chinese_simplified ] = "ÒªΤΪΖδΦΠΛΡΡ°µΔΚύΎέΧι(ΗψΣς)΅£";
             Text[ greek ] = "Η μήτρα (η περιοχή) στη οποία γίνεται η αναζήτηση";
-            Text[ korean ] = "Γ£ΐ» ±ΈΏªΐΞ Ηΰ·Δ(Ήόΐ§)ΐΤ΄Ο΄Ω.";
+            Text[ korean ] = "°Λ»φµΗ΄Β  Ηΰ·Δ(Ήόΐ§)ΐΤ΄Ο΄Ω.";
             Text[ turkish ] = "Arama yapύlan matris (aralύk).";
             Text[ language_user1 ] = " ";
         };
@@ -39209,7 +39209,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ dutch ] = "Geeft als resultaat een verwijzing die is verschoven ten opzichte van het uitgangspunt.";
             Text[ chinese_simplified ] = "Θ·¶¨΄ΣΦΈ¶¨»ωµγ³φ·ΆÒΖ¶―ΊσµΔÒύΣΓΗψΣς΅£";
             Text[ greek ] = "Ορίζει μια αναφορά η οποία μετακινήθηκε σχετικά με το αρχικό σημείο.";
-            Text[ korean ] = "½ΓΐΫ ΑφΑ΅ΏΝ °ό·ΓΗΨΌ­ ΐΜµΏµΘ ΒόΑ¶Έ¦ °αΑ¤";
+            Text[ korean ] = "½ΓΐΫ ΑφΑ΅°ϊ °ό·ΓΗΨΌ­, ΐΜµΏµΘ ΒόΑ¶Έ¦ °αΑ¤";
             Text[ turkish ] = "Ηύkύώ noktasύna gφre taώύnan bir referans tanύmlar.";
             Text[ language_user1 ] = " ";
         };
@@ -39311,7 +39311,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ dutch ] = "Rijen";
             Text[ chinese_simplified ] = "rows";
             Text[ greek ] = "Γραμμές";
-            Text[ korean ] = "Ώ­";
+            Text[ korean ] = "Ηΰ";
             Text[ turkish ] = "Satύr";
             Text[ language_user1 ] = " ";
         };
@@ -39343,7 +39343,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ dutch ] = "Het aantal cellen ten opzichte waarvan naar boven of naar beneden wordt verschoven.";
             Text[ chinese_simplified ] = "ΙΟΟΒÒΖ¶―µΔΠΠΚύ΅£";
             Text[ greek ] = "Το πλήθος των γραμμών που πρόκειται να γίνει η μετακίνηση προς τα πάνω ή κάτω.";
-            Text[ korean ] = "ΐ§ ¶Η΄Β ΎΖ·΅·Ξ ΐΜµΏµΗ΄Β ΗΰΐΗ ΌφΐΤ΄Ο΄Ω.";
+            Text[ korean ] = "ΐ§ ¶Η΄Β ΎΖ·΅·Ξ ΐΜµΏµΗ΄Β ΗΰΐΗ °³Όφ.";
             Text[ turkish ] = "Yukarύ ya da aώaπύ taώύnacak satύr sayύsύ.";
             Text[ language_user1 ] = " ";
         };
@@ -39407,7 +39407,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ dutch ] = "Het aantal kolommen ten opzichte waarvan naar links of naar rechts wordt verschoven.";
             Text[ chinese_simplified ] = "ΧσΣÒÒΖ¶―µΔΑΠΚύ΅£";
             Text[ greek ] = "Ο αριθμός των στηλών που θα μετακινηθούν προς τα αριστερά ή δεξιά.";
-            Text[ korean ] = "ΏήΒΚ ¶Η΄Β ΏΐΈ¥ΒΚΐΈ·Ξ ΐΜµΏµΗ΄Β Ώ­ΐΗ ΌφΐΤ΄Ο΄Ω.";
+            Text[ korean ] = "ΏήΒΚ ¶Η΄Β ΏΐΈ¥ΒΚΐΈ·Ξ ΐΜµΏµΗ΄Β Ώ­ °³Όφ.";
             Text[ turkish ] = "Sola ya da saπa taώύnacak sόtun sayύsύ.";
             Text[ language_user1 ] = " ";
         };
@@ -39536,7 +39536,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ dutch ] = "Het aantal kolommen van de verschoven verwijzing.";
             Text[ chinese_simplified ] = "ÒύΣΓΗψΣςµΔΑΠΚύ΅£";
             Text[ greek ] = "Το πλήθος των στηλών της αναφοράς που μετακινήθηκε.";
-            Text[ korean ] = "ΐΜµΏµΘ ΒόΑ¶Ώ΅Ό­ΐΗ  Ώ­ΐΗ Όφ";
+            Text[ korean ] = "ΐΜµΏµΘ ΒόΑ¶ΐΗ  Ώ­ °³Όφ";
             Text[ turkish ] = "Taώύnan referansύn sόtun sayύsύ.";
             Text[ language_user1 ] = " ";
         };
@@ -39678,7 +39678,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ dutch ] = "Wijst de formulecel een opmaakprofiel toe.";
             Text[ chinese_simplified ] = "·ΦΕδÒ»ΈφΈρΚ½ΡωΚ½ΈψÒ»Έφµ¥ΤªΈρ΅£";
             Text[ greek ] = "Εφαρμόζει ένα πρότυπο μορφοποίησης στο κελί του τύπου.";
-            Text[ korean ] = "Όφ½ΔΌΏΏ΅ Ό­½Δΐ―Ηό ΐϋΏλ.";
+            Text[ korean ] = "Όφ½ΔΌΏΏ΅ Ό­½Δΐ»  ΐϋΏλ.";
             Text[ turkish ] = "Formόl hόcresine bir biηim uygular.";
             Text[ language_user1 ] = "All \"Vorlagen\" /Styles are written with a capital S.10.5.00EMp.s. Formatvorlage ist Style im Gegensatz zu Dok-vorlage (template). ODER ist es in Calc was Besonderes?";
         };
@@ -39813,7 +39813,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ dutch ] = "De tijd (in seconden) waarin het opmaakprofiel geldig blijft.";
             Text[ chinese_simplified ] = "ΡωΚ½±£³ΦΣΠΠ§µΔΚ±Όδ(ÒΤΓλΞªµ¥Ξ»)΅£";
             Text[ greek ] = "Η διάρκεια (σε δευτερόλεπτα) κατά την οποία το πρότυπο παραμένει έγκυρο.";
-            Text[ korean ] = "ΐ―ΗόΐΜ ΐ―ΘΏΗΟ°Τ ³²ΎΖΐΦ΄Β ½Γ°£(ΓΚ΄άΐ§)";
+            Text[ korean ] = "ΐ―ΗόΐΜ ΐ―ΘΏΗΟ°Τ ³²ΎΖΐΦ΄Β ½Γ°£(ΓΚ)";
             Text[ turkish ] = "Biηimin geηerli olacaπύ sόre (saniye biriminden).";
             Text[ language_user1 ] = "All \"Vorlagen\" /Styles are written with a capital S.10.5.00EM";
         };
@@ -40587,7 +40587,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ dutch ] = "Verwijdert niet-afdrukbare tekens uit de tekst.";
             Text[ chinese_simplified ] = "ΙΎ³ύΞΔ±ΎΦΠ²»Δά΄ςΣ΅µΔΧΦ·ϋ΅£";
             Text[ greek ] = "Διαγράφει από το κείμενο τους χαρακτήρες οι οποίοι δεν είναι δυνατόν να εκτυπωθούν.";
-            Text[ korean ] = "ΕΨ½ΊΖ®Ώ΅Ό­ ΐΞΌβ ΊÒ°΅΄ΙΗΡ Ή®ΐΪΈ¦ Α¦°Ε";
+            Text[ korean ] = "ΕΨ½ΊΖ®Ώ΅Ό­ ΊρΐΞΌβ Ή®ΐΪΈ¦  Α¦°Ε";
             Text[ turkish ] = "Yazdύrύlamayan karakterleri metinden siler.";
             Text[ language_user1 ] = " ";
         };
@@ -40657,7 +40657,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ dutch ] = "De tekst waaruit de niet-afdrukbare tekens worden verwijderd.";
             Text[ chinese_simplified ] = "Òª΄ΣΦΠΙΎ³ύΞή·¨΄ςΣ΅ΧΦ·ϋµΔΞΔ±Ύ΅£";
             Text[ greek ] = "Το κείμενο από το οποίο θα απομακρυνθούν οι χαρακτήρες που δεν είναι δυνατόν να εκτυπωθούν.";
-            Text[ korean ] = "ΐΞΌβΗÒ Όφ Ύψ΄Β Ή®ΐΪ°΅  Α¦°ΕµΗΎξΎί  ΗΟ΄Β ΕΨ½ΊΖ®";
+            Text[ korean ] = "ΊρΐΞΌβ Ή®ΐΪ°΅  Α¦°ΕµΗΎξΎί  ΗΟ΄Β ΕΨ½ΊΖ®";
             Text[ turkish ] = "Yazdύrύlamayan karakterlerin silineceπi metin.";
             Text[ language_user1 ] = " ";
         };
