@@ -2,9 +2,9 @@
  *
  *  $RCSfile: debug.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: as $ $Date: 2001-05-04 13:13:15 $
+ *  last change: $Author: as $ $Date: 2001-05-07 09:56:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,9 +86,6 @@
     // see "assertion.hxx" for further informations
     #ifndef ENABLE_ASSERTIONS
         #define ENABLE_ASSERTIONS
-    #endif
-    #ifndef ENABLE_MUTEXDEBUG
-        #define ENABLE_MUTEXDEBUG
     #endif
 #endif
 
