@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.hrc,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 15:01:19 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:19:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,6 @@
 #define STR_INSERTLAYER         (RID_APP_START+37)
 #define STR_MODIFYLAYER         (RID_APP_START+38)
 #define STR_NO_EFFECT           (RID_APP_START+39)
-#define STR_UNDO_SLIDE_PARAMS   (RID_APP_START+40)
 #define STR_UNDO_SLIDE_MOVE     (RID_APP_START+41)
 #define STR_UNDO_REPLACE        (RID_APP_START+42)
 
@@ -329,9 +328,6 @@
 
 
 #define STR_TRANSFORM               (RID_APP_START+240)
-
-#define STR_UNDO_ANIMATION          (RID_APP_START+241)
-
 
 #define STR_EXPORT_ALL                      (RID_APP_START+242)
 #define STR_EXPORT_UNKNOWN_FORMAT           (RID_APP_START+243)
