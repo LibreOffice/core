@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtxml.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: mib $ $Date: 2001-05-07 06:01:50 $
+ *  last change: $Author: dvo $ $Date: 2001-05-14 12:26:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -287,7 +287,7 @@ sal_uInt32 SwXMLWriter::_Write()
 
     if (NULL != pStg)
     {
-        if( !bOrganizerMode &&
+        if( !bOrganizerMode && !bBlock &&
             SFX_CREATE_MODE_EMBEDDED != pDoc->GetDocShell()->GetCreateMode() )
         {
             if( !WriteThroughComponent(
@@ -313,16 +313,19 @@ sal_uInt32 SwXMLWriter::_Write()
 
         if( !bErr )
         {
-            if( !WriteThroughComponent(
+            if( !bBlock )
+            {
+                if( !WriteThroughComponent(
                     xModelComp, "settings.xml", xServiceFactory,
                     "com.sun.star.comp.Writer.XMLSettingsExporter",
                     aFilterArgs, aProps, sal_False ) )
-            {
-                if( !bWarn )
                 {
-                    bWarn = sal_True;
-                    sWarnFile = String( RTL_CONSTASCII_STRINGPARAM("settings.xml"),
-                                        RTL_TEXTENCODING_ASCII_US );
+                    if( !bWarn )
+                    {
+                        bWarn = sal_True;
+                        sWarnFile = String( RTL_CONSTASCII_STRINGPARAM("settings.xml"),
+                                            RTL_TEXTENCODING_ASCII_US );
+                    }
                 }
             }
         }
@@ -441,7 +444,7 @@ sal_Bool SwXMLWriter::WriteThroughComponent(
 
     if( bPlainStream )
     {
-        aPropName = String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM("Compressed") );
+        OUString aPropName( RTL_CONSTASCII_USTRINGPARAM("Compressed") );
         sal_Bool bFalse = sal_False;
         aAny.setValue( &bFalse, ::getBooleanCppuType() );
         xDocStream->SetProperty( aPropName, aAny );
@@ -449,7 +452,7 @@ sal_Bool SwXMLWriter::WriteThroughComponent(
 #if SUPD > 630
     else
     {
-        aPropName = String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM("Encrypted") );
+        OUString aPropName( RTL_CONSTASCII_USTRINGPARAM("Encrypted") );
         sal_Bool bTrue = sal_True;
         aAny.setValue( &bTrue, ::getBooleanCppuType() );
         xDocStream->SetProperty( aPropName, aAny );
@@ -551,11 +554,14 @@ void GetXMLWriter( const String& rName, WriterRef& xRet )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/wrtxml.cxx,v 1.28 2001-05-07 06:01:50 mib Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/wrtxml.cxx,v 1.29 2001-05-14 12:26:47 dvo Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.28  2001/05/07 06:01:50  mib
+      improved error messages for XML filter
+
       Revision 1.27  2001/05/03 15:49:03  dvo
       - support for encrypting streams added
       - turned functions into private methods
