@@ -142,3 +142,4 @@ hedabu: ..\inc\stcpcon.hxx %_DEST%\inc%_EXT%\tools\stcpcon.hxx
 hedabu: ..\inc\btcpcon.hxx %_DEST%\inc%_EXT%\tools\btcpcon.hxx
 hedabu: ..\inc\sasyncfn.hxx %_DEST%\inc%_EXT%\tools\sasyncfn.hxx
 hedabu: ..\inc\tcpdef.hxx %_DEST%\inc%_EXT%\tools\tcpdef.hxx
+hedabu: ..\inc\config.hxx %_DEST%\inc%_EXT%\tools\config.hxx
