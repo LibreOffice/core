@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchcfg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-03-30 13:21:15 $
+ *  last change: $Author: dg $ $Date: 2001-06-22 11:49:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,6 +127,20 @@ const Sequence<OUString>& lcl_GetSearchPropertyNames_Impl()
     {
         aNames.realloc(12);
         OUString* pNames = aNames.getArray();
+#ifdef TF_CFGDATA
+        pNames[0] = C2U("And/ooInetPrefix");
+        pNames[1] = C2U("And/ooInetSuffix");
+        pNames[2] = C2U("And/ooInetSeparator");
+        pNames[3] = C2U("And/ooInetCaseMatch");
+        pNames[4] = C2U("Or/ooInetPrefix");
+        pNames[5] = C2U("Or/ooInetSuffix");
+        pNames[6] = C2U("Or/ooInetSeparator");
+        pNames[7] = C2U("Or/ooInetCaseMatch");
+        pNames[8] = C2U("Exact/ooInetPrefix");
+        pNames[9] = C2U("Exact/ooInetSuffix");
+        pNames[10] = C2U("Exact/ooInetSeparator");
+        pNames[11] = C2U("Exact/ooInetCaseMatch");
+#else
         pNames[0] = C2U("And/Prefix");
         pNames[1] = C2U("And/Suffix");
         pNames[2] = C2U("And/Separator");
@@ -139,12 +153,17 @@ const Sequence<OUString>& lcl_GetSearchPropertyNames_Impl()
         pNames[9] = C2U("Exact/Suffix");
         pNames[10] = C2U("Exact/Separator");
         pNames[11] = C2U("Exact/CaseMatch");
+#endif
     }
     return aNames;
 }
 // ---------------------------------------------------------------------------
 SvxSearchConfig::SvxSearchConfig(sal_Bool bEnableNotify) :
+#ifdef TF_CFGDATA
+    utl::ConfigItem(C2U("Inet/SearchEngines"), CONFIG_MODE_DELAYED_UPDATE),
+#else
     utl::ConfigItem(C2U("Inet/Search/SearchEngines"), CONFIG_MODE_DELAYED_UPDATE),
+#endif
     pImpl(new SvxSearchConfig_Impl)
 {
     if(bEnableNotify)
