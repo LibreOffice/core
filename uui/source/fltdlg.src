@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltdlg.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:44:55 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:49:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ ModalDialog DLG_FILTER_SELECT
     Text [ English ] = "Select Filter" ;
     Text [ norwegian ] = "Velg Filter" ;
     Text [ italian ] = "Scelta filtro" ;
-    Text [ portuguese_brazilian ] = "Selecionar Filtro" ;
+    Text [ portuguese_brazilian ] = "Selção de Filtro" ;
     Text [ portuguese ] = "Seleccionar filtro" ;
     Text [ finnish ] = "Suodattimen valinta" ;
     Text [ danish ] = "Filterudvalg" ;
@@ -97,7 +97,7 @@ ModalDialog DLG_FILTER_SELECT
     Text[ arabic ] = "ÊÍÏíÏ ÇáİáÊÑ";
     Text[ greek ] = "ÅğéëïãŞ ößëôñïõ";
     Text[ korean ] = "í•„í„° ì„ íƒ";
-    Text[ turkish ] = "Filtre seçimi";
+    Text[ turkish ] = "Süzgeç Seçimi";
     Text[ catalan ] = "Seleccionar filtro";
 
     FixedText FT_URL
@@ -139,7 +139,19 @@ ModalDialog DLG_FILTER_SELECT
         TabStop = TRUE ;
     };
     Text[ thai ] = "à¹€à¸¥à¸·à¸­à¸à¸•à¸±à¸§à¸à¸£à¸­à¸‡";
+    Text[ czech ] = "VÃ½bÄ›r filtru";
+    Text[ hebrew ] = "â€®×‘×—×™×¨×ª ××¡× ×Ÿâ€¬";
+    Text[ hindi ] = "Filter Selection";
 };
+
+
+
+
+
+
+
+
+
 
 
 
