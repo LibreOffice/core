@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.h,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 14:24:37 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 18:24:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,6 +177,7 @@ class X11SalFrame : public SalFrame
     bool            mbMoved;
     bool            mbSized;
     Rectangle       maPaintRegion;
+    bool            mbWasGraphicsPaint;
 
     Timer           maAlwaysOnTopRaiseTimer;
 
@@ -302,6 +303,7 @@ public:
     virtual ULONG               GetCurrentModButtons();
     virtual void                SetParent( SalFrame* pNewParent );
     virtual bool                SetPluginParent( SystemParentData* pNewParent );
+    virtual void                YieldGraphicsExpose();
 };
 
 #ifdef _SV_SALDISP_HXX
