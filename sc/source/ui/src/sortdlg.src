@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sortdlg.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-05 09:52:18 $
+ *  last change: $Author: kz $ $Date: 2002-11-27 17:00:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,8 +84,8 @@ TabPage RID_SCPAGE_SORT_FIELDS
         Text [ italian ] = "Crescente" ;
         Text [ portuguese_brazilian ] = "~Ascendente" ;
         Text [ portuguese ] = "~Ascendente" ;
-        Text [ finnish ] = "~Nouseva" ;
-        Text [ danish ] = "Stigende" ;
+        Text [ finnish ] = "Nouseva" ;
+        Text [ danish ] = "St~igende" ;
         Text [ french ] = "Croissant" ;
         Text [ swedish ] = "Stig~ande" ;
         Text [ dutch ] = "Op~lopend" ;
@@ -115,7 +115,7 @@ TabPage RID_SCPAGE_SORT_FIELDS
         Text [ italian ] = "Decrescente" ;
         Text [ portuguese_brazilian ] = "~Descendente" ;
         Text [ portuguese ] = "~Descendente" ;
-        Text [ finnish ] = "~Laskeva" ;
+        Text [ finnish ] = "Laskeva" ;
         Text [ danish ] = "Faldende" ;
         Text [ french ] = "DÈcroissant" ;
         Text [ swedish ] = "~Fallande" ;
@@ -146,7 +146,7 @@ TabPage RID_SCPAGE_SORT_FIELDS
         Text [ italian ] = "Ordina per" ;
         Text [ portuguese_brazilian ] = "Ordenar por" ;
         Text [ portuguese ] = "~Ordenar por" ;
-        Text [ finnish ] = "Lajittelup~eruste" ;
+        Text [ finnish ] = "Lajittelu~peruste" ;
         Text [ danish ] = "~Sorter efter" ;
         Text [ french ] = "~Trier selon" ;
         Text [ swedish ] = "~Sortera efter" ;
@@ -184,8 +184,8 @@ TabPage RID_SCPAGE_SORT_FIELDS
         Text [ italian ] = "Cre~scente" ;
         Text [ portuguese_brazilian ] = "Ascend~ente" ;
         Text [ portuguese ] = "Ascenden~te" ;
-        Text [ finnish ] = "N~ouseva" ;
-        Text [ danish ] = "Stigende" ;
+        Text [ finnish ] = "Nouseva" ;
+        Text [ danish ] = "Sti~gende" ;
         Text [ french ] = "Croissant" ;
         Text [ swedish ] = "St~igande" ;
         Text [ dutch ] = "Oplope~nd" ;
@@ -215,7 +215,7 @@ TabPage RID_SCPAGE_SORT_FIELDS
         Text [ italian ] = "Decresce~nte" ;
         Text [ portuguese_brazilian ] = "D~escendente" ;
         Text [ portuguese ] = "D~escendente" ;
-        Text [ finnish ] = "L~askeva" ;
+        Text [ finnish ] = "Laskeva" ;
         Text [ danish ] = "Faldende" ;
         Text [ french ] = "DÈcroissant" ;
         Text [ swedish ] = "Fa~llande" ;
@@ -284,8 +284,8 @@ TabPage RID_SCPAGE_SORT_FIELDS
         Text [ italian ] = "Crescen~te" ;
         Text [ portuguese_brazilian ] = "Ascenden~te" ;
         Text [ portuguese ] = "Ascenden~te" ;
-        Text [ finnish ] = "Nou~seva" ;
-        Text [ danish ] = "Stigende" ;
+        Text [ finnish ] = "Nouseva" ;
+        Text [ danish ] = "Stige~nde" ;
         Text [ french ] = "Croissant" ;
         Text [ swedish ] = "Sti~gande" ;
         Text [ dutch ] = "~Oplopend" ;
@@ -315,7 +315,7 @@ TabPage RID_SCPAGE_SORT_FIELDS
         Text [ italian ] = "D~ecrescente" ;
         Text [ portuguese_brazilian ] = "De~scendente" ;
         Text [ portuguese ] = "De~scendente" ;
-        Text [ finnish ] = "Laske~va" ;
+        Text [ finnish ] = "Laskeva" ;
         Text [ danish ] = "Faldende" ;
         Text [ french ] = "DÈcroissant" ;
         Text [ swedish ] = "Falla~nde" ;
@@ -346,7 +346,7 @@ TabPage RID_SCPAGE_SORT_FIELDS
         Text [ italian ] = "poi per" ;
         Text [ portuguese_brazilian ] = "Em seguida por" ;
         Text [ portuguese ] = "~Depois por" ;
-        Text [ finnish ] = "Toinen lajitteluehto" ;
+        Text [ finnish ] = "Lis‰lajittelu~ehto" ;
         Text [ danish ] = "D~erefter efter" ;
         Text [ french ] = "P~uis selon" ;
         Text [ swedish ] = "Se~dan efter" ;
@@ -447,7 +447,7 @@ TabPage RID_SCPAGE_SORT_OPTIONS
         Text [ italian ] = "Origine con intestazioni ~riga" ;
         Text [ portuguese_brazilian ] = "Fonte com ~cabe?alhos de fileiras" ;
         Text [ portuguese ] = "¡rea contÈm ~cabeÁalhos de linhas" ;
-        Text [ finnish ] = "Alue sis‰lt‰‰ ~riviotsikkoja" ;
+        Text [ finnish ] = "Alue sis‰lt‰‰ ~riviotsikoita" ;
         Text [ danish ] = "OmrÂdet indeholder rÊkkeoverskrifter" ;
         Text [ french ] = "La plage contient des en-tÍtes de ~lignes" ;
         Text [ swedish ] = "OmrÂde innehÂller radh~uvuden" ;
@@ -508,7 +508,7 @@ TabPage RID_SCPAGE_SORT_OPTIONS
         Text [ italian ] = "Area destina~zione risultato" ;
         Text [ portuguese_brazilian ] = "~?rea de destino do resultado" ;
         Text [ portuguese ] = "~Copiar resultados da classificaÁ„o para:" ;
-        Text [ finnish ] = "~Kopioi lajittelutulokset:" ;
+        Text [ finnish ] = "Kopioi ~lajittelutulokset:" ;
         Text [ danish ] = "Sorteringsresultat-output til" ;
         Text [ french ] = "Copier le rÈsultat du tri vers" ;
         Text [ swedish ] = "Sorteringsresult~at till" ;
@@ -559,7 +559,7 @@ TabPage RID_SCPAGE_SORT_OPTIONS
         Text [ danish ] = "Brugerdefineret sorteringsrÊkkef¯lge" ;
         Text [ french ] = "Ordre de tri ~utilisateur" ;
         Text [ swedish ] = "An~v‰ndardefinierad sorteringsordning" ;
-        Text [ dutch ] = "~Gebruikergedefinieerde sorteervolgorde" ;
+        Text [ dutch ] = "~Door gebruiker gedefinieerde sorteervolgorde" ;
         Text [ spanish ] = "Orden de clasificaciÛn definida por el usuario" ;
         Text [ english_us ] = "Custom sort ~order" ;
         TabStop = TRUE ;
@@ -698,8 +698,8 @@ TabPage RID_SCPAGE_SORT_OPTIONS
         Text [ italian ] = "Dall'~alto verso il basso (ordina righe)" ;
         Text [ portuguese_brazilian ] = "~Topo para a base (ordenar fileiras)" ;
         Text [ portuguese ] = "De ~cima para baixo (ordenar linhas)" ;
-        Text [ finnish ] = "~Alhaalta ylˆs (rivien lajittelu)" ;
-        Text [ danish ] = "Fra ¯verst til nederst (sorter rÊkker)" ;
+        Text [ finnish ] = "Yl~h‰‰lt‰ alas (rivien lajittelu)" ;
+        Text [ danish ] = "F~ra ¯verst til nederst (sorter rÊkker)" ;
         Text [ french ] = "De ~haut en bas (tri de lignes)" ;
         Text [ swedish ] = "UppifrÂn ~och ned (sortera rader)" ;
         Text [ dutch ] = "Van ~boven naar beneden (rijen sorteren)" ;
@@ -768,7 +768,7 @@ TabPage RID_SCPAGE_SORT_OPTIONS
         Text [ spanish ] = "¡rea de datos:" ;
         Text [ english_us ] = "Data area:" ;
         Text[ chinese_simplified ] = "Êï∞ÊçÆÂå∫ÂüüÔºö";
-        Text[ russian ] = "ƒË‡Ô‡ÁÓÌ ‰‡ÌÌ˚ı:";
+        Text[ russian ] = "Œ·Î‡ÒÚ¸ ‰‡ÌÌ˚ı:";
         Text[ polish ] = "Obszar danych:";
         Text[ japanese ] = "„Éá„Éº„ÇøÁØÑÂõ≤:";
         Text[ chinese_traditional ] = "Ë≥áÊñôÂçÄÂüüÔºö";
