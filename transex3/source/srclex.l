@@ -81,12 +81,12 @@ void YYWarning();
 	}
 }
 
-^[\t ]*"#ifndef".+$	|
-^[\t ]*"#ifdef".+$	|
-^[\t ]*"#if".+$		|
-^[\t ]*"#elif".*$	|
-^[\t ]*"#else".*$	|
-^[\t ]*"#endif".*$	{
+(^[\t ]*"#ifndef".+$)	|
+(^[\t ]*"#ifdef".+$)	|
+(^[\t ]*"#if".+$)		|
+(^[\t ]*"#elif".*$)	|
+(^[\t ]*"#else".*$)	|
+(^[\t ]*"#endif".*$)	{
 	WorkOnTokenSet( CONDITION, yytext );
 }
 
@@ -96,22 +96,22 @@ void YYWarning();
 }
 
 [a-zA-Z]+[ \t]+[^={;\n]+\n[ \t]*"#".*\n[ \t]*"{"	|
-[a-zA-Z]+[ \t]+[^={;\n]+\n{0,1}([ \t]*"//".*\n)*[ \t]*"{"	{
+[a-zA-Z]+[ \t]+[^={;\n]+\n?([ \t]*"//".*\n)*[ \t]*"{"	{
 /* RESSOURCE // String TTT_XX ... */
 	WorkOnTokenSet( RESSOURCE, yytext );
 }
 
-^[\t ]*[a-zA-Z_]+[\t ]*"\\"{0,1}[\t ]*\n{0,1}[ \t]*"{"[\t ]*"\\"{0,1}	{
+^[\t ]*[a-zA-Z_]+[\t ]*"\\"?[\t ]*\n?[ \t]*"{"[\t ]*"\\"?	{
 /* SMALRESSOURCE // String ... */
 	WorkOnTokenSet( SMALRESSOURCE, yytext );
 }
 
-[\t ]*[a-zA-Z0-9_]+[ \t]*("["[ \t]*[a-zA-Z0-9_\-]+[ \t]*"]"[ \t]*){0,1}=[ \t]*L{0,1}\".*\".*\n{0,1}	{
+[\t ]*[a-zA-Z0-9_]+[ \t]*("["[ \t]*[a-zA-Z0-9_\-]+[ \t]*"]"[ \t]*)?=[ \t]*L?\".*\".*\n?	{
 /* TEXTLINE // TextTyp = "A Text" */
 	WorkOnTokenSet( TEXTLINE, yytext );
 }
 
-[\t ]*[a-zA-Z0-9_]+[ \t]*("["[ \t]*[a-zA-Z0-9_\-]+[ \t]*"]"[ \t]*){0,1}(\n[ \t]*){0,1}=([ \t]*\n){0,1}(([a-zA-Z0-9_]+)|(\".*\")|([ \t\n]*))*\".*\"(([a-zA-Z0-9_]+)|(\".*\")|([ \t\n]*))*;	{
+[\t ]*[a-zA-Z0-9_]+[ \t]*("["[ \t]*[a-zA-Z0-9_\-]+[ \t]*"]"[ \t]*)?(\n[ \t]*)?=([ \t]*\n)?(([a-zA-Z0-9_]+)|(\".*\")|([ \t\n]*))*\".*\"(([a-zA-Z0-9_]+)|(\".*\")|([ \t\n]*))*;	{
 /* LONGTEXTLINE // TextTyp = "A Text" HHH_XXX "A Text" ZZZ_TTT ... */
 	WorkOnTokenSet( LONGTEXTLINE, yytext );
 }
@@ -121,12 +121,12 @@ void YYWarning();
 	WorkOnTokenSet( TEXT, yytext );
 }
 
-"{"[ \t]*\\{0,1}	{
+"{"[ \t]*\\?	{
 /* LEVELUP */
 	WorkOnTokenSet( LEVELUP, yytext );
 }
 
-"}"[ \t]*;([ \t]*\\){0,1}	{
+"}"[ \t]*;([ \t]*\\)?	{
 /* LEVELDOWN */
 	WorkOnTokenSet( LEVELDOWN, yytext );
 }
@@ -136,7 +136,7 @@ void YYWarning();
 	WorkOnTokenSet( APPFONTMAPPING, yytext );
 }
 
-[ \t]*[a-zA-Z0-9_]+[ \t]*=[ \t]*[0123456789]{1,5}[ \t]*";"{0,1}\\{0,1} {
+[ \t]*[a-zA-Z0-9_]+[ \t]*=[ \t]*[0123456789]{1,5}[ \t]*";"?\\? {
 /* TEXTREFID // TextTyp = 12345 */
 	WorkOnTokenSet( TEXTREFID, yytext );
 }
@@ -149,22 +149,22 @@ void YYWarning();
 
 
 
-[a-zA-Z0-9_]+[ \t]*("["[ \t]*[a-zA-Z0-9_\-]+[ \t]*"]"[ \t]*){0,1}"="[ \t]*(\\[ \t]*){0,1}\n{0,1}[ \t]*"{"[ \t]*(\\[ \t]*){0,1}\n{0,1}[ \t]*"<"	{
+[a-zA-Z0-9_]+[ \t]*("["[ \t]*[a-zA-Z0-9_\-]+[ \t]*"]"[ \t]*)?"="[ \t]*(\\[ \t]*)?\n?[ \t]*"{"[ \t]*(\\[ \t]*)?\n?[ \t]*"<"	{
 /* LISTASSIGNMENT  Typ [ ... ] = ... */
 	WorkOnTokenSet( LISTASSIGNMENT, yytext );
 }
 
-"StringList"+[ \t]*("["[ \t]*[a-zA-Z0-9_\-]+[ \t]*"]"[ \t]*){0,1}"="[ \t]*(\\[ \t]*){0,1}\n{0,1}[ \t]*"{"[ \t]*(\\[ \t]*){0,1}\n{0,1}[ \t]*	{
+"StringList"+[ \t]*("["[ \t]*[a-zA-Z0-9_\-]+[ \t]*"]"[ \t]*)?"="[ \t]*(\\[ \t]*)?\n?[ \t]*"{"[ \t]*(\\[ \t]*)?\n?[ \t]*	{
 /* LISTASSIGNMENT  Typ [ ... ] = ... */
 	WorkOnTokenSet( LISTASSIGNMENT, yytext );
 }
 
-"UIEntries"[ \t]*("["[ \t]*[a-zA-Z0-9_\-]+[ \t]*"]"[ \t]*){0,1}"="[ \t]*(\\[ \t]*){0,1}\n{0,1}[ \t]*"{"	{
+"UIEntries"[ \t]*("["[ \t]*[a-zA-Z0-9_\-]+[ \t]*"]"[ \t]*)?"="[ \t]*(\\[ \t]*)?\n?[ \t]*"{"	{
 /* UIENTRIES */
 	WorkOnTokenSet( UIENTRIES, yytext );
 }
 
-"<"{0,1}[ \t]*L{0,1}\".*\".*">" {
+"<"?[ \t]*L?\".*\".*">" {
 /* LISTTEXT */
 	WorkOnTokenSet( LISTTEXT, yytext );
 }
@@ -194,7 +194,7 @@ void YYWarning();
 /*	YYWarning( "Unknown Char" ); */
 }
 
-"{"{0,1}[ \t]*\".*\"[ \t]*";"[ \t]*"}" {
+"{"?[ \t]*\".*\"[ \t]*";"[ \t]*"}" {
 /* _LISTTEXT */
 	WorkOnTokenSet( _LISTTEXT, yytext );
 }
