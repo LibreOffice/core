@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cmc $ $Date: 2002-08-22 11:30:32 $
+ *  last change: $Author: cmc $ $Date: 2002-09-24 14:39:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,9 @@
 
 #ifndef __SGI_STL_VECTOR
 #include <vector>
+#endif
+#ifndef __SGI_STL_STACK
+#include <stack>
 #endif
 
 #if defined WNT || defined WIN || defined OS2
@@ -147,16 +150,26 @@ struct WW8_TXBXS
 #pragma pack()
 #endif
 
+struct EscherShape
+{
+    ULONG mnEscherShapeOrder;
+    ULONG mnNoInlines;
+    EscherShape(ULONG nEscherShapeOrder)
+        : mnEscherShapeOrder(nEscherShapeOrder), mnNoInlines(0) {}
+};
+
 class wwZOrderer
 {
 private:
     //No of objects in doc before starting (always 0 unless using file->insert
     //and probably 0 then as well
-    std::vector<ULONG> maEscherLayer;
-    typedef std::vector<ULONG>::iterator myeiter;
+    std::vector<EscherShape> maEscherLayer;
+    typedef std::vector<EscherShape>::iterator myeiter;
 
     std::vector<short> maDrawHeight;
     typedef std::vector<short>::iterator myditer;
+
+    std::stack<USHORT> maIndexes;
 
     ULONG mnNoInitialObjects;
     ULONG mnInlines;
@@ -165,6 +178,8 @@ private:
     sal_Int8 mnHeaven;
     sal_Int8 mnHell;
 
+    USHORT GetEscherObjectIdx(ULONG nSpId);
+    myeiter MapEscherIdxToIter(ULONG nIdx);
     ULONG GetEscherObjectPos(ULONG nSpId);
     ULONG GetDrawingObjectPos(short nWwHeight);
 public:
@@ -177,6 +192,8 @@ public:
      */
     void InsertDrawingObject(SdrObject* pObj, short nWwHeight);
     void InsertEscherObject(SdrObject* pObject, ULONG nSpId);
+    void InsideEscher(ULONG nIndex);
+    void OutsideEscher();
 };
 
 void WW8FSPAShadowToReal( WW8_FSPA_SHADOW* pFSPAS, WW8_FSPA* pPic );

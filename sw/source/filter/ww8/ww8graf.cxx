@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: cmc $ $Date: 2002-09-20 10:55:23 $
+ *  last change: $Author: cmc $ $Date: 2002-09-24 14:39:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2878,11 +2878,15 @@ SwFlyFrmFmt* SwWW8ImplReader::ConvertDrawTextToFly(SdrObject* &rpObject,
 
             SwNodeIndex aStart(pPaM->GetPoint()->nNode);
 
+            pWWZOrder->InsideEscher(pF->nSpId);
+
             // lies den Text ein
             bTxbxFlySection = true;
             bool bJoined = ReadText(nStartCp, (nEndCp-nStartCp),
                 MAN_MAINTEXT == pPlcxMan->GetManType() ?
                 MAN_TXBX : MAN_TXBX_HDFT);
+
+            pWWZOrder->OutsideEscher();
 
             MoveOutsideFly(pRetFrmFmt, aSave.GetStartPos(),!bJoined);
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf2.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: cmc $ $Date: 2002-08-28 12:13:10 $
+ *  last change: $Author: cmc $ $Date: 2002-09-24 14:39:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,23 +179,39 @@ wwZOrderer::wwZOrderer(SdrPage* pDrawPg,
     ASSERT(mpDrawPg,"Missing draw page impossible!");
 }
 
+void wwZOrderer::InsideEscher(ULONG nSpId)
+{
+    maIndexes.push(GetEscherObjectIdx(nSpId));
+}
+
+void wwZOrderer::OutsideEscher()
+{
+    maIndexes.pop();
+}
+
 void wwZOrderer::InsertEscherObject(SdrObject* pObject, ULONG nSpId)
 {
     ULONG nInsertPos = GetEscherObjectPos(nSpId);
     mpDrawPg->InsertObject(pObject,nInsertPos + mnNoInitialObjects + mnInlines);
 }
 
-ULONG wwZOrderer::GetEscherObjectPos(ULONG nSpId)
+wwZOrderer::myeiter wwZOrderer::MapEscherIdxToIter(ULONG nIdx)
 {
-    /*
-    #97824# EscherObjects have their own ordering which needs to be matched to
-    the actual ordering that should be used when inserting them into the
-    document.
-    */
+    myeiter aIter = maEscherLayer.begin();
+    myeiter aEnd = maEscherLayer.end();
+    while (aIter != aEnd)
+    {
+        if (aIter->mnEscherShapeOrder == nIdx)
+            break;
+        ++aIter;
+    }
+    return aIter;
+}
 
+USHORT wwZOrderer::GetEscherObjectIdx(ULONG nSpId)
+{
     USHORT nFound=0;
     USHORT nShapeCount = mpShapeOrders ? mpShapeOrders->Count() : 0;
-
     // First, find out what position this shape is in in the Escher order.
     for (USHORT nShapePos=0; nShapePos < nShapeCount; nShapePos++)
     {
@@ -206,18 +222,33 @@ ULONG wwZOrderer::GetEscherObjectPos(ULONG nSpId)
             break;
         }
     }
+    return nFound;
+}
+
+ULONG wwZOrderer::GetEscherObjectPos(ULONG nSpId)
+{
+    /*
+    #97824# EscherObjects have their own ordering which needs to be matched to
+    the actual ordering that should be used when inserting them into the
+    document.
+    */
+    USHORT nFound = GetEscherObjectIdx(nSpId);
     // Match the ordering position from the ShapeOrders to the ordering of all
-    // objects in the document.
+    // objects in the document, there is a complexity when escherobjects
+    // contain inlines objects, we need to consider thsose as part of the
+    // escher count
+    ULONG nRet=0;
     myeiter aIter = maEscherLayer.begin();
     myeiter aEnd = maEscherLayer.end();
     while (aIter != aEnd)
     {
-        if (*aIter > nFound)
+        if (aIter->mnEscherShapeOrder > nFound)
             break;
+        nRet += aIter->mnNoInlines+1;
         ++aIter;
     }
-    aIter = maEscherLayer.insert(aIter, nFound);
-    return std::distance(maEscherLayer.begin(), aIter);
+    maEscherLayer.insert(aIter, EscherShape(nFound));
+    return nRet;
 }
 
 // InsertObj() fuegt das Objekt in die Sw-Page ein und merkt sich die Z-Pos in
@@ -235,8 +266,31 @@ void wwZOrderer::InsertDrawingObject(SdrObject* pObj, short nWwHeight)
 
 void wwZOrderer::InsertTextLayerObject(SdrObject* pObject)
 {
-    mpDrawPg->InsertObject(pObject, mnNoInitialObjects + mnInlines);
-    ++mnInlines;
+    if (maIndexes.empty())
+    {
+        mpDrawPg->InsertObject(pObject, mnNoInitialObjects + mnInlines);
+        ++mnInlines;
+    }
+    else
+    {
+        //If we are inside an escher objects, place us just after that
+        //escher obj, and increment its inline count
+        USHORT nIdx = maIndexes.top();
+        myeiter aEnd = MapEscherIdxToIter(nIdx);
+
+        ULONG nInsertPos=0;
+        myeiter aIter = maEscherLayer.begin();
+        while (aIter != aEnd)
+        {
+            nInsertPos += aIter->mnNoInlines+1;
+            ++aIter;
+        }
+
+        aEnd->mnNoInlines++;
+        nInsertPos += aEnd->mnNoInlines;
+        mpDrawPg->InsertObject(pObject,
+            mnNoInitialObjects + mnInlines + nInsertPos);
+    }
 }
 
 // Parallel zu dem Obj-Array im Dokument baue ich ein Array auf,
