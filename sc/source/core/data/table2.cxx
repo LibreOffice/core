@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table2.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:50:34 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 12:20:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1213,10 +1213,10 @@ USHORT ScTable::FillMaxRot( RowInfo* pRowInfo, USHORT nArrCount, USHORT nX1, USH
     if ( nRotDir != SC_ROTDIR_NONE )
     {
         BOOL bHit = TRUE;
-        if ( nCol+1 < nX1 )                             // links
+        if ( nCol+1 < nX1 )                             // column to the left
             bHit = ( nRotDir != SC_ROTDIR_LEFT );
-        else if ( nCol > nX2+1 )                        // rechts
-            bHit = ( nRotDir == SC_ROTDIR_LEFT );
+        else if ( nCol > nX2+1 )                        // column to the right
+            bHit = ( nRotDir != SC_ROTDIR_RIGHT );      // SC_ROTDIR_STANDARD may now also be extended to the left
 
         if ( bHit )
         {
@@ -3061,6 +3061,10 @@ void ScTable::SetDrawPageSize()
         ULONG y = GetRowOffset( MAXROW + 1 );
         x = (ULONG) ((double) x * HMM_PER_TWIPS);
         y = (ULONG) ((double) y * HMM_PER_TWIPS);
+
+        if ( IsLayoutRTL() )        // IsNegativePage
+            x = -x;
+
         pDrawLayer->SetPageSize( nTab, Size( x, y ) );
     }
 }
