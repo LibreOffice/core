@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshel4.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-29 11:03:54 $
+ *  last change: $Author: kz $ $Date: 2004-02-02 10:54:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,8 @@
  *
  *
  ************************************************************************/
+
+#include "DrawDocShell.hxx"
 
 #ifndef _COM_SUN_STAR_DOCUMENT_PRINTERINDEPENDENTLAYOUT_HPP_
 #include <com/sun/star/document/PrinterIndependentLayout.hpp>
@@ -152,22 +154,35 @@
 #include "glob.hrc"
 #include "strings.hrc"
 #include "strmname.h"
-#include "frmview.hxx"
-#include "docshell.hxx"
+#ifndef SD_FRAMW_VIEW_HXX
+#include "FrameView.hxx"
+#endif
 #include "optsitem.hxx"
-#include "sdoutl.hxx"
+#ifndef SD_OUTLINER_HXX
+#include "Outliner.hxx"
+#endif
 #include "sdattr.hxx"
 #include "drawdoc.hxx"
-#include "viewshel.hxx"
+#ifndef SD_VIEW_SHELL_HXX
+#include "ViewShell.hxx"
+#endif
 #include "app.hxx"
-#include "sdview.hxx"
+#ifndef SD_VIEW_HXX
+#include "View.hxx"
+#endif
 #include "sdpage.hxx"
 #include "sdresid.hxx"
-#include "drviewsh.hxx"
-#include "sdwindow.hxx"
+#ifndef SD_DRAW_VIEW_SHELL_HXX
+#include "DrawViewShell.hxx"
+#endif
+#ifndef SD_WINDOW_HXX
+#include "Window.hxx"
+#endif
 #include "new_foil.hxx"
 #include "sdmod.hxx"
-#include "outlnvsh.hxx"
+#ifndef SD_OUTLINE_VIEW_SHELL_HXX
+#include "OutlineViewShell.hxx"
+#endif
 #include "sdxmlwrp.hxx"
 #include "sdpptwrp.hxx"
 #include "sdcgmfilter.hxx"
@@ -175,13 +190,15 @@
 #include "sdbinfilter.hxx"
 #include "sdhtmlfilter.hxx"
 
+namespace sd {
+
 /*************************************************************************
 |*
 |* SfxPrinter ggf. erzeugen und zurueckgeben
 |*
 \************************************************************************/
 
-SfxPrinter* SdDrawDocShell::GetPrinter(BOOL bCreate)
+SfxPrinter* DrawDocShell::GetPrinter(BOOL bCreate)
 {
     if (bCreate && !pPrinter)
     {
@@ -234,11 +251,11 @@ SfxPrinter* SdDrawDocShell::GetPrinter(BOOL bCreate)
 |*
 \************************************************************************/
 
-void SdDrawDocShell::SetPrinter(SfxPrinter *pNewPrinter)
+void DrawDocShell::SetPrinter(SfxPrinter *pNewPrinter)
 {
     if ( pViewShell )
     {
-        SdView* pView = pViewShell->GetView();
+        ::sd::View* pView = pViewShell->GetView();
         if ( pView->IsTextEdit() )
             pView->EndTextEdit();
     }
@@ -263,7 +280,7 @@ void SdDrawDocShell::SetPrinter(SfxPrinter *pNewPrinter)
 |*
 |*
 \************************************************************************/
-Printer* SdDrawDocShell::GetDocumentPrinter()
+Printer* DrawDocShell::GetDocumentPrinter()
 {
     return GetPrinter(FALSE);
 }
@@ -273,7 +290,7 @@ Printer* SdDrawDocShell::GetDocumentPrinter()
 |*
 |*
 \************************************************************************/
-void SdDrawDocShell::OnDocumentPrinterChanged(Printer* pNewPrinter)
+void DrawDocShell::OnDocumentPrinterChanged(Printer* pNewPrinter)
 {
     // if we already have a printer, see if its the same
     if( pPrinter )
@@ -303,7 +320,7 @@ void SdDrawDocShell::OnDocumentPrinterChanged(Printer* pNewPrinter)
 |*
 |*
 \************************************************************************/
-void SdDrawDocShell::UpdateRefDevice()
+void DrawDocShell::UpdateRefDevice()
 {
     if( pDoc )
     {
@@ -323,19 +340,19 @@ void SdDrawDocShell::UpdateRefDevice()
                 // We are confronted with an invalid or un-implemented
                 // layout mode.  Use the printer as formatting device
                 // as a fall-back.
-                DBG_ASSERT(false, "SdDrawDocShell::UpdateRefDevice(): Unexpected printer layout mode");
+                DBG_ASSERT(false, "DrawDocShell::UpdateRefDevice(): Unexpected printer layout mode");
 
                 pRefDevice = pPrinter;
                 break;
         }
         pDoc->SetRefDevice( pRefDevice );
 
-        SdOutliner* pOutl = pDoc->GetOutliner( FALSE );
+        ::sd::Outliner* pOutl = pDoc->GetOutliner( FALSE );
 
         if( pOutl )
             pOutl->SetRefDevice( pRefDevice );
 
-        SdOutliner* pInternalOutl = pDoc->GetInternalOutliner( FALSE );
+        ::sd::Outliner* pInternalOutl = pDoc->GetInternalOutliner( FALSE );
 
         if( pInternalOutl )
             pInternalOutl->SetRefDevice( pRefDevice );
@@ -348,7 +365,7 @@ void SdDrawDocShell::UpdateRefDevice()
 |*
 \************************************************************************/
 
-BOOL SdDrawDocShell::InitNew( SvStorage * pStor )
+BOOL DrawDocShell::InitNew( SvStorage * pStor )
 {
     BOOL bRet = FALSE;
 
@@ -373,7 +390,7 @@ BOOL SdDrawDocShell::InitNew( SvStorage * pStor )
 |*
 \************************************************************************/
 
-sal_Bool SdDrawDocShell::IsNewDocument() const
+sal_Bool DrawDocShell::IsNewDocument() const
 {
     return( mbNewDocument &&
             ( !GetMedium() || GetMedium()->GetURLObject().GetProtocol() == INET_PROT_NOT_VALID ) );
@@ -385,7 +402,7 @@ sal_Bool SdDrawDocShell::IsNewDocument() const
 |*
 \************************************************************************/
 
-BOOL SdDrawDocShell::Load( SvStorage* pStore )
+BOOL DrawDocShell::Load( SvStorage* pStore )
 {
     mbNewDocument = sal_False;
 
@@ -489,7 +506,7 @@ BOOL SdDrawDocShell::Load( SvStorage* pStore )
 |*
 \************************************************************************/
 
-BOOL SdDrawDocShell::LoadFrom(SvStorage* pStor)
+BOOL DrawDocShell::LoadFrom(SvStorage* pStor)
 {
     mbNewDocument = sal_False;
 
@@ -592,7 +609,7 @@ BOOL SdDrawDocShell::LoadFrom(SvStorage* pStor)
 |*
 \************************************************************************/
 
-BOOL SdDrawDocShell::ConvertFrom( SfxMedium& rMedium )
+BOOL DrawDocShell::ConvertFrom( SfxMedium& rMedium )
 {
     mbNewDocument = sal_False;
 
@@ -649,7 +666,7 @@ BOOL SdDrawDocShell::ConvertFrom( SfxMedium& rMedium )
 |*
 \************************************************************************/
 
-BOOL SdDrawDocShell::Save()
+BOOL DrawDocShell::Save()
 {
     pDoc->StopWorkStartupDelay();
 
@@ -685,7 +702,7 @@ BOOL SdDrawDocShell::Save()
 |*
 \************************************************************************/
 
-BOOL SdDrawDocShell::SaveAs( SvStorage* pStore )
+BOOL DrawDocShell::SaveAs( SvStorage* pStore )
 {
     pDoc->StopWorkStartupDelay();
 
@@ -749,7 +766,7 @@ BOOL SdDrawDocShell::SaveAs( SvStorage* pStore )
 |*
 \************************************************************************/
 
-BOOL SdDrawDocShell::ConvertTo( SfxMedium& rMedium )
+BOOL DrawDocShell::ConvertTo( SfxMedium& rMedium )
 {
     BOOL bRet = FALSE;
 
@@ -806,7 +823,7 @@ BOOL SdDrawDocShell::ConvertTo( SfxMedium& rMedium )
 |*
 \************************************************************************/
 
-BOOL SdDrawDocShell::SaveCompleted( SvStorage * pStor )
+BOOL DrawDocShell::SaveCompleted( SvStorage * pStor )
 {
     BOOL bRet = FALSE;
 
@@ -816,8 +833,9 @@ BOOL SdDrawDocShell::SaveCompleted( SvStorage * pStor )
 
         if( pViewShell )
         {
-            if( pViewShell->ISA( SdOutlineViewShell ) )
-                ((SdOutlineView*) pViewShell->GetView())->GetOutliner()->ClearModifyFlag();
+            if( pViewShell->ISA( OutlineViewShell ) )
+                static_cast<OutlineView*>(pViewShell->GetView())
+                    ->GetOutliner()->ClearModifyFlag();
 
             SdrOutliner* pOutl = pViewShell->GetView()->GetTextEditOutliner();
             if( pOutl )
@@ -854,7 +872,7 @@ BOOL SdDrawDocShell::SaveCompleted( SvStorage * pStor )
 |*
 \************************************************************************/
 
-void SdDrawDocShell::HandsOff()
+void DrawDocShell::HandsOff()
 {
     SfxInPlaceObject::HandsOff();
 
@@ -871,7 +889,7 @@ void SdDrawDocShell::HandsOff()
 |*
 \************************************************************************/
 
-SdDrawDocument* SdDrawDocShell::GetDoc()
+SdDrawDocument* DrawDocShell::GetDoc()
 {
     return pDoc;
 }
@@ -882,7 +900,7 @@ SdDrawDocument* SdDrawDocShell::GetDoc()
 |*
 \************************************************************************/
 
-SfxStyleSheetBasePool* SdDrawDocShell::GetStyleSheetPool()
+SfxStyleSheetBasePool* DrawDocShell::GetStyleSheetPool()
 {
     return( (SfxStyleSheetBasePool*) pDoc->GetStyleSheetPool() );
 }
@@ -893,15 +911,15 @@ SfxStyleSheetBasePool* SdDrawDocShell::GetStyleSheetPool()
 |*
 \************************************************************************/
 
-BOOL SdDrawDocShell::GotoBookmark(const String& rBookmark)
+BOOL DrawDocShell::GotoBookmark(const String& rBookmark)
 {
     OSL_TRACE("GotoBookmark %s",
         ::rtl::OUStringToOString(rBookmark, RTL_TEXTENCODING_UTF8).getStr());
     BOOL bFound = FALSE;
 
-    if (pViewShell && pViewShell->ISA(SdDrawViewShell))
+    if (pViewShell && pViewShell->ISA(DrawViewShell))
     {
-        SdDrawViewShell* pDrViewSh = (SdDrawViewShell*) pViewShell;
+        DrawViewShell* pDrViewSh = static_cast<DrawViewShell*>(pViewShell);
 
         String aBookmark( rBookmark );
 
@@ -947,7 +965,7 @@ BOOL SdDrawDocShell::GotoBookmark(const String& rBookmark)
                   GetDispatcher()->Execute( SID_VIEWSHELL0, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD );
 
                 // Die aktuelle ViewShell hat sich geaendert!
-                pDrViewSh = (SdDrawViewShell*) pViewShell;
+                pDrViewSh = static_cast<DrawViewShell*>(pViewShell);
             }
 
             EditMode eNewEditMode = EM_PAGE;
@@ -967,7 +985,8 @@ BOOL SdDrawDocShell::GotoBookmark(const String& rBookmark)
             // takes care of all the little things to be done.  Especially
             // writing the view data to the frame view (see bug #107803#).
             USHORT nSdPgNum = (nPgNum - 1) / 2;
-            SdUnoDrawView* pUnoDrawView = pDrViewSh->GetController();
+            SdUnoDrawView* pUnoDrawView = static_cast<SdUnoDrawView*>(
+                pDrViewSh->GetSubController());
             if (pUnoDrawView != NULL)
             {
                 ::com::sun::star::uno::Reference<
@@ -979,7 +998,7 @@ BOOL SdDrawDocShell::GotoBookmark(const String& rBookmark)
             {
                 // As a fall back switch to the page via the core.
                 DBG_ASSERT (pUnoDrawView!=NULL,
-                    "SdDrawDocShell::GotoBookmark: can't switch page via API");
+                    "DrawDocShell::GotoBookmark: can't switch page via API");
                 pDrViewSh->SwitchPage(nSdPgNum);
             }
 
@@ -1013,7 +1032,7 @@ BOOL SdDrawDocShell::GotoBookmark(const String& rBookmark)
 #include <tools/urlobj.hxx>
 #endif
 
-BOOL SdDrawDocShell::SaveAsOwnFormat( SfxMedium& rMedium )
+BOOL DrawDocShell::SaveAsOwnFormat( SfxMedium& rMedium )
 {
 
     const SfxFilter* pFilter = rMedium.GetFilter();
@@ -1057,7 +1076,7 @@ BOOL SdDrawDocShell::SaveAsOwnFormat( SfxMedium& rMedium )
 |*
 \************************************************************************/
 
-void SdDrawDocShell::FillClass(SvGlobalName* pClassName,
+void DrawDocShell::FillClass(SvGlobalName* pClassName,
                                         ULONG*  pFormat,
                                         String* pAppName,
                                         String* pFullTypeName,
@@ -1101,18 +1120,18 @@ void SdDrawDocShell::FillClass(SvGlobalName* pClassName,
         }
         else if (nFileFormat == SOFFICE_FILEFORMAT_CURRENT)
         {
-            if ( eDocType == DOCUMENT_TYPE_DRAW )
-            {
-                *pClassName = SvGlobalName(SO3_SDRAW_CLASSID_60);
-                *pFormat = SOT_FORMATSTR_ID_STARDRAW_60;
-                *pFullTypeName = String(SdResId(STR_GRAPHIC_DOCUMENT_FULLTYPE_60));
-            }
-            else
-            {
-                *pClassName = SvGlobalName(SO3_SIMPRESS_CLASSID_60);
-                *pFormat = SOT_FORMATSTR_ID_STARIMPRESS_60;
-                *pFullTypeName = String(SdResId(STR_IMPRESS_DOCUMENT_FULLTYPE_60));
-            }
+                       if ( eDocType == DOCUMENT_TYPE_DRAW )
+                       {
+                               *pClassName = SvGlobalName(SO3_SDRAW_CLASSID_60);
+                               *pFormat = SOT_FORMATSTR_ID_STARDRAW_60;
+                               *pFullTypeName = String(SdResId(STR_GRAPHIC_DOCUMENT_FULLTYPE_60));
+                       }
+                       else
+                       {
+                               *pClassName = SvGlobalName(SO3_SIMPRESS_CLASSID_60);
+                               *pFormat = SOT_FORMATSTR_ID_STARIMPRESS_60;
+                               *pFullTypeName = String(SdResId(STR_IMPRESS_DOCUMENT_FULLTYPE_60));
+                       }
         }
 
         *pShortTypeName = String(SdResId( (eDocType == DOCUMENT_TYPE_DRAW) ?
@@ -1123,7 +1142,7 @@ void SdDrawDocShell::FillClass(SvGlobalName* pClassName,
 
 
 
-OutputDevice* SdDrawDocShell::GetDocumentRefDev (void)
+OutputDevice* DrawDocShell::GetDocumentRefDev (void)
 {
     OutputDevice* pReferenceDevice = SfxInPlaceObject::GetDocumentRefDev ();
     // Only when our parent does not have a reference device then we return
@@ -1132,3 +1151,4 @@ OutputDevice* SdDrawDocShell::GetDocumentRefDev (void)
         pReferenceDevice = pDoc->GetRefDevice ();
     return pReferenceDevice;
 }
+} // end of namespace sd
