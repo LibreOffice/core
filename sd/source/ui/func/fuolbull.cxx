@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuolbull.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:35 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 11:07:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,8 @@
 
 #pragma hdrstop
 
+#include "fuolbull.hxx"
+
 #ifndef _SV_MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
@@ -83,13 +85,24 @@
 #include <svx/editdata.hxx>
 #include <svx/svxids.hrc>
 
-#include "fuolbull.hxx"
-#include "outlview.hxx"
-#include "outlnvsh.hxx"
-#include "drviewsh.hxx"
-#include "sdwindow.hxx"
-#include "dlgolbul.hxx"
+#ifndef SD_OUTLINE_VIEW_HXX
+#include "OutlineView.hxx"
+#endif
+#ifndef SD_OUTLINE_VIEW_SHELL_HXX
+#include "OutlineViewShell.hxx"
+#endif
+#ifndef SD_DRAW_VIEW_SHELL_HXX
+#include "DrawViewShell.hxx"
+#endif
+#ifndef SD_WINDOW_SHELL_HXX
+#include "Window.hxx"
+#endif
+#ifndef SD_OUTLINE_BULLET_DLG_HXX
+#include "OutlineBulletDlg.hxx"
+#endif
 #include "drawdoc.hxx"
+
+namespace sd {
 
 TYPEINIT1( FuOutlineBullet, FuPoor );
 
@@ -99,8 +112,8 @@ TYPEINIT1( FuOutlineBullet, FuPoor );
 |*
 \************************************************************************/
 
-FuOutlineBullet::FuOutlineBullet(SdViewShell* pViewShell, SdWindow* pWindow,
-                                 SdView* pView, SdDrawDocument* pDoc,
+FuOutlineBullet::FuOutlineBullet(ViewShell* pViewShell, ::sd::Window* pWindow,
+                                 ::sd::View* pView, SdDrawDocument* pDoc,
                                  SfxRequest& rReq)
        : FuPoor(pViewShell, pWindow, pView, pDoc, rReq)
 {
@@ -117,7 +130,7 @@ FuOutlineBullet::FuOutlineBullet(SdViewShell* pViewShell, SdWindow* pWindow,
         aNewAttr.Put( aEditAttr, FALSE );
 
         // Dialog hochfahren und ausfuehren
-        SdOutlineBulletDlg* pDlg = new SdOutlineBulletDlg( NULL, &aNewAttr, pView );
+        OutlineBulletDlg* pDlg = new OutlineBulletDlg( NULL, &aNewAttr, pView );
 
         USHORT nResult = pDlg->Execute();
 
@@ -127,7 +140,8 @@ FuOutlineBullet::FuOutlineBullet(SdViewShell* pViewShell, SdWindow* pWindow,
             {
                 SfxItemSet aSet( *pDlg->GetOutputItemSet() );
 
-                if( pView->ISA(SdDrawViewShell) && pView->GetMarkList().GetMarkCount() == 0)
+                if (pView->ISA(DrawViewShell)
+                    && pView->GetMarkList().GetMarkCount() == 0)
                 {
                     SfxUInt16Item aBulletState( EE_PARA_BULLETSTATE, 0 );
                     aSet.Put(aBulletState);
@@ -191,3 +205,4 @@ void FuOutlineBullet::Deactivate()
 
 
 
+} // end of namespace sd
