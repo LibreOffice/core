@@ -2,9 +2,9 @@
  *
  *  $RCSfile: popup.src,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:46:10 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 20:35:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,7 @@
 
 
 #include "sc.hrc" // -> #include <sfx.hrc>
-#include <offmgr/offmenu.hrc>
+#include <svx/globlmn.hrc>
 
 
  // Popup-Menues ----------------------------------------------------------------
