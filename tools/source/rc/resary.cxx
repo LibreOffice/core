@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resary.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mhu $ $Date: 2002-05-22 14:44:52 $
+ *  last change: $Author: obo $ $Date: 2005-01-03 17:08:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,12 +73,12 @@
 ResStringArray::ResStringArray( const ResId& rResId )
     : Resource ( rResId.SetRT( RSC_STRINGARRAY ) ),
       mpAry    ( 0 ),
-      mnSize   ( ReadShortRes() )
+      mnSize   ( ReadLongRes() )
 {
     if ( mnSize )
     {
         mpAry = new ImplResStringItem*[mnSize];
-        for ( USHORT i = 0; i < mnSize; i++ )
+        for ( sal_uInt32 i = 0; i < mnSize; i++ )
         {
             // String laden
             mpAry[i] = new ImplResStringItem( ReadStringRes() );
@@ -93,16 +93,16 @@ ResStringArray::ResStringArray( const ResId& rResId )
 
 ResStringArray::~ResStringArray()
 {
-    for ( USHORT i = 0; i < mnSize; i++ )
+    for ( sal_uInt32 i = 0; i < mnSize; i++ )
         delete mpAry[i];
     delete[] mpAry;
 }
 
 // -----------------------------------------------------------------------
 
-USHORT ResStringArray::FindIndex( long nValue ) const
+sal_uInt32 ResStringArray::FindIndex( long nValue ) const
 {
-    for ( USHORT i = 0; i < mnSize; i++ )
+    for ( sal_uInt32 i = 0; i < mnSize; i++ )
     {
         if ( mpAry[i]->mnValue == nValue )
             return i;
