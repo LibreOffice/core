@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileview.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: pb $ $Date: 2001-09-12 07:59:04 $
+ *  last change: $Author: vg $ $Date: 2001-09-18 08:13:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,7 @@
  *
  ************************************************************************/
 
+#include <string>
 #include "fileview.hxx"
 #include "svtdata.hxx"
 #include "imagemgr.hxx"
