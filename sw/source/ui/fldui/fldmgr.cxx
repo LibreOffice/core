@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldmgr.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2004-01-07 16:35:00 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 16:40:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,9 +148,6 @@
 #endif
 #ifndef _SBXCLASS_HXX //autogen
 #include <svtools/sbx.hxx>
-#endif
-#ifndef _OFF_APP_HXX //autogen
-#include <offmgr/app.hxx>
 #endif
 #ifndef _ZFORLIST_HXX //autogen
 #include <svtools/zforlist.hxx>
@@ -1934,7 +1931,7 @@ BOOL SwFldMgr::ChooseMacro(const String &rSelMacro)
     }
 
     // choose macro dialog
-    String aScriptURL = OfficeApplication::ChooseMacro(FALSE, TRUE, sSelMacro);
+    String aScriptURL = SfxApplication::ChooseMacro(FALSE, TRUE, sSelMacro);
 
     // aScriptURL has the following format:
     // vnd.sun.star.script:language=[language],macro=[macro],location=[location]
