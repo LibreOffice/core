@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXMLTextBlocks.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dvo $ $Date: 2001-05-02 12:52:14 $
+ *  last change: $Author: mtg $ $Date: 2001-06-06 09:54:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,12 @@ protected:
     SvEmbeddedObjectRef xDocShellRef;
     USHORT       nFlags;
     String       aPackageName;
+
+    void ReadInfo();
+    void WriteInfo();
+    void InitBlockMode ( SvStorageRef & rStorage );
+    void ResetBlockMode();
+
 public:
     SvStorageRef        xBlkRoot;
     SvStorageRef        xRoot;
@@ -159,8 +165,6 @@ public:
                                  const SvxMacroTableDtor& rMacroTable,
                                  sal_Bool bFileAlreadyOpen = sal_False );
     virtual BOOL PutMuchEntries( BOOL bOn );
-    void ReadInfo();
-    void WriteInfo();
 
 public:
     SwDoc* GetDoc() const { return pDoc; }
