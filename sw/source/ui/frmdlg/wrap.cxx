@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrap.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 14:59:57 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 13:48:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,9 @@
 // OD 18.09.2003 #i18732#
 #ifndef _FMTFOLLOWTEXTFLOW_HXX
 #include <fmtfollowtextflow.hxx>
+#endif
+#ifndef _SVXSWFRAMEVALIDATION_HXX
+#include <svx/swframevalidation.hxx>
 #endif
 
 
@@ -489,7 +492,7 @@ void SwWrapTabPage::ActivatePage(const SfxItemSet& rSet)
     {
         SwWrtShell* pSh = bFormat ? ::GetActiveWrtShell() : pWrtSh;
         SwFlyFrmAttrMgr aMgr( bNew, pSh, (const SwAttrSet&)GetItemSet() );
-        SwFrmValid      aVal;
+        SvxSwFrameValidation aVal;
 
         // Size
         const SwFmtFrmSize& rFrmSize = (const SwFmtFrmSize&)rSet.Get(RES_FRM_SIZE);
@@ -507,7 +510,7 @@ void SwWrapTabPage::ActivatePage(const SfxItemSet& rSet)
         const SwFmtHoriOrient& rHori = (const SwFmtHoriOrient&)rSet.Get(RES_HORI_ORIENT);
         const SwFmtVertOrient& rVert = (const SwFmtVertOrient&)rSet.Get(RES_VERT_ORIENT);
 
-        aVal.eArea = (RndStdIds)nAnchorId;
+        aVal.nAnchorType = (short)nAnchorId;
         aVal.bAutoHeight = rFrmSize.GetHeightSizeType() == ATT_MIN_SIZE;
         aVal.bAutoWidth = rFrmSize.GetWidthSizeType() == ATT_MIN_SIZE;
         aVal.bMirror = rHori.IsPosToggle();
@@ -515,13 +518,13 @@ void SwWrapTabPage::ActivatePage(const SfxItemSet& rSet)
         aVal.bFollowTextFlow =
             static_cast<const SwFmtFollowTextFlow&>(rSet.Get(RES_FOLLOW_TEXT_FLOW)).GetValue();
 
-        aVal.eHori = rHori.GetHoriOrient();
-        aVal.eVert = (SvxFrameVertOrient)rVert.GetVertOrient();
+        aVal.nHoriOrient = (short)rHori.GetHoriOrient();
+        aVal.nVertOrient = (short)rVert.GetVertOrient();
 
         aVal.nHPos = rHori.GetPos();
-        aVal.eHRel = rHori.GetRelationOrient();
+        aVal.nHRelOrient = rHori.GetRelationOrient();
         aVal.nVPos = rVert.GetPos();
-        aVal.eVRel = rVert.GetRelationOrient();
+        aVal.nVRelOrient = rVert.GetRelationOrient();
 
         if (rFrmSize.GetWidthPercent() && rFrmSize.GetWidthPercent() != 0xff)
             aSize.Width() = aSize.Width() * rFrmSize.GetWidthPercent() / 100;
@@ -533,7 +536,7 @@ void SwWrapTabPage::ActivatePage(const SfxItemSet& rSet)
         aVal.nHeight = aSize.Height();
         aFrmSize = aSize;
 
-        aMgr.ValidateMetrics(aVal);
+        aMgr.ValidateMetrics(aVal, 0);
 
         SwTwips nLeft;
         SwTwips nRight;
@@ -552,7 +555,7 @@ void SwWrapTabPage::ActivatePage(const SfxItemSet& rSet)
         }
         else
         {
-            if (aVal.eArea == FLY_IN_CNTNT)
+            if (aVal.nAnchorType == FLY_IN_CNTNT)
             {
                 nLeft = nRight;
 
