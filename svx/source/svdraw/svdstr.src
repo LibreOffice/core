@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdstr.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-17 20:22:10 $
+ *  last change: $Author: kz $ $Date: 2001-07-20 20:25:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2979,14 +2979,14 @@ String STR_ObjNamePluralOLE2
     Text [ dutch ] = "Ingesloten objecten (OLE)" ;
     Text [ spanish ] = "Objetos incrustados (OLE)" ;
     Text [ english_us ] = "Embedded objects (OLE)" ;
-    Text[ chinese_simplified ] = "ÄÚÇ¶µÄ¶ÔÏó(OLE)";
+    Text[ chinese_simplified ] = "Ç¶ÈëµÄ¶ÔÏó(OLE)";
     Text[ russian ] = "âíåäğåííûå îáúåêòû (OLE)";
     Text[ polish ] = "osadzone obiekty (OLE)";
     Text[ japanese ] = "–„‚ß‚İµÌŞ¼Şª¸Ä(OLE)";
     Text[ chinese_traditional ] = "¤º´Oªºª«¥ó(OLE)";
     Text[ arabic ] = "ßÇÆäÇÊ ãÏãÌÉ (OLE)";
     Text[ dutch ] = "Ingesloten objecten (OLE)";
-    Text[ chinese_simplified ] = "ÄÚÇ¶µÄ¶ÔÏó(OLE)";
+    Text[ chinese_simplified ] = "Ç¶ÈëµÄ¶ÔÏó(OLE)";
     Text[ greek ] = "åíóùìáôùìİíá áíôéêåßìåíá (OLE)";
     Text[ korean ] = "Æ÷ÇÔµÈ °³Ã¼(OLE)";
     Text[ turkish ] = "gömülü nesne (OLE)";
@@ -3439,14 +3439,14 @@ String STR_ObjNamePluralMEASURE
     Text [ spanish ] = "Objetos de dimensiones" ;
     Text [ french ] = "Objets de cotation" ;
     Text [ dutch ] = "Objectafmetingen" ;
-    Text[ chinese_simplified ] = "¶¨³ß¶È¶ÔÏó";
+    Text[ chinese_simplified ] = "¶¨³ß´ç¶ÔÏó";
     Text[ russian ] = "Îáúåêòû äëÿ èçìåğåíèÿ";
     Text[ polish ] = "Obiekty do wymiarowania";
     Text[ japanese ] = "¡–@‹L“ü‚·‚éµÌŞ¼Şª¸Ä";
     Text[ chinese_traditional ] = "©w¤Ø¤oª«¥ó";
     Text[ arabic ] = "ßÇÆäÇÊ ÇáŞíÇÓ";
     Text[ dutch ] = "Objectafmetingen";
-    Text[ chinese_simplified ] = "¶¨³ß¶È¶ÔÏó";
+    Text[ chinese_simplified ] = "¶¨³ß´ç¶ÔÏó";
     Text[ greek ] = "Áíôéêåßìåíá äéáóôáóéïëüãçóçò";
     Text[ korean ] = "Ä¡¼ö °³Ã¼";
     Text[ turkish ] = "Ölçüm nesneleri";
@@ -8088,14 +8088,14 @@ String STR_ItemValTEXTANI_BLINK
     Text [ spanish ] = "intermitente" ;
     Text [ french ] = "clignoter" ;
     Text [ dutch ] = "knipperen" ;
-    Text[ chinese_simplified ] = "ÉÁË¸";
+    Text[ chinese_simplified ] = "ÉÁ¶¯";
     Text[ russian ] = "ìèãàòü";
     Text[ polish ] = "miganie";
     Text[ japanese ] = "“_–Å";
     Text[ chinese_traditional ] = "°{°Ê";
     Text[ arabic ] = "æãíÖ";
     Text[ dutch ] = "knipperen";
-    Text[ chinese_simplified ] = "ÉÁË¸";
+    Text[ chinese_simplified ] = "ÉÁ¶¯";
     Text[ greek ] = "íá áíáâïóâŞíåé";
     Text[ korean ] = "±ô¹ÚÀÓ";
     Text[ turkish ] = "Yanıp sönme";
@@ -15675,11 +15675,11 @@ String SIP_SA_LAYERID
     Text[ polish ] = "ID warstw";
     Text[ portuguese_brazilian ] = "Layer ID";
     Text[ japanese ] = "‘w‚Ì”F¯";
-    Text[ chinese_simplified ] = "²ã±êÊ¶";
+    Text[ chinese_simplified ] = "·Ö²ã±êÊ¶";
     Text[ chinese_traditional ] = "¤À¼h¼ĞÃÑ";
     Text[ arabic ] = "ÊÚÑíİ ÇáØÈŞÉ";
     Text[ dutch ] = "Niveau-ID";
-    Text[ chinese_simplified ] = "²ã±êÊ¶";
+    Text[ chinese_simplified ] = "·Ö²ã±êÊ¶";
     Text[ greek ] = "Ôáõôüôçôá åğéğİäïõ";
     Text[ korean ] = "·¹º§ ID";
     Text[ turkish ] = "Düzey tanıtıcısı";
@@ -17632,6 +17632,7 @@ Bitmap SIP_SA_FINE_MARKERS
 };
 
 // ******************************************************************* EOF
+
 
 
 
