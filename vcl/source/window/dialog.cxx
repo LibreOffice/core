@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: ssa $ $Date: 2002-12-05 09:11:33 $
+ *  last change: $Author: pl $ $Date: 2002-12-10 16:50:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -720,23 +720,29 @@ void Dialog::EndDialog( long nResult )
 
         // Dialog aus der Kette der Dialoge die in Execute stehen entfernen
         ImplSVData* pSVData = ImplGetSVData();
-        Dialog* pPrevDlg = NULL;
         Dialog* pExeDlg = pSVData->maWinData.mpLastExecuteDlg;
         while ( pExeDlg )
         {
             if ( pExeDlg == this )
             {
-                if ( pPrevDlg )
-                    pPrevDlg->mpPrevExecuteDlg = mpPrevExecuteDlg;
-                else
-                    pSVData->maWinData.mpLastExecuteDlg = mpPrevExecuteDlg;
+                pSVData->maWinData.mpLastExecuteDlg = mpPrevExecuteDlg;
                 break;
             }
             pExeDlg = pExeDlg->mpPrevExecuteDlg;
         }
-        // set focus to previous modal dialogue
+        // set focus to previous modal dialogue if it is modal for
+        // the same frame parent (or NULL)
         if( mpPrevExecuteDlg )
-            mpPrevExecuteDlg->GrabFocus();
+        {
+            Window* pFrameParent = ImplGetFrameWindow()->ImplGetParent();
+            Window* pPrevFrameParent = mpPrevExecuteDlg->ImplGetFrameWindow()->ImplGetParent();
+            if( ( !pFrameParent && !pPrevFrameParent ) ||
+                ( pFrameParent && pPrevFrameParent && pFrameParent->ImplGetFrame() == pPrevFrameParent->ImplGetFrame() )
+                )
+            {
+                mpPrevExecuteDlg->GrabFocus();
+            }
+        }
         mpPrevExecuteDlg = NULL;
 
         Hide();
