@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlnvsh.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 14:05:25 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 09:28:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,6 +205,7 @@
 #ifndef SD_VIEW_SHELL_BASE_HXX
 #include "ViewShellBase.hxx"
 #endif
+#include "UpdateLockManager.hxx"
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -552,15 +553,18 @@ void OutlineViewShell::RemoveWindow (::sd::Window* pWin)
 \************************************************************************/
 void OutlineViewShell::Activate( BOOL bIsMDIActivate )
 {
-    ViewShell::Activate( bIsMDIActivate );
-    pOlView->SetLinks();
-    pOlView->ConnectToApplication();
-
-    if( bIsMDIActivate )
+    if ( ! GetViewShellBase().GetUpdateLockManager().IsLocked())
     {
-        OutlinerView* pOutlinerView = pOlView->GetViewByWindow( GetActiveWindow() );
-        ::Outliner* pOutl = pOutlinerView->GetOutliner();
-        pOutl->UpdateFields();
+        ViewShell::Activate( bIsMDIActivate );
+        pOlView->SetLinks();
+        pOlView->ConnectToApplication();
+
+        if( bIsMDIActivate )
+        {
+            OutlinerView* pOutlinerView = pOlView->GetViewByWindow( GetActiveWindow() );
+            ::Outliner* pOutl = pOutlinerView->GetOutliner();
+            pOutl->UpdateFields();
+        }
     }
 }
 
@@ -571,13 +575,16 @@ void OutlineViewShell::Activate( BOOL bIsMDIActivate )
 \************************************************************************/
 void OutlineViewShell::Deactivate( BOOL bIsMDIActivate )
 {
-    pOlView->DisconnectFromApplication();
+    if ( ! GetViewShellBase().GetUpdateLockManager().IsLocked())
+    {
+        pOlView->DisconnectFromApplication();
 
-    // #96416# Links must be kept also on deactivated viewshell, to allow drag'n'drop
-    // to function properly
-    // pOlView->ResetLinks();
+        // #96416# Links must be kept also on deactivated viewshell, to allow drag'n'drop
+        // to function properly
+        // pOlView->ResetLinks();
 
-    ViewShell::Deactivate( bIsMDIActivate );
+        ViewShell::Deactivate( bIsMDIActivate );
+    }
 }
 
 /*************************************************************************
