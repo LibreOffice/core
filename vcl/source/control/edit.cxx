@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 17:47:35 $
+ *  last change: $Author: hr $ $Date: 2004-10-13 08:49:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -894,8 +894,14 @@ int Edit::ImplGetNativeControlType()
             nCtrl = CTRL_COMBOBOX;
             break;
 
-        case WINDOW_EDIT:
         case WINDOW_MULTILINEEDIT:
+            if ( GetWindow( WINDOW_BORDER ) != this )
+                nCtrl = CTRL_MULTILINE_EDITBOX;
+            else
+                nCtrl = CTRL_EDITBOX_NOBORDER;
+            break;
+
+        case WINDOW_EDIT:
         case WINDOW_PATTERNFIELD:
         case WINDOW_METRICFIELD:
         case WINDOW_CURRENCYFIELD:
