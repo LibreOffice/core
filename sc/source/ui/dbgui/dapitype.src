@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dapitype.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-25 15:27:22 $
+ *  last change: $Author: kz $ $Date: 2001-05-30 19:52:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,7 +138,7 @@ ModalDialog RID_SCDLG_DAPITYPE
         Text[ italian ] = "Sorgente dati registrata ~in %PRODUCTNAME";
         Text[ danish ] = "Datakilde som er registreret i %PRODUCTNAME";
         Text[ swedish ] = "Datak‰lla som ‰r registrerad i %PRODUCTNAME";
-        Text[ polish ] = "Zarejestr. ~w %PRODUCTNAME ?rÛd≥o danych";
+        Text[ polish ] = "Zarejestr. ~w %PRODUCTNAME ürÛd≥o danych";
         Text[ portuguese_brazilian ] = "Database source";
         Text[ japanese ] = "%PRODUCTNAME Ç…ìoò^ÇµÇΩ√ﬁ∞¿ø∞Ω(~D)";
         Text[ korean ] = "µ•¿Ã≈Õ∫£¿ÃΩ∫ º“Ω∫(~D)";
@@ -167,7 +167,7 @@ ModalDialog RID_SCDLG_DAPITYPE
         Text[ italian ] = "Sorgente ~esterna/interfaccia";
         Text[ danish ] = "Ekstern kilde/grÊnseflade";
         Text[ swedish ] = "Extern k‰lla/gr‰nssnitt";
-        Text[ polish ] = "~ZewnÍtrzne(y) ?rÛd≥o/interfejs";
+        Text[ polish ] = "~ZewnÍtrzne(y) ürÛd≥o/interfejs";
         Text[ portuguese_brazilian ] = "External source/interface";
         Text[ japanese ] = "äOïîø∞Ω/≤›¿∞Ã™≤Ω(~E)";
         Text[ korean ] = "ø‹∫Œ º“Ω∫/¿Œ≈Õ ∆‰¿ÃΩ∫(~E)";
@@ -217,7 +217,7 @@ ModalDialog RID_SCDLG_DAPITYPE
     Text[ italian ] = "Seleziona sorgente";
     Text[ danish ] = "VÊlg kilde";
     Text[ swedish ] = "V‰lj ut k‰lla";
-    Text[ polish ] = "Wybierz ?rÛd≥o";
+    Text[ polish ] = "Wybierz ürÛd≥o";
     Text[ portuguese_brazilian ] = "Select source";
     Text[ japanese ] = "ø∞ΩÇÃëIë";
     Text[ korean ] = "º“Ω∫ º±≈√";
@@ -315,7 +315,7 @@ ModalDialog RID_SCDLG_DAPISERVICE
         Text[ italian ] = "Sorgente";
         Text[ danish ] = "Kilde";
         Text[ swedish ] = "K‰lla";
-        Text[ polish ] = "?rÛd≥o";
+        Text[ polish ] = "èrÛd≥o";
         Text[ portuguese_brazilian ] = "Source";
         Text[ japanese ] = "ø∞Ω(~U)";
         Text[ korean ] = "º“Ω∫(~U)";
@@ -478,7 +478,7 @@ ModalDialog RID_SCDLG_DAPISERVICE
     Text[ italian ] = "Sorgente dati esterna";
     Text[ danish ] = "Ekstern datakilde";
     Text[ swedish ] = "Extern datak‰lla";
-    Text[ polish ] = "ZewnÍtrzne ?rÛd≥o danych";
+    Text[ polish ] = "ZewnÍtrzne ürÛd≥o danych";
     Text[ portuguese_brazilian ] = "External source";
     Text[ japanese ] = "äOïî√ﬁ∞¿ø∞Ω";
     Text[ korean ] = "ø‹∫Œ µ•¿Ã≈Õº“Ω∫";
@@ -578,7 +578,7 @@ ModalDialog RID_SCDLG_DAPIDATA
         Text[ italian ] = "Sorgente dati";
         Text[ danish ] = "Datakilde";
         Text[ swedish ] = "Datak‰lla";
-        Text[ polish ] = "?rÛd≥o danych";
+        Text[ polish ] = "èrÛd≥o danych";
         Text[ portuguese_brazilian ] = "Data source";
         Text[ japanese ] = "√ﬁ∞¿ø∞Ω(~U)";
         Text[ korean ] = "µ•¿Ã≈Õ º“Ω∫(~U)";
@@ -835,7 +835,7 @@ ModalDialog RID_SCDLG_DAPIDATA
     Text[ italian ] = "Seleziona sorgente dati";
     Text[ danish ] = "VÊlg datakilde";
     Text[ swedish ] = "V‰lj ut datak‰lla";
-    Text[ polish ] = "Wybierz ?rÛd≥o danych";
+    Text[ polish ] = "Wybierz ürÛd≥o danych";
     Text[ portuguese_brazilian ] = "Select data source";
     Text[ japanese ] = "√ﬁ∞¿ø∞ΩÇÃëIë";
     Text[ korean ] = "µ•¿Ã≈Õ º“Ω∫ º±≈√";
