@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impex.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: nn $ $Date: 2001-11-30 10:27:21 $
+ *  last change: $Author: nn $ $Date: 2002-07-17 14:25:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -855,18 +855,54 @@ void lcl_PutString( ScDocument* pDoc, USHORT nCol, USHORT nRow, USHORT nTab,
             else
                 bInNum = FALSE;
         }
-        if ( nFound == 3 )              // genau 3 Teile ?
+
+        USHORT nDP, nMP, nYP;
+        switch ( nColFormat )
+        {
+            case SC_COL_YMD: nDP = 2; nMP = 1; nYP = 0; break;
+            case SC_COL_MDY: nDP = 1; nMP = 0; nYP = 2; break;
+            case SC_COL_DMY:
+            default:         nDP = 0; nMP = 1; nYP = 2; break;
+        }
+
+        if ( nFound == 1 )
+        {
+            //  try to break one number (without separators) into date fields
+
+            xub_StrLen nDateStart = nStart[0];
+            xub_StrLen nDateLen = nEnd[0] + 1 - nDateStart;
+
+            if ( nDateLen >= 5 && nDateLen <= 8 &&
+                    ScGlobal::pCharClass->isNumeric( rStr.Copy( nDateStart, nDateLen ) ) )
+            {
+                //  6 digits: 2 each for day, month, year
+                //  8 digits: 4 for year, 2 each for day and month
+                //  5 or 7 digits: first field is shortened by 1
+
+                BOOL bLongYear = ( nDateLen >= 7 );
+                BOOL bShortFirst = ( nDateLen == 5 || nDateLen == 7 );
+
+                USHORT nFieldStart = nDateStart;
+                for (USHORT nPos=0; nPos<3; nPos++)
+                {
+                    USHORT nFieldEnd = nFieldStart + 1;     // default: 2 digits
+                    if ( bLongYear && nPos == nYP )
+                        nFieldEnd += 2;                     // 2 extra digits for long year
+                    if ( bShortFirst && nPos == 0 )
+                        --nFieldEnd;                        // first field shortened?
+
+                    nStart[nPos] = nFieldStart;
+                    nEnd[nPos]   = nFieldEnd;
+                    nFieldStart  = nFieldEnd + 1;
+                }
+                nFound = 3;
+            }
+        }
+
+        if ( nFound == 3 )              // exactly 3 parts found?
         {
             using namespace ::com::sun::star;
             BOOL bSecondCal = FALSE;
-            USHORT nDP, nMP, nYP;
-            switch ( nColFormat )
-            {
-                case SC_COL_YMD: nDP = 2; nMP = 1; nYP = 0; break;
-                case SC_COL_MDY: nDP = 1; nMP = 0; nYP = 2; break;
-                case SC_COL_DMY:
-                default:         nDP = 0; nMP = 1; nYP = 2; break;
-            }
             USHORT nDay  = (USHORT) rStr.Copy( nStart[nDP], nEnd[nDP]+1-nStart[nDP] ).ToInt32();
             USHORT nYear = (USHORT) rStr.Copy( nStart[nYP], nEnd[nYP]+1-nStart[nYP] ).ToInt32();
             String aMStr = rStr.Copy( nStart[nMP], nEnd[nMP]+1-nStart[nMP] );
