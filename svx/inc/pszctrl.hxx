@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pszctrl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 15:37:56 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 15:10:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,10 @@
 #include <sfx2/stbitem.hxx>
 #endif
 
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
 // forward ---------------------------------------------------------------
 
 class  SvxSizeItem;
@@ -74,7 +78,7 @@ struct SvxPosSizeStatusBarControl_Impl;
 
 // class SvxPosSizeToolBoxControl ----------------------------------------
 
-class SvxPosSizeStatusBarControl : public SfxStatusBarControl
+class SVX_DLLPUBLIC SvxPosSizeStatusBarControl : public SfxStatusBarControl
 {
 private:
     SvxPosSizeStatusBarControl_Impl*    pImp;
