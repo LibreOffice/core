@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormController.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 11:10:04 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 19:35:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,7 +128,7 @@
     @see com::sun::star::form::component:Form
     @see com::sun::star::awt::XTabController
  */
-service FormController
+published service FormController
 {
     /** allows delegating form controller functionality to the component
 
