@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlscripti.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:16 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:18:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -351,7 +351,7 @@ SvXMLImportContext* XMLScriptContext::CreateChildContext( sal_uInt16 nPrefix,
     }
     else if (XML_NAMESPACE_OFFICE == nPrefix)
     {
-        if ( IsXMLToken( rLName, XML_EVENTS ) )
+        if ( IsXMLToken( rLName, XML_EVENT_LISTENERS ) )
         {
             Reference<XEventsSupplier> xSupplier(GetImport().GetModel(),
                                                  UNO_QUERY);
