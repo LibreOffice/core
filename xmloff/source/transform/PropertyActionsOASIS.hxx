@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyActionsOASIS.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:57:43 $
+ *  last change: $Author: hr $ $Date: 2004-08-03 13:34:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,11 @@ enum XMLPropOASISTransformerAction
     XML_OPTACTION_INTERPOLATION,
     XML_OPTACTION_INTERVAL_MAJOR,
     XML_OPTACTION_INTERVAL_MINOR_DIVISOR,
+
+    // #i25616#
+    XML_OPTACTION_OPACITY,
+    XML_OPTACTION_IMAGE_OPACITY,
+
     XML_OPTACTION_END=XML_ATACTION_END
 };
 
