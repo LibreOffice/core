@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: sj $ $Date: 2002-08-12 09:19:28 $
+ *  last change: $Author: sj $ $Date: 2002-08-20 15:07:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,6 @@
 #include <bulitem.hxx>
 #include "polysc3d.hxx"
 #include "extrud3d.hxx"
-#include "writingmodeitem.hxx"
 
 #ifndef _EEITEMID_HXX
 #include "eeitemid.hxx"
@@ -270,7 +269,9 @@
 #ifndef _SVX_SVXFONT_HXX
 #include <svxfont.hxx>
 #endif
-
+#ifndef _SVX_FRMDIRITEM_HXX
+#include <svx/frmdiritem.hxx>
+#endif
 #ifndef _UNTOOLS_UCBSTREAMHELPER_HXX
 #include <unotools/ucbstreamhelper.hxx>
 #endif
@@ -1375,7 +1376,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
             }
 
 
-            aSet.Put( SvxWritingModeItem( bVerticalText ? com::sun::star::text::WritingMode_TB_RL : com::sun::star::text::WritingMode_LR_TB ) );
+            aSet.Put( SvxFrameDirectionItem( bVerticalText ? FRMDIR_VERT_TOP_RIGHT : FRMDIR_HORI_LEFT_TOP, EE_PARA_WRITINGDIR ) );
 
              aSet.Put( SdrTextAutoGrowWidthItem( bAutoGrowWidth ) );
             aSet.Put( SdrTextAutoGrowHeightItem( bAutoGrowHeight ) );
@@ -6401,9 +6402,7 @@ void PPTParagraphObj::ApplyTo( SfxItemSet& rSet, SdrPowerPointImport& rManager, 
         rSet.Put( SfxBoolItem( EE_PARA_HANGINGPUNCTUATION, nVal != 0 ) );
 
     if ( GetAttrib( PPT_ParaAttr_BiDi, nVal, nInstanceInSheet ) )
-    {
-        rSet.Put( SvxWritingModeItem( nVal == 1 ? com::sun::star::text::WritingMode_RL_TB : com::sun::star::text::WritingMode_LR_TB, EE_PARA_WRITINGDIR ) );
-    }
+        rSet.Put( SvxFrameDirectionItem( nVal == 1 ? FRMDIR_HORI_RIGHT_TOP : FRMDIR_HORI_LEFT_TOP, EE_PARA_WRITINGDIR ) );
 
     // LineSpacing
     PPTPortionObj* pPortion = First();
