@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-15 11:26:06 $
+ *  last change: $Author: mib $ $Date: 2001-01-17 10:50:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -637,7 +637,6 @@ void SwUnoPropertyMapProvider::Sort(sal_uInt16 nId)
     { SW_PROP_NAME(UNO_NAME_RIGHT_MARGIN),          RES_LR_SPACE,           &::getCppuType((const sal_Int32*)0),            PROPERTY_NONE, MID_R_MARGIN|CONVERT_TWIPS},            \
     { SW_PROP_NAME(UNO_NAME_WIDTH),                     RES_FRM_SIZE,           &::getCppuType((const sal_Int32*)0)  ,          PROPERTY_NONE, MID_FRMSIZE_WIDTH|CONVERT_TWIPS},\
     { SW_PROP_NAME(UNO_NAME_HEIGHT),                    RES_FRM_SIZE,           &::getCppuType((const sal_Int32*)0)  ,          PROPERTY_NONE, MID_FRMSIZE_HEIGHT|CONVERT_TWIPS},\
-    { SW_PROP_NAME(UNO_NAME_SIZE_TYPE),                 RES_FRM_SIZE,           &::getCppuType((const sal_Int16*)0)  ,          PROPERTY_NONE,   MID_FRMSIZE_SIZE_TYPE  },        \
     { SW_PROP_NAME(UNO_NAME_HORI_ORIENT  ),             RES_HORI_ORIENT,        &::getCppuType((const sal_Int16*)0),            PROPERTY_NONE ,MID_HORIORIENT_ORIENT    },             \
     { SW_PROP_NAME(UNO_NAME_HORI_ORIENT_POSITION),  RES_HORI_ORIENT,        &::getCppuType((const sal_Int32*)0),            PROPERTY_NONE ,MID_HORIORIENT_POSITION|CONVERT_TWIPS    }, \
     { SW_PROP_NAME(UNO_NAME_HORI_ORIENT_RELATION),  RES_HORI_ORIENT,        &::getCppuType((const sal_Int16*)0),            PROPERTY_NONE ,MID_HORIORIENT_RELATION  },               \
@@ -1289,6 +1288,7 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { MAP_CHAR_LEN("FrameIsAutomaticHeight"),         RES_FRM_SIZE,         &::getBooleanCppuType(),        PROPERTY_NONE, MID_FRMSIZE_IS_AUTO_HEIGHT   },
                     { MAP_CHAR_LEN("FrameWidthAbsolute"),           RES_FRM_SIZE,           &::getCppuType((const sal_Int32*)0),        PROPERTY_NONE, MID_FRMSIZE_WIDTH|CONVERT_TWIPS          },
                     { MAP_CHAR_LEN("FrameWidthPercent"),                RES_FRM_SIZE,           &::getCppuType((const sal_Int8*)0),         PROPERTY_NONE, MID_FRMSIZE_REL_WIDTH    },
+                    { SW_PROP_NAME(UNO_NAME_SIZE_TYPE),                 RES_FRM_SIZE,           &::getCppuType((const sal_Int16*)0)  ,          PROPERTY_NONE,   MID_FRMSIZE_SIZE_TYPE  },
                     {0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aFramePropertyMap_Impl;
