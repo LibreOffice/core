@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpid.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-18 11:26:23 $
+ *  last change: $Author: pb $ $Date: 2000-11-27 08:57:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,13 +133,13 @@
 //#define HID_BASICIDE_OBJECTS                  (HID_SVX_START +  59)
 //#define HID_MACRO_OPTIONS                     (HID_SVX_START +  60)
 //#define HID_BASICIDE_BRKPNTS                  (HID_SVX_START +  61)
-//#define HID_BASICIDE_MODULS                       (HID_SVX_START +  62)
+//#define HID_BASICIDE_MODULS                   (HID_SVX_START +  62)
 //#define HID_BASICIDE_LIBS_TP                  (HID_SVX_START +  63)
 //#define HID_BASICIDE_LIBS_DLG                 (HID_SVX_START +  64)
 //#define HID_BASICIDE_CONTROLS                 (HID_SVX_START +  65)
-//#define HID_BASICIDE_MACROS                       (HID_SVX_START +  66)
+//#define HID_BASICIDE_MACROS                   (HID_SVX_START +  66)
 //#define HID_BASICIDE_LIBS                     (HID_SVX_START +  67)
-//#define HID_BASICIDE_ORG_TC                       (HID_SVX_START +  68)
+//#define HID_BASICIDE_ORG_TC                   (HID_SVX_START +  68)
 
 #define HID_POPUP_COLOR                         (HID_SVX_START +  70)
 #define HID_POPUP_BRUSH                         (HID_SVX_START +  71)
@@ -155,9 +155,9 @@
 #define HID_OPTIONS_SEARCH                      (HID_SVX_START +  79)
 
 //#define HID_BASICIDE_MODULES_TREE             (HID_SVX_START +  80)
-//#define HID_BASICIDE_LIBS_TREE                    (HID_SVX_START +  81)
+//#define HID_BASICIDE_LIBS_TREE                (HID_SVX_START +  81)
 //#define HID_BASICIDE_LIBSDLG_TREE             (HID_SVX_START +  82)
-//#define HID_BASICIDE_OBJECTCAT                    (HID_SVX_START +  83)
+//#define HID_BASICIDE_OBJECTCAT                (HID_SVX_START +  83)
 
 #define HID_PAGE_LIGHT3D                        (HID_SVX_START +  84)
 #define HID_PAGE_MEASURE                        (HID_SVX_START +  85)
@@ -239,7 +239,7 @@
 #define HID_CONTDLG_AUTOCONTOUR                 (HID_SVX_START + 163)
 #define HID_CONTDLG_PIPETTE                     (HID_SVX_START + 164)
 
-//#define HID_BASICIDE_PROP_BROWSER_LBOX            (HID_SVX_START + 165)
+//#define HID_BASICIDE_PROP_BROWSER_LBOX        (HID_SVX_START + 165)
 #define HID_DRAWTOOL_TBX                        (HID_SVX_START + 166)
 #define HID_ALIGN_TBX                           (HID_SVX_START + 167)
 
@@ -273,7 +273,7 @@
 #define HID_GALLERY_TITLE                       (HID_SVX_START + 193)
 
 //#define HID_BASICIDE_OBJCAT_SHOW              (HID_SVX_START + 195)
-//#define HID_BASICIDE_OBJCAT_PROPS                 (HID_SVX_START + 196)
+//#define HID_BASICIDE_OBJCAT_PROPS             (HID_SVX_START + 196)
 //#define HID_BASICIDE_OBJCAT_HELP              (HID_SVX_START + 197)
 
 #define HID_IMPGRF_BTN_STANDARD                 (HID_SVX_START + 198)
@@ -283,8 +283,8 @@
 #define HID_IMPGRF_CB_LINK                      (HID_SVX_START + 202)
 #define HID_IMPGRF_CB_PREVIEW                   (HID_SVX_START + 203)
 
-//#define HID_BASICIDE_BRKDLG                       (HID_SVX_START + 204)
-//#define HID_BASICIDE_ACTIV                        (HID_SVX_START + 205)
+//#define HID_BASICIDE_BRKDLG                   (HID_SVX_START + 204)
+//#define HID_BASICIDE_ACTIV                    (HID_SVX_START + 205)
 //#define HID_BASICIDE_BRKPROPS                 (HID_SVX_START + 206)
 //#define HID_BASICIDE_REMOVEWATCH              (HID_SVX_START + 207)
 //#define HID_BASICIDE_GOTOALL                  (HID_SVX_START + 208)
@@ -459,16 +459,21 @@
 #define HID_GRFFILTER_SEPIA                     (HID_SVX_START + 370)
 #define HID_GRFFILTER_SOLARIZE                  (HID_SVX_START + 371)
 
+#define HID_SVXPAGE_CHAR_NAME                   (HID_SVX_START + 372)
+#define HID_SVXPAGE_CHAR_EFFECTS                (HID_SVX_START + 373)
+#define HID_SVXPAGE_CHAR_POSITION               (HID_SVX_START + 374)
+#define HID_SVXPAGE_CHAR_TWOLINES               (HID_SVX_START + 375)
+#define HID_SVXPAGE_CHAR_EFFECTS_CTRL           (HID_SVX_START + 376)
+
 // -----------------------------------------------------------------------
 // "Uberlaufpr"ufung -----------------------------------------------------
 // -----------------------------------------------------------------------
 
-#define ACT_SVX_HID_END     HID_SVXPAGE_GRFCROP
+#define ACT_SVX_HID_END     HID_SVXPAGE_CHAR_EFFECTS_CTRL
 
 #if ACT_SVX_HID_END > HID_SVX_END
 #error Resource-Ueberlauf in #line, #file
 #endif
-
 
 #endif
 
