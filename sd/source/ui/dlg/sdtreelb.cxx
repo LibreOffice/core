@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdtreelb.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: af $ $Date: 2002-11-14 15:01:00 $
+ *  last change: $Author: ka $ $Date: 2002-12-06 16:51:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,20 +142,19 @@ void SdPageObjsTLB::SdPageObjsTransferable::DragFinished( sal_Int8 nDropAction )
 
 SdPageObjsTLB::SdPageObjsTLB( Window* pParentWin, const SdResId& rSdResId,
                               BOOL bEnableDrop ) :
-    SvTreeListBox   ( pParentWin, rSdResId ),
-    pParent         ( pParentWin ),
-    pDoc            ( NULL ),
-    pBookmarkDoc    ( NULL ),
-    pMedium         ( NULL ),
-    pOwnMedium      ( NULL ),
-    aColor          ( COL_WHITE ),
-    aImgOle         ( Bitmap( SdResId( BMP_OLE ) ), aColor ),
-    aImgGraphic     ( Bitmap( SdResId( BMP_GRAPHIC ) ), aColor ),
-    aImgOleH        ( Bitmap( SdResId( BMP_OLE_H ) ), Color( COL_BLACK ) ),
-    aImgGraphicH    ( Bitmap( SdResId( BMP_GRAPHIC_H ) ), Color( COL_BLACK ) ),
-    pDropNavWin     ( NULL ),
-    bOleSelected    ( FALSE ),
-    bGraphicSelected( FALSE )
+    SvTreeListBox       ( pParentWin, rSdResId ),
+    pParent             ( pParentWin ),
+    pDoc                ( NULL ),
+    pBookmarkDoc        ( NULL ),
+    pMedium             ( NULL ),
+    pOwnMedium          ( NULL ),
+    aColor              ( COL_WHITE ),
+    aImgOle             ( Bitmap( SdResId( BMP_OLE ) ), aColor ),
+    aImgGraphic         ( Bitmap( SdResId( BMP_GRAPHIC ) ), aColor ),
+    aImgOleH            ( Bitmap( SdResId( BMP_OLE_H ) ), Color( COL_BLACK ) ),
+    aImgGraphicH        ( Bitmap( SdResId( BMP_GRAPHIC_H ) ), Color( COL_BLACK ) ),
+    pDropNavWin         ( NULL ),
+    bLinkableSelected   ( FALSE )
 {
     // Tree-ListBox mit Linien versehen
     SetWindowBits( WinBits( WB_TABSTOP | WB_BORDER | WB_HASLINES |
@@ -326,8 +325,13 @@ void SdPageObjsTLB::Fill( const SdDrawDocument* pInDoc, BOOL bAllPages,
             bPageExluded |= !bPageBelongsToShow;
 
             pEntry = InsertEntry( pPage->GetName(),
-                                    bPageExluded ? aImgPageExcl : aImgPage,
-                                    bPageExluded ? aImgPageExcl : aImgPage );
+                                  bPageExluded ? aImgPageExcl : aImgPage,
+                                  bPageExluded ? aImgPageExcl : aImgPage,
+                                  0,
+                                  FALSE,
+                                  LIST_APPEND,
+                                  reinterpret_cast< void* >( 1 ) );
+
             SetExpandedEntryBmp( pEntry, bPageExluded ? aImgPageExclH : aImgPageH, BMP_COLOR_HIGHCONTRAST );
             SetCollapsedEntryBmp( pEntry, bPageExluded ? aImgPageExclH : aImgPageH, BMP_COLOR_HIGHCONTRAST );
 
@@ -341,19 +345,22 @@ void SdPageObjsTLB::Fill( const SdDrawDocument* pInDoc, BOOL bAllPages,
                 {
                     if( pObj->GetObjInventor() == SdrInventor && pObj->GetObjIdentifier() == OBJ_OLE2 )
                     {
-                        SvLBoxEntry* pNewEntry = InsertEntry( aStr, aImgOle, aImgOle, pEntry ); // pEntry entspr. Parent
+                        SvLBoxEntry* pNewEntry = InsertEntry( aStr, aImgOle, aImgOle, pEntry );
+
                         SetExpandedEntryBmp( pNewEntry, aImgOleH, BMP_COLOR_HIGHCONTRAST );
                         SetCollapsedEntryBmp( pNewEntry, aImgOleH, BMP_COLOR_HIGHCONTRAST );
                     }
                     else if( pObj->GetObjInventor() == SdrInventor && pObj->GetObjIdentifier() == OBJ_GRAF )
                     {
-                        SvLBoxEntry* pNewEntry = InsertEntry( aStr, aImgGraphic, aImgGraphic, pEntry ); // pEntry entspr. Parent
+                        SvLBoxEntry* pNewEntry = InsertEntry( aStr, aImgGraphic, aImgGraphic, pEntry );
+
                         SetExpandedEntryBmp( pNewEntry, aImgGraphicH, BMP_COLOR_HIGHCONTRAST );
                         SetCollapsedEntryBmp( pNewEntry, aImgGraphicH, BMP_COLOR_HIGHCONTRAST );
                     }
                     else
                     {
                         SvLBoxEntry* pNewEntry = InsertEntry( aStr, aImgObjects, aImgObjects, pEntry );
+
                         SetExpandedEntryBmp( pNewEntry, aImgObjectsH, BMP_COLOR_HIGHCONTRAST );
                         SetCollapsedEntryBmp( pNewEntry, aImgObjectsH, BMP_COLOR_HIGHCONTRAST );
                     }
@@ -379,7 +386,14 @@ void SdPageObjsTLB::Fill( const SdDrawDocument* pInDoc, BOOL bAllPages,
         while( nPage < nMaxMasterPages )
         {
             pPage = (SdPage*) pDoc->GetMasterPage( nPage );
-            pEntry = InsertEntry( pPage->GetName(), aImgPage, aImgPage );
+            pEntry = InsertEntry( pPage->GetName(),
+                                  aImgPage,
+                                  aImgPage,
+                                  0,
+                                  FALSE,
+                                  LIST_APPEND,
+                                  reinterpret_cast< void* >( 1 ) );
+
             SetExpandedEntryBmp( pEntry, aImgPageH, BMP_COLOR_HIGHCONTRAST );
             SetCollapsedEntryBmp( pEntry, aImgPageH, BMP_COLOR_HIGHCONTRAST );
 
@@ -394,18 +408,21 @@ void SdPageObjsTLB::Fill( const SdDrawDocument* pInDoc, BOOL bAllPages,
                     if( pObj->GetObjInventor() == SdrInventor && pObj->GetObjIdentifier() == OBJ_OLE2 )
                     {
                         SvLBoxEntry* pNewEntry = InsertEntry( aStr, aImgOle, aImgOle, pEntry ); // pEntry entspr. Parent
+
                         SetExpandedEntryBmp( pNewEntry, aImgOleH, BMP_COLOR_HIGHCONTRAST );
                         SetCollapsedEntryBmp( pNewEntry, aImgOleH, BMP_COLOR_HIGHCONTRAST );
                     }
                     else if( pObj->GetObjInventor() == SdrInventor && pObj->GetObjIdentifier() == OBJ_GRAF )
                     {
                         SvLBoxEntry* pNewEntry = InsertEntry( aStr, aImgGraphic, aImgGraphic, pEntry ); // pEntry entspr. Parent
+
                         SetExpandedEntryBmp( pNewEntry, aImgGraphicH, BMP_COLOR_HIGHCONTRAST );
                         SetCollapsedEntryBmp( pNewEntry, aImgGraphicH, BMP_COLOR_HIGHCONTRAST );
                     }
                     else
                     {
                         SvLBoxEntry* pNewEntry = InsertEntry( aStr, aImgObjects, aImgObjects, pEntry );
+
                         SetExpandedEntryBmp( pNewEntry, aImgObjectsH, BMP_COLOR_HIGHCONTRAST );
                         SetCollapsedEntryBmp( pNewEntry, aImgObjectsH, BMP_COLOR_HIGHCONTRAST );
                     }
@@ -453,7 +470,14 @@ void SdPageObjsTLB::Fill( const SdDrawDocument* pInDoc, SfxMedium* pInMedium,
     Image aImgDocClosedH( aBmpDocClosedH, Color( COL_BLACK ) );
 
     // Dokumentnamen einfuegen
-    pFileEntry = InsertEntry( aDocName, aImgDocOpen, aImgDocClosed, NULL, TRUE ); // ChildsOnDemand
+    pFileEntry = InsertEntry( aDocName,
+                              aImgDocOpen,
+                              aImgDocClosed,
+                              NULL,
+                              TRUE,
+                              LIST_APPEND,
+                              reinterpret_cast< void* >( 1 ) );
+
     SetExpandedEntryBmp( pFileEntry, aImgDocOpenH, BMP_COLOR_HIGHCONTRAST );
     SetCollapsedEntryBmp( pFileEntry, aImgDocClosedH, BMP_COLOR_HIGHCONTRAST );
 }
@@ -662,7 +686,14 @@ void SdPageObjsTLB::RequestingChilds( SvLBoxEntry* pFileEntry )
                 pPage = (SdPage*) pBookmarkDoc->GetPage( nPage );
                 if( pPage->GetPageKind() == PK_STANDARD )
                 {
-                    pPageEntry = InsertEntry( pPage->GetName(), aImgPage, aImgPage, pFileEntry );
+                    pPageEntry = InsertEntry( pPage->GetName(),
+                                              aImgPage,
+                                              aImgPage,
+                                              pFileEntry,
+                                              FALSE,
+                                              LIST_APPEND,
+                                              reinterpret_cast< void* >( 1 ) );
+
                     SetExpandedEntryBmp( pPageEntry, aImgPageH, BMP_COLOR_HIGHCONTRAST );
                     SetCollapsedEntryBmp( pPageEntry, aImgPageH, BMP_COLOR_HIGHCONTRAST );
 
@@ -677,18 +708,21 @@ void SdPageObjsTLB::RequestingChilds( SvLBoxEntry* pFileEntry )
                             if( pObj->GetObjInventor() == SdrInventor && pObj->GetObjIdentifier() == OBJ_OLE2 )
                             {
                                 SvLBoxEntry* pNewEntry = InsertEntry( aStr, aImgOle, aImgOle, pPageEntry );
+
                                 SetExpandedEntryBmp( pNewEntry, aImgOleH, BMP_COLOR_HIGHCONTRAST );
                                 SetCollapsedEntryBmp( pNewEntry, aImgOleH, BMP_COLOR_HIGHCONTRAST );
                             }
                             else if( pObj->GetObjInventor() == SdrInventor && pObj->GetObjIdentifier() == OBJ_GRAF )
                             {
                                 SvLBoxEntry* pNewEntry = InsertEntry( aStr, aImgGraphic, aImgGraphic, pPageEntry ); // pEntry entspr. Parent
+
                                 SetExpandedEntryBmp( pNewEntry, aImgGraphicH, BMP_COLOR_HIGHCONTRAST );
                                 SetCollapsedEntryBmp( pNewEntry, aImgGraphicH, BMP_COLOR_HIGHCONTRAST );
                             }
                             else
                             {
                                 SvLBoxEntry* pNewEntry = InsertEntry( aStr, aImgObjects, aImgObjects, pPageEntry );
+
                                 SetExpandedEntryBmp( pNewEntry, aImgObjectsH, BMP_COLOR_HIGHCONTRAST );
                                 SetCollapsedEntryBmp( pNewEntry, aImgObjectsH, BMP_COLOR_HIGHCONTRAST );
                             }
@@ -822,23 +856,20 @@ void SdPageObjsTLB::CloseBookmarkDoc()
 
 /*************************************************************************
 |*
-|* Setzt das Flag bOleSelected, entspr. ob ein OLE-Objekt selektiert ist
+|*
 |*
 \************************************************************************/
 
 void SdPageObjsTLB::SelectHdl()
 {
-    SvLBoxEntry* pEntry = NULL;
-    bOleSelected = FALSE;
-    bGraphicSelected = FALSE;
+    SvLBoxEntry* pEntry = FirstSelected();
 
-    pEntry = FirstSelected();
-    while( pEntry && ( !bOleSelected || !bGraphicSelected ) )
+    bLinkableSelected = TRUE;
+
+    while( pEntry && bLinkableSelected )
     {
-        if( aImgOle == GetExpandedEntryBmp( pEntry ) )
-            bOleSelected = TRUE;
-        if( aImgGraphic == GetExpandedEntryBmp( pEntry ) )
-            bGraphicSelected = TRUE;
+        if( NULL == pEntry->GetUserData() )
+            bLinkableSelected = FALSE;
 
         pEntry = NextSelected( pEntry );
     }

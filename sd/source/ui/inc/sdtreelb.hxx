@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdtreelb.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: af $ $Date: 2002-11-14 15:02:42 $
+ *  last change: $Author: ka $ $Date: 2002-12-06 16:51:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,8 +154,7 @@ protected:
     Image                   aImgGraphic;
     Image                   aImgOleH;
     Image                   aImgGraphicH;
-    BOOL                    bOleSelected;
-    BOOL                    bGraphicSelected;
+    BOOL                    bLinkableSelected;
     BOOL                    bDragEnabled;
     String                  aDocName;
     SdDrawDocShellRef       xBookmarkDocShRef;  // Zum Laden von Bookmarks
@@ -201,8 +200,8 @@ public:
     SdDrawDocument*         GetBookmarkDoc(SfxMedium* pMedium = NULL);
     SdDrawDocShell*         GetDropDocSh() { return(pDropDocSh); }
     void                    CloseBookmarkDoc();
-    BOOL                    IsOleSelected() const { return( bOleSelected ); }
-    BOOL                    IsGraphicSelected() const { return( bGraphicSelected ); }
+
+    BOOL                    IsLinkableSelected() const { return bLinkableSelected; }
 
     static BOOL             IsInDrag()  { return bIsInDrag; }
 };

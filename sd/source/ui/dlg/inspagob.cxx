@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inspagob.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cl $ $Date: 2002-05-31 14:20:03 $
+ *  last change: $Author: ka $ $Date: 2002-12-06 16:51:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,11 +203,10 @@ BOOL SdInsertPagesObjsDlg::IsRemoveUnnessesaryMasterPages() const
 
 IMPL_LINK( SdInsertPagesObjsDlg, SelectObjectHdl, void *, p )
 {
-    if( aLbTree.IsOleSelected() ||
-        aLbTree.IsGraphicSelected() )
-        aCbxLink.Disable();
-    else
+    if( aLbTree.IsLinkableSelected() )
         aCbxLink.Enable();
+    else
+        aCbxLink.Disable();
 
     return( 0 );
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navigatr.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: af $ $Date: 2002-11-14 17:00:43 $
+ *  last change: $Author: ka $ $Date: 2002-12-06 16:51:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -239,18 +239,12 @@ void SdNavigatorWin::InitTreeLB( const SdDrawDocument* pDoc )
 
 NavigatorDragType SdNavigatorWin::GetNavigatorDragType()
 {
-    NavigatorDragType eDT = eDragType;
-    NavDocInfo* pInfo = GetDocInfo();
+    NavigatorDragType   eDT = eDragType;
+    NavDocInfo*         pInfo = GetDocInfo();
 
-    // Bei einem gelinktem OLE-Objekt oder -Graphik oder
-    // wenn das Doc keinen Namen besitzt
-    if( eDT == NAVIGATOR_DRAGTYPE_LINK &&
-        ( pInfo && !pInfo->HasName() ||
-          aTlbObjects.IsOleSelected() ||
-          aTlbObjects.IsGraphicSelected() ) )
-    {
+    if( ( eDT == NAVIGATOR_DRAGTYPE_LINK ) && ( ( pInfo && !pInfo->HasName() ) || !aTlbObjects.IsLinkableSelected() ) )
         eDT = NAVIGATOR_DRAGTYPE_NONE;
-    }
+
     return( eDT );
 }
 
@@ -344,9 +338,7 @@ IMPL_LINK( SdNavigatorWin, ClickToolboxHdl, ToolBox*, pBox )
             }
             NavDocInfo* pInfo = GetDocInfo();
 
-            if( pInfo && !pInfo->HasName() ||
-                aTlbObjects.IsOleSelected() ||
-                aTlbObjects.IsGraphicSelected() )
+            if( ( pInfo && !pInfo->HasName() ) || !aTlbObjects.IsLinkableSelected() )
             {
                 pMenu->EnableItem( NAVIGATOR_DRAGTYPE_LINK, FALSE );
                 pMenu->EnableItem( NAVIGATOR_DRAGTYPE_URL, FALSE );
@@ -444,11 +436,8 @@ IMPL_LINK( SdNavigatorWin, SelectDocumentHdl, void *, p )
         }
     }
 
-
     // Pruefen, ob Link oder URL moeglich ist
-    if( pInfo && !pInfo->HasName() ||
-        aTlbObjects.IsOleSelected() ||
-        eDragType != NAVIGATOR_DRAGTYPE_EMBEDDED )
+    if( ( pInfo && !pInfo->HasName() ) || !aTlbObjects.IsLinkableSelected() || ( eDragType != NAVIGATOR_DRAGTYPE_EMBEDDED ) )
     {
         eDragType = NAVIGATOR_DRAGTYPE_EMBEDDED;
         SetDragImage();
