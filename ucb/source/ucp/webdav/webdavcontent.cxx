@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavcontent.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:27:20 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 09:37:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,9 @@
  **************************************************************************
 
  *************************************************************************/
+
+#include "osl/getglobalmutex.hxx"
+#include "rtl/instance.hxx"
 
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
@@ -333,37 +336,14 @@ uno::Any SAL_CALL Content::queryInterface( const uno::Type & rType )
 XTYPEPROVIDER_COMMON_IMPL( Content );
 
 //=========================================================================
-// virtual
-uno::Sequence< uno::Type > SAL_CALL Content::getTypes()
-    throw( uno::RuntimeException )
+
+namespace
 {
-    static cppu::OTypeCollection* pCollection = NULL;
-
-      if ( !pCollection )
+    struct InitFolderTypes
     {
-        osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
-          if ( !pCollection )
+        cppu::OTypeCollection * operator()()
         {
-            sal_Bool bFolder = sal_False;
-            try
-            {
-                bFolder
-                    = isFolder(
-                        uno::Reference< star::ucb::XCommandEnvironment >() );
-            }
-            catch ( uno::RuntimeException const & )
-            {
-                throw;
-            }
-            catch ( uno::Exception const & )
-            {
-                OSL_ENSURE( sal_False,
-                            "Content::getTypes - caught exception." );
-            }
-
-            if ( bFolder )
-            {
-                static cppu::OTypeCollection aCollection(
+            static cppu::OTypeCollection aInstance(
                         CPPU_TYPE_REF( lang::XTypeProvider ),
                         CPPU_TYPE_REF( lang::XServiceInfo ),
                         CPPU_TYPE_REF( lang::XComponent ),
@@ -375,11 +355,15 @@ uno::Sequence< uno::Type > SAL_CALL Content::getTypes()
                         CPPU_TYPE_REF( beans::XPropertySetInfoChangeNotifier ),
                         CPPU_TYPE_REF( container::XChild ),
                         CPPU_TYPE_REF( star::ucb::XContentCreator ) ); // !!
-                  pCollection = &aCollection;
-            }
-              else
-            {
-                static cppu::OTypeCollection aCollection(
+            return &aInstance;
+        }
+    };
+
+    struct InitDocTypes
+    {
+        cppu::OTypeCollection * operator()()
+        {
+            static cppu::OTypeCollection aInstance(
                         CPPU_TYPE_REF( lang::XTypeProvider ),
                         CPPU_TYPE_REF( lang::XServiceInfo ),
                         CPPU_TYPE_REF( lang::XComponent ),
@@ -390,11 +374,49 @@ uno::Sequence< uno::Type > SAL_CALL Content::getTypes()
                         CPPU_TYPE_REF( beans::XPropertyContainer ),
                         CPPU_TYPE_REF( beans::XPropertySetInfoChangeNotifier ),
                         CPPU_TYPE_REF( container::XChild ) );
-                  pCollection = &aCollection;
-            }
+            return &aInstance;
         }
+    };
+}
+
+//=========================================================================
+// virtual
+uno::Sequence< uno::Type > SAL_CALL Content::getTypes()
+    throw( uno::RuntimeException )
+{
+    bool bFolder = false;
+    try
+    {
+        bFolder
+            = isFolder( uno::Reference< star::ucb::XCommandEnvironment >() );
     }
-      return (*pCollection).getTypes();
+    catch ( uno::RuntimeException const & )
+    {
+        throw;
+    }
+    catch ( uno::Exception const & )
+    {
+        OSL_ENSURE( sal_False, "Content::getTypes - caught exception." );
+    }
+
+    if ( bFolder )
+    {
+        return (*rtl_Instance< cppu::OTypeCollection,
+                               InitFolderTypes,
+                               ::osl::MutexGuard,
+                               ::osl::GetGlobalMutex >::create(
+                                    InitFolderTypes(),
+                                    ::osl::GetGlobalMutex() ) ).getTypes();
+    }
+    else
+    {
+        return (*rtl_Instance< cppu::OTypeCollection,
+                               InitDocTypes,
+                               ::osl::MutexGuard,
+                               ::osl::GetGlobalMutex >::create(
+                                    InitDocTypes(),
+                                    ::osl::GetGlobalMutex() ) ).getTypes();
+    }
 }
 
 //=========================================================================
@@ -1188,12 +1210,12 @@ Content::createNewContent( const star::ucb::ContentInfo& Info )
           if ( Info.Type.equalsAsciiL(
                 RTL_CONSTASCII_STRINGPARAM( WEBDAV_COLLECTION_TYPE ) ) )
         {
-            aURL += rtl::OUString::createFromAscii( "[New_Collection]" );
+            aURL += rtl::OUString::createFromAscii( "New_Collection" );
             isCollection = sal_True;
           }
           else
         {
-            aURL += rtl::OUString::createFromAscii( "[New_Content]" );
+            aURL += rtl::OUString::createFromAscii( "New_Content" );
             isCollection = sal_False;
           }
 
