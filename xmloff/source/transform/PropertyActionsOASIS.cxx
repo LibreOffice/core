@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyActionsOASIS.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 12:27:49 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:10:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -435,9 +435,9 @@ XMLTransformerActionInit aParagraphPropertyOASISAttrActionTable[] =
           NO_PARAMS },
     { XML_NAMESPACE_FO, XML_KEEP_WITH_NEXT, XML_OPTACTION_KEEP_WITH_NEXT,
           NO_PARAMS }, /* generated entry */
-
+    { XML_NAMESPACE_FO, XML_KEEP_TOGETHER, XML_OPTACTION_KEEP_TOGETHER,
+        NO_PARAMS },
     { XML_NAMESPACE_STYLE, XML_WRITING_MODE, XML_OPTACTION_DRAW_WRITING_MODE, 0 },
-
     { XML_NAMESPACE_OFFICE, XML_TOKEN_INVALID, XML_ATACTION_EOT, NO_PARAMS }
 };
 
