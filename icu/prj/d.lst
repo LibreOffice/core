@@ -1,4 +1,5 @@
 mkdir: %_DEST%\inc%_EXT%\icu
+mkdir: %_DEST%\inc%_EXT%\external\icu
 mkdir: %_DEST%\inc%_EXT%\external\layout
 mkdir: %_DEST%\inc%_EXT%\external\unicode
 
@@ -6,18 +7,31 @@ mkdir: %_DEST%\inc%_EXT%\external\unicode
 ..\%__SRC%\misc\build\icu\source\common\unicode\*.h %_DEST%\inc%_EXT%\external\unicode\*.h
 ..\%__SRC%\misc\build\icu\source\i18n\unicode\*.h %_DEST%\inc%_EXT%\external\unicode\*.h
 
+hedabu: ..\%__SRC%\misc\build\icu\source\common\cmemory.h %_DEST%\inc%_EXT%\external\icu\cmemory.h
+hedabu: ..\%__SRC%\misc\build\icu\source\common\rbbidata.h %_DEST%\inc%_EXT%\external\icu\rbbidata.h
+hedabu: ..\%__SRC%\misc\build\icu\source\common\utrie.h %_DEST%\inc%_EXT%\external\icu\utrie.h
+hedabu: ..\%__SRC%\misc\build\icu\source\common\ucmndata.h %_DEST%\inc%_EXT%\external\icu\ucmndata.h
+hedabu: ..\%__SRC%\misc\build\icu\source\common\umapfile.h %_DEST%\inc%_EXT%\external\icu\umapfile.h
+
 ..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
 ..\%__SRC%\lib\*.a %_DEST%\lib%_EXT%\*.a
 ..\%__SRC%\lib\*.lib %_DEST%\lib%_EXT%\*.lib
 
 ..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%\*.dll
 
+..\%__SRC%\bin\genccode     %_DEST%\bin%_EXT%\genccode
+..\%__SRC%\bin\genccode.exe %_DEST%\bin%_EXT%\genccode.exe
+..\%__SRC%\bin\genbrk       %_DEST%\bin%_EXT%\genbrk
+..\%__SRC%\bin\genbrk.exe   %_DEST%\bin%_EXT%\genbrk.exe
+
 ..\%__SRC%\lib\libicudata.*     %_DEST%\lib%_EXT%\libicudata.*
 ..\%__SRC%\lib\libicui18n.*     %_DEST%\lib%_EXT%\libicui18n.*
 ..\%__SRC%\lib\libicule.*       %_DEST%\lib%_EXT%\libicule.*
 ..\%__SRC%\lib\libicuuc.*       %_DEST%\lib%_EXT%\libicuuc.*
+..\%__SRC%\lib\libicutoolutil.* %_DEST%\lib%_EXT%\libicutoolutil.*
 
 linklib: libicudata.so.*.*
 linklib: libicui18n.so.*.*
 linklib: libicule.so.*.*
 linklib: libicuuc.so.*.*
+linklib: libicutoolutil.so.*.*
