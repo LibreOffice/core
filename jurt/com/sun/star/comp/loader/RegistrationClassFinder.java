@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RegistrationClassFinder.java,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:27:51 $
+ *  last change: $Author: dbo $ $Date: 2000-11-16 09:09:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,112 @@ public class RegistrationClassFinder {
         }
     }
 
+    private static String s_accessPath[];
+    private static boolean s_bInit = false;
+
+    private final static boolean checkAccessPath( java.net.URL url )
+    {
+        // init access path
+        if (! s_bInit)
+        {
+            String accessPath[] = null;
+
+            String env = System.getProperty( "com.sun.star.comp.loader.CPLD_ACCESSPATH" );
+            if (env != null)
+            {
+                int nPos = 0;
+                java.util.StringTokenizer tokens = new java.util.StringTokenizer( env, ";" );
+                accessPath = new String[ tokens.countTokens() ];
+
+                try
+                {
+                    while (tokens.hasMoreTokens())
+                    {
+                        try
+                        {
+                            accessPath[ nPos ] =
+                                (new java.io.File( tokens.nextToken() )).getCanonicalPath();
+                            ++nPos;
+                        }
+                        catch (java.io.IOException exc)
+                        {
+                        }
+                    }
+                }
+                catch (java.util.NoSuchElementException exc)
+                {
+                }
+
+                if (nPos != accessPath.length)
+                {
+                    // realloc accessPath to nPos
+                    String ar[] = new String[ nPos ];
+                    System.arraycopy( accessPath, 0, ar, 0, nPos );
+                    accessPath = ar;
+                }
+            }
+
+            s_accessPath = accessPath;
+            s_bInit = true;
+
+            if (DEBUG && s_accessPath != null)
+            {
+                System.err.print( "> CPLD_ACCESSPATH: " );
+                for ( int nPos = 0; nPos < s_accessPath.length; ++nPos )
+                {
+                    System.err.print( "\"" + s_accessPath[ nPos ] + "\" " );
+                }
+                System.err.println();
+            }
+        }
+
+        if (s_accessPath == null)
+            return true; // no CPLD_ACCESSPATH set
+
+        if (! url.getProtocol().equals( "file" ))
+        {
+            if (DEBUG)
+                System.err.println( "> \"" + url.toExternalForm() + "\" is no file url!" );
+            return false;
+        }
+
+        String surl;
+
+        try
+        {
+            surl = (new java.io.File( url.getFile() )).getCanonicalPath();
+        }
+        catch (java.io.IOException exc)
+        {
+            if (DEBUG)
+                System.err.println( "> \"" + url.toExternalForm() + "\" cannot be resolved!" );
+            return false;
+        }
+
+        if (DEBUG)
+            System.err.print( "> java loader looking up: \"" + surl + "\"..." );
+
+        // check if jar is in access path
+        for ( int nPos = 0; nPos < s_accessPath.length; ++nPos )
+        {
+            String path = s_accessPath[ nPos ];
+            if (0 == surl.indexOf( path ) &&
+                surl.length() > path.length() &&
+                (path.charAt( path.length() -1 ) == java.io.File.separatorChar ||
+                 surl.charAt( path.length() ) == java.io.File.separatorChar)) // dir boundary
+            {
+                if (DEBUG)
+                    System.err.println( "succeeded!" );
+                return true;
+            }
+        }
+
+        if (DEBUG)
+            System.err.println( "failed!" );
+
+        return false;
+    }
+
     public Class getRegistrationClass()
         throws  java.io.IOException,
                 java.lang.ClassNotFoundException,
@@ -98,6 +204,8 @@ public class RegistrationClassFinder {
             String className = null;
 
             java.net.URL url = new java.net.URL(m_locationUrl);
+            if (! checkAccessPath( url ))
+                throw new ClassNotFoundException( "jar access failed!" );
               Resource resource = ResourceProxy.load(url, null);
               resource.loadJar(url);
 
@@ -133,6 +241,8 @@ public class RegistrationClassFinder {
 
         if (m_context != null) {
             java.net.URL url = new java.net.URL( m_locationUrl );
+            if (! checkAccessPath( url ))
+                throw new ClassNotFoundException( "jar access failed!" );
              Resource resource = ResourceProxy.load(url, null);
              resource.loadJar(url);
 
