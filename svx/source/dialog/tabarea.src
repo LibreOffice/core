@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabarea.src,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:18:24 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:39:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         Text[ english_us ] = "Transparency mode";
         Text[ portuguese ] = "Modo transparκncia";
         Text[ russian ] = "Πεζθμ οπξηπΰχνξρςθ";
-        Text[ greek ] = "Κατάσταση διαφάνειας";
+        Text[ greek ] = "Κατάσταση λειτουργίας διαφάνειας";
         Text[ dutch ] = "Modus Transparantie";
         Text[ french ] = "Mode Transparence";
         Text[ spanish ] = "Modo transparencia";
@@ -152,7 +152,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         Text[ english_us ] = "~Transparency";
         Text[ portuguese ] = "~Transparκncia";
         Text[ russian ] = "Οπξ~ηπΰχνξρςό";
-        Text[ greek ] = "Γραμμική διαφάνεια";
+        Text[ greek ] = "~Διαφάνεια";
         Text[ dutch ] = "~Transparantie";
         Text[ french ] = "~Transparence";
         Text[ spanish ] = "~Transparencia";
@@ -199,7 +199,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         Text[ english_us ] = "Gradient";
         Text[ portuguese ] = "~Gradaηγo";
         Text[ russian ] = "Γπΰδθενς";
-        Text[ greek ] = "Διαβάθμιση διαφάνειας";
+        Text[ greek ] = "~Διαβάθ. χρώματος";
         Text[ dutch ] = "Ve~rloop";
         Text[ french ] = "Dιgradι";
         Text[ spanish ] = "Gradiente";
@@ -282,12 +282,12 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         };
         StringList [ language_user1 ] =
         {
-            < "Line; Line; Linear" ; Default ; > ;
-            < "Axia; Axia; Axial" ; Default ; > ;
-            < "Radi; Radi; Radial" ; Default ; > ;
-            < "Elli; Elli; Ellipsoid" ; Default ; > ;
-            < "Quad; Quad; Quadratisch" ; Default ; > ;
-            < "Rech; Rech; Rechteckig" ; Default ; > ;
+            < "; Line; Line; Linear" ; Default ; > ;
+            < "; Axia; Axia; Axial" ; Default ; > ;
+            < "; Radi; Radi; Radial" ; Default ; > ;
+            < "; Elli; Elli; Ellipsoid" ; Default ; > ;
+            < "; Quad; Quad; Quadratisch" ; Default ; > ;
+            < "; Rech; Rech; Rechteckig" ; Default ; > ;
         };
         StringList [ english_us ] =
         {
@@ -534,7 +534,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         Text[ polish ] = "rodek ~X";
         Text[ portuguese_brazilian ] = "Centro ~X";
         Text[ japanese ] = "δΈ­εΏƒ ~X";
-        Text[ korean ] = "μ¤‘μ‹¬ ~X";
+        Text[ korean ] = "μ¤‘μ‹¬ X(~X)";
         Text[ chinese_simplified ] = "δΈ­εΏƒ ~X";
         Text[ chinese_traditional ] = "δΈ­εΏƒ ~X";
         Text[ arabic ] = "γΡίÒ Σ";
@@ -582,7 +582,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         Text[ polish ] = "rodek ~Y";
         Text[ portuguese_brazilian ] = "Centro ~Y";
         Text[ japanese ] = "δΈ­εΏƒ ~Y";
-        Text[ korean ] = "μ¤‘μ‹¬ ~Y";
+        Text[ korean ] = "μ¤‘μ‹¬ Y(~Y)";
         Text[ chinese_simplified ] = "δΈ­εΏƒ ~Y";
         Text[ chinese_traditional ] = "δΈ­εΏƒ ~Y";
         Text[ arabic ] = "γΡίÒ Υ";
@@ -904,7 +904,7 @@ TabPage RID_SVXPAGE_AREA
         Text[ english_us ] = "Fill";
         Text[ portuguese ] = "Preenchimento";
         Text[ russian ] = "Ηΰλθβκΰ";
-        Text[ greek ] = "Fill";
+        Text[ greek ] = "Γέμισμα";
         Text[ dutch ] = "Vulling";
         Text[ french ] = "Remplissage";
         Text[ spanish ] = "Relleno";
@@ -936,7 +936,7 @@ TabPage RID_SVXPAGE_AREA
         Text[ english_us ] = "None";
         Text[ portuguese ] = "~Nenhum";
         Text[ russian ] = "Νες";
-        Text[ greek ] = "No Fill";
+        Text[ greek ] = "Κανένα";
         Text[ dutch ] = "~Geen";
         Text[ french ] = "Aucun(e)";
         Text[ spanish ] = "Ninguno";
@@ -1001,7 +1001,7 @@ TabPage RID_SVXPAGE_AREA
         Text[ english_us ] = "Gradient";
         Text[ portuguese ] = "~Gradaηγo";
         Text[ russian ] = "Γπΰδθενς";
-        Text[ greek ] = "Δια~βάθμ. χρώμα";
+        Text[ greek ] = "~Διαβάθ. χρώματος";
         Text[ dutch ] = "K~leurovergangen";
         Text[ french ] = "Dιgradι";
         Text[ spanish ] = "Gradiente";
@@ -1034,7 +1034,7 @@ TabPage RID_SVXPAGE_AREA
         Text[ english_us ] = "Hatching";
         Text[ portuguese ] = "~Tracejado";
         Text[ russian ] = "Ψςπθυξβκΰ";
-        Text[ greek ] = "Hatching";
+        Text[ greek ] = "Διαγράμμιση";
         Text[ dutch ] = "~Arcering";
         Text[ french ] = "Hachure";
         Text[ spanish ] = "Trama";
@@ -1066,7 +1066,7 @@ TabPage RID_SVXPAGE_AREA
         Text[ english_us ] = "Bitmap";
         Text[ portuguese ] = "~Bitmap";
         Text[ russian ] = "Π~ΰρςπ";
-        Text[ greek ] = "~Bitmap";
+        Text[ greek ] = "Bitmap";
         Text[ dutch ] = "~Bitmap";
         Text[ french ] = "Bitmap";
         Text[ spanish ] = "Mapa de bits";
@@ -1150,7 +1150,7 @@ TabPage RID_SVXPAGE_AREA
         Text [ french ] = "Pas de progression" ;
         Text [ swedish ] = "Steglδngd" ;
         Text [ danish ] = "Trinvidde" ;
-        Text [ portuguese_brazilian ] = "Incrementos" ;
+        Text [ portuguese_brazilian ] = "Incremento" ;
         Text [ portuguese ] = "Incremento" ;
         Text[ chinese_simplified ] = "ι€’εΆ";
         Text[ russian ] = "Ψΰγθ";
@@ -1158,7 +1158,7 @@ TabPage RID_SVXPAGE_AREA
         Text[ japanese ] = "γ‚Ήγƒ†γƒƒγƒ—ζ•°";
         Text[ chinese_traditional ] = "ζΌΈι€²";
         Text[ arabic ] = "ΗαΚÒΗνΟ";
-        Text[ greek ] = "Βήμα";
+        Text[ greek ] = "Βήματα";
         Text[ korean ] = "μ¦κ°€ν­";
         Text[ turkish ] = "Artύώ";
         Text[ language_user1 ] = " ";
@@ -1192,7 +1192,7 @@ TabPage RID_SVXPAGE_AREA
         Text[ japanese ] = "θ‡ªε‹•(~U)";
         Text[ chinese_traditional ] = "θ‡ªε‹•(~U)";
         Text[ arabic ] = "ΚαήΗΖν";
-        Text[ greek ] = "~Αυτόματα";
+        Text[ greek ] = "Aυτόματα";
         Text[ korean ] = "μλ™(~U)";
         Text[ turkish ] = "Otomatik";
         Text[ language_user1 ] = " ";
@@ -1231,7 +1231,7 @@ TabPage RID_SVXPAGE_AREA
         Text [ english_us ] = "~Background color" ;
         Text[ portuguese ] = "~Cor de fundo";
         Text[ russian ] = "Φβες τξνΰ";
-        Text[ greek ] = "Χρώματα φόντου";
+        Text[ greek ] = "~Χρώμα φόντου";
         Text[ dutch ] = "A~chtergrondkleur";
         Text[ french ] = "Arriθre-plan";
         Text[ spanish ] = "Color de ~fondo";
@@ -1356,7 +1356,7 @@ TabPage RID_SVXPAGE_AREA
         Text[ japanese ] = "η›Έε―Ύ(~L)";
         Text[ chinese_traditional ] = "η›Έε°(~L)";
         Text[ arabic ] = "δΣΘν";
-        Text[ greek ] = "Σχετικά";
+        Text[ greek ] = "~Σχετικά";
         Text[ korean ] = "λΉ„λ΅€ν•μ—¬(~L)";
         Text[ turkish ] = "Gφreceli";
         Text[ language_user1 ] = " ";
@@ -1534,7 +1534,7 @@ TabPage RID_SVXPAGE_AREA
         Text[ chinese_traditional ] = "~X εη§»";
         Text[ arabic ] = "ΗαΕÒΗΝΙ Σ";
         Text[ greek ] = "Κατά ~X";
-        Text[ korean ] = "μ¤ν”„μ…‹ ~X";
+        Text[ korean ] = "μ¤ν”„μ…‹ X(~X)";
         Text[ turkish ] = "X kaydύr";
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "~X-siirtymδ";
@@ -1567,7 +1567,7 @@ TabPage RID_SVXPAGE_AREA
         Text[ chinese_traditional ] = "~Y εη§»";
         Text[ arabic ] = "ΗαΕÒΗΝΙ Υ";
         Text[ greek ] = "Κατά ~Υ";
-        Text[ korean ] = "μ¤ν”„μ…‹ ~Y";
+        Text[ korean ] = "μ¤ν”„μ…‹ Y(~Y)";
         Text[ turkish ] = "Y kaydύr";
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "~Y-siirtymδ";
@@ -1630,7 +1630,7 @@ TabPage RID_SVXPAGE_AREA
         Text[ japanese ] = "δΈ¦γΉγ¦θ΅¨η¤Ί(~T)";
         Text[ chinese_traditional ] = "εΉ³ι‹ª(~T)";
         Text[ arabic ] = "ΘαΗΨ";
-        Text[ greek ] = "Σε παράθεση";
+        Text[ greek ] = "Σε παράθε~ση";
         Text[ korean ] = "λ°”λ‘‘νμ‹(~T)";
         Text[ turkish ] = "Dφώe";
         Text[ language_user1 ] = " ";
@@ -1730,7 +1730,7 @@ TabPage RID_SVXPAGE_AREA
         Text[ japanese ] = "θ΅(~W)";
         Text[ chinese_traditional ] = "ζ¬„(~W)";
         Text[ arabic ] = "Υέ";
-        Text[ greek ] = "Γραμμή";
+        Text[ greek ] = "Γρα~μμή";
         Text[ korean ] = "ν–‰(~W)";
         Text[ turkish ] = "Satύr";
         Text[ language_user1 ] = " ";
@@ -1867,7 +1867,7 @@ TabPage RID_SVXPAGE_SHADOW
         Text[ english_us ] = "~Use shadow";
         Text[ portuguese ] = "Apli~car sombra";
         Text[ russian ] = "Θροξλόηξβΰςό ςενό";
-        Text[ greek ] = "εμφάνιση";
+        Text[ greek ] = "Χ~ρήση σκιάς";
         Text[ dutch ] = "~Schaduw toepassen";
         Text[ french ] = "Appliquer";
         Text[ spanish ] = "Usar sombra";
@@ -1900,7 +1900,7 @@ TabPage RID_SVXPAGE_SHADOW
         Text[ english_us ] = "~Position";
         Text[ portuguese ] = "~Alinhamento";
         Text[ russian ] = "Οξλξ~ζενθε";
-        Text[ greek ] = "Θέση";
+        Text[ greek ] = "~Θέση";
         Text[ dutch ] = "~Uitlijning";
         Text[ french ] = "Position";
         Text[ spanish ] = "Alineaciσn";
@@ -1941,7 +1941,7 @@ TabPage RID_SVXPAGE_SHADOW
         Text[ english_us ] = "~Distance";
         Text[ portuguese ] = "~Distβncia";
         Text[ russian ] = "Πΰρρςξ~ÿνθε";
-        Text[ greek ] = "Απόσταση";
+        Text[ greek ] = "~Απόσταση";
         Text[ dutch ] = "~Afstand";
         Text[ french ] = "Distance";
         Text[ spanish ] = "Distancia";
@@ -2034,7 +2034,7 @@ TabPage RID_SVXPAGE_SHADOW
         Text[ english_us ] = "~Transparency";
         Text[ portuguese ] = "~Transparκncia";
         Text[ russian ] = "Οπξηπΰχνξρςό";
-        Text[ greek ] = "Διαφάνεια";
+        Text[ greek ] = "~Διαφάνεια";
         Text[ dutch ] = "~Transparantie";
         Text[ french ] = "Transparence";
         Text[ spanish ] = "Transparencia";
@@ -2681,7 +2681,7 @@ TabPage RID_SVXPAGE_HATCH
         QuickHelpText[ chinese_traditional ] = "θΌ‰ε…¥ι™°ε½±θ΅¨";
         QuickHelpText[ arabic ] = "ΚΝγνα ήΗΖγΙ ΗαδήζΤ";
         QuickHelpText[ greek ] = "Φόρτωση λίστας με γραμμοσκιές";
-        QuickHelpText[ korean ] = "ν•΄μΉ λª©λ΅ λ΅λ“";
+        QuickHelpText[ korean ] = "ν•΄μΉ­ λª©λ΅ λ΅λ“";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
@@ -2817,7 +2817,7 @@ TabPage RID_SVXPAGE_BITMAP
         Text[ english_us ] = "Pattern Editor";
         Text[ portuguese ] = "Editor de padrυes";
         Text[ russian ] = "Πεδΰκςξπ ξαπΰηφΰ";
-        Text[ greek ] = "Pattern Edit";
+        Text[ greek ] = "Επεξεργασία μοτίβου";
         Text[ dutch ] = "Patroon-editor";
         Text[ french ] = "Ιditeur de motif";
         Text[ spanish ] = "Editor de modelo";
@@ -2856,7 +2856,7 @@ TabPage RID_SVXPAGE_BITMAP
         Text[ english_us ] = "~Foreground color";
         Text[ portuguese ] = "P~rimeiro plano";
         Text[ russian ] = "Οεπεδνθι ολΰν";
-        Text[ greek ] = "~Σε πρώτο πλάνο";
+        Text[ greek ] = "Χ~ρώμα πρώτου πλάνου";
         Text[ dutch ] = "V~oorgrondkleur";
         Text[ french ] = "~Premier plan";
         Text[ spanish ] = "Color de primer plano";
@@ -2867,7 +2867,7 @@ TabPage RID_SVXPAGE_BITMAP
         Text[ polish ] = "~Pierwszy plan";
         Text[ portuguese_brazilian ] = "~Cor do Primeiro Plano";
         Text[ japanese ] = "ε‰ζ™―θ‰²(~F)";
-        Text[ korean ] = "μ „κ²½μƒ‰(~F)";
+        Text[ korean ] = "μ „κ²½ μƒ‰μƒ(~F)";
         Text[ chinese_simplified ] = "ε‰ζ™―ιΆθ‰²(~F)";
         Text[ chinese_traditional ] = "ε‰ζ™―ι΅θ‰²(~F)";
         Text[ turkish ] = "Φnalan rengi";
@@ -2898,7 +2898,7 @@ TabPage RID_SVXPAGE_BITMAP
         Text[ english_us ] = "~Background color";
         Text[ portuguese ] = "~Plano de fundo";
         Text[ russian ] = "Τξν";
-        Text[ greek ] = "Φόντο";
+        Text[ greek ] = "~Χρώμα φόντου";
         Text[ dutch ] = "~Achtergrondkleur";
         Text[ french ] = "Arriθre-plan";
         Text[ spanish ] = "~Color de fondo";
@@ -3069,7 +3069,7 @@ TabPage RID_SVXPAGE_BITMAP
         Text[ japanese ] = "γ‚¤γƒ³γƒγƒΌγƒ(~I)...";
         Text[ chinese_traditional ] = "ε―ε…¥(~I)...";
         Text[ arabic ] = "ΗΣΚνΡΗΟ...";
-        Text[ greek ] = "Εισαγωγή...";
+        Text[ greek ] = "Εισα~γωγή...";
         Text[ korean ] = "κ°€μ Έμ¤κΈ°(~I)...";
         Text[ turkish ] = "έηe aktar...";
         Text[ language_user1 ] = " ";
@@ -3596,7 +3596,7 @@ TabPage RID_SVXPAGE_GRADIENT
         Text[ chinese_traditional ] = "δΈ­εΏƒ(~X)";
         Text[ arabic ] = "ΗαγΡίÒ Σ";
         Text[ greek ] = "Κέντρο X";
-        Text[ korean ] = "μ¤‘μ‹¬ ~X";
+        Text[ korean ] = "μ¤‘μ‹¬ X(~X)";
         Text[ turkish ] = "~X kaydύr";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Centre ~X";
@@ -3645,7 +3645,7 @@ TabPage RID_SVXPAGE_GRADIENT
         Text[ chinese_traditional ] = "δΈ­εΏƒ(~Y)";
         Text[ arabic ] = "ΗαγΡίÒ Υ";
         Text[ greek ] = "Κέντρο ~Y";
-        Text[ korean ] = "μ¤‘μ‹¬ ~Y";
+        Text[ korean ] = "μ¤‘μ‹¬ Y(~Y)";
         Text[ turkish ] = "~Y kaydύr";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Centre ~Y";
@@ -4292,7 +4292,7 @@ TabPage RID_SVXPAGE_COLOR
         Text[ japanese ] = "ζ¨™ζΊ–θ‰²";
         Text[ chinese_traditional ] = "θªΏθ‰²ζΏ";
         Text[ arabic ] = "ήΗΖγΙ ΗαΓαζΗδ";
-        Text[ greek ] = "Πίνακας χρωμάτων";
+        Text[ greek ] = "Πίνα~κας χρωμάτων";
         Text[ korean ] = "μƒ‰μƒν‘";
         Text[ turkish ] = "Renk tablosu";
         Text[ language_user1 ] = " ";
@@ -4567,7 +4567,7 @@ TabPage RID_SVXPAGE_COLOR
         Text[ japanese ] = "θΏ½ε (~A)";
         Text[ chinese_traditional ] = "ζ–°εΆ(~A)";
         Text[ arabic ] = "ΕΦΗέΙ";
-        Text[ greek ] = "Προσθήκη";
+        Text[ greek ] = "Π~ροσθήκη";
         Text[ korean ] = "μ¶”κ°€(~A)";
         Text[ turkish ] = "Ekle";
         Text[ language_user1 ] = " ";
@@ -4602,7 +4602,7 @@ TabPage RID_SVXPAGE_COLOR
         Text[ japanese ] = "η·¨ι›†(~E)...";
         Text[ chinese_traditional ] = "η·¨θΌ―(~E)...";
         Text[ arabic ] = "ΚΝΡνΡ...";
-        Text[ greek ] = "Επεξεργασία...";
+        Text[ greek ] = "Επε~ξεργασία...";
         Text[ korean ] = "νΈμ§‘(~E)...";
         Text[ turkish ] = "Dόzenle...";
         Text[ language_user1 ] = " ";
@@ -5085,6 +5085,8 @@ Image RID_SVXIMG_SAVE_H
 };
 
  // ********************************************************************** EOF
+
+
 
 
 
