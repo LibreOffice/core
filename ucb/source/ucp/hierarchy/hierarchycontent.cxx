@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hierarchycontent.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kso $ $Date: 2001-04-05 09:48:49 $
+ *  last change: $Author: kso $ $Date: 2001-04-19 14:55:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,9 +91,6 @@
 #endif
 #ifndef _COM_SUN_STAR_UCB_INSERTCOMMANDARGUMENT_HPP_
 #include <com/sun/star/ucb/InsertCommandArgument.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_INTERACTIVEBADTRANSFRERURLEXCEPTION_HPP_
-#include <com/sun/star/ucb/InteractiveBadTransferURLException.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UCB_OPENCOMMANDARGUMENT2_HPP_
 #include <com/sun/star/ucb/OpenCommandArgument2.hpp>
@@ -1452,7 +1449,7 @@ void HierarchyContent::destroy( sal_Bool bDeletePhysical )
 void HierarchyContent::transfer( const TransferInfo& rInfo,
                                     const Reference< XCommandEnvironment > & xEnv )
 
-    throw( CommandAbortedException )
+    throw( CommandAbortedException, InteractiveBadTransferURLException )
 {
     osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgcontent.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kso $ $Date: 2001-03-27 14:08:51 $
+ *  last change: $Author: kso $ $Date: 2001-04-19 14:59:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,9 @@
 
 #ifndef _VOS_REF_HXX_
 #include <vos/ref.hxx>
+#endif
+#ifndef _COM_SUN_STAR_UCB_INTERACTIVEBADTRANSFRERURLEXCEPTION_HPP_
+#include <com/sun/star/ucb/InteractiveBadTransferURLException.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UCB_XCONTENTCREATOR_HPP_
 #include <com/sun/star/ucb/XContentCreator.hpp>
@@ -269,7 +272,8 @@ private:
     void transfer( const ::com::sun::star::ucb::TransferInfo& rInfo,
                    const ::com::sun::star::uno::Reference<
                     ::com::sun::star::ucb::XCommandEnvironment > & xEnv )
-        throw( ::com::sun::star::ucb::CommandAbortedException );
+        throw( ::com::sun::star::ucb::CommandAbortedException,
+                ::com::sun::star::ucb::InteractiveBadTransferURLException );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
     getInputStream();

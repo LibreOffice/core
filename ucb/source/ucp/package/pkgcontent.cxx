@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgcontent.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kso $ $Date: 2001-04-05 09:48:30 $
+ *  last change: $Author: kso $ $Date: 2001-04-19 14:59:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1369,7 +1369,7 @@ void Content::destroy( sal_Bool bDeletePhysical )
 //=========================================================================
 void Content::transfer( const TransferInfo& rInfo,
                         const Reference< XCommandEnvironment > & xEnv )
-    throw( CommandAbortedException )
+    throw( CommandAbortedException, InteractiveBadTransferURLException )
 {
     osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
 
