@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FactoryHelper.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kr $ $Date: 2001-02-19 10:00:07 $
+ *  last change: $Author: dbo $ $Date: 2001-06-14 11:54:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,11 +66,12 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 
-
+import com.sun.star.uno.XComponentContext;
 import com.sun.star.lang.XInitialization;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XServiceInfo;
 import com.sun.star.lang.XSingleServiceFactory;
+import com.sun.star.lang.XSingleComponentFactory;
 
 import com.sun.star.registry.XRegistryKey;
 
@@ -82,7 +83,7 @@ import com.sun.star.uno.UnoRuntime;
  * This class has default implementations for <code>getServiceFactory</code>
  * and <code>writeRegistryServiceInfo</code>.
  * <p>
- * @version     $Revision: 1.4 $ $ $Date: 2001-02-19 10:00:07 $
+ * @version     $Revision: 1.5 $ $ $Date: 2001-06-14 11:54:57 $
  * @author      Kay Ramme
  * @see         com.sun.star.lang.XMultiServiceFactory
  * @see         com.sun.star.lang.XServiceInfo
@@ -92,7 +93,8 @@ import com.sun.star.uno.UnoRuntime;
  */
 public class FactoryHelper {
     // the factory
-    static protected class Factory implements XSingleServiceFactory, XServiceInfo {
+    static protected class Factory
+        implements XSingleServiceFactory, XSingleComponentFactory, XServiceInfo {
         protected static Class __objectArray;
 
         static {
@@ -104,11 +106,11 @@ public class FactoryHelper {
             }
         }
 
+        private static final boolean DEBUG = false;
 
         protected XMultiServiceFactory _xMultiServiceFactory;
         protected XRegistryKey         _xRegistryKey;
-        protected Object               _parameters[];
-        protected boolean              _bArgs;
+        protected int                  _nCode;
         protected Constructor          _constructor;
         protected String               _implName;
         protected String               _serviceName;
@@ -124,49 +126,235 @@ public class FactoryHelper {
             _serviceName          = serviceName;
 
             Constructor constructors[] = implClass.getConstructors();
-            for(int i = 0; i < constructors.length && _parameters == null; ++i) {
+            for(int i = 0; i < constructors.length && _constructor == null; ++i) {
                 Class parameters[] = constructors[i].getParameterTypes();
 
                 if(parameters.length == 3
+                   && parameters[0].equals(XComponentContext.class)
+                     && parameters[1].equals(XRegistryKey.class)
+                     && parameters[2].equals(__objectArray)) {
+                    _nCode = 0;
+                    _constructor = constructors[i];
+                }
+                else if(parameters.length == 2
+                     && parameters[0].equals(XComponentContext.class)
+                     && parameters[1].equals(XRegistryKey.class)) {
+                    _nCode = 1;
+                    _constructor = constructors[i];
+                }
+                else if(parameters.length == 2
+                     && parameters[0].equals(XComponentContext.class)
+                     && parameters[1].equals(__objectArray)) {
+                    _nCode = 2;
+                    _constructor = constructors[i];
+                }
+                else if(parameters.length == 1
+                     && parameters[0].equals(XComponentContext.class)) {
+                    _nCode = 3;
+                    _constructor = constructors[i];
+                }
+                // depr
+                else if(parameters.length == 3
                      && parameters[0].equals(XMultiServiceFactory.class)
                      && parameters[1].equals(XRegistryKey.class)
                      && parameters[2].equals(__objectArray)) {
-                    _bArgs = true;
-                    _parameters = new Object[]{xMultiServiceFactory, xRegistryKey, new Object[]{}};
+                    _nCode = 4;
                     _constructor = constructors[i];
                 }
                 else if(parameters.length == 2
                      && parameters[0].equals(XMultiServiceFactory.class)
                      && parameters[1].equals(XRegistryKey.class)) {
-                    _parameters = new Object[]{xMultiServiceFactory, xRegistryKey};
+                    _nCode = 5;
                     _constructor = constructors[i];
                 }
                 else if(parameters.length == 2
                      && parameters[0].equals(XMultiServiceFactory.class)
                      && parameters[1].equals(__objectArray)) {
-                    _bArgs = true;
-                    _parameters = new Object[]{xMultiServiceFactory, new Object[]{}};
+                    _nCode = 6;
                     _constructor = constructors[i];
                 }
                 else if(parameters.length == 1
                      && parameters[0].equals(XMultiServiceFactory.class)) {
-                    _parameters = new Object[]{xMultiServiceFactory};
+                    _nCode = 7;
                     _constructor = constructors[i];
                 }
                 else if(parameters.length == 1
                      && parameters[0].equals(__objectArray)) {
-                    _bArgs = true;
-                    _parameters = new Object[]{new Object[]{}};
+                    _nCode = 8;
                     _constructor = constructors[i];
                 }
                 else if(parameters.length == 0) {
-                    _parameters = new Object[]{};
+                    _nCode = 9;
                     _constructor = constructors[i];
                 }
             }
 
             if(_constructor == null) // have not found a useable constructor
                 throw new com.sun.star.uno.RuntimeException(getClass().getName() + " can not find a useable constructor");
+        }
+
+        private final XMultiServiceFactory getSMgr( XComponentContext xContext )
+        {
+            if (xContext != null)
+            {
+                return (XMultiServiceFactory)UnoRuntime.queryInterface(
+                    XMultiServiceFactory.class, xContext.getServiceManager() );
+            }
+            else
+            {
+                return _xMultiServiceFactory;
+            }
+        }
+
+        // XComponentContext impl
+        //______________________________________________________________________________________________
+        public Object createInstanceWithContext(
+            XComponentContext xContext )
+            throws com.sun.star.uno.Exception
+        {
+            Object args[];
+            switch (_nCode)
+            {
+            case 0:
+                args = new Object [] { xContext, _xRegistryKey, new Object[ 0 ] };
+                break;
+            case 1:
+                args = new Object [] { xContext, _xRegistryKey };
+                break;
+            case 2:
+                args = new Object [] { xContext, new Object[ 0 ] };
+                break;
+            case 3:
+                args = new Object [] { xContext };
+                break;
+            case 4:
+                args = new Object [] { getSMgr( xContext ), _xRegistryKey, new Object[ 0 ] };
+                break;
+            case 5:
+                args = new Object [] { getSMgr( xContext ), _xRegistryKey };
+                break;
+            case 6:
+                args = new Object [] { getSMgr( xContext ), new Object[ 0 ] };
+                break;
+            case 7:
+                args = new Object [] { getSMgr( xContext ) };
+                break;
+            case 8:
+                args = new Object [] { new Object[ 0 ] };
+                break;
+            default:
+                args = new Object [ 0 ];
+                break;
+            }
+
+            try
+            {
+                return _constructor.newInstance( args );
+            }
+            catch (InvocationTargetException invocationTargetException)
+            {
+                Throwable targetException = invocationTargetException.getTargetException();
+
+                if (targetException instanceof java.lang.RuntimeException)
+                    throw (java.lang.RuntimeException)targetException;
+                else if (targetException instanceof com.sun.star.uno.Exception)
+                    throw (com.sun.star.uno.Exception)targetException;
+                else if (targetException instanceof com.sun.star.uno.RuntimeException)
+                    throw (com.sun.star.uno.RuntimeException)targetException;
+                else
+                    throw new com.sun.star.uno.Exception( targetException.toString() );
+            }
+            catch (IllegalAccessException illegalAccessException)
+            {
+                throw new com.sun.star.uno.Exception( illegalAccessException.toString() );
+            }
+            catch (InstantiationException instantiationException)
+            {
+                throw new com.sun.star.uno.Exception( instantiationException.toString() );
+            }
+        }
+        //______________________________________________________________________________________________
+        public Object createInstanceWithArgumentsAndContext(
+            Object rArguments[], XComponentContext xContext )
+            throws com.sun.star.uno.Exception
+        {
+            Object args[];
+
+            boolean bInitCall = true;
+            switch (_nCode)
+            {
+            case 0:
+                args = new Object [] { xContext, _xRegistryKey, rArguments };
+                bInitCall = false;
+                break;
+            case 1:
+                args = new Object [] { xContext, _xRegistryKey };
+                break;
+            case 2:
+                args = new Object [] { xContext, rArguments };
+                bInitCall = false;
+                break;
+            case 3:
+                args = new Object [] { xContext };
+                break;
+            case 4:
+                args = new Object [] { getSMgr( xContext ), _xRegistryKey, rArguments };
+                bInitCall = false;
+                break;
+            case 5:
+                args = new Object [] { getSMgr( xContext ), _xRegistryKey };
+                break;
+            case 6:
+                args = new Object [] { getSMgr( xContext ), rArguments };
+                bInitCall = false;
+                break;
+            case 7:
+                args = new Object [] { getSMgr( xContext ) };
+                break;
+            case 8:
+                args = new Object [] { rArguments };
+                bInitCall = false;
+                break;
+            default:
+                args = new Object [ 0 ];
+                break;
+            }
+
+            try
+            {
+                Object instance = _constructor.newInstance( args );
+                if (bInitCall)
+                {
+                    XInitialization xInitialization = (XInitialization)UnoRuntime.queryInterface(
+                        XInitialization.class, instance );
+                    if (xInitialization != null)
+                    {
+                        xInitialization.initialize( rArguments );
+                    }
+                }
+                return instance;
+            }
+            catch (InvocationTargetException invocationTargetException)
+            {
+                Throwable targetException = invocationTargetException.getTargetException();
+
+                if (targetException instanceof java.lang.RuntimeException)
+                    throw (java.lang.RuntimeException)targetException;
+                else if (targetException instanceof com.sun.star.uno.Exception)
+                    throw (com.sun.star.uno.Exception)targetException;
+                else if (targetException instanceof com.sun.star.uno.RuntimeException)
+                    throw (com.sun.star.uno.RuntimeException)targetException;
+                else
+                    throw new com.sun.star.uno.Exception( targetException.toString() );
+            }
+            catch (IllegalAccessException illegalAccessException)
+            {
+                throw new com.sun.star.uno.Exception( illegalAccessException.toString() );
+            }
+            catch (InstantiationException instantiationException)
+            {
+                throw new com.sun.star.uno.Exception( instantiationException.toString() );
+            }
         }
 
         /**
@@ -179,34 +367,7 @@ public class FactoryHelper {
             throws com.sun.star.uno.Exception,
                    com.sun.star.uno.RuntimeException
         {
-            Object instance = null;
-
-            try {
-                instance = _constructor.newInstance(_parameters);
-            }
-            catch(InvocationTargetException invocationTargetException) {
-                Throwable targetException = invocationTargetException.getTargetException();
-
-                if(targetException instanceof java.lang.RuntimeException)
-                    throw (java.lang.RuntimeException)targetException;
-
-                else if(targetException instanceof com.sun.star.uno.Exception)
-                    throw (com.sun.star.uno.Exception)targetException;
-
-                else if(targetException instanceof com.sun.star.uno.RuntimeException)
-                    throw (com.sun.star.uno.RuntimeException)targetException;
-
-                else
-                    throw new com.sun.star.uno.Exception(targetException.toString());
-            }
-            catch(IllegalAccessException illegalAccessException) {
-                throw new com.sun.star.uno.Exception(illegalAccessException.toString());
-            }
-            catch(InstantiationException instantiationException) {
-                throw new com.sun.star.uno.Exception(instantiationException.toString());
-            }
-
-            return instance;
+            return createInstanceWithContext( null );
         }
 
          /**
@@ -220,36 +381,7 @@ public class FactoryHelper {
             throws com.sun.star.uno.Exception,
                    com.sun.star.uno.RuntimeException
         {
-            Object instance = null;
-            if(_bArgs) {
-                _parameters[_parameters.length - 1] = args;
-
-                try {
-                    instance = _constructor.newInstance(_parameters);
-                }
-                catch(InvocationTargetException invocationTargetException) {
-                    throw new com.sun.star.uno.Exception(invocationTargetException.toString());
-                }
-                catch(IllegalAccessException illegalAccessException) {
-                    throw new com.sun.star.uno.Exception(illegalAccessException.toString());
-                }
-                catch(InstantiationException instantiationException) {
-                    throw new com.sun.star.uno.Exception(instantiationException.toString());
-                }
-
-                finally {
-                    _parameters[_parameters.length - 1] = null;
-                }
-            }
-            else {
-                instance = createInstance();
-
-                XInitialization xInitialization = (XInitialization)UnoRuntime.queryInterface(XInitialization.class, instance);
-                if(xInitialization != null) // check if XInitialization is supported
-                    xInitialization.initialize(args);
-            }
-
-            return instance;
+            return createInstanceWithArgumentsAndContext( args, null );
         }
 
          /**
@@ -346,6 +478,16 @@ public class FactoryHelper {
                                                           XRegistryKey regKey)
     {
         return new Factory(implClass, serviceName, multiFactory, regKey);
+    }
+
+    /** Creates a factory for the given class.
+
+        @return returns a factory object
+        @param   implClass     the implementing class
+    */
+    static public Object createComponentFactory( Class implClass, String serviceName )
+    {
+        return new Factory( implClass, serviceName, null, null );
     }
 
     /**
