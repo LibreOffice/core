@@ -2,9 +2,9 @@
  *
  *  $RCSfile: systemshell.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2002-07-05 07:22:19 $
+ *  last change: $Author: hr $ $Date: 2003-09-29 14:55:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,20 +60,50 @@
  ************************************************************************/
 
 #ifndef _SYSTEMSHELL_HXX_
-#include "../../../inc/systemshell.hxx"
+#include "systemshell.hxx"
 #endif
 
-namespace SystemShell
-{
-    /** Add a file to the system shells recent document list if there is any.
-          This function may have no effect under Unix because there is no
-          standard API among the different desktop managers.
+#include "osl/module.hxx"
 
-          @param aFileUrl
-                    The file url of the document.
-    */
-    void AddToRecentDocumentList(const rtl::OUString& aFileUrl)
+const rtl::OUString SYM_ADD_TO_RECENTLY_USED_FILE_LIST = rtl::OUString::createFromAscii("add_to_recently_used_file_list");
+const rtl::OUString LIB_RECENT_FILE = rtl::OUString::createFromAscii("librecentfile.so");
+
+namespace SystemShell {
+
+    typedef void (*PFUNC_ADD_TO_RECENTLY_USED_LIST)(const rtl::OUString&, const rtl::OUString&);
+
+    //##############################
+    rtl::OUString get_absolute_library_url(const rtl::OUString& lib_name)
     {
+        rtl::OUString url;
+        if (osl::Module::getUrlFromAddress(reinterpret_cast<void*>(AddToRecentDocumentList), url))
+        {
+            sal_Int32 index = url.lastIndexOf('/');
+            url = url.copy(0, index + 1);
+            url += LIB_RECENT_FILE;
+        }
+        return url;
     }
-};
+
+    //##############################
+    void AddToRecentDocumentList(const rtl::OUString& aFileUrl, const rtl::OUString& aMimeType)
+    {
+        rtl::OUString librecentfile_url = get_absolute_library_url(LIB_RECENT_FILE);
+
+        if (librecentfile_url.getLength())
+        {
+            osl::Module module(librecentfile_url);
+
+            if (module.is())
+            {
+                PFUNC_ADD_TO_RECENTLY_USED_LIST add_to_recently_used_file_list =
+                    reinterpret_cast<PFUNC_ADD_TO_RECENTLY_USED_LIST>(module.getSymbol(SYM_ADD_TO_RECENTLY_USED_FILE_LIST));
+
+                if (add_to_recently_used_file_list)
+                    add_to_recently_used_file_list(aFileUrl, aMimeType);
+            }
+        }
+    }
+
+} // namespace SystemShell
 
