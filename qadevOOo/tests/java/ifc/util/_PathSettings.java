@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _PathSettings.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:14:00 $
+ *  last change:$Date: 2003-05-27 12:31:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,7 @@ package ifc.util;
 
 import lib.MultiPropertyTest;
 import lib.MultiPropertyTest$PropertyTester;
+import com.sun.star.lang.XMultiServiceFactory;
 import util.utils;
 
 /**
@@ -113,7 +114,7 @@ public class _PathSettings extends MultiPropertyTest {
                 if (path.length() > 0 && !path.endsWith(";")) {
                     path += ";";
                 }
-                path += utils.getOfficeTemp(tParam.getMSF());
+                path += utils.getOfficeTemp((XMultiServiceFactory)tParam.getMSF());
                 return path;
             }
         });
