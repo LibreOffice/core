@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside2.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 16:17:04 $
+ *  last change: $Author: vg $ $Date: 2003-04-11 17:37:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,7 @@
 #include <iderdll2.hxx>
 
 #include <basobj.hxx>
+#include <brkdlg.hxx>
 
 #include <svx/srchdlg.hxx>
 
@@ -656,6 +657,42 @@ BOOL ModulWindow::BasicToggleBreakPoint()
     return bNewBreakPoint;
 }
 
+
+void ModulWindow::BasicToggleBreakPointEnabled()
+{
+    DBG_CHKTHIS( ModulWindow, 0 );
+    AssertValidEditEngine();
+
+    ExtTextView* pView = GetEditView();
+    if ( pView )
+    {
+        TextSelection aSel = pView->GetSelection();
+        BreakPointList& rList = GetBreakPoints();
+
+        for ( ULONG nLine = ++aSel.GetStart().GetPara(), nEnd = ++aSel.GetEnd().GetPara(); nLine <= nEnd; ++nLine )
+        {
+            BreakPoint* pBrk = rList.FindBreakPoint( nLine );
+            if ( pBrk )
+            {
+                pBrk->bEnabled = pBrk->bEnabled ? FALSE : TRUE;
+                UpdateBreakPoint( *pBrk );
+            }
+        }
+
+        GetBreakPointWindow().Invalidate();
+    }
+}
+
+
+void ModulWindow::ManageBreakPoints()
+{
+    BreakPointWindow& rBrkWin = GetBreakPointWindow();
+    BreakPointDialog aBrkDlg( &rBrkWin, GetBreakPoints() );
+    aBrkDlg.Execute();
+    rBrkWin.Invalidate();
+}
+
+
 IMPL_LINK( ModulWindow, BasicErrorHdl, StarBASIC *, pBasic )
 {
     DBG_CHKTHIS( ModulWindow, 0 );
@@ -1033,6 +1070,16 @@ void __EXPORT ModulWindow::ExecuteCommand( SfxRequest& rReq )
         case SID_BASICIDE_TOGGLEBRKPNT:
         {
             BasicToggleBreakPoint();
+        }
+        break;
+        case SID_BASICIDE_MANAGEBRKPNTS:
+        {
+            ManageBreakPoints();
+        }
+        break;
+        case SID_BASICIDE_TOGGLEBRKPNTENABLED:
+        {
+            BasicToggleBreakPointEnabled();
         }
         break;
         case SID_BASICIDE_ADDWATCH:
