@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldmgr.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-19 08:52:09 $
+ *  last change: $Author: kz $ $Date: 2004-06-29 08:11:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1444,7 +1444,7 @@ BOOL SwFldMgr::InsertFld(  const SwInsertFld_Data& rData )
 
             // Dialog starten
             //
-            pCurShell->StartInputFldDlg(pFld, FALSE);
+            pCurShell->StartInputFldDlg(pFld, FALSE, rData.pParent);
             break;
         }
         case TYP_SETFLD:
