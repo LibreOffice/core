@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuediglu.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:39 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 12:00:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,12 +59,14 @@
  *
  ************************************************************************/
 
-#ifndef _SD_FUEDIGLU_HXX
-#define _SD_FUEDIGLU_HXX
+#ifndef SD_FU_EDIT_GLUE_POINTS_HXX
+#define SD_FU_EDIT_GLUE_POINTS_HXX
 
-#ifndef _SD_FUDRAW_HXX
+#ifndef SD_FU_DRAW_HXX
 #include "fudraw.hxx"
 #endif
+
+namespace sd {
 
 /*************************************************************************
 |*
@@ -72,16 +74,21 @@
 |*
 \************************************************************************/
 
-class FuEditGluePoints : public FuDraw
+class FuEditGluePoints
+    : public FuDraw
 {
- public:
+public:
     TYPEINFO();
 
-    FuEditGluePoints(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
-                        SdDrawDocument* pDoc, SfxRequest& rReq);
+    FuEditGluePoints (
+        ViewShell* pViewSh,
+        ::sd::Window* pWin,
+        ::sd::View* pView,
+        SdDrawDocument* pDoc,
+        SfxRequest& rReq);
+    virtual ~FuEditGluePoints (void);
 
-    virtual ~FuEditGluePoints();
-                                       // Mouse- & Key-Events
+    // Mouse- & Key-Events
     virtual BOOL KeyInput(const KeyEvent& rKEvt);
     virtual BOOL MouseMove(const MouseEvent& rMEvt);
     virtual BOOL MouseButtonUp(const MouseEvent& rMEvt);
@@ -93,7 +100,7 @@ class FuEditGluePoints : public FuDraw
     virtual void Deactivate();         // Function deaktivieren
 };
 
+} // end of namespace sd
 
-
-#endif      // _SD_FUEDIGLU_HXX
+#endif
 
