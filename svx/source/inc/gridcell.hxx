@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridcell.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fs $ $Date: 2002-04-03 16:34:40 $
+ *  last change: $Author: vg $ $Date: 2003-05-19 12:52:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,7 +167,6 @@ private:
 
     static ::svt::CellControllerRef s_xEmptyController;
         // used by locked columns
-
 public:
     DbGridColumn(sal_uInt16 _nId, DbGridControl& rParent)
         :m_nId(_nId)
@@ -323,12 +322,14 @@ protected:
     virtual void    implAdjustGenericFieldSetting( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxModel );
 
     // called by _propertyChanged if a property which denotes the column value has changed
-            void    implValuePropertyChanged( );
+    void    implValuePropertyChanged( );
+
 
 public:
     DbCellControl(DbGridColumn& _rColumn, sal_Bool _bText = sal_True);
-
     virtual ~DbCellControl();
+
+
     Window* GetControl() const { return m_pWindow; }
 
     // control alignment
@@ -456,9 +457,11 @@ protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >  m_xSupplier;
     sal_Int16                       m_nKeyType;
 
+
 public:
     DbFormattedField(DbGridColumn& _rColumn);
     virtual ~DbFormattedField();
+
 
     virtual void Init(Window* pParent, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& xCursor );
     virtual XubString GetFormatText(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _xVariant, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter, Color** ppColor = NULL);
@@ -714,6 +717,7 @@ public:
     const Link& GetCommitHdl() const { return m_aCommitLink; }
 
 protected:
+
     // DbCellControl
     virtual sal_Bool    commitControl( );
     virtual void        updateFromModel( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > _rxModel );
@@ -736,10 +740,11 @@ protected:
     DbGridColumn*           m_pColumn;
     DbCellControl*          m_pCellControl;
 
+    virtual ~FmXGridCell();
 public:
     TYPEINFO();
     FmXGridCell(DbGridColumn* pColumn, DbCellControl* pControl);
-    virtual ~FmXGridCell();
+
 
     DECLARE_UNO3_AGG_DEFAULTS(FmXGridCell, OComponentHelper);
     virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type& _rType ) throw(::com::sun::star::uno::RuntimeException);
@@ -830,9 +835,10 @@ protected:
     ::cppu::OInterfaceContainerHelper   m_aTextListeners;
     Edit*                               m_pEdit;
 
+    virtual ~FmXEditCell();
 public:
     FmXEditCell(DbGridColumn* pColumn, DbCellControl* pControl);
-    ~FmXEditCell();
+
 
     DECLARE_UNO3_AGG_DEFAULTS(FmXEditCell, FmXTextCell);
     virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type& _rType ) throw(::com::sun::star::uno::RuntimeException);
@@ -867,10 +873,11 @@ class FmXCheckBoxCell : public FmXDataCell,
 {
     ::cppu::OInterfaceContainerHelper   m_aItemListeners;
     CheckBox*                           m_pBox;
-
+protected:
+    virtual ~FmXCheckBoxCell();
 public:
     FmXCheckBoxCell(DbGridColumn* pColumn, DbCellControl* pControl);
-    ~FmXCheckBoxCell();
+
 
 // UNO
     DECLARE_UNO3_AGG_DEFAULTS(FmXCheckBoxCell, FmXDataCell);
@@ -899,10 +906,11 @@ class FmXListBoxCell : public FmXTextCell,
     ::cppu::OInterfaceContainerHelper   m_aItemListeners,
                                         m_aActionListeners;
     ListBox*                            m_pBox;
-
+protected:
+    virtual ~FmXListBoxCell();
 public:
     FmXListBoxCell(DbGridColumn* pColumn, DbCellControl* pControl);
-    ~FmXListBoxCell();
+
 
     DECLARE_UNO3_AGG_DEFAULTS(FmXListBoxCell, FmXTextCell);
     virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type& _rType ) throw(::com::sun::star::uno::RuntimeException);
@@ -946,10 +954,12 @@ class FmXFilterCell :public FmXGridCell
                     ,public ::com::sun::star::lang::XUnoTunnel
 {
     ::cppu::OInterfaceContainerHelper m_aTextListeners;
+protected:
+    virtual ~FmXFilterCell();
 public:
     TYPEINFO();
     FmXFilterCell(DbGridColumn* pColumn = NULL, DbCellControl* pControl = NULL);
-    ~FmXFilterCell();
+
 
     DECLARE_UNO3_AGG_DEFAULTS(FmXFilterCell, FmXGridCell);
     virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type& _rType ) throw(::com::sun::star::uno::RuntimeException);
