@@ -2,9 +2,9 @@
  *
  *  $RCSfile: anchoredobjectposition.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 13:42:20 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 13:08:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -485,10 +485,14 @@ SwTwips SwAnchoredObjectPosition::_GetVertRelPos(
 /** adjust calculated vertical in order to keep object inside
     'page' alignment layout frame.
 
+    OD 2004-07-22 #i31805# - add 3rd parameter <_bCheckBottom>
+
     @author OD
 */
-SwTwips SwAnchoredObjectPosition::_AdjustVertRelPos( const SwFrm&  _rPageAlignLayFrm,
-                                                     const SwTwips _nProposedRelPosY ) const
+SwTwips SwAnchoredObjectPosition::_AdjustVertRelPos(
+                                                const SwFrm&  _rPageAlignLayFrm,
+                                                const SwTwips _nProposedRelPosY,
+                                                const bool _bCheckBottom ) const
 {
     SwTwips nAdjustedRelPosY = _nProposedRelPosY;
 
@@ -530,7 +534,9 @@ SwTwips SwAnchoredObjectPosition::_AdjustVertRelPos( const SwFrm&  _rPageAlignLa
 
     if ( bVert )
     {
-        if ( rAnchorFrm.Frm().Right() - nAdjustedRelPosY - aObjSize.Width() <
+        // OD 2004-07-22 #i31805# - consider value of <_bCheckBottom>
+        if ( _bCheckBottom &&
+             rAnchorFrm.Frm().Right() - nAdjustedRelPosY - aObjSize.Width() <
                 aPgAlignArea.Left() )
         {
             nAdjustedRelPosY = aPgAlignArea.Left() +
@@ -546,7 +552,9 @@ SwTwips SwAnchoredObjectPosition::_AdjustVertRelPos( const SwFrm&  _rPageAlignLa
     }
     else
     {
-        if ( rAnchorFrm.Frm().Top() + nAdjustedRelPosY + aObjSize.Height() >
+        // OD 2004-07-22 #i31805# - consider value of <_bCheckBottom>
+        if ( _bCheckBottom &&
+             rAnchorFrm.Frm().Top() + nAdjustedRelPosY + aObjSize.Height() >
                 aPgAlignArea.Bottom() )
         {
             nAdjustedRelPosY = aPgAlignArea.Bottom() -
