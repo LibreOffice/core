@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brdcst.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:59:03 $
+ *  last change: $Author: mh $ $Date: 2001-10-17 17:06:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,10 +74,6 @@ SV_DECL_PTRARR( SfxListenerArr_Impl, SfxListener*, 0, 2 );
 #define _SFX_BRDCST_CXX
 #include "brdcst.hxx"
 
-#include <segmentc.hxx>
-
-SEG_EOFGLOBALS()
-
 //====================================================================
 DBG_NAME(SfxBroadcaster);
 TYPEINIT0(SfxBroadcaster);
@@ -87,7 +83,6 @@ TYPEINIT0(SfxBroadcaster);
 //====================================================================
 // broadcast immedeately
 
-#pragma SEG_FUNCDEF(brdcst_01)
 
 void SfxBroadcaster::Broadcast( const SfxHint &rHint )
 {
@@ -114,7 +109,6 @@ void SfxBroadcaster::Broadcast( const SfxHint &rHint )
 
 // broadcast after a timeout
 
-#pragma SEG_FUNCDEF(brdcst_02)
 
 void SfxBroadcaster::BroadcastDelayed( const SfxHint& rHint )
 {
@@ -125,7 +119,6 @@ void SfxBroadcaster::BroadcastDelayed( const SfxHint& rHint )
 
 // broadcast in idle-handler
 
-#pragma SEG_FUNCDEF(brdcst_03)
 
 void SfxBroadcaster::BroadcastInIdle( const SfxHint& rHint )
 {
@@ -136,7 +129,6 @@ void SfxBroadcaster::BroadcastInIdle( const SfxHint& rHint )
 
 // unregister all listeners
 
-#pragma SEG_FUNCDEF(brdcst_04)
 
 SfxBroadcaster::~SfxBroadcaster()
 {
@@ -157,7 +149,6 @@ SfxBroadcaster::~SfxBroadcaster()
 
 // simple ctor of class SfxBroadcaster
 
-#pragma SEG_FUNCDEF(brdcst_05)
 
 SfxBroadcaster::SfxBroadcaster()
 {
@@ -168,7 +159,6 @@ SfxBroadcaster::SfxBroadcaster()
 
 // copy ctor of class SfxBroadcaster
 
-#pragma SEG_FUNCDEF(brdcst_06)
 
 SfxBroadcaster::SfxBroadcaster( const SfxBroadcaster &rBC )
 {
@@ -186,13 +176,7 @@ SfxBroadcaster::SfxBroadcaster( const SfxBroadcaster &rBC )
 
 // add a new SfxListener to the list
 
-#pragma SEG_FUNCDEF(brdcst_07)
-#if SUPD>=501
-BOOL
-#else
-void
-#endif
-     SfxBroadcaster::AddListener( SfxListener& rListener )
+BOOL SfxBroadcaster::AddListener( SfxListener& rListener )
 {
     DBG_CHKTHIS(SfxBroadcaster, 0);
     const SfxListener *pListener = &rListener;
@@ -205,23 +189,17 @@ void
     else
     {
         DBG_ERROR( "array overflow" );
-#if SUPD>=501
         return FALSE;
-#endif
     }
 
     DBG_ASSERT( USHRT_MAX != aListeners.GetPos(pListener),
                 "AddListener failed" );
-#if SUPD>=501
     return TRUE;
-#endif
 }
 
 //--------------------------------------------------------------------
 
 // called, if no more listeners exists
-
-#pragma SEG_FUNCDEF(brdcst_08)
 
 void SfxBroadcaster::ListenersGone()
 {
@@ -231,8 +209,6 @@ void SfxBroadcaster::ListenersGone()
 //--------------------------------------------------------------------
 
 // forward a notification to all registered listeners
-
-#pragma SEG_FUNCDEF(brdcst_09)
 
 void SfxBroadcaster::SFX_FORWARD(SfxBroadcaster& rBC, const TypeId& rBCType,
                                const SfxHint& rHint, const TypeId& rHintType)
@@ -250,8 +226,6 @@ void SfxBroadcaster::SFX_FORWARD(SfxBroadcaster& rBC, const TypeId& rBCType,
 
 // remove one SfxListener from the list
 
-#pragma SEG_FUNCDEF(brdcst_0a)
-
 void SfxBroadcaster::RemoveListener( SfxListener& rListener )
 {
     {DBG_CHKTHIS(SfxBroadcaster, 0);}
@@ -265,7 +239,6 @@ void SfxBroadcaster::RemoveListener( SfxListener& rListener )
 
 //--------------------------------------------------------------------
 
-#pragma SEG_FUNCDEF(brdcst_0b)
 
 BOOL SfxBroadcaster::HasListeners() const
 {
@@ -277,5 +250,4 @@ BOOL SfxBroadcaster::HasListeners() const
 
 //--------------------------------------------------------------------
 
-#pragma SEG_EOFMODULE
 

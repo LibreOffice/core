@@ -2,9 +2,9 @@
  *
  *  $RCSfile: isethint.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:59:02 $
+ *  last change: $Author: mh $ $Date: 2001-10-17 17:06:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,17 +63,13 @@
 
 #include "isethint.hxx"
 #include "itemset.hxx"
-#include <segmentc.hxx>
 
 //====================================================================
-
-SEG_EOFGLOBALS()
 
 TYPEINIT1(SfxItemSetHint, SfxHint);
 
 //====================================================================
 
-#pragma SEG_FUNCDEF(isethint_01)
 
 SfxItemSetHint::SfxItemSetHint( SfxItemSet *pItemSet )
 
@@ -89,8 +85,6 @@ SfxItemSetHint::SfxItemSetHint( SfxItemSet *pItemSet )
 
 //--------------------------------------------------------------------
 
-#pragma SEG_FUNCDEF(isethint_02)
-
 SfxItemSetHint::SfxItemSetHint( const SfxItemSet &rItemSet )
 
 /*  [Beschreibung]
@@ -104,8 +98,6 @@ SfxItemSetHint::SfxItemSetHint( const SfxItemSet &rItemSet )
 
 //--------------------------------------------------------------------
 
-#pragma SEG_FUNCDEF(isethint_03)
-
 SfxItemSetHint::~SfxItemSetHint()
 {
     delete _pItemSet;
@@ -113,5 +105,4 @@ SfxItemSetHint::~SfxItemSetHint()
 
 //--------------------------------------------------------------------
 
-#pragma SEG_EOFMODULE
 

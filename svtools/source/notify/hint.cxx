@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hint.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:59:03 $
+ *  last change: $Author: mh $ $Date: 2001-10-17 17:06:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,6 @@
 #pragma hdrstop
 
 #include "hint.hxx"
-#include "segmentc.hxx"
 
 //====================================================================
 
