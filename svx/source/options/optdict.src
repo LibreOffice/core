@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdict.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hjs $ $Date: 2001-05-12 06:28:19 $
+ *  last change: $Author: kz $ $Date: 2001-05-16 15:19:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,7 +180,7 @@ ModalDialog RID_SFXDLG_NEWDICT
         Text [ ENGLISH ] = "~Exception (-)" ;
         Text [ norwegian ] = "~Unntak (-)" ;
         Text [ italian ] = "~Eccezione (-)" ;
-        Text [ portuguese_brazilian ] = "~Exceção (-)" ;
+        Text [ portuguese_brazilian ] = "~Exce??o (-)" ;
         Text [ portuguese ] = "~Excepção (-)" ;
         Text [ finnish ] = "~Poikkeus (-)" ;
         Text [ danish ] = "Undtagelse (-)" ;
@@ -211,7 +211,7 @@ ModalDialog RID_SFXDLG_NEWDICT
         Text [ ENGLISH ] = "Dictionary" ;
         Text [ norwegian ] = "Ordliste" ;
         Text [ italian ] = "Dizionario" ;
-        Text [ portuguese_brazilian ] = "Dicionário" ;
+        Text [ portuguese_brazilian ] = "Dicion?rio" ;
         Text [ portuguese ] = "Dicionário" ;
         Text [ finnish ] = "Sanasto" ;
         Text [ danish ] = "Ordbog" ;
@@ -471,7 +471,7 @@ ModalDialog RID_SFXDLG_EDITDICT
         Text [ dutch ] = "~Wissen" ;
         Text [ swedish ] = "~Radera" ;
         Text [ danish ] = "Slet" ;
-        Text [ portuguese_brazilian ] = "~Löschen" ;
+        Text [ portuguese_brazilian ] = "~L?chen" ;
         Text [ portuguese ] = "E~liminar" ;
         Text[ chinese_simplified ] = "É¾³ý(~D)";
         Text[ russian ] = "Óäàëèòü";
@@ -620,7 +620,7 @@ QueryBox RID_SFXQB_SET_LANGUAGE
     Message [ swedish ] = "Vill Du ändra språket i ordboken '%1'?" ;
     Message [ danish ] = "Vil du ændre sproget i ordbogen '%1'?" ;
     Message [ portuguese ] = "Deseja mudar a língua do dicionário '%1'?" ;
-    Message [ portuguese_brazilian ] = "Möchten Sie die Sprache des Wörterbuches '%1' ändern?" ;
+    Message [ portuguese_brazilian ] = "M?hten Sie die Sprache des W?terbuches '%1' ?ndern?" ;
     Message[ chinese_simplified ] = "ÄúÒª¸ü¸Ä´Êµä '%1' µÄÓïÑÔÂð£¿";
     Message[ russian ] = "Âû õîòèòå èçìåíèòü ÿçûê ñëîàâðÿ '%1'?";
     Message[ polish ] = "Czy chcesz zmieniæ jêzyk s³ownika '%1'?";
