@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipFile.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-13 13:38:01 $
+ *  last change: $Author: mtg $ $Date: 2000-11-16 11:55:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -211,7 +211,7 @@ uno::Reference< io::XInputStream> ZipFile::getInputStream(const package::ZipEntr
     sal_Int64 nBegin = rEntry.nOffset;
     nEnd +=nBegin;
 
-    uno::Reference< io::XInputStream > xStreamRef = new EntryInputStream(xStream, nBegin, nEnd, 1024);
+    uno::Reference< io::XInputStream > xStreamRef = new EntryInputStream(xStream, nBegin, nEnd, 1024, rEntry.nMethod == DEFLATED);
     return xStreamRef;
 }
 sal_Bool ZipFile::readLOC(const package::ZipEntry &rEntry)

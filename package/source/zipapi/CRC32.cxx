@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CRC32.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-13 13:38:01 $
+ *  last change: $Author: mtg $ $Date: 2000-11-16 11:55:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ void CRC32::reset()
 }
 sal_Int32 CRC32::getValue()
 {
-    return (sal_Int32) nCRC & 0xFFFFFFFFL;
+    return nCRC & 0xFFFFFFFFL;
 }
 /** Update CRC32 with specified byte
  */

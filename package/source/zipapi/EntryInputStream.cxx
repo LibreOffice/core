@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EntryInputStream.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-13 13:38:01 $
+ *  last change: $Author: mtg $ $Date: 2000-11-16 11:55:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,13 +80,15 @@ using namespace com::sun::star;
  * seek to it before performing any reads.
  */
 
-EntryInputStream::EntryInputStream( uno::Reference < io::XInputStream > xNewInput, sal_Int64 nNewBegin, sal_Int64 nNewEnd, sal_Int32 nNewBufferSize)
+EntryInputStream::EntryInputStream( uno::Reference < io::XInputStream > xNewInput, sal_Int64 nNewBegin, sal_Int64 nNewEnd, sal_Int32 nNewBufferSize, sal_Bool bNewDeflated)
 : xStream(xNewInput)
 , xSeek(xNewInput, uno::UNO_QUERY)
 , nBegin(nNewBegin)
 , nCurrent(nNewBegin)
 , nEnd(nNewEnd)
 , aSequence ( nNewBufferSize )
+, bDeflated ( bNewDeflated )
+, bReachEOF ( sal_False )
 , aInflater( sal_True )
 , nLength(0)
 {
@@ -114,6 +116,16 @@ sal_Int32 SAL_CALL EntryInputStream::readBytes( uno::Sequence< sal_Int8 >& aData
     sal_Int32 n;
     if (nBytesToRead <=0)
         return 0;
+    if (nBytesToRead + nCurrent > nEnd)
+    {
+        if (nCurrent > nEnd)
+            return 0;
+        nBytesToRead = nEnd - nCurrent;
+    }
+
+    if (!bDeflated)
+        return xStream->readBytes(aData, nBytesToRead );
+
     while ( (n = aInflater.doInflate(aData)) == 0)
     {
         if (aInflater.finished() || aInflater.needsDictionary())
@@ -141,7 +153,7 @@ sal_Int32 SAL_CALL EntryInputStream::readSomeBytes( uno::Sequence< sal_Int8 >& a
         xSeek->seek( nCurrent );
     else
         throw (io::IOException());
-    return xStream->readSomeBytes( aData, nMaxBytesToRead );
+    return readBytes( aData, nMaxBytesToRead );
 }
 void SAL_CALL EntryInputStream::skipBytes( sal_Int32 nBytesToSkip )
     throw(io::NotConnectedException, io::BufferSizeExceededException, io::IOException, uno::RuntimeException)

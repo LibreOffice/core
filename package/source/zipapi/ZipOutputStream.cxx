@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipOutputStream.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-13 13:38:01 $
+ *  last change: $Author: mtg $ $Date: 2000-11-16 11:55:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,10 +119,10 @@ void SAL_CALL ZipOutputStream::putNextEntry( const package::ZipEntry& rEntry )
         case DEFLATED:
             if (pNonConstEntry->nSize == -1 || pNonConstEntry->nCompressedSize == -1 ||
                 pNonConstEntry->nCrc == -1)
-                pNonConstEntry->nFlag = 8;
+                pNonConstEntry->nFlag |= 8;
             else if (pNonConstEntry->nSize != -1 && pNonConstEntry->nCompressedSize != -1 &&
                 pNonConstEntry->nCrc != -1)
-                pNonConstEntry->nFlag=0;
+                pNonConstEntry->nFlag &= 8;
             pNonConstEntry->nVersion = 20;
             break;
         case STORED:
@@ -131,12 +131,12 @@ void SAL_CALL ZipOutputStream::putNextEntry( const package::ZipEntry& rEntry )
             else if (pNonConstEntry->nCompressedSize == -1)
                 pNonConstEntry->nCompressedSize = pNonConstEntry->nSize;
             pNonConstEntry->nVersion = 10;
-            pNonConstEntry->nFlag   = 0;
+            pNonConstEntry->nFlag   &= 8;
             break;
     }
     pNonConstEntry->nOffset = aChucker.getPosition();
     writeLOC(rEntry);
-    aZipList.push_back(pNonConstEntry);
+    aZipList.push_back(*pNonConstEntry);
     pCurrentEntry=pNonConstEntry;
 }
 void SAL_CALL ZipOutputStream::close(  )
@@ -185,7 +185,13 @@ void SAL_CALL ZipOutputStream::closeEntry(  )
                 aDeflater.reset();
                 break;
             case STORED:
-                if (pEntry->nCrc != aCRC.getValue())
+                {
+                sal_uInt32 na= pEntry->nCrc;
+                sal_uInt32 nb = aCRC.getValue();
+                int i=0;
+                }
+
+                if (static_cast < sal_uInt32 > (pEntry->nCrc) != static_cast <sal_uInt32> (aCRC.getValue()))
                 {
                     // boom
                     DBG_ERROR("Invalid entry crc32");
@@ -234,7 +240,7 @@ void SAL_CALL ZipOutputStream::finish(  )
     }
     sal_Int32 nOffset= aChucker.getPosition();
     for (int i =0, nEnd = aZipList.size(); i < nEnd; i++)
-        writeCEN(*aZipList[i]);
+        writeCEN(aZipList[i]);
     writeEND( nOffset, aChucker.getPosition() - nOffset);
     bFinished = sal_True;
 }

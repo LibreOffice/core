@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: mtg $ $Date: 2000-11-13 13:38:03 $
+#   last change: $Author: mtg $ $Date: 2000-11-16 11:55:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,7 +77,7 @@ LIB1FILES=	\
 
 # --- Shared-Library -----------------------------------------------
 
-SHL1TARGET= package$(UPD)$(DLLPOSTFIX)
+SHL1TARGET= package$(DLLPOSTFIX)
 SHL1IMPLIB= _ipackage
 
 SHL1STDLIBS= \
