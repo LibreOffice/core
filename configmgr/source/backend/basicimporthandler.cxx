@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basicimporthandler.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 13:13:35 $
+ *  last change: $Author: hr $ $Date: 2004-06-18 15:47:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,12 @@
  ************************************************************************/
 
 #include "basicimporthandler.hxx"
-
+#ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_COMPONENTCHANGEEVENT_HPP_
+#include <com/sun/star/configuration/backend/ComponentChangeEvent.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_XBACKENDCHANGESNOTIFIER_HPP_
+#include <com/sun/star/configuration/backend/XBackendChangesNotifier.hpp>
+#endif
 // -----------------------------------------------------------------------------
 
 namespace configmgr
@@ -70,10 +75,12 @@ namespace configmgr
     {
 // -----------------------------------------------------------------------------
 
-BasicImportHandler::BasicImportHandler(Backend const & xBackend,OUString const & aEntity)
+BasicImportHandler::BasicImportHandler(
+    Backend const & xBackend,OUString const & aEntity, const sal_Bool&  bNotify)
 : m_xBackend(xBackend)
 , m_aComponentName()
 , m_aEntity(aEntity)
+, m_bSendNotification(bNotify)
 {
     OSL_ENSURE( m_xBackend.is(), "Creating an import handler without a target backend" );
 }
@@ -96,6 +103,22 @@ void SAL_CALL
     BasicImportHandler::endLayer(  )
         throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
+    if ( m_bSendNotification)
+    {
+        backenduno::ComponentChangeEvent aEvent;
+        aEvent.Source=*this;
+        aEvent.Component = m_aComponentName;
+
+        uno::Reference<backenduno::XBackendChangesListener> xListener(m_xBackend, uno::UNO_QUERY);
+        if( xListener.is())
+        {
+            xListener->componentDataChanged(aEvent);
+        }
+        else
+        {
+            OSL_ENSURE(false, "ImportMergeHandler: target backend does not support notifications");
+        }
+    }
     m_aComponentName = OUString();
 }
 // -----------------------------------------------------------------------------
