@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: rt $ $Date: 2003-05-21 08:05:47 $
+ *  last change: $Author: vg $ $Date: 2003-07-24 11:57:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,10 @@
 
 #pragma hdrstop
 
+#ifndef _COM_SUN_STAR_FORM_FORMCOMPONENTTYPE_HPP_
+#include <com/sun/star/form/FormComponentType.hpp>
+#endif
+
 #ifndef _SVDPOOL_HXX //autogen wg. SdrItemPool
 #include <svx/svdpool.hxx>
 #endif
@@ -120,6 +124,9 @@
 #ifndef SC_XESTYLE_HXX
 #include "xestyle.hxx"
 #endif
+#ifndef SC_XELINK_HXX
+#include "xelink.hxx"
+#endif
 
 #include "scitems.hxx"
 
@@ -154,10 +161,12 @@
 #include "docoptio.hxx"
 #include "patattr.hxx"
 
+using ::rtl::OUString;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::drawing::XShape;
+using ::com::sun::star::awt::XControlModel;
 
 
 //___________________________________________________________________
@@ -274,9 +283,8 @@ ULONG XclMsodrawinggroup::GetLen() const
 
 // --- class XclMsodrawing --------------------------------------
 
-XclMsodrawing::XclMsodrawing( RootData& rRoot, UINT16 nEscherType, UINT32 nInitialSize )
-        :
-        XclMsodrawing_Base( *rRoot.pEscher, nInitialSize )
+XclMsodrawing::XclMsodrawing( const XclExpRoot& rRoot, UINT16 nEscherType, UINT32 nInitialSize ) :
+    XclMsodrawing_Base( *rRoot.mpRD->pEscher, nInitialSize )
 {
     if ( nEscherType )
     {
@@ -324,11 +332,10 @@ ULONG XclMsodrawing::GetLen() const
 
 // --- class XclObjList ----------------------------------------------
 
-XclObjList::XclObjList( RootData& rRoot )
-        :
-        ExcRoot( &rRoot ),
-        pMsodrawingPerSheet( new XclMsodrawing( rRoot, ESCHER_DgContainer ) ),
-        pSolverContainer( NULL )
+XclObjList::XclObjList( const XclExpRoot& rRoot ) :
+    XclExpRoot( rRoot ),
+    pMsodrawingPerSheet( new XclMsodrawing( rRoot, ESCHER_DgContainer ) ),
+    pSolverContainer( NULL )
 {
 }
 
@@ -336,9 +343,7 @@ XclObjList::XclObjList( RootData& rRoot )
 XclObjList::~XclObjList()
 {
     for ( XclObj* p = First(); p; p = Next() )
-    {
         delete p;
-    }
     delete pMsodrawingPerSheet;
     delete pSolverContainer;
 }
@@ -369,7 +374,7 @@ void XclObjList::EndSheet()
     // Is there still something in the stream? -> The solver container
     UINT32 nSolverSize = pEx->GetStreamPos() - pEx->GetOffsetFromMap( pEx->GetLastOffsetMapPos() );
     if( nSolverSize )
-        pSolverContainer = new XclMsodrawing( *pExcRoot, ESCHER_SolverContainer, nSolverSize );
+        pSolverContainer = new XclMsodrawing( GetRoot(), ESCHER_SolverContainer, nSolverSize );
 
     //! close ESCHER_DgContainer created by XclObjList ctor MSODRAWING
     pEx->CloseContainer();
@@ -392,19 +397,19 @@ void XclObjList::Save( XclExpStream& rStrm )
 
 // --- class XclObj --------------------------------------------------
 
-XclObj::XclObj( ObjType eType, RootData& rRoot, bool bOwnEscher )
-            :
-            pClientTextbox( NULL ),
-            pTxo( NULL ),
-            eObjType( eType ),
-            nObjId(0),
-            nGrbit( 0x6011 ),   // AutoLine, AutoFill, Printable, Locked
-            bFirstOnSheet( rRoot.pObjRecs->Count() == 0 ),
-            mbOwnEscher( bOwnEscher )
+XclObj::XclObj( const XclExpRoot& rRoot, sal_uInt16 nObjType, bool bOwnEscher ) :
+    XclExpRecord( EXC_ID_OBJ, 26 ),
+    pClientTextbox( NULL ),
+    pTxo( NULL ),
+    mnObjType( nObjType ),
+    nObjId(0),
+    nGrbit( 0x6011 ),   // AutoLine, AutoFill, Printable, Locked
+    bFirstOnSheet( rRoot.mpRD->pObjRecs->Count() == 0 ),
+    mbOwnEscher( bOwnEscher )
 {
     //! first object continues the first MSODRAWING record
     if ( bFirstOnSheet )
-        pMsodrawing = rRoot.pObjRecs->GetMsodrawingPerSheet();
+        pMsodrawing = rRoot.mpRD->pObjRecs->GetMsodrawingPerSheet();
     else
         pMsodrawing = new XclMsodrawing( rRoot );
 }
@@ -425,31 +430,31 @@ void XclObj::SetEscherShapeType( UINT16 nType )
     switch ( nType )
     {
         case ESCHER_ShpInst_Line :
-            eObjType = otLine;
+            mnObjType = EXC_OBJ_CMO_LINE;
         break;
         case ESCHER_ShpInst_Rectangle :
         case ESCHER_ShpInst_RoundRectangle :
-            eObjType = otRectangle;
+            mnObjType = EXC_OBJ_CMO_RECTANGLE;
         break;
         case ESCHER_ShpInst_Ellipse :
-            eObjType = otOval;
+            mnObjType = EXC_OBJ_CMO_ELLIPSE;
         break;
         case ESCHER_ShpInst_Arc :
-            eObjType = otArc;
+            mnObjType = EXC_OBJ_CMO_ARC;
         break;
         case ESCHER_ShpInst_TextBox :
-            eObjType = otText;
+            mnObjType = EXC_OBJ_CMO_TEXT;
         break;
         case ESCHER_ShpInst_PictureFrame :
-            eObjType = otPicture;
+            mnObjType = EXC_OBJ_CMO_PICTURE;
         break;
         default:
-            eObjType = otMsOffDrawing;
+            mnObjType = EXC_OBJ_CMO_DRAWING;
     }
 }
 
 
-void XclObj::SetText( RootData& rRoot, const SdrTextObj& rObj )
+void XclObj::SetText( const XclExpRoot& rRoot, const SdrTextObj& rObj )
 {
     DBG_ASSERT( !pClientTextbox, "XclObj::SetText: already set" );
     if ( !pClientTextbox )
@@ -458,17 +463,36 @@ void XclObj::SetText( RootData& rRoot, const SdrTextObj& rObj )
         pClientTextbox = new XclMsodrawing( rRoot );
         pClientTextbox->GetEscherEx()->AddAtom( 0, ESCHER_ClientTextbox );  // TXO record
         pClientTextbox->UpdateStopPos();
-        pTxo = new XclTxo( *rRoot.pER, rObj );
+        pTxo = new XclTxo( rRoot, rObj );
     }
 }
 
 
-void XclObj::SaveCont( XclExpStream& rStrm )
-{   // ftCmo subrecord
-    DBG_ASSERT( eObjType != otUnknown, "XclObj::SaveCont: unknown type" );
-    rStrm << (UINT16) ftCmo << (UINT16) 0x0012;
-    rStrm << (UINT16) eObjType << nObjId << nGrbit
-        << UINT32(0) << UINT32(0) << UINT32(0);
+void XclObj::WriteBody( XclExpStream& rStrm )
+{
+    DBG_ASSERT( mnObjType != EXC_OBJ_CMO_UNKNOWN, "XclObj::WriteBody - unknown type" );
+
+    // create a substream to be able to create subrecords
+    SvMemoryStream aMemStrm;
+    ::std::auto_ptr< XclExpStream > pXclStrm( new XclExpStream( aMemStrm, rStrm.GetRoot() ) );
+
+    // write the ftCmo subrecord
+    pXclStrm->StartRecord( EXC_ID_OBJ_FTCMO, 18 );
+    *pXclStrm << mnObjType << nObjId << nGrbit;
+    pXclStrm->WriteZeroBytes( 12 );
+    pXclStrm->EndRecord();
+
+    // write other subrecords
+    WriteSubRecs( *pXclStrm );
+
+    // write the ftEnd subrecord
+    pXclStrm->StartRecord( EXC_ID_OBJ_FTEND, 0 );
+    pXclStrm->EndRecord();
+
+    // copy the data to the OBJ record
+    pXclStrm.reset();
+    aMemStrm.Seek( 0 );
+    rStrm.CopyFromStream( aMemStrm );
 }
 
 
@@ -479,9 +503,16 @@ void XclObj::Save( XclExpStream& rStrm )
         pMsodrawing->Save( rStrm );
 
     // OBJ
-    ExcRecord::Save( rStrm );
+    XclExpRecord::Save( rStrm );
+
+    // second MSODRAWING record and TXO and CONTINUE records
+    SaveTextRecs( rStrm );
 }
 
+
+void XclObj::WriteSubRecs( XclExpStream& rStrm )
+{
+}
 
 void XclObj::SaveTextRecs( XclExpStream& rStrm )
 {
@@ -494,24 +525,11 @@ void XclObj::SaveTextRecs( XclExpStream& rStrm )
 }
 
 
-UINT16 XclObj::GetNum() const
-{   // the real OBJ
-    return 0x005D;
-}
-
-
-ULONG XclObj::GetLen() const
-{   // length of subrecord including ID and LEN
-    return 22;
-}
-
-
-
 // --- class XclObjComment -------------------------------------------
 
-XclObjComment::XclObjComment( RootData& rRoot, const ScAddress& rPos, const String& rStr, bool bVisible )
+XclObjComment::XclObjComment( const XclExpRoot& rRoot, const ScAddress& rPos, const String& rStr, bool bVisible )
             :
-            XclObj( otComment, rRoot, true )
+            XclObj( rRoot, EXC_OBJ_CMO_NOTE, true )
 {
     nGrbit = 0;     // all off: AutoLine, AutoFill, Printable, Locked
     XclEscherEx* pEx = pMsodrawing->GetEscherEx();
@@ -531,7 +549,7 @@ XclObjComment::XclObjComment( RootData& rRoot, const ScAddress& rPos, const Stri
     aPropOpt.AddOpt( ESCHER_Prop_fPrint, nFlags );                  // bool field
     aPropOpt.Commit( pEx->GetStream() );
 
-    XclEscherClientAnchor( rRoot.pDoc, rPos ).WriteData( *pEx );
+    XclEscherClientAnchor( rRoot.GetDocPtr(), rPos ).WriteData( *pEx );
     pEx->AddAtom( 0, ESCHER_ClientData );                       // OBJ record
     pMsodrawing->UpdateStopPos();
     //! Be sure to construct the MSODRAWING ClientTextbox record _after_ the
@@ -550,51 +568,17 @@ XclObjComment::~XclObjComment()
 }
 
 
-void XclObjComment::SaveCont( XclExpStream& rStrm )
-{
-    // ftCmo subrecord
-    XclObj::SaveCont( rStrm );
-
-#if 0
-/*
-    // ftNts subrecord, Note structure, where the hell is this documented?!?
-    // seems like we don't need it ...
-    rStrm << UINT16( ftNts ) << UINT16(0x0016)
-        << UINT32(0) << UINT32(0) << UINT16(0)
-        << UINT16(0xa000) << UINT16(0xcf24) << UINT16(0xf78e) << UINT16(0);
-    if ( bFirstOnSheet )
-        rStrm << UINT16(0x0010);
-    else
-        rStrm << UINT16(0x0158);
-    rStrm << UINT16(0);
-*/
-#endif
-
-    // ftEnd subrecord
-    rStrm << UINT16(0) << UINT16(0);
-}
-
-
 void XclObjComment::Save( XclExpStream& rStrm )
 {
     // content of this record
     XclObj::Save( rStrm );
-    // second MSODRAWING record and TXO and CONTINUE records
-    XclObj::SaveTextRecs( rStrm );
 }
-
-
-ULONG XclObjComment::GetLen() const
-{   // length of all subrecords including IDs and LENs
-    return XclObj::GetLen() /* + 4 + 0x0016 */ + 4;
-}
-
 
 
 // --- class XclObjDropDown ------------------------------------------
 
-XclObjDropDown::XclObjDropDown( RootData& rRoot, const ScAddress& rPos, BOOL bFilt ) :
-        XclObj( otComboBox, rRoot, true ),
+XclObjDropDown::XclObjDropDown( const XclExpRoot& rRoot, const ScAddress& rPos, BOOL bFilt ) :
+        XclObj( rRoot, EXC_OBJ_CMO_COMBOBOX, true ),
         bIsFiltered( bFilt )
 {
     SetLocked( TRUE );
@@ -613,49 +597,40 @@ XclObjDropDown::XclObjDropDown( RootData& rRoot, const ScAddress& rPos, BOOL bFi
     aPropOpt.AddOpt( ESCHER_Prop_fPrint, 0x000A0000 );              // bool field
     aPropOpt.Commit( pEx->GetStream() );
 
-    XclEscherClientAnchor aAnchor( rRoot, 0x0001 );             // MsofbtClientAnchor
+    XclEscherClientAnchor aAnchor( *rRoot.mpRD, 0x0001 );                // MsofbtClientAnchor
     aAnchor.SetDropDownPosition( rPos );
     aAnchor.WriteData( *pEx );
 
     pEx->AddAtom( 0, ESCHER_ClientData );                       // OBJ record
     pMsodrawing->UpdateStopPos();
     pEx->CloseContainer();  // ESCHER_SpContainer
+
+    // old size + ftSbs + ftLbsData
+    SetRecSize( GetRecSize() + 24 + 20 );
 }
 
 XclObjDropDown::~XclObjDropDown()
 {
 }
 
-void XclObjDropDown::SaveCont( XclExpStream& rStrm )
+void XclObjDropDown::WriteSubRecs( XclExpStream& rStrm )
 {
-    // ftCmo subrecord
-    XclObj::SaveCont( rStrm );
-
     // ftSbs subrecord - Scroll bars (dummy)
-    rStrm   << (UINT16)0x000C << (UINT16)0x0014
-            << (UINT32)0 << (UINT32)0 << (UINT32)0 << (UINT32)0 << (UINT32)0;
+    rStrm.StartRecord( EXC_ID_OBJ_FTSBS, 20 );
+    rStrm.WriteZeroBytes( 20 );
+    rStrm.EndRecord();
 
     // ftLbsData subrecord - Listbox data
-    rStrm   << (UINT16)0x0013 << (UINT16)0x0010
-            << (UINT32)0 << (UINT16)0 << (UINT16)0x0301 << (UINT16)0;
-    rStrm   << (bIsFiltered ? (UINT16)0x000A : (UINT16)0x0002) << (UINT32)0;
-
-    // ftEnd subrecord
-    rStrm << (UINT16)0 << (UINT16)0;
+    rStrm.StartRecord( EXC_ID_OBJ_FTLBSDATA, 16 );
+    rStrm   << (UINT32)0 << (UINT16)0 << (UINT16)0x0301 << (UINT16)0
+            << (UINT16)(bIsFiltered ? 0x000A : 0x0002) << (UINT32)0;
+    rStrm.EndRecord();
 }
-
-ULONG XclObjDropDown::GetLen() const
-{
-    // length of all subrecords including IDs and LENs
-    // (all from XclObj) + ftSbs + ftLbsData + ftEnd
-    return XclObj::GetLen() + 24 + 20 + 4;
-}
-
 
 
 // --- class XclTxo --------------------------------------------------
 
-XclTxo::XclTxo( const String& rString ) :
+XclTxo::XclTxo( const String& rString, sal_uInt16 nFontIx ) :
     mpString( new XclExpString( rString ) ),
     meHorAlign( xlTxoHAlign_Default ),
     meVerAlign( xlTxoVAlign_Default ),
@@ -664,7 +639,7 @@ XclTxo::XclTxo( const String& rString ) :
     if( mpString->Len() )
     {
         // If there is text, Excel *needs* the 2nd CONTINUE record with at least two format runs
-        mpString->AppendFormat( 0, EXC_FONT_APP );
+        mpString->AppendFormat( 0, nFontIx );
         mpString->AppendFormat( mpString->Len(), EXC_FONT_APP );
     }
 }
@@ -758,11 +733,10 @@ ULONG XclTxo::GetLen() const
 
 // --- class XclObjOle -------------------------------------------
 
-XclObjOle::XclObjOle( RootData& rRoot, const SdrObject& rObj )
-            :
-            XclObj( otPicture, rRoot ),
-            rOleObj( rObj ),
-            pRootStorage( rRoot.pRootStorage )
+XclObjOle::XclObjOle( const XclExpRoot& rRoot, const SdrObject& rObj ) :
+    XclObj( rRoot, EXC_OBJ_CMO_PICTURE ),
+    rOleObj( rObj ),
+    pRootStorage( rRoot.GetRootStorage() )
 {
 }
 
@@ -772,11 +746,8 @@ XclObjOle::~XclObjOle()
 }
 
 
-void XclObjOle::SaveCont( XclExpStream& rStrm )
+void XclObjOle::WriteSubRecs( XclExpStream& rStrm )
 {
-    // ftCmo subrecord
-    XclObj::SaveCont( rStrm );
-
     // write only as embedded, not linked
     String          aStorageName( RTL_CONSTASCII_USTRINGPARAM( "MBD" ) );
     sal_Char        aBuf[ sizeof(UINT32) * 2 + 1 ];
@@ -813,38 +784,32 @@ void XclObjOle::SaveCont( XclExpStream& rStrm )
             aOLEExpFilt.ExportOLEObject( *xObj, *xOleStg );
 
             // ftCf subrecord, undocumented as usual
-            rStrm << UINT16(ftCf) << UINT16(2) << UINT16(0x0002);
+            rStrm.StartRecord( EXC_ID_OBJ_FTCF, 2 );
+            rStrm << UINT16(0x0002);
+            rStrm.EndRecord();
 
             // ftPioGrbit subrecord, undocumented as usual
-            rStrm << UINT16(ftPioGrbit) << UINT16(2) << UINT16(0x0001);
-
-            const UINT8 pData[] = {
-                0x05, 0x00,
-//              0xac, 0x10, 0xa4, 0x00,     // Xcl changes values on each object
-                0x00, 0x00, 0x00, 0x00,     // zeroed
-                0x02,                       // GPF if zeroed
-//              0x78, 0xa9, 0x86, 0x00,     // Xcl changes values on each object
-                0x00, 0x00, 0x00, 0x00,     // zeroed
-                0x03
-            };
-            XclExpUniString aName( xOleStg->GetUserName() );
-            UINT16 nPadLen = (UINT16)(aName.GetSize() & 0x01);
-            UINT16 nFmlaLen = static_cast< sal_uInt16 >( sizeof(pData) + aName.GetSize() + nPadLen );
-            UINT16 nSubRecLen = nFmlaLen + 6;
+            rStrm.StartRecord( EXC_ID_OBJ_FTPIOGRBIT, 2 );
+            rStrm << UINT16(0x0001);
+            rStrm.EndRecord();
 
             // ftPictFmla subrecord, undocumented as usual
-            rStrm   << UINT16(ftPictFmla) << nSubRecLen
-                    << nFmlaLen;
-            rStrm.Write( pData, sizeof(pData) );
-            rStrm   << aName;
+            XclExpUniString aName( xOleStg->GetUserName() );
+            UINT16 nPadLen = (UINT16)(aName.GetSize() & 0x01);
+            UINT16 nFmlaLen = static_cast< sal_uInt16 >( 12 + aName.GetSize() + nPadLen );
+            UINT16 nSubRecLen = nFmlaLen + 6;
+
+            rStrm.StartRecord( EXC_ID_OBJ_FTPICTFMLA, nSubRecLen );
+            rStrm   << nFmlaLen
+                    << sal_uInt16( 5 ) << sal_uInt32( 0 ) << sal_uInt8( 2 )
+                    << sal_uInt32( 0 ) << sal_uInt8( 3 )
+                    << aName;
             if( nPadLen )
-                rStrm << UINT8(0);      // pad byte
-            rStrm   << nPictureId;
+                rStrm << sal_uInt8( 0 );       // pad byte
+            rStrm << nPictureId;
+            rStrm.EndRecord();
         }
     }
-
-    // ftEnd subrecord
-    rStrm << UINT16(0) << UINT16(0);
 }
 
 
@@ -852,28 +817,19 @@ void XclObjOle::Save( XclExpStream& rStrm )
 {
     // content of this record
     XclObj::Save( rStrm );
-    // second MSODRAWING record and TXO and CONTINUE records
-    // we shouldn't have any here, so just in case ...
-    XclObj::SaveTextRecs( rStrm );
-}
-
-
-ULONG XclObjOle::GetLen() const
-{
-    return 0;       // calculated by XclExpStream
 }
 
 
 // ----------------------------------------------------------------------------
 
-#if EXC_INCL_EXP_OCX
+#if EXC_EXP_OCX_CTRL
 
-XclExpObjControl::XclExpObjControl(
-        const XclRoot& rRoot,
+XclExpObjOcxCtrl::XclExpObjOcxCtrl(
+        const XclExpRoot& rRoot,
         const Reference< XShape >& rxShape,
         const String& rClassName,
         sal_uInt32 nStrmStart, sal_uInt32 nStrmSize ) :
-    XclObj( otPicture, *rRoot.mpRD, true ),
+    XclObj( rRoot, EXC_OBJ_CMO_PICTURE, true ),
     maClassName( rClassName ),
     mnStrmStart( nStrmStart ),
     mnStrmSize( nStrmSize )
@@ -901,7 +857,7 @@ XclExpObjControl::XclExpObjControl(
         }
 
         // name of the control
-        ::rtl::OUString aCtrlName;
+        OUString aCtrlName;
         //! TODO - this does not work - property is empty
         if( ::getPropValue( aCtrlName, xShapePS, PROPNAME( "Name" ) ) && aCtrlName.getLength() )
         {
@@ -925,14 +881,17 @@ XclExpObjControl::XclExpObjControl(
     pMsodrawing->UpdateStopPos();
 }
 
-void XclExpObjControl::SaveCont( XclExpStream& rStrm )
+void XclExpObjOcxCtrl::WriteSubRecs( XclExpStream& rStrm )
 {
-    // ftCmo
-    XclObj::SaveCont( rStrm );
-    // ftCf (clipboard format)
-    rStrm << sal_uInt16( ftCf ) << sal_uInt16( 2 ) << sal_uInt16( 2 );
+    // ftCf - clipboard format
+    rStrm.StartRecord( EXC_ID_OBJ_FTCF, 2 );
+    rStrm << sal_uInt16( 2 );
+    rStrm.EndRecord();
+
     // ftPioGrbit
-    rStrm << sal_uInt16( ftPioGrbit ) << sal_uInt16( 2 ) << sal_uInt16( 0x0031 );
+    rStrm.StartRecord( EXC_ID_OBJ_FTPIOGRBIT, 2 );
+    rStrm << sal_uInt16( 0x0031 );
+    rStrm.EndRecord();
 
     // ftPictFmla
     XclExpString aClass( maClassName );
@@ -941,8 +900,8 @@ void XclExpObjControl::SaveCont( XclExpStream& rStrm )
     sal_uInt16 nFirstPartSize = 12 + nClassNameSize + nClassNamePad;
     sal_uInt16 nPictFmlaSize = nFirstPartSize + 18;
 
-    rStrm   << sal_uInt16( ftPictFmla ) << sal_uInt16( nPictFmlaSize )
-            << sal_uInt16( nFirstPartSize )             // size of first part
+    rStrm.StartRecord( EXC_ID_OBJ_FTPICTFMLA, nPictFmlaSize );
+    rStrm   << sal_uInt16( nFirstPartSize )             // size of first part
             << sal_uInt16( 5 )                          // formula size
             << sal_uInt32( 0 )                          // unknown ID
             << sal_uInt8( 0x02 ) << sal_uInt32( 0 )     // tTbl token with unknown ID
@@ -952,66 +911,339 @@ void XclExpObjControl::SaveCont( XclExpStream& rStrm )
     rStrm   << mnStrmStart                              // start in 'Ctls' stream
             << mnStrmSize                               // size in 'Ctls' stream
             << sal_uInt32( 0 ) << sal_uInt32( 0 );      // unknown
-
-    // ftEnd
-    rStrm << sal_uInt16( ftEnd ) << sal_uInt16( 0 );
+    rStrm.EndRecord();
 }
 
-sal_uInt32 XclExpObjControl::GetLen() const
+#else
+
+XclExpObjTbxCtrl::XclExpObjTbxCtrl(
+        const XclExpRoot& rRoot,
+        const Reference< XShape >& rxShape,
+        const Reference< XControlModel >& rxCtrlModel ) :
+    XclObj( rRoot, EXC_OBJ_CMO_UNKNOWN, true ),
+    mnHeight( 0 ),
+    mnEntryCount( 0 ),
+    mnState( 0 ),
+    mnLineCount( 0 ),
+    mb3DStyle( false )
 {
-    return 0;       // calculated by XclExpStream
+    Reference< XPropertySet > xPropSet( rxCtrlModel, UNO_QUERY );
+    if( !rxShape.is() || !xPropSet.is() )
+        return;
+
+    mnHeight = rxShape->getSize().Height;
+    if( !mnHeight )
+        return;
+
+    // control type
+    sal_Int16 nClassId;
+    if( ::getPropValue( nClassId, xPropSet, PROPNAME( "ClassId" ) ) )
+    {
+        namespace FormCompType = ::com::sun::star::form::FormComponentType;
+        switch( nClassId )
+        {
+            case FormCompType::COMMANDBUTTON:   mnObjType = EXC_OBJ_CMO_BUTTON;         break;
+            case FormCompType::RADIOBUTTON:     mnObjType = EXC_OBJ_CMO_OPTIONBUTTON;   break;
+            case FormCompType::CHECKBOX:        mnObjType = EXC_OBJ_CMO_CHECKBOX;       break;
+            case FormCompType::LISTBOX:         mnObjType = EXC_OBJ_CMO_LISTBOX;        break;
+            case FormCompType::COMBOBOX:        mnObjType = EXC_OBJ_CMO_COMBOBOX;       break;
+            case FormCompType::GROUPBOX:        mnObjType = EXC_OBJ_CMO_GROUPBOX;       break;
+            case FormCompType::FIXEDTEXT:       mnObjType = EXC_OBJ_CMO_LABEL;          break;
+        }
+    }
+    if( mnObjType == EXC_OBJ_CMO_UNKNOWN )
+        return;
+
+    // OBJ record flags
+    SetLocked( TRUE );
+    SetPrintable( TRUE );
+    SetAutoFill( FALSE );
+    SetAutoLine( FALSE );
+
+    // fill Escher properties
+    XclEscherEx& rEscherEx = *pMsodrawing->GetEscherEx();
+    rEscherEx.OpenContainer( ESCHER_SpContainer );
+    rEscherEx.AddShape( ESCHER_ShpInst_HostControl, SHAPEFLAG_HAVEANCHOR | SHAPEFLAG_HAVESPT );
+    EscherPropertyContainer aPropOpt;
+    aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x01000100 ); // bool field
+    aPropOpt.AddOpt( ESCHER_Prop_lTxid, 0 );                        // Text ID
+    aPropOpt.AddOpt( ESCHER_Prop_WrapText, 0x00000001 );
+    aPropOpt.AddOpt( ESCHER_Prop_FitTextToShape, 0x001A0008 );      // bool field
+    aPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x00100000 );      // bool field
+    aPropOpt.AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x00080000 );     // bool field
+    aPropOpt.Commit( rEscherEx.GetStream() );
+
+    // anchor
+    if( SdrObject* pSdrObj = ::GetSdrObjectFromXShape( rxShape ) )
+        XclEscherClientAnchor( *rRoot.mpRD, *pSdrObj ).WriteData( rEscherEx );
+    rEscherEx.AddAtom( 0, ESCHER_ClientData );                       // OBJ record
+    pMsodrawing->UpdateStopPos();
+
+    // control label
+    OUString aString;
+    if( ::getPropValue( aString, xPropSet, PROPNAME( "Label" ) ) && aString.getLength() )
+    {
+        /*  Be sure to construct the MSODRAWING ClientTextbox record after the
+            base OBJ's MSODRAWING record Escher data is completed. */
+        pClientTextbox = new XclMsodrawing( rRoot );
+        pClientTextbox->GetEscherEx()->AddAtom( 0, ESCHER_ClientTextbox );  // TXO record
+        pClientTextbox->UpdateStopPos();
+
+        XclFontData aFontData;
+        OUString aFontName;
+        float fFloatVal;
+        sal_Int16 nShortVal;
+
+        if( ::getPropValue( aFontName, xPropSet, PROPNAME( "FontName" ) ) )
+            aFontData.maName = XclTools::GetXclFontName( aFontName );
+        if( ::getPropValue( fFloatVal, xPropSet, PROPNAME( "FontHeight" ) ) )
+            aFontData.SetApiHeight( fFloatVal );
+        if( ::getPropValue( nShortVal, xPropSet, PROPNAME( "FontFamily" ) ) )
+            aFontData.SetApiFamily( nShortVal );
+        if( ::getPropValue( nShortVal, xPropSet, PROPNAME( "FontCharset" ) ) )
+            aFontData.SetApiCharSet( nShortVal );
+        if( ::getPropValue( nShortVal, xPropSet, PROPNAME( "FontSlant" ) ) )
+            aFontData.SetApiPosture( static_cast< ::com::sun::star::awt::FontSlant >( nShortVal ) );
+        if( ::getPropValue( fFloatVal, xPropSet, PROPNAME( "FontWeight" ) ) )
+            aFontData.SetApiWeight( fFloatVal );
+        if( ::getPropValue( nShortVal, xPropSet, PROPNAME( "FontUnderline" ) ) )
+            aFontData.SetApiUnderline( nShortVal );
+        if( ::getPropValue( nShortVal, xPropSet, PROPNAME( "FontStrikeout" ) ) )
+            aFontData.SetApiStrikeout( nShortVal );
+
+        sal_uInt16 nFontIx = EXC_FONT_APP;
+        if( aFontData.maName.Len() && aFontData.mnHeight )
+        {
+            XclExpFont* pFont = new XclExpFont( rRoot, aFontData );
+            sal_Int32 nApiColor;
+            if( ::getPropValue( nApiColor, xPropSet, PROPNAME( "TextColor" ) ) )
+            {
+                Color aColor( static_cast< sal_uInt32 >( nApiColor ) );
+                pFont->SetColorId( rRoot.GetPalette().InsertColor( aColor, xlColorChartText, EXC_FONT_AUTOCOLOR ) );
+            }
+            nFontIx = rRoot.GetFontBuffer().Insert( pFont );
+            // font buffer owns pFont, forget it
+        }
+
+        pTxo = new XclTxo( aString, nFontIx );
+        pTxo->SetHorAlign( (mnObjType == EXC_OBJ_CMO_BUTTON) ? xlTxoHAlignCenter : xlTxoHAlignLeft );
+        pTxo->SetVerAlign( xlTxoVAlignCenter );
+    }
+
+    rEscherEx.CloseContainer();  // ESCHER_SpContainer
+
+    // link tag
+    if( ::getPropValue( aString, xPropSet, PROPNAME( "Tag" ) ) )
+        SetLinkFormulas( rRoot, aString );
+
+    // other properties
+    ::getPropValue( mnLineCount, xPropSet, PROPNAME( "LineCount" ) );
+
+    sal_Int16 nBorder = 0;
+    if( ::getPropValue( nBorder, xPropSet, PROPNAME( "Border" ) ) )
+        mb3DStyle = (nBorder == 2);
+
+    sal_Int16 nApiState = 0;
+    if( ::getPropValue( nApiState, xPropSet, PROPNAME( "State" ) ) )
+    {
+        switch( nApiState )
+        {
+            case 0: mnState = EXC_OBJ_CBLS_STATE_UNCHECK;   break;
+            case 1: mnState = EXC_OBJ_CBLS_STATE_CHECK;     break;
+            case 2: mnState = EXC_OBJ_CBLS_STATE_TRI;       break;
+        }
+    }
+}
+
+XclExpObjTbxCtrl::~XclExpObjTbxCtrl()
+{
+}
+
+namespace {
+
+ExcUPN* lclCreateTokenArray( const XclExpRoot& rRoot, const ScTokenArray& rScTokArr )
+{
+    EC_Codetype eDummy;
+    ExcUPN* pXclTokArr = new ExcUPN( rRoot.mpRD, rScTokArr, eDummy );
+    if( !pXclTokArr->GetLen() || !pXclTokArr->GetData() )
+        DELETEZ( pXclTokArr );
+    return pXclTokArr;
+}
+
+ExcUPN* lclCreateTokenArray( const XclExpRoot& rRoot, const ScAddress& rPos )
+{
+    XclExpTabIdBuffer& rTabIdBuffer = rRoot.GetTabIdBuffer();
+    if( rTabIdBuffer.IsExportTable( rPos.Tab() ) && !rTabIdBuffer.IsExternal( rPos.Tab() ) )
+    {
+        ScTokenArray aScTokArr;
+        SingleRefData aRef;
+        aRef.InitAddress( rPos );
+        aScTokArr.AddSingleReference( aRef );
+        return lclCreateTokenArray( rRoot, aScTokArr );
+    }
+    return NULL;
+}
+
+ExcUPN* lclCreateTokenArray( const XclExpRoot& rRoot, const ScRange& rRange )
+{
+    if( rRange.aStart == rRange.aEnd )
+        return lclCreateTokenArray( rRoot, rRange.aStart );
+
+    if( rRange.aStart.Tab() == rRange.aEnd.Tab() )
+    {
+        XclExpTabIdBuffer& rTabIdBuffer = rRoot.GetTabIdBuffer();
+        if( rTabIdBuffer.IsExportTable( rRange.aStart.Tab() ) && !rTabIdBuffer.IsExternal( rRange.aStart.Tab() ) )
+        {
+            ScTokenArray aScTokArr;
+            ComplRefData aRef;
+            aRef.InitRange( rRange );
+            aScTokArr.AddDoubleReference( aRef );
+            return lclCreateTokenArray( rRoot, aScTokArr );
+        }
+    }
+    return NULL;
+}
+
+} // namespace
+
+void XclExpObjTbxCtrl::SetLinkFormulas( const XclExpRoot& rRoot, const String& rTag )
+{
+    ScAddress aCellLink;
+    if( XclTools::GetCtrlCellLinkFromTag( aCellLink, rRoot.GetDoc(), rTag ) )
+        mpCellLink.reset( lclCreateTokenArray( rRoot, aCellLink ) );
+
+    ScRange aSrcRange;
+    if( XclTools::GetCtrlSrcRangeFromTag( aSrcRange, rRoot.GetDoc(), rTag ) )
+    {
+        mpSrcRange.reset( lclCreateTokenArray( rRoot, aSrcRange ) );
+        mnEntryCount = aSrcRange.aEnd.Col() - aSrcRange.aStart.Col() + 1;
+    }
+}
+
+void XclExpObjTbxCtrl::WriteSubRecs( XclExpStream& rStrm )
+{
+    switch( mnObjType )
+    {
+        // *** Check boxes, option buttons ***
+
+        case EXC_OBJ_CMO_CHECKBOX:
+        case EXC_OBJ_CMO_OPTIONBUTTON:
+        {
+            // ftCbls - box properties
+            sal_uInt16 nStyle = 0;
+            ::set_flag( nStyle, EXC_OBJ_CBLS_3D, mb3DStyle );
+
+            rStrm.StartRecord( EXC_ID_OBJ_FTCBLS, 12 );
+            rStrm << mnState;
+            rStrm.WriteZeroBytes( 8 );
+            rStrm << nStyle;
+            rStrm.EndRecord();
+
+            // ftCblsFmla - cell link
+            if( mpCellLink.get() )
+            {
+                rStrm.StartRecord( EXC_ID_OBJ_FTCBLSFMLA, 0 );
+                WriteFormula( rStrm, *mpCellLink );
+                rStrm.EndRecord();
+            }
+        }
+        break;
+
+        // *** List boxes, combo boxes ***
+
+        case EXC_OBJ_CMO_LISTBOX:
+        case EXC_OBJ_CMO_COMBOBOX:
+        {
+            // ftSbs subrecord - Scroll bars
+            sal_Int32 nLineHeight = XclTools::GetHmmFromTwips( 200 );   // always 10pt
+            sal_uInt16 nVisLines = 0;
+            if( mnObjType == EXC_OBJ_CMO_LISTBOX )
+                nVisLines = static_cast< sal_uInt16 >( mnHeight / nLineHeight );
+            else
+                nVisLines = mnLineCount;
+            sal_uInt16 nInvisLines = (mnEntryCount >= nVisLines) ? (mnEntryCount - nVisLines) : 0;
+            rStrm.StartRecord( EXC_ID_OBJ_FTSBS, 20 );
+            rStrm   << sal_uInt32( 0 )              // reserved
+                    << sal_uInt16( 0 )              // thumb position
+                    << sal_uInt16( 0 )              // thumb min pos
+                    << sal_uInt16( nInvisLines )    // thumb max pos
+                    << sal_uInt16( 1 )              // line increment
+                    << sal_uInt16( nVisLines )      // page increment
+                    << sal_uInt16( 0 )              // 0 = vertical, 1 = horizontal
+                    << sal_uInt16( 16 )             // thumb width
+                    << sal_uInt16( 1 );             // reserved
+            rStrm.EndRecord();
+
+            // ftSbsFmla - cell link
+            if( mpCellLink.get() )
+            {
+                rStrm.StartRecord( EXC_ID_OBJ_FTSBSFMLA, 0 );
+                WriteFormula( rStrm, *mpCellLink );
+                rStrm.EndRecord();
+            }
+
+            // ftLbsData - source data range and box properties
+            sal_uInt16 nStyle = EXC_OBJ_LBS_SEL_SIMPLE;
+            ::set_flag( nStyle, EXC_OBJ_LBS_3D, mb3DStyle );
+
+            rStrm.StartRecord( EXC_ID_OBJ_FTLBSDATA, 0 );
+
+            if( mpSrcRange.get() )
+            {
+                rStrm << static_cast< sal_uInt16 >( (mpSrcRange->GetLen() + 7) & 0xFFFE );
+                WriteFormula( rStrm, *mpSrcRange );
+            }
+            else
+                rStrm << sal_uInt16( 0 );
+
+            rStrm << mnEntryCount << sal_uInt16( 0 ) << nStyle << sal_uInt16( 0 );
+            if( mnObjType == EXC_OBJ_CMO_COMBOBOX )
+                rStrm << sal_uInt16( 0 ) << mnLineCount;
+
+            rStrm.EndRecord();
+        }
+        break;
+    }
+}
+
+void XclExpObjTbxCtrl::WriteFormula( XclExpStream& rStrm, const ExcUPN& rTokArr ) const
+{
+    sal_uInt16 nFmlaSize = rTokArr.GetLen();
+    rStrm << nFmlaSize << sal_uInt32( 0 );
+    rStrm.Write( rTokArr.GetData(), nFmlaSize );
+    if( nFmlaSize & 1 )
+        rStrm << sal_uInt8( 0 );
 }
 
 #endif
 
 // --- class XclObjAny -------------------------------------------
 
-XclObjAny::XclObjAny( RootData& rRoot )
-            :
-            XclObj( otUnknown, rRoot )
+XclObjAny::XclObjAny( const XclExpRoot& rRoot ) :
+    XclObj( rRoot, EXC_OBJ_CMO_UNKNOWN )
 {
 }
-
 
 XclObjAny::~XclObjAny()
 {
 }
 
-
-void XclObjAny::SaveCont( XclExpStream& rStrm )
+void XclObjAny::WriteSubRecs( XclExpStream& rStrm )
 {
-    // ftCmo subrecord
-    XclObj::SaveCont( rStrm );
-    switch ( eObjType )
-    {
-        case otGroup :      // ftGmo subrecord
-            rStrm << UINT16(ftGmo) << UINT16(2) << UINT16(0);
-        break;
-    }
-    // ftEnd subrecord
-    rStrm << UINT16(0) << UINT16(0);
+    if( mnObjType == EXC_OBJ_CMO_GROUP )
+        // ftGmo subrecord
+        rStrm << EXC_ID_OBJ_FTGMO << UINT16(2) << UINT16(0);
 }
-
 
 void XclObjAny::Save( XclExpStream& rStrm )
 {
+    if( mnObjType == EXC_OBJ_CMO_GROUP )
+        // old size + ftGmo
+        SetRecSize( GetRecSize() + 6 );
+
     // content of this record
     XclObj::Save( rStrm );
-    // second MSODRAWING record and TXO and CONTINUE records
-    XclObj::SaveTextRecs( rStrm );
 }
-
-
-ULONG XclObjAny::GetLen() const
-{   // length of all subrecords including IDs and LENs
-    ULONG nLen = XclObj::GetLen() + 4;
-    switch ( eObjType )
-    {
-        case otGroup :      nLen += 6;  break;
-    }
-    return nLen;
-}
-
 
 
 // ----------------------------------------------------------------------------
@@ -1042,7 +1274,7 @@ XclExpNote::XclExpNote(
     }
 
     // create the Escher object
-    mnObjId = rRoot.mpRD->pObjRecs->Add( new XclObjComment( *rRoot.mpRD, maPos, aNoteText, mbVisible ) );
+    mnObjId = rRoot.mpRD->pObjRecs->Add( new XclObjComment( rRoot, maPos, aNoteText, mbVisible ) );
 
     SetRecSize( 9 + maAuthor.GetSize() );
 }
