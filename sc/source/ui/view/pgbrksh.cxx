@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pgbrksh.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:09 $
+ *  last change: $Author: mh $ $Date: 2001-10-23 11:24:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,10 +74,6 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/request.hxx>
 #include <svtools/whiter.hxx>
-
-#define GLOBALOVERFLOW
-#include "segmentc.hxx"
-
 
 #include "pgbrksh.hxx"
 #include "tabvwsh.hxx"

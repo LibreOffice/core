@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olinewin.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:09 $
+ *  last change: $Author: mh $ $Date: 2001-10-23 11:24:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,11 +65,6 @@
 #include "ui_pch.hxx"
 #endif
 
-#pragma hdrstop
-
-#ifndef PCH
-#include <segmentc.hxx>
-#endif
 
 // INCLUDE ---------------------------------------------------------------
 
@@ -84,13 +79,7 @@
 #define SC_OL_IMAGE_PLUS    9
 #define SC_OL_IMAGE_MINUS   10
 
-// STATIC DATA -----------------------------------------------------------
-
-SEG_EOFGLOBALS()
-
-
 //==================================================================
-#pragma SEG_FUNCDEF(olinewin_03)
 
 ScOutlineWindow::ScOutlineWindow( Window* pParent, ScOutlineMode eNewMode,
                                     ScViewData* pData, ScSplitPos eNewWhich ) :
@@ -105,13 +94,11 @@ ScOutlineWindow::ScOutlineWindow( Window* pParent, ScOutlineMode eNewMode,
     ImplInitSettings();
 }
 
-#pragma SEG_FUNCDEF(olinewin_04)
 
 __EXPORT ScOutlineWindow::~ScOutlineWindow()
 {
 }
 
-#pragma SEG_FUNCDEF(olinewin_11)
 
 BOOL ScOutlineWindow::IsFirst(USHORT nPos)
 {
@@ -136,7 +123,6 @@ BOOL ScOutlineWindow::IsFirst(USHORT nPos)
     }
 }
 
-#pragma SEG_FUNCDEF(olinewin_05)
 
 BOOL ScOutlineWindow::GetEntryPos( ScOutlineEntry* pEntry,
                                     long& rFirstEntry, long& rSecondEntry, long& rBitmapEntry,
@@ -228,7 +214,6 @@ BOOL ScOutlineWindow::GetEntryPos( ScOutlineEntry* pEntry,
 
 #define GETPREV(nLevel,nEntryNo) (nEntryNo ? pArray->GetEntry( nLevel, nEntryNo-1 ) : 0)
 
-#pragma SEG_FUNCDEF(olinewin_06)
 
 void __EXPORT ScOutlineWindow::Paint( const Rectangle& rRect )
 {
@@ -416,7 +401,6 @@ void __EXPORT ScOutlineWindow::Paint( const Rectangle& rRect )
     }
 }
 
-#pragma SEG_FUNCDEF(olinewin_07)
 
 void ScOutlineWindow::ToggleRect( const Rectangle& rRect )
 {
@@ -425,7 +409,6 @@ void ScOutlineWindow::ToggleRect( const Rectangle& rRect )
     Invert( Rectangle( rRect.Left()+1, rRect.Top()+2, rRect.Left()+1, rRect.Bottom()-2 ) );
 }
 
-#pragma SEG_FUNCDEF(olinewin_08)
 
 BOOL ScOutlineWindow::ButtonHit( const Point& rPos, USHORT& rLevel, USHORT& rEntry, BOOL& rHeader,
                                 Rectangle& rInvRect )
@@ -529,7 +512,6 @@ BOOL ScOutlineWindow::ButtonHit( const Point& rPos, USHORT& rLevel, USHORT& rEnt
     return FALSE;
 }
 
-#pragma SEG_FUNCDEF(olinewin_09)
 
 BOOL ScOutlineWindow::LineHit( const Point& rPos, USHORT& rLevel, USHORT& rEntry )
 {
@@ -603,7 +585,6 @@ BOOL ScOutlineWindow::LineHit( const Point& rPos, USHORT& rLevel, USHORT& rEntry
     return FALSE;
 }
 
-#pragma SEG_FUNCDEF(olinewin_0a)
 
 void ScOutlineWindow::DoFunction( USHORT nLevel, USHORT nEntry, BOOL bHeader )
 {
@@ -626,7 +607,6 @@ void ScOutlineWindow::DoFunction( USHORT nLevel, USHORT nEntry, BOOL bHeader )
     }
 }
 
-#pragma SEG_FUNCDEF(olinewin_0b)
 
 void __EXPORT ScOutlineWindow::MouseMove( const MouseEvent& rMEvt )
 {
@@ -657,7 +637,6 @@ void __EXPORT ScOutlineWindow::MouseMove( const MouseEvent& rMEvt )
     }
 }
 
-#pragma SEG_FUNCDEF(olinewin_0c)
 
 void __EXPORT ScOutlineWindow::MouseButtonUp( const MouseEvent& rMEvt )
 {
@@ -679,7 +658,6 @@ void __EXPORT ScOutlineWindow::MouseButtonUp( const MouseEvent& rMEvt )
     }
 }
 
-#pragma SEG_FUNCDEF(olinewin_0d)
 
 void __EXPORT ScOutlineWindow::MouseButtonDown( const MouseEvent& rMEvt )
 {
@@ -704,7 +682,6 @@ void __EXPORT ScOutlineWindow::MouseButtonDown( const MouseEvent& rMEvt )
     }
 }
 
-#pragma SEG_FUNCDEF(olinewin_0e)
 
 void ScOutlineWindow::SetHeaderSize( USHORT nNewSize )
 {
@@ -715,7 +692,6 @@ void ScOutlineWindow::SetHeaderSize( USHORT nNewSize )
     }
 }
 
-#pragma SEG_FUNCDEF(olinewin_0f)
 
 long ScOutlineWindow::GetDepthSize()
 {
@@ -735,7 +711,6 @@ long ScOutlineWindow::GetDepthSize()
     return nSize;
 }
 
-#pragma SEG_FUNCDEF(olinewin_10)
 
 void ScOutlineWindow::ScrollPixel( long nDiff )
 {
@@ -817,100 +792,3 @@ void ScOutlineWindow::DataChanged( const DataChangedEvent& rDCEvt )
     else
         Window::DataChanged( rDCEvt );
 }
-
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.28  2000/09/17 14:09:33  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.27  2000/08/31 16:38:46  willem.vandorp
-    Header and footer replaced
-
-    Revision 1.26  2000/05/26 15:07:52  er
-    NOOLDSV
-
-    Revision 1.25  1998/08/31 18:17:42  ANK
-    #54242# Farbeinstellung
-
-
-      Rev 1.24   31 Aug 1998 20:17:42   ANK
-   #54242# Farbeinstellung
-
-      Rev 1.23   02 Mar 1998 12:42:18   NN
-   #44879# 3D-Farben aus StyleSettings
-
-      Rev 1.22   16 Oct 1997 12:48:42   NN
-   Paint: Rechteck fuer den Haken richtigherum
-
-      Rev 1.21   07 Oct 1997 19:03:30   NN
-   GetEntryPos: First/SecondEntry begrenzen
-
-      Rev 1.20   07 Oct 1997 15:13:20   NN
-   GetEntryPos: GetScrPos mit bAllowNeg=TRUE
-
-      Rev 1.19   10 Sep 1997 20:19:26   NN
-   IsFirst: Hidden-Abfrage fuer vorangehende Zeile/Spalte
-
-      Rev 1.18   18 Apr 1996 14:58:30   NN
-   auch verschobene Buttons ganz unten painten
-
-      Rev 1.17   14 Feb 1996 20:38:02   NN
-   ButtonHit: ausgeblendete Zeilen oberhalb ueberspringen
-
-      Rev 1.16   20 Dec 1995 18:23:20   NN
-   doppelte Korrektur, wenn ganz links ausgeblendete Gruppe, dann sichtbare
-
-      Rev 1.15   14 Dec 1995 22:53:06   NN
-   Korrekturen bei der Position der Bitmaps (14806)
-
-      Rev 1.14   08 Nov 1995 13:07:32   JN
-   Aenderung fuer 301
-
-      Rev 1.13   04 Jul 1995 11:52:56   NN
-   Reihenfolge der Handle-Bitmaps
-
-      Rev 1.12   24 Jun 1995 17:12:40   NN
-   GetPPTX und Y statt GetPixelPerTwips
-
-      Rev 1.11   20 Apr 1995 19:30:00   NN
-   Imagelist fuer Outline-Bitmaps
-
-      Rev 1.10   29 Jan 1995 13:22:16   NN
-   include dbfunc statt tabview
-
-      Rev 1.9   27 Jan 1995 12:14:20   TRI
-   __EXPORT bei virtuellen Methoden eingebaut
-
-      Rev 1.8   24 Jan 1995 12:43:54   TRI
-   NT Anpassung: zwei long-casts in Min Funktion eingefuegt
-
-      Rev 1.7   20 Jan 1995 17:15:42   NN
-   komplett weggefilterte Outlines nicht anzeigen
-
-      Rev 1.6   18 Jan 1995 15:58:24   TRI
-   Pragmas zur Segementierung eingebaut
-
-      Rev 1.5   03 Jan 1995 18:22:54   NN
-   Doppelklick auf Linie
-
-      Rev 1.4   23 Dec 1994 14:40:16   NN
-   Clipping des linken Buttons
-
-      Rev 1.3   22 Dec 1994 17:29:12   NN
-   Handles nach vorn, innerhalb der Gruppe verschoben
-
-      Rev 1.2   21 Dec 1994 10:51:54   NN
-   ausgeblendete Spalten am Anfang beruecksichtigen
-
-      Rev 1.1   19 Dec 1994 18:23:16   NN
-   Mausabfrage
-
-      Rev 1.0   16 Dec 1994 14:43:46   NN
-   Initial revision.
-
-------------------------------------------------------------------------*/
-
-#pragma SEG_EOFMODULE
-
-
