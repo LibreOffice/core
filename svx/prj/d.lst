@@ -247,6 +247,7 @@ hedabu: ..\inc\sdtacitm.hxx %_DEST%\inc%_EXT%\svx\sdtacitm.hxx
 hedabu: ..\inc\sdtaditm.hxx %_DEST%\inc%_EXT%\svx\sdtaditm.hxx
 hedabu: ..\inc\sdtagitm.hxx %_DEST%\inc%_EXT%\svx\sdtagitm.hxx
 hedabu: ..\inc\sdtaiitm.hxx %_DEST%\inc%_EXT%\svx\sdtaiitm.hxx
+hedabu: ..\inc\sdtfchim.hxx %_DEST%\inc%_EXT%\svx\sdtfchim.hxx
 hedabu: ..\inc\sdtaitm.hxx %_DEST%\inc%_EXT%\svx\sdtaitm.hxx
 hedabu: ..\inc\sdtakitm.hxx %_DEST%\inc%_EXT%\svx\sdtakitm.hxx
 hedabu: ..\inc\sdtayitm.hxx %_DEST%\inc%_EXT%\svx\sdtayitm.hxx
