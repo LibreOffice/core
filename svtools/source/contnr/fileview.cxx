@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileview.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: pb $ $Date: 2001-12-12 10:43:51 $
+ *  last change: $Author: pb $ $Date: 2001-12-12 11:07:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -674,7 +674,7 @@ public:
     void                    EntryRemoved( const OUString& rURL );
     void                    EntryRenamed( OUString& rURL,
                                           const OUString& rName );
-    void                    FolderInserted( const OUString& rURL,
+    String                  FolderInserted( const OUString& rURL,
                                             const OUString& rTitle );
 
     ULONG                   GetEntryPos( const OUString& rURL );
@@ -1368,30 +1368,17 @@ sal_Bool SvtFileView::CreateNewFolder( const String& rNewFolder )
     sal_Bool bRet = sal_False;
     INetURLObject aObj( mpImp->maViewURL );
     aObj.insertName( rNewFolder, false, INetURLObject::LAST_SEGMENT, true, INetURLObject::ENCODE_ALL );
-    String aURL = aObj.GetMainURL( INetURLObject::NO_DECODE );
-    if ( ::utl::UCBContentHelper::MakeFolder( aURL ) )
+    String sURL = aObj.GetMainURL( INetURLObject::NO_DECODE );
+    if ( ::utl::UCBContentHelper::MakeFolder( sURL ) )
     {
-        String aEntry = aObj.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
-        SvLBoxEntry* pEntry = mpImp->mpView->InsertEntry( aEntry, mpImp->maFolderImage, mpImp->maFolderImage );
-        SvtContentEntry* pUserData = new SvtContentEntry( aURL, TRUE );
+        String sTitle = aObj.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
+        String sEntry = mpImp->FolderInserted( sURL, sTitle );
+        SvLBoxEntry* pEntry = mpImp->mpView->InsertEntry( sEntry, mpImp->maFolderImage, mpImp->maFolderImage );
+        SvtContentEntry* pUserData = new SvtContentEntry( sURL, TRUE );
         pEntry->SetUserData( pUserData );
-        mpImp->FolderInserted( aURL, aEntry );
         mpImp->mpView->MakeVisible( pEntry );
         bRet = sal_True;
     }
-/*!!!
-    else
-    {
-        String aPath;
-        if ( !::utl::LocalFileHelper::ConvertURLToSystemPath( aURL, aPath ) )
-            aPath = aURL;
-        String aErrorText( SvtResId( STR_SVT_FILEVIEW_ERR_MAKEFOLDER ) );
-        String aVar( RTL_CONSTASCII_USTRINGPARAM("%1") );
-        aErrorText.SearchAndReplace( aVar, aPath );
-        ErrorBox aBox( this, WB_OK, aErrorText );
-        aBox.Execute();
-    }
-*/
     return bRet;
 }
 
@@ -2408,7 +2395,7 @@ void SvtFileView_Impl::EntryRenamed( OUString& rURL,
 }
 
 // -----------------------------------------------------------------------
-void SvtFileView_Impl::FolderInserted( const OUString& rURL, const OUString& rTitle )
+String SvtFileView_Impl::FolderInserted( const OUString& rURL, const OUString& rTitle )
 {
     ::osl::MutexGuard aGuard( maMutex );
 
@@ -2443,8 +2430,9 @@ void SvtFileView_Impl::FolderInserted( const OUString& rURL, const OUString& rTi
     aValue += rLocaleData.getTime( pData->maModDate );
 
     pData->maDisplayText = aValue;
-
     maContent.push_back( pData );
+
+    return String( aValue );
 }
 
 // -----------------------------------------------------------------------
