@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: oj $ $Date: 2001-03-19 09:35:31 $
+#   last change: $Author: oj $ $Date: 2001-05-07 10:37:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,6 +78,7 @@ ENVCFLAGS+=/FR$(SLO)$/
 # --- Files -------------------------------------
 
 SLOFILES=\
+    $(SLO)$/DCode.obj				\
     $(SLO)$/DResultSet.obj			\
     $(SLO)$/DStatement.obj			\
     $(SLO)$/DPreparedStatement.obj	\

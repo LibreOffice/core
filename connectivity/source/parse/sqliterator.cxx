@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqliterator.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-30 09:59:55 $
+ *  last change: $Author: oj $ $Date: 2001-05-07 10:37:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,8 +150,8 @@ OSQLParseTreeIterator::~OSQLParseTreeIterator()
 void OSQLParseTreeIterator::dispose()
 {
     m_aTables.clear();
-    m_aSelectColumns->clear();
-    m_aParameters->clear();
+    m_aSelectColumns    = NULL;
+    m_aParameters       = NULL;
     m_xTables           = NULL;
     m_xDatabaseMetaData = NULL;
     m_pParser           = NULL;
@@ -161,8 +161,8 @@ void OSQLParseTreeIterator::setParseTree(const OSQLParseNode * pNewParseTree)
 {
     m_aTables.clear();
 
-    m_aSelectColumns->clear();
-    m_aParameters->clear();
+    m_aSelectColumns = new OSQLColumns();
+    m_aParameters    = new OSQLColumns();
 
     m_pParseTree = pNewParseTree;
     if (!m_pParseTree)

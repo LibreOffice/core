@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-03 07:14:11 $
+ *  last change: $Author: oj $ $Date: 2001-05-07 10:37:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,7 +218,7 @@ void ODbaseTable::fillColumns()
     m_pFileStream->Seek(STREAM_SEEK_TO_BEGIN);
     m_pFileStream->Seek(32L);
 
-    m_aColumns->clear();
+    m_aColumns = new OSQLColumns();
     m_aTypes.clear();
     m_aPrecisions.clear();
     m_aScales.clear();
@@ -494,8 +494,9 @@ void ODbaseTable::refreshColumns()
         aVector.push_back(Reference< XNamed>(*aIter,UNO_QUERY)->getName());
 
     if(m_pColumns)
-        delete m_pColumns;
-    m_pColumns  = new ODbaseColumns(this,m_aMutex,aVector);
+        m_pColumns->reFill(aVector);
+    else
+        m_pColumns  = new ODbaseColumns(this,m_aMutex,aVector);
 }
 // -------------------------------------------------------------------------
 void ODbaseTable::refreshIndexes()
@@ -546,14 +547,7 @@ void SAL_CALL ODbaseTable::disposing(void)
 {
     OFileTable::disposing();
     ::osl::MutexGuard aGuard(m_aMutex);
-#ifdef DEBUG
-    for(OSQLColumns::const_iterator aIter = m_aColumns->begin();aIter != m_aColumns->end();++aIter)
-    {
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> xProp = *aIter;
-        xProp = NULL;
-    }
-#endif
-    m_aColumns->clear();
+    m_aColumns = NULL;
 }
 // -------------------------------------------------------------------------
 Sequence< Type > SAL_CALL ODbaseTable::getTypes(  ) throw(RuntimeException)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fanalyzer.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-30 09:59:56 $
+ *  last change: $Author: oj $ $Date: 2001-05-07 10:37:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,14 +75,14 @@ namespace connectivity
             OPredicateCompiler      m_aCompiler;
             OPredicateInterpreter   m_aInterpreter;
 
-            //  OCursor&    m_rCursor;
-
         public:
             OSQLAnalyzer();
 
             void describeParam(::vos::ORef<OSQLColumns> rParameterColumns); // genauere Beschreibung der Parameter
             ::std::vector<sal_Int32>* bindResultRow(OValueRow _pRow);                   // Anbinden einer Ergebniszeile an die Restrictions
             void bindParameterRow(OValueRow _pRow);             // Anbinden einer Parameterzeile an die Restrictions
+
+            void setIndexes(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _xIndexes);
 
             void dispose()
             {
@@ -94,14 +94,9 @@ namespace connectivity
             BOOL evaluateRestriction() {return m_aInterpreter.start();}
             void setOrigColumns(const OFileColumns& rCols) { m_aCompiler.setOrigColumns(rCols); }
             void setParameterColumns(::vos::ORef< connectivity::OSQLColumns > _rParaCols) { m_aCompiler.setParameterColumns(_rParaCols); }
-            virtual OOperandAttr* createOperandAttr(sal_Int32 _nPos,const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xCol);
-        };
-
-        class OFILEAnalyzer : public OSQLAnalyzer
-        {
-        public:
-            OFILEAnalyzer() : OSQLAnalyzer(){}
-            virtual OOperandAttr* createOperandAttr(sal_Int32 _nPos,const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xCol);
+            virtual OOperandAttr* createOperandAttr(sal_Int32 _nPos,
+                                                    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xCol,
+                                                    const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _xIndexes=NULL);
         };
     }
 }

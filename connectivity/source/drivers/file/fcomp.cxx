@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fcomp.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-30 10:11:27 $
+ *  last change: $Author: oj $ $Date: 2001-05-07 10:37:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,9 +109,9 @@ OPredicateCompiler::~OPredicateCompiler()
 void OPredicateCompiler::dispose()
 {
     Clean();
-    m_orgColumns = NULL;
-    if(m_aParameterColumns.isValid())
-        m_aParameterColumns->clear();
+    m_orgColumns        = NULL;
+    m_aParameterColumns = NULL;
+    m_xIndexes          = NULL;
 }
 //------------------------------------------------------------------
 //  inline OCursor& OPredicateCompiler::Cursor() const {return m_rCursor;}
@@ -466,10 +466,12 @@ OOperand* OPredicateCompiler::execute_Operand(OSQLParseNode* pPredicateNode) thr
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> xCol;
         try
         {
-            if (m_orgColumns->getByName(aColumnName) >>= xCol)  // Column existiert nicht im Resultset
-                pOperand = m_pAnalyzer->createOperandAttr(Reference< XColumnLocate>(m_orgColumns,UNO_QUERY)->findColumn(aColumnName),xCol); //new OOperandAttr(pCol);
-            else
+            if (m_orgColumns->getByName(aColumnName) >>= xCol)
             {
+                pOperand = m_pAnalyzer->createOperandAttr(Reference< XColumnLocate>(m_orgColumns,UNO_QUERY)->findColumn(aColumnName),xCol,m_xIndexes);
+            }
+            else
+            {// Column existiert nicht im Resultset
                 ::dbtools::throwGenericSQLException(::rtl::OUString::createFromAscii("Invalid Statement"),NULL);
             }
         }

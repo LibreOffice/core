@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ETable.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-04 09:58:43 $
+ *  last change: $Author: oj $ $Date: 2001-05-07 10:37:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -602,7 +602,7 @@ void SAL_CALL OFlatTable::disposing(void)
 {
     OFileTable::disposing();
     ::osl::MutexGuard aGuard(m_aMutex);
-    m_aColumns->clear();
+    m_aColumns = NULL;
 }
 // -------------------------------------------------------------------------
 Sequence< Type > SAL_CALL OFlatTable::getTypes(  ) throw(RuntimeException)

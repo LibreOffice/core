@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DResultSet.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-30 10:09:03 $
+ *  last change: $Author: oj $ $Date: 2001-05-07 10:37:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,7 @@ namespace connectivity
             // OPropertySetHelper
             virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper();
             virtual sal_Bool fillIndexValues(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier> &_xIndex);
+            virtual file::OSQLAnalyzer* createAnalyzer();
         public:
             DECLARE_SERVICE_INFO();
 

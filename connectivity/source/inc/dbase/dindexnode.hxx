@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dindexnode.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-30 10:09:03 $
+ *  last change: $Author: oj $ $Date: 2001-05-07 10:37:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,27 +92,11 @@ namespace connectivity
             ORowSetValue    xValue;                 /* Schluesselwert           */
 
         public:
-            ONDXKey():nRecord(0){}
-            inline ONDXKey(const ORowSetValue& rVal, sal_Int32 eType, UINT32 nRec)
-                : ONDXKey_BASE(eType)
-                , nRecord(nRec)
-                , xValue(rVal)
-            {}
-            ONDXKey(const rtl::OUString& aStr, UINT32 nRec = 0)
-                : ONDXKey_BASE(::com::sun::star::sdbc::DataType::VARCHAR)
-                 ,nRecord(nRec)
-            {
-                if (aStr.len())
-                    xValue = aStr;
-            }
-            ONDXKey(double aVal, UINT32 nRec = 0)
-                : ONDXKey_BASE(::com::sun::star::sdbc::DataType::DOUBLE)
-                 ,nRecord(nRec)
-                 ,xValue(aVal)
-            {
-            }
-            ONDXKey(UINT32 nRec)
-                : nRecord(nRec){}
+            ONDXKey(UINT32 nRec=0);
+            ONDXKey(const ORowSetValue& rVal, sal_Int32 eType, UINT32 nRec);
+            ONDXKey(const rtl::OUString& aStr, UINT32 nRec = 0);
+            ONDXKey(double aVal, UINT32 nRec = 0);
+
             inline ONDXKey(const ONDXKey& rKey);
 
             inline ONDXKey& operator= (const ONDXKey& rKey);
@@ -347,12 +331,16 @@ namespace connectivity
 
         inline ONDXKey::ONDXKey(const ONDXKey& rKey)
                      : ONDXKey_BASE(rKey.getDBType())
-                     ,nRecord(rKey.nRecord),xValue(rKey.xValue)
+                     ,nRecord(rKey.nRecord)
+                     ,xValue(rKey.xValue)
         {
         }
 
         inline ONDXKey& ONDXKey::operator=(const ONDXKey& rKey)
         {
+            if(&rKey == this)
+                return *this;
+
             xValue = rKey.xValue;
             nRecord = rKey.nRecord;
             m_eDBType = rKey.getDBType();

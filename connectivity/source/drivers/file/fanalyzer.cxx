@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fanalyzer.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-30 10:11:27 $
+ *  last change: $Author: oj $ $Date: 2001-05-07 10:37:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,20 +67,24 @@
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
 #endif
-#ifndef _COM_SUN_STAR_CONTAINER_XINDEXACCESS_HPP_
-#include <com/sun/star/container/XIndexAccess.hpp>
-#endif
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
 #endif
+//#ifndef _CONNECTIVITY_FILE_TABLE_HXX_
+//#include "file/FTable.hxx"
+//#endif
+#ifndef _CONNECTIVITY_SQLNODE_HXX
+#include "connectivity/sqlnode.hxx"
+#endif
 
 
-using namespace connectivity;
-using namespace connectivity::file;
+using namespace ::connectivity;
+using namespace ::connectivity::file;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 
@@ -89,17 +93,23 @@ typedef ::std::list<OEvaluateSet*>      OEvaluateSetList;
 OSQLAnalyzer::OSQLAnalyzer()
                : m_aCompiler(this)
                , m_aInterpreter(m_aCompiler)
-               //   ,m_rCursor(rCurs)
-{}
+{
+}
+// -----------------------------------------------------------------------------
+void OSQLAnalyzer::setIndexes(const Reference< XNameAccess>& _xIndexes)
+{
+    m_aCompiler.m_xIndexes = _xIndexes;
+}
 //------------------------------------------------------------------
 void OSQLAnalyzer::start(OSQLParseNode* pSQLParseNode)
 {
-    if (!pSQLParseNode) return;
+    if (!pSQLParseNode)
+        return;
 
     // Parse Tree analysieren (je nach Statement-Typ)
     // und Zeiger auf WHERE-Klausel setzen:
-    OSQLParseNode * pWhereClause = NULL;
-    OSQLParseNode * pOrderbyClause = NULL;
+    OSQLParseNode* pWhereClause     = NULL;
+    OSQLParseNode* pOrderbyClause   = NULL;
 
     if (SQL_ISRULE(pSQLParseNode,select_statement))
     {
@@ -183,13 +193,13 @@ void OSQLAnalyzer::start(OSQLParseNode* pSQLParseNode)
                     pEvaluateSet = pAttr->preProcess(PTR_CAST(OBoolOperator,pCode1));
             }
 
+            pAttr->bindValue(_pRow);
+
             if (pEvaluateSet)
             {
                 aEvaluateSetList.push_back(pEvaluateSet);
                 pEvaluateSet = NULL;
             }
-            else
-                pAttr->bindValue(_pRow);
         }
     }
 
@@ -273,7 +283,7 @@ void OSQLAnalyzer::describeParam(::vos::ORef<OSQLColumns> rParameterColumns)
                     OOperandAttr *pLeft  = PTR_CAST(OOperandAttr,*(rCodeList.end() - 2));
                     if (pLeft)
                     {
-                        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> xCol;
+                        Reference< XPropertySet> xCol;
                         Reference< XIndexAccess>(m_aCompiler.getOrigColumns(),UNO_QUERY)->getByIndex(pLeft->getRowPos()) >>= xCol;
                         OSL_ENSURE(xCol.is(), "Ungültige Struktur");
                         pParam->describe(xCol, aNewParamColumns);
@@ -301,14 +311,11 @@ void OSQLAnalyzer::clean()
     m_aCompiler.Clean();
 }
 // -----------------------------------------------------------------------------
-OOperandAttr* OSQLAnalyzer::createOperandAttr(sal_Int32 _nPos,const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xCol)
+OOperandAttr* OSQLAnalyzer::createOperandAttr(sal_Int32 _nPos,
+                                              const Reference< XPropertySet>& _xCol,
+                                              const Reference< XNameAccess>& _xIndexes)
 {
     return new OOperandAttr(_nPos,_xCol);
-}
-// -----------------------------------------------------------------------------
-OOperandAttr* OFILEAnalyzer::createOperandAttr(sal_Int32 _nPos,const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xCol)
-{
-    return new OFILEOperandAttr(_nPos,_xCol);
 }
 // -----------------------------------------------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-03 07:14:12 $
+ *  last change: $Author: oj $ $Date: 2001-05-07 10:37:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,9 @@
 #ifndef _COM_SUN_STAR_SDBC_RESULTSETCONCURRENCY_HPP_
 #include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDBCX_XINDEXESSUPPLIER_HPP_
+#include <com/sun/star/sdbcx/XIndexesSupplier.hpp>
+#endif
 
 
 #include <algorithm>
@@ -219,7 +222,8 @@ void OResultSet::disposing(void)
     m_xColumns      = NULL;
     m_xParamColumns = NULL;
 
-    m_aSQLAnalyzer.dispose();
+    if(m_pSQLAnalyzer)
+        m_pSQLAnalyzer->dispose();
     if(m_pTable)
     {
         m_pTable->release();
@@ -237,8 +241,6 @@ void OResultSet::disposing(void)
         m_aInsertRow->clear();
     if(m_aAssignValues.isValid())
         m_aAssignValues->clear();
-    if(m_xParamColumns.isValid())
-        m_xParamColumns->clear();
     m_aBookmarkToPos.clear();
 }
 // -------------------------------------------------------------------------
@@ -729,8 +731,9 @@ sal_Bool SAL_CALL OResultSet::isBeforeFirst(  ) throw(SQLException, RuntimeExcep
 // -------------------------------------------------------------------------
 sal_Bool OResultSet::evaluate()
 {
+    OSL_ENSURE(m_pSQLAnalyzer,"OResultSet::evaluate: Analyzer isn't set!");
     sal_Bool bRet = sal_True;
-    while(!m_aSQLAnalyzer.evaluateRestriction())
+    while(!m_pSQLAnalyzer->evaluateRestriction())
     {
         if(m_pEvaluationKeySet)
         {
@@ -1176,6 +1179,7 @@ BOOL OResultSet::ExecuteRow(OFileTable::FilePosition eFirstCursorPosition,
                                BOOL bEvaluate,
                                BOOL bRetrieveData)
 {
+    OSL_ENSURE(m_pSQLAnalyzer,"OResultSet::ExecuteRow: Analyzer isn't set!");
 
     // Fuer weitere Fetch-Operationen werden diese Angaben ggf. veraendert ...
     OFileTable::FilePosition eCursorPosition = eFirstCursorPosition;
@@ -1208,8 +1212,8 @@ again:
         m_pTable->fetchRow(m_aEvaluateRow, m_pTable->getTableColumns().getBody(), sal_True,TRUE);
 
         if (m_aEvaluateRow->isDeleted() ||
-            (m_aSQLAnalyzer.hasRestriction() && //!bShowDeleted && m_aEvaluateRow->isDeleted() ||// keine Anzeige von geloeschten Sätzen
-                !m_aSQLAnalyzer.evaluateRestriction()))      // Auswerten der Bedingungen
+            (m_pSQLAnalyzer->hasRestriction() && //!bShowDeleted && m_aEvaluateRow->isDeleted() ||// keine Anzeige von geloeschten Sätzen
+                !m_pSQLAnalyzer->evaluateRestriction()))         // Auswerten der Bedingungen
         {                                                // naechsten Satz auswerten
             // aktuelle Zeile loeschen im Keyset
             OSL_ENSURE(!m_pFileSet ||
@@ -1947,6 +1951,7 @@ connectivity::file::OFILEKeyCompare(const void * elem1, const void * elem2)
 //------------------------------------------------------------------
 BOOL OResultSet::OpenImpl()
 {
+    m_pSQLAnalyzer = createAnalyzer();
     const OSQLTables& xTabs = m_aSQLIterator.getTables();
     OSL_ENSURE(xTabs.begin() != xTabs.end(),"NO table in statement!");
 
@@ -1976,7 +1981,8 @@ BOOL OResultSet::OpenImpl()
     if(!m_xParamColumns.isValid())
         m_xParamColumns = new OSQLColumns();
 
-    m_aSQLAnalyzer.clean();
+    OSL_ENSURE(m_pSQLAnalyzer,"OResultSet::OpenImpl: Analyzer isn't set!");
+    m_pSQLAnalyzer->clean();
 
     Reference< ::com::sun::star::lang::XUnoTunnel> xTunnel(xTable,UNO_QUERY);
     if(xTunnel.is())
@@ -1986,13 +1992,16 @@ BOOL OResultSet::OpenImpl()
             m_pTable->acquire();
     }
     OSL_ENSURE(m_pTable,"We need a table object!");
+    Reference<XIndexesSupplier> xIndexSup(xTable,UNO_QUERY);
+    if(xIndexSup.is())
+        m_pSQLAnalyzer->setIndexes(xIndexSup->getIndexes());
     m_nResultSetConcurrency = (m_pTable->isReadOnly() || isCount()) ? ResultSetConcurrency::READ_ONLY : ResultSetConcurrency::UPDATABLE;
 
     GetAssignValues(); // assign values and describe parameter columns
-    m_aSQLAnalyzer.setParameterColumns(m_xParamColumns);
+    m_pSQLAnalyzer->setParameterColumns(m_xParamColumns);
     anylizeSQL();
     if (m_xParamColumns->size())
-        m_aSQLAnalyzer.describeParam(m_xParamColumns);
+        m_pSQLAnalyzer->describeParam(m_xParamColumns);
 
     sal_Int32 i=0;
     // initialize the column index map (mapping select columns to table columns)
@@ -2028,7 +2037,7 @@ BOOL OResultSet::OpenImpl()
         if (m_aParameterRow.isValid() &&  nParaCount < m_aParameterRow->size())
         {
             setBoundedColumns(m_aEvaluateRow,m_xParamColumns,xNames,sal_False);
-            m_aSQLAnalyzer.bindParameterRow(m_aParameterRow);
+            m_pSQLAnalyzer->bindParameterRow(m_aParameterRow);
         }
     }
 
@@ -2042,7 +2051,7 @@ BOOL OResultSet::OpenImpl()
         //  (*aEvaluateRow)[0] = new ODbVariant();
 
         // Row zur Auswertung binden, wenn Preprocessing erfolg, dann bereits ein Keyset
-        m_pEvaluationKeySet = m_aSQLAnalyzer.bindResultRow(m_aEvaluateRow); // Werte im Code des Compilers setzen
+        m_pEvaluationKeySet = m_pSQLAnalyzer->bindResultRow(m_aEvaluateRow);    // Werte im Code des Compilers setzen
                                                     // (Verbindung zur ResultRow herstellen)
     }
 
@@ -2165,7 +2174,7 @@ BOOL OResultSet::OpenImpl()
                 // dabei den "Key", nach dem sortiert werden soll, in den Index eintragen:
                 if (IsSorted())
                 {
-                    if (!m_aSQLAnalyzer.hasRestriction() && m_nOrderbyColumnNumber[1] == SQL_COLUMN_NOTFOUND)
+                    if (!m_pSQLAnalyzer->hasRestriction() && m_nOrderbyColumnNumber[1] == SQL_COLUMN_NOTFOUND)
                     {
                         // Ist nur ein Feld fuer die Sortierung angegeben
                         // Und diese Feld ist indiziert, dann den Index ausnutzen
@@ -2232,7 +2241,7 @@ BOOL OResultSet::OpenImpl()
                 {
                     m_pFileSet = new OKeySet();
 
-                    if (!m_aSQLAnalyzer.hasRestriction())
+                    if (!m_pSQLAnalyzer->hasRestriction())
                     // jetzt kann das Keyset schon gefuellt werden!
                     // Aber Achtung: es wird davon ausgegangen, das die FilePositionen als Folge 1..n
                     // abgelegt werden!
@@ -2386,9 +2395,10 @@ BOOL OResultSet::OpenImpl()
 //------------------------------------------------------------------
 void OResultSet::anylizeSQL()
 {
+    OSL_ENSURE(m_pSQLAnalyzer,"OResultSet::anylizeSQL: Analyzer isn't set!");
     // start analysing the statement
-    m_aSQLAnalyzer.setOrigColumns(m_xColNames);
-    m_aSQLAnalyzer.start(m_pParseTree);
+    m_pSQLAnalyzer->setOrigColumns(m_xColNames);
+    m_pSQLAnalyzer->start(m_pParseTree);
 
     const OSQLParseNode* pOrderbyClause = m_aSQLIterator.getOrderTree();
     if(pOrderbyClause)
@@ -3002,6 +3012,11 @@ void SAL_CALL OResultSet::release() throw(::com::sun::star::uno::RuntimeExceptio
 ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL OResultSet::getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
+}
+// -----------------------------------------------------------------------------
+OSQLAnalyzer* OResultSet::createAnalyzer()
+{
+    return new OSQLAnalyzer();
 }
 // -----------------------------------------------------------------------------
 

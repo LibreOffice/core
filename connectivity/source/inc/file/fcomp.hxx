@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fcomp.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-10 08:51:30 $
+ *  last change: $Author: oj $ $Date: 2001-05-07 10:37:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,7 @@ namespace connectivity
             OFileColumns                            m_orgColumns; // in filecurs this are the filecolumns
             ::vos::ORef< connectivity::OSQLColumns> m_aParameterColumns;
             OSQLAnalyzer*                           m_pAnalyzer;
+            ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess> m_xIndexes;
             sal_Int32                               m_nParamCounter;
             sal_Bool                                m_bORCondition;
 
@@ -115,9 +116,6 @@ namespace connectivity
             OOperand* execute_LIKE(connectivity::OSQLParseNode* pPredicateNode) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             OOperand* execute_ISNULL(connectivity::OSQLParseNode* pPredicateNode) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             OOperand* execute_Operand(connectivity::OSQLParseNode* pPredicateNode) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-
-        private:
-            //  OCursor& Cursor() const;
         };
 
 

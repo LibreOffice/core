@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fcode.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-30 10:11:27 $
+ *  last change: $Author: oj $ $Date: 2001-05-07 10:37:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,19 +91,19 @@
 #include "propertyids.hxx"
 #endif
 
-
 using namespace connectivity;
 using namespace connectivity::file;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::sdbcx;
 
 TYPEINIT0(OCode);
 TYPEINIT1(OOperand, OCode);
 TYPEINIT1(OOperandRow, OOperand);
 TYPEINIT1(OOperandAttr, OOperandRow);
-TYPEINIT1(OFILEOperandAttr, OOperandAttr);
 TYPEINIT1(OOperandParam, OOperandRow);
 TYPEINIT1(OOperandValue, OOperand);
 TYPEINIT1(OOperandConst, OOperandValue);
@@ -170,40 +170,11 @@ OOperandAttr::OOperandAttr(sal_uInt16 _nPos,const Reference< XPropertySet>& _xCo
     , m_xColumn(_xColumn)
 {
 }
-//------------------------------------------------------------------
-OFILEOperandAttr::OFILEOperandAttr(sal_uInt16 _nPos,const Reference< XPropertySet>& _xColumn)
-               :OOperandAttr(_nPos,_xColumn)
-{
-}
 // -------------------------------------------------------------------------
-sal_Bool OFILEOperandAttr::isIndexed() const
+sal_Bool OOperandAttr::isIndexed() const
 {
-    return ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>(m_xColumn,::com::sun::star::uno::UNO_QUERY)->getPropertySetInfo()->hasPropertyByName(connectivity::file::PROPERTY_ISASCENDING);
+    return sal_False;
 }
-//------------------------------------------------------------------
-OEvaluateSet* OFILEOperandAttr::preProcess(OBoolOperator* pOp, OOperand* pRight)
-{
-    OEvaluateSet* pEvaluateSet = NULL;
-    if (isIndexed())
-    {
-        OSL_ENSURE(0,"TODO: OFILEOperandAttr::preProcess");
-//      OFILEIndexIterator* pIter = pCol->GetIndex()->CreateIterator(pOp,pRight);
-//
-//      if (pIter->Status().IsSuccessful())
-//      {
-//          pEvaluateSet = new OEvaluateSet();
-//          ULONG nRec = pIter->First();
-//          while (nRec != SQL_INDEX_ENTRY_NOTFOUND)
-//          {
-//              pEvaluateSet->Insert(nRec);
-//              nRec = pIter->Next();
-//          }
-//      }
-//      delete pIter;
-    }
-    return pEvaluateSet;
-}
-
 //------------------------------------------------------------------
 OOperandParam::OOperandParam(OSQLParseNode* pNode, sal_Int32 _nPos)
     : OOperandRow(_nPos, DataType::VARCHAR)      // Standard-Typ
@@ -272,15 +243,16 @@ OOperandConst::OOperandConst(const OSQLParseNode& rColumnRef, const rtl::OUStrin
     switch (rColumnRef.getNodeType())
     {
         case SQL_NODE_STRING:
-            m_aValue = aStrValue;
-            m_eDBType = DataType::VARCHAR;
+            m_aValue    = aStrValue;
+            m_eDBType   = DataType::VARCHAR;
+            m_aValue.setBound(sal_True);
             return;
         case SQL_NODE_INTNUM:
         case SQL_NODE_APPROXNUM:
         {
-            m_aValue = aStrValue.toDouble();
-
-            m_eDBType = DataType::DOUBLE;
+            m_aValue    = aStrValue.toDouble();
+            m_eDBType   = DataType::DOUBLE;
+            m_aValue.setBound(sal_True);
             return;
         }
     }
@@ -299,6 +271,7 @@ OOperandConst::OOperandConst(const OSQLParseNode& rColumnRef, const rtl::OUStrin
     {
         OSL_ASSERT("Parse Error");
     }
+    m_aValue.setBound(sal_True);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -494,11 +467,6 @@ double OOp_MUL::operate(const double& fLeft,const double& fRight) const
 double OOp_DIV::operate(const double& fLeft,const double& fRight) const
 {
     return fLeft / fRight;
-}
-// -----------------------------------------------------------------------------
-sal_Bool OOperandAttr::isIndexed() const
-{
-    return sal_False;
 }
 // -----------------------------------------------------------------------------
 OEvaluateSet* OOperandAttr::preProcess(OBoolOperator* pOp, OOperand* pRight)

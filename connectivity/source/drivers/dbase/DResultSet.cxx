@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DResultSet.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-30 10:11:27 $
+ *  last change: $Author: oj $ $Date: 2001-05-07 10:37:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,9 @@
 #endif
 #ifndef _CONNECTIVITY_DBASE_INDEXITER_HXX_
 #include "dbase/DIndexIter.hxx"
+#endif
+#ifndef CONNECTIVITY_DBASE_DCODE_HXX
+#include "dbase/DCode.hxx"
 #endif
 
 using namespace connectivity::dbase;
@@ -241,6 +244,7 @@ sal_Bool ODbaseResultSet::fillIndexValues(const Reference< XColumnsSupplier> &_x
                 //  m_bFileSetFrozen = sal_True;
                 //  if(!bDistinct)
                     //  SetRowCount(pFileSet->count());
+                delete pIter;
                 return sal_True;
             }
             delete pIter;
@@ -260,7 +264,6 @@ cppu::IPropertyArrayHelper* ODbaseResultSet::createArrayHelper() const
     describeProperties(aProps);
     return new cppu::OPropertyArrayHelper(aProps);
 }
-// -------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
 void SAL_CALL ODbaseResultSet::acquire() throw(::com::sun::star::uno::RuntimeException)
 {
@@ -275,6 +278,11 @@ void SAL_CALL ODbaseResultSet::release() throw(::com::sun::star::uno::RuntimeExc
 ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL ODbaseResultSet::getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
+}
+// -----------------------------------------------------------------------------
+OSQLAnalyzer* ODbaseResultSet::createAnalyzer()
+{
+    return new OFILEAnalyzer();
 }
 // -----------------------------------------------------------------------------
 

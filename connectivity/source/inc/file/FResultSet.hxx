@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-30 09:59:56 $
+ *  last change: $Author: oj $ $Date: 2001-05-07 10:37:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -275,7 +275,7 @@ OFILEKeyCompare(const void * elem1, const void * elem2);
             OFileTable*                                         m_pTable;
             connectivity::OSQLParseNode*                        m_pParseTree;
 
-            OFILEAnalyzer                                       m_aSQLAnalyzer;
+            OSQLAnalyzer*                                       m_pSQLAnalyzer;
             connectivity::OSQLParseTreeIterator&                m_aSQLIterator;
 
             sal_Int32                                           m_nFetchSize;
@@ -344,6 +344,8 @@ OFILEKeyCompare(const void * elem1, const void * elem2);
 
             BOOL Move(OFileTable::FilePosition eCursorPosition, INT32 nOffset, BOOL bRetrieveData);
             BOOL SkipDeleted(OFileTable::FilePosition eCursorPosition, INT32 nOffset, BOOL bRetrieveData);
+            // create the analyzer
+            virtual OSQLAnalyzer* createAnalyzer();
 
             virtual sal_Bool fillIndexValues(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier> &_xIndex)
             { return sal_False; }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CTable.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-04 09:58:41 $
+ *  last change: $Author: oj $ $Date: 2001-05-07 10:37:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -708,14 +708,7 @@ void SAL_CALL OCalcTable::disposing(void)
 {
     OFileTable::disposing();
     ::osl::MutexGuard aGuard(m_aMutex);
-#ifdef DEBUG
-    for(OSQLColumns::const_iterator aIter = m_aColumns->begin();aIter != m_aColumns->end();++aIter)
-    {
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> xProp = *aIter;
-        xProp = NULL;
-    }
-#endif
-    m_aColumns->clear();
+    m_aColumns = NULL;
 }
 // -------------------------------------------------------------------------
 Sequence< Type > SAL_CALL OCalcTable::getTypes(  ) throw(RuntimeException)

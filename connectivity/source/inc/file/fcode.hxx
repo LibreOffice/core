@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fcode.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-30 09:59:56 $
+ *  last change: $Author: oj $ $Date: 2001-05-07 10:37:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,9 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
 #endif
+#ifndef _COM_SUN_STAR_CONTAINER_XINDEXACCESS_HPP_
+#include <com/sun/star/container/XIndexAccess.hpp>
+#endif
 #ifndef _CONNECTIVITY_FILE_VALUE_HXX_
 #include "FValue.hxx"
 #endif
@@ -89,6 +92,10 @@
 namespace connectivity
 {
     class OSQLParseNode;
+    namespace dbase
+    {
+        class ODbaseIndex;
+    }
     namespace file
     {
 
@@ -152,7 +159,8 @@ namespace connectivity
             ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> m_xColumn;
 
         public:
-            OOperandAttr(sal_uInt16 _nPos,const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xColumn);
+            OOperandAttr(sal_uInt16 _nPos,
+                         const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xColumn);
             ~OOperandAttr()
             {
                 m_xColumn = NULL;
@@ -162,18 +170,6 @@ namespace connectivity
             virtual OEvaluateSet* preProcess(OBoolOperator* pOp, OOperand* pRight = 0);
             TYPEINFO();
         };
-
-        // Attribute aus einer Ergebniszeile
-        class OFILEOperandAttr : public OOperandAttr
-        {
-        public:
-            OFILEOperandAttr(sal_uInt16 _nPos,const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xColumn);
-
-            virtual sal_Bool isIndexed() const;
-            virtual OEvaluateSet* preProcess(OBoolOperator* pOp, OOperand* pRight = 0);
-            TYPEINFO();
-        };
-
 
         // Parameter für ein Prädikat
         class OOperandParam : public OOperandRow

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dindexnode.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-30 13:38:23 $
+ *  last change: $Author: oj $ $Date: 2001-05-07 10:37:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,39 @@ using namespace connectivity;
 using namespace connectivity::dbase;
 using namespace connectivity::file;
 using namespace com::sun::star::sdbc;
+// -----------------------------------------------------------------------------
+ONDXKey::ONDXKey(UINT32 nRec)
+    :nRecord(nRec)
+{
+}
+// -----------------------------------------------------------------------------
+ONDXKey::ONDXKey(const ORowSetValue& rVal, sal_Int32 eType, UINT32 nRec)
+    : ONDXKey_BASE(eType)
+    , nRecord(nRec)
+    , xValue(rVal)
+{
+}
+// -----------------------------------------------------------------------------
+ONDXKey::ONDXKey(const rtl::OUString& aStr, UINT32 nRec)
+    : ONDXKey_BASE(::com::sun::star::sdbc::DataType::VARCHAR)
+     ,nRecord(nRec)
+{
+    if (aStr.getLength())
+    {
+        xValue = aStr;
+        xValue.setBound(sal_True);
+    }
+}
+// -----------------------------------------------------------------------------
+
+ONDXKey::ONDXKey(double aVal, UINT32 nRec)
+    : ONDXKey_BASE(::com::sun::star::sdbc::DataType::DOUBLE)
+     ,nRecord(nRec)
+     ,xValue(aVal)
+{
+}
+// -----------------------------------------------------------------------------
+
 //==================================================================
 // Index Seite
 //==================================================================
@@ -892,7 +925,7 @@ void ONDXNode::Read(SvStream &rStream, ODbaseIndex& rIndex)
         aBuf.EraseTrailingChars();
 
         //  aKey = ONDXKey((aBuf,rIndex.GetDBFConnection()->GetCharacterSet()) ,aKey.nRecord);
-        aKey = ONDXKey((aBuf,rIndex.m_pTable->getConnection()->getTextEncoding()) ,aKey.nRecord);
+        aKey = ONDXKey(::rtl::OUString(aBuf.GetBuffer(),aBuf.Len(),rIndex.m_pTable->getConnection()->getTextEncoding()) ,aKey.nRecord);
     }
     rStream >> aChild;
 }
