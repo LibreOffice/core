@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawview.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 10:14:19 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 12:59:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -337,6 +337,11 @@ void ScDrawView::InvalidateDrawTextAttrs()
     rBindings.Invalidate( SID_TEXTDIRECTION_TOP_TO_BOTTOM );
     rBindings.Invalidate( SID_ATTR_PARA_LEFT_TO_RIGHT );
     rBindings.Invalidate( SID_ATTR_PARA_RIGHT_TO_LEFT );
+    // pseudo slots for Format menu
+    rBindings.Invalidate( SID_ALIGN_ANY_LEFT );
+    rBindings.Invalidate( SID_ALIGN_ANY_HCENTER );
+    rBindings.Invalidate( SID_ALIGN_ANY_RIGHT );
+    rBindings.Invalidate( SID_ALIGN_ANY_JUSTIFIED );
 }
 
 void ScDrawView::DrawMarks( OutputDevice* pOut ) const
