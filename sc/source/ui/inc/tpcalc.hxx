@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpcalc.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-05-04 10:06:50 $
+ *  last change: $Author: er $ $Date: 2001-05-16 10:51:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,7 @@ private:
     CheckBox        aBtnCase;
     CheckBox        aBtnCalc;
     CheckBox        aBtnMatch;
+    CheckBox        aBtnRegex;
     CheckBox        aBtnLookUp;
 
     FixedText       aFtPrec;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpcalc.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-05-04 10:06:50 $
+ *  last change: $Author: er $ $Date: 2001-05-16 10:52:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,7 @@ ScTpCalcOptions::ScTpCalcOptions( Window*           pParent,
         aBtnCase        ( this, ScResId( BTN_CASE ) ),
         aBtnCalc        ( this, ScResId( BTN_CALC ) ),
         aBtnMatch       ( this, ScResId( BTN_MATCH ) ),
+        aBtnRegex       ( this, ScResId( BTN_REGEX ) ),
         aBtnLookUp      ( this, ScResId( BTN_LOOKUP ) ),
         aBtnIterate     ( this, ScResId( BTN_ITERATE ) ),
         aFtSteps        ( this, ScResId( FT_STEPS ) ),
@@ -189,6 +190,7 @@ void __EXPORT ScTpCalcOptions::Reset( const SfxItemSet& rCoreAttrs )
     aBtnCase   .Check( !pLocalOptions->IsIgnoreCase() );
     aBtnCalc   .Check( pLocalOptions->IsCalcAsShown() );
     aBtnMatch  .Check( pLocalOptions->IsMatchWholeCell() );
+    aBtnRegex  .Check( pLocalOptions->IsFormulaRegexEnabled() );
     aBtnLookUp .Check( pLocalOptions->IsLookUpColRowNames() );
     aBtnIterate.Check( pLocalOptions->IsIter() );
     aEdSteps   .SetValue( pLocalOptions->GetIterCount() );
@@ -224,6 +226,7 @@ BOOL __EXPORT ScTpCalcOptions::FillItemSet( SfxItemSet& rCoreAttrs )
     pLocalOptions->SetIgnoreCase( !aBtnCase.IsChecked() );
     pLocalOptions->SetCalcAsShown( aBtnCalc.IsChecked() );
     pLocalOptions->SetMatchWholeCell( aBtnMatch.IsChecked() );
+    pLocalOptions->SetFormulaRegexEnabled( aBtnRegex.IsChecked() );
     pLocalOptions->SetLookUpColRowNames( aBtnLookUp.IsChecked() );
 
     if ( *pLocalOptions != *pOldOptions )

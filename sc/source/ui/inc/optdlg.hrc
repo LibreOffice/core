@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-14 19:06:40 $
+ *  last change: $Author: er $ $Date: 2001-05-16 10:50:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,7 @@
 #define BTN_CALC            17
 #define BTN_MATCH           18
 #define BTN_LOOKUP          19
+#define BTN_REGEX           20
 
 // TP_VIEW:
 #define BTN_VSCROLL         1

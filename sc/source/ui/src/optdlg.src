@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: os $ $Date: 2001-05-16 06:31:18 $
+ *  last change: $Author: er $ $Date: 2001-05-16 10:50:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,7 +222,7 @@ TabPage RID_SCPAGE_CALC
     SVLook = TRUE ;
     Hide = TRUE ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     CheckBox BTN_ITERATE
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
@@ -667,9 +667,37 @@ TabPage RID_SCPAGE_CALC
         Text[ finnish ] = "Hakuehtojen = ja <> on koskettava ~soluja kokonaisuudessaan";
         Text[ catalan ] = "Criterios de ~búsqueda = y <> deben coincidir con celdas completas";
     };
-    CheckBox BTN_LOOKUP
+    CheckBox BTN_REGEX
     {
         Pos = MAP_APPFONT ( 6 , 119 ) ;
+        Size = MAP_APPFONT ( 240 , 10 ) ;
+        Text = "Reguläre Ausdrücke in Formeln ermöglichen" ;
+        Text [ ENGLISH ] = "Enable regular expressions in formulas" ;
+        Text [ english_us ] = "Enable regular expressions in formulas" ;
+        Text [ italian ] = "Enable regular expressions in formulas" ;
+        Text [ spanish ] = "Enable regular expressions in formulas" ;
+        Text [ french ] = "Enable regular expressions in formulas" ;
+        Text [ dutch ] = "Enable regular expressions in formulas" ;
+        Text [ swedish ] = "Enable regular expressions in formulas" ;
+        Text [ danish ] = "Enable regular expressions in formulas" ;
+        Text [ portuguese_brazilian ] = "Enable regular expressions in formulas" ;
+        Text [ portuguese ] = "Enable regular expressions in formulas" ;
+        Text[ chinese_simplified ] = "Enable regular expressions in formulas";
+        Text[ russian ] = "Enable regular expressions in formulas";
+        Text[ polish ] = "Enable regular expressions in formulas";
+        Text[ japanese ] = "Enable regular expressions in formulas";
+        Text[ chinese_traditional ] = "Enable regular expressions in formulas";
+        Text[ arabic ] = "Enable regular expressions in formulas";
+        Text[ greek ] = "Enable regular expressions in formulas";
+        Text[ korean ] = "Enable regular expressions in formulas";
+        Text[ turkish ] = "Enable regular expressions in formulas";
+        Text[ language_user1 ] = " ";
+        Text[ finnish ] = "Enable regular expressions in formulas";
+        Text[ catalan ] = "Enable regular expressions in formulas";
+    };
+    CheckBox BTN_LOOKUP
+    {
+        Pos = MAP_APPFONT ( 6 , 133 ) ;
         Size = MAP_APPFONT ( 240 , 10 ) ;
         Text = "Spalten-/Zeilen~beschriftungen automatisch suchen" ;
         Text [ ENGLISH ] = "Search column and row ~labels automatically" ;
