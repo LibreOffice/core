@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtflde.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-22 12:27:36 $
+ *  last change: $Author: dvo $ $Date: 2000-11-22 13:01:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,10 +186,6 @@
 
 #ifndef _COM_SUN_STAR_UTIL_NUMBERFORMAT_HPP_
 #include <com/sun/star/util/NumberFormat.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_TEXT_BIBLIOGRAPHYDATATYPE_HPP_
-#include <com/sun/star/text/BibliographyDataType.hpp>
 #endif
 
 #ifndef _RTL_USTRBUF_HXX_
@@ -429,8 +425,7 @@ XMLTextFieldExport::XMLTextFieldExport( SvXMLExport& rExp )
       sPropertyDependentTextFields(
           RTL_CONSTASCII_USTRINGPARAM("DependentTextFields")),
       sPropertyURL(RTL_CONSTASCII_USTRINGPARAM("URL")),
-      sPropertyTargetFrame(RTL_CONSTASCII_USTRINGPARAM("TargetFrame")),
-      sPropertyFields(RTL_CONSTASCII_USTRINGPARAM("Fields"))
+      sPropertyTargetFrame(RTL_CONSTASCII_USTRINGPARAM("TargetFrame"))
 {
 }
 
@@ -1486,11 +1481,9 @@ void XMLTextFieldExport::ExportField(const Reference<XTextField> & rTextField )
     }
 
     case FIELD_ID_BIBLIOGRAPHY:
-    {
-        ProcessBibliographyData(xPropSet);
-        ExportElement(sXML_bibliography_mark, sPresentation);
+        // TODO: API missing
+        DBG_ERROR("not implemeted; API is missing.");
         break;
-    }
 
     case FIELD_ID_UNKNOWN:
     default:
@@ -2103,78 +2096,6 @@ void XMLTextFieldExport::ProcessDateTime(const sal_Char* sXMLName,
     }
 }
 
-SvXMLEnumMapEntry __READONLY_DATA aBibliographyDataTypeMap[] =
-{
-    { sXML_article,         BibliographyDataType::ARTICLE },
-    { sXML_book,            BibliographyDataType::BOOK },
-    { sXML_booklet,         BibliographyDataType::BOOKLET },
-    { sXML_conference,      BibliographyDataType::CONFERENCE },
-    { sXML_custom1,         BibliographyDataType::CUSTOM1 },
-    { sXML_custom2,         BibliographyDataType::CUSTOM2 },
-    { sXML_custom3,         BibliographyDataType::CUSTOM3 },
-    { sXML_custom4,         BibliographyDataType::CUSTOM4 },
-    { sXML_custom5,         BibliographyDataType::CUSTOM5 },
-    { sXML_email,           BibliographyDataType::EMAIL },
-    { sXML_inbook,          BibliographyDataType::INBOOK },
-    { sXML_incollection,    BibliographyDataType::INCOLLECTION },
-    { sXML_inproceedings,   BibliographyDataType::INPROCEEDINGS },
-    { sXML_journal,         BibliographyDataType::JOURNAL },
-    { sXML_manual,          BibliographyDataType::MANUAL },
-    { sXML_mastersthesis,   BibliographyDataType::MASTERSTHESIS },
-    { sXML_misc,            BibliographyDataType::MISC },
-    { sXML_phdthesis,       BibliographyDataType::PHDTHESIS },
-    { sXML_proceedings,     BibliographyDataType::PROCEEDINGS },
-    { sXML_techreport,      BibliographyDataType::TECHREPORT },
-    { sXML_unpublished,     BibliographyDataType::UNPUBLISHED },
-    { sXML_www,             BibliographyDataType::WWW },
-    { 0, 0 }
-};
-
-
-
-void XMLTextFieldExport::ProcessBibliographyData(
-    Reference<XPropertySet>& rPropSet)
-{
-    // get the values
-    Any aAny = rPropSet->getPropertyValue(sPropertyFields);
-    Sequence<PropertyValue> aValues;
-    aAny >>= aValues;
-
-    // one attribute per value (unless empty)
-    sal_Int32 nLength = aValues.getLength();
-    for (sal_Int32 i = 0; i < nLength; i++)
-    {
-        if (aValues[i].Name.equalsAsciiL("BibiliographicType",
-                                         sizeof("BibiliographicType")-1))
-        {
-            sal_Int16 nTypeId;
-            aValues[i].Value >>= nTypeId;
-            OUStringBuffer sBuf;
-
-            if (SvXMLUnitConverter::convertEnum(sBuf, nTypeId,
-                                                aBibliographyDataTypeMap))
-            {
-                rExport.AddAttribute(XML_NAMESPACE_TEXT,
-                                     sXML_bibiliographic_type,
-                                     sBuf.makeStringAndClear());
-            }
-            // else: ignore this argument
-        }
-        else
-        {
-            OUString sStr;
-            aValues[i].Value >>= sStr;
-
-            if (sStr.getLength() > 0)
-            {
-                rExport.AddAttribute(XML_NAMESPACE_TEXT,
-                                     MapBibliographyFieldName(aValues[i].Name),
-                                     sStr);
-            }
-        }
-    }
-}
-
 
 // explode a field master name into field type and field name
 sal_Bool XMLTextFieldExport::ExplodeFieldMasterName(
@@ -2238,6 +2159,91 @@ sal_Bool XMLTextFieldExport::GetDependentFieldPropertySet(
     }
 }
 
+// // get PropertySet of (any) DependentTextField for this FieldMaster
+// Reference<XPropertySet> XMLTextFieldExport::GetDependentFieldPropertySet(
+//  const OUString& sFieldMasterName,
+//  const Reference<frame::XModel> & rModel)
+// {
+//  // property (or method) for field master is missing
+//  // according to OS, there will be an XEnumerationAccess
+//  // workaround: get XEnum for all fields, and loop until proper field found
+//  // TODO: all this junk is to be deleted, when proper solution is around!
+
+//  // get text fields supplier
+//  Reference<XTextFieldsSupplier> xTextFieldsSupp(rModel, UNO_QUERY);
+
+//  // iterate over field masters
+//  Reference<container::XEnumeration> xFieldEnum(
+//      xTextFieldsSupp->getTextFields()->createEnumeration(), UNO_QUERY);
+
+//  Any aAny;
+//  Reference<XTextField> xTextField;
+//  for( ; xFieldEnum->hasMoreElements();) {
+//      aAny = xFieldEnum->nextElement();
+//      aAny >>= xTextField;
+
+//      // check, whether Textfield is dependent textfield.
+//      // If so, check master!
+//      Reference<XDependentTextField> xDepTextField(xTextField, UNO_QUERY);
+//      if (xDepTextField.is()) {
+
+//          // compare name
+//          // a) get field service name
+//          // b) get fieldmaster name (= var name)
+//          // c) compare <a>.<b> to end of field master name
+
+//          // a) (copied from GetFieldID)
+
+//          // get service names for rTextField (via XServiceInfo service)
+//          Reference<XServiceInfo> xService(xTextField, UNO_QUERY);
+//          const Sequence<OUString> aServices =
+//              xService->getSupportedServiceNames();
+//          const OUString* pNames = aServices.getConstArray();
+//          sal_Int32 nCount = aServices.getLength();
+
+//          OUString sFieldService; // service name postfix of current field
+
+//          // search for TextField service name
+//          while( nCount-- ) {
+//              if( 0 == pNames->compareTo(
+//                  sServicePrefix, sServicePrefix.getLength()))
+//                  {
+//                      // TextField found => postfix is field type!
+//                      sFieldService =
+//                          pNames->copy(sServicePrefix.getLength());
+//                      break;
+//                  }
+//              ++pNames;
+//          }
+
+//          // b)
+//          Reference<XPropertySet> xMasterPropSet(
+//              xDepTextField->getTextFieldMaster(), UNO_QUERY);
+//          if (! xMasterPropSet.is()) {
+//              break;
+//          }
+//          OUString sVarName = GetStringProperty(sPropertyName,
+//                                                xMasterPropSet);
+
+//          // c)
+//          OUString sName = sFieldMasterPrefix;
+//          OUString sDot = OUString(RTL_CONSTASCII_USTRINGPARAM("."));
+//          sName += sFieldService;
+//          sName += sDot;
+//          sName += sVarName;
+
+//          if (0 == sFieldMasterName.compareTo(sName)) {
+//              Reference<XPropertySet> xPropSet(xTextField, UNO_QUERY);
+//              return xPropSet;
+//          }
+//      }
+//  }
+
+//  Reference<XPropertySet> xPropSet;
+//  return xPropSet;
+// }
+
+
 
 /// map placeholder type
 const sal_Char* XMLTextFieldExport::MapPlaceholderType(sal_uInt16 nType)
@@ -2290,8 +2296,7 @@ const sal_Char* XMLTextFieldExport::MapPageNumberName(
     sal_Char* pName = NULL;
     PageNumberType ePage;
     Any aAny = xPropSet->getPropertyValue(sPropertySubType);
-    ePage = *(PageNumberType*)aAny.
-getValue();
+    ePage = *(PageNumberType*)aAny.getValue();
 
     switch (ePage)
     {
@@ -2652,144 +2657,6 @@ const sal_Char* XMLTextFieldExport::MapDocInfoFieldName(
     }
 
     return pElementName;
-}
-
-const sal_Char* XMLTextFieldExport::MapBibliographyFieldName(OUString sName)
-{
-    sal_Char* pName = NULL;
-
-    if (sName.equalsAsciiL("Identifier", sizeof("Identifier")-1))
-    {
-        pName = sXML_identifier;
-    }
-    else if (sName.equalsAsciiL("BibiliographicType",
-                                sizeof("BibiliographicType")-1))
-    {
-        pName = sXML_bibiliographic_type;
-    }
-    else if (sName.equalsAsciiL("Address", sizeof("Address")-1))
-    {
-        pName = sXML_address;
-    }
-    else if (sName.equalsAsciiL("Annote", sizeof("Annote")-1))
-    {
-        pName = sXML_annote;
-    }
-    else if (sName.equalsAsciiL("Author", sizeof("Author")-1))
-    {
-        pName = sXML_author;
-    }
-    else if (sName.equalsAsciiL("Booktitle", sizeof("Booktitle")-1))
-    {
-        pName = sXML_booktitle;
-    }
-    else if (sName.equalsAsciiL("Chapter", sizeof("Chapter")-1))
-    {
-        pName = sXML_chapter;
-    }
-    else if (sName.equalsAsciiL("Edition", sizeof("Edition")-1))
-    {
-        pName = sXML_edition;
-    }
-    else if (sName.equalsAsciiL("Editor", sizeof("Editor")-1))
-    {
-        pName = sXML_editor;
-    }
-    else if (sName.equalsAsciiL("Howpublished", sizeof("Howpublished")-1))
-    {
-        pName = sXML_howpublished;
-    }
-    else if (sName.equalsAsciiL("Institution", sizeof("Institution")-1))
-    {
-        pName = sXML_institution;
-    }
-    else if (sName.equalsAsciiL("Journal", sizeof("Journal")-1))
-    {
-        pName = sXML_journal;
-    }
-    else if (sName.equalsAsciiL("Month", sizeof("Month")-1))
-    {
-        pName = sXML_month;
-    }
-    else if (sName.equalsAsciiL("Note", sizeof("Note")-1))
-    {
-        pName = sXML_note;
-    }
-    else if (sName.equalsAsciiL("Number", sizeof("Number")-1))
-    {
-        pName = sXML_number;
-    }
-    else if (sName.equalsAsciiL("Organizations", sizeof("Organizations")-1))
-    {
-        pName = sXML_organizations;
-    }
-    else if (sName.equalsAsciiL("Pages", sizeof("Pages")-1))
-    {
-        pName = sXML_pages;
-    }
-    else if (sName.equalsAsciiL("Publisher", sizeof("Publisher")-1))
-    {
-        pName = sXML_publisher;
-    }
-    else if (sName.equalsAsciiL("School", sizeof("School")-1))
-    {
-        pName = sXML_school;
-    }
-    else if (sName.equalsAsciiL("Series", sizeof("Series")-1))
-    {
-        pName = sXML_series;
-    }
-    else if (sName.equalsAsciiL("Title", sizeof("Title")-1))
-    {
-        pName = sXML_title;
-    }
-    else if (sName.equalsAsciiL("Report_Type", sizeof("Report_Type")-1))
-    {
-        pName = sXML_report_type;
-    }
-    else if (sName.equalsAsciiL("Volume", sizeof("Volume")-1))
-    {
-        pName = sXML_volume;
-    }
-    else if (sName.equalsAsciiL("Year", sizeof("Year")-1))
-    {
-        pName = sXML_year;
-    }
-    else if (sName.equalsAsciiL("URL", sizeof("URL")-1))
-    {
-        pName = sXML_url;
-    }
-    else if (sName.equalsAsciiL("Custom1", sizeof("Custom1")-1))
-    {
-        pName = sXML_custom1;
-    }
-    else if (sName.equalsAsciiL("Custom2", sizeof("Custom2")-1))
-    {
-        pName = sXML_custom2;
-    }
-    else if (sName.equalsAsciiL("Custom3", sizeof("Custom3")-1))
-    {
-        pName = sXML_custom3;
-    }
-    else if (sName.equalsAsciiL("Custom4", sizeof("Custom4")-1))
-    {
-        pName = sXML_custom4;
-    }
-    else if (sName.equalsAsciiL("Custom5", sizeof("Custom5")-1))
-    {
-        pName = sXML_custom5;
-    }
-    else if (sName.equalsAsciiL("ISBN", sizeof("ISBN")-1))
-    {
-        pName = sXML_isbn;
-    }
-    else
-    {
-        DBG_ERROR("Unknown bibliography info data");
-        pName = NULL;
-    }
-
-    return pName;
 }
 
 
