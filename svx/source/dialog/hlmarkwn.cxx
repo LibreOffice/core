@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hlmarkwn.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2002-08-14 08:52:49 $
+ *  last change: $Author: os $ $Date: 2002-08-29 07:40:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -396,7 +396,7 @@ int SvxHlinkDlgMarkWnd::FillTree( uno::Reference< container::XNameAccess > xLink
     const OUString* pNames = aNames.getConstArray();
 
     BOOL bHighContrast = Application::GetSettings().GetStyleSettings().GetWindowColor().IsDark();
-    Color aMaskColor( bHighContrast ? COL_LIGHTMAGENTA : COL_LIGHTGRAY );
+    Color aMaskColor( COL_LIGHTMAGENTA );
     const OUString aProp_LinkDisplayName( RTL_CONSTASCII_USTRINGPARAM( "LinkDisplayName" ) );
     const OUString aProp_LinkTarget( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.LinkTarget" ) );
     const OUString aProp_LinkDisplayBitmap( RTL_CONSTASCII_USTRINGPARAM( "LinkDisplayBitmap" ) );
