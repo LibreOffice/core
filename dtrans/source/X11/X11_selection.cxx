@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_selection.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: pl $ $Date: 2001-07-23 16:54:35 $
+ *  last change: $Author: pl $ $Date: 2001-07-24 09:58:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1039,6 +1039,9 @@ void SelectionManager::handleSelectionRequest( XSelectionRequestEvent& rRequest 
                 aNotify.xselection.property = rRequest.property;
                 if( aData.getLength() > INCR_MIN_SIZE )
                 {
+#ifdef DEBUG
+                    fprintf( stderr, "using INCR protocol\n" );
+#endif
                     // use incr protocol
                     int nBufferPos = 0;
                     int nMinSize = INCR_MIN_SIZE;
@@ -1204,50 +1207,57 @@ void SelectionManager::handleSendPropertyNotify( XPropertyEvent& rNotify )
 
     // ready for next part of a IncrementalTransfer
 #ifdef DEBUG
-    fprintf( stderr, "handleSendPropertyNotify for property %s\n",
-             OUStringToOString( getString( rNotify.atom ), RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
+    fprintf( stderr, "handleSendPropertyNotify for property %s (%s)\n",
+             OUStringToOString( getString( rNotify.atom ), RTL_TEXTENCODING_ISO_8859_1 ).getStr(),
+             rNotify.state == PropertyNewValue ? "new value" : ( rNotify.state == PropertyDelete ? "deleted" : "unknown")
+             );
 #endif
-    ::std::hash_map< Window, ::std::list< IncrementalTransfer > >::iterator it;
-    it = m_aIncrementals.find( rNotify.window );
-    int nCurrentTime = time( NULL );
-    if( it != m_aIncrementals.end() )
+
+    // feed incrementals
+    if( rNotify.state == PropertyDelete )
     {
-        ::std::list< IncrementalTransfer >::iterator inc_it = it->second.begin();
-        while( inc_it != it->second.end() )
+        ::std::hash_map< Window, ::std::list< IncrementalTransfer > >::iterator it;
+        it = m_aIncrementals.find( rNotify.window );
+        int nCurrentTime = time( NULL );
+        if( it != m_aIncrementals.end() )
         {
-            bool bDone = false;
-            if( inc_it->m_aProperty == rNotify.atom )
+            ::std::list< IncrementalTransfer >::iterator inc_it = it->second.begin();
+            while( inc_it != it->second.end() )
             {
-                if( rNotify.state != PropertyDelete )
-                    bDone = true;
-                else
+                bool bDone = false;
+                if( inc_it->m_aProperty == rNotify.atom )
                 {
-                    int nBytes = inc_it->m_aData.getLength() - inc_it->m_nBufferPos;
-                    nBytes = nBytes > INCR_MIN_SIZE ? INCR_MIN_SIZE : nBytes;
-                    XChangeProperty(
-                        m_pDisplay,
-                        inc_it->m_aRequestor,
-                        inc_it->m_aProperty,
-                        inc_it->m_aTarget,
-                        inc_it->m_nFormat,
-                        PropModeReplace,
-                        (const unsigned char*)inc_it->m_aData.getConstArray()+inc_it->m_nBufferPos,
-                        nBytes/(inc_it->m_nFormat/8) );
-                    inc_it->m_nBufferPos += nBytes;
-                    if( nBytes == 0 )
+                    if( rNotify.state != PropertyDelete )
                         bDone = true;
+                    else
+                    {
+                        int nBytes = inc_it->m_aData.getLength() - inc_it->m_nBufferPos;
+                        nBytes = nBytes > INCR_MIN_SIZE ? INCR_MIN_SIZE : nBytes;
+                        XChangeProperty(
+                                        m_pDisplay,
+                                        inc_it->m_aRequestor,
+                                        inc_it->m_aProperty,
+                                        inc_it->m_aTarget,
+                                        inc_it->m_nFormat,
+                                        PropModeReplace,
+                                        (const unsigned char*)inc_it->m_aData.getConstArray()+inc_it->m_nBufferPos,
+                                        nBytes/(inc_it->m_nFormat/8) );
+                        inc_it->m_nBufferPos += nBytes;
+                        if( nBytes == 0 )
+                            bDone = true;
+                    }
                 }
+                else if( nCurrentTime - inc_it->m_nTransferStartTime > INCR_TIMEOUT )
+                    bDone = true;
+                if( bDone )
+                {
+                    ::std::list< IncrementalTransfer >::iterator temp_it = inc_it;
+                    ++inc_it;
+                    it->second.erase( temp_it );
+                }
+                else
+                    ++inc_it;
             }
-            else if( nCurrentTime - inc_it->m_nTransferStartTime > INCR_TIMEOUT )
-                bDone = true;
-            if( bDone )
-            {
-                ::std::list< IncrementalTransfer >::iterator temp_it = inc_it;
-                ++inc_it;
-                it->second.erase( temp_it );
-            }
-            else
-                ++inc_it;
         }
     }
 }
