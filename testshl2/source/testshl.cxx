@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testshl.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 16:34:30 $
+ *  last change: $Author: obo $ $Date: 2004-01-05 18:13:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,9 +110,9 @@ void setSignalFilename(GetOpt & opt);
 void my_sleep(int sec)
 {
 #ifdef WNT
-            Sleep(sec * 1000);
+    Sleep(sec * 1000);
 #else
-            usleep(sec * 1000000); // 10 ms
+    usleep(sec * 1000000); // 10 ms
 #endif
 }
 
@@ -228,7 +228,15 @@ std::auto_ptr<Outputter> initOutputter(GetOpt & _aOptions)
     return pOutputter;
 }
 
-void starttest(GetOpt & opt, AutomaticRegisterHelper const& aHelper);
+int starttest(GetOpt & opt, AutomaticRegisterHelper const& aHelper);
+
+void endless()
+{
+    while(1)
+    {
+        my_sleep(1);
+    }
+}
 
 // ----------------------------------- Main -----------------------------------
 #if (defined UNX) || (defined OS2)
@@ -259,12 +267,11 @@ int _cdecl main( int argc, char* argv[] )
         "-pid=s,        write current process id to file",
         "-endless,      testshl runs endless, for test only!!!",
         "-whereami,     shows at runtime, which function is tested next.",
+        "-noerroronexit, if this is given the program exits with return code 0 even if runtime errors occurs.",
         "-h:s,          display help or help on option",
         "-help:s,       see -h",
         NULL
     };
-
-    // rtl::OString* pTest = new rtl::OString("test");
 
     ProcessHandler aCurrentProcess;
 
@@ -276,70 +283,71 @@ int _cdecl main( int argc, char* argv[] )
 
     if ( opt.hasOpt("-verbose") )
     {
-        fprintf(stderr, "testshl2 $Revision: 1.12 $\n");
+        fprintf(stderr, "testshl2 $Revision: 1.13 $\n");
     }
+
+    if ( opt.hasOpt("-endless"))                 // this exists only for self test issues
+    {
+        endless();
+    }
+
+    int  nExitCode = 0;
+    bool bLibrary = true;
 
     // someone indicates that he needs help
     if ( opt.hasOpt( "-h" ) || opt.hasOpt( "-help" ) )
     {
         opt.showUsage();
-        exit(0);
+        nExitCode = 0;
     }
-
-    if ( opt.hasOpt("-endless"))
+    else
     {
-        while(1)
+        if (opt.getParams().empty())
         {
-            my_sleep(1);
-        }
-    }
-
-    bool bLibrary = true;
-    if (opt.getParams().empty())
-    {
-        // no library is given, but if a jobonly list is given, we should generate UNKNOWN errors.
-        if (! opt.hasOpt("-jobonly"))
-        {
-            // std::cerr << "error: At least a library or a job file should given." << std::endl;
-            fprintf(stderr, "error: At least a library or a job file should given.\n");
-            opt.showUsage();
-            exit(0);
+            // no library is given, but if a jobonly list is given, we should generate UNKNOWN errors.
+            if (! opt.hasOpt("-jobonly"))
+            {
+                // std::cerr << "error: At least a library or a job file should given." << std::endl;
+                fprintf(stderr, "error: At least a library or a job file should given.\n");
+                opt.showUsage();
+                nExitCode = 2;
+            }
+            else
+            {
+                bLibrary = false;
+            }
         }
         else
         {
-            bLibrary = false;
-        }
-    }
-
-    setSignalFilename(opt);
-
-    /* show usage screen if too less parameters */
-    // if ( argc < 2 )
-    //     usage();
+            setSignalFilename(opt);
 
 //#ifdef UNDER_WINDOWS_DEBUGGING
 //    DebugBreak();
 //#endif
+            rtl::OUString suLibraryName;
+            if (bLibrary)
+            {
+                suLibraryName = rtl::OStringToOUString(opt.getFirstParam(), osl_getThreadTextEncoding() /* RTL_TEXTENCODING_ASCII_US */ );
+            }
 
-    // ---
-    //# CmdLineBits nCmdlinebitflags = createFlags( argc, argv );
+            AutomaticRegisterHelper aHelper(suLibraryName, opt /*, &aJobs*/);
 
-    //# rtl::OUString suLibraryName = rtl::OUString::createFromAscii(argv[1]);
-    rtl::OUString suLibraryName;
-    if (bLibrary)
-        suLibraryName = rtl::OStringToOUString(opt.getFirstParam(), RTL_TEXTENCODING_ASCII_US );
+            // start the tests
+            nExitCode = starttest(opt, aHelper);
+        }
+    }
 
-    AutomaticRegisterHelper aHelper(suLibraryName, opt /*, &aJobs*/);
-
-    // start the tests
-    starttest(opt, aHelper);
-    return 0;
+    if (opt.hasOpt("-noerroronexit"))
+    {
+        nExitCode = 0;
+    }
+    return nExitCode;
 }
 
 // -----------------------------------------------------------------------------
 // this function is only inserted to give a better startpoint for breakpoints
 
-void starttest(GetOpt & opt, AutomaticRegisterHelper const& aHelper)
+int starttest(GetOpt & opt, AutomaticRegisterHelper const& aHelper)
 {
     // create a TestResult
     std::auto_ptr<CppUnit::TestResult> pResult = initResult(opt);
@@ -360,5 +368,7 @@ void starttest(GetOpt & opt, AutomaticRegisterHelper const& aHelper)
         fflush(stderr);
         getchar();
     }
+    int nExit = pResult->getExitValue();
+    return nExit;
 }
 
