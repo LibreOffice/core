@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textedit.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:12:24 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 19:40:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,10 +59,6 @@
  *
  ************************************************************************/
 
-#ifndef _SYSTEM_HXX //autogen
-#include <vcl/system.hxx>
-#endif
-#include <tools/intn.hxx>
 #ifndef _STREAM_HXX //autogen
 #include <tools/stream.hxx>
 #endif
