@@ -1,0 +1,165 @@
+/*************************************************************************
+ *
+ *  $RCSfile: dtsodcmp.hrc,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: obo $ $Date: 2004-02-16 11:02:30 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef _DTSODCMP_HRC
+#define _DTSODCMP_HRC
+
+//========================================================================
+// Bereiche
+#define RID_SD_STRING_START             26000
+#define RID_SD_MENU_START               27000
+#define RID_SD_CONTEXTMENU_START        28500
+#define RID_SD_TOOLBOX_START            29000
+#define RID_SD_WINDOW_START             30000
+#define RID_SD_STATUSBAR_START          30500
+#define RID_SD_IMAGE_START              31000
+#define RID_SD_BITMAP_START             31250
+#define RID_SD_DIALOG_START             31500
+#define RID_SD_DEPPER_DIALOG_START      31750
+// end is at 31999
+
+#define SID_START                   0
+
+//========================================================================
+// Window-Ids
+
+//========================================================================
+// Menu-Ids
+#define RID_SD_MENU_APP                             (RID_SD_MENU_START)
+#define RID_SD_MENU_FILE                            (RID_SD_MENU_START      +   1)
+#define RID_SD_MENU_FILE_NEW                        (RID_SD_MENU_START      +   2)
+#define RID_SD_MENU_FILE_OPEN                       (RID_SD_MENU_START      +   3)
+#define RID_SD_MENU_FILE_SAVE                       (RID_SD_MENU_START      +   4)
+#define RID_SD_MENU_FILE_SAVEAS                     (RID_SD_MENU_START      +   5)
+#define RID_SD_MENU_FILE_EXIT                       (RID_SD_MENU_START      +   6)
+#define RID_SD_MENU_NEW_OBJECT                      (RID_SD_MENU_START      +   7)
+#define RID_SD_MENU_REMOVE_LAST                     (RID_SD_MENU_START      +   8)
+#define RID_SD_MENU_AUTO                            (RID_SD_MENU_START      +   9)
+#define RID_SD_MENU_RUN_TEST                        (RID_SD_MENU_START      +   10)
+
+//========================================================================
+// ContextMenu-Ids
+
+//========================================================================
+// ToolBox-Ids
+#define RID_SD_TOOLBOX_APP                          (RID_SD_TOOLBOX_START)
+#define RID_SD_TOOLBOX_FILE_NEW                 (RID_SD_TOOLBOX_START   +   1)
+#define RID_SD_TOOLBOX_FILE_OPEN                    (RID_SD_TOOLBOX_START   +   2)
+#define RID_SD_TOOLBOX_FILE_SAVE                    (RID_SD_TOOLBOX_START   +   3)
+
+
+//========================================================================
+// StatusBar-Ids
+
+//========================================================================
+// Image-Ids
+#define RID_SD_CP_IMAGE                         (RID_SD_IMAGE_START)
+
+//========================================================================
+// Dialog-Ids
+#define RID_SD_DIALOG_NEWPROJECT                (RID_SD_DEPPER_DIALOG_START)
+#define RID_SD_DIALOG_NEWDIRECTORY              (RID_SD_DEPPER_DIALOG_START + 1)
+#define RID_SD_DIALOG_HELP                      (RID_SD_DEPPER_DIALOG_START + 2)
+
+//========================================================================
+// String-Ids
+#define RID_SD_CP_NAME                          (RID_SD_STRING_START)
+
+//========================================================================
+// Slot-Ids
+
+//========================================================================
+// Format-Ids
+
+#endif //_DTSODCMP_HRC
+
+/*------------------------------------------------------------------------
+
+    $Log: not supported by cvs2svn $
+    Revision 1.3  2000/04/04 18:39:32  hjs
+    beta 0.4
+
+    Revision 1.2  1999/09/07 10:32:13  hjs
+    worked on ui
+
+    Revision 1.1  1999/09/01 16:17:40  hjs
+    shared hrc for depper and solardep
+
+    Revision 1.2  1999/07/27 16:17:36  mh
+    chg: dep
+
+    Revision 1.1  1999/06/11 17:36:57  hjs
+    component for soldep
+
+    Revision 1.3  1999/04/14 17:29:23  mh
+    chg: Resourcehandling, DesktopWindow, IconView
+
+    Revision 1.2  1999/03/26 16:59:56  mh
+    chg: Mehrere Komponenten jetzt im Floating Frame
+
+    Revision 1.1  1999/03/10 12:33:27  awo
+    Initial revision
+
+    Revision 1.1  1998/12/08 16:31:55  awo
+    Initial revision
+
+
+------------------------------------------------------------------------*/
