@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valueacc.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ka $ $Date: 2002-06-05 15:41:43 $
+ *  last change: $Author: cl $ $Date: 2002-09-02 14:25:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,7 +151,14 @@ void ValueSetAcc::FireAccessibleEvent( short nEventId, const uno::Any& rOldValue
 
         while( aIter != aTmpListeners.end() )
         {
-            (*aIter)->notifyEvent( aEvtObject );
+            try
+            {
+                (*aIter)->notifyEvent( aEvtObject );
+            }
+            catch( uno::Exception& )
+            {
+            }
+
             aIter++;
         }
     }
