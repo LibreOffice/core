@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ClassNotFoundException.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:35:45 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:55:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ module com {  module sun {  module star {  module lang {
 /** This exception is thrown when an application tries to load
     the information on the type through its string name.
  */
-exception ClassNotFoundException: com::sun::star::uno::Exception
+published exception ClassNotFoundException: com::sun::star::uno::Exception
 {
 };
 
