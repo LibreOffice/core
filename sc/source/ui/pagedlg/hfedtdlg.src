@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hfedtdlg.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2001-03-09 20:50:31 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 06:17:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -716,7 +716,7 @@ TabPage RID_HFBASE
         Text[ dutch ] = "~Linker bereik";
         Text[ chinese_simplified ] = "×ó±ßÇøÓò(~L)";
         Text[ greek ] = "ÁñéóôåñŞ ğåñéï÷Ş";
-        Text[ korean ] = "¿ŞÂÊ ¿µ¿ª";
+        Text[ korean ] = "¿ŞÂÊ ¿µ¿ª(~L)";
         Text[ turkish ] = "~Sol bölüm";
         Text[ language_user1 ] = " ";
     };
@@ -755,7 +755,7 @@ TabPage RID_HFBASE
         Text[ dutch ] = "~Middelste bereik";
         Text[ chinese_simplified ] = "ÖĞ¼äÇøÓò(~C)";
         Text[ greek ] = "ÊåíôñéêŞ ğåñéï÷Ş";
-        Text[ korean ] = "Áß½É ¿µ¿ª";
+        Text[ korean ] = "Áß½É ¿µ¿ª(~C)";
         Text[ turkish ] = "~Orta bölüm";
         Text[ language_user1 ] = " ";
     };
@@ -794,7 +794,7 @@ TabPage RID_HFBASE
         Text[ dutch ] = "~Rechter bereik";
         Text[ chinese_simplified ] = "ÓÒ±ßÇøÓò(~R)";
         Text[ greek ] = "Ğåñéï÷Ş äåîéÜ";
-        Text[ korean ] = "¿À¸¥ÂÊ ¿µ¿ª";
+        Text[ korean ] = "¿À¸¥ÂÊ ¿µ¿ª(~R)";
         Text[ turkish ] = "~Sağ bölüm";
         Text[ language_user1 ] = " ";
     };
