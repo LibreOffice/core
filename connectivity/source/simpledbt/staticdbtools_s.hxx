@@ -2,9 +2,9 @@
  *
  *  $RCSfile: staticdbtools_s.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 11:32:39 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 10:16:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,17 +121,13 @@ namespace connectivity
         ) const SAL_THROW ( (::com::sun::star::sdbc::SQLException) );
 
         // ------------------------------------------------
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> calcConnection(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet>& _rxRowSet,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory
-        ) const SAL_THROW ( (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException) );
-
-        // ------------------------------------------------
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> connectRowset(
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet>& _rxRowSet,
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory,
             sal_Bool _bSetAsActiveConnection
-        ) const SAL_THROW ( (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException) );
+        ) const SAL_THROW ( ( ::com::sun::star::sdbc::SQLException
+                            , ::com::sun::star::lang::WrappedTargetException
+                            , ::com::sun::star::uno::RuntimeException ) );
 
         // ------------------------------------------------
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> getRowSetConnection(

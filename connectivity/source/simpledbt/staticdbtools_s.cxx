@@ -2,9 +2,9 @@
  *
  *  $RCSfile: staticdbtools_s.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 11:32:24 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 10:16:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,16 +143,9 @@ namespace connectivity
 
     //----------------------------------------------------------------
     Reference< XConnection> ODataAccessStaticTools::connectRowset(const Reference< XRowSet>& _rxRowSet, const Reference< XMultiServiceFactory>& _rxFactory, sal_Bool _bSetAsActiveConnection) const
-        SAL_THROW ( (SQLException, RuntimeException) )
+        SAL_THROW ( (SQLException, WrappedTargetException, RuntimeException) )
     {
         return ::dbtools::connectRowset( _rxRowSet, _rxFactory, _bSetAsActiveConnection);
-    }
-
-    //----------------------------------------------------------------
-    Reference< XConnection> ODataAccessStaticTools::calcConnection(const Reference< XRowSet>& _rxRowSet, const Reference< XMultiServiceFactory>& _rxFactory) const
-        SAL_THROW ( (SQLException, RuntimeException) )
-    {
-        return ::dbtools::calcConnection(_rxRowSet, _rxFactory);
     }
 
     // ------------------------------------------------
