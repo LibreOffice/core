@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srtdlg.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-08 18:30:21 $
+ *  last change: $Author: kz $ $Date: 2001-01-12 22:42:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -573,7 +573,7 @@ ModalDialog DLG_SORTING
     StringList [ korean ] =
     {
             < "영숫자" ; > ;
-        < "번호" ; > ;
+        < "숫자" ; > ;
     };
     StringList [ turkish ] =
     {
@@ -800,7 +800,7 @@ ModalDialog DLG_SORTING
     StringList [ korean ] =
     {
             < "영숫자" ; > ;
-        < "번호" ; > ;
+        < "숫자" ; > ;
     };
     StringList [ turkish ] =
     {
