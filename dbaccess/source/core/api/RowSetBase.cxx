@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetBase.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 14:42:24 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:31:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,7 +138,7 @@ class OEmptyCollection : public sdbcx::OCollection
 {
 protected:
     virtual void impl_refresh() throw(RuntimeException);
-    virtual Reference< XNamed > createObject(const ::rtl::OUString& _rName);
+    virtual connectivity::sdbcx::ObjectType createObject(const ::rtl::OUString& _rName);
 public:
     OEmptyCollection(::cppu::OWeakObject& _rParent,::osl::Mutex& _rMutex) : OCollection(_rParent,sal_True,_rMutex,::std::vector< ::rtl::OUString>()){}
 };
@@ -147,9 +147,9 @@ void OEmptyCollection::impl_refresh() throw(RuntimeException)
 {
 }
 // -----------------------------------------------------------------------------
-Reference< XNamed > OEmptyCollection::createObject(const ::rtl::OUString& _rName)
+connectivity::sdbcx::ObjectType OEmptyCollection::createObject(const ::rtl::OUString& _rName)
 {
-    return Reference< XNamed >();
+    return connectivity::sdbcx::ObjectType();
 }
 // -----------------------------------------------------------------------------
 
