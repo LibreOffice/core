@@ -2,9 +2,9 @@
  *
  *  $RCSfile: status.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ssa $ $Date: 2002-04-24 12:12:05 $
+ *  last change: $Author: pl $ $Date: 2002-04-24 17:22:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -700,12 +700,7 @@ void StatusBar::Resize()
     if ( mbBottomBorder )
         mnCalcHeight -= 2;
 
-    // Evt. neue Textposition berechnen
-    if ( nOldDY && (nOldDY < mnDY) )
-    {
-        mnTextY = 0;
-        mnTextY += (mnCalcHeight-GetTextHeight()-mnTextY)/2;
-    }
+    mnTextY = (mnCalcHeight-GetTextHeight())/2;
 
     // Formatierung neu ausloesen
     mbFormat = TRUE;
@@ -819,6 +814,15 @@ void StatusBar::DataChanged( const DataChangedEvent& rDCEvt )
     {
         mbFormat = TRUE;
         ImplInitSettings( TRUE, TRUE, TRUE );
+        ImplStatusItem* pItem = mpItemList->First();
+        while ( pItem )
+        {
+            long nWidth = GetTextWidth( pItem->maText );
+            if( nWidth > pItem->mnWidth + STATUSBAR_OFFSET )
+                pItem->mnWidth = nWidth + STATUSBAR_OFFSET;
+            pItem = mpItemList->Next();
+        }
+        SetSizePixel( CalcWindowSizePixel() );
         Invalidate();
     }
 }
