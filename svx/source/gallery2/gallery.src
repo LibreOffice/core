@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gallery.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-29 09:38:56 $
+ *  last change: $Author: kz $ $Date: 2000-12-01 08:05:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -516,7 +516,7 @@ TabPage RID_SVXTABPAGE_GALLERYTHEME_FILES
         Text[ dutch ] = "Bestandstype";
         Text[ chinese_simplified ] = "ÎÄ¼şÀàĞÍ";
         Text[ greek ] = "Ôığïò áñ÷åßïõ";
-        Text[ korean ] = "ÆÄÀÏ ÇüÅÂ";
+        Text[ korean ] = "ÆÄÀÏ  À¯Çü";
         Text[ turkish ] = "Dosya tipi";
         Text[ language_user1 ] = " ";
     };
@@ -882,7 +882,7 @@ ModalDialog RID_SVXDLG_GALLERY_SEARCH_PROGRESS
         Text[ dutch ] = "Bestandstype";
         Text[ chinese_simplified ] = "ÎÄ¼şÀàĞÍ";
         Text[ greek ] = "Ôığïò áñ÷åßïõ";
-        Text[ korean ] = "ÆÄÀÏ ÇüÅÂ";
+        Text[ korean ] = "ÆÄÀÏ  À¯Çü";
         Text[ turkish ] = "Dosya tipi";
         Text[ language_user1 ] = " ";
     };
