@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CallReportWizard.java,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 09:52:19 $
+ *  last change: $Author: hr $ $Date: 2005-04-06 11:38:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,10 +62,12 @@ package com.sun.star.wizards.report;
 
 
 import com.sun.star.beans.PropertyValue;
+import com.sun.star.beans.PropertyAttribute;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.wizards.common.Properties;
+import com.sun.star.lang.XComponent;
 
 
 
@@ -123,9 +125,11 @@ public class CallReportWizard {
     /** This class implements the component. At least the interfaces XServiceInfo,
      * XTypeProvider, and XInitialization should be provided by the service.
      */
-    public static class ReportWizardImplementation implements com.sun.star.lang.XInitialization, com.sun.star.lang.XServiceInfo, com.sun.star.lang.XTypeProvider, com.sun.star.task.XJobExecutor
+    public static class ReportWizardImplementation extends com.sun.star.lib.uno.helper.PropertySet implements com.sun.star.lang.XInitialization, com.sun.star.lang.XServiceInfo, com.sun.star.lang.XTypeProvider, com.sun.star.task.XJobExecutor
     {
         PropertyValue[] databaseproperties;
+        public XComponent DocumentDefinition = null;
+        public XComponent Document = null;
 
         /** The constructor of the inner class has a XMultiServiceFactory parameter.
          * @param xmultiservicefactoryInitialization A special service factory
@@ -133,7 +137,10 @@ public class CallReportWizard {
          */
         public ReportWizardImplementation(com.sun.star.lang.XMultiServiceFactory xmultiservicefactoryInitialization)
         {
+            super();
             xmultiservicefactory = xmultiservicefactoryInitialization;
+            registerProperty("Document", (short)(PropertyAttribute.READONLY|PropertyAttribute.MAYBEVOID));
+            registerProperty("DocumentDefinition", (short)(PropertyAttribute.READONLY|PropertyAttribute.MAYBEVOID));
         }
 
         public void trigger(String sEvent){
@@ -142,9 +149,13 @@ public class CallReportWizard {
             if (sEvent.compareTo("start") == 0) {
                 if (bWizardstartedalready != true){
                     ReportWizard CurReportWizard = new ReportWizard(xmultiservicefactory);
-                    CurReportWizard.startReportWizard(xmultiservicefactory, databaseproperties);
+                    XComponent[] obj = CurReportWizard.startReportWizard(xmultiservicefactory, databaseproperties);
+                    if ( obj != null ){
+                        DocumentDefinition = obj[0];
+                        Document = obj[1];
+                    }
                 }
-            bWizardstartedalready = false;
+                bWizardstartedalready = false;
             }
             else if (sEvent.compareTo("fill") == 0){
                 Dataimport CurDataimport = new Dataimport(xmultiservicefactory);
