@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unolayer.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: af $ $Date: 2002-08-02 12:09:47 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 12:34:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,8 @@
  *
  *
  ************************************************************************/
-#ifndef _UNOLAYER_HXX
-#define _UNOLAYER_HXX
+#ifndef SD_UNOLAYER_HXX
+#define SD_UNOLAYER_HXX
 
 #ifndef _COM_SUN_STAR_CONTAINER_XINDEXACCESS_HPP_
 #include <com/sun/star/container/XIndexAccess.hpp>
@@ -79,11 +79,13 @@
 #include <unomodel.hxx>
 
 class SdrLayer;
-class SdView;
 class SdLayerManager;
 class SdXImpressDocument;
 class SvUnoWeakContainer;
 
+namespace sd {
+class View;
+}
 enum LayerAttribute { VISIBLE, PRINTABLE, LOCKED };
 
 /***********************************************************************
@@ -94,16 +96,6 @@ class SdLayer : public ::cppu::WeakImplHelper4< ::com::sun::star::drawing::XLaye
                                                 ::com::sun::star::container::XChild,
                                                 ::com::sun::star::lang::XUnoTunnel>
 {
-private:
-    SdLayerManager*     pLayerManager;
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XLayerManager > mxLayerManager;
-
-    SdrLayer*           pLayer;
-    SvxItemPropertySet  aPropSet;
-
-    sal_Bool get( LayerAttribute what ) throw();
-    void set( LayerAttribute what, sal_Bool flag ) throw();
-
 public:
     SdLayer( SdLayerManager* pLayerManager_, SdrLayer* pSdrLayer_ ) throw();
     virtual ~SdLayer() throw();
@@ -142,6 +134,16 @@ public:
     */
     virtual void SAL_CALL setParent( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& Parent ) throw (::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException);
 
+private:
+    SdLayerManager*     pLayerManager;
+    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XLayerManager > mxLayerManager;
+
+    SdrLayer*           pLayer;
+    SvxItemPropertySet  aPropSet;
+
+    sal_Bool get( LayerAttribute what ) throw();
+    void set( LayerAttribute what, sal_Bool flag ) throw();
+
 };
 
 
@@ -159,17 +161,6 @@ class SdLayerManager : public ::cppu::WeakImplHelper4< ::com::sun::star::drawing
                                                        ::com::sun::star::lang::XUnoTunnel >
 {
     friend class SdLayer;
-
-private:
-    SdXImpressDocument& rModel;
-    SvUnoWeakContainer* mpLayers;
-
-    SdView* GetView() const throw();
-#ifndef SVX_LIGHT
-    SdDrawDocShell* GetDocShell() const throw() { return rModel.pDocShell; }
-#endif
-
-    void UpdateLayerView( sal_Bool modify = sal_True ) const throw();
 
 public:
     SdLayerManager( SdXImpressDocument& rMyModel ) throw();
@@ -215,8 +206,17 @@ public:
             created for the argument than an empty reference is returned.
     */
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XLayer> GetLayer (SdrLayer* pLayer);
+
+private:
+    SdXImpressDocument& rModel;
+    SvUnoWeakContainer* mpLayers;
+
+    ::sd::View* GetView() const throw();
+#ifndef SVX_LIGHT
+    ::sd::DrawDocShell* GetDocShell() const throw() { return rModel.pDocShell; }
+#endif
+
+    void UpdateLayerView( sal_Bool modify = sal_True ) const throw();
 };
 
 #endif
-
-
