@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: cmc $ $Date: 2001-06-06 12:46:33 $
+ *  last change: $Author: cmc $ $Date: 2001-06-12 09:24:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -737,6 +737,10 @@ class WW8PLCFMan
     long nLastWhereIdxCp;           // last result of WhereIdx()
     USHORT nPLCF;                   // so viele PLCFe werden verwaltet
     short nManType;
+    BOOL bDoingDrawTextBox;         //Normally we adjust the end of attributes
+                                    //so that the end of a paragraph occurs
+                                    //before the para end mark, but for
+                                    //drawboxes we want the true offsets
 
     WW8PLCFxDesc aD[MAN_ANZ_PLCF];
     WW8PLCFxDesc *pChp, *pPap, *pSep, *pFld, *pFldTxbx, *pFldTxbxHdft,
@@ -800,6 +804,8 @@ public:
     WW8PLCFspecial* GetTxbx()   { return pTxbx;     }
     WW8PLCFspecial* GetTxbxBkd(){ return pTxbxBkd;  }
     short GetManType() { return nManType; }
+    BOOL GetDoingDrawTextBox() { return bDoingDrawTextBox; }
+    void SetDoingDrawTextBox(BOOL bIn) { bDoingDrawTextBox = bIn; }
 };
 
 #endif // !DUMP
@@ -1573,12 +1579,15 @@ public:
 /*************************************************************************
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8scan.hxx,v 1.12 2001-06-06 12:46:33 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8scan.hxx,v 1.13 2001-06-12 09:24:43 cmc Exp $
 
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.12  2001/06/06 12:46:33  cmc
+      #76673# ##1005## Fastsave table Insert/Delete Cell implementation, const reworking required
+
       Revision 1.11  2001/06/02 16:06:14  cmc
       #68662# ##989## parent frame of a fly in fly exported as a table
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: cmc $ $Date: 2001-06-06 12:46:32 $
+ *  last change: $Author: cmc $ $Date: 2001-06-12 09:24:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,7 @@
 #ifndef _SDTAITM_HXX
 #include <svx/sdtaitm.hxx>
 #endif
+
 #ifndef _SVSTDARR_HXX
 #define _SVSTDARR_SHORTS
 #include <svtools/svstdarr.hxx>
@@ -747,223 +748,6 @@ ESelection SwWW8ImplReader::GetESelection( long nCpStart, long nCpEnd )
     return ESelection( nSP, (USHORT)nCpStart, nEP, (USHORT)nCpEnd );
 }
 
-// GetTxbxCharAttrs() setzt die harten Zeichen-Attribute in den angegebenen Set.
-// Toggle-Attribute werden z.Zt. nicht beruecksichtigt
-void SwWW8ImplReader::GetTxbxPapAndCharAttrs( SfxItemSet& rS,
-                                              const WW8PLCFManResult& rRes )
-{
-    static SvxAdjust aAdjArr[] = {  SVX_ADJUST_LEFT,
-                                    SVX_ADJUST_CENTER,
-                                    SVX_ADJUST_RIGHT,
-                                    SVX_ADJUST_BLOCK  };
-
-    const BYTE* pData = rRes.pMemPos + 1  + (8 > pWwFib->nVersion ? 0 : 1)
-                                    + WW8SprmDataOfs( rRes.nSprmId );
-
-    switch( rRes.nSprmId )
-    {
-    //
-    // PAP attributes
-    //
-    case  5:
-    case 0x2403: rS.Put(SvxAdjustItem(
-                            aAdjArr[pData[0]&0x3], EE_PARA_JUST ) );
-                 // "&0x3 gegen Tabellenueberlauf bei Stuss-Werten
-                 break;
-    case 21:
-    case 0xA413:
-    case 22:
-    case 0xA414:
-        {
-            short nPara = SVBT16ToShort( pData );
-            if( nPara < 0 )
-                nPara = -nPara;
-
-            SvxULSpaceItem aUL((SvxULSpaceItem&)rS.Get(EE_PARA_ULSPACE, TRUE));
-
-            if( 1 & rRes.nSprmId )      // 21, 0xA413 resp.
-                aUL.SetUpper( nPara );
-            else                        // 22, 0xA414 resp.
-                aUL.SetLower( nPara );
-            rS.Put( aUL );
-        };
-        break;
-    //
-    // CHAR attributes
-    //
-    case      85:
-    case  0x0835: rS.Put( SvxWeightItem( (*pData & 0x1)?WEIGHT_BOLD:WEIGHT_NORMAL,
-                         EE_CHAR_WEIGHT ) );
-                 break;
-    case      86:
-    case  0x0836: rS.Put( SvxPostureItem( (*pData & 0x1)?ITALIC_NORMAL:ITALIC_NONE,
-                         EE_CHAR_ITALIC ) );
-                 break;
-    case      87:
-    case  0x0837: rS.Put( SvxCrossedOutItem( (*pData & 0x1)?STRIKEOUT_SINGLE:STRIKEOUT_NONE,
-                         EE_CHAR_STRIKEOUT ) );
-                 break;
-    case      88:
-    case  0x0838: rS.Put( SvxContourItem( *pData & 0x1, EE_CHAR_OUTLINE));
-                 break;
-    case      89:
-    case  0x0839: rS.Put( SvxShadowedItem( *pData & 0x1, EE_CHAR_SHADOW));
-                 break;
-    case      94:
-    case  0x2A3E:if(    (1 > *pData)
-                    ||
-                        (     (4 <  *pData)
-                           && (6 != *pData) ) )
-                    rS.Put( SvxUnderlineItem(UNDERLINE_NONE,
-                                             EE_CHAR_UNDERLINE) );
-                else
-                {
-                    if( 6 == *pData )
-                        rS.Put( SvxWeightItem(WEIGHT_BOLD,
-                                              EE_CHAR_WEIGHT) );
-                    rS.Put( SvxUnderlineItem(UNDERLINE_SINGLE,
-                                             EE_CHAR_UNDERLINE) );
-                }
-                break;
-    case      98:
-    case  0x2A42:
-                rS.Put( SvxColorItem( Color( GetCol( pData[0] ) ),
-                    EE_CHAR_COLOR ) );
-                break;
-    case      99:
-    case  0x4A43:{
-                    USHORT nFSize = SVBT16ToShort( pData );
-                                // Font-Groesse in halben Point
-                            //  10 = 1440 / ( 72 * 2 )
-                    rS.Put( SvxFontHeightItem(
-                                (const ULONG) ( (ULONG) nFSize * 10 ),
-                                100, EE_CHAR_FONTHEIGHT ) );
-                    rS.Put( SvxFontHeightItem(
-                                (const ULONG) ( (ULONG) nFSize * 10 ),
-                                100, EE_CHAR_FONTHEIGHT_CJK ) );
-                 }
-                 break;
-    case 93:
-    case 0x4A51:
-    case 0x4A4F:
-    case 0x4A50:{
-                    USHORT nFCode = SVBT16ToShort( pData ); // Font-Nummer
-                    FontFamily eFamily;
-                    String aName;
-                    FontPitch ePitch;
-                    CharSet eSrcCharSet;
-
-                    if( GetFontParams( nFCode, eFamily, aName, ePitch,
-                                       eSrcCharSet ) )
-                    {
-                        if (rRes.nSprmId != 0x4A50)
-                        {
-                            rS.Put( SvxFontItem( eFamily, aName, aEmptyStr, ePitch,
-                                eSrcCharSet, EE_CHAR_FONTINFO ) );
-                        }
-                        else
-                        {
-                            rS.Put( SvxFontItem( eFamily, aName, aEmptyStr, ePitch,
-                                eSrcCharSet, EE_CHAR_FONTINFO_CJK ) );
-                        }
-                    }
-                }
-                break;
-    }
-}
-
-/*
-// InsertTxbxCharAttrs() setzt die harten Zeichen-Attribute
-void SwWW8ImplReader::InsertTxbxCharAttrs( long nStartCp, long nEndCp, BOOL bONLYnPicLocFc )
-{
-    nStartCp += nDrawCpO;
-    nEndCp   += nDrawCpO;
-    WW8PLCFx_Cp_FKP* pChp = pPlcxMan->GetChpPLCF();
-    pChp->SeekPos( nStartCp );
-
-    nPicLocFc = LONG_MAX;
-    WW8_CP nStart = pChp->Where();
-    while( nStart <= nEndCp )
-    {
-        SfxItemSet aS( pDrawEditEngine->GetEmptyItemSet() );
-        WW8PLCFxDesc aDesc;
-        pChp->GetSprms( &aDesc );
-        (*pChp)++;
-        WW8_CP nNextEnd = pChp->Where();
-        WW8_CP nEnd     = ( nNextEnd < nEndCp ) ? nNextEnd : nEndCp;
-
-        if( aDesc.nSprmsLen && aDesc.pMemPos )  // Attribut(e) vorhanden?
-            GetTxbxCharAttrs( aS, aDesc, bONLYnPicLocFc );
-
-        if( bONLYnPicLocFc ) // Picture-Position-Attribut gefunden?
-        {
-            if( LONG_MAX != nPicLocFc ) break;
-        //  ==================================
-        }
-        else
-            if( aS.Count() && !bONLYnPicLocFc )
-                pDrawEditEngine->QuickSetAttribs( aS,
-                        GetESelection( nStart - nStartCp, nEnd - nStartCp ) );
-        nStart = nNextEnd;
-    }
-    if( LONG_MAX == nPicLocFc ) nPicLocFc = 0;
-}
-
-// GetTxbxParaAttrs() setzt die harten Para-Attribute in den angegebenen Set.
-// z.Zt. wird nur Justify beachtet, da einfacher
-void SwWW8ImplReader::GetTxbxParaAttrs( SfxItemSet& rS, const WW8PLCFxDesc& rD )
-{
-    static SvxAdjust aAdjArr[] = { SVX_ADJUST_LEFT,
-                     SVX_ADJUST_CENTER, SVX_ADJUST_RIGHT, SVX_ADJUST_BLOCK };
-
-    long  nLen  = rD.nSprmsLen;
-    BYTE* pSprm = rD.pMemPos;
-
-    while( nLen >= 2 )
-    {
-        BYTE   nDelta;
-        USHORT nId = WW8GetSprmId( pWwFib->nVersion, pSprm, &nDelta );
-
-        short nSL = WW8GetSprmSizeBrutto( pWwFib->nVersion, pSprm, &nId );
-
-        if( nLen < nSL )
-            return;                 // nicht mehr genug Bytes ueber
-
-        BYTE* pData = pSprm + 1 + nDelta + WW8SprmDataOfs( nId );
-
-        switch( nId )
-        {
-        case  5:
-        case 0x2403: rS.Put(SvxAdjustItem(
-                                aAdjArr[pData[0]&0x3], EE_PARA_JUST ) );
-                     // "&0x3 gegen Tabellenueberlauf bei Stuss-Werten
-                     break;
-        case 21:
-        case 0xA413:
-        case 22:
-        case 0xA414:
-            {
-                short nPara = SVBT16ToShort( pData );
-                if( nPara < 0 )
-                    nPara = -nPara;
-
-                SvxULSpaceItem aUL( (SvxULSpaceItem&)rS.Get(EE_PARA_ULSPACE,TRUE ));
-
-                switch( nId ){                // keine Versuche
-                case 21:
-                case 0xA413: aUL.SetUpper( nPara ); break;
-                case 22:
-                case 0xA414: aUL.SetLower( nPara ); break;
-                };
-                rS.Put( aUL );
-            };
-            break;
-        }
-        pSprm += nSL;
-        nLen -= nSL;
-    }
-}
-*/
 // InsertTxbxStyAttrs() setzt die Style-Attribute in den uebergebenen ItemSet.
 // Es werden die SW-Styles genommen, die Import-WW-Styles sind zu diesem
 // Zeitpunkt schon destruiert.
@@ -976,179 +760,142 @@ void SwWW8ImplReader::GetTxbxParaAttrs( SfxItemSet& rS, const WW8PLCFxDesc& rD )
 // ItemSet gestopft.
 void SwWW8ImplReader::InsertTxbxStyAttrs( SfxItemSet& rS, USHORT nColl )
 {
-    static USHORT __READONLY_DATA aSrcTab[] = {
-        ITEMID_FONT,
-        ITEMID_POSTURE,
-        ITEMID_WEIGHT,
-        ITEMID_SHADOWED,
-        ITEMID_CONTOUR,
-        ITEMID_CROSSEDOUT,
-        ITEMID_UNDERLINE,
-        ITEMID_FONTHEIGHT,
-        ITEMID_COLOR,
-        ITEMID_WORDLINEMODE,
-        ITEMID_ESCAPEMENT,
-        ITEMID_AUTOKERN,
-        ITEMID_KERNING,
-        ITEMID_ADJUST,
-        ITEMID_LINESPACING,
-        ITEMID_TABSTOP,
-        ITEMID_LRSPACE,
-        ITEMID_ULSPACE,
-        RES_CHRATR_CJK_FONT,
-        RES_CHRATR_CJK_FONTSIZE,
-        RES_CHRATR_EMPHASIS_MARK
-    };
-
-    static USHORT __READONLY_DATA aDstTab[] = {
-        EE_CHAR_FONTINFO,
-        EE_CHAR_ITALIC,
-        EE_CHAR_WEIGHT,
-        EE_CHAR_SHADOW,
-        EE_CHAR_OUTLINE,
-        EE_CHAR_STRIKEOUT,
-        EE_CHAR_UNDERLINE,
-        EE_CHAR_FONTHEIGHT,
-        EE_CHAR_COLOR,
-        EE_CHAR_WLM,
-        EE_CHAR_ESCAPEMENT,
-        EE_CHAR_PAIRKERNING,
-        EE_CHAR_KERNING,
-        EE_PARA_JUST,
-        EE_PARA_SBL,
-        EE_PARA_TABS,
-        EE_PARA_LRSPACE,
-        EE_PARA_ULSPACE,
-        EE_CHAR_FONTINFO_CJK,
-        EE_CHAR_FONTHEIGHT_CJK,
-        EE_CHAR_EMPHASISMARK
-    };
-
-    if( nColl < nColls && pCollA[nColl].pFmt && pCollA[nColl].bColl ){
+    if( nColl < nColls && pCollA[nColl].pFmt && pCollA[nColl].bColl )
+    {
         const SfxPoolItem* pItem;
-        for( USHORT i = 0; i < sizeof(aSrcTab)/sizeof(aSrcTab[0]); i++ ){
-            if( SFX_ITEM_SET == pCollA[nColl].pFmt->GetItemState(
-                                   aSrcTab[i], TRUE, &pItem ) ){
-                SfxPoolItem* pCopy = pItem->Clone();
-                pCopy->SetWhich( aDstTab[i] );
-                rS.Put( *pCopy );
-                delete pCopy;
+        for( USHORT i = POOLATTR_BEGIN; i < POOLATTR_END; i++ )
+        {
+            //If we are set in the source and not set in the destination
+            //then add it in.
+            if ( SFX_ITEM_SET == pCollA[nColl].pFmt->GetItemState(
+                i, TRUE, &pItem ) )
+            {
+                SfxItemPool *pEditPool = rS.GetPool();
+                USHORT nWhich = i;
+                USHORT nSlotId = rDoc.GetAttrPool().GetSlotId(nWhich);
+                if (
+                    nSlotId && nWhich != nSlotId &&
+                    0 != (nWhich = pEditPool->GetWhich(nSlotId)) &&
+                    nWhich != nSlotId &&
+                    ( SFX_ITEM_SET != rS.GetItemState(nWhich, FALSE ) )
+                   )
+                {
+                    SfxPoolItem* pCopy = pItem->Clone();
+                    pCopy->SetWhich( nWhich );
+                    rS.Put( *pCopy );
+                    delete pCopy;
+                }
             }
         }
     }
 
 }
-/*
-// InsertTxbxParaAttrs() setzt zwischen StartCp und EndCp die Style-
-// uns Absatz-Attribute. Dabei werden Style-Attribute als harte Attribute
-// gesetzt, da die EditEngine-Styles im SW UI-maessig nicht benutzt
-// werden und der Import daher das auch nicht soll.
-// Es werden also harte Para-Attrs und *alle* Style-Attrs gesetzt.
-void SwWW8ImplReader::InsertTxbxParaAttrs( long nStartCp, long nEndCp )
-{
-    nStartCp += nDrawCpO;
-    nEndCp   += nDrawCpO;
-    WW8PLCFx_Cp_FKP* pPap = pPlcxMan->GetPapPLCF();
-    pPap->SeekPos( nStartCp );
 
-    WW8_CP nStart = pPap->Where();
-    while( nStart <= nEndCp )
-    {
-        SfxItemSet aS( pDrawEditEngine->GetEmptyItemSet() );
-        WW8PLCFxDesc aDesc;
-        pPap->GetSprms( &aDesc );
-        (*pPap)++;
-        WW8_CP nNextEnd = pPap->Where();
-        WW8_CP nEnd = ( nNextEnd < nEndCp ) ? nNextEnd : nEndCp;
-
-        InsertTxbxStyAttrs( aS, pPap->GetIstd() );  // Style-Kram rein
-
-        if( aDesc.nSprmsLen && aDesc.pMemPos )  // Attribut(e) vorhanden
-            GetTxbxParaAttrs( aS, aDesc );
-
-        if( aS.Count() )
-            pDrawEditEngine->QuickSetAttribs( aS,
-                GetESelection( nStart - nStartCp, nEnd - nStartCp ) );
-        nStart = nNextEnd;
-    }
-}
-*/
 // InsertTxbxAttrs() setzt zwischen StartCp und EndCp die Attribute.
 // Dabei werden Style-Attribute als harte Attribute, Absatz- und Zeichen-
 // attribute gesetzt.
-void SwWW8ImplReader::InsertTxbxAttrs( long nStartCp,
-                                       long nEndCp,
-                                       BOOL bONLYnPicLocFc )
+void SwWW8ImplReader::InsertTxbxAttrs( long nStartCp, long nEndCp,
+    BOOL bONLYnPicLocFc )
 {
     nStartCp += nDrawCpO;
     nEndCp   += nDrawCpO;
     WW8ReaderSave aSave(this,nStartCp);
 
+    BOOL bOldAdjust = pPlcxMan->GetDoingDrawTextBox();
+    pPlcxMan->SetDoingDrawTextBox(TRUE);
     WW8_CP nStart = pPlcxMan->Where();
     WW8_CP nNext;
     WW8_CP nEnd;
-    USHORT nIstd     = pPlcxMan->GetPapPLCF()->GetIstd();
-    USHORT nNextIstd = USHRT_MAX;
+    nAktColl = pPlcxMan->GetColl();
 
     SfxItemSet *pS = new SfxItemSet(pDrawEditEngine->GetEmptyItemSet());
     WW8PLCFManResult aRes;
-    InsertTxbxStyAttrs( *pS, nIstd );
 
+    USHORT nIstd;
+    //Here store stack location
+    USHORT nCurrentCount = pCtrlStck->Count();
     while( nStart <= nEndCp )
     {
         // get position of next SPRM
-        if(    pPlcxMan->Get( &aRes )
-            && aRes.pMemPos && aRes.nSprmId )
+        BOOL bStartAttr = pPlcxMan->Get( &aRes );
+        nAktColl = pPlcxMan->GetColl();
+        if (aRes.nSprmId)
         {
             if( bONLYnPicLocFc )
             {
-                if(    (    68 == aRes.nSprmId)
-                    || (0x6A03 == aRes.nSprmId) )
+                if ( (68 == aRes.nSprmId) || (0x6A03 == aRes.nSprmId) )
                 {
                     Read_PicLoc( aRes.nSprmId,
-                                 aRes.pMemPos
-                                 + 1
-                                 + (8 > pWwFib->nVersion ? 0 : 1)
-                                 + WW8SprmDataOfs( aRes.nSprmId ),
-                                 4 );
+                        aRes.pMemPos + 1 + (8 > pWwFib->nVersion ? 0 : 1)
+                        + WW8SprmDataOfs( aRes.nSprmId ), 4 );
                     // Ok, that's it.  Now let's get out of here!
                     break;
                 }
             }
-            else if( aRes.nSprmId && (    (    256 >  aRes.nSprmId )
-                                       || ( 0x0800 <= aRes.nSprmId ) ) )
+            else if ( aRes.nSprmId && (
+                (256 >  aRes.nSprmId) || (0x0800 <= aRes.nSprmId) ) )
             {
-                GetTxbxPapAndCharAttrs( *pS, aRes );
+                //Here place them onto our usual stack and we will pop them
+                //off and convert them later
+                if (bStartAttr)
+                    ImportSprm(aRes.pMemPos, (short)aRes.nMemLen, aRes.nSprmId);
+                else
+                    EndSprm( aRes.nSprmId );
             }
         }
 
+        nIstd = pPlcxMan->GetPapPLCF()->GetIstd();
         (*pPlcxMan)++;
         nNext = pPlcxMan->Where();
 
         if( (nNext != nStart) && !bONLYnPicLocFc )
         {
-            nNextIstd = pPlcxMan->GetPapPLCF()->GetIstd();
-            if( nNextIstd != nIstd )
-            {
-                nIstd = nNextIstd;
-                // store the *next* Style's SPRMs
-                InsertTxbxStyAttrs( *pS, nIstd );
-            }
-
             nEnd = ( nNext < nEndCp ) ? nNext : nEndCp;
-            // put the attrs into the doc
+            SfxItemPool *pEditPool = pS->GetPool();
+
+            //Here read current properties and convert them into pS
+            //and put those attrs into the draw box if they can be converted
+            //to draw attributes
+            if (pCtrlStck->Count() - nCurrentCount)
+            {
+                for (USHORT i = nCurrentCount; i < pCtrlStck->Count(); i++)
+                {
+                    const SfxPoolItem *pItem = ((*pCtrlStck)[i])->pAttr;
+                    USHORT nWhich = pItem->Which();
+                    USHORT nSlotId = rDoc.GetAttrPool().GetSlotId(nWhich);
+                    if (
+                        nSlotId && nWhich != nSlotId &&
+                        0 != (nWhich = pEditPool->GetWhich(nSlotId)) &&
+                        nWhich != nSlotId
+                       )
+                    {
+                        SfxPoolItem* pCopy = pItem->Clone();
+                        pCopy->SetWhich( nWhich );
+                        pS->Put( *pCopy );
+                        delete pCopy;
+                    }
+                }
+            }
+            //Fill in the remainder from the style
+            InsertTxbxStyAttrs( *pS, nIstd );
+
             if( pS->Count() )
             {
                 pDrawEditEngine->QuickSetAttribs( *pS,
                     GetESelection( nStart - nStartCp, nEnd - nStartCp ) );
                 delete pS;
                 pS = new SfxItemSet(pDrawEditEngine->GetEmptyItemSet());
-                InsertTxbxStyAttrs( *pS, nIstd );
             }
         }
         nStart = nNext;
     }
     delete pS;
+
+    //pop off as far as recorded location just in case there were some left
+    //unclosed
+    for (USHORT nI = pCtrlStck->Count(); nI > nCurrentCount; nI--)
+        pCtrlStck->DeleteAndDestroy(nI-1);
+    pPlcxMan->SetDoingDrawTextBox(bOldAdjust);
     aSave.Restore(this);
 }
 
@@ -1536,12 +1283,15 @@ SwFrmFmt* SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
         {
             pDrawEditEngine->SetText( aString );
             InsertTxbxAttrs( nStartCp, nEndCp, FALSE );
-    //      pDrawEditEngine->QuickFormatDoc();  // nach MT nicht noetig
         }
 
-        OutlinerParaObject* pOp = new OutlinerParaObject( *pDrawEditEngine->CreateTextObject() );
+        BOOL bVertical = pTextObj->IsVerticalWriting();
+        OutlinerParaObject* pOp = new OutlinerParaObject(
+            *pDrawEditEngine->CreateTextObject());
         pOp->SetOutlinerMode( OUTLINERMODE_TEXTOBJECT );
+        pOp->SetVertical( bVertical );
         pTextObj->NbcSetOutlinerParaObject( pOp );
+        pTextObj->SetVerticalWriting(bVertical);
 
         // Fuer die naechste Textbox noch die alten Absatz-Attribute
         // und Styles entfernen, sonst startet die naechste Box
@@ -1550,7 +1300,7 @@ SwFrmFmt* SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
         // und an diesem Absatz die Absatzattribute und Styles loeschen
         // (Empfehlung JOE)
         pDrawEditEngine->SetText( aEmptyStr );
-        pDrawEditEngine->SetParaAttribs( 0, pDrawEditEngine->GetEmptyItemSet() );
+        pDrawEditEngine->SetParaAttribs(0, pDrawEditEngine->GetEmptyItemSet());
     }
 
     pStrm->Seek( nOld );
@@ -3207,11 +2957,14 @@ void SwWW8ImplReader::EmbeddedFlyFrameSizeLock(SwNodeIndex &rStart,
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8graf.cxx,v 1.27 2001-06-06 12:46:32 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8graf.cxx,v 1.28 2001-06-12 09:24:43 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.27  2001/06/06 12:46:32  cmc
+      #76673# ##1005## Fastsave table Insert/Delete Cell implementation, const reworking required
+
       Revision 1.26  2001/06/02 16:06:14  cmc
       #68662# ##989## parent frame of a fly in fly exported as a table
 

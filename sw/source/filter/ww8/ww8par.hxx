@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: cmc $ $Date: 2001-06-06 12:46:32 $
+ *  last change: $Author: cmc $ $Date: 2001-06-12 09:24:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -309,6 +309,8 @@ public:
 
     BOOL IsFtnEdnBkmField(SwFmtFld& rFmtFld, USHORT& nBkmNo);
     void NewAttr(const SwPosition& rPos, const SfxPoolItem& rAttr);
+    void SetAttr(const SwPosition& rPos, USHORT nAttrId=0, BOOL bTstEnde=TRUE,
+        long nHand=LONG_MAX);
     void SetToggleAttr( BYTE nId, BOOL bOn )
     {
         if( bOn )
@@ -901,14 +903,7 @@ friend class WW8FormulaControl;
     void ReadArc( WW8_DPHEAD* pHd, WW8_DO* pDo );
     void ReadPolyLine( WW8_DPHEAD* pHd, WW8_DO* pDo );
     ESelection GetESelection( long nCpStart, long nCpEnd );
-    /*
-    void GetTxbxCharAttrs( SfxItemSet& rS, const WW8PLCFxDesc& rD, BOOL bONLYnPicLocFc );
-    void GetTxbxParaAttrs( SfxItemSet& rS, const WW8PLCFxDesc& rD );
-    */
-    void GetTxbxPapAndCharAttrs( SfxItemSet& rS, const WW8PLCFManResult& rRes );
-    //void InsertTxbxCharAttrs( long nStartCp, long nEndCp, BOOL bONLYnPicLocFc );
     void InsertTxbxStyAttrs( SfxItemSet& rS, USHORT nColl );
-    //void InsertTxbxParaAttrs( long nStartCp, long nEndCp );
     void InsertTxbxAttrs( long nStartCp, long nEndCp, BOOL bONLYnPicLocFc );
 
     BOOL GetTxbxTextSttEndCp( long& rStartCp, long& rEndCp,
@@ -1159,11 +1154,14 @@ public:     // eigentlich private, geht aber leider nur public
 
     Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.hxx,v 1.27 2001-06-06 12:46:32 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.hxx,v 1.28 2001-06-12 09:24:43 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.27  2001/06/06 12:46:32  cmc
+      #76673# ##1005## Fastsave table Insert/Delete Cell implementation, const reworking required
+
       Revision 1.26  2001/05/08 14:02:43  cmc
       ##845## Don't use fallback stream to find escher graphics when stored directly after PICF header
 

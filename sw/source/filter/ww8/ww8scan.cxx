@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: cmc $ $Date: 2001-06-06 12:46:32 $
+ *  last change: $Author: cmc $ $Date: 2001-06-12 09:24:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3285,6 +3285,8 @@ void WW8PLCFMan::AdjustEnds( WW8PLCFxDesc& rDesc )
     //Store old end position for supercool new property finder that uses
     //cp instead of fc's as nature intended
     rDesc.nOrigEndPos = rDesc.nEndPos;
+    if (GetDoingDrawTextBox())
+        return;
 
     if ( (&rDesc == pPap) && rDesc.bRealLineEnd )
     {
@@ -3399,6 +3401,7 @@ static USHORT GetId( BYTE nVersion, WW8PLCFxDesc* p )
 
 WW8PLCFMan::WW8PLCFMan( WW8ScannerBase* pBase, short nType, long nStartCp )
 {
+    bDoingDrawTextBox = FALSE;
     pWwFib      = pBase->pWw8Fib;
     pNoAttrScan = &pBase->nNoAttrScan;
 
@@ -6412,11 +6415,14 @@ BYTE WW8SprmDataOfs( USHORT nId )
 /*************************************************************************
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8scan.cxx,v 1.18 2001-06-06 12:46:32 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8scan.cxx,v 1.19 2001-06-12 09:24:43 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.18  2001/06/06 12:46:32  cmc
+      #76673# ##1005## Fastsave table Insert/Delete Cell implementation, const reworking required
+
       Revision 1.17  2001/06/02 16:06:14  cmc
       #68662# ##989## parent frame of a fly in fly exported as a table
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: cmc $ $Date: 2001-06-06 12:46:32 $
+ *  last change: $Author: cmc $ $Date: 2001-06-12 09:24:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -427,6 +427,24 @@ void SwWW8FltControlStack::NewAttr(const SwPosition& rPos, const SfxPoolItem& rA
     }
     else
         SwFltControlStack::NewAttr(rPos, rAttr);
+}
+
+void SwWW8FltControlStack::SetAttr(const SwPosition& rPos, USHORT nAttrId, BOOL bTstEnde, long nHand)
+{
+    //Doing a textbox, and using the control stack only as a temporary
+    //collection point for properties which will are not to be set into
+    //the real document
+    if (rReader.pPlcxMan && rReader.pPlcxMan->GetDoingDrawTextBox())
+    {
+        for (USHORT i=0; i < Count(); i++)
+        {
+            SwFltStackEntry* pEntry = (*this)[ i ];
+            if( nAttrId == pEntry->pAttr->Which())
+                DeleteAndDestroy(i);
+        }
+    }
+    else //Normal case, set the attribute into the document
+        SwFltControlStack::SetAttr(rPos, nAttrId, bTstEnde, nHand);
 }
 
 void SwWW8FltControlStack::SetAttrInDoc(const SwPosition& rTmpPos, SwFltStackEntry* pEntry)
@@ -3132,11 +3150,14 @@ void SwMSDffManager::ProcessClientAnchor2( SvStream& rSt, DffRecordHeader& rHd, 
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.cxx,v 1.23 2001-06-06 12:46:32 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.cxx,v 1.24 2001-06-12 09:24:43 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.23  2001/06/06 12:46:32  cmc
+      #76673# ##1005## Fastsave table Insert/Delete Cell implementation, const reworking required
+
       Revision 1.22  2001/05/08 14:02:43  cmc
       ##845## Don't use fallback stream to find escher graphics when stored directly after PICF header
 
