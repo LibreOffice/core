@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctloptions.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: pb $ $Date: 2002-05-08 07:23:30 $
+ *  last change: $Author: os $ $Date: 2002-08-14 11:02:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,7 @@ private:
 
     sal_Bool    m_bIsLoaded;
     sal_Bool    m_bCTLFontEnabled;
+    sal_Bool    m_bCTLSequenceChecking;
 
 public:
     SvtCTLOptions_Impl();
@@ -105,6 +106,9 @@ public:
     sal_Bool        IsLoaded() { return m_bIsLoaded; }
     void            SetCTLFontEnabled( sal_Bool _bEnabled );
     sal_Bool        IsCTLFontEnabled() const { return m_bCTLFontEnabled; }
+
+    void            SetCTLSequenceChecking( sal_Bool _bEnabled );
+    sal_Bool        IsCTLSequenceChecking() const { return m_bCTLSequenceChecking;}
 };
 //------------------------------------------------------------------------------
 Sequence< rtl::OUString > SvtCTLOptions_Impl::m_aPropertyNames;
@@ -114,7 +118,8 @@ SvtCTLOptions_Impl::SvtCTLOptions_Impl() :
     utl::ConfigItem( ASCII_STR("Office.Common/I18N/CTL") ),
 
     m_bIsLoaded         ( sal_False ),
-    m_bCTLFontEnabled   ( sal_False )
+    m_bCTLFontEnabled   ( sal_False ),
+    m_bCTLSequenceChecking( sal_False )
 
 {
 }
@@ -140,7 +145,8 @@ void SvtCTLOptions_Impl::Commit()
     {
         switch( nProp )
         {
-            case  0: bVal = m_bCTLFontEnabled; break;
+            case 0: bVal = m_bCTLFontEnabled; break;
+            case 1: bVal = m_bCTLSequenceChecking; break;
         }
         pValues[nProp].setValue( &bVal, getBooleanCppuType() );
     }
@@ -151,9 +157,10 @@ void SvtCTLOptions_Impl::Load()
 {
     if ( !m_aPropertyNames.getLength() )
     {
-        m_aPropertyNames.realloc(1);
+        m_aPropertyNames.realloc(2);
         rtl::OUString* pNames = m_aPropertyNames.getArray();
         pNames[0] = ASCII_STR("CTLFont");
+        pNames[1] = ASCII_STR("CTLSequenceChecking");
         EnableNotification( m_aPropertyNames );
     }
     Sequence< Any > aValues = GetProperties( m_aPropertyNames );
@@ -172,21 +179,32 @@ void SvtCTLOptions_Impl::Load()
                     switch ( nProp )
                     {
                         case 0: m_bCTLFontEnabled = bValue; break;
+                        case 1: m_bCTLSequenceChecking = bValue;break;
                     }
                 }
             }
         }
     }
-
     m_bIsLoaded = sal_True;
 }
 //------------------------------------------------------------------------------
 void SvtCTLOptions_Impl::SetCTLFontEnabled( sal_Bool _bEnabled )
 {
-    m_bCTLFontEnabled = _bEnabled;
-    SetModified();
+    if(m_bCTLFontEnabled != _bEnabled)
+    {
+        m_bCTLFontEnabled = _bEnabled;
+        SetModified();
+    }
 }
-
+//------------------------------------------------------------------------------
+void SvtCTLOptions_Impl::SetCTLSequenceChecking( sal_Bool _bEnabled )
+{
+    if(m_bCTLSequenceChecking != _bEnabled)
+    {
+        SetModified();
+        m_bCTLSequenceChecking = _bEnabled;
+    }
+}
 // global ----------------------------------------------------------------
 
 static SvtCTLOptions_Impl*  pCTLOptions = NULL;
@@ -229,5 +247,17 @@ sal_Bool SvtCTLOptions::IsCTLFontEnabled() const
 {
     DBG_ASSERT( pCTLOptions->IsLoaded(), "CTL options not loaded" );
     return pCTLOptions->IsCTLFontEnabled();
+}
+// -----------------------------------------------------------------------------
+void SvtCTLOptions::SetCTLSequenceChecking( sal_Bool _bEnabled )
+{
+    DBG_ASSERT( pCTLOptions->IsLoaded(), "CTL options not loaded" );
+    pCTLOptions->SetCTLSequenceChecking(_bEnabled);
+}
+// -----------------------------------------------------------------------------
+sal_Bool SvtCTLOptions::IsCTLSequenceChecking() const
+{
+    DBG_ASSERT( pCTLOptions->IsLoaded(), "CTL options not loaded" );
+    return pCTLOptions->IsCTLSequenceChecking();
 }
 

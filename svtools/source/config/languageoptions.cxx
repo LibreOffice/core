@@ -2,9 +2,9 @@
  *
  *  $RCSfile: languageoptions.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: pb $ $Date: 2002-05-13 09:34:57 $
+ *  last change: $Author: os $ $Date: 2002-08-14 11:02:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,5 +166,15 @@ void SvtLanguageOptions::SetCTLFontEnabled( sal_Bool _bEnabled )
 sal_Bool SvtLanguageOptions::IsCTLFontEnabled() const
 {
     return m_pCTLOptions->IsCTLFontEnabled();
+}
+//------------------------------------------------------------------------------
+void SvtLanguageOptions::SetCTLSequenceChecking( sal_Bool _bEnabled )
+{
+    m_pCTLOptions->SetCTLSequenceChecking( _bEnabled );
+}
+//------------------------------------------------------------------------------
+sal_Bool SvtLanguageOptions::IsCTLSequenceChecking() const
+{
+    return m_pCTLOptions->IsCTLSequenceChecking();
 }
 
