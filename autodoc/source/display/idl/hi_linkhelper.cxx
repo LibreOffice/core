@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hi_linkhelper.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:14:57 $
+ *  last change: $Author: vg $ $Date: 2003-07-02 13:49:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ LinkHelper::Search_Module( output::Node & i_node ) const
         rEnv.CurPosition().RelatedNode().Set_RelatedNameRoom(nId);
     }
 
-    return & rEnv.Data().Find_Module( static_cast<ary::idl::Ce_id>(nId) );
+    return & rEnv.Data().Find_Module( ary::idl::Ce_id(nId) );
 }
 
 LinkHelper::OutPosition
