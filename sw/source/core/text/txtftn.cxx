@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtftn.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: fme $ $Date: 2001-12-05 09:15:05 $
+ *  last change: $Author: fme $ $Date: 2001-12-06 14:09:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -949,7 +949,7 @@ SwFtnPortion *SwTxtFormatter::NewFtnPortion( SwTxtFormatInfo &rInf,
     }
     else
 #ifdef VERTICAL_LAYOUT
-        nAdd = pFrm->Frm().Height() -pFrm->Prt().Height() -pFrm->Prt().Top();
+        nAdd = (pFrm->*fnRect->fnGetBottomMargin)();
 #else
         pPrtFrm = pFrm;
 #endif
@@ -958,10 +958,7 @@ SwFtnPortion *SwTxtFormatter::NewFtnPortion( SwTxtFormatInfo &rInf,
     if( nAdd > 0 )
     {
         if ( bVert )
-        {
-            ASSERT( nLower >= nAdd, "nLower a nAdd!" );
             nLower -= nAdd;
-        }
         else
             nLower += nAdd;
     }
