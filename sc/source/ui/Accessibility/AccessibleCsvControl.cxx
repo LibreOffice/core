@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleCsvControl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-29 15:56:20 $
+ *  last change: $Author: sab $ $Date: 2002-09-04 13:57:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -979,8 +979,9 @@ Reference< XAccessible > SAL_CALL ScAccessibleCsvGrid::getAccessibleAt( const Aw
         ensureAlive();
 
         const ScCsvGrid& rGrid = implGetGrid();
-        sal_Int32 nColumn = (rPoint.X > rGrid.GetOffsetX()) ? lcl_GetApiColumn( rGrid.GetColumnFromX( rPoint.X ) ) : 0;
-        sal_Int32 nRow = (rPoint.Y > rGrid.GetOffsetY()) ? (rGrid.GetLineFromY( rPoint.Y ) - rGrid.GetFirstVisLine() + 1) : 0;
+        // #102679#; use >= instead of >, because the offset is the size and not the point
+        sal_Int32 nColumn = (rPoint.X >= rGrid.GetOffsetX()) ? lcl_GetApiColumn( rGrid.GetColumnFromX( rPoint.X ) ) : 0;
+        sal_Int32 nRow = (rPoint.Y >= rGrid.GetOffsetY()) ? (rGrid.GetLineFromY( rPoint.Y ) - rGrid.GetFirstVisLine() + 1) : 0;
         xRet = implCreateCellObj( nRow, nColumn );
     }
     return xRet;
@@ -1657,11 +1658,17 @@ Point ScAccessibleCsvCell::implGetRealPos() const
         (mnLine == CSV_LINE_HEADER) ? 0 : rGrid.GetY( mnLine ) );
 }
 
+sal_uInt32 ScAccessibleCsvCell::implCalcPixelWidth(sal_uInt32 nChars) const
+{
+    ScCsvGrid& rGrid = implGetGrid();
+    return rGrid.GetCharWidth() * nChars;
+}
+
 Size ScAccessibleCsvCell::implGetRealSize() const
 {
     ScCsvGrid& rGrid = implGetGrid();
     return Size(
-        (mnColumn == CSV_COLUMN_HEADER) ? rGrid.GetOffsetX() : rGrid.GetColumnWidth( mnColumn ),
+        (mnColumn == CSV_COLUMN_HEADER) ? rGrid.GetOffsetX() : implCalcPixelWidth(rGrid.GetColumnWidth( mnColumn )),
         (mnLine == CSV_LINE_HEADER) ? rGrid.GetOffsetY() : rGrid.GetLineHeight() );
 }
 
