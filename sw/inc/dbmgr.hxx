@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-10-27 11:26:20 $
+ *  last change: $Author: hr $ $Date: 2000-10-31 15:26:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,9 +147,9 @@ struct SwDSParam
     com::sun::star::util::Date  aNullDate;
 
     ::com::sun::star::uno::Reference<com::sun::star::util::XNumberFormatter>    xFormatter;
-    ::com::sun::star::uno::Reference<::com::sun::star::sdbc::XConnection>       xConnection;
-    ::com::sun::star::uno::Reference<::com::sun::star::sdbc::XStatement>        xStatement;
-    ::com::sun::star::uno::Reference<::com::sun::star::sdbc::XResultSet>        xResultSet;
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>      xConnection;
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XStatement>       xStatement;
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>           xResultSet;
 
     SbaSelectionListRef         xSelectionList;
     BOOL bScrollable;
@@ -308,7 +308,7 @@ public:
                 ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource>& rxSource);
 
     static ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier>
-            GetColumnSupplier(::com::sun::star::uno::Reference<::com::sun::star::sdbc::XConnection>,
+            GetColumnSupplier(::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>,
                                     const String& rTableOrQuery,
                                     BYTE    eTableOrQuery = SW_DB_SELECT_UNKNOWN);
 
