@@ -2,9 +2,9 @@
  *
  *  $RCSfile: arguments.h,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 18:19:27 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 16:13:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,7 @@ namespace framework{
 #define ARGUMENTNAME_VERSION                                DECLARE_ASCII("Version"             )   // int16
 #define ARGUMENTNAME_VIEWID                                 DECLARE_ASCII("ViewId"              )   // int16
 #define ARGUMENTNAME_REPAIRPACKAGE                          DECLARE_ASCII("RepairPackage"       )   // bool
+#define ARGUMENTNAME_DOCUMENTTITLE                          DECLARE_ASCII("DocumentTitle"       )   // string
 
 /*-************************************************************************************************************//**
     @short          define our argument mask
@@ -199,7 +200,8 @@ enum EArgument
     E_URL                   = ARGUMENTLAYER_2 | ARGUMENTFLAG_8 ,
     E_VERSION               = ARGUMENTLAYER_2 | ARGUMENTFLAG_9 ,
     E_VIEWID                = ARGUMENTLAYER_2 | ARGUMENTFLAG_10,
-    E_REPAIRPACKAGE         = ARGUMENTLAYER_2 | ARGUMENTFLAG_11
+    E_REPAIRPACKAGE         = ARGUMENTLAYER_2 | ARGUMENTFLAG_11,
+    E_DOCUMENTTITLE         = ARGUMENTLAYER_2 | ARGUMENTFLAG_12
 };
 
 } // namespace framework
