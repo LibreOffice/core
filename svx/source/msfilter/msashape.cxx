@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msashape.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sj $ $Date: 2000-10-10 15:35:19 $
+ *  last change: $Author: sj $ $Date: 2000-10-16 16:45:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3517,7 +3517,7 @@ SvxMSDffAutoShape::SvxMSDffAutoShape( const DffPropertyReader& rPropReader, SvSt
             aBoundRect = Rectangle( Point( pBoundRect[ 0 ], pBoundRect[ 1 ] ), Point( pBoundRect[ 2 ], pBoundRect[ 3 ] ) );
         else
         {
-            if ( pCalculationData )
+            if ( pCalculationData || pTextRectData )
                 aBoundRect = Rectangle( Point(), Size( 21600, 21600 ) );
             else
                 aBoundRect = Rectangle( Point(), aSnapRect.GetSize() );
@@ -3836,6 +3836,16 @@ Rectangle SvxMSDffAutoShape::GetTextRect() const
     Point aBottomRight( aAry[ 2 ], aAry[ 3 ] );
     Rectangle aRect( aTopLeft, aBottomRight );
     aRect.Move( aSnapRect.Left(), aSnapRect.Top() );
+    if ( bFlipH )
+    {
+        sal_Int32 nXDist = aSnapRect.Right() - aRect.Right();
+        aRect = Rectangle( Point( nXDist + aSnapRect.Left(), aRect.Top() ), aRect.GetSize() );
+    }
+    if ( bFlipV )
+    {
+        sal_Int32 nYDist = aSnapRect.Bottom() - aRect.Bottom();
+        aRect = Rectangle( Point( aRect.Left(), nYDist + aSnapRect.Top() ), aRect.GetSize() );
+    }
     return aRect;
 }
 
