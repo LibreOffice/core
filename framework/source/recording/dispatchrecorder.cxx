@@ -197,8 +197,9 @@ static void AppendToBuffer( css::uno::Any aValue, ::rtl::OUStringBuffer& aArgume
 
         aArgumentBuffer.appendAscii(")");
     }
-    else
+    else {
         LOG_WARNING("","Type not scriptable!")
+    }
 }
 
 void SAL_CALL DispatchRecorder::implts_recordMacro( const css::util::URL& aURL,
