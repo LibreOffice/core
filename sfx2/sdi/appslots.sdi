@@ -5,8 +5,8 @@
 #*    Description       shell SfxApplication
 #*
 #*    Creation date     MI  01/31/1995
-#*    last change       $Author: kz $ $Date: 2004-08-02 12:48:38 $
-#*    $Revision: 1.14 $
+#*    last change       $Author: hr $ $Date: 2004-08-02 15:19:59 $
+#*    $Revision: 1.15 $
 #*
 #*    Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.
 #*
@@ -347,6 +347,9 @@ interface Application : Module
 
      //---------------------------------------------------------------------
     SID_RECENTFILELIST
+    [
+    ]
+    SID_AVAILABLE_TOOLBARS
     [
     ]
 }
