@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dcontact.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-09-29 15:04:47 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 15:59:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,9 +240,10 @@ class SwDrawVirtObj : public SdrVirtObj
 
         // #108784#
         // All overloaded methods which need to use the offset
-        virtual const Rectangle& GetBoundRect() const;
+        virtual const Rectangle& GetCurrentBoundRect() const;
+        virtual const Rectangle& GetLastBoundRect() const;
         virtual void RecalcBoundRect();
-        virtual FASTBOOL Paint(ExtOutputDevice& rOut, const SdrPaintInfoRec& rInfoRec) const;
+        virtual sal_Bool DoPaintObject(ExtOutputDevice& rOut, const SdrPaintInfoRec& rInfoRec) const;
         virtual SdrObject* CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const;
         virtual void TakeXorPoly(XPolyPolygon& rPoly, FASTBOOL bDetail) const;
         virtual void TakeContour(XPolyPolygon& rPoly) const;
