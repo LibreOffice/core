@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: cmc $ $Date: 2002-11-21 13:40:25 $
+ *  last change: $Author: cmc $ $Date: 2002-11-21 17:06:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2080,24 +2080,26 @@ void SwWW8ImplReader::AdjustULWrapForWordMargins(SvxMSDffImportRec* pRecord,
 void SwWW8ImplReader::MatchWrapDistancesIntoFlyFmt(SvxMSDffImportRec* pRecord,
     SwFrmFmt* pFlyFmt )
 {
-    if( pRecord->nDxWrapDistLeft || pRecord->nDxWrapDistRight )
+    if (!pRecord || !pFlyFmt)
+        return;
+
+    if (pRecord->nDxWrapDistLeft || pRecord->nDxWrapDistRight)
     {
         SvxLRSpaceItem aLR;
         aLR.SetLeft(pRecord->nDxWrapDistLeft);
         aLR.SetRight(pRecord->nDxWrapDistRight);
         AdjustLRWrapForWordMargins(pRecord, &aLR);
-        pFlyFmt->SetAttr( aLR );
+        pFlyFmt->SetAttr(aLR);
     }
-    if( pRecord->nDyWrapDistTop || pRecord->nDyWrapDistBottom )
+    if (pRecord->nDyWrapDistTop || pRecord->nDyWrapDistBottom)
     {
         SvxULSpaceItem aUL;
-        aUL.SetUpper(   (USHORT)pRecord->nDyWrapDistTop );
-        aUL.SetLower(   (USHORT)pRecord->nDyWrapDistBottom );
-        AdjustULWrapForWordMargins( pRecord, &aUL);
-        pFlyFmt->SetAttr( aUL );
+        aUL.SetUpper((USHORT)pRecord->nDyWrapDistTop);
+        aUL.SetLower((USHORT)pRecord->nDyWrapDistBottom);
+        AdjustULWrapForWordMargins(pRecord, &aUL);
+        pFlyFmt->SetAttr(aUL);
     }
 }
-
 
 void SwWW8ImplReader::SetAttributesAtGrfNode( SvxMSDffImportRec* pRecord,
     SwFrmFmt *pFlyFmt, WW8_FSPA *pF )
@@ -2475,22 +2477,20 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
         return 0;
     }
 
-    if( !pMSDffManager->GetModel() )
+    if (!pMSDffManager->GetModel())
          pMSDffManager->SetModel(pDrawModel, 1440);
 
-    SdrObject* pObject = 0;
 
     Rectangle aRect(pF->nXaLeft,  pF->nYaTop, pF->nXaRight, pF->nYaBottom);
     SvxMSDffImportData aData( aRect );
 
-    if (!(pMSDffManager->GetShape( pF->nSpId, pObject, aData ) && pObject))
+    SdrObject* pObject = 0;
+    if (!(pMSDffManager->GetShape(pF->nSpId, pObject, aData) && pObject))
     {
         ASSERT( !this, "Where is the Shape ?" );
         return 0;
     }
 
-    const SdrObject* pOrgShapeObject = pObject;
-    SvxMSDffImportRec* pRecord;
     bool bDone = false;
     SdrObject* pOurNewObject = 0;
     bool bReplaceable = false;
@@ -2513,7 +2513,7 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
     SfxItemSet aFlySet(rDoc.GetAttrPool(), RES_FRMATR_BEGIN, RES_FRMATR_END-1);
     SwSurround eSurround = SURROUND_PARALLEL;
     bool bContour = false;
-    switch( pF->nwr )
+    switch (pF->nwr)
     {
         case 0: //0 like 2, but doesn't require absolute object
         case 2: //2 wrap around absolute object
@@ -2533,18 +2533,26 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
     }
 
     // bei Modus 2 oder 4 auch den Zusatzparameter beruecksichtigen
-    if( ( 2 == pF->nwr ) || ( 4 == pF->nwr ) )
+    if ( (2 == pF->nwr) || (4 == pF->nwr) )
     {
         switch( pF->nwrk )
         {
-        //0 wrap both sides
-        case 0: eSurround = SURROUND_PARALLEL;  break;
-        //1 wrap only on left
-        case 1: eSurround = SURROUND_LEFT;      break;
-        //2 wrap only on right
-        case 2: eSurround = SURROUND_RIGHT;     break;
-        //3 wrap only on largest side
-        case 3: eSurround = SURROUND_IDEAL;     break;
+            //0 wrap both sides
+            case 0:
+                eSurround = SURROUND_PARALLEL;
+                break;
+            //1 wrap only on left
+            case 1:
+                eSurround = SURROUND_LEFT;
+                break;
+            //2 wrap only on right
+            case 2:
+                eSurround = SURROUND_RIGHT;
+                break;
+            //3 wrap only on largest side
+            case 3:
+                eSurround = SURROUND_IDEAL;
+                break;
         }
     }
 
@@ -2556,24 +2564,45 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
     // eingelesenes Objekt (kann eine ganze Gruppe sein) jetzt korrekt
     // positionieren usw.
 
-    SwFrmFmt* pRetFrmFmt = 0;
-    pRecord = ( aData.HasRecords() && (1 == aData.GetRecCount() ) )
-        ? aData.GetRecord( 0 ) : 0;
+    ASSERT(!((aData.GetRecCount() != 1) && bReplaceable),
+        "Replaceable drawing with > 1 entries ?");
+
+    if (aData.GetRecCount() != 1)
+        bReplaceable = false;
+
+    SvxMSDffImportRec* pRecord = 0;
+    /*
+        Get the record for top level object, so we can get the word anchoring
+        and wrapping information for it.
+    */
+    USHORT nRecCount = aData.GetRecCount();
+    for (USHORT nTxbx=0; nTxbx < nRecCount; ++nTxbx )
+    {
+        pRecord = aData.GetRecord( nTxbx );
+        if (pRecord && pRecord->pObj == pObject)
+            break;
+        else
+            pRecord = 0;
+    }
+
+    ASSERT(pRecord, "how did that happen?");
+    if (!pRecord)
+        return 0;
 
     //If we are to be "below text" then we are not to be opaque
-    if( pF->bBelowText || ( pRecord ? pRecord->bDrawHell : 0 ) )
+    if (pF->bBelowText || pRecord->bDrawHell)
         aFlySet.Put(SvxOpaqueItem(RES_OPAQUE,false));
 
-
-    if( bReplaceable )
+    SwFrmFmt* pRetFrmFmt = 0;
+    if (bReplaceable)
     {
+        //Single graphics or ole objects
         pRetFrmFmt = ImportReplaceableDrawables(pObject, pOurNewObject, pRecord,
             pF, aFlySet);
     }
     else
     {
-        // eingelesenes Objekt (kann eine ganze Gruppe sein) jetzt korrekt
-        // positionieren usw.
+        //Drawing objects, (e.g. ovals or drawing groups)
         if (pF->bRcaSimple)
         {
             pF->nbx = WW8_FSPA::RelPageBorder;
@@ -2590,8 +2619,7 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
             bReplaceable);
 
         // Should we, and is it possible to make this into a writer textbox
-        if( (!(nIniFlags1 & WW8FL_NO_FLY_FOR_TXBX)) &&
-            (pRecord && pRecord->bReplaceByFly) )
+        if ((!(nIniFlags1 & WW8FL_NO_FLY_FOR_TXBX)) && pRecord->bReplaceByFly)
         {
             pRetFrmFmt = ConvertDrawTextToFly(pObject, pOurNewObject, pRecord,
                 eAnchor, pF, aFlySet);
@@ -2599,11 +2627,11 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
                 bDone = true;
         }
 
-        if( !bDone )
+        if (!bDone)
         {
             if (FmFormInventor == pObject->GetObjInventor())
                 pObject->SetLayer(rDoc.GetControlsId());
-            else if (pF->bBelowText || (pRecord ? pRecord->bDrawHell : 0))
+            else if (pF->bBelowText || pRecord->bDrawHell)
                 pObject->SetLayer(nDrawHell);
             else
                 pObject->SetLayer(nDrawHeaven);
@@ -2614,48 +2642,27 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
             */
             pWWZOrder->InsertEscherObject(pObject,pF->nSpId);
             pRetFrmFmt = rDoc.Insert( *pPaM, *pObject, &aFlySet );
-        }
-    }
 
-    /*
-        Adjust inner and outer edge distances, and insert text if necessary
-        into textboxes contained in groups that were not converted to
-        textframes.
-    */
-    if( !bDone && aData.HasRecords() )
-    {
-        USHORT nRecCount = aData.GetRecCount();
-        for(USHORT nTxbx=0; nTxbx < nRecCount; nTxbx++ )
-        {
-            pRecord = aData.GetRecord( nTxbx );
-            if( pRecord && pRecord->pObj )
+            /*
+                Insert text if necessary into textboxes contained in groups.
+            */
+            if (aData.HasRecords())
             {
-                SdrObject* pTrueObject =
-                    (bReplaceable && (pOrgShapeObject == pRecord->pObj))
-                    ? pOurNewObject : pRecord->pObj;
-
-                if( pTrueObject )
+                USHORT nRecCount = aData.GetRecCount();
+                for (USHORT nTxbx=0; nTxbx < nRecCount; ++nTxbx)
                 {
-                    if (FmFormInventor == pTrueObject->GetObjInventor())
-                        pTrueObject->SetLayer(rDoc.GetControlsId());
-                    else if( pF->bBelowText || pRecord->bDrawHell)
-                        pTrueObject->SetLayer(nDrawHell);
-                    else
-                        pTrueObject->SetLayer(nDrawHeaven);
-                }
-
-                if( pTrueObject == pRecord->pObj )
-                    MatchWrapDistancesIntoFlyFmt(pRecord, pRetFrmFmt);
-
-                if( pRecord->aTextId.nTxBxS && !bReplaceable)
-                {
-                    MungeTextIntoDrawBox(pTrueObject,pRecord,nGrafAnchorCp,
-                        pRetFrmFmt);
+                    pRecord = aData.GetRecord(nTxbx);
+                    if (pRecord && pRecord->pObj && pRecord->aTextId.nTxBxS)
+                    {
+                        MungeTextIntoDrawBox(pRecord->pObj, pRecord,
+                            nGrafAnchorCp, pRetFrmFmt);
+                    }
                 }
             }
         }
     }
 
+    MatchWrapDistancesIntoFlyFmt(pRecord, pRetFrmFmt);
     return AddAutoAnchor(pRetFrmFmt);
 }
 
@@ -2836,8 +2843,6 @@ SwFlyFrmFmt* SwWW8ImplReader::ConvertDrawTextToFly(SdrObject* &rpObject,
         ASSERT(pRetFrmFmt->GetAnchor().GetAnchorId() == eAnchor,
             "Not the anchor type requested!");
 
-        MatchWrapDistancesIntoFlyFmt( pRecord, pRetFrmFmt );
-
         // falls alles Ok, Zeiger auf neues Objekt ermitteln und Z-Order-Liste
         // entsprechend korrigieren (oder Eintrag loeschen)
         rpOurNewObject = CreateContactObject(pRetFrmFmt);
@@ -2974,7 +2979,6 @@ SwFlyFrmFmt* SwWW8ImplReader::ImportReplaceableDrawables( SdrObject* &rpObject,
     {
         if( pRecord )
         {
-            MatchWrapDistancesIntoFlyFmt(pRecord, pRetFrmFmt);
             if( OBJ_OLE2 != SdrObjKind(rpObject->GetObjIdentifier()) )
                 SetAttributesAtGrfNode( pRecord, pRetFrmFmt, pF );
         }
