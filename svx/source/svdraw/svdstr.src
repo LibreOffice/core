@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdstr.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-09 12:20:39 $
+ *  last change: $Author: rt $ $Date: 2000-11-15 20:56:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4255,7 +4255,7 @@ String STR_EditShear
     Text[ arabic ] = "ΚΝΡνέ Τία %O (γΗΖα)";
     Text[ dutch ] = "%O vervormen (schuintrekken)";
     Text[ chinese_simplified ] = "%O Ε¤Ηϊ(ΗγΠ±)";
-    Text[ greek ] = "Παραμόρφωση %O (πλάγια)";
+    Text[ greek ] = "Παραμόρφωση %O (λοξά)";
     Text[ korean ] = "%O ΐΟ±Χ·―¶ίΈ²(±βΏο±β)";
     Text[ turkish ] = "Ηarpύt (eπ): %O";
     Text[ language_user1 ] = " ";
@@ -5864,7 +5864,7 @@ String STR_DragMethShear
     Text[ arabic ] = "ΚΝΡνέ Τία %O (γΗΖα)";
     Text[ dutch ] = "%O vervormen (schuintrekken)";
     Text[ chinese_simplified ] = "%O Ε¤Ηϊ(ΗγΠ±)";
-    Text[ greek ] = "Παραμόρφωση %O (πλάγια)";
+    Text[ greek ] = "Παραμόρφωση %O (λοξά)";
     Text[ korean ] = "%O ΐΟ±Χ·―¶ίΈ²(±βΏο±β)";
     Text[ turkish ] = "Ηarpύt (eπ): %O";
     Text[ language_user1 ] = " ";
@@ -13054,7 +13054,7 @@ String SIP_SA_AUTOSHAPE_ADJUSTMENT
     Text[ spanish ] = "Ajuste de autoformas";
     Text[ italian ] = "Regolazione autoshape";
     Text[ danish ] = "SvDraw Autoshape Adjustment";
-    Text[ swedish ] = "Justering AutoForm";
+    Text[ swedish ] = "Justering av autoformer";
     Text[ polish ] = "Justowanie form automatycznych";
     Text[ portuguese_brazilian ] = "SvDraw Autoshape Adjustment";
     Text[ japanese ] = "µ°ΔΌª²Μί’²®";
