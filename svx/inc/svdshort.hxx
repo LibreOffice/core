@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdshort.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 14:28:26 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 10:23:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,7 @@
 #ifdef Weg_Mit_Den_Doofen_Abkuerzungen
                                            // Statistik - Stand 02-03-1995
                                            //   Haeufigkeit  Ersparnis
-#define SdrObjSurrogate              SdrSU
+//BFS01#define SdrObjSurrogate              SdrSU
 #define SdrHelpLineKind              SdrFLK /* HL ist schon besetzt */
 #define SdrHelpLineList              SdrFLL /* HL ist schon besetzt */
 #define SdrHelpLine                  SdrFL  /* HL ist schon besetzt */
@@ -94,7 +94,7 @@
 #define SdrHdlList                   SdrHL
 #define SdrLayerAdmin                SdrLA
 //#define SdrObjEditRec                SdrER
-#define SdrObjIOHeader               SdrOH
+//BFS01#define SdrObjIOHeader               SdrOH
 #define SdrObjUserCall               SdrUC
 #define SdrObjUnknown                SdrUO
 #define SdrExchangeView              SdrXV
@@ -110,7 +110,7 @@
 #define SdrPage                      SdrPg
 #define SdrObjEditView               SdrOV
 #define SdrModel                     SdrMD
-#define ExtOutputDevice              SdrXO
+#define XOutputDevice              SdrXO
 #define SdrEditView                  SdrEV
 #define SdrPaintView                 SdrNV
 #define SdrPolyObj                   SdrPO
