@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: thb $ $Date: 2001-06-21 15:47:37 $
+#   last change: $Author: hjs $ $Date: 2002-02-07 10:49:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -353,6 +353,7 @@ SLOFILES=\
 
 EXCEPTIONSFILES=\
         $(SLO)$/_bmpmask.obj	\
+        $(SLO)$/frmsel.obj   \
         $(SLO)$/hltpbase.obj	\
         $(SLO)$/hldocntp.obj	\
         $(SLO)$/hlmarkwn.obj	\
