@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propcontroller.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2004-11-26 18:27:01 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 11:12:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,8 +218,10 @@ namespace pcr
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >
                             m_xView;
 
+        /** if we connect the rowset ourself, we own the connection, and are responsible for it
+        */
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >
-                            m_xRowsetConnection;
+                            m_xOwnedRowsetConnection;
 
         // <properties>
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
@@ -467,9 +469,9 @@ namespace pcr
         void SetStringSeq(const ::com::sun::star::beans::Property& rProperty, OLineDescriptor& _rUIData);
 
 
-        void        connectRowset();
+        bool        connectRowset();
         void        cleanupRowsetConnection();
-        sal_Bool    haveRowsetConnection( ) const;
+        bool        isRowsetConnected( ) const;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >
                     ensureRowsetConnection();
