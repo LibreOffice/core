@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbaccess_helpid.hrc,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-27 12:53:58 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 14:40:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -360,7 +360,7 @@
 #define HID_APP_VIEW_PREVIEW_CB                     (HID_DBACCESS_START + 276)
 #define HID_APP_VIEW_PREVIEW_1                      (HID_DBACCESS_START + 277)
 #define HID_APP_VIEW_PREVIEW_2                      (HID_DBACCESS_START + 278)
-#define HID_APP_STATUS_BAR                      (HID_DBACCESS_START + 279)
+// free
 #define UID_APP_VIEW_HORZ_SPLIT                     (HID_DBACCESS_START + 280)
 #define UID_APP_VIEW_PREVIEW_1                      (HID_DBACCESS_START + 281)
 #define HID_APP_VIEW_PREVIEW_3                      (HID_DBACCESS_START + 282)
