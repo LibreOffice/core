@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbcontrl.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: os $ $Date: 2001-09-06 14:42:50 $
+ *  last change: $Author: os $ $Date: 2001-09-17 12:58:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -681,7 +681,11 @@ long SvxFontNameBox::Notify( NotifyEvent& rNEvt )
         }
     }
     else if(EVENT_LOSEFOCUS == rNEvt.GetType())
-        SetText(GetSavedValue());
+    {
+        Window* pFocusWin = Application::GetFocusWindow();
+        if(!HasFocus() && GetSubEdit() != pFocusWin)
+            SetText(GetSavedValue());
+    }
 
     return FontNameBox::Notify( rNEvt );
 }
@@ -897,7 +901,11 @@ long SvxFontSizeBox::Notify( NotifyEvent& rNEvt )
         }
     }
     else if(EVENT_LOSEFOCUS == rNEvt.GetType())
-        SetText(GetSavedValue());
+    {
+        Window* pFocusWin = Application::GetFocusWindow();
+        if(!HasFocus() && GetSubEdit() != pFocusWin)
+            SetText(GetSavedValue());
+    }
 
     return nHandled ? nHandled : FontSizeBox::Notify( rNEvt );
 }
