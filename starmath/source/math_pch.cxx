@@ -2,9 +2,9 @@
  *
  *  $RCSfile: math_pch.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:57:26 $
+ *  last change: $Author: tl $ $Date: 2000-11-03 13:13:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,7 +186,6 @@
 #include <tools/dynary.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/svapp.hxx>
-#include <svtools/iniman.hxx>
 #include <vcl/timer.hxx>
 #include <sfx2/app.hxx>
 #include <svtools/plugapp.hxx>
