@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXMLBlockImport.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mtg $ $Date: 2001-02-08 15:52:00 $
+ *  last change: $Author: mtg $ $Date: 2001-05-02 16:40:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,7 +121,6 @@ class SwXMLTextBlockImport : public SvXMLImport
 {
 private:
     SwXMLTextBlocks &rBlockList;
-    ::rtl::OUString sContents;
 protected:
 
     // This method is called after the namespace map has been updated, but
@@ -131,13 +130,15 @@ protected:
                   const ::com::sun::star::uno::Reference<
                     ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 public:
-    SwXMLTextBlockImport ( SwXMLTextBlocks &rBlocks );
+    sal_Bool bTextOnly;
+    String &m_rText;
+
+    SwXMLTextBlockImport ( SwXMLTextBlocks &rBlocks, String &rNewText, sal_Bool bNewTextOnly );
     SwXMLTextBlocks& getBlockList ( void )
     {
         return rBlockList;
     }
     ~SwXMLTextBlockImport ( void );
-    void AppendText ( ::rtl::OUString &rText );
     virtual void SAL_CALL endDocument(void)
         throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
 
