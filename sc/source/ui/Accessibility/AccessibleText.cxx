@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleText.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sab $ $Date: 2002-04-08 15:02:57 $
+ *  last change: $Author: thb $ $Date: 2002-04-26 11:17:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,8 @@
  *
  *
  ************************************************************************/
+
+#include <memory>
 
 #include "AccessibleText.hxx"
 #ifndef SC_TABVWSH_HXX
@@ -611,7 +613,12 @@ SvxEditViewForwarder* ScAccessibleCellTextData::GetEditViewForwarder( sal_Bool b
 IMPL_LINK(ScAccessibleCellTextData, NotifyHdl, EENotify*, aNotify)
 {
     if( aNotify )
-        GetBroadcaster().Broadcast( SvxEditSourceHintTranslator::EENotification2Hint( aNotify) );
+    {
+        ::std::auto_ptr< SfxHint > aHint( SvxEditSourceHintTranslator::EENotification2Hint( aNotify) );
+
+        if( aHint.get() )
+            GetBroadcaster().Broadcast( *aHint.get() );
+    }
 
     return 0;
 }
@@ -689,7 +696,12 @@ SvxViewForwarder* ScAccessiblePreviewCellTextData::GetViewForwarder()
 IMPL_LINK(ScAccessiblePreviewCellTextData, NotifyHdl, EENotify*, aNotify)
 {
     if( aNotify )
-        GetBroadcaster().Broadcast( SvxEditSourceHintTranslator::EENotification2Hint( aNotify) );
+    {
+        ::std::auto_ptr< SfxHint > aHint( SvxEditSourceHintTranslator::EENotification2Hint( aNotify) );
+
+        if( aHint.get() )
+            GetBroadcaster().Broadcast( *aHint.get() );
+    }
 
     return 0;
 }
@@ -808,7 +820,12 @@ SvxViewForwarder* ScAccessiblePreviewHeaderCellTextData::GetViewForwarder()
 IMPL_LINK(ScAccessiblePreviewHeaderCellTextData, NotifyHdl, EENotify*, aNotify)
 {
     if( aNotify )
-        GetBroadcaster().Broadcast( SvxEditSourceHintTranslator::EENotification2Hint( aNotify) );
+    {
+        ::std::auto_ptr< SfxHint > aHint( SvxEditSourceHintTranslator::EENotification2Hint( aNotify) );
+
+        if( aHint.get() )
+            GetBroadcaster().Broadcast( *aHint.get() );
+    }
 
     return 0;
 }
