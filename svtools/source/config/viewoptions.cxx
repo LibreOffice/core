@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewoptions.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: as $ $Date: 2000-11-15 09:06:06 $
+ *  last change: $Author: as $ $Date: 2000-11-20 16:19:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -313,6 +313,7 @@ sal_Bool SvtViewDialogOptions_Impl::Delete( const OUString& sName )
     if( bState == sal_True )
     {
         m_aList.erase( sName );
+        SetModified();
     }
     return bState;
 }
@@ -320,6 +321,10 @@ sal_Bool SvtViewDialogOptions_Impl::Delete( const OUString& sName )
 //*****************************************************************************************************************
 void SvtViewDialogOptions_Impl::GetPosition( const OUString& sName, sal_Int32& nX, sal_Int32& nY )
 {
+    if( m_aList.find( sName ) == m_aList.end() )
+    {
+        SetModified();
+    }
     nX = m_aList[ sName ].nX;
     nY = m_aList[ sName ].nY;
 }
@@ -335,6 +340,10 @@ void SvtViewDialogOptions_Impl::SetPosition( const OUString& sName, sal_Int32 nX
 //*****************************************************************************************************************
 void SvtViewDialogOptions_Impl::GetSize( const OUString& sName, sal_Int32& nWidth, sal_Int32& nHeight )
 {
+    if( m_aList.find( sName ) == m_aList.end() )
+    {
+        SetModified();
+    }
     nWidth  = m_aList[ sName ].nWidth   ;
     nHeight = m_aList[ sName ].nHeight  ;
 }
@@ -350,6 +359,10 @@ void SvtViewDialogOptions_Impl::SetSize( const OUString& sName, sal_Int32 nWidth
 //*****************************************************************************************************************
 OUString SvtViewDialogOptions_Impl::GetUserData( const OUString& sName )
 {
+    if( m_aList.find( sName ) == m_aList.end() )
+    {
+        SetModified();
+    }
     return m_aList[ sName ].sUserData;
 }
 
@@ -357,6 +370,7 @@ OUString SvtViewDialogOptions_Impl::GetUserData( const OUString& sName )
 void SvtViewDialogOptions_Impl::SetUserData( const OUString& sName, const OUString& sData )
 {
     m_aList[ sName ].sUserData = sData;
+    SetModified();
 }
 
 //*****************************************************************************************************************
@@ -505,6 +519,7 @@ sal_Bool SvtViewTabDialogOptions_Impl::Delete( const OUString& sName )
     if( bState == sal_True )
     {
         m_aList.erase( sName );
+        SetModified();
     }
     return bState;
 }
@@ -512,6 +527,10 @@ sal_Bool SvtViewTabDialogOptions_Impl::Delete( const OUString& sName )
 //*****************************************************************************************************************
 void SvtViewTabDialogOptions_Impl::GetPosition( const OUString& sName, sal_Int32& nX, sal_Int32& nY )
 {
+    if( m_aList.find( sName ) == m_aList.end() )
+    {
+        SetModified();
+    }
     nX = m_aList[ sName ].nX;
     nY = m_aList[ sName ].nY;
 }
@@ -527,6 +546,10 @@ void SvtViewTabDialogOptions_Impl::SetPosition( const OUString& sName, sal_Int32
 //*****************************************************************************************************************
 sal_Int32 SvtViewTabDialogOptions_Impl::GetPageID( const OUString& sName )
 {
+    if( m_aList.find( sName ) == m_aList.end() )
+    {
+        SetModified();
+    }
     return m_aList[ sName ].nPageID;
 }
 
@@ -540,6 +563,10 @@ void SvtViewTabDialogOptions_Impl::SetPageID( const OUString& sName, sal_Int32 n
 //*****************************************************************************************************************
 OUString SvtViewTabDialogOptions_Impl::GetUserData( const OUString& sName )
 {
+    if( m_aList.find( sName ) == m_aList.end() )
+    {
+        SetModified();
+    }
     return m_aList[ sName ].sUserData;
 }
 
@@ -547,6 +574,7 @@ OUString SvtViewTabDialogOptions_Impl::GetUserData( const OUString& sName )
 void SvtViewTabDialogOptions_Impl::SetUserData( const OUString& sName, const OUString& sData )
 {
     m_aList[ sName ].sUserData = sData;
+    SetModified();
 }
 
 //*****************************************************************************************************************
@@ -683,6 +711,7 @@ sal_Bool SvtViewTabPageOptions_Impl::Delete( const OUString& sName )
     if( bState == sal_True )
     {
         m_aList.erase( sName );
+        SetModified();
     }
     return bState;
 }
@@ -690,6 +719,10 @@ sal_Bool SvtViewTabPageOptions_Impl::Delete( const OUString& sName )
 //*****************************************************************************************************************
 OUString SvtViewTabPageOptions_Impl::GetUserData( const OUString& sName )
 {
+    if( m_aList.find( sName ) == m_aList.end() )
+    {
+        SetModified();
+    }
     return m_aList[ sName ].sUserData;
 }
 
@@ -697,6 +730,7 @@ OUString SvtViewTabPageOptions_Impl::GetUserData( const OUString& sName )
 void SvtViewTabPageOptions_Impl::SetUserData( const OUString& sName, const OUString& sData )
 {
     m_aList[ sName ].sUserData = sData;
+    SetModified();
 }
 
 //*****************************************************************************************************************
@@ -843,6 +877,7 @@ sal_Bool SvtViewWindowOptions_Impl::Delete( const OUString& sName )
     if( bState == sal_True )
     {
         m_aList.erase( sName );
+        SetModified();
     }
     return bState;
 }
@@ -850,6 +885,10 @@ sal_Bool SvtViewWindowOptions_Impl::Delete( const OUString& sName )
 //*****************************************************************************************************************
 void SvtViewWindowOptions_Impl::GetPosition( const OUString& sName, sal_Int32& nX, sal_Int32& nY )
 {
+    if( m_aList.find( sName ) == m_aList.end() )
+    {
+        SetModified();
+    }
     nX = m_aList[ sName ].nX;
     nY = m_aList[ sName ].nY;
 }
@@ -865,6 +904,10 @@ void SvtViewWindowOptions_Impl::SetPosition( const OUString& sName, sal_Int32 nX
 //*****************************************************************************************************************
 void SvtViewWindowOptions_Impl::GetSize( const OUString& sName, sal_Int32& nWidth, sal_Int32& nHeight )
 {
+    if( m_aList.find( sName ) == m_aList.end() )
+    {
+        SetModified();
+    }
     nWidth  = m_aList[ sName ].nWidth ;
     nHeight = m_aList[ sName ].nHeight;
 }
@@ -880,6 +923,10 @@ void SvtViewWindowOptions_Impl::SetSize( const OUString& sName, sal_Int32 nWidth
 //*****************************************************************************************************************
 sal_Bool SvtViewWindowOptions_Impl::IsVisible( const OUString& sName )
 {
+    if( m_aList.find( sName ) == m_aList.end() )
+    {
+        SetModified();
+    }
     return m_aList[ sName ].bVisible;
 }
 
@@ -887,11 +934,16 @@ sal_Bool SvtViewWindowOptions_Impl::IsVisible( const OUString& sName )
 void SvtViewWindowOptions_Impl::SetVisible( const OUString& sName, sal_Bool bState )
 {
     m_aList[ sName ].bVisible = bState;
+    SetModified();
 }
 
 //*****************************************************************************************************************
 OUString SvtViewWindowOptions_Impl::GetUserData( const OUString& sName )
 {
+    if( m_aList.find( sName ) == m_aList.end() )
+    {
+        SetModified();
+    }
     return m_aList[ sName ].sUserData;
 }
 
@@ -899,6 +951,7 @@ OUString SvtViewWindowOptions_Impl::GetUserData( const OUString& sName )
 void SvtViewWindowOptions_Impl::SetUserData( const OUString& sName, const OUString& sData )
 {
     m_aList[ sName ].sUserData = sData;
+    SetModified();
 }
 
 //*****************************************************************************************************************
