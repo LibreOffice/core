@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoControlCheckBoxModel.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 14:01:40 $
+ *  last change:$Date: 2003-09-08 13:04:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,13 +58,10 @@
  *
  *
  ************************************************************************/
-
 package mod._toolkit;
 
-import com.sun.star.text.XTextDocument;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.uno.XInterface;
 import java.io.PrintWriter;
+
 import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
@@ -72,52 +69,61 @@ import lib.TestParameters;
 import util.WriterTools;
 import util.utils;
 
-public class UnoControlCheckBoxModel extends TestCase {
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.text.XTextDocument;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XInterface;
+import com.sun.star.util.XCloseable;
 
+
+public class UnoControlCheckBoxModel extends TestCase {
     XTextDocument xTextDoc;
 
     /**
     * Creates StarOffice Writer document.
     */
-    protected void initialize( TestParameters tParam, PrintWriter log ) {
-
-        log.println( "creating a textdocument" );
-        xTextDoc = WriterTools.createTextDoc((XMultiServiceFactory)tParam.getMSF());
+    protected void initialize(TestParameters tParam, PrintWriter log) {
+        log.println("creating a textdocument");
+        xTextDoc = WriterTools.createTextDoc( (XMultiServiceFactory) tParam.getMSF());
     }
 
     /**
     * Disposes StarOffice Writer document.
     */
-    protected void cleanup( TestParameters tParam, PrintWriter log ) {
-        log.println( "    disposing xTextDoc " );
-        xTextDoc.dispose();
+    protected void cleanup(TestParameters tParam, PrintWriter log) {
+        log.println("    disposing xTextDoc ");
+
+        try {
+            XCloseable closer = (XCloseable) UnoRuntime.queryInterface(
+                                        XCloseable.class, xTextDoc);
+            closer.close(true);
+        } catch (com.sun.star.util.CloseVetoException e) {
+            log.println("couldn't close document");
+        } catch (com.sun.star.lang.DisposedException e) {
+            log.println("couldn't close document");
+        }
     }
 
-
-    public synchronized TestEnvironment createTestEnvironment( TestParameters Param,
-                                                  PrintWriter log )
-                                                    throws StatusException {
-
+    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param,
+                                                                 PrintWriter log) {
         XInterface oObj = null;
 
         try {
-            oObj = (XInterface) ((XMultiServiceFactory)Param.getMSF()).createInstance(
-                                    "com.sun.star.awt.UnoControlCheckBoxModel");
+            oObj = (XInterface) ( (XMultiServiceFactory) Param.getMSF())
+                                     .createInstance("com.sun.star.awt.UnoControlCheckBoxModel");
         } catch (Exception e) {
-            e.printStackTrace( log );
-            throw new StatusException( "Couldn't create object", e );
+            e.printStackTrace(log);
+            throw new StatusException("Couldn't create object", e);
         }
 
+        log.println(
+                "creating a new environment for UnoControlCheckBoxModel object");
 
-        log.println( "creating a new environment for UnoControlCheckBoxModel object" );
-        TestEnvironment tEnv = new TestEnvironment( oObj );
+        TestEnvironment tEnv = new TestEnvironment(oObj);
 
         tEnv.addObjRelation("OBJNAME", "stardiv.vcl.controlmodel.CheckBox");
-        System.out.println("ImplementationName: "+utils.getImplName(oObj));
+        System.out.println("ImplementationName: " + utils.getImplName(oObj));
 
         return tEnv;
-
     } // finish method getTestEnvironment
-
-}    // finish class UnoControlCheckBoxModel
-
+} // finish class UnoControlCheckBoxModel

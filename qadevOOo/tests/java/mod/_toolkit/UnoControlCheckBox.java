@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoControlCheckBox.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 14:01:30 $
+ *  last change:$Date: 2003-09-08 13:03:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,11 +58,20 @@
  *
  *
  ************************************************************************/
-
 package mod._toolkit;
 
+import java.io.PrintWriter;
+
+import lib.StatusException;
+import lib.TestCase;
+import lib.TestEnvironment;
+import lib.TestParameters;
+import util.FormTools;
+import util.SOfficeFactory;
+import util.WriterTools;
+import util.utils;
+
 import com.sun.star.awt.XCheckBox;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.awt.XControlModel;
 import com.sun.star.awt.XDevice;
 import com.sun.star.awt.XGraphics;
@@ -73,57 +82,64 @@ import com.sun.star.drawing.XControlShape;
 import com.sun.star.drawing.XShape;
 import com.sun.star.frame.XController;
 import com.sun.star.frame.XFrame;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
+import com.sun.star.util.XCloseable;
 import com.sun.star.view.XControlAccess;
-import java.io.PrintWriter;
-import lib.StatusException;
-import lib.TestCase;
-import lib.TestEnvironment;
-import lib.TestParameters;
-import util.FormTools;
-import util.SOfficeFactory;
-import util.WriterTools;
-import util.utils;
+
 
 public class UnoControlCheckBox extends TestCase {
-
     XTextDocument xTextDoc;
     XTextDocument xTD2;
 
-    protected void initialize ( TestParameters Param, PrintWriter log) {
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)Param.getMSF() );
+    protected void initialize(TestParameters Param, PrintWriter log) {
+        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory) Param.getMSF());
 
         try {
-            log.println( "creating a textdocument" );
-            xTextDoc = SOF.createTextDoc( null );
-            xTD2 = WriterTools.createTextDoc((XMultiServiceFactory)Param.getMSF());
-        } catch ( com.sun.star.uno.Exception e ) {
+            log.println("creating a textdocument");
+            xTextDoc = SOF.createTextDoc(null);
+            xTD2 = WriterTools.createTextDoc( (XMultiServiceFactory) Param.getMSF());
+        } catch (com.sun.star.uno.Exception e) {
             // Some exception occures.FAILED
-            e.printStackTrace( log );
-            throw new StatusException( "Couldn't create document", e );
+            e.printStackTrace(log);
+            throw new StatusException("Couldn't create document", e);
         }
     }
 
-    protected void cleanup( TestParameters tParam, PrintWriter log ) {
-        log.println( "    disposing xTextDoc " );
-        xTextDoc.dispose();
-        xTD2.dispose();
+    protected void cleanup(TestParameters tParam, PrintWriter log) {
+        log.println("    disposing xTextDoc ");
+
+        try {
+            XCloseable closer = (XCloseable) UnoRuntime.queryInterface(
+                                        XCloseable.class, xTextDoc);
+            closer.close(true);
+            closer = (XCloseable) UnoRuntime.queryInterface(XCloseable.class,
+                                                            xTD2);
+            closer.close(true);
+        } catch (com.sun.star.util.CloseVetoException e) {
+            log.println("couldn't close document");
+        } catch (com.sun.star.lang.DisposedException e) {
+            log.println("couldn't close document");
+        }
     }
 
-    public TestEnvironment createTestEnvironment( TestParameters Param,
-                                                  PrintWriter log )
-                                                    throws StatusException {
+    protected TestEnvironment createTestEnvironment(TestParameters Param,
+                                                    PrintWriter log) {
         XInterface oObj = null;
         XWindowPeer the_win = null;
         XToolkit the_kit = null;
         XDevice aDevice = null;
         XGraphics aGraphic = null;
         XWindow anotherWindow = null;
+
         //Insert a ControlShape and get the ControlModel
-        XControlShape aShape = FormTools.createUnoControlShape
-            (xTextDoc,3000,4500,15000,10000,"CheckBox","UnoControlCheckBox");
+        XControlShape aShape = FormTools.createUnoControlShape(xTextDoc, 3000,
+                                                               4500, 15000,
+                                                               10000,
+                                                               "CheckBox",
+                                                               "UnoControlCheckBox");
 
         WriterTools.getDrawPage(xTextDoc).add((XShape) aShape);
 
@@ -131,59 +147,60 @@ public class UnoControlCheckBox extends TestCase {
 
         //Try to query XControlAccess
         XControlAccess the_access = (XControlAccess) UnoRuntime.queryInterface(
-                        XControlAccess.class,xTextDoc.getCurrentController());
+                                            XControlAccess.class,
+                                            xTextDoc.getCurrentController());
 
         //get the CheckBoxControl for the needed Object relations
         try {
             oObj = the_access.getControl(the_Model);
             the_win = the_access.getControl(the_Model).getPeer();
             the_kit = the_win.getToolkit();
-            aDevice = the_kit.createScreenCompatibleDevice(200,200);
+            aDevice = the_kit.createScreenCompatibleDevice(200, 200);
             aGraphic = aDevice.createGraphics();
         } catch (Exception e) {
             log.println("Couldn't get CheckBoxControl");
             e.printStackTrace(log);
-            throw new StatusException("Couldn't get CheckBoxControl", e );
+            throw new StatusException("Couldn't get CheckBoxControl", e);
         }
 
-        log.println( "creating a new environment for UnoControlCheckBox object" );
-        TestEnvironment tEnv = new TestEnvironment( oObj );
+        log.println("creating a new environment for UnoControlCheckBox object");
+
+        TestEnvironment tEnv = new TestEnvironment(oObj);
+
 
         //Adding ObjRelation for XView
-        tEnv.addObjRelation("GRAPHICS",aGraphic);
+        tEnv.addObjRelation("GRAPHICS", aGraphic);
+
 
         //Adding ObjRelation for XControl
-        tEnv.addObjRelation("CONTEXT",xTextDoc);
-        tEnv.addObjRelation("WINPEER",the_win);
-        tEnv.addObjRelation("TOOLKIT",the_kit);
-        tEnv.addObjRelation("MODEL",the_Model);
+        tEnv.addObjRelation("CONTEXT", xTextDoc);
+        tEnv.addObjRelation("WINPEER", the_win);
+        tEnv.addObjRelation("TOOLKIT", the_kit);
+        tEnv.addObjRelation("MODEL", the_Model);
 
         // adding object relation for XItemListener
         ifc.awt._XItemListener.TestItemListener listener =
-            new ifc.awt._XItemListener.TestItemListener() ;
-        XCheckBox check = (XCheckBox)
-            UnoRuntime.queryInterface (XCheckBox.class, oObj) ;
-        check.addItemListener(listener) ;
-        tEnv.addObjRelation("TestItemListener", listener) ;
+                new ifc.awt._XItemListener.TestItemListener();
+        XCheckBox check = (XCheckBox) UnoRuntime.queryInterface(
+                                  XCheckBox.class, oObj);
+        check.addItemListener(listener);
+        tEnv.addObjRelation("TestItemListener", listener);
 
-        System.out.println("ImplementationName: "+utils.getImplName(oObj));
+        System.out.println("ImplementationName: " + utils.getImplName(oObj));
 
         try {
             XController aController = xTD2.getCurrentController();
             XFrame aFrame = aController.getFrame();
             anotherWindow = aFrame.getComponentWindow();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace(log);
             throw new StatusException("Couldn't create XWindow", e);
         }
+
 
         // Object Relation for XWindow
         tEnv.addObjRelation("XWindow.AnotherWindow", anotherWindow);
 
         return tEnv;
     } // finish method getTestEnvironment
-
-}    // finish class UnoControlCheckBox
-
-
+} // finish class UnoControlCheckBox
