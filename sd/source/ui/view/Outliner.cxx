@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Outliner.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:41:21 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 16:15:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -365,6 +365,8 @@ void Outliner::StartSpelling (void)
 }
 
 
+
+
 /** Free all resources acquired during the search/spell check.  After a
     spell check the start position is restored here.
 */
@@ -397,7 +399,11 @@ void Outliner::EndSpelling (void)
             // view.
             RemoveView (mpOutlineView);
             if (mbOwnOutlineView)
+            {
                 delete mpOutlineView;
+                mpOutlineView = NULL;
+                mbOwnOutlineView = false;
+            }
 
             SetUpdateMode(TRUE);
         }
