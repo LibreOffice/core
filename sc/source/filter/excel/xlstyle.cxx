@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlstyle.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-16 08:17:44 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 13:36:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,7 +198,9 @@ ColorData XclDefaultPalette::GetDefColorData( sal_uInt16 nXclIndex ) const
         nColor = mpColorTable[ nXclIndex ];
     else switch( nXclIndex )
     {
+        case EXC_COLOR_WINDOWTEXT3:
         case EXC_COLOR_WINDOWTEXT:  nColor = mnWindowText;  break;
+        case EXC_COLOR_WINDOWBACK3:
         case EXC_COLOR_WINDOWBACK:  nColor = mnWindowBack;  break;
         case EXC_COLOR_FONTAUTO:    nColor = COL_AUTO;      break;
         default:                    nColor = COL_AUTO;
