@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 17:01:29 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 12:17:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1825,81 +1825,6 @@ void ViewShell::CheckBrowseView( FASTBOOL bBrowseChgd )
     EndAction();
     UnlockPaint();
 }
-
-/******************************************************************************
-|*
-|*  ViewShell::Is/Set[Head|Foot]InBrowse()
-|*
-|*  Ersterstellung      MA 10. Feb. 97
-|*  Letzte Aenderung    MA 10. Feb. 97
-|*
-******************************************************************************/
-
-BOOL ViewShell::IsHeadInBrowse() const
-{
-    return GetDoc()->IsHeadInBrowse();
-}
-
-
-void ViewShell::SetHeadInBrowse( BOOL bOn )
-{
-    if ( GetDoc()->IsHeadInBrowse() != bOn )
-    {
-        BOOL bCrsr = ISA(SwCrsrShell);
-        if ( bCrsr )
-            ((SwCrsrShell*)this)->StartAction();
-        else
-            StartAction();
-        GetDoc()->SetHeadInBrowse( bOn );
-
-        SwPageFrm *pPg = GetLayout() ? (SwPageFrm*)GetLayout()->Lower() : 0;
-        while ( pPg )
-        {
-            if ( bCrsr )
-                ::MA_ParkCrsr( pPg->GetPageDesc(), *(SwCrsrShell*)this );
-            pPg->PrepareHeader();
-            pPg = (SwPageFrm*)pPg->GetNext();
-        }
-        if ( bCrsr )
-            ((SwCrsrShell*)this)->EndAction();
-        else
-            EndAction();
-    }
-}
-
-
-BOOL ViewShell::IsFootInBrowse() const
-{
-    return GetDoc()->IsFootInBrowse();
-}
-
-
-void ViewShell::SetFootInBrowse( BOOL bOn )
-{
-    if ( GetDoc()->IsFootInBrowse() != bOn )
-    {
-        BOOL bCrsr = ISA(SwCrsrShell);
-        if ( bCrsr )
-            ((SwCrsrShell*)this)->StartAction();
-        else
-            StartAction();
-        GetDoc()->SetFootInBrowse( bOn );
-
-        SwPageFrm *pPg = GetLayout() ? (SwPageFrm*)GetLayout()->Lower() : 0;
-        while ( pPg )
-        {
-            if ( bCrsr )
-                ::MA_ParkCrsr( pPg->GetPageDesc(), *(SwCrsrShell*)this );
-            pPg->PrepareFooter();
-            pPg = (SwPageFrm*)pPg->GetNext();
-        }
-        if ( bCrsr )
-            ((SwCrsrShell*)this)->EndAction();
-        else
-            EndAction();
-    }
-}
-
 
 /*************************************************************************
 |*
