@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par5.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: khz $ $Date: 2000-12-04 14:08:08 $
+ *  last change: $Author: cmc $ $Date: 2001-01-18 11:58:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2597,7 +2597,9 @@ eF_ResT SwWW8ImplReader::Read_F_Hyperlink( WW8FieldDesc* pF, String& rStr )
                 if( !sURL.Len() )
                 {
                     ConvertFFileName( sURL, aReadParam.GetResult() );
-                    sURL = INetURLObject::RelToAbs( sURL );
+                    //#82900# Need the more sophisticated url converter. cmc
+                    //sURL = INetURLObject::RelToAbs( sURL );
+                    sURL = URIHelper::SmartRelToAbs( sURL );
                 }
                 break;
 
@@ -2862,12 +2864,15 @@ void SwWW8ImplReader::Read_Invisible( USHORT, BYTE* pData, short nLen )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par5.cxx,v 1.6 2000-12-04 14:08:08 khz Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par5.cxx,v 1.7 2001-01-18 11:58:46 cmc Exp $
 
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.6  2000/12/04 14:08:08  khz
+      #78930# Pictures in Hyperlinks will be imported as Graphics with Hyperlink
+
       Revision 1.5  2000/11/24 11:04:38  khz
       WW field names use ANSI encoding - not plain 7-bit ASCII
 
