@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchdlg.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: tl $ $Date: 2001-03-12 11:30:14 $
+ *  last change: $Author: fs $ $Date: 2001-04-18 07:41:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -315,10 +315,10 @@ void SearchAttrItemList::Remove( USHORT nPos, USHORT nLen )
 
 
 SvxJSearchOptionsDialog::SvxJSearchOptionsDialog(
-            SvxSearchDialog &rParent,
-            const SfxItemSet& rOptionsSet, USHORT nUniqueId ) :
-    SfxSingleTabDialog  ( &rParent, rOptionsSet, RID_SVXPAGE_JSEARCH_OPTIONS ),
-    rDialog             ( rParent )
+            Window *pParent,
+            const SfxItemSet& rOptionsSet, USHORT nUniqueId, INT32 nInitialFlags ) :
+    SfxSingleTabDialog  ( pParent, rOptionsSet, RID_SVXPAGE_JSEARCH_OPTIONS ),
+    nInitialTlFlags( nInitialFlags )
 {
     pPage = (SvxJSearchOptionsPage *)
                     SvxJSearchOptionsPage::Create( this, rOptionsSet );
@@ -336,11 +336,7 @@ SvxJSearchOptionsDialog::~SvxJSearchOptionsDialog()
 
 void SvxJSearchOptionsDialog::Activate()
 {
-    // apply changes of transliteration in configuration
-    SvxSearchItem *pItem = rDialog.pSearchItem;
-    DBG_ASSERT( pItem, "SearchItem missing" );
-    if (pItem)
-        pPage->SetTransliterationFlags( pItem->GetTransliterationFlags() );
+    pPage->SetTransliterationFlags( nInitialTlFlags );
 }
 
 
@@ -1259,11 +1255,11 @@ IMPL_LINK( SvxSearchDialog, CommandHdl_Impl, Button *, pBtn )
     else if ( pBtn == &aJapOptionsBtn )
     {
         SfxItemSet aSet( SFX_APP()->GetPool() );
-        SvxJSearchOptionsDialog aDlg( *this, aSet, RID_SVXPAGE_JSEARCH_OPTIONS );
         pSearchItem->SetTransliterationFlags( GetTransliterationFlags() );
+        SvxJSearchOptionsDialog aDlg( this, aSet, RID_SVXPAGE_JSEARCH_OPTIONS, pSearchItem->GetTransliterationFlags() );
         aDlg.Execute();
         INT32 nFlags = aDlg.GetTransliterationFlags();
-        pSearchItem->SetTransliterationFlags( nFlags );
+         pSearchItem->SetTransliterationFlags( nFlags );
         ApplyTransliterationFlags_Impl( nFlags );
     }
 

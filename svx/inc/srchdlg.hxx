@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchdlg.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tl $ $Date: 2001-02-23 13:08:58 $
+ *  last change: $Author: fs $ $Date: 2001-04-18 07:40:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -344,7 +344,7 @@ inline BOOL SvxSearchDialog::HasReplaceAttributes() const
 
 class SvxJSearchOptionsDialog : public SfxSingleTabDialog
 {
-    SvxSearchDialog        &rDialog;
+    INT32                   nInitialTlFlags;
     SvxJSearchOptionsPage  *pPage;
 
     // disallow copy-constructor and assignment-operator for now
@@ -352,8 +352,9 @@ class SvxJSearchOptionsDialog : public SfxSingleTabDialog
     SvxJSearchOptionsDialog & operator == ( const SvxJSearchOptionsDialog & );
 
 public:
-    SvxJSearchOptionsDialog( SvxSearchDialog &rParent,
-                            const SfxItemSet& rOptionsSet, USHORT nUniqueId );
+    SvxJSearchOptionsDialog( Window *pParent,
+                            const SfxItemSet& rOptionsSet, USHORT nUniqueId,
+                            INT32 nInitialFlags  );
     virtual ~SvxJSearchOptionsDialog();
 
     // Window
