@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tres.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sz $ $Date: 2001-05-03 08:57:57 $
+ *  last change: $Author: sz $ $Date: 2001-05-03 09:53:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@ class TestResult {
 
     // <private_ctors>
     TestResult();
-    TestResult( const tRes& oRes );
+    TestResult( const TestResult& oRes );
     // </private_ctors>
 
     // <private_methods>
