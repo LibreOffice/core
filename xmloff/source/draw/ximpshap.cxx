@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-02 10:56:21 $
+ *  last change: $Author: cl $ $Date: 2000-11-06 12:08:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,7 +128,8 @@ SdXMLShapeContext::SdXMLShapeContext(
     mnRotate( 0L ),
     mnStyleFamily(XML_STYLE_FAMILY_SD_GRAPHICS_ID),
     mbIsPlaceholder(FALSE),
-    mbIsUserTransformed(FALSE)
+    mbIsUserTransformed(FALSE),
+    mxAttrList(xAttrList)
 {
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for(sal_Int16 i=0; i < nAttrCount; i++)
@@ -189,7 +190,16 @@ SdXMLShapeContext::SdXMLShapeContext(
 SdXMLShapeContext::~SdXMLShapeContext()
 {
     if(mxCursor.is())
+    {
+        // delete addition newline
+        const OUString aEmpty;
+        mxCursor->gotoEnd( sal_False );
+        mxCursor->goLeft( 1, sal_True );
+        mxCursor->setString( aEmpty );
+
+        // reset cursor
         GetImport().GetTextImport()->ResetCursor();
+    }
 
     if(mxOldCursor.is())
         GetImport().GetTextImport()->SetCursor( mxOldCursor );
@@ -211,6 +221,11 @@ SvXMLImportContext *SdXMLShapeContext::CreateChildContext( USHORT nPrefix,
             mxCursor = xText->createTextCursor();
             if( mxCursor.is() )
             {
+/*
+                const OUString aEmpty;
+                mxCursor->gotoEnd( sal_True );
+                mxCursor->setString( aEmpty );
+*/
                 GetImport().GetTextImport()->SetCursor( mxCursor );
             }
         }
@@ -254,13 +269,12 @@ void SdXMLShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeL
 
 void SdXMLShapeContext::AddShape(uno::Reference< drawing::XShape >& xShape)
 {
-    if(xShape.is() && mxShapes.is())
+    if(xShape.is())
     {
         // set shape local
         mxShape = xShape;
 
-        // add new shape to parent
-        mxShapes->add( xShape );
+        GetImport().GetShapeImport()->addShape( xShape, mxAttrList, mxShapes );
     }
 }
 
@@ -992,16 +1006,21 @@ void SdXMLTextBoxShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
         {
             // Add, set Style and properties from base shape
             AddShape(xShape);
-            SetStyle();
-            SdXMLShapeContext::StartElement(xAttrList);
 
-            if(bIsPresShape && mbIsPlaceholder)
+            if(bIsPresShape && !mbIsPlaceholder)
             {
-                // Do something special if this is a placeholder (?)
-
-
-
+                uno::Reference< beans::XPropertySet > xProps(xShape, uno::UNO_QUERY);
+                if(xProps.is())
+                {
+                    uno::Reference< beans::XPropertySetInfo > xPropsInfo( xProps->getPropertySetInfo() );
+                    if( xPropsInfo.is() && xPropsInfo->hasPropertyByName(OUString(RTL_CONSTASCII_USTRINGPARAM("IsEmptyPresentationObject") )))
+                        xProps->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("IsEmptyPresentationObject") ), ::cppu::bool2any( sal_False ) );
+                }
             }
+
+            SetStyle();
+
+            SdXMLShapeContext::StartElement(xAttrList);
 
             if(!bIsPresShape || mbIsUserTransformed)
             {
@@ -1375,7 +1394,7 @@ SdXMLGraphicObjectShapeContext::SdXMLGraphicObjectShapeContext(
         uno::Reference< drawing::XShape > xShape( xServiceFact->createInstance( aType ), uno::UNO_QUERY);
         if(xShape.is())
         {
-            rShapes->add( xShape );
+            AddShape( xShape );
 
             if( !mbIsPlaceholder )
             {
@@ -1478,7 +1497,7 @@ SdXMLChartShapeContext::SdXMLChartShapeContext(
         uno::Reference< drawing::XShape > xShape( xServiceFact->createInstance( aType ), uno::UNO_QUERY);
         if(xShape.is())
         {
-            rShapes->add( xShape );
+            AddShape( xShape );
 
             if( !mbIsPlaceholder )
             {

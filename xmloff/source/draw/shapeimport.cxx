@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeimport.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2000-10-10 10:59:39 $
+ *  last change: $Author: cl $ $Date: 2000-11-06 12:08:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -445,145 +445,152 @@ SvXMLImportContext* XMLShapeImportHelper::CreateGroupChildContext(
 {
     SvXMLImportContext *pContext = 0L;
 
-    if(rShapes.is())
+    const SvXMLTokenMap& rTokenMap = GetGroupShapeElemTokenMap();
+    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+    sal_Bool bIsPlaceholder(FALSE);
+    OUString aPresentationObjectClass;
+
+    for(sal_Int16 a(0); a < nAttrCount; a++)
     {
-        const SvXMLTokenMap& rTokenMap = GetGroupShapeElemTokenMap();
-        sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-        sal_Bool bIsPlaceholder(FALSE);
-        OUString aPresentationObjectClass;
+        const OUString& rAttrName = xAttrList->getNameByIndex(a);
+        OUString aLocalName;
+        sal_uInt16 nPrefix = rImport.GetNamespaceMap().GetKeyByAttrName(rAttrName, &aLocalName);
 
-        for(sal_Int16 a(0); a < nAttrCount; a++)
+        if(XML_NAMESPACE_PRESENTATION == nPrefix)
         {
-            const OUString& rAttrName = xAttrList->getNameByIndex(a);
-            OUString aLocalName;
-            sal_uInt16 nPrefix = rImport.GetNamespaceMap().GetKeyByAttrName(rAttrName, &aLocalName);
-
-            if(XML_NAMESPACE_PRESENTATION == nPrefix)
+            if(aLocalName.equals(OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_placeholder))))
             {
-                if(aLocalName.equals(OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_placeholder))))
-                {
-                    bIsPlaceholder = TRUE;
-                }
-                else if(aLocalName.equals(OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_class))))
-                {
-                    aPresentationObjectClass = xAttrList->getValueByIndex(a);
-                }
+                bIsPlaceholder = TRUE;
+            }
+            else if(aLocalName.equals(OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_class))))
+            {
+                aPresentationObjectClass = xAttrList->getValueByIndex(a);
             }
         }
+    }
 
-        switch(rTokenMap.Get(nPrefix, rLocalName))
+    switch(rTokenMap.Get(nPrefix, rLocalName))
+    {
+        case XML_TOK_GROUP_GROUP:
         {
-            case XML_TOK_GROUP_GROUP:
+            // draw:g inside group context (RECURSIVE)
+            // create new group shape and add it to rShapes, use it
+            // as base for the new group import
+            uno::Reference< lang::XMultiServiceFactory > xServiceFact(mxModel, uno::UNO_QUERY);
+            if(xServiceFact.is())
             {
-                // draw:g inside group context (RECURSIVE)
-                // create new group shape and add it to rShapes, use it
-                // as base for the new group import
-                uno::Reference< lang::XMultiServiceFactory > xServiceFact(mxModel, uno::UNO_QUERY);
-                if(xServiceFact.is())
+                uno::Reference< drawing::XShape > xShape(
+                    xServiceFact->createInstance(
+                    OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.GroupShape"))),
+                    uno::UNO_QUERY);
+                if(xShape.is())
                 {
-                    uno::Reference< drawing::XShape > xShape(
-                        xServiceFact->createInstance(
-                        OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.GroupShape"))),
-                        uno::UNO_QUERY);
-                    if(xShape.is())
-                    {
-                        rShapes->add( xShape );
+                    addShape( xShape, xAttrList, rShapes );
 
-                        uno::Reference< drawing::XShapes > xNewShapes(xShape, uno::UNO_QUERY);
-                        if(xNewShapes.is())
-                        {
-                            pContext = new SdXMLGroupShapeContext( rImport, nPrefix, rLocalName, xNewShapes);
-                        }
+                    uno::Reference< drawing::XShapes > xNewShapes(xShape, uno::UNO_QUERY);
+                    if(xNewShapes.is())
+                    {
+                        pContext = new SdXMLGroupShapeContext( rImport, nPrefix, rLocalName, xNewShapes);
                     }
                 }
-                break;
             }
-            case XML_TOK_GROUP_RECT:
-            {
-                // draw:rect inside group context
-                pContext = new SdXMLRectShapeContext( rImport, nPrefix, rLocalName, xAttrList, rShapes );
-                break;
-            }
-            case XML_TOK_GROUP_LINE:
-            {
-                // draw:line inside group context
-                pContext = new SdXMLLineShapeContext( rImport, nPrefix, rLocalName, xAttrList, rShapes );
-                break;
-            }
-            case XML_TOK_GROUP_CIRCLE:
-            case XML_TOK_GROUP_ELLIPSE:
-            {
-                // draw:circle or draw:ellipse inside group context
-                pContext = new SdXMLEllipseShapeContext( rImport, nPrefix, rLocalName, xAttrList, rShapes );
-                break;
-            }
-            case XML_TOK_GROUP_POLYGON:
-            case XML_TOK_GROUP_POLYLINE:
-            {
-                // draw:polygon or draw:polyline inside group context
-                pContext = new SdXMLPolygonShapeContext( rImport, nPrefix, rLocalName, xAttrList, rShapes,
-                    rTokenMap.Get(nPrefix, rLocalName) == XML_TOK_GROUP_POLYGON ? TRUE : FALSE );
-                break;
-            }
-            case XML_TOK_GROUP_PATH:
-            {
-                // draw:path inside group context
-                pContext = new SdXMLPathShapeContext( rImport, nPrefix, rLocalName, xAttrList, rShapes);
-                break;
-            }
-            case XML_TOK_GROUP_TEXT_BOX:
-            {
-                // text:text-box inside group context
-                pContext = new SdXMLTextBoxShapeContext( rImport, nPrefix, rLocalName, xAttrList, rShapes );
-                break;
-            }
-            case XML_TOK_GROUP_CONTROL:
-            {
-                // draw:control inside group context
-                pContext = new SdXMLControlShapeContext( rImport, nPrefix, rLocalName, xAttrList, rShapes );
-                break;
-            }
-            case XML_TOK_GROUP_CONNECTOR:
-            {
-                // draw:connector inside group context
-                pContext = new SdXMLConnectorShapeContext( rImport, nPrefix, rLocalName, xAttrList, rShapes );
-                break;
-            }
-            case XML_TOK_GROUP_MEASURE:
-            {
-                // draw:measure inside group context
-                pContext = new SdXMLMeasureShapeContext( rImport, nPrefix, rLocalName, xAttrList, rShapes );
-                break;
-            }
-            case XML_TOK_GROUP_PAGE:
-            {
-                // draw:page inside group context
-                pContext = new SdXMLPageShapeContext( rImport, nPrefix, rLocalName, xAttrList, rShapes );
-                break;
-            }
-            case XML_TOK_GROUP_CAPTION:
-            {
-                // draw:caption inside group context
-                pContext = new SdXMLCaptionShapeContext( rImport, nPrefix, rLocalName, xAttrList, rShapes );
-                break;
-            }
-            case XML_TOK_GROUP_CHART:
-            {
-                // chart:chart inside group context
-                pContext = new SdXMLChartShapeContext( rImport, nPrefix, rLocalName, xAttrList, rShapes );
-                break;
-            }
-            case XML_TOK_GROUP_IMAGE:
-            {
-                // office:image inside group context
-                pContext = new SdXMLGraphicObjectShapeContext( rImport, nPrefix, rLocalName, xAttrList, rShapes );
-                break;
-            }
-
-            // add other shapes here...
+            break;
         }
+        case XML_TOK_GROUP_RECT:
+        {
+            // draw:rect inside group context
+            pContext = new SdXMLRectShapeContext( rImport, nPrefix, rLocalName, xAttrList, rShapes );
+            break;
+        }
+        case XML_TOK_GROUP_LINE:
+        {
+            // draw:line inside group context
+            pContext = new SdXMLLineShapeContext( rImport, nPrefix, rLocalName, xAttrList, rShapes );
+            break;
+        }
+        case XML_TOK_GROUP_CIRCLE:
+        case XML_TOK_GROUP_ELLIPSE:
+        {
+            // draw:circle or draw:ellipse inside group context
+            pContext = new SdXMLEllipseShapeContext( rImport, nPrefix, rLocalName, xAttrList, rShapes );
+            break;
+        }
+        case XML_TOK_GROUP_POLYGON:
+        case XML_TOK_GROUP_POLYLINE:
+        {
+            // draw:polygon or draw:polyline inside group context
+            pContext = new SdXMLPolygonShapeContext( rImport, nPrefix, rLocalName, xAttrList, rShapes,
+                rTokenMap.Get(nPrefix, rLocalName) == XML_TOK_GROUP_POLYGON ? TRUE : FALSE );
+            break;
+        }
+        case XML_TOK_GROUP_PATH:
+        {
+            // draw:path inside group context
+            pContext = new SdXMLPathShapeContext( rImport, nPrefix, rLocalName, xAttrList, rShapes);
+            break;
+        }
+        case XML_TOK_GROUP_TEXT_BOX:
+        {
+            // text:text-box inside group context
+            pContext = new SdXMLTextBoxShapeContext( rImport, nPrefix, rLocalName, xAttrList, rShapes );
+            break;
+        }
+        case XML_TOK_GROUP_CONTROL:
+        {
+            // draw:control inside group context
+            pContext = new SdXMLControlShapeContext( rImport, nPrefix, rLocalName, xAttrList, rShapes );
+            break;
+        }
+        case XML_TOK_GROUP_CONNECTOR:
+        {
+            // draw:connector inside group context
+            pContext = new SdXMLConnectorShapeContext( rImport, nPrefix, rLocalName, xAttrList, rShapes );
+            break;
+        }
+        case XML_TOK_GROUP_MEASURE:
+        {
+            // draw:measure inside group context
+            pContext = new SdXMLMeasureShapeContext( rImport, nPrefix, rLocalName, xAttrList, rShapes );
+            break;
+        }
+        case XML_TOK_GROUP_PAGE:
+        {
+            // draw:page inside group context
+            pContext = new SdXMLPageShapeContext( rImport, nPrefix, rLocalName, xAttrList, rShapes );
+            break;
+        }
+        case XML_TOK_GROUP_CAPTION:
+        {
+            // draw:caption inside group context
+            pContext = new SdXMLCaptionShapeContext( rImport, nPrefix, rLocalName, xAttrList, rShapes );
+            break;
+        }
+        case XML_TOK_GROUP_CHART:
+        {
+            // chart:chart inside group context
+            pContext = new SdXMLChartShapeContext( rImport, nPrefix, rLocalName, xAttrList, rShapes );
+            break;
+        }
+        case XML_TOK_GROUP_IMAGE:
+        {
+            // office:image inside group context
+            pContext = new SdXMLGraphicObjectShapeContext( rImport, nPrefix, rLocalName, xAttrList, rShapes );
+            break;
+        }
+
+        // add other shapes here...
     }
 
     return pContext;
 }
 
+
+void XMLShapeImportHelper::addShape( uno::Reference< drawing::XShape >& rShape, const uno::Reference< xml::sax::XAttributeList >& xAttrList, uno::Reference< drawing::XShapes >& rShapes)
+    throw()
+{
+    if( rShape.is() && rShapes.is() )
+    {
+        // add new shape to parent
+        rShapes->add( rShape );
+    }
+}
