@@ -2,9 +2,9 @@
  *
  *  $RCSfile: client.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:57 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:17:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,7 @@
 #define SC_CLIENT_HXX
 
 #ifndef _SFX_CLIENTSH_HXX //autogen
-#include <sfx2/clientsh.hxx>
+#include <sfx2/ipclient.hxx>
 #endif
 
 class ScDocument;
@@ -78,16 +78,14 @@ private:
     SdrModel*       pModel;
     SdrGrafObj*     pGrafEdit;
 
-public:
-                    ScClient( ScTabViewShell* pViewShell, Window* pDraw, SdrModel* pSdrModel );
-    virtual         ~ScClient();
-
-    virtual void    RequestObjAreaPixel( const Rectangle & rObjRect );
-    virtual void    ViewChanged( USHORT nAspect );
+    virtual void    ObjectAreaChanged();
+    virtual void    RequestNewObjectArea( Rectangle& );
+    virtual void    ViewChanged();
     virtual void    MakeVisible();
-    virtual void    MakeViewData();
 
-    virtual void    UIActivate( BOOL bActivate );
+public:
+                    ScClient( ScTabViewShell* pViewShell, Window* pDraw, SdrModel* pSdrModel, SdrOle2Obj* pObj );
+    virtual         ~ScClient();
 
     SdrGrafObj*     GetGrafEdit() const             { return pGrafEdit; }
     void            SetGrafEdit(SdrGrafObj* pNew)   { pGrafEdit = pNew; }
