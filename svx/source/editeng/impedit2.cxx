@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.97 $
+ *  $Revision: 1.98 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 18:12:39 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:59:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3319,7 +3319,7 @@ uno::Reference< datatransfer::XTransferable > ImpEditEngine::CreateTransferable(
 #endif
 }
 
-EditSelection ImpEditEngine::InsertText( uno::Reference< datatransfer::XTransferable >& rxDataObj, const EditPaM& rPaM, BOOL bUseSpecial )
+EditSelection ImpEditEngine::InsertText( uno::Reference< datatransfer::XTransferable >& rxDataObj, const String& rBaseURL, const EditPaM& rPaM, BOOL bUseSpecial )
 {
     EditSelection aNewSelection( rPaM );
 
@@ -3339,7 +3339,7 @@ EditSelection ImpEditEngine::InsertText( uno::Reference< datatransfer::XTransfer
                 aData >>= aSeq;
                 {
                     SvMemoryStream aBinStream( aSeq.getArray(), aSeq.getLength(), STREAM_READ );
-                    aNewSelection = Read( aBinStream, EE_FORMAT_BIN, rPaM );
+                    aNewSelection = Read( aBinStream, rBaseURL, EE_FORMAT_BIN, rPaM );
                 }
                 bDone = TRUE;
             }
@@ -3373,7 +3373,7 @@ EditSelection ImpEditEngine::InsertText( uno::Reference< datatransfer::XTransfer
                     aData >>= aSeq;
                     {
                         SvMemoryStream aRTFStream( aSeq.getArray(), aSeq.getLength(), STREAM_READ );
-                        aNewSelection = Read( aRTFStream, EE_FORMAT_RTF, rPaM );
+                        aNewSelection = Read( aRTFStream, rBaseURL, EE_FORMAT_RTF, rPaM );
                     }
                     bDone = TRUE;
                 }
