@@ -2,9 +2,9 @@
  *
  *  $RCSfile: opthtml.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 18:45:02 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 12:00:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,36 +75,9 @@ TabPage RID_OFAPAGE_HTMLOPT
     {
         Pos = MAP_APPFONT ( 12 , 16 ) ;
         Size = MAP_APPFONT ( 30 , 8 ) ;
-        Text = "Größe ~1" ;
-        Text [ English ] = "Size ~1" ;
-        Text [ english_us ] = "Size ~1" ;
-        Text [ italian ] = "Dimens. ~1" ;
-        Text [ spanish ] = "Tamaño ~1" ;
-        Text [ french ] = "Taille ~1" ;
-        Text [ dutch ] = "Grootte ~1" ;
-        Text [ swedish ] = "Storlek ~1" ;
-        Text [ danish ] = "Størrelse ~1" ;
-        Text [ portuguese ] = "Tamanho ~1" ;
-        Text [ portuguese_brazilian ] = "Tamanho ~1" ;
-        Text[ chinese_simplified ] = "å¤§å° ~1";
-        Text[ russian ] = "Ğàçìåğ ~1";
-        Text[ polish ] = "Rozmiar 1";
-        Text[ japanese ] = "ã‚µã‚¤ã‚º~1";
-        Text[ chinese_traditional ] = "å¤§å° ~1";
-        Text[ arabic ] = "ÇáÍÌã 1";
-        Text[ greek ] = "Ìİãåèïò 1";
-        Text[ korean ] = "í¬ê¸°1";
-        Text[ turkish ] = "Boyut ~1";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Mida ~1";
-        Text[ finnish ] = "Koko ~1";
-        Text[ thai ] = "à¸‚à¸™à¸²à¸” ~1";
-        Text[ czech ] = "Velikost 1";
-        Text[ hebrew ] = "GrÃ¶ÃŸe ~1";
-        Text[ hindi ] = "à¤ªà¤°à¤¿à¤®à¤¾à¤£ ~1";
-        Text[ slovak ] = "VeÄ¾kosÅ¥ ~1";
-        Text[ hungarian ] = "MÃ©ret ~1";
-        Text[ slovenian ] = "Velikost ~1";
+        Text [ de ] = "Größe ~1" ;
+        Text [ en-US ] = "Size ~1" ;
+        Text [ x-comment ] = " ";
     };
     NumericField NF_SIZE1
     {
@@ -126,36 +99,9 @@ TabPage RID_OFAPAGE_HTMLOPT
     {
         Pos = MAP_APPFONT ( 12 , 32 ) ;
         Size = MAP_APPFONT ( 30 , 8 ) ;
-        Text = "Größe ~2" ;
-        Text [ English ] = "Size ~2" ;
-        Text [ english_us ] = "Size ~2" ;
-        Text [ italian ] = "Dimens. ~2" ;
-        Text [ spanish ] = "Tamaño ~2" ;
-        Text [ french ] = "Taille ~2" ;
-        Text [ dutch ] = "Grootte ~2" ;
-        Text [ swedish ] = "Storlek ~2" ;
-        Text [ danish ] = "Størrelse ~2" ;
-        Text [ portuguese ] = "Tamanho ~2" ;
-        Text [ portuguese_brazilian ] = "Tamanho ~2" ;
-        Text[ chinese_simplified ] = "å¤§å° ~2";
-        Text[ russian ] = "Ğàçìåğ ~2";
-        Text[ polish ] = "Rozmiar 2";
-        Text[ japanese ] = "ã‚µã‚¤ã‚º~2";
-        Text[ chinese_traditional ] = "å¤§å° ~2";
-        Text[ arabic ] = "ÇáÍÌã 2";
-        Text[ greek ] = "Ìİãåèïò 2";
-        Text[ korean ] = "í¬ê¸°2";
-        Text[ turkish ] = "Boyut ~2";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Mida ~2";
-        Text[ finnish ] = "Koko ~2";
-        Text[ thai ] = "à¸‚à¸™à¸²à¸” ~2";
-        Text[ czech ] = "Velikost 2";
-        Text[ hebrew ] = "GrÃ¶ÃŸe ~2";
-        Text[ hindi ] = "à¤ªà¤°à¤¿à¤®à¤¾à¤£ ~2";
-        Text[ slovak ] = "VeÄ¾kosÅ¥ ~2";
-        Text[ hungarian ] = "MÃ©ret ~2";
-        Text[ slovenian ] = "Velikost ~2";
+        Text [ de ] = "Größe ~2" ;
+        Text [ en-US ] = "Size ~2" ;
+        Text [ x-comment ] = " ";
     };
     NumericField NF_SIZE2
     {
@@ -177,36 +123,9 @@ TabPage RID_OFAPAGE_HTMLOPT
     {
         Pos = MAP_APPFONT ( 12 , 48 ) ;
         Size = MAP_APPFONT ( 30 , 8 ) ;
-        Text = "Größe ~3" ;
-        Text [ English ] = "Size ~3" ;
-        Text [ english_us ] = "Size ~3" ;
-        Text [ italian ] = "Dimens. ~3" ;
-        Text [ spanish ] = "Tamaño ~3" ;
-        Text [ french ] = "Taille ~3" ;
-        Text [ dutch ] = "Grootte ~3" ;
-        Text [ swedish ] = "Storlek ~3" ;
-        Text [ danish ] = "Størrelse ~3" ;
-        Text [ portuguese ] = "Tamanho ~3" ;
-        Text [ portuguese_brazilian ] = "Tamanho ~3" ;
-        Text[ chinese_simplified ] = "å¤§å° ~3";
-        Text[ russian ] = "Ğàçìåğ ~3";
-        Text[ polish ] = "Rozmiar 3";
-        Text[ japanese ] = "ã‚µã‚¤ã‚º~3";
-        Text[ chinese_traditional ] = "å¤§å° ~3";
-        Text[ arabic ] = "ÇáÍÌã 3";
-        Text[ greek ] = "Ìİãåèïò 3";
-        Text[ korean ] = "í¬ê¸°3";
-        Text[ turkish ] = "Boyut ~3";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Mida ~3";
-        Text[ finnish ] = "Koko ~3";
-        Text[ thai ] = "à¸‚à¸™à¸²à¸” ~3";
-        Text[ czech ] = "Velikost 3";
-        Text[ hebrew ] = "GrÃ¶ÃŸe ~3";
-        Text[ hindi ] = "à¤ªà¤°à¤¿à¤®à¤¾à¤£ ~3";
-        Text[ slovak ] = "VeÄ¾kosÅ¥ ~3";
-        Text[ hungarian ] = "MÃ©ret ~3";
-        Text[ slovenian ] = "Velikost ~3";
+        Text [ de ] = "Größe ~3" ;
+        Text [ en-US ] = "Size ~3" ;
+        Text [ x-comment ] = " ";
     };
     NumericField NF_SIZE3
     {
@@ -228,36 +147,9 @@ TabPage RID_OFAPAGE_HTMLOPT
     {
         Pos = MAP_APPFONT ( 12 , 64 ) ;
         Size = MAP_APPFONT ( 30 , 8 ) ;
-        Text = "Größe ~4" ;
-        Text [ English ] = "Size ~4" ;
-        Text [ english_us ] = "Size ~4" ;
-        Text [ italian ] = "Dimens. ~4" ;
-        Text [ spanish ] = "Tamaño ~4" ;
-        Text [ french ] = "Taille ~4" ;
-        Text [ dutch ] = "Grootte ~4" ;
-        Text [ swedish ] = "Storlek ~4" ;
-        Text [ danish ] = "Størrelse ~4" ;
-        Text [ portuguese ] = "Tamanho ~4" ;
-        Text [ portuguese_brazilian ] = "Tamanho ~4" ;
-        Text[ chinese_simplified ] = "å¤§å° ~4";
-        Text[ russian ] = "Ğàçìåğ ~4";
-        Text[ polish ] = "Rozmiar 4";
-        Text[ japanese ] = "ã‚µã‚¤ã‚º~4";
-        Text[ chinese_traditional ] = "å¤§å° ~4";
-        Text[ arabic ] = "ÇáÍÌã 4";
-        Text[ greek ] = "Ìİãåèïò 4";
-        Text[ korean ] = "í¬ê¸°4";
-        Text[ turkish ] = "Boyut ~4";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Mida ~4";
-        Text[ finnish ] = "Koko ~4";
-        Text[ thai ] = "à¸‚à¸™à¸²à¸” ~4";
-        Text[ czech ] = "Velikost 4";
-        Text[ hebrew ] = "GrÃ¶ÃŸe ~4";
-        Text[ hindi ] = "à¤ªà¤°à¤¿à¤®à¤¾à¤£ ~4";
-        Text[ slovak ] = "VeÄ¾kosÅ¥ ~4";
-        Text[ hungarian ] = "MÃ©ret ~4";
-        Text[ slovenian ] = "Velikost ~4";
+        Text [ de ] = "Größe ~4" ;
+        Text [ en-US ] = "Size ~4" ;
+        Text [ x-comment ] = " ";
     };
     NumericField NF_SIZE4
     {
@@ -279,36 +171,9 @@ TabPage RID_OFAPAGE_HTMLOPT
     {
         Pos = MAP_APPFONT ( 12 , 80 ) ;
         Size = MAP_APPFONT ( 30 , 8 ) ;
-        Text = "Größe ~5" ;
-        Text [ English ] = "Size ~5" ;
-        Text [ english_us ] = "Size ~5" ;
-        Text [ italian ] = "Dimens. ~5" ;
-        Text [ spanish ] = "Tamaño ~5" ;
-        Text [ french ] = "Taille ~5" ;
-        Text [ dutch ] = "Grootte ~5" ;
-        Text [ swedish ] = "Storlek ~5" ;
-        Text [ danish ] = "Størrelse ~5" ;
-        Text [ portuguese ] = "Tamanho ~5" ;
-        Text [ portuguese_brazilian ] = "Tamanho ~5" ;
-        Text[ chinese_simplified ] = "å¤§å° ~5";
-        Text[ russian ] = "Ğàçìåğ ~5";
-        Text[ polish ] = "Rozmiar 5";
-        Text[ japanese ] = "ã‚µã‚¤ã‚º~5";
-        Text[ chinese_traditional ] = "å¤§å° ~5";
-        Text[ arabic ] = "ÇáÍÌã 5";
-        Text[ greek ] = "Ìİãåèïò 5";
-        Text[ korean ] = "í¬ê¸°5";
-        Text[ turkish ] = "Boyut ~5";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Mida ~5";
-        Text[ finnish ] = "Koko ~5";
-        Text[ thai ] = "à¸‚à¸™à¸²à¸” ~5";
-        Text[ czech ] = "Velikost 5";
-        Text[ hebrew ] = "GrÃ¶ÃŸe ~5";
-        Text[ hindi ] = "à¤ªà¤°à¤¿à¤®à¤¾à¤£ ~5";
-        Text[ slovak ] = "VeÄ¾kosÅ¥ ~5";
-        Text[ hungarian ] = "MÃ©ret ~5";
-        Text[ slovenian ] = "Velikost ~5";
+        Text [ de ] = "Größe ~5" ;
+        Text [ en-US ] = "Size ~5" ;
+        Text [ x-comment ] = " ";
     };
     NumericField NF_SIZE5
     {
@@ -330,36 +195,9 @@ TabPage RID_OFAPAGE_HTMLOPT
     {
         Pos = MAP_APPFONT ( 12 , 96 ) ;
         Size = MAP_APPFONT ( 30 , 8 ) ;
-        Text = "Größe ~6" ;
-        Text [ English ] = "Size ~6" ;
-        Text [ english_us ] = "Size ~6" ;
-        Text [ italian ] = "Dimens. ~6" ;
-        Text [ spanish ] = "Tamaño ~6" ;
-        Text [ french ] = "Taille ~6" ;
-        Text [ dutch ] = "Grootte ~6" ;
-        Text [ swedish ] = "Storlek ~6" ;
-        Text [ danish ] = "Størrelse ~6" ;
-        Text [ portuguese ] = "Tamanho ~6" ;
-        Text [ portuguese_brazilian ] = "Tamanho ~6" ;
-        Text[ chinese_simplified ] = "å¤§å° ~6";
-        Text[ russian ] = "Ğàçìåğ ~6";
-        Text[ polish ] = "Rozmiar 6";
-        Text[ japanese ] = "ã‚µã‚¤ã‚º~6";
-        Text[ chinese_traditional ] = "å¤§å° ~6";
-        Text[ arabic ] = "ÇáÍÌã 6";
-        Text[ greek ] = "Ìİãåèïò 6";
-        Text[ korean ] = "í¬ê¸°6";
-        Text[ turkish ] = "Boyut ~6";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Mida ~6";
-        Text[ finnish ] = "Koko ~6";
-        Text[ thai ] = "à¸‚à¸™à¸²à¸” ~6";
-        Text[ czech ] = "Velikost 6";
-        Text[ hebrew ] = "GrÃ¶ÃŸe ~6";
-        Text[ hindi ] = "à¤ªà¤°à¤¿à¤®à¤¾à¤£ ~6";
-        Text[ slovak ] = "VeÄ¾kosÅ¥ ~6";
-        Text[ hungarian ] = "MÃ©ret ~6";
-        Text[ slovenian ] = "Velikost ~6";
+        Text [ de ] = "Größe ~6" ;
+        Text [ en-US ] = "Size ~6" ;
+        Text [ x-comment ] = " ";
     };
     NumericField NF_SIZE6
     {
@@ -381,36 +219,9 @@ TabPage RID_OFAPAGE_HTMLOPT
     {
         Pos = MAP_APPFONT ( 12 , 112 ) ;
         Size = MAP_APPFONT ( 30 , 8 ) ;
-        Text = "Größe ~7" ;
-        Text [ English ] = "Size ~7" ;
-        Text [ english_us ] = "Size ~7" ;
-        Text [ italian ] = "Dimens. ~7" ;
-        Text [ spanish ] = "Tamaño ~7" ;
-        Text [ french ] = "Taille ~7" ;
-        Text [ dutch ] = "Grootte ~7" ;
-        Text [ swedish ] = "Storlek ~7" ;
-        Text [ danish ] = "Størrelse ~7" ;
-        Text [ portuguese ] = "Tamanho ~7" ;
-        Text [ portuguese_brazilian ] = "Tamanho ~7" ;
-        Text[ chinese_simplified ] = "å¤§å° ~7";
-        Text[ russian ] = "Ğàçìåğ ~7";
-        Text[ polish ] = "Rozmiar 7";
-        Text[ japanese ] = "ã‚µã‚¤ã‚º~7";
-        Text[ chinese_traditional ] = "å¤§å° ~7";
-        Text[ arabic ] = "ÇáÍÌã 7";
-        Text[ greek ] = "Ìİãåèïò 7";
-        Text[ korean ] = "í¬ê¸°7";
-        Text[ turkish ] = "Boyut ~7";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Mida ~7";
-        Text[ finnish ] = "Koko ~7";
-        Text[ thai ] = "à¸‚à¸™à¸²à¸” ~7";
-        Text[ czech ] = "Velikost 7";
-        Text[ hebrew ] = "GrÃ¶ÃŸe ~7";
-        Text[ hindi ] = "à¤ªà¤°à¤¿à¤®à¤¾à¤£ ~7";
-        Text[ slovak ] = "VeÄ¾kosÅ¥ ~7";
-        Text[ hungarian ] = "MÃ©ret ~7";
-        Text[ slovenian ] = "Velikost ~7";
+        Text [ de ] = "Größe ~7" ;
+        Text [ en-US ] = "Size ~7" ;
+        Text [ x-comment ] = " ";
     };
     NumericField NF_SIZE7
     {
@@ -432,143 +243,35 @@ TabPage RID_OFAPAGE_HTMLOPT
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 75 , 8 ) ;
-        Text = "Schriftgrößen" ;
-        Text [ English ] = "Font sizes" ;
-        Text [ english_us ] = "Font sizes" ;
-        Text [ italian ] = "Dimensioni carattere" ;
-        Text [ spanish ] = "Tamaños de fuente" ;
-        Text [ french ] = "Tailles de police" ;
-        Text [ dutch ] = "Lettergrootten" ;
-        Text [ swedish ] = "Teckenstorlekar" ;
-        Text [ danish ] = "Skriftstørrelser" ;
-        Text [ portuguese ] = "Tamanhos de letra" ;
-        Text [ portuguese_brazilian ] = "Tamanhos da fonte" ;
-        Text[ chinese_simplified ] = "å­—ä½“å¤§å°";
-        Text[ russian ] = "Ğàçìåğû øğèôòà";
-        Text[ polish ] = "Rozmiary czcionek";
-        Text[ japanese ] = "ãƒ•ã‚©ãƒ³ãƒˆã‚µã‚¤ã‚º";
-        Text[ chinese_traditional ] = "å­—å‹å¤§å°";
-        Text[ arabic ] = "ÃÍÌÇã ÇáÎØ";
-        Text[ greek ] = "Ìİãåèïò ãñáììáôïóåéñÜò";
-        Text[ korean ] = "ê¸€ê¼´ í¬ê¸°";
-        Text[ turkish ] = "Yazıtipi boyutları";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Mides de lletra";
-        Text[ finnish ] = "Fonttikoot";
-        Text[ thai ] = "à¸‚à¸™à¸²à¸”à¸•à¸±à¸§à¸­à¸±à¸à¸©à¸£";
-        Text[ czech ] = "Velikosti pÃ­sma";
-        Text[ hebrew ] = "SchriftgrÃ¶ÃŸen";
-        Text[ hindi ] = "à¤«à¤¼à¥‰à¤¨à¥à¤Ÿà¥ à¤ªà¤°à¤¿à¤®à¤¾à¤£";
-        Text[ slovak ] = "VeÄ¾kosti pÃ­sma";
-        Text[ hungarian ] = "BetÅ±mÃ©retek";
-        Text[ slovenian ] = "Velikosti pisav";
+        Text [ de ] = "Schriftgrößen" ;
+        Text [ en-US ] = "Font sizes" ;
+        Text [ x-comment ] = " ";
     };
     CheckBox CB_UNKNOWN_TAGS
     {
         Pos = MAP_APPFONT ( 93 , 14 ) ;
         Size = MAP_APPFONT ( 155 , 10 ) ;
         TabStop = TRUE ;
-        Text = "~Unbekannte HTML-Tags als Felder importieren" ;
-        Text [ English ] = "Import ~unknown HTML tags as fields" ;
-        Text [ english_us ] = "~Import unknown HTML tags as fields" ;
-        Text [ italian ] = "Importa Tag HTML sconosciuti come campi" ;
-        Text [ spanish ] = "Importar HTML-Tags ~desconocidos como campos" ;
-        Text [ french ] = "Importer les balises HTML inconnues comme champs" ;
-        Text [ dutch ] = "~Onbekende HTML-tags als velden importeren" ;
-        Text [ swedish ] = "~Importera okända HTML-taggar som fält" ;
-        Text [ danish ] = "~Importer ukendte HTML-koder som felter" ;
-        Text [ portuguese ] = "~Importar HTML-Tags desconhecidos como campos" ;
-        Text [ portuguese_brazilian ] = "~Importar Tags HTML desconhecidos como campos" ;
-        Text[ chinese_simplified ] = "å°†ä¸æ˜çš„HTMLæ ‡è®°å½“ä½œå­—æ®µè¾“å…¥(~I)";
-        Text[ russian ] = "Èìïîğòèğîâàòü íåèçâåñòíûå òåãè HTML êàê ïîëÿ";
-        Text[ polish ] = "~Importuj nieznane tagi HTML jako pola";
-        Text[ japanese ] = "ä¸æ˜ãªHTMLã‚¿ã‚°ã‚’ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã¨ã—ã¦ã‚¤ãƒ³ãƒãƒ¼ãƒˆ(~I)";
-        Text[ chinese_traditional ] = "å°‡ä¸æ˜çš„HTMLæ¨™è¨˜ç•¶ä½œæ¬„ä½åŒ¯å…¥(~I)";
-        Text[ arabic ] = "ÇÓÊíÑÇÏ HTML-Tags ÛíÑ ÇáãÚÑæİÉ ßÍŞæá";
-        Text[ greek ] = "ÅéóáãùãŞ Üãíùóôùí åôéêåôşí ôïõ HTML ùò ğåäßá";
-        Text[ korean ] = "ì•Œ ìˆ˜ ì—†ëŠ” HTML íƒœê·¸ë¥¼ í•„ë“œë¡œì„œ ê°€ì ¸ì˜¤ê¸°(~I)";
-        Text[ turkish ] = "Bilinmeyen HTML kod öğelerini alan olarak ~içe aktar";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Importa els marcadors HTML desconeguts com a camps";
-        Text[ finnish ] = "Tuo tuntemattomat ~HTML-koodit kenttinä";
-        Text[ thai ] = "~à¸™à¸³à¹€à¸‚à¹‰à¸²à¸ªà¸´à¹ˆà¸‡à¸à¹ˆà¸§à¸‡à¸—à¹‰à¸²à¸¢ HTML à¸—à¸µà¹ˆà¹„à¸¡à¹ˆà¸£à¸¹à¹‰à¸ˆà¸±à¸à¹€à¸›à¹‡à¸™à¹€à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
-        Text[ czech ] = "Importovat neznÃ¡mÃ© HTML znaÄky jako pole";
-        Text[ hebrew ] = "~Unbekannte HTML-Tags als Felder importieren";
-        Text[ hindi ] = "à¤…à¤œà¥à¤à¤¾à¤¤ HTML à¤Ÿà¥‰à¤—à¥‹à¤‚ à¤•à¥‹ à¤•à¥à¤·à¥‡à¤¤à¥à¤° à¤œà¥ˆà¤¸à¥‡ ~à¤†à¤¯à¤¾à¤¤ à¤•à¤°à¥‹";
-        Text[ slovak ] = "~ImportovaÅ¥ neznÃ¡me HTML tagy ako polia";
-        Text[ hungarian ] = "~Ismeretlen HTML-kÃ³dok importÃ¡lÃ¡sa mezÅ‘kkÃ©nt";
-        Text[ slovenian ] = "Neznane HTML oznake uvoz~i kot polja";
+        Text [ de ] = "~Unbekannte HTML-Tags als Felder importieren" ;
+        Text [ en-US ] = "~Import unknown HTML tags as fields" ;
+        Text [ x-comment ] = " ";
     };
     CheckBox CB_IGNORE_FONTNAMES
     {
         Pos = MAP_APPFONT ( 93 , 28 ) ;
         Size = MAP_APPFONT ( 155 , 10 ) ;
         TabStop = TRUE ;
-        Text = "~Font-Einstellungen ignorieren" ;
-        Text [ English ] = "Ignore font settings" ;
-        Text [ english_us ] = "Ignore ~font settings" ;
-        Text [ portuguese_brazilian ] = "~Ignorar definições da fonte" ;
-        Text [ swedish ] = "Ignorera te~ckensnittsinställningar" ;
-        Text [ danish ] = "Ignorer skrifttypeindstillinger" ;
-        Text [ italian ] = "Ignora impostazioni tipo di carattere" ;
-        Text [ spanish ] = "~Ignorar la configuración de la fuente" ;
-        Text [ french ] = "Ignorer les paramètres des polices" ;
-        Text [ dutch ] = "Lettertype-~instellingen negeren" ;
-        Text [ portuguese ] = "~Ignorar parâmetros do tipo de letra" ;
-        Text[ chinese_simplified ] = "å¿½ç•¥å­—ä½“è®¾å®š(~F)";
-        Text[ russian ] = "Èãíîğèğîâàòü íàñòğîéêè ~øğèôòà";
-        Text[ polish ] = "Ignoruj ~ustawienia czcionek";
-        Text[ japanese ] = "ãƒ•ã‚©ãƒ³ãƒˆè¨­å®šã‚’ç„¡è¦–ã™ã‚‹(~F)";
-        Text[ chinese_traditional ] = "å¿½ç•¥å­—å‹è¨­å®š(~F)";
-        Text[ arabic ] = "ÊÌÇåá ÅÚÏÇÏÇÊ ÇáÎØ";
-        Text[ greek ] = "ĞáñÜ~âëåøç ñõèìßóåùí ãñáììáôïóåéñÜò";
-        Text[ korean ] = "ê¸€ê¼´ ì„¤ì • ë¬´ì‹œ(~F)";
-        Text[ turkish ] = "~Yazıtipi ayarlarını yok say";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Ignora els paràmetres del tipus de ~lletra";
-        Text[ finnish ] = "Ohita ~fonttiasetukset";
-        Text[ thai ] = "à¹€à¸à¸´à¸à¹€à¸‰à¸¢à¸à¸²à¸£à¸•à¸±à¹‰à¸‡à¸„à¹ˆà¸²~à¸•à¸±à¸§à¸­à¸±à¸à¸©à¸£";
-        Text[ czech ] = "Ignorovat nastavenÃ­ pÃ­sem";
-        Text[ hebrew ] = "~Font-Einstellungen ignorieren";
-        Text[ hindi ] = "~à¤«à¤¼à¥‰à¤¨à¥à¤Ÿà¥ à¤¨à¤¿à¤°à¥à¤§à¤¾à¤°à¤£à¥‹à¤‚ à¤•à¥‹ à¤‰à¤ªà¥‡à¤•à¥à¤·à¤¾ à¤•à¤°à¥‹";
-        Text[ slovak ] = "IgnorovaÅ¥ nastavenia ~fontov";
-        Text[ hungarian ] = "B~etÅ±beÃ¡llÃ­tÃ¡sok figyelmen kÃ­vÃ¼l hagyÃ¡sa";
-        Text[ slovenian ] = "Prezri nastavitve ~pisave";
+        Text [ de ] = "~Font-Einstellungen ignorieren" ;
+        Text [ en-US ] = "Ignore ~font settings" ;
+        Text [ x-comment ] = " ";
     };
     FixedLine GB_IMPORT
     {
         Pos = MAP_APPFONT ( 87 , 3 ) ;
         Size = MAP_APPFONT ( 167 , 8 ) ;
-        Text = "Import" ;
-        Text [ English ] = "Import" ;
-        Text [ dutch ] = "Importeren" ;
-        Text [ english_us ] = "Import" ;
-        Text [ italian ] = "Importa" ;
-        Text [ spanish ] = "Importación" ;
-        Text [ french ] = "Import" ;
-        Text [ swedish ] = "Import" ;
-        Text [ danish ] = "Importer" ;
-        Text [ portuguese ] = "Importar" ;
-        Text [ portuguese_brazilian ] = "Importar" ;
-        Text[ chinese_simplified ] = "è¾“å…¥";
-        Text[ russian ] = "Èìïîğò";
-        Text[ polish ] = "Importuj";
-        Text[ japanese ] = "ã‚¤ãƒ³ãƒãƒ¼ãƒˆ";
-        Text[ chinese_traditional ] = "åŒ¯å…¥";
-        Text[ arabic ] = "ÇÓÊíÑÇÏ";
-        Text[ greek ] = "ÅéóáãùãŞ";
-        Text[ korean ] = "ê°€ì ¸ì˜¤ê¸°";
-        Text[ turkish ] = "İçeri aktarım";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Importa";
-        Text[ finnish ] = "Tuo";
-        Text[ thai ] = "à¸™à¸³à¹€à¸‚à¹‰à¸²";
-        Text[ czech ] = "Importovat";
-        Text[ hebrew ] = "Import";
-        Text[ hindi ] = "à¤†à¤¯à¤¾à¤¤";
-        Text[ slovak ] = "ImportovaÅ¥";
-        Text[ hungarian ] = "ImportÃ¡lÃ¡s";
-        Text[ slovenian ] = "Uvoz";
+        Text [ de ] = "Import" ;
+        Text [ en-US ] = "Import" ;
+        Text [ x-comment ] = " ";
     };
     ListBox LB_EXPORT
     {
@@ -594,141 +297,33 @@ TabPage RID_OFAPAGE_HTMLOPT
     {
         Pos = MAP_APPFONT ( 99 , 88 ) ;
         Size = MAP_APPFONT ( 149 , 10 ) ;
-        Text = "~Warnung anzeigen";
-        Text[ENGLISH] = "Show ~warning";
-        Text[ english_us ] = "Display ~warning";
-        Text[ portuguese ] = "~Mostrar advertência";
-        Text[ russian ] = "Ïîêàçàòü ïğåäóïğåæäåíèå";
-        Text[ dutch ] = "~Waarschuwing weergeven";
-        Text[ french ] = "Afficher un ~avertissement";
-        Text[ spanish ] = "Mostrar ~advertencia";
-        Text[ italian ] = "Mostra avviso";
-        Text[ danish ] = "Vis advarsel";
-        Text[ swedish ] = "Visa ~varning";
-        Text[ polish ] = "Wyœwietl ~ostrze¿enie";
-        Text[ portuguese_brazilian ] = "~Exibir aviso";
-        Text[ japanese ] = "è­¦å‘Šã®è¡¨ç¤º(~W)";
-        Text[ chinese_simplified ] = "æ˜¾ç¤ºè­¦å‘Š(~W)";
-        Text[ chinese_traditional ] = "é¡¯ç¤ºè­¦å‘Š(~W)";
-        Text[ arabic ] = "ÅÙåÇÑ ÊÍĞíÑ";
-        Text[ greek ] = "ÅìöÜíéóç ğñïåéäïğïßçóçò";
-        Text[ korean ] = "ê²½ê³  í‘œì‹œ(~W)";
-        Text[ turkish ] = "~Uyarıları görüntüle";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Visualitza l'~advertiment";
-        Text[ finnish ] = "Näytä ~varoitus";
-        Text[ thai ] = "à¹à¸ªà¸”à¸‡~à¸„à¸³à¹€à¸•à¸·à¸­à¸™";
-        Text[ czech ] = "Zobrazit varovÃ¡nÃ­";
-        Text[ hebrew ] = "~Warnung anzeigen";
-        Text[ hindi ] = "~à¤šà¥‡à¤¤à¤¾à¤µà¤¨à¥€ à¤¦à¤¿à¤–à¤¾à¤“";
-        Text[ slovak ] = "ZobraziÅ¥ ~vÃ½strahu";
-        Text[ hungarian ] = "~FigyelmeztetÃ©sek megjelenÃ­tÃ©se";
-        Text[ slovenian ] = "PrikaÅ¾i ~opozorilo";
+        Text [ de ] = "~Warnung anzeigen";
+        Text [ en-US ] = "Display ~warning";
+        Text [ x-comment ] = " ";
     };
     CheckBox CB_PRINT_EXTENSION
     {
         Pos = MAP_APPFONT ( 93 , 102 ) ;
         Size = MAP_APPFONT ( 155 , 10 ) ;
-        Text = "~Drucklayout" ;
-        Text [ English ] = "~Print layout" ;
-        Text [ portuguese ] = "~Configuração da impressão" ;
-        Text [ english_us ] = "~Print layout" ;
-        Text [ portuguese_brazilian ] = "~Layout de Impressão" ;
-        Text [ swedish ] = "~Utskriftslayout" ;
-        Text [ danish ] = "~Udskriftslayout" ;
-        Text [ italian ] = "Layout di stampa" ;
-        Text [ spanish ] = "~Configuración de la impresora" ;
-        Text [ french ] = "~Mise en page d'impression" ;
-        Text [ dutch ] = "~Afdruklay-out" ;
-        Text[ chinese_simplified ] = "æ‰“å°ç‰ˆå¼(~P)";
-        Text[ russian ] = "Ğàçìåòêà ïå~÷àòè";
-        Text[ polish ] = "Uk³~ad wydruku";
-        Text[ japanese ] = "å°åˆ·ãƒ¬ã‚¤ã‚¢ã‚¦ãƒˆ(~P)";
-        Text[ chinese_traditional ] = "åˆ—å°ç‰ˆå¼(~P)";
-        Text[ arabic ] = "ÊÎØíØ ÇáØÈÇÚÉ";
-        Text[ language_user1 ] = " ";
-        Text[ greek ] = "ÄéÜôáîç åêôığùóçò";
-        Text[ korean ] = "ì¸ì‡„ ëª¨ì–‘(~P)";
-        Text[ turkish ] = "Sayfa düzeni";
-        Text[ catalan ] = "~Imprimeix el format";
-        Text[ finnish ] = "~Tulostusasettelu";
-        Text[ thai ] = "~à¸à¸´à¸¡à¸à¹Œà¹€à¸„à¹‰à¸²à¹‚à¸„à¸£à¸‡";
-        Text[ czech ] = "RozvrÅ¾enÃ­ tisku";
-        Text[ hebrew ] = "~Drucklayout";
-        Text[ hindi ] = "~à¤›à¤ªà¤¾à¤ˆ à¤…à¤­à¤¿à¤¨à¥à¤¯à¤¾à¤¸";
-        Text[ slovak ] = "Us~poriadanie tlaÄe";
-        Text[ hungarian ] = "~NyomtatÃ¡si elrendezÃ©s";
-        Text[ slovenian ] = "~Pogled postavitve tiskanja";
+        Text [ de ] = "~Drucklayout" ;
+        Text [ en-US ] = "~Print layout" ;
+        Text [ x-comment ] = " ";
     };
     CheckBox CB_LOCAL_GRF
     {
         Pos = MAP_APPFONT ( 93 , 116 ) ;
         Size = MAP_APPFONT ( 155 , 10 ) ;
-        Text = "~Lokale Grafiken in das Internet kopieren" ;
-        Text [ English ] = "Copy ~local graphics to the Internet" ;
-        Text [ english_us ] = "~Copy local graphics to Internet" ;
-        Text [ portuguese_brazilian ] = "~Copiar figuras locais para a Internet" ;
-        Text [ swedish ] = "Kopiera ~lokal grafik till Internet" ;
-        Text [ danish ] = "~Kopier lokal grafik til Internet" ;
-        Text [ italian ] = "Copia immagini locali in Internet" ;
-        Text [ spanish ] = "Copiar imágenes ~locales en Internet" ;
-        Text [ french ] = "Copier les images ~locales sur Internet" ;
-        Text [ dutch ] = "~Lokale afbeeldingen naar het internet kopiëren" ;
-        Text [ portuguese ] = "~Copiar imagens locais para a Internet" ;
-        Text[ chinese_simplified ] = "å°†æœ¬æœºçš„å›¾å½¢å¤åˆ¶åˆ°å›½é™…äº’è”ç½‘çš„æœåŠ¡å™¨ä¸Š(~C)";
-        Text[ russian ] = "Êîïèğîâàòü ëîêàëüíóş ãğàôèêó â Èíòåğíåò";
-        Text[ polish ] = "~Kopiuj lokalne grafiki do Internetu";
-        Text[ japanese ] = "ãƒ­ãƒ¼ã‚«ãƒ«ã®å›³ã‚’ã‚¤ãƒ³ã‚¿ãƒ¼ãƒãƒƒãƒˆã«ã‚³ãƒ”ãƒ¼(~C)";
-        Text[ chinese_traditional ] = "å°‡æœ¬æ©Ÿçš„åœ–å½¢è¤‡è£½çµ¦ Internet çš„ä¼ºæœå™¨(~C)";
-        Text[ arabic ] = "äÓÎ ÇáÑÓæãÇÊ ÇáãÍáíÉ Åáì ÇáÅäÊÑäÊ";
-        Text[ greek ] = "ÁíôéãñáöŞ ôïğéêşí ãñáöéêşí óôï Énternet";
-        Text[ korean ] = "ë¡œì»¬ ê·¸ë¦¼ì„ ì¸í„°ë„·ìœ¼ë¡œ ë³µì‚¬(~C)";
-        Text[ turkish ] = "Yerel grafikleri İnternete kopyala";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Copia els gràfics locals a Internet";
-        Text[ finnish ] = "Kopioi ~paikalliset kuvat Internetiin";
-        Text[ thai ] = "~à¸„à¸±à¸”à¸¥à¸­à¸à¸à¸£à¸²à¸Ÿà¸´à¸„à¸—à¹‰à¸­à¸‡à¸–à¸´à¹ˆà¸™à¹„à¸›à¸¢à¸±à¸‡à¸­à¸´à¸™à¹€à¸•à¸­à¸£à¹Œà¹€à¸™à¹‡à¸•";
-        Text[ czech ] = "KopÃ­rovat lokÃ¡lnÃ­ obrÃ¡zky na Internet";
-        Text[ hebrew ] = "~Lokale Grafiken in das Internet kopieren";
-        Text[ hindi ] = "à¤¸à¥à¤¥à¤¾à¤¨à¤¿à¤• à¤¸à¥à¤šà¤¿à¤¤à¥à¤° à¤•à¥‹ à¤‡à¤¨à¥à¤Ÿà¤°à¤¨à¥‡à¤Ÿà¥ à¤®à¥‡à¤‚ ~à¤ªà¥à¤°à¤¤à¤¿à¤²à¤¿à¤ªà¤¿ à¤¬à¤¨à¤¾à¤“";
-        Text[ slovak ] = "~KopÃ­rovaÅ¥ lokÃ¡lne obrÃ¡zky na Internet";
-        Text[ hungarian ] = "~Helyi kÃ©pek mÃ¡solÃ¡sa az internetre";
-        Text[ slovenian ] = "~Kopiraj grafike na Internet";
+        Text [ de ] = "~Lokale Grafiken in das Internet kopieren" ;
+        Text [ en-US ] = "~Copy local graphics to Internet" ;
+        Text [ x-comment ] = " ";
     };
 
     FixedText FT_CHARSET
     {
         Pos = MAP_APPFONT ( 93 , 130 ) ;
         Size = MAP_APPFONT ( 65 , 8 ) ;
-        Text = "Z~eichensatz" ;
-        Text [ English ] = "Character Set" ;
-        Text[ english_us ] = "Character set";
-        Text[ portuguese ] = "~Conjunto de caracteres";
-        Text[ russian ] = "Êîäèğîâêà";
-        Text[ greek ] = "Ó~åô ÷áñáêôŞñùí";
-        Text[ dutch ] = "~Tekenset";
-        Text[ french ] = "J~eu de caractères";
-        Text[ spanish ] = "Juego de caracteres";
-        Text[ italian ] = "Set di caratteri";
-        Text[ danish ] = "Tegnsæt";
-        Text[ swedish ] = "T~eckenuppsättning";
-        Text[ polish ] = "Zestaw znaków";
-        Text[ portuguese_brazilian ] = "Conjunto de Caracteres";
-        Text[ japanese ] = "æ–‡å­—ã‚³ãƒ¼ãƒ‰ã‚»ãƒƒãƒˆ";
-        Text[ korean ] = "ë¬¸ìì§‘í•©";
-        Text[ chinese_simplified ] = "å­—ç¬¦é›†";
-        Text[ chinese_traditional ] = "å­—å‹";
-        Text[ turkish ] = "Karakter kümesi";
-        Text[ arabic ] = "ãÌãæÚÉ ÃÍÑİ";
-        Text[ catalan ] = "Joc de Caràcters";
-        Text[ finnish ] = "Merkistö";
-        Text[ thai ] = "à¸Šà¸¸à¸”à¸•à¸±à¸§à¸­à¸±à¸à¸‚à¸£à¸°";
-        Text[ czech ] = "ZnakovÃ¡ sada";
-        Text[ hebrew ] = "Z~eichensatz";
-        Text[ hindi ] = "à¤…à¤•à¥à¤·à¤° à¤¸à¤®à¥‚à¤¹";
-        Text[ slovak ] = "ZnakovÃ¡ sada";
-        Text[ hungarian ] = "KarakterkÃ©szlet";
-        Text[ slovenian ] = "Nabor znakov";
+        Text [ de ] = "Z~eichensatz" ;
+        Text [ en-US ] = "Character set";
     };
     ListBox LB_CHARSET
     {
@@ -742,36 +337,9 @@ TabPage RID_OFAPAGE_HTMLOPT
     {
         Pos = MAP_APPFONT ( 87 , 44 ) ;
         Size = MAP_APPFONT ( 167 , 8 ) ;
-        Text = "Export" ;
-        Text [ English ] = "Export" ;
-        Text [ english_us ] = "Export" ;
-        Text [ italian ] = "Esporta" ;
-        Text [ spanish ] = "Exportación" ;
-        Text [ french ] = "Export" ;
-        Text [ dutch ] = "Exporteren" ;
-        Text [ swedish ] = "Export" ;
-        Text [ danish ] = "Eksporter" ;
-        Text [ portuguese ] = "Exportar" ;
-        Text [ portuguese_brazilian ] = "Exportar" ;
-        Text[ chinese_simplified ] = "è¾“å‡º";
-        Text[ russian ] = "İêñïîğò";
-        Text[ polish ] = "Eksport";
-        Text[ japanese ] = "ã‚¨ã‚¯ã‚¹ãƒãƒ¼ãƒˆ";
-        Text[ chinese_traditional ] = "åŒ¯å‡º";
-        Text[ arabic ] = "ÊÕÏíÑ";
-        Text[ greek ] = "ÅîáãùãŞ";
-        Text[ korean ] = "ë‚´ë³´ë‚´ê¸°";
-        Text[ turkish ] = "Aktar";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Exporta";
-        Text[ finnish ] = "Vie";
-        Text[ thai ] = "à¸ªà¹ˆà¸‡à¸­à¸­à¸";
-        Text[ czech ] = "Export";
-        Text[ hebrew ] = "â€®×™×¦×•×â€¬";
-        Text[ hindi ] = "à¤¨à¤¿à¤°à¥à¤¯à¤¾à¤¤";
-        Text[ slovak ] = "ExportovaÅ¥";
-        Text[ hungarian ] = "ExportÃ¡lÃ¡s";
-        Text[ slovenian ] = "Izvoz";
+        Text [ de ] = "Export" ;
+        Text [ en-US ] = "Export" ;
+        Text [ x-comment ] = " ";
     };
 };
  // ******************************************************************* EOF
