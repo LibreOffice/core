@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfflt.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-05 21:40:10 $
+ *  last change: $Author: ka $ $Date: 2002-04-26 09:19:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 
 #include <svtools/controldims.hrc>
 #include "dialogs.hrc"
+#include "helpid.hrc"
 #include "grfflt.hrc"
 
 // --------------------
@@ -830,6 +831,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_EMBOSS
 #define MA_Y13  MA_Y12 + RSC_CD_FIXEDTEXT_HEIGHT + RSC_SP_CTRL_DESC_Y
     Control DLG_FILTEREMBOSS_CTL_LIGHT
     {
+        HelpID = HID_GRFFILTER_EMBOSS_LIGHT ;
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , MA_Y13 ) ;
         Size = MAP_APPFONT ( 77 , 60 ) ;
