@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdmodel.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 14:54:52 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 17:53:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,12 @@
  *
  ************************************************************************/
 
+#include "svdmodel.hxx"
+
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
+#include <com/sun/star/container/XNameContainer.hpp>
+#endif
+
 #ifndef _OSL_ENDIAN_H_
 #include <osl/endian.h>
 #endif
@@ -66,7 +72,6 @@
 #include <rtl/logfile.hxx>
 #endif
 
-#include "svdmodel.hxx"
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
 #endif
@@ -105,6 +110,7 @@
 #include "xlnstit.hxx"
 #endif
 
+#include <sfx2/objsh.hxx>
 
 #include "svditext.hxx"
 #include "editeng.hxx"   // Fuer EditEngine::CreatePool()
@@ -170,10 +176,6 @@
 
 #ifndef _FORBIDDENCHARACTERSTABLE_HXX
 #include "forbiddencharacterstable.hxx"
-#endif
-
-#ifndef _PERSIST_HXX
-#include <so3/persist.hxx>
 #endif
 
 #ifndef _ZFORLIST_HXX
@@ -337,8 +339,7 @@ SvStream& operator>>(SvStream& rIn, SdrModelInfo& rModInfo)
 
 DBG_NAME(SdrModel);
 TYPEINIT1(SdrModel,SfxBroadcaster);
-
-void SdrModel::ImpCtor(SfxItemPool* pPool, SvPersist* pPers,
+void SdrModel::ImpCtor(SfxItemPool* pPool, SfxObjectShell* pPers,
     FASTBOOL bUseExtColorTable, FASTBOOL bLoadRefCounts)
 {
     mbInDestruction=false;
@@ -454,7 +455,7 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, SvPersist* pPers,
     ImpCreateTables();
 }
 
-SdrModel::SdrModel(SfxItemPool* pPool, SvPersist* pPers, INT32 bLoadRefCounts):
+SdrModel::SdrModel(SfxItemPool* pPool, SfxObjectShell* pPers, INT32 bLoadRefCounts):
     aInfo(TRUE),
     maPages(1024,32,32),
     maMaPag(1024,32,32)
@@ -467,7 +468,7 @@ SdrModel::SdrModel(SfxItemPool* pPool, SvPersist* pPers, INT32 bLoadRefCounts):
     ImpCtor(pPool,pPers,FALSE, (FASTBOOL)bLoadRefCounts);
 }
 
-SdrModel::SdrModel(const String& rPath, SfxItemPool* pPool, SvPersist* pPers, INT32 bLoadRefCounts):
+SdrModel::SdrModel(const String& rPath, SfxItemPool* pPool, SfxObjectShell* pPers, INT32 bLoadRefCounts):
     aInfo(TRUE),
     maPages(1024,32,32),
     maMaPag(1024,32,32),
@@ -481,7 +482,7 @@ SdrModel::SdrModel(const String& rPath, SfxItemPool* pPool, SvPersist* pPers, IN
     ImpCtor(pPool,pPers,FALSE, (FASTBOOL)bLoadRefCounts);
 }
 
-SdrModel::SdrModel(SfxItemPool* pPool, SvPersist* pPers, FASTBOOL bUseExtColorTable, INT32 bLoadRefCounts):
+SdrModel::SdrModel(SfxItemPool* pPool, SfxObjectShell* pPers, FASTBOOL bUseExtColorTable, INT32 bLoadRefCounts):
     aInfo(TRUE),
     maPages(1024,32,32),
     maMaPag(1024,32,32)
@@ -494,7 +495,7 @@ SdrModel::SdrModel(SfxItemPool* pPool, SvPersist* pPers, FASTBOOL bUseExtColorTa
     ImpCtor(pPool,pPers,bUseExtColorTable, (FASTBOOL)bLoadRefCounts);
 }
 
-SdrModel::SdrModel(const String& rPath, SfxItemPool* pPool, SvPersist* pPers, FASTBOOL bUseExtColorTable, INT32 bLoadRefCounts):
+SdrModel::SdrModel(const String& rPath, SfxItemPool* pPool, SfxObjectShell* pPers, FASTBOOL bUseExtColorTable, INT32 bLoadRefCounts):
     aInfo(TRUE),
     maPages(1024,32,32),
     maMaPag(1024,32,32),
@@ -2306,62 +2307,53 @@ void SdrModel::AfterRead()
         GetPage(i)->AfterRead();
     }
 
-#ifndef SVX_LIGHT
     // Investigation of bMyPool to check if it's allowed to delete the OLE objects.
     // If bMyPool == FALSE it's not allowed (Writer)
     if( pPersist && bMyPool )
     {
-        SvInfoObjectMemberList* pList = (SvInfoObjectMemberList*) pPersist->GetObjectList();
-
-        if( pList )
+        uno::Sequence < rtl::OUString > aNames = pPersist->GetEmbeddedObjectContainer().GetObjectNames();
+        for ( sal_Int32 nObj=0; nObj<aNames.getLength(); nObj++ )
         {
-            SvInfoObjectRef pInfo = pList->First();
-            while( pInfo.Is() )
+            BOOL bFound = FALSE;
+            String aName = aNames[nObj];
+            UINT16 a;
+
+            nCnt = GetPageCount();
+            for( a = 0; a < nCnt && !bFound; a++ )
             {
-                BOOL bFound = FALSE;
-                String aName = pInfo->GetObjName();
-                UINT16 a;
-
-                nCnt = GetPageCount();
-                for( a = 0; a < nCnt && !bFound; a++ )
+                // Pages
+                SdrObjListIter aIter( *GetPage(a) );
+                while( !bFound && aIter.IsMore() )
                 {
-                    // Pages
-                    SdrObjListIter aIter( *GetPage(a) );
-                    while( !bFound && aIter.IsMore() )
+                    SdrObject* pObj = aIter.Next();
+                    if( pObj->ISA(SdrOle2Obj) )
                     {
-                        SdrObject* pObj = aIter.Next();
-                        if( pObj->ISA(SdrOle2Obj) )
-                        {
-                            if( aName == static_cast< SdrOle2Obj* >( pObj )->GetPersistName() )
-                                bFound = TRUE;
-                        }
+                        if( aName == static_cast< SdrOle2Obj* >( pObj )->GetPersistName() )
+                            bFound = TRUE;
                     }
                 }
-
-                nCnt = GetMasterPageCount();
-                for( a = 0; a < nCnt && !bFound; a++ )
-                {
-                    // MasterPages
-                    SdrObjListIter aIter( *GetMasterPage(a) );
-                    while( !bFound && aIter.IsMore() )
-                    {
-                        SdrObject* pObj = aIter.Next();
-                        if( pObj->ISA(SdrOle2Obj) )
-                        {
-                            if( aName == static_cast< SdrOle2Obj* >( pObj )->GetPersistName() )
-                                bFound = TRUE;
-                        }
-                    }
-                }
-
-                if( !bFound )
-                    pInfo->SetDeleted(TRUE);
-
-                pInfo = pList->Next();
             }
+
+            nCnt = GetMasterPageCount();
+            for( a = 0; a < nCnt && !bFound; a++ )
+            {
+                // MasterPages
+                SdrObjListIter aIter( *GetMasterPage(a) );
+                while( !bFound && aIter.IsMore() )
+                {
+                    SdrObject* pObj = aIter.Next();
+                    if( pObj->ISA(SdrOle2Obj) )
+                    {
+                        if( aName == static_cast< SdrOle2Obj* >( pObj )->GetPersistName() )
+                            bFound = TRUE;
+                    }
+                }
+            }
+
+            if( !bFound )
+                pPersist->GetEmbeddedObjectContainer().RemoveEmbeddedObject( aName );
         }
     }
-#endif
 }
 
 ULONG SdrModel::ImpCountAllSteamComponents() const
