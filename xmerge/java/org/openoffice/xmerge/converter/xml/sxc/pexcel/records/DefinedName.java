@@ -212,12 +212,7 @@ public class DefinedName implements BIFFRecord {
          String baseCellAddress;
         getDefinition();        // This must be called first so we know the type
 
-         if(isRangeType()) {
-            baseCellAddress = definition;
-        } else {
-            baseCellAddress = "$" + wb.getSheetName(0) + ".A1";
-            // baseCellAddress = "$Sheet1.A1";  // HACK eeeekk!
-        }
+        baseCellAddress = "$" + wb.getSheetName(0) + ".A1";
 
         NameDefinition nd = new NameDefinition(getName(),definition, baseCellAddress, isRangeType(), isExpressionType());
         return nd;
