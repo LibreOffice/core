@@ -2,9 +2,9 @@
  *
  *  $RCSfile: miscopt.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-11 09:23:58 $
+ *  last change: $Author: mba $ $Date: 2001-06-29 08:10:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,8 +120,10 @@ using namespace ::com::sun::star::uno   ;
 #define PROPERTYHANDLE_SYMBOLSET        1
 #define PROPERTYNAME_TOOLBOXSTYLE       OUString(RTL_CONSTASCII_USTRINGPARAM("ToolboxStyle"))
 #define PROPERTYHANDLE_TOOLBOXSTYLE     2
+#define PROPERTYNAME_USESYSTEMFILEDIALOG          OUString(RTL_CONSTASCII_USTRINGPARAM("UseSystemFileDialog"))
+#define PROPERTYHANDLE_USESYSTEMFILEDIALOG        3
 
-#define PROPERTYCOUNT                   3
+#define PROPERTYCOUNT                   4
 
 DECLARE_LIST( LinkList, Link * );
 
@@ -137,9 +139,10 @@ class SvtMiscOptions_Impl : public ConfigItem
 
     private:
     LinkList    aList;
-    sal_Bool    m_bPluginsEnabled;
     sal_Int16   m_nSymbolSet;
     sal_Int16   m_nToolboxStyle;
+    sal_Bool    m_bPluginsEnabled;
+    sal_Bool    m_bUseSystemFileDialog;
     //-------------------------------------------------------------------------------------------------------------
     //  public methods
     //-------------------------------------------------------------------------------------------------------------
@@ -192,28 +195,15 @@ class SvtMiscOptions_Impl : public ConfigItem
         //  public interface
         //---------------------------------------------------------------------------------------------------------
 
-        /*-****************************************************************************************************//**
-            @short      Method to check whether plugins are enbaled.
-            @descr      Method to check whether plugins are enbaled.
-            @seealso    -
+        sal_Bool UseSystemFileDialog() const
+        { return m_bUseSystemFileDialog; }
 
-            @return     TRUE, if plugins are enabled.
-
-            @onerror    No error should occurre!
-        *//*-*****************************************************************************************************/
+        void SetUseSystemFileDialog( sal_Bool bSet )
+        {  m_bUseSystemFileDialog = bSet; SetModified(); }
 
         sal_Bool IsPluginsEnabled() const
         { return m_bPluginsEnabled; }
 
-        /*-****************************************************************************************************//**
-            @short      Method to set if plugins are enabled.
-            @descr      Method to set if plugins are enabled.
-            @seealso    -
-
-            @param      "bEnable" to enable plugins
-
-            @onerror    No error should occurre!
-        *//*-*****************************************************************************************************/
         void SetPluginsEnabled( sal_Bool bEnable );
 
         sal_Int16 GetSymbolSet()
@@ -297,6 +287,11 @@ SvtMiscOptions_Impl::SvtMiscOptions_Impl()
             case PROPERTYHANDLE_TOOLBOXSTYLE        :   {
                                                             if( !(seqValues[nProperty] >>= m_nToolboxStyle) )
                                                                 DBG_ERROR("Wrong type of \"Misc\\ToolboxStyle\"!" );
+                                                        }
+                                                    break;
+            case PROPERTYHANDLE_USESYSTEMFILEDIALOG      :   {
+                                                            if( !(seqValues[nProperty] >>= m_bUseSystemFileDialog) )
+                                                                DBG_ERROR("Wrong type of \"Misc\\PluginsEnabled\"!" );
                                                         }
                                                     break;
         }
@@ -395,6 +390,11 @@ void SvtMiscOptions_Impl::Notify( const Sequence< OUString >& seqPropertyNames )
                                                                 DBG_ERROR("Wrong type of \"Misc\\ToolboxStyle\"!" );
                                                         }
                                                     break;
+            case PROPERTYHANDLE_USESYSTEMFILEDIALOG      :   {
+                                                            if( !(seqValues[nProperty] >>= m_bUseSystemFileDialog) )
+                                                                DBG_ERROR("Wrong type of \"Misc\\PluginsEnabled\"!" );
+                                                            }
+                                                    break;
             default:
                 DBG_ERROR( "SvtMiscOptions_Impl::Notify()\nUnkown property detected ... I can't handle these!\n" );
                 break;
@@ -430,6 +430,10 @@ void SvtMiscOptions_Impl::Commit()
                                                         seqValues[nProperty] <<= m_nToolboxStyle;
                                                     }
                                                     break;
+            case PROPERTYHANDLE_USESYSTEMFILEDIALOG      :   {
+                                                        seqValues[nProperty] <<= m_bUseSystemFileDialog;
+                                                    }
+                                                    break;
         }
     }
     // Set properties in configuration.
@@ -446,7 +450,8 @@ Sequence< OUString > SvtMiscOptions_Impl::GetPropertyNames()
     {
         PROPERTYNAME_PLUGINSENABLED,
         PROPERTYNAME_SYMBOLSET,
-        PROPERTYNAME_TOOLBOXSTYLE
+        PROPERTYNAME_TOOLBOXSTYLE,
+        PROPERTYNAME_USESYSTEMFILEDIALOG
     };
 
     // Initialize return sequence with these list ...
@@ -510,6 +515,16 @@ void SvtMiscOptions::SetPluginsEnabled( sal_Bool bEnable )
 sal_Int16 SvtMiscOptions::GetSymbolSet() const
 {
     return m_pDataContainer->GetSymbolSet();
+}
+
+void SvtMiscOptions::SetUseSystemFileDialog( sal_Bool bEnable )
+{
+    m_pDataContainer->SetUseSystemFileDialog( bEnable );
+}
+
+sal_Bool SvtMiscOptions::UseSystemFileDialog() const
+{
+    return m_pDataContainer->UseSystemFileDialog();
 }
 
 void SvtMiscOptions::SetSymbolSet( sal_Int16 nSet )
