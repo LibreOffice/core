@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 15:17:27 $
+#   last change: $Author: hr $ $Date: 2001-05-30 12:20:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -93,6 +93,13 @@ OBJFILES=	$(OBJ)$/textenc.obj 	\
             $(OBJ)$/tcvtutf8.obj
 .ENDIF
 
+# Optimization of on Solaris Intel due to internal compiler error
+# To be reevaluated after compiler upgrade
+.IF "$(OS)$(CPU)"=="SOLARISI"
+NOOPTFILES= \
+            $(SLO)$/textenc.obj     \
+            $(OBJ)$/textenc.obj
+.ENDIF
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :	target.mk
