@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grafctrl.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 17:02:47 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:57:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,7 @@
 #include "brshitem.hxx"
 #include "sizeitem.hxx"
 #include "sdgcpitm.hxx"
-#include "../dialog/grfpage.hxx"
+//CHINA001 #include "../dialog/grfpage.hxx"
 #include "itemwin.hxx"
 #include "dialmgr.hxx"
 #include "svdview.hxx"
@@ -123,7 +123,7 @@
 #include "svdundo.hxx"
 #include "svdtrans.hxx"
 #include "grafctrl.hxx"
-
+#include "svxdlg.hxx" //CHINA001
 // -----------
 // - Defines -
 // -----------
@@ -1072,8 +1072,13 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
                 SfxSingleTabDialog  aCropDialog( SfxViewShell::Current() ? SfxViewShell::Current()->GetWindow() : NULL,
                                                  aCropDlgAttr, 950 );
                 const String        aCropStr = SVX_RESSTR( RID_SVXSTR_GRAFCROP );
-                SfxTabPage*         pTabPage = SvxGrfCropPage::Create( &aCropDialog, aCropDlgAttr );
-
+                //CHINA001 SfxTabPage*          pTabPage = SvxGrfCropPage::Create( &aCropDialog, aCropDlgAttr );
+                SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
+                DBG_ASSERT(pFact, "Dialogdiet error!");//CHINA001
+                ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc( RID_SVXPAGE_GRFCROP );
+                DBG_ASSERT(fnCreatePage, "Dialogdiet error!");//CHINA001
+                SfxTabPage* pTabPage = (*fnCreatePage)( &aCropDialog, aCropDlgAttr );
+                //CHINA001 end
                 pTabPage->SetText( aCropStr );
                 aCropDialog.SetTabPage( pTabPage );
 
