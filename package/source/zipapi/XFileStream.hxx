@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XFileStream.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mtg $ $Date: 2001-09-05 18:48:26 $
+ *  last change: $Author: mtg $ $Date: 2001-09-14 14:55:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,14 +79,14 @@
 #ifndef _CPPUHELPER_WEAK_HXX_
 #include <cppuhelper/weak.hxx>
 #endif
-#ifndef COM_SUN_STAR_PACKAGES_ZIP_ZIPENTRY_HPP
-#include <com/sun/star/packages/zip/ZipEntry.hpp>
-#endif
 #ifndef _VOS_REF_H_
 #include <vos/ref.hxx>
 #endif
 #ifndef _INFLATER_HXX
 #include <Inflater.hxx>
+#endif
+#ifndef _ZIP_ENTRY_HXX_
+#include <ZipEntry.hxx>
 #endif
 
 class EncryptionData;
@@ -102,7 +102,7 @@ protected:
     com::sun::star::uno::Reference < com::sun::star::io::XSeekable > mxTempSeek;
     com::sun::star::uno::Reference < com::sun::star::io::XOutputStream > mxTempOut;
     com::sun::star::uno::Sequence < sal_Int8 > maBuffer, maCompBuffer;
-    com::sun::star::packages::zip::ZipEntry maEntry;
+    ZipEntry maEntry;
     vos::ORef < EncryptionData > mxData;
     rtlCipher maCipher;
     Inflater maInflater;
@@ -111,7 +111,7 @@ protected:
     void fill( sal_Int64 nUntil );
 
 public:
-    XFileStream( com::sun::star::packages::zip::ZipEntry & rEntry,
+    XFileStream( ZipEntry & rEntry,
                  com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xNewZipStream,
                  com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xNewTempStream,
                  const vos::ORef < EncryptionData > &rData,
