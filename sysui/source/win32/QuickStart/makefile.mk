@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: ssa $ $Date: 2001-05-04 15:11:54 $
+#   last change: $Author: hjs $ $Date: 2001-08-30 09:40:42 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,6 +66,7 @@ PRJNAME=sysui
 TARGET=quickstart
 LIBTARGET=NO
 ENABLE_EXCEPTIONS=TRUE
+TARGETTYPE=GUI
 
 # --- Settings -----------------------------------------------------
 
