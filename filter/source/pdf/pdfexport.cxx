@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfexport.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: sj $ $Date: 2002-09-04 13:57:57 $
+ *  last change: $Author: sj $ $Date: 2002-09-04 15:55:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,7 +218,6 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                                 GDIMetaFile                 aMtf;
                                 const MapMode               aMapMode( MAP_100TH_MM );
                                 const Size                  aMtfSize( aPageSize.Width, aPageSize.Height );
-                                VCLXDevice*                 pXDevice = new VCLXDevice;
 
                                 pOut->Push();
                                 pOut->EnableOutput( FALSE );
@@ -237,7 +236,6 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                                     bRet = ImplExportPage( *pPDFWriter, aMtf, nCompressMode ) || bRet;
 
                                 pOut->Pop();
-                                delete pXDevice;
                             }
                         }
                     }
