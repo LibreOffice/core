@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-04 10:44:37 $
+ *  last change: $Author: kz $ $Date: 2002-02-05 21:18:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -455,7 +455,7 @@ ModalDialog DLG_DOCTEMPLATE
         Text[ russian ] = "œ‡‚Í‡";
         Text[ greek ] = "Edit";
         Text[ dutch ] = "Be~werken";
-        Text[ french ] = "~…diter";
+        Text[ french ] = "…diter";
         Text[ spanish ] = "Edi~tar";
         Text[ italian ] = "Modifica";
         Text[ danish ] = "Edit";
@@ -669,11 +669,11 @@ StringArray STRARY_SVT_DOCINFO
         < "Data" ; DI_DATE ; > ;
         < "Parole chiave" ; DI_KEYWORDS ; > ;
         < "Descrizione" ; DI_DESCRIPTION ; > ;
-        < "Tipo:" ; DI_MIMETYPE ; > ;
+        < "Tipo" ; DI_MIMETYPE ; > ;
         < "Data modifica" ; DI_MODIFIEDDATE ; > ;
-        < "Cambiato:" ; DI_MODIFIEDBY ; > ;
+        < "Cambiato" ; DI_MODIFIEDBY ; > ;
         < "Stampato il" ; DI_PRINTDATE ; > ;
-        < "Stampato:" ; DI_PRINTBY ; > ;
+        < "Stampato" ; DI_PRINTBY ; > ;
         < "Argomento" ; DI_THEME ; > ;
         < "Dimensioni" ; DI_SIZE ; > ;
     };
