@@ -2,9 +2,9 @@
  *
  *  $RCSfile: list.c,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 11:51:28 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 10:49:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-/* $Id: list.c,v 1.3 2004-02-04 11:51:28 hr Exp $ */
+/* $Id: list.c,v 1.4 2004-03-17 10:49:49 obo Exp $ */
 
 /*[]---------------------------------------------------[]*/
 /*|                                                     |*/
@@ -76,6 +76,7 @@
 #    define NDEBUG
 #  endif
 #endif
+
 #include <assert.h>
 
 #ifdef MALLOC_TRACE
