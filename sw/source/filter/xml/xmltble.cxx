@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltble.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:22:42 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:30:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -655,7 +655,11 @@ void SwXMLExport::ExportTableColumnStyle( const SwXMLTableColumn_Impl& rCol )
     CheckAttrList();
 
     // style:name="..."
-    AddAttribute( XML_NAMESPACE_STYLE, XML_NAME, rCol.GetStyleName() );
+    sal_Bool bEncoded = sal_False;
+    AddAttribute( XML_NAMESPACE_STYLE, XML_NAME,
+                    EncodeStyleName( rCol.GetStyleName(), &bEncoded ) );
+    if( bEncoded )
+        AddAttribute( XML_NAMESPACE_STYLE, XML_DISPLAY_NAME, rCol.GetStyleName() );
 
     // style:family="table-column"
     AddAttribute( XML_NAMESPACE_STYLE, XML_FAMILY, XML_TABLE_COLUMN );
@@ -902,7 +906,7 @@ void SwXMLExport::ExportTableBox( const SwTableBox& rBox, sal_uInt16 nColSpan,
             const String& rName = pFrmFmt->GetName();
             if( rName.Len() )
             {
-                AddAttribute( XML_NAMESPACE_TABLE, XML_STYLE_NAME, rName );
+                AddAttribute( XML_NAMESPACE_TABLE, XML_STYLE_NAME, EncodeStyleName(rName) );
             }
         }
     }
@@ -1030,7 +1034,7 @@ void SwXMLExport::ExportTableLine( const SwTableLine& rLine,
         const String& rName = pFrmFmt->GetName();
         if( rName.Len() )
         {
-            AddAttribute( XML_NAMESPACE_TABLE, XML_STYLE_NAME, rName );
+            AddAttribute( XML_NAMESPACE_TABLE, XML_STYLE_NAME, EncodeStyleName(rName) );
         }
     }
 
@@ -1124,7 +1128,7 @@ void SwXMLExport::ExportTableLines( const SwTableLines& rLines,
         else
         {
             AddAttribute( XML_NAMESPACE_TABLE, XML_STYLE_NAME,
-                          pColumn->GetStyleName() );
+                          EncodeStyleName(pColumn->GetStyleName()) );
 
             if( nColRep > 1U )
             {
@@ -1200,7 +1204,7 @@ void SwXMLExport::ExportTable( const SwTableNode& rTblNd )
     {
         AddAttribute( XML_NAMESPACE_TABLE, XML_NAME, pTblFmt->GetName() );
         AddAttribute( XML_NAMESPACE_TABLE, XML_STYLE_NAME,
-                      pTblFmt->GetName() );
+                      EncodeStyleName( pTblFmt->GetName() ) );
     }
 
     {
