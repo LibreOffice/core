@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleCsvControl.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:05:42 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 17:00:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -615,8 +615,8 @@ sal_Int32 SAL_CALL ScAccessibleCsvRuler::getIndexAtPoint( const AwtPoint& rPoint
     ScUnoGuard aGuard;
     ensureAlive();
     ScCsvRuler& rRuler = implGetRuler();
-    // #107054# use object's coordinate system
-    return ::std::min( ::std::max( rRuler.GetPosFromX( rPoint.X ), 0L ), rRuler.GetPosCount() );
+    // #107054# use object's coordinate system, convert to API position
+    return lcl_GetApiPos( ::std::min( ::std::max( rRuler.GetPosFromX( rPoint.X ), 0L ), rRuler.GetPosCount() ) );
 }
 
 OUString SAL_CALL ScAccessibleCsvRuler::getSelectedText() throw( RuntimeException )
