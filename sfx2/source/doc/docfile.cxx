@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.139 $
+ *  $Revision: 1.140 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 14:40:52 $
+ *  last change: $Author: kz $ $Date: 2004-06-10 13:31:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2750,16 +2750,23 @@ sal_Bool SfxMedium::SaveVersionList_Impl( sal_Bool bUseXML )
 //----------------------------------------------------------------
 sal_Bool SfxMedium::IsReadOnly()
 {
-    sal_Bool bReadOnly = !( GetOpenMode() & STREAM_WRITE );
-/*(dv)  if ( bReadOnly && pURLObj && CntAnchor::IsViewURL( pURLObj->GetMainURL( INetURLObject::NO_DECODE ) ) )
-        // Chaos-Storages sind niemals als readonly anzusehen!
-        return sal_False;
-*/
-    if ( !bReadOnly )
+    sal_Bool bReadOnly = sal_False;
+
+    // a) ReadOnly filter cant produce read/write contents!
+    bReadOnly = (
+                    (pFilter                                                                         ) &&
+                    ((pFilter->GetFilterFlags() & SFX_FILTER_OPENREADONLY) == SFX_FILTER_OPENREADONLY)
+                );
+
+    // b) if filter allow read/write contents .. check open mode of the storage
+    if (!bReadOnly)
+        bReadOnly = !( GetOpenMode() & STREAM_WRITE );
+
+    // c) the API can force the readonly state!
+    if (!bReadOnly)
     {
-        // logisch readonly ge"offnet
         SFX_ITEMSET_ARG( GetItemSet(), pItem, SfxBoolItem, SID_DOC_READONLY, sal_False);
-        if ( pItem )
+        if (pItem)
             bReadOnly = pItem->GetValue();
     }
 
