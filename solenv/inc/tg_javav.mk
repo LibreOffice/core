@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_javav.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: vg $ $Date: 2003-06-04 10:40:35 $
+#   last change: $Author: kz $ $Date: 2003-08-25 14:47:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,7 +64,7 @@ JAVAVERMK:=$(INCCOM)$/java_ver.mk
 
 .INCLUDE .IGNORE : $(JAVAVERMK)
 
-.IF "$(JAVAVER)"==""
+.IF "$(JAVAVER)"=="" || "$(JAVALOCATION)"!="$(JAVA_HOME)"
 .IF "$(L10N_framework)"==""
 
 JAVAVER:=
@@ -83,4 +83,4 @@ JAVAVER:=$(shell -$(JAVA_HOME)$/bin$/java $(JFLAGSVERSION_CMD))
 JAVANUMVER:=$(shell -$(JAVA_HOME)$/bin$/java $(JFLAGSNUMVERSION_CMD))
 
 .ENDIF			# "$(L10N_framework)"==""
-.ENDIF			# "$(COMNAME)"==""
+.ENDIF			# "$(JAVAVER)"=="" || "$(JAVALOCATION)"!="$(JAVA_HOME)"
