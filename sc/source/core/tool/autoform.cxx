@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autoform.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dr $ $Date: 2001-11-19 13:30:31 $
+ *  last change: $Author: dr $ $Date: 2001-11-29 14:37:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -452,6 +452,10 @@ ScAutoFormatData::ScAutoFormatData()
     bIncludeFrame =
     bIncludeBackground =
     bIncludeWidthHeight = TRUE;
+
+    ppDataField = new ScAutoFormatDataField*[ 16 ];
+    for( USHORT nIndex = 0; nIndex < 16; ++nIndex )
+        ppDataField[ nIndex ] = new ScAutoFormatDataField;
 }
 
 ScAutoFormatData::ScAutoFormatData( const ScAutoFormatData& rData ) :
@@ -464,22 +468,30 @@ ScAutoFormatData::ScAutoFormatData( const ScAutoFormatData& rData ) :
         bIncludeBackground( rData.bIncludeBackground ),
         bIncludeWidthHeight( rData.bIncludeWidthHeight )
 {
+    ppDataField = new ScAutoFormatDataField*[ 16 ];
+    for( USHORT nIndex = 0; nIndex < 16; ++nIndex )
+        ppDataField[ nIndex ] = new ScAutoFormatDataField( rData.GetField( nIndex ) );
 }
 
 ScAutoFormatData::~ScAutoFormatData()
 {
+    for( USHORT nIndex = 0; nIndex < 16; ++nIndex )
+        delete ppDataField[ nIndex ];
+    delete[] ppDataField;
 }
 
 ScAutoFormatDataField& ScAutoFormatData::GetField( USHORT nIndex )
 {
     DBG_ASSERT( (0 <= nIndex) && (nIndex < 16), "ScAutoFormatData::GetField - illegal index" );
-    return aDataField[ nIndex ];
+    DBG_ASSERT( ppDataField && ppDataField[ nIndex ], "ScAutoFormatData::GetField - no data" );
+    return *ppDataField[ nIndex ];
 }
 
 const ScAutoFormatDataField& ScAutoFormatData::GetField( USHORT nIndex ) const
 {
     DBG_ASSERT( (0 <= nIndex) && (nIndex < 16), "ScAutoFormatData::GetField - illegal index" );
-    return aDataField[ nIndex ];
+    DBG_ASSERT( ppDataField && ppDataField[ nIndex ], "ScAutoFormatData::GetField - no data" );
+    return *ppDataField[ nIndex ];
 }
 
 const SfxPoolItem* ScAutoFormatData::GetItem( USHORT nIndex, USHORT nWhich ) const
@@ -626,8 +638,7 @@ BOOL ScAutoFormatData::IsEqualData( USHORT nIndex1, USHORT nIndex2 ) const
 
 void ScAutoFormatData::FillToItemSet( USHORT nIndex, SfxItemSet& rItemSet, ScDocument& rDoc ) const
 {
-    DBG_ASSERT( (0 <= nIndex) && (nIndex < 16), "ScAutoFormatData::FillToItemSet - illegal index" );
-    const ScAutoFormatDataField& rField = aDataField[ nIndex ];
+    const ScAutoFormatDataField& rField = GetField( nIndex );
 
     if( bIncludeValueFormat )
     {
@@ -675,8 +686,7 @@ void ScAutoFormatData::FillToItemSet( USHORT nIndex, SfxItemSet& rItemSet, ScDoc
 
 void ScAutoFormatData::GetFromItemSet( USHORT nIndex, const SfxItemSet& rItemSet, const ScNumFormatAbbrev& rNumFormat )
 {
-    DBG_ASSERT( (0 <= nIndex) && (nIndex < 16), "ScAutoFormatData::GetFromItemSet - illegal index" );
-    ScAutoFormatDataField& rField = aDataField[ nIndex ];
+    ScAutoFormatDataField& rField = GetField( nIndex );
 
     rField.SetNumFormat     ( rNumFormat);
     rField.SetFont          ( (const SvxFontItem&)          rItemSet.Get( ATTR_FONT ) );
@@ -742,7 +752,7 @@ BOOL ScAutoFormatData::Load( SvStream& rStream, const ScAfVersions& rVersions )
 
         bRet = 0 == rStream.GetError();
         for( USHORT i = 0; bRet && i < 16; ++i )
-            bRet = aDataField[ i ].Load( rStream, rVersions, nVer );
+            bRet = GetField( i ).Load( rStream, rVersions, nVer );
     }
     else
         bRet = FALSE;
@@ -769,7 +779,7 @@ BOOL ScAutoFormatData::LoadOld( SvStream& rStream, const ScAfVersions& rVersions
 
         bRet = 0 == rStream.GetError();
         for (USHORT i=0; bRet && i < 16; i++)
-            bRet = aDataField[ i ].LoadOld( rStream, rVersions );
+            bRet = GetField( i ).LoadOld( rStream, rVersions );
     }
     else
         bRet = FALSE;
@@ -819,7 +829,7 @@ BOOL ScAutoFormatData::Save(SvStream& rStream)
 
     BOOL bRet = 0 == rStream.GetError();
     for (USHORT i = 0; bRet && (i < 16); i++)
-        bRet = aDataField[ i ].Save( rStream );
+        bRet = GetField( i ).Save( rStream );
 
     return bRet;
 }

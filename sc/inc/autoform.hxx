@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autoform.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2001-11-19 13:28:26 $
+ *  last change: $Author: dr $ $Date: 2001-11-29 14:36:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -273,7 +273,7 @@ private:
     BOOL                        bIncludeValueFormat : 1;
     BOOL                        bIncludeWidthHeight : 1;
 
-    ScAutoFormatDataField       aDataField[ 16 ];
+    ScAutoFormatDataField**     ppDataField;
 
     ScAutoFormatDataField&      GetField( USHORT nIndex );
     const ScAutoFormatDataField& GetField( USHORT nIndex ) const;
