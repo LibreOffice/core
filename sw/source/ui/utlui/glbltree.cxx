@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glbltree.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2005-02-04 12:31:02 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:49:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1341,7 +1341,7 @@ void    SwGlobalTree::Hide()
 void    SwGlobalTree::ExecCommand(USHORT nCmd)
 {
     SvLBoxEntry* pEntry = FirstSelected();
-    DBG_ASSERT(pEntry, "gleich knalltïs")
+    DBG_ASSERT(pEntry, "gleich knallt's")
     if(FN_GLOBAL_EDIT == nCmd)
     {
         const SwGlblDocContent* pCont = (const SwGlblDocContent*)
