@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flddb.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 19:00:43 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 03:28:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,43 +68,14 @@ TabPage TP_FLD_DB
     SVLook = TRUE ;
     Hide = TRUE ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
-    Text = "Datenbank" ;
-    Text [ ENGLISH ] = "Database" ;
+    Text [ de ] = "Datenbank" ;
     FixedText FT_DBTYPE
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 76 , 8 ) ;
-        Text = "~Feldtyp" ;
-        Text [ ENGLISH ] = "Type" ;
-        Text [ norwegian ] = "Type" ;
-        Text [ italian ] = "~Tipo di campo" ;
-        Text [ portuguese_brazilian ] = "~Tipo" ;
-        Text [ portuguese ] = "Tipo de ~campo" ;
-        Text [ finnish ] = "~Tyyppi" ;
-        Text [ danish ] = "~Type" ;
-        Text [ french ] = "~Type de champ" ;
-        Text [ swedish ] = "~Fälttyp" ;
-        Text [ dutch ] = "~Veldtype" ;
-        Text [ spanish ] = "~Tipo de campo" ;
-        Text [ english_us ] = "~Type" ;
+        Text [ de ] = "~Feldtyp" ;
+        Text [ en-US ] = "~Type" ;
         Left = TRUE ;
-        Text[ chinese_simplified ] = "å­—æ®µç±»å‹(~T)";
-        Text[ russian ] = "Òèï ïîëÿ";
-        Text[ polish ] = "~Typ pola";
-        Text[ japanese ] = "ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‚¿ã‚¤ãƒ—(~T)";
-        Text[ chinese_traditional ] = "æ¬„ä½é¡å‹(~T)";
-        Text[ arabic ] = "äæÚ ÇáÍŞá";
-        Text[ greek ] = "~Ôığïò ğåäßïõ";
-        Text[ korean ] = "ìœ í˜•(~T)";
-        Text[ turkish ] = "Alan tipi";
-        Text[ catalan ] = "~Tipus";
-        Text[ thai ] = "~à¸Šà¸™à¸´à¸”";
-        Text[ czech ] = "Typ";
-        Text[ hebrew ] = "â€®×¡×•×’â€¬";
-        Text[ hindi ] = "~à¤µà¤°à¥à¤—";
-        Text[ slovak ] = "~Typ";
-        Text[ hungarian ] = "~TÃ­pus";
-        Text[ slovenian ] = "~Vrsta";
     };
     ListBox LB_DBTYPE
     {
@@ -127,37 +98,9 @@ TabPage TP_FLD_DB
     {
         Pos = MAP_APPFONT ( 6 , 126 ) ;
         Size = MAP_APPFONT ( 76 , 8 ) ;
-        TEXT = "Bedin~gung" ;
-        TEXT [ English ] = "Conditio~n" ;
-        TEXT [ norwegian ] = "Vilkår" ;
-        TEXT [ italian ] = "Condizione" ;
-        TEXT [ portuguese_brazilian ] = "~Condição" ;
-        TEXT [ portuguese ] = "~Condição" ;
-        TEXT [ finnish ] = "~Ehto" ;
-        TEXT [ danish ] = "~Betingelse" ;
-        TEXT [ french ] = "Condition" ;
-        TEXT [ swedish ] = "~Villkor" ;
-        TEXT [ dutch ] = "~Voorwaarde" ;
-        TEXT [ spanish ] = "Con~dición" ;
-        TEXT [ english_us ] = "~Condition" ;
+        Text [ de ] = "Bedin~gung" ;
+        Text [ en-US ] = "~Condition" ;
         Left = TRUE ;
-        TEXT[ chinese_simplified ] = "æ¡ä»¶(~C)";
-        TEXT[ russian ] = "Óñëîâèå";
-        TEXT[ polish ] = "W~arunek";
-        TEXT[ japanese ] = "æ¡ä»¶(~C)";
-        TEXT[ chinese_traditional ] = "æ¢ä»¶(~C)";
-        TEXT[ arabic ] = "ÇáÔÑØ";
-        TEXT[ greek ] = "¼ñïò";
-        TEXT[ korean ] = "ì¡°ê±´(~C)";
-        TEXT[ turkish ] = "Koşul";
-        TEXT[ catalan ] = "Con~dició";
-        TEXT[ thai ] = "à¹€~à¸‡à¸·à¹ˆà¸­à¸™à¹„à¸‚";
-        TEXT[ czech ] = "PodmÃ­nka";
-        TEXT[ hebrew ] = "Bedin~gung";
-        TEXT[ hindi ] = "~à¤¶à¤°à¥à¤¤";
-        TEXT[ slovak ] = "~Podmienka";
-        TEXT[ hungarian ] = "~FeltÃ©tel";
-        TEXT[ slovenian ] = "~Pogoj";
     };
     Edit ED_DBCONDITION
     {
@@ -171,37 +114,9 @@ TabPage TP_FLD_DB
     {
         Pos = MAP_APPFONT ( 6 , 156 ) ;
         Size = MAP_APPFONT ( 76 , 8 ) ;
-        TEXT = "Sat~znummer" ;
-        TEXT [ English ] = "Setnumber" ;
-        TEXT [ norwegian ] = "Setnumber" ;
-        TEXT [ italian ] = "Numero di record" ;
-        TEXT [ portuguese_brazilian ] = "Número do registro" ;
-        TEXT [ portuguese ] = "~Número de registo" ;
-        TEXT [ finnish ] = "Tietueen numero" ;
-        TEXT [ danish ] = "Datapostnummer" ;
-        TEXT [ french ] = "~Numéro de l'enregistrement" ;
-        TEXT [ swedish ] = "~Datapostnummer" ;
-        TEXT [ dutch ] = "~Recordnummer" ;
-        TEXT [ spanish ] = "Número de registro" ;
-        TEXT [ english_us ] = "Record number" ;
+        Text [ de ] = "Sat~znummer" ;
+        Text [ en-US ] = "Record number" ;
         Left = TRUE ;
-        TEXT[ chinese_simplified ] = "æ¡ç›®ç¼–å·";
-        TEXT[ russian ] = "Íîìåğ çàïèñè";
-        TEXT[ polish ] = "~Numer rekordu";
-        TEXT[ japanese ] = "ãƒ¬ã‚³ãƒ¼ãƒ‰ç•ªå·";
-        TEXT[ chinese_traditional ] = "æ¢ç›®è™Ÿç¢¼";
-        TEXT[ arabic ] = "ÑŞã ÇáÓÌá";
-        TEXT[ greek ] = "Áñéèìüò åããñáöŞò";
-        TEXT[ korean ] = "ë ˆì½”ë“œ ë²ˆí˜¸";
-        TEXT[ turkish ] = "Kayıt numarası";
-        TEXT[ catalan ] = "Número de registre";
-        TEXT[ thai ] = "à¹€à¸¥à¸‚à¸£à¸°à¹€à¸šà¸µà¸¢à¸™";
-        TEXT[ czech ] = "ÄŒÃ­slo zÃ¡znamu";
-        TEXT[ hebrew ] = "Sat~znummer";
-        TEXT[ hindi ] = "à¤…à¤­à¤¿à¤²à¥‡à¤– à¤¸à¤‚à¤–à¥à¤¯à¤¾";
-        TEXT[ slovak ] = "ÄŒÃ­slo zÃ¡znamu";
-        TEXT[ hungarian ] = "RekordszÃ¡m";
-        TEXT[ slovenian ] = "Å tevilka zapisa";
     };
     Edit ED_DBSETNUMBER
     {
@@ -215,36 +130,9 @@ TabPage TP_FLD_DB
     {
         Pos = MAP_APPFONT ( 88 , 3 ) ;
         Size = MAP_APPFONT ( 166 , 8 ) ;
-        Text = "Datenbank~auswahl" ;
-        Text [ ENGLISH ] = "Database s~election" ;
+        Text [ de ] = "Datenbank~auswahl" ;
         Left = TRUE ;
-        Text [ english_us ] = "Database s~election" ;
-        Text [ portuguese_brazilian ] = "~Seleção do banco de dados" ;
-        Text [ swedish ] = "Datab~asurval" ;
-        Text [ danish ] = "Databaseudvalg" ;
-        Text [ italian ] = "Scelta database" ;
-        Text [ spanish ] = "~Seleccionar base de datos" ;
-        Text [ french ] = "~Sélection d'une base de données" ;
-        Text [ dutch ] = "Selectie ~database" ;
-        Text [ portuguese ] = "~Seleccionar base de dados" ;
-        Text[ chinese_simplified ] = "é€‰æ‹©æ•°æ®åº“(~E)";
-        Text[ russian ] = "Âûáîğ áàçû äàííûõ";
-        Text[ polish ] = "~Wybór bazy danych";
-        Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ã®é¸æŠ(~E)";
-        Text[ chinese_traditional ] = "é¸æ“‡è³‡æ–™åº«(~E)";
-        Text[ arabic ] = "ÇÎÊíÇÑ ŞÇÚÏÉ ÇáÈíÇäÇÊ";
-        Text[ greek ] = "ÅğéëïãŞ âÜóçò äåäïìİíùí";
-        Text[ korean ] = "ë°ì´í„°ë² ì´ìŠ¤ ì„ íƒ(~E)";
-        Text[ turkish ] = "Veritabanı seçimi";
-        Text[ catalan ] = "~Selecciona base de dades";
-        Text[ finnish ] = "~Tietokantavalinta";
-        Text[ thai ] = "à¹€à¸¥à¸·~à¸­à¸à¸à¸²à¸™à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
-        Text[ czech ] = "VÃ½bÄ›r databÃ¡ze";
-        Text[ hebrew ] = "Datenbank~auswahl";
-        Text[ hindi ] = "à¤²à¥‡à¤–à¤¾à¤¸à¤‚à¤šà¤¯ à¤šà¥~à¤¨à¤¾à¤µ";
-        Text[ slovak ] = "VÃ½b~er databÃ¡zy";
-        Text[ hungarian ] = "~AdatbÃ¡zis kivÃ¡lasztÃ¡s";
-        Text[ slovenian ] = "~Izbor zbirke podatkov";
+        Text [ en-US ] = "Database s~election" ;
     };
     Control TLB_DBLIST
     {
@@ -257,70 +145,16 @@ TabPage TP_FLD_DB
     {
         Pos = MAP_APPFONT ( 94 , 153 ) ;
         Size = MAP_APPFONT ( 67 , 10 ) ;
-        Text = "A~us Datenbank" ;
-        Text [ ENGLISH ] = "From database" ;
+        Text [ de ] = "A~us Datenbank" ;
         Check = TRUE ;
-        Text [ english_us ] = "From database" ;
-        Text [ portuguese_brazilian ] = "Do banco de dados" ;
-        Text [ swedish ] = "F~rån databas" ;
-        Text [ danish ] = "Fra database" ;
-        Text [ italian ] = "Dal database" ;
-        Text [ spanish ] = "De la base de datos" ;
-        Text [ french ] = "De la BD" ;
-        Text [ dutch ] = "~Uit database" ;
-        Text [ portuguese ] = "~Da base de dados" ;
-        Text[ chinese_simplified ] = "ä»æ•°æ®åº“";
-        Text[ russian ] = "Èç áàçû äàííûõ";
-        Text[ polish ] = "Z ~bazy danych";
-        Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ã‹ã‚‰";
-        Text[ chinese_traditional ] = "å¾è³‡æ–™åº«";
-        Text[ arabic ] = "ãä ŞÇÚÏÉ ÇáÈíÇäÇÊ";
-        Text[ greek ] = "Áğü âÜóç äåäïìİíùí";
-        Text[ korean ] = "ë°ì´í„°ë² ì´ìŠ¤ë¡œë¶€í„°";
-        Text[ turkish ] = "Veritabanından";
-        Text[ catalan ] = "Des de la base de dades";
-        Text[ finnish ] = "Tietokannasta";
-        Text[ thai ] = "à¸ˆà¸²à¸à¸à¸²à¸™à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
-        Text[ czech ] = "Z databÃ¡ze";
-        Text[ hebrew ] = "A~us Datenbank";
-        Text[ hindi ] = "à¤²à¥‡à¤–à¤¾à¤¸à¤‚à¤šà¤¯ à¤¸à¥‡";
-        Text[ slovak ] = "Z databÃ¡zy";
-        Text[ hungarian ] = "AdatbÃ¡zisbÃ³l";
-        Text[ slovenian ] = "Iz zbirke podatkov";
+        Text [ en-US ] = "From database" ;
     };
     RadioButton RB_DBFORMAT
     {
         Pos = MAP_APPFONT ( 94 , 165 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
-        Text = "Se~lbst definiert" ;
-        Text [ ENGLISH ] = "User defined" ;
-        Text [ english_us ] = "User-defined" ;
-        Text [ portuguese_brazilian ] = "Definido pelo usuário" ;
-        Text [ swedish ] = "An~vändardefinierat" ;
-        Text [ danish ] = "Brugerdefineret" ;
-        Text [ italian ] = "Personalizzato" ;
-        Text [ spanish ] = "Definido por el usuario" ;
-        Text [ french ] = "Défini par l'utilisateur" ;
-        Text [ dutch ] = "~Zelf gedefinieerd" ;
-        Text [ portuguese ] = "D~efinido pelo utilizador" ;
-        Text[ chinese_simplified ] = "ä½¿ç”¨è€…è‡ªå®š";
-        Text[ russian ] = "Ïîëüçîâàòåëüñêèé";
-        Text[ polish ] = "~U¿ytkownika";
-        Text[ japanese ] = "ãƒ¦ãƒ¼ã‚¶ãƒ¼å®šç¾©";
-        Text[ chinese_traditional ] = "è‡ªè¨‚";
-        Text[ arabic ] = "ãõÚÑİ ãä ŞÈá ÇáãÓÊÎÏã";
-        Text[ greek ] = "Ğñïóáñìïóìİíï";
-        Text[ korean ] = "ì‚¬ìš©ì ì •ì˜";
-        Text[ turkish ] = "Kullanıcı-tanımlı";
-        Text[ catalan ] = "Definit per l'usuari";
-        Text[ finnish ] = "Käyttäjän määrittämä";
-        Text[ thai ] = "à¸£à¸°à¸šà¸¸à¸œà¸¹à¹‰à¹ƒà¸Šà¹‰";
-        Text[ czech ] = "DefinovanÃ© uÅ¾ivatelem";
-        Text[ hebrew ] = "Se~lbst definiert";
-        Text[ hindi ] = "à¤‰à¤ªà¤­à¥‹à¤•à¥à¤¤à¤¾ à¤¸à¥‡ à¤ªà¤°à¤¿à¤­à¤¾à¤·à¤¿à¤¤";
-        Text[ slovak ] = "DefinovanÃ© uÅ¾Ã­vateÄ¾om";
-        Text[ hungarian ] = "EgyÃ©ni";
-        Text[ slovenian ] = "UporabniÅ¡ko doloÄeno";
+        Text [ de ] = "Se~lbst definiert" ;
+        Text [ en-US ] = "User-defined" ;
     };
     ListBox LB_DBNUMFORMAT
     {
@@ -346,35 +180,8 @@ TabPage TP_FLD_DB
     {
         Pos = MAP_APPFONT ( 88 , 141 ) ;
         Size = MAP_APPFONT ( 166 , 8 ) ;
-        TEXT = "Format" ;
-        TEXT [ English ] = "Format" ;
-        Text [ english_us ] = "Format" ;
-        Text [ portuguese_brazilian ] = "Formato" ;
-        Text [ swedish ] = "Format" ;
-        Text [ danish ] = "Format" ;
-        Text [ italian ] = "Formato" ;
-        Text [ spanish ] = "Formato" ;
-        Text [ french ] = "Format" ;
-        Text [ dutch ] = "Formaat" ;
-        Text [ portuguese ] = "Formato" ;
-        Text[ chinese_simplified ] = "æ ¼å¼";
-        Text[ russian ] = "Ôîğìàò";
-        Text[ polish ] = "Format";
-        Text[ japanese ] = "æ›¸å¼";
-        Text[ chinese_traditional ] = "æ ¼å¼";
-        Text[ arabic ] = "ÇáÊäÓíŞ";
-        Text[ greek ] = "ÌïñöŞ";
-        Text[ korean ] = "ì„œì‹";
-        Text[ turkish ] = "Format";
-        Text[ catalan ] = "Format";
-        Text[ finnish ] = "Muotoilu";
-        Text[ thai ] = "à¸£à¸¹à¸›à¹à¸šà¸š";
-        Text[ czech ] = "FormÃ¡t";
-        Text[ hebrew ] = "â€®×¢×™×¦×•×‘â€¬";
-        Text[ hindi ] = "à¤°à¤šà¤¨à¤¾";
-        Text[ slovak ] = "FormÃ¡t";
-        Text[ hungarian ] = "FormÃ¡tum";
-        Text[ slovenian ] = "Oblika";
+        Text [ de ] = "Format" ;
+        Text [ en-US ] = "Format" ;
     };
     FixedLine FL_DBFORMAT_VERT
     {
@@ -382,33 +189,7 @@ TabPage TP_FLD_DB
         Size = MAP_APPFONT ( 4 , 28 ) ;
         Vert = TRUE;
     };
-    Text [ english_us ] = "Database" ;
-    Text [ portuguese_brazilian ] = "Banco de Dados" ;
-    Text [ swedish ] = "Databas" ;
-    Text [ danish ] = "Database" ;
-    Text [ italian ] = "Database" ;
-    Text [ spanish ] = "Base de datos" ;
-    Text [ french ] = "Base de données" ;
-    Text [ dutch ] = "Database" ;
-    Text [ portuguese ] = "Base de dados" ;
-    Text[ chinese_simplified ] = "æ•°æ®åº“";
-    Text[ russian ] = "Áàçà äàííûõ";
-    Text[ polish ] = "Baza danych";
-    Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹";
-    Text[ chinese_traditional ] = "è³‡æ–™åº«";
-    Text[ arabic ] = "ŞÇÚÏÉ ÈíÇäÇÊ";
-    Text[ greek ] = "ÂÜóç äåäïìİíùí";
-    Text[ korean ] = "ë°ì´í„°ë² ì´ìŠ¤";
-    Text[ turkish ] = "Veritabanı";
-    Text[ catalan ] = "Base de dades";
-    Text[ finnish ] = "Tietokanta";
-    Text[ thai ] = "à¸à¸²à¸™à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
-    Text[ czech ] = "DatabÃ¡ze";
-    Text[ hebrew ] = "Datenbank";
-    Text[ hindi ] = "à¤²à¥‡à¤–à¤¾à¤¸à¤‚à¤šà¤¯";
-    Text[ slovak ] = "DatabÃ¡za";
-    Text[ hungarian ] = "AdatbÃ¡zis";
-    Text[ slovenian ] = "Zbirka podatkov";
+    Text [ en-US ] = "Database" ;
 };
 
 
