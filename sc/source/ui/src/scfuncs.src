@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scfuncs.src,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-06 21:10:36 $
+ *  last change: $Author: kz $ $Date: 2002-02-08 21:14:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -33095,7 +33095,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ french ] = "La matrice des données Y." ;
             Text [ swedish ] = "Matrisen med y-data." ;
             Text [ dutch ] = "De matrix van de Y-gegevens." ;
-            Text [ spanish ] = "es una matriz o área de observaciones numéricos dependientes." ;
+            Text [ spanish ] = "La matriz de los datos Y." ;
             Text [ english_us ] = "The Y data array." ;
             Text[ chinese_simplified ] = "æ•°å­—å‹å› å˜é‡æ•°ç»„æˆ–å•å…ƒæ ¼åŒºåŸŸã€‚";
             Text[ russian ] = "Ìàññèâ äàííûõ Y.";
@@ -39435,7 +39435,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ french ] = "Le nombre de caractères à remplacer." ;
             Text [ swedish ] = "Antalet tecken som ersätts." ;
             Text [ dutch ] = "Het aantal tekens dat wordt vervangen." ;
-            Text [ spanish ] = "es el número de caracteres en el argumento texto_original, comenzando por núm_inicial, que desea reemplazar con el argumento texto_nuevo." ;
+            Text [ spanish ] = "El número de caracteres que se debe reemplazar." ;
             Text [ english_us ] = "The number of characters to be replaced." ;
             Text[ chinese_simplified ] = "æ›¿æ¢å­—ç¬¦çš„æ•°ç›®ã€‚";
             Text[ russian ] = "Êîëè÷åñòâî ñèìâîëîâ, êîòîğûå òğåáóåòñÿ çàìåíèòü.";
