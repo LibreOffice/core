@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpara.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:32 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 21:09:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -264,7 +264,7 @@ TabPage TP_NUMPARA
         Text[ chinese_simplified ] = "¿ªÊ¼´Ó(~S)";
         Text[ russian ] = "Íà÷àòü ñ:";
         Text[ polish ] = "Zacznij od:";
-        Text[ japanese ] = "ŠJn:(~S)";
+        Text[ japanese ] = "ŠJn”Ô†(~S):";
         Text[ chinese_traditional ] = "¶}©l±q(~S)";
         Text[ arabic ] = "ÇáÈÏÁ ÈÜ:";
         Text[ greek ] = "¸íáñîç áğü:";
@@ -353,7 +353,7 @@ TabPage TP_NUMPARA
         Text [ portuguese ] = "~Recomeçar neste parágrafo" ;
         Text [ english_us ] = "Rest~art at this paragraph" ;
         Text [ portuguese_brazilian ] = "~An diesem Absatz neu beginnen" ;
-        Text [ swedish ] = "Börj~a om vid detta stycke" ;
+        Text [ swedish ] = "Börja o~m vid detta stycke" ;
         Text [ danish ] = "Begynd nyt ved dette afsnit" ;
         Text [ italian ] = "~Ricomincia con questo paragrafo" ;
         Text [ spanish ] = "Volver a empe~zar en este párrafo" ;
@@ -380,7 +380,7 @@ TabPage TP_NUMPARA
         Text [ portuguese ] = "~Começar com:" ;
         Text [ english_us ] = "~Start with:" ;
         Text [ portuguese_brazilian ] = "~Beginnen mit:" ;
-        Text [ swedish ] = "~Börja med:" ;
+        Text [ swedish ] = "Börja m~ed:" ;
         Text [ danish ] = "Begynd med:" ;
         Text [ italian ] = "~Inizia con..." ;
         Text [ spanish ] = "Empezar ~con:" ;
