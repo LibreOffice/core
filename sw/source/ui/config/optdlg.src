@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-31 21:57:43 $
+ *  last change: $Author: kz $ $Date: 2001-11-02 21:15:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3257,7 +3257,7 @@ TabPage TP_OPTSHDWCRSR
         Text[ russian ] = "Φβες";
         Text[ polish ] = "Kolor";
         Text[ japanese ] = "θ‰²(~R)";
-        Text[ chinese_traditional ] = "ι΅”θ‰²(~R)";
+        Text[ chinese_traditional ] = "ι΅θ‰²(~R)";
         Text[ arabic ] = "Ηααζδ";
         Text[ greek ] = "Χρώμα";
         Text[ korean ] = "μƒ‰μƒ(~R)";
@@ -3331,6 +3331,7 @@ TabPage TP_OPTSHDWCRSR
         Text[ language_user1 ] = " ";
     };
 };
+
 
 
 
