@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.src,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:27:02 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:04:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,6 +179,7 @@ Window DLG_NAVIGATION_PI
                 Text[ czech ] = "Přepnout";
                 Text[ hebrew ] = "Umschalten";
                 Text[ hindi ] = "टागल";
+                Text[ slovak ] = "Prepnúť";
             };
             ToolBoxItem
             {
@@ -210,6 +211,7 @@ Window DLG_NAVIGATION_PI
                 Text[ czech ] = "Navigace";
                 Text[ hebrew ] = "Navigation";
                 Text[ hindi ] = "नाविगेशन";
+                Text[ slovak ] = "Navigácia";
             };
             /*            ToolBoxItem
             {
@@ -261,6 +263,7 @@ Window DLG_NAVIGATION_PI
                 Text[ czech ] = "Zpět";
                 Text[ hebrew ] = "‮קודם‬";
                 Text[ hindi ] = "पीछे";
+                Text[ slovak ] = "Späť";
             };
             ToolBoxItem
             {
@@ -295,6 +298,7 @@ Window DLG_NAVIGATION_PI
                 Text[ czech ] = "Vpřed";
                 Text[ hebrew ] = "Vorwärts";
                 Text[ hindi ] = "आगे की ओर";
+                Text[ slovak ] = "Poslať ďalej";
             };
             ToolBoxItem
             {
@@ -336,6 +340,7 @@ Window DLG_NAVIGATION_PI
                 Text[ czech ] = "Způsob přetáhnutí";
                 Text[ hebrew ] = "Dragmodus";
                 Text[ hindi ] = "खींचने का प्रकार";
+                Text[ slovak ] = "Spôsob pretiahnutia";
             };
             ToolBoxItem
             {
@@ -374,6 +379,7 @@ Window DLG_NAVIGATION_PI
                 Text[ czech ] = "Kapitolu o úroveň výše";
                 Text[ hebrew ] = "Kapitel hoch";
                 Text[ hindi ] = "अध्याय को उत्तेजित करो";
+                Text[ slovak ] = "Kapitolu o úroveň vyššie";
             };
             ToolBoxItem
             {
@@ -407,6 +413,7 @@ Window DLG_NAVIGATION_PI
                 Text[ czech ] = "Kapitolu o úroveň níže";
                 Text[ hebrew ] = "Kapitel hinunter";
                 Text[ hindi ] = "डिमोट् अध्याय";
+                Text[ slovak ] = "Kapitolu o úroveň nižšie";
             };
             ToolBoxItem
             {
@@ -442,6 +449,7 @@ Window DLG_NAVIGATION_PI
                 Text[ czech ] = "Políčko pro výběr zap/vyp";
                 Text[ hebrew ] = "Auswahlbox an-/ausschalten";
                 Text[ hindi ] = "सूची बॉक्स शुरु/बंद";
+                Text[ slovak ] = "Políčko pre výber zap/vyp";
             };
             ToolBoxItem
             {
@@ -473,6 +481,7 @@ Window DLG_NAVIGATION_PI
                 Text[ czech ] = "Náhled obsahu";
                 Text[ hebrew ] = "Inhaltsansicht umschalten";
                 Text[ hindi ] = "विषय का दृश्य";
+                Text[ slovak ] = "Náhľad obsahu";
             };
             ToolBoxItem
             {
@@ -510,6 +519,7 @@ Window DLG_NAVIGATION_PI
                 Text[ czech ] = "Vložit upomínku";
                 Text[ hebrew ] = "Merker setzen";
                 Text[ hindi ] = "याद दिलानेवाले को सेट्ट करो";
+                Text[ slovak ] = "Vložiť upomienku";
             };
             ToolBoxItem
             {
@@ -547,6 +557,7 @@ Window DLG_NAVIGATION_PI
                 Text[ czech ] = "Záhlaví";
                 Text[ hebrew ] = "‮כותרת עליונה‬";
                 Text[ hindi ] = "पृष्ठ की ऊपर की टीका";
+                Text[ slovak ] = "Záhlavie";
             };
             ToolBoxItem
             {
@@ -582,6 +593,7 @@ Window DLG_NAVIGATION_PI
                 Text[ czech ] = "Zápatí";
                 Text[ hebrew ] = "‮כותרת תחתונה‬";
                 Text[ hindi ] = "पृष्ठ की नीचे की टीका ";
+                Text[ slovak ] = "Zápätie";
             };
             ToolBoxItem
             {
@@ -616,6 +628,7 @@ Window DLG_NAVIGATION_PI
                 Text[ czech ] = "Ukotvení<->Text";
                 Text[ hebrew ] = "Anker<->Text";
                 Text[ hindi ] = "ऐन्कर<->टेक्स्ट्";
+                Text[ slovak ] = "Ukotvenie<->Text";
             };
             ToolBoxItem
             {
@@ -653,6 +666,7 @@ Window DLG_NAVIGATION_PI
                 Text[ czech ] = "Zobrazené úrovně záhlaví";
                 Text[ hebrew ] = "Angezeigte Überschriftenebenen";
                 Text[ hindi ] = "शीर्षक स्तरों को दिखाया है";
+                Text[ slovak ] = "Zobrazené úrovne záhlavia";
             };
             ToolBoxItem
             {
@@ -690,6 +704,7 @@ Window DLG_NAVIGATION_PI
                 Text[ czech ] = "O úroveň výše";
                 Text[ hebrew ] = "Ebene hoch";
                 Text[ hindi ] = "स्तर को उत्तेजित करो";
+                Text[ slovak ] = "O úroveň vyššie";
             };
             ToolBoxItem
             {
@@ -723,6 +738,7 @@ Window DLG_NAVIGATION_PI
                 Text[ czech ] = "O úroveň níže";
                 Text[ hebrew ] = "Ebene senken";
                 Text[ hindi ] = "डिमोट् स्तर";
+                Text[ slovak ] = "O úroveň nižšie";
             };
         };
     };
@@ -764,6 +780,7 @@ Window DLG_NAVIGATION_PI
                 Text[ czech ] = "Přepnout";
                 Text[ hebrew ] = "Umschalten";
                 Text[ hindi ] = "टागल";
+                Text[ slovak ] = "Prepnúť";
             };
             ToolBoxItem
             {
@@ -799,6 +816,7 @@ Window DLG_NAVIGATION_PI
                 Text[ czech ] = "Upravit";
                 Text[ hebrew ] = "‮עריכה‬";
                 Text[ hindi ] = "संपादन";
+                Text[ slovak ] = "Upraviť";
             };
             ToolBoxItem
             {
@@ -830,6 +848,7 @@ Window DLG_NAVIGATION_PI
                 Text[ czech ] = "Aktualizovat";
                 Text[ hebrew ] = "Aktualisieren";
                 Text[ hindi ] = "अपडेट् करो";
+                Text[ slovak ] = "Aktualizácia";
             };
             ToolBoxItem
             {
@@ -862,6 +881,7 @@ Window DLG_NAVIGATION_PI
                 Text[ czech ] = "Vložit";
                 Text[ hebrew ] = "‮הוספה‬";
                 Text[ hindi ] = "जोड़ो";
+                Text[ slovak ] = "Vložiť";
             };
             ToolBoxItem
             {
@@ -897,6 +917,7 @@ Window DLG_NAVIGATION_PI
                 Text[ czech ] = "Uložit také obsah";
                 Text[ hebrew ] = "Inhalte mitspeichern";
                 Text[ hindi ] = "विषयों को भी संचित करो";
+                Text[ slovak ] = "Uložiť tiež obsah";
             };
             ToolBoxItem
             {
@@ -933,6 +954,7 @@ Window DLG_NAVIGATION_PI
                 Text[ czech ] = "Přesunout nahoru";
                 Text[ hebrew ] = "‮הזז למעלה‬";
                 Text[ hindi ] = "ऊपर की ओर स्थान परिवर्तन करो";
+                Text[ slovak ] = "Presunúť nahor";
             };
             ToolBoxItem
             {
@@ -965,6 +987,7 @@ Window DLG_NAVIGATION_PI
                 Text[ czech ] = "Přesunout dolů";
                 Text[ hebrew ] = "‮הזז למטה‬";
                 Text[ hindi ] = "नीचे की ओर स्थान परिवर्तन करो";
+                Text[ slovak ] = "Presunúť dole";
             };
         };
     };
@@ -1040,6 +1063,7 @@ Window DLG_NAVIGATION_PI
         Text[ czech ] = "Úroveň osnovy";
         Text[ hebrew ] = "Gliederungsebenen";
         Text[ hindi ] = "बाहरी रूपरेखा स्तर";
+        Text[ slovak ] = "Úroveň osnovy";
     };
     String ST_DRAGMODE
     {
@@ -1069,6 +1093,7 @@ Window DLG_NAVIGATION_PI
         Text[ czech ] = "Způsob přetáhnutí";
         Text[ hebrew ] = "Dragmodus";
         Text[ hindi ] = "खींचने का प्रकार";
+        Text[ slovak ] = "Spôsob pretiahnutia";
     };
     String ST_HYPERLINK
     {
@@ -1099,6 +1124,7 @@ Window DLG_NAVIGATION_PI
         Text[ czech ] = "Vložit jako hypertextový odkaz";
         Text[ hebrew ] = "Als Hyperlink einfügen";
         Text[ hindi ] = "हाइपरलिंक जैसे जोड़ो";
+        Text[ slovak ] = "Vložiť ako hypertextový odkaz";
     };
     String ST_LINK_REGION
     {
@@ -1129,6 +1155,7 @@ Window DLG_NAVIGATION_PI
         Text[ czech ] = "Vložit jako odkaz";
         Text[ hebrew ] = "Als Verknüpfung einfügen";
         Text[ hindi ] = "लिंक जैसे जोड़ो";
+        Text[ slovak ] = "Vložiť ako odkaz";
     };
     String ST_COPY_REGION
     {
@@ -1159,6 +1186,7 @@ Window DLG_NAVIGATION_PI
         Text[ czech ] = "Vložit jako kopii";
         Text[ hebrew ] = "Als Kopie einfügen";
         Text[ hindi ] = "प्रतिलिपि जैसे जोड़ो";
+        Text[ slovak ] = "Vložiť ako kópiu";
     };
     String ST_DISPLAY
     {
@@ -1188,6 +1216,7 @@ Window DLG_NAVIGATION_PI
         Text[ czech ] = "Zobrazit";
         Text[ hebrew ] = "Anzeige";
         Text[ hindi ] = "दिखाओ";
+        Text[ slovak ] = "Zobraziť";
     };
     String ST_ACTIVE_VIEW
     {
@@ -1218,6 +1247,7 @@ Window DLG_NAVIGATION_PI
         Text[ czech ] = "Aktivní okno";
         Text[ hebrew ] = "Aktives Fenster";
         Text[ hindi ] = "क्रियाशील विन्डो";
+        Text[ slovak ] = "Aktívne okno";
     };
     String ST_HIDDEN
     {
@@ -1247,6 +1277,7 @@ Window DLG_NAVIGATION_PI
         Text[ czech ] = "skrytý";
         Text[ hebrew ] = "versteckt";
         Text[ hindi ] = "छिपा हुआ";
+        Text[ slovak ] = "skrytý";
     };
     String ST_ACTIVE
     {
@@ -1276,6 +1307,7 @@ Window DLG_NAVIGATION_PI
         Text[ czech ] = "aktivní";
         Text[ hebrew ] = "aktiv";
         Text[ hindi ] = "क्रियाशील";
+        Text[ slovak ] = "aktívny";
     };
     String ST_INACTIVE
     {
@@ -1305,6 +1337,7 @@ Window DLG_NAVIGATION_PI
         Text[ czech ] = "neaktivní";
         Text[ hebrew ] = "inaktiv";
         Text[ hindi ] = "निष्क्रिय";
+        Text[ slovak ] = "neaktívne";
     };
     String ST_EDIT_ENTRY
     {
@@ -1334,6 +1367,7 @@ Window DLG_NAVIGATION_PI
         Text[ czech ] = "Upravit...";
         Text[ hebrew ] = "‮עריכה...‬";
         Text[ hindi ] = "संपादन...";
+        Text[ slovak ] = "Upraviť...";
     };
     String ST_UPDATE
     {
@@ -1363,6 +1397,7 @@ Window DLG_NAVIGATION_PI
         Text[ czech ] = "Aktualizovat";
         Text[ hebrew ] = "‮עדכון‬";
         Text[ hindi ] = "~अपडेट् करो";
+        Text[ slovak ] = "~Aktualizovať";
     };
     String ST_EDIT_CONTENT
     {
@@ -1392,6 +1427,7 @@ Window DLG_NAVIGATION_PI
         Text[ czech ] = "Upravit";
         Text[ hebrew ] = "‮עריכה‬";
         Text[ hindi ] = "संपादन";
+        Text[ slovak ] = "Upraviť";
     };
     String ST_EDIT_LINK
     {
@@ -1421,6 +1457,7 @@ Window DLG_NAVIGATION_PI
         Text[ czech ] = "Upravit odkaz";
         Text[ hebrew ] = "Verknüpfung bearbeiten";
         Text[ hindi ] = "लिंक संपादन";
+        Text[ slovak ] = "Upraviť odkaz";
     };
     String ST_INSERT
     {
@@ -1452,6 +1489,7 @@ Window DLG_NAVIGATION_PI
         Text[ czech ] = "Vložit";
         Text[ hebrew ] = "‮הוספה‬";
         Text[ hindi ] = "जोड़ो";
+        Text[ slovak ] = "Vložiť";
     };
     String ST_INDEX
     {
@@ -1481,6 +1519,7 @@ Window DLG_NAVIGATION_PI
         Text[ czech ] = "Rejstřík";
         Text[ hebrew ] = "~Verzeichnis";
         Text[ hindi ] = "~अनुक्रमणिका";
+        Text[ slovak ] = "Re~gister";
     };
     String ST_FILE
     {
@@ -1510,6 +1549,7 @@ Window DLG_NAVIGATION_PI
         Text[ czech ] = "Soubor";
         Text[ hebrew ] = "‮קובץ‬";
         Text[ hindi ] = "फाइल";
+        Text[ slovak ] = "Súbor";
     };
     String ST_NEW_FILE
     {
@@ -1539,6 +1579,7 @@ Window DLG_NAVIGATION_PI
         Text[ czech ] = "Nový dokument";
         Text[ hebrew ] = "‮מסמך חדש‬";
         Text[ hindi ] = "नया लेखपत्र";
+        Text[ slovak ] = "Nový dokument";
     };
     String ST_TEXT
     {
@@ -1568,6 +1609,7 @@ Window DLG_NAVIGATION_PI
         Text[ czech ] = "Text";
         Text[ hebrew ] = "‮טקסט‬";
         Text[ hindi ] = "टेक्स्ट्";
+        Text[ slovak ] = "Text";
     };
     String ST_DELETE
     {
@@ -1599,6 +1641,7 @@ Window DLG_NAVIGATION_PI
         Text[ czech ] = "Smazat";
         Text[ hebrew ] = "‮מחיקה‬";
         Text[ hindi ] = "मिटाओ";
+        Text[ slovak ] = "Zmazať";
     };
     String ST_DELETE_ENTRY
     {
@@ -1629,6 +1672,7 @@ Window DLG_NAVIGATION_PI
         Text[ czech ] = "Smazat";
         Text[ hebrew ] = "‮מחיקה‬";
         Text[ hindi ] = "~मिटाओ";
+        Text[ slovak ] = "Z~mazať";
     };
     String ST_UPDATE_SEL
     {
@@ -1658,6 +1702,7 @@ Window DLG_NAVIGATION_PI
         Text[ czech ] = "Výběr";
         Text[ hebrew ] = "‮מבחר‬";
         Text[ hindi ] = "चुनाव";
+        Text[ slovak ] = "Výber";
     };
     String ST_UPDATE_INDEX
     {
@@ -1687,6 +1732,7 @@ Window DLG_NAVIGATION_PI
         Text[ czech ] = "Rejstříky";
         Text[ hebrew ] = "Verzeichnisse";
         Text[ hindi ] = "अनुक्रमणिका";
+        Text[ slovak ] = "Obsahy";
     };
     String ST_UPDATE_LINK
     {
@@ -1717,6 +1763,7 @@ Window DLG_NAVIGATION_PI
         Text[ czech ] = "Odkazy";
         Text[ hebrew ] = "‮קישורים‬";
         Text[ hindi ] = "लिंक्स";
+        Text[ slovak ] = "Odkazy";
     };
     String ST_UPDATE_ALL
     {
@@ -1746,6 +1793,7 @@ Window DLG_NAVIGATION_PI
         Text[ czech ] = "Vše";
         Text[ hebrew ] = "‮הכל‬";
         Text[ hindi ] = "सब";
+        Text[ slovak ] = "Všetko";
     };
     String ST_REMOVE_INDEX
     {
@@ -1775,6 +1823,7 @@ Window DLG_NAVIGATION_PI
         Text[ czech ] = "Odstranit rejstřík";
         Text[ hebrew ] = "~Verzeichnis aufheben";
         Text[ hindi ] = "~अनुक्रमणिका हटाओ";
+        Text[ slovak ] = "Odst~rániť register";
     };
     String ST_REMOVE_TBL_PROTECTION
     {
@@ -1805,6 +1854,7 @@ Window DLG_NAVIGATION_PI
         Text[ czech ] = "Odemknout";
         Text[ hebrew ] = "Schutz ~aufheben";
         Text[ hindi ] = "अ~रक्षित";
+        Text[ slovak ] = "~Odomknúť";
     };
     String ST_INVISIBLE
     {
@@ -1834,6 +1884,7 @@ Window DLG_NAVIGATION_PI
         Text[ czech ] = "skrytý";
         Text[ hebrew ] = "versteckt";
         Text[ hindi ] = "छिपा हुआ";
+        Text[ slovak ] = "skrytý";
     };
     String ST_BROKEN_LINK
     {
@@ -1863,6 +1914,7 @@ Window DLG_NAVIGATION_PI
         Text[ czech ] = "Soubor nenalezen: ";
         Text[ hebrew ] = "Datei nicht gefunden:";
         Text[ hindi ] = "फाइल नहीं मिला: ";
+        Text[ slovak ] = "súbor nenájdený: ";
     };
     String ST_RENAME
     {
@@ -1892,6 +1944,7 @@ Window DLG_NAVIGATION_PI
         Text[ czech ] = "Přejmenovat";
         Text[ hebrew ] = "~Umbenennen";
         Text[ hindi ] = "~पुनः नाम दो";
+        Text[ slovak ] = "P~remenovať";
     };
     String ST_READONLY_IDX
     {
@@ -1921,6 +1974,7 @@ Window DLG_NAVIGATION_PI
         Text[ czech ] = "Pouze ke čtení";
         Text[ hebrew ] = "~Schreibgeschützt";
         Text[ hindi ] = "केवल ~पढ़ने केलिए";
+        Text[ slovak ] = "Len na čí~tanie";
     };
     Text[ chinese_simplified ] = "助手";
     Text[ russian ] = "���������";
@@ -1936,6 +1990,7 @@ Window DLG_NAVIGATION_PI
     Text[ czech ] = "Navigátor";
     Text[ hebrew ] = "‮נווט‬";
     Text[ hindi ] = "नाविगेटर";
+    Text[ slovak ] = "Navigátor";
 };
 #define NAVI_ENTRY_IDS \
     IdList =           \
@@ -1970,6 +2025,8 @@ ImageList IMG_NAVI_ENTRYBMPH
     MaskColor = IMAGE_MASK_COLOR ;
     NAVI_ENTRY_IDS
 };
+
+
 
 
 
