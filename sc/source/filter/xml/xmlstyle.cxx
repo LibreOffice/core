@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyle.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-11 07:43:39 $
+ *  last change: $Author: sab $ $Date: 2001-05-21 10:51:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,6 +146,7 @@ const XMLPropertyMapEntry aXMLScCellStylesProperties[] =
     { "ParaBottomMargin", XML_NAMESPACE_FO, sXML_padding, XML_TYPE_MEASURE, CTF_SC_ALLPADDING },
     { "ParaBottomMargin", XML_NAMESPACE_FO, sXML_padding_bottom, XML_TYPE_MEASURE, CTF_SC_BOTTOMPADDING },
     { "ParaIndent", XML_NAMESPACE_FO, sXML_margin_left, XML_TYPE_MEASURE16, 0 },
+    { "ParaIsHyphenation", XML_NAMESPACE_FO, sXML_hyphenate, XML_TYPE_BOOL, 0 },
     { "ParaLeftMargin", XML_NAMESPACE_FO, sXML_padding_left, XML_TYPE_MEASURE, CTF_SC_LEFTPADDING },
     { "ParaRightMargin", XML_NAMESPACE_FO, sXML_padding_right, XML_TYPE_MEASURE, CTF_SC_RIGHTPADDING },
     { "ParaTopMargin", XML_NAMESPACE_FO, sXML_padding_top, XML_TYPE_MEASURE, CTF_SC_TOPPADDING },
@@ -158,6 +159,7 @@ const XMLPropertyMapEntry aXMLScCellStylesProperties[] =
     { "TopBorder", XML_NAMESPACE_STYLE, sXML_border_line_width_top, XML_TYPE_BORDER_WIDTH, CTF_SC_TOPBORDERWIDTH },
     { "VertJustify", XML_NAMESPACE_FO, sXML_vertical_align, XML_SC_TYPE_VERTJUSTIFY, 0},
     { "StandardDecimals", XML_NAMESPACE_STYLE, sXML_decimal_places, XML_TYPE_NUMBER16, 0 },
+
 
 // CharacterProperties
 /*  { "CharAutoKerning", XML_NAMESPACE_STYLE, sXML_letter_kerning, XML_TYPE_BOOL, 0 },
