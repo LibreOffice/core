@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-27 16:11:03 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 18:01:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -887,7 +887,7 @@ static Graphic ImpGetScaledGraphic( const Graphic& rGraphic, FilterConfigItem& r
         if( rGraphic.GetType() == GRAPHIC_BITMAP )
         {
 
-            // Auflösung wird eingestellt
+            // Aufloesung wird eingestellt
             if( nMode == 1 )
             {
                 Bitmap      aBitmap( rGraphic.GetBitmap() );
