@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLExport.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-07 13:33:04 $
+ *  last change: $Author: bm $ $Date: 2000-11-24 09:51:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -434,11 +434,15 @@ void SchXMLExportHelper::parseDocument( uno::Reference< chart::XChartDocument >&
             SvXMLElementExport aElTitle( mrExport, XML_NAMESPACE_CHART, sXML_title, sal_True, sal_True );
 
             // content (text:p)
-            uno::Reference< text::XTextRange > xRange( xShape, uno::UNO_QUERY );
-            if( xRange.is())
+            uno::Reference< beans::XPropertySet > xPropSet( xShape, uno::UNO_QUERY );
+            if( xPropSet.is())
             {
+                uno::Any aAny( xPropSet->getPropertyValue(
+                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "String" ))));
+                rtl::OUString aText;
+                aAny >>= aText;
                 SvXMLElementExport aTitle( mrExport, XML_NAMESPACE_TEXT, sXML_p, sal_True, sal_False );
-                mrExport.GetDocHandler()->characters( xRange->getString());
+                mrExport.GetDocHandler()->characters( aText );
             }
         }
         else    // autostyles
@@ -478,11 +482,15 @@ void SchXMLExportHelper::parseDocument( uno::Reference< chart::XChartDocument >&
             SvXMLElementExport aElSubTitle( mrExport, XML_NAMESPACE_CHART, sXML_subtitle, sal_True, sal_True );
 
             // content (text:p)
-            uno::Reference< text::XTextRange > xRange( xShape, uno::UNO_QUERY );
-            if( xRange.is())
+            uno::Reference< beans::XPropertySet > xPropSet( xShape, uno::UNO_QUERY );
+            if( xPropSet.is())
             {
+                uno::Any aAny( xPropSet->getPropertyValue(
+                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "String" ))));
+                rtl::OUString aText;
+                aAny >>= aText;
                 SvXMLElementExport aSubTitle( mrExport, XML_NAMESPACE_TEXT, sXML_p, sal_True, sal_False );
-                mrExport.GetDocHandler()->characters( xRange->getString());
+                mrExport.GetDocHandler()->characters( aText );
             }
         }
         else    // autostyles
@@ -1277,11 +1285,15 @@ void SchXMLExportHelper::exportAxes( uno::Reference< chart::XDiagram > xDiagram,
 
                     SvXMLElementExport aTitle( mrExport, XML_NAMESPACE_CHART, sXML_title, sal_True, sal_True );
                     // content (text:p)
-                    uno::Reference< text::XTextRange > xRange( xShape, uno::UNO_QUERY );
-                    if( xRange.is())
+                    uno::Reference< beans::XPropertySet > xPropSet( xShape, uno::UNO_QUERY );
+                    if( xPropSet.is())
                     {
+                        uno::Any aAny( xPropSet->getPropertyValue(
+                            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "String" ))));
+                        rtl::OUString aText;
+                        aAny >>= aText;
                         SvXMLElementExport aTitlePara( mrExport, XML_NAMESPACE_TEXT, sXML_p, sal_True, sal_False );
-                        mrExport.GetDocHandler()->characters( xRange->getString());
+                        mrExport.GetDocHandler()->characters( aText );
                     }
                 }
             }
@@ -1415,11 +1427,15 @@ void SchXMLExportHelper::exportAxes( uno::Reference< chart::XDiagram > xDiagram,
 
                     SvXMLElementExport aTitle( mrExport, XML_NAMESPACE_CHART, sXML_title, sal_True, sal_True );
                     // content (text:p)
-                    uno::Reference< text::XTextRange > xRange( xShape, uno::UNO_QUERY );
-                    if( xRange.is())
+                    uno::Reference< beans::XPropertySet > xPropSet( xShape, uno::UNO_QUERY );
+                    if( xPropSet.is())
                     {
+                        uno::Any aAny( xPropSet->getPropertyValue(
+                            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "String" ))));
+                        rtl::OUString aText;
+                        aAny >>= aText;
                         SvXMLElementExport aTitlePara( mrExport, XML_NAMESPACE_TEXT, sXML_p, sal_True, sal_False );
-                        mrExport.GetDocHandler()->characters( xRange->getString());
+                        mrExport.GetDocHandler()->characters( aText );
                     }
                 }
             }
@@ -1550,11 +1566,15 @@ void SchXMLExportHelper::exportAxes( uno::Reference< chart::XDiagram > xDiagram,
 
                     SvXMLElementExport aTitle( mrExport, XML_NAMESPACE_CHART, sXML_title, sal_True, sal_True );
                     // content (text:p)
-                    uno::Reference< text::XTextRange > xRange( xShape, uno::UNO_QUERY );
-                    if( xRange.is())
+                    uno::Reference< beans::XPropertySet > xPropSet( xShape, uno::UNO_QUERY );
+                    if( xPropSet.is())
                     {
+                        uno::Any aAny( xPropSet->getPropertyValue(
+                            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "String" ))));
+                        rtl::OUString aText;
+                        aAny >>= aText;
                         SvXMLElementExport aTitlePara( mrExport, XML_NAMESPACE_TEXT, sXML_p, sal_True, sal_False );
-                        mrExport.GetDocHandler()->characters( xRange->getString());
+                        mrExport.GetDocHandler()->characters( aText );
                     }
                 }
             }
