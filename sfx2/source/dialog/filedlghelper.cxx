@@ -2,9 +2,6 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.97 $
- *
- *  last change: $Author: gt $ $Date: 2002-10-31 14:52:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,9 +178,9 @@
 #ifndef _PICKERHELPER_HXX
 #include <svtools/pickerhelper.hxx>
 #endif
-#ifndef _SVX_SVXIDS_HRC
-#include <svx/svxids.hrc>
-#endif
+//#ifndef _SVX_SVXIDS_HRC
+//#include <svx/svxids.hrc>
+//#endif
 #ifndef _UCBHELPER_CONTENT_HXX
 #include <ucbhelper/content.hxx>
 #endif
@@ -2061,9 +2058,10 @@ void FileDialogHelper_Impl::SetContext( FileDialogHelper::Context _eNewContext )
 
     switch( _eNewContext )
     {
-        case FileDialogHelper::SW_INSERT_GRAPHIC:
-        case FileDialogHelper::SC_INSERT_GRAPHIC:
-        case FileDialogHelper::SD_INSERT_GRAPHIC:       nNewHelpId = SID_INSERT_GRAPHIC;        break;
+// #104952# dependency to SVX not allowed! When used again, another solution has to be found
+//      case FileDialogHelper::SW_INSERT_GRAPHIC:
+//      case FileDialogHelper::SC_INSERT_GRAPHIC:
+//      case FileDialogHelper::SD_INSERT_GRAPHIC:       nNewHelpId = SID_INSERT_GRAPHIC;        break;
         case FileDialogHelper::SW_INSERT_SOUND:
         case FileDialogHelper::SC_INSERT_SOUND:
         case FileDialogHelper::SD_INSERT_SOUND:         nNewHelpId = SID_INSERT_SOUND;          break;
@@ -2076,8 +2074,8 @@ void FileDialogHelper_Impl::SetContext( FileDialogHelper::Context _eNewContext )
     if( pConfigId )
         LoadLastUsedFilter( *pConfigId );
 
-    if( nNewHelpId )
-        this->setDialogHelpId( nNewHelpId );
+//  if( nNewHelpId )
+//      this->setDialogHelpId( nNewHelpId );
 }
 
 // ------------------------------------------------------------------------
@@ -2343,8 +2341,8 @@ ErrCode FileOpenDialog_Impl( sal_uInt32 nFlags,
     ErrCode nRet;
     FileDialogHelper aDialog( nFlags, rFact );
 
-    if( nHelpId )
-        aDialog.SetDialogHelpId( nHelpId );
+//  if( nHelpId )
+//      aDialog.SetDialogHelpId( nHelpId );
 
     nRet = aDialog.Execute( aPath, rpURLList, rpSet, rFilter );
 
