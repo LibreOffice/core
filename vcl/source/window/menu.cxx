@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: tbe $ $Date: 2002-05-22 13:15:17 $
+ *  last change: $Author: tbe $ $Date: 2002-05-27 16:40:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,6 +150,9 @@
 
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
 #include <drafts/com/sun/star/accessibility/XAccessible.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HPP_
+#include <drafts/com/sun/star/accessibility/AccessibleRole.hpp>
 #endif
 
 #ifndef _VCL_UNOWRAP_HXX
@@ -778,27 +781,27 @@ void Menu::ImplCallEventListeners( ULONG nEvent )
 
 void Menu::AddEventListener( const Link& rEventListener )
 {
-//    mpDummy3_WindowEventListeners->push_back( rEventListener );
+    maEventListeners.push_back( rEventListener );
 }
 
 void Menu::RemoveEventListener( const Link& rEventListener )
 {
-//    mpDummy3_WindowEventListeners->remove( rEventListener );
+    maEventListeners.remove( rEventListener );
 }
 
 // -----------------------------------------------------------------------
 
-void Menu::AddChildEventListener( const Link& rEventListener )
-{
+//void Menu::AddChildEventListener( const Link& rEventListener )
+//{
 //    mpDummy4_WindowChildEventListeners->push_back( rEventListener );
-}
+//}
 
 // -----------------------------------------------------------------------
 
-void Menu::RemoveChildEventListener( const Link& rEventListener )
-{
+//void Menu::RemoveChildEventListener( const Link& rEventListener )
+//{
 //    mpDummy4_WindowChildEventListeners->remove( rEventListener );
-}
+//}
 
 void Menu::InsertItem( USHORT nItemId, const XubString& rStr, MenuItemBits nItemBits, USHORT nPos )
 {
@@ -2591,6 +2594,8 @@ MenuFloatingWindow::MenuFloatingWindow( Menu* pMen, Window* pParent, WinBits nSt
 
     if ( Application::GetAccessHdlCount() )
         Application::AccessNotify( AccessNotification( ACCESS_EVENT_POPUPMENU_START, pMenu ) );
+
+    SetAccessibleRole( ::drafts::com::sun::star::accessibility::AccessibleRole::MENU );
 }
 
 MenuFloatingWindow::~MenuFloatingWindow()
@@ -3584,6 +3589,8 @@ MenuBarWindow::MenuBarWindow( Window* pParent ) :
     aHideBtn.SetClickHdl( LINK( this, MenuBarWindow, HideHdl ) );
     aHideBtn.SetSymbol( SYMBOL_HIDE );
     aHideBtn.SetQuickHelpText( XubString( ResId( SV_HELPTEXT_MINIMIZE, pResMgr ) ) );
+
+    SetAccessibleRole( ::drafts::com::sun::star::accessibility::AccessibleRole::MENUBAR );
 }
 
 MenuBarWindow::~MenuBarWindow()
