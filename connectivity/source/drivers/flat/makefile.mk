@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: oj $ $Date: 2000-10-24 16:32:46 $
+#   last change: $Author: ganaya $ $Date: 2001-01-30 16:50:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -109,7 +109,8 @@ SLOFILES=\
 # NETBSD-1.2.1 doesn't know about weak symbols so the default mechanism for GCC won't work.
 # SCO and MACOSX: the linker does know about weak symbols, but we can't ignore multiple defined symbols
 .IF "$(OS)"=="NETBSD" || "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX" 
-SLOFILES+=$(SLO)$/staticmbdbase.obj
+SLOFILES+=$(SLO)$/staticmbflat.obj
+SLOFILES+=$(SLO)$/staticmbodbc.obj
 .ENDIF
 
 SHL1VERSIONMAP= $(TARGET).map
