@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moptions.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-10 07:13:54 $
+ *  last change: $Author: kz $ $Date: 2001-05-17 08:54:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@ ModalDialog RID_MACROOPTIONS
     Text [ English ] = "Description" ;
     Text [ norwegian ] = "Beskrivelse" ;
     Text [ italian ] = "Descrizione" ;
-    Text [ portuguese_brazilian ] = "Descrição" ;
+    Text [ portuguese_brazilian ] = "Descri??o" ;
     Text [ portuguese ] = "Descrição" ;
     Text [ finnish ] = "Kuvaus" ;
     Text [ danish ] = "Beskrivelse" ;
@@ -116,7 +116,7 @@ ModalDialog RID_MACROOPTIONS
         Text [ ENGLISH ] = "Description" ;
         Text [ norwegian ] = "Beskrivelse" ;
         Text [ italian ] = "Descrizione" ;
-        Text [ portuguese_brazilian ] = "Descrição" ;
+        Text [ portuguese_brazilian ] = "Descri??o" ;
         Text [ portuguese ] = "Descrição" ;
         Text [ finnish ] = "Kuvaus" ;
         Text [ danish ] = "Beskrivelse" ;
@@ -155,7 +155,7 @@ ModalDialog RID_MACROOPTIONS
         Text [ ENGLISH ] = "Help informations" ;
         Text [ norwegian ] = "Help informations" ;
         Text [ italian ] = "Informazioni sulla Guida" ;
-        Text [ portuguese_brazilian ] = "Informações do ajuda" ;
+        Text [ portuguese_brazilian ] = "Informa??s do ajuda" ;
         Text [ portuguese ] = "Informações - Ajuda" ;
         Text [ finnish ] = "Ohjetiedot" ;
         Text [ danish ] = "Hjælp-information" ;
@@ -185,7 +185,7 @@ ModalDialog RID_MACROOPTIONS
         Text [ ENGLISH ] = "Help identification" ;
         Text [ norwegian ] = "Help identification" ;
         Text [ italian ] = "Identifica la Guida" ;
-        Text [ portuguese_brazilian ] = "Identificação do ajuda" ;
+        Text [ portuguese_brazilian ] = "Identifica??o do ajuda" ;
         Text [ portuguese ] = "Ajuda - Identificação" ;
         Text [ finnish ] = "Ohjetunnus" ;
         Text [ danish ] = "Hjælp-identifikation" ;
