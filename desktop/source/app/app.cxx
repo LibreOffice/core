@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: cd $ $Date: 2001-07-20 09:52:29 $
+ *  last change: $Author: dv $ $Date: 2001-07-23 15:31:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1019,8 +1019,9 @@ void Desktop::OpenStartupScreen( const char* pLabelPrefix )
     {
         // versuchen, die Label-DLL zu erzeugen
         String aMgrName = String::CreateFromAscii( pLabelPrefix );
+        LanguageType aLanguageReturn;
         aMgrName += String::CreateFromInt32(SOLARUPD); // aktuelle Versionsnummer
-        m_pLabelResMgr = ResMgr::CreateResMgr( U2S( aMgrName ));
+        m_pLabelResMgr = ResMgr::SearchCreateResMgr( U2S( aMgrName ), aLanguageReturn );
 
         // keine separate Label-DLL vorhanden?
         if ( !m_pLabelResMgr )
