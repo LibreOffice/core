@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindows.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: mt $ $Date: 2002-09-04 08:40:14 $
+ *  last change: $Author: mt $ $Date: 2002-09-05 11:23:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -947,7 +947,12 @@ void VCLXRadioButton::setState( sal_Bool b ) throw(::com::sun::star::uno::Runtim
 
     RadioButton* pRadioButton = (RadioButton*)GetWindow();
     if ( pRadioButton)
+    {
         pRadioButton->Check( b );
+        // #102717# item listeners are called, but not C++ click listeners in StarOffice code => call click hdl
+        // But this is needed in old code because Accessibility API uses it.
+        pRadioButton->GetClickHdl().Call( pRadioButton );
+    }
 }
 
 sal_Bool VCLXRadioButton::getState() throw(::com::sun::star::uno::RuntimeException)
