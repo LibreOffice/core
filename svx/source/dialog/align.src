@@ -2,9 +2,9 @@
  *
  *  $RCSfile: align.src,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:14:21 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 13:56:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,8 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ hebrew ] = "‮יישור טקסט‬";
         Text[ hindi ] = "टेक्स्ट् पंक्तिकरण";
         Text[ slovak ] = "Zarovnanie textu";
+        Text[ hungarian ] = "Szövegigazítás";
+        Text[ slovenian ] = "Poravnava besedila";
     };
     FixedText FT_HORALIGN
     {
@@ -136,7 +138,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ spanish ] = "~Horizontal";
         Text[ finnish ] = "Vaaka~taso";
         Text[ italian ] = "~Orizzontale";
-        Text[ danish ] = "Va~ndret";
+        Text[ danish ] = "~Vandret";
         Text[ swedish ] = "H~orisontell";
         Text[ polish ] = "W po~ziomie";
         Text[ portuguese_brazilian ] = "Hori~zontal";
@@ -152,6 +154,8 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ hebrew ] = "‮אופקי‬";
         Text[ hindi ] = "सम~तल";
         Text[ slovak ] = "~Vodorovné";
+        Text[ hungarian ] = "Ví~zszintes";
+        Text[ slovenian ] = "Vodo~ravno";
     };
     ListBox LB_HORALIGN
     {
@@ -384,6 +388,22 @@ TabPage RID_SVXPAGE_ALIGNMENT
         < "Vpravo" ; ALIGNDLG_HORALIGN_RIGHT ; > ;
         < "Do bloku" ; ALIGNDLG_HORALIGN_BLOCK ; > ;
     };
+    StringList [ hungarian ] =
+    {
+         < "Alapértelmezett" ; ALIGNDLG_HORALIGN_STD ; > ;
+        < "Balra" ; ALIGNDLG_HORALIGN_LEFT ; > ;
+        < "Középre" ; ALIGNDLG_HORALIGN_CENTER ; > ;
+            < "Jobbra" ; ALIGNDLG_HORALIGN_RIGHT ; > ;
+            < "Sorkizárt" ; ALIGNDLG_HORALIGN_BLOCK ; > ;
+        };
+    StringList [ slovenian ] =
+    {
+         < "Privzeto" ; ALIGNDLG_HORALIGN_STD ; > ;
+        < "Levo" ; ALIGNDLG_HORALIGN_LEFT ; > ;
+        < "Sredina" ; ALIGNDLG_HORALIGN_CENTER ; > ;
+            < "Desno" ; ALIGNDLG_HORALIGN_RIGHT ; > ;
+            < "Obojestransko" ; ALIGNDLG_HORALIGN_BLOCK ; > ;
+        };
     };
     FixedText FT_INDENT
     {
@@ -419,6 +439,8 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ hebrew ] = "‮כניסה‬";
         Text[ hindi ] = "इ~न्डेन्ट्";
         Text[ slovak ] = "~Odsadenie";
+        Text[ hungarian ] = "Be~húzás";
+        Text[ slovenian ] = "Z~amik";
     };
     MetricField ED_INDENT
     {
@@ -463,6 +485,8 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ hebrew ] = "‮אנכי‬";
         Text[ hindi ] = "~लंबरूप";
         Text[ slovak ] = "~Zvislé";
+        Text[ hungarian ] = "~Függőleges";
+        Text[ slovenian ] = "~Navpično";
     };
     ListBox LB_VERALIGN
     {
@@ -559,7 +583,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         {
             < "Standard" ; ALIGNDLG_VERALIGN_STD ; > ;
             < "Top" ; ALIGNDLG_VERALIGN_TOP ; > ;
-            < "Centreret" ; ALIGNDLG_VERALIGN_MID ; > ;
+            < "Midte" ; ALIGNDLG_VERALIGN_MID ; > ;
             < "Bund" ; ALIGNDLG_VERALIGN_BOTTOM ; > ;
         };
         StringList [ swedish ] =
@@ -667,6 +691,20 @@ TabPage RID_SVXPAGE_ALIGNMENT
         < "Uprostred" ; ALIGNDLG_VERALIGN_MID ; > ;
         < "Dole" ; ALIGNDLG_VERALIGN_BOTTOM ; > ;
     };
+    StringList [ hungarian ] =
+    {
+         < "Alapértelmezett" ; ALIGNDLG_VERALIGN_STD ; > ;
+        < "Felülre" ; ALIGNDLG_VERALIGN_TOP ; > ;
+        < "Középre" ; ALIGNDLG_VERALIGN_MID ; > ;
+        < "Alulra" ; ALIGNDLG_VERALIGN_BOTTOM ; > ;
+    };
+    StringList [ slovenian ] =
+    {
+         < "Privzeto" ; ALIGNDLG_VERALIGN_STD ; > ;
+        < "Zgoraj" ; ALIGNDLG_VERALIGN_TOP ; > ;
+        < "Sredina" ; ALIGNDLG_VERALIGN_MID ; > ;
+        < "Spodaj" ; ALIGNDLG_VERALIGN_BOTTOM ; > ;
+    };
     };
     FixedLine FL_ORIENTATION
     {
@@ -703,6 +741,8 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ hebrew ] = "‮כיוון טקסט‬";
         Text[ hindi ] = "टेक्स्ट् दिशा";
         Text[ slovak ] = "Smer textu";
+        Text[ hungarian ] = "Szövegirány";
+        Text[ slovenian ] = "Smer besedila";
     };
     ImageButton BTN_TXTSTACKED
     {
@@ -738,7 +778,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ spanish ] = "~�ngulo";
         Text[ finnish ] = "A~steet";
         Text[ italian ] = "~Gradi";
-        Text[ danish ] = "V~inkel";
+        Text[ danish ] = "~Grader";
         Text[ swedish ] = "~Vinkel";
         Text[ polish ] = "S~topnie";
         Text[ portuguese_brazilian ] = "~Graus";
@@ -754,6 +794,8 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ hebrew ] = "‮מעלות‬";
         Text[ hindi ] = "डि~ग्रीस";
         Text[ slovak ] = "~Stupňov";
+        Text[ hungarian ] = "F~ok";
+        Text[ slovenian ] = "Sto~pinje";
     };
     NumericField NF_DEGREES
     {
@@ -774,7 +816,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text [ english_us ] = "Re~ference edge" ;
         Text [ portuguese_brazilian ] = "A~resta de refer�ncia" ;
         Text [ swedish ] = "Referens~kant" ;
-        Text [ danish ] = "Referencekant" ;
+        Text [ danish ] = "Reference~kant" ;
         Text [ italian ] = "Bordo di ri~ferimento" ;
         Text [ spanish ] = "~Aristas de referencia" ;
         Text [ french ] = "Bord de r�f�rence" ;
@@ -799,6 +841,8 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ hebrew ] = "‮קצה יחוס‬";
         Text[ hindi ] = "रे~फरेन्स किनारा";
         Text[ slovak ] = "~Základňa";
+        Text[ hungarian ] = "Ala~pél";
+        Text[ slovenian ] = "Re~ferenčni rob";
     };
     Control CTR_BORDER_LOCK
     {
@@ -824,7 +868,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ spanish ] = "~Utilizar dise�o vertical asi�tico ";
         Text[ finnish ] = "Use ~Asian vertical layout mode";
         Text[ italian ] = "Usa il layout verticale asiatico";
-        Text[ danish ] = "Use ~Asian vertical layout mode";
+        Text[ danish ] = "Brug ~Asiatisk lodret layouttilstand.";
         Text[ swedish ] = "Anv�nd asiatiskt, vertikalt layoutl�ge";
         Text[ polish ] = "Use ~Asian vertical layout mode";
         Text[ portuguese_brazilian ] = "Usar modo ~asi�tico de layout vertical";
@@ -840,6 +884,8 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ hebrew ] = "‮פריסה אנכית לשפות מזרח הרחוק‬";
         Text[ hindi ] = "Use ~Asian vertical layout mode";
         Text[ slovak ] = "Použiť vertikálny mód ázijského rozloženi~a";
+        Text[ hungarian ] = "Á~zsiai függőleges írásmód használata";
+        Text[ slovenian ] = "Uporabi ~azijsko navpično postavitev";
     };
     FixedLine FL_SPACE
     {
@@ -876,6 +922,8 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ hebrew ] = "‮מרווח לקוי הרשת‬";
         Text[ hindi ] = "जाल रेखाओं केलिए अंतर देना";
         Text[ slovak ] = "Vzdialenosť k mriežkam";
+        Text[ hungarian ] = "Térköz a rácshálóhoz";
+        Text[ slovenian ] = "Razmik do mrežnih črt";
     };
     FixedText FT_LEFTSPACE
     {
@@ -912,6 +960,8 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ hebrew ] = "‮שמאל‬";
         Text[ hindi ] = "बा~याँ";
         Text[ slovak ] = "Vľ~avo";
+        Text[ hungarian ] = "~Bal";
+        Text[ slovenian ] = "Le~vo";
     };
     MetricField ED_LEFTSPACE
     {
@@ -938,7 +988,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text [ portuguese_brazilian ] = "Direita" ;
         Text [ portuguese ] = "Dir~eita" ;
         Text [ finnish ] = "Oik~ea" ;
-        Text [ danish ] = "H�~jre" ;
+        Text [ danish ] = "H�jre" ;
         Text [ french ] = "� droite" ;
         Text [ swedish ] = "H~�ger" ;
         Text [ dutch ] = "~Rechts" ;
@@ -962,6 +1012,8 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ hebrew ] = "‮ימין‬";
         Text[ hindi ] = "दाहिना";
         Text[ slovak ] = "Vpravo";
+        Text[ hungarian ] = "Jobb";
+        Text[ slovenian ] = "Desno";
     };
     MetricField ED_RIGHTSPACE
     {
@@ -988,7 +1040,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text [ portuguese_brazilian ] = "Em ~Cima" ;
         Text [ portuguese ] = "Em ~cima" ;
         Text [ finnish ] = "~Yl�reuna" ;
-        Text [ danish ] = "�v~erst" ;
+        Text [ danish ] = "To~p" ;
         Text [ french ] = "En haut" ;
         Text [ swedish ] = "U~ppe" ;
         Text [ dutch ] = "~Boven" ;
@@ -1012,6 +1064,8 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ hebrew ] = "‮עליון‬";
         Text[ hindi ] = "ऊ~पर";
         Text[ slovak ] = "~Navrchu";
+        Text[ hungarian ] = "~Felül";
+        Text[ slovenian ] = "Z~goraj";
     };
     MetricField ED_TOPSPACE
     {
@@ -1038,7 +1092,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text [ portuguese_brazilian ] = "Em ~Baixo" ;
         Text [ portuguese ] = "Em ~baixo" ;
         Text [ finnish ] = "Alare~una" ;
-        Text [ danish ] = "Nederst" ;
+        Text [ danish ] = "~Bund" ;
         Text [ french ] = "En bas" ;
         Text [ swedish ] = "N~ere" ;
         Text [ dutch ] = "~Onder" ;
@@ -1062,6 +1116,8 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ hebrew ] = "‮תחתון‬";
         Text[ hindi ] = "त~ल";
         Text[ slovak ] = "Na~spodku";
+        Text[ hungarian ] = "A~lul";
+        Text[ slovenian ] = "S~podaj";
     };
     MetricField ED_BOTTOMSPACE
     {
@@ -1085,7 +1141,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text [ English ] = "Text Flow" ;
         Text [ english_us ] = "Properties" ;
         Text [ swedish ] = "Egenskaper" ;
-        Text [ danish ] = "Tekstretning" ;
+        Text [ danish ] = "Egenskaber" ;
         Text [ italian ] = "Propriet�" ;
         Text [ spanish ] = "Propiedades" ;
         Text [ french ] = "Propri�t�s" ;
@@ -1113,6 +1169,8 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ hebrew ] = "‮מאפיינים‬";
         Text[ hindi ] = "टेक्स्ट् धारा";
         Text[ slovak ] = "Tok textu";
+        Text[ hungarian ] = "Tulajdonságok";
+        Text[ slovenian ] = "Lastnosti";
     };
     TriStateBox BTN_WRAP
     {
@@ -1125,7 +1183,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text [ portuguese_brazilian ] = "Quebra de linha" ;
         Text [ portuguese ] = "Quebra de ~linha" ;
         Text [ finnish ] = "Rivinvaihto" ;
-        Text [ danish ] = "Linjeskift" ;
+        Text [ danish ] = "Automatisk ~linjeskift" ;
         Text [ french ] = "Retour � la ligne automatique" ;
         Text [ swedish ] = "Automatisk rad~brytning" ;
         Text [ dutch ] = "Re~gelafbreking" ;
@@ -1149,6 +1207,8 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ hebrew ] = "‮מעברי שורות אוטומטיים‬";
         Text[ hindi ] = "रेखा खण्डन";
         Text[ slovak ] = "Zalomenie riadku";
+        Text[ hungarian ] = "A~utomatikus sortörés";
+        Text[ slovenian ] = "Samodejni prelom ~vrstice";
     };
     TriStateBox BTN_HYPH
     {
@@ -1165,7 +1225,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ spanish ] = "~Separaci�n sil�bica activa";
         Text[ finnish ] = "Tavutus k�yt�ss�";
         Text[ italian ] = "Funzione di sillabazione attiva";
-        Text[ danish ] = "Orddeling ~aktiveret";
+        Text[ danish ] = "Orddeling aktiveret";
         Text[ swedish ] = "Avs~tavning aktiv";
         Text[ polish ] = "Dzielenie wyraz�w aktywne";
         Text[ portuguese_brazilian ] = "Divis�o sil�bica ativada";
@@ -1181,6 +1241,8 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ hebrew ] = "‮הפעלת מיקוף‬";
         Text[ hindi ] = "क्रियाशील हाइफ़नेशन्";
         Text[ slovak ] = "Delenie slov aktívne";
+        Text[ hungarian ] = "Elválasztás aktív";
+        Text[ slovenian ] = "Deljenje besed aktivno";
     };
     FixedText FT_TEXTFLOW
     {
@@ -1197,7 +1259,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ spanish ] = "~Flujo de texto";
         Text[ finnish ] = "~Tekstin suunta";
         Text[ italian ] = "Flusso di testo";
-        Text[ danish ] = "Te~xt flow";
+        Text[ danish ] = "Tekst~forl�b";
         Text[ swedish ] = "Te~xtfl�de";
         Text[ polish ] = "Kierunek ~tekstu";
         Text[ portuguese_brazilian ] = "Fluxo do te~xto";
@@ -1213,6 +1275,8 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ hebrew ] = "‮זרימת טקסט‬";
         Text[ hindi ] = "Te~xt flow";
         Text[ slovak ] = "Tok te~xtu";
+        Text[ hungarian ] = "S~zövegbeosztás";
+        Text[ slovenian ] = "Potek be~sedila";
     };
     ListBox LB_FRAMEDIR
     {
@@ -1277,6 +1341,8 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ hebrew ] = "‮המשך טקסט מגבול התחתון של התא‬";
         Text[ hindi ] = "नीचे का कोष्ठ किनारे से टेक्स्ट् विस्तार";
         Text[ slovak ] = "Rozsah textu od dolného okraja bunky";
+        Text[ hungarian ] = "Szöveg kiterjesztése az alsó cellakerettől";
+        Text[ slovenian ] = "Podaljšano besedilo iz spodnjega roba celic";
     };
     String STR_TOPLOCK
     {
@@ -1285,7 +1351,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text [ english_us ] = "Text Extension From Upper Cell Border" ;
         Text [ portuguese_brazilian ] = "Extens�o do texto � partir da borda superior da c�lula" ;
         Text [ swedish ] = "Textutstr�ckning fr�n �vre cellkanten" ;
-        Text [ danish ] = "Tekstudstr�kning ud fra �verste cellerand." ;
+        Text [ danish ] = "Tekstudstr�kning ud fra �verste cellekant" ;
         Text [ italian ] = "Estensione del testo dal bordo superiore della cella." ;
         Text [ spanish ] = "Expansi�n del texto a partir del borde superior de la celda." ;
         Text [ french ] = "Extension de texte � partir du bord sup�rieur de la cellule" ;
@@ -1310,6 +1376,8 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ hebrew ] = "‮המשך טקסט מגבול העליון של התא‬";
         Text[ hindi ] = "ऊपरी कोष्ठ किनारे से टेक्स्ट् विस्तार";
         Text[ slovak ] = "Rozsah textu od horného okraja bunky";
+        Text[ hungarian ] = "Szöveg kiterjesztése a felső cellakerettől";
+        Text[ slovenian ] = "Podaljšano besedilo iz zgornjega roba celic";
     };
     String STR_CELLLOCK
     {
@@ -1318,7 +1386,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text [ english_us ] = "Text Extension Inside Cell" ;
         Text [ portuguese_brazilian ] = "Extens�o do texto dentro da c�lula" ;
         Text [ swedish ] = "Textutstr�ckning bara inuti cellen" ;
-        Text [ danish ] = "Tekstudstr�kning kun indenfor cellen." ;
+        Text [ danish ] = "Tekstudstr�kning indenfor cellen" ;
         Text [ italian ] = "Estensione del testo solo all'interno della cella." ;
         Text [ spanish ] = "Expansi�n del texto solo dentro de la celda." ;
         Text [ french ] = "Extension de texte uniquement � l'int�rieur de la cellule." ;
@@ -1343,6 +1411,8 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ hebrew ] = "‮המשך הטקסט בתוך התא בלבד‬";
         Text[ hindi ] = "कोष्ठ के भीतर टेक्स्ट् विस्तार";
         Text[ slovak ] = "Rozsah textu vo vnútri bunky";
+        Text[ hungarian ] = "Szöveg kiterjesztése a cellán belül";
+        Text[ slovenian ] = "Podaljšano besedilo znotraj celice";
     };
     Text[ chinese_simplified ] = "对齐";
     Text[ russian ] = "������������";
@@ -1362,8 +1432,12 @@ TabPage RID_SVXPAGE_ALIGNMENT
     Text[ hebrew ] = "‮יישור‬";
     Text[ hindi ] = "पंक्तिकरण";
     Text[ slovak ] = "Zarovnanie";
+    Text[ hungarian ] = "Igazítás";
+    Text[ slovenian ] = "Poravnava";
 };
  // ********************************************************************** EOF
+
+
 
 
 
