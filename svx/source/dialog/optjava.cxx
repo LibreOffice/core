@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optjava.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-01 08:49:58 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 11:57:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,10 +141,9 @@ SvxJavaTable::~SvxJavaTable()
 void SvxJavaTable::SetTabs()
 {
     SvxSimpleTable::SetTabs();
-/*!
+/*
     USHORT nAdjust = SV_LBOXTAB_ADJUST_RIGHT | SV_LBOXTAB_ADJUST_LEFT |
                      SV_LBOXTAB_ADJUST_CENTER | SV_LBOXTAB_ADJUST_NUMERIC | SV_LBOXTAB_FORCE;
-
     if ( aTabs.Count() > 0 )
     {
         SvLBoxTab* pTab = (SvLBoxTab*)aTabs.GetObject(0);
@@ -205,17 +204,18 @@ SvxJavaOptionsPage::SvxJavaOptionsPage( Window* pParent, const SfxItemSet& rSet 
 {
     m_aJavaEnableCB.SetClickHdl( LINK( this, SvxJavaOptionsPage, EnableHdl_Impl ) );
     m_aJavaList.SetCheckButtonHdl( LINK( this, SvxJavaOptionsPage, CheckHdl_Impl ) );
+    m_aJavaList.SetSelectHdl( LINK( this, SvxJavaOptionsPage, SelectHdl_Impl ) );
     m_aAddBtn.SetClickHdl( LINK( this, SvxJavaOptionsPage, AddHdl_Impl ) );
     m_aParameterBtn.SetClickHdl( LINK( this, SvxJavaOptionsPage, ParameterHdl_Impl ) );
     m_aClassPathBtn.SetClickHdl( LINK( this, SvxJavaOptionsPage, ClassPathHdl_Impl ) );
     m_aResetTimer.SetTimeoutHdl( LINK( this, SvxJavaOptionsPage, ResetHdl_Impl ) );
     m_aResetTimer.SetTimeout( RESET_TIMEOUT );
 
-    m_aJavaList.EnableCheckButton( new SvLBoxButtonData( &m_aJavaList ) );
+    m_aJavaList.EnableCheckButton( new SvLBoxButtonData( &m_aJavaList, true ) );
 
     static long aStaticTabs[]=
     {
-        5, 0, 15, 80, 110, 300
+        5, 0, 15, 90, 130, 300
     };
 
     m_aJavaList.SvxSimpleTable::SetTabs( aStaticTabs );
@@ -280,6 +280,21 @@ IMPL_LINK( SvxJavaOptionsPage, CheckHdl_Impl, SvxSimpleTable *, pList )
     SvLBoxEntry* pEntry = pList ? m_aJavaList.GetEntry( m_aJavaList.GetCurMousePoint() )
                                 : m_aJavaList.FirstSelected();
     HandleCheckEntry( pEntry );
+    return 0;
+}
+
+// -----------------------------------------------------------------------
+
+IMPL_LINK( SvxJavaOptionsPage, SelectHdl_Impl, SvxSimpleTable *, pList )
+{
+    // set installation directory info
+    SvLBoxEntry* pEntry = m_aJavaList.FirstSelected();
+    DBG_ASSERT( pEntry, "SvxJavaOptionsPage::SelectHdl_Impl(): no entry" );
+    String* pLocation = static_cast< String* >( pEntry->GetUserData() );
+    DBG_ASSERT( pLocation, "invalid location string" );
+    String sInfo = m_sInstallText;
+    sInfo += *pLocation;
+    m_aJavaPathText.SetText( sInfo );
     return 0;
 }
 
@@ -420,6 +435,7 @@ IMPL_LINK( SvxJavaOptionsPage, ClassPathHdl_Impl, PushButton *, EMPTYARG )
     else
         sClassPath = m_pPathDlg->GetClassPath();
 
+    m_pPathDlg->SetFocus();
     if ( m_pPathDlg->Execute() == RET_OK )
         sClassPath = m_pPathDlg->GetClassPath();
     else
@@ -523,8 +539,6 @@ void SvxJavaOptionsPage::AddJRE( JavaInfo* _pInfo )
     sEntry += '\t';
     if ( ( _pInfo->nFeatures & JFW_FEATURE_ACCESSBRIDGE ) == JFW_FEATURE_ACCESSBRIDGE )
         sEntry += m_sAccessibilityText;
-    sEntry += '\t';
-
     SvLBoxEntry* pEntry = m_aJavaList.InsertEntry( sEntry );
     INetURLObject aLocObj( ::rtl::OUString( _pInfo->sLocation ) );
     String* pLocation = new String( aLocObj.getFSysPath( INetURLObject::FSYS_DETECT ) );
@@ -551,13 +565,6 @@ void SvxJavaOptionsPage::HandleCheckEntry( SvLBoxEntry* _pEntry )
     }
     else
         m_aJavaList.SetCheckButtonState( _pEntry, SV_BUTTON_CHECKED );
-
-    // set installation directory info
-    String* pLocation = static_cast< String* >( _pEntry->GetUserData() );
-    DBG_ASSERT( pLocation, "invalid location string" );
-    String sInfo = m_sInstallText;
-    sInfo += *pLocation;
-    m_aJavaPathText.SetText( sInfo );
 }
 
 // -----------------------------------------------------------------------
@@ -615,7 +622,7 @@ BOOL SvxJavaOptionsPage::FillItemSet( SfxItemSet& rCoreSet )
 
             JavaInfo* pSelectedJava = NULL;
             eErr = jfw_getSelectedJRE( &pSelectedJava );
-            if ( JFW_E_NONE == eErr )
+            if ( JFW_E_NONE == eErr || JFW_E_INVALID_SETTINGS == eErr )
             {
                 if (pSelectedJava == NULL || !jfw_areEqualJavaInfo( pInfo, pSelectedJava ) )
                 {
@@ -809,47 +816,6 @@ void SvxJavaParameterDlg::SetParameters( Sequence< ::rtl::OUString >& rParams )
     }
 }
 
-// class SvxClassPathListBox ---------------------------------------------
-
-void SvxClassPathListBox::RequestHelp( const HelpEvent& rHEvt )
-{
-    USHORT nPos = LISTBOX_ENTRY_NOTFOUND;
-    USHORT nTop = GetTopEntry();
-    USHORT nCount = GetDisplayLineCount(); // Attention: Not GetLineCount()
-    Point aPt = ScreenToOutputPixel( rHEvt.GetMousePosPixel() );
-    Rectangle aItemRect;
-    if ( nCount > 0 ) // if there're some entries, find it.
-    {
-         for ( nPos = nTop ; nPos <= nTop + nCount - 1; ++nPos )
-        {
-            if ( GetBoundingRectangle( nPos ).IsInside( aPt ) )
-                break;
-        }
-    }
-    else
-        return; // nothing to show
-
-    String aHelpText;
-     if ( nPos <= nTop + nCount - 1 ) // if find the matching entry, get its content.
-    {
-        String* pHelpText = static_cast< String* >( GetEntryData(nPos) );
-        if ( pHelpText )
-             aHelpText = *pHelpText;
-    }
-
-    aItemRect = Rectangle(Point(0,0),GetSizePixel());
-    aPt = Point( OutputToScreenPixel( aItemRect.TopLeft() ) );
-    aItemRect.Left() = aPt.X();
-    aItemRect.Top() = aPt.Y();
-    aPt = OutputToScreenPixel( aItemRect.BottomRight() );
-    aItemRect.Right() = aPt.X();
-    aItemRect.Bottom() = aPt.Y();
-    if ( rHEvt.GetMode() == HELPMODE_BALLOON )
-        Help::ShowBalloon( this, aItemRect.Center(), aItemRect, aHelpText );
-    else
-        Help::ShowQuickHelp( this, aItemRect, aHelpText );
-}
-
 // class SvxJavaClassPathDlg ---------------------------------------------
 
 SvxJavaClassPathDlg::SvxJavaClassPathDlg( Window* pParent ) :
@@ -896,6 +862,9 @@ SvxJavaClassPathDlg::SvxJavaClassPathDlg( Window* pParent ) :
         aBoxSz.Width() -= nDelta;
         m_aPathList.SetSizePixel( aBoxSz );
     }
+
+    // set initial focus to path list
+    m_aPathList.GrabFocus();
 }
 
 // -----------------------------------------------------------------------
@@ -918,20 +887,9 @@ IMPL_LINK( SvxJavaClassPathDlg, AddArchiveHdl_Impl, PushButton *, EMPTYARG )
     {
         String sURL = aDlg.GetPath();
         INetURLObject aURL( sURL );
-        sal_Unicode cDelimiter;
-        String sFile = aURL.getFSysPath( INetURLObject::FSYS_DETECT, &cDelimiter );
+        String sFile = aURL.getFSysPath( INetURLObject::FSYS_DETECT );
         if ( !IsPathDuplicate( sURL ) )
-        {
-            String sNewFile = GetAbbreviatedPath( sFile, cDelimiter );
-            if ( sFile != sNewFile )
-            {
-                USHORT nPos = m_aPathList.InsertEntry(
-                    sNewFile, SvFileInformationManager::GetImage( aURL ) );
-                m_aPathList.SetEntryData( nPos, new String( sFile ) );
-            }
-            else
-                m_aPathList.InsertEntry( sFile, SvFileInformationManager::GetImage( aURL ) );
-        }
+            m_aPathList.InsertEntry( sFile, SvFileInformationManager::GetImage( aURL ) );
         else
         {
             String sMsg( SVX_RES( RID_SVXSTR_MULTIFILE_DBL_ERR ) );
@@ -956,20 +914,9 @@ IMPL_LINK( SvxJavaClassPathDlg, AddPathHdl_Impl, PushButton *, EMPTYARG )
     {
         String sFolderURL( xFolderPicker->getDirectory() );
         INetURLObject aURL( sFolderURL );
-        sal_Unicode cDelimiter;
-        String sFolder = aURL.getFSysPath( INetURLObject::FSYS_DETECT, &cDelimiter );
+        String sFolder = aURL.getFSysPath( INetURLObject::FSYS_DETECT );
         if ( !IsPathDuplicate( sFolderURL ) )
-        {
-            String sNewFolder = GetAbbreviatedPath( sFolder, cDelimiter );
-            if ( sFolder != sNewFolder )
-            {
-                USHORT nPos = m_aPathList.InsertEntry(
-                    sNewFolder, SvFileInformationManager::GetImage( aURL ) );
-                m_aPathList.SetEntryData( nPos, new String( sFolder ) );
-            }
-            else
-                m_aPathList.InsertEntry( sFolder, SvFileInformationManager::GetImage( aURL ) );
-        }
+            m_aPathList.InsertEntry( sFolder, SvFileInformationManager::GetImage( aURL ) );
         else
         {
             String sMsg( SVX_RES( RID_SVXSTR_MULTIFILE_DBL_ERR ) );
@@ -1022,41 +969,7 @@ bool SvxJavaClassPathDlg::IsPathDuplicate( const String& _rPath )
 
 // -----------------------------------------------------------------------
 
-String SvxJavaClassPathDlg::GetAbbreviatedPath( const String& _rPath, sal_Unicode _cDelim )
-{
-    return _rPath;  // buggy under UNIX !!!
-
-    const xub_StrLen nFirst = _rPath.Search( _cDelim );
-    xub_StrLen nPos = nFirst;
-    String sDots( String::CreateFromAscii("...") );
-    String sNewPath, sTempPath = _rPath;
-    static Image aImage = SvFileInformationManager::GetImage( SvtPathOptions().GetWorkPath() );
-    long nCtrlWidth = m_aPathList.GetSizePixel().Width() - ( aImage.GetSizePixel().Width() + 10 );
-    long nWidth = m_aPathList.GetTextWidth( _rPath );
-
-    while ( nCtrlWidth < nWidth )
-    {
-        xub_StrLen nNextPos = sTempPath.Search( _cDelim, nPos + 1 );
-        if ( STRING_NOTFOUND == nNextPos )
-            break;
-        if ( nPos > nFirst )
-            nNextPos++;
-        sNewPath = sTempPath.Copy( 0, nPos + 1 );
-        if ( nPos == nFirst )
-            sNewPath += sDots;
-        sNewPath += sTempPath.Copy( nNextPos );
-        sTempPath = sNewPath;
-        nPos = sTempPath.Search( _cDelim, nFirst + 1 );
-
-        nWidth = m_aPathList.GetTextWidth( sNewPath );
-    }
-
-    return sNewPath;
-}
-
-// -----------------------------------------------------------------------
-
-String  SvxJavaClassPathDlg::GetClassPath() const
+String SvxJavaClassPathDlg::GetClassPath() const
 {
     String sPath;
     USHORT nCount = m_aPathList.GetEntryCount();
@@ -1086,17 +999,10 @@ void SvxJavaClassPathDlg::SetClassPath( const String& _rPath )
     {
         String sToken = _rPath.GetToken( 0, CLASSPATH_DELIMITER, nIdx );
         INetURLObject aURL( sToken, INetURLObject::FSYS_DETECT );
-        sal_Unicode cDelimiter;
-        String sPath = aURL.getFSysPath( INetURLObject::FSYS_DETECT, &cDelimiter );
-        String sNewPath = GetAbbreviatedPath( sPath, cDelimiter );
-        if ( sPath != sNewPath )
-        {
-            USHORT nPos = m_aPathList.InsertEntry(
-                sNewPath, SvFileInformationManager::GetImage( aURL ) );
-            m_aPathList.SetEntryData( nPos, new String( sPath ) );
-        }
-        else
-            m_aPathList.InsertEntry( sPath, SvFileInformationManager::GetImage( aURL ) );
+        String sPath = aURL.getFSysPath( INetURLObject::FSYS_DETECT );
+        m_aPathList.InsertEntry( sPath, SvFileInformationManager::GetImage( aURL ) );
     }
+    // select first entry
+    m_aPathList.SelectEntryPos(0);
 }
 
