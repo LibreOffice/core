@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XIdlArray.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-16 15:02:57 $
+ *  last change: $Author: dbo $ $Date: 2002-03-08 17:19:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,73 +79,83 @@
  module com {  module sun {  module star {  module reflection {
 
 //=============================================================================
-// DOCUMENTATION CHANGED FOR XIdlArray
 
-// DocMerge from xml: interface com::sun::star::reflection::XIdlArray
-/** provides methods to dynamically access arrays.
+/** Reflects an IDL sequence and provides dynamic access to instances of
+    that sequence.
+    This interface supports widening conversion when getting or setting elements.
 
-    <p>Array permits widening conversions to occur during a get or set
-    operation, but throws an IllegalArgumentException if a narrowing
-    conversion would occur.
-
-    </p>@see            IdlClass
- */
+    @attention
+    Although the name of this interface denotes arrays,
+    sequences are meant. Don't be obfuscated, arrays are not supported by UNO!
+*/
 interface XIdlArray: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR XIdlArray::realloc
+    /** Rellocates the length of the sequence instance.
 
-    // DocMerge from xml: method com::sun::star::reflection::XIdlArray::realloc
-    /** Change the size of the array to the new size.
-        If the new length is greater, the additional
-        elements are default constructed, otherwise
-        the elements are destructed.
+        @param array
+               sequence instance
+        @length
+                new length of sequence
      */
-    void realloc( [inout] any array,
-             [in] long length )
-            raises( com::sun::star::lang::IllegalArgumentException );
+    void realloc(
+        [inout] any array,
+        [in] long length )
+        raises( com::sun::star::lang::IllegalArgumentException );
 
-    //-------------------------------------------------------------------------
+    /** Returns the length of the given sequence.
 
-    // DocMerge from idl: method com::sun::star::reflection::XIdlArray::getLen
-    /** @returns
-                the number of elements in the array.
-     */
+        @param array
+               sequence instance
+        @return
+                length of sequence
+    */
     long getLen( [in] any array )
-            raises( com::sun::star::lang::IllegalArgumentException );
+        raises( com::sun::star::lang::IllegalArgumentException );
 
-    //-------------------------------------------------------------------------
+    /** Returns element at given index.
 
-    // DocMerge from idl: method com::sun::star::reflection::XIdlArray::get
-    /** @returns
-                the value of the indexed component in the specified array object.
+        @param aArray
+               sequence instance
+        @param nIndex
+               index
+        @return
+                value
 
-                @throws IllegalArgumentException
-                if the specified object is not an array or if the
-                specified object is <NULL/>.
+        @throws IllegalArgumentException
+        if the specified object is not a sequence or if the specified object is null
 
-                @throws ArrayIndexOutOfBoundsException
-                if the specified index argument is negative,
-                or if it is greater than or equal to the
-                length of the specified array.
-     */
-    any get( [in] any aArray,
-             [in] long nIndex )
-            raises( com::sun::star::lang::IllegalArgumentException,
-                    com::sun::star::lang::ArrayIndexOutOfBoundsException );
+        @throws ArrayIndexOutOfBoundsException
+        if the specified index argument is negative, or if it is greater than or equal to the
+        length of the specified sequence.
+    */
+    any get(
+        [in] any aArray,
+        [in] long nIndex )
+        raises( com::sun::star::lang::IllegalArgumentException,
+                com::sun::star::lang::ArrayIndexOutOfBoundsException );
 
-    //-------------------------------------------------------------------------
+    /** Sets a new value at given index.
 
-    // DocMerge from xml: method com::sun::star::reflection::XIdlArray::set
-    /** sets the value of the indexed component of the specified array object
-        to the specified new value.
-     */
-    void set( [inout] any aArray,
-             [in] long nIndex,
-             [in] any aNewValue )
-            raises( com::sun::star::lang::IllegalArgumentException,
-                    com::sun::star::lang::ArrayIndexOutOfBoundsException );
+        @param aArray
+               sequence instance
+        @param nIndex
+               index
+        @param aNewValue
+               new value to be set
 
+        @throws IllegalArgumentException
+        if the specified object is not a sequence or if the specified object is null
+
+        @throws ArrayIndexOutOfBoundsException
+        if the specified index argument is negative, or if it is greater than or equal to the
+        length of the specified sequence.
+    */
+    void set(
+        [inout] any aArray,
+        [in] long nIndex,
+        [in] any aNewValue )
+        raises( com::sun::star::lang::IllegalArgumentException,
+                com::sun::star::lang::ArrayIndexOutOfBoundsException );
 };
 
 //=============================================================================
@@ -155,6 +165,9 @@ interface XIdlArray: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2001/11/16 15:02:57  mi
+    proofing by Richard Holt
+
     Revision 1.5  2001/03/16 15:10:38  jsc
     remove interfaceheader with uik and remove [const] in method definitions
 

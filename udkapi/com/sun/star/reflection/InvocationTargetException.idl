@@ -2,9 +2,9 @@
  *
  *  $RCSfile: InvocationTargetException.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-16 15:02:57 $
+ *  last change: $Author: dbo $ $Date: 2002-03-08 17:19:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,14 +72,11 @@
 
 //=============================================================================
 
-// DocMerge from xml: exception com::sun::star::reflection::InvocationTargetException
-/** is a checked exception that wraps another exception.
+/** This exception denotes a checked exception (wrapping an originating exception)
+    and may be thrown upon using invocation API.
 
-
-    <p>Typically such exceptions are thrown by an invoked method or constructor.
-
-    </p>@see XIdlMethod
- */
+    @see XIdlMethod
+*/
 exception InvocationTargetException: com::sun::star::lang::WrappedTargetException
 {
 };
@@ -91,6 +88,9 @@ exception InvocationTargetException: com::sun::star::lang::WrappedTargetExceptio
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2001/11/16 15:02:57  mi
+    proofing by Richard Holt
+
     Revision 1.4  2000/11/08 12:28:46  mi
     moved from api
 

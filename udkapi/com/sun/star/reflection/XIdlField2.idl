@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XIdlField2.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-16 15:02:57 $
+ *  last change: $Author: dbo $ $Date: 2002-03-08 17:19:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,111 +88,63 @@
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::reflection::XIdlField2
-/** has the same functionallity as <type scope="com::sun::star::reflection">XIdlField</type>.
-    <p>
-    XIdlField2 correct a specification error of the
-    <method>com::sun::star::reflection::XIdlField::set</method> method.
-    The first parameter the object itself must be specified as an [inout] parameter.
-    </p>
-    <p>
-    This new interface must be implemented in all places where
-    <type scope="com::sun::star::reflection">XIdlField</type> is implemented. For a correct
-    working <method>XIdlField2::set</method> method in all use cases a queryInterface to
-    XIdlField2 is necessary.
-    </p>
- */
+/** Reflects an IDL interface attribute, enum or compound type
+    (i.e. struct/exception) member.
+*/
 interface XIdlField2: com::sun::star::reflection::XIdlMember
 {
-    //-------------------------------------------------------------------------
+    /** Returns the type of the field.
 
-    // DocMerge from idl: method com::sun::star::reflection::XIdlField2::getType
-    /** @returns
-                an <type>XIdlClass</type> object that identifies the declared
-                type for the field represented by this <type>XIdlField</type>.
-     */
+        @return
+                type of the field
+    */
     com::sun::star::reflection::XIdlClass getType();
 
-    //-------------------------------------------------------------------------
+    /** Returns the access mode of the field, i.e. read-write, read-only or
+        write-only (access mode "const" is deprecated).
 
-    // DocMerge from idl: method com::sun::star::reflection::XIdlField2::getAccessMode
-    /** @returns
-                an enumeration value which denotes whether the field is
-                "const", "readonly", "writeonly", or "readwrite".
-     */
+        @return
+                access mode of the field
+    */
     com::sun::star::reflection::FieldAccessMode getAccessMode();
 
-    //-------------------------------------------------------------------------
+    /** Gets the value of the reflected field from the given object,
+        i.e. an interface, enum or compound type (struct/exception).
+        For enums, the given object is ignored; the returned value
+        reflects the constant enum 32-bit value.
 
-    // DocMerge from idl: method com::sun::star::reflection::XIdlField2::get
-    /** @returns
-                the value of the field represented by this field on the specified object.
+        @param obj
+               object instance having member of reflected type
+        @return
+                value of field
 
-                <p>The underlying field's value is obtained as follows:
+        @throws IllegalAccessException
+        An <type scope="com::sun::star::lang>IllegalAccessException</type>
+        is thrown if the given object is no interface, enum or compound type;
+        or the given object does not have the reflected field.
+    */
+    any get(
+        [in] any obj )
+        raises( com::sun::star::lang::IllegalArgumentException );
 
-                <ul>
-                <li>If the underlying field is a constant, the
-                object argument is ignored; it may be NULL.
+    /** Sets the value of the reflected field of the given object,
+        i.e. an interface or compound type (struct/exception).
 
-                <li>Otherwise, the underlying field is an instance
-                field. If the specified object argument is
-                NULL, the method throws an
-                "IllegalArgumentException". If the specified
-                object is not an instance of the class,
-                interface, struct, union, or enum declaring
-                the underlying field, the method throws an
-                "IllegalArgumentException".
+        @param obj
+               object instance having member of reflected type
+        @param value
+               value to be set
 
-                <li>Otherwise, the value is retrieved from the
-                underlying instance or constant.
-                </ul>
-
-                @throws IllegalArgumentException
-                if the specified object is <NULL/> and if the
-                specified object is not an instance of the class or
-                interface declaring the underlying field.
-     */
-    any get( [in] any obj )
-            raises( com::sun::star::lang::IllegalArgumentException );
-
-    //-------------------------------------------------------------------------
-
-    // DocMerge from xml: method com::sun::star::reflection::XIdlField2::set
-    /** sets the field represented by this <type>XIdlField2</type> on the
-        specified object argument to the specified new value.
-
-        <p>The operation proceeds as follows:
-
-        </p>
-        <ul>
-        <li>If the specified object argument is NULL, the method
-        throws an <type scope="com::sun::star::lang">IllegalArgumentException</type>. If
-        the specified object argument is not an instance of
-        the class or interface declaring the underlying field,
-        then the method throws an
-        <type scope="com::sun::star::lang">IllegalArgumentException</type>.
-
-        </li>
-        <li>If the underlying field is constant, the method throws an
-        <type scope="com::sun::star::lang">IllegalAccessException</type>.
-
-        <p>If the new value cannot be converted to the type
-        of underlying field by an identity or widening
-        conversion, the method throws an
-        <type scope="com::sun::star::lang">IllegalArgumentException</type>.
-        </p>
-        </li>
-        </ul>
-
-        <p>The field is set to the possibly widened new value.
-
-        </p>
-     */
-    void set( [inout] any obj,
-             [in] any value )
-            raises( com::sun::star::lang::IllegalArgumentException,
-                    com::sun::star::lang::IllegalAccessException );
-
+        @throws IllegalAccessException
+        An <type scope="com::sun::star::lang>IllegalAccessException</type>
+        is thrown if the given object is no interface or compound type;
+        or the given object does not have the reflected field.
+    */
+    void set(
+        [inout] any obj,
+        [in] any value )
+        raises( com::sun::star::lang::IllegalArgumentException,
+                com::sun::star::lang::IllegalAccessException );
 };
 
 //=============================================================================
@@ -202,6 +154,9 @@ interface XIdlField2: com::sun::star::reflection::XIdlMember
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.2  2001/11/16 15:02:57  mi
+    proofing by Richard Holt
+
     Revision 1.1  2001/05/03 13:58:08  jsc
     new
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TypeDescriptionManager.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-16 15:02:57 $
+ *  last change: $Author: dbo $ $Date: 2002-03-08 17:19:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,10 @@
 #include <com/sun/star/lang/XInitialization.idl>
 #endif
 
+#ifndef __com_sun_star_lang_XComponent_idl__
+#include <com/sun/star/lang/XComponent.idl>
+#endif
+
 
 //=============================================================================
 
@@ -80,18 +84,38 @@
 
 //=============================================================================
 
-/** This service is the central manager supporting the
-    <type scope="com::sun::star::container">XHierarchicalNameAccessy</type>
-    interface.
-    At runtime there will only be at most a single instance of the service.
-    A manager instance is hooked into the C UNO runtime typelib and lives
-    until the service manager is shut down.<br>
-    You can manually add a provider by inserting it via the XSet interface.
+/** This service manages type descriptions and acts as a central access point
+    to every type description.  It delegates calls for demanded types to
+    subsequent
+    <type scope="com::sun::star::reflection>TypeDescriptionProvider</type>s
+    and may cache read type descriptions.<br>
+    At runtime there will be a singleton accessable via the initial
+    component context's key
+    "/singletons/com.sun.star.reflection.theTypeDescriptionManager".
+    This object is hooked into the C UNO runtime typelib and lives
+    until the component context is shut down.<br>
+    At startup the object enumerates every
+    <type scope="com::sun::star::reflection>TypeDescriptionProvider</type>
+    and creates instances of every available one.
+    You can later on manually add or remove a provider via the
+    <type scope="com::sun::star::container>XSet</type> interface.
+
+    @see com::sun::star::reflection::XTypeDescription
 */
 service TypeDescriptionManager
 {
+    /** Interface to retrieve type descriptions.
+    */
     interface com::sun::star::container::XHierarchicalNameAccess;
+    /** Interface to modify the set of
+        <type scope="com::sun::star::container>TypeDescriptionProvider</type>s.
+    */
     interface com::sun::star::container::XSet;
+    /** Interface to signal shutdown to the manager.<br>
+        This signals all providers to shut down, because usually each provider
+        references its manager.
+    */
+    [optional] interface com::sun::star::lang::XComponent;
 };
 
 //=============================================================================
@@ -101,6 +125,9 @@ service TypeDescriptionManager
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2001/11/16 15:02:57  mi
+    proofing by Richard Holt
+
     Revision 1.5  2000/12/04 13:40:22  dbo
     XInit removed, because providers are initialized at first use from ServiceManager; modifications can be done using XSet.
 

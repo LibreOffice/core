@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XUnionTypeDescription.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:38 $
+ *  last change: $Author: dbo $ $Date: 2002-03-08 17:19:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,45 +72,55 @@
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::reflection::XUnionTypeDescription
-/** The type description of a union.
- */
+/** Deprecated.  Unions are not supported.
+    Reflects a union type.
+    The discriminant of a union switches between the current value types.
+    In addition, there is also a default case, having no discriminant.
+
+    @deprecated
+*/
 interface XUnionTypeDescription: com::sun::star::reflection::XTypeDescription
 {
+    /** Returns the (ordinal) discriminant type.
 
-    // DocMerge from idl: method com::sun::star::reflection::XUnionTypeDescription::getDiscriminantType
-    /** * @return The type of the discriminant (ordinal type).
-     */
+        @return
+                type of the discriminant
+    */
     com::sun::star::reflection::XTypeDescription getDiscriminantType();
 
+    /** Returns the default discriminant value.
 
-    // DocMerge from idl: method com::sun::star::reflection::XUnionTypeDescription::getDefaultDiscriminant
-    /** * @return Union default descriminant (ordinal).
-     */
+        @return
+                default discriminant value
+    */
     any getDefaultDiscriminant();
 
+    /** Returns the type of the default value.
 
-    // DocMerge from idl: method com::sun::star::reflection::XUnionTypeDescription::getDefaultMemberType
-    /** * @return Union default member type (might be 0).
-     */
+        @return
+                type of the default value
+    */
     com::sun::star::reflection::XTypeDescription getDefaultMemberType();
 
+    /** Returns discriminants of all members in order of IDL declaration.
 
-    // DocMerge from idl: method com::sun::star::reflection::XUnionTypeDescription::getDiscriminants
-    /** * @return Union member discriminant values (same order as idl declaration).
-     */
+        @return
+                discriminants of all members
+    */
     sequence< any > getDiscriminants();
 
+    /** Returns types of all members in order of IDL declaration.
 
-    // DocMerge from idl: method com::sun::star::reflection::XUnionTypeDescription::getMemberTypes
-    /** * @return Union value member types (same order as idl declaration).
-     */
+        @return
+                types of all members
+    */
     sequence< com::sun::star::reflection::XTypeDescription > getMemberTypes();
 
+    /** Returns names of all members in order of IDL declaration.
 
-    // DocMerge from idl: method com::sun::star::reflection::XUnionTypeDescription::getMemberNames
-    /** * @return Union value member names (same order as idl declaration).
-     */
+        @return
+                names of all members
+    */
     sequence< string > getMemberNames();
 };
 
@@ -121,6 +131,9 @@ interface XUnionTypeDescription: com::sun::star::reflection::XTypeDescription
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2001/03/16 15:10:38  jsc
+    remove interfaceheader with uik and remove [const] in method definitions
+
     Revision 1.4  2000/11/08 12:28:46  mi
     moved from api
 

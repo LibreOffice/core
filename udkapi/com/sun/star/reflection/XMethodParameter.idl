@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMethodParameter.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-16 15:02:57 $
+ *  last change: $Author: dbo $ $Date: 2002-03-08 17:19:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,49 +76,46 @@
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::reflection::XMethodParameter
-/** The description of an interface method parameter.<br>
-    One of the methods isIn() or isOut() must return true.
- */
+/** Reflects a method parameter.
+
+    @see XInterfaceMethodTypeDescription
+*/
 interface XMethodParameter: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
+    /** Returns the name of the parameter
 
-    // DocMerge from idl: method com::sun::star::reflection::XMethodParameter::getName
-    /** @return the name of the parameter.
-     */
+        @return
+                name of parameter
+    */
     string getName();
 
-    //-------------------------------------------------------------------------
+    /** Returns the type of the parameter.
 
-    // DocMerge from idl: method com::sun::star::reflection::XMethodParameter::getType
-    /** @return the type of the parameter.
-     */
+        @return
+                type of parameter
+    */
     com::sun::star::reflection::XTypeDescription getType();
 
-    //-------------------------------------------------------------------------
+    /** Returns true, if the parameter is declared as [in] or [inout] in IDL.
 
-    // DocMerge from idl: method com::sun::star::reflection::XMethodParameter::isIn
-    /** @return true, if the call type of this parameter IN or INOUT if in
-               parameter, false, if the call type is OUT.
-     */
+        @return
+                true, if declared [in] or [inout] parameter
+    */
     boolean isIn();
 
-    //-------------------------------------------------------------------------
+    /** Returns true, if the parameter is declared as [out] or [inout] in IDL.
 
-    // DocMerge from idl: method com::sun::star::reflection::XMethodParameter::isOut
-    /** @return true, if the call type of this parameter OUT or INOUT,
-               false, if the call type is IN.
-     */
+        @return
+                true, if declared [out] or [inout] parameter
+    */
     boolean isOut();
 
-    //-------------------------------------------------------------------------
+    /** Returns the position of the parameter regarding the IDL method declaration.
 
-    // DocMerge from idl: method com::sun::star::reflection::XMethodParameter::getPosition
-    /** @return the position of this parameter in the method definition.
-     */
+        @return
+                position of the parameter
+    */
     long getPosition();
-
 };
 
 //=============================================================================
@@ -128,6 +125,9 @@ interface XMethodParameter: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2001/11/16 15:02:57  mi
+    proofing by Richard Holt
+
     Revision 1.5  2001/03/16 15:10:38  jsc
     remove interfaceheader with uik and remove [const] in method definitions
 

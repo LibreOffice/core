@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ProxyFactory.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-16 15:02:57 $
+ *  last change: $Author: dbo $ $Date: 2002-03-08 17:19:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,15 +72,21 @@
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::reflection::ProxyFactory
-/** Specifies a factory object to create proxy objects.<br>
-    These proxy object represent a given target object and can be
-    be aggregated. The proxy objects are UNO conforming and do NOT provide
-    original target interfaces on queryInterface() calls.
- */
+/** Service to create proxy objects acting on behalf of a given
+    target object.<br>
+    A proxy delegates calls to a given target object.
+    In addition, it is aggregatable, thus it is possible to
+    intercept calls on the proxy's interfaces.
+
+    @attention
+    A proxy object is UNO conform, but does NOT provide original target
+    interfaces on queryInterface() calls.  This may lead to problems
+    regarding object identity, e.g. when dealing with listener proxies.
+*/
 service ProxyFactory
 {
-    // DocMerge: empty anyway
+    /** Factory interface to produce proxies
+    */
     interface com::sun::star::reflection::XProxyFactory;
 };
 
@@ -91,6 +97,9 @@ service ProxyFactory
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.2  2001/11/16 15:02:57  mi
+    proofing by Richard Holt
+
     Revision 1.1  2000/11/14 08:29:06  jsc
     moved from com.sun.star.util
 

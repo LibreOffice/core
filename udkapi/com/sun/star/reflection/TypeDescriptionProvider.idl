@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TypeDescriptionProvider.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-16 15:02:57 $
+ *  last change: $Author: dbo $ $Date: 2002-03-08 17:19:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,19 +76,26 @@
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::reflection::TypeDescriptionProvider
-/** A provider service supports the XHierarchicalNameAccess interface to read type descriptions
-    and constants from a specific source, e.g., a typelib registry file.
-    <br>
- */
+/** This service provides type descriptions, i.e. concrete
+    service implementations read from source like the persistent registry
+    database format.<br>
+    All registered implementations of this service will be inserted to the
+    initial component context's singleton object
+    "/singletons/com.sun.star.reflection.theTypeDescriptionManager".<br>
+
+    @see com::sun::star::reflection::TypeDescriptionManager
+*/
 service TypeDescriptionProvider
 {
-    // DocMerge: empty anyway
+    /** Interface to retrieve type descriptions.
+    */
     interface com::sun::star::container::XHierarchicalNameAccess;
-
-    // DocMerge: empty anyway
+    /** Interface to signal shutdown to the provider.<br>
+        This has to be done maunally, because usually each provider references
+        its manager (which implements type caching) for late resolution of
+        partial types (e.g. parameter types).
+    */
     interface com::sun::star::lang::XComponent;
-
 };
 
 //=============================================================================
@@ -98,6 +105,9 @@ service TypeDescriptionProvider
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2001/11/16 15:02:57  mi
+    proofing by Richard Holt
+
     Revision 1.4  2000/11/08 12:28:46  mi
     moved from api
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XIdlMethod.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-16 15:02:57 $
+ *  last change: $Author: dbo $ $Date: 2002-03-08 17:19:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,117 +90,79 @@ interface XIdlClass;
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::reflection::XIdlMethod
-/** makes it possible to access the specification of a method dynamically.
- */
+/** Reflects an IDL interface method.
+*/
 interface XIdlMethod: com::sun::star::reflection::XIdlMember
 {
-    //-------------------------------------------------------------------------
+    /** Returns the return type of the reflected method.
 
-    // DocMerge from idl: method com::sun::star::reflection::XIdlMethod::getReturnType
-    /** @returns
-                an <type>XIdlClass</type> object that represents the formal
-                return type of the method represented by this method object.
-     */
+        @return
+                return type of reflected method
+    */
     XIdlClass getReturnType();
 
-    //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR XIdlMethod::getParameterTypes
+    /** Returns the formal parameter types of the reflected method in order of IDL
+        declaration.
 
-    // DocMerge from idl: method com::sun::star::reflection::XIdlMethod::getParameterTypes
-    /** Returns a sequence of XIdlClass objects that represent the formal
-         parameter types, in declaration order, of the method
-         represented by this Method object.  Returns a sequence of length
-         0 if the underlying method takes no parameters.
-     */
+        @return
+                formal parameter types of reflected method
+    */
     sequence<XIdlClass> getParameterTypes();
 
-    //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR XIdlMethod::getParameterInfos
+    /** Returns formal parameter informations of the reflected method
+        in order of IDL declaration.
+        Parameter information reflects the parameter's access mode (in, out, inout),
+        the parameter's name and formal type.
 
-    // DocMerge from idl: method com::sun::star::reflection::XIdlMethod::getParameterInfos
-    /** Returns a sequence of ParamInfo objects that represent all informations
-         about the formal parameter types, in declaration order, of the method
-         represented by this Method object.  Returns a sequence of length
-         0 if the underlying method takes no parameters.
-     */
+        @return
+                parameter informations of reflected method
+    */
     sequence<ParamInfo> getParameterInfos();
 
-    //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR XIdlMethod::getExceptionTypes
+    /** Returns the declared exceptions types of the reflected method.
 
-    // DocMerge from idl: method com::sun::star::reflection::XIdlMethod::getExceptionTypes
-    /** Returns a sequence of XIdlClass objects that represent the types of
-         the checked exceptions thrown by the underlying method
-         represented by this Method object.  Returns a sequence of length
-         0 if the method throws no checked exceptions.
-     */
+        @return
+                declared exception types of reflected method
+    */
     sequence<com::sun::star::reflection::XIdlClass> getExceptionTypes();
 
-    //-------------------------------------------------------------------------
+    /** Returns the method mode in which calls are run, i.e. either oneway or
+        twoway.  Method mode oneway denotes that a call may be run asynchronously
+        (thus having no out parameters or return value)
 
-    // DocMerge from idl: method com::sun::star::reflection::XIdlMethod::getMode
-    /** @returns
-                an enumeration value which denotes whether the method is one-way or two-way.
-     */
+        @return
+                method mode of reflected method
+    */
     com::sun::star::reflection::MethodMode getMode();
 
-    //-------------------------------------------------------------------------
+    /** Invokes the reflected method on a given object with the given parameters.
+        The parameters may be widening converted to fit their exact IDL type,
+        meaning no loss of information.
 
-    // DocMerge from xml: method com::sun::star::reflection::XIdlMethod::invoke
-    /** Invokes the underlying method represented by this method object on
-        the specified object with the specified parameters. Individual
-        parameters are subject to widening conversions as necessary.
+        @param obj
+               object to call on
+        @param args
+               arguments passed to the method
+        @return
+                return value of the method call (may be empty for methods returning void)
 
-        <p>Method invocation proceeds in the following order of steps:
-
-        </p>
-        <p>If the specified object argument is NULL, the invocation
-        throws an <type scope="com::sun::star::lang">IllegalArgumentException</type>. Otherwise,
-        if the specified object argument is not an instance of the
-        class or interface declaring the underlying method, the
-        invocation throws an <type scope="com::sun::star::lang">IllegalArgumentException</type>.
-
-        </p>
-        <p>If the number of actual parameters supplied via <var>args</var> is
-        different from the number of formal parameters required by
-        the underlying method, the invocation throws an
-        <type scope="com::sun::star::lang">IllegalArgumentException</type>.
-
-        </p>
-        <p>For each actual parameter in the supplied <var>args</var> array:
-
-        <dl>
-        <dd>If the parameter value cannot be converted to the
-        corresponding formal parameter type by an
-        identity or widening conversion, the
-        invocation throws an <type scope="com::sun::star::lang">IllegalArgumentException</type>.
-        </dd>
-        </dl>
-
-        </p>
-        <p>When the control transfers to the underlying method and
-        the method stops abruptly by throwing an exception, the exception
-        is placed in an <type>InvocationTargetException</type> and thrown
-        in turn to the caller of
-<!-- jrh: Is something missing here? -->
-        .
-
-        </p>
-        <p>If the method completes normally, the value it returns
-        is returned to the caller of
-<!-- jrh: Is something missing here? -->
-        .
-        If the underlying method return type is void, the invocation
-        returns <void/>.
-
-        </p>
-     */
-    any invoke( [in] any obj,
-             [inout] sequence<any> args )
-            raises( com::sun::star::lang::IllegalArgumentException,
-                    com::sun::star::reflection::InvocationTargetException );
-
+        @throws IllegalArgumentException
+        if the given object is a nuull reference or does not support the reflected
+        method's interface
+        @throws IllegalArgumentException
+        if the given number of arguments differ from the expected number
+        or the given arguments' types differ from the expected ones (even a
+        widening conversion was not possible)
+        @throws InvocationTargetException
+        if the reflected method that has been invoked has thrown an exception.
+        The original exception will be wrapped up and signalled by the
+        InvocationTargetException
+    */
+    any invoke(
+        [in] any obj,
+        [inout] sequence<any> args )
+        raises( com::sun::star::lang::IllegalArgumentException,
+                com::sun::star::reflection::InvocationTargetException );
 };
 
 //=============================================================================
@@ -210,6 +172,9 @@ interface XIdlMethod: com::sun::star::reflection::XIdlMember
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.7  2001/11/16 15:02:57  mi
+    proofing by Richard Holt
+
     Revision 1.6  2001/03/16 15:10:38  jsc
     remove interfaceheader with uik and remove [const] in method definitions
 

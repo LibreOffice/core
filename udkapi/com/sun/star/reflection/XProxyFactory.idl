@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XProxyFactory.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-16 15:02:57 $
+ *  last change: $Author: dbo $ $Date: 2002-03-08 17:19:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,24 +74,28 @@
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::reflection::XProxyFactory
-/** You can create proxy interfaces via this interface.
- */
+/** Factory interface to produce proxy objects.
+*/
 interface XProxyFactory: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
+    /** This method creates a new proxy object that acts on behalf of the given
+        target object.<br>
+        The proxy delegates calls to the given target object.
+        In addition, it is aggregatable, thus it is possible to
+        intercept calls on the proxy's interfaces.
 
-    // DocMerge from xml: method com::sun::star::reflection::XProxyFactory::createProxy
-    /** Creates a new object that represents the given target object and can
-        be aggregated. The proxy object acts UNO conforming and does NOT provide
-        original target interfaces on queryInterface() calls.<br>
-        Be careful, e.g., when registering as a listener at the proxy,
-        you will get event notification from the original object, meaning
-        a different object!
-     */
+        @attention
+        The proxy object is UNO conform, but does NOT provide original target
+        interfaces on queryInterface() calls.  This may lead to problems
+        regarding object identity, e.g. when dealing with listener proxies.
+
+        @param xTarget
+               target object
+        @return
+                proxy object
+    */
     com::sun::star::uno::XAggregation createProxy(
         [in] com::sun::star::uno::XInterface xTarget );
-
 };
 
 //=============================================================================
@@ -101,6 +105,9 @@ interface XProxyFactory: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2001/11/16 15:02:57  mi
+    proofing by Richard Holt
+
     Revision 1.2  2001/03/16 15:10:38  jsc
     remove interfaceheader with uik and remove [const] in method definitions
 

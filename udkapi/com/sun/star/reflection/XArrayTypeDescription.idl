@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XArrayTypeDescription.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-30 13:51:23 $
+ *  last change: $Author: dbo $ $Date: 2002-03-08 17:19:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,29 +72,34 @@
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::reflection::XArrayTypeDescription
-/** The type description of an array.
+/** Deprecated.  Arrays are not supported.
+    Reflects a fixed-size array type.
     The type class of this description is TypeClass_ARRAY.
- */
+
+    @deprecated
+*/
 interface XArrayTypeDescription: com::sun::star::reflection::XTypeDescription
 {
-    //-------------------------------------------------------------------------
+    /** Returns the element type of the array.
 
-    // DocMerge from idl: method com::sun::star::reflection::XServiceTypeDescription::getReferencedType
-    /** @return the typedefed type, if the type is a typedef,
-               or the base type, if the type is a array or sequence.
-     */
+        @return
+                element type of the array
+    */
     com::sun::star::reflection::XTypeDescription getType();
 
-    // DocMerge from idl: method com::sun::star::reflection::XServiceTypeDescription::getNumberOfDimensions
-    /** @return the number of dimensions.
-     */
-    long                getNumberOfDimensions();
+    /** Returns the number of dimensions of the array.
 
-    // DocMerge from idl: method com::sun::star::reflection::XServiceTypeDescription::getDimensions
-    /** @return a sequence with the array dimensions.
-     */
-    sequence< long >    getDimensions();
+        @return
+                dimension of the array
+    */
+    long getNumberOfDimensions();
+
+    /** Returns dimensions of array (same length as getNumberOfDimensions()).
+
+        @return
+                dimensions of array
+    */
+    sequence< long > getDimensions();
 };
 
 //=============================================================================
@@ -104,6 +109,9 @@ interface XArrayTypeDescription: com::sun::star::reflection::XTypeDescription
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.1  2001/03/30 13:51:23  jsc
+    new
+
 
 =============================================================================*/
 #endif

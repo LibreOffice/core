@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CoreReflection.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dbo $ $Date: 2002-01-23 08:52:21 $
+ *  last change: $Author: dbo $ $Date: 2002-03-08 17:19:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,8 +72,9 @@
 
 //=============================================================================
 
-/** This service is the implementation of the API reflection.
-    You can obtain information about types and call on objects.
+/** This service is the implementation of the reflection API.
+    You can obtain information about types, modify values of reflected types
+    and call on objects.
 */
 service CoreReflection
 {
@@ -89,6 +90,9 @@ service CoreReflection
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2002/01/23 08:52:21  dbo
+    #96711# IDL documentation review
+
     Revision 1.5  2000/11/23 11:27:48  dbo
     #80612# XIdlClassProvider deprecated, XIdlReflection to be supported
 

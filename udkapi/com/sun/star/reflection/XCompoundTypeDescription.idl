@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XCompoundTypeDescription.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:38 $
+ *  last change: $Author: dbo $ $Date: 2002-03-08 17:19:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,30 +72,30 @@
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::reflection::XCompoundTypeDescription
-/** the type description of a struct or exception.
- */
+/** Reflects a compound type, i.e. a struct or exception.
+*/
 interface XCompoundTypeDescription: com::sun::star::reflection::XTypeDescription
 {
-    //-------------------------------------------------------------------------
+    /** Returns the type of the base type of the compound type.
+        If the compound does not have a base type, the method returns a null interface.
 
-    // DocMerge from xml: method com::sun::star::reflection::XCompoundTypeDescription::getBaseType
-    /** returns the type of the base type from the compound. If the compound does not have a base type, the method returns a NULL.
-     */
+        @return
+                base interface or null
+    */
     com::sun::star::reflection::XTypeDescription getBaseType();
 
-    //-------------------------------------------------------------------------
+    /** Returns the member types of the struct/exception in IDL declaration order.
 
-    // DocMerge from idl: method com::sun::star::reflection::XCompoundTypeDescription::getMemberTypes
-    /** @return the members of the struct or exception.
-     */
+        @return
+                members of struct/exception
+    */
     sequence<com::sun::star::reflection::XTypeDescription> getMemberTypes();
 
-    //-------------------------------------------------------------------------
+    /** Returns the member names of the struct/exception in IDL declaration order.
 
-    // DocMerge from idl: method com::sun::star::reflection::XCompoundTypeDescription::getMemberNames
-    /** @return the member names of the struct or exception.
-     */
+        @return
+                members names of struct/exception
+    */
     sequence<string> getMemberNames();
 };
 
@@ -106,6 +106,9 @@ interface XCompoundTypeDescription: com::sun::star::reflection::XTypeDescription
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2001/03/16 15:10:38  jsc
+    remove interfaceheader with uik and remove [const] in method definitions
+
     Revision 1.4  2000/11/08 12:28:46  mi
     moved from api
 

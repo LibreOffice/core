@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XInterfaceMemberTypeDescription.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:38 $
+ *  last change: $Author: dbo $ $Date: 2002-03-08 17:19:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,28 +72,27 @@
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::reflection::XInterfaceMemberTypeDescription
-/** The type description of a member (method or attribute) of an interface.
-    The type class of this description is TypeClass_INTERFACE_METHOD or
-    TypeClass_INTERFACE_ATTRIBUTE.
- */
+/** Base interface for reflected interface members.
+
+    @see XInterfaceAttributeTypeDescription
+    @see XInterfaceMethodTypeDescription
+*/
 interface XInterfaceMemberTypeDescription: com::sun::star::reflection::XTypeDescription
 {
-    //-------------------------------------------------------------------------
+    /** Returns name of member
 
-    // DocMerge from idl: method com::sun::star::reflection::XInterfaceMemberTypeDescription::getMemberName
-    /** @return the name of the member
-     */
+        @return
+                member name
+    */
     string getMemberName();
 
-    //-------------------------------------------------------------------------
+    /** Returns the position the member including all inherited members of base
+        interfaces.
 
-    // DocMerge from idl: method com::sun::star::reflection::XInterfaceMemberTypeDescription::getPosition
-    /** @return the position of this method in the interface definition
-               plus the count of members in the base interface.
-     */
+        @return
+                position of member
+    */
     long getPosition();
-
 };
 
 //=============================================================================
@@ -103,6 +102,9 @@ interface XInterfaceMemberTypeDescription: com::sun::star::reflection::XTypeDesc
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2001/03/16 15:10:38  jsc
+    remove interfaceheader with uik and remove [const] in method definitions
+
     Revision 1.4  2000/11/08 12:28:46  mi
     moved from api
 

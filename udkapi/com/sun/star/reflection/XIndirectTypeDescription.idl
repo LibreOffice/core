@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XIndirectTypeDescription.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-16 15:02:57 $
+ *  last change: $Author: dbo $ $Date: 2002-03-08 17:19:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,21 +72,19 @@
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::reflection::XIndirectTypeDescription
-/** The type description of a typedef, array, or sequence.
+/** Reflects a typedef or sequence type.
     The type class of this description is TypeClass_TYPEDEF or
-    TypeClass_SEQUENCE or TypeClass_ARRAY.
- */
+    TypeClass_SEQUENCE.
+*/
 interface XIndirectTypeDescription: com::sun::star::reflection::XTypeDescription
 {
-    //-------------------------------------------------------------------------
+    /** Returns the typedefed type, if the type is a typedef,
+        or the element type, if the type is a sequence.
 
-    // DocMerge from idl: method com::sun::star::reflection::XIndirectTypeDescription::getReferencedType
-    /** @return the typedefed type, if the type is a typedef,
-               or the base type, if the type is a array or sequence.
-     */
+        @return
+                referenced type
+    */
     com::sun::star::reflection::XTypeDescription getReferencedType();
-
 };
 
 //=============================================================================
@@ -96,6 +94,9 @@ interface XIndirectTypeDescription: com::sun::star::reflection::XTypeDescription
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2001/11/16 15:02:57  mi
+    proofing by Richard Holt
+
     Revision 1.5  2001/03/16 15:10:38  jsc
     remove interfaceheader with uik and remove [const] in method definitions
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ParamInfo.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-16 15:02:57 $
+ *  last change: $Author: dbo $ $Date: 2002-03-08 17:19:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,32 +73,21 @@ interface XIdlClass;
 
 //=============================================================================
 
-// DocMerge from xml: struct com::sun::star::reflection::ParamInfo
-/** describes a formal parameter of a method.
- */
+/** Provides information about a formal parameter of a method.
+*/
 struct ParamInfo
 {
-    // DocMerge from xml: field com::sun::star::reflection::ParamInfo::aName
-    /** The name of the parameter.
-     */
+    /** name of the parameter
+    */
     string aName;
 
-    //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR ParamInfo::aMode
-
-    // DocMerge from xml: field com::sun::star::reflection::ParamInfo::aMode
-    /** One of the values IN, OUT, INOUT from the ParamMode enumeration.
-     */
+    /** parameter mode: in, out, inout
+    */
     ParamMode aMode;
 
-    //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR ParamInfo::aType
-
-    // DocMerge from xml: field com::sun::star::reflection::ParamInfo::aType
-    /** The type of the parameter.
-     */
+    /** formal type of the parameter
+    */
     XIdlClass aType;
-
 };
 
 //=============================================================================
@@ -108,6 +97,9 @@ struct ParamInfo
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2001/11/16 15:02:57  mi
+    proofing by Richard Holt
+
     Revision 1.4  2000/11/08 12:28:46  mi
     moved from api
 

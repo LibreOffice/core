@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XIdlMember.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-16 15:02:57 $
+ *  last change: $Author: dbo $ $Date: 2002-03-08 17:19:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,33 +72,23 @@
 
 interface XIdlClass;
 
-//=============================================================================
-
-// DocMerge from xml: interface com::sun::star::reflection::XIdlMember
-/** makes it possible to access members of classes dynamically.
- */
+/** Base interface for <type>XidlField2</type>s and <type>XIdlMethod</type>s.
+*/
 interface XIdlMember: com::sun::star::uno::XInterface
 {
-    //-------------------------------------------------------------------------
+    /** Returns the declaring type of this field, i.e. the type having
+        the member declared (interface, enum, struct, exception).
 
-    // DocMerge from idl: method com::sun::star::reflection::XIdlMember::getDeclaringClass
-    /** @returns
-                the <type>XIdlClass</type> object representing the class,
-                interface, struct, union, or enum that declares the member
-                represented by this member.
-     */
+        @returns
+                declaring type
+    */
     XIdlClass getDeclaringClass();
 
-    //-------------------------------------------------------------------------
-    // DOCUMENTATION CHANGED FOR XIdlMember::getName
+    /** Returns the fully-qualified name of the member.
 
-    // DocMerge from xml: method com::sun::star::reflection::XIdlMember::getName
-    /** Returns the fully-qualified name of the type (class, interface,
-        array, sequence, struct, union, enum, or primitive) represented by this
-        XIdlClass object, as a String.
-     */
+        @return fully-qualified name of the member
+    */
     string getName();
-
 };
 
 //=============================================================================
@@ -108,6 +98,9 @@ interface XIdlMember: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2001/11/16 15:02:57  mi
+    proofing by Richard Holt
+
     Revision 1.5  2001/03/16 15:10:38  jsc
     remove interfaceheader with uik and remove [const] in method definitions
 
