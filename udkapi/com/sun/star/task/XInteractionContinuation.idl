@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XInteractionContinuation.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jl $ $Date: 2002-07-18 13:24:55 $
+ *  last change: $Author: sb $ $Date: 2002-11-07 12:22:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,15 +71,21 @@
  module com {  module sun {  module star {  module task {
 
 //=============================================================================
+/** Specifies a way of how to continue from an
+    <type scope="com::sun::star::task">XInteractionRequest</type>.
 
-// DocMerge: empty anyway
+    <P>Different sub-interfaces of this interface specify different ways of
+    continuing.</P>
+ */
 interface XInteractionContinuation: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::task::XInteractionContinuation::select
-    /** Select this way of continuing from an interaction request (given a
-        choice of various XInteractionContinuation interfaces).
+    /** Select this way of continuing from an
+        <type scope="com::sun::star::task">XInteractionRequest</type> (given a
+        choice of various
+        <type scope="com::sun::star::task">XInteractionContinuation</type>s).
      */
     void select();
 
@@ -92,6 +98,9 @@ interface XInteractionContinuation: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.1  2002/07/18 13:24:55  jl
+    #101225#These interfaces were originally located in offapi in the same namespace
+
     Revision 1.4  2001/03/16 16:41:45  jsc
     remove interfaceheader with uik and remove [const] in method definitions
 
