@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoftn.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: os $ $Date: 2002-03-01 08:27:10 $
+ *  last change: $Author: os $ $Date: 2002-03-20 08:46:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -569,15 +569,28 @@ Any SwXFootnote::getPropertyValue( const OUString& rPropertyName )
     Any aRet;
     if(!SwXParagraph::getDefaultTextContentValue(aRet, rPropertyName))
     {
-        if(!rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_REFERENCE_ID)))
-            throw UnknownPropertyException();
-
-        const SwFmtFtn*  pFmt = FindFmt();
-        if(pFmt)
+        if(rPropertyName.equalsAsciiL(SW_PROP_NAME(UNO_NAME_START_REDLINE))||
+                rPropertyName.equalsAsciiL(SW_PROP_NAME(UNO_NAME_END_REDLINE)))
         {
-            const SwTxtFtn* pTxtFtn = pFmt->GetTxtFtn();
-            DBG_ASSERT(pTxtFtn, "no TextNode?")
-            aRet <<= (sal_Int16)pTxtFtn->GetSeqRefNo();
+            //redline can only be returned if it's a living object
+            if(!m_bIsDescriptor)
+                aRet = SwXText::getPropertyValue(rPropertyName);
+        }
+        else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_REFERENCE_ID)))
+        {
+            const SwFmtFtn*  pFmt = FindFmt();
+            if(pFmt)
+            {
+                const SwTxtFtn* pTxtFtn = pFmt->GetTxtFtn();
+                DBG_ASSERT(pTxtFtn, "no TextNode?")
+                aRet <<= (sal_Int16)pTxtFtn->GetSeqRefNo();
+            }
+        }
+        else
+        {
+            UnknownPropertyException aExcept;
+            aExcept.Message = rPropertyName;
+            throw aExcept;
         }
     }
     return aRet;

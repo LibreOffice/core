@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: jp $ $Date: 2002-02-01 12:42:16 $
+ *  last change: $Author: os $ $Date: 2002-03-20 08:46:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1109,6 +1109,12 @@ uno::Any SwXCell::getPropertyValue(const OUString& rPropertyName)
         else if(rPropertyName.equalsAsciiL(SW_PROP_NAME(UNO_NAME_CELL_NAME)))
         {
             aRet <<= OUString ( pBox->GetName() );
+        }
+        else if(rPropertyName.equalsAsciiL(SW_PROP_NAME(UNO_NAME_START_REDLINE))||
+                rPropertyName.equalsAsciiL(SW_PROP_NAME(UNO_NAME_END_REDLINE)))
+        {
+            //redline can only be returned if it's a living object
+            aRet = SwXText::getPropertyValue(rPropertyName);
         }
         else
         {
