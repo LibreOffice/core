@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforlist.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: er $ $Date: 2002-10-29 18:20:53 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:53:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3510,7 +3510,7 @@ void SvNumberFormatter::ImpInitCurrencyTable()
     {
         LanguageType eLang = ConvertIsoNamesToLanguage(
             pLocales[nLocale].Language, pLocales[nLocale].Country );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         LanguageType eReal = International::GetRealLanguage( eLang );
         LanguageType eNeut = International::GetNeutralLanguage( eLang );
         if ( eReal != eLang )
