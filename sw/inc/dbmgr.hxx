@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 18:09:45 $
+ *  last change: $Author: vg $ $Date: 2003-05-26 08:13:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,6 +199,9 @@ class SwConnectionDisposedListener_Impl;
 class SwNewDBMgr
 {
 friend class SwConnectionDisposedListener_Impl;
+
+    static SwDbtoolsClient* pDbtoolsClient;
+
     String              sEMailAddrFld;  // Mailing: Spaltenname der E-Mail Adresse
     String              sSubject;       // Mailing: Subject
     String              sAttached;      // Mailing: Attachte Files
@@ -363,6 +366,8 @@ public:
     static ::com::sun::star::uno::Sequence<rtl::OUString> GetExistingDatabaseNames();
 
     static SwDbtoolsClient&    GetDbtoolsClient();
+    // has to be called from _FinitUI()
+    static void                RemoveDbtoolsClient();
 
     /** try to get the data source from the given connection through the XChild interface.
         If this is not possible, the data source will be created through its name.
