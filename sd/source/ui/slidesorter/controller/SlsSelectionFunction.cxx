@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsSelectionFunction.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 14:53:30 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:06:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,7 +172,6 @@ SelectionFunction::SelectionFunction (
       mrController (rController),
       mbPageHit(false),
       mbRectangleSelection(false),
-      mpRangeSelectionAnchor(NULL),
       mbDragSelection(false),
       maInsertionMarkerBox(),
       mpSound(new Sound),
@@ -848,7 +847,6 @@ void SelectionFunction::ProcessMouseEvent (sal_uInt32 nEventType, const MouseEve
         // Range selection with the shift modifier.
         case BUTTON_DOWN | LEFT_BUTTON | SINGLE_CLICK | OVER_SELECTED_PAGE | SHIFT_MODIFIER:
         case BUTTON_DOWN | LEFT_BUTTON | SINGLE_CLICK | OVER_UNSELECTED_PAGE | SHIFT_MODIFIER:
-            DeselectAllPages();
             RangeSelect(*pHitDescriptor);
             break;
 
@@ -932,7 +930,6 @@ void SelectionFunction::ProcessMouseEvent (sal_uInt32 nEventType, const MouseEve
 void SelectionFunction::SelectHitPage (model::PageDescriptor& rDescriptor)
 {
     mrController.GetPageSelector().SelectPage(rDescriptor);
-    mpRangeSelectionAnchor = &rDescriptor;
 }
 
 
@@ -1002,14 +999,6 @@ void SelectionFunction::ProcessRectangleSelection (bool bToggleSelection)
                 view::SlideSorterView::BBT_SHAPE));
             if (rSelectionRectangle.IsInside (aPageBox))
             {
-                // The first page in the selection rectangle becomes the new
-                // selection anchor.
-                if (bFirstPage)
-                {
-                    mpRangeSelectionAnchor = &rDescriptor;
-                    bFirstPage = false;
-                }
-
                 // When we are extending the selection (shift key is
                 // pressed) then toggle the selection state of the page.
                 // Otherwise select it: this results in the previously
@@ -1051,18 +1040,29 @@ void SelectionFunction::RangeSelect (model::PageDescriptor& rDescriptor)
 {
     PageSelector& rSelector (mrController.GetPageSelector());
 
-    if (mpRangeSelectionAnchor!=NULL)
+    model::PageDescriptor* pAnchor = rSelector.GetSelectionAnchor();
+    DeselectAllPages();
+
+    if (pAnchor != NULL)
     {
         // Select all pages between the anchor and the given one, including
         // the two.
-        USHORT nAnchorIndex (
-            (mpRangeSelectionAnchor->GetPage()->GetPageNum()-1) / 2);
-        USHORT nOtherIndex (
-            (rDescriptor.GetPage()->GetPageNum()-1) / 2);
-        USHORT nMinIndex (::std::min(nAnchorIndex, nOtherIndex));
-        USHORT nMaxIndex (::std::max(nAnchorIndex, nOtherIndex));
-        for (USHORT nIndex=nMinIndex; nIndex<=nMaxIndex; nIndex++)
-            rSelector.SelectPage (nIndex);
+        USHORT nAnchorIndex ((pAnchor->GetPage()->GetPageNum()-1) / 2);
+        USHORT nOtherIndex ((rDescriptor.GetPage()->GetPageNum()-1) / 2);
+
+        // Iterate over all pages in the range.  Start with the anchor
+        // page.  This way the PageSelector will recognize it again as
+        // anchor (the first selected page after a DeselectAllPages()
+        // becomes the anchor.)
+        int nStep = (nAnchorIndex < nOtherIndex) ? +1 : -1;
+        USHORT nIndex = nAnchorIndex;
+        while (true)
+        {
+            rSelector.SelectPage(nIndex);
+            if (nIndex == nOtherIndex)
+                break;
+            nIndex += nStep;
+        }
     }
 }
 
@@ -1105,7 +1105,7 @@ void SelectionFunction::MoveSubstitution (void)
         }
 
         // The selection anchor may have become invalid.
-        mpRangeSelectionAnchor = NULL;
+        //        mpRangeSelectionAnchor = NULL;
     }
 
     pViewShell->GetViewFrame()->GetBindings().Invalidate(SID_STATUS_PAGE);
