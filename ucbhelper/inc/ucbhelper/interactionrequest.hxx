@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interactionrequest.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kso $ $Date: 2001-05-29 07:12:05 $
+ *  last change: $Author: kso $ $Date: 2001-05-29 11:45:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,8 +80,14 @@
 #ifndef _COM_SUN_STAR_TASK_XINTERACTIONDISAPPROVE_HPP_
 #include <com/sun/star/task/XInteractionDisapprove.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UCB_XINTERACTIONREPLACEEXISTINGDATA_HPP_
+#include <com/sun/star/ucb/XInteractionReplaceExistingData.hpp>
+#endif
 #ifndef _COM_SUN_STAR_UCB_XINTERACTIONSUPPLYAUTHENTICATION_HPP_
 #include <com/sun/star/ucb/XInteractionSupplyAuthentication.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UCB_XINTERACTIONSUPPLYNAME_HPP_
+#include <com/sun/star/ucb/XInteractionSupplyName.hpp>
 #endif
 
 #ifndef _RTL_REF_HXX_
@@ -640,6 +646,97 @@ inline InteractionSupplyAuthentication::InteractionSupplyAuthentication(
   m_bCanSetAccount( bCanSetAccount )
 {
 }
+
+//============================================================================
+/**
+  * This class implements a standard interaction continuation, namely the
+  * interface XInteractionSupplyName. Instances of this class can be passed
+  * along with an interaction request to indicate the possiblity to
+  * supply a new name.
+  */
+class InteractionSupplyName : public InteractionContinuation,
+                              public com::sun::star::lang::XTypeProvider,
+                              public com::sun::star::ucb::XInteractionSupplyName
+{
+    rtl::OUString m_aName;
+
+public:
+    InteractionSupplyName( InteractionRequest * pRequest )
+    : InteractionContinuation( pRequest ) {}
+
+    // XInterface
+    virtual com::sun::star::uno::Any SAL_CALL
+    queryInterface( const com::sun::star::uno::Type & rType )
+        throw( com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL acquire()
+        throw();
+    virtual void SAL_CALL release()
+        throw();
+
+    // XTypeProvider
+    virtual com::sun::star::uno::Sequence< com::sun::star::uno::Type > SAL_CALL
+    getTypes()
+        throw( com::sun::star::uno::RuntimeException );
+    virtual com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL
+    getImplementationId()
+        throw( com::sun::star::uno::RuntimeException );
+
+    // XInteractionContinuation
+    virtual void SAL_CALL select()
+        throw( com::sun::star::uno::RuntimeException );
+
+    // XInteractionSupplyName
+    virtual void SAL_CALL setName( const ::rtl::OUString& Name )
+        throw ( com::sun::star::uno::RuntimeException );
+
+    // Non-interface methods.
+
+    /**
+      * This method returns the name that was supplied by the interaction
+      * handler.
+      *
+      * @return the name.
+      */
+    const rtl::OUString & getName() const { return m_aName; }
+};
+
+//============================================================================
+/**
+  * This class implements a standard interaction continuation, namely the
+  * interface XInteractionReplaceExistingData. Instances of this class can be
+  * passed along with an interaction request to indicate the possiblity to
+  * replace existing data.
+  */
+class InteractionReplaceExistingData :
+                  public InteractionContinuation,
+                  public com::sun::star::lang::XTypeProvider,
+                  public com::sun::star::ucb::XInteractionReplaceExistingData
+{
+public:
+    InteractionReplaceExistingData( InteractionRequest * pRequest )
+    : InteractionContinuation( pRequest ) {}
+
+    // XInterface
+    virtual com::sun::star::uno::Any SAL_CALL
+    queryInterface( const com::sun::star::uno::Type & rType )
+        throw( com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL acquire()
+        throw();
+    virtual void SAL_CALL release()
+        throw();
+
+    // XTypeProvider
+    virtual com::sun::star::uno::Sequence< com::sun::star::uno::Type > SAL_CALL
+    getTypes()
+        throw( com::sun::star::uno::RuntimeException );
+    virtual com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL
+    getImplementationId()
+        throw( com::sun::star::uno::RuntimeException );
+
+    // XInteractionContinuation
+    virtual void SAL_CALL select()
+        throw( com::sun::star::uno::RuntimeException );
+};
 
 } // namespace ucbhelper
 

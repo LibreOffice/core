@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interactionrequest.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kso $ $Date: 2001-05-29 07:12:19 $
+ *  last change: $Author: kso $ $Date: 2001-05-29 11:47:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,7 +223,7 @@ uno::Sequence< uno::Type > SAL_CALL InteractionRequest::getTypes()
         {
             static cppu::OTypeCollection collection(
                 getCppuType( static_cast<
-                    uno::Reference < lang::XTypeProvider > * >( 0 ) ),
+                    uno::Reference< lang::XTypeProvider > * >( 0 ) ),
                 getCppuType( static_cast<
                     uno::Reference< task::XInteractionRequest > * >( 0 ) ) );
             pCollection = &collection;
@@ -375,7 +375,7 @@ uno::Sequence< uno::Type > SAL_CALL InteractionAbort::getTypes()
         {
             static cppu::OTypeCollection collection(
                 getCppuType( static_cast<
-                    uno::Reference < lang::XTypeProvider > * >( 0 ) ),
+                    uno::Reference< lang::XTypeProvider > * >( 0 ) ),
                 getCppuType( static_cast<
                     uno::Reference< task::XInteractionAbort > * >( 0 ) ) );
             pCollection = &collection;
@@ -477,7 +477,7 @@ uno::Sequence< uno::Type > SAL_CALL InteractionRetry::getTypes()
         {
             static cppu::OTypeCollection collection(
                 getCppuType( static_cast<
-                    uno::Reference < lang::XTypeProvider > * >( 0 ) ),
+                    uno::Reference< lang::XTypeProvider > * >( 0 ) ),
                 getCppuType( static_cast<
                     uno::Reference< task::XInteractionRetry > * >( 0 ) ) );
             pCollection = &collection;
@@ -579,7 +579,7 @@ uno::Sequence< uno::Type > SAL_CALL InteractionApprove::getTypes()
         {
             static cppu::OTypeCollection collection(
                 getCppuType( static_cast<
-                    uno::Reference < lang::XTypeProvider > * >( 0 ) ),
+                    uno::Reference< lang::XTypeProvider > * >( 0 ) ),
                 getCppuType( static_cast<
                     uno::Reference< task::XInteractionApprove > * >( 0 ) ) );
             pCollection = &collection;
@@ -681,7 +681,7 @@ uno::Sequence< uno::Type > SAL_CALL InteractionDisapprove::getTypes()
         {
             static cppu::OTypeCollection collection(
                 getCppuType( static_cast<
-                    uno::Reference < lang::XTypeProvider > * >( 0 ) ),
+                    uno::Reference< lang::XTypeProvider > * >( 0 ) ),
                 getCppuType( static_cast<
                     uno::Reference< task::XInteractionDisapprove > * >( 0 ) ) );
             pCollection = &collection;
@@ -739,11 +739,9 @@ InteractionSupplyAuthentication::queryInterface( const uno::Type & rType )
     throw ( uno::RuntimeException )
 {
     uno::Any aRet = cppu::queryInterface( rType,
-                static_cast< lang::XTypeProvider * >( this ),
-                static_cast< task::XInteractionContinuation * >( this ),
-                static_cast<
-                    com::sun::star::ucb::XInteractionSupplyAuthentication * >
-                        ( this ) );
+            static_cast< lang::XTypeProvider * >( this ),
+            static_cast< task::XInteractionContinuation * >( this ),
+            static_cast< ucb::XInteractionSupplyAuthentication * >( this ) );
 
     return aRet.hasValue()
             ? aRet : InteractionContinuation::queryInterface( rType );
@@ -786,11 +784,10 @@ uno::Sequence< uno::Type > SAL_CALL InteractionSupplyAuthentication::getTypes()
         {
             static cppu::OTypeCollection collection(
                 getCppuType( static_cast<
-                    uno::Reference < lang::XTypeProvider > * >( 0 ) ),
+                    uno::Reference< lang::XTypeProvider > * >( 0 ) ),
                 getCppuType( static_cast<
                     uno::Reference<
-                        com::sun::star::ucb::XInteractionSupplyAuthentication >
-                            * >( 0 ) ) );
+                        ucb::XInteractionSupplyAuthentication > * >( 0 ) ) );
             pCollection = &collection;
         }
     }
@@ -883,9 +880,9 @@ InteractionSupplyAuthentication::setPassword( const rtl::OUString& Password )
 
 //=========================================================================
 // virtual
-uno::Sequence< com::sun::star::ucb::RememberAuthentication > SAL_CALL
+uno::Sequence< ucb::RememberAuthentication > SAL_CALL
 InteractionSupplyAuthentication::getRememberPasswordModes(
-                    com::sun::star::ucb::RememberAuthentication& Default )
+                                    ucb::RememberAuthentication& Default )
     throw( uno::RuntimeException )
 {
     Default = m_eDefaultRememberPasswordMode;
@@ -896,7 +893,7 @@ InteractionSupplyAuthentication::getRememberPasswordModes(
 // virtual
 void SAL_CALL
 InteractionSupplyAuthentication::setRememberPassword(
-                    com::sun::star::ucb::RememberAuthentication Remember )
+                                    ucb::RememberAuthentication Remember )
     throw( uno::RuntimeException )
 {
     m_eRememberPasswordMode = Remember;
@@ -926,9 +923,9 @@ InteractionSupplyAuthentication::setAccount( const rtl::OUString& Account )
 
 //=========================================================================
 // virtual
-uno::Sequence< com::sun::star::ucb::RememberAuthentication > SAL_CALL
+uno::Sequence< ucb::RememberAuthentication > SAL_CALL
 InteractionSupplyAuthentication::getRememberAccountModes(
-                    com::sun::star::ucb::RememberAuthentication& Default )
+                                    ucb::RememberAuthentication& Default )
     throw( uno::RuntimeException )
 {
     Default = m_eDefaultRememberAccountMode;
@@ -937,11 +934,230 @@ InteractionSupplyAuthentication::getRememberAccountModes(
 
 //=========================================================================
 // virtual
-void SAL_CALL
-InteractionSupplyAuthentication::setRememberAccount(
-                    com::sun::star::ucb::RememberAuthentication Remember )
+void SAL_CALL InteractionSupplyAuthentication::setRememberAccount(
+                                    ucb::RememberAuthentication Remember )
     throw( uno::RuntimeException )
 {
     m_eRememberAccountMode = Remember;
+}
+
+//=========================================================================
+//=========================================================================
+//
+// InteractionSupplyName Implementation.
+//
+//=========================================================================
+//=========================================================================
+
+//=========================================================================
+//
+// XInterface methods.
+//
+//=========================================================================
+
+// virtual
+void SAL_CALL InteractionSupplyName::acquire()
+    throw()
+{
+    OWeakObject::acquire();
+}
+
+//=========================================================================
+// virtual
+void SAL_CALL InteractionSupplyName::release()
+    throw()
+{
+    OWeakObject::release();
+}
+
+//=========================================================================
+// virtual
+uno::Any SAL_CALL
+InteractionSupplyName::queryInterface( const uno::Type & rType )
+    throw ( uno::RuntimeException )
+{
+    uno::Any aRet = cppu::queryInterface( rType,
+                static_cast< lang::XTypeProvider * >( this ),
+                static_cast< task::XInteractionContinuation * >( this ),
+                static_cast< ucb::XInteractionSupplyName * >( this ) );
+
+    return aRet.hasValue()
+            ? aRet : InteractionContinuation::queryInterface( rType );
+}
+
+//=========================================================================
+//
+// XTypeProvider methods.
+//
+//=========================================================================
+
+// virtual
+uno::Sequence< sal_Int8 > SAL_CALL InteractionSupplyName::getImplementationId()
+    throw( uno::RuntimeException )
+{
+    static cppu::OImplementationId* pId = NULL;
+      if ( !pId )
+      {
+        osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
+          if ( !pId )
+          {
+              static cppu::OImplementationId id( sal_False );
+              pId = &id;
+          }
+      }
+      return (*pId).getImplementationId();
+}
+
+//=========================================================================
+// virtual
+uno::Sequence< uno::Type > SAL_CALL InteractionSupplyName::getTypes()
+    throw( uno::RuntimeException )
+{
+    static cppu::OTypeCollection* pCollection = 0;
+      if ( !pCollection )
+      {
+        osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
+        if ( !pCollection )
+        {
+            static cppu::OTypeCollection collection(
+                getCppuType( static_cast<
+                    uno::Reference< lang::XTypeProvider > * >( 0 ) ),
+                getCppuType( static_cast<
+                    uno::Reference< ucb::XInteractionSupplyName > * >( 0 ) ) );
+            pCollection = &collection;
+        }
+    }
+    return (*pCollection).getTypes();
+}
+
+//=========================================================================
+//
+// XInteractionContinuation methods.
+//
+//=========================================================================
+
+// virtual
+void SAL_CALL InteractionSupplyName::select()
+    throw( uno::RuntimeException )
+{
+    recordSelection();
+}
+
+//=========================================================================
+//
+// XInteractionSupplyName methods.
+//
+//=========================================================================
+
+// virtual
+void SAL_CALL
+InteractionSupplyName::setName( const rtl::OUString& Name )
+    throw( uno::RuntimeException )
+{
+    m_aName = Name;
+}
+
+//=========================================================================
+//=========================================================================
+//
+// InteractionReplaceExistingData Implementation.
+//
+//=========================================================================
+//=========================================================================
+
+//=========================================================================
+//
+// XInterface methods.
+//
+//=========================================================================
+
+// virtual
+void SAL_CALL InteractionReplaceExistingData::acquire()
+    throw()
+{
+    OWeakObject::acquire();
+}
+
+//=========================================================================
+// virtual
+void SAL_CALL InteractionReplaceExistingData::release()
+    throw()
+{
+    OWeakObject::release();
+}
+
+//=========================================================================
+// virtual
+uno::Any SAL_CALL
+InteractionReplaceExistingData::queryInterface( const uno::Type & rType )
+    throw ( uno::RuntimeException )
+{
+    uno::Any aRet = cppu::queryInterface( rType,
+                static_cast< lang::XTypeProvider * >( this ),
+                static_cast< task::XInteractionContinuation * >( this ),
+                static_cast< ucb::XInteractionReplaceExistingData * >( this ) );
+
+    return aRet.hasValue()
+            ? aRet : InteractionContinuation::queryInterface( rType );
+}
+
+//=========================================================================
+//
+// XTypeProvider methods.
+//
+//=========================================================================
+
+// virtual
+uno::Sequence< sal_Int8 > SAL_CALL
+InteractionReplaceExistingData::getImplementationId()
+    throw( uno::RuntimeException )
+{
+    static cppu::OImplementationId* pId = NULL;
+      if ( !pId )
+      {
+        osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
+          if ( !pId )
+          {
+              static cppu::OImplementationId id( sal_False );
+              pId = &id;
+          }
+      }
+      return (*pId).getImplementationId();
+}
+
+//=========================================================================
+// virtual
+uno::Sequence< uno::Type > SAL_CALL InteractionReplaceExistingData::getTypes()
+    throw( uno::RuntimeException )
+{
+    static cppu::OTypeCollection* pCollection = 0;
+      if ( !pCollection )
+      {
+        osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
+        if ( !pCollection )
+        {
+            static cppu::OTypeCollection collection(
+                getCppuType( static_cast<
+                    uno::Reference< lang::XTypeProvider > * >( 0 ) ),
+                getCppuType( static_cast<
+                    uno::Reference<
+                        ucb::XInteractionReplaceExistingData > * >( 0 ) ) );
+            pCollection = &collection;
+        }
+    }
+    return (*pCollection).getTypes();
+}
+
+//=========================================================================
+//
+// XInteractionContinuation methods.
+//
+//=========================================================================
+
+// virtual
+void SAL_CALL InteractionReplaceExistingData::select()
+    throw( uno::RuntimeException )
+{
+    recordSelection();
 }
 
