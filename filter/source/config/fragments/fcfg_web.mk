@@ -1,5 +1,5 @@
 # -----------------------------------------------
-# count = 11
+# count = 12
 T4_WEB = \
     writer_web_HTML \
     writer_StarWriter_30 \
@@ -11,10 +11,11 @@ T4_WEB = \
     writer_web_HTML_help \
     writer_StarOffice_XML_Writer \
     writer_web_StarOffice_XML_Writer_Web_Template \
-    pdf_Portable_Document_Format
+    pdf_Portable_Document_Format\
+    writerweb8_writer_template
 
 # -----------------------------------------------
-# count = 12
+# count = 14
 F4_WEB = \
     HTML \
     StarWriter_3_0__StarWriter_Web_ \
@@ -27,7 +28,9 @@ F4_WEB = \
     writer_web_HTML_help \
     writer_web_StarOffice_XML_Writer \
     writer_web_StarOffice_XML_Writer_Web_Template \
-    writer_web_pdf_Export
+    writer_web_pdf_Export\
+    writerweb8_writer_template\
+    writerweb8_writer
 
 # -----------------------------------------------
 # count = 0
