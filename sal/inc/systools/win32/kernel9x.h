@@ -2,9 +2,9 @@
  *
  *  $RCSfile: kernel9x.h,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hro $ $Date: 2001-05-23 11:08:57 $
+ *  last change: $Author: obr $ $Date: 2001-06-07 09:20:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,6 +138,18 @@ extern "C" {
 #undef GetFullPathNameW
 #endif
 
+#ifdef CreateProcessW
+#undef CreateProcessW
+#endif
+
+#ifdef CreateProcessAsUserW
+#undef CreateProcessAsUserW
+#endif
+
+#ifdef GetEnvironmentVariableW
+#undef GetEnvironmentVariableW
+#endif
+
 //------------------------------------------------------------------------
 // set the compiler directives for the function pointer we declare below
 // if we build sal or sal will be used as static library we define extern
@@ -256,12 +268,46 @@ KERNEL9X_API int ( WINAPI* lpfnGetLocaleInfoW ) (
     int cchData         // size of buffer
 );
 
-KERNEL9X_API ( WINAPI * lpfnGetFullPathNameW )(
+KERNEL9X_API DWORD ( WINAPI * lpfnGetFullPathNameW )(
     LPCWSTR lpFileName,     // file name
     DWORD   nBufferLength,  // size of path buffer
     LPWSTR  lpBuffer,       // path buffer
     LPWSTR  *lpFilePart     // address of file name in path
 );
+
+KERNEL9X_API BOOL ( WINAPI * lpfnCreateProcessW )(
+    LPCWSTR lpApplicationName,                 // name of executable module
+    LPWSTR lpCommandLine,                      // command line string
+    LPSECURITY_ATTRIBUTES lpProcessAttributes, // SD
+    LPSECURITY_ATTRIBUTES lpThreadAttributes,  // SD
+    BOOL bInheritHandles,                      // handle inheritance option
+    DWORD dwCreationFlags,                     // creation flags
+    LPVOID lpEnvironment,                      // new environment block
+    LPCWSTR lpCurrentDirectory,                // current directory name
+    LPSTARTUPINFOW lpStartupInfo,              // startup information
+    LPPROCESS_INFORMATION lpProcessInformation // process information
+);
+
+KERNEL9X_API BOOL ( WINAPI * lpfnCreateProcessAsUserW )(
+    HANDLE hToken,                             // handle to user token
+    LPCWSTR lpApplicationName,                 // name of executable module
+    LPWSTR lpCommandLine,                      // command-line string
+    LPSECURITY_ATTRIBUTES lpProcessAttributes, // SD
+    LPSECURITY_ATTRIBUTES lpThreadAttributes,  // SD
+    BOOL bInheritHandles,                      // inheritance option
+    DWORD dwCreationFlags,                     // creation flags
+    LPVOID lpEnvironment,                      // new environment block
+    LPCWSTR lpCurrentDirectory,                // current directory name
+    LPSTARTUPINFOW lpStartupInfo,              // startup information
+    LPPROCESS_INFORMATION lpProcessInformation // process information
+);
+
+KERNEL9X_API DWORD ( WINAPI * lpfnGetEnvironmentVariableW )(
+    LPCWSTR lpName,  // environment variable name
+    LPWSTR lpBuffer, // buffer for variable value
+    DWORD nSize      // size of buffer
+);
+
 
 //------------------------------------------------------------------------
 // redefine the above undefined macros so that the preprocessor replaces
@@ -285,6 +331,10 @@ KERNEL9X_API ( WINAPI * lpfnGetFullPathNameW )(
 
 #define GetCanonicalPath            lpfnGetCanonicalPathW
 #define GetLocaleInfoW              lpfnGetLocaleInfoW
+
+#define CreateProcessW              lpfnCreateProcessW
+#define CreateProcessAsUserW        lpfnCreateProcessAsUserW
+#define GetEnvironmentVariableW     lpfnGetEnvironmentVariableW
 
 #ifdef __cplusplus
 }
