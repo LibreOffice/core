@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpropls.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-07 14:39:07 $
+ *  last change: $Author: fs $ $Date: 2001-05-15 14:11:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -363,7 +363,8 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
     { "FontWorkShadowTransparence",     XML_NAMESPACE_DRAW, sXML_fontwork_shadow_transparence,  XML_TYPE_PERCENT,           CTF_FONTWORK_SHADOWTRANSPARENCE },
 
     // control attributes (border exists one mor time for the text additions of shapes)
-    { "ControlBorder",                  XML_NAMESPACE_FO,   sXML_border,                XML_SD_TYPE_CONTROL_BORDER, 0 },
+    { "ControlBackground",              XML_NAMESPACE_FO,   sXML_background_color,      XML_TYPE_COLOR|MID_FLAG_MULTI_PROPERTY, 0 },
+    { "ControlBorder",                  XML_NAMESPACE_FO,   sXML_border,                XML_SD_TYPE_CONTROL_BORDER|MID_FLAG_MULTI_PROPERTY, 0 },
 
     // special entries for floating frames
     { "FrameIsAutoScroll",          XML_NAMESPACE_DRAW, sXML_frame_display_scrollbar,   XML_TYPE_BOOL|MID_FLAG_MULTI_PROPERTY,              CTF_FRAME_DISPLAY_SCROLLBAR },
