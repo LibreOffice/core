@@ -7601,7 +7601,7 @@ SfxVoidItem ShiftBackspace FN_SHIFT_BACKSPACE
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem ShowFourPages FN_SHOW_FOUR_PAGES
+SfxVoidItem ShowMultiplePages FN_SHOW_MULTIPLE_PAGES
 ()
 [
     /* flags: */

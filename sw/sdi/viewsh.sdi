@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.sdi,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2002-12-02 08:45:34 $
+ *  last change: $Author: os $ $Date: 2002-12-06 13:58:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,7 +199,7 @@ interface TextPrintPreview : View
         ExecMethod = Execute ;
         StateMethod = GetState ;
     ]
-    FN_SHOW_FOUR_PAGES // status(final|play)
+    FN_SHOW_MULTIPLE_PAGES // status(final|play)
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;

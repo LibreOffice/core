@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swslots.src,v $
  *
- *  $Revision: 1.101 $
+ *  $Revision: 1.102 $
  *
- *  last change: $Author: kz $ $Date: 2002-12-05 14:04:45 $
+ *  last change: $Author: os $ $Date: 2002-12-06 14:03:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -7058,34 +7058,10 @@ SfxSlotInfo FN_SHIFT_BACKSPACE
     SlotName[ finnish ] = "Askelpalautin";
     SlotName[ thai ] = "à¹à¸šà¹‡à¸„à¸ªà¹€à¸›à¸‹";
 };
-SfxSlotInfo FN_SHOW_FOUR_PAGES
+SfxSlotInfo FN_SHOW_MULTIPLE_PAGES
 {
-    SlotName = "Seitenansicht: vier Seiten";
-    SlotName [ english ] =  "Seitenansicht: vier Seiten";
-    SlotName[ english_us ] = "Page Preview: Four Pages";
-    SlotName[ portuguese ] = "Ver página: quatro páginas";
-    SlotName[ russian ] = "Ïğåäâàğèòåëüíûé ïğîñìîòğ ñòğàíèöû: ÷åòûğå ñòğàíèöû";
-    SlotName[ dutch ] = "Afdrukvoorbeeld: vier pagina's";
-    SlotName[ french ] = "Aperçu : quatre pages";
-    SlotName[ spanish ] = "Vista preliminar: cuatro páginas";
-    SlotName[ italian ] = "Vista pagina: quattro pagine";
-    SlotName[ danish ] = "Sidevisning: fire sider";
-    SlotName[ swedish ] = "Förhandsgranskning: fyra sidor";
-    SlotName[ polish ] = "Podgl¹d strony: Cztery strony";
-    SlotName[ portuguese_brazilian ] = "ShowFourPages";
-    SlotName[ japanese ] = "4ãƒšãƒ¼ã‚¸è¡¨ç¤º";
-    SlotName[ chinese_simplified ] = "é¡µé¢è§†å›¾ï¼šå››é¡µ";
-    SlotName[ chinese_traditional ] = "é é¢æª¢è¦–ï¼šå››é ";
-    SlotName[ arabic ] = "ÇáãÚÇíäÉ: ÃÑÈÚ ÕİÍÇÊ";
-    SlotName[ dutch ] = "Afdrukvoorbeeld: vier pagina's";
-    SlotName[ chinese_simplified ] = "é¡µé¢è§†å›¾ï¼šå››é¡µ";
-    SlotName[ greek ] = "Ğñïåğéóêüğçóç óåëßäáò: ôİóóåñéò óåëßäåò";
-    SlotName[ korean ] = "í˜ì´ì§€ ë¯¸ë¦¬ë³´ê¸°: 4 í˜ì´ì§€";
-    SlotName[ turkish ] = "Sayfa ön izleme: Dört sayfa";
-    SlotName[ language_user1 ] = " ";
-    SlotName[ catalan ] = "Visualització prèvia: quatre pàgines";
-    SlotName[ finnish ] = "Esikatselu: neljä sivua";
-    SlotName[ thai ] = "à¸¡à¸¸à¸¡à¸¡à¸­à¸‡à¸«à¸™à¹‰à¸²: à¸ªà¸µà¹ˆà¸«à¸™à¹‰à¸²";
+    SlotName = "Seitenansicht: mehrere Seiten";
+    SlotName[ english_us ] = "Page Preview: Multiple pages";
 };
 SfxSlotInfo FN_SHOW_TWO_PAGES
 {
