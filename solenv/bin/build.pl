@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: hjs $ $Date: 2001-04-27 11:05:07 $
+#   last change: $Author: rt $ $Date: 2001-04-27 15:25:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,7 +73,7 @@ use Cwd;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.14 $ ';
+$id_str = ' $Revision: 1.15 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -174,7 +174,7 @@ sub BuildAll {
             print   "=============\n";
             $PrjDir = CorrectPath($StandDir.$Prj);
             BuildPrj($PrjDir);
-            system ("deliver");
+            system ("$ENV{DELIVER}");
             RemoveFromDependencies($Prj, \%ParentDepsHash);
         };
     } else {
