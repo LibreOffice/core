@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FilterContainer.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2001-06-28 11:13:15 $
+ *  last change: $Author: hjs $ $Date: 2001-09-07 12:22:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,9 @@
  *
  *
  ************************************************************************/
+
+
+#include <stdexcept>
 
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
