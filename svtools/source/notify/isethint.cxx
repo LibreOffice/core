@@ -2,9 +2,9 @@
  *
  *  $RCSfile: isethint.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 14:39:27 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 10:26:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,9 @@
  *
  ************************************************************************/
 
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #include "isethint.hxx"
 #include "itemset.hxx"
@@ -69,7 +71,6 @@
 TYPEINIT1(SfxItemSetHint, SfxHint);
 
 //====================================================================
-
 
 SfxItemSetHint::SfxItemSetHint( SfxItemSet *pItemSet )
 
@@ -104,5 +105,3 @@ SfxItemSetHint::~SfxItemSetHint()
 }
 
 //--------------------------------------------------------------------
-
-
