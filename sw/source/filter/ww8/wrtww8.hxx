@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.hxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-09 11:59:45 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 18:22:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,6 @@
 
 // einige Forward Deklarationen
 class BitmapPalette;
-class Brush;                //JP 04.06.99: die Brush obsolete!!
 class SwEscherEx;
 class DateTime;
 class Font;
