@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XPrinterServer.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-27 09:04:51 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 17:42:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@
 
 /** manages several printers on one machine.
  */
-interface XPrinterServer: com::sun::star::uno::XInterface
+published interface XPrinterServer: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
