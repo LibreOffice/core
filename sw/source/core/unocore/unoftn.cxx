@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoftn.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: tl $ $Date: 2002-09-12 13:06:12 $
+ *  last change: $Author: tl $ $Date: 2002-09-13 12:45:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,8 +150,9 @@ OUString SwXFootnote::getImplementationName(void) throw( RuntimeException )
  ---------------------------------------------------------------------------*/
 BOOL SwXFootnote::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
-    return !rServiceName.compareToAscii("com.sun.star.text.Footnote") ||
-        !rServiceName.compareToAscii("com.sun.star.text.TextContent") ||
+    return  !rServiceName.compareToAscii("com.sun.star.text.Footnote") ||
+            !rServiceName.compareToAscii("com.sun.star.text.TextContent") ||
+            !rServiceName.compareToAscii("com.sun.star.text.Text") ||
             (m_bIsEndnote && !rServiceName.compareToAscii("com.sun.star.text.Endnote"));
 ;
 }
@@ -160,12 +161,13 @@ BOOL SwXFootnote::supportsService(const OUString& rServiceName) throw( RuntimeEx
  ---------------------------------------------------------------------------*/
 Sequence< OUString > SwXFootnote::getSupportedServiceNames(void) throw( RuntimeException )
 {
-    Sequence< OUString > aRet(m_bIsEndnote ? 3 : 2);
+    Sequence< OUString > aRet(m_bIsEndnote ? 4 : 3);
     OUString* pArray = aRet.getArray();
     pArray[0] = C2U("com.sun.star.text.Footnote");
     pArray[1] = C2U("com.sun.star.text.TextContent");
+    pArray[2] = C2U("com.sun.star.text.Text");
     if(m_bIsEndnote)
-        pArray[2] = C2U("com.sun.star.text.Endnote");
+        pArray[3] = C2U("com.sun.star.text.Endnote");
     return aRet;
 }
 /*-- 10.12.98 15:31:44---------------------------------------------------
