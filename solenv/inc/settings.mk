@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.156 $
+#   $Revision: 1.157 $
 #
-#   last change: $Author: obo $ $Date: 2004-11-19 11:42:23 $
+#   last change: $Author: hr $ $Date: 2004-12-10 18:03:38 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -1059,7 +1059,8 @@ RSC=guw.pl rsc
 .ENDIF
 .ENDIF
 
-RSCUPDVER=$(UPD)$(UPDMINOR)
+#new
+RSCUPDVER=$(RSCREVISION)
 RSCUPDVERDEF=-DUPDVER="$(RSCUPDVER)"
 
 RSCFLAGS=-s
