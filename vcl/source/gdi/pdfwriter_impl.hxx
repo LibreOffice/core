@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pl $ $Date: 2002-07-29 12:47:14 $
+ *  last change: $Author: pl $ $Date: 2002-07-29 16:26:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,8 @@ struct ImplFontData;
 struct ImplFontSelectData;
 struct ImplFontMetricData;
 struct FontSubsetInfo;
+class ZCodec;
+class SvMemoryStream;
 
 namespace vcl
 {
@@ -329,6 +331,9 @@ private:
     std::list< GraphicsState >          m_aGraphicsStack;
     GraphicsState                       m_aCurrentPDFState;
 
+    ZCodec*                             m_pCodec;
+    SvMemoryStream*                     m_pMemStream;
+
     /* creates fonts and subsets that will be emitted later */
     void registerGlyphs( int nGlyphs, long* pGlyphs, sal_Unicode* pUnicodes, sal_uInt8* pMappedGlyphs, sal_Int32* pMappedFontObjects );
 
@@ -393,6 +398,8 @@ private:
     bool updateObject( sal_Int32 n );
 
     bool writeBuffer( const void* pBuffer, sal_uInt64 nBytes );
+    void beginCompression();
+    void endCompression();
     void endPage();
 public:
     PDFWriterImpl( const rtl::OUString& rTargetFile, PDFWriter::PDFVersion eVersion = PDFWriter::PDF_1_4 );

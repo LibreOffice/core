@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: pl $ $Date: 2002-07-29 12:47:12 $
+ *  last change: $Author: pl $ $Date: 2002-07-29 16:26:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,8 @@
 #include <pdfwriter_impl.hxx>
 #include <rtl/strbuf.hxx>
 #include <tools/debug.hxx>
+#include <tools/zcodec.hxx>
+#include <tools/stream.hxx>
 #include <virdev.hxx>
 #include <bmpacc.hxx>
 #include <bitmapex.hxx>
@@ -87,6 +89,8 @@
 // Aaarrgh
 #define M_PI 3.14159265
 #endif
+
+#define ENABLE_COMPRESSION
 
 using namespace vcl;
 using namespace rtl;
@@ -197,7 +201,7 @@ void PDFWriterImpl::PDFPage::beginStream()
     // write content stream header
     OStringBuffer aLine;
     aLine.append( m_nStreamObject );
-    aLine.append( " 0 obj\r\n  << /Length " );
+    aLine.append( " 0 obj\r\n<< /Length " );
     aLine.append( m_nStreamLengthObject );
     aLine.append( " 0 R >>\r\nstream\r\n" );
     if( ! m_pWriter->writeBuffer( aLine.getStr(), aLine.getLength() ) )
@@ -240,13 +244,14 @@ bool PDFWriterImpl::PDFPage::emit(sal_Int32 nParentObject )
     OStringBuffer aLine;
 
     aLine.append( m_nPageObject );
-    aLine.append( " 0 obj\r\n  << /Type /Page\r\n     /Parent " );
+    aLine.append( " 0 obj\r\n"
+                  "<< /Type /Page\r\n"
+                  "   /Parent " );
     aLine.append( nParentObject );
     aLine.append( " 0 R\r\n" );
     if( m_nPageWidth && m_nPageHeight )
     {
-        aLine.append( "     /MediaBox " );
-        aLine.append( "[ 0 0 " );
+        aLine.append( "  /MediaBox [ 0 0 " );
         aLine.append( m_nPageWidth );
         aLine.append( ' ' );
         aLine.append( m_nPageHeight );
@@ -254,17 +259,17 @@ bool PDFWriterImpl::PDFPage::emit(sal_Int32 nParentObject )
     }
     switch( m_eOrientation )
     {
-        case PDFWriter::Landscape: aLine.append( "     /Rotate 90\r\n" );break;
-        case PDFWriter::Seascape: aLine.append( "     /Rotate -90\r\n" );break;
-        case PDFWriter::Portrait: aLine.append( "     /Rotate 0\r\n" );break;
+        case PDFWriter::Landscape: aLine.append( "   /Rotate 90\r\n" );break;
+        case PDFWriter::Seascape: aLine.append( "   /Rotate -90\r\n" );break;
+        case PDFWriter::Portrait: aLine.append( "   /Rotate 0\r\n" );break;
 
         case PDFWriter::Inherit:
         default:
             break;
     }
-    aLine.append( "     /Contents " );
+    aLine.append( "   /Contents " );
     aLine.append( m_nStreamObject );
-    aLine.append( " 0 R\r\n  >>\r\nendobj\r\n\r\n" );
+    aLine.append( " 0 R\r\n>>\r\nendobj\r\n\r\n" );
     return m_pWriter->writeBuffer( aLine.getStr(), aLine.getLength() );
 }
 
@@ -457,7 +462,8 @@ PDFWriterImpl::PDFWriterImpl( const OUString& rFilename, PDFWriter::PDFVersion e
         m_eInheritedOrientation( PDFWriter::Portrait ),
         m_nCurrentPage( -1 ),
         m_eVersion( eVersion ),
-        m_aFileName( rFilename )
+        m_aFileName( rFilename ),
+        m_pCodec( NULL )
 {
     Font aFont;
     aFont.SetName( String( RTL_CONSTASCII_USTRINGPARAM( "Times" ) ) );
@@ -515,6 +521,32 @@ void PDFWriterImpl::emitComment( const OString& rComment )
     writeBuffer( aLine.getStr(), aLine.getLength() );
 }
 
+void PDFWriterImpl::beginCompression()
+{
+#ifdef ENABLE_COMPRESSION
+    m_pCodec = new ZCodec( 0x4000, 0x4000 );
+    m_pMemStream = new SvMemoryStream();
+    m_pCodec->BeginCompression();
+#endif
+}
+
+void PDFWriterImpl::endCompression()
+{
+#ifdef ENABLE_COMPRESSION
+    if( m_pCodec )
+    {
+        m_pCodec->EndCompression();
+        delete m_pCodec;
+        m_pCodec = NULL;
+        sal_uInt64 nLen = m_pMemStream->Tell();
+        m_pMemStream->Seek( 0 );
+        writeBuffer( m_pMemStream->GetData(), nLen );
+        delete m_pMemStream;
+        m_pMemStream = NULL;
+    }
+#endif
+}
+
 bool PDFWriterImpl::writeBuffer( const void* pBuffer, sal_uInt64 nBytes )
 {
     if( ! m_bOpen ) // we are already down the drain
@@ -524,13 +556,21 @@ bool PDFWriterImpl::writeBuffer( const void* pBuffer, sal_uInt64 nBytes )
         return true;
 
     sal_uInt64 nWritten;
-    if( osl_writeFile( m_aFile, pBuffer, nBytes, &nWritten ) != osl_File_E_None )
-        nWritten = 0;
-
-    if( nWritten != nBytes )
+    if( m_pCodec )
     {
-        osl_closeFile( m_aFile );
-        m_bOpen = false;
+        m_pCodec->Write( *m_pMemStream, static_cast<const BYTE*>(pBuffer), (ULONG)nBytes );
+        nWritten = nBytes;
+    }
+    else
+    {
+        if( osl_writeFile( m_aFile, pBuffer, nBytes, &nWritten ) != osl_File_E_None )
+            nWritten = 0;
+
+        if( nWritten != nBytes )
+        {
+            osl_closeFile( m_aFile );
+            m_bOpen = false;
+        }
     }
 
     return nWritten == nBytes;
@@ -697,6 +737,9 @@ void PDFWriterImpl::endPage()
 {
     if( m_aPages.begin() != m_aPages.end() )
     {
+        if( m_pCodec )
+            endCompression();
+
         m_aGraphicsStack.clear();
         m_aGraphicsStack.push_back( GraphicsState() );
 
@@ -798,7 +841,11 @@ bool PDFWriterImpl::emitTilings()
         // write pattern object
         aTilingObj.append( it->m_nObject );
         aTilingObj.append( " 0 obj\r\n" );
-        aTilingObj.append( "  << /Type /Pattern\r\n     /PatternType 1\r\n     /PaintType 1\r\n     /TilingType 1\r\n     /BBox [ " );
+        aTilingObj.append( "<< /Type /Pattern\r\n"
+                           "   /PatternType 1\r\n"
+                           "   /PaintType 1\r\n"
+                           "   /TilingType 1\r\n"
+                           "   /BBox [ " );
         appendDouble( (double)nX/10.0, aTilingObj, 1 );
         aTilingObj.append( ' ' );
         appendDouble( (double)nY/10.0, aTilingObj, 1 );
@@ -806,18 +853,23 @@ bool PDFWriterImpl::emitTilings()
         appendDouble( (double)(nX+nW)/10.0, aTilingObj, 1 );
         aTilingObj.append( ' ' );
         appendDouble( (double)(nY+nH)/10.0, aTilingObj, 1 );
-        aTilingObj.append( " ]\r\n     /XStep " );
+        aTilingObj.append( " ]\r\n"
+                           "   /XStep " );
         appendDouble( (double)nW/10.0, aTilingObj, 1 );
-        aTilingObj.append( "\r\n     /YStep " );
+        aTilingObj.append( "\r\n"
+                           "   /YStep " );
         appendDouble( (double)nH/10.0, aTilingObj, 1 );
-        aTilingObj.append( "\r\n     /Resources <<\r\n" );
-        aTilingObj.append( "   /XObject << /Im" );
+        aTilingObj.append( "\r\n"
+                           "   /Resources <<\r\n"
+                           "   /XObject << /Im" );
         aTilingObj.append( it->m_nBitmapObject );
         aTilingObj.append( ' ' );
         aTilingObj.append( it->m_nBitmapObject );
-        aTilingObj.append( " 0 R >> >>\r\n     /Length " );
+        aTilingObj.append( " 0 R >> >>\r\n"
+                           "  /Length " );
         aTilingObj.append( (sal_Int32)aTilingStream.getLength() );
-        aTilingObj.append( "\r\n  >>\r\nstream\r\n" );
+        aTilingObj.append( "\r\n"
+                           ">>\r\nstream\r\n" );
         CHECK_RETURN( updateObject( it->m_nObject ) );
         CHECK_RETURN( writeBuffer( aTilingObj.getStr(), aTilingObj.getLength() ) );
         CHECK_RETURN( writeBuffer( aTilingStream.getStr(), aTilingStream.getLength() ) );
@@ -903,7 +955,11 @@ bool PDFWriterImpl::emitHatches()
         // write pattern object
         aHatchObj.append( it->m_nObject );
         aHatchObj.append( " 0 obj\r\n" );
-        aHatchObj.append( "  << /Type /Pattern\r\n     /PatternType 1\r\n     /PaintType 1\r\n     /TilingType 1\r\n     /BBox [ " );
+        aHatchObj.append( "<< /Type /Pattern\r\n"
+                          "   /PatternType 1\r\n"
+                          "   /PaintType 1\r\n"
+                          "   /TilingType 1\r\n"
+                          "   /BBox [ " );
         aHatchObj.append( -nMax );
         aHatchObj.append( ' ' );
         aHatchObj.append( -nMax );
@@ -911,11 +967,14 @@ bool PDFWriterImpl::emitHatches()
         aHatchObj.append( nMax );
         aHatchObj.append( ' ' );
         aHatchObj.append( nMax );
-        aHatchObj.append( " ]\r\n     /XStep " );
+        aHatchObj.append( " ]\r\n"
+                          "   /XStep " );
         aHatchObj.append( 2*nMax );
-        aHatchObj.append( "\r\n     /YStep " );
+        aHatchObj.append( "\r\n"
+                          "   /YStep " );
         aHatchObj.append( 2*nMax );
-        aHatchObj.append( "\r\n     /Matrix [ " );
+        aHatchObj.append( "\r\n"
+                          "   /Matrix [ " );
         // prepare matrix
         const double theta = (double)rHatch.GetAngle() * M_PI / 1800.0;
         /* the constant factor in scale is arbitrary */
@@ -929,16 +988,19 @@ bool PDFWriterImpl::emitHatches()
         appendDouble( scale*cos( theta ), aHatchObj );
         aHatchObj.append( " 0 0 ]\r\n" );
 
-        aHatchObj.append( "     /Resources <<\r\n" );
-        aHatchObj.append( "  /ColorSpace << /HCS [ /Pattern /DeviceRGB ] >>\r\n" );
-        aHatchObj.append( "  /Pattern << /P" );
+        aHatchObj.append( "   /Resources <<\r\n"
+                          "     /ColorSpace << /HCS [ /Pattern /DeviceRGB ] >>\r\n"
+                          "     /Pattern << /P" );
         aHatchObj.append( nBaseHatch );
         aHatchObj.append( ' ' );
         aHatchObj.append( nBaseHatch );
-        aHatchObj.append( " 0 R >>\r\n" );
-        aHatchObj.append( " >>\r\n     /Length " );
+        aHatchObj.append( " 0 R >>\r\n"
+                          "     >>\r\n"
+                          "   /Length " );
         aHatchObj.append( (sal_Int32)aHatchStream.getLength() );
-        aHatchObj.append( "\r\n  >>\r\nstream\r\n" );
+        aHatchObj.append( "\r\n"
+                          ">>\r\n"
+                          "stream\r\n" );
         CHECK_RETURN( updateObject( it->m_nObject ) );
         CHECK_RETURN( writeBuffer( aHatchObj.getStr(), aHatchObj.getLength() ) );
         CHECK_RETURN( writeBuffer( aHatchStream.getStr(), aHatchStream.getLength() ) );
@@ -979,12 +1041,19 @@ bool PDFWriterImpl::emitHatches()
 
             aHatchObj.append( nObject );
             aHatchObj.append( " 0 obj\r\n" );
-            aHatchObj.append( "  << /Type /Pattern\r\n     /PatternType 1\r\n     /PaintType 2\r\n     /TilingType 1\r\n     /BBox [ 0 0 1 1 ]\r\n" );
-            aHatchObj.append( "     /XStep 1\r\n" );
-            aHatchObj.append( "     /YStep 1\r\n" );
-            aHatchObj.append( "     /Resources << >>\r\n     /Length " );
+            aHatchObj.append( "<< /Type /Pattern\r\n"
+                              "   /PatternType 1\r\n"
+                              "   /PaintType 2\r\n"
+                              "   /TilingType 1\r\n"
+                              "   /BBox [ 0 0 1 1 ]\r\n"
+                              "   /XStep 1\r\n"
+                              "   /YStep 1\r\n"
+                              "   /Resources << >>\r\n"
+                              "   /Length " );
             aHatchObj.append( (sal_Int32)aHatchStream.getLength() );
-            aHatchObj.append( "\r\n  >>\r\nstream\r\n" );
+            aHatchObj.append( "\r\n"
+                              ">>\r\n"
+                              "stream\r\n" );
             CHECK_RETURN( writeBuffer( aHatchObj.getStr(), aHatchObj.getLength() ) );
             CHECK_RETURN( writeBuffer( aHatchStream.getStr(), aHatchStream.getLength() ) );
             aHatchObj.setLength( 0 );
@@ -1007,12 +1076,15 @@ sal_Int32 PDFWriterImpl::emitBuiltinFont( ImplFontData* pFont )
             nFontObject = createObject();
             CHECK_RETURN( updateObject( nFontObject ) );
             aLine.append( nFontObject );
-            aLine.append( " 0 obj\r\n  << /Type /Font\r\n"
-                          "     /Subtype /Type1\r\n"
-                          "     /BaseFont /" );
+            aLine.append( " 0 obj\r\n"
+                          "<< /Type /Font\r\n"
+                          "   /Subtype /Type1\r\n"
+                          "   /BaseFont /" );
             aLine.append( m_aBuiltinFonts[i].m_pPSName );
-            aLine.append( "\r\n     /Encoding /WinAnsiEncoding" );
-            aLine.append( "\r\n  >>\r\nendobj\r\n\r\n" );
+            aLine.append( "\r\n"
+                          "   /Encoding /WinAnsiEncoding\r\n"
+                          ">>\r\n"
+                          "endobj\r\n\r\n" );
             CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
 
             break;
@@ -1184,21 +1256,31 @@ sal_Int32 PDFWriterImpl::emitEmbeddedFont( ImplFontData* pFont )
         nStreamObject = createObject();
         if( !updateObject(nStreamObject))
             goto streamend;
+        sal_Int32 nStreamLengthObject = createObject();
         aLine.append( nStreamObject );
-        aLine.append( " 0 obj\r\n  << /Length " );
-        aLine.append( nLength1+nLength2 );
-        aLine.append( "\r\n     /Length1 " );
+        aLine.append( " 0 obj\r\n"
+                      "<< /Length " );
+        aLine.append( nStreamLengthObject );
+        aLine.append( " 0 R\r\n"
+#ifdef ENABLE_COMPRESSION
+                      "   /Filter /FlateDecode\r\n"
+#endif
+                      "   /Length1 " );
         aLine.append( nLength1 );
-        aLine.append( "\r\n     /Length2 " );
+        aLine.append( "\r\n"
+                      "   /Length2 " );
         aLine.append( nLength2 );
-        aLine.append( "\r\n     /Length3 0\r\n  >>\r\nstream\r\n" );
+        aLine.append( "\r\n"
+                      "   /Length3 0\r\n"
+                      ">>\r\n"
+                      "stream\r\n" );
         if( !writeBuffer( aLine.getStr(), aLine.getLength() ) )
             goto streamend;
 
-#if defined DBG_UTIL || defined DEBUG
-        sal_uInt64 nCheckBeginStreamPos = 0;
-        osl_getFilePos( m_aFile, &nCheckBeginStreamPos );
-#endif
+        sal_uInt64 nBeginStreamPos = 0;
+        osl_getFilePos( m_aFile, &nBeginStreamPos );
+
+        beginCompression();
 
         // write ascii section
         if( aSections.begin() == aSections.end() )
@@ -1223,12 +1305,6 @@ sal_Int32 PDFWriterImpl::emitEmbeddedFont( ImplFontData* pFont )
             if( ! writeBuffer( pFontData+nIndex, nEndAsciiIndex-nIndex+1 ) )
                 goto streamend;
         }
-
-#if defined DBG_UTIL || defined DEBUG
-        sal_uInt64 nCheckBeginBinaryPos = 0;
-        osl_getFilePos( m_aFile, &nCheckBeginBinaryPos );
-        DBG_ASSERT( nCheckBeginBinaryPos - nCheckBeginStreamPos == nLength1, "wrong /Length1 written" );
-#endif
 
         // write binary section
         if( ! bConvertHexData )
@@ -1301,23 +1377,31 @@ sal_Int32 PDFWriterImpl::emitEmbeddedFont( ImplFontData* pFont )
                     nWriteIndex++;
                 }
             }
-            DBG_ASSERT( nWriteIndex == nLength2*2, "wrong write index in binary conversion" );
             if( ! writeBuffer( pWriteBuffer, nLength2 ) )
                 goto streamend;
 
             rtl_freeMemory( pWriteBuffer );
         }
+        endCompression();
 
-#if defined DBG_UTIL || defined DEBUG
-        sal_uInt64 nCheckEndBinaryPos = 0;
-        osl_getFilePos( m_aFile, &nCheckEndBinaryPos );
-        DBG_ASSERT( nCheckEndBinaryPos - nCheckBeginBinaryPos == nLength2, "wrong /Length2 written" );
-        DBG_ASSERT( nCheckEndBinaryPos - nCheckBeginStreamPos == nLength1+nLength2, "wrong /Length written" );
-#endif
+
+        sal_uInt64 nEndStreamPos = 0;
+        osl_getFilePos( m_aFile, &nEndStreamPos );
 
         // and finally close the stream
         aLine.setLength( 0 );
         aLine.append( "\r\nendstream\r\nendobj\r\n\r\n" );
+        if( ! writeBuffer( aLine.getStr(), aLine.getLength() ) )
+            goto streamend;
+
+        // write stream length object
+        aLine.setLength( 0 );
+        if( ! updateObject( nStreamLengthObject ) )
+            goto streamend;
+        aLine.append( nStreamLengthObject );
+        aLine.append( " 0 obj\r\n" );
+        aLine.append( (sal_Int64)(nEndStreamPos-nBeginStreamPos ) );
+        aLine.append( "\r\nendobj\r\n\r\n" );
         if( ! writeBuffer( aLine.getStr(), aLine.getLength() ) )
             goto streamend;
     }
@@ -1334,21 +1418,27 @@ sal_Int32 PDFWriterImpl::emitEmbeddedFont( ImplFontData* pFont )
             goto streamend;
         OStringBuffer aLine( 1024 );
         aLine.append( nObject );
-        aLine.append( " 0 obj\r\n  << /Type /Font\r\n"
-                      "     /Subtype /Type1\r\n"
-                      "     /BaseFont /" );
+        aLine.append( " 0 obj\r\n"
+                      "<< /Type /Font\r\n"
+                      "   /Subtype /Type1\r\n"
+                      "   /BaseFont /" );
         aLine.append( OUStringToOString( aInfo.m_aPSName, osl_getThreadTextEncoding() ) );
-        aLine.append( "\r\n     /Encoding /WinAnsiEncoding" );
-        aLine.append( "\r\n     /FirstChar 0\r\n     /LastChar 255\r\n     /Widths [ " );
+        aLine.append( "\r\n"
+                      "   /Encoding /WinAnsiEncoding\r\n"
+                      "   /FirstChar 0\r\n"
+                      "   /LastChar 255\r\n"
+                      "   /Widths [ " );
         for( int i = 0; i < 256; i++ )
         {
             aLine.append( pWidths[i] );
             aLine.append( (!i || (i&7)) ? " " : "\r\n     " );
         }
-        aLine.append( " ]\r\n" );
-        aLine.append( "     /FontDescriptor " );
+        aLine.append( " ]\r\n"
+                      "   /FontDescriptor " );
         aLine.append( nFontDescriptor );
-        aLine.append( " 0 R\r\n  >>\r\nendobj\r\n\r\n" );
+        aLine.append( " 0 R\r\n"
+                      ">>\r\n"
+                      "endobj\r\n\r\n" );
         if( ! writeBuffer( aLine.getStr(), aLine.getLength() ) )
             goto streamend;
 
@@ -1421,13 +1511,14 @@ sal_Int32 PDFWriterImpl::createToUnicodeCMap( sal_uInt8* pEncoding, sal_Unicode*
     OStringBuffer aLine( 40 );
 
     aLine.append( nStream );
-    aLine.append( " 0 obj\r\n  << /Length " );
+    aLine.append( " 0 obj\r\n<< /Length " );
     aLine.append( aContents.getLength() );
     aLine.append( " >>\r\nstream\r\n" );
     CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
     CHECK_RETURN( writeBuffer( aContents.getStr(), aContents.getLength() ) );
     aLine.setLength( 0 );
-    aLine.append( "endstream\r\nendobj\r\n\r\n" );
+    aLine.append( "endstream\r\n"
+                  "endobj\r\n\r\n" );
     CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
     return nStream;
 }
@@ -1452,12 +1543,15 @@ sal_Int32 PDFWriterImpl::emitFontDescriptor( ImplFontData* pFont, FontSubsetInfo
     CHECK_RETURN( updateObject( nFontDescriptor ) );
     aLine.setLength( 0 );
     aLine.append( nFontDescriptor );
-    aLine.append( " 0 obj\r\n  << /Type /FontDescriptor\r\n" );
-    aLine.append( "     /FontName /" );
+    aLine.append( " 0 obj\r\n"
+                  "<< /Type /FontDescriptor\r\n"
+                  "   /FontName /" );
     appendSubsetName( nSubsetID, rInfo.m_aPSName, aLine );
-    aLine.append( "\r\n     /Flags " );
+    aLine.append( "\r\n"
+                  "   /Flags " );
     aLine.append( nFontFlags );
-    aLine.append( "\r\n     /FontBBox [ " );
+    aLine.append( "\r\n"
+                  "   /FontBBox [ " );
     // note: Top and Bottom are reversed in VCL and PDF rectangles
     aLine.append( (sal_Int32)rInfo.m_aFontBBox.TopLeft().X() );
     aLine.append( ' ' );
@@ -1466,21 +1560,26 @@ sal_Int32 PDFWriterImpl::emitFontDescriptor( ImplFontData* pFont, FontSubsetInfo
     aLine.append( (sal_Int32)rInfo.m_aFontBBox.BottomRight().X() );
     aLine.append( ' ' );
     aLine.append( (sal_Int32)(rInfo.m_aFontBBox.BottomRight().Y()+1) );
-    aLine.append( " ]\r\n     /ItalicAngle " );
+    aLine.append( " ]\r\n"
+                  "   /ItalicAngle " );
     if( pFont->meItalic == ITALIC_OBLIQUE || pFont->meItalic == ITALIC_NORMAL )
         aLine.append( "-30" );
     else
         aLine.append( "0" );
-    aLine.append( "\r\n     /Ascent " );
+    aLine.append( "\r\n"
+                  "   /Ascent " );
     aLine.append( (sal_Int32)rInfo.m_nAscent );
-    aLine.append( "\r\n     /Descent " );
+    aLine.append( "\r\n"
+                  "   /Descent " );
     aLine.append( (sal_Int32)-rInfo.m_nDescent );
-    aLine.append( "\r\n     /CapHeight " );
+    aLine.append( "\r\n"
+                  "   /CapHeight " );
     aLine.append( (sal_Int32)rInfo.m_nCapHeight );
     // According to PDF reference 1.4 StemV is required
     // seems a tad strange to me, but well ...
-    aLine.append( "\r\n     /StemV 80\r\n" );
-    aLine.append( "     /FontFile" );
+    aLine.append( "\r\n"
+                  "   /StemV 80\r\n"
+                  "   /FontFile" );
     switch( rInfo.m_nFontType )
     {
         case SAL_FONTSUBSETINFO_TYPE_TRUETYPE:
@@ -1494,7 +1593,9 @@ sal_Int32 PDFWriterImpl::emitFontDescriptor( ImplFontData* pFont, FontSubsetInfo
     }
     aLine.append( ' ' );
     aLine.append( nFontStream );
-    aLine.append( " 0 R\r\n  >>\r\nendobj\r\n\r\n" );
+    aLine.append( " 0 R\r\n"
+                  ">>\r\n"
+                  "endobj\r\n\r\n" );
     CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
 
     return nFontDescriptor;
@@ -1562,17 +1663,29 @@ sal_Int32 PDFWriterImpl::emitFonts()
                 CHECK_RETURN( (osl_File_E_None == osl_setFilePos( aFontFile, osl_Pos_Absolut, 0 ) ) );
 
                 sal_Int32 nFontStream = createObject();
+                sal_Int32 nStreamLengthObject = createObject();
                 CHECK_RETURN( updateObject( nFontStream ) );
                 aLine.setLength( 0 );
                 aLine.append( nFontStream );
-                aLine.append( " 0 obj\r\n  << /Length " );
+                aLine.append( " 0 obj\r\n"
+                              "<< /Length " );
+                aLine.append( (sal_Int32)nStreamLengthObject );
+                aLine.append( " 0 R\r\n"
+#ifdef ENABLE_COMPRESSION
+                              "   /Filter /FlateDecode\r\n"
+#endif
+                              "   /Length1 " );
                 aLine.append( (sal_Int32)nLength );
-                aLine.append( "\r\n     /Length1 " );
-                aLine.append( (sal_Int32)nLength );
-                aLine.append( "\r\n  >>\r\nstream\r\n" );
+                aLine.append( "\r\n"
+                              ">>\r\n"
+                              "stream\r\n" );
                 CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
 
+                sal_uInt64 nStartPos = 0;
+                CHECK_RETURN( (osl_File_E_None == osl_getFilePos( m_aFile, &nStartPos ) ) );
+
                 // copy font file
+                beginCompression();
                 sal_uInt64 nRead;
                 sal_Bool bEOF = sal_False;
                 do
@@ -1581,10 +1694,22 @@ sal_Int32 PDFWriterImpl::emitFonts()
                     CHECK_RETURN( writeBuffer( buf, nRead ) );
                     CHECK_RETURN( (osl_File_E_None == osl_isEndOfFile( aFontFile, &bEOF ) ) );
                 } while( ! bEOF );
+                endCompression();
 
+                sal_uInt64 nEndPos = 0;
+                CHECK_RETURN( (osl_File_E_None == osl_getFilePos( m_aFile, &nEndPos ) ) );
                 // end the stream
                 aLine.setLength( 0 );
                 aLine.append( "\r\nendstream\r\nendobj\r\n\r\n" );
+                CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
+
+                // emit stream length object
+                CHECK_RETURN( updateObject( nStreamLengthObject ) );
+                aLine.setLength( 0 );
+                aLine.append( nStreamLengthObject );
+                aLine.append( " 0 obj\r\n" );
+                aLine.append( (sal_Int64)(nEndPos-nStartPos) );
+                aLine.append( "\r\nendobj\r\n\r\n" );
                 CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
 
                 // write font descriptor
@@ -1597,30 +1722,34 @@ sal_Int32 PDFWriterImpl::emitFonts()
                 CHECK_RETURN( updateObject( nFontObject ) );
                 aLine.setLength( 0 );
                 aLine.append( nFontObject );
-                aLine.append( " 0 obj\r\n  << /Type /Font\r\n" );
-                aLine.append( "     /Subtype /TrueType\r\n" );
-                aLine.append( "     /BaseFont /" );
+                aLine.append( " 0 obj\r\n"
+                              "<< /Type /Font\r\n"
+                              "   /Subtype /TrueType\r\n"
+                              "   /BaseFont /" );
                 appendSubsetName( lit->m_nFontID, aSubsetInfo.m_aPSName, aLine );
-                aLine.append( "\r\n     /FirstChar 1" );
-                aLine.append( "\r\n     /LastChar " );
+                aLine.append( "\r\n"
+                              "   /FirstChar 1\r\n"
+                              "   /LastChar " );
                 aLine.append( (sal_Int32)nGlyphs );
-                aLine.append( "\r\n     /Widths [ " );
+                aLine.append( "\r\n"
+                              "   /Widths [ " );
                 for( int i = 0; i < nGlyphs; i++ )
                 {
                     aLine.append( pWidths[ aEncodingIndexMap[(sal_uInt8)(i+1)] ] );
                     aLine.append( (i == 0 || (i & 7 )) ? " " : "\r\n     " );
                 }
-                aLine.append( "]\r\n" );
-                aLine.append( "     /FontDescriptor " );
+                aLine.append( "]\r\n"
+                              "   /FontDescriptor " );
                 aLine.append( nFontDescriptor );
                 aLine.append( " 0 R\r\n" );
                 if( nToUnicodeStream )
                 {
-                    aLine.append( "     /ToUnicode " );
+                    aLine.append( "   /ToUnicode " );
                     aLine.append( nToUnicodeStream );
                     aLine.append( " 0 R\r\n" );
                 }
-                aLine.append( "  >>\r\nendobj\r\n\r\n" );
+                aLine.append( ">>\r\n"
+                              "endobj\r\n\r\n" );
                 CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
 
                 aFontIDToObject[ lit->m_nFontID ] = nFontObject;
@@ -1641,16 +1770,19 @@ sal_Int32 PDFWriterImpl::emitFonts()
     CHECK_RETURN( updateObject( nFontDict ) );
     aLine.setLength( 0 );
     aLine.append( nFontDict );
-    aLine.append( " 0 obj\r\n  << " );
+    aLine.append( " 0 obj\r\n"
+                  "<< " );
     for( std::map< sal_Int32, sal_Int32 >::iterator mit = aFontIDToObject.begin(); mit != aFontIDToObject.end(); ++mit )
     {
         aLine.append( "/F" );
         aLine.append( mit->first );
         aLine.append( ' ' );
         aLine.append( mit->second );
-        aLine.append( " 0 R\r\n     " );
+        aLine.append( " 0 R\r\n"
+                      "   " );
     }
-    aLine.append( ">>\r\nendobj\r\n\r\n" );
+    aLine.append( ">>\r\n"
+                  "endobj\r\n\r\n" );
     CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
 
     return nFontDict;
@@ -1667,7 +1799,8 @@ sal_Int32 PDFWriterImpl::emitResources()
         CHECK_RETURN( emitGradients() );
         aLine.setLength( 0 );
         aLine.append( nShadingDict = createObject() );
-        aLine.append( " 0 obj\r\n  << " );
+        aLine.append( " 0 obj\r\n"
+                      "<< " );
         for( std::list<GradientEmit>::iterator it = m_aGradients.begin();
              it != m_aGradients.end(); ++it )
         {
@@ -1675,9 +1808,10 @@ sal_Int32 PDFWriterImpl::emitResources()
             aLine.append( it->m_nObject );
             aLine.append( ' ' );
             aLine.append( it->m_nObject );
-            aLine.append( " 0 R\r\n     " );
+            aLine.append( " 0 R\r\n   " );
         }
-        aLine.append( ">>\r\nendobj\r\n\r\n" );
+        aLine.append( ">>\r\n"
+                      "endobj\r\n\r\n" );
         CHECK_RETURN( updateObject( nShadingDict ) );
         CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
     }
@@ -1692,7 +1826,7 @@ sal_Int32 PDFWriterImpl::emitResources()
             CHECK_RETURN( emitTilings() );
         aLine.setLength( 0 );
         aLine.append( nPatternDict = createObject() );
-        aLine.append( " 0 obj\r\n  << " );
+        aLine.append( " 0 obj\r\n<< " );
         for( std::list<HatchEmit>::const_iterator hatch = m_aHatches.begin();
              hatch != m_aHatches.end(); ++hatch )
         {
@@ -1700,7 +1834,7 @@ sal_Int32 PDFWriterImpl::emitResources()
             aLine.append( hatch->m_nObject );
             aLine.append( ' ' );
             aLine.append( hatch->m_nObject );
-            aLine.append( " 0 R\r\n     " );
+            aLine.append( " 0 R\r\n   " );
         }
         for( std::list<BitmapPatternEmit>::const_iterator tile = m_aTilings.begin();
              tile != m_aTilings.end(); ++tile )
@@ -1709,9 +1843,10 @@ sal_Int32 PDFWriterImpl::emitResources()
             aLine.append( tile->m_nObject );
             aLine.append( ' ' );
             aLine.append( tile->m_nObject );
-            aLine.append( " 0 R\r\n     " );
+            aLine.append( " 0 R\r\n   " );
         }
-        aLine.append( ">>\r\nendobj\r\n\r\n" );
+        aLine.append( ">>\r\n"
+                      "endobj\r\n\r\n" );
         CHECK_RETURN( updateObject( nPatternDict ) );
         CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
     }
@@ -1726,7 +1861,8 @@ sal_Int32 PDFWriterImpl::emitResources()
         aLine.setLength( 0 );
         nXObjectDict = createObject();
         aLine.append( nXObjectDict );
-        aLine.append( " 0 obj\r\n  << " );
+        aLine.append( " 0 obj\r\n"
+                      "<< " );
         for( std::list<BitmapEmit>::const_iterator it = m_aBitmaps.begin();
              it != m_aBitmaps.end(); ++it )
         {
@@ -1734,7 +1870,7 @@ sal_Int32 PDFWriterImpl::emitResources()
             aLine.append( it->m_nObject );
             aLine.append( ' ' );
             aLine.append( it->m_nObject );
-            aLine.append( " 0 R\r\n     " );
+            aLine.append( " 0 R\r\n   " );
         }
         for( std::list<TransparencyEmit>::const_iterator t = m_aTransparentObjects.begin();
              t != m_aTransparentObjects.end(); ++t )
@@ -1743,10 +1879,11 @@ sal_Int32 PDFWriterImpl::emitResources()
             aLine.append( t->m_nObject );
             aLine.append( ' ' );
             aLine.append( t->m_nObject );
-            aLine.append( " 0 R\r\n     " );
+            aLine.append( " 0 R\r\n   " );
         }
 
-        aLine.append( ">>\r\nendobj\r\n\r\n" );
+        aLine.append( ">>\r\n"
+                      "endobj\r\n\r\n" );
         CHECK_RETURN( updateObject( nXObjectDict ) );
         CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
     }
@@ -1756,36 +1893,37 @@ sal_Int32 PDFWriterImpl::emitResources()
     CHECK_RETURN( updateObject( nResourceDict ) );
     aLine.setLength( 0 );
     aLine.append( nResourceDict );
-    aLine.append( " 0 obj\r\n  <<\r\n" );
+    aLine.append( " 0 obj\r\n<<\r\n" );
     if( nFontDict )
     {
-        aLine.append( "     /Font " );
+        aLine.append( "   /Font " );
         aLine.append( nFontDict );
         aLine.append( " 0 R\r\n" );
     }
     if( nXObjectDict )
     {
-        aLine.append( "     /XObject " );
+        aLine.append( "   /XObject " );
         aLine.append( nXObjectDict );
         aLine.append( " 0 R\r\n" );
     }
     if( nShadingDict )
     {
-        aLine.append( "     /Shading " );
+        aLine.append( "   /Shading " );
         aLine.append( nShadingDict );
         aLine.append( " 0 R\r\n" );
     }
     if( nPatternDict )
     {
-        aLine.append( "     /Pattern " );
+        aLine.append( "   /Pattern " );
         aLine.append( nPatternDict );
         aLine.append( " 0 R\r\n" );
     }
-    aLine.append( "     /ProcSet [ /PDF " );
+    aLine.append( "   /ProcSet [ /PDF " );
     if( nXObjectDict )
         aLine.append( "/ImageC /ImageI " );
     aLine.append( "]\r\n" );
-    aLine.append( "  >>\r\nendobj\r\n\r\n" );
+    aLine.append( ">>\r\n"
+                  "endobj\r\n\r\n" );
     CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
     return nResourceDict;
 }
@@ -1816,33 +1954,38 @@ bool PDFWriterImpl::emitCatalog()
     OStringBuffer aLine( 1024 );
     aLine.append( nTreeNode );
     aLine.append( " 0 obj\r\n" );
-    aLine.append( "  << /Type /Pages\r\n" );
-    aLine.append( "     /Resources " );
+    aLine.append( "<< /Type /Pages\r\n" );
+    aLine.append( "   /Resources " );
     aLine.append( nResourceDict );
     aLine.append( " 0 R\r\n" );
     switch( m_eInheritedOrientation )
     {
-        case PDFWriter::Landscape: aLine.append( "     /Rotate 90\r\n" );break;
-        case PDFWriter::Seascape: aLine.append( "     /Rotate -90\r\n" );break;
+        case PDFWriter::Landscape: aLine.append( "   /Rotate 90\r\n" );break;
+        case PDFWriter::Seascape: aLine.append( "   /Rotate -90\r\n" );break;
 
         case PDFWriter::Inherit: // actually Inherit would be a bug, but insignificant
         case PDFWriter::Portrait:
         default:
             break;
     }
-    aLine.append( "     /MediaBox [ 0 0 " );
+    aLine.append( "   /MediaBox [ 0 0 " );
     aLine.append( m_nInheritedPageWidth );
     aLine.append( ' ' );
     aLine.append( m_nInheritedPageHeight );
-    aLine.append( " ]\r\n     /Kids [ " );
+    aLine.append( " ]\r\n"
+                  "   /Kids [ " );
     for( std::list<PDFPage>::const_iterator iter = m_aPages.begin(); iter != m_aPages.end(); ++iter )
     {
         aLine.append( iter->m_nPageObject );
-        aLine.append( " 0 R\r\n             " );
+        aLine.append( " 0 R\r\n"
+                      "           " );
     }
-    aLine.append( "]\r\n     /Count " );
+    aLine.append( "]\r\n"
+                  "   /Count " );
     aLine.append( (sal_Int32)m_aPages.size() );
-    aLine.append( "\r\n  >>\r\nendobj\r\n\r\n" );
+    aLine.append( "\r\n"
+                  ">>\r\n"
+                  "endobj\r\n\r\n" );
     CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
 
     // emit Catalog
@@ -1851,9 +1994,13 @@ bool PDFWriterImpl::emitCatalog()
         return false;
     aLine.setLength( 0 );
     aLine.append( m_nCatalogObject );
-    aLine.append( " 0 obj\r\n  << /Type /Catalog\r\n     /Pages " );
+    aLine.append( " 0 obj\r\n"
+                  "<< /Type /Catalog\r\n"
+                  "   /Pages " );
     aLine.append( nTreeNode );
-    aLine.append( " 0 R\r\n  >>\r\nendobj\r\n\r\n" );
+    aLine.append( " 0 R\r\n"
+                  ">>\r\n"
+                  "endobj\r\n\r\n" );
     CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
 
     return true;
@@ -1890,13 +2037,18 @@ bool PDFWriterImpl::emitTrailer()
 
     // emit trailer
     aLine.setLength( 0 );
-    aLine.append( "trailer\r\n<< /Size " );
+    aLine.append( "trailer\r\n"
+                  "<< /Size " );
     aLine.append( (sal_Int32)(nObjects+1) );
-    aLine.append( "\r\n   /Root " );
+    aLine.append( "\r\n"
+                  "   /Root " );
     aLine.append( m_nCatalogObject );
-    aLine.append( " 0 R\r\n>>\r\nstartxref\r\n" );
+    aLine.append( " 0 R\r\n"
+                  ">>\r\n"
+                  "startxref\r\n" );
     aLine.append( (sal_Int64)nXRefOffset );
-    aLine.append( "\r\n%%EOF\r\n" );
+    aLine.append( "\r\n"
+                  "%%EOF\r\n" );
     CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
 
     return true;
@@ -3195,9 +3347,10 @@ bool PDFWriterImpl::writeTransparentObject( TransparencyEmit& rObject )
     OStringBuffer aLine( 512 );
     CHECK_RETURN( updateObject( rObject.m_nObject ) );
     aLine.append( rObject.m_nObject );
-    aLine.append( " 0 obj\r\n  << /Type /XObject\r\n"
-                  "     /Subtype /Form\r\n"
-                  "     /BBox [ " );
+    aLine.append( " 0 obj\r\n"
+                  "<< /Type /XObject\r\n"
+                  "   /Subtype /Form\r\n"
+                  "   /BBox [ " );
     appendDouble( ((double)rObject.m_aBoundRect.TopLeft().X())/10.0, aLine );
     aLine.append( ' ' );
     appendDouble( ((double)rObject.m_aBoundRect.TopLeft().Y())/10.0, aLine );
@@ -3205,20 +3358,24 @@ bool PDFWriterImpl::writeTransparentObject( TransparencyEmit& rObject )
     appendDouble( ((double)rObject.m_aBoundRect.BottomRight().X())/10.0, aLine );
     aLine.append( ' ' );
     appendDouble( ((double)rObject.m_aBoundRect.BottomRight().Y()+1)/10.0, aLine );
-    aLine.append( " ]\r\n     /Resources << /ExtGState << /EGS" );
+    aLine.append( " ]\r\n"
+                  "   /Resources << /ExtGState << /EGS" );
     aLine.append( nStateObject );
     aLine.append( ' ' );
     aLine.append( nStateObject );
     aLine.append( " 0 R >> >>\r\n" );
-    aLine.append( "     /Group << /S /Transparency /CS /DeviceRGB >>\r\n" );
-    aLine.append( "     /Length " );
+    aLine.append( "   /Group << /S /Transparency /CS /DeviceRGB >>\r\n" );
+    aLine.append( "   /Length " );
     aLine.append( (sal_Int32)(rObject.m_aContentStream.getLength()+aProlog.getLength()) );
-    aLine.append( "  >>\r\nstream\r\n" );
+    aLine.append( "\r\n"
+                  ">>\r\n"
+                  "stream\r\n" );
     CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
     CHECK_RETURN( writeBuffer( aProlog.getStr(), aProlog.getLength() ) );
     CHECK_RETURN( writeBuffer( rObject.m_aContentStream.getStr(), rObject.m_aContentStream.getLength() ) );
     aLine.setLength( 0 );
-    aLine.append( "endstream\r\nendobj\r\n\r\n" );
+    aLine.append( "endstream\r\n"
+                  "endobj\r\n\r\n" );
     CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
 
     // write ExtGState dict for this XObject
@@ -3226,11 +3383,14 @@ bool PDFWriterImpl::writeTransparentObject( TransparencyEmit& rObject )
     CHECK_RETURN( updateObject( nStateObject ) );
     aLine.append( nStateObject );
     aLine.append( " 0 obj\r\n"
-                  "  << /CA " );
+                  "<< /CA " );
     appendDouble( rObject.m_fAlpha, aLine );
-    aLine.append( "\r\n     /ca " );
+    aLine.append( "\r\n"
+                  "   /ca " );
     appendDouble( rObject.m_fAlpha, aLine );
-    aLine.append( "\r\n  >>\r\nendobj\r\n\r\n" );
+    aLine.append( "\r\n"
+                  ">>\r\n"
+                  "endobj\r\n\r\n" );
     CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
 
     return true;
@@ -3256,18 +3416,33 @@ bool PDFWriterImpl::writeGradientFunction( GradientEmit& rObject )
 
     Size aSize = aSample.GetSizePixel();
 
+    sal_Int32 nStreamLengthObject = createObject();
     OStringBuffer aLine( 120 );
     aLine.append( nFunctionObject );
-    aLine.append( " 0 obj\r\n  << /FunctionType 0\r\n     /Domain [ 0 1 0 1 ]\r\n" );
-    aLine.append( "     /Size [ " );
+    aLine.append( " 0 obj\r\n"
+                  "<< /FunctionType 0\r\n"
+                  "   /Domain [ 0 1 0 1 ]\r\n"
+                  "   /Size [ " );
     aLine.append( (sal_Int32)aSize.Width() );
     aLine.append( ' ' );
     aLine.append( (sal_Int32)aSize.Height() );
-    aLine.append( " ]\r\n     /BitsPerSample 8\r\n     /Range [ 0 1 0 1 0 1 ]\r\n" );
-    aLine.append( "     /Length " );
-    aLine.append( (sal_Int32)(aSize.Width()*aSize.Height()*3) );
-    aLine.append( "\r\n  >>\r\nstream\r\n" );
+    aLine.append( " ]\r\n"
+                  "   /BitsPerSample 8\r\n"
+                  "   /Range [ 0 1 0 1 0 1 ]\r\n"
+                  "   /Length " );
+    aLine.append( nStreamLengthObject );
+    aLine.append( " 0 R\r\n"
+#ifdef ENABLE_COMPRESSION
+                  "   /Filter /FlateDecode\r\n"
+#endif
+                  ">>\r\n"
+                  "stream\r\n" );
     CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
+
+    sal_uInt64 nStartStreamPos = 0;
+    CHECK_RETURN( (osl_File_E_None == osl_getFilePos( m_aFile, &nStartStreamPos )) );
+
+    beginCompression();
     for( int y = 0; y < aSize.Height(); y++ )
     {
         for( int x = 0; x < aSize.Width(); x++ )
@@ -3280,22 +3455,42 @@ bool PDFWriterImpl::writeGradientFunction( GradientEmit& rObject )
             CHECK_RETURN( writeBuffer( aCol, 3 ) );
         }
     }
+    endCompression();
+
+    sal_uInt64 nEndStreamPos = 0;
+    CHECK_RETURN( (osl_File_E_None == osl_getFilePos( m_aFile, &nEndStreamPos )) );
+
     aLine.setLength( 0 );
     aLine.append( "\r\nendstream\r\nendobj\r\n\r\n" );
+    CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
+
+    // write stream length
+    CHECK_RETURN( updateObject( nStreamLengthObject ) );
+    aLine.setLength( 0 );
+    aLine.append( nStreamLengthObject );
+    aLine.append( " 0 obj\r\n" );
+    aLine.append( (sal_Int64)(nEndStreamPos-nStartStreamPos) );
+    aLine.append( "\r\nendobj\r\n\r\n" );
     CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
 
     CHECK_RETURN( updateObject( rObject.m_nObject ) );
     aLine.setLength( 0 );
     aLine.append( rObject.m_nObject );
-    aLine.append( " 0 obj\r\n  << /ShadingType 1\r\n     /ColorSpace /DeviceRGB\r\n" );
-    aLine.append( "     /AntiAlias true\r\n     /Domain [ 0 1 0 1 ]\r\n" );
-    aLine.append( "     /Matrix [ " );
+    aLine.append( " 0 obj\r\n"
+                  "<< /ShadingType 1\r\n"
+                  "   /ColorSpace /DeviceRGB\r\n"
+                  "   /AntiAlias true\r\n"
+                  "   /Domain [ 0 1 0 1 ]\r\n"
+                  "   /Matrix [ " );
     aLine.append( (sal_Int32)aSize.Width() );
     aLine.append( " 0 0 " );
     aLine.append( (sal_Int32)aSize.Height() );
-    aLine.append( " 0 0 ]\r\n     /Function " );
+    aLine.append( " 0 0 ]\r\n"
+                  "   /Function " );
     aLine.append( nFunctionObject );
-    aLine.append( " 0 R\r\n  >>\r\nendobj\r\n\r\n" );
+    aLine.append( " 0 R\r\n"
+                  ">>\r\n"
+                  "endobj\r\n\r\n" );
     CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
 
     pRefDevice->Pop();
@@ -3380,19 +3575,27 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
 
     OStringBuffer aLine(80);
     aLine.append( rObject.m_nObject );
-    aLine.append( " 0 obj\r\n  << /Type /XObject\r\n     /Subtype /Image\r\n     /Width " );
+    aLine.append( " 0 obj\r\n"
+                  "<< /Type /XObject\r\n"
+                  "   /Subtype /Image\r\n"
+                  "   /Width " );
     aLine.append( (sal_Int32)aBitmap.GetSizePixel().Width() );
-    aLine.append( "\r\n     /Height " );
+    aLine.append( "\r\n"
+                  "   /Height " );
     aLine.append( (sal_Int32)aBitmap.GetSizePixel().Height() );
-    aLine.append( "\r\n     /BitsPerComponent " );
+    aLine.append( "\r\n"
+                  "   /BitsPerComponent " );
     aLine.append( nBitsPerComponent );
-    aLine.append( "\r\n     /Length " );
+    aLine.append( "\r\n"
+                  "   /Length " );
     aLine.append( nStreamLengthObject );
     aLine.append( " 0 R\r\n" );
-
+#ifdef ENABLE_COMPRESSION
+    aLine.append( "   /Filter /FlateDecode\r\n" );
+#endif
     if( ! bMask )
     {
-        aLine.append( "     /ColorSpace " );
+        aLine.append( "   /ColorSpace " );
         if( bTrueColor )
             aLine.append( "/DeviceRGB\r\n" );
         else
@@ -3418,18 +3621,18 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
     {
         if( aBitmap.GetBitCount() == 1 )
         {
-            aLine.append( "     /ImageMask true\r\n" );
+            aLine.append( "   /ImageMask true\r\n" );
             sal_Int32 nBlackIndex = pAccess->GetBestPaletteIndex( BitmapColor( Color( COL_BLACK ) ) );
             DBG_ASSERT( nBlackIndex == 0 || nBlackIndex == 1, "wrong black index" );
             if( nBlackIndex )
-                aLine.append( "     /Decode [ 1 0 ]\r\n" );
+                aLine.append( "   /Decode [ 1 0 ]\r\n" );
             else
-                aLine.append( "     /Decode [ 0 1 ]\r\n" );
+                aLine.append( "   /Decode [ 0 1 ]\r\n" );
         }
         else if( aBitmap.GetBitCount() == 8 )
         {
-            aLine.append( "     /ColorSpace /DeviceGray\r\n"
-                          "     /Decode [ 1 0 ]\r\n" );
+            aLine.append( "   /ColorSpace /DeviceGray\r\n"
+                          "   /Decode [ 1 0 ]\r\n" );
         }
     }
 
@@ -3439,15 +3642,15 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
         {
             nMaskObject = createObject();
             if( rObject.m_aBitmap.IsAlpha() && m_eVersion > PDFWriter::PDF_1_3 )
-                aLine.append( "     /SMask " );
+                aLine.append( "   /SMask " );
             else
-                aLine.append( "     /Mask " );
+                aLine.append( "   /Mask " );
             aLine.append( nMaskObject );
             aLine.append( " 0 R\r\n" );
         }
         else if( aTransparentColor != Color( COL_TRANSPARENT ) )
         {
-            aLine.append( "    /Mask [ " );
+            aLine.append( "  /Mask [ " );
             if( bTrueColor )
             {
                 aLine.append( (sal_Int32)aTransparentColor.GetRed() );
@@ -3470,11 +3673,13 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
             aLine.append( " ]\r\n" );
         }
     }
-    aLine.append( "  >>\r\nstream\r\n" );
+    aLine.append( ">>\r\n"
+                  "stream\r\n" );
     CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
     sal_uInt64 nStartPos = 0;
     CHECK_RETURN( (osl_File_E_None == osl_getFilePos( m_aFile, &nStartPos )) );
 
+    beginCompression();
     if( ! bTrueColor || pAccess->GetScanlineFormat() == BMP_FORMAT_24BIT_TC_RGB )
     {
         for( int i = 0; i < pAccess->Height(); i++ )
@@ -3499,6 +3704,7 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
         }
         rtl_freeMemory( pCol );
     }
+    endCompression();
 
     sal_uInt64 nEndPos = 0;
     CHECK_RETURN( (osl_File_E_None == osl_getFilePos( m_aFile, &nEndPos )) );
