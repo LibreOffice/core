@@ -11307,3 +11307,4 @@ SfxCompare_UString_SfxPropertyDescriptor_Impl
 ?DbgName_SfxBindingsUpdate_Impl@@YAPAUDbgDataType@@XZ
 ?DbgName_SfxVirtualMenu@@YAPAUDbgDataType@@XZ
 ?DbgName_SfxConfigManager@@YAPAUDbgDataType@@XZ
+?lcl_translateBasic2Uno@?%O:\SRC665\src\sfx2\source\doc\objmisc.cxx157615644@@YAXABVSbxVariableRef@@PAX@Z
