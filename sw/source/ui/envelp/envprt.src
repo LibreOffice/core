@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envprt.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-26 03:27:07 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 15:30:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,7 +136,7 @@ TabPage TP_ENV_PRT
     FixedText TXT_RIGHT
     {
         Pos = MAP_APPFONT ( 12 , 74 ) ;
-        Size = MAP_APPFONT ( 50 , 8 ) ;
+        Size = MAP_APPFONT ( 72 , 8 ) ;
         Text [ de ] = "Nach ~rechts" ;
         Text [ en-US ] = "~Shift right" ;
         Left = TRUE ;
@@ -145,7 +145,7 @@ TabPage TP_ENV_PRT
     MetricField FLD_RIGHT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 66 , 72 ) ;
+        Pos = MAP_APPFONT ( 86 , 72 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -162,7 +162,7 @@ TabPage TP_ENV_PRT
     FixedText TXT_DOWN
     {
         Pos = MAP_APPFONT ( 12 , 90 ) ;
-        Size = MAP_APPFONT ( 50 , 8 ) ;
+        Size = MAP_APPFONT ( 72 , 8 ) ;
         Text [ de ] = "~Nach unten" ;
         Text [ en-US ] = "Shift ~down" ;
         Left = TRUE ;
@@ -171,7 +171,7 @@ TabPage TP_ENV_PRT
     MetricField FLD_DOWN
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 66 , 88 ) ;
+        Pos = MAP_APPFONT ( 86 , 88 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
