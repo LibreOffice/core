@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_ext.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: hjs $ $Date: 2001-10-30 16:26:12 $
+#   last change: $Author: hjs $ $Date: 2001-10-30 18:04:46 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,6 +76,10 @@ P_BUILD_DIR=$(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/$(BUILD_DIR)
 P_INSTALL_DIR=$(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/$(BUILD_DIR)
 P_INSTALL_TARGET_DIR=$(MISC)$/install
 
+.IF "$(TAR_EXCLUDES)"!=""
+TAR_EXCLUDE_SWITCH=--exclude $(TAR_EXCLUDES)
+.ENDIF          # "$(TAR_EXCLUDES)"!=""
+
 #clean PWD to let a build_action=dmake set it with new value
 .IF "$(GUI)"=="WNT"
 PWD:=
@@ -103,12 +107,12 @@ clean:
     
 $(MISC)$/%.unpack : $(PRJ)$/download$/%.tar.gz
     @+-$(RM) $@
-    @+echo $(assign UNPACKCMD := gunzip -c $(BACK_PATH)download$/$(TARFILE_NAME).tar.gz | tar -xvf - ) > $(NULLDEV)
+    @+echo $(assign UNPACKCMD := gunzip -c $(BACK_PATH)download$/$(TARFILE_NAME).tar.gz | tar $(TAR_EXCLUDE_SWITCH) -xvf - ) > $(NULLDEV)
     @+$(COPY) $(mktmp $(UNPACKCMD)) $@
 
 $(MISC)$/%.unpack : $(PRJ)$/download$/%.tar
     @+-$(RM) $@
-    +echo $(assign UNPACKCMD := tar -xvf $(BACK_PATH)download$/$(TARFILE_NAME).tar) > $(NULLDEV)
+    +echo $(assign UNPACKCMD := tar $(TAR_EXCLUDE_SWITCH) -xsvf $(BACK_PATH)download$/$(TARFILE_NAME).tar) > $(NULLDEV)
     @+$(COPY) $(mktmp $(UNPACKCMD)) $@
 
 #untar
