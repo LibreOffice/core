@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framelistanalyzer.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 18:21:30 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 17:14:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,6 +210,7 @@ void FrameListAnalyzer::impl_analyze()
     // But look, if this analyze step is realy needed.
     if (
         ((m_eDetectMode & E_HELP)     == E_HELP                ) &&
+        (m_xReferenceFrame.is()                                ) &&
         (m_xReferenceFrame->getName() == SPECIALTARGET_HELPTASK)
        )
     {
