@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgegif.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 14:03:04 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:53:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -231,7 +231,7 @@ ModalDialog DLG_EXPORT_GIF
         Text[ arabic ] = "ΝέΩ ΤέΗέ";
         Text[ dutch ] = "~Transparant opslaan";
         Text[ chinese_simplified ] = "ε­η›ι€ζ(~T)";
-        Text[ greek ] = "Αποθήκευση διαφανές";
+        Text[ greek ] = "Αποθήκευση διαφάνειας";
         Text[ korean ] = "ν¬λª… λª¨λ“ μ €μ¥(~T)";
         Text[ turkish ] = "Saydam biηimde kaydet";
         Text[ language_user1 ] = " ";
@@ -263,6 +263,7 @@ ModalDialog DLG_EXPORT_GIF
     Text[ hindi ] = "GIF ΰ¤µΰ¤Ώΰ¤•ΰ¤²ΰ¥ΰ¤ª";
     Text[ slovak ] = "VoΔΎby pre formΓ΅t GIF";
 };
+
 
 
 
