@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoControlListBoxModel.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 17:25:30 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 16:02:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,18 @@ published service UnoControlListBoxModel
 
     //-------------------------------------------------------------------------
 
+    /** specifies the alignment of the text in the control.
+
+        <pre>
+        0: left
+        1: center
+        2: right
+        </pre>
+     */
+    [optional, property] short Align;
+
+    //-------------------------------------------------------------------------
+
     /** specifies the background color (RGB) of the control.
      */
     [property] com::sun::star::util::Color BackgroundColor;
@@ -103,6 +115,17 @@ published service UnoControlListBoxModel
         </pre>
      */
     [property] short Border;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the color of the border, if present
+
+        <p>Not every border style (see <member>Border</member>) may support coloring.
+        For instance, usually a border with 3D effect will ignore the BorderColor setting.</p>
+
+        @since #i24694#
+     */
+    [optional, property] long BorderColor;
 
     //-------------------------------------------------------------------------
 
