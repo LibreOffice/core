@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfiltersettingsdialog.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 08:31:24 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:52:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1194,6 +1194,10 @@ void XMLFilterSettingsDialog::initFilterList()
                     {
                         pValues->Value >>= pTempFilter->maImportTemplate;
                     }
+                    else if(pValues->Name.equalsAscii( "Finalized" ))
+                    {
+                        pValues->Value >>= pTempFilter->mbReadonly;
+                    }
                 }
 
                 // if this is not a XmlFilterAdaptor entry, skip it
@@ -1275,7 +1279,10 @@ void XMLFilterSettingsDialog::initFilterList()
                                 }
                                 else if(pValues->Name.equalsAscii( "Finalized" ))
                                 {
-                                    pValues->Value >>= pTempFilter->mbReadonly;
+                                    // both the filter and the type may be finalized
+                                    sal_Bool bTemp;
+                                    pValues->Value >>= bTemp;
+                                    pTempFilter->mbReadonly |= bTemp;
                                 }
                             }
                         }
