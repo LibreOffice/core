@@ -2,9 +2,9 @@
  *
  *  $RCSfile: floatwin.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: pl $ $Date: 2002-05-22 12:01:21 $
+ *  last change: $Author: ssa $ $Date: 2002-07-02 15:25:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,7 @@ void FloatingWindow::ImplInit( Window* pParent, WinBits nStyle )
     mbInCleanUp = FALSE;
     mbGrabFocus = FALSE;
 
+
     if ( !pParent )
         pParent = Application::GetAppWindow();
 
@@ -133,7 +134,10 @@ void FloatingWindow::ImplInit( Window* pParent, WinBits nStyle )
             ImplBorderWindow*   pBorderWin;
             USHORT              nBorderStyle = BORDERWINDOW_STYLE_OVERLAP | BORDERWINDOW_STYLE_BORDER | BORDERWINDOW_STYLE_FLOAT;
             if ( (nStyle & WB_SYSTEMWINDOW) && !(nStyle & (WB_MOVEABLE | WB_SIZEABLE)) )
+            {
                 nBorderStyle |= BORDERWINDOW_STYLE_FRAME;
+                nStyle |= WB_CLOSEABLE; // make undecorated floaters closeable
+            }
             pBorderWin  = new ImplBorderWindow( pParent, nStyle, nBorderStyle );
             SystemWindow::ImplInit( pBorderWin, nStyle & ~WB_BORDER, NULL );
             pBorderWin->mpClientWindow = this;
@@ -602,9 +606,11 @@ void FloatingWindow::StartPopupMode( const Rectangle& rRect, ULONG nFlags )
     else
         SetTitleType( FLOATWIN_TITLE_NONE );
 
-    // avoid close on focus change for decorated floating windows
+    // avoid close on focus change for decorated floating windows only
     if( mbFrame && (GetStyle() & WB_MOVEABLE) )
         nFlags |= FLOATWIN_POPUPMODE_NOAPPFOCUSCLOSE;
+    else
+        nFlags &= ~FLOATWIN_POPUPMODE_NOAPPFOCUSCLOSE;
 
     // Fenster-Position ermitteln und setzen
     USHORT nArrangeIndex;
