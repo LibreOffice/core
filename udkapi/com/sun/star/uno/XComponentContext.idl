@@ -1,8 +1,8 @@
 /*************************************************************************
  *
- *  $RCSfile: XCurrentContext.idl,v $
+ *  $RCSfile: XComponentContext.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.1 $
  *
  *  last change: $Author: dbo $ $Date: 2001-05-04 14:22:18 $
  *
@@ -61,24 +61,22 @@
 #ifndef __com_sun_star_uno_XCurrentContext_idl__
 #define __com_sun_star_uno_XCurrentContext_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
-#include <com/sun/star/uno/XInterface.idl>
+#ifndef __com_sun_star_lang_XMultiComponentFactory_idl__
+#include <com/sun/star/lang/XMultiComponentFactory.idl>
+#endif
+#ifndef __com_sun_star_uno_Exception_idl__
+#include <com/sun/star/uno/Exception.idl>
 #endif
 
 
 module com {  module sun {  module star {  module uno {
 
-/** Task local execution context for UNO.
+/** Component context to be granted to a component for running.
     Arbitrary values can be retrieved from the context.
-
-    Use UNO runtime functions to obtain the current context in your language.
 */
-interface XCurrentContext : XInterface
+interface XComponentContext : XInterface
 {
     /** Gets a value from the context.
-        You should carefully use the obtained value, because the current context
-        (value container) lives only for the running task (i.e. often the
-        executing thread) only!
 
         @param Name
                name of value
@@ -86,6 +84,11 @@ interface XCurrentContext : XInterface
                 value
     */
     any getValueByName( [in] string Name );
+    /** Gets the service manager instance to be used (or null).
+        This method has been added for convenience, because the
+        service manager is a often used object.
+    */
+    com::sun::star::lang::XMultiComponentFactory getServiceManager();
 };
 
 }; }; }; };
