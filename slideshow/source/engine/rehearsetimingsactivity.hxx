@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rehearsetimingsactivity.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 15:34:58 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 13:43:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,10 +116,11 @@ public:
     // Disposable:
     virtual void dispose();
     // Activity:
+    virtual double calcTimeLag() const;
     virtual bool perform();
     virtual bool isActive() const;
     virtual bool needsScreenUpdate() const;
-    virtual void end();
+    virtual void dequeued();
 
 private:
     RehearseTimingsActivity(
@@ -174,11 +175,6 @@ private:
                   cppcanvas::CustomSpriteSharedPtr> > ViewsVecT;
     ViewsVecT m_views;
 
-    // interims solution only:
-    template <typename PairT>
-    static typename PairT::second_type const & mySelect2nd( PairT const & p ) {
-        return p.second;
-    }
     template <typename FuncT>
     FuncT for_each_sprite( FuncT func ) const {
         ViewsVecT::const_iterator iPos( m_views.begin() );
