@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlitemm.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:15:00 $
+ *  last change: $Author: mib $ $Date: 2000-10-12 10:42:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -459,7 +459,7 @@ SvXMLItemMapEntry aXMLTableCellItemMap[] =
     // RES_SURROUND
     // not required
     // RES_VERT_ORIENT
-    M_E( TABLE, vertical_align,                 RES_VERT_ORIENT, 0 ),
+    M_E( FO,    vertical_align,                 RES_VERT_ORIENT, 0 ),
     // RES_HORI_ORIENT
     // not required
     // RES_ANCHOR
@@ -514,11 +514,14 @@ SvXMLItemMapEntry aXMLTableCellItemMap[] =
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/xmlitemm.cxx,v 1.1.1.1 2000-09-18 17:15:00 hr Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/xmlitemm.cxx,v 1.2 2000-10-12 10:42:49 mib Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/18 17:15:00  hr
+      initial import
+
       Revision 1.8  2000/09/18 16:05:07  willem.vandorp
       OpenOffice header added.
 
