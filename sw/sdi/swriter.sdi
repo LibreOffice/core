@@ -87,7 +87,7 @@ SfxVoidItem AddAllUnknownWords FN_ADD_UNKNOWN
     HasCoreId = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = TRUE,
-    Toggle = TRUE,
+    Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
@@ -7653,31 +7653,6 @@ SfxVoidItem SortDialog FN_SORTING_DLG
     StatusBarConfig = FALSE,
     ToolBoxConfig = TRUE,
     GroupId = GID_DATA;
-]
-
-//--------------------------------------------------------------------------
-SfxVoidItem Spelling FN_SPELLING_DLG
-()
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = TRUE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Asynchron;
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_OPTIONS;
 ]
 
 //--------------------------------------------------------------------------
