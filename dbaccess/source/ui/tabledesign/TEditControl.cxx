@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TEditControl.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-09 07:46:33 $
+ *  last change: $Author: oj $ $Date: 2002-01-21 15:24:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -337,7 +337,7 @@ void OTableEditorCtrl::InitCellController()
         Reference<XConnection> xCon = GetView()->getController()->getConnection();
         Reference< XDatabaseMetaData> xMetaData = xCon.is() ? xCon->getMetaData() : Reference< XDatabaseMetaData>();
 
-        xub_StrLen nMaxTextLen = ((xub_StrLen)xMetaData.is() ? xMetaData->getMaxColumnNameLength() : 0);
+        nMaxTextLen = ((xub_StrLen)xMetaData.is() ? xMetaData->getMaxColumnNameLength() : 0);
 
         if( nMaxTextLen == 0 )
             nMaxTextLen = EDIT_NOLIMIT;
