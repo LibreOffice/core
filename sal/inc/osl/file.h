@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file.h,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hro $ $Date: 2001-11-26 18:49:49 $
+ *  last change: $Author: hro $ $Date: 2001-12-04 15:06:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -489,6 +489,7 @@ oslFileError SAL_CALL osl_getVolumeDeviceMountPath( oslVolumeDeviceHandle Handle
 #define osl_Volume_Attribute_CompactDisc    0x00000004L
 #define osl_Volume_Attribute_FixedDisk      0x00000008L
 #define osl_Volume_Attribute_RAMDisk        0x00000010L
+#define osl_Volume_Attribute_FloppyDisk     0x00000020L
 
 /* Flags specifying which fields to retreive by osl_getVolumeInfo */
 
