@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.4 $
+#*  $Revision: 1.5 $
 #*
-#*  last change: $Author: hr $ $Date: 2003-11-07 15:14:05 $
+#*  last change: $Author: obo $ $Date: 2004-05-28 16:33:17 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -77,6 +77,7 @@ ENABLE_EXCEPTIONS=TRUE
 MY_MISC_CXXFILES = \
         $(MISC)$/dict_word_brk.c \
         $(MISC)$/dict_word_ca_brk.c \
+        $(MISC)$/dict_word_hu_brk.c \
         $(MISC)$/edit_word_brk.c \
         $(MISC)$/count_word_brk.c \
         $(MISC)$/line_brk.c
@@ -91,6 +92,7 @@ SLOFILES=   \
         $(SLO)$/xdictionary.obj \
         $(SLO)$/dict_word_brk.obj \
         $(SLO)$/dict_word_ca_brk.obj \
+        $(SLO)$/dict_word_hu_brk.obj \
         $(SLO)$/edit_word_brk.obj \
         $(SLO)$/count_word_brk.obj \
         $(SLO)$/line_brk.obj
