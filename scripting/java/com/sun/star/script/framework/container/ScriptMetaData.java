@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptMetaData.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-19 23:06:48 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 17:41:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -362,8 +362,8 @@ public class ScriptMetaData extends ScriptEntry implements Cloneable {
             try
             {
 
-                helper = new XStorageHelper( parcelLocation, ElementModes.ELEMENT_READWRITE, true );
-                sourceStream = helper.getStorage().openStreamElement( getLanguageName(), ElementModes.ELEMENT_READWRITE | ElementModes.ELEMENT_TRUNCATE);
+                helper = new XStorageHelper( parcelLocation, ElementModes.READWRITE, true );
+                sourceStream = helper.getStorage().openStreamElement( getLanguageName(), ElementModes.READWRITE | ElementModes.TRUNCATE);
                 if ( sourceStream != null )
                 {
                     OutputStream os = new XOutputStreamWrapper(sourceStream.getOutputStream());
@@ -463,7 +463,7 @@ public class ScriptMetaData extends ScriptEntry implements Cloneable {
             boolean commitFlag = true;
             try
             {
-                xParcelDirStorageHelper = new XStorageHelper( parcelLocation, ElementModes.ELEMENT_READWRITE, false );
+                xParcelDirStorageHelper = new XStorageHelper( parcelLocation, ElementModes.READWRITE, false );
                 xParcelDirStorageHelper.getStorage().removeElement( sourceFileName );
                 result = true;
             }
