@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewse.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: aw $ $Date: 2002-02-27 14:40:58 $
+ *  last change: $Author: aw $ $Date: 2002-03-13 14:28:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -522,6 +522,21 @@ void SdDrawViewShell::FuPermanent(SfxRequest& rReq)
     // Shell wird invalidiert, schneller als einzeln (laut MI)
     // Jetzt explizit der letzte Slot incl. Update()
     Invalidate();
+
+    // #97016# III CTRL-SID_OBJECT_SELECT -> select first draw object if none is selected yet
+    if(SID_OBJECT_SELECT == nSId && pFuActual && (rReq.GetModifier() & KEY_MOD1))
+    {
+        if(!pView->HasMarkedObj())
+        {
+            // select first object
+            pView->UnmarkAllObj();
+            pView->MarkNextObj(TRUE);
+
+            // ...and make it visible
+            if(pView->HasMarkedObj())
+                pView->MakeVisible(pView->GetAllMarkedRect(), *pWindow);
+        }
+    }
 
     // #97016# with qualifier construct directly
     if(pFuActual && (rReq.GetModifier() & KEY_MOD1))
