@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_slo.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: hjs $ $Date: 2001-10-25 13:57:28 $
+#   last change: $Author: hjs $ $Date: 2001-11-21 16:54:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,6 +86,7 @@ $(SLOTARGET): $(SLOFILES) $(IDLSLOFILES)
 
 
 
+.IF "$(SVXLIGHT)"!=""
 .IF "$(SVXLIGHTSLOTARGET)"!=""
 $(SVXLIGHTSLOTARGET): $(REAL_SVXLIGHTSLOFILES)
 .IF "$(MDB)" != ""
@@ -104,6 +105,7 @@ $(SVXLIGHTSLOTARGET): $(REAL_SVXLIGHTSLOFILES)
     +echo $(foreach,i,$(REAL_SVXLIGHTSLOFILES:f) $(RSLO)$/$(i:s/.obj/.o/)) | xargs -n1 > $@
 .ENDIF			# "$(GUI)"=="UNX"
 .ENDIF			# "$(SVXLIGHTSLOTARGET)"!=""
+.ENDIF			# "$(SVXLIGHT)"!=""
 
 .IF "$(SECOND_BUILD)"!=""
 .IF "$($(SECOND_BUILD)SLOTARGET)"!=""

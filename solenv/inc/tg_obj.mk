@@ -22,6 +22,7 @@ $(OBJTARGET): $(OBJFILES) $(IDLOBJFILES)
 .ENDIF			# "$(OBJTARGET)"!=""
 
 
+.IF "$(SVXLIGHT)"!=""
 .IF "$(SVXLIGHTOBJTARGET)"!=""
 $(SVXLIGHTOBJTARGET): $(REAL_SVXLIGHTOBJFILES)
     @echo ------------------------------
@@ -41,6 +42,7 @@ $(SVXLIGHTOBJTARGET): $(REAL_SVXLIGHTOBJFILES)
     +echo $(foreach,i,$(REAL_SVXLIGHTOBJFILES:f) $(ROBJ)$/$(i:s/.obj/.o/)) | xargs -n1 > $@
 .ENDIF			# "$(GUI)"=="UNX"
 .ENDIF			# "$(SVXLIGHTOBJTARGET)"!=""
+.ENDIF			# "$(SVXLIGHT)"!=""
 
 .IF "$(SECOND_BUILD)"!=""
 .IF "$($(SECOND_BUILD)OBJTARGET)"!=""
