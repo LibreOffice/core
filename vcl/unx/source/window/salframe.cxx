@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.128 $
+ *  $Revision: 1.129 $
  *
- *  last change: $Author: pl $ $Date: 2002-04-23 13:19:51 $
+ *  last change: $Author: pl $ $Date: 2002-05-07 13:24:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1260,25 +1260,25 @@ SalFrame::SetWindowState( const SalFrameState *pState )
             && aPosSize.GetHeight() <= rScreenSize.Height() )
         {
             // adjust position so that frame fits onto screen
-            if( aPosSize.Right()+maGeometry.nRightDecoration >= rScreenSize.Width() )
+            if( aPosSize.Right()+(long)maGeometry.nRightDecoration >= rScreenSize.Width() )
             {
                 aPosSize.Move( (long)rScreenSize.Width() - (long)aPosSize.Right() - (long)maGeometry.nRightDecoration, 0 );
                 nGravity = EastGravity;
                 bAdjusted = true;
             }
-            if( aPosSize.Bottom()+maGeometry.nBottomDecoration >= rScreenSize.Height() )
+            if( aPosSize.Bottom()+(long)maGeometry.nBottomDecoration >= rScreenSize.Height() )
             {
                 aPosSize.Move( 0, (long)rScreenSize.Height() - (long)aPosSize.Bottom() - (long)maGeometry.nBottomDecoration );
                 nGravity = nGravity == EastGravity ? SouthEastGravity : SouthGravity;
                 bAdjusted = true;
             }
-            if( aPosSize.Left() < maGeometry.nLeftDecoration )
+            if( aPosSize.Left() < (long)maGeometry.nLeftDecoration )
             {
                 aPosSize.Move( (long)maGeometry.nLeftDecoration - (long)aPosSize.Left(), 0 );
                 nGravity = ( nGravity == SouthGravity || nGravity == SouthEastGravity ) ? SouthWestGravity : WestGravity;
                 bAdjusted = true;
             }
-            if( aPosSize.Top() < maGeometry.nTopDecoration )
+            if( aPosSize.Top() < (long)maGeometry.nTopDecoration )
             {
                 aPosSize.Move( 0, (long)maGeometry.nTopDecoration - (long)aPosSize.Top() );
                 nGravity =
