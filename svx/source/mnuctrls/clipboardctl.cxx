@@ -2,9 +2,9 @@
  *
  *  $RCSfile: clipboardctl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 17:51:15 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 09:28:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,8 @@ SvxClipBoardControl::SvxClipBoardControl(
     SfxToolBoxControl( nSlotId, nId, rTbx ),
     pPopup      (0),
     nItemId     (nId),
-    pClipboardFmtItem( 0 )
+    pClipboardFmtItem( 0 ),
+    bDisabled( FALSE )
 {
     addStatusListener( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:ClipboardFormatItems" )));
     ToolBox& rBox = GetToolBox();
@@ -166,13 +167,6 @@ SfxPopupWindow* SvxClipBoardControl::CreatePopupWindow()
         aArgs[0].Value = a;
         Dispatch( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:ClipboardFormatItems" )),
                   aArgs );
-/*
-        const SfxPoolItem* pArgs[] =
-        {
-            &aItem, NULL
-        };
-        GetBindings().ExecuteSynchron( SID_CLIPBOARD_FORMAT_ITEMS, pArgs );
-*/
     }
 
     GetToolBox().EndSelection();
@@ -197,13 +191,14 @@ void SvxClipBoardControl::StateChanged( USHORT nSID, SfxItemState eState, const 
             pClipboardFmtItem = pState->Clone();
             GetToolBox().SetItemBits( GetId(), GetToolBox().GetItemBits( GetId() ) | TIB_DROPDOWN );
         }
-        else
+        else if ( !bDisabled )
             GetToolBox().SetItemBits( GetId(), GetToolBox().GetItemBits( GetId() ) & ~TIB_DROPDOWN );
         GetToolBox().Invalidate( GetToolBox().GetItemRect( GetId() ) );
     }
     else
     {
         // enable the item as a whole
+        bDisabled = (GetItemState(pState) == SFX_ITEM_DISABLED);
         GetToolBox().EnableItem( GetId(), (GetItemState(pState) != SFX_ITEM_DISABLED) );
     }
 }
