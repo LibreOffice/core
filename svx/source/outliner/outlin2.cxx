@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlin2.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mt $ $Date: 2001-08-17 11:22:12 $
+ *  last change: $Author: mt $ $Date: 2001-10-11 13:16:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -384,6 +384,18 @@ USHORT Outliner::GetAsianCompressionMode() const
 {
     DBG_CHKTHIS(Outliner,0);
     return pEditEngine->GetAsianCompressionMode();
+}
+
+void Outliner::SetKernAsianPunctuation( BOOL b )
+{
+    DBG_CHKTHIS(Outliner,0);
+    pEditEngine->SetKernAsianPunctuation( b );
+}
+
+BOOL Outliner::IsKernAsianPunctuation() const
+{
+    DBG_CHKTHIS(Outliner,0);
+    return pEditEngine->IsKernAsianPunctuation();
 }
 
 void Outliner::UndoActionStart( USHORT nId )
