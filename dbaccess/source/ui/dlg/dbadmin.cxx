@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-07 15:12:36 $
+ *  last change: $Author: fs $ $Date: 2001-06-14 14:18:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1242,8 +1242,6 @@ void ODbAdminDialog::removeDetailPages()
 // -----------------------------------------------------------------------------
 void ODbAdminDialog::addDetailPage(USHORT _nPageId,USHORT _nTextId,CreateTabPage pCreateFunc)
 {
-    // remove all current detail pages
-    removeDetailPages();
     // open our own resource block, as the page titles are strings local to this block
     OLocalResourceAccess aDummy(DLG_DATABASE_ADMINISTRATION, RSC_TABDIALOG);
 
@@ -1258,6 +1256,9 @@ IMPL_LINK(ODbAdminDialog, OnTypeSelected, OGeneralPage*, _pTabPage)
     CreateTabPage pCreateFunc;
     USHORT nPageId = -1,nTextId;
     _pTabPage->enableConnectionURL();
+
+    // remove all current detail pages
+    removeDetailPages();
 
     // and insert the new ones
     switch (_pTabPage->GetSelectedType())
@@ -1294,33 +1295,23 @@ IMPL_LINK(ODbAdminDialog, OnTypeSelected, OGeneralPage*, _pTabPage)
             nPageId     = TAB_PAG_ADABAS_SETTINGS;
             nTextId     = STR_PAGETITLE_ADABAS_STATISTIC;
             pCreateFunc = OAdabasAdminSettings::Create;
+            // for adabas we have more than one page
+            addDetailPage(PAGE_ADABAS, STR_PAGETITLE_ADABAS, OAdabasDetailsPage::Create);
             break;
         case DST_ADDRESSBOOK:
-            removeDetailPages();
             if(getDatasourceType(*GetExampleSet()) == DST_ADDRESSBOOK)
             {
                 String sConnectionURL;
                 SFX_ITEMSET_GET(*GetExampleSet(), pUrlItem, SfxStringItem, DSID_CONNECTURL, sal_True);
                 sConnectionURL = pUrlItem->GetValue();
-                if(String::CreateFromAscii("sdbc:address:ldap:") == sConnectionURL)
+                if (0 == sConnectionURL.CompareToAscii("sdbc:address:ldap:"))
                     addDetailPage(PAGE_LDAP,STR_PAGETITLE_LDAP,OLDAPDetailsPage::Create);
             }
             _pTabPage->disableConnectionURL();
             break;
     }
-    if(nPageId != USHORT(-1))
-    {
+    if ((sal_uInt16)-1 != nPageId)
         addDetailPage(nPageId,nTextId,pCreateFunc);
-        m_aCurrentDetailPages.push(nPageId);
-        // for adabas we have more than one page
-        if(nPageId == TAB_PAG_ADABAS_SETTINGS)
-        {
-            // open our own resource block, as the page titles are strings local to this block
-            OLocalResourceAccess aDummy(DLG_DATABASE_ADMINISTRATION, RSC_TABDIALOG);
-            AddTabPage(PAGE_ADABAS, String(ResId(STR_PAGETITLE_ADABAS)), OAdabasDetailsPage::Create, 0, sal_False, 1);
-            m_aCurrentDetailPages.push(PAGE_ADABAS);
-        }
-    }
 
     if (bResetPasswordRequired)
     {
@@ -2651,6 +2642,9 @@ IMPL_LINK(ODatasourceSelector, OnButtonPressed, Button*, EMPTYARG)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.57  2001/06/07 15:12:36  fs
+ *  #87934# removed a wrong assertion
+ *
  *  Revision 1.56  2001/06/01 08:41:31  oj
  *  #87149# changed order for tabpages
  *
