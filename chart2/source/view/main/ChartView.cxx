@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartView.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: iha $ $Date: 2003-11-13 10:12:06 $
+ *  last change: $Author: bm $ $Date: 2003-11-14 15:25:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -536,13 +536,14 @@ void createTitle( const uno::Reference< XTitle >& xTitle
                 , sal_Int32 nYDistance
                 , const uno::Reference< drawing::XShapes>& xPageShapes
                 , const uno::Reference< lang::XMultiServiceFactory>& xShapeFactory
+                , const awt::Size & rPageSize
                  )
 {
     if(xTitle.is())
     {
         VTitle aVTitle(xTitle);
         aVTitle.init(xPageShapes,xShapeFactory);
-        aVTitle.createShapes( awt::Point(0,0) );
+        aVTitle.createShapes( awt::Point(0,0), rPageSize );
         awt::Size aTitleSize = aVTitle.getFinalSize();
         aVTitle.changePosition( awt::Point( nXPosition, nrYOffset + aTitleSize.Height/2 + nYDistance ) );
         nrYOffset += aTitleSize.Height + 2*nYDistance;
@@ -641,13 +642,15 @@ bool ChartViewImpl::create( const awt::Size& rPageSize )
 
     //------------ create main title shape
     createTitle( TitleHelper::getTitle( TitleHelper::MAIN_TITLE, m_xChartModel )
-                , nXPosition, nYOffset, nYDistance, xPageShapes, m_xShapeFactory );
+                , nXPosition, nYOffset, nYDistance, xPageShapes, m_xShapeFactory
+                , rPageSize );
     if(nYOffset+nYDistance>=rPageSize.Height)
         return true;
 
     //------------ create sub title shape
     createTitle( TitleHelper::getTitle( TitleHelper::SUB_TITLE, m_xChartModel )
-                , nXPosition, nYOffset, nYDistance, xPageShapes, m_xShapeFactory );
+                , nXPosition, nYOffset, nYDistance, xPageShapes, m_xShapeFactory
+                , rPageSize );
     if(nYOffset+nYDistance>=rPageSize.Height)
         return true;
 

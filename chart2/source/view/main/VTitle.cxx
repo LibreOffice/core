@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VTitle.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: iha $ $Date: 2003-10-30 15:42:49 $
+ *  last change: $Author: bm $ $Date: 2003-11-14 15:25:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,7 @@
 #include "PropertyMapper.hxx"
 #include "ShapeFactory.hxx"
 #include "chartview/ObjectIdentifier.hxx"
+#include "RelativeSizeHelper.hxx"
 
 #ifndef _DRAFTS_COM_SUN_STAR_CHART2_XFORMATTEDSTRING_HPP_
 #include <drafts/com/sun/star/chart2/XFormattedString.hpp>
@@ -186,7 +187,9 @@ void VTitle::changePosition( const awt::Point& rPos )
     }
 }
 
-void VTitle::createShapes( const awt::Point& rPos )
+void VTitle::createShapes(
+      const awt::Point& rPos
+    , const awt::Size& rReferenceSize )
 {
     try
     {
@@ -283,6 +286,16 @@ void VTitle::createShapes( const awt::Point& rPos )
 
                 PropertyMapper::setMappedProperties( xTargetProps, xSourceProps
                     , PropertyMapper::getPropertyNameMapForCharacterProperties() );
+
+                // adapt font size according to page size
+                awt::Size aOldRefSize;
+                if( xTitleProperties->getPropertyValue( C2U("ReferencePageSize")) >>= aOldRefSize )
+                {
+                    RelativeSizeHelper::adaptFontSizes(
+                        xTargetProps
+                        , aOldRefSize
+                        , rReferenceSize );
+                }
             }
         }
         else
@@ -300,6 +313,16 @@ void VTitle::createShapes( const awt::Point& rPos )
                 uno::Reference< beans::XPropertySet > xTargetProps( aCursorList[nN], uno::UNO_QUERY );
                 uno::Reference< beans::XPropertySet > xSourceProps( aStringList[nN], uno::UNO_QUERY );
                 PropertyMapper::setMappedProperties( xTargetProps, xSourceProps, PropertyMapper::getPropertyNameMapForCharacterProperties() );
+
+                // adapt font size according to page size
+                awt::Size aOldRefSize;
+                if( xTitleProperties->getPropertyValue( C2U("ReferencePageSize")) >>= aOldRefSize )
+                {
+                    RelativeSizeHelper::adaptFontSizes(
+                        xTargetProps
+                        , aOldRefSize
+                        , rReferenceSize );
+                }
             }
         }
 

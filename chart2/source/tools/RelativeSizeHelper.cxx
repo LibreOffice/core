@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelativeSizeHelper.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-12 19:41:37 $
+ *  last change: $Author: bm $ $Date: 2003-11-14 15:25:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,27 +60,63 @@
  ************************************************************************/
 #include "RelativeSizeHelper.hxx"
 
+#include <vector>
 #include <algorithm>
 
 using namespace ::com::sun::star::awt;
+using namespace ::com::sun::star::beans;
+using namespace ::std;
+
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::makeAny;
+using ::rtl::OUString;
 
 namespace chart
 {
 
 // static
 double RelativeSizeHelper::calculate(
+    double fValue,
     const Size & rOldReferenceSize,
-    const Size & rNewReferenceSize,
-    double fValue )
+    const Size & rNewReferenceSize )
 {
     if( rOldReferenceSize.Width <= 0 ||
         rOldReferenceSize.Height <= 0 )
         return fValue;
 
-    return ::std::min(
+    return min(
         static_cast< double >( rNewReferenceSize.Width )  / static_cast< double >( rOldReferenceSize.Width ),
         static_cast< double >( rNewReferenceSize.Height ) / static_cast< double >( rOldReferenceSize.Height ))
         * fValue;
+}
+
+// static
+void RelativeSizeHelper::adaptFontSizes(
+    Reference< XPropertySet > & xTargetProperties,
+    const Size & rOldReferenceSize,
+    const Size & rNewReferenceSize )
+{
+    if( ! xTargetProperties.is())
+        return;
+
+    float fFontHeight;
+
+    vector< OUString > aProperties;
+    aProperties.push_back( OUString( RTL_CONSTASCII_USTRINGPARAM( "CharHeight" )));
+    aProperties.push_back( OUString( RTL_CONSTASCII_USTRINGPARAM( "CharHeightAsian" )));
+    aProperties.push_back( OUString( RTL_CONSTASCII_USTRINGPARAM( "CharHeightComplex" )));
+
+    for( vector< OUString >::const_iterator aIt = aProperties.begin();
+         aIt != aProperties.end(); ++aIt )
+    {
+        if( xTargetProperties->getPropertyValue( *aIt ) >>= fFontHeight )
+        {
+            xTargetProperties->setPropertyValue(
+                *aIt,
+                makeAny( static_cast< float >(
+                             calculate( fFontHeight, rOldReferenceSize, rNewReferenceSize ))));
+        }
+    }
 }
 
 } //  namespace chart

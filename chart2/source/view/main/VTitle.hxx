@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VTitle.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: iha $ $Date: 2003-10-30 15:40:04 $
+ *  last change: $Author: bm $ $Date: 2003-11-14 15:25:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,8 @@ public:
 
     //void    setSceneMatrix( const ::com::sun::star::drawing::HomogenMatrix& rMatrix );
 
-    void    createShapes( const ::com::sun::star::awt::Point& rPos );
+    void    createShapes( const ::com::sun::star::awt::Point& rPos
+                          , const ::com::sun::star::awt::Size& rReferenceSize );
 
     ::com::sun::star::awt::Size getFinalSize() const;
     void    changePosition( const ::com::sun::star::awt::Point& rPos );

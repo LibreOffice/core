@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelativeSizeHelper.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-12 19:41:34 $
+ *  last change: $Author: bm $ $Date: 2003-11-14 15:25:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,9 @@
 #ifndef _COM_SUN_STAR_AWT_SIZE_HPP_
 #include <com/sun/star/awt/Size.hpp>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
+#endif
 
 namespace chart
 {
@@ -72,9 +75,15 @@ class RelativeSizeHelper
 {
 public:
     static double calculate(
+        double fValue,
         const ::com::sun::star::awt::Size & rOldReferenceSize,
-        const ::com::sun::star::awt::Size & rNewReferenceSize,
-        double fValue );
+        const ::com::sun::star::awt::Size & rNewReferenceSize );
+
+    static void adaptFontSizes(
+        ::com::sun::star::uno::Reference<
+            ::com::sun::star::beans::XPropertySet > & xTargetProperties,
+        const ::com::sun::star::awt::Size & rOldReferenceSize,
+        const ::com::sun::star::awt::Size & rNewReferenceSize );
 
 private:
     // not implemented
