@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmtool.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-11 10:21:43 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 11:16:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -279,11 +279,13 @@ SwFrmNotify::~SwFrmNotify()
                 pFrm->SetRetouche();
             }
 
-            //Wenn ein TxtFrm gerade einen Follow erzeugt hat, so ist dieser
-            //frisch formatiert und braucht nicht nocheinmal angestossen werden.
-            if ( bHadFollow || !pFrm->IsCntntFrm() ||
-                 !((SwCntntFrm*)pFrm)->GetFollow() )
-                pFrm->InvalidateNextPos();
+            // A fresh follow frame does not have to be invalidated, because
+            // it is already formatted:
+            if ( bHadFollow || !pFrm->IsCntntFrm() || !((SwCntntFrm*)pFrm)->GetFollow() )
+            {
+                if ( !pFrm->IsTabFrm() || !((SwTabFrm*)pFrm)->GetFollow() )
+                    pFrm->InvalidateNextPos();
+            }
         }
     }
 
@@ -621,16 +623,7 @@ SwLayNotify::~SwLayNotify()
                 bInvaPercent = bLow;
                 if ( bLow )
                 {
-                    if ( nHeightOfst || nWidthOfst )
-                    {
-                        const Size aSz( aPrt.Width()  + nWidthOfst,
-                                        aPrt.Height() + nHeightOfst );
-                        if ( pLay->Prt().SSize() != aSz )
-                            pLay->ChgLowersProp( aSz );
-                    }
-                    else
-                        pLay->ChgLowersProp( aPrt.SSize() );
-
+                    pLay->ChgLowersProp( aPrt.SSize() );
                 }
                 //Wenn die PrtArea gewachsen ist, so ist es moeglich, dass die
                 //Kette der Untergeordneten einen weiteren Frm aufnehmen kann,
@@ -2412,9 +2405,10 @@ SwFrm *SaveCntnt( SwLayoutFrm *pLay, SwFrm *pStart )
         if( !pSav || !pLay->IsAnLower( pSav ) )
             return NULL;
     }
-    // Tabellen sollen immer komplett gesichert werden, es sei denn, es wird
-    // der Inhalt eines Bereichs innerhalb einer Tabelle gesichert.
-    if ( pSav->IsInTab() && !( pLay->IsSctFrm() && pLay->IsInTab() ) )
+
+    // Tables should be saved as a whole, expection:
+    // The contents of a section or a cell inside a table should be saved
+    if ( pSav->IsInTab() && !( ( pLay->IsSctFrm() || pLay->IsCellFrm() ) && pLay->IsInTab() ) )
         while ( !pSav->IsTabFrm() )
             pSav = pSav->GetUpper();
 
@@ -2531,9 +2525,10 @@ void MA_FASTCALL lcl_AddFlysToPage( SwCntntFrm *pCntnt, SwPageFrm *pPage )
     }
 }
 
-void RestoreCntnt( SwFrm *pSav, SwLayoutFrm *pParent, SwFrm *pSibling )
+void RestoreCntnt( SwFrm *pSav, SwLayoutFrm *pParent, SwFrm *pSibling, bool bGrow )
 {
     ASSERT( pSav && pParent, "Kein Save oder Parent fuer Restore." );
+    SWRECTFN( pParent )
 
     //Wenn es bereits FlowFrms unterhalb des neuen Parent gibt, so wird die
     //Kette, beginnend mit pSav,  hinter dem letzten angehaengt.
@@ -2578,7 +2573,7 @@ void RestoreCntnt( SwFrm *pSav, SwLayoutFrm *pParent, SwFrm *pSibling )
     SwFrm* pLast;
     do
     {   pSav->pUpper = pParent;
-        nGrowVal += pSav->Frm().Height();
+        nGrowVal += (pSav->Frm().*fnRect->fnGetHeight)();
         pSav->_InvalidateAll();
 
         //Jetzt die Flys anmelden, fuer TxtFrms gleich geeignet invalidieren.
@@ -2615,7 +2610,9 @@ void RestoreCntnt( SwFrm *pSav, SwLayoutFrm *pParent, SwFrm *pSibling )
         pLast->pNext = pNxt;
         pNxt->pPrev = pLast;
     }
-    pParent->Grow( nGrowVal PHEIGHT );
+
+    if ( bGrow )
+        pParent->Grow( nGrowVal PHEIGHT );
 }
 
 /*************************************************************************
