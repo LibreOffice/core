@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh8.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-27 19:03:06 $
+ *  last change: $Author: nn $ $Date: 2000-10-30 11:45:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -882,8 +882,6 @@ ULONG ScDocShell::DBaseExport( const String& rFullFileName, CharSet eCharSet, BO
         ScFieldEditEngine aEditEngine( aDocument.GetEditPool() );
         String aString;
         double fVal;
-
-        nLastRow = nFirstDataRow - 1;       //! Test !!!!!!!
 
         for ( USHORT nDocRow = nFirstDataRow; nDocRow <= nLastRow; nDocRow++ )
         {
