@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ActiveMSPList.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-12-07 10:54:07 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 11:50:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,6 @@
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implbase1.hxx>
-
 #include <util/scriptingconstants.hxx>
 #include <util/util.hxx>
 #include <util/MiscUtils.hxx>
@@ -155,8 +154,8 @@ ActiveMSPList::createMSP( const Any& aContext )
         }
         else
         {
-              createNonDocMSPs();
-              return m_hMsps[ shareDirString ];
+            createNonDocMSPs();
+            return m_hMsps[ shareDirString ];
         }
 
     }
@@ -307,25 +306,6 @@ throw ( ::com::sun::star::uno::RuntimeException )
     }
 }
 
-
-ActiveMSPList&
-ActiveMSPList::instance( const Reference< XComponentContext > & xContext )
-{
-    static ActiveMSPList* inst = 0;
-    // need to not only hold a static pointer to this object but also
-    // keep it aqcuired
-    static Reference< lang::XEventListener > holder;
-    if ( !inst )
-    {
-        ::osl::MutexGuard guard( ::osl::Mutex::getGlobalMutex() );
-        if ( !inst )
-        {
-           inst = new ActiveMSPList( xContext );
-           holder = inst;
-        }
-    }
-    return *inst;
-}
 
 void
 ActiveMSPList::createNonDocMSPs()
