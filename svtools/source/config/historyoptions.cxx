@@ -2,9 +2,9 @@
  *
  *  $RCSfile: historyoptions.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: as $ $Date: 2000-11-08 14:51:47 $
+ *  last change: $Author: as $ $Date: 2000-11-17 11:04:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,8 +107,8 @@ using namespace ::com::sun::star::beans ;
 //_________________________________________________________________________________________________________________
 
 #define ROOTNODE_HISTORY                        OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Common/History/"   ))
-#define DEFAULT_PICKLISTSIZE                    0
-#define DEFAULT_HISTORYSIZE                     0
+#define DEFAULT_PICKLISTSIZE                    4
+#define DEFAULT_HISTORYSIZE                     10
 
 #define PATHDELIMITER                           OUString(RTL_CONSTASCII_USTRINGPARAM("/"                        ))
 #define PROPERTYNAME_PICKLISTSIZE               OUString(RTL_CONSTASCII_USTRINGPARAM("PickListSize"             ))
@@ -289,10 +289,8 @@ class SvtHistoryOptions_Impl : public ConfigItem
 //*****************************************************************************************************************
 SvtHistoryOptions_Impl::SvtHistoryOptions_Impl()
     // Init baseclasses first
-    :   ConfigItem          ( ROOTNODE_HISTORY  )
+    :   ConfigItem          ( ROOTNODE_HISTORY      )
     // Init member then...
-    ,   m_nPicklistSize     ( 0                 )
-    ,   m_nHistorySize      ( 0                 )
 {
     // Use our list snapshot of configuration keys to get his values.
     // See impl_GetPropertyNames() for further informations.
@@ -333,7 +331,16 @@ SvtHistoryOptions_Impl::SvtHistoryOptions_Impl()
 
     // Safe impossible cases.
     // I think a size of 0 isn't relay meaningful.
-    DBG_ASSERT( !(m_nPicklistSize<1 || m_nHistorySize<1), "SvtHistoryOptions_Impl::SvtHistoryOptions_Impl()\nI think a history size of 0 isn't relay meaningful!\n" );
+    if( m_nPicklistSize < 1 )
+    {
+        m_nPicklistSize = DEFAULT_PICKLISTSIZE;
+        DBG_ASSERT( sal_False, "SvtHistoryOptions_Impl::SvtHistoryOptions_Impl()\nI think a picklist size of 0 isn't relay meaningful! Set new value to 4 entries.\n" );
+    }
+    if( m_nHistorySize < 1 )
+    {
+        m_nHistorySize = DEFAULT_HISTORYSIZE;
+        DBG_ASSERT( sal_False, "SvtHistoryOptions_Impl::SvtHistoryOptions_Impl()\nI think a history size of 0 isn't relay meaningful! Set new value to 10 entries.\n" );
+    }
 
     IMPL_THistoryItem aItem;
     sal_uInt32 nPosition = PROPERTYHANDLE_HISTORYSIZE+1;
@@ -418,7 +425,8 @@ void SvtHistoryOptions_Impl::Commit()
     Sequence< PropertyValue >   seqPropertyValues( 4 )  ;
 
     // Copy picklist entries to save-list!
-    for( sal_uInt32 nItem=0; nItem<m_nPicklistSize; ++nItem )
+    sal_uInt32 nPicklistCount = m_aPicklist.size();
+    for( sal_uInt32 nItem=0; nItem<nPicklistCount; ++nItem )
     {
         aItem = m_aPicklist[nItem];
         seqPropertyValues[OFFSET_URL        ].Name  =   PROPERTYNAME_HISTORYITEM_URL        ;
@@ -435,7 +443,8 @@ void SvtHistoryOptions_Impl::Commit()
     }
 
     // Copy URL-list entries to save-list!
-    for( nItem=0; nItem<m_nHistorySize; ++nItem )
+    sal_uInt32 nHistoryCount = m_aHistory.size();
+    for( nItem=0; nItem<nHistoryCount; ++nItem )
     {
         aItem = m_aHistory[nItem];
         seqPropertyValues[OFFSET_URL        ].Name  =   PROPERTYNAME_HISTORYITEM_URL        ;
@@ -500,6 +509,7 @@ void SvtHistoryOptions_Impl::SetSize( EHistoryType eHistory, sal_uInt32 nSize )
                                     }
                                 }
                                 m_nPicklistSize = nSize;
+                                SetModified();
                             }
                             break;
 
@@ -514,6 +524,7 @@ void SvtHistoryOptions_Impl::SetSize( EHistoryType eHistory, sal_uInt32 nSize )
                                     }
                                 }
                                 m_nHistorySize = nSize;
+                                SetModified();
                             }
                             break;
     }
@@ -529,11 +540,13 @@ void SvtHistoryOptions_Impl::Clear( EHistoryType eHistory )
     {
         case ePICKLIST  :   {
                                 m_aPicklist.clear();
+                                SetModified();
                             }
                             break;
 
         case eHISTORY   :   {
                                 m_aHistory.clear();
+                                SetModified();
                             }
                             break;
     }
@@ -583,6 +596,7 @@ void SvtHistoryOptions_Impl::AppendItem(            EHistoryType    eHistory    
                                 }
                                 // Append new item to list.
                                 m_aPicklist.push_front( aItem );
+                                SetModified();
                             }
                             break;
 
@@ -594,6 +608,7 @@ void SvtHistoryOptions_Impl::AppendItem(            EHistoryType    eHistory    
                                 }
                                 // Append new item to list.
                                 m_aHistory.push_front( aItem );
+                                SetModified();
                             }
                             break;
     }
