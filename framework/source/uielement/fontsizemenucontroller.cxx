@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontsizemenucontroller.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 17:50:49 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 17:00:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -386,7 +386,7 @@ void SAL_CALL FontSizeMenuController::select( const css::awt::MenuEvent& rEvent 
     aLock.unlock();
 
     // Command URL used to dispatch the selected font family name
-    const rtl::OUString aFontHeightCommand( RTL_CONSTASCII_USTRINGPARAM( ".uno:FontHeight?FontHeight.Height=" ));
+    const rtl::OUString aFontHeightCommand( RTL_CONSTASCII_USTRINGPARAM( ".uno:FontHeight?FontHeight.Height:float=" ));
 
     if ( xPopupMenu.is() && xDispatch.is() )
     {
