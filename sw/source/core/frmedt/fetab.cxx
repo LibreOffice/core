@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fetab.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2002-03-21 13:13:18 $
+ *  last change: $Author: ama $ $Date: 2002-05-22 10:32:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1240,7 +1240,12 @@ USHORT SwFEShell::GetCurTabColNum() const
                         //              dem CellFrame vergleichen????
             pFrm = pFrm->GetUpper();
         } while ( !pFrm->IsCellFrm() );
+#ifdef VERTICAL_LAYOUT
+        SWRECTFN( pFrm )
+        const long nX = (pFrm->Frm().*fnRect->fnGetLeft)();
+#else
         const long nX = pFrm->Frm().Left();
+#endif
 
         //TabCols besorgen, den nur ueber diese erreichen wir die Position.
         SwTabCols aTabCols;
