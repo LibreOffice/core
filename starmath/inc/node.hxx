@@ -2,9 +2,9 @@
  *
  *  $RCSfile: node.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tl $ $Date: 2001-04-19 14:45:26 $
+ *  last change: $Author: jp $ $Date: 2001-05-11 13:01:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,8 +188,8 @@ public:
 
     virtual void Draw(OutputDevice &rDev, const Point &rPosition) const;
 
-    USHORT  GetRow() const    { return aNodeToken.nRow; }
-    USHORT  GetColumn() const { return aNodeToken.nCol; }
+    USHORT  GetRow() const    { return (USHORT)aNodeToken.nRow; }
+    USHORT  GetColumn() const { return (USHORT)aNodeToken.nCol; }
 
     SmScaleMode     GetScaleMode() const { return eScaleMode; }
     void            SetScaleMode(SmScaleMode eMode) { eScaleMode = eMode; }
