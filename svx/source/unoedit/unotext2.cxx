@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotext2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-23 11:54:34 $
+ *  last change: $Author: cl $ $Date: 2001-03-14 09:23:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -648,7 +648,7 @@ void SAL_CALL SvxUnoTextCursor::setString( const OUString& aString ) throw(uno::
 // lang::XServiceInfo
 OUString SAL_CALL SvxUnoTextCursor::getImplementationName() throw(uno::RuntimeException)
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM("SvxUnoTextCursort"));
+    return OUString(RTL_CONSTASCII_USTRINGPARAM("SvxUnoTextCursor"));
 }
 
 sal_Bool SAL_CALL SvxUnoTextCursor::supportsService( const OUString& ServiceName ) throw(uno::RuntimeException)
