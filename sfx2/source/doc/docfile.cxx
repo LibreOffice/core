@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.107 $
+ *  $Revision: 1.108 $
  *
- *  last change: $Author: as $ $Date: 2002-07-09 06:04:26 $
+ *  last change: $Author: mav $ $Date: 2002-07-30 11:23:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -994,19 +994,29 @@ SvStorage* SfxMedium::GetStorage_Impl( BOOL bUCBStorage )
                 if ( !pImp->aDoneLink.IsSet() )
                     DownLoad();
 
-                if ( ::utl::LocalFileHelper::IsLocalFile( aLogicName ) &&
-                    ( bUCBStorage || UCBStorage::IsStorageFile( pInStream ) ) )
+                if ( IsReadOnly() && ::utl::LocalFileHelper::IsLocalFile( aLogicName ) )
                 {
-                    // JAR files can't be created on a stream, ctor with stream copies the stream to a TempFile and opens it
-                    CloseInStream();
-                    aStorage = new SvStorage( TRUE, aStorageName, nStorOpenMode, bDirect ? 0 : STORAGE_TRANSACTED );
+                    CreateTempFile();
+                    aStorage = new SvStorage( aName, nStorOpenMode, bDirect ? 0 : STORAGE_TRANSACTED );
                 }
                 else
                 {
-                    // create a storage on the stream
-                    aStorage = new SvStorage( pInStream, FALSE );
-                    if ( !aStorage->GetName().Len() )
-                        aStorage->SetName( aStorageName );
+                    if ( ::utl::LocalFileHelper::IsLocalFile( aLogicName ) &&
+                        ( bUCBStorage || UCBStorage::IsStorageFile( pInStream ) ) )
+                    {
+                        // JAR files can't be created on a stream,
+                        // ctor with stream copies the stream to a TempFile and opens it
+
+                        CloseInStream();
+                        aStorage = new SvStorage( TRUE, aStorageName, nStorOpenMode, bDirect ? 0 : STORAGE_TRANSACTED );
+                    }
+                    else
+                    {
+                        // create a storage on the stream
+                        aStorage = new SvStorage( pInStream, FALSE );
+                        if ( !aStorage->GetName().Len() )
+                            aStorage->SetName( aStorageName );
+                    }
                 }
             }
         }
