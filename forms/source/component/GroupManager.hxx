@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GroupManager.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-27 12:08:20 $
+ *  last change: $Author: vg $ $Date: 2001-09-12 12:13:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -257,12 +257,12 @@ public:
     virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& _rSource) throw(::com::sun::star::uno::RuntimeException);
 
 // ::com::sun::star::beans::XPropertyChangeListener
-    virtual void SAL_CALL propertyChange(const ::com::sun::star::beans::PropertyChangeEvent& evt);
+    virtual void SAL_CALL propertyChange(const ::com::sun::star::beans::PropertyChangeEvent& evt) throw ( ::com::sun::star::uno::RuntimeException);
 
 // ::com::sun::star::container::XContainerListener
-    virtual void SAL_CALL elementInserted(const ::com::sun::star::container::ContainerEvent& _rEvent);
-    virtual void SAL_CALL elementRemoved(const ::com::sun::star::container::ContainerEvent& _rEvent);
-    virtual void SAL_CALL elementReplaced(const ::com::sun::star::container::ContainerEvent& _rEvent);
+    virtual void SAL_CALL elementInserted(const ::com::sun::star::container::ContainerEvent& _rEvent) throw ( ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL elementRemoved(const ::com::sun::star::container::ContainerEvent& _rEvent) throw ( ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL elementReplaced(const ::com::sun::star::container::ContainerEvent& _rEvent) throw ( ::com::sun::star::uno::RuntimeException);
 
 // Other functions
     sal_Int32 getGroupCount();
