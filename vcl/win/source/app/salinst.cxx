@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salinst.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 14:51:58 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 18:28:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,9 +131,15 @@ void SalAbort( const XubString& rErrorText )
     ImplFreeSalGDI();
 
     if ( !rErrorText.Len() )
+    {
+        // #112255# make sure crash reporter is triggered
+        RaiseException( 0, EXCEPTION_NONCONTINUABLE, 0, NULL );
         FatalAppExit( 0, "Application Error" );
+    }
     else
     {
+        // #112255# make sure crash reporter is triggered
+        RaiseException( 0, EXCEPTION_NONCONTINUABLE, 0, NULL );
         ByteString aErrorText( ImplSalGetWinAnsiString( rErrorText ) );
         FatalAppExit( 0, aErrorText.GetBuffer() );
     }
@@ -711,8 +717,13 @@ void WinSalInstance::Yield( BOOL bWait )
         // by the main thread anyway (where all windows are created)
         // If the mainthread is not currently handling messages, then our SendMessage would
         // also do nothing, so this seems to be reasonable.
-        //ImplSendMessage( mhComWnd, SAL_MSG_THREADYIELD, (WPARAM)bWait, (LPARAM)0 );
-        Sleep(1);
+
+        // #i18883# only sleep if potential deadlock scenario, ie, when a dialog is open
+        if( ImplGetSVData()->maAppData.mnModalMode )
+            Sleep(1);
+        else
+            ImplSendMessage( maInstData.mhComWnd, SAL_MSG_THREADYIELD, (WPARAM)bWait, (LPARAM)0 );
+
         n = nCount;
         while ( n )
         {
@@ -739,6 +750,7 @@ LRESULT CALLBACK SalComWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lPar
 {
     LRESULT nRet = 0;
 
+
     switch ( nMsg )
     {
         case SAL_MSG_PRINTABORTJOB:
@@ -746,8 +758,6 @@ LRESULT CALLBACK SalComWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lPar
             rDef = FALSE;
             break;
         case SAL_MSG_THREADYIELD:
-            // #97739#: we should never reach this point
-            // other threads do not actively yield anymore, they just sleep (see SalInstance::Yield)
             ImplSalYield( (BOOL)wParam );
             rDef = FALSE;
             break;
@@ -814,7 +824,15 @@ LRESULT CALLBACK SalComWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lPar
 LRESULT CALLBACK SalComWndProcA( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam )
 {
     int bDef = TRUE;
-    LRESULT nRet = SalComWndProc( hWnd, nMsg, wParam, lParam, bDef );
+    LRESULT nRet = 0;
+    __try
+    {
+        nRet = SalComWndProc( hWnd, nMsg, wParam, lParam, bDef );
+    }
+    // #112221# exception should not be caught in user32
+    __except(UnhandledExceptionFilter(GetExceptionInformation()))
+    {
+    }
     if ( bDef )
     {
         if ( !ImplHandleGlobalMsg( hWnd, nMsg, wParam, lParam, nRet ) )
@@ -826,7 +844,15 @@ LRESULT CALLBACK SalComWndProcA( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lPa
 LRESULT CALLBACK SalComWndProcW( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam )
 {
     int bDef = TRUE;
-    LRESULT nRet = SalComWndProc( hWnd, nMsg, wParam, lParam, bDef );
+    LRESULT nRet = 0;
+    __try
+    {
+        nRet = SalComWndProc( hWnd, nMsg, wParam, lParam, bDef );
+    }
+    // #112221# exception should not be caught in user32
+    __except(UnhandledExceptionFilter(GetExceptionInformation()))
+    {
+    }
     if ( bDef )
     {
         if ( !ImplHandleGlobalMsg( hWnd, nMsg, wParam, lParam, nRet ) )
