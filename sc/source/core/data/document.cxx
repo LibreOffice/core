@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: nn $ $Date: 2002-03-04 19:25:17 $
+ *  last change: $Author: sab $ $Date: 2002-03-20 12:11:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2201,6 +2201,10 @@ void ScDocument::CompileXML()
     SetAutoCalc( FALSE );
     for (USHORT i=0; i<=MAXTAB; i++)
         if (pTab[i]) pTab[i]->CompileXML();
+
+    if ( pCondFormList )
+        pCondFormList->CompileXML();
+
     SetDirty();
     SetAutoCalc( bOldAutoCalc );
 }

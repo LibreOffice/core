@@ -2,9 +2,9 @@
  *
  *  $RCSfile: conditio.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-02 15:05:09 $
+ *  last change: $Author: sab $ $Date: 2002-03-20 12:11:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -502,6 +502,11 @@ void ScConditionEntry::CompileAll()
 
     DELETEZ(pFCell1);
     DELETEZ(pFCell2);
+}
+
+void ScConditionEntry::CompileXML()
+{
+    Compile(GetExpression(aSrcPos, 0), GetExpression(aSrcPos, 1), sal_False, sal_False);
 }
 
 void ScConditionEntry::UpdateReference( UpdateRefMode eUpdateRefMode,
@@ -1417,6 +1422,12 @@ void ScConditionalFormat::CompileAll()
         ppEntries[i]->CompileAll();
 }
 
+void ScConditionalFormat::CompileXML()
+{
+    for (USHORT i=0; i<nEntryCount; i++)
+        ppEntries[i]->CompileXML();
+}
+
 void ScConditionalFormat::UpdateReference( UpdateRefMode eUpdateRefMode,
                                 const ScRange& rRange, short nDx, short nDy, short nDz )
 {
@@ -1542,6 +1553,13 @@ void ScConditionalFormatList::CompileAll()
     USHORT nCount = Count();
     for (USHORT i=0; i<nCount; i++)
         (*this)[i]->CompileAll();
+}
+
+void ScConditionalFormatList::CompileXML()
+{
+    USHORT nCount = Count();
+    for (USHORT i=0; i<nCount; i++)
+        (*this)[i]->CompileXML();
 }
 
 void ScConditionalFormatList::UpdateReference( UpdateRefMode eUpdateRefMode,
