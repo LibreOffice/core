@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fwkutil.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jl $ $Date: 2004-05-17 13:55:32 $
+ *  last change: $Author: jl $ $Date: 2004-05-17 15:53:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@
 #include "libxml/parser.h"
 #include "libxml/xpath.h"
 
-#define ENVIRONMENT_VAR_JRE_PATH "OO_USE_JRE"
+#define ENVIRONMENT_VAR_JRE_PATH "JAVA_HOME"
 
 namespace jfw
 {
@@ -101,7 +101,7 @@ enum JFW_MODE
     /** We are NOT in an office process. The javavendors.xml is located next to
         the jvmfwk.dll, the javasettings.xml is NEIHER created, NOR read or written.
         As class path the environment variable CLASSPATH is used. The JRE, which
-        is to be used is determined by the environment variable OO_USE_JRE. It must
+        is to be used is determined by the environment variable JAVA_HOME. It must
         contain a file URL to the JRE.
      */
     JFW_MODE_ENV_SIMPLE
