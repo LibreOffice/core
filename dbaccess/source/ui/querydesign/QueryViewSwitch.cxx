@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryViewSwitch.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:13:39 $
+ *  last change: $Author: rt $ $Date: 2004-09-09 09:48:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,9 +70,6 @@
 #ifndef DBAUI_QUERYCONTAINERWINDOW_HXX
 #include "querycontainerwindow.hxx"
 #endif
-#ifndef _SV_TOOLBOX_HXX
-#include <vcl/toolbox.hxx>
-#endif
 #ifndef _DBAUI_MODULE_DBU_HXX_
 #include "moduledbu.hxx"
 #endif
@@ -99,23 +96,6 @@ using namespace dbaui;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 
-namespace
-{
-    void switchToolBox(ToolBox* _pToolBox,sal_Bool _bGraphicalDesign)
-    {
-        if ( _pToolBox )
-        {
-            _pToolBox->ShowItem(ID_BROWSER_QUERY_DISTINCT_VALUES,_bGraphicalDesign);
-            _pToolBox->ShowItem(ID_BROWSER_QUERY_VIEW_ALIASES,_bGraphicalDesign);
-            _pToolBox->ShowItem(ID_BROWSER_QUERY_VIEW_TABLES,_bGraphicalDesign);
-            _pToolBox->ShowItem(ID_BROWSER_QUERY_VIEW_FUNCTIONS,_bGraphicalDesign);
-            _pToolBox->ShowItem(ID_BROWSER_ADDTABLE,_bGraphicalDesign);
-            _pToolBox->ShowItem(ID_QUERY_ZOOM_IN,_bGraphicalDesign);
-            _pToolBox->ShowItem(ID_QUERY_ZOOM_OUT,_bGraphicalDesign);
-            _pToolBox->ShowItem(ID_BROWSER_ESACPEPROCESSING,!_bGraphicalDesign);
-        }
-    }
-}
 DBG_NAME(OQueryViewSwitch);
 OQueryViewSwitch::OQueryViewSwitch(OQueryContainerWindow* _pParent, OQueryController* _pController,const Reference< XMultiServiceFactory >& _rFactory)
 : m_bAddTableDialogWasVisible(sal_False)
@@ -148,8 +128,6 @@ void OQueryViewSwitch::initialize()
 {
     // initially be in SQL mode
     OQueryContainerWindow* pContainer = getContainer();
-    ToolBox* pToolBox = pContainer ? pContainer->getToolBox() : NULL;
-    switchToolBox(pToolBox,sal_False);
     m_pTextView->Show();
     m_pDesignView->initialize();
 }
@@ -291,9 +269,6 @@ sal_Bool OQueryViewSwitch::switchView()
     }
 
     OQueryContainerWindow* pContainer = getContainer();
-    ToolBox* pToolBox = pContainer ? pContainer->getToolBox() : NULL;
-    DBG_ASSERT( pToolBox, "OQueryViewSwitch::switchView: no toolbox!" );
-
     if ( !bGraphicalDesign )
     {
         m_pDesignView->stopTimer();
@@ -316,8 +291,6 @@ sal_Bool OQueryViewSwitch::switchView()
 
     if ( bRet )
     {
-        switchToolBox(pToolBox,bGraphicalDesign);
-
         m_pTextView->Show   ( !bGraphicalDesign );
         m_pDesignView->Show ( bGraphicalDesign );
         if ( bGraphicalDesign && m_bAddTableDialogWasVisible )
