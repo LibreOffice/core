@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flddb.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2000-10-27 17:45:54 $
+ *  last change: $Author: kz $ $Date: 2000-11-27 08:19:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,7 +176,7 @@ TabPage TP_FLD_DB
         TEXT[ chinese_traditional ] = "¶µ¥Ø¸¹½X";
         TEXT[ arabic ] = "ÑŞã ÇáÓÌá";
         TEXT[ greek ] = "Áñéèìüò åããñáöŞò";
-        TEXT[ korean ] = "·¹ÄÚµå ¹øÈ£";
+        TEXT[ korean ] = "µ¥ÀÌÅÍ ·¹ÄÚµå  ¹øÈ£";
         TEXT[ turkish ] = "Veri kümesi numarası";
     };
     Edit ED_DBSETNUMBER
