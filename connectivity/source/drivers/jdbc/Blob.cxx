@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Blob.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 13:19:10 $
+ *  last change: $Author: obo $ $Date: 2003-12-03 12:39:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,7 @@
 #include "java/io/InputStream.hxx"
 #endif
 #ifndef _INC_MEMORY
-#include <memory.h>
+//#include <memory.h>
 #endif
 
 using namespace connectivity;
