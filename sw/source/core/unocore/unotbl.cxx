@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:48:54 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 14:54:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1391,7 +1391,7 @@ void SwXTextTableRow::setPropertyValue(const OUString& rPropertyName,
                     if(FN_UNO_ROW_AUTO_HEIGHT== pMap->nWID)
                     {
                         sal_Bool bSet = *(sal_Bool*)aValue.getValue();
-                        aFrmSize.SetSizeType(bSet ? ATT_VAR_SIZE : ATT_FIX_SIZE);
+                        aFrmSize.SetHeightSizeType(bSet ? ATT_VAR_SIZE : ATT_FIX_SIZE);
                     }
                     else
                     {
@@ -1448,7 +1448,7 @@ uno::Any SwXTextTableRow::getPropertyValue(const OUString& rPropertyName) throw(
                     const SwFmtFrmSize& rSize = pLn->GetFrmFmt()->GetFrmSize();
                     if(FN_UNO_ROW_AUTO_HEIGHT== pMap->nWID)
                     {
-                        BOOL bTmp =  ATT_VAR_SIZE == rSize.GetSizeType();
+                        BOOL bTmp =  ATT_VAR_SIZE == rSize.GetHeightSizeType();
                         aRet.setValue(&bTmp, ::getCppuBooleanType());
                     }
                     else
