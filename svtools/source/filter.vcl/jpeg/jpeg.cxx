@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jpeg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sj $ $Date: 2001-08-20 11:57:06 $
+ *  last change: $Author: avy $ $Date: 2001-08-21 14:24:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@ extern "C"
 #include <vcl/bmpacc.hxx>
 #include "jpeg.hxx"
 #include "FilterConfigItem.hxx"
-#include "Filter.hxx"
+#include "filter.hxx"
 
 // -----------
 // - Defines -
