@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: obo $ $Date: 2002-06-26 08:17:56 $
+ *  last change: $Author: oj $ $Date: 2002-07-22 12:59:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1994,7 +1994,7 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId)
             break;
 
         case ID_BROWSER_SAVERECORD:
-            if ( SaveModified( sal_True ) )
+            if ( SaveModified( sal_False ) )
                 setCurrentModified( sal_False );
             break;
 
@@ -2034,9 +2034,25 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId)
 }
 
 //------------------------------------------------------------------------------
-sal_Bool SbaXDataBrowserController::SaveModified(sal_Bool bCommit)
+sal_Bool SbaXDataBrowserController::SaveModified(sal_Bool bAskFor)
 {
-    if (bCommit && !CommitCurrent())    // das aktuelle Control committen lassen
+    if ( bAskFor && GetState(ID_BROWSER_SAVERECORD).bEnabled )
+    {
+        getBrowserView()->getVclControl()->GrabFocus();
+
+        QueryBox aQry(getBrowserView()->getVclControl(), ModuleRes(QUERY_BRW_SAVEMODIFIED));
+
+        switch (aQry.Execute())
+        {
+            case RET_NO:
+                Execute(ID_BROWSER_UNDORECORD);
+                return sal_True;
+            case RET_CANCEL:
+                return sal_False;
+        }
+    }
+
+    if ( !CommitCurrent() ) // das aktuelle Control committen lassen
         return sal_False;
 
     Reference< XPropertySet >  xFormSet(getRowSet(), UNO_QUERY);
@@ -2062,8 +2078,8 @@ sal_Bool SbaXDataBrowserController::SaveModified(sal_Bool bCommit)
         bResult = sal_False;
     }
 
-    InvalidateFeature(ID_BROWSER_SAVEDOC);
-    InvalidateFeature(ID_BROWSER_UNDO);
+    InvalidateFeature(ID_BROWSER_SAVERECORD);
+    InvalidateFeature(ID_BROWSER_UNDORECORD);
     return bResult;
 }
 
