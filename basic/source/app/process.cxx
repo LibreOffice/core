@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: gh $ $Date: 2001-07-30 12:14:09 $
+ *  last change: $Author: vg $ $Date: 2003-03-26 12:04:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,7 @@ Process::Process()
 // Destruktor
 Process::~Process()
 {
-    delete pArgumentList;
+//  delete pArgumentList;
     delete pProcess;
 }
 
@@ -155,11 +155,16 @@ void Process::SetImage( const String &aAppPath, const String &aAppParams )
 
         xub_StrLen i, nCount = aAppParams.GetQuotedTokenCount( CUniString("\"\"" ), ' ' );
         ::rtl::OUString *pParamList = new ::rtl::OUString[nCount];
+
+        xub_StrLen nParamCount = 0;
         for ( i = 0 ; i < nCount ; i++ )
         {
-            ::rtl::OUString aTemp = ::rtl::OUString(aAppParams.GetQuotedToken( i, CUniString("\"\"" ), ' ' ));
+            ::rtl::OUString aTemp = ::rtl::OUString(aAppParams.GetQuotedToken( i, CUniString("\"\"''" ), ' ' ));
             if ( aTemp.getLength() )
-                pParamList[i] = aTemp;
+            {
+                pParamList[nParamCount] = aTemp;
+                nParamCount++;
+            }
         }
         pArgumentList = new NAMESPACE_VOS(OArgumentList)( pParamList, nCount );
         ::rtl::OUString aNormalizedAppPath;
