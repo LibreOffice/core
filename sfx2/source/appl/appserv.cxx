@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appserv.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 11:25:57 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 15:42:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -678,6 +678,8 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             else
                 Help::DisableBalloonHelp();
             SvtHelpOptions().SetExtendedHelp( bOn );
+            Invalidate(SID_HELPBALLOONS);
+            bDone = TRUE;
 
             // ggf. recorden
             if ( !rReq.IsAPI() )
@@ -694,6 +696,8 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                             ? ((SfxBoolItem*)pOnItem)->GetValue()
                             : !aHelpOpt.IsHelpAgentAutoStartMode();
             aHelpOpt.SetHelpAgentAutoStartMode( bOn );
+            Invalidate(SID_HELP_PI);
+            bDone = TRUE;
             break;
         }
 
