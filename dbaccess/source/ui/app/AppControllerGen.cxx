@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AppControllerGen.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 09:04:02 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 11:59:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -599,11 +599,14 @@ sal_Bool OApplicationController::isRenameDeleteAllowed(ElementType _eType,sal_Bo
     return bEnabled;
 }
 // -----------------------------------------------------------------------------
-void OApplicationController::loadSubToolbar(const Reference< drafts::com::sun::star::frame::XLayoutManager >& _xLayoutManager)
+void OApplicationController::onLoadedMenu(const Reference< drafts::com::sun::star::frame::XLayoutManager >& _xLayoutManager)
 {
-    OGenericUnoController::loadSubToolbar(_xLayoutManager);
-    Execute(SID_DB_APP_VIEW_FORMS,Sequence<PropertyValue>());
+    OGenericUnoController::onLoadedMenu( _xLayoutManager );
 
+    if ( getContainer() )
+        getContainer()->createIconAutoMnemonics();
+
+    Execute( SID_DB_APP_VIEW_FORMS, Sequence< PropertyValue >() );
     InvalidateAll();
 }
 // -----------------------------------------------------------------------------
