@@ -2,9 +2,9 @@
  *
  *  $RCSfile: styledlg.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-04 20:24:14 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 06:14:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@ TabDialog RID_SCDLG_STYLES_PAR
     Text [ italian ] = "Modello di cella" ;
     Text [ portuguese_brazilian ] = "Cell Style" ;
     Text [ portuguese ] = "Estilo da célula" ;
-    Text [ finnish ] = "Cell Style" ;
+    Text [ finnish ] = "Solun tyyli" ;
     Text [ danish ] = "Celletypografi" ;
     Text [ french ] = "Style de cellule" ;
     Text [ swedish ] = "Cellformatmall" ;
@@ -97,7 +97,7 @@ TabDialog RID_SCDLG_STYLES_PAR
                 Text [ italian ] = "Numeri" ;
                 Text [ portuguese_brazilian ] = "Número" ;
                 Text [ portuguese ] = "Números" ;
-                Text [ finnish ] = "Numero" ;
+                Text [ finnish ] = "Numerot" ;
                 Text [ danish ] = "Tal" ;
                 Text [ french ] = "Nombres" ;
                 Text [ swedish ] = "Tal" ;
@@ -126,7 +126,7 @@ TabDialog RID_SCDLG_STYLES_PAR
                 Text [ italian ] = "Carattere" ;
                 Text [ portuguese_brazilian ] = "Caractere" ;
                 Text [ portuguese ] = "Tipo de letra" ;
-                Text [ finnish ] = "Merkki" ;
+                Text [ finnish ] = "Fontti" ;
                 Text [ danish ] = "Skrifttype" ;
                 Text [ french ] = "Police" ;
                 Text [ swedish ] = "Teckensnitt" ;
@@ -169,6 +169,7 @@ TabDialog RID_SCDLG_STYLES_PAR
                 Text[ turkish ] = "Character Extension";
                 Text[ arabic ] = "ÊÃËíÑÇÊ ÇáÎØæØ";
                 Text[ catalan ] = "Efecto de fuente";
+                Text[ finnish ] = "Fonttitehosteet";
             };
             PageItem
             {
@@ -222,6 +223,7 @@ TabDialog RID_SCDLG_STYLES_PAR
                 Text[ turkish ] = "Asian typography";
                 Text[ arabic ] = "ÃÓáæÈ ÇáØÈÇÚÉ ÇáÂÓíæíÉ";
                 Text[ catalan ] = "Tipografía asiática";
+                Text[ finnish ] = "Aasialaiset merkit";
             };
             PageItem
             {
@@ -232,7 +234,7 @@ TabDialog RID_SCDLG_STYLES_PAR
                 Text [ italian ] = "Bordo" ;
                 Text [ portuguese_brazilian ] = "Borda" ;
                 Text [ portuguese ] = "Contornos" ;
-                Text [ finnish ] = "Reunaviiva" ;
+                Text [ finnish ] = "Reunat" ;
                 Text [ danish ] = "Ramme" ;
                 Text [ french ] = "Bordure" ;
                 Text [ swedish ] = "Inramning" ;
@@ -288,7 +290,7 @@ TabDialog RID_SCDLG_STYLES_PAR
                 Text [ italian ] = "Protezione celle" ;
                 Text [ portuguese_brazilian ] = "Proteção" ;
                 Text [ portuguese ] = "Protecção de célula" ;
-                Text [ finnish ] = "Suojaus" ;
+                Text [ finnish ] = "Solujen suojaus" ;
                 Text [ danish ] = "Cellebeskyttelse" ;
                 Text [ french ] = "Protection de cellule" ;
                 Text [ swedish ] = "Cellskydd" ;
@@ -332,7 +334,7 @@ TabDialog RID_SCDLG_STYLES_PAGE
     Text [ italian ] = "Modello di pagina" ;
     Text [ portuguese_brazilian ] = "Estilo da Página" ;
     Text [ portuguese ] = "Estilo de página" ;
-    Text [ finnish ] = "Sivutyyli" ;
+    Text [ finnish ] = "Sivun tyyli" ;
     Text [ danish ] = "Sidetypografi" ;
     Text [ french ] = "Style de page" ;
     Text [ swedish ] = "Sidformatmall" ;
@@ -357,7 +359,7 @@ TabDialog RID_SCDLG_STYLES_PAGE
                 Text [ italian ] = "Pagina" ;
                 Text [ portuguese_brazilian ] = "Página" ;
                 Text [ portuguese ] = "Página" ;
-                Text [ finnish ] = "Sivu" ;
+                Text [ finnish ] = "Sivu " ;
                 Text [ danish ] = "Side" ;
                 Text [ french ] = "Page" ;
                 Text [ swedish ] = "Sida" ;
@@ -385,7 +387,7 @@ TabDialog RID_SCDLG_STYLES_PAGE
                 Text [ italian ] = "Bordo" ;
                 Text [ portuguese_brazilian ] = "Borda" ;
                 Text [ portuguese ] = "Contornos" ;
-                Text [ finnish ] = "Reunaviiva" ;
+                Text [ finnish ] = "Reunat" ;
                 Text [ danish ] = "Ramme" ;
                 Text [ french ] = "Bordure" ;
                 Text [ swedish ] = "Inramning" ;
@@ -441,7 +443,7 @@ TabDialog RID_SCDLG_STYLES_PAGE
                 Text [ italian ] = "Riga d'intestazione" ;
                 Text [ portuguese_brazilian ] = "Cabeçalho" ;
                 Text [ portuguese ] = "Cabeçalho" ;
-                Text [ finnish ] = "Yläteksti" ;
+                Text [ finnish ] = "Yläotsikko" ;
                 Text [ danish ] = "Sidehoved" ;
                 Text [ french ] = "En-tête" ;
                 Text [ swedish ] = "Sidhuvud" ;
@@ -469,7 +471,7 @@ TabDialog RID_SCDLG_STYLES_PAGE
                 Text [ italian ] = "Piè di pagina" ;
                 Text [ portuguese_brazilian ] = "Rodapé" ;
                 Text [ portuguese ] = "Rodapé" ;
-                Text [ finnish ] = "Alateksti" ;
+                Text [ finnish ] = "Alaselite" ;
                 Text [ danish ] = "Sidefod" ;
                 Text [ french ] = "Pied de page" ;
                 Text [ swedish ] = "Sidfot" ;
@@ -497,7 +499,7 @@ TabDialog RID_SCDLG_STYLES_PAGE
                 Text [ italian ] = "Tabella" ;
                 Text [ portuguese_brazilian ] = "Tabela" ;
                 Text [ portuguese ] = "Folha" ;
-                Text [ finnish ] = "Taulukko" ;
+                Text [ finnish ] = "Lomake" ;
                 Text [ danish ] = "Ark" ;
                 Text [ french ] = "Classeur" ;
                 Text [ swedish ] = "Tabell" ;
