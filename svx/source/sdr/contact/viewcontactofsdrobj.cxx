@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewcontactofsdrobj.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 10:08:07 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 09:46:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,14 +173,14 @@ static sal_Bool bTestTheBitmapBufferedObjects(sal_False);
             {
                 // Always buffer OLE2 objects, this needs to be moved to a
                 // ViewContactOfOLE2Obj later
-                pRetval = new VOCBitmapBuffer(rObjectContact, *this);
+                pRetval = new VOCBitmapExBuffer(rObjectContact, *this);
             }
             else
             {
 #ifdef DBG_UTIL
                 if(bTestTheBitmapBufferedObjects)
                 {
-                    pRetval = new VOCBitmapBuffer(rObjectContact, *this);
+                    pRetval = new VOCBitmapExBuffer(rObjectContact, *this);
                 }
                 else
                 {
