@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerparser.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2002-07-14 16:49:50 $
+ *  last change: $Author: cyrillem $ $Date: 2002-07-19 18:21:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,7 +123,6 @@ void SAL_CALL LayerParser::startElement( const OUString& aName, const uno::Refer
         this->startSkipping( aName, xAttribs );
         return;
     }
-
     ElementInfo aInfo = getDataParser().parseElementInfo(aName,xAttribs);
 
     switch (aInfo.type)
@@ -171,9 +170,9 @@ void SAL_CALL LayerParser::endElement( const OUString& aName )
     else if (this->isInNode())
         this->endNode();
 
-    else
+    else {
         this->raiseParseException("Layer parser: Invalid XML: endElement without matching startElement");
-
+    }
 }
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
@@ -254,6 +253,35 @@ void LayerParser::startProperty( ElementInfo const & aInfo, const uno::Reference
 }
 // -----------------------------------------------------------------------------
 
+void LayerParser::addOrReplaceCurrentProperty(const uno::Any& aValue) {
+    const ElementInfo& currentInfo = getActiveNodeInfo() ;
+
+    OSL_ASSERT(currentInfo.op == Operation::replace) ;
+    try {
+        if (aValue.hasValue()) {
+            m_xHandler->addPropertyWithValue(currentInfo.name,
+                                             currentInfo.flags, aValue) ;
+        }
+        else {
+            m_xHandler->addProperty(currentInfo.name, currentInfo.flags,
+                                    getActivePropertyType()) ;
+        }
+    }
+    catch (com::sun::star::beans::PropertyExistException& exception) {
+        // If we're here, someone is trying to do a replace
+        // on an existing property. Now that doesn't make
+        // a lot of sense to be honest, but since that amounts
+        // to a modify anyway, let's humor that someone.
+        // Print a warning anyway.
+        OSL_ENSURE(false, "Found a replace operation on an existing property, use modify instead") ;
+        m_xHandler->overrideProperty(currentInfo.name, currentInfo.flags,
+                                     getActivePropertyType()) ;
+        // The value cannot be localised, this would have been trapped earlier
+        m_xHandler->setPropertyValue(aValue) ;
+    }
+}
+// -----------------------------------------------------------------------------
+
 void LayerParser::endProperty()
 {
     OSL_ASSERT(!this->isInRemoved());
@@ -262,10 +290,13 @@ void LayerParser::endProperty()
     {
         if (this->isInUnhandledProperty())
         {
-            ElementInfo const & aInfo = getActiveNodeInfo();
-            OSL_ASSERT(aInfo.op == Operation::replace);
+            uno::Any value ;
 
-            m_xHandler->addProperty(aInfo.name,aInfo.flags,getActivePropertyType());
+            if (getActivePropertyType() == getCppuType(
+                        static_cast<rtl::OUString *>(NULL))){
+                value <<= rtl::OUString() ;
+            }
+            addOrReplaceCurrentProperty(value) ;
         }
         m_bNewProp = false;
     }
@@ -291,18 +322,15 @@ void LayerParser::endValueData()
 {
     uno::Any aValue = this->getCurrentValue();
 
+    if (!aValue.hasValue() && getActivePropertyType() == getCppuType(
+                static_cast<rtl::OUString *>(NULL))) {
+        aValue <<= rtl::OUString() ;
+    }
     if (m_bNewProp)
     {
         OSL_ENSURE(!isValueDataLocalized(),"Layer parser: Invalid Data: 'lang' ignored for newly added property.");
 
-        ElementInfo const & aInfo = this->getActiveNodeInfo();
-
-        OSL_ASSERT( aInfo.op == Operation::replace );
-
-        if (aValue.hasValue())
-            m_xHandler->addPropertyWithValue(aInfo.name,aInfo.flags,aValue);
-        else
-            m_xHandler->addProperty(aInfo.name,aInfo.flags,getActivePropertyType());
+        addOrReplaceCurrentProperty(aValue) ;
     }
     else if (this->isValueDataLocalized())
     {

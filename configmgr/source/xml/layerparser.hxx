@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerparser.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-16 11:00:29 $
+ *  last change: $Author: cyrillem $ $Date: 2002-07-19 18:21:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,17 @@ namespace configmgr
             void startValueData(const uno::Reference< sax::XAttributeList >& xAttribs);
             /// end collecting data for a value - returns the collected value
             void endValueData();
+
+            /**
+              Forces the addition or replacement of a property.
+              As it is possible to "replace" an existing property,
+              even though this amounts to a modify, this method
+              first tries to add a new property and failing that,
+              to replace the value of an existing one.
+
+              @param aValue value to be set for the property
+              */
+            void addOrReplaceCurrentProperty(const uno::Any& aValue) ;
 
             bool isInRemoved() const { return m_bRemoved; }
             void checkNotRemoved();
