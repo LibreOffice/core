@@ -2,9 +2,9 @@
  *
  *  $RCSfile: padialog.hrc,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pl $ $Date: 2001-06-27 16:03:31 $
+ *  last change: $Author: pl $ $Date: 2002-08-27 11:24:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,17 +140,20 @@
 #define RID_FNTNM_STR_TTCRENAME         8
 #define RID_FNTNM_STR_NOTRENAMABLE          9
 
-#define RID_TXT_REFETCH            1031
+#define RID_TXT_REFETCH                 1031
 
-#define RID_BXT_TESTPAGE           1034
-#define RID_BXT_ENVIRONMENT        1035
+#define RID_BXT_TESTPAGE                1034
+#define RID_BXT_ENVIRONMENT             1035
 
-#define RID_YOU_SURE               1040
+#define RID_YOU_SURE                    1040
 
-#define RID_BUTTERFLY              1047
+#define RID_ERR_REMOVEDRIVERFAILED          1041
+
+#define RID_BUTTERFLY                   1047
 
 #define RID_COMMAND_TXT_MODIFY              1049
 #define RID_COMMAND_TXT_ADDENTRY            1050
+#define RID_ERR_REMOVESGENPRT               1051
 #define RID_PA_TXT_NOWRITE              1052
 #define RID_DOUBLEFONTFILE              1053
 #define RID_INVALIDFONTPATH             1054

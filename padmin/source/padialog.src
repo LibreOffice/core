@@ -2,9 +2,9 @@
  *
  *  $RCSfile: padialog.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2002-06-10 15:24:38 $
+ *  last change: $Author: pl $ $Date: 2002-08-27 11:24:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2293,6 +2293,18 @@ String RID_QUERY_DRIVERUSED
     Text[ finnish ] = "Jotkin tulostimet k�ytt�v�t yh� ajuria \"%s\". Haluatko varmasti poistaa ajurin? Sit� k�ytt�v�t tulostimet poistetaan my�s.";
     Text[ catalan ] = "Encara hi ha impressores que utilitzen aquest controlador. Vol eliminar-lo? Tamb� s'eliminaran les impressores corresponents.";
     Text[ thai ] = "มีเครื่องพิมพ์ที่ใช้ไดร้ฟ์เวอร์ \"%s\"อยู่  คุณต้องการเอาออกหรือไม่? จะเอาเครื่องพิมพ์ที่มีลักษณะเช่นเดียวกันออกด้วย";
+};
+
+String RID_ERR_REMOVESGENPRT
+{
+    Text = "Der Treiber \"%s\" wird immer gebraucht und kann daher nicht entfernt werden.";
+    Text [ English ] = "The driver \"%s\" is always needed and can therefore not be removed.";
+};
+
+String RID_ERR_REMOVEDRIVERFAILED
+{
+    Text = "Der Treiber \"%s1\" konnte nicht entfernt werden. Das L�schen der Datei\n\n%s2\n\nist fehlgeschlagen.";
+    Text [ English ] = "The driver \"%s1\" could not be removed. Removing the file\n\n%s2\n\nwas not possible.";
 };
 
 String RID_ERR_REMOVEDEFAULTDRIVER

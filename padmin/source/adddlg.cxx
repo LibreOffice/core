@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adddlg.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: pl $ $Date: 2002-07-24 18:49:09 $
+ *  last change: $Author: pl $ $Date: 2002-08-27 11:24:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -246,11 +246,19 @@ IMPL_LINK( APChooseDriverPage, ClickBtnHdl, PushButton*, pButton )
         {
             int nSelect = m_aDriverBox.GetSelectEntryPos(i);
             String aDriver( *(String*)m_aDriverBox.GetEntryData( nSelect ) );
-            // never delete the default driver
-            if( aDriver.EqualsIgnoreCaseAscii( "SGENPRT" ) )
-                continue;
             if( aDriver.Len() )
             {
+                // never delete the default driver
+                if( aDriver.EqualsIgnoreCaseAscii( "SGENPRT" ) )
+                {
+                    String aText( PaResId( RID_ERR_REMOVESGENPRT ) );
+                    aText.SearchAndReplace( String::CreateFromAscii( "%s" ), m_aDriverBox.GetSelectEntry( i ) );
+                    ErrorBox aErrorBox( this, WB_OK | WB_DEF_OK, aText );
+                    aErrorBox.SetText( m_aRemStr );
+                    aErrorBox.Execute();
+                    continue;
+                }
+
                 PrinterInfo aDefInfo( rPIManager.getPrinterInfo( rPIManager.getDefaultPrinter() ) );
                 // for comparisons convert to a OUString
                 OUString aPPD( aDriver );
@@ -328,7 +336,15 @@ IMPL_LINK( APChooseDriverPage, ClickBtnHdl, PushButton*, pButton )
                         if( file->Copy( 0, nPos ) == String( aPPD ) )
                         {
                             ByteString aSysPath( aFile, aEncoding );
-                            unlink( aSysPath.GetBuffer() );
+                            if( unlink( aSysPath.GetBuffer() ) )
+                            {
+                                String aText( PaResId( RID_ERR_REMOVEDRIVERFAILED ) );
+                                aText.SearchAndReplace( String::CreateFromAscii( "%s1" ), m_aDriverBox.GetSelectEntry( i ) );
+                                aText.SearchAndReplace( String::CreateFromAscii( "%s2" ), aFile );
+                                ErrorBox aErrorBox( this, WB_OK | WB_DEF_OK, aText );
+                                aErrorBox.SetText( m_aRemStr );
+                                aErrorBox.Execute();
+                            }
                         }
                     }
                 }
