@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OTools.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-06 10:10:44 $
+ *  last change: $Author: oj $ $Date: 2001-11-20 14:14:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -847,7 +847,7 @@ void OTools::GetInfo(OConnection* _pConnection,
 // -------------------------------------------------------------------------
 sal_Int32 OTools::MapOdbcType2Jdbc(sal_Int32 _nType)
 {
-    sal_Int32 nValue;
+    sal_Int32 nValue = DataType::VARCHAR;
     switch(_nType)
     {
         case SQL_BIT:
@@ -888,7 +888,7 @@ sal_Int32 OTools::MapOdbcType2Jdbc(sal_Int32 _nType)
         case SQL_VARCHAR:
             nValue = DataType::VARCHAR;
             break;
-            case SQL_WLONGVARCHAR:
+        case SQL_WLONGVARCHAR:
         case SQL_LONGVARCHAR:
             nValue = DataType::LONGVARCHAR;
             break;
@@ -908,11 +908,14 @@ sal_Int32 OTools::MapOdbcType2Jdbc(sal_Int32 _nType)
             nValue = DataType::BINARY;
             break;
         case SQL_VARBINARY:
+        case SQL_GUID:
             nValue = DataType::VARBINARY;
             break;
         case SQL_LONGVARBINARY:
             nValue = DataType::LONGVARBINARY;
             break;
+        default:
+            OSL_ASSERT(!"Invalid type");
     }
     return nValue;
 }

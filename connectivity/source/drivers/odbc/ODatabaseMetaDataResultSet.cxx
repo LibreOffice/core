@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ODatabaseMetaDataResultSet.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-22 11:17:34 $
+ *  last change: $Author: oj $ $Date: 2001-11-20 14:14:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -920,6 +920,8 @@ void ODatabaseMetaDataResultSet::openTypeInfo() throw(SQLException, RuntimeExcep
     aMap[SQL_VARBINARY]         = DataType::VARBINARY;
     aMap[SQL_LONGVARBINARY]     = DataType::LONGVARBINARY;
 
+    aMap[SQL_GUID]              = DataType::VARBINARY;
+
 
     m_aValueRange[2] = aMap;
 
@@ -1116,6 +1118,8 @@ void ODatabaseMetaDataResultSet::openColumns(   const Any& catalog,             
     aMap[SQL_BINARY]            = DataType::BINARY;
     aMap[SQL_VARBINARY]         = DataType::VARBINARY;
     aMap[SQL_LONGVARBINARY]     = DataType::LONGVARBINARY;
+
+    aMap[SQL_GUID]              = DataType::VARBINARY;
 
     m_aValueRange[5] = aMap;
     checkColumnCount();
