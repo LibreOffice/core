@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wview.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:35:46 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 13:25:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,9 @@
 #endif
 #ifndef _SVX_EXTRUSION_BAR_HXX
 #include <svx/extrusionbar.hxx>
+#endif
+#ifndef _SVX_FONTWORK_BAR_HXX
+#include <svx/fontworkbar.hxx>
 #endif
 
 #include <sfx2/objface.hxx>
@@ -285,6 +288,10 @@ void SwWebView::SelectShell()
         {
             eShellMode = SEL_DRAW;
             SetShell( new svx::ExtrusionBar( this ) );
+            rDispatcher.Push( *GetCurShell() );
+
+            eShellMode = SEL_DRAW;
+            SetShell( new svx::FontworkBar( this ) );
             rDispatcher.Push( *GetCurShell() );
 
             SetShell( new SwDrawShell( *this ));
