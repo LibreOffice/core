@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-07 13:33:05 $
+ *  last change: $Author: cl $ $Date: 2000-11-08 12:24:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1414,7 +1414,13 @@ SdXMLGraphicObjectShapeContext::SdXMLGraphicObjectShapeContext(
                     {
                         uno::Any aAny;
                         aAny <<= aURL;
-                        xProps->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("GraphicURL") ), aAny );
+                        try
+                        {
+                            xProps->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("GraphicURL") ), aAny );
+                        }
+                        catch (lang::IllegalArgumentException const &)
+                        {
+                        }
                     }
                 }
             }
