@@ -2,9 +2,9 @@
  *
  *  $RCSfile: topfrm.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-10 10:38:29 $
+ *  last change: $Author: mba $ $Date: 2002-08-23 11:10:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,7 +204,7 @@ void SfxTopWindow_Impl::DataChanged( const DataChangedEvent& rDCEvt )
 
 long SfxTopWindow_Impl::Notify( NotifyEvent& rNEvt )
 {
-    if ( pFrame->IsClosing_Impl() )
+    if ( pFrame->IsClosing_Impl() || !pFrame->GetFrameInterface().is() )
         return sal_False;
 
     SfxViewFrame* pView = pFrame->GetCurrentViewFrame();
