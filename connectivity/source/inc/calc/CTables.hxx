@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CTables.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-12 11:54:45 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 15:37:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@ namespace connectivity
         class OCalcTables : public OCalcTables_BASE
         {
         protected:
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed > createObject(const ::rtl::OUString& _rName);
+            virtual sdbcx::ObjectType createObject(const ::rtl::OUString& _rName);
         public:
             OCalcTables(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rMetaData,::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex,
                 const TStringVector &_rVector) : OCalcTables_BASE(_rMetaData,_rParent,_rMutex,_rVector)
