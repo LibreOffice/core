@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabline.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-09 13:10:40 $
+ *  last change: $Author: kz $ $Date: 2000-11-15 21:34:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1577,6 +1577,7 @@ TabPage RID_SVXPAGE_LINE_DEF
         QuickHelpText[ korean ] = "Load Line Styles";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
+        QuickHelpText[ turkish ] = "Linienstiltabelle laden";
     };
     ImageButton BTN_SAVE
     {
@@ -1619,6 +1620,7 @@ TabPage RID_SVXPAGE_LINE_DEF
         QuickHelpText[ korean ] = "Save Line Styles";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
+        QuickHelpText[ turkish ] = "Linienstiltabelle sichern";
     };
     Text[ chinese_simplified ] = "¶ЁТеПЯМхКЅСщ";
     Text[ russian ] = "Задать стили линии";
@@ -1923,6 +1925,7 @@ TabPage RID_SVXPAGE_LINEEND_DEF
         QuickHelpText[ korean ] = "Load Arrow Styles";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
+        QuickHelpText[ turkish ] = "Linienendentabelle laden";
     };
     ImageButton BTN_SAVE
     {
@@ -1965,6 +1968,7 @@ TabPage RID_SVXPAGE_LINEEND_DEF
         QuickHelpText[ korean ] = "Save Arrow Styles";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
+        QuickHelpText[ turkish ] = "Linienendentabelle sichern";
     };
     Text[ chinese_simplified ] = "¶ЁТеПЯ¶Л";
     Text[ russian ] = "Задать концы линии";
