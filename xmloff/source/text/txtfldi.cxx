@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfldi.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: dvo $ $Date: 2002-01-18 14:26:55 $
+ *  last change: $Author: dvo $ $Date: 2002-05-29 15:25:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3795,8 +3795,8 @@ void XMLScriptImportContext::ProcessAttribute(
             break;
     }
 
-    // validity depends only on script type
-    bValid = bScriptTypeOK;
+    // always valid (even without ScriptType; cf- #96531#)
+    bValid = sal_True;
 }
 
 void XMLScriptImportContext::PrepareField(
