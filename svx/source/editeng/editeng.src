@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-17 13:20:00 $
+ *  last change: $Author: os $ $Date: 2002-12-02 13:53:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,7 +224,7 @@ String RID_EDITUNDO_RESETATTRIBS
     TEXT [ danish ] = "Nulstil attributer" ;
     TEXT [ french ] = "Restaurer les attributs" ;
     TEXT [ swedish ] = "Återställ attribut" ;
-    TEXT [ dutch ] = "Attributen terugzetten" ;
+    TEXT [ dutch ] = "Attributen herstellen" ;
     TEXT [ spanish ] = "Restablecer atributos" ;
     TEXT [ english_us ] = "Reset attributes" ;
     TEXT[ chinese_simplified ] = "é‡è®¾å±æ€§";
@@ -233,7 +233,7 @@ String RID_EDITUNDO_RESETATTRIBS
     TEXT[ japanese ] = "å±æ€§ã‚’å…ƒã«æˆ»ã™";
     TEXT[ chinese_traditional ] = "é‡è¨­å±¬æ€§";
     TEXT[ arabic ] = "ÅÚÇÏÉ ÊÚííä ÇáÓãÇÊ";
-    TEXT[ dutch ] = "Attributen terugzetten";
+    TEXT[ dutch ] = "Attributen herstellen";
     TEXT[ chinese_simplified ] = "é‡è®¾å±æ€§";
     TEXT[ greek ] = "ÅğáíáöïñÜ éäéïôŞôùí";
     TEXT[ korean ] = "ì†ì„± ì›ë˜ëŒ€ë¡œ";
@@ -254,14 +254,14 @@ String RID_EDITUNDO_INDENT
     Text [ italian ] = "Rientro" ;
     Text [ spanish ] = "Sangría" ;
     Text [ french ] = "Mettre en retrait" ;
-    Text [ dutch ] = "Inspringen" ;
+    Text [ dutch ] = "Inspringing" ;
     Text[ chinese_simplified ] = "ç¼©è¿›";
     Text[ russian ] = "Îòñòóï";
     Text[ polish ] = "Wciêcie";
     Text[ japanese ] = "æŒ¿å…¥";
     Text[ chinese_traditional ] = "ç¸®æ’";
     Text[ arabic ] = "ÅÒÇÍÉ";
-    Text[ dutch ] = "Inspringen";
+    Text[ dutch ] = "Inspringing";
     Text[ chinese_simplified ] = "ç¼©è¿›";
     Text[ greek ] = "Åóï÷Ş";
     Text[ korean ] = "ë“¤ì—¬ì“°ê¸°";
@@ -307,7 +307,7 @@ String RID_EDITUNDO_TRANSLITERATE
     TEXT[English] = "Change case";
     TEXT[ english_us ] = "Case/Characters";
     TEXT[ portuguese ] = "Caixa/Caracteres";
-    TEXT[ russian ] = "Çàãëàâíàÿ/ñòğî÷íàÿ áóêâà";
+    TEXT[ russian ] = "Ğåãèñòğ";
     TEXT[ greek ] = "Êåöáëáßá/ĞåæÜ";
     TEXT[ dutch ] = "Hoofdletters/kleine letters";
     TEXT[ french ] = "Casse/Caractères";
@@ -325,7 +325,7 @@ String RID_EDITUNDO_TRANSLITERATE
     TEXT[ arabic ] = "ÇáßÊÇÈÉ ÈÃÍÑİ ßÈíÑÉ Ãæ ÕÛíÑÉ";
     TEXT[ language_user1 ] = "nk03.04.01: hier passt Englisch Uebesetzung besser.";
     TEXT[ catalan ] = "Majúscules/minúscules";
-    TEXT[ finnish ] = "Pienet tai suuret kirjaimet";
+    TEXT[ finnish ] = "Muuta kirjainkoko";
     TEXT[ thai ] = "à¸•à¸±à¸§à¸à¸´à¸¡à¸à¹Œ/à¸•à¸±à¸§à¸­à¸±à¸à¸‚à¸£à¸°";
 };
 
@@ -338,12 +338,12 @@ Menu RID_MENU_SPELL
         {
             Identifier = MN_SPELLING ;
             HelpId = HID_EDITENG_SPELLER_START;
-            Text = "~Rechtschreibung..." ;
+            Text = "~Rechtschreibprüfung..." ;
             Text [ English ] = "~Spelling..." ;
             Text [ english_us ] = "~Spellcheck..." ;
             Text[ language_user1 ] = "triple dots (...) are required now at the end of the text";
             Text[ portuguese ] = "Or~tografia";
-            Text[ russian ] = "~Ïğàâîïèñàíèå";
+            Text[ russian ] = "~Ïğîâåğêà îğôîãğàôèè";
             Text[ greek ] = "Ï~ñèïãñáößá";
             Text[ dutch ] = "~Spellingcontrole";
             Text[ french ] = "~Orthographe...";
@@ -393,7 +393,7 @@ Menu RID_MENU_SPELL
             Text[ korean ] = "ì¶”ê°€(~A)";
             Text[ turkish ] = "Ekle";
             Text[ catalan ] = "~Afegeix";
-            Text[ finnish ] = "~Lisää";
+            Text[ finnish ] = "Lis~ää";
             Text[ thai ] = "à¹€~à¸à¸´à¹ˆà¸¡";
         };
         MenuItem
