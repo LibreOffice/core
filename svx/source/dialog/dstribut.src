@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dstribut.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 14:01:17 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 11:52:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,218 +71,55 @@ TabPage RID_SVXPAGE_DISTRIBUTE
     HelpId = HID_PAGE_DISTRIBUTE ;
     Hide = TRUE ;
     Size = MAP_APPFONT ( 260 , 81 ) ;
-    Text = "Verteilung" ;
-    Text [ ENGLISH ] = "Distribution" ;
-    Text [ english_us ] = "Distribution" ;
+    Text [ de ] = "Verteilung" ;
+    Text [ en-US ] = "Distribution" ;
 
     FixedLine FL_HORIZONTAL
     {
         Pos = MAP_APPFONT ( 6 , 3  ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text = "Horizontal" ;
-        Text [ ENGLISH ] = "Horizontal" ;
-        Text [ english_us ] = "Horizontal" ;
-        Text[ portuguese ] = "Horizontal";
-        Text[ russian ] = "Ãîğèçîíòàëüíî";
-        Text[ greek ] = "Ïñéæüíôéá";
-        Text[ dutch ] = "Horizontaal";
-        Text[ french ] = "Horizontale";
-        Text[ spanish ] = "Horizontal";
-        Text[ italian ] = "Orizzontale";
-        Text[ danish ] = "Vandret";
-        Text[ swedish ] = "Horisontell";
-        Text[ polish ] = "Poziomo";
-        Text[ portuguese_brazilian ] = "Horizontal";
-        Text[ japanese ] = "æ¨ª";
-        Text[ korean ] = "ê°€ë¡œ";
-        Text[ chinese_simplified ] = "æ°´å¹³çš„";
-        Text[ chinese_traditional ] = "æ°´å¹³";
-        Text[ arabic ] = "ÃİŞí";
-        Text[ turkish ] = "Yatay";
-        Text[ catalan ] = "Horitzontal";
-        Text[ finnish ] = "Vaakataso";
-        Text[ thai ] = "à¹à¸™à¸§à¸™à¸­à¸™";
-        Text[ czech ] = "VodorovnÄ›";
-        Text[ hebrew ] = "â€®××•×¤×§×™â€¬";
-        Text[ hindi ] = "à¤¸à¤®à¤¤à¤²";
-        Text[ slovak ] = "Vodorovne";
-        Text[ hungarian ] = "VÃ­zszintes";
-        Text[ slovenian ] = "Vodoravno";
+        Text [ de ] = "Horizontal" ;
+        Text [ en-US ] = "Horizontal" ;
     };
 
     RadioButton BTN_HOR_NONE
     {
         Pos = MAP_APPFONT ( 12 , 14  ) ;
         Size = MAP_APPFONT ( 48 , 10 ) ;
-        Text = "~Keine" ;
-        Text [ ENGLISH ] = "~None" ;
-        Text [ ENGLISH_US ] = "~None" ;
-        Text[ portuguese ] = "~Nenhuma";
-        Text[ russian ] = "Íåò";
-        Text[ greek ] = "~Êáìßá";
-        Text[ dutch ] = "~Geen";
-        Text[ french ] = "Aucun(e)";
-        Text[ spanish ] = "Ninguno";
-        Text[ italian ] = "Senza";
-        Text[ danish ] = "~Ingen";
-        Text[ swedish ] = "In~gen";
-        Text[ polish ] = "~Brak";
-        Text[ portuguese_brazilian ] = "~Nenhum";
-        Text[ japanese ] = "ãªã—(~N)";
-        Text[ korean ] = "ì—†ìŒ(~N)";
-        Text[ chinese_simplified ] = "æ— (~N)";
-        Text[ chinese_traditional ] = "ç„¡(~N)";
-        Text[ arabic ] = "ÈÏæä";
-        Text[ turkish ] = "~Hiçbiri";
-        Text[ catalan ] = "Cap";
-        Text[ finnish ] = "Ei mitään";
-        Text[ thai ] = "à¹„~à¸¡à¹ˆà¸¡à¸µ";
-        Text[ czech ] = "Nic";
-        Text[ hebrew ] = "â€®×œ×œ×â€¬";
-        Text[ hindi ] = "~à¤•à¥‹à¤ˆ à¤¨à¤¹à¥€à¤‚";
-        Text[ slovak ] = "~NiÄ";
-        Text[ hungarian ] = "~Nincs";
-        Text[ slovenian ] = "~Brez";
+        Text [ de ] = "~Keine" ;
+        Text [ en-US ] = "~None" ;
     };
 
     RadioButton BTN_HOR_LEFT
     {
         Pos = MAP_APPFONT ( 56 , 26  ) ;
         Size = MAP_APPFONT ( 45 , 10 ) ;
-        Text = "~Links" ;
-        Text [ ENGLISH ] = "~Left" ;
-        Text [ ENGLISH_US ] = "~Left" ;
-        Text[ portuguese ] = "E~squerda";
-        Text[ russian ] = "Ñëåâà";
-        Text[ greek ] = "Á~ñéóôåñÜ";
-        Text[ dutch ] = "~Links";
-        Text[ french ] = "À gauche";
-        Text[ spanish ] = "Izquierda";
-        Text[ italian ] = "A sinistra";
-        Text[ danish ] = "~Venstre";
-        Text[ swedish ] = "~Vänster";
-        Text[ polish ] = "Z ~lewej";
-        Text[ portuguese_brazilian ] = "~Esquerda";
-        Text[ japanese ] = "å·¦(~L)";
-        Text[ korean ] = "ì™¼ìª½(~L)";
-        Text[ chinese_simplified ] = "å·¦(~L)";
-        Text[ chinese_traditional ] = "å·¦(~L)";
-        Text[ arabic ] = "íÓÇÑ";
-        Text[ turkish ] = "~Sol";
-        Text[ catalan ] = "Esquerra";
-        Text[ finnish ] = "Vasen";
-        Text[ thai ] = "~à¸‹à¹‰à¸²à¸¢";
-        Text[ czech ] = "Vlevo";
-        Text[ hebrew ] = "â€®×©×××œâ€¬";
-        Text[ hindi ] = "~à¤¬à¤¾à¤¯à¤¾à¤";
-        Text[ slovak ] = "VÄ¾~avo";
-        Text[ hungarian ] = "~Bal";
-        Text[ slovenian ] = "~Levo";
+        Text [ de ] = "~Links" ;
+        Text [ en-US ] = "~Left" ;
     };
 
     RadioButton BTN_HOR_CENTER
     {
         Pos = MAP_APPFONT ( 105 , 26  ) ;
         Size = MAP_APPFONT ( 45 , 10 ) ;
-        Text = "~Mitte" ;
-        Text [ ENGLISH ] = "~Center" ;
-        Text [ ENGLISH_US ] = "~Center" ;
-        Text[ portuguese ] = "~Centro";
-        Text[ russian ] = "Â öåíòğå";
-        Text[ greek ] = "~Êİíôñï";
-        Text[ dutch ] = "Midden";
-        Text[ french ] = "Centre";
-        Text[ spanish ] = "Centrado";
-        Text[ italian ] = "Al centro";
-        Text[ danish ] = "~Centreret";
-        Text[ swedish ] = "~Mitten";
-        Text[ polish ] = "~Do œrodka";
-        Text[ portuguese_brazilian ] = "~Centro";
-        Text[ japanese ] = "ä¸­å¤®(~C)";
-        Text[ korean ] = "ê°€ìš´ë°(~C)";
-        Text[ chinese_simplified ] = "ä¸­å¿ƒ(~C)";
-        Text[ chinese_traditional ] = "ä¸­å¿ƒ(~C)";
-        Text[ arabic ] = "æÓØ";
-        Text[ turkish ] = "~Merkez";
-        Text[ catalan ] = "Centre";
-        Text[ finnish ] = "Keskitä";
-        Text[ thai ] = "~à¸•à¸£à¸‡à¸à¸¥à¸²à¸‡";
-        Text[ czech ] = "Na stÅ™ed";
-        Text[ hebrew ] = "â€®××¨×›×–â€¬";
-        Text[ hindi ] = "~à¤®à¤§à¥à¤¯";
-        Text[ slovak ] = "Na ~stred";
-        Text[ hungarian ] = "~KÃ¶zÃ©p";
-        Text[ slovenian ] = "~Sredina";
+        Text [ de ] = "~Mitte" ;
+        Text [ en-US ] = "~Center" ;
     };
 
     RadioButton BTN_HOR_DISTANCE
     {
         Pos = MAP_APPFONT ( 154 , 26  ) ;
         Size = MAP_APPFONT ( 45 , 10 ) ;
-        Text = "~Abstand" ;
-        Text [ ENGLISH ] = "~Spacing" ;
-        Text [ ENGLISH_US ] = "~Spacing" ;
-        Text[ portuguese ] = "~Distância";
-        Text[ russian ] = "Èíòåğâàë";
-        Text[ greek ] = "Á~ğüóôáóç";
-        Text[ dutch ] = "~Afstand";
-        Text[ french ] = "Écart";
-        Text[ spanish ] = "Espacio";
-        Text[ italian ] = "Distanza";
-        Text[ danish ] = "~Afstand";
-        Text[ swedish ] = "~Avstånd";
-        Text[ polish ] = "~Odstêp";
-        Text[ portuguese_brazilian ] = "A~fastamento";
-        Text[ japanese ] = "é–“éš”(~S)";
-        Text[ korean ] = "ê°„ê²©(~S)";
-        Text[ chinese_simplified ] = "é—´éš”(~S)";
-        Text[ chinese_traditional ] = "é–“éš”(~S)";
-        Text[ arabic ] = "ÇáÊÈÇÚÏ";
-        Text[ turkish ] = "~Boşluk";
-        Text[ catalan ] = "Espaiat";
-        Text[ finnish ] = "Välit";
-        Text[ thai ] = "~à¸£à¸°à¸¢à¸°à¸«à¹ˆà¸²à¸‡";
-        Text[ czech ] = "Mezery";
-        Text[ hebrew ] = "â€®×¨×™×•×•×—â€¬";
-        Text[ hindi ] = "~à¤¬à¥€à¤š à¤®à¥‡à¤‚ à¤…à¤‚à¤¤à¤° à¤¦à¥‡à¤¨à¤¾";
-        Text[ slovak ] = "R~ozostupy";
-        Text[ hungarian ] = "~TÃ©rkÃ¶z";
-        Text[ slovenian ] = "~Razmik";
+        Text [ de ] = "~Abstand" ;
+        Text [ en-US ] = "~Spacing" ;
     };
 
     RadioButton BTN_HOR_RIGHT
     {
         Pos = MAP_APPFONT ( 203 , 26  ) ;
         Size = MAP_APPFONT ( 45 , 10 ) ;
-        Text = "~Rechts" ;
-        Text [ ENGLISH ] = "~Right" ;
-        Text [ ENGLISH_US ] = "~Right" ;
-        Text[ portuguese ] = "Di~reita";
-        Text[ russian ] = "Ñïğàâà";
-        Text[ greek ] = "Äå~îéÜ";
-        Text[ dutch ] = "~Rechts";
-        Text[ french ] = "À droite";
-        Text[ spanish ] = "Derecha";
-        Text[ italian ] = "A destra";
-        Text[ danish ] = "~Højre";
-        Text[ swedish ] = "Höge~r";
-        Text[ polish ] = "Z p~rawej";
-        Text[ portuguese_brazilian ] = "~Direita";
-        Text[ japanese ] = "å³(~R)";
-        Text[ korean ] = "ì˜¤ë¥¸ìª½(~R)";
-        Text[ chinese_simplified ] = "å³(~R)";
-        Text[ chinese_traditional ] = "å³(~R)";
-        Text[ arabic ] = "íãíä";
-        Text[ turkish ] = "~Sağ";
-        Text[ catalan ] = "Dreta";
-        Text[ finnish ] = "Oikea";
-        Text[ thai ] = "~à¸‚à¸§à¸²";
-        Text[ czech ] = "Vpravo";
-        Text[ hebrew ] = "â€®×™××™×Ÿâ€¬";
-        Text[ hindi ] = "~à¤¦à¤¾à¤¹à¤¿à¤¨à¤¾";
-        Text[ slovak ] = "V~pravo";
-        Text[ hungarian ] = "~Jobb";
-        Text[ slovenian ] = "~Desno";
+        Text [ de ] = "~Rechts" ;
+        Text [ en-US ] = "~Right" ;
     };
 
     FixedImage IMG_HOR_LOW {
@@ -329,210 +166,48 @@ TabPage RID_SVXPAGE_DISTRIBUTE
     {
         Pos = MAP_APPFONT ( 6 , 42  ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text = "Vertikal" ;
-        Text [ ENGLISH ] = "Vertical" ;
-        Text [ english_us ] = "Vertical" ;
-        Text[ portuguese ] = "Vertical";
-        Text[ russian ] = "Âåğòèêàëüíî";
-        Text[ greek ] = "Êáôáêüñõöá";
-        Text[ dutch ] = "Verticaal";
-        Text[ french ] = "Verticale";
-        Text[ spanish ] = "Vertical";
-        Text[ italian ] = "Verticale";
-        Text[ danish ] = "Lodret";
-        Text[ swedish ] = "Vertikal";
-        Text[ polish ] = "Pionowo";
-        Text[ portuguese_brazilian ] = "Vertical";
-        Text[ japanese ] = "ç¸¦";
-        Text[ korean ] = "ì„¸ë¡œ";
-        Text[ chinese_simplified ] = "å‚ç›´çš„";
-        Text[ chinese_traditional ] = "å‚ç›´";
-        Text[ arabic ] = "ÑÃÓí";
-        Text[ turkish ] = "Dikey";
-        Text[ catalan ] = "Vertical";
-        Text[ finnish ] = "Pystytaso";
-        Text[ thai ] = "à¹à¸™à¸§à¸•à¸±à¹‰à¸‡";
-        Text[ czech ] = "Svisle";
-        Text[ hebrew ] = "â€®×× ×›×™â€¬";
-        Text[ hindi ] = "à¤²à¤®à¥à¤¬";
-        Text[ slovak ] = "ZvislÃ©";
-        Text[ hungarian ] = "FÃ¼ggÅ‘leges";
-        Text[ slovenian ] = "NavpiÄno";
+        Text [ de ] = "Vertikal" ;
+        Text [ en-US ] = "Vertical" ;
     };
 
     RadioButton BTN_VER_NONE
     {
         Pos = MAP_APPFONT ( 12 , 53  ) ;
         Size = MAP_APPFONT ( 46 , 10 ) ;
-        Text = "K~eine" ;
-        Text [ ENGLISH ] = "N~one" ;
-        Text [ ENGLISH_US ] = "N~one" ;
-        Text[ portuguese ] = "~Nenhuma";
-        Text[ russian ] = "Íåò";
-        Text[ greek ] = "~Êáíİíá";
-        Text[ dutch ] = "~Geen";
-        Text[ french ] = "Aucun(e)";
-        Text[ spanish ] = "Ninguno";
-        Text[ italian ] = "Senza";
-        Text[ danish ] = "Ing~en";
-        Text[ swedish ] = "Ing~en";
-        Text[ polish ] = "Br~ak";
-        Text[ portuguese_brazilian ] = "N~enhum";
-        Text[ japanese ] = "ãªã—(~O)";
-        Text[ korean ] = "ì—†ìŒ(~O)";
-        Text[ chinese_simplified ] = "æ— (~O)";
-        Text[ chinese_traditional ] = "ç„¡(~O)";
-        Text[ arabic ] = "ÈÏæä";
-        Text[ turkish ] = "~Hiçbiri";
-        Text[ catalan ] = "Cap";
-        Text[ finnish ] = "Ei mitään";
-        Text[ thai ] = "à¹„à¸¡à¹ˆ~à¸¡à¸µ";
-        Text[ czech ] = "Nic";
-        Text[ hebrew ] = "â€®××£ ××—×“â€¬";
-        Text[ hindi ] = "~à¤•à¥‹à¤ˆ à¤¨à¤¹à¥€à¤‚";
-        Text[ slovak ] = "N~iÄ";
-        Text[ hungarian ] = "Nin~cs";
-        Text[ slovenian ] = "B~rez";
+        Text [ de ] = "K~eine" ;
+        Text [ en-US ] = "N~one" ;
     };
 
     RadioButton BTN_VER_TOP
     {
         Pos = MAP_APPFONT ( 56 , 65  ) ;
         Size = MAP_APPFONT ( 45 , 10 ) ;
-        Text = "~Oben" ;
-        Text [ ENGLISH ] = "~Top" ;
-        Text [ ENGLISH_US ] = "~Top" ;
-        Text[ portuguese ] = "~Topo";
-        Text[ russian ] = "Ñâåğõó";
-        Text[ greek ] = "~ĞÜíù";
-        Text[ dutch ] = "~Boven";
-        Text[ french ] = "En haut";
-        Text[ spanish ] = "Arriba";
-        Text[ italian ] = "In alto";
-        Text[ danish ] = "~Top";
-        Text[ swedish ] = "~Uppe";
-        Text[ polish ] = "U ~góry";
-        Text[ portuguese_brazilian ] = "Em ~Cima";
-        Text[ japanese ] = "ä¸Š(~T)";
-        Text[ korean ] = "ìœ„(~T)";
-        Text[ chinese_simplified ] = "ä¸Š(~T)";
-        Text[ chinese_traditional ] = "ä¸Š(~T)";
-        Text[ arabic ] = "ÃÚáì";
-        Text[ turkish ] = "Ü~st";
-        Text[ catalan ] = "Superior";
-        Text[ finnish ] = "Yläreuna";
-        Text[ thai ] = "~à¸šà¸™";
-        Text[ czech ] = "NahoÅ™e";
-        Text[ hebrew ] = "â€®×¢×œ×™×•×Ÿâ€¬";
-        Text[ hindi ] = "~à¤Šà¤ªà¤°";
-        Text[ slovak ] = "~Navrchu";
-        Text[ hungarian ] = "T~eteje";
-        Text[ slovenian ] = "~Zgoraj";
+        Text [ de ] = "~Oben" ;
+        Text [ en-US ] = "~Top" ;
     };
 
     RadioButton BTN_VER_CENTER
     {
         Pos = MAP_APPFONT ( 105 , 65  ) ;
         Size = MAP_APPFONT ( 45 , 10 ) ;
-        Text = "M~itte" ;
-        Text [ ENGLISH ] = "C~enter" ;
-        Text [ ENGLISH_US ] = "C~enter" ;
-        Text[ portuguese ] = "~Centro";
-        Text[ russian ] = "Â öåíòğå";
-        Text[ greek ] = "Êİíô~ñï";
-        Text[ dutch ] = "~Midden";
-        Text[ french ] = "Centre";
-        Text[ spanish ] = "Centrado";
-        Text[ italian ] = "Al centro";
-        Text[ danish ] = "Ce~ntreret";
-        Text[ swedish ] = "M~itten";
-        Text[ polish ] = "Do œrod~ka";
-        Text[ portuguese_brazilian ] = "~Centro";
-        Text[ japanese ] = "ä¸­å¤®(~E)";
-        Text[ korean ] = "ê°€ìš´ë°(~E)";
-        Text[ chinese_simplified ] = "ä¸­å¿ƒ(~E)";
-        Text[ chinese_traditional ] = "ä¸­å¿ƒ(~E)";
-        Text[ arabic ] = "æÓØ";
-        Text[ turkish ] = "Merkez";
-        Text[ catalan ] = "Centre";
-        Text[ finnish ] = "Keskitä";
-        Text[ thai ] = "à¸•~à¸£à¸‡à¸à¸¥à¸²à¸‡";
-        Text[ czech ] = "StÅ™ed";
-        Text[ hebrew ] = "â€®××¨×›×–â€¬";
-        Text[ hindi ] = "~à¤®à¤§à¥à¤¯";
-        Text[ slovak ] = "Stre~d";
-        Text[ hungarian ] = "KÃ¶~zÃ©p";
-        Text[ slovenian ] = "S~redina";
+        Text [ de ] = "M~itte" ;
+        Text [ en-US ] = "C~enter" ;
     };
 
     RadioButton BTN_VER_DISTANCE
     {
         Pos = MAP_APPFONT ( 154 , 65  ) ;
         Size = MAP_APPFONT ( 45 , 10 ) ;
-        Text = "A~bstand" ;
-        Text [ ENGLISH ] = "S~pacing" ;
-        Text [ ENGLISH_US ] = "S~pacing" ;
-        Text[ portuguese ] = "~Distância";
-        Text[ russian ] = "Èíòåğâàë";
-        Text[ greek ] = "Áğü~óôáóç";
-        Text[ dutch ] = "~Afstand";
-        Text[ french ] = "Écart";
-        Text[ spanish ] = "Espacio";
-        Text[ italian ] = "Distanza";
-        Text[ danish ] = "~Afstand";
-        Text[ swedish ] = "Av~stånd";
-        Text[ polish ] = "Odstê~p";
-        Text[ portuguese_brazilian ] = "A~fastamento";
-        Text[ japanese ] = "é–“éš”(~P)";
-        Text[ korean ] = "ê°„ê²©(~P)";
-        Text[ chinese_simplified ] = "é—´éš”(~P)";
-        Text[ chinese_traditional ] = "é–“éš”(~P)";
-        Text[ arabic ] = "ÇáÊÈÇÚÏ";
-        Text[ turkish ] = "~Boşluk";
-        Text[ catalan ] = "Espaiat";
-        Text[ finnish ] = "Välit";
-        Text[ thai ] = "à¸£à¸°~à¸¢à¸°à¸«à¹ˆà¸²à¸‡";
-        Text[ czech ] = "Mezery";
-        Text[ hebrew ] = "â€®×¨×™×•×•×—â€¬";
-        Text[ hindi ] = "~à¤¬à¥€à¤š à¤®à¥‡à¤‚ à¤…à¤‚à¤¤à¤° à¤¦à¥‡à¤¨à¤¾";
-        Text[ slovak ] = "Rozostu~py";
-        Text[ hungarian ] = "TÃ©~rkÃ¶z";
-        Text[ slovenian ] = "Ra~zmik";
+        Text [ de ] = "A~bstand" ;
+        Text [ en-US ] = "S~pacing" ;
     };
 
     RadioButton BTN_VER_BOTTOM
     {
         Pos = MAP_APPFONT ( 203 , 65  ) ;
         Size = MAP_APPFONT ( 45 , 10 ) ;
-        Text = "~Unten" ;
-        Text [ ENGLISH ] = "~Bottom" ;
-        Text [ ENGLISH_US ] = "~Bottom" ;
-        Text[ portuguese ] = "B~ase";
-        Text[ russian ] = "Ñíèçó";
-        Text[ greek ] = "ÊÜ~ôù";
-        Text[ dutch ] = "~Beneden";
-        Text[ french ] = "En bas";
-        Text[ spanish ] = "Abajo";
-        Text[ italian ] = "In basso";
-        Text[ danish ] = "~Bund";
-        Text[ swedish ] = "~Nere";
-        Text[ polish ] = "~U do³u";
-        Text[ portuguese_brazilian ] = "Em ~Baixo";
-        Text[ japanese ] = "ä¸‹(~B)";
-        Text[ korean ] = "ì•„ë˜(~B)";
-        Text[ chinese_simplified ] = "ä¸‹(~B)";
-        Text[ chinese_traditional ] = "ä¸‹(~B)";
-        Text[ arabic ] = "ÃÓİá";
-        Text[ turkish ] = "~Alt";
-        Text[ catalan ] = "Part inferior";
-        Text[ finnish ] = "Alareuna";
-        Text[ thai ] = "~à¸¥à¹ˆà¸²à¸‡";
-        Text[ czech ] = "Dole";
-        Text[ hebrew ] = "â€®×ª×—×ª×•×Ÿâ€¬";
-        Text[ hindi ] = "~à¤¤à¤²";
-        Text[ slovak ] = "Na ~spodku";
-        Text[ hungarian ] = "~Alja";
-        Text[ slovenian ] = "~Spodaj";
+        Text [ de ] = "~Unten" ;
+        Text [ en-US ] = "~Bottom" ;
     };
 
     FixedImage IMG_VER_HIGH {
@@ -575,26 +250,6 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         };
     };
 
-    Text[ portuguese ] = "Distribuição...";
-    Text[ russian ] = "Ğàñïğåäåëåíèå";
-    Text[ greek ] = "ÊáôáíïìŞ..";
-    Text[ dutch ] = "Verdeling";
-    Text[ french ] = "Répartition";
-    Text[ spanish ] = "Distribución";
-    Text[ italian ] = "Distribuzione";
-    Text[ danish ] = "Fordeling";
-    Text[ swedish ] = "Fördelning";
-    Text[ polish ] = "Rozmieszczenie";
-    Text[ portuguese_brazilian ] = "Distribuição";
-    Text[ japanese ] = "åˆ†å¸ƒ...";
-    Text[ korean ] = "ë°°ë¶„";
-    Text[ chinese_simplified ] = "åˆ†å¸ƒ";
-    Text[ chinese_traditional ] = "åˆ†å¸ƒ";
-    Text[ arabic ] = "ÊæÒíÚ";
-    Text[ turkish ] = "Dağılım";
-    Text[ catalan ] = "Distribució";
-    Text[ finnish ] = "Jakauma";
-    Text[ thai ] = "à¸à¸²à¸£à¹à¸ˆà¸à¹à¸ˆà¸‡";
 
     Image IMG_HOR_LOW_H
     {
@@ -644,12 +299,6 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         MaskColor = STD_MASKCOLOR ;
     };
 
-    Text[ czech ] = "Distribuce";
-    Text[ hebrew ] = "â€®×ª×¤×•×¦×”â€¬";
-    Text[ hindi ] = "à¤µà¤¿à¤¤à¤°à¤£";
-    Text[ slovak ] = "DistribÃºcia";
-    Text[ hungarian ] = "TagolÃ¡s";
-    Text[ slovenian ] = "Distribucija";
 };
 
 // ********************************************************************** EOF
