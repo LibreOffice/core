@@ -20391,3 +20391,13 @@ _real@8@400cfa00000000000000
 ?GetReducedString@@YA?AVString@@ABVINetURLObject@@K@Z
 ?Read@GalleryCodec@@QAEXAAVSvStream@@@Z
 ?Write@GalleryCodec@@QAEXAAVSvStream@@@Z
+?GetLanguage@EditEngine@@QBEGGG@Z
+?SetBeginPasteOrDropHdl@EditEngine@@QAEXABVLink@@@Z
+?SetEndPasteOrDropHdl@EditEngine@@QAEXABVLink@@@Z
+?BeginPasteOrDropHdl@Outliner@@AAEJPAUPasteOrDropInfos@@@Z
+?EndPasteOrDropHdl@Outliner@@AAEJPAUPasteOrDropInfos@@@Z
+?LinkStubBeginPasteOrDropHdl@Outliner@@CAJPAX0@Z
+?LinkStubEndPasteOrDropHdl@Outliner@@CAJPAX0@Z
+?GetLanguage@Outliner@@QBEGGG@Z
+?hasLevels@SvxTextEditSource@@SAEPBVSdrObject@@@Z
+?DrawCentered@SgaObjectSvDraw@@SAEPAVOutputDevice@@ABVFmFormModel@@@Z
