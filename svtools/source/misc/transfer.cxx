@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfer.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 13:58:24 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 13:51:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifdef WNT
 #include <tools/prewin.h>
 #include <shlobj.h>
@@ -1163,8 +1162,8 @@ TransferableDataHelper::TransferableDataHelper( const Reference< ::com::sun::sta
 
 TransferableDataHelper::TransferableDataHelper( const TransferableDataHelper& rDataHelper ) :
     mxTransfer( rDataHelper.mxTransfer ),
-    mpFormats( new DataFlavorExVector( *rDataHelper.mpFormats ) ),
     mxClipboard( rDataHelper.mxClipboard ),
+    mpFormats( new DataFlavorExVector( *rDataHelper.mpFormats ) ),
     mpClipboardListener( NULL )
 {
 }
@@ -2079,7 +2078,6 @@ TransferableDataHelper TransferableDataHelper::CreateFromSelection( Window* pWin
 }
 
 // -----------------------------------------------------------------------------
-
 sal_Bool TransferableDataHelper::IsEqual( const ::com::sun::star::datatransfer::DataFlavor& rInternalFlavor,
                                           const ::com::sun::star::datatransfer::DataFlavor& rRequestFlavor,
                                           sal_Bool bCompareParameters )
