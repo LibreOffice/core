@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoControlDateField.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mt $ $Date: 2002-09-05 08:07:16 $
+ *  last change: $Author: jsc $ $Date: 2002-11-28 11:26:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,12 @@
 #ifndef __com_sun_star_awt_UnoDateFieldControl_idl__
 #define __com_sun_star_awt_UnoDateFieldControl_idl__
 
-#ifndef __com_sun_star_awt_UnoControlSpinField_idl__
-#include <com/sun/star/awt/UnoControlSpinField.idl>
+#ifndef __com_sun_star_awt_UnoControlEdit_idl__
+#include <com/sun/star/awt/UnoControlEdit.idl>
+#endif
+
+#ifndef __com_sun_star_awt_XSpinField_idl__
+#include <com/sun/star/awt/XSpinField.idl>
 #endif
 
 #ifndef __com_sun_star_awt_XDateField_idl__
@@ -84,7 +88,10 @@
 service UnoControlDateField
 {
     // DocMerge: empty anyway
-    service com::sun::star::awt::UnoControlSpinField;
+    service com::sun::star::awt::UnoControlEdit;
+
+    // DocMerge: empty anyway
+    [optional] interface com::sun::star::awt::XSpinField;
 
     // DocMerge: empty anyway
     interface com::sun::star::awt::XDateField;
@@ -98,6 +105,9 @@ service UnoControlDateField
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.2  2002/09/05 08:07:16  mt
+    #97920# Fields support XSpinField now
+
     Revision 1.1  2001/04/19 08:42:25  fs
     initial checkin
 
