@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GraphicExportDemo.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:23:37 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 11:28:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -81,7 +81,7 @@ public class GraphicExportDemo
                 if ( args.length >= 4 )
                     sConnection = args[ 3 ];
                 else
-                    sConnection = "uno:socket,host=localhost,port=8100;urp;StarOffice.ServiceManager";
+                    sConnection = "uno:socket,host=localhost,port=2083;urp;StarOffice.ServiceManager";
                 XMultiServiceFactory xServiceFactory =
                     Helper.connect( sConnection );
 
