@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txthyph.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:31:02 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 16:13:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -484,7 +484,13 @@ sal_Bool SwTxtPortion::CreateHyphen( SwTxtFormatInfo &rInf, SwTxtGuess &rGuess )
 
 sal_Bool SwHyphPortion::GetExpTxt( const SwTxtSizeInfo &rInf, XubString &rTxt ) const
 {
-    rTxt = '-';
+    // --> FME 2004-06-24 #i16816# tagged pdf support
+    const sal_Unicode cChar = rInf.GetVsh()->GetViewOptions()->IsPDFExport() ?
+                              0xad :
+                              '-';
+    // <--
+
+    rTxt = cChar;
     return sal_True;
 }
 
