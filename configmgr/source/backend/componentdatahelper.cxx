@@ -2,9 +2,9 @@
  *
  *  $RCSfile: componentdatahelper.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 14:55:20 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 08:46:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -464,17 +464,34 @@ ValueNode * DataBuilderContext::addPropertyToCurrent(std::auto_ptr<ValueNode> _a
         CFG_UNO_THROW1( configuration::backend::MalformedDataException )
 {
     OSL_PRECOND(_aNode.get(), "ERROR: Adding a NULL node");
+    OSL_PRECOND(!_bMayReplace || _aNode->getAttributes().isReplacedForUser(), "Wrong status for added property");
 
     if (this->findChild(_aNode->getName()))
     {
         // We currently may get a 'replace', when overriding an added property
         if (_bMayReplace && getCurrentParent().isSetNode())
+        {
             getCurrentParent().removeChild(_aNode->getName());
+            _aNode->modifyState(node::isReplaced);
+        }
         else
 
             raisePropertyExistException("Component Builder Context: The property to be added does already exist", _aNode->getName());
     }
     return getCurrentParent().addChild( base_ptr(_aNode) )->asValueNode();
+}
+// -----------------------------------------------------------------------------
+
+void DataBuilderContext::markCurrentMerged()
+{
+    Stack< ISubtree * >::topdown_iterator it = m_aParentStack.begin_down(), end = m_aParentStack.end_down();
+    for ( ;it != end && (*it)->isDefault(); ++it)
+        (*it)->modifyState( node::isMerged );
+
+#if OSL_DEBUG_LEVEL > 0
+    for ( ;it != end; ++it)
+        OSL_ENSURE(!(*it)->isDefault(),"Found a default node in ancestry of a merged change");
+#endif
 }
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
