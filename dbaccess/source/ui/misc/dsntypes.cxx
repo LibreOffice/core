@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsntypes.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-05 10:09:11 $
+ *  last change: $Author: fs $ $Date: 2000-10-20 07:01:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,7 +180,15 @@ DATASOURCE_TYPE ODsnTypeCollection::implDetermineType(const String& _rDsn)
         return DST_ODBC;
     if (_rDsn.EqualsIgnoreCaseAscii("sdbc:dbase", 0, nSeparator))
         return DST_DBASE;
-    if (_rDsn.EqualsIgnoreCaseAscii("sdbc:text", 0, nSeparator))
+
+    nSeparator = _rDsn.Search((sal_Unicode)':', nSeparator + 1);
+    if (STRING_NOTFOUND == nSeparator)
+    {
+        DBG_ERROR("ODsnTypeCollection::implDetermineType : missing the third colon !");
+        return DST_UNKNOWN;
+    }
+
+    if (_rDsn.EqualsIgnoreCaseAscii("sdbc:flat:file", 0, nSeparator))
         return DST_TEXT;
 
     DBG_ERROR("ODsnTypeCollection::implDetermineType : unrecognized data source type !");
@@ -347,6 +355,9 @@ SfxPoolItem* DbuTypeCollectionItem::Clone(SfxItemPool* _pPool) const
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2000/10/05 10:09:11  fs
+ *  initial checkin
+ *
  *
  *  Revision 1.0 26.09.00 08:05:35  fs
  ************************************************************************/
