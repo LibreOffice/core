@@ -7341,7 +7341,7 @@ SfxVoidItem SelectTables SID_SELECT_TABLES
     Cachable = Cachable,
     FastCall = TRUE,
     HasCoreId = FALSE,
-        HasDialog = TRUE,
+    HasDialog = TRUE,
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
@@ -7354,6 +7354,6 @@ SfxVoidItem SelectTables SID_SELECT_TABLES
     MenuConfig = TRUE,
     StatusBarConfig = FALSE,
     ToolBoxConfig = TRUE,
-        GroupId = GID_EDIT;
+    GroupId = GID_EDIT;
 ]
 

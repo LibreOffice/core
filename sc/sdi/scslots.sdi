@@ -12,7 +12,6 @@ ModulePrefix( "Sc" )
 ]
 {
     item  double      ScDoubleItem;
-    item  String      SvxBoxInfoItem;
 
     //----------------------------------------------------------
     // bei Problemen ggF. "von Hand" includen (=Copy/Paste)
