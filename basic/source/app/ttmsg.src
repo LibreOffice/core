@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ttmsg.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 18:31:01 $
+ *  last change: $Author: kz $ $Date: 2000-10-27 15:17:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -258,7 +258,7 @@ String S_TIMOUT_WAITING
     Text[ greek ] = "Server Timeout while waiting for answer. Sequence No: ($Arg1)";
     Text[ dutch ] = "Server timeout bij het wachten op antwoord. Sequentie nr: ($Arg1)";
     Text[ french ] = "Timeout du serveur lors de l'attente de la réponse. N° de séquence : ($Arg1)";
-    Text[ spanish ] = "Server Timeout al esperar por respuesta. Secuencia núm.: ($Arg1)";
+    Text[ spanish ] = "Desconexión temporal al esperar por respuesta. Secuencia núm.: ($Arg1)";
     Text[ italian ] = "Server Timeout while waiting for answer. Sequence No: ($Arg1)";
     Text[ danish ] = "Server Timeout while waiting for answer. Sequence No: ($Arg1)";
     Text[ swedish ] = "Server Timeout while waiting for answer. Sequence No: ($Arg1)";
@@ -324,7 +324,7 @@ String S_TIMOUT_SENDING
     Text[ greek ] = "Server Timeout while sending. Sequence No: ($Arg1)";
     Text[ dutch ] = "Server timeout bij het zenden. Sequentie nr: ($Arg1)";
     Text[ french ] = "Timeout du serveur lors de l'envoi. N° de séquence : ($Arg1)";
-    Text[ spanish ] = "Server Timeout al enviar. Secuencia núm.: ($Arg1)";
+    Text[ spanish ] = "Desconexión temporal al enviar. Secuencia núm.: ($Arg1)";
     Text[ italian ] = "Server Timeout while sending. Sequence No: ($Arg1)";
     Text[ danish ] = "Server Timeout while sending. Sequence No: ($Arg1)";
     Text[ swedish ] = "Server Timeout while sending. Sequence No: ($Arg1)";
@@ -472,45 +472,45 @@ String S_NO_WARNINGS_DETECTED
 String S_INCLUDE_FILE_WARNINGS_DETECTED
 {
     Text = "** ($Arg1) Warnungen bei der Initialisierung aufgetreten";
-    Text[ english_us ] = "** ($Arg1) warnings occurred";
-    Text[ portuguese ] = "** ($Arg1): erros ocorridos";
-    Text[ russian ] = "** ($Arg1) warnings occurred";
-    Text[ greek ] = "** ($Arg1) warnings occurred";
+    Text[ english_us ] = "** ($Arg1) warnings occurred during initialization";
+    Text[ portuguese ] = "Advertências ** ($Arg1) durante a inicialização";
+    Text[ russian ] = "**Âî âğåìÿ èíèöèàëèçàöèè âûäàâàëîñü ($Arg1) ïğåäóïğåæäåíèé";
+    Text[ greek ] = "** ĞáñïõóéÜóôçêáí ğñïåéäïğïéŞóåéò ôïõ ($Arg1) êáôÜ ôçí áñ÷éêïğïßçóç";
     Text[ dutch ] = "** ($Arg1) waarschuwingen weergegeven";
-    Text[ french ] = "** ($Arg1) : Avertissements survenus";
-    Text[ spanish ] = "** Han aparecido las advertencias ($Arg1)";
-    Text[ italian ] = "** ($Arg1) warnings occurred";
-    Text[ danish ] = "** ($Arg1) warnings occurred";
-    Text[ swedish ] = "** ($Arg1) warnings occurred";
-    Text[ polish ] = "** Wyst¹pi³o ($Arg1) ostrze¿eñ";
+    Text[ french ] = "** ($Arg1) : Avertissements durant l'initialisation";
+    Text[ spanish ] = "** Han aparecido las advertencias ($Arg1) durante la inicialización";
+    Text[ italian ] = "** ($Arg1) avvertenze durante l'inizializzazione";
+    Text[ danish ] = "** ($Arg1) advarsler opstod under initialiseringen";
+    Text[ swedish ] = "** ($Arg1) warnings occurred during initialization";
+    Text[ polish ] = "** Wyst¹pi³o ($Arg1) ostrze¿eñ podczas inicjalizacji";
     Text[ portuguese_brazilian ] = "** ($Arg1) Warnungen aufgetreten";
-    Text[ japanese ] = "** ($Arg1) ‚ÌŒx”­¶";
+    Text[ japanese ] = "** ‰Šú‰»’†‚É ($Arg1) ‚ÌŒx‚ ‚è";
     Text[ korean ] = "** ($Arg1) °æ°í ¹ß»ı";
-    Text[ chinese_simplified ] = "·¢ÉúÁË** ($Arg1) ¾¯¸æ";
-    Text[ chinese_traditional ] = "** ($Arg1) Äµ§i";
-    Text[ arabic ] = "** ($Arg1) warnings occurred";
+    Text[ chinese_simplified ] = "ÔÚ³õÊ¼»¯Ê±·¢³ö ** ($Arg1) ¾¯¸æ";
+    Text[ chinese_traditional ] = "** ¦bªì©l¤Æ®Éµo¥XÄµ§i($Arg1) Äµ§i";
+    Text[ arabic ] = "** ($Arg1) ÊÍĞíÑÇÊ ÃËäÇÁ ÚãáíÉ ÇáÊåíÆÉ ÍÏËÊ";
     Text[ turkish ] = "** ($Arg1) warnings occurred";
 };
 String S_NO_INCLUDE_FILE_WARNINGS_DETECTED
 {
     Text = "** Keine Warnungen bei der Initialisierung aufgetreten";
-    Text[ english_us ] = "** No warnings have occurred";
-    Text[ portuguese ] = "**Não ocorreram quaisquer erros";
-    Text[ russian ] = "** No warnings have occurred";
-    Text[ greek ] = "** No warnings have occurred";
+    Text[ english_us ] = "** No warnings occurred during initialization";
+    Text[ portuguese ] = "**Não apareceram advertências durante a inicialização";
+    Text[ russian ] = "**Âî âğåìÿ èíèöèàëèçàöèè ïğåäóïğåæäåíèÿ íå âûäàâàëèñü";
+    Text[ greek ] = "** Äåí ğáñïõóéÜóôçêå êáìßá ğñïåéäïğïßçóç êáôÜ ôçí áñ÷éêïğïßçóç";
     Text[ dutch ] = "** Geen waarschuwingen weergegeven";
-    Text[ french ] = "** Aucun avertissement n'est survenu";
-    Text[ spanish ] = "** No han aparecido advertencias";
-    Text[ italian ] = "** No warnings have occurred";
-    Text[ danish ] = "** No warnings have occurred";
-    Text[ swedish ] = "** No warnings have occurred";
-    Text[ polish ] = "** Nie wyst¹pi³y ¿adne ostrze¿enia";
+    Text[ french ] = "** Aucun avertissement durant l'initialisation";
+    Text[ spanish ] = "** No han aparecido advertencias durante la inicialización";
+    Text[ italian ] = "** Nessuna avvertenza durante l'inizializzazione";
+    Text[ danish ] = "** Ingen advarsler opstod under initialiseringen";
+    Text[ swedish ] = "** No warnings occurred during initialization";
+    Text[ polish ] = "** Nie wyst¹pi³y ¿adne ostrze¿enia podczas inicjalizacji";
     Text[ portuguese_brazilian ] = "** Keine Warnungen aufgetreten";
-    Text[ japanese ] = "** Œx‚È‚µ";
+    Text[ japanese ] = "** ‰Šú‰»’†‚ÉŒx‚È‚µ";
     Text[ korean ] = "** ¹ß»ıµÈ °æ°í°¡ ¾ø½À´Ï´Ù.";
-    Text[ chinese_simplified ] = "** Ã»ÓĞ³öÏÖ¾¯¸æ";
-    Text[ chinese_traditional ] = "** ¨S¦³Äµ§i";
-    Text[ arabic ] = "** No warnings have occurred";
+    Text[ chinese_simplified ] = "** ÔÚ³õÊ¼»¯Ê±Ã»ÓĞ³öÏÖ¾¯¸æ";
+    Text[ chinese_traditional ] = "** ¦bªì©l¤Æ®É¨S¦³µo¥XÄµ§i";
+    Text[ arabic ] = "** áã ÊÍÏË ÃíÉ ÊÍĞíÑÇÊ ÃËäÇÁ ÇáÊåíÆÉ";
     Text[ turkish ] = "** No warnings have occurred";
 };
 String S_UNKNOWN_SLOT_CONTROL
