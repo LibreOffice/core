@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchdlg.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-26 21:08:01 $
+ *  last change: $Author: kz $ $Date: 2001-02-02 16:49:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,7 @@ String RID_SVXSTR_SEARCH
     Text[ russian ] = "(Νΰιςθ)";
     Text[ polish ] = "(Szukaj)";
     Text[ japanese ] = "(υ)";
-    Text[ chinese_traditional ] = "(΄M§δ)";
+    Text[ chinese_traditional ] = "(·j΄M)";
     Text[ arabic ] = "(ΘΝΛ)";
     Text[ greek ] = " (Αναζήτηση)";
     Text[ korean ] = "(Γ£±β)";
@@ -171,7 +171,7 @@ ModelessDialog RID_SVXDLG_SEARCH
     Text[ russian ] = "Νΰιςθ θ ηΰμενθςό";
     Text[ polish ] = "Znajd i zamieρ";
     Text[ japanese ] = "υ‚Ζ’u·";
-    Text[ chinese_traditional ] = "΄M§δ©M΄ΐ¥N";
+    Text[ chinese_traditional ] = "·j΄M©M΄ΐ¥N";
     Text[ arabic ] = "ΘΝΛ ζΗΣΚΘΟΗα";
     Text[ greek ] = "Αναζήτηση και Αντικατάσταση";
     Text[ korean ] = "Γ£±βΏΝ ΉΩ²Ω±β";
@@ -199,7 +199,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ russian ] = "Νΰιςθ";
         Text[ polish ] = "Szukaj";
         Text[ japanese ] = "υ€–Ϊ(~H)";
-        Text[ chinese_traditional ] = "΄M§δ¤Ί®e(~H)";
+        Text[ chinese_traditional ] = "·j΄M¤Ί®e(~H)";
         Text[ arabic ] = "ΗαΘΝΛ Ϊδ";
         Text[ greek ] = "Aναζήτηση για";
         Text[ korean ] = "Γ£ΐ» ΄λ»σ(~H)";
@@ -359,7 +359,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ russian ] = "Òξχνϋι οξθρκ";
         Text[ polish ] = "Dok³adne wyszukiwanie";
         Text[ japanese ] = "‘ε•¶/¬•¶‚π‹ζ•Κ(~T)";
-        Text[ chinese_traditional ] = "Ίλ½T΄M§δ(~T)";
+        Text[ chinese_traditional ] = "Ίλ½T·j΄M(~T)";
         Text[ arabic ] = "ΘΝΛ Οήνή";
         Text[ language_user1 ] = " ";
         Text[ greek ] = "Ακριβής αναζήτηση";
@@ -475,7 +475,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ russian ] = "Οξθρκ ρςθλει";
         Text[ polish ] = "Szu~kaj stylσw";
         Text[ japanese ] = "½ΐ²Ω‚Μυ(~Y)";
-        Text[ chinese_traditional ] = "΄M§δΌΛ¦΅(~Y)";
+        Text[ chinese_traditional ] = "·j΄MΌΛ¦΅(~Y)";
         Text[ arabic ] = "ΗαΘΝΛ Ϊδ ΓδγΗΨ";
         Text[ greek ] = "Aναζήτηση για πρότυπα";
         Text[ korean ] = "Ό­½ΔΖΔΐΟ Γ£±β(~Y)";
@@ -653,7 +653,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ russian ] = "Νΰιςθ β";
         Text[ polish ] = "Szukaj w";
         Text[ japanese ] = "υκ";
-        Text[ chinese_traditional ] = "΄M§δ¦μΈm";
+        Text[ chinese_traditional ] = "·j΄M¦μΈm";
         Text[ arabic ] = "ΗαΘΝΛ έν";
         Text[ greek ] = "Αναζήτηση σε";
         Text[ korean ] = "Γ£ΐ» Ήόΐ§";
@@ -740,7 +740,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ russian ] = "Νΰοπΰβλενθε οξθρκΰ";
         Text[ polish ] = "Kierunek wyszukiwania";
         Text[ japanese ] = "υ•ϋό";
-        Text[ chinese_traditional ] = "΄M§δ¤θ¦V";
+        Text[ chinese_traditional ] = "·j΄M¤θ¦V";
         Text[ arabic ] = "ΗΚΜΗε ΗαΘΝΛ";
         Text[ greek ] = "Κατεύθυνση αναζήτησης";
         Text[ korean ] = "Γ£ΐ» ΉζΗβ";
@@ -767,7 +767,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ russian ] = "Οξθρκ βξ βρευ ςΰαλθφΰυ";
         Text[ polish ] = "Szukaj we wszystkich arkuszach";
         Text[ japanese ] = "‚·‚Χ‚Δ‚Μ•\\‚πυ(~S)";
-        Text[ chinese_traditional ] = "΄M§δ¥ώ³΅ªΊªν®ζ(~S)";
+        Text[ chinese_traditional ] = "·j΄M¥ώ³΅ªΊªν®ζ(~S)";
         Text[ arabic ] = "ΗαΘΝΛ έν ία ΗαΜΟΗζα";
         Text[ greek ] = "Αναζήτηση σε όλους τους πίνακες";
         Text[ korean ] = "ΐόΓΌ ½ΓΖ®Ώ΅Ό­ Γ£±β(~S)";
@@ -823,7 +823,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ russian ] = "Νΰιςθ βρε";
         Text[ polish ] = "~Znajd wszystkie";
         Text[ japanese ] = "‚·‚Χ‚Δυ(~A)";
-        Text[ chinese_traditional ] = "΄M§δ¥ώ³΅(~A)";
+        Text[ chinese_traditional ] = "·j΄M¥ώ³΅(~A)";
         Text[ arabic ] = "ΗαΘΝΛ Ϊδ Ηαία";
         Text[ greek ] = "~Aναζήτηση όλων";
         Text[ korean ] = "ΈπµΞ Γ£±β(~A)";
@@ -853,7 +853,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Text[ russian ] = "Νΰιςθ";
         Text[ polish ] = "Szukaj";
         Text[ japanese ] = "υ(~S)";
-        Text[ chinese_traditional ] = "΄M§δ(~S)";
+        Text[ chinese_traditional ] = "·j΄M(~S)";
         Text[ arabic ] = "ΘΝΛ";
         Text[ greek ] = "Aναζήτη~ση";
         Text[ korean ] = "Γ£±β(~F)";
