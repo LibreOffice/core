@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: kr $ $Date: 2000-10-19 15:48:44 $
+#   last change: $Author: vg $ $Date: 2003-05-22 09:01:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -57,26 +57,14 @@
 #   Contributor(s): _______________________________________
 #
 #
-#
 #*************************************************************************
 
-PRJ=..$/..$/..$/..$/..$/..
-
+PRJ := ..$/..$/..$/..$/..$/..
 PRJNAME := jurt
+TARGET := test_com_sun_star_comp_bridgefactory
+
 PACKAGE := com$/sun$/star$/comp$/bridgefactory
-TARGET  := test_com_sun_star_comp_bridgefactory
+JAVATESTFILES := BridgeFactory_Test.java
+JARFILES := ridl.jar sandbox.jar
 
-
-# --- Settings -----------------------------------------------------
-.INCLUDE : $(PRJ)$/util$/makefile.pmk
-
-
-# Files --------------------------------------------------------
-
-JAVACLASSFILES= \
-    $(CLASSDIR)$/$(PACKAGE)$/BridgeFactory_Test.class
-
-# --- Targets ------------------------------------------------------
-
-.INCLUDE :  target.mk
-
+.INCLUDE: javaunittest.mk
