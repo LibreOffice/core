@@ -976,7 +976,7 @@ end sub
 sub PopulateTopLevelKeyBindingList()
 
     allKeyGroupsArray(0) =  &quot;SHIFT + CONTROL + F keys&quot;
-	allKeyGroupsArray(1) = &quot;SHIFT + CONTROL + digits&quot;
+	allKeyGroupsArray(1) = &quot;SHIFT + CONTROL + digits&quot; &apos; CURRENTLY DISABLED
 	allKeyGroupsArray(2) = &quot;SHIFT + CONTROL + letters&quot;
 	allKeyGroupsArray(3) = &quot;CONTROL + F keys&quot;
 	allKeyGroupsArray(4) = &quot;CONTROL + digits&quot;
@@ -985,9 +985,14 @@ sub PopulateTopLevelKeyBindingList()
 	
 	keyCombo = bindingDialog.getControl( &quot;KeyCombo&quot; )
 	keyCombo.removeItems( 0, keyCombo.getItemCount() )
+	pos = 0
 	for n = LBOUND( allKeyGroupsArray() ) to UBOUND( allKeyGroupsArray() )
-
-		keyCombo.addItem( allKeyGroupsArray( n ), n )
+	&apos; SHIFT + CONTROL + digits group is disabled at the moment, so skip
+	&apos; it
+		if ( n &lt;&gt; 1 ) then
+			keyCombo.addItem( allKeyGroupsArray( n ), pos )
+			pos = pos +1
+		endif
 	next n 
 	keyCombo.text = keyCombo.getItem( 0 )
 end sub
