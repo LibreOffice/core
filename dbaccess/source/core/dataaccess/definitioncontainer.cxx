@@ -2,9 +2,9 @@
  *
  *  $RCSfile: definitioncontainer.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-21 06:39:14 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:09:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,9 +65,6 @@
 #ifndef DBACCESS_SHARED_DBASTRINGS_HRC
 #include "dbastrings.hrc"
 #endif
-#ifndef _DBA_CORE_CONTAINERELEMENT_HXX_
-#include "containerelement.hxx"
-#endif
 #ifndef _DBASHARED_APITOOLS_HXX_
 #include "apitools.hxx"
 #endif
@@ -90,19 +87,22 @@
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
 #endif
-
-#ifndef _COM_SUN_STAR_UTIL_XFLUSHABLE_HPP_
-#include <com/sun/star/util/XFlushable.hpp>
-#endif
 #ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
 #include <com/sun/star/lang/XComponent.hpp>
 #endif
-#ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
-#include <com/sun/star/lang/XUnoTunnel.hpp>
+#ifndef _COM_SUN_STAR_UCB_COMMANDINFO_HPP_
+#include <com/sun/star/ucb/CommandInfo.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
 #endif
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
 #endif
+#ifndef _UCBHELPER_CONTENTIDENTIFIER_HXX
+#include <ucbhelper/contentidentifier.hxx>
+#endif
+
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -112,7 +112,7 @@ using namespace ::com::sun::star::container;
 using namespace ::osl;
 using namespace ::comphelper;
 using namespace ::cppu;
-using namespace ::utl;
+using namespace ::com::sun::star::ucb;
 
 //........................................................................
 namespace dbaccess
@@ -124,51 +124,46 @@ namespace dbaccess
 //==========================================================================
 DBG_NAME(ODefinitionContainer)
 //--------------------------------------------------------------------------
-ODefinitionContainer::ODefinitionContainer(OWeakObject& _rParent, Mutex& _rMutex)
-    :OConfigurationFlushable(_rMutex)
-    ,m_aContainerListeners(_rMutex)
-    ,m_rParent(_rParent)
-    ,m_bInitialized(sal_False)
+ODefinitionContainer::ODefinitionContainer(   const Reference< XMultiServiceFactory >& _xORB
+                                            , const Reference< XInterface >&    _xParentContainer
+                                            , const TContentPtr& _pImpl
+                                            )
+    :OContentHelper(_xORB,_xParentContainer,_pImpl)
+    ,m_aContainerListeners(m_aMutex)
+    ,m_bInPropertyChange(sal_False)
 {
+    m_pImpl->m_aProps.bIsDocument = sal_False;
+    m_pImpl->m_aProps.bIsFolder = sal_True;
+
+    ODefinitionContainer_Impl* pItem = static_cast<ODefinitionContainer_Impl*>(m_pImpl.get());
+    ODefinitionContainer_Impl::Documents::iterator aEnd = pItem->m_aDocumentMap.end();
+    for (   ODefinitionContainer_Impl::Documents::iterator aNameIter = pItem->m_aDocumentMap.begin();
+            aNameIter != aEnd;
+            ++aNameIter
+        )
+        m_aDocuments.push_back(m_aDocumentMap.insert(Documents::value_type(aNameIter->first,Documents::mapped_type())).first);
+
     DBG_CTOR(ODefinitionContainer, NULL);
 }
 
 //--------------------------------------------------------------------------
-void ODefinitionContainer::initialize(const OConfigurationTreeRoot& _rConfigurationRoot, sal_Bool _bRead)
+void SAL_CALL ODefinitionContainer::disposing()
 {
-    MutexGuard aGuard(m_rMutex);
-    m_aConfigurationNode = _rConfigurationRoot;
+    OContentHelper::disposing();
 
-    DBG_ASSERT(m_aConfigurationNode.isValid(), "ODefinitionContainer::initialize : need a starting point within the configuration !");
-    DBG_ASSERT(!m_bInitialized, "ODefinitionContainer::initialize : already initialized !");
-
-    if (m_aConfigurationNode.isValid())
-    {
-        DBG_ASSERT(m_aConfigurationNode.isSetNode(), "ODefinitionContainer::initialize: our config node should be a set node!");
-        m_aConfigurationNode.setEscape(sal_True);
-        initializeFromConfiguration();
-    }
-
-    m_bInitialized = sal_True;
-}
-
-//--------------------------------------------------------------------------
-void ODefinitionContainer::dispose()
-{
-    MutexGuard aGuard(m_rMutex);
-    DBG_ASSERT(m_bInitialized, "ODefinitionContainer::dispose : not initialized !");
+    MutexGuard aGuard(m_aMutex);
 
     // say our listeners goobye
     EventObject aEvt(*this);
     m_aContainerListeners.disposeAndClear(aEvt);
 
     // dispose our elements
-    for (   ConstDocumentsIterator aLoop = m_aDocuments.begin();
-            aLoop != m_aDocuments.end();
-            ++aLoop
-        )
+    Documents::iterator aIter = m_aDocumentMap.begin();
+    Documents::iterator aEnd = m_aDocumentMap.end();
+
+    for (; aIter != aEnd; ++aIter)
     {
-        Reference<XPropertySet> xProp = aLoop->xObject;
+        Reference<XContent> xProp = aIter->second;
         if ( xProp.is() )
         {
             removeObjectListener(xProp);
@@ -177,42 +172,9 @@ void ODefinitionContainer::dispose()
     }
 
     // remove our elements
-    m_aDocumentMap.clear();
     m_aDocuments.clear();
-    m_aDocumentObjectKeys.clear();
-    m_aConfigurationNode.clear();
-
-    m_bInitialized = sal_False;
-}
-
-//--------------------------------------------------------------------------
-void ODefinitionContainer::flush_NoBroadcast_NoCommit()
-{
-    DBG_ASSERT(m_aConfigurationNode.isValid(), "ODefinitionContainer::flush : need a starting point within the configuration !");
-    DBG_ASSERT(m_bInitialized, "ODefinitionContainer::flush : not initialized !");
-
-    for (   ConstDocumentsIterator aLoop = m_aDocuments.begin();
-            aLoop != m_aDocuments.end();
-            ++aLoop
-        )
-    {
-        if (aLoop->xObject.get().is())
-        {
-            // TODO: perhaps we should use the flush_NoBroadcast_NoCommit of the implementations of the objects
-            // the method here is called flush_NoBroadcast_NoCommit, which is contradicted by a direct flush call ...
-            Reference< XFlushable > xFlush(aLoop->xObject.get(), UNO_QUERY);
-            DBG_ASSERT(xFlush.is(), "ODefinitionContainer::flush : have a living object which is not flushable !");
-            if (xFlush.is())
-                try
-                {
-                    xFlush->flush();
-                }
-                catch(Exception&)
-                {
-                    DBG_ERROR("ODefinitionContainer::flush : could not write one of my objects !");
-                }
-        }
-    }
+    //  !!! do this before clearing the map which the vector elements refer to !!!
+    m_aDocumentMap.clear();
 }
 
 //--------------------------------------------------------------------------
@@ -221,26 +183,20 @@ ODefinitionContainer::~ODefinitionContainer()
     DBG_DTOR(ODefinitionContainer, NULL);
 }
 
+IMPLEMENT_FORWARD_XINTERFACE2( ODefinitionContainer,OContentHelper,ODefinitionContainer_Base)
+IMPLEMENT_TYPEPROVIDER2(ODefinitionContainer,OContentHelper,ODefinitionContainer_Base);
 // XServiceInfo
 //--------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL ODefinitionContainer::getImplementationName(  ) throw(RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii("com.sun.star.sdb.ODefinitionContainer");
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.ODefinitionContainer"));
 }
-
-//--------------------------------------------------------------------------
-sal_Bool SAL_CALL ODefinitionContainer::supportsService( const ::rtl::OUString& _rServiceName ) throw (RuntimeException)
-{
-    MutexGuard aGuard(m_rMutex);
-    checkValid(sal_False);
-    return findValue(getSupportedServiceNames(), _rServiceName, sal_True).getLength() != 0;
-}
-
 //--------------------------------------------------------------------------
 Sequence< ::rtl::OUString > SAL_CALL ODefinitionContainer::getSupportedServiceNames(  ) throw(RuntimeException)
 {
-    Sequence< ::rtl::OUString > aReturn(1);
-    aReturn.getArray()[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdb.DefinitionContainer");
+    Sequence< ::rtl::OUString > aReturn(2);
+    aReturn.getArray()[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.DefinitionContainer"));
+    aReturn.getArray()[1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.Content"));
     return aReturn;
 }
 
@@ -248,77 +204,38 @@ Sequence< ::rtl::OUString > SAL_CALL ODefinitionContainer::getSupportedServiceNa
 //--------------------------------------------------------------------------
 void SAL_CALL ODefinitionContainer::insertByName( const ::rtl::OUString& _rName, const Any& aElement ) throw(IllegalArgumentException, ElementExistException, WrappedTargetException, RuntimeException)
 {
-    MutexGuard aGuard(m_rMutex);
+    ClearableMutexGuard aGuard(m_aMutex);
 
     implInsert(_rName,aElement);
 
-    // notify the listeners
-    if (m_aContainerListeners.getLength())
-    {
-        Reference< XPropertySet > xNewElement;
-        aElement >>= xNewElement;
-
-        ContainerEvent aEvent(*this, makeAny(_rName), makeAny(xNewElement), Any());
-        OInterfaceIteratorHelper aListenerIterator(m_aContainerListeners);
-        while (aListenerIterator.hasMoreElements())
-            static_cast< XContainerListener* >(aListenerIterator.next())->elementInserted(aEvent);
-    }
+    Reference< XContent > xNewElement(aElement,UNO_QUERY);
+    notifyByName(aGuard,_rName,xNewElement,NULL,E_INSERTED);
 }
 // -----------------------------------------------------------------------------
 void ODefinitionContainer::implInsert(const ::rtl::OUString& _rName, const Any& aElement)
 {
-    checkValid(sal_True);
-
     if (checkExistence(_rName))
-        throw ElementExistException();
+        throw ElementExistException(_rName,*this);
 
     // approve the new object
-    Reference< XPropertySet > xNewElement;
-    ::cppu::extractInterface(xNewElement, aElement);
-    if (!approveNewObject(xNewElement))
+    Reference< XContent > xNewElement(aElement,UNO_QUERY);
+    if (!approveNewObject(_rName,xNewElement))
         throw IllegalArgumentException();
 
-    // get the implementation which allows us to set the new name and the new configuration location
-    // TODO : think about doing all this without implementation access, e.g. by calling setParent on
-    // a XChild and storeAs on an XStorable
-    // or maybe we should allow such objects : they're not persistent, then, and know nothing about their name
-    OContainerElement* pNewElement = NULL;
-    if (!getImplementation(pNewElement, Reference< XInterface >(xNewElement)))
-        throw IllegalArgumentException();
-
-    // for storing the new element
-    Reference< XFlushable > xNewFlushable(xNewElement, UNO_QUERY);
-    if (!xNewFlushable.is())
-        throw IllegalArgumentException();
-
-    OConfigurationNode aObjectNode = m_aConfigurationNode.createNode(_rName);
-    OSL_VERIFY(m_aConfigurationNode.commit());
-
-    if (!aObjectNode.isValid())
-    {   // something went wrong
-        DBG_ERROR("ODefinitionContainer::insertByName : could not create the new configuration nodes !");
-        throw RuntimeException(::rtl::OUString(), *this);
-    }
-
-    implAppend(_rName, xNewElement, aObjectNode);
-
-    pNewElement->inserted(static_cast<OWeakObject*>(this), _rName, aObjectNode.cloneAsRoot());
-    xNewFlushable->flush();
+    implAppend(_rName, xNewElement);
 }
 //--------------------------------------------------------------------------
 void SAL_CALL ODefinitionContainer::removeByName( const ::rtl::OUString& _rName ) throw(NoSuchElementException, WrappedTargetException, RuntimeException)
 {
-    Reference< XPropertySet > xOldElement;
+    Reference< XContent > xOldElement;
+    ClearableMutexGuard aGuard(m_aMutex);
     {
-        MutexGuard aGuard(m_rMutex);
-        checkValid(sal_True);
-
         // check the arguments
         if (!_rName.getLength())
             throw IllegalArgumentException();
 
         if (!checkExistence(_rName))
-            throw NoSuchElementException();
+            throw NoSuchElementException(_rName,*this);
 
         // the old element (for the notifications)
         xOldElement = implGetByName(_rName, (m_aContainerListeners.getLength() != 0));
@@ -328,92 +245,74 @@ void SAL_CALL ODefinitionContainer::removeByName( const ::rtl::OUString& _rName 
         // do the removal
         implRemove(_rName);
 
-        OContainerElement* pOldElement = NULL;
-        getImplementation(pOldElement, Reference< XInterface >(xOldElement));
-        DBG_ASSERT(pOldElement, "ODefinitionContainer::removeByName : have an invalid object !");
-        // we never should have inserted this when it's no OContainerElement
-        if (pOldElement)
-            pOldElement->removed();
-
-        disposeComponent(xOldElement);
+        //  disposeComponent(xOldElement); // no dispose here, the object amy be inserted again unde a different name
     }
-
-    // notify the listeners
-    if (m_aContainerListeners.getLength())
-    {
-        ContainerEvent aEvent(*this, makeAny(_rName), makeAny(xOldElement), Any());
-        OInterfaceIteratorHelper aListenerIterator(m_aContainerListeners);
-        while (aListenerIterator.hasMoreElements())
-            static_cast< XContainerListener* >(aListenerIterator.next())->elementRemoved(aEvent);
-    }
+    notifyByName(aGuard,_rName,NULL,NULL,E_REMOVED);
 }
 
 // XNameReplace
 //--------------------------------------------------------------------------
 void SAL_CALL ODefinitionContainer::replaceByName( const ::rtl::OUString& _rName, const Any& aElement ) throw(IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException)
 {
-    ClearableMutexGuard aGuard(m_rMutex);
-    checkValid(sal_True);
+    ClearableMutexGuard aGuard(m_aMutex);
 
     // check the arguments
     if (!_rName.getLength())
         throw IllegalArgumentException();
 
     // let derived classes approve the new object
-    Reference< XPropertySet > xNewElement;
-    ::cppu::extractInterface(xNewElement, aElement);
-    if (!approveNewObject(xNewElement))
+    Reference< XContent > xNewElement(aElement,UNO_QUERY);
+    if (!approveNewObject(_rName,xNewElement))
         throw IllegalArgumentException();
 
-    // get the implementation so we can notify the new object about it's new name and locations
-    // TODO : think about doing all this without implementation access, e.g. by calling setParent on
-    // a XChild and storeAs on an XStorable
-    // or maybe we should allow such objects : they're not persistent, then, and know nothing about their name
-    OContainerElement* pNewElement = NULL;
-    if (!getImplementation(pNewElement, Reference< XInterface >(xNewElement)))
-        throw IllegalArgumentException();
-
-    // for storing the new element
-    Reference< XFlushable > xNewFlushable(xNewElement, UNO_QUERY);
-    if (!xNewFlushable.is())
-        throw IllegalArgumentException();
 
     // the old element (for the notifications)
-    Reference< XPropertySet > xOldElement = implGetByName(_rName, m_aContainerListeners.getLength() != 0);
+    Reference< XContent > xOldElement = implGetByName(_rName, m_aContainerListeners.getLength() != 0);
         // as this is potentially expensive (if the object is not already created and initialized from the registry)
         // we get the element only if we have listeners which may be interested in
 
     // do the replace
-    OConfigurationNode aObjectDescription;
-    implReplace(_rName, xNewElement, aObjectDescription);
-
-    // tell the old element it has been removed
-    OContainerElement* pOldElement = NULL;
-    if (getImplementation(pOldElement, Reference< XInterface >(xOldElement)))
-        pOldElement->removed();
+    implReplace(_rName, xNewElement);
 
     // and dispose it
     disposeComponent(xOldElement);
-
-    // tell the new element it's new name/location and flush it
-    pNewElement->inserted(static_cast<OWeakObject*>(this), _rName, aObjectDescription.cloneAsRoot());
-    xNewFlushable->flush();
-
-    aGuard.clear();
+    notifyByName(aGuard,_rName,xNewElement,xOldElement,E_REPLACED);
+}
+// -----------------------------------------------------------------------------
+void ODefinitionContainer::notifyByName( ClearableMutexGuard& _rGuard
+                                        ,const ::rtl::OUString& _rName
+                                        ,const Reference< XContent >& _xNewElement
+                                        ,const Reference< XContent >& _xOldElement
+                                        ,ENotifyKind _eHowToNotify)
+{
+    _rGuard.clear();
     // notify the listeners
     if (m_aContainerListeners.getLength())
     {
-        ContainerEvent aEvent(*this, makeAny(_rName), makeAny(xNewElement), makeAny(xOldElement));
+        ContainerEvent aEvent(*this, makeAny(_rName), makeAny(_xNewElement), makeAny(_xOldElement));
         OInterfaceIteratorHelper aListenerIterator(m_aContainerListeners);
         while (aListenerIterator.hasMoreElements())
-            static_cast< XContainerListener* >(aListenerIterator.next())->elementReplaced(aEvent);
+        {
+            switch( _eHowToNotify )
+            {
+                case E_REPLACED:
+                    static_cast< XContainerListener* >(aListenerIterator.next())->elementReplaced(aEvent);
+                    break;
+                case E_REMOVED:
+                    static_cast< XContainerListener* >(aListenerIterator.next())->elementRemoved(aEvent);
+                    break;
+                case E_INSERTED:
+                    static_cast< XContainerListener* >(aListenerIterator.next())->elementInserted(aEvent);
+                    break;
+            }
+        }
     }
 }
 
 //--------------------------------------------------------------------------
 void SAL_CALL ODefinitionContainer::addContainerListener( const Reference< XContainerListener >& _rxListener ) throw(RuntimeException)
 {
-    MutexGuard aGuard(m_rMutex);
+    MutexGuard aGuard(m_aMutex);
     if (_rxListener.is())
         m_aContainerListeners.addInterface(_rxListener);
 }
@@ -421,7 +320,7 @@ void SAL_CALL ODefinitionContainer::addContainerListener( const Reference< XCont
 //--------------------------------------------------------------------------
 void SAL_CALL ODefinitionContainer::removeContainerListener( const Reference< XContainerListener >& _rxListener ) throw(RuntimeException)
 {
-    MutexGuard aGuard(m_rMutex);
+    MutexGuard aGuard(m_aMutex);
     if (_rxListener.is())
         m_aContainerListeners.removeInterface(_rxListener);
 }
@@ -430,25 +329,21 @@ void SAL_CALL ODefinitionContainer::removeContainerListener( const Reference< XC
 //--------------------------------------------------------------------------
 Type SAL_CALL ODefinitionContainer::getElementType( ) throw (RuntimeException)
 {
-    MutexGuard aGuard(m_rMutex);
-    checkValid(sal_False);
-    return ::getCppuType( static_cast< Reference< XPropertySet >* >(NULL) );
+    return ::getCppuType( static_cast< Reference< XContent >* >(NULL) );
 }
 
 //--------------------------------------------------------------------------
 sal_Bool SAL_CALL ODefinitionContainer::hasElements( ) throw (RuntimeException)
 {
-    MutexGuard aGuard(m_rMutex);
-    checkValid(sal_False);
-    return m_aDocuments.size() != 0;
+    MutexGuard aGuard(m_aMutex);
+    return !m_aDocuments.empty();
 }
 
 // XEnumerationAccess
 //--------------------------------------------------------------------------
 Reference< XEnumeration > SAL_CALL ODefinitionContainer::createEnumeration(  ) throw(RuntimeException)
 {
-    MutexGuard aGuard(m_rMutex);
-    checkValid(sal_False);
+    MutexGuard aGuard(m_aMutex);
     return new ::comphelper::OEnumerationByIndex(static_cast<XIndexAccess*>(this));
 }
 
@@ -456,34 +351,26 @@ Reference< XEnumeration > SAL_CALL ODefinitionContainer::createEnumeration(  ) t
 // XIndexAccess
 sal_Int32 SAL_CALL ODefinitionContainer::getCount(  ) throw(RuntimeException)
 {
-    MutexGuard aGuard(m_rMutex);
-    checkValid(sal_False);
+    MutexGuard aGuard(m_aMutex);
     return m_aDocuments.size();
 }
 
 //--------------------------------------------------------------------------
 Any SAL_CALL ODefinitionContainer::getByIndex( sal_Int32 _nIndex ) throw(IndexOutOfBoundsException, WrappedTargetException, RuntimeException)
 {
-    MutexGuard aGuard(m_rMutex);
-    checkValid(sal_False);
+    MutexGuard aGuard(m_aMutex);
 
     if ((_nIndex < 0) || (_nIndex >= (sal_Int32)m_aDocuments.size()))
         throw IndexOutOfBoundsException();
 
-    DocumentsIterator aPos = m_aDocuments.begin() + _nIndex;
-    Reference<XPropertySet> xProp = aPos->xObject;
+    Documents::iterator aPos = m_aDocuments[_nIndex];
+    Reference<XContent> xProp = aPos->second;
     if (!xProp.is())
     {   // that's the first access to the object
         // -> create it
-        xProp = createObject(aPos->sName, m_aDocumentObjectKeys[aPos->sName]);
-        aPos->xObject = xProp;
+        xProp = createObject(aPos->first);
+        aPos->second = Documents::mapped_type();
         // and update the name-access map
-        m_aDocumentMap[aPos->sName] = aPos->xObject;
-
-#if DBG_UTIL
-        Reference< XFlushable > xFlushable(aPos->xObject.get(), UNO_QUERY);
-        DBG_ASSERT(xFlushable.is(), "ODefinitionContainer::getByIndex : createObject returned an invalid object (no XFlushable) !");
-#endif
     }
 
     return makeAny(xProp);
@@ -492,42 +379,28 @@ Any SAL_CALL ODefinitionContainer::getByIndex( sal_Int32 _nIndex ) throw(IndexOu
 //--------------------------------------------------------------------------
 Any SAL_CALL ODefinitionContainer::getByName( const ::rtl::OUString& _rName ) throw(NoSuchElementException, WrappedTargetException, RuntimeException)
 {
-    MutexGuard aGuard(m_rMutex);
-    checkValid(sal_False);
+    MutexGuard aGuard(m_aMutex);
 
     return makeAny(implGetByName(_rName));
 }
 
 //--------------------------------------------------------------------------
-Reference< XPropertySet > ODefinitionContainer::implGetByName(const ::rtl::OUString& _rName, sal_Bool _bReadIfNeccessary) throw (NoSuchElementException)
+Reference< XContent > ODefinitionContainer::implGetByName(const ::rtl::OUString& _rName, sal_Bool _bReadIfNeccessary) throw (NoSuchElementException)
 {
-    PropertySetMapIterator aMapPos = m_aDocumentMap.find(_rName);
+    Documents::iterator aMapPos = m_aDocumentMap.find(_rName);
     if (aMapPos == m_aDocumentMap.end())
-        throw NoSuchElementException();
+        throw NoSuchElementException(_rName,*this);
 
-    Reference< XPropertySet > xProp = aMapPos->second;
+    Reference< XContent > xProp = aMapPos->second;
 
-    if (_bReadIfNeccessary && !aMapPos->second.get().is())
+    if (_bReadIfNeccessary && !xProp.is())
     {   // the object has never been accessed before, so we have to read it now
         // (that's the expensive part)
 
         // create the object and insert it into the map
-        xProp = createObject(_rName, m_aDocumentObjectKeys[_rName]);
+        xProp = createObject(_rName);
         aMapPos->second = xProp;
-
-        // update the vector for the index access
-        for (   DocumentsIterator aSearch = m_aDocuments.begin();
-                aSearch != m_aDocuments.end();
-                ++aSearch
-                )
-        {
-            if (aSearch->sName.equals(_rName))
-            {
-                aSearch->xObject = xProp;
-                addObjectListener(aSearch->xObject);
-                break;
-            }
-        }
+        addObjectListener(xProp);
     }
 
     return xProp;
@@ -536,14 +409,13 @@ Reference< XPropertySet > ODefinitionContainer::implGetByName(const ::rtl::OUStr
 //--------------------------------------------------------------------------
 Sequence< ::rtl::OUString > SAL_CALL ODefinitionContainer::getElementNames(  ) throw(RuntimeException)
 {
-    MutexGuard aGuard(m_rMutex);
-    checkValid(sal_False);
+    MutexGuard aGuard(m_aMutex);
 
     Sequence< ::rtl::OUString > aNames(m_aDocumentMap.size());
     ::rtl::OUString* pNames = aNames.getArray();
-    ;
-    for (   ConstPropertySetMapIterator aNameIter = m_aDocumentMap.begin();
-            aNameIter != m_aDocumentMap.end();
+    Documents::iterator aEnd = m_aDocumentMap.end();
+    for (   Documents::iterator aNameIter = m_aDocumentMap.begin();
+            aNameIter != aEnd;
             ++pNames, ++aNameIter
         )
     {
@@ -556,107 +428,93 @@ Sequence< ::rtl::OUString > SAL_CALL ODefinitionContainer::getElementNames(  ) t
 //--------------------------------------------------------------------------
 sal_Bool SAL_CALL ODefinitionContainer::hasByName( const ::rtl::OUString& _rName ) throw(RuntimeException)
 {
-    MutexGuard aGuard(m_rMutex);
-    checkValid(sal_False);
+    MutexGuard aGuard(m_aMutex);
 
-    return (m_aDocumentMap.find(_rName) != m_aDocumentMap.end());
+    return checkExistence(_rName);
 }
 
 //--------------------------------------------------------------------------
 void SAL_CALL ODefinitionContainer::disposing( const EventObject& _rSource ) throw(RuntimeException)
 {
-    Reference< XPropertySet > xSource(_rSource.Source, UNO_QUERY);
+    MutexGuard aGuard(m_aMutex);
+    Reference< XContent > xSource(_rSource.Source, UNO_QUERY);
     // it's one of our documents ....
-    for (   DocumentsIterator aLoop = m_aDocuments.begin();
-            aLoop != m_aDocuments.end();
-            ++aLoop
-        )
+    Documents::iterator aIter = m_aDocumentMap.begin();
+    Documents::iterator aEnd = m_aDocumentMap.end();
+    for (;aIter != aEnd;++aIter )
     {
-        if (xSource == aLoop->xObject.get().get())
+        if ( xSource == aIter->second.get() )
         {
-            removeObjectListener(aLoop->xObject);
+            removeObjectListener(xSource);
             // and clear our document map/vector, so the object will be recreated on next access
-            aLoop->xObject = PropertySetRef();//.clear();
-            m_aDocumentMap[aLoop->sName] = PropertySetRef();//.clear();
+            aIter->second = Documents::mapped_type();
         }
-    }
-}
-
-//--------------------------------------------------------------------------
-void ODefinitionContainer::initializeFromConfiguration()
-{
-    if (!m_aConfigurationNode.isValid())
-    {
-        DBG_ERROR("ODefinitionContainer::initializeFromConfiguration : invalid configuration key !");
-        return;
-    }
-
-    Sequence< ::rtl::OUString > aDefinitionNames = m_aConfigurationNode.getNodeNames();
-    const ::rtl::OUString* pDefinitionNames = aDefinitionNames.getConstArray();
-    for (sal_Int32 i=0; i<aDefinitionNames.getLength(); ++i, ++pDefinitionNames)
-    {
-        // get the node under which the object is stored
-        OConfigurationNode aObjectNode = m_aConfigurationNode.openNode(*pDefinitionNames);
-
-        if ((0 == pDefinitionNames->getLength()) || !aObjectNode.isValid())
-        {
-            DBG_ERROR("ODefinitionContainer::initializeFromConfiguration : invalid structure within the configuration !");
-            continue;
-        }
-
-        Reference< XPropertySet > xNewObject;
-        // we don't read this new object here, this may be much to expensive. We read it only on request.
-
-        m_aDocuments.push_back(Document(*pDefinitionNames, xNewObject));
-        m_aDocumentMap[*pDefinitionNames] = xNewObject;
-        m_aDocumentObjectKeys[*pDefinitionNames] = aObjectNode;
     }
 }
 
 //--------------------------------------------------------------------------
 sal_Bool ODefinitionContainer::isReadOnly() const
 {
-    return !m_aConfigurationNode.isValid() || m_aConfigurationNode.isReadonly();
+    return sal_False;
 }
 
 //--------------------------------------------------------------------------
 void ODefinitionContainer::implRemove(const ::rtl::OUString& _rName)
 {
     // from the object maps
-    m_aDocumentMap.erase(_rName);
-    for (   DocumentsIterator aSearch = m_aDocuments.begin();
-            aSearch != m_aDocuments.end();
-            ++aSearch
-        )
+    Documents::iterator aFind = m_aDocumentMap.find(_rName);
+    if ( aFind != m_aDocumentMap.end() )
     {
-        if (aSearch->sName.equals(_rName))
-        {
-            m_aDocuments.erase(aSearch);
-            break;
-        }
-    }
+        m_aDocuments.erase( ::std::find(m_aDocuments.begin(),m_aDocuments.end(),aFind));
+        m_aDocumentMap.erase(aFind);
 
-    m_aDocumentObjectKeys.erase(_rName);
-    m_aConfigurationNode.removeNode(_rName);
-    OSL_VERIFY(m_aConfigurationNode.commit());
+        ODefinitionContainer_Impl* pItem = static_cast<ODefinitionContainer_Impl*>(m_pImpl.get());
+        pItem->m_aDocumentMap.erase(_rName);
+
+        notifyDataSourceModified();
+    }
 }
 
 //--------------------------------------------------------------------------
-void ODefinitionContainer::implAppend(const ::rtl::OUString& _rName, const Reference< XPropertySet >& _rxNewObject, const OConfigurationNode& _rObjectNode)
+void ODefinitionContainer::implAppend(const ::rtl::OUString& _rName, const Reference< XContent >& _rxNewObject)
 {
-    MutexGuard aGuard(m_rMutex);
-    OSL_ENSURE(_rxNewObject.is(),"Object is null!");
+    MutexGuard aGuard(m_aMutex);
     try
     {
-        // now update our structures
-        if(_rxNewObject.is())
-        {
-            m_aDocuments.push_back(Document(_rName, _rxNewObject));
-            m_aDocumentMap[_rName] = _rxNewObject;
-            m_aDocumentObjectKeys[_rName] = _rObjectNode;
+        Reference<XChild> xChild(_rxNewObject,UNO_QUERY);
+        if ( xChild.is() )
+            xChild->setParent(static_cast<OWeakObject*>(this));
 
-            addObjectListener(_rxNewObject);
+        ODefinitionContainer_Impl* pItem = static_cast<ODefinitionContainer_Impl*>(m_pImpl.get());
+        ODefinitionContainer_Impl::Documents::iterator aFind = pItem->m_aDocumentMap.find(_rName);
+        if ( aFind == pItem->m_aDocumentMap.end() )
+        {
+            Reference<XUnoTunnel> xUnoTunnel(_rxNewObject,UNO_QUERY);
+            ::rtl::Reference<OContentHelper> pContent = NULL;
+            if ( xUnoTunnel.is() )
+            {
+                pContent = reinterpret_cast<OContentHelper*>(xUnoTunnel->getSomething(OContentHelper::getUnoTunnelImplementationId()));
+                TContentPtr pImpl = pContent->getImpl();
+                ODefinitionContainer_Impl::Documents::iterator aIter = ::std::find_if(pItem->m_aDocumentMap.begin(),pItem->m_aDocumentMap.end(),
+                                                                    ::std::compose1(
+                                                                        ::std::bind2nd(::std::equal_to<TContentPtr>(), pImpl),
+                                                                        ::std::select2nd<ODefinitionContainer_Impl::Documents::value_type>())
+                                                                    );
+
+                if ( aIter != pItem->m_aDocumentMap.end() )
+                    pItem->m_aDocumentMap.erase(aIter);
+
+                pImpl->m_aProps.aTitle = _rName;
+                pItem->m_aDocumentMap.insert(ODefinitionContainer_Impl::Documents::value_type(_rName,pImpl));
+            }
         }
+
+
+        m_aDocuments.push_back(m_aDocumentMap.insert(Documents::value_type(_rName,_rxNewObject)).first);
+        notifyDataSourceModified();
+        // now update our structures
+        if ( _rxNewObject.is() )
+            addObjectListener(_rxNewObject);
     }
     catch(Exception&)
     {
@@ -665,100 +523,34 @@ void ODefinitionContainer::implAppend(const ::rtl::OUString& _rName, const Refer
 }
 
 //--------------------------------------------------------------------------
-void ODefinitionContainer::implReplace(const ::rtl::OUString& _rName, const Reference< XPropertySet >& _rxNewObject, OConfigurationNode& _rNewObjectNode)
+void ODefinitionContainer::implReplace(const ::rtl::OUString& _rName, const Reference< XContent >& _rxNewObject)
 {
     DBG_ASSERT(checkExistence(_rName), "ODefinitionContainer::implReplace : invalid name !");
 
-    m_aDocumentMap[_rName] = _rxNewObject;
-    for (   DocumentsIterator aSearch = m_aDocuments.begin();
-            aSearch != m_aDocuments.end();
-            ++aSearch
-        )
-    {
-        if (aSearch->sName.equals(_rName))
-        {
-            removeObjectListener(aSearch->xObject);
-            aSearch->xObject = _rxNewObject;
-            addObjectListener(aSearch->xObject);
-            break;
-        }
-    }
-
-    _rNewObjectNode.clear();
-    // update the configuration
-    // clear all old data
-    m_aConfigurationNode.removeNode(_rName);
-    OSL_VERIFY(m_aConfigurationNode.commit());
-
-    _rNewObjectNode = m_aDocumentObjectKeys[_rName] = m_aConfigurationNode.createNode(_rName);
-    OSL_VERIFY(m_aConfigurationNode.commit());
+    Documents::iterator aFind = m_aDocumentMap.find(_rName);
+    removeObjectListener(aFind->second);
+    aFind->second = _rxNewObject;
+    addObjectListener(aFind->second);
 }
-
-//--------------------------------------------------------------------------
-void ODefinitionContainer::checkValid(sal_Bool _bIntendWriteAccess) const throw (RuntimeException, DisposedException)
-{
-    if (!m_bInitialized)
-        throw DisposedException();
-
-    if (_bIntendWriteAccess && isReadOnly())
-    {
-        ::rtl::OUString sMessage = DBACORE_RESSTRING( RID_STR_NEED_CONFIG_WRITE_ACCESS);
-        DisposedException(
-            sMessage,
-            Reference< XInterface >(const_cast<XServiceInfo*>(static_cast<const XServiceInfo*>(this)))
-        );
-    }
-
-    DBG_ASSERT( (m_aDocuments.size() == m_aDocumentObjectKeys.size()) &&
-                (m_aDocuments.size() == m_aDocumentMap.size()),
-        "ODefinitionContainer::checkValid : inconsistent state !");
-}
-
-//--------------------------------------------------------------------------
-Reference< XInterface > SAL_CALL ODefinitionContainer::createInstance(  ) throw(Exception, RuntimeException)
-{
-    Reference< XPropertySet > xNew = createObject();
-    OSL_ENSURE(approveNewObject(xNew), "ODefinitionContainer::createInstance: createObject returned nonsense!");
-    return xNew.get();
-}
-
-//--------------------------------------------------------------------------
-Reference< XInterface > SAL_CALL ODefinitionContainer::createInstanceWithArguments( const Sequence< Any >& /* aArguments */ ) throw(Exception, RuntimeException)
-{
-    return createInstance();
-}
-
-//--------------------------------------------------------------------------
-sal_Bool ODefinitionContainer::approveNewObject(const Reference< XPropertySet >& _rxObject) const
+// -----------------------------------------------------------------------------
+sal_Bool ODefinitionContainer::approveNewObject(const ::rtl::OUString& _sName,const Reference< XContent >& _rxObject) const
 {
     return _rxObject.is();
-}
-
-//--------------------------------------------------------------------------
-Reference< XInterface > SAL_CALL ODefinitionContainer::getParent(  ) throw (RuntimeException)
-{
-    return m_rParent;
-}
-
-//--------------------------------------------------------------------------
-void SAL_CALL ODefinitionContainer::setParent( const Reference< XInterface >& Parent ) throw (NoSupportException, RuntimeException)
-{
-    throw NoSupportException();
 }
 // -----------------------------------------------------------------------------
 // XPropertyChangeListener
 void SAL_CALL ODefinitionContainer::propertyChange( const PropertyChangeEvent& evt ) throw (RuntimeException)
 {
-    MutexGuard aGuard(m_rMutex);
-    checkValid(sal_True);
-        if(evt.PropertyName == (rtl::OUString) PROPERTY_NAME)
+    ClearableMutexGuard aGuard(m_aMutex);
+    if(evt.PropertyName == (rtl::OUString) PROPERTY_NAME)
     {
+        m_bInPropertyChange = sal_True;
         try
         {
             ::rtl::OUString sNewName,sOldName;
             evt.OldValue >>= sOldName;
             evt.NewValue >>= sNewName;
-            Reference<XPropertySet> xProp(evt.Source,UNO_QUERY);
+            Reference<XContent> xProp(evt.Source,UNO_QUERY);
             removeObjectListener(xProp);
             implRemove(sOldName);
             implInsert(sNewName,makeAny(evt.Source));
@@ -768,15 +560,16 @@ void SAL_CALL ODefinitionContainer::propertyChange( const PropertyChangeEvent& e
             OSL_ENSURE(0,"Exception catched!");
             throw RuntimeException();
         }
+        m_bInPropertyChange = sal_False;
     }
 }
 // -----------------------------------------------------------------------------
 // XVetoableChangeListener
 void SAL_CALL ODefinitionContainer::vetoableChange( const PropertyChangeEvent& aEvent ) throw (PropertyVetoException, RuntimeException)
 {
-    MutexGuard aGuard(m_rMutex);
-    checkValid(sal_True);
-        if(aEvent.PropertyName == (rtl::OUString) PROPERTY_NAME)
+    MutexGuard aGuard(m_aMutex);
+
+    if(aEvent.PropertyName == (rtl::OUString) PROPERTY_NAME)
     {
         ::rtl::OUString sNewName;
         aEvent.NewValue >>= sNewName;
@@ -785,21 +578,34 @@ void SAL_CALL ODefinitionContainer::vetoableChange( const PropertyChangeEvent& a
     }
 }
 // -----------------------------------------------------------------------------
-void ODefinitionContainer::addObjectListener(const Reference< XPropertySet >& _xNewObject)
+void ODefinitionContainer::addObjectListener(const Reference< XContent >& _xNewObject)
 {
     OSL_ENSURE(_xNewObject.is(),"ODefinitionContainer::addObjectListener: Object is null!");
-    _xNewObject->addPropertyChangeListener(PROPERTY_NAME, this);
-    _xNewObject->addVetoableChangeListener(PROPERTY_NAME, this);
+    Reference<XPropertySet> xProp(_xNewObject,UNO_QUERY);
+    if ( xProp.is() )
+    {
+        xProp->addPropertyChangeListener(PROPERTY_NAME, this);
+        xProp->addVetoableChangeListener(PROPERTY_NAME, this);
+    }
 }
 // -----------------------------------------------------------------------------
-void ODefinitionContainer::removeObjectListener(const Reference< XPropertySet >& _xNewObject)
+void ODefinitionContainer::removeObjectListener(const Reference< XContent >& _xNewObject)
 {
     OSL_ENSURE(_xNewObject.is(),"ODefinitionContainer::addObjectListener: Object is null!");
-    _xNewObject->removePropertyChangeListener(PROPERTY_NAME, this);
-    _xNewObject->removeVetoableChangeListener(PROPERTY_NAME, this);
+    Reference<XPropertySet> xProp(_xNewObject,UNO_QUERY);
+    if ( xProp.is() )
+    {
+        xProp->removePropertyChangeListener(PROPERTY_NAME, this);
+        xProp->removeVetoableChangeListener(PROPERTY_NAME, this);
+    }
 }
 // -----------------------------------------------------------------------------
+sal_Bool ODefinitionContainer::checkExistence(const ::rtl::OUString& _rName)
+{
+    return m_aDocumentMap.find(_rName) != m_aDocumentMap.end();
+}
 
 //........................................................................
-}   // namespace dbaccess
+}
+// namespace dbaccess
 //........................................................................
