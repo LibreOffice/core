@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Callback.cpp,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jl $ $Date: 2001-12-06 14:49:12 $
+ *  last change: $Author: jl $ $Date: 2002-09-05 08:32:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -509,9 +509,36 @@ STDMETHODIMP CCallback::outSeqByte(LPSAFEARRAY * outVal)
     return S_OK;
 }
 
-STDMETHODIMP CCallback::inSeqByte( LPSAFEARRAY val)
+STDMETHODIMP CCallback::inSeqByte( LPSAFEARRAY listeners)
 {
-    // TODO: Add your implementation code here
+
+    return S_OK;
+}
+
+STDMETHODIMP CCallback::inSeqXEventListener( LPSAFEARRAY listeners, LPSAFEARRAY events)
+{
+    HRESULT hr= S_OK;
+    long ubound= 0;
+    long lbound= 0;
+    long count= 0;
+    hr= SafeArrayGetUBound( listeners, 1, &ubound);
+    hr= SafeArrayGetLBound( listeners, 1, &lbound);
+    count= ubound - lbound +1;
+
+    // We assume thate the count of EventObjects in events is the same
+    for( long i = 0; i < count; i++)
+    {
+        CComVariant varListener;
+        CComVariant varEvent;
+        hr= SafeArrayGetElement( listeners, &i, &varListener);
+        hr= SafeArrayGetElement( events, &i, &varEvent);
+        if( varListener.vt == VT_DISPATCH && varEvent.vt == VT_DISPATCH)
+        {
+            CComDispatchDriver disp( varListener.pdispVal);
+            hr= disp.Invoke1(L"disposing", &varEvent);
+        }
+
+    }
 
     return S_OK;
 }
