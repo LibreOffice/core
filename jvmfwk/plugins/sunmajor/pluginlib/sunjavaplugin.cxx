@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sunjavaplugin.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jl $ $Date: 2004-05-07 14:49:41 $
+ *  last change: $Author: jl $ $Date: 2004-05-10 14:34:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,7 +219,7 @@ void abort_handler()
 }
 namespace cssu = com::sun::star::uno;
 extern "C"
-javaPluginError getAllJavaInfos( rtl_uString *sMinVersion,
+javaPluginError jfw_plugin_getAllJavaInfos( rtl_uString *sMinVersion,
                                  rtl_uString *sMaxVersion,
                                  rtl_uString  * *arExcludeList,
                                  sal_Int32  nLenList,
@@ -260,7 +260,7 @@ javaPluginError getAllJavaInfos( rtl_uString *sMinVersion,
 }
 
 extern "C"
-javaPluginError getJavaInfoByPath(
+javaPluginError jfw_plugin_getJavaInfoByPath(
     rtl_uString *path,
     rtl_uString *sMinVersion,
     rtl_uString *sMaxVersion,
@@ -335,7 +335,7 @@ javaPluginError getJavaInfoByPath(
     </p>
  */
 extern "C"
-javaPluginError startJavaVirtualMachine(
+javaPluginError jfw_plugin_startJavaVirtualMachine(
     const JavaInfo *pInfo,
     const JavaVMOption* arOptions,
     sal_Int32 cOptions,

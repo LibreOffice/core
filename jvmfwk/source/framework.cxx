@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framework.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: jl $ $Date: 2004-05-07 14:49:41 $
+ *  last change: $Author: jl $ $Date: 2004-05-10 14:34:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,11 +132,11 @@ javaFrameworkError SAL_CALL jfw_findAllJREs(JavaInfo ***pparInfo, sal_Int32 *pSi
     errcode = jfw::getVendorPluginURLs(doc, context, & vecPlugins);
     if (errcode != JFW_E_NONE)
         return errcode;
-    //Add the JavaInfos found by getAllJavaInfos to the vector
+    //Add the JavaInfos found by jfw_plugin_getAllJavaInfos to the vector
     //Make sure that the contents are destroyed if this
     //function returns with an error
     std::vector<JavaInfo*> vecInfo;
-    //Add the JavaInfos found by getJavaInfoByPath to this vector
+    //Add the JavaInfos found by jfw_plugin_getJavaInfoByPath to this vector
     //Make sure that the contents are destroyed if this
     //function returns with an error
     std::vector<JavaInfo*> vecInfoManual;
@@ -174,9 +174,9 @@ javaFrameworkError SAL_CALL jfw_findAllJREs(JavaInfo ***pparInfo, sal_Int32 *pSi
                           freeJavaInfo);
             return JFW_E_NO_PLUGIN;
         }
-        getAllJavaInfos_ptr getAllJavaFunc =
-            (getAllJavaInfos_ptr) pluginLib.getSymbol(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("getAllJavaInfos")));
+        jfw_plugin_getAllJavaInfos_ptr getAllJavaFunc =
+            (jfw_plugin_getAllJavaInfos_ptr) pluginLib.getSymbol(
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("jfw_plugin_getAllJavaInfos")));
 
         OSL_ASSERT(getAllJavaFunc);
         if (getAllJavaFunc == NULL)
@@ -213,12 +213,12 @@ javaFrameworkError SAL_CALL jfw_findAllJREs(JavaInfo ***pparInfo, sal_Int32 *pSi
         //Check if the current plugin can detect JREs at the location
         // of the paths added by jfw_setJRELocations or jfw_addJRELocation
         //get the function from the plugin
-        getJavaInfoByPath_ptr getJavaInfoByPathFunc =
-            (getJavaInfoByPath_ptr) pluginLib.getSymbol(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("getJavaInfoByPath")));
+        jfw_plugin_getJavaInfoByPath_ptr jfw_plugin_getJavaInfoByPathFunc =
+            (jfw_plugin_getJavaInfoByPath_ptr) pluginLib.getSymbol(
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("jfw_plugin_getJavaInfoByPath")));
 
-        OSL_ASSERT(getJavaInfoByPathFunc);
-        if (getJavaInfoByPathFunc == NULL)
+        OSL_ASSERT(jfw_plugin_getJavaInfoByPathFunc);
+        if (jfw_plugin_getJavaInfoByPathFunc == NULL)
         {   //delete JavaInfo objects
             std::for_each(vecInfo.begin(), vecInfo.end(), freeJavaInfo);
             std::for_each(vecInfoManual.begin(), vecInfoManual.end(),
@@ -232,7 +232,7 @@ javaFrameworkError SAL_CALL jfw_findAllJREs(JavaInfo ***pparInfo, sal_Int32 *pSi
             rtl::OUString sLocation =
                 rtl::OStringToOUString(*ii, RTL_TEXTENCODING_UTF8);
             JavaInfo* pInfo = NULL;
-            plerr = (*getJavaInfoByPathFunc)(
+            plerr = (*jfw_plugin_getJavaInfoByPathFunc)(
                 sLocation.pData,
                 versionInfo.sMinVersion.pData,
                 versionInfo.sMaxVersion.pData,
@@ -335,7 +335,7 @@ javaFrameworkError SAL_CALL jfw_startVM(JavaVMOption *arOptions, sal_Int32 cOpti
         (jfw::wasJavaSelectedInSameProcess() == true))
         return JFW_E_NEED_RESTART;
 
-    //get the function startJavaVirtualMachine
+    //get the function jfw_plugin_startJavaVirtualMachine
     rtl::OUString sLibPath;
     if ((errcode = jfw::getPluginLibrary(sLibPath)) != JFW_E_NONE)
         return errcode;
@@ -344,9 +344,9 @@ javaFrameworkError SAL_CALL jfw_startVM(JavaVMOption *arOptions, sal_Int32 cOpti
         return JFW_E_NO_PLUGIN;
 
     rtl::OUString sFunctionName(
-        RTL_CONSTASCII_USTRINGPARAM("startJavaVirtualMachine"));
-    startJavaVirtualMachine_ptr pFunc =
-        (startJavaVirtualMachine_ptr)
+        RTL_CONSTASCII_USTRINGPARAM("jfw_plugin_startJavaVirtualMachine"));
+    jfw_plugin_startJavaVirtualMachine_ptr pFunc =
+        (jfw_plugin_startJavaVirtualMachine_ptr)
         osl_getSymbol(modulePlugin, sFunctionName.pData);
     if (pFunc == NULL)
         return JFW_E_ERROR;
@@ -491,9 +491,9 @@ javaFrameworkError SAL_CALL jfw_findAndSelectJRE(JavaInfo **pInfo)
         if (pluginLib.is() == sal_False)
             return JFW_E_NO_PLUGIN;
 
-        getAllJavaInfos_ptr getAllJavaFunc =
-            (getAllJavaInfos_ptr) pluginLib.getSymbol(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("getAllJavaInfos")));
+        jfw_plugin_getAllJavaInfos_ptr getAllJavaFunc =
+            (jfw_plugin_getAllJavaInfos_ptr) pluginLib.getSymbol(
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("jfw_plugin_getAllJavaInfos")));
 
         OSL_ASSERT(getAllJavaFunc);
         if (getAllJavaFunc == NULL)
@@ -540,7 +540,7 @@ javaFrameworkError SAL_CALL jfw_findAndSelectJRE(JavaInfo **pInfo)
                 break;
             }
         }
-        //The array returned by getAllJavaInfos must be freed as well as
+        //The array returned by jfw_plugin_getAllJavaInfos must be freed as well as
         //its contents
         for (int i = 0; i < cInfos; i++)
             jfw_freeJavaInfo(arInfos[i]);
@@ -577,12 +577,12 @@ javaFrameworkError SAL_CALL jfw_findAndSelectJRE(JavaInfo **pInfo)
             //Check if the current plugin can detect JREs at the location
             // of the paths added by jfw_setJRELocations or jfw_addJRELocation
             //get the function from the plugin
-            getJavaInfoByPath_ptr getJavaInfoByPathFunc =
-                (getJavaInfoByPath_ptr) pluginLib.getSymbol(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("getJavaInfoByPath")));
+            jfw_plugin_getJavaInfoByPath_ptr jfw_plugin_getJavaInfoByPathFunc =
+                (jfw_plugin_getJavaInfoByPath_ptr) pluginLib.getSymbol(
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("jfw_plugin_getJavaInfoByPath")));
 
-            OSL_ASSERT(getJavaInfoByPathFunc);
-            if (getJavaInfoByPathFunc == NULL)
+            OSL_ASSERT(jfw_plugin_getJavaInfoByPathFunc);
+            if (jfw_plugin_getJavaInfoByPathFunc == NULL)
                 return JFW_E_ERROR;
 
             typedef std::vector<rtl::OString>::const_iterator citLoc;
@@ -592,7 +592,7 @@ javaFrameworkError SAL_CALL jfw_findAndSelectJRE(JavaInfo **pInfo)
                 rtl::OUString sLocation =
                     rtl::OStringToOUString(*i, RTL_TEXTENCODING_UTF8);
                 JavaInfo* pInfo = NULL;
-                javaPluginError err = (*getJavaInfoByPathFunc)(
+                javaPluginError err = (*jfw_plugin_getJavaInfoByPathFunc)(
                     sLocation.pData,
                     versionInfo.sMinVersion.pData,
                     versionInfo.sMaxVersion.pData,
@@ -767,19 +767,19 @@ javaFrameworkError SAL_CALL jfw_getJavaInfoByPath(
         if (pluginLib.is() == sal_False)
             return JFW_E_NO_PLUGIN;
 
-        getJavaInfoByPath_ptr getJavaInfoByPathFunc =
-            (getJavaInfoByPath_ptr) pluginLib.getSymbol(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("getJavaInfoByPath")));
+        jfw_plugin_getJavaInfoByPath_ptr jfw_plugin_getJavaInfoByPathFunc =
+            (jfw_plugin_getJavaInfoByPath_ptr) pluginLib.getSymbol(
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("jfw_plugin_getJavaInfoByPath")));
 
-        OSL_ASSERT(getJavaInfoByPathFunc);
-        if (getJavaInfoByPathFunc == NULL)
+        OSL_ASSERT(jfw_plugin_getJavaInfoByPathFunc);
+        if (jfw_plugin_getJavaInfoByPathFunc == NULL)
             continue;
 
         //ask the plugin if this is a JRE.
         //If so check if it meets the version requirements.
         //Only if it does return a JavaInfo
         JavaInfo* pInfo = NULL;
-        javaPluginError plerr = (*getJavaInfoByPathFunc)(
+        javaPluginError plerr = (*jfw_plugin_getJavaInfoByPathFunc)(
             pPath,
             versionInfo.sMinVersion.pData,
             versionInfo.sMaxVersion.pData,

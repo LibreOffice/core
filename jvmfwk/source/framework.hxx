@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framework.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2004-04-26 11:20:34 $
+ *  last change: $Author: jl $ $Date: 2004-05-10 14:34:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@
 
 /** typedefs for functions from vendorplugin.h
  */
-typedef javaPluginError (*getAllJavaInfos_ptr)(
+typedef javaPluginError (*jfw_plugin_getAllJavaInfos_ptr)(
     rtl_uString * sMinVersion,
     rtl_uString * sMaxVersion,
     rtl_uString * * arExcludeList,
@@ -79,7 +79,7 @@ typedef javaPluginError (*getAllJavaInfos_ptr)(
     JavaInfo*** parJavaInfo,
     sal_Int32 *nLenInfoList);
 
-typedef javaPluginError (*getJavaInfoByPath_ptr)(
+typedef javaPluginError (*jfw_plugin_getJavaInfoByPath_ptr)(
     rtl_uString * sPath,
     rtl_uString * sMinVersion,
     rtl_uString * sMaxVersion,
@@ -93,7 +93,7 @@ typedef javaPluginError (*getJavaInfoByPath_ptr)(
     during instantiation.
     </p>
  */
-typedef javaPluginError (*startJavaVirtualMachine_ptr)(
+typedef javaPluginError (*jfw_plugin_startJavaVirtualMachine_ptr)(
     const JavaInfo *info,
     const JavaVMOption* options,
     sal_Int32 cOptions,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vendorplugin.h,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jl $ $Date: 2004-05-07 14:49:40 $
+ *  last change: $Author: jl $ $Date: 2004-05-10 14:34:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,7 @@ typedef enum
     JFW_PLUGIN_E_INVALID_ARG,
     JFW_PLUGIN_E_WRONG_VERSION_FORMAT
  */
-javaPluginError getAllJavaInfos(
+javaPluginError jfw_plugin_getAllJavaInfos(
     rtl_uString *sMinVersion,
     rtl_uString *sMaxVersion,
     rtl_uString * * arExcludeList,
@@ -119,7 +119,7 @@ javaPluginError getAllJavaInfos(
     JFW_PLUGIN_E_FAILED_VERSION
     JFW_PLUGIN_E_NO_JRE
  */
-javaPluginError getJavaInfoByPath(
+javaPluginError jfw_plugin_getJavaInfoByPath(
     rtl_uString *path,
     rtl_uString *sMinVersion,
     rtl_uString *sMaxVersion,
@@ -139,7 +139,7 @@ javaPluginError getJavaInfoByPath(
     JFW_PLUGIN_E_VM_CREATION_FAILED
 
  */
-javaPluginError startJavaVirtualMachine(
+javaPluginError jfw_plugin_startJavaVirtualMachine(
     const JavaInfo *info,
     const JavaVMOption* options,
     sal_Int32 cOptions,

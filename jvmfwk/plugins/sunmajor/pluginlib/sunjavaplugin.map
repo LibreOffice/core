@@ -1,8 +1,8 @@
 UDK_3_0_0 {
     global:
-    getAllJavaInfos;
-    getJavaInfoByPath;
-    startJavaVirtualMachine;
+    jfw_plugin_getAllJavaInfos;
+    jfw_plugin_getJavaInfoByPath;
+    jfw_plugin_startJavaVirtualMachine;
     local:
     *;
 };
