@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="ScrollBar" script:language="StarBasic">REM  *****  BASIC  *****
+
+Dim oDialog As Object
+Const Border = 5
+
+Sub Main()
+
+	Dim oLibContainer As Object, oLib As Object
+	Dim oInputStreamProvider As Object
+	Dim oDialogModel As Object
+	Dim oScrollBarModel As Object
+	Dim oLabelModel As Object
+	Dim sLabel As String
+	Dim VisibleSize As Double
+
+	Const sLibName = &quot;ToolkitControls&quot;
+	Const sDialogName = &quot;ScrollBarDlg&quot;
+
+	REM load/get library and input stream provider
+	oLibContainer = DialogLibraries	
+	oLibContainer.loadLibrary( sLibName )
+	oLib = oLibContainer.getByName( sLibName )	
+	oInputStreamProvider = oLib.getByName( sDialogName )
+
+	REM create dialog control
+	oDialog = CreateUnoDialog( oInputStreamProvider )
+
+	REM set the label
+	sLabel = &quot;This Text exceeds the visible area of the dialog and can be&quot;
+	sLabel = sLabel + &quot; scrolled horizontally by clicking on the scroll bar.&quot;	
+	oDialogModel = oDialog.Model
+	oLabelModel = oDialogModel.Label1
+	oLabelModel.Label = sLabel
+
+	REM scroll bar settings
+	oScrollBarModel = oDialog.Model.ScrollBar1
+	oScrollBarModel.ScrollValueMax = 100		
+	VisibleSize = (oDialogModel.Width - Border - oLabelModel.PositionX) / oLabelModel.Width 
+	VisibleSize = VisibleSize * oScrollBarModel.ScrollValueMax
+	oScrollBarModel.VisibleSize = VisibleSize	
+	oScrollBarModel.BlockIncrement = oScrollBarModel.VisibleSize
+	oScrollBarModel.LineIncrement = oScrollBarModel.BlockIncrement / 20
+				
+	REM show the dialog
+	oDialog.execute()
+		
+End Sub
+
+Sub AdjustmentHandler()
+
+	Dim oLabelModel As Object
+	Dim oScrollBarModel As Object	
+	Dim ScrollValue As Long, ScrollValueMax As Long
+	Dim VisibleSize As Long
+	Dim Factor As Double
+
+	Static bInit As Boolean
+	Static PositionX0 As Long
+	Static Offset As Long
+		
+	REM get the model of the label control
+	oLabelModel = oDialog.Model.Label1
+
+	REM on initialization remember the position of the label control and calculate offset
+	If bInit = False Then
+		bInit = True
+		PositionX0 = oLabelModel.PositionX
+		OffSet = PositionX0 + oLabelModel.Width - (oDialog.Model.Width - Border)
+	End If	
+
+	REM get the model of the scroll bar control
+	oScrollBarModel = oDialog.Model.ScrollBar1
+
+	REM get the actual scroll value
+    ScrollValue = oScrollBarModel.ScrollValue
+
+	REM calculate and set new position of the label control
+	ScrollValueMax = oScrollBarModel.ScrollValueMax
+	VisibleSize = oScrollBarModel.VisibleSize	    
+	Factor = Offset / (ScrollValueMax - VisibleSize)
+	oLabelModel.PositionX = PositionX0 - Factor * ScrollValue
+		
+End Sub
+</script:module>
