@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.h,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: cp $ $Date: 2001-11-09 16:54:05 $
+ *  last change: $Author: pl $ $Date: 2001-11-27 18:13:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,7 @@ class SalFrameDelData
 #define SHOWSTATE_UNKNOWN       -1
 #define SHOWSTATE_MINIMIZED     0
 #define SHOWSTATE_NORMAL        1
+#define SHOWSTATE_HIDDEN        2
 
 class SalFrameData
 {

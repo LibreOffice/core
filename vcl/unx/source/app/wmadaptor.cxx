@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wmadaptor.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: ssa $ $Date: 2001-11-23 12:38:18 $
+ *  last change: $Author: pl $ $Date: 2001-11-27 18:13:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,6 +193,7 @@ static const WMAdaptorProtocol aAtomTab[] =
     { "WM_COMMAND", WMAdaptor::WM_COMMAND },
     { "WM_CLIENT_LEADER", WMAdaptor::WM_CLIENT_LEADER },
     { "WM_LOCALE_NAME", WMAdaptor::WM_LOCALE_NAME },
+    { "WM_TRANSIENT_FOR", WMAdaptor::WM_TRANSIENT_FOR },
     { "SAL_QUITEVENT", WMAdaptor::SAL_QUITEVENT },
     { "SAL_USEREVENT", WMAdaptor::SAL_USEREVENT },
     { "SAL_EXTTEXTEVENT", WMAdaptor::SAL_EXTTEXTEVENT },

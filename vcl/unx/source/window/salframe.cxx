@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.104 $
+ *  $Revision: 1.105 $
  *
- *  last change: $Author: ssa $ $Date: 2001-11-23 12:39:27 $
+ *  last change: $Author: pl $ $Date: 2001-11-27 18:13:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -269,10 +269,6 @@ bool SalFrameData::IsOverrideRedirect() const
 void SalFrameData::Init( ULONG nSalFrameStyle, SystemParentData* pParentData )
 {
     nStyle_     = nSalFrameStyle;
-#ifdef DEBUG
-        fprintf( stderr, "nStyle = 0x%x\n", nStyle_ );
-#endif
-
     XWMHints Hints;
     Hints.flags = InputHint;
     Hints.input = True;
@@ -302,9 +298,6 @@ void SalFrameData::Init( ULONG nSalFrameStyle, SystemParentData* pParentData )
         h = 10;
         Attributes.override_redirect = True;
 
-#ifdef DEBUG
-        fprintf( stderr, "created new FLOAT style shell\n" );
-#endif
     }
     else if( pParentData )
     {
@@ -372,9 +365,6 @@ void SalFrameData::Init( ULONG nSalFrameStyle, SystemParentData* pParentData )
                 h = 630;
             if( rScreenSize.Height() >= 1024 )
                 h = 875;
-#ifdef DEBUG
-            fprintf( stderr, "initial size %dx%d\n", w, h );
-#endif
         }
         if( ! mpParent )
         {
@@ -523,7 +513,6 @@ void SalFrameData::Init( ULONG nSalFrameStyle, SystemParentData* pParentData )
 
     // Pointer
     pFrame_->SetPointer( POINTER_ARROW );
-
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -875,6 +864,23 @@ void SalFrame::Show( BOOL bVisible )
         if( pIntroBitmap && pIntroBitmap != this )
             pIntroBitmap->Show( FALSE );
 
+        /*
+         *  #95097#
+         *  Actually this is rather exotic and currently happens only in conjunction
+         *  with the basic dialogue editor,
+         *  which shows a frame and instantly hides it again. After that the
+         *  editor window is shown and the WM takes this as an opportunity
+         *  to show our hidden transient frame also. So Show( FALSE ) must
+         *  withdraw the frame AND delete the WM_TRANSIENT_FOR property.
+         *  In case the frame is shown again, the transient hint must be restored here.
+         */
+        if( ! ( maFrameData.nStyle_ & ( SAL_FRAME_STYLE_FLOAT | SAL_FRAME_STYLE_CHILD ) )
+            && ! maFrameData.IsOverrideRedirect()
+            && maFrameData.mpParent
+            )
+        {
+            _GetDisplay()->getWMAdaptor()->changeReferenceFrame( this, maFrameData.mpParent );
+        }
         if( maFrameData.GetWindow() != maFrameData.GetShellWindow() )
         {
             XMapWindow( _GetXDisplay(), maFrameData.GetShellWindow() );
@@ -932,7 +938,10 @@ void SalFrame::Show( BOOL bVisible )
         if( maFrameData.getInputContext() )
             maFrameData.getInputContext()->Unmap( this );
 
-        XUnmapWindow( _GetXDisplay(), maFrameData.GetWindow() );
+        if( maFrameData.mpParent )
+            XDeleteProperty( _GetXDisplay(), maFrameData.GetShellWindow(), _GetDisplay()->getWMAdaptor()->getAtom( WMAdaptor::WM_TRANSIENT_FOR ) );
+        XWithdrawWindow( _GetXDisplay(), maFrameData.GetWindow(), _GetDisplay()->GetScreenNumber() );
+        maFrameData.nShowState_ = SHOWSTATE_HIDDEN;
     }
 }
 
@@ -943,6 +952,7 @@ void SalFrame::ToTop( USHORT nFlags )
 
     if( ( nFlags & SAL_FRAME_TOTOP_RESTOREWHENMIN )
         && ! ( maFrameData.nStyle_ & SAL_FRAME_STYLE_FLOAT )
+        && maFrameData.nShowState_ != SHOWSTATE_HIDDEN
         )
     {
         if( maFrameData.GetWindow() != maFrameData.GetShellWindow() )
@@ -1421,11 +1431,6 @@ void SalFrameData::SetPosSize( const Rectangle &rPosSize )
               && pFrame_->maGeometry.nHeight == rPosSize.GetHeight() )
          )
         return;
-#ifdef DEBUG
-    fprintf(stderr, "SalFrameData::SetPosSize( %dx%d+%d+%d )\n",
-            rPosSize.GetWidth(), rPosSize.GetHeight(),
-            rPosSize.Left(), rPosSize.Top() );
-#endif
 
      if( mpParent )
      {
@@ -2941,9 +2946,6 @@ long SalFrameData::HandleClientMessage( XClientMessageEvent *pEvent )
     {
         if( pEvent->data.l[0] == rWMAdaptor.getAtom( WMAdaptor::WM_DELETE_WINDOW ) )
         {
-#ifdef DEBUG
-            fprintf( stderr, "DeleteWindow request\n" );
-#endif
             Close();
             return 1;
         }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wmadaptor.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-30 16:01:50 $
+ *  last change: $Author: pl $ $Date: 2001-11-27 18:13:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,7 @@ public:
         WM_CLIENT_LEADER,
         WM_COMMAND,
         WM_LOCALE_NAME,
+        WM_TRANSIENT_FOR,
 
         // special atoms
         SAL_QUITEVENT,
