@@ -2,9 +2,9 @@
 *
 *  $RCSfile: dbumiscres.src,v $
 *
-*  $Revision: 1.56 $
+*  $Revision: 1.57 $
 *
-*  last change: $Author: hr $ $Date: 2003-06-13 12:55:49 $
+*  last change: $Author: hr $ $Date: 2003-07-03 18:02:56 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -78,7 +78,7 @@ String STR_CONNUINAMES
     Text = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;Text;Tabellendokument;Adressbuch" ;
     Text [ english ] = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;Text;Spreadsheet;Addressbook" ;
     Text [ english_us ] = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;Text;Spreadsheet;Address book" ;
-    Text[ language_user1 ] = "Please be carefull with the number/ordering of (semicolon-separated) tokens in the string.";
+    Text[ language_user1 ] = "; Please be carefull with the number/ordering of (semicolon-separated) tokens in the string.";
     Text[ russian ] = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;Òåêñò;İëåêòğîííàÿ òàáëèöà;Àäğåñíàÿ êíèãà";
     Text[ finnish ] = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;Laskentataulut;Osoitteisto";
     Text[ portuguese ] = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;Texto;FolhaCálculo;LivroEndereços";
@@ -100,7 +100,7 @@ String STR_CONNUINAMES
     Text[ thai ] = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;Text;Spreadsheet";
     Text[ czech ] = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;Text;Tabulka;Kontakty";
         Text[ hebrew ] = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;Text;Tabellendokument;Adressbuch";
-        Text[ portuguese_brazilian ] = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;Texto;Planilha;Livro de Endereços";
+        Text[ portuguese_brazilian ] = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;Texto;Planilha;Livro de Endereços";
         Text[ hindi ] = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;à¤Ÿà¥‡à¤•à¥à¤¸à¥à¤Ÿà¥;à¤¸à¥à¤ªà¥à¤°à¥‡à¤¡à¤¶à¥€à¤Ÿà¥;à¤ªà¤¤à¤¾à¤ªà¥à¤¸à¥à¤¤à¤•";
         Text[ slovak ] = "MySQL;MySQL;Adabas;JDBC;ODBC;dBase;ADO;Text;ZoÅ¡it;AdresÃ¡r";
     };
@@ -115,7 +115,7 @@ String 1
     Text [ english_us ] = "System";
     Text[ portuguese ] = "Sistema";
     Text[ russian ] = "Ansi";
-    Text[ greek ] = "Óıóôçìá";
+    Text[ greek ] = "Ansi";
     Text[ dutch ] = "Ansi";
     Text[ french ] = "Système";
     Text[ spanish ] = "Sistema";
@@ -272,7 +272,7 @@ Text [ english ] = "The table can't be dropped, 'cause the database connection d
 Text [ english_us ] = "The table cannot be deleted because the database connection does not support this.";
 Text[ portuguese ] = "A tabela não tem suporte na ligação da base de dados e por isso impossível de eliminar.";
 Text[ russian ] = "Íåâîçìîæíî óäàëèòü òàáëèöó, òàê êàê ıòî íå ïîääåğæèâàåòñÿ ïîäêëş÷åíèåì ê áàçå äàííûõ.";
-Text[ greek ] = "Äåí åßíáé äõíáôüí íá äéáãñáöåß ï ğßíáêáò, åğåéäŞ äåí õğÜñ÷åé óıíäåóç ìå ôçí âÜóç äåäïìİíùí.";
+Text[ greek ] = "Äåí åßíáé äõíáôŞ ç äéáãñáöŞ ôïõ ğßíáêá, åğåéäŞ äåí õğïóôçñßæåôáé áğü ôç óıíäåóç ìå ôç âÜóç äåäïìİíùí.";
 Text[ dutch ] = "De tabel kan niet worden gewist omdat deze niet wordt ondersteund door de database.";
 Text[ french ] = "Impossible de supprimer la table : elle n'est pas supportée par la connexion de BD.";
 Text[ spanish ] = "No se puede borrar la tabla porque la conexión con la base de datos no admite esta operación.";
@@ -281,7 +281,7 @@ Text[ italian ] = "Impossibile eliminare la tabella perché non è supportata dal 
 Text[ danish ] = "Tabellen kan ikke slettes, da databaseforbindelsen ikke understøtter den.";
 Text[ swedish ] = "Det går inte att radera tabellen eftersom databasförbindelsen inte stödjer den.";
 Text[ polish ] = "Tabeli nie mo¿na usun¹æ, poniewa¿ po³¹czenie z baz¹ danych nie obs³uguje tej operacji.";
-Text[ portuguese_brazilian ] = "A tabela não pode ser excluida por que a conexão à base de dados não suporta isto.";
+Text[ portuguese_brazilian ] = "A tabela não pode ser excluída por que a conexão ao banco de dados não suporta esta ação";
 Text[ japanese ] = "ãƒ†ãƒ¼ãƒ–ãƒ«ã¯ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ã®æ¥ç¶šãŒã“ã‚Œã‚’æ”¯æ´ã—ãªã„ãŸã‚å‰Šé™¤ã§ãã¾ã›ã‚“ã€‚";
 Text[ korean ] = "í…Œì´ë¸”ì„ ë°ì´í„°ë² ì´ìŠ¤ ì—°ê²°ì—ì„œ ì§€ì›ë˜ì§€ ì•Šê¸° ë•Œë¬¸ì— ì‚­ì œí•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤.";
 Text[ chinese_simplified ] = "å› ä¸ºæ•°æ®åº“çš„è¿æ¥ä¸æ”¯æŒè¿™ä¸ªåŠŸèƒ½è€Œæ— æ³•åˆ é™¤è¿™ä¸ªè¡¨æ ¼ã€‚";
@@ -302,7 +302,7 @@ Text = "~Alle";
 Text [ english ] = "~All";
 Text [ english_us ] = "~All";
 
-Text[ language_user1 ] = "This will be a button text in a dialog asking for confirmation. Something like 'Yes/All/No/Cancel'";
+Text[ language_user1 ] = "; This will be a button text in a dialog asking for confirmation. Something like 'Yes/All/No/Cancel'";
 Text[ portuguese ] = "~Tudo";
 Text[ russian ] = "~Âñå";
 Text[ greek ] = "¼ë~á";
@@ -344,7 +344,7 @@ Text[ italian ] = "Annulla:";
 Text[ danish ] = "Fortryd:";
 Text[ swedish ] = "Ångra:";
 Text[ polish ] = "Cofnij";
-Text[ portuguese_brazilian ] = "Apagar o resto ...";
+Text[ portuguese_brazilian ] = "Desfazer:";
 Text[ japanese ] = "å…ƒã«æˆ»ã™:";
 Text[ korean ] = "ì‹¤í–‰ ì·¨ì†Œ:";
 Text[ chinese_simplified ] = "æ’¤æ¶ˆå‘½ä»¤ï¼š";
@@ -375,7 +375,7 @@ Text[ italian ] = "Ripristina:";
 Text[ danish ] = "Gendan:";
 Text[ swedish ] = "Återställ:";
 Text[ polish ] = "Przywróæ";
-Text[ portuguese_brazilian ] = "Refazer: ";
+Text[ portuguese_brazilian ] = "Refazer:";
 Text[ japanese ] = "ã‚„ã‚Šç›´ã—:";
 Text[ korean ] = "ë‹¤ì‹œ ì‹¤í–‰:";
 Text[ chinese_simplified ] = "æ¢å¤æ’¤æ¶ˆå‘½ä»¤ï¼š";
@@ -404,7 +404,9 @@ String STR_UNKNOWN_TYPE_FOUND
     Text[ chinese_simplified ] = "æ— æ³•ä¸ºåˆ—'#1'æ‰¾åˆ°åˆé€‚çš„åˆ—ç±»å‹ã€‚";
     Text[ chinese_traditional ] = "ç„¡æ³•ç‚ºæ¬„ '#1' æ‰¾åˆ°åˆé©çš„æ¬„é¡å‹ã€‚";
     Text[ slovak ] = "Nebol nÃ¡jdenÃ½ zodpovedajÃºci typ stÄºpca pre stÄºpec '#1'.";
+    Text[ portuguese_brazilian ] = "Não foi encontrado um tipo de coluna correspondente para a coluna '#1''.";
 };
+
 
 
 
