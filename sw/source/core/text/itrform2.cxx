@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrform2.cxx,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 14:31:10 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 13:45:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1263,8 +1263,13 @@ SwLinePortion *SwTxtFormatter::NewPortion( SwTxtFormatInfo &rInf )
 
     if( !pPor )
     {
-        if( !pMulti || pMulti->IsBidi() )
-        {   // We open a multiportion part, if we enter a multi-line part
+        if( ( !pMulti || pMulti->IsBidi() ) &&
+            // --> FME 2005-02-14 #i42734#
+            // No multi portion if there is a hook character waiting:
+            ( !rInf.GetRest() || '\0' == rInf.GetHookChar() ) )
+            // <--
+        {
+            // We open a multiportion part, if we enter a multi-line part
             // of the paragraph.
             xub_StrLen nEnd = rInf.GetIdx();
             SwMultiCreator* pCreate = rInf.GetMultiCreator( nEnd, pMulti );
