@@ -2,9 +2,9 @@
  *
  *  $RCSfile: factory.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 23:14:56 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 14:45:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,7 @@
 #include <rtl/unload.h>
 #endif
 
+#include "cppuhelper/propshlp.hxx"
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
@@ -96,6 +97,12 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/uno/XUnloadingPreference.hpp>
+#include "com/sun/star/beans/PropertyAttribute.hpp"
+
+#include <memory>
+
+#define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
+
 
 using namespace osl;
 using namespace rtl;
@@ -116,7 +123,6 @@ class OSingleFactoryHelper
     , public XSingleServiceFactory
     , public lang::XSingleComponentFactory
     , public XUnloadingPreference
-
 {
 public:
     OSingleFactoryHelper(
@@ -432,10 +438,9 @@ Any SAL_CALL OFactoryComponentHelper::queryInterface( const Type & rType )
 {
     if( rType == ::getCppuType( (Reference<XUnloadingPreference>*)0))
     {
-        Any ret;
-        Reference<XUnloadingPreference> xpref( static_cast<XUnloadingPreference*>(this));
-        ret<<= xpref;
-        return ret;
+        return makeAny(
+            Reference< XUnloadingPreference >(
+                static_cast< XUnloadingPreference * >(this) ) );
     }
     return OComponentHelper::queryInterface( rType );
 }
@@ -591,19 +596,45 @@ sal_Bool SAL_CALL OFactoryComponentHelper::releaseOnNotification() throw(::com::
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-class ORegistryFactoryHelper
-    : public OFactoryComponentHelper
+class ORegistryFactoryHelper : public OFactoryComponentHelper,
+                               public OPropertySetHelper
+
 {
 public:
     ORegistryFactoryHelper(
         const Reference<XMultiServiceFactory > & rServiceManager,
         const OUString & rImplementationName_,
         const Reference<XRegistryKey > & xImplementationKey_,
-        sal_Bool bOneInstance_ = sal_False )
-        SAL_THROW( () )
-        : OFactoryComponentHelper( rServiceManager, rImplementationName_, 0, 0, 0, bOneInstance_ )
-        , xImplementationKey( xImplementationKey_ )
+        sal_Bool bOneInstance_ = sal_False ) SAL_THROW( () )
+            : OFactoryComponentHelper(
+                rServiceManager, rImplementationName_, 0, 0, 0, bOneInstance_ ),
+              OPropertySetHelper( OComponentHelper::rBHelper ),
+              xImplementationKey( xImplementationKey_ )
         {}
+
+    // XInterface
+    virtual Any SAL_CALL queryInterface( Type const & type )
+        throw (RuntimeException);
+    virtual void SAL_CALL acquire() throw ();
+    virtual void SAL_CALL release() throw ();
+    // XTypeProvider
+    virtual Sequence< Type > SAL_CALL getTypes()
+        throw (RuntimeException);
+    // XPropertySet
+    virtual Reference< beans::XPropertySetInfo > SAL_CALL getPropertySetInfo()
+        throw (RuntimeException);
+
+    // OPropertySetHelper
+    virtual IPropertyArrayHelper & SAL_CALL getInfoHelper();
+    virtual sal_Bool SAL_CALL convertFastPropertyValue(
+        Any & rConvertedValue, Any & rOldValue,
+        sal_Int32 nHandle, Any const & rValue )
+        throw (lang::IllegalArgumentException);
+    virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
+        sal_Int32 nHandle, Any const & rValue )
+        throw (Exception);
+    virtual void SAL_CALL getFastPropertyValue(
+        Any & rValue, sal_Int32 nHandle ) const;
 
     // OSingleFactoryHelper
     Reference<XInterface > createInstanceEveryTime(
@@ -636,7 +667,117 @@ private:
     /** The factory created with the loader. */
     Reference<XSingleComponentFactory > xModuleFactory;
     Reference<XSingleServiceFactory >   xModuleFactoryDepr;
+    Reference< beans::XPropertySetInfo > m_xInfo;
+    ::std::auto_ptr< IPropertyArrayHelper > m_property_array_helper;
 };
+
+// XInterface
+//______________________________________________________________________________
+Any SAL_CALL ORegistryFactoryHelper::queryInterface(
+    Type const & type ) throw (RuntimeException)
+{
+    Any ret( OFactoryComponentHelper::queryInterface( type ) );
+    if (ret.hasValue())
+        return ret;
+    else
+        return OPropertySetHelper::queryInterface( type );
+}
+
+//______________________________________________________________________________
+void ORegistryFactoryHelper::acquire() throw ()
+{
+    OFactoryComponentHelper::acquire();
+}
+
+//______________________________________________________________________________
+void ORegistryFactoryHelper::release() throw ()
+{
+    OFactoryComponentHelper::release();
+}
+
+// XTypeProvider
+//______________________________________________________________________________
+Sequence< Type > ORegistryFactoryHelper::getTypes() throw (RuntimeException)
+{
+    Sequence< Type > types( OFactoryComponentHelper::getTypes() );
+    sal_Int32 pos = types.getLength();
+    types.realloc( pos + 3 );
+    Type * p = types.getArray();
+    p[ pos++ ] = ::getCppuType(
+        reinterpret_cast< Reference< beans::XMultiPropertySet > const * >(0) );
+    p[ pos++ ] = ::getCppuType(
+        reinterpret_cast< Reference< beans::XFastPropertySet > const * >(0) );
+    p[ pos++ ] = ::getCppuType(
+        reinterpret_cast< Reference< beans::XPropertySet > const * >(0) );
+    return types;
+}
+
+// XPropertySet
+//______________________________________________________________________________
+Reference< beans::XPropertySetInfo >
+ORegistryFactoryHelper::getPropertySetInfo() throw (RuntimeException)
+{
+    ::osl::MutexGuard guard( aMutex );
+    if (! m_xInfo.is())
+        m_xInfo = createPropertySetInfo( getInfoHelper() );
+    return m_xInfo;
+}
+
+// OPropertySetHelper
+//______________________________________________________________________________
+IPropertyArrayHelper & ORegistryFactoryHelper::getInfoHelper()
+{
+    ::osl::MutexGuard guard( aMutex );
+    if (m_property_array_helper.get() == 0)
+    {
+        beans::Property prop(
+            OUSTR("ImplementationKey") /* name */,
+            0 /* handle */,
+            ::getCppuType( &xImplementationKey ),
+            beans::PropertyAttribute::READONLY |
+            beans::PropertyAttribute::OPTIONAL );
+        m_property_array_helper.reset(
+            new ::cppu::OPropertyArrayHelper( &prop, 1 ) );
+    }
+    return *m_property_array_helper.get();
+}
+
+//______________________________________________________________________________
+sal_Bool ORegistryFactoryHelper::convertFastPropertyValue(
+    Any & rConvertedValue, Any & rOldValue,
+    sal_Int32 nHandle, Any const & rValue )
+    throw (lang::IllegalArgumentException)
+{
+    OSL_ENSURE( 0, "unexpected!" );
+    return false;
+}
+
+//______________________________________________________________________________
+void ORegistryFactoryHelper::setFastPropertyValue_NoBroadcast(
+    sal_Int32 nHandle, Any const & rValue )
+    throw (Exception)
+{
+    throw beans::PropertyVetoException(
+        OUSTR("unexpected: only readonly properties!"),
+        static_cast< OWeakObject * >(this) );
+}
+
+//______________________________________________________________________________
+void ORegistryFactoryHelper::getFastPropertyValue(
+    Any & rValue, sal_Int32 nHandle ) const
+{
+    if (nHandle == 0)
+    {
+        rValue <<= xImplementationKey;
+    }
+    else
+    {
+        rValue.clear();
+        throw beans::UnknownPropertyException(
+            OUSTR("unknown property!"), static_cast< OWeakObject * >(
+                const_cast< ORegistryFactoryHelper * >(this) ) );
+    }
+}
 
 Reference<XInterface > ORegistryFactoryHelper::createInstanceEveryTime(
     Reference< XComponentContext > const & xContext )
