@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: er $ $Date: 2001-03-12 16:47:50 $
+#   last change: $Author: hjs $ $Date: 2003-08-18 14:42:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -196,6 +196,12 @@ SLOFILES =  \
     $(SLO)$/validat.obj \
     $(SLO)$/scimpexpmsg.obj \
     $(SLO)$/sortparam.obj
+
+.IF "$(OS)$(COM)$(CPUNAME)"=="LINUXGCCSPARC"
+NOOPTFILES= \
+                $(SLO)$/cell.obj \
+        $(SLO)$/column2.obj
+.ENDIF
 
 EXCEPTIONSFILES= \
     $(SLO)$/documen6.obj \
