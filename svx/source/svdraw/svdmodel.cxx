@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdmodel.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: cl $ $Date: 2001-06-25 15:35:20 $
+ *  last change: $Author: nn $ $Date: 2001-06-25 20:13:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2555,6 +2555,7 @@ void SdrModel::SetCharCompressType( UINT16 nType )
 {
     if( nType != mnCharCompressType )
     {
+        mnCharCompressType = nType;
         ImpSetOutlinerDefaults( pDrawOutliner );
         ImpSetOutlinerDefaults( pHitTestOutliner );
     }
