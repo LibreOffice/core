@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swparrtf.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: cmc $ $Date: 2002-05-22 11:28:00 $
+ *  last change: $Author: cmc $ $Date: 2002-05-29 10:56:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -581,15 +581,15 @@ if( pSttNdIdx->GetIndex()+1 == pPam->GetBound( FALSE ).nNode.GetIndex() )
 
 SwRTFParser::~SwRTFParser()
 {
-    for(::std::map<SwTableNode *, SwNodeIndex>::iterator aIter
+    for(::std::map<SwTableNode *, SwNodeIndex*>::iterator aIter
         = maTables.begin(); aIter != maTables.end(); ++aIter)
     {
         // exitiert schon ein Layout, dann muss an dieser Tabelle die
         // BoxFrames neu erzeugt
         SwTableNode *pTable = aIter->first;
-        SwNodeIndex rIndex = aIter->second;
+        SwNodeIndex *pIndex = aIter->second;
         pTable->DelFrms();
-        pTable->MakeFrms(&rIndex);
+        pTable->MakeFrms(pIndex);
     }
 
     delete pSttNdIdx;

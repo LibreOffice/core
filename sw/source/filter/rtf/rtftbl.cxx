@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtftbl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cmc $ $Date: 2002-05-29 10:12:06 $
+ *  last change: $Author: cmc $ $Date: 2002-05-29 10:56:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,10 +66,6 @@
 
 #ifdef WTC
 #define private public
-#endif
-
-#ifndef __SGI_STL_UTILITY
-#include <utility>
 #endif
 
 #ifndef _HINTIDS_HXX
@@ -609,9 +605,13 @@ void SwRTFParser::ReadTable( int nToken )
     {
         //Associate this tablenode with this after position, replace an
         //old node association if necessary
+#if 0
         ::std::pair<SwTableNode *, SwNodeIndex> aPair(pTableNode,
-            pPam->GetPoint()->nNode);
+            &(pPam->GetPoint()->nNode));
         maTables.insert(aPair);
+#else
+        maTables[pTableNode] = &pPam->GetPoint()->nNode;
+#endif
     }
 
     ULONG nOldPos = pPam->GetPoint()->nNode.GetIndex();
@@ -780,6 +780,9 @@ void SwRTFParser::CheckInsNewTblLine()
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.4  2002/05/29 10:12:06  cmc
+      #99567# utility missing
+
       Revision 1.3  2002/05/22 11:28:00  cmc
       #99290# Collect tables and force recalc at end of parsing once for each table, not at end of each row
 

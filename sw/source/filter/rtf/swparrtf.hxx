@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swparrtf.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cmc $ $Date: 2002-05-22 11:28:00 $
+ *  last change: $Author: cmc $ $Date: 2002-05-29 10:56:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,7 +165,7 @@ SV_DECL_VARARR( SwListArr, SwListEntry, 0, 20 )
 
 class SwRTFParser : public SvxRTFParser
 {
-    ::std::map<SwTableNode *, SwNodeIndex> maTables;
+    ::std::map<SwTableNode *, SwNodeIndex *> maTables;
     SwRTFStyleTbl aTxtCollTbl;
     SwRTFCharStyleTbl aCharFmtTbl;
     SwFlySaveArr aFlyArr;               // Flys als Letzes im Doc setzen
@@ -297,6 +297,9 @@ public:
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.3  2002/05/22 11:28:00  cmc
+      #99290# Collect tables and force recalc at end of parsing once for each table, not at end of each row
+
       Revision 1.2  2001/06/01 10:42:53  jp
       Bug #87720#: im-/export of ruby attribute and combined characters
 
