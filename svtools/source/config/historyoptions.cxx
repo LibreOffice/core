@@ -2,9 +2,9 @@
  *
  *  $RCSfile: historyoptions.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: as $ $Date: 2000-11-02 07:22:19 $
+ *  last change: $Author: as $ $Date: 2000-11-07 11:42:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,10 +115,10 @@ using namespace ::com::sun::star::beans ;
 #define PROPERTYNAME_HISTORYSIZE                OUString(RTL_CONSTASCII_USTRINGPARAM("Size"                     ))
 #define PROPERTYNAME_PICKLIST                   OUString(RTL_CONSTASCII_USTRINGPARAM("PickList/"                ))
 #define PROPERTYNAME_HISTORY                    OUString(RTL_CONSTASCII_USTRINGPARAM("List/"                    ))
-#define PROPERTYNAME_HISTORYITEM_URL            PROPERTYNAME_URL+PATHDELIMITER
-#define PROPERTYNAME_HISTORYITEM_FILTER         PROPERTYNAME_FILTER+PATHDELIMITER
-#define PROPERTYNAME_HISTORYITEM_TITLE          PROPERTYNAME_TITLE+PATHDELIMITER
-#define PROPERTYNAME_HISTORYITEM_PASSWORD       PROPERTYNAME_PASSWORD+PATHDELIMITER
+#define PROPERTYNAME_HISTORYITEM_URL            HISTORY_PROPERTYNAME_URL+PATHDELIMITER
+#define PROPERTYNAME_HISTORYITEM_FILTER         HISTORY_PROPERTYNAME_FILTER+PATHDELIMITER
+#define PROPERTYNAME_HISTORYITEM_TITLE          HISTORY_PROPERTYNAME_TITLE+PATHDELIMITER
+#define PROPERTYNAME_HISTORYITEM_PASSWORD       HISTORY_PROPERTYNAME_PASSWORD+PATHDELIMITER
 #define OFFSET_URL                              0
 #define OFFSET_FILTER                           1
 #define OFFSET_TITLE                            2
@@ -658,14 +658,14 @@ Sequence< Sequence< PropertyValue > > SvtHistoryOptions_Impl::impl_GetSequenceFr
     // Copy items from given to return list.
     for( sal_Int32 nItem=0; nItem<nCount; ++nItem )
     {
-        seqProperties[OFFSET_URL        ].Name  =   PROPERTYNAME_URL        ;
-        seqProperties[OFFSET_FILTER     ].Name  =   PROPERTYNAME_FILTER     ;
-        seqProperties[OFFSET_TITLE      ].Name  =   PROPERTYNAME_TITLE      ;
-        seqProperties[OFFSET_PASSWORD   ].Name  =   PROPERTYNAME_PASSWORD   ;
-        seqProperties[OFFSET_URL        ].Value <<= aList[nItem].sURL       ;
-        seqProperties[OFFSET_FILTER     ].Value <<= aList[nItem].sFilter    ;
-        seqProperties[OFFSET_TITLE      ].Value <<= aList[nItem].sTitle     ;
-        seqProperties[OFFSET_PASSWORD   ].Value <<= aList[nItem].sPassword  ;
+        seqProperties[OFFSET_URL        ].Name  =   HISTORY_PROPERTYNAME_URL        ;
+        seqProperties[OFFSET_FILTER     ].Name  =   HISTORY_PROPERTYNAME_FILTER     ;
+        seqProperties[OFFSET_TITLE      ].Name  =   HISTORY_PROPERTYNAME_TITLE      ;
+        seqProperties[OFFSET_PASSWORD   ].Name  =   HISTORY_PROPERTYNAME_PASSWORD   ;
+        seqProperties[OFFSET_URL        ].Value <<= aList[nItem].sURL               ;
+        seqProperties[OFFSET_FILTER     ].Value <<= aList[nItem].sFilter            ;
+        seqProperties[OFFSET_TITLE      ].Value <<= aList[nItem].sTitle             ;
+        seqProperties[OFFSET_PASSWORD   ].Value <<= aList[nItem].sPassword          ;
         seqResult[nItem] = seqProperties;
     }
     return seqResult;
