@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfly.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-04 13:19:28 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:01:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,6 +167,10 @@
 #endif
 #ifndef _FMTCNCT_HXX //autogen
 #include <fmtcnct.hxx>
+#endif
+
+#ifndef _DFLYOBJ_HXX
+#include <dflyobj.hxx>
 #endif
 
 extern USHORT GetHtmlMode( const SwDocShell* );
@@ -682,7 +686,7 @@ BOOL SwDoc::ChgAnchor( const SdrMarkList& rMrkList, int eAnchorId,
     for ( USHORT i = 0; i < rMrkList.GetMarkCount(); ++i )
     {
         SdrObject *pObj = rMrkList.GetMark( i )->GetObj();
-        if ( !pObj->IsWriterFlyFrame() )
+        if ( !pObj->ISA(SwVirtFlyDrawObj) )
         {
             SwDrawContact* pContact = (SwDrawContact*)GetUserCall(pObj);
 
@@ -749,7 +753,7 @@ BOOL SwDoc::ChgAnchor( const SdrMarkList& rMrkList, int eAnchorId,
                     const Point aNewPoint = pOldAnch &&
                                              ( pOldAnch->IsVertical() ||
                                                pOldAnch->IsRightToLeft() ) ?
-                                             pObj->GetBoundRect().TopRight() :
+                                             pObj->GetCurrentBoundRect().TopRight() :
                                              aPt;
 
                     // OD 18.06.2003 #108784# - allow drawing objects in header/footer
