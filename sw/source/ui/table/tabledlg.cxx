@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabledlg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2000-11-09 15:22:28 $
+ *  last change: $Author: kz $ $Date: 2000-11-09 15:49:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -838,7 +838,7 @@ int  SwFormatTablePage::DeactivatePage( SfxItemSet* pSet )
             }
             if(nColSum != pTblData->GetWidth())
             {
-                SwTwips nMinWidth = std::min((long)MINLAY, pTblData->GetWidth() / pTblData->GetColCount() - 1);
+                SwTwips nMinWidth = std::min((long)MINLAY, (long) (pTblData->GetWidth() / pTblData->GetColCount() - 1));
                 SwTwips nDiff = nColSum - pTblData->GetWidth();
                 while ( Abs(nDiff) > pTblData->GetColCount() + 1 )
                 {
@@ -2109,6 +2109,9 @@ void SwTextFlowPage::DisablePageBreak()
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/09 15:22:28  hr
+    #65293#: std::min()/max()
+
     Revision 1.2  2000/11/07 12:48:38  hjs
     use min/max from stl
 
