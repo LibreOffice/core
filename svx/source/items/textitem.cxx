@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textitem.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-15 20:19:13 $
+ *  last change: $Author: os $ $Date: 2001-02-19 06:46:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4130,7 +4130,7 @@ sal_Bool SvxCharRotateItem::QueryValue( com::sun::star::uno::Any& rVal,
     switch( nMemberId )
     {
     case MID_ROTATE:
-        rVal <<= GetValue();
+        rVal <<= (sal_Int16)GetValue();
         break;
     case MID_FITTOLINE:
         rVal = Bool2Any( IsFitToLine() );
@@ -4145,19 +4145,23 @@ sal_Bool SvxCharRotateItem::QueryValue( com::sun::star::uno::Any& rVal,
 sal_Bool SvxCharRotateItem::PutValue( const com::sun::star::uno::Any& rVal,
                                     BYTE nMemberId )
 {
-    sal_Bool bRet = sal_False;
-    sal_uInt16 nVal;
+    sal_Bool bRet = sal_True;
+    sal_Int16 nVal;
     switch( nMemberId )
     {
     case MID_ROTATE:
         rVal >>= nVal;
-        SetValue( nVal );
+        if(!nVal || 90 == nVal || 270 == nVal)
+            SetValue( (USHORT)nVal );
+        else
+            bRet = sal_False;
         break;
 
     case MID_FITTOLINE:
         SetFitToLine( Any2Bool( rVal ) );
-        bRet = sal_True;
         break;
+    default:
+        bRet = sal_False;
     }
     return bRet;
 }
