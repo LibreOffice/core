@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shutdownicon.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cd $ $Date: 2001-07-20 09:59:44 $
+ *  last change: $Author: hro $ $Date: 2001-07-30 16:36:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,7 +198,7 @@ void ShutdownIcon::FileOpen()
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
         // use ctor for filling up filters automatically! #89169#
-        FileDialogHelper dlg( WB_OPEN, *(SfxObjectFactory*) NULL );
+        FileDialogHelper dlg( WB_OPEN | SFXWB_MULTISELECTION, *(SfxObjectFactory*) NULL );
         if ( ERRCODE_NONE == dlg.Execute() )
             OpenURL( OUString( dlg.GetPath() ) );
     }
