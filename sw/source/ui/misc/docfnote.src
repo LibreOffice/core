@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfnote.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 21:31:17 $
+ *  last change: $Author: kz $ $Date: 2000-10-27 17:53:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,7 +220,7 @@ TabPage TP_FOOTNOTEOPTION
         Text [ spanish ] = "Comen~zar en" ;
         Text [ french ] = "À partir de" ;
         Text [ dutch ] = "~Begin met" ;
-        Text [ swedish ] = "~Börja vid" ;
+        Text [ swedish ] = "Bö~rja med" ;
         Text [ danish ] = "Begynd med" ;
         Text [ portuguese_brazilian ] = "Be~ginn bei" ;
         Text [ portuguese ] = "~Iniciar em" ;
@@ -446,7 +446,7 @@ TabPage TP_FOOTNOTEOPTION
         Text [ finnish ] = "Jäljessä" ;
         Text [ danish ] = "Efter" ;
         Text [ french ] = "Après" ;
-        Text [ swedish ] = "~Bakom" ;
+        Text [ swedish ] = "B~akom" ;
         Text [ dutch ] = "E~rachter" ;
         Text [ spanish ] = "D~etrás" ;
         Text [ english_us ] = "Aft~er" ;
@@ -615,7 +615,7 @@ TabPage TP_FOOTNOTEOPTION
         Text [ danish ] = "Tekstområde" ;
         Text [ italian ] = "Area del testo" ;
         Text [ spanish ] = "Área de ~texto" ;
-        Text [ french ] = "Plage de ~texte" ;
+        Text [ french ] = "Zone de ~texte" ;
         Text [ dutch ] = "~Tekstbereik" ;
         Text [ portuguese ] = "~Área de texto" ;
         Text[ chinese_simplified ] = "ÎÄ×ÖÇøÓò(~X)";
@@ -652,7 +652,7 @@ TabPage TP_FOOTNOTEOPTION
         Text [ italian ] = "Area note a piè pagina" ;
         Text [ spanish ] = "Área de ~nota al pie" ;
         Text [ french ] = "Plage de la ~note" ;
-        Text [ dutch ] = "Voetnoot~bereik" ;
+        Text [ dutch ] = "Voetnoten~bereik" ;
         Text [ portuguese ] = "Á~rea de nota de rodapé" ;
         Text[ chinese_simplified ] = "×¢½ÅÇøÓò(~F)";
         Text[ russian ] = "Îáëàñòü ñíîñêè";
@@ -773,7 +773,7 @@ TabPage TP_FOOTNOTEOPTION
         Text [ finnish ] = "Jatkumisilmoitus" ;
         Text [ danish ] = "Henvisningstekst for flersidede fodnoter" ;
         Text [ french ] = "Indication de suite" ;
-        Text [ swedish ] = "Meddelandetext för mersidiga fotnoter" ;
+        Text [ swedish ] = "Hänvisningstext för flersidiga fotnoter" ;
         Text [ dutch ] = "Verwijstekst bij voetnoten verdeeld over meer dan een pagina" ;
         Text [ spanish ] = "Indicación para notas al pie en varias páginas" ;
         Text [ english_us ] = "Continuation notice" ;
@@ -933,7 +933,7 @@ TabPage TP_ENDNOTEOPTION
         Text [ spanish ] = "Comen~zar en" ;
         Text [ french ] = "À partir de" ;
         Text [ dutch ] = "~Begin met" ;
-        Text [ swedish ] = "~Börja vid" ;
+        Text [ swedish ] = "~Börja med" ;
         Text [ danish ] = "Begynd med" ;
         Text [ portuguese_brazilian ] = "Be~ginn bei" ;
         Text [ portuguese ] = "~Iniciar em" ;
@@ -1121,7 +1121,7 @@ TabPage TP_ENDNOTEOPTION
         Text [ finnish ] = "Edellä" ;
         Text [ danish ] = "Før" ;
         Text [ french ] = "Avant" ;
-        Text [ swedish ] = "~Före" ;
+        Text [ swedish ] = "~Framför" ;
         Text [ dutch ] = "~Ervoor" ;
         Text [ spanish ] = "~Delante" ;
         Text [ english_us ] = "Be~fore" ;
@@ -1159,7 +1159,7 @@ TabPage TP_ENDNOTEOPTION
         Text [ finnish ] = "Jäljessä" ;
         Text [ danish ] = "Efter" ;
         Text [ french ] = "Après" ;
-        Text [ swedish ] = "~Bakom" ;
+        Text [ swedish ] = "Ba~kom" ;
         Text [ dutch ] = "E~rachter" ;
         Text [ spanish ] = "D~etrás" ;
         Text [ english_us ] = "Aft~er" ;
@@ -1327,7 +1327,7 @@ TabPage TP_ENDNOTEOPTION
         Text [ danish ] = "Tekstområde" ;
         Text [ italian ] = "Area del testo" ;
         Text [ spanish ] = "Área de ~texto" ;
-        Text [ french ] = "Plage de ~texte" ;
+        Text [ french ] = "Zone de ~texte" ;
         Text [ dutch ] = "~Eindemarkeringsbereik" ;
         Text [ portuguese ] = "Área de te~xto" ;
         Text[ chinese_simplified ] = "ÎÄ×ÖÇøÓò(~X)";
@@ -1483,7 +1483,7 @@ TabPage TP_ENDNOTEOPTION
         Text [ finnish ] = "Jatkumisilmoitus" ;
         Text [ danish ] = "Henvisningstekst for flersidede fodnoter" ;
         Text [ french ] = "Indication de suite" ;
-        Text [ swedish ] = "Meddelandetext för mersidiga fotnoter" ;
+        Text [ swedish ] = "Hänvisningstext för flersidiga fotnoter" ;
         Text [ dutch ] = "Verwijstekst bij voetnoten verdeeld over meer dan een pagina" ;
         Text [ spanish ] = "Indicación para notas al pie en varias páginas" ;
         Text [ english_us ] = "Continuation notice" ;
