@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxfer.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 10:38:13 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 11:54:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -613,35 +613,44 @@ sal_Bool SdTransferable::WriteObject( SotStorageStreamRef& rxOStm, void* pObject
     {
         case( SDTRANSFER_OBJECTTYPE_DRAWMODEL ):
         {
-            SdDrawDocument* pDoc = (SdDrawDocument*) pObject;
-            pDoc->BurnInStyleSheetAttributes();
-            pDoc->SetStreamingSdrModel( TRUE );
-            pDoc->RemoveNotPersistentObjects( TRUE );
-            rxOStm->SetBufferSize( 16348 );
-
-            Reference< XComponent > xComponent( new SdXImpressDocument( pDoc, sal_True ) );
-            pDoc->setUnoModel( Reference< XInterface >::query( xComponent ) );
-
+            try
             {
-                com::sun::star::uno::Reference<com::sun::star::io::XOutputStream> xDocOut( new utl::OOutputStreamWrapper( *rxOStm ) );
-                if( SvxDrawingLayerExport( pDoc, xDocOut, xComponent, (pDoc->GetDocumentType() == DOCUMENT_TYPE_IMPRESS) ? "com.sun.star.comp.Impress.XMLClipboardExporter" : "com.sun.star.comp.DrawingLayer.XMLExporter" ) )
-                    rxOStm->Commit();
-            }
+                SdDrawDocument* pDoc = (SdDrawDocument*) pObject;
+                pDoc->BurnInStyleSheetAttributes();
+                pDoc->SetStreamingSdrModel( TRUE );
+                pDoc->RemoveNotPersistentObjects( TRUE );
+                rxOStm->SetBufferSize( 16348 );
 
-/* testcode
+                Reference< XComponent > xComponent( new SdXImpressDocument( pDoc, sal_True ) );
+                pDoc->setUnoModel( Reference< XInterface >::query( xComponent ) );
+
+                {
+                    com::sun::star::uno::Reference<com::sun::star::io::XOutputStream> xDocOut( new utl::OOutputStreamWrapper( *rxOStm ) );
+                    if( SvxDrawingLayerExport( pDoc, xDocOut, xComponent, (pDoc->GetDocumentType() == DOCUMENT_TYPE_IMPRESS) ? "com.sun.star.comp.Impress.XMLClipboardExporter" : "com.sun.star.comp.DrawingLayer.XMLExporter" ) )
+                        rxOStm->Commit();
+                }
+
+    /* testcode
+                {
+                    const rtl::OUString aURL( RTL_CONSTASCII_USTRINGPARAM( "file:///e:/test.xml" ) );
+                    SfxMedium aMedium( aURL, STREAM_WRITE | STREAM_TRUNC, TRUE );
+                    aMedium.IsRemote();
+                    com::sun::star::uno::Reference<com::sun::star::io::XOutputStream> xDocOut( new utl::OOutputStreamWrapper( *aMedium.GetOutStream() ) );
+                    if( SvxDrawingLayerExport( pDoc, xDocOut, xComponent, (pDoc->GetDocumentType() == DOCUMENT_TYPE_IMPRESS) ? "com.sun.star.comp.Impress.XMLClipboardExporter" : "com.sun.star.comp.DrawingLayer.XMLExporter" ) )
+                        aMedium.Commit();
+                }
+    */
+
+                pDoc->SetStreamingSdrModel( FALSE );
+
+                xComponent->dispose();
+                bRet = ( rxOStm->GetError() == ERRCODE_NONE );
+            }
+            catch( Exception& )
             {
-                const rtl::OUString aURL( RTL_CONSTASCII_USTRINGPARAM( "file:///e:/test.xml" ) );
-                SfxMedium aMedium( aURL, STREAM_WRITE | STREAM_TRUNC, TRUE );
-                aMedium.IsRemote();
-                com::sun::star::uno::Reference<com::sun::star::io::XOutputStream> xDocOut( new utl::OOutputStreamWrapper( *aMedium.GetOutStream() ) );
-                if( SvxDrawingLayerExport( pDoc, xDocOut, xComponent, (pDoc->GetDocumentType() == DOCUMENT_TYPE_IMPRESS) ? "com.sun.star.comp.Impress.XMLClipboardExporter" : "com.sun.star.comp.DrawingLayer.XMLExporter" ) )
-                    aMedium.Commit();
+                DBG_ERROR( "sd::SdTransferable::WriteObject(), exception catched!" );
+                bRet = FALSE;
             }
-*/
-
-            pDoc->SetStreamingSdrModel( FALSE );
-
-            bRet = ( rxOStm->GetError() == ERRCODE_NONE );
         }
         break;
 
