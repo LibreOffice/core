@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impimagetree.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-28 13:33:19 $
+ *  last change: $Author: rt $ $Date: 2004-06-02 14:59:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -394,18 +394,18 @@ bool ImplImageTree::loadImage( const ::rtl::OUString& rName, BitmapEx& rReturn )
         }
         else
         {
-            // search in filesystem relative to application root
-            ::rtl::OUString aAppFileName( Application::GetAppFileName() );
-            sal_Int32       nPos = aAppFileName.lastIndexOf( '/' );
+            // HACK for old setup!!! search in filesystem relative to application root
+            ::rtl::OUString aAppDir( Application::GetAppFileName() );
+            sal_Int32       nPos = aAppDir.lastIndexOf( '/' );
 
             if( -1 == nPos )
-                nPos = aAppFileName.lastIndexOf( '\\' );
+                nPos = aAppDir.lastIndexOf( '\\' );
 
             if( -1 != nPos )
             {
                 String aURLStr;
 
-                if( ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aAppFileName.copy( 0, nPos  ), aURLStr ) )
+                if( ::utl::LocalFileHelper::ConvertPhysicalNameToURL( ( aAppDir = aAppDir.copy( 0, nPos  ) ), aURLStr ) )
                 {
                     INetURLObject   aURL( aURLStr );
                     sal_Int32       nIndex = 0;
@@ -423,6 +423,38 @@ bool ImplImageTree::loadImage( const ::rtl::OUString& rName, BitmapEx& rReturn )
                     {
                         implLoadFromStream( *pIStm, aURLStr, rReturn );
                         delete pIStm;
+                    }
+
+                    if( rReturn.IsEmpty() )
+                    {
+                        // HACK for old setup!!! try to look in ../share/config
+                        nPos = aAppDir.lastIndexOf( '/' );
+
+                        if( -1 == nPos )
+                            nPos = aAppDir.lastIndexOf( '\\' );
+
+                        if( ( -1 != nPos ) && ::utl::LocalFileHelper::ConvertPhysicalNameToURL( ( aAppDir = aAppDir.copy( 0, nPos  ) ), aURLStr ) )
+                        {
+                            aURL = INetURLObject( aURLStr );
+                            aURL.Append( String( RTL_CONSTASCII_USTRINGPARAM( "share" ) ) );
+                            aURL.Append( String( RTL_CONSTASCII_USTRINGPARAM( "config" ) ) );
+                            nIndex = 0;
+
+                            do
+                            {
+                                aURL.Append( rName.getToken( 0, '/', nIndex ) );
+                            }
+                            while( nIndex >= 0 );
+
+                            aURLStr = aURL.GetMainURL( INetURLObject::NO_DECODE );
+                            SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( aURLStr, STREAM_READ );
+
+                            if( pIStm )
+                            {
+                                implLoadFromStream( *pIStm, aURLStr, rReturn );
+                                delete pIStm;
+                            }
+                        }
                     }
                 }
             }
