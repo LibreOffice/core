@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-17 07:11:49 $
+ *  last change: $Author: oj $ $Date: 2001-04-17 09:15:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,6 +179,9 @@
 #ifndef _DBAUI_INDEXDIALOG_HXX_
 #include "indexdialog.hxx"
 #endif
+#ifndef _COM_SUN_STAR_UTIL_XFLUSHABLE_HPP_
+#include <com/sun/star/util/XFlushable.hpp>
+#endif
 
 extern "C" void SAL_CALL createRegistryInfo_OTableControl()
 {
@@ -197,6 +200,7 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::ui;
+using namespace ::com::sun::star::util;
 using namespace ::dbtools;
 using namespace ::dbaui;
 using namespace ::comphelper;
@@ -506,6 +510,43 @@ sal_Bool OTableController::doSaveDoc(sal_Bool _bSaveAs)
                 m_sName = sComposedName;
                 assignTable();
             }
+            // now check if our datasource has set a tablefilter and if append the new table name to it
+            Reference< XChild> xChild(m_xConnection,UNO_QUERY);
+            if(xChild.is())
+            {
+                Reference< XPropertySet> xProp(xChild->getParent(),UNO_QUERY);
+                if(xProp.is())
+                {
+                    Sequence< ::rtl::OUString > aFilter;
+                    xProp->getPropertyValue(PROPERTY_TABLEFILTER) >>= aFilter;
+                    // first check if we have something like SCHEMA.%
+                    sal_Bool bHasToInsert = sal_True;
+                    static ::rtl::OUString sPattern = ::rtl::OUString::createFromAscii("%");
+                    const ::rtl::OUString* pBegin = aFilter.getConstArray();
+                    const ::rtl::OUString* pEnd = pBegin + aFilter.getLength();
+                    for (;pBegin != pEnd; ++pBegin)
+                    {
+                        if(pBegin->indexOf('%') != -1)
+                        {
+                            sal_Int32 nLen;
+                            if((nLen = pBegin->lastIndexOf('.')) != -1 && !pBegin->compareTo(m_sName,nLen))
+                                bHasToInsert = sal_False;
+                            else if(pBegin->getLength() == 1)
+                                bHasToInsert = sal_False;
+                        }
+                    }
+                    if(bHasToInsert)
+                    {
+                        aFilter.realloc(aFilter.getLength()+1);
+                        aFilter.getArray()[aFilter.getLength()-1] = m_sName;
+                        xProp->setPropertyValue(PROPERTY_TABLEFILTER,makeAny(aFilter));
+                        Reference<XFlushable> xFlush(xProp,UNO_QUERY);
+                        if(xFlush.is())
+                            xFlush->flush();
+                    }
+                }
+            }
+
         }
         else if(m_xTable.is())
         {
@@ -533,6 +574,14 @@ sal_Bool OTableController::doSaveDoc(sal_Bool _bSaveAs)
         stopTableListening();
         m_xTable = NULL;
         aInfo = SQLExceptionInfo(e);
+    }
+    catch(const ElementExistException& e)
+    {
+        m_sName = ::rtl::OUString();
+        stopTableListening();
+        m_xTable = NULL;
+        //  aInfo = SQLExceptionInfo(e);
+        return sal_False;
     }
     catch(Exception&)
     {
