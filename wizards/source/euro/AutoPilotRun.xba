@@ -37,6 +37,7 @@ Dim i As Integer
 		DialogModel.cmdGoOn.DefaultButton = True
 		DialogConvert.GetControl(&quot;optWholeDir&quot;).SetFocus()
 		DialogConvert.Execute
+		DialogConvert.Dispose()
 	End If
 End Sub
 

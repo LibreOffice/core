@@ -17,17 +17,14 @@ Sub Main()
 		bDoUnProtect = False
 		bPreSelected = True
 		oDocument = ThisComponent
-		Msgbox Vartype(oDocument)
-		Msgbox oDocument.CharLocale.Language &amp; &quot;;&quot; &amp; oDocument.CharLocale.Country
 		RetrieveDocumentObjects()											&apos; Statusline, SheetsCollection etc.
 		InitializeConverter(oDocument.CharLocale, 1)
 		GetPreSelectedRange()
 		If GoOn Then
 			DialogConvert.GetControl(&quot;chkComplete&quot;).SetFocus()	
 			DialogConvert.Execute
-		Else
-			DialogConvert.Dispose
 		End If
+		DialogConvert.Dispose
 	End If
 End Sub
 
