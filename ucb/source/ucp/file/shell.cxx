@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: hr $ $Date: 2001-11-08 16:28:12 $
+ *  last change: $Author: abi $ $Date: 2001-11-15 13:19:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -266,7 +266,6 @@ shell::shell( const uno::Reference< lang::XMultiServiceFactory >& xMultiServiceF
       Title( rtl::OUString::createFromAscii( "Title" ) ),
       IsDocument( rtl::OUString::createFromAscii( "IsDocument" ) ),
       IsFolder( rtl::OUString::createFromAscii( "IsFolder" ) ),
-      DateCreated( rtl::OUString::createFromAscii( "DateCreated" ) ),
       DateModified( rtl::OUString::createFromAscii( "DateModified" ) ),
       Size( rtl::OUString::createFromAscii( "Size" ) ),
       FolderCount( rtl::OUString::createFromAscii( "FolderCount" ) ),
@@ -323,17 +322,6 @@ shell::shell( const uno::Reference< lang::XMultiServiceFactory >& xMultiServiceF
                                              beans::PropertyAttribute::MAYBEVOID
                                              | beans::PropertyAttribute::BOUND
                                              | beans::PropertyAttribute::READONLY ) );
-
-
-    // DateCreated
-    m_aDefaultProperties.insert( MyProperty( true,
-                                             DateCreated,
-                                             -1,
-                                             getCppuType( static_cast< util::DateTime* >( 0 ) ),
-                                             uno::Any(),
-                                             beans::PropertyState_DEFAULT_VALUE,
-                                             beans::PropertyAttribute::MAYBEVOID
-                                             | beans::PropertyAttribute::BOUND ) );
 
 
     // DateModified
@@ -2014,8 +2002,6 @@ void SAL_CALL shell::getMaskFromProperties( sal_Int32& n_Mask, const uno::Sequen
             n_Mask |= FileStatusMask_FileName;
         else if( PropertyName == IsDocument || PropertyName == IsFolder )
             n_Mask |= FileStatusMask_Type;
-        else if( PropertyName == DateCreated )
-            n_Mask |= FileStatusMask_CreationTime;
         else if( PropertyName == DateModified )
             n_Mask |= FileStatusMask_ModifyTime;
         else if( PropertyName == Size )
@@ -2269,32 +2255,6 @@ shell::commit( const shell::ContentMap::iterator& it,
         }
     }
 
-    if( aFileStatus.isValid( FileStatusMask_CreationTime ) )
-    {
-        TimeValue temp = aFileStatus.getCreationTime();
-
-        // Convert system time to local time (for EA)
-        TimeValue   myLocalTime;
-        osl_getLocalTimeFromSystemTime( &temp, &myLocalTime );
-
-        oslDateTime myDateTime;
-        osl_getDateTimeFromTimeValue( &myLocalTime,&myDateTime );
-        util::DateTime aDateTime;
-
-        aDateTime.HundredthSeconds = ( unsigned short )(myDateTime.NanoSeconds / 10000000);
-        aDateTime.Seconds = myDateTime.Seconds;
-        aDateTime.Minutes = myDateTime.Minutes;
-        aDateTime.Hours = myDateTime.Hours;
-        aDateTime.Day = myDateTime.Day;
-        aDateTime.Month = myDateTime.Month;
-        aDateTime.Year = myDateTime.Year;
-        aAny <<= aDateTime;
-        it1 = properties.find( MyProperty( DateCreated ) );
-        if( it1 != properties.end() )
-        {
-            it1->setValue( aAny );
-        }
-    }
 }
 
 

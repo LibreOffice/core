@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: abi $ $Date: 2001-11-05 07:43:30 $
+ *  last change: $Author: abi $ $Date: 2001-11-15 13:19:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -667,7 +667,6 @@ namespace fileaccess {
         const rtl::OUString Title;
         const rtl::OUString IsDocument;
         const rtl::OUString IsFolder;
-        const rtl::OUString DateCreated;
         const rtl::OUString DateModified;
         const rtl::OUString Size;
         const rtl::OUString FolderCount;
