@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sequenceashashmap.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-28 12:47:53 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 10:17:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,12 @@ SequenceAsHashMap::SequenceAsHashMap(const css::uno::Any& aSource)
     (*this) << aSource;
 }
 
+//-----------------------------------------------
+SequenceAsHashMap::SequenceAsHashMap(const css::uno::Sequence< css::uno::Any >& lSource)
+{
+    (*this) << lSource;
+}
+
 /*-----------------------------------------------
     04.11.2003 08:30
 -----------------------------------------------*/
@@ -144,6 +150,50 @@ void SequenceAsHashMap::operator<<(const css::uno::Any& aSource)
     throw css::beans::IllegalTypeException(
             ::rtl::OUString::createFromAscii("Any contains wrong type."),
             css::uno::Reference< css::uno::XInterface >());
+}
+
+//-----------------------------------------------
+void SequenceAsHashMap::operator<<(const css::uno::Sequence< css::uno::Any >& lSource)
+{
+    sal_Int32 c = lSource.getLength();
+    sal_Int32 i = 0;
+
+    for (i=0; i<c; ++i)
+    {
+        css::beans::PropertyValue lP;
+        if (lSource[i] >>= lP)
+        {
+            if (
+                (!lP.Name.getLength()) ||
+                (!lP.Value.hasValue())
+               )
+                throw css::beans::IllegalTypeException(
+                        ::rtl::OUString::createFromAscii("PropertyValue struct contains no usefull informations."),
+                        css::uno::Reference< css::uno::XInterface >());
+            (*this)[lP.Name] = lP.Value;
+            continue;
+        }
+
+        css::beans::NamedValue lN;
+        if (lSource[i] >>= lN)
+        {
+            if (
+                (!lN.Name.getLength()) ||
+                (!lN.Value.hasValue())
+               )
+                throw css::beans::IllegalTypeException(
+                        ::rtl::OUString::createFromAscii("NamedValue struct contains no usefull informations."),
+                        css::uno::Reference< css::uno::XInterface >());
+            (*this)[lN.Name] = lN.Value;
+            continue;
+        }
+
+        // ignore VOID Any ... but reject wrong filled ones!
+        if (lSource[i].hasValue())
+            throw css::beans::IllegalTypeException(
+                    ::rtl::OUString::createFromAscii("Any contains wrong type."),
+                    css::uno::Reference< css::uno::XInterface >());
+    }
 }
 
 /*-----------------------------------------------
