@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: cl $ $Date: 2002-04-09 07:31:52 $
+#   last change: $Author: af $ $Date: 2002-04-11 13:07:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,6 +80,8 @@ CXXFILES =								\
     DescriptionGenerator.cxx			\
     GraphCtlAccessibleContext.cxx		\
     ChildrenManager.cxx					\
+    ChildrenManagerImpl.cxx				\
+    DescriptionGenerator.cxx			\
     AccessibleShape.cxx					\
     AccessibleGraphicShape.cxx			\
     AccessibleOLEShape.cxx				\
@@ -94,6 +96,8 @@ SLOFILES =	\
     $(SLO)$/DescriptionGenerator.obj			\
     $(SLO)$/GraphCtlAccessibleContext.obj		\
     $(SLO)$/ChildrenManager.obj 				\
+    $(SLO)$/ChildrenManagerImpl.obj 			\
+    $(SLO)$/DescriptionGenerator.obj 			\
     $(SLO)$/AccessibleContextBase.obj			\
     $(SLO)$/AccessibleComponentBase.obj			\
     $(SLO)$/AccessibleShape.obj					\
