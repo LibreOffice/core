@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dllcomponentloader.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dbo $ $Date: 2000-12-15 08:53:10 $
+ *  last change: $Author: dbo $ $Date: 2000-12-15 10:20:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -363,8 +363,8 @@ static OUString getMacSymbolName( const OUString & rLibName, const char * pSymNa
     sal_Int32 nEnd = rLibName.indexOf( (sal_Unicode)'.', nStart );
     OSL_ASSERT( nEnd > nStart );
     OUStringBuffer buf( 16 );
-    buf.appendAscii( pSymName );
     buf.append( rLibName.copy( nStart, nEnd - nStart ) );
+    buf.appendAscii( pSymName );
     return buf.makeStringAndClear();
 }
 #endif
