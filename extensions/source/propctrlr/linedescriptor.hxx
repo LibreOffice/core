@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linedescriptor.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-10-06 15:50:43 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 12:03:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 #ifndef _EXTENSIONS_PROPCTRLR_BRWCONTROL_HXX_
 #include "brwcontrol.hxx"
 #endif
+#ifndef _VCL_FLDUNIT_HXX
+#include <vcl/fldunit.hxx>
+#endif
 
 //............................................................................
 namespace pcr
@@ -86,14 +89,14 @@ namespace pcr
         BrowserControlType          eControlType;
         sal_uInt32                  nHelpId;
         sal_uInt32                  nUniqueButtonId;
-        sal_uInt16                  nDigits;    // for numeric fields
-        sal_Int32                   nMinValue;  // for numeric fields only
-        sal_Int32                   nMaxValue;  // for numeric fields only
+        sal_uInt16                  nDigits;        // for numeric fields
+        sal_Int32                   nMinValue;      // for numeric fields only
+        sal_Int32                   nMaxValue;      // for numeric fields only
+        FieldUnit                   eDisplayUnit;   // for numeric fields only
+        FieldUnit                   eValueUnit;     // for numeric fields only
 
         sal_Bool                    bUnknownValue   :1;
         sal_Bool                    bHasDefaultValue:1;
-        sal_Bool                    bHasBrowseButton:1;
-        sal_Bool                    bIsHyperlink    :1;
         sal_Bool                    bIsLocked       :1;
         sal_Bool                    bHaveMinMax     :1;
 
@@ -102,8 +105,6 @@ namespace pcr
             ,nHelpId(0)
             ,bUnknownValue(sal_False)
             ,bHasDefaultValue(sal_False)
-            ,bHasBrowseButton(sal_False)
-            ,bIsHyperlink(sal_False)
             ,bIsLocked(sal_False)
             ,pDataPtr(NULL)
             ,pControl(NULL)
@@ -112,29 +113,8 @@ namespace pcr
             ,nMinValue(0)
             ,nMaxValue(-1)
             ,bHaveMinMax(sal_False)
-        {
-        }
-
-        // does not copy theValues
-        // TODO: (fs) why?
-        OLineDescriptor(const OLineDescriptor& rData)
-            :eControlType(rData.eControlType)
-            ,sValue(rData.sValue)
-            ,sTitle(rData.sTitle)
-            ,sName(rData.sName)
-            ,nHelpId(rData.nHelpId)
-            ,bUnknownValue(rData.bUnknownValue)
-            ,bHasDefaultValue(rData.bHasDefaultValue)
-            ,bHasBrowseButton(rData.bHasBrowseButton)
-            ,bIsHyperlink(rData.bIsHyperlink)
-            ,bIsLocked(rData.bIsLocked)
-            ,pDataPtr(rData.pDataPtr)
-            ,pControl(rData.pControl)
-            ,nDigits(rData.nDigits)
-            ,nUniqueButtonId(rData.nUniqueButtonId)
-            ,nMinValue(rData.nMinValue)
-            ,nMaxValue(rData.nMaxValue)
-            ,bHaveMinMax(rData.bHaveMinMax)
+            ,eDisplayUnit( FUNIT_NONE )
+            ,eValueUnit( FUNIT_NONE )
         {
         }
     };
