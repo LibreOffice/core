@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sj $ $Date: 2000-10-24 08:22:02 $
+ *  last change: $Author: sj $ $Date: 2000-10-24 11:49:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2117,14 +2117,15 @@ SdrObject* SdrPowerPointImport::ReadObjText( PPTTextObj* pTextObj, SdrObject* pS
     SdrTextObj* pText = PTR_CAST( SdrTextObj, pSdrObj );
     if ( pText )
     {
-        if ( !ApplyTextObj( pTextObj, pText, pPage, NULL ) )
+        if ( !ApplyTextObj( pTextObj, pText, pPage, NULL, NULL ) )
             pSdrObj = NULL;
     }
     return pSdrObj;
 }
 
 
-SdrObject* SdrPowerPointImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pSdrText, SdPage* pPage, SfxStyleSheet* pSheet ) const
+SdrObject* SdrPowerPointImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pSdrText, SdPage* pPage,
+                                                SfxStyleSheet* pSheet, SfxStyleSheet** ppStyleSheetAry ) const
 {
     SdrTextObj* pText = pSdrText;
     if ( pTextObj->Count() )
@@ -2162,9 +2163,14 @@ SdrObject* SdrPowerPointImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* 
                         nCurrentIndex += pPortion->Count();
                     }
                 }
-                UINT16 nParaIndex = (UINT16)pTextObj->GetCurrentIndex();
+                sal_uInt16  nParaIndex = (UINT16)pTextObj->GetCurrentIndex();
+                SfxStyleSheet* pS = ( ppStyleSheetAry ) ? ppStyleSheetAry[ pPara->pParaSet->mnDepth ] : pSheet;
+
                 rOutliner.Insert( String( pParaText, (UINT16)nCurrentIndex ), nParaIndex, pPara->GetLevel() );
                 rOutliner.SetParaAttribs( nParaIndex, rOutliner.GetEmptyItemSet() );
+                if ( pS )
+                    rOutliner.SetStyleSheet( nParaIndex, pS );
+
                 ESelection aSelection( nParaIndex, 0, nParaIndex, 0 );
                 for ( pPortion = pPara->First(); pPortion; pPortion = pPara->Next() )
                 {
