@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlbas.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-13 10:46:28 $
+ *  last change: $Author: jp $ $Date: 2001-01-17 12:50:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,8 +134,7 @@ void SwHTMLParser::NewScript()
     ParseScriptOptions( aScriptType, eScriptLang, aScriptURL,
                         aBasicLib, aBasicModule );
 
-    BOOL bDownload = aScriptURL.Len();
-    if( bDownload )
+    if( aScriptURL.Len() )
     {
         // Den Inhalt des Script-Tags ignorieren
         bIgnoreRawData = TRUE;
@@ -396,11 +395,14 @@ void SwHTMLWriter::OutBasicBodyEvents()
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/htmlbas.cxx,v 1.2 2000-11-13 10:46:28 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/htmlbas.cxx,v 1.3 2001-01-17 12:50:56 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.2  2000/11/13 10:46:28  jp
+      remove IniManager
+
       Revision 1.1.1.1  2000/09/18 17:14:55  hr
       initial import
 
