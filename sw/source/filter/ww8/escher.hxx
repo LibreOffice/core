@@ -2,9 +2,9 @@
  *
  *  $RCSfile: escher.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-25 07:40:09 $
+ *  last change: $Author: kz $ $Date: 2003-12-09 11:46:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,7 @@
 #include <svx/escherex.hxx>
 #endif
 
+const sal_uInt32 nInlineHack = 0x00010001;
 class SwFrmFmt;
 
 class WinwordAnchoring : public EscherExClientRecord_Base
@@ -76,10 +77,11 @@ public:
     void WriteData(EscherEx& rEx) const;
     void SetAnchoring(const SwFrmFmt& rFmt, bool bBROKEN = false);
 private:
-    sal_uInt32 nXAlign;
-    sal_uInt32 nYAlign;
-    sal_uInt32 nXRelTo;
-    sal_uInt32 nYRelTo;
+    bool mbInline;
+    sal_uInt32 mnXAlign;
+    sal_uInt32 mnYAlign;
+    sal_uInt32 mnXRelTo;
+    sal_uInt32 mnYRelTo;
 };
 
 class SwBasicEscherEx : public EscherEx
@@ -114,6 +116,7 @@ public:
     SwBasicEscherEx(SvStream* pStrm, SwWW8Writer& rWrt, UINT32 nDrawings = 1);
     INT32 WriteGrfFlyFrame(const SwFrmFmt& rFmt, UINT32 nShapeId);
     INT32 WriteOLEFlyFrame(const SwFrmFmt& rFmt, UINT32 nShapeId);
+    void WriteEmptyFlyFrame(const SwFrmFmt& rFmt, UINT32 nShapeId);
     virtual void WriteFrmExtraData(const SwFrmFmt&);
     virtual void WritePictures();
     virtual ~SwBasicEscherEx();
