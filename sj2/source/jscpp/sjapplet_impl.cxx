@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sjapplet_impl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pl $ $Date: 2001-08-15 11:21:55 $
+ *  last change: $Author: kr $ $Date: 2001-08-30 15:30:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,9 +130,12 @@ static void testJavaException(JNIEnv * pEnv)  throw(com::sun::star::uno::Runtime
 
           jstring jsMessage = (jstring)pEnv->CallObjectMethod(jtThrowable, jmThrowable_getMessage);
 
-          const jchar * jcMessage = pEnv->GetStringChars(jsMessage, NULL);
-          OUString ouMessage(jcMessage);
-          pEnv->ReleaseStringChars(jsMessage, jcMessage);
+          OUString ouMessage;
+        if(jsMessage) {
+            const jchar * jcMessage = pEnv->GetStringChars(jsMessage, NULL);
+            ouMessage = OUString(jcMessage);
+            pEnv->ReleaseStringChars(jsMessage, jcMessage);
+        }
 
           throw RuntimeException(ouMessage, Reference<XInterface>());
     }
