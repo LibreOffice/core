@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i_reposypart.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 14:11:31 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:28:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,8 +121,9 @@ CheshireCat::CheshireCat( const n22::RepositoryCenter & i_rRepository )
         pGate(),
         pCenter(&i_rRepository)
 {
-    pCePilot = new CePilot_Inst( aCeStorage, aNamesDictionary );
-    pTypePilot = new TypePilot_Inst( aTypeStorage, *pCePilot );
+    pTypePilot = new TypePilot_Inst( aTypeStorage );
+    pCePilot = new CePilot_Inst( aCeStorage, aNamesDictionary, *pTypePilot );
+    pTypePilot->Assign_CePilot(*pCePilot);
     pSecondariesPilot = new SecondariesPilot_Inst( aCeStorage, aTypeStorage );
     pGate = new Gate_Inst( *pCePilot, *pTypePilot, *pSecondariesPilot );
 }
