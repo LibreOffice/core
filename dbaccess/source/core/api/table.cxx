@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-28 10:25:05 $
+ *  last change: $Author: fs $ $Date: 2001-03-02 16:59:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -590,8 +590,17 @@ void ODBTable::refreshKeys()
     }
     else if(!isNew())
     {
-        refreshPrimaryKeys(aVector);
-        refreshForgeinKeys(aVector);
+        try { refreshPrimaryKeys(aVector); }
+        catch(SQLException&)
+        {   // allowed to fail
+            OSL_TRACE("ODBTable::refreshKeys: caught an exception while refreshing the primary keys\n");
+        }
+
+        try { refreshForgeinKeys(aVector); }
+        catch(SQLException&)
+        {   // allowed to fail
+            OSL_TRACE("ODBTable::refreshKeys: caught an exception while refreshing the foreign keys\n");
+        }
     }
     if(m_pKeys)
         delete m_pKeys;
