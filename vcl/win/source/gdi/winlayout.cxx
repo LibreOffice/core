@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: hdu $ $Date: 2002-09-10 14:13:32 $
+ *  last change: $Author: hdu $ $Date: 2002-09-12 07:05:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -406,7 +406,10 @@ int SimpleWinLayout::GetNextGlyphs( int nLen, long* pGlyphs, Point& rPos, int& n
     while( nCount < nLen )
     {
         // update returned values
-        *(pGlyphs++) = mpOutGlyphs[ nStart ];
+        long nGlyphIndex = mpOutGlyphs[ nStart ];
+        if( mnLayoutFlags & SAL_LAYOUT_DISABLE_GLYPH_PROCESSING )
+            nGlyphIndex |= GF_ISCHAR;
+        *(pGlyphs++) = nGlyphIndex;
         if( pGlyphAdvances )
             *(pGlyphAdvances++) = mpGlyphAdvances[ nStart ];
         if( pCharIndexes )
