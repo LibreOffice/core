@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MtaFop.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tra $ $Date: 2002-03-27 10:41:14 $
+ *  last change: $Author: rt $ $Date: 2003-10-06 15:57:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
