@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2000-09-28 11:32:44 $
+ *  last change: $Author: mba $ $Date: 2000-10-04 10:50:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,7 +192,6 @@
 #include "app.hrc"
 #include "interno.hxx"
 #include "ipenv.hxx"
-#include "saveopt.hxx"
 #include "intfrm.hxx"
 #include "virtmenu.hxx"
 #include "module.hxx"
@@ -318,6 +317,8 @@ SfxApplication::SfxApplication()
 SfxApplication::~SfxApplication()
 {
     DELETEZ( pAppData_Impl->pSaveOptions );
+    DELETEZ( pAppData_Impl->pUndoOptions );
+    DELETEZ( pAppData_Impl->pHelpOptions );
     if ( !bDowning )
         Deinitialize();
     Broadcast( SfxSimpleHint(SFX_HINT_DYING) );
@@ -647,7 +648,7 @@ long SfxAppFocusChanged_Impl( void* pObj, void* pArg )
                 nId = pFocusWindow ? pFocusWindow->GetHelpId() : 0;
             }
             ((SfxHelp_Impl*)pHelp)->SlotExecutedOrFocusChanged(
-                nId, sal_False, pApp->GetOptions().IsAutoHelpAgent() );
+                nId, sal_False, SvtHelpOptions().IsHelpAgentAutoStartMode() );
         }
     }
 
