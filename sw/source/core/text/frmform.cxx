@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmform.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: fme $ $Date: 2002-05-27 09:12:52 $
+ *  last change: $Author: fme $ $Date: 2002-05-27 09:27:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2267,7 +2267,7 @@ void SwTxtFrm::Format( const SwBorderAttrs * )
                                 const SwPosition* pPos = pFmt->GetAnchor().GetCntntAnchor();
 
                                 if( !pFly->IsValid() && pPos &&
-                                     pPos->nContent.GetIndex() > GetOfst() )
+                                     pPos->nContent.GetIndex() >= GetOfst() )
                                 {
 #ifdef VERTICAL_LAYOUT
                                     SwTwips nOldTop = (pFly->Frm().*fnRect->fnGetTop)();
