@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tblrwcl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:55:17 $
+ *  last change: $Author: vg $ $Date: 2003-07-01 15:11:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4225,6 +4225,17 @@ BOOL SwTable::SetRowHeight( SwTableBox& rAktBox, USHORT eType,
                                                     aParam, 0, TRUE );
 
                         pFndBox = ::lcl_SaveInsDelData( aParam, ppUndo, aTmpLst );
+
+                        // #110525# delete complete table when last row is
+                        // deleted
+                        if( !bBigger &&
+                            aParam.aBoxes.Count() == aSortCntBoxes.Count() )
+                        {
+                            GetFrmFmt()->GetDoc()->DeleteRowCol( aParam.aBoxes );
+                            return FALSE;
+                        }
+
+
                         if( ppUndo )
                             *ppUndo = aParam.CreateUndo(
                                         bBigger ? UNDO_TABLE_INSROW
