@@ -2,9 +2,9 @@
  *
  *  $RCSfile: modulepcr.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-12 11:29:50 $
+ *  last change: $Author: rt $ $Date: 2001-05-23 07:40:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,8 @@ typedef ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleService
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rServiceManager,
             const ::rtl::OUString & _rComponentName,
             ::cppu::ComponentInstantiation _pCreateFunction,
-            const ::com::sun::star::uno::Sequence< ::rtl::OUString > & _rServiceNames
+            const ::com::sun::star::uno::Sequence< ::rtl::OUString > & _rServiceNames,
+            rtl_ModuleCount* _pModuleCounter
         );
 
     //=========================================================================
@@ -313,6 +314,9 @@ typedef ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleService
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/01/12 11:29:50  fs
+ *  initial checkin - outsourced the form property browser
+ *
  *
  *  Revision 1.0 08.01.01 12:52:50  fs
  ************************************************************************/

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: modulepcr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-23 11:54:38 $
+ *  last change: $Author: rt $ $Date: 2001-05-23 07:40:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -341,7 +341,7 @@ namespace pcr
                 const FactoryInstantiation FactoryInstantiationFunction = reinterpret_cast<const FactoryInstantiation>(*pFactoryFunction);
                 const ComponentInstantiation ComponentInstantiationFunction = reinterpret_cast<const ComponentInstantiation>(*pComponentFunction);
 
-                xReturn = FactoryInstantiationFunction( _rxServiceManager, *pImplName, ComponentInstantiationFunction, *pServices);
+                xReturn = FactoryInstantiationFunction( _rxServiceManager, *pImplName, ComponentInstantiationFunction, *pServices, NULL);
                 if (xReturn.is())
                 {
                     xReturn->acquire();
@@ -361,6 +361,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2001/03/23 11:54:38  jl
+ *  replaced: OSL_ENSHURE->OSL_ENSURE
+ *
  *  Revision 1.1  2001/01/12 11:29:40  fs
  *  initial checkin - outsourced the form property browser
  *

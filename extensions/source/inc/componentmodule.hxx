@@ -2,9 +2,9 @@
  *
  *  $RCSfile: componentmodule.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-12 07:06:08 $
+ *  last change: $Author: rt $ $Date: 2001-05-23 07:41:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,8 @@ typedef ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleService
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rServiceManager,
             const ::rtl::OUString & _rComponentName,
             ::cppu::ComponentInstantiation _pCreateFunction,
-            const ::com::sun::star::uno::Sequence< ::rtl::OUString > & _rServiceNames
+            const ::com::sun::star::uno::Sequence< ::rtl::OUString > & _rServiceNames,
+            rtl_ModuleCount* _pModuleCounter
         );
 
     //=========================================================================
@@ -328,6 +329,9 @@ typedef ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleService
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/02/12 07:06:08  fs
+ *  initial checkin - helper class for implementing module-functionality in SFX-less components
+ *
  *
  *  Revision 1.0 30.01.01 15:07:32  fs
  ************************************************************************/
