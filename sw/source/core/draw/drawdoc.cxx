@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:59:02 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 16:25:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,12 +76,11 @@
 #ifndef _SFXINTITEM_HXX
 #include <svtools/intitem.hxx>
 #endif
-#ifndef _OFF_APP_HXX //autogen
-#include <offmgr/app.hxx>
-#endif
 #ifndef _FORBIDDENCHARACTERSTABLE_HXX
 #include <svx/forbiddencharacterstable.hxx>
 #endif
+
+#include <svx/xtable.hxx>
 
 #define ITEMID_COLOR_TABLE      SID_COLOR_TABLE
 #define ITEMID_GRADIENT_LIST    SID_GRADIENT_LIST
@@ -148,7 +147,7 @@ SwDrawDocument::SwDrawDocument( SwDoc* pD ) :
         SvxColorTableItem* pColItem = ( SvxColorTableItem* )
                                 ( pDocSh->GetItem( ITEMID_COLOR_TABLE ) );
         XColorTable *pXCol = pColItem ? pColItem->GetColorTable() :
-                                        OFF_APP()->GetStdColorTable();
+                                        XColorTable::GetStdColorTable();
         SetColorTable( pXCol );
 
         if ( !pColItem )
@@ -163,7 +162,7 @@ SwDrawDocument::SwDrawDocument( SwDoc* pD ) :
         SetObjectShell( pDocSh );
     }
     else
-        SetColorTable( OFF_APP()->GetStdColorTable() );
+        SetColorTable( XColorTable::GetStdColorTable() );
 
     // copy all the default values to the SdrModel
     SfxItemPool* pSdrPool = pD->GetAttrPool().GetSecondaryPool();
@@ -220,7 +219,7 @@ SwDrawDocument::SwDrawDocument( SfxItemPool *pPool, SwDocShell *pDocSh )
     SvxColorTableItem* pColItem = ( SvxColorTableItem* )
                                 ( pDocSh->GetItem( ITEMID_COLOR_TABLE ) );
     XColorTable *pXCol = pColItem ? pColItem->GetColorTable() :
-                                    OFF_APP()->GetStdColorTable();
+                                    XColorTable::GetStdColorTable();
     SetColorTable( pXCol );
 
     if ( !pColItem )
