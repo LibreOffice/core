@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appquit.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-19 11:31:11 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:37:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -276,7 +276,6 @@ void SfxApplication::Deinitialize()
     delete[] pInterfaces, pInterfaces = 0;
 
     // free administration managers
-    DELETEZ(pImp->pAutoSaveTimer);
     DELETEZ(pAppDispat);
     SfxResId::DeleteResMgr();
     DELETEZ(pImp->pOfaResMgr);
@@ -301,7 +300,6 @@ void SfxApplication::Deinitialize()
     DELETEX(pImp->pMenuCtrlFac);
     DELETEX(pImp->pEventHdl);
     SfxNewHdl::Delete();
-    DELETEX(pImp->pAutoSaveTimer);
     DELETEX(pImp->pViewFrames);
     DELETEX(pImp->pViewShells);
     DELETEX(pImp->pObjShells);
