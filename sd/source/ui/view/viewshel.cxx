@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshel.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dl $ $Date: 2000-12-18 12:50:58 $
+ *  last change: $Author: aw $ $Date: 2001-02-12 12:43:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -526,23 +526,34 @@ void __EXPORT SdViewShell::Deactivate(BOOL bIsMDIActivate)
 
 BOOL SdViewShell::KeyInput(const KeyEvent& rKEvt, SdWindow* pWin)
 {
-    BOOL bReturn = FALSE;
+    BOOL bReturn(FALSE);
 
-    if (pWin)
+    if(pWin)
     {
         SetActiveWindow(pWin);
     }
 
-    if (pFuSlideShow)
+    if(!bReturn)
     {
-        bReturn = pFuSlideShow->KeyInput(rKEvt);
-    }
-    else if (pFuActual)
-    {
-        bReturn = pFuActual->KeyInput(rKEvt);
+        // #76008#
+        // give key input first to SfxViewShell to give CTRL+Key
+        // (e.g. CTRL+SHIFT+'+', to front) priority.
+        bReturn = SfxViewShell::KeyInput(rKEvt);
     }
 
-    if (!bReturn && pWindow)
+    if(!bReturn)
+    {
+        if(pFuSlideShow)
+        {
+            bReturn = pFuSlideShow->KeyInput(rKEvt);
+        }
+        else if(pFuActual)
+        {
+            bReturn = pFuActual->KeyInput(rKEvt);
+        }
+    }
+
+    if(!bReturn && pWindow)
     {
         KeyCode aKeyCode = rKEvt.GetKeyCode();
 
@@ -561,9 +572,6 @@ BOOL SdViewShell::KeyInput(const KeyEvent& rKEvt, SdWindow* pWin)
             bReturn = TRUE;
         }
     }
-
-    if( !bReturn )
-        bReturn = SfxViewShell::KeyInput(rKEvt);
 
     return(bReturn);
 }
