@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntcap.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2003-10-15 09:58:39 $
+ *  last change: $Author: rt $ $Date: 2003-10-30 10:29:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,9 +92,6 @@
 #endif
 #ifndef _SWFONT_HXX
 #include <swfont.hxx>
-#endif
-#ifndef _DRAWFONT_HXX
-#include <drawfont.hxx>
 #endif
 #ifndef _BREAKIT_HXX
 #include <breakit.hxx>
@@ -391,13 +388,19 @@ void SwDoDrawCapital::DrawSpace( Point &rPos )
     long nDiff = rInf.GetPos().X() - rPos.X();
 
     Point aPos( rPos );
-#ifdef BIDI
-    if ( rInf.GetFrm()->IsRightToLeft() )
-    {
+    const BOOL bSwitchL2R = rInf.GetFrm()->IsRightToLeft() &&
+                          ! rInf.IsIgnoreFrmRTL();
+
+
+    if ( bSwitchL2R )
        rInf.GetFrm()->SwitchLTRtoRTL( aPos );
-       nDiff = -nDiff;
-    }
-#endif
+
+    const ULONG nMode = rInf.GetpOut()->GetLayoutMode();
+    const BOOL bBidiPor = ( bSwitchL2R !=
+                            ( 0 != ( TEXT_LAYOUT_BIDI_RTL & nMode ) ) );
+
+    if ( bBidiPor )
+        nDiff = -nDiff;
 
     if ( rInf.GetFrm()->IsVertical() )
         rInf.GetFrm()->SwitchHorizontalToVertical( aPos );
@@ -564,13 +567,22 @@ void SwDoDrawStretchCapital::Do()
 
         rInf.ApplyAutoColor();
 
-        // Optimierung:
+        Point aPos( rInf.GetPos() );
+        const BOOL bSwitchL2R = rInf.GetFrm()->IsRightToLeft() &&
+                              ! rInf.IsIgnoreFrmRTL();
 
+        if ( bSwitchL2R )
+            rInf.GetFrm()->SwitchLTRtoRTL( aPos );
+
+        if ( rInf.GetFrm()->IsVertical() )
+            rInf.GetFrm()->SwitchHorizontalToVertical( aPos );
+
+        // Optimierung:
         if( 1 >= rInf.GetLen() )
-            GetOut().DrawText( rInf.GetPos(), rInf.GetText(), rInf.GetIdx(),
+            GetOut().DrawText( aPos, rInf.GetText(), rInf.GetIdx(),
                 rInf.GetLen() );
         else
-            GetOut().DrawStretchText( rInf.GetPos(), nPartWidth,
+            GetOut().DrawStretchText( aPos, nPartWidth,
                                 rInf.GetText(), rInf.GetIdx(), rInf.GetLen() );
     }
     ((Point&)rInf.GetPos()).X() += nPartWidth;
