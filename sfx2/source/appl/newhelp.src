@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.src,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 14:12:16 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 18:10:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,7 +136,7 @@ Window WIN_HELP_INDEX
                 Text[ danish ] = "INDEKS";
                 Text[ swedish ] = "Index";
                 Text[ polish ] = "Indeks";
-                Text[ portuguese_brazilian ] = "Νdice";
+                Text[ portuguese_brazilian ] = "Νndice";
                 Text[ japanese ] = "η΄ΆεΌ•";
                 Text[ korean ] = "μƒ‰μΈ";
                 Text[ chinese_simplified ] = "η΄ΆεΌ•";
@@ -176,7 +176,7 @@ Window WIN_HELP_INDEX
                 Text[ arabic ] = "ΘΝΛ";
                 Text[ catalan ] = "Cerca";
                 Text[ finnish ] = "Etsi";
-                Text[ language_user1 ] = "pb: the correct english text here must be 'Search' (said VK and FPE)";
+                Text[ language_user1 ] = "; pb: the correct english text here must be 'Search' (said VK and FPE)";
                 Text[ thai ] = "ΰΈ«ΰΈ²";
                 Text[ czech ] = "Hledat";
                 Text[ hebrew ] = "β€®Χ—Χ™Χ¤Χ•Χ©β€¬";
@@ -191,7 +191,7 @@ Window WIN_HELP_INDEX
                 Text[ english_us ] = "Bookmarks";
                 Text[ portuguese ] = "Marcadores";
                 Text[ russian ] = "Ηΰκλΰδκθ";
-                Text[ greek ] = "Σελιδοδείκτης";
+                Text[ greek ] = "Σελιδοδείκτες";
                 Text[ dutch ] = "Bladwijzers";
                 Text[ french ] = "Marque-pages";
                 Text[ spanish ] = "Marcadores";
@@ -377,7 +377,7 @@ TabPage TP_HELP_SEARCH
         Text [ english_us ] = "~Complete words only";
         Text[ portuguese ] = "~Sσ palavras inteiras";
         Text[ russian ] = "~Òξλόκξ ρλξβξ φελθκξμ";
-        Text[ greek ] = "~Complete words only";
+        Text[ greek ] = "~Μόνο ολόκληρες λέξεις";
         Text[ dutch ] = "~Alleen hele woorden";
         Text[ french ] = "Uniquement les mots entiers";
         Text[ spanish ] = "~Sσlo palabras completas";
@@ -408,7 +408,7 @@ TabPage TP_HELP_SEARCH
         Text [ english_us ] = "Find in ~headings only";
         Text[ portuguese ] = "~Procurar sσ em tνtulos";
         Text[ russian ] = "~Θρκΰςό ςξλόκξ β ηΰγξλξβκΰυ";
-        Text[ greek ] = "~Search headings only";
+        Text[ greek ] = "Εύρεση μόνο στις ~επικεφαλίδες";
         Text[ dutch ] = "~Alleen in titels zoeken";
         Text[ french ] = "Recherche uniquement dans les titres";
         Text[ spanish ] = "~Buscar sσlo en tνtulos";
@@ -416,7 +416,7 @@ TabPage TP_HELP_SEARCH
         Text[ danish ] = "Sψg kun i ~titler";
         Text[ swedish ] = "Sφk bara i r~ubriker";
         Text[ polish ] = "Znajd tylko w ~nag³σwkach";
-        Text[ portuguese_brazilian ] = "~Procurar somente em tνtulos";
+        Text[ portuguese_brazilian ] = "~Procurar somente nos tνtulos do documento";
         Text[ japanese ] = "γ‚Ώγ‚¤γƒγƒ«γ®γΏγ‚’ζ¤η΄Ά(~H)";
         Text[ korean ] = "μ λª©μ—μ„λ§ μ°Ύμ•„λ³΄κΈ°(~H)";
         Text[ chinese_simplified ] = "δ»…ε¨ε¤§ζ ‡ιΆθƒε›΄ε†…ζε―»(~H)";
@@ -484,7 +484,7 @@ TabPage TP_HELP_BOOKMARKS
         Text [ english_us ] = "~Bookmarks" ;
         Text[ portuguese ] = "~Marcadores";
         Text[ russian ] = "Ηΰκλΰδκθ";
-        Text[ greek ] = "Bookmarks";
+        Text[ greek ] = "~Σελιδοδείκτες";
         Text[ dutch ] = "~Bladwijzers";
         Text[ french ] = "Marque-pages";
         Text[ spanish ] = "Marcadores";
@@ -522,7 +522,7 @@ TabPage TP_HELP_BOOKMARKS
         Text [ english_us ] = "~Display" ;
         Text[ portuguese ] = "~Mostrar";
         Text[ russian ] = "~Οξκΰηΰςό";
-        Text[ greek ] = "Εμφάνιση";
+        Text[ greek ] = "Εμ~φάνιση";
         Text[ dutch ] = "~Weergeven";
         Text[ french ] = "Afficher";
         Text[ spanish ] = "~Visualizar";
@@ -672,7 +672,7 @@ String STR_HELP_BUTTON_INDEX_ON
     Text [ english_us ] = "Show Navigation Pane";
     Text[ portuguese ] = "Mostrar αrea de navegaηγo";
     Text[ russian ] = "Οξκΰηΰςό οΰνελό νΰβθγΰφθθ";
-    Text[ greek ] = "Ευρετήριο";
+    Text[ greek ] = "Εμφάνιση παραθύρου περιήγησης";
     Text[ dutch ] = "Navigatiebereik weergeven";
     Text[ french ] = "Afficher l'espace de navigation";
     Text[ spanish ] = "Mostrar αrea de navegaciσn";
@@ -701,7 +701,7 @@ String STR_HELP_BUTTON_INDEX_OFF
     Text [ english_us ] = "Hide Navigation Pane";
     Text[ portuguese ] = "Desactivar αrea de navegaηγo";
     Text[ russian ] = "Ρκπϋςό οΰνελό νΰβθγΰφθθ";
-    Text[ greek ] = "Hide navigation area";
+    Text[ greek ] = "Απόκρυψη παραθύρου περιήγησης";
     Text[ dutch ] = "Navigatiebereik uitschakelen";
     Text[ french ] = "Masquer l'espace de navigation";
     Text[ spanish ] = "Ocultar αrea de navegaciσn";
@@ -817,7 +817,7 @@ String STR_HELP_BUTTON_PRINT
     Text [ english_us ] = "Print...";
     Text[ portuguese ] = "Imprimir...";
     Text[ russian ] = "Οεχΰςό...";
-    Text[ greek ] = "Εκτύπωση";
+    Text[ greek ] = "Εκτύπωση...";
     Text[ dutch ] = "Afdrukken...";
     Text[ french ] = "Imprimer...";
     Text[ spanish ] = "Imprimir...";
@@ -846,7 +846,7 @@ String STR_HELP_BUTTON_ADDBOOKMARK
     Text [ english_us ] = "Add to Bookmarks...";
     Text[ portuguese ] = "Adicionar marcador...";
     Text[ russian ] = "Δξαΰβθςό ηΰκλΰδκσ...";
-    Text[ greek ] = "Add to bookmarks";
+    Text[ greek ] = "Προσθήκη στους σελιδοδείκτες...";
     Text[ dutch ] = "Bladwijzer toevoegen...";
     Text[ french ] = "Ajouter un marque-page...";
     Text[ spanish ] = "Aρadir marcador...";
@@ -875,7 +875,7 @@ String STR_HELP_BUTTON_SEARCHDIALOG
     Text [ english_us ] = "Find...";
     Text[ portuguese ] = "Localizar...";
     Text[ russian ] = "Νΰιςθ...";
-    Text[ greek ] = "Find...";
+    Text[ greek ] = "Εύρεση...";
     Text[ dutch ] = "Zoeken...";
     Text[ french ] = "Rechercher...";
     Text[ spanish ] = "Buscar...";
@@ -918,7 +918,7 @@ String STR_HELP_BUTTON_SOURCEVIEW
     Text[ arabic ] = "δΥ γΥΟΡ HTML";
     Text[ dutch ] = "HTML-brontekst";
     Text[ chinese_simplified ] = "HTML ζΊζ–‡ζ¬";
-    Text[ greek ] = "Κείμενο προέλευσης HTML";
+    Text[ greek ] = "Αρχείο προέλευσης HTML";
     Text[ korean ] = "HTML μ›λ³Έ";
     Text[ turkish ] = "HTML Kaynaπύ";
     Text[ catalan ] = "Font HTML";
@@ -936,7 +936,7 @@ String STR_HELP_FIRST_MESSAGE
     Text[ english_us ] = "The Help is being started...";
     Text[ portuguese ] = "A iniciar Ajuda...";
     Text[ russian ] = "Ηΰοσρκ Ροπΰβκθ...";
-    Text[ greek ] = "Help is started...";
+    Text[ greek ] = "Γίνεται εκκίνηση της Βοήθειας...";
     Text[ dutch ] = "Help wordt gestart...";
     Text[ french ] = "Dιmarrage de l'aide...";
     Text[ spanish ] = "Se ha iniciado la Ayuda...";
@@ -978,7 +978,7 @@ String STR_HELP_MENU_TEXT_SELECTION_MODE
     Text[ danish ] = "Select Text";
     Text[ swedish ] = "Markera text";
     Text[ polish ] = "Select Text";
-    Text[ portuguese_brazilian ] = "Select Text";
+    Text[ portuguese_brazilian ] = "Selecionar texto";
     Text[ japanese ] = "γƒ†γ‚­γ‚Ήγƒγ®ιΈζ";
     Text[ korean ] = "ν…μ¤νΈ μ„ νƒ";
     Text[ chinese_simplified ] = "ι€‰ζ‹©ζ–‡ε­—";
@@ -1072,7 +1072,7 @@ ModalDialog DLG_HELP_ADDBOOKMARK
         TEXT[ english_us ] = "Rename Bookmark";
         TEXT[ portuguese ] = "Mudar nome ao marcador";
         TEXT[ russian ] = "Οεπεθμενξβΰςό ηΰκλΰδκσ";
-        TEXT[ greek ] = "Rename Bookmark";
+        TEXT[ greek ] = "Μετονομασία σελιδοδείκτη";
         TEXT[ dutch ] = "Naam bladwijzer wijzigen";
         TEXT[ french ] = "Renommer le marque-page";
         TEXT[ spanish ] = "Cambiar nombre a marcador";
@@ -1098,7 +1098,7 @@ ModalDialog DLG_HELP_ADDBOOKMARK
     TEXT[ english_us ] = "Add to Bookmarks";
     TEXT[ portuguese ] = "Adicionar marcador";
     TEXT[ russian ] = "Δξαΰβθςό ηΰκλΰδκσ";
-    TEXT[ greek ] = "Εισαγωγή σελιδοδείκτη";
+    TEXT[ greek ] = "Προσθήκη στους σελιδοδείκτες";
     TEXT[ dutch ] = "Bladwijzer toevoegen";
     TEXT[ french ] = "Ajouter un marque-page";
     TEXT[ spanish ] = "Aρadir marcador";
@@ -1107,7 +1107,7 @@ ModalDialog DLG_HELP_ADDBOOKMARK
     TEXT[ danish ] = "Tilfψj bogmζrke";
     TEXT[ swedish ] = "Lδgg till bokmδrke";
     TEXT[ polish ] = "Dodaj do zak³adek";
-    TEXT[ portuguese_brazilian ] = "Adicionar ao marcador";
+    TEXT[ portuguese_brazilian ] = "Adicionar marcador";
     TEXT[ japanese ] = "γƒ–γƒƒγ‚―γƒγƒΌγ‚―γ®θΏ½ε ";
     TEXT[ korean ] = "μ±…κ°ν”Όμ— μ¶”κ°€";
     TEXT[ chinese_simplified ] = "ε ε…¥δΉ¦η­Ύ";
@@ -1203,7 +1203,7 @@ Menu MENU_HELP_BOOKMARKS
             Text[ english_us ] = "Delete";
             Text[ portuguese ] = "Eliminar";
             Text[ russian ] = "Σδΰλθςό";
-            Text[ greek ] = "Διαγραφή";
+            Text[ greek ] = "Delete";
             Text[ dutch ] = "Wissen";
             Text[ french ] = "Supprimer";
             Text[ spanish ] = "Borrar";
@@ -1238,7 +1238,7 @@ InfoBox RID_INFO_NOSEARCHRESULTS
     MESSAGE[ english_us ] = "No topics found.";
     MESSAGE[ portuguese ] = "Nγo foram encontrados temas.";
     MESSAGE[ russian ] = "Θρκξμϋι ςεπμθν νε νΰιδεν.";
-    MESSAGE[ greek ] = "No themes found.";
+    MESSAGE[ greek ] = "Δεν βρέθηκαν θέματα";
     MESSAGE[ dutch ] = "Geen onderwerpen gevonden";
     MESSAGE[ french ] = "Aucun rιsultat de recherche.";
     MESSAGE[ spanish ] = "No se han encontrado temas";
@@ -1247,7 +1247,7 @@ InfoBox RID_INFO_NOSEARCHRESULTS
     MESSAGE[ danish ] = "Der blev ikke fundet emner.";
     MESSAGE[ swedish ] = "Sφkningen gav inget resultat.";
     MESSAGE[ polish ] = "Nie znaleziono Ώadnych tematσw.";
-    MESSAGE[ portuguese_brazilian ] = "Nenhum tσpico encotrado.";
+    MESSAGE[ portuguese_brazilian ] = "Nenhum tσpico encontrado";
     MESSAGE[ japanese ] = "γƒ†γƒΌγƒγ―θ¦‹γ¤γ‹γ‚γΎγ›γ‚“γ€‚";
     MESSAGE[ korean ] = "μ λª©μ΄ μ—†μµλ‹λ‹¤.";
     MESSAGE[ chinese_simplified ] = "ζ²΅ζ‰ζ‰Ύε°δΈ»ιΆγ€‚";
@@ -1399,6 +1399,7 @@ Image IMG_HELP_TOOLBOX_HCL_COPY
     ImageBitmap = Bitmap { File = "lch05711.bmp" ; };
     MASKCOLOR_MAGENTA
 };
+
 
 
 
