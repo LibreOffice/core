@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-22 13:08:06 $
+ *  last change: $Author: fs $ $Date: 2001-06-26 09:29:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1037,12 +1037,16 @@ void SAL_CALL ORowSet::updateObject( sal_Int32 columnIndex, const Any& x ) throw
 
     ::osl::MutexGuard aGuard( m_rMutex );
     checkUpdateIterator();
-    Any aOldValue((*(*m_aCurrentRow))[columnIndex].makeAny());
-    m_pCache->updateObject(columnIndex,x);
-    // we have to notify all listeners
-    (*(*m_aCurrentRow))[columnIndex] = x;
-    firePropertyChange(columnIndex-1 ,aOldValue);
-    fireProperty(PROPERTY_ID_ISMODIFIED,sal_True,sal_False);
+
+    if (!::dbtools::implUpdateObject(this, columnIndex, x))
+    {   // there is no other updateXXX call which can handle the value in x
+        Any aOldValue((*(*m_aCurrentRow))[columnIndex].makeAny());
+        m_pCache->updateObject(columnIndex,x);
+        // we have to notify all listeners
+        (*(*m_aCurrentRow))[columnIndex] = x;
+        firePropertyChange(columnIndex-1 ,aOldValue);
+        fireProperty(PROPERTY_ID_ISMODIFIED,sal_True,sal_False);
+    }
 }
 // -------------------------------------------------------------------------
 void SAL_CALL ORowSet::updateNumericObject( sal_Int32 columnIndex, const Any& x, sal_Int32 scale ) throw(SQLException, RuntimeException)
