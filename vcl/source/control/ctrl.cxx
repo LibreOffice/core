@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 16:53:26 $
+ *  last change: $Author: vg $ $Date: 2003-06-04 11:21:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,7 +240,7 @@ Pair ControlLayoutData::GetLineStartEnd( long nLine ) const
     if( nLine >= 0 && nLine < nDisplayLines )
     {
         aPair.A() = m_aLineIndices[nLine];
-        if( nLine+1 < m_aLineIndices.size() )
+        if( nLine+1 < nDisplayLines )
             aPair.B() = m_aLineIndices[nLine+1]-1;
         else
             aPair.B() = m_aDisplayText.Len()-1;
