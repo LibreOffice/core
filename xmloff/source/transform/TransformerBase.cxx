@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TransformerBase.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 21:33:01 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 14:59:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -287,10 +287,8 @@ XMLTransformerBase::XMLTransformerBase( XMLTransformerActionInit *pInit,
     m_pElemActions( new XMLTransformerActions( pInit ) ),
     m_pTokenMap( new XMLTransformerTokenMap( pTKMapInit ) )
 {
-    GetNamespaceMap().Add( GetXMLToken(XML_NP_FO), GetXMLToken(XML_N_FO), XML_NAMESPACE_FO );
     GetNamespaceMap().Add( GetXMLToken(XML_NP_XLINK), GetXMLToken(XML_N_XLINK), XML_NAMESPACE_XLINK );
     GetNamespaceMap().Add( GetXMLToken(XML_NP_DC), GetXMLToken(XML_N_DC), XML_NAMESPACE_DC );
-    GetNamespaceMap().Add( GetXMLToken(XML_NP_SVG), GetXMLToken(XML_N_SVG),  XML_NAMESPACE_SVG );
     GetNamespaceMap().Add( GetXMLToken(XML_NP_MATH), GetXMLToken(XML_N_MATH), XML_NAMESPACE_MATH );
     GetNamespaceMap().Add( GetXMLToken(XML_NP_OOO), GetXMLToken(XML_N_OOO), XML_NAMESPACE_OOO );
     GetNamespaceMap().Add( GetXMLToken(XML_NP_DOM), GetXMLToken(XML_N_DOM), XML_NAMESPACE_DOM );
