@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: ssa $ $Date: 2002-04-18 18:11:00 $
+ *  last change: $Author: pl $ $Date: 2002-04-23 15:59:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2206,6 +2206,14 @@ void Window::ImplCallPaint( const Region* pRegion, USHORT nPaintFlags )
         {
             if ( pRegion )
                 maInvalidateRegion.Union( *pRegion );
+            if( mpWinData && mbTrackVisible )
+                /* #98602# need to repaint all children within the
+               * tracking rectangle, so the following invert
+               * operation takes places without traces of the previous
+               * one.
+               */
+                maInvalidateRegion.Union( *mpWinData->mpTrackRect );
+
             if ( mnPaintFlags & IMPL_PAINT_PAINTALLCHILDS )
                 pChildRegion = new Region( maInvalidateRegion );
             maInvalidateRegion.Intersect( *pWinChildClipRegion );
@@ -2243,8 +2251,6 @@ void Window::ImplCallPaint( const Region* pRegion, USHORT nPaintFlags )
             {
                 if ( mbFocusVisible )
                     ImplInvertFocus( *(mpWinData->mpFocusRect) );
-                if ( mbTrackVisible && (mpWinData->mnTrackFlags & SHOWTRACK_WINDOW) )
-                    InvertTracking( *(mpWinData->mpTrackRect), mpWinData->mnTrackFlags );
             }
             mbInPaint = FALSE;
             mbInitClipRegion = TRUE;
@@ -2267,6 +2273,12 @@ void Window::ImplCallPaint( const Region* pRegion, USHORT nPaintFlags )
             pTempWindow = pTempWindow->mpNext;
         }
     }
+
+    if ( mpWinData && mbTrackVisible && (mpWinData->mnTrackFlags & SHOWTRACK_WINDOW) )
+        /* #98602# need to invert the tracking rect AFTER
+        * the children have painted
+        */
+        InvertTracking( *(mpWinData->mpTrackRect), mpWinData->mnTrackFlags );
 
     if ( pChildRegion )
         delete pChildRegion;
