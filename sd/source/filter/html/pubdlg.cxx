@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pubdlg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 13:07:02 $
+ *  last change: $Author: obo $ $Date: 2004-04-29 16:14:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,9 +119,6 @@
 #endif
 #ifndef _SVX_COLRITEM_HXX
 #include <svx/colritem.hxx>
-#endif
-#ifndef _SVX_ADRITEM_HXX //autogen
-#include <svx/adritem.hxx>
 #endif
 #ifndef _LIST_HXX
 #include <tools/list.hxx>
@@ -247,14 +244,14 @@ SdPublishingDesign::SdPublishingDesign()
     m_aCompression = UniString::CreateFromInt32( nCompression );
     m_aCompression.Append( sal_Unicode('%') );
 
-    SvxAddressItem aAdrItem;
+    SvtUserOptions aUserOptions;
 
     m_nResolution   = PUB_LOWRES_WIDTH;
-    m_aAuthor       = aAdrItem.GetFirstName();
-    if( m_aAuthor.Len() && aAdrItem.GetName().Len() )
+    m_aAuthor       = aUserOptions.GetFirstName();
+    if( m_aAuthor.Len() && aUserOptions.GetLastName().Len() )
         m_aAuthor      += sal_Unicode(' ');
-    m_aAuthor      += aAdrItem.GetName();
-    m_aEMail        = aAdrItem.GetEmail();
+    m_aAuthor      += aUserOptions.GetLastName();
+    m_aEMail        = aUserOptions.GetEmail();
     m_bDownload     = FALSE;
 //-/    m_bCreated      = TRUE;
     m_nButtonThema  = -1;
