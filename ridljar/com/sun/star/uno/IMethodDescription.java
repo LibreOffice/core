@@ -2,9 +2,9 @@
  *
  *  $RCSfile: IMethodDescription.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2001-10-26 11:43:05 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 02:56:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,9 +68,11 @@ import java.lang.reflect.Method;
 /**
  * The <code>IMethodDescription</code> allows to examine a method
  * in detail. It gives a view to java methods from a UNO point.
- * <p>
- * @version     $Revision: 1.2 $ $ $Date: 2001-10-26 11:43:05 $
- * @author      Kay Ramme
+ *
+ * @deprecated This interface does not cover all the features supported by the
+ * corresponding (unpublished) implementation.  But no client code should need
+ * to access this functionality, anyway.
+ *
  * @since       UDK3.0
  */
 public interface IMethodDescription extends IMemberDescription {
