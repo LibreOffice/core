@@ -2,9 +2,9 @@
  *
  *  $RCSfile: subtdlg.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-02 16:54:52 $
+ *  last change: $Author: kz $ $Date: 2001-02-12 09:28:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
         Text[ chinese_traditional ] = "¸s²Õ¤§¶¡´«­¶(~P)";
         Text[ arabic ] = "ÕİÍÉ ÌÏíÏÉ ÚäÏ ÊÛííÑ ÇáãÌãæÚÉ";
         Text[ greek ] = "Íİá óåëßäá ìå êÜèå áëëáãŞ ïìÜäáò";
-        Text[ korean ] = "±×·ì »çÀÌ¿¡ ÆäÀÌÁö ³ª´©±â(~P)";
+        Text[ korean ] = "±×·ìº¯°æ½Ã¿¡¡¡»õ¡¡ÂÊ (~P)";
         Text[ turkish ] = "~Her grup için yeni sayfa başlat";
         Text[ language_user1 ] = " ";
     };
@@ -417,7 +417,7 @@ TabPage RID_SUBTBASE
         Text[ chinese_traditional ] = "­pºâ³W«h(~F)";
         Text[ arabic ] = "ÇáÏÇáÉ";
         Text[ greek ] = "Êáíüíáò õğïëïãéóìïı";
-        Text[ korean ] = "ÇÔ¼ö »ç¿ë(~F)";
+        Text[ korean ] = "°è»ê¡¡±ÔÄ¢(~F)";
         Text[ turkish ] = "K~ullanılacak fonksiyon";
         Text[ language_user1 ] = " ";
     };
@@ -716,11 +716,11 @@ TabPage RID_SUBTBASE
         < "Æò±Õ" ; Default ; > ;
         < "ÃÖ´ë" ; Default ; > ;
         < "ÃÖ¼Ò" ; Default ; > ;
-        < "Á¦Ç°" ; Default ; > ;
-        < "Ä«¿îÆ® (¼ıÀÚ ¸¸)" ; Default ; > ;
-        < "StDev (»ùÇÃ)" ; Default ; > ;
-        < "Ç¥ÁØ ÆíÂ÷(¸ğÁı´Ü)" ; Default ; > ;
-        < "º¯¼ö (»ùÇÃ)" ; Default ; > ;
+        < "°ö" ; Default ; > ;
+        < "°³¼ö (¼ıÀÚ ¸¸)" ; Default ; > ;
+        < "StDev (Ç¥º»)" ; Default ; > ;
+        < "StAbwN (¸ğÁı´Ü)" ; Default ; > ;
+        < "ºĞ»ê (Ç¥º»)" ; Default ; > ;
         < "ºĞ»ê (¸ğÁı´Ü)" ; Default ; > ;
     };
     StringList [ turkish ] =
