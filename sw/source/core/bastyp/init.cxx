@@ -2,9 +2,9 @@
  *
  *  $RCSfile: init.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-27 21:35:29 $
+ *  last change: $Author: jp $ $Date: 2001-04-03 11:14:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -896,14 +896,15 @@ void _InitCore()
     for ( i = 66; i <= 121; ++i )
         SwAttrPool::pVersionMap4[ i-1 ] = i + 9;
 
-    pBreakIt = new SwBreakIt();
-    ::com::sun::star::lang::Locale aLcl( SvxCreateLocale( GetAppLanguage() ));
+    pBreakIt = new SwBreakIt;
+    const ::com::sun::star::lang::Locale& rLcl = pBreakIt->GetLocale(
+                                            (LanguageType)GetAppLanguage() );
     ::com::sun::star::uno::Reference<
             ::com::sun::star::lang::XMultiServiceFactory > xMSF =
                                     ::comphelper::getProcessServiceFactory();
-    pAppCharClass = new CharClass( aLcl );
+    pAppCharClass = new CharClass( rLcl );
 
-    pAppLocaleData = new LocaleDataWrapper( xMSF, aLcl );
+    pAppLocaleData = new LocaleDataWrapper( xMSF, rLcl );
     pCalendarWrapper = new SwCalendarWrapper( xMSF );
 
     _FrmInit();

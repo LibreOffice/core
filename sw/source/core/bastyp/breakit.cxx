@@ -2,9 +2,9 @@
  *
  *  $RCSfile: breakit.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ama $ $Date: 2000-11-24 15:34:35 $
+ *  last change: $Author: jp $ $Date: 2001-04-03 11:14:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,8 +94,9 @@ using namespace ::com::sun::star::i18n;
 SwBreakIt::SwBreakIt()
     : pLocale( NULL ), pForbidden( NULL )
 {
-    _GetLocale( LANGUAGE_NONE );
-    _GetForbidden( LANGUAGE_NONE );
+    LanguageType nLang = (LanguageType)GetAppLanguage();
+    _GetLocale( nLang );
+    _GetForbidden( nLang );
     Reference< XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
     Reference < XInterface > xI = xMSF->createInstance(
         ::rtl::OUString::createFromAscii( "com.sun.star.i18n.BreakIterator" ) );
