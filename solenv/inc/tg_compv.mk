@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_compv.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hjs $ $Date: 2001-10-26 13:17:43 $
+#   last change: $Author: hjs $ $Date: 2001-11-01 19:33:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -117,10 +117,12 @@ COMNAME=sunpro5
 
 compiler_version_error:
     @+echo ++++++++++++++++++++++++++++++++++++
+    @+echo  ERROR!
     @+echo  Could not detect compiler version!
     @+echo  Please extend tg_compv.mk in 
     @+echo  "solenv/inc".
     @+echo ++++++++++++++++++++++++++++++++++++
+    @+exit 255
 
 .ENDIF          # "$(COMNAME)"==""
 
