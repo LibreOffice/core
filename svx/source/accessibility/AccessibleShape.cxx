@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleShape.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: af $ $Date: 2002-07-24 13:23:55 $
+ *  last change: $Author: af $ $Date: 2002-10-23 09:45:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -680,26 +680,6 @@ awt::Size SAL_CALL AccessibleShape::getSize (void)
 
 
 
-
-sal_Bool SAL_CALL AccessibleShape::isShowing (void)
-    throw (uno::RuntimeException)
-{
-    return mxStateSet->contains (AccessibleStateType::SHOWING);
-}
-
-
-
-
-sal_Bool SAL_CALL AccessibleShape::isVisible (void)
-    throw (uno::RuntimeException)
-{
-    return mxStateSet->contains (AccessibleStateType::VISIBLE);
-}
-
-
-
-
-//=====  XAccessibleExtendedComponent  ========================================
 
 sal_Int32 SAL_CALL AccessibleShape::getForeground (void)
     throw (::com::sun::star::uno::RuntimeException)

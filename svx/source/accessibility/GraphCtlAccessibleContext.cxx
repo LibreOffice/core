@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GraphCtlAccessibleContext.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: af $ $Date: 2002-10-17 12:14:48 $
+ *  last change: $Author: af $ $Date: 2002-10-23 09:45:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -332,26 +332,6 @@ awt::Size SAL_CALL SvxGraphCtrlAccessibleContext::getSize() throw( RuntimeExcept
     return awt::Size( aRect.getWidth(), aRect.getHeight() );
 }
 
-//-----------------------------------------------------------------------------
-
-sal_Bool SAL_CALL SvxGraphCtrlAccessibleContext::isShowing() throw( RuntimeException )
-{
-    return sal_True;
-}
-
-//-----------------------------------------------------------------------------
-
-sal_Bool SAL_CALL SvxGraphCtrlAccessibleContext::isVisible() throw( RuntimeException )
-{
-    return sal_True;
-}
-
-//-----------------------------------------------------------------------------
-
-sal_Bool SAL_CALL SvxGraphCtrlAccessibleContext::isFocusTraversable() throw( RuntimeException )
-{
-    return sal_True;
-}
 
 //=====  XAccessibleContext  ==================================================
 
@@ -616,6 +596,28 @@ Any SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleKeyBinding() throw( Run
     // here is no implementation, because here are no KeyBindings for every object
     return Any();
 }
+
+
+
+
+
+sal_Int32 SAL_CALL SvxGraphCtrlAccessibleContext::getForeground (void)
+    throw (::com::sun::star::uno::RuntimeException)
+{
+    UINT32 nColor = Application::GetSettings().GetStyleSettings().GetWindowTextColor().GetColor();
+    return static_cast<sal_Int32>(nColor);
+}
+
+
+
+
+sal_Int32 SAL_CALL SvxGraphCtrlAccessibleContext::getBackground (void)
+    throw (::com::sun::star::uno::RuntimeException)
+{
+    UINT32 nColor = Application::GetSettings().GetStyleSettings().GetWindowColor().GetColor();
+    return static_cast<sal_Int32>(nColor);
+}
+
 
 //=====  XServiceInfo  ========================================================
 

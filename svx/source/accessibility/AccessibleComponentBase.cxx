@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleComponentBase.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: af $ $Date: 2002-08-05 09:13:55 $
+ *  last change: $Author: af $ $Date: 2002-10-23 09:45:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,7 +167,7 @@ awt::Point SAL_CALL AccessibleComponentBase::getLocationOnScreen (void)
 
 
 
-
+/*
 sal_Bool SAL_CALL AccessibleComponentBase::isShowing (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
@@ -191,7 +191,7 @@ sal_Bool SAL_CALL AccessibleComponentBase::isFocusTraversable (void)
 {
     return sal_False;
 }
-
+*/
 
 
 
@@ -259,15 +259,6 @@ sal_Int32 SAL_CALL AccessibleComponentBase::getBackground (void)
         throw (::com::sun::star::uno::RuntimeException)
 {
     return uno::Reference<awt::XFont>();
-}
-
-
-
-
-sal_Bool SAL_CALL AccessibleComponentBase::isEnabled (void)
-    throw (::com::sun::star::uno::RuntimeException)
-{
-    return sal_True;
 }
 
 
