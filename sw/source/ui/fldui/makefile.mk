@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 14:56:12 $
+#   last change: $Author: hr $ $Date: 2004-05-10 16:25:54 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -61,7 +61,7 @@
 #*************************************************************************
 
 PRJ=..$/..$/..
-
+LIBTARGET=no
 PRJNAME=sw
 TARGET=fldui
 
@@ -89,7 +89,7 @@ SRC1FILES =  \
         inpdlg.src
 
 SLOFILES =  \
-        $(SLO)$/changedb.obj \
+            $(SLO)$/changedb.obj \
         $(SLO)$/DropDownFieldDialog.obj \
         $(SLO)$/flddb.obj \
         $(SLO)$/flddinf.obj \
@@ -103,9 +103,19 @@ SLOFILES =  \
         $(SLO)$/fldvar.obj \
         $(SLO)$/javaedit.obj \
         $(SLO)$/inpdlg.obj \
+        $(SLO)$/fldwrap.obj \
         $(SLO)$/xfldui.obj
 
+
 EXCEPTIONSFILES =  \
+        $(SLO)$/xfldui.obj
+
+LIB1TARGET = $(SLB)$/$(TARGET).lib
+
+LIB1OBJFILES =	\
+        $(SLO)$/DropDownFieldDialog.obj \
+        $(SLO)$/fldmgr.obj \
+        $(SLO)$/fldwrap.obj \
         $(SLO)$/xfldui.obj
 
 # --- Tagets -------------------------------------------------------
