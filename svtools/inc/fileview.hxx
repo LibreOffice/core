@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileview.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2003-09-29 15:00:13 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 14:32:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,9 @@
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_H_
 #include <com/sun/star/uno/Sequence.h>
 #endif
+#ifndef _COM_SUN_STAR_UCB_XCONTENT_HPP_
+#include <com/sun/star/ucb/XContent.hpp>
+#endif
 
 #include <vcl/ctrl.hxx>
 #include <vcl/image.hxx>
@@ -121,6 +124,8 @@ public:
     sal_Bool                Initialize( const String& rURL,
                                         const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aContents );
 
+    sal_Bool                Initialize( const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent>& _xContent, const String& rFilter );
+
     sal_Bool                ExecuteFilter( const String& rFilter );
     void                    SetNoSelection();
     void                    ResetCursor();
@@ -173,7 +178,6 @@ enum QueryDeleteResult_Impl
     QUERYDELETE_ALL,
     QUERYDELETE_CANCEL
 };
-
 
 class QueryDeleteDlg_Impl : public ModalDialog
 {
