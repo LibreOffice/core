@@ -1,3 +1,5 @@
+all_fragments+=pocketword
+
 # -----------------------------------------------
 # count = 1
 T4_POCKETWORD = \
@@ -26,6 +28,6 @@ CONTENTHANDLERS_4fcfg_pocketword = $(foreach,i,$(C4_POCKETWORD) contenthandlers$
 # needed to get dependencies inside global makefile work!
 ALL_4fcfg_pocketword = \
     $(TYPES_4fcfg_pocketword) \
-    $(FILTERS_4fcfg_pocketword) \
+    $(foreach,i,$(FILTERS_4fcfg_base) $(MISC)$/$i) \
     $(FRAMELOADERS_4fcfg_pocketword) \
     $(CONTENTHANDLERS_4fcfg_pocketword)

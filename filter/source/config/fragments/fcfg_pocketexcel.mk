@@ -1,3 +1,5 @@
+all_fragments+=pocketexcel
+
 # -----------------------------------------------
 # count = 1
 T4_POCKETEXCEL = \
@@ -26,6 +28,6 @@ CONTENTHANDLERS_4fcfg_pocketexcel = $(foreach,i,$(C4_POCKETEXCEL) contenthandler
 # needed to get dependencies inside global makefile work!
 ALL_4fcfg_pocketexcel = \
     $(TYPES_4fcfg_pocketexcel) \
-    $(FILTERS_4fcfg_pocketexcel) \
+    $(foreach,i,$(FILTERS_4fcfg_base) $(MISC)$/$i) \
     $(FRAMELOADERS_4fcfg_pocketexcel) \
     $(CONTENTHANDLERS_4fcfg_pocketexcel)
