@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: cl $ $Date: 2001-01-12 16:13:38 $
+#   last change: $Author: cl $ $Date: 2001-03-06 16:53:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,29 +73,31 @@ PACKAGE=com$/sun$/star$/drawing
 # ------------------------------------------------------------------------
 
 IDLFILES=\
+    ConnectorProperties.idl\
+    MeasureProperties.idl\
+    FillProperties.idl\
+    LineProperties.idl\
+    ShadowProperties.idl\
+    TextProperties.idl\
+    Defaults.idl\
     BitmapMode.idl\
     CameraGeometry.idl\
     BoundVolume.idl\
     Alignment.idl\
-    AreaShape.idl\
-    AreaShapeDescriptor.idl\
     Arrangement.idl\
     BezierPoint.idl\
     CircleKind.idl\
     ClosedBezierShape.idl\
-    ClosedFreeHandShape.idl\
     color.idl\
     ColorMode.idl\
     ConnectionType.idl\
     ConnectorShape.idl\
-    ConnectorShapeDescriptor.idl\
     ConnectorType.idl\
     ControlShape.idl\
     CoordinateSequence.idl\
     CoordinateSequenceSequence.idl\
     DashStyle.idl\
-    DimensioningShape.idl\
-    DimensioningShapeDescriptor.idl\
+    MeasureShape.idl\
     Direction3D.idl\
     DoubleSequence.idl\
     DoubleSequenceSequence.idl\
@@ -105,14 +107,12 @@ IDLFILES=\
     DrawPages.idl\
     DrawViewMode.idl\
     EllipseShape.idl\
-    EllipseShapeDescriptor.idl\
     FillStyle.idl\
     FlagSequence.idl\
     FlagSequenceSequence.idl\
     GenericDrawPage.idl\
     GluePoint.idl\
     GraphicObjectShape.idl\
-    GraphicObjectShapeDescriptor.idl\
     GroupShape.idl\
     Hatch.idl\
     HatchStyle.idl\
@@ -129,7 +129,6 @@ IDLFILES=\
     LineDash.idl\
     LineEndType.idl\
     LineShape.idl\
-    LineShapeDescriptor.idl\
     LineStyle.idl\
     LineJoint.idl\
     MasterPage.idl\
@@ -141,34 +140,25 @@ IDLFILES=\
     NormalsKind.idl\
     OLE2Shape.idl\
     OpenBezierShape.idl\
-    OpenFreeHandShape.idl\
     PageShape.idl\
     PointSequence.idl\
     PointSequenceSequence.idl\
     PolygonFlags.idl\
     PolygonKind.idl\
-    PolyLinePathShape.idl\
     PolyLineShape.idl\
     PolyPolygonBezierCoords.idl\
     PolyPolygonBezierDescriptor.idl\
     PolyPolygonBezierShape.idl\
-    PolyPolygonBezierShapeDescriptor.idl\
     PolyPolygonDescriptor.idl\
-    PolyPolygonPathShape.idl\
     PolyPolygonShape.idl\
     PolyPolygonShape3D.idl\
-    PolyPolygonShapeDescriptor.idl\
     Position3D.idl\
     ProjectionMode.idl\
     RectanglePoint.idl\
     RectangleShape.idl\
-    RectangleShapeDescriptor.idl\
     RotationDescriptor.idl\
     ShadeMode.idl\
-    ShadowDescriptor.idl\
     Shape.idl\
-    ShapeDescriptor.idl\
-    ShapeGroup.idl\
     Shapes.idl\
     SnapObjectType.idl\
     Text.idl\
@@ -177,7 +167,6 @@ IDLFILES=\
     TextAnimationKind.idl\
     TextFitToSizeType.idl\
     TextShape.idl\
-    TextShapeDescriptor.idl\
     TextureKind.idl\
     TextureKind2.idl\
     TextureMode.idl\

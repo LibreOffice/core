@@ -1,8 +1,8 @@
 /*************************************************************************
  *
- *  $RCSfile: Text.idl,v $
+ *  $RCSfile: Defaults.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.1 $
  *
  *  last change: $Author: cl $ $Date: 2001-03-06 16:53:32 $
  *
@@ -58,37 +58,48 @@
  *
  *
  ************************************************************************/
-#ifndef __com_sun_star_drawing_Text_idl__
-#define __com_sun_star_drawing_Text_idl__
+#ifndef __com_sun_star_drawing_Defaults_idl__
+#define __com_sun_star_drawing_Defaults_idl__
 
-#ifndef __com_sun_star_text_XText_idl__
-#include <com/sun/star/text/XText.idl>
+#ifndef __com_sun_star_drawing_LineProperties_idl__
+#include <com/sun/star/drawing/LineProperties.idl>
+#endif
+
+#ifndef __com_sun_star_drawing_FillProperties_idl__
+#include <com/sun/star/drawing/FillProperties.idl>
 #endif
 
 #ifndef __com_sun_star_drawing_TextProperties_idl__
 #include <com/sun/star/drawing/TextProperties.idl>
 #endif
 
+#ifndef __com_sun_star_drawing_ShadowProperties_idl__
+#include <com/sun/star/drawing/ShadowProperties.idl>
+#endif
+
+#ifndef __com_sun_star_drawing_ConnectorProperties_idl__
+#include <com/sun/star/drawing/ConnectorProperties.idl>
+#endif
+
+#ifndef __com_sun_star_drawing_MeasureProperties_idl__
+#include <com/sun/star/drawing/MeasureProperties.idl>
+#endif
+
 //=============================================================================
 
- module com {  module sun {  module star {  module drawing {
+module com { module sun { module star { module drawing {
 
 //=============================================================================
-
-/** This abstract service specifies the general characteristics of an optional
-    text inside a <type>Shape</type>.
- */
-service Text
+/** describes a specialized shape with a 2D extent that can be filled.
+*/
+service Defaults
 {
-    /** With this interface you can modify the text of this
-                <type>Shape<type>.
-     */
-    interface com::sun::star::text::XText;
-
-    /** The properties in this service describe the style for rendering
-        a shapes text area.
-     */
+    service com::sun::star::drawing::LineProperties;
+    service com::sun::star::drawing::FillProperties;
     service com::sun::star::drawing::TextProperties;
+    service com::sun::star::drawing::ShadowProperties;
+    service com::sun::star::drawing::ConnectorProperties;
+    service com::sun::star::drawing::MeasureProperties;
 };
 
 //=============================================================================

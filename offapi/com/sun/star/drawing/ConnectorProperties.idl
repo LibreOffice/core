@@ -1,8 +1,8 @@
 /*************************************************************************
  *
- *  $RCSfile: Text.idl,v $
+ *  $RCSfile: ConnectorProperties.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.1 $
  *
  *  last change: $Author: cl $ $Date: 2001-03-06 16:53:32 $
  *
@@ -58,16 +58,13 @@
  *
  *
  ************************************************************************/
-#ifndef __com_sun_star_drawing_Text_idl__
-#define __com_sun_star_drawing_Text_idl__
+#ifndef __com_sun_star_drawing_ConnectorProperties_idl__
+#define __com_sun_star_drawing_ConnectorProperties_idl__
 
-#ifndef __com_sun_star_text_XText_idl__
-#include <com/sun/star/text/XText.idl>
+#ifndef __com_sun_star_drawing_ConnectorType_idl__
+#include <com/sun/star/drawing/ConnectorType.idl>
 #endif
 
-#ifndef __com_sun_star_drawing_TextProperties_idl__
-#include <com/sun/star/drawing/TextProperties.idl>
-#endif
 
 //=============================================================================
 
@@ -75,20 +72,40 @@
 
 //=============================================================================
 
-/** This abstract service specifies the general characteristics of an optional
-    text inside a <type>Shape</type>.
+/** This is a set of properties to describe the style for rendering connector.
  */
-service Text
+service ConnectorProperties
 {
-    /** With this interface you can modify the text of this
-                <type>Shape<type>.
-     */
-    interface com::sun::star::text::XText;
+    //-------------------------------------------------------------------------
 
-    /** The properties in this service describe the style for rendering
-        a shapes text area.
+    /** This property contains the kind of the connector.
      */
-    service com::sun::star::drawing::TextProperties;
+    [property] com::sun::star::drawing::ConnectorType EdgeKind;
+
+    //-------------------------------------------------------------------------
+
+    /** This property contains the horizontal distance of node 1.
+     */
+    [property] long EdgeNode1HorzDist;
+
+    //-------------------------------------------------------------------------
+
+    /** This property contains the vertical distance of node 1.
+     */
+    [property] long EdgeNode1VertDist;
+
+    //-------------------------------------------------------------------------
+
+    /** This property contains the horizontal distance of node 2.
+     */
+    [property] long EdgeNode2HorzDist;
+
+    //-------------------------------------------------------------------------
+
+    /** This property contains the vertical distance of node 2.
+     */
+    [property] long EdgeNode2VertDist;
+
 };
 
 //=============================================================================

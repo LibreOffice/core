@@ -1,8 +1,8 @@
 /*************************************************************************
  *
- *  $RCSfile: Shape.idl,v $
+ *  $RCSfile: MeasureProperties.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.1 $
  *
  *  last change: $Author: cl $ $Date: 2001-03-06 16:53:32 $
  *
@@ -58,28 +58,21 @@
  *
  *
  ************************************************************************/
-#ifndef __com_sun_star_drawing_Shape_idl__
-#define __com_sun_star_drawing_Shape_idl__
+#ifndef __com_sun_star_drawing_MeasureProperties_idl__
+#define __com_sun_star_drawing_MeasureProperties_idl__
 
-#ifndef __com_sun_star_document_LinkTarget_idl__
-#include <com/sun/star/document/LinkTarget.idl>
+#ifndef __com_sun_star_drawing_MeasureKind_idl__
+#include <com/sun/star/drawing/MeasureKind.idl>
 #endif
 
-#ifndef __com_sun_star_drawing_XShape_idl__
-#include <com/sun/star/drawing/XShape.idl>
+#ifndef __com_sun_star_drawing_MeasureTextHorzPos_idl__
+#include <com/sun/star/drawing/MeasureTextHorzPos.idl>
 #endif
 
-#ifndef __com_sun_star_lang_XComponent_idl__
-#include <com/sun/star/lang/XComponent.idl>
+#ifndef __com_sun_star_drawing_MeasureTextVertPos_idl__
+#include <com/sun/star/drawing/MeasureTextVertPos.idl>
 #endif
 
-#ifndef __com_sun_star_style_XStyle_idl__
-#include <com/sun/star/style/XStyle.idl>
-#endif
-
-#ifndef __com_sun_star_drawing_HomogenMatrix3_idl__
-#include <com/sun/star/drawing/HomogenMatrix3.idl>
-#endif
 
 //=============================================================================
 
@@ -87,100 +80,97 @@
 
 //=============================================================================
 
-/** This abstract service specifies the general characteristics of all
-    <type>Shape</type>s.@see XShape
-        @see com::sun::star::lang::XComponent
-        @see com::sun::star::text::XText
-        @see ShapeDescriptor
+/** This service describes a <type>MeasureShape</type>.
  */
-service Shape
+service MeasureProperties
 {
     //-------------------------------------------------------------------------
-
-    /** handles all the properties of this instance.
+    /** If this property is <TRUE/>, the measure is drawn below the
+        reference edge instead of above it.
      */
-    interface com::sun::star::beans::XPropertySet;
+    [property] boolean MeasureBelowReferenceEdge;
 
     //-------------------------------------------------------------------------
-
-    /** This gives you the size and position of this <type>Shape</type>
-                and lets you change it. You can use <member>getShapeType</member>
-                to determine what kind of shape this is.
+    /** This is the length of the first help line.
      */
-    interface com::sun::star::drawing::XShape;
+    [property] long MeasureHelpLine1Length;
 
     //-------------------------------------------------------------------------
-
-    /** is used for lifetime control of this <type>Shape</type>.
+    /** This is the length of the second help line.
      */
-    interface com::sun::star::lang::XComponent;
+    [property] long MeasureHelpLine2Length;
 
     //-------------------------------------------------------------------------
-
-    /** The <type>XShapeDescriptor</type> tells you what kind of
-                <type>Shape</type> this instance is.
+    /** This is the distance from the measure line to the start of the
+        help lines.
      */
-    interface com::sun::star::drawing::XShapeDescriptor;
+    [property] long MeasureHelpLineDistance;
 
     //-------------------------------------------------------------------------
-
-    /** is used to query or change the ZOrder of this <type>Shape</type>. */
-    [property] long ZOrder;
+    /** This is the overhang of the two help lines.
+     */
+    [property] long MeasureHelpLineOverhang;
 
     //-------------------------------------------------------------------------
-
-    /** This is the ID of the <type>Layer</type> to which this
-        <type>Shape</type> is attached.
+    /** This enumeration specifies the <type>MeasureKind</type>.
      */
-    [optional, readonly, property] short LayerID;
+    [property] com::sun::star::drawing::MeasureKind MeasureKind;
 
     //-------------------------------------------------------------------------
-
-    /** This is the name of the <type>Layer</type> to which this
-        <type>Shape</type> is attached.
+    /** This is the distance from the reference edge to the measure line.
      */
-    [optional, readonly, property] string LayerName;
+    [property] long MeasureLineDistance;
 
     //-------------------------------------------------------------------------
-
-    /** If this is <FALSE/>, the <type>Shape</type> is not visible
-        on printer outputs.
+    /** This is the overhang of the reference line over the help lines.
      */
-    [optional, property] boolean Printable;
+    [property] long MeasureOverhang;
 
     //-------------------------------------------------------------------------
-
-    /** With this set to <TRUE/>, this <type>Shape</type>
-        can not be moved interactively in the user interface.
+    /** If this is <TRUE/>, the unit of measure is shown in the measure text.
      */
-    [optional, property] boolean MoveProtect;
+    [property] boolean MeasureShowUnit;
 
     //-------------------------------------------------------------------------
-
-    /** This is the name of this <type>Shape</type>.
+    /** If this is <TRUE/>, the angle of the measure is set automatically.
      */
-    [optional, property] string Name;
+    [property] boolean MeasureTextAutoAngle;
 
     //-------------------------------------------------------------------------
-
-    /** With this set to <TRUE/>, this <type>Shape</type> may not be
-        sized interactively in the user interface.
+    /** This is the automatic angle.
      */
-    [optional, property] boolean SizeProtect;
+    [property] long MeasureTextAutoAngleView;
 
     //-------------------------------------------------------------------------
-
-    /** this property lets you get and set a style for this shape.
+    /** This is the fixed angle.
      */
-    [optional, property] com::sun::star::style::XStyle Style;
+    [property] long MeasureTextFixedAngle;
 
     //-------------------------------------------------------------------------
-
-    /** this property lets you get and set the transformation matrix
-        for this shape.
+    /** This is the horizontal position of the measure text.
      */
-    [optional, property] com::sun::star::drawing::HomogenMatrix3 Transformation;
-};
+    [property] com::sun::star::drawing::MeasureTextHorzPos MeasureTextHorizontalPosition;
+
+    //-------------------------------------------------------------------------
+    /** This is the vertical position of the text.
+     */
+    [property] com::sun::star::drawing::MeasureTextVertPos MeasureTextVerticalPosition;
+
+    //-------------------------------------------------------------------------
+    /** If this value is <TRUE/>, the measure has a fixed angle.
+     */
+    [property] boolean MeasureTextIsFixedAngle;
+
+    //-------------------------------------------------------------------------
+    /** If this value is <TRUE/>, the text is rotated 90 degrees.
+     */
+    [property] boolean MeasureTextRotate90;
+
+    //-------------------------------------------------------------------------
+    /** If this value is <TRUE/>, the text is printed upside down.
+     */
+    [property] boolean MeasureTextUpsideDown;
+ };
 
 //=============================================================================
 

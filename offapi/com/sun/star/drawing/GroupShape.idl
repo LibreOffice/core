@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GroupShape.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-16 20:21:55 $
+ *  last change: $Author: cl $ $Date: 2001-03-06 16:53:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,9 +80,9 @@
 
 //=============================================================================
 
-/** This service is for a group of <type>Shape</type>s.@see XShapeGroup
+/** This service is for a group of <type>Shape</type>s.
+        @see XShapeGroup
         @see XShapes
-        @see AreaShape
  */
 service GroupShape
 {
@@ -109,6 +109,9 @@ service GroupShape
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2001/01/16 20:21:55  cl
+    #80654# fixed some false service connections
+
     Revision 1.5  2001/01/16 20:13:39  cl
     #80654# fixed some false service connections
 

@@ -1,8 +1,8 @@
 /*************************************************************************
  *
- *  $RCSfile: Text.idl,v $
+ *  $RCSfile: ShadowProperties.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.1 $
  *
  *  last change: $Author: cl $ $Date: 2001-03-06 16:53:32 $
  *
@@ -58,16 +58,9 @@
  *
  *
  ************************************************************************/
-#ifndef __com_sun_star_drawing_Text_idl__
-#define __com_sun_star_drawing_Text_idl__
+#ifndef __com_sun_star_drawing_ShadowProperties_idl__
+#define __com_sun_star_drawing_ShadowProperties_idl__
 
-#ifndef __com_sun_star_text_XText_idl__
-#include <com/sun/star/text/XText.idl>
-#endif
-
-#ifndef __com_sun_star_drawing_TextProperties_idl__
-#include <com/sun/star/drawing/TextProperties.idl>
-#endif
 
 //=============================================================================
 
@@ -75,20 +68,44 @@
 
 //=============================================================================
 
-/** This abstract service specifies the general characteristics of an optional
-    text inside a <type>Shape</type>.
+/** This is a set of properties to describe the style for rendering a shadow.
  */
-service Text
+service ShadowProperties
 {
-    /** With this interface you can modify the text of this
-                <type>Shape<type>.
-     */
-    interface com::sun::star::text::XText;
+    //-------------------------------------------------------------------------
 
-    /** The properties in this service describe the style for rendering
-        a shapes text area.
+    /** enables/disables the shadow of a <type>Shape</type>.
+        <p>The other shadow properties are only applied if this is
+        set to <TRUE/>.</p>
      */
-    service com::sun::star::drawing::TextProperties;
+    [property] boolean Shadow;
+
+    //-------------------------------------------------------------------------
+
+    /** This is the color of the shadow of this <type>Shape</type>.
+     */
+    [property] long ShadowColor;
+
+    //-------------------------------------------------------------------------
+
+    /** This defines the degree of transparence of the shadow in percent.
+     */
+    [property] short ShadowTransparence;
+
+    //-------------------------------------------------------------------------
+
+    /** This is the horizontal distance of the left edge of the
+        <type>Shape</type> to the shadow.
+     */
+    [property] long ShadowXDistance;
+
+    //-------------------------------------------------------------------------
+
+    /** This is the vertical distance of the top edge of the
+        <type>Shape</type> to the shadow.
+     */
+    [property] long ShadowYDistance;
+
 };
 
 //=============================================================================

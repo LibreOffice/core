@@ -1,8 +1,8 @@
 /*************************************************************************
  *
- *  $RCSfile: Text.idl,v $
+ *  $RCSfile: MeasureShape.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.1 $
  *
  *  last change: $Author: cl $ $Date: 2001-03-06 16:53:32 $
  *
@@ -58,15 +58,35 @@
  *
  *
  ************************************************************************/
-#ifndef __com_sun_star_drawing_Text_idl__
-#define __com_sun_star_drawing_Text_idl__
+#ifndef __com_sun_star_drawing_MeasureShape_idl__
+#define __com_sun_star_drawing_MeasureShape_idl__
 
-#ifndef __com_sun_star_text_XText_idl__
-#include <com/sun/star/text/XText.idl>
+#ifndef __com_sun_star_drawing_Shape_idl__
+#include <com/sun/star/drawing/Shape.idl>
 #endif
 
-#ifndef __com_sun_star_drawing_TextProperties_idl__
-#include <com/sun/star/drawing/TextProperties.idl>
+#ifndef __com_sun_star_drawing_MeasureProperties_idl__
+#include <com/sun/star/drawing/MeasureProperties.idl>
+#endif
+
+#ifndef __com_sun_star_drawing_Text_idl__
+#include <com/sun/star/drawing/Text.idl>
+#endif
+
+#ifndef __com_sun_star_drawing_ShadowProperties_idl__
+#include <com/sun/star/drawing/ShadowProperties.idl>
+#endif
+
+#ifndef __com_sun_star_drawing_LineProperties_idl__
+#include <com/sun/star/drawing/LineProperties.idl>
+#endif
+
+#ifndef __com_sun_star_drawing_RotationDescriptor_idl__
+#include <com/sun/star/drawing/RotationDescriptor.idl>
+#endif
+
+#ifndef __com_sun_star_awt_Point_idl__
+#include <com/sun/star/awt/Point.idl>
 #endif
 
 //=============================================================================
@@ -75,20 +95,29 @@
 
 //=============================================================================
 
-/** This abstract service specifies the general characteristics of an optional
-    text inside a <type>Shape</type>.
+/** This service is for a dimensioning shape.
  */
-service Text
+service MeasureShape
 {
-    /** With this interface you can modify the text of this
-                <type>Shape<type>.
-     */
-    interface com::sun::star::text::XText;
+    service com::sun::star::drawing::Shape;
 
-    /** The properties in this service describe the style for rendering
-        a shapes text area.
-     */
-    service com::sun::star::drawing::TextProperties;
+    service com::sun::star::drawing::MeasureProperties;
+
+    service com::sun::star::drawing::LineProperties;
+
+    service com::sun::star::drawing::Text;
+
+    service com::sun::star::drawing::ShadowProperties;
+
+    service com::sun::star::drawing::RotationDescriptor;
+
+    /** this point is the start of the measured distance */
+    [property] com::sun::star::awt::Point StartPosition;
+
+    //-------------------------------------------------------------------------
+
+    /** this point is the end of the measured distance */
+    [property] com::sun::star::awt::Point EndPosition;
 };
 
 //=============================================================================

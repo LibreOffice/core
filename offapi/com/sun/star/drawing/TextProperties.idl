@@ -1,0 +1,306 @@
+/*************************************************************************
+ *
+ *  $RCSfile: TextProperties.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: cl $ $Date: 2001-03-06 16:53:32 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_drawing_TextProperties_idl__
+#define __com_sun_star_drawing_TextProperties_idl__
+
+#ifndef __com_sun_star_container_XIndexReplace_idl__
+#include <com/sun/star/container/XIndexReplace.idl>
+#endif
+
+#ifndef __com_sun_star_style_CharacterProperties_idl__
+#include <com/sun/star/style/CharacterProperties.idl>
+#endif
+
+#ifndef __com_sun_star_style_ParagraphProperties_idl__
+#include <com/sun/star/style/ParagraphProperties.idl>
+#endif
+
+#ifndef __com_sun_star_drawing_TextFitToSizeType_idl__
+#include <com/sun/star/drawing/TextFitToSizeType.idl>
+#endif
+
+#ifndef __com_sun_star_drawing_TextAdjust_idl__
+#include <com/sun/star/drawing/TextAdjust.idl>
+#endif
+
+#ifndef __com_sun_star_drawing_TextAnimationDirection_idl__
+#include <com/sun/star/drawing/TextAnimationDirection.idl>
+#endif
+
+#ifndef __com_sun_star_drawing_TextAnimationKind_idl__
+#include <com/sun/star/drawing/TextAnimationKind.idl>
+#endif
+
+#ifndef __com_sun_star_drawing_TextVerticalAdjust_idl__
+#include <com/sun/star/drawing/TextVerticalAdjust.idl>
+#endif
+
+#ifndef __com_sun_star_drawing_TextHorizontalAdjust_idl__
+#include <com/sun/star/drawing/TextHorizontalAdjust.idl>
+#endif
+
+#ifndef __com_sun_star_text_WritingMode_idl__
+#include <com/sun/star/text/WritingMode.idl>
+#endif
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module drawing {
+
+//=============================================================================
+
+
+/** This is a set of properties to describe the style for rendering a the
+    text area inside a shape.
+ */
+service TextProperties
+{
+    /** The properties in this service set default formats for text
+        inside the <type>Shape</type>.
+     */
+    service com::sun::star::style::CharacterProperties;
+
+    /** The properties in this service set default formats for text
+        inside the <type>Shape</type>.
+     */
+    service com::sun::star::style::ParagraphProperties;
+
+    //-------------------------------------------------------------------------
+
+    /** If this is <TRUE/>, numbering is ON for the text of
+        this <type>Shape</type>.
+     */
+    [optional, property] boolean IsNumbering;
+
+    //-------------------------------------------------------------------------
+
+    /** describes the numbering levels.
+        <p>The different rules accessible with this
+        <type scope="com::sun::star::container">XIndexReplace</type> interface
+        are sequences of property values as described in the service
+        <type scope="com::sun::star::style">NumberingRule</type>.</p>
+     */
+    [optional, property] com::sun::star::container::XIndexReplace NumberingRules;
+
+    //-------------------------------------------------------------------------
+
+    /** If this value is <TRUE/>, the height of the <type>Shape</type> is
+        automatically expanded/shrunk when text is added to or removed from
+        the <type>Shape</type>.
+     */
+    [property] boolean TextAutoGrowHeight;
+
+    //-------------------------------------------------------------------------
+
+    /** If this value is <TRUE/>, the width of the <type>Shape</type> is
+        automatically expanded/shrunk when text is added to or removed from
+        the <type>Shape</type>.
+     */
+    [property] boolean TextAutoGrowWidth;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: property com::sun::star::drawing::Text::TextContourFrame
+    /** If this value is <TRUE/>, the left edge of every line of text is
+        aligned with the left edge of this <type>Shape</type>.
+     */
+    [property] boolean TextContourFrame;
+
+    //-------------------------------------------------------------------------
+
+    /** With this set to <TRUE/>, the text inside of the <type>Shape</type>
+        is stretched to fit into the <type>Shape</type>.
+     */
+    [property] com::sun::star::drawing::TextFitToSizeType TextFitToSize;
+
+    //-------------------------------------------------------------------------
+
+    /** adjusts the horizontal position of the text inside of
+        the <type>Shape</type>.
+     */
+    [property] com::sun::star::drawing::TextHorizontalAdjust HorizontalAdjust;
+
+    //-------------------------------------------------------------------------
+
+    /** adjusts the vertical position of the text inside of
+        the <type>Shape</type>.
+     */
+    [property] com::sun::star::drawing::TextVerticalAdjust VerticalAdjust;
+
+    //-------------------------------------------------------------------------
+
+    /** This is the distance from the left edge of the <type>Shape</type>
+        to the left edge of the text.
+        <p>This is only useful if <member>Text::TextHorizontalAdjust</member> is
+        <const>BLOCK</const> or <const>STRETCH</const> or if
+        <member>Text::TextFitSize</member> is <TRUE/>.</p>
+     */
+    [property] long TextLeftDistance;
+
+    //-------------------------------------------------------------------------
+
+    /** This is the distance from the right edge of the <type>Shape</type>
+        to the right edge of the text.
+
+        <p>This is only useful if <member>Text::TextHorizontalAdjust</member> is
+        <const>BLOCK</const> or <const>STRETCH</const>
+        or if <member>Text::TextFitSize</member> is <TRUE/>.</p>
+     */
+    [property] long TextRightDistance;
+
+    //-------------------------------------------------------------------------
+
+    /** This is the distance from the upper edge of the <type>Shape</type> to
+        the upper edge of the text.
+
+        <p>This is only useful if <member>Text::TextVerticalAdjust</member> is
+        <const>BLOCK</const> or if <member>Text::TextFitSize</member> is
+        <TRUE/>.</p>
+     */
+    [property] long TextUpperDistance;
+
+    //-------------------------------------------------------------------------
+
+    /** This is the distance from the lower edge of the <type>Shape</type> to the
+        lower edge of the text.
+
+
+
+        <p>This is only useful if <type>Text::TextVerticalAdjust</type> is
+        <const>BLOCK</const> or if <member>Text::TextFitSize</member> is
+        <TRUE/>.</p>
+     */
+    [property] long TextLowerDistance;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR Text::TextMaximumFrameHeight
+    [property] long TextMaximumFrameHeight;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR Text::TextMaximumFrameWidth
+    [property] long TextMaximumFrameWidth;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR Text::TextMinimalFrameHeight
+    [property] long TextMinimumFrameHeight;
+
+    //-------------------------------------------------------------------------
+    // DOCUMENTATION OMITTED FOR Text::TextMinimumFrameWidth
+    [property] long TextMinimumFrameWidth;
+
+    //-------------------------------------------------------------------------
+
+    /** This is the number of pixels the text is moved in each animation step.
+     */
+    [property] short TextAnimationAmount;
+
+    //-------------------------------------------------------------------------
+
+    /** This number defines how many times the text animation is repeated.
+        <p>If this is set to zero, the repeat is endless.</p>
+     */
+    [property] short TextAnimationCount;
+
+    //-------------------------------------------------------------------------
+
+    /** This is the delay in thousandths of a second between each
+        of the animation steps.
+     */
+    [property] short TextAnimationDelay;
+
+    //-------------------------------------------------------------------------
+
+    /** This enumeration defines the direction in which the text moves.
+     */
+    [property] com::sun::star::drawing::TextAnimationDirection TextAnimationDirection;
+
+    //-------------------------------------------------------------------------
+
+    /** This value defines the type of animation.
+     */
+    [property] com::sun::star::drawing::TextAnimationKind TextAnimationKind;
+
+    //-------------------------------------------------------------------------
+
+    /** If this value is <TRUE/>, the text is visible at the start of the
+        animation.
+     */
+    [property] boolean TextAnimationStartInside;
+
+    //-------------------------------------------------------------------------
+
+    /** If this value is <TRUE/>, the text is visible at the end of the
+        animation.
+     */
+    [property] boolean TextAnimationStopInside;
+
+    //-------------------------------------------------------------------------
+
+    /** If this value selects the writing mode for the text.
+     */
+    [property] ::com::sun::star::text::WritingMode TextWritingMode;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

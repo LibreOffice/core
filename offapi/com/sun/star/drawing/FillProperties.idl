@@ -1,0 +1,252 @@
+/*************************************************************************
+ *
+ *  $RCSfile: FillProperties.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: cl $ $Date: 2001-03-06 16:53:32 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_drawing_FillProperties_idl__
+#define __com_sun_star_drawing_FillProperties_idl__
+
+#ifndef __com_sun_star_drawing_FillStyle_idl__
+#include <com/sun/star/drawing/FillStyle.idl>
+#endif
+
+#ifndef __com_sun_star_awt_Gradient_idl__
+#include <com/sun/star/awt/Gradient.idl>
+#endif
+
+#ifndef __com_sun_star_drawing_Hatch_idl__
+#include <com/sun/star/drawing/Hatch.idl>
+#endif
+
+#ifndef __com_sun_star_drawing_BitmapMode_idl__
+#include <com/sun/star/drawing/BitmapMode.idl>
+#endif
+
+#ifndef __com_sun_star_awt_XBitmap_idl__
+#include <com/sun/star/awt/XBitmap.idl>
+#endif
+
+#ifndef __com_sun_star_drawing_RectanglePoint_idl__
+#include <com/sun/star/drawing/RectanglePoint.idl>
+#endif
+
+
+//=============================================================================
+
+module com { module sun { module star { module drawing {
+
+//=============================================================================
+
+/** This is a set of properties to describe the style for rendering an area.
+ */
+service FillProperties
+{
+    //-------------------------------------------------------------------------
+    /** This enumeration selects the style with which the area will be filled.
+    */
+    [property] com::sun::star::drawing::FillStyle FillStyle;
+
+    //-------------------------------------------------------------------------
+    /** If the <type>FillStyle</type> is set to <const>FillStyle::SOLID</const>,
+        this is the color used.
+    */
+    [property] long FillColor;
+
+    //-------------------------------------------------------------------------
+    /** This is the transparence of the filled area.
+
+        <p>This property is only valid if <type>FillStyle</type> is set to
+        <const>FillStyle::SOLID</const>.
+    */
+    [property] short FillTransparence;
+
+    //-------------------------------------------------------------------------
+    /** If a gradient is used for transparency, this is the name of the
+        used transparence gradient style or it is empty. If you set the name
+        of a transparence gradient style contained in the document, this
+        style used.
+    */
+    [property] string FillTransparenceGradientName;
+
+
+    //-------------------------------------------------------------------------
+    /** This describes the transparency of the fill area as a gradient.
+    */
+    [optional, property] com::sun::star::awt::Gradient FillTransparenceGradient;
+
+    //-------------------------------------------------------------------------
+    /** If the <type>FillStyle</type> is set to <const>FillStyle::GRADIENT</const>, this
+        is the name of the used fill gradient style.
+    */
+    [property] string FillGradientName;
+
+    //-------------------------------------------------------------------------
+    /** If the <type>FillStyle</type> is set to <const>FillStyle::GRADIENT</const>, this
+        describes the gradient used.
+    */
+    [optional, property] com::sun::star::awt::Gradient FillGradient;
+
+    //-------------------------------------------------------------------------
+    /** If the <type>FillStyle</type> is set to <const>FillStyle::GRADIENT</const>, this
+        is the name of the used fill hatch style.
+    */
+    [property] string FillHatchName;
+
+    //-------------------------------------------------------------------------
+    /** If the <type>FillStyle</type> is set to <const>FillStyle::HATCH</const>, this
+        describes the hatch used.
+    */
+    [optional, property] com::sun::star::drawing::Hatch FillHatch;
+
+    //-------------------------------------------------------------------------
+    /** If the <type>FillStyle</type> is set to <const>FillStyle::BITMAP</const>, this is
+        the name of the used fill bitmap style.
+    */
+    [property] string FillBitmapName;
+
+    //-------------------------------------------------------------------------
+    /** If the <type>FillStyle</type> is set to <const>FillStyle::BITMAP</const>, this is
+        the bitmap used.
+    */
+    [optional, property] com::sun::star::awt::XBitmap FillBitmap;
+
+    //-------------------------------------------------------------------------
+    /** If the <type>FillStyle</type> is set to <const>FillStyle::BITMAP</const>, this is
+        a URL to the bitmap used.
+    */
+    [optional, property] string FillBitmapURL;
+
+    //-------------------------------------------------------------------------
+    /** This is the horizontal offset where the tile starts.
+
+        <p>It is given in percent in relation to the width of the bitmap.
+    */
+    [property] short FillBitmapOffsetX;
+
+    //-------------------------------------------------------------------------
+    /** This is the vertical offset where the tile starts.
+
+        It is given in percent in relation to the width of the bitmap.
+    */
+    [property] short FillBitmapOffsetY;
+
+    //-------------------------------------------------------------------------
+    /** Every second line of tiles is moved the given percent of the
+        witdh of the bitmap.
+    */
+    [property] short FillBitmapPositionOffsetX;
+
+    //-------------------------------------------------------------------------
+    /** Every second row of tiles is moved the given percent of the
+        width of the bitmap.
+    */
+    [property] short FillBitmapPositionOffsetY;
+
+    //-------------------------------------------------------------------------
+    /** The RectanglePoint specifies the position inside of the bitmap to
+        use as the top left position for rendering.
+    */
+    [property] com::sun::star::drawing::RectanglePoint FillBitmapRectanglePoint;
+
+    //-------------------------------------------------------------------------
+    /** specifies if the size is given in percentage or
+        as an absolute value.
+
+        <p>If this is <TRUE/>, the properties FillBitmapSizeX
+        and  FillBitmapSizeY contain the size of the tile in percent
+        of the size of the original bitmap. If this
+        is <FALSE/>, the size of the tile is specified
+        with 1/100th mm.
+    */
+    [property] boolean FillBitmapLogicalSize;
+
+    //-------------------------------------------------------------------------
+    /** This is the width of the tile for filling.
+
+        <p>Depending on the property FillBitmapLogicalSize, this is
+        either relative or absolute.
+    */
+    [property] long FillBitmapSizeX;
+
+    //-------------------------------------------------------------------------
+    /** This is the height of the tile for filling.
+
+        <p>Depending on the property FillBitmapLogicalSize, this
+        is either relative or absolute.
+    */
+    [property] long FillBitmapSizeY;
+
+    //-------------------------------------------------------------------------
+    /** this enum selects how a area is filled with a single bitmap.
+    */
+    [property] com::sun::star::drawing::BitmapMode FillBitmapMode;
+
+    //-------------------------------------------------------------------------
+    /** if this is <TRUE/>, the transparent background of a
+        hatch filled area ist drawn in the current background color
+    */
+    [property] boolean FillBackground;
+
+    //-------------------------------------------------------------------------
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

@@ -1,8 +1,8 @@
 /*************************************************************************
  *
- *  $RCSfile: Shape.idl,v $
+ *  $RCSfile: LineProperties.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.1 $
  *
  *  last change: $Author: cl $ $Date: 2001-03-06 16:53:32 $
  *
@@ -58,28 +58,25 @@
  *
  *
  ************************************************************************/
-#ifndef __com_sun_star_drawing_Shape_idl__
-#define __com_sun_star_drawing_Shape_idl__
+#ifndef __com_sun_star_drawing_LineProperties_idl__
+#define __com_sun_star_drawing_LineProperties_idl__
 
-#ifndef __com_sun_star_document_LinkTarget_idl__
-#include <com/sun/star/document/LinkTarget.idl>
+#ifndef __com_sun_star_drawing_LineStyle_idl__
+#include <com/sun/star/drawing/LineStyle.idl>
 #endif
 
-#ifndef __com_sun_star_drawing_XShape_idl__
-#include <com/sun/star/drawing/XShape.idl>
+#ifndef __com_sun_star_drawing_LineDash_idl__
+#include <com/sun/star/drawing/LineDash.idl>
 #endif
 
-#ifndef __com_sun_star_lang_XComponent_idl__
-#include <com/sun/star/lang/XComponent.idl>
+#ifndef __com_sun_star_drawing_PolyPolygonBezierCoords_idl__
+#include <com/sun/star/drawing/PolyPolygonBezierCoords.idl>
 #endif
 
-#ifndef __com_sun_star_style_XStyle_idl__
-#include <com/sun/star/style/XStyle.idl>
+#ifndef __com_sun_star_drawing_LineJoint_idl__
+#include <com/sun/star/drawing/LineJoint.idl>
 #endif
 
-#ifndef __com_sun_star_drawing_HomogenMatrix3_idl__
-#include <com/sun/star/drawing/HomogenMatrix3.idl>
-#endif
 
 //=============================================================================
 
@@ -87,99 +84,90 @@
 
 //=============================================================================
 
-/** This abstract service specifies the general characteristics of all
-    <type>Shape</type>s.@see XShape
-        @see com::sun::star::lang::XComponent
-        @see com::sun::star::text::XText
-        @see ShapeDescriptor
+/** This is a set of properties to describe the style for rendering a Line.
+    <p>The properties for line ends and line starts are only supported by
+    shapes with open line ends.
  */
-service Shape
+service LineProperties
 {
-    //-------------------------------------------------------------------------
-
-    /** handles all the properties of this instance.
+    /** This property contains the type of the line.
      */
-    interface com::sun::star::beans::XPropertySet;
+    [property] com::sun::star::drawing::LineStyle LineStyle;
 
     //-------------------------------------------------------------------------
 
-    /** This gives you the size and position of this <type>Shape</type>
-                and lets you change it. You can use <member>getShapeType</member>
-                to determine what kind of shape this is.
+    /** This property contains the dash of the line.
      */
-    interface com::sun::star::drawing::XShape;
+    [property] com::sun::star::drawing::LineDash LineDash;
 
     //-------------------------------------------------------------------------
 
-    /** is used for lifetime control of this <type>Shape</type>.
+    /** This property contains the line color.
      */
-    interface com::sun::star::lang::XComponent;
+    [property] long LineColor;
 
     //-------------------------------------------------------------------------
 
-    /** The <type>XShapeDescriptor</type> tells you what kind of
-                <type>Shape</type> this instance is.
+    /** This property contains the extent of transparency.
      */
-    interface com::sun::star::drawing::XShapeDescriptor;
+    [property] short LineTransparence;
 
     //-------------------------------------------------------------------------
 
-    /** is used to query or change the ZOrder of this <type>Shape</type>. */
-    [property] long ZOrder;
-
-    //-------------------------------------------------------------------------
-
-    /** This is the ID of the <type>Layer</type> to which this
-        <type>Shape</type> is attached.
+    /** This property contains the width of the line in 1/100th mm.
      */
-    [optional, readonly, property] short LayerID;
+    [property] long LineWidth;
 
     //-------------------------------------------------------------------------
 
-    /** This is the name of the <type>Layer</type> to which this
-        <type>Shape</type> is attached.
+    /** This property defines the rendering of joints between thick lines
      */
-    [optional, readonly, property] string LayerName;
+    [property] com::sun::star::drawing::LineJoint LineJoint;
 
     //-------------------------------------------------------------------------
 
-    /** If this is <FALSE/>, the <type>Shape</type> is not visible
-        on printer outputs.
+    /** This property contains the name of the line starts poly polygon bezier.
+        <p>If this string is empty, no line end polygon is rendered.
      */
-    [optional, property] boolean Printable;
+    [optional, property] string LineStartName;
 
     //-------------------------------------------------------------------------
 
-    /** With this set to <TRUE/>, this <type>Shape</type>
-        can not be moved interactively in the user interface.
+    /** This property contains the line start in the form of a poly polygon bezier.
      */
-    [optional, property] boolean MoveProtect;
+    [optional, property] com::sun::star::drawing::PolyPolygonBezierCoords LineStart;
 
     //-------------------------------------------------------------------------
 
-    /** This is the name of this <type>Shape</type>.
+    /** This property contains the line end in the form of a poly polygon bezier.
      */
-    [optional, property] string Name;
+    [optional, property] com::sun::star::drawing::PolyPolygonBezierCoords LineEnd;
 
     //-------------------------------------------------------------------------
 
-    /** With this set to <TRUE/>, this <type>Shape</type> may not be
-        sized interactively in the user interface.
+    /** If this property is <TRUE/>, the line will
+        start from the center of the polygon.
      */
-    [optional, property] boolean SizeProtect;
+    [optional, property] boolean LineStartCenter;
 
     //-------------------------------------------------------------------------
 
-    /** this property lets you get and set a style for this shape.
+    /** This property contains the width of the line start polygon.
      */
-    [optional, property] com::sun::star::style::XStyle Style;
+    [optional, property] long LineStartWidth;
 
     //-------------------------------------------------------------------------
 
-    /** this property lets you get and set the transformation matrix
-        for this shape.
+    /** If this property is <TRUE/>, the line will end
+        in the center of the polygon.
      */
-    [optional, property] com::sun::star::drawing::HomogenMatrix3 Transformation;
+    [optional, property] boolean LineEndCenter;
+
+    //-------------------------------------------------------------------------
+
+    /** This property contains the width of the line end polygon.
+     */
+    [optional, property] long LineEndWidth;
 };
 
 //=============================================================================

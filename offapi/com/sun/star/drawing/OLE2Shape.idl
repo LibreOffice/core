@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OLE2Shape.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-19 14:58:59 $
+ *  last change: $Author: cl $ $Date: 2001-03-06 16:53:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,14 +65,13 @@
 #include <com/sun/star/drawing/XShapeDescriptor.idl>
 #endif
 
-#ifndef __com_sun_star_drawing_XShape_idl__
-#include <com/sun/star/drawing/XShape.idl>
+#ifndef __com_sun_star_drawing_Shape_idl__
+#include <com/sun/star/drawing/Shape.idl>
 #endif
 
-#ifndef __com_sun_star_lang_XComponent_idl__
-#include <com/sun/star/lang/XComponent.idl>
+#ifndef __com_sun_star_frame_XModel_idl__
+#include <com/sun/star/frame/XModel.idl>
 #endif
-
 
 //=============================================================================
 
@@ -83,26 +82,28 @@ module com { module sun { module star { module drawing {
 */
 service OLE2Shape
 {
-    /** The <type>XShapeDescriptor</type> tells you what kind of
-        <type>Shape</type> this instance is.
-    */
-    interface com::sun::star::drawing::XShapeDescriptor;
+    service com::sun::star::drawing::Shape;
 
-    /** This gives you the size and position of this <type>Shape</type> and
-        lets you change it. You can use <member>getShapeType</member> to
-        determine what kind of <type>Shape</type> this is.
-    */
-    interface com::sun::star::drawing::XShape;
-
-    /** This lets a <type>Shape</type> act as a standard component.
-    */
-    interface com::sun::star::lang::XComponent;
+    //-------------------------------------------------------------------------
 
     /** If you get this property you get the CLSID of the OLE2 document stream
         contained in this OLE2 shape. If you set it, an empty OLE2 document stream
         with this CLSID is created within this OLE2 shape.
     */
     [property] string CLSID;
+
+    //-------------------------------------------------------------------------
+
+    /** This is the model for the ole2 inside this shape.
+        <p>This property returns an empty reference if the ole2 is not
+        Office component.
+    */
+    [readonly, property] com::sun::star::frame::XModel Model;
+
+    /** This property returns <TRUE/> for all ole2 that are internal
+        Office components.
+    */
+    [readonly, property] boolean IsInternal;
 };
 
 //=============================================================================

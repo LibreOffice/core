@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ClosedBezierShape.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:42:41 $
+ *  last change: $Author: cl $ $Date: 2001-03-06 16:53:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,20 +61,16 @@
 #ifndef __com_sun_star_drawing_ClosedBezierShape_idl__
 #define __com_sun_star_drawing_ClosedBezierShape_idl__
 
-#ifndef __com_sun_star_drawing_LineShapeDescriptor_idl__
-#include <com/sun/star/drawing/LineShapeDescriptor.idl>
-#endif
-
 #ifndef __com_sun_star_drawing_LineShape_idl__
 #include <com/sun/star/drawing/LineShape.idl>
 #endif
 
-#ifndef __com_sun_star_drawing_AreaShapeDescriptor_idl__
-#include <com/sun/star/drawing/AreaShapeDescriptor.idl>
+#ifndef __com_sun_star_drawing_LineProperties_idl__
+#include <com/sun/star/drawing/LineProperties.idl>
 #endif
 
-#ifndef __com_sun_star_drawing_AreaShape_idl__
-#include <com/sun/star/drawing/AreaShape.idl>
+#ifndef __com_sun_star_drawing_FillProperties_idl__
+#include <com/sun/star/drawing/FillProperties.idl>
 #endif
 
 #ifndef __com_sun_star_drawing_PolyPolygonBezierDescriptor_idl__
@@ -85,8 +81,8 @@
 #include <com/sun/star/drawing/Text.idl>
 #endif
 
-#ifndef __com_sun_star_drawing_ShadowDescriptor_idl__
-#include <com/sun/star/drawing/ShadowDescriptor.idl>
+#ifndef __com_sun_star_drawing_ShadowProperties_idl__
+#include <com/sun/star/drawing/ShadowProperties.idl>
 #endif
 
 #ifndef __com_sun_star_drawing_RotationDescriptor_idl__
@@ -100,53 +96,27 @@
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::drawing::ClosedBezierShape
 /** This service is for a closed bezier shape.
  */
 service ClosedBezierShape
 {
-    // DocMerge: empty anyway
-    service com::sun::star::drawing::LineShapeDescriptor;
+    service com::sun::star::drawing::Shape;
 
-    // DocMerge: empty anyway
-    service com::sun::star::drawing::LineShape;
+    service com::sun::star::drawing::LineProperties;
 
-    // DocMerge: empty anyway
-    service com::sun::star::drawing::AreaShapeDescriptor;
+    service com::sun::star::drawing::FillProperties;
 
-    // DocMerge: empty anyway
-    service com::sun::star::drawing::AreaShape;
-
-    // DocMerge: empty anyway
     service com::sun::star::drawing::PolyPolygonBezierDescriptor;
 
-    // DocMerge: empty anyway
     service com::sun::star::drawing::Text;
 
-    // DocMerge: empty anyway
-    service com::sun::star::drawing::ShadowDescriptor;
+    service com::sun::star::drawing::ShadowProperties;
 
-    // DocMerge: empty anyway
     service com::sun::star::drawing::RotationDescriptor;
-
 };
 
 //=============================================================================
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.1.1.1  2000/09/18 23:35:12  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:52:19  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:42  jsc
-    new
-
-
-=============================================================================*/
 #endif
