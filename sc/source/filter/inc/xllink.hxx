@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xllink.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:49:34 $
+ *  last change: $Author: kz $ $Date: 2005-01-14 12:13:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,47 +68,22 @@
 
 // Constants and Enumerations =================================================
 
+const sal_uInt16 EXC_TAB_EXTERNAL           = 0xFFFE;     /// Special sheet index for external links.
+const sal_uInt16 EXC_TAB_DELETED            = 0xFFFF;     /// Deleted sheet in a 3D reference.
+
+// (0x0016) EXTERNCOUNT -------------------------------------------------------
+
+const sal_uInt16 EXC_ID_EXTERNCOUNT         = 0x0016;
+
 // (0x0017) EXTERNSHEET -------------------------------------------------------
 
 const sal_uInt16 EXC_ID_EXTERNSHEET         = 0x0017;
-const sal_uInt16 EXC_EXTSH_EXTERNAL         = 0xFFFE;     /// Addins, DDE, OLE.
-const sal_uInt16 EXC_EXTSH_DELETED          = 0xFFFF;     /// Deleted 3D reference.
 
-// (0x0018, 0x0218) NAME ------------------------------------------------------
-
-const sal_uInt16 EXC_ID_NAME                = 0x0018;
-const sal_uInt16 EXC_ID34_NAME              = 0x0218;
-
-// flags
-const sal_uInt16 EXC_NAME_HIDDEN            = 0x0001;
-const sal_uInt16 EXC_NAME_FUNC              = 0x0002;
-const sal_uInt16 EXC_NAME_VB                = 0x0004;
-const sal_uInt16 EXC_NAME_PROC              = 0x0008;
-const sal_uInt16 EXC_NAME_CALCEXP           = 0x0010;
-const sal_uInt16 EXC_NAME_BUILTIN           = 0x0020;
-const sal_uInt16 EXC_NAME_FGROUPMASK        = 0x0FC0;
-const sal_uInt16 EXC_NAME_BIG               = 0x1000;
-
-const sal_uInt8 EXC_NAME2_FUNC              = 0x02;     /// BIFF2 function/command flag.
-
-const sal_uInt16 EXC_NAME_GLOBAL            = 0;        /// 0 = Globally defined name.
-
-// codes for built-in names
-const sal_Unicode EXC_BUILTIN_CONSOLIDATEAREA   = '\x00';
-const sal_Unicode EXC_BUILTIN_AUTOOPEN          = '\x01';
-const sal_Unicode EXC_BUILTIN_AUTOCLOSE         = '\x02';
-const sal_Unicode EXC_BUILTIN_EXTRACT           = '\x03';
-const sal_Unicode EXC_BUILTIN_DATABASE          = '\x04';
-const sal_Unicode EXC_BUILTIN_CRITERIA          = '\x05';
-const sal_Unicode EXC_BUILTIN_PRINTAREA         = '\x06';
-const sal_Unicode EXC_BUILTIN_PRINTTITLES       = '\x07';
-const sal_Unicode EXC_BUILTIN_RECORDER          = '\x08';
-const sal_Unicode EXC_BUILTIN_DATAFORM          = '\x09';
-const sal_Unicode EXC_BUILTIN_AUTOACTIVATE      = '\x0A';
-const sal_Unicode EXC_BUILTIN_AUTODEACTIVATE    = '\x0B';
-const sal_Unicode EXC_BUILTIN_SHEETTITLE        = '\x0C';
-const sal_Unicode EXC_BUILTIN_AUTOFILTER        = '\x0D';
-const sal_Unicode EXC_BUILTIN_UNKNOWN           = '\x0E';
+const sal_Unicode EXC_EXTSH_URL             = '\x01';
+const sal_Unicode EXC_EXTSH_OWNTAB          = '\x02';
+const sal_Unicode EXC_EXTSH_TABNAME         = '\x03';
+const sal_Unicode EXC_EXTSH_OWNDOC          = '\x04';
+const sal_Unicode EXC_EXTSH_ADDIN           = '\x3A';
 
 // (0x0023) EXTERNNAME --------------------------------------------------------
 
