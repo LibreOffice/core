@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mt $ $Date: 2001-06-05 16:22:53 $
+ *  last change: $Author: mt $ $Date: 2001-06-22 12:25:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1538,7 +1538,8 @@ void ImpEditView::dragDropEnd( const ::com::sun::star::datatransfer::dnd::DragSo
         else
         {
             // andere EditEngine...
-            DeleteSelected();
+            if ( pEditEngine->pImpEditEngine->ImplHasText() )   // #88630# SC ist removing the content when switching the task
+                DeleteSelected();
         }
     }
 
