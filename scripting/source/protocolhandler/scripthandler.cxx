@@ -2,9 +2,9 @@
 *
 *  $RCSfile: scripthandler.cxx,v $
 *
-*  $Revision: 1.4 $
+*  $Revision: 1.5 $
 *
-*  last change: $Author: npower $ $Date: 2003-02-12 09:41:39 $
+*  last change: $Author: npower $ $Date: 2003-02-12 12:49:42 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -205,8 +205,8 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
     sal_Bool bSuccess = sal_False;
     Any invokeResult;
 
-    OSL_TRACE( "ScriptProtocolHandler::dispatchWithNotification - start \nInput URL %s \n",
-    ::rtl::OUStringToOString( aURL.Complete, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+    OSL_TRACE( "ScriptProtocolHandler::dispatchWithNotification - start \nInput URL %s and %d args\n",
+    ::rtl::OUStringToOString( aURL.Complete, RTL_TEXTENCODING_ASCII_US ).pData->buffer, lArgs.getLength() );
     if ( m_bInitialised )
     {
         try
@@ -220,13 +220,29 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
             Sequence< Any > inArgs( 0 );
             Sequence< Any > outArgs( 0 );
             Sequence< sal_Int16 > outIndex;
+
             if ( lArgs.getLength() > 0 )
             {
-               inArgs.realloc( lArgs.getLength() );
+               int argCount = 0;
                for ( int index = 0; index < lArgs.getLength(); index++ )
                {
-                   OSL_TRACE(" processing arg %d, of type", index, lArgs[ index ].Value.getValueTypeName() );
-                   inArgs[ index ] = lArgs[ index ].Value;
+                   OSL_TRACE(" processing arg %d, name %s of type %s", index,
+                       ::rtl::OUStringToOString(
+                           lArgs[ index ].Name,
+                           RTL_TEXTENCODING_ASCII_US ).pData->buffer,
+                       ::rtl::OUStringToOString(
+                           lArgs[ index ].Value.getValueTypeName(),
+                           RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+                   // Sometimes we get a propertyval with name = "Referer"
+                   // this is not an argument to be passed to script, so
+                   // ignore.
+                   if ( lArgs[ index ].Name.compareToAscii("Referer") != 0  ||
+                        lArgs[ index ].Name.getLength() == 0 )
+                   {
+                       inArgs.realloc( ++argCount );
+                       OSL_TRACE("Adding arg to inArgs");
+                       inArgs[ index ] = lArgs[ index ].Value;
+                   }
                }
             }
             invokeResult = xFunc->invoke( inArgs, outIndex, outArgs );
