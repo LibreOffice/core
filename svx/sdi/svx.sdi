@@ -11510,3 +11510,48 @@ SfxVoidItem OpenHyperlink SID_OPEN_HYPERLINK
         GroupId = GID_EDIT;
 ]
 
+SfxBoolItem CTLFontState SID_CTLFONT_STATE
+[
+        /* flags: */
+        AutoUpdate = FALSE,
+        Cachable = Cachable,
+        FastCall = FALSE,
+        HasCoreId = FALSE,
+        HasDialog = FALSE,
+        ReadOnlyDoc = TRUE,
+        Toggle = FALSE,
+        Container = FALSE,
+        RecordAbsolute = FALSE,
+        RecordPerSet;
+        Synchron;
+
+        /* config: */
+        AccelConfig = FALSE,
+        MenuConfig = FALSE,
+        StatusBarConfig = FALSE,
+        ToolBoxConfig = FALSE,
+        GroupId = GID_APPLICATION;
+]
+
+SfxBoolItem VerticalTextState SID_VERTICALTEXT_STATE
+[
+        /* flags: */
+        AutoUpdate = FALSE,
+        Cachable = Cachable,
+        FastCall = FALSE,
+        HasCoreId = FALSE,
+        HasDialog = FALSE,
+        ReadOnlyDoc = TRUE,
+        Toggle = FALSE,
+        Container = FALSE,
+        RecordAbsolute = FALSE,
+        RecordPerSet;
+        Synchron;
+
+        /* config: */
+        AccelConfig = FALSE,
+        MenuConfig = FALSE,
+        StatusBarConfig = FALSE,
+        ToolBoxConfig = FALSE,
+        GroupId = GID_APPLICATION;
+]
