@@ -2,9 +2,9 @@
  *
  *  $RCSfile: aststructinstance.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 15:09:14 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 09:20:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,5 +97,5 @@ AstStructInstance::AstStructInstance(
     AstScope * scope):
     AstType(
         NT_instantiated_struct, createName(typeTemplate, typeArguments), scope),
-    m_typeTemplate(typeTemplate)
+    m_typeTemplate(typeTemplate), m_typeArguments(*typeArguments)
 {}
