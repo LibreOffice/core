@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tagtest.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: gh $ $Date: 2001-11-28 13:03:52 $
+ *  last change: $Author: gh $ $Date: 2001-12-05 11:12:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -739,38 +739,48 @@ void LingTest::CheckTags( TokenList aReference, TokenList aTestee, ParserMessage
 */
 
     // filter uninteresting Tags
+    Token aMetaTokens = 0;
     i=0;
     while ( i < aReference.Count() )
     {
         Token aToken = aReference.GetObject( i );
         Token aTokenGroup = TAG_GROUP( aToken );
         if ( TAG_GROUP_PROGSWITCH == aTokenGroup
-            || TAG_GROUP_META == aTokenGroup
             || TAG_REFINSERT == aToken
             || TAG_REFSTART == aToken
             || TAG_NAME == aToken
             || TAG_HREF == aToken
             || TAG_AVIS == aToken
-            || TAG_AHID == aToken )
+            || TAG_AHID == aToken
+            || ( TAG_GROUP_META == aTokenGroup && (aMetaTokens & aToken) == aToken ) )
+        {
             i++;
+            if ( TAG_GROUP_META == aTokenGroup )
+                aMetaTokens |= aToken;
+        }
         else
             aReference.Remove( i );
     }
 
+    aMetaTokens = 0;
     i=0;
     while ( i < aTestee.Count() )
     {
         Token aToken = aTestee.GetObject( i );
         Token aTokenGroup = TAG_GROUP( aToken );
         if ( TAG_GROUP_PROGSWITCH == aTokenGroup
-            || TAG_GROUP_META == aTokenGroup
             || TAG_REFINSERT == aToken
             || TAG_REFSTART == aToken
             || TAG_NAME == aToken
             || TAG_HREF == aToken
             || TAG_AVIS == aToken
-            || TAG_AHID == aToken )
+            || TAG_AHID == aToken
+            || ( TAG_GROUP_META == aTokenGroup && (aMetaTokens & aToken) == aToken ) )
+        {
             i++;
+            if ( TAG_GROUP_META == aTokenGroup )
+                aMetaTokens |= aToken;
+        }
         else
             aTestee.Remove( i );
     }

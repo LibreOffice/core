@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tagtest.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: nf $ $Date: 2001-06-26 12:56:08 $
+ *  last change: $Author: gh $ $Date: 2001-12-05 11:12:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,8 @@ typedef USHORT Token;
 #define TAG_KEY                     ( TAG_GROUP_STRUCTURE << TAG_GROUPSHIFT | 0x040 )
 #define TAG_INDEX                   ( TAG_GROUP_STRUCTURE << TAG_GROUPSHIFT | 0x080 )
 
+#define TAG_REFSTART                ( TAG_GROUP_STRUCTURE << TAG_GROUPSHIFT | 0x100 )
+
 #define TAG_GROUP_SYSSWITCH         0x4
 #define TAG_WIN                     ( TAG_GROUP_SYSSWITCH << TAG_GROUPSHIFT | 0x001 )
 #define TAG_UNIX                    ( TAG_GROUP_SYSSWITCH << TAG_GROUPSHIFT | 0x002 )
@@ -130,7 +132,11 @@ typedef USHORT Token;
 #define TAG_PORTALSHORTNAME         ( TAG_GROUP_META << TAG_GROUPSHIFT | 0x100 )
 
 
-#define TAG_GROUP_MULTI             0x7
+#define TAG_GROUP_SINGLE            0x7
+#define TAG_REFINSERT               ( TAG_GROUP_SINGLE << TAG_GROUPSHIFT | 0x001 )
+
+
+#define TAG_GROUP_MULTI             0x8
 #define TAG_END                     ( TAG_GROUP_MULTI << TAG_GROUPSHIFT | 0x100 )
 #define TAG_ELSE                    ( TAG_GROUP_MULTI << TAG_GROUPSHIFT | 0x200 )
 #define TAG_AEND                    ( TAG_GROUP_MULTI << TAG_GROUPSHIFT | 0x400 )
@@ -199,6 +205,7 @@ private:
     USHORT nPos;
     ByteString aSource;
     ByteString aLastToken;
+    static ByteString aLastUnknownToken;
     TokenList aTokenList;
 
     ByteString GetNextTokenString();
