@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DOTransferable.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ka $ $Date: 2002-07-20 10:08:59 $
+ *  last change: $Author: ka $ $Date: 2002-07-20 10:35:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -396,15 +396,18 @@ CDOTransferable::ByteSequence_t SAL_CALL CDOTransferable::getClipboardData( CFor
 
     try
     {
-        clipDataToByteStream( aFormatEtc.getClipformat( ), stgmedium, byteStream );
+        if ( CF_ENHMETAFILE == aFormatEtc.getClipformat() )
+            byteStream = WinENHMFPictToOOMFPict( stgmedium.hEnhMetaFile );
+        else
+        {
+            clipDataToByteStream( aFormatEtc.getClipformat( ), stgmedium, byteStream );
 
-        // format conversion if necessary
-        if ( CF_DIB == aFormatEtc.getClipformat() )
-            byteStream = WinDIBToOOBMP( byteStream );
-        else if ( CF_METAFILEPICT == aFormatEtc.getClipformat() )
-            byteStream = WinMFPictToOOMFPict( byteStream );
-        else if ( CF_ENHMETAFILE == aFormatEtc.getClipformat() )
-            byteStream = WinENHMFPictToOOMFPict( byteStream );
+            // format conversion if necessary
+            if ( CF_DIB == aFormatEtc.getClipformat() )
+                byteStream = WinDIBToOOBMP( byteStream );
+            else if ( CF_METAFILEPICT == aFormatEtc.getClipformat() )
+                byteStream = WinMFPictToOOMFPict( byteStream );
+        }
 
         ReleaseStgMedium( &stgmedium );
     }

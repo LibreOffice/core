@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfer.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: dvo $ $Date: 2002-05-27 12:16:35 $
+ *  last change: $Author: ka $ $Date: 2002-07-20 10:38:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -277,6 +277,36 @@ Any SAL_CALL TransferableHelper::getTransferData( const DataFlavor& rFlavor ) th
                 GetData( aSubstFlavor );
                 bDone = maAny.hasValue();
             }
+            else if( SotExchange::GetFormatDataFlavor( SOT_FORMATSTR_ID_EMF, aSubstFlavor ) &&
+                     TransferableDataHelper::IsEqual( aSubstFlavor, rFlavor ) &&
+                     SotExchange::GetFormatDataFlavor( FORMAT_GDIMETAFILE, aSubstFlavor ) )
+            {
+                GetData( aSubstFlavor );
+
+                if( maAny.hasValue() )
+                {
+                    Sequence< sal_Int8 > aSeq;
+
+                    if( maAny >>= aSeq )
+                    {
+                        SvMemoryStream* pSrcStm = new SvMemoryStream( (char*) aSeq.getConstArray(), aSeq.getLength(), STREAM_WRITE | STREAM_TRUNC );
+                        GDIMetaFile     aMtf;
+
+                        *pSrcStm >> aMtf;
+                        delete pSrcStm;
+
+                        Graphic         aGraphic( aMtf );
+                        SvMemoryStream  aDstStm( 65535, 65535 );
+
+                        if( GraphicConverter::Export( aDstStm, aGraphic, CVT_EMF ) == ERRCODE_NONE )
+                        {
+                            maAny <<= ( aSeq = Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( aDstStm.GetData() ),
+                                                                     aDstStm.Seek( STREAM_SEEK_TO_END ) ) );
+                            bDone = sal_True;
+                        }
+                    }
+                }
+            }
             else if( SotExchange::GetFormatDataFlavor( SOT_FORMATSTR_ID_WMF, aSubstFlavor ) &&
                      TransferableDataHelper::IsEqual( aSubstFlavor, rFlavor ) &&
                      SotExchange::GetFormatDataFlavor( FORMAT_GDIMETAFILE, aSubstFlavor ) )
@@ -540,7 +570,10 @@ void TransferableHelper::AddFormat( const DataFlavor& rFlavor )
         mpFormats->push_back( aFlavorEx );
 
         if( FORMAT_GDIMETAFILE == aFlavorEx.mnSotId )
+        {
+            AddFormat( SOT_FORMATSTR_ID_EMF );
             AddFormat( SOT_FORMATSTR_ID_WMF );
+        }
     }
 }
 
@@ -1180,7 +1213,8 @@ void TransferableDataHelper::FillDataFlavorExVector( const Sequence< DataFlavor 
             rDataFlavorExVector.push_back( aFlavorEx );
 
             // add additional formats for special mime types
-            if( SOT_FORMATSTR_ID_WMF == aFlavorEx.mnSotId )
+            if( SOT_FORMATSTR_ID_WMF == aFlavorEx.mnSotId ||
+                SOT_FORMATSTR_ID_EMF == aFlavorEx.mnSotId )
             {
                 if( SotExchange::GetFormatDataFlavor( SOT_FORMAT_GDIMETAFILE, aFlavorEx ) )
                 {
@@ -1475,29 +1509,40 @@ sal_Bool TransferableDataHelper::GetGDIMetaFile( SotFormatStringId nFormat, GDIM
 sal_Bool TransferableDataHelper::GetGDIMetaFile( const DataFlavor& rFlavor, GDIMetaFile& rMtf )
 {
     SotStorageStreamRef xStm;
-    sal_Bool            bRet = GetSotStorageStream( rFlavor, xStm );
+    DataFlavor          aSubstFlavor;
+    sal_Bool            bRet = sal_False;
 
-    if( bRet )
+    if( GetSotStorageStream( rFlavor, xStm ) )
     {
         *xStm >> rMtf;
         bRet = ( xStm->GetError() == ERRCODE_NONE );
     }
 
-    if( !bRet )
+    if( !bRet &&
+        HasFormat( SOT_FORMATSTR_ID_EMF ) &&
+        SotExchange::GetFormatDataFlavor( SOT_FORMATSTR_ID_EMF, aSubstFlavor ) &&
+        GetSotStorageStream( aSubstFlavor, xStm ) )
     {
-        DataFlavor aSubstFlavor;
+        Graphic aGraphic;
 
-        if( HasFormat( SOT_FORMATSTR_ID_WMF ) &&
-            SotExchange::GetFormatDataFlavor( SOT_FORMATSTR_ID_WMF, aSubstFlavor ) &&
-            GetSotStorageStream( aSubstFlavor, xStm ) )
+        if( GraphicConverter::Import( *xStm, aGraphic ) == ERRCODE_NONE )
         {
-            Graphic aGraphic;
+            rMtf = aGraphic.GetGDIMetaFile();
+            bRet = TRUE;
+        }
+    }
 
-            if( GraphicConverter::Import( *xStm, aGraphic ) == ERRCODE_NONE )
-            {
-                rMtf = aGraphic.GetGDIMetaFile();
-                bRet = TRUE;
-            }
+    if( !bRet &&
+        HasFormat( SOT_FORMATSTR_ID_WMF ) &&
+        SotExchange::GetFormatDataFlavor( SOT_FORMATSTR_ID_WMF, aSubstFlavor ) &&
+        GetSotStorageStream( aSubstFlavor, xStm ) )
+    {
+        Graphic aGraphic;
+
+        if( GraphicConverter::Import( *xStm, aGraphic ) == ERRCODE_NONE )
+        {
+            rMtf = aGraphic.GetGDIMetaFile();
+            bRet = TRUE;
         }
     }
 

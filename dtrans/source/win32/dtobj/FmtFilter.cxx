@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FmtFilter.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ka $ $Date: 2002-07-20 10:08:59 $
+ *  last change: $Author: ka $ $Date: 2002-07-20 10:35:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,9 +171,21 @@ Sequence< sal_Int8 > SAL_CALL WinMFPictToOOMFPict( Sequence< sal_Int8 >& aMetaFi
 // convert a windows enhanced metafile to a openoffice metafile
 //-------------------------------------------------------------
 
-Sequence< sal_Int8 > SAL_CALL WinENHMFPictToOOMFPict( Sequence< sal_Int8 >& aEnhMetaFile )
+Sequence< sal_Int8 > SAL_CALL WinENHMFPictToOOMFPict( HENHMETAFILE hEnhMetaFile )
 {
-    return aEnhMetaFile;
+    Sequence< sal_Int8 >    aRet;
+    UINT                    nSize = 0;
+
+    if( hEnhMetaFile &&
+        ( ( nSize = GetEnhMetaFileBits( hEnhMetaFile, 0, NULL ) ) != 0 ) )
+    {
+        aRet.realloc( nSize );
+
+        if( GetEnhMetaFileBits( hEnhMetaFile, nSize, (sal_uChar*) aRet.getArray() ) != nSize )
+            aRet.realloc( 0 );
+    }
+
+    return aRet;
 }
 
 //------------------------------------------------------------------------
