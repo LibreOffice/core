@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.hxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 11:54:23 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 21:07:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,6 +156,8 @@ protected:
     sal_Bool writeFileIsTemp();
     ::com::sun::star::uno::Reference < ::com::sun::star::io::XActiveDataStreamer > openOriginalForOutput();
     void WriteMimetypeMagicFile( ZipOutputStream& aZipOut );
+    void DisconnectFromTargetAndThrowException_Impl(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xTempStream );
 
 public:
     ZipPackage (const ::com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > &xNewFactory);
