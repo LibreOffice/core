@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-24 11:17:09 $
+ *  last change: $Author: mtg $ $Date: 2000-11-24 14:03:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -314,7 +314,12 @@ Any SAL_CALL ZipPackage::getByHierarchicalName( const OUString& aName )
     sal_Int32 nOldIndex =0,nIndex = 0;
     Any aAny;
     Reference < XNameContainer > xCurrent  = Reference < XNameContainer > (pRootFolder);
-    if (aName.lastIndexOf('/') == aName.getLength()-1)
+
+    if (aName == OUString::createFromAscii("/"))
+    {
+        aAny <<= Reference < XUnoTunnel > (pRootFolder);
+    }
+    else if (aName.lastIndexOf('/') == aName.getLength()-1)
     {
         while ((nIndex = aName.indexOf('/', nOldIndex)) != -1)
         {
