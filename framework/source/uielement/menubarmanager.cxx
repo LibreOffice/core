@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menubarmanager.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 21:03:14 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 14:12:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,11 +230,12 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::ui;
 
-static const char ITEM_DESCRIPTOR_COMMANDURL[]  = "CommandURL";
-static const char ITEM_DESCRIPTOR_HELPURL[]     = "HelpURL";
-static const char ITEM_DESCRIPTOR_CONTAINER[]   = "ItemDescriptorContainer";
-static const char ITEM_DESCRIPTOR_LABEL[]       = "Label";
-static const char ITEM_DESCRIPTOR_TYPE[]        = "Type";
+static const char ITEM_DESCRIPTOR_COMMANDURL[]        = "CommandURL";
+static const char ITEM_DESCRIPTOR_HELPURL[]           = "HelpURL";
+static const char ITEM_DESCRIPTOR_CONTAINER[]         = "ItemDescriptorContainer";
+static const char ITEM_DESCRIPTOR_LABEL[]             = "Label";
+static const char ITEM_DESCRIPTOR_TYPE[]              = "Type";
+static const char ITEM_DESCRIPTOR_MODULEIDENTIFIER[]  = "ModuleIdentifier";
 
 struct SystemMenuData
 {
@@ -301,7 +302,9 @@ static sal_Int16 getImageTypeFromBools( sal_Bool bBig, sal_Bool bHighContrast )
 // #110897#
 MenuBarManager::MenuBarManager(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
-    Reference< XFrame >& rFrame, Menu* pMenu, sal_Bool bDelete, sal_Bool bDeleteChildren )
+    Reference< XFrame >& rFrame,
+    const rtl::OUString& rModuleIdentifier,
+    Menu* pMenu, sal_Bool bDelete, sal_Bool bDeleteChildren )
 :   // #110897#
     mxServiceFactory(xServiceFactory),
     ThreadHelpBase( &Application::GetSolarMutex() ), OWeakObject()
@@ -314,7 +317,7 @@ MenuBarManager::MenuBarManager(
     m_xPopupMenuControllerRegistration = Reference< ::com::sun::star::frame::XUIControllerRegistration >(
         getServiceFactory()->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.PopupMenuControllerFactory" ))),
         UNO_QUERY );
-    FillMenuManager( pMenu, rFrame, bDelete, bDeleteChildren );
+    FillMenuManager( pMenu, rFrame, rModuleIdentifier, bDelete, bDeleteChildren );
 }
 
 // #110897#
@@ -339,6 +342,7 @@ MenuBarManager::MenuBarManager(
     m_bInitialized      = sal_False;
     m_bIsBookmarkMenu   = sal_True;
 
+    rtl::OUString aModuleIdentifier;
     m_xPopupMenuControllerRegistration = Reference< ::com::sun::star::frame::XUIControllerRegistration >(
         getServiceFactory()->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.PopupMenuControllerFactory" ))),
         UNO_QUERY );
@@ -365,7 +369,7 @@ MenuBarManager::MenuBarManager(
         if ( pPopupMenu )
         {
             // #110897# MenuBarManager* pSubMenuManager = new MenuBarManager( rFrame, pPopupMenu, bDeleteChildren, bDeleteChildren );
-            MenuBarManager* pSubMenuManager = new MenuBarManager( getServiceFactory(), rFrame, pPopupMenu, bDeleteChildren, bDeleteChildren );
+            MenuBarManager* pSubMenuManager = new MenuBarManager( getServiceFactory(), rFrame, aModuleIdentifier, pPopupMenu, bDeleteChildren, bDeleteChildren );
 
             Reference< XStatusListener > xSubMenuManager( static_cast< OWeakObject *>( pSubMenuManager ), UNO_QUERY );
 
@@ -425,6 +429,7 @@ MenuBarManager::MenuBarManager(
     m_bInitialized      = sal_False;
     m_bIsBookmarkMenu   = sal_True;
 
+    rtl::OUString aModuleIdentifier;
     m_xPopupMenuControllerRegistration = Reference< ::com::sun::star::frame::XUIControllerRegistration >(
         getServiceFactory()->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.PopupMenuControllerFactory" ))),
         UNO_QUERY );
@@ -451,7 +456,7 @@ MenuBarManager::MenuBarManager(
         if ( pPopupMenu )
         {
             // #110897# MenuBarManager* pSubMenuManager = new MenuBarManager( rFrame, pPopupMenu, sal_False, sal_False );
-            MenuBarManager* pSubMenuManager = new MenuBarManager( getServiceFactory(), rFrame, pPopupMenu, sal_False, sal_False );
+            MenuBarManager* pSubMenuManager = new MenuBarManager( getServiceFactory(), rFrame, aModuleIdentifier, pPopupMenu, sal_False, sal_False );
 
             Reference< XStatusListener > xSubMenuManager( static_cast< OWeakObject *>( pSubMenuManager ), UNO_QUERY );
 
@@ -1445,7 +1450,7 @@ String MenuBarManager::RetrieveLabelFromCommand( const String& aCmdURL )
     return aLabel;
 }
 
-void MenuBarManager::FillMenuManager( Menu* pMenu, Reference< XFrame >& rFrame, sal_Bool bDelete, sal_Bool bDeleteChildren )
+void MenuBarManager::FillMenuManager( Menu* pMenu, Reference< XFrame >& rFrame, const rtl::OUString& rModuleIdentifier, sal_Bool bDelete, sal_Bool bDeleteChildren )
 {
     m_xFrame            = rFrame;
     m_bActive           = sal_False;
@@ -1491,6 +1496,7 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, Reference< XFrame >& rFrame, 
         framework::AddonMenuManager::MergeAddonHelpMenu( rFrame, (MenuBar *)pMenu );
     }
 
+    String aEmpty;
     int nItemCount = pMenu->GetItemCount();
     for ( int i = 0; i < nItemCount; i++ )
     {
@@ -1510,11 +1516,26 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, Reference< XFrame >& rFrame, 
                 pMenu->SetItemText( nItemId, RetrieveLabelFromCommand( aItemCommand ));
         }
 
+        // Set module identifier when provided from outside
+        if ( rModuleIdentifier.getLength() > 0 )
+        {
+            m_aModuleIdentifier = rModuleIdentifier;
+            m_bModuleIdentified = sal_True;
+        }
+
         Reference< XDispatch > xDispatch;
         Reference< XStatusListener > xStatusListener;
         PopupMenu* pPopupMenu = pMenu->GetPopupMenu( nItemId );
         if ( pPopupMenu )
         {
+            // Retrieve module identifier from Help Command entry
+            rtl::OUString aModuleIdentifier( rModuleIdentifier );
+            if ( pMenu->GetHelpCommand( nItemId ).Len() > 0 )
+            {
+                aModuleIdentifier = pMenu->GetHelpCommand( nItemId );
+                pMenu->SetHelpCommand( nItemId, aEmpty );
+            }
+
             if ( m_xPopupMenuControllerRegistration.is() &&
                  m_xPopupMenuControllerRegistration->hasController( aItemCommand, rtl::OUString() ) &&
                  pPopupMenu->GetItemCount() == 0 )
@@ -1532,7 +1553,7 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, Reference< XFrame >& rFrame, 
                 delete pPopupMenu;
             }
             else if (( aItemCommand.getLength() > nAddonsURLPrefixLength ) &&
-                ( aItemCommand.indexOf( ADDONSPOPUPMENU_URL_PREFIX ) == 0 ))
+                     ( aItemCommand.indexOf( ADDONSPOPUPMENU_URL_PREFIX ) == 0 ))
             {
                 // A special addon popup menu, must be created with a different ctor
                 // #110897# MenuBarManager* pSubMenuManager = new MenuBarManager( rFrame, (AddonPopupMenu *)pPopupMenu, bDeleteChildren, bDeleteChildren );
@@ -1554,7 +1575,7 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, Reference< XFrame >& rFrame, 
             else
             {
                 // #110897# MenuBarManager* pSubMenuManager = new MenuBarManager( rFrame, pPopupMenu, bDeleteChildren, bDeleteChildren );
-                MenuBarManager* pSubMenuManager = new MenuBarManager( getServiceFactory(), rFrame, pPopupMenu, bDeleteChildren, bDeleteChildren );
+                MenuBarManager* pSubMenuManager = new MenuBarManager( getServiceFactory(), rFrame, aModuleIdentifier, pPopupMenu, bDeleteChildren, bDeleteChildren );
                 Reference< XStatusListener > xSubMenuManager( static_cast< OWeakObject *>( pSubMenuManager ), UNO_QUERY );
                 rFrame->addFrameActionListener( Reference< XFrameActionListener >( xSubMenuManager, UNO_QUERY ));
 
@@ -1573,8 +1594,8 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, Reference< XFrame >& rFrame, 
 
                 // Create addon popup menu if there exist elements and this is the tools popup menu
                 if (( nItemId == SID_ADDONLIST ||
-                    aItemCommand == aSlotSpecialToolsMenu ||
-                                        aItemCommand == aCmdToolsMenu ) &&
+                      aItemCommand == aSlotSpecialToolsMenu ||
+                      aItemCommand == aCmdToolsMenu ) &&
                     AddonMenuManager::HasAddonMenuElements() )
                 {
                     USHORT      nCount   = 0;
@@ -1746,11 +1767,21 @@ void MenuBarManager::RetrieveShortcuts( std::vector< MenuItemHandler* >& aMenuSh
                 Reference< XModuleUIConfigurationManagerSupplier > xModuleCfgMgrSupplier( getServiceFactory()->createInstance(
                                                                                             SERVICENAME_MODULEUICONFIGURATIONMANAGERSUPPLIER ),
                                                                                         UNO_QUERY );
-                Reference< XUIConfigurationManager > xUICfgMgr = xModuleCfgMgrSupplier->getUIConfigurationManager( m_aModuleIdentifier );
-                if ( xUICfgMgr.is() )
+                try
                 {
-                    xModuleAccelCfg = Reference< XAcceleratorConfiguration >( xUICfgMgr->getShortCutManager(), UNO_QUERY );
-                    m_xModuleAcceleratorManager = xModuleAccelCfg;
+                    Reference< XUIConfigurationManager > xUICfgMgr = xModuleCfgMgrSupplier->getUIConfigurationManager( m_aModuleIdentifier );
+                    if ( xUICfgMgr.is() )
+                    {
+                        xModuleAccelCfg = Reference< XAcceleratorConfiguration >( xUICfgMgr->getShortCutManager(), UNO_QUERY );
+                        m_xModuleAcceleratorManager = xModuleAccelCfg;
+                    }
+                }
+                catch ( RuntimeException& )
+                {
+                    throw;
+                }
+                catch ( Exception& )
+                {
                 }
             }
 
@@ -1829,7 +1860,7 @@ void MenuBarManager::RetrieveImageManagers()
     }
 }
 
-void MenuBarManager::FillMenu( USHORT& nId, Menu* pMenu, const Reference< XIndexAccess >& rItemContainer )
+void MenuBarManager::FillMenu( USHORT& nId, Menu* pMenu, const rtl::OUString& rModuleIdentifier, const Reference< XIndexAccess >& rItemContainer )
 {
     // Fill menu bar with container contents
     for ( sal_Int32 n = 0; n < rItemContainer->getCount(); n++ )
@@ -1838,6 +1869,7 @@ void MenuBarManager::FillMenu( USHORT& nId, Menu* pMenu, const Reference< XIndex
         rtl::OUString               aCommandURL;
         rtl::OUString               aLabel;
         rtl::OUString               aHelpURL;
+        rtl::OUString               aModuleIdentifier( rModuleIdentifier );
         sal_uInt16                  nType;
         Reference< XIndexAccess >   xIndexContainer;
 
@@ -1848,25 +1880,17 @@ void MenuBarManager::FillMenu( USHORT& nId, Menu* pMenu, const Reference< XIndex
                 for ( int i = 0; i < aProp.getLength(); i++ )
                 {
                     if ( aProp[i].Name.equalsAscii( ITEM_DESCRIPTOR_COMMANDURL ))
-                    {
                         aProp[i].Value >>= aCommandURL;
-                    }
                     else if ( aProp[i].Name.equalsAscii( ITEM_DESCRIPTOR_HELPURL ))
-                    {
                         aProp[i].Value >>= aHelpURL;
-                    }
                     else if ( aProp[i].Name.equalsAscii( ITEM_DESCRIPTOR_CONTAINER ))
-                    {
                         aProp[i].Value >>= xIndexContainer;
-                    }
                     else if ( aProp[i].Name.equalsAscii( ITEM_DESCRIPTOR_LABEL ))
-                    {
                         aProp[i].Value >>= aLabel;
-                    }
                     else if ( aProp[i].Name.equalsAscii( ITEM_DESCRIPTOR_TYPE ))
-                    {
                         aProp[i].Value >>= nType;
-                    }
+                    else if ( aProp[i].Name.equalsAscii( ITEM_DESCRIPTOR_MODULEIDENTIFIER ))
+                        aProp[i].Value >>= aModuleIdentifier;
                 }
 
                 if ( nType == ::com::sun::star::ui::ItemType::DEFAULT )
@@ -1883,8 +1907,12 @@ void MenuBarManager::FillMenu( USHORT& nId, Menu* pMenu, const Reference< XIndex
                         PopupMenu* pNewPopupMenu = new PopupMenu;
                         pMenu->SetPopupMenu( nId, pNewPopupMenu );
 
+                        // Use help command to transport module identifier
+                        if ( aModuleIdentifier.getLength() > 0 )
+                            pMenu->SetHelpCommand( nId, aModuleIdentifier );
+
                         ++nId;
-                        FillMenu( nId, pNewPopupMenu, xIndexContainer );
+                        FillMenu( nId, pNewPopupMenu, aModuleIdentifier, xIndexContainer );
                     }
                     else
                         ++nId;
@@ -1929,13 +1957,14 @@ void MenuBarManager::SetItemContainer( const Reference< XIndexAccess >& rItemCon
         // Remove top-level parts
         m_pVCLMenu->Clear();
 
-        USHORT   nId = 1;
+        USHORT          nId = 1;
+        rtl::OUString   aModuleIdentifier;
 
         // Fill menu bar with container contents
-        FillMenu( nId, (Menu *)m_pVCLMenu, rItemContainer );
+        FillMenu( nId, (Menu *)m_pVCLMenu, aModuleIdentifier, rItemContainer );
 
         // Refill menu manager again
-        FillMenuManager( m_pVCLMenu, xFrame, sal_False, sal_True );
+        FillMenuManager( m_pVCLMenu, xFrame, aModuleIdentifier, sal_False, sal_True );
 
         // add itself as frame action listener
         m_xFrame->addFrameActionListener( Reference< XFrameActionListener >( static_cast< OWeakObject* >( this ), UNO_QUERY ));
