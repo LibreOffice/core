@@ -2,9 +2,9 @@
  *
  *  $RCSfile: measure.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-08 23:08:19 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 23:00:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,7 @@ TabPage RID_SVXPAGE_MEASURE
         Text[ french ] = "Ligne";
         Text[ spanish ] = "Línea";
         Text[ finnish ] = "Line";
-        Text[ italian ] = "Line";
+        Text[ italian ] = "Linea";
         Text[ danish ] = "Line";
         Text[ swedish ] = "Linje";
         Text[ polish ] = "Lina";
@@ -337,7 +337,7 @@ TabPage RID_SVXPAGE_MEASURE
         TabStop = TRUE ;
         Text = "Maßlinie u~nterhalb des Objekts" ;
         Text [ ENGLISH ] = "Measure ~below reference edge" ;
-        Text[ english_us ] = "~Below reference edge";
+        Text[ english_us ] = "Measure ~below object";
         Text[ portuguese ] = "Mostrar ~abaixo";
         Text[ russian ] = "Ëèíèÿ ğàçìåğà ïîä îáúåêòîì";
         Text[ greek ] = "ÅìöÜíéóç êÜôù áğü";
@@ -345,7 +345,7 @@ TabPage RID_SVXPAGE_MEASURE
         Text[ french ] = "Afficher ~en dessous";
         Text[ spanish ] = "Línea de tamaño ~debajo del objeto";
         Text[ finnish ] = "~Viitereunan alapuolella";
-        Text[ italian ] = "Mostra in basso";
+        Text[ italian ] = "Linea di quotatura sotto l'oggetto";
         Text[ danish ] = "Vis nedenfor";
         Text[ swedish ] = "Måttlinje ~nedanför objekt";
         Text[ polish ] = "Linia wymiarowa pod obiektem";
@@ -377,7 +377,7 @@ TabPage RID_SVXPAGE_MEASURE
         Text[ french ] = "Étiquette";
         Text[ spanish ] = "Etiqueta";
         Text[ finnish ] = "Legend";
-        Text[ italian ] = "Legend";
+        Text[ italian ] = "Dicitura";
         Text[ danish ] = "Legend";
         Text[ swedish ] = "Etikett";
         Text[ polish ] = "Etykieta";
@@ -529,7 +529,7 @@ TabPage RID_SVXPAGE_MEASURE
         TabStop = TRUE ;
         Text = "Beschriftung ~parallel zur Hilfslinie" ;
         Text [ ENGLISH ] = "legend ~parallel to help line" ;
-        Text[ english_us ] = "~Parallel";
+        Text[ english_us ] = "Legend ~parallel to line";
         Text[ portuguese ] = "Paralelamente";
         Text[ russian ] = "Ïîäïèñü ïàğàëëåëüíî äîï. ëèíèè";
         Text[ greek ] = "ĞáñÜëëçëç ğñïâïëŞ";
@@ -537,7 +537,7 @@ TabPage RID_SVXPAGE_MEASURE
         Text[ french ] = "Affichage ~parallèle";
         Text[ spanish ] = "Etiqueta paralela a líneas auxiliares";
         Text[ finnish ] = "~Samansuuntainen";
-        Text[ italian ] = "Mostra ~parallelamente";
+        Text[ italian ] = "Legenda ~parallela alla griglia";
         Text[ danish ] = "Vis parallelt";
         Text[ swedish ] = "Etikett ~parallell med hjälplinje";
         Text[ polish ] = "Ustaw etykietê równolegle do linii pomocniczej";
@@ -598,6 +598,7 @@ TabPage RID_SVXPAGE_MEASURE
     Text[ finnish ] = "Mitoitus";
 };
  // ********************************************************************** EOF
+
 
 
 
