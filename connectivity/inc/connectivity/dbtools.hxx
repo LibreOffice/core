@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtools.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-26 10:09:30 $
+ *  last change: $Author: fs $ $Date: 2001-08-06 14:46:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,18 +146,38 @@ namespace dbtools
 //=========================================================================
 
     /** calculates the connection the given RowSet works - or should work - with.
-        If the set has an active connection (ActiveConnection property), this one is returned.
+        <p>If the set has an active connection (ActiveConnection property), this one is returned.
         Else the parent hierarchy is searched for an object with an XConnection interface. If found, this
-        one is returned.
-        If we still haven't a connection, a new one is calculated from the current RowSet settings (such as
-        DataSource, URL, User, Password) and returned.
-        In any of these cases the calculated connection is <b>forwarded</b> to the RowSet, that means before
-        returning from the function the connection is set as ActiveConnection property on the RowSet !
+        one is returned.</p>
+        <p>If we still haven't a connection, a new one is calculated from the current RowSet settings (such as
+        DataSource, URL, User, Password) and returned.</p>
+        <p>In any of these cases the calculated connection is <b>forwarded</b> to the RowSet, that means before
+        returning from the function the connection is set as ActiveConnection property on the RowSet !<p>
+        <p>This function  is deprecated, please use connectRowset.</p>
+    @deprecated
+    @see connectRowset
     */
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> calcConnection(
         const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet>& _rxRowSet,
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory)
             throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+
+    /** creates a connection which can be used for the rowset given
+        <p>If the rowset already has an ActiveConnection (means a value vor this property), this connection is returned.</p>
+        <p>The connection is calculated from the settings in the row set (data source name, URL, user, pwd).</p>
+        @param _rxRowSet
+            the row set
+        @param _rxFactory
+            a service factory, which can be used to create data sources, interaction handler etc (the usual stuff)
+        @param _bSetAsActiveConnection
+            If <TRUE/>, the calculated connection is set as ActiveConnection property on the rowset.
+            In this case, the method behaves exactly like calcConnection.
+    */
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> connectRowset(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet>& _rxRowSet,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory,
+        sal_Bool _bSetAsActiveConnection
+    )   SAL_THROW ( (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException) );
 
     /** returns the connection the RowSet is currently working with (which is the ActiveConnection property)
     */

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtools.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-26 10:09:13 $
+ *  last change: $Author: fs $ $Date: 2001-08-06 14:49:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -502,6 +502,13 @@ Reference< XConnection> calcConnection(
             const Reference< XMultiServiceFactory>& _rxFactory)
             throw (SQLException, RuntimeException)
 {
+    return connectRowset( _rxRowSet, _rxFactory, sal_True );
+}
+
+//------------------------------------------------------------------------------
+Reference< XConnection> connectRowset(const Reference< XRowSet>& _rxRowSet, const Reference< XMultiServiceFactory>& _rxFactory,
+    sal_Bool _bSetAsActiveConnection )  SAL_THROW ( (SQLException, RuntimeException) )
+{
     Reference< XConnection> xReturn;
     Reference< XPropertySet> xRowSetProps(_rxRowSet, UNO_QUERY);
     if (xRowSetProps.is())
@@ -565,7 +572,7 @@ Reference< XConnection> calcConnection(
             // If one of the properties affecting the connection (DataSource, URL) is set afterwards,
             // it will free our connection and build a new one with the new parameters on the next execute.
             // At least the service descriptions says so :)
-            if (xReturn.is())
+            if (xReturn.is() && _bSetAsActiveConnection)
             {
                 try
                 {
@@ -1688,6 +1695,9 @@ void checkDisposed(sal_Bool _bThrow) throw ( DisposedException )
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.36  2001/06/26 10:09:13  oj
+ *  #87808# new method to wrap setObject method
+ *
  *  Revision 1.35  2001/06/26 09:27:28  fs
  *  #88392# +implUpdaetObject
  *
