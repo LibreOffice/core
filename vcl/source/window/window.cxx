@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.127 $
+ *  $Revision: 1.128 $
  *
- *  last change: $Author: tbe $ $Date: 2002-08-19 16:06:38 $
+ *  last change: $Author: ssa $ $Date: 2002-08-20 14:24:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3815,7 +3815,7 @@ void Window::ImplGrabFocus( USHORT nFlags )
     BOOL bMustNotGrabFocus = FALSE;
     // #100242#, check parent hierarchy if some floater prohibits grab focus
 
-    Window *pParent = mpParent;
+    Window *pParent = this;
     while( pParent )
     {
         // #102158#, ignore grabfocus only if the floating parent grabs keyboard focus by itself (GrabsFocus())
@@ -7913,7 +7913,8 @@ USHORT Window::GetAccessibleRole() const
 
             case WINDOW_DOCKINGWINDOW:
             case WINDOW_SYSWINDOW:
-            case WINDOW_FLOATINGWINDOW: nRole = accessibility::AccessibleRole::LAYEREDPANE; break;
+            case WINDOW_FLOATINGWINDOW: nRole = mbFrame ? accessibility::AccessibleRole::FRAME :
+                                                            accessibility::AccessibleRole::LAYEREDPANE; break;
 
             case WINDOW_WORKWINDOW: nRole = accessibility::AccessibleRole::ROOTPANE; break;
 
