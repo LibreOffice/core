@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optinet2.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 17:38:34 $
+ *  last change: $Author: obo $ $Date: 2004-04-29 16:20:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,6 +176,18 @@
 #define CB_CONFIRM                                      201
 #define CB_WARNING                                      202
 #define FT_PATH_LIST                                    203
+
+#define FI_EXECMACRO                                    204
+#define FI_CONFIRM                                      205
+#define FI_WARNING                                      206
+#define FI_SCRIPTEXEC                                   207
+#define FI_HYPERLINKS                                   208
+#define FI_JAVAENABLE                                   209
+#define FI_JAVASECURITY                                 210
+#define FI_NETACCESS                                    211
+#define FI_CLASSPATH                                    212
+#define FI_EXECPLUG                                     213
+#define FI_EXEAPPLETS                                   214
 
 #define GB_EXECUTE                                      85
 #define CB_EXECUTE_PLUGINS                              85
