@@ -4,7 +4,7 @@ ri	ridljar									nmake	-	all	ri_genall NULL
 ri	ridljar\com\sun\star\lib\uno\typedesc	nmake	-	all	ri_typedesc ri_typeinfo ri_uno NULL
 ri	ridljar\com\sun\star\lib\uno\typeinfo	nmake	-	all	ri_typeinfo ri_genall NULL
 ri	ridljar\com\sun\star\uno					nmake	-	all	ri_uno ri_typeinfo NULL
-ri	ridljar\com\sun\star\util				nmake	-	all	ri_package_util ri_typeinfo ri_uno NULL
+ri	ridljar\com\sun\star\util				nmake	-	all	ri_package_util ri_typeinfo ri_uno ri_lang NULL
 ri	ridljar\com\sun\star\util\logging		nmake	-	all	ri_log ri_typeinfo ri_beans NULL
 ri	ridljar\com\sun\star\lang				nmake	-	all	ri_lang ri_uno NULL
 ri	ridljar\com\sun\star\security			nmake	-	all	ri_sec ri_uno NULL
