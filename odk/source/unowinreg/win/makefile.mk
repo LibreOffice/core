@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: obo $ $Date: 2004-05-28 15:53:03 $
+#   last change: $Author: obo $ $Date: 2004-08-12 13:21:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,6 +73,11 @@ USE_DEFFILE=TRUE
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
+
+.IF "$(SOLAR_JAVA)"==""
+nojava:
+    @echo "Not building javaunohelper because Java is disabled"
+.ENDIF
 
 # --- Files --------------------------------------------------------
 
