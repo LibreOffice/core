@@ -2,9 +2,9 @@
  *
  *  $RCSfile: distrib.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:39:43 $
+ *  last change: $Author: obo $ $Date: 2005-01-27 11:27:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,7 @@
 
 // NOT FULLY DECLARED SERVICES
 #include <ary_i/codeinf2.hxx>
+#include <parser/parserinfo.hxx>
 #include <s2_luidl/tkp_uidl.hxx>
 #include <s2_luidl/parsenv2.hxx>
 #include <s2_luidl/tk_punct.hxx>
@@ -82,10 +83,11 @@ namespace csi
 namespace uidl
 {
 
-TokenDistributor::TokenDistributor( ary::n22::Repository & io_rRepository )
+TokenDistributor::TokenDistributor( ary::n22::Repository & io_rRepository,
+                                    ParserInfo &           io_rParserInfo )
     :   pTokenSource(0),
-        aProcessingData( io_rRepository, aDocumentation ),
-        aDocumentation()
+        aProcessingData( io_rRepository, aDocumentation, io_rParserInfo ),
+        aDocumentation(io_rParserInfo)
 {
 }
 
@@ -105,8 +107,10 @@ TokenDistributor::TradeToken()
         aProcessingData.ProcessCurToken();
 }
 
-TokenDistributor::ProcessingData::ProcessingData( ary::n22::Repository &    io_rRepository,
-                                                  Documentation &       i_rDocuProcessor )
+TokenDistributor::ProcessingData::ProcessingData(
+                                        ary::n22::Repository &  io_rRepository,
+                                        Documentation &         i_rDocuProcessor,
+                                        ParserInfo &            io_rParserInfo )
     :   // aEnvironments
         // aTokenQueue
         // itCurToken
@@ -114,6 +118,7 @@ TokenDistributor::ProcessingData::ProcessingData( ary::n22::Repository &    io_r
         nTryCount(0),
         bFinished(false),
         rRepository(io_rRepository),
+        rParserInfo(io_rParserInfo),
         pDocuProcessor(&i_rDocuProcessor),
         bPublishedRecentlyOn(false)
 {
@@ -140,6 +145,12 @@ TokenDistributor::ProcessingData::Receive( DYN csi::uidl::Token & let_drToken )
 }
 
 void
+TokenDistributor::ProcessingData::Increment_CurLine()
+{
+    rParserInfo.Increment_CurLine();
+}
+
+void
 TokenDistributor::ProcessingData::ProcessCurToken()
 {
 
@@ -149,6 +160,7 @@ if (DEBUG_ShowTokens())
 }
 
     aCurResult.reset();
+
     CurEnvironment().ProcessToken( CurToken() );
     AcknowledgeResult();
 }
@@ -242,8 +254,9 @@ TokenDistributor::ProcessingData::DecrementTryCount()
 }
 
 TokenDistributor::
-Documentation::Documentation()
-    :   pDocuParseEnv(new csi::dsapi::SapiDocu_PE),
+Documentation::Documentation(ParserInfo & io_rParserInfo)
+    :   pDocuParseEnv(new csi::dsapi::SapiDocu_PE(io_rParserInfo)),
+        rParserInfo(io_rParserInfo),
         pMostRecentDocu(0),
         bIsPassedFirstDocu(false)
 {
@@ -270,6 +283,13 @@ Documentation::Receive( DYN csi::dsapi::Token & let_drToken )
             bIsPassedFirstDocu = true;
         }
     }
+}
+
+void
+TokenDistributor::
+Documentation::Increment_CurLine()
+{
+    rParserInfo.Increment_CurLine();
 }
 
 
