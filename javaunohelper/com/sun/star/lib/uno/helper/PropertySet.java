@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertySet.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jl $ $Date: 2002-05-03 14:53:34 $
+ *  last change: $Author: jl $ $Date: 2002-08-08 12:14:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -426,11 +426,20 @@ XMultiPropertySet
         if (prop == null)
             throw new UnknownPropertyException("The property " + name + " is unknown");
         if ((prop.Attributes & PropertyAttribute.READONLY) == PropertyAttribute.READONLY)
-            return null;
+            return new Any(new Type(void.class), null);
 
         synchronized (this)
         {
             ret= getPropertyValue(prop);
+        }
+        // null must not be returned. Either a void any is returned or an any containing
+        // an interface type and a null reference.
+        if (ret == null)
+        {
+            if (prop.Type.getTypeClass() == TypeClass.INTERFACE)
+                ret= new Any(prop.Type, null);
+            else
+                ret= new Any(new Type(void.class), null);
         }
         return ret;
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertySet_Test.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jl $ $Date: 2002-04-29 11:28:05 $
+ *  last change: $Author: jl $ $Date: 2002-08-08 12:16:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,7 @@ package com.sun.star.lib.uno.helper;
 import com.sun.star.lang.EventObject;
 import com.sun.star.lang.DisposedException;
 import com.sun.star.uno.Type;
+import com.sun.star.uno.TypeClass;
 import com.sun.star.uno.XInterface;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.Any;
@@ -549,12 +550,21 @@ public class PropertySet_Test
             cl.boolClassProp= null;
             cl.setPropertyValue("PropBoolClass", null);
             r[i++]= cl.boolClassProp == null;
+            // the returned value must be a void any
+            Object objAny= cl.getPropertyValue("PropBoolClass");
+            r[i++]= util.isVoidAny( objAny);
+
             cl.boolClassProp= new Boolean(true);
             cl.setPropertyValue("PropBoolClass", null);
             r[i++]= cl.boolClassProp == null;
             cl.boolClassProp= new Boolean(false);
             cl.setPropertyValue("PropBoolClass", new Any(new Type(boolean.class),null));
             r[i++]= cl.boolClassProp == null;
+
+            cl.propXWeakA.Attributes= PropertyAttribute.MAYBEVOID;
+            cl.setPropertyValue("propXWeakA", null);
+            r[i++]= isVoidAny(cl.getPropertyValue("propXWeakA"));
+            cl.propXWeakA.Attributes= 0;
 
             cl.anyPropA= null;
             try{
@@ -1632,6 +1642,25 @@ class util
         else if ((obj1 == null && obj2 == null) && t1 != null && t1.equals(t2))
             return true;
         return false;
+    }
+
+    // returns true if obj is an any that contains a void or interface type and the
+    // object is null
+    static boolean isVoidAny(Object obj)
+    {
+        boolean ret= false;
+        if( obj != null && obj instanceof Any)
+        {
+            Any a= (Any) obj;
+            if( a.getType().getTypeClass().equals( TypeClass.INTERFACE)
+                && a.getObject() == null) {
+                ret= true;
+            }
+            else if( a.getType().equals( new Type(void.class)) && a.getObject() == null) {
+                ret= true;
+            }
+        }
+        return ret;
     }
 }
 
