@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.hxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:01:08 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:51:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -326,8 +326,9 @@ public:
 
     //Druckauftrag abwickeln.
     // pPDFOut != Null is: do PDF Export (no printing!)
-    sal_Bool Prt( SwPrtOptions& rOptions, SfxProgress& rProgress,
-                  OutputDevice *pPDFOut = NULL );
+    sal_Bool Prt( SwPrtOptions& rOptions, SfxProgress* pProgress,
+                  OutputDevice* pPDFOut = NULL );
+
     //"Drucken" fuer OLE 2.0
     static void PrtOle2( SwDoc *pDoc, const SwViewOption *pOpt, SwPrtOptions& rOptions,
                          OutputDevice* pOleOut, const Rectangle& rRect );
