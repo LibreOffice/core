@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appcfg.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: as $ $Date: 2001-10-09 09:06:33 $
+ *  last change: $Author: fs $ $Date: 2001-10-19 10:17:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -322,6 +322,10 @@ BOOL SfxApplication::GetOptions( SfxItemSet& rSet )
                 case SID_ATTR_BACKUP :
                     if(rSet.Put( SfxBoolItem( rPool.GetWhich( SID_ATTR_BACKUP ),
                               aSaveOptions.IsBackup())))
+                        bRet = TRUE;
+                    break;
+                case SID_ATTR_PRETTYPRINTING:
+                    if ( rSet.Put( SfxBoolItem( rPool.GetWhich( SID_ATTR_PRETTYPRINTING ), aSaveOptions.IsPrettyPrinting() ) ) )
                         bRet = TRUE;
                     break;
                 case SID_ATTR_AUTOSAVE :
@@ -685,6 +689,13 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     {
         DBG_ASSERT(pItem->ISA(SfxBoolItem), "BoolItem expected");
         aSaveOptions.SetBackup( ( (const SfxBoolItem*)pItem )->GetValue() );
+    }
+
+    // PrettyPrinting
+    if ( SFX_ITEM_SET == rSet.GetItemState( rPool.GetWhich( SID_ATTR_PRETTYPRINTING ), TRUE, &pItem ) )
+    {
+        DBG_ASSERT( pItem->ISA( SfxBoolItem ), "BoolItem expected" );
+        aSaveOptions.SetPrettyPrinting( static_cast< const SfxBoolItem*> ( pItem )->GetValue() );
     }
 
     // AutoSave
