@@ -107,7 +107,7 @@ class AccessibleRelationHandler
                     else
                     {
                         aBuffer.append( xAccTarget.getAccessibleContext().
-                                         getAccessibleDescription() );
+                                         getAccessibleName() );
                     }
                     aBuffer.append( ", " );
                 }
