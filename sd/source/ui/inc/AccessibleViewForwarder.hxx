@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleViewForwarder.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: af $ $Date: 2002-04-11 17:03:58 $
+ *  last change: $Author: af $ $Date: 2002-04-12 14:47:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@ public:
     AccessibleViewForwarder (SdrPaintView* pView, USHORT nWindowId);
     AccessibleViewForwarder (SdrPaintView* pView, OutputDevice& rDevice);
 
-    virtual ~AccessibleViewForwarder (void) SAL_THROW(());
+    virtual ~AccessibleViewForwarder (void);
 
     void SetView (SdrPaintView* pView);
 
