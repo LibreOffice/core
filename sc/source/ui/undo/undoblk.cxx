@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undoblk.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 13:56:04 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 18:11:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,7 +128,7 @@ TYPEINIT1(ScUndoBorder,             ScBlockUndo);
 // -----------------------------------------------------------------------
 //
 //      Zellen einfuegen
-//      Zeilen einfügen
+//      Zeilen einfuegen
 //      einzeln oder Block
 //
 
@@ -327,7 +327,7 @@ BOOL __EXPORT ScUndoInsertCells::CanRepeat(SfxRepeatTarget& rTarget) const
 // -----------------------------------------------------------------------
 //
 //      Zellen loeschen
-//      Zeilen löschen
+//      Zeilen loeschen
 //      einzeln oder Block
 //
 
