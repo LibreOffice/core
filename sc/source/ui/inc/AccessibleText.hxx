@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleText.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-01 15:09:15 $
+ *  last change: $Author: sab $ $Date: 2002-03-04 14:07:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,7 @@
 class ScCellTextData;
 class ScDocShell;
 class ScViewForwarder;
+class ScEditViewForwarder;
 
 //  ScAccessibleCellTextData: shared data between sub objects of a accessible cell text object
 
@@ -92,10 +93,16 @@ public:
     virtual SvxTextForwarder* GetTextForwarder();
     virtual SvxViewForwarder* GetViewForwarder();
     virtual SvxEditViewForwarder* GetEditViewForwarder( sal_Bool bCreate );
+    virtual SfxBroadcaster& GetBroadcaster();
+
+    DECL_LINK( NotifyHdl, EENotify* );
 private:
+    SfxBroadcaster maBroadcaster;
     ScViewForwarder* mpViewForwarder;
+    ScEditViewForwarder* mpEditViewForwarder;
     ScTabViewShell* mpViewShell;
     ScSplitPos meSplitPos;
+    sal_Bool mbViewEditEngine;
 
     // prevent the using of this method of the base class
     ScSharedCellEditSource* GetOriginalSource() { return NULL; }
