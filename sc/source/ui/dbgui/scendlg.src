@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scendlg.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 20:25:36 $
+ *  last change: $Author: nn $ $Date: 2001-02-12 18:36:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,7 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         TabStop = TRUE ;
         MaxTextLength = 512 ;
         VScroll = TRUE ;
+        IgnoreTab = TRUE ;
     };
     Edit ED_NAME
     {
