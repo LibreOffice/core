@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoApp.java,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kr $ $Date: 2000-11-24 16:31:58 $
+ *  last change: $Author: kr $ $Date: 2000-11-24 16:33:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -466,11 +466,12 @@ public class UnoApp {
 
     /**
      * The result of applying this option is a registry
-     * servicemanager.
+     * servicemanager. This option takes the rdb file name
+     * as a paramter.
      */
     static class Registry_Option extends Option {
         static final String __key  = "-r";
-        static final String __help = "create a XMultiServiceFactory out of the registry registry file";
+        static final String __help = "create a XMultiServiceFactory out of the registry file (e.g. -r applicat.rdb)";
 
         Registry_Option() {
             super(__key, __help);
@@ -478,6 +479,32 @@ public class UnoApp {
 
         void set(UnoApp unoApp, String args[], int index[]) throws Exception {
             unoApp._context = RegistryServiceFactory.create(args[index[0] ++]);
+            unoApp._creator = this;
+
+            if(DEBUG) System.err.println("##### " + getClass().getName() + " - got RegistryServiceFactory:" + unoApp._context);
+        }
+
+        Object create(UnoApp unoApp) throws Exception {
+            return unoApp._context;
+        }
+
+    }
+
+    /**
+     * The result of applying this option is a registry
+     * servicemanager. This option takes two rdb file names
+     * as a paramters.
+     */
+    static class TwoRegistry_Option extends Option {
+        static final String __key  = "-tr";
+        static final String __help = "create a XMultiServiceFactory out of two registry files (e.g. -tr applicat.rdb user.rdb";
+
+        TwoRegistry_Option() {
+            super(__key, __help);
+        }
+
+        void set(UnoApp unoApp, String args[], int index[]) throws Exception {
+            unoApp._context = RegistryServiceFactory.create(args[index[0] ++], args[index[0] ++]);
             unoApp._creator = this;
 
             if(DEBUG) System.err.println("##### " + getClass().getName() + " - got RegistryServiceFactory:" + unoApp._context);
@@ -691,6 +718,7 @@ public class UnoApp {
         __options.put(Service_Option.__key,        new Service_Option());
         __options.put(Import_Option.__key,         new Import_Option());
         __options.put(Registry_Option.__key,       new Registry_Option());
+        __options.put(TwoRegistry_Option.__key,    new TwoRegistry_Option());
         __options.put(ServiceManager_Option.__key, new ServiceManager_Option());
           __options.put(Args_Option.__key,           new Args_Option());
         __options.put(Component_Option.__key,      new Component_Option());
