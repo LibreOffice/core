@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: pluby $ $Date: 2001-03-02 07:16:52 $
+#   last change: $Author: hr $ $Date: 2004-02-02 18:49:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,11 +77,6 @@ SLOFILES =\
         $(SLO)$/attrlistimpl.obj\
         $(SLO)$/sax_expat.obj \
         $(SLO)$/saxwriter.obj
-
-# Make symbol renaming match library name for Mac OS X
-.IF "$(OS)"=="MACOSX"
-SYMBOLPREFIX=sax
-.ENDIF
 
 # --- Targets ------------------------------------------------------
 .INCLUDE :	target.mk
