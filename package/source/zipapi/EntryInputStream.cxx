@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EntryInputStream.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-21 17:57:07 $
+ *  last change: $Author: mba $ $Date: 2000-11-30 13:47:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,8 +127,6 @@ sal_Int32 SAL_CALL EntryInputStream::readBytes( uno::Sequence< sal_Int8 >& aData
                                         sal_Int32 nBytesToRead )
     throw(io::NotConnectedException, io::BufferSizeExceededException, io::IOException, uno::RuntimeException)
 {
-    sal_Int64 nDataLen = aData.getLength();
-
     if (nBytesToRead <=0)
         return 0;
 
@@ -138,8 +136,9 @@ sal_Int32 SAL_CALL EntryInputStream::readBytes( uno::Sequence< sal_Int8 >& aData
             return 0;
         nBytesToRead = nEnd - nCurrent;
     }
-    if (nBytesToRead > nDataLen)
-        nBytesToRead = nDataLen;
+
+    aData.realloc( nBytesToRead );
+    sal_Int64 nDataLen = aData.getLength();
 
     for ( sal_Int64 i = 0; i< nBytesToRead;i++,nCurrent++)
         aData[i] = aBuffer[nCurrent];
