@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menudispatcher.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2002-10-07 10:19:03 $
+ *  last change: $Author: vg $ $Date: 2003-06-10 09:09:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -391,6 +391,20 @@ class MenuDispatcher   :   // interfaces
         *//*-*****************************************************************************************************/
 
         sal_Bool impl_setMenuBar( MenuBar* pMenuBar, sal_Bool bMenuFromResource = sal_False );
+
+        /*-****************************************************************************************************//**
+            @short      -
+            @descr      -
+
+            @seealso    -
+
+            @param      -
+            @return     -
+
+            @onerror    -
+        *//*-*****************************************************************************************************/
+
+        void impl_setAccelerators( Menu* pMenu, const Accelerator& aAccel );
 
     //-------------------------------------------------------------------------------------------------------------
     //  debug methods
