@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confuno.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2001-04-06 14:36:18 $
+ *  last change: $Author: sab $ $Date: 2001-04-12 12:18:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,6 +243,7 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
                     aGridOpt.SetSynchronize( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
                 else
                     throw beans::UnknownPropertyException();
+                aViewOpt.SetGridOptions(aGridOpt);
             }
             pDoc->SetViewOptions(aViewOpt);
         }
