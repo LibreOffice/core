@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sjapplet_impl.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-16 09:54:27 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 15:12:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,7 +121,7 @@ static void testJavaException(JNIEnv * pEnv)  throw(com::sun::star::uno::Runtime
 #else // !SOLAR_JAVA
 static void throwException() throw(com::sun::star::uno::RuntimeException)
 {
-    throw RuntimeException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Java applets not supported.")), Reference<XInterface>());
+    throw css::uno::RuntimeException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Java applets not supported.")), css::uno::Reference<XInterface>());
 }
 #endif
 
