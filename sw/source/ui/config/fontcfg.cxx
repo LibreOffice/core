@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontcfg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-02-09 15:38:22 $
+ *  last change: $Author: os $ $Date: 2001-05-11 10:37:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,13 +93,18 @@ Sequence<OUString> SwStdFontConfig::GetPropertyNames()
 {
     static const char* aPropNames[] =
     {
-        "Standard",    // 0
-        "Heading",     // 1
-        "List",        // 2
-        "Caption",     // 3
-        "Index",       // 4
+        "DefaultFont/Standard",    // 0
+        "DefaultFont/Heading",     // 1
+        "DefaultFont/List",        // 2
+        "DefaultFont/Caption",     // 3
+        "DefaultFont/Index",       // 4
+        "DefaultFontCJK/Standard", // 5
+        "DefaultFontCJK/Heading",  // 6
+        "DefaultFontCJK/List",     // 7
+        "DefaultFontCJK/Caption",  // 8
+        "DefaultFontCJK/Index",    // 9
     };
-    const int nCount = 5;
+    const int nCount = 10;
     Sequence<OUString> aNames(nCount);
     OUString* pNames = aNames.getArray();
     for(int i = 0; i < nCount; i++)
@@ -112,15 +117,18 @@ Sequence<OUString> SwStdFontConfig::GetPropertyNames()
 
 --------------------------------------------------*/
 SwStdFontConfig::SwStdFontConfig() :
-    utl::ConfigItem(C2U("Office.Writer/DefaultFont"))
+    utl::ConfigItem(C2U("Office.Writer"))
 {
 #if defined(UNX)
     const String sDefFont(C2S("times"));
 #else
     const String sDefFont(C2S("Times New Roman"));
 #endif
-    sFontStandard = sFontList = sFontCaption = sFontIndex = sDefFont;
-    sFontOutline = SwStdFontConfig::GetDefaultFor(FONT_OUTLINE);
+    for(sal_Int16 i = 0; i < DEF_FONT_COUNT; i++)
+        sDefaultFonts[i] = sDefFont;
+
+    sDefaultFonts[FONT_OUTLINE] = GetDefaultFor(FONT_OUTLINE);
+    sDefaultFonts[FONT_OUTLINE_CJK] = GetDefaultFor(FONT_OUTLINE_CJK);
 
     Sequence<OUString> aNames = GetPropertyNames();
     Sequence<Any> aValues = GetProperties(aNames);
@@ -134,14 +142,7 @@ SwStdFontConfig::SwStdFontConfig() :
             {
                 OUString sVal;
                 pValues[nProp] >>= sVal;
-                switch(nProp)
-                {
-                    case FONT_STANDARD:  sFontStandard= sVal;  break;
-                    case FONT_OUTLINE :  sFontOutline = sVal;  break;
-                    case FONT_LIST    :  sFontList   = sVal;  break;
-                    case FONT_CAPTION :  sFontCaption = sVal;  break;
-                    case FONT_INDEX   :  sFontIndex  = sVal;  break;
-                }
+                sDefaultFonts[nProp] = sVal;
             }
         }
     }
@@ -157,29 +158,8 @@ void    SwStdFontConfig::Commit()
     Any* pValues = aValues.getArray();
     for(int nProp = 0; nProp < aNames.getLength(); nProp++)
     {
-        switch(nProp)
-        {
-            case FONT_STANDARD:
-                if(GetDefaultFor(nProp) != sFontStandard)
-                    pValues[nProp] <<= OUString(sFontStandard);
-            break;
-            case FONT_OUTLINE :
-                if(GetDefaultFor(nProp) != sFontOutline)
-                    pValues[nProp] <<= OUString(sFontOutline);
-            break;
-            case FONT_LIST    :
-                if(GetDefaultFor(nProp) != sFontList)
-                    pValues[nProp] <<= OUString(sFontList);
-            break;
-            case FONT_CAPTION :
-                if(GetDefaultFor(nProp) != sFontCaption)
-                    pValues[nProp] <<= OUString(sFontCaption);
-            break;
-            case FONT_INDEX   :
-                if(GetDefaultFor(nProp) != sFontIndex)
-                    pValues[nProp] <<= OUString(sFontIndex);
-            break;
-        }
+        if(GetDefaultFor(nProp) != sDefaultFonts[nProp])
+                pValues[nProp] <<= OUString(sDefaultFonts[nProp]);
     }
     PutProperties(aNames, aValues);
 }
@@ -202,29 +182,32 @@ BOOL SwStdFontConfig::IsFontDefault(USHORT nFontType) const
     switch( nFontType )
     {
         case FONT_STANDARD:
-            bSame = sFontStandard == rStd;
+        case FONT_STANDARD_CJK:
+            bSame = sDefaultFonts[nFontType] == rStd;
         break;
         case FONT_OUTLINE :
+        case FONT_OUTLINE_CJK :
 #if defined(UNX)
-            bSame = sFontOutline == C2S("helvetica");
+            bSame = sDefaultFonts[nFontType] == C2S("helvetica");
 #elif defined(WNT) || defined(WIN)
-            bSame = sFontOutline == C2S("Arial");
+            bSame = sDefaultFonts[nFontType] == C2S("Arial");
 #elif defined(MAC)
-            bSame = sFontOutline == C2S("Helvetica");
+            bSame = sDefaultFonts[nFontType] == C2S("Helvetica");
 #elif defined(PM20)
-            bSame = sFontOutline == C2S("Helvetica");
+            bSame = sDefaultFonts[nFontType] == C2S("Helvetica");
 #else
 #error Defaultfont fuer diese Plattform?
 #endif
         break;
         case FONT_LIST    :
-            bSame = (sFontList == rStd) && (sFontStandard == rStd);
-        break;
         case FONT_CAPTION :
-            bSame = (sFontCaption == rStd) && (sFontStandard == rStd);
-        break;
         case FONT_INDEX   :
-            bSame = (sFontIndex == rStd) && (sFontStandard == rStd);
+            bSame = (sDefaultFonts[nFontType] == rStd) && (sDefaultFonts[FONT_STANDARD] == rStd);
+        break;
+        case FONT_LIST_CJK    :
+        case FONT_CAPTION_CJK :
+        case FONT_INDEX_CJK   :
+            bSame = (sDefaultFonts[nFontType] == rStd) && (sDefaultFonts[FONT_STANDARD_CJK] == rStd);
         break;
     }
     return bSame;
@@ -242,12 +225,8 @@ String  SwStdFontConfig::GetDefaultFor(USHORT nFontType)
 #endif
     switch( nFontType )
     {
-        case FONT_STANDARD:
-        case FONT_LIST    :
-        case FONT_CAPTION :
-        case FONT_INDEX   :
-        break;
         case FONT_OUTLINE :
+        case FONT_OUTLINE_CJK :
 #if defined(UNX)
             sRet = C2S("helvetica");
 #elif defined(WNT) || defined(WIN)

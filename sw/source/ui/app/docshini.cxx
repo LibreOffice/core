@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshini.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: os $ $Date: 2001-05-10 08:46:10 $
+ *  last change: $Author: os $ $Date: 2001-05-11 10:37:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -260,26 +260,6 @@ using namespace ::rtl;
 --------------------------------------------------*/
 
 
-void lcl_SetColl(SwDoc* pDoc, sal_uInt16 nType,
-                    SfxPrinter* pPrt, const String& rStyle)
-{
-    sal_Bool bDelete = sal_False;
-    const SfxFont* pFnt = pPrt ? pPrt->GetFontByName(rStyle): 0;
-    if(!pFnt)
-    {
-        pFnt = new SfxFont( FAMILY_DONTKNOW, rStyle, PITCH_DONTKNOW,
-                            ::gsl_getSystemTextEncoding() );
-        bDelete = sal_True;
-    }
-    SwTxtFmtColl *pColl = pDoc->GetTxtCollFromPool(nType);
-    pColl->SetAttr(SvxFontItem(pFnt->GetFamily(), pFnt->GetName(),
-                        aEmptyStr, pFnt->GetPitch(), pFnt->GetCharSet()));
-    if(bDelete)
-    {
-        delete (SfxFont*) pFnt;
-    }
-}
-
 /*--------------------------------------------------------------------
     Beschreibung: Document laden
  --------------------------------------------------------------------*/
@@ -305,54 +285,69 @@ sal_Bool SwDocShell::InitNew( SvStorage * pStor )
         SfxPrinter* pPrt = pDoc->GetPrt();
 
         String sEntry;
-        if(!pStdFont->IsFontDefault(FONT_STANDARD))
+        for(USHORT i = 0; i < 2; i++)
         {
-            sEntry = pStdFont->GetFontStandard();
-            sal_Bool bDelete = sal_False;
-            const SfxFont* pFnt = pPrt ? pPrt->GetFontByName(sEntry): 0;
-            if(!pFnt)
+            USHORT nFontWhich = i ? RES_CHRATR_CJK_FONT : RES_CHRATR_FONT;
+            USHORT nFontId = i ? FONT_STANDARD_CJK : FONT_STANDARD;
+            if(!pStdFont->IsFontDefault(nFontId))
             {
-                pFnt = new SfxFont( FAMILY_DONTKNOW, sEntry, PITCH_DONTKNOW,
-                                    ::gsl_getSystemTextEncoding() );
-                bDelete = sal_True;
+                sEntry = pStdFont->GetFontFor(nFontId);
+                sal_Bool bDelete = sal_False;
+                const SfxFont* pFnt = pPrt ? pPrt->GetFontByName(sEntry): 0;
+                if(!pFnt)
+                {
+                    pFnt = new SfxFont( FAMILY_DONTKNOW, sEntry, PITCH_DONTKNOW,
+                                        ::gsl_getSystemTextEncoding() );
+                    bDelete = sal_True;
+                }
+                pDoc->SetDefault(SvxFontItem(pFnt->GetFamily(), pFnt->GetName(),
+                                    aEmptyStr, pFnt->GetPitch(), pFnt->GetCharSet(), nFontWhich));
+                SwTxtFmtColl *pColl = pDoc->GetTxtCollFromPool(RES_POOLCOLL_STANDARD);
+                pColl->ResetAttr(nFontWhich);
+                if(bDelete)
+                {
+                    delete (SfxFont*) pFnt;
+                    bDelete = sal_False;
+                }
             }
-            pDoc->SetDefault(SvxFontItem(pFnt->GetFamily(), pFnt->GetName(),
-                                aEmptyStr, pFnt->GetPitch(), pFnt->GetCharSet()));
-            SwTxtFmtColl *pColl = pDoc->GetTxtCollFromPool(RES_POOLCOLL_STANDARD);
-            pColl->ResetAttr(RES_CHRATR_FONT);
-            if(bDelete)
+        }
+        USHORT aFontIdPoolId[] =
+        {
+            FONT_OUTLINE,       RES_POOLCOLL_HEADLINE_BASE,
+            FONT_LIST,          RES_POOLCOLL_NUMBUL_BASE,
+            FONT_CAPTION,       RES_POOLCOLL_LABEL,
+            FONT_INDEX,         RES_POOLCOLL_REGISTER_BASE,
+            FONT_OUTLINE_CJK,   RES_POOLCOLL_HEADLINE_BASE,
+            FONT_LIST_CJK,      RES_POOLCOLL_NUMBUL_BASE,
+            FONT_CAPTION_CJK,   RES_POOLCOLL_LABEL,
+            FONT_INDEX_CJK,     RES_POOLCOLL_REGISTER_BASE
+        };
+
+        USHORT nFontWhich = RES_CHRATR_FONT;
+        for(USHORT nIdx = 0; nIdx < 16; nIdx += 2)
+        {
+            if(nIdx == 8)
+                nFontWhich = RES_CHRATR_CJK_FONT;
+            if(!pStdFont->IsFontDefault(aFontIdPoolId[nIdx]))
             {
-                delete (SfxFont*) pFnt;
-                bDelete = sal_False;
+                sEntry = pStdFont->GetFontFor(aFontIdPoolId[nIdx]);
+                sal_Bool bDelete = sal_False;
+                const SfxFont* pFnt = pPrt ? pPrt->GetFontByName(sEntry): 0;
+                if(!pFnt)
+                {
+                    pFnt = new SfxFont( FAMILY_DONTKNOW, sEntry, PITCH_DONTKNOW,
+                                        ::gsl_getSystemTextEncoding() );
+                    bDelete = sal_True;
+                }
+                SwTxtFmtColl *pColl = pDoc->GetTxtCollFromPool(aFontIdPoolId[nIdx + 1]);
+                pColl->SetAttr(SvxFontItem(pFnt->GetFamily(), pFnt->GetName(),
+                                    aEmptyStr, pFnt->GetPitch(), pFnt->GetCharSet(), nFontWhich));
+                if(bDelete)
+                {
+                    delete (SfxFont*) pFnt;
+                }
             }
-
-//              lcl_SetColl(pDoc, RES_POOLCOLL_STANDARD, pPrt, sEntry);
         }
-
-        if(!pStdFont->IsFontDefault(FONT_OUTLINE))
-        {
-            sEntry = pStdFont->GetFontOutline();
-            lcl_SetColl(pDoc, RES_POOLCOLL_HEADLINE_BASE, pPrt, sEntry);
-        }
-
-        if(!pStdFont->IsFontDefault(FONT_LIST))
-        {
-            sEntry = pStdFont->GetFontList();
-            lcl_SetColl(pDoc, RES_POOLCOLL_NUMBUL_BASE, pPrt, sEntry);
-        }
-
-        if(!pStdFont->IsFontDefault(FONT_CAPTION))
-        {
-            sEntry = pStdFont->GetFontCaption();
-            lcl_SetColl(pDoc, RES_POOLCOLL_LABEL, pPrt, sEntry);
-        }
-
-        if(!pStdFont->IsFontDefault(FONT_INDEX))
-        {
-            sEntry = pStdFont->GetFontIndex();
-            lcl_SetColl(pDoc, RES_POOLCOLL_REGISTER_BASE, pPrt, sEntry);
-        }
-
 
 /*
         //JP 12.07.95: so einfach waere es fuer die neu Mimik

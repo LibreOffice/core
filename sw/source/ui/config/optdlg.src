@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: os $ $Date: 2001-05-10 13:29:01 $
+ *  last change: $Author: os $ $Date: 2001-05-11 10:37:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1526,30 +1526,8 @@ TabPage TP_STD_FONT
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 195 , 8 ) ;
-        Text = "Grundschriften" ;
-        Text [ English ] = "Standard fonts" ;
-        Text [ norwegian ] = "Standard fonts" ;
-        Text [ italian ] = "Caratteri standard" ;
-        Text [ portuguese_brazilian ] = "Fontes padrao" ;
-        Text [ portuguese ] = "Tipos de letra padrão" ;
-        Text [ finnish ] = "Grundschriften" ;
-        Text [ danish ] = "Standardskrifttyper" ;
-        Text [ french ] = "Polices standard" ;
-        Text [ swedish ] = "Standardteckensnitt" ;
-        Text [ dutch ] = "Standaardlettertypen" ;
-        Text [ spanish ] = "Fuentes estándar" ;
-        Text [ english_us ] = "Basic fonts" ;
-        Text[ chinese_simplified ] = "±ê×¼×ÖÌå";
-        Text[ russian ] = "Îñíîâíûå øğèôòû";
-        Text[ polish ] = "Czcionki podstawowe";
-        Text[ japanese ] = "Šù’è‚ÌÌ«İÄ";
-        Text[ chinese_traditional ] = "¼Ğ·Ç¦r«¬";
-        Text[ arabic ] = "ÇáÎØæØ ÇáÃÓÇÓíÉ";
-        Text[ greek ] = "Âáóéêİò ãñáììáôïóåéñİò";
-        Text[ korean ] = "±âº» ±Û²Ã";
-        Text[ turkish ] = "Standart yazıtipi";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Fuentes estándar";
+        Text = "Grundschriften (%1)" ;
+        Text [ English ] = "Basic fonts (%1)" ;
     };
     FixedText FT_STANDARD
     {
@@ -1795,6 +1773,16 @@ TabPage TP_STD_FONT
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "~Oletusarvo";
         Text[ catalan ] = "~Predeterminado";
+    };
+    String ST_SCRIPT_ASIAN
+    {
+        Text = "Asiatisch" ;
+        Text [ English ] = "Asian" ;
+    };
+    String ST_SCRIPT_WESTERN
+    {
+        Text = "Westlich" ;
+        Text [ English ] = "Western" ;
     };
 };
 /**************************************************************************/

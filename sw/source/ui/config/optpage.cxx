@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optpage.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: os $ $Date: 2001-05-10 08:47:33 $
+ *  last change: $Author: os $ $Date: 2001-05-11 10:37:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,9 @@
 #endif
 #ifndef _SWTYPES_HXX
 #include <swtypes.hxx>
+#endif
+#ifndef _CHARATR_HXX
+#include <charatr.hxx>
 #endif
 #ifndef _VIEW_HXX
 #include <view.hxx>
@@ -647,6 +650,8 @@ SwStdFontTabPage::SwStdFontTabPage( Window* pParent,
     aStdChrFrm  (this, SW_RES(GB_STDCHR  )),
     aDocOnlyCB  (this, SW_RES(CB_DOCONLY )),
     aStandardPB (this, SW_RES(PB_STANDARD)),
+    sScriptWestern(ResId(ST_SCRIPT_WESTERN)),
+    sScriptAsian(ResId(ST_SCRIPT_ASIAN)),
     pPrt(0),
     pFontConfig(0),
     pWrtShell(0),
@@ -656,7 +661,8 @@ SwStdFontTabPage::SwStdFontTabPage( Window* pParent,
     bSetLabelDefault(TRUE),
     bSetIdxDefault(TRUE),
     bIdxDefault(FALSE),
-    bDeletePrinter(FALSE)
+    bDeletePrinter(FALSE),
+    bCJKMode(FALSE)
 {
     FreeResource();
     aStandardPB.SetClickHdl(LINK(this, SwStdFontTabPage, StandardHdl));
@@ -681,8 +687,6 @@ SwStdFontTabPage::~SwStdFontTabPage()
 /*-----------------03.09.96 11.53-------------------
 
 --------------------------------------------------*/
-
-
 SfxTabPage* SwStdFontTabPage::Create( Window* pParent,
                                 const SfxItemSet& rAttrSet )
 {
@@ -692,10 +696,9 @@ SfxTabPage* SwStdFontTabPage::Create( Window* pParent,
 /*-----------------03.09.96 11.53-------------------
 
 --------------------------------------------------*/
-
-
 void lcl_SetColl(SwWrtShell* pWrtShell, USHORT nType,
-                    SfxPrinter* pPrt, const String& rStyle)
+                    SfxPrinter* pPrt, const String& rStyle,
+                    USHORT nFontWhich)
 {
     BOOL bDelete = FALSE;
     const SfxFont* pFnt = pPrt ? pPrt->GetFontByName(rStyle): 0;
@@ -706,20 +709,16 @@ void lcl_SetColl(SwWrtShell* pWrtShell, USHORT nType,
     }
     SwTxtFmtColl *pColl = pWrtShell->GetTxtCollFromPool(nType);
     pColl->SetAttr(SvxFontItem(pFnt->GetFamily(), pFnt->GetName(),
-                aEmptyStr, pFnt->GetPitch(), pFnt->GetCharSet()));
+                aEmptyStr, pFnt->GetPitch(), pFnt->GetCharSet(), nFontWhich));
     if(bDelete)
     {
         delete (SfxFont*) pFnt;
         bDelete = FALSE;
     }
 }
-
-
 /*-----------------03.09.96 11.53-------------------
 
 --------------------------------------------------*/
-
-
 BOOL SwStdFontTabPage::FillItemSet( SfxItemSet& rSet )
 {
     BOOL bNotDocOnly = !aDocOnlyCB.IsChecked();
@@ -739,17 +738,18 @@ BOOL SwStdFontTabPage::FillItemSet( SfxItemSet& rSet )
 
     if(bNotDocOnly)
     {
-        pFontConfig->SetFontStandard(sStandard);
-        pFontConfig->SetFontOutline(sTitle);
-        pFontConfig->SetFontList(sList);
-        pFontConfig->SetFontCaption(sLabel);
-        pFontConfig->SetFontIndex(sIdx);
+        pFontConfig->SetFontStandard(sStandard, bCJKMode);
+        pFontConfig->SetFontOutline(sTitle, bCJKMode);
+        pFontConfig->SetFontList(sList, bCJKMode);
+        pFontConfig->SetFontCaption(sLabel, bCJKMode);
+        pFontConfig->SetFontIndex(sIdx, bCJKMode);
     }
     if(pWrtShell)
     {
         pWrtShell->StartAllAction();
         SfxPrinter* pPrt = pWrtShell->GetPrt();
         BOOL bMod = FALSE;
+        USHORT nFontWhich = bCJKMode ? RES_CHRATR_CJK_FONT : RES_CHRATR_FONT;
         if(sStandard != sShellStd)
         {
             BOOL bDelete = FALSE;
@@ -762,7 +762,7 @@ BOOL SwStdFontTabPage::FillItemSet( SfxItemSet& rSet )
             pWrtShell->SetDefault(SvxFontItem(pFnt->GetFamily(), pFnt->GetName(),
                                 aEmptyStr, pFnt->GetPitch(), pFnt->GetCharSet()));
             SwTxtFmtColl *pColl = pWrtShell->GetTxtCollFromPool(RES_POOLCOLL_STANDARD);
-            pColl->ResetAttr(RES_CHRATR_FONT);
+            pColl->ResetAttr(nFontWhich);
             if(bDelete)
             {
                 delete (SfxFont*) pFnt;
@@ -773,22 +773,22 @@ BOOL SwStdFontTabPage::FillItemSet( SfxItemSet& rSet )
         }
         if(sTitle != sShellTitle )
         {
-            lcl_SetColl(pWrtShell, RES_POOLCOLL_HEADLINE_BASE, pPrt, sTitle);
+            lcl_SetColl(pWrtShell, RES_POOLCOLL_HEADLINE_BASE, pPrt, sTitle, nFontWhich);
             bMod = TRUE;
         }
         if(sList != sShellList && (!bListDefault || !bSetListDefault ))
         {
-            lcl_SetColl(pWrtShell, RES_POOLCOLL_NUMBUL_BASE, pPrt, sList);
+            lcl_SetColl(pWrtShell, RES_POOLCOLL_NUMBUL_BASE, pPrt, sList, nFontWhich);
             bMod = TRUE;
         }
         if(sLabel != sShellLabel && (!bLabelDefault || !bSetLabelDefault))
         {
-            lcl_SetColl(pWrtShell, RES_POOLCOLL_LABEL, pPrt, sLabel);
+            lcl_SetColl(pWrtShell, RES_POOLCOLL_LABEL, pPrt, sLabel, nFontWhich);
             bMod = TRUE;
         }
         if(sIdx != sShellIndex && (!bIdxDefault || !bSetIdxDefault))
         {
-            lcl_SetColl(pWrtShell, RES_POOLCOLL_REGISTER_BASE, pPrt, sIdx);
+            lcl_SetColl(pWrtShell, RES_POOLCOLL_REGISTER_BASE, pPrt, sIdx, nFontWhich);
             bMod = TRUE;
         }
         if ( bMod )
@@ -802,9 +802,11 @@ BOOL SwStdFontTabPage::FillItemSet( SfxItemSet& rSet )
 /*-----------------03.09.96 11.53-------------------
 
 --------------------------------------------------*/
-
 void SwStdFontTabPage::Reset( const SfxItemSet& rSet )
 {
+    String sTmp(aStdChrFrm.GetText());
+    sTmp.SearchAndReplaceAscii("%1", bCJKMode ? sScriptAsian : sScriptWestern);
+    aStdChrFrm.SetText(sTmp);
     const SfxPoolItem* pItem;
 
     if(SFX_ITEM_SET == rSet.GetItemState(FN_PARAM_PRINTER, FALSE, &pItem))
@@ -847,32 +849,38 @@ void SwStdFontTabPage::Reset( const SfxItemSet& rSet )
 
     if(!pWrtShell)
     {
-       sStdBackup = pFontConfig->GetFontStandard();
-       sOutBackup = pFontConfig->GetFontOutline();
-       sListBackup= pFontConfig->GetFontList();
-       sCapBackup = pFontConfig->GetFontCaption();
-       sIdxBackup = pFontConfig->GetFontIndex();
+       sStdBackup = pFontConfig->GetFontStandard(bCJKMode);
+       sOutBackup = pFontConfig->GetFontOutline(bCJKMode);
+       sListBackup= pFontConfig->GetFontList(bCJKMode);
+       sCapBackup = pFontConfig->GetFontCaption(bCJKMode);
+       sIdxBackup = pFontConfig->GetFontIndex(bCJKMode);
        aDocOnlyCB.Enable(FALSE);
     }
     else
     {
         SwTxtFmtColl *pColl = pWrtShell->GetTxtCollFromPool(RES_POOLCOLL_STANDARD);
-        sShellStd = sStdBackup =  pColl->GetFont().GetFamilyName();
+        const SvxFontItem& rFont = bCJKMode ? pColl->GetCJKFont() : pColl->GetFont();
+        sShellStd = sStdBackup =  rFont.GetFamilyName();
 
         pColl = pWrtShell->GetTxtCollFromPool(RES_POOLCOLL_HEADLINE_BASE);
-        sShellTitle = sOutBackup = pColl->GetFont().GetFamilyName();
+        const SvxFontItem& rFontHL = bCJKMode ? pColl->GetCJKFont() : pColl->GetFont();
+        sShellTitle = sOutBackup = rFontHL.GetFamilyName();
 
+        USHORT nFontWhich = bCJKMode ? RES_CHRATR_CJK_FONT : RES_CHRATR_FONT;
         pColl = pWrtShell->GetTxtCollFromPool(RES_POOLCOLL_NUMBUL_BASE);
-        bListDefault = SFX_ITEM_DEFAULT == pColl->GetAttrSet().GetItemState(RES_CHRATR_FONT, FALSE);
-        sShellList = sListBackup = pColl->GetFont().GetFamilyName();
+        const SvxFontItem& rFontLS = bCJKMode ? pColl->GetCJKFont() : pColl->GetFont();
+        bListDefault = SFX_ITEM_DEFAULT == pColl->GetAttrSet().GetItemState(nFontWhich, FALSE);
+        sShellList = sListBackup = rFontLS.GetFamilyName();
 
         pColl = pWrtShell->GetTxtCollFromPool(RES_POOLCOLL_LABEL);
-        bLabelDefault = SFX_ITEM_DEFAULT == pColl->GetAttrSet().GetItemState(RES_CHRATR_FONT, FALSE);
-        sShellLabel = sCapBackup = pColl->GetFont().GetFamilyName();
+        bLabelDefault = SFX_ITEM_DEFAULT == pColl->GetAttrSet().GetItemState(nFontWhich, FALSE);
+        const SvxFontItem& rFontCP = bCJKMode ? pColl->GetCJKFont() : pColl->GetFont();
+        sShellLabel = sCapBackup = rFontCP.GetFamilyName();
 
         pColl = pWrtShell->GetTxtCollFromPool(RES_POOLCOLL_REGISTER_BASE);
-        bIdxDefault = SFX_ITEM_DEFAULT == pColl->GetAttrSet().GetItemState(RES_CHRATR_FONT, FALSE);
-        sShellIndex = sIdxBackup = pColl->GetFont().GetFamilyName();
+        bIdxDefault = SFX_ITEM_DEFAULT == pColl->GetAttrSet().GetItemState(nFontWhich, FALSE);
+        const SvxFontItem& rFontIDX = bCJKMode ? pColl->GetCJKFont() : pColl->GetFont();
+        sShellIndex = sIdxBackup = rFontIDX.GetFamilyName();
     }
     aStandardBox.SetText(sStdBackup );
     aTitleBox   .SetText(sOutBackup );
@@ -937,7 +945,6 @@ IMPL_LINK( SwStdFontTabPage, ModifyHdl, ComboBox*, pBox )
     }
     return 0;
 }
-
 /*-----------------18.01.97 12.14-------------------
     Optionen Tabelle
 --------------------------------------------------*/

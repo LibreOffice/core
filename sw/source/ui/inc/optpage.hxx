@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optpage.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-05-04 11:20:32 $
+ *  last change: $Author: os $ $Date: 2001-05-11 10:37:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,6 +220,7 @@ public:
 
 class SwStdFontTabPage : public SfxTabPage
 {
+    FixedLine       aStdChrFrm  ;
     FixedText       aStandardLbl;
     ComboBox        aStandardBox;
     FixedText       aTitleLbl   ;
@@ -231,7 +232,6 @@ class SwStdFontTabPage : public SfxTabPage
     FixedText       aIdxLbl     ;
     ComboBox        aIdxBox     ;
     CheckBox        aDocOnlyCB  ;
-    FixedLine        aStdChrFrm  ;
     PushButton      aStandardPB;
 
     String          sShellStd;
@@ -251,8 +251,10 @@ class SwStdFontTabPage : public SfxTabPage
     BOOL    bIdxDefault     :1;
     BOOL    bSetIdxDefault  :1;
     BOOL    bDeletePrinter :1;
+    BOOL    bCJKMode : 1;
 
-
+    String sScriptWestern;
+    String sScriptAsian;
 
     DECL_LINK( StandardHdl, PushButton * );
     DECL_LINK( ModifyHdl, ComboBox * );
@@ -268,6 +270,7 @@ public:
     virtual BOOL        FillItemSet( SfxItemSet& rSet );
     virtual void        Reset( const SfxItemSet& rSet );
 
+    void    SetCJKMode() {bCJKMode = TRUE;}
 };
 
 /*-----------------18.01.97 12.10-------------------

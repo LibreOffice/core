@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontcfg.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:40 $
+ *  last change: $Author: os $ $Date: 2001-05-11 10:37:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,87 +68,62 @@
 #include <tools/string.hxx>
 #endif
 
-#define FONT_STANDARD   0
-#define FONT_OUTLINE    1
-#define FONT_LIST       2
-#define FONT_CAPTION    3
-#define FONT_INDEX      4
+#define FONT_STANDARD       0
+#define FONT_OUTLINE        1
+#define FONT_LIST           2
+#define FONT_CAPTION        3
+#define FONT_INDEX          4
+#define FONT_STANDARD_CJK   5
+#define FONT_OUTLINE_CJK    6
+#define FONT_LIST_CJK       7
+#define FONT_CAPTION_CJK    8
+#define FONT_INDEX_CJK      9
+#define DEF_FONT_COUNT      10
+
 
 class SwStdFontConfig : public utl::ConfigItem
 {
-    String      sFontStandard;
-    String      sFontOutline ;
-    String      sFontList    ;
-    String      sFontCaption ;
-    String      sFontIndex   ;
+    String      sDefaultFonts[DEF_FONT_COUNT];
 
     com::sun::star::uno::Sequence<rtl::OUString>    GetPropertyNames();
 
+    void ChangeString(USHORT nFontType, const String& rSet)
+        {
+            if(sDefaultFonts[nFontType] != rSet)
+            {
+                SetModified();
+                sDefaultFonts[nFontType] = rSet;
+            }
+        }
 public:
     SwStdFontConfig();
     ~SwStdFontConfig();
 
     virtual void    Commit();
 
-    const String&   GetFontStandard() const {return sFontStandard   ;}
-    const String&   GetFontOutline()  const {return sFontOutline ;}
-    const String&   GetFontList   ()  const {return sFontList ;}
-    const String&   GetFontCaption()  const {return sFontCaption ;}
-    const String&   GetFontIndex  ()  const {return sFontIndex  ;}
+    const String&   GetFontStandard(sal_Bool bCJK) const {return sDefaultFonts[bCJK ? FONT_STANDARD_CJK : FONT_STANDARD];}
+    const String&   GetFontOutline(sal_Bool bCJK)  const {return sDefaultFonts[bCJK ? FONT_OUTLINE_CJK : FONT_OUTLINE];}
+    const String&   GetFontList   (sal_Bool bCJK)  const {return sDefaultFonts[bCJK ? FONT_LIST_CJK : FONT_LIST];}
+    const String&   GetFontCaption(sal_Bool bCJK)  const {return sDefaultFonts[bCJK ? FONT_CAPTION_CJK : FONT_CAPTION];}
+    const String&   GetFontIndex  (sal_Bool bCJK)  const {return sDefaultFonts[bCJK ? FONT_INDEX_CJK : FONT_INDEX];}
 
+    const String&   GetFontFor(USHORT nFontType)  const {return sDefaultFonts[nFontType];}
     BOOL            IsFontDefault(USHORT nFontType) const;
 
-    inline void     SetFontStandard(const String& rSet);
-    inline void     SetFontOutline(const String& rSet);
-    inline void     SetFontList   (const String& rSet);
-    inline void     SetFontCaption(const String& rSet);
-    inline void     SetFontIndex  (const String& rSet);
+    void     SetFontStandard(const String& rSet, sal_Bool bCJK)
+                    {ChangeString(bCJK ? FONT_STANDARD_CJK : FONT_STANDARD, rSet);}
+
+    void     SetFontOutline(const String& rSet, sal_Bool bCJK)
+                    {    ChangeString(bCJK ? FONT_OUTLINE_CJK : FONT_OUTLINE, rSet);}
+    void     SetFontList   (const String& rSet, sal_Bool bCJK)
+                    {    ChangeString(bCJK ? FONT_LIST_CJK : FONT_LIST, rSet);}
+    void     SetFontCaption(const String& rSet, sal_Bool bCJK)
+                    {    ChangeString(bCJK ? FONT_CAPTION_CJK : FONT_CAPTION, rSet);}
+    void     SetFontIndex  (const String& rSet, sal_Bool bCJK)
+                    {    ChangeString(bCJK ? FONT_INDEX_CJK : FONT_INDEX, rSet);}
 
     static String   GetDefaultFor(USHORT nFontType);
 };
-
-inline void SwStdFontConfig::SetFontStandard   (const String& rSet)
-{
-    if( sFontStandard != rSet)
-    {
-        SetModified();
-        sFontStandard = rSet;
-    }
-}
-inline void SwStdFontConfig::SetFontOutline(const String& rSet)
-{
-    if( sFontOutline != rSet)
-    {
-        SetModified();
-        sFontOutline  = rSet;
-    }
-}
-inline void SwStdFontConfig::SetFontList      (const String& rSet)
-{
-    if(sFontList != rSet)
-    {
-        SetModified();
-        sFontList = rSet;
-    }
-}
-
-inline void SwStdFontConfig::SetFontCaption(const String& rSet)
-{
-    if(sFontCaption != rSet)
-    {
-        SetModified();
-        sFontCaption  = rSet;
-    }
-}
-
-inline void SwStdFontConfig::SetFontIndex  (const String& rSet)
-{
-    if(sFontIndex != rSet)
-    {
-        SetModified();
-        sFontIndex = rSet;
-    }
-}
 #endif
 
 

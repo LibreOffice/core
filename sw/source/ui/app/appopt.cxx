@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopt.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2001-05-10 08:46:10 $
+ *  last change: $Author: os $ $Date: 2001-05-11 10:37:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,9 +178,9 @@
 #include <globals.h>        // globale Konstanten z.B.
 #endif
 
-#if SUPD<629
-#ifndef RID_SW_TP_HTML_OPTSHDWCRSR
-#define RID_SW_TP_HTML_OPTSHDWCRSR (RID_OFA_START + 246)
+#if SUPD<632
+#ifndef RID_SW_TP_STD_FONT_CJK
+#define RID_SW_TP_STD_FONT_CJK          (RID_OFA_START + 247)
 #endif
 #endif
 
@@ -572,7 +572,12 @@ SfxTabPage*  SwModule::CreateTabPage( USHORT nId, Window* pParent, const SfxItem
         break;
 
         break;
-        case RID_SW_TP_STD_FONT:        pRet = SwStdFontTabPage::Create(pParent, rSet); break;
+        case RID_SW_TP_STD_FONT:
+        case RID_SW_TP_STD_FONT_CJK:
+            pRet = SwStdFontTabPage::Create(pParent, rSet);
+            if(RID_SW_TP_STD_FONT_CJK == nId)
+                ((SwStdFontTabPage*)pRet)->SetCJKMode();
+        break;
         case RID_SW_TP_HTML_OPTPRINT_PAGE:
         case RID_SW_TP_OPTPRINT_PAGE:
         {
@@ -623,6 +628,9 @@ SfxTabPage*  SwModule::CreateTabPage( USHORT nId, Window* pParent, const SfxItem
 
 /*-------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.12  2001/05/10 08:46:10  os
+    store print options at the document
+
     Revision 1.11  2001/05/07 13:58:02  os
     #86002# don't apply web settings to text view and vice versa
 
