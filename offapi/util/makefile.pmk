@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.pmk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-26 13:59:19 $
+#   last change: $Author: vg $ $Date: 2003-06-12 10:32:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,7 +85,7 @@ LOCALIDLFILES=TRUE
 
 URDDOC=TRUE
 
-.IF "$(OS)"=="SOLARIS"
+.IF "$(OS)"=="SOLARIS" || "$(OS)"=="FREEBSD"
 .IF "$(CPU)"=="I"
 UNOIDL=unoidl
 .ENDIF
