@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swslots.src,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: os $ $Date: 2001-09-21 10:37:24 $
+ *  last change: $Author: kz $ $Date: 2001-09-24 20:42:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,7 +217,7 @@ SfxSlotInfo FN_AUTOFORMAT_AUTO
     SlotName[ italian ] = "Foramttazione automatica durante la digitazione";
     SlotName[ danish ] = "AutoFormat";
     SlotName[ swedish ] = "AutoFormat vid inmatning";
-    SlotName[ polish ] = "Autoformat";
+    SlotName[ polish ] = "Autoformat podczas wprowadzania";
     SlotName[ japanese ] = "å…¥åŠ›æ™‚ï½µï½°ï¾„ï¾Œï½«ï½°ï¾ï½¯ï¾„";
     SlotName[ korean ] = "ì…ë ¥ì‹œ ìë™í¬ë§·";
     SlotName[ chinese_simplified ] = "è¾“å…¥æ—¶ä½¿ç”¨è‡ªåŠ¨æ ¼å¼";
@@ -2752,7 +2752,7 @@ SfxSlotInfo FN_GLOSSARY_DLG
     SlotName [ english ] =  "Autotext bearbeiten";
     SlotName[ english_us ] = "Edit AutoText";
     SlotName[ portuguese ] = "Editar AutoTexto";
-    SlotName[ russian ] = "Ïğàâêà Àâòîòåêñòà";
+    SlotName[ russian ] = "Ïğàâêà àâòîòåêñòà";
     SlotName[ dutch ] = "AutoTekst bewerken";
     SlotName[ french ] = "Éditer l'AutoTexte";
     SlotName[ spanish ] = "Editar AutoTexto";
@@ -3403,7 +3403,7 @@ SfxSlotInfo FN_INSERT_FIELD
     SlotName[ italian ] = "Dialogo comando di campo";
     SlotName[ danish ] = "Indsæt felt";
     SlotName[ swedish ] = "Dialogruta för fältkommandon";
-    SlotName[ polish ] = "Wstaw pola";
+    SlotName[ polish ] = "Okno dialogowe pola";
     SlotName[ portuguese_brazilian ] = "InsertFieldCode";
     SlotName[ japanese ] = "ï¾Œï½¨ï½°ï¾™ï¾„ï¾ã®ï¾€ï¾ï½²ï½±ï¾›ï½¸ï¾";
     SlotName[ chinese_simplified ] = "å­—æ®µæŒ‡ä»¤å¯¹è¯æ¡†";
@@ -3843,7 +3843,7 @@ SfxSlotInfo FN_INSERT_HARDHYPHEN
     SlotName[ portuguese ] = "Inserir hífen não separável";
     SlotName[ russian ] = "Âñòàâèòü æåñòêèå ïåğåíîñû";
     SlotName[ dutch ] = "Vast scheidingsteken invoegen";
-    SlotName[ french ] = "Insérer un trait d'union manuel";
+    SlotName[ french ] = "Insérer un trait d'union protégé";
     SlotName[ spanish ] = "Insertar guión protegido";
     SlotName[ italian ] = "Inserisci sillabazione non divisibile";
     SlotName[ danish ] = "Indsæt hård bindestreg";
@@ -6633,7 +6633,7 @@ SfxSlotInfo FN_SET_ADD_MODE
     SlotName [ english ] =  "Multiselektion ein";
     SlotName[ english_us ] = "MultiSelection On";
     SlotName[ portuguese ] = "Multiselecção";
-    SlotName[ russian ] = "Âêë. ìóëüòèâûäåëåíèå";
+    SlotName[ russian ] = "Âêë. ãğóïïîâîå âûäåëåíèå";
     SlotName[ dutch ] = "Multiselectie inschakelen";
     SlotName[ french ] = "Mode Multisélection";
     SlotName[ spanish ] = "Activar selección múltiple";
@@ -6771,7 +6771,7 @@ SfxSlotInfo FN_SHADOWCURSOR
 {
     SlotName = "Direkt-Cursor ein/aus";
     SlotName [ english ] =  "Direkt-Cursor ein/aus";
-    SlotName[ english_us ] = "Direct Cursor on/off";
+    SlotName[ english_us ] = "Direct Cursor On/Off";
     SlotName[ portuguese ] = "Activar cursor directo";
     SlotName[ russian ] = "Âêë./âûêë. ñâîáîäíûé êóğñîğ";
     SlotName[ dutch ] = "Direct-cursor aan/uit";
@@ -8420,6 +8420,34 @@ SfxSlotInfo FN_TOOL_ANKER_AT_CHAR
 {
     SlotName = "Am Zeichen verankern";
     SlotName [ english ] =  "Am Zeichen verankern";
+    SlotName[ english_us ] = "Anchor as Character";
+    SlotName[ portuguese ] = "Ancorar como carácter";
+    SlotName[ russian ] = "Ïğèâÿçàòü êàê çíàê";
+    SlotName[ dutch ] = "Aan teken verankeren";
+    SlotName[ french ] = "Ancrage comme caractère";
+    SlotName[ spanish ] = "Anclar como carácter";
+    SlotName[ italian ] = "Ancora come carattere";
+    SlotName[ danish ] = "Forankring til tegnet";
+    SlotName[ swedish ] = "Förankra som tecken";
+    SlotName[ polish ] = "Zakotwicz jako znak";
+    SlotName[ portuguese_brazilian ] = "Anchor at Character";
+    SlotName[ japanese ] = "æ–‡å­—ã¨ã—ã¦ï½±ï¾ï½¶ï½°ã™ã‚‹";
+    SlotName[ chinese_simplified ] = "å½“ä½œå­—ç¬¦é”å®š";
+    SlotName[ chinese_traditional ] = "æ¨™è¨˜åœ¨å­—å…ƒä¸Š";
+    SlotName[ arabic ] = "ÅÑÓÇÁ Úáì ÇáÃÍÑİ";
+    SlotName[ dutch ] = "Aan teken verankeren";
+    SlotName[ chinese_simplified ] = "å½“ä½œå­—ç¬¦é”å®š";
+    SlotName[ greek ] = "Áãêıñùóç óôïí ÷áñáêôŞñá";
+    SlotName[ korean ] = "ë¬¸ìë¡œ ìœ„ì¹˜ ê³ ì •";
+    SlotName[ turkish ] = "Karaktere sabitle";
+    SlotName[ language_user1 ] = " ";
+    SlotName[ catalan ] = "Anclar al carácter";
+    SlotName[ finnish ] = "Ankkuri merkkiin";
+};
+SfxSlotInfo FN_TOOL_ANKER_CHAR
+{
+    SlotName = "Als Zeichen verankern";
+    SlotName [ english ] =  "Anchor as character";
     SlotName[ english_us ] = "Anchor to Character";
     SlotName[ portuguese ] = "Âncora no carácter";
     SlotName[ russian ] = "Ïğèâÿçàòü ê çíàêó";
@@ -8439,34 +8467,6 @@ SfxSlotInfo FN_TOOL_ANKER_AT_CHAR
     SlotName[ chinese_simplified ] = "æ ‡è®°åœ¨å­—ç¬¦ä¸Š";
     SlotName[ greek ] = "Áãêıñùóç óôïí ÷áñáêôŞñá";
     SlotName[ korean ] = "ë¬¸ìì— ìœ„ì¹˜ê³ ì •";
-    SlotName[ turkish ] = "Karaktere sabitle";
-    SlotName[ language_user1 ] = " ";
-    SlotName[ catalan ] = "Anclar al carácter";
-    SlotName[ finnish ] = "Ankkuri merkkiin";
-};
-SfxSlotInfo FN_TOOL_ANKER_CHAR
-{
-    SlotName = "Als Zeichen verankern";
-    SlotName [ english ] =  "Anchor as character";
-    SlotName[ english_us ] = "Anchor as Character";
-    SlotName[ portuguese ] = "Ancorar como carácter";
-    SlotName[ russian ] = "Ïğèâÿçàòü êàê çíàê";
-    SlotName[ dutch ] = "Aan teken verankeren";
-    SlotName[ french ] = "Ancrage comme caractère";
-    SlotName[ spanish ] = "Anclar como carácter";
-    SlotName[ italian ] = "Ancora come carattere";
-    SlotName[ danish ] = "Forankring til tegnet";
-    SlotName[ swedish ] = "Förankra som tecken";
-    SlotName[ polish ] = "Zakotwicz przy znaku";
-    SlotName[ portuguese_brazilian ] = "Anchor at Character";
-    SlotName[ japanese ] = "æ–‡å­—ã¨ã—ã¦ï½±ï¾ï½¶ï½°ã™ã‚‹";
-    SlotName[ chinese_simplified ] = "å½“ä½œå­—ç¬¦é”å®š";
-    SlotName[ chinese_traditional ] = "æ¨™è¨˜åœ¨å­—å…ƒä¸Š";
-    SlotName[ arabic ] = "ÅÑÓÇÁ Úáì ÇáÃÍÑİ";
-    SlotName[ dutch ] = "Aan teken verankeren";
-    SlotName[ chinese_simplified ] = "å½“ä½œå­—ç¬¦é”å®š";
-    SlotName[ greek ] = "Áãêıñùóç óôïí ÷áñáêôŞñá";
-    SlotName[ korean ] = "ë¬¸ìë¡œ ìœ„ì¹˜ ê³ ì •";
     SlotName[ turkish ] = "Karaktere sabitle";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Anclar al carácter";
@@ -8950,7 +8950,7 @@ SfxSlotInfo FN_VIEW_GRAPHIC
 {
     SlotName = "Grafik ein/aus";
     SlotName [ english ] =  "Graphics On/Off";
-    SlotName[ english_us ] = "Graphics on/off";
+    SlotName[ english_us ] = "Graphics On/Off";
     SlotName[ portuguese ] = "Mostrar/Ocultar imagem";
     SlotName[ russian ] = "Âêë./âûêë. ğèñóíîê";
     SlotName[ greek ] = "Ãñáöéêü Íáé/¼÷é";
@@ -9032,7 +9032,7 @@ SfxSlotInfo FN_VIEW_META_CHARS
 {
     SlotName = "Steuerzeichen  ein/aus";
     SlotName [ english ] =  "Nonprinting Characters on/off";
-    SlotName[ english_us ] = "Nonprinting Characters  on/off";
+    SlotName[ english_us ] = "Nonprinting Characters  On/Off";
     SlotName[ portuguese ] = "Mostrar/Ocultar caracteres não imprimíveis";
     SlotName[ russian ] = "Âêë./âûêë. íåïå÷àòàåìûå ñèìâîëû";
     SlotName[ greek ] = "Ìç åêôõğşóéìïé ÷áñáêôŞñåò Íáé/¼÷é";
@@ -9059,7 +9059,7 @@ SfxSlotInfo FN_VIEW_TABLEGRID
     SlotName [ english ] =  "Tabellenbegrenzungen";
     SlotName[ english_us ] = "Table Limits";
     SlotName[ portuguese ] = "Margens da tabela";
-    SlotName[ russian ] = "Îãğàíè÷åíèÿ òàáëèöû";
+    SlotName[ russian ] = "Ãğàíèöû òàáëèöû";
     SlotName[ dutch ] = "Tabelbegrenzingen";
     SlotName[ french ] = "Limiteurs de tableaux";
     SlotName[ spanish ] = "Límites de la tabla";
@@ -9171,7 +9171,7 @@ SfxSlotInfo SID_ATTR_CHAR_COLOR_BACKGROUND
     SlotName [ english ] =  "Zeichenhintergrund";
     SlotName[ english_us ] = "Highlighting";
     SlotName[ portuguese ] = "Cor de fundo dos caracteres";
-    SlotName[ russian ] = "Ïîäöâåòêà";
+    SlotName[ russian ] = "Ôîí òåêñòà";
     SlotName[ dutch ] = "Tekenachtergrond";
     SlotName[ french ] = "Trame de fond";
     SlotName[ spanish ] = "Fondo de carácter";
@@ -9493,17 +9493,78 @@ SfxSlotInfo FN_SECTION_APPENDNODE
 {
     SlotName = "Absatz an Bereich anfügen";
     SlotName [ english ] =  "Append paragraph to section";
+    SlotName[ english_us ] = "Append paragraph to section";
+    SlotName[ portuguese ] = "Append paragraph to section";
+    SlotName[ russian ] = "Append paragraph to section";
+    SlotName[ greek ] = "Append paragraph to section";
+    SlotName[ dutch ] = "Append paragraph to section";
+    SlotName[ french ] = "Append paragraph to section";
+    SlotName[ spanish ] = "Append paragraph to section";
+    SlotName[ finnish ] = "Append paragraph to section";
+    SlotName[ italian ] = "Append paragraph to section";
+    SlotName[ danish ] = "Append paragraph to section";
+    SlotName[ swedish ] = "Append paragraph to section";
+    SlotName[ polish ] = "Append paragraph to section";
+    SlotName[ portuguese_brazilian ] = "Append paragraph to section";
+    SlotName[ japanese ] = "Append paragraph to section";
+    SlotName[ korean ] = "Append paragraph to section";
+    SlotName[ chinese_simplified ] = "Append paragraph to section";
+    SlotName[ chinese_traditional ] = "Append paragraph to section";
+    SlotName[ turkish ] = "Append paragraph to section";
+    SlotName[ arabic ] = "Append paragraph to section";
+    SlotName[ catalan ] = "Append paragraph to section";
 };
 SfxSlotInfo FN_SET_MODOPT_TBLNUMFMT
 {
     SlotName = "Zahlenerkennung";
     SlotName [ english ] =  "Number recognition";
+    SlotName[ english_us ] = "Number recognition";
+    SlotName[ portuguese ] = "Number recognition";
+    SlotName[ russian ] = "Number recognition";
+    SlotName[ greek ] = "Number recognition";
+    SlotName[ dutch ] = "Number recognition";
+    SlotName[ french ] = "Number recognition";
+    SlotName[ spanish ] = "Number recognition";
+    SlotName[ finnish ] = "Number recognition";
+    SlotName[ italian ] = "Number recognition";
+    SlotName[ danish ] = "Number recognition";
+    SlotName[ swedish ] = "Number recognition";
+    SlotName[ polish ] = "Number recognition";
+    SlotName[ portuguese_brazilian ] = "Number recognition";
+    SlotName[ japanese ] = "Number recognition";
+    SlotName[ korean ] = "Number recognition";
+    SlotName[ chinese_simplified ] = "Number recognition";
+    SlotName[ chinese_traditional ] = "Number recognition";
+    SlotName[ turkish ] = "Number recognition";
+    SlotName[ arabic ] = "Number recognition";
+    SlotName[ catalan ] = "Number recognition";
 };
 SfxSlotInfo FN_UPDATE_CHARTS
 {
     SlotName = "Diagramme aktualisieren";
     SlotName [ english ] =  "Update Charts";
+    SlotName[ english_us ] = "Update Charts";
+    SlotName[ portuguese ] = "Update Charts";
+    SlotName[ russian ] = "Update Charts";
+    SlotName[ greek ] = "Update Charts";
+    SlotName[ dutch ] = "Update Charts";
+    SlotName[ french ] = "Update Charts";
+    SlotName[ spanish ] = "Update Charts";
+    SlotName[ finnish ] = "Update Charts";
+    SlotName[ italian ] = "Update Charts";
+    SlotName[ danish ] = "Update Charts";
+    SlotName[ swedish ] = "Update Charts";
+    SlotName[ polish ] = "Update Charts";
+    SlotName[ portuguese_brazilian ] = "Update Charts";
+    SlotName[ japanese ] = "Update Charts";
+    SlotName[ korean ] = "Update Charts";
+    SlotName[ chinese_simplified ] = "Update Charts";
+    SlotName[ chinese_traditional ] = "Update Charts";
+    SlotName[ turkish ] = "Update Charts";
+    SlotName[ arabic ] = "Update Charts";
+    SlotName[ catalan ] = "Update Charts";
 };
+
 
 
 
