@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JobQueue_Test.java,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 09:13:24 $
+ *  last change: $Author: vg $ $Date: 2003-10-09 10:15:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,8 +227,7 @@ public final class JobQueue_Test extends ComplexTestCase {
     }
 
     private static final class TestThread extends Thread {
-        public final ThreadId _threadId
-        = __javaThreadPoolFactory.getThreadId(this);
+        public final ThreadId _threadId = JavaThreadPoolFactory.getThreadId();
         public final Object _disposeId = new Object();
         public JobQueue _jobQueue = null;
         public String _message;
