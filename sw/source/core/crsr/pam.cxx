@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pam.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-16 15:29:08 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:43:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,12 +128,6 @@ inline xub_StrLen GetSttOrEnd( BOOL bCondition, const SwCntntNode& rNd )
 *************************************************************************/
 
 
-SwPosition::SwPosition(const SwPosition &rPos)
-    : nNode(rPos.nNode),nContent(rPos.nContent)
-{
-}
-
-
 SwPosition::SwPosition( const SwNodeIndex &rNode, const SwIndex &rCntnt )
     : nNode( rNode ),nContent( rCntnt )
 {
@@ -149,6 +143,11 @@ SwPosition::SwPosition( const SwNode& rNode )
 {
 }
 
+
+SwPosition::SwPosition(const SwPosition &rPos)
+    : nNode(rPos.nNode),nContent(rPos.nContent)
+{
+}
 
 SwPosition &SwPosition::operator=(const SwPosition &rPos)
 {
@@ -497,13 +496,6 @@ SwPaM::SwPaM( const SwNode& rMk, xub_StrLen nMkCntnt,
     pPoint = &aBound2;
 }
 
-SwPaM::SwPaM( SwPaM &rPam )
-    : Ring( &rPam ), aBound1( *(rPam.pPoint) ), aBound2( *(rPam.pMark) ), bIsInFrontOfLabel(FALSE)
-{
-    pPoint = &aBound1;
-    pMark  = rPam.HasMark() ? &aBound2 : pPoint;
-}
-
 SwPaM::SwPaM( const SwNode& rNd, xub_StrLen nCntnt, SwPaM* pRing )
     : Ring( pRing ), aBound1( rNd ), aBound2( rNd ), bIsInFrontOfLabel(FALSE)
 {
@@ -521,6 +513,31 @@ SwPaM::SwPaM( const SwNodeIndex& rNd, xub_StrLen nCntnt, SwPaM* pRing )
 }
 
 SwPaM::~SwPaM() {}
+
+// @@@ semantic: no copy ctor.
+SwPaM::SwPaM( SwPaM &rPam )
+    : Ring( &rPam ),
+      aBound1( *(rPam.pPoint) ),
+      aBound2( *(rPam.pMark)  ),
+      bIsInFrontOfLabel(FALSE)
+{
+    pPoint = &aBound1;
+    pMark  = rPam.HasMark() ? &aBound2 : pPoint;
+}
+
+// @@@ semantic: no copy assignment for super class Ring.
+SwPaM &SwPaM::operator=( const SwPaM &rPam )
+{
+    *pPoint = *( rPam.pPoint );
+    if( rPam.HasMark() )
+    {
+        SetMark();
+        *pMark = *( rPam.pMark );
+    }
+    else
+        DeleteMark();
+    return *this;
+}
 
 void SwPaM::SetMark()
 {
@@ -552,19 +569,6 @@ FASTBOOL SwPaM::IsInFrontOfLabel() const
 void SwPaM::SetInFrontOfLabel(FASTBOOL _bIsInFrontOfLabel)
 {
     bIsInFrontOfLabel = _bIsInFrontOfLabel;
-}
-
-SwPaM &SwPaM::operator=( SwPaM &rPam )
-{
-    *pPoint = *( rPam.pPoint );
-    if( rPam.HasMark() )
-    {
-        SetMark();
-        *pMark = *( rPam.pMark );
-    }
-    else
-        DeleteMark();
-    return *this;
 }
 
 // Bewegen des Cursors
