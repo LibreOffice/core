@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colfrm.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ama $ $Date: 2001-08-30 08:49:33 $
+ *  last change: $Author: ama $ $Date: 2001-09-13 08:24:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -441,34 +441,6 @@ void SwLayoutFrm::AdjustColumns( const SwFmtCol *pAttr, BOOL bAdjustAttributes )
             SvxLRSpaceItem aLR( pSet->GetLRSpace() );
             SvxULSpaceItem aUL( pSet->GetULSpace() );
 
-#ifdef VERTICAL_LAYOUT
-            if( IsVertical() )
-            {
-                if ( bLine )
-                {
-                    if ( i == 0 )
-                    {   aUL.SetUpper( pC->GetLeft() );
-                        aUL.SetLower( Max(pC->GetRight(), nMin) );
-                    }
-                    else if ( i == (pAttr->GetNumCols() - 1) )
-                    {   aUL.SetUpper( Max(pC->GetLeft(), nMin) );
-                        aUL.SetLower( pC->GetRight() );
-                    }
-                    else
-                    {   aUL.SetUpper( Max(pC->GetLeft(), nMin) );
-                        aUL.SetLower( Max(pC->GetRight(), nMin) );
-                    }
-                }
-                else
-                {
-                    aUL.SetUpper( pC->GetLeft() );
-                    aUL.SetLower( pC->GetRight());
-                }
-                aLR.SetLeft ( pC->GetUpper() );
-                aLR.SetRight( pC->GetLower() );
-            }
-            else
-#endif
             {
             //Damit die Trennlinien Platz finden, muessen sie hier
             //Beruecksichtigung finden. Ueberall wo zwei Spalten aufeinanderstossen

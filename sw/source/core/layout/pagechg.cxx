@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagechg.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ama $ $Date: 2001-08-30 08:48:51 $
+ *  last change: $Author: ama $ $Date: 2001-09-13 08:22:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -557,6 +557,9 @@ void SwPageFrm::_UpdateAttr( SfxPoolItem *pOld, SfxPoolItem *pNew,
             /* kein break hier */
         case RES_FRM_SIZE:
         {
+#ifdef VERTICAL_LAYOUT
+            CheckVertical();
+#endif
             const SwRect aOldRect( Frm() );
             if ( GetFmt()->GetDoc()->IsBrowseMode() )
             {

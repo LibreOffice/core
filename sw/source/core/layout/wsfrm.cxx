@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wsfrm.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ama $ $Date: 2001-08-30 08:49:04 $
+ *  last change: $Author: ama $ $Date: 2001-09-13 08:21:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2411,14 +2411,17 @@ void SwLayoutFrm::ChgLowersProp( const Size& rOldSize )
     const BOOL bWidthChgd  = rOldSize.Width()  != Prt().Width();
 
 #ifdef VERTICAL_LAYOUT
-    const SzPtr pVar = ( bVarHeight == IsVertical() ) ? pWidth : pHeight;
+    const BOOL bVert = IsVertical();
+    const SzPtr pVar = ( bVarHeight == bVert ) ? pWidth : pHeight;
+    if( IsBodyFrm() && IsInDocBody() && !Lower()->IsColumnFrm()
+        && !( bVert ? bHeightChgd : bWidthChgd )
+        && ( !IsInSct() || !FindSctFrm()->IsColLocked() ) )
 #else
     const SzPtr pVar = pVARSIZE;
-#endif
-
     //Abkuerzung fuer Body-Inhalt
     if( IsBodyFrm() && IsInDocBody() && !Lower()->IsColumnFrm() && !bWidthChgd
         && ( !IsInSct() || !FindSctFrm()->IsColLocked() ) )
+#endif
     {
         SwPageFrm *pPage = FindPageFrm();
         if( pFrm )
@@ -2474,7 +2477,7 @@ void SwLayoutFrm::ChgLowersProp( const Size& rOldSize )
                 //invalidiert und nur der letzte noch (teilweise) passende
                 //Adjustiert.
 #ifdef VERTICAL_LAYOUT
-                if( IsVertical() )
+                if( bVert )
                 {
                     SwTwips nBot = Frm().Left() + Prt().Left();
                     while ( pFrm->GetPrev() && pFrm->Frm().Left() < nBot )
@@ -2571,7 +2574,7 @@ void SwLayoutFrm::ChgLowersProp( const Size& rOldSize )
             if ( bHeightChgd )
             {
 #ifdef VERTICAL_LAYOUT
-                if ( pFrm->bVarHeight != pFrm->IsVertical() )
+                if ( pFrm->bVarHeight == pFrm->IsVertical() )
 #else
                 if ( !pFrm->bVarHeight )
 #endif
@@ -2615,21 +2618,98 @@ void SwLayoutFrm::Format( const SwBorderAttrs *pAttrs )
     if ( bValidPrtArea && bValidSize )
         return;
 
-    const USHORT nLR = pAttrs->CalcLeft( this ) + pAttrs->CalcRight();
-    const USHORT nUL = pAttrs->CalcTop()  + pAttrs->CalcBottom();
+    const USHORT nLeft = (USHORT)pAttrs->CalcLeft( this );
+    const USHORT nLR = nLeft + (USHORT)pAttrs->CalcRight();
+    const USHORT nUpper = pAttrs->CalcTop();
+    const USHORT nUL = nUpper + pAttrs->CalcBottom();
 
+#ifdef VERTICAL_LAYOUT
+    SwRectFn fnRect = IsVertical() ? fnRectVert : fnRectHori;
+    if ( !bValidPrtArea )
+    {
+        bValidPrtArea = TRUE;
+        (aPrt.*fnRect->fnSetPosX)( nLeft );
+        (aPrt.*fnRect->fnSetPosY)( nUpper );
+        (aPrt.*fnRect->fnSetWidth)( (aFrm.*fnRect->fnGetWidth)() - nLR );
+        (aPrt.*fnRect->fnSetHeight)( (aFrm.*fnRect->fnGetHeight)()- nUL );
+    }
+
+    if ( !bValidSize )
+    {
+        const SzPtr pVarSz = pVARSIZE;
+        if ( !HasFixSize( pVarSz ) )
+        {
+            const SwTwips nBorder = bVarHeight ? nUL : nLR;
+            const PtPtr pVarPs = pVARPOS;
+            const SwFmtFrmSize &rSz = GetFmt()->GetFrmSize();
+            SwTwips nMinHeight = rSz.GetSizeType() == ATT_MIN_SIZE ? rSz.GetHeight() : 0;
+            do
+            {   bValidSize = TRUE;
+
+                //Die Groesse in der VarSize wird durch den Inhalt plus den
+                //Raendern bestimmt.
+                SwTwips nRemaining = 0;
+                SwFrm *pFrm = Lower();
+                while ( pFrm )
+                {   nRemaining += (pFrm->Frm().*fnRect->fnGetHeight)();
+                    if( pFrm->IsTxtFrm() && ((SwTxtFrm*)pFrm)->IsUndersized() )
+                    // Dieser TxtFrm waere gern ein bisschen groesser
+                        nRemaining += ((SwTxtFrm*)pFrm)->GetParHeight()
+                                      - (pFrm->Prt().*fnRect->fnGetHeight)();
+                    else if( pFrm->IsSctFrm() && ((SwSectionFrm*)pFrm)->IsUndersized() )
+                        nRemaining += ((SwSectionFrm*)pFrm)->Undersize();
+                    pFrm = pFrm->GetNext();
+                }
+                nRemaining += nBorder;
+                nRemaining = Max( nRemaining, nMinHeight );
+                const SwTwips nDiff = nRemaining-(Frm().*fnRect->fnGetHeight)();
+                const long nOldLeft = (Frm().*fnRect->fnGetLeft)();
+                const long nOldTop = (Frm().*fnRect->fnGetTop)();
+                if ( nDiff )
+                {
+                    if ( nDiff > 0 )
+                        Grow( nDiff, pVarSz );
+                    else
+                        Shrink( -nDiff, pVarSz );
+                    //Schnell auf dem kurzen Dienstweg die Position updaten.
+                    MakePos();
+                }
+                //Unterkante des Uppers nicht ueberschreiten.
+                if ( GetUpper() && (Frm().*fnRect->fnGetHeight)() )
+                {
+                    const SwTwips nLimit = (GetUpper()->*fnRect->fnGetLimit)();
+                    if( (this->*fnRect->fnSetLimit)( nLimit ) &&
+                        nOldLeft == (Frm().*fnRect->fnGetLeft)() &&
+                        nOldTop  == (Frm().*fnRect->fnGetTop)() )
+                        bValidSize = bValidPrtArea = TRUE;
+                }
+            } while ( !bValidSize );
+        }
+        else if ( GetType() & 0x0018 )
+        {
+            do
+            {   if ( Frm().Height() != pAttrs->GetSize().Height() )
+                    ChgSize( Size( Frm().Width(), pAttrs->GetSize().Height()));
+                bValidSize = TRUE;
+                MakePos();
+            } while ( !bValidSize );
+        }
+        else
+            bValidSize = TRUE;
+    }
+#else
     if ( !bValidPrtArea )
     {
         bValidPrtArea = TRUE;
 
         //Position einstellen.
-        aPrt.Left( pAttrs->CalcLeft( this ) );
-        aPrt.Top ( pAttrs->CalcTop()  );
+        aPrt.Left( nLeft );
+        aPrt.Top ( nUpper  );
 
         //Sizes einstellen; die Groesse gibt der umgebende Frm vor, die
         //die Raender werden einfach abgezogen.
-        aPrt.Width ( aFrm.Width() - nLR );
-        aPrt.Height( aFrm.Height()- nUL );
+        aPrt.Width ( aFrm.Width() - nLeft - nRight );
+        aPrt.Height( aFrm.Height()- nUpper - nBottom );
     }
 
     if ( !bValidSize )
@@ -2699,6 +2779,7 @@ void SwLayoutFrm::Format( const SwBorderAttrs *pAttrs )
         else
             bValidSize = TRUE;
     }
+#endif
 }
 
 /*************************************************************************

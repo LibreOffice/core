@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calcmove.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ama $ $Date: 2001-09-11 08:12:51 $
+ *  last change: $Author: ama $ $Date: 2001-09-13 08:23:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -510,13 +510,14 @@ void SwFrm::MakePos()
         pPrv = lcl_Prev( this, FALSE );
 #ifdef VERTICAL_LAYOUT
         USHORT nMyType = GetType();
+        BOOL bVert = IsVertical();
 #endif
         if ( !bUseUpper && pPrv )
         {   aFrm.Pos( pPrv->Frm().Pos() );
 #ifdef VERTICAL_LAYOUT
             if( FRM_NEIGHBOUR & nMyType && !IsVertical() )
                 aFrm.Pos().X() += pPrv->Frm().Width();
-            else if( IsVertical() && FRM_NOTE_VERT & nMyType )
+            else if( bVert && FRM_NOTE_VERT & nMyType )
                 aFrm.Pos().X() -= aFrm.Width();
             else
                 aFrm.Pos().Y() += pPrv->Frm().Height();
@@ -538,7 +539,7 @@ void SwFrm::MakePos()
 #ifdef VERTICAL_LAYOUT
                 if( FRM_NEIGHBOUR & nMyType && !IsVertical() )
                     aFrm.Pos().X() += pPrv->Frm().Width();
-                else if( IsVertical() && FRM_NOTE_VERT & nMyType )
+                else if( bVert && FRM_NOTE_VERT & nMyType )
                     aFrm.Pos().X() -= aFrm.Width();
                 else
                     aFrm.Pos().Y() += pPrv->Frm().Height();
@@ -551,7 +552,7 @@ void SwFrm::MakePos()
                 aFrm.Pos( GetUpper()->Frm().Pos() );
                 aFrm.Pos() += GetUpper()->Prt().Pos();
 #ifdef VERTICAL_LAYOUT
-                if( IsVertical() && FRM_NOTE_VERT & nMyType )
+                if( bVert && FRM_NOTE_VERT & nMyType )
                     aFrm.Pos().X() -= aFrm.Width() - GetUpper()->Prt().Width();
 #endif
             }
@@ -559,8 +560,7 @@ void SwFrm::MakePos()
         else
             aFrm.Pos().X() = aFrm.Pos().Y() = 0;
 #ifdef VERTICAL_LAYOUT
-        if( IsBodyFrm() && IsVertical() && GetUpper() &&
-            aFrm.Width() < GetUpper()->Prt().Width() )
+        if( IsBodyFrm() && bVert && GetUpper() )
             aFrm.Pos().X() += GetUpper()->Prt().Width() - aFrm.Width();
 #endif
         bValidPos = TRUE;
