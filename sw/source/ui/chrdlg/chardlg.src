@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2000-12-06 15:02:59 $
+ *  last change: $Author: rt $ $Date: 2000-12-08 18:11:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,7 +190,7 @@ TabDialog DLG_CHAR
                 Text[ swedish ] = "Asiatisk layout";
                 Text[ polish ] = "Layout azjatycki";
                 Text[ portuguese_brazilian ] = "Asian layout";
-                Text[ japanese ] = "±¼Þ±Ž®Ú²±³Ä";
+                Text[ japanese ] = "˜a•¶Ú²±³Ä";
                 Text[ korean ] = "¾Æ½Ã¾Æ ·¹ÀÌ¾Æ¿ô";
                 Text[ chinese_simplified ] = "ÑÇÖÞÎÄ×ÖµÄ°æÊ½";
                 Text[ chinese_traditional ] = "¨È¬w¤å¦rª©¦¡";
