@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontwork.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: cl $ $Date: 2002-03-04 08:51:21 $
+ *  last change: $Author: kz $ $Date: 2002-04-29 20:25:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,6 +139,7 @@ DockingWindow RID_SVXDLG_FONTWORK
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Desactivado";
                 Text[ finnish ] = "Off";
+                Text[ thai ] = "ปิด";
             };
             ToolBoxItem
             {
@@ -178,6 +179,7 @@ DockingWindow RID_SVXDLG_FONTWORK
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Rodar";
                 Text[ finnish ] = "Kierr�";
+                Text[ thai ] = "หมุน";
             };
             ToolBoxItem
             {
@@ -213,6 +215,7 @@ DockingWindow RID_SVXDLG_FONTWORK
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Derecho";
                 Text[ finnish ] = "Pystyss�";
+                Text[ thai ] = "ตั้งตรง";
             };
             ToolBoxItem
             {
@@ -248,6 +251,7 @@ DockingWindow RID_SVXDLG_FONTWORK
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Inclinar horizontalmente";
                 Text[ finnish ] = "Kallista vaakasuunnassa";
+                Text[ thai ] = "แนวนอนเอียง";
             };
             ToolBoxItem
             {
@@ -283,6 +287,7 @@ DockingWindow RID_SVXDLG_FONTWORK
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Inclinar verticalmente";
                 Text[ finnish ] = "Kallista pystysuunnassa";
+                Text[ thai ] = "แนวตั้งเอียง";
             };
         };
     };
@@ -326,6 +331,7 @@ DockingWindow RID_SVXDLG_FONTWORK
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Orientaci�n";
                 Text[ finnish ] = "Suunta";
+                Text[ thai ] = "การวางแนว";
             };
             ToolBoxItem
             {
@@ -367,6 +373,7 @@ DockingWindow RID_SVXDLG_FONTWORK
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Alineado a la izquierda";
                 Text[ finnish ] = "Tasaa vasemmalle";
+                Text[ thai ] = "ชิดซ้าย";
             };
             ToolBoxItem
             {
@@ -402,6 +409,7 @@ DockingWindow RID_SVXDLG_FONTWORK
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Centrado";
                 Text[ finnish ] = "Keskell�";
+                Text[ thai ] = "ตรงกลาง";
             };
             ToolBoxItem
             {
@@ -439,6 +447,7 @@ DockingWindow RID_SVXDLG_FONTWORK
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Alinear a la derecha";
                 Text[ finnish ] = "Tasaa oikealle";
+                Text[ thai ] = "ชิดขวา";
             };
             ToolBoxItem
             {
@@ -476,6 +485,7 @@ DockingWindow RID_SVXDLG_FONTWORK
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Tama�o autom�tico de texto";
                 Text[ finnish ] = "Automaattinen tekstin koon m��ritys";
+                Text[ thai ] = "ขนาดข้อความอัตโนมัติ";
             };
         };
     };
@@ -529,6 +539,7 @@ DockingWindow RID_SVXDLG_FONTWORK
         QuickHelpText[ turkish ] = "Abstand";
         QuickHelpText[ catalan ] = "Distancia";
         QuickHelpText[ finnish ] = "Et�isyys";
+        QuickHelpText[ thai ] = "Distance";
     };
     FixedBitmap FB_TEXTSTART
     {
@@ -577,6 +588,7 @@ DockingWindow RID_SVXDLG_FONTWORK
         QuickHelpText[ turkish ] = "Einzug";
         QuickHelpText[ catalan ] = "Sangr�a";
         QuickHelpText[ finnish ] = "Sisenn�";
+        QuickHelpText[ thai ] = "Indent";
     };
     ToolBox TBX_SHADOW
     {
@@ -618,6 +630,7 @@ DockingWindow RID_SVXDLG_FONTWORK
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Contorno";
                 Text[ finnish ] = "��riviiva";
+                Text[ thai ] = "เส้นแสดงรูปร่าง";
             };
             ToolBoxItem
             {
@@ -653,6 +666,7 @@ DockingWindow RID_SVXDLG_FONTWORK
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Contorno de caracteres";
                 Text[ finnish ] = "Tekstin ��riviiva";
+                Text[ thai ] = "เส้นแสดงรูปร่างข้อความ";
             };
             ToolBoxItem
             {
@@ -692,6 +706,7 @@ DockingWindow RID_SVXDLG_FONTWORK
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Sin sombra";
                 Text[ finnish ] = "Ei varjoa";
+                Text[ thai ] = "ไม่แรเงา";
             };
             ToolBoxItem
             {
@@ -727,6 +742,7 @@ DockingWindow RID_SVXDLG_FONTWORK
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Vertical";
                 Text[ finnish ] = "Pystytaso";
+                Text[ thai ] = "แนวตั้ง";
             };
             ToolBoxItem
             {
@@ -762,6 +778,7 @@ DockingWindow RID_SVXDLG_FONTWORK
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Inclinar";
                 Text[ finnish ] = "Kallista";
+                Text[ thai ] = "เอียง";
             };
         };
     };
@@ -832,6 +849,8 @@ DockingWindow RID_SVXDLG_FONTWORK
         CustomUnitText[ catalan ] = "Grados";
         QuickHelpText[ catalan ] = "Distancia X";
         QuickHelpText[ finnish ] = "Et�isyys X";
+        CustomUnitText[ thai ] = " องศา";
+        QuickHelpText[ thai ] = "ระยะ X";
     };
     FixedBitmap FB_SHADOW_Y
     {
@@ -896,6 +915,8 @@ DockingWindow RID_SVXDLG_FONTWORK
         QuickHelpText[ catalan ] = "Distancia Y";
         CustomUnitText[ finnish ] = "%";
         QuickHelpText[ finnish ] = "Et�isyys Y";
+        CustomUnitText[ thai ] = "%";
+        QuickHelpText[ thai ] = "Distance Y";
     };
     ListBox CLB_SHADOW_COLOR
     {
@@ -980,6 +1001,7 @@ DockingWindow RID_SVXDLG_FONTWORK
         QuickHelpText[ turkish ] = "Schattenfarbe";
         QuickHelpText[ catalan ] = "Color sombra";
         QuickHelpText[ finnish ] = "Varjon v�ri";
+        QuickHelpText[ thai ] = "Shadow Color";
     };
     Text[ chinese_simplified ] = "美工字体";
     Text[ russian ] = "FontWork";
@@ -988,10 +1010,11 @@ DockingWindow RID_SVXDLG_FONTWORK
     Text[ chinese_traditional ] = "美術字型";
     Text[ arabic ] = "FontWork";
     Text[ greek ] = "FontWork";
-    Text[ korean ] = "폰트워크";
+    Text[ korean ] = "FontWork";
     Text[ turkish ] = "FontWork";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "FontWork";
+    Text[ thai ] = "ตัวอักษรที่ใช้งาน";
 };
  // Bitmaps ---------------------------------------------------------------
 Bitmap RID_SVXBMP_FONTWORK_FORM1
@@ -1085,6 +1108,7 @@ String RID_SVXSTR_FONTWORK_FORM1
     Text[ turkish ] = "�st yar�m daire";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Semic�rculo superior";
+    Text[ thai ] = "ครึ่งวงกลมบน";
 };
 String RID_SVXSTR_FONTWORK_FORM2
 {
@@ -1112,6 +1136,7 @@ String RID_SVXSTR_FONTWORK_FORM2
     Text[ turkish ] = "Alt yar�m daire";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Semic�rculo inferior";
+    Text[ thai ] = "ครึ่งวงกลมล่าง";
 };
 String RID_SVXSTR_FONTWORK_FORM3
 {
@@ -1139,6 +1164,7 @@ String RID_SVXSTR_FONTWORK_FORM3
     Text[ turkish ] = "Sol yar�m daire";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Semic�rculo izquierdo";
+    Text[ thai ] = "ครึ่งวงกลมซ้าย";
 };
 String RID_SVXSTR_FONTWORK_FORM4
 {
@@ -1166,6 +1192,7 @@ String RID_SVXSTR_FONTWORK_FORM4
     Text[ turkish ] = "Sa� yar�m daire";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Semic�rculo derecho";
+    Text[ thai ] = "ครึ่งวงกลมขวา";
 };
 String RID_SVXSTR_FONTWORK_FORM5
 {
@@ -1193,6 +1220,7 @@ String RID_SVXSTR_FONTWORK_FORM5
     Text[ turkish ] = "�st yay";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Arco superior de c�rculo";
+    Text[ thai ] = "ส่วนโค้งของวงกลมบน";
 };
 String RID_SVXSTR_FONTWORK_FORM6
 {
@@ -1220,6 +1248,7 @@ String RID_SVXSTR_FONTWORK_FORM6
     Text[ turkish ] = "Alt yay";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Arco inferior de c�rculo";
+    Text[ thai ] = "ส่วนโค้งของวงกลมล่าง";
 };
 String RID_SVXSTR_FONTWORK_FORM7
 {
@@ -1247,6 +1276,7 @@ String RID_SVXSTR_FONTWORK_FORM7
     Text[ turkish ] = "Sol yay";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Arco izquierdo de c�rculo";
+    Text[ thai ] = "ส่วนโค้งของวงกลมซ้าย";
 };
 String RID_SVXSTR_FONTWORK_FORM8
 {
@@ -1274,6 +1304,7 @@ String RID_SVXSTR_FONTWORK_FORM8
     Text[ turkish ] = "Sa� yay";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Arco derecho de c�rculo";
+    Text[ thai ] = "ส่วนโค้งของวงกลมขวา";
 };
 String RID_SVXSTR_FONTWORK_FORM9
 {
@@ -1301,6 +1332,7 @@ String RID_SVXSTR_FONTWORK_FORM9
     Text[ turkish ] = "A��k daire";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Circulo abierto";
+    Text[ thai ] = "เปิดวงกลม";
 };
 String RID_SVXSTR_FONTWORK_FORM10
 {
@@ -1328,6 +1360,7 @@ String RID_SVXSTR_FONTWORK_FORM10
     Text[ turkish ] = "Kapal� daire";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "C�rculo cerrado";
+    Text[ thai ] = "ปิดวงกลม";
 };
 String RID_SVXSTR_FONTWORK_FORM11
 {
@@ -1355,6 +1388,7 @@ String RID_SVXSTR_FONTWORK_FORM11
     Text[ turkish ] = "Kapal� daire II";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "C�rculo cerrado II";
+    Text[ thai ] = "ปิดวงกลม II";
 };
 String RID_SVXSTR_FONTWORK_FORM12
 {
@@ -1382,6 +1416,7 @@ String RID_SVXSTR_FONTWORK_FORM12
     Text[ turkish ] = "Dikey a��k daire";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "C�rculo abierto vertical";
+    Text[ thai ] = "เปิดวงกลมแนวตั้ง";
 };
 String RID_SVXSTR_FONTWORK_UNDOCREATE
 {
@@ -1403,10 +1438,11 @@ String RID_SVXSTR_FONTWORK_UNDOCREATE
     Text[ chinese_traditional ] = "產生美術字型物件";
     Text[ arabic ] = "����� ���� FontWork";
     Text[ greek ] = "���������� ������������ FontWork";
-    Text[ korean ] = "폰트워크 개체 생성";
+    Text[ korean ] = "FontWork 개체 생성";
     Text[ turkish ] = "FontWork nesnesi olu�tur";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Crear objeto FontWork";
     Text[ finnish ] = "Luo fonttity�objekti";
+    Text[ thai ] = "สร้างวัตถตัวอักษรที่ใช้งาน";
 };
  // ********************************************************************** EOF
