@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeprovider.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: lla $ $Date: 2001-01-17 15:02:30 $
+ *  last change: $Author: lla $ $Date: 2001-01-26 07:53:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,11 +135,11 @@ namespace configmgr
                   root(_aSubtree)   /* EXPENSIVE!!! (deep copy) */
             {}
 
-        TreeChangeList(const vos::ORef < OOptions >& _xOptions, const rtl::OUString& _rPathToRoot, auto_ptr<SubtreeChange> _pSubtreeChange)
-                : m_xOptions(_xOptions),
-                  pathToRoot(_rPathToRoot),
-                  root(*_pSubtreeChange.release()) /* EXPENSIVE!!! (deep copy) */
-            {}
+        // TreeChangeList(const vos::ORef < OOptions >& _xOptions, const rtl::OUString& _rPathToRoot, auto_ptr<SubtreeChange> _pSubtreeChange)
+        //         : m_xOptions(_xOptions),
+        //           pathToRoot(_rPathToRoot),
+        //           root(*_pSubtreeChange.release()) /* EXPENSIVE!!! (deep copy) */
+        //     {}
         /** ctor
         @param      _rPathToRoot        path to the root of the whole to-be-updated subtree
         @param      _rLocalName         relative path within the to-be-updated subtree

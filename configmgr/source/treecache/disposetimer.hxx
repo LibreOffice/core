@@ -2,9 +2,9 @@
  *
  *  $RCSfile: disposetimer.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: lla $ $Date: 2001-01-17 15:02:34 $
+ *  last change: $Author: lla $ $Date: 2001-01-26 07:51:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -262,7 +262,7 @@ namespace configmgr
 
         void runDisposer();
         void implStartBefore(TimeStamp const& _aTime);
-
+        sal_Int32 writeOneTreeFoundByOption(vos::ORef< OOptions > const& _xOption);
     };
 ////////////////////////////////////////////////////////////////////////////////
 } // namespace configmgr

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: disposetimer.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: lla $ $Date: 2001-01-18 13:18:40 $
+ *  last change: $Author: lla $ $Date: 2001-01-26 07:51:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -417,17 +417,6 @@ void OTreeCacheWriteScheduler::onTimerShot()
     {
         runDisposer();
     }
-
-    catch (uno::Exception& ue)
-    {
-        OSL_ENSURE(false, "ERROR: UNO Exception left a disposer");
-        ue;
-    }
-    catch (configuration::Exception& ce)
-    {
-        OSL_ENSURE(false, "ERROR: configuration::Exception left a disposer");
-        ce;
-    }
     catch (...)
     {
         OSL_ENSURE(false, "ERROR: Unknown Exception left a disposer");
@@ -452,35 +441,32 @@ void OTreeCacheWriteScheduler::runDisposer()
         vos::ORef< OOptions > xTaskOption = *it;
         if (xTaskOption.isValid())
         {
-            if (TreeInfo* pInfo = m_rTreeManager.requestTreeInfo(xTaskOption,false))
+            sal_Int32 nErrorCount = writeOneTreeFoundByOption(xTaskOption);
+            if (nErrorCount == 0)
             {
-                CFG_TRACE_INFO_NI("- Found matching data container (TreeInfo) - collecting data");
-
-                PendingList aList;
-                sal_Int32 nCount = pInfo->syncPending(xTaskOption, aList);
-                if (nCount > 0)
-                {
-                    CFG_TRACE_INFO_NI("write down %d pendings", nCount);
-                    for(PendingList::iterator it = aList.begin();
-                        it != aList.end();
-                        ++it)
-                    {
-                        rtl::OUString sName = it->first;
-                        // LLA->JB: Is this a hack?
-                        auto_ptr<SubtreeChange> aSubtreeChange = auto_ptr<SubtreeChange>(it->second);
-                        ConfigurationName aName; // MUST be empty, we have the ptr to the root obj
-                        m_rTreeManager.sessionUpdate(xTaskOption, aName, aSubtreeChange);
-                    }
-                }
+                it = m_aWriteList.erase(it);
             }
         }
         else
         {
             CFG_TRACE_WARNING_NI("runDisposer: TaskOption not valid");
         }
-
     }
-    m_aWriteList.clear();
+    // m_aWriteList.clear();
+}
+
+// -----------------------------------------------------------------------------
+sal_Int32 OTreeCacheWriteScheduler::writeOneTreeFoundByOption(vos::ORef< OOptions > const& _xOptions)
+{
+    sal_Int32 nErrorCount = 0;
+    if (TreeInfo* pInfo = m_rTreeManager.requestTreeInfo(_xOptions,false))
+    {
+        CFG_TRACE_INFO_NI("- Found matching data container (TreeInfo) - collecting data");
+
+        nErrorCount = pInfo->syncPending(_xOptions, m_rTreeManager);
+        // we got a pending list with pointers from TreeInfo.
+    }
+    return nErrorCount;
 }
 
 // -----------------------------------------------------------------------------
@@ -528,19 +514,18 @@ void OTreeCacheWriteScheduler::scheduleWrite(vos::ORef< OOptions > const& _xOpti
 
     CFG_TRACE_INFO_NI("- cache write will be started in about %d seconds", int(m_aCleanupInterval.getTimeValue().Seconds));
 
-    m_aWriteList.push_back(_xOptions);
-
-
     if (_bSync || m_bSyncron)
     {
-        // write now!
-        runDisposer();
+        // lasy writing
+        m_aWriteList.push_back(_xOptions);
+
+        TimeStamp aNewTime = implGetCleanupTime(TimeStamp::getCurrentTime(), m_aCleanupInterval);
+        implStartBefore(aNewTime);
     }
     else
     {
-        // lasy writing
-        TimeStamp aNewTime = implGetCleanupTime(TimeStamp::getCurrentTime(), m_aCleanupInterval);
-        implStartBefore(aNewTime);
+        // write now!
+        writeOneTreeFoundByOption(_xOptions);
     }
 }
 
