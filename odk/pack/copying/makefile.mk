@@ -352,6 +352,7 @@ DOCUHTMLFILES= \
     $(DESTDIR)$/index.html \
     $(DESTDIRDOCU)$/tools.html \
     $(DESTDIRDOCU)$/notsupported.html \
+    $(DESTDIRDOCU)$/devmanual_preview.html \
     $(DESTDIRDOCU)$/install.html \
     $(DESTDIREXAMPLES)$/examples.html
 
@@ -407,6 +408,10 @@ $(DESTDIRDOCU)$/tools.html : $(PRJ)$/docs$/tools.html
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
 
 $(DESTDIRDOCU)$/notsupported.html : $(PRJ)$/docs$/notsupported.html
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
+
+$(DESTDIRDOCU)$/devmanual_preview.html : $(PRJ)$/docs$/devmanual_preview.html
     +-rm -f $@ >& $(NULLDEV)
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
 
