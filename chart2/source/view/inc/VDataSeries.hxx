@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VDataSeries.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: iha $ $Date: 2003-11-17 15:26:32 $
+ *  last change: $Author: bm $ $Date: 2003-12-08 15:46:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,11 +67,11 @@
 //for auto_ptr
 #include <memory>
 
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_DATACAPTIONSTYLE_HPP_
-#include <drafts/com/sun/star/chart2/DataCaptionStyle.hpp>
+#ifndef _DRAFTS_COM_SUN_STAR_CHART2_DATAPOINTLABEL_HPP_
+#include <drafts/com/sun/star/chart2/DataPointLabel.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_SYMBOLPROPERTIES_HPP_
-#include <drafts/com/sun/star/chart2/SymbolProperties.hpp>
+#ifndef _DRAFTS_COM_SUN_STAR_CHART2_SYMBOL_HPP_
+#include <drafts/com/sun/star/chart2/Symbol.hpp>
 #endif
 #ifndef _DRAFTS_COM_SUN_STAR_CHART2_XDATASEQUENCE_HPP_
 #include <drafts/com/sun/star/chart2/XDataSequence.hpp>
@@ -124,7 +124,7 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
                         getPropertiesOfSeries() const;
 
-    ::drafts::com::sun::star::chart2::SymbolProperties*
+    ::drafts::com::sun::star::chart2::Symbol*
                         getSymbolProperties( sal_Int32 index ) const;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > m_xShape;
@@ -149,7 +149,7 @@ public:
     rtl::OUString       getLabelsCID() const;
     rtl::OUString       getLabelCID_Stub() const;
 
-    ::drafts::com::sun::star::chart2::DataCaptionStyle*
+    ::drafts::com::sun::star::chart2::DataPointLabel*
                         getDataCaptionStyle( sal_Int32 index ) const;
     bool    getTextLabelMultiPropertyLists( sal_Int32 index, tNameSequence*& pPropNames, tAnySequence*& pPropValues ) const;
 
@@ -184,20 +184,20 @@ private: //member
     rtl::OUString           m_aLabelCID_Stub;
 
     //some cached values for data labels as they are very expensive
-    mutable ::std::auto_ptr< ::drafts::com::sun::star::chart2::DataCaptionStyle >
+    mutable ::std::auto_ptr< ::drafts::com::sun::star::chart2::DataPointLabel >
                                                     m_apCaption_Series;
     mutable ::std::auto_ptr< tNameSequence >        m_apLabelPropNames_Series;
     mutable ::std::auto_ptr< tAnySequence >         m_apLabelPropValues_Series;
 
-    mutable ::std::auto_ptr< ::drafts::com::sun::star::chart2::DataCaptionStyle >
+    mutable ::std::auto_ptr< ::drafts::com::sun::star::chart2::DataPointLabel >
                                                     m_apCaption_AttributedPoint;
     mutable ::std::auto_ptr< tNameSequence >        m_apLabelPropNames_AttributedPoint;
     mutable ::std::auto_ptr< tAnySequence >         m_apLabelPropValues_AttributedPoint;
     mutable sal_Int32   m_nCurrentAttributedPoint;
 
-    mutable ::std::auto_ptr< ::drafts::com::sun::star::chart2::SymbolProperties >
+    mutable ::std::auto_ptr< ::drafts::com::sun::star::chart2::Symbol >
                                                     m_apSymbolProperties_Series;
-    mutable ::std::auto_ptr< ::drafts::com::sun::star::chart2::SymbolProperties >
+    mutable ::std::auto_ptr< ::drafts::com::sun::star::chart2::Symbol >
                                                     m_apSymbolProperties_AttributedPoint;
     //
 };

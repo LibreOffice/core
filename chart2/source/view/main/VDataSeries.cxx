@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VDataSeries.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: iha $ $Date: 2003-11-22 11:44:55 $
+ *  last change: $Author: bm $ $Date: 2003-12-08 15:46:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,8 @@
 #include "chartview/ObjectIdentifier.hxx"
 #include "macros.hxx"
 
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_SYMBOLPROPERTIES_HPP_
-#include <drafts/com/sun/star/chart2/SymbolProperties.hpp>
+#ifndef _DRAFTS_COM_SUN_STAR_CHART2_SYMBOL_HPP_
+#include <drafts/com/sun/star/chart2/Symbol.hpp>
 #endif
 
 //#include "CommonConverters.hxx"
@@ -322,13 +322,13 @@ rtl::OUString VDataSeries::getCategoryString( sal_Int32 index ) const
     return aRet;
 }
 
-::std::auto_ptr< SymbolProperties > getSymbolPropertiesFromPropertySet(
+::std::auto_ptr< Symbol > getSymbolPropertiesFromPropertySet(
         const uno::Reference< beans::XPropertySet >& xProp )
 {
-    ::std::auto_ptr< SymbolProperties > apSymbolProps( new SymbolProperties() );
+    ::std::auto_ptr< Symbol > apSymbolProps( new Symbol() );
     try
     {
-        if( xProp->getPropertyValue( C2U( "SymbolProperties" ) ) >>= *apSymbolProps )
+        if( xProp->getPropertyValue( C2U( "Symbol" ) ) >>= *apSymbolProps )
         {
             //use main color to fill symbols
             xProp->getPropertyValue( C2U( "Color" ) ) >>= apSymbolProps->nFillColor;
@@ -343,9 +343,9 @@ rtl::OUString VDataSeries::getCategoryString( sal_Int32 index ) const
     return apSymbolProps;
 }
 
-SymbolProperties* VDataSeries::getSymbolProperties( sal_Int32 index ) const
+Symbol* VDataSeries::getSymbolProperties( sal_Int32 index ) const
 {
-    SymbolProperties* pRet=NULL;
+    Symbol* pRet=NULL;
     if( isAttributedDataPoint( index ) )
     {
         if(!m_apSymbolProperties_AttributedPoint.get() || m_nCurrentAttributedPoint!=index)
@@ -389,13 +389,13 @@ uno::Reference< beans::XPropertySet > VDataSeries::getPropertiesOfSeries() const
     return  uno::Reference<beans::XPropertySet>(m_xDataSeries, uno::UNO_QUERY );
 }
 
-::std::auto_ptr< DataCaptionStyle > getDataCaptionStyleFromPropertySet(
+::std::auto_ptr< DataPointLabel > getDataCaptionStyleFromPropertySet(
         const uno::Reference< beans::XPropertySet >& xProp )
 {
-    ::std::auto_ptr< DataCaptionStyle > apCaption( new DataCaptionStyle() );
+    ::std::auto_ptr< DataPointLabel > apCaption( new DataPointLabel() );
     try
     {
-        if( !(xProp->getPropertyValue( C2U( "DataCaption" ) ) >>= *apCaption) )
+        if( !(xProp->getPropertyValue( C2U( "DataPointLabel" ) ) >>= *apCaption) )
             apCaption.reset();
     }
     catch( uno::Exception &e)
@@ -405,9 +405,9 @@ uno::Reference< beans::XPropertySet > VDataSeries::getPropertiesOfSeries() const
     return apCaption;
 }
 
-DataCaptionStyle* VDataSeries::getDataCaptionStyle( sal_Int32 index ) const
+DataPointLabel* VDataSeries::getDataCaptionStyle( sal_Int32 index ) const
 {
-    DataCaptionStyle* pRet = NULL;
+    DataPointLabel* pRet = NULL;
     if( isAttributedDataPoint( index ) )
     {
         if(!m_apCaption_AttributedPoint.get() || m_nCurrentAttributedPoint!=index)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PlotterBase.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: iha $ $Date: 2003-11-17 15:29:44 $
+ *  last change: $Author: bm $ $Date: 2003-12-08 15:46:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,8 @@
 #include "PlottingPositionHelper.hxx"
 #include "ShapeFactory.hxx"
 
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_DATACAPTIONSTYLE_HPP_
-#include <drafts/com/sun/star/chart2/DataCaptionStyle.hpp>
+#ifndef _DRAFTS_COM_SUN_STAR_CHART2_DATAPOINTLABEL_HPP_
+#include <drafts/com/sun/star/chart2/DataPointLabel.hpp>
 #endif
 
 /*

@@ -273,7 +273,7 @@ void VSeriesPlotter::createDataLabel( const uno::Reference< drawing::XShapes >& 
                     , const awt::Point& rScreenPosition2D )
 {
     //check wether the label needs to be created and how:
-    DataCaptionStyle* pCaption = rDataSeries.getDataCaptionStyle( nPointIndex );
+    DataPointLabel* pCaption = rDataSeries.getDataCaptionStyle( nPointIndex );
 
     if( !pCaption || (!pCaption->ShowNumber && !pCaption->ShowNumberInPercent
         && !pCaption->ShowCategoryName && !pCaption->ShowLegendSymbol ) )

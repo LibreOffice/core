@@ -74,6 +74,8 @@ while( <SVERSION> )
 }
 close SVERSION;
 
+$USER_PATH = "$OFF_PATH${PATHSEP}user";
+
 # ================================================================================
 
 print "Chart2 project is in <$PRJ_PATH>\n";
@@ -146,4 +148,4 @@ foreach $res (@files)
 }
 
 print "installing filter...\n";
-print `$COPYCMD $PRJ_PATH${PATHSEP}workbench${PATHSEP}officeintegration${PATHSEP}TypeDetection.xcu $OFF_PATH${PATHSEP}user${PATHSEP}registry${PATHSEP}data${PATHSEP}org${PATHSEP}openoffice${PATHSEP}Office`;
+print `$COPYCMD $PRJ_PATH${PATHSEP}workbench${PATHSEP}officeintegration${PATHSEP}TypeDetection.xcu $USER_PATH${PATHSEP}registry${PATHSEP}data${PATHSEP}org${PATHSEP}openoffice${PATHSEP}Office`;

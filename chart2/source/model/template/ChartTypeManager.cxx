@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartTypeManager.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-25 09:01:34 $
+ *  last change: $Author: bm $ $Date: 2003-12-08 15:46:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -392,8 +392,22 @@ uno::Reference< uno::XInterface > SAL_CALL ChartTypeManager::createInstance(
 
     if( nId == TEMPLATE_NOT_FOUND )
     {
-        xResult = m_xContext->getServiceManager()->createInstanceWithContext(
-            aServiceSpecifier, m_xContext );
+        try
+        {
+            xResult = m_xContext->getServiceManager()->createInstanceWithContext(
+                aServiceSpecifier, m_xContext );
+        }
+//         catch( registry::InvalidValueException & ex )
+        catch( uno::Exception & ex )
+        {
+            // couldn't create service via factory
+
+            // As XMultiServiceFactory does not specify, what to do in case
+            // createInstance is called with an unknown service-name, this
+            // function will just return an empty XInterface.
+            ASSERT_EXCEPTION( ex );
+            xResult.set( 0 );
+        }
     }
     else
     {

@@ -12,8 +12,8 @@
 #include "Splines.hxx"
 #include "ChartTypeHelper.hxx"
 
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_SYMBOLPROPERTIES_HPP_
-#include <drafts/com/sun/star/chart2/SymbolProperties.hpp>
+#ifndef _DRAFTS_COM_SUN_STAR_CHART2_SYMBOL_HPP_
+#include <drafts/com/sun/star/chart2/Symbol.hpp>
 #endif
 
 #ifndef _SV_GEN_HXX
@@ -676,7 +676,7 @@ void AreaChart::createShapes()
                         }
                         else //m_nDimension!=3
                         {
-                            SymbolProperties* pSymbolProperties = (*aSeriesIter)->getSymbolProperties( nIndex );
+                            Symbol* pSymbolProperties = (*aSeriesIter)->getSymbolProperties( nIndex );
                             if( pSymbolProperties )
                             {
                                 if( pSymbolProperties->aStyle == SymbolStyle_STANDARD )

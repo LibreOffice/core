@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataPointItemConverter.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-25 13:07:38 $
+ *  last change: $Author: bm $ $Date: 2003-12-08 15:45:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,8 +70,8 @@
 #define ITEMID_CHARTDATADESCR SCHATTR_DATADESCR_DESCR
 #include <svx/chrtitem.hxx>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_DATACAPTIONSTYLE_HPP__
-#include <drafts/com/sun/star/chart2/DataCaptionStyle.hpp>
+#ifndef _DRAFTS_COM_SUN_STAR_CHART2_DATAPOINTLABEL_HPP_
+#include <drafts/com/sun/star/chart2/DataPointLabel.hpp>
 #endif
 #ifndef _SFXINTITEM_HXX
 #include <svtools/intitem.hxx>
@@ -177,47 +177,47 @@ bool DataPointItemConverter::ApplySpecialItem(
                 reinterpret_cast< const SvxChartDataDescrItem & >(
                     rItemSet.Get( nWhichId ));
 
-            chart2::DataCaptionStyle aStyle;
-            if( GetPropertySet()->getPropertyValue( C2U( "DataCaption" )) >>= aStyle )
+            chart2::DataPointLabel aLabel;
+            if( GetPropertySet()->getPropertyValue( C2U( "Label" )) >>= aLabel )
             {
                 switch( rItem.GetValue())
                 {
                     case CHDESCR_NONE:
-                        aStyle.ShowNumber = sal_False;
-                        aStyle.ShowCategoryName = sal_False;
+                        aLabel.ShowNumber = sal_False;
+                        aLabel.ShowCategoryName = sal_False;
                         break;
                     case CHDESCR_VALUE:
-                        aStyle.ShowNumber = sal_True;
-                        aStyle.ShowNumberInPercent = sal_False;
-                        aStyle.ShowCategoryName = sal_False;
+                        aLabel.ShowNumber = sal_True;
+                        aLabel.ShowNumberInPercent = sal_False;
+                        aLabel.ShowCategoryName = sal_False;
                         break;
                     case CHDESCR_PERCENT:
-                        aStyle.ShowNumber = sal_True;
-                        aStyle.ShowNumberInPercent = sal_True;
-                        aStyle.ShowCategoryName = sal_False;
+                        aLabel.ShowNumber = sal_True;
+                        aLabel.ShowNumberInPercent = sal_True;
+                        aLabel.ShowCategoryName = sal_False;
                         break;
                     case CHDESCR_TEXT:
-                        aStyle.ShowNumber = sal_False;
-                        aStyle.ShowCategoryName = sal_True;
+                        aLabel.ShowNumber = sal_False;
+                        aLabel.ShowCategoryName = sal_True;
                         break;
                     case CHDESCR_TEXTANDPERCENT:
-                        aStyle.ShowNumber = sal_True;
-                        aStyle.ShowNumberInPercent = sal_True;
-                        aStyle.ShowCategoryName = sal_True;
+                        aLabel.ShowNumber = sal_True;
+                        aLabel.ShowNumberInPercent = sal_True;
+                        aLabel.ShowCategoryName = sal_True;
                         break;
                     case CHDESCR_TEXTANDVALUE:
-                        aStyle.ShowNumber = sal_True;
-                        aStyle.ShowNumberInPercent = sal_False;
-                        aStyle.ShowCategoryName = sal_True;
+                        aLabel.ShowNumber = sal_True;
+                        aLabel.ShowNumberInPercent = sal_False;
+                        aLabel.ShowCategoryName = sal_True;
                         break;
                     default:
                         break;
                 }
 
-                aValue <<= aStyle;
-                if( aValue != GetPropertySet()->getPropertyValue( C2U( "DataCaption" ) ))
+                aValue <<= aLabel;
+                if( aValue != GetPropertySet()->getPropertyValue( C2U( "Label" ) ))
                 {
-                    GetPropertySet()->setPropertyValue( C2U( "DataCaption" ), aValue );
+                    GetPropertySet()->setPropertyValue( C2U( "Label" ), aValue );
                     bChanged = true;
                 }
             }
@@ -230,14 +230,14 @@ bool DataPointItemConverter::ApplySpecialItem(
                 reinterpret_cast< const SvxChartDataDescrItem & >(
                     rItemSet.Get( nWhichId ));
 
-            chart2::DataCaptionStyle aStyle;
-            if( GetPropertySet()->getPropertyValue( C2U( "DataCaption" )) >>= aStyle )
+            chart2::DataPointLabel aLabel;
+            if( GetPropertySet()->getPropertyValue( C2U( "Label" )) >>= aLabel )
             {
-                sal_Bool bOldValue = aStyle.ShowLegendSymbol;
-                aStyle.ShowLegendSymbol = static_cast< sal_Bool >( rItem.GetValue() );
-                if( bOldValue != aStyle.ShowLegendSymbol )
+                sal_Bool bOldValue = aLabel.ShowLegendSymbol;
+                aLabel.ShowLegendSymbol = static_cast< sal_Bool >( rItem.GetValue() );
+                if( bOldValue != aLabel.ShowLegendSymbol )
                 {
-                    GetPropertySet()->setPropertyValue( C2U( "DataCaption" ), uno::makeAny( aStyle ));
+                    GetPropertySet()->setPropertyValue( C2U( "Label" ), uno::makeAny( aLabel ));
                     bChanged = true;
                 }
             }
@@ -280,23 +280,23 @@ void DataPointItemConverter::FillSpecialItem(
         case SCHATTR_DATADESCR_DESCR:
         case SCHATTR_DATADESCR_SHOW_SYM:
         {
-            chart2::DataCaptionStyle aStyle;
-            if( GetPropertySet()->getPropertyValue( C2U( "DataCaption" )) >>= aStyle )
+            chart2::DataPointLabel aLabel;
+            if( GetPropertySet()->getPropertyValue( C2U( "Label" )) >>= aLabel )
             {
                 SvxChartDataDescr aDescr;
 
-                if( aStyle.ShowNumber )
+                if( aLabel.ShowNumber )
                 {
-                    if( aStyle.ShowNumberInPercent )
+                    if( aLabel.ShowNumberInPercent )
                     {
-                        if( aStyle.ShowCategoryName )
+                        if( aLabel.ShowCategoryName )
                             aDescr = CHDESCR_TEXTANDPERCENT;
                         else
                             aDescr = CHDESCR_PERCENT;
                     }
                     else
                     {
-                        if( aStyle.ShowCategoryName )
+                        if( aLabel.ShowCategoryName )
                             aDescr = CHDESCR_TEXTANDVALUE;
                         else
                             aDescr = CHDESCR_VALUE;
@@ -304,14 +304,14 @@ void DataPointItemConverter::FillSpecialItem(
                 }
                 else
                 {
-                    if( aStyle.ShowCategoryName )
+                    if( aLabel.ShowCategoryName )
                         aDescr = CHDESCR_TEXT;
                     else
                         aDescr = CHDESCR_NONE;
                 }
 
                 rOutItemSet.Put( SvxChartDataDescrItem( aDescr ));
-                rOutItemSet.Put( SfxBoolItem( SCHATTR_DATADESCR_SHOW_SYM, aStyle.ShowLegendSymbol ));
+                rOutItemSet.Put( SfxBoolItem( SCHATTR_DATADESCR_SHOW_SYM, aLabel.ShowLegendSymbol ));
             }
         }
         break;

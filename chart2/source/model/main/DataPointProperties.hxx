@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataPointProperties.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-26 12:31:01 $
+ *  last change: $Author: bm $ $Date: 2003-12-08 15:45:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@ public:
         PROP_DATAPOINT_TRANSPARENCY_GRADIENT,
         PROP_DATAPOINT_GRADIENT,
         PROP_DATAPOINT_HATCH,
-        PROP_DATAPOINT_BITMAP,
+        PROP_DATAPOINT_FILL_BITMAP,
 
         // border (of filled objects)
         PROP_DATAPOINT_BORDER_COLOR,
@@ -108,9 +108,14 @@ public:
         // others
         PROP_DATAPOINT_SYMBOL_PROP,
         PROP_DATAPOINT_OFFSET,
-        PROP_DATAPOINT_DATA_CAPTION,
+        PROP_DATAPOINT_LABEL,
         PROP_DATAPOINT_NUMBER_FORMAT,
-        PROP_DATAPOINT_REFERENCE_DIAGRAM_SIZE
+        PROP_DATAPOINT_REFERENCE_DIAGRAM_SIZE,
+
+        // statistics
+        PROP_DATAPOINT_ERROR_BAR_X,
+        PROP_DATAPOINT_ERROR_BAR_Y,
+        PROP_DATAPOINT_SHOW_ERROR_BOX
     };
 
     static void AddPropertiesToVector(

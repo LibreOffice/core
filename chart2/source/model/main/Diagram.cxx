@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Diagram.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: iha $ $Date: 2003-12-04 16:15:55 $
+ *  last change: $Author: bm $ $Date: 2003-12-08 15:45:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -460,7 +460,56 @@ uno::Sequence< uno::Reference< chart2::XBoundedCoordinateSystem > > SAL_CALL Dia
     return m_aIdentifier;
 }
 
-// ________
+// ____ XRegressionCurveContainer ____
+void SAL_CALL Diagram::addRegressionCurve(
+    const uno::Reference< chart2::XRegressionCurve >& aRegressionCurve )
+    throw (lang::IllegalArgumentException,
+           uno::RuntimeException)
+{
+    uno::Reference< chart2::XIdentifiable > xIdent( aRegressionCurve, uno::UNO_QUERY );
+    if( ! xIdent.is() ||
+        m_aRegressionCurves.find( xIdent->getIdentifier() ) != m_aRegressionCurves.end() )
+        throw lang::IllegalArgumentException();
+
+    m_aRegressionCurves.insert(
+        tRegressionCurveContainerType::value_type( xIdent->getIdentifier(), aRegressionCurve ));
+}
+
+void SAL_CALL Diagram::removeRegressionCurve(
+    const uno::Reference< chart2::XRegressionCurve >& aRegressionCurve )
+    throw (container::NoSuchElementException,
+           uno::RuntimeException)
+{
+    if( ! aRegressionCurve.is())
+        throw container::NoSuchElementException();
+
+    uno::Reference< chart2::XIdentifiable > xIdent( aRegressionCurve, uno::UNO_QUERY );
+    if( xIdent.is())
+    {
+        tRegressionCurveContainerType::iterator aIt( m_aRegressionCurves.find( xIdent->getIdentifier() ));
+
+        if( aIt == m_aRegressionCurves.end())
+            throw container::NoSuchElementException();
+
+        m_aRegressionCurves.erase( aIt );
+    }
+    else
+        throw container::NoSuchElementException();
+}
+
+uno::Sequence< uno::Reference< chart2::XRegressionCurve > > SAL_CALL Diagram::getRegressionCurves()
+    throw (uno::RuntimeException)
+{
+    uno::Sequence< uno::Reference< chart2::XRegressionCurve > > aResult( m_aRegressionCurves.size());
+
+    ::std::transform( m_aRegressionCurves.begin(), m_aRegressionCurves.end(),
+                      aResult.getArray(),
+                      ::std::select2nd< tRegressionCurveContainerType::value_type >() );
+
+    return aResult;
+}
+
+// ============================================================
 
 Sequence< OUString > Diagram::getSupportedServiceNames_Static()
 {

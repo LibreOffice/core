@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LineChartTypeTemplate.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-25 09:01:35 $
+ *  last change: $Author: bm $ $Date: 2003-12-08 15:46:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,8 +67,8 @@
 #ifndef _DRAFTS_COM_SUN_STAR_CHART2_SYMBOLSTYLE_HPP_
 #include <drafts/com/sun/star/chart2/SymbolStyle.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_SYMBOLPROPERTIES_HPP_
-#include <drafts/com/sun/star/chart2/SymbolProperties.hpp>
+#ifndef _DRAFTS_COM_SUN_STAR_CHART2_SYMBOL_HPP_
+#include <drafts/com/sun/star/chart2/Symbol.hpp>
 #endif
 
 #ifndef CHART_PROPERTYHELPER_HXX
@@ -289,14 +289,14 @@ uno::Reference< chart2::XDiagram > SAL_CALL
     {
         try
         {
-            chart2::SymbolProperties aSymbProp;
+            chart2::Symbol aSymbProp;
             uno::Reference< beans::XPropertySet > xProp( aSeriesSeq[i], uno::UNO_QUERY_THROW );
-            if( (xProp->getPropertyValue( C2U( "SymbolProperties" )) >>= aSymbProp ) )
+            if( (xProp->getPropertyValue( C2U( "Symbol" )) >>= aSymbProp ) )
             {
                 aSymbProp.aStyle = eStyle;
                 if( m_bHasSymbols )
                     aSymbProp.nStandardSymbol = i;
-                xProp->setPropertyValue( C2U( "SymbolProperties" ), uno::makeAny( aSymbProp ));
+                xProp->setPropertyValue( C2U( "Symbol" ), uno::makeAny( aSymbProp ));
             }
         }
         catch( uno::Exception & ex )
@@ -349,9 +349,9 @@ sal_Bool SAL_CALL LineChartTypeTemplate::matchesTemplate(
         {
             try
             {
-                chart2::SymbolProperties aSymbProp;
+                chart2::Symbol aSymbProp;
                 uno::Reference< beans::XPropertySet > xProp( aSeriesSeq[i], uno::UNO_QUERY_THROW );
-                if( (xProp->getPropertyValue( C2U( "SymbolProperties" )) >>= aSymbProp ) )
+                if( (xProp->getPropertyValue( C2U( "Symbol" )) >>= aSymbProp ) )
                 {
                     if( aSymbProp.aStyle != eStyle )
                     {

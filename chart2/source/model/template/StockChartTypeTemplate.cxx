@@ -2,9 +2,9 @@
  *
  *  $RCSfile: StockChartTypeTemplate.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-21 14:17:57 $
+ *  last change: $Author: bm $ $Date: 2003-12-08 15:46:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,9 +66,6 @@
 
 #ifndef _DRAFTS_COM_SUN_STAR_CHART2_SYMBOLSTYLE_HPP_
 #include <drafts/com/sun/star/chart2/SymbolStyle.hpp>
-#endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_SYMBOLPROPERTIES_HPP_
-#include <drafts/com/sun/star/chart2/SymbolProperties.hpp>
 #endif
 
 #ifndef CHART_PROPERTYHELPER_HXX

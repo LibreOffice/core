@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataPointProperties.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-27 10:49:05 $
+ *  last change: $Author: bm $ $Date: 2003-12-08 15:45:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,14 +92,17 @@
 #ifndef _DRAFTS_COM_SUN_STAR_CHART2_TRANSPARENCYSTYLE_HPP_
 #include <drafts/com/sun/star/chart2/TransparencyStyle.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_DATACAPTIONSTYLE_HPP_
-#include <drafts/com/sun/star/chart2/DataCaptionStyle.hpp>
+#ifndef _DRAFTS_COM_SUN_STAR_CHART2_DATAPOINTLABEL_HPP_
+#include <drafts/com/sun/star/chart2/DataPointLabel.hpp>
 #endif
 #ifndef _DRAFTS_COM_SUN_STAR_CHART2_NUMBERFORMAT_HPP_
 #include <drafts/com/sun/star/chart2/NumberFormat.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_SYMBOLPROPERTIES_HPP_
-#include <drafts/com/sun/star/chart2/SymbolProperties.hpp>
+#ifndef _DRAFTS_COM_SUN_STAR_CHART2_SYMBOL_HPP_
+#include <drafts/com/sun/star/chart2/Symbol.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_CHART2_ERRORBAR_HPP_
+#include <drafts/com/sun/star/chart2/ErrorBar.hpp>
 #endif
 
 using namespace ::com::sun::star;
@@ -186,8 +189,8 @@ void DataPointProperties::AddPropertiesToVector(
                   | beans::PropertyAttribute::MAYBEVOID ));
 
     rOutProperties.push_back(
-        Property( C2U( "Bitmap" ),
-                  PROP_DATAPOINT_BITMAP,
+        Property( C2U( "FillBitmap" ),
+                  PROP_DATAPOINT_FILL_BITMAP,
                   ::getCppuType( reinterpret_cast< const chart2::FillBitmap * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT
@@ -249,9 +252,9 @@ void DataPointProperties::AddPropertiesToVector(
 
     // others
     rOutProperties.push_back(
-        Property( C2U( "SymbolProperties" ),
+        Property( C2U( "Symbol" ),
                   PROP_DATAPOINT_SYMBOL_PROP,
-                  ::getCppuType( reinterpret_cast< const chart2::SymbolProperties * >(0)),
+                  ::getCppuType( reinterpret_cast< const chart2::Symbol * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
     rOutProperties.push_back(
@@ -262,9 +265,9 @@ void DataPointProperties::AddPropertiesToVector(
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( C2U( "DataCaption" ),
-                  PROP_DATAPOINT_DATA_CAPTION,
-                  ::getCppuType( reinterpret_cast< const chart2::DataCaptionStyle * >(0)),
+        Property( C2U( "Label" ),
+                  PROP_DATAPOINT_LABEL,
+                  ::getCppuType( reinterpret_cast< const chart2::DataPointLabel * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
@@ -279,6 +282,26 @@ void DataPointProperties::AddPropertiesToVector(
         Property( C2U( "ReferenceDiagramSize" ),
                   PROP_DATAPOINT_REFERENCE_DIAGRAM_SIZE,
                   ::getCppuType( reinterpret_cast< const awt::Size * >(0)),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEVOID ));
+
+    // statistics
+    rOutProperties.push_back(
+        Property( C2U( "ErrorBarX" ),
+                  PROP_DATAPOINT_ERROR_BAR_X,
+                  ::getCppuType( reinterpret_cast< const chart2::ErrorBar * >(0)),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEVOID ));
+    rOutProperties.push_back(
+        Property( C2U( "ErrorBarY" ),
+                  PROP_DATAPOINT_ERROR_BAR_Y,
+                  ::getCppuType( reinterpret_cast< const chart2::ErrorBar * >(0)),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEVOID ));
+    rOutProperties.push_back(
+        Property( C2U( "ShowErrorBox" ),
+                  PROP_DATAPOINT_SHOW_ERROR_BOX,
+                  ::getBooleanCppuType(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
 }
@@ -313,8 +336,8 @@ void DataPointProperties::AddDefaultsToMap(
     OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_DATAPOINT_HATCH ));
     rOutMap[ PROP_DATAPOINT_HATCH ] =
         uno::Any();//need this empty default value otherwise get a costly exception in DataSeries::GetDefaultValue
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_DATAPOINT_BITMAP ));
-    rOutMap[ PROP_DATAPOINT_BITMAP ] =
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_DATAPOINT_FILL_BITMAP ));
+    rOutMap[ PROP_DATAPOINT_FILL_BITMAP ] =
         uno::Any();//need this empty default value otherwise get a costly exception in DataSeries::GetDefaultValue
 
     //border
@@ -348,7 +371,7 @@ void DataPointProperties::AddDefaultsToMap(
 
 
     //others
-    chart2::SymbolProperties aSymbProp;
+    chart2::Symbol aSymbProp;
     aSymbProp.aStyle = chart2::SymbolStyle_NONE;
     aSymbProp.nStandardSymbol = 0;
     aSymbProp.aSize = awt::Size( 423, 423 ); // 12pt x 12pt
@@ -361,9 +384,9 @@ void DataPointProperties::AddDefaultsToMap(
     rOutMap[ PROP_DATAPOINT_OFFSET ] =
         uno::makeAny( double( 0.0 ) );
 
-    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_DATAPOINT_DATA_CAPTION ));
-    rOutMap[ PROP_DATAPOINT_DATA_CAPTION ] =
-        uno::makeAny( chart2::DataCaptionStyle(
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_DATAPOINT_LABEL ));
+    rOutMap[ PROP_DATAPOINT_LABEL ] =
+        uno::makeAny( chart2::DataPointLabel(
                           sal_False, // ShowNumber
                           sal_False, // ShowNumberInPercent
                           sal_False, // ShowCategoryName
