@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewdata.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-23 15:20:22 $
+ *  last change: $Author: nn $ $Date: 2002-02-14 19:21:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2555,14 +2555,15 @@ void ScViewData::UpdateOutlinerFlags( Outliner& rOutl ) const
 
     rOutl.SetCalcFieldValueHdl( LINK( SC_MOD(), ScModule, CalcFieldValueHdl ) );
 
-    //  #66115# Der Speller muss auch gesetzt werden, wenn Online-Spelling aus ist,
-    //  weil die EditEngine sich vom Speller die Sprache fuer AutoKorrektur holt
+    //  #97417# don't call GetSpellChecker if online spelling isn't enabled.
+    //  The language for AutoCorrect etc. is taken from the pool defaults
+    //  (set in ScDocument::UpdateDrawLanguages)
 
-    //! no way to set the outliner's spelling language?
-    //  (may not bee needed - default language is always used)
-
-    com::sun::star::uno::Reference<com::sun::star::linguistic2::XSpellChecker1> xXSpellChecker1( LinguMgr::GetSpellChecker() );
-    rOutl.SetSpeller( xXSpellChecker1 );
+    if ( bOnlineSpell )
+    {
+        com::sun::star::uno::Reference<com::sun::star::linguistic2::XSpellChecker1> xXSpellChecker1( LinguMgr::GetSpellChecker() );
+        rOutl.SetSpeller( xXSpellChecker1 );
+    }
 }
 
 ScAddress ScViewData::GetCurPos() const
