@@ -13,6 +13,7 @@ ul	unoil\com\sun\star\datatransfer			nmake	-	all	ul_dattrans ul_genall NULL
 ul	unoil\com\sun\star\datatransfer\clipboard	nmake	-	all	ul_dattrans_clip ul_dattrans NULL
 ul	unoil\com\sun\star\datatransfer\dnd		nmake	-	all	ul_dattrans_dnd ul_dattrans NULL
 ul	unoil\com\sun\star\document			nmake	-	all	ul_document ul_frame NULL
+ul	unoil\com\sun\star\embed			nmake	-	all	ul_embed ul_genall ul_pckgs ul_awt NULL
 ul	unoil\com\sun\star\task				nmake	-	all	ul_task ul_genall NULL
 ul	unoil\com\sun\star\sdbc				nmake	-	all	ul_sdbc ul_cssutil ul_task NULL
 ul	unoil\com\sun\star\sdbcx			nmake	-	all	ul_sdbx ul_sdbc NULL
@@ -24,6 +25,7 @@ ul	unoil\com\sun\star\installation			nmake	-	all	ul_installation ul_genall NULL
 ul	unoil\com\sun\star\ldap 			nmake	-	all	ul_ldap ul_genall NULL
 ul	unoil\com\sun\star\linguistic2			nmake	-	all	ul_linguistic2 ul_genall NULL
 ul	unoil\com\sun\star\mozilla			nmake	-	all	ul_mozilla ul_genall NULL
+ul	unoil\com\sun\star\packages			nmake	-	all	ul_pckgs ul_genall NULL
 ul	unoil\com\sun\star\packages\zip			nmake	-	all	ul_pck_zip ul_genall NULL
 ul	unoil\com\sun\star\packages\manifest		nmake	-	all	ul_pck_manifest ul_genall NULL
 ul	unoil\com\sun\star\plugin			nmake	-	all	ul_plugin ul_awt NULL
@@ -46,4 +48,4 @@ ul	unoil\com\sun\star\ui				nmake	-	all	ul_ui ul_awt ul_view NULL
 ul	unoil\com\sun\star\xml				nmake	-	all	ul_xml ul_xml_sax ul_genall NULL
 ul	unoil\com\sun\star\xml\input			nmake	-	all	ul_xml_input ul_xml_sax ul_genall NULL
 ul	unoil\com\sun\star\xml\sax			nmake	-	all	ul_xml_sax ul_genall NULL
-ul	unoil\util					nmake	-	all	ul_util ul_chart ul_configuration ul_configbackend ul_dattrans ul_dattrans_clip ul_dattrans_dnd ul_document ul_form ul_formula ul_installation ul_linguistic2 ul_mozilla ul_plugin ul_presentation ul_resource ul_scanner ul_setup ul_sheet ul_style ul_sync ul_sync2 ul_ui_dialogs ul_view ul_ui ul_xml_sax ul_xml_input ul_i18n ul_pck_zip ul_pck_manifest ul_accessibility NULL
+ul	unoil\util					nmake	-	all	ul_util ul_chart ul_configuration ul_configbackend ul_dattrans ul_dattrans_clip ul_dattrans_dnd ul_document ul_embed ul_form ul_formula ul_installation ul_linguistic2 ul_mozilla ul_plugin ul_presentation ul_resource ul_scanner ul_setup ul_sheet ul_style ul_sync ul_sync2 ul_ui_dialogs ul_view ul_ui ul_xml_sax ul_xml_input ul_i18n ul_pck_zip ul_pck_manifest ul_accessibility NULL
