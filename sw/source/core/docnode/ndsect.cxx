@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndsect.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:04:34 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 08:12:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -691,13 +691,23 @@ void SwDoc::ChgSection( USHORT nPos, const SwSection& rSect,
 
         if( bOnlyAttrChg )
         {
+            const BOOL bDoesUndo = DoesUndo();
             if( DoesUndo() )
             {
                 ClearRedo();
                 AppendUndo( new SwUndoChgSection( *pFmt, TRUE ) );
+                // --> FME 2004-10-13 #i32968#
+                // Inserting columns in the section causes MakeFrmFmt to put two
+                // objects of type SwUndoFrmFmt on the undo stack. We don't want them.
+                DoUndo( FALSE );
+                // <--
             }
             pFmt->SetAttr( *pAttr );
             SetModified();
+
+            // --> FME 2004-10-13 #i32968#
+            DoUndo( bDoesUndo );
+            // <--
         }
         return;
     }
@@ -715,11 +725,16 @@ void SwDoc::ChgSection( USHORT nPos, const SwSection& rSect,
         }
     }
 
-
+    const BOOL bDoesUndo = DoesUndo();
     if( DoesUndo() )
     {
         ClearRedo();
         AppendUndo( new SwUndoChgSection( *pFmt, FALSE ) );
+        // --> FME 2004-10-13 #i32968#
+        // Inserting columns in the section causes MakeFrmFmt to put two
+        // objects of type SwUndoFrmFmt on the undo stack. We don't want them.
+        DoUndo( FALSE );
+        // <--
     }
 
     // #56167# Der LinkFileName koennte auch nur aus Separatoren bestehen
@@ -786,6 +801,10 @@ void SwDoc::ChgSection( USHORT nPos, const SwSection& rSect,
     }
 
     SetModified();
+
+    // --> FME 2004-10-13 #i32968#
+    DoUndo( bDoesUndo );
+    // <--
 }
 
 /* -----------------19.02.99 09:31-------------------
