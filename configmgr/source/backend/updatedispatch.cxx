@@ -2,9 +2,9 @@
  *
  *  $RCSfile: updatedispatch.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 16:11:53 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 13:19:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,8 +83,8 @@
 #include "matchlocale.hxx"
 #endif
 
-#include <drafts/com/sun/star/configuration/backend/XUpdateHandler.hpp>
-#include <drafts/com/sun/star/configuration/backend/NodeAttribute.hpp>
+#include <com/sun/star/configuration/backend/XUpdateHandler.hpp>
+#include <com/sun/star/configuration/backend/NodeAttribute.hpp>
 
 namespace configmgr
 {
@@ -94,7 +94,8 @@ namespace configmgr
 // -----------------------------------------------------------------------------
 
 UpdateDispatcher::UpdateDispatcher(UpdateHandler const & _xUpdateHandler, OUString const & _aLocale)
-: m_xUpdateHandler(_xUpdateHandler)
+: m_pContextPath(NULL)
+, m_xUpdateHandler(_xUpdateHandler)
 , m_aLocale(_aLocale)
 , m_aElementName()
 , m_bInValueSet(false)
@@ -118,32 +119,59 @@ void UpdateDispatcher::dispatchUpdate(configuration::AbsolutePath const & _aRoot
 
     OSL_PRECOND( !_aRootPath.isRoot(), "Cannot apply update, where root is outside a component" );
 
-#ifdef CFG_UPDATE_CONTEXT_IS_ROOT
-    this->startUpdate(_aRootPath);
-    this->applyToChildren(_anUpdate);
-    this->endUpdate();
-#else
-    this->startUpdate(_aRootPath.getParentPath());
+    OSL_PRECOND( m_pContextPath == NULL, "Update Dispatcher already has a context path" );
+    if (!_aRootPath.getParentPath().isRoot())
+    {
+        OSL_ENSURE(false,"Obsolete functionality used: starting update with non-empty context");
+        m_pContextPath = &_aRootPath;
+    }
+
+    this->startUpdate();
     this->applyToChange(_anUpdate);
     this->endUpdate();
-#endif
 
+    m_pContextPath = NULL;
 }
 // -----------------------------------------------------------------------------
 
-void UpdateDispatcher::startUpdate(configuration::AbsolutePath const & _aContextPath)
+void UpdateDispatcher::startUpdate()
 {
-//    OUString sContext = _aContextPath.isRoot() ? OUString() : _aContextPath.toString();
-    OUString sContext = _aContextPath.toString();
-    m_xUpdateHandler->startUpdate(sContext);
+    m_xUpdateHandler->startUpdate();
     m_bInValueSet = false;
     m_bInLocalizedValues = false;
     m_aElementName = OUString();
+
+    if (m_pContextPath)
+    {
+        configuration::AbsolutePath::Iterator   it = m_pContextPath->begin();
+        configuration::AbsolutePath::Iterator   stop = m_pContextPath->end();
+
+        OSL_ASSERT(it != stop);
+        --stop;
+
+        for ( ; it != stop; ++it)
+        {
+            m_xUpdateHandler->modifyNode(it->getName().toString(),0,0,false);
+        }
+    }
 }
 // -----------------------------------------------------------------------------
 
 void UpdateDispatcher::endUpdate()
 {
+    if (m_pContextPath)
+    {
+        configuration::AbsolutePath::Iterator   it = m_pContextPath->begin();
+        configuration::AbsolutePath::Iterator   stop = m_pContextPath->end();
+
+        OSL_ASSERT(it != stop);
+        --stop;
+
+        for ( ; it != stop; ++it)
+        {
+            m_xUpdateHandler->endNode();
+        }
+    }
     m_xUpdateHandler->endUpdate();
 }
 // -----------------------------------------------------------------------------
@@ -207,7 +235,8 @@ void UpdateDispatcher::handle(ValueChange const& aValueNode)
             sal_Int16 nAttrMask = getUpdateAttributeMask(aValueNode.getAttributes());
 
             m_xUpdateHandler->modifyProperty( aValueNode.getNodeName(),
-                                                nAttr, nAttrMask );
+                                                nAttr, nAttrMask,
+                                              aValueNode.getValueType() );
 
             if (aValueNode.isLocalizedValue() && m_aLocale.getLength())
             {
@@ -283,7 +312,8 @@ void UpdateDispatcher::handle(SubtreeChange const& aSubtree)
     if (isLocalizedValueSet(aSubtree))
     {
         m_xUpdateHandler->modifyProperty( aSubtree.getNodeName(),
-                                            nAttr, nAttrMask );
+                                            nAttr, nAttrMask,
+                                            uno::Type() );
 
         m_bInLocalizedValues = true;
         this->applyToChildren(aSubtree);
@@ -352,7 +382,7 @@ data::SetVisitor::Result UpdateDispatcher::handle(data::ValueNodeAccess const& _
          sal_Int16 nAttr     = getUpdateAttributes(_aNode.getAttributes(),false);
         sal_Int16 nAttrMask = getUpdateAttributeMask(_aNode.getAttributes());
 
-        m_xUpdateHandler->modifyProperty( aName, nAttr, nAttrMask );
+        m_xUpdateHandler->modifyProperty( aName, nAttr, nAttrMask, _aNode.getValueType() );
 
         if (_aNode.isLocalized() && m_aLocale.getLength())
         {
@@ -425,7 +455,7 @@ data::SetVisitor::Result UpdateDispatcher::handle(data::SetNodeAccess const& _aN
 
         if (_aNode.isLocalizedValueSetNode())
         {
-            m_xUpdateHandler->modifyProperty( aName, nAttr, nAttrMask );
+            m_xUpdateHandler->modifyProperty( aName, nAttr, nAttrMask, uno::Type() );
 
             m_bInLocalizedValues = true;
             this->visitElements(_aNode);
