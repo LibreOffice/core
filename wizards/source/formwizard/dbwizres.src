@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbwizres.src,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:35:35 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 14:05:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,7 @@ String RID_DB_COMMON_START + 0
     Text[ czech ] = "Vytvořit";
     Text[ hebrew ] = "‮יצירה‬";
     Text[ hindi ] = "उ~त्पन्न करो";
+    Text[ slovak ] = "Vytvo~riť";
 };
 String RID_DB_COMMON_START + 1
 {
@@ -128,6 +129,7 @@ String RID_DB_COMMON_START + 1
     Text[ czech ] = "Zrušit";
     Text[ hebrew ] = "‮ביטול‬";
     Text[ hindi ] = "~रद्द करो";
+    Text[ slovak ] = "~Zrušiť";
 };
 String RID_DB_COMMON_START + 2
 {
@@ -158,6 +160,7 @@ String RID_DB_COMMON_START + 2
     Text[ czech ] = "<< Předchozí";
     Text[ hebrew ] = "‮<< הקודם‬";
     Text[ hindi ] = "<< ~पीछे";
+    Text[ slovak ] = "<< ~Späť";
 };
 String RID_DB_COMMON_START + 3
 {
@@ -188,6 +191,7 @@ String RID_DB_COMMON_START + 3
     Text[ czech ] = "Další >>";
     Text[ hebrew ] = "‮הבא >>‬";
     Text[ hindi ] = "~आगे >>";
+    Text[ slovak ] = "Ďa~lší >>";
 };
 String RID_DB_COMMON_START + 4
 {
@@ -218,6 +222,7 @@ String RID_DB_COMMON_START + 4
     Text[ czech ] = "Databáze";
     Text[ hebrew ] = "‮מסד נתונים‬";
     Text[ hindi ] = "~लेखासंचय";
+    Text[ slovak ] = "~Databáza";
 };
 String RID_DB_COMMON_START + 5
 {
@@ -249,6 +254,7 @@ String RID_DB_COMMON_START + 5
     Text[ czech ] = "Název tabulky";
     Text[ hebrew ] = "‮שם טבלה‬";
     Text[ hindi ] = "~सारणी नाम";
+    Text[ slovak ] = "~Tabuľka";
 };
 String RID_DB_COMMON_START + 6
 {
@@ -279,6 +285,7 @@ String RID_DB_COMMON_START + 6
     Text[ czech ] = "Při běhu průvodce došlo k chybě. Průvodce musí být ukončen.";
     Text[ hebrew ] = "‮ארעה שגיאה בזמן פעולת הטייס האוטומטי. הטייס יופסק.‬";
     Text[ hindi ] = "An error occurred while running the AutoPilot. The AutoPilot will be terminated.";
+    Text[ slovak ] = "Počas behu Sprievodcu sa vyskytla chyba. Sprievodca bude ukončený.";
 };
 
 String RID_DB_COMMON_START + 8
@@ -310,6 +317,7 @@ String RID_DB_COMMON_START + 8
     Text[ czech ] = "Není instalována žádná databáze. Pro běh té části průvodce, která konvertuje formuláře, musí být instalována alespoň jedna databáze.";
     Text[ hebrew ] = "‮לא מותקן מסד נתונים. נדרש לפחות מסד נתונים אחד כדי להפעיל את הטייס האותומטי לטפסים.‬";
     Text[ hindi ] = "कोई लेखासंचय को प्रतिष्ठापित नहीं किया है । फ़ार्म का ओटोपैलट् को प्रारंभ करने के लिए कम से कम एक लेखासंचय की ज़रूरत है ।";
+    Text[ slovak ] = "Žiadna databáza nebola nainštalovaná. Najmenej jedna databáza je potrebná na spustenie Sprievodcu pre formuláre";
 };
 String RID_DB_COMMON_START + 9
 {
@@ -341,6 +349,7 @@ String RID_DB_COMMON_START + 9
     Text[ czech ] = "Databáze neobsahuje žádné tabulky.";
     Text[ hebrew ] = "‮אין טבלאות במסד הנתונים.‬";
     Text[ hindi ] = "लेखासंचय में एक भी सारणी नहीं है ।";
+    Text[ slovak ] = "Databáza neobsahuje žiadne tabuľky.";
 };
 String RID_DB_COMMON_START + 10
 {
@@ -372,6 +381,7 @@ String RID_DB_COMMON_START + 10
     Text[ czech ] = "Tento název v databázi již existuje, prosím, zadejte jiný.";
     Text[ hebrew ] = "‮כותרת זו קיימת כבר במסד הנתונים. נא לבחור שם אחר.‬";
     Text[ hindi ] = "यह शीर्षक लेखासंचय में पहिले से ही अस्तित्व में है । कृपया दूसरा नाम प्रविष्ट कीजिए ।";
+    Text[ slovak ] = "Tento nadpis v databáze už existuje, prosím, zadajte iný.";
 };
 String RID_DB_COMMON_START + 11
 {
@@ -402,6 +412,7 @@ String RID_DB_COMMON_START + 11
     Text[ czech ] = "Název nesmí obsahovat žádné mezery ani jiné zvláštní znaky.";
     Text[ hebrew ] = "‮רווחים ותווים מיוחדים אסורים בכותרות.‬";
     Text[ hindi ] = "शीर्षक का नाम में खाली स्थान अथवा विशेष अक्षरों को नहीं भर सकते है ।";
+    Text[ slovak ] = "Nadpis nesmie obsahovať žiadne medzery ani iné zvláštne znaky.";
 };
 
 String RID_DB_COMMON_START + 12
@@ -434,6 +445,7 @@ String RID_DB_COMMON_START + 12
     Text[ czech ] = "Databázový stroj (com.sun.data.DatabaseEngine) nemohl být instalován.";
     Text[ hebrew ] = "‮לא ניתן להפעיל עותק של שרות מסד הנתונים (com.sun.star.data.DatabaseEngine).‬";
     Text[ hindi ] = "लेखासंचय सेवा (com.sun.data.DatabaseEngine) को प्रारंभ नहीं कर सकते है ।";
+    Text[ slovak ] = "Databázová služba (com.sun.data.DatabaseEngine) nemôže byť inicializovaná.";
 };
 
 String RID_DB_COMMON_START + 13
@@ -465,6 +477,7 @@ String RID_DB_COMMON_START + 13
     Text[ czech ] = "Vybranou tabulku nebo dotaz nelze otevřít.";
     Text[ hebrew ] = "‮לא ניתן לפתוח טבלה או שאילתה זו.‬";
     Text[ hindi ] = "चुने हुए सारणी अथवा जानकारी को नहीं खोल सकते है ।";
+    Text[ slovak ] = "Vybranú tabuľku alebo otázku nemožno otvoriť.";
 };
 
 String RID_DB_COMMON_START + 14
@@ -495,6 +508,7 @@ String RID_DB_COMMON_START + 14
     Text[ czech ] = "Nebylo navázáno spojení s databází.";
     Text[ hebrew ] = "‮לא ניתן להתחבר למסד הנתונים.‬";
     Text[ hindi ] = "लेखासंचय केलिए कोई कनेक्शन स्थापित नहीं कर सकते है ।";
+    Text[ slovak ] = "Chyba pri nadväzovaní komunikácie s databázou.";
 };
 
 String RID_DB_COMMON_START + 20
@@ -525,6 +539,7 @@ String RID_DB_COMMON_START + 20
     Text[ czech ] = "Nápověda";
     Text[ hebrew ] = "‮עזרה‬";
     Text[ hindi ] = "~सहायता";
+    Text[ slovak ] = "~Pomocník";
 };
 
 String RID_DB_COMMON_START + 21
@@ -555,6 +570,7 @@ String RID_DB_COMMON_START + 21
     Text[ danish ] = "~Stop";
     Text[ hebrew ] = "‮עצירה‬";
     Text[ hindi ] = "~रोको";
+    Text[ slovak ] = "~Zastaviť";
 };
 
 
@@ -586,6 +602,7 @@ String RID_DB_COMMON_START + 30
     Text[ portuguese_brazilian ] = "The document could not be saved.";
     Text[ thai ] = "The document could not be saved.";
     Text[ hindi ] = "The document could not be saved.";
+    Text[ slovak ] = "Dokumet sa nedá uložiť.";
 };
 
 
@@ -617,6 +634,7 @@ String RID_DB_COMMON_START + 31
     Text[ portuguese_brazilian ] = "A link to data source could not be extablished.";
     Text[ thai ] = "A link to data source could not be extablished.";
     Text[ hindi ] = "A link to data source could not be extablished.";
+    Text[ slovak ] = "Nemohlo byť vytvorené prepojenie na Zdroj dát.";
 };
 
 String RID_DB_COMMON_START + 32
@@ -647,6 +665,7 @@ String RID_DB_COMMON_START + 32
     Text[ portuguese_brazilian ] = "A link to the data source will be created automatically.";
     Text[ thai ] = "A link to the data source will be created automatically.";
     Text[ hindi ] = "A link to the data source will be created automatically.";
+    Text[ slovak ] = "Prepojenie so Zdrojom dát bude vytvorené automaticky.";
 };
 
 
@@ -678,6 +697,7 @@ String RID_DB_COMMON_START + 33
     Text[ portuguese_brazilian ] = "Exiting the AutoPilot";
     Text[ thai ] = "Exiting the AutoPilot";
     Text[ hindi ] = "Exiting the AutoPilot";
+    Text[ slovak ] = "Ukončujem Sprievodcu";
 };
 
 String RID_DB_COMMON_START + 34
@@ -708,6 +728,7 @@ String RID_DB_COMMON_START + 34
     Text[ portuguese_brazilian ] = "Connecting to data source...";
     Text[ thai ] = "Connecting to data source...";
     Text[ hindi ] = "Connecting to data source...";
+    Text[ slovak ] = "Spájam sa so Zdrojom dát...";
 };
 
 String RID_DB_COMMON_START + 35
@@ -738,6 +759,7 @@ String RID_DB_COMMON_START + 35
     Text[ portuguese_brazilian ] = "The connection to the data source could not be established.";
     Text[ thai ] = "The connection to the data source could not be established.";
     Text[ hindi ] = "The connection to the data source could not be established.";
+    Text[ slovak ] = "Spojenie so Zdrojom dát nemohlo vytvorené.";
 };
 
 
@@ -769,6 +791,7 @@ String RID_DB_COMMON_START + 36
     Text[ czech ] = "Zadaná cesta k souboru není platná.";
     Text[ hebrew ] = "‮מסלול הספריות אל הקובץ אינו חוקי.‬";
     Text[ hindi ] = "The file path entered is not valid.";
+    Text[ slovak ] = "Zadaná cesta je neplatná.";
 };
 
 
@@ -800,6 +823,7 @@ String RID_DB_COMMON_START + 37
     Text[ portuguese_brazilian ] = "Please select a data source";
     Text[ thai ] = "Please select a data source";
     Text[ hindi ] = "Please select a data source";
+    Text[ slovak ] = "Prosím vyberte Zdroj dát";
 };
 
 String RID_DB_COMMON_START + 38
@@ -830,6 +854,7 @@ String RID_DB_COMMON_START + 38
     Text[ portuguese_brazilian ] = "Please select a table or query";
     Text[ thai ] = "Please select a table or query";
     Text[ hindi ] = "Please select a table or query";
+    Text[ slovak ] = "Prosím vyberte tabuľku alebo dotaz";
 };
 
 String RID_DB_COMMON_START + 39
@@ -860,6 +885,7 @@ String RID_DB_COMMON_START + 39
     Text[ portuguese_brazilian ] = "Add field";
     Text[ thai ] = "Add field";
     Text[ hindi ] = "Add field";
+    Text[ slovak ] = "Pridať pole";
 };
 
 String RID_DB_COMMON_START + 40
@@ -890,6 +916,7 @@ String RID_DB_COMMON_START + 40
     Text[ portuguese_brazilian ] = "Remove field";
     Text[ thai ] = "Remove field";
     Text[ hindi ] = "Remove field";
+    Text[ slovak ] = "Odstrániť pole";
 };
 
 String RID_DB_COMMON_START + 41
@@ -920,6 +947,7 @@ String RID_DB_COMMON_START + 41
     Text[ portuguese_brazilian ] = "Add all fields";
     Text[ thai ] = "Add all fields";
     Text[ hindi ] = "Add all fields";
+    Text[ slovak ] = "Pridať všetky polia";
 };
 
 String RID_DB_COMMON_START + 42
@@ -950,6 +978,7 @@ String RID_DB_COMMON_START + 42
     Text[ portuguese_brazilian ] = "Remove all fields";
     Text[ thai ] = "Remove all fields";
     Text[ hindi ] = "Remove all fields";
+    Text[ slovak ] = "Odstrániť všetky polia";
 };
 
 
@@ -986,6 +1015,7 @@ String RID_DB_GROUP_WIZARD_START + 0
     Text[ czech ] = "Část skupiny průvodce";
     Text[ hebrew ] = "‮עצם טייס אוטומטי מקבוצה‬";
     Text[ hindi ] = "ओटोपैलट् समूह ऐलिमेन्ट्";
+    Text[ slovak ] = "Sprievodca skupinovým prvkom";
 };
 
 String RID_DB_GROUP_WIZARD_START + 1
@@ -1017,6 +1047,7 @@ String RID_DB_GROUP_WIZARD_START + 1
     Text[ czech ] = "Databáze neobsahuje žádné tabulky.";
     Text[ hebrew ] = "‮אין טבלאות במסד הנתונים.‬";
     Text[ hindi ] = "लेखासंचय में एक भी सारणी नहीं है ।";
+    Text[ slovak ] = "Databáza neobsahuje žiadne tabuľky.";
 };
 
 String RID_DB_GROUP_WIZARD_START + 2
@@ -1048,6 +1079,7 @@ String RID_DB_GROUP_WIZARD_START + 2
     Text[ czech ] = "Vytvořit skupinu";
     Text[ hebrew ] = "‮יצירת קבוצה‬";
     Text[ hindi ] = "समूह उत्पन्न करो";
+    Text[ slovak ] = "Vytvoriť skupinu";
 };
 
 String RID_DB_GROUP_WIZARD_START + 3
@@ -1080,6 +1112,7 @@ String RID_DB_GROUP_WIZARD_START + 3
     Text[ czech ] = ": Výběr tabulky";
     Text[ hebrew ] = "‮בחירת טבלאות:‬";
     Text[ hindi ] = ": सारणी चुनाव";
+    Text[ slovak ] = ": Výber tabuľky";
 };
 
 String RID_DB_GROUP_WIZARD_START + 4
@@ -1112,6 +1145,7 @@ String RID_DB_GROUP_WIZARD_START + 4
     Text[ czech ] = ": Výběr polí";
     Text[ hebrew ] = "‮בחירת שדות:‬";
     Text[ hindi ] = ": क्षेत्र चुनाव";
+    Text[ slovak ] = ": Výber poľa";
 };
 
 String RID_DB_GROUP_WIZARD_START + 5
@@ -1144,6 +1178,7 @@ String RID_DB_GROUP_WIZARD_START + 5
     Text[ czech ] = ": Výběr výchozího sloupce";
     Text[ hebrew ] = "‮בחירת שדה ברירת המחדל:‬";
     Text[ hindi ] = ": अनुपस्थिति क्षेत्र का चुनाव";
+    Text[ slovak ] = ": Východzí výber poľa";
 };
 
 String RID_DB_GROUP_WIZARD_START + 6
@@ -1176,6 +1211,7 @@ String RID_DB_GROUP_WIZARD_START + 6
     Text[ czech ] = ": Hodnoty sloupce";
     Text[ hebrew ] = "‮ערכי שדה:‬";
     Text[ hindi ] = ": क्षेत्र का मूल्य";
+    Text[ slovak ] = ": Hodnoty poľa";
 };
 
 String RID_DB_GROUP_WIZARD_START + 7
@@ -1208,6 +1244,7 @@ String RID_DB_GROUP_WIZARD_START + 7
     Text[ czech ] = ": Pole databáze";
     Text[ hebrew ] = "‮שדה מסד נתונים:‬";
     Text[ hindi ] = ": लेखासंचय क्षेत्र";
+    Text[ slovak ] = ": Pole databázy";
 };
 
 String RID_DB_GROUP_WIZARD_START + 8
@@ -1239,6 +1276,7 @@ String RID_DB_GROUP_WIZARD_START + 8
     Text[ czech ] = ": Vytvořit skupinu";
     Text[ hebrew ] = "‮יצירת קבוצת אפשרויות:‬";
     Text[ hindi ] = ": विकल्प समूह उत्पन्न करो";
+    Text[ slovak ] = ": Vytvoriť skupinu výberu";
 };
 
 String RID_DB_GROUP_WIZARD_START + 9
@@ -1270,6 +1308,7 @@ String RID_DB_GROUP_WIZARD_START + 9
     Text[ czech ] = "Zadejte všechny volby v tomto dialogovém okně.";
     Text[ hebrew ] = "‮יש למלא את כל השדות של האפשרויות בחלון זה‬";
     Text[ hindi ] = "Enter all option fields in this dialog.";
+    Text[ slovak ] = "V tomto dialógu zadajte všetky polia možností.";
 };
 
 String RID_DB_GROUP_WIZARD_START + 10
@@ -1301,6 +1340,7 @@ String RID_DB_GROUP_WIZARD_START + 10
     Text[ czech ] = "Jaké názvy chcete přiřadit jednotlivým volbám?";
     Text[ hebrew ] = "‮אילה שמות לתת לשדות האפשרויות?‬";
     Text[ hindi ] = "आप विकल्प क्षेत्रों को क्या नाम देना चाहते है?";
+    Text[ slovak ] = "Aké názvy chcete dať poliam možností?";
 };
 
 String RID_DB_GROUP_WIZARD_START + 11
@@ -1332,6 +1372,7 @@ String RID_DB_GROUP_WIZARD_START + 11
     Text[ czech ] = "Pole voleb";
     Text[ hebrew ] = "‮שדות אפשרויות‬";
     Text[ hindi ] = "~विकल्प क्षेत्र";
+    Text[ slovak ] = "P~olia možností";
 };
 
 String RID_DB_GROUP_WIZARD_START + 12
@@ -1363,6 +1404,7 @@ String RID_DB_GROUP_WIZARD_START + 12
     Text[ czech ] = "Má být některá volba vybrána jako výchozí?";
     Text[ hebrew ] = "‮האם לבחור שדה אחד כברירת מחדל?‬";
     Text[ hindi ] = "एक विकल्प क्षेत्र को अनुपस्थिति में चुनना है क्या ?";
+    Text[ slovak ] = "Má byť jedno pole možností vybrané ako východzie?";
 };
 
 String RID_DB_GROUP_WIZARD_START + 13
@@ -1395,6 +1437,7 @@ String RID_DB_GROUP_WIZARD_START + 13
     Text[ czech ] = "Ano, následující:";
     Text[ hebrew ] = "‮כן, יש לבחור את:‬";
     Text[ hindi ] = "हाँ, निम्नलिखित:";
+    Text[ slovak ] = "Áno, toto:";
 };
 
 String RID_DB_GROUP_WIZARD_START + 14
@@ -1426,6 +1469,7 @@ String RID_DB_GROUP_WIZARD_START + 14
     Text[ czech ] = "Ne, žádná.";
     Text[ hebrew ] = "‮לא, אין צורך לבחור שדות.‬";
     Text[ hindi ] = "नहीं, चुनने केलिए कोई क्षेत्र नहीं है ।";
+    Text[ slovak ] = "Nie, nemá byť vybrané žiadne pole.";
 };
 
 String RID_DB_GROUP_WIZARD_START + 15
@@ -1458,6 +1502,7 @@ String RID_DB_GROUP_WIZARD_START + 15
     Text[ czech ] = "Pokud vyberete jednu z voleb, celá skupina získá určitou hodnotu.";
     Text[ hebrew ] = "‮כאשר בוחרים אפשרות, קבוצת האפשרויות מקבלת ערך.‬";
     Text[ hindi ] = "जब आप एक विकल्प को चुनते है , तब विकल्प समूह को एक निर्दिष्ट मूल्य दिया जाता है ।";
+    Text[ slovak ] = "Keď si vyberiete voľbu, skupine volieb bude priradená špecifická hodnota.";
 };
 
 String RID_DB_GROUP_WIZARD_START + 16
@@ -1489,6 +1534,7 @@ String RID_DB_GROUP_WIZARD_START + 16
     Text[ czech ] = "Jaké hodnoty chcete přiřadit jednotlivým volbám?";
     Text[ hebrew ] = "‮איזו ערכים לתת לכל אפשרות?‬";
     Text[ hindi ] = "आप हरेक विकल्प को क्या मूल्य देना चाहते है?";
+    Text[ slovak ] = "Akú hodnotu chcete priradiť jednotlivým voľbám?";
 };
 
 String RID_DB_GROUP_WIZARD_START + 17
@@ -1520,6 +1566,7 @@ String RID_DB_GROUP_WIZARD_START + 17
     Text[ czech ] = "Pole voleb";
     Text[ hebrew ] = "‮שדות אפשרויות‬";
     Text[ hindi ] = "~विकल्प क्षेत्र";
+    Text[ slovak ] = "P~olia možností";
 };
 
 String RID_DB_GROUP_WIZARD_START + 18
@@ -1551,6 +1598,7 @@ String RID_DB_GROUP_WIZARD_START + 18
     Text[ czech ] = "Buď můžete vybranou hodnotu uložit do pole v databázi a nebo ji použít k nějaké další akci.";
     Text[ hebrew ] = "‮ניתן לשמור את ערך קבוצת האפשרויות בשדה במסד הנתונים או לשמור אותו לשימוש מאוחר יותר.‬";
     Text[ hindi ] = "आप विकल्प समूह का मूल्य को लेखासंचय में संचित कर सकते है अथवा अनुगमन कार्य में उपयोग कर सकते है ।";
+    Text[ slovak ] = "Môžete uložiť hodnotu zo skupiny výberu do databázového poľa, alebo ju použiť neskôr.";
 };
 
 String RID_DB_GROUP_WIZARD_START + 19
@@ -1582,6 +1630,7 @@ String RID_DB_GROUP_WIZARD_START + 19
     Text[ czech ] = "Chcete hodnotu uložit v databázovém poli?";
     Text[ hebrew ] = "‮האם לשמור את הערך בשדה במסד הנתונים?‬";
     Text[ hindi ] = "आप विकल्प समूह का मूल्य को लेखासंचय में संचित करना चाहते है?";
+    Text[ slovak ] = "Chcete uložiť hodnotu v poli databázy?";
 };
 
 String RID_DB_GROUP_WIZARD_START + 20
@@ -1613,6 +1662,7 @@ String RID_DB_GROUP_WIZARD_START + 20
     Text[ czech ] = "Ano, uložit do tohoto pole v databázi:";
     Text[ hebrew ] = "‮כו, יש לשמור את הערך במסד הנתונים בשדה הבא:‬";
     Text[ hindi ] = "हाँ, निम्नलिखित लेखासंचय क्षेत्र में संचित करो:";
+    Text[ slovak ] = "Áno, uložiť do nasledujúceho databázového poľa:";
 };
 
 String RID_DB_GROUP_WIZARD_START + 21
@@ -1644,6 +1694,7 @@ String RID_DB_GROUP_WIZARD_START + 21
     Text[ czech ] = "Ne, hodnota bude použita jen ve formuláři.";
     Text[ hebrew ] = "‮לא, יש לשמור את הערך בטופס בלבד.‬";
     Text[ hindi ] = "नहीं, मैं मूल्य को केवल फ़ार्म में संचित करना चाहता हूँ ।";
+    Text[ slovak ] = "Nie, chcem uložiť len hodnotu do formulára.";
 };
 
 String RID_DB_GROUP_WIZARD_START + 22
@@ -1675,6 +1726,7 @@ String RID_DB_GROUP_WIZARD_START + 22
     Text[ czech ] = "Jaký popisek se má dát k této skupině?";
     Text[ hebrew ] = "‮אילו כותרת לתת לקבוצת האפשרויות?‬";
     Text[ hindi ] = "आप विकल्प समूह को क्या नाम देना चाहते है?";
+    Text[ slovak ] = "Aký popis má byť pridelený vašej skupine výberu?";
 };
 
 String RID_DB_GROUP_WIZARD_START + 23
@@ -1706,6 +1758,7 @@ String RID_DB_GROUP_WIZARD_START + 23
     Text[ czech ] = "Toto jsou všechny informace potřebné pro vytvoření přepínacího pole.";
     Text[ hebrew ] = "‮אלו כל הפרטים הנדרשים ליצירת קבוצת אפשרויות.‬";
     Text[ hindi ] = "विकल्प समूह को उत्पन्न करने के लिए इन सब विवरणों की ज़रूरत है ।";
+    Text[ slovak ] = "To boli všetky detaily potrebné pre vytvorenie skupiny výberu.";
 };
 
 #endif
@@ -1741,6 +1794,7 @@ String RID_DB_FORM_WIZARD_START + 0
     Text[ czech ] = "Průvodce formulářem";
     Text[ hebrew ] = "‮טייס אוטומטי לטפסים‬";
     Text[ hindi ] = "ओटोपैलट् फ़ार्म";
+    Text[ slovak ] = "Sprievodca formulárom";
 };
 
 String RID_DB_FORM_WIZARD_START + 1
@@ -1772,6 +1826,7 @@ String RID_DB_FORM_WIZARD_START + 1
     Text[ czech ] = "Tento titulek nemůže být použit, prosím, zvolte si jiný.";
     Text[ hebrew ] = "‮לא ניתן להשתמש בכותרת זו. נא לבחור כותרת אחרת.‬";
     Text[ hindi ] = "यह शीर्षक को उपयोग नहीं कर सकते है । कृपया दूसरा शीर्षक को चुनिए ।";
+    Text[ slovak ] = "Tento nadpis sa nedá použiť. Prosím vyberte iný.";
 };
 
 String RID_DB_FORM_WIZARD_START + 2
@@ -1803,6 +1858,7 @@ String RID_DB_FORM_WIZARD_START + 2
     Text[ czech ] = "Vytvořit formulář";
     Text[ hebrew ] = "‮יצירת טופס‬";
     Text[ hindi ] = "फ़ार्म उत्पन्न करो";
+    Text[ slovak ] = "Vytvoriť formulár";
 };
 
 String RID_DB_FORM_WIZARD_START + 3
@@ -1835,6 +1891,7 @@ String RID_DB_FORM_WIZARD_START + 3
     Text[ czech ] = "Form_";
     Text[ hebrew ] = "‮טופס_‬";
     Text[ hindi ] = "फ़ार्म_";
+    Text[ slovak ] = "Formulár_";
 };
 
 String RID_DB_FORM_WIZARD_START + 4
@@ -1866,6 +1923,7 @@ String RID_DB_FORM_WIZARD_START + 4
     Text[ czech ] = "(Datum)";
     Text[ hebrew ] = "‮(תאריך)‬";
     Text[ hindi ] = "(दिनांक)";
+    Text[ slovak ] = "(Dátum)";
 };
 
 String RID_DB_FORM_WIZARD_START + 5
@@ -1897,6 +1955,7 @@ String RID_DB_FORM_WIZARD_START + 5
     Text[ czech ] = "(Čas)";
     Text[ hebrew ] = "‮(זמן)‬";
     Text[ hindi ] = "(समय)";
+    Text[ slovak ] = "(Čas)";
 };
 
 String RID_DB_FORM_WIZARD_START + 6
@@ -1928,6 +1987,7 @@ String RID_DB_FORM_WIZARD_START + 6
     Text[ czech ] = "Tabulky nebo dotazy";
     Text[ hebrew ] = "‮טבלאות או שאילתות‬";
     Text[ hindi ] = "सारणी अथवा जानकारी";
+    Text[ slovak ] = "Tabuľky alebo dotazy";
 };
 
 String RID_DB_FORM_WIZARD_START + 7
@@ -1959,6 +2019,7 @@ String RID_DB_FORM_WIZARD_START + 7
     Text[ czech ] = ": Výběr polí";
     Text[ hebrew ] = "‮בחירת שדות:‬";
     Text[ hindi ] = ": क्षेत्र का चुनाव";
+    Text[ slovak ] = ": Výber poľa";
 };
 
 String RID_DB_FORM_WIZARD_START + 8
@@ -1990,6 +2051,7 @@ String RID_DB_FORM_WIZARD_START + 8
     Text[ czech ] = ": Zarovnání polí";
     Text[ hebrew ] = "‮יישור שדות:‬";
     Text[ hindi ] = ": क्षेत्र पंक्तिकरण";
+    Text[ slovak ] = ": Zarovnanie poľa";
 };
 
 String RID_DB_FORM_WIZARD_START + 9
@@ -2021,6 +2083,7 @@ String RID_DB_FORM_WIZARD_START + 9
     Text[ czech ] = ": Šablony";
     Text[ hebrew ] = "‮תבניות:‬";
     Text[ hindi ] = ": नमूनें";
+    Text[ slovak ] = ": Šablóny";
 };
 
 String RID_DB_FORM_WIZARD_START + 10
@@ -2052,6 +2115,7 @@ String RID_DB_FORM_WIZARD_START + 10
     Text[ czech ] = ": Vytvořit formulář";
     Text[ hebrew ] = "‮יצירת טופס:‬";
     Text[ hindi ] = ": फ़ार्म उत्पन्न करो";
+    Text[ slovak ] = ": Vytvoriť formulár";
 };
 
 String RID_DB_FORM_WIZARD_START + 11
@@ -2084,6 +2148,7 @@ String RID_DB_FORM_WIZARD_START + 11
     Text[ czech ] = "Zdroj dat";
     Text[ hebrew ] = "‮מקור הנתונים‬";
     Text[ hindi ] = "ड़ॉटा मू~ल";
+    Text[ slovak ] = "Zdr~oj dát";
 };
 
 String RID_DB_FORM_WIZARD_START + 12
@@ -2115,6 +2180,7 @@ String RID_DB_FORM_WIZARD_START + 12
     Text[ czech ] = "Stávající pole";
     Text[ hebrew ] = "‮שדות קיימים‬";
     Text[ hindi ] = "अस्ति~त्व में रहनेवाला क्षेत्र";
+    Text[ slovak ] = "Aktuálne pol~ia";
 };
 
 String RID_DB_FORM_WIZARD_START + 13
@@ -2146,6 +2212,7 @@ String RID_DB_FORM_WIZARD_START + 13
     Text[ czech ] = "Pole ve formuláři";
     Text[ hebrew ] = "‮שדות בטופס‬";
     Text[ hindi ] = "फ़ॉर्म में रहनेवाला क्षेत्र";
+    Text[ slovak ] = "Polia vo formulári";
 };
 
 String RID_DB_FORM_WIZARD_START + 14
@@ -2177,6 +2244,7 @@ String RID_DB_FORM_WIZARD_START + 14
     Text[ czech ] = "Vzhled";
     Text[ hebrew ] = "‮פריסה (עיצוב דף)‬";
     Text[ hindi ] = "~अभिन्यास";
+    Text[ slovak ] = "Vzhľa~d";
 };
 
 String RID_DB_FORM_WIZARD_START + 15
@@ -2208,6 +2276,7 @@ String RID_DB_FORM_WIZARD_START + 15
     Text[ czech ] = "Zaměřený na sloupce";
     Text[ hebrew ] = "‮לפי עמודים‬";
     Text[ hindi ] = "स्तंभ अनुस्थापित";
+    Text[ slovak ] = "Stĺpcový";
 };
 
 String RID_DB_FORM_WIZARD_START + 16
@@ -2239,6 +2308,7 @@ String RID_DB_FORM_WIZARD_START + 16
     Text[ czech ] = "Optimalizovaný";
     Text[ hebrew ] = "‮מיועל‬";
     Text[ hindi ] = "~योग्य की हुयी";
+    Text[ slovak ] = "~Optimalizovaný";
 };
 
 String RID_DB_FORM_WIZARD_START + 17
@@ -2270,6 +2340,7 @@ String RID_DB_FORM_WIZARD_START + 17
     Text[ czech ] = "Tabulkový";
     Text[ hebrew ] = "‮טבלאי‬";
     Text[ hindi ] = "~क्रमबद्ध्";
+    Text[ slovak ] = "~Tabuľkový";
 };
 
 String RID_DB_FORM_WIZARD_START + 18
@@ -2302,6 +2373,7 @@ String RID_DB_FORM_WIZARD_START + 18
     Text[ czech ] = "Titulek / Data";
     Text[ hebrew ] = "‮כותרת\\נתונים‬";
     Text[ hindi ] = "शीर्षक / ~डॉटा";
+    Text[ slovak ] = "Nadpis / ~Dáta";
 };
 
 String RID_DB_FORM_WIZARD_START + 19
@@ -2333,6 +2405,7 @@ String RID_DB_FORM_WIZARD_START + 19
     Text[ czech ] = "Dlážděný";
     Text[ hebrew ] = "‮פריסה ללא חפיפה‬";
     Text[ hindi ] = "~टइल";
+    Text[ slovak ] = "~Dláždený";
 };
 
 String RID_DB_FORM_WIZARD_START + 20
@@ -2364,6 +2437,7 @@ String RID_DB_FORM_WIZARD_START + 20
     Text[ czech ] = "Co nejplnější";
     Text[ hebrew ] = "‮חופפים‬";
     Text[ hindi ] = "~स्टॉक की हुयी";
+    Text[ slovak ] = "Kumulo~vaný";
 };
 
 String RID_DB_FORM_WIZARD_START + 21
@@ -2396,6 +2470,7 @@ String RID_DB_FORM_WIZARD_START + 21
     Text[ czech ] = "Formáty stránek";
     Text[ hebrew ] = "‮סגנונות דפים‬";
     Text[ hindi ] = "~पृष्ठ शैलियाँ";
+    Text[ slovak ] = "Štýly st~ránky";
 };
 
 String RID_DB_FORM_WIZARD_START + 22
@@ -2427,6 +2502,7 @@ String RID_DB_FORM_WIZARD_START + 22
     Text[ czech ] = "Zadejte titulek";
     Text[ hebrew ] = "‮הכנסת כותרת‬";
     Text[ hindi ] = "शीर्षक प्रविष्ट करो";
+    Text[ slovak ] = "Zadajte nadpis";
 };
 
 String RID_DB_FORM_WIZARD_START + 23
@@ -2458,6 +2534,7 @@ String RID_DB_FORM_WIZARD_START + 23
     Text[ czech ] = "Po dokončení...";
     Text[ hebrew ] = "‮לאחר סיום...‬";
     Text[ hindi ] = "समाप्ती के ~पश्चात...";
+    Text[ slovak ] = "Po ukonč~ení...";
 };
 
 String RID_DB_FORM_WIZARD_START + 24
@@ -2489,6 +2566,7 @@ String RID_DB_FORM_WIZARD_START + 24
     Text[ czech ] = "Začít ihned pracovat s dokumentem";
     Text[ hebrew ] = "‮שימוש מיידי במסמך‬";
     Text[ hindi ] = "लेखपत्र को तुरंत उपयोग करो";
+    Text[ slovak ] = "Začať ihneď pracovať s dokumentom";
 };
 
 String RID_DB_FORM_WIZARD_START + 25
@@ -2520,6 +2598,7 @@ String RID_DB_FORM_WIZARD_START + 25
     Text[ czech ] = "Uložit dokument";
     Text[ hebrew ] = "‮שמירת מסמך‬";
     Text[ hindi ] = "लेखपत्र संचित करो";
+    Text[ slovak ] = "Uložiť dokument";
 };
 
 String RID_DB_FORM_WIZARD_START + 26
@@ -2550,6 +2629,7 @@ String RID_DB_FORM_WIZARD_START + 26
     Text[ czech ] = "Formulář byl vytvořen a uložen do databáze.";
     Text[ hebrew ] = "‮הטופס נוצר ונשמר במסד הנתונים.‬";
     Text[ hindi ] = "The form has been created and saved in the database.";
+    Text[ slovak ] = "Formulár bol vytvorený a uložený v rámci databáze.";
 };
 
 String RID_DB_FORM_WIZARD_START + 27
@@ -2580,6 +2660,7 @@ String RID_DB_FORM_WIZARD_START + 27
     Text[ czech ] = "Názvy formulářů nemohou být delší než 32 znaků.";
     Text[ hebrew ] = "‮שמות טפסים עד 32 תווים בלבד.‬";
     Text[ hindi ] = "फ़ॉर्म का नाम 32 अक्षर से अधिक नहीं हो सकता है ।";
+    Text[ slovak ] = "Názvy formulárov nesmú presiahnuť 32 znakov.";
 };
 
 String RID_DB_FORM_WIZARD_START + 28
@@ -2610,6 +2691,7 @@ String RID_DB_FORM_WIZARD_START + 28
     Text[ czech ] = "Okraje políček";
     Text[ hebrew ] = "‮גבולות שדה‬";
     Text[ hindi ] = "क्षेत्र किनारा";
+    Text[ slovak ] = "Okraj poľa";
 };
 
 String RID_DB_FORM_WIZARD_START + 29
@@ -2640,6 +2722,7 @@ String RID_DB_FORM_WIZARD_START + 29
     Text[ czech ] = "Bez okrajů";
     Text[ hebrew ] = "‮ללא גבולות שדה‬";
     Text[ hindi ] = "कोई किनारा नहीं";
+    Text[ slovak ] = "Bez okrajov";
 };
 
 
@@ -2671,6 +2754,7 @@ String RID_DB_FORM_WIZARD_START + 30
     Text[ czech ] = "3D vzhled";
     Text[ hebrew ] = "‮מראה תלת מימדי‬";
     Text[ hindi ] = "3D दृश्य";
+    Text[ slovak ] = "3D vzhľad";
 };
 
 String RID_DB_FORM_WIZARD_START + 31
@@ -2701,6 +2785,7 @@ String RID_DB_FORM_WIZARD_START + 31
     Text[ czech ] = "Plochý";
     Text[ hebrew ] = "‮שטוח‬";
     Text[ hindi ] = "समतल";
+    Text[ slovak ] = "Plochý";
 };
 
 String RID_DB_FORM_WIZARD_START + 32
@@ -2732,6 +2817,7 @@ String RID_DB_FORM_WIZARD_START + 32
     Text[ czech ] = "Umístění titulku";
     Text[ hebrew ] = "‮מיקום תוית‬";
     Text[ hindi ] = "लेबिल स्थान";
+    Text[ slovak ] = "Označenie";
 };
 
 String RID_DB_FORM_WIZARD_START + 33
@@ -2763,6 +2849,7 @@ String RID_DB_FORM_WIZARD_START + 33
     Text[ czech ] = "Zarovnat vlevo";
     Text[ hebrew ] = "‮ישור לשמאל‬";
     Text[ hindi ] = "बायाँ ओर पंक्तिकरण";
+    Text[ slovak ] = "Zarovnať vľavo";
 };
 
 String RID_DB_FORM_WIZARD_START + 34
@@ -2794,6 +2881,7 @@ String RID_DB_FORM_WIZARD_START + 34
     Text[ czech ] = "Zarovnat vpravo";
     Text[ hebrew ] = "‮ישור לימין‬";
     Text[ hindi ] = "दाहिनी ओर पंक्तिकरण";
+    Text[ slovak ] = "Zarovnať vpravo";
 };
 
 String RID_DB_FORM_WIZARD_START + 35
@@ -2824,6 +2912,7 @@ String RID_DB_FORM_WIZARD_START + 35
     Text[ czech ] = "Rozmístění databázových polí";
     Text[ hebrew ] = "‮תצוגת שדות מסד הנתונים‬";
     Text[ hindi ] = "DB क्षेत्रों को क्रम में रखना";
+    Text[ slovak ] = "Usporiadanie z DB polí";
 };
 
 String RID_DB_FORM_WIZARD_START + 36
@@ -2855,6 +2944,7 @@ String RID_DB_FORM_WIZARD_START + 36
     Text[ czech ] = "Do sloupců - titulky vlevo";
     Text[ hebrew ] = "‮לפי עמודים - תוויות לשמאל‬";
     Text[ hindi ] = "स्तंभ के सदृश - लेबिलें बायाँ ओर";
+    Text[ slovak ] = "Do stĺpcov - popisy naľavo";
 };
 
 String RID_DB_FORM_WIZARD_START + 37
@@ -2885,6 +2975,7 @@ String RID_DB_FORM_WIZARD_START + 37
     Text[ czech ] = "Do sloupců - titulky v záhlaví";
     Text[ hebrew ] = "‮לפי עמודים - תוויות למעלה‬";
     Text[ hindi ] = "स्तंभ के सदृश - लेबिलें ऊपर";
+    Text[ slovak ] = "Do stĺpcov - popisy hore";
 };
 
 String RID_DB_FORM_WIZARD_START + 38
@@ -2916,6 +3007,7 @@ String RID_DB_FORM_WIZARD_START + 38
     Text[ czech ] = "Do bloků - titulky vlevo";
     Text[ hebrew ] = "‮לפי קטעים - תוויות לשמאל‬";
     Text[ hindi ] = "ब्लॉक्स में - लेबिलें बायाँ ओर";
+    Text[ slovak ] = "Do blokov - popisy naľavo";
 };
 
 String RID_DB_FORM_WIZARD_START + 39
@@ -2947,6 +3039,7 @@ String RID_DB_FORM_WIZARD_START + 39
     Text[ czech ] = "Do bloků - titulky nad poli";
     Text[ hebrew ] = "‮לפי קטעים - תוויות למעלה‬";
     Text[ hindi ] = "ब्लॉक्स में - लेबिलें ऊपर";
+    Text[ slovak ] = "Do blokov - popisy nad";
 };
 
 String RID_DB_FORM_WIZARD_START + 40
@@ -2978,6 +3071,7 @@ String RID_DB_FORM_WIZARD_START + 40
     Text[ czech ] = "Jako tabulku";
     Text[ hebrew ] = "‮לפי תבנית דף נתונים‬";
     Text[ hindi ] = "ड़ॉटा शीट् जैसे";
+    Text[ slovak ] = "Ako dátový list";
 };
 
 
@@ -3011,6 +3105,7 @@ String RID_DB_FORM_WIZARD_START + 45
     Text[ czech ] = "Zvolte databázi";
     Text[ hebrew ] = "‮בחירת מסד נתונים‬";
     Text[ hindi ] = "लेखासंचय चुनो";
+    Text[ slovak ] = "Vybrať databázu";
 };
 
 String RID_DB_FORM_WIZARD_START + 46
@@ -3043,6 +3138,7 @@ String RID_DB_FORM_WIZARD_START + 46
     Text[ czech ] = "Zvolte vzhled";
     Text[ hebrew ] = "‮בחירת סוג פריסה‬";
     Text[ hindi ] = "अभिन्यास चुनो";
+    Text[ slovak ] = "Vybrať vzhľad";
 };
 
 String RID_DB_FORM_WIZARD_START + 47
@@ -3074,6 +3170,7 @@ String RID_DB_FORM_WIZARD_START + 47
     Text[ czech ] = "Konec";
     Text[ hebrew ] = "‮סיום‬";
     Text[ hindi ] = "समाप्त";
+    Text[ slovak ] = "Koniec";
 };
 
 String RID_DB_FORM_WIZARD_START + 50
@@ -3105,6 +3202,7 @@ String RID_DB_FORM_WIZARD_START + 50
     Text[ czech ] = "Zobrazení binárních polí";
     Text[ hebrew ] = "‮תצוגת שדות בינריים‬";
     Text[ hindi ] = "बैनरी क्षेत्रों को दिखाओ";
+    Text[ slovak ] = "Zobraziť z binárnych polí";
 };
 
 String RID_DB_FORM_WIZARD_START + 51
@@ -3136,6 +3234,7 @@ String RID_DB_FORM_WIZARD_START + 51
     Text[ czech ] = "Ignorovat binární pole";
     Text[ hebrew ] = "‮התעלמות משדות בינריים‬";
     Text[ hindi ] = "बैनरी क्षेत्रों को उपेक्षा करो";
+    Text[ slovak ] = "Ignorovať binárne polia";
 };
 
 String RID_DB_FORM_WIZARD_START + 52
@@ -3167,6 +3266,7 @@ String RID_DB_FORM_WIZARD_START + 52
     Text[ czech ] = "Zobrazit jako obrázky";
     Text[ hebrew ] = "‮שדות בינריים כתמונות‬";
     Text[ hindi ] = "बैनरी क्षेत्र चित्र जैसे";
+    Text[ slovak ] = "Binárne polia ako obrázky";
 };
 
 
@@ -3198,6 +3298,7 @@ String RID_DB_FORM_WIZARD_START + 55
     Text[ czech ] = "Obrázek pozadí";
     Text[ hebrew ] = "‮צלם רקע‬";
     Text[ hindi ] = "पृष्ठभाग चित्र";
+    Text[ slovak ] = "Pozadie";
 };
 
 
@@ -3230,6 +3331,7 @@ String RID_DB_FORM_WIZARD_START + 56
     Text[ czech ] = "Dlážděný";
     Text[ hebrew ] = "‮פריסה ללא חפיפה‬";
     Text[ hindi ] = "~टइल किया हुआ";
+    Text[ slovak ] = "~Dláždený";
 };
 
 
@@ -3261,6 +3363,7 @@ String RID_DB_FORM_WIZARD_START + 57
     Text[ czech ] = "Roztažený";
     Text[ hebrew ] = "‮התאמה לגודל‬";
     Text[ hindi ] = "~स्केल किया हुआ";
+    Text[ slovak ] = "Ro~ztiahnutý";
 };
 
 String RID_DB_FORM_WIZARD_START + 60
@@ -3291,6 +3394,7 @@ String RID_DB_FORM_WIZARD_START + 60
     Text[ czech ] = "Cesta k adresáři";
     Text[ hebrew ] = "‮מסלול ספריות‬";
     Text[ hindi ] = "डैरक्टरी मार्ग";
+    Text[ slovak ] = "Cesta k adresáru";
 };
 
 
@@ -3323,6 +3427,7 @@ String RID_DB_FORM_WIZARD_START + 65
     Text[ czech ] = "Dialog bude zmenšen";
     Text[ hebrew ] = "‮החלון יוקטן‬";
     Text[ hindi ] = "डयलॉग को कम किया जायेगा";
+    Text[ slovak ] = "Dialóg bude zredukovaný";
 };
 
 String RID_DB_FORM_WIZARD_START + 66
@@ -3354,6 +3459,7 @@ String RID_DB_FORM_WIZARD_START + 66
     Text[ czech ] = "Dialog bude zvětšen";
     Text[ hebrew ] = "‮החלון יוגדל‬";
     Text[ hindi ] = "डयलॉग को बड़ा किया जायेगा";
+    Text[ slovak ] = "Dialóg bude zväčšený.";
 };
 
 
@@ -3386,6 +3492,7 @@ String RID_DB_FORM_WIZARD_START + 70
     Text[ czech ] = "Writer 6.0";
     Text[ hebrew ] = "‮Writer 6.0‬";
     Text[ hindi ] = "लेखक 6.0";
+    Text[ slovak ] = "Writer 6.0";
 };
 
 String RID_DB_FORM_WIZARD_START + 71
@@ -3417,6 +3524,7 @@ String RID_DB_FORM_WIZARD_START + 71
     Text[ czech ] = "Šablona Writeru 6.0";
     Text[ hebrew ] = "‮תבנית Writer 6.0‬";
     Text[ hindi ] = "लेखक 6.0 नमूना";
+    Text[ slovak ] = "Šablóna Writer 6.0";
 };
 
 
@@ -3453,6 +3561,7 @@ String RID_DB_QUERY_WIZARD_START + 0
     Text[ czech ] = "Dotaz průvodce";
     Text[ hebrew ] = "‮שאילתת טייס אוטומטי‬";
     Text[ hindi ] = "ओटोपैलट् जानकारी";
+    Text[ slovak ] = "Sprievodca dotazom";
 };
 
 String RID_DB_QUERY_WIZARD_START + 1
@@ -3484,6 +3593,7 @@ String RID_DB_QUERY_WIZARD_START + 1
     Text[ czech ] = "Není instalována žádná databáze. Pro vytvoření dotazu musíte mít instalovánu alespoň jednu databázi.";
     Text[ hebrew ] = "‮אין מסד נתונים מותקן. נדרש לפחות מסד נתונים אחד על מנת להפעיל את הטייס האוטומטי לשאילתות.‬";
     Text[ hindi ] = "कोई लेखासंचय को प्रतिष्ठापन नहीं किया है । ओटोपैलट् जानकारी को प्रारंभ करने से पहिले सिस्टम् में कम से कम एक लेखासंचय की रहना ज़रूरी है ।";
+    Text[ slovak ] = "Nie je inštalovaná žiadna databáza. Potrebujete aspoň jednu databázu pre spustenie Sprievodcu dotazom.";
 };
 
 String RID_DB_QUERY_WIZARD_START + 2
@@ -3515,6 +3625,7 @@ String RID_DB_QUERY_WIZARD_START + 2
     Text[ czech ] = "Při spuštění nebo návrhu dotazu došlo k chybě.";
     Text[ hebrew ] = "‮ארעה שגיאה בהגדרה או בביצוע השאילתה‬";
     Text[ hindi ] = "जानकारी को चलाने के समय अथवा परिभाषा देने के समय गलती घटित हुआ ।";
+    Text[ slovak ] = "Pri vytváraní alebo vykonávaní dotazu sa vyskytla chyba.";
 };
 
 String RID_DB_QUERY_WIZARD_START + 3
@@ -3547,6 +3658,7 @@ String RID_DB_QUERY_WIZARD_START + 3
     Text[ czech ] = "Dotaz byl uložen v Exploreru.";
     Text[ hebrew ] = "‮השאילתה נשמר בסייר‬";
     Text[ hindi ] = "ऍक्सप्लोरर् में जानकारी को संचित किया है ।";
+    Text[ slovak ] = "Dotaz bol uložený v Prieskumníkovi.";
 };
 
 String RID_DB_QUERY_WIZARD_START + 4
@@ -3578,6 +3690,7 @@ String RID_DB_QUERY_WIZARD_START + 4
     Text[ czech ] = "Došlo k chybě, dotaz nemohl být uložen.";
     Text[ hebrew ] = "‮ארעה שגיאה. לא ניתן לשמור את השאילתה.‬";
     Text[ hindi ] = "गलती घटित हुआ । जानकारी को संचित नहीं कर सकते है ।";
+    Text[ slovak ] = "Vyskytla sa chyba. Dotaz nemohol byť uložený.";
 };
 
 String RID_DB_QUERY_WIZARD_START + 5
@@ -3609,6 +3722,7 @@ String RID_DB_QUERY_WIZARD_START + 5
     Text[ czech ] = "Duplicate field name. A field named $1 already exists.";
     Text[ hebrew ] = "‮שדה בשם $1 כבר קיים.‬";
     Text[ hindi ] = "क्षेत्र नाम को दोहरा गया है । क्षेत्र का नाम $1 पहिले से अस्तित्व में है ।";
+    Text[ slovak ] = "Duplicitný názov poľa. Pole s názvom $1 už existuje.";
 };
 
 String RID_DB_QUERY_WIZARD_START + 6
@@ -3640,6 +3754,7 @@ String RID_DB_QUERY_WIZARD_START + 6
     Text[ czech ] = "Dotaz_";
     Text[ hebrew ] = "‮שאילתה_‬";
     Text[ hindi ] = "जानकारी_";
+    Text[ slovak ] = "Dotaz_";
 };
 
 String RID_DB_QUERY_WIZARD_START + 7
@@ -3671,6 +3786,7 @@ String RID_DB_QUERY_WIZARD_START + 7
     Text[ czech ] = "(žádná)";
     Text[ hebrew ] = "‮(אין)‬";
     Text[ hindi ] = "(कोई नहीं)";
+    Text[ slovak ] = "(nič)";
 };
 
 String RID_DB_QUERY_WIZARD_START + 8
@@ -3702,6 +3818,7 @@ String RID_DB_QUERY_WIZARD_START + 8
     Text[ czech ] = "Vyprázdnit";
     Text[ hebrew ] = "‮ריק‬";
     Text[ hindi ] = "खाली";
+    Text[ slovak ] = "prázdny";
 };
 
 String RID_DB_QUERY_WIZARD_START + 9
@@ -3733,6 +3850,7 @@ String RID_DB_QUERY_WIZARD_START + 9
     Text[ czech ] = "not empty";
     Text[ hebrew ] = "‮לא ריק‬";
     Text[ hindi ] = "खाली नहीं है";
+    Text[ slovak ] = "nie je prázdny";
 };
 
 String RID_DB_QUERY_WIZARD_START + 10
@@ -3764,6 +3882,7 @@ String RID_DB_QUERY_WIZARD_START + 10
     Text[ czech ] = "like";
     Text[ hebrew ] = "‮כמו‬";
     Text[ hindi ] = "सदृश";
+    Text[ slovak ] = "ako";
 };
 
 String RID_DB_QUERY_WIZARD_START + 11
@@ -3795,6 +3914,7 @@ String RID_DB_QUERY_WIZARD_START + 11
     Text[ czech ] = "not like";
     Text[ hebrew ] = "‮לא כמו‬";
     Text[ hindi ] = "सदृश नहीं है";
+    Text[ slovak ] = "nie ako";
 };
 
 String RID_DB_QUERY_WIZARD_START + 12
@@ -3826,6 +3946,7 @@ String RID_DB_QUERY_WIZARD_START + 12
     Text[ czech ] = "AND";
     Text[ hebrew ] = "‮וגם‬";
     Text[ hindi ] = "और";
+    Text[ slovak ] = "AND";
 };
 
 String RID_DB_QUERY_WIZARD_START + 13
@@ -3857,6 +3978,7 @@ String RID_DB_QUERY_WIZARD_START + 13
     Text[ czech ] = "nebo";
     Text[ hebrew ] = "‮או‬";
     Text[ hindi ] = "अथवा";
+    Text[ slovak ] = "OR";
 };
 
 String RID_DB_QUERY_WIZARD_START + 14
@@ -3888,6 +4010,7 @@ String RID_DB_QUERY_WIZARD_START + 14
     Text[ czech ] = ": Výběr tabulky";
     Text[ hebrew ] = "‮בחירת טבלאות:‬";
     Text[ hindi ] = ": सारणी चुनाव";
+    Text[ slovak ] = ": Výber tabuľky";
 };
 
 String RID_DB_QUERY_WIZARD_START + 15
@@ -3919,6 +4042,7 @@ String RID_DB_QUERY_WIZARD_START + 15
     Text[ czech ] = ": Výběr polí";
     Text[ hebrew ] = "‮בחירת שדות:‬";
     Text[ hindi ] = ": क्षेत्र चुनाव";
+    Text[ slovak ] = ": Výber poľa";
 };
 
 String RID_DB_QUERY_WIZARD_START + 16
@@ -3951,6 +4075,7 @@ String RID_DB_QUERY_WIZARD_START + 16
     Text[ czech ] = ": Filter";
     Text[ hebrew ] = "‮סינון:‬";
     Text[ hindi ] = ": फ़िल्टर";
+    Text[ slovak ] = ": Filter";
 };
 
 String RID_DB_QUERY_WIZARD_START + 17
@@ -3983,6 +4108,7 @@ String RID_DB_QUERY_WIZARD_START + 17
     Text[ czech ] = ": Pořadí třídění";
     Text[ hebrew ] = "‮סדר מיון‬";
     Text[ hindi ] = ": सोर्ट क्रम";
+    Text[ slovak ] = ": Poradie triedenia";
 };
 
 String RID_DB_QUERY_WIZARD_START + 18
@@ -4015,6 +4141,7 @@ String RID_DB_QUERY_WIZARD_START + 18
     Text[ czech ] = ": Vytvořit";
     Text[ hebrew ] = "‮חדש:‬";
     Text[ hindi ] = ": उत्पन्न करो";
+    Text[ slovak ] = ": Vytvoriť";
 };
 
 String RID_DB_QUERY_WIZARD_START + 19
@@ -4046,6 +4173,7 @@ String RID_DB_QUERY_WIZARD_START + 19
     Text[ czech ] = "Náhled";
     Text[ hebrew ] = "‮תצוגה מקדימה‬";
     Text[ hindi ] = "~पूर्वदृश्य";
+    Text[ slovak ] = "~Náhľad";
 };
 
 String RID_DB_QUERY_WIZARD_START + 20
@@ -4078,6 +4206,7 @@ String RID_DB_QUERY_WIZARD_START + 20
     Text[ czech ] = "Zdroj dat";
     Text[ hebrew ] = "‮מקור הנתונים‬";
     Text[ hindi ] = "डॉटा मूल";
+    Text[ slovak ] = "Zdroj dát";
 };
 
 String RID_DB_QUERY_WIZARD_START + 21
@@ -4110,6 +4239,7 @@ String RID_DB_QUERY_WIZARD_START + 21
     Text[ czech ] = "Existující pole";
     Text[ hebrew ] = "‮שדות קיימים‬";
     Text[ hindi ] = "~अस्तित्व में रहनेवाला क्षेत्र";
+    Text[ slovak ] = "~Existujúce polia";
 };
 
 String RID_DB_QUERY_WIZARD_START + 22
@@ -4141,6 +4271,7 @@ String RID_DB_QUERY_WIZARD_START + 22
     Text[ czech ] = "Pole použitá v dotazu";
     Text[ hebrew ] = "‮שדות בשאילתה‬";
     Text[ hindi ] = "जानकारी में रहनेवाला क्षेत्र";
+    Text[ slovak ] = "Polia v dotaze";
 };
 
 String RID_DB_QUERY_WIZARD_START + 23
@@ -4173,6 +4304,7 @@ String RID_DB_QUERY_WIZARD_START + 23
     Text[ czech ] = "Filter";
     Text[ hebrew ] = "‮סינון‬";
     Text[ hindi ] = "फ़िल्टर";
+    Text[ slovak ] = "Filter";
 };
 
 String RID_DB_QUERY_WIZARD_START + 24
@@ -4204,6 +4336,7 @@ String RID_DB_QUERY_WIZARD_START + 24
     Text[ czech ] = "Odkaz";
     Text[ hebrew ] = "‮קשר‬";
     Text[ hindi ] = "लिंक";
+    Text[ slovak ] = "Odkaz";
 };
 
 String RID_DB_QUERY_WIZARD_START + 25
@@ -4236,6 +4369,7 @@ String RID_DB_QUERY_WIZARD_START + 25
     Text[ czech ] = "Název pole";
     Text[ hebrew ] = "‮שם שדה‬";
     Text[ hindi ] = "क्षेत्र नाम";
+    Text[ slovak ] = "Názov poľa";
 };
 
 String RID_DB_QUERY_WIZARD_START + 26
@@ -4267,6 +4401,7 @@ String RID_DB_QUERY_WIZARD_START + 26
     Text[ czech ] = "Podmínka";
     Text[ hebrew ] = "‮תנאי‬";
     Text[ hindi ] = "शर्त";
+    Text[ slovak ] = "Podmienka";
 };
 
 String RID_DB_QUERY_WIZARD_START + 27
@@ -4298,6 +4433,7 @@ String RID_DB_QUERY_WIZARD_START + 27
     Text[ czech ] = "Hodnota";
     Text[ hebrew ] = "‮ערך‬";
     Text[ hindi ] = "मूल्य";
+    Text[ slovak ] = "Hodnota";
 };
 
 String RID_DB_QUERY_WIZARD_START + 28
@@ -4330,6 +4466,7 @@ String RID_DB_QUERY_WIZARD_START + 28
     Text[ czech ] = "pořadí řazení";
     Text[ hebrew ] = "‮סדר מיון‬";
     Text[ hindi ] = "सोर्ट क्रम";
+    Text[ slovak ] = "Poradie radenia";
 };
 
 String RID_DB_QUERY_WIZARD_START + 29
@@ -4361,6 +4498,7 @@ String RID_DB_QUERY_WIZARD_START + 29
     Text[ czech ] = "Nadpis dotazu";
     Text[ hebrew ] = "‮כותרת שאילתה‬";
     Text[ hindi ] = "जानकारी का शीर्षक";
+    Text[ slovak ] = "Názov dotazu";
 };
 
 String RID_DB_QUERY_WIZARD_START + 30
@@ -4392,6 +4530,7 @@ String RID_DB_QUERY_WIZARD_START + 30
     Text[ czech ] = "Po dokončení...";
     Text[ hebrew ] = "‮לאחר סיום...‬";
     Text[ hindi ] = "समाप्ती के पश्चात...";
+    Text[ slovak ] = "Po ukončení...";
 };
 
 String RID_DB_QUERY_WIZARD_START + 31
@@ -4423,6 +4562,7 @@ String RID_DB_QUERY_WIZARD_START + 31
     Text[ czech ] = "Spustit dotaz okamžitě";
     Text[ hebrew ] = "‮בצוע מיידי של השאילתה‬";
     Text[ hindi ] = "जानकारी को तुरंत चलाओ";
+    Text[ slovak ] = "Spustiť dotaz okamžite";
 };
 
 String RID_DB_QUERY_WIZARD_START + 32
@@ -4454,6 +4594,7 @@ String RID_DB_QUERY_WIZARD_START + 32
     Text[ czech ] = "Uložit dotaz";
     Text[ hebrew ] = "‮שמירת שאילתה‬";
     Text[ hindi ] = "जानकारी को संचित करो";
+    Text[ slovak ] = "Uložiť dotaz";
 };
 
 #endif
@@ -4488,6 +4629,7 @@ String RID_DB_REPORT_WIZARD_START + 0
     Text[ czech ] = "Sestava průvodce";
     Text[ hebrew ] = "‮דו\"ח טייס האוטומטי‬";
     Text[ hindi ] = "ओटोपैलट् रिपोर्ट";
+    Text[ slovak ] = "Sprievodca hlásením";
 };
 
 String RID_DB_REPORT_WIZARD_START + 1
@@ -4520,6 +4662,7 @@ String RID_DB_REPORT_WIZARD_START + 1
     Text[ czech ] = "Sestava nemohla být uložena v Exploreru.";
     Text[ hebrew ] = "‮לא ניתן לשמור את הדו\"ח בסייר.‬";
     Text[ hindi ] = "The report could not be saved in the Explorer.";
+    Text[ slovak ] = "Hlásenie nemôže byť uložené do Prieskumníka.";
 };
 
 String RID_DB_REPORT_WIZARD_START + 2
@@ -4551,6 +4694,7 @@ String RID_DB_REPORT_WIZARD_START + 2
     Text[ czech ] = "Není instalována žádná databáze. Pro spuštění průvodce musí být instalována alespoň jedna databáze.";
     Text[ hebrew ] = "‮אין מסד נתונים. נדרש להתקין לפחות מסד נתונים אחד על מנת להפעיל דו\"ח טייס אוטומטי.‬";
     Text[ hindi ] = "लेखासंचय को प्रतिष्ठापन नहीं किया है । ओटोपैलट् रिपोर्ट को प्रारंभ करने से पहिले सिस्टम् में कम से कम एक लेखासंचय की रहना ज़रूरी है ।";
+    Text[ slovak ] = "Databáza nebola nainštalovaná. Na spustenie Sprievodcu hlásením je potrebná aspoň jedna databáza.";
 };
 
 String RID_DB_REPORT_WIZARD_START + 3
@@ -4583,6 +4727,7 @@ String RID_DB_REPORT_WIZARD_START + 3
     Text[ czech ] = "Tabulka";
     Text[ hebrew ] = "‮טבלה‬";
     Text[ hindi ] = "~सारणी";
+    Text[ slovak ] = "~Tabuľka";
 };
 
 String RID_DB_REPORT_WIZARD_START + 4
@@ -4615,6 +4760,7 @@ String RID_DB_REPORT_WIZARD_START + 4
     Text[ czech ] = "Sloupce";
     Text[ hebrew ] = "‮עמודים‬";
     Text[ hindi ] = "स्त~म्भें";
+    Text[ slovak ] = "Stĺp~ce";
 };
 
 String RID_DB_REPORT_WIZARD_START + 5
@@ -4646,6 +4792,7 @@ String RID_DB_REPORT_WIZARD_START + 5
     Text[ czech ] = "Osnova A";
     Text[ hebrew ] = "‮שלד א'‬";
     Text[ hindi ] = "बाहरी रूपरेखा A";
+    Text[ slovak ] = "Osnova A";
 };
 
 String RID_DB_REPORT_WIZARD_START + 6
@@ -4677,6 +4824,7 @@ String RID_DB_REPORT_WIZARD_START + 6
     Text[ czech ] = "Vlevo A";
     Text[ hebrew ] = "‮קשרים א'‬";
     Text[ hindi ] = "बायाँ A";
+    Text[ slovak ] = "Vľavo A";
 };
 
 String RID_DB_REPORT_WIZARD_START + 7
@@ -4708,6 +4856,7 @@ String RID_DB_REPORT_WIZARD_START + 7
     Text[ czech ] = "Sestava_";
     Text[ hebrew ] = "‮דו\"ח_‬";
     Text[ hindi ] = "रिपोर्ट_";
+    Text[ slovak ] = "Hlásenie_";
 };
 
 String RID_DB_REPORT_WIZARD_START + 8
@@ -4739,6 +4888,7 @@ String RID_DB_REPORT_WIZARD_START + 8
     Text[ czech ] = "(žádná)";
     Text[ hebrew ] = "‮- לא מוגדר -‬";
     Text[ hindi ] = "(कोई नहीं)";
+    Text[ slovak ] = "(žiadne)";
 };
 
 String RID_DB_REPORT_WIZARD_START + 9
@@ -4768,6 +4918,7 @@ String RID_DB_REPORT_WIZARD_START + 9
     Text[ czech ] = ": Výběr tabulky";
     Text[ hebrew ] = "‮שדות בדו\"ח‬";
     Text[ hindi ] = ": सारणी चुनाव";
+    Text[ slovak ] = "P~olia v správe";
 };
 
 
@@ -4801,6 +4952,7 @@ String RID_DB_REPORT_WIZARD_START + 11
     Text[ czech ] = ": Struktura";
     Text[ hebrew ] = "‮חלוקה לקבוצות‬";
     Text[ hindi ] = ": बनावट";
+    Text[ slovak ] = "Zoskupenie";
 };
 
 String RID_DB_REPORT_WIZARD_START + 12
@@ -4833,6 +4985,7 @@ String RID_DB_REPORT_WIZARD_START + 12
     Text[ czech ] = ": Vlastnosti třídění";
     Text[ hebrew ] = "‮אפשריות מיון‬";
     Text[ hindi ] = ": सोर्ट विकल्प";
+    Text[ slovak ] = "Možnosti zoraďovania";
 };
 
 String RID_DB_REPORT_WIZARD_START + 13
@@ -4864,6 +5017,7 @@ String RID_DB_REPORT_WIZARD_START + 13
     Text[ czech ] = ": Výběr stylu";
     Text[ hebrew ] = "‮בחירת עיצוב פריסה‬";
     Text[ hindi ] = ": शैली चुनाव";
+    Text[ slovak ] = "Vybrať vzhľad";
 };
 
 
@@ -4894,6 +5048,7 @@ String RID_DB_REPORT_WIZARD_START + 14
     Text[ czech ] = ": Styly";
     Text[ hebrew ] = "‮שמירת הדו\"ח‬";
     Text[ hindi ] = ": शैलियाँ";
+    Text[ slovak ] = "Uložiť správu";
 };
 
 
@@ -4926,6 +5081,7 @@ String RID_DB_REPORT_WIZARD_START + 15
     Text[ czech ] = ": Vytvořit";
     Text[ hebrew ] = "‮עיצוב פריסת הנתונים‬";
     Text[ hindi ] = ": उत्पन्न करो";
+    Text[ slovak ] = "Rozloženie dát";
 };
 
 String RID_DB_REPORT_WIZARD_START + 16
@@ -4957,6 +5113,7 @@ String RID_DB_REPORT_WIZARD_START + 16
     Text[ czech ] = "Zdroj dat";
     Text[ hebrew ] = "‮עיצוב כותרת עליונה ותחתונה‬";
     Text[ hindi ] = "ड़ॉटा मूल";
+    Text[ slovak ] = "Rozloženie záhlaví a zápätí";
 };
 
 
@@ -4989,6 +5146,7 @@ String RID_DB_REPORT_WIZARD_START + 19
     Text[ czech ] = "Uspořádat pole";
     Text[ hebrew ] = "‮שדות‬";
     Text[ hindi ] = "क्षेत्रों को व्यवस्था करो";
+    Text[ slovak ] = "Polia";
 };
 
 String RID_DB_REPORT_WIZARD_START + 20
@@ -5020,6 +5178,7 @@ String RID_DB_REPORT_WIZARD_START + 20
     Text[ czech ] = "Pořadí třídění";
     Text[ hebrew ] = "‮מיון לפי‬";
     Text[ hindi ] = "~सोर्ट क्रम";
+    Text[ slovak ] = "Zor~adiť podľa";
 };
 
 
@@ -5052,6 +5211,7 @@ String RID_DB_REPORT_WIZARD_START + 21
     Text[ czech ] = "Zarovnání";
     Text[ hebrew ] = "‮ואחר כך לפי‬";
     Text[ hindi ] = "~पंक्तिकरण";
+    Text[ slovak ] = "A potom podľa";
 };
 
 
@@ -5084,6 +5244,7 @@ String RID_DB_REPORT_WIZARD_START + 22
     Text[ czech ] = "Na výšku";
     Text[ hebrew ] = "‮כיוון‬";
     Text[ hindi ] = "~पोरट्रैट";
+    Text[ slovak ] = "Orientácia";
 };
 
 String RID_DB_REPORT_WIZARD_START + 23
@@ -5115,6 +5276,7 @@ String RID_DB_REPORT_WIZARD_START + 23
     Text[ czech ] = "Na šířku";
     Text[ hebrew ] = "‮לאורך הדף‬";
     Text[ hindi ] = "~लान्डस्केप";
+    Text[ slovak ] = "Na výšku";
 };
 
 String RID_DB_REPORT_WIZARD_START + 24
@@ -5146,6 +5308,7 @@ String RID_DB_REPORT_WIZARD_START + 24
     Text[ czech ] = "Styl";
     Text[ hebrew ] = "‮לרוחב הדף‬";
     Text[ hindi ] = "~शैली";
+    Text[ slovak ] = "Na šírku";
 };
 
 
@@ -5177,6 +5340,7 @@ String RID_DB_REPORT_WIZARD_START + 28
     Text[ czech ] = "Vlevo B";
     Text[ hebrew ] = "‮איזה שדות לכלול בדו\"ח?‬";
     Text[ hindi ] = "बा~याँ B";
+    Text[ slovak ] = "Ktoré polia chcete mať v správe?";
 };
 
 
@@ -5207,6 +5371,7 @@ String RID_DB_REPORT_WIZARD_START + 29
     Text[ czech ] = "Odsazený";
     Text[ hebrew ] = "‮האם להוסיף רמות של חלוקה לקבוצות?‬";
     Text[ hindi ] = "~इन्डेन्ट किया हुआ";
+    Text[ slovak ] = "Chcete pridať úrovne zoskupovania?";
 };
 
 
@@ -5237,6 +5402,7 @@ String RID_DB_REPORT_WIZARD_START + 30
     Text[ czech ] = "Zarovnaný";
     Text[ hebrew ] = "‮מיון הנתונים לפי איזה שדות?‬";
     Text[ hindi ] = "~व्यवस्था किया हुआ";
+    Text[ slovak ] = "Na základe ktorých polí chcete zradiť dáta?";
 };
 
 
@@ -5267,6 +5433,7 @@ String RID_DB_REPORT_WIZARD_START + 31
     Text[ czech ] = "Styly";
     Text[ hebrew ] = "‮מה המראה הרצוי לד\"ח?‬";
     Text[ hindi ] = "शैलियाँ";
+    Text[ slovak ] = "Ako chcete aby vaša správa vyzerala?";
 };
 
 
@@ -5301,6 +5468,7 @@ String RID_DB_REPORT_WIZARD_START + 32
     Text[ czech ] = "Název sestavy";
     Text[ hebrew ] = "‮איזה סוג דו\"ח?‬";
     Text[ hindi ] = "रिपोर्ट का ~नाम";
+    Text[ slovak ] = "Aký typ správy chcete";
 };
 
 
@@ -5333,6 +5501,7 @@ String RID_DB_REPORT_WIZARD_START + 33
     Text[ czech ] = "Po dokončení...";
     Text[ hebrew ] = "‮כותרת הדו\"ח‬";
     Text[ hindi ] = "समा~प्ती के पश्चात्...";
+    Text[ slovak ] = "Názov správy";
 };
 
 
@@ -5365,6 +5534,7 @@ String RID_DB_REPORT_WIZARD_START + 34
     Text[ czech ] = "Zobrazit sestavu";
     Text[ hebrew ] = "‮הצגת הדו\"ח‬";
     Text[ hindi ] = "रिपोर्ट दिखाओ";
+    Text[ slovak ] = "Zobraziť hlásenie";
 };
 
 String RID_DB_REPORT_WIZARD_START + 35
@@ -5396,6 +5566,7 @@ String RID_DB_REPORT_WIZARD_START + 35
     Text[ czech ] = "Uložit sestavu";
     Text[ hebrew ] = "‮שמירת הדו\"ח‬";
     Text[ hindi ] = "रिपोर्ट संचित करो";
+    Text[ slovak ] = "Uložiť hlásenie";
 };
 
 String RID_DB_REPORT_WIZARD_START + 36
@@ -5425,6 +5596,7 @@ String RID_DB_REPORT_WIZARD_START + 36
     Text[ czech ] = "A;Z";
     Text[ hebrew ] = "‮סדר עולה‬";
     Text[ hindi ] = "A;Z";
+    Text[ slovak ] = "Vzostupne";
 };
 
 String RID_DB_REPORT_WIZARD_START + 37
@@ -5454,6 +5626,7 @@ String RID_DB_REPORT_WIZARD_START + 37
     Text[ czech ] = "Názvy sestav nemohou být delší než 32 znaků.";
     Text[ hebrew ] = "‮סדר יורד‬";
     Text[ hindi ] = "रिपोर्ट का नाम् 32 अक्षरों से अधिक नहीं हो सकता है ।";
+    Text[ slovak ] = "Zostupne";
 };
 
 
@@ -5484,6 +5657,7 @@ String RID_DB_REPORT_WIZARD_START + 40
     Text[ czech ] = "Dynamická šablona reportu";
     Text[ hebrew ] = "‮תבנית דו\"ח דינמית‬";
     Text[ hindi ] = "Dynamic report template";
+    Text[ slovak ] = "Dynamická šablóna správy";
 };
 
 
@@ -5514,6 +5688,7 @@ String RID_DB_REPORT_WIZARD_START + 41
     Text[ czech ] = "Ihned použít šablonu reportu";
     Text[ hebrew ] = "‮יישום מיידי של תבנית הדו\"ח‬";
     Text[ hindi ] = "Use report template immediately";
+    Text[ slovak ] = "Okamžite použiť šablónu správy";
 };
 
 String RID_DB_REPORT_WIZARD_START + 42
@@ -5543,6 +5718,7 @@ String RID_DB_REPORT_WIZARD_START + 42
     Text[ czech ] = "Upravit šablonu reportu";
     Text[ hebrew ] = "‮שינוי תבנית הדו\"ח‬";
     Text[ hindi ] = "Modify report template";
+    Text[ slovak ] = "Upraviť šablónu správy";
 };
 
 String RID_DB_REPORT_WIZARD_START + 43
@@ -5572,6 +5748,7 @@ String RID_DB_REPORT_WIZARD_START + 43
     Text[ czech ] = "Statická sestava";
     Text[ hebrew ] = "‮דו\"ח סטטי‬";
     Text[ hindi ] = "Static report";
+    Text[ slovak ] = "Statická správa";
 };
 
 
@@ -5602,6 +5779,7 @@ String RID_DB_REPORT_WIZARD_START + 44
     Text[ czech ] = "Uložit jako";
     Text[ hebrew ] = "‮שמירה בשם‬";
     Text[ hindi ] = "Save as";
+    Text[ slovak ] = "Uložiť ako";
 };
 
 
@@ -5632,6 +5810,7 @@ String RID_DB_REPORT_WIZARD_START + 45
     Text[ czech ] = "Vytvořit propojení do databáze";
     Text[ hebrew ] = "‮יצירת קשר למסד הנתונים‬";
     Text[ hindi ] = "~Create link to database";
+    Text[ slovak ] = "Vytvoriť prepojenie na ~databázu";
 };
 
 
@@ -5662,6 +5841,7 @@ String RID_DB_REPORT_WIZARD_START + 50
     Text[ czech ] = "Seskupení";
     Text[ hebrew ] = "‮חלוקה לקבוצות‬";
     Text[ hindi ] = "Groupings";
+    Text[ slovak ] = "Zoskupenia";
 };
 
 String RID_DB_REPORT_WIZARD_START + 51
@@ -5680,7 +5860,7 @@ String RID_DB_REPORT_WIZARD_START + 51
     Text[ swedish ] = "Sedan efter";
     Text[ polish ] = "And then b~y";
     Text[ portuguese_brazilian ] = "And then b~y";
-    Text[ japanese ] = "２番目に優先されるキー";
+    Text[ japanese ] = "次に優先されるキー(~3)";
     Text[ korean ] = "두번째 기준";
     Text[ chinese_simplified ] = "然后按照(~Y)";
     Text[ chinese_traditional ] = "然後按照";
@@ -5691,6 +5871,7 @@ String RID_DB_REPORT_WIZARD_START + 51
     Text[ czech ] = "A potom podle";
     Text[ hebrew ] = "‮ואחר כך לפי‬";
     Text[ hindi ] = "And then b~y";
+    Text[ slovak ] = "A ~potom podľa";
 };
 
 String RID_DB_REPORT_WIZARD_START + 52
@@ -5709,7 +5890,7 @@ String RID_DB_REPORT_WIZARD_START + 52
     Text[ swedish ] = "Sedan efter";
     Text[ polish ] = "And ~then by";
     Text[ portuguese_brazilian ] = "And ~then by";
-    Text[ japanese ] = "３番目に優先されるキー";
+    Text[ japanese ] = "次に優先されるキー(~4)";
     Text[ korean ] = "세번째 기준";
     Text[ chinese_simplified ] = "然后按照(~H)";
     Text[ chinese_traditional ] = "然後按照";
@@ -5720,6 +5901,7 @@ String RID_DB_REPORT_WIZARD_START + 52
     Text[ czech ] = "A potom podle";
     Text[ hebrew ] = "‮ואחר כך לפי‬";
     Text[ hindi ] = "And ~then by";
+    Text[ slovak ] = "A po~tom podľa";
 };
 
 String RID_DB_REPORT_WIZARD_START + 53
@@ -5749,6 +5931,7 @@ String RID_DB_REPORT_WIZARD_START + 53
     Text[ czech ] = "Vzestupně";
     Text[ hebrew ] = "‮סדר עולה‬";
     Text[ hindi ] = "Asc~ending";
+    Text[ slovak ] = "Vzostupn~e";
 };
 
 String RID_DB_REPORT_WIZARD_START + 54
@@ -5778,6 +5961,7 @@ String RID_DB_REPORT_WIZARD_START + 54
     Text[ czech ] = "Vzestupně";
     Text[ hebrew ] = "‮סדר עולה‬";
     Text[ hindi ] = "Ascend~ing";
+    Text[ slovak ] = "Vzostup~ne";
 };
 
 String RID_DB_REPORT_WIZARD_START + 55
@@ -5807,6 +5991,7 @@ String RID_DB_REPORT_WIZARD_START + 55
     Text[ czech ] = "Vzestupně";
     Text[ hebrew ] = "‮סדר עולה‬";
     Text[ hindi ] = "Ascendin~g";
+    Text[ slovak ] = "~Vzostupne";
 };
 
 String RID_DB_REPORT_WIZARD_START + 56
@@ -5836,6 +6021,7 @@ String RID_DB_REPORT_WIZARD_START + 56
     Text[ czech ] = "Sestupně";
     Text[ hebrew ] = "‮סדר יורד‬";
     Text[ hindi ] = "De~scending";
+    Text[ slovak ] = "Zo~stupne";
 };
 
 String RID_DB_REPORT_WIZARD_START + 57
@@ -5865,6 +6051,7 @@ String RID_DB_REPORT_WIZARD_START + 57
     Text[ czech ] = "Sestupně";
     Text[ hebrew ] = "‮סדר יורד‬";
     Text[ hindi ] = "Des~cending";
+    Text[ slovak ] = "~Zostupne";
 };
 
 String RID_DB_REPORT_WIZARD_START + 58
@@ -5894,6 +6081,7 @@ String RID_DB_REPORT_WIZARD_START + 58
     Text[ czech ] = "Sestupně";
     Text[ hebrew ] = "‮סדר יורד‬";
     Text[ hindi ] = "De~scending";
+    Text[ slovak ] = "Zo~stupne";
 };
 
 
@@ -5924,6 +6112,7 @@ String RID_DB_REPORT_WIZARD_START + 60
     Text[ portuguese_brazilian ] = "Binary fields cannot be displayed in the report.";
     Text[ thai ] = "Binary fields cannot be displayed in the report.";
     Text[ hindi ] = "Binary fields cannot be displayed in the report.";
+    Text[ slovak ] = "Binárne polia nemôžu byť zobrazené v správe.";
 };
 
 
@@ -5954,6 +6143,7 @@ String RID_DB_REPORT_WIZARD_START + 61
     Text[ portuguese_brazilian ] = "The table '<TABLENAME>' does not exist.";
     Text[ thai ] = "The table '<TABLENAME>' does not exist.";
     Text[ hindi ] = "The table '<TABLENAME>' does not exist.";
+    Text[ slovak ] = "Tabuľka '<TABLENAME>' neexistuje.";
 };
 
 String RID_DB_REPORT_WIZARD_START + 62
@@ -5983,6 +6173,7 @@ String RID_DB_REPORT_WIZARD_START + 62
     Text[ portuguese_brazilian ] = "Creating Report...";
     Text[ thai ] = "Creating Report...";
     Text[ hindi ] = "Creating Report...";
+    Text[ slovak ] = "Vytváram správu...";
 };
 
 String RID_DB_REPORT_WIZARD_START + 63
@@ -6012,6 +6203,7 @@ String RID_DB_REPORT_WIZARD_START + 63
     Text[ portuguese_brazilian ] = "Number of records inserted: <COUNT>";
     Text[ thai ] = "Number of records inserted: <COUNT>";
     Text[ hindi ] = "Number of records inserted: <COUNT>";
+    Text[ slovak ] = "Počet vložených záznamov: <COUNT>";
 };
 
 String RID_DB_REPORT_WIZARD_START + 64
@@ -6041,6 +6233,7 @@ String RID_DB_REPORT_WIZARD_START + 64
     Text[ portuguese_brazilian ] = "The form '<REPORTFORM>' does not exist.";
     Text[ thai ] = "The form '<REPORTFORM>' does not exist.";
     Text[ hindi ] = "The form '<REPORTFORM>' does not exist.";
+    Text[ slovak ] = "Formulár '<REPORTFORM>' neexistuje.";
 };
 
 String RID_DB_REPORT_WIZARD_START + 65
@@ -6070,6 +6263,7 @@ String RID_DB_REPORT_WIZARD_START + 65
     Text[ portuguese_brazilian ] = "The query with the statement <BR>'<STATEMENT>' <BR> could not be run. <BR> Check your data source.";
     Text[ thai ] = "The query with the statement <BR>'<STATEMENT>' <BR> could not be run. <BR> Check your data source.";
     Text[ hindi ] = "The query with the statement <BR>'<STATEMENT>' <BR> could not be run. <BR> Check your data source.";
+    Text[ slovak ] = "Dotaz s výrazom <BR>'<STATEMENT>' <BR> nemohol byť spustený. <BR> Preverte váš Zdroj dát.";
 };
 
 String RID_DB_REPORT_WIZARD_START + 66
@@ -6099,6 +6293,7 @@ String RID_DB_REPORT_WIZARD_START + 66
     Text[ portuguese_brazilian ] = "The following hidden control in the form '<REPORTFORM>' could not be read: '<CONTROLNAME>'.";
     Text[ thai ] = "The following hidden control in the form '<REPORTFORM>' could not be read: '<CONTROLNAME>'.";
     Text[ hindi ] = "The following hidden control in the form '<REPORTFORM>' could not be read: '<CONTROLNAME>'.";
+    Text[ slovak ] = "Nasledujúci skrytý ovládací prvok vo formulári '<REPORTFORM>' nemohol byť načítaný: '<CONTROLNAME>'.";
 };
 
 String RID_DB_REPORT_WIZARD_START + 67
@@ -6128,6 +6323,7 @@ String RID_DB_REPORT_WIZARD_START + 67
     Text[ portuguese_brazilian ] = "Importing data...";
     Text[ thai ] = "Importing data...";
     Text[ hindi ] = "Importing data...";
+    Text[ slovak ] = "Importujem dáta...";
 };
 
 
@@ -6158,6 +6354,7 @@ String RID_DB_REPORT_WIZARD_START + 68
     Text[ czech ] = "Pojmenování polí";
     Text[ hebrew ] = "Labeling Fields";
     Text[ hindi ] = "Labeling Fields";
+    Text[ slovak ] = "Označujem polia";
 };
 
 
@@ -6172,7 +6369,7 @@ String RID_DB_REPORT_WIZARD_START + 69
     Text[ french ] = "Type d'�tiquetage des champs :";
     Text[ spanish ] = "Tipo de etiquetaje de los campos:";
     Text[ finnish ] = "How do you want to label the fields?";
-    Text[ italian ] = "Volete indicare una dicitura ai campi?";
+    Text[ italian ] = "Volete indicare una dicitura per i campi?";
     Text[ danish ] = "How do you want to label the fields?";
     Text[ swedish ] = "Hur vill du etikettera f�lten?";
     Text[ polish ] = "How do you want to label the fields?";
@@ -6188,6 +6385,7 @@ String RID_DB_REPORT_WIZARD_START + 69
     Text[ czech ] = "Jak chcete pojmenovat pole?";
     Text[ hebrew ] = "How do you want to label the fields?";
     Text[ hindi ] = "How do you want to label the fields?";
+    Text[ slovak ] = "Ako chcete označiť polia?";
 };
 
 String RID_DB_REPORT_WIZARD_START + 70
@@ -6217,6 +6415,7 @@ String RID_DB_REPORT_WIZARD_START + 70
     Text[ czech ] = "Jmenovka";
     Text[ hebrew ] = "‮מדבקות‬";
     Text[ hindi ] = "लेजन्ड";
+    Text[ slovak ] = "Označenie";
 };
 
 
@@ -6247,6 +6446,7 @@ String RID_DB_REPORT_WIZARD_START + 71
     Text[ czech ] = "Pole";
     Text[ hebrew ] = "Field";
     Text[ hindi ] = "Field";
+    Text[ slovak ] = "Pole";
 };
 
 
@@ -6277,6 +6477,7 @@ String RID_DB_REPORT_WIZARD_START + 72
     Text[ czech ] = "V průvodci došlo k chybě.<BR>Šablona '%PATH' je pravděpodobně vadná.<BR>.<BR>Nahlédněte do nápovědy pro detailnější popis.<BR>Prosíme, vyberte jinou šablonu.";
     Text[ hebrew ] = "An error occurred in the AutoPilot.<BR>The template '%PATH' could be erroneous.<BR>Either the required sections or tables do not exist or exist under the wrong name.<BR>See the Help for more detailed information.<BR>Please select another template.";
     Text[ hindi ] = "An error  occurred in the AutoPilot.<BR>The template '%PATH' could be erroneous.<BR>Either the required sections or tables do not exist or exist under the wrong name.<BR>See the Help for more detailed information.<BR>Please select another template.";
+    Text[ slovak ] = "V Sprievodcovi sa vyskytla chyba.<BR>Šablóna '%PATH' môže byť vadná.<BR>Požadované sekcie alebo tabuľky buď neexistujú alebo existujú pod nesprávnym názvom.<BR>Pre podrobnejšie informácie pozrite Pomocníka.<BR>Prosím vyberte inú šablónu.";
 };
 
 
@@ -6307,6 +6508,7 @@ String RID_DB_REPORT_WIZARD_START + 73
     Text[ czech ] = "V tabulce je neplatné uživatelem definované pole.";
     Text[ hebrew ] = "There is an invalid user field in a table.";
     Text[ hindi ] = "There is an invalid user field in a table.";
+    Text[ slovak ] = "V tabuľke sa nachádza neplatné užívateľské pole.";
 };
 
 
@@ -6322,6 +6524,21 @@ String RID_DB_REPORT_WIZARD_START + 74
     Text[ korean ] = "'<FIELDNAME>' 정렬 조건이 두 번 선택되었습니다. 조건은 한 번만 선택할 수 있습니다.";
     Text[ chinese_simplified ] = "排序方式 '<FIELDNAME>' 已经选用两次。每个排序方式仅可以选用一次。";
     Text[ chinese_traditional ] = "排序方式 '<FIELDNAME>' 已經選用兩次。每個排序方式僅能選用一次。";
+    Text[ portuguese ] = "The sort criterium '<FIELDNAME>' was chosen twice. Each criterium can only be chosen once.";
+    Text[ russian ] = "The sort criterium '<FIELDNAME>' was chosen twice. Each criterium can only be chosen once.";
+    Text[ greek ] = "The sort criterium '<FIELDNAME>' was chosen twice. Each criterium can only be chosen once.";
+    Text[ dutch ] = "The sort criterium '<FIELDNAME>' was chosen twice. Each criterium can only be chosen once.";
+    Text[ finnish ] = "The sort criterium '<FIELDNAME>' was chosen twice. Each criterium can only be chosen once.";
+    Text[ czech ] = "The sort criterium '<FIELDNAME>' was chosen twice. Each criterium can only be chosen once.";
+    Text[ danish ] = "The sort criterium '<FIELDNAME>' was chosen twice. Each criterium can only be chosen once.";
+    Text[ polish ] = "The sort criterium '<FIELDNAME>' was chosen twice. Each criterium can only be chosen once.";
+    Text[ portuguese_brazilian ] = "The sort criterium '<FIELDNAME>' was chosen twice. Each criterium can only be chosen once.";
+    Text[ turkish ] = "The sort criterium '<FIELDNAME>' was chosen twice. Each criterium can only be chosen once.";
+    Text[ arabic ] = "The sort criterium '<FIELDNAME>' was chosen twice. Each criterium can only be chosen once.";
+    Text[ hebrew ] = "The sort criterium '<FIELDNAME>' was chosen twice. Each criterium can only be chosen once.";
+    Text[ catalan ] = "The sort criterium '<FIELDNAME>' was chosen twice. Each criterium can only be chosen once.";
+    Text[ thai ] = "The sort criterium '<FIELDNAME>' was chosen twice. Each criterium can only be chosen once.";
+    Text[ slovak ] = "Zoraďovacie kritérium '<FIELDNAME>' bolo vybrané dvakrát. Každé kritérium môže byť vybrané len raz.";
 };
 
 
@@ -6337,6 +6554,21 @@ String RID_DB_REPORT_WIZARD_START + 75
     Text[ korean ] = "참고: 보고가 만들어지면 더미(dummy) 텍스트는 데이터베이스의 데이터로 대체됩니다.";
     Text[ chinese_simplified ] = "注意：在制作报表时示范文字会由数据库的文字内容取代。";
     Text[ chinese_traditional ] = "提示：在製作報表時示範文字會由資料庫的文字内容取代。";
+    Text[ portuguese ] = "Note: The dummy text will be replaced by data from the database when the report is created.";
+    Text[ russian ] = "Note: The dummy text will be replaced by data from the database when the report is created.";
+    Text[ greek ] = "Note: The dummy text will be replaced by data from the database when the report is created.";
+    Text[ dutch ] = "Note: The dummy text will be replaced by data from the database when the report is created.";
+    Text[ finnish ] = "Note: The dummy text will be replaced by data from the database when the report is created.";
+    Text[ czech ] = "Note: The dummy text will be replaced by data from the database when the report is created.";
+    Text[ danish ] = "Note: The dummy text will be replaced by data from the database when the report is created.";
+    Text[ polish ] = "Note: The dummy text will be replaced by data from the database when the report is created.";
+    Text[ portuguese_brazilian ] = "Note: The dummy text will be replaced by data from the database when the report is created.";
+    Text[ turkish ] = "Note: The dummy text will be replaced by data from the database when the report is created.";
+    Text[ arabic ] = "Note: The dummy text will be replaced by data from the database when the report is created.";
+    Text[ hebrew ] = "Note: The dummy text will be replaced by data from the database when the report is created.";
+    Text[ catalan ] = "Note: The dummy text will be replaced by data from the database when the report is created.";
+    Text[ thai ] = "Note: The dummy text will be replaced by data from the database when the report is created.";
+    Text[ slovak ] = "poznámka: Text bude nahradený dátami z databáze pri vytvorení správy.";
 };
 
 
@@ -6374,6 +6606,7 @@ String RID_DB_TABLE_WIZARD_START + 0
     Text[ czech ] = "Tabulka průvodce";
     Text[ hebrew ] = "‮טבלאת טייס אוטומטי‬";
     Text[ hindi ] = "ओटोपैलट् टेबल्";
+    Text[ slovak ] = "Sprievodca tabuľkou";
 };
 
 String RID_DB_TABLE_WIZARD_START + 1
@@ -6405,6 +6638,7 @@ String RID_DB_TABLE_WIZARD_START + 1
     Text[ czech ] = "Není instalována žádná databáze. Pro vytvoření tabulky musíte mít instalovánu alespoň jednu databázi.";
     Text[ hebrew ] = "‮אין מסד נתונים. נדרש להתקין לפחות מסד נתונים אחד על מנת להפעיל את הטייס האוטומטי לטבלאות.‬";
     Text[ hindi ] = "लेखासंचय को प्रतिष्ठापन नहीं किया है । ओटोपैलट् सारणी को प्रारंभ करने के लिए कम से कम एक लेखासंचय की ज़रूरत है ।";
+    Text[ slovak ] = "Nie je inštalovaná žiadna databáza. Potrebujete aspoň jednu databázu pre spustenie Sprievodcu tabuľkou.";
 };
 
 String RID_DB_TABLE_WIZARD_START + 2
@@ -6436,6 +6670,7 @@ String RID_DB_TABLE_WIZARD_START + 2
     Text[ czech ] = "Identifikátor $1 již v seznamu existuje.";
     Text[ hebrew ] = "‮השם $1 כבר מופיע ברשימה.‬";
     Text[ hindi ] = "$1 अइड़ेन्टिफ़ैयर पहिले से ही सूची में है।";
+    Text[ slovak ] = "Identifikátor $1 už v zozname existuje.";
 };
 
 String RID_DB_TABLE_WIZARD_START + 3
@@ -6467,6 +6702,7 @@ String RID_DB_TABLE_WIZARD_START + 3
     Text[ czech ] = "Databáze $1 nemůže být otevřena.";
     Text[ hebrew ] = "‮לא ניתן לפתוח את מסד הנתונים $1.‬";
     Text[ hindi ] = "$1 लेखासंचय को नहीं खोल सकते है ।";
+    Text[ slovak ] = "Databáza $1 nemohla byť otvorená.";
 };
 
 String RID_DB_TABLE_WIZARD_START + 4
@@ -6498,6 +6734,7 @@ String RID_DB_TABLE_WIZARD_START + 4
     Text[ czech ] = "Tabulka byla vytvořena.";
     Text[ hebrew ] = "‮הטבלה נוצרה.‬";
     Text[ hindi ] = "सारणी को उत्पन्न किया है ।";
+    Text[ slovak ] = "Tabuľka bola vytvorená.";
 };
 
 String RID_DB_TABLE_WIZARD_START + 5
@@ -6529,6 +6766,7 @@ String RID_DB_TABLE_WIZARD_START + 5
     Text[ czech ] = "Tabulka nemohla být vytvořena.";
     Text[ hebrew ] = "‮לא ניתן ליצור את הטבלה.‬";
     Text[ hindi ] = "सारणी को उत्पन्न नहीं कर सकते है ।";
+    Text[ slovak ] = "tabuľka nemohla byť vytvorená.";
 };
 
 String RID_DB_TABLE_WIZARD_START + 6
@@ -6560,6 +6798,7 @@ String RID_DB_TABLE_WIZARD_START + 6
     Text[ czech ] = ": Typ tabulky";
     Text[ hebrew ] = "‮קביעת סוג טבלה:‬";
     Text[ hindi ] = ": सारणी वर्ग";
+    Text[ slovak ] = ": Typ tabuľky";
 };
 
 String RID_DB_TABLE_WIZARD_START + 7
@@ -6591,6 +6830,7 @@ String RID_DB_TABLE_WIZARD_START + 7
     Text[ czech ] = ": Výběr polí";
     Text[ hebrew ] = "‮בחירת שדות:‬";
     Text[ hindi ] = ": क्षेत्र चुनाव";
+    Text[ slovak ] = ": Výber poľa";
 };
 
 String RID_DB_TABLE_WIZARD_START + 8
@@ -6622,6 +6862,7 @@ String RID_DB_TABLE_WIZARD_START + 8
     Text[ czech ] = ": Úpravy";
     Text[ hebrew ] = "‮התאמה אישית:‬";
     Text[ hindi ] = ": कस्टमैज़ेशन्";
+    Text[ slovak ] = ": Prispôsobenie";
 };
 
 String RID_DB_TABLE_WIZARD_START + 9
@@ -6653,6 +6894,7 @@ String RID_DB_TABLE_WIZARD_START + 9
     Text[ czech ] = ": Vytvořit tabulku";
     Text[ hebrew ] = "‮יצירת טבלה:‬";
     Text[ hindi ] = ": सारणी उत्पन्न करो";
+    Text[ slovak ] = ": Vytvoriť tabuľku";
 };
 
 String RID_DB_TABLE_WIZARD_START + 10
@@ -6685,6 +6927,7 @@ String RID_DB_TABLE_WIZARD_START + 10
     Text[ czech ] = "Databases";
     Text[ hebrew ] = "‮מסדי נתונים‬";
     Text[ hindi ] = "लेखासंचय";
+    Text[ slovak ] = "Databázy";
 };
 
 String RID_DB_TABLE_WIZARD_START + 11
@@ -6716,6 +6959,7 @@ String RID_DB_TABLE_WIZARD_START + 11
     Text[ czech ] = "Tabulka";
     Text[ hebrew ] = "‮טבלה‬";
     Text[ hindi ] = "~सारणी";
+    Text[ slovak ] = "~Tabuľka";
 };
 
 String RID_DB_TABLE_WIZARD_START + 12
@@ -6747,6 +6991,7 @@ String RID_DB_TABLE_WIZARD_START + 12
     Text[ czech ] = "Navrhovaná pole";
     Text[ hebrew ] = "‮שדות מוצעים‬";
     Text[ hindi ] = "~प्रस्तावित क्षेत्र";
+    Text[ slovak ] = "Navrhované ~polia";
 };
 
 String RID_DB_TABLE_WIZARD_START + 13
@@ -6778,6 +7023,7 @@ String RID_DB_TABLE_WIZARD_START + 13
     Text[ czech ] = "Aplikováno";
     Text[ hebrew ] = "‮ייושם‬";
     Text[ hindi ] = "~लागू किया हुआ";
+    Text[ slovak ] = "Použi~té";
 };
 
 String RID_DB_TABLE_WIZARD_START + 14
@@ -6809,6 +7055,7 @@ String RID_DB_TABLE_WIZARD_START + 14
     Text[ czech ] = "Název pole";
     Text[ hebrew ] = "‮שם שדה‬";
     Text[ hindi ] = "~क्षेत्र नाम";
+    Text[ slovak ] = "~Názov poľa";
 };
 
 String RID_DB_TABLE_WIZARD_START + 15
@@ -6840,6 +7087,7 @@ String RID_DB_TABLE_WIZARD_START + 15
     Text[ czech ] = "Aplikuj";
     Text[ hebrew ] = "‮ישום‬";
     Text[ hindi ] = "~लागू करो";
+    Text[ slovak ] = "~Použiť";
 };
 
 String RID_DB_TABLE_WIZARD_START + 16
@@ -6871,6 +7119,7 @@ String RID_DB_TABLE_WIZARD_START + 16
     Text[ czech ] = "Po dokončení...";
     Text[ hebrew ] = "‮לאחר סיום...‬";
     Text[ hindi ] = "समाप्ती के पश्चात...";
+    Text[ slovak ] = "Po ukončení...";
 };
 
 String RID_DB_TABLE_WIZARD_START + 17
@@ -6903,6 +7152,7 @@ String RID_DB_TABLE_WIZARD_START + 17
     Text[ czech ] = "Zadejte data do tabulky";
     Text[ hebrew ] = "‮הכנסת נתונים לטבלה‬";
     Text[ hindi ] = "सारणी में ड़ॉटा प्रविष्ट करो";
+    Text[ slovak ] = "Zadajte dáta do tabuľky";
 };
 
 String RID_DB_TABLE_WIZARD_START + 18
@@ -6934,6 +7184,7 @@ String RID_DB_TABLE_WIZARD_START + 18
     Text[ czech ] = "Zobrazit tabulku";
     Text[ hebrew ] = "‮הצגת טבלה‬";
     Text[ hindi ] = "सारणी दिखाओ";
+    Text[ slovak ] = "Zobraziť tabuľku";
 };
 
 String RID_DB_TABLE_WIZARD_START + 19
@@ -6965,6 +7216,7 @@ String RID_DB_TABLE_WIZARD_START + 19
     Text[ czech ] = "Nezobrazovat tabulku";
     Text[ hebrew ] = "‮ללא הצגת טבלה‬";
     Text[ hindi ] = "सारणी को मत दिखाओ";
+    Text[ slovak ] = "Nezobraziť tabuľku";
 };
 
 // ============================================================================
@@ -6999,6 +7251,7 @@ String RID_DB_GRID_WIZARD_START + 0
     Text[ czech ] = "Průvodce tabulárním prvkem";
     Text[ hebrew ] = "‮פריט טייס אוטומטי עבור טבלה‬";
     Text[ hindi ] = "ओटोपैलट् सारणी ऐलिमेन्ट्";
+    Text[ slovak ] = "Sprievodca prvkom tabuľky";
 };
 
 String RID_DB_GRID_WIZARD_START + 1
@@ -7031,6 +7284,7 @@ String RID_DB_GRID_WIZARD_START + 1
     Text[ czech ] = "Vytvořit prvek tabulky";
     Text[ hebrew ] = "‮יצירת פריט טבלה‬";
     Text[ hindi ] = "सारणी का ऐलिमेन्ट् उत्पन्न करो";
+    Text[ slovak ] = "Vytvoriť prvok tabuľky";
 };
 
 String RID_DB_GRID_WIZARD_START + 2
@@ -7062,6 +7316,7 @@ String RID_DB_GRID_WIZARD_START + 2
     Text[ czech ] = "(Date)";
     Text[ hebrew ] = "‮(תאריך)‬";
     Text[ hindi ] = "(दिनांक)";
+    Text[ slovak ] = "(Dátum)";
 };
 
 String RID_DB_GRID_WIZARD_START + 3
@@ -7093,6 +7348,7 @@ String RID_DB_GRID_WIZARD_START + 3
     Text[ czech ] = "(Čas)";
     Text[ hebrew ] = "‮(זמן)‬";
     Text[ hindi ] = "(समय)";
+    Text[ slovak ] = "(Čas)";
 };
 
 String RID_DB_GRID_WIZARD_START + 4
@@ -7125,6 +7381,7 @@ String RID_DB_GRID_WIZARD_START + 4
     Text[ czech ] = "Tabulkový prvek_";
     Text[ hebrew ] = "‮פריט טבלה_‬";
     Text[ hindi ] = "सारणी ऐलिमेन्ट्_";
+    Text[ slovak ] = "Prvok tabuľky_";
 };
 
 String RID_DB_GRID_WIZARD_START + 5
@@ -7156,6 +7413,7 @@ String RID_DB_GRID_WIZARD_START + 5
     Text[ czech ] = ": Výběr tabulky";
     Text[ hebrew ] = "‮בחירת טבלאות:‬";
     Text[ hindi ] = ": सारणी चुनाव";
+    Text[ slovak ] = ": Výber tabuľky";
 };
 
 String RID_DB_GRID_WIZARD_START + 6
@@ -7187,6 +7445,7 @@ String RID_DB_GRID_WIZARD_START + 6
     Text[ czech ] = ": Výběr polí";
     Text[ hebrew ] = "‮בחירת שדות:‬";
     Text[ hindi ] = ": क्षेत्र चुनाव";
+    Text[ slovak ] = ": Výber poľa";
 };
 
 String RID_DB_GRID_WIZARD_START + 7
@@ -7218,6 +7477,7 @@ String RID_DB_GRID_WIZARD_START + 7
     Text[ czech ] = ": Zarovnání polí";
     Text[ hebrew ] = "‮יישור שדות:‬";
     Text[ hindi ] = ": क्षेत्र पंक्तिकरण";
+    Text[ slovak ] = ": Zarovnanie poľa";
 };
 
 String RID_DB_GRID_WIZARD_START + 8
@@ -7249,6 +7509,7 @@ String RID_DB_GRID_WIZARD_START + 8
     Text[ czech ] = ": Styles";
     Text[ hebrew ] = "‮סגנונות:‬";
     Text[ hindi ] = ": शैलियाँ";
+    Text[ slovak ] = ": Štýly";
 };
 
 String RID_DB_GRID_WIZARD_START + 9
@@ -7280,6 +7541,7 @@ String RID_DB_GRID_WIZARD_START + 9
     Text[ czech ] = ": Vytvoření formuláře";
     Text[ hebrew ] = "‮יצירת טופס:‬";
     Text[ hindi ] = ": फ़ार्म उत्पन्न करो";
+    Text[ slovak ] = ": Vytvoriť formulár";
 };
 
 String RID_DB_GRID_WIZARD_START + 10
@@ -7312,6 +7574,7 @@ String RID_DB_GRID_WIZARD_START + 10
     Text[ czech ] = "Database";
     Text[ hebrew ] = "‮מסד נתונים‬";
     Text[ hindi ] = "लेखासंचय";
+    Text[ slovak ] = "Databáza";
 };
 
 String RID_DB_GRID_WIZARD_START + 11
@@ -7343,6 +7606,7 @@ String RID_DB_GRID_WIZARD_START + 11
     Text[ czech ] = "Existing fields";
     Text[ hebrew ] = "‮שדות קיימים‬";
     Text[ hindi ] = "अस्तित्व में रहनेवाला क्षेत्र";
+    Text[ slovak ] = "Existujúce polia";
 };
 
 String RID_DB_GRID_WIZARD_START + 12
@@ -7374,6 +7638,7 @@ String RID_DB_GRID_WIZARD_START + 12
     Text[ czech ] = "Vybraná pole";
     Text[ hebrew ] = "‮שדות נבחרים‬";
     Text[ hindi ] = "चुने हुए क्षेत्र";
+    Text[ slovak ] = "Vybrané polia";
 };
 
 // ============================================================================
@@ -7408,6 +7673,7 @@ String RID_DB_COMBO_WIZARD_START + 0
     Text[ czech ] = "Průvodce - rozbalovací seznam";
     Text[ hebrew ] = "‮טייס אוטומטי - תיבה משולבת‬";
     Text[ hindi ] = "ओटोपैलट् - कॉम्बो बॉक्स";
+    Text[ slovak ] = "Sprievodca - Rozbaľovací zoznam";
 };
 
 String RID_DB_COMBO_WIZARD_START + 1
@@ -7439,6 +7705,7 @@ String RID_DB_COMBO_WIZARD_START + 1
     Text[ czech ] = "Průvodce - seznam";
     Text[ hebrew ] = "‮טייס אוטומטי  - רשימה‬";
     Text[ hindi ] = "ओटोपैलट् - सूची बॉक्स";
+    Text[ slovak ] = "Sprievodca - Pole zoznamu";
 };
 
 String RID_DB_COMBO_WIZARD_START + 2
@@ -7471,6 +7738,7 @@ String RID_DB_COMBO_WIZARD_START + 2
     Text[ czech ] = "Vytvořit ovládací prvek";
     Text[ hebrew ] = "‮יצירת פקד‬";
     Text[ hindi ] = "नियंत्रण उत्पन्न करो";
+    Text[ slovak ] = "Vytvoriť ovládacie pole";
 };
 
 String RID_DB_COMBO_WIZARD_START + 3
@@ -7502,6 +7770,7 @@ String RID_DB_COMBO_WIZARD_START + 3
     Text[ czech ] = "Pole kombinovaného seznamu_";
     Text[ hebrew ] = "‮שדה קומבו בוקס_‬";
     Text[ hindi ] = "कॉम्बो बॉक्स क्षेत्र_";
+    Text[ slovak ] = "Combo Box pole_";
 };
 
 String RID_DB_COMBO_WIZARD_START + 4
@@ -7534,6 +7803,7 @@ String RID_DB_COMBO_WIZARD_START + 4
     Text[ czech ] = ": Výběr tabulky";
     Text[ hebrew ] = "‮בחירת טבלאות:‬";
     Text[ hindi ] = ": सारणी चुनाव";
+    Text[ slovak ] = ": Výber tabuľky";
 };
 
 String RID_DB_COMBO_WIZARD_START + 5
@@ -7565,6 +7835,7 @@ String RID_DB_COMBO_WIZARD_START + 5
     Text[ czech ] = ": Výběr polí";
     Text[ hebrew ] = "‮בחירת שדות:‬";
     Text[ hindi ] = ": क्षेत्र चुनाव";
+    Text[ slovak ] = ": Výber poľa";
 };
 
 String RID_DB_COMBO_WIZARD_START + 6
@@ -7596,6 +7867,7 @@ String RID_DB_COMBO_WIZARD_START + 6
     Text[ czech ] = ": Odkaz na pole";
     Text[ hebrew ] = "‮קשר עם שדה:‬";
     Text[ hindi ] = ": क्षेत्र लिंक";
+    Text[ slovak ] = ": Odkaz na pole";
 };
 
 String RID_DB_COMBO_WIZARD_START + 7
@@ -7627,6 +7899,7 @@ String RID_DB_COMBO_WIZARD_START + 7
     Text[ czech ] = ": Zpracování dat";
     Text[ hebrew ] = "‮עיבוד נתונים:‬";
     Text[ hindi ] = ": डॉटा कार्यवाही हो रहा है";
+    Text[ slovak ] = ": Spracovanie dát";
 };
 
 String RID_DB_COMBO_WIZARD_START + 8
@@ -7658,6 +7931,7 @@ String RID_DB_COMBO_WIZARD_START + 8
     Text[ czech ] = ": Vytvoření formuláře";
     Text[ hebrew ] = "‮יצירת טופס:‬";
     Text[ hindi ] = ": फ़ार्म उत्पन्न करो";
+    Text[ slovak ] = ": Vytvoriť formulár";
 };
 
 String RID_DB_COMBO_WIZARD_START + 9
@@ -7689,6 +7963,7 @@ String RID_DB_COMBO_WIZARD_START + 9
     Text[ czech ] = "Tabulka hodnot";
     Text[ hebrew ] = "‮טבלת ערכים‬";
     Text[ hindi ] = "मूल्यों का टेबल्";
+    Text[ slovak ] = "Tabuľka hodnôt";
 };
 
 String RID_DB_COMBO_WIZARD_START + 10
@@ -7720,6 +7995,7 @@ String RID_DB_COMBO_WIZARD_START + 10
     Text[ czech ] = "Tabulka s obsahem pro seznam";
     Text[ hebrew ] = "‮טבלה עבור תוכן רשימה‬";
     Text[ hindi ] = "सूची का विषय के लिए सारणी";
+    Text[ slovak ] = "Tabuľka pre obsah zoznamu";
 };
 
 String RID_DB_COMBO_WIZARD_START + 11
@@ -7751,6 +8027,7 @@ String RID_DB_COMBO_WIZARD_START + 11
     Text[ czech ] = "Existing fields";
     Text[ hebrew ] = "‮שדות קיימים‬";
     Text[ hindi ] = "अस्तित्व में रहनेवाला क्षेत्र";
+    Text[ slovak ] = "Existujúce polia";
 };
 
 String RID_DB_COMBO_WIZARD_START + 12
@@ -7782,6 +8059,7 @@ String RID_DB_COMBO_WIZARD_START + 12
     Text[ czech ] = "Zobrazit pole";
     Text[ hebrew ] = "‮הצגת שדה‬";
     Text[ hindi ] = "क्षेत्र दिखाओ";
+    Text[ slovak ] = "Zobraziť pole";
 };
 
 String RID_DB_COMBO_WIZARD_START + 13
@@ -7813,6 +8091,7 @@ String RID_DB_COMBO_WIZARD_START + 13
     Text[ czech ] = "Obsah vybraného pole bude zobrazen v rozbalovacím seznamu.";
     Text[ hebrew ] = "‮תוכן השדה הנבחר יוצג בקומבו בוקס.‬";
     Text[ hindi ] = "चुने हुए क्षेत्र का विषयों कॉम्बो बॉक्स सूची में दिखलाया जाएगा ।";
+    Text[ slovak ] = "Obsah vybraného poľa bude zobrazený v zozname.";
 };
 
 String RID_DB_COMBO_WIZARD_START + 14
@@ -7844,6 +8123,7 @@ String RID_DB_COMBO_WIZARD_START + 14
     Text[ czech ] = "Obsah vybraného pole bude zobrazen v rozbalovacím seznamu, pokud jsou propojená pole identická.";
     Text[ hebrew ] = "‮תוכן השדה הנבחר יוצג בתיבת הרשימה בתנאי שהשדות המקושרים זהים.‬";
     Text[ hindi ] = "अगर लिंक किया हुआ क्षेत्र समान है ,तो चुने हुए क्षेत्र का विषयों सूची बॉक्स में दिखलाया जाएगा ।";
+    Text[ slovak ] = "Obsah vybraného poľa bude zobrazený v zozname ak sú pripojené polia rovnaké.";
 };
 
 String RID_DB_COMBO_WIZARD_START + 15
@@ -7875,6 +8155,7 @@ String RID_DB_COMBO_WIZARD_START + 15
     Text[ czech ] = "Information";
     Text[ hebrew ] = "‮מידע‬";
     Text[ hindi ] = "सूचना";
+    Text[ slovak ] = "Informácia";
 };
 
 String RID_DB_COMBO_WIZARD_START + 16
@@ -7906,6 +8187,7 @@ String RID_DB_COMBO_WIZARD_START + 16
     Text[ czech ] = "Pole z tabulky hodnot";
     Text[ hebrew ] = "‮שדה מטבלת הערכים‬";
     Text[ hindi ] = "मूल्य सारणी का क्षेत्र";
+    Text[ slovak ] = "Pole z tabuľky hodnôt";
 };
 
 String RID_DB_COMBO_WIZARD_START + 17
@@ -7937,6 +8219,7 @@ String RID_DB_COMBO_WIZARD_START + 17
     Text[ czech ] = "Pole z tabulky pro seznam";
     Text[ hebrew ] = "‮שדה מטבלת הרשימה‬";
     Text[ hindi ] = "सूची सारणी का क्षेत्र";
+    Text[ slovak ] = "Pole z tabuľky zoznamu";
 };
 
 String RID_DB_COMBO_WIZARD_START + 18
@@ -7969,6 +8252,7 @@ String RID_DB_COMBO_WIZARD_START + 18
     Text[ czech ] = "Buď můžete vybranou hodnotu uložit do pole v databázi a nebo ji použít k nějaké další akci.";
     Text[ hebrew ] = "‮ניתן לשמור את ערך הקומבו בוקס במסד הנתונים או להשתמש בו לתצוגה בלבד.‬";
     Text[ hindi ] = "आप कॉम्बो क्षेत्र का मूल्य को लेखासंचय क्षेत्र में संचित कर सकते है अथवा केवल दिखाने के लिए उपयोग कर सकते है ।";
+    Text[ slovak ] = "Môžete alebo uložiť hodnotu combo boxu do databázového poľa, alebo ju použiť na zobrazenie.";
 };
 
 String RID_DB_COMBO_WIZARD_START + 19
@@ -8000,6 +8284,7 @@ String RID_DB_COMBO_WIZARD_START + 19
     Text[ czech ] = "Buď můžete vybranou hodnotu uložit do pole v databázi a nebo ji použít k nějaké další akci.";
     Text[ hebrew ] = "‮ניתן לשמור את ערך שדה הרשימה במסד הנתונים או להשתמש בו לתצוגה בלבד.‬";
     Text[ hindi ] = "आप सूची क्षेत्र का मूल्य को लेखासंचय क्षेत्र में संचित कर सकते है अथवा केवल दिखाने के लिए उपयोग कर सकते है ।";
+    Text[ slovak ] = "Môžete alebo uložiť hodnotu poľa zoznamu do databázového poľa, alebo ju použiť na zobrazenie.";
 };
 
 String RID_DB_COMBO_WIZARD_START + 20
@@ -8031,6 +8316,7 @@ String RID_DB_COMBO_WIZARD_START + 20
     Text[ czech ] = "Chcete hodnotu uložit v databázovém poli?";
     Text[ hebrew ] = "‮האם לשמור את הערך בשדה במסד הנתונים?‬";
     Text[ hindi ] = "आप विकल्प समूह का मूल्य को लेखासंचय में संचित करना चाहते है?";
+    Text[ slovak ] = "Chcete uložiť hodnotu v poli databázy?";
 };
 
 String RID_DB_COMBO_WIZARD_START + 21
@@ -8062,6 +8348,7 @@ String RID_DB_COMBO_WIZARD_START + 21
     Text[ czech ] = "Ano, uložit do tohoto pole:";
     Text[ hebrew ] = "‮כן, יש לשמור את הערך בשדה מסד נתונים הבא:‬";
     Text[ hindi ] = "हाँ, मूल्य को निम्नलिखित लेखासंचय क्षेत्र में संचित करो:";
+    Text[ slovak ] = "Áno, uložiť do nasledujúceho databázového poľa:";
 };
 
 String RID_DB_COMBO_WIZARD_START + 22
@@ -8093,9 +8380,14 @@ String RID_DB_COMBO_WIZARD_START + 22
     Text[ czech ] = "Ne, chci si jej schovat pro pozdější využití.";
     Text[ hebrew ] = "‮לא, הערך לתצוגה בלבד.‬";
     Text[ hindi ] = "नहीं, मैं केवल मूल्य को दिखाने के लिए उपयोग करना चाहता हूँ ।";
+    Text[ slovak ] = "Nie, chcem použiť hodnotu pre zobrazenie.";
 };
 
 #endif
+
+
+
+
 
 
 
