@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8dout.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-09-28 08:14:59 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:21:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,9 +70,7 @@
 #include <tools/stream.hxx>
 #endif
 
-#ifndef _SVSTOR_HXX //autogen
-#include <so3/svstor.hxx>
-#endif
+#include <sot/storage.hxx>
 
 extern SvStorageStreamRef xStrm;
 extern SvStorageStreamRef xTableStream;
