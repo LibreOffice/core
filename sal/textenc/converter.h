@@ -2,9 +2,9 @@
  *
  *  $RCSfile: converter.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sb $ $Date: 2001-11-19 17:46:37 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 11:40:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,11 +90,9 @@ typedef enum
 } ImplBadInputConversionAction;
 
 ImplBadInputConversionAction
-ImplHandleBadInputMbTextToUnicodeConversion(sal_Bool bUndefined,
-                                            sal_uInt32 nFlags,
-                                            sal_Unicode ** pDestBufPtr,
-                                            sal_Unicode * pDestBufEnd,
-                                            sal_uInt32 * pInfo)
+ImplHandleBadInputTextToUnicodeConversion(
+    sal_Bool bUndefined, sal_Bool bMultiByte, sal_Char cByte, sal_uInt32 nFlags,
+    sal_Unicode ** pDestBufPtr, sal_Unicode * pDestBufEnd, sal_uInt32 * pInfo)
     SAL_THROW_EXTERN_C();
 
 ImplBadInputConversionAction

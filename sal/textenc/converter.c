@@ -2,9 +2,9 @@
  *
  *  $RCSfile: converter.c,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sb $ $Date: 2001-11-19 17:46:37 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 11:40:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,28 +77,45 @@
 #include "sal/types.h"
 #endif
 
-ImplBadInputConversionAction
-ImplHandleBadInputMbTextToUnicodeConversion(sal_Bool bUndefined,
-                                            sal_uInt32 nFlags,
-                                            sal_Unicode ** pDestBufPtr,
-                                            sal_Unicode * pDestBufEnd,
-                                            sal_uInt32 * pInfo)
+ImplBadInputConversionAction ImplHandleBadInputTextToUnicodeConversion(
+    sal_Bool bUndefined, sal_Bool bMultiByte, sal_Char cByte, sal_uInt32 nFlags,
+    sal_Unicode ** pDestBufPtr, sal_Unicode * pDestBufEnd, sal_uInt32 * pInfo)
 {
-    *pInfo |= bUndefined ? RTL_TEXTTOUNICODE_INFO_MBUNDEFINED :
-                           RTL_TEXTTOUNICODE_INFO_INVALID;
-    switch (nFlags & (bUndefined ? RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_MASK :
-                                   RTL_TEXTTOUNICODE_FLAGS_INVALID_MASK))
+    *pInfo |= bUndefined
+        ? (bMultiByte
+           ? RTL_TEXTTOUNICODE_INFO_MBUNDEFINED
+           : RTL_TEXTTOUNICODE_INFO_UNDEFINED)
+        : RTL_TEXTTOUNICODE_INFO_INVALID;
+    switch (nFlags
+            & (bUndefined
+               ? (bMultiByte
+                  ? RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_MASK
+                  : RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_MASK)
+               : RTL_TEXTTOUNICODE_FLAGS_INVALID_MASK))
     {
+    case RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR:
     case RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR:
     case RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR:
         *pInfo |= RTL_TEXTTOUNICODE_INFO_ERROR;
         return IMPL_BAD_INPUT_STOP;
 
+    case RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_IGNORE:
     case RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_IGNORE:
     case RTL_TEXTTOUNICODE_FLAGS_INVALID_IGNORE:
         return IMPL_BAD_INPUT_CONTINUE;
 
-    default: /* RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_DEFAULT,
+    case RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_MAPTOPRIVATE:
+        if (*pDestBufPtr != pDestBufEnd)
+        {
+            *(*pDestBufPtr)++ = RTL_TEXTCVT_BYTE_PRIVATE_START
+                | ((sal_uChar) cByte);
+            return IMPL_BAD_INPUT_CONTINUE;
+        }
+        else
+            return IMPL_BAD_INPUT_NO_OUTPUT;
+
+    default: /* RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_DEFAULT,
+                RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_DEFAULT,
                 RTL_TEXTTOUNICODE_FLAGS_INVALID_DEFAULT */
         if (*pDestBufPtr != pDestBufEnd)
         {
