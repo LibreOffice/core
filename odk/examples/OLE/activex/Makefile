@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.9 $
+#  $Revision: 1.10 $
 #
-#  last change: $Author: kz $ $Date: 2003-08-27 16:46:11 $
+#  last change: $Author: rt $ $Date: 2004-05-18 13:29:10 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -123,5 +123,5 @@ clean :
 	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_INC))
 	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_GEN))
 	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_SLO))
-	-$(DEL) $(subst /,$(PS),$(OUT_LIB)/*$(COMPONENT_NAME).*)
-	-$(DEL) $(subst /,$(PS),$(SHAREDLIB_OUT)/$(SHAREDLIB_PRE)$(COMPONENT_NAME).*)
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(OUT_LIB)/*$(COMPONENT_NAME).*))
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(SHAREDLIB_OUT)/$(SHAREDLIB_PRE)$(COMPONENT_NAME).*))
