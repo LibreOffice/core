@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_wrp.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:42 $
+ *  last change: $Author: svesik $ $Date: 2000-12-19 00:17:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,7 @@ struct XIMArg
     char *value;
 };
 
-#if !defined(LINUX)
+#if !defined(LINUX) && !defined(FREEBSD)
 #include <varargs.h>
 #else
 #include <stdarg.h>
@@ -209,11 +209,11 @@ XvaOpenIM(Display *display, XrmDatabase rdb,
         * so count the stuff dangling here
      */
 
-    #ifdef LINUX
+#if defined(LINUX) || defined(FREEBSD)
     va_start(variable, res_class);
-      #else
+#else
       va_start(variable);
-      #endif
+#endif
       total_count = XvaCountArgs(variable);
       va_end(variable);
 
@@ -226,11 +226,11 @@ XvaOpenIM(Display *display, XrmDatabase rdb,
         /*
           * now package it up so we can set it along
           */
-        #ifdef LINUX
+#if defined(LINUX) || defined(FREEBSD)
         va_start(variable, res_class);
-        #else
+#else
         va_start(variable);
-        #endif
+#endif
         XvaGetArgs( variable, args );
         va_end(variable);
 
