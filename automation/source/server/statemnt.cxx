@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statemnt.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 17:24:05 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 12:25:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2313,6 +2313,7 @@ Window* StatementCommand::GetNextRecoverWin()
     // über die TopLevelWindows der App iterieren
     Window* pBase = Application::GetFirstTopLevelWindow();
     Window *pControl = NULL;
+    Window* pFirstDocFrame = NULL;
     while ( pBase )
     {
         // zuerst weitere Fenster auf dem Fenster suchen und schliessen
@@ -2332,8 +2333,17 @@ Window* StatementCommand::GetNextRecoverWin()
         if ( pBase->IsVisible() && !IsFirstDocFrame( pBase ) && pBase->GetType() != WINDOW_BORDERWINDOW && !IsIMEWin( pBase ) )
             return pBase;
 
+        if ( !pFirstDocFrame && IsFirstDocFrame( pBase ) )
+            pFirstDocFrame = pBase;
+
         pBase = Application::GetNextTopLevelWindow( pBase );
     }
+#ifdef RESET_APPLICATION_TO_BACKING_WINDOW
+    // close the FirstDocFrame last, It will not be closed, but the Document inside will be closed.
+    if ( IsDocWin( pFirstDocFrame ) )
+        return pFirstDocFrame;
+#endif // def RESET_APPLICATION_TO_BACKING_WINDOW
+
     return NULL;
 }
 
@@ -2424,11 +2434,11 @@ BOOL StatementCommand::Execute()
                 if ( !nRetryCount )
                     ReportError( GEN_RES_STR0( S_RESETAPPLICATION_FAILED_COMPLEX ) );
 
-                bBool2 = FALSE;         // no document found
                 Window *pControl = GetNextRecoverWin();
 
                 if ( pControl )
                 {
+                    bBool2 = FALSE; // flag for wait when all windows are closed
                     pControl->GrabFocus();
 
                     if (    pControl->GetType() != WINDOW_DOCKINGWINDOW
@@ -2436,6 +2446,7 @@ BOOL StatementCommand::Execute()
                          && pControl->GetType() != WINDOW_MODELESSDIALOG
                          && pControl->GetType() != WINDOW_WORKWINDOW
                          && pControl->GetType() != WINDOW_TOOLBOX
+                         && pControl->GetType() != WINDOW_BORDERWINDOW
                          && nRetryCount-- )
                     {
                         short nRT = ImpGetRType( pControl, pControl->GetSmartUniqueOrHelpId() );
@@ -2551,25 +2562,66 @@ BOOL StatementCommand::Execute()
                         if ( nRetryCount--
                                 && (    (pControl->GetType() == WINDOW_FLOATINGWINDOW)
                                     ||  (pControl->GetType() == WINDOW_MODELESSDIALOG)
-                                    ||  (pControl->GetType() == WINDOW_WORKWINDOW) ) )
+                                    ||  (pControl->GetType() == WINDOW_WORKWINDOW)
+                                    ||  (pControl->GetType() == WINDOW_BORDERWINDOW) ) )
                         {
     //                      if ( pControl->GetStyle() & WB_CLOSEABLE )
                             {
-                                REPORT_WIN_CLOSED( pControl, TypeString(pControl->GetType()));
-                                SET_WINP_CLOSING(pControl);
-                                ((SystemWindow*)pControl)->Close();
+#ifdef RESET_APPLICATION_TO_BACKING_WINDOW
+                                // Special handling for last Document; do not close the Frame, only the Document
+                                if ( GetDocWinCount() == 1 && IsDocFrame( pControl ) )
+                                {
+                                    if ( IsDocWin( pControl ) )
+                                    {
+                                        if ( GetDocFrameMenuBar( pControl ) )
+                                        {
+                                            MenuBar* pMenu = GetDocFrameMenuBar( pControl );
+                                            if ( pMenu->HasCloser() )
+                                            {
+                                                REPORT_WIN_CLOSED( pControl, TypeString(pControl->GetType()));
+                                                SET_WINP_CLOSING(pControl);
 
-                                // Eigentlich nur bei TaskWindows!
-                                if ( (Window*)nLNr1 != pControl )
-                                    nNr1 = 1;       // Zum durchprobieren der Buttons beim Schließen
-                                nLNr1 = (ULONG)pControl;
+                                                pMenu->GetCloserHdl().Call( pMenu );
 
-                                return FALSE;
+                                                // nur bei TaskWindows!
+                                                if ( (Window*)nLNr1 != pControl )
+                                                    nNr1 = 1;       // Zum durchprobieren der Buttons beim Schließen
+                                                nLNr1 = (ULONG)pControl;
+
+                                                return FALSE;
+                                            }
+                                        }
+                                    }
+                                }
+                                else
+#endif // def RESET_APPLICATION_TO_BACKING_WINDOW
+                                {
+                                    REPORT_WIN_CLOSED( pControl, TypeString(pControl->GetType()));
+                                    SET_WINP_CLOSING(pControl);
+                                    ((SystemWindow*)pControl)->Close();
+
+                                    // Eigentlich nur bei TaskWindows!
+                                    if ( (Window*)nLNr1 != pControl )
+                                        nNr1 = 1;       // Zum durchprobieren der Buttons beim Schließen
+                                    nLNr1 = (ULONG)pControl;
+
+                                    return FALSE;
+                                }
                             }
                         }
                     }
                 }
-                pRet->GenReturn ( RET_Value, aSmartMethodId, aString1);
+                // wait for some time if more windows show up
+                // E.g.: Floating toolbars on a Task which was hidden by another Task before
+                if ( !bBool2 )
+                {
+                    nLNr1 = Time().GetTime() + 100; // 100 = 1 Second
+                    bBool2 = TRUE;
+                }
+                if ( Time().GetTime() < long(nLNr1) )   // Aktuelle Zeit kleiner Endzeit
+                    return FALSE;
+                else
+                    pRet->GenReturn ( RET_Value, aSmartMethodId, aString1);
             }
 
     }
@@ -3968,7 +4020,10 @@ BOOL StatementControl::HandleCommonMethods( Window *pControl )
             break;
         case M_Caption :
             {
-                pRet->GenReturn ( RET_Value, aUId, pControl->GetText());
+                if ( pControl->GetText().Len() == 0 && IsDocFrame( pControl->GetWindow( WINDOW_FRAME ) ) )
+                    pRet->GenReturn ( RET_Value, aUId, pControl->GetWindow( WINDOW_FRAME )->GetText());
+                else
+                    pRet->GenReturn ( RET_Value, aUId, pControl->GetText());
             }
             break;
         case M_GetRT:
@@ -4515,6 +4570,7 @@ BOOL StatementControl::Execute()
     else
     {
         BOOL bSearchButtonOnToolbox = (nParams == PARAM_NONE) && ((M_Click == nMethodId) || (M_TearOff == nMethodId) || (M_IsEnabled == nMethodId) || (M_OpenMenu == nMethodId));
+        bSearchButtonOnToolbox |= (nParams == PARAM_USHORT_1) && (M_GetState == nMethodId);
         if ( nMethodId == M_TypeKeys || nMethodId == M_MouseDown
             || nMethodId == M_MouseUp || nMethodId ==  M_MouseMove
             || nMethodId == M_SnapShot )
@@ -4538,6 +4594,7 @@ BOOL StatementControl::Execute()
                 case M_Click:
                 case M_TearOff:
                 case M_OpenMenu:
+                case M_GetState:
                     break;
                 case M_IsEnabled:
                     nMethodId = _M_IsEnabled;   // Umlabeln, da die Behandlung essentiell anders ist!
@@ -5180,7 +5237,7 @@ BOOL StatementControl::Execute()
                         ToolBox *pTB = ((ToolBox*)pControl);
                         if ( !aUId.Matches( pTB->GetSmartUniqueOrHelpId() ) )   // Also Button auf der ToolBox gefunden
                         {
-                            if ( nParams == PARAM_NONE )
+                            if ( (nParams == PARAM_NONE) || (nParams == PARAM_USHORT_1) )
                             {           // Wir fälschen einen Parameter
                                 if ( aUId.HasNumeric() )
                                 {
@@ -5199,28 +5256,30 @@ BOOL StatementControl::Execute()
                         }
 
 #define FIND_ITEM\
+    USHORT nItemPos = 0;\
+    BOOL bItemFound = FALSE;\
     {\
         SmartId aButtonId;\
         if( nParams == PARAM_STR_1 )\
             aButtonId = SmartId( aString1 );\
         if( nParams == PARAM_ULONG_1 )\
             aButtonId = SmartId( nLNr1 );\
-        for ( nNr1 = 0; nNr1 < pTB->GetItemCount() && !aButtonId.Matches(pTB->GetItemCommand(pTB->GetItemId(nNr1))) &&\
-                                                      !aButtonId.Matches(pTB->GetHelpId(pTB->GetItemId(nNr1))) ; nNr1++ ) {}\
-        bBool1 = aButtonId.Matches(pTB->GetItemCommand(pTB->GetItemId(nNr1))) || aButtonId.Matches(pTB->GetHelpId(pTB->GetItemId(nNr1)));\
-        if ( !bBool1 )\
+        for ( nItemPos = 0; nItemPos < pTB->GetItemCount() && !aButtonId.Matches(pTB->GetItemCommand(pTB->GetItemId(nItemPos))) &&\
+                                                      !aButtonId.Matches(pTB->GetHelpId(pTB->GetItemId(nItemPos))) ; nItemPos++ ) {}\
+        bItemFound = aButtonId.Matches(pTB->GetItemCommand(pTB->GetItemId(nItemPos))) || aButtonId.Matches(pTB->GetHelpId(pTB->GetItemId(nItemPos)));\
+        if ( !bItemFound )\
             ReportError( aUId, GEN_RES_STR1( S_HELPID_ON_TOOLBOX_NOT_FOUND, MethodString( nMethodId ) ) );\
         else\
         {\
-            if ( !pTB->IsItemEnabled( pTB->GetItemId(nNr1) ) && nMethodId != _M_IsEnabled )\
+            if ( !pTB->IsItemEnabled( pTB->GetItemId(nItemPos) ) && nMethodId != _M_IsEnabled )\
             {\
                 ReportError( aUId, GEN_RES_STR1( S_BUTTON_DISABLED_ON_TOOLBOX, MethodString( nMethodId ) ) );\
-                bBool1 = FALSE;\
+                bItemFound = FALSE;\
             }\
-            else if ( !pTB->IsItemVisible( pTB->GetItemId(nNr1) ) )\
+            else if ( !pTB->IsItemVisible( pTB->GetItemId(nItemPos) ) )\
             {\
                 ReportError( aUId, GEN_RES_STR1( S_BUTTON_HIDDEN_ON_TOOLBOX, MethodString( nMethodId ) ) );\
-                bBool1 = FALSE;\
+                bItemFound = FALSE;\
             }\
             else\
             {\
@@ -5229,7 +5288,7 @@ BOOL StatementControl::Execute()
                 }\
                 else\
                 {   /* Try the multi line way */\
-                    if ( pTB->GetItemRect(pTB->GetItemId(nNr1)).IsEmpty() )\
+                    if ( pTB->GetItemRect(pTB->GetItemId(nItemPos)).IsEmpty() )\
                     {\
                         USHORT nLine = pTB->GetCurLine();\
                         do\
@@ -5238,13 +5297,13 @@ BOOL StatementControl::Execute()
                             for ( int i = 1 ; i < 30 ; i++ )\
                                 SafeReschedule();\
                         }\
-                        while ( pTB->GetCurLine() != nLine && pTB->GetItemRect(pTB->GetItemId(nNr1)).IsEmpty() );\
+                        while ( pTB->GetCurLine() != nLine && pTB->GetItemRect(pTB->GetItemId(nItemPos)).IsEmpty() );\
                         pTB->Invalidate( pTB->GetScrollRect() );\
                     }\
-                    if ( pTB->GetItemRect(pTB->GetItemId(nNr1)).IsEmpty() )\
+                    if ( pTB->GetItemRect(pTB->GetItemId(nItemPos)).IsEmpty() )\
                     {\
                         ReportError( aUId, GEN_RES_STR1( S_CANNOT_MAKE_BUTTON_VISIBLE_IN_TOOLBOX, MethodString( nMethodId ) ) );\
-                        bBool1 = FALSE;\
+                        bItemFound = FALSE;\
                     }\
                 }\
             }\
@@ -5259,9 +5318,9 @@ BOOL StatementControl::Execute()
                             case M_Click :
                                 {
                                     FIND_ITEM;
-                                    if ( bBool1 )   // FIND_ITEM Erfolgreich
+                                    if ( bItemFound )   // FIND_ITEM Erfolgreich
                                     {
-                                        Rectangle aRect = pTB->GetItemRect(pTB->GetItemId(nNr1));
+                                        Rectangle aRect = pTB->GetItemRect(pTB->GetItemId(nItemPos));
                                         if ( aRect.IsEmpty() )
                                         {
                                             Rectangle aRect = pTB->GetMenubuttonRect();
@@ -5273,11 +5332,11 @@ BOOL StatementControl::Execute()
                                             aSubMenuId3 = SmartId();
                                             pMenuWindow = NULL;
 
-                                            new StatementCommand( this, RC_MenuSelect, PARAM_USHORT_1, pTB->GetItemId(nNr1) + TOOLBOX_MENUITEM_START );
+                                            new StatementCommand( this, RC_MenuSelect, PARAM_USHORT_1, pTB->GetItemId(nItemPos) + TOOLBOX_MENUITEM_START );
                                         }
                                         else
                                         {
-                                            Rectangle aRect = pTB->GetItemRect(pTB->GetItemId(nNr1));
+                                            Rectangle aRect = pTB->GetItemRect(pTB->GetItemId(nItemPos));
                                             MouseEvent aMEvnt;
                                             aMEvnt = MouseEvent(aRect.Center(),1,MOUSE_SIMPLECLICK,MOUSE_LEFT);
                                             ImplMouseButtonDown( pTB, aMEvnt );
@@ -5289,9 +5348,9 @@ BOOL StatementControl::Execute()
                             case M_TearOff :
                                 {
                                     FIND_ITEM;
-                                    if ( bBool1 )   // FIND_ITEM Erfolgreich
+                                    if ( bItemFound )   // FIND_ITEM Erfolgreich
                                     {
-                                        Rectangle aRect = pTB->GetItemPosDropDownRect( nNr1 );
+                                        Rectangle aRect = pTB->GetItemPosDropDownRect( nItemPos );
                                         AnimateMouse( pControl, aRect.Center() );
                                         MouseEvent aMEvnt(aRect.Center(),1,MOUSE_SIMPLECLICK,MOUSE_LEFT);
                                         ImplMouseButtonDown( pTB, aMEvnt );
@@ -5324,9 +5383,9 @@ BOOL StatementControl::Execute()
                             case M_OpenMenu :
                                 {
                                     FIND_ITEM;
-                                    if ( bBool1 )   // FIND_ITEM Erfolgreich
+                                    if ( bItemFound )   // FIND_ITEM Erfolgreich
                                     {
-                                        Rectangle aRect = pTB->GetItemPosDropDownRect( nNr1 );
+                                        Rectangle aRect = pTB->GetItemPosDropDownRect( nItemPos );
                                         AnimateMouse( pControl, aRect.Center() );
                                         MouseEvent aMEvnt(aRect.Center(),1,MOUSE_SIMPLECLICK,MOUSE_LEFT);
                                         ImplMouseButtonDown( pTB, aMEvnt );
@@ -5342,37 +5401,40 @@ BOOL StatementControl::Execute()
                             case _M_IsEnabled:
                                 {
                                     FIND_ITEM;
-                                    if ( bBool1 )   // FIND_ITEM Erfolgreich
+                                    if ( bItemFound )   // FIND_ITEM Erfolgreich
                                     {
-                                        pRet->GenReturn ( RET_Value, aUId, pTB->IsItemEnabled( pTB->GetItemId(nNr1) ) );
+                                        pRet->GenReturn ( RET_Value, aUId, pTB->IsItemEnabled( pTB->GetItemId(nItemPos) ) );
                                     }
                                 }
                                 break;
                             case M_GetState :
-                                if ( !ValueOK(aUId, CUniString("GetState"),nNr1,pTB->GetItemCount()) )
-                                    break;
-                                switch (nNr2)
                                 {
-                                case 0:
-                                    pRet->GenReturn ( RET_Value, aUId, (ULONG)pTB->GetHelpId(pTB->GetItemId(nNr1-1)));
-                                    break;
-                                case 1:
-                                    pRet->GenReturn ( RET_Value, aUId, (ULONG)pTB->GetItemType(nNr1-1));
-                                    break;
-                                case 2:
-                                    pRet->GenReturn ( RET_Value, aUId, (ULONG)pTB->GetItemState(pTB->GetItemId(nNr1-1)));
-                                    break;
-                                case 3:
-                                    pRet->GenReturn ( RET_Value, aUId, (ULONG)pTB->GetItemId(nNr1-1));
-                                    break;
-                                default:
-                                    pRet->GenReturn ( RET_Value, aUId, ULONG(0));
-                                    break;
+                                    FIND_ITEM;
+                                    if ( bItemFound )   // FIND_ITEM Erfolgreich
+                                    {
+                                        switch (nNr1)
+                                        {
+                                        case 0:
+                                            pRet->GenReturn ( RET_Value, aUId, (ULONG)pTB->GetHelpId(pTB->GetItemId(nItemPos)));
+                                            break;
+                                        case 1:
+                                            pRet->GenReturn ( RET_Value, aUId, (ULONG)pTB->GetItemType(nItemPos));
+                                            break;
+                                        case 2:
+                                            pRet->GenReturn ( RET_Value, aUId, (ULONG)pTB->GetItemState(pTB->GetItemId(nItemPos)));
+                                            break;
+                                        case 3:
+                                            pRet->GenReturn ( RET_Value, aUId, (ULONG)pTB->GetItemId(nItemPos));
+                                            break;
+                                        default:
+                                            pRet->GenReturn ( RET_Value, aUId, ULONG(0));
+                                            break;
+                                        }
+                                    }
                                 }
                                 break;
                             case M_GetItemText :
-                                if ( ValueOK(aUId, CUniString("GetItemText"),nNr1,pTB->GetItemCount()) )
-                                    pRet->GenReturn ( RET_Value, aUId, (String)pTB->GetItemText(nNr1-1));
+                                pRet->GenReturn ( RET_Value, aUId, (String)pTB->GetItemText(nNr1));
                                 break;
                             case M_GetText :
                                 pRet->GenReturn ( RET_Value, aUId, (String)pTB->GetText());
@@ -5396,13 +5458,11 @@ BOOL StatementControl::Execute()
                             case M_Close:
                             case M_Size:
                             case M_Move:
+                            case M_IsMax:
+                            case M_Minimize:
+                            case M_Maximize:
                             case M_Help:        // Alles was unten weiterbehandelt werden soll
                                 goto DockingWin;
-                            case M_IsMax:            // not active in UI thus no implementation needed
-                            case M_Minimize:         // formerly handled by DockingWin
-                            case M_Maximize:
-                                DirectLog( S_QAError, GEN_RES_STR0( S_DEPRECATED ) );
-                                break;
                             default:
                                 ReportError( aUId, GEN_RES_STR2c2( S_UNKNOWN_METHOD, MethodString(nMethodId), "ToolBox" ) );
                                 break;
@@ -5926,18 +5986,31 @@ SvLBoxString* pItem = NULL;\
                             break;
                         case M_Size:
                         case M_Move:
+                        case M_IsMax:
+                        case M_Minimize:
+                        case M_Maximize:
                             if ( ((DockingWindow*)pControl)->IsFloatingMode() )
                             {
-//                              pControl = ((DockingWindow*)pControl)->GetFloatingWindow();
-                                goto FloatWin;
+                                Window* pFloat = ((DockingWindow*)pControl)->GetFloatingWindow();
+                                if ( !pFloat && ((DockingWindow*)pControl)->IsFloatingMode() )
+                                {
+                                    if ( pControl->GET_REAL_PARENT() && pControl->GET_REAL_PARENT()->GetType() == WINDOW_FLOATINGWINDOW )
+                                        pFloat = pControl->GET_REAL_PARENT();
+                                    else
+                                    {
+                                        DBG_ERROR("FloatingMode set but Parent is no FloatingWindow")
+                                    }
+                                }
+                                if ( pFloat && pFloat->GetType() == WINDOW_FLOATINGWINDOW )
+                                {
+                                    pControl = pFloat;
+                                    goto FloatWin;
+                                }
+                                else
+                                    ReportError( aUId, GEN_RES_STR1( S_CANNOT_FIND_FLOATING_WIN, MethodString( nMethodId ) ) );
                             }
                             else
                                 ReportError( aUId, GEN_RES_STR1( S_ALLOWED_ONLY_IN_DOCKING_MODE, MethodString( nMethodId ) ) );
-                            break;
-                        case M_IsMax:            // not active in UI thus no implementation needed
-                        case M_Minimize:
-                        case M_Maximize:
-                            DirectLog( S_QAError, GEN_RES_STR0( S_DEPRECATED ) );
                             break;
                         case M_Help:        // Alles was unten weiterbehandelt werden soll
                             goto MoreDialog;
@@ -5967,8 +6040,16 @@ SvLBoxString* pItem = NULL;\
                         {
                             if ( pControl->GetStyle() & WB_SIZEABLE )
                             {
-                                pControl->SetSizePixel(Size(nNr1,nNr2));
-                                pControl->Resize();
+                                Size aMin = ((FloatingWindow*)pControl)->GetMinOutputSizePixel();
+                                if ( aMin.Width() <= nNr1 && aMin.Height() <= nNr2 )
+                                {
+                                    pControl->SetSizePixel(Size(nNr1,nNr2));
+                                    pControl->Resize();
+                                }
+                                else
+                                {
+                                    ReportError( aUId, GEN_RES_STR2( S_SIZE_BELOW_MINIMUM, String::CreateFromInt32( aMin.Width() ), String::CreateFromInt32( aMin.Height() ) ) );
+                                }
                             }
                             else
                                 ReportError( aUId, GEN_RES_STR1( S_SIZE_NOT_CHANGEABLE, MethodString( nMethodId ) ) );
