@@ -1,0 +1,188 @@
+#! /usr/bin/csh
+
+# This script sets all enviroment variables, which are necessary for building 
+# the examples of the Office Development Kit.
+# The Script was developed for the operating systems Solaris and Linux.
+
+# The SDK name
+setenv OO_SDK_NAME @OO_SDK_NAME@
+
+# Installation directory of the Software Development Kit.
+# Example: setenv OO_SDK_HOME /work/StarOffice_SDK
+setenv OO_SDK_HOME @OO_SDK_HOME@
+
+# Office installation directory.
+# Example: setenv OFFICE_HOME /opt/staroffice
+set OFFICE_HOME=@OFFICE_HOME@
+
+# Directory of the make command.
+# Example: setenv OO_SDK_MAKE_HOME /usr/bin
+setenv OO_SDK_MAKE_HOME @OO_SDK_MAKE_HOME@
+
+# Directory of the zip command.
+# Example: setenv OO_SDK_ZIP_HOME /usr/bin
+setenv OO_SDK_ZIP_HOME @OO_SDK_ZIP_HOME@
+
+# Directory of the C++ compiler.
+# Example: setenv OO_SDK_CPP_HOME /usr/bin
+setenv OO_SDK_CPP_HOME @OO_SDK_CPP_HOME@
+
+# Solaris only
+setenv OO_SDK_CC_55_OR_HIGHER @OO_SDK_CC_55_OR_HIGHER@
+
+# Directory of the Java SDK.
+# Example: setenv OO_SDK_JAVA_HOME "/usr/local/j2sdk1.4.1_01"
+setenv OO_SDK_JAVA_HOME @OO_SDK_JAVA_HOME@
+
+# Special output directory
+# Example: setenv OO_SDK_OUTPUT_DIR "$HOME"
+setenv OO_SDK_OUTPUT_DIR @OO_SDK_OUTPUT_DIR@
+
+# Environment variable to enable auto deployment of example components
+# Example: set SDK_AUTO_DEPLOYMENT=YES
+setenv SDK_AUTO_DEPLOYMENT @SDK_AUTO_DEPLOYMENT@
+
+# Set office program path.
+setenv OFFICE_PROGRAM_PATH ${OFFICE_HOME}/program
+
+# Set UNO path, necessary to ensure that the cpp examples using the
+# new UNO bootstrap mechanism use the configured office installation.
+setenv UNO_PATH ${OFFICE_PROGRAM_PATH}
+
+# Set SDK example output directory
+setenv OO_EXAMPLE_OUT ${OO_SDK_HOME}
+if ( $?OO_SDK_OUTPUT_DIR ) then
+    setenv OO_EXAMPLE_OUT ${OO_SDK_OUTPUT_DIR}/${OO_SDK_NAME}
+endif
+
+# check platform and set appropriate variables
+switch (`uname -s`)
+  case "SunOS":
+    if ( `uname -p` == "sparc" ) then
+        set directoryname=solsparc
+	set platform=Solaris Sparc
+    else
+        set directoryname=solintel
+	set platform=Solaris Intel
+    endif
+    set exampleout=SOLARISexample.out
+
+    # set LD_LIBRARY_PATH
+    if ( $?LD_LIBARY_PATH == 0) then
+	setenv LD_LIBRARY_PATH ${OO_SDK_HOME}/${directoryname}/lib:${OO_EXAMPLE_OUT}/${exampleout}/lib:${OFFICE_PROGRAM_PATH}:.
+    else
+	setenv LD_LIBRARY_PATH ${OO_SDK_HOME}/${directoryname}/lib:${OO_EXAMPLE_OUT}/${exampleout}/lib:${OFFICE_PROGRAM_PATH}:.:${LD_LIBRARY_PATH}
+    endif
+  breaksw
+  case "Linux":
+    set directoryname=linux
+    set exampleout=LINUXexample.out
+    set platform=Linux
+
+    # set LD_LIBRARY_PATH
+    if ( $?LD_LIBARY_PATH == 0) then
+	setenv LD_LIBRARY_PATH ${OO_SDK_HOME}/${directoryname}/lib:${OO_EXAMPLE_OUT}/${exampleout}/lib:${OFFICE_PROGRAM_PATH}:.
+    else
+	setenv LD_LIBRARY_PATH ${OO_SDK_HOME}/${directoryname}/lib:${OO_EXAMPLE_OUT}/${exampleout}/lib:${OFFICE_PROGRAM_PATH}:.:${LD_LIBRARY_PATH}
+    endif
+  breaksw
+  case "Darwin":
+    set directoryname=macosx
+    set exampleout=MACOSXexample.out
+    set platform=MacOSX
+
+    # set DYLD_LIBRARY_PATH
+    if ( $?DYLD_LIBRARY_PATH == 0) then
+	setenv DYLD_LIBRARY_PATH ${OO_SDK_HOME}/${directoryname}/lib:${OO_EXAMPLE_OUT}/${exampleout}/lib:${OFFICE_PROGRAM_PATH}:.
+    else
+	setenv DYLD_LIBRARY_PATH ${OO_SDK_HOME}/${directoryname}/lib:${OO_EXAMPLE_OUT}/${exampleout}/lib:${OFFICE_PROGRAM_PATH}:.:${DYLD_LIBRARY_PATH}
+    endif
+  breaksw
+  case "FreeBSD":
+    set directoryname=freebsd
+    set exampleout=FREEBSDexample.out
+    set platform=FreeBSD
+
+    # set LD_LIBRARY_PATH
+    if ( $?LD_LIBARY_PATH == 0) then
+	setenv LD_LIBRARY_PATH ${OO_SDK_HOME}/${directoryname}/lib:${OO_EXAMPLE_OUT}/${exampleout}/lib:${OFFICE_PROGRAM_PATH}:.
+    else
+	setenv LD_LIBRARY_PATH ${OO_SDK_HOME}/${directoryname}/lib:${OO_EXAMPLE_OUT}/${exampleout}/lib:${OFFICE_PROGRAM_PATH}:.:${LD_LIBRARY_PATH}
+    endif
+
+    if ( -e "/sbin/sysctl" ) then
+	set OSVERSION=`/sbin/sysctl  -n kern.osreldate`
+    else
+	set OSVERSION=`/usr/sbin/sysctl  -n kern.osreldate`
+    endif
+    
+    if ( ${OSVERSION} < 500016 ) then
+	setenv PTHREAD_CFLAGS -D_THREAD_SAFE
+	setenv PTHREAD_LIBS -pthread
+    else if ( ${OSVERSION} < 502102 ) then
+	setenv PTHREAD_CFLAGS -D_THREAD_SAFE
+	setenv PTHREAD_LIBS -lc_r
+    else	
+	setenv PTHREAD_LIBS -pthread
+    endif
+  breaksw
+endsw
+
+# set PATH
+if ( $?PATH == 0) then
+    setenv PATH ${OO_SDK_ZIP_HOME}:${OO_SDK_MAKE_HOME}:${OO_SDK_HOME}/${directoryname}/bin:${OO_EXAMPLE_OUT}/${exampleout}:${OFFICE_PROGRAM_PATH}:.
+else
+    setenv PATH ${OO_SDK_ZIP_HOME}:${OO_SDK_MAKE_HOME}:${OO_SDK_HOME}/${directoryname}/bin:${OO_EXAMPLE_OUT}/${exampleout}:${OFFICE_PROGRAM_PATH}:.:${PATH}
+endif
+
+# Set CLASSPATH
+if ( $?CLASSPATH == 0) then
+    setenv CLASSPATH ${OFFICE_PROGRAM_PATH}/classes/jurt.jar:${OFFICE_PROGRAM_PATH}/classes/unoil.jar:${OFFICE_PROGRAM_PATH}/classes/ridl.jar:${OFFICE_PROGRAM_PATH}/classes/juh.jar
+else
+    setenv CLASSPATH ${OFFICE_PROGRAM_PATH}/classes/jurt.jar:${OFFICE_PROGRAM_PATH}/classes/unoil.jar:${OFFICE_PROGRAM_PATH}/classes/ridl.jar:${OFFICE_PROGRAM_PATH}/classes/juh.jar:${CLASSPATH}
+endif
+
+if ( $?OO_SDK_CPP_HOME == 0) then
+    setenv PATH ${OO_SDK_CPP_HOME}:${PATH}
+endif
+
+if ( $?OO_SDK_JAVA_HOME == 0) then
+    setenv PATH ${OO_SDK_JAVA_HOME}:${PATH}
+#    setenv UNO_JAVA_JFW_JREHOME `sp2bv $OO_SDK_JAVA_HOME`
+#    setenv UNO_JAVA_JFW_ENV_CLASSPATH true
+#    setenv UNO_JAVA_JFW_VENDOR_SETTINGS `sp2bv $OFFICE_HOME/share/config/javavendors.xml`
+endif
+
+echo 
+echo " ************************************************************************"
+echo " *"                                                  
+echo " * SDK environment is prepared for ${platform}"      
+echo " *"                                                  
+echo " * SDK = ${OO_SDK_HOME}"
+echo " * Office = ${OFFICE_HOME}"
+echo " * Make = ${OO_SDK_MAKE_HOME}"
+echo " * Zip = ${OO_SDK_ZIP_HOME}"
+if ( $?OO_SDK_CPP_HOME == 0) then
+echo " * C++ Compiler = "
+else
+echo " * C++ Compiler = ${OO_SDK_CPP_HOME}"
+endif
+if ( $?OO_SDK_JAVA_HOME == 0) then
+echo " * Java = "
+else
+echo " * Java = ${OO_SDK_JAVA_HOME}"
+endif
+if ( $?OO_SDK_OUTPUT_DIR == 0) then
+echo " * Special Output directory = "
+else
+echo " * Special Output directory = ${OO_SDK_OUTPUT_DIR}"
+endif
+echo " * Auto deployment = ${SDK_AUTO_DEPLOYMENT}"
+echo " *"
+echo " ************************************************************************"
+
+unset directoryname
+unset exampleout
+unset platform
+
+echo "]2;Shell prepared with the SDK environment"
