@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_transferable.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pl $ $Date: 2001-09-11 11:23:56 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:09:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 #include <stdio.h>
 #endif
 
@@ -120,7 +120,7 @@ Any SAL_CALL X11Transferable::getTransferData( const DataFlavor& rFlavor )
         if( ((sal_Unicode*)aData.getConstArray())[nLen-1] == 0 )
             nLen--;
         OUString aString( (sal_Unicode*)aData.getConstArray(), nLen );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "X11Transferable::getTransferData( \"%s\" )\n -> \"%s\"\n",
              OUStringToOString( rFlavor.MimeType, RTL_TEXTENCODING_ISO_8859_1 ).getStr(),
              OUStringToOString( aString, RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
