@@ -253,89 +253,6 @@ drawing::PolyPolygonShape3D createBorderPolygon(
     return aRet;
 }
 
-drawing::Position3D Vector3DToPosition3D( const Vector3D& rVector)
-{
-    return drawing::Position3D(
-          rVector.X()
-        , rVector.Y()
-        , rVector.Z()
-        );
-}
-
-/*
-drawing::Position3D lcl_getPosition3DFromPoly( sal_Int32 nIndex, const drawing::PolyPolygonShape3D& rPoly )
-{
-    drawing::Position3D aRet(0.0,0.0,0.0);
-    if(nIndex<0)
-        return aRet;
-    if( !rPoly.SequenceX.getLength() )
-        return aRet;
-    if( rPoly.SequenceX[0].getLength() <= nIndex )
-        return aRet;
-
-    aRet.PositionX = rPoly.SequenceX[0][nIndex];
-    aRet.PositionY = rPoly.SequenceY[0][nIndex];
-    aRet.PositionZ = rPoly.SequenceZ[0][nIndex];
-    return aRet;
-}
-
-drawing::Position3D lcl_getNormal( const drawing::Position3D& rPos1
-                                 , const drawing::Position3D& rPos2 )
-{
-    drawing::Position3D rPos3(rPos2);
-    rPos3.PositionZ+=100;//arbitrary value not NULL
-
-    Polygon3D aPolygon3D(3);
-    aPolygon3D[0] = Position3DToVector3D( rPos1 );
-    aPolygon3D[1] = Position3DToVector3D( rPos2 );
-    aPolygon3D[2] = Position3DToVector3D( rPos3 );
-    Vector3D aNormal = aPolygon3D.GetNormal();
-    return Vector3DToPosition3D(aNormal);
-}
-
-drawing::PolyPolygonShape3D lcl_getNormalPolygon( const drawing::PolyPolygonShape3D& rPoly )
-{
-    drawing::PolyPolygonShape3D aNormalPoly;
-
-    sal_Int32 nPolyCount = rPoly.SequenceX.getLength();
-    if(!nPolyCount)
-        return aNormalPoly;
-
-    aNormalPoly.SequenceX.realloc(nPolyCount);
-    aNormalPoly.SequenceY.realloc(nPolyCount);
-    aNormalPoly.SequenceZ.realloc(nPolyCount);
-
-    for(sal_Int32 nPoly=0;nPoly<nPolyCount;nPoly++)
-    {
-        sal_Int32 nPointCount = rPoly.SequenceX[nPoly].getLength();
-
-        const double* pSourceInnerSequenceX = rPoly.SequenceX.getConstArray()[nPoly].getConstArray();
-        const double* pSourceInnerSequenceY = rPoly.SequenceY.getConstArray()[nPoly].getConstArray();
-        const double* pSourceInnerSequenceZ = rPoly.SequenceZ.getConstArray()[nPoly].getConstArray();
-
-        aNormalPoly.SequenceX[nPoly].realloc(nPointCount+1);
-        aNormalPoly.SequenceY[nPoly].realloc(nPointCount+1);
-        aNormalPoly.SequenceZ[nPoly].realloc(nPointCount+1);
-
-        double* pInnerSequenceX = aNormalPoly.SequenceX[nPoly].getArray();
-        double* pInnerSequenceY = aNormalPoly.SequenceY[nPoly].getArray();
-        double* pInnerSequenceZ = aNormalPoly.SequenceZ[nPoly].getArray();
-
-        sal_Int32 nN=0;
-        for(nN=0;nN<nPointCount-1;nN++)
-        {
-            drawing::Position3D aNormal = lcl_getNormal(
-                                    lcl_getPosition3DFromPoly( nN, rPoly )
-                                    , lcl_getPosition3DFromPoly( nN+1, rPoly ) );
-            pInnerSequenceX[nN] = aNormal.PositionX;
-            pInnerSequenceY[nN] = aNormal.PositionY;
-            pInnerSequenceZ[nN] = aNormal.PositionZ;
-        }
-    }
-    return aNormalPoly;
-}
-*/
-
 uno::Reference< drawing::XShape >
         create3DLine( const uno::Reference< drawing::XShapes >& xTarget
                     , uno::Reference< lang::XMultiServiceFactory > m_xShapeFactory
@@ -363,13 +280,6 @@ uno::Reference< drawing::XShape >
             xProp->setPropertyValue( C2U( UNO_NAME_3D_POLYPOLYGON3D )
                 , uno::makeAny( rPoly ) );
 
-            /*
-            //Normals Polygon
-            drawing::PolyPolygonShape3D aNormalPoly = lcl_getNormalPolygon( rPoly );
-            xProp->setPropertyValue( C2U( UNO_NAME_3D_NORMALSPOLYGON3D )
-                , uno::makeAny( aNormalPoly ) );
-            */
-
             //NormalsKind
             xProp->setPropertyValue( C2U( UNO_NAME_3D_NORMALS_KIND )
                 , uno::makeAny( drawing::NormalsKind_FLAT ) );
@@ -395,14 +305,6 @@ bool AreaChart::impl_createLine( VDataSeries* pSeries
     m_pPosHelper->getTransformedClipRect();
     drawing::PolyPolygonShape3D aPoly;
     Clipping::clipPolygonAtRectangle( *pSeriesPoly, m_pPosHelper->getTransformedClipDoubleRect(), aPoly );
-
-    /*
-    double fMinZ = m_pPosHelper->getLogicMinZ();
-    m_pPosHelper->doLogicScaling( NULL, NULL, &fMinZ );
-    Polygon aToolsPoly = PolyToToolsPoly( aPoly );
-    aToolsPoly.Clip( m_pPosHelper->getTransformedClipRect() );
-    aPoly = ToolsPolyToPoly( aToolsPoly, fMinZ );
-    */
 
     if(isPolygonEmptyOrSinglePoint(aPoly))
         return false;
@@ -523,7 +425,8 @@ void AreaChart::impl_createSeriesShapes()
     const ::std::vector< VDataSeriesGroup >::const_iterator aXSlotEnd = m_aXSlots.end();
 //=============================================================================
     //for the area chart there should be at most one x slot (no side by side stacking available)
-    if( aXSlotIter != aXSlotEnd )
+    //handle as if independent series
+    for( ; aXSlotIter != aXSlotEnd; aXSlotIter++ )
     {
         ::std::vector< VDataSeries* >* pSeriesList = &(aXSlotIter->m_aSeriesVector);
 
