@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optasian.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-28 12:30:05 $
+ *  last change: $Author: kz $ $Date: 2001-04-03 19:18:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ chinese_simplified ] = "◊÷∑˚º‰∏Ù";
         Text[ chinese_traditional ] = "¶r§∏∂°πj";
         Text[ turkish ] = "Kerning";
-        Text[ arabic ] = "Kerning";
+        Text[ arabic ] = " ﬁ‰Ì‰ √Õ—›";
     };
     RadioButton RB_CHAR_KERNING
     {
@@ -171,7 +171,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ chinese_simplified ] = "◊÷∑˚º‰∏Ù";
         Text[ chinese_traditional ] = "¶r§∏∂°πj";
         Text[ turkish ] = "Character distance";
-        Text[ arabic ] = "Character distance";
+        Text[ arabic ] = " »«⁄œ «·√Õ—›";
     };
     RadioButton RB_NO_COMP
     {
@@ -271,7 +271,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ chinese_simplified ] = "ø™Õ∑∫ÕΩ·Œ≤◊÷∑˚";
         Text[ chinese_traditional ] = "∂}¿Y¶r§∏©Mµ≤ß¿¶r§∏";
         Text[ turkish ] = "Start and end characters";
-        Text[ arabic ] = "Start and end characters";
+        Text[ arabic ] = "√Õ—› «·»œ«Ì… Ê«·‰Â«Ì…";
     };
     FixedText FT_LANGUAGE
     {
@@ -351,7 +351,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ japanese ] = "çsì™ã÷ë•ï∂éö:";
         Text[ korean ] = "No start of line:";
         Text[ chinese_simplified ] = "–– ◊Ω˚÷π π”√◊÷∑˚£∫";
-        Text[ chinese_traditional ] = "&#34892;&#39318;&#31105;&#27490;&#20351;&#29992;&#23383;&#20803;&#65306;";
+        Text[ chinese_traditional ] = "¶Ê≠∫∏T§Ó®œ•Œ¶r§∏°G";
         Text[ turkish ] = "No start of line:";
         Text[ arabic ] = "»œÊ‰ »œ«Ì… «·”ÿ—:";
         Text[ language_user1 ] = "EM22.3.01: Dt soll eigtl \"nicht am Z...\" heissen.";
