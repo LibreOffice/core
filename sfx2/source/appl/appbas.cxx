@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appbas.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ab $ $Date: 2000-12-19 17:40:54 $
+ *  last change: $Author: ab $ $Date: 2001-02-26 12:00:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,9 @@
 
 #ifndef _COM_SUN_STAR_FRAME_XDESKTOP_HPP_
 #include <com/sun/star/frame/XDesktop.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SCRIPT_XLIBRARYCONTAINER_HPP_
+#include <com/sun/star/script/XLibraryContainer.hpp>
 #endif
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
@@ -172,6 +175,7 @@
 #include "stbmgr.hxx"
 #include "appimp.hxx"
 #include "basmgr.hxx"
+#include "dlgcont.hxx"
 #include "helper.hxx"
 
 #define ITEMID_SEARCH SID_SEARCH_ITEM
@@ -187,6 +191,7 @@
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
+using namespace ::com::sun::star::script;
 
 // #ifndef STR_VERSION_ID
 // #define STR_VERSION_ID 1
@@ -659,12 +664,14 @@ BasicManager* SfxApplication::GetBasicManager()
         }
 
         SvStorageRef aStor = new SvStorage( aAppBasic.GetMainURL(), STREAM_READ | STREAM_SHARE_DENYWRITE );
+        SfxBasicManager* pSfxBasicManager;
         if ( aStor.Is() && 0 == aStor->GetError() )
         {
             SfxErrorContext aErrContext( ERRCTX_SFX_LOADBASIC, Application::GetAppName() );
             String aOldBaseURL = INetURLObject::GetBaseURL();
             INetURLObject::SetBaseURL( aAppBasic.GetMainURL() );
-            pImp->pBasicMgr = new SfxBasicManager( *aStor, NULL, &aAppBasicDir );
+            pSfxBasicManager = new SfxBasicManager( *aStor, NULL, &aAppBasicDir );
+            pImp->pBasicMgr = pSfxBasicManager;
             pImp->pBasicMgr->SetStorageName( aAppBasic.PathToFileName() );
 
             // ggf. nach einem Channel-Update den BasicManager aktualisieren
@@ -703,7 +710,8 @@ BasicManager* SfxApplication::GetBasicManager()
         }
         if ( !aStor.Is() || 0 != aStor->GetError() )
         {
-            pImp->pBasicMgr = new SfxBasicManager( new StarBASIC, &aAppBasicDir );
+            pSfxBasicManager = new SfxBasicManager( new StarBASIC, &aAppBasicDir );
+            pImp->pBasicMgr = pSfxBasicManager;
 
             // Als Destination das erste Dir im Pfad:
             String aFileName( aAppBasic.getName() );
@@ -751,6 +759,18 @@ BasicManager* SfxApplication::GetBasicManager()
         pBas->Insert( xUnoObj );
         //pBas->setRoot( xDesktop );
 
+        // Dialog container
+        SfxDialogContainer* pDlgCont = new SfxDialogContainer( sal_True );
+        pDlgCont->acquire();    // Hold via UNO
+        pImp->pDialogContainer = pDlgCont;
+        pSfxBasicManager->SetDialogContainer( pImp->pDialogContainer );
+
+        Reference< XLibraryContainer > xDlgCont = static_cast< XLibraryContainer* >( pDlgCont );
+        Any aDlgCont;
+        aDlgCont <<= xDlgCont;
+        xUnoObj = GetSbUnoObject( DEFINE_CONST_UNICODE("Dialogs"), aDlgCont );
+        pBas->Insert( xUnoObj );
+
         // Konstanten
 //ASDBG     RegisterBasicConstants( "so", aConstants, sizeof(aConstants)/sizeof(SfxConstant) );
 
@@ -759,6 +779,15 @@ BasicManager* SfxApplication::GetBasicManager()
             pBas->SetModified( sal_False );
     }
     return pImp->pBasicMgr;
+}
+
+//--------------------------------------------------------------------
+
+Reference< XLibraryContainer > SfxApplication::GetDialogContainer()
+{
+    Reference< XLibraryContainer > xRet
+        = static_cast< XLibraryContainer* >( pImp->pDialogContainer );
+    return xRet;
 }
 
 //--------------------------------------------------------------------
