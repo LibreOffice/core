@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldmgr.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 14:11:24 $
+ *  last change: $Author: rt $ $Date: 2004-05-19 08:52:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,6 +163,7 @@ private:
     String          sCurFrame;
 
     String          sMacroPath;
+    String          sMacroName;
 
     ULONG           nCurFmt;
     BOOL            bEvalExp;
@@ -203,8 +204,9 @@ public:
     void            InsertFldType(SwFieldType& rType);
 
     BOOL            ChooseMacro(const String &rSelMacro = aEmptyStr);
-    inline void     SetMacroPath(const String& rPath) { sMacroPath = rPath; }
+    void            SetMacroPath(const String& rPath);
     inline const String& GetMacroPath() const         { return (sMacroPath); }
+    inline const String& GetMacroName() const         { return (sMacroName); }
     inline void     SetMacroModule(SbModule* pMod)    { pModule = pMod; }
 
     // Vorheriger Naechster gleichen Typ
