@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ama $ $Date: 2001-04-24 10:02:41 $
+ *  last change: $Author: jp $ $Date: 2001-07-04 18:14:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -300,9 +300,10 @@ BOOL SwEditShell::IsGrfSwapOut( BOOL bOnlyLinked ) const
 {
     SwGrfNode *pGrfNode = _GetGrfNode();
     return pGrfNode &&
-        ( ( bOnlyLinked && ( pGrfNode->IsLinkedFile() &&
-            GRAPHIC_DEFAULT == pGrfNode->GetGrfObj().GetType() )) ||
-            pGrfNode->GetGrfObj().IsSwappedOut() );
+        (bOnlyLinked ? ( pGrfNode->IsLinkedFile() &&
+                        ( GRAPHIC_DEFAULT == pGrfNode->GetGrfObj().GetType()||
+                          pGrfNode->GetGrfObj().IsSwappedOut()))
+                     : pGrfNode->GetGrfObj().IsSwappedOut());
 }
 
 const GraphicObject& SwEditShell::GetGraphicObj() const
