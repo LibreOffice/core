@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.108 $
+ *  $Revision: 1.109 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 13:39:22 $
+ *  last change: $Author: rt $ $Date: 2004-11-02 14:38:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -300,7 +300,10 @@ void SAL_CALL SvXMLExportEventListener::disposing( const lang::EventObject& rEve
     throw(uno::RuntimeException)
 {
     if (pExport)
+    {
         pExport->DisposingModel();
+        pExport = NULL;
+    }
 }
 
 //==============================================================================
@@ -374,7 +377,7 @@ void SvXMLExport::_InitCtor()
     sGraphicObjectProtocol = OUString( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.GraphicObject:" ) );
     sEmbeddedObjectProtocol = OUString( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.EmbeddedObject:" ) );
 
-    if (xModel.is() && ! mxEventListener.is())
+    if (xModel.is() && !mxEventListener.is())
     {
         mxEventListener.set( new SvXMLExportEventListener(this));
         xModel->addEventListener(mxEventListener);
