@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpreslt.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-03 16:34:48 $
+ *  last change: $Author: kz $ $Date: 2001-02-02 16:47:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,11 +188,11 @@ ModalDialog DLG_PRESLT
         Text [ danish ] = "Indlæs..." ;
         Text [ portuguese_brazilian ] = "~Laden..." ;
         Text [ portuguese ] = "~Carregar..." ;
-        Text[ chinese_simplified ] = "×°ÔØ(~L)...";
+        Text[ chinese_simplified ] = "×°Èë(~L)...";
         Text[ russian ] = "~Çàãğóçêà...";
         Text[ polish ] = "Za³aduj...";
         Text[ japanese ] = "“Ç‚İ‚İ(~L)...";
-        Text[ chinese_traditional ] = "¸Ë¸ü(~L)...";
+        Text[ chinese_traditional ] = "¸ü¤J(~L)...";
         Text[ arabic ] = "ÊÍãíá...";
         Text[ greek ] = "Öüñôùóç...";
         Text[ korean ] = "·Îµå(~L)...";
