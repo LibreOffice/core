@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleContext.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 10:54:02 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 16:44:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,14 +58,13 @@
  *
  *
  ************************************************************************/
-
 #ifndef __com_sun_star_accessibility_AccessibleContext_idl__
 #define __com_sun_star_accessibility_AccessibleContext_idl__
 
 module com { module sun { module star { module accessibility {
 
-interface XAccessibleContext;
-interface XAccessibleEventBroadcaster;
+ published interface XAccessibleContext;
+ published interface XAccessibleEventBroadcaster;
 
 /** Central service of the Accessibility API that gives access to various
     facets of an object's content.
@@ -84,7 +83,7 @@ interface XAccessibleEventBroadcaster;
 
     @since #107627#
 */
-service AccessibleContext
+published service AccessibleContext
 {
     interface XAccessibleContext;
 

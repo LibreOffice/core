@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Accessible.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 10:53:51 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 16:43:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,13 +58,12 @@
  *
  *
  ************************************************************************/
-
 #ifndef __com_sun_star_accessibility_Accessible_idl__
 #define __com_sun_star_accessibility_Accessible_idl__
 
 module com { module sun { module star { module accessibility {
 
-interface   XAccessible;
+ published interface    XAccessible;
 
 /** Every class has to support this service in order to be accessible.
 
@@ -81,7 +80,7 @@ interface   XAccessible;
 
     @since #107627#
 */
-service Accessible
+published service Accessible
 {
     interface XAccessible;
 };
