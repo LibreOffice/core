@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shutdowniconw32.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hro $ $Date: 2001-08-20 12:28:43 $
+ *  last change: $Author: hro $ $Date: 2001-08-20 14:44:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,6 +148,8 @@ using namespace ::osl;
 
 #define LISTENER_WINDOWCLASS    "SO Listener Class"
 #define LISTENER_WINDOWNAME     "SO Listener Window"
+#define EXECUTER_WINDOWCLASS    "SO Executer Class"
+#define EXECUTER_WINDOWNAME     "SO Executer Window"
 
 #define ID_QUICKSTART               1
 #define IDM_EXIT                    2
@@ -189,6 +191,7 @@ using namespace ::osl;
 #define SFX_TASKBAR_NOTIFICATION    WM_USER+1
 
 static HWND aListenerWindow = NULL;
+static HWND aExecuterWindow = NULL;
 
 static void OnMeasureItem(HWND hwnd, LPMEASUREITEMSTRUCT lpmis);
 static void OnDrawItem(HWND hwnd, LPDRAWITEMSTRUCT lpdis);
@@ -198,6 +201,8 @@ typedef struct tagMYITEM
     OUString text;
     UINT iconId;
 } MYITEM;
+
+// -------------------------------
 
 static bool isNT()
 {
@@ -219,6 +224,8 @@ static bool isNT()
     return bWnt;
 }
 
+
+// -------------------------------
 
 static void addMenuItem( HMENU hMenu, UINT id, UINT iconId, OUString& text, int& pos, int bOwnerdraw )
 {
@@ -262,6 +269,8 @@ static void addMenuItem( HMENU hMenu, UINT id, UINT iconId, OUString& text, int&
     InsertMenuItemW( hMenu, pos++, TRUE, &mi );
 }
 
+// -------------------------------
+
 static HMENU createSystrayMenu( )
 {
     HMENU hMenu = CreatePopupMenu();
@@ -296,6 +305,8 @@ static HMENU createSystrayMenu( )
     return hMenu;
 }
 
+// -------------------------------
+
 static void deleteSystrayMenu( HMENU hMenu )
 {
     if( !hMenu )
@@ -319,6 +330,8 @@ static void deleteSystrayMenu( HMENU hMenu )
         mi.fMask = MIIM_DATA;
     }
 }
+
+// -------------------------------
 
 static void addTaskbarIcon( HWND hWnd )
 {
@@ -344,6 +357,7 @@ static void addTaskbarIcon( HWND hWnd )
     Shell_NotifyIconA(NIM_ADD, &nid);
 }
 
+// -------------------------------
 
 LRESULT CALLBACK listenerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -406,25 +420,13 @@ LRESULT CALLBACK listenerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
                     switch( m )
                     {
                         case IDM_OPEN:
-                            ShutdownIcon::FileOpen();
-                        break;
                         case IDM_WRITER:
-                            ShutdownIcon::OpenURL( OUString( RTL_CONSTASCII_USTRINGPARAM( WRITER_URL ) ) );
-                        break;
                         case IDM_CALC:
-                            ShutdownIcon::OpenURL( OUString( RTL_CONSTASCII_USTRINGPARAM( CALC_URL ) ) );
-                        break;
                         case IDM_IMPRESS:
-                            ShutdownIcon::OpenURL( OUString( RTL_CONSTASCII_USTRINGPARAM( IMPRESS_URL ) ) );
-                        break;
                         case IDM_DRAW:
-                            ShutdownIcon::OpenURL( OUString( RTL_CONSTASCII_USTRINGPARAM( DRAW_URL ) ) );
-                        break;
                         case IDM_TEMPLATE:
-                            ShutdownIcon::FromTemplate();
-                        break;
+                            break;
                         case IDM_INSTALL:
-                            ShutdownIcon::SetAutostart( !ShutdownIcon::GetAutostart() );
                             CheckMenuItem( popupMenu, IDM_INSTALL, MF_BYCOMMAND| (ShutdownIcon::GetAutostart() ? MF_CHECKED : MF_UNCHECKED) );
                             break;
                         case IDM_EXIT:
@@ -435,18 +437,19 @@ LRESULT CALLBACK listenerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
                             nid.uID = ID_QUICKSTART;
                             Shell_NotifyIconA(NIM_DELETE, &nid);
 
-                            // remove listener and
-                            //  terminate office if running in background
-                            ShutdownIcon::terminateDesktop();
                             break;
                     }
+
+                    PostMessage( aExecuterWindow, WM_COMMAND, m, (LPARAM)hWnd );
                 }
                 break;
             }
             break;
         case WM_DESTROY:
             deleteSystrayMenu( popupMenu );
-            return 0;
+            // We don't need the Systray Thread anymore
+            PostQuitMessage( 0 );
+            return DefWindowProc(hWnd, uMsg, wParam, lParam);
         default:
             if( uMsg == s_uTaskbarRestart )
             {
@@ -457,6 +460,91 @@ LRESULT CALLBACK listenerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
     }
     return 0;
 }
+
+// -------------------------------
+
+LRESULT CALLBACK executerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+    static HMENU popupMenu = NULL;
+
+    static UINT s_uTaskbarRestart = 0;
+
+    switch (uMsg)
+    {
+        case WM_NCCREATE:
+            return TRUE;
+        case WM_CREATE:
+            return 0;
+
+        case WM_COMMAND:
+            switch( LOWORD(wParam) )
+            {
+                case IDM_OPEN:
+                    ShutdownIcon::FileOpen();
+                break;
+                case IDM_WRITER:
+                    ShutdownIcon::OpenURL( OUString( RTL_CONSTASCII_USTRINGPARAM( WRITER_URL ) ) );
+                break;
+                case IDM_CALC:
+                    ShutdownIcon::OpenURL( OUString( RTL_CONSTASCII_USTRINGPARAM( CALC_URL ) ) );
+                break;
+                case IDM_IMPRESS:
+                    ShutdownIcon::OpenURL( OUString( RTL_CONSTASCII_USTRINGPARAM( IMPRESS_URL ) ) );
+                break;
+                case IDM_DRAW:
+                    ShutdownIcon::OpenURL( OUString( RTL_CONSTASCII_USTRINGPARAM( DRAW_URL ) ) );
+                break;
+                case IDM_TEMPLATE:
+                    ShutdownIcon::FromTemplate();
+                break;
+                case IDM_INSTALL:
+                    ShutdownIcon::SetAutostart( !ShutdownIcon::GetAutostart() );
+                    break;
+                case IDM_EXIT:
+                    // remove listener and
+                    //  terminate office if running in background
+                    ShutdownIcon::terminateDesktop();
+                    break;
+            }
+            break;
+        case WM_DESTROY:
+        default:
+            return DefWindowProc(hWnd, uMsg, wParam, lParam);
+    }
+    return 0;
+}
+
+// -------------------------------
+
+
+DWORD WINAPI SystrayThread( LPVOID lpParam )
+{
+    aListenerWindow = CreateWindowExA(0,
+        LISTENER_WINDOWCLASS,       // registered class name
+        LISTENER_WINDOWNAME,        // window name
+        0,                          // window style
+        CW_USEDEFAULT,              // horizontal position of window
+        CW_USEDEFAULT,              // vertical position of window
+        CW_USEDEFAULT,              // window width
+        CW_USEDEFAULT,              // window height
+        (HWND) NULL,                // handle to parent or owner window
+        NULL,                       // menu handle or child identifier
+        (HINSTANCE) GetModuleHandle( NULL ),    // handle to application instance
+        NULL                        // window-creation data
+        );
+
+    MSG msg;
+
+    while ( GetMessage( &msg, NULL, 0, 0 ) )
+    {
+        TranslateMessage( &msg );
+        DispatchMessage( &msg );
+    }
+
+    return msg.wParam; // Exit code of WM_QUIT
+}
+
+// -------------------------------
 
 void ShutdownIcon::initSystray()
 {
@@ -480,9 +568,25 @@ void ShutdownIcon::initSystray()
 
     RegisterClassExA(&listenerClass);
 
-    aListenerWindow = CreateWindowExA(0,
-        LISTENER_WINDOWCLASS,       // registered class name
-        LISTENER_WINDOWNAME,        // window name
+    WNDCLASSEXA executerClass;
+    executerClass.cbSize        = sizeof(WNDCLASSEX);
+    executerClass.style         = 0;
+    executerClass.lpfnWndProc   = executerWndProc;
+    executerClass.cbClsExtra    = 0;
+    executerClass.cbWndExtra    = 0;
+    executerClass.hInstance     = (HINSTANCE) GetModuleHandle( NULL );
+    executerClass.hIcon         = NULL;
+    executerClass.hCursor       = NULL;
+    executerClass.hbrBackground = NULL;
+    executerClass.lpszMenuName  = NULL;
+    executerClass.lpszClassName = EXECUTER_WINDOWCLASS;
+    executerClass.hIconSm       = NULL;
+
+    RegisterClassExA( &executerClass );
+
+    aExecuterWindow = CreateWindowExA(0,
+        EXECUTER_WINDOWCLASS,       // registered class name
+        EXECUTER_WINDOWNAME,        // window name
         0,                          // window style
         CW_USEDEFAULT,              // horizontal position of window
         CW_USEDEFAULT,              // vertical position of window
@@ -493,7 +597,12 @@ void ShutdownIcon::initSystray()
         (HINSTANCE) GetModuleHandle( NULL ),    // handle to application instance
         NULL                        // window-creation data
         );
+
+    DWORD   dwThreadId;
+    HANDLE  hThread = CreateThread( NULL, 0, SystrayThread, this, 0, &dwThreadId );
 }
+
+// -------------------------------
 
 void ShutdownIcon::deInitSystray()
 {
@@ -501,10 +610,12 @@ void ShutdownIcon::deInitSystray()
     {
         DestroyWindow( aListenerWindow );
         aListenerWindow = NULL;
+        DestroyWindow( aExecuterWindow );
+        aExecuterWindow = NULL;
     }
     UnregisterClassA( LISTENER_WINDOWCLASS, GetModuleHandle( NULL ) );
+    UnregisterClassA( EXECUTER_WINDOWCLASS, GetModuleHandle( NULL ) );
 }
-
 
 
 // -------------------------------
