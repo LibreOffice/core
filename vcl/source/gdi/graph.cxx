@@ -2,9 +2,9 @@
  *
  *  $RCSfile: graph.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: th $ $Date: 2001-07-06 16:02:21 $
+ *  last change: $Author: ka $ $Date: 2001-08-24 14:10:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -429,14 +429,28 @@ BOOL Graphic::IsAnimated() const
 
 Bitmap Graphic::GetBitmap() const
 {
-    return mpImpGraphic->ImplGetBitmap();
+    return GetBitmap( NULL );
 }
 
 // ------------------------------------------------------------------------
 
 BitmapEx Graphic::GetBitmapEx() const
 {
-    return mpImpGraphic->ImplGetBitmapEx();
+    return GetBitmapEx( NULL );
+}
+
+// ------------------------------------------------------------------------
+
+Bitmap Graphic::GetBitmap( const Size* pSizePixel ) const
+{
+    return mpImpGraphic->ImplGetBitmap( pSizePixel );
+}
+
+// ------------------------------------------------------------------------
+
+BitmapEx Graphic::GetBitmapEx( const Size* pSizePixel ) const
+{
+    return mpImpGraphic->ImplGetBitmapEx( pSizePixel );
 }
 
 // ------------------------------------------------------------------------
