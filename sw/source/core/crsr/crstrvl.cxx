@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crstrvl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:00:41 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:37:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,7 +187,9 @@
 #ifndef _FMTURL_HXX
 #include <fmturl.hxx>
 #endif
-
+#ifndef _TXTFRM_HXX
+#include "txtfrm.hxx"
+#endif
 
 // zum naechsten/vorhergehenden Punkt auf gleicher Ebene
 FASTBOOL SwCrsrShell::GotoNextNum()
@@ -1566,6 +1568,51 @@ FASTBOOL SwContentAtPos::IsInProtectSect() const
     return pNd && ( pNd->IsInProtectSect() ||
                     ( 0 != ( pFrm = pNd->GetFrm(0,0,FALSE)) &&
                         pFrm->IsProtected() ));
+}
+bool SwContentAtPos::IsInRTLText()const
+{
+    bool bRet = false;
+    const SwTxtNode* pNd = 0;
+    if( pFndTxtAttr )
+    {
+        switch( eCntntAtPos )
+        {
+            case SW_FTN:
+            {
+                const SwTxtFtn* pTxtFtn = static_cast<const SwTxtFtn*>(pFndTxtAttr);
+                if(pTxtFtn->GetStartNode())
+                {
+                    SwStartNode* pSttNd = pTxtFtn->GetStartNode()->GetNode().GetStartNode();
+                    SwPaM aTemp( *pSttNd );
+                    aTemp.Move(fnMoveForward, fnGoNode);
+                    SwCntntNode* pCntntNode = aTemp.GetCntntNode();
+                    if(pCntntNode && pCntntNode->IsTxtNode())
+                        pNd = static_cast<SwTxtNode*>(pCntntNode);
+                }
+            }
+            break;
+
+        }
+    }
+    if(pNd)
+    {
+        SwClientIter aClientIter( * const_cast<SwTxtNode*>(pNd) );
+        SwClient* pLast = aClientIter.GoStart();
+        while( pLast )
+        {
+            if ( pLast->ISA( SwTxtFrm ) )
+            {
+                SwTxtFrm* pTmpFrm = static_cast<SwTxtFrm*>( pLast );
+                if ( !pTmpFrm->IsFollow())
+                {
+                    bRet = pTmpFrm->IsRightToLeft();
+                    break;
+                }
+            }
+            pLast = ++aClientIter;
+        }
+    }
+    return bRet;
 }
 
 FASTBOOL SwCrsrShell::SelectTxtAttr( USHORT nWhich, BOOL bExpand,
