@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imapdlg.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2000-10-26 13:35:48 $
+ *  last change: $Author: kz $ $Date: 2000-11-09 12:43:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -515,23 +515,23 @@ FloatingWindow RID_SVXDLG_IMAP
                 Text = "Rückgängig " ;
                 Text [ English ] = "Undo " ;
                 Text [ norwegian ] = "Angre " ;
-                Text [ italian ] = "Annulla " ;
+                Text [ italian ] = "Annulla  " ;
                 Text [ portuguese_brazilian ] = "Widerrufen" ;
                 Text [ portuguese ] = "Anular  " ;
                 Text [ finnish ] = "Kumoa " ;
-                Text [ danish ] = "Fortryd" ;
+                Text [ danish ] = "Fortryd " ;
                 Text [ french ] = "Annuler " ;
-                Text [ swedish ] = "Ångra " ;
-                Text [ dutch ] = "Ongedaan maken " ;
-                Text [ spanish ] = "Deshacer " ;
+                Text [ swedish ] = "Ångra  " ;
+                Text [ dutch ] = "Ongedaan " ;
+                Text [ spanish ] = "Deshacer  " ;
                 Text [ english_us ] = "Undo " ;
-                Text[ chinese_simplified ] = "³·ÏûÃüÁî";
-                Text[ russian ] = "Îòìåíèòü  ";
+                Text[ chinese_simplified ] = "³·ÏûÃüÁî ";
+                Text[ russian ] = "Îòìåíèòü ";
                 Text[ polish ] = "Cofnij ";
-                Text[ japanese ] = "Œ³‚É–ß‚·";
-                Text[ chinese_traditional ] = "´_­ì";
+                Text[ japanese ] = "Œ³‚É–ß‚· ";
+                Text[ chinese_traditional ] = "´_­ì ";
                 Text[ arabic ] = "ÊÑÇÌÚ";
-                Text[ greek ] = "Áíáßñåóç";
+                Text[ greek ] = "Áíáßñåóç ";
                 Text[ korean ] = "ÀÛ¾÷Ãë¼Ò ";
                 Text[ turkish ] = "Geri al ";
                 Text[ language_user1 ] = " ";
@@ -552,19 +552,19 @@ FloatingWindow RID_SVXDLG_IMAP
                 Text [ english_us ] = "Redo" ;
                 Text [ portuguese ] = "Restaurar  " ;
                 Text [ portuguese_brazilian ] = "Wiederholen" ;
-                Text [ swedish ] = "Återställ  " ;
-                Text [ danish ] = "Gendan" ;
-                Text [ italian ] = "Ripristina " ;
-                Text [ spanish ] = "Restaurar " ;
+                Text [ swedish ] = "Återställ   " ;
+                Text [ danish ] = "Gendan " ;
+                Text [ italian ] = "Ripristina  " ;
+                Text [ spanish ] = "Restaurar  " ;
                 Text [ french ] = "Restaurer " ;
-                Text [ dutch ] = "Herstellen " ;
-                Text[ chinese_simplified ] = "»Ö¸´³·ÏûÃüÁî";
-                Text[ russian ] = "Âåğíóòü  ";
-                Text[ polish ] = "Ponów ";
-                Text[ japanese ] = "‚â‚è’¼‚µ";
-                Text[ chinese_traditional ] = "«ì´_";
+                Text [ dutch ] = "Herstellen  " ;
+                Text[ chinese_simplified ] = "»Ö¸´³·ÏûÃüÁî ";
+                Text[ russian ] = "Âåğíóòü ";
+                Text[ polish ] = "Przywróæ ";
+                Text[ japanese ] = "‚â‚è’¼‚µ ";
+                Text[ chinese_traditional ] = "«ì´_ ";
                 Text[ arabic ] = "ÅÚÇÏÉ";
-                Text[ greek ] = "ÅğáíáöïñÜ";
+                Text[ greek ] = "ÅğáíáöïñÜ ";
                 Text[ korean ] = "º¹¿ø ";
                 Text[ turkish ] = "Yinele ";
                 Text[ language_user1 ] = " ";
@@ -762,7 +762,7 @@ FloatingWindow RID_SVXDLG_IMAP
     Text[ polish ] = "Edytor mapy obrazkowej";
     Text[ japanese ] = "²Ò°¼ŞÏ¯Ìß ´ÃŞ¨À";
     Text[ chinese_traditional ] = "¼v¹³¬M®g½s¿è¾¹";
-    Text[ arabic ] = "Image Map Editor";
+    Text[ arabic ] = "ãÍÑÑ ãÎØØ ÇáÕæÑÉ";
     Text[ greek ] = "ÅğåîåñãáóôŞò ImageMap";
     Text[ korean ] = "ÀÌ¹ÌÁö ¸Ê ¿¡µğÅÍ";
     Text[ turkish ] = "ImageMap editörü";
@@ -1233,7 +1233,7 @@ ModalDialog RID_SVXDLG_IMAPURL
         Text[ polish ] = "Frame:";
         Text[ japanese ] = "ÌÚ°Ñ:";
         Text[ chinese_traditional ] = "°T®Ø:";
-        Text[ arabic ] = "Frame:";
+        Text[ arabic ] = "ÅØÇÑ:";
         Text[ greek ] = "Ğëáßóéï:";
         Text[ korean ] = "ÇÁ·¹ÀÓ:";
         Text[ turkish ] = "Frame:";
@@ -1305,9 +1305,9 @@ String STR_IMAPDLG_SAVE
     Text[ chinese_simplified ] = "Í¼ÏñÓ³ÉäÒÑ¾­±»¸Ä¶¯¡£\nÄúÒª´æÅÌ¸ü¸ÄÂğ£¿";
     Text[ russian ] = "Image Map èçìåíåí.\nÑîõğàíèòü ıòè èçìåíåíèÿ?";
     Text[ polish ] = "Mapa obrazkowa zosta³a zmieniona.\nCzy zmiany maj¹ byæ zapisane?";
-    Text[ japanese ] = "²Ò°¼ŞÏ¯Ìß‚ª•ÏX‚³‚ê‚Ä‚¢‚Ü‚·B\n•ÏX‚ğ•Û‘¶‚µ‚Ü‚·‚©?";
+    Text[ japanese ] = "²Ò°¼ŞÏ¯Ìß‚ª•ÏX‚³‚ê‚Ä‚¢‚Ü‚·B\n•ÏX‚ğ•Û‘¶‚µ‚Ü‚·‚©B";
     Text[ chinese_traditional ] = "¼v¹³¬M®g¤w¸g³QÅÜ§ó¡C\n±z­nÀx¦sÅÜ§ó¡H";
-    Text[ arabic ] = "Êã ÊÛííÑ ÇáÜ ImageMap.\nåá ÊÑíÏ ÍİÙ ÇáÊÛííÑÇÊ¿";
+    Text[ arabic ] = "Êã ÊÛííÑ ãÎØØ ÇáÕæÑÉ .\nåá ÊÑíÏ ÍİÙ ÇáÊÛííÑÇÊ¿";
     Text [ italian ] = "L'ImageMap è stata cambiata.\nSalvare le modifiche?" ;
     Text [ spanish ] = "Se ha modificado el ImageMap.\n¿Desea guardar los cambios?" ;
     Text [ french ] = "L'imageMap a été modifiée.\nDésirez-vous sauvegarder les modifications?" ;
@@ -1342,9 +1342,9 @@ String STR_IMAPDLG_MODIFY
     Text[ chinese_simplified ] = "Í¼ÏñÓ³ÉäÒÑ¾­±»¸Ä¶¯¡£\nÄúÒª½ÓÊÜ¸ü¸ÄÂğ£¿";
     Text[ russian ] = "Image Map èçìåíåí.\nÏğèíÿòü ıòè èçìåíåíèÿ?";
     Text[ polish ] = "Mapa obrazkowa zosta³a zmieniona.\nCzy zmiany maj¹ byæ zapisane?";
-    Text[ japanese ] = "²Ò°¼ŞÏ¯Ìß‚ª•ÏX‚³‚ê‚Ä‚¢‚Ü‚·B\n•ÏX‚ğ•Û‘¶‚µ‚Ü‚·‚©?";
+    Text[ japanese ] = "²Ò°¼ŞÏ¯Ìß‚ª•ÏX‚³‚ê‚Ä‚¢‚Ü‚·B\n•ÏX‚ğ•Û‘¶‚µ‚Ü‚·‚©B";
     Text[ chinese_traditional ] = "¼v¹³¬M®g¤w¸g³QÅÜ§ó¡C\n±z­n±µ¨üÅÜ§ó¡S";
-    Text[ arabic ] = "Êã ÊÛííÑ ÇáÜ ImageMap.\nåá ÊÑíÏ ÍİÙ ÇáÊÛííÑÇÊ¿";
+    Text[ arabic ] = "Êã ÊÛííÑ ãÎØØ ÇáÕæÑÉ .\nåá ÊÑíÏ ÍİÙ ÇáÊÛííÑÇÊ¿";
     Text[ greek ] = "Ôï ImageMap ôñïğïğïéŞèçêå.\nÈİëåôå íá åöáñìïóôïıí ïé áëëáãİò;";
     Text[ korean ] = "ÀÌ¹ÌÁö ¸ÊÀÌ ¼öÁ¤µÇ¾ú½À´Ï´Ù.\nº¯°æµÈ ³»¿ëÀ» ÀúÀåÇÏ½Ã°Ú½À´Ï±î?";
     Text[ turkish ] = "ImageMap değiştirildi.\nDeğişiklikler kaydedilsin mi?";
