@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshe3.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: thb $ $Date: 2001-08-14 17:01:31 $
+ *  last change: $Author: dl $ $Date: 2001-09-27 15:02:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -500,9 +500,10 @@ USHORT  SdViewShell::SetPrinter(SfxPrinter* pNewPrinter,
 
         if( this->ISA( SdDrawViewShell ) )
         {
+            SdPage* pPage = pDoc->GetSdPage( 0, PK_STANDARD );
             SetPageSizeAndBorder( ( (SdDrawViewShell*)this )->GetPageKind(),
-                        aNewSize, -1,-1,-1,-1, bScaleAll, TRUE,
-                        pNewPrinter->GetOrientation() );
+                        aNewSize, -1,-1,-1,-1, bScaleAll,
+                        pNewPrinter->GetOrientation(), pPage->GetPaperBin(), pPage->IsBackgroundFullSize() );
         }
 
         pNewPrinter->SetMapMode(aOldMap);

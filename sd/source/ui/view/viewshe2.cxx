@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshe2.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ka $ $Date: 2001-09-13 11:18:58 $
+ *  last change: $Author: dl $ $Date: 2001-09-27 15:01:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -755,17 +755,14 @@ IMPL_LINK( SdViewShell, ModeBtnHdl, Button *, pButton )
 void SdViewShell::SetPageSizeAndBorder(PageKind ePageKind, const Size& rNewSize,
                                        long nLeft, long nRight,
                                        long nUpper, long nLower, BOOL bScaleAll,
-                                       BOOL bUndo, Orientation eOrientation)
+                                       Orientation eOrientation, USHORT nPaperBin,
+                                       BOOL bBackgroundFullSize)
 {
     SdPage* pPage;
     SdUndoGroup* pUndoGroup = NULL;
-
-    if (bUndo)
-    {
-        pUndoGroup = new SdUndoGroup(pDoc);
-        String aString(SdResId(STR_UNDO_CHANGE_PAGEFORMAT));
-        pUndoGroup->SetComment(aString);
-    }
+    pUndoGroup = new SdUndoGroup(pDoc);
+    String aString(SdResId(STR_UNDO_CHANGE_PAGEFORMAT));
+    pUndoGroup->SetComment(aString);
 
     USHORT i, nPageCnt = pDoc->GetMasterSdPageCount(ePageKind);
 
@@ -776,23 +773,22 @@ void SdViewShell::SetPageSizeAndBorder(PageKind ePageKind, const Size& rNewSize,
         **********************************************************************/
         pPage = pDoc->GetMasterSdPage(i, ePageKind);
 
-        SdUndoAction* pUndo = NULL;
-
-        if (bUndo)
-        {
-            pUndo = new SdPageFormatUndoAction(pDoc, pPage,
-                                pPage->GetSize(),
-                                pPage->GetLftBorder(), pPage->GetRgtBorder(),
-                                pPage->GetUppBorder(), pPage->GetLwrBorder(),
-                                pPage->IsScaleObjects(),
-                                pPage->GetOrientation(),
-                                rNewSize,
-                                nLeft, nRight,
-                                nUpper, nLower,
-                                bScaleAll,
-                                eOrientation);
-            pUndoGroup->AddAction(pUndo);
-        }
+        SdUndoAction* pUndo = new SdPageFormatUndoAction(pDoc, pPage,
+                            pPage->GetSize(),
+                            pPage->GetLftBorder(), pPage->GetRgtBorder(),
+                            pPage->GetUppBorder(), pPage->GetLwrBorder(),
+                            pPage->IsScaleObjects(),
+                            pPage->GetOrientation(),
+                            pPage->GetPaperBin(),
+                            pPage->IsBackgroundFullSize(),
+                            rNewSize,
+                            nLeft, nRight,
+                            nUpper, nLower,
+                            bScaleAll,
+                            eOrientation,
+                            nPaperBin,
+                            bBackgroundFullSize);
+        pUndoGroup->AddAction(pUndo);
 
         const SfxPoolItem* pPoolItem = NULL;
 
@@ -812,6 +808,8 @@ void SdViewShell::SetPageSizeAndBorder(PageKind ePageKind, const Size& rNewSize,
         }
 
         pPage->SetOrientation(eOrientation);
+        pPage->SetPaperBin( nPaperBin );
+        pPage->SetBackgroundFullSize( bBackgroundFullSize );
 
         if ( ePageKind == PK_STANDARD )
             pDoc->GetMasterSdPage(i, PK_NOTES)->CreateTitleAndLayout();
@@ -828,23 +826,22 @@ void SdViewShell::SetPageSizeAndBorder(PageKind ePageKind, const Size& rNewSize,
         **********************************************************************/
         pPage = pDoc->GetSdPage(i, ePageKind);
 
-        SdUndoAction* pUndo = NULL;
-
-        if (bUndo)
-        {
-            pUndo = new SdPageFormatUndoAction(pDoc, pPage,
+        SdUndoAction* pUndo = new SdPageFormatUndoAction(pDoc, pPage,
                                 pPage->GetSize(),
                                 pPage->GetLftBorder(), pPage->GetRgtBorder(),
                                 pPage->GetUppBorder(), pPage->GetLwrBorder(),
                                 pPage->IsScaleObjects(),
                                 pPage->GetOrientation(),
+                                pPage->GetPaperBin(),
+                                pPage->IsBackgroundFullSize(),
                                 rNewSize,
                                 nLeft, nRight,
                                 nUpper, nLower,
                                 bScaleAll,
-                                eOrientation);
-            pUndoGroup->AddAction(pUndo);
-        }
+                                eOrientation,
+                                nPaperBin,
+                                bBackgroundFullSize);
+        pUndoGroup->AddAction(pUndo);
 
         if (rNewSize.Width() > 0 ||
             nLeft  >= 0 || nRight >= 0 || nUpper >= 0 || nLower >= 0)
@@ -862,6 +859,8 @@ void SdViewShell::SetPageSizeAndBorder(PageKind ePageKind, const Size& rNewSize,
         }
 
         pPage->SetOrientation(eOrientation);
+        pPage->SetPaperBin( nPaperBin );
+        pPage->SetBackgroundFullSize( bBackgroundFullSize );
 
         if ( ePageKind == PK_STANDARD )
         {
@@ -876,11 +875,8 @@ void SdViewShell::SetPageSizeAndBorder(PageKind ePageKind, const Size& rNewSize,
     if ( ePageKind == PK_STANDARD )
         pDoc->GetSdPage(0, PK_HANDOUT)->CreateTitleAndLayout(TRUE);
 
-    if (bUndo)
-    {
-        // Undo Gruppe dem Undo Manager uebergeben
-        GetViewFrame()->GetObjectShell()->GetUndoManager()->AddUndoAction(pUndoGroup);
-    }
+    // Undo Gruppe dem Undo Manager uebergeben
+    GetViewFrame()->GetObjectShell()->GetUndoManager()->AddUndoAction(pUndoGroup);
 
     long nWidth = pPage->GetSize().Width();
     long nHeight = pPage->GetSize().Height();

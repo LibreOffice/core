@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unchss.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:34 $
+ *  last change: $Author: dl $ $Date: 2001-09-27 15:01:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,7 @@
 #include "glob.hxx"
 #include "sdresid.hxx"
 #include "drawdoc.hxx"
+#include "stlsheet.hxx"
 
 
 
@@ -109,7 +110,8 @@ StyleSheetUndoAction::StyleSheetUndoAction(SdDrawDocument* pTheDoc,
     // Layoutnamen und Separator loeschen
     String aSep( RTL_CONSTASCII_USTRINGPARAM( SD_LT_SEPARATOR ) );
     USHORT nPos = aName.Search(aSep);
-    aName.Erase(0, nPos + aSep.Len());
+    if( nPos != STRING_NOTFOUND )
+        aName.Erase(0, nPos + aSep.Len());
 
     // Platzhalter durch Vorlagennamen ersetzen
     nPos = aComment.Search(sal_Unicode('$'));
@@ -124,10 +126,13 @@ StyleSheetUndoAction::StyleSheetUndoAction(SdDrawDocument* pTheDoc,
 |*
 \************************************************************************/
 
-void __EXPORT StyleSheetUndoAction::Undo()
+void StyleSheetUndoAction::Undo()
 {
     pStyleSheet->GetItemSet().Set(*pOldSet);
-    pStyleSheet->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
+    if( pStyleSheet->GetFamily() == SFX_STYLE_FAMILY_PSEUDO )
+        ( (SdStyleSheet*)pStyleSheet )->GetRealStyleSheet()->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
+    else
+        pStyleSheet->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
 }
 
 /*************************************************************************
@@ -136,10 +141,13 @@ void __EXPORT StyleSheetUndoAction::Undo()
 |*
 \************************************************************************/
 
-void __EXPORT StyleSheetUndoAction::Redo()
+void StyleSheetUndoAction::Redo()
 {
     pStyleSheet->GetItemSet().Set(*pNewSet);
-    pStyleSheet->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
+    if( pStyleSheet->GetFamily() == SFX_STYLE_FAMILY_PSEUDO )
+        ( (SdStyleSheet*)pStyleSheet )->GetRealStyleSheet()->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
+    else
+        pStyleSheet->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
 }
 
 /*************************************************************************
@@ -148,7 +156,7 @@ void __EXPORT StyleSheetUndoAction::Redo()
 |*
 \************************************************************************/
 
-void __EXPORT StyleSheetUndoAction::Repeat()
+void StyleSheetUndoAction::Repeat()
 {
     DBG_ASSERT(FALSE, "StyleSheetUndoAction::Repeat: nicht implementiert");
 }
@@ -159,7 +167,7 @@ void __EXPORT StyleSheetUndoAction::Repeat()
 |*
 \************************************************************************/
 
-__EXPORT StyleSheetUndoAction::~StyleSheetUndoAction()
+StyleSheetUndoAction::~StyleSheetUndoAction()
 {
     delete pNewSet;
     delete pOldSet;
@@ -171,7 +179,7 @@ __EXPORT StyleSheetUndoAction::~StyleSheetUndoAction()
 |*
 \************************************************************************/
 
-String __EXPORT StyleSheetUndoAction::GetComment() const
+String StyleSheetUndoAction::GetComment() const
 {
     return aComment;
 }

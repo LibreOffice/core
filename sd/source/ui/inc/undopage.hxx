@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undopage.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:42 $
+ *  last change: $Author: dl $ $Date: 2001-09-27 15:04:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,8 @@ class SdPageFormatUndoAction : public SdUndoAction
     INT32       nOldLower;
     BOOL        bOldScale;
     Orientation eOldOrientation;
+    USHORT      nOldPaperBin;
+    BOOL        bOldFullSize;
 
     Size        aNewSize;
     INT32       nNewLeft;
@@ -95,6 +97,8 @@ class SdPageFormatUndoAction : public SdUndoAction
     INT32       nNewLower;
     BOOL        bNewScale;
     Orientation eNewOrientation;
+    USHORT      nNewPaperBin;
+    BOOL        bNewFullSize;
 
 public:
     TYPEINFO();
@@ -107,6 +111,8 @@ public:
                             INT32           nOldLwr,
                             BOOL            bOldScl,
                             Orientation     eOldOrient,
+                            USHORT          nOPaperBin,
+                            BOOL            bOFullSize,
 
                             const Size&     rNewSz,
                             INT32           nNewLft,
@@ -114,7 +120,10 @@ public:
                             INT32           nNewUpr,
                             INT32           nNewLwr,
                             BOOL            bNewScl,
-                            Orientation     eNewOrient ) :
+                            Orientation     eNewOrient,
+                            USHORT          nNPaperBin,
+                            BOOL            bNFullSize
+                            ) :
         SdUndoAction(pDoc),
         pPage       (pThePage),
         aOldSize    (rOldSz),
@@ -124,6 +133,9 @@ public:
         nOldLower   (nOldLwr),
         bOldScale   (bOldScl),
         eOldOrientation(eOldOrient),
+        nOldPaperBin (nOPaperBin),
+        bOldFullSize (bOFullSize),
+
 
         aNewSize    (rNewSz),
         nNewLeft    (nNewLft),
@@ -131,7 +143,10 @@ public:
         nNewUpper   (nNewUpr),
         nNewLower   (nNewLwr),
         bNewScale   (bNewScl),
-        eNewOrientation(eNewOrient)
+        eNewOrientation(eNewOrient),
+        nNewPaperBin (nNPaperBin),
+        bNewFullSize (bNFullSize)
+
         {}
     virtual ~SdPageFormatUndoAction();
 

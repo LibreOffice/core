@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: kz $ $Date: 2001-09-13 12:58:12 $
+ *  last change: $Author: dl $ $Date: 2001-09-27 15:03:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -736,7 +736,7 @@ uno::Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyN
     }
     case WID_PAGE_BACKFULL:
     {
-        sal_Bool bFullSize = GetPage()->GetBackgroundFullSize();
+        sal_Bool bFullSize = GetPage()->IsBackgroundFullSize();
         aAny = uno::Any( &bFullSize, ::getBooleanCppuType() );
         break;
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undopage.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-09-21 16:11:56 $
+ *  last change: $Author: dl $ $Date: 2001-09-27 15:03:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,7 @@ TYPEINIT1(SdPageULUndoAction, SdUndoAction);
 |*
 \************************************************************************/
 
-__EXPORT SdPageFormatUndoAction::~SdPageFormatUndoAction()
+SdPageFormatUndoAction::~SdPageFormatUndoAction()
 {
 }
 
@@ -103,7 +103,7 @@ __EXPORT SdPageFormatUndoAction::~SdPageFormatUndoAction()
 |*
 \************************************************************************/
 
-void __EXPORT SdPageFormatUndoAction::Undo()
+void SdPageFormatUndoAction::Undo()
 {
     Rectangle aOldBorderRect(nOldLeft, nOldUpper, nOldRight, nOldLower);
     pPage->ScaleObjects(aOldSize, aOldBorderRect, bNewScale);
@@ -113,6 +113,11 @@ void __EXPORT SdPageFormatUndoAction::Undo()
     pPage->SetUppBorder(nOldUpper);
     pPage->SetLwrBorder(nOldLower);
     pPage->SetOrientation(eOldOrientation);
+    pPage->SetPaperBin( nOldPaperBin );
+
+    pPage->SetBackgroundFullSize( bOldFullSize );
+    if( !pPage->IsMasterPage() )
+        ( (SdPage*) pPage->GetMasterPage(0) )->SetBackgroundFullSize( bOldFullSize );
 
     SfxViewShell* pViewShell = SfxViewShell::Current();
 
@@ -141,7 +146,7 @@ void __EXPORT SdPageFormatUndoAction::Undo()
 |*
 \************************************************************************/
 
-void __EXPORT SdPageFormatUndoAction::Redo()
+void SdPageFormatUndoAction::Redo()
 {
     Rectangle aNewBorderRect(nNewLeft, nNewUpper, nNewRight, nNewLower);
     pPage->ScaleObjects(aNewSize, aNewBorderRect, bNewScale);
@@ -151,6 +156,11 @@ void __EXPORT SdPageFormatUndoAction::Redo()
     pPage->SetUppBorder(nNewUpper);
     pPage->SetLwrBorder(nNewLower);
     pPage->SetOrientation(eNewOrientation);
+    pPage->SetPaperBin( nNewPaperBin );
+
+    pPage->SetBackgroundFullSize( bNewFullSize );
+    if( !pPage->IsMasterPage() )
+        ( (SdPage*) pPage->GetMasterPage(0) )->SetBackgroundFullSize( bNewFullSize );
 
     SfxViewShell* pViewShell = SfxViewShell::Current();
 
@@ -179,7 +189,7 @@ void __EXPORT SdPageFormatUndoAction::Redo()
 |*
 \************************************************************************/
 
-void __EXPORT SdPageFormatUndoAction::Repeat()
+void SdPageFormatUndoAction::Repeat()
 {
     Redo();
 }
@@ -190,7 +200,7 @@ void __EXPORT SdPageFormatUndoAction::Repeat()
 |*
 \************************************************************************/
 
-__EXPORT SdPageLRUndoAction::~SdPageLRUndoAction()
+SdPageLRUndoAction::~SdPageLRUndoAction()
 {
 }
 
@@ -200,7 +210,7 @@ __EXPORT SdPageLRUndoAction::~SdPageLRUndoAction()
 |*
 \************************************************************************/
 
-void __EXPORT SdPageLRUndoAction::Undo()
+void SdPageLRUndoAction::Undo()
 {
     pPage->SetLftBorder(nOldLeft);
     pPage->SetRgtBorder(nOldRight);
@@ -212,7 +222,7 @@ void __EXPORT SdPageLRUndoAction::Undo()
 |*
 \************************************************************************/
 
-void __EXPORT SdPageLRUndoAction::Redo()
+void SdPageLRUndoAction::Redo()
 {
     pPage->SetLftBorder(nNewLeft);
     pPage->SetRgtBorder(nNewRight);
@@ -224,7 +234,7 @@ void __EXPORT SdPageLRUndoAction::Redo()
 |*
 \************************************************************************/
 
-void __EXPORT SdPageLRUndoAction::Repeat()
+void SdPageLRUndoAction::Repeat()
 {
     Redo();
 }
@@ -235,7 +245,7 @@ void __EXPORT SdPageLRUndoAction::Repeat()
 |*
 \************************************************************************/
 
-__EXPORT SdPageULUndoAction::~SdPageULUndoAction()
+SdPageULUndoAction::~SdPageULUndoAction()
 {
 }
 
@@ -245,7 +255,7 @@ __EXPORT SdPageULUndoAction::~SdPageULUndoAction()
 |*
 \************************************************************************/
 
-void __EXPORT SdPageULUndoAction::Undo()
+void SdPageULUndoAction::Undo()
 {
     pPage->SetUppBorder(nOldUpper);
     pPage->SetLwrBorder(nOldLower);
@@ -257,7 +267,7 @@ void __EXPORT SdPageULUndoAction::Undo()
 |*
 \************************************************************************/
 
-void __EXPORT SdPageULUndoAction::Redo()
+void SdPageULUndoAction::Redo()
 {
     pPage->SetUppBorder(nNewUpper);
     pPage->SetLwrBorder(nNewLower);
@@ -269,7 +279,7 @@ void __EXPORT SdPageULUndoAction::Redo()
 |*
 \************************************************************************/
 
-void __EXPORT SdPageULUndoAction::Repeat()
+void SdPageULUndoAction::Repeat()
 {
     Redo();
 }

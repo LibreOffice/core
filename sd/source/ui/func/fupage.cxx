@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fupage.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dl $ $Date: 2001-09-13 11:22:42 $
+ *  last change: $Author: dl $ $Date: 2001-09-27 15:00:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,7 +251,7 @@ FuPage::FuPage( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
             bScale = FALSE;
         aNewAttr.Put( SfxBoolItem( SID_ATTR_PAGE_EXT1, bScale ) );
 
-        BOOL bFullSize = ( (SdPage*)( pPage->GetMasterPage( 0 ) ) )->GetBackgroundFullSize();
+        BOOL bFullSize = ( (SdPage*)( pPage->GetMasterPage( 0 ) ) )->IsBackgroundFullSize();
         aNewAttr.Put( SfxBoolItem( SID_ATTR_PAGE_EXT2, bFullSize ) );
 
         ///////////////////////////////////////////////////////////////////////
@@ -459,7 +459,7 @@ FuPage::FuPage( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
     // Set new page-attributes
     //
     const SfxPoolItem *pPoolItem;
-
+    BOOL  bSetPageSizeAndBorder = FALSE;
     Size    aNewSize(aSize);
     INT32   nLeft  = -1,
             nRight = -1,
@@ -467,6 +467,8 @@ FuPage::FuPage( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
             nLower = -1;
     BOOL    bScaleAll = TRUE;
     Orientation eOrientation = pPage->GetOrientation();
+    BOOL    bFullSize = ( (SdPage*)( pPage->GetMasterPage( 0 ) ) )->IsBackgroundFullSize();
+    USHORT  nPaperBin = pPage->GetPaperBin();
 
     if( pArgs->GetItemState(SID_ATTR_PAGE, TRUE, &pPoolItem) == SFX_ITEM_SET )
     {
@@ -481,6 +483,9 @@ FuPage::FuPage( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
             eOrientation = ORIENTATION_PORTRAIT;
         }
 
+        if( pPage->GetOrientation() != eOrientation )
+            bSetPageSizeAndBorder = TRUE;
+
         if ( pViewSh->ISA(SdDrawViewShell) )
             ((SdDrawViewShell*) pViewSh)->ResetActualPage();
     }
@@ -488,6 +493,9 @@ FuPage::FuPage( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
     if( pArgs->GetItemState(SID_ATTR_PAGE_SIZE, TRUE, &pPoolItem) == SFX_ITEM_SET )
     {
         aNewSize = ((const SvxSizeItem*) pPoolItem)->GetSize();
+
+        if( pPage->GetSize() != aNewSize )
+            bSetPageSizeAndBorder = TRUE;
     }
 
     if( pArgs->GetItemState(pDoc->GetPool().GetWhich(SID_ATTR_LRSPACE),
@@ -495,6 +503,10 @@ FuPage::FuPage( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
     {
         nLeft = ((const SvxLRSpaceItem*) pPoolItem)->GetLeft();
         nRight = ((const SvxLRSpaceItem*) pPoolItem)->GetRight();
+
+        if( pPage->GetLftBorder() != nLeft || pPage->GetRgtBorder() != nRight )
+            bSetPageSizeAndBorder = TRUE;
+
     }
 
     if( pArgs->GetItemState(pDoc->GetPool().GetWhich(SID_ATTR_ULSPACE),
@@ -502,6 +514,9 @@ FuPage::FuPage( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
     {
         nUpper = ((const SvxULSpaceItem*) pPoolItem)->GetUpper();
         nLower = ((const SvxULSpaceItem*) pPoolItem)->GetLower();
+
+        if( pPage->GetUppBorder() != nUpper || pPage->GetLwrBorder() != nLower )
+            bSetPageSizeAndBorder = TRUE;
     }
 
     if( pArgs->GetItemState(pDoc->GetPool().GetWhich(SID_ATTR_PAGE_EXT1),
@@ -513,31 +528,38 @@ FuPage::FuPage( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
     if( pArgs->GetItemState(pDoc->GetPool().GetWhich(SID_ATTR_PAGE_EXT2),
                             TRUE, &pPoolItem) == SFX_ITEM_SET )
     {
-        BOOL bFullSize = ((const SfxBoolItem*) pPoolItem)->GetValue();
-        ( (SdPage*)( pPage->GetMasterPage( 0 ) ) )->SetBackgroundFullSize( bFullSize );
+        bFullSize = ((const SfxBoolItem*) pPoolItem)->GetValue();
+
+        if( ( (SdPage*)( pPage->GetMasterPage( 0 ) ) )->IsBackgroundFullSize() != bFullSize )
+            bSetPageSizeAndBorder = TRUE;
     }
 
     // Papierschacht (PaperBin)
     if( pArgs->GetItemState(pDoc->GetPool().GetWhich(SID_ATTR_PAGE_PAPERBIN),
                             TRUE, &pPoolItem) == SFX_ITEM_SET )
     {
-        USHORT nPaperBin = ((const SvxPaperBinItem*) pPoolItem)->GetValue();
-        pPage->SetPaperBin( nPaperBin );
+        nPaperBin = ((const SvxPaperBinItem*) pPoolItem)->GetValue();
+
+        if( pPage->GetPaperBin() != nPaperBin )
+            bSetPageSizeAndBorder = TRUE;
     }
 
     if (nLeft == -1 && nUpper != -1)
     {
+        bSetPageSizeAndBorder = TRUE;
         nLeft  = pPage->GetLftBorder();
         nRight = pPage->GetRgtBorder();
     }
     else if (nLeft != -1 && nUpper == -1)
     {
+        bSetPageSizeAndBorder = TRUE;
         nUpper = pPage->GetUppBorder();
         nLower = pPage->GetLwrBorder();
     }
 
-    pViewSh->SetPageSizeAndBorder(ePageKind, aNewSize, nLeft, nRight, nUpper, nLower,
-                                  bScaleAll, TRUE, eOrientation);
+    if( bSetPageSizeAndBorder )
+        pViewSh->SetPageSizeAndBorder(ePageKind, aNewSize, nLeft, nRight, nUpper, nLower,
+                                      bScaleAll, eOrientation, nPaperBin, bFullSize );
 
     ////////////////////////////////////////////////////////////////////////////////
     //
@@ -562,8 +584,6 @@ FuPage::FuPage( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
         aSize.Height() -= nUpper + nLower - 1;
         Rectangle aRect( aPos, aSize );
         pObj->SetLogicRect( aRect );
-
-//-/        pObj->NbcSetAttributes( *pArgs, FALSE );
         pObj->SetItemSet(*pArgs);
     }
 

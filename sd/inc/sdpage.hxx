@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpage.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dl $ $Date: 2001-06-22 11:24:53 $
+ *  last change: $Author: dl $ $Date: 2001-09-27 15:02:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,7 +251,7 @@ public:
     void    EndListenOutlineText();
 
     void    SetBackgroundFullSize( BOOL bIn );
-    BOOL    GetBackgroundFullSize() const { return bBackgroundFullSize; }
+    BOOL    IsBackgroundFullSize() const { return bBackgroundFullSize; }
 
     rtl_TextEncoding GetCharSet() { return(eCharSet); }
 
