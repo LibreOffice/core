@@ -2,9 +2,9 @@
  *
  *  $RCSfile: applab.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:57:13 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:24:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@
 #include <sfx2/request.hxx>
 #endif
 #ifndef _LINKMGR_HXX
-#include <so3/linkmgr.hxx>
+#include <sfx2/linkmgr.hxx>
 #endif
 #ifndef _SVX_PBINITEM_HXX //autogen
 #include <svx/pbinitem.hxx>
@@ -522,8 +522,8 @@ static sal_uInt16 nBCTitleNo = 0;
                         else if (rItem.bSynchron)
                         {
                             SwSection aSect(FILE_LINK_SECTION, pSh->GetUniqueSectionName());
-                            String sLinkName(so3::cTokenSeperator);
-                            sLinkName += so3::cTokenSeperator;
+                            String sLinkName(sfx2::cTokenSeperator);
+                            sLinkName += sfx2::cTokenSeperator;
                             sLinkName += String::CreateFromAscii(MASTER_LABEL);
                             aSect.SetLinkFileName(sLinkName);
                             aSect.SetProtect();
