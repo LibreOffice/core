@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.129 $
+ *  $Revision: 1.130 $
  *
- *  last change: $Author: kz $ $Date: 2004-11-26 17:01:14 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 12:26:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,9 @@
 #endif
 #ifndef _COM_SUN_STAR_UNO_XNAMINGSERVICE_HPP_
 #include <com/sun/star/uno/XNamingService.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBCX_PRIVILEGE_HPP_
+#include <com/sun/star/sdbcx/Privilege.hpp>
 #endif
 #ifndef _CONNECTIVITY_DBTOOLS_HXX_
 #include <connectivity/dbtools.hxx>
@@ -1507,9 +1510,6 @@ void SAL_CALL ORowSet::executeWithCompletion( const Reference< XInteractionHandl
 
     try
     {
-        // create and fill a composer
-        Reference<XSQLQueryComposer>  xComposer = getCurrentSettingsComposer(this, m_xServiceManager);
-
         freeResources();
 
         // calc the connection to be used
@@ -1518,9 +1518,11 @@ void SAL_CALL ORowSet::executeWithCompletion( const Reference< XInteractionHandl
             Reference< XConnection > xXConnection;
             setActiveConnection( xXConnection );
         }
-        calcConnection(_rxHandler);
+        calcConnection( _rxHandler );
         m_bRebuildConnOnExecute = sal_False;
-        ::dbtools::askForParameters(xComposer,this,m_xActiveConnection,_rxHandler);
+
+        Reference< XSingleSelectQueryComposer > xComposer = getCurrentSettingsComposer( this, m_xServiceManager );
+        ::dbtools::askForParameters( xComposer, this, m_xActiveConnection, _rxHandler );
     }
     // ensure that only the allowed exceptions leave this block
     catch(SQLException&)
@@ -2174,7 +2176,7 @@ rtl::OUString ORowSet::getCommand(sal_Bool& bEscapeProcessing,::com::sun::star::
 rtl::OUString ORowSet::getComposedQuery(const rtl::OUString& rQuery, sal_Bool bEscapeProcessing,Reference< XNameAccess >& _rxRetTables) throw( SQLException, RuntimeException )
 {
     // use query composer to make a useful query with filter and/or order by part
-    rtl::OUString aFilterStatement = rQuery;
+    rtl::OUString aComposedStatement = rQuery;
     if (bEscapeProcessing)
     {
         Reference< XMultiServiceFactory >  xFactory(m_xActiveConnection, UNO_QUERY);
@@ -2188,7 +2190,6 @@ rtl::OUString ORowSet::getComposedQuery(const rtl::OUString& rQuery, sal_Bool bE
             catch (Exception&)
             {
                 m_xComposer = NULL;
-                m_xAnalyzer = NULL;
             }
         }
         if(!m_xComposer.is()) // no composer so we create one
@@ -2198,7 +2199,7 @@ rtl::OUString ORowSet::getComposedQuery(const rtl::OUString& rQuery, sal_Bool bE
         }
         if ( m_xComposer.is() )
         {
-            m_xAnalyzer->setQuery(rQuery);
+            m_xComposer->setElementaryQuery( rQuery );
 
             if ( m_bApplyFilter )
             {
@@ -2215,21 +2216,14 @@ rtl::OUString ORowSet::getComposedQuery(const rtl::OUString& rQuery, sal_Bool bE
                 // don't simply overwrite an existent filter, this would lead to problems if this existent
                 // filter contains paramters (since a keyset may add parameters itself)
                 // 2003-12-12 - #23418# - fs@openoffice.org
-                ::rtl::OUString sFilter = m_xAnalyzer->getFilter();
-                if ( sFilter.getLength() )
-                {
-                    sFilter = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("( ")) + sFilter;
-                    sFilter += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ) AND "));
-                }
-                sFilter += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("( ")) + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("0 = 1"));
-                sFilter += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" )"));
-                m_xComposer->setFilter( sFilter );
+                m_xComposer->setElementaryQuery( m_xComposer->getQuery( ) );
+                m_xComposer->setFilter( ::rtl::OUString::createFromAscii( "0 = 1" ) );
             }
 
             if (m_aOrder.getLength())
                 m_xComposer->setOrder(m_aOrder);
 
-            aFilterStatement = m_xAnalyzer->getQuery();
+            aComposedStatement = m_xComposer->getQuery();
             if(!m_xColumns.is())
             {
                 Reference<XColumnsSupplier> xCols(m_xComposer,UNO_QUERY);
@@ -2237,7 +2231,7 @@ rtl::OUString ORowSet::getComposedQuery(const rtl::OUString& rQuery, sal_Bool bE
             }
         }
     }
-    return aFilterStatement;
+    return aComposedStatement;
 }
 // -----------------------------------------------------------------------------
 void ORowSet::checkAndResizeParameters(sal_Int32 parameterIndex)
