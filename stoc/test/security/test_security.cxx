@@ -2,9 +2,9 @@
  *
  *  $RCSfile: test_security.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2002-04-11 16:03:27 $
+ *  last change: $Author: dbo $ $Date: 2002-04-19 15:17:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,8 @@
 
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/uno/XCurrentContext.hpp>
+
+#include <com/sun/star/io/FilePermission.hpp>
 
 #define USER_CREDS "access-control.user-credentials"
 #define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
@@ -393,6 +395,96 @@ static void check_root_pos( AccessControl & ac, bool invert = false )
 }
 
 //==================================================================================================
+class acc_Restr
+    : public WeakImplHelper1< security::XAccessControlContext >
+{
+    Any m_perm;
+
+public:
+    inline acc_Restr( Any const & perm = Any() ) SAL_THROW( () )
+        : m_perm( perm )
+        {}
+
+    // XAccessControlContext impl
+    virtual void SAL_CALL checkPermission( Any const & perm )
+        throw (RuntimeException);
+};
+//__________________________________________________________________________________________________
+void acc_Restr::checkPermission( Any const & perm )
+    throw (RuntimeException)
+{
+    if (perm != m_perm)
+    {
+        throw security::AccessControlException(
+            OUSTR("dyn violation!"), Reference< XInterface >(), perm );
+    }
+}
+
+typedef void (* t_action)( AccessControl &, Any const & arg );
+
+//==================================================================================================
+class Action
+    : public WeakImplHelper1< security::XAction >
+{
+    t_action m_action;
+    AccessControl & m_ac;
+    Any m_arg;
+
+public:
+    inline Action( t_action action, AccessControl & ac, Any const & arg = Any() ) SAL_THROW( () )
+        : m_action( action )
+        , m_ac( ac )
+        , m_arg( arg )
+        {}
+
+    // XAction impl
+    virtual Any SAL_CALL run()
+        throw (Exception);
+};
+//__________________________________________________________________________________________________
+Any Action::run()
+    throw (Exception)
+{
+    (*m_action)( m_ac, m_arg );
+    return Any();
+}
+
+//==================================================================================================
+static void restr_file_permissions( AccessControl & ac )
+{
+    // running in dbo's domain
+    /* permission com.sun.star.io.FilePermission "file:///home/dbo/-", ",,read , write "; */
+    CHECK( ac.checkFilePermission( OUSTR("file:///home/dbo/bla"), OUSTR("read,write,execute") ), true );
+    CHECK( ac.checkFilePermission( OUSTR("file:///home/dbo/bla"), OUSTR("read,write") ), false );
+}
+//==================================================================================================
+static void all_dbo_permissions( AccessControl & ac, Any const & )
+{
+    check_dbo_pos( ac );
+    check_dbo_neg( ac );
+}
+//==================================================================================================
+static void no_permissions( AccessControl & ac, Any const & arg )
+{
+    check_dbo_pos( ac, true );
+    check_dbo_neg( ac );
+    // set privs to old dbo restr
+    Reference< security::XAccessControlContext > xContext;
+    OSL_VERIFY( arg >>= xContext );
+    ac->doPrivileged(
+        new Action( all_dbo_permissions, ac ),
+        xContext );
+}
+//==================================================================================================
+static void check_dbo_dynamic( AccessControl & ac )
+{
+    Any arg( makeAny( ac->getContext() ) );
+    ac->doRestricted(
+        new Action( no_permissions, ac, arg ),
+        new acc_Restr() );
+}
+
+//==================================================================================================
 int SAL_CALL main( int argc, char * argv [] )
 {
     try
@@ -405,6 +497,7 @@ int SAL_CALL main( int argc, char * argv [] )
         AccessControl ac( xContext );
         check_dbo_pos( ac );
         check_dbo_neg( ac );
+        check_dbo_dynamic( ac );
         ::fprintf( stderr, "dbo checked.\n" );
         }
 
@@ -420,6 +513,7 @@ int SAL_CALL main( int argc, char * argv [] )
         ::fprintf( stderr, "[security test] multi-user checking dbo..." );
         check_dbo_pos( ac );
         check_dbo_neg( ac );
+        check_dbo_dynamic( ac );
         ::fprintf( stderr, "dbo checked.\n" );
         }
         {
