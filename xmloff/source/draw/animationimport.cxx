@@ -1,0 +1,1509 @@
+/*************************************************************************
+ *
+ *  $RCSfile: animationimport.cxx,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2004-11-26 19:31:14 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include <tools/debug.hxx>
+
+#ifndef __COMPHELPER_UNOINTERFACETOUNIQUEIDENTIFIERMAPPER__
+#include "unointerfacetouniqueidentifiermapper.hxx"
+#endif
+
+#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
+#include <com/sun/star/lang/XInitialization.hpp>
+#endif
+#ifndef _COM_SUN_STAR_ANIMATIONS_ANIMATIONTRANSFORMTYPE_HPP_
+#include <com/sun/star/animations/AnimationTransformType.hpp>
+#endif
+#ifndef _COM_SUN_STAR_ANIMATIONS_XANIMATIONNODESUPPLIER_HPP_
+#include <com/sun/star/animations/XAnimationNodeSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_PRESENTATION_ANIMATIONEFFECT_HPP_
+#include <com/sun/star/presentation/AnimationEffect.hpp>
+#endif
+#ifndef _COM_SUN_STAR_PRESENTATION_ANIMATIONSPEED_HPP_
+#include <com/sun/star/presentation/AnimationSpeed.hpp>
+#endif
+#ifndef _COM_SUN_STAR_ANIMATIONS_ANIMATIONNODETYPE_HPP_
+#include <com/sun/star/animations/AnimationNodeType.hpp>
+#endif
+#ifndef _COM_SUN_STAR_ANIMATIONS_XITERATECONTAINER_HPP_
+#include <com/sun/star/animations/XIterateContainer.hpp>
+#endif
+#ifndef _COM_SUN_STAR_ANIMATIONS_XANIMATEMOTION_HPP_
+#include <com/sun/star/animations/XAnimateMotion.hpp>
+#endif
+#ifndef _COM_SUN_STAR_ANIMATIONS_XANIMATECOLOR_HPP_
+#include <com/sun/star/animations/XAnimateColor.hpp>
+#endif
+#ifndef _COM_SUN_STAR_ANIMATIONS_XANIMATETRANSFORM_HPP_
+#include <com/sun/star/animations/XAnimateTransform.hpp>
+#endif
+#ifndef _COM_SUN_STAR_ANIMATIONS_XTRANSITIONFILTER_HPP_
+#include <com/sun/star/animations/XTransitionFilter.hpp>
+#endif
+#ifndef _COM_SUN_STAR_ANIMATIONS_XCOMMAND_HPP_
+#include <com/sun/star/animations/XCommand.hpp>
+#endif
+#ifndef _COM_SUN_STAR_ANIMATIONS_XAUDIO_HPP_
+#include <com/sun/star/animations/XAudio.hpp>
+#endif
+#ifndef _COM_SUN_STAR_ANIMATIONS_VALUEPAIR_HPP_
+#include <com/sun/star/animations/ValuePair.hpp>
+#endif
+#ifndef _COM_SUN_STAR_ANIMATIONS_ANIMATIONCOLORSPACE_HPP_
+#include <com/sun/star/animations/AnimationColorSpace.hpp>
+#endif
+#ifndef _COM_SUN_STAR_PRESENTATION_EffectPresetClass_HPP_
+#include <com/sun/star/presentation/EffectPresetClass.hpp>
+#endif
+#ifndef _COM_SUN_STAR_ANIMATIONS_TIMING_HPP_
+#include <com/sun/star/animations/Timing.hpp>
+#endif
+#ifndef _COM_SUN_STAR_ANIMATIONS_EVENT_HPP_
+#include <com/sun/star/animations/Event.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+#ifndef _COM_SUN_STAR_XML_SAX_XATTRIBUTELIST_HPP_
+#include <com/sun/star/xml/sax/XAttributeList.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TEXT_XTEXTRANGE_HPP_
+#include <com/sun/star/text/XTextRange.hpp>
+#endif
+#ifndef _COM_SUN_STAR_PRESENTATION_ParagraphTarget_HPP_
+#include <com/sun/star/presentation/ParagraphTarget.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XENUMERATIONACCESS_HPP_
+#include <com/sun/star/container/XEnumerationAccess.hpp>
+#endif
+
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+
+#ifndef _CPPUHELPER_IMPLBASE1_HXX_
+#include <cppuhelper/implbase1.hxx>
+#endif
+
+#include <list>
+
+#ifndef _XMLOFF_XMLTYPES_HXX
+#include "xmltypes.hxx"
+#endif
+#ifndef _SDPROPLS_HXX
+#include "sdpropls.hxx"
+#endif
+
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include "xmltoken.hxx"
+#endif
+#ifndef _XMLOFF_XMLIMP_HXX
+#include "xmlimp.hxx"
+#endif
+#ifndef _XMLOFF_XMLNMSPE_HXX
+#include "xmlnmspe.hxx"
+#endif
+#ifndef _XMLOFF_XMLUCONV_HXX
+#include "xmluconv.hxx"
+#endif
+#ifndef _OSL_MUTEX_HXX_
+#include <osl/mutex.hxx>
+#endif
+#ifndef _XMLOFF_NMSPMAP_HXX
+#include "nmspmap.hxx"
+#endif
+
+#ifndef _XMLOFF_ANIM_HXX
+#include "anim.hxx"
+#endif
+
+#include "animations.hxx"
+
+#ifndef _XMLOFF_ANIMATIONIMPORT_HXX
+#include "animationimport.hxx"
+#endif
+
+using namespace ::rtl;
+using namespace ::std;
+using namespace ::cppu;
+using namespace ::com::sun::star::animations;
+using namespace ::com::sun::star::presentation;
+using namespace ::com::sun::star::drawing;
+using namespace ::xmloff::token;
+
+using ::com::sun::star::xml::sax::XAttributeList;
+using ::com::sun::star::uno::Any;
+using ::com::sun::star::uno::makeAny;
+using ::com::sun::star::uno::UNO_QUERY;
+using ::com::sun::star::uno::UNO_QUERY_THROW;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::Sequence;
+using ::com::sun::star::uno::RuntimeException;
+using ::com::sun::star::uno::Exception;
+using ::com::sun::star::uno::XInterface;
+using ::com::sun::star::uno::Type;
+using ::com::sun::star::beans::NamedValue;
+using ::com::sun::star::text::XTextRange;
+using ::com::sun::star::container::XEnumerationAccess;
+using ::com::sun::star::container::XEnumeration;
+using ::com::sun::star::lang::XMultiServiceFactory;
+using ::com::sun::star::lang::XInitialization;
+
+namespace xmloff
+{
+
+///////////////////////////////////////////////////////////////////////
+
+
+
+///////////////////////////////////////////////////////////////////////
+
+
+///////////////////////////////////////////////////////////////////////
+
+class AnimationsImportHelperImpl
+{
+private:
+    SvXMLTokenMap* mpAnimationNodeTokenMap;
+    SvXMLTokenMap* mpAnimationNodeAttributeTokenMap;
+
+    SvXMLImport& mrImport;
+public:
+    AnimationsImportHelperImpl( SvXMLImport& rImport );
+    ~AnimationsImportHelperImpl();
+
+    const SvXMLTokenMap& getAnimationNodeTokenMap();
+    const SvXMLTokenMap& getAnimationNodeAttributeTokenMap();
+
+    Any convertValue( XMLTokenEnum eAttributeName, const OUString& rValue );
+    Sequence< Any > convertValueSequence( XMLTokenEnum eAttributeName, const OUString& rValue );
+
+    Any convertTarget( const OUString& rValue );
+    Any convertPath( const OUString& rValue );
+    Any convertTiming( const OUString& rValue );
+    Sequence< double > convertKeyTimes( const OUString& rValue );
+    Sequence< TimeFilterPair > convertTimeFilter( const OUString& rValue );
+
+    bool convertAnimationValue( XMLTokenEnum eAttributeName, Any& rValue );
+};
+
+AnimationsImportHelperImpl::AnimationsImportHelperImpl( SvXMLImport& rImport )
+:   mrImport( rImport ),
+    mpAnimationNodeTokenMap( NULL ),
+    mpAnimationNodeAttributeTokenMap( NULL )
+{
+}
+
+AnimationsImportHelperImpl::~AnimationsImportHelperImpl()
+{
+    delete mpAnimationNodeTokenMap;
+    delete mpAnimationNodeAttributeTokenMap;
+}
+
+const SvXMLTokenMap& AnimationsImportHelperImpl::getAnimationNodeTokenMap()
+{
+    if( mpAnimationNodeTokenMap == NULL )
+    {
+        static __FAR_DATA SvXMLTokenMapEntry aAnimationNodeTokenMap[] =
+        {
+            { XML_NAMESPACE_ANIMATION,  XML_PAR,                (sal_uInt16)AnimationNodeType::PAR },
+            { XML_NAMESPACE_ANIMATION,  XML_SEQ,                (sal_uInt16)AnimationNodeType::SEQ },
+            { XML_NAMESPACE_ANIMATION,  XML_ITERATE,            (sal_uInt16)AnimationNodeType::ITERATE },
+            { XML_NAMESPACE_ANIMATION,  XML_ANIMATE,            (sal_uInt16)AnimationNodeType::ANIMATE },
+            { XML_NAMESPACE_ANIMATION,  XML_SET,                (sal_uInt16)AnimationNodeType::SET },
+            { XML_NAMESPACE_ANIMATION,  XML_ANIMATEMOTION,      (sal_uInt16)AnimationNodeType::ANIMATEMOTION },
+            { XML_NAMESPACE_ANIMATION,  XML_ANIMATECOLOR,       (sal_uInt16)AnimationNodeType::ANIMATECOLOR },
+            { XML_NAMESPACE_ANIMATION,  XML_ANIMATETRANSFORM,   (sal_uInt16)AnimationNodeType::ANIMATETRANSFORM },
+            { XML_NAMESPACE_ANIMATION,  XML_TRANSITIONFILTER,   (sal_uInt16)AnimationNodeType::TRANSITIONFILTER },
+            { XML_NAMESPACE_ANIMATION,  XML_AUDIO,              (sal_uInt16)AnimationNodeType::AUDIO },
+            { XML_NAMESPACE_ANIMATION,  XML_COMMAND,            (sal_uInt16)AnimationNodeType::COMMAND },
+            XML_TOKEN_MAP_END
+        };
+
+        mpAnimationNodeTokenMap = new SvXMLTokenMap( aAnimationNodeTokenMap );
+    }
+
+    return *mpAnimationNodeTokenMap;
+}
+
+enum AnimationNodeAttributes
+{
+    ANA_Begin,
+    ANA_Dur,
+    ANA_End,
+    ANA_Fill,
+    ANA_FillDefault,
+    ANA_Restart,
+    ANA_RestartDefault,
+    ANA_Accelerate,
+    ANA_Decelerate,
+    ANA_AutoReverse,
+    ANA_RepeatCount,
+    ANA_RepeatDur,
+    ANA_EndSync,
+    ANA_Node_Type,
+    ANA_Preset_ID,
+    ANA_Preset_Sub_Type,
+    ANA_Preset_Class,
+    ANA_After_Effect,
+    ANA_Target,
+    ANA_XLink,
+    ANA_MasterElement,
+    ANA_SubItem,
+    ANA_AttributeName,
+    ANA_Values,
+    ANA_From,
+    ANA_By,
+    ANA_To,
+    ANA_KeyTimes,
+    ANA_CalcMode,
+    ANA_Accumulate,
+    ANA_AdditiveMode,
+    ANA_KeySplines,
+    ANA_Path,
+    ANA_ColorSpace,
+    ANA_ColorDirection,
+    ANA_TransformType,
+    ANA_TransitionType,
+    ANA_TransitionSubType,
+    ANA_Mode,
+    ANA_Direction,
+    ANA_FadeColor,
+    ANA_IterateType,
+    ANA_IterateInterval,
+    ANA_Formula,
+    ANA_ID,
+    ANA_Group_Id,
+    ANA_Command,
+    ANA_Volume
+};
+
+const SvXMLTokenMap& AnimationsImportHelperImpl::getAnimationNodeAttributeTokenMap()
+{
+    if( mpAnimationNodeAttributeTokenMap == NULL )
+    {
+        static __FAR_DATA SvXMLTokenMapEntry aAnimationNodeAttributeTokenMap[] =
+        {
+            { XML_NAMESPACE_SMIL, XML_BEGIN,                    (sal_uInt16)ANA_Begin },
+            { XML_NAMESPACE_SMIL, XML_DUR,                      (sal_uInt16)ANA_Dur },
+            { XML_NAMESPACE_SMIL, XML_END,                      (sal_uInt16)ANA_End },
+            { XML_NAMESPACE_SMIL, XML_FILL,                     (sal_uInt16)ANA_Fill },
+            { XML_NAMESPACE_SMIL, XML_FILLDEFAULT,              (sal_uInt16)ANA_FillDefault },
+            { XML_NAMESPACE_SMIL, XML_RESTART,                  (sal_uInt16)ANA_Restart },
+            { XML_NAMESPACE_SMIL, XML_RESTARTDEFAULT,           (sal_uInt16)ANA_RestartDefault },
+            { XML_NAMESPACE_SMIL, XML_ACCELERATE,               (sal_uInt16)ANA_Accelerate },
+            { XML_NAMESPACE_SMIL, XML_DECELERATE,               (sal_uInt16)ANA_Decelerate },
+            { XML_NAMESPACE_SMIL, XML_AUTOREVERSE,              (sal_uInt16)ANA_AutoReverse },
+            { XML_NAMESPACE_SMIL, XML_REPEATCOUNT,              (sal_uInt16)ANA_RepeatCount },
+            { XML_NAMESPACE_SMIL, XML_REPEATDUR,                (sal_uInt16)ANA_RepeatDur },
+            { XML_NAMESPACE_SMIL, XML_ENDSYNC,                  (sal_uInt16)ANA_EndSync },
+            { XML_NAMESPACE_PRESENTATION, XML_NODE_TYPE,        (sal_uInt16)ANA_Node_Type },
+            { XML_NAMESPACE_PRESENTATION, XML_PRESET_ID,        (sal_uInt16)ANA_Preset_ID },
+            { XML_NAMESPACE_PRESENTATION, XML_PRESET_SUB_TYPE,  (sal_uInt16)ANA_Preset_Sub_Type },
+            { XML_NAMESPACE_PRESENTATION, XML_PRESET_CLASS,     (sal_uInt16)ANA_Preset_Class },
+            { XML_NAMESPACE_PRESENTATION, XML_AFTER_EFFECT,     (sal_uInt16)ANA_After_Effect },
+            { XML_NAMESPACE_SMIL, XML_TARGETELEMENT,            (sal_uInt16)ANA_Target },
+            { XML_NAMESPACE_XLINK, XML_HREF,                    (sal_uInt16)ANA_XLink },
+            { XML_NAMESPACE_PRESENTATION, XML_MASTER_ELEMENT,   (sal_uInt16)ANA_MasterElement },
+            { XML_NAMESPACE_ANIMATION, XML_SUB_ITEM,            (sal_uInt16)ANA_SubItem },
+            { XML_NAMESPACE_SMIL, XML_ATTRIBUTENAME,            (sal_uInt16)ANA_AttributeName },
+            { XML_NAMESPACE_SMIL, XML_VALUES,                   (sal_uInt16)ANA_Values },
+            { XML_NAMESPACE_SMIL, XML_FROM,                     (sal_uInt16)ANA_From },
+            { XML_NAMESPACE_SMIL, XML_BY,                       (sal_uInt16)ANA_By },
+            { XML_NAMESPACE_SMIL, XML_TO,                       (sal_uInt16)ANA_To },
+            { XML_NAMESPACE_SMIL, XML_KEYTIMES,                 (sal_uInt16)ANA_KeyTimes },
+            { XML_NAMESPACE_SMIL, XML_CALCMODE,                 (sal_uInt16)ANA_CalcMode },
+            { XML_NAMESPACE_SMIL, XML_ACCUMULATE,               (sal_uInt16)ANA_Accumulate },
+            { XML_NAMESPACE_PRESENTATION, XML_ADDITIVE,         (sal_uInt16)ANA_AdditiveMode },
+            { XML_NAMESPACE_SMIL, XML_KEYSPLINES,               (sal_uInt16)ANA_KeySplines },
+            { XML_NAMESPACE_SVG, XML_PATH,                      (sal_uInt16)ANA_Path },
+            { XML_NAMESPACE_ANIMATION, XML_COLOR_INTERPOLATION, (sal_uInt16)ANA_ColorSpace },
+            { XML_NAMESPACE_ANIMATION, XML_COLOR_INTERPOLATION_DIRECTION,       (sal_uInt16)ANA_ColorDirection },
+            { XML_NAMESPACE_SVG, XML_TYPE,                      (sal_uInt16)ANA_TransformType },
+            { XML_NAMESPACE_SMIL, XML_TYPE,                     (sal_uInt16)ANA_TransitionType },
+            { XML_NAMESPACE_SMIL, XML_SUBTYPE,                  (sal_uInt16)ANA_TransitionSubType },
+            { XML_NAMESPACE_SMIL, XML_MODE,                     (sal_uInt16)ANA_Mode },
+            { XML_NAMESPACE_SMIL, XML_DIRECTION,                (sal_uInt16)ANA_Direction },
+            { XML_NAMESPACE_SMIL, XML_FADECOLOR,                (sal_uInt16)ANA_FadeColor },
+            { XML_NAMESPACE_ANIMATION, XML_ITERATE_TYPE,        (sal_uInt16)ANA_IterateType },
+            { XML_NAMESPACE_ANIMATION, XML_ITERATE_INTERVAL,    (sal_uInt16)ANA_IterateInterval },
+            { XML_NAMESPACE_ANIMATION, XML_FORMULA,             (sal_uInt16)ANA_Formula },
+            { XML_NAMESPACE_ANIMATION, XML_ID,                  (sal_uInt16)ANA_ID },
+            { XML_NAMESPACE_PRESENTATION, XML_GROUP_ID,         (sal_uInt16)ANA_Group_Id },
+            { XML_NAMESPACE_ANIMATION, XML_AUDIO_LEVEL,         (sal_uInt16)ANA_Volume },
+            { XML_NAMESPACE_ANIMATION, XML_COMMAND,             (sal_uInt16)ANA_Command },
+
+            XML_TOKEN_MAP_END
+        };
+
+        mpAnimationNodeAttributeTokenMap = new SvXMLTokenMap( aAnimationNodeAttributeTokenMap );
+    }
+
+    return *mpAnimationNodeAttributeTokenMap;
+}
+
+static bool isDouble( const OUString& rValue )
+{
+    sal_Int32 nLength = rValue.getLength();
+    const sal_Unicode * pStr = rValue.getStr();
+    while( nLength )
+    {
+        if( (*pStr >= '0' && *pStr <= '9') || *pStr == '-' || *pStr == '.' || *pStr == '+' || *pStr == 'e' || *pStr == 'E' )
+        {
+            pStr++;
+            nLength--;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+static bool isTime( const OUString& rValue )
+{
+    sal_Int32 nLength = rValue.getLength();
+    const sal_Unicode * pStr;
+    for( pStr = rValue.getStr(); nLength; pStr++, nLength-- )
+    {
+        if( !( (*pStr >= '0' && *pStr <= '9') || *pStr == '-' || *pStr == '.' || *pStr == '+' || *pStr == 'e' || *pStr == 'E' ) )
+            break;
+    }
+
+    // return true if this is a double (if someone forgot the 's' we silently ignore it)
+    // or if its a double that ends with a 's' or 'S'
+    return (nLength == 0) || ((*pStr == 's' || *pStr == 'S') && (nLength == 1));
+}
+
+static sal_Int32 count_codes( const OUString& rString, sal_Unicode nCode )
+{
+    sal_Int32 nCount = 0;
+    sal_Int32 fromIndex = 0;
+
+    while(true)
+    {
+        fromIndex = rString.indexOf( nCode, fromIndex );
+        if( fromIndex == -1 )
+            break;
+
+        fromIndex++;
+        nCount++;
+    }
+
+    return nCount;
+}
+
+Any AnimationsImportHelperImpl::convertTarget( const OUString& rValue )
+{
+    try
+    {
+        Reference< XInterface > xRef( mrImport.getInterfaceToIdentifierMapper().getReference( rValue ) );
+
+        Reference< XShape > xShape( xRef, UNO_QUERY );
+        if( xShape.is() )
+            return makeAny( xShape );
+
+        Reference< XTextRange > xTextRange( xRef, UNO_QUERY );
+        if( xTextRange.is() )
+        {
+            Reference< XShape > xShape( xTextRange->getText(), UNO_QUERY_THROW );
+
+            Reference< XEnumerationAccess > xParaEnumAccess( xShape, UNO_QUERY_THROW );
+            Reference< XEnumeration > xEnumeration( xParaEnumAccess->createEnumeration(), UNO_QUERY_THROW );
+            sal_Int16 nParagraph = 0;
+
+            while( xEnumeration->hasMoreElements() )
+            {
+                Reference< XTextRange > xRef( xEnumeration->nextElement(), UNO_QUERY );
+                if( xRef == xTextRange )
+                {
+                    return makeAny( ParagraphTarget( xShape, nParagraph ) );
+                }
+
+                nParagraph++;
+            }
+        }
+    }
+    catch( RuntimeException& )
+    {
+        DBG_ERROR( "xmloff::AnimationsImportImpl::convertTarget(), RuntimeException catched!" );
+    }
+
+    Any aAny;
+    return aAny;
+}
+
+Any AnimationsImportHelperImpl::convertValue( XMLTokenEnum eAttributeName, const OUString& rValue )
+{
+    sal_Int32 nPos = rValue.indexOf( ',' );
+    if( nPos >= 0 )
+    {
+        ValuePair aPair;
+        aPair.First = convertValue( eAttributeName, rValue.copy( 0, nPos ) );
+        aPair.Second = convertValue( eAttributeName, rValue.copy( nPos+1, rValue.getLength() - nPos - 1 ) );
+        return makeAny( aPair );
+    }
+    else
+    {
+        Any aAny;
+        sal_Int32 nType;
+
+        if( rValue.getLength() ) switch( eAttributeName )
+        {
+        case XML_X:
+        case XML_Y:
+        case XML_WIDTH:
+        case XML_HEIGHT:
+        case XML_TRANSLATE:
+        {
+/*
+            OUString aString( rValue );
+
+            const sal_Char* pSource[] = { "$x", "$y", "$width", "$height", NULL };
+            const sal_Char* pDest[] = { "$X", "$Y", "$Width", "$Height", NULL };
+            const sal_Int32 nLength[] = { 2, 2, 6, 7, 0 };
+
+            sal_Int32 nIndex = 0;
+            while( (nIndex = aString.indexOf( (sal_Unicode)'$', nIndex )) != -1  )
+            {
+                const sal_Char** ps = pSource;
+                const sal_Char** pd = pDest;
+                const sal_Int32* pl = nLength;
+
+                while( *ps )
+                {
+                    if( aString.matchAsciiL( *ps, *pl, nIndex ) )
+                    {
+                        const OUString aNew( OUString::createFromAscii( *pd ) );
+                        aString = aString.replaceAt( nIndex, *pl, aNew );
+                        break;
+                    }
+
+                    ps++;
+                    pd++;
+                    pl++;
+                }
+
+                if( *ps == 0 )
+                    nIndex++;
+            }
+
+            return makeAny( aString );
+*/
+            return makeAny( rValue );
+        }
+
+        case XML_SCALE:
+        case XML_SKEWY:
+        case XML_SKEWX:
+        case XML_OPACITY:
+        case XML_ROTATE:            nType = XML_TYPE_DOUBLE;                    break;
+        case XML_TEXT_ROTATION_ANGLE:nType = XML_TYPE_TEXT_ROTATION_ANGLE;      break;
+        case XML_FILL_COLOR:
+        case XML_STROKE_COLOR:
+        case XML_DIM:
+        case XML_COLOR:             nType = XML_TYPE_COLOR;                     break;
+        case XML_FILL:              nType = XML_SD_TYPE_FILLSTYLE;              break;
+        case XML_STROKE:            nType = XML_SD_TYPE_STROKE;                 break;
+        case XML_FONT_WEIGHT:       nType = XML_TYPE_TEXT_WEIGHT;               break;
+        case XML_FONT_STYLE:        nType = XML_TYPE_TEXT_POSTURE;              break;
+        case XML_TEXT_UNDERLINE:    nType = XML_TYPE_TEXT_UNDERLINE_STYLE;      break;
+        case XML_FONT_SIZE:         nType = XML_TYPE_CHAR_HEIGHT;               break;
+        case XML_VISIBILITY:        nType = XML_SD_TYPE_PRESPAGE_VISIBILITY;    break;
+
+        default:
+            if( rValue.getLength() )
+                aAny <<= rValue;
+            return aAny;
+        }
+
+        const XMLPropertyHandler* pHandler = mrImport.GetShapeImport()->GetSdPropHdlFactory()->GetPropertyHandler( nType );
+        if( pHandler )
+            pHandler->importXML( rValue, aAny, mrImport.GetMM100UnitConverter() );
+
+        return aAny;
+
+/*
+        if( rValue.getLength() == 0 )
+        {
+            Any aAny;
+            return aAny;
+        }
+        else if( rValue.indexOf( '#' ) == 0 )
+        {
+            // color
+            Color aColor;
+            SvXMLUnitConverter::convertColor( aColor, rValue );
+
+            return makeAny( static_cast< sal_Int32 >( aColor.GetRGBColor() ) );
+        }
+        else if( rValue.indexOf( '$' ) != -1 )
+        {
+            // formula
+            return makeAny( rValue );
+        }
+        else
+        {
+            if( isDouble( rValue ) )
+            {
+                return makeAny( rValue.toDouble() );
+            }
+            else
+            {
+                return makeAny( rValue );
+            }
+        }
+*/
+    }
+}
+
+Sequence< Any > AnimationsImportHelperImpl::convertValueSequence( XMLTokenEnum eAttributeName, const OUString& rValue )
+{
+    Sequence< Any > aValues;
+
+    // do we have any value at all?
+    if( rValue.getLength() )
+    {
+        sal_Int32 nElements = count_codes( rValue, (sal_Unicode)';') + 1; // a non empty string has at least one value
+
+        // prepare the sequence
+        aValues.realloc( nElements );
+
+        // fill the sequence
+        Any* pValues = aValues.getArray();
+        sal_Int32 nIndex, nElement;
+        for( nIndex = 0, nElement = 0; nElements && (nIndex >= 0); nElements-- )
+        {
+            *pValues++ = convertValue( eAttributeName, rValue.getToken( 0, ';', nIndex ) );
+        }
+    }
+
+    return aValues;
+}
+
+Any AnimationsImportHelperImpl::convertTiming( const OUString& rValue )
+{
+    Any aAny;
+
+    // do we have any value at all?
+    if( rValue.getLength() )
+    {
+        // count the values
+        sal_Int32 nElements = count_codes( rValue, (sal_Unicode)';' ) + 1; // a non empty string has at least one value
+
+        if( nElements == 1 )
+        {
+            if( IsXMLToken( rValue, XML_MEDIA ) )
+            {
+                aAny <<= Timing_MEDIA;
+            }
+            else if( IsXMLToken( rValue, XML_INDEFINITE ) )
+            {
+                aAny <<= Timing_INDEFINITE;
+            }
+            else if( isTime( rValue ) )
+            {
+                aAny <<= rValue.toDouble();
+            }
+            else
+            {
+                Event aEvent;
+                aEvent.Repeat = 0;
+                aEvent.Trigger = 0;
+
+                OUString aEventTrigger;
+
+                sal_Int32 nPos = rValue.indexOf( (sal_Unicode)'+' );
+                if( nPos == -1 )
+                {
+                    aEventTrigger = rValue;
+                }
+                else
+                {
+                    aEventTrigger = rValue.copy( 0, nPos );
+
+                    // convert offset
+                    aEvent.Offset <<= convertTiming( rValue.copy( nPos + 1 ) );
+                }
+
+                nPos = aEventTrigger.indexOf( (sal_Unicode)'.' );
+                if( nPos != -1 )
+                {
+                    aEvent.Source <<= mrImport.getInterfaceToIdentifierMapper().getReference( aEventTrigger.copy( 0, nPos ) );
+                    aEventTrigger = aEventTrigger.copy( nPos + 1 );
+                }
+
+                sal_uInt16 nEnum;
+                if( SvXMLUnitConverter::convertEnum( nEnum, aEventTrigger, getAnimationsEnumMap(Animations_EnumMap_EventTrigger) ) )
+                {
+                    aEvent.Trigger = (sal_Int16)nEnum;
+                }
+                else
+                {
+                    DBG_ERROR("AnimationsImportHelperImpl::convertTiming(), unknown event trigger!");
+                }
+
+                aAny <<= aEvent;
+            }
+        }
+        else
+        {
+            // fill the sequence
+            Sequence< Any > aValues( nElements );
+            Any* pValues = aValues.getArray();
+            sal_Int32 nIndex = 0;
+            while( (nElements--) && (nIndex >= 0) )
+                *pValues++ = convertTiming( rValue.getToken( 0, ';', nIndex ) );
+
+            aAny <<= aValues;
+        }
+    }
+    return aAny;
+}
+
+Sequence< double > AnimationsImportHelperImpl::convertKeyTimes( const OUString& rValue )
+{
+    sal_Int32 nElements = 0;
+
+    if( rValue.getLength() )
+        nElements = count_codes( rValue, (sal_Unicode)';' ) + 1; // a non empty string has at least one value
+
+    Sequence< double > aKeyTimes( nElements );
+
+    if( nElements )
+    {
+        double* pValues = aKeyTimes.getArray();
+        sal_Int32 nIndex = 0;
+        while( (nElements--) && (nIndex >= 0) )
+            *pValues++ = rValue.getToken( 0, ';', nIndex ).toDouble();
+    }
+
+    return aKeyTimes;
+}
+
+Sequence< TimeFilterPair > AnimationsImportHelperImpl::convertTimeFilter( const OUString& rValue )
+{
+    sal_Int32 nElements = 0;
+
+    if( rValue.getLength() )
+        nElements = count_codes( rValue, (sal_Unicode)';' ) + 1; // a non empty string has at least one value
+
+    Sequence< TimeFilterPair > aTimeFilter( nElements );
+
+    if( nElements )
+    {
+        TimeFilterPair* pValues = aTimeFilter.getArray();
+        sal_Int32 nIndex = 0;
+        while( (nElements--) && (nIndex >= 0) )
+        {
+            const OUString aToken( rValue.getToken( 0, ';', nIndex ) );
+
+            sal_Int32 nPos = aToken.indexOf( ',' );
+            if( nPos >= 0 )
+            {
+                pValues->Time = aToken.copy( 0, nPos ).toDouble();
+                pValues->Progress = aToken.copy( nPos+1, aToken.getLength() - nPos - 1 ).toDouble();
+            }
+            pValues++;
+        }
+    }
+
+    return aTimeFilter;
+}
+
+Any AnimationsImportHelperImpl::convertPath( const OUString& rValue )
+{
+    return makeAny( rValue );
+}
+
+///////////////////////////////////////////////////////////////////////
+
+TYPEINIT1( AnimationNodeContext, SvXMLImportContext );
+
+AnimationNodeContext::AnimationNodeContext(
+        const Reference< XAnimationNode >& xParentNode,
+        SvXMLImport& rImport, sal_uInt16 nPrfx, const rtl::OUString& rLocalName,
+        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
+        AnimationsImportHelperImpl* pHelper /* = NULL */ )
+:   SvXMLImportContext(rImport, nPrfx, rLocalName),
+    mpHelper( pHelper ),
+    mbRootContext( pHelper == NULL )
+{
+    try
+    {
+        if( mbRootContext )
+        {
+            mpHelper = new AnimationsImportHelperImpl( rImport );
+            mxNode = xParentNode;
+        }
+        else
+        {
+            Reference< XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
+
+            sal_Int16 nPresetClass = EffectPresetClass::CUSTOM;
+
+            const sal_Char* pServiceName = 0;
+
+            sal_Int16 nNodeType = (sal_Int16)mpHelper->getAnimationNodeTokenMap().Get( nPrfx, rLocalName );
+            switch( nNodeType )
+            {
+            case AnimationNodeType::SEQ:                pServiceName = "com.sun.star.animations.SequenceTimeContainer"; break;
+            case AnimationNodeType::ITERATE:            pServiceName = "com.sun.star.animations.IterateContainer"; break;
+            case AnimationNodeType::ANIMATE:            pServiceName = "com.sun.star.animations.Animate"; break;
+            case AnimationNodeType::SET:                pServiceName = "com.sun.star.animations.AnimateSet"; break;
+            case AnimationNodeType::ANIMATEMOTION:      pServiceName = "com.sun.star.animations.AnimateMotion"; break;
+            case AnimationNodeType::ANIMATECOLOR:       pServiceName = "com.sun.star.animations.AnimateColor"; break;
+            case AnimationNodeType::ANIMATETRANSFORM:   pServiceName = "com.sun.star.animations.AnimateTransform"; break;
+            case AnimationNodeType::TRANSITIONFILTER:   pServiceName = "com.sun.star.animations.TransitionFilter"; break;
+            case AnimationNodeType::AUDIO:              pServiceName = "com.sun.star.animations.Audio"; break;
+            case AnimationNodeType::COMMAND:            pServiceName = "com.sun.star.animations.Command"; break;
+            case AnimationNodeType::PAR:
+                {
+                    const sal_Int16 nCount = xAttrList.is() ? xAttrList->getLength() : 0;
+                    sal_Int16 nAttribute;
+                    for( nAttribute = 0; nAttribute < nCount; nAttribute++ )
+                    {
+                        OUString aLocalName;
+                        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( xAttrList->getNameByIndex( nAttribute ), &aLocalName );
+                        if( (nPrefix == XML_NAMESPACE_PRESENTATION) && IsXMLToken( aLocalName, XML_PRESET_ID ) )
+                        {
+                            const OUString& rValue = xAttrList->getValueByIndex( nAttribute );
+                            if( rValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ooo-entrance-random" ) ) )
+                            {
+                                nPresetClass = EffectPresetClass::ENTRANCE;
+                            }
+                            else if( rValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ooo-exit-random" ) ) )
+                            {
+                                nPresetClass = EffectPresetClass::EXIT;
+                            }
+
+                            if( nPresetClass != EffectPresetClass::CUSTOM )
+                            {
+                                pServiceName = "com.sun.star.comp.sd.RandomAnimationNode";
+                                break;
+                            }
+                        }
+                    }
+                    if( !pServiceName )
+                        pServiceName = "com.sun.star.animations.ParallelTimeContainer";
+                }
+                break;
+            default:
+                pServiceName = 0;
+            }
+
+            if( pServiceName && xFactory.is() )
+            {
+                mxNode = Reference< XAnimationNode >( xFactory->createInstance(
+                    OUString::createFromAscii(pServiceName) ), UNO_QUERY_THROW );
+
+                if( nPresetClass != EffectPresetClass::CUSTOM )
+                {
+                    Reference< XInitialization > xInit( mxNode, UNO_QUERY_THROW );
+                    const Any aAny( makeAny( nPresetClass ) );
+                    Sequence< Any > aArgs( &aAny, 1 ) ;
+                    xInit->initialize( aArgs );
+                }
+
+                Reference< XTimeContainer > xParentContainer( xParentNode, UNO_QUERY_THROW );
+                xParentContainer->appendChild( mxNode );
+            }
+        }
+    }
+    catch( RuntimeException& )
+    {
+        DBG_ERROR( "xmloff::AnimationsImportImpl::AnimationsImportImpl(), RuntimeException catched!" );
+    }
+}
+
+AnimationNodeContext::~AnimationNodeContext()
+{
+    if( mbRootContext )
+        delete mpHelper;
+}
+
+void AnimationNodeContext::StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList )
+{
+    if( mxNode.is() ) try
+    {
+        const sal_Int16 nNodeType = mxNode->getType();
+
+        // query for optional interfaces that are often used later
+        Reference< XAnimate > xAnimate( mxNode, UNO_QUERY );
+        Reference< XTransitionFilter > xTransitionFilter( mxNode, UNO_QUERY );
+        Reference< XIterateContainer > xIter( mxNode, UNO_QUERY );
+
+        std::list< NamedValue > aUserData;
+        XMLTokenEnum meAttributeName = XML_TOKEN_INVALID;
+        OUString aFrom, aBy, aTo, aValues;
+
+        const SvXMLTokenMap& rTokenMap = mpHelper->getAnimationNodeAttributeTokenMap();
+        const sal_Int16 nCount = xAttrList.is() ? xAttrList->getLength() : 0;
+        sal_uInt16 nEnum;
+        sal_Int16 nAttribute;
+        for( nAttribute = 0; nAttribute < nCount; nAttribute++ )
+        {
+            const OUString& rAttrName = xAttrList->getNameByIndex( nAttribute );
+            const OUString& rValue = xAttrList->getValueByIndex( nAttribute );
+
+            OUString aLocalName;
+            sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName, &aLocalName );
+            switch( mpHelper->getAnimationNodeAttributeTokenMap().Get( nPrefix, aLocalName ) )
+            {
+            case ANA_Begin:
+            {
+                mxNode->setBegin( mpHelper->convertTiming( rValue ) );
+            }
+            break;
+            case ANA_Dur:
+            {
+                mxNode->setDuration( mpHelper->convertTiming( rValue ) );
+            }
+            break;
+            case ANA_End:
+            {
+                mxNode->setEnd( mpHelper->convertTiming( rValue ) );
+            }
+            break;
+            case ANA_Fill:
+            {
+                if( SvXMLUnitConverter::convertEnum( nEnum, rValue, getAnimationsEnumMap(Animations_EnumMap_Fill) ) )
+                    mxNode->setFill( (sal_Int16)nEnum );
+            }
+            break;
+            case ANA_FillDefault:
+            {
+                if( SvXMLUnitConverter::convertEnum( nEnum, rValue, getAnimationsEnumMap(Animations_EnumMap_FillDefault) ) )
+                    mxNode->setFillDefault( (sal_Int16)nEnum );
+            }
+            break;
+            case ANA_Restart:
+            {
+                if( SvXMLUnitConverter::convertEnum( nEnum, rValue, getAnimationsEnumMap(Animations_EnumMap_Restart) ) )
+                    mxNode->setRestart( (sal_Int16)nEnum );
+            }
+            break;
+            case ANA_RestartDefault:
+            {
+                if( SvXMLUnitConverter::convertEnum( nEnum, rValue, getAnimationsEnumMap(Animations_EnumMap_RestartDefault) ) )
+                    mxNode->setRestartDefault( (sal_Int16)nEnum );
+            }
+            break;
+            case ANA_Accelerate:
+            {
+                if( isDouble( rValue ) )
+                    mxNode->setAcceleration( rValue.toDouble() );
+            }
+            break;
+            case ANA_Decelerate:
+            {
+                if( isDouble( rValue ) )
+                    mxNode->setDecelerate( rValue.toDouble() );
+            }
+            break;
+            case ANA_AutoReverse:
+            {
+                sal_Bool bTemp;
+                if( SvXMLUnitConverter::convertBool( bTemp, rValue ) )
+                    mxNode->setAutoReverse( bTemp  );
+            }
+            break;
+            case ANA_RepeatCount:
+            {
+                mxNode->setRepeatCount( mpHelper->convertTiming( rValue ) );
+            }
+            break;
+            case ANA_RepeatDur:
+            {
+                mxNode->setRepeatDuration( mpHelper->convertTiming( rValue ) );
+            }
+            break;
+            case ANA_EndSync:
+            {
+                if( SvXMLUnitConverter::convertEnum( nEnum, rValue, getAnimationsEnumMap(Animations_EnumMap_Endsync) ) )
+                    mxNode->setEndSync( makeAny( (sal_Int16)nEnum ) );
+            }
+            break;
+            case ANA_Node_Type:
+            {
+                if( SvXMLUnitConverter::convertEnum( nEnum, rValue, getAnimationsEnumMap(Animations_EnumMap_EffectNodeType) ) )
+                    aUserData.push_back( NamedValue( GetXMLToken( XML_NODE_TYPE ), makeAny( (sal_Int16)nEnum ) ) );
+            }
+            break;
+            case ANA_Preset_ID:
+            {
+                aUserData.push_back( NamedValue( GetXMLToken( XML_PRESET_ID ), makeAny( rValue ) ) );
+            }
+            break;
+            case ANA_Preset_Sub_Type:
+            {
+                aUserData.push_back( NamedValue( GetXMLToken( XML_PRESET_SUB_TYPE ), makeAny( rValue ) ) );
+            }
+            break;
+            case ANA_Preset_Class:
+            {
+                if( SvXMLUnitConverter::convertEnum( nEnum, rValue, getAnimationsEnumMap(Animations_EnumMap_EffectPresetClass) ) )
+                    aUserData.push_back( NamedValue( GetXMLToken( XML_PRESET_CLASS ), makeAny( (sal_Int16)nEnum ) ) );
+            }
+            break;
+            case ANA_After_Effect:
+            {
+                sal_Bool bTemp;
+                if( SvXMLUnitConverter::convertBool( bTemp, rValue ) )
+                    aUserData.push_back( NamedValue( GetXMLToken( XML_AFTER_EFFECT ), makeAny( bTemp ) ) );
+            }
+            break;
+            case ANA_XLink:
+            {
+                if( nNodeType == AnimationNodeType::AUDIO )
+                {
+                    Reference< XAudio > xAudio( mxNode, UNO_QUERY_THROW );
+                    xAudio->setSource( makeAny( GetImport().GetAbsoluteReference( rValue ) ) );
+                    break;
+                }
+
+            }
+            // fall through intented!
+            case ANA_Target:
+            {
+                {
+                    Any aTarget( mpHelper->convertTarget( rValue ) );
+
+                    if( xAnimate.is() )
+                    {
+                        xAnimate->setTarget( aTarget );
+                    }
+                    else if( xIter.is() )
+                    {
+                        xIter->setTarget( aTarget );
+                    }
+                }
+            }
+            break;
+
+            case ANA_Volume:
+            {
+                if( nNodeType == AnimationNodeType::AUDIO )
+                {
+                    if( isDouble( rValue ) )
+                    {
+                        Reference< XAudio > xAudio( mxNode, UNO_QUERY_THROW );
+                        xAudio->setVolume( rValue.toDouble() );
+                    }
+                }
+            }
+            break;
+
+            case ANA_MasterElement:
+            {
+                Reference< XAnimationNode > xMaster( GetImport().getInterfaceToIdentifierMapper().getReference( rValue ), UNO_QUERY );
+                aUserData.push_back( NamedValue( GetXMLToken( XML_MASTER_ELEMENT ), makeAny( xMaster ) ) );
+            }
+            break;
+
+            case ANA_SubItem:
+            {
+                if( SvXMLUnitConverter::convertEnum( nEnum, rValue, getAnimationsEnumMap(Animations_EnumMap_SubItem) ) )
+                {
+                    if( xAnimate.is() )
+                    {
+                        xAnimate->setSubItem( (sal_Int16)nEnum );
+                    }
+                    else if( xIter.is() )
+                    {
+                        xIter->setSubItem( (sal_Int16)nEnum );
+                    }
+                }
+            }
+            break;
+
+            case ANA_AttributeName:
+            {
+                if( xAnimate.is() )
+                {
+                    OUString aName( rValue );
+
+                    ImplAttributeNameConversion* p = getAnimationAttributeNamesConversionList();
+                    while( p->mpAPIName )
+                    {
+                        if( IsXMLToken( aName, p->meXMLToken ) )
+                        {
+                            aName = OUString::createFromAscii( p->mpAPIName );
+                            meAttributeName = p->meXMLToken;
+                            break;
+                        }
+
+                        p++;
+                    }
+
+                    xAnimate->setAttributeName( aName );
+                }
+            }
+            break;
+
+            case ANA_Values:
+            {
+                aValues = rValue;
+            }
+            break;
+
+            case ANA_From:
+            {
+                aFrom = rValue;
+            }
+            break;
+
+            case ANA_By:
+            {
+                aBy = rValue;
+            }
+            break;
+
+            case ANA_To:
+            {
+                aTo = rValue;
+            }
+            break;
+
+            case ANA_KeyTimes:
+            {
+                if( xAnimate.is() )
+                    xAnimate->setKeyTimes( mpHelper->convertKeyTimes( rValue ) );
+            }
+            break;
+
+            case ANA_Formula:
+            {
+                if( xAnimate.is() )
+                    xAnimate->setFormula( rValue );
+            }
+            break;
+
+            case ANA_ID:
+            {
+                if( rValue.getLength() )
+                {
+                    Reference< XInterface > xRef( mxNode, UNO_QUERY );
+                    GetImport().getInterfaceToIdentifierMapper().registerReference( rValue, xRef );
+                }
+            }
+            break;
+
+            case ANA_CalcMode:
+            {
+                if( xAnimate.is() )
+                {
+                    if( SvXMLUnitConverter::convertEnum( nEnum, rValue, getAnimationsEnumMap(Animations_EnumMap_CalcMode) ) )
+                        xAnimate->setCalcMode( (sal_Int16)nEnum );
+                }
+            }
+            break;
+
+            case ANA_Accumulate:
+            {
+                if( xAnimate.is() )
+                    xAnimate->setAccumulate( IsXMLToken( rValue, XML_SUM ) );
+            }
+            break;
+
+            case ANA_AdditiveMode:
+            {
+                if( xAnimate.is() )
+                {
+                    if( SvXMLUnitConverter::convertEnum( nEnum, rValue, getAnimationsEnumMap(Animations_EnumMap_AdditiveMode) ) )
+                        xAnimate->setAdditive( (sal_Int16)nEnum );
+                }
+            }
+            break;
+
+            case ANA_KeySplines:
+            {
+                if( xAnimate.is() )
+                    xAnimate->setTimeFilter( mpHelper->convertTimeFilter( rValue ) );
+            }
+            break;
+
+            case ANA_Path:
+            {
+                Reference< XAnimateMotion > xAnimateMotion( mxNode, UNO_QUERY );
+                if( xAnimateMotion.is() )
+                    xAnimateMotion->setPath( mpHelper->convertPath( rValue ) );
+            }
+            break;
+
+            case ANA_ColorSpace:
+            {
+                Reference< XAnimateColor > xAnimateColor( mxNode, UNO_QUERY );
+                if( xAnimateColor.is() )
+                    xAnimateColor->setColorInterpolation( IsXMLToken( rValue, XML_HSL ) ? AnimationColorSpace::HSL : AnimationColorSpace::RGB );
+            }
+            break;
+
+            case ANA_ColorDirection:
+            {
+                Reference< XAnimateColor > xAnimateColor( mxNode, UNO_QUERY );
+                if( xAnimateColor.is() )
+                    xAnimateColor->setDirection( IsXMLToken( rValue, XML_CLOCKWISE ) );
+            }
+            break;
+
+            case ANA_TransformType:
+            {
+                Reference< XAnimateTransform > xTransform( mxNode, UNO_QUERY );
+                if( xTransform.is() )
+                {
+                    if( SvXMLUnitConverter::convertEnum( nEnum, rValue, getAnimationsEnumMap(Animations_EnumMap_TransformType) ) )
+                    {
+                        xTransform->setTransformType( (sal_Int16)nEnum );
+                        switch( nEnum )
+                        {
+                        case AnimationTransformType::SCALE: meAttributeName = XML_SCALE; break;
+                        case AnimationTransformType::ROTATE: meAttributeName = XML_ROTATE; break;
+                        case AnimationTransformType::SKEWX: meAttributeName = XML_SKEWX; break;
+                        case AnimationTransformType::SKEWY: meAttributeName = XML_SKEWY; break;
+                        //case AnimationTransformType::TRANSLATE:
+                        default:
+                            meAttributeName = XML_TRANSLATE; break;
+                        }
+                    }
+                }
+            }
+            break;
+
+            case ANA_TransitionType:
+            {
+                if( xTransitionFilter.is() )
+                {
+                    if( SvXMLUnitConverter::convertEnum( nEnum, rValue, getAnimationsEnumMap(Animations_EnumMap_TransitionType) ) )
+                        xTransitionFilter->setTransition( (sal_Int16)nEnum );
+                }
+            }
+            break;
+
+            case ANA_TransitionSubType:
+            {
+                if( xTransitionFilter.is() )
+                {
+                    sal_uInt16 nEnum;
+                    if( SvXMLUnitConverter::convertEnum( nEnum, rValue, getAnimationsEnumMap(Animations_EnumMap_TransitionSubType) ) )
+                        xTransitionFilter->setSubtype( (sal_Int16)nEnum );
+                }
+            }
+            break;
+
+            case ANA_Mode:
+            {
+                if( xTransitionFilter.is() )
+                    xTransitionFilter->setMode( IsXMLToken( rValue, XML_IN ) );
+            }
+            break;
+
+            case ANA_Direction:
+            {
+                if( xTransitionFilter.is() )
+                    xTransitionFilter->setDirection( IsXMLToken( rValue, XML_FORWARD ) );
+            }
+            break;
+
+            case ANA_FadeColor:
+            {
+                if( xTransitionFilter.is() )
+                {
+                    Color aColor;
+                    SvXMLUnitConverter::convertColor( aColor, rValue );
+                    xTransitionFilter->setFadeColor( static_cast< sal_Int32 >( aColor.GetRGBColor() ) );
+                }
+            }
+            break;
+
+            case ANA_IterateType:
+            {
+                if( SvXMLUnitConverter::convertEnum( nEnum, rValue, getAnimationsEnumMap(Animations_EnumMap_IterateType) ) )
+                {
+                    if( xIter.is() )
+                        xIter->setIterateType( (sal_Int16)nEnum );
+                }
+            }
+            break;
+
+            case ANA_IterateInterval:
+            {
+                if( xIter.is() )
+                    xIter->setIterateInterval( rValue.toDouble() );
+            }
+            break;
+
+            case ANA_Group_Id:
+            {
+                aUserData.push_back( NamedValue( aLocalName, makeAny( rValue.toInt32() ) ) );
+            }
+            break;
+
+            case ANA_Command:
+            {
+                if( nNodeType == AnimationNodeType::COMMAND )
+                {
+                    if( SvXMLUnitConverter::convertEnum( nEnum, rValue, getAnimationsEnumMap(Animations_EnumMap_Command) ) )
+                    {
+                        Reference< XCommand > xCommand( mxNode, UNO_QUERY_THROW );
+                        xCommand->setCommand( (sal_Int16)nEnum );
+                    }
+                }
+            }
+            break;
+
+            default:
+                // push all unknown attributes within the presentation namespace as user data
+                if( nPrefix == XML_NAMESPACE_PRESENTATION )
+                {
+                    aUserData.push_back( NamedValue( aLocalName, makeAny( rValue ) ) );
+                }
+            }
+        }
+
+        sal_Int32 nUserDataCount = aUserData.size();
+        if( nUserDataCount )
+        {
+            Sequence< NamedValue > aUnoUserData( nUserDataCount );
+            NamedValue* pData = aUnoUserData.getArray();
+            std::list< NamedValue >::iterator aIter( aUserData.begin() );
+            const std::list< NamedValue >::iterator aEnd( aUserData.end() );
+            while( aIter != aEnd )
+                *pData++ = (*aIter++);
+
+            mxNode->setUserData( aUnoUserData );
+        }
+
+        // convert values
+        if( xAnimate.is() )
+        {
+            if( aFrom.getLength() )
+                xAnimate->setFrom( mpHelper->convertValue( meAttributeName, aFrom ) );
+
+            if( aBy.getLength() )
+                xAnimate->setBy( mpHelper->convertValue( meAttributeName, aBy ) );
+
+            if( aTo.getLength() )
+                xAnimate->setTo( mpHelper->convertValue( meAttributeName, aTo ) );
+
+            if( aValues.getLength() )
+                xAnimate->setValues( mpHelper->convertValueSequence( meAttributeName, aValues ) );
+        }
+    }
+    catch( RuntimeException& )
+    {
+        DBG_ERROR( "xmloff::AnimationNodeContext::StartElement(), RuntimeException catched!" );
+    }
+}
+
+SvXMLImportContext * AnimationNodeContext::CreateChildContext( USHORT nPrefix, const ::rtl::OUString& rLocalName,
+        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList )
+{
+    if( mxNode.is())
+        return new AnimationNodeContext( mxNode, GetImport(), nPrefix, rLocalName, xAttrList, mpHelper );
+    else
+        return new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
+}
+
+// --------------------------------------------------------------------
+
+class AnimationsImport: public SvXMLImport, public XAnimationNodeSupplier
+{
+public:
+    AnimationsImport( const Reference< XMultiServiceFactory > & rSMgr );
+    ~AnimationsImport() throw ();
+
+    SvXMLImportContext *AnimationsImport::CreateContext(USHORT nPrefix, const OUString& rLocalName, const Reference<XAttributeList>& xAttrList);
+
+    // XInterface
+    virtual Any SAL_CALL queryInterface( const Type& aType ) throw (RuntimeException);
+    virtual void SAL_CALL acquire() throw ();
+    virtual void SAL_CALL release() throw ();
+
+    // XAnimationNodeSupplier
+    Reference< XAnimationNode > SAL_CALL AnimationsImport::getAnimationNode() throw (RuntimeException);
+
+    // XServiceInfo
+    virtual OUString SAL_CALL getImplementationName() throw(RuntimeException);
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(RuntimeException);
+    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(RuntimeException);
+
+private:
+    Reference< XAnimationNode > mxRootNode;
+};
+
+AnimationsImport::AnimationsImport( const Reference< XMultiServiceFactory > & rSMgr )
+: SvXMLImport( rSMgr, true )
+{
+    // add namespaces
+    GetNamespaceMap().Add(
+        GetXMLToken(XML_NP_PRESENTATION),
+        GetXMLToken(XML_N_PRESENTATION),
+        XML_NAMESPACE_PRESENTATION);
+
+    GetNamespaceMap().Add(
+        GetXMLToken(XML_NP_SMIL),
+        GetXMLToken(XML_N_SMIL),
+        XML_NAMESPACE_SMIL);
+
+    GetNamespaceMap().Add(
+        GetXMLToken(XML_NP_ANIMATION),
+        GetXMLToken(XML_N_ANIMATION),
+        XML_NAMESPACE_ANIMATION);
+
+    mxRootNode = Reference< XAnimationNode >::query(rSMgr->createInstance(
+        OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.animations.SequenceTimeContainer"))));
+}
+
+AnimationsImport::~AnimationsImport() throw ()
+{
+}
+
+// XInterface
+Any SAL_CALL AnimationsImport::queryInterface( const Type& aType ) throw (RuntimeException)
+{
+    if ( aType == ::getCppuType((Reference<XAnimationNodeSupplier> *)0) )
+    {
+        return makeAny( Reference<XAnimationNodeSupplier>( this ) );
+    }
+    else
+    {
+        return SvXMLImport::queryInterface( aType );
+    }
+}
+
+void SAL_CALL AnimationsImport::acquire() throw ()
+{
+    SvXMLImport::acquire();
+}
+
+void SAL_CALL AnimationsImport::release() throw ()
+{
+    SvXMLImport::release();
+}
+
+SvXMLImportContext *AnimationsImport::CreateContext(USHORT nPrefix, const OUString& rLocalName, const Reference<XAttributeList>& xAttrList)
+{
+    SvXMLImportContext* pContext = 0;
+
+    if( (XML_NAMESPACE_ANIMATION == nPrefix) && IsXMLToken( rLocalName, XML_SEQ ) )
+    {
+         pContext = new AnimationNodeContext( mxRootNode, *this, nPrefix, rLocalName, xAttrList );
+    }
+    else
+    {
+        pContext = SvXMLImport::CreateContext(nPrefix, rLocalName, xAttrList);
+    }
+
+    return pContext;
+}
+
+// XAnimationNodeSupplier
+Reference< XAnimationNode > SAL_CALL AnimationsImport::getAnimationNode() throw (RuntimeException)
+{
+    return mxRootNode;
+}
+
+} // namespace xmloff
+
+Sequence< OUString > SAL_CALL AnimationsImport_getSupportedServiceNames() throw()
+{
+    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Xmloff.AnimationsImport" ) );
+    const Sequence< OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
+}
+
+OUString SAL_CALL AnimationsImport_getImplementationName() throw()
+{
+    return OUString( RTL_CONSTASCII_USTRINGPARAM( "xmloff::AnimationsImport" ) );
+}
+
+Reference< XInterface > SAL_CALL AnimationsImport_createInstance(const Reference< XMultiServiceFactory > & rSMgr) throw( Exception )
+{
+    return (cppu::OWeakObject*)new xmloff::AnimationsImport( rSMgr );
+
+}
+
+namespace xmloff
+{
+
+OUString SAL_CALL AnimationsImport::getImplementationName() throw(RuntimeException)
+{
+    return AnimationsImport_getImplementationName();
+}
+
+sal_Bool SAL_CALL AnimationsImport::supportsService( const OUString& ServiceName ) throw(RuntimeException)
+{
+    return ServiceName.equalsAscii( "com.sun.star.comp.Xmloff.AnimationsImport" );
+}
+
+Sequence< OUString > SAL_CALL AnimationsImport::getSupportedServiceNames() throw(RuntimeException)
+{
+    return AnimationsImport_getSupportedServiceNames();
+}
+
+} // namespace xmloff
+
