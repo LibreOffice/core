@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unostyle.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: os $ $Date: 2001-02-13 08:02:30 $
+ *  last change: $Author: os $ $Date: 2001-02-19 08:04:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,6 +181,9 @@
 #endif
 #ifndef _UNOEVENT_HXX
 #include "unoevent.hxx"
+#endif
+#ifndef _FMTRUBY_HXX
+#include <fmtruby.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_STYLE_PARAGRAPHSTYLECATEGORY_HPP_
@@ -1744,6 +1747,38 @@ void SwXStyle::setPropertyValue(const OUString& rPropertyName, const Any& aValue
                                                     SFX_STYLE_FAMILY_PARA) ));
                     aBase.SetItemSet(aSet);
                 }
+                break;
+                case RES_TXTATR_CJK_RUBY:
+                    if(MID_RUBY_CHARSTYLE == pMap->nMemberId )
+                    {
+                        OUString sTmp;
+                        if(aValue >>= sTmp)
+                        {
+                            SfxItemSet& rStyleSet = aBase.GetItemSet();
+                            SfxItemSet aSet(*rStyleSet.GetPool(), pMap->nWID, pMap->nWID);
+                            aSet.Put(rStyleSet);
+                            SwFmtRuby* pRuby = 0;
+                            const SfxPoolItem* pItem;
+                            if(SFX_ITEM_SET == aSet.GetItemState( RES_TXTATR_CJK_RUBY, sal_True, &pItem ) )
+                                pRuby = new SwFmtRuby(*((SwFmtRuby*)pItem));
+                            if(!pRuby)
+                                pRuby = new SwFmtRuby(aEmptyStr);
+                            String sStyle(SwXStyleFamilies::GetUIName(sTmp, SFX_STYLE_FAMILY_CHAR));
+                             pRuby->SetCharFmtName( sTmp );
+                            pRuby->SetCharFmtId( 0 );
+                            if(sTmp.getLength())
+                            {
+                                sal_uInt16 nId = SwDoc::GetPoolId( sTmp, GET_POOLID_CHRFMT );
+                                pRuby->SetCharFmtId(nId);
+                            }
+                            aSet.Put(*pRuby);
+                            aBase.SetItemSet(aSet);
+                            delete pRuby;
+                        }
+                        else
+                            throw lang::IllegalArgumentException();
+                    }
+                goto put_itemset;
                 break;
                 case RES_PARATR_DROP:
                 {

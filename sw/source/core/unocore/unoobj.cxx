@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: os $ $Date: 2001-01-12 16:12:45 $
+ *  last change: $Author: os $ $Date: 2001-02-19 08:04:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,9 @@
 #include <swerror.h>
 #ifndef _SWTBLFMT_HXX //autogen
 #include <swtblfmt.hxx>
+#endif
+#ifndef _FMTRUBY_HXX
+#include <fmtruby.hxx>
 #endif
 #ifndef _FMTHBSH_HXX
 #include <fmthbsh.hxx>
@@ -728,7 +731,8 @@ sal_Bool lcl_setCrsrPropertyValue(const SfxItemPropertyMap* pMap,
             {
                 if( MID_DROPCAP_CHAR_STYLE_NAME == pMap->nMemberId)
                 {
-                    if(aValue.getValueType() == ::getCppuType((const OUString*)0))
+                    OUString uStyle;
+                    if(aValue >>= uStyle)
                     {
                         SwFmtDrop* pDrop = 0;
                         const SfxPoolItem* pItem;
@@ -736,8 +740,6 @@ sal_Bool lcl_setCrsrPropertyValue(const SfxItemPropertyMap* pMap,
                             pDrop = new SwFmtDrop(*((SwFmtDrop*)pItem));
                         if(!pDrop)
                             pDrop = new SwFmtDrop();
-                        OUString uStyle;
-                        aValue >>= uStyle;
                         String sStyle(SwXStyleFamilies::GetUIName(uStyle, SFX_STYLE_FAMILY_CHAR));
                         SwDocStyleSheet* pStyle =
                             (SwDocStyleSheet*)rPam.GetDoc()->GetDocShell()->GetStyleSheetPool()->Find(sStyle, SFX_STYLE_FAMILY_CHAR);
@@ -754,6 +756,34 @@ sal_Bool lcl_setCrsrPropertyValue(const SfxItemPropertyMap* pMap,
                 else
                     bRet = sal_False;
             }
+            break;
+            case RES_TXTATR_CJK_RUBY:
+                if(MID_RUBY_CHARSTYLE == pMap->nMemberId )
+                {
+                    OUString sTmp;
+                    if(aValue >>= sTmp)
+                    {
+                        SwFmtRuby* pRuby = 0;
+                        const SfxPoolItem* pItem;
+                        if(SFX_ITEM_SET == rSet.GetItemState( RES_TXTATR_CJK_RUBY, sal_True, &pItem ) )
+                            pRuby = new SwFmtRuby(*((SwFmtRuby*)pItem));
+                        if(!pRuby)
+                            pRuby = new SwFmtRuby(aEmptyStr);
+                        String sStyle(SwXStyleFamilies::GetUIName(sTmp, SFX_STYLE_FAMILY_CHAR));
+                         pRuby->SetCharFmtName( sTmp );
+                        pRuby->SetCharFmtId( 0 );
+                        if(sTmp.getLength())
+                        {
+                            sal_uInt16 nId = SwDoc::GetPoolId( sTmp, GET_POOLID_CHRFMT );
+                            pRuby->SetCharFmtId(nId);
+                        }
+                        rSet.Put(*pRuby);
+                        delete pRuby;
+                    }
+                    else
+                        throw lang::IllegalArgumentException();
+                    bRet = sal_False;
+                }
             break;
             case RES_PAGEDESC      :
             if(MID_PAGEDESC_PAGEDESCNAME == pMap->nMemberId )
