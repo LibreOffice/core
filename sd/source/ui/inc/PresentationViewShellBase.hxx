@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PresentationViewShellBase.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 11:39:35 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 13:59:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,11 +76,16 @@ class PresentationViewShellBase
 public:
     TYPEINFO();
     SFX_DECL_VIEWFACTORY(PresentationViewShellBase);
+
     /** This constructor is used by the view factory of the SFX
         macros.
     */
     PresentationViewShellBase (SfxViewFrame *pFrame, SfxViewShell* pOldShell);
     virtual ~PresentationViewShellBase (void);
+
+    /** We delete the ViewTabBar that is not needed for the presentation.
+    */
+    virtual void LateInit (void);
 };
 
 } // end of namespace sd
