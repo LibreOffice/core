@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlideSorterController.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-24 15:06:53 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 16:51:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,14 @@ public:
             The space occupied by the browser window is returned.
     */
     Rectangle Resize (const Rectangle& rAvailableSpace);
+
+    /** Determine which of the UI elements--the scroll bars, the scroll bar
+        filler, the actual slide sorter view--are visible and place them in
+        the area last passed to Resize().
+        @return
+            Returns the space occupied by the browser window.
+    */
+    Rectangle Rearrange (void);
 
     SlideSorterViewShell& GetViewShell (void) const;
     model::SlideSorterModel& GetModel (void) const;
@@ -372,6 +380,11 @@ private:
         FinishEditModeChange().
     */
     SdPage* mpEditModeChangeMasterPage;
+
+    /** This rectangle in the parent window encloses scroll bars and slide
+        sorter window.  It is set when Resize() is called.
+    */
+    Rectangle maTotalWindowArea;
 
     /** When this flag is set then on the next call to Paint() the selection
         is moved into the visible area.
