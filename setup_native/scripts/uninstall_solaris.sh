@@ -24,6 +24,7 @@ tail +$linenum `basename $0` > $GETUID_SO
 
 PKGLIST=`pkginfo -R $MY_ROOT | cut -f 2 -d ' ' | grep -v core`
 COREPKG=`pkginfo -R $MY_ROOT | cut -f 2 -d ' ' | grep core`
+COREPKG01=`pkginfo -R $MY_ROOT | cut -f 2 -d ' ' | grep core01`
 
 echo "#############################################"
 echo "#     Deinstallation of Office packages     #"
@@ -36,7 +37,7 @@ for i in $PKGLIST $COREPKG; do
   echo $i
 done
 
-INSTALL_DIR=$MY_ROOT`pkginfo -R $MY_ROOT -r $COREPKG`
+INSTALL_DIR=$MY_ROOT`pkginfo -R $MY_ROOT -r $COREPKG01`
 
 # Restore original bootstraprc
 mv -f $INSTALL_DIR/program/bootstraprc.orig $INSTALL_DIR/program/bootstraprc
