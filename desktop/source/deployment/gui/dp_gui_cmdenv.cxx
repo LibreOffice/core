@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_gui_cmdenv.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-11 12:03:09 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 14:05:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,10 +63,12 @@
 #include "dp_gui.h"
 #include "dp_gui_cmdenv.h"
 #include "comphelper/anytostring.hxx"
+#include "com/sun/star/lang/WrappedTargetException.hpp"
 #include "com/sun/star/beans/PropertyValue.hpp"
+#include "com/sun/star/task/XInteractionAbort.hpp"
+#include "com/sun/star/task/XInteractionApprove.hpp"
 #include "vcl/msgbox.hxx"
 
-// using namespace ::dp_misc;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
@@ -81,13 +83,11 @@ void ProgressCommandEnv::ProgressDialog::CancelButtonImpl::Click()
     m_dialog->m_cmdEnv->m_aborted = true;
     if (m_dialog->m_cmdEnv->m_xAbortChannel.is())
     {
-        try
-        {
+        try {
             m_dialog->m_cmdEnv->m_xAbortChannel->sendAbort();
         }
-        catch (RuntimeException &)
-        {
-            OSL_ASSERT( 0 );
+        catch (RuntimeException &) {
+            OSL_ENSURE( 0, "### unexpected RuntimeException!" );
         }
     }
 }
@@ -95,9 +95,8 @@ void ProgressCommandEnv::ProgressDialog::CancelButtonImpl::Click()
 //______________________________________________________________________________
 ProgressCommandEnv::~ProgressCommandEnv()
 {
-    if (m_progressDialog.get() != 0)
-    {
-        ::vos::OGuard guard( Application::GetSolarMutex() );
+    if (m_progressDialog.get() != 0) {
+        const ::vos::OGuard guard( Application::GetSolarMutex() );
         m_progressDialog->SetModalInputMode( FALSE );
         m_progressDialog.reset();
     }
@@ -174,8 +173,7 @@ void ProgressCommandEnv::showProgress( sal_Int32 progressSections )
     m_progressSections = progressSections;
     m_currentProgressSection = 0;
     m_currentInnerProgress = 0;
-    if (m_progressDialog.get() == 0)
-    {
+    if (m_progressDialog.get() == 0) {
         ::osl::Condition cond;
         Application::PostUserEvent(
             LINK( this, ProgressCommandEnv, executeDialog ), &cond );
@@ -192,9 +190,8 @@ void ProgressCommandEnv::progressSection(
     {
         ++m_currentProgressSection;
         m_currentInnerProgress = 0;
-        if (m_progressDialog.get() != 0)
-        {
-            ::vos::OGuard guard( Application::GetSolarMutex() );
+        if (m_progressDialog.get() != 0) {
+            const ::vos::OGuard guard( Application::GetSolarMutex() );
             if (m_progressDialog->m_statusBar->IsProgressMode())
                 m_progressDialog->m_statusBar->EndProgressMode();
             m_progressDialog->m_statusBar->StartProgressMode( text );
@@ -209,7 +206,7 @@ void ProgressCommandEnv::updateProgress( OUString const & text )
 {
     if (m_progressDialog.get() != 0)
     {
-        ::vos::OGuard guard( Application::GetSolarMutex() );
+        const ::vos::OGuard guard( Application::GetSolarMutex() );
         if (text.getLength() > 0)
             m_progressDialog->m_ftCurrentAction->SetText( text );
         // xxx todo: how to do better?
@@ -248,29 +245,99 @@ void ProgressCommandEnv::handle(
     Reference<task::XInteractionRequest> const & xRequest )
     throw (RuntimeException)
 {
-#if OSL_DEBUG_LEVEL > 1
     Any request( xRequest->getRequest() );
     OSL_ASSERT( request.getValueTypeClass() == TypeClass_EXCEPTION );
-    OSL_TRACE( ">>> handling request:\n%s\n",
-               ::rtl::OUStringToOString(
-                   ::comphelper::anyToString(request),
-                   osl_getThreadTextEncoding() ).getStr() );
+#if OSL_DEBUG_LEVEL > 1
+    OSL_TRACE( "[dp_gui_cmdenv.cxx] incoming request:\n%s\n",
+               ::rtl::OUStringToOString( ::comphelper::anyToString(request),
+                                         RTL_TEXTENCODING_UTF8 ).getStr() );
 #endif
 
-    if (! m_xHandler.is())
-    {
-        Sequence<Any> handlerArgs( 1 );
-        handlerArgs[ 0 ] <<= beans::PropertyValue(
-            OUSTR("Context"), -1, makeAny(m_title),
-            beans::PropertyState_DIRECT_VALUE );
-        Reference<XComponentContext> const & xContext =
-            m_mainDialog->m_xComponentContext;
-        m_xHandler.set( xContext->getServiceManager()
-                        ->createInstanceWithArgumentsAndContext(
-                            OUSTR("com.sun.star.uui.InteractionHandler"),
-                            handlerArgs, xContext ), UNO_QUERY_THROW );
+    lang::WrappedTargetException wtExc;
+    if (request >>= wtExc) {
+        // handable deployment error signalled, e.g.
+        // bundle item registration failed, notify cause only:
+        Any cause;
+        deployment::DeploymentException dpExc;
+        if (wtExc.TargetException >>= dpExc)
+            cause = dpExc.Cause;
+        else {
+            CommandFailedException cfExc;
+            if (wtExc.TargetException >>= cfExc)
+                cause = cfExc.Reason;
+            else
+                cause = wtExc.TargetException;
+        }
+        update_( cause );
+
+        // selections:
+        bool approve = false;
+        bool abort = false;
+
+        // ignore intermediate errors of legacy packages, i.e.
+        // former pkgchk behaviour:
+        const Reference<deployment::XPackage> xPackage(
+            wtExc.Context, UNO_QUERY );
+        OSL_ASSERT( xPackage.is() );
+        if (xPackage.is()) {
+            const Reference<deployment::XPackageTypeInfo> xPackageType(
+                xPackage->getPackageType() );
+            OSL_ASSERT( xPackageType.is() );
+            if (xPackageType.is()) {
+                approve = (xPackage->isBundle() &&
+                           xPackageType->getMediaType().matchAsciiL(
+                               RTL_CONSTASCII_STRINGPARAM(
+                                   "application/"
+                                   "vnd.sun.star.legacy-package-bundle") ));
+            }
+        }
+        abort = !approve;
+
+        // select:
+        Sequence< Reference<task::XInteractionContinuation> > conts(
+            xRequest->getContinuations() );
+        Reference<task::XInteractionContinuation> const * pConts =
+            conts.getConstArray();
+        sal_Int32 len = conts.getLength();
+        for ( sal_Int32 pos = 0; pos < len; ++pos )
+        {
+            if (approve) {
+                Reference<task::XInteractionApprove> xInteractionApprove(
+                    pConts[ pos ], UNO_QUERY );
+                if (xInteractionApprove.is()) {
+                    xInteractionApprove->select();
+                    // don't query again for ongoing continuations:
+                    approve = false;
+                }
+            }
+            else if (abort) {
+                Reference<task::XInteractionAbort> xInteractionAbort(
+                    pConts[ pos ], UNO_QUERY );
+                if (xInteractionAbort.is()) {
+                    xInteractionAbort->select();
+                    // don't query again for ongoing continuations:
+                    abort = false;
+                }
+            }
+        }
     }
-    m_xHandler->handle( xRequest );
+    else {
+        // forward to UUI handler:
+        if (! m_xHandler.is()) {
+            // late init:
+            Sequence<Any> handlerArgs( 1 );
+            handlerArgs[ 0 ] <<= beans::PropertyValue(
+                OUSTR("Context"), -1, makeAny(m_title),
+                beans::PropertyState_DIRECT_VALUE );
+            Reference<XComponentContext> const & xContext =
+                m_mainDialog->m_xComponentContext;
+            m_xHandler.set( xContext->getServiceManager()
+                            ->createInstanceWithArgumentsAndContext(
+                                OUSTR("com.sun.star.uui.InteractionHandler"),
+                                handlerArgs, xContext ), UNO_QUERY_THROW );
+        }
+        m_xHandler->handle( xRequest );
+    }
 }
 
 // XProgressHandler
@@ -286,14 +353,12 @@ void ProgressCommandEnv::update_( Any const & Status )
     throw (RuntimeException)
 {
     OUString text;
-    if (Status.hasValue())
-    {
-        if (! (Status >>= text))
-        {
-            Exception exc;
-            if (Status >>= exc)
-                text = exc.Message;
-        }
+    if (Status.hasValue() && !(Status >>= text)) {
+        if (Status.getValueTypeClass() == TypeClass_EXCEPTION)
+            text = static_cast<Exception const *>(Status.getValue())->Message;
+        if (text.getLength() == 0)
+            text = ::comphelper::anyToString(Status); // fallback
+        m_mainDialog->errbox( text );
     }
     updateProgress( text );
     ++m_currentInnerProgress;
@@ -309,6 +374,7 @@ void ProgressCommandEnv::update( Any const & Status )
 //______________________________________________________________________________
 void ProgressCommandEnv::pop() throw (RuntimeException)
 {
+    update_( Any() ); // no message
 }
 
 }
