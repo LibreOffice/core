@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocument.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: sab $ $Date: 2002-07-08 09:45:19 $
+ *  last change: $Author: sab $ $Date: 2002-07-12 12:41:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,6 +173,7 @@ struct ScAccessibleShapeData
     ~ScAccessibleShapeData();
     mutable accessibility::AccessibleShape* pAccShape;
     mutable ScAddress*          pRelationCell; // if it is NULL this shape is anchored on the table
+    SdrObject*                  pShape;
     com::sun::star::uno::Reference< com::sun::star::drawing::XShape > xShape;
     mutable sal_uInt32          nVectorIndex;
     mutable sal_Bool            bSelected;
@@ -1050,7 +1051,7 @@ sal_Int8 ScChildrenShapes::Compare(const uno::Reference<drawing::XShape>& xShape
         else if (xShape1.get() > xShape2.get())
             nResult = 1;
     }
-    else if (xShape1.is()) // a not give shape is lesser than a given shape
+    else if (xShape1.is()) // a not given shape is lesser than a given shape
         nResult = 1;
     else if (xShape2.is())
         nResult = -1;
@@ -1205,40 +1206,34 @@ void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         if ((rRef.GetId() == SC_HINT_ACC_TABLECHANGED) &&
             mpAccessibleSpreadsheet)
         {
+            FreeAccessibleSpreadsheet();
+            if (mpChildrenShapes)
+                DELETEZ(mpChildrenShapes);
+
             AccessibleEventObject aEvent;
-            aEvent.EventId = AccessibleEventId::ACCESSIBLE_CHILD_EVENT;
+            aEvent.EventId = AccessibleEventId::ACCESSIBLE_ALL_CHILDREN_CHANGED_EVENT;
             aEvent.Source = uno::Reference< XAccessible >(this);
-            aEvent.OldValue <<= GetAccessibleSpreadsheet();
-
-            CommitChange(aEvent); // child is gone - event
-
-            aEvent.OldValue = uno::Any();
-            FreeAccessibleSpreadsheet(); // free the spreadsheet after free the reference on this object
-            aEvent.NewValue <<= GetAccessibleSpreadsheet();
-
-            CommitChange(aEvent); // there is a new child - event
+            CommitChange(aEvent); // all childs changed
         }
         else if (rRef.GetId() == SC_HINT_ACC_MAKEDRAWLAYER)
         {
             if (mpChildrenShapes)
                 mpChildrenShapes->SetDrawBroadcaster();
         }
-        else if ((rRef.GetId() == SC_HINT_ACC_ENTEREDITMODE))
+        else if ((rRef.GetId() == SC_HINT_ACC_ENTEREDITMODE)) // this event comes only on creating edit field of a cell
         {
             if (mpViewShell && mpViewShell->GetViewData()->GetEditView(meSplitPos))
             {
-                DBG_ASSERT(!mpTempAccEdit, "EditObject should be gone");
                 mpTempAccEdit = new ScAccessibleEditObject(this, mpViewShell->GetViewData()->GetEditView(meSplitPos), mpViewShell->GetWindowByPos(meSplitPos), sal_True);
                 uno::Reference<XAccessible> xAcc = mpTempAccEdit;
-                if (mpViewShell->GetWindowByPos(meSplitPos)->HasFocus())
-                    mpTempAccEdit->GotFocus();
 
                 AddChild(xAcc, sal_True);
+
+                mpTempAccEdit->GotFocus();
             }
         }
         else if ((rRef.GetId() == SC_HINT_ACC_LEAVEEDITMODE))
         {
-            DBG_ASSERT(mpTempAccEdit, "here should be a EditObject");
             if (mxTempAcc.is())
             {
                 mpTempAccEdit = NULL;
