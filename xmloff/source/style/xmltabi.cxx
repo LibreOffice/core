@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltabi.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-17 16:32:02 $
+ *  last change: $Author: mib $ $Date: 2001-01-26 07:44:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -295,7 +295,7 @@ void SvxXMLTabStopImportContext::EndElement( )
     if( mpTabStops )
     {
         sal_uInt16 nCount = mpTabStops->Count();
-        sal_uInt16 nNewCount;
+        sal_uInt16 nNewCount = 0;
 
         uno::Sequence< style::TabStop> aSeq( nCount );
         style::TabStop* pTabStops = aSeq.getArray();
