@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdedtv1.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2000-10-30 11:11:36 $
+ *  last change: $Author: aw $ $Date: 2000-11-28 16:40:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -700,6 +700,7 @@ void SdrEditView::MergeAttrFromMarked(SfxItemSet& rAttr, BOOL bOnlyHardAttr) con
 
     for(sal_uInt32 a(0); a < nMarkAnz; a++)
     {
+        // #80277# merging was done wrong in the prev version
         const SfxItemSet& rSet = aMark.GetMark(a)->GetObj()->GetItemSet();
 //-/        rAttr.MergeValues(rSet, TRUE);
         SfxWhichIter aIter(rSet);
@@ -707,18 +708,31 @@ void SdrEditView::MergeAttrFromMarked(SfxItemSet& rAttr, BOOL bOnlyHardAttr) con
 
         while(nWhich)
         {
-            const SfxPoolItem* pItem = NULL;
-            rSet.GetItemState(nWhich, TRUE, &pItem);
-
-            if(pItem)
+            if(!bOnlyHardAttr || SFX_ITEM_SET == rSet.GetItemState(nWhich, FALSE))
             {
-                if(pItem == (SfxPoolItem *)-1)
-                    rAttr.InvalidateItem(nWhich);
-                else
-                    rAttr.MergeValue(*pItem, TRUE);
+                const SfxPoolItem& rItem = rSet.Get(nWhich);
+                rAttr.MergeValue(rItem, TRUE);
             }
             nWhich = aIter.NextWhich();
         }
+
+//      SfxWhichIter aIter(rSet);
+//      sal_uInt16 nWhich(aIter.FirstWhich());
+//
+//      while(nWhich)
+//      {
+//          const SfxPoolItem* pItem = NULL;
+//          rSet.GetItemState(nWhich, FALSE, &pItem);
+//
+//          if(pItem)
+//          {
+//              if(pItem == (SfxPoolItem *)-1)
+//                  rAttr.InvalidateItem(nWhich);
+//              else
+//                  rAttr.MergeValue(*pItem, TRUE);
+//          }
+//          nWhich = aIter.NextWhich();
+//      }
     }
 
 
