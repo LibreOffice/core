@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view2.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-01 07:46:39 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:52:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -522,7 +522,7 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
             else if ( pWrtShell->HasSelection() || IsDrawMode() )
             {
                 SdrView *pSdrView = pWrtShell->HasDrawView() ? pWrtShell->GetDrawView() : 0;
-                if(pSdrView && pSdrView->HasMarkedObj() &&
+                if(pSdrView && pSdrView->AreObjectsMarked() &&
                     pSdrView->GetHdlList().GetFocusHdl())
                 {
                     ((SdrHdlList&)pSdrView->GetHdlList()).ResetFocusHdl();
@@ -898,8 +898,8 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
 //???               || rShell.IsFrmSelected()
                 )
             {
-                String sDisplay( rShell.GetDrawView()->GetMarkList().
-                                    GetMarkDescription() );
+                String sDisplay( rShell.GetDrawView()->GetMarkedObjectList().
+                                    GetDescriptionOfMarkedObjects() );
                 rSet.Put( SfxStringItem( FN_STAT_PAGE, sDisplay ));
             }
             else
