@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 16:57:43 $
+ *  last change: $Author: kz $ $Date: 2003-12-11 12:11:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,6 +221,19 @@ namespace xmloff
     XMLFORM_CONSTASCII_STRING( PROPERTY_DATEFORMAT,         "DateFormat");
     XMLFORM_CONSTASCII_STRING( PROPERTY_TIMEFORMAT,         "TimeFormat");
     XMLFORM_CONSTASCII_STRING( PROPERTY_PERSISTENCE_MAXTEXTLENGTH,  "PersistenceMaxTextLength");
+    XMLFORM_CONSTASCII_STRING( PROPERTY_SCROLLVALUE_MIN,    "ScrollValueMin");
+    XMLFORM_CONSTASCII_STRING( PROPERTY_SCROLLVALUE_MAX,    "ScrollValueMax");
+    XMLFORM_CONSTASCII_STRING( PROPERTY_SCROLLVALUE,        "ScrollValue");
+    XMLFORM_CONSTASCII_STRING( PROPERTY_SCROLLVALUE_DEFAULT,"DefaultScrollValue");
+    XMLFORM_CONSTASCII_STRING( PROPERTY_LINE_INCREMENT,     "LineIncrement");
+    XMLFORM_CONSTASCII_STRING( PROPERTY_BLOCK_INCREMENT,    "BlockIncrement");
+    XMLFORM_CONSTASCII_STRING( PROPERTY_REPEAT_DELAY,       "RepeatDelay");
+    XMLFORM_CONSTASCII_STRING( PROPERTY_SPINVALUE,          "SpinValue");
+    XMLFORM_CONSTASCII_STRING( PROPERTY_SPINVALUE_MIN,      "SpinValueMin");
+    XMLFORM_CONSTASCII_STRING( PROPERTY_SPINVALUE_MAX,      "SpinValueMax");
+    XMLFORM_CONSTASCII_STRING( PROPERTY_DEFAULT_SPINVALUE,  "DefaultSpinValue");
+    XMLFORM_CONSTASCII_STRING( PROPERTY_SPIN_INCREMENT,     "SpinIncrement");
+    XMLFORM_CONSTASCII_STRING( PROPERTY_ORIENTATION,        "Orientation");
 
     XMLFORM_CONSTASCII_STRING( PROPERTY_BOUND_CELL,         "BoundCell");
     XMLFORM_CONSTASCII_STRING( PROPERTY_LIST_CELL_RANGE,    "CellRange");
