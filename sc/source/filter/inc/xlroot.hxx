@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlroot.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-23 17:31:29 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 15:40:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,7 @@ class SfxPrinter;
 class SvNumberFormatter;
 class ScRangeName;
 class SvStorage;
+struct XclFontData;
 
 /** Access to global data for a filter object (imported or exported document)
     from other classes. */
@@ -202,10 +203,13 @@ protected:
     inline void                 SetUILanguage( LanguageType eLang ) { mrData.meUILang = eLang; }
     /** Sets the character set to import/export byte strings. */
     inline void                 SetCharSet( CharSet eCharSet ) { mrData.meCharSet = eCharSet; }
-    /** Sets the width of the '0' character (default font) for the current printer (twips). */
-    inline void                 SetCharWidth( long nCharWidth ) { mrData.mnCharWidth = nCharWidth; }
+    /** Sets the width of the '0' character (default font) for the current printer (twips).
+        @param rFontData  The font used for the '0' character. */
+    void                        SetCharWidth( const XclFontData& rFontData );
     /** Increases the current Calc sheet index by 1. */
     inline void                 IncScTab() { ++mrData.mnScTab; }
+    /** Sets the maximum possible cell address according to the current BIFF version. */
+    void                        SetMaxPos();
 
     /** Checks if the passed cell address is valid.
         @descr  Sets the internal flag that produces a warning box, if the cell is
