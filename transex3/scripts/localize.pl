@@ -6,9 +6,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: localize.pl,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: ihi $ $Date: 2004-11-26 20:44:23 $
+#   last change: $Author: kz $ $Date: 2005-01-13 19:16:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -106,16 +106,30 @@ my $file_types = "(src|hrc|xcs|xcu|lng|ulf|xrm|xhp|xcd|xgf|xxl|xrb)";
 #### main ####
 parse_options();
 
-if ( $^O eq 'MSWin32' ) {
+#if ( $^O eq 'MSWin32' ) {
+#   $WIN = 'TRUE';
+#}
+# else {
+#   $WIN = '';
+#}
+if ( defined $ENV{USE_SHELL} && $ENV{USE_SHELL} eq '4nt' ) {
    $WIN = 'TRUE';
 }
  else {
    $WIN = '';
 }
 
-if   ( $mode eq "merge"    )    {   splitfile( $sdffile );      }
-elsif( $mode eq "extract"  )    {   collectfiles( $outputfile );}
-else                            {   usage();                    }
+if   ( $mode eq "merge"    )    {
+    merge_gsicheck();
+    splitfile( $sdffile );
+    unlink $sdffile;             # remove temp file!
+}
+elsif( $mode eq "extract"  )    {
+    collectfiles( $outputfile );
+}
+else                            {
+    usage();
+}
 
 exit(0);
 
@@ -254,7 +268,7 @@ sub writesdf{
             }
             close DESTFILE;
          }else {
-            print STDOUT "Warning: File $localizeFile is not writable , try to merge ...\n";
+            print STDOUT "WARNING: File $localizeFile is not writable , try to merge ...\n";
             my ( $TMPFILE , $tmpfile ) = File::Temp::tempfile();
             if( open DESTFILE , "+> $tmpfile " ){
                 @mykeys = keys( %index );
@@ -269,13 +283,105 @@ sub writesdf{
                     } else { print STDERR "Can't open/create '$localizeFile', original file is renamed to  $localizeFile.backup\n"; }
                 } else { print STDERR "Can't open/create '$localizeFile'\n"; }
             }else{
-                print STDERR "Can't open/create '$localizeFile'\n";
+                print STDERR "WARNING: Can't open/create '$localizeFile'\n";
             }
         }
     }
     sort_outfile( $localizeFile );
 }
 
+sub get_license_header{
+    return
+    "#*************************************************************************\n".
+    "##\n".
+    "##   \$RCSf"."ile: localize.pl,v \$\n".
+    "##\n".
+    "##   \$Revi"."sion: 1.5.2.8 \$\n".
+    "##   last change: \$Aut"."hor: ihi \$ \$Dat"."e: 2004/12/21 15:31:36 \$\n".
+    "##\n".
+    "##   The Contents of this file are made available subject to the terms of\n".
+    "##   either of the following licenses\n".
+    "##\n".
+    "##          - GNU Lesser General Public License Version 2.1\n".
+    "##          - Sun Industry Standards Source License Version 1.1\n".
+    "##\n".
+    "##   Sun Microsystems Inc., October, 2000\n".
+    "##\n".
+    "##   GNU Lesser General Public License Version 2.1\n".
+    "##   =============================================\n".
+    "##   Copyright 2000 by Sun Microsystems, Inc.\n".
+    "##   901 San Antonio Road, Palo Alto, CA 94303, USA\n".
+    "##\n".
+    "##   This library is free software; you can redistribute it and/or\n".
+    "##   modify it under the terms of the GNU Lesser General Public\n".
+    "##   License version 2.1, as published by the Free Software Foundation.\n".
+    "##\n".
+    "##   This library is distributed in the hope that it will be useful,\n".
+    "##   but WITHOUT ANY WARRANTY; without even the implied warranty of\n".
+    "##   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n".
+    "##   Lesser General Public License for more details.\n".
+    "##\n".
+    "##   You should have received a copy of the GNU Lesser General Public\n".
+    "##   License along with this library; if not, write to the Free Software\n".
+    "##   Foundation, Inc., 59 Temple Place, Suite 330, Boston,\n".
+    "##   MA  02111-1307  USA\n".
+    "##\n".
+    "##\n".
+    "##   Sun Industry Standards Source License Version 1.1\n".
+    "##   =================================================\n".
+    "##   The contents of this file are subject to the Sun Industry Standards\n".
+    "##   Source License Version 1.1 (the \"License\"); You may not use this file\n".
+    "##   except in compliance with the License. You may obtain a copy of the\n".
+    "##   License at http://www.openoffice.org/license.html.\n".
+    "##\n".
+    "##   Software provided under this License is provided on an \"AS IS\" basis,\n".
+    "##   WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,\n".
+    "##   WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,\n".
+    "##   MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.\n".
+    "##   See the License for the specific provisions governing your rights and\n".
+    "##   obligations concerning the Software.\n".
+    "##\n".
+    "##   The Initial Developer of the Original Code is: Sun Microsystems, Inc.\n".
+    "##\n".
+    "##   Copyright: 2000 by Sun Microsystems, Inc.\n".
+    "##\n".
+    "##   All Rights Reserved.\n".
+    "##\n".
+    "##   Contributor(s): _______________________________________\n".
+    "##\n".
+    "##\n".
+    "##\n".
+    "##*************************************************************************\n".
+    "#\n";
+}
+######## Check input sdf file and use only the correct part
+sub merge_gsicheck{
+    my $command = '';
+    my ( $TMPHANDLE , $tmpfile ) = File::Temp::tempfile();
+    close ( $TMPHANDLE );
+
+    if( $ENV{WRAPCMD} ){
+        $command = "$ENV{WRAPCMD} gsicheck";
+    }else{
+        $command = "gsicheck";
+    }
+    my $errfile = $sdffile.".err";
+    $command .= " -c -wcf $tmpfile -wef $errfile -l \"\" $sdffile";
+    #my $rc = system( $command );
+    my $output = `$command`;
+    my $rc = $? << 8;
+    if ( $output ne "" ){
+        print STDOUT "### gsicheck ###\n";
+        print STDOUT "### The file $errfile have been written containing the errors in your sdf file. Those lines will not be merged: ###\n\n";
+        print STDOUT "$output\n";
+        print STDOUT "################\n";
+
+    }else{
+        # Remove the 0 Byte file
+        unlink $errfile;
+    }
+    $sdffile = $tmpfile;
+}
 #########################################################
 sub collectfiles{
     print STDOUT "### Localize\n";
@@ -314,30 +420,16 @@ sub collectfiles{
         print "### Fetching source language strings\n";
         my $command = "";
         my $args    = "";
-        if( $WIN eq "TRUE" ){
-            if ( $ENV{UPDMINOR} ){
-                if( $ENV{WRAPCMD} ){
-                    $command = "$ENV{WRAPCMD} $ENV{SOLARVERSION}\\$ENV{INPATH}\\bin.$ENV{UPDMINOR}\\localize_sl.exe";
-                }else{
-                    $command = "$ENV{SOLARVERSION}\\$ENV{INPATH}\\bin.$ENV{UPDMINOR}\\localize_sl.exe";
-                }
-               } else {
-               if( $ENV{WRAPCMD} ){
-                   $command = "$ENV{WRAPCMD} $ENV{SOLARVERSION}\\$ENV{INPATH}\\bin\\localize_sl.exe";
-               }else{
-                   $command = "$ENV{SOLARVERSION}\\$ENV{INPATH}\\bin\\localize_sl.exe";
-               }
-           }
+
+        if( $ENV{WRAPCMD} ){
+            $command = "$ENV{WRAPCMD} localize_sl";
+        }else{
+            $command = "localize_sl";
         }
-        else{
-            if ( $ENV{UPDMINOR} ) {
-                $command = "$ENV{SOLARVERSION}/$ENV{INPATH}/bin.$ENV{UPDMINOR}/localize_sl";
-            } else {
-                $command = "$ENV{SOLARVERSION}/$ENV{INPATH}/bin/localize_sl";
-            }
-        }
-      # -e
-        if ( -x $command ){
+
+        # -e
+        # if ( -x $command ){
+        if( $command ){
             if( !$bVerbose  ){ $args .= " -QQ "; }
             $args .= " -e -f $localizeSDF -l ";
             my $bFlag="";
@@ -429,7 +521,7 @@ sub collectfiles{
                             }
                         }
                     }
-                }else { print STDERR "ERROR: Can't open file $currentfile"; }
+                }else { print STDERR "WARNING: Can't open file $currentfile"; }
             }
 
             foreach my $line ( keys( %{$fallbackhashhash_ref->{ $cur_lang } } )) {
@@ -445,7 +537,7 @@ sub collectfiles{
                     print ALLPARTICLES_MERGED ( $_, "\n" );  # recheck de / en-US !
                 }
             }
-            else { print STDERR "ERROR: Can't open file $currentfile"; }
+            else { print STDERR "WARNING: Can't open file $currentfile"; }
         }
     }
     close ALLPARTICLES_MERGED;
@@ -624,8 +716,12 @@ sub sort_outfile{
         #if ( open ( SORTEDFILE , "< $outputfile" ) ){
         if ( open ( SORTEDFILE , "< $outfile" ) ){
 
+            my $line;
             while ( <SORTEDFILE> ){
-                push @lines , $_ ;
+                $line = $_;
+                if( $line =~ /^[^\#]/ ){
+                    push @lines , $line;
+                }
             }
             close SORTEDFILE;
             @sorted_lines = sort {
@@ -675,13 +771,14 @@ sub sort_outfile{
             } @lines;
 #            if ( open ( SORTEDFILE , "> $outputfile" ) ){
             if ( open ( SORTEDFILE , "> $outfile" ) ){
+                print SORTEDFILE get_license_header();
                 foreach my $newline ( @sorted_lines ) {
                     print SORTEDFILE $newline;
                     #print STDOUT $newline;
                 }
             }
             close SORTEDFILE;
-        } else { print STDERR "ERROR: Can't open file $outfile\n";}
+        } else { print STDERR "WARNING: Can't open file $outfile\n";}
 
 }
 #########################################################
@@ -977,6 +1074,9 @@ sub usage{
     print STDERR "    -s <sourceroot> Path to the modules, if no \$SRC_ROOT is set\n";
     print STDERR "    -l ( all | <isocode> | <isocode>=fallback ) comma seperated languages\n";
     print STDERR "    -v              Verbose\n";
+    print STDERR "\nExample:\n";
+    print STDERR "\nlocalize -e -l en-US,pt-BR=en-US -f my.sdf\n( Extract en-US and pt-BR with en-US fallback )\n";
+    print STDERR "\nlocalize -m -l cs -f my.sdf\n( Merge cs translation into the sourcecode ) \n";
 }
 
 #            my $line           = defined $_ ? $_ : '';
