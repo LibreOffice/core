@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartController_Insert.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: iha $ $Date: 2003-10-28 15:54:47 $
+ *  last change: $Author: bm $ $Date: 2003-11-04 12:37:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,9 +74,6 @@
 #include "DrawModelWrapper.hxx"
 #include "MultipleChartConverters.hxx"
 #include "LegendItemConverter.hxx"
-
-//maybe superfluous in future:
-#include "ChartTypeItemConverter.hxx"
 
 #ifndef _DRAFTS_COM_SUN_STAR_CHART2_XAXISCONTAINER_HPP_
 #include <drafts/com/sun/star/chart2/XAxisContainer.hpp>
@@ -522,8 +519,9 @@ void SAL_CALL ChartController::executeDispatch_InsertStatistic()
 
         uno::Reference< beans::XPropertySet > xProp=NULL;
         //@todo use correct ItemConverter if available
-        wrapper::ChartTypeItemConverter aItemConverter( xProp, m_pDrawModelWrapper->GetItemPool() );
-        SfxItemSet aItemSet = aItemConverter.CreateEmptyItemSet();
+//         wrapper::ChartTypeItemConverter aItemConverter( NULL, xProp, m_pDrawModelWrapper->GetItemPool() );
+//         SfxItemSet aItemSet = aItemConverter.CreateEmptyItemSet();
+        SfxItemSet aItemSet( m_pDrawModelWrapper->GetItemPool(), 1, 2 );
         //aItemConverter.FillItemSet( aItemSet );
 
         //prepare and open dialog
@@ -531,10 +529,11 @@ void SAL_CALL ChartController::executeDispatch_InsertStatistic()
         SchDataStatisticsDlg aDlg( pParent, aItemSet);
         if( aDlg.Execute() == RET_OK )
         {
-            SfxItemSet aOutItemSet = aItemConverter.CreateEmptyItemSet();
+//             SfxItemSet aOutItemSet = aItemConverter.CreateEmptyItemSet();
+            SfxItemSet aOutItemSet( m_pDrawModelWrapper->GetItemPool(), 1, 2 );
             aDlg.GetAttr( aOutItemSet );
 
-            bChanged = aItemConverter.ApplyItemSet( aOutItemSet );//model should be changed now
+//             bChanged = aItemConverter.ApplyItemSet( aOutItemSet );//model should be changed now
         }
     }
     catch( uno::RuntimeException& e)

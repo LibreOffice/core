@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LegendItemConverter.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-17 14:30:14 $
+ *  last change: $Author: bm $ $Date: 2003-11-04 12:37:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,7 +166,7 @@ bool LegendItemConverter::GetItemPropertyName( USHORT nWhichId, ::rtl::OUString 
 
 
 bool LegendItemConverter::ApplySpecialItem(
-    USHORT nWhichId, const SfxItemSet & rItemSet ) const
+    USHORT nWhichId, const SfxItemSet & rItemSet )
     throw( uno::Exception )
 {
     bool bChanged = false;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartTypeManager.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:31 $
+ *  last change: $Author: bm $ $Date: 2003-11-04 12:37:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -244,8 +244,8 @@ enum TemplateId
     TEMPLATE_THREEDBARFLAT,
     TEMPLATE_STACKEDTHREEDBARFLAT,
     TEMPLATE_PERCENTSTACKEDTHREEDBARFLAT,
-    TEMPLATE_COLUMNWITHONELINE,
-    TEMPLATE_STACKEDCOLUMNWITHONELINE,
+    TEMPLATE_COLUMNWITHLINE,
+    TEMPLATE_STACKEDCOLUMNWITHLINE,
     TEMPLATE_AREA,
     TEMPLATE_STACKEDAREA,
     TEMPLATE_PERCENTSTACKEDAREA,
@@ -312,8 +312,8 @@ const tTemplateMapType & lcl_DefaultChartTypeMap()
         ( C2U( "com.sun.star.chart2.template.ThreeDBarFlat" ),                  TEMPLATE_THREEDBARFLAT )
         ( C2U( "com.sun.star.chart2.template.StackedThreeDBarFlat" ),           TEMPLATE_STACKEDTHREEDBARFLAT )
         ( C2U( "com.sun.star.chart2.template.PercentStackedThreeDBarFlat" ),    TEMPLATE_PERCENTSTACKEDTHREEDBARFLAT )
-        ( C2U( "com.sun.star.chart2.template.ColumnWithOneLine" ),              TEMPLATE_COLUMNWITHONELINE )
-        ( C2U( "com.sun.star.chart2.template.StackedColumnWithOneLine" ),       TEMPLATE_STACKEDCOLUMNWITHONELINE )
+        ( C2U( "com.sun.star.chart2.template.ColumnWithLine" ),                 TEMPLATE_COLUMNWITHLINE )
+        ( C2U( "com.sun.star.chart2.template.StackedColumnWithLine" ),          TEMPLATE_STACKEDCOLUMNWITHLINE )
         ( C2U( "com.sun.star.chart2.template.Area" ),                           TEMPLATE_AREA )
         ( C2U( "com.sun.star.chart2.template.StackedArea" ),                    TEMPLATE_STACKEDAREA )
         ( C2U( "com.sun.star.chart2.template.PercentStackedArea" ),             TEMPLATE_PERCENTSTACKEDAREA )
@@ -399,167 +399,167 @@ uno::Reference< uno::XInterface > SAL_CALL ChartTypeManager::createInstance(
         {
             // Line
             case TEMPLATE_LINE:
-                xTemplate.set( new LineChartTypeTemplate( m_xContext,
+                xTemplate.set( new LineChartTypeTemplate( m_xContext, aServiceSpecifier,
                     chart2::StackMode_NONE, LineChartTypeTemplate::NO_SPLINE, false ));
                 break;
             case TEMPLATE_STACKEDLINE:
-                xTemplate.set( new LineChartTypeTemplate( m_xContext,
+                xTemplate.set( new LineChartTypeTemplate( m_xContext, aServiceSpecifier,
                     chart2::StackMode_STACKED, LineChartTypeTemplate::NO_SPLINE, false ));
                 break;
             case TEMPLATE_PERCENTSTACKEDLINE:
-                xTemplate.set( new LineChartTypeTemplate( m_xContext,
+                xTemplate.set( new LineChartTypeTemplate( m_xContext, aServiceSpecifier,
                     chart2::StackMode_STACKED_PERCENT, LineChartTypeTemplate::NO_SPLINE, false ));
                 break;
             case TEMPLATE_LINESYMBOL:
-                xTemplate.set( new LineChartTypeTemplate( m_xContext,
+                xTemplate.set( new LineChartTypeTemplate( m_xContext, aServiceSpecifier,
                     chart2::StackMode_NONE, LineChartTypeTemplate::NO_SPLINE, true ));
                 break;
             case TEMPLATE_STACKEDLINESYMBOL:
-                xTemplate.set( new LineChartTypeTemplate( m_xContext,
+                xTemplate.set( new LineChartTypeTemplate( m_xContext, aServiceSpecifier,
                     chart2::StackMode_STACKED, LineChartTypeTemplate::NO_SPLINE, true ));
                 break;
             case TEMPLATE_PERCENTSTACKEDLINESYMBOL:
-                xTemplate.set( new LineChartTypeTemplate( m_xContext,
+                xTemplate.set( new LineChartTypeTemplate( m_xContext, aServiceSpecifier,
                     chart2::StackMode_STACKED_PERCENT, LineChartTypeTemplate::NO_SPLINE, true ));
                 break;
             case TEMPLATE_CUBICSPLINE:
-                xTemplate.set( new LineChartTypeTemplate( m_xContext,
+                xTemplate.set( new LineChartTypeTemplate( m_xContext, aServiceSpecifier,
                     chart2::StackMode_NONE, LineChartTypeTemplate::CUBIC_SPLINE, false ));
                 break;
             case TEMPLATE_CUBICSPLINESYMBOL:
-                xTemplate.set( new LineChartTypeTemplate( m_xContext,
+                xTemplate.set( new LineChartTypeTemplate( m_xContext, aServiceSpecifier,
                     chart2::StackMode_NONE, LineChartTypeTemplate::CUBIC_SPLINE, true ));
                 break;
             case TEMPLATE_BSPLINE:
-                xTemplate.set( new LineChartTypeTemplate( m_xContext,
+                xTemplate.set( new LineChartTypeTemplate( m_xContext, aServiceSpecifier,
                     chart2::StackMode_NONE, LineChartTypeTemplate::B_SPLINE, false ));
                 break;
             case TEMPLATE_BSPLINESYMBOL:
-                xTemplate.set( new LineChartTypeTemplate( m_xContext,
+                xTemplate.set( new LineChartTypeTemplate( m_xContext, aServiceSpecifier,
                     chart2::StackMode_NONE, LineChartTypeTemplate::B_SPLINE, true ));
                 break;
             case TEMPLATE_THREEDLINE:
-                xTemplate.set( new LineChartTypeTemplate( m_xContext,
+                xTemplate.set( new LineChartTypeTemplate( m_xContext, aServiceSpecifier,
                     chart2::StackMode_NONE, LineChartTypeTemplate::NO_SPLINE, false, 3 ));
                 break;
 
             // Bar/Column
             case TEMPLATE_COLUMN:
-                xTemplate.set( new BarChartTypeTemplate( m_xContext,
+                xTemplate.set( new BarChartTypeTemplate( m_xContext, aServiceSpecifier,
                     chart2::StackMode_NONE, BarChartTypeTemplate::VERTICAL ));
                 break;
             case TEMPLATE_STACKEDCOLUMN:
-                xTemplate.set( new BarChartTypeTemplate( m_xContext,
+                xTemplate.set( new BarChartTypeTemplate( m_xContext, aServiceSpecifier,
                     chart2::StackMode_STACKED, BarChartTypeTemplate::VERTICAL ));
                 break;
             case TEMPLATE_PERCENTSTACKEDCOLUMN:
-                xTemplate.set( new BarChartTypeTemplate( m_xContext,
+                xTemplate.set( new BarChartTypeTemplate( m_xContext, aServiceSpecifier,
                     chart2::StackMode_STACKED_PERCENT, BarChartTypeTemplate::VERTICAL ));
                 break;
             case TEMPLATE_BAR:
-                xTemplate.set( new BarChartTypeTemplate( m_xContext,
+                xTemplate.set( new BarChartTypeTemplate( m_xContext, aServiceSpecifier,
                     chart2::StackMode_NONE, BarChartTypeTemplate::HORIZONTAL ));
                 break;
             case TEMPLATE_STACKEDBAR:
-                xTemplate.set( new BarChartTypeTemplate( m_xContext,
+                xTemplate.set( new BarChartTypeTemplate( m_xContext, aServiceSpecifier,
                     chart2::StackMode_STACKED, BarChartTypeTemplate::HORIZONTAL ));
                 break;
             case TEMPLATE_PERCENTSTACKEDBAR:
-                xTemplate.set( new BarChartTypeTemplate( m_xContext,
+                xTemplate.set( new BarChartTypeTemplate( m_xContext, aServiceSpecifier,
                     chart2::StackMode_STACKED_PERCENT, BarChartTypeTemplate::HORIZONTAL ));
                 break;
             case TEMPLATE_THREEDCOLUMNDEEP:
-                xTemplate.set( new BarChartTypeTemplate( m_xContext,
+                xTemplate.set( new BarChartTypeTemplate( m_xContext, aServiceSpecifier,
                     chart2::StackMode_NONE, BarChartTypeTemplate::VERTICAL,
                     3, BarChartTypeTemplate::THREE_D_DEEP ));
                 break;
             case TEMPLATE_THREEDCOLUMNFLAT:
-                xTemplate.set( new BarChartTypeTemplate( m_xContext,
+                xTemplate.set( new BarChartTypeTemplate( m_xContext, aServiceSpecifier,
                     chart2::StackMode_NONE, BarChartTypeTemplate::VERTICAL,
                     3, BarChartTypeTemplate::THREE_D_FLAT ));
                 break;
             case TEMPLATE_STACKEDTHREEDCOLUMNFLAT:
-                xTemplate.set( new BarChartTypeTemplate( m_xContext,
+                xTemplate.set( new BarChartTypeTemplate( m_xContext, aServiceSpecifier,
                     chart2::StackMode_STACKED, BarChartTypeTemplate::VERTICAL,
                     3, BarChartTypeTemplate::THREE_D_FLAT ));
             case TEMPLATE_PERCENTSTACKEDTHREEDCOLUMNFLAT:
-                xTemplate.set( new BarChartTypeTemplate( m_xContext,
+                xTemplate.set( new BarChartTypeTemplate( m_xContext, aServiceSpecifier,
                     chart2::StackMode_STACKED_PERCENT, BarChartTypeTemplate::VERTICAL,
                     3, BarChartTypeTemplate::THREE_D_FLAT ));
             case TEMPLATE_THREEDBARDEEP:
-                xTemplate.set( new BarChartTypeTemplate( m_xContext,
+                xTemplate.set( new BarChartTypeTemplate( m_xContext, aServiceSpecifier,
                     chart2::StackMode_NONE, BarChartTypeTemplate::HORIZONTAL,
                     3, BarChartTypeTemplate::THREE_D_DEEP ));
                 break;
             case TEMPLATE_THREEDBARFLAT:
-                xTemplate.set( new BarChartTypeTemplate( m_xContext,
+                xTemplate.set( new BarChartTypeTemplate( m_xContext, aServiceSpecifier,
                     chart2::StackMode_NONE, BarChartTypeTemplate::HORIZONTAL,
                     3, BarChartTypeTemplate::THREE_D_FLAT ));
                 break;
             case TEMPLATE_STACKEDTHREEDBARFLAT:
-                xTemplate.set( new BarChartTypeTemplate( m_xContext,
+                xTemplate.set( new BarChartTypeTemplate( m_xContext, aServiceSpecifier,
                     chart2::StackMode_STACKED, BarChartTypeTemplate::HORIZONTAL,
                     3, BarChartTypeTemplate::THREE_D_FLAT ));
                 break;
             case TEMPLATE_PERCENTSTACKEDTHREEDBARFLAT:
-                xTemplate.set( new BarChartTypeTemplate( m_xContext,
+                xTemplate.set( new BarChartTypeTemplate( m_xContext, aServiceSpecifier,
                     chart2::StackMode_STACKED_PERCENT, BarChartTypeTemplate::HORIZONTAL,
                     3, BarChartTypeTemplate::THREE_D_FLAT ));
                 break;
 
             // Combi-Chart Line/Column
-            case TEMPLATE_COLUMNWITHONELINE:
-            case TEMPLATE_STACKEDCOLUMNWITHONELINE:
+            case TEMPLATE_COLUMNWITHLINE:
+            case TEMPLATE_STACKEDCOLUMNWITHLINE:
             {
-                chart2::StackMode eMode = ( nId == TEMPLATE_COLUMNWITHONELINE )
+                chart2::StackMode eMode = ( nId == TEMPLATE_COLUMNWITHLINE )
                     ? chart2::StackMode_NONE
                     : chart2::StackMode_STACKED;
                 sal_Int32 nNumOfLines = 1;
                 getFastPropertyValue( PROP_TEMPLATE_MANAGER_NUMBER_OF_LINES ) >>= nNumOfLines;
 
-                xTemplate.set( new ColumnLineChartTypeTemplate( m_xContext, eMode, nNumOfLines ));
+                xTemplate.set( new ColumnLineChartTypeTemplate( m_xContext, aServiceSpecifier, eMode, nNumOfLines ));
             }
             break;
 
             // Area
             case TEMPLATE_AREA:
-                xTemplate.set( new AreaChartTypeTemplate( m_xContext, chart2::StackMode_NONE ));
+                xTemplate.set( new AreaChartTypeTemplate( m_xContext, aServiceSpecifier, chart2::StackMode_NONE ));
                 break;
             case TEMPLATE_STACKEDAREA:
-                xTemplate.set( new AreaChartTypeTemplate( m_xContext, chart2::StackMode_STACKED ));
+                xTemplate.set( new AreaChartTypeTemplate( m_xContext, aServiceSpecifier, chart2::StackMode_STACKED ));
                 break;
             case TEMPLATE_PERCENTSTACKEDAREA:
-                xTemplate.set( new AreaChartTypeTemplate( m_xContext, chart2::StackMode_STACKED_PERCENT ));
+                xTemplate.set( new AreaChartTypeTemplate( m_xContext, aServiceSpecifier, chart2::StackMode_STACKED_PERCENT ));
                 break;
             case TEMPLATE_THREEDAREA:
-                xTemplate.set( new AreaChartTypeTemplate( m_xContext, chart2::StackMode_NONE, 3 ));
+                xTemplate.set( new AreaChartTypeTemplate( m_xContext, aServiceSpecifier, chart2::StackMode_NONE, 3 ));
                 break;
             case TEMPLATE_STACKEDTHREEDAREA:
-                xTemplate.set( new AreaChartTypeTemplate( m_xContext, chart2::StackMode_STACKED, 3 ));
+                xTemplate.set( new AreaChartTypeTemplate( m_xContext, aServiceSpecifier, chart2::StackMode_STACKED, 3 ));
                 break;
             case TEMPLATE_PERCENTSTACKEDTHREEDAREA:
-                xTemplate.set( new AreaChartTypeTemplate( m_xContext, chart2::StackMode_STACKED_PERCENT, 3 ));
+                xTemplate.set( new AreaChartTypeTemplate( m_xContext, aServiceSpecifier, chart2::StackMode_STACKED_PERCENT, 3 ));
                 break;
 
             case TEMPLATE_PIE:
-                xTemplate.set( new PieChartTypeTemplate( m_xContext,
-                    PieChartTypeTemplate::NO_OFFSET, false ));
+                xTemplate.set( new PieChartTypeTemplate( m_xContext, aServiceSpecifier,
+                    chart2::PieChartOffsetMode_NONE, false ));
                 break;
             case TEMPLATE_PIEONEEXPLODED:
-                xTemplate.set( new PieChartTypeTemplate( m_xContext,
-                    PieChartTypeTemplate::FIRST_EXPLODED, false ));
+                xTemplate.set( new PieChartTypeTemplate( m_xContext, aServiceSpecifier,
+                    chart2::PieChartOffsetMode_FIRST_EXPLODED, false ));
                 break;
             case TEMPLATE_PIEALLEXPLODED:
-                xTemplate.set( new PieChartTypeTemplate( m_xContext,
-                    PieChartTypeTemplate::ALL_EXPLODED, false ));
+                xTemplate.set( new PieChartTypeTemplate( m_xContext, aServiceSpecifier,
+                    chart2::PieChartOffsetMode_ALL_EXPLODED, false ));
                 break;
             case TEMPLATE_RING:
-                xTemplate.set( new PieChartTypeTemplate( m_xContext,
-                    PieChartTypeTemplate::NO_OFFSET, true ));
+                xTemplate.set( new PieChartTypeTemplate( m_xContext, aServiceSpecifier,
+                    chart2::PieChartOffsetMode_NONE, true ));
                 break;
             case TEMPLATE_THREEDPIE:
-                xTemplate.set( new PieChartTypeTemplate( m_xContext,
-                    PieChartTypeTemplate::NO_OFFSET, false, 3 ));
+                xTemplate.set( new PieChartTypeTemplate( m_xContext, aServiceSpecifier,
+                    chart2::PieChartOffsetMode_NONE, false, 3 ));
                 break;
 
             case TEMPLATE_SCATTERLINESYMBOL:
@@ -572,7 +572,7 @@ uno::Reference< uno::XInterface > SAL_CALL ChartTypeManager::createInstance(
 
             // TEST !!!
             case TEMPLATE_NET:
-                xTemplate.set( new DoubleStackedBarChartTypeTemplate( m_xContext,
+                xTemplate.set( new DoubleStackedBarChartTypeTemplate( m_xContext, aServiceSpecifier,
                     chart2::StackMode_NONE, chart2::StackMode_STACKED ));
                 break;
 
@@ -580,14 +580,14 @@ uno::Reference< uno::XInterface > SAL_CALL ChartTypeManager::createInstance(
             case TEMPLATE_NETSYMBOL:
             case TEMPLATE_STACKEDNET:
             case TEMPLATE_STACKEDNETSYMBOL:
-                xTemplate.set( new DoubleStackedBarChartTypeTemplate( m_xContext,
+                xTemplate.set( new DoubleStackedBarChartTypeTemplate( m_xContext, aServiceSpecifier,
                     chart2::StackMode_STACKED, chart2::StackMode_STACKED ));
                 break;
 
             // TEST !!!
             case TEMPLATE_PERCENTSTACKEDNET:
             case TEMPLATE_PERCENTSTACKEDNETSYMBOL:
-                xTemplate.set( new DoubleStackedBarChartTypeTemplate( m_xContext,
+                xTemplate.set( new DoubleStackedBarChartTypeTemplate( m_xContext, aServiceSpecifier,
                     chart2::StackMode_STACKED_PERCENT, chart2::StackMode_STACKED ));
                 break;
 

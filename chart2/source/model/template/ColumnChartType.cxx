@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: CharacterPropertyItemConverter.hxx,v $
+ *  $RCSfile: ColumnChartType.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-04 12:37:13 $
+ *  last change: $Author: bm $ $Date: 2003-11-04 12:37:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,45 +58,26 @@
  *
  *
  ************************************************************************/
-#ifndef CHART_CHARACTERPROPERTYITEMCONVERTER_HXX
-#define CHART_CHARACTERPROPERTYITEMCONVERTER_HXX
+#include "ColumnChartType.hxx"
 
-#include "ItemConverter.hxx"
-
-#ifndef _COM_SUN_STAR_UNO_ANY_HXX_
-#include <com/sun/star/uno/Any.hxx>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYSTATE_HPP_
-#include <com/sun/star/beans/PropertyState.hpp>
-#endif
+using namespace ::com::sun::star;
+using namespace ::drafts::com::sun::star;
 
 namespace chart
 {
-namespace wrapper
+
+ColumnChartType::ColumnChartType( sal_Int32 nDim /* = 2 */ ) :
+        ChartType( nDim )
+{}
+
+ColumnChartType::~ColumnChartType()
+{}
+
+// ____ XChartType ____
+::rtl::OUString SAL_CALL ColumnChartType::getChartType()
+    throw (uno::RuntimeException)
 {
+    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.ColumnChart" ));
+}
 
-class CharacterPropertyItemConverter :
-        public ::comphelper::ItemConverter
-{
-public:
-    CharacterPropertyItemConverter(
-        const ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet > & rPropertySet,
-        SfxItemPool& rItemPool );
-    virtual ~CharacterPropertyItemConverter();
-
-protected:
-    virtual const USHORT * GetWhichPairs() const;
-    virtual bool GetItemPropertyName( USHORT nWhichId, ::rtl::OUString & rOutName ) const;
-
-    virtual void FillSpecialItem( USHORT nWhichId, SfxItemSet & rOutItemSet ) const
-        throw( ::com::sun::star::uno::Exception );
-    virtual bool ApplySpecialItem( USHORT nWhichId, const SfxItemSet & rItemSet )
-        throw( ::com::sun::star::uno::Exception );
-};
-
-} //  namespace wrapper
 } //  namespace chart
-
-// CHART_CHARACTERPROPERTYITEMCONVERTER_HXX
-#endif

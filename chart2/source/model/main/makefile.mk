@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: bm $ $Date: 2003-10-17 14:32:50 $
+#   last change: $Author: bm $ $Date: 2003-11-04 12:37:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -106,6 +106,7 @@ SLOFILES=	\
     $(SLO)$/Scale.obj \
     $(SLO)$/StyleFamilies.obj \
     $(SLO)$/StyleFamily.obj \
+    $(SLO)$/SubGrid.obj \
     $(SLO)$/Title.obj \
     $(SLO)$/UserDefinedProperties.obj \
     $(SLO)$/Wall.obj \

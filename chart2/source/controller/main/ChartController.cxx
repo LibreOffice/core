@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartController.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: iha $ $Date: 2003-10-30 12:15:45 $
+ *  last change: $Author: bm $ $Date: 2003-11-04 12:37:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,7 @@
 #include "ChartWindow.hxx"
 #include "DrawModelWrapper.hxx"
 #include "DrawViewWrapper.hxx"
+#include "DataSeriesTreeHelper.hxx"
 
 #include "macros.hxx"
 
@@ -89,6 +90,9 @@
 #endif
 #ifndef _DRAFTS_COM_SUN_STAR_CHART2_XSTACKABLESCALEGROUP_HPP_
 #include <drafts/com/sun/star/chart2/XStackableScaleGroup.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XCHARTTYPETEMPLATE_HPP_
+#include <drafts/com/sun/star/chart2/XChartTypeTemplate.hpp>
 #endif
 
 //-------
@@ -1077,52 +1081,55 @@ void SAL_CALL ChartController::executeDispatch_ChartType()
 
     //-------------------------------------------------------------
     //convert properties to ItemSet
-    uno::Reference< beans::XPropertySet > xProp;
-    uno::Reference< XChartDocument > xChartDoc( m_aModel->getModel(), uno::UNO_QUERY );
-    if( xChartDoc.is())
-        xProp.set( xChartDoc->getChartTypeManager(), uno::UNO_QUERY );
-    DBG_ASSERT( xProp.is(), "Invalid ChartTypeManager" );
+    uno::Reference< XChartDocument >   xChartDoc( m_aModel->getModel(), uno::UNO_QUERY );
+    DBG_ASSERT( xChartDoc.is(), "Invalid XChartDocument" );
+    if( !xChartDoc.is())
+        return;
+    uno::Reference< XDiagram > xDia( xChartDoc->getDiagram() );
+    DBG_ASSERT( xDia.is(), "No Diagram set!" );
+    uno::Reference< XChartTypeTemplate > xTemplate;
 
+    if( xChartDoc.is())
     {
-        wrapper::ChartTypeItemConverter aItemConverter( xProp, m_pDrawModelWrapper->GetItemPool() );
-        SfxItemSet aItemSet = aItemConverter.CreateEmptyItemSet();//creates only an empty itemset
-        aItemConverter.FillItemSet( aItemSet );
+        uno::Reference< lang::XMultiServiceFactory > xCTManager( xChartDoc->getChartTypeManager(), uno::UNO_QUERY );
+//         wrapper::ChartTypeItemConverter aItemConverter( xCTManager, xProp, m_pDrawModelWrapper->GetItemPool() );
+//         SfxItemSet aItemSet = aItemConverter.CreateEmptyItemSet();//creates only an empty itemset
+//         aItemConverter.FillItemSet( aItemSet );
         //-------------------------------------------------------------
         //prepare and open dialog
         Window* pParent( NULL );
-        SchDiagramTypeDlg aDlg( pParent, aItemSet );
+        SchDiagramTypeDlg aDlg( pParent, xDia, xCTManager );
         if( aDlg.Execute() == RET_OK )
         {
-            SfxItemSet aOutItemSet = aItemConverter.CreateEmptyItemSet();
-            aDlg.GetAttr( aOutItemSet );
+//             SfxItemSet aOutItemSet = aItemConverter.CreateEmptyItemSet();
+//             aDlg.GetAttr( aOutItemSet );
 
-            bChanged = aItemConverter.ApplyItemSet( aOutItemSet );//model should be changed now
+//             bChanged = aItemConverter.ApplyItemSet( aOutItemSet );//model should be changed now
+
+//             // XPropertySet may have been changed
+//             uno::Reference< beans::XPropertySet > xNewProp( aItemConverter.GetPropertySet());
+//             bChanged = bChanged || (xProp != xNewProp);
+//             xProp = xNewProp;
+            xTemplate.set( aDlg.getTemplate());
+            bChanged = true;
         }
     }
 
     try
     {
         //make sure that all objects using  m_pDrawModelWrapper or m_pChartView are already deleted
-        if(bChanged &&
-           xChartDoc.is())
+        if( bChanged &&
+            xTemplate.is() )
         {
-            uno::Reference< lang::XMultiServiceFactory > xFact( xProp, uno::UNO_QUERY );
-            if( xFact.is() )
-            {
-                ::rtl::OUString aServiceName;
-                if( xProp->getPropertyValue( C2U( "ChartStyleTemplateServiceName" )) >>= aServiceName )
-                {
-                    uno::Reference< XChartTypeTemplate > xTemplate(
-                        xFact->createInstance( aServiceName ), uno::UNO_QUERY );
-                    xChartDoc->setChartTypeTemplate( xTemplate );
-                    if( xTemplate.is())
-                        xTemplate->changeDiagram( xChartDoc->getDiagram() );
-                    impl_rebuildView();
-                }
-            }
+            xChartDoc->setDiagram(
+                xTemplate->createDiagram(
+                    helper::DataSeriesTreeHelper::getDataSeriesFromDiagram(
+                        xChartDoc->getDiagram())));
+
+            impl_rebuildView();
         }
     }
-    catch( uno::RuntimeException& e)
+    catch( uno::Exception& e)
     {
         ASSERT_EXCEPTION( e );
     }

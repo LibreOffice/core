@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BarChartTypeTemplate.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:31 $
+ *  last change: $Author: bm $ $Date: 2003-11-04 12:37:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,13 @@
 #ifndef CHART_BARCHARTTYPETEMPLATE_HXX
 #define CHART_BARCHARTTYPETEMPLATE_HXX
 
+#include "OPropertySet.hxx"
+#include "MutexContainer.hxx"
+
+#ifndef _COMPHELPER_UNO3_HXX_
+#include <comphelper/uno3.hxx>
+#endif
+
 #include "ChartTypeTemplate.hxx"
 
 #ifndef _DRAFTS_COM_SUN_STAR_CHART2_STACKMODE_HPP_
@@ -70,7 +77,10 @@
 namespace chart
 {
 
-class BarChartTypeTemplate : public ChartTypeTemplate
+class BarChartTypeTemplate :
+        public helper::MutexContainer,
+        public ChartTypeTemplate,
+        public ::property::OPropertySet
 {
 public:
     enum BarDirection
@@ -88,20 +98,37 @@ public:
     explicit BarChartTypeTemplate(
         ::com::sun::star::uno::Reference<
             ::com::sun::star::uno::XComponentContext > const & xContext,
+        const ::rtl::OUString & rServiceName,
         ::drafts::com::sun::star::chart2::StackMode eStackMode,
         BarDirection eDirection,
         sal_Int32 nDim = 2,
         ThreeDMode eThreeDMode = THREE_D_FLAT );
     virtual ~BarChartTypeTemplate();
 
+    /// XServiceInfo declarations
+    APPHELPER_XSERVICEINFO_DECL()
+
+    /// merge XInterface implementations
+     DECLARE_XINTERFACE()
+    /// merge XTypeProvider implementations
+     DECLARE_XTYPEPROVIDER()
+
 protected:
+    // ____ OPropertySet ____
+    virtual ::com::sun::star::uno::Any GetDefaultValue( sal_Int32 nHandle ) const
+        throw(::com::sun::star::beans::UnknownPropertyException);
+    virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper();
+
+    // ____ XPropertySet ____
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL
+        getPropertySetInfo()
+        throw (::com::sun::star::uno::RuntimeException);
+
     // ____ ChartTypeTemplate ____
     virtual sal_Int32 getDimension() const;
     virtual ::drafts::com::sun::star::chart2::StackMode getStackMode() const;
-
-    // ____ XChartTypeTemplate ____
     virtual ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::chart2::XChartType > SAL_CALL getChartTypeForAdditionalSeries()
+        ::drafts::com::sun::star::chart2::XChartType > getDefaultChartType()
         throw (::com::sun::star::uno::RuntimeException);
 
 private:

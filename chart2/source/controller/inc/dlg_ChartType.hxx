@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlg_ChartType.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:27 $
+ *  last change: $Author: bm $ $Date: 2003-11-04 12:37:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,20 @@
 #ifndef _SFXITEMSET_HXX
 #include <svtools/itemset.hxx>
 #endif
+// header for SvxChartStyle
+#ifndef _SVX_CHRTITEM_HXX
+#include <svx/chrtitem.hxx>
+#endif
+
+#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XDIAGRAM_HPP_
+#include <drafts/com/sun/star/chart2/XDiagram.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XCHARTTYPETEMPLATE_HPP_
+#include <drafts/com/sun/star/chart2/XChartTypeTemplate.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
 
 //.............................................................................
 namespace chart
@@ -151,7 +165,12 @@ private:
     HelpButton      aBtnHelp;
     ChartDimension  eDimension;
 
-    const SfxItemSet&       rOutAttrs;
+//  const SfxItemSet&       rOutAttrs;
+
+    ::com::sun::star::uno::Reference<
+            ::drafts::com::sun::star::chart2::XDiagram > m_xDiagram;
+    ::com::sun::star::uno::Reference<
+            ::com::sun::star::lang::XMultiServiceFactory > m_xTemplateManager;
 
     void Reset();
 
@@ -163,31 +182,37 @@ private:
     DECL_LINK(DoubleClickHdl, void*);
     DECL_LINK(ClickHdl, void*);
 
-    void SwitchDepth (USHORT nID);
+    void SwitchDepth( SvxChartStyle eID );
 
     /** Hides/Shows the controls for line/bar combination chart according to the
         chart type id given as nID.
      */
-    void SwitchNumLines( USHORT nID );
+    void SwitchNumLines( SvxChartStyle eID );
 
     void FillValueSets();
 
 public:
-    SchDiagramTypeDlg(Window* pWindow, const SfxItemSet& rInAttrs);
+    SchDiagramTypeDlg(
+        Window* pWindow,
+        const ::com::sun::star::uno::Reference<
+            ::drafts::com::sun::star::chart2::XDiagram > & xDiagram,
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::lang::XMultiServiceFactory > & xTemplateManager );
     virtual ~SchDiagramTypeDlg();
 
-    void    GetAttr(SfxItemSet& rOutAttrs);
-//  int     GetDepth();
-//  void    SetDepth( int nDeep );
+//BM    void    GetAttr(SfxItemSet& rOutAttrs);
 
-//  int     GetGranularity();
-//  void    SetGranularity( int nGranularity );
+     sal_Int32 GetDepth();
+    void      SetDepth( sal_Int32 nDeep );
+
+     sal_Int32 GetGranularity();
+     void      SetGranularity( sal_Int32 nGranularity );
 
     /** The value set here determines the maximum number of lines in a line/bar
         combination chart.  This should usually be one less than the number of
         series, such that at least one series remains a bar.
      */
-    void    SetMaximumNumberOfLines( long nMaxLines );
+    void    SetMaximumNumberOfLines( sal_Int32 nMaxLines );
     /** set the current number of lines that are used in a line/bar combination
         chart.
      */
@@ -195,9 +220,13 @@ public:
     /** get the number of lines that should be used for a line/bar combination
         chart.  This has to be set before to be meaningful
      */
-//     long    GetNumberOfLines() const;
+    sal_Int32  GetNumberOfLines() const;
 
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
+
+    ::com::sun::star::uno::Reference<
+            ::drafts::com::sun::star::chart2::XChartTypeTemplate >
+        getTemplate() const;
 };
 
 //.............................................................................

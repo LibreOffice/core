@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ItemConverter.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-17 14:30:10 $
+ *  last change: $Author: bm $ $Date: 2003-11-04 12:37:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,6 +166,12 @@ public:
      */
     bool IsValid() const;
 
+    /** Returns the XPropertySet that was given in the CTOR and is used to apply
+        items in ApplyItemSet().
+     */
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::beans::XPropertySet >  GetPropertySet() const;
+
     /** Invalidates all items in rDestSet, that are set (state SFX_ITEM_SET) in
         both item sets (rDestSet and rSourceSet) and have differing content.
      */
@@ -215,19 +221,20 @@ protected:
 
         @return true if the item changed a property, false otherwise.
      */
-    virtual bool ApplySpecialItem( USHORT nWhichId, const SfxItemSet & rItemSet ) const
+    virtual bool ApplySpecialItem( USHORT nWhichId, const SfxItemSet & rItemSet )
         throw( ::com::sun::star::uno::Exception );
+
+    /** If the XPropertySet has to change during the converting (necessary for ChartType)
+     */
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
+        SetNewPropertySet(
+            const ::com::sun::star::uno::Reference<
+            ::com::sun::star::beans::XPropertySet > & xNewProp );
 
     // ________
 
     /// Returns the pool
     SfxItemPool & GetItemPool() const;
-
-    /** Returns the XPropertySet that was given in the CTOR and is used to apply
-        items in ApplyItemSet().
-     */
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet >  GetPropertySet() const;
 
     // ____ ::utl::OEventListenerAdapter ____
     virtual void _disposing( const ::com::sun::star::lang::EventObject& _rSource );

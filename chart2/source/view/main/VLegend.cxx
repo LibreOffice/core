@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VLegend.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: iha $ $Date: 2003-10-31 12:50:57 $
+ *  last change: $Author: bm $ $Date: 2003-11-04 12:37:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -263,6 +263,19 @@ uno::Reference< drawing::XShape >
         else if( aChartType.equals( C2U( "com.sun.star.chart2.LineChart" )))
         {
             eSymbolStyle = chart2::LegendSymbolStyle_LINE;
+            try
+            {
+                // use a box for 3d-line charts
+                sal_Int32 nDim;
+                uno::Reference< beans::XPropertySet > xCTProp( xChartType, uno::UNO_QUERY_THROW );
+                if(( xCTProp->getPropertyValue( C2U( "Dimension" )) >>= nDim ) &&
+                   nDim == 3 )
+                    eSymbolStyle = chart2::LegendSymbolStyle_BOX;
+            }
+            catch( uno::Exception & ex )
+            {
+                ASSERT_EXCEPTION( ex );
+            }
         }
         else if( aChartType.equals( C2U( "com.sun.star.chart2.PieChart" )))
         {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GraphicPropertyItemConverter.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-17 14:30:14 $
+ *  last change: $Author: bm $ $Date: 2003-11-04 12:37:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -416,7 +416,7 @@ void GraphicPropertyItemConverter::FillSpecialItem(
 }
 
 bool GraphicPropertyItemConverter::ApplySpecialItem(
-    USHORT nWhichId, const SfxItemSet & rItemSet ) const
+    USHORT nWhichId, const SfxItemSet & rItemSet )
     throw( uno::Exception )
 {
 //     if( m_eGraphicObjectType == LINE_DATA_POINT ||
@@ -631,7 +631,7 @@ void GraphicPropertyItemConverter::FillBitmapItem(
 }
 
 void GraphicPropertyItemConverter::ApplyBitmapItem(
-    USHORT nWhichId, const SfxItemSet & rItemSet ) const
+    USHORT nWhichId, const SfxItemSet & rItemSet )
     throw( beans::UnknownPropertyException )
 {
     static const ::rtl::OUString aBitmapPropName(

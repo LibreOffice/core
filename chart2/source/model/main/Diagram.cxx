@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Diagram.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 12:54:13 $
+ *  last change: $Author: bm $ $Date: 2003-11-04 12:37:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,6 +165,11 @@ Diagram::Diagram( uno::Reference< uno::XComponentContext > const & xContext ) :
     m_xTitle( NULL ),
     m_aIdentifier( C2U( "@diagram" ))
 {
+    if( ! m_xContext.is() ||
+        ! ( xContext->getValueByName( C2U( "TemplateServiceName" )) >>= m_aTemplateServiceName ))
+    {
+        OSL_ENSURE( false, "Missing argument TemplateServiceName" );
+    }
 }
 
 Diagram::~Diagram()
@@ -199,6 +204,12 @@ void SAL_CALL Diagram::setTree(
         throw lang::IllegalArgumentException();
     }
 }
+
+// ::rtl::OUString SAL_CALL Diagram::getChartTypeTemplateServiceName()
+//     throw (uno::RuntimeException)
+// {
+//     return m_aTemplateServiceName;
+// }
 
 uno::Reference< beans::XPropertySet > SAL_CALL Diagram::getWall()
     throw (uno::RuntimeException)
@@ -484,6 +495,6 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( Diagram, Diagram_Base, ::property::OPropertySe
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
 APPHELPER_XSERVICEINFO_IMPL( Diagram,
-                             C2U( "com.sun.star.comp.chart.Diagram" ));
+                             C2U( "com.sun.star.comp.chart2.Diagram" ));
 
 } //  namespace chart

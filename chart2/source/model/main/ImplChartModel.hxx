@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImplChartModel.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-17 14:48:14 $
+ *  last change: $Author: bm $ $Date: 2003-11-04 12:37:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,10 +93,6 @@
 #include <com/sun/star/container/NoSuchElementException.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_CHART_XCHARTDOCUMENT_HPP_
-#include <com/sun/star/chart/XChartDocument.hpp>
-#endif
-
 #ifndef _CPPUHELPER_WEAKREF_HXX_
 #include <cppuhelper/weakref.hxx>
 #endif
@@ -180,11 +176,6 @@ public:
     void SetTitle( const ::com::sun::star::uno::Reference<
                    ::drafts::com::sun::star::chart2::XTitle >& rTitle );
 
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart::XChartDocument > GetOldChartDocument(
-            const ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::chart2::XChartDocument > & xNewModel );
-
     /** Is called by the ChartModel's XComponent::dispose() to notify the
         impl-class to release resources
      */
@@ -226,8 +217,6 @@ private:
     ::com::sun::star::uno::Reference< ::drafts::com::sun::star::chart2::XTitle >
                                           m_xTitle;
 
-    ::com::sun::star::uno::WeakReference< ::com::sun::star::chart::XChartDocument >
-                                          m_xOldModel;
     bool                                  m_bIsDisposed;
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
                                           m_xPageBackground;

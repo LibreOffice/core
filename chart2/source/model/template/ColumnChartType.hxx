@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: ColumnLineChartTypeTemplate.hxx,v $
+ *  $RCSfile: ColumnChartType.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-04 12:37:34 $
+ *  last change: $Author: bm $ $Date: 2003-11-04 12:37:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,78 +58,27 @@
  *
  *
  ************************************************************************/
-#ifndef CHART_COLUMNLINECHARTTYPETEMPLATE_HXX
-#define CHART_COLUMNLINECHARTTYPETEMPLATE_HXX
+#ifndef CHART_COLUMNCHARTTYPE_HXX
+#define CHART_COLUMNCHARTTYPE_HXX
 
-#include "ChartTypeTemplate.hxx"
-
-#include "OPropertySet.hxx"
-#include "MutexContainer.hxx"
-
-#ifndef _COMPHELPER_UNO3_HXX_
-#include <comphelper/uno3.hxx>
-#endif
-
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_STACKMODE_HPP_
-#include <drafts/com/sun/star/chart2/StackMode.hpp>
-#endif
+#include "ChartType.hxx"
 
 namespace chart
 {
 
-class ColumnLineChartTypeTemplate :
-        public helper::MutexContainer,
-        public ChartTypeTemplate,
-        public ::property::OPropertySet
+class ColumnChartType : public ChartType
 {
 public:
-    explicit ColumnLineChartTypeTemplate(
-        ::com::sun::star::uno::Reference<
-            ::com::sun::star::uno::XComponentContext > const & xContext,
-        const ::rtl::OUString & rServiceName,
-        ::drafts::com::sun::star::chart2::StackMode eStackMode,
-        sal_Int32 nNumberOfLines );
-    virtual ~ColumnLineChartTypeTemplate();
-
-    /// XServiceInfo declarations
-    APPHELPER_XSERVICEINFO_DECL()
-
-    /// merge XInterface implementations
-     DECLARE_XINTERFACE()
-    /// merge XTypeProvider implementations
-     DECLARE_XTYPEPROVIDER()
+    ColumnChartType( sal_Int32 nDim = 2 );
+    virtual ~ColumnChartType();
 
 protected:
-    // ____ OPropertySet ____
-    virtual ::com::sun::star::uno::Any GetDefaultValue( sal_Int32 nHandle ) const
-        throw(::com::sun::star::beans::UnknownPropertyException);
-    virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper();
-
-    // ____ XPropertySet ____
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL
-        getPropertySetInfo()
+    // ____ XChartType ____
+    virtual ::rtl::OUString SAL_CALL getChartType()
         throw (::com::sun::star::uno::RuntimeException);
-
-    // ____ ChartTypeTemplate ____
-    virtual ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::chart2::XDataSeriesTreeParent > createDataSeriesTree(
-            const ::com::sun::star::uno::Sequence<
-                ::com::sun::star::uno::Reference<
-                    ::drafts::com::sun::star::chart2::XDataSeries > >& aSeriesSeq,
-            const ::com::sun::star::uno::Reference<
-                ::drafts::com::sun::star::chart2::XBoundedCoordinateSystem > & rCoordSys
-            );
-
-    virtual ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::chart2::XChartType > getDefaultChartType()
-        throw (::com::sun::star::uno::RuntimeException);
-
-private:
-    ::drafts::com::sun::star::chart2::StackMode
-                       m_eStackMode;
 };
 
 } //  namespace chart
 
-// CHART_COLUMNLINECHARTTYPETEMPLATE_HXX
+// CHART_COLUMNCHARTTYPE_HXX
 #endif

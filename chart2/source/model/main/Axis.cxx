@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Axis.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 15:49:33 $
+ *  last change: $Author: bm $ $Date: 2003-11-04 12:37:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -309,7 +309,13 @@ Axis::~Axis()
 // --------------------------------------------------------------------------------
 
 // ____ XAxis ____
-// (nothing)
+uno::Sequence< uno::Reference< beans::XPropertySet > > SAL_CALL Axis::getSubTickProperties()
+    throw (uno::RuntimeException)
+{
+    OSL_ENSURE( false, "Not implemented yet" );
+    return uno::Sequence< uno::Reference< beans::XPropertySet > >();
+}
+
 
 // ____ XMeter ____
 void SAL_CALL Axis::attachCoordinateSystem(

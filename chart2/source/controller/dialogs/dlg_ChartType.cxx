@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlg_ChartType.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:25 $
+ *  last change: $Author: bm $ $Date: 2003-11-04 12:37:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,14 +93,13 @@
 #include "Bitmaps.hrc"
 #include "Bitmaps_HC.hrc"
 #include "Strings.hrc"
+#include "DataSeriesTreeHelper.hxx"
+#include "InlineContainer.hxx"
+#include "macros.hxx"
+
+#include <functional>
 
 #include "SchSfxItemIds.hxx"
-
-//#include "SchAllDefinesFor_svx_chrtitem.hxx"
-#define ITEMID_CHARTSTYLE   SCHATTR_DIAGRAM_STYLE
-#ifndef _SVX_CHRTITEM_HXX
-#include <svx/chrtitem.hxx>
-#endif
 
 // header for class SfxInt32Item
 #ifndef _SFXINTITEM_HXX
@@ -141,6 +140,175 @@
 //#define CHTYPE_ADDIN         11
 
 //.............................................................................
+namespace
+{
+typedef ::std::map< ::rtl::OUString, sal_Int32 > tTemplateServiceMap;
+
+const tTemplateServiceMap & lcl_GetChartTemplateServiceNameMap()
+{
+    static tTemplateServiceMap aTemplateMap(
+        ::comphelper::MakeMap< ::rtl::OUString, sal_Int32 >
+        ( C2U( "com.sun.star.chart2.template.Line" ),                           CHSTYLE_2D_LINE)
+        ( C2U( "com.sun.star.chart2.template.StackedLine" ),                    CHSTYLE_2D_STACKEDLINE)
+        ( C2U( "com.sun.star.chart2.template.PercentStackedLine" ),             CHSTYLE_2D_PERCENTLINE)
+        ( C2U( "com.sun.star.chart2.template.LineSymbol" ),                     CHSTYLE_2D_LINESYMBOLS)
+        ( C2U( "com.sun.star.chart2.template.StackedLineSymbol" ),              CHSTYLE_2D_STACKEDLINESYM)
+        ( C2U( "com.sun.star.chart2.template.PercentStackedLineSymbol" ),       CHSTYLE_2D_PERCENTLINESYM)
+        ( C2U( "com.sun.star.chart2.template.CubicSpline" ),                    CHSTYLE_2D_CUBIC_SPLINE)
+        ( C2U( "com.sun.star.chart2.template.CubicSplineSymbol" ),              CHSTYLE_2D_CUBIC_SPLINE_SYMBOL)
+        ( C2U( "com.sun.star.chart2.template.BSpline" ),                        CHSTYLE_2D_B_SPLINE)
+        ( C2U( "com.sun.star.chart2.template.BSplineSymbol" ),                  CHSTYLE_2D_B_SPLINE_SYMBOL)
+        ( C2U( "com.sun.star.chart2.template.ThreeDLine" ),                     CHSTYLE_3D_STRIPE)
+        ( C2U( "com.sun.star.chart2.template.Column" ),                         CHSTYLE_2D_COLUMN)
+        ( C2U( "com.sun.star.chart2.template.StackedColumn" ),                  CHSTYLE_2D_STACKEDCOLUMN)
+        ( C2U( "com.sun.star.chart2.template.PercentStackedColumn" ),           CHSTYLE_2D_PERCENTCOLUMN)
+        ( C2U( "com.sun.star.chart2.template.Bar" ),                            CHSTYLE_2D_BAR)
+        ( C2U( "com.sun.star.chart2.template.StackedBar" ),                     CHSTYLE_2D_STACKEDBAR)
+        ( C2U( "com.sun.star.chart2.template.PercentStackedBar" ),              CHSTYLE_2D_PERCENTBAR)
+        ( C2U( "com.sun.star.chart2.template.ThreeDColumnDeep" ),               CHSTYLE_3D_COLUMN)
+        ( C2U( "com.sun.star.chart2.template.ThreeDColumnFlat" ),               CHSTYLE_3D_FLATCOLUMN)
+        ( C2U( "com.sun.star.chart2.template.StackedThreeDColumnFlat" ),        CHSTYLE_3D_STACKEDFLATCOLUMN)
+        ( C2U( "com.sun.star.chart2.template.PercentStackedThreeDColumnFlat" ), CHSTYLE_3D_PERCENTFLATCOLUMN)
+        ( C2U( "com.sun.star.chart2.template.ThreeDBarDeep" ),                  CHSTYLE_3D_BAR)
+        ( C2U( "com.sun.star.chart2.template.ThreeDBarFlat" ),                  CHSTYLE_3D_FLATBAR)
+        ( C2U( "com.sun.star.chart2.template.StackedThreeDBarFlat" ),           CHSTYLE_3D_STACKEDFLATBAR)
+        ( C2U( "com.sun.star.chart2.template.PercentStackedThreeDBarFlat" ),    CHSTYLE_3D_PERCENTFLATBAR)
+        ( C2U( "com.sun.star.chart2.template.ColumnWithLine" ),                 CHSTYLE_2D_LINE_COLUMN)
+        ( C2U( "com.sun.star.chart2.template.StackedColumnWithLine" ),          CHSTYLE_2D_LINE_STACKEDCOLUMN)
+        ( C2U( "com.sun.star.chart2.template.Area" ),                           CHSTYLE_2D_AREA)
+        ( C2U( "com.sun.star.chart2.template.StackedArea" ),                    CHSTYLE_2D_STACKEDAREA)
+        ( C2U( "com.sun.star.chart2.template.PercentStackedArea" ),             CHSTYLE_2D_PERCENTAREA)
+        ( C2U( "com.sun.star.chart2.template.ThreeDArea" ),                     CHSTYLE_3D_AREA)
+        ( C2U( "com.sun.star.chart2.template.StackedThreeDArea" ),              CHSTYLE_3D_STACKEDAREA)
+        ( C2U( "com.sun.star.chart2.template.PercentStackedThreeDArea" ),       CHSTYLE_3D_PERCENTAREA)
+        ( C2U( "com.sun.star.chart2.template.Pie" ),                            CHSTYLE_2D_PIE)
+        ( C2U( "com.sun.star.chart2.template.PieOneExploded" ),                 CHSTYLE_2D_PIE_SEGOF1)
+        ( C2U( "com.sun.star.chart2.template.PieAllExploded" ),                 CHSTYLE_2D_PIE_SEGOFALL)
+        ( C2U( "com.sun.star.chart2.template.Ring" ),                           CHSTYLE_2D_DONUT1)
+//         ( C2U( "com.sun.star.chart2.template.Ring" ),                           CHSTYLE_2D_DONUT2)
+        ( C2U( "com.sun.star.chart2.template.ThreeDPie" ),                      CHSTYLE_3D_PIE)
+        ( C2U( "com.sun.star.chart2.template.ScatterLineSymbol" ),              CHSTYLE_2D_XY)
+        ( C2U( "com.sun.star.chart2.template.CubicSplineScatter" ),             CHSTYLE_2D_CUBIC_SPLINE_XY)
+        ( C2U( "com.sun.star.chart2.template.CubicSplineScatterSymbol" ),       CHSTYLE_2D_CUBIC_SPLINE_SYMBOL_XY)
+        ( C2U( "com.sun.star.chart2.template.BSplineScatter" ),                 CHSTYLE_2D_B_SPLINE_XY)
+        ( C2U( "com.sun.star.chart2.template.BSplineScatterSymbol" ),           CHSTYLE_2D_B_SPLINE_SYMBOL_XY)
+        ( C2U( "com.sun.star.chart2.template.ScatterLine" ),                    CHSTYLE_2D_XY_LINE)
+        ( C2U( "com.sun.star.chart2.template.ScatterSymbol" ),                  CHSTYLE_2D_XYSYMBOLS)
+        ( C2U( "com.sun.star.chart2.template.Net" ),                            CHSTYLE_2D_NET)
+        ( C2U( "com.sun.star.chart2.template.NetSymbol" ),                      CHSTYLE_2D_NET_SYMBOLS)
+        ( C2U( "com.sun.star.chart2.template.StackedNet" ),                     CHSTYLE_2D_NET_STACK)
+        ( C2U( "com.sun.star.chart2.template.StackedNetSymbol" ),               CHSTYLE_2D_NET_SYMBOLS_STACK)
+        ( C2U( "com.sun.star.chart2.template.PercentStackedNet" ),              CHSTYLE_2D_NET_PERCENT)
+        ( C2U( "com.sun.star.chart2.template.PercentStackedNetSymbol" ),        CHSTYLE_2D_NET_SYMBOLS_PERCENT)
+        ( C2U( "com.sun.star.chart2.template.StockLowHighClose" ),              CHSTYLE_2D_STOCK_1)
+        ( C2U( "com.sun.star.chart2.template.StockOpenLowHighClose" ),          CHSTYLE_2D_STOCK_2)
+        ( C2U( "com.sun.star.chart2.template.StockVolumeLowHighClose" ),        CHSTYLE_2D_STOCK_3)
+        ( C2U( "com.sun.star.chart2.template.StockVolumeOpenLowHighClose" ),    CHSTYLE_2D_STOCK_4)
+        ( C2U( "com.sun.star.chart2.template.Surface" ),                        CHSTYLE_3D_SURFACE)
+        ( C2U( "com.sun.star.chart2.template.ThreeDScatter" ),                  CHSTYLE_3D_XYZ)
+        ( C2U( "com.sun.star.chart2.template.ThreeDScatterSymbol" ),            CHSTYLE_3D_XYZSYMBOLS)
+        ( C2U( "com.sun.star.chart2.template.Addin" ),                          CHSTYLE_ADDIN)
+        );
+
+    return aTemplateMap;
+}
+
+SvxChartStyle lcl_GetChartStyleForTemplateServiceName( const ::rtl::OUString & rServiceName )
+{
+    const tTemplateServiceMap & rMap = lcl_GetChartTemplateServiceNameMap();
+    tTemplateServiceMap::const_iterator aIt( rMap.find( rServiceName ));
+    if( aIt != rMap.end())
+        return static_cast< SvxChartStyle >( (*aIt).second );
+
+    return CHSTYLE_ADDIN;
+}
+
+::rtl::OUString lcl_GetTemplateServiceNameForChartStyle( SvxChartStyle eStyle )
+{
+    const tTemplateServiceMap & rMap = lcl_GetChartTemplateServiceNameMap();
+    tTemplateServiceMap::const_iterator aIt(
+        ::std::find_if( rMap.begin(), rMap.end(),
+                        ::std::compose1( ::std::bind2nd(
+                                             ::std::equal_to< tTemplateServiceMap::data_type >(),
+                                             static_cast< sal_Int32 >( eStyle ) ),
+                                         ::std::select2nd< tTemplateServiceMap::value_type >())));
+    if( aIt != rMap.end())
+        return (*aIt).first;
+
+    return ::rtl::OUString();
+}
+
+bool lcl_IsBSplineChart( SvxChartStyle eStyle )
+{
+    switch( eStyle )
+    {
+        case CHSTYLE_2D_B_SPLINE :
+        case CHSTYLE_2D_B_SPLINE_SYMBOL :
+        case CHSTYLE_2D_B_SPLINE_XY :
+        case CHSTYLE_2D_B_SPLINE_SYMBOL_XY :
+            return true;
+
+        default:
+            return false;
+    }
+    return false;
+}
+
+bool lcl_IsCubicSplineChart( SvxChartStyle eStyle )
+{
+    switch( eStyle )
+    {
+        case CHSTYLE_2D_CUBIC_SPLINE :
+        case CHSTYLE_2D_CUBIC_SPLINE_SYMBOL :
+        case CHSTYLE_2D_CUBIC_SPLINE_XY :
+        case CHSTYLE_2D_CUBIC_SPLINE_SYMBOL_XY :
+            return true;
+
+        default:
+            return false;
+    }
+    return false;
+}
+
+bool lcl_IsShapeStyleChartType( SvxChartStyle eStyle )
+{
+    switch( eStyle )
+    {
+        case CHSTYLE_3D_COLUMN:
+        case CHSTYLE_3D_FLATCOLUMN:
+        case CHSTYLE_3D_STACKEDFLATCOLUMN:
+        case CHSTYLE_3D_PERCENTFLATCOLUMN:
+        case CHSTYLE_3D_BAR:
+        case CHSTYLE_3D_FLATBAR:
+        case CHSTYLE_3D_STACKEDFLATBAR:
+        case CHSTYLE_3D_PERCENTFLATBAR:
+            return true;
+
+        default:
+            return false;
+    }
+    return false;
+}
+
+bool lcl_IsCombiChart( SvxChartStyle eStyle )
+{
+    switch( eStyle )
+    {
+        case CHSTYLE_2D_LINE_COLUMN:
+        case CHSTYLE_2D_LINE_STACKEDCOLUMN:
+            return true;
+        default:
+            return false;
+    }
+    return false;
+}
+
+} // anonymous namespace
+
+using namespace ::com::sun::star;
+using namespace ::drafts::com::sun::star;
+
+//.............................................................................
 namespace chart
 {
 //.............................................................................
@@ -149,30 +317,33 @@ namespace chart
 // bIsHighContrast must exist and reflect the correct state
 #define SELECT_BITMAP(name) Bitmap( SchResId( bIsHighContrast ? name ## _HC : name ))
 
-SchDiagramTypeDlg::SchDiagramTypeDlg(Window* pWindow,
-                                     const SfxItemSet& rInAttrs) :
-    ModalDialog(pWindow, SchResId(DLG_DIAGRAM_TYPE)),
+SchDiagramTypeDlg::SchDiagramTypeDlg(
+    Window* pWindow,
+    const uno::Reference< chart2::XDiagram > & xDiagram,
+    const uno::Reference< lang::XMultiServiceFactory > & xTemplateManager ) :
+        ModalDialog(pWindow, SchResId(DLG_DIAGRAM_TYPE)),
 
-    n3DGeometry(CHART_SHAPE3D_ANY),
-    aRbt2D(this, ResId(RBT_2D)),
-    aRbt3D(this, ResId(RBT_3D)),
-    aFlDimension(this, ResId(FL_DIMENSION)),
-    aFtDeep( this, ResId( FT_DEEP ) ),
-    aMtrFldDeep( this, ResId( MTR_FLD_DEEP ) ),
-    aFtGran( this, ResId( FT_GRAN ) ),
-    aMtrFldGran( this, ResId( MTR_FLD_GRAN ) ),
-    aFtNumLines( this, ResId( FT_NUM_OF_LINES ) ),
-    aMtrFldNumLines( this, ResId( MTR_FLD_NUM_OF_LINES ) ),
+        n3DGeometry(CHART_SHAPE3D_ANY),
+        aRbt2D(this, ResId(RBT_2D)),
+        aRbt3D(this, ResId(RBT_3D)),
+        aFlDimension(this, ResId(FL_DIMENSION)),
+        aFtDeep( this, ResId( FT_DEEP ) ),
+        aMtrFldDeep( this, ResId( MTR_FLD_DEEP ) ),
+        aFtGran( this, ResId( FT_GRAN ) ),
+        aMtrFldGran( this, ResId( MTR_FLD_GRAN ) ),
+        aFtNumLines( this, ResId( FT_NUM_OF_LINES ) ),
+        aMtrFldNumLines( this, ResId( MTR_FLD_NUM_OF_LINES ) ),
 
-    aFtType(this, ResId(FT_TYPE)),
-    aCtlType(this, ResId(CTL_TYPE)),
-    aFtVariant(this, ResId(FT_VARIANT)),
-    aCtlVariant(this, ResId(CTL_VARIANT)),
-    aBtnOK(this, ResId(BTN_OK)),
-    aBtnCancel(this, ResId(BTN_CANCEL)),
-    aBtnHelp(this, ResId(BTN_HELP)),
-    eDimension(CHDIM_2D),
-    rOutAttrs(rInAttrs)
+        aFtType(this, ResId(FT_TYPE)),
+        aCtlType(this, ResId(CTL_TYPE)),
+        aFtVariant(this, ResId(FT_VARIANT)),
+        aCtlVariant(this, ResId(CTL_VARIANT)),
+        aBtnOK(this, ResId(BTN_OK)),
+        aBtnCancel(this, ResId(BTN_CANCEL)),
+        aBtnHelp(this, ResId(BTN_HELP)),
+        eDimension(CHDIM_2D),
+        m_xDiagram( xDiagram ),
+        m_xTemplateManager( xTemplateManager )
 {
     FreeResource();
 
@@ -203,8 +374,8 @@ SchDiagramTypeDlg::SchDiagramTypeDlg(Window* pWindow,
 
     Reset();
 
-    //ToDo: This is just to have some default
-    SetMaximumNumberOfLines( 12 );
+    // "- 1": at least one bar should remain
+    SetMaximumNumberOfLines( helper::DataSeriesTreeHelper::getDataSeriesFromDiagram( m_xDiagram ).getLength() - 1 );
 }
 
 /*************************************************************************
@@ -224,180 +395,169 @@ SchDiagramTypeDlg::~SchDiagramTypeDlg()
 
 void SchDiagramTypeDlg::Reset()
 {
-    const SfxPoolItem *pPoolItem = NULL;
+    if( ! m_xDiagram.is())
+        return;
 
-    if (rOutAttrs.GetItemState(SCHATTR_STYLE_SHAPE, TRUE, &pPoolItem)
-            == SFX_ITEM_SET)
-            n3DGeometry=((const SfxInt32Item*)pPoolItem)->GetValue();
+    uno::Reference< chart2::XDataSeriesTreeParent > xTree( m_xDiagram->getTree());
+    SvxChartStyle eStyle = lcl_GetChartStyleForTemplateServiceName(
+        helper::DataSeriesTreeHelper::getChartTypeTemplateServiceName( xTree ));
 
-    if (rOutAttrs.GetItemState(SCHATTR_DIAGRAM_STYLE, TRUE, &pPoolItem)
-            == SFX_ITEM_SET)
+    USHORT nType;
+    ChartDimension eDim;
+
+    switch( eStyle )
     {
-        USHORT nType;
-        ChartDimension eDim;
+        case CHSTYLE_2D_B_SPLINE :
+        case CHSTYLE_2D_B_SPLINE_SYMBOL :
+        case CHSTYLE_2D_LINE:
+        case CHSTYLE_2D_STACKEDLINE:
+        case CHSTYLE_2D_PERCENTLINE:
+        case CHSTYLE_2D_LINESYMBOLS:
+        case CHSTYLE_2D_STACKEDLINESYM:
+        case CHSTYLE_2D_PERCENTLINESYM:
+        case CHSTYLE_2D_CUBIC_SPLINE :
+        case CHSTYLE_2D_CUBIC_SPLINE_SYMBOL :
+            nType   = CHTYPE_LINE;
+            eDim    = CHDIM_2D;
+            break;
 
-        //Hier sollte demnaechst folgendes ersatzweise stehen:
-        //nType=pDoc->GetBaseType();
-        //eDim=(pDoc->GetDisplayDimension()==3)?CHDIM_3D:CHDIM_2D;
+        case CHSTYLE_2D_COLUMN:
+        case CHSTYLE_2D_STACKEDCOLUMN:
+        case CHSTYLE_2D_PERCENTCOLUMN:
+        case CHSTYLE_2D_LINE_COLUMN:
+        case CHSTYLE_2D_LINE_STACKEDCOLUMN:
 
-        switch (((const SvxChartStyleItem*)pPoolItem)->GetValue())
-        {
-            case CHSTYLE_2D_B_SPLINE :
-            case CHSTYLE_2D_B_SPLINE_SYMBOL :
-            case CHSTYLE_2D_LINE:
-            case CHSTYLE_2D_STACKEDLINE:
-            case CHSTYLE_2D_PERCENTLINE:
-            case CHSTYLE_2D_LINESYMBOLS:
-            case CHSTYLE_2D_STACKEDLINESYM:
-            case CHSTYLE_2D_PERCENTLINESYM:
-            case CHSTYLE_2D_CUBIC_SPLINE :
-            case CHSTYLE_2D_CUBIC_SPLINE_SYMBOL :
-                nType   = CHTYPE_LINE;
-                eDim    = CHDIM_2D;
-                break;
+            nType   = CHTYPE_COLUMN;
+            eDim    = CHDIM_2D;
+            break;
 
-            case CHSTYLE_2D_COLUMN:
-            case CHSTYLE_2D_STACKEDCOLUMN:
-            case CHSTYLE_2D_PERCENTCOLUMN:
-            case CHSTYLE_2D_LINE_COLUMN:
-            case CHSTYLE_2D_LINE_STACKEDCOLUMN:
+        case CHSTYLE_2D_BAR:
+        case CHSTYLE_2D_STACKEDBAR:
+        case CHSTYLE_2D_PERCENTBAR:
+            nType   = CHTYPE_BAR;
+            eDim    = CHDIM_2D;
+            break;
 
-                nType   = CHTYPE_COLUMN;
-                eDim    = CHDIM_2D;
-                break;
+        case CHSTYLE_2D_AREA:
+        case CHSTYLE_2D_STACKEDAREA:
+        case CHSTYLE_2D_PERCENTAREA:
+            nType   = CHTYPE_AREA;
+            eDim    = CHDIM_2D;
+            break;
 
-            case CHSTYLE_2D_BAR:
-            case CHSTYLE_2D_STACKEDBAR:
-            case CHSTYLE_2D_PERCENTBAR:
-                nType   = CHTYPE_BAR;
-                eDim    = CHDIM_2D;
-                break;
+        case CHSTYLE_2D_PIE:
+        case CHSTYLE_2D_PIE_SEGOF1:
+        case CHSTYLE_2D_PIE_SEGOFALL:
+        case CHSTYLE_2D_DONUT1:
+        case CHSTYLE_2D_DONUT2:
+            nType   = CHTYPE_CIRCLE;
+            eDim    = CHDIM_2D;
+            break;
 
-            case CHSTYLE_2D_AREA:
-            case CHSTYLE_2D_STACKEDAREA:
-            case CHSTYLE_2D_PERCENTAREA:
-                nType   = CHTYPE_AREA;
-                eDim    = CHDIM_2D;
-                break;
+        case CHSTYLE_2D_B_SPLINE_XY :
+        case CHSTYLE_2D_XY_LINE :
+        case CHSTYLE_2D_B_SPLINE_SYMBOL_XY :
+        case CHSTYLE_2D_XYSYMBOLS:
+        case CHSTYLE_2D_XY:
+        case CHSTYLE_2D_CUBIC_SPLINE_XY :
+        case CHSTYLE_2D_CUBIC_SPLINE_SYMBOL_XY :
+            nType   = CHTYPE_XY;
+            eDim    = CHDIM_2D;
+            break;
 
-            case CHSTYLE_2D_PIE:
-            case CHSTYLE_2D_PIE_SEGOF1:
-            case CHSTYLE_2D_PIE_SEGOFALL:
-            case CHSTYLE_2D_DONUT1:
-            case CHSTYLE_2D_DONUT2:
-                nType   = CHTYPE_CIRCLE;
-                eDim    = CHDIM_2D;
-                break;
+        case CHSTYLE_2D_NET:
+        case CHSTYLE_2D_NET_SYMBOLS:
+        case CHSTYLE_2D_NET_STACK:
+        case CHSTYLE_2D_NET_SYMBOLS_STACK:
+        case CHSTYLE_2D_NET_PERCENT:
+        case CHSTYLE_2D_NET_SYMBOLS_PERCENT:
+            nType   = CHTYPE_NET;
+            eDim    = CHDIM_2D;
+            break;
 
-            case CHSTYLE_2D_B_SPLINE_XY :
-            case CHSTYLE_2D_XY_LINE :
-            case CHSTYLE_2D_B_SPLINE_SYMBOL_XY :
-            case CHSTYLE_2D_XYSYMBOLS:
-            case CHSTYLE_2D_XY:
-            case CHSTYLE_2D_CUBIC_SPLINE_XY :
-            case CHSTYLE_2D_CUBIC_SPLINE_SYMBOL_XY :
-                nType   = CHTYPE_XY;
-                eDim    = CHDIM_2D;
-                break;
+        case CHSTYLE_3D_STRIPE:
+            nType   = CHTYPE_LINE;
+            eDim    = CHDIM_3D;
+            break;
 
-            case CHSTYLE_2D_NET:
-            case CHSTYLE_2D_NET_SYMBOLS:
-            case CHSTYLE_2D_NET_STACK:
-            case CHSTYLE_2D_NET_SYMBOLS_STACK:
-            case CHSTYLE_2D_NET_PERCENT:
-            case CHSTYLE_2D_NET_SYMBOLS_PERCENT:
-                nType   = CHTYPE_NET;
-                eDim    = CHDIM_2D;
-                break;
+        case CHSTYLE_3D_COLUMN:
+        case CHSTYLE_3D_FLATCOLUMN:
+        case CHSTYLE_3D_STACKEDFLATCOLUMN:
+        case CHSTYLE_3D_PERCENTFLATCOLUMN:
+            nType   = CHTYPE_COLUMN;
+            eDim    = CHDIM_3D;
+            break;
 
-            case CHSTYLE_3D_STRIPE:
-                nType   = CHTYPE_LINE;
-                eDim    = CHDIM_3D;
-                break;
+        case CHSTYLE_3D_BAR:
+        case CHSTYLE_3D_FLATBAR:
+        case CHSTYLE_3D_STACKEDFLATBAR:
+        case CHSTYLE_3D_PERCENTFLATBAR:
+            nType   = CHTYPE_BAR;
+            eDim    = CHDIM_3D;
+            break;
 
-            case CHSTYLE_3D_COLUMN:
-            case CHSTYLE_3D_FLATCOLUMN:
-            case CHSTYLE_3D_STACKEDFLATCOLUMN:
-            case CHSTYLE_3D_PERCENTFLATCOLUMN:
-                nType   = CHTYPE_COLUMN;
-                eDim    = CHDIM_3D;
-                break;
+        case CHSTYLE_3D_AREA:
+        case CHSTYLE_3D_STACKEDAREA:
+        case CHSTYLE_3D_PERCENTAREA:
+            nType   = CHTYPE_AREA;
+            eDim    = CHDIM_3D;
+            break;
 
-            case CHSTYLE_3D_BAR:
-            case CHSTYLE_3D_FLATBAR:
-            case CHSTYLE_3D_STACKEDFLATBAR:
-            case CHSTYLE_3D_PERCENTFLATBAR:
-                nType   = CHTYPE_BAR;
-                eDim    = CHDIM_3D;
-                break;
+        case CHSTYLE_3D_PIE:
+            nType   = CHTYPE_CIRCLE;
+            eDim    = CHDIM_3D;
+            break;
 
-            case CHSTYLE_3D_AREA:
-            case CHSTYLE_3D_STACKEDAREA:
-            case CHSTYLE_3D_PERCENTAREA:
-                nType   = CHTYPE_AREA;
-                eDim    = CHDIM_3D;
-                break;
+        case CHSTYLE_2D_STOCK_1:
+        case CHSTYLE_2D_STOCK_2:
+        case CHSTYLE_2D_STOCK_3:
+        case CHSTYLE_2D_STOCK_4:
+            nType   = CHTYPE_STOCK;
+            eDim    = CHDIM_2D;
+            break;
 
-            case CHSTYLE_3D_PIE:
-                nType   = CHTYPE_CIRCLE;
-                eDim    = CHDIM_3D;
-                break;
-
-            case CHSTYLE_2D_STOCK_1:
-            case CHSTYLE_2D_STOCK_2:
-            case CHSTYLE_2D_STOCK_3:
-            case CHSTYLE_2D_STOCK_4:
-                nType   = CHTYPE_STOCK;
-                eDim    = CHDIM_2D;
-                break;
-
-            default:
-                DBG_ERROR("Invalid chart style given!");
-                return;
-        }
-
-        if (eDim == CHDIM_3D)
-        {
-            aRbt3D.Check(TRUE);
-            eDimension = CHDIM_2D;
-            SelectDimensionHdl(&aRbt3D);
-        }
-        else
-        {
-            aRbt2D.Check(TRUE);
-            eDimension = CHDIM_3D;
-            SelectDimensionHdl(&aRbt2D);
-        }
-
-        aCtlType.SelectItem(nType);
-        SelectTypeHdl(&aCtlType);
-
-        USHORT nItemChartType = static_cast< USHORT >(
-            static_cast< const SvxChartStyleItem * >( pPoolItem )->GetValue() );
-
-        SwitchDepth( nItemChartType );
-        SwitchNumLines( nItemChartType );
+        default:
+            DBG_ERROR("Invalid chart style given!");
+            return;
     }
 
-    if (rOutAttrs.GetItemState(SCHATTR_NUM_OF_LINES_FOR_BAR, TRUE, &pPoolItem)
-            == SFX_ITEM_SET)
+    if (eDim == CHDIM_3D)
     {
-        aMtrFldNumLines.SetValue(
-            reinterpret_cast< const SfxInt32Item * >( pPoolItem )->GetValue());
+        aRbt3D.Check(TRUE);
+        eDimension = CHDIM_2D;
+        SelectDimensionHdl(&aRbt3D);
+    }
+    else
+    {
+        aRbt2D.Check(TRUE);
+        eDimension = CHDIM_3D;
+        SelectDimensionHdl(&aRbt2D);
     }
 
-    if (rOutAttrs.GetItemState(SCHATTR_SPLINE_RESOLUTION, TRUE, &pPoolItem)
-            == SFX_ITEM_SET)
+    aCtlType.SelectItem(nType);
+    SelectTypeHdl(&aCtlType);
+
+    SwitchDepth( eStyle );
+    SwitchNumLines( eStyle );
+
+    if( lcl_IsCombiChart( eStyle ))
     {
-        aMtrFldGran.SetValue(
-            reinterpret_cast< const SfxInt32Item * >( pPoolItem )->GetValue());
+        sal_Int32 nNumLines = helper::DataSeriesTreeHelper::getNumberOfSeriesForChartTypeByIndex(
+            xTree, 1 );
+        aMtrFldNumLines.SetValue( nNumLines );
     }
 
-    if (rOutAttrs.GetItemState(SCHATTR_SPLINE_ORDER, TRUE, &pPoolItem)
-        ==SFX_ITEM_SET)
+    if( lcl_IsBSplineChart( eStyle ) ||
+        lcl_IsCubicSplineChart( eStyle ))
     {
-        aMtrFldDeep.SetValue(
-            reinterpret_cast< const SfxInt32Item * >( pPoolItem )->GetValue());
+        // todo: take model value (XChartType)
+        SetGranularity( 20 );
+
+        if( lcl_IsBSplineChart( eStyle ))
+        {
+            // todo: take model value (XChartType)
+            SetDepth( 3 );
+        }
     }
 }
 
@@ -806,35 +966,40 @@ void SchDiagramTypeDlg::FillVariantSet(USHORT nType)
     aCtlVariant.Show();
 
     USHORT nSelId = aCtlVariant.GetItemId(0);
-    const SfxPoolItem *pPoolItem = NULL;
 
-    if( rOutAttrs.GetItemState(SCHATTR_DIAGRAM_STYLE, TRUE, &pPoolItem) == SFX_ITEM_SET )
+    uno::Reference< chart2::XDataSeriesTreeParent > xTree( m_xDiagram->getTree());
+    SvxChartStyle eStyle = lcl_GetChartStyleForTemplateServiceName(
+        helper::DataSeriesTreeHelper::getChartTypeTemplateServiceName( xTree ));
+
+    USHORT nId = static_cast< USHORT >( eStyle ) + 1;
+//         (USHORT)((const SvxChartStyleItem*)pPoolItem)->GetValue() + 1;
+
+    if( aCtlVariant.GetItemPos( nId ) != VALUESET_ITEM_NOTFOUND )
     {
-        USHORT nId = (USHORT)((const SvxChartStyleItem*)pPoolItem)->GetValue() + 1;
-
-        if( aCtlVariant.GetItemPos(nId) != VALUESET_ITEM_NOTFOUND )
-        {
-            nSelId = nId;
-            nDefaultOffset = 0;
-        }
+        nSelId = nId;
+        nDefaultOffset = 0;
     }
+
     long nShape3dOffset = 0;
-    if( rOutAttrs.GetItemState(SCHATTR_STYLE_SHAPE, TRUE, &pPoolItem) == SFX_ITEM_SET )
+    if( lcl_IsShapeStyleChartType( eStyle ))
     {
-//      long nId3D = ((const SfxInt32Item*)&pPoolItem)->GetValue();
-        switch( n3DGeometry )
-        {
-            case CHART_SHAPE3D_CYLINDER:
-                nShape3dOffset = OFFSET_ROUND;
-                break;
-            case CHART_SHAPE3D_CONE:
-                nShape3dOffset = OFFSET_CONE;
-                break;
-            case CHART_SHAPE3D_PYRAMID:
-                nShape3dOffset = OFFSET_PYRAMID;
-                break;
-        }
+        nShape3dOffset = OFFSET_CONE;
     }
+
+//      long nId3D = ((const SfxInt32Item*)&pPoolItem)->GetValue();
+//      switch( n3DGeometry )
+//      {
+//          case CHART_SHAPE3D_CYLINDER:
+//              nShape3dOffset = OFFSET_ROUND;
+//              break;
+//          case CHART_SHAPE3D_CONE:
+//              nShape3dOffset = OFFSET_CONE;
+//              break;
+//          case CHART_SHAPE3D_PYRAMID:
+//              nShape3dOffset = OFFSET_PYRAMID;
+//              break;
+//      }
+
     if( aCtlVariant.GetItemPos( nSelId + nShape3dOffset + nDefaultOffset ) != VALUESET_ITEM_NOTFOUND )
         nSelId += (nShape3dOffset + nDefaultOffset);
 
@@ -843,8 +1008,9 @@ void SchDiagramTypeDlg::FillVariantSet(USHORT nType)
     // make selected Item visible
     aCtlVariant.SetFirstLine( aCtlVariant.GetItemPos( aCtlVariant.GetSelectItemId() ) / aCtlVariant.GetColCount() );
 
-    SwitchDepth( nSelId - 1 );
-    SwitchNumLines( nSelId - 1 );
+    eStyle = static_cast< SvxChartStyle >( nSelId - 1 );
+    SwitchDepth( eStyle );
+    SwitchNumLines( eStyle );
 }
 
 /*************************************************************************
@@ -889,36 +1055,36 @@ IMPL_LINK( SchDiagramTypeDlg, DoubleClickHdl, void *, EMPTYARG )
 |*
 \*************************************************************************/
 
-void SchDiagramTypeDlg::GetAttr(SfxItemSet& rOutAttrs)
-{
-    long nId=aCtlVariant.GetSelectItemId() - 1;
-    long nGeo=CHART_SHAPE3D_ANY;
-    if(nId>OFFSET_CONE)
-    {
-        nId-=OFFSET_CONE;
-        nGeo=CHART_SHAPE3D_CONE;
-    }
-    if(nId>OFFSET_ROUND)
-    {
-        nId-=OFFSET_ROUND;
-        nGeo=CHART_SHAPE3D_CYLINDER;
-    }
-    if(nId>OFFSET_PYRAMID)
-    {
-        nId-=OFFSET_PYRAMID;
-        nGeo=CHART_SHAPE3D_PYRAMID;
-    }
-    if(nGeo != n3DGeometry)
-        rOutAttrs.Put(SfxInt32Item(SCHATTR_STYLE_SHAPE,nGeo));
-    else
-        rOutAttrs.ClearItem(SCHATTR_STYLE_SHAPE);
+// void SchDiagramTypeDlg::GetAttr(SfxItemSet& rOutAttrs)
+// {
+//  long nId=aCtlVariant.GetSelectItemId() - 1;
+//  long nGeo=CHART_SHAPE3D_ANY;
+//  if(nId>OFFSET_CONE)
+//  {
+//      nId-=OFFSET_CONE;
+//      nGeo=CHART_SHAPE3D_CONE;
+//  }
+//  if(nId>OFFSET_ROUND)
+//  {
+//      nId-=OFFSET_ROUND;
+//      nGeo=CHART_SHAPE3D_CYLINDER;
+//  }
+//  if(nId>OFFSET_PYRAMID)
+//  {
+//      nId-=OFFSET_PYRAMID;
+//      nGeo=CHART_SHAPE3D_PYRAMID;
+//  }
+//  if(nGeo != n3DGeometry)
+//      rOutAttrs.Put(SfxInt32Item(SCHATTR_STYLE_SHAPE,nGeo));
+//  else
+//      rOutAttrs.ClearItem(SCHATTR_STYLE_SHAPE);
 
-    rOutAttrs.Put(SvxChartStyleItem((SvxChartStyle) (nId)));
+//  rOutAttrs.Put(SvxChartStyleItem((SvxChartStyle) (nId)));
 
-    rOutAttrs.Put( SfxInt32Item( SCHATTR_NUM_OF_LINES_FOR_BAR, aMtrFldNumLines.GetValue()));
-    rOutAttrs.Put( SfxInt32Item( SCHATTR_SPLINE_RESOLUTION,    aMtrFldGran.GetValue()));
-    rOutAttrs.Put( SfxInt32Item( SCHATTR_SPLINE_ORDER,         aMtrFldDeep.GetValue()));
-}
+//     rOutAttrs.Put( SfxInt32Item( SCHATTR_NUM_OF_LINES_FOR_BAR, aMtrFldNumLines.GetValue()));
+//     rOutAttrs.Put( SfxInt32Item( SCHATTR_SPLINE_RESOLUTION,    aMtrFldGran.GetValue()));
+//     rOutAttrs.Put( SfxInt32Item( SCHATTR_SPLINE_ORDER,         aMtrFldDeep.GetValue()));
+// }
 
 /*************************************************************************
 |*
@@ -926,54 +1092,45 @@ void SchDiagramTypeDlg::GetAttr(SfxItemSet& rOutAttrs)
 |*
 \************************************************************************/
 
-// int SchDiagramTypeDlg::GetDepth()
-// {
-//  return aMtrFldDeep.GetValue();
-// }
-
-/*************************************************************************
-|*
-|* Setzt die uebergebene Intensitaet
-|*
-\************************************************************************/
-
-// void SchDiagramTypeDlg::SetDepth( int nDepth )
-// {
-//   aMtrFldDeep.SetValue( nDepth );
-// }
-
-/*************************************************************************
-|*
-|* Setzt die uebergebene Intensitaet
-|*
-\************************************************************************/
-
-void SchDiagramTypeDlg::SwitchDepth (USHORT nID)
+sal_Int32 SchDiagramTypeDlg::GetDepth()
 {
-    aFtDeep.Hide ();
-    aMtrFldDeep.Hide ();
-    aFtGran.Hide ();
-    aMtrFldGran.Hide ();
+    return aMtrFldDeep.GetValue();
+}
 
-    switch (nID)
+/*************************************************************************
+|*
+|* Setzt die uebergebene Intensitaet
+|*
+\************************************************************************/
+
+void SchDiagramTypeDlg::SetDepth( sal_Int32 nDepth )
+{
+     aMtrFldDeep.SetValue( nDepth );
+}
+
+/*************************************************************************
+|*
+|* Setzt die uebergebene Intensitaet
+|*
+\************************************************************************/
+
+void SchDiagramTypeDlg::SwitchDepth( SvxChartStyle eID )
+{
+    aFtDeep.Hide();
+    aMtrFldDeep.Hide();
+    aFtGran.Hide();
+    aMtrFldGran.Hide();
+
+    if( lcl_IsBSplineChart( eID ))
     {
-        case CHSTYLE_2D_B_SPLINE :
-        case CHSTYLE_2D_B_SPLINE_SYMBOL :
-        case CHSTYLE_2D_B_SPLINE_XY :
-        case CHSTYLE_2D_B_SPLINE_SYMBOL_XY :
-            aFtDeep.Show ();
-            aMtrFldDeep.Show ();
+        aFtDeep.Show ();
+        aMtrFldDeep.Show ();
+    }
 
-        case CHSTYLE_2D_CUBIC_SPLINE :
-        case CHSTYLE_2D_CUBIC_SPLINE_SYMBOL :
-        case CHSTYLE_2D_CUBIC_SPLINE_XY :
-        case CHSTYLE_2D_CUBIC_SPLINE_SYMBOL_XY :
-            aFtGran.Show ();
-            aMtrFldGran.Show ();
-            break;
-
-        default :
-            break;
+    if( lcl_IsCubicSplineChart( eID ))
+    {
+        aFtGran.Show ();
+        aMtrFldGran.Show ();
     }
 }
 
@@ -985,8 +1142,11 @@ void SchDiagramTypeDlg::SwitchDepth (USHORT nID)
 
 IMPL_LINK( SchDiagramTypeDlg, ClickHdl, void *, EMPTYARG )
 {
-    SwitchDepth (aCtlVariant.GetSelectItemId() - 1);
-    SwitchNumLines( aCtlVariant.GetSelectItemId() - 1 );
+    SvxChartStyle eStyle = static_cast< SvxChartStyle >(
+        aCtlVariant.GetSelectItemId() - 1 );
+
+    SwitchDepth( eStyle );
+    SwitchNumLines( eStyle );
     return 0;
 }
 
@@ -996,10 +1156,10 @@ IMPL_LINK( SchDiagramTypeDlg, ClickHdl, void *, EMPTYARG )
 |*
 \************************************************************************/
 
-// int SchDiagramTypeDlg::GetGranularity()
-// {
-//  return aMtrFldGran.GetValue();
-// }
+sal_Int32 SchDiagramTypeDlg::GetGranularity()
+{
+    return aMtrFldGran.GetValue();
+}
 
 /*************************************************************************
 |*
@@ -1007,10 +1167,10 @@ IMPL_LINK( SchDiagramTypeDlg, ClickHdl, void *, EMPTYARG )
 |*
 \************************************************************************/
 
-// void SchDiagramTypeDlg::SetGranularity( int nGranularity )
-// {
-//  aMtrFldGran.SetValue( nGranularity );
-// }
+void SchDiagramTypeDlg::SetGranularity( sal_Int32 nGranularity )
+{
+    aMtrFldGran.SetValue( nGranularity );
+}
 
 void SchDiagramTypeDlg::FillValueSets()
 {
@@ -1034,20 +1194,17 @@ void SchDiagramTypeDlg::DataChanged( const DataChangedEvent& rDCEvt )
 }
 
 
-void SchDiagramTypeDlg::SwitchNumLines( USHORT nID )
+void SchDiagramTypeDlg::SwitchNumLines( SvxChartStyle eID )
 {
-    switch( nID )
+    if( lcl_IsCombiChart( eID ))
     {
-        case CHSTYLE_2D_LINE_COLUMN:
-        case CHSTYLE_2D_LINE_STACKEDCOLUMN:
-            aFtNumLines.Show();
-            aMtrFldNumLines.Show();
-            break;
-
-        default:
-            aFtNumLines.Hide();
-            aMtrFldNumLines.Hide();
-            break;
+        aFtNumLines.Show();
+        aMtrFldNumLines.Show();
+    }
+    else
+    {
+        aFtNumLines.Hide();
+        aMtrFldNumLines.Hide();
     }
 }
 
@@ -1057,15 +1214,45 @@ void SchDiagramTypeDlg::SetMaximumNumberOfLines( long nMaxLines )
     aMtrFldNumLines.SetMax( nMaxLines );
 }
 
+uno::Reference< chart2::XChartTypeTemplate > SchDiagramTypeDlg::getTemplate() const
+{
+    uno::Reference< chart2::XChartTypeTemplate > xResult;
+
+    if( m_xTemplateManager.is())
+    {
+        SvxChartStyle eStyle = static_cast< SvxChartStyle >(
+            aCtlVariant.GetSelectItemId() - 1 );
+
+        xResult.set( m_xTemplateManager->createInstance(
+                         lcl_GetTemplateServiceNameForChartStyle( eStyle )),
+                     uno::UNO_QUERY );
+
+        if( lcl_IsCombiChart( eStyle ))
+        {
+            try
+            {
+                uno::Reference< beans::XPropertySet > xProp( xResult, uno::UNO_QUERY_THROW );
+                xProp->setPropertyValue( C2U( "NumberOfLines" ), uno::makeAny( GetNumberOfLines()));
+            }
+            catch( uno::Exception & ex )
+            {
+                ASSERT_EXCEPTION( ex );
+            }
+        }
+    }
+
+    return xResult;
+}
+
 // void SchDiagramTypeDlg::SetNumberOfLines( long nLines )
 // {
 //     aMtrFldNumLines.SetValue( nLines );
 // }
 
-// long SchDiagramTypeDlg::GetNumberOfLines() const
-// {
-//     return aMtrFldNumLines.GetValue();
-// }
+sal_Int32 SchDiagramTypeDlg::GetNumberOfLines() const
+{
+    return aMtrFldNumLines.GetValue();
+}
 
 //.............................................................................
 } //namespace chart

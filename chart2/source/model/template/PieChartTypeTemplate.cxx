@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PieChartTypeTemplate.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:32 $
+ *  last change: $Author: bm $ $Date: 2003-11-04 12:37:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,16 @@
 #include "PieChartType.hxx"
 #include "Scale.hxx"
 #include "macros.hxx"
+#include "algohelper.hxx"
+
+#ifndef CHART_PROPERTYHELPER_HXX
+#include "PropertyHelper.hxx"
+#endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+#endif
+
+#include <algorithm>
 
 using namespace ::com::sun::star;
 using namespace ::drafts::com::sun::star;
@@ -76,27 +86,189 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;
 using ::osl::MutexGuard;
 
+namespace
+{
+
+static const ::rtl::OUString lcl_aServiceName(
+    RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.PieChartTypeTemplate" ));
+
+enum
+{
+    PROP_PIE_TEMPLATE_DEFAULT_OFFSET,
+    PROP_PIE_TEMPLATE_OFFSET_MODE,
+    PROP_PIE_TEMPLATE_DIMENSION,
+    PROP_PIE_TEMPLATE_USE_RINGS
+};
+
+void lcl_AddPropertiesToVector(
+    ::std::vector< Property > & rOutProperties )
+{
+    rOutProperties.push_back(
+        Property( C2U( "OffsetMode" ),
+                  PROP_PIE_TEMPLATE_OFFSET_MODE,
+                  ::getCppuType( reinterpret_cast< const chart2::PieChartOffsetMode * >(0)),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+    rOutProperties.push_back(
+        Property( C2U( "DefaultOffset" ),
+                  PROP_PIE_TEMPLATE_DEFAULT_OFFSET,
+                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+    rOutProperties.push_back(
+        Property( C2U( "Dimension" ),
+                  PROP_PIE_TEMPLATE_DIMENSION,
+                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+    rOutProperties.push_back(
+        Property( C2U( "UseRings" ),
+                  PROP_PIE_TEMPLATE_USE_RINGS,
+                  ::getBooleanCppuType(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+}
+
+void lcl_AddDefaultsToMap(
+    ::chart::helper::tPropertyValueMap & rOutMap )
+{
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_PIE_TEMPLATE_OFFSET_MODE ));
+    rOutMap[ PROP_PIE_TEMPLATE_OFFSET_MODE ] =
+        uno::makeAny( chart2::PieChartOffsetMode_NONE );
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_PIE_TEMPLATE_DEFAULT_OFFSET ));
+    rOutMap[ PROP_PIE_TEMPLATE_DEFAULT_OFFSET ] =
+        uno::makeAny( sal_Int32( 10 ) );
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_PIE_TEMPLATE_DIMENSION ));
+    rOutMap[ PROP_PIE_TEMPLATE_DIMENSION ] =
+        uno::makeAny( sal_Int32( 2 ) );
+    OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_PIE_TEMPLATE_USE_RINGS ));
+    rOutMap[ PROP_PIE_TEMPLATE_USE_RINGS ] =
+        uno::makeAny( sal_False );
+}
+
+const uno::Sequence< Property > & lcl_GetPropertySequence()
+{
+    static uno::Sequence< Property > aPropSeq;
+
+    // /--
+    MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+    if( 0 == aPropSeq.getLength() )
+    {
+        // get properties
+        ::std::vector< ::com::sun::star::beans::Property > aProperties;
+        lcl_AddPropertiesToVector( aProperties );
+
+        // and sort them for access via bsearch
+        ::std::sort( aProperties.begin(), aProperties.end(),
+                     ::chart::helper::PropertyNameLess() );
+
+        // transfer result to static Sequence
+        aPropSeq = ::chart::helper::VectorToSequence( aProperties );
+    }
+
+    return aPropSeq;
+}
+
+::cppu::IPropertyArrayHelper & lcl_getInfoHelper()
+{
+    static ::cppu::OPropertyArrayHelper aArrayHelper(
+        lcl_GetPropertySequence(),
+        /* bSorted = */ sal_True );
+
+    return aArrayHelper;
+}
+
+} // anonymous namespace
+
 namespace chart
 {
 
 PieChartTypeTemplate::PieChartTypeTemplate(
     uno::Reference<
         uno::XComponentContext > const & xContext,
-    PieOffsetMode eMode,
+    const ::rtl::OUString & rServiceName,
+    chart2::PieChartOffsetMode eMode,
     bool bRings            /* = false */,
     sal_Int32 nDim         /* = 2 */    ) :
-        ChartTypeTemplate( xContext ),
+        ChartTypeTemplate( xContext, rServiceName ),
+        ::property::OPropertySet( m_aMutex ),
         m_ePieOffsetMode( eMode ),
-        m_nDim( nDim ),
         m_bIsRingChart( bRings )
-{}
+{
+    setFastPropertyValue_NoBroadcast( PROP_PIE_TEMPLATE_OFFSET_MODE,    uno::makeAny( eMode ));
+    setFastPropertyValue_NoBroadcast( PROP_PIE_TEMPLATE_DIMENSION,      uno::makeAny( nDim ));
+    setFastPropertyValue_NoBroadcast( PROP_PIE_TEMPLATE_USE_RINGS,      uno::makeAny( sal_Bool( bRings )));
+}
 
 PieChartTypeTemplate::~PieChartTypeTemplate()
 {}
 
+// ____ OPropertySet ____
+uno::Any PieChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle ) const
+    throw(beans::UnknownPropertyException)
+{
+    static helper::tPropertyValueMap aStaticDefaults;
+
+    // /--
+    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+    if( 0 == aStaticDefaults.size() )
+    {
+        // initialize defaults
+        lcl_AddDefaultsToMap( aStaticDefaults );
+    }
+
+    helper::tPropertyValueMap::const_iterator aFound(
+        aStaticDefaults.find( nHandle ));
+
+    if( aFound == aStaticDefaults.end())
+        return uno::Any();
+
+    return (*aFound).second;
+    // \--
+}
+
+::cppu::IPropertyArrayHelper & SAL_CALL PieChartTypeTemplate::getInfoHelper()
+{
+    return lcl_getInfoHelper();
+}
+
+
+// ____ XPropertySet ____
+uno::Reference< beans::XPropertySetInfo > SAL_CALL
+    PieChartTypeTemplate::getPropertySetInfo()
+    throw (uno::RuntimeException)
+{
+    static uno::Reference< beans::XPropertySetInfo > xInfo;
+
+    // /--
+    MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+    if( !xInfo.is())
+    {
+        xInfo = ::cppu::OPropertySetHelper::createPropertySetInfo(
+            getInfoHelper());
+    }
+
+    return xInfo;
+    // \--
+}
+
+
+// ____ ChartTypeTemplate ____
 sal_Int32 PieChartTypeTemplate::getDimension() const
 {
-    return m_nDim;
+    sal_Int32 nDim = 2;
+    try
+    {
+        // note: UNO-methods are never const
+        const_cast< PieChartTypeTemplate * >( this )->
+            getFastPropertyValue( PROP_PIE_TEMPLATE_DIMENSION ) >>= nDim;
+    }
+    catch( beans::UnknownPropertyException & ex )
+    {
+        ASSERT_EXCEPTION( ex );
+    }
+
+    return nDim;
 }
 
 uno::Reference< chart2::XBoundedCoordinateSystem > PieChartTypeTemplate::createCoordinateSystem(
@@ -139,9 +311,12 @@ Reference< chart2::XDataSeriesTreeParent > PieChartTypeTemplate::createDataSerie
     const Sequence< Reference< chart2::XDataSeries > > & aSeriesSeq,
     const Reference< chart2::XBoundedCoordinateSystem > & rCoordSys )
 {
-    sal_Int32 nOffset = (m_ePieOffsetMode == NO_OFFSET)
+    sal_Int32 nDefaultOffset = 10;
+    sal_Int32 nDim = getDimension();
+    getFastPropertyValue( PROP_PIE_TEMPLATE_DEFAULT_OFFSET ) >>= nDefaultOffset;
+    sal_Int32 nOffset = (m_ePieOffsetMode == chart2::PieChartOffsetMode_NONE)
         ? 0
-        : m_nDefaultOffset;
+        : nDefaultOffset;
 
     // create series tree nodes
     // root
@@ -149,7 +324,7 @@ Reference< chart2::XDataSeriesTreeParent > PieChartTypeTemplate::createDataSerie
 
     // chart type group
     Reference< chart2::XDataSeriesTreeNode > aChartTypeNode(
-        createChartTypeGroup( new PieChartType( m_nDim, nOffset )));
+        createChartTypeGroup( new PieChartType( nDim, nOffset )));
 
     // 'x-axis' group
     Reference< chart2::XDataSeriesTreeNode > aCategoryNode(
@@ -164,7 +339,7 @@ Reference< chart2::XDataSeriesTreeParent > PieChartTypeTemplate::createDataSerie
 
     // build tree
     // add series node to value node
-    if( m_ePieOffsetMode == FIRST_EXPLODED )
+    if( m_ePieOffsetMode == chart2::PieChartOffsetMode_FIRST_EXPLODED )
     {
         if( aSeriesSeq.getLength() >= 1 )
         {
@@ -176,7 +351,7 @@ Reference< chart2::XDataSeriesTreeParent > PieChartTypeTemplate::createDataSerie
         {
             // chart type group
             Reference< chart2::XDataSeriesTreeNode > aChartTypeNode2(
-                createChartTypeGroup( new PieChartType( m_nDim, 0 )));
+                createChartTypeGroup( new PieChartType( nDim, 0 )));
 
             // 'x-axis' group
             Reference< chart2::XDataSeriesTreeNode > aCategoryNode2(
@@ -208,15 +383,33 @@ Reference< chart2::XDataSeriesTreeParent > PieChartTypeTemplate::createDataSerie
     return aRoot;
 }
 
-// ____ XChartTypeTemplate ____
-uno::Reference< chart2::XChartType > SAL_CALL PieChartTypeTemplate::getChartTypeForAdditionalSeries()
+uno::Reference< chart2::XChartType > PieChartTypeTemplate::getDefaultChartType()
     throw (uno::RuntimeException)
 {
     sal_Int32 nOffset = 0;
-    if( m_ePieOffsetMode == ALL_EXPLODED )
-        nOffset = m_nDefaultOffset;
+    if( m_ePieOffsetMode == chart2::PieChartOffsetMode_ALL_EXPLODED )
+    {
+        nOffset = 10;
+        getFastPropertyValue( PROP_PIE_TEMPLATE_DEFAULT_OFFSET ) >>= nOffset;
+    }
 
-    return new PieChartType( m_nDim, nOffset );
+    return new PieChartType( getDimension(), nOffset );
 }
+
+// ----------------------------------------
+
+uno::Sequence< ::rtl::OUString > PieChartTypeTemplate::getSupportedServiceNames_Static()
+{
+    uno::Sequence< ::rtl::OUString > aServices( 2 );
+    aServices[ 0 ] = lcl_aServiceName;
+    aServices[ 1 ] = C2U( "drafts.com.sun.star.chart2.ChartTypeTemplate" );
+    return aServices;
+}
+
+// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
+APPHELPER_XSERVICEINFO_IMPL( PieChartTypeTemplate, lcl_aServiceName );
+
+IMPLEMENT_FORWARD_XINTERFACE2( PieChartTypeTemplate, ChartTypeTemplate, OPropertySet )
+IMPLEMENT_FORWARD_XTYPEPROVIDER2( PieChartTypeTemplate, ChartTypeTemplate, OPropertySet )
 
 } //  namespace chart

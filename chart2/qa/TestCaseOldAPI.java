@@ -23,6 +23,7 @@ import drafts.com.sun.star.chart2.XTitled;
 import drafts.com.sun.star.chart2.XTitle;
 import drafts.com.sun.star.chart2.XDataProvider;
 import drafts.com.sun.star.chart2.XFormattedString;
+import drafts.com.sun.star.chart2.XDiagramProvider;
 
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.comp.helper.ComponentContext;
@@ -57,13 +58,14 @@ public class TestCaseOldAPI extends ComplexTestCase {
      */
     public String[] getTestMethodNames() {
         return new String[] {
+            "testChartType",
             "testTitle",
             "testSubTitle",
             "testDiagram",
             "testAxis",
             "testLegend",
             "testArea",
-            "testChartType"
+            "testAggregation"
         };
     }
 
@@ -71,9 +73,10 @@ public class TestCaseOldAPI extends ComplexTestCase {
 
     public void before()
     {
-        boolean bCreateView = false;
+        // change to "true" to get a view
+        mbCreateView = false;
 
-        if( bCreateView )
+        if( mbCreateView )
             mxChartModel = createDocument( "chart" );
         else
             mxChartModel = createChartModel();
@@ -91,14 +94,18 @@ public class TestCaseOldAPI extends ComplexTestCase {
             XCloseable.class, mxChartModel );
         assure( "document is no XCloseable", xCloseable != null );
 
-        try
+        // do not close document if there exists a view
+        if( ! mbCreateView )
         {
-            xCloseable.close( true );
-        }
-        catch( CloseVetoException ex )
-        {
-            failed( ex.getMessage() );
-            ex.printStackTrace( (PrintWriter)log );
+            try
+            {
+                xCloseable.close( true );
+            }
+            catch( CloseVetoException ex )
+            {
+                failed( ex.getMessage() );
+                ex.printStackTrace( (PrintWriter)log );
+            }
         }
     }
 
@@ -209,7 +216,7 @@ public class TestCaseOldAPI extends ComplexTestCase {
                 XPropertySet xProp = xDisp.getWall();
                 if( xProp != null )
                 {
-                    log.println( "Testing wall" );
+//                     log.println( "Testing wall" );
 
                     int nColor = 0xffe1ff; // thistle1
 
@@ -220,7 +227,7 @@ public class TestCaseOldAPI extends ComplexTestCase {
                 }
 
                 assure( "Wrong Diagram Type", xDia.getDiagramType().equals(
-                            "com.sun.star.chart.BarDiagram" ));
+                            "com.sun.star.chart.AreaDiagram" ));
             }
         }
         catch( Exception ex )
@@ -375,9 +382,19 @@ public class TestCaseOldAPI extends ComplexTestCase {
             {
                 XDiagram xDia = (XDiagram) UnoRuntime.queryInterface(
                     XDiagram.class, xFact.createInstance( aMyServiceName ));
-                assure( "AreaDiagram could not be created", xDia != null );
+                assure( aMyServiceName + " could not be created", xDia != null );
 
                 mxOldDoc.setDiagram( xDia );
+
+                XPropertySet xDiaProp = (XPropertySet) UnoRuntime.queryInterface(
+                    XPropertySet.class, xDia );
+                assure( "Diagram is no XPropertySet", xDiaProp != null );
+
+                xDiaProp.getPropertyValue( "Stacked" );
+                xDiaProp.setPropertyValue( "Stacked", new Boolean( true ));
+                assure( "StackMode could not be set correctly",
+                        AnyConverter.toBoolean(
+                            xDiaProp.getPropertyValue( "Stacked" )));
             }
         }
         catch( Exception ex )
@@ -387,10 +404,25 @@ public class TestCaseOldAPI extends ComplexTestCase {
         }
     }
 
+    // ------------
+
+    public void testAggregation()
+    {
+        // query to new type
+        XChartDocument xDiaProv = (XChartDocument) UnoRuntime.queryInterface(
+            XChartDocument.class, mxOldDoc );
+        assure( "query to new interface failed", xDiaProv != null );
+
+        com.sun.star.chart.XChartDocument xDoc = (com.sun.star.chart.XChartDocument) UnoRuntime.queryInterface(
+            com.sun.star.chart.XChartDocument.class, xDiaProv );
+        assure( "querying back to old interface failed", xDoc != null );
+    }
+
     // ================================================================================
 
     private XModel                    mxChartModel;
     private XChartDocument            mxOldDoc;
+    private boolean                   mbCreateView;
 
     // --------------------------------------------------------------------------------
 

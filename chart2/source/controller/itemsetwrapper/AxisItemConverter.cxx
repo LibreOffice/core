@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AxisItemConverter.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-17 14:30:13 $
+ *  last change: $Author: bm $ $Date: 2003-11-04 12:37:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -436,7 +436,7 @@ void AxisItemConverter::FillSpecialItem( USHORT nWhichId, SfxItemSet & rOutItemS
     }
 }
 
-bool AxisItemConverter::ApplySpecialItem( USHORT nWhichId, const SfxItemSet & rItemSet ) const
+bool AxisItemConverter::ApplySpecialItem( USHORT nWhichId, const SfxItemSet & rItemSet )
     throw( uno::Exception )
 {
     if( ! ( m_xAxis.is() &&

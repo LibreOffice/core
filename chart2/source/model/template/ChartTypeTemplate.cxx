@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartTypeTemplate.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-09 16:46:43 $
+ *  last change: $Author: bm $ $Date: 2003-11-04 12:37:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,17 +60,17 @@
  ************************************************************************/
 #include "ChartTypeTemplate.hxx"
 #include "PropertyHelper.hxx"
-#include "algohelper.hxx"
 #include "macros.hxx"
 #include "ContextHelper.hxx"
 #include "Scale.hxx"
+#include "DataSeriesTreeHelper.hxx"
 
-#include "Diagram.hxx"
 #include "Scaling.hxx"
 #include "CartesianCoordinateSystem.hxx"
 #include "BoundedCoordinateSystem.hxx"
 #include "MeterHelper.hxx"
 #include "LegendHelper.hxx"
+#include "BarChartType.hxx"
 
 #ifndef _CPPUHELPER_COMPONENT_CONTEXT_HXX_
 #include <cppuhelper/component_context.hxx>
@@ -106,85 +106,6 @@ using ::com::sun::star::uno::Any;
 
 namespace
 {
-bool lcl_SetStackModeAtTree(
-    const Reference< chart2::XDataSeriesTreeParent > & rTree,
-    chart2::StackMode eMode )
-{
-    if( ! rTree.is())
-        return false;
-
-    bool bResult = false;
-
-    // seek value stacking group
-    Sequence< Reference< chart2::XDataSeriesTreeNode > > aChildren( rTree->getChildren());
-    for( sal_Int32 i = 0;
-         ( ! bResult ) && ( i < aChildren.getLength() );
-         ++i )
-    {
-        Reference< chart2::XStackableScaleGroup > xStackGroup( aChildren[ i ], uno::UNO_QUERY );
-        if( xStackGroup.is())
-        {
-            Reference< lang::XServiceInfo > xServInfo( aChildren[ i ], uno::UNO_QUERY );
-            if( xServInfo.is() &&
-                xServInfo->supportsService(
-                    C2U( "drafts.com.sun.star.chart2.ContinuousScaleGroup" )))
-            {
-                xStackGroup->setStackMode( eMode );
-                bResult = true;
-                break;
-            }
-        }
-
-        // recurse
-        Reference< chart2::XDataSeriesTreeParent > xNewParent( aChildren[ i ], uno::UNO_QUERY );
-        if( xNewParent.is() &&
-            lcl_SetStackModeAtTree( xNewParent, eMode ))
-            bResult = true;
-    }
-
-    return bResult;
-}
-
-// helping method for lcl_GetDataSeries() (see below)
-void lcl_AddSeriesRecursive(
-    Reference< chart2::XDataSeriesTreeParent > xParent,
-        ::std::vector< Reference< chart2::XDataSeries > > & rOutSeriesVec )
-{
-    if( xParent.is())
-    {
-        Sequence< Reference< chart2::XDataSeriesTreeNode > > aChildren( xParent->getChildren());
-        for( sal_Int32 i = 0; i < aChildren.getLength(); ++i )
-        {
-            Reference< chart2::XDataSeries > aDataSeries( aChildren[ i ], uno::UNO_QUERY );
-            if( aDataSeries.is())
-            {
-                rOutSeriesVec.push_back( aDataSeries );
-            }
-            else
-            {
-                Reference< chart2::XDataSeriesTreeParent > xNewParent( aChildren[ i ], uno::UNO_QUERY );
-                if( xNewParent.is())
-                    lcl_AddSeriesRecursive( xNewParent, rOutSeriesVec );
-            }
-        }
-    }
-}
-Sequence< Reference< chart2::XDataSeries > >
-    lcl_GetDataSeries( const Reference< chart2::XDiagram > & xDia )
-{
-    ::std::vector< Reference< chart2::XDataSeries > > aSeriesVec;
-
-    if( xDia.is())
-    {
-        Reference< chart2::XDataSeriesTreeParent > aParent( xDia->getTree());
-
-        if( aParent.is())
-            lcl_AddSeriesRecursive( aParent, aSeriesVec );
-    }
-
-    return ::chart::helper::VectorToSequence( aSeriesVec );
-}
-
 void lcl_FlushLegend( const Reference< chart2::XLegend > & xLegend )
 {
     if( xLegend.is())
@@ -213,8 +134,10 @@ namespace chart
 {
 
 ChartTypeTemplate::ChartTypeTemplate(
-    Reference< uno::XComponentContext > const & xContext ) :
-    m_xContext( xContext )
+    Reference< uno::XComponentContext > const & xContext,
+    const ::rtl::OUString & rServiceName ) :
+        m_xContext( xContext ),
+        m_aServiceName( rServiceName )
 {
 }
 
@@ -227,35 +150,49 @@ Reference< chart2::XDiagram > SAL_CALL ChartTypeTemplate::createDiagram(
     const Sequence< Reference< chart2::XDataSeries > >& aSeriesSeq )
     throw (uno::RuntimeException)
 {
-    // create diagram
-    Reference< chart2::XDiagram > xDia( new Diagram( m_xContext ) );
+    Reference< chart2::XDiagram > xDia;
 
-    // modify diagram
-    FillDiagram( xDia, aSeriesSeq );
+    try
+    {
+        // create diagram
+        ContextHelper::tContextEntryMapType aContextValues(
+            ContextHelper::MakeContextEntryMap
+            ( C2U( "TemplateServiceName" ),
+              uno::makeAny( getServiceName() ))
+            );
 
-    // create and attach legend
-    Reference< chart2::XLegend > xLegend(
-        m_xContext->getServiceManager()->createInstanceWithContext(
-            C2U( "drafts.com.sun.star.chart2.Legend" ),
-            m_xContext ),
-        uno::UNO_QUERY );
+        xDia.set(
+            m_xContext->getServiceManager()->createInstanceWithContext(
+                C2U( "drafts.com.sun.star.chart2.Diagram" ),
+                ContextHelper::createContext( aContextValues, m_xContext ) ),
+            uno::UNO_QUERY_THROW );
 
-    xDia->setLegend( xLegend );
-    LegendHelper::defaultFillEmptyLegend( xLegend, xDia );
+        // modify diagram
+        FillDiagram( xDia, aSeriesSeq );
+
+        // create and attach legend
+        Reference< chart2::XLegend > xLegend(
+            m_xContext->getServiceManager()->createInstanceWithContext(
+                C2U( "drafts.com.sun.star.chart2.Legend" ),
+                m_xContext ),
+            uno::UNO_QUERY_THROW );
+
+        xDia->setLegend( xLegend );
+        LegendHelper::defaultFillEmptyLegend( xLegend, xDia );
+    }
+    catch( uno::Exception & ex )
+    {
+        ASSERT_EXCEPTION( ex );
+    }
 
     return xDia;
 }
 
-// simple first approach
-void SAL_CALL ChartTypeTemplate::changeDiagram( const Reference< chart2::XDiagram >& xDiagram )
+// ____ XServiceName ____
+    ::rtl::OUString SAL_CALL ChartTypeTemplate::getServiceName()
     throw (uno::RuntimeException)
 {
-    Sequence< Reference< chart2::XDataSeries > > aSeriesSeq( lcl_GetDataSeries( xDiagram ));
-    FillDiagram( xDiagram, aSeriesSeq );
-
-    Reference< chart2::XLegend > xLegend( xDiagram->getLegend());
-    lcl_FlushLegend( xLegend );
-    LegendHelper::defaultFillEmptyLegend( xLegend, xDiagram );
+    return m_aServiceName;
 }
 
 // ________________________________________
@@ -268,6 +205,12 @@ sal_Int32 ChartTypeTemplate::getDimension() const
 chart2::StackMode ChartTypeTemplate::getStackMode() const
 {
     return chart2::StackMode_NONE;
+}
+
+uno::Reference< chart2::XChartType > ChartTypeTemplate::getDefaultChartType()
+    throw (uno::RuntimeException)
+{
+    return new BarChartType( 2 );
 }
 
 // ________________________________________
@@ -528,7 +471,7 @@ Reference< chart2::XDataSeriesTreeParent > ChartTypeTemplate::createDataSeriesTr
 
     // chart type group
     Reference< chart2::XDataSeriesTreeNode > aChartTypeNode(
-        createChartTypeGroup( getChartTypeForAdditionalSeries()));
+        createChartTypeGroup( getDefaultChartType()));
 
     // 'x-axis' group
     Reference< chart2::XDataSeriesTreeNode > aCategoryNode(
@@ -558,7 +501,7 @@ void ChartTypeTemplate::setStackModeAtTree(
     const Reference< chart2::XDataSeriesTreeParent > & rTree,
     chart2::StackMode eMode )
 {
-    bool bResult = lcl_SetStackModeAtTree( rTree, eMode );
+    bool bResult = helper::DataSeriesTreeHelper::setStackMode( rTree, eMode );
     OSL_ENSURE( bResult, "stack-mode could not be set" );
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartModel.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-17 14:48:14 $
+ *  last change: $Author: bm $ $Date: 2003-11-04 12:37:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,6 +207,9 @@ private:
 //  ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >   m_aPrinterOptions;
 
     ::std::auto_ptr< impl::ImplChartModel >                                     m_pImplChartModel;
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation >     m_xOldModelAgg;
 
 private:
     //private methods
@@ -467,8 +470,7 @@ public:
     virtual void SAL_CALL
         setDiagram( const ::com::sun::star::uno::Reference<
                         ::drafts::com::sun::star::chart2::XDiagram >& xDiagram )
-            throw (::com::sun::star::lang::IllegalArgumentException,
-                   ::com::sun::star::uno::RuntimeException);
+            throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL
         attachDataProvider( const ::com::sun::star::uno::Reference<
                             ::drafts::com::sun::star::chart2::XDataProvider >& xProvider )
@@ -484,13 +486,6 @@ public:
     virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::chart2::XChartTypeManager > SAL_CALL
         getChartTypeManager()
             throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL
-        setChartTypeTemplate( const ::com::sun::star::uno::Reference<
-                                  ::drafts::com::sun::star::chart2::XChartTypeTemplate >& xNewTemplate )
-            throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::chart2::XChartTypeTemplate > SAL_CALL
-        getChartTypeTemplate()
-            throw (::com::sun::star::uno::RuntimeException);
 //     virtual void SAL_CALL setSplitLayoutContainer(
 //         const ::com::sun::star::uno::Reference<
 //             ::drafts::com::sun::star::layout::XSplitLayoutContainer >& xLayoutCnt )
@@ -502,7 +497,7 @@ public:
         getPageBackground()
             throw (::com::sun::star::uno::RuntimeException);
 
-// ____ XTitled ____
+    // ____ XTitled ____
     virtual ::com::sun::star::uno::Reference<
         ::drafts::com::sun::star::chart2::XTitle > SAL_CALL getTitle()
         throw (::com::sun::star::uno::RuntimeException);
@@ -518,4 +513,3 @@ public:
 }  // namespace chart
 
 #endif
-

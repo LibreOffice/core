@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Diagram.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:30 $
+ *  last change: $Author: bm $ $Date: 2003-11-04 12:37:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,6 +178,8 @@ protected:
         const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::chart2::XDataSeriesTreeParent >& xTree )
         throw (::com::sun::star::lang::IllegalArgumentException,
                ::com::sun::star::uno::RuntimeException);
+//     virtual ::rtl::OUString SAL_CALL getChartTypeTemplateServiceName()
+//         throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet > SAL_CALL getWall()
         throw (::com::sun::star::uno::RuntimeException);
@@ -302,6 +304,8 @@ private:
     ::com::sun::star::uno::Reference<
         ::drafts::com::sun::star::chart2::XLegend >
                         m_xLegend;
+
+    const ::rtl::OUString m_aTemplateServiceName;
 };
 
 } //  namespace chart

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PieChartTypeTemplate.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:32 $
+ *  last change: $Author: bm $ $Date: 2003-11-04 12:37:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,30 +61,56 @@
 #ifndef CHART_PIECHARTTYPETEMPLATE_HXX
 #define CHART_PIECHARTTYPETEMPLATE_HXX
 
+#include "OPropertySet.hxx"
+#include "MutexContainer.hxx"
+
+#ifndef _COMPHELPER_UNO3_HXX_
+#include <comphelper/uno3.hxx>
+#endif
+
 #include "ChartTypeTemplate.hxx"
+
+#ifndef _DRAFTS_COM_SUN_STAR_CHART2_PIECHARTOFFSETMODE_HPP_
+#include <drafts/com/sun/star/chart2/PieChartOffsetMode.hpp>
+#endif
 
 namespace chart
 {
 
-class PieChartTypeTemplate : public ChartTypeTemplate
+class PieChartTypeTemplate :
+        public helper::MutexContainer,
+        public ChartTypeTemplate,
+        public ::property::OPropertySet
 {
 public:
-    enum PieOffsetMode
-    {
-        NO_OFFSET,
-        FIRST_EXPLODED,
-        ALL_EXPLODED
-    };
-
     PieChartTypeTemplate(
         ::com::sun::star::uno::Reference<
             ::com::sun::star::uno::XComponentContext > const & xContext,
-        PieOffsetMode eMode,
+        const ::rtl::OUString & rServiceName,
+        ::drafts::com::sun::star::chart2::PieChartOffsetMode eMode,
         bool bRings = false,
         sal_Int32 nDim = 2 );
     virtual ~PieChartTypeTemplate();
 
+    /// XServiceInfo declarations
+    APPHELPER_XSERVICEINFO_DECL()
+
+    /// merge XInterface implementations
+     DECLARE_XINTERFACE()
+    /// merge XTypeProvider implementations
+     DECLARE_XTYPEPROVIDER()
+
 protected:
+    // ____ OPropertySet ____
+    virtual ::com::sun::star::uno::Any GetDefaultValue( sal_Int32 nHandle ) const
+        throw(::com::sun::star::beans::UnknownPropertyException);
+    virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper();
+
+    // ____ XPropertySet ____
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL
+        getPropertySetInfo()
+        throw (::com::sun::star::uno::RuntimeException);
+
     // ____ ChartTypeTemplate ____
     virtual sal_Int32 getDimension() const;
 
@@ -109,18 +135,14 @@ protected:
                 ::drafts::com::sun::star::chart2::XBoundedCoordinateSystem > & rCoordSys
             );
 
-    // ____ XChartTypeTemplate ____
     virtual ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::chart2::XChartType > SAL_CALL getChartTypeForAdditionalSeries()
+        ::drafts::com::sun::star::chart2::XChartType > getDefaultChartType()
         throw (::com::sun::star::uno::RuntimeException);
 
 private:
-    PieOffsetMode             m_ePieOffsetMode;
-    sal_Int32                 m_nDim;
-    bool                      m_bIsRingChart;
-
-    // same value as in old chart
-    static const sal_Int32    m_nDefaultOffset = 10;
+    ::drafts::com::sun::star::chart2::PieChartOffsetMode
+                    m_ePieOffsetMode;
+    bool            m_bIsRingChart;
 };
 
 } //  namespace chart

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Axis.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:30 $
+ *  last change: $Author: bm $ $Date: 2003-11-04 12:37:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,8 +144,12 @@ protected:
 //      throw (::com::sun::star::lang::IllegalArgumentException);
 
     // ____ XAxis ____
+    virtual ::com::sun::star::uno::Sequence<
+            ::com::sun::star::uno::Reference<
+                    ::com::sun::star::beans::XPropertySet > > SAL_CALL getSubTickProperties()
+        throw (::com::sun::star::uno::RuntimeException);
 
-    // ____ XMeter ____
+// ____ XMeter ____
     virtual void SAL_CALL attachCoordinateSystem(
         const ::com::sun::star::uno::Reference<
             ::drafts::com::sun::star::chart2::XBoundedCoordinateSystem >& xCoordSys,

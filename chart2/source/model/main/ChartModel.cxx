@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartModel.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-17 14:48:14 $
+ *  last change: $Author: bm $ $Date: 2003-11-04 12:37:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,8 @@
 #include "ImplChartModel.hxx"
 #include "servicenames.hxx"
 #include "MediaDescriptorHelper.hxx"
+#include "macros.hxx"
+#include "ChartDocumentWrapper.hxx"
 
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
 #include <com/sun/star/uno/Reference.h>
@@ -100,11 +102,15 @@ ChartModel::ChartModel(uno::Reference<uno::XComponentContext > const & xContext)
     , m_xCurrentController( NULL )
     , m_nControllerLockCount(0)
     , m_pImplChartModel( new impl::ImplChartModel( xContext ) )
+    , m_xContext( xContext )
 {
 }
 
 ChartModel::~ChartModel()
 {
+    if( m_xOldModelAgg.is())
+        m_xOldModelAgg->setDelegator( NULL );
+
     //@todo
 
     if ( m_pControllers )
@@ -783,8 +789,7 @@ APPHELPER_XSERVICEINFO_IMPL(ChartModel,CHART_MODEL_SERVICE_IMPLEMENTATION_NAME)
 
         void SAL_CALL ChartModel
 ::setDiagram( const uno::Reference< chart2::XDiagram >& xDiagram )
-            throw (lang::IllegalArgumentException,
-                   uno::RuntimeException)
+            throw (uno::RuntimeException)
 {
     OSL_ASSERT( m_pImplChartModel.get() != 0 );
     // /--
@@ -836,28 +841,6 @@ APPHELPER_XSERVICEINFO_IMPL(ChartModel,CHART_MODEL_SERVICE_IMPLEMENTATION_NAME)
     // /--
     MutexGuard aGuard( m_aModelMutex );
     return m_pImplChartModel->GetChartTypeManager();
-    // \--
-}
-
-        void SAL_CALL ChartModel
-::setChartTypeTemplate( const uno::Reference< chart2::XChartTypeTemplate >& xNewTemplate )
-        throw (uno::RuntimeException)
-{
-    OSL_ASSERT( m_pImplChartModel.get() != 0 );
-    // /--
-    MutexGuard aGuard( m_aModelMutex );
-    m_pImplChartModel->SetChartTypeTemplate( xNewTemplate );
-    // \--
-}
-
-        uno::Reference< chart2::XChartTypeTemplate > SAL_CALL ChartModel
-::getChartTypeTemplate()
-        throw (uno::RuntimeException)
-{
-    OSL_ASSERT( m_pImplChartModel.get() != 0 );
-    // /--
-    MutexGuard aGuard( m_aModelMutex );
-    return m_pImplChartModel->GetChartTypeTemplate();
     // \--
 }
 
@@ -921,14 +904,30 @@ void SAL_CALL ChartModel::setTitle(
 uno::Any SAL_CALL ChartModel::queryInterface( const uno::Type& aType )
     throw (uno::RuntimeException)
 {
-    // return old API wrapper
-    if( aType ==
-        ::getCppuType( (uno::Reference< ::com::sun::star::chart::XChartDocument > *)0 ))
+    uno::Any aResult( impl::ChartModel_Base::queryInterface( aType ));
+
+    if( ! aResult.hasValue())
     {
-        return uno::makeAny( m_pImplChartModel->GetOldChartDocument( this ));
+        // try old API wrapper
+        try
+        {
+            if( ! m_xOldModelAgg.is())
+            {
+                m_xOldModelAgg.set(
+                    static_cast< uno::XWeak* >(
+                        new wrapper::ChartDocumentWrapper( m_xContext )), uno::UNO_QUERY_THROW );
+                m_xOldModelAgg->setDelegator( static_cast< ::cppu::OWeakObject* >( this ));
+            }
+
+            aResult = m_xOldModelAgg->queryAggregation( aType );
+        }
+        catch( uno::Exception & ex )
+        {
+            ASSERT_EXCEPTION( ex );
+        }
     }
 
-    return impl::ChartModel_Base::queryInterface( aType );
+    return aResult;
 }
 
 

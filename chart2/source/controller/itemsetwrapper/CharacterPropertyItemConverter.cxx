@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CharacterPropertyItemConverter.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-17 14:30:13 $
+ *  last change: $Author: bm $ $Date: 2003-11-04 12:37:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -249,7 +249,7 @@ void CharacterPropertyItemConverter::FillSpecialItem(
 }
 
 bool CharacterPropertyItemConverter::ApplySpecialItem(
-    USHORT nWhichId, const SfxItemSet & rItemSet ) const
+    USHORT nWhichId, const SfxItemSet & rItemSet )
     throw( uno::Exception )
 {
     bool bChanged = false;

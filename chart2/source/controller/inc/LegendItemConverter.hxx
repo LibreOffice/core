@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LegendItemConverter.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-17 14:30:10 $
+ *  last change: $Author: bm $ $Date: 2003-11-04 12:37:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@ protected:
 
     virtual void FillSpecialItem( USHORT nWhichId, SfxItemSet & rOutItemSet ) const
         throw( ::com::sun::star::uno::Exception );
-    virtual bool ApplySpecialItem( USHORT nWhichId, const SfxItemSet & rItemSet ) const
+    virtual bool ApplySpecialItem( USHORT nWhichId, const SfxItemSet & rItemSet )
         throw( ::com::sun::star::uno::Exception );
 
 private:

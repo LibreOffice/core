@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LineChartTypeTemplate.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:32 $
+ *  last change: $Author: bm $ $Date: 2003-11-04 12:37:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,11 +70,12 @@ namespace chart
 LineChartTypeTemplate::LineChartTypeTemplate(
     uno::Reference<
         uno::XComponentContext > const & xContext,
+    const ::rtl::OUString & rServiceName,
     chart2::StackMode eStackMode,
     SplineMode eSplineMode,
     bool bSymbols,
     sal_Int32 nDim /* = 2 */ ) :
-        ChartTypeTemplate( xContext ),
+        ChartTypeTemplate( xContext, rServiceName ),
         m_eStackMode( eStackMode ),
         m_eSplineMode( eSplineMode ),
         m_bHasSymbols( bSymbols ),
@@ -94,8 +95,7 @@ chart2::StackMode LineChartTypeTemplate::getStackMode() const
     return m_eStackMode;
 }
 
-// ____ XChartTypeTemplate ____
-uno::Reference< chart2::XChartType > SAL_CALL LineChartTypeTemplate::getChartTypeForAdditionalSeries()
+uno::Reference< chart2::XChartType > LineChartTypeTemplate::getDefaultChartType()
     throw (uno::RuntimeException)
 {
     return new LineChartType( m_nDim );

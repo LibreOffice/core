@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartTypeTemplate.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-09 16:46:43 $
+ *  last change: $Author: bm $ $Date: 2003-11-04 12:37:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,8 @@
 #ifndef CHART_CHARTTYPETEMPLATE_HXX
 #define CHART_CHARTTYPETEMPLATE_HXX
 
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
-#include <cppuhelper/implbase1.hxx>
+#ifndef _CPPUHELPER_IMPLBASE2_HXX_
+#include <cppuhelper/implbase2.hxx>
 #endif
 #include "ServiceMacros.hxx"
 
@@ -87,17 +87,25 @@
 #ifndef _DRAFTS_COM_SUN_STAR_CHART2_XLEGEND_HPP_
 #include <drafts/com/sun/star/chart2/XLegend.hpp>
 #endif
+#ifndef _COM_SUN_STAR_LANG_XSERVICENAME_HPP_
+#include <com/sun/star/lang/XServiceName.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_CHART2_XCHARTTYPE_HPP_
+#include <drafts/com/sun/star/chart2/XChartType.hpp>
+#endif
 
 namespace chart
 {
 
-class ChartTypeTemplate : public ::cppu::WeakImplHelper1<
-    ::drafts::com::sun::star::chart2::XChartTypeTemplate >
+class ChartTypeTemplate : public ::cppu::WeakImplHelper2<
+        ::drafts::com::sun::star::chart2::XChartTypeTemplate,
+        ::com::sun::star::lang::XServiceName >
 {
 public:
     explicit ChartTypeTemplate(
         ::com::sun::star::uno::Reference<
-            ::com::sun::star::uno::XComponentContext > const & xContext );
+            ::com::sun::star::uno::XComponentContext > const & xContext,
+        const ::rtl::OUString & rServiceName );
     virtual ~ChartTypeTemplate();
 
     APPHELPER_XSERVICEINFO_DECL()
@@ -106,17 +114,14 @@ public:
 
 protected:
     // ____ XChartTypeTemplate ____
-    // still abstract !
-        virtual ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::chart2::XChartType > SAL_CALL getChartTypeForAdditionalSeries()
-        throw (::com::sun::star::uno::RuntimeException) = 0;
     virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::chart2::XDiagram > SAL_CALL
         createDiagram( const ::com::sun::star::uno::Sequence<
                            ::com::sun::star::uno::Reference<
                                ::drafts::com::sun::star::chart2::XDataSeries > >& aSeriesSeq )
         throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL changeDiagram(
-        const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::chart2::XDiagram >& xDiagram )
+
+    // ____ XServiceName ____
+    virtual ::rtl::OUString SAL_CALL getServiceName()
         throw (::com::sun::star::uno::RuntimeException);
 
     // Methods to overload for automatic creation
@@ -129,6 +134,10 @@ protected:
         if createDataSeriesTree() is not overloaded
      */
     virtual ::drafts::com::sun::star::chart2::StackMode getStackMode() const;
+
+    virtual ::com::sun::star::uno::Reference<
+        ::drafts::com::sun::star::chart2::XChartType > getDefaultChartType()
+        throw (::com::sun::star::uno::RuntimeException);
 
     // Methods for creating the diagram piecewise
     // ------------------------------------------
@@ -252,6 +261,7 @@ protected:
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
         m_xContext;
+    const ::rtl::OUString m_aServiceName;
 
     /** modifies the given diagram
      */

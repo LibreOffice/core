@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LineChartTypeTemplate.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:32 $
+ *  last change: $Author: bm $ $Date: 2003-11-04 12:37:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,7 @@ public:
     explicit LineChartTypeTemplate(
         ::com::sun::star::uno::Reference<
             ::com::sun::star::uno::XComponentContext > const & xContext,
+        const ::rtl::OUString & rServiceName,
         ::drafts::com::sun::star::chart2::StackMode eStackMode, SplineMode eSplineMode,
         bool bSymbols, sal_Int32 nDim = 2 );
     virtual ~LineChartTypeTemplate();
@@ -91,10 +92,8 @@ protected:
     // ____ ChartTypeTemplate ____
     virtual sal_Int32 getDimension() const;
     virtual ::drafts::com::sun::star::chart2::StackMode getStackMode() const;
-
-    // ____ XChartTypeTemplate ____
     virtual ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::chart2::XChartType > SAL_CALL getChartTypeForAdditionalSeries()
+        ::drafts::com::sun::star::chart2::XChartType > getDefaultChartType()
         throw (::com::sun::star::uno::RuntimeException);
 
 private:

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImplChartModel.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-17 14:48:14 $
+ *  last change: $Author: bm $ $Date: 2003-11-04 12:37:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,6 @@
 #include "ContextHelper.hxx"
 // #include "SplitLayoutContainer.hxx"
 #include "LayoutDefaults.hxx"
-#include "ChartDocumentWrapper.hxx"
 #include "PageBackground.hxx"
 
 #ifndef _CPPUHELPER_COMPONENT_CONTEXT_HXX_
@@ -379,23 +378,6 @@ uno::Reference< chart2::XTitle > ImplChartModel::GetTitle()
 void ImplChartModel::SetTitle( const uno::Reference< chart2::XTitle >& rTitle )
 {
     m_xTitle = rTitle;
-}
-
-uno::Reference< ::com::sun::star::chart::XChartDocument > ImplChartModel::GetOldChartDocument(
-    const uno::Reference< chart2::XChartDocument > & xNewModel )
-{
-    // put weak reference into a strong one
-    uno::Reference< ::com::sun::star::chart::XChartDocument > xRef( m_xOldModel );
-
-    if( ! xRef.is())
-    {
-        xRef.set( new wrapper::ChartDocumentWrapper( xNewModel, m_xContext ));
-
-        // assing reference to weak reference
-        m_xOldModel = xRef;
-    }
-
-    return xRef;
 }
 
 void ImplChartModel::dispose()
