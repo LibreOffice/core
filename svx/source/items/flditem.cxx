@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flditem.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:20 $
+ *  last change: $Author: er $ $Date: 2001-06-11 17:21:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,9 @@
  *
  ************************************************************************/
 
+#ifndef _ZFORLIST_HXX
+#include <svtools/zforlist.hxx>
+#endif
 #ifndef _INTN_HXX
 #include <tools/intn.hxx>
 #endif
@@ -286,6 +289,72 @@ void SvxDateField::Save( SvPersistStream & rStm )
 
 // -----------------------------------------------------------------------
 
+String SvxDateField::GetFormatted( SvNumberFormatter& rFormatter, LanguageType eLang ) const
+{
+    Date aDate; // current date
+    if ( eType == SVXDATETYPE_FIX )
+        aDate.SetDate( nFixDate );
+
+    SvxDateFormat eTmpFormat = eFormat;
+
+    if ( eTmpFormat == SVXDATEFORMAT_SYSTEM )
+    {
+        DBG_ERROR( "SVXDATEFORMAT_SYSTEM nicht implementiert!" );
+        eTmpFormat = SVXDATEFORMAT_STDSMALL;
+    }
+    else if ( eTmpFormat == SVXDATEFORMAT_APPDEFAULT )
+    {
+        DBG_ERROR( "SVXDATEFORMAT_APPDEFAULT: Woher nehmen?" );
+        eTmpFormat = SVXDATEFORMAT_STDSMALL;
+    }
+
+    ULONG nFormatKey;
+
+    switch( eTmpFormat )
+    {
+        case SVXDATEFORMAT_STDSMALL:
+            // short
+            nFormatKey = rFormatter.GetFormatIndex( NF_DATE_SYSTEM_SHORT, eLang );
+        break;
+        case SVXDATEFORMAT_STDBIG:
+            // long
+            nFormatKey = rFormatter.GetFormatIndex( NF_DATE_SYSTEM_LONG, eLang );
+        break;
+        case SVXDATEFORMAT_A:
+            // 13.02.96
+            nFormatKey = rFormatter.GetFormatIndex( NF_DATE_SYS_DDMMYY, eLang );
+        break;
+        case SVXDATEFORMAT_B:
+            // 13.02.1996
+            nFormatKey = rFormatter.GetFormatIndex( NF_DATE_SYS_DDMMYYYY, eLang );
+        break;
+        case SVXDATEFORMAT_C:
+            // 13. Feb 1996
+            nFormatKey = rFormatter.GetFormatIndex( NF_DATE_SYS_DMMMYYYY, eLang );
+        break;
+        case SVXDATEFORMAT_D:
+            // 13. Februar 1996
+            nFormatKey = rFormatter.GetFormatIndex( NF_DATE_SYS_DMMMMYYYY, eLang );
+        break;
+        case SVXDATEFORMAT_E:
+            // Die, 13. Februar 1996
+            nFormatKey = rFormatter.GetFormatIndex( NF_DATE_SYS_NNDMMMMYYYY, eLang );
+        break;
+        case SVXDATEFORMAT_F:
+            // Dienstag, 13. Februar 1996
+            nFormatKey = rFormatter.GetFormatIndex( NF_DATE_SYS_NNNNDMMMMYYYY, eLang );
+        break;
+        default:
+            nFormatKey = rFormatter.GetStandardFormat( NUMBERFORMAT_DATE, eLang );
+    }
+
+    double fDiffDate = aDate - *(rFormatter.GetNullDate());
+    String aStr;
+    rFormatter.GetOutputString( fDiffDate, nFormatKey, aStr, NULL );
+    return aStr;
+}
+
+// deprecated, to be removed
 XubString SvxDateField::GetFormatted( LanguageType eLanguage, LanguageType eFmt ) const
 {
     International aInter( eLanguage, eFmt );
@@ -661,6 +730,61 @@ void SvxExtTimeField::Save( SvPersistStream & rStm )
 
 //----------------------------------------------------------------------------
 
+String SvxExtTimeField::GetFormatted( SvNumberFormatter& rFormatter, LanguageType eLang ) const
+{
+    Time aTime; // current time
+    if ( eType == SVXTIMETYPE_FIX )
+        aTime.SetTime( nFixTime );
+
+    SvxTimeFormat eTmpFormat = eFormat;
+
+    switch( eTmpFormat )
+    {
+        case SVXTIMEFORMAT_SYSTEM :
+            DBG_ERROR( "SVXTIMEFORMAT_SYSTEM: not implemented" );
+            eTmpFormat = SVXTIMEFORMAT_STANDARD;
+        break;
+        case SVXTIMEFORMAT_APPDEFAULT :
+            DBG_ERROR( "SVXTIMEFORMAT_APPDEFAULT: not implemented" );
+            eTmpFormat = SVXTIMEFORMAT_STANDARD;
+        break;
+        case SVXTIMEFORMAT_12_HMSH:
+            DBG_ERROR( "SVXTIMEFORMAT_12_HMSH: not implemented" );
+            eTmpFormat = SVXTIMEFORMAT_24_HMSH;
+        break;
+    }
+
+    ULONG nFormatKey;
+
+    switch( eTmpFormat )
+    {
+        case SVXTIMEFORMAT_12_HM:
+            nFormatKey = rFormatter.GetFormatIndex( NF_TIME_HHMMAMPM, eLang );
+        break;
+        case SVXTIMEFORMAT_24_HM:
+            nFormatKey = rFormatter.GetFormatIndex( NF_TIME_HHMM, eLang );
+        break;
+        case SVXTIMEFORMAT_24_HMSH:
+            nFormatKey = rFormatter.GetFormatIndex( NF_TIME_HH_MMSS00, eLang );
+        break;
+        case SVXTIMEFORMAT_12_HMS:
+            nFormatKey = rFormatter.GetFormatIndex( NF_TIME_HHMMSSAMPM, eLang );
+        break;
+        case SVXTIMEFORMAT_24_HMS:
+            nFormatKey = rFormatter.GetFormatIndex( NF_TIME_HHMMSS, eLang );
+        break;
+        case SVXTIMEFORMAT_STANDARD:
+        default:
+            nFormatKey = rFormatter.GetStandardFormat( NUMBERFORMAT_TIME, eLang );
+    }
+
+    double fFracTime = aTime.GetTimeInDays();
+    String aStr;
+    rFormatter.GetOutputString( fFracTime, nFormatKey, aStr, NULL );
+    return aStr;
+}
+
+// deprecated, to be removed
 XubString SvxExtTimeField::GetFormatted( LanguageType eLanguage, LanguageType eFmt ) const
 {
     International aInter( eLanguage, eFmt );
