@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlroot.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2004-10-18 15:20:42 $
+ *  last change: $Author: rt $ $Date: 2004-11-09 15:09:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,6 +145,7 @@ class SdrPage;
 class ScDocumentPool;
 class ScStyleSheetPool;
 class ScRangeName;
+class ScDBCollection;
 struct XclFontData;
 
 /** Access to global data for a filter object (imported or exported document) from other classes. */
@@ -164,6 +165,10 @@ public:
     inline const XclRoot& GetRoot() const { return *this; }
     /** Returns the current BIFF version of the importer/exporter. */
     inline XclBiff      GetBiff() const { return mrData.meBiff; }
+    /** Returns true, if currently a document is imported. */
+    inline bool         IsImport() const { return !mrData.mbExport; }
+    /** Returns true, if currently a document is exported. */
+    inline bool         IsExport() const { return mrData.mbExport; }
     /** Returns the system language, i.e. for number formats. */
     inline LanguageType GetSysLanguage() const { return mrData.meSysLang; }
     /** Returns the document language. */
@@ -223,6 +228,8 @@ public:
     ScStyleSheetPool&   GetStyleSheetPool() const;
     /** Returns the defined names container of the Calc document. */
     ScRangeName&        GetNamedRanges() const;
+    /** Returns the database ranges container of the Calc document. */
+    ScDBCollection&     GetDatabaseRanges() const;
     /** Returns the drawing layer page of the passed sheet, if present. */
     SdrPage*            GetSdrPage( SCTAB nScTab ) const;
 
