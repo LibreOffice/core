@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fefly1.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2002-08-09 08:54:15 $
+ *  last change: $Author: os $ $Date: 2002-08-13 13:13:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -333,13 +333,6 @@ sal_Bool lcl_ChkAndSetNewAnchor( const SwFlyFrm& rFly, SfxItemSet& rSet )
         return sal_False;
 
     SwDoc* pDoc = (SwDoc*)rFmt.GetDoc();
-
-#ifndef PRODUCT
-    ASSERT( !(nNew == FLY_PAGE &&
-        (FLY_AT_CNTNT==nOld || FLY_AUTO_CNTNT==nOld || FLY_IN_CNTNT==nOld ) &&
-        pDoc->IsInHeaderFooter( rOldAnch.GetCntntAnchor()->nNode )),
-            "Unerlaubter Ankerwechsel in Head/Foot." );
-#endif
 
     return ::lcl_FindAnchorPos( *pDoc, rFly.Frm().Pos(), rFly, rSet );
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfly.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ama $ $Date: 2001-12-14 10:45:09 $
+ *  last change: $Author: os $ $Date: 2002-08-13 13:18:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -350,12 +350,6 @@ sal_Int8 SwDoc::SetFlyFrmAnchor( SwFrmFmt& rFmt, SfxItemSet& rSet, BOOL bNewFrms
     if( nOld == nNew )
         return DONTMAKEFRMS;
 
-#ifndef PRODUCT
-    if( nNew == FLY_PAGE &&
-        (FLY_AT_CNTNT==nOld || FLY_AUTO_CNTNT==nOld || FLY_IN_CNTNT==nOld ) &&
-        IsInHeaderFooter( rOldAnch.GetCntntAnchor()->nNode ) )
-        ASSERT( !this, "Unerlaubter Ankerwechsel in Head/Foot." );
-#endif
 
     Point aOldAnchorPos( ::lcl_FindAnchorLayPos( *this, rOldAnch, &rFmt ));
     Point aNewAnchorPos( ::lcl_FindAnchorLayPos( *this, aNewAnch, 0 ));
