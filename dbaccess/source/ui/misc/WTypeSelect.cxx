@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WTypeSelect.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:52:52 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 18:02:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -412,7 +412,9 @@ IMPL_LINK( OWizTypeSelect, ButtonClickHdl, Button *, pButton )
 sal_Bool OWizTypeSelectList::IsPrimaryKeyAllowed() const
 {
     sal_uInt16 nCount = GetSelectEntryCount();
-    for(sal_uInt16 j=0;m_bPKey && j < nCount;++j)
+    sal_uInt16 j;
+
+    for( j = 0; m_bPKey && j < nCount; ++j )
     {
         OFieldDescription* pField = static_cast<OFieldDescription*>(GetEntryData(GetSelectEntryPos(j)));
         if(!pField || pField->getTypeInfo()->nSearchType == ColumnSearch::NONE)
