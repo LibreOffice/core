@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyle.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: cl $ $Date: 2002-05-23 14:15:35 $
+ *  last change: $Author: fs $ $Date: 2002-10-25 13:22:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -680,7 +680,12 @@ SvXMLStyleContext *SvXMLStylesContext::CreateStyleStyleChildContext(
             pStyle = new XMLTextStyleContext( GetImport(), nPrefix, rLocalName,
                                               xAttrList, *this, nFamily );
             break;
+
         case XML_STYLE_FAMILY_CONTROL_ID:
+            pStyle = const_cast< SvXMLImport& >( GetImport() ).GetFormImport()->createControlStyleContext(
+                nPrefix, rLocalName, xAttrList, *this, nFamily );
+            break;
+
         case XML_STYLE_FAMILY_TEXT_RUBY:
             pStyle = new XMLPropStyleContext( GetImport(), nPrefix, rLocalName,
                                               xAttrList, *this, nFamily );
