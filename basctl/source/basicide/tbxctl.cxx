@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxctl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 17:14:02 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 12:19:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,15 +70,17 @@
 #include <iderid.hxx>
 #include <tbxctl.hrc>
 #include <idetemp.hxx>
+#include <sfx2/imagemgr.hxx>
+#include <svtools/aeitem.hxx>
 
-SFX_IMPL_TOOLBOX_CONTROL( TbxControls, SfxEnumItem )
+SFX_IMPL_TOOLBOX_CONTROL( TbxControls, SfxAllEnumItem )
 
 /*************************************************************************
 |*
 |* WorkWindow Alignment
 |*
 \************************************************************************/
-
+/*
 IMPL_LINK( PopupWindowTbx, SelectHdl, void*, EMPTYARG )
 {
     if ( IsInPopupMode() )
@@ -134,15 +136,15 @@ void PopupWindowTbx::Update()
 PopupWindowTbx::~PopupWindowTbx()
 {
 }
-
+*/
 /*************************************************************************
 |*
 |* Klasse fuer Toolbox
 |*
 \************************************************************************/
 
-TbxControls::TbxControls( USHORT nId, ToolBox& rTbx, SfxBindings& rBind ) :
-        SfxToolBoxControl( nId, rTbx, rBind )
+TbxControls::TbxControls( USHORT nSlotId, USHORT nId, ToolBox& rTbx ) :
+        SfxToolBoxControl( nSlotId, nId, rTbx )
 {
     nLastSlot = USHRT_MAX;
 
@@ -201,8 +203,14 @@ void TbxControls::StateChanged( USHORT nSID, SfxItemState eState,
             }
             if( nTemp )
             {
-                Image aImage = GetBindings().GetImageManager()->GetImage( nTemp );
-                GetToolBox().SetItemImage( SID_CHOOSE_CONTROLS, aImage );
+                rtl::OUString aSlotURL( RTL_CONSTASCII_USTRINGPARAM( "slot:" ));
+                aSlotURL += rtl::OUString::valueOf( sal_Int32( nTemp ));
+                Image aImage = GetImage( m_xFrame,
+                                         aSlotURL,
+                                         hasBigImages(),
+                                         GetToolBox().GetDisplayBackground().GetColor().IsDark() );
+                ToolBox& rBox = GetToolBox();
+                rBox.SetItemImage(GetId(), aImage);
                 nLastSlot = nLastEnum;
             }
         }
@@ -231,6 +239,12 @@ void TbxControls::Select( USHORT nModifier )
 \************************************************************************/
 SfxPopupWindow* TbxControls::CreatePopupWindow()
 {
+    if ( GetSlotId() == SID_CHOOSE_CONTROLS )
+    {
+        rtl::OUString aSubToolBarResName( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/insertcontrolsbar" ));
+        createAndPositionSubToolBar( aSubToolBarResName );
+    }
+/*
     if (GetId() == SID_CHOOSE_CONTROLS)
     {
         PopupWindowTbx *pWin =
@@ -246,7 +260,7 @@ SfxPopupWindow* TbxControls::CreatePopupWindow()
         pWin->Show();
         return(pWin);
     }
-
+*/
     return(0);
 }
 
