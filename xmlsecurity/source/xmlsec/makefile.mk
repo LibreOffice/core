@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2004-11-26 14:57:29 $
+#   last change: $Author: rt $ $Date: 2005-03-30 11:36:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,6 +82,10 @@ CFLAGS+=-DSYSTEM_LIBXML $(LIBXML_CFLAGS)
 CDEFS += -DXMLSEC_CRYPTO_MSCRYPTO -DXMLSEC_NO_XSLT
 .ELSE
 CDEFS += -DXMLSEC_CRYPTO_NSS -DXMLSEC_NO_XSLT
+.IF "$(WITH_MOZILLA)" == "NO"
+@all:
+    @echo "No mozilla -> no nss -> no libxmlsec -> no xmlsecurity.."
+.ENDIF
 .ENDIF
 
 # --- Files --------------------------------------------------------
