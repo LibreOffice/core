@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.112 $
+ *  $Revision: 1.113 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-28 17:23:37 $
+ *  last change: $Author: rt $ $Date: 2005-02-09 14:56:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1764,6 +1764,19 @@ void FileDialogHelper_Impl::addFilters( sal_uInt32 nFlags,
 
     if ( ! xFltMgr.is() )
         return;
+
+    // we still need a matcher to convert UI names to filter names
+    if ( !rFactory.Len() )
+    {
+        SfxApplication *pSfxApp = SFX_APP();
+        mpMatcher = &pSfxApp->GetFilterMatcher();
+        mbDeleteMatcher = sal_False;
+    }
+    else
+    {
+        mpMatcher = new SfxFilterMatcher( rFactory );
+        mbDeleteMatcher = sal_True;
+    }
 
     Reference< XMultiServiceFactory > xSMGR = ::comphelper::getProcessServiceFactory();
     Reference< XContainerQuery > xFilterCont(
