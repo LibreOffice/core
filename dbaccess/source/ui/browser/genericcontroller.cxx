@@ -2,9 +2,9 @@
  *
  *  $RCSfile: genericcontroller.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:52:12 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:03:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1063,7 +1063,7 @@ namespace
             }
             else
             {
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
                 Sequence< ::rtl::OUString > sServiceNames = xSI->getSupportedServiceNames();
                 const ::rtl::OUString* pLoop = sServiceNames.getConstArray();
                 for ( sal_Int32 i=0; i<sServiceNames.getLength(); ++i, ++pLoop )
