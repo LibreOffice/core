@@ -2,9 +2,9 @@
  *
  *  $RCSfile: expop2.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:43:59 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 08:59:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,17 +93,11 @@
 #include "xelink.hxx"
 #endif
 
-extern const sal_Char*  pVBAStorageName;
-extern const sal_Char*  pVBASubStorageName;
 
-
-
-
-ExportBiff5::ExportBiff5( SvStorage& rRootStorage, SvStream& aStream, XclBiff eBiff, ScDocument* pDoc, const String& rBasePath, CharSet eDest, bool bRelUrl ):
-    XclExpRootData( eBiff, *pDoc, rBasePath, eDest, bRelUrl ),
+ExportBiff5::ExportBiff5( SfxMedium& rMedium, SvStream& aStream, XclBiff eBiff, ScDocument* pDoc, CharSet eDest, bool bRelUrl ):
+    XclExpRootData( eBiff, rMedium, *pDoc, eDest, bRelUrl ),
     ExportTyp( aStream, pDoc, eDest ),
     XclExpRoot( static_cast< XclExpRootData& >( *this ) )
-    // Excel immer Windoofs, Quelle (SC) immer System
 {
     DBG_ASSERT( pDoc, "-ExportBiff5::ExportBiff5(): No Null-Document!" );
 
@@ -117,7 +111,6 @@ ExportBiff5::ExportBiff5( SvStorage& rRootStorage, SvStream& aStream, XclBiff eB
     pExcRoot->eDateiTyp = Biff5;
     pExcRoot->nColMax = static_cast<SCCOL>(XCL_COLMAX);
     pExcRoot->nRowMax = static_cast<SCROW>(EXC5_ANZROW);
-    pExcRoot->pRootStorage = &rRootStorage;
 
     pExcRoot->pCharset = &eZielChar;
 
@@ -144,7 +137,6 @@ FltError ExportBiff5::Write()
 {
     FltError                eRet = eERR_OK;
     SvtFilterOptions*       pFiltOpt = NULL;
-    SvStorage*              pRootStorage = pExcRoot->pRootStorage;
 
     if( pExcRoot->eHauptDateiTyp >= Biff8 )
     {
@@ -159,27 +151,27 @@ FltError ExportBiff5::Write()
     {
         SfxObjectShell&     rDocShell = *pExcRoot->pDoc->GetDocumentShell();
 
-        DBG_ASSERT( pExcRoot->pRootStorage, "-ImportExcel8::ImportExcel8(): no storage, no cookies!" );
+        DBG_ASSERT( GetRootStorage(), "ExportBiff5::Write - no storage" );
 
         SvxImportMSVBasic   aBasicImport(   rDocShell,
-                                            *pRootStorage,
+                                            *GetRootStorage(),
                                             pFiltOpt->IsLoadExcelBasicCode(),
                                             pFiltOpt->IsLoadExcelBasicStorage() );
 
-        ULONG       nErr = aBasicImport.SaveOrDelMSVBAStorage( TRUE, _STRING( pVBAStorageName ) );
+        ULONG       nErr = aBasicImport.SaveOrDelMSVBAStorage( TRUE, EXC_STORAGE_VBA_PROJECT );
 
         if( nErr != ERRCODE_NONE )
             rDocShell.SetError( nErr );
     }
 
     // VBA-storage written?
-    pExcRoot->bWriteVBAStorage = pRootStorage->IsContained( _STRING( pVBAStorageName ) );
+    pExcRoot->bWriteVBAStorage = GetRootStorage()->IsContained( EXC_STORAGE_VBA_PROJECT );
 
     pExcDoc->ReadDoc();         // ScDoc -> ExcDoc
     pExcDoc->Write( aOut );     // wechstreamen
 
     SfxDocumentInfo&    rInfo = rDocShell.GetDocInfo();
-    rInfo.SavePropertySet( pExcRoot->pRootStorage );
+    rInfo.SavePropertySet( GetRootStorage() );
 
     if( pExcRoot->bCellCut || IsTruncated() )
         return SCWARN_EXPORT_MAXROW;
@@ -189,8 +181,8 @@ FltError ExportBiff5::Write()
 
 
 
-ExportBiff8::ExportBiff8( SvStorage& rRootStorage, SvStream& aStream, XclBiff eBiff, ScDocument* pDoc, const String& rBasePath, CharSet eZ, bool bRelUrl ) :
-    ExportBiff5( rRootStorage, aStream, eBiff, pDoc, rBasePath, eZ, bRelUrl )
+ExportBiff8::ExportBiff8( SfxMedium& rMedium, SvStream& aStream, XclBiff eBiff, ScDocument* pDoc, CharSet eZ, bool bRelUrl ) :
+    ExportBiff5( rMedium, aStream, eBiff, pDoc, eZ, bRelUrl )
 {
     pExcRoot->eHauptDateiTyp = Biff8;
     pExcRoot->eDateiTyp = Biff8;
