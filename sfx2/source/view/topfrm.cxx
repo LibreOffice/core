@@ -2,9 +2,9 @@
  *
  *  $RCSfile: topfrm.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:36 $
+ *  last change: $Author: mba $ $Date: 2000-10-16 14:34:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,33 +135,6 @@ using namespace ::com::sun::star::frame;
 #include "sfxslots.hxx"
 
 DBG_NAME(SfxTopViewFrame);
-
-class SfxAsyncQuit_Impl
-{
-    Timer aTimer;
-    DECL_LINK( TimerHdl, Timer*);
-
-public:
-
-    SfxAsyncQuit_Impl();
-};
-
-SfxAsyncQuit_Impl::SfxAsyncQuit_Impl()
-{
-    aTimer.SetTimeoutHdl( LINK(this, SfxAsyncQuit_Impl, TimerHdl) );
-    aTimer.SetTimeout( 5000 );
-    aTimer.Start();
-}
-
-IMPL_LINK(SfxAsyncQuit_Impl, TimerHdl, Timer*, pTimer)
-{
-    aTimer.Stop();
-    SfxFrameArr_Impl& rArr = *SFX_APP()->Get_Impl()->pTopFrames;
-    if ( !rArr.Count() )
-        SFX_APP()->GetAppDispatcher_Impl()->Execute( SID_QUITAPP, SFX_CALLMODE_ASYNCHRON );
-    delete this;
-    return 0L;
-}
 
 class SfxTopFrame_Impl
 {
@@ -389,11 +362,6 @@ SfxTopFrame::~SfxTopFrame()
 {
     RemoveTopFrame_Impl( this );
     DELETEZ( pWindow );
-
-    SfxFrameArr_Impl& rArr = *SFX_APP()->Get_Impl()->pTopFrames;
-    if ( !rArr.Count() )
-        // don't shutdown immediately because it is possible that opening a new task is underway!
-        new SfxAsyncQuit_Impl();
     delete pImp;
 }
 
