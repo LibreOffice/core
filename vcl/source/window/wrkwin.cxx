@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrkwin.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-03 17:43:37 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 18:07:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,10 +132,10 @@ void WorkWindow::ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pS
 
     ImplBorderWindow* pBorderWin = new ImplBorderWindow( pParent, pSystemParentData, nStyle, nFrameStyle );
     Window::ImplInit( pBorderWin, nStyle & (WB_3DLOOK | WB_CLIPCHILDREN | WB_DIALOGCONTROL | WB_SYSTEMFLOATWIN), NULL );
-    pBorderWin->mpClientWindow = this;
-    pBorderWin->GetBorder( mnLeftBorder, mnTopBorder, mnRightBorder, mnBottomBorder );
-    mpBorderWindow  = pBorderWin;
-//        mpRealParent    = pParent; // !!! Muesste eigentlich gesetzt werden, aber wegen Fehlern mit dem MenuBar erstmal nicht gesetzt !!!
+    pBorderWin->mpWindowImpl->mpClientWindow = this;
+    pBorderWin->GetBorder( mpWindowImpl->mnLeftBorder, mpWindowImpl->mnTopBorder, mpWindowImpl->mnRightBorder, mpWindowImpl->mnBottomBorder );
+    mpWindowImpl->mpBorderWindow  = pBorderWin;
+//        mpWindowImpl->mpRealParent    = pParent; // !!! Muesste eigentlich gesetzt werden, aber wegen Fehlern mit dem MenuBar erstmal nicht gesetzt !!!
 
     if ( nStyle & WB_APP )
     {
@@ -245,7 +245,7 @@ void WorkWindow::ShowFullScreenMode( BOOL bFullScreenMode )
     mbFullScreenMode = bFullScreenMode != 0;
     if ( !mbSysChild )
     {
-        mpFrameWindow->mbWaitSystemResize = TRUE;
+        mpWindowImpl->mpFrameWindow->mpWindowImpl->mbWaitSystemResize = TRUE;
         ImplGetFrame()->ShowFullScreen( bFullScreenMode );
     }
 }
@@ -269,10 +269,10 @@ void WorkWindow::StartPresentationMode( BOOL bPresentation, USHORT nFlags )
         if ( !mbSysChild )
         {
             if ( mnPresentationFlags & PRESENTATION_HIDEALLAPPS )
-                mpFrame->SetAlwaysOnTop( TRUE );
+                mpWindowImpl->mpFrame->SetAlwaysOnTop( TRUE );
             if ( !(mnPresentationFlags & PRESENTATION_NOAUTOSHOW) )
                 ToTop();
-            mpFrame->StartPresentation( TRUE );
+            mpWindowImpl->mpFrame->StartPresentation( TRUE );
         }
 
         if ( !(mnPresentationFlags & PRESENTATION_NOAUTOSHOW) )
@@ -283,9 +283,9 @@ void WorkWindow::StartPresentationMode( BOOL bPresentation, USHORT nFlags )
         Show( mbPresentationVisible );
         if ( !mbSysChild )
         {
-            mpFrame->StartPresentation( FALSE );
+            mpWindowImpl->mpFrame->StartPresentation( FALSE );
             if ( mnPresentationFlags & PRESENTATION_HIDEALLAPPS )
-                mpFrame->SetAlwaysOnTop( FALSE );
+                mpWindowImpl->mpFrame->SetAlwaysOnTop( FALSE );
         }
         ShowFullScreenMode( mbPresentationFull );
 
@@ -300,9 +300,9 @@ void WorkWindow::StartPresentationMode( BOOL bPresentation, USHORT nFlags )
 
 BOOL WorkWindow::IsMinimized() const
 {
-    //return mpFrameData->mbMinimized;
+    //return mpWindowImpl->mpFrameData->mbMinimized;
     SalFrameState aState;
-    mpFrame->GetWindowState(&aState);
+    mpWindowImpl->mpFrame->GetWindowState(&aState);
     return (( aState.mnState & SAL_FRAMESTATE_MINIMIZED ) != 0);
 }
 
@@ -316,7 +316,7 @@ BOOL WorkWindow::SetPluginParent( SystemParentData* pParent )
 
     BOOL bShown = IsVisible();
     Show( FALSE );
-    BOOL bRet = mpFrame->SetPluginParent( pParent );
+    BOOL bRet = mpWindowImpl->mpFrame->SetPluginParent( pParent );
     Show( bShown );
 
     if( bWasDnd )
@@ -327,12 +327,12 @@ BOOL WorkWindow::SetPluginParent( SystemParentData* pParent )
 
 void WorkWindow::ImplSetFrameState( ULONG aFrameState )
 {
-    Window* pWindow = mpFrameWindow;
+    Window* pWindow = mpWindowImpl->mpFrameWindow;
 
     SalFrameState   aState;
     aState.mnMask   = SAL_FRAMESTATE_MASK_STATE;
     aState.mnState  = aFrameState; //SAL_FRAMESTATE_MAXIMIZED;
-    mpFrame->SetWindowState( &aState );
+    mpWindowImpl->mpFrame->SetWindowState( &aState );
 }
 
 
@@ -367,7 +367,7 @@ BOOL WorkWindow::IsMaximized()
     BOOL bRet = FALSE;
 
     SalFrameState aState;
-    if( mpFrame->GetWindowState( &aState ) )
+    if( mpWindowImpl->mpFrame->GetWindowState( &aState ) )
     {
         if( aState.mnState & (SAL_FRAMESTATE_MAXIMIZED          |
                               SAL_FRAMESTATE_MAXIMIZED_HORZ     |
