@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertySet.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jl $ $Date: 2002-10-21 11:21:58 $
+ *  last change: $Author: rt $ $Date: 2004-08-02 09:43:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -754,6 +754,7 @@ XMultiPropertySet
         || obj instanceof String
         || obj instanceof XInterface
         || obj instanceof Type
+        || obj instanceof com.sun.star.uno.Enum
         || obj.getClass().isArray())
             return true;
         return false;
@@ -812,6 +813,8 @@ XMultiPropertySet
         else if (cl.equals(Double.class))
             retVal= new Double(AnyConverter.toDouble(obj));
         else if (XInterface.class.isAssignableFrom(cl))
+            retVal= AnyConverter.toObject(new Type(cl), obj);
+        else if (com.sun.star.uno.Enum.class.isAssignableFrom(cl))
             retVal= AnyConverter.toObject(new Type(cl), obj);
         else
             throw new com.sun.star.lang.IllegalArgumentException("Could not convert the argument");
