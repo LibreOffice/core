@@ -119,13 +119,29 @@ sub resolve_all_directory_names
             {
                 foreach $key (keys %{$directoryhashref})
                 {
-                    # the key ("HostName (49)") must be usable for both hashes
+                    # the key ("HostName (en-US)") must be usable for both hashes
 
                     if ( $key =~ /\bHostName\b/ )
                     {
+                        $parentvalue = "";
                         $value = $directoryhashref->{$key};
-                        $parentvalue = $parentdirectoryhashref->{$key};
-                        $directoryhashref->{$key} = $parentvalue . $installer::globals::separator . $value;
+                        if ( $parentdirectoryhashref->{$key} ) { $parentvalue = $parentdirectoryhashref->{$key}; }
+
+                        # It is possible, that in scp project, a directory is defined in more languages than
+                        # the directory parent (happened after automatic generation of macros.inc).
+                        # Therefore this is checked now and written with a warning into the logfile.
+                        # This is no error, because (in most cases) the concerned language is not build.
+
+                        if ($parentvalue eq "")
+                        {
+                            $directoryhashref->{$key} = "FAILURE";
+                            my $infoline = "WARNING: No hostname for $parentid with \"$key\". Needed by child directory $gid !\n";
+                            push( @installer::globals::globallogfileinfo, $infoline);
+                        }
+                        else
+                        {
+                            $directoryhashref->{$key} = $parentvalue . $installer::globals::separator . $value;
+                        }
                     }
                 }
             }
@@ -281,6 +297,34 @@ sub resolving_all_languages_in_productlists
     }
 
     return \@itemsinalllanguages;
+}
+
+################################################################################
+# Looking for directories without correct HostName
+################################################################################
+
+sub checking_directories_with_corrupt_hostname
+{
+    my ($dirsref) = @_;
+
+    for ( my $i = 0; $i <= $#{$dirsref}; $i++ )
+    {
+        my $onedir = ${$dirsref}[$i];
+
+        my $hostname = "";
+
+        if ( $onedir->{'HostName'} ) { $hostname = $onedir->{'HostName'}; }
+
+        if ( $hostname eq "" )
+        {
+            installer::exiter::exit_program("ERROR: HostName not defined for $onedir->{'gid'} for specified language.", "checking_directories_with_corrupt_hostname");
+        }
+
+        if ( $hostname eq "FAILURE" )
+        {
+            installer::exiter::exit_program("ERROR: Could not create HostName for $onedir->{'gid'} (missing language at parent). See logfile warning for more info!", "checking_directories_with_corrupt_hostname");
+        }
+    }
 }
 
 ################################################################################
@@ -627,13 +671,39 @@ sub get_sourcepath_from_filename_and_includepath
 }
 
 ##############################################################
+# Determining, whether a specified directory is language
+# dependent
+##############################################################
+
+sub determine_directory_language_dependency
+{
+    my($directorygid, $dirsref) = @_;
+
+    my $is_multilingual = 0;
+
+    for ( my $i = 0; $i <= $#{$dirsref}; $i++ )
+    {
+        my $onedir = ${$dirsref}[$i];
+        my $gid = $onedir->{'gid'};
+
+        if ( $gid eq $directorygid )
+        {
+            $is_multilingual = $onedir->{'ismultilingual'};
+            last;
+        }
+    }
+
+    return $is_multilingual;
+}
+
+##############################################################
 # Getting all source pathes for all files to be packed
 # $item can be "Files" or "ScpActions"
 ##############################################################
 
 sub get_Source_Directory_For_Files_From_Includepathlist
 {
-    my ($filesarrayref, $includepatharrayref, $item) = @_;
+    my ($filesarrayref, $includepatharrayref, $dirsref, $item) = @_;
 
     if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::scriptitems::get_Source_Directory_For_Files_From_Includepathlist : $#{$filesarrayref} : $#{$includepatharrayref} : $item"); }
 
@@ -645,6 +715,8 @@ sub get_Source_Directory_For_Files_From_Includepathlist
     {
         my $onefile = ${$filesarrayref}[$i];
         my $onelanguage = $onefile->{'specificlanguage'};
+
+        if ( ! $onefile->{'Name'} ) { installer::exiter::exit_program("ERROR: $item without name ! GID: $onefile->{'gid'} ! Language: $onelanguage", "get_Source_Directory_For_Files_From_Includepathlist"); }
 
         my $onefilename = $onefile->{'Name'};
         $onefilename =~ s/^\s*\Q$installer::globals::separator\E//;     # filename begins with a slash, for instance /registry/schema/org/openoffice/VCL.xcs
@@ -682,6 +754,24 @@ sub get_Source_Directory_For_Files_From_Includepathlist
                     push( @installer::globals::logfileinfo, $infoline);
                     print "    $infoline";
                     if ( $onefile->{'destination'} ) { $onefile->{'destination'} =~ s/$oldname/$onefile->{'Name'}/; }
+
+                    # If the directory, in which the new file is installed, is not language dependent,
+                    # the filename has to be changed to avoid installation conflicts
+                    # No mechanism for resource files!
+                    # -> implementing for the content of ARCHIVE files
+
+                    if ( $onefile->{'Styles'} =~ /\bARCHIVE\b/ )
+                    {
+                        my $directorygid = $onefile->{'Dir'};
+                        my $islanguagedependent = determine_directory_language_dependency($directorygid, $dirsref);
+
+                        if ( ! $islanguagedependent )
+                        {
+                            $onefile->{'Styles'} =~ s/\bARCHIVE\b/ARCHIVE, RENAME_TO_LANGUAGE/; # Setting new flag RENAME_TO_LANGUAGE
+                            $infoline = "Setting flag RENAME_TO_LANGUAGE: File $onefile->{'Name'} in directory: $directorygid\n";
+                            push( @installer::globals::logfileinfo, $infoline);
+                        }
+                    }
                 }
                 else
                 {
@@ -771,40 +861,6 @@ sub remove_Files_For_Ada_Products
     push( @installer::globals::logfileinfo, $infoline);
 
     return \@newfilesarray;
-}
-
-#################################################################################
-# Setting flag UNO_COMPONENT to files, which are listed in
-# @installer::globals::add_unocomponent_libraries
-# This has to be removed after removal of old setup.
-#################################################################################
-
-sub set_unocomponent_flags
-{
-    my ($filesarrayref) = @_;
-
-    my $infoline;
-
-    for ( my $j = 0; $j <= $#installer::globals::add_unocomponent_libraries; $j++ )
-    {
-        my $onegid = $installer::globals::add_unocomponent_libraries[$j];
-
-        for ( my $i = 0; $i <= $#{$filesarrayref}; $i++ )
-        {
-            my $onefile = ${$filesarrayref}[$i];
-
-            my $filegid = $onefile->{'gid'};
-
-            if ($filegid eq $onegid)
-            {
-                if ( $onefile->{'Styles'} ) { $onefile->{'Styles'} =~ s/\)/\,UNO_COMPONENT\)/; }    # adding the flag UNO_COMPONENT
-                else { $onefile->{'Styles'} = "(UNO_COMPONENT)"; }
-                $infoline = "Adding the flag UNO_COMPONENT to file $filegid\n";
-                push( @installer::globals::logfileinfo, $infoline);
-                last;
-            }
-        }
-    }
 }
 
 #################################################################################
@@ -991,72 +1047,6 @@ sub change_keys_of_scpactions
             }
         }
     }
-}
-
-############################################################################
-# Removing all setup files from installation set.
-# This can be removed, if the files and links are
-# also removed in scp project.
-# set-dll, set-res, setup-link
-# gid_File_Lib_Set, gid_File_Res_Set, gid_Shortcut_Setup
-############################################################################
-
-sub remove_Setup_from_Installset
-{
-    my ($itemsarrayref) = @_;
-
-    if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::scriptitems::remove_Setup_from_Installset : $#{$itemsarrayref}"); }
-
-    my $infoline;
-
-    my @newitemsarray = ();
-
-    for ( my $i = 0; $i <= $#{$itemsarrayref}; $i++ )
-    {
-        my $oneitem = ${$itemsarrayref}[$i];
-        my $gid = $oneitem->{'gid'};
-
-        # scp Todo: Remove asap after removal of old setup
-
-        if (( $gid eq "gid_File_Lib_Set" ) ||
-            ( $gid eq "gid_File_Res_Set" ) ||
-            ( $gid eq "gid_File_Lib_Tplx" ) ||
-            ( $gid eq "gid_File_Res_Tplx" ) ||
-            ( $gid eq "gid_File_Lib_Jvm" ) ||
-            ( $gid eq "gid_File_Res_Jvm" ) ||
-            ( $gid eq "gid_File_Lib_Usp" ) ||
-            ( $gid eq "gid_File_Bin_Setup" ) ||
-            ( $gid eq "gid_File_Binary_Setup" ) ||
-            ( $gid eq "gid_File_Bin_Jre117" ) ||
-            ( $gid eq "gid_File_Exe_Regsvrex" ) ||
-            ( $gid eq "GID_FILE_RDB_SETUP_SERVICES" ) ||
-            ( $gid eq "gid_File_Rdb_Setup_Services" ) ||
-            ( $gid eq "gid_File_Rdb_Setup_Services_Rdb" ) ||
-            ( $gid eq "gid_Shortcut_Setup" ) ||
-            ( $gid eq "gid_File_Extra_Cdemath" ) ||
-            ( $gid eq "gid_File_Extra_Cdewriter" ) ||
-            ( $gid eq "gid_File_Extra_Cdecalc" ) ||
-            ( $gid eq "gid_File_Extra_Cdedraw" ) ||
-            ( $gid eq "gid_File_Extra_Cdeimpress" ) ||
-            ( $gid eq "gid_File_Bmp_Logo" ) ||
-            ( $gid eq "gid_File_Bmp_Product" ) ||
-            ( $gid eq "gid_File_Bmp_Vendor" ) ||
-            ( $gid eq "gid_File_Bmp_Vendor_Hc" ) ||
-            ( $gid eq "gid_File_Images_Zip_Setup" ))
-        {
-            $infoline = "ATTENTION: Removing setup item $oneitem->{'gid'} from the installation set.\n";
-            push( @installer::globals::globallogfileinfo, $infoline);
-
-            next;
-        }
-
-        push(@newitemsarray, $oneitem);
-    }
-
-    $infoline = "\n";
-    push( @installer::globals::globallogfileinfo, $infoline);
-
-    return \@newitemsarray;
 }
 
 ############################################################################
@@ -1252,7 +1242,10 @@ sub collect_directories_with_create_flag_from_directoryarray
 
         if ( $styles =~ /\bCREATE\b/ )
         {
-            my $directoryname = $onedir->{'HostName'};
+            my $directoryname = "";
+
+            if ( $onedir->{'HostName'} ) { $directoryname = $onedir->{'HostName'}; }
+            else { installer::exiter::exit_program("ERROR: No directory name (HostName) set for specified language in gid $onedir->{'gid'}", "assigning_modules_to_items"); }
 
             my $alreadyincluded = installer::existence::exists_in_array_of_hashes($searchkey, $directoryname, $directoriesforepmarrayref);
 
