@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuspell.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:39 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 12:14:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,36 +59,44 @@
  *
  ************************************************************************/
 
-#ifndef _SD_FUSPELL_HXX
-#define _SD_FUSPELL_HXX
+#ifndef SD_FU_SPELL_HXX
+#define SD_FU_SPELL_HXX
 
-#ifndef _SD_FUPOOR_HXX
+#ifndef SD_FU_POOR_HXX
 #include "fupoor.hxx"
 #endif
 
+namespace sd {
+
 extern USHORT SidArraySpell[];
 
-class SdOutliner;
+class Outliner;
 
-class FuSpell : public FuPoor
+class FuSpell
+    : public FuPoor
 {
- protected:
-    SdOutliner*     pSdOutliner;
-    BOOL            bOwnOutliner;
-
- public:
+public:
     TYPEINFO();
 
-    FuSpell( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
-             SdDrawDocument* pDoc, SfxRequest& rReq );
-    ~FuSpell();
+    FuSpell (
+        ViewShell* pViewSh,
+        ::sd::Window* pWin,
+        ::sd::View* pView,
+        SdDrawDocument* pDoc,
+        SfxRequest& rReq);
+    virtual ~FuSpell (void);
 
     void    StartSpelling();
 
-    SdOutliner* GetOutliner() const { return pSdOutliner; }
+    ::sd::Outliner* GetOutliner() const { return pSdOutliner; }
+
+protected:
+    ::sd::Outliner* pSdOutliner;
+    BOOL bOwnOutliner;
 };
 
+} // end of namespace sd
 
-#endif // _SD_FUSPELL_HXX
+#endif
 
 
