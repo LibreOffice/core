@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfly.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fme $ $Date: 2001-10-29 11:18:15 $
+ *  last change: $Author: fme $ $Date: 2001-12-06 15:49:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -246,6 +246,11 @@ void lcl_MaxAscDescent( SwLinePortion* pPos, long &rAscent, long &rDescent,
 
 void SwTxtFormatter::CalcUnclipped( SwTwips& rTop, SwTwips& rBottom )
 {
+#ifdef VERTICAL_LAYOUT
+    ASSERT( ! pFrm->IsVertical() || pFrm->IsSwapped(),
+            "SwTxtFormatter::CalcUnclipped with unswapped frame" )
+#endif
+
     long nFlyAsc, nFlyDesc;
     lcl_MaxAscDescent( pCurr, rTop, rBottom, nFlyAsc, nFlyDesc );
     rTop = Y() + GetCurr()->GetAscent();
@@ -262,6 +267,11 @@ void SwTxtFormatter::CalcUnclipped( SwTwips& rTop, SwTwips& rBottom )
 void SwTxtFormatter::UpdatePos( SwLineLayout *pCurr, Point aStart,
     xub_StrLen nStartIdx, sal_Bool bAllWays ) const
 {
+#ifdef VERTICAL_LAYOUT
+    ASSERT( ! pFrm->IsVertical() || pFrm->IsSwapped(),
+            "SwTxtFormatter::UpdatePos with unswapped frame" )
+#endif
+
     if( GetInfo().IsTest() )
         return;
     SwLinePortion *pFirst = pCurr->GetFirstPortion();
@@ -326,8 +336,9 @@ void SwTxtFormatter::UpdatePos( SwLineLayout *pCurr, Point aStart,
             else
             {
 #ifdef VERTICAL_LAYOUT
-                ((SwFlyCntPortion*)pPos)->SetBase( *aTmpInf.GetTxtFrm(), aTmpInf.GetPos(), nTmpAscent,
-                    nTmpDescent, nFlyAsc, nFlyDesc, nFlags );
+                ((SwFlyCntPortion*)pPos)->SetBase( *aTmpInf.GetTxtFrm(),
+                    aTmpInf.GetPos(), nTmpAscent, nTmpDescent, nFlyAsc,
+                    nFlyDesc, nFlags );
 #else
                 ((SwFlyCntPortion*)pPos)->SetBase( aTmpInf.GetPos(), nTmpAscent,
                     nTmpDescent, nFlyAsc, nFlyDesc, nFlags );
@@ -377,6 +388,11 @@ void SwTxtFormatter::UpdatePos( SwLineLayout *pCurr, Point aStart,
 
 void SwTxtFormatter::AlignFlyInCntBase( long nBaseLine ) const
 {
+#ifdef VERTICAL_LAYOUT
+    ASSERT( ! pFrm->IsVertical() || pFrm->IsSwapped(),
+            "SwTxtFormatter::AlignFlyInCntBase with unswapped frame" )
+#endif
+
     if( GetInfo().IsTest() )
         return;
     SwLinePortion *pFirst = pCurr->GetFirstPortion();
@@ -435,7 +451,18 @@ sal_Bool SwTxtFormatter::ChkFlyUnderflow( SwTxtFormatInfo &rInf ) const
         // = GetLineHeight()
         const long nHeight = GetCurr()->GetRealHeight();
         SwRect aLine( GetLeftMargin(), Y(), rInf.RealWidth(), nHeight );
+
+#ifdef VERTICAL_LAYOUT
+        SwRect aLineVert( aLine );
+        if ( pFrm->IsVertical() )
+            pFrm->SwitchHorizontalToVertical( aLineVert );
+        SwRect aInter( rInf.GetTxtFly()->GetFrm( aLineVert ) );
+        if ( pFrm->IsVertical() )
+            pFrm->SwitchVerticalToHorizontal( aInter );
+#else
         SwRect aInter( rInf.GetTxtFly()->GetFrm( aLine ) );
+#endif
+
         if( !aInter.HasArea() )
             return sal_False;
 
@@ -448,7 +475,17 @@ sal_Bool SwTxtFormatter::ChkFlyUnderflow( SwTxtFormatInfo &rInf ) const
         while( pPos )
         {
             aLine.Width( pPos->Width() );
+
+#ifdef VERTICAL_LAYOUT
+            aLineVert = aLine;
+            if ( pFrm->IsVertical() )
+                pFrm->SwitchHorizontalToVertical( aLineVert );
+            aInter = rInf.GetTxtFly()->GetFrm( aLineVert );
+            if ( pFrm->IsVertical() )
+                pFrm->SwitchVerticalToHorizontal( aInter );
+#else
             aInter = rInf.GetTxtFly()->GetFrm( aLine );
+#endif
 
             // new flys from below?
             if( !pPos->IsFlyPortion() )
@@ -555,7 +592,16 @@ void SwTxtFormatter::CalcFlyWidth( SwTxtFormatInfo &rInf )
     SwRect aLine( rInf.X() + nLeftMin, nTop, rInf.RealWidth() - rInf.X()
                   + nLeftMar - nLeftMin , nHeight );
 
+#ifdef VERTICAL_LAYOUT
+    SwRect aLineVert( aLine );
+    if ( pFrm->IsVertical() )
+        pFrm->SwitchHorizontalToVertical( aLineVert );
+    SwRect aInter( pTxtFly->GetFrm( aLineVert ) );
+    if ( pFrm->IsVertical() )
+        pFrm->SwitchVerticalToHorizontal( aInter );
+#else
     SwRect aInter( pTxtFly->GetFrm( aLine ) );
+#endif
 
     if( aInter.IsOver( aLine ) )
     {
@@ -622,9 +668,18 @@ void SwTxtFormatter::CalcFlyWidth( SwTxtFormatInfo &rInf )
             // ausweichen oder die Oberkante des naechsten Rahmens, den wir
             // beachten muessen. Wir koennen also jetzt getrost bis zu diesem
             // Wert anwachsen, so sparen wir einige Leerzeilen.
+#ifdef VERTICAL_LAYOUT
+            SWRECTFN( pFrm )
+            const long nNextTop =
+                    pFrm->SwitchVerticalToHorizontal( pTxtFly->GetNextTop() );
+            if( nNextTop > aInter.Bottom() )
+            {
+                SwTwips nH = nNextTop - aInter.Top();
+#else
             if( pTxtFly->GetNextTop() > aInter.Bottom() )
             {
                 SwTwips nH = pTxtFly->GetNextTop() - aInter.Top();
+#endif
                 if( nH < KSHRT_MAX )
                     pFly->Height( KSHORT( nH ) );
             }
@@ -771,16 +826,6 @@ SwTxtFly::SwTxtFly( const SwTxtFly& rTxtFly )
     else
         pFlyList = NULL;
 
-#ifdef VERTICAL_LAYOUT
-    if( pCurrFrm->IsVertical() && rTxtFly.pRotRectList )
-    {
-        pRotRectList = new SwRotRectList( rTxtFly.pRotRectList->Count(), 10 );
-        pRotRectList->Insert( rTxtFly.pRotRectList, 0 );
-    }
-    else
-        pRotRectList = NULL;
-#endif
-
     bOn = rTxtFly.bOn;
     bLeftSide = rTxtFly.bLeftSide;
     bTopRule = rTxtFly.bTopRule;
@@ -798,9 +843,6 @@ void SwTxtFly::CtorInit( const SwCntntFrm *pFrm )
     pCurrFrm = pFrm;
     pMaster = pCurrFrm->IsFollow() ? NULL : pCurrFrm;
     pFlyList = NULL;
-#ifdef VERTICAL_LAYOUT
-    pRotRectList = NULL;
-#endif
     // Wenn wir nicht von einem Frame ueberlappt werden, oder wenn
     // es gar keine FlyCollection gibt, dann schaltet wir uns fuer immer ab.
     // Aber es koennte sein, dass waehrend der Formatierung eine Zeile
@@ -828,12 +870,26 @@ SwRect SwTxtFly::_GetFrm( const SwRect &rRect, sal_Bool bTop ) const
     SwRect aRet;
     if( ForEach( rRect, &aRet, sal_True ) )
     {
+#ifdef VERTICAL_LAYOUT
+        SWRECTFN( pCurrFrm )
+        if( bTop )
+            (aRet.*fnRect->fnSetTop)( (rRect.*fnRect->fnGetTop)() );
+#else
         if( bTop )
             aRet.Top( rRect.Top() );
+#endif
 
         // 8110: Bottom nicht immer anpassen.
+#ifdef VERTICAL_LAYOUT
+        const SwTwips nRetBottom = (aRet.*fnRect->fnGetBottom)();
+        const SwTwips nRectBottom = (rRect.*fnRect->fnGetBottom)();
+        if ( (*fnRect->fnYDiff)( nRetBottom, nRectBottom ) > 0 ||
+             (aRet.*fnRect->fnGetHeight)() < 0 )
+            (aRet.*fnRect->fnSetBottom)( nRectBottom );
+#else
         if( aRet.Bottom() > rRect.Bottom() || 0 > aRet.Height() )
             aRet.Bottom( rRect.Bottom() );
+#endif
     }
     return aRet;
 }
@@ -850,10 +906,21 @@ SwRect SwTxtFly::_GetFrm( const SwRect &rRect, sal_Bool bTop ) const
 
 sal_Bool SwTxtFly::IsAnyFrm() const
 {
+#ifdef VERTICAL_LAYOUT
+    SWAP_IF_SWAPPED( pCurrFrm )
+#endif
+
     ASSERT( bOn, "IsAnyFrm: Why?" );
     SwRect aRect( pCurrFrm->Frm().Pos() + pCurrFrm->Prt().Pos(),
         pCurrFrm->Prt().SSize() );
+
+#ifdef VERTICAL_LAYOUT
+    const sal_Bool bRet = ForEach( aRect, NULL, sal_False );
+    UNDO_SWAP( pCurrFrm )
+    return bRet;
+#else
     return ForEach( aRect, NULL, sal_False );
+#endif
 }
 
 /*************************************************************************
@@ -1231,7 +1298,7 @@ SwFlyList *SwTxtFly::InitFlyList()
     ASSERT( !pFlyList, "InitFlyList: FlyList already initialized" );
 
 #ifdef VERTICAL_LAYOUT
-    SWAP_IF_NOT_SWAPPED( pCurrFrm )
+    SWAP_IF_SWAPPED( pCurrFrm )
 #endif
 
     const SwSortDrawObjs *pSorted = pPage->GetSortedObjs();
@@ -1241,42 +1308,35 @@ SwFlyList *SwTxtFly::InitFlyList()
     {
         pFlyList = new SwFlyList( 10, 10 );
 
-#ifdef VERTICAL_LAYOUT
-        if ( pCurrFrm->IsVertical() )
-            pRotRectList = new SwRotRectList( 10, 10 );
-#endif
-
         SwRect aRect( pCurrFrm->Prt() );
         aRect += pCurrFrm->Frm().Pos();
         // Wir machen uns etwas kleiner als wir sind,
         // damit Ein-Twip-Ueberlappungen ignoriert werden. (#49532)
+#ifdef VERTICAL_LAYOUT
+        SWRECTFN( pCurrFrm )
+        const long nRight = (aRect.*fnRect->fnGetRight)() - 1;
+        const long nLeft = (aRect.*fnRect->fnGetLeft)() + 1;
+#else
         const long nRight = aRect.Right() - 1;
         const long nLeft = aRect.Left() + 1;
+#endif
         const sal_Bool bFooter = pCurrFrm->IsInFtn();
 
         for( MSHORT i = 0; i < nCount; i++ )
         {
             SdrObject *pO = (*pSorted)[ i ];
 
-#ifdef VERTICAL_LAYOUT
-            SwRect aBound;
-            if ( pCurrFrm->IsVertical() )
-            {
-                // Rectangle
-                SwRect aVertBound( GetBoundRect( pO ) );
-                aBound = aVertBound;
-                // aBound is bounding rectangle of the SdrObject rotated for
-                // horizontal formatting
-                ((SwTxtFrm*)pCurrFrm)->SwitchVerticalToHorizontal( aBound );
-            }
-            else
-                aBound = GetBoundRect( pO );
-#else
             const SwRect aBound( GetBoundRect( pO ) );
-#endif
 
+#ifdef VERTICAL_LAYOUT
+            if( nRight < (aBound.*fnRect->fnGetLeft)() ||
+                (*fnRect->fnYDiff)( (aRect.*fnRect->fnGetTop)(),
+                                    (aBound.*fnRect->fnGetBottom)() ) > 0 ||
+                nLeft > (aBound.*fnRect->fnGetRight)() )
+#else
             if( nRight < aBound.Left() || aRect.Top() > aBound.Bottom() ||
                 nLeft > aBound.Right() )
+#endif
                 continue;
 
             if( GetTop( pO, pCurrFrm->IsInFtn(),
@@ -1286,24 +1346,19 @@ SwFlyList *SwTxtFly::InitFlyList()
                 while( nPos )
                 {
                     SdrObject *pTmp = (*pFlyList)[ --nPos ];
-#ifdef VERTICAL_LAYOUT
-                    const SwRect aTmpBound = pCurrFrm->IsVertical() ?
-                                             (*pRotRectList)[ nPos ] :
-                                             GetBoundRect( pTmp );
-#else
                     const SwRect aTmpBound( GetBoundRect( pTmp ) );
-#endif
+#ifdef VERTICAL_LAYOUT
+                    if( (aTmpBound.*fnRect->fnGetLeft)() <=
+                        (aBound.*fnRect->fnGetLeft)() )
+#else
                     if( aTmpBound.Left() <= aBound.Left() )
+#endif
                     {
                         ++nPos;
                         break;
                     }
                 }
                 pFlyList->C40_INSERT( SdrObject, pO, nPos );
-#ifdef VERTICAL_LAYOUT
-                if ( pCurrFrm->IsVertical() )
-                    pRotRectList->Insert( aBound, nPos );
-#endif
 
                 SwContact *pContact = (SwContact*)GetUserCall(pO);
                 const SwFmtSurround &rFlyFmt = pContact->GetFmt()->GetSurround();
@@ -1311,7 +1366,13 @@ SwFlyList *SwTxtFly::InitFlyList()
                 {
                     const SwFmtVertOrient &rTmpFmt = pContact->GetFmt()->GetVertOrient();
                     if( VERT_BOTTOM != rTmpFmt.GetVertOrient() )
+#ifdef VERTICAL_LAYOUT
+                        nMinBottom = ( bVert && nMinBottom ) ?
+                                     Min( nMinBottom, aBound.Left() ) :
+                                     Max( nMinBottom, (aBound.*fnRect->fnGetBottom)() );
+#else
                         nMinBottom = Max( nMinBottom, aBound.Bottom() );
+#endif
                 }
 
                 bOn = sal_True;
@@ -1319,23 +1380,23 @@ SwFlyList *SwTxtFly::InitFlyList()
         }
         if( nMinBottom )
         {
+#ifdef VERTICAL_LAYOUT
+            SwTwips nMax = (pCurrFrm->GetUpper()->*fnRect->fnGetLimit)();
+            if( (*fnRect->fnYDiff)( nMinBottom, nMax ) > 0 )
+                nMinBottom = nMax;
+#else
             SwTwips nMax = pCurrFrm->GetUpper()->Frm().Top() +
                            pCurrFrm->GetUpper()->Prt().Bottom();
             if( nMinBottom > nMax )
                 nMinBottom = nMax;
+#endif
         }
     }
     else
-#ifdef VERTICAL_LAYOUT
-    {
-        if ( pCurrFrm->IsVertical() )
-            pRotRectList = new SwRotRectList( 0, 10 );
         pFlyList = new SwFlyList( 0, 10 );
-    }
 
+#ifdef VERTICAL_LAYOUT
     UNDO_SWAP( pCurrFrm )
-#else
-        pFlyList = new SwFlyList( 0, 10 );
 #endif
 
     return pFlyList;
@@ -1442,12 +1503,16 @@ void ClrContourCache()
 #ifdef VERTICAL_LAYOUT
 const SwRect SwContourCache::CalcBoundRect( const SdrObject* pObj,
         const SwRect &rLine, const long nXPos, const sal_Bool bRight,
-        const SwTxtFrm* pFrm, const SwRect* pRotRect )
+        const SwTxtFrm* pFrm )
 #else
 const SwRect SwContourCache::CalcBoundRect( const SdrObject* pObj,
         const SwRect &rLine, const long nXPos, const sal_Bool bRight )
 #endif
 {
+#ifdef VERTICAL_LAYOUT
+    SWRECTFN( pFrm )
+#endif
+
     SwRect aRet;
     const SwFmt *pFmt =
         ((SwContact*)GetUserCall(pObj))->GetFmt();
@@ -1456,26 +1521,11 @@ const SwRect SwContourCache::CalcBoundRect( const SdrObject* pObj,
           ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm()->Lower() &&
           ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm()->Lower()->IsNoTxtFrm() ) )
     {
+#ifdef VERTICAL_LAYOUT
+        aRet = GetBoundRect( pObj );
+#else
         const SvxLRSpaceItem &rLRSpace = pFmt->GetLRSpace();
         const SvxULSpaceItem &rULSpace = pFmt->GetULSpace();
-#ifdef VERTICAL_LAYOUT
-        if ( pRotRect )
-        {
-            aRet = *pRotRect;
-            aRet.Left( aRet.Left() - rULSpace.GetUpper() );
-            aRet.Width( aRet.Width() + rULSpace.GetLower() );
-            aRet.Top( aRet.Top() - rLRSpace.GetRight() );
-            aRet.Height( aRet.Height() + rLRSpace.GetLeft() );
-        }
-        else
-        {
-            aRet = pObj->GetBoundRect();
-            aRet.Left( aRet.Left() - rLRSpace.GetLeft() );
-            aRet.Width( aRet.Width() + rLRSpace.GetRight() );
-            aRet.Top( aRet.Top() - rULSpace.GetUpper() );
-            aRet.Height( aRet.Height() + rULSpace.GetLower() );
-        }
-#else
         aRet = pObj->GetBoundRect();
         aRet.Left( aRet.Left() - rLRSpace.GetLeft() );
         aRet.Width( aRet.Width() + rLRSpace.GetRight() );
@@ -1488,17 +1538,8 @@ const SwRect SwContourCache::CalcBoundRect( const SdrObject* pObj,
                 pContourCache = new SwContourCache;
 
 #ifdef VERTICAL_LAYOUT
-            if ( pRotRect )
-            {
-                SwRect aVertLine( rLine );
-                ((SwTxtFrm*)pFrm)->SwitchHorizontalToVertical( aVertLine );
-                aRet = pContourCache->ContourRect(
-                    pFmt, pObj, aVertLine, aVertLine.Top(), bRight, sal_True
-                    );
-                ((SwTxtFrm*)pFrm)->SwitchVerticalToHorizontal( aRet );
-            }
-            else
-                aRet = pContourCache->ContourRect( pFmt, pObj, rLine, nXPos, bRight );
+            aRet = pContourCache->ContourRect(
+                    pFmt, pObj, pFrm, rLine, nXPos, bRight );
 #else
             aRet = pContourCache->ContourRect( pFmt, pObj, rLine, nXPos, bRight );
 #endif
@@ -1509,11 +1550,7 @@ const SwRect SwContourCache::CalcBoundRect( const SdrObject* pObj,
     else
     {
 #ifdef VERTICAL_LAYOUT
-        const SvxULSpaceItem &rULSpace = pFmt->GetULSpace();
-        if ( pRotRect )
-            aRet = *pRotRect;
-        aRet.Left( aRet.Left() - rULSpace.GetUpper() );
-        aRet.Width( aRet.Width() + rULSpace.GetLower() );
+        aRet = GetBoundRect( pObj );
 #else
         const SvxLRSpaceItem &rLRSpace = pFmt->GetLRSpace();
         aRet = pObj->GetBoundRect();
@@ -1521,16 +1558,19 @@ const SwRect SwContourCache::CalcBoundRect( const SdrObject* pObj,
         aRet.Width( aRet.Width() + rLRSpace.GetRight() );
 #endif
     }
+
+#ifndef VERTICAL_LAYOUT
     const SvxULSpaceItem &rULSpace = pFmt->GetULSpace();
     aRet.Top( aRet.Top() - rULSpace.GetUpper() );
     aRet.Height( aRet.Height() + rULSpace.GetLower() );
+#endif
     return aRet;
 }
 
 #ifdef VERTICAL_LAYOUT
 const SwRect SwContourCache::ContourRect( const SwFmt* pFmt,
-    const SdrObject* pObj, const SwRect &rLine,
-    const long nXPos, const sal_Bool bRight, const sal_Bool bRot )
+    const SdrObject* pObj, const SwTxtFrm* pFrm, const SwRect &rLine,
+    const long nXPos, const sal_Bool bRight )
 #else
 const SwRect SwContourCache::ContourRect( const SwFmt* pFmt,
     const SdrObject* pObj, const SwRect &rLine,
@@ -1550,19 +1590,33 @@ const SwRect SwContourCache::ContourRect( const SwFmt* pFmt,
         }
         XPolyPolygon aXPoly;
         XPolyPolygon *pXPoly = NULL;
+#ifdef VERTICAL_LAYOUT
+        sal_Bool bVert = sal_False;
+#endif
         if ( pObj->IsWriterFlyFrame() )
         {
             // Vorsicht #37347: Das GetContour() fuehrt zum Laden der Grafik,
             // diese aendert dadurch ggf. ihre Groesse, ruft deshalb ein
             // ClrObject() auf.
             PolyPolygon aPoly;
+#ifdef VERTICAL_LAYOUT
+            SwFlyFrm* pObjFrm = ( (SwVirtFlyDrawObj*)pObj )->GetFlyFrm();
+            if( ! pObjFrm->GetContour( aPoly ) )
+                aPoly = PolyPolygon( pObjFrm->Frm().SVRect() );
+            bVert = pObjFrm->IsVertical();
+#else
             if( !((SwVirtFlyDrawObj*)pObj)->GetFlyFrm()->GetContour( aPoly ) )
                 aPoly = PolyPolygon( ((SwVirtFlyDrawObj*)pObj)->
                                      GetFlyFrm()->Frm().SVRect() );
+#endif
             aXPoly = XPolyPolygon( aPoly );
         }
         else
         {
+#ifdef VERTICAL_LAYOUT
+            SwFrm* pObjFrm = ( (SwDrawContact*)GetUserCall(pObj) )->GetAnchor();
+            bVert = pObjFrm->IsVertical();
+#endif
             if( !pObj->ISA( E3dObject ) )
                 pObj->TakeXorPoly( aXPoly, sal_True );
             pXPoly = new XPolyPolygon();
@@ -1575,17 +1629,34 @@ const SwRect SwContourCache::ContourRect( const SwFmt* pFmt,
         pSdrObj[ 0 ] = pObj; // Wg. #37347 darf das Object erst nach dem
                              // GetContour() eingetragen werden.
 #ifdef VERTICAL_LAYOUT
-        pTextRanger[ 0 ] = new TextRanger( aXPoly, pXPoly, 20,
-            rLRSpace.GetLeft(), rLRSpace.GetRight(),
-            pFmt->GetSurround().IsOutside(), sal_False, bRot );
+        if ( bVert )
+        {
+            pTextRanger[ 0 ] = new TextRanger( aXPoly, pXPoly, 20,
+                rULSpace.GetLower(), rULSpace.GetUpper(),
+                pFmt->GetSurround().IsOutside(), sal_False, pFrm->IsVertical() );
+
+            pTextRanger[ 0 ]->SetUpper( rLRSpace.GetLeft() );
+            pTextRanger[ 0 ]->SetLower( rLRSpace.GetRight() );
+        }
+        else
+        {
+            pTextRanger[ 0 ] = new TextRanger( aXPoly, pXPoly, 20,
+                rLRSpace.GetLeft(), rLRSpace.GetRight(),
+                pFmt->GetSurround().IsOutside(), sal_False, pFrm->IsVertical() );
+
+            pTextRanger[ 0 ]->SetUpper( rULSpace.GetUpper() );
+            pTextRanger[ 0 ]->SetLower( rULSpace.GetLower() );
+        }
+
 #else
         pTextRanger[ 0 ] = new TextRanger( aXPoly, pXPoly, 20,
             rLRSpace.GetLeft(), rLRSpace.GetRight(),
             pFmt->GetSurround().IsOutside(), sal_False );
-#endif
 
         pTextRanger[ 0 ]->SetUpper( rULSpace.GetUpper() );
         pTextRanger[ 0 ]->SetLower( rULSpace.GetLower() );
+#endif
+
         delete pXPoly;
         // UPPER_LOWER_TEST
 #ifndef PRODUCT
@@ -1619,11 +1690,12 @@ const SwRect SwContourCache::ContourRect( const SwFmt* pFmt,
         pTextRanger[ 0 ] = pTmpRanger;
     }
 #ifdef VERTICAL_LAYOUT
-    Range aRange;
-    if ( bRot )
-        aRange = Range( rLine.Left(), rLine.Right() );
-    else
-        aRange = Range( rLine.Top(), rLine.Bottom() );
+    SWRECTFN( pFrm )
+    long nTmpTop = (rLine.*fnRect->fnGetTop)();
+    // fnGetBottom is top + height
+    long nTmpBottom = (rLine.*fnRect->fnGetBottom)();
+
+    Range aRange( Min( nTmpTop, nTmpBottom ), Max( nTmpTop, nTmpBottom ) );
 #else
     Range aRange( rLine.Top(), rLine.Bottom() );
 #endif
@@ -1651,20 +1723,10 @@ const SwRect SwContourCache::ContourRect( const SwFmt* pFmt,
         if( bSet && nIdx < nCount )
         {
 #ifdef VERTICAL_LAYOUT
-            if ( bRot )
-            {
-                aRet.Left( rLine.Left() );
-                aRet.Right( rLine.Right() );
-                aRet.Top( (*pTmp)[ nIdx ] );
-                aRet.Bottom( (*pTmp)[ nIdx + 1 ] );
-            }
-            else
-            {
-                aRet.Top( rLine.Top() );
-                aRet.Height( rLine.Height() );
-                aRet.Left( (*pTmp)[ nIdx ] );
-                aRet.Right( (*pTmp)[ nIdx + 1 ] );
-            }
+            (aRet.*fnRect->fnSetTopAndHeight)( (rLine.*fnRect->fnGetTop)(),
+                                               (rLine.*fnRect->fnGetHeight)() );
+            (aRet.*fnRect->fnSetLeft)( (*pTmp)[ nIdx ] );
+            (aRet.*fnRect->fnSetRight)( (*pTmp)[ nIdx + 1 ] + 1 );
 #else
             aRet.Top( rLine.Top() );
             aRet.Height( rLine.Height() );
@@ -1767,6 +1829,10 @@ void SwTxtFly::ShowContour( OutputDevice* pOut )
 
 sal_Bool SwTxtFly::ForEach( const SwRect &rRect, SwRect* pRect, sal_Bool bAvoid ) const
 {
+#ifdef VERTICAL_LAYOUT
+    SWAP_IF_SWAPPED( pCurrFrm )
+#endif
+
     sal_Bool bRet = sal_False;
     MSHORT nCount;
     if( bOn && ( 0 != ( nCount = GetFlyList()->Count() ) ) )
@@ -1775,17 +1841,15 @@ sal_Bool SwTxtFly::ForEach( const SwRect &rRect, SwRect* pRect, sal_Bool bAvoid 
         {
             const SdrObject *pObj = (*pFlyList)[ i ];
 
-#ifdef VERTICAL_LAYOUT
-            // Rectangle
-            SwRect aRect = pCurrFrm->IsVertical() ?
-                           (*pRotRectList)[ i ] :
-                           GetBoundRect( pObj );
-#else
             SwRect aRect( GetBoundRect( pObj ) );
-#endif
 
             // Optimierung
+#ifdef VERTICAL_LAYOUT
+            SWRECTFN( pCurrFrm )
+            if( (aRect.*fnRect->fnGetLeft)() > (rRect.*fnRect->fnGetRight)() )
+#else
             if( aRect.Left() > rRect.Right() )
+#endif
                 break;
             if( pCurrFly != pObj && aRect.IsOver( rRect ) )
             {
@@ -1807,16 +1871,15 @@ sal_Bool SwTxtFly::ForEach( const SwRect &rRect, SwRect* pRect, sal_Bool bAvoid 
                 }
                 if( pRect )
                 {
-#ifdef VERTICAL_LAYOUT
-                    SwRect aFly = FlyToRect( pObj, rRect,
-                                             pCurrFrm->IsVertical() ?
-                                             &aRect : 0 );
-#else
                     SwRect aFly = FlyToRect( pObj, rRect );
-#endif
                     if( aFly.IsEmpty() || !aFly.IsOver( rRect ) )
                         continue;
+#ifdef VERTICAL_LAYOUT
+                    if( !bRet || (aFly.*fnRect->fnGetLeft)() <
+                                  (pRect->*fnRect->fnGetLeft)() )
+#else
                     if( !bRet || aFly.Left() < pRect->Left() )
+#endif
                         *pRect = aFly;
                     if( rSur.IsContour() )
                     {
@@ -1829,6 +1892,11 @@ sal_Bool SwTxtFly::ForEach( const SwRect &rRect, SwRect* pRect, sal_Bool bAvoid 
             }
         }
     }
+
+#ifdef VERTICAL_LAYOUT
+    UNDO_SWAP( pCurrFrm )
+#endif
+
     return bRet;
 }
 
@@ -1860,11 +1928,23 @@ void SwTxtFly::CalcRightMargin( SwRect &rFly, MSHORT nFlyPos,
                                   const SwRect &rLine ) const
 {
     // Normalerweise ist der rechte Rand der rechte Rand der Printarea.
+#ifdef VERTICAL_LAYOUT
+    ASSERT( ! pCurrFrm->IsVertical() || ! pCurrFrm->IsSwapped(),
+            "SwTxtFly::CalcRightMargin with swapped frame" )
+    SWRECTFN( pCurrFrm )
+    SwTwips nRight = (pCurrFrm->Frm().*fnRect->fnGetLeft)() +
+                     (pCurrFrm->Prt().*fnRect->fnGetRight)() + 1;
+    SwTwips nFlyRight = (rFly.*fnRect->fnGetRight)();
+    SwRect aLine( rLine );
+    (aLine.*fnRect->fnSetRight)( nRight );
+    (aLine.*fnRect->fnSetLeft)( (rFly.*fnRect->fnGetLeft)() );
+#else
     SwTwips nRight = pCurrFrm->Frm().Left() + pCurrFrm->Prt().Right() + 1;
     SwTwips nFlyRight = rFly.Right();
     SwRect aLine( rLine );
     aLine.Right( nRight );
     aLine.Left( rFly.Left() );
+#endif
 
     // Es koennte aber sein, dass in die gleiche Zeile noch ein anderes
     // Object hineinragt, welches _ueber_ uns liegt.
@@ -1890,21 +1970,16 @@ void SwTxtFly::CalcRightMargin( SwRect &rFly, MSHORT nFlyPos,
         eOrder = GetOrder( pNext );
         if( SURROUND_THROUGHT == eOrder )
             continue;
+
 #ifdef VERTICAL_LAYOUT
-        SwRect aTmp;
-        if ( pCurrFrm->IsVertical() )
-        {
-            SwRect aRotRect( (*pRotRectList)[ nPos - 1 ] );
-            aTmp = SwContourCache::CalcBoundRect
-                ( pNext, aLine, nFlyRight, sal_True, pCurrFrm, &aRotRect );
-        }
-        else
-            aTmp = SwContourCache::CalcBoundRect( pNext, aLine, nFlyRight, sal_True, 0 );
+        const SwRect aTmp( SwContourCache::CalcBoundRect
+                ( pNext, aLine, nFlyRight, sal_True, pCurrFrm ) );
+        SwTwips nTmpRight = (aTmp.*fnRect->fnGetRight)();
 #else
         const SwRect aTmp( SwContourCache::CalcBoundRect
             ( pNext, aLine, nFlyRight, sal_True ) );
-#endif
         SwTwips nTmpRight = aTmp.Right();
+#endif
 
         // Optimierung:
         // In nNextTop wird notiert, an welcher Y-Positon mit Aenderung der
@@ -1916,6 +1991,24 @@ void SwTxtFly::CalcRightMargin( SwRect &rFly, MSHORT nFlyPos,
         // Insbesondere bei HTML-Dokumenten kommen oft (Dummy-)Absaetze in einer
         // 2-Pt.-Schrift vor, bis diese einem groesseren Rahmen ausgewichen sind,
         // erforderte es frueher Unmengen von Leerzeilen.
+#ifdef VERTICAL_LAYOUT
+        const long nTmpTop = (aTmp.*fnRect->fnGetTop)();
+        if( (*fnRect->fnYDiff)( nTmpTop, (aLine.*fnRect->fnGetTop)() ) > 0 )
+        {
+            if( (*fnRect->fnYDiff)( nNextTop, nTmpTop ) > 0 )
+                SetNextTop( nTmpTop ); // Die Oberkante des "naechsten" Rahmens
+        }
+        else if( ! (aTmp.*fnRect->fnGetWidth)() ) // Typisch fuer Objekte mit Konturumlauf
+        {   // Bei Objekten mit Konturumlauf, die vor der aktuellen Zeile beginnen
+            // und hinter ihr enden, trotzdem aber nicht mit ihr ueberlappen,
+            // muss die Optimierung ausgeschaltet werden, denn bereits in der
+            // naechsten Zeile kann sich dies aendern.
+            if( ! (aTmp.*fnRect->fnGetHeight)() ||
+                (*fnRect->fnYDiff)( (aTmp.*fnRect->fnGetBottom)(),
+                                    (aLine.*fnRect->fnGetTop)() ) > 0 )
+                SetNextTop( 0 );
+        }
+#else
         if( aLine.Top() < aTmp.Top() )
         {
             if( aTmp.Top() < nNextTop )
@@ -1929,7 +2022,7 @@ void SwTxtFly::CalcRightMargin( SwRect &rFly, MSHORT nFlyPos,
             if( !aTmp.Height() || aTmp.Bottom() > aLine.Top() )
                 SetNextTop( 0 );
         }
-
+#endif
         if( aTmp.IsOver( aLine ) && nTmpRight > nFlyRight )
         {
             nFlyRight = nTmpRight;
@@ -1947,7 +2040,11 @@ void SwTxtFly::CalcRightMargin( SwRect &rFly, MSHORT nFlyPos,
             }
         }
     }
+#ifdef VERTICAL_LAYOUT
+    (rFly.*fnRect->fnSetRight)( nRight );
+#else
     rFly.Right( nRight );
+#endif
 }
 
 /*************************************************************************
@@ -1962,12 +2059,27 @@ void SwTxtFly::CalcRightMargin( SwRect &rFly, MSHORT nFlyPos,
 void SwTxtFly::CalcLeftMargin( SwRect &rFly, MSHORT nFlyPos,
                                   const SwRect &rLine ) const
 {
+#ifdef VERTICAL_LAYOUT
+    ASSERT( ! pCurrFrm->IsVertical() || ! pCurrFrm->IsSwapped(),
+            "SwTxtFly::CalcLeftMargin with swapped frame" )
+    SWRECTFN( pCurrFrm )
+    SwTwips nLeft = (pCurrFrm->Frm().*fnRect->fnGetLeft)() +
+                    (pCurrFrm->Prt().*fnRect->fnGetLeft)();
+    const SwTwips nFlyLeft = (rFly.*fnRect->fnGetLeft)();
+
+    if( nLeft > nFlyLeft )
+        nLeft = rFly.Left();
+
+    SwRect aLine( rLine );
+    (aLine.*fnRect->fnSetLeft)( nLeft );
+#else
     // Normalerweise ist der linke Rand der linke Rand der Printarea.
     SwTwips nLeft = pCurrFrm->Frm().Left() + pCurrFrm->Prt().Left();
     if( nLeft > rFly.Left() )
         nLeft = rFly.Left();
     SwRect aLine( rLine );
     aLine.Left( nLeft );
+#endif
 
     // Es koennte aber sein, dass in die gleiche Zeile noch ein anderes
     // Object hineinragt, welches _ueber_ uns liegt.
@@ -1981,7 +2093,11 @@ void SwTxtFly::CalcLeftMargin( SwRect &rFly, MSHORT nFlyPos,
     {
         const SdrObject *pNext = (*pFlyList)[ nFlyPos ];
         const SwRect aTmp( GetBoundRect( pNext ) );
+#ifdef VERTICAL_LAYOUT
+        if( (aTmp.*fnRect->fnGetLeft)() >= nFlyLeft )
+#else
         if( aTmp.Left() >= rFly.Left() )
+#endif
             break;
     }
 
@@ -1997,30 +2113,31 @@ void SwTxtFly::CalcLeftMargin( SwRect &rFly, MSHORT nFlyPos,
             continue;
 
 #ifdef VERTICAL_LAYOUT
-        SwRect aTmp;
-        if ( pCurrFrm->IsVertical() )
+        const SwRect aTmp( SwContourCache::CalcBoundRect
+                ( pNext, aLine, nFlyLeft, sal_False, pCurrFrm ) );
+
+        if( (aTmp.*fnRect->fnGetLeft)() < nFlyLeft && aTmp.IsOver( aLine ) )
         {
-            SwRect aRotRect( (*pRotRectList)[ nFlyPos ] );
-            aTmp = SwContourCache::CalcBoundRect
-                ( pNext, aLine, rFly.Left(), sal_False, pCurrFrm, &aRotRect );
-        }
-        else
-            aTmp = SwContourCache::CalcBoundRect
-                ( pNext, aLine, rFly.Left(), sal_False, 0 );
+            SwTwips nTmpRight = (aTmp.*fnRect->fnGetRight)();
 #else
         const SwRect aTmp( SwContourCache::CalcBoundRect
             ( pNext, aLine, rFly.Left(), sal_False ) );
-#endif
 
         if( aTmp.Left() < rFly.Left() && aTmp.IsOver( aLine ) )
         {
             SwTwips nTmpRight = aTmp.Right();
+#endif
             if( nLeft <= nTmpRight )
                 nLeft = nTmpRight + 1;
+
             break;
         }
     }
+#ifdef VERTICAL_LAYOUT
+    (rFly.*fnRect->fnSetLeft)( nLeft );
+#else
     rFly.Left( nLeft );
+#endif
 }
 
 /*************************************************************************
@@ -2033,16 +2150,12 @@ void SwTxtFly::CalcLeftMargin( SwRect &rFly, MSHORT nFlyPos,
  * zum Text zurueck.
  *************************************************************************/
 
-#ifdef VERTICAL_LAYOUT
-SwRect SwTxtFly::FlyToRect( const SdrObject *pObj, const SwRect &rLine,
-                            const SwRect* pRotRect ) const
-#else
 SwRect SwTxtFly::FlyToRect( const SdrObject *pObj, const SwRect &rLine ) const
-#endif
 {
 #ifdef VERTICAL_LAYOUT
+    SWRECTFN( pCurrFrm )
     SwRect aFly = SwContourCache::CalcBoundRect( pObj, rLine,
-        rLine.Left(), sal_True, pCurrFrm, pRotRect );
+        (rLine.*fnRect->fnGetLeft)(), sal_True, pCurrFrm );
 #else
     SwRect aFly = SwContourCache::CalcBoundRect( pObj, rLine,
         rLine.Left(), sal_True );
@@ -2050,8 +2163,13 @@ SwRect SwTxtFly::FlyToRect( const SdrObject *pObj, const SwRect &rLine ) const
     if( !aFly.Width() )
         return aFly;
 
+#ifdef VERTICAL_LAYOUT
+    SetNextTop( (aFly.*fnRect->fnGetBottom)() ); // Damit die Zeile ggf. bis zur Unterkante
+                                 // des Rahmens waechst.
+#else
     SetNextTop( aFly.Bottom() ); // Damit die Zeile ggf. bis zur Unterkante
                                  // des Rahmens waechst.
+#endif
     MSHORT nFlyPos = GetPos( pObj );
 
     // Bei LEFT und RIGHT vergroessern wir das Rechteck.
@@ -2114,11 +2232,20 @@ _FlyCntnt SwTxtFly::CalcSmart( const SdrObject *pObj ) const
     // 11839: Nur die X-Positionen sind interessant, die Y-Positionen des
     // CurrentFrames koennen sich noch aendern (wachsen).
 
+#ifdef VERTICAL_LAYOUT
+    SWRECTFN( pCurrFrm )
+    const long nCurrLeft = (pCurrFrm->*fnRect->fnGetPrtLeft)();
+    const long nCurrRight = (pCurrFrm->*fnRect->fnGetPrtRight)();
+    const SwRect aRect( GetBoundRect( pObj ) );
+    long nFlyLeft = (aRect.*fnRect->fnGetLeft)();
+    long nFlyRight = (aRect.*fnRect->fnGetRight)();
+#else
     const long nCurrLeft = pCurrFrm->Prt().Left() + pCurrFrm->Frm().Left();
     const long nCurrRight = pCurrFrm->Prt().Right() + pCurrFrm->Frm().Left();
     const SwRect aRect( GetBoundRect( pObj ) );
     long nFlyLeft = aRect.Left();
     long nFlyRight = aRect.Right();
+#endif
 
     if ( nFlyRight < nCurrLeft || nFlyLeft > nCurrRight )
         eOrder = SURROUND_PARALLEL;
@@ -2213,8 +2340,20 @@ _FlyCntnt SwTxtFly::GetOrder( const SdrObject *pObj ) const
 
 sal_Bool SwTxtFly::IsAnyFrm( const SwRect &rLine ) const
 {
+
+#ifdef VERTICAL_LAYOUT
+    SWAP_IF_SWAPPED( pCurrFrm )
+#endif
+
     ASSERT( bOn, "IsAnyFrm: Why?" );
+
+#ifdef VERTICAL_LAYOUT
+    const sal_Bool bRet = ForEach( rLine, NULL, sal_False );
+    UNDO_SWAP( pCurrFrm )
+    return bRet;
+#else
     return ForEach( rLine, NULL, sal_False );
+#endif
 }
 
 const SwFrmFmt* SwTxtFrm::IsFirstBullet()
