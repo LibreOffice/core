@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frm_strings.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 16:18:31 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 11:40:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -303,6 +303,7 @@ namespace frm
     FORMS_CONSTASCII_STRING( PROPERTY_PERSISTENCE_MAXTEXTLENGTH,"PersistenceMaxTextLength" );
     FORMS_CONSTASCII_STRING( PROPERTY_RICH_TEXT,                "RichText" );
     FORMS_CONSTASCII_STRING( PROPERTY_ENFORCE_FORMAT,           "EnforceFormat" );
+    FORMS_CONSTASCII_STRING( PROPERTY_LINEEND_FORMAT,           "LineEndFormat" );
 
     FORMS_CONSTASCII_STRING( PROPERTY_BORDER,                   "Border" );
     FORMS_CONSTASCII_STRING( PROPERTY_BORDERCOLOR,              "BorderColor" );
