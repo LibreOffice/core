@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2001-09-14 12:08:46 $
+ *  last change: $Author: jb $ $Date: 2001-09-25 10:27:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,15 +118,37 @@ namespace utl
         static PathStatus locateVersionFile(rtl::OUString& _rURL);
 
     public: // evaluate the validity of the installation
+        /// high-level status of bootstrap success
         enum Status
         {
-            DATA_OK,              // user-dir and share-dir do exist, product key found or can be defaulted to exe-name
-            MISSING_USER_INSTALL, // ${userurl} does not exist; or version-file cannot be found or is invalid
-            INVALID_USER_INSTALL, // can locate ${userurl}, but user-dir is missing
-            INVALID_BASE_INSTALL  // other failure: e.g. cannot locate share-dir; bootstraprc missing or invalid; no product key
+            DATA_OK,              /// user-dir and share-dir do exist, product key found or can be defaulted to exe-name
+            MISSING_USER_INSTALL, /// ${userurl} does not exist; or version-file cannot be found or is invalid
+            INVALID_USER_INSTALL, /// can locate ${userurl}, but user-dir is missing
+            INVALID_BASE_INSTALL  /// other failure: e.g. cannot locate share-dir; bootstraprc missing or invalid; no product key
         };
+
+        /// error code for detailed diagnostics of bootstrap failures
+        enum FailureCode
+        {
+            NO_FAILURE,                   /// bootstrap was successful
+            MISSING_INSTALL_DIRECTORY,    /// the shared installation directory could not be located
+            MISSING_BOOTSTRAP_FILE,       /// the bootstrap INI file could not be found or read
+            MISSING_BOOTSTRAP_FILE_ENTRY, /// the bootstrap INI is missing a required entry
+            INVALID_BOOTSTRAP_FILE_ENTRY, /// the bootstrap INI contains invalid data
+            MISSING_VERSION_FILE,         /// the version locator INI file could not be found or read
+            MISSING_VERSION_FILE_ENTRY,   /// the version locator INI has no entry for this version
+            INVALID_VERSION_FILE_ENTRY,   /// the version locator INI entry is not a valid directory URL
+            MISSING_USER_DIRECTORY,       /// the user installation directory does not exist
+            INVALID_BOOTSTRAP_DATA        /// some bootstrap data was invalid in unexpected ways
+        };
+
         /// Evaluates the status of the installation and returns a diagnostic message corresponding to this status
         static Status checkBootstrapStatus(rtl::OUString& _rDiagnosticMessage);
+
+        /** Evaluates the status of the installation and returns a diagnostic
+            message and error code corresponding to this status
+        */
+        static Status checkBootstrapStatus(rtl::OUString& _rDiagnosticMessage, FailureCode& _rErrCode);
 
     public:
         // singleton impl-class

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jb $ $Date: 2001-09-14 12:08:46 $
+ *  last change: $Author: jb $ $Date: 2001-09-25 10:27:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,7 +202,7 @@ OUString getURLSeparator()
 // ---------------------------------------------------------------------------------------
 // path status utility function
 static
-PathStatus checkStatusOfURL(OUString const& _sURL)
+PathStatus implCheckStatusOfURL(OUString const& _sURL, osl::DirectoryItem& aDirItem)
 {
     using namespace osl;
 
@@ -210,8 +210,7 @@ PathStatus checkStatusOfURL(OUString const& _sURL)
 
     if (_sURL.getLength() != 0)
     {
-        DirectoryItem aItem;
-        switch( DirectoryItem::get(_sURL, aItem) )
+        switch( DirectoryItem::get(_sURL, aDirItem) )
         {
         case DirectoryItem::E_None:         // Success
             eStatus = Bootstrap::PATH_EXISTS;
@@ -241,6 +240,77 @@ PathStatus checkStatusOfURL(OUString const& _sURL)
 
     return eStatus;
 }
+// ---------------------------------------------------------------------------------------
+
+static
+bool implNormalizeURL(OUString & _sURL, osl::DirectoryItem& aDirItem)
+{
+    using namespace osl;
+
+    OSL_PRECOND(aDirItem.is(), "Opened DirItem required");
+
+    static const sal_uInt32 cFileStatusMask = FileStatusMask_FileURL;
+
+    FileStatus aFileStatus(cFileStatusMask);
+
+    if (aDirItem.getFileStatus(aFileStatus) != DirectoryItem::E_None)
+        return false;
+
+    OUString aNormalizedURL = aFileStatus.getFileURL();
+
+    if (aNormalizedURL.getLength() == 0)
+        return false;
+
+    _sURL = aNormalizedURL;
+    return true;
+}
+// ---------------------------------------------------------------------------------------
+#ifdef DEBUG
+static
+PathStatus dbgCheckStatusOfURL(OUString const& _sURL)
+{
+    using namespace osl;
+
+    DirectoryItem aDirItem;
+
+    return implCheckStatusOfURL(_sURL,aDirItem);
+}
+// ---------------------------------------------------------------------------------------
+#endif
+
+static
+bool normalizeURL(OUString & _sURL)
+{
+    using namespace osl;
+
+    DirectoryItem aDirItem;
+
+    bool bResult = DirectoryItem::get(_sURL, aDirItem) == DirectoryItem::E_None;
+
+    if ( bResult )
+        bResult = implNormalizeURL(_sURL,aDirItem);
+
+    return bResult;
+}
+// ---------------------------------------------------------------------------------------
+
+static
+PathStatus checkStatusAndNormalizeURL(OUString & _sURL)
+{
+    using namespace osl;
+
+    DirectoryItem aDirItem;
+
+    PathStatus eStatus = implCheckStatusOfURL(_sURL,aDirItem);
+
+    if (eStatus == Bootstrap::PATH_EXISTS)
+    {
+        if (!implNormalizeURL(_sURL,aDirItem))
+            OSL_ENSURE(false,"Unexpected failure getting actual URL for existing object");
+    }
+    return eStatus;
+}
+
 
 // ----------------------------------------------------------------------------------
 // helpers to build and check a nested URL
@@ -260,10 +330,10 @@ PathStatus getDerivedPath(OUString& _rURL, OUString const& _sRelativeURL, OUStri
 
         // a derived (nested) URL can only exist or have a lesser status, if the parent exists
         if (aStatus == Bootstrap::PATH_EXISTS)
-            aStatus = checkStatusOfURL(_rURL);
+            aStatus = checkStatusAndNormalizeURL(_rURL);
 
         else // the relative appendix must be valid
-            OSL_ASSERT(aStatus != Bootstrap::PATH_VALID || checkStatusOfURL(_rURL) == Bootstrap::PATH_VALID);
+            OSL_ASSERT(aStatus != Bootstrap::PATH_VALID || dbgCheckStatusOfURL(_rURL) == Bootstrap::PATH_VALID);
     }
     else
     {
@@ -365,7 +435,7 @@ void readPathFromINI(Bootstrap::Impl::PathData & _rResult, osl::Profile & _rIniF
         _rResult.status = Bootstrap::DATA_MISSING;
 
     else if ( normalizeAndSubstitutePathVariables(_rResult.path) )
-        _rResult.status = checkStatusOfURL(_rResult.path);
+        _rResult.status = checkStatusAndNormalizeURL(_rResult.path);
 
     else
         _rResult.status = Bootstrap::DATA_INVALID;
@@ -405,9 +475,12 @@ static void addUnexpectedError(OUStringBuffer& _rBuf, AsciiString _sExtraInfo = 
 }
 // ---------------------------------------------------------------------------------------
 
-static void describeError(OUStringBuffer& _rBuf, Bootstrap::Impl const& _rData)
+static Bootstrap::FailureCode describeError(OUStringBuffer& _rBuf, Bootstrap::Impl const& _rData)
 {
+    Bootstrap::FailureCode eErrCode = Bootstrap::INVALID_BOOTSTRAP_DATA;
+
     _rBuf.appendAscii("The program cannot be started. ");
+
     switch (_rData.aUserInstall_.status)
     {
     case Bootstrap::PATH_EXISTS:
@@ -415,6 +488,7 @@ static void describeError(OUStringBuffer& _rBuf, Bootstrap::Impl const& _rData)
         {
         case Bootstrap::PATH_VALID:
             addMissingDirectoryError(_rBuf, _rData.aBaseInstall_.path);
+            eErrCode = Bootstrap::MISSING_INSTALL_DIRECTORY;
             break;
 
         case Bootstrap::DATA_INVALID:
@@ -437,6 +511,7 @@ static void describeError(OUStringBuffer& _rBuf, Bootstrap::Impl const& _rData)
 
     case Bootstrap::PATH_VALID:
         addMissingDirectoryError(_rBuf, _rData.aUserInstall_.path);
+        eErrCode = Bootstrap::MISSING_USER_DIRECTORY;
         break;
 
         // else fall through
@@ -444,6 +519,7 @@ static void describeError(OUStringBuffer& _rBuf, Bootstrap::Impl const& _rData)
         if (_rData.aVersionINI_.status == Bootstrap::PATH_EXISTS)
         {
             addFileError(_rBuf, _rData.aVersionINI_.path, IS_INVALID);
+            eErrCode = Bootstrap::INVALID_VERSION_FILE_ENTRY;
             break;
         }
         // else fall through
@@ -453,10 +529,12 @@ static void describeError(OUStringBuffer& _rBuf, Bootstrap::Impl const& _rData)
         {
         case Bootstrap::PATH_EXISTS:
             addFileError(_rBuf, _rData.aVersionINI_.path, "does not support the current version");
+            eErrCode = Bootstrap::MISSING_VERSION_FILE_ENTRY;
             break;
 
         case Bootstrap::PATH_VALID:
             addFileError(_rBuf, _rData.aVersionINI_.path, IS_MISSING);
+            eErrCode = Bootstrap::MISSING_VERSION_FILE;
             break;
 
         default:
@@ -464,11 +542,17 @@ static void describeError(OUStringBuffer& _rBuf, Bootstrap::Impl const& _rData)
             {
             case Bootstrap::PATH_EXISTS:
                 addFileError(_rBuf, _rData.aBootstrapINI_.path, IS_INVALID);
+
+                if (_rData.aVersionINI_.status == Bootstrap::DATA_MISSING)
+                    eErrCode = Bootstrap::MISSING_BOOTSTRAP_FILE_ENTRY;
+                else
+                    eErrCode = Bootstrap::INVALID_BOOTSTRAP_FILE_ENTRY;
                 break;
 
             case Bootstrap::DATA_INVALID: OSL_ASSERT(false);
             case Bootstrap::PATH_VALID:
                 addFileError(_rBuf, _rData.aBootstrapINI_.path, IS_MISSING);
+                eErrCode = Bootstrap::MISSING_BOOTSTRAP_FILE;
                 break;
 
             default:
@@ -483,6 +567,8 @@ static void describeError(OUStringBuffer& _rBuf, Bootstrap::Impl const& _rData)
         addUnexpectedError(_rBuf);
         break;
     }
+
+    return eErrCode;
 }
 // ---------------------------------------------------------------------------------------
 // ---------------------------------------------------------------------------------------
@@ -570,6 +656,14 @@ PathStatus Bootstrap::locateVersionFile(OUString& _rURL)
 
 Bootstrap::Status Bootstrap::checkBootstrapStatus(OUString& _rDiagnosticMessage)
 {
+    FailureCode eDummyCode(NO_FAILURE);
+
+    return checkBootstrapStatus(_rDiagnosticMessage,eDummyCode);
+}
+// ---------------------------------------------------------------------------------------
+
+Bootstrap::Status Bootstrap::checkBootstrapStatus(rtl::OUString& _rDiagnosticMessage, FailureCode& _rErrCode)
+{
     Impl const& aData = data();
 
     Status result = aData.status_;
@@ -578,14 +672,15 @@ Bootstrap::Status Bootstrap::checkBootstrapStatus(OUString& _rDiagnosticMessage)
 
     OUStringBuffer sErrorBuffer;
     if (result != DATA_OK)
-    {
-        describeError(sErrorBuffer,aData);
-    }
+        _rErrCode = describeError(sErrorBuffer,aData);
+
+    else
+        _rErrCode = NO_FAILURE;
+
     _rDiagnosticMessage = sErrorBuffer.makeStringAndClear();
 
     return result;
 }
-// ---------------------------------------------------------------------------------------
 
 // ---------------------------------------------------------------------------------------
 // class Bootstrap::Impl
@@ -605,6 +700,16 @@ bool Bootstrap::Impl::initBaseInstallationData()
     sal_Int32 nSepIndex = sExecutable.lastIndexOf(cURLSeparator);
 
     sExename_ = sExecutable.copy(nSepIndex + 1);
+
+    /// ... and get the basename (strip the extension)
+    {
+        sal_Unicode cExtensionSep = '.';
+
+        sal_Int32 const nExtIndex = sExename_.lastIndexOf(cExtensionSep);
+        sal_Int32 const nExtLength = sExename_.getLength() - nExtIndex - 1;
+        if (0 < nExtIndex && nExtLength < 4)
+            sExename_ = sExename_.copy(0,nExtIndex);
+    }
 
     OSL_ENSURE(nSepIndex > 0, "osl_getExecutableFile returns local path only");
     if (nSepIndex <= 0)
@@ -628,8 +733,8 @@ bool Bootstrap::Impl::initBaseInstallationData()
     aBaseInstall_.path      = sExecutable.copy(0,nSepIndex);
     aBaseInstall_.status    = PATH_EXISTS;
 
-    OSL_ASSERT( checkStatusOfURL(sExecutable) == PATH_EXISTS );
-    OSL_ASSERT( checkStatusOfURL(aBaseInstall_.path) == PATH_EXISTS );
+    OSL_ASSERT( dbgCheckStatusOfURL(sExecutable) == PATH_EXISTS );
+    OSL_ASSERT( dbgCheckStatusOfURL(aBaseInstall_.path) == PATH_EXISTS );
 
     // now find the bootstrap ini
     OUString const sBootstrapName(RTL_CONSTASCII_USTRINGPARAM(BOOTSTRAP_FILE));
