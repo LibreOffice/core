@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuins1.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:56 $
+ *  last change: $Author: nn $ $Date: 2001-07-03 14:57:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,7 @@
 //------------------------------------------------------------------------
 
 #include <svx/impgrf.hxx>
+#include <svx/opengrf.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdpagv.hxx>
@@ -75,9 +76,7 @@
 #include <svtools/filter.hxx>
 #include <svtools/stritem.hxx>
 #include <vcl/msgbox.hxx>
-#ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
-#endif
 
 #include "fuinsert.hxx"
 #include "tabvwsh.hxx"
@@ -187,136 +186,82 @@ FuInsertGraphic::FuInsertGraphic( ScTabViewShell*   pViewSh,
                                   SfxRequest&       rReq )
        : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
 {
-    SvxImportGraphicDialog* pDlg = NULL;
-    Graphic aImportGraphic;
-    String  aPath;
-    String  aFilterName;
-    BOOL    bError = FALSE;
-    BOOL    bAsLink = FALSE;
-    Graphic* pInsGraphic = NULL;
+    SvxOpenGraphicDialog aDlg(ScResId(STR_INSERTGRAPHIC));
 
-    const SfxItemSet *pArgs = rReq.GetArgs();
-    const SfxPoolItem* pItem;
-    if ( pArgs && pArgs->GetItemState( SID_INSERT_GRAPHIC, TRUE, &pItem ) == SFX_ITEM_SET )
+    if( aDlg.Execute() == GRFILTER_OK )
     {
-        DBG_ASSERT( pItem->ISA(SfxStringItem), "falsches Item" );
-        aPath = ((const SfxStringItem*) pItem)->GetValue();
-
-        if ( pArgs->GetItemState( FN_PARAM_FILTER, TRUE, &pItem ) == SFX_ITEM_SET )
+        Graphic aGraphic;
+        USHORT nError = aDlg.GetGraphic(aGraphic);
+        if( nError == GRFILTER_OK )
         {
-            DBG_ASSERT( pItem->ISA(SfxStringItem), "falsches Item" );
-            aFilterName = ((const SfxStringItem*) pItem)->GetValue();
-        }
-        if ( pArgs->GetItemState( FN_PARAM_1, TRUE, &pItem ) == SFX_ITEM_SET )
-        {
-            DBG_ASSERT( pItem->ISA(SfxBoolItem), "falsches Item" );
-            bAsLink = ((const SfxBoolItem*) pItem)->GetValue();
-        }
+            //  #74778# set the size so the graphic has its original pixel size
+            //  at 100% view scale (as in SetMarkedOriginalSize),
+            //  instead of respecting the current view scale
 
-        if ( GRFILTER_OK == ::LoadGraphic( aPath, aFilterName, aImportGraphic ) )
-            pInsGraphic = &aImportGraphic;
-        else
-            bError = TRUE;
-    }
-
-    if ( !pInsGraphic && !bError )                  // noch keine geladen -> Dialog
-    {
-        pDlg = new SvxImportGraphicDialog( pWindow,
-                                      String( ScResId(STR_INSERTGRAPHIC) ),
-                                      ENABLE_STANDARD | ENABLE_LINK );
-
-        if ( pDlg->Execute() == RET_OK )
-        {
-            aPath       = pDlg->GetPath();
-            aFilterName = pDlg->GetCurFilter();
-            bAsLink     = pDlg->AsLink();
-            pInsGraphic = pDlg->GetGraphic();           // per Preview schon geladen?
-
-            if ( !pInsGraphic )
+            ScDrawView* pDrawView = pViewSh->GetScDrawView();
+            MapMode aSourceMap = aGraphic.GetPrefMapMode();
+            MapMode aDestMap( MAP_100TH_MM );
+            if ( aSourceMap.GetMapUnit() == MAP_PIXEL && pDrawView )
             {
-                // Grafik laden, wenn Dialog es nicht bereits getan hat
-
-                GraphicFilter&  rFilter  = pDlg->GetFilter();
-                ImportProgress  aImportProgress( rFilter );
-                INetURLObject aURL;
-                aURL.SetSmartURL( aPath );
-                USHORT nError = rFilter.ImportGraphic( aImportGraphic, aURL );
-                if ( nError == GRFILTER_OK )
-                    pInsGraphic = &aImportGraphic;
-                else
-                {
-                    //! merge error strings with Writer and Impress!!!
-                    USHORT nRes = 0;
-                    switch ( nError )
-                    {
-                        case GRFILTER_OPENERROR:    nRes = SCSTR_GRFILTER_OPENERROR;    break;
-                        case GRFILTER_IOERROR:      nRes = SCSTR_GRFILTER_IOERROR;      break;
-                        case GRFILTER_FORMATERROR:  nRes = SCSTR_GRFILTER_FORMATERROR;  break;
-                        case GRFILTER_VERSIONERROR: nRes = SCSTR_GRFILTER_VERSIONERROR; break;
-                        case GRFILTER_FILTERERROR:  nRes = SCSTR_GRFILTER_FILTERERROR;  break;
-                        case GRFILTER_TOOBIG:       nRes = SCSTR_GRFILTER_TOOBIG;       break;
-                    }
-                    if ( nRes )
-                    {
-                        InfoBox aInfoBox( pWindow, String(ScResId(nRes)) );
-                        aInfoBox.Execute();
-                    }
-                }
+                Fraction aScaleX, aScaleY;
+                pDrawView->CalcNormScale( aScaleX, aScaleY );
+                aDestMap.SetScaleX(aScaleX);
+                aDestMap.SetScaleY(aScaleY);
             }
+            Size aLogicSize = pWindow->LogicToLogic(
+                                    aGraphic.GetPrefSize(), &aSourceMap, &aDestMap );
 
-            rReq.AppendItem( SfxStringItem( SID_INSERT_GRAPHIC, aPath       ) );
-            rReq.AppendItem( SfxStringItem( FN_PARAM_FILTER,    aFilterName ) );
-            rReq.AppendItem( SfxBoolItem(   FN_PARAM_1,         bAsLink     ) );
+            //  Groesse begrenzen
+
+            SdrPageView* pPV  = pView->GetPageViewPvNum(0);
+            SdrPage* pPage = pPV->GetPage();
+            Point aInsertPos = pViewSh->GetInsertPos();
+            LimitSizeOnDrawPage( aLogicSize, aInsertPos, pPage->GetSize() );
+
+            Rectangle aRect ( aInsertPos, aLogicSize );
+
+            SdrGrafObj* pObj = new SdrGrafObj( aGraphic, aRect );
+
+            if ( aDlg.IsAsLink() )
+                pObj->SetGraphicLink( aDlg.GetPath(), aDlg.GetCurrentFilter() );
+
+            //  #49961# Pfad wird nicht mehr als Name der Grafik gesetzt
+
+            ScDrawLayer* pLayer = (ScDrawLayer*) pView->GetModel();
+            String aName = pLayer->GetNewGraphicName();                 // "Grafik x"
+            pObj->SetName(aName);
+
+            pView->InsertObject( pObj, *pPV );
         }
-    }
-
-    if ( pInsGraphic )              // irgendwo eine Grafik gefunden -> einfuegen
-    {
-        //  #74778# set the size so the graphic has its original pixel size
-        //  at 100% view scale (as in SetMarkedOriginalSize),
-        //  instead of respecting the current view scale
-
-        ScDrawView* pDrawView = pViewSh->GetScDrawView();
-        MapMode aSourceMap = pInsGraphic->GetPrefMapMode();
-        MapMode aDestMap( MAP_100TH_MM );
-        if ( aSourceMap.GetMapUnit() == MAP_PIXEL && pDrawView )
+        else
         {
-            Fraction aScaleX, aScaleY;
-            pDrawView->CalcNormScale( aScaleX, aScaleY );
-            aDestMap.SetScaleX(aScaleX);
-            aDestMap.SetScaleY(aScaleY);
+            //  error is handled in SvxOpenGraphicDialog::GetGraphic
+
+#if 0
+            USHORT nRes = 0;
+            switch ( nError )
+            {
+                case GRFILTER_OPENERROR:    nRes = SCSTR_GRFILTER_OPENERROR;    break;
+                case GRFILTER_IOERROR:      nRes = SCSTR_GRFILTER_IOERROR;      break;
+                case GRFILTER_FORMATERROR:  nRes = SCSTR_GRFILTER_FORMATERROR;  break;
+                case GRFILTER_VERSIONERROR: nRes = SCSTR_GRFILTER_VERSIONERROR; break;
+                case GRFILTER_FILTERERROR:  nRes = SCSTR_GRFILTER_FILTERERROR;  break;
+                case GRFILTER_TOOBIG:       nRes = SCSTR_GRFILTER_TOOBIG;       break;
+            }
+            if ( nRes )
+            {
+                InfoBox aInfoBox( pWindow, String(ScResId(nRes)) );
+                aInfoBox.Execute();
+            }
+            else
+            {
+                ULONG nStreamError = GetGrfFilter()->GetLastError().nStreamError;
+                if( ERRCODE_NONE != nStreamError )
+                    ErrorHandler::HandleError( nStreamError );
+            }
+#endif
         }
-        Size aLogicSize = pWindow->LogicToLogic(
-                                pInsGraphic->GetPrefSize(), &aSourceMap, &aDestMap );
-
-        //  Groesse begrenzen
-
-        SdrPageView* pPV  = pView->GetPageViewPvNum(0);
-        SdrPage* pPage = pPV->GetPage();
-        Point aInsertPos = pViewSh->GetInsertPos();
-        LimitSizeOnDrawPage( aLogicSize, aInsertPos, pPage->GetSize() );
-
-        Rectangle aRect ( aInsertPos, aLogicSize );
-
-        SdrGrafObj* pObj = new SdrGrafObj( *pInsGraphic, aRect );
-
-        if ( bAsLink )
-            pObj->SetGraphicLink( aPath, aFilterName );
-
-        //  #49961# Pfad wird nicht mehr als Name der Grafik gesetzt
-
-        ScDrawLayer* pLayer = (ScDrawLayer*) pView->GetModel();
-        String aName = pLayer->GetNewGraphicName();                 // "Grafik x"
-        pObj->SetName(aName);
-
-        pView->InsertObject( pObj, *pPV );
-
-        rReq.Done();
     }
-
-    rReq.SetReturnValue( SfxBoolItem( rReq.GetSlot(), pInsGraphic != NULL ) );
-
-    delete pDlg;        // Dialog erst am Ende loeschen
 }
 
 /*************************************************************************
