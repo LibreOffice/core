@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabarea.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-15 21:32:34 $
+ *  last change: $Author: pw $ $Date: 2000-11-22 15:33:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,9 +132,9 @@ TabPage RID_SVXPAGE_TRANSPARENCE
     {
         Pos = MAP_APPFONT ( 12 , 36 ) ;
         Size = MAP_APPFONT ( 110 , 10 ) ;
-        Text = "~Transparenzverlauf" ;
-        Text [ ENGLISH ] = "~Transparence gradient" ;
-        Text[ english_us ] = "~Transparency gradient";
+        Text = "Transparenz~verlauf" ;
+        Text [ ENGLISH ] = "Transparence ~gradient" ;
+        Text[ english_us ] = "Transparency ~gradient";
         Text[ portuguese ] = "~Gradação da transparência";
         Text[ russian ] = "~Ïğîçğà÷íàÿ ãğàäèåíòíàÿ";
         Text[ greek ] = "ÄéáâÜèìéóç äéáöÜíåéáò";
