@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gloslst.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 16:08:09 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 08:40:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,42 +70,16 @@ ModalDialog DLG_GLOSSARY_DECIDE_DLG
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 161 , 67 ) ;
-    Text = "AutoText auswählen:" ;
+    Text [ de ] = "AutoText auswählen:" ;
+    Text [ en-US ] = "Select AutoText:" ;
     Moveable = TRUE ;
     FixedLine FL_GLOSS
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 93 , 8 ) ;
-        Text = "AutoText - Gruppe" ;
-        Text [ ENGLISH ] = "Glossary group" ;
-        Text [ english_us ] = "AutoText - Group" ;
-        Text [ portuguese_brazilian ] = "AutoTexto - Grupo" ;
-        Text [ swedish ] = "AutoText - grupp" ;
-        Text [ danish ] = "AutoTekst - gruppe" ;
-        Text [ italian ] = "Testo automatico - Gruppo" ;
-        Text [ spanish ] = "Texto automático - Grupo" ;
-        Text [ french ] = "AutoTexte - Groupe" ;
-        Text [ dutch ] = "AutoTekst - groep" ;
-        Text [ portuguese ] = "AutoTexto - Grupo" ;
-        Text[ chinese_simplified ] = "è‡ªåŠ¨å›¾æ–‡é›†å°ç»„";
-        Text[ russian ] = "Àâòîòåêñò - Ãğóïïà";
-        Text[ polish ] = "Autotekst - Grupa";
-        Text[ japanese ] = "å…¥åŠ›æ”¯æ´ ã‚°ãƒ«ãƒ¼ãƒ—";
-        Text[ chinese_traditional ] = "è‡ªå‹•åœ–æ–‡é›†ç¾¤çµ„";
-        Text[ arabic ] = "ãÌãæÚÉ äÕ ÊáŞÇÆí";
-        Text[ greek ] = "Áõôüìáôï êåßìåíï - ÏìÜäá";
-        Text[ korean ] = "ìë™ í…ìŠ¤íŠ¸ ê·¸ë£¹";
-        Text[ turkish ] = "OtomatikMetin - Grup";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Grup AutoText";
-        Text[ finnish ] = "Automaattinen teksti - ryhmä";
-        Text[ thai ] = "à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡à¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´ - à¸ˆà¸±à¸”à¸à¸¥à¸¸à¹ˆà¸¡";
-        Text[ czech ] = "AutomatickÃ½ text - skupina";
-        Text[ hebrew ] = "AutoText - Gruppe";
-        Text[ hindi ] = "à¤¸à¥à¤µà¤šà¤¾à¤²à¤¿à¤¤ à¤Ÿà¥‡à¤•à¥à¤¸à¥à¤Ÿà¥ - à¤¸à¤®à¥‚à¤¹";
-        Text[ slovak ] = "AutomatickÃ½ text - skupina";
-        Text[ hungarian ] = "SzÃ¶veg-o-mata - csoport";
-        Text[ slovenian ] = "Samobesedilo - skupina";
+        Text [ de ] = "AutoText - Gruppe" ;
+        Text [ en-US ] = "AutoText - Group" ;
+        Text [ x-comment ] = " ";
     };
     OKButton PB_OK
     {
@@ -136,34 +110,6 @@ ModalDialog DLG_GLOSSARY_DECIDE_DLG
         TabStop = TRUE ;
         Border = TRUE ;
     };
-    Text [ english_us ] = "Select AutoText:" ;
-    Text [ portuguese_brazilian ] = "Selecionar AutoTexto:" ;
-    Text [ swedish ] = "Välj ut textblock:  " ;
-    Text [ danish ] = "Vælg AutoTekst: " ;
-    Text [ italian ] = "Seleziona modulo di testo:  " ;
-    Text [ spanish ] = "Seleccionar módulo de texto:  " ;
-    Text [ french ] = "Sélection de l'AutoTexte : " ;
-    Text [ dutch ] = "Tekstbouwsteen selecteren:" ;
-    Text [ portuguese ] = "Seleccionar módulo de texto:  " ;
-    Text[ chinese_simplified ] = "é€‰æ‹©è‡ªåŠ¨å›¾æ–‡é›†æ¡ç›®ï¼š ";
-    Text[ russian ] = "Âûáğàòü àâòîòåêñò: ";
-    Text[ polish ] = "Wybierz Autotekst:  ";
-    Text[ japanese ] = "ãƒ†ã‚­ã‚¹ãƒˆãƒ–ãƒ­ãƒƒã‚¯ã®é¸æŠ: ";
-    Text[ chinese_traditional ] = "é¸æ“‡è‡ªå‹•åœ–æ–‡é›†ï¼š ";
-    Text[ arabic ] = "ÇÎÊíÇÑ ÚäÕÑ ÇáäÕ: ";
-    Text[ greek ] = "ÅğéëïãŞ áõôüìáôïõ êåéìİíïõ: ";
-    Text[ korean ] = "ìë™ í…ìŠ¤íŠ¸ ì„ íƒ: ";
-    Text[ turkish ] = "Otomatik Metin bileşeni seç: ";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Selecciona el módulo de text:  ";
-    Text[ finnish ] = "Valitse automaattinen teksti: ";
-    Text[ thai ] = "à¹€à¸¥à¸·à¸­à¸à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡à¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´: ";
-    Text[ czech ] = "Vybrat automatickÃ½ text:";
-    Text[ hebrew ] = "Textbaustein auswÃ¤hlen:";
-    Text[ hindi ] = "à¤¸à¥à¤µà¤šà¤¾à¤²à¤¿à¤¤ à¤Ÿà¥‡à¤•à¥à¤¸à¥à¤Ÿà¥ à¤šà¥à¤¨à¥‹: ";
-    Text[ slovak ] = "VybraÅ¥ automatickÃ½ text:";
-    Text[ hungarian ] = "SzÃ¶veg-o-mata elem kivÃ¡lasztÃ¡sa: ";
-    Text[ slovenian ] = "Izberi samobesedilo:";
 };
 
 
