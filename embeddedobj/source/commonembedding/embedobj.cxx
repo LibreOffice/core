@@ -2,9 +2,9 @@
  *
  *  $RCSfile: embedobj.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-25 09:20:55 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:52:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -354,7 +354,7 @@ void OCommonEmbeddedObject::SwitchStateTo_Impl( sal_Int32 nNextState )
         {
             uno::Reference< embed::XInplaceClient > xInplaceClient( m_xClientSite, uno::UNO_QUERY_THROW );
             // TODO:
-            uno::Reference< ::drafts::com::sun::star::frame::XLayoutManager > xContainerLM =
+            uno::Reference< ::com::sun::star::frame::XLayoutManager > xContainerLM =
                         xInplaceClient->getLayoutManager();
             if ( xContainerLM.is() )
             {
@@ -402,7 +402,7 @@ void OCommonEmbeddedObject::SwitchStateTo_Impl( sal_Int32 nNextState )
         if ( nNextState == embed::EmbedStates::INPLACE_ACTIVE )
         {
             uno::Reference< embed::XInplaceClient > xInplaceClient( m_xClientSite, uno::UNO_QUERY_THROW );
-            uno::Reference< ::drafts::com::sun::star::frame::XLayoutManager > xContainerLM =
+            uno::Reference< ::com::sun::star::frame::XLayoutManager > xContainerLM =
                         xInplaceClient->getLayoutManager();
 
             sal_Bool bOk = sal_False;
