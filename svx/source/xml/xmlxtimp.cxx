@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlxtimp.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 07:52:08 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 17:58:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,9 @@
 #include <com/sun/star/document/XGraphicObjectResolver.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_EMBED_ELEMENTMODES_HPP_
+#include <com/sun/star/embed/ElementModes.hpp>
+#endif
 #ifndef _COM_SUN_STAR_IO_XACTIVEDATACONTROL_HPP_
 #include <com/sun/star/io/XActiveDataControl.hpp>
 #endif
@@ -113,10 +116,6 @@
 
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
-#endif
-
-#ifndef _SVSTOR_HXX
-#include <so3/svstor.hxx>
 #endif
 
 #ifndef _SFXDOCFILE_HXX
@@ -396,29 +395,27 @@ sal_Bool SvxXMLXTableImport::load( const OUString& rUrl, const Reference< XNameC
                 break;
             }
 
-            SvStorageStreamRef                      xIStm;
+            uno::Reference < io::XStream > xIStm;
             uno::Reference< io::XActiveDataSource > xSource;
 
-            SvStorage*                              pStorage = aMedium.GetStorage();
+            uno::Reference < embed::XStorage > xStorage = aMedium.GetStorage();
 
-            xml::sax::InputSource                   aParserInput;
+            xml::sax::InputSource aParserInput;
             aParserInput.sSystemId = aMedium.GetName();
 
-            if( pStorage )
+            if( xStorage.is() )
             {
                 const String aContentStmName( RTL_CONSTASCII_USTRINGPARAM( "Content.xml" ) );
 
-                xIStm = pStorage->OpenStream( aContentStmName, STREAM_READ | STREAM_NOCREATE );
-                if( !xIStm.Is() )
+                xIStm = xStorage->openStreamElement( aContentStmName, embed::ElementModes::READ );
+                if( !xIStm.is() )
                 {
                     DBG_ERROR( "could not open Content stream" );
                     break;
                 }
 
-                xIStm->SetBufferSize( 16 * 1024 );
-                aParserInput.aInputStream = new utl::OInputStreamWrapper( *xIStm );
-
-                pGraphicHelper = SvXMLGraphicHelper::Create( *pStorage, GRAPHICHELPER_MODE_READ );
+                aParserInput.aInputStream = xIStm->getInputStream();
+                pGraphicHelper = SvXMLGraphicHelper::Create( xStorage, GRAPHICHELPER_MODE_READ );
                 xGrfResolver = pGraphicHelper;
             }
             else
