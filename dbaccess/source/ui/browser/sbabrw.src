@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbabrw.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 05:46:45 $
+ *  last change: $Author: fs $ $Date: 2001-04-03 08:16:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1166,4 +1166,11 @@ String STR_OPENTABLES_WARNINGS_DETAILS
     Text[ chinese_traditional ] = "¶b¶s®˙™ÌÆÊÆ…µo•X§@≠”∏ÍÆ∆Æw≥s±µ™∫ƒµßi°C";
     Text[ turkish ] = "While retrieving the tables, warnings were provided by the connection.";
     Text[ arabic ] = " „  »·Ì€  Õ–Ì—«  „‰ « ’«· ﬁ«⁄œ… «·»Ì«‰«  √À‰«¡ „Õ«Ê·… «” —œ«œ «·Ãœ«Ê·.";
+};
+
+String STR_CONNECTING_DATASOURCE
+{
+    Text = "Verbindungsaufbau zu \"$name$\" ...";
+    Text [ english ] = "connecting to \"$name$\" ...";
+    Text [ english_us ] = "connecting to \"$name$\" ...";
 };

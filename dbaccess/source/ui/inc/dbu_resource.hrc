@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbu_resource.hrc,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-02 10:18:50 $
+ *  last change: $Author: fs $ $Date: 2001-04-03 08:14:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -372,6 +372,7 @@
 #define STR_CONFIRM_DROP_INDEX              RID_STRING_START + 141
 #define STR_LOGICAL_INDEX_NAME              RID_STRING_START + 142
 #define STR_INDEXDESIGN_DOUBLE_COLUMN_NAME  RID_STRING_START + 143
+#define STR_CONNECTING_DATASOURCE           RID_STRING_START + 144
 
 //========================================================================
 // untyped resources
@@ -386,6 +387,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.35  2001/04/02 10:18:50  oj
+ *  #84817# give error msg when no field was selected
+ *
  *  Revision 1.34  2001/03/21 13:51:48  oj
  *  #85217# new querybox
  *
