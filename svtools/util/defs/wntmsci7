@@ -13279,3 +13279,7 @@ _TI3?AVDisposedException@lang@star@sun@com@@
 ?pMPostUserEvent@CommunicationLinkViaSocket@@1PAVOMutex@vos@@A
 ??4CommunicationLinkRef@@QAEAAV0@ABV0@@Z
 ?pMPostUserEvent@@3PAVOMutex@vos@@A
+?UpdatePaintLineColor@LineListBox@@AAEEXZ
+??0?$WeakReference@VXAccessible@accessibility@star@sun@com@drafts@@@uno@star@sun@com@@QAE@XZ
+?SwitchToGregorianCalendar@SvNumberformat@@QBEXABVString@@N@Z
+?SwitchToOtherCalendar@SvNumberformat@@QBEXAAVString@@AAN@Z
