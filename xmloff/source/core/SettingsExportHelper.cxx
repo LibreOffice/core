@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SettingsExportHelper.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:32:45 $
+ *  last change: $Author: kz $ $Date: 2004-06-28 16:03:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -528,25 +528,29 @@ void XMLSettingsExportHelper::exportForbiddenCharacters(
             const rtl::OUString sBeginLine ( RTL_CONSTASCII_USTRINGPARAM ( "BeginLine" ) );
             const rtl::OUString sEndLine   ( RTL_CONSTASCII_USTRINGPARAM ( "EndLine" ) );
 
+            sal_Int32 nPos = 0;
             for( sal_Int32 nIndex = 0; nIndex < nCount; nIndex++, pLocales++ )
             {
-                const i18n::ForbiddenCharacters aChars( xForbChars->getForbiddenCharacters( *pLocales ) );
+                if( xForbChars->hasForbiddenCharacters( *pLocales ) )
+                {
+                    const i18n::ForbiddenCharacters aChars( xForbChars->getForbiddenCharacters( *pLocales ) );
 
 
-                uno::Sequence < beans::PropertyValue > aSequence ( XML_FORBIDDEN_CHARACTER_MAX );
-                beans::PropertyValue *pForChar = aSequence.getArray();
+                    uno::Sequence < beans::PropertyValue > aSequence ( XML_FORBIDDEN_CHARACTER_MAX );
+                    beans::PropertyValue *pForChar = aSequence.getArray();
 
-                pForChar[XML_FORBIDDEN_CHARACTER_LANGUAGE].Name    = sLanguage;
-                pForChar[XML_FORBIDDEN_CHARACTER_LANGUAGE].Value <<= pLocales->Language;
-                pForChar[XML_FORBIDDEN_CHARACTER_COUNTRY].Name    = sCountry;
-                pForChar[XML_FORBIDDEN_CHARACTER_COUNTRY].Value <<= pLocales->Country;
-                pForChar[XML_FORBIDDEN_CHARACTER_VARIANT].Name    = sVariant;
-                pForChar[XML_FORBIDDEN_CHARACTER_VARIANT].Value <<= pLocales->Variant;
-                pForChar[XML_FORBIDDEN_CHARACTER_BEGIN_LINE].Name    = sBeginLine;
-                pForChar[XML_FORBIDDEN_CHARACTER_BEGIN_LINE].Value <<= aChars.beginLine;
-                pForChar[XML_FORBIDDEN_CHARACTER_END_LINE].Name    = sEndLine;
-                pForChar[XML_FORBIDDEN_CHARACTER_END_LINE].Value <<= aChars.endLine;
-                xBox->insertByIndex(nIndex, uno::makeAny( aSequence ));
+                    pForChar[XML_FORBIDDEN_CHARACTER_LANGUAGE].Name    = sLanguage;
+                    pForChar[XML_FORBIDDEN_CHARACTER_LANGUAGE].Value <<= pLocales->Language;
+                    pForChar[XML_FORBIDDEN_CHARACTER_COUNTRY].Name    = sCountry;
+                    pForChar[XML_FORBIDDEN_CHARACTER_COUNTRY].Value <<= pLocales->Country;
+                    pForChar[XML_FORBIDDEN_CHARACTER_VARIANT].Name    = sVariant;
+                    pForChar[XML_FORBIDDEN_CHARACTER_VARIANT].Value <<= pLocales->Variant;
+                    pForChar[XML_FORBIDDEN_CHARACTER_BEGIN_LINE].Name    = sBeginLine;
+                    pForChar[XML_FORBIDDEN_CHARACTER_BEGIN_LINE].Value <<= aChars.beginLine;
+                    pForChar[XML_FORBIDDEN_CHARACTER_END_LINE].Name    = sEndLine;
+                    pForChar[XML_FORBIDDEN_CHARACTER_END_LINE].Value <<= aChars.endLine;
+                    xBox->insertByIndex(nPos++, uno::makeAny( aSequence ));
+                }
             }
 
             uno::Reference< container::XIndexAccess > xIA( xBox, uno::UNO_QUERY );
