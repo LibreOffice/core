@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.95 $
+ *  $Revision: 1.96 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-26 17:57:08 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 13:48:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -541,40 +541,30 @@ String STR_UNDO_BEZCLOSE
     Text [ en-US ] = "Close Polygon" ;
 };
  //-------------------------------------
-/* ### ACHTUNG: Neuer Text in Resource! */
 String STR_SLIDE_MODE
 {
-    Text [ de ] = "Diaansicht" ;
-    Text [ en-US ] = "Slide View" ;
-
+    Text [ de ] = "Diatisch" ;
+    Text [ en-US ] = "Slide Sorter" ;
 };
-/* ### ACHTUNG: Neuer Text in Resource! */
 String STR_DRAW_MODE
 {
-    Text [ de ] = "Zeichnungsansicht" ;
-    Text [ en-US ] = "Drawing View" ;
-
+    Text [ de ] = "Normal" ;
+    Text [ en-US ] = "Normal" ;
 };
-/* ### ACHTUNG: Neuer Text in Resource! */
 String STR_OUTLINE_MODE
 {
-    Text [ de ] = "Gliederungsansicht" ;
-    Text [ en-US ] = "Outline View" ;
-
+    Text [ de ] = "Gliederung" ;
+    Text [ en-US ] = "Outline" ;
 };
-/* ### ACHTUNG: Neuer Text in Resource! */
 String STR_NOTES_MODE
 {
-    Text [ de ] = "Notizansicht" ;
-    Text [ en-US ] = "Notes View" ;
-
+    Text [ de ] = "Notizen" ;
+    Text [ en-US ] = "Notes" ;
 };
-/* ### ACHTUNG: Neuer Text in Resource! */
 String STR_HANDOUT_MODE
 {
-    Text [ de ] = "Handzettelansicht" ;
-    Text [ en-US ] = "Handout View" ;
-
+    Text [ de ] = "Handzettel" ;
+    Text [ en-US ] = "Handout" ;
 };
 String STR_PRESENTATION_LAYOUT
 {
@@ -3050,3 +3040,63 @@ String STR_UNDO_HANGULHANJACONVERSION
     Text [ en-US ] = "Hangul/Hanja Conversion";
 };
 
+String STR_LEFT_PANE_TITLE
+{
+    Text = "Folien";
+    Text [ english_us ] = "Slides";
+};
+String STR_RIGHT_PANE_TITLE
+{
+    Text = "Aufgabenbereich";
+    Text [ english_us ] = "Task Panel";
+};
+String STR_TASKPANEL_MASTER_PAGE_TITLE
+{
+    Text = "Master Pages";
+    Text [ english_us ] = "Master Pages";
+};
+String STR_TASKPANEL_MASTER_PAGE_MENU_TITLE
+{
+    Text = "Panel";
+    Text [ english_us ] = "Panel";
+};
+String STR_TASKPANEL_MASTER_PAGE_MENU_LOCK
+{
+    Text = "Lock Aufgabenbereich";
+    Text [ english_us ] = "Lock Task Panel";
+};
+String STR_TASKPANEL_MASTER_PAGE_MENU_UNLOCK
+{
+    Text = "Unlock Aufgabenbereich";
+    Text [ english_us ] = "Unlock Task Panel";
+};
+String STR_TASKPANEL_CURRENT_MASTER_PAGES_TITLE
+{
+    Text = "Verwendete Master Pages";
+    Text [ english_us ] = "Currently Used Master Pages";
+};
+String STR_TASKPANEL_RECENT_MASTER_PAGES_TITLE
+{
+    Text = "Zuletzt verwendete Master Pages";
+    Text [ english_us ] = "Recently Used Master Pages";
+};
+String STR_TASKPANEL_ALL_MASTER_PAGES_TITLE
+{
+    Text = "Verfügbare Master Pages";
+    Text [ english_us ] = "All Available Master Pages";
+};
+String STR_TASKPANEL_NOT_AVAILABLE_SUBSTITUTION
+{
+    Text = "Vorschau nicht verfügbar";
+    Text [ english_us ] = "Preview not available";
+};
+String STR_TASKPANEL_PREPARING_PREVIEW_SUBSTITUTION
+{
+    Text = "Erzeuge Vorschau";
+    Text [ english_us ] = "Preparing preview";
+};
+String STR_TASKPANEL_LAYOUT_MENU_TITLE
+{
+    Text = "Layouts";
+    Text [ english_us ] = "Layouts";
+};
