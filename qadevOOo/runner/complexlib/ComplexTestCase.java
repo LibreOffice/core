@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ComplexTestCase.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Date: 2003-04-01 09:18:04 $
+ *  last change: $Date: 2003-05-27 12:01:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,7 @@ package complexlib;
 import java.lang.reflect.Method;
 import share.DescEntry;
 import lib.TestParameters;
-import com.sun.star.lang.XMultiServiceFactory;
+import lib.StatusException;
 import share.LogWriter;
 import share.ComplexTest;
 import java.io.PrintWriter;
@@ -104,13 +104,18 @@ public abstract class ComplexTestCase implements ComplexTest {
         }
         catch(java.lang.reflect.InvocationTargetException e) {
             Throwable t = e.getTargetException();
-            log.println(t.toString());
-            errorMsg = "Exception in before() method.\n\r" +
-                                                            t.getMessage();
-            if (errorMsg == null)
-                errorMsg = "";
-            log.println("Message: " + errorMsg);
-            t.printStackTrace((PrintWriter)log);
+            if (t instanceof StatusException) {
+                errorMsg = "Failed in before() method.";
+            }
+            else {
+                log.println(t.toString());
+                errorMsg = "Exception in before() method.\n\r" +
+                                                                t.getMessage();
+                if (errorMsg == null)
+                    errorMsg = "";
+                log.println("Message: " + errorMsg);
+                t.printStackTrace((PrintWriter)log);
+            }
         }
 
         //executeMethodTests
@@ -133,14 +138,16 @@ public abstract class ComplexTestCase implements ComplexTest {
             }
             catch(java.lang.reflect.InvocationTargetException e) {
                 Throwable t = e.getTargetException();
-                log.println(t.toString());
-                String msg = t.getMessage();
-                log.println("Message: " + msg);
-                t.printStackTrace((PrintWriter)log);
-                subEntry.State=message + (msg == null?"":msg);
-                subEntry.hasErrorMsg = true;
-                subEntry.ErrorMsg = message + "\n" + msg;
-                continue;
+                if (!(t instanceof StatusException)) {
+                    log.println(t.toString());
+                    String msg = t.getMessage();
+                    log.println("Message: " + msg);
+                    t.printStackTrace((PrintWriter)log);
+                    subEntry.State=message + (msg == null?"":msg);
+                    subEntry.hasErrorMsg = true;
+                    subEntry.ErrorMsg = message + "\n" + msg;
+                    continue;
+                }
             }
             catch(java.lang.Exception e) {
                 log.println(e.getClass().getName());
@@ -172,29 +179,59 @@ public abstract class ComplexTestCase implements ComplexTest {
             }
             catch(java.lang.reflect.InvocationTargetException e) {
                 Throwable t = e.getTargetException();
-                log.println(t.toString());
-                errorMsg = "Exception in 'after()' method.\n\r" +
-                                                                t.getMessage();
-                if (errorMsg == null)
-                    errorMsg = "";
-                log.println("Message: " + errorMsg);
-                t.printStackTrace((PrintWriter)log);
+                if (!(t instanceof StatusException)) {
+                    log.println(t.toString());
+                    errorMsg = "Exception in 'after()' method.\n\r" +
+                                                                    t.getMessage();
+                    if (errorMsg == null)
+                        errorMsg = "";
+                    log.println("Message: " + errorMsg);
+                    t.printStackTrace((PrintWriter)log);
+                }
             }
         }
     }
 
     public abstract String[] getTestMethodNames();
 
-    public abstract String getTestObjectName();
+    public String getTestObjectName() {
+        return this.getClass().getName();
+    }
+
+    protected void assure(boolean s) {
+        assure("Assure failed.", s, false);
+    }
 
     protected void assure(String msg, boolean s) {
+        assure(msg, s, false);
+    }
+
+    protected void failed() {
+        assure("Test did fail.", false, false);
+    }
+
+    protected void failed(String msg) {
+        assure(msg, false, false);
+    }
+
+    protected void assure(String msg, boolean s, boolean cont) {
         state &= s;
         if (!s) {
             message += msg + "\r\n";
             log.println(msg);
+            if (!cont) {
+                throw new StatusException(msg, new Throwable());
+            }
         }
     }
 
+    protected void failed(String msg, boolean cont) {
+        assure(msg, false, cont);
+    }
+
+    /**
+     * @deprecated
+     */
     protected void addResult(String message, boolean state) {
         String msg = message + " - " + state;
         this.state &= state;
@@ -202,7 +239,6 @@ public abstract class ComplexTestCase implements ComplexTest {
         log.println(msg);
     }
 
-    protected void failed(String msg) {
-        assure(msg, false);
-    }
 }
+
+
