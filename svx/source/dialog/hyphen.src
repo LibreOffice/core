@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyphen.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:00:57 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:34:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@ ModalDialog RID_SVXDLG_HYPHENATE
     Text [ English ] = "Hypenation" ;
     Text [ norwegian ] = "Hypenation" ;
     Text [ italian ] = "Sillabazione" ;
-    Text [ portuguese_brazilian ] = "Hifena??o" ;
+    Text [ portuguese_brazilian ] = "Divis„o Sil·bica" ;
     Text [ portuguese ] = "Divis„o sil·bica" ;
     Text [ finnish ] = "Tavutus" ;
     Text [ danish ] = "Orddeling" ;
@@ -115,7 +115,7 @@ ModalDialog RID_SVXDLG_HYPHENATE
         TEXT [ English ] = "~Word" ;
         TEXT [ norwegian ] = "Word" ;
         TEXT [ italian ] = "Parola" ;
-        TEXT [ portuguese_brazilian ] = "Palavra" ;
+        TEXT [ portuguese_brazilian ] = "~Palavra" ;
         TEXT [ portuguese ] = "Pa~lavra" ;
         TEXT [ finnish ] = "~Sana" ;
         TEXT [ danish ] = "~Ord" ;
@@ -126,16 +126,19 @@ ModalDialog RID_SVXDLG_HYPHENATE
         TEXT [ english_us ] = "~Word" ;
         TEXT[ chinese_simplified ] = "Â≠ó(~W)";
         TEXT[ russian ] = "—ÎÓ‚Ó";
-        TEXT[ polish ] = "S≥owo";
+        TEXT[ polish ] = "~Wyraz";
         TEXT[ japanese ] = "ÂçòË™û(~W)";
         TEXT[ chinese_traditional ] = "Â≠ó(~W)";
         TEXT[ arabic ] = "«·ﬂ·„…";
         TEXT[ greek ] = "À›ÓÁ";
         TEXT[ korean ] = "Îã®Ïñ¥(~W)";
-        TEXT[ turkish ] = "Sˆzc¸k";
+        TEXT[ turkish ] = "~Kelime";
         TEXT[ language_user1 ] = " ";
         TEXT[ catalan ] = "Paraula";
         TEXT[ thai ] = "~‡∏Ñ‡∏≥";
+        TEXT[ czech ] = "Slovo";
+        TEXT[ hebrew ] = "W~ort";
+        TEXT[ hindi ] = "~‡§∂‡§¨‡•ç‡§¶";
     };
     PushButton BTN_HYPH_CONTINUE
     {
@@ -152,10 +155,10 @@ ModalDialog RID_SVXDLG_HYPHENATE
         Text [ swedish ] = "~N‰sta" ;
         Text [ danish ] = "NÊste" ;
         Text [ portuguese ] = "~Continuar" ;
-        Text [ portuguese_brazilian ] = "~Weiter" ;
+        Text [ portuguese_brazilian ] = "~PrÛximo" ;
         Text[ chinese_simplified ] = "ÁªßÁª≠(~N)";
         Text[ russian ] = "ƒ‡ÎÂÂ";
-        Text[ polish ] = "Dalej";
+        Text[ polish ] = "~Dalej";
         Text[ japanese ] = "Ê¨°„Å∏(~N)";
         Text[ chinese_traditional ] = "ÁπºÁ∫å(~N)";
         Text[ arabic ] = "«· «·Ì";
@@ -166,6 +169,9 @@ ModalDialog RID_SVXDLG_HYPHENATE
         Text[ catalan ] = "~Seg¸ent";
         Text[ finnish ] = "~Seuraava";
         Text[ thai ] = "~‡∏ñ‡∏±‡∏î‡πÑ‡∏õ";
+        Text[ czech ] = "Dal≈°√≠";
+        Text[ hebrew ] = "‚ÄÆ◊î◊ë◊ê‚Ä¨";
+        Text[ hindi ] = "~‡§Ü‡§ó‡•á";
     };
     PushButton BTN_HYPH_DELETE
     {
@@ -175,7 +181,7 @@ ModalDialog RID_SVXDLG_HYPHENATE
         TEXT [ English ] = "~Erase" ;
         TEXT [ norwegian ] = "~Erase" ;
         TEXT [ italian ] = "Ri~muovi" ;
-        TEXT [ portuguese_brazilian ] = "~Apagar" ;
+        TEXT [ portuguese_brazilian ] = "~Remover" ;
         TEXT [ portuguese ] = "~Remover" ;
         TEXT [ finnish ] = "~Poista" ;
         TEXT [ danish ] = "Fjern" ;
@@ -187,7 +193,7 @@ ModalDialog RID_SVXDLG_HYPHENATE
         TABSTOP = TRUE ;
         TEXT[ chinese_simplified ] = "Âà†Èô§(~R)";
         TEXT[ russian ] = "”‰‡ÎËÚ¸";
-        TEXT[ polish ] = "UsuÒ";
+        TEXT[ polish ] = "~UsuÒ";
         TEXT[ japanese ] = "ÂâäÈô§(~R)";
         TEXT[ chinese_traditional ] = "Âà™Èô§(~R)";
         TEXT[ arabic ] = "≈“«·…";
@@ -197,6 +203,9 @@ ModalDialog RID_SVXDLG_HYPHENATE
         TEXT[ language_user1 ] = " ";
         TEXT[ catalan ] = "~Suprimeix";
         TEXT[ thai ] = "‡πÄ~‡∏≠‡∏≤‡∏≠‡∏≠‡∏Å";
+        TEXT[ czech ] = "Odstranit";
+        TEXT[ hebrew ] = "‚ÄÆ◊î◊°◊®◊î‚Ä¨";
+        TEXT[ hindi ] = "~‡§π‡§ü‡§æ‡§ì";
     };
     OKButton BTN_HYPH_CUT
     {
@@ -206,20 +215,20 @@ ModalDialog RID_SVXDLG_HYPHENATE
         TEXT [ English ] = "Hyphe~nate" ;
         TEXT [ norwegian ] = "Hyphe~nate" ;
         TEXT [ italian ] = "Si~llabazione" ;
-        TEXT [ portuguese_brazilian ] = "Hife~nar" ;
+        TEXT [ portuguese_brazilian ] = "Dividir ~SÌlabas" ;
         TEXT [ portuguese ] = "~Separar" ;
         TEXT [ finnish ] = "~Tavuta" ;
         TEXT [ danish ] = "Del ord" ;
         TEXT [ french ] = "~Couper" ;
         TEXT [ swedish ] = "A~vstava" ;
         TEXT [ dutch ] = "~Afbreken" ;
-        TEXT [ spanish ] = "~Dividir" ;
+        TEXT [ spanish ] = "~Separar" ;
         TEXT [ english_us ] = "~Hyphenate" ;
         TABSTOP = TRUE ;
         DEFBUTTON = TRUE ;
         TEXT[ chinese_simplified ] = "ËøûÂ≠óÁ¨¶(~H)";
         TEXT[ russian ] = "œÂÂÌÂÒÚË";
-        TEXT[ polish ] = "Podziel";
+        TEXT[ polish ] = "~Podziel wyrazy";
         TEXT[ japanese ] = "ÂàÜ„Åë„Çã(~H)";
         TEXT[ chinese_traditional ] = "ÈÄ£Â≠óÁ¨¶(~H)";
         TEXT[ arabic ] = "›’· «·„ﬁ«ÿ⁄";
@@ -229,6 +238,9 @@ ModalDialog RID_SVXDLG_HYPHENATE
         TEXT[ language_user1 ] = " ";
         TEXT[ catalan ] = "~Parteix els mots";
         TEXT[ thai ] = "‡πÉ‡∏™‡πà~‡∏¢‡∏±‡∏ï‡∏¥‡∏†‡∏±‡∏á‡∏Ñ‡πå";
+        TEXT[ czech ] = "Dƒõlit slova";
+        TEXT[ hebrew ] = "~Trennen";
+        TEXT[ hindi ] = "~‡§π‡§æ‡§á‡§´‡§º‡§®‡•á‡§ü‡•ç";
     };
     CancelButton BTN_HYPH_CANCEL
     {
@@ -254,8 +266,20 @@ ModalDialog RID_SVXDLG_HYPHENATE
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "SeparaciÛ en sÌl.labes";
     Text[ thai ] = "‡πÉ‡∏™‡πà‡∏¢‡∏±‡∏ï‡∏¥‡∏†‡∏±‡∏á‡∏Ñ‡πå";
+    Text[ czech ] = "Dƒõlen√≠ slov";
+    Text[ hebrew ] = "‚ÄÆ◊©◊ë◊ô◊®◊™ ◊û◊ú◊ô◊ù‚Ä¨";
+    Text[ hindi ] = "‡§π‡§æ‡§á‡§´‡§º‡§®‡•á‡§∂‡§®‡•ç";
 };
  // ******************************************************************* EOF
+
+
+
+
+
+
+
+
+
 
 
 
