@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportDataPilot.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2002-09-06 10:57:37 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:52:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,7 +225,9 @@ void ScXMLExportDataPilot::WriteDPFilter(const ScQueryParam& aQueryParam)
         sal_Bool bOr(sal_False);
         sal_Bool bHasEntries(sal_True);
         sal_Int16 nEntries(0);
-        for (sal_Int32 j = 0; (j < nQueryEntryCount) && bHasEntries; j++)
+        sal_Int32 j;
+
+        for ( j = 0; (j < nQueryEntryCount) && bHasEntries; j++)
         {
             ScQueryEntry aEntry = aQueryParam.GetEntry(static_cast<USHORT>(j));
             if (aEntry.bDoQuery)
