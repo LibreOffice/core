@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xfont.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 10:27:48 $
+ *  last change: $Author: vg $ $Date: 2003-05-28 12:34:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -644,13 +644,9 @@ X11FontLayout::X11FontLayout( ExtendedFontStruct& rFont )
 bool X11FontLayout::LayoutText( ImplLayoutArgs& rArgs )
 {
     Point aNewPos( 0, 0 );
-    int nGlyphCount = 0;
-    for(;; ++nGlyphCount )
+    bool bRightToLeft;
+    for( int nCharPos = -1; rArgs.GetNextPos( &nCharPos, &bRightToLeft ); )
     {
-        int nCharPos;
-        bool bRightToLeft;
-        if( !rArgs.GetNextPos( &nCharPos, &bRightToLeft ) )
-            break;
         sal_Unicode cChar = rArgs.mpStr[ nCharPos ];
         if( bRightToLeft )
             cChar = GetMirroredChar( cChar );
@@ -675,7 +671,7 @@ bool X11FontLayout::LayoutText( ImplLayoutArgs& rArgs )
         aNewPos.X() += nGlyphWidth;
     }
 
-    return (nGlyphCount > 0);
+    return (nCharPos >= 0);
 }
 
 // -----------------------------------------------------------------------
