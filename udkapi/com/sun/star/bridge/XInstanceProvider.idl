@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XInstanceProvider.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:33 $
+ *  last change: $Author: jbu $ $Date: 2001-10-12 16:01:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,14 +66,28 @@
  module com {  module sun {  module star {  module bridge {
 
 
-/** @missing
+/** Allows to export UNO objects to other processes.
+
+    @see XBridge
  */
 interface XInstanceProvider: com::sun::star::uno::XInterface
 {
 
-    // DocMerge from xml: method com::sun::star::bridge::XInstanceProvider::getInstance
-    /** @returns
-            the object associated with the name.
+    /** gets called, when an initial object is requested from a remote process.
+        You may either create a  new instance or return an existing object.
+
+       @param sInstanceName
+            The name of the requested object.
+
+       @returns
+            the object associated with the name. The return value maybe null in case
+            there is no object to offer for this string. In this case, XBridge.getInstance()
+            will also return a null reference
+
+       @throws NoSuchElementException
+            You may throw this exception to indicate, that there is no object for this
+            name. Due to a specification bug, this exception will appear as a RuntimeException
+            at the XBridge.getInstance() method.
      */
     com::sun::star::uno::XInterface getInstance( [in] string sInstanceName )
             raises ( com::sun::star::container::NoSuchElementException );

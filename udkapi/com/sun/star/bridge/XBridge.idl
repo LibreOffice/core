@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XBridge.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:33 $
+ *  last change: $Author: jbu $ $Date: 2001-10-12 16:01:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,7 @@
 
 module com {  module sun {  module star {  module bridge {
 
-/** @missing
+/**
  */
 interface XBridge: com::sun::star::uno::XInterface
 {
@@ -74,6 +74,12 @@ interface XBridge: com::sun::star::uno::XInterface
 
         <p>In general, this method is called once to get the initial object from the
         remote, but it is allowed to call the method multiple times. </p>
+
+        @param sInstanceName The name of the object, that shall be retrieved from the
+                             remote process. The call is delegated to
+                             com.sun.star.bridge.XInstanceProvider.getInstance() in the
+                             remote process
+        @see com.sun.star.bridge.XInstanceProvider
      */
     XInterface getInstance( [in] string sInstanceName );
 

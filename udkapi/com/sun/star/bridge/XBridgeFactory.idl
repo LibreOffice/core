@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XBridgeFactory.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:33 $
+ *  last change: $Author: jbu $ $Date: 2001-10-12 16:01:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,32 +70,37 @@
 
  module com {  module sun {  module star {  module bridge {
 
-/** @missing
+/** factory to create interprocess bridges
  */
 interface XBridgeFactory: com::sun::star::uno::XInterface
 {
-    // DocMerge from idl: method com::sun::star::bridge::XBridgeFactory::createBridge
-    /** @incomplete
+    /** tries to create a UNO interprocess bridge.
 
         @param sName
-            The name of the bridge. The format should be protocol:connection-description
-             (e.g. iiop:socket:localhost:2000). This allows other components to reuse
+            The name of the bridge. This allows other components to reuse
              an already created bridge (using getBridge).
+             <p>
+             If empty, an anonymous bridge is created, which cannot be retrieved with
+             getBridge(). No BridgeExistsException can be thrown in this case.
 
         @param sProtocol
-            The protocol, the bridge should work on.
+            The protocol, that will be used on the connection (e.g. urp) plus additional
+            comma separated name=value protocol properties.
 
         @param aConnection
-            The connection on which the calls will be transfered.
+            The connection, which is used to transfer the calls. The bridge expects to
+            own the connection, thus it will close the connection, in case it does not
+            need it anymore.
 
         @param anInstanceProvider
-            gets called, when a request from remote comes in.
+            gets called, when a request from remote comes in. You can pass a null reference
+            in case you don't want to export any objects.
 
         @throws BridgeExistsException
             There is already a bridge registered with this name.  Use getBridge instead.
 
         @throws IllegalArgumentException
-            The protocol is unknown.
+            The protocol is unknown or the connection is null.
      */
     XBridge createBridge(
         [in] string sName,
@@ -105,14 +110,14 @@ interface XBridgeFactory: com::sun::star::uno::XInterface
         raises ( BridgeExistsException , com::sun::star::lang::IllegalArgumentException );
 
 
-    // DocMerge from xml: method com::sun::star::bridge::XBridgeFactory::getBridge
-    /** tries to get a bridge.
+    /** tries to get a bridge by this name.
+        <p> Cannot be retrieved, when the bridge got disposed before.
+
+        @return An existing remote bridge or a null reference.
      */
     XBridge getBridge( [in] string  sName );
 
-    // DocMerge from idl: method com::sun::star::bridge::XBridgeFactory::getExistingBridges
-    /** @returns
-            Sequence of all existing bridges.
+    /** returns the sequence of all existing (including unnamed)bridges.
      */
     sequence < XBridge > getExistingBridges( );
 };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoUrlResolver.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:28:26 $
+ *  last change: $Author: jbu $ $Date: 2001-10-12 16:01:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,15 +69,13 @@
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::bridge::UnoUrlResolver
-/** provides the ability to access outer processes,
-    resolving them by their name.
+/** provides the ability to access remote processes,
+    resolving them by an UNO url.
     <br>
  */
 service UnoUrlResolver
 {
 
-    // DocMerge from xml: service com::sun::star::bridge::UnoUrlResolver: interface com::sun::star::bridge::XUnoUrlResolver
     /** resolve objects via this interface.
      */
     interface com::sun::star::bridge::XUnoUrlResolver;
@@ -90,6 +88,9 @@ service UnoUrlResolver
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/11/08 12:28:26  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:34:57  hjs
     initial import
 
