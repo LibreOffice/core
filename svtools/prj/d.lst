@@ -40,8 +40,7 @@ mkdir: %_DEST%\inc%_EXT%\svtools
 ..\%__SRC%\res\bmp.* %_DEST%\bin%_EXT%\bmp.*
 ..\%__SRC%\res\bmpgui.* %_DEST%\bin%_EXT%\bmpgui.*
 ..\%__SRC%\misc\svt?????.map %_DEST%\bin%_EXT%\svt?????.map
-..\%__SRC%\lib\libsvt?????.so %_DEST%\lib%_EXT%\*
-..\%__SRC%\lib\libsvl?????.so %_DEST%\lib%_EXT%\*
+..\%__SRC%\lib\libsv*.so %_DEST%\lib%_EXT%\*
 ..\%__SRC%\lib\libsv*.dylib %_DEST%\lib%_EXT%\*
 ..\%__SRC%\inc\svtools\proped.hxx %_DEST%\inc%_EXT%\svtools\proped.hxx
 
