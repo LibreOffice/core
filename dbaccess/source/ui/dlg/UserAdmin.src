@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UserAdmin.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-26 17:28:49 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:42:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,6 +164,12 @@ QueryBox QUERY_USERADMIN_DELETE_USER
     Buttons = WB_YES_NO ;
     Message [ de ] = "Soll der Benutzer wirklich gelöscht werden?" ;
     Message [ en-US ] = "Do you really want to delete the user?";
+};
+
+String STR_USERADMIN_NOT_AVAILABLE
+{
+    Text [ de ] ="Die Datenbank unterstützt keine Benutzerverwaltung!" ;
+    Text [ en-US ] = "The database does not support user administration." ;
 };
 
 #define EDIT_SIZE_X     50
