@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmsel.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: lla $ $Date: 2002-07-18 07:49:23 $
+ *  last change: $Author: gt $ $Date: 2002-07-19 09:31:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,38 +156,48 @@ using namespace ::rtl;
 // struct SvxFrameSelector_Impl ------------------------------------------------
 struct SvxFrameSelector_Impl
 {
-    SvxFrameSelectorType    eSel; // Selektor-Typ (Tabelle oder Absatz)
+    SvxFrameSelectorType                eSel;           // Selektor-Typ (Tabelle oder Absatz)
 
-    Color               aCurLineCol;  // aktuelle Linienfarbe
-    SvxLineStruct       aCurLineStyle;// aktueller LineStyle
-    Bitmap              aBackBmp;         // Hintergrund-Bitmap
-    Rectangle           aRectFrame;     // der Rahmen (Mitte der Linien)
-    Rectangle           aBoundingRect;// alle Linien umschliessender Rahmen
-    SvxFrameLine        aLeftLine;    // seine Linien
-    SvxFrameLine        aRightLine;
-    SvxFrameLine        aTopLine;
-    SvxFrameLine        aBottomLine;
-    SvxFrameLine        aHorLine;
-    SvxFrameLine        aVerLine;
-    Rectangle           aSpotLeft;      // Click-HotSpots auf der Bitmap
-    Rectangle           aSpotRight;
-    Rectangle           aSpotTop;
-    Rectangle           aSpotBottom;
-    Rectangle           aSpotHor;
-    Rectangle           aSpotVer;
-    BOOL                bIsDontCare;
+    Color                               aCurLineCol;    // aktuelle Linienfarbe
+    Color                               aPaintLineCol;
+    SvxLineStruct                       aCurLineStyle;  // aktueller LineStyle
+    Bitmap                              aBackBmp;       // Hintergrund-Bitmap
+    Rectangle                           aRectFrame;     // der Rahmen (Mitte der Linien)
+    Rectangle                           aBoundingRect;  // alle Linien umschliessender Rahmen
+    SvxFrameLine                        aLeftLine;      // seine Linien
+    SvxFrameLine                        aRightLine;
+    SvxFrameLine                        aTopLine;
+    SvxFrameLine                        aBottomLine;
+    SvxFrameLine                        aHorLine;
+    SvxFrameLine                        aVerLine;
+    Rectangle                           aSpotLeft;      // Click-HotSpots auf der Bitmap
+    Rectangle                           aSpotRight;
+    Rectangle                           aSpotTop;
+    Rectangle                           aSpotBottom;
+    Rectangle                           aSpotHor;
+    Rectangle                           aSpotVer;
+    BOOL                                bIsDontCare;
+    BOOL                                bHC;
     SvxFrameSelectorAccessible_Impl*    pAccess;
     uno::Reference< XAccessible >       xAccess;
     SvxFrameSelectorAccessible_Impl*    pChildren[6];
     uno::Reference< XAccessible >       xChildren[6];
 
-    SvxFrameSelector_Impl();
-    ~SvxFrameSelector_Impl();
+                                        SvxFrameSelector_Impl( const SvxFrameSelector* pThis );
+                                        ~SvxFrameSelector_Impl();
 
-    uno::Reference< XAccessible >  GetChildAccessible(
-        SvxFrameSelector& rFrameSel, SvxFrameSelectorLine eWhich);
-    const Rectangle&           GetLineSpot(SvxFrameSelectorLine eWhich) const;
+    uno::Reference< XAccessible >       GetChildAccessible( SvxFrameSelector& rFrameSel, SvxFrameSelectorLine eWhich );
+    const Rectangle&                    GetLineSpot( SvxFrameSelectorLine eWhich ) const;
+
+    void                                SetHC( const SvxFrameSelector* pContrl = NULL );    // pContrl == NULL -> no HC
+    inline const Color&                 GetPaintLineCol( void ) const;
 };
+
+inline const Color& SvxFrameSelector_Impl::GetPaintLineCol( void ) const
+{
+    return bHC? aPaintLineCol : aCurLineCol;
+}
+
 // class SvxFrameSelectorAccessible_Impl ------------------------------------------------
 
 class SvxFrameSelectorAccessible_Impl :
@@ -897,13 +907,28 @@ void SvxFrameLine::SetState( SvxFrameLineState eState )
 }
 // class SvxFrameSelector ------------------------------------------------
 
+inline const Color& SvxFrameSelector::GetPaintColor( const Color& rNormalColor ) const
+{
+    return pImpl->bHC? pImpl->aPaintLineCol : rNormalColor;
+}
+
+inline const Color& SvxFrameSelector::GetDisplayBackgroundColor( const StyleSettings& rSettings ) const
+{
+    return rSettings.GetFieldColor();
+}
+
+const Color& SvxFrameSelector::GetDisplayBackgroundColor( void ) const
+{
+    return GetDisplayBackgroundColor( GetSettings().GetStyleSettings() );
+}
+
 SvxFrameSelector::SvxFrameSelector( Window* pParent,
                                     const ResId& rResId )
     :   Control         ( pParent, rResId ),
         eShadow         ( SVX_FRMSHADOW_NONE ),
-        aShadowCol    ( COL_BLACK ),
+        aShadowCol      ( COL_BLACK ),
         bIsClicked      ( FALSE ),
-        pImpl(new SvxFrameSelector_Impl)
+        pImpl           ( new SvxFrameSelector_Impl( this ) )
 {
 }
 /* -----------------------------01.02.2002 16:47------------------------------
@@ -992,7 +1017,7 @@ void SvxFrameSelector::InitBitmap_Impl()
     aVirDev.SetOutputSizePixel( aSzParent );
     aVirDev.SetLineColor();
 
-    aVirDev.SetFillColor( rStyleSettings.GetFieldColor() );
+    aVirDev.SetFillColor( GetDisplayBackgroundColor( rStyleSettings ) );
     aVirDev.DrawRect( Rectangle( Point( 0, 0 ), aSzParent ) );
 
     DrawContents_Impl( aVirDev );
@@ -1188,7 +1213,7 @@ void SvxFrameSelector::ShowLines()
            pImpl->aVerLine.aState == SVX_FRMLINESTATE_DONT_CARE ) )
     {
         if ( pImpl->aVerLine.aState == SVX_FRMLINESTATE_SHOW )
-            aFillColor = pImpl->aVerLine.aColor;
+            aFillColor = GetPaintColor( pImpl->aVerLine.aColor );
         else
             aFillColor = Color( COL_LIGHTGRAY );
 
@@ -1229,7 +1254,7 @@ void SvxFrameSelector::ShowLines()
            pImpl->aHorLine.aState == SVX_FRMLINESTATE_DONT_CARE ) )
     {
         if ( pImpl->aHorLine.aState == SVX_FRMLINESTATE_SHOW )
-            aFillColor = pImpl->aHorLine.aColor;
+            aFillColor = GetPaintColor( pImpl->aHorLine.aColor );
         else
             aFillColor = Color( COL_LIGHTGRAY );
 
@@ -1271,7 +1296,7 @@ void SvxFrameSelector::ShowLines()
          pImpl->aLeftLine.aState == SVX_FRMLINESTATE_DONT_CARE )
     {
         if ( pImpl->aLeftLine.aState == SVX_FRMLINESTATE_SHOW )
-            aFillColor = pImpl->aLeftLine.aColor;
+            aFillColor = GetPaintColor( pImpl->aLeftLine.aColor );
         else
             aFillColor = Color( COL_LIGHTGRAY );
 
@@ -1311,7 +1336,7 @@ void SvxFrameSelector::ShowLines()
          pImpl->aRightLine.aState == SVX_FRMLINESTATE_DONT_CARE )
     {
         if ( pImpl->aRightLine.aState == SVX_FRMLINESTATE_SHOW )
-            aFillColor = pImpl->aRightLine.aColor;
+            aFillColor = GetPaintColor( pImpl->aRightLine.aColor );
         else
             aFillColor = Color( COL_LIGHTGRAY );
 
@@ -1351,7 +1376,7 @@ void SvxFrameSelector::ShowLines()
          pImpl->aTopLine.aState == SVX_FRMLINESTATE_DONT_CARE )
     {
         if ( pImpl->aTopLine.aState == SVX_FRMLINESTATE_SHOW )
-            aFillColor = pImpl->aTopLine.aColor;
+            aFillColor = GetPaintColor( pImpl->aTopLine.aColor );
         else
             aFillColor = Color( COL_LIGHTGRAY );
 
@@ -1391,7 +1416,7 @@ void SvxFrameSelector::ShowLines()
          pImpl->aBottomLine.aState == SVX_FRMLINESTATE_DONT_CARE )
     {
         if ( pImpl->aBottomLine.aState == SVX_FRMLINESTATE_SHOW )
-            aFillColor = pImpl->aBottomLine.aColor;
+            aFillColor = GetPaintColor( pImpl->aBottomLine.aColor );
         else
             aFillColor = Color( COL_LIGHTGRAY );
 
@@ -1470,6 +1495,9 @@ void SvxFrameSelector::DrawContents_Impl( OutputDevice& rVirDev )
     /*
      * Malen des Inhaltes:
      */
+    if( pImpl->bHC )
+        return;
+
     if ( pImpl->eSel == SVX_FRMSELTYPE_TABLE )
     {
         Color aPrevLineColor = rVirDev.GetLineColor();
@@ -1772,7 +1800,6 @@ void SvxFrameSelector::Paint( const Rectangle& )
             InvertTracking(aCompleteRect, SHOWTRACK_SMALL | SHOWTRACK_WINDOW);
         }
     }
-
 }
 
 // -----------------------------------------------------------------------
@@ -2003,11 +2030,14 @@ BOOL    SvxFrameSelector::IsAnyLineSet() const
  ---------------------------------------------------------------------------*/
 void SvxFrameSelector::DataChanged( const DataChangedEvent& rDCEvt )
 {
-    if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
-         (rDCEvt.GetFlags() & SETTINGS_STYLE) )
-            InitBitmap_Impl();
-
     Window::DataChanged( rDCEvt );
+
+    if( ( rDCEvt.GetType() == DATACHANGED_SETTINGS ) && ( rDCEvt.GetFlags() & SETTINGS_STYLE ) )
+    {
+        pImpl->SetHC( this );
+        InitBitmap_Impl();
+        ShowLines();
+    }
 }
 /* -----------------------------20.03.2002 14:31------------------------------
 
@@ -2194,7 +2224,7 @@ uno::Reference< XAccessible > SvxFrameSelector::CreateAccessible()
 /* -----------------------------05.02.2002 15:46------------------------------
 
  ---------------------------------------------------------------------------*/
-SvxFrameSelector_Impl::SvxFrameSelector_Impl() :
+SvxFrameSelector_Impl::SvxFrameSelector_Impl( const SvxFrameSelector* pThis ) :
         eSel            ( SVX_FRMSELTYPE_PARAGRAPH ),
         aCurLineStyle ( SvxFrameLine::NO_LINE ),
         aCurLineCol   ( COL_BLACK ),
@@ -2203,6 +2233,8 @@ SvxFrameSelector_Impl::SvxFrameSelector_Impl() :
 {
     for(sal_Int16 i = 0; i < 6; i++)
         pChildren[i] = 0;
+
+    SetHC( pThis );
 }
 /* -----------------------------05.02.2002 15:47------------------------------
 
@@ -2246,3 +2278,14 @@ const Rectangle& SvxFrameSelector_Impl::GetLineSpot(SvxFrameSelectorLine eWhich)
     return *pRet;
 }
 
+
+void SvxFrameSelector_Impl::SetHC( const SvxFrameSelector* pCntrl )
+{
+    if( pCntrl && pCntrl->GetDisplayBackgroundColor().IsDark() )
+    {
+        bHC = TRUE;
+        aPaintLineCol = pCntrl->GetSettings().GetStyleSettings().GetLabelTextColor();
+    }
+    else
+        bHC = FALSE;
+}
