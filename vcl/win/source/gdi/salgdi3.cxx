@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hdu $ $Date: 2002-09-12 07:04:38 $
+ *  last change: $Author: hdu $ $Date: 2002-09-18 17:54:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1932,7 +1932,13 @@ BOOL SalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
         return FALSE;
 
     // open font file
-    int nFaceNum = 0; // TODO: find correct face number
+    int nFaceNum = 0;
+    if( !*xRawFontData.get() )  // TTC candidate
+    {
+        // #103415# avoid crash, TODO: fix TTC font embedding
+        return FALSE;
+    }
+
     ScopedTrueTypeFont aSftTTF;
     int nRC = aSftTTF.open( xRawFontData.get(), nFontSize, nFaceNum );
     if( nRC != SF_OK )
