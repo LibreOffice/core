@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mmconfigitem.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:23:00 $
+ *  last change: $Author: rt $ $Date: 2004-09-27 11:45:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,9 @@
 #ifndef _SWDBDATA_HXX
 #include <swdbdata.hxx>
 #endif
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
+#endif
 
 namespace com{namespace sun{namespace star{
     namespace sdbc{
@@ -95,7 +98,7 @@ struct SwDocMergeInfo
     long    nEndPageInTarget;
     long    nDBRow;
 };
-class SwMailMergeConfigItem
+class SW_DLLPUBLIC SwMailMergeConfigItem
 {
 //    com::sun::star::uno::Sequence< ::rtl::OUString>     m_aSavedDocuments;
     SwMailMergeConfigItem_Impl*                                 m_pImpl;
