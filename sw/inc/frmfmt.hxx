@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmfmt.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:01:06 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 10:54:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,10 @@
 #endif
 // <--
 
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
+#endif
+
 class SwDrawContact;
 class SwFlyFrm;
 class Graphic;
@@ -81,7 +85,7 @@ class SwRect;
 class SwContact;
 class SdrObject;
 
-class SwFrmFmt: public SwFmt
+class SW_DLLPUBLIC SwFrmFmt: public SwFmt
 {
     friend class SwDoc;
     friend class SwPageDesc;    //darf den protected CTor rufen.
@@ -168,7 +172,7 @@ public:
     virtual void SetPositionLayoutDir( const sal_Int16 _nPositionLayoutDir );
     // <--
 
-    DECL_FIXEDMEMPOOL_NEWDEL(SwFrmFmt)
+    DECL_FIXEDMEMPOOL_NEWDEL_DLL(SwFrmFmt)
 };
 
 //Das FlyFrame-Format ------------------------------
