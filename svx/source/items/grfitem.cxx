@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfitem.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:20 $
+ *  last change: $Author: os $ $Date: 2000-10-19 13:18:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,9 +72,14 @@
 #ifndef _SVX_ITEMTYPE_HXX //autogen
 #include <itemtype.hxx>
 #endif
+#ifndef _COM_SUN_STAR_TEXT_GRAPHICCROP_HPP_
+#include <com/sun/star/text/GraphicCrop.hpp>
+#endif
 
 using namespace ::com::sun::star;
 
+#define TWIP_TO_MM100(TWIP)     ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
+#define MM100_TO_TWIP(MM100)    ((MM100) >= 0 ? (((MM100)*72L+63L)/127L) : (((MM100)*72L-63L)/127L))
 //TYPEINIT1_AUTOFACTORY( SvxGrfCrop, SfxPoolItem )
 
 /******************************************************************************
@@ -156,35 +161,44 @@ SvStream& SvxGrfCrop::Store( SvStream& rStrm, USHORT nVersion ) const
 
 BOOL SvxGrfCrop::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
-/* ????????
-    text::GraphicCrop  aCrop;
-    aCrop.Left   = TWIP_TO_MM100(nLeft);
-    aCrop.Right  = TWIP_TO_MM100(nRight) ;
-    aCrop.Top    = TWIP_TO_MM100(nTop)   ;
-    aCrop.Bottom = TWIP_TO_MM100(nBottom) );
-    rVal.setValue( &aCrop, ::getCppuType((text::GraphicCrop*)0) );
- ????????*/
+    text::GraphicCrop aRet;
+    aRet.Left   = nLeft;
+    aRet.Right  = nRight;
+    aRet.Top    = nTop;
+    aRet.Bottom = nBottom;
+
+    if(nMemberId&CONVERT_TWIPS)
+    {
+       aRet.Right   = TWIP_TO_MM100(aRet.Right );
+       aRet.Top     = TWIP_TO_MM100(aRet.Top );
+       aRet.Left    = TWIP_TO_MM100(aRet.Left   );
+       aRet.Bottom  = TWIP_TO_MM100(aRet.Bottom);
+    }
+
+
+    rVal <<= aRet;
     return   sal_True;
 }
 
 BOOL SvxGrfCrop::PutValue( const uno::Any& rVal, BYTE nMemberId )
 {
-    sal_Bool bRet = sal_False;
-/*
-    if(rVal.getValueType() == ::getCppuType((const text::GraphicCrop*)0))
+    if(!rVal.hasValue() || rVal.getValueType() != ::getCppuType((text::GraphicCrop*)0))
+        return sal_False;
+    text::GraphicCrop aVal;
+    rVal >>= aVal;
+    if(nMemberId&CONVERT_TWIPS)
     {
-        const text::GraphicCrop* pCrop = (const text::GraphicCrop*)rVal.getValue();
-        nLeft   = MM100_TO_TWIP(pCrop->Left  );
-        nRight  = MM100_TO_TWIP(pCrop->Right );
-        nTop    = MM100_TO_TWIP(pCrop->Top   );
-        nBottom = MM100_TO_TWIP(pCrop->Bottom);
-        bRet = sal_True;
+       aVal.Right   = MM100_TO_TWIP(aVal.Right );
+       aVal.Top     = MM100_TO_TWIP(aVal.Top );
+       aVal.Left    = MM100_TO_TWIP(aVal.Left   );
+       aVal.Bottom  = MM100_TO_TWIP(aVal.Bottom);
     }
-    else
-        //exception(wrong_type)
-        ;
-*/
-    return bRet;
+
+    nLeft   = aVal.Left  ;
+    nRight  = aVal.Right ;
+    nTop    = aVal.Top   ;
+    nBottom = aVal.Bottom;
+    return  sal_True;
 }
 
 SfxItemPresentation SvxGrfCrop::GetPresentation(
