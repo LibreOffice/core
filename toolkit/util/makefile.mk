@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: hr $ $Date: 2002-08-15 13:56:25 $
+#   last change: $Author: vg $ $Date: 2003-04-15 13:45:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,12 +82,11 @@ SHL1TARGET= tk$(VERSION)$(DLLPOSTFIX)
 SHL1IMPLIB= itk
 
 SHL1STDLIBS=\
-        $(TOOLSLIB)			\
-        $(SOTLIB)			\
-        $(VOSLIB)			\
-        $(COMPHELPERLIB)	\
-        $(UNOTOOLSLIB)		\
         $(VCLLIB)			\
+        $(SOTLIB)			\
+        $(UNOTOOLSLIB)		\
+        $(TOOLSLIB)			\
+        $(COMPHELPERLIB)	\
         $(CPPUHELPERLIB)	\
         $(CPPULIB)			\
         $(SALLIB)
