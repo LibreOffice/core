@@ -2,9 +2,9 @@
  *
  *  $RCSfile: base3d.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 15:03:49 $
+ *  last change: $Author: hr $ $Date: 2004-09-09 11:26:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -552,6 +552,8 @@ void Base3D::StartPrimitive(Base3DObjectMode eMode)
                 aComplexPolygon.StartPrimitive();
                 break;
             }
+            default:
+                break;  // -Wall multiple cases not handled.
         }
     }
     else
@@ -579,6 +581,8 @@ void Base3D::EndPrimitive()
                 aComplexPolygon.EndPrimitive(this);
                 break;
             }
+            default:
+                break;  // -Wall multiple values not handled.
         }
     }
     else
@@ -766,6 +770,8 @@ void Base3D::PostAddVertex(B3dEntity& rEntity)
                 aComplexPolygon.PostAddVertex(rEntity);
                 break;
             }
+            default:
+                break; // -Wall multiple values not handled.
         }
     }
     else
@@ -793,6 +799,8 @@ B3dEntity& Base3D::GetFreeEntity()
                 return aComplexPolygon.GetFreeEntity();
                 break;
             }
+            default:
+                break;
         }
     }
     return ImplGetFreeEntity();
