@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertysethelper.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-14 15:52:37 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 12:35:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,11 @@ protected:
     virtual void _setPropertyToDefault( const comphelper::PropertyMapEntry* pEntry )  throw(::com::sun::star::beans::UnknownPropertyException );
     virtual ::com::sun::star::uno::Any _getPropertyDefault( const comphelper::PropertyMapEntry* pEntry ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException );
 
+    // allow setting of properties after construction
+    void setInfo( comphelper::PropertySetInfo* pInfo ) throw();
+
 public:
+    PropertySetHelper( );
     PropertySetHelper( comphelper::PropertySetInfo* pInfo ) throw();
     virtual ~PropertySetHelper() throw();
 
