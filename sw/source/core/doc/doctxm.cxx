@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctxm.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-30 08:20:42 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 11:46:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1718,7 +1718,11 @@ void SwTOXBaseSection::UpdateCntnt( SwTOXElement eType,
             const SwCntntFrm* pFrm = pCNd->GetFrm( &aPt, 0, FALSE );
             USHORT nSetLevel = USHRT_MAX;
 
-            if( IsLevelFromChapter() )
+            //#111105# tables of tables|illustrations|objects don't support hierarchies
+            if( IsLevelFromChapter() &&
+                    TOX_TABLES != SwTOXBase::GetType() &&
+                    TOX_ILLUSTRATIONS != SwTOXBase::GetType() &&
+                    TOX_OBJECTS != SwTOXBase::GetType() )
             {
                 const SwTxtNode* pOutlNd = ::lcl_FindChapterNode( *pCNd,
                                                         MAXLEVEL - 1 );
@@ -1773,7 +1777,7 @@ void SwTOXBaseSection::UpdateTable( const SwTxtNode* pOwnChapterNode )
                     ::lcl_FindChapterNode( *pCNd, 0 ) == pOwnChapterNode ))
                 {
                     SwTOXTable * pNew = new SwTOXTable( *pCNd );
-                    if( IsLevelFromChapter() )
+                    if( IsLevelFromChapter() && TOX_TABLES != SwTOXBase::GetType())
                     {
                         const SwTxtNode* pOutlNd =
                             ::lcl_FindChapterNode( *pCNd, MAXLEVEL - 1 );
