@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dcontact.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2003-12-05 11:27:15 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 15:27:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,6 +168,11 @@
 // #108784#
 #ifndef _XOUTX_HXX
 #include <svx/xoutx.hxx>
+#endif
+
+// OD 2004-02-11 #110582#-2
+#ifndef _FLYFRMS_HXX
+#include <flyfrms.hxx>
 #endif
 
 // OD 18.06.2003 #108784#
@@ -341,6 +346,141 @@ void SwContact::SetMaster( SdrObject* pNew )
     pMasterObj = pNew;
 }
 
+/** method to move drawing object to corresponding visible layer
+
+    OD 21.08.2003 #i18447#
+
+    @author OD
+*/
+void SwContact::MoveObjToVisibleLayer( SdrObject* _pDrawObj )
+{
+    _MoveObjToLayer( true, _pDrawObj );
+}
+
+/** method to move drawing object to corresponding invisible layer
+
+    OD 21.08.2003 #i18447#
+
+    @author OD
+*/
+void SwContact::MoveObjToInvisibleLayer( SdrObject* _pDrawObj )
+{
+    _MoveObjToLayer( false, _pDrawObj );
+}
+
+/** method to move object to visible/invisible layer
+
+    OD 21.08.2003 #i18447#
+    implementation for the public method <MoveObjToVisibleLayer(..)>
+    and <MoveObjToInvisibleLayer(..)>
+
+    @author OD
+*/
+void SwContact::_MoveObjToLayer( const bool _bToVisible,
+                                 SdrObject* _pDrawObj )
+{
+    if ( !_pDrawObj )
+    {
+        ASSERT( false, "SwDrawContact::_MoveObjToLayer(..) - no drawing object!" );
+        return;
+    }
+
+    if ( !pRegisteredIn )
+    {
+        ASSERT( false, "SwDrawContact::_MoveObjToLayer(..) - no drawing frame format!" );
+        return;
+    }
+
+    SwDoc* pWriterDoc = static_cast<SwFrmFmt*>(pRegisteredIn)->GetDoc();
+    if ( !pWriterDoc )
+    {
+        ASSERT( false, "SwDrawContact::_MoveObjToLayer(..) - no writer document!" );
+        return;
+    }
+
+    SdrLayerID nToHellLayerId =
+        _bToVisible ? pWriterDoc->GetHellId() : pWriterDoc->GetInvisibleHellId();
+    SdrLayerID nToHeavenLayerId =
+        _bToVisible ? pWriterDoc->GetHeavenId() : pWriterDoc->GetInvisibleHeavenId();
+    SdrLayerID nToControlLayerId =
+        _bToVisible ? pWriterDoc->GetControlsId() : pWriterDoc->GetInvisibleControlsId();
+    SdrLayerID nFromHellLayerId =
+        _bToVisible ? pWriterDoc->GetInvisibleHellId() : pWriterDoc->GetHellId();
+    SdrLayerID nFromHeavenLayerId =
+        _bToVisible ? pWriterDoc->GetInvisibleHeavenId() : pWriterDoc->GetHeavenId();
+    SdrLayerID nFromControlLayerId =
+        _bToVisible ? pWriterDoc->GetInvisibleControlsId() : pWriterDoc->GetControlsId();
+
+    if ( _pDrawObj->ISA( SdrObjGroup ) )
+    {
+        // determine layer for group object
+        {
+            // proposed layer of a group object is the hell layer
+            SdrLayerID nNewLayerId = nToHellLayerId;
+            if ( ::CheckControlLayer( _pDrawObj ) )
+            {
+                // it has to be the control layer, if one of the member
+                // is a control
+                nNewLayerId = nToControlLayerId;
+            }
+            else if ( _pDrawObj->GetLayer() == pWriterDoc->GetHeavenId() ||
+                      _pDrawObj->GetLayer() == pWriterDoc->GetInvisibleHeavenId() )
+            {
+                // it has to be the heaven layer, if method <GetLayer()> reveals
+                // a heaven layer
+                nNewLayerId = nToHeavenLayerId;
+            }
+            // set layer at group object, but do *not* broadcast and
+            // no propagation to the members.
+            // Thus, call <NbcSetLayer(..)> at super class
+            _pDrawObj->SdrObject::NbcSetLayer( nNewLayerId );
+        }
+
+        // call method recursively for group object members
+        const SdrObjList* pLst =
+                static_cast<SdrObjGroup*>(_pDrawObj)->GetSubList();
+        if ( pLst )
+        {
+            for ( USHORT i = 0; i < pLst->GetObjCount(); ++i )
+            {
+                _MoveObjToLayer( _bToVisible, pLst->GetObj( i ) );
+            }
+        }
+    }
+    else
+    {
+        const SdrLayerID nLayerIdOfObj = _pDrawObj->GetLayer();
+        if ( nLayerIdOfObj == nFromHellLayerId )
+        {
+            _pDrawObj->SetLayer( nToHellLayerId );
+        }
+        else if ( nLayerIdOfObj == nFromHeavenLayerId )
+        {
+            _pDrawObj->SetLayer( nToHeavenLayerId );
+        }
+        else if ( nLayerIdOfObj == nFromControlLayerId )
+        {
+            _pDrawObj->SetLayer( nToControlLayerId );
+        }
+    }
+}
+
+// -------------------------------------------------------------------------
+// OD 2004-01-16 #110582# - some virtual helper methods for information
+// about the object (Writer fly frame resp. drawing object)
+
+const SwNodeIndex& SwContact::GetCntntAnchorNode() const
+{
+    return GetCntntAnchor().nNode;
+}
+
+const SwIndex& SwContact::GetCntntAnchorIndex() const
+{
+    return GetCntntAnchor().nContent;
+}
+
+// -------------------------------------------------------------------------
+
 /*************************************************************************
 |*
 |*  SwFlyDrawContact, Ctor und Dtor
@@ -397,6 +537,83 @@ SwVirtFlyDrawObj *SwFlyDrawContact::CreateNewRef( SwFlyFrm *pFly )
 
 void SwFlyDrawContact::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
 {
+}
+
+// OD 2004-01-16 #110582# - override method to control Writer fly frames,
+// which are linked, and to assure that all objects anchored at/inside the
+// Writer fly frame are also made visible.
+void SwFlyDrawContact::MoveObjToVisibleLayer( SdrObject* _pDrawObj )
+{
+    ASSERT( _pDrawObj->ISA(SwVirtFlyDrawObj),
+            "<SwFlyDrawContact::MoveObjToVisibleLayer(..)> - wrong SdrObject type -> crash" );
+
+    if ( GetFmt()->GetDoc()->IsVisibleLayerId( _pDrawObj->GetLayer() ) )
+    {
+        // nothing to do
+        return;
+    }
+
+    SwFlyFrm* pFlyFrm = static_cast<SwVirtFlyDrawObj*>(_pDrawObj)->GetFlyFrm();
+
+    // OD 2004-02-12 #110582#-2 - insert columns, if necessary
+    pFlyFrm->InsertColumns();
+    pFlyFrm->Chain( pFlyFrm->GetAnchor() );
+    pFlyFrm->InsertCnt();
+    if ( pFlyFrm->GetDrawObjs() )
+    {
+        for ( sal_uInt8 i = 0; i < pFlyFrm->GetDrawObjs()->Count(); ++i)
+        {
+            SdrObject* pObj = (*pFlyFrm->GetDrawObjs())[i];
+            SwContact* pContact = static_cast<SwContact*>(pObj->GetUserCall());
+            pContact->MoveObjToVisibleLayer( pObj );
+        }
+    }
+
+    // make fly frame visible
+    SwContact::MoveObjToVisibleLayer( _pDrawObj );
+
+    // OD 2004-02-11 #110582#-2
+    if ( pFlyFrm->IsFlyInCntFrm() )
+    {
+        static_cast<SwFlyInCntFrm*>(pFlyFrm)->SetRefPoint( Point(), Point(), Point() );
+    }
+    else
+    {
+        pFlyFrm->Frm().Pos( Point() );
+    }
+    pFlyFrm->InvalidatePos();
+}
+
+// OD 2004-01-16 #110582# - override method to control Writer fly frames,
+// which are linked, and to assure that all objects anchored at/inside the
+// Writer fly frame are also made invisible.
+void SwFlyDrawContact::MoveObjToInvisibleLayer( SdrObject* _pDrawObj )
+{
+    ASSERT( _pDrawObj->ISA(SwVirtFlyDrawObj),
+            "<SwFlyDrawContact::MoveObjToInvisibleLayer(..)> - wrong SdrObject type -> crash" );
+
+    if ( !GetFmt()->GetDoc()->IsVisibleLayerId( _pDrawObj->GetLayer() ) )
+    {
+        // nothing to do
+        return;
+    }
+
+    SwFlyFrm* pFlyFrm = static_cast<SwVirtFlyDrawObj*>(_pDrawObj)->GetFlyFrm();
+
+    pFlyFrm->Unchain();
+    pFlyFrm->DeleteCnt();
+    if ( pFlyFrm->GetDrawObjs() )
+    {
+        for ( sal_uInt8 i = 0; i < pFlyFrm->GetDrawObjs()->Count(); ++i)
+        {
+            SdrObject* pObj = (*pFlyFrm->GetDrawObjs())[i];
+            SwContact* pContact = static_cast<SwContact*>(pObj->GetUserCall());
+            pContact->MoveObjToInvisibleLayer( pObj );
+        }
+    }
+
+    // make fly frame invisible
+    SwContact::MoveObjToInvisibleLayer( _pDrawObj );
 }
 
 /*************************************************************************
@@ -993,6 +1210,19 @@ void SwDrawContact::DisconnectObjFromLayout( SdrObject* _pDrawObj )
 |*  Letzte Aenderung    MA 25. Mar. 99
 |*
 |*************************************************************************/
+SwTxtFrm* lcl_GetFlyInCntntAnchor( SwTxtFrm* _pProposedAnchorFrm,
+                                   const xub_StrLen _nTxtOfs )
+{
+    SwTxtFrm* pAct = _pProposedAnchorFrm;
+    SwTxtFrm* pTmp;
+    do
+    {
+        pTmp = pAct;
+        pAct = pTmp->GetFollow();
+    }
+    while( pAct && _nTxtOfs >= pAct->GetOfst() );
+    return pTmp;
+}
 
 void SwDrawContact::ConnectToLayout( const SwFmtAnchor* pAnch )
 {
@@ -1113,6 +1343,16 @@ void SwDrawContact::ConnectToLayout( const SwFmtAnchor* pAnch )
                         if ( FLY_AT_FLY == pAnch->GetAnchorId() && !pFrm->IsFlyFrm() )
                         {
                             pFrm = pFrm->FindFlyFrm();
+                        }
+
+                        // OD 2004-01-20 #110582# - find correct follow for
+                        // as character anchored objects.
+                        if ( pAnch->GetAnchorId() == FLY_IN_CNTNT &&
+                             pFrm->IsTxtFrm() )
+                        {
+                            pFrm = lcl_GetFlyInCntntAnchor(
+                                        static_cast<SwTxtFrm*>(pFrm),
+                                        pAnch->GetCntntAnchor()->nContent.GetIndex() );
                         }
 
                         if ( !pAnchorFrmOfMaster )
@@ -1380,125 +1620,6 @@ void SwDrawContact::ChangeMasterObject( SdrObject *pNewMaster )
         ((SwFrmFmt*)pRegisteredIn)->GetDoc()->GetDrawModel()->GetPage(0)->
                                     RemoveObject( GetMaster()->GetOrdNum() );
     */
-}
-
-/** method to move drawing object to corresponding visible layer
-
-    OD 21.08.2003 #i18447#
-
-    @author OD
-*/
-void SwDrawContact::MoveObjToVisibleLayer( SdrObject* _pDrawObj )
-{
-    _MoveObjToLayer( true, _pDrawObj );
-}
-
-/** method to move drawing object to corresponding invisible layer
-
-    OD 21.08.2003 #i18447#
-
-    @author OD
-*/
-void SwDrawContact::MoveObjToInvisibleLayer( SdrObject* _pDrawObj )
-{
-    _MoveObjToLayer( false, _pDrawObj );
-}
-
-/** method to move object to visible/invisible layer
-
-    OD 21.08.2003 #i18447#
-    implementation for the public method <MoveObjToVisibleLayer(..)>
-    and <MoveObjToInvisibleLayer(..)>
-
-    @author OD
-*/
-void SwDrawContact::_MoveObjToLayer( const bool _bToVisible,
-                                     SdrObject* _pDrawObj )
-{
-    if ( !_pDrawObj )
-    {
-        ASSERT( false, "SwDrawContact::_MoveObjToLayer(..) - no drawing object!" );
-        return;
-    }
-
-    if ( !pRegisteredIn )
-    {
-        ASSERT( false, "SwDrawContact::_MoveObjToLayer(..) - no drawing frame format!" );
-        return;
-    }
-
-    SwDoc* pWriterDoc = static_cast<SwFrmFmt*>(pRegisteredIn)->GetDoc();
-    if ( !pWriterDoc )
-    {
-        ASSERT( false, "SwDrawContact::_MoveObjToLayer(..) - no writer document!" );
-        return;
-    }
-
-    SdrLayerID nToHellLayerId =
-        _bToVisible ? pWriterDoc->GetHellId() : pWriterDoc->GetInvisibleHellId();
-    SdrLayerID nToHeavenLayerId =
-        _bToVisible ? pWriterDoc->GetHeavenId() : pWriterDoc->GetInvisibleHeavenId();
-    SdrLayerID nToControlLayerId =
-        _bToVisible ? pWriterDoc->GetControlsId() : pWriterDoc->GetInvisibleControlsId();
-    SdrLayerID nFromHellLayerId =
-        _bToVisible ? pWriterDoc->GetInvisibleHellId() : pWriterDoc->GetHellId();
-    SdrLayerID nFromHeavenLayerId =
-        _bToVisible ? pWriterDoc->GetInvisibleHeavenId() : pWriterDoc->GetHeavenId();
-    SdrLayerID nFromControlLayerId =
-        _bToVisible ? pWriterDoc->GetInvisibleControlsId() : pWriterDoc->GetControlsId();
-
-    if ( _pDrawObj->ISA( SdrObjGroup ) )
-    {
-        // determine layer for group object
-        {
-            // proposed layer of a group object is the hell layer
-            SdrLayerID nNewLayerId = nToHellLayerId;
-            if ( ::CheckControlLayer( _pDrawObj ) )
-            {
-                // it has to be the control layer, if one of the member
-                // is a control
-                nNewLayerId = nToControlLayerId;
-            }
-            else if ( _pDrawObj->GetLayer() == pWriterDoc->GetHeavenId() ||
-                      _pDrawObj->GetLayer() == pWriterDoc->GetInvisibleHeavenId() )
-            {
-                // it has to be the heaven layer, if method <GetLayer()> reveals
-                // a heaven layer
-                nNewLayerId = nToHeavenLayerId;
-            }
-            // set layer at group object, but do *not* broadcast and
-            // no propagation to the members.
-            // Thus, call <NbcSetLayer(..)> at super class
-            _pDrawObj->SdrObject::NbcSetLayer( nNewLayerId );
-        }
-
-        // call method recursively for group object members
-        const SdrObjList* pLst =
-                static_cast<SdrObjGroup*>(_pDrawObj)->GetSubList();
-        if ( pLst )
-        {
-            for ( USHORT i = 0; i < pLst->GetObjCount(); ++i )
-            {
-                _MoveObjToLayer( _bToVisible, pLst->GetObj( i ) );
-            }
-        }
-    }
-    else
-    {
-        const SdrLayerID nLayerIdOfObj = _pDrawObj->GetLayer();
-        if ( nLayerIdOfObj == nFromHellLayerId )
-        {
-            _pDrawObj->SetLayer( nToHellLayerId );
-        }
-        else if ( nLayerIdOfObj == nFromHeavenLayerId )
-        {
-            _pDrawObj->SetLayer( nToHeavenLayerId );
-        }
-        else if ( nLayerIdOfObj == nFromControlLayerId )
-        {
-            _pDrawObj->SetLayer( nToControlLayerId );
-        }
-    }
 }
 
 // =============================================================================
