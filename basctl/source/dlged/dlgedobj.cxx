@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgedobj.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 14:22:40 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 11:17:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -833,17 +833,17 @@ void DlgEdObj::operator= (const SdrObject& rObj)
 
 //----------------------------------------------------------------------------
 
-void DlgEdObj::WriteData(SvStream& rOut) const  // not working yet
-{
-    SdrUnoObj::WriteData(rOut);
-}
+//BFS01void DlgEdObj::WriteData(SvStream& rOut) const   // not working yet
+//BFS01{
+//BFS01 SdrUnoObj::WriteData(rOut);
+//BFS01}
 
 //----------------------------------------------------------------------------
 
-void DlgEdObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn) // not working yet
-{
-    SdrUnoObj::ReadData(rHead,rIn);
-}
+//BFS01void DlgEdObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)  // not working yet
+//BFS01{
+//BFS01 SdrUnoObj::ReadData(rHead,rIn);
+//BFS01}
 
 //----------------------------------------------------------------------------
 
