@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scerrors.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 20:55:39 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 06:44:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,7 @@ Resource RID_ERRHDLSC
         Text[ turkish ] = "Dosya ile baðlantý oluþturulamadý.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "No se pudo establecer conexión con el archivo.";
+        Text[ finnish ] = "Tiedostoon yhdistäminen ei ole mahdollista.";
     };
     String SCERR_IMPORT_CURSOR & SH_MAX
     {
@@ -120,6 +121,7 @@ Resource RID_ERRHDLSC
         Text[ turkish ] = "Dosya formatý okunamadý.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "No se pudo leer el formato del archivo.";
+        Text[ finnish ] = "Tiedostomuotoa ei voitu lukea.";
     };
     String SCERR_IMPORT_OPEN & SH_MAX
     {
@@ -146,6 +148,7 @@ Resource RID_ERRHDLSC
         Text[ turkish ] = "Dosya açýlamadý.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "No se pudo abrir el archivo.";
+        Text[ finnish ] = "Tiedostoa ei voitu avata.";
     };
     String SCERR_IMPORT_UNKNOWN & SH_MAX
     {
@@ -171,6 +174,7 @@ Resource RID_ERRHDLSC
         Text[ turkish ] = "Bilnmeyen hata oluþtu.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Ha ocurrido un error desconocido.";
+        Text[ finnish ] = "Ilmeni tuntematon virhe.";
     };
     String SCERR_IMPORT_OUTOFMEM & SH_MAX
     {
@@ -196,6 +200,7 @@ Resource RID_ERRHDLSC
         Text[ turkish ] = "Ýçe aktarma iþleminde bellek yetersiz.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Memoria insuficiente al importar.";
+        Text[ finnish ] = "Muisti ei riitä viemiseen.";
     };
     String SCERR_IMPORT_UNKNOWN_WK & SH_MAX
     {
@@ -221,6 +226,7 @@ Resource RID_ERRHDLSC
         Text[ turkish ] = "Bilinmeyen Lotus-123 dosya formatý.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Formato del archivo Lotus 123 desconocido.";
+        Text[ finnish ] = "Tuntematon Lotus1-2-3-tiedostomuoto.";
     };
     String SCERR_IMPORT_FORMAT & SH_MAX
     {
@@ -246,6 +252,7 @@ Resource RID_ERRHDLSC
         Text[ turkish ] = "Ýçe aktarma iþleminde dosya yapýsýnda hata.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Error en la estructura del archivo al importar.";
+        Text[ finnish ] = "Virhe tiedostorakenteessa tietoja tuotaessa.";
     };
     String SCERR_IMPORT_NI & SH_MAX
     {
@@ -272,6 +279,7 @@ Resource RID_ERRHDLSC
         Text[ korean ] = "ÀÌ ÆÄÀÏ À¯Çü¿¡ ¸Â´Â ÇÊÅÍ°¡ ¾ø½À´Ï´Ù.";
         Text[ turkish ] = "Bu dosya tipi için filtre mevcut deðil.";
         Text[ catalan ] = "Para este tipo de archivo no hay ningún filtro implementado.";
+        Text[ finnish ] = "Tälle tiedostotyypille ei ole suodatinta.";
     };
     String SCERR_IMPORT_UNKNOWN_BIFF & SH_MAX
     {
@@ -298,6 +306,7 @@ Resource RID_ERRHDLSC
         Text[ turkish ] = "Desteklenmeyen ya da bilinmeyen Excel dosya formatý.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Formato del archivo Excel no soportado o desconocido.";
+        Text[ finnish ] = "Tuntematon tai tukematon Excel-tiedostomuoto.";
     };
     String SCERR_IMPORT_NI_BIFF & SH_MAX
     {
@@ -323,6 +332,7 @@ Resource RID_ERRHDLSC
         Text[ turkish ] = "Henüz kullanýlmayan Excel dosya formatý.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Formato del archivo Excel aún no implementado.";
+        Text[ finnish ] = "Excel-tiedostomuotoa ei ole vielä otettu käyttöön.";
     };
     String SCERR_IMPORT_FILEPASSWD & SH_MAX
     {
@@ -349,6 +359,7 @@ Resource RID_ERRHDLSC
         Text[ turkish ] = "Dosya þifre ile korunuyor.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "El archivo está protegido con una palabra clave.";
+        Text[ finnish ] = "Tämä tiedosto on suojattu salasanalla.";
     };
     String SCERR_IMPORT_INTERNAL & SH_MAX
     {
@@ -374,6 +385,7 @@ Resource RID_ERRHDLSC
         Text[ turkish ] = "Ýç içe aktarma hatasý";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Error de importación interno.";
+        Text[ finnish ] = "Sisäinen tuontivirhe";
     };
     String SCERR_IMPORT_8K_LIMIT & SH_MAX
     {
@@ -400,6 +412,7 @@ Resource RID_ERRHDLSC
         Text[ turkish ] = "Dosya, 8192 satýrý altýnda veri bulunduðu okununamýyor.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "El archivo contiene datos por debajo de la fila 8192, por lo que no puede ser leído.";
+        Text[ finnish ] = "Tässä tiedostossa on tietoja rivin 8192 jälkeen, joten tiedostoa ei voida lukea.";
     };
      // Export ----------------------------------------------------
     String SCERR_EXPORT_CONNECT & SH_MAX
@@ -426,6 +439,7 @@ Resource RID_ERRHDLSC
         Text[ turkish ] = "Dosya ile baðlantý oluþturulamadý.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "No se pudo establecer conexión con el archivo.";
+        Text[ finnish ] = "Tiedostoon ei voitu muodostaa yhteyttä.";
     };
     String SCERR_EXPORT_CURSOR & SH_MAX
     {
@@ -451,6 +465,7 @@ Resource RID_ERRHDLSC
         Text[ turkish ] = "Dosya formatý yazýlamadý.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "No se pudo guardar el formato del archivo.";
+        Text[ finnish ] = "Tiedostomuotoa ei voitu kirjoittaa.";
     };
     String SCERR_EXPORT_DATA & SH_MAX
     {
@@ -476,6 +491,7 @@ Resource RID_ERRHDLSC
         Text[ turkish ] = "Veriler yazýlamadý.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "No se pudieron guardar los datos.";
+        Text[ finnish ] = "Tietoja ei voitu kirjoittaa.";
     };
      //------------------------------------------------------------
      // WARNINGS ---------------------------------------------------
@@ -504,6 +520,7 @@ Resource RID_ERRHDLSC
         Text[ turkish ] = "Yalnýzca yürürlükteki tablo kaydedildi.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Solo se ha guardado la hoja actual.";
+        Text[ finnish ] = "Vain aktiivinen lomake tallennettiin.";
     };
     String SCWARN_IMPORT_RANGE_OVERFLOW & SH_MAX
     {
@@ -530,6 +547,7 @@ Resource RID_ERRHDLSC
         Text[ turkish ] = "Azami satýr sayýsý aþýldý. Fazla satýrlar içe aktarýlmadý!";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Se ha excedido la cantidad máxima de filas. ¡Las filas adicionales no se importaron!";
+        Text[ finnish ] = "Rivien enimmäismäärä ylittyi. Ylimääräisiä rivejä ei viety.";
     };
     String SCWARN_IMPORT_OPEN_FM3 & SH_MAX
     {
@@ -556,6 +574,7 @@ Resource RID_ERRHDLSC
         Text[ turkish ] = "Ýlgili FM3 dosyasý açlamadý.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "No se pudo abrir el archivo correspondiente FM3.";
+        Text[ finnish ] = "Vastaavaa FM3-tiedostoa ei voitu avata.";
     };
     String SCWARN_IMPORT_WRONG_FM3 & SH_MAX
     {
@@ -582,6 +601,7 @@ Resource RID_ERRHDLSC
         Text[ turkish ] = "Ýlgili FM3 dosyasýnýn dosya yapýsýnda hata.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Error en la estructura del archivo FM3 correspondiente.";
+        Text[ finnish ] = "Virhe tiedostorakenteessa tai vastaavassa FM3-tiedostossa.";
     };
     String SCWARN_CORE_HARD_RECALC & SH_MAX
     {
@@ -608,6 +628,7 @@ Resource RID_ERRHDLSC
         Text[ turkish ] = "Belge, otomatik hesaplama için fazla karmaþýk. Yeniden hesaplatmak için F9 tuþuna basýn.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Documento demasiado complejo para el cálculo automático. Pulse F9 para volver a calcular.";
+        Text[ finnish ] = "Tiedosto on liian monimutkainen automaattista laskentaa varten. Laske tiedot uudelleen painamalla F9.";
     };
     String SCWARN_EXPORT_MAXROW & SH_MAX
     {
@@ -634,6 +655,7 @@ Resource RID_ERRHDLSC
         Text[ turkish ] = "Belge, çýktý formatýnýn desteklediðinden çok satýr içeriyor.\nFazla gelen satýrlar kaydedilmedi.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "El documento contiene mas filas de las que soporta el formato seleccionado.\nLas filas adicionales no se guardaron.";
+        Text[ finnish ] = "Asiakirjassa on enemmän rivejä kuin mitä valittu muoto tukee.\nYlimääräisiä rivejä ei tallennettu.";
     };
     String SCWARN_IMPORT_INFOLOST & SH_MAX
     {
@@ -660,6 +682,7 @@ Resource RID_ERRHDLSC
         Text[ turkish ] = "Belgede, bu program sürümünde bilinmeyen bilgiler mevcut.\nBu bilgiler, yeniden kayýtta kaybolacak!";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "El documento contiene información desconocida para la versión de este programa.\n¡Al volver a guardar se perderá esta información!";
+        Text[ finnish ] = "Asiakirjassa on tietoja, joita tämä ohjelmaversio ei tunnista.\nJos asiakirja tallennetaan uudelleen, nämä tiedot häviävät.";
     };
     String SCWARN_EXPORT_DATALOST & SH_MAX
     {
@@ -685,5 +708,6 @@ Resource RID_ERRHDLSC
         Text[ turkish ] = "Tüm hücre içerikleri belirtilen formatta kaydedilemedi.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "No se pudieron guardar todos los contenidos de las celdas en el formato especificado.";
+        Text[ finnish ] = "Kaikkia solujen sisältöjä ei voitu tallentaa määritetyssä muodossa.";
     };
 };
