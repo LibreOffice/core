@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndole.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:04:08 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:16:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,8 @@ class SwOLEObj
 
     //Entweder Ref oder Name sind bekannt, wenn nur der Name bekannt ist, wird
     //dir Ref bei Anforderung durch GetOleRef() vom Sfx besorgt.
-    SvInPlaceObjectRef *pOLERef;    //new/delete, damit so2.hxx wegfaellt.
+    SvInPlaceObjectRef *pOLERef;
+    //new/delete, damit so2.hxx wegfaellt.
     String aName;
 
     SwOLEObj( const SwOLEObj& rObj );   //nicht erlaubt.
@@ -98,6 +99,8 @@ public:
     ~SwOLEObj();
 
     BOOL RemovedFromLRU();
+
+    String GetDescription();
 
 #ifndef _FESHVIEW_ONLY_INLINE_NEEDED
     SvInPlaceObjectRef GetOleRef();
@@ -117,7 +120,7 @@ struct SwPersistentOleData;
 class SwOLENode: public SwNoTxtNode
 {
     friend class SwNodes;
-    SwOLEObj aOLEObj;
+    mutable SwOLEObj aOLEObj;
     SwPersistentOleData* pSavedData;
     String sChartTblName;       // bei Chart Objecten: Name der ref. Tabelle
     BOOL   bOLESizeInvalid;     //Soll beim SwDoc::PrtOLENotify beruecksichtig
@@ -155,6 +158,8 @@ public:
 
     BOOL IsOLESizeInvalid() const   { return bOLESizeInvalid; }
     void SetOLESizeInvalid( BOOL b ){ bOLESizeInvalid = b; }
+
+    String GetDescription() const { return aOLEObj.GetDescription(); }
 
 #ifndef _FESHVIEW_ONLY_INLINE_NEEDED
     const String& GetChartTblName() const       { return sChartTblName; }
