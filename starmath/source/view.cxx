@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 16:10:04 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 09:50:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1672,7 +1672,7 @@ void SmViewShell::GetState(SfxItemSet &rSet)
 SmViewShell::SmViewShell(SfxViewFrame *pFrame, SfxViewShell *):
     SfxViewShell(pFrame, SFX_VIEW_DISABLE_ACCELS | SFX_VIEW_MAXIMIZE_FIRST | SFX_VIEW_HAS_PRINTOPTIONS | SFX_VIEW_CAN_PRINT),
     aGraphic(this),
-    aGraphicController(aGraphic, SID_GRAPHIC, pFrame->GetBindings())
+    aGraphicController(aGraphic, SID_GAPHIC_SM, pFrame->GetBindings())
 {
     pViewFrame = &pFrame->GetWindow();
 
