@@ -167,6 +167,7 @@ hedabu: ..\inc\toolbox.hxx %_DEST%\inc%_EXT%\vcl\toolbox.hxx
 hedabu: ..\inc\uniqid.hxx %_DEST%\inc%_EXT%\vcl\uniqid.hxx
 hedabu: ..\inc\unowrap.hxx %_DEST%\inc%_EXT%\vcl\unowrap.hxx
 hedabu: ..\inc\vclenum.hxx %_DEST%\inc%_EXT%\vcl\vclenum.hxx
+hedabu: ..\inc\vclevent.hxx %_DEST%\inc%_EXT%\vcl\vclevent.hxx
 hedabu: ..\inc\vector2d.hxx %_DEST%\inc%_EXT%\vcl\vector2d.hxx
 hedabu: ..\inc\virdev.hxx %_DEST%\inc%_EXT%\vcl\virdev.hxx
 hedabu: ..\inc\waitobj.hxx %_DEST%\inc%_EXT%\vcl\waitobj.hxx
