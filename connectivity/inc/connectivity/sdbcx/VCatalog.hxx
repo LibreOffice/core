@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VCatalog.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-18 08:50:43 $
+ *  last change: $Author: hr $ $Date: 2001-10-16 18:04:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,8 +148,8 @@ namespace connectivity
             // ::cppu::OComponentHelper
             virtual void SAL_CALL disposing(void);
             // XInterface
-            void SAL_CALL acquire() throw(::com::sun::star::uno::RuntimeException);
-            void SAL_CALL release() throw(::com::sun::star::uno::RuntimeException);
+            void SAL_CALL acquire() throw();
+            void SAL_CALL release() throw();
             // XTablesSupplier
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL getTables(  ) throw(::com::sun::star::uno::RuntimeException);
             // XViewsSupplier
