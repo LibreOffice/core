@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xfactory.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:50:32 $
+ *  last change: $Author: mav $ $Date: 2004-10-13 09:24:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -361,24 +361,19 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
         throw io::IOException(); // unexpected mimetype of the storage
 
     uno::Sequence< beans::PropertyValue > aTempMedDescr( lArguments );
-    ::rtl::OUString aFilterName = m_aConfigHelper.UpdateMediaDescriptorWithFilterName( aTempMedDescr, aObject );
-
-    uno::Reference< uno::XInterface > xResult;
-
-    if ( aFilterName.getLength() )
+    if ( nEntryConnectionMode == embed::EntryInitModes::MEDIA_DESCRIPTOR_INIT )
     {
+        ::rtl::OUString aFilterName = m_aConfigHelper.UpdateMediaDescriptorWithFilterName( aTempMedDescr, aObject );
+        if ( !aFilterName.getLength() )
+        // the object must be OOo embedded object, if it is not an exception must be thrown
+            throw io::IOException(); // TODO:
+    }
 
-        xResult = uno::Reference< uno::XInterface > (
+    uno::Reference< uno::XInterface > xResult = uno::Reference< uno::XInterface > (
                     static_cast< ::cppu::OWeakObject* > ( new OCommonEmbeddedObject(
                                                 m_xFactory,
                                                 aObject ) ),
                     uno::UNO_QUERY );
-    }
-    else
-    {
-        // the object must be OOo embedded object, if it is not an exception must be thrown
-        throw io::IOException(); // TODO:
-    }
 
     uno::Reference< embed::XEmbedPersist > xPersist( xResult, uno::UNO_QUERY );
     if ( xPersist.is() )
