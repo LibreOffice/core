@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-12 07:21:30 $
+ *  last change: $Author: kz $ $Date: 2001-04-26 19:18:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -327,7 +327,7 @@ ErrorBox MSG_SIGNAL
     Message[ chinese_simplified ] = "·¢ÉúÁËÒ»¸öÒâÍâµÄ³ÌĞò´íÎó£¡\nÄúÏÖÔÚ¿ÉÒÔ³¢ÊÔ±£´æËùÓĞ±»´ò¿ªµÄÎÄ¼ş£¡\nÄúÒªÔÚ¹Ø±ÕÕâ¸öÓ¦ÓÃ³ÌĞòÖ®Ç°±£´æËùÓĞµÄÎÄ¼şÂğ£¿";
     Message[ russian ] = "Ïğîèçîøëà íåîæèäàííàÿ îøèáêà ïğèëîæåíèÿ!\nÂû ìîæåòå ñåé÷àñ ïîïûòàòüñÿ\nñîõğàíèòü âñå îòêğûòûå äîêóìåíòû!\n\nÏîïûòàòüñÿ ñîõğàíèòü Âàøó ğàáîòó äî âûõîäà èç ïğèëîæåíèÿ?";
     Message[ polish ] = "Wyst¹pi³ nieoczekiwany b³¹d w programie!\nNa w³asn¹ odpowiedzialnoœæ mo¿esz spróbowaæ \nzapisaæ wszystkie otwarte dokumenty!\n\nCzy spróbowaæ zapisaæ twojê pracê przed zamkniêciem aplikacji?";
-    Message[ japanese ] = "—\\Šú‚µ‚È‚¢ÌßÛ¸Ş×Ñ ´×°‚ª”­¶‚µ‚Ü‚µ‚½B\nØ½¸‚Í‚ ‚è‚Ü‚·‚ª\nŠJ‚©‚ê‚Ä‚¢‚éÄŞ·­ÒİÄ‚Í‚·‚×‚Ä•Û‘¶‚µ‚Ä‚İ‚Ä‚­‚¾‚³‚¢B\n\n±ÌßØ¹°¼®İ‚ğI—¹‚·‚é‘O‚ÉAì‹Æ’†‚ÌÄŞ·­ÒİÄ‚ğ•Û‘¶‚µ‚Ä‚İ‚Ü‚·‚©H";
+    Message[ japanese ] = "—\\Šú‚µ‚È‚¢ÌßÛ¸Ş×Ñ ´×°‚ª”­¶‚µ‚Ü‚µ‚½B\nØ½¸‚Í‚ ‚è‚Ü‚·‚ª\nŠJ‚©‚ê‚Ä‚¢‚éÄŞ·­ÒİÄ‚ğ‚·‚×‚Ä•Û‘¶‚µ‚Ü‚·B\n\n±ÌßØ¹°¼®İ‚ğI—¹‚·‚é‘O‚ÉAì‹Æ’†‚ÌÄŞ·­ÒİÄ‚ğ•Û‘¶‚µ‚Ü‚·‚©B";
     Message[ chinese_traditional ] = "µo¥Í¤F¤@­Ó·N¥~ªºµ{¦¡¿ù»~¡I\n±z²{¦b¥i¥H¹Á¸Õ«O¦s©Ò¦³³Q¶}±ÒªºÀÉ®×¡I\n±z­n¦bÃö³¬³o­ÓÀ³¥Îµ{¦¡¤§«eÀx¦s©Ò¦³ªºÀÉ®×¡H";
     Message[ arabic ] = "ÍÏË ÎØÃ ÊØÈíŞ ÛíÑ ãÊæŞÚ!\níãßäß ÇáÂä¡ Úáì ãÓÆæáíÊß ÇáÎÇÕÉ¡ ãÍÇæáÉ ÍİÙ \nßá ÇáãÓÊäÏÇÊ ÇáãİÊæÍÉ!\n\nåá ÊÑíÏ ãÍÇæáÉ ÍİÙ Úãáß¡ ŞÈá ÅäåÇÁ ÇáÊØÈíŞ¿";
     Message[ dutch ] = "Er is een onverwachte programmafout opgetreden!\nU kunt nu op eigen risico proberen,\nalle geopende documenten op te slaan!\n\nWilt u proberen uw werk op te slaan voordat de applicatie wordt beëindigd?";
@@ -508,7 +508,7 @@ String STR_RECOVER_QUERY
     Text[ chinese_simplified ] = "ÄúÒªĞŞ¸´Õâ¸öÎÄ¼ş \"$1\" Âğ£¿";
     Text[ russian ] = "Âîññòàíîâèòü ôàéë \"$1\"?";
     Text[ polish ] = "Odtworzyæ plik \"$1\"?";
-    Text[ japanese ] = "Ì§²Ù\"$1\"‚ğ•œŒ³‚µ‚Ü‚·‚©H";
+    Text[ japanese ] = "Ì§²Ù \"$1\" ‚ğ•œŒ³‚µ‚Ü‚·‚©B";
     Text[ chinese_traditional ] = "±z­nÁÙ­ìÀÉ®× $1 ?";
     Text[ arabic ] = "åá ÊÑíÏ ÇÓÊÚÇÏÉ Çáãáİ \"$1\"¿";
     Text[ dutch ] = "Wilt u dat het bestand \"$1\" hersteld wordt?";
@@ -582,7 +582,7 @@ String GID_VIEW
     Text = "Ansicht" ;
     Text [ ENGLISH ] = "View" ;
     Text [ norwegian ] = "View" ;
-    Text [ italian ] = "Visualizza" ;
+    Text [ italian ] = "Vista" ;
     Text [ portuguese_brazilian ] = "Ver" ;
     Text [ portuguese ] = "Visualizar" ;
     Text [ finnish ] = "Näytä" ;
@@ -1143,7 +1143,7 @@ String GID_CONNECTOR
     Text[ chinese_simplified ] = "Á¬½Ó·û";
     Text[ russian ] = "Ñîåäèíèòåëüíàÿ ëîìàíàÿ ëèíèÿ";
     Text[ polish ] = "£¹cznik";
-    Text[ japanese ] = "ºÈ¸À°";
+    Text[ japanese ] = "ºÈ¸À";
     Text[ chinese_traditional ] = "³s±µ²Å";
     Text[ arabic ] = "ÇáÑÇÈØ";
     Text[ dutch ] = "Verbinding";
@@ -1197,7 +1197,7 @@ String GID_DRAWING
     Text[ chinese_simplified ] = "»æÍ¼";
     Text[ russian ] = "Ğèñîâàíèå";
     Text[ polish ] = "Rysowanie";
-    Text[ japanese ] = "•`‰æ";
+    Text[ japanese ] = "}Œ`•`‰æ";
     Text[ chinese_traditional ] = "Ã¸¹Ï";
     Text[ arabic ] = "ÑÓã";
     Text[ dutch ] = "Tekenen";
@@ -3487,7 +3487,7 @@ String STR_KEY_DATABASE_PATH
     Text[ chinese_simplified ] = "²éÑ¯Êı¾İ¿â";
     Text[ russian ] = "Çàïğîñû áàçû äàííûõ";
     Text[ polish ] = "Kwerendy bazy danych";
-    Text[ japanese ] = "ÃŞ°ÀÍŞ°½¸´Ø";
+    Text[ japanese ] = "ÃŞ°ÀÍŞ°½¸´Ø°";
     Text[ chinese_traditional ] = "¬d¸ß¸ê®Æ®w";
     Text[ arabic ] = "ÇÓÊÚáÇãÇÊ ŞÇÚÏÉ ÇáÈíÇäÇÊ";
     Text[ dutch ] = "Database query's";
