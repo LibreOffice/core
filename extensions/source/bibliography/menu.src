@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:16:45 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 20:27:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,7 +131,7 @@ Menu RID_MAIN_MENU
                 Text[ portuguese ] = "~Enviar como e-mail...";
                 Text[ russian ] = "Отправить как электронное письмо...";
                 Text[ dutch ] = "Als ~e-mail verzenden...";
-                Text[ french ] = "~Envoyer par e-mail...";
+                Text[ french ] = "En~voyer par e-mail...";
                 Text[ spanish ] = "Enviar como ~mensaje electrуnico...";
                 Text[ italian ] = "~Invia come eMail...";
                 Text[ danish ] = "Send som e-mail...";
