@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Column.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:55:46 $
+ *  last change: $Author: vg $ $Date: 2003-06-10 11:15:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,24 +146,18 @@ service Column
     // DocMerge from xml: property com::sun::star::sdbcx::Column::IsRowVersion
     /** indicates that the column contains some kind of time or date stamp
         used to track updates.
-
-        @optional
      */
     [optional, readonly, property] boolean IsRowVersion;
 
 
     // DocMerge from xml: property com::sun::star::sdbcx::Column::Description
     /** keeps a description of the object.
-
-        @optional
      */
     [optional, readonly, property] string Description;
 
 
     // DocMerge from xml: property com::sun::star::sdbcx::Column::DefaultValue
     /** keeps a default value for a column, is provided as string.
-
-        @optional
      */
     [optional, readonly, property] string DefaultValue;
 
