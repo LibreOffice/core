@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appdde.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:27:36 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 16:21:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -703,7 +703,6 @@ BOOL ImplDdeService::SysTopicExecute( const String* pStr )
 
 BOOL SfxDdeTriggerTopic_Impl::Execute( const String* pStr )
 {
-//    Application::GetAppWindow()->ToTop(TOTOP_RESTOREWHENMIN);
     return TRUE;
 }
 
