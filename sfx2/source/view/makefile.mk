@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 15:29:59 $
+#   last change: $Author: rt $ $Date: 2003-09-19 08:03:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,7 +83,6 @@ SRC1FILES = \
 SLOFILES =	\
         $(SLO)$/frmload.obj \
         $(SLO)$/framedlg.obj \
-        $(SLO)$/fsetvwsh.obj \
         $(SLO)$/frame.obj \
         $(SLO)$/urlframe.obj \
         $(SLO)$/ipenv.obj \
