@@ -2,9 +2,9 @@
  *
  *  $RCSfile: queryfilter.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-08 15:34:49 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 06:06:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,8 +97,8 @@
     };\
     StringList [ finnish ] = \
     {\
-        < "UND" ; Default ; > ; \
-        < "ODER" ; Default ; > ; \
+        < "AND" ; Default ; > ; \
+        < "OR" ; Default ; > ; \
     };\
     StringList [ danish ] = \
     {\
@@ -424,7 +424,7 @@ ModalDialog DLG_FILTERCRIT
         Text [ italian ] = "Criteri di ricerca" ;
         Text [ portuguese_brazilian ] = "Procurar critérios" ;
         Text [ portuguese ] = "Critérios" ;
-        Text [ finnish ] = "Hakuehdot" ;
+        Text [ finnish ] = "Ehto" ;
         Text [ danish ] = "Kriterier" ;
         Text [ french ] = "Critères" ;
         Text [ swedish ] = "Kriterier" ;
@@ -486,6 +486,7 @@ ModalDialog DLG_FILTERCRIT
         Text[ turkish ] = "- Yok -";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "- ninguno -";
+        Text[ finnish ] = "- ei mitään -";
     };
     String STR_COMPARE_OPERATORS
     {
@@ -511,6 +512,7 @@ ModalDialog DLG_FILTERCRIT
         Text[ turkish ] = "=;<>;<;<=;>;>=;gibi;gibi deðil;boþ;boþ deðil";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "=;<>;<;<=;>;>=;como;no como;vacío;no vacío";
+        Text[ finnish ] = "=;<>;<;<=;>;>=;kuten;ei kuten;tyhjä;ei tyhjä";
     };
     Text[ portuguese ] = "Filtro";
     Text[ russian ] = "Ôèëüòð";
@@ -519,7 +521,7 @@ ModalDialog DLG_FILTERCRIT
     Text[ french ] = "Filtre";
     Text[ spanish ] = "Filtro";
     Text[ italian ] = "Filtro";
-    Text[ danish ] = "Filter";
+    Text[ danish ] = "Filtre";
     Text[ swedish ] = "Filter";
     Text[ polish ] = "Filtr";
     Text[ portuguese_brazilian ] = "Filter";
@@ -530,4 +532,5 @@ ModalDialog DLG_FILTERCRIT
     Text[ turkish ] = "Filtre";
     Text[ arabic ] = "ÝáÊÑ";
     Text[ catalan ] = "Filtro";
+    Text[ finnish ] = "Suodatin";
 };
