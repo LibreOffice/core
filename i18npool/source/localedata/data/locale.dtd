@@ -18,6 +18,9 @@ PURPOSE:
         'unoid                     CDATA              #REQUIRED'>
 <!ENTITY % MessageID
         'msgid                     CDATA              #REQUIRED'>
+<!ENTITY % RefLocale
+        'ref                     CDATA              #REQUIRED'>
+<!-- The locale refered for the sub categories -->
 
 <!ELEMENT DefaultName  (#PCDATA)>
 
@@ -43,6 +46,11 @@ PURPOSE:
 <!ELEMENT Varient (#PCDATA) >
 
 <!ELEMENT LC_FORMAT (FormatElement+) >
+<!ATTLIST LC_FORMAT %RefLocale;>
+<!ATTLIST LC_FORMAT ReplaceFrom CDATA #REQUIRED>
+<!-- Define placeholder for currency code -->
+<!ATTLIST LC_FORMAT ReplaceTo CDATA #REQUIRED>
+<!-- Currency code to be used to replace the placeholder -->
 
 <!ELEMENT FormatElement   ( FormatCode, DefaultName?)>
 <!ATTLIST FormatElement    %MessageID;>
@@ -105,6 +113,7 @@ Can be 	FIXED_NUMBER ,FRACTION_NUMBER ,PERCENT_NUMBER  	SCIENTIFIC_NUMBER
 -->
 
 <!ELEMENT LC_CALENDAR (Calendar+ ) >
+<!ATTLIST LC_CALENDAR %RefLocale;>
 <!ELEMENT Calendar (DaysOfWeek, MonthsOfYear, Eras, StartDayOfWeek, MinimalDaysInFirstWeek) >
 <!ATTLIST Calendar %UNOModule;>
 <!-- the unoid of a gregorian calendar MUST be lower case "gregorian" -->
@@ -134,6 +143,7 @@ Can be 	FIXED_NUMBER ,FRACTION_NUMBER ,PERCENT_NUMBER  	SCIENTIFIC_NUMBER
 <!ELEMENT MinimalDaysInFirstWeek (#PCDATA)>
 
 <!ELEMENT LC_CURRENCY (Currency+ ) >
+<!ATTLIST LC_CURRENCY %RefLocale;>
 <!ELEMENT Currency (CurrencyID, CurrencySymbol, BankSymbol, CurrencyName, DecimalPlaces)>
 <!ATTLIST Currency  default CDATA #REQUIRED >
 <!ATTLIST Currency  usedInCompatibleFormatCodes CDATA #REQUIRED >
@@ -152,6 +162,7 @@ Can be 	FIXED_NUMBER ,FRACTION_NUMBER ,PERCENT_NUMBER  	SCIENTIFIC_NUMBER
 <!ELEMENT DecimalPlaces (#PCDATA)>
 
 <!ELEMENT LC_CTYPE (Separators, Markers, TimeAM, TimePM,  MeasurementSystem)>
+<!ATTLIST LC_CTYPE  %RefLocale;>
 <!ATTLIST LC_CTYPE  %UNOModule;>
 <!ELEMENT Separators (DateSeparator, ThousandSeparator, DecimalSeparator, TimeSeparator, Time100SecSeparator, ListSeparator, LongDateDayOfWeekSeparator, LongDateDaySeparator, LongDateMonthSeparator, LongDateYearSeparator)>
 <!ELEMENT Markers (QuotationStart, QuotationEnd, DoubleQuotationStart, DoubleQuotationEnd)>
@@ -174,6 +185,7 @@ Can be 	FIXED_NUMBER ,FRACTION_NUMBER ,PERCENT_NUMBER  	SCIENTIFIC_NUMBER
 <!ELEMENT LongDateYearSeparator (#PCDATA)>
 
 <!ELEMENT LC_COLLATION (Collator*, CollationOptions?)>
+<!ATTLIST LC_COLLATION %RefLocale;>
 <!ELEMENT Collator EMPTY>
 <!ATTLIST Collator  %UNOModule;>
 <!ATTLIST Collator  default CDATA #REQUIRED >
@@ -181,13 +193,16 @@ Can be 	FIXED_NUMBER ,FRACTION_NUMBER ,PERCENT_NUMBER  	SCIENTIFIC_NUMBER
 <!ELEMENT TransliterationModules (#PCDATA)>
 
 <!ELEMENT LC_SEARCH (SearchOptions?)>
+<!ATTLIST LC_SEARCH %RefLocale;>
 <!ELEMENT SearchOptions (TransliterationModules+)>
 
 <!ELEMENT LC_TRANSLITERATION (Transliteration+)>
+<!ATTLIST LC_TRANSLITERATION %RefLocale;>
 <!ELEMENT Transliteration EMPTY>
 <!ATTLIST Transliteration  %UNOModule;>
 
 <!ELEMENT LC_MISC (ForbiddenCharacters?, ReservedWords)>
+<!ATTLIST LC_MISC %RefLocale;>
 <!ELEMENT ForbiddenCharacters (ForbiddenLineBeginCharacters, ForbiddenLineEndCharacters)>
 <!ELEMENT ForbiddenLineBeginCharacters (#PCDATA)>
 <!ELEMENT ForbiddenLineEndCharacters (#PCDATA)>
@@ -219,6 +234,7 @@ the parameter NumType can have one of the following values:
 -->
 
 <!ELEMENT LC_NumberingLevel (NumberingLevel+ )>
+<!ATTLIST LC_NumberingLevel %RefLocale;>
 <!ELEMENT NumberingLevel EMPTY>
 <!ATTLIST NumberingLevel Prefix CDATA #REQUIRED>
 <!ATTLIST NumberingLevel NumType CDATA #REQUIRED>
@@ -226,6 +242,7 @@ the parameter NumType can have one of the following values:
 
 
 <!ELEMENT LC_OutLineNumberingLevel (OutlineStyle+ )>
+<!ATTLIST LC_OuterneNumberingLevel %RefLocale;>
 <!ELEMENT OutlineStyle (OutLineNumberingLevel+)>
 <!ELEMENT OutLineNumberingLevel EMPTY>
 <!ATTLIST OutLineNumberingLevel Prefix CDATA  #REQUIRED >
