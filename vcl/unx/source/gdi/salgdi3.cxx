@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: cp $ $Date: 2001-03-23 16:24:12 $
+ *  last change: $Author: cp $ $Date: 2001-03-30 08:34:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -448,7 +448,8 @@ SalDisplay::GetXlfdList()
             }
             // exclude fonts already managed by fontmanager, anyway keep
             // gui fonts: they are candidates for GetInterfaceFont ()
-            ((VirtualXlfd*)mpFallbackFactory)->FilterInterfaceFont (pXlfdList + i);
+            if (pXlfdList[i].Fonttype() == eTypeScalable)
+                ((VirtualXlfd*)mpFallbackFactory)->FilterInterfaceFont (pXlfdList + i);
             #if defined(USE_PSPRINT) && defined(USE_BUILTIN_RASTERIZER)
             if (FontLookup::InSet (aSet, pXlfdList[i]))
                 continue;
