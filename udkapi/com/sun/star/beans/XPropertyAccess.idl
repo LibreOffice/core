@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XPropertyAccess.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 12:43:42 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:24:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,7 @@ module com {  module sun {  module star {  module beans {
     <p>Another advantage of this method is that conflicts are avoided
     if property value restrictions depend on the value of other properties.</p>
  */
-interface XPropertyAccess: com::sun::star::uno::XInterface
+published interface XPropertyAccess: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
