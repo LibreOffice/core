@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormattedField.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2002-07-23 11:05:38 $
+ *  last change: $Author: oj $ $Date: 2002-09-26 11:19:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,7 +183,7 @@ protected:
     SvNumberFormatter*  m_pMyPrivateFormatter;
 
 public:
-    StandardFormatsSupplier(const Reference<XMultiServiceFactory>& _rxFactory);
+    StandardFormatsSupplier(const Reference<XMultiServiceFactory>& _rxFactory,LanguageType _eSysLanguage);
 
     operator Reference<XNumberFormatsSupplier> ();
     SvNumberFormatsSupplierObj::operator new;
@@ -195,9 +195,9 @@ protected:
 
 
 //------------------------------------------------------------------
-StandardFormatsSupplier::StandardFormatsSupplier(const Reference< XMultiServiceFactory > & _rxFactory)
+StandardFormatsSupplier::StandardFormatsSupplier(const Reference< XMultiServiceFactory > & _rxFactory,LanguageType _eSysLanguage)
     :SvNumberFormatsSupplierObj()
-    ,m_pMyPrivateFormatter(new SvNumberFormatter(_rxFactory, Application::GetSettings().GetUILanguage()))
+    ,m_pMyPrivateFormatter(new SvNumberFormatter(_rxFactory, _eSysLanguage))
 {
     SetNumberFormatter(m_pMyPrivateFormatter);
 }
@@ -718,8 +718,14 @@ Reference<XNumberFormatsSupplier>  OFormattedModel::calcFormFormatsSupplier() co
 //------------------------------------------------------------------------------
 Reference<XNumberFormatsSupplier>  OFormattedModel::calcDefaultFormatsSupplier() const
 {
-    if (!s_xDefaultFormatter.is())
-        s_xDefaultFormatter = *new StandardFormatsSupplier(m_xServiceFactory);
+    if ( !s_xDefaultFormatter.is() )
+    {
+        // get the Office's UI locale
+        const Locale& rSysLocale = SvtSysLocale().GetLocaleData().getLocale();
+        // translate
+        LanguageType eSysLanguage = ConvertIsoNamesToLanguage( rSysLocale.Language, rSysLocale.Country );
+        s_xDefaultFormatter = *new StandardFormatsSupplier(m_xServiceFactory,eSysLanguage);
+    }
     return s_xDefaultFormatter;
 }
 
