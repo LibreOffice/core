@@ -2,9 +2,9 @@
  *
  *  $RCSfile: preload.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-11-14 16:05:22 $
+ *  last change: $Author: os $ $Date: 2001-11-26 15:53:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,8 +113,8 @@ TabPage RID_TP_WELCOME
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 248 , 160 ) ;
         WordBreak = TRUE ;
-        Text = "Herzlich willkommen zu %PRODUCTNAME %PRODUCTVERSION OEM\n\nUm %PRODUCTNAME %PRODUCTVERSION OEM starten zu können, geben Sie bitte auf der dem Lizenztext folgenden Dialogseite Ihre Benutzerdaten ein.\n\nIn der Readme-Datei im StarOffice-Produktverzeichnis finden Sie wichtige Hinweise zum Programm. Bitte lesen Sie diese Hinweise aufmerksam durch.\n\nDes weiteren finden Sie ausführliche Informationen auf der Internetseite von Sun unter\n\nhttp://www.sun.com/staroffice.\n\nWir wünschen Ihnen viel Spaß und Erfolg mit Ihrem neuen StarOffice.\n\nIhr StarOffice Team.";
-        Text [ english_us ] = "Welcome to %PRODUCTNAME %PRODUCTVERSION OEM\n\nTo start %PRODUCTNAME %PRODUCTVERSION OEM, please enter your personal data in the dialog following the license text.\n\nImportant information is contained in the readme files which are located in the StarOffice product directory. Please read these files carefully.\n\nYou can also find detailed information on the Sun Internet pages at\n\nhttp://www.sun.com/staroffice.\n\nWe hope you enjoy working with StarOffice.";
+        Text = "Herzlich willkommen zu %PRODUCTNAME %PRODUCTVERSION OEM\n\nUm %PRODUCTNAME %PRODUCTVERSION OEM starten zu können, geben Sie bitte auf der dem Lizenztext folgenden Dialogseite Ihre Benutzerdaten ein.\n\nIn der Readme-Datei im %PRODUCTNAME-Produktverzeichnis finden Sie wichtige Hinweise zum Programm. Bitte lesen Sie diese Hinweise aufmerksam durch.\n\nDes weiteren finden Sie ausführliche Informationen auf der Internetseite von Sun unter\n\nhttp://www.sun.com/staroffice.\n\nWir wünschen Ihnen viel Spaß und Erfolg mit Ihrem neuen %PRODUCTNAME.\n\nIhr %PRODUCTNAME Team.";
+        Text [ english_us ] = "Welcome to %PRODUCTNAME %PRODUCTVERSION OEM\n\nTo start %PRODUCTNAME %PRODUCTVERSION OEM, please enter your personal data in the dialog following the license text.\n\nImportant information is contained in the readme files which are located in the %PRODUCTNAME product directory. Please read these files carefully.\n\nYou can also find detailed information on the Sun Internet pages at\n\nhttp://www.sun.com/staroffice.\n\nWe hope you enjoy working with %PRODUCTNAME.";
     };
 };
 TabPage RID_TP_LICENSE
