@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlocx.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-14 12:06:44 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:40:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -268,13 +268,14 @@ bool XclImpOcxConverter::CreateSdrUnoObj( XclImpEscherOle& rOcxCtrl )
                 if( xControlShape.is() )
                 {
                     Reference< XControlModel > xModel( xControlShape->getControl() );
-                    Reference< XPropertySet > xPropSet( xModel, UNO_QUERY );
-                    if( xModel.is() && xPropSet.is() )
+                    if( xModel.is() )
                     {
                         // set the spreadsheet links
                         ConvertSheetLinks( xModel, rOcxCtrl );
                         // set additional control properties
-                        rOcxCtrl.SetProperties( xPropSet );
+                        ScfPropertySet aPropSet( xModel );
+                        if( aPropSet.Is() )
+                            rOcxCtrl.WriteToPropertySet( aPropSet );
                     }
                 }
 
@@ -297,8 +298,7 @@ bool XclImpOcxConverter::CreateSdrUnoObj( XclImpEscherTbxCtrl& rTbxCtrl )
         Reference< XInterface > xInt( rxServiceFactory->createInstance( rTbxCtrl.GetServiceName() ) );
         Reference< XFormComponent > xFormComp( xInt, UNO_QUERY );
         Reference< XControlModel > xModel( xInt, UNO_QUERY );
-        Reference< XPropertySet > xPropSet( xInt, UNO_QUERY );
-        if( xFormComp.is() && xModel.is() && xPropSet.is() )
+        if( xFormComp.is() && xModel.is() )
         {
             // the shape to fill
             Reference< XShape > xShape;
@@ -315,7 +315,9 @@ bool XclImpOcxConverter::CreateSdrUnoObj( XclImpEscherTbxCtrl& rTbxCtrl )
                     // set the links to the spreadsheet
                     ConvertSheetLinks( xModel, rTbxCtrl );
                     // set the control properties
-                    rTbxCtrl.SetProperties( xPropSet );
+                    ScfPropertySet aPropSet( xModel );
+                    if( aPropSet.Is() )
+                        rTbxCtrl.WriteToPropertySet( aPropSet );
                     // try to attach a macro to the control
                     RegisterTbxMacro( rTbxCtrl );
 
