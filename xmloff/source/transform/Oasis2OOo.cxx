@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Oasis2OOo.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 12:27:33 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:10:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -376,7 +376,7 @@ static XMLTransformerActionInit aActionTable[] =
     ENTRY1( DRAW, CONTOUR_PATH, XML_ETACTION_PROC_ATTRS, OASIS_SHAPE_ACTIONS ),
     ENTRY1( DRAW, AREA_RECTANGLE, XML_ETACTION_PROC_ATTRS, OASIS_SHAPE_ACTIONS ),
     ENTRY1( DRAW, AREA_CIRCLE, XML_ETACTION_PROC_ATTRS, OASIS_SHAPE_ACTIONS ),
-    ENTRY1( DRAW, AREA_POLYGON, XML_ETACTION_PROC_ATTRS, OASIS_SHAPE_ACTIONS ),
+    ENTRY1( DRAW, AREA_POLYGON, XML_ETACTION_PROC_ATTRS, OASIS_DRAW_AREA_POLYGON_ACTIONS ),
     ENTRY1( DRAW, GLUE_POINT, XML_ETACTION_PROC_ATTRS, OASIS_SHAPE_ACTIONS ),
     ENTRY1( DR3D, SCENE, XML_ETACTION_PROC_ATTRS, OASIS_SHAPE_ACTIONS ),
     ENTRY1( DR3D, CUBE, XML_ETACTION_PROC_ATTRS, OASIS_SHAPE_ACTIONS ),
@@ -599,7 +599,22 @@ static XMLTransformerActionInit aActionTable[] =
 
     // process table::conversion-mode
     ENTRY1( TABLE, CONVERSION_MODE, XML_ETACTION_PROC_ATTRS,
-            OOO_DDE_CONV_MODE_ACTIONS ),
+            OASIS_DDE_CONV_MODE_ACTIONS ),
+
+    // process table::data-pilot-member
+    ENTRY1( TABLE, DATA_PILOT_MEMBER, XML_ETACTION_PROC_ATTRS,
+            OASIS_DATAPILOT_MEMBER_ACTIONS ),
+
+    // process table::data-pilot-level
+    ENTRY1( TABLE, DATA_PILOT_LEVEL, XML_ETACTION_PROC_ATTRS,
+            OASIS_DATAPILOT_LEVEL_ACTIONS ),
+
+    // process table::source-service
+    ENTRY1( TABLE, SOURCE_SERVICE, XML_ETACTION_PROC_ATTRS,
+            OASIS_SOURCE_SERVICE_ACTIONS ),
+
+    ENTRY1( TEXT, SECTION, XML_ETACTION_PROC_ATTRS,
+        OASIS_FORMULA_ACTIONS ), /* generated entry */
 
     // entries for date time change (#i36576#)
     ENTRY0( TEXT, DATE, OASIS_DATETIME_ACTIONS ),
@@ -632,6 +647,7 @@ static XMLTransformerActionInit aStyleActionTable[] =
                  XML_FAMILY_TYPE_LIST ),
     ENTRY1( STYLE, MASTER_PAGE_NAME, XML_ATACTION_DECODE_STYLE_NAME_REF,
                  XML_FAMILY_TYPE_MASTER_PAGE ),
+    ENTRY0( STYLE, DEFAULT_OUTLINE_LEVEL, XML_ATACTION_REMOVE ),
     ENTRY1( TEXT, STYLE_NAME, XML_ATACTION_DECODE_STYLE_NAME_REF,
                  XML_FAMILY_TYPE_TEXT ),    // list level styles
     ENTRY1( DRAW, NAME, XML_ATACTION_DECODE_STYLE_NAME,
@@ -797,6 +813,7 @@ static XMLTransformerActionInit aShapeActionTable[] =
     ENTRY1Q( DRAW, CONTROL, XML_ATACTION_RENAME,
                     XML_NAMESPACE_FORM, XML_ID ),
     ENTRY1( XLINK, HREF, XML_ATACTION_URI_OASIS, sal_True ),
+
     // BM: needed by chart:legend.  The legend needs also the draw actions.  As
     // there is no merge mechanism, all actions have to be in the same table
     ENTRY2( CHART, LEGEND_POSITION, XML_ATACTION_RENAME_ATTRIBUTE,
@@ -1063,11 +1080,35 @@ static XMLTransformerActionInit aFormulaActionTable[] =
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
-// OOO_DDE_CONV_MODE_ACTIONS
+// OASIS_DDE_CONV_MODE_ACTIONS
 static XMLTransformerActionInit aDDEConvModeActionTable[] =
 {
     ENTRY1Q( TABLE, KEEP_TEXT, XML_ATACTION_RENAME,
                         XML_NAMESPACE_TABLE, XML_LET_TEXT ),
+    ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
+};
+
+// OASIS_DATAPILOT_MEMBER_ACTIONS
+static XMLTransformerActionInit aDataPilotMemberActionTable[] =
+{
+    ENTRY1Q( TABLE, SHOW_DETAILS, XML_ATACTION_RENAME,
+                        XML_NAMESPACE_TABLE, XML_DISPLAY_DETAILS ),
+    ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
+};
+
+// OASIS_DATAPILOT_LEVEL_ACTIONS
+static XMLTransformerActionInit aDataPilotLevelActionTable[] =
+{
+    ENTRY1Q( TABLE, SHOW_EMPTY, XML_ATACTION_RENAME,
+                        XML_NAMESPACE_TABLE, XML_DISPLAY_EMPTY ),
+    ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
+};
+
+// OASIS_SOURCE_SERVICE_ACTIONS
+static XMLTransformerActionInit aSourceServiceActionTable[] =
+{
+    ENTRY1Q( TABLE, USER_NAME, XML_ATACTION_RENAME,
+                        XML_NAMESPACE_TABLE, XML_USERNAME ),
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
@@ -1090,6 +1131,14 @@ static XMLTransformerActionInit aFormActionTable[] =
                        XML_NAMESPACE_FORM, XML_SERVICE_NAME,
                     XML_NAMESPACE_OOO ),
     ENTRY1( XLINK, HREF, XML_ATACTION_URI_OASIS, sal_False ),
+    ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
+};
+
+// OASIS_DRAW_AREA_POLYGON_ACTIONS (to be added to OASIS_SHAPE_ACTIONS)
+static XMLTransformerActionInit aDrawAreaPolygonActionTable[] =
+{
+    ENTRY1Q( DRAW, POINTS, XML_ATACTION_RENAME,
+             XML_NAMESPACE_SVG, XML_POINTS ),
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
@@ -1810,10 +1859,6 @@ XMLTransformerActions *Oasis2OOoTransformer::GetUserDefinedActions(
                 m_aActions[OASIS_FORMULA_ACTIONS] =
                     new XMLTransformerActions( aFormulaActionTable );
                 break;
-            case OOO_DDE_CONV_MODE_ACTIONS:
-                m_aActions[OOO_DDE_CONV_MODE_ACTIONS] =
-                    new XMLTransformerActions( aDDEConvModeActionTable );
-                break;
             case OASIS_CHART_ACTIONS:
                 m_aActions[OASIS_CHART_ACTIONS] =
                     new XMLTransformerActions( aChartActionTable );
@@ -1821,6 +1866,28 @@ XMLTransformerActions *Oasis2OOoTransformer::GetUserDefinedActions(
             case OASIS_FORM_ACTIONS:
                 m_aActions[OASIS_FORM_ACTIONS] =
                     new XMLTransformerActions( aFormActionTable );
+                break;
+            case OASIS_DDE_CONV_MODE_ACTIONS:
+                m_aActions[OASIS_DDE_CONV_MODE_ACTIONS] =
+                    new XMLTransformerActions( aDDEConvModeActionTable );
+                break;
+            case OASIS_DATAPILOT_MEMBER_ACTIONS:
+                m_aActions[OASIS_DATAPILOT_MEMBER_ACTIONS] =
+                    new XMLTransformerActions( aDataPilotMemberActionTable );
+                break;
+            case OASIS_DATAPILOT_LEVEL_ACTIONS:
+                m_aActions[OASIS_DATAPILOT_LEVEL_ACTIONS] =
+                    new XMLTransformerActions( aDataPilotLevelActionTable );
+                break;
+            case OASIS_SOURCE_SERVICE_ACTIONS:
+                m_aActions[OASIS_SOURCE_SERVICE_ACTIONS] =
+                    new XMLTransformerActions( aSourceServiceActionTable );
+                break;
+            case OASIS_DRAW_AREA_POLYGON_ACTIONS:
+                m_aActions[OASIS_DRAW_AREA_POLYGON_ACTIONS] =
+                    new XMLTransformerActions( aShapeActionTable );
+                m_aActions[OASIS_DRAW_AREA_POLYGON_ACTIONS]
+                    ->Add( aDrawAreaPolygonActionTable );
                 break;
             case OASIS_SCRIPT_ACTIONS:
                 m_aActions[OASIS_SCRIPT_ACTIONS] =
@@ -1996,5 +2063,6 @@ Reference< XInterface > SAL_CALL Oasis2OOoTransformer_createInstance(
         const Reference< XMultiServiceFactory > & rSMgr)
     throw( Exception )
 {
+    OSL_TRACE("Creating Oasis2OOoTransformer");
     return (cppu::OWeakObject*)new Oasis2OOoTransformer;
 }
