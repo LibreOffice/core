@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tenchelp.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: th $ $Date: 2001-05-09 12:56:40 $
+ *  last change: $Author: th $ $Date: 2001-05-18 13:53:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@ typedef sal_uInt16 rtl_Script;
 /* -------- */
 
 #ifndef NULL
-#define NULL    ((void*)0
+#define NULL    ((void*)0)
 #endif
 
 #define RTL_UNICODE_START_HIGH_SURROGATES                   0xD800
