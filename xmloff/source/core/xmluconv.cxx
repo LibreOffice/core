@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmluconv.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: sab $ $Date: 2001-10-29 15:59:46 $
+ *  last change: $Author: er $ $Date: 2002-04-15 10:44:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1333,6 +1333,13 @@ void SvXMLUnitConverter::convertDateTime( ::rtl::OUStringBuffer& rBuffer,
         if( rDateTime.Seconds < 10 )
             aString += '0';
         aString += String::CreateFromInt32( rDateTime.Seconds );
+        if ( rDateTime.HundredthSeconds > 0)
+        {
+            aString += ',';
+            if (rDateTime.HundredthSeconds < 10)
+                aString += '0';
+            aString += String::CreateFromInt32( rDateTime.HundredthSeconds );
+        }
     }
 
     rBuffer.append( aString );
@@ -1429,7 +1436,7 @@ sal_Bool SvXMLUnitConverter::convertDateTime( com::sun::star::util::DateTime& rD
         rDateTime.Hours = (sal_uInt16)nHour;
         rDateTime.Minutes = (sal_uInt16)nMin;
         rDateTime.Seconds = (sal_uInt16)nSec;
-        rDateTime.HundredthSeconds = 0;
+        rDateTime.HundredthSeconds = sDoubleStr.toDouble() * 100;
     }
     return bSuccess;
 }
