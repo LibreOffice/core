@@ -2,9 +2,9 @@
 *
 *  $RCSfile: FieldColumn.java,v $
 *
-*  $Revision: 1.2 $
+*  $Revision: 1.3 $
 *
-*  last change: $Author: kz $ $Date: 2004-05-19 12:40:39 $
+*  last change: $Author: pjunck $ $Date: 2004-10-27 13:30:20 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -60,6 +60,8 @@
 
 package com.sun.star.wizards.db;
 
+import com.sun.star.container.XNameAccess;
+import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.sdbc.DataType;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Exception;
@@ -88,17 +90,26 @@ public class FieldColumn {
     protected int iLogicalFormatKey;
 
     public FieldColumn(CommandMetaData oCommandMetaData, String _DisplayFieldName) {
-        try {
-            // TODO: xColumns has to be retrieved from the respective table
-            setFieldNameAndCommandName(_DisplayFieldName);
-            FieldTitle = FieldName; // oCommandMetaData.getFieldTitle(FieldName);
-            //TODO check if the aliasname doesn't occur twice in query
-            AliasName = FieldName;
-            DBMetaData.CommandObject oTable = oCommandMetaData.getTableByName(CommandName);
-            oField = oTable.xColumns.getByName(FieldName);
-            ColIndex = JavaTools.FieldInList(oTable.xColumns.getElementNames(), FieldName) + 1;
-            iType = AnyConverter.toInt(Helper.getUnoPropertyValue(oField, "Type"));
+        // TODO: xColumns has to be retrieved from the respective table
+        setFieldNameAndCommandName(_DisplayFieldName);
+        if (CommandName == null){
+            DisplayFieldName = FieldName;
+            CommandName = oCommandMetaData.getCommand();
+        }
+        else
             DisplayFieldName = CommandName + "." + FieldName;
+        FieldTitle = FieldName; // oCommandMetaData.getFieldTitle(FieldName);
+        //TODO check if the aliasname doesn't occur twice in query
+        AliasName = FieldName;
+        DBMetaData.CommandObject oTable = oCommandMetaData.getTableByName(CommandName);
+        setFormatKeys(oCommandMetaData, oTable.xColumns);
+    }
+
+    private void setFormatKeys(CommandMetaData oCommandMetaData, XNameAccess _xColumns){
+        try {
+            oField = _xColumns.getByName(FieldName);
+            ColIndex = JavaTools.FieldInList(_xColumns.getElementNames(), FieldName) + 1;
+            iType = AnyConverter.toInt(Helper.getUnoPropertyValue(oField, "Type"));
             iDateFormatKey = oCommandMetaData.iDateFormatKey;
             iDateTimeFormatKey = oCommandMetaData.iDateTimeFormatKey;
             iNumberFormatKey = oCommandMetaData.iNumberFormatKey;
@@ -106,9 +117,16 @@ public class FieldColumn {
             iTimeFormatKey = oCommandMetaData.iTimeFormatKey;
             iLogicalFormatKey = oCommandMetaData.iLogicalFormatKey;
             DefaultValue = getTyperelatedFieldData();
-        } catch (Exception exception) {
-            exception.printStackTrace(System.out);
+        } catch (Exception e) {
+            e.printStackTrace(System.out);
         }
+    }
+
+    public FieldColumn(CommandMetaData oCommandMetaData, XNameAccess _xColumns, String _DisplayFieldName) {
+        FieldName = _DisplayFieldName;
+        DisplayFieldName = FieldName;
+        ColIndex = JavaTools.FieldInList(_xColumns.getElementNames(), FieldName) + 1;
+        setFormatKeys(oCommandMetaData, _xColumns);
     }
 
     public void setCommandName(String _CommandName) {

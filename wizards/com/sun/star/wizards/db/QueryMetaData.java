@@ -2,9 +2,9 @@
 *
 *  $RCSfile: QueryMetaData.java,v $
 *
-*  $Revision: 1.2 $
+*  $Revision: 1.3 $
 *
-*  last change: $Author: kz $ $Date: 2004-05-19 12:41:03 $
+*  last change: $Author: pjunck $ $Date: 2004-10-27 13:30:34 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -62,6 +62,8 @@ package com.sun.star.wizards.db;
 
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.beans.PropertyValue;
+import com.sun.star.container.XNameAccess;
+
 import java.util.*;
 import com.sun.star.lang.Locale;
 import com.sun.star.sdb.CommandType;
@@ -121,6 +123,20 @@ public class QueryMetaData extends CommandMetaData {
     void removeQueryField() {
 
     }
+
+
+    public void setFieldNames(String[] _FieldNames, XNameAccess _xColumns) {
+        int FieldCount = _FieldNames.length;
+        FieldNames = new String[FieldCount];
+        //      FieldTitles = new String[FieldCount];
+        QueryFields.removeAllElements();
+        for (int i = 0; i < FieldCount; i++) {
+            CurFieldColumn = new FieldColumn(this,_xColumns, _FieldNames[i] );
+            QueryFields.add(QueryFields.size(), CurFieldColumn);
+            FieldNames[i] = _FieldNames[i];
+        }
+    }
+
 
     public void setFieldNames(String[] _FieldNames) {
         int FieldCount = _FieldNames.length;
@@ -184,7 +200,7 @@ public class QueryMetaData extends CommandMetaData {
         return AllFieldNames;
     }
 
-    public void setAllIncludedFieldNames() {
+    public void setAllIncludedFieldNames(boolean _bAppendMode) {
         try {
             this.getIncludedCommandNames();
             if (FieldTitleSet == null)
@@ -193,7 +209,11 @@ public class QueryMetaData extends CommandMetaData {
                 CommandObject otable = getTableByName((String) CommandNames.elementAt(i));
                 String[] LocFieldNames = otable.xColumns.getElementNames();
                 for (int a = 0; a < LocFieldNames.length; a++) {
-                    String CurFieldDisplayString = ((String) CommandNames.elementAt(i)) + "." + LocFieldNames[a];
+                    String CurFieldDisplayString = "";
+                    if (_bAppendMode)
+                        CurFieldDisplayString = ((String) CommandNames.elementAt(i)) + "." + LocFieldNames[a];
+                    else
+                        CurFieldDisplayString = LocFieldNames[a];
                     if (!FieldTitleSet.containsKey(CurFieldDisplayString))
                         FieldTitleSet.put(CurFieldDisplayString, null);
                 }
