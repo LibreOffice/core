@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bitmap.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 16:56:27 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:50:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,22 @@ namespace cppcanvas
     class Bitmap : public virtual CanvasGraphic
     {
     public:
-        virtual BitmapCanvasSharedPtr                       getBitmapCanvas() const = 0;
+        /** Render to parent canvas, with global alpha.
+
+            This method renders the content to the parent canvas,
+            i.e. the canvas this object was constructed for.
+
+            @param nAlphaModulation
+            Global alpha value, with which each pixel alpha value gets
+            multiplied. For a normal, opaque bitmap, this will make
+            the bitmap appear transparent with the given alpha value
+            (value must be in the range [0,1]).
+
+            @return whether the rendering finished successfully.
+         */
+        virtual bool                        drawAlphaModulated( double nAlphaModulation ) const = 0;
+
+        virtual BitmapCanvasSharedPtr       getBitmapCanvas() const = 0;
 
         virtual ::com::sun::star::uno::Reference<
             ::drafts::com::sun::star::rendering::XBitmap >  getUNOBitmap() const = 0;
