@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mnumgr.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 17:38:08 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 18:25:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -913,8 +913,6 @@ void SfxMenuManager::LeavePopup()
 //--------------------------------------------------------------------
 
 // executes the function for the selected item
-extern Select_Impl( void*, void* ) ;
-
 IMPL_LINK( SfxMenuManager, Select, Menu *, pMenu )
 {
     DBG_MEMTEST();
