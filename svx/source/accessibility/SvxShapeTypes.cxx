@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SvxShapeTypes.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: af $ $Date: 2002-04-18 16:41:45 $
+ *  last change: $Author: af $ $Date: 2002-04-22 14:32:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,28 +86,29 @@ AccessibleShape* CreateSvxAccessibleShape (
 {
     switch (nId)
     {
-        case DRAWING_RECTANGLE:
-        case DRAWING_ELLIPSE:
+        case DRAWING_3D_CUBE:
+        case DRAWING_3D_EXTRUDE:
+        case DRAWING_3D_LATHE:
+        case DRAWING_3D_POLYGON:
+        case DRAWING_3D_SCENE:
+        case DRAWING_3D_SPHERE:
+        case DRAWING_CAPTION:
+        case DRAWING_CLOSED_BEZIER:
+        case DRAWING_CLOSED_FREEHAND:
         case DRAWING_CONNECTOR:
-        case DRAWING_MEASURE:
+        case DRAWING_ELLIPSE:
+        case DRAWING_GROUP:
         case DRAWING_LINE:
+        case DRAWING_MEASURE:
+        case DRAWING_OPEN_BEZIER:
+        case DRAWING_OPEN_FREEHAND:
+        case DRAWING_PAGE:
         case DRAWING_POLY_POLYGON:
         case DRAWING_POLY_LINE:
-        case DRAWING_OPEN_BEZIER:
-        case DRAWING_CLOSED_BEZIER:
-        case DRAWING_OPEN_FREEHAND:
-        case DRAWING_CLOSED_FREEHAND:
         case DRAWING_POLY_POLYGON_PATH:
         case DRAWING_POLY_LINE_PATH:
-        case DRAWING_GROUP:
+        case DRAWING_RECTANGLE:
         case DRAWING_TEXT:
-        case DRAWING_PAGE:
-        case DRAWING_3D_SCENE:
-        case DRAWING_3D_CUBE:
-        case DRAWING_3D_SPHERE:
-        case DRAWING_3D_LATHE:
-        case DRAWING_3D_EXTRUDE:
-        case DRAWING_3D_POLYGON:
             return new AccessibleShape (rxShape, rxParent, rShapeTreeInfo);
 
         case DRAWING_CONTROL:
@@ -116,11 +117,10 @@ AccessibleShape* CreateSvxAccessibleShape (
         case DRAWING_GRAPHIC_OBJECT:
             return new AccessibleGraphicShape (rxShape, rxParent, rShapeTreeInfo);
 
-        case DRAWING_OLE:
-        case DRAWING_CAPTION:
-        case DRAWING_FRAME:
-        case DRAWING_PLUGIN:
         case DRAWING_APPLET:
+        case DRAWING_FRAME:
+        case DRAWING_OLE:
+        case DRAWING_PLUGIN:
             return new AccessibleOLEShape (rxShape, rxParent, rShapeTreeInfo);
 
         default:

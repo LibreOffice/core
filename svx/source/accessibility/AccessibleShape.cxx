@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleShape.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: af $ $Date: 2002-04-18 16:33:36 $
+ *  last change: $Author: af $ $Date: 2002-04-22 14:32:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -669,72 +669,74 @@ void AccessibleShape::ViewForwarderChanged (ChangeType aChangeType,
     ShapeTypeId nShapeType = ShapeTypeHandler::Instance().GetTypeId (mxShape);
     switch (nShapeType)
     {
-        case DRAWING_RECTANGLE:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("RectangleShape"));
-            break;
-        case DRAWING_ELLIPSE:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("EllipseShape"));
-            break;
-        case DRAWING_CONNECTOR:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("ConnectorShape"));
-            break;
-        case DRAWING_MEASURE:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("MeasureShape"));
-            break;
-        case DRAWING_LINE:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("LineShape"));
-            break;
-        case DRAWING_POLY_POLYGON:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("PolyPolygonShape"));
-            break;
-        case DRAWING_POLY_LINE:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("PolyLineShape"));
-            break;
-        case DRAWING_OPEN_BEZIER:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("OpenBezierShape"));
-            break;
-        case DRAWING_CLOSED_BEZIER:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("ClosedBezierShape"));
-            break;
-        case DRAWING_OPEN_FREEHAND:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("OpenFreehandShape"));
-            break;
-        case DRAWING_CLOSED_FREEHAND:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("ClosedFreehandShape"));
-            break;
-        case DRAWING_POLY_POLYGON_PATH:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("PolyPolygonPathShape"));
-            break;
-        case DRAWING_POLY_LINE_PATH:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("PolyLinePathShape"));
-            break;
-        case DRAWING_GROUP:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("GroupShape"));
-            break;
-        case DRAWING_TEXT:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("TextShape"));
-            break;
-        case DRAWING_PAGE:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("PageShape"));
-            break;
-        case DRAWING_3D_SCENE:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("3DSceneShape"));
-            break;
         case DRAWING_3D_CUBE:
             sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("3DCubeShape"));
-            break;
-        case DRAWING_3D_SPHERE:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("3DSphereShape"));
-            break;
-        case DRAWING_3D_LATHE:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("3DLatheShape"));
             break;
         case DRAWING_3D_EXTRUDE:
             sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("3DExtrudeShape"));
             break;
+        case DRAWING_3D_LATHE:
+            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("3DLatheShape"));
+            break;
         case DRAWING_3D_POLYGON:
             sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("3DPolygonShape"));
             break;
+        case DRAWING_3D_SCENE:
+            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("3DSceneShape"));
+            break;
+        case DRAWING_3D_SPHERE:
+            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("3DSphereShape"));
+            break;
+
+        case DRAWING_CLOSED_BEZIER:
+            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("ClosedBezierShape"));
+            break;
+        case DRAWING_CLOSED_FREEHAND:
+            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("ClosedFreehandShape"));
+            break;
+        case DRAWING_CONNECTOR:
+            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("ConnectorShape"));
+            break;
+        case DRAWING_ELLIPSE:
+            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("EllipseShape"));
+            break;
+        case DRAWING_GROUP:
+            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("GroupShape"));
+            break;
+        case DRAWING_LINE:
+            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("LineShape"));
+            break;
+        case DRAWING_MEASURE:
+            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("MeasureShape"));
+            break;
+        case DRAWING_OPEN_BEZIER:
+            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("OpenBezierShape"));
+            break;
+        case DRAWING_OPEN_FREEHAND:
+            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("OpenFreehandShape"));
+            break;
+        case DRAWING_PAGE:
+            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("PageShape"));
+            break;
+        case DRAWING_POLY_LINE:
+            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("PolyLineShape"));
+            break;
+        case DRAWING_POLY_LINE_PATH:
+            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("PolyLinePathShape"));
+            break;
+        case DRAWING_POLY_POLYGON:
+            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("PolyPolygonShape"));
+            break;
+        case DRAWING_POLY_POLYGON_PATH:
+            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("PolyPolygonPathShape"));
+            break;
+        case DRAWING_RECTANGLE:
+            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("RectangleShape"));
+            break;
+        case DRAWING_TEXT:
+            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("TextShape"));
+            break;
+
         default:
             sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("UnknownAccessibleShape"));
             uno::Reference<drawing::XShapeDescriptor> xDescriptor (mxShape, uno::UNO_QUERY);
@@ -796,15 +798,45 @@ void AccessibleShape::ViewForwarderChanged (ChangeType aChangeType,
     ShapeTypeId nShapeType = ShapeTypeHandler::Instance().GetTypeId (mxShape);
     switch (nShapeType)
     {
-        case DRAWING_RECTANGLE:
-            aDG.Initialize (RID_SVXSTR_A11Y_ST_RECTANGLE);
+        case DRAWING_3D_CUBE:
+            aDG.Initialize (OUString::createFromAscii("3D Cube"));
+            aDG.Add3DProperties ();
+            break;
+        case DRAWING_3D_EXTRUDE:
+            aDG.Initialize (OUString::createFromAscii("3D Extrusion Object"));
+            aDG.Add3DProperties ();
+            break;
+        case DRAWING_3D_LATHE:
+            aDG.Initialize (OUString::createFromAscii("3D Lathe Object"));
+            aDG.Add3DProperties ();
+            break;
+        case DRAWING_3D_POLYGON:
+            aDG.Initialize (OUString::createFromAscii("3D Polygon"));
+            aDG.Add3DProperties ();
+            break;
+        case DRAWING_3D_SCENE:
+            aDG.Initialize (OUString::createFromAscii("3D Scene"));
+            break;
+        case DRAWING_3D_SPHERE:
+            aDG.Initialize (OUString::createFromAscii("3D Sphere"));
+            aDG.Add3DProperties ();
+            break;
+        case DRAWING_CAPTION:
+            aDG.Initialize (::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("CaptionShape")));
+            break;
+        case DRAWING_CLOSED_BEZIER:
+            aDG.Initialize (OUString::createFromAscii("Closed Bezier Curve"));
             aDG.AddLineProperties ();
             aDG.AddFillProperties ();
             break;
-        case DRAWING_ELLIPSE:
-            aDG.Initialize (RID_SVXSTR_A11Y_ST_ELLIPSE);
+        case DRAWING_CLOSED_FREEHAND:
+            aDG.Initialize (OUString::createFromAscii("Closed Freehand Curve"));
             aDG.AddLineProperties ();
             aDG.AddFillProperties ();
+            break;
+        case DRAWING_CONNECTOR:
+            aDG.Initialize (OUString::createFromAscii("Connector"));
+            aDG.AddLineProperties ();
             break;
         case DRAWING_CONTROL:
             aDG.Initialize (OUString::createFromAscii("Control"));
@@ -815,42 +847,43 @@ void AccessibleShape::ViewForwarderChanged (ChangeType aChangeType,
                 DescriptionGenerator::INTEGER,
                 OUString());
             break;
-        case DRAWING_CONNECTOR:
-            aDG.Initialize (OUString::createFromAscii("Connector"));
+        case DRAWING_ELLIPSE:
+            aDG.Initialize (RID_SVXSTR_A11Y_ST_ELLIPSE);
+            aDG.AddLineProperties ();
+            aDG.AddFillProperties ();
+            break;
+        case DRAWING_GROUP:
+            aDG.Initialize (OUString::createFromAscii("Group"));
+            break;
+        case DRAWING_LINE:
+            aDG.Initialize (OUString::createFromAscii("Line"));
             aDG.AddLineProperties ();
             break;
         case DRAWING_MEASURE:
             aDG.Initialize (OUString::createFromAscii("Dimension Line"));
             aDG.AddLineProperties ();
             break;
-        case DRAWING_LINE:
-            aDG.Initialize (OUString::createFromAscii("Line"));
-            aDG.AddLineProperties ();
-            break;
-        case DRAWING_POLY_POLYGON:
-            aDG.Initialize (OUString::createFromAscii("Poly Polygon"));
-            aDG.AddLineProperties ();
-            aDG.AddFillProperties ();
-            break;
-        case DRAWING_POLY_LINE:
-            aDG.Initialize (OUString::createFromAscii("Poly Line"));
-            aDG.AddLineProperties ();
-            break;
         case DRAWING_OPEN_BEZIER:
             aDG.Initialize (RID_SVXSTR_A11Y_ST_OPEN_BEZIER_CURVE);
             aDG.AddLineProperties ();
-            break;
-        case DRAWING_CLOSED_BEZIER:
-            aDG.Initialize (OUString::createFromAscii("Closed Bezier Curve"));
-            aDG.AddLineProperties ();
-            aDG.AddFillProperties ();
             break;
         case DRAWING_OPEN_FREEHAND:
             aDG.Initialize (OUString::createFromAscii("Open Freehand Curve"));
             aDG.AddLineProperties ();
             break;
-        case DRAWING_CLOSED_FREEHAND:
-            aDG.Initialize (OUString::createFromAscii("Closed Freehand Curve"));
+        case DRAWING_PAGE:
+            aDG.Initialize (OUString::createFromAscii("Page"));
+            break;
+        case DRAWING_POLY_LINE:
+            aDG.Initialize (OUString::createFromAscii("Poly Line"));
+            aDG.AddLineProperties ();
+            break;
+        case DRAWING_POLY_LINE_PATH:
+            aDG.Initialize (OUString::createFromAscii("Poly Line Path"));
+            aDG.AddLineProperties ();
+            break;
+        case DRAWING_POLY_POLYGON:
+            aDG.Initialize (OUString::createFromAscii("Poly Polygon"));
             aDG.AddLineProperties ();
             aDG.AddFillProperties ();
             break;
@@ -859,42 +892,14 @@ void AccessibleShape::ViewForwarderChanged (ChangeType aChangeType,
             aDG.AddLineProperties ();
             aDG.AddFillProperties ();
             break;
-        case DRAWING_POLY_LINE_PATH:
-            aDG.Initialize (OUString::createFromAscii("Poly Line Path"));
+        case DRAWING_RECTANGLE:
+            aDG.Initialize (RID_SVXSTR_A11Y_ST_RECTANGLE);
             aDG.AddLineProperties ();
-            break;
-        case DRAWING_GROUP:
-            aDG.Initialize (OUString::createFromAscii("Group"));
+            aDG.AddFillProperties ();
             break;
         case DRAWING_TEXT:
             aDG.Initialize (OUString::createFromAscii("Text"));
             aDG.AddTextProperties ();
-            break;
-        case DRAWING_PAGE:
-            aDG.Initialize (OUString::createFromAscii("Page"));
-            break;
-        case DRAWING_3D_SCENE:
-            aDG.Initialize (OUString::createFromAscii("3D Scene"));
-            break;
-        case DRAWING_3D_CUBE:
-            aDG.Initialize (OUString::createFromAscii("3D Cube"));
-            aDG.Add3DProperties ();
-            break;
-        case DRAWING_3D_SPHERE:
-            aDG.Initialize (OUString::createFromAscii("3D Sphere"));
-            aDG.Add3DProperties ();
-            break;
-        case DRAWING_3D_LATHE:
-            aDG.Initialize (OUString::createFromAscii("3D Lathe Object"));
-            aDG.Add3DProperties ();
-            break;
-        case DRAWING_3D_EXTRUDE:
-            aDG.Initialize (OUString::createFromAscii("3D Extrusion Object"));
-            aDG.Add3DProperties ();
-            break;
-        case DRAWING_3D_POLYGON:
-            aDG.Initialize (OUString::createFromAscii("3D Polygon"));
-            aDG.Add3DProperties ();
             break;
         default:
             aDG.Initialize (::rtl::OUString::createFromAscii (

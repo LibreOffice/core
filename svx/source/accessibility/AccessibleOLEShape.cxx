@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleOLEShape.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: af $ $Date: 2002-04-18 16:31:06 $
+ *  last change: $Author: af $ $Date: 2002-04-22 14:32:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,20 +213,17 @@ uno::Sequence<uno::Type> SAL_CALL
     ShapeTypeId nShapeType = ShapeTypeHandler::Instance().GetTypeId (mxShape);
     switch (nShapeType)
     {
-        case DRAWING_OLE:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("OLEShape"));
-            break;
-        case DRAWING_CAPTION:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("CaptionOLEShape"));
+        case DRAWING_APPLET:
+            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("AppletOLEShape"));
             break;
         case DRAWING_FRAME:
             sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("FrameOLEShape"));
             break;
+        case DRAWING_OLE:
+            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("OLEShape"));
+            break;
         case DRAWING_PLUGIN:
             sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("PluginOLEShape"));
-            break;
-        case DRAWING_APPLET:
-            sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("AppletOLEShape"));
             break;
 
         default:
