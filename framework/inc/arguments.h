@@ -2,9 +2,9 @@
  *
  *  $RCSfile: arguments.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: as $ $Date: 2001-11-08 11:56:29 $
+ *  last change: $Author: mav $ $Date: 2002-06-21 08:38:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,7 @@ namespace framework{
 #define ARGUMENTNAME_DEEPDETECTION                          DECLARE_ASCII("DeepDetection"       )   // bool
 #define ARGUMENTNAME_STATUSINDICATOR                        DECLARE_ASCII("StatusIndicator"     )   // Reference< XStatusIndicator >
 #define ARGUMENTNAME_INTERACTIONHANDLER                     DECLARE_ASCII("InteractionHandler"  )   // Reference< XInteractionHandler >
+#define ARGUMENTNAME_MACROEXECUTIONMODE                     DECLARE_ASCII("MacroExecutionMode"  )   // int16
 
 /*-************************************************************************************************************//**
     @short          define our argument mask
@@ -191,7 +192,8 @@ enum EArgument
     E_OUTPUTSTREAM          = ARGUMENTLAYER_2 | ARGUMENTFLAG_4  ,
     E_TYPENAME              = ARGUMENTLAYER_2 | ARGUMENTFLAG_5  ,
     E_STATUSINDICATOR       = ARGUMENTLAYER_2 | ARGUMENTFLAG_6  ,
-    E_INTERACTIONHANDLER    = ARGUMENTLAYER_2 | ARGUMENTFLAG_7
+    E_INTERACTIONHANDLER    = ARGUMENTLAYER_2 | ARGUMENTFLAG_7  ,
+    E_MACROEXECUTIONMODE    = ARGUMENTLAYER_2 | ARGUMENTFLAG_8
 };
 
 }       //  namespace framework

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatchwatcher.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: as $ $Date: 2002-05-24 11:18:14 $
+ *  last change: $Author: mav $ $Date: 2002-06-21 08:36:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,9 @@
 #ifndef _COM_SUN_STAR_UTIL_XURLTRANSFORMER_HPP_
 #include <com/sun/star/util/XURLTransformer.hpp>
 #endif
+#ifndef _COM_SUN_STAR_DOCUMENT_MACROEXECMODE_HPP_
+#include <com/sun/star/document/MacroExecMode.hpp>
+#endif
 
 #include <tools/urlobj.hxx>
 
@@ -192,7 +195,7 @@ void DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatchRequ
         const DispatchRequest&  aDispatchRequest = *p;
 
         // create parameter array
-        sal_Int32 nCount = 2;
+        sal_Int32 nCount = 3;
 
         // we need more properties for a print/print to request
         if ( aDispatchRequest.aRequestType == REQUEST_PRINT ||
@@ -218,6 +221,10 @@ void DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatchRequ
 
             aArgs[1].Name = OUString::createFromAscii( "InteractionHandler" );
             aArgs[1].Value <<= xInteraction;
+
+            sal_Int16 nMacroExecMode = ::com::sun::star::document::MacroExecMode::USE_CONFIG;
+            aArgs[2].Name = OUString::createFromAscii( "MacroExecutionMode" );
+            aArgs[2].Value <<= nMacroExecMode;
         }
 
         // mark request as user interaction from outside

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: as $ $Date: 2002-05-24 11:33:30 $
+ *  last change: $Author: mav $ $Date: 2002-06-21 08:42:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,6 +187,10 @@
 
 #ifndef _COM_SUN_STAR_UTIL_XCLOSEABLE_HPP_
 #include <com/sun/star/util/XCloseable.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_DOCUMENT_MACROEXECMODE_HPP_
+#include <com/sun/star/document/MacroExecMode.hpp>
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -915,6 +919,9 @@ css::uno::Reference< css::lang::XComponent > SAL_CALL Desktop::loadComponentFrom
         {
             aAnalyzer.setArgument( E_INTERACTIONHANDLER, static_cast< css::task::XInteractionHandler* >(this) );
         }
+
+        if( !aAnalyzer.existArgument( E_MACROEXECUTIONMODE ) )
+            aAnalyzer.setArgument( E_MACROEXECUTIONMODE, css::document::MacroExecMode::NEVER_EXECUTE );
 
         // Reset loader state to default, because we must yield for a valid result! See next WHILE condition.
         // And we must do it before we call dispatch!
