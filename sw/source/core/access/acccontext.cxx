@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccontext.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2002-10-02 08:47:36 $
+ *  last change: $Author: mib $ $Date: 2002-10-29 14:05:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -989,6 +989,18 @@ Any SAL_CALL SwAccessibleContext::getAccessibleKeyBinding()
     // There are no key bindings
     Any aAny;
     return aAny;
+}
+
+sal_Int32 SAL_CALL SwAccessibleContext::getForeground()
+        throw (::com::sun::star::uno::RuntimeException)
+{
+    return 0;
+}
+
+sal_Int32 SAL_CALL SwAccessibleContext::getBackground()
+        throw (::com::sun::star::uno::RuntimeException)
+{
+    return 0xffffff;
 }
 
 
