@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urltest.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sb $ $Date: 2001-01-18 12:57:08 $
+ *  last change: $Author: sb $ $Date: 2001-04-24 16:30:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -491,7 +491,7 @@ main()
         }
     }
 
-    if (true)
+    if (false)
     {
         rtl::OUString
             aParameters(rtl::OUString::createFromAscii("; CharSet=UTF-8  ; Blubber=Blob"));
@@ -519,6 +519,115 @@ main()
         {
             printf("BAD INetMIME::scanParameters()\n");
             bSuccess = false;
+        }
+    }
+
+    if (true)
+    {
+        {
+            INetURLObject aObj;
+            aObj.setFSysPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("a:")),
+                             INetURLObject::FSYS_DETECT);
+            if (!rtl::OUString(aObj.GetMainURL(INetURLObject::NO_DECODE)).
+                     equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("file:///a:")))
+            {
+                printf("BAD setFSysPath(\"a:\")\n");
+                bSuccess = false;
+            }
+        }
+        {
+            INetURLObject aObj;
+            aObj.setFSysPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                               "a:/")),
+                             INetURLObject::FSYS_DETECT);
+            if (!rtl::OUString(aObj.GetMainURL(INetURLObject::NO_DECODE)).
+                     equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("file:///a:/")))
+            {
+                printf("BAD setFSysPath(\"a:/\")\n");
+                bSuccess = false;
+            }
+        }
+        {
+            INetURLObject aObj;
+            aObj.setFSysPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                               "a:\\")),
+                             INetURLObject::FSYS_DETECT);
+            if (!rtl::OUString(aObj.GetMainURL(INetURLObject::NO_DECODE)).
+                     equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("file:///a:/")))
+            {
+                printf("BAD setFSysPath(\"a:\\\")\n");
+                bSuccess = false;
+            }
+        }
+
+        if (!rtl::OUString(INetURLObject("file:///a:").
+                               getFSysPath(INetURLObject::FSYS_DETECT)).
+                 equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("a:")))
+        {
+            printf("BAD getFSysPath(\"file:///a:\")\n");
+            bSuccess = false;
+        }
+        if (!rtl::OUString(INetURLObject("file:///a:/").
+                               getFSysPath(INetURLObject::FSYS_DETECT)).
+                 equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("a:\\")))
+        {
+            printf("BAD getFSysPath(\"file:///a:/\")\n");
+            bSuccess = false;
+        }
+
+        {
+            bool bWasAbsolute;
+            if (!rtl::OUString(INetURLObject(rtl::OUString(
+                                                 RTL_CONSTASCII_USTRINGPARAM(
+                                                     "file:///"))).
+                                   smartRel2Abs(
+                                           rtl::OUString(
+                                               RTL_CONSTASCII_USTRINGPARAM(
+                                                   "a:")),
+                                           bWasAbsolute).
+                                       GetMainURL(INetURLObject::NO_DECODE)).
+                     equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("file:///a:"))
+                || !bWasAbsolute)
+            {
+                printf("BAD smartRel2Abs(\"a:\")\n");
+                bSuccess = false;
+            }
+        }
+        {
+            bool bWasAbsolute;
+            if (!rtl::OUString(INetURLObject(rtl::OUString(
+                                                 RTL_CONSTASCII_USTRINGPARAM(
+                                                     "file:///"))).
+                                   smartRel2Abs(
+                                           rtl::OUString(
+                                               RTL_CONSTASCII_USTRINGPARAM(
+                                                   "a:/")),
+                                           bWasAbsolute).
+                                       GetMainURL(INetURLObject::NO_DECODE)).
+                     equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("file:///a:/"))
+                || !bWasAbsolute)
+            {
+                printf("BAD smartRel2Abs(\"a:/\")\n");
+                bSuccess = false;
+            }
+        }
+        {
+            bool bWasAbsolute;
+            if (!rtl::OUString(INetURLObject(rtl::OUString(
+                                                 RTL_CONSTASCII_USTRINGPARAM(
+                                                     "file:///"))).
+                                   smartRel2Abs(
+                                           rtl::OUString(
+                                               RTL_CONSTASCII_USTRINGPARAM(
+                                                   "a:\\")),
+                                           bWasAbsolute).
+                                       GetMainURL(INetURLObject::NO_DECODE)).
+                     equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("file:///a:/"))
+                || !bWasAbsolute)
+            {
+                printf("BAD smartRel2Abs(\"a:\\\")\n");
+                bSuccess = false;
+            }
         }
     }
 

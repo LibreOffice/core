@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urlobj.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: sb $ $Date: 2000-12-07 09:09:07 $
+ *  last change: $Author: sb $ $Date: 2001-04-24 16:28:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -298,7 +298,7 @@ inline sal_Int32 INetURLObject::SubString::set(UniString & rString,
 inline void INetURLObject::SubString::operator +=(sal_Int32 nDelta)
 {
     if (isPresent())
-        m_nBegin += nDelta;
+        m_nBegin = static_cast< xub_StrLen >(m_nBegin + nDelta);
 }
 
 //============================================================================
@@ -717,10 +717,10 @@ bool INetURLObject::setAbsURIRef(UniString const & rTheAbsURIRef,
             //    "\\" domain ["\" *UCS4]
             //
             // 8th Production (Unix-like DOS file; FSYS_DOS only):
-            //    ALPHA ":/" *UCS4
+            //    ALPHA ":" ["/" *UCS4]
             //
             // 9th Production (DOS file; FSYS_DOS only):
-            //    ALPHA ":\" *UCS4
+            //    ALPHA ":" ["\" *UCS4]
             //
             // For the 'non URL' file productions 6--9, the interpretation of
             // the input as a (degenerate) URI is turned off, i.e., escape
@@ -729,10 +729,10 @@ bool INetURLObject::setAbsURIRef(UniString const & rTheAbsURIRef,
 
             sal_Unicode const * p = pPos;
             if (eStyle & FSYS_DOS
-                && pEnd - p >= 3
+                && pEnd - p >= 2
                 && INetMIME::isAlpha(p[0])
                 && p[1] == ':'
-                && (p[2] == '/' || p[2] == '\\'))
+                && (pEnd - p == 2 || p[2] == '/' || p[2] == '\\'))
             {
                 m_eScheme = INET_PROT_FILE; // 8th, 9th
                 eMechanism = ENCODE_ALL;
@@ -962,21 +962,23 @@ bool INetURLObject::setAbsURIRef(UniString const & rTheAbsURIRef,
                     }
 
                     // 5th Production (Unix-like DOS; FSYS_DOS only):
-                    //    ALPHA ":/" *path ["#" *UCS4]
+                    //    ALPHA ":" ["/" *path] ["#" *UCS4]
                     //  becomes
-                    //    "file:///" ALPHA ":/" *path ["#" *UCS4]
+                    //    "file:///" ALPHA ":" ["/" *path] ["#" *UCS4]
                     //  replacing "\" by "/" within <*path>
                     //
                     // 6th Production (DOS; FSYS_DOS only):
-                    //    ALPHA ":\" *path ["#" *UCS4]
+                    //    ALPHA ":" ["\" *path] ["#" *UCS4]
                     //  becomes
-                    //    "file:///" ALPHA ":/" *path ["#" *UCS4]
+                    //    "file:///" ALPHA ":" ["/" *path] ["#" *UCS4]
                     //  replacing "\" by "/" within <*path>
                     if (eStyle & FSYS_DOS
-                        && pEnd - pPos >= 3
+                        && pEnd - pPos >= 2
                         && INetMIME::isAlpha(pPos[0])
                         && pPos[1] == ':'
-                        && (pPos[2] == '/' || pPos[2] == '\\'))
+                        && (pEnd - pPos == 2
+                            || pPos[2] == '/'
+                            || pPos[2] == '\\'))
                     {
                         nAltSegmentDelimiter = '\\';
                         bSkippedInitialSlash = true;
@@ -1322,18 +1324,18 @@ bool INetURLObject::convertRelToAbs(UniString const & rTheRelURIRef,
         //    "\\" domain ["\" *UCS4]
         //
         // 2nd Production (Unix-like DOS file; FSYS_DOS only):
-        //    ALPHA ":/" *UCS4
+        //    ALPHA ":" ["/" *UCS4]
         //
         // 3rd Production (DOS file; FSYS_DOS only):
-        //    ALPHA ":\" *UCS4
+        //    ALPHA ":" ["\" *UCS4]
         if (eStyle & FSYS_DOS)
         {
             bool bFSys = false;
             sal_Unicode const * q = p;
-            if (pEnd - q >= 3
+            if (pEnd - q >= 2
                 && INetMIME::isAlpha(q[0])
                 && q[1] == ':'
-                && (q[2] == '/' || q[2] == '\\'))
+                && (pEnd - q == 2 || q[2] == '/' || q[2] == '\\'))
                 bFSys = true; // 2nd, 3rd
             else if (pEnd - q >= 2 && q[0] == '\\' && q[1] == '\\')
             {
@@ -4124,10 +4126,12 @@ bool INetURLObject::setFSysPath(UniString const & rFSysPath, FSysStyle eStyle)
             }
 
             if (eStyle & FSYS_DOS
-                && pFSysEnd - pFSysBegin >= 3
+                && pFSysEnd - pFSysBegin >= 2
                 && INetMIME::isAlpha(pFSysBegin[0])
                 && pFSysBegin[1] == ':'
-                && (pFSysBegin[2] == '/' || pFSysBegin[2] == '\\'))
+                && (pFSysEnd - pFSysBegin == 2
+                    || pFSysBegin[2] == '/'
+                    || pFSysBegin[2] == '\\'))
             {
                 eStyle = FSYS_DOS; // Productions T4, T5
                 break;
@@ -4197,8 +4201,10 @@ bool INetURLObject::setFSysPath(UniString const & rFSysPath, FSysStyle eStyle)
             else
             {
                 aSynAbsURIRef += '/';
-                if (pFSysEnd - p >= 3 && INetMIME::isAlpha(p[0])
-                    && p[1] == ':' && (p[2] == '\\' || p[2] == '/'))
+                if (pFSysEnd - p >= 2
+                    && INetMIME::isAlpha(p[0])
+                    && p[1] == ':'
+                    && (pFSysEnd - p == 2 || p[2] == '\\' || p[2] == '/'))
                     nAltDelimiter = '/';
             }
             for (; p != pFSysEnd; ++p)
