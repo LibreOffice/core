@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: er $ $Date: 2001-02-06 14:47:10 $
+ *  last change: $Author: er $ $Date: 2001-02-06 16:24:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -337,7 +337,7 @@ void __EXPORT ScCellShell::GetClipState( SfxItemSet& rSet )
         USHORT nRow = GetViewData()->GetCurY();
         USHORT nTab = GetViewData()->GetTabNo();
         ScDocument* pDoc = GetViewData()->GetDocShell()->GetDocument();
-        if ( FALSE )//!pDoc->IsBlockEditable( nTab, nCol,nRow, nCol,nRow ))
+        if (!pDoc->IsBlockEditable( nTab, nCol,nRow, nCol,nRow ))
             bDisable = TRUE;
         ScMarkData& rMark = GetViewData()->GetMarkData();
         if (rMark.IsMultiMarked())
