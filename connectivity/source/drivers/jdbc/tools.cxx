@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tools.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-26 14:01:12 $
+ *  last change: $Author: oj $ $Date: 2002-05-10 11:37:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,7 +182,9 @@ java_util_Properties* connectivity::createStringPropertyArray(JNIEnv *pEnv,const
     {
         // this is a special property to find the jdbc driver
         if( pBegin->Name.compareToAscii("JavaDriverClass") &&
-            pBegin->Name.compareToAscii("CharSet"))
+            pBegin->Name.compareToAscii("CharSet") &&
+            pBegin->Name.compareToAscii("ParameterNameSubstitution") &&
+            pBegin->Name.compareToAscii("BooleanComparisonMode"))
         {
             ::rtl::OUString aStr;
             pBegin->Value >>= aStr;
