@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porlay.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fme $ $Date: 2001-10-26 14:36:59 $
+ *  last change: $Author: fme $ $Date: 2001-11-07 09:59:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -551,31 +551,38 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode )
     else
         nScript = pBreakIt->xBreak->getScriptType( rTxt, 0 );
 
-    USHORT nScriptRemove = aScriptChg.Count() - nCnt;
+    const USHORT nScriptRemove = aScriptChg.Count() - nCnt;
     aScriptChg.Remove( nCnt, nScriptRemove );
     aScriptType.Remove( nCnt, nScriptRemove );
 
-    // new data for arrays, we start from changed position - 1
-    if ( nChg )
-         nChg--;
     // we know now that script at position nChg is nScript
     // we have to start at position - 1 to make sure that appending a
     // character cannot cause the occurence of two successing character
     // groups of the same type in the array
+    if ( nChg )
+         nChg--;
 
     // WEAK can only occur at the beginning of a paragraph
-    // the first character not in the weak group determines the type of the
-    // weak characters
     if( WEAK == nScript )
     {
         ASSERT( 0 == nChg, "WEAK in ScriptInfo at non 0 position" );
-        xub_StrLen nWeakEnd =
-                (xub_StrLen)pBreakIt->xBreak->endOfScript( rTxt, nChg, nScript );
-        if( nWeakEnd < rTxt.Len() )
-            nScript = pBreakIt->xBreak->getScriptType( rTxt, nWeakEnd );
-        else
+
+//
+// IMPORTANT:
+//
+// This is not optimal. It would be better to consider the next occuring
+// script for weak characters at the beginning of a paragraph.
+// To make this work we would have to trigger a reformat from the
+// beginning of the weak characters
+
+//        xub_StrLen nWeakEnd =
+//                (xub_StrLen)pBreakIt->xBreak->endOfScript( rTxt, nChg, nScript );
+//        if( nWeakEnd < rTxt.Len() )
+//            nScript = pBreakIt->xBreak->getScriptType( rTxt, nWeakEnd );
+//        else
             // default to application language
-            nScript = GetScriptTypeOfLanguage( GetAppLanguage() );
+
+        nScript = GetScriptTypeOfLanguage( GetAppLanguage() );
     }
 
     USHORT nLastChg;
@@ -592,7 +599,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode )
     else
         nLastChg = nChg;
 
-    USHORT nCompRemove = aCompChg.Count() - nCntComp;
+    const USHORT nCompRemove = aCompChg.Count() - nCntComp;
     aCompChg.Remove( nCntComp, nCompRemove );
     aCompLen.Remove( nCntComp, nCompRemove );
     aCompType.Remove( nCntComp, nCompRemove );
@@ -617,10 +624,10 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode )
     {
         ASSERT( i18n::ScriptType::WEAK != nScript,
                 "Inserting WEAK into SwScriptInfo structure" );
+        ASSERT( STRING_LEN != nChg, "65K? Strange length of script section" );
+
         if ( nChg > rTxt.Len() )
             nChg = rTxt.Len();
-
-        ASSERT( STRING_LEN != nChg, "65K? Strange length of script section" );
 
         aScriptChg.Insert( nChg, nCnt );
         aScriptType.Insert( nScript, nCnt++ );
