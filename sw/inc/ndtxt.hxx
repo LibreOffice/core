@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtxt.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2003-09-05 16:35:07 $
+ *  last change: $Author: rt $ $Date: 2003-09-25 07:39:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -316,6 +316,9 @@ public:
     //Liefert fuer die Initalfunktion tatsaechliche Anzahl der Initialzeichen
     //bei nWishLen == 0 die des ersten Wortes
     USHORT GetDropLen( USHORT nWishLen) const;
+
+    // Passes back info needed on the dropcap dimensions
+    bool GetDropSize(int& rFontHeight, int& rDropHeight, int& rDropDescent) const;
 
     // Berechnung des Visible-Flags
     inline BOOL CalcVisibleFlag()
