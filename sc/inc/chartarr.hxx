@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chartarr.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2001-05-18 12:08:22 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:03:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,18 +82,18 @@ class ScChartPositionMap
             ScAddress**         ppData;
             ScAddress**         ppColHeader;
             ScAddress**         ppRowHeader;
-            ULONG               nCount;
-            USHORT              nColCount;
-            USHORT              nRowCount;
+            SCSIZE              nCount;
+            SCSIZE              nColCount;
+            SCSIZE              nRowCount;
 
-                                ScChartPositionMap( USHORT nChartCols, USHORT nChartRows,
-                                    USHORT nColAdd,     // Header-Spalten
-                                    USHORT nRowAdd,     // Header-Zeilen
+                                ScChartPositionMap( SCSIZE nChartCols, SCSIZE nChartRows,
+                                    SCSIZE nColAdd,     // Header-Spalten
+                                    SCSIZE nRowAdd,     // Header-Zeilen
                                     Table& rCols        // Table mit Col-Tables mit Address*
                                     );
                                 ~ScChartPositionMap();  //! deletes all ScAddress*
 
-            const ScAddress*    GetPosition( ULONG nIndex ) const
+            const ScAddress*    GetPosition( SCSIZE nIndex ) const
                                     {
                                         if ( nIndex < nCount )
                                             return ppData[ nIndex ];
@@ -106,37 +106,37 @@ class ScChartPositionMap
 
 public:
 
-            ULONG               GetCount() const { return nCount; }
-            USHORT              GetColCount() const { return nColCount; }
-            USHORT              GetRowCount() const { return nRowCount; }
+            SCSIZE              GetCount() const { return nCount; }
+            SCSIZE              GetColCount() const { return nColCount; }
+            SCSIZE              GetRowCount() const { return nRowCount; }
 
-            BOOL                IsValid( USHORT nCol, USHORT nRow ) const
+            BOOL                IsValid( SCSIZE nCol, SCSIZE nRow ) const
                                     { return nCol < nColCount && nRow < nRowCount; }
                                 // Daten spaltenweise
-            ULONG               GetIndex( USHORT nCol, USHORT nRow ) const
-                                    { return (ULONG) nCol * nRowCount + nRow; }
+            SCSIZE              GetIndex( SCSIZE nCol, SCSIZE nRow ) const
+                                    { return nCol * nRowCount + nRow; }
 
                                 //! kann NULL sein und damit "kein Wert"
-            const ScAddress*    GetPosition( USHORT nChartCol, USHORT nChartRow ) const
+            const ScAddress*    GetPosition( SCSIZE nChartCol, SCSIZE nChartRow ) const
                                     {
                                         if ( IsValid( nChartCol, nChartRow ) )
                                             return ppData[ GetIndex( nChartCol, nChartRow ) ];
                                         return NULL;
                                     }
-            const ScAddress*    GetColHeaderPosition( USHORT nChartCol ) const
+            const ScAddress*    GetColHeaderPosition( SCSIZE nChartCol ) const
                                     {
                                         if ( nChartCol < nColCount )
                                             return ppColHeader[ nChartCol ];
                                         return NULL;
                                     }
-            const ScAddress*    GetRowHeaderPosition( USHORT nChartRow ) const
+            const ScAddress*    GetRowHeaderPosition( SCSIZE nChartRow ) const
                                     {
                                         if ( nChartRow < nRowCount )
                                             return ppRowHeader[ nChartRow ];
                                         return NULL;
                                     }
-            ScRangeListRef      GetColRanges( USHORT nChartCol ) const;
-            ScRangeListRef      GetRowRanges( USHORT nChartRow ) const;
+            ScRangeListRef      GetColRanges( SCSIZE nChartCol ) const;
+            ScRangeListRef      GetRowRanges( SCSIZE nChartRow ) const;
 };
 
 
@@ -159,8 +159,8 @@ class ScChartArray : public DataObject              // nur noch Parameter-Struct
     ScDocument* pDocument;
     ScChartPositionMap* pPositionMap;
     ScChartGlue eGlue;
-    USHORT      nStartCol;
-    USHORT      nStartRow;
+    SCCOL       nStartCol;
+    SCROW       nStartRow;
     BOOL        bColHeaders;
     BOOL        bRowHeaders;
     BOOL        bDummyUpperLeft;
@@ -175,9 +175,9 @@ private:
     void        CreatePositionMap();
 
 public:
-    ScChartArray( ScDocument* pDoc, USHORT nTab,
-                    USHORT nStartCol, USHORT nStartRow,
-                    USHORT nEndCol, USHORT nEndRow,
+    ScChartArray( ScDocument* pDoc, SCTAB nTab,
+                    SCCOL nStartCol, SCROW nStartRow,
+                    SCCOL nEndCol, SCROW nEndRow,
                     const String& rChartName );
     ScChartArray( ScDocument* pDoc, const ScRangeListRef& rRangeList,
                     const String& rChartName );
