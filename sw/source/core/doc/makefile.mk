@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: obo $ $Date: 2004-11-16 10:22:13 $
+#   last change: $Author: rt $ $Date: 2005-03-29 14:37:50 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -59,7 +59,6 @@
 #
 #
 #*************************************************************************
-
 PRJ=..$/..$/..
 
 PRJNAME=sw
@@ -117,7 +116,8 @@ SLOFILES =	\
         $(SLO)$/tblrwcl.obj \
         $(SLO)$/visiturl.obj \
         $(SLO)$/htmltbl.obj \
-        $(SLO)$/docxforms.obj
+        $(SLO)$/docxforms.obj \
+        $(SLO)$/headerfooterhelper.obj
 
 EXCEPTIONSFILES = \
         $(SLO)$/doclay.obj
