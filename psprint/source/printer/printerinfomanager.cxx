@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printerinfomanager.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jbu $ $Date: 2001-05-22 09:03:19 $
+ *  last change: $Author: pl $ $Date: 2001-05-22 13:42:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,6 +228,7 @@ void PrinterInfoManager::initialize()
             break;
         }
     }
+    fillFontSubstitutions( m_aGlobalDefaults );
 
     // now collect all available printers
     nIndex = 0;
@@ -443,7 +444,37 @@ void PrinterInfoManager::initialize()
         }
     }
 
+    // set default printer
+    if( m_aPrinters.size() )
+    {
+        if( m_aPrinters.find( aDefaultPrinter ) == m_aPrinters.end() )
+            aDefaultPrinter = m_aPrinters.begin()->first;
+    }
+    else
+        aDefaultPrinter = OUString();
+    m_aDefaultPrinter = aDefaultPrinter;
+
     // add a default printer for every available print queue
+    // merge paper and font substitution from default printer,
+    // all else from global defaults
+    PrinterInfo aMergeInfo( m_aGlobalDefaults );
+    aMergeInfo.m_aDriverName    = String( RTL_CONSTASCII_USTRINGPARAM( "SGENPRT" ) );
+    aMergeInfo.m_aFeatures      = String( RTL_CONSTASCII_USTRINGPARAM( "autoqueue" ) );
+
+    if( m_aDefaultPrinter.getLength() )
+    {
+        PrinterInfo aDefaultInfo( getPrinterInfo( m_aDefaultPrinter ) );
+        aMergeInfo.m_bPerformFontSubstitution = aDefaultInfo.m_bPerformFontSubstitution;
+        fillFontSubstitutions( aMergeInfo );
+
+        const PPDKey* pDefKey           = aDefaultInfo.m_pParser->getKey( String( RTL_CONSTASCII_USTRINGPARAM( "PageSize" ) ) );
+        const PPDKey* pMergeKey         = aMergeInfo.m_pParser->getKey( String( RTL_CONSTASCII_USTRINGPARAM( "PageSize" ) ) );
+        const PPDValue* pDefValue       = aDefaultInfo.m_aContext.getValue( pDefKey );
+        const PPDValue* pMergeValue     = pMergeKey ? pMergeKey->getValue( pDefValue->m_aOption ) : NULL;
+        if( pMergeKey && pMergeValue )
+            aMergeInfo.m_aContext.setValue( pMergeKey, pMergeValue );
+    }
+
     getSystemPrintQueues();
     for( ::std::list< OUString >::iterator it = m_aSystemPrintQueues.begin(); it != m_aSystemPrintQueues.end(); ++it )
     {
@@ -460,12 +491,9 @@ void PrinterInfoManager::initialize()
 
         Printer aPrinter;
 
-        // initialize to global defaults
-        aPrinter.m_aInfo = m_aGlobalDefaults;
-        aPrinterName = aPrinterName;
-        fillFontSubstitutions( aPrinter.m_aInfo );
+        // initialize to merged defaults
+        aPrinter.m_aInfo = aMergeInfo;
         aPrinter.m_aInfo.m_aPrinterName     = aPrinterName;
-        aPrinter.m_aInfo.m_aDriverName      = String( RTL_CONSTASCII_USTRINGPARAM( "SGENPRT" ) );
         aPrinter.m_aInfo.m_aCommand         = aCmd;
         aPrinter.m_aInfo.m_aLocation        = *it;
         aPrinter.m_bModified                = false;
@@ -473,17 +501,6 @@ void PrinterInfoManager::initialize()
 
         m_aPrinters[ aPrinterName ] = aPrinter;
     }
-
-    // set default printer
-    if( m_aPrinters.size() )
-    {
-        if( m_aPrinters.find( aDefaultPrinter ) == m_aPrinters.end() )
-            aDefaultPrinter = m_aPrinters.begin()->first;
-    }
-    else
-        aDefaultPrinter = OUString();
-
-    m_aDefaultPrinter = aDefaultPrinter;
 }
 
 // -----------------------------------------------------------------
@@ -567,6 +584,18 @@ bool PrinterInfoManager::writePrinterConfig()
     {
         if( ! it->second.m_bModified )
             // printer was not changed, do nothing
+            continue;
+
+        // don't save autoqueue printers
+        sal_Int32 nIndex = 0;
+        bool bAutoQueue = false;
+        while( nIndex != -1 && ! bAutoQueue )
+        {
+            OUString aToken( it->second.m_aInfo.m_aFeatures.getToken( 0, ',', nIndex ) );
+            if( aToken.getLength() && aToken.compareToAscii( "autoqueue" ) == 0 )
+                bAutoQueue = true;
+        }
+        if( bAutoQueue )
             continue;
 
         if( it->second.m_aFile.getLength() )
@@ -661,6 +690,7 @@ bool PrinterInfoManager::addPrinter( const OUString& rPrinterName, const OUStrin
     if( m_aPrinters.find( rPrinterName ) == m_aPrinters.end() && ( pParser = PPDParser::getParser( rDriverName ) ) )
     {
         Printer aPrinter;
+        aPrinter.m_bModified                        = true;
         aPrinter.m_aInfo                            = m_aGlobalDefaults;
         aPrinter.m_aInfo.m_aDriverName              = rDriverName;
         aPrinter.m_aInfo.m_pParser                  = pParser;
@@ -714,10 +744,18 @@ bool PrinterInfoManager::removePrinter( const OUString& rPrinterName )
             {
                 Config aConfig( it->second.m_aFile );
                 aConfig.DeleteGroup( it->second.m_aGroup );
+                aConfig.Flush();
             }
         }
         if( bSuccess )
+        {
             m_aPrinters.erase( it );
+            // need this here because someone may call
+            // checkPrintersChanged after the removal
+            // but then other added printers were not flushed
+            // to disk, so they are discarded
+            writePrinterConfig();
+        }
     }
     return bSuccess;
 }

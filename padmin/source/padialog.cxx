@@ -2,9 +2,9 @@
  *
  *  $RCSfile: padialog.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-08 11:56:36 $
+ *  last change: $Author: pl $ $Date: 2001-05-22 13:43:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -635,11 +635,12 @@ void PADialog::RenameDevice()
         aInfo.m_aPrinterName = aPrinter;
         if( m_rPIManager.addPrinter( aPrinter, aInfo.m_aDriverName ) )
         {
+            bool bWasDefault = m_rPIManager.getDefaultPrinter() == aOldPrinter;
             m_aPrinters.push_back( aPrinter );
             if( m_rPIManager.removePrinter( aOldPrinter ) )
                 m_aPrinters.remove( aOldPrinter );
             m_rPIManager.changePrinterInfo( aPrinter, aInfo );
-            if( m_rPIManager.getDefaultPrinter() == aOldPrinter )
+            if( bWasDefault )
             {
                 m_rPIManager.setDefaultPrinter( aPrinter );
                 UpdateDefPrt();
@@ -660,6 +661,17 @@ void PADialog::UpdateDevice()
     for( it = m_aPrinters.begin(); it != m_aPrinters.end(); ++it )
     {
         const PrinterInfo& rInfo( m_rPIManager.getPrinterInfo( *it ) );
+        sal_Int32 nIndex = 0;
+        bool bAutoQueue = false;
+        while( nIndex != -1 && ! bAutoQueue )
+        {
+            OUString aToken( rInfo.m_aFeatures.getToken( 0, ',', nIndex ) );
+            if( aToken.getLength() && aToken.compareToAscii( "autoqueue" ) == 0 )
+                bAutoQueue = true;
+        }
+        if( bAutoQueue )
+            continue;
+
         String aEntry( *it );
         if( *it == m_rPIManager.getDefaultPrinter() )
         {
