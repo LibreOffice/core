@@ -1,3 +1,5 @@
+all_fragments+=chart
+
 # -----------------------------------------------
 # count = 5
 T4_CHART = \
@@ -36,6 +38,6 @@ CONTENTHANDLERS_4fcfg_chart = $(foreach,i,$(C4_CHART) contenthandlers$/$i.xcu)
 # needed to get dependencies inside global makefile work!
 ALL_4fcfg_chart = \
     $(TYPES_4fcfg_chart) \
-    $(FILTERS_4fcfg_chart) \
+    $(foreach,i,$(FILTERS_4fcfg_base) $(MISC)$/$i) \
     $(FRAMELOADERS_4fcfg_chart) \
     $(CONTENTHANDLERS_4fcfg_chart)
