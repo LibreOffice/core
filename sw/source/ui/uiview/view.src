@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 06:45:14 $
+ *  last change: $Author: kz $ $Date: 2001-05-12 07:21:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -281,7 +281,7 @@ QueryBox MSG_SEARCH_END
     Message[ chinese_traditional ] = "%PRODUCTNAME Writer ¤w¸g·j´M¦Ü¤å¥óªºµ²§ô¦ì¸m¡C­nÄ~Äò·j´M¦Ü¤å¥óªº°_©l¦ì¸m¡H";
     Message[ arabic ] = "ŞÇã %PRODUCTNAME Writer ÈÇáÈÍË ÍÊì äåÇíÉ ÇáãÓÊäÏ. åá ÊÑíÏ ãÊÇÈÚÉ ÇáÈÍË ÚäÏ ÈÏÇíÉ ÇáãÓÊäÏ¿";
     Message[ greek ] = "Ôï %PRODUCTNAME Writer ïëïêëŞñùóå ôçí áíáæŞôçóç ùò ôï ôİëïò ôïõ åããñÜöïõ. Èİëåôå íá óõíå÷éóôåß ç áíáæŞôçóç áğü ôçí áñ÷Ş ôïõ åããñÜöïõ;";
-    Message[ korean ] = "%PRODUCTNAME Writer°¡ ¹®¼­ÀÇ ³¡±îÁö °Ë»öÇß½À´Ï´Ù. ¹®¼­ÀÇ Ã³À½¿¡¼­ºÎÅÍ °è¼ÓÇÏ½Ã°Ú½À´Ï±î?";
+    Message[ korean ] = "%PRODUCTNAME Writer°¡ ¹®¼­ÀÇ ³¡±îÁö °Ë»öÇß½À´Ï´Ù. ¹®¼­ÀÇ ½ÃÀÛºÎºĞ¿¡¼­ºÎÅÍ °è¼ÓÇÏ½Ã°Ú½À´Ï±î?";
     Message[ turkish ] = "%PRODUCTNAME Writer belgenin sonuna kadar aramayı tamamladı. Belgenin başından aramaya devam etmek istiyor musunuz?";
     Message[ language_user1 ] = " ";
     Message[ catalan ] = "%PRODUCTNAME Writer ha buscado hasta el final del documento. ¿Desea continuar la búsqueda desde el principio?";
@@ -310,7 +310,7 @@ QueryBox MSG_SEARCH_START
     Message[ chinese_traditional ] = "%PRODUCTNAME Writer ¤w¸g·j´M¦Ü¤å¥ó°_©l¦ì¸m¡C­nÄ~Äò·j´M¦Ü¤å¥óªºµ²§ô¦ì¸m¡S";
     Message[ arabic ] = "ŞÇã %PRODUCTNAME Writer ÈÇáÈÍË ÍÊì ÈÏÇíÉ ÇáãÓÊäÏ. åá ÊÑíÏ ãÊÇÈÚÉ ÇáÈÍË ÚäÏ äåÇíÉ ÇáãÓÊäÏ¿";
     Message[ greek ] = "Ôï %PRODUCTNAME Writer ïëïêëŞñùóå ôçí áíáæŞôçóç ùò ôçí áñ÷Ş ôïõ åããñÜöïõ. Èİëåôå íá óõíå÷éóôåß ç áíáæŞôçóç áğü ôï ôİëïò ôïõ åããñÜöïõ;";
-    Message[ korean ] = "%PRODUCTNAME Writer°¡ ¹®¼­ÀÇ½ÃÀÛºÎºĞ±îÁö °Ë»öÇß½À´Ï´Ù. ¹®¼­ÀÇ ³¡¿¡¼­ºÎÅÍ °è¼ÓÇÏ½Ã°Ú½À´Ï±î?";
+    Message[ korean ] = "%PRODUCTNAME Writer°¡ ¹®¼­ÀÇ ½ÃÀÛºÎºĞ±îÁö °Ë»öÇß½À´Ï´Ù. ¹®¼­ÀÇ ³¡ºÎºĞ¿¡¼­ °è¼ÓÇÏ½Ã°Ú½À´Ï±î?";
     Message[ turkish ] = "%PRODUCTNAME Writer belgenin başına kadar aramayı tamamladı. Belgenin sonundan aramaya devam etmek istiyor musunuz?";
     Message[ language_user1 ] = " ";
     Message[ catalan ] = "%PRODUCTNAME Writer ha buscado hasta el principio del documento. ¿Desea continuar desde el final?";
@@ -437,13 +437,13 @@ String STR_WEBOPTIONS
     TEXT[ polish ] = "Dokument HTML";
     TEXT[ portuguese_brazilian ] = "HTML document";
     TEXT[ japanese ] = "HTML Œ`®ÄŞ·­ÒİÄ";
-    TEXT[ korean ] = "HTML document";
+    TEXT[ korean ] = "HTML ¹®¼­";
     TEXT[ chinese_simplified ] = "HTML ÎÄµµ";
     TEXT[ chinese_traditional ] = "HTML ¤å¥ó";
     TEXT[ turkish ] = "HTML document";
     TEXT[ arabic ] = "HTML ãÓÊäÏ";
     TEXT[ catalan ] = "Documento HTML";
-    TEXT[ finnish ] = "HTML-Dokument";
+    TEXT[ finnish ] = "HTML-asiakirja";
 };
 String STR_TEXTOPTIONS
 {
@@ -462,13 +462,13 @@ String STR_TEXTOPTIONS
     TEXT[ polish ] = "Dokument tekstowy";
     TEXT[ portuguese_brazilian ] = "Text document";
     TEXT[ japanese ] = "•¶‘ÄŞ·­ÒİÄ";
-    TEXT[ korean ] = "Text document";
+    TEXT[ korean ] = "ÅØ½ºÆ® ¹®¼­";
     TEXT[ chinese_simplified ] = "ÎÄ×ÖÎÄµµ";
     TEXT[ chinese_traditional ] = "¤å¦r¤å¥ó";
     TEXT[ turkish ] = "Text document";
     TEXT[ arabic ] = "ãÓÊäÏ äÕ";
     TEXT[ catalan ] = "Documento de texto";
-    TEXT[ finnish ] = "Textdokument";
+    TEXT[ finnish ] = "Tekstiasiakirja";
 };
 InfoBox MSG_NOT_FOUND
 {
