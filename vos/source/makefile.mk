@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 15:18:16 $
+#   last change: $Author: obr $ $Date: 2000-10-23 10:08:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -108,7 +108,6 @@ SLOFILES=       $(SLO)$/acceptor.obj    \
                 $(SLO)$/dynload.obj		\
                 $(SLO)$/xception.obj	\
                 $(SLO)$/evtque.obj		\
-                $(SLO)$/ports.obj		\
                 $(SLO)$/channel.obj
 
 
@@ -147,7 +146,6 @@ OBJFILES=       $(OBJ)$/acceptor.obj    \
                 $(OBJ)$/dynload.obj		\
                 $(OBJ)$/xception.obj	\
                 $(OBJ)$/evtque.obj		\
-                $(OBJ)$/ports.obj		\
                 $(OBJ)$/channel.obj
 
 # $(SLO)$/evtque.obj
