@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jpeg.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 15:22:19 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:16:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -415,8 +415,14 @@ void* JPEGReader::CreateBitmap( void* pParam )
 
         const ULONG nFormat = pAcc->GetScanlineFormat();
 
-        if( ( bGray && ( BMP_FORMAT_8BIT_PAL == nFormat ) ) ||
-            ( !bGray && ( BMP_FORMAT_24BIT_TC_BGR == nFormat ) ) )
+        if(
+            ( bGray && ( BMP_FORMAT_8BIT_PAL == nFormat ) ) ||
+#ifndef SYSTEM_JPEG
+            ( !bGray && ( BMP_FORMAT_24BIT_TC_BGR == nFormat ) )
+#else
+            ( !bGray && ( BMP_FORMAT_24BIT_TC_RGB == nFormat ) )
+#endif
+          )
         {
             pBmpBuf = pAcc->GetBuffer();
             nAlignedWidth = pAcc->GetScanlineSize();
@@ -478,9 +484,15 @@ void JPEGReader::FillBitmap()
 
                 for( long nX = 0L; nX < nWidth; nX++ )
                 {
+#ifndef SYSTEM_JPEG
                     aColor.SetBlue( *pTmp++ );
                     aColor.SetGreen( *pTmp++ );
                     aColor.SetRed( *pTmp++ );
+#else
+                    aColor.SetRed( *pTmp++ );
+                    aColor.SetGreen( *pTmp++ );
+                    aColor.SetBlue( *pTmp++ );
+#endif
                     pAcc->SetPixel( nY, nX, aColor );
                 }
             }
@@ -641,9 +653,15 @@ void* JPEGWriter::GetScanline( long nY )
                 for( long nX = 0L; nX < nWidth; nX++ )
                 {
                     aColor = pAcc->GetPaletteColor( (BYTE) pAcc->GetPixel( nY, nX ) );
+#ifndef SYSTEM_JPEG
                     *pTmp++ = aColor.GetBlue();
                     *pTmp++ = aColor.GetGreen();
                     *pTmp++ = aColor.GetRed();
+#else
+                    *pTmp++ = aColor.GetRed();
+                    *pTmp++ = aColor.GetGreen();
+                    *pTmp++ = aColor.GetBlue();
+#endif
                 }
             }
             else
@@ -651,9 +669,15 @@ void* JPEGWriter::GetScanline( long nY )
                 for( long nX = 0L; nX < nWidth; nX++ )
                 {
                     aColor = pAcc->GetPixel( nY, nX );
+#ifndef SYSTEM_JPEG
                     *pTmp++ = aColor.GetBlue();
                     *pTmp++ = aColor.GetGreen();
                     *pTmp++ = aColor.GetRed();
+#else
+                    *pTmp++ = aColor.GetRed();
+                    *pTmp++ = aColor.GetGreen();
+                    *pTmp++ = aColor.GetBlue();
+#endif
                 }
             }
 
@@ -684,7 +708,11 @@ BOOL JPEGWriter::Write( const Graphic& rGraphic,
     pAcc = aBmp.AcquireReadAccess();
     if( pAcc )
     {
+#ifndef SYSTEM_JPEG
         bNative = ( pAcc->GetScanlineFormat() == BMP_FORMAT_24BIT_TC_BGR );
+#else
+        bNative = ( pAcc->GetScanlineFormat() == BMP_FORMAT_24BIT_TC_RGB );
+#endif
 
         if( !bNative )
             pBuffer = new BYTE[ AlignedWidth4Bytes( pAcc->Width() * 24L ) ];
