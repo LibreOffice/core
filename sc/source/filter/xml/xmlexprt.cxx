@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-16 18:14:35 $
+ *  last change: $Author: sab $ $Date: 2000-11-17 07:43:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -695,19 +695,9 @@ void ScXMLExport::WriteRowContent()
             bIsAutoStyle = aRange.bIsAutoStyle;
             nCols = aRange.nRepeatColumns;
             bIsFirst = sal_False;
-            /*table::CellAddress aCellAddress;
-            aCellAddress.Column = aRange.aRangeAddress.EndColumn;
-            aCellAddress.Row = aRange.aRangeAddress.EndRow;
-            aCellAddress.Sheet = aRange.aRangeAddress.Sheet;
-            nPrevValidationIndex = aValidationsContainer.GetValidationIndex(aCellAddress);*/
         }
         else
         {
-            /*table::CellAddress aCellAddress;
-            aCellAddress.Column = aRange.aRangeAddress.EndColumn;
-            aCellAddress.Row = aRange.aRangeAddress.EndRow;
-            aCellAddress.Sheet = aRange.aRangeAddress.Sheet;
-            sal_Int32 nValidationIndex = aValidationsContainer.GetValidationIndex(aCellAddress);*/
             if (aRange.nIndex == nIndex && aRange.bIsAutoStyle == bIsAutoStyle &&
                 nPrevValidationIndex == aRange.nValidationIndex)
                 nCols += aRange.nRepeatColumns;
@@ -1049,7 +1039,6 @@ void ScXMLExport::_ExportContent()
             aCellStyles.Sort();
             aShapesContainer.Sort();
             aMergedRangesContainer.Sort();
-//          aValidationsContainer.Sort();
             aDetectiveObjContainer.Sort();
 
             ScMyNotEmptyCellsIterator aCellsItr(*this);
@@ -1058,7 +1047,6 @@ void ScXMLExport::_ExportContent()
             aCellsItr.SetMergedRanges( &aMergedRangesContainer );
             aCellsItr.SetAreaLinks( &aAreaLinks );
             aCellsItr.SetEmptyDatabaseRanges( &aEmptyRanges );
-//          aCellsItr.SetValidations( &aValidationsContainer );
             aCellsItr.SetDetectiveObj( &aDetectiveObjContainer );
             aCellsItr.SetDetectiveOp( &aDetectiveOpContainer );
 
@@ -1835,7 +1823,6 @@ void ScXMLExport::WriteCell (const ScMyCell& aCell)
             sal_Bool bPrevCharWasSpace(sal_True);
               if (GetCellText(aCell.xCell, sOUText))
                 GetTextParagraphExport()->exportText(sOUText, bPrevCharWasSpace);
-                //GetDocHandler()->characters(sOUText);
         }
     }
     WriteShapes(aCell);
