@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helptext.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 15:16:50 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 09:19:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,6 +201,12 @@ String SV_SHORTCUT_MENUBAR
     Text [ en-US ] = "To Menu Bar";
 };
 
+String SV_SHORTCUT_SPLITTER
+{
+    Text = "Trenner für geteiltes Fenster" ;
+    Text[ English ] = "Split window separator" ;
+    Text[ english_us ] = "Split window separator" ;
+};
 
 
 
