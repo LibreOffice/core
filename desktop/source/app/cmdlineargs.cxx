@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdlineargs.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-27 09:42:22 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 18:05:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -507,7 +507,9 @@ sal_Bool CommandLineArgs::CheckGroupMembers( GroupParamId nGroupId, BoolParam nE
 
 void CommandLineArgs::ResetParamValues()
 {
-    for ( int i = 0; i < CMD_BOOLPARAM_COUNT; i++ )
+    int i;
+
+    for ( i = 0; i < CMD_BOOLPARAM_COUNT; i++ )
         m_aBoolParams[i] = sal_False;
     for ( i = 0; i < CMD_STRINGPARAM_COUNT; i++ )
         m_aStrSetParams[i] = sal_False;
