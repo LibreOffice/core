@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2002-03-04 19:28:30 $
+ *  last change: $Author: nn $ $Date: 2002-08-30 15:09:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,7 +200,14 @@ void ScTabView::InitBlockMode( USHORT nCurX, USHORT nCurY, USHORT nCurZ,
         }
         rMark.SetMarkArea( ScRange( nBlockStartX,nBlockStartY, nTab, nBlockEndX,nBlockEndY, nTab ) );
         InvertBlockMark( nBlockStartX,nBlockStartY,nBlockEndX,nBlockEndY );
+
+        bNewStartIfMarking = FALSE;     // use only once
     }
+}
+
+void ScTabView::SetNewStartIfMarking()
+{
+    bNewStartIfMarking = TRUE;
 }
 
 void ScTabView::DoneBlockMode( BOOL bContinue )            // Default FALSE

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview3.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: nn $ $Date: 2002-08-21 17:41:35 $
+ *  last change: $Author: nn $ $Date: 2002-08-30 15:09:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -928,6 +928,13 @@ void ScTabView::MoveCursorAbs( short nCurX, short nCurY, ScFollowMode eMode,
 
     HideAllCursors();
 
+    if ( bShift && bNewStartIfMarking && IsBlockMode() )
+    {
+        //  used for ADD selection mode: start a new block from the cursor position
+        DoneBlockMode( TRUE );
+        InitBlockMode( aViewData.GetCurX(), aViewData.GetCurY(), aViewData.GetTabNo(), TRUE );
+    }
+
         //  aktiven Teil umschalten jetzt in AlignToCursor
 
     AlignToCursor( nCurX, nCurY, eMode );
@@ -1055,7 +1062,7 @@ void ScTabView::MoveCursorRel( short nMovX, short nMovY, ScFollowMode eMode,
     MoveCursorAbs( nCurX, nCurY, eMode, bShift, FALSE, TRUE, bKeepSel );
 }
 
-void ScTabView::MoveCursorPage( short nMovX, short nMovY, ScFollowMode eMode, BOOL bShift )
+void ScTabView::MoveCursorPage( short nMovX, short nMovY, ScFollowMode eMode, BOOL bShift, BOOL bKeepSel )
 {
     USHORT nCurX;
     USHORT nCurY;
@@ -1080,10 +1087,10 @@ void ScTabView::MoveCursorPage( short nMovX, short nMovY, ScFollowMode eMode, BO
     if (nMovX && !nPageX) nPageX = (nMovX>0) ? 1 : -1;
     if (nMovY && !nPageY) nPageY = (nMovY>0) ? 1 : -1;
 
-    MoveCursorRel( nPageX, nPageY, eMode, bShift );
+    MoveCursorRel( nPageX, nPageY, eMode, bShift, bKeepSel );
 }
 
-void ScTabView::MoveCursorArea( short nMovX, short nMovY, ScFollowMode eMode, BOOL bShift )
+void ScTabView::MoveCursorArea( short nMovX, short nMovY, ScFollowMode eMode, BOOL bShift, BOOL bKeepSel )
 {
     USHORT nCurX;
     USHORT nCurY;
@@ -1118,10 +1125,10 @@ void ScTabView::MoveCursorArea( short nMovX, short nMovY, ScFollowMode eMode, BO
             eMode = SC_FOLLOW_LINE;
     }
 
-    MoveCursorRel( ((short)nNewX)-(short)nCurX, ((short)nNewY)-(short)nCurY, eMode, bShift );
+    MoveCursorRel( ((short)nNewX)-(short)nCurX, ((short)nNewY)-(short)nCurY, eMode, bShift, bKeepSel );
 }
 
-void ScTabView::MoveCursorEnd( short nMovX, short nMovY, ScFollowMode eMode, BOOL bShift )
+void ScTabView::MoveCursorEnd( short nMovX, short nMovY, ScFollowMode eMode, BOOL bShift, BOOL bKeepSel )
 {
     ScDocument* pDoc = aViewData.GetDocument();
     USHORT nTab = aViewData.GetTabNo();
@@ -1148,7 +1155,7 @@ void ScTabView::MoveCursorEnd( short nMovX, short nMovY, ScFollowMode eMode, BOO
         nNewY=nUsedY;
 
     aViewData.ResetOldCursor();
-    MoveCursorRel( ((short)nNewX)-(short)nCurX, ((short)nNewY)-(short)nCurY, eMode, bShift );
+    MoveCursorRel( ((short)nNewX)-(short)nCurX, ((short)nNewY)-(short)nCurY, eMode, bShift, bKeepSel );
 }
 
 void ScTabView::MoveCursorScreen( short nMovX, short nMovY, ScFollowMode eMode, BOOL bShift )
@@ -1575,6 +1582,7 @@ void ScTabView::SetTabNo( USHORT nTab, BOOL bNew )
         if ( !bRefMode ) // Abfrage, damit RefMode bei Tabellenwechsel funktioniert
         {
             DoneBlockMode();
+            pSelEngine->Reset();                // reset all flags, including locked modifiers
             aViewData.SetRefTabNo( nTab );
         }
 

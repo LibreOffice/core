@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewdata.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: nn $ $Date: 2002-08-21 17:41:36 $
+ *  last change: $Author: nn $ $Date: 2002-08-30 15:09:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -644,16 +644,18 @@ void ScViewData::SetPagebreakMode( BOOL bSet )
 BOOL ScViewData::GetSimpleArea( USHORT& rStartCol, USHORT& rStartRow, USHORT& rStartTab,
                                 USHORT& rEndCol, USHORT& rEndRow, USHORT& rEndTab, BOOL bMergeMark )
 {
-    if ( aMarkData.IsMarked() || aMarkData.IsMultiMarked() )
+    ScMarkData aNewMark( aMarkData );       // use a local copy for MarkToSimple
+
+    if ( aNewMark.IsMarked() || aNewMark.IsMultiMarked() )
     {
         if ( bMergeMark )
-            if ( aMarkData.IsMultiMarked() )
-                aMarkData.MarkToSimple();
+            if ( aNewMark.IsMultiMarked() )
+                aNewMark.MarkToSimple();
 
-        if ( aMarkData.IsMarked() && !aMarkData.IsMultiMarked() )
+        if ( aNewMark.IsMarked() && !aNewMark.IsMultiMarked() )
         {
             ScRange aMarkRange;
-            aMarkData.GetMarkArea( aMarkRange );
+            aNewMark.GetMarkArea( aMarkRange );
             rStartCol = aMarkRange.aStart.Col();
             rStartRow = aMarkRange.aStart.Row();
             rStartTab = aMarkRange.aStart.Tab();
@@ -680,14 +682,16 @@ BOOL ScViewData::GetSimpleArea( USHORT& rStartCol, USHORT& rStartRow, USHORT& rS
 
 BOOL ScViewData::GetSimpleArea( ScRange& rRange, BOOL bMergeMark )
 {
-    if ( aMarkData.IsMarked() || aMarkData.IsMultiMarked() )
+    ScMarkData aNewMark( aMarkData );       // use a local copy for MarkToSimple
+
+    if ( aNewMark.IsMarked() || aNewMark.IsMultiMarked() )
     {
         if ( bMergeMark )
-            if ( aMarkData.IsMultiMarked() )
-                aMarkData.MarkToSimple();
+            if ( aNewMark.IsMultiMarked() )
+                aNewMark.MarkToSimple();
 
-        if ( aMarkData.IsMarked() && !aMarkData.IsMultiMarked() )
-            aMarkData.GetMarkArea( rRange );
+        if ( aNewMark.IsMarked() && !aNewMark.IsMultiMarked() )
+            aNewMark.GetMarkArea( rRange );
         else
         {
             rRange = ScRange( GetCurX(), GetCurY(), GetTabNo() );
@@ -703,16 +707,18 @@ BOOL ScViewData::GetSimpleArea( ScRange& rRange, BOOL bMergeMark )
 
 void ScViewData::GetMultiArea( ScRangeListRef& rRange, BOOL bMergeMark )
 {
-    BOOL bMulti = aMarkData.IsMultiMarked();
+    ScMarkData aNewMark( aMarkData );       // use a local copy for MarkToSimple
+
+    BOOL bMulti = aNewMark.IsMultiMarked();
     if (bMulti && bMergeMark)
     {
-        aMarkData.MarkToSimple();
-        bMulti = aMarkData.IsMultiMarked();
+        aNewMark.MarkToSimple();
+        bMulti = aNewMark.IsMultiMarked();
     }
     if (bMulti)
     {
         rRange = new ScRangeList;
-        aMarkData.FillRangeListWithMarks( rRange, FALSE );
+        aNewMark.FillRangeListWithMarks( rRange, FALSE );
     }
     else
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dr $ $Date: 2002-03-13 11:43:13 $
+ *  last change: $Author: nn $ $Date: 2002-08-30 15:08:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,6 +201,7 @@ private:
     BOOL                bInActivatePart;
     BOOL                bInZoomUpdate;
     BOOL                bMoveIsShift;
+    BOOL                bNewStartIfMarking;
 
 
     void            Init();
@@ -374,9 +375,12 @@ public:
                                     BOOL bKeepOld = FALSE, BOOL bKeepSel = FALSE );
     void            MoveCursorRel( short nMovX, short nMovY, ScFollowMode eMode,
                                     BOOL bShift, BOOL bKeepSel = FALSE );
-    void            MoveCursorPage( short nMovX, short nMovY, ScFollowMode eMode, BOOL bShift );
-    void            MoveCursorArea( short nMovX, short nMovY, ScFollowMode eMode, BOOL bShift );
-    void            MoveCursorEnd( short nMovX, short nMovY, ScFollowMode eMode, BOOL bShift );
+    void            MoveCursorPage( short nMovX, short nMovY, ScFollowMode eMode,
+                                    BOOL bShift, BOOL bKeepSel = FALSE );
+    void            MoveCursorArea( short nMovX, short nMovY, ScFollowMode eMode,
+                                    BOOL bShift, BOOL bKeepSel = FALSE );
+    void            MoveCursorEnd( short nMovX, short nMovY, ScFollowMode eMode,
+                                    BOOL bShift, BOOL bKeepSel = FALSE );
     void            MoveCursorScreen( short nMovX, short nMovY, ScFollowMode eMode, BOOL bShift );
 
     void            MoveCursorEnter( BOOL bShift );     // Shift fuer Richtung (kein Markieren)
@@ -384,6 +388,8 @@ public:
     BOOL            MoveCursorKeyInput( const KeyEvent& rKeyEvent );
 
     void            FindNextUnprot( BOOL bShift, BOOL bInSelection = TRUE );
+
+    void            SetNewStartIfMarking();
 
     void            SetTabNo( USHORT nTab, BOOL bNew = FALSE );
     void            SelectNextTab( short nDir );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun2.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: nn $ $Date: 2002-03-04 19:28:30 $
+ *  last change: $Author: nn $ $Date: 2002-08-30 15:09:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -764,9 +764,17 @@ void ScViewFunc::SetPrintRanges( const String* pPrint,
 
 BOOL ScViewFunc::TestMergeCells()           // Vorab-Test (fuer Menue)
 {
-    ScMarkData& rMark = GetViewData()->GetMarkData();
-    rMark.MarkToSimple();
-    return rMark.IsMarked() && !rMark.IsMultiMarked();
+    //  simple test: TRUE if there's a selection but no multi selection
+
+    const ScMarkData& rMark = GetViewData()->GetMarkData();
+    if ( rMark.IsMultiMarked() )
+    {
+        ScMarkData aNewMark( rMark );   // use local copy for MarkToSimple
+        aNewMark.MarkToSimple();
+        return aNewMark.IsMarked() && !aNewMark.IsMultiMarked();
+    }
+    else
+        return rMark.IsMarked();
 }
 
 

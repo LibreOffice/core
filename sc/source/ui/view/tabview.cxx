@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-29 11:35:44 $
+ *  last change: $Author: nn $ $Date: 2002-08-30 15:09:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -385,7 +385,8 @@ BOOL lcl_HasRowOutline( const ScViewData& rViewData )
             bInUpdateHeader( FALSE ),                                       \
             bInActivatePart( FALSE ),                                       \
             bInZoomUpdate( FALSE ),                                         \
-            bMoveIsShift( FALSE )
+            bMoveIsShift( FALSE ),                                          \
+            bNewStartIfMarking( FALSE )
 
 
 ScTabView::ScTabView( Window* pParent, ScDocShell& rDocSh, ScTabViewShell* pViewShell ) :
@@ -1853,6 +1854,7 @@ Point ScTabView::GetInsertPos()
 void ScTabView::LockModifiers( USHORT nModifiers )
 {
     pSelEngine->LockModifiers( nModifiers );
+    pHdrSelEng->LockModifiers( nModifiers );
 }
 
 USHORT ScTabView::GetLockedModifiers() const

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh4.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2002-04-10 15:43:17 $
+ *  last change: $Author: nn $ $Date: 2002-08-30 15:09:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,7 @@ void ScCellShell::ExecuteCursor( SfxRequest& rReq )
     USHORT              nSlotId  = rReq.GetSlot();
     short               nRepeat = 1;
     BOOL                bSel = FALSE;
+    BOOL                bKeep = FALSE;
 
     if ( pReqArgs != NULL )
     {
@@ -105,6 +106,20 @@ void ScCellShell::ExecuteCursor( SfxRequest& rReq )
             nRepeat = ((const SfxInt16Item*)pItem)->GetValue();
         if( IS_AVAILABLE( FN_PARAM_2, &pItem ) )
             bSel = ((const SfxBoolItem*)pItem)->GetValue();
+    }
+    else
+    {
+        //  evaluate locked selection mode
+
+        USHORT nLocked = pTabViewShell->GetLockedModifiers();
+        if ( nLocked & KEY_SHIFT )
+            bSel = TRUE;                // EXT
+        else if ( nLocked & KEY_MOD1 )
+        {
+            // ADD mode: keep the selection, start a new block when marking with shift again
+            bKeep = TRUE;
+            pTabViewShell->SetNewStartIfMarking();
+        }
     }
 
     // einmal extra, damit der Cursor bei ExecuteInputDirect nicht zuoft gemalt wird:
@@ -115,51 +130,51 @@ void ScCellShell::ExecuteCursor( SfxRequest& rReq )
     switch ( nSlotId )
     {
         case SID_CURSORDOWN:
-            pTabViewShell->MoveCursorRel(   0,  nRepeat, SC_FOLLOW_LINE, bSel );
+            pTabViewShell->MoveCursorRel(   0,  nRepeat, SC_FOLLOW_LINE, bSel, bKeep );
             break;
 
         case SID_CURSORBLKDOWN:
-            pTabViewShell->MoveCursorArea( 0, nRepeat, SC_FOLLOW_JUMP, bSel );
+            pTabViewShell->MoveCursorArea( 0, nRepeat, SC_FOLLOW_JUMP, bSel, bKeep );
             break;
 
         case SID_CURSORUP:
-            pTabViewShell->MoveCursorRel(   0,  -nRepeat, SC_FOLLOW_LINE, bSel );
+            pTabViewShell->MoveCursorRel(   0,  -nRepeat, SC_FOLLOW_LINE, bSel, bKeep );
             break;
 
         case SID_CURSORBLKUP:
-            pTabViewShell->MoveCursorArea( 0, -nRepeat, SC_FOLLOW_JUMP, bSel );
+            pTabViewShell->MoveCursorArea( 0, -nRepeat, SC_FOLLOW_JUMP, bSel, bKeep );
             break;
 
         case SID_CURSORLEFT:
-            pTabViewShell->MoveCursorRel( -nRepeat, 0, SC_FOLLOW_LINE, bSel );
+            pTabViewShell->MoveCursorRel( -nRepeat, 0, SC_FOLLOW_LINE, bSel, bKeep );
             break;
 
         case SID_CURSORBLKLEFT:
-            pTabViewShell->MoveCursorArea( -nRepeat, 0, SC_FOLLOW_JUMP, bSel );
+            pTabViewShell->MoveCursorArea( -nRepeat, 0, SC_FOLLOW_JUMP, bSel, bKeep );
             break;
 
         case SID_CURSORRIGHT:
-            pTabViewShell->MoveCursorRel(   nRepeat, 0, SC_FOLLOW_LINE, bSel );
+            pTabViewShell->MoveCursorRel(   nRepeat, 0, SC_FOLLOW_LINE, bSel, bKeep );
             break;
 
         case SID_CURSORBLKRIGHT:
-            pTabViewShell->MoveCursorArea( nRepeat, 0, SC_FOLLOW_JUMP, bSel );
+            pTabViewShell->MoveCursorArea( nRepeat, 0, SC_FOLLOW_JUMP, bSel, bKeep );
             break;
 
         case SID_CURSORPAGEDOWN:
-            pTabViewShell->MoveCursorPage(  0, nRepeat, SC_FOLLOW_FIX, bSel );
+            pTabViewShell->MoveCursorPage(  0, nRepeat, SC_FOLLOW_FIX, bSel, bKeep );
             break;
 
         case SID_CURSORPAGEUP:
-            pTabViewShell->MoveCursorPage(  0, -nRepeat, SC_FOLLOW_FIX, bSel );
+            pTabViewShell->MoveCursorPage(  0, -nRepeat, SC_FOLLOW_FIX, bSel, bKeep );
             break;
 
         case SID_CURSORPAGERIGHT_: //XXX !!!
-            pTabViewShell->MoveCursorPage( nRepeat, 0, SC_FOLLOW_FIX, bSel );
+            pTabViewShell->MoveCursorPage( nRepeat, 0, SC_FOLLOW_FIX, bSel, bKeep );
             break;
 
         case SID_CURSORPAGELEFT_: //XXX !!!
-            pTabViewShell->MoveCursorPage( -nRepeat, 0, SC_FOLLOW_FIX, bSel );
+            pTabViewShell->MoveCursorPage( -nRepeat, 0, SC_FOLLOW_FIX, bSel, bKeep );
             break;
 
         default:
@@ -332,6 +347,7 @@ void ScCellShell::ExecutePage( SfxRequest& rReq )
     const SfxItemSet*   pReqArgs = rReq.GetArgs();
     USHORT              nSlotId  = rReq.GetSlot();
     BOOL                bSel = FALSE;
+    BOOL                bKeep = FALSE;
 
     if ( pReqArgs != NULL )
     {
@@ -339,24 +355,38 @@ void ScCellShell::ExecutePage( SfxRequest& rReq )
         if( IS_AVAILABLE( FN_PARAM_2, &pItem ) )
             bSel = ((const SfxBoolItem*)pItem)->GetValue();
     }
+    else
+    {
+        //  evaluate locked selection mode
+
+        USHORT nLocked = pTabViewShell->GetLockedModifiers();
+        if ( nLocked & KEY_SHIFT )
+            bSel = TRUE;                // EXT
+        else if ( nLocked & KEY_MOD1 )
+        {
+            // ADD mode: keep the selection, start a new block when marking with shift again
+            bKeep = TRUE;
+            pTabViewShell->SetNewStartIfMarking();
+        }
+    }
 
     pTabViewShell->ExecuteInputDirect();
     switch ( nSlotId )
     {
         case SID_CURSORHOME:
-            pTabViewShell->MoveCursorEnd( -1, 0, SC_FOLLOW_LINE, bSel );
+            pTabViewShell->MoveCursorEnd( -1, 0, SC_FOLLOW_LINE, bSel, bKeep );
             break;
 
         case SID_CURSOREND:
-            pTabViewShell->MoveCursorEnd( 1, 0, SC_FOLLOW_JUMP, bSel );
+            pTabViewShell->MoveCursorEnd( 1, 0, SC_FOLLOW_JUMP, bSel, bKeep );
             break;
 
         case SID_CURSORTOPOFFILE:
-            pTabViewShell->MoveCursorEnd( -1, -1, SC_FOLLOW_LINE, bSel );
+            pTabViewShell->MoveCursorEnd( -1, -1, SC_FOLLOW_LINE, bSel, bKeep );
             break;
 
         case SID_CURSORENDOFFILE:
-            pTabViewShell->MoveCursorEnd( 1, 1, SC_FOLLOW_JUMP, bSel );
+            pTabViewShell->MoveCursorEnd( 1, 1, SC_FOLLOW_JUMP, bSel, bKeep );
             break;
 
         default:
