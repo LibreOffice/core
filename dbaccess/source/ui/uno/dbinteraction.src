@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinteraction.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-29 09:48:05 $
+ *  last change: $Author: obo $ $Date: 2001-02-09 20:15:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@ String STR_REMEMBERPASSWORD_SESSION
     Text[ arabic ] = "ÊĞßøÑ ßáãÉ ÇáÓÑ ÍÊì äåÇíÉ ÌáÓÉ ÇáÚãá";
     Text[ chinese_simplified ] = "½áÊø³ÌĞòÖ®Ç°Ò»Ö±¼Ç×¡ÃÜÂë(~R)";
     Text[ chinese_simplified ] = "½áÊø³ÌĞòÖ®Ç°Ò»Ö±¼Ç×¡ÃÜÂë(~R)";
-    Text[ chinese_traditional ] = "µ²§ôµ{§Ç¤§«e¤@ª½°O¦í±K½X(~R)";
+    Text[ chinese_traditional ] = "µ²§ôµ{¦¡¤§«e¤@ª½°O¦í±K½X(~R)";
     Text[ danish ] = "Husk adgangskoden til applikationen afsluttes";
     Text[ dutch ] = "Wachtwoord o~nthouden tot aan beëindigen van het programma";
     Text[ dutch ] = "Wachtwoord o~nthouden tot aan beëindigen van het programma";
@@ -119,6 +119,9 @@ String STR_REMEMBERPASSWORD_PERSISTENT
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2000/11/29 09:48:05  kz
+ *  Merge SRC614: 29.11.00 - 10:47:26 (NoBranch)
+ *
  *  Revision 1.3  2000/11/27 07:44:56  rt
  *  Merge SRC614: 27.11.00 - 08:44:34 (NoBranch)
  *
