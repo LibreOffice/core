@@ -18326,3 +18326,6 @@ _real@8@3ff9a0a0a0a0a0a0a000
 ?GetIgnoreWidthCJK@FmSearchEngine@@QBEEXZ
 ?SetCaseSensitive@FmSearchEngine@@QAEXE@Z
 ?SetIgnoreWidthCJK@FmSearchEngine@@QAEXE@Z
+??0SvxLanguageBox@@QAE@PAVWindow@@KE@Z
+?Init@SvxLanguageBox@@AAEXXZ
+??0SvxJSearchOptionsDialog@@QAE@PAVWindow@@ABVSfxItemSet@@GJ@Z
