@@ -122,3 +122,13 @@ sc.ScTableSheetsObj::com::sun::star::container::XNameReplace
 
 ### i26072 ###
 sc.ScAccessibleDocument::com::sun::star::accessibility::XAccessibleSelection
+
+### i39210 ###
+sc.ScDataPilotFieldObj::com::sun::star::sheet::DataPilotField
+sc.ScDataPilotFieldObj::com::sun::star::beans::XPropertySet
+
+### i39212 ###
+sc.ScDataPilotItemObj::com::sun::star::sheet::DataPilotItem
+
+### i38676 ###
+sc.ScTableSheetObj::com::sun::star::sheet::XCellSeries
