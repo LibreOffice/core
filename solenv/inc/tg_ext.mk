@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_ext.mk,v $
 #
-#   $Revision: 1.49 $
+#   $Revision: 1.50 $
 #
-#   last change: $Author: obo $ $Date: 2004-02-20 09:05:56 $
+#   last change: $Author: obo $ $Date: 2004-05-28 14:41:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -92,6 +92,10 @@ PATCHFLAGS=-b
 PACKAGE_DIR=$(MISC)$/build
 #MUST match with PACKAGE_DIR
 BACK_PATH=..$/..$/..$/
+
+# remove logical operators from variable
+# to survive .IF statements
+BUILD_ACTION_CHECK=$(BUILD_ACTION:s/||//:s/&&//)
 
 # Remove entire package from output directory, for example, if new patches are
 # to be applied.
@@ -240,13 +244,13 @@ $(PACKAGE_DIR)$/$(CONFIGURE_FLAG_FILE) : $(PACKAGE_DIR)$/$(PATCH_FLAG_FILE)
     
 $(PACKAGE_DIR)$/$(BUILD_FLAG_FILE) : $(PACKAGE_DIR)$/$(CONFIGURE_FLAG_FILE)
     @+-$(RM) $@ >& $(NULLDEV)
-.IF "$(BUILD_ACTION)"=="none" ||	"$(BUILD_ACTION)"==""
+.IF "$(BUILD_ACTION_CHECK)"=="none" || "$(BUILD_ACTION_CHECK)"==""
     +$(TOUCH) $(PACKAGE_DIR)$/$(BUILD_FLAG_FILE)
-.ELSE			# "$(BUILD_ACTION)"=="none" ||	"$(BUILD_ACTION)"==""
+.ELSE			# "$(BUILD_ACTION_CHECK)"=="none" || "$(BUILD_ACTION_CHECK)"==""
     +-$(MKDIR) $(P_BUILD_DIR)
     +cd $(P_BUILD_DIR) && $(BUILD_ACTION) $(BUILD_FLAGS) && $(TOUCH) $(BUILD_FLAG_FILE)
     +mv $(P_BUILD_DIR)$/$(BUILD_FLAG_FILE) $(PACKAGE_DIR)$/$(BUILD_FLAG_FILE)
-.ENDIF			# "$(BUILD_ACTION)"=="none" ||	"$(BUILD_ACTION)"==""
+.ENDIF			# "$(BUILD_ACTION_CHECK)"=="none" || "$(BUILD_ACTION_CHECK)"==""
 
 $(PACKAGE_DIR)$/$(INSTALL_FLAG_FILE) : $(PACKAGE_DIR)$/$(BUILD_FLAG_FILE)
     @+-$(RM) $@ >& $(NULLDEV)
