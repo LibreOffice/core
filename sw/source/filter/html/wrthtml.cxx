@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrthtml.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 13:41:37 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:29:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,8 +265,9 @@ const sal_Char __FAR_DATA SwHTMLWriter::sNewLine[] = "\015\012";
 static sal_Char __FAR_DATA sIndentTabs[MAX_INDENT_LEVEL+2] =
     "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t";
 
-SwHTMLWriter::SwHTMLWriter()
+SwHTMLWriter::SwHTMLWriter( const String& rBaseURL )
 {
+    SetBaseURL( rBaseURL );
     bFirstLine = sal_True;
     nBkmkTabPos = USHRT_MAX;
     pDfltColor = 0;
@@ -724,9 +725,7 @@ void lcl_html_OutSectionStartTag( SwHTMLWriter& rHTMLWrt,
         String aFilter( aFName.GetToken(1,sfx2::cTokenSeperator) );
         String aSection( aFName.GetToken(2,sfx2::cTokenSeperator) );
 
-        String aEncURL( INetURLObject::AbsToRel(aURL,
-                                          INetURLObject::WAS_ENCODED,
-                                        INetURLObject::DECODE_UNAMBIGUOUS ) );
+        String aEncURL( URIHelper::simpleNormalizedMakeRelative(rHTMLWrt.GetBaseURL(), aURL ) );
         sal_Unicode cDelim = 255U;
         sal_Bool bURLContainsDelim =
             (STRING_NOTFOUND != aEncURL.Search( cDelim ) );
@@ -1099,7 +1098,7 @@ const SwPageDesc *SwHTMLWriter::MakeHeader( sal_uInt16 &rHeaderAttrs )
     ByteString sIndent;
     GetIndentString( sIndent );
 //  OutNewLine();
-    SfxFrameHTMLWriter::Out_DocInfo( Strm(), pDoc->GetpInfo(),
+    SfxFrameHTMLWriter::Out_DocInfo( Strm(), GetBaseURL(), pDoc->GetpInfo(),
                                      sIndent.GetBuffer(), eDestEnc,
                                        &aNonConvertableCharacters );
 
@@ -1292,8 +1291,7 @@ void SwHTMLWriter::OutHyperlinkHRefValue( const String& rURL )
         }
     }
 
-    sURL = INetURLObject::AbsToRel( sURL, INetURLObject::WAS_ENCODED,
-                                    INetURLObject::DECODE_UNAMBIGUOUS);
+    sURL = URIHelper::simpleNormalizedMakeRelative( GetBaseURL(), sURL);
     HTMLOutFuncs::Out_String( Strm(), sURL, eDestEnc,
                               &aNonConvertableCharacters );
 }
@@ -1333,7 +1331,9 @@ void SwHTMLWriter::OutBackground( const SvxBrushItem *pBrushItem,
                     XOUTBMP_USE_NATIVE_IF_POSSIBLE );
             if( !nErr )     // fehlerhaft, da ist nichts auszugeben
             {
-                rEmbGrfNm = URIHelper::SmartRelToAbs( rEmbGrfNm );
+                rEmbGrfNm = URIHelper::SmartRel2Abs(
+                    INetURLObject( GetBaseURL() ), rEmbGrfNm,
+                    URIHelper::GetMaybeFileHdl() );
                 pLink = &rEmbGrfNm;
             }
             else
@@ -1355,9 +1355,7 @@ void SwHTMLWriter::OutBackground( const SvxBrushItem *pBrushItem,
     if( pLink )
     {
         ByteString sOut( ' ' );
-        String s( INetURLObject::AbsToRel( *pLink,
-                                        INetURLObject::WAS_ENCODED,
-                                        INetURLObject::DECODE_UNAMBIGUOUS));
+        String s( URIHelper::simpleNormalizedMakeRelative( GetBaseURL(), *pLink));
         (sOut += sHTML_O_background) += "=\"";
         Strm() << sOut.GetBuffer();
         HTMLOutFuncs::Out_String( Strm(), s, eDestEnc, &aNonConvertableCharacters ) << '\"';
@@ -1579,9 +1577,9 @@ HTMLSaveData::~HTMLSaveData()
 }
 
 
-void GetHTMLWriter( const String&, WriterRef& xRet )
+void GetHTMLWriter( const String&, const String& rBaseURL, WriterRef& xRet )
 {
-    xRet = new SwHTMLWriter;
+    xRet = new SwHTMLWriter( rBaseURL );
 }
 
 
