@@ -3,9 +3,9 @@
  *
  *  $RCSfile: WriterWebWindowState.xcu,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-28 15:21:11 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 08:57:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,9 +138,6 @@
             <node oor:name="private:resource/toolbar/tableobjectbar" oor:op="replace">
                 <prop oor:name="Docked" oor:type="xs:boolean">
                     <value>false</value>
-                </prop>
-                <prop oor:name="Size" oor:type="xs:string">
-                    <value>579,27</value>
                 </prop>
                 <prop oor:name="Visible" oor:type="xs:boolean">
                     <value>true</value>
@@ -381,9 +378,6 @@
             <node oor:name="private:resource/toolbar/numobjectbar" oor:op="replace">
                 <prop oor:name="Docked" oor:type="xs:boolean">
                     <value>false</value>
-                </prop>
-                <prop oor:name="Size" oor:type="xs:string">
-                    <value>374,27</value>
                 </prop>
                 <prop oor:name="UIName" oor:type="xs:string">
                     <value xml:lang="en-US">Bullets and Numbering</value>
