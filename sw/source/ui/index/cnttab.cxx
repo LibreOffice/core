@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:43:50 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:03:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3543,7 +3543,7 @@ IMPL_LINK(SwTokenWindow, ScrollHdl, ImageButton*, pBtn )
     if(aControlList.Count())
     {
         const long nSpace = aCtrlParentWin.GetSizePixel().Width();
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     //find all start/end positions and print it
     String sMessage(String::CreateFromAscii("Space: "));
     sMessage += String::CreateFromInt32(nSpace);
@@ -3618,7 +3618,7 @@ IMPL_LINK(SwTokenWindow, ScrollHdl, ImageButton*, pBtn )
             pCtrl = aControlList.Last();
             aRightScrollWin.Enable((pCtrl->GetPosPixel().X() + pCtrl->GetSizePixel().Width()) > nSpace);
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
             sMessage.AppendAscii("Move: ");
             sMessage += String::CreateFromInt32(nMove);
             GetParent()->GetParent()->GetParent()->SetText(sMessage);
