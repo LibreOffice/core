@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr1.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:04:15 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:51:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3540,7 +3540,8 @@ void ScInterpreter::ScLookup()
                 BOOL bFound = FALSE;
                 sal_Int32 nRes;
                 String aParamStr = *rEntry.pStr;
-                for (USHORT i = 0; i < nMatCount; i++)
+                USHORT i;
+                for ( i = 0; i < nMatCount; i++)
                 {
                     if (!pMat1->IsValue(i))
                     {
@@ -3567,7 +3568,8 @@ void ScInterpreter::ScLookup()
             {
                 BOOL bFound = FALSE;
                 double fVal1;
-                for (USHORT i = 0; i < nMatCount; i++)
+                USHORT i;
+                for ( i = 0; i < nMatCount; i++)
                 {
                     if (pMat1->IsValue(i))
                         fVal1 = pMat1->GetDouble(i);
