@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportSharedData.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2001-08-02 08:53:57 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 13:49:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,10 @@
 #ifndef SC_XMLEXPORTSHAREDDATA_HXX
 #define SC_XMLEXPORTSHAREDDATA_HXX
 
+#ifndef SC_SCGLOB_HXX
+#include "global.hxx"
+#endif
+
 #ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGE_HPP_
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #endif
@@ -88,6 +92,7 @@ typedef std::vector<ScMyDrawPage> ScMyDrawPages;
 class ScMyShapesContainer;
 class ScMyDetectiveObjContainer;
 struct ScMyShape;
+class ScMyNoteShapesContainer;
 
 class ScMySharedData
 {
@@ -97,6 +102,7 @@ class ScMySharedData
     ScMyDrawPages*              pDrawPages;
     ScMyShapesContainer*        pShapesContainer;
     ScMyDetectiveObjContainer*  pDetectiveObjContainer;
+    ScMyNoteShapesContainer*    pNoteShapes;
     sal_Int32                   nTableCount;
 public:
     ScMySharedData(const sal_Int32 nTableCount);
@@ -118,6 +124,9 @@ public:
     void AddTableShape(const sal_Int32 nTable, const com::sun::star::uno::Reference<com::sun::star::drawing::XShape>& xShape);
     ScMyTableShapes* GetTableShapes() { return pTableShapes; }
     ScMyDetectiveObjContainer* GetDetectiveObjContainer() { return pDetectiveObjContainer; }
+    void AddNoteObj(const com::sun::star::uno::Reference<com::sun::star::drawing::XShape>& xShape, const ScAddress& rPos);
+    void SortNoteShapes();
+    ScMyNoteShapesContainer* GetNoteShapes() { return pNoteShapes; }
 };
 
 #endif
