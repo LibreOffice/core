@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev4.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ka $ $Date: 2001-09-03 13:32:06 $
+ *  last change: $Author: ka $ $Date: 2001-09-18 09:51:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -799,6 +799,13 @@ void OutputDevice::DrawGradient( const Rectangle& rRect,
         Push( PUSH_CLIPREGION );
         IntersectClipRegion( rRect );
 
+        // because we draw with no border line, we have to expand gradient
+        // rect to avoid missing lines on the right and bottom edge
+        aRect.Left()--;
+        aRect.Top()--;
+        aRect.Right()++;
+        aRect.Bottom()++;
+
         // we need a graphics
         if ( !mpGraphics )
         {
@@ -1058,6 +1065,13 @@ void OutputDevice::AddGradientActions( const Rectangle& rRect, const Gradient& r
         mpMetaFile->AddAction( new MetaPushAction( PUSH_ALL ) );
         mpMetaFile->AddAction( new MetaISectRectClipRegionAction( aRect ) );
         mpMetaFile->AddAction( new MetaLineColorAction( Color(), FALSE ) );
+
+        // because we draw with no border line, we have to expand gradient
+        // rect to avoid missing lines on the right and bottom edge
+        aRect.Left()--;
+        aRect.Top()--;
+        aRect.Right()++;
+        aRect.Bottom()++;
 
         // calculate step count if neccessary
         if ( !aGradient.GetSteps() )
