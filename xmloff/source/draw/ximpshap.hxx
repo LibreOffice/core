@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-13 19:13:03 $
+ *  last change: $Author: cl $ $Date: 2000-12-20 16:17:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,6 +205,9 @@ class SdXMLEllipseShapeContext : public SdXMLShapeContext
     sal_Int32                   mnRX;
     sal_Int32                   mnRY;
 
+    USHORT                      meKind;
+    sal_Int32                   mnStartAngle;
+    sal_Int32                   mnEndAngle;
 public:
     TYPEINFO();
 

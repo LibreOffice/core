@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-19 16:23:47 $
+ *  last change: $Author: cl $ $Date: 2000-12-20 16:17:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,10 @@
 
 #ifndef _SDXMLEXP_IMPL_HXX
 #include "sdxmlexp_impl.hxx"
+#endif
+
+#ifndef _COM_SUN_STAR_DRAWING_CIRCLEKIND_HPP_
+#include <com/sun/star/drawing/CircleKind.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGESSUPPLIER_HPP_
@@ -300,6 +304,8 @@ class ImpPresPageDrawStylePropMapper : public SvXMLExportPropertyMapper
 public:
     ImpPresPageDrawStylePropMapper( const UniReference< XMLPropertySetMapper >& rMapper );
     virtual ~ImpPresPageDrawStylePropMapper();
+
+    void ContextFilter( std::vector< XMLPropertyState >& rProperties, uno::Reference< beans::XPropertySet > rPropSet ) const;
 };
 
 ImpPresPageDrawStylePropMapper::ImpPresPageDrawStylePropMapper(
@@ -341,6 +347,45 @@ void ImpPresPageDrawStylePropMapper::handleSpecialItem(
 {
     // call parent
     SvXMLExportPropertyMapper::handleSpecialItem(rAttrList, rProperty, rUnitConverter, rNamespaceMap, pProperties, nIdx );
+}
+
+
+void ImpPresPageDrawStylePropMapper::ContextFilter(
+    std::vector< XMLPropertyState >& rProperties,
+    uno::Reference< beans::XPropertySet > rPropSet ) const
+{
+    XMLPropertyState* pRepeatOffsetX = NULL;
+    XMLPropertyState* pRepeatOffsetY = NULL;
+
+    // filter properties
+    for( std::vector< XMLPropertyState >::iterator property = rProperties.begin();
+         property != rProperties.end();
+         property++ )
+    {
+        // find properties with context
+        // to prevent writing this property set mnIndex member to -1
+        switch( getPropertySetMapper()->GetEntryContextId( property->mnIndex ))
+        {
+            case CTF_REPEAT_OFFSET_X:
+                pRepeatOffsetX = property;
+                break;
+
+            case CTF_REPEAT_OFFSET_Y:
+                pRepeatOffsetY = property;
+                break;
+        }
+    }
+
+    if( pRepeatOffsetX && pRepeatOffsetY )
+    {
+        sal_Int32 nOffset;
+        if( ( pRepeatOffsetX->maValue >>= nOffset ) && ( nOffset == 0 ) )
+            pRepeatOffsetX->mnIndex = -1;
+        else
+            pRepeatOffsetY->mnIndex = -1;
+    }
+
+    SvXMLExportPropertyMapper::ContextFilter(rProperties, rPropSet);
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -2190,6 +2235,28 @@ void SdXMLExport::ImpExportEllipseShape(SvXMLExport& rExp,
         // does transformation need to be exported?
         if(aTransform.NeedsAction())
             rExp.AddAttribute(XML_NAMESPACE_SVG, sXML_transform, aTransform.GetExportString(rExp.GetMM100UnitConverter()));
+
+        drawing::CircleKind eKind = drawing::CircleKind_FULL;
+        xPropSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("CircleKind")) ) >>= eKind;
+        if( eKind != drawing::CircleKind_FULL )
+        {
+            sal_Int32 nStartAngle;
+            sal_Int32 nEndAngle;
+            xPropSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("CircleStartAngle")) ) >>= nStartAngle;
+            xPropSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("CircleEndAngle")) ) >>= nEndAngle;
+
+            const double dStartAngle = nStartAngle / 100.0;
+            const double dEndAngle = nEndAngle / 100.0;
+
+            SvXMLUnitConverter::convertEnum( sStringBuffer, (USHORT)eKind, aXML_CircleKind_EnumMap );
+            rExp.AddAttribute(XML_NAMESPACE_DRAW, sXML_kind, sStringBuffer.makeStringAndClear() );
+
+            SvXMLUnitConverter::convertNumber( sStringBuffer, dStartAngle );
+            rExp.AddAttribute(XML_NAMESPACE_DRAW, sXML_start_angle, sStringBuffer.makeStringAndClear() );
+
+            SvXMLUnitConverter::convertNumber( sStringBuffer, dEndAngle );
+            rExp.AddAttribute(XML_NAMESPACE_DRAW, sXML_end_angle, sStringBuffer.makeStringAndClear() );
+        }
 
         if(bCircle)
         {

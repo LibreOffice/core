@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpropls.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mib $ $Date: 2000-12-18 13:25:00 $
+ *  last change: $Author: cl $ $Date: 2000-12-20 16:17:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,13 +130,12 @@ extern const XMLPropertyMapEntry aXMLSDPresPageProps[];
 #define XML_SD_TYPE_TEXT_CROSSEDOUT                 (XML_SD_TYPES_START + 16 )
 #define XML_SD_TYPE_NUMBULLET                       (XML_SD_TYPES_START + 17 )
 #define XML_SD_TYPE_WRITINGMODE                     (XML_SD_TYPES_START + 18 )
-#define XML_SD_TYPE_BITMAP_TILE                     (XML_SD_TYPES_START + 19 )
-#define XML_SD_TYPE_BITMAP_STRETCH                  (XML_SD_TYPES_START + 20 )
-#define XML_SD_TYPE_BITMAPREPOFFSETX                (XML_SD_TYPES_START + 21 )
-#define XML_SD_TYPE_BITMAPREPOFFSETY                (XML_SD_TYPES_START + 22 )
-#define XML_SD_TYPE_FILLBITMAPSIZE                  (XML_SD_TYPES_START + 23 )
-#define XML_SD_TYPE_LOGICAL_SIZE                    (XML_SD_TYPES_START + 24 )
-#define XML_SD_TYPE_BITMAP_REFPOINT                 (XML_SD_TYPES_START + 25 )
+#define XML_SD_TYPE_BITMAP_MODE                     (XML_SD_TYPES_START + 19 )
+#define XML_SD_TYPE_BITMAPREPOFFSETX                (XML_SD_TYPES_START + 20 )
+#define XML_SD_TYPE_BITMAPREPOFFSETY                (XML_SD_TYPES_START + 21 )
+#define XML_SD_TYPE_FILLBITMAPSIZE                  (XML_SD_TYPES_START + 22 )
+#define XML_SD_TYPE_LOGICAL_SIZE                    (XML_SD_TYPES_START + 23 )
+#define XML_SD_TYPE_BITMAP_REFPOINT                 (XML_SD_TYPES_START + 24 )
 
 // 3D property types
 #define XML_SD_TYPE_BACKFACE_CULLING                (XML_SD_TYPES_START + 40 )
@@ -152,15 +151,14 @@ extern const XMLPropertyMapEntry aXMLSDPresPageProps[];
 #define CTF_NUMBERINGRULES          1000
 #define CTF_NUMBERINGRULES_NAME     1001
 #define CTF_WRITINGMODE             1002
-#define CTF_BITMAP_TILE             1003
-#define CTF_BITMAP_STRETCH          1004
-#define CTF_REPEAT_OFFSET_X         1005
-#define CTF_REPEAT_OFFSET_Y         1006
+#define CTF_REPEAT_OFFSET_X         1003
+#define CTF_REPEAT_OFFSET_Y         1004
 
 //////////////////////////////////////////////////////////////////////////////
 // enum maps for attributes
 
 extern SvXMLEnumMapEntry aXML_ConnectionKind_EnumMap[];
+extern SvXMLEnumMapEntry aXML_CircleKind_EnumMap[];
 
 //////////////////////////////////////////////////////////////////////////////
 // factory for own graphic properties

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-13 19:13:03 $
+ *  last change: $Author: cl $ $Date: 2000-12-20 16:17:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,10 @@
 
 #ifndef _XMLOFF_XMLUCONV_HXX
 #include "xmluconv.hxx"
+#endif
+
+#ifndef _COM_SUN_STAR_DRAWING_CIRCLEKIND_HPP_
+#include <com/sun/star/drawing/CircleKind.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
@@ -582,7 +586,10 @@ SdXMLEllipseShapeContext::SdXMLEllipseShapeContext(
     mnCX( 0L ),
     mnCY( 0L ),
     mnRX( 1L ),
-    mnRY( 1L )
+    mnRY( 1L ),
+    meKind( drawing::CircleKind_FULL ),
+    mnStartAngle( 0 ),
+    mnEndAngle( 0 )
 {
 }
 
@@ -627,6 +634,32 @@ void SdXMLEllipseShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl
             return;
         }
     }
+    else if( XML_NAMESPACE_DRAW == nPrefix )
+    {
+        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_kind)) )
+        {
+            USHORT eKind;
+            if( SvXMLUnitConverter::convertEnum( eKind, rValue, aXML_CircleKind_EnumMap ) )
+            {
+                meKind = eKind;
+            }
+            return;
+        }
+        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_start_angle)) )
+        {
+            double dStartAngle;
+            if( SvXMLUnitConverter::convertNumber( dStartAngle, rValue ) )
+                mnStartAngle = (sal_Int32)(dStartAngle * 100.0);
+            return;
+        }
+        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_end_angle)) )
+        {
+            double dEndAngle;
+            if( SvXMLUnitConverter::convertNumber( dEndAngle, rValue ) )
+                mnEndAngle = (sal_Int32)(dEndAngle * 100.0);
+            return;
+        }
+    }
 
     SdXMLShapeContext::processAttribute( nPrefix, rLocalName, rValue );
 }
@@ -649,6 +682,23 @@ void SdXMLEllipseShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
         mxShape->setSize(aSize);
 
         SetRotation();
+
+        if( meKind != drawing::CircleKind_FULL )
+        {
+            uno::Reference< beans::XPropertySet > xPropSet( mxShape, uno::UNO_QUERY );
+            if( xPropSet.is() )
+            {
+                uno::Any aAny;
+                aAny <<= (drawing::CircleKind)meKind;
+                xPropSet->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("CircleKind")), aAny );
+
+                aAny <<= mnStartAngle;
+                xPropSet->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("CircleStartAngle")), aAny );
+
+                aAny <<= mnEndAngle;
+                xPropSet->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("CircleEndAngle")), aAny );
+            }
+        }
 
         SdXMLShapeContext::StartElement(xAttrList);
     }
