@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 13:14:43 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 11:50:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1237,28 +1237,6 @@ void SfxViewFrame::ReleaseObjectShell_Impl( sal_Bool bStoreView )
     HACK(MI weiss nicht wie !pSh sein kann - nach PlugIns isses aber so)
     if ( pDyingViewSh )
     {
-        // Gibt es noch andere Views auf mein Doc?
-        SfxViewFrame *pView = GetFirst(xObjSh);
-        while( pView )
-        {
-            if ( pView != this )
-                break;
-            pView = GetNext( *pView, xObjSh );
-        }
-
-        if ( !pView )
-        {
-            // Ich bin die letzte View
-            SfxObjectFactory *pFactory = &xObjSh->GetFactory();
-            if ( pFactory && pFactory->GetFlags() & SFXOBJECTSHELL_HASOPENDOC )
-            {
-                // Event nur bei echten Dokumenten
-                xObjSh->Get_Impl()->bInCloseEvent = sal_True;
-                SFX_APP()->NotifyEvent( SfxEventHint(SFX_EVENT_CLOSEDOC, xObjSh) );
-                xObjSh->Get_Impl()->bInCloseEvent = sal_False;
-            }
-        }
-
         SetRestoreView_Impl( bStoreView );
         if ( bStoreView )
             pDyingViewSh->WriteUserData( GetViewData_Impl(), sal_True );
