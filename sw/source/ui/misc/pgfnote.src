@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pgfnote.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-10 20:39:10 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 21:12:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,7 @@ TabPage TP_FOOTNOTE_PAGE
         Text[ korean ] = "ÃÖ´ë¡¡³ôÀÌ£¬ÂÊ³ôÀÌ¿Í¡¡°°°Ô(~N)";
         Text[ turkish ] = "En fazla sayfa yüksekliðinde";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Altura má~xima como página";
     };
     RadioButton RB_MAXHEIGHT
     {
@@ -124,6 +125,7 @@ TabPage TP_FOOTNOTE_PAGE
         Text[ korean ] = "°¢ÁÖ ÃÖ´ë ³ôÀÌ(~H)";
         Text[ turkish ] = "Azami dipnot yüksekliði";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Altura máx. de ~nota al pie";
     };
     MetricField ED_MAXHEIGHT
     {
@@ -172,6 +174,7 @@ TabPage TP_FOOTNOTE_PAGE
         Text[ korean ] = "º»¹®¿¡¡¡´ëÇÑ¡¡°£°Ý";
         Text[ turkish ] = "Metinden uzaklýk";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Distancia al cuerpo del texto";
     };
     MetricField ED_DIST
     {
@@ -199,7 +202,7 @@ TabPage TP_FOOTNOTE_PAGE
         Text [ norwegian ] = "+++Footnote range" ;
         Text [ italian ] = "Area note a piè pagina" ;
         Text [ portuguese_brazilian ] = "Faixa de nota de pé de página" ;
-        Text [ portuguese ] = "Faixa da nota de rodapé" ;
+        Text [ portuguese ] = "Área da nota de rodapé" ;
         Text [ finnish ] = "Alaviitealue" ;
         Text [ danish ] = "Fodnoteområde" ;
         Text [ french ] = "Plage note de bas de page" ;
@@ -217,6 +220,7 @@ TabPage TP_FOOTNOTE_PAGE
         Text[ korean ] = "°¢ÁÖ ¿µ¿ª";
         Text[ turkish ] = "Dipnot bölümü";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Área de la nota al pie";
     };
     FixedText FT_LINEPOS
     {
@@ -244,6 +248,7 @@ TabPage TP_FOOTNOTE_PAGE
         Text[ korean ] = "À§Ä¡(~P)";
         Text[ turkish ] = "Konum";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Posición";
     };
     ListBox DLB_LINEPOS
     {
@@ -391,6 +396,12 @@ TabPage TP_FOOTNOTE_PAGE
         < " " ; Default ; > ;
         < " " ; Default ; > ;
     };
+    StringList [ catalan ] =
+    {
+            < "A la izquierda" ; Default ; > ;
+        < "Centrado" ; Default ; > ;
+        < "Derecha" ; Default ; > ;
+    };
     };
     FixedText FT_LINETYPE
     {
@@ -419,6 +430,7 @@ TabPage TP_FOOTNOTE_PAGE
         Text[ korean ] = "µÎ²²(~W)";
         Text[ turkish ] = "Çizgi kal.";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Grosor";
     };
     ListBox DLB_LINETYPE
     {
@@ -456,6 +468,7 @@ TabPage TP_FOOTNOTE_PAGE
         Text[ korean ] = "±æÀÌ(~L)";
         Text[ turkish ] = "Uzunluk";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Longitud";
     };
     MetricField ED_LINEWIDTH
     {
@@ -501,6 +514,7 @@ TabPage TP_FOOTNOTE_PAGE
         Text[ greek ] = "Áðüó~ôáóç áðü ôï ðåñéå÷üìåíï õðïóçìåßùóçò";
         Text[ korean ] = "°¢ÁÖ ³»¿ë¿¡ ´ëÇÑ¡¡°£°Ý(~S)";
         Text[ turkish ] = "Dipnot içeriðine uzaklýk";
+        Text[ catalan ] = "~Espacio al contenido de la nota";
     };
     MetricField ED_LINEDIST
     {
@@ -546,5 +560,6 @@ TabPage TP_FOOTNOTE_PAGE
         Text[ korean ] = "±¸ºÐ¼±";
         Text[ turkish ] = "Ayýrma çizgisi";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Línea de separación";
     };
 };
