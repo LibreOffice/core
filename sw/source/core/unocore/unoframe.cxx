@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.97 $
+ *  $Revision: 1.98 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-25 09:27:49 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 11:25:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,9 @@
 
 #pragma hdrstop
 
+#ifndef _COM_SUN_STAR_EMBED_NOVISUALAREASIZEEXCEPTION_HPP_
+#include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
+#endif
 #ifndef _COM_SUN_STAR_EMBED_XCLASSIFIEDOBJECT_HPP_
 #include <com/sun/star/embed/XClassifiedObject.hpp>
 #endif
@@ -2263,7 +2266,16 @@ void SwXFrame::attachToRange(const uno::Reference< XTextRange > & xTextRange)
                     // TODO/LEAN: VisualArea may switch object to running state
                     //The Size should be suggested by the OLE server if not manually set
                     MapUnit aRefMap = VCLUnoHelper::UnoEmbed2VCLMapUnit( xIPObj->getMapUnit( nAspect ) );
-                    awt::Size aSize = xIPObj->getVisualAreaSize( nAspect );
+                    awt::Size aSize;
+                    try
+                    {
+                        aSize = xIPObj->getVisualAreaSize( nAspect );
+                    }
+                    catch ( embed::NoVisualAreaSizeException& )
+                    {
+                        // the default size will be set later
+                    }
+
                     Size aSz( aSize.Width, aSize.Height );
                     if ( !aSz.Width() || !aSz.Height() )
                     {
