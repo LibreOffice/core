@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scheduler.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-12-13 08:53:39 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 16:30:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,6 +167,9 @@ namespace sdr
 
             // get time
             sal_uInt32 GetTime();
+
+            // #i38135#
+            void SetTime(sal_uInt32 nTime);
 
             // reset
             void Reset(sal_uInt32 nTime);
