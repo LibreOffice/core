@@ -2,9 +2,9 @@
  *
  *  $RCSfile: some.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:13:32 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 16:14:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -39,24 +39,22 @@
  *************************************************************************/
 
 #include <com/sun/star/uno/XInterface.idl>
-#include <com/sun/star/lang/XInitialization.idl>
+#include <com/sun/star/lang/IllegalArgumentException.idl>
 
 module my_module
 {
 
-interface XSomething : com::sun::star::uno::XInterface
-{
-    string methodOne( [in] string val );
-};
+    interface XSomething
+    {
+        string methodOne( [in] string val );
+        string methodTwo();
+    };
 
-service MyService1
-{
-    interface XSomething;
-};
-service MyService2
-{
-    interface XSomething;
-    interface com::sun::star::lang::XInitialization;
-};
+    service MyService1 : XSomething;
 
+    service MyService2 : XSomething
+    {
+        create([in]string sArgument)
+            raises (::com::sun::star::lang::IllegalArgumentException);
+    };
 };
