@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localize.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nf $ $Date: 2001-06-07 13:38:36 $
+ *  last change: $Author: nf $ $Date: 2001-06-07 13:40:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -286,7 +286,6 @@ void SourceTreeLocalizer::WorkOnFile(
             fprintf( stdout, "Executed: %s\n", sCommand.GetBuffer());
 
             SvFileStream aSDFIn( aTemp.GetFull(), STREAM_READ );
-            fprintf( stdout, "Open\n" );
             ByteString sLine;
             while ( !aSDFIn.IsEof()) {
                 aSDFIn.ReadLine( sLine );
@@ -294,8 +293,6 @@ void SourceTreeLocalizer::WorkOnFile(
                     aSDF.WriteLine( sLine );
             }
             aSDFIn.Close();
-
-            fprintf( stdout, "Copied\n" );
 
             aTemp.Kill();
         }
