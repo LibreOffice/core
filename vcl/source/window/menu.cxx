@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.106 $
+ *  $Revision: 1.107 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 12:23:14 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 13:49:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -431,6 +431,8 @@ uno::Reference< i18n::XCharacterClassification > MenuItemList::GetCharClass() co
 class MenuFloatingWindow : public FloatingWindow
 {
     friend void Menu::ImplFillLayoutData() const;
+    friend Menu::~Menu();
+
 private:
     Menu*           pMenu;
     PopupMenu*      pActivePopup;
@@ -769,8 +771,14 @@ Menu::~Menu()
     ImplCallEventListeners( VCLEVENT_OBJECT_DYING, ITEMPOS_INVALID );
 
     // at the window free the reference to the accessible component
+    // and make sure the MenuFloatingWindow knows about our destruction
     if ( pWindow )
+    {
+        MenuFloatingWindow* pFloat = (MenuFloatingWindow*)pWindow;
+        if( pFloat->pMenu == this )
+            pFloat->pMenu = NULL;
         pWindow->SetAccessible( ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >() );
+    }
 
     // dispose accessible components
     if ( mxAccessible.is() )
@@ -1839,7 +1847,8 @@ BOOL Menu::ImplIsVisible( USHORT nPos ) const
 
     // Fuer den Menubar nicht erlaubt, weil ich nicht mitbekomme
     // ob dadurch ein Eintrag verschwindet oder wieder da ist.
-    if ( !bIsMenuBar && ( nMenuFlags & MENU_FLAG_HIDEDISABLEDENTRIES ) )
+    if ( !bIsMenuBar && ( nMenuFlags & MENU_FLAG_HIDEDISABLEDENTRIES ) &&
+        !( nMenuFlags & MENU_FLAG_ALWAYSSHOWDISABLEDENTRIES ) )
     {
         MenuItemData* pData = pItemList->GetDataFromPos( nPos );
         if( !pData ) // e.g. nPos == ITEMPOS_INVALID
@@ -2908,6 +2917,10 @@ USHORT PopupMenu::Execute( Window* pWindow, const Rectangle& rRect, USHORT nFlag
         nPopupModeFlags = FLOATWIN_POPUPMODE_RIGHT;
     else
         nPopupModeFlags = FLOATWIN_POPUPMODE_DOWN;
+
+    if (nFlags & POPUPMENU_NOMOUSEUPCLOSE )                      // allow popup menus to stay open on mouse button up
+        nPopupModeFlags |= FLOATWIN_POPUPMODE_NOMOUSEUPCLOSE;    // useful if the menu was opened on mousebutton down (eg toolbox configuration)
+
     return ImplExecute( pWindow, rRect, nPopupModeFlags, 0, FALSE );
 }
 
@@ -3061,7 +3074,15 @@ USHORT PopupMenu::ImplExecute( Window* pW, const Rectangle& rRect, ULONG nPopupM
     }
     if ( bRealExecute )
     {
+        ImplDelData aDelData;
+        pWin->ImplAddDel( &aDelData );
+
         pWin->Execute();
+
+        if ( !aDelData.IsDelete() )
+            pWin->ImplRemoveDel( &aDelData );
+        else
+            return 0;
 
         // Focus wieder herstellen (kann schon im Select wieder
         // hergestellt wurden sein
@@ -3200,7 +3221,7 @@ MenuFloatingWindow::~MenuFloatingWindow()
     if( nHighlightedItem != ITEMPOS_INVALID )
         pMenu->ImplCallEventListeners( VCLEVENT_MENU_DEHIGHLIGHT, nHighlightedItem );
 
-    if( !bKeyInput && pMenu->pStartedFrom && !pMenu->pStartedFrom->bIsMenuBar )
+    if( !bKeyInput && pMenu && pMenu->pStartedFrom && !pMenu->pStartedFrom->bIsMenuBar )
     {
         // #102461# remove highlight in parent
         MenuItemData* pData;
