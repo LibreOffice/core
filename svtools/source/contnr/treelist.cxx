@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treelist.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-06 13:30:55 $
+ *  last change: $Author: fs $ $Date: 2002-01-18 18:15:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,6 +179,7 @@ void SvTreeEntryList::DestroyAll()
 
 
 
+DBG_NAME( SvTreeList )
 /*************************************************************************
 |*
 |*    SvTreeList::
@@ -191,6 +192,7 @@ void SvTreeEntryList::DestroyAll()
 
 SvTreeList::SvTreeList()
 {
+    DBG_CTOR( SvTreeList, NULL );
     nEntryCount = 0;
     bAbsPositionsValid = FALSE;
     nRefCount = 1;
@@ -211,8 +213,12 @@ SvTreeList::SvTreeList()
 
 SvTreeList::~SvTreeList()
 {
-    Clear();
-    delete pRootItem;
+    DBG_DTOR( SvTreeList, NULL );
+    if ( pRootItem )
+    {
+        Clear();
+        delete pRootItem;
+    }
 #ifdef DBG_UTIL
     pRootItem = 0;
 #endif
@@ -1735,6 +1741,17 @@ SvListView::~SvListView()
 {
     DBG_DTOR(SvListView,0);
     ClearTable();
+
+    // if we still have a model -> remove ourself from it
+    if ( pModel )
+    {
+        pModel->RemoveView( this );
+        if ( pModel->GetRefCount() == 0 )
+        {
+            delete pModel;
+            pModel = NULL;
+        }
+    }
 }
 
 void SvListView::InitTable()
@@ -1819,6 +1836,7 @@ void SvListView::SetModel( SvTreeList* pNewModel )
         ModelNotification( LISTACTION_CLEARING,0,0,0 );
         if ( pModel->GetRefCount() == 0 )
             delete pModel;
+
     }
     pModel = pNewModel;
     InitTable();
