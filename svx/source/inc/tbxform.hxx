@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxform.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:03:23 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 19:22:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@
 #endif
 
 //========================================================================
-
+/* //CHINA001
 class FmInputRecordNoDialog : public ModalDialog
 {
 public:
@@ -97,7 +97,7 @@ public:
     void SetValue(double dNew) { m_aRecordNo.SetValue(dNew); }
     long GetValue() const { return m_aRecordNo.GetValue(); }
 };
-
+*/ //CHINA001
 //========================================================================
 class SvxFmAbsRecWin : public NumericField
 {
