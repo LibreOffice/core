@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attarray.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:14 $
+ *  last change: $Author: nn $ $Date: 2001-03-12 08:49:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -987,35 +987,34 @@ BOOL ScAttrArray::ApplyFrame( const SvxBoxItem*     pBoxItem,
     if ( rMerge.GetRowMerge() == nDistBottom + 1 )
         nDistBottom = 0;
 
-    SvxBoxItem* pNewFrame = new SvxBoxItem( *pOldFrame );
+    SvxBoxItem aNewFrame( *pOldFrame );
 
     if ( bLeft ? pBoxInfoItem->IsValid(VALID_LEFT) : pBoxInfoItem->IsValid(VALID_VERT) )
-        pNewFrame->SetLine( bLeft ? pBoxItem->GetLeft() : pBoxInfoItem->GetVert(),
+        aNewFrame.SetLine( bLeft ? pBoxItem->GetLeft() : pBoxInfoItem->GetVert(),
             BOX_LINE_LEFT );
     if ( (nDistRight==0) ? pBoxInfoItem->IsValid(VALID_RIGHT) : pBoxInfoItem->IsValid(VALID_VERT) )
-        pNewFrame->SetLine( (nDistRight==0) ? pBoxItem->GetRight() : pBoxInfoItem->GetVert(),
+        aNewFrame.SetLine( (nDistRight==0) ? pBoxItem->GetRight() : pBoxInfoItem->GetVert(),
             BOX_LINE_RIGHT );
     if ( bTop ? pBoxInfoItem->IsValid(VALID_TOP) : pBoxInfoItem->IsValid(VALID_HORI) )
-        pNewFrame->SetLine( bTop ? pBoxItem->GetTop() : pBoxInfoItem->GetHori(),
+        aNewFrame.SetLine( bTop ? pBoxItem->GetTop() : pBoxInfoItem->GetHori(),
             BOX_LINE_TOP );
     if ( (nDistBottom==0) ? pBoxInfoItem->IsValid(VALID_BOTTOM) : pBoxInfoItem->IsValid(VALID_HORI) )
-        pNewFrame->SetLine( (nDistBottom==0) ? pBoxItem->GetBottom() : pBoxInfoItem->GetHori(),
+        aNewFrame.SetLine( (nDistBottom==0) ? pBoxItem->GetBottom() : pBoxInfoItem->GetHori(),
             BOX_LINE_BOTTOM );
 
-    if (*pNewFrame == *pOldFrame)
+    if (aNewFrame == *pOldFrame)
     {
-        delete pNewFrame;
+        // nothing to do
         return FALSE;
     }
     else
     {
-        SfxItemPoolCache aCache( pDocument->GetPool(), pNewFrame );
+        SfxItemPoolCache aCache( pDocument->GetPool(), &aNewFrame );
         ApplyCacheArea( nStartRow, nEndRow, &aCache );
 
 /*      ScPatternAttr* pNewPattern = (ScPatternAttr*) pPattern->Clone();
-        pNewPattern->GetItemSet().Put( *pNewFrame );
+        pNewPattern->GetItemSet().Put( aNewFrame );
         SetPatternArea( nStartRow, nEndRow, pNewPattern, TRUE );
-        delete pNewFrame;
 */
         return TRUE;
     }
@@ -2432,6 +2431,7 @@ void ScAttrArray::Load( SvStream& rStream )
         pData[nCount-1].nRow = MAXROW;
     }
 }
+
 
 
 
