@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: ssa $ $Date: 2001-10-24 10:24:19 $
+ *  last change: $Author: ssa $ $Date: 2001-10-30 08:28:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -6060,6 +6060,25 @@ Point Window::AbsoluteScreenToOutputPixel( const Point& rPos ) const
     p.Y() -= g.nY;
 #endif
     return p;
+}
+
+// -----------------------------------------------------------------------
+
+Rectangle Window::GetWindowExtentsRelative( Window *pRelativeWindow )
+{
+#ifndef REMOTE_APPSERVER
+    SalFrame::Geometry g = mpFrame->GetGeometry();
+    Point aPos( OutputToScreenPixel( GetPosPixel() ) );
+    aPos.X() += g.nX - g.nLeftDecoration;
+    aPos.Y() += g.nY - g.nTopDecoration;
+    Size aSize ( GetSizePixel() );
+    aSize.Width() += g.nLeftDecoration + g.nRightDecoration;
+    aSize.Height() += g.nTopDecoration + g.nBottomDecoration;
+    if( pRelativeWindow )
+        aPos = pRelativeWindow->AbsoluteScreenToOutputPixel( aPos );
+    return Rectangle( aPos, aSize );
+#endif
+    return Rectangle();
 }
 
 // -----------------------------------------------------------------------
