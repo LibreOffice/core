@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtreeview.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-09 07:36:15 $
+ *  last change: $Author: fs $ $Date: 2000-11-10 13:53:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,11 +72,15 @@
 #include "dbtreemodel.hxx"
 #endif
 
-using namespace dbaui;
-// ------------------
-// - DBTreeView -
-// ------------------
+// .........................................................................
+namespace dbaui
+{
+// .........................................................................
 
+
+//========================================================================
+// class DBTreeView
+//========================================================================
 DBTreeView::DBTreeView( Window* pParent, WinBits nBits)
                     :   Window( pParent, nBits )
                     , m_pTreeListBox(NULL)
@@ -149,4 +153,9 @@ void DBTreeView::setSelectHdl(const Link& _rHdl)
 }
 
 // -------------------------------------------------------------------------
+
+// .........................................................................
+}   // namespace dbaui
+// .........................................................................
+
 

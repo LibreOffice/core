@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtreemodel.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-09 07:34:02 $
+ *  last change: $Author: fs $ $Date: 2000-11-10 13:53:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@
 #ifndef _SVLBOX_HXX
 #include <svtools/svlbox.hxx>
 #endif
+#ifndef _SVLBOXITM_HXX
+#include <svtools/svlbitm.hxx>
+#endif
 #ifndef _DBAUI_MODULE_DBU_HXX_
 #include "moduledbu.hxx"
 #endif
@@ -77,9 +80,33 @@ namespace com { namespace sun { namespace star { namespace lang { class XMultiSe
 
 namespace dbaui
 {
-    // ------------------
-    // - DBTreeListModel -
-    // ------------------
+    #define SV_ITEM_ID_DBTEXTITEM   SV_ITEM_ID_LBOXSTRING
+
+    //========================================================================
+    //= DSBrowserString
+    //========================================================================
+    class DSBrowserString : public SvLBoxString
+    {
+        sal_Bool    m_bSelected;
+
+    public:
+        DSBrowserString(SvLBoxEntry* _pEntry, sal_uInt16 _nFlags, const XubString& _rStr)
+            :SvLBoxString(_pEntry, _nFlags, _rStr)
+            ,m_bSelected(sal_False)
+        {
+        }
+
+        virtual USHORT IsA();
+
+        virtual void Paint(const Point& rPos, SvLBox& rDev, sal_uInt16 nFlags, SvLBoxEntry* pEntry);
+        virtual void InitViewData( SvLBox* pView,SvLBoxEntry* pEntry, SvViewDataItem* _pViewData);
+
+        void    Select(sal_Bool _bSelect) { m_bSelected = _bSelect; }
+    };
+
+    //========================================================================
+    //= DBTreeListModel
+    //========================================================================
     class DBTreeListModel : public SvLBoxTreeList
     {
     public:

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2000-11-09 14:42:09 $
+ *  last change: $Author: fs $ $Date: 2000-11-10 13:53:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -300,6 +300,7 @@ SbaTableQueryBrowser::SbaTableQueryBrowser(const Reference< XMultiServiceFactory
     ,m_pTreeModel(NULL)
     ,m_pTreeView(NULL)
     ,m_pSplitter(NULL)
+    ,m_pCurrentlyDisplayed(NULL)
 {
     // calc the title for the load stopper
 //  sal_uInt32 nTitleResId;
@@ -1303,7 +1304,7 @@ IMPL_LINK(SbaTableQueryBrowser, OnExpandEntry, SvLBoxEntry*, _pParent)
 
     DBTreeListModel::DBTreeListUserData* pData = static_cast< DBTreeListModel::DBTreeListUserData* >(_pParent->GetUserData());
     OSL_ENSHURE(pData,"SbaTableQueryBrowser::OnExpandEntry: No user data!");
-    SvLBoxString* pString = static_cast<SvLBoxString*>(pFirstParent->GetFirstItem(SV_ITEM_ID_LBOXSTRING));
+    SvLBoxString* pString = static_cast<SvLBoxString*>(pFirstParent->GetFirstItem(SV_ITEM_ID_DBTEXTITEM));
     OSL_ENSHURE(pString,"SbaTableQueryBrowser::OnExpandEntry: No string item!");
     String aName(pString->GetText());
     Any aValue(m_xDatabaseContext->getByName(aName));
@@ -1427,7 +1428,7 @@ IMPL_LINK(SbaTableQueryBrowser, OnSelectEntry, SvLBoxEntry*, _pEntry)
     Reference<XConnection> xOldConnection;
     xProp->getPropertyValue(PROPERTY_ACTIVECONNECTION) >>= xOldConnection;
     // the name of the table or query
-    SvLBoxString* pString = (SvLBoxString*)_pEntry->GetFirstItem(SV_ITEM_ID_LBOXSTRING);
+    SvLBoxString* pString = (SvLBoxString*)_pEntry->GetFirstItem(SV_ITEM_ID_DBTEXTITEM);
     ::rtl::OUString aName(pString->GetText().GetBuffer());
 
     SvLBoxEntry* pTables = m_pTreeModel->GetParent(_pEntry);
@@ -1442,6 +1443,35 @@ IMPL_LINK(SbaTableQueryBrowser, OnSelectEntry, SvLBoxEntry*, _pEntry)
 
     if(bRebuild)
     {
+        if (0 == m_pTreeModel->GetChildCount(_pEntry))
+        {
+            // tell the old entry it has been deselected
+            SvLBoxEntry* pEntry = m_pCurrentlyDisplayed;
+            while (pEntry)
+            {
+                SvLBoxItem* pTextItem = pEntry->GetFirstItem(SV_ITEM_ID_DBTEXTITEM);
+                if (pTextItem)
+                {
+                    static_cast<DSBrowserString*>(pTextItem)->Select(sal_False);
+                    m_pTreeModel->InvalidateEntry( pEntry );
+                }
+                pEntry = m_pTreeModel->GetParent(pEntry);
+            }
+            m_pCurrentlyDisplayed = _pEntry;
+            // tell the new entry it has been selected
+            pEntry = m_pCurrentlyDisplayed;
+            while (pEntry)
+            {
+                SvLBoxItem* pTextItem = pEntry->GetFirstItem(SV_ITEM_ID_DBTEXTITEM);
+                if (pTextItem)
+                {
+                    static_cast<DSBrowserString*>(pTextItem)->Select(sal_True);
+                    m_pTreeModel->InvalidateEntry( pEntry );
+                }
+                pEntry = m_pTreeModel->GetParent(pEntry);
+            }
+        }
+
         // the values allowing the RowSet to re-execute
         xProp->setPropertyValue(PROPERTY_ACTIVECONNECTION,makeAny(xConnection));
         xProp->setPropertyValue(PROPERTY_COMMANDTYPE,makeAny(nCommandType));

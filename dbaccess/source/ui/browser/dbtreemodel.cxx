@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtreemodel.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-09 07:34:01 $
+ *  last change: $Author: fs $ $Date: 2000-11-10 13:53:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,10 +127,64 @@ using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::beans;
-using namespace ::dbaui;
 using namespace ::dbtools;
 
+// .........................................................................
+namespace dbaui
+{
+// .........................................................................
+
+//========================================================================
+// class DSBrowserString
+//========================================================================
+//------------------------------------------------------------------------
+void DSBrowserString::InitViewData( SvLBox* pView,SvLBoxEntry* pEntry, SvViewDataItem* _pViewData)
+{
+    SvLBoxString::InitViewData(pView,pEntry, _pViewData);
+    if (!_pViewData)
+        _pViewData = pView->GetViewDataItem( pEntry, this );
+
+    Font aOldFont( pView->GetFont());
+    Font aFont( aOldFont );
+    aFont.SetWeight(WEIGHT_BOLD);
+    pView->SetFont( aFont );
+
+    _pViewData->aSize = Size(pView->GetTextWidth(GetText()), pView->GetTextHeight());
+    pView->SetFont( aOldFont );
+}
+
+//------------------------------------------------------------------------
+USHORT DSBrowserString::IsA()
+{
+    return SV_ITEM_ID_DBTEXTITEM;
+}
+
+//------------------------------------------------------------------------
+void DSBrowserString::Paint(const Point& rPos, SvLBox& rDev, sal_uInt16 nFlags, SvLBoxEntry* pEntry )
+{
+    if (m_bSelected)
+    {
+        Font aOldFont( rDev.GetFont());
+        Font aFont( aOldFont );
+        aFont.SetWeight(WEIGHT_BOLD);
+        rDev.SetFont( aFont );
+
+        Point aPos(rPos);
+        rDev.DrawText( aPos, GetText() );
+        rDev.SetFont( aOldFont );
+    }
+    else
+        SvLBoxString::Paint(rPos, rDev, nFlags, pEntry);
+}
+
+//========================================================================
+// class DBTreeListModel
+//========================================================================
 // -------------------------------------------------------------------------
 DBTreeListModel::DBTreeListModel()
 {
 }
+
+// .........................................................................
+}   // namespace dbaui
+// .........................................................................
