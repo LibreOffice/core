@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdefs.hxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: dr $ $Date: 2002-05-22 11:10:31 $
+ *  last change: $Author: dr $ $Date: 2002-09-16 09:26:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,6 +145,15 @@ enum XclTextWrap
     xlTextWrapNo                    = 0x00,
     xlTextWrapYes                   = 0x01,
     xlTextWrapParent                = 0xFF
+};
+
+/** CTL text direction. */
+enum XclTextDirection
+{
+    xlTextDirContext                = 0x00,
+    xlTextDirLTR                    = 0x01,
+    xlTextDirRTL                    = 0x02,
+    xlTextDirParent                 = 0xFF
 };
 
 #define EXC_ROT_STACKED             0xFF
@@ -316,6 +325,7 @@ enum XclEscapement
 
 #define EXC_XF8_GETINDENT(nFlag)        (static_cast< sal_uInt16 >( nFlag & 0x000F ) * 200)
 #define EXC_XF8_GETROT(nFlag)           static_cast< sal_uInt8 >( (nFlag & 0xFF00) >> 8 )
+#define EXC_XF8_GETTEXTDIR(nFlag)       static_cast< XclTextDirection >( (nFlag & 0x00C0) >> 6 )
 
 // (0x005D) OBJ ===============================================================
 

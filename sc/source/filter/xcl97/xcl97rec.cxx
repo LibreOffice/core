@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: dr $ $Date: 2002-05-13 12:32:11 $
+ *  last change: $Author: dr $ $Date: 2002-09-16 09:28:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,6 +127,9 @@
 #include <offmgr/fltrcfg.hxx>
 #include <svx/boxitem.hxx>
 #include <svx/brshitem.hxx>
+#ifndef _SVX_FRMDIRITEM_HXX
+#include <svx/frmdiritem.hxx>
+#endif
 #include <vcl/bmpacc.hxx>
 
 #include <svx/eeitem.hxx>
@@ -1231,11 +1234,11 @@ ULONG ExcLabelSst::GetDiffLen() const
 ExcXf8::ExcXf8( UINT16 nFont, UINT16 nForm, const ScPatternAttr* pPattAttr,
                 BOOL& rbLineBreak, BOOL bSt ) :
         ExcXf( nFont, nForm, pPattAttr, rbLineBreak, bSt ),
+        eTextDir( xlTextDirContext ),
         nTrot( 0 ),
         nCIndent( 0 ),
         bFShrinkToFit( FALSE ),
         bFMergeCell( FALSE ),
-        nIReadingOrder( 0 ),
         nGrbitDiag( 0 ),
         nIcvDiagSer( 0 ),
         nDgDiag( 0 )
@@ -1252,6 +1255,14 @@ ExcXf8::ExcXf8( UINT16 nFont, UINT16 nForm, const ScPatternAttr* pPattAttr,
         nCIndent /= 200;
         if( nCIndent > 15 )
             nCIndent = 15;
+
+        switch( (SvxFrameDirection)((const SvxFrameDirectionItem&)pPattAttr->GetItem( ATTR_WRITINGDIR )).GetValue() )
+        {
+            case FRMDIR_ENVIRONMENT:    eTextDir = xlTextDirContext;    break;
+            case FRMDIR_HORI_LEFT_TOP:  eTextDir = xlTextDirLTR;        break;
+            case FRMDIR_HORI_RIGHT_TOP: eTextDir = xlTextDirRTL;        break;
+            default:                    DBG_ERRORFILE( "ExcXf8::ExcXf8 - unknown CTL text direction" );
+        }
     }
 }
 
@@ -1276,7 +1287,7 @@ void ExcXf8::SaveCont( XclExpStream& rStrm )
         nTmp |= 0x0010;
     if( bFMergeCell )
         nTmp |= 0x0020;
-    nTmp |= nIReadingOrder << 6;
+    nTmp |= ((UINT16)eTextDir) << 6;
     // Bit 9-8 reserved, Bit 15-10 fAtr... alle 0 (keine Parent Styles)
     rStrm << nTmp;
 

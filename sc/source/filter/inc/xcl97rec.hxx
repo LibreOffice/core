@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: dr $ $Date: 2001-10-26 16:46:10 $
+ *  last change: $Author: dr $ $Date: 2002-09-16 09:26:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -544,9 +544,9 @@ public:
 class ExcXf8 : public ExcXf
 {
 private:
+        XclTextDirection    eTextDir;
         UINT16              nTrot;
         UINT16              nCIndent;
-        UINT16              nIReadingOrder;
 
         UINT16              nGrbitDiag;
         UINT32              nIcvDiagSer;
