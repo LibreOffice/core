@@ -4,6 +4,13 @@
 SHL1STDLIBS=
 .ENDIF
 
+# Link in static data members for template classes
+.IF "$(OS)"=="MACOSX"
+.IF "$(TARGET)"!="$(STATICLIBNAME)"
+SHL1STDLIBS+=$(STATICLIB)
+.ENDIF
+.ENDIF
+
 .IF "$(SHLLINKARCONLY)" != ""
 SHL1STDLIBS=
 STDSHL=
@@ -315,6 +322,11 @@ $(SHL1TARGETN) : \
 .ENDIF
 .IF "$(OS)"=="MACOSX"
         $(CC) -c -dynamic -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL1TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
+.IF "$(TARGET)"!="$(STATICLIBNAME)"
+    @echo "------------------------------"
+    @echo "Updating static data member initializations"
+    @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)"
+.ENDIF
 .ENDIF
 .IF "$(OS)"=="LINUX" || "$(OS)"=="NETBSD" || "$(OS)"=="FREEBSD"
         $(CC) -c -fPIC -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL1TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
@@ -330,20 +342,6 @@ $(SHL1TARGETN) : \
     $(SHL1VERSIONOBJ) $(SHL1DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
     `cat /dev/null $(SHL1LIBS) | tr -s " " "\n" | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
     $(SHL1STDLIBS) $(SHL1ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
-.IF "$(OS)"=="MACOSX"
-    @cat $(MISC)$/$(@:b).cmd
-    @+-( source $(MISC)$/$(@:b).cmd ) |& tee $(MISC)$/$(@:b).cmd.out ; \
-    if ( $$status == 0 ) \
-      grep -q '^ld: Undefined symbols:' $(MISC)$/$(@:b).cmd.out ; \
-      if ( $$status == 0 ) \
-        echo `cat $(MISC)$/$(@:b).cmd` `grep '^__Q.*\..*$$' $(MISC)$/$(@:b).cmd.out | sed s\#^\#-Wl,-U,\#` > $(MISC)$/$(@:b).cmd.bak ; \
-        mv -f $(MISC)$/$(@:b).cmd.bak $(MISC)$/$(@:b).cmd ; \
-        echo "------------------------------" ; \
-        echo "Making: ../../unxmacxp/lib/liburd.dylib with undefined symbol correction" ; \
-      endif ; \
-    endif
-    @+-$(RM) $(MISC)$/$(@:b).cmd.out
-.ENDIF
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
 .IF "$(OS)"=="S390"
@@ -376,6 +374,13 @@ $(SHL1TARGETN) : \
 
 .IF "$(OS)"=="AIX"
 SHL2STDLIBS=
+.ENDIF
+
+# Link in static data members for template classes
+.IF "$(OS)"=="MACOSX"
+.IF "$(TARGET)"!="$(STATICLIBNAME)"
+SHL2STDLIBS+=$(STATICLIB)
+.ENDIF
 .ENDIF
 
 .IF "$(SHLLINKARCONLY)" != ""
@@ -689,6 +694,11 @@ $(SHL2TARGETN) : \
 .ENDIF
 .IF "$(OS)"=="MACOSX"
         $(CC) -c -dynamic -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL2TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
+.IF "$(TARGET)"!="$(STATICLIBNAME)"
+    @echo "------------------------------"
+    @echo "Updating static data member initializations"
+    @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)"
+.ENDIF
 .ENDIF
 .IF "$(OS)"=="LINUX" || "$(OS)"=="NETBSD" || "$(OS)"=="FREEBSD"
         $(CC) -c -fPIC -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL2TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
@@ -704,20 +714,6 @@ $(SHL2TARGETN) : \
     $(SHL2VERSIONOBJ) $(SHL2DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
     `cat /dev/null $(SHL2LIBS) | tr -s " " "\n" | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
     $(SHL2STDLIBS) $(SHL2ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
-.IF "$(OS)"=="MACOSX"
-    @cat $(MISC)$/$(@:b).cmd
-    @+-( source $(MISC)$/$(@:b).cmd ) |& tee $(MISC)$/$(@:b).cmd.out ; \
-    if ( $$status == 0 ) \
-      grep -q '^ld: Undefined symbols:' $(MISC)$/$(@:b).cmd.out ; \
-      if ( $$status == 0 ) \
-        echo `cat $(MISC)$/$(@:b).cmd` `grep '^__Q.*\..*$$' $(MISC)$/$(@:b).cmd.out | sed s\#^\#-Wl,-U,\#` > $(MISC)$/$(@:b).cmd.bak ; \
-        mv -f $(MISC)$/$(@:b).cmd.bak $(MISC)$/$(@:b).cmd ; \
-        echo "------------------------------" ; \
-        echo "Making: ../../unxmacxp/lib/liburd.dylib with undefined symbol correction" ; \
-      endif ; \
-    endif
-    @+-$(RM) $(MISC)$/$(@:b).cmd.out
-.ENDIF
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
 .IF "$(OS)"=="S390"
@@ -750,6 +746,13 @@ $(SHL2TARGETN) : \
 
 .IF "$(OS)"=="AIX"
 SHL3STDLIBS=
+.ENDIF
+
+# Link in static data members for template classes
+.IF "$(OS)"=="MACOSX"
+.IF "$(TARGET)"!="$(STATICLIBNAME)"
+SHL3STDLIBS+=$(STATICLIB)
+.ENDIF
 .ENDIF
 
 .IF "$(SHLLINKARCONLY)" != ""
@@ -1063,6 +1066,11 @@ $(SHL3TARGETN) : \
 .ENDIF
 .IF "$(OS)"=="MACOSX"
         $(CC) -c -dynamic -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL3TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
+.IF "$(TARGET)"!="$(STATICLIBNAME)"
+    @echo "------------------------------"
+    @echo "Updating static data member initializations"
+    @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)"
+.ENDIF
 .ENDIF
 .IF "$(OS)"=="LINUX" || "$(OS)"=="NETBSD" || "$(OS)"=="FREEBSD"
         $(CC) -c -fPIC -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL3TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
@@ -1078,20 +1086,6 @@ $(SHL3TARGETN) : \
     $(SHL3VERSIONOBJ) $(SHL3DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
     `cat /dev/null $(SHL3LIBS) | tr -s " " "\n" | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
     $(SHL3STDLIBS) $(SHL3ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
-.IF "$(OS)"=="MACOSX"
-    @cat $(MISC)$/$(@:b).cmd
-    @+-( source $(MISC)$/$(@:b).cmd ) |& tee $(MISC)$/$(@:b).cmd.out ; \
-    if ( $$status == 0 ) \
-      grep -q '^ld: Undefined symbols:' $(MISC)$/$(@:b).cmd.out ; \
-      if ( $$status == 0 ) \
-        echo `cat $(MISC)$/$(@:b).cmd` `grep '^__Q.*\..*$$' $(MISC)$/$(@:b).cmd.out | sed s\#^\#-Wl,-U,\#` > $(MISC)$/$(@:b).cmd.bak ; \
-        mv -f $(MISC)$/$(@:b).cmd.bak $(MISC)$/$(@:b).cmd ; \
-        echo "------------------------------" ; \
-        echo "Making: ../../unxmacxp/lib/liburd.dylib with undefined symbol correction" ; \
-      endif ; \
-    endif
-    @+-$(RM) $(MISC)$/$(@:b).cmd.out
-.ENDIF
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
 .IF "$(OS)"=="S390"
@@ -1124,6 +1118,13 @@ $(SHL3TARGETN) : \
 
 .IF "$(OS)"=="AIX"
 SHL4STDLIBS=
+.ENDIF
+
+# Link in static data members for template classes
+.IF "$(OS)"=="MACOSX"
+.IF "$(TARGET)"!="$(STATICLIBNAME)"
+SHL4STDLIBS+=$(STATICLIB)
+.ENDIF
 .ENDIF
 
 .IF "$(SHLLINKARCONLY)" != ""
@@ -1437,6 +1438,11 @@ $(SHL4TARGETN) : \
 .ENDIF
 .IF "$(OS)"=="MACOSX"
         $(CC) -c -dynamic -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL4TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
+.IF "$(TARGET)"!="$(STATICLIBNAME)"
+    @echo "------------------------------"
+    @echo "Updating static data member initializations"
+    @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)"
+.ENDIF
 .ENDIF
 .IF "$(OS)"=="LINUX" || "$(OS)"=="NETBSD" || "$(OS)"=="FREEBSD"
         $(CC) -c -fPIC -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL4TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
@@ -1452,20 +1458,6 @@ $(SHL4TARGETN) : \
     $(SHL4VERSIONOBJ) $(SHL4DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
     `cat /dev/null $(SHL4LIBS) | tr -s " " "\n" | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
     $(SHL4STDLIBS) $(SHL4ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
-.IF "$(OS)"=="MACOSX"
-    @cat $(MISC)$/$(@:b).cmd
-    @+-( source $(MISC)$/$(@:b).cmd ) |& tee $(MISC)$/$(@:b).cmd.out ; \
-    if ( $$status == 0 ) \
-      grep -q '^ld: Undefined symbols:' $(MISC)$/$(@:b).cmd.out ; \
-      if ( $$status == 0 ) \
-        echo `cat $(MISC)$/$(@:b).cmd` `grep '^__Q.*\..*$$' $(MISC)$/$(@:b).cmd.out | sed s\#^\#-Wl,-U,\#` > $(MISC)$/$(@:b).cmd.bak ; \
-        mv -f $(MISC)$/$(@:b).cmd.bak $(MISC)$/$(@:b).cmd ; \
-        echo "------------------------------" ; \
-        echo "Making: ../../unxmacxp/lib/liburd.dylib with undefined symbol correction" ; \
-      endif ; \
-    endif
-    @+-$(RM) $(MISC)$/$(@:b).cmd.out
-.ENDIF
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
 .IF "$(OS)"=="S390"
@@ -1498,6 +1490,13 @@ $(SHL4TARGETN) : \
 
 .IF "$(OS)"=="AIX"
 SHL5STDLIBS=
+.ENDIF
+
+# Link in static data members for template classes
+.IF "$(OS)"=="MACOSX"
+.IF "$(TARGET)"!="$(STATICLIBNAME)"
+SHL5STDLIBS+=$(STATICLIB)
+.ENDIF
 .ENDIF
 
 .IF "$(SHLLINKARCONLY)" != ""
@@ -1811,6 +1810,11 @@ $(SHL5TARGETN) : \
 .ENDIF
 .IF "$(OS)"=="MACOSX"
         $(CC) -c -dynamic -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL5TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
+.IF "$(TARGET)"!="$(STATICLIBNAME)"
+    @echo "------------------------------"
+    @echo "Updating static data member initializations"
+    @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)"
+.ENDIF
 .ENDIF
 .IF "$(OS)"=="LINUX" || "$(OS)"=="NETBSD" || "$(OS)"=="FREEBSD"
         $(CC) -c -fPIC -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL5TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
@@ -1826,20 +1830,6 @@ $(SHL5TARGETN) : \
     $(SHL5VERSIONOBJ) $(SHL5DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
     `cat /dev/null $(SHL5LIBS) | tr -s " " "\n" | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
     $(SHL5STDLIBS) $(SHL5ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
-.IF "$(OS)"=="MACOSX"
-    @cat $(MISC)$/$(@:b).cmd
-    @+-( source $(MISC)$/$(@:b).cmd ) |& tee $(MISC)$/$(@:b).cmd.out ; \
-    if ( $$status == 0 ) \
-      grep -q '^ld: Undefined symbols:' $(MISC)$/$(@:b).cmd.out ; \
-      if ( $$status == 0 ) \
-        echo `cat $(MISC)$/$(@:b).cmd` `grep '^__Q.*\..*$$' $(MISC)$/$(@:b).cmd.out | sed s\#^\#-Wl,-U,\#` > $(MISC)$/$(@:b).cmd.bak ; \
-        mv -f $(MISC)$/$(@:b).cmd.bak $(MISC)$/$(@:b).cmd ; \
-        echo "------------------------------" ; \
-        echo "Making: ../../unxmacxp/lib/liburd.dylib with undefined symbol correction" ; \
-      endif ; \
-    endif
-    @+-$(RM) $(MISC)$/$(@:b).cmd.out
-.ENDIF
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
 .IF "$(OS)"=="S390"
@@ -1872,6 +1862,13 @@ $(SHL5TARGETN) : \
 
 .IF "$(OS)"=="AIX"
 SHL6STDLIBS=
+.ENDIF
+
+# Link in static data members for template classes
+.IF "$(OS)"=="MACOSX"
+.IF "$(TARGET)"!="$(STATICLIBNAME)"
+SHL6STDLIBS+=$(STATICLIB)
+.ENDIF
 .ENDIF
 
 .IF "$(SHLLINKARCONLY)" != ""
@@ -2185,6 +2182,11 @@ $(SHL6TARGETN) : \
 .ENDIF
 .IF "$(OS)"=="MACOSX"
         $(CC) -c -dynamic -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL6TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
+.IF "$(TARGET)"!="$(STATICLIBNAME)"
+    @echo "------------------------------"
+    @echo "Updating static data member initializations"
+    @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)"
+.ENDIF
 .ENDIF
 .IF "$(OS)"=="LINUX" || "$(OS)"=="NETBSD" || "$(OS)"=="FREEBSD"
         $(CC) -c -fPIC -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL6TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
@@ -2200,20 +2202,6 @@ $(SHL6TARGETN) : \
     $(SHL6VERSIONOBJ) $(SHL6DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
     `cat /dev/null $(SHL6LIBS) | tr -s " " "\n" | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
     $(SHL6STDLIBS) $(SHL6ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
-.IF "$(OS)"=="MACOSX"
-    @cat $(MISC)$/$(@:b).cmd
-    @+-( source $(MISC)$/$(@:b).cmd ) |& tee $(MISC)$/$(@:b).cmd.out ; \
-    if ( $$status == 0 ) \
-      grep -q '^ld: Undefined symbols:' $(MISC)$/$(@:b).cmd.out ; \
-      if ( $$status == 0 ) \
-        echo `cat $(MISC)$/$(@:b).cmd` `grep '^__Q.*\..*$$' $(MISC)$/$(@:b).cmd.out | sed s\#^\#-Wl,-U,\#` > $(MISC)$/$(@:b).cmd.bak ; \
-        mv -f $(MISC)$/$(@:b).cmd.bak $(MISC)$/$(@:b).cmd ; \
-        echo "------------------------------" ; \
-        echo "Making: ../../unxmacxp/lib/liburd.dylib with undefined symbol correction" ; \
-      endif ; \
-    endif
-    @+-$(RM) $(MISC)$/$(@:b).cmd.out
-.ENDIF
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
 .IF "$(OS)"=="S390"
@@ -2246,6 +2234,13 @@ $(SHL6TARGETN) : \
 
 .IF "$(OS)"=="AIX"
 SHL7STDLIBS=
+.ENDIF
+
+# Link in static data members for template classes
+.IF "$(OS)"=="MACOSX"
+.IF "$(TARGET)"!="$(STATICLIBNAME)"
+SHL7STDLIBS+=$(STATICLIB)
+.ENDIF
 .ENDIF
 
 .IF "$(SHLLINKARCONLY)" != ""
@@ -2559,6 +2554,11 @@ $(SHL7TARGETN) : \
 .ENDIF
 .IF "$(OS)"=="MACOSX"
         $(CC) -c -dynamic -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL7TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
+.IF "$(TARGET)"!="$(STATICLIBNAME)"
+    @echo "------------------------------"
+    @echo "Updating static data member initializations"
+    @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)"
+.ENDIF
 .ENDIF
 .IF "$(OS)"=="LINUX" || "$(OS)"=="NETBSD" || "$(OS)"=="FREEBSD"
         $(CC) -c -fPIC -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL7TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
@@ -2574,20 +2574,6 @@ $(SHL7TARGETN) : \
     $(SHL7VERSIONOBJ) $(SHL7DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
     `cat /dev/null $(SHL7LIBS) | tr -s " " "\n" | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
     $(SHL7STDLIBS) $(SHL7ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
-.IF "$(OS)"=="MACOSX"
-    @cat $(MISC)$/$(@:b).cmd
-    @+-( source $(MISC)$/$(@:b).cmd ) |& tee $(MISC)$/$(@:b).cmd.out ; \
-    if ( $$status == 0 ) \
-      grep -q '^ld: Undefined symbols:' $(MISC)$/$(@:b).cmd.out ; \
-      if ( $$status == 0 ) \
-        echo `cat $(MISC)$/$(@:b).cmd` `grep '^__Q.*\..*$$' $(MISC)$/$(@:b).cmd.out | sed s\#^\#-Wl,-U,\#` > $(MISC)$/$(@:b).cmd.bak ; \
-        mv -f $(MISC)$/$(@:b).cmd.bak $(MISC)$/$(@:b).cmd ; \
-        echo "------------------------------" ; \
-        echo "Making: ../../unxmacxp/lib/liburd.dylib with undefined symbol correction" ; \
-      endif ; \
-    endif
-    @+-$(RM) $(MISC)$/$(@:b).cmd.out
-.ENDIF
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
 .IF "$(OS)"=="S390"
@@ -2620,6 +2606,13 @@ $(SHL7TARGETN) : \
 
 .IF "$(OS)"=="AIX"
 SHL8STDLIBS=
+.ENDIF
+
+# Link in static data members for template classes
+.IF "$(OS)"=="MACOSX"
+.IF "$(TARGET)"!="$(STATICLIBNAME)"
+SHL8STDLIBS+=$(STATICLIB)
+.ENDIF
 .ENDIF
 
 .IF "$(SHLLINKARCONLY)" != ""
@@ -2933,6 +2926,11 @@ $(SHL8TARGETN) : \
 .ENDIF
 .IF "$(OS)"=="MACOSX"
         $(CC) -c -dynamic -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL8TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
+.IF "$(TARGET)"!="$(STATICLIBNAME)"
+    @echo "------------------------------"
+    @echo "Updating static data member initializations"
+    @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)"
+.ENDIF
 .ENDIF
 .IF "$(OS)"=="LINUX" || "$(OS)"=="NETBSD" || "$(OS)"=="FREEBSD"
         $(CC) -c -fPIC -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL8TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
@@ -2948,20 +2946,6 @@ $(SHL8TARGETN) : \
     $(SHL8VERSIONOBJ) $(SHL8DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
     `cat /dev/null $(SHL8LIBS) | tr -s " " "\n" | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
     $(SHL8STDLIBS) $(SHL8ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
-.IF "$(OS)"=="MACOSX"
-    @cat $(MISC)$/$(@:b).cmd
-    @+-( source $(MISC)$/$(@:b).cmd ) |& tee $(MISC)$/$(@:b).cmd.out ; \
-    if ( $$status == 0 ) \
-      grep -q '^ld: Undefined symbols:' $(MISC)$/$(@:b).cmd.out ; \
-      if ( $$status == 0 ) \
-        echo `cat $(MISC)$/$(@:b).cmd` `grep '^__Q.*\..*$$' $(MISC)$/$(@:b).cmd.out | sed s\#^\#-Wl,-U,\#` > $(MISC)$/$(@:b).cmd.bak ; \
-        mv -f $(MISC)$/$(@:b).cmd.bak $(MISC)$/$(@:b).cmd ; \
-        echo "------------------------------" ; \
-        echo "Making: ../../unxmacxp/lib/liburd.dylib with undefined symbol correction" ; \
-      endif ; \
-    endif
-    @+-$(RM) $(MISC)$/$(@:b).cmd.out
-.ENDIF
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
 .IF "$(OS)"=="S390"
@@ -2994,6 +2978,13 @@ $(SHL8TARGETN) : \
 
 .IF "$(OS)"=="AIX"
 SHL9STDLIBS=
+.ENDIF
+
+# Link in static data members for template classes
+.IF "$(OS)"=="MACOSX"
+.IF "$(TARGET)"!="$(STATICLIBNAME)"
+SHL9STDLIBS+=$(STATICLIB)
+.ENDIF
 .ENDIF
 
 .IF "$(SHLLINKARCONLY)" != ""
@@ -3307,6 +3298,11 @@ $(SHL9TARGETN) : \
 .ENDIF
 .IF "$(OS)"=="MACOSX"
         $(CC) -c -dynamic -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL9TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
+.IF "$(TARGET)"!="$(STATICLIBNAME)"
+    @echo "------------------------------"
+    @echo "Updating static data member initializations"
+    @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)"
+.ENDIF
 .ENDIF
 .IF "$(OS)"=="LINUX" || "$(OS)"=="NETBSD" || "$(OS)"=="FREEBSD"
         $(CC) -c -fPIC -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL9TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
@@ -3322,20 +3318,6 @@ $(SHL9TARGETN) : \
     $(SHL9VERSIONOBJ) $(SHL9DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
     `cat /dev/null $(SHL9LIBS) | tr -s " " "\n" | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
     $(SHL9STDLIBS) $(SHL9ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
-.IF "$(OS)"=="MACOSX"
-    @cat $(MISC)$/$(@:b).cmd
-    @+-( source $(MISC)$/$(@:b).cmd ) |& tee $(MISC)$/$(@:b).cmd.out ; \
-    if ( $$status == 0 ) \
-      grep -q '^ld: Undefined symbols:' $(MISC)$/$(@:b).cmd.out ; \
-      if ( $$status == 0 ) \
-        echo `cat $(MISC)$/$(@:b).cmd` `grep '^__Q.*\..*$$' $(MISC)$/$(@:b).cmd.out | sed s\#^\#-Wl,-U,\#` > $(MISC)$/$(@:b).cmd.bak ; \
-        mv -f $(MISC)$/$(@:b).cmd.bak $(MISC)$/$(@:b).cmd ; \
-        echo "------------------------------" ; \
-        echo "Making: ../../unxmacxp/lib/liburd.dylib with undefined symbol correction" ; \
-      endif ; \
-    endif
-    @+-$(RM) $(MISC)$/$(@:b).cmd.out
-.ENDIF
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
 .IF "$(OS)"=="S390"
@@ -3368,6 +3350,13 @@ $(SHL9TARGETN) : \
 
 .IF "$(OS)"=="AIX"
 SHL10STDLIBS=
+.ENDIF
+
+# Link in static data members for template classes
+.IF "$(OS)"=="MACOSX"
+.IF "$(TARGET)"!="$(STATICLIBNAME)"
+SHL10STDLIBS+=$(STATICLIB)
+.ENDIF
 .ENDIF
 
 .IF "$(SHLLINKARCONLY)" != ""
@@ -3681,6 +3670,11 @@ $(SHL10TARGETN) : \
 .ENDIF
 .IF "$(OS)"=="MACOSX"
         $(CC) -c -dynamic -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL10TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
+.IF "$(TARGET)"!="$(STATICLIBNAME)"
+    @echo "------------------------------"
+    @echo "Updating static data member initializations"
+    @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)"
+.ENDIF
 .ENDIF
 .IF "$(OS)"=="LINUX" || "$(OS)"=="NETBSD" || "$(OS)"=="FREEBSD"
         $(CC) -c -fPIC -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL10TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
@@ -3696,20 +3690,6 @@ $(SHL10TARGETN) : \
     $(SHL10VERSIONOBJ) $(SHL10DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
     `cat /dev/null $(SHL10LIBS) | tr -s " " "\n" | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
     $(SHL10STDLIBS) $(SHL10ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
-.IF "$(OS)"=="MACOSX"
-    @cat $(MISC)$/$(@:b).cmd
-    @+-( source $(MISC)$/$(@:b).cmd ) |& tee $(MISC)$/$(@:b).cmd.out ; \
-    if ( $$status == 0 ) \
-      grep -q '^ld: Undefined symbols:' $(MISC)$/$(@:b).cmd.out ; \
-      if ( $$status == 0 ) \
-        echo `cat $(MISC)$/$(@:b).cmd` `grep '^__Q.*\..*$$' $(MISC)$/$(@:b).cmd.out | sed s\#^\#-Wl,-U,\#` > $(MISC)$/$(@:b).cmd.bak ; \
-        mv -f $(MISC)$/$(@:b).cmd.bak $(MISC)$/$(@:b).cmd ; \
-        echo "------------------------------" ; \
-        echo "Making: ../../unxmacxp/lib/liburd.dylib with undefined symbol correction" ; \
-      endif ; \
-    endif
-    @+-$(RM) $(MISC)$/$(@:b).cmd.out
-.ENDIF
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
 .IF "$(OS)"=="S390"

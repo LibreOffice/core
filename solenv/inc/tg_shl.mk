@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_shl.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: pluby $ $Date: 2001-02-24 08:35:53 $
+#   last change: $Author: pluby $ $Date: 2001-02-26 07:51:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -102,6 +102,13 @@ SHL1 SHL2 SHL3 SHL4 SHL5 SHL6 SHL7 SHL8 SHL9:
 
 .IF "$(OS)"=="AIX"
 SHL$(TNR)STDLIBS=
+.ENDIF
+
+# Link in static data members for template classes
+.IF "$(OS)"=="MACOSX"
+.IF "$(TARGET)"!="$(STATICLIBNAME)"
+SHL$(TNR)STDLIBS+=$(STATICLIB)
+.ENDIF
 .ENDIF
 
 .IF "$(SHLLINKARCONLY)" != ""
@@ -415,6 +422,11 @@ $(SHL$(TNR)TARGETN) : \
 .ENDIF
 .IF "$(OS)"=="MACOSX"
         $(CC) -c -dynamic -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL$(TNR)TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
+.IF "$(TARGET)"!="$(STATICLIBNAME)"
+    @echo "------------------------------"
+    @echo "Updating static data member initializations"
+    @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)"
+.ENDIF
 .ENDIF
 .IF "$(OS)"=="LINUX" || "$(OS)"=="NETBSD" || "$(OS)"=="FREEBSD"
         $(CC) -c -fPIC -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL$(TNR)TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
@@ -430,20 +442,6 @@ $(SHL$(TNR)TARGETN) : \
     $(SHL$(TNR)VERSIONOBJ) $(SHL$(TNR)DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
     `cat /dev/null $(SHL$(TNR)LIBS) | tr -s " " "\n" | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
     $(SHL$(TNR)STDLIBS) $(SHL$(TNR)ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
-.IF "$(OS)"=="MACOSX"
-    @cat $(MISC)$/$(@:b).cmd
-    @+-( source $(MISC)$/$(@:b).cmd ) |& tee $(MISC)$/$(@:b).cmd.out ; \
-    if ( $$status == 0 ) \
-      grep -q '^ld: Undefined symbols:' $(MISC)$/$(@:b).cmd.out ; \
-      if ( $$status == 0 ) \
-        echo `cat $(MISC)$/$(@:b).cmd` `grep '^__Q.*\..*$$' $(MISC)$/$(@:b).cmd.out | sed s\#^\#-Wl,-U,\#` > $(MISC)$/$(@:b).cmd.bak ; \
-        mv -f $(MISC)$/$(@:b).cmd.bak $(MISC)$/$(@:b).cmd ; \
-        echo "------------------------------" ; \
-        echo "Making: ../../unxmacxp/lib/liburd.dylib with undefined symbol correction" ; \
-      endif ; \
-    endif
-    @+-$(RM) $(MISC)$/$(@:b).cmd.out
-.ENDIF
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
 .IF "$(OS)"=="S390"
