@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ProgressBarHelper.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-18 15:59:40 $
+ *  last change: $Author: sab $ $Date: 2001-05-21 10:10:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,21 @@ ProgressBarHelper::~ProgressBarHelper()
 
 sal_Int32 ProgressBarHelper::ChangeReference(sal_Int32 nNewReference)
 {
+    if((nNewReference > 0) && (nNewReference != nReference))
+    {
+        if (nReference)
+        {
+            double fPercent(nNewReference / nReference);
+            double fValue(nValue * fPercent);
+            nValue = sal_Int32(nValue);
+            nReference = nNewReference;
+        }
+        else
+        {
+            nReference = nNewReference;
+            nValue = 0;
+        }
+    }
     return nValue;
 }
 
