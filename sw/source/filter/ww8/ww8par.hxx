@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: cmc $ $Date: 2002-04-04 14:11:10 $
+ *  last change: $Author: cmc $ $Date: 2002-04-11 15:30:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -893,8 +893,7 @@ friend class WW8FormulaControl;
         MSO_LineStyle eLineStyle, MSO_SPT eShapeType, INT32 &rLineWidth,
         SvxBoxItem& rBox );
     void MatchSdrItemsIntoFlySet( SdrObject*    pSdrObj, SfxItemSet &aFlySet,
-        MSO_LineStyle eLineStyle, MSO_SPT eShapeType, Rectangle &rInnerDist,
-        BOOL bFixSize );
+        MSO_LineStyle eLineStyle, MSO_SPT eShapeType, Rectangle &rInnerDist );
     void MatchWrapDistancesIntoFlyFmt( SvxMSDffImportRec* pRecord,
                                        SwFrmFmt*          pFlyFmt );
 
@@ -1030,8 +1029,9 @@ friend class WW8FormulaControl;
         RndStdIds eAnchor, WW8_FSPA *pF, SfxItemSet &rFlySet );
     void MungeTextIntoDrawBox(SdrObject* pTrueObject,
         SvxMSDffImportRec *pRecord, long nGrafAnchorCp, SwFrmFmt *pRetFrmFmt);
-
+#if 0
     void EmbeddedFlyFrameSizeLock(SwNodeIndex &rStart,SwFrmFmt *pFrmFmt);
+#endif
     void GrafikCtor();
     void GrafikDtor();
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par3.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: cmc $ $Date: 2002-03-01 09:30:56 $
+ *  last change: $Author: cmc $ $Date: 2002-04-11 15:30:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1686,6 +1686,9 @@ void SwWW8ImplReader::RegisterNumFmt(sal_uInt16 nActLFO, sal_uInt8 nActLevel)
 void SwWW8ImplReader::Read_ListLevel(sal_uInt16, const sal_uInt8* pData,
     short nLen)
 {
+    if (pPlcxMan && pPlcxMan->GetDoingDrawTextBox())
+        return;
+
     if( nLen < 0 )
     {
         // aktuelle Liste ist hier zu Ende, was ist zu tun ???
@@ -1727,6 +1730,9 @@ void SwWW8ImplReader::Read_ListLevel(sal_uInt16, const sal_uInt8* pData,
 void SwWW8ImplReader::Read_LFOPosition(sal_uInt16, const sal_uInt8* pData,
     short nLen)
 {
+    if (pPlcxMan && pPlcxMan->GetDoingDrawTextBox())
+        return;
+
     if( nLen < 0 )
     {
         // aktueller Level ist hier zu Ende, was ist zu tun ???

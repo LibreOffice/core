@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: cmc $ $Date: 2002-04-04 14:11:10 $
+ *  last change: $Author: cmc $ $Date: 2002-04-11 15:30:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3184,7 +3184,12 @@ void SwWW8ImplReader::Read_Symbol(USHORT, const BYTE* pData, short nLen )
     if( !bIgnoreText )
     {
         if( nLen < 0 )
+        {
+            //otherwise disable after we print the char
+            if (pPlcxMan && pPlcxMan->GetDoingDrawTextBox())
+                pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_CHRATR_FONT );
             bSymbol = FALSE;
+        }
         else
         {
             // Make new Font-Atribut
@@ -3193,7 +3198,10 @@ void SwWW8ImplReader::Read_Symbol(USHORT, const BYTE* pData, short nLen )
             //Will not be added to the charencoding stack, for styles the real
             //font setting will be put in as the styles charset, and for plain
             //text encoding for symbols is moot.
-            if (SetNewFontAttr(SVBT16ToShort( pData ), FALSE, RES_CHRATR_FONT))
+            BOOL bCharEncode=FALSE;
+            if (pPlcxMan && pPlcxMan->GetDoingDrawTextBox())
+                bCharEncode=TRUE;
+            if (SetNewFontAttr(SVBT16ToShort( pData ), bCharEncode, RES_CHRATR_FONT))
             {
                 if( bVer67 )
                 {

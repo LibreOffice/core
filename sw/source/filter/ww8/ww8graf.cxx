@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: cmc $ $Date: 2002-03-13 11:28:26 $
+ *  last change: $Author: cmc $ $Date: 2002-04-11 15:30:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -755,8 +755,11 @@ void SwWW8ImplReader::InsertTxbxAttrs( long nStartCp, long nEndCp,
     BOOL bOldAdjust = pPlcxMan->GetDoingDrawTextBox();
     pPlcxMan->SetDoingDrawTextBox(TRUE);
     WW8_CP nStart = pPlcxMan->Where();
-    WW8_CP nNext;
-    WW8_CP nEnd;
+    WW8_CP nNext,nEnd,nStartReplace;
+
+    BOOL bDoingSymbol = FALSE;
+    sal_Unicode cReplaceSymbol = cSymbol;
+
     nAktColl = pPlcxMan->GetColl();
 
     SfxItemSet *pS = new SfxItemSet(pDrawEditEngine->GetEmptyItemSet());
@@ -789,9 +792,28 @@ void SwWW8ImplReader::InsertTxbxAttrs( long nStartCp, long nEndCp,
                 //Here place them onto our usual stack and we will pop them
                 //off and convert them later
                 if (bStartAttr)
+                {
                     ImportSprm(aRes.pMemPos, aRes.nSprmId);
+                    if (!bDoingSymbol && bSymbol == TRUE)
+                    {
+                        bDoingSymbol = TRUE;
+                        nStartReplace = nStart;
+                        cReplaceSymbol = cSymbol;
+                    }
+                }
                 else
+                {
                     EndSprm( aRes.nSprmId );
+                    if (bSymbol == FALSE && bDoingSymbol)
+                    {
+                        bDoingSymbol = FALSE;
+                        String sTemp;
+                        sTemp.Fill(nStart-nStartReplace,cReplaceSymbol);
+                        pDrawEditEngine->QuickInsertText(sTemp,
+                            GetESelection(nStartReplace - nStartCp,
+                            nStart - nStartCp ) );
+                    }
+                }
             }
         }
 
@@ -1201,8 +1223,7 @@ SwFrmFmt* SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
                                                  aFlySet,
                                                  pRecord->eLineStyle,
                                                  pRecord->eShapeType,
-                                                 aInnerDist,
-                                                 !pRecord->bLastBoxInChain );
+                                                 aInnerDist );
 
                         pFlyFmt->SetAttr( aFlySet );
 
@@ -1324,7 +1345,7 @@ void SwWW8ImplReader::ReadTxtBox( WW8_DPHEAD* pHd, WW8_DO* pDo )
         //neither does it store the border style so its always simple
         Rectangle aInnerDist(Point(0,0),Point(0,0));
         MatchSdrItemsIntoFlySet( pObj, aFlySet, mso_lineSimple, mso_sptMin,
-            aInnerDist, TRUE);
+            aInnerDist );
 
         //undo the anchor setting for draw graphics, remove the setting in the
         //control stack, get the id from the drawpg and reuse it in the new
@@ -1696,7 +1717,7 @@ INT32 SwWW8ImplReader::MatchSdrBoxIntoFlyBoxItem(const Color& rLineColor,
 
 void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
     SfxItemSet& rFlySet, MSO_LineStyle eLineStyle, MSO_SPT eShapeType,
-    Rectangle& rInnerDist, BOOL bFixSize )
+    Rectangle& rInnerDist )
 {
 /*
     am Rahmen zu setzende Frame-Attribute
@@ -1801,22 +1822,25 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
     if( 0 < rInnerDist.Bottom() )
         aBox.SetDistance( (USHORT)rInnerDist.Bottom(), BOX_LINE_BOTTOM );
 
+    BOOL bFixSize = !(WW8ITEMVALUE(rOldSet, SDRATTR_TEXT_AUTOGROWHEIGHT,
+        SdrTextAutoGrowHeightItem));
+
     // Size: SwFmtFrmSize
     if( SFX_ITEM_SET != rFlySet.GetItemState(RES_FRM_SIZE, FALSE) )
     {
         const Rectangle& rSnapRect = pSdrObj->GetSnapRect();
         // if necessary adapt width and position of the framework: The
         // recorded interior is to remain equally large despite thick edges.
-        rFlySet.Put( SwFmtFrmSize(bFixSize ? ATT_FIX_SIZE : ATT_MIN_SIZE,
+        rFlySet.Put( SwFmtFrmSize(bFixSize ? ATT_FIX_SIZE : ATT_VAR_SIZE,
             rSnapRect.GetWidth()  + 2*nOutside,
             rSnapRect.GetHeight() + 2*nOutside) );
     }
     else //If a size is set, adjust it to consider border thickness
     {
         SwFmtFrmSize aSize = (const SwFmtFrmSize &)(rFlySet.Get(RES_FRM_SIZE));
-        aSize.SetWidth(aSize.GetWidth()+ 2*nOutside);
-        aSize.SetHeight(aSize.GetHeight() + 2*nOutside);
-        rFlySet.Put(aSize);
+        rFlySet.Put( SwFmtFrmSize(bFixSize ? ATT_FIX_SIZE : ATT_VAR_SIZE,
+            aSize.GetWidth()  + 2*nOutside,
+            aSize.GetHeight() + 2*nOutside) );
     }
 
     //Sadly word puts escher borders outside the graphic, but orients the
@@ -2172,18 +2196,26 @@ void SwWW8ImplReader::ProcessEscherAlign( SvxMSDffImportRec* pRecord,
             offsets correspondingly by the offsets of the parent
             */
             const SwFrmFmt *pFmt = pPaM->GetCntntNode()->GetFrmFmt();
-            if (pFmt)
+            if (pFmt && !pRecord->bReplaceByFly)
             {
                 const SvxBoxItem &rParentBox = pFmt->GetBox();
                 pFSPA->nYaTop -= rParentBox.GetDistance();
+                pFSPA->nYaBottom -= rParentBox.GetDistance();
 
                 if (eHoriRel == FRAME)
                 {
                     const SwFmtHoriOrient &rParentHori = pFmt->GetHoriOrient();
                     pFSPA->nXaLeft += rParentHori.GetPos();
                     pFSPA->nXaLeft += rParentBox.GetDistance();
+
+                    pFSPA->nXaRight += rParentHori.GetPos();
+                    pFSPA->nXaRight += rParentBox.GetDistance();
+
                     if (rParentHori.GetRelationOrient() == REL_PG_FRAME)
+                    {
                         pFSPA->nXaLeft -= nPgLeft;
+                        pFSPA->nXaRight -= nPgLeft;
+                    }
                 }
             }
 
@@ -2387,18 +2419,7 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
         if( (nbyRelText != pF->nby) )
         {
             if( bIsHeader || bIsFooter)
-            {
-#if 0
-                //Not sure what this wants to achieve, its certainly wrong for
-                //94418
-
-                if( bIsHeader && (nPgTop < pF->nYaTop))
-                    pF->nYaTop -= nPgTop;
-                else
-                    pF->nYaTop = 0;
-#endif
                 pNode_FLY_AT_CNTNT = &pPaM->GetPoint()->nNode.GetNode();
-            }
             else
                 eAnchor = FLY_PAGE;
         }
@@ -2640,20 +2661,17 @@ SwFrmFmt * SwWW8ImplReader::ConvertDrawTextToFly(SdrObject* &rpObject,
         if (pSdrTextObj && pSdrTextObj->IsVerticalWriting())
         {
             rFlySet.Put(SvxFrameDirectionItem(FRMDIR_VERT_TOP_RIGHT));
-
-            rFlySet.Put(SwFmtFrmSize(pRecord->bLastBoxInChain ? ATT_MIN_SIZE
-                : ATT_FIX_SIZE, pF->nYaBottom - pF->nYaTop,
+            rFlySet.Put(SwFmtFrmSize(ATT_FIX_SIZE, pF->nYaBottom - pF->nYaTop,
                 pF->nXaRight - pF->nXaLeft));
         }
         else
         {
-            rFlySet.Put(SwFmtFrmSize(pRecord->bLastBoxInChain ? ATT_MIN_SIZE
-                : ATT_FIX_SIZE, pF->nXaRight - pF->nXaLeft,
+            rFlySet.Put(SwFmtFrmSize(ATT_FIX_SIZE, pF->nXaRight - pF->nXaLeft,
                 pF->nYaBottom - pF->nYaTop));
         }
 
         MatchSdrItemsIntoFlySet( rpObject, rFlySet, pRecord->eLineStyle,
-            pRecord->eShapeType, aInnerDist, !pRecord->bLastBoxInChain);
+            pRecord->eShapeType, aInnerDist );
 
         pRetFrmFmt = rDoc.MakeFlySection(eAnchor, pPaM->GetPoint(), &rFlySet );
 
@@ -2720,7 +2738,7 @@ SwFrmFmt * SwWW8ImplReader::ConvertDrawTextToFly(SdrObject* &rpObject,
                 MAN_TXBX : MAN_TXBX_HDFT );
 
             MoveOutsideFly(pRetFrmFmt, aSave.GetStartPos(),!bJoined);
-
+#if 0
             /*
             ##505##
             Special test to see if we will be forced to disable allowing this
@@ -2729,7 +2747,7 @@ SwFrmFmt * SwWW8ImplReader::ConvertDrawTextToFly(SdrObject* &rpObject,
             */
             if (pRecord->bLastBoxInChain)
                 EmbeddedFlyFrameSizeLock(aStart,pRetFrmFmt);
-
+#endif
             aSave.Restore( this );
             aAnchoring.Insert(pCtrlStck);
         }
@@ -2762,7 +2780,7 @@ SwFrmFmt* SwWW8ImplReader::ImportReplaceableDrawables( SdrObject* &rpObject,
 
     ProcessEscherAlign( pRecord, pF, rFlySet, TRUE );
 
-    rFlySet.Put(SwFmtFrmSize( ATT_VAR_SIZE, nWidthTw, nHeightTw));
+    rFlySet.Put(SwFmtFrmSize( ATT_FIX_SIZE, nWidthTw, nHeightTw));
 
     if( pRecord )
     {
@@ -2771,7 +2789,7 @@ SwFrmFmt* SwWW8ImplReader::ImportReplaceableDrawables( SdrObject* &rpObject,
         Rectangle aInnerDist(0,0,0,0);
 
         MatchSdrItemsIntoFlySet( rpObject, rFlySet, pRecord->eLineStyle,
-            pRecord->eShapeType, aInnerDist, !pRecord->bLastBoxInChain );
+            pRecord->eShapeType, aInnerDist );
     }
 
     XubString aObjectName( rpObject->GetName() );
@@ -2874,7 +2892,7 @@ void SwWW8ImplReader::GrafikDtor()
     DELETEZ( pDrawEditEngine ); // evtl. von Grafik angelegt
     DELETEZ( pDrawHeight );     // dito
 }
-
+#if 0
 void SwWW8ImplReader::EmbeddedFlyFrameSizeLock(SwNodeIndex &rStart,
     SwFrmFmt *pFrmFmt)
 {
@@ -2917,7 +2935,7 @@ void SwWW8ImplReader::EmbeddedFlyFrameSizeLock(SwNodeIndex &rStart,
         }
     }
 }
-
+#endif
 void SwWW8ImplReader::GetNoninlineNodeAttribs(const SwTxtNode *pNode,
     std::vector<const xub_StrLen*> &rPositions)
 {

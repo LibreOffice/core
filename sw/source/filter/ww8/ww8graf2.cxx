@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf2.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: cmc $ $Date: 2002-03-21 14:41:21 $
+ *  last change: $Author: cmc $ $Date: 2002-04-11 15:30:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -862,7 +862,7 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf( SdrTextObj* pTextObj,
 
                     MatchSdrItemsIntoFlySet( pObject, aAttrSet,
                         pRecord->eLineStyle, pRecord->eShapeType,
-                        aInnerDist, !pRecord->bLastBoxInChain );
+                        aInnerDist );
 
                     //Groesse aus der WinWord PIC-Struktur als
                     //Grafik-Groesse nehmen
