@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apperror.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 16:28:23 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 19:38:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,8 @@
  *
  ************************************************************************/
 
-#ifndef _SV_CONFIG_HXX
-#include <vcl/config.hxx>
+#ifndef _CONFIG_HXX
+#include <tools/config.hxx>
 #endif
 #ifndef _CTRLTOOL_HXX
 #include <svtools/ctrltool.hxx>
