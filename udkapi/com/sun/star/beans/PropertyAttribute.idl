@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyAttribute.idl,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 16:53:21 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 16:04:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,7 +143,7 @@ published constants PropertyAttribute
 
         @see com::sun::star::reflection::XPropertyTypeDescription
         @see com::sun::star::reflection::XServiceTypeDescription
-    @since OOo1.1.2
+    @since OOo 1.1.2
      */
     const short OPTIONAL = 256;
 };
