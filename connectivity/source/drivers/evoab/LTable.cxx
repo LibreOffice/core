@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LTable.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-02 07:58:17 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 08:24:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -458,7 +458,6 @@ void OEvoabTable::construct()
         OSL_TRACE("OEvoabTable::construct()::m_pFileStream->Tell() = %d\n", nSize );
 
         fillColumns();
-        AllocBuffer();
 
         refreshColumns();
     }
@@ -589,9 +588,9 @@ sal_Int64 OEvoabTable::getSomething( const Sequence< sal_Int8 > & rId ) throw (R
             OEvoabTable_BASE::getSomething(rId);
 }
 //------------------------------------------------------------------
-sal_Bool OEvoabTable::fetchRow(OValueRow _rRow,const OSQLColumns & _rCols,sal_Bool bIsTable,sal_Bool bRetrieveData)
+sal_Bool OEvoabTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols,sal_Bool bIsTable,sal_Bool bRetrieveData)
 {
-    (*_rRow)[0] = m_nFilePos;
+    *(*_rRow)[0] = m_nFilePos;
 
     if (!bRetrieveData)
         return TRUE;
@@ -608,7 +607,7 @@ sal_Bool OEvoabTable::fetchRow(OValueRow _rRow,const OSQLColumns & _rCols,sal_Bo
         //OSL_TRACE("OEvoabTable::fetchRow()::aStr = %s\n", ((OUtoCStr(::rtl::OUString(aStr))) ? (OUtoCStr(::rtl::OUString(aStr))):("NULL")) );
 
         if (aStr.Len() == 0)
-            (*_rRow)[i+1].setNull();
+            (*_rRow)[i+1]->setNull();
         else
         {
             // Laengen je nach Datentyp:
@@ -642,18 +641,18 @@ sal_Bool OEvoabTable::fetchRow(OValueRow _rRow,const OSQLColumns & _rCols,sal_Bo
                         switch(nType)
                         {
                             case DataType::DATE:
-                                (*_rRow)[i+1] = ::dbtools::DBTypeConversion::toDouble(::dbtools::DBTypeConversion::toDate(nRes,aDate));
+                                *(*_rRow)[i+1] = ::dbtools::DBTypeConversion::toDouble(::dbtools::DBTypeConversion::toDate(nRes,aDate));
                                 break;
                             case DataType::TIMESTAMP:
-                                (*_rRow)[i+1] = ::dbtools::DBTypeConversion::toDouble(::dbtools::DBTypeConversion::toDateTime(nRes,aDate));
+                                *(*_rRow)[i+1] = ::dbtools::DBTypeConversion::toDouble(::dbtools::DBTypeConversion::toDateTime(nRes,aDate));
                                 break;
                             default:
-                                (*_rRow)[i+1] = ::dbtools::DBTypeConversion::toDouble(::dbtools::DBTypeConversion::toTime(nRes));
+                                *(*_rRow)[i+1] = ::dbtools::DBTypeConversion::toDouble(::dbtools::DBTypeConversion::toTime(nRes));
                         }
                     }
                     catch(Exception&)
                     {
-                        (*_rRow)[i+1].setNull();
+                        (*_rRow)[i+1]->setNull();
                     }
                 }   break;
                 case DataType::DOUBLE:
@@ -687,15 +686,15 @@ sal_Bool OEvoabTable::fetchRow(OValueRow _rRow,const OSQLColumns & _rCols,sal_Bo
 
                     // #99178# OJ
                     if ( DataType::DECIMAL == nType || DataType::NUMERIC == nType )
-                        (*_rRow)[i+1] = String::CreateFromDouble(nVal);
+                        *(*_rRow)[i+1] = ORowSetValue(String::CreateFromDouble(nVal));
                     else
-                        (*_rRow)[i+1] = nVal;
+                        *(*_rRow)[i+1] = nVal;
                 } break;
 
                 default:
                 {
                     // Wert als String in Variable der Row uebernehmen
-                    (*_rRow)[i+1] = aStr;
+                    *(*_rRow)[i+1] = ORowSetValue(aStr);
                 }
                 break;
             }
@@ -703,48 +702,7 @@ sal_Bool OEvoabTable::fetchRow(OValueRow _rRow,const OSQLColumns & _rCols,sal_Bo
     }
     return sal_True;
 }
-// -------------------------------------------------------------------------
-BOOL OEvoabTable::CreateImpl()
-{
-    return TRUE;
-}
-
-//------------------------------------------------------------------
-BOOL OEvoabTable::DropImpl()
-{
-    return TRUE;
-}
-//------------------------------------------------------------------
-BOOL OEvoabTable::InsertRow(OValueVector& rRow, BOOL bFlush,const Reference<XIndexAccess>& _xCols)
-{
-    return sal_False;
-}
-
-//------------------------------------------------------------------
-BOOL OEvoabTable::UpdateRow(OValueVector& rRow, OValueRow pOrgRow,const Reference<XIndexAccess>& _xCols)
-{
-    return sal_False;
-}
-
-//------------------------------------------------------------------
-BOOL OEvoabTable::DeleteRow(const OSQLColumns& _rCols)
-{
-    return sal_False;
-}
-
-//------------------------------------------------------------------
-void OEvoabTable::AllocBuffer()
-{
-}
-
-//------------------------------------------------------------------
-BOOL OEvoabTable::UpdateBuffer(OValueVector& rRow, OValueRow pOrgRow,const Reference<XIndexAccess>& _xCols)
-{
-    return sal_False;
-}
 // -----------------------------------------------------------------------------
-
-// -------------------------------------------------------------------------
 sal_Bool OEvoabTable::setColumnAliases()
 {
 
