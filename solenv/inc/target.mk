@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.110 $
+#   $Revision: 1.111 $
 #
-#   last change: $Author: hjs $ $Date: 2002-03-28 16:50:41 $
+#   last change: $Author: hjs $ $Date: 2002-05-13 12:31:46 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -2836,6 +2836,7 @@ SRCALLTARGET:	\
         $(SRC16TARGET) \
         $(IMGLSTTARGET)
 
+.IF "$(ZIP1TARGETN)$(ZIP2TARGETN)$(ZIP3TARGETN)$(ZIP4TARGETN)$(ZIP5TARGETN)$(ZIP6TARGETN)$(ZIP7TARGETN)$(ZIP8TARGETN)$(ZIP9TARGETN)"!=""
 ZIPALLTARGET: \
         $(ZIP1TARGETN) \
         $(ZIP2TARGETN) \
@@ -2846,6 +2847,12 @@ ZIPALLTARGET: \
         $(ZIP7TARGETN) \
         $(ZIP8TARGETN) \
         $(ZIP9TARGETN)
+.ELSE
+ZIPALLTARGET:
+    @+$(ECHO) ---
+    @+echo nothing to zip for activated languages!
+    @+$(ECHO) ---
+.ENDIF
 
 
 #temporary workaround for non-existing delzip in extras
