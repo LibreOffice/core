@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-25 16:03:02 $
+#   last change: $Author: vg $ $Date: 2003-04-15 13:51:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,11 +64,11 @@ PRJ=..$/..
 PRJNAME=bib
 TARGET=bib
 ENABLE_EXCEPTIONS=TRUE
-USE_DEFFILE=TRUE
 NO_BSYMBOLIC=TRUE
 IMGLST_SRS=$(SRS)$/bib.srs
 
 # --- Settings -----------------------------------------------------
+
 .INCLUDE :	$(PRJ)$/util$/makefile.pmk
 
 # --- Files --------------------------------------------------------
@@ -109,27 +109,20 @@ RESLIB1NAME=bib
 RESLIB1SRSFILES= $(SRS)/bib.srs
 RESLIB1DEPN= bib.src bib.hrc
 
-SHL1TARGET= $(TARGET)$(UPD)$(DLLPOSTFIX)
-
-#		$(UNOLIB)	 \
 
 SHL1STDLIBS= \
-        $(CPPULIB) 	 \
-        $(CPPUHELPERLIB) 	 \
-        $(COMPHELPERLIB) 	 \
-        $(VOSLIB) 	 \
-        $(TOOLSLIB)  \
-        $(SO2LIB)	\
-        $(VCLLIB)    \
-        $(TKLIB)	\
-        $(SVTOOLLIB)\
-        $(SVLLIB)	\
+        $(SVTOOLLIB) \
+        $(TKLIB) \
+        $(VCLLIB) \
+        $(SVLLIB) \
+        $(UNOTOOLSLIB) \
+        $(TOOLSLIB) \
         $(DBTOOLSLIB) \
-        $(OSLLIB)	 \
-        $(SALLIB)	\
-        $(UNOTOOLSLIB)	\
-        $(SOTLIB)	\
-        $(UCBHELPERLIB)
+        $(COMPHELPERLIB) \
+        $(CPPUHELPERLIB) \
+        $(CPPULIB) \
+        $(SALLIB)
+
 
 #Create UNO Header files
 UNOUCROUT=$(OUT)$/inc$/$(PRJNAME)
@@ -187,13 +180,13 @@ UNOTYPES=\
 
 #END
 
-SHL1LIBS=		$(SLB)$/$(TARGET).lib
+SHL1TARGET= $(TARGET)$(UPD)$(DLLPOSTFIX)
+SHL1LIBS=       $(SLB)$/$(TARGET).lib
 SHL1IMPLIB=		i$(TARGET)
 SHL1DEPN=		$(SHL1LIBS)
 SHL1DEF=		$(MISC)$/$(SHL1TARGET).def
-
+SHL1VERSIONMAP=exports.map
 DEF1NAME=		$(SHL1TARGET)
-DEF1EXPORTFILE=	exports.dxp
 
 ALL:\
     $(do_build) \
