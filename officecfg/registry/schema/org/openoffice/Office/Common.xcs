@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: sj $ $Date: 2002-08-06 14:45:55 $
+ *  last change: $Author: obr $ $Date: 2002-08-06 15:34:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4607,22 +4607,40 @@ Relevant on platforms where file/folder picker integration is implemented.</desc
 			</prop>
 		</group>
 		<set oor:name="OfficeObjects" oor:node-type="ObjectNames"/>
-		<group oor:name="ExternalApps" oor:extensible="true"/>
+		<group oor:name="ExternalApps" oor:extensible="true">
+			<!--Responsible: OBR-->
+			<info>
+				<desc xml:lang="en-US">Specifies external helper applications / protocol handlers</desc>
+			</info>
+		</group>
 		<group oor:name="ExternalMailer">
 			<!--Responsible: OBR-->
-			<!-- OldPath: -->
-			<!-- OldLocation: -->
-			<!--UI hints: Not yet available -->
+			<info>
+				<desc xml:lang="en-US">Specifies an external mail application to be used for Send as email</desc>
+			</info>
 			<prop oor:name="UseDefaultMailer" oor:type="xs:boolean">
+				<info>
+					<desc xml:lang="en-US">Indicates if the mail application in the OS specific user settings should be used.</desc>
+				</info>
 				<value xsi:nil="true"/>
 			</prop>
 			<prop oor:name="Program" oor:type="xs:string">
+				<info>
+					<desc xml:lang="en-US">The external mail application to be used.</desc>
+				</info>
 				<value/>
 			</prop>
 			<prop oor:name="CommandProfile" oor:type="xs:string">
+				<info>
+					<desc xml:lang="en-US">The default external mail application.</desc>
+				</info>
 				<value>Netscape 6.x</value>
 			</prop>
-			<set oor:name="Profiles" oor:node-type="MailCommandLineProfile"/>
+			<set oor:name="Profiles" oor:node-type="MailCommandLineProfile">
+				<info>
+					<desc xml:lang="en-US">A set of supported command line profiles</desc>
+				</info>
+			</set>
 		</group>
 		<group oor:name="I18N">
 			<!-- Responsible: OS -->
