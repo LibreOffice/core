@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: npower $ $Date: 2003-02-20 10:56:29 $
+#   last change: $Author: npower $ $Date: 2003-07-07 14:26:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,21 +81,6 @@ SLOFILES=\
         $(SLO)$/ScriptNameResolverImpl.obj\
         $(SLO)$/ScriptRuntimeManager.obj \
 
-SHL1TARGET=	$(TARGET)
-
-SHL1STDLIBS= \
-        $(CPPULIB)		\
-        $(CPPUHELPERLIB)	\
-        $(SALLIB)
-
-SHL1DEPN= 
-
-SHL1IMPLIB=	$(TARGET)
-SHL1LIBS=	$(SLB)$/$(TARGET).lib
-SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
-
-DEF1NAME=	$(SHL1TARGET)
-DEF1EXPORTFILE=	exports.dxp
 
 # --- Targets ------------------------------------------------------
 
