@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DocumentLoader.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:54:28 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 20:10:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -53,7 +53,7 @@ import com.sun.star.beans.XPropertySet;
 public class DocumentLoader {
   public static void main(String args[]) {
     try {
-      String sConnectionString = "uno:socket,host=localhost,port=8100;urp;StarOffice.ServiceManager";
+      String sConnectionString = "uno:socket,host=localhost,port=2083;urp;StarOffice.ServiceManager";
 
       if ( args.length < 1 ) {
         System.out.println(

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DocumentPrinter.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:54:38 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 20:10:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -52,7 +52,7 @@ import com.sun.star.view.XPrintable;
 public class DocumentPrinter {
   public static void main(String args[]) {
     try {
-      String sConnectionString = "uno:socket,host=localhost,port=8100;urp;StarOffice.ServiceManager";
+      String sConnectionString = "uno:socket,host=localhost,port=2083;urp;StarOffice.ServiceManager";
 
       if ( args.length < 3 ) {
         System.out.println(
