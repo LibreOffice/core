@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldvar.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 06:43:16 $
+ *  last change: $Author: rt $ $Date: 2001-05-17 08:34:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,7 +200,7 @@ TabPage TP_FLD_VAR
         TEXT [ English ] = "Invisible" ;
         TEXT [ norwegian ] = "Usynlig" ;
         TEXT [ italian ] = "Nascosto" ;
-        TEXT [ portuguese_brazilian ] = "Invisível" ;
+        TEXT [ portuguese_brazilian ] = "Invis?vel" ;
         TEXT [ portuguese ] = "~Invisível" ;
         TEXT [ finnish ] = "~Näkymätön" ;
         TEXT [ danish ] = "Usynlig" ;
@@ -476,7 +476,7 @@ TabPage TP_FLD_VAR
         Left = TRUE ;
         Text[ chinese_simplified ] = "ÊýÖµ(~V)";
         Text[ russian ] = "Çíà÷åíèå";
-        Text[ polish ] = "Wartoœæ";
+        Text[ polish ] = "Warto?æ";
         Text[ japanese ] = "’l(~V)";
         Text[ chinese_traditional ] = "¼Æ­È(~V)";
         Text[ arabic ] = "ÞíãÉ";
