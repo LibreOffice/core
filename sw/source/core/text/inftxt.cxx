@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: fme $ $Date: 2002-05-21 08:09:50 $
+ *  last change: $Author: fme $ $Date: 2002-05-28 09:00:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -884,7 +884,7 @@ void lcl_CalcRect( const SwTxtPaintInfo* pInf, const SwLinePortion& rPor,
                        (   bFrmDir && DIR_LEFT2RIGHT == pInf->GetDirection() );
 
     if ( bCounterDir )
-        aPoint.A() -= rPor.Width();
+        aPoint.A() -= aSize.Width();
 #endif
 
     SwRect aRect( aPoint, aSize );
