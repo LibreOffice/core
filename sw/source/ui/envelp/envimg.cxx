@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envimg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2000-11-13 11:53:55 $
+ *  last change: $Author: os $ $Date: 2001-12-10 16:54:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -256,7 +256,6 @@ SwEnvCfgItem::SwEnvCfgItem() :
     {
         for(int nProp = 0; nProp < aNames.getLength(); nProp++)
         {
-            DBG_ASSERT(pValues[nProp].hasValue(), "property value missing")
             if(pValues[nProp].hasValue())
             {
                 switch(nProp)
