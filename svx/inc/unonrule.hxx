@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unonrule.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2000-09-28 12:34:18 $
+ *  last change: $Author: cl $ $Date: 2000-11-02 16:06:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,6 +139,9 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMED_HPP_
 #include <com/sun/star/container/XNamed.hpp>
 #endif
+#ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
+#include <com/sun/star/lang/XUnoTunnel.hpp>
+#endif
 
 #include <unotools/servicehelper.hxx>
 
@@ -146,11 +149,11 @@
 #include <numitem.hxx>
 #endif
 
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase3.hxx>
 
 class SdrModel;
 
-class SvxUnoNumberingRules : public ::cppu::WeakAggImplHelper2< ::com::sun::star::container::XIndexReplace, ::com::sun::star::container::XNamed >
+class SvxUnoNumberingRules : public ::cppu::WeakAggImplHelper3< ::com::sun::star::container::XIndexReplace, ::com::sun::star::container::XNamed, ::com::sun::star::lang::XUnoTunnel >
 {
 private:
     SvxNumBulletItem* mpBulletItem;
