@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: nf $ $Date: 2001-05-08 11:09:27 $
+#   last change: $Author: nf $ $Date: 2001-05-21 13:28:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -93,7 +93,8 @@ OBJFILES=                       \
     $(OBJ)$/revision.obj    \
     $(OBJ)$/shellprp.obj 	\
     $(OBJ)$/fattr.obj 		\
-    $(OBJ)$/minormk.obj 	
+    $(OBJ)$/minormk.obj 	\
+    $(OBJ)$/mkcreate.obj
 
 SLOFILES=                   \
     $(SLO)$/sstring.obj     \
@@ -105,7 +106,8 @@ SLOFILES=                   \
     $(SLO)$/revision.obj    \
     $(SLO)$/shellprp.obj 	\
     $(SLO)$/fattr.obj 		\
-    $(SLO)$/minormk.obj 	
+    $(SLO)$/minormk.obj 	\
+    $(SLO)$/mkcreate.obj
 
 LIB1TARGET= $(LB)$/btstrp.lib
 LIB1ARCHIV= $(LB)$/libbtstrp.a
@@ -134,9 +136,9 @@ APP2LIBS=       $(LB)$/bootstrp.lib
 APP2DEPN=   $(LB)$/atools.lib $(LB)$/bootstrp.lib
 
 APP3TARGET=mkcreate
-APP3OBJS=   $(OBJ)$/mkcrexe.obj $(OBJ)$/mkcreate.obj
+APP3OBJS=   $(OBJ)$/mkcrexe.obj 
 APP3STDLIBS=$(STATIC_LIBS)
-APP3LIBS=       $(LB)$/bootstrp.lib
+APP3LIBS=   $(LB)$/bootstrp.lib
 APP3DEPN=   $(LB)$/atools.lib $(LB)$/bootstrp.lib
 
 APP4TARGET=     setsolar
