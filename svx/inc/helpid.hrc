@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpid.hrc,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-14 11:52:30 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 14:14:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -713,7 +713,7 @@
 #define HID_MENU_EXTRUSION_LIGHTING                 (HID_SVX_EXT0_START + 116)
 #define HID_VALUESET_EXTRUSION_LIGHTING             (HID_SVX_EXT0_START + 117)
 #define HID_MENU_EXTRUSION_SURFACE                  (HID_SVX_EXT0_START + 118)
-#define HID_SCRIPTSBOX                              (HID_SVX_EXT0_START + 119)
+#define HID_SCRIPTORG_DIALOG                        (HID_SVX_EXT0_START + 119)
 #define HID_SELECTOR_CATEGORIES                     (HID_SVX_EXT0_START + 120)
 #define HID_SELECTOR_COMMANDS                       (HID_SVX_EXT0_START + 121)
 
