@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:14:49 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 11:51:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,7 @@ CheckBox CB_USE_PASSWD
     Text[ czech ] = "Heslo";
     Text[ hebrew ] = "‮סיסמה‬";
     Text[ hindi ] = "~कूटशब्द";
+    Text[ slovak ] = "~Heslo";
 };
 CheckBox CB_READ_ONLY
 {
@@ -122,6 +123,7 @@ CheckBox CB_READ_ONLY
     Text[ czech ] = "Pouze pro čtení";
     Text[ hebrew ] = "‮קריאה בלבד‬";
     Text[ hindi ] = "~केवल पढ़ने केलिए";
+    Text[ slovak ] = "~Len na čítanie";
 };
 String STR_LINKEDIT_TEXT
 {
@@ -154,6 +156,7 @@ String STR_LINKEDIT_TEXT
     Text[ czech ] = "Upravit odkazy";
     Text[ hebrew ] = "Verknüpfungen bearbeiten";
     Text[ hindi ] = "लिंक्स का संपादन";
+    Text[ slovak ] = "Upraviť odkazy";
 };
 String STR_PATH_NOT_FOUND1
 {
@@ -186,6 +189,7 @@ String STR_PATH_NOT_FOUND1
     Text[ czech ] = "Adresář ";
     Text[ hebrew ] = "Das Verzeichnis '";
     Text[ hindi ] = "डैरक्टरी '";
+    Text[ slovak ] = "Adresár '";
 };
 String STR_PATH_NOT_FOUND2
 {
@@ -219,11 +223,14 @@ String STR_PATH_NOT_FOUND2
     Text[ czech ] = " neexistuje.";
     Text[ hebrew ] = "' existiert nicht.";
     Text[ hindi ] = "' अस्तित्व में नहीं है ।";
+    Text[ slovak ] = " neexistuje.";
 };
 String STR_FLT_SGV
 {
     Text = "SGV - StarDraw 2.0,SGV" ;
 };
+
+
 
 
 
