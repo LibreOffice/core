@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olinetab.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:26:59 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 09:10:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -699,7 +699,8 @@ BOOL ScOutlineArray::DeleteSpace( SCCOLROW nStartPos, SCSIZE nSize )
     return bNeedSave;
 }
 
-BOOL ScOutlineArray::ManualAction( SCCOLROW nStartPos, SCCOLROW nEndPos, BOOL bShow, BYTE* pHiddenFlags )
+BOOL ScOutlineArray::ManualAction( SCCOLROW nStartPos, SCCOLROW nEndPos,
+        BOOL bShow, const ScBitMaskCompressedArray< SCCOLROW, BYTE>& rHiddenFlags )
 {
     BOOL bModified = FALSE;
     ScSubOutlineIterator aIter( this );
@@ -716,10 +717,10 @@ BOOL ScOutlineArray::ManualAction( SCCOLROW nStartPos, SCCOLROW nEndPos, BOOL bS
                 //  #i12341# hide if all columns/rows are hidden, show if at least one
                 //  is visible
 
-                BOOL bAllHidden = TRUE;
-                for ( SCCOLROW i=nEntryStart; i<=nEntryEnd && bAllHidden; i++ )
-                    if ( ( pHiddenFlags[i] & CR_HIDDEN ) == 0 )
-                        bAllHidden = FALSE;
+                SCCOLROW nEnd = rHiddenFlags.GetBitStateEnd( nEntryStart,
+                        CR_HIDDEN, CR_HIDDEN);
+                BOOL bAllHidden = (nEntryEnd <= nEnd && nEnd <
+                        ::std::numeric_limits<SCCOLROW>::max());
 
                 BOOL bToggle = ( bShow != bAllHidden );
                 if ( bToggle )
