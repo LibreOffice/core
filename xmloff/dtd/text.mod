@@ -1,5 +1,5 @@
 <!--
-	$Id: text.mod,v 1.46 2002-01-17 14:27:00 dvo Exp $
+	$Id: text.mod,v 1.47 2002-01-18 11:39:17 dvo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -617,7 +617,7 @@
 <!ATTLIST text:object-count style:num-letter-sync %boolean; "false">
 
 <!ELEMENT text:bibliography-mark (#PCDATA)>
-<!ATTLIST text:bibliography-mark text:bibiliographic-type 
+<!ATTLIST text:bibliography-mark text:bibliography-type 
 	( article | book | booklet | conference | custom1 | custom2 | custom3 | 
 	  custom4 | custom5 | email | inbook | incollection | inproceedings | 
 	  journal | manual | mastersthesis | misc | phdthesis | proceedings | 
@@ -984,7 +984,7 @@ indices, and there may be only one text:index-title element.
 <!ELEMENT text:index-entry-bibliography EMPTY>
 <!ATTLIST text:index-entry-bibliography text:style-name %styleName; #IMPLIED>
 <!ATTLIST text:index-entry-bibliography text:bibliography-data-field
-							( address | annote | author | bibiliographic-type |
+							( address | annote | author | bibliography-type |
 							  booktitle | chapter | custom1 | custom2 | 
 							  custom3 | custom4 | custom5 | edition | editor |
 							  howpublished | identifier | institution | isbn |
@@ -1061,7 +1061,7 @@ indices, and there may be only one text:index-title element.
 
 <!ELEMENT text:sort-key EMPTY>
 <!ATTLIST text:sort-key text:key ( address | annote | author | 
-	bibiliographic-type | booktitle | chapter | custom1 | custom2 | 
+	bibliography-type | booktitle | chapter | custom1 | custom2 | 
 	custom3 | custom4 | custom5 | edition | editor | howpublished | 
 	identifier | institution | isbn | journal | month | note | number | 
 	organizations | pages | publisher | report-type | school | series | 
