@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagemgr.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-23 11:13:53 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 14:38:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,6 +187,7 @@ static SvtExtensionResIdMapping_Impl __READONLY_DATA ExtensionMap_Impl[] =
     { "sch",   FALSE, STR_DESCRIPTION_SCHART_DOC,            0 },
     { "sda",   FALSE, STR_DESCRIPTION_SDRAW_DOC,             IMG_DRAW },
     { "sdb",   FALSE, 0,                                     IMG_DATABASE },
+    { "odb",   FALSE, STR_DESCRIPTION_SDATABASE_DOC,         IMG_DATABASE },
     { "sdc",   FALSE, STR_DESCRIPTION_SCALC_DOC,             IMG_CALC },
     { "sdd",   FALSE, STR_DESCRIPTION_SIMPRESS_DOC,          IMG_IMPRESS },
     { "sdp",   FALSE, STR_DESCRIPTION_SIMPRESS_DOC,          IMG_IMPRESSPACKED },
@@ -244,6 +245,7 @@ static SvtExtensionResIdMapping_Impl __READONLY_DATA ExtensionMap_Impl[] =
     {"SVsc0", FALSE, STR_DESCRIPTION_SCALC_DOC,      IMG_CALC},
     {"SVch0", FALSE, STR_DESCRIPTION_SCHART_DOC,     IMG_CHART},
     {"SVsm0", FALSE, STR_DESCRIPTION_SMATH_DOC,      IMG_MATH},
+    ("SVsb0", FALSE, STR_DESCRIPTION_SDATABASE_DOC,  IMG_DATABASE),
     {"sW/©1", FALSE, STR_DESCRIPTION_SOFFICE_TEMPLATE_DOC,IMG_WRITERTEMPLATE},
     {"sVsa1", FALSE, STR_DESCRIPTION_SOFFICE_TEMPLATE_DOC,IMG_DRAWTEMPLATE},
     {"sVsd1", FALSE, STR_DESCRIPTION_SOFFICE_TEMPLATE_DOC,IMG_IMPRESSTEMPLATE},
