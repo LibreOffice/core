@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmergewizard.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-29 09:30:52 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 13:57:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,7 @@
 #include <sfx2/viewfrm.hxx>
 #endif
 
+#include <helpid.h>
 #include <dbui.hrc>
 #include <mailmergewizard.hrc>
 
@@ -151,6 +152,8 @@ SwMailMergeWizard::SwMailMergeWizard(SwView& rView, SwMailMergeConfigItem& rItem
     enableButtons(WZB_FINISH, sal_False);
 
     m_pFinish->SetText(m_sFinish);
+    m_pNextPage->SetHelpId(HID_MM_NEXT_PAGE);
+    m_pPrevPage->SetHelpId(HID_MM_PREV_PAGE);
 
     declarePath(
         0,
