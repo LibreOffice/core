@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: os $ $Date: 2002-11-22 07:14:28 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:04:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2572,14 +2572,14 @@ void  SwContentTree::RequestHelp( const HelpEvent& rHEvt )
                     break;
                     case CONTENT_TYPE_GRAPHIC:
                         sEntry = ((SwGraphicContent*)pUserData)->GetLink();
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                         sEntry += ' ';
                         sEntry += String::CreateFromInt32(
                                     ((SwGraphicContent*)pUserData)->GetYPos());
 #endif
                         bRet = sal_True;
                     break;
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                     case CONTENT_TYPE_TABLE:
                     case CONTENT_TYPE_FRAME:
                         sEntry = String::CreateFromInt32(
