@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fme $ $Date: 2001-08-09 12:42:43 $
+ *  last change: $Author: os $ $Date: 2001-11-30 12:13:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -431,11 +431,9 @@ SfxTabPage* SwCharURLPage::Create(  Window* pParent,
 IMPL_LINK( SwCharURLPage, InsertFileHdl, PushButton *, pBtn )
 {
     FileDialogHelper aDlgHelper( FILEOPEN_SIMPLE, 0 );
-    Reference < XFilePicker > xFP = aDlgHelper.GetFilePicker();
-
-//    pFileDlg->SetHelpId(HID_FILEDLG_CHARDLG);
-    if( xFP->execute() == RET_OK )
+    if( aDlgHelper.Execute() == RET_OK )
     {
+        Reference < XFilePicker > xFP = aDlgHelper.GetFilePicker();
         aURLED.SetText(URIHelper::SmartRelToAbs(xFP->getFiles().getConstArray()[0]));
     }
     return 0;
