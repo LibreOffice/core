@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleCell.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-20 13:57:21 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:15:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -476,12 +476,10 @@ void ScAccessibleCell::FillDependends(utl::AccessibleRelationSetHelper* pRelatio
             {
                 sal_Bool bFound(sal_False);
                 ScDetectiveRefIter aIter( (ScFormulaCell*) pCell );
-                ScTripel aRefStart;
-                ScTripel aRefEnd;
-                while ( !bFound && aIter.GetNextRef( aRefStart, aRefEnd ) )
+                ScRange aRef;
+                while ( !bFound && aIter.GetNextRef( aRef ) )
                 {
-                    ScRange aRefRange( aRefStart, aRefEnd );
-                    if (aRefRange.In(maCellAddress))
+                    if (aRef.In(maCellAddress))
                         bFound = sal_True;
                 }
                 if (bFound)
@@ -502,11 +500,10 @@ void ScAccessibleCell::FillPrecedents(utl::AccessibleRelationSetHelper* pRelatio
             ScFormulaCell* pFCell = (ScFormulaCell*) pBaseCell;
 
             ScDetectiveRefIter aIter( pFCell );
-            ScTripel aRefStart;
-            ScTripel aRefEnd;
-            while ( aIter.GetNextRef( aRefStart, aRefEnd ) )
+            ScRange aRef;
+            while ( aIter.GetNextRef( aRef ) )
             {
-                AddRelation(ScRange( aRefStart, aRefEnd ), AccessibleRelationType::CONTROLLED_BY, pRelationSet);
+                AddRelation( aRef, AccessibleRelationType::CONTROLLED_BY, pRelationSet);
             }
         }
     }
@@ -526,7 +523,9 @@ void ScAccessibleCell::AddRelation(const ScRange& rRange,
     uno::Reference < XAccessibleTable > xTable ( getAccessibleParent()->getAccessibleContext(), uno::UNO_QUERY );
     if (xTable.is())
     {
-        sal_uInt32 nCount((rRange.aEnd.Col() - rRange.aStart.Col() + 1) * (rRange.aEnd.Row() - rRange.aStart.Row() + 1));
+        sal_uInt32 nCount(static_cast<sal_uInt32>(rRange.aEnd.Col() -
+                    rRange.aStart.Col() + 1) * (rRange.aEnd.Row() -
+                    rRange.aStart.Row() + 1));
         uno::Sequence < uno::Reference < uno::XInterface > > aTargetSet( nCount );
         uno::Reference < uno::XInterface >* pTargetSet = aTargetSet.getArray();
         if (pTargetSet)
