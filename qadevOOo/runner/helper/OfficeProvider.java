@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OfficeProvider.java,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change:$Date: 2004-07-23 13:41:15 $
+ *  last change:$Date: 2004-11-02 11:34:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,7 @@
  ************************************************************************/
 package helper;
 
-import com.sun.star.bridge.UnoUrlResolver;
+//import com.sun.star.bridge.UnoUrlResolver;
 import com.sun.star.bridge.XUnoUrlResolver;
 import com.sun.star.connection.XConnection;
 import com.sun.star.connection.XConnector;
@@ -140,8 +140,11 @@ public class OfficeProvider implements AppProvider {
      * Method to get the ServiceManager of an Office
      */
     public Object getManager(lib.TestParameters param) {
+        String errorMessage = null;
+        boolean bAppExecutionHasWarning = false;
+
         String additionalArgs = (String) param.get(
-        "AdditionalConnectionArguments");
+            "AdditionalConnectionArguments");
 
         if (additionalArgs == null) {
             additionalArgs = ";";
@@ -162,10 +165,10 @@ public class OfficeProvider implements AppProvider {
 
         if (msf == null) {
             String exc = "";
+            Exception exConnectFailed = null;
             boolean isExecutable = false;
             boolean isAppKnown = ((cncstr.indexOf("host=localhost") > 0) || (cncstr.indexOf("pipe,name=")>0));
-            isAppKnown &= !((String) param.get("AppExecutionCommand")).equals(
-            "");
+            isAppKnown &= !((String) param.get("AppExecutionCommand")).equals("");
 
             if (isAppKnown) {
                 if (debug) {
@@ -182,6 +185,16 @@ public class OfficeProvider implements AppProvider {
                 }
 
                 String cmd = (String) param.get("AppExecutionCommand");
+                // validate the AppExecutionCommand, but try it out anyway.
+                // keep the error message for later.
+                errorMessage =
+                    util.utils.validateAppExecutionCommand(cmd, (String)param.get("OperatingSystem"));
+                if (errorMessage.startsWith("Error")) {
+                    System.out.println(errorMessage);
+                    return null;
+                }
+                bAppExecutionHasWarning = !errorMessage.equals("OK");
+
                 DynamicClassLoader dcl = new DynamicClassLoader();
                 LogWriter log = (LogWriter) dcl.getInstance(
                 (String) param.get("LogWriter"));
@@ -219,8 +232,10 @@ public class OfficeProvider implements AppProvider {
                         Thread.sleep(k * 1000);
                         msf = connect(cncstr);
                     } catch (com.sun.star.uno.Exception ue) {
+                        exConnectFailed = ue;
                         exc = ue.getMessage();
                     } catch (java.lang.Exception je) {
+                        exConnectFailed = je;
                         exc = je.getMessage();
                     }
 
@@ -228,8 +243,11 @@ public class OfficeProvider implements AppProvider {
                 }
 
                 if (msf == null) {
-                    System.out.println("Exception while connecting.\n" +
-                    exc);
+                    System.out.println("Exception while connecting.\n" + exConnectFailed);
+                    if (exc != null)
+                        System.out.println(exc);
+                    if (bAppExecutionHasWarning)
+                        System.out.println(errorMessage);
                 } else if (isExecutable) {
                     //copy the user layer to a safe place
                     try {
@@ -250,7 +268,7 @@ public class OfficeProvider implements AppProvider {
                         //System.out.println("CopyLayer: "+copyLayer);
                         copyDirectory(new File(userLayer), new File(copyLayer));
                     } catch (com.sun.star.container.NoSuchElementException e) {
-                        System.out.println("User Variable not defined");
+                        System.out.println("User Variable '$(user)' not defined.");
                     } catch (java.io.IOException e) {
                         System.out.println("Couldn't backup user layer");
                         e.printStackTrace();
@@ -258,7 +276,9 @@ public class OfficeProvider implements AppProvider {
                 }
             } else {
                 System.out.println("Could not connect an Office" +
-                " and cannot start one.");
+                    " and cannot start one.");
+                if (bAppExecutionHasWarning)
+                    System.out.println(errorMessage);
             }
         }
 
@@ -281,7 +301,11 @@ public class OfficeProvider implements AppProvider {
         XMultiComponentFactory xLocalServiceManager = xcomponentcontext.getServiceManager();
 
         // create a connector, so that it can contact the office
-        XUnoUrlResolver urlResolver = UnoUrlResolver.create(xcomponentcontext);
+//        XUnoUrlResolver urlResolver = UnoUrlResolver.create(xcomponentcontext);
+        Object xUrlResolver = xLocalServiceManager.createInstanceWithContext(
+                    "com.sun.star.bridge.UnoUrlResolver", xcomponentcontext);
+        XUnoUrlResolver urlResolver = (XUnoUrlResolver) UnoRuntime.queryInterface(
+                    XUnoUrlResolver.class, xUrlResolver);
 
         Object rInitialObject = urlResolver.resolve(connectStr);
 
@@ -349,6 +373,8 @@ public class OfficeProvider implements AppProvider {
         XMultiServiceFactory msf = null;
         String exc = "";
 
+        if (debug) System.out.println("trying to connect to " + cncstr);
+
         try {
             msf = connect(cncstr);
         } catch (com.sun.star.uno.Exception ue) {
@@ -357,7 +383,7 @@ public class OfficeProvider implements AppProvider {
             exc = je.getMessage();
         }
 
-        if (debug) {
+        if (debug && exc.length() != 0) {
             System.out.println("Could not connect an Office. " + exc);
         }
 
@@ -429,9 +455,13 @@ public class OfficeProvider implements AppProvider {
         try {
             String userLayer = (String) param.get("userLayer");
             String copyLayer = (String) param.get("copyLayer");
-            File copyFile = new File(copyLayer);
-            copyDirectory(copyFile, new File(userLayer));
-            deleteDir(copyFile);
+            if (userLayer != null && copyLayer != null) {
+                File copyFile = new File(copyLayer);
+                copyDirectory(copyFile, new File(userLayer));
+                deleteDir(copyFile);
+            }
+            else
+                System.out.println("Cannot copy layer: " + copyLayer + " back to user layer: " + userLayer);
         } catch (java.io.IOException e) {
             if (debug) {
                 System.out.println("Couldn't recover from backup");
