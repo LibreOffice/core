@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rubydialog.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:37:01 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:17:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,7 @@ ModelessDialog RID_SVXDLG_RUBY
         Text[ czech ] = "Automatická detekce";
         Text[ hebrew ] = "‮גילוי אוטומטי‬";
         Text[ hindi ] = "स्वचालित खोज";
+        Text[ slovak ] = "Automatická detekcia";
     };
     FixedText FT_LEFT
     {
@@ -136,6 +137,7 @@ ModelessDialog RID_SVXDLG_RUBY
         Text[ czech ] = "Základní text";
         Text[ hebrew ] = "‮טקסט בסיסי‬";
         Text[ hindi ] = "आधार टेक्स्ट्";
+        Text[ slovak ] = "Základný text";
     };
     FixedText FT_RIGHT
     {
@@ -167,6 +169,7 @@ ModelessDialog RID_SVXDLG_RUBY
         Text[ czech ] = "Ruby text";
         Text[ hebrew ] = "‮טקסט נוסף 'רובי'‬";
         Text[ hindi ] = "रूबी टेक्स्ट्";
+        Text[ slovak ] = "Ruby text";
     };
     Edit ED_LEFT_1
     {
@@ -254,6 +257,7 @@ ModelessDialog RID_SVXDLG_RUBY
         Text[ czech ] = "Zarovnání";
         Text[ hebrew ] = "‮יישור‬";
         Text[ hindi ] = "पंक्तिकरण";
+        Text[ slovak ] = "Zarovnanie";
     };
     ListBox LB_ADJUST
     {
@@ -477,6 +481,14 @@ ModelessDialog RID_SVXDLG_RUBY
         "0 1 0" ;
         "1 2 1" ;
     };
+    StringList [ slovak ] =
+    {
+        "Vľavo" ;
+        "Na stred" ;
+        "Vpravo" ;
+        "0 1 0" ;
+        "1 2 1" ;
+    };
     };
     FixedText FT_POSITION
     {
@@ -508,6 +520,7 @@ ModelessDialog RID_SVXDLG_RUBY
         Text[ czech ] = "Umístění";
         Text[ hebrew ] = "‮מיקום‬";
         Text[ hindi ] = "स्थान";
+        Text[ slovak ] = "Umiestnenie";
     };
     ListBox LB_POSITION
     {
@@ -650,6 +663,11 @@ ModelessDialog RID_SVXDLG_RUBY
         "ऊपर" ;
         "नीचे" ;
     };
+    StringList [ slovak ] =
+    {
+        "Navrchu" ;
+        "Dole" ;
+    };
     };
     FixedText FT_CHAR_STYLE
     {
@@ -681,6 +699,7 @@ ModelessDialog RID_SVXDLG_RUBY
         Text[ czech ] = "Znakový styl pro Ruby text";
         Text[ hebrew ] = "‮סגנון תו לטקסט נוסף 'רובי'‬";
         Text[ hindi ] = "रूबी टेक्स्ट् केलिए अक्षर शैली";
+        Text[ slovak ] = "Znakový štýl pre Ruby text";
     };
     ListBox LB_CHAR_STYLE
     {
@@ -720,6 +739,7 @@ ModelessDialog RID_SVXDLG_RUBY
         Text[ czech ] = "Stylista";
         Text[ hebrew ] = "‮המסגנן‬";
         Text[ hindi ] = "स्टइलिस्ट्";
+        Text[ slovak ] = "Štylista";
     };
     FixedText FT_PREVIEW
     {
@@ -751,6 +771,7 @@ ModelessDialog RID_SVXDLG_RUBY
         Text[ czech ] = "Náhled:";
         Text[ hebrew ] = "‮תצוגה מקדימה:‬";
         Text[ hindi ] = "पूर्वदृश्य:";
+        Text[ slovak ] = "Náhľad:";
     };
     Window WIN_PREVIEW
     {
@@ -789,6 +810,7 @@ ModelessDialog RID_SVXDLG_RUBY
         Text[ czech ] = "Použít";
         Text[ hebrew ] = "‮יישום‬";
         Text[ hindi ] = "~लागू करो";
+        Text[ slovak ] = "~Použiť";
     };
     PushButton PB_CLOSE
     {
@@ -820,6 +842,7 @@ ModelessDialog RID_SVXDLG_RUBY
         Text[ czech ] = "Zavřít";
         Text[ hebrew ] = "‮סגירה‬";
         Text[ hindi ] = "~बन्द करो";
+        Text[ slovak ] = "~Zavrieť";
     };
     HelpButton PB_HELP
     {
@@ -850,7 +873,10 @@ ModelessDialog RID_SVXDLG_RUBY
     Text[ czech ] = "Ruby";
     Text[ hebrew ] = "‮רובי‬";
     Text[ hindi ] = "रूबी";
+    Text[ slovak ] = "Ruby";
 };
+
+
 
 
 
