@@ -12,7 +12,7 @@ $(HIDRES1PARTICLE): $(RESLIB1HIDFILES)
     @echo ------------------------------
     @echo Making: $@
     @+$(IFEXIST) $@ $(THEN) $(RM) $@
-    $(TYPE) $(RESLIB1HIDFILES) > $@.$(ROUT).tmp 
+    +$(TYPE) $(mktmp  $(subst,$/,/ $(RESLIB1HIDFILES))) | xargs -s 1000 cat > $@.$(ROUT).tmp
     @+$(RENAME) $@.$(ROUT).tmp $@
 
 ALLTAR : $(HIDRES1PARTICLE)
@@ -90,7 +90,7 @@ $(HIDRES2PARTICLE): $(RESLIB2HIDFILES)
     @echo ------------------------------
     @echo Making: $@
     @+$(IFEXIST) $@ $(THEN) $(RM) $@
-    $(TYPE) $(RESLIB2HIDFILES) > $@.$(ROUT).tmp 
+    +$(TYPE) $(mktmp  $(subst,$/,/ $(RESLIB2HIDFILES))) | xargs -s 1000 cat > $@.$(ROUT).tmp
     @+$(RENAME) $@.$(ROUT).tmp $@
 
 ALLTAR : $(HIDRES2PARTICLE)
@@ -168,7 +168,7 @@ $(HIDRES3PARTICLE): $(RESLIB3HIDFILES)
     @echo ------------------------------
     @echo Making: $@
     @+$(IFEXIST) $@ $(THEN) $(RM) $@
-    $(TYPE) $(RESLIB3HIDFILES) > $@.$(ROUT).tmp 
+    +$(TYPE) $(mktmp  $(subst,$/,/ $(RESLIB3HIDFILES))) | xargs -s 1000 cat > $@.$(ROUT).tmp
     @+$(RENAME) $@.$(ROUT).tmp $@
 
 ALLTAR : $(HIDRES3PARTICLE)
@@ -246,7 +246,7 @@ $(HIDRES4PARTICLE): $(RESLIB4HIDFILES)
     @echo ------------------------------
     @echo Making: $@
     @+$(IFEXIST) $@ $(THEN) $(RM) $@
-    $(TYPE) $(RESLIB4HIDFILES) > $@.$(ROUT).tmp 
+    +$(TYPE) $(mktmp  $(subst,$/,/ $(RESLIB4HIDFILES))) | xargs -s 1000 cat > $@.$(ROUT).tmp
     @+$(RENAME) $@.$(ROUT).tmp $@
 
 ALLTAR : $(HIDRES4PARTICLE)
@@ -324,7 +324,7 @@ $(HIDRES5PARTICLE): $(RESLIB5HIDFILES)
     @echo ------------------------------
     @echo Making: $@
     @+$(IFEXIST) $@ $(THEN) $(RM) $@
-    $(TYPE) $(RESLIB5HIDFILES) > $@.$(ROUT).tmp 
+    +$(TYPE) $(mktmp  $(subst,$/,/ $(RESLIB5HIDFILES))) | xargs -s 1000 cat > $@.$(ROUT).tmp
     @+$(RENAME) $@.$(ROUT).tmp $@
 
 ALLTAR : $(HIDRES5PARTICLE)
@@ -402,7 +402,7 @@ $(HIDRES6PARTICLE): $(RESLIB6HIDFILES)
     @echo ------------------------------
     @echo Making: $@
     @+$(IFEXIST) $@ $(THEN) $(RM) $@
-    $(TYPE) $(RESLIB6HIDFILES) > $@.$(ROUT).tmp 
+    +$(TYPE) $(mktmp  $(subst,$/,/ $(RESLIB6HIDFILES))) | xargs -s 1000 cat > $@.$(ROUT).tmp
     @+$(RENAME) $@.$(ROUT).tmp $@
 
 ALLTAR : $(HIDRES6PARTICLE)
@@ -480,7 +480,7 @@ $(HIDRES7PARTICLE): $(RESLIB7HIDFILES)
     @echo ------------------------------
     @echo Making: $@
     @+$(IFEXIST) $@ $(THEN) $(RM) $@
-    $(TYPE) $(RESLIB7HIDFILES) > $@.$(ROUT).tmp 
+    +$(TYPE) $(mktmp  $(subst,$/,/ $(RESLIB7HIDFILES))) | xargs -s 1000 cat > $@.$(ROUT).tmp
     @+$(RENAME) $@.$(ROUT).tmp $@
 
 ALLTAR : $(HIDRES7PARTICLE)
@@ -558,7 +558,7 @@ $(HIDRES8PARTICLE): $(RESLIB8HIDFILES)
     @echo ------------------------------
     @echo Making: $@
     @+$(IFEXIST) $@ $(THEN) $(RM) $@
-    $(TYPE) $(RESLIB8HIDFILES) > $@.$(ROUT).tmp 
+    +$(TYPE) $(mktmp  $(subst,$/,/ $(RESLIB8HIDFILES))) | xargs -s 1000 cat > $@.$(ROUT).tmp
     @+$(RENAME) $@.$(ROUT).tmp $@
 
 ALLTAR : $(HIDRES8PARTICLE)
@@ -636,7 +636,7 @@ $(HIDRES9PARTICLE): $(RESLIB9HIDFILES)
     @echo ------------------------------
     @echo Making: $@
     @+$(IFEXIST) $@ $(THEN) $(RM) $@
-    $(TYPE) $(RESLIB9HIDFILES) > $@.$(ROUT).tmp 
+    +$(TYPE) $(mktmp  $(subst,$/,/ $(RESLIB9HIDFILES))) | xargs -s 1000 cat > $@.$(ROUT).tmp
     @+$(RENAME) $@.$(ROUT).tmp $@
 
 ALLTAR : $(HIDRES9PARTICLE)
@@ -714,7 +714,7 @@ $(HIDRES10PARTICLE): $(RESLIB10HIDFILES)
     @echo ------------------------------
     @echo Making: $@
     @+$(IFEXIST) $@ $(THEN) $(RM) $@
-    $(TYPE) $(RESLIB10HIDFILES) > $@.$(ROUT).tmp 
+    +$(TYPE) $(mktmp  $(subst,$/,/ $(RESLIB10HIDFILES))) | xargs -s 1000 cat > $@.$(ROUT).tmp
     @+$(RENAME) $@.$(ROUT).tmp $@
 
 ALLTAR : $(HIDRES10PARTICLE)
