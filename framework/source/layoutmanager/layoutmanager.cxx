@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layoutmanager.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 09:24:54 $
+ *  last change: $Author: rt $ $Date: 2005-02-02 10:00:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -456,8 +456,6 @@ LayoutManager::~LayoutManager()
 void LayoutManager::impl_clearUpMenuBar()
 {
     implts_lock();
-
-    lock();
 
     // Clear up VCL menu bar to prepare shutdown
     if ( m_xContainerWindow.is() )
