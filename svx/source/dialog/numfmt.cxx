@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numfmt.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:10 $
+ *  last change: $Author: er $ $Date: 2001-01-16 15:44:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,12 @@
 #endif
 #ifndef _SV_SVAPP_HXX //autogen
 #include <vcl/svapp.hxx>
+#endif
+#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
+#include <unotools/localedatawrapper.hxx>
+#endif
+#ifndef _ISOLANG_HXX
+#include <tools/isolang.hxx>
 #endif
 #pragma hdrstop
 
@@ -402,10 +408,16 @@ void SvxNumberFormatTabPage::Init_Impl()
 
     // Sprachen-ListBox initialisieren
 
-    const USHORT nCount = International::GetAvailableFormatCount();
-
-    for ( USHORT i=0; i<nCount; i++ )
-        aLbLanguage.InsertLanguage( International::GetAvailableFormat( i ) );
+    aLbLanguage.InsertLanguage( LANGUAGE_SYSTEM );
+    ::com::sun::star::uno::Sequence< ::com::sun::star::lang::Locale > xLoc =
+        LocaleDataWrapper::getInstalledLocaleNames();
+    sal_Int32 nCount = xLoc.getLength();
+    for ( sal_Int32 i=0; i<nCount; i++ )
+    {
+        LanguageType eLang = ConvertIsoNamesToLanguage( xLoc[i].Language,
+            xLoc[i].Country );
+        aLbLanguage.InsertLanguage( eLang );
+    }
 }
 
 
