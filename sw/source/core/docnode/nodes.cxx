@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodes.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:38:51 $
+ *  last change: $Author: obo $ $Date: 2004-06-01 07:42:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2080,12 +2080,10 @@ void SwNodes::_CopyNodes( const SwNodeRange& rRange,
         {
         case ND_TABLENODE:
             // dann kopiere mal den TableNode
-            // Tabelle in Tabelle kopieren ?
             // Tabell in Fussnote kopieren ?
-            if( pDoc->IsIdxInTbl( aInsPos ) ||
-                ( aInsPos < pDoc->GetNodes().GetEndOfInserts().GetIndex() &&
+            if( aInsPos < pDoc->GetNodes().GetEndOfInserts().GetIndex() &&
                     pDoc->GetNodes().GetEndOfInserts().StartOfSectionIndex()
-                    < aInsPos.GetIndex() ))
+                    < aInsPos.GetIndex() )
             {
                 nNodeCnt -=
                     ( pAktNode->EndOfSectionIndex() -
@@ -2446,9 +2444,14 @@ SwNode* SwNodes::FindPrvNxtFrmNode( SwNodeIndex& rFrmIdx,
                     // falls aber der Node in einer Tabelle steht, muss
                     // natuerlich dieser returnt werden, wenn der SttNode eine
                     // Section oder Tabelle ist!
+#if OSL_DEBUG_LEVEL > 1
+                    SwTableNode* pDebugNode = pSttNd->FindStartNode()->FindTableNode();
+#endif
                     SwTableNode* pTblNd;
-                    if( ( pSttNd->IsTableNode() ) &&
-                        0 != ( pTblNd = pFrmNd->FindTableNode() ))
+                    if( pSttNd->IsTableNode() &&
+                        0 != ( pTblNd = pFrmNd->FindTableNode() ) &&
+                        // TABLE IN TABLE:
+                        pTblNd != pSttNd->FindStartNode()->FindTableNode() )
                     {
                         pFrmNd = pTblNd;
                         rFrmIdx = *pFrmNd;
