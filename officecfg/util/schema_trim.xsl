@@ -3,9 +3,9 @@
  *
  *  $RCSfile: schema_trim.xsl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dg $ $Date: 2002-05-06 18:45:06 $
+ *  last change: $Author: dg $ $Date: 2002-05-16 17:48:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,18 +70,51 @@
 	<xsl:output method="xml" indent="yes"/>
 	<xsl:namespace-alias stylesheet-prefix="xs" result-prefix="xs"></xsl:namespace-alias>
 
-<!-- Remove all comment from the schema files -->
+<!-- Remove all comments from the schema files -->
 	<xsl:template match="*|@*">
 	  <xsl:copy>
 		<xsl:apply-templates select="*|@*"/>
 	  </xsl:copy>
 	</xsl:template>
 
-
 <!-- suppress the location of the schema -->
 	<xsl:template match = "@xsi:schemaLocation"/>
 
+<!-- suppress the constraints of the schema -->
+	<xsl:template match = "constraints"/>
+
 <!-- suppress the all documentation items -->
 	<xsl:template match = "info"/>
+
+<!-- make sure that missing features are not invoked -->
+	<xsl:template match = "item">
+		<xsl:message terminate="yes">ERROR: multiple template types for sets are NOT supported!</xsl:message>
+	</xsl:template>
+
+	<xsl:template match = "set[@oor:extensible='true']">
+		<xsl:message terminate="yes">ERROR: extensible sets are currently NOT supported!</xsl:message>
+	</xsl:template>
+
+<!-- validate for correct node references -->
+	<xsl:template match="@oor:node-type">
+		<!--<xsl:choose>
+			<xsl:when>
+				<xsl:if test="../@oor:component">	
+					<xsl:message terminate="yes">ERROR: extensible sets are currently NOT supported!</xsl:message>
+				</xsl:if> -->
+		<xsl:copy/>
+	</xsl:template>
+
+<!-- locate a component file -->
+	<xsl:template name="locateFile">
+		<xsl:param name="componentName"/>
+		<xsl:param name="path" select="$root"/>
+		<xsl:variable name ="file"><xsl:value-of select="$path"/>/<xsl:value-of select="translate($componentName,'.','/')"/>.xcd</xsl:variable>
+		<xsl:if	test="not( document($file) )">
+			<xsl:message terminate ="yes">**Error: unable to locate document '<xsl:value-of select="translate($componentName,'.','/')"/>.xcd'</xsl:message>
+		</xsl:if>
+		<xsl:value-of select="$file"/>
+	</xsl:template>
+
 
 </xsl:transform>
