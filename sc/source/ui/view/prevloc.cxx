@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prevloc.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 12:04:38 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 09:17:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -363,15 +363,17 @@ ScAddress ScPreviewLocationData::GetCellFromRange( const Size& rOffsetPixel, con
         --nCol;
 
     long nPosY = 0;
-    SCROW nRow = rRange.aStart.Row();
-    SCROW nEndRow = rRange.aEnd.Row();
-    while ( nRow <= nEndRow && nPosY < aOffsetLogic.Height() )
+    ScCoupledCompressedArrayIterator< SCROW, BYTE, USHORT> aIter(
+            pDoc->GetRowFlagsArray( nTab), rRange.aStart.Row(),
+            rRange.aEnd.Row(), CR_HIDDEN, 0, pDoc->GetRowHeightArray( nTab));
+    while ( aIter && nPosY < aOffsetLogic.Height() )
     {
-        USHORT nDocH = pDoc->FastGetRowHeight( nRow, nTab );
+        USHORT nDocH = *aIter;
         if (nDocH)
             nPosY += (long) (nDocH * nScaleY);
-        ++nRow;
+        ++aIter;
     }
+    SCROW nRow = aIter.GetPos();
     if ( nRow > rRange.aStart.Row() )
         --nRow;
 
@@ -394,14 +396,9 @@ Rectangle ScPreviewLocationData::GetOffsetPixel( const ScAddress& rCellPos, cons
     }
     long nSizeX = (long) ( pDoc->GetColWidth( nEndCol, nTab ) * nScaleX );
 
-    long nPosY = 0;
     SCROW nEndRow = rCellPos.Row();
-    for (SCROW nRow = rRange.aStart.Row(); nRow < nEndRow; nRow++)
-    {
-        USHORT nDocH = pDoc->FastGetRowHeight( nRow, nTab );
-        if (nDocH)
-            nPosY += (long) (nDocH * nScaleY);
-    }
+    long nPosY = (long) pDoc->FastGetScaledRowHeight( rRange.aStart.Row(),
+            nEndRow, nTab, nScaleY);
     long nSizeY = (long) ( pDoc->FastGetRowHeight( nEndRow, nTab ) * nScaleY );
 
     Size aOffsetLogic( nPosX, nPosY );
@@ -736,13 +733,11 @@ void ScPreviewLocationData::GetTableInfo( const Rectangle& rVisiblePixel, ScPrev
     if ( bHasHeaderRow )
         ++nRowCount;
     if ( bHasRepRows )
-        for ( nRow=nRepeatRowStart; nRow<=nRepeatRowEnd; nRow++ )
-            if ( ( pDoc->GetRowFlags( nRow, nTab ) & CR_HIDDEN ) == 0 )
-                ++nRowCount;
+        nRowCount += pDoc->GetRowFlagsArray( nTab).CountForCondition(
+                nRepeatRowStart, nRepeatRowEnd, CR_HIDDEN, 0);
     if ( bHasMainRows )
-        for ( nRow=nMainRowStart; nRow<=nMainRowEnd; nRow++ )
-            if ( ( pDoc->GetRowFlags( nRow, nTab ) & CR_HIDDEN ) == 0 )
-                ++nRowCount;
+        nRowCount += pDoc->GetRowFlagsArray( nTab).CountForCondition(
+                nMainRowStart, nMainRowEnd, CR_HIDDEN, 0);
 
     if ( nRowCount > 0 )
     {
@@ -757,40 +752,58 @@ void ScPreviewLocationData::GetTableInfo( const Rectangle& rVisiblePixel, ScPrev
         if ( bHasRepRows )
         {
             long nPosY = 0;
-            for ( nRow=nRepeatRowStart; nRow<=nRepeatRowEnd; nRow++ )
-                if ( ( pDoc->GetRowFlags( nRow, nTab ) & CR_HIDDEN ) == 0 )
+            ScCompressedArrayIterator< SCROW, BYTE> aIter(
+                    pDoc->GetRowFlagsArray( nTab), nRepeatRowStart,
+                    nRepeatRowEnd);
+            do
+            {
+                if ((*aIter & CR_HIDDEN) == 0)
                 {
-                    USHORT nDocH = pDoc->FastGetRowHeight( nRow, nTab );
-                    long nNextY = nPosY + (long) (nDocH * nScaleY);
+                    SCROW nRangeEnd = aIter.GetRangeEnd();
+                    for (SCROW nRow=aIter.GetRangeStart(); nRow<=nRangeEnd; ++nRow)
+                    {
+                        USHORT nDocH = pDoc->FastGetOriginalRowHeight( nRow, nTab );
+                        long nNextY = nPosY + (long) (nDocH * nScaleY);
 
-                    long nPixelStart = pWindow->LogicToPixel( Size( 0, nPosY ), aCellMapMode ).Height();
-                    long nPixelEnd = pWindow->LogicToPixel( Size( 0, nNextY ), aCellMapMode ).Height() - 1;
-                    pRowInfo[nRowPos].Set( FALSE, nRow,
-                                                aRepeatRect.Top() + nPixelStart,
-                                                aRepeatRect.Top() + nPixelEnd );
+                        long nPixelStart = pWindow->LogicToPixel( Size( 0, nPosY ), aCellMapMode ).Height();
+                        long nPixelEnd = pWindow->LogicToPixel( Size( 0, nNextY ), aCellMapMode ).Height() - 1;
+                        pRowInfo[nRowPos].Set( FALSE, nRow,
+                                aRepeatRect.Top() + nPixelStart,
+                                aRepeatRect.Top() + nPixelEnd );
 
-                    nPosY = nNextY;
-                    ++nRowPos;
+                        nPosY = nNextY;
+                        ++nRowPos;
+                    }
                 }
+            } while (aIter.NextRange());
         }
         if ( bHasMainRows )
         {
             long nPosY = 0;
-            for ( nRow=nMainRowStart; nRow<=nMainRowEnd; nRow++ )
-                if ( ( pDoc->GetRowFlags( nRow, nTab ) & CR_HIDDEN ) == 0 )
+            ScCompressedArrayIterator< SCROW, BYTE> aIter(
+                    pDoc->GetRowFlagsArray( nTab), nMainRowStart,
+                    nMainRowEnd);
+            do
+            {
+                if ((*aIter & CR_HIDDEN) == 0)
                 {
-                    USHORT nDocH = pDoc->FastGetRowHeight( nRow, nTab );
-                    long nNextY = nPosY + (long) (nDocH * nScaleY);
+                    SCROW nRangeEnd = aIter.GetRangeEnd();
+                    for (SCROW nRow=aIter.GetRangeStart(); nRow<=nRangeEnd; ++nRow)
+                    {
+                        USHORT nDocH = pDoc->FastGetOriginalRowHeight( nRow, nTab );
+                        long nNextY = nPosY + (long) (nDocH * nScaleY);
 
-                    long nPixelStart = pWindow->LogicToPixel( Size( 0, nPosY ), aCellMapMode ).Height();
-                    long nPixelEnd = pWindow->LogicToPixel( Size( 0, nNextY ), aCellMapMode ).Height() - 1;
-                    pRowInfo[nRowPos].Set( FALSE, nRow,
-                                                aMainRect.Top() + nPixelStart,
-                                                aMainRect.Top() + nPixelEnd );
+                        long nPixelStart = pWindow->LogicToPixel( Size( 0, nPosY ), aCellMapMode ).Height();
+                        long nPixelEnd = pWindow->LogicToPixel( Size( 0, nNextY ), aCellMapMode ).Height() - 1;
+                        pRowInfo[nRowPos].Set( FALSE, nRow,
+                                aMainRect.Top() + nPixelStart,
+                                aMainRect.Top() + nPixelEnd );
 
-                    nPosY = nNextY;
-                    ++nRowPos;
+                        nPosY = nNextY;
+                        ++nRowPos;
+                    }
                 }
+            } while (aIter.NextRange());
         }
         rInfo.SetRowInfo( nRowCount, pRowInfo );
     }
