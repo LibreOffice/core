@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swcrsr.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:17 $
+ *  last change: $Author: jp $ $Date: 2000-10-09 11:42:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1077,7 +1077,7 @@ FASTBOOL SwCursor::IsStartWord() const
         sal_Int32 nPtPos = GetPoint()->nContent.GetIndex();
         bRet = pBreakIt->xBreak->isBeginWord( pTxtNd->GetTxt(), nPtPos,
                 pBreakIt->GetLocale( pTxtNd->GetLang( nPtPos )),
-                                WordType::ANYWORD_IGNOREWHITESPACES );
+                                WordType::ANY_WORD /*ANYWORD_IGNOREWHITESPACES*/);
     }
     return bRet;
 }
@@ -1091,7 +1091,7 @@ FASTBOOL SwCursor::IsEndWord() const
         sal_Int32 nPtPos = GetPoint()->nContent.GetIndex();
         bRet = pBreakIt->xBreak->isEndWord( pTxtNd->GetTxt(), nPtPos,
                 pBreakIt->GetLocale( pTxtNd->GetLang( nPtPos ) ),
-                                WordType::ANYWORD_IGNOREWHITESPACES );
+                                WordType::ANY_WORD /*ANYWORD_IGNOREWHITESPACES*/);
     }
     return bRet;
 }
