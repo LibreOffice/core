@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpid.hrc,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-27 13:21:38 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:36:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -736,13 +736,19 @@
 #define HID_SVX_CONFIG_EVENT                        (HID_SVX_EXT0_START + 133)
 #define HID_CONFIG_EVENT_OFFICE_BASED               (HID_SVX_EXT0_START + 134)
 #define HID_CONFIG_EVENT_DOCUMENT_BASED             (HID_SVX_EXT0_START + 135)
-#define HID_SELECTOR_DIALOG                         (HID_SVX_EXT0_START + 136)
-#define HID_SVX_CONFIG_MENU                         (HID_SVX_EXT0_START + 137)
-#define HID_SVX_CONFIG_MENU_CONTENTS                (HID_SVX_EXT0_START + 138)
-#define HID_SVX_CONFIG_TOOLBAR                      (HID_SVX_EXT0_START + 139)
-#define HID_SVX_CONFIG_TOOLBAR_CONTENTS             (HID_SVX_EXT0_START + 140)
-#define HID_SCRIPTSBOX                              (HID_SVX_EXT0_START + 141)
-
+#define HID_SCRIPTSBOX                              (HID_SVX_EXT0_START + 136)
+#define HID_SELECTOR_CATEGORIES                     (HID_SVX_EXT0_START + 137)
+#define HID_SELECTOR_COMMANDS                       (HID_SVX_EXT0_START + 138)
+#define HID_SELECTOR_DIALOG                         (HID_SVX_EXT0_START + 139)
+#define HID_SVX_CONFIG_MENU                         (HID_SVX_EXT0_START + 140)
+#define HID_SVX_CONFIG_MENU_CONTENTS                (HID_SVX_EXT0_START + 141)
+#define HID_SVX_CONFIG_TOOLBAR                      (HID_SVX_EXT0_START + 142)
+#define HID_SVX_CONFIG_TOOLBAR_CONTENTS             (HID_SVX_EXT0_START + 143)
+#define HID_SCRIPTSBOX                              (HID_SVX_EXT0_START + 144)
+#define HID_SVX_RUN_MACRO                           (HID_SVX_EXT0_START + 145)
+#define HID_SVX_BASIC_MACRO_ORGANIZER               (HID_SVX_EXT0_START + 146)
+#define HID_SVX_BASIC_DIALOG_ORGANIZER              (HID_SVX_EXT0_START + 147)
+#define HID_SVX_COMMON_MACRO_ORGANIZER              (HID_SVX_EXT0_START + 148)
 
 // please adjust ACT_SVX_HID_END2 below if you add entries here!
 
@@ -757,7 +763,7 @@
 #endif
 
 // overrun check 2
-#define ACT_SVX_HID_END2        HID_SVX_CONFIG_TOOLBAR_CONTENTS
+#define ACT_SVX_HID_END2        HID_SVX_COMMON_MACRO_ORGANIZER
 
 #if ACT_SVX_HID2_END > HID_SVX_EXT0_END
 #error resource overrun in #line, #file
