@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fanalyzer.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-01 11:24:25 $
+ *  last change: $Author: fs $ $Date: 2002-01-16 08:43:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,9 +73,6 @@
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
 #endif
-//#ifndef _CONNECTIVITY_FILE_TABLE_HXX_
-//#include "file/FTable.hxx"
-//#endif
 #ifndef _CONNECTIVITY_SQLNODE_HXX
 #include "connectivity/sqlnode.hxx"
 #endif
@@ -89,16 +86,19 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 
 typedef ::std::list<OEvaluateSet*>      OEvaluateSetList;
+DBG_NAME( file_OSQLAnalyzer )
 //------------------------------------------------------------------
 OSQLAnalyzer::OSQLAnalyzer()
                : m_aCompiler(this)
                , m_aInterpreter(m_aCompiler)
 {
+    DBG_CTOR( file_OSQLAnalyzer, NULL );
 }
 
 // -----------------------------------------------------------------------------
 OSQLAnalyzer::~OSQLAnalyzer()
 {
+    DBG_DTOR( file_OSQLAnalyzer, NULL );
 }
 
 // -----------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FConnection.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: fs $ $Date: 2001-11-02 14:44:58 $
+ *  last change: $Author: fs $ $Date: 2002-01-16 08:40:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,9 @@
 #ifndef _CONNECTIVITY_MODULECONTEXT_HXX_
 #include "ModuleContext.hxx"
 #endif
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
+#endif
 
 using namespace connectivity::file;
 using namespace dbtools;
@@ -136,6 +139,7 @@ using namespace com::sun::star::ucb;
 using namespace ::ucb;
 using namespace rtl;
 typedef connectivity::OMetaConnection OConnection_BASE;
+DBG_NAME( file_OConnection )
 // --------------------------------------------------------------------------------
 OConnection::OConnection(OFileDriver*   _pDriver)
                          : OSubComponent<OConnection, OConnection_BASE>((::cppu::OWeakObject*)_pDriver, this)
@@ -145,6 +149,7 @@ OConnection::OConnection(OFileDriver*   _pDriver)
                          ,m_bShowDeleted(sal_False)
                          ,m_bCaseSensitiveExtension( sal_True )
 {
+    DBG_CTOR( file_OConnection, NULL );
     ModuleContext::AddRef();
 }
 //-----------------------------------------------------------------------------
@@ -153,6 +158,7 @@ OConnection::~OConnection()
     if(!isClosed(  ))
         close();
     ModuleContext::ReleaseRef();
+    DBG_DTOR( file_OConnection, NULL );
 }
 //-----------------------------------------------------------------------------
 void SAL_CALL OConnection::release() throw()

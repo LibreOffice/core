@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FDatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-26 10:31:59 $
+ *  last change: $Author: fs $ $Date: 2002-01-16 08:41:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,9 @@
 #ifndef _UCBHELPER_CONTENTBROKER_HXX
 #include <ucbhelper/contentbroker.hxx>
 #endif
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
+#endif
 
 
 using namespace com::sun::star::ucb;
@@ -120,13 +123,16 @@ using namespace com::sun::star::sdbcx;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::container;
 
+DBG_NAME( file_ODatabaseMetaData )
 ODatabaseMetaData::ODatabaseMetaData(OConnection* _pCon) : ::connectivity::ODatabaseMetaDataBase(_pCon)
                         ,m_pConnection(_pCon)
 {
+    DBG_CTOR( file_ODatabaseMetaData, NULL );
 }
 // -------------------------------------------------------------------------
 ODatabaseMetaData::~ODatabaseMetaData()
 {
+    DBG_DTOR( file_ODatabaseMetaData, NULL );
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo(  ) throw(SQLException, RuntimeException)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FTable.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-12 11:46:34 $
+ *  last change: $Author: fs $ $Date: 2002-01-16 08:42:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,9 @@
 #ifndef _UNTOOLS_UCBSTREAMHELPER_HXX
 #include <unotools/ucbstreamhelper.hxx>
 #endif
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
+#endif
 
 using namespace connectivity;
 using namespace connectivity::file;
@@ -94,6 +97,7 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 
+DBG_NAME( file_OFileTable );
 OFileTable::OFileTable(sdbcx::OCollection* _pTables,OConnection* _pConnection)
 : OTable_TYPEDEF(_pTables,_pConnection->getMetaData()->storesMixedCaseQuotedIdentifiers())
                 ,m_pConnection(_pConnection)
@@ -103,6 +107,7 @@ OFileTable::OFileTable(sdbcx::OCollection* _pTables,OConnection* _pConnection)
                 ,m_pFileStream(NULL)
                 ,m_bWriteable(sal_False)
 {
+    DBG_CTOR( file_OFileTable, NULL );
     construct();
     TStringVector aVector;
     //  m_pColumns  = new OColumns(this,m_aMutex,aVector);
@@ -128,9 +133,15 @@ OFileTable::OFileTable( sdbcx::OCollection* _pTables,OConnection* _pConnection,
                 ,m_pFileStream(NULL)
                 ,m_bWriteable(sal_False)
 {
+    DBG_CTOR( file_OFileTable, NULL );
     m_aColumns = new OSQLColumns();
     construct();
     //  refreshColumns();
+}
+// -------------------------------------------------------------------------
+OFileTable::~OFileTable( )
+{
+    DBG_DTOR( file_OFileTable, NULL );
 }
 // -------------------------------------------------------------------------
 void OFileTable::refreshColumns()

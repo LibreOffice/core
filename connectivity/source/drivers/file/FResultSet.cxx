@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: oj $ $Date: 2001-12-10 11:18:38 $
+ *  last change: $Author: fs $ $Date: 2002-01-16 08:44:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,7 +158,7 @@ using namespace com::sun::star::container;
 #endif
 //------------------------------------------------------------------------------
 IMPLEMENT_SERVICE_INFO(OResultSet,"com.sun.star.sdbcx.drivers.file.ResultSet","com.sun.star.sdbc.ResultSet");
-DBG_NAME(OResultSet )
+DBG_NAME( file_OResultSet )
 // -------------------------------------------------------------------------
 OResultSet::OResultSet(OStatement_Base* pStmt,OSQLParseTreeIterator&    _aSQLIterator) :    OResultSet_BASE(m_aMutex)
                         ,::comphelper::OPropertyContainer(OResultSet_BASE::rBHelper)
@@ -192,7 +192,7 @@ OResultSet::OResultSet(OStatement_Base* pStmt,OSQLParseTreeIterator&    _aSQLIte
                         ,m_pSQLAnalyzer(NULL)
                         ,m_aSkipDeletedSet(this)
 {
-    DBG_CTOR(OResultSet ,NULL);
+    DBG_CTOR( file_OResultSet, NULL );
     osl_incrementInterlockedCount( &m_refCount );
 
     m_nResultSetConcurrency = isCount() ? ResultSetConcurrency::READ_ONLY : ResultSetConcurrency::UPDATABLE;
@@ -205,7 +205,7 @@ OResultSet::~OResultSet()
 {
     osl_incrementInterlockedCount( &m_refCount );
     disposing();
-    DBG_DTOR(OResultSet ,NULL);
+    DBG_DTOR( file_OResultSet, NULL );
 }
 // -------------------------------------------------------------------------
 void OResultSet::construct()
