@@ -325,16 +325,7 @@ sal_Int16 SAL_CALL checkPrecisionSize()
 // -----------------------------------------------------------------------------
     class toDouble : public CppUnit::TestFixture
     {
-
     public:
-
-        toDouble()
-            {
-                // testPrecision a;
-            }
-
-
-
         // initialise your test code values here.
         void setUp()
             {
@@ -346,10 +337,12 @@ sal_Int16 SAL_CALL checkPrecisionSize()
 
         void toDouble_test_impl(rtl::OString const& _sValue)
             {
+                //t_print("the original str is %s\n", _sValue.getStr());
                 double nValueATOF = atof( _sValue.getStr() );
-
+        //t_print("original data is %e\n", nValueATOF);
                 rtl::OUString suValue = rtl::OUString::createFromAscii( _sValue.getStr() );
                 double nValueToDouble = suValue.toDouble();
+                //t_print("result data is %e\n", nValueToDouble);
 
                 bool bEqualResult = is_double_equal(nValueToDouble, nValueATOF);
                 CPPUNIT_ASSERT_MESSAGE("Values are not equal.", bEqualResult == true);
@@ -472,6 +465,157 @@ sal_Int16 SAL_CALL checkPrecisionSize()
         CPPUNIT_TEST(toDouble_test_1e308);
         CPPUNIT_TEST_SUITE_END();
     }; // class toDouble
+
+// -----------------------------------------------------------------------------
+// - toFloat (tests)
+// -----------------------------------------------------------------------------
+    class toFloat : public CppUnit::TestFixture
+    {
+    public:
+        // initialise your test code values here.
+        void setUp()
+            {
+            }
+
+        void tearDown()
+            {
+            }
+
+        void toFloat_test_impl(rtl::OString const& _sValue)
+            {
+                //t_print("the original str is %s\n", _sValue.getStr());
+                float nValueATOF = atof( _sValue.getStr() );
+        //t_print("the original str is %.10f\n", nValueATOF);
+                rtl::OUString suValue = rtl::OUString::createFromAscii( _sValue.getStr() );
+                float nValueToFloat = suValue.toFloat();
+                //t_print("the result str is %.10f\n", nValueToFloat);
+
+                bool bEqualResult = is_float_equal(nValueToFloat, nValueATOF);
+                CPPUNIT_ASSERT_MESSAGE("Values are not equal.", bEqualResult == true);
+            }
+
+        void toFloat_test(rtl::OString const& _sValue)
+            {
+                toFloat_test_impl(_sValue);
+
+                // test also the negativ part.
+                rtl::OString sNegativValue("-");
+                sNegativValue += _sValue;
+                toFloat_test_impl(sNegativValue);
+            }
+
+        // insert your test code here.
+        void toFloat_selftest()
+            {
+                t_print("Start selftest:\n");
+                CPPUNIT_ASSERT (is_float_equal(1.0, 1.01) == false);
+                CPPUNIT_ASSERT (is_float_equal(1.0, 1.001) == false);
+                CPPUNIT_ASSERT (is_float_equal(1.0, 1.0001) == false);
+                CPPUNIT_ASSERT (is_float_equal(1.0, 1.00001) == false);
+                CPPUNIT_ASSERT (is_float_equal(1.0, 1.000002) == false);
+                CPPUNIT_ASSERT (is_float_equal(1.0, 1.0000001) == true);
+                CPPUNIT_ASSERT (is_float_equal(1.0, 1.00000001) == true);
+                CPPUNIT_ASSERT (is_float_equal(1.0, 1.000000001) == true);
+
+                t_print("Selftest done.\n");
+            }
+
+        void toFloat_test_3()
+            {
+                rtl::OString sValue("3");
+                toFloat_test(sValue);
+            }
+        void toFloat_test_3_5()
+            {
+                rtl::OString sValue("3.5");
+                toFloat_test(sValue);
+            }
+        void toFloat_test_3_0625()
+            {
+                rtl::OString sValue("3.0625");
+                toFloat_test(sValue);
+            }
+        void toFloat_test_3_0625_e()
+            {
+                rtl::OString sValue("3.0625e-4");
+                toFloat_test(sValue);
+            }
+        void toFloat_test_pi()
+            {
+                // value from http://www.angio.net/pi/digits/50.txt
+                rtl::OString sValue("3.141592653589793238462643383279502884197169399375");
+                toFloat_test(sValue);
+            }
+
+        void toFloat_test_1()
+            {
+                rtl::OString sValue("1");
+                toFloat_test(sValue);
+            }
+        void toFloat_test_10()
+            {
+                rtl::OString sValue("10");
+                toFloat_test(sValue);
+            }
+        void toFloat_test_100()
+            {
+                rtl::OString sValue("100");
+                toFloat_test(sValue);
+            }
+        void toFloat_test_1000()
+            {
+                rtl::OString sValue("1000");
+                toFloat_test(sValue);
+            }
+        void toFloat_test_10000()
+            {
+                rtl::OString sValue("10000");
+                toFloat_test(sValue);
+            }
+        void toFloat_test_mix()
+            {
+                rtl::OString sValue("456789321455.123456789012");
+                toFloat_test(sValue);
+            }
+        void toFloat_test_1e99()
+            {
+                rtl::OString sValue("1e99");
+                toFloat_test(sValue);
+            }
+        void toFloat_test_1e_n99()
+            {
+                rtl::OString sValue("1e-9");
+                toFloat_test(sValue);
+            }
+        void toFloat_test_1e308()
+            {
+                rtl::OString sValue("1e308");
+                toFloat_test(sValue);
+            }
+
+        // Change the following lines only, if you add, remove or rename
+        // member functions of the current class,
+        // because these macros are need by auto register mechanism.
+
+        CPPUNIT_TEST_SUITE(toFloat);
+        CPPUNIT_TEST(toFloat_selftest);
+
+        CPPUNIT_TEST(toFloat_test_3);
+        CPPUNIT_TEST(toFloat_test_3_5);
+        CPPUNIT_TEST(toFloat_test_3_0625);
+        CPPUNIT_TEST(toFloat_test_3_0625_e);
+        CPPUNIT_TEST(toFloat_test_pi);
+        CPPUNIT_TEST(toFloat_test_1);
+        CPPUNIT_TEST(toFloat_test_10);
+        CPPUNIT_TEST(toFloat_test_100);
+        CPPUNIT_TEST(toFloat_test_1000);
+        CPPUNIT_TEST(toFloat_test_10000);
+        CPPUNIT_TEST(toFloat_test_mix);
+        CPPUNIT_TEST(toFloat_test_1e99);
+        CPPUNIT_TEST(toFloat_test_1e_n99);
+        CPPUNIT_TEST(toFloat_test_1e308);
+        CPPUNIT_TEST_SUITE_END();
+    }; // class toFloat
 
 // -----------------------------------------------------------------------------
 // - lastIndexOf (tests)
@@ -825,8 +969,8 @@ public:
 // -----------------------------------------------------------------------------
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_OUString::valueOf, "rtl_OUString");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_OUString::toDouble, "rtl_OUString");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_OUString::toFloat, "rtl_OUString");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_OUString::lastIndexOf, "rtl_OUString");
-
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_OUString::getToken, "rtl_OUString");
 
 } // namespace rtl_OUString
@@ -837,4 +981,3 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_OUString::getToken, "rtl_OUString");
 // this macro creates an empty function, which will called by the RegisterAllFunctions()
 // to let the user the possibility to also register some functions by hand.
 NOADDITIONAL;
-
