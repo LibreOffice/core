@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfnote.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-09 13:03:09 $
+ *  last change: $Author: kz $ $Date: 2000-11-29 10:54:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -653,7 +653,7 @@ TabPage TP_FOOTNOTEOPTION
         Text [ spanish ] = "Área de ~nota al pie" ;
         Text [ french ] = "Plage de la ~note" ;
         Text [ dutch ] = "Voetnoten~bereik" ;
-        Text [ portuguese ] = "Á~rea de nota de rodapé" ;
+        Text [ portuguese ] = "Á~rea de rodapé" ;
         Text[ chinese_simplified ] = "×¢½ÅÇøÓò(~F)";
         Text[ russian ] = "Îáëàñòü ñíîñêè";
         Text[ polish ] = "Obszar przyp. doln.";
@@ -797,10 +797,10 @@ TabPage TP_FOOTNOTEOPTION
         Text [ norwegian ] = "~Fortsetter" ;
         Text [ italian ] = "Alla fine del piè pagina" ;
         Text [ portuguese_brazilian ] = "~Continuado" ;
-        Text [ portuguese ] = "No fim da nota de ~rodapé" ;
+        Text [ portuguese ] = "~No final da nota" ;
         Text [ finnish ] = "~Jatkuu" ;
         Text [ danish ] = "Ved fodnotens slutning" ;
-        Text [ french ] = "En ~fin de note de bas de page" ;
+        Text [ french ] = "En ~fin de note" ;
         Text [ swedish ] = "Vid slutet av f~otnoten" ;
         Text [ dutch ] = "~Voetnooteinde" ;
         Text [ spanish ] = "Final de n~ota al pie" ;
@@ -813,7 +813,7 @@ TabPage TP_FOOTNOTEOPTION
         Text[ chinese_traditional ] = "¦bª`¸}¥½(~N)";
         Text[ arabic ] = "ÚäÏ äåÇíÉ ÇáÍÇÔíÉ ÇáÓİáíÉ";
         Text[ greek ] = "Óôï ôİëïò ôçò õğ~ïóçìåßùóçò";
-        Text[ korean ] = "´ÙÀ½ ÆäÀÌÁö(~N)";
+        Text[ korean ] = "°¢ÁÖ ³¡(~N)";
         Text[ turkish ] = "~Dipnot altında";
         Text[ language_user1 ] = " ";
     };
@@ -852,7 +852,7 @@ TabPage TP_FOOTNOTEOPTION
         Text[ chinese_traditional ] = "±qÄò­¶¶}©l(~S)";
         Text[ arabic ] = "Úáì ÇáÕİÍÉ ÇáÊÇáíÉ";
         Text[ greek ] = "Óôçí å~ğüìåíç óåëßäá";
-        Text[ korean ] = "½ÃÀÛ(~S)";
+        Text[ korean ] = "´ÙÀ½ ÆäÀÌÁö ½ÃÀÛ(~S)";
         Text[ turkish ] = "~Sonraki sayfada";
     };
     Edit ED_CONT_FROM
