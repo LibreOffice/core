@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.149 $
+ *  $Revision: 1.150 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-19 11:15:42 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 08:53:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -428,21 +428,27 @@ void SfxObjectShell::SetupStorage( const uno::Reference< embed::XStorage >& xSto
     {
         SvGlobalName aName;
         String aFullTypeName, aShortTypeName, aAppName;
-        ULONG nClipFormat;
+        ULONG nClipFormat=0;
 
-        FillClass( &aName, &nClipFormat, &aAppName,
-                    &aFullTypeName, &aShortTypeName, nVersion );
-
-        datatransfer::DataFlavor aDataFlavor;
-        SotExchange::GetFormatDataFlavor( nClipFormat, aDataFlavor );
-        if ( aDataFlavor.MimeType.getLength() )
+        FillClass( &aName, &nClipFormat, &aAppName, &aFullTypeName, &aShortTypeName, nVersion );
+        if ( nClipFormat )
         {
-            // basic doesn't have a media type!
-            try {
-                xProps->setPropertyValue( ::rtl::OUString::createFromAscii( "MediaType" ),
-                                            uno::makeAny( aDataFlavor.MimeType ) );
-            } catch( uno::Exception& )
-            {}
+            // basic doesn't have a ClipFormat
+            // without MediaType the storage is not really usable, but currently the BasicIDE still
+            // is an SfxObjectShell and so we can't take this as an error
+            datatransfer::DataFlavor aDataFlavor;
+            SotExchange::GetFormatDataFlavor( nClipFormat, aDataFlavor );
+            if ( aDataFlavor.MimeType.getLength() )
+            {
+                try
+                {
+                    xProps->setPropertyValue( ::rtl::OUString::createFromAscii( "MediaType" ), uno::makeAny( aDataFlavor.MimeType ) );
+                }
+                catch( uno::Exception& )
+                {
+                    // TODO/LATER: ErrorHandling
+                }
+            }
         }
     }
 }
@@ -847,34 +853,36 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
         else
             pMedium->GetStorage();
 
-        pImp->nLoadedFlags = 0;
-        if ( pMedium->GetFilter() &&  ( pMedium->GetFilter()->GetFilterFlags() & SFX_FILTER_STARONEFILTER ) )
+        if ( GetError() == ERRCODE_NONE )
         {
-            bOk = ImportFrom(*pMedium);
-            FinishedLoading( SFX_LOADED_ALL );
-        }
-        else
-        {
-            bOk = ConvertFrom(*pMedium);
-        }
-
-        if ( HasMacros_Impl() )
-        {
-            // no signing in alien formats!
-            AdjustMacroMode( String() );
-            if ( SvtSecurityOptions().GetMacroSecurityLevel() >= 2
-                && MacroExecMode::NEVER_EXECUTE == pImp->nMacroMode )
+            pImp->nLoadedFlags = 0;
+            if ( pMedium->GetFilter() && ( pMedium->GetFilter()->GetFilterFlags() & SFX_FILTER_STARONEFILTER ) )
             {
-                WarningBox aBox( NULL, SfxResId( MSG_WARNING_MACRO_ISDISABLED ) );
-                aBox.Execute();
+                bOk = ImportFrom(*pMedium);
+                FinishedLoading( SFX_LOADED_ALL );
+            }
+            else
+            {
+                bOk = ConvertFrom(*pMedium);
+            }
+
+            if ( HasMacros_Impl() )
+            {
+                // no signing in alien formats!
+                AdjustMacroMode( String() );
+                if ( SvtSecurityOptions().GetMacroSecurityLevel() >= 2
+                    && MacroExecMode::NEVER_EXECUTE == pImp->nMacroMode )
+                {
+                    WarningBox aBox( NULL, SfxResId( MSG_WARNING_MACRO_ISDISABLED ) );
+                    aBox.Execute();
+                }
+            }
+            else
+            {
+                // if macros will be added by the user later, the security check is obsolete
+                pImp->nMacroMode = MacroExecMode::ALWAYS_EXECUTE_NO_WARN;
             }
         }
-        else
-        {
-            // if macros will be added by the user later, the security check is obsolete
-            pImp->nMacroMode = MacroExecMode::ALWAYS_EXECUTE_NO_WARN;
-        }
-
     }
 
     if ( bOk )
@@ -955,42 +963,44 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
 //???? dv           SetFileName( aDirEntry.GetFull() );
         }
         Broadcast( SfxSimpleHint(SFX_HINT_NAMECHANGED) );
-    }
 
-    if ( SFX_CREATE_MODE_EMBEDDED != eCreateMode )
-    {
-        GetpApp()->HideStatusText();
-
-        SFX_ITEMSET_ARG( pMedium->GetItemSet(), pAsTempItem, SfxBoolItem, SID_TEMPLATE, sal_False);
-        SFX_ITEMSET_ARG( pMedium->GetItemSet(), pPreviewItem, SfxBoolItem, SID_PREVIEW, sal_False);
-        SFX_ITEMSET_ARG( pMedium->GetItemSet(), pHiddenItem, SfxBoolItem, SID_HIDDEN, sal_False);
-        if( bOk && pMedium->GetOrigURL().Len()
-         && !( pAsTempItem && pAsTempItem->GetValue() )
-         && !( pPreviewItem && pPreviewItem->GetValue() )
-         && !( pHiddenItem && pHiddenItem->GetValue() ) )
+        if ( SFX_CREATE_MODE_EMBEDDED != eCreateMode )
         {
-            INetURLObject aUrl( pMedium->GetOrigURL() );
+            GetpApp()->HideStatusText();
 
-            if ( aUrl.GetProtocol() == INET_PROT_FILE )
+            SFX_ITEMSET_ARG( pMedium->GetItemSet(), pAsTempItem, SfxBoolItem, SID_TEMPLATE, sal_False);
+            SFX_ITEMSET_ARG( pMedium->GetItemSet(), pPreviewItem, SfxBoolItem, SID_PREVIEW, sal_False);
+            SFX_ITEMSET_ARG( pMedium->GetItemSet(), pHiddenItem, SfxBoolItem, SID_HIDDEN, sal_False);
+            if( bOk && pMedium->GetOrigURL().Len()
+            && !( pAsTempItem && pAsTempItem->GetValue() )
+            && !( pPreviewItem && pPreviewItem->GetValue() )
+            && !( pHiddenItem && pHiddenItem->GetValue() ) )
             {
-                const SfxFilter* pFilter = pMedium->GetOrigFilter();
-                SystemShell::AddToRecentDocumentList( aUrl.GetURLNoPass( INetURLObject::NO_DECODE ), (pFilter) ? pFilter->GetMimeType() : String() );
+                INetURLObject aUrl( pMedium->GetOrigURL() );
+
+                if ( aUrl.GetProtocol() == INET_PROT_FILE )
+                {
+                    const SfxFilter* pFilter = pMedium->GetOrigFilter();
+                    SystemShell::AddToRecentDocumentList( aUrl.GetURLNoPass( INetURLObject::NO_DECODE ), (pFilter) ? pFilter->GetMimeType() : String() );
+                }
             }
         }
-    }
 
-    // MAV: the code below is moved here since this is the only central place where the object shell is visible
-    //      in case of pick list for example OpenDocExec_Impl() is not used.
+        // MAV: the code below is moved here since this is the only central place where the object shell is visible
+        //      in case of pick list for example OpenDocExec_Impl() is not used.
 
-    // xmlsec05, check with SFX team
-    // Check if there is a broken signature...
-    // After EA change to interaction handler...
-    if ( !bShowBrokenSignatureWarningAlready
-        && GetDocumentSignatureState() == SIGNATURESTATE_SIGNATURES_BROKEN )
-    {
-        WarningBox aBox( NULL, SfxResId( RID_XMLSEC_WARNING_BROKENSIGNATURE ) );
-        aBox.Execute();
+        // xmlsec05, check with SFX team
+        // Check if there is a broken signature...
+        // After EA change to interaction handler...
+        if ( !bShowBrokenSignatureWarningAlready
+            && GetDocumentSignatureState() == SIGNATURESTATE_SIGNATURES_BROKEN )
+        {
+            WarningBox aBox( NULL, SfxResId( RID_XMLSEC_WARNING_BROKENSIGNATURE ) );
+            aBox.Execute();
+        }
     }
+    else
+        GetpApp()->HideStatusText();
 
     return bOk;
 }
@@ -1251,13 +1261,13 @@ sal_Bool SfxObjectShell::SaveTo_Impl
                 // so we can forget the stream in any way and the next storage commit will flush it
             if( ConnectTmpStorage_Impl( pMedium->GetStorage() ) )
             {
-                pMedium->Close();
+                pMedium->CloseAndRelease();
 
                 // TODO/LATER: for now the medium must be closed since it can already contain streams from old medium
                 //             in future those streams should not be copied in case a valid target url is provided,
                 //             if the url is not provided ( means the document is based on a stream ) this code is not
                 //             reachable.
-                rMedium.Close();
+                rMedium.CloseAndRelease();
                 rMedium.GetOutputStorage();
             }
         }
@@ -1266,11 +1276,8 @@ sal_Bool SfxObjectShell::SaveTo_Impl
             // the source and the target formats are alien
             // just disconnect the stream from the source format
             // so that the target medium can use it
-
-            pMedium->CloseInStream();
-            pMedium->CloseOutStream();
-
-            rMedium.Close();
+            pMedium->CloseAndRelease();
+            rMedium.CloseAndRelease();
             rMedium.CreateTempFileNoCopy();
             rMedium.GetOutStream();
         }
@@ -1279,11 +1286,8 @@ sal_Bool SfxObjectShell::SaveTo_Impl
             // the source format is an alien one but the target
             // format is an own one so just disconnect the source
             // medium
-
-            pMedium->CloseInStream();
-            pMedium->CloseOutStream();
-
-            rMedium.Close();
+            pMedium->CloseAndRelease();
+            rMedium.CloseAndRelease();
             rMedium.GetOutputStorage();
         }
         else // means if ( bOwnSource && !bOwnTarget )
@@ -1294,9 +1298,8 @@ sal_Bool SfxObjectShell::SaveTo_Impl
 
             if( ConnectTmpStorage_Impl( pMedium->GetStorage() ) )
             {
-                pMedium->Close();
-
-                rMedium.Close();
+                pMedium->CloseAndRelease();
+                rMedium.CloseAndRelease();
                 rMedium.CreateTempFileNoCopy();
                 rMedium.GetOutStream();
             }
@@ -1506,10 +1509,9 @@ sal_Bool SfxObjectShell::SaveTo_Impl
         // ( same as on loading, where these objects are copied to the temporary storage )
         // but don't commit these changes, because in the case when the old object storage is not a temporary one,
         // all changes will be written into the original file !
-
+        // we also don't touch any graphical replacements here
         if( bOk )
-            bOk = SaveChildren();
-//REMOVE                bOk = SaveChilds() && SaveCompletedChilds( uno::Reference< embed::XStorage >() );
+            bOk = SaveChildren( TRUE );
     }
 
     sal_Bool bCopyTo = sal_False;
@@ -2842,7 +2844,7 @@ void InsertStreamIntoPicturesStorage_Impl( const uno::Reference< embed::XStorage
     }
 }
 
-sal_Bool SfxObjectShell::SaveChildren()
+sal_Bool SfxObjectShell::SaveChildren( BOOL bObjectsOnly )
 {
     sal_Bool bResult = sal_True;
 
@@ -2888,7 +2890,7 @@ sal_Bool SfxObjectShell::SaveChildren()
                 }
             }
 
-            if ( !bOasis )
+            if ( !bOasis && !bObjectsOnly )
             {
                 // copy replacement images for linked objects
                 try
@@ -2910,16 +2912,14 @@ sal_Bool SfxObjectShell::SaveChildren()
         }
     }
 
-    if ( bResult )
+    if ( bResult && !bObjectsOnly )
     {
         try
         {
+            // we assume that the storage is *never* kept permanently open elsewhere
             ::rtl::OUString aObjReplElement( RTL_CONSTASCII_USTRINGPARAM( "ObjectReplacements" ) );
             if ( !bOasis && GetStorage()->hasByName( aObjReplElement ) && GetStorage()->isStorageElement( aObjReplElement ) )
-            {
-                ClearEmbeddedObjects();
                 GetStorage()->removeElement( aObjReplElement );
-            }
         }
         catch( uno::Exception& )
         {
