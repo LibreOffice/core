@@ -2,9 +2,9 @@
  *
  *  $RCSfile: validate.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tbe $ $Date: 2001-07-17 08:50:44 $
+ *  last change: $Author: tbe $ $Date: 2001-07-25 07:46:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,12 +71,10 @@
 #include <svtools/eitem.hxx>
 #include <vcl/svapp.hxx>
 #include <basic/sbmeth.hxx>
-#include <basctl/basobj.hxx>
 #include <basic/sbstar.hxx>
 #include <basic/sbmod.hxx>
-#ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
-#endif
+#include <offmgr/app.hxx>
 #endif
 
 #include "scresid.hxx"
@@ -509,7 +507,7 @@ IMPL_LINK( ScTPValidationError, ClickSearchHdl, PushButton*, pBtn )
 {
     Window* pOld = Application::GetDefDialogParent();
     Application::SetDefDialogParent( this );
-    String aMacroURL = BasicIDE::SelectMacro(FALSE, TRUE);
+    String aMacroURL = OfficeApplication::ChooseMacro(FALSE, TRUE);
     Application::SetDefDialogParent( pOld );
 
     // aMacroURL has the following format:

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: ka $ $Date: 2001-02-13 13:35:20 $
+#   last change: $Author: tbe $ $Date: 2001-07-25 07:49:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -130,7 +130,6 @@ SHL1STDLIBS=        \
     $(UNOTOOLSLIB)  \
     $(SOTLIB)		\
     $(XMLOFFLIB)	\
-    $(BASCTLLIB)	\
     $(DBTOOLSLIB)
 
 
