@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layfrm.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 11:11:44 $
+ *  last change: $Author: rt $ $Date: 2004-05-17 16:15:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,7 +119,7 @@ public:
                         const SwPageFrm * ) const;
 
     virtual BOOL  GetCrsrOfst( SwPosition *, Point&,
-                                const SwCrsrMoveState* = 0 ) const;
+                               SwCrsrMoveState* = 0 ) const;
 
     virtual void Cut();
     virtual void Paste( SwFrm* pParent, SwFrm* pSibling = 0 );
