@@ -2,9 +2,9 @@
  *
  *  $RCSfile: languageoptions.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-23 12:37:40 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 15:30:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -271,6 +271,7 @@ sal_uInt16 SvtLanguageOptions::GetScriptTypeOfLanguage( sal_uInt16 nLang )
         case LANGUAGE_ARABIC_UAE:
         case LANGUAGE_ARABIC_BAHRAIN:
         case LANGUAGE_ARABIC_QATAR:
+        case LANGUAGE_FARSI:
         case LANGUAGE_HEBREW:
         case LANGUAGE_MARATHI:
         case LANGUAGE_PUNJABI:
