@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LayoutMenu.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:38:48 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-28 13:31:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,7 @@
 #ifndef SD_VIEW_SHELL_BASE_HXX
 #include "ViewShellBase.hxx"
 #endif
+#include "DrawViewShell.hxx"
 #include "PaneManager.hxx"
 #include "SlideSorterViewShell.hxx"
 
@@ -489,6 +490,38 @@ int LayoutMenu::CalculateRowCount (const Size& rItemSize, int nColumnCount)
 
 
 
+bool LayoutMenu::IsMainViewInMasterPageMode (void)
+{
+    bool bMasterPageMode (false);
+
+    ViewShell* pMainViewShell = mrBase.GetMainViewShell();
+    if (pMainViewShell != NULL)
+        switch (pMainViewShell->GetShellType())
+        {
+            case ViewShell::ST_NOTES:
+            case ViewShell::ST_HANDOUT:
+            case ViewShell::ST_IMPRESS:
+            {
+                DrawViewShell* pDrawViewShell = static_cast<DrawViewShell*>(
+                    pMainViewShell);
+                if (pDrawViewShell != NULL)
+                    if (pDrawViewShell->GetEditMode() == EM_MASTERPAGE)
+                        bMasterPageMode = true;
+            }
+            break;
+
+            default:
+                // All other view shells do not support a master page mode,
+                // so let the bMasterPageMode keep its default value.
+                break;
+        }
+
+    return bMasterPageMode;
+}
+
+
+
+
 IMPL_LINK(LayoutMenu, ClickHandler, ValueSet*, pValueSet)
 {
     AssignLayoutToSelectedSlides (GetSelectedAutoLayout());
@@ -504,7 +537,7 @@ IMPL_LINK(LayoutMenu, ClickHandler, ValueSet*, pValueSet)
 void LayoutMenu::AssignLayoutToSelectedSlides (AutoLayout aLayout)
 {
     ViewShell* pViewShell = mrBase.GetMainViewShell();
-    if (pViewShell != NULL)
+    if (pViewShell!=NULL && ! IsMainViewInMasterPageMode())
     {
         SfxRequest aRequest (CreateRequest(SID_MODIFYPAGE, aLayout));
         pViewShell->ExecuteSlot (aRequest, BOOL(FALSE));
