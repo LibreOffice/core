@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stream.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: th $ $Date: 2001-07-03 14:51:44 $
+ *  last change: $Author: mh $ $Date: 2001-07-23 09:01:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -564,7 +564,7 @@ SvStream::~SvStream()
         Flush();
 
     if( pRWBuf )
-        delete pRWBuf;
+        delete[] pRWBuf;
 }
 
 /*************************************************************************
@@ -658,7 +658,7 @@ void SvStream::SetBufferSize( USHORT nBufferSize )
 
     if( nBufSize )
     {
-        delete pRWBuf;
+        delete[] pRWBuf;
         nBufFilePos += nBufActualPos;
     }
 
@@ -1296,7 +1296,7 @@ SvStream& SvStream::operator>> ( SvStream& rStream )
         rStream.Write( pBuf, nCount );
     } while( nCount == cBufLen );
 
-    delete pBuf;
+    delete[] pBuf;
     return *this;
 }
 
@@ -1494,7 +1494,7 @@ SvStream& SvStream::operator<< ( SvStream& rStream)
         Write( pBuf, nCount );
     } while( nCount == cBufLen );
 
-    delete pBuf;
+    delete[] pBuf;
     return *this;
 }
 
@@ -3133,7 +3133,7 @@ BOOL SvSharedMemoryStream::ReAllocateMemory( long nDiff )
 
 void SvSharedMemoryStream::FreeMemory()
 {
-    delete pBuf;
+    delete[] pBuf;
 }
 
 
