@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: nn $ $Date: 2002-09-20 10:07:32 $
+ *  last change: $Author: nn $ $Date: 2002-10-08 08:00:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,6 +133,11 @@ ScCellShell::~ScCellShell()
     if ( pClipEvtLstnr )
     {
         pClipEvtLstnr->AddRemoveListener( GetViewData()->GetActiveWin(), FALSE );
+
+        //  #103849# The listener may just now be waiting for the SolarMutex and call the link
+        //  afterwards, in spite of RemoveListener. So the link has to be reset, too.
+        pClipEvtLstnr->ClearCallbackLink();
+
         pClipEvtLstnr->release();
     }
 }
