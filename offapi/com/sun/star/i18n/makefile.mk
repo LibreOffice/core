@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: jp $ $Date: 2001-02-06 09:35:59 $
+#   last change: $Author: jp $ $Date: 2001-02-06 09:55:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,6 +82,7 @@ IDLFILES=\
     CharacterClassification.idl \
     CJKBreakIterator.idl \
     Currency.idl \
+    GNUCollator.idl \
     JAJPBreakIterator.idl \
     LanguageCountryInfo.idl \
     LocaleData.idl \
@@ -90,6 +91,8 @@ IDLFILES=\
     NumberFormatIndex.idl \
     NumberFormatMapper.idl \
     Transliteration.idl \
+    Transliterationl10n.idl \
+    Transliterationja_JP.idl \
     Weekdays.idl \
     XBreakIterator.idl \
     XCalendar.idl \
