@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EnhancedCustomShapeGeometry.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-18 11:03:24 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:27:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -252,7 +252,7 @@ static const mso_CustomShape msoRoundRectangle =
     (SvxMSDffCalculationData*)mso_sptRoundRectangleCalc, sizeof( mso_sptRoundRectangleCalc ) / sizeof( SvxMSDffCalculationData ),
     (sal_Int32*)mso_sptDefault3600,
     (SvxMSDffTextRectangles*)mso_sptRoundRectangleTextRect, sizeof( mso_sptRoundRectangleTextRect ) / sizeof( SvxMSDffTextRectangles ),
-    21600, 21600,
+    10800, 10800,
     0x80000000, 0x80000000,
     NULL, 0,
     NULL, 0     // handles
@@ -462,7 +462,7 @@ static const mso_CustomShape msoOctagon =
     (sal_Int32*)mso_sptOctagonDefault,
     (SvxMSDffTextRectangles*)mso_sptOctagonTextRect, sizeof( mso_sptOctagonTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000,
+    10800, 10800,
     (SvxMSDffVertPair*)mso_sptStandardGluePoints, sizeof( mso_sptStandardGluePoints ) / sizeof( SvxMSDffVertPair ),
     (SvxMSDffHandle*)mso_sptOctagonHandle, sizeof( mso_sptOctagonHandle ) / sizeof( SvxMSDffHandle )        // handles
 };
@@ -582,18 +582,19 @@ static const mso_CustomShape msoPentagon =
 static const SvxMSDffVertPair mso_sptPlusVert[] =               // adjustment1 : 0 - 10800
 {
     { 1 MSO_I, 0 }, { 2 MSO_I, 0 }, { 2 MSO_I, 1 MSO_I }, { 21600, 1 MSO_I },
-    { 21600, 2 MSO_I }, { 2 MSO_I, 2 MSO_I }, { 2 MSO_I, 21600 }, { 1 MSO_I, 21600 },
-    { 1 MSO_I, 2 MSO_I }, { 0, 2 MSO_I }, { 0, 1 MSO_I }, { 1 MSO_I, 1 MSO_I }, { 1 MSO_I, 0 }
+    { 21600, 3 MSO_I }, { 2 MSO_I, 3 MSO_I }, { 2 MSO_I, 21600 }, { 1 MSO_I, 21600 },
+    { 1 MSO_I, 3 MSO_I }, { 0, 3 MSO_I }, { 0, 1 MSO_I }, { 1 MSO_I, 1 MSO_I }, { 1 MSO_I, 0 }
 };
 static const SvxMSDffCalculationData mso_sptPlusCalc[] =
 {
     { 0x2001, DFF_Prop_adjustValue, 10799, 10800 },
     { 0x2000, 0x400, 0, 0 },
-    { 0x8000, 21600, 0, 0x400 }
+    { 0xa000, DFF_Prop_geoRight, 0, 0x400 },
+    { 0xa000, DFF_Prop_geoBottom, 0, 0x400 }
 };
 static const SvxMSDffTextRectangles mso_sptPlusTextRect[] =
 {
-    { { 1 MSO_I, 1 MSO_I }, { 2 MSO_I, 2 MSO_I } }
+    { { 1 MSO_I, 1 MSO_I }, { 2 MSO_I, 3 MSO_I } }
 };
 static const SvxMSDffHandle mso_sptPlusHandle[] =
 {
@@ -1837,10 +1838,10 @@ static const mso_CustomShape msoCircularArrow =
 
 static const SvxMSDffVertPair mso_sptCubeVert[] =
 {
-    { 0, 21600 }, { 0, 1 MSO_I }, { 2 MSO_I, 0 }, { 21600, 0 },
-    { 21600, 3 MSO_I }, { 4 MSO_I, 21600 }, { 0, 1 MSO_I }, { 2 MSO_I, 0 },
-    { 21600, 0 }, { 4 MSO_I, 1 MSO_I }, { 4 MSO_I, 21600 }, { 4 MSO_I, 1 MSO_I },
-    { 21600, 0 }, { 21600, 3 MSO_I }
+    { 0, 10 MSO_I }, { 0, 1 MSO_I }, { 2 MSO_I, 0 }, { 9 MSO_I, 0 },
+    { 9 MSO_I, 3 MSO_I }, { 4 MSO_I, 10 MSO_I }, { 0, 1 MSO_I }, { 2 MSO_I, 0 },
+    { 9 MSO_I, 0 }, { 4 MSO_I, 1 MSO_I }, { 4 MSO_I, 10 MSO_I  }, { 4 MSO_I, 1 MSO_I },
+    { 9 MSO_I, 0 }, { 9 MSO_I, 3 MSO_I }
 };
 static const sal_uInt16 mso_sptCubeSegm[] =
 {
@@ -1858,12 +1859,13 @@ static const SvxMSDffCalculationData mso_sptCubeCalc[] =
     { 0x8000,  21600, 0, 0x402 },   // 5
     { 0x2001, 0x405, 1, 2 },        // 6
     { 0x6000, 0x402, 0x406, 0 },    // 7
-    { 0x2001, 0x404, 1, 2 }         // 8
-
+    { 0x2001, 0x404, 1, 2 },        // 8
+    { 0x2000, DFF_Prop_geoRight, 0, 0 },    // 9
+    { 0x2000, DFF_Prop_geoBottom, 0, 0 }    //10
 };
 static const SvxMSDffTextRectangles mso_sptCubeTextRect[] =
 {
-    { { 0, 1 MSO_I }, { 4 MSO_I, 21600 } }
+    { { 0, 1 MSO_I }, { 4 MSO_I, 10 MSO_I } }
 };
 static const SvxMSDffHandle mso_sptCubeHandle[] =
 {
@@ -1887,9 +1889,9 @@ static const SvxMSDffVertPair mso_sptBevelVert[] =
 {
     { 0, 0 }, { 21600, 0 }, { 21600, 21600 }, { 0, 21600 },
     { 0, 0 }, { 21600, 0 }, { 1 MSO_I, 0 MSO_I }, { 0 MSO_I, 0 MSO_I },
-    { 21600, 0 }, { 21600, 21600 }, { 1 MSO_I, 1 MSO_I }, { 1 MSO_I, 0 MSO_I },
-    { 21600, 21600 }, { 0, 21600 }, { 0 MSO_I, 1 MSO_I }, { 1 MSO_I, 1 MSO_I },
-    { 0, 21600 }, { 0, 0 }, { 0 MSO_I, 0 MSO_I }, { 0 MSO_I, 1 MSO_I }
+    { 21600, 0 }, { 21600, 21600 }, { 1 MSO_I, 2 MSO_I }, { 1 MSO_I, 0 MSO_I },
+    { 21600, 21600 }, { 0, 21600 }, { 0 MSO_I, 2 MSO_I }, { 1 MSO_I, 2 MSO_I },
+    { 0, 21600 }, { 0, 0 }, { 0 MSO_I, 0 MSO_I }, { 0 MSO_I, 2 MSO_I }
 };
 static const sal_uInt16 mso_sptBevelSegm[] =
 {
@@ -1902,11 +1904,13 @@ static const sal_uInt16 mso_sptBevelSegm[] =
 static const SvxMSDffCalculationData mso_sptBevelCalc[] =
 {
     { 0x2001, DFF_Prop_adjustValue, 21599, 21600 },
-    { 0x8000, 21600, 0, 0x400 }
+    { 0xa000, DFF_Prop_geoRight, 0, 0x400 },
+    { 0xa000, DFF_Prop_geoBottom, 0, 0x400 }
 };
+
 static const SvxMSDffTextRectangles mso_sptBevelTextRect[] =
 {
-    { { 0 MSO_I, 0 MSO_I }, { 1 MSO_I, 1 MSO_I } }
+    { { 0 MSO_I, 0 MSO_I }, { 1 MSO_I, 2 MSO_I } }
 };
 static const SvxMSDffHandle mso_sptBevelHandle[] =
 {
@@ -1982,9 +1986,9 @@ static const SvxMSDffVertPair mso_sptActionButtonBlankVert[] =
 {
     { 0, 0 }, { 21600, 0 }, { 21600, 21600 }, { 0, 21600 },
     { 0, 0 }, { 21600, 0 }, { 1 MSO_I, 0 MSO_I }, { 0 MSO_I, 0 MSO_I },
-    { 21600, 0 }, { 21600, 21600 }, { 1 MSO_I, 1 MSO_I }, { 1 MSO_I, 0 MSO_I },
-    { 21600, 21600 }, { 0, 21600 }, { 0 MSO_I, 1 MSO_I }, { 1 MSO_I, 1 MSO_I },
-    { 0, 21600 }, { 0, 0 }, { 0 MSO_I, 0 MSO_I }, { 0 MSO_I, 1 MSO_I }
+    { 21600, 0 }, { 21600, 21600 }, { 1 MSO_I, 2 MSO_I }, { 1 MSO_I, 0 MSO_I },
+    { 21600, 21600 }, { 0, 21600 }, { 0 MSO_I, 2 MSO_I }, { 1 MSO_I, 2 MSO_I },
+    { 0, 21600 }, { 0, 0 }, { 0 MSO_I, 0 MSO_I }, { 0 MSO_I, 2 MSO_I }
 };
 static const sal_uInt16 mso_sptActionButtonBlankSegm[] =
 {
@@ -1997,11 +2001,12 @@ static const sal_uInt16 mso_sptActionButtonBlankSegm[] =
 static const SvxMSDffCalculationData mso_sptActionButtonBlankCalc[] =
 {
     { 0x2001, DFF_Prop_adjustValue, 21599, 21600 },
-    { 0x8000, 21600, 0, 0x400 }
+    { 0xa000, DFF_Prop_geoRight, 0, 0x400 },
+    { 0xa000, DFF_Prop_geoBottom, 0, 0x400 }
 };
 static const SvxMSDffTextRectangles mso_sptActionButtonBlankTextRect[] =
 {
-    { { 0 MSO_I, 0 MSO_I }, { 1 MSO_I, 1 MSO_I } }
+    { { 0 MSO_I, 0 MSO_I }, { 1 MSO_I, 2 MSO_I } }
 };
 static const SvxMSDffHandle mso_sptButtonHandle[] =
 {
@@ -2033,14 +2038,14 @@ static const SvxMSDffVertPair mso_sptActionButtonHomeVert[] =
     { 21600, 21600 }, { 0, 21600 }, { 1 MSO_I, 4 MSO_I }, { 3 MSO_I, 4 MSO_I },
     { 0, 21600 }, { 0, 0 }, { 1 MSO_I, 2 MSO_I }, { 1 MSO_I, 4 MSO_I },
 
-    { 10800, 0xa MSO_I }, { 0xc MSO_I, 0xe MSO_I }, { 0xc MSO_I, 0x10 MSO_I }, { 0x12 MSO_I, 0x10 MSO_I },
-    { 0x12 MSO_I, 0x14 MSO_I }, { 0x16 MSO_I, 10800 }, { 0x18 MSO_I, 10800 }, { 0x18 MSO_I, 0x1a MSO_I },
-    { 0x1c MSO_I, 0x1a MSO_I }, { 0x1c MSO_I, 10800 }, { 0x1e MSO_I, 10800 },
+    { 7 MSO_I, 0xa MSO_I }, { 0xc MSO_I, 0xe MSO_I }, { 0xc MSO_I, 0x10 MSO_I }, { 0x12 MSO_I, 0x10 MSO_I },
+    { 0x12 MSO_I, 0x14 MSO_I }, { 0x16 MSO_I, 8 MSO_I }, { 0x18 MSO_I, 8 MSO_I }, { 0x18 MSO_I, 0x1a MSO_I },
+    { 0x1c MSO_I, 0x1a MSO_I }, { 0x1c MSO_I, 8 MSO_I }, { 0x1e MSO_I, 8 MSO_I },
 
     { 0xc MSO_I, 0xe MSO_I }, { 0xc MSO_I, 0x10 MSO_I }, { 0x12 MSO_I, 0x10 MSO_I },{ 0x12 MSO_I, 0x14 MSO_I },
 
     { 0x20 MSO_I, 0x24 MSO_I }, { 0x22 MSO_I, 0x24 MSO_I }, { 0x22 MSO_I, 0x1a MSO_I }, { 0x18 MSO_I, 0x1a MSO_I },
-    { 0x18 MSO_I, 10800 }, { 0x1c MSO_I, 10800 }, { 0x1c MSO_I, 0x1a MSO_I }, { 0x20 MSO_I, 0x1a MSO_I }
+    { 0x18 MSO_I, 8 MSO_I }, { 0x1c MSO_I, 8 MSO_I }, { 0x1c MSO_I, 0x1a MSO_I }, { 0x20 MSO_I, 0x1a MSO_I }
 
 };
 static const sal_uInt16 mso_sptActionButtonHomeSegm[] =
@@ -2063,8 +2068,8 @@ static const SvxMSDffCalculationData mso_sptActionButtonHomeCalc[] =    // adj v
     { 0xa000, DFF_Prop_geoBottom, 0, DFF_Prop_adjustValue },
     { 0x8000, 10800, 0, DFF_Prop_adjustValue },
     { 0x2001, 0x0405, 1, 10800 },                           // scaling   6
-    { 0x6000, DFF_Prop_geoRight, DFF_Prop_geoLeft, 10800 }, // lr center 7
-    { 0x6000, DFF_Prop_geoBottom, DFF_Prop_geoTop, 10800 }, // ul center 8
+    { 0x2001, DFF_Prop_geoRight, 1, 2 },    // lr center 7
+    { 0x2001, DFF_Prop_geoBottom, 1, 2 },   // ul center 8
 
     { 0x4001, -8000, 0x0406, 1 },   // 9
     { 0x6000, 0x0409, 0x0408, 0 },  // a
@@ -2104,7 +2109,7 @@ static const mso_CustomShape msoActionButtonHome =
     (sal_Int32*)mso_sptDefault1400,
     (SvxMSDffTextRectangles*)mso_sptActionButtonTextRect, sizeof( mso_sptActionButtonTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000,
+    10800, 10800,
     NULL, 0,
     (SvxMSDffHandle*)mso_sptButtonHandle, sizeof( mso_sptButtonHandle ) / sizeof( SvxMSDffHandle )
 };
@@ -2118,15 +2123,15 @@ static const SvxMSDffVertPair mso_sptActionButtonHelpVert[] =
     { 0, 21600 }, { 0, 0 }, { 1 MSO_I, 2 MSO_I }, { 1 MSO_I,4 MSO_I },
     { 7 MSO_I, 0xc MSO_I }, { 0xa MSO_I, 0x3e MSO_I }, { 7 MSO_I, 0x10 MSO_I }, { 0xe MSO_I, 0x3e MSO_I }, { 7 MSO_I, 0xc MSO_I },
     { 0x12 MSO_I, 0x14 MSO_I }, { 0x12 MSO_I, 0x16 MSO_I },                             // pp
-    { 0x12 MSO_I, 0x18 MSO_I }, { 0x1a MSO_I, 10800 }, { 0x1c MSO_I, 10800 },           // ccp
-    { 0x1e MSO_I, 10800 }, { 0x20 MSO_I, 0x22 MSO_I }, { 0x20 MSO_I, 0x24 MSO_I },      // ccp
-    { 0x20 MSO_I, 0x26 MSO_I }, { 0x28 MSO_I, 0x2a MSO_I }, { 10800, 0x2a MSO_I },      // ccp
+    { 0x12 MSO_I, 0x18 MSO_I }, { 0x1a MSO_I, 8 MSO_I }, { 0x1c MSO_I, 8 MSO_I },       // ccp
+    { 0x1e MSO_I, 8 MSO_I }, { 0x20 MSO_I, 0x22 MSO_I }, { 0x20 MSO_I, 0x24 MSO_I },    // ccp
+    { 0x20 MSO_I, 0x26 MSO_I }, { 0x28 MSO_I, 0x2a MSO_I }, { 7 MSO_I, 0x2a MSO_I },    // ccp
     { 0x2c MSO_I, 0x2a MSO_I }, { 0x2e MSO_I, 0x26 MSO_I }, { 0x2e MSO_I, 0x24 MSO_I }, // ccp
     { 0x30 MSO_I, 0x24 MSO_I }, { 0x30 MSO_I, 0x32 MSO_I }, { 0x34 MSO_I, 0x36 MSO_I }, // ccp
-    { 10800, 0x36 MSO_I },                                                              // p
+    { 7 MSO_I, 0x36 MSO_I },                                                            // p
     { 0x12 MSO_I, 0x36 MSO_I }, { 0x1c MSO_I, 0x32 MSO_I }, { 0x1c MSO_I, 0x24 MSO_I }, // ccp
     { 0x1c MSO_I, 0x38 MSO_I }, { 0x3a MSO_I, 0x3c MSO_I }, { 0x12 MSO_I, 0x3c MSO_I }, // ccp
-    { 10800, 0x3c MSO_I }, { 0x34 MSO_I, 10800 }, { 0x34 MSO_I, 0x16 MSO_I },           // ccp
+    { 7 MSO_I, 0x3c MSO_I }, { 0x34 MSO_I, 8 MSO_I }, { 0x34 MSO_I, 0x16 MSO_I },       // ccp
     { 0x34 MSO_I, 0x14 MSO_I }
 };
 static const sal_uInt16 mso_sptActionButtonHelpSegm[] =
@@ -2147,9 +2152,9 @@ static const SvxMSDffCalculationData mso_sptActionButtonHelpCalc[] =    // adj v
     { 0xa000, DFF_Prop_geoRight, 0, DFF_Prop_adjustValue },
     { 0xa000, DFF_Prop_geoBottom, 0, DFF_Prop_adjustValue },
     { 0x8000, 10800, 0, DFF_Prop_adjustValue },
-    { 0x2001, 0x0405, 1, 10800 },                           // scaling   6
-    { 0x6000, DFF_Prop_geoRight, DFF_Prop_geoLeft, 10800 }, // lr center 7
-    { 0x6000, DFF_Prop_geoBottom, DFF_Prop_geoTop, 10800 }, // ul center 8
+    { 0x2001, 0x0405, 1, 10800 },           // scaling   6
+    { 0x2001, DFF_Prop_geoRight, 1, 2 },    // lr center 7
+    { 0x2001, DFF_Prop_geoBottom, 1, 2 },   // ul center 8
 
     { 0x4001, -1690, 0x0406, 1 },   // 9
     { 0x6000, 0x0409, 0x0407, 0 },  // a
@@ -2214,7 +2219,7 @@ static const mso_CustomShape msoActionButtonHelp =
     (sal_Int32*)mso_sptDefault1400,
     (SvxMSDffTextRectangles*)mso_sptActionButtonTextRect, sizeof( mso_sptActionButtonTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000,
+    10800, 10800,
     NULL, 0,
     (SvxMSDffHandle*)mso_sptButtonHandle, sizeof( mso_sptButtonHandle ) / sizeof( SvxMSDffHandle )
 };
@@ -2251,9 +2256,9 @@ static const SvxMSDffCalculationData mso_sptActionButtonInformationCalc[] = // a
     { 0xa000, DFF_Prop_geoRight, 0, DFF_Prop_adjustValue },
     { 0xa000, DFF_Prop_geoBottom, 0, DFF_Prop_adjustValue },
     { 0x8000, 10800, 0, DFF_Prop_adjustValue },
-    { 0x2001, 0x0405, 1, 10800 },                           // scaling   6
-    { 0x6000, DFF_Prop_geoRight, DFF_Prop_geoLeft, 10800 }, // lr center 7
-    { 0x6000, DFF_Prop_geoBottom, DFF_Prop_geoTop, 10800 }, // ul center 8
+    { 0x2001, 0x0405, 1, 10800 },           // scaling   6
+    { 0x2001, DFF_Prop_geoRight, 1, 2 },    // lr center 7
+    { 0x2001, DFF_Prop_geoBottom, 1, 2 },   // ul center 8
 
     { 0x4001, -8050, 0x0406, 1 },   // 9
     { 0x6000, 0x0409, 0x0407, 0 },  // a
@@ -2302,7 +2307,7 @@ static const mso_CustomShape msoActionButtonInformation =
     (sal_Int32*)mso_sptDefault1400,
     (SvxMSDffTextRectangles*)mso_sptActionButtonTextRect, sizeof( mso_sptActionButtonTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000,
+    10800, 10800,
     NULL, 0,
     (SvxMSDffHandle*)mso_sptButtonHandle, sizeof( mso_sptButtonHandle ) / sizeof( SvxMSDffHandle )
 };
@@ -2315,7 +2320,7 @@ static const SvxMSDffVertPair mso_sptActionButtonBackPreviousVert[] =
     { 21600, 21600 }, { 0, 21600 }, { 1 MSO_I, 4 MSO_I }, { 3 MSO_I,4 MSO_I },
     { 0, 21600 }, { 0, 0 }, { 1 MSO_I, 2 MSO_I }, { 1 MSO_I, 4 MSO_I },
 
-    { 0xa MSO_I, 10800 }, { 0xe MSO_I, 0xc MSO_I }, { 0xe MSO_I, 0x10 MSO_I }
+    { 0xa MSO_I, 8 MSO_I }, { 0xe MSO_I, 0xc MSO_I }, { 0xe MSO_I, 0x10 MSO_I }
 };
 static const sal_uInt16 mso_sptActionButtonForwardBackSegm[] =
 {
@@ -2334,9 +2339,9 @@ static const SvxMSDffCalculationData mso_sptActionButtonForwardBackCalc[] = // a
     { 0xa000, DFF_Prop_geoRight, 0, DFF_Prop_adjustValue },
     { 0xa000, DFF_Prop_geoBottom, 0, DFF_Prop_adjustValue },
     { 0x8000, 10800, 0, DFF_Prop_adjustValue },
-    { 0x2001, 0x0405, 1, 10800 },                           // scaling   6
-    { 0x6000, DFF_Prop_geoRight, DFF_Prop_geoLeft, 10800 }, // lr center 7
-    { 0x6000, DFF_Prop_geoBottom, DFF_Prop_geoTop, 10800 }, // ul center 8
+    { 0x2001, 0x0405, 1, 10800 },           // scaling   6
+    { 0x2001, DFF_Prop_geoRight, 1, 2 },    // lr center 7
+    { 0x2001, DFF_Prop_geoBottom, 1, 2 },   // ul center 8
 
     { 0x4001, -8050, 0x0406, 1 },   // 9
     { 0x6000, 0x0409, 0x0407, 0 },  // a
@@ -2355,7 +2360,7 @@ static const mso_CustomShape msoActionButtonBackPrevious =
     (sal_Int32*)mso_sptDefault1400,
     (SvxMSDffTextRectangles*)mso_sptActionButtonTextRect, sizeof( mso_sptActionButtonTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000,
+    10800, 10800,
     NULL, 0,
     (SvxMSDffHandle*)mso_sptButtonHandle, sizeof( mso_sptButtonHandle ) / sizeof( SvxMSDffHandle )
 };
@@ -2368,7 +2373,7 @@ static const SvxMSDffVertPair mso_sptActionButtonForwardNextVert[] =
     { 21600, 21600 }, { 0, 21600 }, { 1 MSO_I, 4 MSO_I }, { 3 MSO_I, 4 MSO_I },
     { 0, 21600 }, { 0, 0 }, { 1 MSO_I, 2 MSO_I }, { 1 MSO_I, 4 MSO_I },
 
-    { 0xa MSO_I, 0xc MSO_I }, { 0xe MSO_I, 10800 }, { 0xa MSO_I, 0x10 MSO_I }
+    { 0xa MSO_I, 0xc MSO_I }, { 0xe MSO_I, 8 MSO_I }, { 0xa MSO_I, 0x10 MSO_I }
 };
 static const mso_CustomShape msoActionButtonForwardNext =
 {
@@ -2378,7 +2383,7 @@ static const mso_CustomShape msoActionButtonForwardNext =
     (sal_Int32*)mso_sptDefault1400,
     (SvxMSDffTextRectangles*)mso_sptActionButtonTextRect, sizeof( mso_sptActionButtonTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000,
+    10800, 10800,
     NULL, 0,
     (SvxMSDffHandle*)mso_sptButtonHandle, sizeof( mso_sptButtonHandle ) / sizeof( SvxMSDffHandle )
 };
@@ -2391,7 +2396,7 @@ static const SvxMSDffVertPair mso_sptActionButtonBeginningVert[] =
     { 21600, 21600 }, { 0, 21600 }, { 1 MSO_I, 4 MSO_I }, { 3 MSO_I, 4 MSO_I },
     { 0, 21600 }, { 0, 0 }, { 1 MSO_I, 2 MSO_I }, { 1 MSO_I, 4 MSO_I },
 
-    { 0xa MSO_I, 10800 }, { 0xe MSO_I, 0xc MSO_I }, { 0xe MSO_I, 0x10 MSO_I }, { 0x12 MSO_I, 0xc MSO_I },
+    { 0xa MSO_I, 8 MSO_I }, { 0xe MSO_I, 0xc MSO_I }, { 0xe MSO_I, 0x10 MSO_I }, { 0x12 MSO_I, 0xc MSO_I },
     { 0x14 MSO_I, 0xc MSO_I }, { 0x14 MSO_I, 0x10 MSO_I }, { 0x12 MSO_I, 0x10 MSO_I }
 };
 static const sal_uInt16 mso_sptActionButtonBeginningEndSegm[] =
@@ -2413,9 +2418,9 @@ static const SvxMSDffCalculationData mso_sptActionButtonBeginningEndCalc[] =    
     { 0xa000, DFF_Prop_geoRight, 0, DFF_Prop_adjustValue },
     { 0xa000, DFF_Prop_geoBottom, 0, DFF_Prop_adjustValue },
     { 0x8000, 10800, 0, DFF_Prop_adjustValue },
-    { 0x2001, 0x0405, 1, 10800 },                           // scaling   6
-    { 0x6000, DFF_Prop_geoRight, DFF_Prop_geoLeft, 10800 }, // lr center 7
-    { 0x6000, DFF_Prop_geoBottom, DFF_Prop_geoTop, 10800 }, // ul center 8
+    { 0x2001, 0x0405, 1, 10800 },           // scaling   6
+    { 0x2001, DFF_Prop_geoRight, 1, 2 },    // lr center 7
+    { 0x2001, DFF_Prop_geoBottom, 1, 2 },   // ul center 8
 
     { 0x4001, -4020, 0x0406, 1 },   // 9
     { 0x6000, 0x0409, 0x0407, 0 },  // a
@@ -2445,7 +2450,7 @@ static const mso_CustomShape msoActionButtonBeginning =
     (sal_Int32*)mso_sptDefault1400,
     (SvxMSDffTextRectangles*)mso_sptActionButtonTextRect, sizeof( mso_sptActionButtonTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000,
+    10800, 10800,
     NULL, 0,
     (SvxMSDffHandle*)mso_sptButtonHandle, sizeof( mso_sptButtonHandle ) / sizeof( SvxMSDffHandle )
 };
@@ -2458,7 +2463,7 @@ static const SvxMSDffVertPair mso_sptActionButtonEndVert[] =
     { 21600, 21600 }, { 0, 21600 }, { 1 MSO_I, 4 MSO_I }, { 3 MSO_I, 4 MSO_I },
     { 0, 21600 }, { 0, 0 }, { 1 MSO_I, 2 MSO_I }, { 1 MSO_I, 4 MSO_I },
 
-    { 0x16 MSO_I, 10800 }, { 0x12 MSO_I, 0x10 MSO_I }, { 0x12 MSO_I, 0xc MSO_I },
+    { 0x16 MSO_I, 8 MSO_I }, { 0x12 MSO_I, 0x10 MSO_I }, { 0x12 MSO_I, 0xc MSO_I },
 
     { 0x18 MSO_I, 0xc MSO_I }, { 0x18 MSO_I, 0x10 MSO_I }, { 0xe MSO_I, 0x10 MSO_I }, { 0xe MSO_I, 0xc MSO_I }
 };
@@ -2470,7 +2475,7 @@ static const mso_CustomShape msoActionButtonEnd =
     (sal_Int32*)mso_sptDefault1400,
     (SvxMSDffTextRectangles*)mso_sptActionButtonTextRect, sizeof( mso_sptActionButtonTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000,
+    10800, 10800,
     NULL, 0,
     (SvxMSDffHandle*)mso_sptButtonHandle, sizeof( mso_sptButtonHandle ) / sizeof( SvxMSDffHandle )
 };
@@ -2485,11 +2490,11 @@ static const SvxMSDffVertPair mso_sptActionButtonReturnVert[] =
 
     { 0xa MSO_I, 0xc MSO_I }, { 0xe MSO_I, 0xc MSO_I }, { 0xe MSO_I, 0x10 MSO_I },                          // ppp
     { 0xe MSO_I, 0x12 MSO_I }, { 0x14 MSO_I, 0x16 MSO_I }, { 0x18 MSO_I, 0x16 MSO_I },                      // ccp
-    { 10800, 0x16 MSO_I },                                                                                  // p
+    { 7 MSO_I, 0x16 MSO_I },                                                                                // p
     { 0x1a MSO_I, 0x16 MSO_I }, { 0x1c MSO_I, 0x12 MSO_I }, { 0x1c MSO_I, 0x10 MSO_I },                     // ccp
-    { 0x1c MSO_I, 0xc MSO_I }, { 10800, 0xc MSO_I }, { 0x1e MSO_I, 0x20 MSO_I }, { 0x22 MSO_I, 0xc MSO_I }, // pppp
+    { 0x1c MSO_I, 0xc MSO_I }, { 7 MSO_I, 0xc MSO_I }, { 0x1e MSO_I, 0x20 MSO_I }, { 0x22 MSO_I, 0xc MSO_I },// pppp
     { 0x24 MSO_I, 0xc MSO_I }, { 0x24 MSO_I, 0x10 MSO_I },                                                  // pp
-    { 0x24 MSO_I, 0x26 MSO_I }, { 0x28 MSO_I, 0x2a MSO_I }, { 10800, 0x2a MSO_I },                          // ccp
+    { 0x24 MSO_I, 0x26 MSO_I }, { 0x28 MSO_I, 0x2a MSO_I }, { 7 MSO_I, 0x2a MSO_I },                        // ccp
     { 0x18 MSO_I, 0x2a MSO_I },                                                                             // p
     { 0x2c MSO_I, 0x2a MSO_I }, { 0xa MSO_I, 0x26 MSO_I }, { 0xa MSO_I, 0x10 MSO_I }                        // ccp
 };
@@ -2510,9 +2515,9 @@ static const SvxMSDffCalculationData mso_sptActionButtonReturnCalc[] =  // adj v
     { 0xa000, DFF_Prop_geoRight, 0, DFF_Prop_adjustValue },
     { 0xa000, DFF_Prop_geoBottom, 0, DFF_Prop_adjustValue },
     { 0x8000, 10800, 0, DFF_Prop_adjustValue },
-    { 0x2001, 0x0405, 1, 10800 },                           // scaling   6
-    { 0x6000, DFF_Prop_geoRight, DFF_Prop_geoLeft, 10800 }, // lr center 7
-    { 0x6000, DFF_Prop_geoBottom, DFF_Prop_geoTop, 10800 }, // ul center 8
+    { 0x2001, 0x0405, 1, 10800 },           // scaling   6
+    { 0x2001, DFF_Prop_geoRight, 1, 2 },    // lr center 7
+    { 0x2001, DFF_Prop_geoBottom, 1, 2 },   // ul center 8
 
     { 0x4001, -8050, 0x0406, 1 },   // 9
     { 0x6000, 0x0409, 0x0407, 0 },  // a
@@ -2559,7 +2564,7 @@ static const mso_CustomShape msoActionButtonReturn =
     (sal_Int32*)mso_sptDefault1400,
     (SvxMSDffTextRectangles*)mso_sptActionButtonTextRect, sizeof( mso_sptActionButtonTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000,
+    10800, 10800,
     NULL, 0,
     (SvxMSDffHandle*)mso_sptButtonHandle, sizeof( mso_sptButtonHandle ) / sizeof( SvxMSDffHandle )
 };
@@ -2594,9 +2599,9 @@ static const SvxMSDffCalculationData mso_sptActionButtonDocumentCalc[] =    // a
     { 0xa000, DFF_Prop_geoRight, 0, DFF_Prop_adjustValue },
     { 0xa000, DFF_Prop_geoBottom, 0, DFF_Prop_adjustValue },
     { 0x8000, 10800, 0, DFF_Prop_adjustValue },
-    { 0x2001, 0x0405, 1, 10800 },                           // scaling   6
-    { 0x6000, DFF_Prop_geoRight, DFF_Prop_geoLeft, 10800 }, // lr center 7
-    { 0x6000, DFF_Prop_geoBottom, DFF_Prop_geoTop, 10800 }, // ul center 8
+    { 0x2001, 0x0405, 1, 10800 },           // scaling   6
+    { 0x2001, DFF_Prop_geoRight, 1, 2 },    // lr center 7
+    { 0x2001, DFF_Prop_geoBottom, 1, 2 },   // ul center 8
 
     { 0x4001, -6350, 0x0406, 1 },   // 9
     { 0x6000, 0x0409, 0x0407, 0 },  // a
@@ -2619,7 +2624,7 @@ static const mso_CustomShape msoActionButtonDocument =
     (sal_Int32*)mso_sptDefault1400,
     (SvxMSDffTextRectangles*)mso_sptActionButtonTextRect, sizeof( mso_sptActionButtonTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000,
+    10800, 10800,
     NULL, 0,
     (SvxMSDffHandle*)mso_sptButtonHandle, sizeof( mso_sptButtonHandle ) / sizeof( SvxMSDffHandle )
 };
@@ -2633,7 +2638,7 @@ static const SvxMSDffVertPair mso_sptActionButtonSoundVert[] =
     { 0, 21600 }, { 0, 0 }, { 1 MSO_I, 2 MSO_I }, { 1 MSO_I, 4 MSO_I },
 
     { 0xa MSO_I, 0xc MSO_I }, { 0xe MSO_I, 0xc MSO_I }, { 0x10 MSO_I, 0x12 MSO_I }, { 0x10 MSO_I, 0x14 MSO_I },
-    { 0xe MSO_I, 0x16 MSO_I }, { 0xa MSO_I, 0x16 MSO_I }, { 0x18 MSO_I, 10800 }, { 0x1a MSO_I, 10800 },
+    { 0xe MSO_I, 0x16 MSO_I }, { 0xa MSO_I, 0x16 MSO_I }, { 0x18 MSO_I, 8 MSO_I }, { 0x1a MSO_I, 8 MSO_I },
 
     { 0x18 MSO_I, 0xc MSO_I }, { 0x1a MSO_I, 0x1c MSO_I },
 
@@ -2660,9 +2665,9 @@ static const SvxMSDffCalculationData mso_sptActionButtonSoundCalc[] =   // adj v
     { 0xa000, DFF_Prop_geoRight, 0, DFF_Prop_adjustValue },
     { 0xa000, DFF_Prop_geoBottom, 0, DFF_Prop_adjustValue },
     { 0x8000, 10800, 0, DFF_Prop_adjustValue },
-    { 0x2001, 0x0405, 1, 10800 },                           // scaling   6
-    { 0x6000, DFF_Prop_geoRight, DFF_Prop_geoLeft, 10800 }, // lr center 7
-    { 0x6000, DFF_Prop_geoBottom, DFF_Prop_geoTop, 10800 }, // ul center 8
+    { 0x2001, 0x0405, 1, 10800 },           // scaling   6
+    { 0x2001, DFF_Prop_geoRight, 1, 2 },    // lr center 7
+    { 0x2001, DFF_Prop_geoBottom, 1, 2 },   // ul center 8
 
     { 0x4001, -8050, 0x0406, 1 },   // 9
     { 0x6000, 0x0409, 0x0407, 0 },  // a
@@ -2695,7 +2700,7 @@ static const mso_CustomShape msoActionButtonSound =
     (sal_Int32*)mso_sptDefault1400,
     (SvxMSDffTextRectangles*)mso_sptActionButtonTextRect, sizeof( mso_sptActionButtonTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000,
+    10800, 10800,
     NULL, 0,
     (SvxMSDffHandle*)mso_sptButtonHandle, sizeof( mso_sptButtonHandle ) / sizeof( SvxMSDffHandle )
 };
@@ -2731,9 +2736,9 @@ static const SvxMSDffCalculationData mso_sptActionButtonMovieCalc[] =   // adj v
     { 0xa000, DFF_Prop_geoRight, 0, DFF_Prop_adjustValue },
     { 0xa000, DFF_Prop_geoBottom, 0, DFF_Prop_adjustValue },
     { 0x8000, 10800, 0, DFF_Prop_adjustValue },
-    { 0x2001, 0x0405, 1, 10800 },                           // scaling   6
-    { 0x6000, DFF_Prop_geoRight, DFF_Prop_geoLeft, 10800 }, // lr center 7
-    { 0x6000, DFF_Prop_geoBottom, DFF_Prop_geoTop, 10800 }, // ul center 8
+    { 0x2001, 0x0405, 1, 10800 },           // scaling   6
+    { 0x2001, DFF_Prop_geoRight, 1, 2 },    // lr center 7
+    { 0x2001, DFF_Prop_geoBottom, 1, 2 },   // ul center 8
 
     { 0x4001, -8050, 0x0406, 1 },   // 9
     { 0x6000, 0x0409, 0x0407, 0 },  // a
@@ -2780,7 +2785,7 @@ static const mso_CustomShape msoActionButtonMovie =
     (sal_Int32*)mso_sptDefault1400,
     (SvxMSDffTextRectangles*)mso_sptActionButtonTextRect, sizeof( mso_sptActionButtonTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000,
+    10800, 10800,
     NULL, 0,
     (SvxMSDffHandle*)mso_sptButtonHandle, sizeof( mso_sptButtonHandle ) / sizeof( SvxMSDffHandle )
 };
@@ -2886,14 +2891,14 @@ static const SvxMSDffCalculationData mso_sptNoSmokingCalc[] =
     { 0x4000, 10800, 0x403, 0 },                    // 6 x2
     { 0x8000, 10800, 0, 0x404 },                    // 7 y1
     { 0x4000, 10800, 0x404, 0 },                    // 8 y2
-    { 0x6081, 0x405, 0x407, 450 },                  // 9
-    { 0x6082, 0x405, 0x407, 450 },                  // a
-    { 0x6081, 0x405, 0x408, 450 },                  // b
-    { 0x6082, 0x405, 0x408, 450 },                  // c
-    { 0x6081, 0x406, 0x408, 450 },                  // d
-    { 0x6082, 0x406, 0x408, 450 },                  // e
-    { 0x6081, 0x406, 0x407, 450 },                  // f
-    { 0x6082, 0x406, 0x407, 450 }                   // 10
+    { 0x6081, 0x405, 0x407, 45 },                   // 9
+    { 0x6082, 0x405, 0x407, 45 },                   // a
+    { 0x6081, 0x405, 0x408, 45 },                   // b
+    { 0x6082, 0x405, 0x408, 45 },                   // c
+    { 0x6081, 0x406, 0x408, 45 },                   // d
+    { 0x6082, 0x406, 0x408, 45 },                   // e
+    { 0x6081, 0x406, 0x407, 45 },                   // f
+    { 0x6082, 0x406, 0x407, 45 }                    // 10
 };
 static const SvxMSDffHandle mso_sptNoSmokingHandle[] =
 {
@@ -3088,50 +3093,50 @@ static const SvxMSDffCalculationData mso_sptSunCalc[] =
     { 0x2000, 0x406, 210, 0 },
     { 0x4000, 10800, 0x407, 0 },    // y1 (0x8)
     { 0x8000, 10800, 0, 0x407 },    // y2 (0x9)
-    { 0x0081, 0, 10800, 450 },      // 0xa
-    { 0x0082, 0, 10800, 450 },      // 0xb
-    { 0x6081, 0x404, 0x408, 450 },  // 0xc
-    { 0x6082, 0x404, 0x408, 450 },  // 0xd
-    { 0x6081, 0x404, 0x409, 450 },  // 0xe
-    { 0x6082, 0x404, 0x409, 450 },  // 0xf
-    { 0x0081, 0, 10800, 900 },      // 0x10
-    { 0x0082, 0, 10800, 900 },      // 0x11
-    { 0x6081, 0x404, 0x408, 900 },  // 0x12
-    { 0x6082, 0x404, 0x408, 900 },  // 0x13
-    { 0x6081, 0x404, 0x409, 900 },  // 0x14
-    { 0x6082, 0x404, 0x409, 900 },  // 0x15
-    { 0x0081, 0, 10800, 1350 },     // 0x16
-    { 0x0082, 0, 10800, 1350 },     // 0x17
-    { 0x6081, 0x404, 0x408, 1350 }, // 0x18
-    { 0x6082, 0x404, 0x408, 1350 }, // 0x19
-    { 0x6081, 0x404, 0x409, 1350 }, // 0x1a
-    { 0x6082, 0x404, 0x409, 1350 }, // 0x1b
-    { 0x0081, 0, 10800, 1800 },     // 0x1c
-    { 0x0082, 0, 10800, 1800 },     // 0x1d
-    { 0x6081, 0x404, 0x408, 1800 }, // 0x1e
-    { 0x6082, 0x404, 0x408, 1800 }, // 0x1f
-    { 0x6081, 0x404, 0x409, 1800 }, // 0x20
-    { 0x6082, 0x404, 0x409, 1800 }, // 0x21
-    { 0x0081, 0, 10800, 2250 },     // 0x22
-    { 0x0082, 0, 10800, 2250 },     // 0x23
-    { 0x6081, 0x404, 0x408, 2250 }, // 0x24
-    { 0x6082, 0x404, 0x408, 2250 }, // 0x25
-    { 0x6081, 0x404, 0x409, 2250 }, // 0x26
-    { 0x6082, 0x404, 0x409, 2250 }, // 0x27
-    { 0x0081, 0, 10800, 2700 },     // 0x28
-    { 0x0082, 0, 10800, 2700 },     // 0x29
-    { 0x6081, 0x404, 0x408, 2700 }, // 0x2a
-    { 0x6082, 0x404, 0x408, 2700 }, // 0x2b
-    { 0x6081, 0x404, 0x409, 2700 }, // 0x2c
-    { 0x6082, 0x404, 0x409, 2700 }, // 0x2d
-    { 0x0081, 0, 10800, 3150 },     // 0x2e
-    { 0x0082, 0, 10800, 3150 },     // 0x2f
-    { 0x6081, 0x404, 0x408, 3150 }, // 0x30
-    { 0x6082, 0x404, 0x408, 3150 }, // 0x31
-    { 0x6081, 0x404, 0x409, 3150 }, // 0x32
-    { 0x6082, 0x404, 0x409, 3150 }, // 0x33
-    { 0x2081, DFF_Prop_adjustValue, 10800, 450 },   // 0x34 ( textbox )
-    { 0x2081, DFF_Prop_adjustValue, 10800, 2250 },  // 0x35
+    { 0x0081, 0, 10800, 45 },       // 0xa
+    { 0x0082, 0, 10800, 45 },       // 0xb
+    { 0x6081, 0x404, 0x408, 45 },   // 0xc
+    { 0x6082, 0x404, 0x408, 45 },   // 0xd
+    { 0x6081, 0x404, 0x409, 45 },   // 0xe
+    { 0x6082, 0x404, 0x409, 45 },   // 0xf
+    { 0x0081, 0, 10800, 90 },       // 0x10
+    { 0x0082, 0, 10800, 90 },       // 0x11
+    { 0x6081, 0x404, 0x408, 90 },   // 0x12
+    { 0x6082, 0x404, 0x408, 90 },   // 0x13
+    { 0x6081, 0x404, 0x409, 90 },   // 0x14
+    { 0x6082, 0x404, 0x409, 90 },   // 0x15
+    { 0x0081, 0, 10800, 135 },      // 0x16
+    { 0x0082, 0, 10800, 135 },      // 0x17
+    { 0x6081, 0x404, 0x408, 135 },  // 0x18
+    { 0x6082, 0x404, 0x408, 135 },  // 0x19
+    { 0x6081, 0x404, 0x409, 135 },  // 0x1a
+    { 0x6082, 0x404, 0x409, 135 },  // 0x1b
+    { 0x0081, 0, 10800, 180 },      // 0x1c
+    { 0x0082, 0, 10800, 180 },      // 0x1d
+    { 0x6081, 0x404, 0x408, 180 },  // 0x1e
+    { 0x6082, 0x404, 0x408, 180 },  // 0x1f
+    { 0x6081, 0x404, 0x409, 180 },  // 0x20
+    { 0x6082, 0x404, 0x409, 180 },  // 0x21
+    { 0x0081, 0, 10800, 225 },      // 0x22
+    { 0x0082, 0, 10800, 225 },      // 0x23
+    { 0x6081, 0x404, 0x408, 225 },  // 0x24
+    { 0x6082, 0x404, 0x408, 225 },  // 0x25
+    { 0x6081, 0x404, 0x409, 225 },  // 0x26
+    { 0x6082, 0x404, 0x409, 225 },  // 0x27
+    { 0x0081, 0, 10800, 270 },      // 0x28
+    { 0x0082, 0, 10800, 270 },      // 0x29
+    { 0x6081, 0x404, 0x408, 270 },  // 0x2a
+    { 0x6082, 0x404, 0x408, 270 },  // 0x2b
+    { 0x6081, 0x404, 0x409, 270 },  // 0x2c
+    { 0x6082, 0x404, 0x409, 270 },  // 0x2d
+    { 0x0081, 0, 10800, 315 },      // 0x2e
+    { 0x0082, 0, 10800, 315 },      // 0x2f
+    { 0x6081, 0x404, 0x408, 315 },  // 0x30
+    { 0x6082, 0x404, 0x408, 315 },  // 0x31
+    { 0x6081, 0x404, 0x409, 315 },  // 0x32
+    { 0x6082, 0x404, 0x409, 315 },  // 0x33
+    { 0x2081, DFF_Prop_adjustValue, 10800, 45 },    // 0x34 ( textbox )
+    { 0x2081, DFF_Prop_adjustValue, 10800, 225 },   // 0x35
     { 0x8000, 10800, 0, DFF_Prop_adjustValue }
 
 
@@ -3178,7 +3183,7 @@ static const SvxMSDffCalculationData mso_sptMoonCalc[] =
     { 0x6000, 0x402, DFF_Prop_adjustValue, 0 },
     { 0x2001, DFF_Prop_adjustValue, 1794, 10000 },
     { 0x8000, 21600, 0, 0x0404 },
-    { 0x2001, DFF_Prop_adjustValue, 4000, 18900 },
+    { 0x2001, DFF_Prop_adjustValue, 400, 18900 },
     { 0x8081, 0, 10800, 0x406 },
     { 0x8082, 0, 10800, 0x406 },
     { 0x6000, 0x407, 0x407, 0 },
@@ -3228,7 +3233,7 @@ static const SvxMSDffCalculationData mso_sptBracketPairCalc[] =
     { 0x6000, DFF_Prop_geoTop, DFF_Prop_adjustValue, 0 },
     { 0xa000, DFF_Prop_geoBottom, 0, DFF_Prop_adjustValue },
     { 0xa000, DFF_Prop_geoRight, 0, DFF_Prop_adjustValue },
-    { 0x2082, DFF_Prop_adjustValue, 0, 450 },
+    { 0x2082, DFF_Prop_adjustValue, 0, 45 },
     { 0x2000, 0x404, 0, 10800 },
     { 0x8000, 0, 0, DFF_Prop_adjustValue },
     { 0xa000, 0x406, 0, 0x405 },
@@ -3258,7 +3263,7 @@ static const mso_CustomShape msoBracketPair =
     (sal_Int32*)mso_sptDefault3700,
     (SvxMSDffTextRectangles*)mso_sptBracketPairTextRect, sizeof( mso_sptBracketPairTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000,
+    10800, 0x80000000,
     (SvxMSDffVertPair*)mso_sptStandardGluePoints, sizeof( mso_sptStandardGluePoints ) / sizeof( SvxMSDffVertPair ),
     (SvxMSDffHandle*)mso_sptBracketPairHandle, sizeof( mso_sptBracketPairHandle ) / sizeof( SvxMSDffHandle )        // handles
 };
@@ -3284,7 +3289,7 @@ static const mso_CustomShape msoPlaque =
     (sal_Int32*)mso_sptDefault3600,
     (SvxMSDffTextRectangles*)mso_sptPlaqueTextRect, sizeof( mso_sptPlaqueTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000,
+    10800, 10800,
     (SvxMSDffVertPair*)mso_sptStandardGluePoints, sizeof( mso_sptStandardGluePoints ) / sizeof( SvxMSDffVertPair ),
     (SvxMSDffHandle*)mso_sptPlaqueHandle, sizeof( mso_sptPlaqueHandle ) / sizeof( SvxMSDffHandle )      // handles
 };
@@ -3327,7 +3332,7 @@ static const SvxMSDffTextRectangles mso_sptBracePairTextRect[] =
 static const SvxMSDffHandle mso_sptBracePairHandle[] =
 {
     {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_SWITCHED,
-        0, 0x100, 10800, 10800, 0x80000000, 0x7fffffff, 0, 10800 }
+        0, 0x100, 10800, 10800, 0x80000000, 0x7fffffff, 0, 5400 }
 };
 static const mso_CustomShape msoBracePair =
 {
@@ -3337,7 +3342,7 @@ static const mso_CustomShape msoBracePair =
     (sal_Int32*)mso_sptDefault1800,
     (SvxMSDffTextRectangles*)mso_sptBracePairTextRect, sizeof( mso_sptBracePairTextRect ) / sizeof( SvxMSDffTextRectangles ),
     21600, 21600,
-    0x80000000, 0x80000000,
+    10800, 0x80000000,
     (SvxMSDffVertPair*)mso_sptStandardGluePoints, sizeof( mso_sptStandardGluePoints ) / sizeof( SvxMSDffVertPair ),
     (SvxMSDffHandle*)mso_sptBracePairHandle, sizeof( mso_sptBracePairHandle ) / sizeof( SvxMSDffHandle )        // handles
 };
@@ -3454,7 +3459,7 @@ static const SvxMSDffTextRectangles mso_sptLeftBraceTextRect[] =
 static const SvxMSDffHandle mso_sptLeftBraceHandle[] =
 {
     {   MSDFF_HANDLE_FLAGS_RANGE,
-        2, 0x100, 10800, 10800, 0x80000000, 0x7fffffff, 0, 5400 },
+        10800, 0x100, 10800, 10800, 0x80000000, 0x7fffffff, 0, 5400 },
     {   MSDFF_HANDLE_FLAGS_RANGE,
         0, 0x101, 10800, 10800, 0x80000000, 0x7fffffff, 0, 21600 }
 };
@@ -3487,7 +3492,7 @@ static const SvxMSDffTextRectangles mso_sptRightBraceTextRect[] =
 static const SvxMSDffHandle mso_sptRightBraceHandle[] =
 {
     {   MSDFF_HANDLE_FLAGS_RANGE,
-        2, 0x100, 10800, 10800, 0x80000000, 0x7fffffff, 0, 5400 },
+        10800, 0x100, 10800, 10800, 0x80000000, 0x7fffffff, 0, 5400 },
     {   MSDFF_HANDLE_FLAGS_RANGE,
         1, 0x101, 10800, 10800, 0x80000000, 0x7fffffff, 0, 21600 }
 };
@@ -3628,106 +3633,106 @@ static const mso_CustomShape msoStar =
 static const SvxMSDffCalculationData mso_sptSeal24Calc[] =
 {
     { 0x2000, DFF_Prop_adjustValue, 0, 0 },     // 0x00
-    { 0x2081, 0x400, 10800, 3150 },             // 0x01 ( textframe )
-    { 0x2082, 0x400, 10800, 3150 },             // 0x02
-    { 0x2081, 0x400, 10800, 1350 },             // 0x03
-    { 0x2082, 0x400, 10800, 1350 },             // 0x04
+    { 0x2081, 0x400, 10800, 315 },              // 0x01 ( textframe )
+    { 0x2082, 0x400, 10800, 315 },              // 0x02
+    { 0x2081, 0x400, 10800, 135 },              // 0x03
+    { 0x2082, 0x400, 10800, 135 },              // 0x04
     { 0x0081, 0,     10800, 0 },
     { 0x0082, 0,     10800, 0 },
-    { 0x2081, 0x400, 10800, 75 },
-    { 0x2082, 0x400, 10800, 75 },
+    { 0x2081, 0x400, 10800, 7 },
+    { 0x2082, 0x400, 10800, 7 },
+    { 0x0081, 0,     10800, 15 },
+    { 0x0082, 0,     10800, 15 },
+    { 0x2081, 0x400, 10800, 22 },
+    { 0x2082, 0x400, 10800, 22 },
+    { 0x0081, 0,     10800, 30 },
+    { 0x0082, 0,     10800, 30 },
+    { 0x2081, 0x400, 10800, 37 },
+    { 0x2082, 0x400, 10800, 37 },
+    { 0x0081, 0,     10800, 45 },
+    { 0x0082, 0,     10800, 45 },
+    { 0x2081, 0x400, 10800, 52 },
+    { 0x2082, 0x400, 10800, 52 },
+    { 0x0081, 0,     10800, 60 },
+    { 0x0082, 0,     10800, 60 },
+    { 0x2081, 0x400, 10800, 67 },
+    { 0x2082, 0x400, 10800, 67 },
+    { 0x0081, 0,     10800, 75 },
+    { 0x0082, 0,     10800, 75 },
+    { 0x2081, 0x400, 10800, 82 },
+    { 0x2082, 0x400, 10800, 82 },
+    { 0x0081, 0,     10800, 90 },
+    { 0x0082, 0,     10800, 90 },
+    { 0x2081, 0x400, 10800, 97 },
+    { 0x2082, 0x400, 10800, 97 },
+    { 0x0081, 0,     10800, 105 },
+    { 0x0082, 0,     10800, 105 },
+    { 0x2081, 0x400, 10800, 112 },
+    { 0x2082, 0x400, 10800, 112 },
+    { 0x0081, 0,     10800, 120 },
+    { 0x0082, 0,     10800, 120 },
+    { 0x2081, 0x400, 10800, 127 },
+    { 0x2082, 0x400, 10800, 127 },
+    { 0x0081, 0,     10800, 135 },
+    { 0x0082, 0,     10800, 135 },
+    { 0x2081, 0x400, 10800, 142 },
+    { 0x2082, 0x400, 10800, 142 },
     { 0x0081, 0,     10800, 150 },
     { 0x0082, 0,     10800, 150 },
-    { 0x2081, 0x400, 10800, 225 },
-    { 0x2082, 0x400, 10800, 225 },
+    { 0x2081, 0x400, 10800, 157 },
+    { 0x2082, 0x400, 10800, 157 },
+    { 0x0081, 0,     10800, 165 },
+    { 0x0082, 0,     10800, 165 },
+    { 0x2081, 0x400, 10800, 172 },
+    { 0x2082, 0x400, 10800, 172 },
+    { 0x0081, 0,     10800, 180 },
+    { 0x0082, 0,     10800, 180 },
+    { 0x2081, 0x400, 10800, 187 },
+    { 0x2082, 0x400, 10800, 187 },
+    { 0x0081, 0,     10800, 195 },
+    { 0x0082, 0,     10800, 195 },
+    { 0x2081, 0x400, 10800, 202 },
+    { 0x2082, 0x400, 10800, 202 },
+    { 0x0081, 0,     10800, 210 },
+    { 0x0082, 0,     10800, 210 },
+    { 0x2081, 0x400, 10800, 217 },
+    { 0x2082, 0x400, 10800, 217 },
+    { 0x0081, 0,     10800, 225 },
+    { 0x0082, 0,     10800, 225 },
+    { 0x2081, 0x400, 10800, 232 },
+    { 0x2082, 0x400, 10800, 232 },
+    { 0x0081, 0,     10800, 240 },
+    { 0x0082, 0,     10800, 240 },
+    { 0x2081, 0x400, 10800, 247 },
+    { 0x2082, 0x400, 10800, 247 },
+    { 0x0081, 0,     10800, 255 },
+    { 0x0082, 0,     10800, 255 },
+    { 0x2081, 0x400, 10800, 262 },
+    { 0x2082, 0x400, 10800, 262 },
+    { 0x0081, 0,     10800, 270 },
+    { 0x0082, 0,     10800, 270 },
+    { 0x2081, 0x400, 10800, 277 },
+    { 0x2082, 0x400, 10800, 277 },
+    { 0x0081, 0,     10800, 285 },
+    { 0x0082, 0,     10800, 285 },
+    { 0x2081, 0x400, 10800, 292 },
+    { 0x2082, 0x400, 10800, 292 },
     { 0x0081, 0,     10800, 300 },
     { 0x0082, 0,     10800, 300 },
-    { 0x2081, 0x400, 10800, 375 },
-    { 0x2082, 0x400, 10800, 375 },
-    { 0x0081, 0,     10800, 450 },
-    { 0x0082, 0,     10800, 450 },
-    { 0x2081, 0x400, 10800, 525 },
-    { 0x2082, 0x400, 10800, 525 },
-    { 0x0081, 0,     10800, 600 },
-    { 0x0082, 0,     10800, 600 },
-    { 0x2081, 0x400, 10800, 675 },
-    { 0x2082, 0x400, 10800, 675 },
-    { 0x0081, 0,     10800, 750 },
-    { 0x0082, 0,     10800, 750 },
-    { 0x2081, 0x400, 10800, 825 },
-    { 0x2082, 0x400, 10800, 825 },
-    { 0x0081, 0,     10800, 900 },
-    { 0x0082, 0,     10800, 900 },
-    { 0x2081, 0x400, 10800, 975 },
-    { 0x2082, 0x400, 10800, 975 },
-    { 0x0081, 0,     10800, 1050 },
-    { 0x0082, 0,     10800, 1050 },
-    { 0x2081, 0x400, 10800, 1125 },
-    { 0x2082, 0x400, 10800, 1125 },
-    { 0x0081, 0,     10800, 1200 },
-    { 0x0082, 0,     10800, 1200 },
-    { 0x2081, 0x400, 10800, 1275 },
-    { 0x2082, 0x400, 10800, 1275 },
-    { 0x0081, 0,     10800, 1350 },
-    { 0x0082, 0,     10800, 1350 },
-    { 0x2081, 0x400, 10800, 1425 },
-    { 0x2082, 0x400, 10800, 1425 },
-    { 0x0081, 0,     10800, 1500 },
-    { 0x0082, 0,     10800, 1500 },
-    { 0x2081, 0x400, 10800, 1575 },
-    { 0x2082, 0x400, 10800, 1575 },
-    { 0x0081, 0,     10800, 1650 },
-    { 0x0082, 0,     10800, 1650 },
-    { 0x2081, 0x400, 10800, 1725 },
-    { 0x2082, 0x400, 10800, 1725 },
-    { 0x0081, 0,     10800, 1800 },
-    { 0x0082, 0,     10800, 1800 },
-    { 0x2081, 0x400, 10800, 1875 },
-    { 0x2082, 0x400, 10800, 1875 },
-    { 0x0081, 0,     10800, 1950 },
-    { 0x0082, 0,     10800, 1950 },
-    { 0x2081, 0x400, 10800, 2025 },
-    { 0x2082, 0x400, 10800, 2025 },
-    { 0x0081, 0,     10800, 2100 },
-    { 0x0082, 0,     10800, 2100 },
-    { 0x2081, 0x400, 10800, 2175 },
-    { 0x2082, 0x400, 10800, 2175 },
-    { 0x0081, 0,     10800, 2250 },
-    { 0x0082, 0,     10800, 2250 },
-    { 0x2081, 0x400, 10800, 2325 },
-    { 0x2082, 0x400, 10800, 2325 },
-    { 0x0081, 0,     10800, 2400 },
-    { 0x0082, 0,     10800, 2400 },
-    { 0x2081, 0x400, 10800, 2475 },
-    { 0x2082, 0x400, 10800, 2475 },
-    { 0x0081, 0,     10800, 2550 },
-    { 0x0082, 0,     10800, 2550 },
-    { 0x2081, 0x400, 10800, 2625 },
-    { 0x2082, 0x400, 10800, 2625 },
-    { 0x0081, 0,     10800, 2700 },
-    { 0x0082, 0,     10800, 2700 },
-    { 0x2081, 0x400, 10800, 2775 },
-    { 0x2082, 0x400, 10800, 2775 },
-    { 0x0081, 0,     10800, 2850 },
-    { 0x0082, 0,     10800, 2850 },
-    { 0x2081, 0x400, 10800, 2925 },
-    { 0x2082, 0x400, 10800, 2925 },
-    { 0x0081, 0,     10800, 3000 },
-    { 0x0082, 0,     10800, 3000 },
-    { 0x2081, 0x400, 10800, 3075 },
-    { 0x2082, 0x400, 10800, 3075 },
-    { 0x0081, 0,     10800, 3150 },
-    { 0x0082, 0,     10800, 3150 },
-    { 0x2081, 0x400, 10800, 3225 },
-    { 0x2082, 0x400, 10800, 3225 },
-    { 0x0081, 0,     10800, 3300 },
-    { 0x0082, 0,     10800, 3300 },
-    { 0x2081, 0x400, 10800, 3375 },
-    { 0x2082, 0x400, 10800, 3375 },
-    { 0x0081, 0,     10800, 3450 },
-    { 0x0082, 0,     10800, 3450 },
-    { 0x2081, 0x400, 10800, 3525 },
-    { 0x2082, 0x400, 10800, 3525 }
+    { 0x2081, 0x400, 10800, 307 },
+    { 0x2082, 0x400, 10800, 307 },
+    { 0x0081, 0,     10800, 315 },
+    { 0x0082, 0,     10800, 315 },
+    { 0x2081, 0x400, 10800, 322 },
+    { 0x2082, 0x400, 10800, 322 },
+    { 0x0081, 0,     10800, 330 },
+    { 0x0082, 0,     10800, 330 },
+    { 0x2081, 0x400, 10800, 337 },
+    { 0x2082, 0x400, 10800, 337 },
+    { 0x0081, 0,     10800, 345 },
+    { 0x0082, 0,     10800, 345 },
+    { 0x2081, 0x400, 10800, 352 },
+    { 0x2082, 0x400, 10800, 352 }
 };
 static const SvxMSDffVertPair mso_sptSeal8Vert[] =  // adj value 0 -> 10800
 {
@@ -3768,74 +3773,74 @@ static const SvxMSDffVertPair mso_sptSeal16Vert[] = // adj value 0 -> 10800
 static const SvxMSDffCalculationData mso_sptSeal16Calc[] =
 {
     { 0x2000, DFF_Prop_adjustValue, 0, 0 },     // 0x00
-    { 0x2081, 0x400, 10800, 3150 },             // 0x01 ( textframe )
-    { 0x2082, 0x400, 10800, 3150 },             // 0x02
-    { 0x2081, 0x400, 10800, 1350 },             // 0x03
-    { 0x2082, 0x400, 10800, 1350 },             // 0x04
+    { 0x2081, 0x400, 10800, 315 },              // 0x01 ( textframe )
+    { 0x2082, 0x400, 10800, 315 },              // 0x02
+    { 0x2081, 0x400, 10800, 135 },              // 0x03
+    { 0x2082, 0x400, 10800, 135 },              // 0x04
     { 0x0081, 0,     10800, 0 },
     { 0x0082, 0,     10800, 0 },
-    { 0x2081, 0x400, 10800, 113 },
-    { 0x2082, 0x400, 10800, 113 },
+    { 0x2081, 0x400, 10800, 11 },
+    { 0x2082, 0x400, 10800, 11 },
+    { 0x0081, 0,     10800, 22 },
+    { 0x0082, 0,     10800, 22 },
+    { 0x2081, 0x400, 10800, 33 },
+    { 0x2082, 0x400, 10800, 33 },
+    { 0x0081, 0,     10800, 45 },
+    { 0x0082, 0,     10800, 45 },
+    { 0x2081, 0x400, 10800, 56 },
+    { 0x2082, 0x400, 10800, 56 },
+    { 0x0081, 0,     10800, 67 },
+    { 0x0082, 0,     10800, 67 },
+    { 0x2081, 0x400, 10800, 78 },
+    { 0x2082, 0x400, 10800, 78 },
+    { 0x0081, 0,     10800, 90 },
+    { 0x0082, 0,     10800, 90 },
+    { 0x2081, 0x400, 10800, 101 },
+    { 0x2082, 0x400, 10800, 101 },
+    { 0x0081, 0,     10800, 112 },
+    { 0x0082, 0,     10800, 112 },
+    { 0x2081, 0x400, 10800, 123 },
+    { 0x2082, 0x400, 10800, 123 },
+    { 0x0081, 0,     10800, 135 },
+    { 0x0082, 0,     10800, 135 },
+    { 0x2081, 0x400, 10800, 146 },
+    { 0x2082, 0x400, 10800, 146 },
+    { 0x0081, 0,     10800, 157 },
+    { 0x0082, 0,     10800, 157 },
+    { 0x2081, 0x400, 10800, 168 },
+    { 0x2082, 0x400, 10800, 168 },
+    { 0x0081, 0,     10800, 180 },
+    { 0x0082, 0,     10800, 180 },
+    { 0x2081, 0x400, 10800, 191 },
+    { 0x2082, 0x400, 10800, 191 },
+    { 0x0081, 0,     10800, 202 },
+    { 0x0082, 0,     10800, 202 },
+    { 0x2081, 0x400, 10800, 213 },
+    { 0x2082, 0x400, 10800, 213 },
     { 0x0081, 0,     10800, 225 },
     { 0x0082, 0,     10800, 225 },
-    { 0x2081, 0x400, 10800, 338 },
-    { 0x2082, 0x400, 10800, 338 },
-    { 0x0081, 0,     10800, 450 },
-    { 0x0082, 0,     10800, 450 },
-    { 0x2081, 0x400, 10800, 563 },
-    { 0x2082, 0x400, 10800, 563 },
-    { 0x0081, 0,     10800, 675 },
-    { 0x0082, 0,     10800, 675 },
-    { 0x2081, 0x400, 10800, 788 },
-    { 0x2082, 0x400, 10800, 788 },
-    { 0x0081, 0,     10800, 900 },
-    { 0x0082, 0,     10800, 900 },
-    { 0x2081, 0x400, 10800, 1013 },
-    { 0x2082, 0x400, 10800, 1013 },
-    { 0x0081, 0,     10800, 1125 },
-    { 0x0082, 0,     10800, 1125 },
-    { 0x2081, 0x400, 10800, 1238 },
-    { 0x2082, 0x400, 10800, 1238 },
-    { 0x0081, 0,     10800, 1350 },
-    { 0x0082, 0,     10800, 1350 },
-    { 0x2081, 0x400, 10800, 1463 },
-    { 0x2082, 0x400, 10800, 1463 },
-    { 0x0081, 0,     10800, 1575 },
-    { 0x0082, 0,     10800, 1575 },
-    { 0x2081, 0x400, 10800, 1688 },
-    { 0x2082, 0x400, 10800, 1688 },
-    { 0x0081, 0,     10800, 1800 },
-    { 0x0082, 0,     10800, 1800 },
-    { 0x2081, 0x400, 10800, 1913 },
-    { 0x2082, 0x400, 10800, 1913 },
-    { 0x0081, 0,     10800, 2025 },
-    { 0x0082, 0,     10800, 2025 },
-    { 0x2081, 0x400, 10800, 2138 },
-    { 0x2082, 0x400, 10800, 2138 },
-    { 0x0081, 0,     10800, 2250 },
-    { 0x0082, 0,     10800, 2250 },
-    { 0x2081, 0x400, 10800, 2363 },
-    { 0x2082, 0x400, 10800, 2363 },
-    { 0x0081, 0,     10800, 2475 },
-    { 0x0082, 0,     10800, 2475 },
-    { 0x2081, 0x400, 10800, 2588 },
-    { 0x2082, 0x400, 10800, 2588 },
-    { 0x0081, 0,     10800, 2700 },
-    { 0x0082, 0,     10800, 2700 },
-    { 0x2081, 0x400, 10800, 2813 },
-    { 0x2082, 0x400, 10800, 2813 },
-    { 0x0081, 0,     10800, 2925 },
-    { 0x0082, 0,     10800, 2925 },
-    { 0x2081, 0x400, 10800, 3038 },
-    { 0x2082, 0x400, 10800, 3038 },
-    { 0x0081, 0,     10800, 3150 },
-    { 0x0082, 0,     10800, 3150 },
-    { 0x2081, 0x400, 10800, 3263 },
-    { 0x2082, 0x400, 10800, 3263 },
-    { 0x0081, 0,     10800, 3375 },
-    { 0x0082, 0,     10800, 3375 },
-    { 0x2081, 0x400, 10800, 3488 },
-    { 0x2082, 0x400, 10800, 3488 }
+    { 0x2081, 0x400, 10800, 236 },
+    { 0x2082, 0x400, 10800, 236 },
+    { 0x0081, 0,     10800, 247 },
+    { 0x0082, 0,     10800, 247 },
+    { 0x2081, 0x400, 10800, 258 },
+    { 0x2082, 0x400, 10800, 258 },
+    { 0x0081, 0,     10800, 270 },
+    { 0x0082, 0,     10800, 270 },
+    { 0x2081, 0x400, 10800, 281 },
+    { 0x2082, 0x400, 10800, 281 },
+    { 0x0081, 0,     10800, 292 },
+    { 0x0082, 0,     10800, 292 },
+    { 0x2081, 0x400, 10800, 303 },
+    { 0x2082, 0x400, 10800, 303 },
+    { 0x0081, 0,     10800, 315 },
+    { 0x0082, 0,     10800, 315 },
+    { 0x2081, 0x400, 10800, 326 },
+    { 0x2082, 0x400, 10800, 326 },
+    { 0x0081, 0,     10800, 337 },
+    { 0x0082, 0,     10800, 337 },
+    { 0x2081, 0x400, 10800, 348 },
+    { 0x2082, 0x400, 10800, 348 }
 };
 static const mso_CustomShape msoSeal16 =
 {
@@ -3880,138 +3885,138 @@ static const mso_CustomShape msoSeal24 =
 static const SvxMSDffCalculationData mso_sptSeal32Calc[] =
 {
     { 0x2000, DFF_Prop_adjustValue, 0, 0 },     // 0x00
-    { 0x2081, 0x400, 10800, 3150 },             // 0x01 ( textframe )
-    { 0x2082, 0x400, 10800, 3150 },             // 0x02
-    { 0x2081, 0x400, 10800, 1350 },             // 0x03
-    { 0x2082, 0x400, 10800, 1350 },             // 0x04
+    { 0x2081, 0x400, 10800, 315 },              // 0x01 ( textframe )
+    { 0x2082, 0x400, 10800, 315 },              // 0x02
+    { 0x2081, 0x400, 10800, 135 },              // 0x03
+    { 0x2082, 0x400, 10800, 135 },              // 0x04
     { 0x0081, 0,     10800, 0 },
     { 0x0082, 0,     10800, 0 },
-    { 0x2081, 0x400, 10800, 56 },
-    { 0x2082, 0x400, 10800, 56 },
-    { 0x0081, 0,     10800, 113 },
-    { 0x0082, 0,     10800, 113 },
-    { 0x2081, 0x400, 10800, 169 },
-    { 0x2082, 0x400, 10800, 169 },
+    { 0x2081, 0x400, 10800, 5 },
+    { 0x2082, 0x400, 10800, 5 },
+    { 0x0081, 0,     10800, 11 },
+    { 0x0082, 0,     10800, 11 },
+    { 0x2081, 0x400, 10800, 16 },
+    { 0x2082, 0x400, 10800, 16 },
+    { 0x0081, 0,     10800, 22 },
+    { 0x0082, 0,     10800, 22 },
+    { 0x2081, 0x400, 10800, 28 },
+    { 0x2082, 0x400, 10800, 28 },
+    { 0x0081, 0,     10800, 33 },
+    { 0x0082, 0,     10800, 33 },
+    { 0x2081, 0x400, 10800, 39 },
+    { 0x2082, 0x400, 10800, 39 },
+    { 0x0081, 0,     10800, 45 },
+    { 0x0082, 0,     10800, 45 },
+    { 0x2081, 0x400, 10800, 50 },
+    { 0x2082, 0x400, 10800, 50 },
+    { 0x0081, 0,     10800, 56 },
+    { 0x0082, 0,     10800, 56 },
+    { 0x2081, 0x400, 10800, 61 },
+    { 0x2082, 0x400, 10800, 61 },
+    { 0x0081, 0,     10800, 67 },
+    { 0x0082, 0,     10800, 67 },
+    { 0x2081, 0x400, 10800, 73 },
+    { 0x2082, 0x400, 10800, 73 },
+    { 0x0081, 0,     10800, 78 },
+    { 0x0082, 0,     10800, 78 },
+    { 0x2081, 0x400, 10800, 84 },
+    { 0x2082, 0x400, 10800, 84 },
+    { 0x0081, 0,     10800, 90 },
+    { 0x0082, 0,     10800, 90 },
+    { 0x2081, 0x400, 10800, 95 },
+    { 0x2082, 0x400, 10800, 95 },
+    { 0x0081, 0,     10800, 101 },
+    { 0x0082, 0,     10800, 101 },
+    { 0x2081, 0x400, 10800, 106 },
+    { 0x2082, 0x400, 10800, 106 },
+    { 0x0081, 0,     10800, 112 },
+    { 0x0082, 0,     10800, 112 },
+    { 0x2081, 0x400, 10800, 118 },
+    { 0x2082, 0x400, 10800, 118 },
+    { 0x0081, 0,     10800, 123 },
+    { 0x0082, 0,     10800, 123 },
+    { 0x2081, 0x400, 10800, 129 },
+    { 0x2082, 0x400, 10800, 129 },
+    { 0x0081, 0,     10800, 135 },
+    { 0x0082, 0,     10800, 135 },
+    { 0x2081, 0x400, 10800, 140 },
+    { 0x2082, 0x400, 10800, 140 },
+    { 0x0081, 0,     10800, 146 },
+    { 0x0082, 0,     10800, 146 },
+    { 0x2081, 0x400, 10800, 151 },
+    { 0x2082, 0x400, 10800, 151 },
+    { 0x0081, 0,     10800, 157 },
+    { 0x0082, 0,     10800, 157 },
+    { 0x2081, 0x400, 10800, 163 },
+    { 0x2082, 0x400, 10800, 163 },
+    { 0x0081, 0,     10800, 168 },
+    { 0x0082, 0,     10800, 168 },
+    { 0x2081, 0x400, 10800, 174 },
+    { 0x2082, 0x400, 10800, 174 },
+    { 0x0081, 0,     10800, 180 },
+    { 0x0082, 0,     10800, 180 },
+    { 0x2081, 0x400, 10800, 185 },
+    { 0x2082, 0x400, 10800, 185 },
+    { 0x0081, 0,     10800, 191 },
+    { 0x0082, 0,     10800, 191 },
+    { 0x2081, 0x400, 10800, 196 },
+    { 0x2082, 0x400, 10800, 196 },
+    { 0x0081, 0,     10800, 202 },
+    { 0x0082, 0,     10800, 202 },
+    { 0x2081, 0x400, 10800, 208 },
+    { 0x2082, 0x400, 10800, 208 },
+    { 0x0081, 0,     10800, 213 },
+    { 0x0082, 0,     10800, 213 },
+    { 0x2081, 0x400, 10800, 219 },
+    { 0x2082, 0x400, 10800, 219 },
     { 0x0081, 0,     10800, 225 },
     { 0x0082, 0,     10800, 225 },
-    { 0x2081, 0x400, 10800, 281 },
-    { 0x2082, 0x400, 10800, 281 },
-    { 0x0081, 0,     10800, 338 },
-    { 0x0082, 0,     10800, 338 },
-    { 0x2081, 0x400, 10800, 394 },
-    { 0x2082, 0x400, 10800, 394 },
-    { 0x0081, 0,     10800, 450 },
-    { 0x0082, 0,     10800, 450 },
-    { 0x2081, 0x400, 10800, 506 },
-    { 0x2082, 0x400, 10800, 506 },
-    { 0x0081, 0,     10800, 563 },
-    { 0x0082, 0,     10800, 563 },
-    { 0x2081, 0x400, 10800, 619 },
-    { 0x2082, 0x400, 10800, 619 },
-    { 0x0081, 0,     10800, 675 },
-    { 0x0082, 0,     10800, 675 },
-    { 0x2081, 0x400, 10800, 731 },
-    { 0x2082, 0x400, 10800, 731 },
-    { 0x0081, 0,     10800, 788 },
-    { 0x0082, 0,     10800, 788 },
-    { 0x2081, 0x400, 10800, 843 },
-    { 0x2082, 0x400, 10800, 843 },
-    { 0x0081, 0,     10800, 900 },
-    { 0x0082, 0,     10800, 900 },
-    { 0x2081, 0x400, 10800, 956 },
-    { 0x2082, 0x400, 10800, 956 },
-    { 0x0081, 0,     10800, 1013 },
-    { 0x0082, 0,     10800, 1013 },
-    { 0x2081, 0x400, 10800, 1069 },
-    { 0x2082, 0x400, 10800, 1069 },
-    { 0x0081, 0,     10800, 1125 },
-    { 0x0082, 0,     10800, 1125 },
-    { 0x2081, 0x400, 10800, 1181 },
-    { 0x2082, 0x400, 10800, 1181 },
-    { 0x0081, 0,     10800, 1238 },
-    { 0x0082, 0,     10800, 1238 },
-    { 0x2081, 0x400, 10800, 1294 },
-    { 0x2082, 0x400, 10800, 1294 },
-    { 0x0081, 0,     10800, 1350 },
-    { 0x0082, 0,     10800, 1350 },
-    { 0x2081, 0x400, 10800, 1406 },
-    { 0x2082, 0x400, 10800, 1406 },
-    { 0x0081, 0,     10800, 1462 },
-    { 0x0082, 0,     10800, 1462 },
-    { 0x2081, 0x400, 10800, 1519 },
-    { 0x2082, 0x400, 10800, 1519 },
-    { 0x0081, 0,     10800, 1575 },
-    { 0x0082, 0,     10800, 1575 },
-    { 0x2081, 0x400, 10800, 1631 },
-    { 0x2082, 0x400, 10800, 1631 },
-    { 0x0081, 0,     10800, 1688 },
-    { 0x0082, 0,     10800, 1688 },
-    { 0x2081, 0x400, 10800, 1744 },
-    { 0x2082, 0x400, 10800, 1744 },
-    { 0x0081, 0,     10800, 1800 },
-    { 0x0082, 0,     10800, 1800 },
-    { 0x2081, 0x400, 10800, 1856 },
-    { 0x2082, 0x400, 10800, 1856 },
-    { 0x0081, 0,     10800, 1913 },
-    { 0x0082, 0,     10800, 1913 },
-    { 0x2081, 0x400, 10800, 1969 },
-    { 0x2082, 0x400, 10800, 1969 },
-    { 0x0081, 0,     10800, 2025 },
-    { 0x0082, 0,     10800, 2025 },
-    { 0x2081, 0x400, 10800, 2081 },
-    { 0x2082, 0x400, 10800, 2081 },
-    { 0x0081, 0,     10800, 2138 },
-    { 0x0082, 0,     10800, 2138 },
-    { 0x2081, 0x400, 10800, 2194 },
-    { 0x2082, 0x400, 10800, 2194 },
-    { 0x0081, 0,     10800, 2250 },
-    { 0x0082, 0,     10800, 2250 },
-    { 0x2081, 0x400, 10800, 2306 },
-    { 0x2082, 0x400, 10800, 2306 },
-    { 0x0081, 0,     10800, 2362 },
-    { 0x0082, 0,     10800, 2362 },
-    { 0x2081, 0x400, 10800, 2418 },
-    { 0x2082, 0x400, 10800, 2418 },
-    { 0x0081, 0,     10800, 2475 },
-    { 0x0082, 0,     10800, 2475 },
-    { 0x2081, 0x400, 10800, 2531 },
-    { 0x2082, 0x400, 10800, 2531 },
-    { 0x0081, 0,     10800, 2587 },
-    { 0x0082, 0,     10800, 2587 },
-    { 0x2081, 0x400, 10800, 2643 },
-    { 0x2082, 0x400, 10800, 2643 },
-    { 0x0081, 0,     10800, 2700 },
-    { 0x0082, 0,     10800, 2700 },
-    { 0x2081, 0x400, 10800, 2756 },
-    { 0x2082, 0x400, 10800, 2756 },
-    { 0x0081, 0,     10800, 2812 },
-    { 0x0082, 0,     10800, 2812 },
-    { 0x2081, 0x400, 10800, 2868 },
-    { 0x2082, 0x400, 10800, 2868 },
-    { 0x0081, 0,     10800, 2925 },
-    { 0x0082, 0,     10800, 2925 },
-    { 0x2081, 0x400, 10800, 2981 },
-    { 0x2082, 0x400, 10800, 2981 },
-    { 0x0081, 0,     10800, 3037 },
-    { 0x0082, 0,     10800, 3037 },
-    { 0x2081, 0x400, 10800, 3093 },
-    { 0x2082, 0x400, 10800, 3093 },
-    { 0x0081, 0,     10800, 3150 },
-    { 0x0082, 0,     10800, 3150 },
-    { 0x2081, 0x400, 10800, 3206 },
-    { 0x2082, 0x400, 10800, 3206 },
-    { 0x0081, 0,     10800, 3262 },
-    { 0x0082, 0,     10800, 3262 },
-    { 0x2081, 0x400, 10800, 3318 },
-    { 0x2082, 0x400, 10800, 3318 },
-    { 0x0081, 0,     10800, 3375 },
-    { 0x0082, 0,     10800, 3375 },
-    { 0x2081, 0x400, 10800, 3431 },
-    { 0x2082, 0x400, 10800, 3431 },
-    { 0x0081, 0,     10800, 3487 },
-    { 0x0082, 0,     10800, 3487 },
-    { 0x2081, 0x400, 10800, 3543 },
-    { 0x2082, 0x400, 10800, 3543 }
+    { 0x2081, 0x400, 10800, 230 },
+    { 0x2082, 0x400, 10800, 230 },
+    { 0x0081, 0,     10800, 236 },
+    { 0x0082, 0,     10800, 236 },
+    { 0x2081, 0x400, 10800, 241 },
+    { 0x2082, 0x400, 10800, 241 },
+    { 0x0081, 0,     10800, 247 },
+    { 0x0082, 0,     10800, 247 },
+    { 0x2081, 0x400, 10800, 253 },
+    { 0x2082, 0x400, 10800, 253 },
+    { 0x0081, 0,     10800, 258 },
+    { 0x0082, 0,     10800, 258 },
+    { 0x2081, 0x400, 10800, 264 },
+    { 0x2082, 0x400, 10800, 264 },
+    { 0x0081, 0,     10800, 270 },
+    { 0x0082, 0,     10800, 270 },
+    { 0x2081, 0x400, 10800, 275 },
+    { 0x2082, 0x400, 10800, 275 },
+    { 0x0081, 0,     10800, 281 },
+    { 0x0082, 0,     10800, 281 },
+    { 0x2081, 0x400, 10800, 286 },
+    { 0x2082, 0x400, 10800, 286 },
+    { 0x0081, 0,     10800, 292 },
+    { 0x0082, 0,     10800, 292 },
+    { 0x2081, 0x400, 10800, 298 },
+    { 0x2082, 0x400, 10800, 298 },
+    { 0x0081, 0,     10800, 303 },
+    { 0x0082, 0,     10800, 303 },
+    { 0x2081, 0x400, 10800, 309 },
+    { 0x2082, 0x400, 10800, 309 },
+    { 0x0081, 0,     10800, 315 },
+    { 0x0082, 0,     10800, 315 },
+    { 0x2081, 0x400, 10800, 320 },
+    { 0x2082, 0x400, 10800, 320 },
+    { 0x0081, 0,     10800, 326 },
+    { 0x0082, 0,     10800, 326 },
+    { 0x2081, 0x400, 10800, 331 },
+    { 0x2082, 0x400, 10800, 331 },
+    { 0x0081, 0,     10800, 337 },
+    { 0x0082, 0,     10800, 337 },
+    { 0x2081, 0x400, 10800, 343 },
+    { 0x2082, 0x400, 10800, 343 },
+    { 0x0081, 0,     10800, 348 },
+    { 0x0082, 0,     10800, 348 },
+    { 0x2081, 0x400, 10800, 354 },
+    { 0x2082, 0x400, 10800, 354 }
 };
 static const SvxMSDffVertPair mso_sptSeal32Vert[] =
 {
@@ -4145,18 +4150,18 @@ static const mso_CustomShape msoRibbon2 =
 
 static const SvxMSDffVertPair mso_sptVerticalScrollVert[] = // adjustment1 : 0 - 5400
 {
-    { 1 MSO_I, 21600 }, { 0, 2 MSO_I }, { 1 MSO_I, 3 MSO_I }, { 0 MSO_I, 3 MSO_I },
+    { 1 MSO_I, 21600 }, { 0, 11 MSO_I }, { 1 MSO_I, 12 MSO_I }, { 0 MSO_I, 12 MSO_I },
     { 0 MSO_I, 1 MSO_I }, { 4 MSO_I, 0 }, { 2 MSO_I, 0 }, { 21600, 1 MSO_I },
-    { 2 MSO_I, 0 MSO_I }, { 3 MSO_I, 0 MSO_I }, { 3 MSO_I, 2 MSO_I }, { 5 MSO_I, 21600 },
+    { 2 MSO_I, 0 MSO_I }, { 3 MSO_I, 0 MSO_I }, { 3 MSO_I, 11 MSO_I }, { 5 MSO_I, 21600 },
 
     { 6 MSO_I, 1 MSO_I }, { 4 MSO_I, 0 MSO_I }, { 8 MSO_I, 9 MSO_I }, { 4 MSO_I, 1 MSO_I },
 
-    { 0 MSO_I, 2 MSO_I }, { 1 MSO_I, 21600 }, { 0, 2 MSO_I }, { 1 MSO_I, 3 MSO_I },
-    { 9 MSO_I, 10 MSO_I }, { 1 MSO_I, 2 MSO_I },
+    { 0 MSO_I, 11 MSO_I }, { 1 MSO_I, 21600 }, { 0, 11 MSO_I }, { 1 MSO_I, 12 MSO_I },
+    { 9 MSO_I, 10 MSO_I }, { 1 MSO_I, 11 MSO_I },
 
     { 4 MSO_I, 0 }, { 6 MSO_I, 1 MSO_I },
 
-    { 0 MSO_I, 3 MSO_I }, { 0 MSO_I, 2 MSO_I },
+    { 0 MSO_I, 12 MSO_I }, { 0 MSO_I, 11 MSO_I },
 
     { 4 MSO_I, 0 MSO_I },
     { 2 MSO_I, 0 MSO_I }
@@ -4174,19 +4179,22 @@ static const SvxMSDffCalculationData mso_sptScrollCalc[] =
 {
     0x2000, DFF_Prop_adjustValue, 0, 0,
     0x2001, 0x400, 1, 2,
-    0x8000, 21600, 0, 0x401,
-    0x8000, 21600, 0, 0x400,
+    0xa000, DFF_Prop_geoRight, 0, 0x401,
+    0xa000, DFF_Prop_geoRight, 0, 0x400,
     0x6000, 0x400, 0x401, 0,
-    0x8000, 21600, 0, 0x404,
+    0xa000, DFF_Prop_geoRight, 0, 0x404,
     0x2001, 0x400, 2, 1,
     0x2001, 0x401, 1, 2,
     0x6000, 0x400, 0x407, 0,
     0x6000, 0x401, 0x407, 0,
-    0x8000, 21600, 0, 0x409
+    0xa000, DFF_Prop_geoBottom, 0, 0x409,
+    0xa000, DFF_Prop_geoBottom, 0, 0x401,
+    0xa000, DFF_Prop_geoBottom, 0, 0x400,
+    0xa000, DFF_Prop_geoBottom, 0, 0x404
 };
 static const SvxMSDffTextRectangles mso_sptScrollTextRect[] =
 {
-    { { 0 MSO_I, 0 MSO_I }, { 3 MSO_I, 3 MSO_I } }
+    { { 0 MSO_I, 0 MSO_I }, { 3 MSO_I, 12 MSO_I } }
 };
 static const SvxMSDffHandle mso_sptVerticalScrollHandle[] =
 {
@@ -4208,12 +4216,12 @@ static const mso_CustomShape msoVerticalScroll =
 static const SvxMSDffVertPair mso_sptHorizontalScrollVert[] =   // adjustment1 : 0 - 5400
 {
     { 0, 4 MSO_I }, { 1 MSO_I, 0 MSO_I }, { 3 MSO_I, 0 MSO_I }, { 3 MSO_I, 1 MSO_I },
-    { 2 MSO_I, 0 }, { 21600, 1 MSO_I }, { 21600, 5 MSO_I }, { 2 MSO_I, 3 MSO_I },
-    { 0 MSO_I, 3 MSO_I }, { 0 MSO_I, 2 MSO_I }, { 1 MSO_I, 21600 }, { 0, 2 MSO_I },
+    { 2 MSO_I, 0 }, { 21600, 1 MSO_I }, { 21600, 13 MSO_I }, { 2 MSO_I, 12 MSO_I },
+    { 0 MSO_I, 12 MSO_I }, { 0 MSO_I, 11 MSO_I }, { 1 MSO_I, 21600 }, { 0, 11 MSO_I },
 
     { 1 MSO_I, 4 MSO_I }, { 9 MSO_I, 8 MSO_I }, { 0 MSO_I, 4 MSO_I }, { 1 MSO_I, 6 MSO_I },
 
-    { 2 MSO_I, 1 MSO_I }, { 10 MSO_I,9 MSO_I }, { 3 MSO_I, 1 MSO_I }, { 2 MSO_I, 0 },
+    { 2 MSO_I, 1 MSO_I }, { 3 MSO_I, 9 MSO_I }, { 3 MSO_I, 1 MSO_I }, { 2 MSO_I, 0 },
     { 21600, 1 MSO_I }, { 2 MSO_I, 0 MSO_I },
 
     { 1 MSO_I, 6 MSO_I },
@@ -4223,7 +4231,7 @@ static const SvxMSDffVertPair mso_sptHorizontalScrollVert[] =   // adjustment1 :
     { 3 MSO_I, 0 MSO_I },
 
     { 0 MSO_I, 4 MSO_I },
-    { 0 MSO_I, 2 MSO_I }
+    { 0 MSO_I, 11 MSO_I }
 };
 static const sal_uInt16 mso_sptHorizontalScrollSegm[] =
 {
