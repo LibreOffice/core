@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxlngr.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-27 11:48:18 $
+#   last change: $Author: hr $ $Date: 2003-04-28 16:47:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -93,7 +93,7 @@ CC*=gcc
 # do not use standard header search paths
 # here the Compiler is installed in the solenv hierarchy, to be changed
 # if installed elsewhere
-CFLAGS=-w -nostdinc -c $(INCLUDE) -I$(SOLARENV)/unxlngr/lib/gcc-lib/arm-linux/2.95.2/include -I$(SOLARENV)/unxlngr/usr/include
+CFLAGS=-nostdinc -c $(INCLUDE) -I$(SOLARENV)/unxlngr/lib/gcc-lib/arm-linux/2.95.2/include -I$(SOLARENV)/unxlngr/usr/include
 # flags for the C++ Compiler
 CFLAGSCC=
 
