@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_compv.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: vg $ $Date: 2003-07-02 13:43:49 $
+#   last change: $Author: vg $ $Date: 2003-12-17 18:06:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -87,6 +87,12 @@ CFLAGSVERSION_CMD= -V |& $(AWK) -f $(SOLARENV)$/bin$/getcompver.awk
 CFLAGSNUMVERSION_CMD= -V |& $(AWK) -v num=true -f $(SOLARENV)$/bin$/getcompver.awk
 .ENDIF
 
+.IF "$(COM)"=="C730"
+CFLAGSVERSION= -version
+CFLAGSVERSION_CMD= -version |& cut -d" " -f4-
+CFLAGSNUMVERSION_CMD= -version |& cut -d" " -f4-
+.ENDIF
+
 # that's the version known by the specific
 # compiler
 CCVER:=$(shell -$(CXX) $(CFLAGSVERSION_CMD))
@@ -136,6 +142,11 @@ SHORTSTDCPP3="5"
 COMID=C52
 COMNAME=sunpro5
 .ENDIF
+.ENDIF
+
+.IF "$(COM)"=="C730"
+COMID=C730
+COMNAME=MipsPro
 .ENDIF
 
 .IF "$(COMNAME)"==""
