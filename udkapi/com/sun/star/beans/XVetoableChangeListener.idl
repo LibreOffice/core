@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XVetoableChangeListener.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 12:43:44 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:26:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@ module com {  module sun {  module star {  module beans {
     <p>You can register an <type>XVetoableChangeListener</type> with
     a source object so as to be notified of any constrained property updates.</p>
  */
-interface XVetoableChangeListener: com::sun::star::lang::XEventListener
+published interface XVetoableChangeListener: com::sun::star::lang::XEventListener
 {
     //-------------------------------------------------------------------------
 
