@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appedit.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:12:08 $
+ *  last change: $Author: gh $ $Date: 2001-05-04 10:51:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,20 @@ AppEdit::~AppEdit()
     delete pVScroll;
 }
 
+void AppEdit::Command( const CommandEvent& rCEvt )
+{
+    switch( rCEvt.GetCommand() ) {
+        case COMMAND_WHEEL:
+            {
+                HandleScrollCommand( rCEvt, pHScroll, pVScroll );
+            }
+            break;
+        default:
+            AppWin::Command( rCEvt );
+    }
+}
+
+
 IMPL_LINK( AppEdit, Scroll, ScrollBar*, pScroll )
 {
     if ( !pHScroll || !pVScroll )
@@ -145,7 +159,7 @@ void AppEdit::InitScrollBars()
     Size aOutSz( pTextView->GetWindow()->GetOutputSizePixel() );
     pVScroll->SetVisibleSize( aOutSz.Height() );
     pVScroll->SetPageSize( aOutSz.Height() * 8 / 10 );
-    pVScroll->SetLineSize( GetTextHeight() );
+    pVScroll->SetLineSize( GetTextHeight() +2 );    // +2 is empirical. don't know why
     pVScroll->SetThumbPos( pTextView->GetStartDocPos().Y() );
     pVScroll->Show();
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textedit.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: gh $ $Date: 2000-10-24 11:28:10 $
+ *  last change: $Author: gh $ $Date: 2001-05-04 10:51:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -538,6 +538,7 @@ void TextEditImp::Command( const CommandEvent& rCEvt )
 {
     switch( rCEvt.GetCommand() ) {
         case COMMAND_CONTEXTMENU:
+        case COMMAND_WHEEL:
             GetParent()->Command( rCEvt );
             break;
         default:
