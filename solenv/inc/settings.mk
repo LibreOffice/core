@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.143 $
+#   $Revision: 1.144 $
 #
-#   last change: $Author: rt $ $Date: 2004-03-02 11:32:54 $
+#   last change: $Author: hr $ $Date: 2004-03-09 12:19:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -167,9 +167,15 @@ JAVARESPONSE=TRUE
 .ELSE
 #JAVAC=javac.exe
 #JAVAI=java.exe
+.IF "$(JDK)" == "gcj"
+JAVAC=gcj -C
+JAVAI=gij
+JAVACPS=--classpath
+.ELSE
 JAVAC=javac
 JAVAI=java
 JAVACPS=-classpath
+.ENDIF
 JAVARESPONSE=
 .ENDIF
 .ENDIF
@@ -1155,7 +1161,11 @@ REGCOMP*=regcomp
 CPPUMAKER*=cppumaker
 JAVAMAKER*=javamaker
 RDBMAKER*=rdbmaker
+.IF "$(JDK)"=="gcj"
+JAVA*=gij
+.ELSE
 JAVA*=java
+.ENDIF
 SCPCOMP*=scpcomp
 #SCPLINK*=scplink
 SCPLINK*=$(PERL) $(SOLARENV)$/bin/par2script.pl
