@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treenodefactory.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2001-06-11 09:33:08 $
+ *  last change: $Author: jb $ $Date: 2001-07-16 17:01:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,12 +60,19 @@
  ************************************************************************/
 
 #include <stdio.h>
-/* PLEASE DON'T DELETE ANY COMMENT LINES, ALSO IT'S UNNECESSARY. */
 
 #include "treenodefactory.hxx"
 
+#ifndef _CONFIGMGR_TREE_VALUENODE_HXX
 #include "valuenode.hxx"
+#endif
+#ifndef CONFIGMGR_SUBTREE_HXX
 #include "subtree.hxx"
+#endif
+
+#ifndef CONFIGMGR_TREE_CHANGEFACTORY_HXX
+#include "treechangefactory.hxx"
+#endif
 
 
 namespace configmgr
@@ -116,9 +123,22 @@ std::auto_ptr<ValueNode>  OTreeNodeFactory::createNullValueNode(
 
 //= ISubtree ============================================================
 
-std::auto_ptr<ISubtree> OTreeNodeFactory::createDummyTree(rtl::OUString const& aName)
+std::auto_ptr<ISubtree> OTreeNodeFactory::createDummyTree(Name const& _aName, Name const& _aElementTypeName)
 {
-    return std::auto_ptr<ISubtree>( new Subtree(aName, configuration::Attributes()) );
+    std::auto_ptr<ISubtree> pResult;
+
+    if (_aElementTypeName.isEmpty())
+    {
+        pResult.reset( new Subtree(_aName.toString(),configuration::Attributes()) );
+    }
+    else
+    {
+        pResult.reset( new Subtree(_aName.toString(),
+                                   _aElementTypeName.toString(),
+                                   getDummySetElementModule().toString(),
+                                   configuration::Attributes()) );
+    }
+    return pResult;
 }
 
 //-----------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treenodefactory.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2001-06-11 08:22:33 $
+ *  last change: $Author: jb $ $Date: 2001-07-16 17:01:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,9 +62,15 @@
 #ifndef CONFIGMGR_TREE_NODEFACTORY_HXX
 #define CONFIGMGR_TREE_NODEFACTORY_HXX
 
+#ifndef _CONFIGMGR_TREE_VALUENODE_HXX
 #include "valuenode.hxx"
+#endif
 
+#ifndef INCLUDED_MEMORY
 #include <memory>
+#define INCLUDED_MEMORY
+#endif
+
 
 namespace configmgr
 {
@@ -72,10 +78,14 @@ namespace configmgr
     namespace uno = ::com::sun::star::uno;
 
     //==========================================================================
+    namespace configuration { class Name;}
+
     //==========================================================================
 
     class OTreeNodeFactory
     {
+    public:
+        typedef configuration::Name Name;
     public:
     //= ValueNodes ============================================================
         std::auto_ptr<ValueNode> createValueNode(
@@ -111,7 +121,8 @@ namespace configmgr
 
     //= special case: Dummy ISubtree ============================================================
         static std::auto_ptr<ISubtree> createDummyTree(
-                                    rtl::OUString const& aName);
+                                    Name const& _aName,
+                                    Name const& _aElementTypeName);
 
         //-----------------------------------------------
     };
