@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: gh $ $Date: 2001-08-21 09:48:58 $
+ *  last change: $Author: gh $ $Date: 2001-10-15 08:19:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,6 +164,75 @@ void SAL_CALL osl_TestToolDebugMessageFilter( const sal_Char *pString )
         TestToolDebugMessageFilter( pString );
 }
 #endif
+
+
+TTUniqueId::TTUniqueId()
+: nUId( 0 )
+, aUIdType( UID_UNKNOWN )
+{}
+
+TTUniqueId::TTUniqueId( const String& aUId, UIdType aType )
+: nUId( 0 )
+, aUStrId( aUId )
+, aUIdType( aType )
+{
+    DBG_ASSERT( aUIdType == UID_UNO || aUIdType == UID_MOZILLA || aUIdType == UID_UNKNOWN_STRING, "StringID set with NonString type" )
+};
+
+TTUniqueId::TTUniqueId( ULONG nUId )
+: nUId( nUId )
+, aUIdType( UID_VCL )
+{};
+
+BOOL TTUniqueId::operator == ( const TTUniqueId& rRight ) const
+{
+    if ( IsStrId() && rRight.IsStrId() )
+        return aUStrId == rRight.aUStrId;
+    else if ( !IsStrId() && !rRight.IsStrId() )
+        return nUId == rRight.nUId;
+    else
+        return FALSE;
+}
+
+BOOL TTUniqueId::operator <  ( const TTUniqueId& rRight ) const
+{
+    if ( IsStrId() && rRight.IsStrId() )
+        return aUStrId < rRight.aUStrId;
+    else if ( !IsStrId() && !rRight.IsStrId() )
+        return nUId < rRight.nUId;
+    else
+        return IsStrId();    // Sort strings to the top
+}
+
+String TTUniqueId::GetString() const
+{
+    if ( IsStrId() )
+        return aUStrId;
+    else
+        return String::CreateFromInt64( nUId );
+}
+
+ULONG TTUniqueId::GetULONG() const
+{
+    DBG_ASSERT( aUIdType == UID_VCL, "GetULONG on StringID" )
+    return nUId;
+};
+
+BOOL TTUniqueId::IsStrId() const
+{
+    switch ( aUIdType )
+    {
+        case UID_UNO:
+        case UID_MOZILLA:
+        case UID_UNKNOWN_STRING:
+            return TRUE;
+        case UID_VCL:
+            return FALSE;
+        case UID_UNKNOWN:
+            DBG_ERROR( "UNKNOWN UIdType")
+            return FALSE;
+    }
+}
 
 BasicApp aBasicApp;                     // Applikations-Instanz
 
