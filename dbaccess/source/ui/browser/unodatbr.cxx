@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-06 12:56:25 $
+ *  last change: $Author: fs $ $Date: 2001-03-07 08:19:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -418,6 +418,9 @@ void SAL_CALL SbaTableQueryBrowser::disposing()
     // clear the tree model
     delete m_pTreeModel;
     m_pTreeModel = NULL;
+
+    // remove ourself as status listener
+    implRemoveStatusListeners();
 
     // remove the container listener from the database context
     Reference< XContainer > xDatasourceContainer(m_xDatabaseContext, UNO_QUERY);
@@ -992,7 +995,7 @@ void SAL_CALL SbaTableQueryBrowser::disposing( const EventObject& _rSource ) thr
 }
 
 // -------------------------------------------------------------------------
-void SbaTableQueryBrowser::attachFrame(const Reference< ::com::sun::star::frame::XFrame > & _xFrame) throw( RuntimeException )
+void SbaTableQueryBrowser::implRemoveStatusListeners()
 {
     // clear all old dispatches
     for (   ConstSpecialSlotDispatchersIterator aLoop = m_aDispatchers.begin();
@@ -1014,6 +1017,12 @@ void SbaTableQueryBrowser::attachFrame(const Reference< ::com::sun::star::frame:
     }
     m_aDispatchers.clear();
     m_aDispatchStates.clear();
+}
+
+// -------------------------------------------------------------------------
+void SbaTableQueryBrowser::attachFrame(const Reference< ::com::sun::star::frame::XFrame > & _xFrame) throw( RuntimeException )
+{
+    implRemoveStatusListeners();
 
     SbaXDataBrowserController::attachFrame(_xFrame);
 
