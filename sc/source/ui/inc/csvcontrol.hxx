@@ -2,9 +2,9 @@
  *
  *  $RCSfile: csvcontrol.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dr $ $Date: 2002-08-15 09:29:11 $
+ *  last change: $Author: dr $ $Date: 2002-08-16 13:00:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -277,7 +277,7 @@ private:
 
 public:
     inline explicit             ScCsvCmd() : meType( CSVCMD_NONE ),
-                                    mnParam1( POS_INVALID ), mnParam2( POS_INVALID ) {}
+                                    mnParam1( CSV_POS_INVALID ), mnParam2( CSV_POS_INVALID ) {}
 
     inline void                 Set( ScCsvCmdType eType, sal_Int32 nParam1, sal_Int32 nParam2 );
 
@@ -329,6 +329,8 @@ public:
     void                        AccSendFocusEvent( bool bFocused );
     /** Sends a caret changed event to the accessibility object. */
     void                        AccSendCaretEvent();
+    /** Sends a visible area changed event to the accessibility object. */
+    void                        AccSendVisibleEvent();
     /** Sends a selection changed event to the accessibility object. */
     void                        AccSendSelectionEvent();
     /** Sends a table model changed event for changed cell contents to the accessibility object. */
@@ -370,8 +372,8 @@ public:
     /** Executes a command by calling command handler. */
     void                        Execute(
                                     ScCsvCmdType eType,
-                                    sal_Int32 nParam1 = POS_INVALID,
-                                    sal_Int32 nParam2 = POS_INVALID );
+                                    sal_Int32 nParam1 = CSV_POS_INVALID,
+                                    sal_Int32 nParam2 = CSV_POS_INVALID );
 
     // layout helpers ---------------------------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleText.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-09 13:00:48 $
+ *  last change: $Author: dr $ $Date: 2002-08-16 12:57:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,9 @@
 #include <svx/svdmodel.hxx>
 #endif
 
+
+// ============================================================================
+
 class ScViewForwarder : public SvxViewForwarder
 {
     ScTabViewShell*     mpViewShell;
@@ -204,6 +207,9 @@ Point ScViewForwarder::PixelToLogic( const Point& rPoint, const MapMode& rMapMod
     return Point();
 }
 
+
+// ============================================================================
+
 class ScEditObjectViewForwarder : public SvxViewForwarder
 {
     Window*             mpWindow;
@@ -265,6 +271,9 @@ Point ScEditObjectViewForwarder::PixelToLogic( const Point& rPoint, const MapMod
         DBG_ERROR("this ViewForwarder is not valid");
     return Point();
 }
+
+
+// ============================================================================
 
 class ScPreviewViewForwarder : public SvxViewForwarder
 {
@@ -369,6 +378,9 @@ void ScPreviewViewForwarder::FillTableInfo() const
         mpViewShell->GetLocationData().GetTableInfo( aVisRect, *mpTableInfo );
     }
 }
+
+
+// ============================================================================
 
 class ScEditViewForwarder : public SvxEditViewForwarder
 {
@@ -512,6 +524,9 @@ sal_Bool ScEditViewForwarder::Paste()
 void ScEditViewForwarder::GrabFocus()
 {
 }
+
+
+// ============================================================================
 
 //  ScAccessibleCellTextData: shared data between sub objects of a accessible cell text object
 
@@ -662,6 +677,9 @@ ScDocShell* ScAccessibleCellTextData::GetDocShell(ScTabViewShell* pViewShell)
     return pDocSh;
 }
 
+
+// ============================================================================
+
 ScAccessibleEditObjectTextData::ScAccessibleEditObjectTextData(EditView* pEditView, Window* pWin)
     :
     mpViewForwarder(NULL),
@@ -758,6 +776,9 @@ IMPL_LINK(ScAccessibleEditObjectTextData, NotifyHdl, EENotify*, aNotify)
 
     return 0;
 }
+
+
+// ============================================================================
 
 ScAccessibleEditLineTextData::ScAccessibleEditLineTextData(EditView* pEditView, Window* pWin)
     :
@@ -906,6 +927,9 @@ void ScAccessibleEditLineTextData::EndEdit()
     mpEditView = NULL;
 }
 
+
+// ============================================================================
+
 //  ScAccessiblePreviewCellTextData: shared data between sub objects of a accessible cell text object
 
 ScAccessiblePreviewCellTextData::ScAccessiblePreviewCellTextData(ScPreviewShell* pViewShell,
@@ -990,6 +1014,9 @@ ScDocShell* ScAccessiblePreviewCellTextData::GetDocShell(ScPreviewShell* pViewSh
         pDocSh = (ScDocShell*) pViewShell->GetDocument()->GetDocumentShell();
     return pDocSh;
 }
+
+
+// ============================================================================
 
 //  ScAccessiblePreviewHeaderCellTextData: shared data between sub objects of a accessible cell text object
 
@@ -1116,6 +1143,9 @@ ScDocShell* ScAccessiblePreviewHeaderCellTextData::GetDocShell(ScPreviewShell* p
     return pDocSh;
 }
 
+
+// ============================================================================
+
 ScAccessibleHeaderTextData::ScAccessibleHeaderTextData(ScPreviewShell* pViewShell,
                             const EditTextObject* pEditObj, sal_Bool bHeader, SvxAdjust eAdjust)
     :
@@ -1227,6 +1257,9 @@ SvxViewForwarder* ScAccessibleHeaderTextData::GetViewForwarder()
         mpViewForwarder = new ScPreviewViewForwarder(mpViewShell);
     return mpViewForwarder;
 }
+
+
+// ============================================================================
 
 ScAccessibleNoteTextData::ScAccessibleNoteTextData(ScPreviewShell* pViewShell,
                             const String& sText, const ScAddress& aCellPos, sal_Bool bMarkNote)
@@ -1341,3 +1374,117 @@ SvxViewForwarder* ScAccessibleNoteTextData::GetViewForwarder()
         mpViewForwarder = new ScPreviewViewForwarder(mpViewShell);
     return mpViewForwarder;
 }
+
+
+// CSV import =================================================================
+
+class ScCsvViewForwarder : public SvxViewForwarder
+{
+    Rectangle                   maBoundBox;
+    Window*                     mpWindow;
+
+public:
+    explicit                    ScCsvViewForwarder( Window* pWindow, const Rectangle& rBoundBox );
+
+    virtual BOOL                IsValid() const;
+    virtual Rectangle           GetVisArea() const;
+    virtual Point               LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const;
+    virtual Point               PixelToLogic( const Point& rPoint, const MapMode& rMapMode ) const;
+};
+
+ScCsvViewForwarder::ScCsvViewForwarder( Window* pWindow, const Rectangle& rBoundBox ) :
+    maBoundBox( rBoundBox ),
+    mpWindow( pWindow )
+{
+}
+
+BOOL ScCsvViewForwarder::IsValid() const
+{
+    return mpWindow != NULL;
+}
+
+Rectangle ScCsvViewForwarder::GetVisArea() const
+{
+    return maBoundBox;
+}
+
+Point ScCsvViewForwarder::LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const
+{
+    if( !mpWindow ) return Point();
+    return mpWindow->LogicToPixel( rPoint, rMapMode );
+}
+
+Point ScCsvViewForwarder::PixelToLogic( const Point& rPoint, const MapMode& rMapMode ) const
+{
+    if( !mpWindow ) return Point();
+    return mpWindow->PixelToLogic( rPoint, rMapMode );
+}
+
+
+// ----------------------------------------------------------------------------
+
+ScAccessibleCsvTextData::ScAccessibleCsvTextData(
+        Window* pWindow, EditEngine* pEditEngine,
+        const String& rCellText, const Rectangle& rBoundBox, const Size& rCellSize ) :
+    mpWindow( pWindow ),
+    mpEditEngine( pEditEngine ),
+    maCellText( rCellText ),
+    maBoundBox( rBoundBox ),
+    maCellSize( rCellSize )
+{
+}
+
+ScAccessibleCsvTextData::~ScAccessibleCsvTextData()
+{
+}
+
+void ScAccessibleCsvTextData::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+{
+    if ( rHint.ISA( SfxSimpleHint ) )
+    {
+        ULONG nId = ((const SfxSimpleHint&)rHint).GetId();
+        if( nId == SFX_HINT_DYING )
+        {
+            mpWindow = NULL;
+            mpEditEngine = NULL;
+            mpTextForwarder.reset( NULL );
+            mpViewForwarder.reset( NULL );
+        }
+    }
+    ScAccessibleTextData::Notify( rBC, rHint );
+}
+
+ScAccessibleTextData* ScAccessibleCsvTextData::Clone() const
+{
+    return new ScAccessibleCsvTextData( mpWindow, mpEditEngine, maCellText, maBoundBox, maCellSize );
+}
+
+SvxTextForwarder* ScAccessibleCsvTextData::GetTextForwarder()
+{
+    if( mpEditEngine )
+    {
+        mpEditEngine->SetPaperSize( maCellSize );
+        mpEditEngine->SetText( maCellText );
+        if( !mpTextForwarder.get() )
+            mpTextForwarder.reset( new SvxEditEngineForwarder( *mpEditEngine ) );
+    }
+    else
+        mpTextForwarder.reset( NULL );
+    return mpTextForwarder.get();
+}
+
+SvxViewForwarder* ScAccessibleCsvTextData::GetViewForwarder()
+{
+    if( !mpViewForwarder.get() )
+        mpViewForwarder.reset( new ScCsvViewForwarder( mpWindow, maBoundBox ) );
+    return mpViewForwarder.get();
+}
+
+SvxEditViewForwarder* ScAccessibleCsvTextData::GetEditViewForwarder( sal_Bool bCreate )
+{
+    return NULL;
+}
+
+
+// ============================================================================
+

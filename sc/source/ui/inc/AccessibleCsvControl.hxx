@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleCsvControl.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dr $ $Date: 2002-08-15 09:29:08 $
+ *  last change: $Author: dr $ $Date: 2002-08-16 13:00:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,9 @@
 #ifndef _SV_GEN_HXX
 #include <vcl/gen.hxx>
 #endif
+#ifndef _STRING_HXX
+#include <tools/string.hxx>
+#endif
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
 #endif
@@ -85,6 +88,9 @@
 #endif
 #ifndef _CPPUHELPER_IMPLBASE2_HXX_
 #include <cppuhelper/implbase2.hxx>
+#endif
+#ifndef _SVX_ACCESSILE_STATIC_TEXT_BASE_HXX_
+#include <svx/AccessibleStaticTextBase.hxx>
 #endif
 
 #ifndef _SC_ACCESSIBLECONTEXTBASE_HXX
@@ -141,6 +147,8 @@ public:
     virtual void SendFocusEvent( bool bFocused );
     /** Sends a caret changed event to all listeners. */
     virtual void SendCaretEvent();
+    /** Sends a visible area changed event to all listeners. */
+    virtual void SendVisibleEvent();
     /** Sends a selection changed event to all listeners. */
     virtual void SendSelectionEvent();
     /** Sends a table model changed event for changed cell contents to all listeners. */
@@ -318,7 +326,7 @@ public:
     virtual void SendCaretEvent();
 
     // helpers ----------------------------------------------------------------
-protected:
+private:
     /** Returns this object's name. */
     virtual ::rtl::OUString SAL_CALL createAccessibleName()
         throw( ::com::sun::star::uno::RuntimeException );
@@ -545,7 +553,7 @@ public:
     virtual void SendRemoveColumnEvent( sal_uInt32 nFirstColumn, sal_uInt32 nLastColumn );
 
     // helpers ----------------------------------------------------------------
-protected:
+private:
     /** Returns this object's name. */
     virtual ::rtl::OUString SAL_CALL createAccessibleName()
         throw( ::com::sun::star::uno::RuntimeException );
@@ -587,7 +595,7 @@ protected:
     inline sal_Int32 implGetIndex( sal_Int32 nRow, sal_Int32 nColumn ) const { return nRow * implGetColumnCount() + nColumn; }
 
     /** Returns the contents of the specified cell (including header). Indexes must be valid. */
-    ::rtl::OUString implGetCellText( sal_Int32 nRow, sal_Int32 nColumn ) const;
+    String implGetCellText( sal_Int32 nRow, sal_Int32 nColumn ) const;
     /** Creates a new accessible object of the specified cell. Indexes must be valid. */
     ScAccessibleCsvControl* implCreateCellObj( sal_Int32 nRow, sal_Int32 nColumn ) const;
 };
@@ -595,19 +603,16 @@ protected:
 
 // ============================================================================
 
-typedef ::cppu::ImplHelper1<
-        ::drafts::com::sun::star::accessibility::XAccessibleText >
-    ScAccessibleCsvCellImpl;
-
 /** Accessible class representing a cell of the CSV grid control. */
-class ScAccessibleCsvCell : public ScAccessibleCsvControl, public ScAccessibleCsvCellImpl
+class ScAccessibleCsvCell : public ScAccessibleCsvControl, public accessibility::AccessibleStaticTextBase
 {
 protected:
     typedef ::com::sun::star::uno::Sequence<
-        ::com::sun::star::beans::PropertyValue > PropertyValueSeq;
+        ::com::sun::star::beans::PropertyValue >    PropertyValueSeq;
+    typedef ::std::auto_ptr< SvxEditSource >        SvxEditSourcePtr;
 
 private:
-    ::rtl::OUString             maCellText; /// The text contents of this cell.
+    String                      maCellText; /// The text contents of this cell.
     sal_Int32                   mnLine;     /// The grid line index (core index).
     sal_uInt32                  mnColumn;   /// The grid column index (core index).
     sal_Int32                   mnIndex;    /// The index of the cell in the table.
@@ -615,9 +620,10 @@ private:
 public:
     explicit                    ScAccessibleCsvCell(
                                     ScCsvGrid& rGrid,
-                                    const ::rtl::OUString& rCellText,
+                                    const String& rCellText,
                                     sal_Int32 nRow, sal_Int32 nColumn );
     virtual                     ~ScAccessibleCsvCell();
+    virtual void SAL_CALL       disposing();
 
     // XAccessibleComponent ---------------------------------------------------
 
@@ -625,14 +631,6 @@ public:
     virtual void SAL_CALL grabFocus() throw( ::com::sun::star::uno::RuntimeException );
 
     // XAccessibleContext -----------------------------------------------------
-
-    /** Returns the child count (count of cells in the table). */
-    virtual sal_Int32 SAL_CALL getAccessibleChildCount()
-        throw( ::com::sun::star::uno::RuntimeException );
-
-    /** Returns the specified child cell. */
-    virtual XAccessibleRef SAL_CALL getAccessibleChild( sal_Int32 nIndex )
-        throw( ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException );
 
     /** Returns the index of this cell in the table. */
     virtual sal_Int32 SAL_CALL getAccessibleIndexInParent()
@@ -645,68 +643,6 @@ public:
     /** Returns the current set of states. */
     virtual XAccessibleStateSetRef SAL_CALL getAccessibleStateSet()
         throw( ::com::sun::star::uno::RuntimeException );
-
-    // XAccessibleText --------------------------------------------------------
-
-    /** Return the position of the caret (not supported). */
-    virtual sal_Int32 SAL_CALL getCaretPosition() throw( ::com::sun::star::uno::RuntimeException );
-
-    /** Sets the position of the caret (not supported). */
-    virtual sal_Bool SAL_CALL setCaretPosition( sal_Int32 nIndex )
-        throw( ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException );
-
-    /** Returns the specified character. */
-    virtual sal_Unicode SAL_CALL getCharacter( sal_Int32 nIndex )
-        throw( ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException );
-
-    /** Returns the attributes of the specified character. */
-    virtual PropertyValueSeq SAL_CALL getCharacterAttributes( sal_Int32 nIndex )
-        throw( ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException );
-
-    /** Returns the screen coordinates of the specified character. */
-    virtual AwtRectangle SAL_CALL getCharacterBounds( sal_Int32 nIndex )
-        throw( ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException );
-
-    /** Returns the count of characters. */
-    virtual sal_Int32 SAL_CALL getCharacterCount() throw( ::com::sun::star::uno::RuntimeException );
-
-    /** Returns the character index at the specified screen coordinate. */
-    virtual sal_Int32 SAL_CALL getIndexAtPoint( const AwtPoint& rPoint )
-        throw( ::com::sun::star::uno::RuntimeException );
-
-    /** Returns the selected text (not supported). */
-    virtual ::rtl::OUString SAL_CALL getSelectedText() throw( ::com::sun::star::uno::RuntimeException );
-
-    /** Returns the start index of the selection (not supported). */
-    virtual sal_Int32 SAL_CALL getSelectionStart() throw( ::com::sun::star::uno::RuntimeException );
-
-    /** Returns the end index of the selection (not supported). */
-    virtual sal_Int32 SAL_CALL getSelectionEnd() throw( ::com::sun::star::uno::RuntimeException );
-
-    /** Selects a part of the text (not supported). */
-    virtual sal_Bool SAL_CALL setSelection( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
-        throw( ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException );
-
-    /** Returns the entire text. */
-    virtual ::rtl::OUString SAL_CALL getText() throw( ::com::sun::star::uno::RuntimeException );
-
-    /** Returns the specified range [Start,End) of the text. */
-    virtual ::rtl::OUString SAL_CALL getTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
-        throw( ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException );
-
-    /** Returns the specified text portion. */
-    virtual ::rtl::OUString SAL_CALL getTextAtIndex( sal_Int32 nIndex, sal_Int16 nTextType )
-        throw( ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException );
-
-    virtual ::rtl::OUString SAL_CALL getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 nTextType )
-        throw( ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException );
-
-    virtual ::rtl::OUString SAL_CALL getTextBehindIndex( sal_Int32 nIndex, sal_Int16 nTextType )
-        throw( ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException );
-
-    /** Copies the specified text range into the clipboard (not supported). */
-    virtual sal_Bool SAL_CALL copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
-        throw( ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException );
 
     // XInterface -------------------------------------------------------------
 
@@ -740,9 +676,7 @@ protected:
     /** Returns this object's current bounding box relative to the parent object. */
     virtual Rectangle GetBoundingBox() const throw( ::com::sun::star::uno::RuntimeException );
 
-    /** Returns the bounding box of the cell. */
-    Rectangle implGetBoundingBox() const;
-
+private:
     /** Returns this object's name. */
     virtual ::rtl::OUString SAL_CALL createAccessibleName()
         throw( ::com::sun::star::uno::RuntimeException );
@@ -750,16 +684,17 @@ protected:
     virtual ::rtl::OUString SAL_CALL createAccessibleDescription()
         throw( ::com::sun::star::uno::RuntimeException );
 
-    /** Throws an exception, if the specified character position is invalid. */
-    void ensureValidIndex( sal_Int32 nIndex ) const
-        throw( ::com::sun::star::lang::IndexOutOfBoundsException );
-    /** Throws an exception, if the specified character range [Start,End) is invalid.
-        @descr  If Start>End, swaps Start and End before checking. */
-    void ensureValidRange( sal_Int32& rnStartIndex, sal_Int32& rnEndIndex ) const
-        throw( ::com::sun::star::lang::IndexOutOfBoundsException );
-
     /** Returns the VCL grid control. Assumes a living object. */
     ScCsvGrid& implGetGrid() const;
+    /** Returns the pixel position of the cell (rel. to parent), regardless of visibility. */
+    Point implGetRealPos() const;
+    /** Returns the pixel size of the cell, regardless of visibility. */
+    Size implGetRealSize() const;
+    /** Returns the bounding box of the cell relative in the table. */
+    Rectangle implGetBoundingBox() const;
+
+    /** Creates the edit source the text helper needs. */
+    ::std::auto_ptr< SvxEditSource > implCreateEditSource();
 };
 
 

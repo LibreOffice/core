@@ -2,9 +2,9 @@
  *
  *  $RCSfile: csvtablebox.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dr $ $Date: 2002-08-15 09:28:09 $
+ *  last change: $Author: dr $ $Date: 2002-08-16 12:59:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -436,10 +436,10 @@ IMPL_LINK( ScCsvTableBox, CsvCmdHdl, ScCsvControl*, pCtrl )
             ImplSetLineOffset( GetFirstVisLine() );
         break;
         case CSVCMD_MOVERULERCURSOR:
-            maData.mnPosCursor = IsVisibleSplitPos( nParam1 ) ? nParam1 : POS_INVALID;
+            maData.mnPosCursor = IsVisibleSplitPos( nParam1 ) ? nParam1 : CSV_POS_INVALID;
         break;
         case CSVCMD_MOVEGRIDCURSOR:
-            maData.mnColCursor = ((0 <= nParam1) && (nParam1 < GetPosCount())) ? nParam1 : POS_INVALID;
+            maData.mnColCursor = ((0 <= nParam1) && (nParam1 < GetPosCount())) ? nParam1 : CSV_POS_INVALID;
         break;
     }
 
@@ -472,9 +472,9 @@ IMPL_LINK( ScCsvTableBox, ScrollEndHdl, ScrollBar*, pScrollBar )
 
     if( pScrollBar == &maHScroll )
     {
-        if( GetRulerCursorPos() != POS_INVALID )
+        if( GetRulerCursorPos() != CSV_POS_INVALID )
             Execute( CSVCMD_MOVERULERCURSOR, maRuler.GetNoScrollPos( GetRulerCursorPos() ) );
-        if( GetGridCursorPos() != POS_INVALID )
+        if( GetGridCursorPos() != CSV_POS_INVALID )
             Execute( CSVCMD_MOVEGRIDCURSOR, maGrid.GetNoScrollCol( GetGridCursorPos() ) );
     }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: csvgrid.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dr $ $Date: 2002-08-15 09:29:11 $
+ *  last change: $Author: dr $ $Date: 2002-08-16 13:00:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,7 @@
 // ----------------------------------------------------------------------------
 
 namespace svx { class ColorConfig; }
+class EditEngine;
 class ScEditEngineDefaulter;
 class ScAsciiOptions;
 class ScAccessibleCsvControl;
@@ -97,6 +98,8 @@ class ScAccessibleCsvControl;
 
 const sal_uInt8 CSV_COLFLAG_NONE    = 0x00;         /// Nothing set.
 const sal_uInt8 CSV_COLFLAG_SELECT  = 0x01;         /// Column is selected.
+
+const sal_uInt32 CSV_COLUMN_INVALID = CSV_VEC_NOTFOUND;
 
 
 // ----------------------------------------------------------------------------
@@ -282,7 +285,7 @@ public:
     /** Returns index of the first selected column really after nFromIndex. */
     sal_uInt32                  GetNextSelected( sal_uInt32 nFromIndex ) const;
     /** Returns true, if at least one column is selected. */
-    inline bool                 HasSelection() const { return GetFirstSelected() != VEC_NOTFOUND; }
+    inline bool                 HasSelection() const { return GetFirstSelected() != CSV_COLUMN_INVALID; }
 
     /** Selects or deselects the specified column. */
     void                        Select( sal_uInt32 nColIndex, bool bSelect = true );
@@ -341,6 +344,8 @@ protected:
 public:
     /** Redraws the entire data grid. */
     void                        ImplRedraw();
+    /** Returns a pointer to the used edit engine. */
+    EditEngine*                 GetEditEngine();
 
 private:
     /** Returns the width of the control. */

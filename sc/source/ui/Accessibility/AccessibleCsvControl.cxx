@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleCsvControl.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dr $ $Date: 2002-08-15 09:27:02 $
+ *  last change: $Author: dr $ $Date: 2002-08-16 12:57:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,19 @@
 #include <comphelper/sequence.hxx>
 #endif
 
+#ifndef SC_ITEMS_HXX
+#include "scitems.hxx"
+#endif
+#ifndef _SVX_FONTITEM_HXX
+#include <svx/fontitem.hxx>
+#endif
+#ifndef _SVX_FHGTITEM_HXX
+#include <svx/fhgtitem.hxx>
+#endif
+#ifndef _SVX_LANGITEM_HXX
+#include <svx/langitem.hxx>
+#endif
+
 #ifndef _SC_CSVCONTROL_HXX
 #include "csvcontrol.hxx"
 #endif
@@ -114,6 +127,12 @@
 #endif
 #ifndef _SC_CSVGRID_HXX
 #include "csvgrid.hxx"
+#endif
+#ifndef _SC_ACCESSIBLETEXT_HXX
+#include "AccessibleText.hxx"
+#endif
+#ifndef SC_EDITSRC_HXX
+#include "editsrc.hxx"
 #endif
 
 #ifndef SC_UNOGUARD_HXX
@@ -129,6 +148,7 @@ using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
 using ::utl::AccessibleRelationSetHelper;
 using ::utl::AccessibleStateSetHelper;
+using ::accessibility::AccessibleStaticTextBase;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
@@ -142,32 +162,22 @@ using namespace ::drafts::com::sun::star::accessibility;
 
 // ----------------------------------------------------------------------------
 
-const sal_uInt16 nRulerRole     = AccessibleRole::TEXT;
-const sal_uInt16 nGridRole      = AccessibleRole::TABLE;
-const sal_uInt16 nCellRole      = AccessibleRole::TEXT;
+const sal_uInt16 nRulerRole         = AccessibleRole::TEXT;
+const sal_uInt16 nGridRole          = AccessibleRole::TABLE;
+const sal_uInt16 nCellRole          = AccessibleRole::TEXT;
 
-const sal_Unicode cRulerDot     = '.';
-const sal_Unicode cRulerLine    = '|';
+#define CREATE_OUSTRING( name )     OUString( RTL_CONSTASCII_USTRINGPARAM( name ) )
 
+#define RULER_IMPL_NAME             "ScAccessibleCsvRuler"
+#define GRID_IMPL_NAME              "ScAccessibleCsvGrid"
+#define CELL_IMPL_NAME              "ScAccessibleCsvCell"
 
-// forwarders =================================================================
-#if 0
-/** Used for cell text handling. */
-class ScCsvCellViewForwarder : public SvxViewForwarder
-{
-private:
-    ScCsvGrid*                  mpGrid;
+const sal_Unicode cRulerDot         = '.';
+const sal_Unicode cRulerLine        = '|';
 
-public:
-                                ScCsvViewForwarder( ScCsvGrid* pGrid );
-    virtual                     ~ScCsvViewForwarder();
+const sal_Int32 CSV_LINE_HEADER     = CSV_POS_INVALID;
+const sal_uInt32 CSV_COLUMN_HEADER  = CSV_COLUMN_INVALID;
 
-    virtual BOOL                IsValid() const;
-    virtual Rectangle           GetVisArea() const;
-    virtual Point               LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const;
-    virtual Point               PixelToLogic( const Point& rPoint, const MapMode& rMapMode ) const;
-};
-#endif
 
 // CSV base control ===========================================================
 
@@ -233,6 +243,14 @@ void ScAccessibleCsvControl::SendFocusEvent( bool bFocused )
 void ScAccessibleCsvControl::SendCaretEvent()
 {
     DBG_ERRORFILE( "ScAccessibleCsvControl::SendCaretEvent - Illegal call" );
+}
+
+void ScAccessibleCsvControl::SendVisibleEvent()
+{
+    AccessibleEventObject aEvent;
+    aEvent.EventId = AccessibleEventId::ACCESSIBLE_VISIBLE_DATA_EVENT;
+    aEvent.Source = Reference< XAccessible >( this );
+    CommitChange( aEvent );
 }
 
 void ScAccessibleCsvControl::SendSelectionEvent()
@@ -401,6 +419,39 @@ sal_Int32 lcl_GetRulerPos( sal_Int32 nApiPos )
     return nRulerPos + nRelPos / nDiv * 10 + ::std::max( nRelPos % nDiv - nDiv + 10L, 0L );
 }
 
+/** Expands the sequence's size and returns the base index of the new inserted elements. */
+inline sal_Int32 lcl_ExpandSequence( Sequence< PropertyValue >& rSeq, sal_Int32 nExp )
+{
+    DBG_ASSERT( nExp > 0, "lcl_ExpandSequence - invalid value" );
+    rSeq.realloc( rSeq.getLength() + nExp );
+    return rSeq.getLength() - nExp;
+}
+
+/** Fills the property value rVal with the specified name and value from the item. */
+inline void lcl_FillProperty( PropertyValue& rVal, const OUString& rPropName, const SfxPoolItem& rItem, sal_uInt8 nMID )
+{
+    rVal.Name = rPropName;
+    rItem.QueryValue( rVal.Value, nMID );
+}
+
+/** Fills the sequence with all font attributes of rFont. */
+void lcl_FillFontAttributes( Sequence< PropertyValue >& rSeq, const Font& rFont )
+{
+    SvxFontItem aFontItem( rFont.GetFamily(), rFont.GetName(), rFont.GetStyleName(), rFont.GetPitch(), rFont.GetCharSet() );
+    SvxFontHeightItem aHeightItem( rFont.GetSize().Height() );
+    SvxLanguageItem aLangItem( rFont.GetLanguage() );
+
+    sal_Int32 nIndex = lcl_ExpandSequence( rSeq, 7 );
+    lcl_FillProperty( rSeq[ nIndex++ ], CREATE_OUSTRING( "CharFontName" ),      aFontItem,   MID_FONT_FAMILY_NAME );
+    lcl_FillProperty( rSeq[ nIndex++ ], CREATE_OUSTRING( "CharFontFamily" ),    aFontItem,   MID_FONT_FAMILY );
+    lcl_FillProperty( rSeq[ nIndex++ ], CREATE_OUSTRING( "CharFontStyleName" ), aFontItem,   MID_FONT_STYLE_NAME );
+    lcl_FillProperty( rSeq[ nIndex++ ], CREATE_OUSTRING( "CharFontCharSet" ),   aFontItem,   MID_FONT_PITCH );
+    lcl_FillProperty( rSeq[ nIndex++ ], CREATE_OUSTRING( "CharFontPitch" ),     aFontItem,   MID_FONT_CHAR_SET );
+    lcl_FillProperty( rSeq[ nIndex++ ], CREATE_OUSTRING( "CharHeight" ),        aHeightItem, MID_FONTHEIGHT );
+    lcl_FillProperty( rSeq[ nIndex++ ], CREATE_OUSTRING( "CharLocale" ),        aLangItem,   MID_LANG_LOCALE );
+}
+
+
 
 // ----------------------------------------------------------------------------
 
@@ -501,14 +552,14 @@ Sequence< PropertyValue > SAL_CALL ScAccessibleCsvRuler::getCharacterAttributes(
     ScUnoGuard aGuard;
     ensureAlive();
     ensureValidIndex( nIndex );
-    Sequence< PropertyValue > aSeq; //! TODO
+    Sequence< PropertyValue > aSeq;
+    lcl_FillFontAttributes( aSeq, implGetRuler().GetFont() );
 //! TODO split attribute: waiting for #102221#
 //    if( implHasSplit( nIndex ) )
 //    {
-//        sal_Int32 nLen = aSeq.getLength();
-//        aSeq.realloc( nLen + 1 );
-//        aSeq[ nLen ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "..." ) );
-//        aSeq[ nLen ].Value <<= ...;
+//        sal_Int32 nIndex = lcl_ExpandSequence( aSeq, 1 );
+//        aSeq[ nIndex ].Name = CREATE_OUSTRING( "..." );
+//        aSeq[ nIndex ].Value <<= ...;
 //    }
     return aSeq;
 }
@@ -763,7 +814,7 @@ void SAL_CALL ScAccessibleCsvRuler::release() throw ()
 
 OUString SAL_CALL ScAccessibleCsvRuler::getImplementationName() throw( RuntimeException )
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "ScAccessibleCsvRuler" ) );
+    return CREATE_OUSTRING( RULER_IMPL_NAME );
 }
 
 
@@ -789,7 +840,7 @@ Sequence< sal_Int8 > SAL_CALL ScAccessibleCsvRuler::getImplementationId() throw(
 void ScAccessibleCsvRuler::SendCaretEvent()
 {
     sal_Int32 nPos = implGetRuler().GetRulerCursorPos();
-    if( nPos != POS_INVALID )
+    if( nPos != CSV_POS_INVALID )
     {
         AccessibleEventObject aEvent;
         aEvent.EventId = AccessibleEventId::ACCESSIBLE_CARET_EVENT;
@@ -885,13 +936,13 @@ sal_Int32 ScAccessibleCsvRuler::implGetLastEqualFormatted( sal_Int32 nApiPos )
 /** Converts a grid columnm index to an API column index. */
 inline sal_Int32 lcl_GetApiColumn( sal_uInt32 nGridColumn )
 {
-    return (nGridColumn != VEC_NOTFOUND) ? static_cast< sal_Int32 >( nGridColumn + 1 ) : 0;
+    return (nGridColumn != CSV_COLUMN_HEADER) ? static_cast< sal_Int32 >( nGridColumn + 1 ) : 0;
 }
 
 /** Converts an API columnm index to a ScCsvGrid column index. */
 inline sal_uInt32 lcl_GetGridColumn( sal_Int32 nApiColumn )
 {
-    return (nApiColumn > 0) ? static_cast< sal_uInt32 >( nApiColumn - 1 ) : VEC_NOTFOUND;
+    return (nApiColumn > 0) ? static_cast< sal_uInt32 >( nApiColumn - 1 ) : CSV_COLUMN_HEADER;
 }
 
 
@@ -917,13 +968,18 @@ ScAccessibleCsvGrid::~ScAccessibleCsvGrid()
 Reference< XAccessible > SAL_CALL ScAccessibleCsvGrid::getAccessibleAt( const AwtPoint& rPoint )
         throw( RuntimeException )
 {
-    ScUnoGuard aGuard;
-    ensureAlive();
+    Reference< XAccessible > xRet;
+    if( contains( rPoint ) )
+    {
+        ScUnoGuard aGuard;
+        ensureAlive();
 
-    const ScCsvGrid& rGrid = implGetGrid();
-    sal_Int32 nColumn = (rPoint.X > rGrid.GetOffsetX()) ? lcl_GetApiColumn( rGrid.GetColumnFromX( rPoint.X ) ) : 0;
-    sal_Int32 nRow = (rPoint.Y > rGrid.GetOffsetY()) ? (rGrid.GetLineFromY( rPoint.Y ) - rGrid.GetFirstVisLine() + 1) : 0;
-    return implCreateCellObj( nRow, nColumn );
+        const ScCsvGrid& rGrid = implGetGrid();
+        sal_Int32 nColumn = (rPoint.X > rGrid.GetOffsetX()) ? lcl_GetApiColumn( rGrid.GetColumnFromX( rPoint.X ) ) : 0;
+        sal_Int32 nRow = (rPoint.Y > rGrid.GetOffsetY()) ? (rGrid.GetLineFromY( rPoint.Y ) - rGrid.GetFirstVisLine() + 1) : 0;
+        xRet = implCreateCellObj( nRow, nColumn );
+    }
+    return xRet;
 }
 
 
@@ -1058,7 +1114,7 @@ Sequence< sal_Int32 > SAL_CALL ScAccessibleCsvGrid::getSelectedAccessibleColumns
 
     sal_Int32 nSeqIx = 0;
     sal_uInt32 nColIx = rGrid.GetFirstSelected();
-    for( ; nColIx != VEC_NOTFOUND; ++nSeqIx, nColIx = rGrid.GetNextSelected( nColIx ) )
+    for( ; nColIx != CSV_COLUMN_INVALID; ++nSeqIx, nColIx = rGrid.GetNextSelected( nColIx ) )
         aSeq[ nSeqIx ] = lcl_GetApiColumn( nColIx );
 
     aSeq.realloc( nSeqIx );
@@ -1236,7 +1292,7 @@ void SAL_CALL ScAccessibleCsvGrid::release() throw ()
 
 OUString SAL_CALL ScAccessibleCsvGrid::getImplementationName() throw( RuntimeException )
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "ScAccessibleCsvGrid" ) );
+    return CREATE_OUSTRING( GRID_IMPL_NAME );
 }
 
 
@@ -1374,7 +1430,7 @@ sal_Int32 ScAccessibleCsvGrid::implGetSelColumnCount() const
 {
     ScCsvGrid& rGrid = implGetGrid();
     sal_Int32 nCount = 0;
-    for( sal_uInt32 nColIx = rGrid.GetFirstSelected(); nColIx != VEC_NOTFOUND; nColIx = rGrid.GetNextSelected( nColIx ) )
+    for( sal_uInt32 nColIx = rGrid.GetFirstSelected(); nColIx != CSV_COLUMN_INVALID; nColIx = rGrid.GetNextSelected( nColIx ) )
         ++nCount;
     return nCount;
 }
@@ -1383,7 +1439,7 @@ sal_Int32 ScAccessibleCsvGrid::implGetSelColumn( sal_Int32 nSelColumn ) const
 {
     ScCsvGrid& rGrid = implGetGrid();
     sal_Int32 nColumn = 0;
-    for( sal_uInt32 nColIx = rGrid.GetFirstSelected(); nColIx != VEC_NOTFOUND; nColIx = rGrid.GetNextSelected( nColIx ) )
+    for( sal_uInt32 nColIx = rGrid.GetFirstSelected(); nColIx != CSV_COLUMN_INVALID; nColIx = rGrid.GetNextSelected( nColIx ) )
     {
         if( nColumn == nSelColumn )
             return static_cast< sal_Int32 >( nColIx + 1 );
@@ -1392,15 +1448,15 @@ sal_Int32 ScAccessibleCsvGrid::implGetSelColumn( sal_Int32 nSelColumn ) const
     return 0;
 }
 
-OUString ScAccessibleCsvGrid::implGetCellText( sal_Int32 nRow, sal_Int32 nColumn ) const
+String ScAccessibleCsvGrid::implGetCellText( sal_Int32 nRow, sal_Int32 nColumn ) const
 {
     ScCsvGrid& rGrid = implGetGrid();
     sal_Int32 nLine = nRow + rGrid.GetFirstVisLine() - 1;
-    OUString aCellStr;
+    String aCellStr;
     if( (nColumn > 0) && (nRow > 0) )
         aCellStr = rGrid.GetCellText( lcl_GetGridColumn( nColumn ), nLine );
     else if( nRow > 0 )
-        aCellStr = OUString::valueOf( nLine + 1L );
+        aCellStr = String::CreateFromInt32( nLine + 1L );
     else if( nColumn > 0 )
         aCellStr = rGrid.GetColumnTypeName( lcl_GetGridColumn( nColumn ) );
     return aCellStr;
@@ -1419,20 +1475,28 @@ DBG_NAME( ScAccessibleCsvCell )
 
 ScAccessibleCsvCell::ScAccessibleCsvCell(
         ScCsvGrid& rGrid,
-        const ::rtl::OUString& rCellText,
+        const String& rCellText,
         sal_Int32 nRow, sal_Int32 nColumn ) :
     ScAccessibleCsvControl( rGrid.GetAccessible(), rGrid, nCellRole ),
+    AccessibleStaticTextBase( SvxEditSourcePtr( NULL ) ),
     maCellText( rCellText ),
-    mnLine( nRow ? (nRow + rGrid.GetFirstVisLine() - 1) : POS_INVALID ),
+    mnLine( nRow ? (nRow + rGrid.GetFirstVisLine() - 1) : CSV_LINE_HEADER ),
     mnColumn( lcl_GetGridColumn( nColumn ) ),
     mnIndex( nRow * (rGrid.GetColumnCount() + 1) + nColumn )
 {
     DBG_CTOR( ScAccessibleCsvCell, NULL );
+    SetEditSource( implCreateEditSource() );
 }
 
 ScAccessibleCsvCell::~ScAccessibleCsvCell()
 {
     DBG_DTOR( ScAccessibleCsvCell, NULL );
+}
+
+void SAL_CALL ScAccessibleCsvCell::disposing()
+{
+    SetEditSource( SvxEditSourcePtr( NULL ) );
+    ScAccessibleCsvControl::disposing();
 }
 
 
@@ -1448,19 +1512,6 @@ void SAL_CALL ScAccessibleCsvCell::grabFocus() throw( RuntimeException )
 
 
 // XAccessibleContext -----------------------------------------------------
-
-sal_Int32 SAL_CALL ScAccessibleCsvCell::getAccessibleChildCount() throw( RuntimeException )
-{
-    ensureAlive();
-    return 0;
-}
-
-Reference< XAccessible > SAL_CALL ScAccessibleCsvCell::getAccessibleChild( sal_Int32 nIndex )
-        throw( IndexOutOfBoundsException, RuntimeException )
-{
-    ensureAlive();
-    throw IndexOutOfBoundsException();
-}
 
 sal_Int32 SAL_CALL ScAccessibleCsvCell::getAccessibleIndexInParent() throw( RuntimeException )
 {
@@ -1485,146 +1536,14 @@ Reference< XAccessibleStateSet > SAL_CALL ScAccessibleCsvCell::getAccessibleStat
     {
         const ScCsvGrid& rGrid = implGetGrid();
         pStateSet->AddState( AccessibleStateType::SINGLE_LINE );
-        if( mnColumn != VEC_NOTFOUND )
-        {
-            pStateSet->AddState( AccessibleStateType::FOCUSABLE );
+        if( mnColumn != CSV_COLUMN_HEADER )
             pStateSet->AddState( AccessibleStateType::SELECTABLE );
-        }
-        if( rGrid.HasFocus() && (rGrid.GetFocusColumn() == mnColumn) )
-            pStateSet->AddState( AccessibleStateType::FOCUSED );
+        if( rGrid.HasFocus() && (rGrid.GetFocusColumn() == mnColumn) && (mnLine == CSV_LINE_HEADER) )
+            pStateSet->AddState( AccessibleStateType::ACTIVE );
         if( rGrid.IsSelected( mnColumn ) )
             pStateSet->AddState( AccessibleStateType::SELECTED );
     }
     return pStateSet;
-}
-
-
-// XAccessibleText ------------------------------------------------------------
-
-sal_Int32 SAL_CALL ScAccessibleCsvCell::getCaretPosition() throw( RuntimeException )
-{
-    ensureAlive();
-    return 0;
-}
-
-sal_Bool SAL_CALL ScAccessibleCsvCell::setCaretPosition( sal_Int32 nIndex )
-    throw( IndexOutOfBoundsException, RuntimeException )
-{
-    ensureAlive();
-    return sal_False;
-}
-
-sal_Unicode SAL_CALL ScAccessibleCsvCell::getCharacter( sal_Int32 nIndex )
-    throw( IndexOutOfBoundsException, RuntimeException )
-{
-    ScUnoGuard aGuard;
-    ensureAlive();
-    ensureValidIndex( nIndex );
-    return maCellText.getStr()[ nIndex ];
-}
-
-Sequence< PropertyValue > SAL_CALL ScAccessibleCsvCell::getCharacterAttributes( sal_Int32 nIndex )
-    throw( IndexOutOfBoundsException, RuntimeException )
-{
-    ScUnoGuard aGuard;
-    ensureAlive();
-    ensureValidIndex( nIndex );
-    return Sequence< PropertyValue >(); //! TODO
-}
-
-ScAccessibleCsvCell::AwtRectangle SAL_CALL ScAccessibleCsvCell::getCharacterBounds( sal_Int32 nIndex )
-    throw( IndexOutOfBoundsException, RuntimeException )
-{
-    ScUnoGuard aGuard;
-    ensureAlive();
-    ensureValidIndex( nIndex );
-    ScCsvGrid& rGrid = implGetGrid();
-    return AwtRectangle( nIndex * rGrid.GetCharWidth(), 0, rGrid.GetCharWidth(), rGrid.GetLineHeight() );
-}
-
-sal_Int32 SAL_CALL ScAccessibleCsvCell::getCharacterCount() throw( RuntimeException )
-{
-    ScUnoGuard aGuard;
-    ensureAlive();
-    return maCellText.getLength();
-}
-
-sal_Int32 SAL_CALL ScAccessibleCsvCell::getIndexAtPoint( const AwtPoint& rPoint )
-    throw( RuntimeException )
-{
-    ScUnoGuard aGuard;
-    ensureAlive();
-    sal_Int32 nIndex = rPoint.X / implGetGrid().GetCharWidth();
-    return ((0 <= nIndex) && (nIndex < maCellText.getLength())) ? nIndex : -1;
-}
-
-OUString SAL_CALL ScAccessibleCsvCell::getSelectedText() throw( RuntimeException )
-{
-    ensureAlive();
-    return OUString();
-}
-
-sal_Int32 SAL_CALL ScAccessibleCsvCell::getSelectionStart() throw( RuntimeException )
-{
-    ensureAlive();
-    return -1;
-}
-
-sal_Int32 SAL_CALL ScAccessibleCsvCell::getSelectionEnd() throw( RuntimeException )
-{
-    ensureAlive();
-    return -1;
-}
-
-sal_Bool SAL_CALL ScAccessibleCsvCell::setSelection( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
-    throw( IndexOutOfBoundsException, RuntimeException )
-{
-    ensureAlive();
-    return sal_False;
-}
-
-OUString SAL_CALL ScAccessibleCsvCell::getText() throw( RuntimeException )
-{
-    ScUnoGuard aGuard;
-    ensureAlive();
-    return maCellText;
-}
-
-OUString SAL_CALL ScAccessibleCsvCell::getTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
-    throw( IndexOutOfBoundsException, RuntimeException )
-{
-    ScUnoGuard aGuard;
-    ensureAlive();
-    ensureValidRange( nStartIndex, nEndIndex );
-    return maCellText.copy( nStartIndex, nEndIndex - nStartIndex );
-}
-
-OUString SAL_CALL ScAccessibleCsvCell::getTextAtIndex( sal_Int32 nIndex, sal_Int16 nTextType )
-    throw( IndexOutOfBoundsException, RuntimeException )
-{
-    ensureAlive();
-    return OUString(); //! TODO
-}
-
-OUString SAL_CALL ScAccessibleCsvCell::getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 nTextType )
-    throw( IndexOutOfBoundsException, RuntimeException )
-{
-    ensureAlive();
-    return OUString(); //! TODO
-}
-
-OUString SAL_CALL ScAccessibleCsvCell::getTextBehindIndex( sal_Int32 nIndex, sal_Int16 nTextType )
-    throw( IndexOutOfBoundsException, RuntimeException )
-{
-    ensureAlive();
-    return OUString(); //! TODO
-}
-
-sal_Bool SAL_CALL ScAccessibleCsvCell::copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
-    throw( IndexOutOfBoundsException, RuntimeException )
-{
-    ensureAlive();
-    return sal_False;
 }
 
 
@@ -1633,8 +1552,12 @@ sal_Bool SAL_CALL ScAccessibleCsvCell::copyText( sal_Int32 nStartIndex, sal_Int3
 Any SAL_CALL ScAccessibleCsvCell::queryInterface( const ::com::sun::star::uno::Type& rType )
         throw( RuntimeException )
 {
-    Any aAny( ScAccessibleCsvCellImpl::queryInterface( rType ) );
-    return aAny.hasValue() ? aAny : ScAccessibleCsvControl::queryInterface( rType );
+    Any aAny;
+    if( rType == getCppuType( static_cast< const Reference< XAccessibleText >* >( NULL ) ) )
+        aAny <<= Reference< XAccessibleText >( this );
+    else
+        aAny <<= ScAccessibleCsvControl::queryInterface( rType );
+    return aAny;
 }
 
 void SAL_CALL ScAccessibleCsvCell::acquire() throw()
@@ -1651,7 +1574,7 @@ void SAL_CALL ScAccessibleCsvCell::release() throw()
 
 OUString SAL_CALL ScAccessibleCsvCell::getImplementationName() throw( RuntimeException )
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "ScAccessibleCsvCell" ) );
+    return CREATE_OUSTRING( CELL_IMPL_NAME );
 }
 
 
@@ -1690,27 +1613,9 @@ Rectangle ScAccessibleCsvCell::GetBoundingBox() const throw( RuntimeException )
     return implGetBoundingBox();
 }
 
-Rectangle ScAccessibleCsvCell::implGetBoundingBox() const
-{
-    ScCsvGrid& rGrid = implGetGrid();
-    Point aPos;
-    Size aSize( rGrid.GetOffsetX(), rGrid.GetOffsetY() );
-    if( mnColumn != VEC_NOTFOUND )
-    {
-        aPos.X() = rGrid.GetColumnX( mnColumn );
-        aSize.Width() = rGrid.GetColumnWidth( mnColumn );
-    }
-    if( mnLine == POS_INVALID )
-    {
-        aPos.Y() = rGrid.GetY( mnLine );
-        aSize.Height() = rGrid.GetLineHeight();
-    }
-    return Rectangle( aPos, aSize );
-}
-
 OUString SAL_CALL ScAccessibleCsvCell::createAccessibleName() throw( RuntimeException )
 {
-    return OUString();
+    return maCellText;
 }
 
 OUString SAL_CALL ScAccessibleCsvCell::createAccessibleDescription() throw( RuntimeException )
@@ -1718,25 +1623,54 @@ OUString SAL_CALL ScAccessibleCsvCell::createAccessibleDescription() throw( Runt
     return OUString();
 }
 
-void ScAccessibleCsvCell::ensureValidIndex( sal_Int32 nIndex ) const
-        throw( IndexOutOfBoundsException )
-{
-    if( nIndex >= maCellText.getLength() )
-        throw IndexOutOfBoundsException();
-}
-
-void ScAccessibleCsvCell::ensureValidRange( sal_Int32& rnStartIndex, sal_Int32& rnEndIndex ) const
-        throw( IndexOutOfBoundsException )
-{
-    if( rnStartIndex > rnEndIndex )
-        ::std::swap( rnStartIndex, rnEndIndex );
-    if( (rnStartIndex < 0) || (rnEndIndex > maCellText.getLength()) )
-        throw IndexOutOfBoundsException();
-}
-
 ScCsvGrid& ScAccessibleCsvCell::implGetGrid() const
 {
     return static_cast< ScCsvGrid& >( implGetControl() );
+}
+
+Point ScAccessibleCsvCell::implGetRealPos() const
+{
+    ScCsvGrid& rGrid = implGetGrid();
+    return Point(
+        (mnColumn == CSV_COLUMN_HEADER) ? 0 : rGrid.GetColumnX( mnColumn ),
+        (mnLine == CSV_LINE_HEADER) ? 0 : rGrid.GetY( mnLine ) );
+}
+
+Size ScAccessibleCsvCell::implGetRealSize() const
+{
+    ScCsvGrid& rGrid = implGetGrid();
+    return Size(
+        (mnColumn == CSV_COLUMN_HEADER) ? rGrid.GetOffsetX() : rGrid.GetColumnWidth( mnColumn ),
+        (mnLine == CSV_LINE_HEADER) ? rGrid.GetOffsetY() : rGrid.GetLineHeight() );
+}
+
+Rectangle ScAccessibleCsvCell::implGetBoundingBox() const
+{
+    ScCsvGrid& rGrid = implGetGrid();
+    Rectangle aClipRect( Point( 0, 0 ), rGrid.GetSizePixel() );
+    if( mnColumn != CSV_COLUMN_HEADER )
+        aClipRect.Left() = rGrid.GetOffsetX();
+    if( mnLine != CSV_LINE_HEADER )
+         aClipRect.Top() = rGrid.GetOffsetY();
+
+    Rectangle aRect( implGetRealPos(), implGetRealSize() );
+    aRect.Intersection( aClipRect );
+    if( (aRect.GetWidth() <= 0) || (aRect.GetHeight() <= 0) )
+        aRect.SetSize( Size( -1, -1 ) );
+    return aRect;
+}
+
+::std::auto_ptr< SvxEditSource > ScAccessibleCsvCell::implCreateEditSource()
+{
+    ScCsvGrid& rGrid = implGetGrid();
+    Rectangle aBoundRect( implGetBoundingBox() );
+    aBoundRect -= implGetRealPos();
+
+    ::std::auto_ptr< ScAccessibleTextData > pCsvTextData( new ScAccessibleCsvTextData(
+        &rGrid, rGrid.GetEditEngine(), maCellText, aBoundRect, implGetRealSize() ) );
+
+    ::std::auto_ptr< SvxEditSource > pEditSource( new ScAccessibilityEditSource( pCsvTextData ) );
+    return pEditSource;
 }
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: csvruler.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dr $ $Date: 2002-08-15 09:28:09 $
+ *  last change: $Author: dr $ $Date: 2002-08-16 12:59:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,9 @@ void ScCsvRuler::ApplyLayout( const ScCsvLayoutData& rOldData )
         ImplInvertCursor( GetRulerCursorPos() );
     }
     EnableRepaint();
+
+    if( nDiff & CSV_DIFF_POSOFFSET )
+        AccSendVisibleEvent();
 }
 
 void ScCsvRuler::InitColors()
@@ -151,14 +154,14 @@ void ScCsvRuler::MoveCursor( sal_Int32 nPos, bool bScroll )
     DisableRepaint();
     if( bScroll )
         Execute( CSVCMD_MAKEPOSVISIBLE, nPos );
-    Execute( CSVCMD_MOVERULERCURSOR, IsVisibleSplitPos( nPos ) ? nPos : POS_INVALID );
+    Execute( CSVCMD_MOVERULERCURSOR, IsVisibleSplitPos( nPos ) ? nPos : CSV_POS_INVALID );
     EnableRepaint();
     AccSendCaretEvent();
 }
 
 void ScCsvRuler::MoveCursorRel( ScMoveMode eDir )
 {
-    if( GetRulerCursorPos() != POS_INVALID )
+    if( GetRulerCursorPos() != CSV_POS_INVALID )
     {
         switch( eDir )
         {
@@ -182,9 +185,9 @@ void ScCsvRuler::MoveCursorRel( ScMoveMode eDir )
 
 void ScCsvRuler::MoveCursorToSplit( ScMoveMode eDir )
 {
-    if( GetRulerCursorPos() != POS_INVALID )
+    if( GetRulerCursorPos() != CSV_POS_INVALID )
     {
-        sal_uInt32 nIndex = VEC_NOTFOUND;
+        sal_uInt32 nIndex = CSV_VEC_NOTFOUND;
         switch( eDir )
         {
             case MOVE_FIRST:    nIndex = maSplits.LowerBound( 0 );                          break;
@@ -193,7 +196,7 @@ void ScCsvRuler::MoveCursorToSplit( ScMoveMode eDir )
             case MOVE_NEXT:     nIndex = maSplits.LowerBound( GetRulerCursorPos() + 1 );    break;
         }
         sal_Int32 nPos = maSplits[ nIndex ];
-        if( nPos != POS_INVALID )
+        if( nPos != CSV_POS_INVALID )
             MoveCursor( nPos );
     }
 }
@@ -217,7 +220,7 @@ void ScCsvRuler::ScrollVertRel( ScMoveMode eDir )
 sal_Int32 ScCsvRuler::GetNoScrollPos( sal_Int32 nPos ) const
 {
     sal_Int32 nNewPos = nPos;
-    if( nNewPos != POS_INVALID )
+    if( nNewPos != CSV_POS_INVALID )
     {
         if( nNewPos < GetFirstVisPos() + CSV_SCROLL_DIST )
         {
@@ -268,7 +271,7 @@ void ScCsvRuler::MoveSplitRel( sal_Int32 nPos, ScMoveMode eDir )
     if( HasSplit( nPos ) )
     {
         sal_Int32 nNewPos = FindEmptyPos( nPos, eDir );
-        if( nNewPos != POS_INVALID )
+        if( nNewPos != CSV_POS_INVALID )
             Execute( CSVCMD_MOVESPLIT, nPos, nNewPos );
     }
 }
@@ -282,7 +285,7 @@ void ScCsvRuler::RemoveAllSplits()
 sal_Int32 ScCsvRuler::FindEmptyPos( sal_Int32 nPos, ScMoveMode eDir ) const
 {
     sal_Int32 nNewPos = nPos;
-    if( nNewPos != POS_INVALID )
+    if( nNewPos != CSV_POS_INVALID )
     {
         switch( eDir )
         {
@@ -300,7 +303,7 @@ sal_Int32 ScCsvRuler::FindEmptyPos( sal_Int32 nPos, ScMoveMode eDir ) const
             break;
         }
     }
-    return IsValidSplitPos( nNewPos ) ? nNewPos : POS_INVALID;
+    return IsValidSplitPos( nNewPos ) ? nNewPos : CSV_POS_INVALID;
 }
 
 void ScCsvRuler::MoveCurrSplit( sal_Int32 nNewPos )
@@ -316,7 +319,7 @@ void ScCsvRuler::MoveCurrSplitRel( ScMoveMode eDir )
     if( HasSplit( GetRulerCursorPos() ) )
     {
         sal_Int32 nNewPos = FindEmptyPos( GetRulerCursorPos(), eDir );
-        if( nNewPos != POS_INVALID )
+        if( nNewPos != CSV_POS_INVALID )
             MoveCurrSplit( nNewPos );
     }
 }
@@ -335,7 +338,7 @@ void ScCsvRuler::GetFocus()
 {
     ScCsvControl::GetFocus();
     DisableRepaint();
-    if( GetRulerCursorPos() == POS_INVALID )
+    if( GetRulerCursorPos() == CSV_POS_INVALID )
         MoveCursor( GetNoScrollPos( mnPosCursorLast ) );
     EnableRepaint();
 }
@@ -344,7 +347,7 @@ void ScCsvRuler::LoseFocus()
 {
     ScCsvControl::LoseFocus();
     mnPosCursorLast = GetRulerCursorPos();
-    MoveCursor( POS_INVALID );
+    MoveCursor( CSV_POS_INVALID );
 }
 
 void ScCsvRuler::DataChanged( const DataChangedEvent& rDCEvt )
@@ -389,7 +392,7 @@ void ScCsvRuler::MouseMove( const MouseEvent& rMEvt )
             Rectangle aRect( aPoint, maWinSize );
             if( !IsVisibleSplitPos( nPos ) || !aRect.IsInside( rMEvt.GetPosPixel() ) )
                 // if focused, keep old cursor position for key input
-                nPos = HasFocus() ? GetRulerCursorPos() : POS_INVALID;
+                nPos = HasFocus() ? GetRulerCursorPos() : CSV_POS_INVALID;
             MoveCursor( nPos, false );
         }
         ImplSetMousePointer( nPos );
@@ -484,7 +487,7 @@ void ScCsvRuler::EndMouseTracking( bool bApply )
         else if( !maOldSplits.HasSplit( mnPosMTCurr ) )
             Execute( CSVCMD_REMOVESPLIT, mnPosMTCurr );
     }
-    mnPosMTStart = POS_INVALID;
+    mnPosMTStart = CSV_POS_INVALID;
 }
 
 
@@ -597,7 +600,7 @@ void ScCsvRuler::ImplDrawRulerDev()
 
     sal_uInt32 nFirst = maSplits.LowerBound( GetFirstVisPos() );
     sal_uInt32 nLast = maSplits.UpperBound( GetLastVisPos() );
-    if( (nFirst != POS_INVALID) && (nLast != POS_INVALID) )
+    if( (nFirst != CSV_POS_INVALID) && (nLast != CSV_POS_INVALID) )
         for( sal_uInt32 nIndex = nFirst; nIndex <= nLast; ++nIndex )
             ImplDrawSplit( GetSplitPos( nIndex ) );
 }

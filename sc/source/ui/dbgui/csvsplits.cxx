@@ -2,9 +2,9 @@
  *
  *  $RCSfile: csvsplits.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dr $ $Date: 2002-07-05 15:47:38 $
+ *  last change: $Author: dr $ $Date: 2002-08-16 12:59:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ bool ScCsvSplits::Insert( sal_Int32 nPos )
 bool ScCsvSplits::Remove( sal_Int32 nPos )
 {
     sal_uInt32 nIndex = GetIndex( nPos );
-    bool bValid = (nIndex != VEC_NOTFOUND);
+    bool bValid = (nIndex != CSV_VEC_NOTFOUND);
     if( bValid )
         maVec.erase( maVec.begin() + nIndex );
     return bValid;
@@ -105,7 +105,7 @@ void ScCsvSplits::RemoveRange( sal_Int32 nPosStart, sal_Int32 nPosEnd )
 {
     sal_uInt32 nStartIx = LowerBound( nPosStart );
     sal_uInt32 nEndIx = UpperBound( nPosEnd );
-    if( (nStartIx != VEC_NOTFOUND) && (nEndIx != VEC_NOTFOUND) && (nStartIx <= nEndIx) )
+    if( (nStartIx != CSV_VEC_NOTFOUND) && (nEndIx != CSV_VEC_NOTFOUND) && (nStartIx <= nEndIx) )
         maVec.erase( maVec.begin() + nStartIx, maVec.begin() + nEndIx + 1 );
 }
 
@@ -116,7 +116,7 @@ void ScCsvSplits::Clear()
 
 bool ScCsvSplits::HasSplit( sal_Int32 nPos ) const
 {
-    return GetIndex( nPos ) != VEC_NOTFOUND;
+    return GetIndex( nPos ) != CSV_VEC_NOTFOUND;
 }
 
 
@@ -136,16 +136,16 @@ sal_uInt32 ScCsvSplits::LowerBound( sal_Int32 nPos ) const
 sal_uInt32 ScCsvSplits::UpperBound( sal_Int32 nPos ) const
 {
     sal_uInt32 nIndex = LowerBound( nPos );
-    if( nIndex == VEC_NOTFOUND )
-        return Count() ? (Count() - 1) : VEC_NOTFOUND;
+    if( nIndex == CSV_VEC_NOTFOUND )
+        return Count() ? (Count() - 1) : CSV_VEC_NOTFOUND;
     if( GetPos( nIndex ) == nPos )
         return nIndex;
-    return nIndex ? (nIndex - 1) : VEC_NOTFOUND;
+    return nIndex ? (nIndex - 1) : CSV_VEC_NOTFOUND;
 }
 
 sal_Int32 ScCsvSplits::GetPos( sal_uInt32 nIndex ) const
 {
-    return (nIndex < Count()) ? maVec[ nIndex ] : POS_INVALID;
+    return (nIndex < Count()) ? maVec[ nIndex ] : CSV_POS_INVALID;
 }
 
 
@@ -153,7 +153,7 @@ sal_Int32 ScCsvSplits::GetPos( sal_uInt32 nIndex ) const
 
 sal_uInt32 ScCsvSplits::GetIterIndex( const_iterator aIter ) const
 {
-    return (aIter == maVec.end()) ? VEC_NOTFOUND : (aIter - maVec.begin());
+    return (aIter == maVec.end()) ? CSV_VEC_NOTFOUND : (aIter - maVec.begin());
 }
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleText.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: sab $ $Date: 2002-06-12 10:35:10 $
+ *  last change: $Author: dr $ $Date: 2002-08-16 13:00:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,8 @@
 #include <svx/svxenum.hxx>
 #endif
 
+#include <memory>
+
 class ScCellTextData;
 class ScDocShell;
 class ScViewForwarder;
@@ -84,6 +86,9 @@ class ScPreviewViewForwarder;
 class ScEditViewForwarder;
 class ScPreviewShell;
 class EditTextObject;
+
+
+// ============================================================================
 
 class ScAccessibleTextData : public SfxListener
 {
@@ -111,6 +116,9 @@ private:
     ScSharedCellEditSource* GetOriginalSource() { return NULL; }
 };
 
+
+// ============================================================================
+
 class ScAccessibleCellBaseTextData : public ScAccessibleTextData,
                                      public ScCellTextData
 {
@@ -125,6 +133,9 @@ public:
     virtual void                SetDoUpdate(sal_Bool bValue) { ScCellTextData::SetDoUpdate(bValue); }
     virtual sal_Bool            IsDirty() const { return ScCellTextData::IsDirty(); }
 };
+
+
+// ============================================================================
 
 //  ScAccessibleCellTextData: shared data between sub objects of a accessible cell text object
 
@@ -157,6 +168,9 @@ private:
     ScDocShell* GetDocShell(ScTabViewShell* pViewShell);
 };
 
+
+// ============================================================================
+
 class ScAccessibleEditObjectTextData : public ScAccessibleTextData
 {
 public:
@@ -185,6 +199,9 @@ protected:
     Window* mpWindow;
 };
 
+
+// ============================================================================
+
 class ScAccessibleEditLineTextData : public ScAccessibleEditObjectTextData
 {
 public:
@@ -205,6 +222,9 @@ private:
 
     sal_Bool mbEditEngineCreated;
 };
+
+
+// ============================================================================
 
 class ScAccessiblePreviewCellTextData : public ScAccessibleCellBaseTextData
 {
@@ -231,6 +251,9 @@ private:
 
     ScDocShell* GetDocShell(ScPreviewShell* pViewShell);
 };
+
+
+// ============================================================================
 
 class ScAccessiblePreviewHeaderCellTextData : public ScAccessibleCellBaseTextData
 {
@@ -260,6 +283,9 @@ private:
 
     ScDocShell* GetDocShell(ScPreviewShell* pViewShell);
 };
+
+
+// ============================================================================
 
 class ScAccessibleHeaderTextData : public ScAccessibleTextData
 {
@@ -291,6 +317,9 @@ private:
     SvxAdjust               meAdjust;
 };
 
+
+// ============================================================================
+
 class ScAccessibleNoteTextData : public ScAccessibleTextData
 {
 public:
@@ -320,5 +349,47 @@ private:
     sal_Bool                mbMarkNote;
     sal_Bool                mbDataValid;
 };
+
+
+// ============================================================================
+
+class ScAccessibleCsvTextData : public ScAccessibleTextData
+{
+private:
+    typedef ::std::auto_ptr< SvxTextForwarder > TextForwarderPtr;
+    typedef ::std::auto_ptr< SvxViewForwarder > ViewForwarderPtr;
+
+    Window*                     mpWindow;
+    EditEngine*                 mpEditEngine;
+    TextForwarderPtr            mpTextForwarder;
+    ViewForwarderPtr            mpViewForwarder;
+    String                      maCellText;
+    Rectangle                   maBoundBox;
+    Size                        maCellSize;
+
+public:
+    explicit                    ScAccessibleCsvTextData(
+                                    Window* pWindow,
+                                    EditEngine* pEditEngine,
+                                    const String& rCellText,
+                                    const Rectangle& rBoundBox,
+                                    const Size& rCellSize );
+    virtual                     ~ScAccessibleCsvTextData();
+
+    virtual ScAccessibleTextData* Clone() const;
+
+    virtual void                Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+
+    virtual SvxTextForwarder*   GetTextForwarder();
+    virtual SvxViewForwarder*   GetViewForwarder();
+    virtual SvxEditViewForwarder* GetEditViewForwarder( sal_Bool bCreate );
+
+    virtual void                UpdateData() {}
+    virtual void                SetDoUpdate( sal_Bool bValue ) {}
+    virtual sal_Bool            IsDirty() const { return sal_False; }
+};
+
+
+// ============================================================================
 
 #endif

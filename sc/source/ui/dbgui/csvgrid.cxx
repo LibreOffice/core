@@ -2,9 +2,9 @@
  *
  *  $RCSfile: csvgrid.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dr $ $Date: 2002-08-15 09:28:08 $
+ *  last change: $Author: dr $ $Date: 2002-08-16 12:59:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,9 +138,11 @@ ScCsvGrid::ScCsvGrid( ScCsvControl& rParent ) :
     maHeaderFont( GetFont() ),
     maColStates( 1 ),
     maTypeNames( 1 ),
-    mnRecentSelCol( VEC_NOTFOUND )
+    mnRecentSelCol( CSV_COLUMN_INVALID )
 {
     mpEditEngine->SetRefDevice( &maBackgrDev );
+    mpEditEngine->SetRefMapMode( MapMode( MAP_PIXEL ) );
+
     maPopup.SetMenuFlags( maPopup.GetMenuFlags() | MENU_FLAG_NOAUTOMNEMONICS );
 
     InitColors();
@@ -217,6 +219,9 @@ void ScCsvGrid::ApplyLayout( const ScCsvLayoutData& rOldData )
         InvalidateGfx();
 
     EnableRepaint();
+
+    if( nDiff & (CSV_DIFF_POSOFFSET | CSV_DIFF_LINEOFFSET) )
+        AccSendVisibleEvent();
 }
 
 void ScCsvGrid::SetFirstImportedLine( sal_Int32 nLine )
@@ -231,7 +236,7 @@ void ScCsvGrid::SetFirstImportedLine( sal_Int32 nLine )
 sal_Int32 ScCsvGrid::GetNoScrollCol( sal_Int32 nPos ) const
 {
     sal_Int32 nNewPos = nPos;
-    if( nNewPos != POS_INVALID )
+    if( nNewPos != CSV_POS_INVALID )
     {
         if( nNewPos < GetFirstVisPos() + CSV_SCROLL_DIST )
         {
@@ -344,7 +349,7 @@ void ScCsvGrid::RemoveSplit( sal_Int32 nPos )
 void ScCsvGrid::MoveSplit( sal_Int32 nPos, sal_Int32 nNewPos )
 {
     sal_uInt32 nColIx = GetColumnFromPos( nPos );
-    if( nColIx != VEC_NOTFOUND )
+    if( nColIx != CSV_COLUMN_INVALID )
     {
         DisableRepaint();
         if( (GetColumnPos( nColIx - 1 ) < nNewPos) && (nNewPos < GetColumnPos( nColIx + 1 )) )
@@ -465,7 +470,7 @@ sal_Int32 ScCsvGrid::GetColumnX( sal_uInt32 nColIndex ) const
 sal_uInt32 ScCsvGrid::GetColumnFromX( sal_Int32 nX ) const
 {
     sal_Int32 nPos = (nX - GetOffsetX()) / GetCharWidth() + GetFirstVisPos();
-    return (nPos >= GetFirstVisPos()) ? GetColumnFromPos( nPos ) : VEC_NOTFOUND;
+    return (nPos >= GetFirstVisPos()) ? GetColumnFromPos( nPos ) : CSV_COLUMN_INVALID;
 }
 
 sal_uInt32 ScCsvGrid::GetColumnFromPos( sal_Int32 nPos ) const
@@ -504,11 +509,11 @@ void ScCsvGrid::SetColumnType( sal_uInt32 nColIndex, sal_Int32 nColType )
 sal_Int32 ScCsvGrid::GetSelColumnType() const
 {
     sal_uInt32 nColIx = GetFirstSelected();
-    if( nColIx == VEC_NOTFOUND )
+    if( nColIx == CSV_COLUMN_INVALID )
         return CSV_TYPE_NOSELECTION;
 
     sal_Int32 nType = GetColumnType( nColIx );
-    while( (nColIx != VEC_NOTFOUND) && (nType != CSV_TYPE_MULTI) )
+    while( (nColIx != CSV_COLUMN_INVALID) && (nType != CSV_TYPE_MULTI) )
     {
         if( nType != GetColumnType( nColIx ) )
             nType = CSV_TYPE_MULTI;
@@ -521,7 +526,7 @@ void ScCsvGrid::SetSelColumnType( sal_Int32 nType )
 {
     if( (nType != CSV_TYPE_MULTI) && (nType != CSV_TYPE_NOSELECTION) )
     {
-        for( sal_uInt32 nColIx = GetFirstSelected(); nColIx != VEC_NOTFOUND; nColIx = GetNextSelected( nColIx ) )
+        for( sal_uInt32 nColIx = GetFirstSelected(); nColIx != CSV_COLUMN_INVALID; nColIx = GetNextSelected( nColIx ) )
             SetColumnType( nColIx, nType );
         Repaint( true );
         Execute( CSVCMD_EXPORTCOLUMNTYPE );
@@ -632,7 +637,7 @@ sal_uInt32 ScCsvGrid::GetNextSelected( sal_uInt32 nFromIndex ) const
     for( sal_uInt32 nColIx = nFromIndex + 1; nColIx < nColCount; ++nColIx )
         if( IsSelected( nColIx ) )
             return nColIx;
-    return VEC_NOTFOUND;
+    return CSV_COLUMN_INVALID;
 }
 
 void ScCsvGrid::Select( sal_uInt32 nColIndex, bool bSelect )
@@ -656,9 +661,9 @@ void ScCsvGrid::ToggleSelect( sal_uInt32 nColIndex )
 
 void ScCsvGrid::SelectRange( sal_uInt32 nColIndex1, sal_uInt32 nColIndex2, bool bSelect )
 {
-    if( nColIndex1 == VEC_NOTFOUND )
+    if( nColIndex1 == CSV_COLUMN_INVALID )
         Select( nColIndex2 );
-    else if( nColIndex2 == VEC_NOTFOUND )
+    else if( nColIndex2 == CSV_COLUMN_INVALID )
         Select( nColIndex1 );
     else if( nColIndex1 > nColIndex2 )
     {
@@ -706,7 +711,7 @@ void ScCsvGrid::MoveCursor( sal_uInt32 nColIndex )
 
 void ScCsvGrid::MoveCursorRel( ScMoveMode eDir )
 {
-    if( GetFocusColumn() != VEC_NOTFOUND )
+    if( GetFocusColumn() != CSV_COLUMN_INVALID )
     {
         switch( eDir )
         {
@@ -1064,6 +1069,11 @@ void ScCsvGrid::ImplRedraw()
     }
 }
 
+EditEngine* ScCsvGrid::GetEditEngine()
+{
+    return mpEditEngine.get();
+}
+
 void ScCsvGrid::ImplSetColumnClipRegion( OutputDevice& rOutDev, sal_uInt32 nColIndex )
 {
     rOutDev.SetClipRegion( Region( Rectangle(
@@ -1094,6 +1104,7 @@ void ScCsvGrid::ImplDrawCellText( const Point& rPos, const String& rText )
 {
     String aText( rText );
     aText.SearchAndReplaceAll( '\t', ' ' );
+    mpEditEngine->SetPaperSize( maWinSize );
     mpEditEngine->SetText( aText );
     mpEditEngine->Draw( &maBackgrDev, rPos );
 

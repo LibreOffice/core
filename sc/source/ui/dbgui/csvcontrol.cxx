@@ -2,9 +2,9 @@
  *
  *  $RCSfile: csvcontrol.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dr $ $Date: 2002-08-15 09:28:08 $
+ *  last change: $Author: dr $ $Date: 2002-08-16 12:59:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@ ScCsvLayoutData::ScCsvLayoutData() :
     mnWinHeight( 1 ),
     mnOffsetY( 0 ),
     mnLineHeight( 1 ),
-    mnPosCursor( POS_INVALID ),
+    mnPosCursor( CSV_POS_INVALID ),
     mnColCursor( 0 ),
     mnNoRepaint( 0 )
 {
@@ -172,6 +172,12 @@ void ScCsvControl::AccSendCaretEvent()
 {
     if( mpAccessible )
         mpAccessible->SendCaretEvent();
+}
+
+void ScCsvControl::AccSendVisibleEvent()
+{
+    if( mpAccessible )
+        mpAccessible->SendVisibleEvent();
 }
 
 void ScCsvControl::AccSendSelectionEvent()
