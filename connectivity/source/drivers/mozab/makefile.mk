@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: oj $ $Date: 2001-10-23 09:08:04 $
+#   last change: $Author: fs $ $Date: 2001-10-23 17:46:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -63,8 +63,8 @@
 PRJ=..$/..$/..
 PRJINC=..$/..
 PRJNAME=connectivity
-TARGET=mozab
-TARGET2=mozabdrv
+TARGET=$(MOZAB_TARGET)
+TARGET2=$(MOZAB_TARGET)drv
 
 .IF "$(BUILD_SOSL)"!=""
 all: 
@@ -113,7 +113,7 @@ SLOFILES=\
 # --- MOZAB BASE Library -----------------------------------
 
 SHL1VERSIONMAP= $(TARGET).map
-SHL1TARGET=	$(MOZAB_TARGET)$(MOZAB_MAJOR)
+SHL1TARGET=	$(TARGET)$(MOZAB_MAJOR)
 SHL1OBJS=$(SLOFILES)
 SHL1STDLIBS=\
     $(CPPULIB)					\
@@ -126,7 +126,7 @@ SHL1STDLIBS=\
 
 
 SHL1DEPN=
-SHL1IMPLIB=	i$(MOZAB_TARGET)$(MOZAB_MAJOR)
+SHL1IMPLIB=	i$(TARGET)$(MOZAB_MAJOR)
 
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 
@@ -134,7 +134,7 @@ DEF1NAME=	$(SHL1TARGET)
 DEF1DEPN=	$(MISC)$/$(SHL1TARGET).flt \
             $(SLB)$/$(TARGET).lib
 DEFLIB1NAME=$(TARGET)
-DEF1EXPORTFILE=	exports.dxp
+#DEF1EXPORTFILE=	exports.dxp
 
 
 # --- Files -------------------------------------
@@ -147,6 +147,7 @@ MOZSLOFILES=\
     $(SLO)$/MNameMapper.obj
 
 SLO2FILES=\
+        $(SLO)$/MConfigAccess.obj				\
         $(SLO)$/MCatalog.obj					\
         $(SLO)$/MColumns.obj					\
         $(SLO)$/MTable.obj						\
