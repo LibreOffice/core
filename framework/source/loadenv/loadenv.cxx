@@ -2,9 +2,9 @@
  *
  *  $RCSfile: loadenv.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 13:55:35 $
+ *  last change: $Author: kz $ $Date: 2004-06-10 13:21:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -418,6 +418,11 @@ void LoadEnv::initializeLoading(const ::rtl::OUString&                          
     css::uno::Reference< css::util::XURLTransformer > xParser(m_xSMGR->createInstance(SERVICENAME_URLTRANSFORMER), css::uno::UNO_QUERY);
     xParser->parseStrict(m_aURL);
 
+    // BTW: Split URL and JumpMark ...
+    // Because such mark is an explicit value of the media descriptor!
+    if (m_aURL.Mark.getLength())
+        m_lMediaDescriptor[::comphelper::MediaDescriptor::PROP_JUMPMARK()] <<= m_aURL.Mark;
+
     // By the way: remove the old and deprecated value "FileName" from the descriptor!
     ::comphelper::MediaDescriptor::iterator pIt = m_lMediaDescriptor.find(::comphelper::MediaDescriptor::PROP_FILENAME());
     if (pIt != m_lMediaDescriptor.end())
@@ -463,10 +468,6 @@ void LoadEnv::initializeLoading(const ::rtl::OUString&                          
         (m_lMediaDescriptor.find(::comphelper::MediaDescriptor::PROP_INTERACTIONHANDLER()) == m_lMediaDescriptor.end())
        )
     {
-        /*TODO um den InteractionHandler noch ein LogObject packen, welcher
-               die Art der Nutzung des Interaction Handlers protokolliert
-               und die Daten aufbereitet zur Verfügung stellt. Damit wäre im Nachinein
-               eine Fehleranalyse möglich! */
         m_lMediaDescriptor[::comphelper::MediaDescriptor::PROP_INTERACTIONHANDLER()] <<= xInteractionHandler;
     }
 
@@ -1457,8 +1458,6 @@ void LoadEnv::impl_reactForLoadingState()
     // SAFE -> ----------------------------------
     ReadGuard aReadLock(m_aLock);
 
-    m_aTargetLock.freeResource();
-
     if (m_bLoaded)
     {
         // Bring the new loaded document to front (if allowed!).
@@ -1526,6 +1525,19 @@ void LoadEnv::impl_reactForLoadingState()
         {}
         m_xTargetFrame.clear();
     }
+
+    // This max force an implicit closing of our target frame ...
+    // e.g. in case close(TRUE) was called before and the frame
+    // kill itself if our external use-lock is released here!
+    // Thats why we releas this lock AFTER ALL OPERATIONS on this frame
+    // are finished. The frame itslef must handle then
+    // this situation gracefully.
+    m_aTargetLock.freeResource();
+
+    // Last but not least :-)
+    // We have to clear the current media descriptor.
+    // Otherwhise it hold a might existing stream open!
+    m_lMediaDescriptor.clear();
 
     aReadLock.unlock();
     // <- SAFE ----------------------------------
