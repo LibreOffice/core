@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextDocument.idl,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 10:15:08 $
+ *  last change: $Author: kz $ $Date: 2004-01-28 12:54:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,92 +61,8 @@
 #ifndef __com_sun_star_text_TextDocument_idl__
 #define __com_sun_star_text_TextDocument_idl__
 
-#ifndef __com_sun_star_document_OfficeDocument_idl__
-#include <com/sun/star/document/OfficeDocument.idl>
-#endif
-
-#ifndef __com_sun_star_text_XTextDocument_idl__
-#include <com/sun/star/text/XTextDocument.idl>
-#endif
-
-#ifndef __com_sun_star_util_XSearchable_idl__
-#include <com/sun/star/util/XSearchable.idl>
-#endif
-
-#ifndef _com_sun_star_util_XRefreshable_idl_
-#include <com/sun/star/util/XRefreshable.idl>
-#endif
-
-#ifndef __com_sun_star_text_XFootnotesSupplier_idl__
-#include <com/sun/star/text/XFootnotesSupplier.idl>
-#endif
-
-#ifndef __com_sun_star_text_XEndnotesSupplier_idl__
-#include <com/sun/star/text/XEndnotesSupplier.idl>
-#endif
-
-#ifndef __com_sun_star_util_XReplaceable_idl__
-#include <com/sun/star/util/XReplaceable.idl>
-#endif
-
-#ifndef __com_sun_star_text_XPagePrintable_idl__
-#include <com/sun/star/text/XPagePrintable.idl>
-#endif
-
-#ifndef __com_sun_star_text_XReferenceMarksSupplier_idl__
-#include <com/sun/star/text/XReferenceMarksSupplier.idl>
-#endif
-
-#ifndef __com_sun_star_text_XLineNumberingSupplier_idl__
-#include <com/sun/star/text/XLineNumberingSupplier.idl>
-#endif
-
-#ifndef __com_sun_star_text_XChapterNumberingSupplier_idl__
-#include <com/sun/star/text/XChapterNumberingSupplier.idl>
-#endif
-
-#ifndef __com_sun_star_text_XTextGraphicObjectsSupplier_idl__
-#include <com/sun/star/text/XTextGraphicObjectsSupplier.idl>
-#endif
-
-#ifndef __com_sun_star_text_XTextEmbeddedObjectsSupplier_idl__
-#include <com/sun/star/text/XTextEmbeddedObjectsSupplier.idl>
-#endif
-
-#ifndef __com_sun_star_text_XTextTablesSupplier_idl__
-#include <com/sun/star/text/XTextTablesSupplier.idl>
-#endif
-
-#ifndef __com_sun_star_style_XStyleFamiliesSupplier_idl__
-#include <com/sun/star/style/XStyleFamiliesSupplier.idl>
-#endif
-
-#ifndef __com_sun_star_util_XNumberFormatsSupplier_idl__
-#include <com/sun/star/util/XNumberFormatsSupplier.idl>
-#endif
-
-#ifndef __com_sun_star_text_XBookmarksSupplier_idl__
-#include <com/sun/star/text/XBookmarksSupplier.idl>
-#endif
-
-#ifndef __com_sun_star_text_XDocumentIndexesSupplier_idl__
-#include <com/sun/star/text/XDocumentIndexesSupplier.idl>
-#endif
-
-#ifndef __com_sun_star_text_XTextFieldsSupplier_idl__
-#include <com/sun/star/text/XTextFieldsSupplier.idl>
-#endif
-
-#ifndef __com_sun_star_text_XTextFramesSupplier_idl__
-#include <com/sun/star/text/XTextFramesSupplier.idl>
-#endif
-
-#ifndef __com_sun_star_text_XTextSectionsSupplier_idl__
-#include <com/sun/star/text/XTextSectionsSupplier.idl>
-#endif
-
-#ifndef __com_sun_star_lang_Locale_idl__
-#include <com/sun/star/lang/Locale.idl>
+#ifndef __com_sun_star_text_GenericTextDocument_idl__
+#include <com/sun/star/text/GenericTextDocument.idl>
 #endif
 
 //=============================================================================
@@ -155,138 +71,12 @@
 
 //=============================================================================
 
-/** A text document is a model component which contains text
-    structured by paragraphs.
-
-    <p>Each paragraph and each portion of text can be fitted with
-    some attributes (technically properties).
-
-    <p>In addition, all text objects can be searched.</p>
+/** Specify the document service of the text module.
  */
 service TextDocument
 {
-    service com::sun::star::document::OfficeDocument;
-
-    interface com::sun::star::text::XTextDocument;
-
-    interface com::sun::star::util::XSearchable;
-
-    interface com::sun::star::util::XRefreshable;
-
-    [optional] interface com::sun::star::text::XFootnotesSupplier;
-
-    [optional] interface com::sun::star::text::XEndnotesSupplier;
-
-    [optional] interface com::sun::star::util::XReplaceable;
-
-    [optional] interface com::sun::star::text::XPagePrintable;
-
-    [optional] interface com::sun::star::text::XReferenceMarksSupplier;
-
-    [optional] interface com::sun::star::text::XLineNumberingSupplier;
-
-    [optional] interface com::sun::star::text::XChapterNumberingSupplier;
-
-    [optional] interface com::sun::star::beans::XPropertySet;
-
-    [optional] interface com::sun::star::text::XTextGraphicObjectsSupplier;
-
-    [optional] interface com::sun::star::text::XTextEmbeddedObjectsSupplier;
-
-    [optional] interface com::sun::star::text::XTextTablesSupplier;
-
-    [optional] interface com::sun::star::style::XStyleFamiliesSupplier;
-
-    /// @since #107627#
-    [optional] interface com::sun::star::text::XBookmarksSupplier;
-
-    /// @since #107627#
-    [optional] interface com::sun::star::text::XDocumentIndexesSupplier;
-
-    /// @since #107627#
-    [optional] interface com::sun::star::text::XTextFieldsSupplier;
-
-    /// @since #107627#
-    [optional] interface com::sun::star::text::XTextFramesSupplier;
-
-    /// @since #107627#
-    [optional] interface com::sun::star::text::XTextSectionsSupplier;
-
-    /// @since #107627#
-    [optional] interface com::sun::star::util::XNumberFormatsSupplier;
-    //-------------------------------------------------------------------------
-
-    // DocMerge from xml: property com::sun::star::text::AdvancedTextDocument::CharLocale
-    /** contains the identifier of the default locale of the document.
-     */
-    [optional, property] com::sun::star::lang::Locale CharLocale;
-
-    //-------------------------------------------------------------------------
-
-    // DocMerge from xml: property com::sun::star::text::AdvancedTextDocument::CharacterCount
-    /** contains the count of all characters in the document.
-     */
-    [optional, readonly, property] long CharacterCount;
-
-
-    //-------------------------------------------------------------------------
-
-    // DocMerge from xml: property com::sun::star::text::AdvancedTextDocument::ParagraphCount
-    /** contains the count of all paragraphs in the document.
-     */
-    [optional, readonly, property] long ParagraphCount;
-
-    //-------------------------------------------------------------------------
-
-    // DocMerge from xml: property com::sun::star::text::AdvancedTextDocument::WordCount
-    /** contains the count of all words in the document.@see WordSeparator
-     */
-    [optional, readonly, property] long WordCount;
-
-    //-------------------------------------------------------------------------
-
-    // DocMerge from xml: property com::sun::star::text::AdvancedTextDocument::WordSeparator
-    /** contains a string that consists of characters that mark the
-        separation of words in counting the words in a document.
-
-
-
-        <p> I.e. slash and backslash. Whitespaces (tab stop,
-        space, paragraph break, line break) always separate
-        words.</p>@see WordCount
-     */
-    [optional, property] string WordSeparator;
-
-        //-------------------------------------------------------------------------
-        /** specifies the concordance file taken into account when
-         *  creating an index.
-         *
-         *  When no concordance file should be used the string is empty.
-         *  Used for text documents only.
-     *
-     *  @since #107627#
-         */
-        [optional, property] string IndexAutoMarkFileURL;
-
-        //-------------------------------------------------------------------------
-        /** specifies if change recording is active.
-     *
-     *  @since #107627#
-         */
-        [optional, property] boolean RecordChanges;
-
-        //-------------------------------------------------------------------------
-        /** specifies the first 4 digit year to be used when years
-         *  are given in 2 digits.
-         *
-         *  Example: if set to 1930
-         *    Oct-12-29 will be interpreted as Oct-12-2029
-         *    Oct-12-30 will be interpreted as Oct-12-1930
-         *    Oct-12-02 will be interpreted as Oct-12-2002
-     *
-     *  @since #107627#
-         */
-        [optional, property] short TwoDigitYear;
+    /** Provides the functionality of such text document. */
+    service GenericTextDocument;
 };
 
 //=============================================================================
