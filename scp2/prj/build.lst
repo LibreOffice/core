@@ -2,6 +2,7 @@ cp    scp2    :    scptools NULL
 cp    scp2                        usr1     -    all    cp_mkout NULL
 cp    scp2\source\activex         nmake    -    all    cp_activex NULL
 cp    scp2\source\calc            nmake    -    all    cp_calc NULL
+cp    scp2\source\canvas          nmake    -    all    cp_canvas NULL
 cp    scp2\source\cde             nmake    -    all    cp_cde NULL
 cp    scp2\source\crashrep        nmake    -    all    cp_crashrep NULL
 cp    scp2\source\draw            nmake    -    all    cp_draw NULL
