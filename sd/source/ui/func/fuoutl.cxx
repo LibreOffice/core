@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuoutl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:35 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 11:08:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,9 +65,17 @@
 
 #include <svx/outliner.hxx>
 
-#include "outlview.hxx"
-#include "sdwindow.hxx"
+#ifndef SD_OUTLINE_VIEW_HXX
+#include "OutlineView.hxx"
+#endif
+#ifndef SD_OUTLINE_VIEW_SHELL_HXX
+#include "OutlineViewShell.hxx"
+#endif
+#ifndef SD_WINDOW_SHELL_HXX
+#include "Window.hxx"
+#endif
 
+namespace sd {
 
 TYPEINIT1( FuOutline, FuPoor );
 
@@ -77,11 +85,15 @@ TYPEINIT1( FuOutline, FuPoor );
 |*
 \************************************************************************/
 
-FuOutline::FuOutline(SdViewShell* pViewShell, SdWindow* pWindow, SdView* pView,
-                     SdDrawDocument* pDoc, SfxRequest& rReq)
-       : FuPoor(pViewShell, pWindow, pView, pDoc, rReq),
-         pOutlineViewShell((SdOutlineViewShell*)pViewShell),
-         pOutlineView((SdOutlineView*)pView)
+FuOutline::FuOutline (
+    ViewShell* pViewShell,
+    ::sd::Window* pWindow,
+    ::sd::View* pView,
+    SdDrawDocument* pDoc,
+    SfxRequest& rReq)
+    : FuPoor(pViewShell, pWindow, pView, pDoc, rReq),
+      pOutlineViewShell (static_cast<OutlineViewShell*>(pViewShell)),
+      pOutlineView (static_cast<OutlineView*>(pView))
 {
 }
 
@@ -105,7 +117,8 @@ BOOL FuOutline::Command(const CommandEvent& rCEvt)
 {
     BOOL bResult = FALSE;
 
-    OutlinerView* pOlView = ((SdOutlineView*)pView)->GetViewByWindow(pWindow);
+    OutlinerView* pOlView =
+        static_cast<OutlineView*>(pView)->GetViewByWindow(pWindow);
     DBG_ASSERT (pOlView, "keine OutlinerView gefunden");
 
     if (pOlView)
@@ -118,3 +131,4 @@ BOOL FuOutline::Command(const CommandEvent& rCEvt)
 
 
 
+} // end of namespace sd
