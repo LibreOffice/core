@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ODatabaseForm.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change:$Date: 2003-11-18 16:27:32 $
+ *  last change:$Date: 2005-02-24 17:42:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -270,6 +270,7 @@ public class ODatabaseForm extends TestCase {
     DBTools.DataSourceInfo srcInf = null;
     boolean isMySQLDB = false;
     protected XConnection conn = null;
+    private Object dbSrc = null;
 
     protected void initialize(TestParameters tParam, PrintWriter log) {
         //log.println( "creating a draw document" );
@@ -309,7 +310,7 @@ public class ODatabaseForm extends TestCase {
                 propInfo[0].Value = "util.dddriver.Driver";
                 srcInf.Info = propInfo;
 
-                Object dbSrc = srcInf.getDataSourceService();
+                dbSrc = srcInf.getDataSourceService();
                 dbTools.reRegisterDB(dbSourceName, dbSrc);
             } catch (com.sun.star.uno.Exception e) {
                 log.println("Error while object test initialization :");
@@ -322,7 +323,7 @@ public class ODatabaseForm extends TestCase {
             try {
                 srcInf.URL = "sdbc:dbase:" + DBTools.dirToUrl(tmpDir);
 
-                Object dbSrc = srcInf.getDataSourceService();
+                dbSrc = srcInf.getDataSourceService();
                 dbTools.reRegisterDB(dbSourceName, dbSrc);
             } catch (com.sun.star.uno.Exception e) {
                 log.println("Error while object test initialization :");
@@ -766,6 +767,7 @@ public class ODatabaseForm extends TestCase {
     * Closes connection of <code>RowSet</code> instance created.
     */
     protected void cleanup(TestParameters Param, PrintWriter log) {
+        log.println("closing connection...");
         try {
             conn.close();
         } catch (com.sun.star.uno.Exception e) {
@@ -775,7 +777,20 @@ public class ODatabaseForm extends TestCase {
             log.println("Connection was already closed. It's OK.");
         }
 
-        log.println("    disposing xTextDoc ");
+
+        log.println("closing data source...");
+        try {
+            XCloseable closer = (XCloseable) UnoRuntime.queryInterface(
+                                        XCloseable.class, dbSrc);
+            closer.close(true);
+        } catch (com.sun.star.util.CloseVetoException e) {
+            log.println("couldn't close data source");
+        } catch (com.sun.star.lang.DisposedException e) {
+            log.println("couldn't close data source");
+        }
+
+
+        log.println("closing document...");
 
         try {
             XCloseable closer = (XCloseable) UnoRuntime.queryInterface(
@@ -787,8 +802,10 @@ public class ODatabaseForm extends TestCase {
             log.println("couldn't close document");
         }
 
+        log.println("revoking data source...");
         try {
             dbTools.revokeDB(dbSourceName);
+        } catch (com.sun.star.container.NoSuchElementException e){
         } catch (com.sun.star.uno.Exception e) {
             log.println("Error while object test cleaning up :");
             e.printStackTrace(log);
