@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforscan.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: er $ $Date: 2001-07-04 17:33:02 $
+ *  last change: $Author: er $ $Date: 2001-07-13 10:20:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1334,7 +1334,6 @@ int ImpSvNumberformatScan::FinalScanGetCalendar( xub_StrLen& nPos, USHORT& i,
 xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
 {
     const LocaleDataWrapper* pLoc = pFormatter->GetLocaleData();
-    const CharClass* pChrCls = pFormatter->GetCharClass();
 
     // save values for convert mode
     String sOldDecSep       = pLoc->getNumDecimalSep();
@@ -1353,7 +1352,12 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
 
     // change locale data et al
     if (bConvertMode)
+    {
         pFormatter->ChangeIntl(eNewLnge);
+        //! pointer may have changed
+        pLoc = pFormatter->GetLocaleData();
+    }
+    const CharClass* pChrCls = pFormatter->GetCharClass();
 
     xub_StrLen nPos = 0;                    // Korrekturposition
     USHORT i = 0;                           // durchlaeuft die Symbole
