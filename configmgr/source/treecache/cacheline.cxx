@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cacheline.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:19:42 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 13:39:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,7 +214,7 @@ namespace configmgr
         data::TreeAccessor aModuleTree(_anAccessor, m_base);
         OSL_ASSERT( aModuleTree.isValid());
 
-        data::NodeAccess aNode = aModuleTree.getRootNode();
+        data::NodeAccess aNode = aModuleTree.getRootNode().toNodeAccess();
         OSL_ENSURE( aNode.isValid(), "CacheLine contains no nodes");
 
         Path::Iterator it = aConfigName.begin();
