@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: os $ $Date: 2002-06-10 12:43:55 $
+ *  last change: $Author: os $ $Date: 2002-07-05 14:00:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,6 +156,9 @@
 #endif
 #ifndef _POOLFMT_HXX
 #include <poolfmt.hxx>
+#endif
+#ifndef _POOLFMT_HRC
+#include <poolfmt.hrc>
 #endif
 #ifndef _UITOOL_HXX
 #include <uitool.hxx>
@@ -608,6 +611,9 @@ SwTOXDescription&   SwMultiTOXTabDialog::GetTOXDescription(CurTOXType eType)
                 pDescArr[nIndex]->SetAuthBrackets(C2S("[]"));
             }
         }
+        else if(TOX_INDEX == eType.eType)
+            pDescArr[nIndex]->SetMainEntryCharStyle(SW_RESSTR(STR_POOLCHR_IDX_MAIN_ENTRY));
+
     }
     return *pDescArr[nIndex];
 }
