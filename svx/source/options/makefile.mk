@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: ghiggins $ $Date: 2002-10-08 13:10:58 $
+#   last change: $Author: pb $ $Date: 2002-12-02 07:56:57 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,51 +77,54 @@ CFLAGS+=-DDG_DLL
 
 # --- Files --------------------------------------------------------
 
-SRCFILES =  \
-        optasian.src	\
-        optcolor.src    \
-        optjsearch.src  \
-        optgenrl.src	\
-        optdict.src		\
-        optaccessibility.src \
-        optsave.src		\
-        optpath.src		\
-        optlingu.src	\
-        optgrid.src		\
-        optinet2.src	\
-        multipat.src    \
-        optextbr.src
+SRCFILES=\
+    optasian.src		\
+    optcolor.src		\
+    optjsearch.src		\
+    optgenrl.src		\
+    optdict.src		\
+    optaccessibility.src	\
+    optsave.src		\
+    optpath.src		\
+    optlingu.src		\
+    optgrid.src		\
+    optinet2.src		\
+    multipat.src		\
+    optextbr.src		\
+    optctl.src
 
-EXCEPTIONSFILES= \
-        $(SLO)$/multifil.obj    \
-        $(SLO)$/optasian.obj \
-        $(SLO)$/optdict.obj \
-        $(SLO)$/optlingu.obj \
-        $(SLO)$/optaccessibility.obj \
-        $(SLO)$/optsave.obj \
-        $(SLO)$/optpath.obj
+EXCEPTIONSFILES=\
+    $(SLO)$/multifil.obj		\
+    $(SLO)$/optasian.obj		\
+    $(SLO)$/optdict.obj		\
+    $(SLO)$/optlingu.obj		\
+    $(SLO)$/optaccessibility.obj	\
+    $(SLO)$/optsave.obj		\
+    $(SLO)$/optpath.obj
 
-SLOFILES=	$(EXCEPTIONSFILES) \
-        $(SLO)$/asiancfg.obj	\
-        $(SLO)$/colorcfg.obj    \
-        $(SLO)$/optcolor.obj    \
-        $(SLO)$/optjsearch.obj  \
-        $(SLO)$/optitems.obj	\
-        $(SLO)$/optgenrl.obj	\
-        $(SLO)$/adritem.obj	\
-        $(SLO)$/optgrid.obj	\
-        $(SLO)$/optinet2.obj	\
-        $(SLO)$/multipat.obj    \
-        $(SLO)$/optextbr.obj    \
-        $(SLO)$/srchcfg.obj
+SLOFILES=\
+    $(EXCEPTIONSFILES)	\
+    $(SLO)$/asiancfg.obj	\
+    $(SLO)$/colorcfg.obj    \
+    $(SLO)$/optcolor.obj    \
+    $(SLO)$/optjsearch.obj  \
+    $(SLO)$/optitems.obj	\
+    $(SLO)$/optgenrl.obj	\
+    $(SLO)$/adritem.obj	\
+    $(SLO)$/optgrid.obj	\
+    $(SLO)$/optinet2.obj	\
+    $(SLO)$/multipat.obj    \
+    $(SLO)$/optextbr.obj    \
+    $(SLO)$/srchcfg.obj	\
+    $(SLO)$/optctl.obj
 
 
-SVXLIGHTOBJFILES= \
-        $(OBJ)$/adritem.obj
+SVXLIGHTOBJFILES=\
+    $(OBJ)$/adritem.obj
 
 .IF "$(GUI)"=="WIN"
-SLOFILES+=	\
-        $(SLO)$/optdll.obj
+SLOFILES+=\
+    $(SLO)$/optdll.obj
 .ENDIF
 
 # --- Targets -------------------------------------------------------
