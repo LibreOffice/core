@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srtdlg.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:46 $
+ *  last change: $Author: kz $ $Date: 2000-10-27 18:02:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -410,7 +410,7 @@ ModalDialog DLG_SORTING
         Text[ chinese_simplified ] = "µİ¼õ(~D)";
         Text[ russian ] = "Ïî óáûâàíèş";
         Text[ polish ] = "Malej¹co";
-        Text[ japanese ] = "~‡";
+        Text[ japanese ] = "~‡(~D)";
         Text[ chinese_traditional ] = "»¼´î(~D)";
         Text[ arabic ] = "ÊäÇÒáí";
         Text[ greek ] = "Öèßíïõóá";
