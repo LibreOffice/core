@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XRecordableDispatch.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2002-04-22 12:49:51 $
+ *  last change: $Author: as $ $Date: 2002-11-05 09:06:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,25 +85,7 @@
     This interface can be implemented as an additional one beside an existing
     <type>XDispatch</type> one to provide record functionality of dispatches.
     Because it's an additional interface the status events are available there
-    and not at this interface.<br>
-    An example:
-    <listing>
-        XDispatch xDispatcher = xFrame.queryDispatch(aURL,"",0);
-        XRecordableDispatch xRecordable = (XRecordableDispatch)UnoRuntime.queryInterface(
-            XRecordableDispatch.class,
-            xDispatcher);
-
-        xDispatcher.addStatusListener(this,aURL);
-
-        if(xRecordable!=null)
-            xRecordable.dispatchAndRecord(aURL,lArguments,xRecorder);
-        else
-            xDispatcher.dispatch(aURL,lArguments);
-
-        ...
-
-        xDispatcher.removeStatusListener(this,aURL);
-    </listing>
+    and not at this interface.
     </p>
 
     <p>
@@ -114,6 +96,23 @@
     to make dispatch and recording automaticly. The interface XRecordableDispatch
     is used transparently there.
     </p>
+
+    @example
+    <listing>
+        <i>XDispatch</i> xDispatcher = xFrame.queryDispatch(aURL,"",0);
+        <i>XRecordableDispatch</i> xRecordable = (<i>XRecordableDispatch</i>)UnoRuntime.queryInterface(
+        &nbsp;&nbsp;XRecordableDispatch.class,
+        &nbsp;&nbsp;xDispatcher);
+
+        xDispatcher.addStatusListener(this,aURL);
+
+        <b>if</b> (xRecordable!=<b>null</b>)
+        &nbsp;&nbsp;xRecordable.dispatchAndRecord(aURL,lArguments,xRecorder);
+        else
+        &nbsp;&nbsp;xDispatcher.dispatch(aURL,lArguments);
+        ...
+        xDispatcher.removeStatusListener(this,aURL);
+    </listing>
 
     @see XDispatchRecorderSupplier
     @see XDispatch

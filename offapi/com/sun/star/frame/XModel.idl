@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XModel.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:05:26 $
+ *  last change: $Author: as $ $Date: 2002-11-05 09:06:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,9 +109,9 @@
     <type>XSelectionSupplier</type>, it has a current selection too.
     </p>
 
-    @see MediaDescriptor
+    @see com::sun::star::document::MediaDescriptor
     @see Controller
-    @see XSelectionSupplier
+    @see com::sun::star::view::XSelectionSupplier
  */
 interface XModel: com::sun::star::lang::XComponent
 {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XComponentLoader.idl,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:05:21 $
+ *  last change: $Author: as $ $Date: 2002-11-05 09:06:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,7 +123,7 @@ interface XComponentLoader: com::sun::star::uno::XInterface
                 </tr>
                 <tr>
                     <td><strong>"_default"</strong></td>
-                    <td>recycle empty frame or create new one</td>
+                    <td>special UI functionality<br>(e.g. detecting of already loaded documents, using of empty frames of creating of new top frames as fallback)</td>
                 </tr>
                 <tr>
                     <td><strong>"_self", ""(!)</strong></td>

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XFrame.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:05:24 $
+ *  last change: $Author: as $ $Date: 2002-11-05 09:06:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,9 +194,6 @@ interface XFrame: com::sun::star::lang::XComponent
         Frames may contain other frames (e.g., a frameset) and may
         be contained in other frames. This hierarchy is searched with
         this method.
-        </p>
-
-        <p>
         First some special names are taken into account, i.e. "",
         "_self", "_top", "_blank" etc. <var>SearchFlags</var> is ignored when
         comparing these names with <var>TargetFrameName</var>; further steps are
@@ -207,19 +204,32 @@ interface XFrame: com::sun::star::lang::XComponent
         </p>
 
         <p>
+        List of special target names:
+        <table border=1>
+        <tr><td>""/"_self"</td><td>address the starting frame itself</td></tr>
+        <tr><td>"_parent"</td><td>address the direct parent frame only</td></tr>
+        <tr><td>"_top"</td><td>address the top frame of this subtree of the frametree</td></tr>
+        <tr><td>"_blank"</td><td>creates a new top frame</td></tr>
+        </table>
+        </p>
+
+        <p>
         If no frame with the given name is found, a new top frame is
         created; if this is allowed by a special flag <const>FrameSearchFlag::CREATE</const>.
         The new frame also gets the desired name.
         </p>
 
         @param TargetFrameName
-            identify (a) a special target ("_blank","_self" ...)
-                  or (b) any well known frame
+            identify
+            <ul><li>(a) a special target ("_blank","_self" ...) or</li>
+                <li>(b) any well known frame</li><ul>
             to search it inside the current hierarchy
 
         @param SearchFlags
             optional parameter to regulate search if no special target was used for <var>TargetFrameName</var>
-     */
+
+         @see FrameSearchFlag
+         */
     XFrame findFrame(
         [in] string TargetFrameName,
         [in] long SearchFlags);

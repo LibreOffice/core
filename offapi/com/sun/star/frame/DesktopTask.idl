@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DesktopTask.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:05:15 $
+ *  last change: $Author: as $ $Date: 2002-11-05 09:06:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,21 +94,45 @@
  module com {  module sun {  module star {  module frame {
 
 //=============================================================================
-/** @deprecated
+/** use the <type>Frame</type> service instead of this
+    @deprecated
  */
 service DesktopTask
 {
-    interface com::sun::star::frame::XDesktopTask;
+        /** use <type>Frame</type> service */
+        interface com::sun::star::frame::XDesktopTask;
+
+        /** use the same interface at the <type>Frame</type> service */
     interface com::sun::star::frame::XFrame;
+
+        /** use the same interface at the <type>Frame</type> service */
     interface com::sun::star::beans::XPropertySet;
+
+        /** - */
     interface com::sun::star::frame::XWindowArranger;
+
+        /** use the same interface at the <type>Desktop</type> or
+            <type>Frame</type> service */
     interface com::sun::star::frame::XFramesSupplier;
+
+        /** use property <member>Frame::Title</member> instead of that */
     [readonly, property] string Title;
+
+        /** - */
     [readonly, property] boolean IsDesktop;
+
+        /** use th visible state of the frame container window instead of this */
     [property] boolean IsVisible;
+
+        /** - */
     [property] boolean IsFloating;
+        /** - */
     [property] boolean IsAlwaysVisible;
+
+        /** use the position of the frame container window instead of this */
     [property] com::sun::star::awt::Point Position;
+
+        /** use the size of the frame container window instead of this */
     [property] com::sun::star::awt::Size Size;
 };
 

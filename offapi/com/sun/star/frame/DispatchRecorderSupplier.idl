@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DispatchRecorderSupplier.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2002-04-22 12:49:51 $
+ *  last change: $Author: as $ $Date: 2002-11-05 09:06:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,11 +70,11 @@
  module com {  module sun {  module star {  module frame {
 
 //=============================================================================
-/** provides a <type>DipatchRecorder</type>
+/** provides a <type>DispatchRecorder</type>
 
     <p>
-    This supplier regulate macro recording of <type>XDispatch::dispatch()</type>
-    calls. For that it capsulate a reference to a <type>DipatchRecorder</type>.
+    This supplier regulate macro recording of <member>XDispatch::dispatch()</member>
+    calls. For that it capsulate a reference to a <type>DispatchRecorder</type>.
     Such recorder is used internaly and can be used externaly too.
     A supplier will be available on a <type>Frame</type> if recording was enabled,
     otherwise not. A frame supports a special property for that.
@@ -83,7 +83,7 @@
     opened frames or only some of them; and so on.
     </p>
 
-    @see DipatchRecorder
+    @see DispatchRecorder
     @see Frame
  */
 service DispatchRecorderSupplier

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Desktop.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:05:15 $
+ *  last change: $Author: as $ $Date: 2002-11-05 09:06:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,7 @@ service Desktop
 
         <p>
         It's not a must for a frame (neither a frame tree) to be a part of this
-        global tree. But such outstanding frames willn't be accessible by the normal
+        global tree. But such outstanding frames won't be accessible by the normal
         frame api.
         </p>
      */

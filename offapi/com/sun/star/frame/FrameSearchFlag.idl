@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FrameSearchFlag.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:05:19 $
+ *  last change: $Author: as $ $Date: 2002-11-05 09:06:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,9 +70,9 @@
 /** these types describe the algorithm to be used to search a frame
 
     <p>
-    Such flags will be used on methods <type>XFrame::findFrame()</type>,
-    <type>XDispatchProvider::queryDispatch()</type> or
-    <type>XComponentLoader::loadComponentFromURL()</type> if no special target
+    Such flags will be used on methods <member>XFrame::findFrame()</member>,
+    <member>XDispatchProvider::queryDispatch()</member> or
+    <member>XComponentLoader::loadComponentFromURL()</member> if no special target
     frame name (e.g. "_blank", "_self") is used.
     </p>
 

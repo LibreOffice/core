@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDispatch.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:05:22 $
+ *  last change: $Author: as $ $Date: 2002-11-05 09:06:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,20 +84,20 @@ module com {  module sun {  module star {  module frame {
 
 //=============================================================================
 /** serves state information of objects which can be connected to
-    controllers (e.g., toolbox controllers).
+        controls (e.g., toolbox controls).
 
     <p>
     Each state change is to be broadcast to all registered
     status listeners. The first notification should be performed
     synchronously from <member>XDispatch::addStatusListener()</member>;
-    if not, controllers may flicker. State listener must be aware of this
+        if not, controls may flicker. State listener must be aware of this
     synchronous notification.
     </p>
 
     <p>
     The state consists of enabled/disabled and a short descriptive text
     of the function (e.g., "undo insert character"). It is to be broadcast
-    whenever this state changes or the controller should re-get the value
+        whenever this state changes or the control should re-get the value
     for the URL to which it is connected. Additionally, a context-switch-event
     is to be broadcast whenever the object may be out of scope,
     to force the state listener to requery the <type>XDispatch</type>.
@@ -125,21 +125,23 @@ interface XDispatch: com::sun::star::uno::XInterface
 
         @example
             <listing>
-            // some code for a click-handler
+            <i><font COLOR="#949494">// some code for a click-handler (Java)</font></i>
             void <strong>myOnClick</strong>(<em>String</em> sURL,<em>String</em> sTargetFrame,<em>com.sun.star.beans.PropertyValue[]</em> lArguments)
             {
-            com.sun.star.util.URL[] aURL = new com.sun.star.util.URL[1];
-            aURL[0] = new com.sun.star.util.URL();
-            aURL[0].Complete = sURL;
+            &nbsp;&nbsp;com.sun.star.util.URL[] aURL = new com.sun.star.util.URL[1];
+            &nbsp;&nbsp;aURL[0] = new com.sun.star.util.URL();
+            &nbsp;&nbsp;aURL[0].Complete = sURL;
 
-            com.sun.star.util.XURLTransformer xParser = (com.sun.star.util.XURLTransformer)UnoRuntime.queryInterface(com.sun.star.util.XURLTransformer.class, mxServiceManager.createInstance("com.sun.star.util.URLTransformer"));
+            &nbsp;&nbsp;com.sun.star.util.XURLTransformer xParser = (com.sun.star.util.XURLTransformer)UnoRuntime.queryInterface(
+            &nbsp;&nbsp;&nbsp;&nbsp;com.sun.star.util.XURLTransformer.class,
+            &nbsp;&nbsp;&nbsp;&nbsp;mxServiceManager.createInstance("com.sun.star.util.URLTransformer"));
 
-            xParser-&gt;parseStrict(aURL);
+            &nbsp;&nbsp;xParser.parseStrict(aURL);
 
-            com.sun.star.frame.XDispatch xDispatcher = mxFrame.queryDispatch(aURL[0], sTargetFrame, com.sun.star.frame.FrameSearchFlag.GLOBAL);
+            &nbsp;&nbsp;com.sun.star.frame.XDispatch xDispatcher = mxFrame.queryDispatch(aURL[0], sTargetFrame, com.sun.star.frame.FrameSearchFlag.GLOBAL);
 
-            if(xDispatcher!=null)
-                xDispatcher.dispatch(aURL[0], lArguments);
+            &nbsp;&nbsp;if(xDispatcher!=null)
+            &nbsp;&nbsp;&nbsp;&nbsp;xDispatcher.dispatch(aURL[0], lArguments);
             }
             </listing>
      */
@@ -148,7 +150,7 @@ interface XDispatch: com::sun::star::uno::XInterface
         [in] sequence<com::sun::star::beans::PropertyValue> Arguments);
 
     //-------------------------------------------------------------------------
-    /** registers a listener of a controller for a specific URL
+        /** registers a listener of a control for a specific URL
         to this object to receive status events.
 
         <p>
@@ -172,7 +174,7 @@ interface XDispatch: com::sun::star::uno::XInterface
         [in] com::sun::star::util::URL URL);
 
     //-------------------------------------------------------------------------
-    /** unregisters a listener of a controller.
+        /** unregisters a listener of a control.
 
         @param Control
             listener which wish to be unregistered
