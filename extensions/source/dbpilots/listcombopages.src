@@ -2,9 +2,9 @@
  *
  *  $RCSfile: listcombopages.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-21 21:06:00 $
+ *  last change: $Author: kz $ $Date: 2001-08-24 20:45:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -515,6 +515,9 @@ String RID_STR_COMBOWIZ_DBFIELD
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.23  2001/08/21 21:06:00  kz
+ *  Merge SRC638: 21.08.01 - 23:05:18
+ *
  *  Revision 1.22  2001/08/14 15:10:18  kz
  *  Merge SRC638: 14.08.01 - 17:09:52
  *
@@ -545,6 +548,7 @@ String RID_STR_COMBOWIZ_DBFIELD
  *
  *  Revision 1.0 21.02.01 16:16:18  fs
  ************************************************************************/
+
 
 
 
