@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MasterScriptProvider.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 14:06:44 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 15:31:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,20 +89,6 @@ using namespace ::scripting_util;
 
 namespace func_provider
 {
-
-::rtl::OUString s_implName = ::rtl::OUString::createFromAscii(
-    "com.sun.star.script.provider.MasterScriptProvider" );
-const ::rtl::OUString s_serviceNameList[] = {
-    ::rtl::OUString::createFromAscii(
-        "com.sun.star.script.provider.MasterScriptProvider" ),
-    ::rtl::OUString::createFromAscii(
-        "com.sun.star.script.browse.BrowseNode" ),
-    ::rtl::OUString::createFromAscii(
-        "com.sun.star.script.provider.ScriptProvider" ) };
-
-Sequence< ::rtl::OUString > s_serviceNames = Sequence <
-        ::rtl::OUString > ( s_serviceNameList, 3 );
-
 //*************************************************************************
 //  Definitions for MasterScriptProviderFactory global methods.
 //*************************************************************************
@@ -134,8 +120,6 @@ MasterScriptProvider::MasterScriptProvider( const Reference< XComponentContext >
         m_xContext( xContext ), m_bIsValid( false ), m_bInitialised( false ),
         m_bIsPkgMSP( false ), m_pPCache( 0 )
 {
-    OSL_TRACE( "< MasterScriptProvider ctor called >\n" );
-
     validateXRef( m_xContext, "MasterScriptProvider::MasterScriptProvider: No context available\n" );
     m_xMgr = m_xContext->getServiceManager();
     validateXRef( m_xMgr,
@@ -146,8 +130,6 @@ MasterScriptProvider::MasterScriptProvider( const Reference< XComponentContext >
 //*************************************************************************
 MasterScriptProvider::~MasterScriptProvider()
 {
-    OSL_TRACE( "< MasterScriptProvider dtor called >\n" );
-
     //s_moduleCount.modCnt.release( &s_moduleCount.modCnt );
     if ( m_pPCache )
     {
@@ -160,10 +142,8 @@ MasterScriptProvider::~MasterScriptProvider()
 void SAL_CALL MasterScriptProvider::initialize( const Sequence < Any >& args )
 throw ( Exception, RuntimeException )
 {
-    OSL_TRACE( "< MasterScriptProvider::initialize() method called >\n" );
     if ( m_bInitialised )
     {
-        OSL_TRACE( "MasterScriptProvider Already initialised" );
         return ;
     }
 
@@ -192,13 +172,9 @@ throw ( Exception, RuntimeException )
         if ( args[ 0 ].getValueType() ==  ::getCppuType((const ::rtl::OUString* ) NULL ) )
         {
              args[ 0 ] >>= m_sCtxString;
-            OSL_TRACE("Creating MSP for context is %s",
-            ::rtl::OUStringToOString( m_sCtxString , RTL_TEXTENCODING_ASCII_US ).pData->buffer );
             invokeArgs[ 0  ] = args[ 0 ];
             if ( m_sCtxString.indexOf( OUSTR("vnd.sun.star.tdoc") ) == 0 )
             {
-                OSL_TRACE("Creating MSP for tdoc url %s",
-                    ::rtl::OUStringToOString( m_sCtxString , RTL_TEXTENCODING_ASCII_US ).pData->buffer );
                 m_xModel =  MiscUtils::tDocUrlToModel( m_sCtxString );
             }
 
@@ -211,9 +187,6 @@ throw ( Exception, RuntimeException )
                 m_xModel.set( args[ 0 ], UNO_QUERY_THROW );
                 m_sCtxString =  MiscUtils::xModelToTdocUrl( m_xModel );
                 Any propValURL = makeAny( m_sCtxString );
-                OSL_TRACE( "!!** XModel URL inserted into any is %s \n",
-                    ::rtl::OUStringToOString(
-                        m_sCtxString , RTL_TEXTENCODING_ASCII_US ).pData->buffer );
                 invokeArgs[ 0 ] <<= propValURL;
             }
 
@@ -235,7 +208,6 @@ throw ( Exception, RuntimeException )
         // if contex string ends with "uno_packages"
         if ( indexOfPkgSpec > -1 && ( m_sCtxString.match( pkgSpec, indexOfPkgSpec ) == sal_True ) )
         {
-            OSL_TRACE("** ** Setting this to be a package MSP");
             m_bIsPkgMSP = sal_True;
         }
         else
@@ -257,23 +229,18 @@ throw ( Exception, RuntimeException )
 
     m_bInitialised = true;
     m_bIsValid = true;
-    OSL_TRACE( "Initialised XMasterScriptProvider for %s",
-            ::rtl::OUStringToOString( m_sCtxString , RTL_TEXTENCODING_ASCII_US ).pData->buffer );
 }
 
 
 //*************************************************************************
 void MasterScriptProvider::createPkgProvider()
 {
-    OSL_TRACE("In MasterScriptProvider::createPkgProvider()");
     try
     {
         ::rtl::OUString loc = m_sCtxString;
         Any location;
         ::rtl::OUString sPkgCtx =  m_sCtxString.concat( OUSTR(":uno_packages") );
         location <<= sPkgCtx;
-
-        OSL_TRACE("About to create pkg MSP");
 
         Reference< provider::XScriptProviderFactory > xFac(
             m_xContext->getValueByName(
@@ -285,7 +252,7 @@ void MasterScriptProvider::createPkgProvider()
     }
     catch ( Exception& e )
     {
-        OSL_TRACE("Failed to create msp for uno_packages in context %s, error is %s",
+        OSL_TRACE("Exception creating MasterScriptProvider for uno_packages in context %s: %s",
                 ::rtl::OUStringToOString( m_sCtxString,
                     RTL_TEXTENCODING_ASCII_US ).pData->buffer,
                 ::rtl::OUStringToOString( e.Message,
@@ -310,13 +277,6 @@ throw ( provider::ScriptFrameworkErrorException,
             Reference< XInterface >() );
     }
 
-    OSL_TRACE( "**  ==> MasterScriptProvider in getScript\n" );
-    OSL_TRACE( "Script URI is %s\n Context is %s",
-        ::rtl::OUStringToOString( scriptURI,
-            RTL_TEXTENCODING_ASCII_US ).pData->buffer,
-        ::rtl::OUStringToOString( m_sCtxString,
-            RTL_TEXTENCODING_ASCII_US ).pData->buffer  );
-
     // need to get the language from the string
 
     Reference< uri::XUriReferenceFactory > xFac (
@@ -340,9 +300,6 @@ throw ( provider::ScriptFrameworkErrorException,
     {
         ::rtl::OUString errorMsg = OUSTR( "Incorrect format for Script URI: " );
         errorMsg = errorMsg.concat( scriptURI );
-        OSL_TRACE( "%s",
-            ::rtl::OUStringToOString( errorMsg,
-                RTL_TEXTENCODING_ASCII_US ).pData->buffer  );
         throw provider::ScriptFrameworkErrorException(
             errorMsg, Reference< XInterface >(),
             scriptURI, OUSTR(""),
@@ -357,9 +314,6 @@ throw ( provider::ScriptFrameworkErrorException,
          ( sfUri->getName().getLength() == 0  ) )
     {
         ::rtl::OUString errorMsg = OUSTR( "Incorrect format for Script URI: " );
-        OSL_TRACE( "%s",
-            ::rtl::OUStringToOString( errorMsg,
-                RTL_TEXTENCODING_ASCII_US ).pData->buffer  );
         errorMsg = errorMsg.concat( scriptURI );
         throw provider::ScriptFrameworkErrorException(
             errorMsg, Reference< XInterface >(),
@@ -369,13 +323,6 @@ throw ( provider::ScriptFrameworkErrorException,
 
     ::rtl::OUString language = sfUri->getParameter( langKey );
     ::rtl::OUString location = sfUri->getParameter( locKey );
-    // Temporary debug lines
-    OSL_TRACE( "Script location %s\n Context is %s\n endwith %d",
-        ::rtl::OUStringToOString( location,
-            RTL_TEXTENCODING_ASCII_US ).pData->buffer,
-        ::rtl::OUStringToOString( m_sCtxString,
-            RTL_TEXTENCODING_ASCII_US ).pData->buffer,
-        endsWith( m_sCtxString, location )  );
 
     // if script us located in uno pkg
     sal_Int32 index = -1;
@@ -411,7 +358,6 @@ throw ( provider::ScriptFrameworkErrorException,
          ( language.equals( OUSTR( "Basic" ) ) )
          )
     {
-        OSL_TRACE("MasterScriptProvider::getScript() location is in this context or is Basic script");
         Reference< provider::XScriptProvider > xScriptProvider;
         ::rtl::OUStringBuffer buf( 80 );
         buf.appendAscii( "com.sun.star.script.provider.ScriptProviderFor");
@@ -427,7 +373,6 @@ throw ( provider::ScriptFrameworkErrorException,
             }
             catch( Exception& e )
             {
-                OSL_TRACE("Attempt to throw ScriptFrameworkException");
                 throw provider::ScriptFrameworkErrorException(
                     e.Message, Reference< XInterface >(),
                     sfUri->getName(), language,
@@ -498,9 +443,6 @@ MasterScriptProvider::providerCache()
 MasterScriptProvider::getName()
         throw ( css::uno::RuntimeException )
 {
-    OSL_TRACE("MasterScriptProvider::getName() for %s",
-        ::rtl::OUStringToOString( getContextString(),
-            RTL_TEXTENCODING_ASCII_US ).pData->buffer );
     if ( !isPkgProvider() )
     {
         ::rtl::OUString sCtx = getContextString();
@@ -528,9 +470,6 @@ MasterScriptProvider::getName()
     {
         m_sNodeName = OUSTR("uno_packages");
     }
-    OSL_TRACE("MasterScriptProvider::getName() returning name %s ",
-        ::rtl::OUStringToOString( m_sNodeName,
-            RTL_TEXTENCODING_ASCII_US ).pData->buffer );
     return m_sNodeName;
 }
 
@@ -539,9 +478,6 @@ Sequence< Reference< browse::XBrowseNode > > SAL_CALL
 MasterScriptProvider::getChildNodes()
         throw ( css::uno::RuntimeException )
 {
-    OSL_TRACE("MasterScriptProvider:getChildNodes() ctx = %s",
-        ::rtl::OUStringToOString( getContextString(),
-            RTL_TEXTENCODING_ASCII_US ).pData->buffer );
     Sequence< Reference< provider::XScriptProvider > > providers = getAllProviders();
 
     Reference< provider::XScriptProvider > pkgProv = getPkgProvider();
@@ -659,16 +595,11 @@ MasterScriptProvider::insertByName( const ::rtl::OUString& aName, const Any& aEl
             Reference< container::XNameContainer > xCont( xSProviders[ index ], UNO_QUERY );
             if ( !xCont.is() )
             {
-                OSL_TRACE("Ignoring script provider [%d]", index );
                 continue;
             }
             try
             {
                 xCont->insertByName( aName, aElement );
-                OSL_TRACE("ScriptProvider [%d] insertByName succeeded for package named %s ", index,
-                    ::rtl::OUStringToOString( aName,
-                        RTL_TEXTENCODING_ASCII_US ).pData->buffer );
-
                 break;
             }
             catch ( Exception& ignore )
@@ -681,11 +612,8 @@ MasterScriptProvider::insertByName( const ::rtl::OUString& aName, const Any& aEl
             // No script providers could process the package
             ::rtl::OUString message = OUSTR("Failed to register package for ");
             message = message.concat( aName );
-            OSL_TRACE("Failed to register package, throwing illegalArgument: %s",
-                ::rtl::OUStringToOString( message,
-                        RTL_TEXTENCODING_ASCII_US ).pData->buffer );
             throw lang::IllegalArgumentException( message,
-                                                      Reference < XInterface > (), 2 );
+                Reference < XInterface > (), 2 );
         }
    }
 }
@@ -741,16 +669,11 @@ MasterScriptProvider::removeByName( const ::rtl::OUString& Name ) throw ( contai
             Reference< container::XNameContainer > xCont( xSProviders[ index ], UNO_QUERY );
             if ( !xCont.is() )
             {
-                OSL_TRACE("Ignoring script provider [%d]", index );
                 continue;
             }
             try
             {
                 xCont->removeByName( Name );
-                OSL_TRACE("ScriptProvider [%d] removeByName succeeded for package named %s ", index,
-                    ::rtl::OUStringToOString( Name,
-                        RTL_TEXTENCODING_ASCII_US ).pData->buffer );
-
                 break;
             }
             catch ( Exception& ignore )
@@ -846,17 +769,11 @@ MasterScriptProvider::hasByName( const ::rtl::OUString& aName ) throw (RuntimeEx
             Reference< container::XNameContainer > xCont( xSProviders[ index ], UNO_QUERY );
             if ( !xCont.is() )
             {
-                OSL_TRACE("Ignoring script provider [%d]", index );
                 continue;
             }
             try
             {
                 result = xCont->hasByName( aName );
-                OSL_TRACE("ScriptProvider [%d] hasByName for %s returned %s",
-                    index,
-                    ::rtl::OUStringToOString( aName,
-                        RTL_TEXTENCODING_ASCII_US ).pData->buffer,
-                    ( result == sal_True ) ? "TRUE" : "FALSE" );
                 if ( result == sal_True )
                 {
                     break;
@@ -908,22 +825,16 @@ sal_Bool SAL_CALL MasterScriptProvider::hasElements(  ) throw ( RuntimeException
 Sequence< Reference< provider::XScriptProvider > > SAL_CALL
 MasterScriptProvider::getAllProviders() throw ( css::uno::RuntimeException )
 {
-    OSL_TRACE("Entering MasterScriptProvider Get ALL Providers() " );
     if ( providerCache() )
     {
-        OSL_TRACE("Leaving MasterScriptProvider Get ALL Providers() " );
         return providerCache()->getAllProviders();
     }
     else
     {
-        OSL_TRACE("MasterScriptProvider::getAllProviders() something wrong, no language providers");
-        ::rtl::OUString errorMsg;
-        errorMsg = ::rtl::OUString::createFromAscii("MasterScriptProvider::getAllProviders, unknown error, cache not initialised");
-        OSL_TRACE("Leaving MasterScriptProvider Get ALL Providers() THROWING " );
-        return providerCache()->getAllProviders();
+        ::rtl::OUString errorMsg = ::rtl::OUString::createFromAscii(
+            "MasterScriptProvider::getAllProviders, cache not initialised");
         throw RuntimeException( errorMsg.concat( errorMsg ),
-                        Reference< XInterface >() );
-
+            Reference< XInterface >() );
     }
 }
 
@@ -932,15 +843,17 @@ MasterScriptProvider::getAllProviders() throw ( css::uno::RuntimeException )
 ::rtl::OUString SAL_CALL MasterScriptProvider::getImplementationName( )
 throw( RuntimeException )
 {
-    return s_implName;
+    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM (
+        "com.sun.star.script.provider.MasterScriptProvider" ) );
 }
 
 //*************************************************************************
 sal_Bool SAL_CALL MasterScriptProvider::supportsService( const ::rtl::OUString& serviceName )
 throw( RuntimeException )
 {
-    ::rtl::OUString const * pNames = s_serviceNames.getConstArray();
-    for ( sal_Int32 nPos = s_serviceNames.getLength(); nPos--; )
+    Sequence< ::rtl::OUString > serviceNames( getSupportedServiceNames() );
+    ::rtl::OUString const * pNames = serviceNames.getConstArray();
+    for ( sal_Int32 nPos = serviceNames.getLength(); nPos--; )
     {
         if ( serviceName.equals( pNames[ nPos ] ) )
         {
@@ -954,7 +867,16 @@ throw( RuntimeException )
 Sequence< ::rtl::OUString > SAL_CALL MasterScriptProvider::getSupportedServiceNames( )
 throw( RuntimeException )
 {
-        return s_serviceNames;
+    ::rtl::OUString names[3];
+
+    names[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM (
+        "com.sun.star.script.provider.MasterScriptProvider" ) );
+    names[1] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM (
+        "com.sun.star.script.browse.BrowseNode" ) );
+    names[2] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM (
+        "com.sun.star.script.provider.ScriptProvider" ) );
+
+    return Sequence< ::rtl::OUString >( names, 3 );
 }
 
 } // namespace func_provider
@@ -980,14 +902,24 @@ Reference< XInterface > SAL_CALL sp_create(
 Sequence< ::rtl::OUString > sp_getSupportedServiceNames( )
     SAL_THROW( () )
 {
-    return ::func_provider::s_serviceNames;
+    ::rtl::OUString names[3];
+
+    names[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM (
+        "com.sun.star.script.provider.MasterScriptProvider" ) );
+    names[1] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM (
+        "com.sun.star.script.browse.BrowseNode" ) );
+    names[2] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM (
+        "com.sun.star.script.provider.ScriptProvider" ) );
+
+    return Sequence< ::rtl::OUString >( names, 3 );
 }
 
 //*************************************************************************
 ::rtl::OUString sp_getImplementationName( )
 SAL_THROW( () )
 {
-    return ::func_provider::s_implName;
+    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM (
+        "com.sun.star.script.provider.MasterScriptProvider" ) );
 }
 
 static struct cppu::ImplementationEntry s_entries [] =
