@@ -2,9 +2,9 @@
  *
  *  $RCSfile: feflyole.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:06:45 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 16:26:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,8 +149,6 @@ SwFlyFrm *SwFEShell::FindFlyFrm( const uno::Reference < embed::XEmbeddedObject >
         {
             SwNode *pNd = GetNodes()[ nSttIdx+1 ];
             if ( pNd->IsOLENode() &&
-                //do not load Objects! must not be neccessary here
-                 ((SwOLENode*)pNd)->GetOLEObj().IsOleRef() &&
                  ((SwOLENode*)pNd)->GetOLEObj().GetOleRef() == xObj )
             {
                 bExist = TRUE;
