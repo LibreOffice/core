@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docprev.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cl $ $Date: 2002-08-02 12:47:13 $
+ *  last change: $Author: cl $ $Date: 2002-11-13 18:19:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,16 @@
 #include <vcl/ctrl.hxx>
 #endif
 
+#ifndef _SVDOUTL_HXX
+#include <svx/svdoutl.hxx>
+#endif
+#ifndef _SVDPAGV_HXX
+#include <svx/svdpagv.hxx>
+#endif
+#ifndef _SVDORECT_HXX
+#include <svx/svdorect.hxx>
+#endif
+
 #ifndef _SD_FADER_HXX
 #include "fader.hxx"
 #endif
@@ -92,36 +102,43 @@
 #include "docshell.hxx"
 #include "viewshel.hxx"
 #include "showview.hxx"
+#include "drawview.hxx"
+#include "sdpage.hxx"
 
 using namespace ::com::sun::star;
 
 const int SdDocPreviewWin::FRAME = 4;
 
-void SdDocPreviewWin::SetObjectShell( SfxObjectShell* pObj, USHORT nShowPage )
+void SdDocPreviewWin::SetObjectShell( SfxObjectShell* pObj, sal_uInt16 nShowPage )
 {
+    mpObj = pObj;
+    mnShowPage = nShowPage;
 
-    SdDrawDocShell* pDocShell = PTR_CAST(SdDrawDocShell,pObj);
-    SdDrawDocument* pDoc = pDocShell?pDocShell->GetDoc():NULL;
-    if(pDoc)
+    updateViewSettings();
+}
+
+IMPL_LINK( SdDocPreviewWin, PaintProc, SdrPaintProcRec *, pRecord )
+{
+    SdrObject* pObj = pRecord->pObj;
+    if( !pObj->IsEmptyPresObj() )
     {
-        const USHORT nPageCount = pDoc->GetSdPageCount(PK_STANDARD);
-        USHORT nPgNum = 0;
-        while( nPgNum < nPageCount )
+        pObj->Paint( pRecord->rOut, pRecord->rInfoRec );
+    }
+    else
+    {
+        // sad but true, background shapes are also empty presentation objects
+        // so we need to check if this is one
+        if( pObj->GetPage()->IsMasterPage() && (pObj->GetPage() == pObj->GetObjList()) && (pObj->GetOrdNum() == 0) && pObj->ISA( SdrRectObj ) )
         {
-            pDoc->SetSelected( pDoc->GetSdPage( nPgNum, PK_STANDARD ), nPgNum == nShowPage );
-            nPgNum++;
+            pObj->Paint( pRecord->rOut, pRecord->rInfoRec );
         }
     }
 
-    GDIMetaFile* pFile = pObj ? pObj->GetPreviewMetaFile( ) : 0;
-    delete pMetaFile;
-    pMetaFile = pFile;
-    m_pObj = pObj;
-    Invalidate();
+    return 0;
 }
 
 SdDocPreviewWin::SdDocPreviewWin( Window* pParent, const ResId& rResId )
-: Control(pParent, rResId), pMetaFile( 0 ), bInEffect(FALSE), m_pObj(NULL)
+: Control(pParent, rResId), pMetaFile( 0 ), bInEffect(FALSE), mpObj(NULL), mnShowPage(0)
 {
     SetBorderStyle( WINDOW_BORDER_MONO );
     svx::ColorConfig aColorConfig;
@@ -129,7 +146,7 @@ SdDocPreviewWin::SdDocPreviewWin( Window* pParent, const ResId& rResId )
 }
 
 SdDocPreviewWin::SdDocPreviewWin( Window* pParent )
-: Control(pParent, 0 ), pMetaFile( 0 ), bInEffect(FALSE), m_pObj(NULL)
+: Control(pParent, 0 ), pMetaFile( 0 ), bInEffect(FALSE), mpObj(NULL), mnShowPage(0)
 {
     SetBorderStyle( WINDOW_BORDER_MONO );
     svx::ColorConfig aColorConfig;
@@ -189,7 +206,7 @@ void SdDocPreviewWin::ImpPaint( GDIMetaFile* pFile, OutputDevice* pVDev )
     pVDev->DrawRect(Rectangle( Point(0,0 ), pVDev->GetOutputSize()));
     if( pFile )
     {
-        pVDev->SetFillColor( Color( aColorConfig.GetColorValue( svx::DOCCOLOR ).nColor ) );
+        pVDev->SetFillColor( maDocumentColor );
         pVDev->DrawRect(Rectangle(aPoint, aSize));
         pFile->WindStart();
         pFile->Play( pVDev, aPoint, aSize  );
@@ -212,6 +229,59 @@ void SdDocPreviewWin::ShowEffect( presentation::FadeEffect eEffect, FadeSpeed eS
 
     bInEffect = TRUE;
 
+    svx::ColorConfig aColorConfig;
+
+    SetLineColor();
+    SetFillColor( Color( aColorConfig.GetColorValue( svx::APPBACKGROUND ).nColor ) );
+    DrawRect(Rectangle( Point(0,0 ), GetOutputSize()));
+
+    Point aPoint;
+    Size aSize( GetOutputSize() );
+    Point bPoint(aSize.Width()-2*FRAME, aSize.Height()-2*FRAME );
+    CalcSizeAndPos( pMetaFile, aSize, aPoint );
+    bPoint -= aPoint;
+    aPoint += Point( FRAME, FRAME );
+
+    // virtuelle Devices anlegen
+
+    VirtualDevice* pVDev = new VirtualDevice(*this);
+    pVDev->SetOutputSize( GetOutputSize() );
+    pVDev->SetFillColor( maDocumentColor );
+    pVDev->DrawRect(Rectangle(aPoint, aSize));
+
+    pVDev->SetLineColor();
+    pVDev->SetFillColor( Color( aColorConfig.GetColorValue( svx::APPBACKGROUND ).nColor ) );
+    pVDev->DrawRect(Rectangle( Point(0,0 ), pVDev->GetOutputSize()));
+    if( pMetaFile )
+    {
+        pVDev->SetFillColor( maDocumentColor );
+        pVDev->DrawRect(Rectangle(aPoint, aSize));
+        pMetaFile->WindStart();
+        pMetaFile->Play( pVDev, aPoint, aSize  );
+    }
+
+    // ein Fader zum Ueberblenden
+    Fader* pFader = new Fader(this);
+    pFader->SetEffect( eEffect );
+    pFader->SetSpeed( eSpeed );
+    pFader->SetSource(Rectangle(aPoint, aSize));
+    pFader->SetTarget(Rectangle(aPoint, aSize));
+
+    // virtuelle Devices an Fader uebergeben
+    pFader->SetNewVirtualDevice(pVDev);
+
+    // ueberblenden
+    pFader->Fade();
+
+    delete pFader;
+
+//  DrawOutDev( Point( 0,0 ), GetOutputSize(), Point( 0,0 ), GetOutputSize(), *pVDev );
+
+    delete pVDev;
+
+
+
+/*
     Point aPoint;
     Size aSize = GetOutputSize();
     Point bPoint( aSize.Width() - 2*FRAME, aSize.Height() - 2*FRAME );
@@ -234,38 +304,7 @@ void SdDocPreviewWin::ShowEffect( presentation::FadeEffect eEffect, FadeSpeed eS
     aSize.Width()   += aPixelSize.Width();
     aSize.Height() += aPixelSize.Height();
 
-    // virtuelle Devices anlegen
-    MapMode aMapMode = GetMapMode();
-    aMapMode.SetOrigin(Point(0,0));
-
-    VirtualDevice* pVDev = new VirtualDevice(*this);
-    pVDev->SetMapMode(aMapMode);
-    pVDev->SetOutputSize(aSize); // aCPageSize);
-
-    pVDev->SetFillColor( Color( aColorConfig.GetColorValue( svx::DOCCOLOR ).nColor ) );
-    pVDev->DrawRect(Rectangle(aPoint, aSize));
-
-    if( pMetaFile )
-    {
-        pMetaFile->WindStart();
-        pMetaFile->Play( pVDev, Point( 0,0 ), aSize  );
-    }
-
-    // ein Fader zum Ueberblenden
-    Fader* pFader = new Fader(this);
-    pFader->SetEffect( eEffect );
-    pFader->SetSpeed( eSpeed );
-    pFader->SetSource(Rectangle(Point(), aSize));
-    pFader->SetTarget(Rectangle(aPoint, aSize));
-
-    // virtuelle Devices an Fader uebergeben
-    pFader->SetNewVirtualDevice(pVDev);
-
-    // ueberblenden
-    pFader->Fade();
-
-    delete pFader;
-    delete pVDev;
+*/
 
     bInEffect = FALSE;
 }
@@ -289,3 +328,102 @@ long SdDocPreviewWin::Notify( NotifyEvent& rNEvt )
 }
 
 
+void SdDocPreviewWin::updateViewSettings()
+{
+    SdDrawDocShell* pDocShell = PTR_CAST(SdDrawDocShell,mpObj);
+    SdDrawDocument* pDoc = pDocShell?pDocShell->GetDoc():NULL;
+
+    SvtAccessibilityOptions aAccOptions;
+    bool bUseWhiteColor = !aAccOptions.GetIsForPagePreviews() && GetSettings().GetStyleSettings().GetHighContrastMode();
+    if( bUseWhiteColor )
+    {
+        maDocumentColor = Color( COL_WHITE );
+    }
+    else
+    {
+        svx::ColorConfig aColorConfig;
+        maDocumentColor = Color( aColorConfig.GetColorValue( svx::DOCCOLOR ).nColor );
+    }
+
+    GDIMetaFile* pMtf = NULL;
+
+    if(pDoc)
+    {
+        SdrOutliner& rOutl = pDoc->GetDrawOutliner();
+        Color aOldBackgroundColor = rOutl.GetBackgroundColor();
+        rOutl.SetBackgroundColor( maDocumentColor );
+
+        pMtf = new GDIMetaFile;
+        SdPage * pPage = pDoc->GetSdPage( mnShowPage, PK_STANDARD );
+
+        VirtualDevice       aVDev;
+
+        const Fraction      aFrac( pDoc->GetScaleFraction() );
+        const MapMode       aMap( pDoc->GetScaleUnit(), Point(), aFrac, aFrac );
+
+        aVDev.SetMapMode( aMap );
+        pMtf->Record( &aVDev );
+
+        SdDrawView* pView = new SdDrawView(pDocShell, this, NULL);
+
+
+        const Size aSize( pPage->GetSize() );
+
+        pView->SetBordVisible( FALSE );
+        pView->SetPageVisible( FALSE );
+        pView->ShowPage( pPage, Point() );
+
+        const Point aNewOrg( pPage->GetLftBorder(), pPage->GetUppBorder() );
+        const Size aNewSize( aSize.Width() - pPage->GetLftBorder() - pPage->GetRgtBorder(),
+                              aSize.Height() - pPage->GetUppBorder() - pPage->GetLwrBorder() );
+        const Rectangle aClipRect( aNewOrg, aNewSize );
+        MapMode         aVMap( aMap );
+
+        SdrPageView* pPageView  = pView->GetPageView( pPage );
+
+        aVDev.Push();
+        aVMap.SetOrigin( Point( -aNewOrg.X(), -aNewOrg.Y() ) );
+        aVDev.SetRelativeMapMode( aVMap );
+        aVDev.IntersectClipRegion( aClipRect );
+        const Link aPaintProcLink( LINK(this, SdDocPreviewWin, PaintProc ) );
+
+        for (USHORT i=0; i<pView->GetPageViewCount(); i++)
+        {
+            SdrPageView* pPV=pView->GetPageViewPvNum(i);
+            pPV->InitRedraw(&aVDev,Region( Rectangle( Point(), aNewSize ) ),0,&aPaintProcLink );
+        }
+
+        aVDev.Pop();
+
+        pMtf->Stop();
+        pMtf->WindStart();
+        pMtf->SetPrefMapMode( aMap );
+        pMtf->SetPrefSize( aNewSize );
+
+        rOutl.SetBackgroundColor( aOldBackgroundColor );
+
+        delete pView;
+    }
+
+    delete pMetaFile;
+    pMetaFile = pMtf;
+
+    Invalidate();
+}
+
+void SdDocPreviewWin::SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType, const SfxHint& rHint, const TypeId& rHintType)
+{
+    if( rHint.ISA( SfxSimpleHint ) && ( (SfxSimpleHint&) rHint ).GetId() == SFX_HINT_COLORS_CHANGED )
+    {
+        updateViewSettings();
+    }
+}
+void SdDocPreviewWin::DataChanged( const DataChangedEvent& rDCEvt )
+{
+    Control::DataChanged( rDCEvt );
+
+    if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+    {
+        updateViewSettings();
+    }
+}

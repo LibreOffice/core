@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docprev.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:38 $
+ *  last change: $Author: cl $ $Date: 2002-11-13 18:18:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,31 +74,49 @@
 #include <tools/gen.hxx>
 #endif
 
+#ifndef _SFXLSTNER_HXX
+#include <svtools/lstner.hxx>
+#endif
+#ifndef _SVX_COLORCFG_HXX
+#include <svx/colorcfg.hxx>
+#endif
+
 #ifndef _SD_FADEDEF_H
 #include <fadedef.h>
 #endif
 
 class GDIMetaFile;
+struct SdrPaintProcRec;
 
-class SdDocPreviewWin : public Control
+class SdDocPreviewWin : public Control, public SfxListener
 {
 protected:
     GDIMetaFile*    pMetaFile;
     BOOL            bInEffect;
     Link            aClickHdl;
-    SfxObjectShell* m_pObj;
+    SfxObjectShell* mpObj;
+    sal_uInt16      mnShowPage;
+    Color           maDocumentColor;
 
     virtual void    Paint( const Rectangle& rRect );
     static void     CalcSizeAndPos( GDIMetaFile* pFile, Size& rSize, Point& rPoint );
-    static void     ImpPaint( GDIMetaFile* pFile, OutputDevice* pVDev );
+    void            ImpPaint( GDIMetaFile* pFile, OutputDevice* pVDev );
 
     static const int FRAME;
+
+    svx::ColorConfig    maColorConfig;
+
+    virtual void SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType, const SfxHint& rHint, const TypeId& rHintType);
+
+    void updateViewSettings();
+
+    DECL_LINK(PaintProc, SdrPaintProcRec*);
 
 public:
                     SdDocPreviewWin( Window* pParent, const ResId& rResId );
                     SdDocPreviewWin( Window* pParent );
                     ~SdDocPreviewWin() { delete pMetaFile; }
-    void            SetObjectShell( SfxObjectShell* pObj, USHORT nShowPage = 0 );
+    void            SetObjectShell( SfxObjectShell* pObj, sal_uInt16 nShowPage = 0 );
     void            SetGDIFile( GDIMetaFile* pFile );
     virtual void    Resize();
     void            ShowEffect( ::com::sun::star::presentation::FadeEffect eEffect, FadeSpeed eSpeed );
@@ -107,6 +125,8 @@ public:
 
     void            SetClickHdl( const Link& rLink ) { aClickHdl = rLink; }
     const Link&     GetClickHdl() const { return aClickHdl; }
+
+    virtual void DataChanged( const DataChangedEvent& rDCEvt );
 
 };
 
