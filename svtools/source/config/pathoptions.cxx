@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pathoptions.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pb $ $Date: 2000-09-25 10:00:42 $
+ *  last change: $Author: pb $ $Date: 2000-09-26 09:26:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,8 +242,6 @@ private:
     const String&   GetPath( int nIndex );
     void            SetPath( int nIndex, const String& rNewPath );
 
-    rtl::OUString   SubstVar( const rtl::OUString& rVar );
-
 public:
                     SvtPathOptions_Impl();
 
@@ -309,6 +307,8 @@ public:
     void            SetUserConfigPath( const String& rPath ) { SetPath( PATH_USERCONFIG, rPath ); }
     void            SetUserDictionaryPath( const String& rPath ) { SetPath( PATH_USERDICTIONARY, rPath ); }
     void            SetWorkPath( const String& rPath ) { SetPath( PATH_WORK, rPath ); }
+
+    rtl::OUString   SubstVar( const rtl::OUString& rVar );
 };
 
 // global ----------------------------------------------------------------
@@ -1393,5 +1393,13 @@ void SvtPathOptions::SetUserDictionaryPath( const String& rPath )
 void SvtPathOptions::SetWorkPath( const String& rPath )
 {
     pImp->SetWorkPath( rPath );
+}
+
+// -----------------------------------------------------------------------
+
+String SvtPathOptions::SubstituteVariable( const String& rVar )
+{
+    String aRet = pImp->SubstVar( rVar );
+    return aRet;
 }
 
