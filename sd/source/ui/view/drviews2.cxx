@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews2.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-28 13:34:31 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 15:11:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -475,11 +475,15 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         case SID_INSERTPAGE:
         case SID_INSERTPAGE_QUICK:
         case SID_DUPLICATE_PAGE:
-            CreateOrDuplicatePage (rReq, ePageKind, GetActualPage());
+        {
+            SdPage* pNewPage = CreateOrDuplicatePage (rReq, ePageKind, GetActualPage());
             Cancel();
             if (pFuActual && pFuActual->GetSlotID() == SID_BEZIER_EDIT )
                 GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON);
+            if (pNewPage != NULL)
+                SwitchPage((pNewPage->GetPageNum()-1)/2);
             rReq.Done ();
+        }
         break;
 
         case SID_INSERT_MASTER_PAGE:
@@ -1288,19 +1292,21 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
     2. Use the model to create a new page or duplicate an existing one.
     3. Update the tab control and switch to the new page.
 */
-void DrawViewShell::CreateOrDuplicatePage (
+SdPage* DrawViewShell::CreateOrDuplicatePage (
     SfxRequest& rRequest,
     PageKind ePageKind,
     SdPage* pPage)
 {
+    SdPage* pNewPage = NULL;
     if (ePageKind == PK_STANDARD && eEditMode != EM_MASTERPAGE)
     {
         if ( pDrView->IsTextEdit() )
         {
             pDrView->EndTextEdit();
         }
-        ViewShell::CreateOrDuplicatePage (rRequest, ePageKind, pPage);
+        pNewPage = ViewShell::CreateOrDuplicatePage (rRequest, ePageKind, pPage);
     }
+    return pNewPage;
 }
 
 } // end of namespace sd
