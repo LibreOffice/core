@@ -9513,3 +9513,8 @@ lpfnDrawTextW
 ??1IMPL_TWindowData@@QAE@XZ
 ?GetAnyData@SvtViewOptions@@QAE?AV?$Sequence@UPropertyValue@beans@star@sun@com@@@uno@star@sun@com@@XZ
 ?SetAnyData@SvtViewOptions@@QAEXABV?$Sequence@UPropertyValue@beans@star@sun@com@@@uno@star@sun@com@@@Z
+?GetCursor@SvtIconChoiceCtrl@@QBEPAVSvxIconChoiceCtrlEntry@@XZ
+?ReadViewSettings@SvtTemplateWindow@@QAEXXZ
+?WriteViewSettings@SvtTemplateWindow@@QAEXXZ
+_real@8@3ffcccccccccccccd000
+_real@8@3ffeccccccccccccd000
