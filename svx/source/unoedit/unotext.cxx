@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotext.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-27 13:33:46 $
+ *  last change: $Author: cl $ $Date: 2001-04-03 14:02:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,7 +216,7 @@ void CheckSelection( struct ESelection& rSel, SvxTextForwarder* pForwarder ) thr
             rSel.nStartPara = aMaxSelection.nEndPara;
             rSel.nStartPos = aMaxSelection.nEndPos;
         }
-        else if( rSel.nStartPos > pForwarder->GetTextLen( rSel.nStartPara ) )
+        else if( rSel.nStartPos  > pForwarder->GetTextLen( rSel.nStartPara ) )
         {
             rSel.nStartPos = pForwarder->GetTextLen( rSel.nStartPara );
         }
@@ -1422,10 +1422,34 @@ void SAL_CALL SvxUnoText::insertControlCharacter( const uno::Reference< text::XT
         }
         case text::ControlCharacter::LINE_BREAK:
         {
-            const String aText( (char)10, 1 );  // '\r' geht auf'm Mac nicht
-            insertString( xRange, aText, bAbsorb );
+            SvxUnoTextRangeBase* pRange = SvxUnoTextRange::getImplementation( xRange );
+            if(pRange)
+            {
+                ESelection aRange = pRange->GetSelection();
 
-//          pForwarder->QuickInsertLineBreak( aSelection );
+                if( bAbsorb )
+                {
+                    const String aEmpty;
+                    pForwarder->QuickInsertText( aEmpty, aRange );
+
+                    aRange.nEndPos = aRange.nStartPos;
+                    aRange.nEndPara = aRange.nStartPara;
+                }
+                else
+                {
+                    aRange.nStartPos = aRange.nEndPos;
+                    aRange.nStartPara = aRange.nStartPara;
+                }
+
+                pForwarder->QuickInsertLineBreak( aRange );
+                GetEditSource()->UpdateData();
+
+                aRange.nEndPos += 1;
+                if( !bAbsorb )
+                    aRange.nStartPos += 1;
+
+                pRange->SetSelection( aRange );
+            }
             return;
         }
         case text::ControlCharacter::APPEND_PARAGRAPH:
