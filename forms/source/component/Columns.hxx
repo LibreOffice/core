@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Columns.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-21 08:55:24 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 11:12:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,9 @@
 #ifndef _COMPHELPER_UNO3_HXX_
 #include <comphelper/uno3.hxx>
 #endif
-#include "strings.hxx"
+#ifndef FRM_STRINGS_HXX
+#include "frm_strings.hxx"
+#endif
 
 #ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
 #include <com/sun/star/container/XChild.hpp>
@@ -225,19 +227,6 @@ void ClassName::fillProperties( \
         setOwnProperties(_rProps);                                              \
     }   \
 }   \
-
-// liste der moeglichen Controls
-DECLARE_CONSTASCII_USTRING(FRM_COL_TEXTFIELD);
-DECLARE_CONSTASCII_USTRING(FRM_COL_CHECKBOX);
-DECLARE_CONSTASCII_USTRING(FRM_COL_COMBOBOX);
-DECLARE_CONSTASCII_USTRING(FRM_COL_LISTBOX);
-DECLARE_CONSTASCII_USTRING(FRM_COL_NUMERICFIELD);
-DECLARE_CONSTASCII_USTRING(FRM_COL_DATEFIELD);
-DECLARE_CONSTASCII_USTRING(FRM_COL_TIMEFIELD);
-DECLARE_CONSTASCII_USTRING(FRM_COL_CURRENCYFIELD);
-DECLARE_CONSTASCII_USTRING(FRM_COL_PATTERNFIELD);
-DECLARE_CONSTASCII_USTRING(FRM_COL_FORMATTEDFIELD);
-
 
 // column type ids
 #define TYPE_CHECKBOX       0
