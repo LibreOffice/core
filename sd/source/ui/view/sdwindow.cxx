@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdwindow.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 15:02:02 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:47:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,8 @@
 #ifndef _SFXREQUEST_HXX
 #include <sfx2/request.hxx>
 #endif
+
+#include <sfx2/viewfrm.hxx>
 
 #pragma hdrstop
 
@@ -347,8 +349,7 @@ void Window::KeyInput(const KeyEvent& rKEvt)
     {
         if (mpViewShell && rKEvt.GetKeyCode().GetCode() == KEY_ESCAPE)
         {
-            // Wenn IP aktiv, wird der IP-Modus abgebrochen
-            mpViewShell->GetDocSh()->DoInPlaceActivate(FALSE);
+            mpViewShell->GetViewShell()->Escape();
         }
         else
         {
