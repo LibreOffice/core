@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontcache.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pl $ $Date: 2002-04-12 12:39:43 $
+ *  last change: $Author: pl $ $Date: 2002-07-20 15:21:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -475,6 +475,10 @@ void FontCache::copyPrintFont( const PrintFontManager::PrintFont* pFrom, PrintFo
     pTo->m_nAscend          = pFrom->m_nAscend;
     pTo->m_nDescend         = pFrom->m_nDescend;
     pTo->m_nLeading         = pFrom->m_nLeading;
+    pTo->m_nXMin            = pFrom->m_nXMin;
+    pTo->m_nYMin            = pFrom->m_nYMin;
+    pTo->m_nXMax            = pFrom->m_nXMax;
+    pTo->m_nYMax            = pFrom->m_nYMax;
     pTo->m_bHaveVerticalSubstitutedGlyphs = pFrom->m_bHaveVerticalSubstitutedGlyphs;
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontmanager.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: pl $ $Date: 2002-02-28 11:49:51 $
+ *  last change: $Author: pl $ $Date: 2002-07-20 15:21:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -276,6 +276,10 @@ class PrintFontManager
         int                                         m_nAscend;
         int                                         m_nDescend;
         int                                         m_nLeading;
+        int                                         m_nXMin; // font bounding box
+        int                                         m_nYMin;
+        int                                         m_nXMax;
+        int                                         m_nYMax;
         bool                                        m_bHaveVerticalSubstitutedGlyphs;
 
         PrintFont( fonttype::type eType );
@@ -472,14 +476,7 @@ public:
     }
 
     // get the ttc face number
-    int getFontFaceNumber( fontID nFontID ) const
-    {
-        int nRet = -1;
-        PrintFont* pFont = getFont( nFontID );
-        if( pFont->m_eType == fonttype::TrueType )
-            nRet = static_cast< TrueTypeFontFile* >(pFont)->m_nCollectionEntry;
-        return nRet;
-    }
+    int getFontFaceNumber( fontID nFontID ) const;
 
     // get a specific fonts global metrics
     const CharacterMetric& getGlobalFontMetric( fontID nFontID, bool bHorizontal ) const;
@@ -492,6 +489,9 @@ public:
 
     // get a specific fonts leading
     int getFontLeading( fontID nFontID ) const;
+
+    // get a fonts glyph bounding box
+    bool getFontBoundingBox( fontID nFont, int& xMin, int& yMin, int& xMax, int& yMax );
 
     // info whether there are vertical substitutions
     bool hasVerticalSubstitutions( fontID nFontID ) const;
@@ -549,6 +549,26 @@ public:
     {
         return m_aAdobecodeToUnicode.equal_range( aChar );
     }
+
+    // creates a new font subset of an existing TrueType font
+    // returns true in case of success, else false
+    // nFont: the font to be subsetted
+    // rOutFile: the file to put the new subset into;
+    //           must be a valid osl file URL
+    // pGlyphIDs: input array of glyph ids for new font
+    // pNewEncoding: the corresponding encoding in the new font
+    // pWidths: output array of widths of requested glyphs
+    // nGlyphs: number of glyphs in arrays
+    // pCapHeight:: capital height of the produced font
+    // pXMin, pYMin, pXMax, pYMax: outgoing font bounding box
+    bool createFontSubset( fontID nFont,
+                           const ::rtl::OUString& rOutFile,
+                           long* pGlyphIDs,
+                           sal_uInt8* pNewEncoding,
+                           sal_Int32* pWidths,
+                           int nGlyphs,
+                           bool bVertical = false
+                           );
 
     // font administration functions
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontmanager.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: pl $ $Date: 2002-05-21 10:44:57 $
+ *  last change: $Author: pl $ $Date: 2002-07-20 15:21:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -252,6 +252,10 @@ PrintFontManager::PrintFont::PrintFont( fonttype::type eType ) :
         m_nAscend( 0 ),
         m_nDescend( 0 ),
         m_nLeading( 0 ),
+        m_nXMin( 0 ),
+        m_nYMin( 0 ),
+        m_nXMax( 0 ),
+        m_nYMax( 0 ),
         m_bHaveVerticalSubstitutedGlyphs( false )
 {
 }
@@ -613,6 +617,11 @@ bool PrintFontManager::PrintFont::readAfmMetrics( const OString& rFileName, Mult
         pInfo->gfi->charwidth ? pInfo->gfi->charwidth : pInfo->gfi->fontBBox.urx;
     m_aGlobalMetricX.height = m_aGlobalMetricY.height =
         pInfo->gfi->capHeight ? pInfo->gfi->capHeight : pInfo->gfi->fontBBox.ury;
+
+    m_nXMin = pInfo->gfi->fontBBox.llx;
+    m_nYMin = pInfo->gfi->fontBBox.lly;
+    m_nXMax = pInfo->gfi->fontBBox.urx;
+    m_nYMax = pInfo->gfi->fontBBox.ury;
 
     // fill in character metrics
 
@@ -1453,6 +1462,12 @@ bool PrintFontManager::analyzeTrueTypeFile( PrintFont* pFont ) const
         if( pFont->m_nAscend )
             pFont->m_aGlobalMetricX.height = pFont->m_aGlobalMetricY.height = pFont->m_nAscend + pFont->m_nDescend;
 
+        // get bounding box
+        pFont->m_nXMin = aInfo.xMin;
+        pFont->m_nYMin = aInfo.yMin;
+        pFont->m_nXMax = aInfo.xMax;
+        pFont->m_nYMax = aInfo.yMax;
+
         // get type flags
         pTTFontFile->m_nTypeFlags = (unsigned int)aInfo.typeFlags;
 
@@ -2019,6 +2034,43 @@ bool PrintFontManager::getFontFastInfo( fontID nFontID, FastPrintFontInfo& rInfo
 }
 
 // -------------------------------------------------------------------------
+
+bool PrintFontManager::getFontBoundingBox( fontID nFontID, int& xMin, int& yMin, int& xMax, int& yMax )
+{
+    bool bSuccess = false;
+    PrintFont* pFont = getFont( nFontID );
+    if( pFont )
+    {
+        if( pFont->m_nXMin == 0 && pFont->m_nYMin == 0 && pFont->m_nXMax == 0 && pFont->m_nYMax == 0 )
+        {
+            // might be a truetype font not analyzed or type1 without metrics read
+            if( pFont->m_eType == fonttype::Type1 )
+                pFont->readAfmMetrics( getAfmFile( pFont ), m_pAtoms );
+            else if( pFont->m_eType == fonttype::TrueType )
+                analyzeTrueTypeFile( pFont );
+        }
+        bSuccess = true;
+        xMin = pFont->m_nXMin;
+        yMin = pFont->m_nYMin;
+        xMax = pFont->m_nXMax;
+        yMax = pFont->m_nYMax;
+    }
+    return bSuccess;
+}
+
+// -------------------------------------------------------------------------
+
+int PrintFontManager::getFontFaceNumber( fontID nFontID ) const
+{
+    int nRet = -1;
+    PrintFont* pFont = getFont( nFontID );
+    if( pFont && pFont->m_eType == fonttype::TrueType )
+        nRet = static_cast< TrueTypeFontFile* >(pFont)->m_nCollectionEntry;
+    return nRet;
+}
+
+// -------------------------------------------------------------------------
+
 
 family::type PrintFontManager::matchFamilyName( const ::rtl::OUString& rFamily ) const
 {
@@ -3039,4 +3091,129 @@ bool PrintFontManager::getAlternativeFamilyNames( fontID nFont, ::std::list< OUS
         }
     }
     return rNames.begin() != rNames.end();
+}
+
+// -------------------------------------------------------------------------
+
+bool PrintFontManager::createFontSubset(
+                                        fontID nFont,
+                                        const OUString& rOutFile,
+                                        long* pGlyphIDs,
+                                        sal_uInt8* pNewEncoding,
+                                        sal_Int32* pWidths,
+                                        int nGlyphs,
+                                        bool bVertical
+                                        )
+{
+    int i;
+    // glyph 0 is needed in position 0
+    // look if 0 is already there
+    int nDefault = -1;
+    for( i = 0; i < nGlyphs; i++ )
+    {
+        if( ! pGlyphIDs[i] )
+        {
+            nDefault = i;
+            break;
+        }
+    }
+    if( nDefault != 0) // reordering has to take place
+    {
+        if( nDefault == -1 )
+            nGlyphs++;
+
+        long* pIDs = (long*)rtl_allocateMemory( sizeof(long)*nGlyphs );
+        sal_uInt8* pEnc = (sal_uInt8*)rtl_allocateMemory( sizeof(sal_uInt8)*nGlyphs );
+        sal_Int32* pW = (sal_Int32*)rtl_allocateMemory( sizeof(sal_Int32)*nGlyphs );
+        if( nDefault == -1 )
+        {
+            for( i = 0; i < nGlyphs-1; i++ )
+            {
+                pIDs[i+1] = pGlyphIDs[i];
+                pEnc[i+1] = pNewEncoding[i];
+            }
+        }
+        else
+        {
+            for( i = 0; i < nGlyphs; i++ )
+            {
+                pIDs[i] = pGlyphIDs[i];
+                pEnc[i] = pNewEncoding[i];
+            }
+            pIDs[ nDefault ] = pIDs[0];
+            pEnc[ nDefault ] = pIDs[0];
+        }
+        pIDs[0] = 0;
+        pEnc[0] = 0;
+
+        bool bSuccess = createFontSubset( nFont, rOutFile, pIDs, pEnc, pW, nGlyphs, bVertical );
+        if( bSuccess && pWidths )
+        {
+            if( nDefault == -1 )
+            {
+                for( i = 0; i < nGlyphs-1; i++ )
+                    pWidths[i] = pW[i+1];
+            }
+            else
+            {
+                for( i = 0; i < nGlyphs; i++ )
+                    pWidths[i] = pW[i];
+                pWidths[ nDefault ] = pW[0];
+                pWidths[ 0 ] = pW[ nDefault ];
+            }
+        }
+        rtl_freeMemory( pIDs );
+        rtl_freeMemory( pW );
+        rtl_freeMemory( pEnc );
+
+        return bSuccess;
+    }
+
+    PrintFont* pFont = getFont( nFont );
+    if( pFont->m_eType != fonttype::TrueType )
+        return false;
+
+    OUString aSysPath;
+    if( osl_File_E_None != osl_getSystemPathFromFileURL( rOutFile.pData, &aSysPath.pData ) )
+        return false;
+
+    rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
+    ByteString aFromFile = getFontFile( pFont );
+    ByteString aToFile( OUStringToOString( aSysPath, aEncoding ) );
+
+    TrueTypeFont* pTTFont = NULL;
+    TrueTypeFontFile* pTTFontFile = static_cast< TrueTypeFontFile* >(pFont);
+    if( OpenTTFont( aFromFile.GetBuffer(), pTTFontFile->m_nCollectionEntry < 0 ? 0 : pTTFontFile->m_nCollectionEntry, &pTTFont ) != SF_OK )
+        return false;
+
+    uint16* pTempIDs = (uint16*)rtl_allocateMemory( sizeof(uint16)*nGlyphs );
+    for( i = 0; i < nGlyphs; i++ )
+        pTempIDs[i] = (uint16)pGlyphIDs[i];
+    TTSimpleGlyphMetrics* pMetrics = GetTTSimpleGlyphMetrics( pTTFont,
+                                                              pTempIDs,
+                                                              nGlyphs,
+                                                              bVertical ? 1 : 0 );
+    if( pMetrics )
+    {
+        for( i = 0; i < nGlyphs; i++ )
+            pWidths[i] = pMetrics[i].adv;
+        free( pMetrics );
+    }
+    else
+    {
+        rtl_freeMemory( pTempIDs );
+        return false;
+    }
+
+    bool bSuccess = ( SF_OK == CreateTTFromTTGlyphs( pTTFont,
+                                                     aToFile.GetBuffer(),
+                                                     pTempIDs,
+                                                     pNewEncoding,
+                                                     nGlyphs,
+                                                     0,
+                                                     NULL,
+                                                     TTCF_IncludeOS2 ) );
+
+    rtl_freeMemory( pTempIDs );
+    return bSuccess;
 }

@@ -37,9 +37,9 @@
  *
  *  $RCSfile: parseAFM.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cp $ $Date: 2001-05-22 16:37:39 $
+ *  last change: $Author: pl $ $Date: 2002-07-20 15:21:19 $
  *
  ************************************************************************/
 
@@ -117,14 +117,14 @@ static char *ident = NULL; /* storage buffer for keywords */
 // which is not allowed per afm spcification, but let us handle
 // this gently
 enum parseKey {
-    ASCENDER, ASCENT, CHARBBOX, CODE, COMPCHAR, CODEHEX, CAPHEIGHT, CHARWIDTH, CHARACTERS, COMMENT,
+    ASCENDER, ASCENT, CHARBBOX, CODE, COMPCHAR, CODEHEX, CAPHEIGHT, CHARWIDTH, CHARACTERSET, CHARACTERS, COMMENT,
     DESCENDER, DESCENT, EM, ENCODINGSCHEME, ENDCHARMETRICS, ENDCOMPOSITES, ENDDIRECTION,
     ENDFONTMETRICS, ENDKERNDATA, ENDKERNPAIRS, ENDTRACKKERN,
     FAMILYNAME, FONTBBOX, FONTNAME, FULLNAME, ISBASEFONT, ISFIXEDPITCH,
     ITALICANGLE, KERNPAIR, KERNPAIRXAMT, LIGATURE, MAPPINGSCHEME, METRICSSETS, CHARNAME,
     NOTICE, COMPCHARPIECE, STARTCHARMETRICS, STARTCOMPOSITES, STARTDIRECTION,
     STARTFONTMETRICS, STARTKERNDATA, STARTKERNPAIRS,
-    STARTTRACKKERN, TRACKKERN, UNDERLINEPOSITION,
+    STARTTRACKKERN, STDHW, STDVW, TRACKKERN, UNDERLINEPOSITION,
     UNDERLINETHICKNESS, VVECTOR, VERSION, XYWIDTH, X0WIDTH, XWIDTH, WEIGHT, XHEIGHT,
     NOPE
 };
@@ -143,14 +143,14 @@ enum parseKey {
  */
 
 static char    *keyStrings[] = {
-    "Ascender", "Ascent", "B", "C", "CC", "CH", "CapHeight", "CharWidth", "Characters", "Comment",
+    "Ascender", "Ascent", "B", "C", "CC", "CH", "CapHeight", "CharWidth", "CharacterSet" ,"Characters", "Comment",
     "Descender", "Descent", "Em", "EncodingScheme", "EndCharMetrics", "EndComposites", "EndDirection",
     "EndFontMetrics", "EndKernData", "EndKernPairs", "EndTrackKern",
     "FamilyName", "FontBBox", "FontName", "FullName", "IsBaseFont", "IsFixedPitch",
     "ItalicAngle", "KP", "KPX", "L", "MappingScheme", "MetricsSets", "N",
     "Notice", "PCC", "StartCharMetrics", "StartComposites", "StartDirection",
     "StartFontMetrics", "StartKernData", "StartKernPairs",
-    "StartTrackKern", "TrackKern", "UnderlinePosition",
+    "StartTrackKern", "StdHW", "StdVW", "TrackKern", "UnderlinePosition",
     "UnderlineThickness", "V", "Version", "W", "W0X", "WX", "Weight", "XHeight",
     NULL};
 
@@ -419,6 +419,15 @@ static int parseGlobals( FILE* fp, register GlobalFontInfo* gfi )
                 case ISBASEFONT:
                     keyword = token(fp);
                     break; /* ignore this for now */
+                case CHARACTERSET:
+                    keyword=token(fp); //ignore
+                    break;
+                case STDHW:
+                    keyword=token(fp); //ignore
+                    break;
+                case STDVW:
+                    keyword=token(fp); //ignore
+                    break;
                 case CHARWIDTH:
                     keyword = token(fp);
                     if (direction == 0)
@@ -547,7 +556,7 @@ static int initializeArray( FILE* fp, register int* cwi)
  *  parseFile to determine if there is more file to parse.
  */
 
-static parseCharWidths( FILE* fp, register int* cwi)
+static int parseCharWidths( FILE* fp, register int* cwi)
 {
     bool cont = true, save = (cwi != NULL);
     int pos = 0, error = ok;
@@ -701,7 +710,7 @@ enlargeCount( unsigned int n_oldcount )
  *  parseFile to determine if there is more file to parse.
  */
 
-static parseCharMetrics( FILE* fp, register FontInfo* fi)
+static int parseCharMetrics( FILE* fp, register FontInfo* fi)
 {
     bool cont = true, firstTime = true;
     int error = ok, count = 0;
@@ -754,7 +763,7 @@ static parseCharMetrics( FILE* fp, register FontInfo* fi)
                 }
                 if (count < fi->numOfChars) {
                     if (firstTime)
-                        firstTime = FALSE;
+                        firstTime = false;
                     else
                         temp++;
                     sscanf(token(fp),"<%x>", &temp->code);
@@ -764,7 +773,7 @@ static parseCharMetrics( FILE* fp, register FontInfo* fi)
                 }
                 else {
                     error = parseError;
-                    cont = FALSE;
+                    cont = false;
                 }
                 break;
             case XYWIDTH:
@@ -853,7 +862,7 @@ static parseCharMetrics( FILE* fp, register FontInfo* fi)
  *  parseFile to determine if there is more file to parse.
  */
 
-static parseTrackKernData( FILE* fp, register FontInfo* fi)
+static int parseTrackKernData( FILE* fp, register FontInfo* fi)
 {
     bool cont = true, save = (fi->tkd != NULL);
     int pos = 0, error = ok, tcount = 0;
@@ -961,7 +970,7 @@ static parseTrackKernData( FILE* fp, register FontInfo* fi)
  *  parseFile to determine if there is more file to parse.
  */
 
-static parsePairKernData( FILE* fp, register FontInfo* fi)
+static int parsePairKernData( FILE* fp, register FontInfo* fi)
 {
     bool cont = true, save = (fi->pkd != NULL);
     int pos = 0, error = ok, pcount = 0;
@@ -1091,7 +1100,7 @@ static parsePairKernData( FILE* fp, register FontInfo* fi)
  *  parseFile to determine if there is more file to parse.
  */
 
-static parseCompCharData( FILE* fp, register FontInfo* fi)
+static int parseCompCharData( FILE* fp, register FontInfo* fi)
 {
     bool cont = true, firstTime = true, save = (fi->ccd != NULL);
     int pos = 0, j = 0, error = ok, ccount = 0, pcount = 0;
