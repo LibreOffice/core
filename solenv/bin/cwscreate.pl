@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: cwscreate.pl,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: hr $ $Date: 2004-09-01 12:18:14 $
+#   last change: $Author: hjs $ $Date: 2004-09-09 14:48:46 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -102,7 +102,7 @@ $SIG{'INT'} = 'INT_handler' if defined($log);
 ( my $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
 my $script_rev;
-my $id_str = ' $Revision: 1.5 $ ';
+my $id_str = ' $Revision: 1.6 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -137,8 +137,12 @@ $obligatory_modules{'res'}++;
 $obligatory_modules{'so_res'}++;
 $obligatory_modules{'instset'}++;
 $obligatory_modules{'instsetoo'}++;
+$obligatory_modules{'instset_native'}++;
+$obligatory_modules{'instsetoo_native'}++;
 $obligatory_modules{'smoketest'}++;
 $obligatory_modules{'smoketest_oo'}++;
+$obligatory_modules{'smoketest_native'}++;
+$obligatory_modules{'smoketestoo_native'}++;
 $obligatory_modules{'test10'}++;
 
 my $parameter_list = $log->array2string(";",@args_bak) if defined($log);
@@ -455,7 +459,7 @@ sub copy_workspace
         }
         # copy solver
         $sync_dir::do_keepzip = 1;
-        my $btarget = "instset";
+        my $btarget = "finalize";
         foreach $platform ( @found_platforms )
         {
             %sync_dir::done_hash = ();
