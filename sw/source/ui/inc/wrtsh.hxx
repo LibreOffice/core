@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tl $ $Date: 2001-03-12 08:16:49 $
+ *  last change: $Author: tl $ $Date: 2001-04-09 07:25:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,7 @@ class NaviContentBookmark;
 struct SwCallMouseEvent;
 class DropEvent;
 struct ChartSelectionInfo;
+class SfxStringListItem;
 
 namespace com { namespace sun { namespace star { namespace util {
     struct SearchOptions;
@@ -350,9 +351,10 @@ typedef FASTBOOL (SwWrtShell:: *FNSimpleMove)();
 
     enum DoType { UNDO, REDO, REPEAT };
 
-    void    Do( DoType eDoType );
+    void    Do( DoType eDoType, USHORT nCnt = 1 );
     String  GetDoString( DoType eDoType ) const;
     String  GetRepeatString() const;
+    USHORT  GetDoStrings( DoType eDoType, SfxStringListItem& rStrLstItem ) const;
 
     //Suchen oder Ersetzen
     ULONG SearchPattern(const com::sun::star::util::SearchOptions& rSearchOpt,
