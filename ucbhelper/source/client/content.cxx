@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kso $ $Date: 2000-12-01 07:50:37 $
+ *  last change: $Author: kso $ $Date: 2000-12-01 12:54:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -904,8 +904,16 @@ void Content::writeStream( const Reference< XInputStream >& rStream,
     if ( !rStream.is() )
         return;
 
-    if ( !isDocument() )
-        return;
+    try
+    {
+        // Note: Throws an exception in case the resource does not exist,
+        //       but writeStream must work for non-existing resources, too.
+        if ( !isDocument() )
+            return;
+    }
+    catch ( Exception& )
+    {
+    }
 
     InsertCommandArgument aArg;
     aArg.Data            = rStream;
