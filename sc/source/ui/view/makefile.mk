@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: vg $ $Date: 2003-12-17 20:10:30 $
+#   last change: $Author: rt $ $Date: 2004-09-17 13:54:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -111,8 +111,8 @@ SLOFILES =  \
         $(SLO)$/tabvwshc.obj \
         $(SLO)$/tabvwshd.obj \
         $(SLO)$/tabvwshe.obj \
-    $(SLO)$/tabvwshf.obj \
-    $(SLO)$/tabvwshg.obj \
+        $(SLO)$/tabvwshf.obj \
+        $(SLO)$/tabvwshg.obj \
         $(SLO)$/tabvwshh.obj \
         $(SLO)$/printfun.obj \
         $(SLO)$/pfuncache.obj \
@@ -152,7 +152,9 @@ SLOFILES =  \
         $(SLO)$/galwrap.obj \
         $(SLO)$/imapwrap.obj \
         $(SLO)$/reffact.obj \
+        $(SLO)$/selectionstate.obj \
         $(SLO)$/spelleng.obj \
+        $(SLO)$/spelldialog.obj \
         $(SLO)$/waitoff.obj \
         $(SLO)$/cellsh.obj \
         $(SLO)$/cellsh1.obj\
