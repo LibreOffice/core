@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glossary.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:47:03 $
+ *  last change: $Author: kz $ $Date: 2004-01-28 19:38:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -772,28 +772,23 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn )
             xFP->setDisplayDirectory(aPathOpt.GetWorkPath() );
             String sWW8( C2S(FILTER_WW8) );
 
-            sal_uInt16 i = 0;
-
-            const SfxFilterContainer* pFltCnt =
-                    SwDocShell::Factory().GetFilterContainer();
-            if( pFltCnt )
+            Reference<XFilterManager> xFltMgr(xFP, UNO_QUERY);
+            SfxFilterMatcher aMatcher( String::CreateFromAscii(SwDocShell::Factory().GetShortName()) );
+            SfxFilterMatcherIter aIter( &aMatcher );
+            const SfxFilter* pFilter = aIter.First();
+            while ( pFilter )
             {
-                Reference<XFilterManager> xFltMgr(xFP, UNO_QUERY);
+                if( pFilter->GetUserData() == sWW8 )
+                {
+                    xFltMgr->appendFilter( pFilter->GetUIName(),
+                                ((WildCard&)pFilter->GetWildcard()).GetWildCard() );
+                    xFltMgr->setCurrentFilter( pFilter->GetUIName() ) ;
+                }
 
-                const SfxFilter* pFilter;
-                sal_uInt16 nCount = pFltCnt->GetFilterCount();
-                for( i = 0; i < nCount; ++i )
-                    if( ( pFilter = pFltCnt->GetFilter( i ))
-                        /*->IsAllowedAsTemplate()
-                        && pFilter*/->GetUserData() == sWW8 )
-                    {
-                        xFltMgr->appendFilter( pFilter->GetUIName(),
-                                    ((WildCard&)pFilter->GetWildcard()).GetWildCard() );
-                        xFltMgr->setCurrentFilter( pFilter->GetUIName() ) ;
-                    }
+                pFilter = aIter.Next();
             }
 
-            if( i && aDlgHelper.Execute() == ERRCODE_NONE )
+            if( aDlgHelper.Execute() == ERRCODE_NONE )
             {
                 if( pGlossaryHdl->ImportGlossaries( xFP->getFiles().getConstArray()[0] ))
                     Init();
