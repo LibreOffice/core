@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2000-11-15 17:28:50 $
+#   last change: $Author: mib $ $Date: 2001-01-22 11:42:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -236,7 +236,9 @@ SHL2DEPN=   \
 
 SHL2OBJS= \
     $(OUT)$/slo$/swmodule.obj \
-    $(OUT)$/slo$/swdll.obj
+    $(OUT)$/slo$/swdll.obj \
+    $(SLO)$/atrfrm.obj \
+    $(SLO)$/fmtatr2.obj
 #	$(SLO)$/.obj		  ^ \ nicht vergessen!
 
 .IF "$(OS)$(CPU)"=="SOLARISS"
@@ -382,6 +384,9 @@ $(MISC)$/$(SHL2TARGET).def:  makefile.mk
     @echo _CreateObjSdGraphicDocShellDll @5                        >>$@
     @echo _InitSdDll @6                                            >>$@
     @echo _DeInitSdDll @7                                          >>$@
+    @echo _component_getImplementationEnvironment @7				>>$@
+    @echo _component_writeInfo @8									>>$@
+    @echo _component_getFactory @9								>>$@
 .ELSE
     @echo   CreateSwDocShellDll @2 	                           >>$@
     @echo   CreateSwWebDocShellDll @3                            >>$@
@@ -391,6 +396,9 @@ $(MISC)$/$(SHL2TARGET).def:  makefile.mk
     @echo   CreateObjSwGlobalDocShellDll @7                         >>$@
     @echo   InitSwDll @8                                          >>$@
     @echo   DeInitSwDll @9                                        >>$@
+    @echo _component_getImplementationEnvironment @10				>>$@
+    @echo _component_writeInfo @11									>>$@
+    @echo _component_getFactory @12								>>$@
 .ENDIF
 .ELSE
         @echo option DESCRIPTION 'SwDLL'                            >$@
@@ -403,6 +411,9 @@ $(MISC)$/$(SHL2TARGET).def:  makefile.mk
     @echo CreateObjSwWebDocShellDll_ @5   >>temp.def
     @echo InitSwDll_ @6                    >>temp.def
     @echo DeInitSwDll_ @7                  >>temp.def
+    @echo _component_getImplementationEnvironment @10				>>$@
+    @echo _component_writeInfo @11									>>$@
+    @echo _component_getFactory @12								>>$@
     @gawk -f s:\util\exp.awk temp.def				>>$@
     del temp.def
 .ENDIF
@@ -429,6 +440,9 @@ $(MISC)$/$(SHL2TARGET).def:  makefile.mk
     @echo   CreateObjSwGlobalDocShellDll @23                         >>$@
     @echo   InitSwDll @24                                          >>$@
     @echo   DeInitSwDll @25                                        >>$@
+    @echo   component_getImplementationEnvironment @50				>>$@
+    @echo   component_writeInfo @51									>>$@
+    @echo   component_getFactory @52								>>$@
 
 .ENDIF
 
@@ -445,6 +459,9 @@ $(MISC)$/$(SHL2TARGET).def:  makefile.mk
     @echo   CreateObjSwGlobalDocShellDll                        >> $@
     @echo   InitSwDll                                         >> $@
     @echo   DeInitSwDll                                       >> $@
+    @echo   component_getImplementationEnvironment0				>>$@
+    @echo   component_writeInfo									>>$@
+    @echo   component_getFactory								>>$@
 
 
 .ENDIF
