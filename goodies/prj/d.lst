@@ -5,6 +5,7 @@ mkdir: %COMMON_DEST%\bin%_EXT%\hid
 ..\%__SRC%\lib\icrp.lib %_DEST%\lib%_EXT%\icrp.lib
 ..\%__SRC%\lib\igo.lib %_DEST%\lib%_EXT%\go.lib
 ..\%__SRC%\lib\igo.lib %_DEST%\lib%_EXT%\igo.lib
+..\%__SRC%\lib\itfu.lib %_DEST%\lib%_EXT%\itfu.lib
 ..\%__SRC%\slb\go.lib %_DEST%\lib%_EXT%\xgo.lib
 ..\%__SRC%\slb\gol.lib %_DEST%\lib%_EXT%\gol.lib
 ..\%__SRC%\bin\ma?????.* %_DEST%\bin%_EXT%\ma?????.*
