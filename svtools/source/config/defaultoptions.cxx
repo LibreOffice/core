@@ -2,9 +2,9 @@
  *
  *  $RCSfile: defaultoptions.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: pb $ $Date: 2001-01-18 08:13:02 $
+ *  last change: $Author: pb $ $Date: 2001-02-08 13:30:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,11 +122,10 @@ using namespace com::sun::star::uno;
 #define DEFAULTPATH__NEWMENU        16
 #define DEFAULTPATH__PALETTE        17
 #define DEFAULTPATH__PLUGIN         18
-#define DEFAULTPATH__STORAGE        19
-#define DEFAULTPATH__TEMPLATE       20
-#define DEFAULTPATH__USERCONFIG     21
-#define DEFAULTPATH__USERDICTIONARY 22
-#define DEFAULTPATH__WORK           23
+#define DEFAULTPATH__TEMPLATE       19
+#define DEFAULTPATH__USERCONFIG     20
+#define DEFAULTPATH__USERDICTIONARY 21
+#define DEFAULTPATH__WORK           22
 
 // class SvtDefaultOptions_Impl ------------------------------------------
 
@@ -152,7 +151,6 @@ public:
     String          m_aNewMenuPath;
     String          m_aPalettePath;
     String          m_aPluginPath;
-    String          m_aStoragePath;
     String          m_aTemplatePath;
     String          m_aUserConfigPath;
     String          m_aUserDictionaryPath;
@@ -201,7 +199,6 @@ static PathToDefaultMapping_Impl __READONLY_DATA PathMap_Impl[] =
     SvtPathOptions::PATH_NEWMENU,       &SvtDefaultOptions_Impl::m_aNewMenuPath,
     SvtPathOptions::PATH_PALETTE,       &SvtDefaultOptions_Impl::m_aPalettePath,
     SvtPathOptions::PATH_PLUGIN,        &SvtDefaultOptions_Impl::m_aPluginPath,
-    SvtPathOptions::PATH_STORAGE,       &SvtDefaultOptions_Impl::m_aStoragePath,
     SvtPathOptions::PATH_TEMP,          NULL,
     SvtPathOptions::PATH_TEMPLATE,      &SvtDefaultOptions_Impl::m_aTemplatePath,
 #if SUPD<615
@@ -237,7 +234,6 @@ Sequence< OUString > GetDefaultPropertyNames()
         "New",              // PATH_NEWMENU
         "Palette",          // PATH_PALETTE
         "Plugin",           // PATH_PLUGIN
-        "Storage",          // PATH_STORAGE
         "Template",         // PATH_TEMPLATE
         "UserConfig",       // PATH_USERCONFIG
         "UserDictionary",   // PATH_USERDICTIONARY
@@ -356,7 +352,6 @@ SvtDefaultOptions_Impl::SvtDefaultOptions_Impl() : ConfigItem( ASCII_STR("Office
                     case DEFAULTPATH__NEWMENU:          m_aNewMenuPath = String( aFullPath );       break;
                     case DEFAULTPATH__PALETTE:          m_aPalettePath = String( aFullPath );       break;
                     case DEFAULTPATH__PLUGIN:           m_aPluginPath = String( aFullPath );        break;
-                    case DEFAULTPATH__STORAGE:          m_aStoragePath = String( aFullPath );       break;
                     case DEFAULTPATH__TEMPLATE:         m_aTemplatePath = String( aFullPath );      break;
                     case DEFAULTPATH__USERCONFIG:       m_aUserConfigPath = String( aFullPath );    break;
                     case DEFAULTPATH__USERDICTIONARY:   m_aUserDictionaryPath = String( aFullPath );break;
