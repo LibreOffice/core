@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swtable.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:42:47 $
+ *  last change: $Author: obo $ $Date: 2004-06-01 07:39:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,6 +136,12 @@ protected:
 
     SwHTMLTableLayout *pHTMLLayout;
 
+    // Usually, the table node of a SwTable can be accessed by getting a box
+    // out of aSortCntBoxes, which know their SwStartNode. But in some rare
+    // cases, we need to know the table node of a SwTable, before the table
+    // boxes have been build (SwTableNode::MakeCopy with tables in tables).
+    SwTableNode* pTableNode;
+
 //SOLL das fuer jede Tabelle einstellbar sein?
     TblChgMode  eTblChgMode;
 
@@ -249,7 +255,9 @@ public:
         // BorderLine ein wenig aufraeumen
     void GCBorderLines();
 
+    // returns the table node via aSortCntBoxes or pTableNode
     SwTableNode* GetTableNode() const;
+    void SetTableNode( SwTableNode* pNode ) { pTableNode = pNode; }
 
         // Daten Server-Methoden
     void SetRefObject( SwServerObject* );
