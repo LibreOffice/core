@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DrawController.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-15 07:55:47 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 15:10:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,11 +121,12 @@ DrawController::DrawController (
     ViewShellBase& rBase,
     ViewShell& rViewShell,
     View& rView) throw()
-    : SfxBaseController (&rBase),
-      OBroadcastHelper(SfxBaseController::m_aMutex),
-      OPropertySetHelper( *static_cast<OBroadcastHelperVar<
+    : DrawControllerInterfaceBase(&rBase),
+      BroadcastHelperOwner(SfxBaseController::m_aMutex),
+      OPropertySetHelper( static_cast<OBroadcastHelperVar<
           OMultiTypeInterfaceContainerHelper,
-          OMultiTypeInterfaceContainerHelper::keyType> *>(this)),
+          OMultiTypeInterfaceContainerHelper::keyType>& >(
+              BroadcastHelperOwner::maBroadcastHelper)),
       mrView(rView),
       mrViewShell(rViewShell),
       maLastVisArea(),
@@ -146,11 +147,10 @@ DrawController::~DrawController (void) throw()
 
 // XInterface
 
-IMPLEMENT_FORWARD_XINTERFACE3(
+IMPLEMENT_FORWARD_XINTERFACE2(
     DrawController,
-    SfxBaseController,
-    OPropertySetHelper,
-    DrawControllerInterfaceBase);
+    DrawControllerInterfaceBase,
+    OPropertySetHelper);
 
 
 // XTypeProvider
@@ -190,6 +190,7 @@ void SAL_CALL DrawController::dispose()
         {
             mbDisposing = true;
 
+            OPropertySetHelper::disposing();
             SfxBaseController::dispose();
         }
     }
@@ -326,7 +327,7 @@ void SAL_CALL DrawController::addSelectionChangeListener(
     if( mbDisposing )
         throw lang::DisposedException();
 
-    addListener (saSelectionTypeIdentifier, xListener);
+    BroadcastHelperOwner::maBroadcastHelper.addListener (saSelectionTypeIdentifier, xListener);
 }
 
 
@@ -339,7 +340,7 @@ void SAL_CALL DrawController::removeSelectionChangeListener(
     if( mbDisposing )
         throw lang::DisposedException();
 
-    removeListener (saSelectionTypeIdentifier, xListener);
+    BroadcastHelperOwner::maBroadcastHelper.removeListener (saSelectionTypeIdentifier, xListener);
 }
 
 
@@ -551,7 +552,7 @@ void  SAL_CALL
 {
     ThrowIfDisposed();
     // Have to forward the event to our selection change listeners.
-    OInterfaceContainerHelper* pListeners = getContainer(
+    OInterfaceContainerHelper* pListeners = BroadcastHelperOwner::maBroadcastHelper.getContainer(
         ::getCppuType((Reference<view::XSelectionChangeListener>*)0));
     if (pListeners)
     {
@@ -656,7 +657,7 @@ void DrawController::FireVisAreaChanged (const Rectangle& rVisArea) throw()
 
 void DrawController::FireSelectionChangeListener() throw()
 {
-    OInterfaceContainerHelper * pLC = getContainer(
+    OInterfaceContainerHelper * pLC = BroadcastHelperOwner::maBroadcastHelper.getContainer(
         saSelectionTypeIdentifier);
     if( pLC )
     {
@@ -813,7 +814,7 @@ void DrawController::getFastPropertyValue (
 void DrawController::ThrowIfDisposed (void) const
     throw (::com::sun::star::lang::DisposedException)
 {
-    if (rBHelper.bDisposed || rBHelper.bInDispose)
+    if (rBHelper.bDisposed || rBHelper.bInDispose || mbDisposing)
     {
         OSL_TRACE ("Calling disposed DrawController object. Throwing exception:");
         throw lang::DisposedException (
