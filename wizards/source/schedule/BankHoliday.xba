@@ -28,11 +28,8 @@ Dim B%,C%,D%,E%,F%,G%,H%,I%,K%,L%,M%,N%,O%, nMonth%, nDay%
 End Function
 
 
-&apos; Note: the following algorithm is valid only till the Year 2100.
-&apos; but I have no Idea from which date in the paste it is valid
 Function CalOrthodoxEasterTable(ByVal iYear as Integer) as Long
 Dim R1%, R2%, R3%, RA%, R4%, RB%, R5%, RC%
-Dim lDate as Long
 	R1 = iYear mod 19
 	R2 = iYear mod 4
 	R3 = iYear mod 7
@@ -41,8 +38,7 @@ Dim lDate as Long
 	RB = 2 * R2 + 4 * R3 + 6 * R4
 	R5 = RB mod 7
 	RC = R4 + R5
-	lDate = DateSerial(iYear, 4,4)
-	CalOrthodoxEasterTable() = lDate + RC
+&apos;	Todo: Add the result to March 22;
 End Function
 
 
@@ -124,28 +120,24 @@ End Function
 
 
 Sub CalInsertOwnDataInTables(ByVal iSelYear as Integer)
-	&apos;	Fügt die eigenen Individuellen Daten aus der Tabelle in die
-	&apos;	bereits erstellte unsortierte Tabelle ein.	
+	&apos; inserts the individual data from the table into the previously unsorted list
 Dim CurEventName as String
-Dim CurYear as Integer
-Dim CurMonth as Integer
-Dim CurDay as Integer
+Dim CurEvYear as Integer
+Dim CurEvMonth as Integer
+Dim CurEvDay as Integer
 Dim LastIndex as Integer
 Dim i as Integer
+Dim DateStr as String
 	LastIndex = Ubound(DlgCalModel.lstOwnData.StringItemList())
 	For i = 0 To LastIndex
-		CurYear = CalGetYearOfEvent(i)
-		If DlgCalModel.lstOwnData.StringItemList(i) &lt;&gt; &quot;&quot; Then
-			If (CurYear = iSelYear) Or (CurYear = 0) Then
-				CurMonth = CalGetMonthofEvent(i)
-				CurDay = CalGetDayofEvent(i)
+		If GetSelectedDateUnits(CurEvDay, CurEvMonth, CurEvYear, i) &lt;&gt; SBDATEUNDEFINED Then
+			If (CurEvYear = iSelYear) Or (CurEvYear = SBYEARUNDEFINED) Then
 				CurEventName = CalGetNameOfEvent(i)
-				CalInsertBankholiday(DateSerial(CurYear, CurMonth, CurDay), CurEventName, cHolidayType_Own)
+				CalInsertBankholiday(DateSerial(CurEvYear, CurEvMonth, CurEvDay), CurEventName, cHolidayType_Own)
 			End If
 		End If
 	Next
 End Sub
-
 
 
 &apos; Finds eg the first,second Monday in a month
@@ -186,8 +178,8 @@ End Function
 
 Sub AddFollowUpHolidays(ByVal lStartDate as Long, iCount as Integer, HolidayName as String, iType as Integer)
 Dim lDate as Long
-	For lDate = lStartDate + 1 To lStartDate + iCount
+	For lDate = lStartDate + 1 To lStartDate + 4
 		CalInsertBankholiday(lDate, HolidayName, iType)
-	Next lDate
+	Next i
 End Sub
 </script:module>

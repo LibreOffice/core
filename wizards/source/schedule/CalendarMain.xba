@@ -61,6 +61,8 @@ Public CONST CalBLThueringen     = 16
 
 Public DlgCalendar as Object
 Public DlgCalModel as Object
+Public lDateFormat as Long
+Public lDateStandardFormat as Long
 
 
 
@@ -111,6 +113,7 @@ Dim iThisMonth as Integer
 		.txtYear.Tag = .txtYear.Value
 		.Step = 1
 	End With
+	SetupNumberFormatter(sCurLangLocale, sCurCountryLocale)
 	CalChooseCalendar()  &apos; month
 	iThisMonth = Month(Now)
 	DlgCalendar.GetControl(&quot;lstMonth&quot;).SelectItemPos(iThisMonth-1, True)
@@ -126,6 +129,42 @@ Dim iThisMonth as Integer
 	Exit Sub
 ErrorHandler:
     MsgBox(sError$, 16, sWizardTitle$)
+End Sub
+
+
+Sub SetupNumberFormatter(sCurLangLocale as String, sCurCountryLocale as String)
+Dim oFormats as Object
+Dim DateFormatString as String
+	oFormats = oDocument.getNumberFormats()
+	Select Case sCurLangLocale
+		Case &quot;en&quot;
+			DateFormatString = &quot;DD/MMM&quot;
+		Case &quot;pt&quot;
+		Case &quot;ru&quot;
+		Case &quot;nl&quot;
+		Case &quot;fr&quot;
+		Case &quot;es&quot;
+		Case &quot;it&quot;
+		Case &quot;da&quot;
+		Case &quot;sv&quot;
+		Case &quot;pl&quot;
+		Case &quot;de&quot;
+			DateFormatString = &quot;TT.MMM&quot;
+		Case &quot;tr&quot;
+		Case &quot;ja&quot;
+		Case &quot;zh&quot;
+&apos;			If sCurCountryLocale = &quot;CN&quot; Then
+&apos;			Else
+&apos;			End If		
+		Case &quot;ar&quot;
+		Case &quot;ko&quot;
+	End Select	
+	lDateFormat = AddNumberFormat(oFormats, DateFormatString, oDocument.CharLocale)
+	lDateStandardFormat = oFormats.getStandardFormat(com.sun.star.util.NumberFormat.DATE, oDocument.CharLocale)
+
+&apos;	lDateStandardFormat = AddNumberFormat(oFormats, StandardDateFormatString, oDocument.CharLocale)
+	oNumberFormatter = createUNOService(&quot;com.sun.star.util.NumberFormatter&quot;)
+	oNumberFormatter.attachNumberFormatsSupplier(oDocument)
 End Sub
 
 
@@ -158,6 +197,7 @@ Sub CalcmdOk()
 	&apos; It is either given out a month or a year
 Dim i, iSelYear as Integer
 Dim SelYear as String
+&apos;	DlgCalendar.Visible = False
 
 	oSheets = oDocument.sheets
 	Call CalSaveOwnData()
