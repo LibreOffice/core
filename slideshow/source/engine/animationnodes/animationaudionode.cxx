@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animationaudionode.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 14:20:39 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 08:05:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,18 +163,17 @@ namespace presentation
                     // no duration and no inherent media time
                     // - assume duration '0'
                     getContext().mrEventQueue.addEvent(
-                        makeEvent( ::boost::bind(&BaseNode::deactivate,
-                                                 ::boost::cref( getSelf() ) ) ) );
+                        makeEvent( boost::bind( &BaseNode::deactivate,
+                                                getSelf() ) ) );
                 }
                 else
                 {
                     // no node duration. Take inherent media
                     // time, then
                     getContext().mrEventQueue.addEvent(
-                        makeDelay( ::boost::bind(&BaseNode::deactivate,
-                                                 ::boost::cref( getSelf() ) ),
+                        makeDelay( boost::bind( &BaseNode::deactivate,
+                                                getSelf() ),
                                    mpPlayer->getDuration() ) );
-
                 }
             }
         }
