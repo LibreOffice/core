@@ -2,7 +2,7 @@
     shell SfxMDIFrame
 
     (C) 1994-1995 StarDivision GmbH, Hamburg, Germany
-    $Author: hr $ $Date: 2000-09-18 16:52:25 $ $Revision: 1.1.1.1 $
+    $Author: mba $ $Date: 2001-06-29 11:29:27 $ $Revision: 1.2 $
     $Logfile:   T:/sfx2/sdi/mdislots.sdv  $ $Workfile:   MDISLOTS.SDI  $
 =========================================================================*/
 
@@ -181,6 +181,12 @@ shell SfxTopViewFrame : SfxViewFrame
     SID_TOPDOC
     [
     ]
+
+        SID_SHOWPOPUPS
+        [
+        ExecMethod = Exec_Impl ;
+        StateMethod = GetState_Impl ;
+        ]
 }
 
 shell SfxExternalTopViewFrame_Impl : SfxViewFrame
@@ -220,6 +226,9 @@ shell SfxTask
 /*-------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 16:52:25  hr
+    initial import
+
     Revision 1.66  1999/02/09 16:36:54  MBA
     Fix #61564#: ArrangeSlots ohne Toggle
 
