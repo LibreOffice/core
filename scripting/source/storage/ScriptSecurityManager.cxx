@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptSecurityManager.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dfoster $ $Date: 2003-02-13 18:07:21 $
+ *  last change: $Author: dfoster $ $Date: 2003-02-19 16:25:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,7 +206,6 @@ void ScriptSecurityManager::addScriptStorage( rtl::OUString url,
                         {
                             newPerm.execPermission=sal_True;
                         }
-                        /* this might be better (result ==3) */
                         if ( result&2 == 2 )
                         {
                             /* if checkbox clicked then need to add path to registry*/
