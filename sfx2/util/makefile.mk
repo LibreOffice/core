@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: mh $ $Date: 2001-10-04 16:28:26 $
+#   last change: $Author: hjs $ $Date: 2001-10-11 17:27:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -69,18 +69,11 @@ TARGET=sfx
 #sfx.hid generieren
 GEN_HID=TRUE
 
-COMP1TYPELIST=		sfx
-
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
 
 # --- Allgemein ----------------------------------------------------
-
-.IF "$(header)" == ""
-CXXFILES =         $(PROJECTPCHSOURCE).cxx
-.ENDIF
-
 
 LIB1TARGET= $(SLB)$/$(TARGET).lib
 LIB1FILES=  $(SLB)$/appl.lib		\
@@ -207,188 +200,23 @@ RESLIB1SRSFILES=$(SFXSRSLIST)
 
 # --- Targets ------------------------------------------------------
 
-all : $(SRS)$/hidother.hid ALLTAR
 
 .INCLUDE :  target.mk
 
+ALLTAR : $(SRS)$/hidother.hid
+
 # --- SFX-Filter-Datei ---
 
-$(MISC)$/$(SHL1TARGET).flt:
+$(MISC)$/$(SHL1TARGET).flt: makefile.mk
     @echo ------------------------------
     @echo Making: $@
-    @echo _Impl > $@
-    @echo IMP >> $@
-    @echo Dbg >> $@
-    @echo DLL >> $@
-    @echo AVL_Tree >> $@
-    @echo BinaryGlobalLoader >> $@
-    @echo BinaryResLoader >> $@
-    @echo BitSet >> $@
-    @echo CntBoxOpenJob >> $@
-    @echo CntContentPropertiesTabPage >> $@
-    @echo CntCoreDataComplex_Impl >> $@
-    @echo CntCoreDataSimple_Impl >> $@
-    @echo CntDirectory >> $@
-    @echo CntDirEntry >> $@
-    @echo CntDirtyItemSet >> $@
-    @echo CntExplorerFileContent >> $@
-    @echo CntFTPServerTabPage >> $@
-    @echo CntGeneralTabPage >> $@
-    @echo CntHash >> $@
-    @echo CntIMAPFolderInfoItem >> $@
-    @echo CntIMAPFolderNode >> $@
-    @echo CntIMAPRootNode >> $@
-    @echo CntInterface >> $@
-    @echo CntItemPool >> $@
-    @echo CntLazyDelete >> $@
-    @echo CntLazyWriter >> $@
-    @echo CntMessageBodyItemImp >> $@
-    @echo CntMessageNode >> $@
-    @echo CntNewMessagesControl >> $@
-    @echo CntNewsBoxGetListJob >> $@
-    @echo CntNewsBoxNode >> $@
-    @echo CntNewsBoxNodeImp >> $@
-    @echo CntNewsBoxOpenJob >> $@
-    @echo CntNewsBoxPutListJob >> $@
-    @echo CntNewsGroupNode >> $@
-    @echo CntNewsGroupOpenJob >> $@
-    @echo CntNewsGroupMarkJob >> $@
-    @echo CntNewsMsgOpenJob >> $@
-    @echo CntCrossReferenceItem >> $@
-    @echo CntNode >> $@
-    @echo CntNodeFactory >> $@
-    @echo CntNodeHint >> $@
-    @echo CntNodeJob >> $@
-    @echo CntOutMsgExternalStateItem >> $@
-    @echo CntOutMsgInternalStateItem >> $@
-    @echo CntOutTrayNode >> $@
-    @echo CntPopupMenu >> $@
-    @echo CntProgress >> $@
-    @echo CntPOP3Node >> $@
-    @echo CntPOP3Box >> $@
-    @echo CntPOP3Msg >> $@
-    @echo CntPropertyDialog >> $@
-    @echo CntPropertyTabPage >> $@
-    @echo CntRangesItem >> $@
-    @echo CntRecipientInfo >> $@
-    @echo CntRecipientListItem >> $@
-    @echo CntRecipientStateTabPage >> $@
-    @echo CntRootNodeMgr >> $@
-    @echo CntRootStorageNode >> $@
-    @echo CntRulesTabPage >> $@
-    @echo CntSeenStatusItem >> $@
-    @echo CntServerSettingsTabPage >> $@
-    @echo CntSortingInfoArr >> $@
-    @echo CntSortingItem >> $@
-    @echo CntSubscribeTabPage >> $@
-    @echo CntThreadData >> $@
-    @echo CntThreadingInfoArr >> $@
-    @echo CntThreadingItem >> $@
-    @echo CntUI >> $@
-    @echo CntUpdateHint >> $@
-    @echo CntUpdateInitTimer >> $@
-    @echo CntUShortListItem >> $@
-    @echo CntViewDescriptionItem >> $@
-    @echo DocManager >> $@
-    @echo FileHeader >> $@
-    @echo IdPool >> $@
-    @echo ImportParser_Impl >> $@
-    @echo ItemListData >> $@
-    @echo MapEntry >> $@
-    @echo NotesLibrary >> $@
-    @echo QueryFolderNameDialog >> $@
-    @echo SbxArrayRef >> $@
-    @echo SbxObjectRef >> $@
-    @echo SfxAccelerator >> $@
-    @echo SfxConfigDialog >> $@
-    @echo SfxConfigManager >> $@
-    @echo SfxContextMenuData >> $@
-    @echo SfxCustomizeToolBox >> $@
-    @echo SfxDirEntryHint >> $@
-    @echo SfxDocumentsCollection >> $@
-    @echo SfxDocumentTemplateDlg >> $@
-    @echo SfxEnumMenu >> $@
-    @echo SfxEventConfigPage >> $@
-    @echo SfxExecuteItem >> $@
-    @echo SfxExplorerBookmark >> $@
-    @echo SfxExplorerBrowserConfig >> $@
-    @echo SfxExplorerContentHint >> $@
-    @echo SfxExplorerFolderSearchCriteriaTabPage >> $@
-    @echo SfxExplorerFolderSearchDlg >> $@
-    @echo SfxExplorerFolderSearchPlaceTabPage >> $@
-    @echo SfxExplorerFolderSearchWrapper >> $@
-    @echo SfxExplorerIterator >> $@
-    @echo SfxExplorerMenuView >> $@
-    @echo SfxExplorerObjectShell >> $@
-    @echo SfxExplorerSearchFolder >> $@
-    @echo SfxExtDirEntryHint >> $@
-    @echo SfxFilterDialog >> $@
-    @echo SfxFilterFunc >> $@
-    @echo SfxFrameProperties >> $@
-    @echo SfxGenericObjectShell >> $@
-    @echo SfxGenericViewShell >> $@
-    @echo SfxHelpTextCache >> $@
-    @echo SfxHelpViewShell >> $@
-    @echo SfxIPCServer >> $@
-    @echo SfxIPCService >> $@
-    @echo SfxJobQueue >> $@
-    @echo SfxMailBroadcaster >> $@
-    @echo SfxMenuBarManager >> $@
-    @echo SfxMenuManager >> $@
-    @echo SfxMenuConfig >> $@
-    @echo SfxMessageServer >> $@
-    @echo SfxNewHdl >> $@
-    @echo SfxObjectBarConfigPage >> $@
-    @echo SfxObjectBarListBox >> $@
-    @echo SfxObjectList >> $@
-    @echo SfxObjectVerbsControl >> $@
-    @echo SfxOfflineURLManager >> $@
-    @echo SfxPlugInFrame >> $@
-    @echo SfxPlugInObjectShell >> $@
-    @echo SfxPlugInViewShell >> $@
-    @echo SfxPopupMenuManager >> $@
-    @echo SfxResId >> $@
-    @echo SfxSlotInfo >> $@
-    @echo SfxSplitWindow >> $@
-    @echo SfxSrchDlgBrowseBox >> $@
-    @echo SfxStateCache >> $@
-    @echo SfxStatusBarConfigListBox >> $@
-    @echo SfxStatusBarConfigPage >> $@
-    @echo SfxStringHint >> $@
-    @echo SfxTaskBar >> $@
-    @echo SfxTaskBarWrapper >> $@
-    @echo SfxTaskButtonBar >> $@
-    @echo SfxTaskToolBox >> $@
-    @echo SfxTemplateControllerItem >> $@
-    @echo SfxTemplateDir >> $@
-    @echo SfxTemplateDirEntry >> $@
-    @echo SfxTemplateOrganizeDlg >> $@
-    @echo SfxToolbox >> $@
-    @echo SfxToolBoxConfig >> $@
-    @echo SfxToolboxCustomizer >> $@
-    @echo SfxToolboxCustomWindow >> $@
-    @echo SfxToolBoxOptions >> $@
-    @echo SfxURLFrame >> $@
-    @echo SfxVirtualMenu >> $@
-    @echo SfxWindowsCollection >> $@
-    @echo SfxWorkWindow >> $@
-    @echo SortedULONGs_SAR >> $@
-    @echo solver >> $@
-    @echo _FileListEntry >> $@
-    @echo InitHelp >> $@
-    @echo InitTpl >> $@
-.IF "$(OLD_CHAOS)" != ""
-.IF "$(VCL)" != ""
-    @echo CntExtendedHash >> $@
-    @echo CntStore >> $@
-    @echo CntFldr >> $@
-.ENDIF
-.ENDIF          # "$(OLD_CHAOS)" != ""
-.IF "$(GUI)"=="WNT" || "$(GUI)"=="WIN"
-    @echo WEP>>$@
-.ENDIF
+    @+$(TYPE) sfxcommon.flt > $@
     @echo CntSearchLocationsTabPage>>$@
     @echo CntSearchDialog>>$@
+.IF "$(GUI)"=="WNT"
+    @echo WEP>>$@
+    @echo ?CreateType@>>$@
+.ENDIF
 .IF "$(COM)"=="MSC"
     @echo ??_5>>$@
     @echo ??_7>>$@
@@ -413,9 +241,6 @@ $(MISC)$/$(SHL1TARGET).flt:
     @echo NoSuchElementException>>$@
     @echo __CT>>$@
 .ENDIF         # "$(COM)"=="MSC" 
-.IF "$(GUI)"=="WNT"
-    @echo ?CreateType@>>$@
-.ENDIF
 
 $(SRS)$/hidother.hid: hidother.src
 .IF "$(GUI)$(CPU)"=="WNTI"
