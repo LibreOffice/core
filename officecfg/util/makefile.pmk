@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.pmk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: vg $ $Date: 2002-05-07 13:20:59 $
+#   last change: $Author: dg $ $Date: 2002-05-16 17:49:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -69,22 +69,28 @@ $(MISC)$/instance$/%.xml : $(MISC)$/xcdformat$/%.xcd
 # convert to old format xcd format
 $(MISC)$/xcdformat$/%.xcd : %.xcs
     -$(MKDIR) -p $(@:d)
-    java -Xmx128m -classpath $(COMMON_BUILD_TOOLS)$/xt.jar$(PATH_SEPERATOR)$(COMMON_BUILD_TOOLS)$/parser.jar$(PATH_SEPERATOR)$(CLASSDIR)$/cfgimport.jar -Dcom.jclark.xsl.sax.parser=com.sun.xml.parser.Parser com.jclark.xsl.sax.Driver $< $(PRJ)$/util$/rschema.xsl $(MISC)$/xcdformat$/$(<:d)$(<:b).xcd xcu=$(PRJ)$/registry$/data$/$(<:d)$(<:b).xcu schemaRoot=$(PRJ)$/registry$/schema 
+    java -classpath $(COMMON_BUILD_TOOLS)$/xt.jar$(PATH_SEPERATOR)$(COMMON_BUILD_TOOLS)$/parser.jar$(PATH_SEPERATOR)$(CLASSDIR)$/cfgimport.jar -Dcom.jclark.xsl.sax.parser=com.sun.xml.parser.Parser com.jclark.xsl.sax.Driver $< $(PRJ)$/util$/rschema.xsl $(MISC)$/xcdformat$/$(<:d)$(<:b).xcd xcu=$(PRJ)$/registry$/data$/$(<:d)$(<:b).xcu schemaRoot=$(PRJ)$/registry$/schema 
 
 # stripping schema files 
 $(MISC)$/registry$/schema$/%.xcs : %.xcs
     -$(MKDIR) -p $(@:d)
-    java -Xmx128m -classpath $(COMMON_BUILD_TOOLS)$/xt.jar$(PATH_SEPERATOR)$(COMMON_BUILD_TOOLS)$/parser.jar -Dcom.jclark.xsl.sax.parser=com.sun.xml.parser.Parser com.jclark.xsl.sax.Driver $< $(PRJ)$/util$/schema_trim.xsl $(MISC)$/registry$/schema$/$(<:d)$(<:b).xcs
-
+    java -classpath $(COMMON_BUILD_TOOLS)$/xt.jar$(PATH_SEPERATOR)$(COMMON_BUILD_TOOLS)$/parser.jar -Dcom.jclark.xsl.sax.parser=com.sun.xml.parser.Parser com.jclark.xsl.sax.Driver $< $(PRJ)$/util$/schema_trim.xsl $(@:d)$(<:b).tmp
+    java -classpath $(COMMON_BUILD_TOOLS)$/jaxp.jar$(PATH_SEPERATOR)$(COMMON_BUILD_TOOLS)$/parser.jar$(PATH_SEPERATOR)$(CLASSDIR)$/schema.jar -Djavax.xml.parsers.SAXParserFactory=com.sun.xml.parser.SAXParserFactoryImpl org.openoffice.helper.PrettyPrinter $(@:d)$(<:b).tmp $(@:d)$(<:b).xcs
+    +$(RM) $(@:d)$(<:b).tmp
+    
 # creating a locale independent file 
 $(MISC)$/registry$/data$/%.xcu : %.xcu
     -$(MKDIR) -p $(@:d) 
-    java -Xmx128m -classpath $(COMMON_BUILD_TOOLS)$/xt.jar$(PATH_SEPERATOR)$(COMMON_BUILD_TOOLS)$/parser.jar -Dcom.jclark.xsl.sax.parser=com.sun.xml.parser.Parser com.jclark.xsl.sax.Driver $< $(PRJ)$/util$/alllang.xsl $(MISC)$/registry$/data$/$(<:d)$(<:b).xcu
-
+    java -classpath $(COMMON_BUILD_TOOLS)$/xt.jar$(PATH_SEPERATOR)$(COMMON_BUILD_TOOLS)$/parser.jar -Dcom.jclark.xsl.sax.parser=com.sun.xml.parser.Parser com.jclark.xsl.sax.Driver $< $(PRJ)$/util$/alllang.xsl $(@:d)$(<:b).tmp
+    java -classpath $(COMMON_BUILD_TOOLS)$/jaxp.jar$(PATH_SEPERATOR)$(COMMON_BUILD_TOOLS)$/parser.jar$(PATH_SEPERATOR)$(CLASSDIR)$/schema.jar -Djavax.xml.parsers.SAXParserFactory=com.sun.xml.parser.SAXParserFactoryImpl org.openoffice.helper.PrettyPrinter $(@:d)$(<:b).tmp $(@:d)$(<:b).xcu
+    +$(RM) $(@:d)$(<:b).tmp
+    
 # creating locale dependent entries
 $(MISC)$/registry$/res$/{$(alliso)}$/%.xcu :| %.xcu
     -$(MKDIR) -p $(@:d)
-    java -Xmx128m -classpath $(COMMON_BUILD_TOOLS)$/xt.jar$(PATH_SEPERATOR)$(COMMON_BUILD_TOOLS)$/parser.jar -Dcom.jclark.xsl.sax.parser=com.sun.xml.parser.Parser com.jclark.xsl.sax.Driver $< $(PRJ)$/util$/alllang.xsl $@ locale={$(subst,$/$<, $(subst,$(MISC)$/registry$/res$/, $@))}	
+    java -classpath $(COMMON_BUILD_TOOLS)$/xt.jar$(PATH_SEPERATOR)$(COMMON_BUILD_TOOLS)$/parser.jar -Dcom.jclark.xsl.sax.parser=com.sun.xml.parser.Parser com.jclark.xsl.sax.Driver $< $(PRJ)$/util$/alllang.xsl $(@:d)$(<:b).tmp locale={$(subst,$/$<, $(subst,$(MISC)$/registry$/res$/, $@))}	
+    java -classpath $(COMMON_BUILD_TOOLS)$/jaxp.jar$(PATH_SEPERATOR)$(COMMON_BUILD_TOOLS)$/parser.jar$(PATH_SEPERATOR)$(CLASSDIR)$/schema.jar -Djavax.xml.parsers.SAXParserFactory=com.sun.xml.parser.SAXParserFactoryImpl org.openoffice.helper.PrettyPrinter $(@:d)$(<:b).tmp $(@:d)$(<:b).xcu
+    +$(RM) $(@:d)$(<:b).tmp
     
 #xxxxxxxxx
 # create old output format obsolete
