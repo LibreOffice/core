@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrosecurity.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: gt $ $Date: 2004-07-20 15:43:12 $
+ *  last change: $Author: gt $ $Date: 2004-07-22 13:41:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,7 +188,7 @@ private:
     PushButton          maAddLocPB;
     PushButton          maRemoveLocPB;
 
-    DECL_LINK(          AddCertPBHdl, void* );
+//  DECL_LINK(          AddCertPBHdl, void* );
     DECL_LINK(          ViewCertPBHdl, void* );
     DECL_LINK(          RemoveCertPBHdl, void* );
     DECL_LINK(          AddLocPBHdl, void* );

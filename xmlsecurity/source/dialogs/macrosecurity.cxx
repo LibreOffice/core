@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrosecurity.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-22 09:43:23 $
+ *  last change: $Author: gt $ $Date: 2004-07-22 13:38:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -280,10 +280,28 @@ IMPL_LINK( MacroSecurityTrustedSourcesTP, ViewCertPBHdl, void*, EMTYARG )
 
 IMPL_LINK( MacroSecurityTrustedSourcesTP, RemoveCertPBHdl, void*, EMTYARG )
 {
-    if( maTrustCertLB.FirstSelected() )
+    SvLBoxEntry*    pSel = maTrustCertLB.FirstSelected();
+    if( pSel )
     {
-        USHORT nSelected = USHORT( sal_Int32( maTrustCertLB.FirstSelected()->GetUserData() ) );
-        mpDlg->maCurrentSignatureInformations.erase( mpDlg->maCurrentSignatureInformations.begin()+nSelected );
+        USHORT nSel = USHORT( sal_Int32( pSel->GetUserData() ) );
+//      mpDlg->maCurrentSignatureInformations.erase( mpDlg->maCurrentSignatureInformations.begin()+nSelected );
+
+        // remove from sequence
+        sal_Int32   nSeqIndex = ( sal_Int32 ) maTrustCertLB.GetEntry( nSel )->GetUserData();
+
+        sal_Int32   nCnt = maTrustedAuthors.getLength();
+        DBG_ASSERT( nSeqIndex < nCnt, "MacroSecurityTrustedSourcesTP::RemoveLocPBHdl(): impossible state!?" );
+        cssu::Sequence< SvtSecurityOptions::Certificate >   aNewSeq( nCnt - 1 );
+        for( sal_Int32 nR = 0, nW = 0 ; nR < nCnt ; ++nR )
+        {
+            if( nR != nSeqIndex )
+            {
+                aNewSeq[ nW ] = maTrustedAuthors[ nR ];
+                ++nW;
+            }
+        }
+
+        maTrustedAuthors = aNewSeq;
 
         FillCertLB();
     }
@@ -330,22 +348,6 @@ IMPL_LINK( MacroSecurityTrustedSourcesTP, RemoveLocPBHdl, void*, EMTYARG )
     if( nSel != LISTBOX_ENTRY_NOTFOUND )
     {
         maTrustFileLocLB.RemoveEntry( nSel );
-        // remove from sequence
-        sal_Int32   nSeqIndex = ( sal_Int32 ) maTrustCertLB.GetEntry( nSel )->GetUserData();
-
-        sal_Int32   nCnt = maTrustedAuthors.getLength();
-        DBG_ASSERT( nSeqIndex < nCnt, "MacroSecurityTrustedSourcesTP::RemoveLocPBHdl(): impossible state!?" );
-        cssu::Sequence< SvtSecurityOptions::Certificate >   aNewSeq( nCnt - 1 );
-        for( sal_Int32 nR = 0, nW = 0 ; nR < nCnt ; ++nR )
-        {
-            if( nR != nSeqIndex )
-            {
-                aNewSeq[ nW ] = maTrustedAuthors[ nR ];
-                ++nW;
-            }
-        }
-
-        maTrustedAuthors = aNewSeq;
     }
 
     return 0;
@@ -417,15 +419,23 @@ MacroSecurityTrustedSourcesTP::MacroSecurityTrustedSourcesTP( Window* _pParent, 
 
     FreeResource();
 
+    maTrustCertLB.SetSelectHdl( LINK( this, MacroSecurityTrustedSourcesTP, TrustCertLBSelectHdl ) );
 //  maAddCertPB.SetClickHdl( LINK( this, MacroSecurityTrustedSourcesTP, AddCertPBHdl ) );
     maAddCertPB.Hide();     // not used in the moment...
     maViewCertPB.SetClickHdl( LINK( this, MacroSecurityTrustedSourcesTP, ViewCertPBHdl ) );
     maViewCertPB.Disable();
     maRemoveCertPB.SetClickHdl( LINK( this, MacroSecurityTrustedSourcesTP, RemoveCertPBHdl ) );
     maRemoveCertPB.Disable();
+
+    maTrustFileLocLB.SetSelectHdl( LINK( this, MacroSecurityTrustedSourcesTP, TrustFileLocLBSelectHdl ) );
     maAddLocPB.SetClickHdl( LINK( this, MacroSecurityTrustedSourcesTP, AddLocPBHdl ) );
     maRemoveLocPB.SetClickHdl( LINK( this, MacroSecurityTrustedSourcesTP, RemoveLocPBHdl ) );
     maRemoveLocPB.Disable();
+
+    cssu::Sequence< rtl::OUString > aSecureURLs = mpDlg->maSecOptions.GetSecureURLs();
+    sal_Int32                       nEntryCnt = aSecureURLs.getLength();
+    for( sal_Int32 i = 0 ; i < nEntryCnt ; ++i )
+        maTrustFileLocLB.InsertEntry( aSecureURLs[ i ] );
 }
 
 void MacroSecurityTrustedSourcesTP::ActivatePage()
@@ -436,5 +446,15 @@ void MacroSecurityTrustedSourcesTP::ActivatePage()
 
 void MacroSecurityTrustedSourcesTP::ClosePage( void )
 {
+    USHORT  nEntryCnt = maTrustFileLocLB.GetEntryCount();
+    if( nEntryCnt )
+    {
+        cssu::Sequence< rtl::OUString > aSecureURLs( nEntryCnt );
+        for( USHORT i = 0 ; i < nEntryCnt ; ++i )
+            aSecureURLs[ i ] = maTrustFileLocLB.GetEntry( i );
+
+        mpDlg->maSecOptions.SetSecureURLs( aSecureURLs );
+    }
+
     mpDlg->maSecOptions.SetTrustedAuthors( maTrustedAuthors );
 }
