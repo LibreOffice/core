@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewse.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: ka $ $Date: 2001-08-15 10:54:49 $
+ *  last change: $Author: aw $ $Date: 2001-08-17 10:28:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1477,6 +1477,12 @@ void SdDrawViewShell::FuSupport(SfxRequest& rReq)
                         pUndoManager->Undo();
                     }
                 }
+
+                // #91081# refresh rulers, maybe UNDO was move of TAB marker in ruler
+                if(bHasRuler)
+                {
+                    Invalidate(SID_ATTR_TABSTOP);
+                }
             }
 
             rReq.Done();
@@ -1504,6 +1510,12 @@ void SdDrawViewShell::FuSupport(SfxRequest& rReq)
                     {
                         pUndoManager->Redo();
                     }
+                }
+
+                // #91081# refresh rulers, maybe REDO was move of TAB marker in ruler
+                if(bHasRuler)
+                {
+                    Invalidate(SID_ATTR_TABSTOP);
                 }
             }
 
