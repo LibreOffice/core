@@ -2,9 +2,9 @@
  *
  *  $RCSfile: changes.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: jb $ $Date: 2002-03-28 08:23:19 $
+ *  last change: $Author: jb $ $Date: 2002-03-28 08:24:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,6 @@ namespace configmgr
 //==========================================================================
 //= ValueChange
 //==========================================================================
-// -------------------------------------------------------------------------
 
 // works reliably only if old value is set and the value really changes
 uno::Type implGetValueType(uno::Any const & _aValue, uno::Any const & _aOldValue)
