@@ -2,7 +2,6 @@ mkdir: %_DEST%\inc%_EXT%\svtools
 
 ..\%__SRC%\srs\ehdl.srs %_DEST%\res%_EXT%\svtools.srs
 ..\%__SRC%\lib\_notify.lib %_DEST%\lib%_EXT%\_notify.lib
-..\%__SRC%\lib\_libcall.lib %_DEST%\lib%_EXT%\_libcall.lib
 ..\%__SRC%\lib\_ctrl.lib %_DEST%\lib%_EXT%\_ctrl.lib
 ..\%__SRC%\lib\ctrl.lib %_DEST%\lib%_EXT%\ctrl.lib
 ..\%__SRC%\lib\isvl.lib %_DEST%\lib%_EXT%\isvl.lib
@@ -89,7 +88,6 @@ hedabu: ..\inc\itemiter.hxx %_DEST%\inc%_EXT%\svtools\itemiter.hxx
 hedabu: ..\inc\itempool.hxx %_DEST%\inc%_EXT%\svtools\itempool.hxx
 hedabu: ..\inc\itemset.hxx %_DEST%\inc%_EXT%\svtools\itemset.hxx
 hedabu: ..\inc\lckbitem.hxx %_DEST%\inc%_EXT%\svtools\lckbitem.hxx
-hedabu: ..\inc\libcall.hxx %_DEST%\inc%_EXT%\svtools\libcall.hxx
 hedabu: ..\inc\lstner.hxx %_DEST%\inc%_EXT%\svtools\lstner.hxx
 hedabu: ..\inc\macitem.hxx %_DEST%\inc%_EXT%\svtools\macitem.hxx
 hedabu: ..\inc\memberid.hrc %_DEST%\inc%_EXT%\svtools\memberid.hrc

@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.6 $
+#*  $Revision: 1.7 $
 #*
-#*  last change: $Author: mh $ $Date: 2000-11-10 09:21:23 $
+#*  last change: $Author: obr $ $Date: 2000-11-13 10:36:37 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -147,7 +147,6 @@ LIB8FILES=	\
         $(SLB)$/config.lib	\
         $(SLB)$/filerec.lib \
         $(SLB)$/items1.lib	\
-        $(SLB)$/libcall.lib \
         $(SLB)$/misc1.lib	\
         $(SLB)$/notify.lib	\
         $(SLB)$/srch.lib	\
