@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsave.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 18:48:25 $
+ *  last change: $Author: obo $ $Date: 2004-04-29 16:25:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,9 @@
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
 #include <com/sun/star/uno/Reference.h>
 #endif
+#ifndef _SVX_READONLYIMAGE_HXX
+#include <readonlyimage.hxx>
+#endif
 
 namespace com { namespace sun { namespace star {
   namespace beans {
@@ -101,6 +104,7 @@ private:
     CheckBox            aLoadUserSettingsCB;
     FixedLine           aSaveBox;
     CheckBox            aDocInfoBtn;
+    ReadOnlyImage       aBackupFI;
     CheckBox            aBackupBtn;
     CheckBox            aAutoSaveBtn;
     NumericField        aAutoSaveEdit;
@@ -115,6 +119,7 @@ private:
     FixedText           aApplicationFT;
     ListBox             aApplicationLB;
     FixedText           aFiltersFT;
+    ReadOnlyImage       aFiltersFI;
     ListBox             aFiltersLB;
 
     String              sAlienMsg;
