@@ -2,9 +2,9 @@
  *
  *  $RCSfile: StringHelper.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Date: 2004-11-02 11:26:12 $
+ *  last change: $Date: 2004-12-10 16:59:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,9 +63,34 @@ package convwatch;
 
 public class StringHelper {
 
-    public static String doublequote(String _sStr)
+    public static String doubleQuote(String _sStr)
         {
             return "\"" + _sStr + "\"";
+        }
+
+    public static String singleQuote(String _sStr)
+        {
+            return "'" + _sStr + "'";
+        }
+
+    public static String doubleQuoteIfNeed(String _sStr)
+        {
+            if (_sStr.startsWith("\"") && _sStr.endsWith("\""))
+            {
+                // don't quote twice
+                return _sStr;
+            }
+            if (_sStr.indexOf(" ") == -1)
+            {
+                // don't quote, if there is no space in name
+                return _sStr;
+            }
+            if (_sStr.indexOf("%") != -1)
+            {
+                return singleQuote(_sStr);
+            }
+
+            return doubleQuote(_sStr);
         }
 
     /**
