@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsa.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2004-11-27 14:40:16 $
+ *  last change: $Author: rt $ $Date: 2004-12-16 10:13:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -599,8 +599,6 @@ void DrawViewShell::Init (void)
     ViewShell::Init ();
 
     StartListening (*GetDocSh());
-
-    GetViewShellBase().UpdateController (GetController());
 
     // Now that the controller that is used by at least the FormShell we can
     // allow the switching of object bars and switch to the default object
