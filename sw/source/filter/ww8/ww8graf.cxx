@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.103 $
+ *  $Revision: 1.104 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-25 11:22:18 $
+ *  last change: $Author: hjs $ $Date: 2003-08-18 15:27:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2290,26 +2290,11 @@ SdrObject* SwWW8ImplReader::CreateContactObject(SwFrmFmt* pFlyFmt)
 bool SwWW8ImplReader::MiserableRTLGraphicsHack(long &rLeft,  long nWidth,
     SwHoriOrient eHoriOri, SwRelationOrient eHoriRel)
 {
-    bool bRet = false;
-    if (IsRightToLeft() && eHoriOri == HORI_NONE)
-    {
-        if (eHoriRel == REL_PG_FRAME)
-        {
-            rLeft =
-                maSectionManager.GetPageWidth() - rLeft;
-            bRet = true;
-        }
-        else if (eHoriRel == REL_PG_PRTAREA)
-        {
-            rLeft = maSectionManager.GetPageWidth() -
-                maSectionManager.GetPageLeft() -
-                maSectionManager.GetPageRight() - rLeft;
-            bRet = true;
-        }
-    }
-    if (bRet)
-        rLeft -= nWidth;
-    return bRet;
+    return RTLGraphicsHack(rLeft, nWidth, eHoriOri, eHoriRel,
+            maSectionManager.GetPageLeft(),
+            maSectionManager.GetPageRight(),
+            maSectionManager.GetPageWidth(),
+            IsRightToLeft());
 }
 
 RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
@@ -2444,11 +2429,14 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
             eHoriRel = PRTAREA;
 
         //#109311# Miserable miserable hack.
-        long nWidth = (pFSPA->nXaRight - pFSPA->nXaLeft);
-        if (MiserableRTLGraphicsHack(pFSPA->nXaLeft, nWidth, eHoriOri,
-            eHoriRel))
+        if (bOrgObjectWasReplace || pRecord->bReplaceByFly)
         {
-            pFSPA->nXaRight = pFSPA->nXaLeft + nWidth;
+            long nWidth = (pFSPA->nXaRight - pFSPA->nXaLeft);
+            if (MiserableRTLGraphicsHack(pFSPA->nXaLeft, nWidth, eHoriOri,
+                eHoriRel))
+            {
+                pFSPA->nXaRight = pFSPA->nXaLeft + nWidth;
+            }
         }
 
         /*
