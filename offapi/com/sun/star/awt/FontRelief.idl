@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FontRelief.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-27 08:46:09 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 17:05:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@
     <p>They may be expanded in future versions.</p>
  */
 
-constants FontRelief
+published constants FontRelief
 {
     //-------------------------------------------------------------------------
 
