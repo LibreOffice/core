@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableAutoFormatField.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-14 12:53:40 $
+ *  last change: $Author: nn $ $Date: 2001-05-18 15:00:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,7 +160,7 @@ service TableAutoFormatField
     // DocMerge from xml: property com::sun::star::sheet::TableAutoFormatField::CharLocale
     /** contains the value of the locale.
      */
-    [property] com::sun::star::lang::Locale CharLocale;
+    [optional, property] com::sun::star::lang::Locale CharLocale;
 
     //-------------------------------------------------------------------------
 
@@ -182,7 +182,7 @@ service TableAutoFormatField
     // DocMerge from xml: property com::sun::star::sheet::TableAutoFormatField::ShadowFormat
     /** contains a description of the shadow.
      */
-    [property] com::sun::star::table::ShadowFormat ShadowFormat;
+    [optional, property] com::sun::star::table::ShadowFormat ShadowFormat;
 
 };
 
@@ -193,6 +193,9 @@ service TableAutoFormatField
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/12/14 12:53:40  mi
+    <true></true> -> <TRUE/> and same with FALSE
+
     Revision 1.3  2000/11/08 12:43:46  mi
     moved from api
 
