@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lngsvcmgr.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tl $ $Date: 2001-01-25 10:54:49 $
+ *  last change: $Author: tl $ $Date: 2001-03-28 11:37:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,7 @@
 #define _LINGUISTIC_LNGSVCMGR_HXX_
 
 #include <uno/lbnames.h>            // CPPU_CURRENT_LANGUAGE_BINDING_NAME macro, which specify the environment type
-#include <cppuhelper/implbase3.hxx> // helper for implementations
+#include <cppuhelper/implbase4.hxx> // helper for implementations
 
 #ifndef _CPPUHELPER_INTERFACECONTAINER_H_
 #include <cppuhelper/interfacecontainer.h>  //OMultiTypeInterfaceContainerHelper
@@ -82,6 +82,9 @@
 
 #ifndef _COM_SUN_STAR_LINGUISTIC2_XLINGUSERVICEMANAGER_HPP_
 #include <com/sun/star/linguistic2/XLinguServiceManager.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LINGUISTIC2_XAVAILABLELOCALES_HPP_
+#include <com/sun/star/linguistic2/XAvailableLocales.hpp>
 #endif
 
 #include <vcl/timer.hxx>
@@ -106,9 +109,10 @@ namespace com { namespace sun { namespace star { namespace linguistic2 {
 
 
 class LngSvcMgr :
-    public cppu::WeakImplHelper3
+    public cppu::WeakImplHelper4
     <
         com::sun::star::linguistic2::XLinguServiceManager,
+        com::sun::star::linguistic2::XAvailableLocales,
         com::sun::star::lang::XComponent,
         com::sun::star::lang::XServiceInfo
     >
@@ -202,11 +206,6 @@ public:
                 const ::rtl::OUString& rServiceName,
                 const ::com::sun::star::lang::Locale& rLocale )
             throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence<
-            ::com::sun::star::lang::Locale > SAL_CALL
-        getAvailableLocales(
-                const ::rtl::OUString& rServiceName )
-            throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL
         setConfiguredServices(
                 const ::rtl::OUString& rServiceName,
@@ -218,6 +217,13 @@ public:
         getConfiguredServices(
                 const ::rtl::OUString& rServiceName,
                 const ::com::sun::star::lang::Locale& rLocale )
+            throw(::com::sun::star::uno::RuntimeException);
+
+    // XAvailableLocales
+    virtual ::com::sun::star::uno::Sequence<
+            ::com::sun::star::lang::Locale > SAL_CALL
+        getAvailableLocales(
+                const ::rtl::OUString& rServiceName )
             throw(::com::sun::star::uno::RuntimeException);
 
     // XComponent
