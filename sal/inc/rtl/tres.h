@@ -58,13 +58,13 @@ typedef rtl_funcstate (SAL_CALL *rtl_tres_getnextfuncstate_ptr)
 typedef rtl_funcstate (SAL_CALL *rtl_tres_getprevfuncstate_ptr)
                                                             ( rtl_funcstate );
 typedef sal_uInt32 (SAL_CALL *rtl_tres_getflags_ptr)( rtl_funcstate );
-typedef sal_Char* (SAL_CALL *rtl_tres_getname_ptr)( rtl_funcstate );
+typedef rtl_String* (SAL_CALL *rtl_tres_getname_ptr)( rtl_funcstate );
 typedef sal_uInt32 (SAL_CALL *rtl_tres_getstart_ptr)( rtl_funcstate );
 typedef sal_uInt32 (SAL_CALL *rtl_tres_getstop_ptr)( rtl_funcstate );
 typedef rtl_cmpstate (SAL_CALL *rtl_tres_getcmpstate_ptr)( rtl_funcstate );
 
 typedef sal_Bool (SAL_CALL *rtl_tres_getstat_ptr)( rtl_cmpstate );
-typedef sal_Char* (SAL_CALL *rtl_tres_getmsg_ptr)( rtl_cmpstate );
+typedef rtl_String* (SAL_CALL *rtl_tres_getmsg_ptr)( rtl_cmpstate );
 typedef rtl_cmpstate (SAL_CALL *rtl_tres_getnextcmpstate_ptr)( rtl_cmpstate );
 
  /* type definition of vtable structure for testresult */
