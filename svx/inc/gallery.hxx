@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gallery.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 13:46:19 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 14:42:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,10 @@
 #include <tools/urlobj.hxx>
 #endif
 #include <vector>
+
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
 
 // -----------
 // - Defines -
@@ -141,11 +145,11 @@ class FmFormModel;
 class Bitmap;
 class OutputDevice;
 
-class GalleryExplorer
+class SVX_DLLPUBLIC GalleryExplorer
 {
 private:
 
-    static Gallery*             ImplGetGallery();
+    SVX_DLLPRIVATE static Gallery*              ImplGetGallery();
 
 public:
 
