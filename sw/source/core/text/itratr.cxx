@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itratr.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ama $ $Date: 2001-02-20 10:25:08 $
+ *  last change: $Author: ama $ $Date: 2001-02-23 09:58:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,6 +159,9 @@
 #endif
 #ifndef _FMTSRND_HXX
 #include <fmtsrnd.hxx>
+#endif
+#ifndef _ITRTXT_HXX
+#include <itrtxt.hxx>
 #endif
 
 using namespace ::com::sun::star;
@@ -854,4 +857,169 @@ void SwTxtNode::GetMinMaxSize( ULONG nIndex, ULONG& rMin, ULONG &rMax,
     pOut->SetMapMode( aOldMap );
 }
 
+/*************************************************************************
+ *                      SwTxtNode::GetScalingOfSelectedText()
+ *
+ * Calculates the width of the text part specified by nStt and nEnd,
+ * the height of the line containing nStt is devided by this width,
+ * indicating the scaling factor, if the text part is rotated.
+ * Having CH_BREAKs in the text part, this method returns the scaling
+ * factor for the longest of the text parts separated by the CH_BREAKs.
+ *
+ * changing this method very likely requires changing of "GetMinMaxSize"
+ *************************************************************************/
+
+USHORT SwTxtNode::GetScalingOfSelectedText( xub_StrLen nStt, xub_StrLen nEnd )
+    const
+{
+    ASSERT( nStt < nEnd , "what? start >= end?" );
+
+    ViewShell* pSh;
+    OutputDevice* pOut;
+    GetDoc()->GetEditShell( &pSh );
+    pOut = GetDoc()->GetPrt();
+    if( !pOut || !((Printer*)pOut)->IsValid() )
+    {
+        if( pSh )
+        {
+            if( 0 == ( pOut = pSh->GetReferenzDevice() ) )
+                pOut = pSh->GetWin();
+        }
+        if( !pOut )
+            pOut = GetpApp()->GetDefaultDevice();
+    }
+
+    MapMode aOldMap( pOut->GetMapMode() );
+    pOut->SetMapMode( MapMode( MAP_TWIP ) );
+
+    SwScriptInfo aScriptInfo;
+    SwAttrIter aIter( *(SwTxtNode*)this, &aScriptInfo );
+
+    xub_StrLen nIdx = nStt;
+
+    ULONG nWidth = 0;
+    ULONG nProWidth = 0;
+
+    while( nIdx < nEnd )
+    {
+        aIter.SeekAndChg( nIdx, pOut );
+
+        // scan for end of portion
+        xub_StrLen nNextChg = aIter.GetNextAttr();
+        xub_StrLen nStop = aScriptInfo.NextScriptChg( nIdx );
+        if( nNextChg > nStop )
+            nNextChg = nStop;
+
+        nStop = nIdx;
+        xub_Unicode cChar = CH_BLANK;
+        SwTxtAttr* pHint;
+
+        // stop at special characters in [ nIdx, nNextChg ]
+        while( nStop < nEnd && nStop < nNextChg )
+        {
+            cChar = aText.GetChar( nStop );
+            if( CH_TAB == cChar || CH_BREAK == cChar ||
+               ( CH_TXTATR_BREAKWORD == cChar ||  CH_TXTATR_INWORD == cChar ) &&
+               ( 0 == ( pHint = aIter.GetAttr( nStop ) ) ) )
+                break;
+            else
+                ++nStop;
+        }
+
+        // calculate text widths up to cChar
+        if ( nStop > nIdx )
+            nProWidth += aIter.GetFnt()->_GetTxtSize( 0, pOut, GetTxt(), nIdx,
+                                                        nStop - nIdx ).Width();
+
+        nIdx = nStop;
+        aIter.SeekAndChg( nIdx, pOut );
+
+        if ( cChar == CH_BREAK )
+        {
+            nWidth = Max( nWidth, nProWidth );
+            nProWidth = 0;
+            nIdx++;
+        }
+        else if ( cChar == CH_TAB )
+        {
+            // tab receives width of one space
+            nProWidth += aIter.GetFnt()->_GetTxtSize( 0, pOut, ' ', 0, 1 ).Width();
+            nIdx++;
+        }
+        else if ( pHint && ( cChar == CH_TXTATR_BREAKWORD || CH_TXTATR_INWORD ) )
+        {
+            switch( pHint->Which() )
+            {
+                case RES_TXTATR_FTN :
+                {
+                    const XubString aTxt = pHint->GetFtn().GetNumStr();
+                    nProWidth += aIter.GetFnt()->_GetTxtSize( 0, pOut, aTxt, 0,
+                                        aTxt.Len() ).Width();
+                    break;
+                }
+                case RES_TXTATR_FIELD :
+                {
+                    SwField *pFld = (SwField*)pHint->GetFld().GetFld();
+                    const String aTxt = pFld->GetCntnt( FALSE );
+                    nProWidth += aIter.GetFnt()->_GetTxtSize( 0, pOut, aTxt, 0,
+                                        aTxt.Len() ).Width();
+                    break;
+                }
+                case RES_TXTATR_HARDBLANK :
+                {
+                    XubString aTxt( pHint->GetHardBlank().GetChar() );
+                    nProWidth += aIter.GetFnt()->_GetTxtSize(
+                            GetDoc()->GetRootFrm() ? GetDoc()->GetRootFrm()->GetCurrShell() : 0,
+                            pOut, aTxt, 0, 1 ).Width();
+                    break;
+                }
+                default:
+                {
+                // any suggestions for a default action?
+                }
+            } // end of switch
+            nIdx++;
+        } // end of while
+    }
+
+    nWidth = Max( nWidth, nProWidth );
+
+    // search for a text frame this node belongs to
+    SwClientIter aClientIter( *(SwTxtNode*)this );
+    SwClient* pLast = aClientIter.GoStart();
+    SwTxtFrm* pFrm;
+
+    while( pLast )
+    {
+        if ( pLast->ISA( SwTxtFrm ) )
+        {
+            SwTxtFrm* pTmpFrm = ( SwTxtFrm* )pLast;
+            if ( pTmpFrm->GetOfst() <= nStt &&
+                ( !pTmpFrm->GetFollow() ||
+                   pTmpFrm->GetFollow()->GetOfst() > nStt ) )
+            {
+                pFrm = pTmpFrm;
+                break;
+            }
+        }
+        pLast = ++aClientIter;
+    }
+
+    // search for the line containing nStt
+    if ( pFrm && pFrm->HasPara() )
+    {
+        SwTxtInfo aInf( pFrm );
+        SwTxtIter aLine( pFrm, &aInf );
+        aLine.CharToLine( nStt );
+        pOut->SetMapMode( aOldMap );
+        return nWidth ? ( ( 100 * aLine.GetCurr()->Height() ) / nWidth ) : 0;
+    }
+    // no frame or no paragraph, we take the height of the character
+    // at nStt as line height
+
+    aIter.SeekAndChg( nStt, pOut );
+    pOut->SetMapMode( aOldMap );
+    return nWidth ? ( ( 100 * aIter.GetFnt()->_GetTxtSize( 0, pOut, GetTxt(),
+                        nStt, 1 ).Height() ) / nWidth ) : 0;
+}
 

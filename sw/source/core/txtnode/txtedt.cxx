@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtedt.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-20 09:22:58 $
+ *  last change: $Author: ama $ $Date: 2001-02-23 09:57:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1093,15 +1093,4 @@ void SwTxtNode::ReplaceTextOnly( xub_StrLen nPos, const XubString& rText )
     SwInsTxt aHint( nPos, rText.Len() );
     SwModify::Modify( 0, &aHint );
 }
-
-USHORT SwTxtNode::GetScalingOfSelectedText( xub_StrLen nStt,
-                                            xub_StrLen nEnd ) const
-{
-    // implementation missed
-    // !!!! think on: with and without  Layout !!!!
-
-    USHORT nScaleWidth = 100;
-    return nScaleWidth;
-}
-
 
