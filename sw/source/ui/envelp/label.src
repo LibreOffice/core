@@ -2,9 +2,9 @@
  *
  *  $RCSfile: label.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-04 20:50:15 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 06:35:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@
     Text [ italian ] = "Etichette" ;                    \
     Text [ portuguese_brazilian ] = "Etiquetas" ;       \
     Text [ portuguese ] = "Etiquetas" ;                 \
-    Text [ finnish ] = "Tarrat" ;                       \
+    Text [ finnish ] = "Nimiöt" ;                       \
     Text [ danish ] = "Etiketter" ;                     \
     Text [ french ] = "Étiquettes" ;                    \
     Text [ swedish ] = "Etiketter" ;                    \
@@ -155,6 +155,7 @@ TabDialog DLG_LAB
                 Text[ turkish ] = "Özel";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Privado";
+                Text[ finnish ] = "Henkilökohtainen";
             };
             PageItem
             {
@@ -182,6 +183,7 @@ TabDialog DLG_LAB
                 Text[ turkish ] = "Ýþ";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Trabajo";
+                Text[ finnish ] = "Liiketoiminta";
             };
             PageItem
             {
@@ -209,6 +211,7 @@ TabDialog DLG_LAB
                 Text[ turkish ] = "Format";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Formato";
+                Text[ finnish ] = "Muotoile";
             };
             PageItem
             {
@@ -236,6 +239,7 @@ TabDialog DLG_LAB
                 Text[ language_user1 ] = " ";
                 Text[ turkish ] = "Seçenekler";
                 Text[ catalan ] = "Opciones";
+                Text[ finnish ] = "Asetukset";
             };
         };
     };
@@ -271,6 +275,7 @@ TabDialog DLG_LAB
         Text[ language_user1 ] = " ";
         Text[ turkish ] = "Kaðýt";
         Text[ catalan ] = "Tipo";
+        Text[ finnish ] = "Normaali";
     };
 };
  // TP_LAB_LAB ---------------------------------------------------------------
@@ -291,7 +296,7 @@ TabPage TP_LAB_LAB
         Text [ italian ] = "~Testo etichetta" ;
         Text [ portuguese_brazilian ] = "Gravar" ;
         Text [ portuguese ] = "~Inscrição" ;
-        Text [ finnish ] = "Otsikko" ;
+        Text [ finnish ] = "Nimiöteksti" ;
         Text [ danish ] = "Etikettekst" ;
         Text [ french ] = "~Libellé" ;
         Text [ swedish ] = "~Påskrift" ;
@@ -321,7 +326,7 @@ TabPage TP_LAB_LAB
         Text [ italian ] = "Indirizzo" ;
         Text [ portuguese_brazilian ] = "Endereço" ;
         Text [ portuguese ] = "Endereço" ;
-        Text [ finnish ] = "Valitse osoite" ;
+        Text [ finnish ] = "Osoite" ;
         Text [ danish ] = "Adresse" ;
         Text [ french ] = "Adre~sse" ;
         Text [ swedish ] = "Adre~ss" ;
@@ -414,6 +419,7 @@ TabPage TP_LAB_LAB
         Text[ language_user1 ] = " ";
         Text[ turkish ] = "Tablo";
         Text[ catalan ] = "Tabla";
+        Text[ finnish ] = "Taulukko";
     };
     ListBox LB_TABLE
     {
@@ -478,7 +484,7 @@ TabPage TP_LAB_LAB
         Text [ italian ] = "Testo etichetta" ;
         Text [ portuguese_brazilian ] = "Gravar" ;
         Text [ portuguese ] = "Inscrição" ;
-        Text [ finnish ] = "Otsikko" ;
+        Text [ finnish ] = "Kaiverrus" ;
         Text [ danish ] = "Etikettekst" ;
         Text [ french ] = "Libellé" ;
         Text [ swedish ] = "Påskrift" ;
@@ -509,7 +515,7 @@ TabPage TP_LAB_LAB
         Text [ italian ] = "~Continuo" ;
         Text [ portuguese_brazilian ] = "~Contínuo" ;
         Text [ portuguese ] = "~Contínuo" ;
-        Text [ finnish ] = "Jatkuva" ;
+        Text [ finnish ] = "~Jatkuva" ;
         Text [ danish ] = "Endeløs" ;
         Text [ french ] = "~Continu" ;
         Text [ swedish ] = "~Kontinuerlig" ;
@@ -538,7 +544,7 @@ TabPage TP_LAB_LAB
         Text [ italian ] = "Foglio" ;
         Text [ portuguese_brazilian ] = "Folha" ;
         Text [ portuguese ] = "~Folha" ;
-        Text [ finnish ] = "Arkki" ;
+        Text [ finnish ] = "~Lomake" ;
         Text [ danish ] = "Ark" ;
         Text [ french ] = "~Feuille" ;
         Text [ swedish ] = "~Ark" ;
@@ -567,7 +573,7 @@ TabPage TP_LAB_LAB
         Text [ italian ] = "Marca" ;
         Text [ portuguese_brazilian ] = "Fazer" ;
         Text [ portuguese ] = "Marca" ;
-        Text [ finnish ] = "Merkki" ;
+        Text [ finnish ] = "Tuotemerkki" ;
         Text [ danish ] = "Mærke" ;
         Text [ french ] = "~Marque" ;
         Text [ swedish ] = "~Märke" ;
@@ -606,7 +612,7 @@ TabPage TP_LAB_LAB
         Text [ italian ] = "Tipo" ;
         Text [ portuguese_brazilian ] = "Tipo" ;
         Text [ portuguese ] = "Tipo" ;
-        Text [ finnish ] = "Laji" ;
+        Text [ finnish ] = "~Tyyppi" ;
         Text [ danish ] = "Type" ;
         Text [ french ] = "~Type" ;
         Text [ swedish ] = "~Typ" ;
@@ -710,6 +716,7 @@ FloatingWindow DLG_SYNC_BTN
         Text[ turkish ] = "Etiket içeriðini çoðalt";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Sincronizar etiquetas";
+        Text[ finnish ] = "Synkronoi nimiöt";
     };
 };
  // String *******************************************************************
@@ -721,7 +728,7 @@ String STR_DOC_TITLE
     Text [ italian ] = "Busta" ;
     Text [ portuguese_brazilian ] = "Etiquetas" ;
     Text [ portuguese ] = "Etiquetas" ;
-    Text [ finnish ] = "Tarrat" ;
+    Text [ finnish ] = "Nimiöt" ;
     Text [ danish ] = "Etiketter" ;
     Text [ french ] = "Étiquettes" ;
     Text [ swedish ] = "Etiketter" ;
@@ -748,7 +755,7 @@ String STR_CUSTOM
     Text [ italian ] = "[Utente]" ;
     Text [ portuguese_brazilian ] = "[Pessoal]" ;
     Text [ portuguese ] = "[Utilizador]" ;
-    Text [ finnish ] = "[Oma]" ;
+    Text [ finnish ] = "[Käyttäjän määrittämä]" ;
     Text [ danish ] = "[Bruger]" ;
     Text [ french ] = "[Personnalisé]" ;
     Text [ swedish ] = "[Användare]" ;
@@ -806,6 +813,7 @@ TabPage TP_VISITING_CARDS
         Text[ turkish ] = "Otomatik metin - alaný";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Área AutoT~exto";
+        Text[ finnish ] = "Automaattinen teksti - osio";
     };
     ListBox LB_AUTO_TEXT_GROUP
     {
@@ -841,6 +849,7 @@ TabPage TP_VISITING_CARDS
         Text[ turkish ] = "Ýçerik";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Contenido";
+        Text[ finnish ] = "Sisältö";
     };
     Window WIN_EXAMPLE
     {
@@ -872,6 +881,7 @@ TabPage TP_VISITING_CARDS
         Text[ arabic ] = "ÇáãÚÇíäÉ";
         Text[ turkish ] = "Önizleme";
         Text[ catalan ] = "Previsualización";
+        Text[ finnish ] = "Esikatselu";
     };
     String ST_VISCARD_GROUP
     {
@@ -909,6 +919,7 @@ TabPage TP_PRIVATE_DATA
         Text[ turkish ] = "Özel bilgiler";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Datos privados";
+        Text[ finnish ] = "Omat tiedot";
     };
     FixedText FT_NAME
     {
@@ -936,6 +947,7 @@ TabPage TP_PRIVATE_DATA
         Text[ turkish ] = "Ad/Soyad/Baþharfler";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "No~mbre/Apellidos/Iniciales";
+        Text[ finnish ] = "Etu-/suku~nimi/nimikirjaimet";
     };
     Edit ED_FIRSTNAME
     {
@@ -980,6 +992,7 @@ TabPage TP_PRIVATE_DATA
         Text[ arabic ] = "ÇáÇÓã/ÇÓã ÇáÚÇÆáÉ/ÇáÇÎÊÕÇÑ 2";
         Text[ turkish ] = "Ad/Soyad/Baþharfler 2";
         Text[ catalan ] = "Nombre/Apellidos/Iniciales 2";
+        Text[ finnish ] = "Etu-/suku~nimi/nimikirjaimet 2";
     };
     Edit ED_FIRSTNAME_2
     {
@@ -1025,6 +1038,7 @@ TabPage TP_PRIVATE_DATA
         Text[ turkish ] = "Sokak";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Calle";
+        Text[ finnish ] = "Ka~tuosoite";
     };
     Edit ED_STREET
     {
@@ -1058,6 +1072,7 @@ TabPage TP_PRIVATE_DATA
         Text[ turkish ] = "Posta kodu/Þehir";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "CP/Ciuda~d";
+        Text[ finnish ] = "Postinumero/Posti~toimipaikka";
     };
     Edit ED_ZIP
     {
@@ -1097,6 +1112,7 @@ TabPage TP_PRIVATE_DATA
         Text[ turkish ] = "Ülke/Ýl";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~País/Provincia";
+        Text[ finnish ] = "Val~tio/osavaltio";
     };
     Edit ED_COUNTRY
     {
@@ -1136,6 +1152,7 @@ TabPage TP_PRIVATE_DATA
         Text[ turkish ] = "Unvan/Meslek";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Título/Pro~fesión";
+        Text[ finnish ] = "Asema/~ammatti";
     };
     Edit ED_TITLE
     {
@@ -1174,6 +1191,7 @@ TabPage TP_PRIVATE_DATA
         Text[ turkish ] = "Phone/Mobile";
         Text[ arabic ] = "ÇáåÇÊÝ/ÇáãÍãæá";
         Text[ catalan ] = "Teléfono/Móvil";
+        Text[ finnish ] = "Telefon/Mobil";
     };
     Edit ED_PHONE
     {
@@ -1213,6 +1231,7 @@ TabPage TP_PRIVATE_DATA
         Text[ turkish ] = "Faks";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Fa~x";
+        Text[ finnish ] = "Fak~si";
     };
     Edit ED_FAX
     {
@@ -1246,6 +1265,7 @@ TabPage TP_PRIVATE_DATA
         Text[ turkish ] = "Web sayfasý / E-posta";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Página principal / e-mail";
+        Text[ finnish ] = "Kotisivu/sähköposti";
     };
     Edit ED_WWW
     {
@@ -1291,6 +1311,7 @@ TabPage TP_BUSINESS_DATA
         Text[ turkish ] = "Ýþ Bilgileri";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Datos del trabajo";
+        Text[ finnish ] = "Liiketiedot";
     };
     FixedText FT_COMP
     {
@@ -1318,6 +1339,7 @@ TabPage TP_BUSINESS_DATA
         Text[ turkish ] = "~Þirket adý";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "E~mpresa";
+        Text[ finnish ] = "Yritys";
     };
     Edit ED_COMP
     {
@@ -1351,6 +1373,7 @@ TabPage TP_BUSINESS_DATA
         Text[ turkish ] = "Þirket adý ( 2'nci satýr)";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Empresa ~2da línea";
+        Text[ finnish ] = "Yritys2";
     };
     Edit ED_COMP_EXT
     {
@@ -1384,6 +1407,7 @@ TabPage TP_BUSINESS_DATA
         Text[ turkish ] = "Slogan";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Esl~ogan";
+        Text[ finnish ] = "Iskulause";
     };
     Edit ED_SLOGAN
     {
@@ -1417,6 +1441,7 @@ TabPage TP_BUSINESS_DATA
         Text[ turkish ] = "Sokak";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Calle";
+        Text[ finnish ] = "Katuosoite";
     };
     Edit ED_STREET
     {
@@ -1450,6 +1475,7 @@ TabPage TP_BUSINESS_DATA
         Text[ turkish ] = "Posta kodu/Þehir";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "CP/Ciu~dad";
+        Text[ finnish ] = "Postinumero/postitoimipaikka";
     };
     Edit ED_ZIP
     {
@@ -1489,6 +1515,7 @@ TabPage TP_BUSINESS_DATA
         Text[ turkish ] = "Ülke/Ýl";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "País/Pro~vincia";
+        Text[ finnish ] = "Valtio/osavaltio";
     };
     Edit ED_COUNTRY
     {
@@ -1528,6 +1555,7 @@ TabPage TP_BUSINESS_DATA
         Text[ turkish ] = "Pozisyon";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Posición";
+        Text[ finnish ] = "Sijainti";
     };
     Edit ED_POSITION
     {
@@ -1560,6 +1588,7 @@ TabPage TP_BUSINESS_DATA
         Text[ turkish ] = "Phone/Mobile";
         Text[ arabic ] = "ÇáåÇÊÝ/ÇáãÍãæá";
         Text[ catalan ] = "Teléfono/Móvil";
+        Text[ finnish ] = "Telefon/Mobil";
     };
     Edit ED_PHONE
     {
@@ -1595,9 +1624,10 @@ TabPage TP_BUSINESS_DATA
         Text[ korean ] = "Fax";
         Text[ chinese_simplified ] = "´«Õæ";
         Text[ chinese_traditional ] = "¶Ç¯u";
-        Text[ turkish ] = "Fax";
+        Text[ turkish ] = "Faks";
         Text[ arabic ] = "ÇáÝÇßÓ";
         Text[ catalan ] = "Fax";
+        Text[ finnish ] = "Fax";
     };
     Edit ED_FAX
     {
@@ -1631,6 +1661,7 @@ TabPage TP_BUSINESS_DATA
         Text[ turkish ] = "Web sayfasý  / E-posta";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Página principal / ~e-mail";
+        Text[ finnish ] = "Ko~tisivu/sähköposti";
     };
     Edit ED_WWW
     {
