@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: ka $ $Date: 2000-12-03 16:00:26 $
+ *  last change: $Author: sab $ $Date: 2000-12-04 15:19:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -637,11 +637,11 @@ void ScXMLExport::ExportColumns(const sal_Int16 nTable, const table::CellRangeAd
                                     WriteColumn(nColsRepeated, nPrevIndex, bPrevIsVisible);
                                     if (aGroupColumns.IsGroupEnd(nColumn - 1))
                                         aGroupColumns.CloseGroups(nColumn - 1);
-                                    bPrevIsVisible = bIsVisible;
-                                    nPrevIndex = nIndex;
-                                    nColsRepeated = 1;
-                                    bIsFirst = sal_True;
                                 }
+                                bPrevIsVisible = bIsVisible;
+                                nPrevIndex = nIndex;
+                                nColsRepeated = 1;
+                                bIsFirst = sal_True;
                                 if(aGroupColumns.IsGroupStart(nColumn))
                                     aGroupColumns.OpenGroups(nColumn);
                                 OpenHeaderColumn();
@@ -2430,28 +2430,29 @@ void ScXMLExport::WriteNamedExpressions(const com::sun::star::uno::Reference <co
                                     AddAttribute(XML_NAMESPACE_TABLE, sXML_cell_range_address, sOUContent);
                                     sal_Int32 nRangeType = xNamedRange->getType();
                                     rtl::OUStringBuffer sBufferRangeType;
-                                    if (nRangeType & sheet::NamedRangeFlag::COLUMN_HEADER == sheet::NamedRangeFlag::COLUMN_HEADER)
+                                    if ((nRangeType & sheet::NamedRangeFlag::COLUMN_HEADER) == sheet::NamedRangeFlag::COLUMN_HEADER)
                                         sBufferRangeType.appendAscii(sXML_repeat_column);
-                                    if (nRangeType & sheet::NamedRangeFlag::ROW_HEADER == sheet::NamedRangeFlag::ROW_HEADER)
+                                    if ((nRangeType & sheet::NamedRangeFlag::ROW_HEADER) == sheet::NamedRangeFlag::ROW_HEADER)
                                     {
                                         if (sBufferRangeType.getLength() > 0)
                                             sBufferRangeType.appendAscii(" ");
                                         sBufferRangeType.appendAscii(sXML_repeat_row);
                                     }
-                                    if (nRangeType & sheet::NamedRangeFlag::FILTER_CRITERIA == sheet::NamedRangeFlag::FILTER_CRITERIA)
+                                    if ((nRangeType & sheet::NamedRangeFlag::FILTER_CRITERIA) == sheet::NamedRangeFlag::FILTER_CRITERIA)
                                     {
                                         if (sBufferRangeType.getLength() > 0)
                                             sBufferRangeType.appendAscii(" ");
                                         sBufferRangeType.appendAscii(sXML_filter);
                                     }
-                                    if (nRangeType & sheet::NamedRangeFlag::PRINT_AREA == sheet::NamedRangeFlag::PRINT_AREA)
+                                    if ((nRangeType & sheet::NamedRangeFlag::PRINT_AREA) == sheet::NamedRangeFlag::PRINT_AREA)
                                     {
                                         if (sBufferRangeType.getLength() > 0)
                                             sBufferRangeType.appendAscii(" ");
                                         sBufferRangeType.appendAscii(sXML_print_range);
                                     }
                                     rtl::OUString sRangeType = sBufferRangeType.makeStringAndClear();
-                                    AddAttribute(XML_NAMESPACE_TABLE, sXML_range_usable_as, sRangeType);
+                                    if (sRangeType.getLength())
+                                        AddAttribute(XML_NAMESPACE_TABLE, sXML_range_usable_as, sRangeType);
                                     SvXMLElementExport aElemNR(*this, XML_NAMESPACE_TABLE, sXML_named_range, sal_True, sal_True);
                                 }
                                 else
