@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfer.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-12 12:56:37 $
+ *  last change: $Author: ka $ $Date: 2001-03-13 14:07:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -779,21 +779,25 @@ Reference< XClipboard> TransferableHelper::GetSystemClipboard()
 // - TransferableDataHelper -
 // --------------------------
 
-TransferableDataHelper::TransferableDataHelper()
+TransferableDataHelper::TransferableDataHelper() :
+    mpFormatsVector( new ::std::vector< DataFlavorEx > )
 {
 }
 
 // -----------------------------------------------------------------------------
 
 TransferableDataHelper::TransferableDataHelper( const Reference< ::com::sun::star::datatransfer::XTransferable >& rxTransferable ) :
-    mxTransfer( rxTransferable )
+    mxTransfer( rxTransferable ),
+    mpFormatsVector( new ::std::vector< DataFlavorEx > )
 {
+    InitFormats();
 }
 
 // -----------------------------------------------------------------------------
 
 TransferableDataHelper::TransferableDataHelper( const TransferableDataHelper& rDataHelper ) :
-    mxTransfer( rDataHelper.mxTransfer )
+    mxTransfer( rDataHelper.mxTransfer ),
+    mpFormatsVector( new ::std::vector< DataFlavorEx >( *rDataHelper.mpFormatsVector ) )
 {
 }
 
@@ -802,6 +806,8 @@ TransferableDataHelper::TransferableDataHelper( const TransferableDataHelper& rD
 TransferableDataHelper& TransferableDataHelper::operator=( const TransferableDataHelper& rDataHelper )
 {
     mxTransfer = rDataHelper.mxTransfer;
+    delete mpFormatsVector, mpFormatsVector = new ::std::vector< DataFlavorEx >( *rDataHelper.mpFormatsVector );
+
     return *this;
 }
 
@@ -809,47 +815,128 @@ TransferableDataHelper& TransferableDataHelper::operator=( const TransferableDat
 
 TransferableDataHelper::~TransferableDataHelper()
 {
+    delete mpFormatsVector;
 }
 
 // -----------------------------------------------------------------------------
 
-Any TransferableDataHelper::GetAny( const DataFlavor& rFlavor ) const
+void TransferableDataHelper::InitFormats()
 {
-    Any aRet;
+    Application::GetSolarMutex().acquire();
+    mpFormatsVector->clear();
 
     try
     {
         if( mxTransfer.is() )
         {
-            const sal_uInt32 nRef = Application::ReleaseSolarMutex();
-            aRet = mxTransfer->getTransferData( rFlavor );
-            Application::AcquireSolarMutex( nRef );
+            const Sequence< DataFlavor > aFlavors( mxTransfer->getTransferDataFlavors() );
+
+            for( sal_Int32 i = 0; i < aFlavors.getLength(); i++ )
+            {
+                DataFlavorEx        aFlavorEx;
+                const DataFlavor&   rFlavor = aFlavors[ i ];
+
+                aFlavorEx.MimeType = rFlavor.MimeType;
+                aFlavorEx.HumanPresentableName = rFlavor.HumanPresentableName;
+                aFlavorEx.DataType = rFlavor.DataType;
+                aFlavorEx.mnSotId = SotExchange::RegisterFormat( rFlavor );
+
+                mpFormatsVector->push_back( aFlavorEx );
+            }
         }
     }
     catch( const ::com::sun::star::uno::Exception& )
     {
-        DBG_ERROR( "Could not get data from transferable" );
     }
 
-    return aRet;
+    Application::GetSolarMutex().release();
 }
 
 // -----------------------------------------------------------------------------
 
 sal_Bool TransferableDataHelper::HasFormat( SotFormatStringId nFormat ) const
 {
-    DataFlavor aFlavor;
+    ::std::vector< DataFlavorEx >::iterator aIter( mpFormatsVector->begin() ), aEnd( mpFormatsVector->end() );
+    sal_Bool                                bRet = sal_False;
 
-    return( mxTransfer.is() &&
-            SotExchange::GetFormatDataFlavor( nFormat, aFlavor ) &&
-            mxTransfer->isDataFlavorSupported( aFlavor ) );
+    while( aIter != aEnd )
+    {
+        if( nFormat == (*aIter++).mnSotId )
+        {
+            bRet = sal_True;
+            aIter = aEnd;
+        }
+    }
+
+    return bRet;
 }
 
 // -----------------------------------------------------------------------------
 
 sal_Bool TransferableDataHelper::HasFormat( const DataFlavor& rFlavor ) const
 {
-    return( mxTransfer.is() && mxTransfer->isDataFlavorSupported( rFlavor ) );
+    ::std::vector< DataFlavorEx >::iterator aIter( mpFormatsVector->begin() ), aEnd( mpFormatsVector->end() );
+    sal_Bool                                bRet = sal_False;
+
+    while( aIter != aEnd )
+    {
+        if( TransferableDataHelper::IsEqual( rFlavor, *aIter++ ) )
+        {
+            bRet = sal_True;
+            aIter = aEnd;
+        }
+    }
+
+    return bRet;
+}
+
+// -----------------------------------------------------------------------------
+
+sal_uInt32 TransferableDataHelper::GetFormatCount() const
+{
+    return mpFormatsVector->size();
+}
+
+// -----------------------------------------------------------------------------
+
+SotFormatStringId TransferableDataHelper::GetFormat( sal_uInt32 nFormat ) const
+{
+    DBG_ASSERT( nFormat < mpFormatsVector->size(), "TransferableDataHelper::GetFormat: invalid format index" );
+        return( ( nFormat < mpFormatsVector->size() ) ? (*mpFormatsVector)[ nFormat ].mnSotId : 0 );
+}
+
+// -----------------------------------------------------------------------------
+
+DataFlavor TransferableDataHelper::GetFormatDataFlavor( sal_uInt32 nFormat ) const
+{
+    DBG_ASSERT( nFormat < mpFormatsVector->size(), "TransferableDataHelper::GetFormat: invalid format index" );
+    DataFlavor aRet;
+
+    if( nFormat < mpFormatsVector->size() )
+        aRet = (DataFlavor&) (*mpFormatsVector)[ nFormat ];
+
+    return aRet;
+}
+
+// -----------------------------------------------------------------------------
+
+Any TransferableDataHelper::GetAny( const DataFlavor& rFlavor ) const
+{
+    const sal_uInt32    nRef = Application::ReleaseSolarMutex();
+    Any                 aRet;
+
+    try
+    {
+        if( mxTransfer.is() )
+            aRet = mxTransfer->getTransferData( rFlavor );
+    }
+    catch( const ::com::sun::star::uno::Exception& )
+    {
+    }
+
+    Application::AcquireSolarMutex( nRef );
+
+    return aRet;
 }
 
 // -----------------------------------------------------------------------------
