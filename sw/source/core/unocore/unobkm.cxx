@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unobkm.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mtg $ $Date: 2001-11-28 20:06:01 $
+ *  last change: $Author: tl $ $Date: 2002-09-12 13:05:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,6 +197,8 @@ void SwXBookmark::attachToRange(const uno::Reference< text::XTextRange > & xText
 void SwXBookmark::attach(const uno::Reference< text::XTextRange > & xTextRange)
                             throw( lang::IllegalArgumentException, uno::RuntimeException )
 {
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    attachToRange( xTextRange );
 }
 /*-- 10.12.98 10:14:39---------------------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoparagraph.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: tl $ $Date: 2002-09-06 12:38:31 $
+ *  last change: $Author: tl $ $Date: 2002-09-12 13:06:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -671,7 +671,11 @@ uno::Any SwXParagraph::getPropertyDefault(const OUString& rPropertyName)
 void SwXParagraph::attach(const uno::Reference< XTextRange > & xTextRange)
                     throw( lang::IllegalArgumentException, uno::RuntimeException )
 {
-
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    // SwXParagraph will only created in order to be inserteb by
+    // 'insertTextContentBefore' or 'insertTextContentAfter' therefore
+    // they cannot be attached
+    throw uno::RuntimeException();
 }
 /*-- 11.12.98 08:12:51---------------------------------------------------
 

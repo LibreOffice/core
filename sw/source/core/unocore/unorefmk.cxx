@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unorefmk.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2002-02-01 12:42:16 $
+ *  last change: $Author: tl $ $Date: 2002-09-12 13:07:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -246,6 +246,8 @@ void SwXReferenceMark::attachToRange(const uno::Reference< text::XTextRange > & 
 void SwXReferenceMark::attach(const uno::Reference< text::XTextRange > & xTextRange)
                 throw( lang::IllegalArgumentException, uno::RuntimeException )
 {
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    attachToRange( xTextRange );
 }
 /*-- 11.12.98 10:28:34---------------------------------------------------
 
@@ -478,6 +480,9 @@ void SwXReferenceMark::removeVetoableChangeListener(
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2002/02/01 12:42:16  jp
+    Task #92291#: add new character skip modifier
+
     Revision 1.3  2001/11/06 08:34:24  jp
     Bug #93914#: optimize the modify calls
 

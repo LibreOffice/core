@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: tl $ $Date: 2002-09-10 13:52:20 $
+ *  last change: $Author: tl $ $Date: 2002-09-12 13:12:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1845,6 +1845,8 @@ void SwXTextField::attachToRange(
 void SwXTextField::attach(const uno::Reference< XTextRange > & xTextRange)
     throw( IllegalArgumentException, uno::RuntimeException )
 {
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    attachToRange( xTextRange );
 }
 /*-- 14.12.98 11:37:18---------------------------------------------------
 

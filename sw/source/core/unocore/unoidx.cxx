@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoidx.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: tl $ $Date: 2002-08-14 09:42:21 $
+ *  last change: $Author: tl $ $Date: 2002-09-12 13:06:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1176,6 +1176,8 @@ void SwXDocumentIndex::attachToRange(const Reference< text::XTextRange > & xText
 void SwXDocumentIndex::attach(const Reference< text::XTextRange > & xTextRange)
     throw( IllegalArgumentException, RuntimeException )
 {
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    attachToRange( xTextRange );
 }
 /*-- 15.01.99 14:23:56---------------------------------------------------
 
@@ -1624,6 +1626,8 @@ void SwXDocumentIndexMark::attachToRange(const Reference< text::XTextRange > & x
 void SwXDocumentIndexMark::attach(const Reference< text::XTextRange > & xTextRange)
                 throw( IllegalArgumentException, RuntimeException )
 {
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    attachToRange( xTextRange );
 }
 /*-- 14.12.98 10:25:45---------------------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: tl $ $Date: 2002-09-12 09:40:40 $
+ *  last change: $Author: tl $ $Date: 2002-09-12 13:08:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2528,6 +2528,8 @@ void SwXTextTable::attachToRange(const uno::Reference< XTextRange > & xTextRange
 void SwXTextTable::attach(const uno::Reference< XTextRange > & xTextRange)
         throw( IllegalArgumentException, uno::RuntimeException )
 {
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    attachToRange( xTextRange );
 }
 /*-- 11.12.98 12:42:46---------------------------------------------------
 

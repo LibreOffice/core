@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosect.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: os $ $Date: 2002-09-02 12:38:28 $
+ *  last change: $Author: tl $ $Date: 2002-09-12 13:07:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -454,6 +454,8 @@ void SwXTextSection::attachToRange(const uno::Reference< text::XTextRange > & xT
 void SwXTextSection::attach(const uno::Reference< text::XTextRange > & xTextRange)
                     throw( lang::IllegalArgumentException, uno::RuntimeException )
 {
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    attachToRange( xTextRange );
 }
 
 /*-- 10.12.98 14:47:09---------------------------------------------------

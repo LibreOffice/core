@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoftn.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: os $ $Date: 2002-03-20 08:46:22 $
+ *  last change: $Author: tl $ $Date: 2002-09-12 13:06:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -345,6 +345,8 @@ void SwXFootnote::attachToRange(const uno::Reference< text::XTextRange > & xText
 void SwXFootnote::attach(const uno::Reference< text::XTextRange > & xTextRange)
             throw( lang::IllegalArgumentException, uno::RuntimeException )
 {
+    vos::OGuard aGuard(Application::GetSolarMutex());
+    attachToRange( xTextRange );
 }
 /*-- 10.12.98 15:31:48---------------------------------------------------
 
