@@ -2327,57 +2327,6 @@ SfxBoolItem DesignerDialog SID_STYLE_DESIGNER
     GroupId = GID_FORMAT;
 ]
 
-//--------------------------------------------------------------------------
-SfxBoolItem DesktopMode SID_DESKTOPMODE
-
-[
-    /* flags: */
-    AutoUpdate = TRUE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    Readonly = FALSE,
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_APPLICATION;
-]
-
-//--------------------------------------------------------------------------
-SfxVoidItem DocumentManager SID_DOCMANAGER
-()
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = TRUE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Asynchron;
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_APPLICATION;
-]
 
 //--------------------------------------------------------------------------
 SfxVoidItem DragHierarchy SID_STYLE_DRAGHIERARCHIE
@@ -2531,32 +2480,6 @@ SfxVoidItem ExecuteSearch FID_SEARCH_NOW
     GroupId = GID_EDIT;
 ]
 
-//--------------------------------------------------------------------------
-SfxBoolItem Explorer SID_EXPLORER
-
-[
-    /* flags: */
-    AutoUpdate = TRUE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    Readonly = FALSE,
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_VIEW;
-]
 
 //--------------------------------------------------------------------------
 SfxBoolItem ExtendedHelp SID_EXTENDEDHELP
@@ -4794,32 +4717,6 @@ SfxVoidItem MailNotifyReset SID_MAIL_NOTIFY_RESET
     GroupId = GID_EXPLORER;
 ]
 
-//--------------------------------------------------------------------------
-SfxBoolItem MailReadDialog SID_MAIL_INBOX
-
-[
-    /* flags: */
-    AutoUpdate = TRUE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Asynchron;
-
-    Readonly = FALSE,
-
-    /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_EXPLORER;
-]
 
 //--------------------------------------------------------------------------
 SfxUInt16Item MailReceipt SID_MAIL_NOTIFY
