@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connection.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2000-12-12 12:20:31 $
+ *  last change: $Author: oj $ $Date: 2001-02-14 15:04:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,9 @@
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #endif
 #include "querycomposer.hxx"
+#ifndef _CPPUHELPER_EXTRACT_HXX_
+#include <cppuhelper/extract.hxx>
+#endif
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -467,7 +470,8 @@ void OConnection::disposing()
     OSubComponent::disposing();
     OConnectionRerouter::disposing();
 
-    m_pTables->dispose();
+    if(m_pTables)
+        m_pTables->disposing();
     m_aQueries.dispose();
 
     for (OWeakRefArrayIterator j = m_aComposers.begin(); m_aComposers.end() != j; j++)
@@ -574,7 +578,7 @@ Reference< XPreparedStatement >  SAL_CALL OConnection::prepareCommand( const ::r
             if (m_aQueries.hasByName(command))
             {
                 Reference< XPropertySet > xQuery;
-                m_aQueries.getByName(command) >>= xQuery;
+                ::cppu::extractInterface(xQuery,m_aQueries.getByName(command));
                 xQuery->getPropertyValue(PROPERTY_COMMAND) >>= aStatement;
             }
             break;
