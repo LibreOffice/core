@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsave.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-17 20:28:47 $
+ *  last change: $Author: kz $ $Date: 2001-07-20 20:31:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@ TabPage RID_SFXPAGE_SAVE
         Text[ greek ] = "Load";
         Text[ dutch ] = "Load";
         Text[ french ] = "Charger";
-        Text[ spanish ] = "Load";
+        Text[ spanish ] = "Cargar";
         Text[ finnish ] = "Load";
         Text[ italian ] = "Load";
         Text[ danish ] = "Load";
@@ -136,7 +136,7 @@ TabPage RID_SFXPAGE_SAVE
         Text[ greek ] = "Load user-defined settings with the document";
         Text[ dutch ] = "Load user-defined settings with the document";
         Text[ french ] = "Chargement des paramètres utilisateur avec le document";
-        Text[ spanish ] = "Load user-defined settings with the document";
+        Text[ spanish ] = "Cargar la configuración de usuario al cargar el documento";
         Text[ finnish ] = "Load user-defined settings with the document";
         Text[ italian ] = "Load user-defined settings with the document";
         Text[ danish ] = "Load user-defined settings with the document";
@@ -255,7 +255,7 @@ TabPage RID_SFXPAGE_SAVE
         Text [ english_us ] = "~AutoSave every" ;
         Text[ chinese_simplified ] = "È«²¿×Ô¶¯´æÅÌ(~A)";
         Text[ russian ] = "Ñîõğàíÿòü àâòîìàòè÷åñêè êàæäûå";
-        Text[ polish ] = "Zapisz automatycznie co";
+        Text[ polish ] = "Zapisuj automatycznie co";
         Text[ japanese ] = "‚·‚×‚Ä©“®“I‚É•Û‘¶(~A)";
         Text[ chinese_traditional ] = "¥ş³¡¦Û°ÊÀx¦s(~A)";
         Text[ arabic ] = "ÇáÍİÙ ÊáŞÇÆíÇğ ßá";
@@ -327,7 +327,7 @@ TabPage RID_SFXPAGE_SAVE
         Text [ english_us ] = "~Prompt to save" ;
         Text[ chinese_simplified ] = "ÏÔÊ¾Ñ¯ÎÊ(~P)";
         Text[ russian ] = "Ñ çàïğîñîì";
-        Text[ polish ] = "Z zapytanie~m";
+        Text[ polish ] = "Potwierdzenie";
         Text[ japanese ] = "Šm”FÒ¯¾°¼Ş‚Ì•\\¦(~P)";
         Text[ chinese_traditional ] = "Åã¥Ü¸ß°İ(~P)";
         Text[ arabic ] = "ÇáãØÇáÈÉ ÈÇáÍİÙ";
@@ -745,6 +745,7 @@ TabPage RID_SFXPAGE_SAVE
 };
 
 // ********************************************************************** EOF
+
 
 
 
