@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workctrl.src,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 08:48:12 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:01:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,6 +172,7 @@ FloatingWindow RID_INSERT_CTRL
     Text[ czech ] = "Vložit";
     Text[ hebrew ] = "‮הוספה‬";
     Text[ hindi ] = "जोड़ो";
+    Text[ slovak ] = "Vložiť";
 };
 FloatingWindow RID_INSERT_OBJ_CTRL
 {
@@ -249,6 +250,7 @@ FloatingWindow RID_INSERT_OBJ_CTRL
     Text[ czech ] = "Vložit objekt";
     Text[ hebrew ] = "‮הוספת אוביקט‬";
     Text[ hindi ] = "वस्तु जोड़ो";
+    Text[ slovak ] = "Vložiť objekt";
 };
 Menu RID_INSERT_FIELD_CTRL
 {
@@ -285,6 +287,7 @@ Menu RID_INSERT_FIELD_CTRL
             Text[ czech ] = "Datum";
             Text[ hebrew ] = "‮תאריך‬";
             Text[ hindi ] = "दिनांक";
+            Text[ slovak ] = "Dátum";
         };
         MenuItem
         {
@@ -317,6 +320,7 @@ Menu RID_INSERT_FIELD_CTRL
             Text[ czech ] = "Čas";
             Text[ hebrew ] = "‮שעה‬";
             Text[ hindi ] = "समय";
+            Text[ slovak ] = "Čas";
         };
          //#ifndef MN_SW_WEB
         MenuItem
@@ -350,6 +354,7 @@ Menu RID_INSERT_FIELD_CTRL
             Text[ czech ] = "Čísla stránek";
             Text[ hebrew ] = "Seitennummer";
             Text[ hindi ] = "पृष्ठ संख्या";
+            Text[ slovak ] = "Čísla stránok";
         };
         MenuItem
         {
@@ -382,6 +387,7 @@ Menu RID_INSERT_FIELD_CTRL
             Text[ czech ] = "Počet stránek";
             Text[ hebrew ] = "‮סך הכול עמודים‬";
             Text[ hindi ] = "पृष्ठ गिनती";
+            Text[ slovak ] = "Počet stránok";
         };
         MenuItem
         {
@@ -414,6 +420,7 @@ Menu RID_INSERT_FIELD_CTRL
             Text[ czech ] = "Předmět";
             Text[ hebrew ] = "‮נושא‬";
             Text[ hindi ] = "विषय";
+            Text[ slovak ] = "Predmet";
         };
         MenuItem
         {
@@ -446,6 +453,7 @@ Menu RID_INSERT_FIELD_CTRL
             Text[ czech ] = "Titul";
             Text[ hebrew ] = "‮כותרת‬";
             Text[ hindi ] = "उपाधि";
+            Text[ slovak ] = "Titul";
         };
          //#endif
         MenuItem
@@ -479,6 +487,7 @@ Menu RID_INSERT_FIELD_CTRL
             Text[ czech ] = "Autor";
             Text[ hebrew ] = "‮מחבר‬";
             Text[ hindi ] = "लेखक";
+            Text[ slovak ] = "Autor";
         };
         MenuItem
         {
@@ -515,6 +524,7 @@ Menu RID_INSERT_FIELD_CTRL
             Text[ czech ] = "Jiné...";
             Text[ hebrew ] = "Andere...";
             Text[ hindi ] = "अन्य ...";
+            Text[ slovak ] = "Iné...";
         };
     };
 };
@@ -605,6 +615,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ czech ] = "Tabulka";
         Text[ hebrew ] = "‮טבלה‬";
         Text[ hindi ] = "सारणी";
+        Text[ slovak ] = "Tabuľka";
     };
     String ST_FRM
     {
@@ -635,6 +646,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ czech ] = "Textový rámec";
         Text[ hebrew ] = "Textrahmen";
         Text[ hindi ] = "टेक्स्ट् फ्रेम ";
+        Text[ slovak ] = "Textový rámec";
     };
     String ST_PGE
     {
@@ -665,6 +677,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ czech ] = "Stránka";
         Text[ hebrew ] = "‮דף‬";
         Text[ hindi ] = "पृष्ठ";
+        Text[ slovak ] = "Stránka";
     };
     String ST_DRW
     {
@@ -708,6 +721,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ czech ] = "Kresba";
         Text[ hebrew ] = "‮ציור‬";
         Text[ hindi ] = "रेखाचित्र";
+        Text[ slovak ] = "Kresba";
     };
     String ST_CTRL
     {
@@ -738,6 +752,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ czech ] = "Ovládací prvek";
         Text[ hebrew ] = "Kontrollfeld";
         Text[ hindi ] = "नियंत्रण";
+        Text[ slovak ] = "Ovládací prvok";
     };
     String ST_REG
     {
@@ -768,6 +783,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ czech ] = "Sekce";
         Text[ hebrew ] = "‮מיקטע‬";
         Text[ hindi ] = "विभाग";
+        Text[ slovak ] = "Sekcia";
     };
     String ST_BKM
     {
@@ -798,6 +814,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ czech ] = "Záložka";
         Text[ hebrew ] = "‮סימניה‬";
         Text[ hindi ] = "पृष्ठसंकेत";
+        Text[ slovak ] = "Záložka";
     };
     String ST_GRF
     {
@@ -828,6 +845,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ czech ] = "Obrázky";
         Text[ hebrew ] = "‮גרפיקה‬";
         Text[ hindi ] = "सुचित्र";
+        Text[ slovak ] = "Obrázky";
     };
     String ST_OLE
     {
@@ -858,6 +876,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ czech ] = "Objekt OLE";
         Text[ hebrew ] = "OLE‮אוביקט ‬";
         Text[ hindi ] = "OLE वस्तु";
+        Text[ slovak ] = "Objekt OLE";
     };
     String ST_OUTL
     {
@@ -889,6 +908,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ czech ] = "Nadpisy";
         Text[ hebrew ] = "Überschrift";
         Text[ hindi ] = "शीर्षकें";
+        Text[ slovak ] = "Nadpisy";
     };
     String ST_SEL
     {
@@ -919,6 +939,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ czech ] = "Výběr";
         Text[ hebrew ] = "‮מבחר‬";
         Text[ hindi ] = "चुनाव";
+        Text[ slovak ] = "Výber";
     };
     String ST_FTN
     {
@@ -950,6 +971,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ czech ] = "Poznámka pod čarou";
         Text[ hebrew ] = "‮הערת שוליים‬";
         Text[ hindi ] = "पृष्ठ के नीचे की टीका";
+        Text[ slovak ] = "Poznámka pod čiarou";
     };
     String ST_MARK
     {
@@ -980,6 +1002,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ czech ] = "Upomínka";
         Text[ hebrew ] = "Merker";
         Text[ hindi ] = "याद दिलानेवाला";
+        Text[ slovak ] = "Pripomienka";
     };
     String ST_POSTIT
     {
@@ -1010,6 +1033,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ czech ] = "Poznámka";
         Text[ hebrew ] = "‮הערה‬";
         Text[ hindi ] = "सूचना";
+        Text[ slovak ] = "Poznámka";
     };
     String ST_SRCH_REP
     {
@@ -1040,6 +1064,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ czech ] = "Opakovat hledání";
         Text[ hebrew ] = "‮חזרה על חיפוש‬";
         Text[ hindi ] = "खोज दुहराना";
+        Text[ slovak ] = "Opakovať hľadanie";
     };
     String ST_INDEX_ENTRY
     {
@@ -1070,6 +1095,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ czech ] = "Položka rejstříku";
         Text[ hebrew ] = "‮ערך מפתח‬";
         Text[ hindi ] = "अनुक्रमणिका प्रविष्टि";
+        Text[ slovak ] = "Položka obsahu";
     };
     String ST_TABLE_FORMULA
     {
@@ -1100,6 +1126,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ czech ] = "Vzorec v tabulce";
         Text[ hebrew ] = "Tabellenformel";
         Text[ hindi ] = "सारणी सूत्र";
+        Text[ slovak ] = "Vzorec tabuľky";
     };
     String ST_TABLE_FORMULA_ERROR
     {
@@ -1130,6 +1157,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ czech ] = "Chybný vzorec v tabulce";
         Text[ hebrew ] = "Fehlerhafte Tabellenformel";
         Text[ hindi ] = "गलत सारणी सूत्र";
+        Text[ slovak ] = "Chybný vzorec v tabuľke";
     };
     Text [ portuguese ] = "Navega��o" ;
     Text [ english_us ] = "Navigation" ;
@@ -1156,6 +1184,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
     Text[ czech ] = "Navigace";
     Text[ hebrew ] = "Navigation";
     Text[ hindi ] = "नाविगेशन्";
+    Text[ slovak ] = "Navigácia";
 };
 /*
 Noch ein paar Reserven
@@ -1225,6 +1254,7 @@ String STR_IMGBTN_TBL_DOWN
     Text[ czech ] = "Další tabulka";
     Text[ hebrew ] = "Nächste Tabelle";
     Text[ hindi ] = "अगला सारणी";
+    Text[ slovak ] = "Ďalšia tabuľka";
 };
 String STR_IMGBTN_FRM_DOWN
 {
@@ -1256,6 +1286,7 @@ String STR_IMGBTN_FRM_DOWN
     Text[ czech ] = "Další textový rámec";
     Text[ hebrew ] = "Nächster Textrahmen";
     Text[ hindi ] = "अगला टेक्स्ट् फ्रेम ";
+    Text[ slovak ] = "Ďalší textový rámec";
 };
 String STR_IMGBTN_PGE_DOWN
 {
@@ -1287,6 +1318,7 @@ String STR_IMGBTN_PGE_DOWN
     Text[ czech ] = "Další stránka";
     Text[ hebrew ] = "Nächste Seite";
     Text[ hindi ] = "अगला पृष्ठ";
+    Text[ slovak ] = "Ďalšia stránka";
 };
 String STR_IMGBTN_DRW_DOWN
 {
@@ -1318,6 +1350,7 @@ String STR_IMGBTN_DRW_DOWN
     Text[ czech ] = "Další kresba";
     Text[ hebrew ] = "Nächstes Zeichenobjekt";
     Text[ hindi ] = "अगला रेखाचित्र";
+    Text[ slovak ] = "Ďalšia kresba";
 };
 String STR_IMGBTN_CTRL_DOWN
 {
@@ -1349,6 +1382,7 @@ String STR_IMGBTN_CTRL_DOWN
     Text[ czech ] = "Další ovládací prvek";
     Text[ hebrew ] = "Nächstes Kontrollfeld";
     Text[ hindi ] = "अगला नियंत्रण";
+    Text[ slovak ] = "Ďalší ovládací prvok";
 };
 String STR_IMGBTN_REG_DOWN
 {
@@ -1380,6 +1414,7 @@ String STR_IMGBTN_REG_DOWN
     Text[ czech ] = "Další sekce";
     Text[ hebrew ] = "Nächster Bereich";
     Text[ hindi ] = "अगला विभाग";
+    Text[ slovak ] = "Ďalšia sekcia";
 };
 String STR_IMGBTN_BKM_DOWN
 {
@@ -1411,6 +1446,7 @@ String STR_IMGBTN_BKM_DOWN
     Text[ czech ] = "Další záložka";
     Text[ hebrew ] = "Nächste Textmarke";
     Text[ hindi ] = "अगला पृष्ठसंकेत";
+    Text[ slovak ] = "Ďalšia záložka";
 };
 String STR_IMGBTN_GRF_DOWN
 {
@@ -1442,6 +1478,7 @@ String STR_IMGBTN_GRF_DOWN
     Text[ czech ] = "Další obrázek";
     Text[ hebrew ] = "Nächste Grafik";
     Text[ hindi ] = "अगला चित्र";
+    Text[ slovak ] = "Ďalší obrázok";
 };
 String STR_IMGBTN_OLE_DOWN
 {
@@ -1474,6 +1511,7 @@ String STR_IMGBTN_OLE_DOWN
     Text[ czech ] = "Další OLE objekt";
     Text[ hebrew ] = "Nächstes OLE-Objekt";
     Text[ hindi ] = "अगला OLE वस्तु";
+    Text[ slovak ] = "Ďalší OLE objekt";
 };
 String STR_IMGBTN_OUTL_DOWN
 {
@@ -1505,6 +1543,7 @@ String STR_IMGBTN_OUTL_DOWN
     Text[ czech ] = "Další nadpis";
     Text[ hebrew ] = "Nächste Überschrift";
     Text[ hindi ] = "अगला शीर्षक";
+    Text[ slovak ] = "Ďalší nadpis";
 };
 String STR_IMGBTN_SEL_DOWN
 {
@@ -1536,6 +1575,7 @@ String STR_IMGBTN_SEL_DOWN
     Text[ czech ] = "Další výběr";
     Text[ hebrew ] = "Nächste Markierung";
     Text[ hindi ] = "अगला चुनाव";
+    Text[ slovak ] = "Ďalší výber";
 };
 String STR_IMGBTN_FTN_DOWN
 {
@@ -1567,6 +1607,7 @@ String STR_IMGBTN_FTN_DOWN
     Text[ czech ] = "Další poznámka pod čarou";
     Text[ hebrew ] = "Nächste Fußnote";
     Text[ hindi ] = "अगला पृष्ठ के नीचे की टीका";
+    Text[ slovak ] = "Ďalšia poznámka pod čiarou";
 };
 String STR_IMGBTN_MARK_DOWN
 {
@@ -1598,6 +1639,7 @@ String STR_IMGBTN_MARK_DOWN
     Text[ czech ] = "Další připomínka";
     Text[ hebrew ] = "Nächster Merker";
     Text[ hindi ] = "अगला याद दिलानेवाला";
+    Text[ slovak ] = "Ďalšia pripomienka";
 };
 String STR_IMGBTN_POSTIT_DOWN
 {
@@ -1629,6 +1671,7 @@ String STR_IMGBTN_POSTIT_DOWN
     Text[ czech ] = "Další poznámka";
     Text[ hebrew ] = "Nächste Notiz";
     Text[ hindi ] = "अगला सूचना";
+    Text[ slovak ] = "Ďalšia poznámka";
 };
 String STR_IMGBTN_SRCH_REP_DOWN
 {
@@ -1659,6 +1702,7 @@ String STR_IMGBTN_SRCH_REP_DOWN
     Text[ czech ] = "Pokračovat v hledání kupředu";
     Text[ hebrew ] = "Vorwärts weitersuchen";
     Text[ hindi ] = "आगे की ओर खोज जारी रखो";
+    Text[ slovak ] = "Pokračovať v hľadaní dopredu";
 };
 String STR_IMGBTN_INDEX_ENTRY_DOWN
 {
@@ -1689,6 +1733,7 @@ String STR_IMGBTN_INDEX_ENTRY_DOWN
     Text[ czech ] = "Další položka rejstříku";
     Text[ hebrew ] = "Nächster Verzeichniseintrag";
     Text[ hindi ] = "अगला अनुक्रमणिका प्रविष्टि";
+    Text[ slovak ] = "Ďalšia položka indexu";
 };
 String STR_IMGBTN_NEXT_UP
 {
@@ -1727,6 +1772,7 @@ String STR_IMGBTN_TBL_UP
     Text[ czech ] = "Předchozí tabulka";
     Text[ hebrew ] = "Vorige Tabelle";
     Text[ hindi ] = "पिछला सारणी";
+    Text[ slovak ] = "Predchádzajúca tabuľka";
 };
 String STR_IMGBTN_FRM_UP
 {
@@ -1757,6 +1803,7 @@ String STR_IMGBTN_FRM_UP
     Text[ czech ] = "Předchozí textový rámec";
     Text[ hebrew ] = "Voriger Textrahmen";
     Text[ hindi ] = "पिछला टेक्स्ट् फ्रेम ";
+    Text[ slovak ] = "Predchádzajúci textový rámec";
 };
 String STR_IMGBTN_PGE_UP
 {
@@ -1787,6 +1834,7 @@ String STR_IMGBTN_PGE_UP
     Text[ czech ] = "Předchozí strana";
     Text[ hebrew ] = "Vorige Seite";
     Text[ hindi ] = "पिछला पृष्ठ";
+    Text[ slovak ] = "Predchádzajúca strana";
 };
 String STR_IMGBTN_DRW_UP
 {
@@ -1817,6 +1865,7 @@ String STR_IMGBTN_DRW_UP
     Text[ czech ] = "Předchozí kresba";
     Text[ hebrew ] = "Voriges Zeichenobjekt";
     Text[ hindi ] = "पिछला रेखाचित्र";
+    Text[ slovak ] = "Predchádzajúca kresba";
 };
 String STR_IMGBTN_CTRL_UP
 {
@@ -1847,6 +1896,7 @@ String STR_IMGBTN_CTRL_UP
     Text[ czech ] = "Předchozí ovládací prvek";
     Text[ hebrew ] = "Voriges Kontrollfeld";
     Text[ hindi ] = "पिछला नियंत्रण";
+    Text[ slovak ] = "Predchádzajúci ovládací­ prvok";
 };
 String STR_IMGBTN_REG_UP
 {
@@ -1877,6 +1927,7 @@ String STR_IMGBTN_REG_UP
     Text[ czech ] = "Předchozí sekce";
     Text[ hebrew ] = "Voriger Bereich";
     Text[ hindi ] = "पिछला विभाग";
+    Text[ slovak ] = "Predchádzajúca sekcia";
 };
 String STR_IMGBTN_BKM_UP
 {
@@ -1907,6 +1958,7 @@ String STR_IMGBTN_BKM_UP
     Text[ czech ] = "Předchozí záložka";
     Text[ hebrew ] = "Vorige Textmarke";
     Text[ hindi ] = "पिछला पृष्ठसंकेत";
+    Text[ slovak ] = "Predchádzajúca záložka";
 };
 String STR_IMGBTN_GRF_UP
 {
@@ -1937,6 +1989,7 @@ String STR_IMGBTN_GRF_UP
     Text[ czech ] = "Předchozí obrázek";
     Text[ hebrew ] = "Vorige Grafik";
     Text[ hindi ] = "पिछला चित्र";
+    Text[ slovak ] = "Predchádzajúci obrázok";
 };
 String STR_IMGBTN_OLE_UP
 {
@@ -1968,6 +2021,7 @@ String STR_IMGBTN_OLE_UP
     Text[ czech ] = "Předchozí OLE objekt";
     Text[ hebrew ] = "Voriges OLE-Objekt";
     Text[ hindi ] = "पिछला OLE वस्तु";
+    Text[ slovak ] = "Predchádzajúci OLE objekt";
 };
 String STR_IMGBTN_OUTL_UP
 {
@@ -1999,6 +2053,7 @@ String STR_IMGBTN_OUTL_UP
     Text[ czech ] = "Předchozí nadpis";
     Text[ hebrew ] = "Vorige Überschrift";
     Text[ hindi ] = "पिछला शीर्षक";
+    Text[ slovak ] = "Predchádzajúci nadpis";
 };
 String STR_IMGBTN_SEL_UP
 {
@@ -2029,6 +2084,7 @@ String STR_IMGBTN_SEL_UP
     Text[ czech ] = "Předchozí výběr";
     Text[ hebrew ] = "Vorige Markierung";
     Text[ hindi ] = "पिछला चुनाव";
+    Text[ slovak ] = "Predchádzajúci výber";
 };
 String STR_IMGBTN_FTN_UP
 {
@@ -2060,6 +2116,7 @@ String STR_IMGBTN_FTN_UP
     Text[ czech ] = "Předchozí poznámka pod čarou";
     Text[ hebrew ] = "Vorige Fußnote";
     Text[ hindi ] = "पिछला पृष्ठ के नीचे की टीका";
+    Text[ slovak ] = "Predchádzajúca poznámka pod čiarou";
 };
 String STR_IMGBTN_MARK_UP
 {
@@ -2090,6 +2147,7 @@ String STR_IMGBTN_MARK_UP
     Text[ czech ] = "Předchozí připomínka";
     Text[ hebrew ] = "Voriger Merker";
     Text[ hindi ] = "पिछला याद दिलानेवाला";
+    Text[ slovak ] = "Predchádzajúca pripomienka";
 };
 String STR_IMGBTN_POSTIT_UP
 {
@@ -2120,6 +2178,7 @@ String STR_IMGBTN_POSTIT_UP
     Text[ czech ] = "Předchozí poznámka";
     Text[ hebrew ] = "Vorige Notiz";
     Text[ hindi ] = "पिछला सूचना";
+    Text[ slovak ] = "Predchádzajúca poznámka";
 };
 String STR_IMGBTN_SRCH_REP_UP
 {
@@ -2150,6 +2209,7 @@ String STR_IMGBTN_SRCH_REP_UP
     Text[ czech ] = "Pokračovat v hledání zpět";
     Text[ hebrew ] = "Rückwärts weitersuchen";
     Text[ hindi ] = "पिछली ओर खोज जारी रखो";
+    Text[ slovak ] = "Pokračovať v hľadaní naspäť";
 };
 String STR_IMGBTN_INDEX_ENTRY_UP
 {
@@ -2180,6 +2240,7 @@ String STR_IMGBTN_INDEX_ENTRY_UP
     Text[ czech ] = "Předchozí položka rejstříku";
     Text[ hebrew ] = "Voriger Verzeichniseintrag";
     Text[ hindi ] = "पिछला अनुक्रमणिका प्रविष्टि";
+    Text[ slovak ] = "Predchádzajúca položka registra";
 };
 String STR_IMGBTN_TBLFML_UP
 {
@@ -2210,6 +2271,7 @@ String STR_IMGBTN_TBLFML_UP
     Text[ czech ] = "Předchozí vzorec v tabulce";
     Text[ hebrew ] = "Vorige Tabellenformel";
     Text[ hindi ] = "पिछला सारणी सूत्र";
+    Text[ slovak ] = "Predchádzajúci vzorec v tabuľke";
 };
 String STR_IMGBTN_TBLFML_DOWN
 {
@@ -2240,6 +2302,7 @@ String STR_IMGBTN_TBLFML_DOWN
     Text[ czech ] = "Další vzorec v tabulce";
     Text[ hebrew ] = "Nächste Tabellenformel";
     Text[ hindi ] = "अगला सारणी सूत्र";
+    Text[ slovak ] = "Ďalší vzorec v tabuľke";
 };
 String STR_IMGBTN_TBLFML_ERR_UP
 {
@@ -2270,6 +2333,7 @@ String STR_IMGBTN_TBLFML_ERR_UP
     Text[ czech ] = "Předchozí chybný vzorec v tabulce";
     Text[ hebrew ] = "Vorige fehlerhafte Tabellenformel";
     Text[ hindi ] = "पिछला दोषयुक्त सारणी सूत्र";
+    Text[ slovak ] = "Predchádzajúca chybný vzorec v tabuľke";
 };
 String STR_IMGBTN_TBLFML_ERR_DOWN
 {
@@ -2300,6 +2364,7 @@ String STR_IMGBTN_TBLFML_ERR_DOWN
     Text[ czech ] = "Další chybný vzorec v tabulce";
     Text[ hebrew ] = "Nächste fehlerhafte Tabellenformel";
     Text[ hindi ] = "अगला दोषयुक्त सारणी सूत्र";
+    Text[ slovak ] = "Ďalší chybný vzorec v tabuľke";
 };
 ImageButton BTN_NAVI
 {
@@ -2346,6 +2411,7 @@ ImageButton BTN_NAVI
         Text[ czech ] = "Navigace";
         Text[ hebrew ] = "Navigation";
         Text[ hindi ] = "नाविगेशन";
+        Text[ slovak ] = "Navigácia";
     };
 };
 ComboBox RID_PVIEW_ZOOM_LB
@@ -2358,6 +2424,8 @@ ComboBox RID_PVIEW_ZOOM_LB
     Border = TRUE ;
     Hide = TRUE ;
 };
+
+
 
 
 
