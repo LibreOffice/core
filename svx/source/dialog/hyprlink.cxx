@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyprlink.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 18:31:28 $
+ *  last change: $Author: rt $ $Date: 2004-05-21 09:37:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -845,13 +845,11 @@ void SvxHyperlinkDlg::SetImages()
     if( bHighContrast )
         bHighContrast = GetDisplayBackground().GetColor().IsDark() != 0;
 
-    Color aMaskColor( 0xff, 0x00, 0xff );
-
-    SetItemImage( BTN_LINK, Image( mpManager->GetImage( BTN_LINK, bHighContrast ).GetBitmap(), aMaskColor ) );
-    SetItemImage( BTN_INSERT_BOOKMARK, Image( mpManager->GetImage( BTN_INSERT_BOOKMARK, bHighContrast  ).GetBitmap(), aMaskColor ) );
-    SetItemImage( BTN_INET_SEARCH, Image( mpManager->GetImage( BTN_INET_SEARCH, bHighContrast  ).GetBitmap(), aMaskColor ) );
-    SetItemImage( BTN_TARGET, Image( mpManager->GetImage( BTN_TARGET, bHighContrast  ).GetBitmap(), aMaskColor ) );
-    SetItemImage( BTN_OPENDIALOG, Image( mpManager->GetImage( BTN_OPENDIALOG, bHighContrast  ).GetBitmap(), aMaskColor ) );
+    SetItemImage( BTN_LINK, mpManager->GetImage( BTN_LINK, bHighContrast ) );
+    SetItemImage( BTN_INSERT_BOOKMARK, mpManager->GetImage( BTN_INSERT_BOOKMARK, bHighContrast ) );
+    SetItemImage( BTN_INET_SEARCH, mpManager->GetImage( BTN_INET_SEARCH, bHighContrast ) );
+    SetItemImage( BTN_TARGET, mpManager->GetImage( BTN_TARGET, bHighContrast ) );
+    SetItemImage( BTN_OPENDIALOG, mpManager->GetImage( BTN_OPENDIALOG, bHighContrast ) );
 }
 
 /*--------------------------------------------------------------------
