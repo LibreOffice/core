@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.108 $
+ *  $Revision: 1.109 $
  *
- *  last change: $Author: mtg $ $Date: 2001-09-03 14:57:23 $
+ *  last change: $Author: mtg $ $Date: 2001-10-04 10:29:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1608,7 +1608,7 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     {SW_PROP_NMID(UNO_NAME_SEPARATOR_LINE_COLOR), WID_TXTCOL_LINE_COLOR, CPPU_E2T(CPPUTYPE_INT32),PROPERTY_NONE,    0},
                     {SW_PROP_NMID(UNO_NAME_SEPARATOR_LINE_RELATIVE_HEIGHT), WID_TXTCOL_LINE_REL_HGT, CPPU_E2T(CPPUTYPE_INT32),PROPERTY_NONE,    0},
                     {SW_PROP_NMID(UNO_NAME_SEPARATOR_LINE_VERTIVAL_ALIGNMENT), WID_TXTCOL_LINE_ALIGN, CPPU_E2T(CPPUTYPE_VERTALIGN),PROPERTY_NONE,   0},
-                    {SW_PROP_NMID(UNO_NAME_SEPARATOR_LINE_IS_ON), WID_TXTCOL_LINE_IS_ON, CPPU_E2T(CPPUTYPE_INT32),PROPERTY_NONE,    0},
+                    {SW_PROP_NMID(UNO_NAME_SEPARATOR_LINE_IS_ON), WID_TXTCOL_LINE_IS_ON, CPPU_E2T(CPPUTYPE_BOOLEAN),PROPERTY_NONE,  0},
                     {0,0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aTextColumns_Impl;
