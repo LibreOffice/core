@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OleObjectFactory.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-19 14:58:58 $
+ *  last change: $Author: jl $ $Date: 2002-01-22 09:28:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,13 +72,13 @@
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::bridge::OleObjectFactory
-/** makes it possible to create OLE objects as UNO objects.
+/** makes it possible to create COM objects as UNO objects.
 
-    <p>Any OLE objects which are accessable via <code>CLSIDFromProgID()</code>
-    and <code>CoCreateInstance()</code> could be created by this service.
+    <p>A COM object must have a ProgId since the ProgId is used as argument for
+    XMultiServiceFactory::createInstance. The only interfaces which are mapped
+    are <code>IUnknown</code> and <code>IDispatch</code>.
     The created UNO objects support <type scope="com::sun::star::script">XInvocation</type>
-    if the original OLE objects support IDispatch. </p>
+    if the original COM objects support IDispatch. </p>
 
     <p>The optional parameters of the method
     <member scope="com::sun::star::lang">XMultiServiceFactory::createInstanceWithArguments()</member>
@@ -86,9 +86,7 @@
  */
 service OleObjectFactory
 {
-    // DocMerge: empty anyway
     interface com::sun::star::lang::XMultiServiceFactory;
-
 };
 
 //=============================================================================
@@ -98,6 +96,9 @@ service OleObjectFactory
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.7  2000/12/19 14:58:58  mi
+    documentation sytax errors fixed
+
     Revision 1.6  2000/12/12 10:18:48  jbu
     reconstructed some method references, that have gone lost during merges
 
