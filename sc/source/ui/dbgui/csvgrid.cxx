@@ -2,9 +2,9 @@
  *
  *  $RCSfile: csvgrid.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: dr $ $Date: 2002-08-16 15:36:25 $
+ *  last change: $Author: dr $ $Date: 2002-10-22 10:35:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,6 +138,7 @@ ScCsvGrid::ScCsvGrid( ScCsvControl& rParent ) :
     maHeaderFont( GetFont() ),
     maColStates( 1 ),
     maTypeNames( 1 ),
+    mnFirstImpLine( 0 ),
     mnRecentSelCol( CSV_COLUMN_INVALID )
 {
     mpEditEngine->SetRefDevice( &maBackgrDev );
