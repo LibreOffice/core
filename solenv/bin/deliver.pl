@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.29 $
+#   $Revision: 1.30 $
 #
-#   last change: $Author: hjs $ $Date: 2002-05-16 17:07:11 $
+#   last change: $Author: hr $ $Date: 2002-07-18 16:47:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,7 +77,7 @@ use File::Path;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.29 $ ';
+$id_str = ' $Revision: 1.30 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -133,6 +133,10 @@ $has_symlinks       = 0;            # system supports symlinks
 for (@action_list) {
     $action_hash{$_}++;
 }
+
+# trap normal signals (HUP, INT, PIPE, TERM)
+# for clean up on unexpected termination
+use sigtrap 'handler' => \&cleanup_and_die, 'normal-signals';
 
 #### main ####
 
@@ -616,23 +620,33 @@ sub copy_if_newer
             return 0;
         }
         else {
-            my $rc = copy($from, $to);
+            # copy to temporary file first and rename later
+            # to minimize the possibility for race conditions
+            local $temp_file = sprintf('%s.%d-%d', $to, $$, time());
+            my $rc = copy($from, $temp_file);
             if ( $rc) {
-                utime($$from_stat_ref[9], $$from_stat_ref[9], $to);
-                fix_file_permissions($$from_stat_ref[2], $to);
-                # handle special packaging of *.dylib files for Mac OS X
-                if ( $^O eq 'darwin' )
-                {
-                    system("create-bundle", $to) if ( $to =~ /\.dylib/ );
-                    system("create-bundle", "$to=$from.app") if ( -d "$from.app" );
+                utime($$from_stat_ref[9], $$from_stat_ref[9], $temp_file);
+                fix_file_permissions($$from_stat_ref[2], $temp_file);
+                $rc = rename($temp_file, $to);
+                if ( $rc ) {
+                    # handle special packaging of *.dylib files for Mac OS X
+                    if ( $^O eq 'darwin' )
+                    {
+                        system("create-bundle", $to) if ( $to =~ /\.dylib/ );
+                        system("create-bundle", "$to=$from.app") if ( -d "$from.app" );
+                    }
+                    push_on_ziplist($to) if $opt_zip;
+                    return 1;
                 }
-                push_on_ziplist($to) if $opt_zip;
-                return 1;
+                else {
+                    print_error("can't rename temporary file to $to: $!",0);
+                }
             }
             else {
                 print_error("can't copy $from: $!",0);
-                return 0;
             }
+            unlink($temp_file);
+            return 0;
         }
     }
 }
@@ -900,6 +914,17 @@ sub print_stats
         print "Files copied: $files_copied\n";
     }
     print "Files unchanged/not matching: $files_unchanged\n";
+}
+
+sub cleanup_and_die
+{
+    # clean up on unexpected termination
+    my $sig = shift;
+    if ( defined($temp_file) && -e $temp_file ) {
+        unlink($temp_file);
+    }
+
+    die "caught unexpected signal $sig, terminating ...";
 }
 
 sub usage
