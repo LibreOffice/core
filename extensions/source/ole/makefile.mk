@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: jl $ $Date: 2000-10-12 12:48:57 $
+#   last change: $Author: jl $ $Date: 2000-10-17 09:04:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -108,7 +108,8 @@ UNOTYPES= \
     com.sun.star.uno.TypeClass		\
     com.sun.star.script.FinishEngineEvent	\
     com.sun.star.script.XInvocation		\
-    com.sun.star.script.XInvocation		\
+    com.sun.star.script.XInvocation2		\
+    com.sun.star.script.MemberType		\
     com.sun.star.script.XLibraryAccess	\
     com.sun.star.script.XAllListener	\
     com.sun.star.script.FailReason		\
