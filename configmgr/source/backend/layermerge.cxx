@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layermerge.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-27 10:33:36 $
+ *  last change: $Author: jb $ $Date: 2002-05-27 13:55:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -582,7 +582,7 @@ void SAL_CALL LayerMergeHandler::dropNode( const OUString& aName )
 // -----------------------------------------------------------------------------
 
 void SAL_CALL LayerMergeHandler::overrideProperty( const OUString& aName, sal_Int16 aAttributes, const uno::Type& aType )
-    throw (MalformedDataException, beans::UnknownPropertyException, lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException)
+    throw (MalformedDataException, beans::UnknownPropertyException, beans::IllegalTypeException,  lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException)
 {
     if (INode * pProp = m_aContext.findProperty(aName))
     {

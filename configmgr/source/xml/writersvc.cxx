@@ -2,9 +2,9 @@
  *
  *  $RCSfile: writersvc.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-27 10:39:04 $
+ *  last change: $Author: jb $ $Date: 2002-05-27 13:55:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,7 +212,7 @@ uno::Reference< io::XOutputStream > SAL_CALL
 {
     uno::Reference< io::XActiveDataSource > xDS( m_xWriter, uno::UNO_QUERY );
 
-    return xDS.is()? xDS->getOutputStream() : NULL;
+    return xDS.is()? xDS->getOutputStream() : uno::Reference< io::XOutputStream >();
 }
 // -----------------------------------------------------------------------------
 

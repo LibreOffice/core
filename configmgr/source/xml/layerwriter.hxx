@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerwriter.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-27 10:39:04 $
+ *  last change: $Author: jb $ $Date: 2002-05-27 13:55:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,7 +153,7 @@ namespace configmgr
 
             virtual void SAL_CALL
                 setPropertyValueForLocale( const uno::Any& aValue, const OUString& aLocale )
-                    throw (backenduno::MalformedDataException, beans::IllegalTypeException, lang::IllegalAccessException, lang::IllegalArgumentException, uno::RuntimeException);
+                    throw (backenduno::MalformedDataException, beans::IllegalTypeException, lang::IllegalArgumentException, uno::RuntimeException);
 
         private:
             void checkInElement(bool bInElement, bool bInProperty = false);

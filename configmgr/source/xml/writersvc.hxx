@@ -2,9 +2,9 @@
  *
  *  $RCSfile: writersvc.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-27 10:39:04 $
+ *  last change: $Author: jb $ $Date: 2002-05-27 13:55:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #endif
 #ifndef _COM_SUN_STAR_XML_SAX_XDOCUMENTHANDLER_HPP_
-#include <com/sun/star/xml/sax/XDocumenthandler.hpp>
+#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #endif
 
 // -----------------------------------------------------------------------------

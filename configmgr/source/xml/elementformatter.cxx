@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementformatter.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-05-27 10:39:04 $
+ *  last change: $Author: jb $ $Date: 2002-05-27 13:55:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,8 +134,8 @@ void ElementFormatter::addNamespaces()
 {
     static OUString const sNamespaceDecl( RTL_CONSTASCII_USTRINGPARAM("xmlns:") );
 
-    addAttribute( sNamespaceDecl.concat(NS_PREFIX_OOR), NS_URI_OOR);
-    addAttribute( sNamespaceDecl.concat(NS_PREFIX_XS ), NS_URI_XS );
+    addAttribute( sNamespaceDecl.concat(NS_PREFIX_OOR), static_cast<OUString const &>(NS_URI_OOR));
+    addAttribute( sNamespaceDecl.concat(NS_PREFIX_XS ), static_cast<OUString const &>(NS_URI_XS ));
 }
 // -----------------------------------------------------------------------------
 
@@ -191,9 +191,9 @@ void ElementFormatter::addOperation(Operation::Enum _eOp)
     switch (_eOp)
     {
     case Operation::none:       break;
-    case Operation::modify:     addAttribute(ATTR_OPERATION, OPERATION_MODIFY);  break;
-    case Operation::replace:    addAttribute(ATTR_OPERATION, OPERATION_REPLACE); break;
-    case Operation::remove:     addAttribute(ATTR_OPERATION, OPERATION_REMOVE);  break;
+    case Operation::modify:     addAttribute(ATTR_OPERATION, static_cast<OUString const &>(OPERATION_MODIFY));  break;
+    case Operation::replace:    addAttribute(ATTR_OPERATION, static_cast<OUString const &>(OPERATION_REPLACE)); break;
+    case Operation::remove:     addAttribute(ATTR_OPERATION, static_cast<OUString const &>(OPERATION_REMOVE));  break;
 
     case Operation::unknown:
         OSL_ENSURE(false, "ElementFormatter: Trying to add attribute for 'unknown' operation");
