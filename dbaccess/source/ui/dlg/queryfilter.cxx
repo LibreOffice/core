@@ -2,9 +2,9 @@
  *
  *  $RCSfile: queryfilter.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-22 08:24:13 $
+ *  last change: $Author: oj $ $Date: 2001-01-25 07:17:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -515,7 +515,7 @@ void DlgFilterCrit::SetLine( sal_uInt16 nIdx,const PropertyValue& _rItem,sal_Boo
             aStr.Erase(0,11);
             break;
     }
-    aStr.EraseTrailingChars();
+    aStr.EraseLeadingChars();
 
     // to make sure that we only set first three
     switch( nIdx )
