@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.146 $
+ *  $Revision: 1.147 $
  *
- *  last change: $Author: thb $ $Date: 2002-10-21 14:08:19 $
+ *  last change: $Author: ssa $ $Date: 2002-10-22 09:59:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4315,8 +4315,9 @@ Window::~Window()
                 "Window::~Window(): Window is in TrackingMode" );
     DBG_ASSERT( pSVData->maWinData.mpCaptureWin != this,
                 "Window::~Window(): Window has the mouse captured" );
-    DBG_ASSERT( pSVData->maWinData.mpDefDialogParent != this,
-                "Window::~Window(): Window is DefModalDialogParent" );
+    // #103442# DefModalDialogParent is now determined on-the-fly, so this pointer is unimportant now
+    //DBG_ASSERT( pSVData->maWinData.mpDefDialogParent != this,
+    //            "Window::~Window(): Window is DefModalDialogParent" );
 
     // Wegen alter kompatibilitaet
     if ( pSVData->maWinData.mpTrackWin == this )
