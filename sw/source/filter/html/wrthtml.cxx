@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrthtml.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-20 13:43:17 $
+ *  last change: $Author: jp $ $Date: 2000-11-01 19:23:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -422,20 +422,6 @@ sal_uInt32 SwHTMLWriter::WriteStream()
     nWarn = 0;
     GetNumInfo().Clear();
     pNextNumRuleInfo = 0;
-
-    // Content-Id setzen
-    aCId.Erase();
-    SwDocShell *pDocSh = pDoc->GetDocShell();
-    if( pDocSh )
-    {
-        const SfxPoolItem *pItem = pDocSh->GetItem( SID_ORIGURL );
-        if( pItem )
-        {
-            aCId = ((const SfxStringItem *)pItem)->GetValue();
-            ASSERT( aCId.Len(), "CID ohne Laenge!" );
-            nWhishLineLen = 72;
-        }
-    }
 
     ByteString aStartTags;
 
@@ -1235,8 +1221,6 @@ void SwHTMLWriter::OutBackground( const SvxBrushItem *pBrushItem,
             if( !nErr )     // fehlerhaft, da ist nichts auszugeben
             {
                 rEmbGrfNm = URIHelper::SmartRelToAbs( rEmbGrfNm );
-                if( HasCId() )
-                    MakeCIdURL( rEmbGrfNm );
                 pLink = &rEmbGrfNm;
             }
             else
@@ -1248,11 +1232,9 @@ void SwHTMLWriter::OutBackground( const SvxBrushItem *pBrushItem,
     else
     {
         rEmbGrfNm = *pLink;
-        if( HasCId() || bCfgCpyLinkedGrfs )
+        if( bCfgCpyLinkedGrfs )
         {
-            CopyLocalFileToINet( rEmbGrfNm, HasCId() );
-            if( HasCId() )
-                MakeCIdURL( rEmbGrfNm );
+            CopyLocalFileToINet( rEmbGrfNm  );
             pLink = &rEmbGrfNm;
         }
     }
@@ -1323,26 +1305,6 @@ sal_uInt16 SwHTMLWriter::GetHTMLFontSize( sal_uInt32 nHeight ) const
 
     return nSize;
 }
-
-
-void SwHTMLWriter::MakeCIdURL( String& rURL )
-{
-    if( !aCId.Len() )
-        return;
-
-    INetURLObject aURLObj( rURL );
-    if( INET_PROT_FILE!=aURLObj.GetProtocol() )
-        return;
-
-    String aLastName( aURLObj.GetLastName() );
-    ASSERT( aLastName.Len(), "Dateiname ohne Laenge!" );
-    // TODO: unicode?
-    aLastName.ToLowerAscii();
-
-    rURL.AssignAscii( "cid:" );
-    ((rURL += aLastName) += '.') += aCId;
-}
-
 
 // Struktur speichert die aktuellen Daten des Writers zwischen, um
 // einen anderen Dokument-Teil auszugeben, wie z.B. Header/Footer
@@ -1432,11 +1394,14 @@ void GetHTMLWriter( const String&, WriterRef& xRet )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/wrthtml.cxx,v 1.2 2000-10-20 13:43:17 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/wrthtml.cxx,v 1.3 2000-11-01 19:23:14 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.2  2000/10/20 13:43:17  jp
+      use correct INetURL-Decode enum
+
       Revision 1.1.1.1  2000/09/18 17:14:56  hr
       initial import
 

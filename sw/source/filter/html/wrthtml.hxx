@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrthtml.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:56 $
+ *  last change: $Author: jp $ $Date: 2000-11-01 19:23:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,8 +225,6 @@ SV_DECL_PTRARR_SORT_DEL( SwHTMLFmtInfos, SwHTMLFmtInfo*, 1, 1 )
 
 class SwHTMLWriter : public Writer
 {
-    String aCId;                    // Content-Id fuer Mail-Export
-
     SwHTMLPosFlyFrms *pHTMLPosFlyFrms;
     SwHTMLNumRuleInfo *pNumRuleInfo;// aktuelle Numerierung
     SwHTMLNumRuleInfo *pNextNumRuleInfo;
@@ -503,8 +501,6 @@ public:
     sal_Bool IsHTMLMode( sal_uInt32 nMode ) const { return (nHTMLMode & nMode) != 0; }
 
     inline sal_Bool IsCSS1Source( sal_uInt16 n ) const;
-    sal_Bool HasCId() const { return aCId.Len() > 0; }
-    void MakeCIdURL( String& rURL );
 
     static const sal_Char *GetNumFormat( sal_uInt16 nFmt );
     static void PrepareFontList( const SvxFontItem& rFontItem, String& rNames,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfatr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-20 13:43:28 $
+ *  last change: $Author: jp $ $Date: 2000-11-01 19:25:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -832,18 +832,6 @@ static Writer& OutRTF_SwGrfNode( Writer& rWrt, SwCntntNode & rNode )
     if( rRTFWrt.bOutFmtAttr )       // wurde ueberhaupt ein Attrribut
         rRTFWrt.Strm() << "}{";     // ausgegeben ??
 
-    String aCID;
-    SwDocShell *pDocSh = rWrt.pDoc->GetDocShell();
-    if( pDocSh )
-    {
-        const SfxPoolItem *pItem = pDocSh->GetItem( SID_ORIGURL );
-        if( pItem )
-        {
-            aCID = ((const SfxStringItem *)pItem)->GetValue();
-            ASSERT( aCID.Len(), "CID ohne Laenge!" );
-        }
-    }
-
     String aGrfNm;
     const SwMirrorGrf& rMirror = pNd->GetSwAttrSet().GetMirrorGrf();
     if( !pNd->IsLinkedFile() || RES_DONT_MIRROR_GRF != rMirror.GetValue() )
@@ -879,48 +867,18 @@ static Writer& OutRTF_SwGrfNode( Writer& rWrt, SwCntntNode & rNode )
             rRTFWrt.Strm() << "}}";
             return rWrt;
         }
-
-        // MIB 17.7.97: Wenn Mail-Export, dann in eine file-URL draus machen,
-        // damit wir spaeter auf ein file-Protokoll stossen.
-        if( aCID.Len() )
-            aGrfNm = URIHelper::SmartRelToAbs( aGrfNm );
     }
     else
-    {
         pNd->GetFileFilterNms( &aGrfNm, 0 );
-        if( aCID.Len() )
-            rWrt.CopyLocalFileToINet( aGrfNm, TRUE );
-    }
 
-    if( aCID.Len() )
-    {
-        INetURLObject aURLObj( aGrfNm );
-        if( INET_PROT_FILE==aURLObj.GetProtocol() )
-        {
-            String aLastName( aURLObj.GetLastName(
-                                INetURLObject::DECODE_UNAMBIGUOUS) );
-            ASSERT( aLastName.Len(), "Dateiname ohne Laenge!" );
-            GetAppCharClass().toLower( aLastName );
-
-            aGrfNm.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "cid:" ));
-            ((aGrfNm = aLastName) += '.') += aCID;
-        }
-        else
-            aGrfNm = INetURLObject::AbsToRel( aGrfNm,
-                                        INetURLObject::WAS_ENCODED,
-                                        INetURLObject::DECODE_UNAMBIGUOUS);
-    }
-    else
-    {
-        // MIB->JP: Warum erst AbsToRel und dann das URL-Objekt? So
-        // kommt bei relativierbaren URLs als Protokoll "unknown" raus.
-        // Ist das Absicht?
-        aGrfNm = INetURLObject::AbsToRel( aGrfNm, INetURLObject::WAS_ENCODED,
-                                        INetURLObject::DECODE_UNAMBIGUOUS);
-        INetURLObject aUrl( aGrfNm );
-        if( aUrl.GetProtocol() == INET_PROT_FILE )
-            aGrfNm = aUrl.PathToFileName();
-    }
+    // MIB->JP: Warum erst AbsToRel und dann das URL-Objekt? So
+    // kommt bei relativierbaren URLs als Protokoll "unknown" raus.
+    // Ist das Absicht?
+    aGrfNm = INetURLObject::AbsToRel( aGrfNm, INetURLObject::WAS_ENCODED,
+                                    INetURLObject::DECODE_UNAMBIGUOUS);
+    INetURLObject aUrl( aGrfNm );
+    if( aUrl.GetProtocol() == INET_PROT_FILE )
+        aGrfNm = aUrl.PathToFileName();
 
     // Bitmap als File-Referenz speichern
     rRTFWrt.Strm() << sRTF_FIELD << sRTF_FLDPRIV;
@@ -3007,11 +2965,14 @@ SwNodeFnTab aRTFNodeFnTab = {
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/rtf/rtfatr.cxx,v 1.2 2000-10-20 13:43:28 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/rtf/rtfatr.cxx,v 1.3 2000-11-01 19:25:51 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.2  2000/10/20 13:43:28  jp
+      use correct INetURL-Decode enum
+
       Revision 1.1.1.1  2000/09/18 17:14:56  hr
       initial import
 

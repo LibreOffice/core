@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlfly.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-20 13:42:52 $
+ *  last change: $Author: jp $ $Date: 2000-11-01 19:23:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1281,8 +1281,6 @@ Writer& OutHTML_BulletImage( Writer& rWrt,
                 if( !nErr )
                 {
                     rGrfName = URIHelper::SmartRelToAbs( rGrfName );
-                    if( rHTMLWrt.HasCId() )
-                        rHTMLWrt.MakeCIdURL( rGrfName );
                     pLink = &rGrfName;
                 }
                 else
@@ -1294,11 +1292,9 @@ Writer& OutHTML_BulletImage( Writer& rWrt,
         else
         {
             rGrfName = *pLink;
-            if( rHTMLWrt.bCfgCpyLinkedGrfs || rHTMLWrt.HasCId() )
+            if( rHTMLWrt.bCfgCpyLinkedGrfs )
             {
-                rHTMLWrt.CopyLocalFileToINet( rGrfName, rHTMLWrt.HasCId() );
-                if( rHTMLWrt.HasCId() )
-                    rHTMLWrt.MakeCIdURL( rGrfName );
+                rHTMLWrt.CopyLocalFileToINet( rGrfName );
                 pLink = &rGrfName;
             }
         }
@@ -1615,8 +1611,6 @@ static Writer & OutHTML_FrmFmtAsImage( Writer& rWrt, const SwFrmFmt& rFrmFmt,
     }
 
     aGrfNm = URIHelper::SmartRelToAbs( aGrfNm );
-    if( rHTMLWrt.HasCId() )
-        rHTMLWrt.MakeCIdURL( aGrfNm );
     Size aSz( 0, 0 );
     ULONG nFrmFlags = bInCntnr ? HTML_FRMOPTS_GENIMG_CNTNR
                                 : HTML_FRMOPTS_GENIMG;
@@ -1676,11 +1670,9 @@ static Writer& OutHTML_FrmFmtGrfNode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
     else
     {
         pGrfNd->GetFileFilterNms( &aGrfNm, 0 );
-        if( rHTMLWrt.bCfgCpyLinkedGrfs || rHTMLWrt.HasCId() )
-            rWrt.CopyLocalFileToINet( aGrfNm, rHTMLWrt.HasCId() );
+        if( rHTMLWrt.bCfgCpyLinkedGrfs )
+            rWrt.CopyLocalFileToINet( aGrfNm );
     }
-    if( rHTMLWrt.HasCId() )
-        rHTMLWrt.MakeCIdURL( aGrfNm );
 
     ULONG nFrmFlags = bInCntnr ? HTML_FRMOPTS_IMG_CNTNR : HTML_FRMOPTS_IMG;
     if( rHTMLWrt.IsHTMLMode( HTMLMODE_ABS_POS_FLY ) && !bInCntnr )
@@ -1962,11 +1954,14 @@ BOOL SwHTMLPosFlyFrm::operator<( const SwHTMLPosFlyFrm& rFrm ) const
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/htmlfly.cxx,v 1.2 2000-10-20 13:42:52 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/htmlfly.cxx,v 1.3 2000-11-01 19:23:14 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.2  2000/10/20 13:42:52  jp
+      use correct INetURL-Decode enum
+
       Revision 1.1.1.1  2000/09/18 17:14:55  hr
       initial import
 

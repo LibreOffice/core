@@ -2,9 +2,9 @@
  *
  *  $RCSfile: css1atr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-20 13:42:31 $
+ *  last change: $Author: jp $ $Date: 2000-11-01 19:23:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3091,15 +3091,13 @@ static Writer& OutCSS1_SvxBrush( Writer& rWrt, const SfxPoolItem& rHt,
         {
             // Grafik als (JPG-)File speichern
             const String* pTempFileName = rHTMLWrt.GetOrigFileName();
-            if(pTempFileName)
+            if( pTempFileName )
                 sGrfNm = *pTempFileName;
             USHORT nErr = XOutBitmap::WriteGraphic( *pGrf, sGrfNm,
                         String::CreateFromAscii("JPG") );
             if( !nErr )     // fehlerhaft, da ist nichts auszugeben
             {
                 sGrfNm = URIHelper::SmartRelToAbs( sGrfNm );
-                if( rHTMLWrt.HasCId() )
-                    rHTMLWrt.MakeCIdURL( sGrfNm );
                 pLink = &sGrfNm;
             }
             else
@@ -3108,12 +3106,10 @@ static Writer& OutCSS1_SvxBrush( Writer& rWrt, const SfxPoolItem& rHt,
             }
         }
     }
-    else if( !pGrfName && (rHTMLWrt.bCfgCpyLinkedGrfs || rHTMLWrt.HasCId()) )
+    else if( !pGrfName && rHTMLWrt.bCfgCpyLinkedGrfs )
     {
         sGrfNm = *pLink;
-        rWrt.CopyLocalFileToINet( sGrfNm, rHTMLWrt.HasCId() );
-        if( rHTMLWrt.HasCId() )
-            rHTMLWrt.MakeCIdURL( sGrfNm );
+        rWrt.CopyLocalFileToINet( sGrfNm );
         pLink = &sGrfNm;
     }
 
@@ -3489,6 +3485,9 @@ SwAttrFnTab aCSS1AttrFnTab = {
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.2  2000/10/20 13:42:31  jp
+      use correct INetURL-Decode enum
+
       Revision 1.1.1.1  2000/09/18 17:14:55  hr
       initial import
 

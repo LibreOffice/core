@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlatr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-20 13:42:43 $
+ *  last change: $Author: jp $ $Date: 2000-11-01 19:23:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2334,9 +2334,7 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
             sal_Unicode c = rStr.GetChar( nStrPos );
             // versuche nach ungefaehr 255 Zeichen eine neue Zeile zu
             // beginnen, aber nicht in PRE und nur bei Spaces
-            // MIB 15.4.99: Auf Wunsch von ST wird in Mails auch in einem
-            // PRE ganz bewusst umgebrocheni (#64159#).
-            if( ' '==c && (!rHTMLWrt.nLastParaToken || rHTMLWrt.HasCId()) )
+            if( ' '==c && !rHTMLWrt.nLastParaToken  )
             {
                 xub_StrLen nLineLen;
                 if( rHTMLWrt.nLastParaToken )
@@ -3092,11 +3090,14 @@ SwAttrFnTab aHTMLAttrFnTab = {
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/htmlatr.cxx,v 1.2 2000-10-20 13:42:43 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/htmlatr.cxx,v 1.3 2000-11-01 19:23:14 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.2  2000/10/20 13:42:43  jp
+      use correct INetURL-Decode enum
+
       Revision 1.1.1.1  2000/09/18 17:14:55  hr
       initial import
 
