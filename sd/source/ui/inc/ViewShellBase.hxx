@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ViewShellBase.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 11:46:43 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 11:28:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,8 +154,6 @@ public:
     */
     DrawController* GetDrawController (void);
 
-    virtual void InnerResizePixel (const Point &rPos, const Size &rSize);
-
     /** This call is forwarded to the main sub-shell.
     */
     virtual ErrCode DoVerb (long nVerb);
@@ -198,6 +196,9 @@ protected:
         const TypeId& rBCType,
         const SfxHint& rHint,
         const TypeId& rHintType);
+
+    virtual void InnerResizePixel (const Point &rOfs, const Size &rSize);
+    virtual void OuterResizePixel (const Point &rOfs, const Size &rSize);
 
 private:
     osl::Mutex maMutex;
