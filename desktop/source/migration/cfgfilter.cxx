@@ -35,16 +35,18 @@ void SAL_CALL CConfigFilter::initialize(const Sequence< Any >& seqArgs)
     }
     if (m_aCurrentComponent.getLength() == 0)
         m_aCurrentComponent = OUString::createFromAscii("unknown.component");
-    if (!m_xSourceLayer.is())
+
+    if (!m_xSourceLayer.is()) {
         throw Exception();
+    }
+
 }
 
 
 void CConfigFilter::pushElement(rtl::OUString aName, sal_Bool bUse)
 {
     OUString aPath;
-    if (!m_elementStack.empty())
-    {
+    if (!m_elementStack.empty()) {
         aPath = m_elementStack.top().path; // or use base path
         aPath += OUString::createFromAscii("/");
     }
@@ -63,17 +65,6 @@ sal_Bool CConfigFilter::checkCurrentElement()
     return m_elementStack.top().use;
 }
 
-static sal_Bool _checkRegexp(const OUString& aString, const OUString aPattern)
-{
-    using namespace utl;
-    SearchParam param(aPattern, SearchParam::SRCH_REGEXP);
-    TextSearch ts(param, LANGUAGE_DONTKNOW);
-    xub_StrLen start = 0;
-    xub_StrLen end = 0;
-    end = (xub_StrLen)(aString.getLength());
-    return ts.SearchFrwrd(aString, &start, &end);
-}
-
 sal_Bool CConfigFilter::checkElement(rtl::OUString aName)
 {
 
@@ -85,63 +76,33 @@ sal_Bool CConfigFilter::checkElement(rtl::OUString aName)
         aFullPath = m_elementStack.top().path + OUString::createFromAscii("/");
 
     aFullPath += aName;
-#if 1
+
     // check whether any include patterns patch this path
-    strings_v::const_iterator i_in = m_pvInclude->begin();
-    while (i_in != m_pvInclude->end())
+    for (strings_v::const_iterator i_in = m_pvInclude->begin();
+        i_in != m_pvInclude->end(); i_in++)
     {
-        if (i_in->indexOf(aFullPath.copy(0, i_in->getLength()>aFullPath.getLength()
-            ? aFullPath.getLength() : i_in->getLength())) == 0) // pattern is beginning of path
+        // pattern is beginning of path
+        // or path is a begiing for pattern
+        if (i_in->match(aFullPath.copy(0, i_in->getLength()>aFullPath.getLength()
+            ? aFullPath.getLength() : i_in->getLength()), 0))
         {
             bResult = sal_True;
             break; // one match is enough
         }
-        i_in++;
     }
     // if match is found, check for exclusion
     if (bResult)
     {
-        strings_v::const_iterator i_ex = m_pvExclude->begin();
-        while (i_ex != m_pvExclude->end())
+        for (strings_v::const_iterator i_ex = m_pvExclude->begin();
+            i_ex != m_pvExclude->end(); i_ex++)
         {
-            if (i_in->indexOf(aFullPath.copy(0, i_ex->getLength()>aFullPath.getLength()
-                ? aFullPath.getLength() : i_ex->getLength())) == 0) // pattern is beginning of path
+            if (aFullPath.match(*i_ex, 0)) // pattern is beginning of path
             {
                 bResult = sal_False;
                 break; // one is enough...
             }
-            i_ex++;
         }
     }
-
-#else
-    // check whether any include patterns patch this path
-    strings_v::const_iterator i_in = m_pvInclude->begin();
-    while (i_in != m_pvInclude->end())
-    {
-        if (_checkRegexp(aFullPath, *i_in))
-        {
-            bResult = sal_True;
-            break; // one match is enough
-        }
-        i_in++;
-    }
-
-    // if match is found, check for exclusion
-    if (bResult)
-    {
-        strings_v::const_iterator i_ex = m_pvExclude->begin();
-        while (i_ex != m_pvExclude->end())
-        {
-            if (_checkRegexp(aFullPath, *i_ex))
-            {
-                bResult = sal_False;
-                break; // one is enough...
-            }
-            i_ex++;
-        }
-    }
-#endif
     return bResult;
 }
 
@@ -288,10 +249,6 @@ void SAL_CALL  CConfigFilter::setPropertyValue(
 {
     if (checkCurrentElement())
         m_xLayerHandler->setPropertyValue(aValue);
-
-    // setting value ends the property
-    // popElement();
-
 }
 
 void SAL_CALL CConfigFilter::setPropertyValueForLocale(
@@ -303,10 +260,6 @@ void SAL_CALL CConfigFilter::setPropertyValueForLocale(
 {
     if (checkCurrentElement())
         m_xLayerHandler->setPropertyValueForLocale(aValue, aLocale);
-
-    // setting value ends the property
-    // popElement();
-
 }
 
 void SAL_CALL  CConfigFilter::endProperty()
@@ -331,12 +284,7 @@ void SAL_CALL  CConfigFilter::addProperty(
         ::com::sun::star::lang::WrappedTargetException )
 {
     if (checkElement(aName))
-    {
         m_xLayerHandler->addProperty(aName, aAttributes, aType);
-        pushElement(aName);
-    }
-    else
-        pushElement(aName, sal_False);
 }
 
 void SAL_CALL  CConfigFilter::addPropertyWithValue(
