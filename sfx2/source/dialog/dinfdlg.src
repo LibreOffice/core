@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dinfdlg.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-04 10:46:57 $
+ *  last change: $Author: kz $ $Date: 2002-02-05 21:18:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@ TabPage TP_DOCINFODESC
         Text [ portuguese ] = "~TÌtulo" ;
         Text [ finnish ] = "~Otsikko" ;
         Text [ danish ] = "Titel" ;
-        Text [ french ] = "~Titre" ;
+        Text [ french ] = "Titre" ;
         Text [ swedish ] = "~Rubrik" ;
         Text [ dutch ] = "~Titel" ;
         Text [ spanish ] = "~TÌtulo" ;
@@ -126,7 +126,7 @@ TabPage TP_DOCINFODESC
         Text [ french ] = "~Sujet" ;
         Text [ swedish ] = "T~ema" ;
         Text [ dutch ] = "~Onderwerp" ;
-        Text [ spanish ] = "~Tema" ;
+        Text [ spanish ] = "Tema" ;
         Text [ english_us ] = "~Subject" ;
         Text[ chinese_simplified ] = "‰∏ªÈ¢ò(~S)";
         Text[ russian ] = "“ÂÏ‡";
@@ -560,7 +560,7 @@ TabPage TP_DOCINFODOC
         Text[ russian ] = "~”‰‡ÎËÚ¸";
         Text[ greek ] = "ƒÈ·„Ò·ˆﬁ";
         Text[ dutch ] = "~Wissen";
-        Text[ french ] = "~Supprimer";
+        Text[ french ] = "Supprimer";
         Text[ spanish ] = "~Eliminar";
         Text[ italian ] = "~Elimina";
         Text[ danish ] = "Slet";
@@ -847,7 +847,7 @@ TabPage TP_DOCINFORELOAD
         Text [ english_us ] = "~URL" ;
         Text [ italian ] = "URL" ;
         Text [ spanish ] = "~URL" ;
-        Text [ french ] = "~URL" ;
+        Text [ french ] = "URL" ;
         Text [ dutch ] = "~URL" ;
         Text [ swedish ] = "~URL" ;
         Text [ danish ] = "URL" ;
