@@ -2,9 +2,9 @@
  *
  *  $RCSfile: InteractionHandler.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sb $ $Date: 2001-05-03 08:37:23 $
+ *  last change: $Author: sb $ $Date: 2001-08-20 07:44:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,30 +62,36 @@
 #ifndef __com_sun_star_task_PropertyMatcherFactory_idl__
 #define __com_sun_star_task_PropertyMatcherFactory_idl__
 
-#ifndef __com_sun_star_task_XInteractionHandler_idl__
-#include <com/sun/star/task/XInteractionHandler.idl>
-#endif
+module com { module sun { module star {
+    module lang { interface XInitialization; };
+    module task { interface XInteractionHandler; };
+}; }; };
 
 module com { module sun { module star { module task {
 
 //============================================================================
 /** An interaction request handler that lets the user handle a number of well
-    known requests via GUI dialogs.
+    known requests via GUI dialogs (and the
+    <type>com::sun::star::task::PasswordContainer</type> service).
 
-    @descr
-    The well known requests handled by this service include
+    <p>The well known requests handled by this service include
+    <type>com::sun::star::java::WrongJavaVersionException</type>,
+    <type>com::sun::star::sync2::BadPartnershipException</type>,
+    <type>com::sun::star::task::PasswordRequest</type>,
     <type>com::sun::star::ucb::AuthenticationRequest</type>,
     <type>com::sun::star::ucb::HandleCookiesRequest</type>,
+    <type>com::sun::star::ucb::InteractiveAugmentedIOException</type>,
     <type>com::sun::star::ucb::InteractiveCHAOSException</type>,
     <type>com::sun::star::ucb::InteractiveFileIOException</type>,
     <type>com::sun::star::ucb::InteractiveIOException</type>,
     <type>com::sun::star::ucb::InteractiveNetworkConnectException</type>,
+    <type>com::sun::star::ucb::InteractiveNetworkException</type>,
     <type>com::sun::star::ucb::InteractiveNetworkGeneralException</type>,
     <type>com::sun::star::ucb::InteractiveNetworkOffLineException</type>,
     <type>com::sun::star::ucb::InteractiveNetworkReadException</type>,
     <type>com::sun::star::ucb::InteractiveNetworkResolveNameException</type>,
     <type>com::sun::star::ucb::InteractiveNetworkWriteException</type>, and
-    <type>com::sun::star::ucb::InteractiveWrongMediumException</type>.
+    <type>com::sun::star::ucb::InteractiveWrongMediumException</type>.</p>
  */
 service InteractionHandler
 {
@@ -93,6 +99,24 @@ service InteractionHandler
     /** Handle an interaction request.
      */
     interface com::sun::star::task::XInteractionHandler;
+
+    //------------------------------------------------------------------------
+    /** Initialize the interaction handler.
+
+        <p>The arguments must be a sequence of
+        <type>com::sun::star::beans::PropertyValue</type>s.  The currently
+        supported properties are:
+        <ul>
+        <li><code>"Parent"</code> of type
+            <type>com::sun::star::awt::XWindow</type> denotes the parent
+            window for any GUI dialogs the interaction handler pops up; it is
+            strongly recommended that this property is supplied;</li>
+        <li><code>"Context"</code> of type <atom>string</atom> is a textual
+            description of the current context (used, e.g., as a first line of
+            text in error boxes); this property is optional.</li>
+        </ul></p>
+     */
+    interface com::sun::star::lang::XInitialization;
 };
 
 }; }; }; };
