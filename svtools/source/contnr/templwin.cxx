@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 16:33:42 $
+ *  last change: $Author: rt $ $Date: 2004-07-05 10:37:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,9 @@
 #ifndef _UNOTOOLS_UCBHELPER_HXX
 #include <unotools/ucbhelper.hxx>
 #endif
+
+#include "unotools/configmgr.hxx"
+
 #ifndef _COM_SUN_STAR_AWT_XWINDOW_HPP_
 #include <com/sun/star/awt/XWindow.hpp>
 #endif
@@ -144,12 +147,6 @@
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XCOMPONENTLOADER_HPP_
 #include <com/sun/star/frame/XComponentLoader.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XLOCALIZABLE_HPP_
-#include <com/sun/star/lang/XLocalizable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
-#include <com/sun/star/lang/Locale.hpp>
 #endif
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -215,6 +212,7 @@
 #ifndef _SV_MNEMONIC_HXX
 #include <vcl/mnemonic.hxx>
 #endif
+
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::frame;
@@ -341,12 +339,6 @@ SvtIconWindow_Impl::SvtIconWindow_Impl( Window* pParent ) :
 
     if ( xTemplates.is() )
     {
-        AllSettings aSettings;
-        Locale aLocale = aSettings.GetLocale();
-
-        Reference< XLocalizable > xLocalizable( xTemplates, UNO_QUERY );
-        xLocalizable->setLocale( aLocale );
-
         Reference < XContent > aRootContent = xTemplates->getContent();
         Reference < XCommandEnvironment > aCmdEnv;
 
