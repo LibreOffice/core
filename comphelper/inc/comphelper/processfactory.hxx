@@ -2,9 +2,9 @@
  *
  *  $RCSfile: processfactory.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-09-29 11:28:15 $
+ *  last change: $Author: fs $ $Date: 2002-05-02 09:10:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
 #include <com/sun/star/uno/Reference.hxx>
 #endif
+#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
+#include <com/sun/star/uno/Sequence.hxx>
+#endif
 
 namespace com { namespace sun { namespace star { namespace lang {
     class XMultiServiceFactory;
@@ -87,6 +90,26 @@ void setProcessServiceFactory(const ::com::sun::star::uno::Reference< ::com::sun
  * @author Juergen Schmidt
  */
 ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > getProcessServiceFactory();
+
+/** creates a component, using the process factory if set
+    @see getProcessServiceFactory
+    @see setProcessServiceFactory
+*/
+::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
+    createProcessComponent(
+        const ::rtl::OUString& _rServiceSpecifier
+    ) SAL_THROW( ( ::com::sun::star::uno::RuntimeException ) );
+
+/** creates a component with arguments, using the process factory if set
+
+    @see getProcessServiceFactory
+    @see setProcessServiceFactory
+*/
+::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
+    createProcessComponentWithArguments(
+        const ::rtl::OUString& _rServiceSpecifier,
+        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& _rArgs
+    ) SAL_THROW( ( ::com::sun::star::uno::RuntimeException ) );
 
 }
 

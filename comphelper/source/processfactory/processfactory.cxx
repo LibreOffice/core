@@ -2,9 +2,9 @@
  *
  *  $RCSfile: processfactory.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hjs $ $Date: 2001-01-17 16:02:51 $
+ *  last change: $Author: fs $ $Date: 2002-05-02 09:10:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,29 @@ Reference< XMultiServiceFactory > getProcessServiceFactory()
     Reference< XMultiServiceFactory> xReturn;
     xReturn = localProcessFactory( xReturn, sal_False );
     return xReturn;
+}
+
+Reference< XInterface > createProcessComponent( const ::rtl::OUString& _rServiceSpecifier ) SAL_THROW( ( RuntimeException ) )
+{
+    Reference< XInterface > xComponent;
+
+    Reference< XMultiServiceFactory > xFactory( getProcessServiceFactory() );
+    if ( xFactory.is() )
+        xComponent = xFactory->createInstance( _rServiceSpecifier );
+
+    return xComponent;
+}
+
+Reference< XInterface > createProcessComponentWithArguments( const ::rtl::OUString& _rServiceSpecifier,
+        const Sequence< Any >& _rArgs ) SAL_THROW( ( RuntimeException ) )
+{
+    Reference< XInterface > xComponent;
+
+    Reference< XMultiServiceFactory > xFactory( getProcessServiceFactory() );
+    if ( xFactory.is() )
+        xComponent = xFactory->createInstanceWithArguments( _rServiceSpecifier, _rArgs );
+
+    return xComponent;
 }
 
 } // namesapce comphelper
