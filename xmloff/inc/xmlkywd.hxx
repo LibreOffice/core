@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-30 12:46:46 $
+ *  last change: $Author: dr $ $Date: 2000-11-01 14:03:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -274,6 +274,7 @@ XML_CONSTASCII_ACTION( sXML_cone, "cone" );
 XML_CONSTASCII_ACTION( sXML_connect_bars, "connect-bars" );
 XML_CONSTASCII_ACTION( sXML_connection_name, "connection-name" );
 XML_CONSTASCII_ACTION( sXML_connector, "connector" );
+XML_CONSTASCII_ACTION( sXML_consolidation, "consolidation" );
 XML_CONSTASCII_ACTION( sXML_continue, "continue" );
 XML_CONSTASCII_ACTION( sXML_consecutive_numbering, "consecutive-numbering" );
 XML_CONSTASCII_ACTION( sXML_constant, "constant" );
@@ -593,6 +594,7 @@ XML_CONSTASCII_ACTION( sXML_line_spacing, "line-spacing" );
 XML_CONSTASCII_ACTION( sXML_linear, "linear" );
 XML_CONSTASCII_ACTION( sXML_lines, "lines" );
 XML_CONSTASCII_ACTION( sXML_lines_used, "lines-used" );
+XML_CONSTASCII_ACTION( sXML_link_to_source_data, "link-to-source-data" );
 XML_CONSTASCII_ACTION( sXML_list, "list");
 XML_CONSTASCII_ACTION( sXML_list_block, "list-block" );
 XML_CONSTASCII_ACTION( sXML_list_header, "list-header" );
@@ -912,6 +914,7 @@ XML_CONSTASCII_ACTION( sXML_sort, "sort");
 XML_CONSTASCII_ACTION( sXML_sort_by, "sort-by");
 XML_CONSTASCII_ACTION( sXML_sort_groups, "sort-groups");
 XML_CONSTASCII_ACTION( sXML_source_cell_range, "source-cell-range");
+XML_CONSTASCII_ACTION( sXML_source_cell_range_addresses, "source-cell-range-addresses");
 XML_CONSTASCII_ACTION( sXML_source_field_name, "source-field-name");
 XML_CONSTASCII_ACTION( sXML_source_name, "source-name");
 XML_CONSTASCII_ACTION( sXML_source_service, "source-service");
@@ -989,6 +992,7 @@ XML_CONSTASCII_ACTION( sXML_tabstop_position, "position" );
 XML_CONSTASCII_ACTION( sXML_tabstop_tab_stop, "tab-stop" );
 XML_CONSTASCII_ACTION( sXML_tabstop_tab_stops, "tab-stops" );
 XML_CONSTASCII_ACTION( sXML_tabstop_type, "type" );
+XML_CONSTASCII_ACTION( sXML_target_cell_address, "target-cell-address");
 XML_CONSTASCII_ACTION( sXML_target_frame_name, "target-frame-name" );
 XML_CONSTASCII_ACTION( sXML_target_range_address, "target-range-address");
 XML_CONSTASCII_ACTION( sXML_template, "template" );
@@ -1054,6 +1058,7 @@ XML_CONSTASCII_ACTION( sXML_underline_small_wave, "small-wave" );
 XML_CONSTASCII_ACTION( sXML_underline_wave, "wave" );
 XML_CONSTASCII_ACTION( sXML_unordered_list, "unordered-list" );
 XML_CONSTASCII_ACTION( sXML_use_cell_protection, "use-cell-protection" );
+XML_CONSTASCII_ACTION( sXML_use_label, "use-label" );
 XML_CONSTASCII_ACTION( sXML_use_optimal_column_width, "use-optimal-column-width");
 XML_CONSTASCII_ACTION( sXML_use_optimal_row_height, "use-optimal-row-height");
 XML_CONSTASCII_ACTION( sXML_use_styles, "use-styles" );
