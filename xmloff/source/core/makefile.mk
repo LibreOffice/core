@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: pluby $ $Date: 2001-03-02 07:21:23 $
+#   last change: $Author: sab $ $Date: 2001-03-09 19:09:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -97,7 +97,8 @@ CXXFILES = \
         xmltkmap.cxx	\
         xmluconv.cxx	\
         ProgressBarHelper.cxx	\
-        PropertySetMerger.cxx
+        PropertySetMerger.cxx	\
+        SettingsExportHelper.cxx
 
 SLOFILES =	\
         $(SLO)$/facreg.obj		\
@@ -114,7 +115,8 @@ SLOFILES =	\
         $(SLO)$/xmltkmap.obj	\
         $(SLO)$/xmluconv.obj	\
         $(SLO)$/ProgressBarHelper.obj	\
-        $(SLO)$/PropertySetMerger.obj
+        $(SLO)$/PropertySetMerger.obj	\
+        $(SLO)$/SettingsExportHelper.obj
 
 # --- Tagets -------------------------------------------------------
 
