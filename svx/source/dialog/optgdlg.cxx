@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgdlg.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 16:10:26 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 09:27:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,6 +129,9 @@
 #endif
 #ifndef INCLUDED_SVTOOLS_HELPOPT_HXX
 #include <svtools/helpopt.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_ACCESSIBILITYOPTIONS_HXX
+#include <svtools/accessibilityoptions.hxx>
 #endif
 #ifndef _UTL_CONFIGITEM_HXX_
 #include <unotools/configitem.hxx>
@@ -472,6 +475,7 @@ OfaViewTabPage::OfaViewTabPage(Window* pParent, const SfxItemSet& rSet ) :
     aWindowSizeMF       ( this, ResId( MF_WINDOWSIZE ) ),
     aIconSizeFT              ( this, ResId( FT_ICONSIZE ) ),
     aIconSizeLB              ( this, ResId( LB_ICONSIZE ) ),
+    m_aSystemFont               (this, ResId( CB_SYSTEM_FONT ) ),
 #if defined( UNX ) || defined ( FS_PRIV_DEBUG )
     aFontAntiAliasing   ( this, ResId( CB_FONTANTIALIASING )),
     aAAPointLimitLabel  ( this, ResId( FT_POINTLIMIT_LABEL )),
@@ -558,6 +562,11 @@ OfaViewTabPage::OfaViewTabPage(Window* pParent, const SfxItemSet& rSet ) :
 
 #endif
     FreeResource();
+    if( ! Application::ValidateSystemFont() )
+    {
+        m_aSystemFont.Check( FALSE );
+        m_aSystemFont.Enable( FALSE );
+    }
 }
 
 OfaViewTabPage::~OfaViewTabPage()
@@ -737,12 +746,23 @@ BOOL OfaViewTabPage::FillItemSet( SfxItemSet& rSet )
         bModified = TRUE;
     }
 
+    SvtAccessibilityOptions     aAccessibilityOptions;
+    if( aAccessibilityOptions.GetIsSystemFont() != m_aSystemFont.IsChecked() &&
+        m_aSystemFont.IsEnabled() )
+    {
+        aAccessibilityOptions.SetIsSystemFont( m_aSystemFont.IsChecked() );
+        bModified = TRUE;
+        bMenuOptModified = TRUE;
+    }
+
     if( bMenuOptModified )
     {
         // Set changed settings to the application instance
         AllSettings aAllSettings = Application::GetSettings();
         StyleSettings aStyleSettings = aAllSettings.GetStyleSettings();
         aStyleSettings.SetUseImagesInMenus( aMenuIconsCB.IsChecked() );
+        if( m_aSystemFont.IsEnabled() )
+            aStyleSettings.SetUseSystemUIFonts( m_aSystemFont.IsChecked() );
         aAllSettings.SetStyleSettings(aStyleSettings);
         Application::MergeSystemSettings( aAllSettings );
         Application::SetSettings(aAllSettings);
@@ -771,6 +791,12 @@ void OfaViewTabPage::Reset( const SfxItemSet& rSet )
         nBigLB_InitialSelection = ( SfxImageManager::GetCurrentSymbolSet() == SFX_SYMBOLS_LARGE )? 2 : 1;
     aIconSizeLB.SelectEntryPos( nBigLB_InitialSelection );
     aIconSizeLB.SaveValue();
+
+    if( m_aSystemFont.IsEnabled() )
+    {
+        SvtAccessibilityOptions aAccessibilityOptions;
+        m_aSystemFont.Check( aAccessibilityOptions.GetIsSystemFont() );
+    }
 
     // Screen Scaling
     aWindowSizeMF.SetValue ( pAppearanceCfg->GetScaleFactor() );
