@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleListBox.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Date: 2003-01-27 18:19:30 $
+ *  last change: $Date: 2003-02-14 12:31:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,7 +202,7 @@ public class AccessibleListBox extends TestCase {
             throw new StatusException("Can't switch to required tab", e);
         }
 
-        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.COMBOBOX,
+        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.LIST,
             "", "com.sun.star.comp.toolkit.AccessibleListBox");
         Object list = at.getAccessibleObjectForRole(at.SearchedAccessible,
             AccessibleRole.LIST);

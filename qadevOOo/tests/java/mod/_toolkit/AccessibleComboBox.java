@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleComboBox.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Date: 2003-01-27 18:19:32 $
+ *  last change: $Date: 2003-02-14 12:28:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,10 +174,10 @@ public class AccessibleComboBox extends TestCase {
             Thread.sleep(1000);
         } catch (InterruptedException ex) {}
 
-        at.printAccessibleTree(log, xRoot);
+        //at.printAccessibleTree(log, xRoot);
 
         oObj = at.getAccessibleObjectForRole
-            (xRoot, AccessibleRole.COMBOBOX, "", "AccessibleComboBox");
+            (xRoot, AccessibleRole.PANEL, "", "AccessibleComboBox");
 
         log.println("ImplementationName " + utils.getImplName(oObj));
 
