@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: pb $ $Date: 2001-09-18 12:30:19 $
+ *  last change: $Author: kz $ $Date: 2001-09-24 20:13:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -581,9 +581,9 @@ StringArray STRARY_SVT_DOCINFO
         < "Описание" ; DI_DESCRIPTION ; > ;
         < "Тип содержимого" ; DI_MIMETYPE ; > ;
         < "Дата изменения" ; DI_MODIFIEDDATE ; > ;
-        < "Изменено" ; DI_MODIFIEDBY ; > ;
+        < "Изменен" ; DI_MODIFIEDBY ; > ;
         < "Дата печати" ; DI_PRINTDATE ; > ;
-        < "Напечатано" ; DI_PRINTBY ; > ;
+        < "Напечатан" ; DI_PRINTBY ; > ;
         < "Тема" ; DI_THEME ; > ;
         < "Размер" ; DI_SIZE ; > ;
     };
@@ -843,6 +843,7 @@ StringArray STRARY_SVT_DOCINFO
         < "GrцЯe" ; DI_SIZE ; > ;
     };
 };
+
 
 
 
