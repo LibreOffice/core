@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLTableContext.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 18:20:09 $
+ *  last change: $Author: hr $ $Date: 2004-08-03 13:19:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -488,6 +488,10 @@ void SchXMLTableHelper::applyTableSimple(
             sal_Int32 nCol = 0, nRow = 0;
             if( nRowCount )
                 nColumnCount = rTable.aData[ 0 ].size();
+
+            // #i27909# avoid illegal index access for empty tables
+            if( nColumnCount == 0 || nRowCount == 0 )
+                return;
 
             uno::Sequence< ::rtl::OUString > aCategories( nRowCount - 1 );
             uno::Sequence< ::rtl::OUString > aLabels( nColumnCount - 1 );
