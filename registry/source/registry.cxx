@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registry.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-12 10:03:22 $
+ *  last change: $Author: hr $ $Date: 2003-07-16 17:26:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@ using namespace salhelper;
 ORealDynamicLoader* ODynamicLoader<Registry_Api>::m_pLoader = NULL;
 #endif
 
-#if defined(MACOSX)
+#if defined(MACOSX) && ( __GNUC__ < 3 )
 ORealDynamicLoader* ODynamicLoader<Registry_Api>::m_pStaticLoader = NULL;
 #endif
 
