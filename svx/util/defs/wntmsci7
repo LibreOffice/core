@@ -19467,3 +19467,9 @@ _real@8@40088000000000000000
 ?s_pType_com_sun_star_ucb_XAnyCompareFactory@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXAnyCompareFactory@ucb@star@sun@com@@@3456@@Z@4PAU_typelib_TypeDescriptionReference@@A
 ?setCurrentController@SvxSimpleUnoModel@@UAAXABV?$Reference@VXController@frame@star@sun@com@@@uno@star@sun@com@@@Z
 ?unlockControllers@SvxSimpleUnoModel@@UAAXXZ
+??0WrappedTargetException@lang@star@sun@com@@QAE@ABV01234@@Z
+??1WrappedTargetException@lang@star@sun@com@@QAE@XZ
+?makeAny@uno@star@sun@com@@YA?AVAny@1234@ABVUnknownPropertyException@beans@234@@Z
+?s_pType_com_sun_star_beans_UnknownPropertyException@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBVUnknownPropertyException@beans@456@@Z@4PAU_typelib_TypeDescriptionReference@@A
+_TI2?AVWrappedTargetException@lang@star@sun@com@@
+?createTextField@SvxUnoDrawMSFactory@@SA?AV?$Reference@VXInterface@uno@star@sun@com@@@uno@star@sun@com@@ABVOUString@rtl@@@Z
