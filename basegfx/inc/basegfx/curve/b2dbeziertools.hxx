@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dbeziertools.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-28 11:17:46 $
+ *  last change: $Author: thb $ $Date: 2003-12-08 13:24:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,10 +95,10 @@ namespace basegfx
         true curve.
 
         @return the number of line segments created
-        */
-    sal_Int32 adaptiveSubdivideByDistance( B2DPolygon&      rPoly,
-                                            const B2DCubicBezier&   rCurve,
-                                            double                  distanceBound );
+    */
+    sal_Int32 adaptiveSubdivideByDistance( B2DPolygon&              rPoly,
+                                           const B2DCubicBezier&    rCurve,
+                                           double                   distanceBound );
 
     /** Subdivide given cubic bezier segment.
 
@@ -120,10 +120,10 @@ namespace basegfx
         true curve.
 
         @return the number of quadratic curve segments created
-        */
-    sal_Int32 adaptiveDegreeReductionByDistance( B2DPolygon&        rPoly,
-                                                    const B2DCubicBezier&   rCurve,
-                                                    double                  distanceBound );
+    */
+    sal_Int32 adaptiveDegreeReductionByDistance( B2DPolygon&            rPoly,
+                                                 const B2DCubicBezier&  rCurve,
+                                                 double                 distanceBound );
 
 
     /** Subdivide given cubic bezier segment.
@@ -142,13 +142,14 @@ namespace basegfx
 
         @param angleBound
         Bound on the maximal angle difference between two adjacent
-        polygon lines, in degrees.
+        polygon lines, in degrees. Values greater than |90| are
+        truncated to 90 degrees. You won't use them, anyway.
 
         @return the number of line segments created
-        */
-    sal_Int32 adaptiveSubdivideByAngle( B2DPolygon& rPoly,
+    */
+    sal_Int32 adaptiveSubdivideByAngle( B2DPolygon&             rPoly,
                                         const B2DCubicBezier&   rCurve,
-                                        double                  angleBound );
+                                        double                  distanceBound );
 
     /** Subdivide given cubic bezier segment.
 
@@ -168,13 +169,15 @@ namespace basegfx
         @param distanceBound
         Bound on the maximal angle difference between the control
         vectors of any of the generated quadratic bezier
-        segments. The angle must be given in degrees.
+        segments. The angle must be given in degrees. Values
+        greater than |90| are truncated to 90 degrees. You won't
+        use them, anyway.
 
         @return the number of quadratic curve segments created
-        */
-    sal_Int32 adaptiveDegreeReductionByAngle( B2DPolygon&   rPoly,
-                                                const B2DCubicBezier& rCurve,
-                                                double              angleBound );
+    */
+    sal_Int32 adaptiveDegreeReductionByAngle( B2DPolygon&           rPoly,
+                                              const B2DCubicBezier& rCurve,
+                                              double                angleBound );
 
 
     /** Subdivide given quadratic bezier segment.
@@ -197,10 +200,35 @@ namespace basegfx
         true curve
 
         @return the number of line segments created
-        */
-    sal_Int32 adaptiveSubdivideByDistance( B2DPolygon&          rPoly,
-                                            const B2DQuadraticBezier&   rCurve,
-                                            double                      distanceBound );
+    */
+    sal_Int32 adaptiveSubdivideByDistance( B2DPolygon&                  rPoly,
+                                           const B2DQuadraticBezier&    rCurve,
+                                           double                       distanceBound );
+
+    /** Subdivide given quadratic bezier segment.
+
+        This function adaptively subdivides the given bezier
+        segment into as much straight line segments as necessary,
+        such that the maximal angle change between any adjacent
+        lines is less than the given error value.
+
+        @param rPoly
+        Output polygon. The subdivided bezier segment is added to
+        this polygon via B2DPolygon::append().
+
+        @param rCurve
+        The cubic bezier curve to subdivide
+
+        @param angleBound
+        Bound on the maximal angle difference between two adjacent
+        polygon lines, in degrees. Values greater than |90| are
+        truncated to 90 degrees. You won't use them, anyway.
+
+        @return the number of line segments created
+    */
+    sal_Int32 adaptiveSubdivideByAngle( B2DPolygon&                 rPoly,
+                                        const B2DQuadraticBezier&   rCurve,
+                                        double                      distanceBound );
 
     /** Subdivide given quadratic bezier segment.
 
@@ -221,10 +249,9 @@ namespace basegfx
         polygon lines, in degrees.
 
         @return the number of line segments created
-        */
-    sal_Int32 adaptiveSubdivideByAngle( B2DPolygon&     rPoly,
+    */
+    sal_Int32 adaptiveSubdivideByAngle( B2DPolygon&                 rPoly,
                                         const B2DQuadraticBezier&   rCurve,
                                         double                      angleBound );
 }
-
 #endif // _BGFX_CURVE_B2DBEZIERTOOLS_HXX2

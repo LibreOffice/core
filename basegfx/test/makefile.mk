@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: thb $ $Date: 2003-09-26 07:55:36 $
+#   last change: $Author: thb $ $Date: 2003-12-08 13:24:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -61,8 +61,10 @@
 #*************************************************************************
 
 PRJ=..
+
 PRJNAME=basegfx
 TARGET=tests
+
 ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
@@ -85,22 +87,21 @@ SHL1STDLIBS= 	$(TOOLSLIB)		 \
                 $(VOSLIB)		 \
                 $(CPPUHELPERLIB) \
                 $(CPPULIB)		 \
+                $(CPPUNITLIB)	 \
                 $(UNOTOOLSLIB)	
-.IF "$(GUI)" == "WNT"
-SHL1STDLIBS+=	$(SOLARLIBDIR)$/cppunit.lib
-.ENDIF
-.IF "$(GUI)" == "UNX"
-SHL1STDLIBS+=$(SOLARLIBDIR)$/libcppunit$(DLLPOSTFIX).a
-.ENDIF
 
 SHL1IMPLIB= i$(SHL1TARGET)
-SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
 
 DEF1NAME    =$(SHL1TARGET)
-DEF1EXPORTFILE= export.exp
-# auto generated Target:tests
+SHL1VERSIONMAP = export.map 
+
 # END ------------------------------------------------------------------
+
+#------------------------------- All object files -------------------------------
+# do this here, so we get right dependencies
+SLOFILES=$(SHL1OBJS) 
 
 # --- Targets ------------------------------------------------------
 
 .INCLUDE : target.mk
+.INCLUDE : _cppunit.mk 

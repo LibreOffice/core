@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dhommatrix.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-28 11:18:02 $
+ *  last change: $Author: thb $ $Date: 2003-12-08 13:24:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -382,8 +382,8 @@ namespace basegfx
         a3DHomMat.set(0, 1, get(0, 1));
         a3DHomMat.set(1, 0, get(1, 0));
         a3DHomMat.set(1, 1, get(1, 1));
-        a3DHomMat.set(0, 2, get(0, 3));
-        a3DHomMat.set(1, 2, get(1, 3));
+        a3DHomMat.set(0, 3, get(0, 2));
+        a3DHomMat.set(1, 3, get(1, 2));
 
         ::basegfx::B3DTuple r3DScale, r3DTranslate, r3DRotate, r3DShear;
 
