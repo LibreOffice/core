@@ -1,8 +1,62 @@
-/*
- * JavaTools.java
- *
- * Created on August 20, 2003, 1:23 PM
- */
+/*************************************************************************
+*
+*  $RCSfile: JavaTools.java,v $
+*
+*  $Revision: 1.3 $
+*
+*  last change: $Author: pjunck $ $Date: 2004-10-27 13:29:06 $
+*
+*  The Contents of this file are made available subject to the terms of
+*  either of the following licenses
+*
+*         - GNU Lesser General Public License Version 2.1
+*         - Sun Industry Standards Source License Version 1.1
+*
+*  Sun Microsystems Inc., October, 2000
+*
+*  GNU Lesser General Public License Version 2.1
+*  =============================================
+*  Copyright 2000 by Sun Microsystems, Inc.
+*  901 San Antonio Road, Palo Alto, CA 94303, USA
+*
+*  This library is free software; you can redistribute it and/or
+*  modify it under the terms of the GNU Lesser General Public
+*  License version 2.1, as published by the Free Software Foundation.
+*
+*  This library is distributed in the hope that it will be useful,
+*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+*  Lesser General Public License for more details.
+*
+*  You should have received a copy of the GNU Lesser General Public
+*  License along with this library; if not, write to the Free Software
+*  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+*  MA  02111-1307  USA
+*
+*
+*  Sun Industry Standards Source License Version 1.1
+*  =================================================
+*  The contents of this file are subject to the Sun Industry Standards
+*  Source License Version 1.1 (the "License"); You may not use this file
+*  except in compliance with the License. You may obtain a copy of the
+*  License at http://www.openoffice.org/license.html.
+*
+*  Software provided under this License is provided on an "AS IS" basis,
+*  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+*  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+*  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+*  See the License for the specific provisions governing your rights and
+*  obligations concerning the Software.
+*
+*  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+*
+*  Copyright: 2000 by Sun Microsystems, Inc.
+*
+*  All Rights Reserved.
+*
+*  Contributor(s): Berend Cornelius
+*
+*/
 
 package com.sun.star.wizards.common;
 
@@ -20,16 +74,6 @@ public class JavaTools {
 
     /** Creates a new instance of JavaTools */
     public JavaTools() {
-    }
-
-    public static long getNullDateCorrection(long lDate) {
-        java.util.Calendar oCal = java.util.Calendar.getInstance();
-        oCal.set(1900, 1, 1);
-        Date dTime = oCal.getTime();
-        long lTime = dTime.getTime();
-        long lDBNullDate = lTime / (3600 * 24000);
-        long iDiffValue = lDBNullDate - lDate;
-        return iDiffValue;
     }
 
     public static String[] copyStringArray(String[] FirstArray) {
@@ -57,6 +101,17 @@ public class JavaTools {
         return olist;
     }
 
+
+    public static String[] ArrayOutOfMultiDimArray(String _sMultiDimArray[][], int _index){
+        String[] sRetArray = null;
+        if (_sMultiDimArray != null){
+            sRetArray = new String[_sMultiDimArray.length];
+            for (int i = 0; i < _sMultiDimArray.length; i++){
+                sRetArray[i] = _sMultiDimArray[i][_index];
+            }
+        }
+        return sRetArray;
+    }
 
 
     public static int[] initializeintArray(int FieldCount, int nValue) {
@@ -154,9 +209,8 @@ public class JavaTools {
     }
 
     public static int FieldInIntTable(int[][] SearchList, int SearchValue) {
-        int FieldLen = SearchList.length;
         int retvalue = -1;
-        for (int i = 0; i < FieldLen; i++) {
+        for (int i = 0; i < SearchList.length; i++) {
             if (SearchList[i][0] == SearchValue) {
                 retvalue = i;
                 break;
@@ -164,6 +218,20 @@ public class JavaTools {
         }
         return retvalue;
     }
+
+
+    public static int FieldInIntTable(int[] SearchList, int SearchValue) {
+        int retvalue = -1;
+        for (int i = 0; i < SearchList.length; i++) {
+            if (SearchList[i] == SearchValue) {
+                retvalue = i;
+                break;
+            }
+        }
+        return retvalue;
+    }
+
+
 
     public static int getArraylength(Object[] MyArray) {
         int FieldCount = 0;
@@ -183,7 +251,7 @@ public class JavaTools {
         int SortCount = SortList[0].length;
         int DimCount = SortList.length;
         for (int s = 0; s < SortCount; s++) {
-            for (int t = 0; t < ((SortCount - s) - 1); t++) {
+            for (int t = 0; t < SortCount - s - 1; t++) {
                 if (SortList[0][t].compareTo(SortList[0][t + 1]) > 0) {
                     for (int k = 0; k < DimCount; k++) {
                         DisplayDummy = SortList[k][t];
@@ -216,7 +284,9 @@ public class JavaTools {
                     MainString = MainString.substring(iIndex + 1, MainString.length());
                 }
             } while (iIndex >= 0);
-            StringArray =  VectorToStringList(StringVector);
+            int FieldCount = StringVector.size();
+            StringArray = new String[FieldCount];
+            StringVector.copyInto(StringArray);
         } else
             StringArray = new String[0];
         return StringArray;
@@ -310,11 +380,13 @@ public class JavaTools {
         return dt;
     }
 
+
     public static long getMillis(DateTime time) {
         java.util.Calendar cal = java.util.Calendar.getInstance();
         cal.set(time.Year, time.Month, time.Day, time.Hours, time.Seconds);
         return cal.getTimeInMillis();
     }
+
 
     public static String[] removeOutdatedFields(String[] baselist, String[] _complist) {
         String[] retarray = new String[] {};
@@ -334,13 +406,14 @@ public class JavaTools {
         return (retarray);
     }
 
-    public static String[][] removeOutdatedFields(String[][] baselist, String[] _complist) {
+
+    public static String[][] removeOutdatedFields(String[][] baselist, String[] _complist, int _compindex) {
         String[][] retarray = new String[][] {};
         if ((baselist != null) && (_complist != null)) {
             if (baselist.length > 0) {
                 Vector retvector = new Vector();
                 for (int i = 0; i < baselist.length; i++) {
-                    if (FieldInList(_complist, baselist[i][0]) != -1)
+                    if (FieldInList(_complist, baselist[i][_compindex]) != -1)
                         retvector.add(baselist[i]);
                     //          else
                     // here you could call the method of a defined interface to notify the calling method
@@ -350,6 +423,11 @@ public class JavaTools {
             }
         }
         return (retarray);
+    }
+
+
+    public static String[][] removeOutdatedFields(String[][] baselist, String[] _complist) {
+        return removeOutdatedFields(baselist, _complist, 0);
     }
 
     public static PropertyValue[][] removeOutdatedFields(PropertyValue[][] baselist, String[] _complist) {
@@ -381,22 +459,66 @@ public class JavaTools {
         return (retarray);
     }
 
-    public static int getDuplicateFieldIndex(String[][] ocomplist) {
-        for (int n = 0; n < ocomplist.length; n++) {
-            String[] ocurValue = ocomplist[n];
-            for (int m = n; m < ocomplist.length; m++) {
-                if (m != n) {
-                    for (int a = 0; a < ocurValue.length; a++) {
-                        if (!ocurValue[a].equals(ocomplist[m][a]))
-                            break;
-                        if (a == ocurValue.length - 1)
-                            return m;
-                    }
+
+    /**
+     * searches a multidimensional array for duplicate fields. According to the following example
+     * SlaveFieldName1 ;SlaveFieldName2; SlaveFieldName3
+     * MasterFieldName1;MasterFieldName2;MasterFieldName3
+     * The entries SlaveFieldNameX and MasterFieldNameX are grouped together and then the created groups are compared
+     * If a group is duplicate the entry of the second group is returned.
+     * @param _scomplist
+     * @return
+     */
+    public static int getDuplicateFieldIndex(String[][] _scomplist){
+        int retvalue = -1;
+        if (_scomplist.length > 0){
+            int fieldcount = _scomplist[0].length;
+            String[] sDescList = new String[fieldcount];
+            for (int m = 0; m < fieldcount; m++){
+                for (int n = 0; n < _scomplist.length; n++){
+                    if (n == 0)
+                        sDescList[m] = new String();
+                    sDescList[m] += _scomplist[n][m];
+                }
+            }
+            return getDuplicateFieldIndex(sDescList);
+        }
+        return retvalue;
+    }
+
+    /**
+     * not tested!!!!!
+     * @param scomplist
+     * @return
+     */
+    public static int getDuplicateFieldIndex(String[] scomplist) {
+        for (int n = 0; n < scomplist.length; n++) {
+            String scurvalue = scomplist[n];
+            for (int m = n; m < scomplist.length; m++) {
+                if (m != n){
+                    if (scurvalue.equals(scomplist[m]))
+                        return m;
                 }
             }
         }
         return -1;
     }
+
+
+    public static int getDuplicateFieldIndex(String[] _scomplist, String _fieldname) {
+        int iduplicate = 0;
+        for (int n = 0; n < _scomplist.length; n++) {
+            if (_scomplist[n].equals(_fieldname)){
+                iduplicate++;
+                if (iduplicate == 2){
+                    return n;
+                }
+            }
+        }
+        return -1;
+    }
+
+
 
     public static boolean isEqual(PropertyValue firstPropValue, PropertyValue secPropValue) {
         if (!firstPropValue.Name.equals(secPropValue.Name))
@@ -423,30 +545,6 @@ public class JavaTools {
             }
         }
         return new int[] { -1, -1 };
-    }
-
-
-    public static String[] removeArrayFields(String[] _sbaselist, String[] _scomplist){
-        Vector StringVector = new Vector();
-        for (int i = 0; i < _sbaselist.length; i++){
-            if (FieldInList(_scomplist, _sbaselist[i]) == -1){
-                StringVector.addElement(_sbaselist[i]);
-            }
-        }
-        return VectorToStringList(StringVector);
-    }
-
-
-
-    public static String[] VectorToStringList(Vector _aVector){
-        int fieldcount = _aVector.size();
-        if (fieldcount > 0){
-            String[] StringList = new String[fieldcount];
-            _aVector.copyInto(StringList);
-            return StringList;
-        }
-        else
-            return new String[]{};
     }
 
 
