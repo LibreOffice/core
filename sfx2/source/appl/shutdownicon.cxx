@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shutdownicon.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2001-11-01 15:01:37 $
+ *  last change: $Author: hro $ $Date: 2001-11-12 16:45:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,8 +82,17 @@
 #ifndef _COM_SUN_STAR_FRAME_XFRAMESSUPPLIER_HPP_
 #include <com/sun/star/frame/XFramesSupplier.hpp>
 #endif
-#ifndef _COM_SUN_STAR_UI_DIALOGS_XFILEPICKER_HPP_
-#include <com/sun/star/ui/dialogs/XFilePicker.hpp>
+#ifndef _COM_SUN_STAR_UI_DIALOGS_XFILEPICKERCONTROLACCESS_HPP_
+#include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UI_DIALOGS_EXTENDEDFILEPICKERELEMENTIDS_HPP_
+#include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UI_DIALOGS_COMMONFILEPICKERELEMENTIDS_HPP_
+#include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UI_DIALOGS_CONTROLACTIONS_HPP_
+#include <com/sun/star/ui/dialogs/ControlActions.hpp>
 #endif
 #ifndef _FILEDLGHELPER_HXX
 #include <filedlghelper.hxx>
@@ -165,7 +174,7 @@ bool ShutdownIcon::GetAutostart( )
 
 // ---------------------------------------------------------------------------
 
-void ShutdownIcon::OpenURL( ::rtl::OUString& aURL )
+void ShutdownIcon::OpenURL( ::rtl::OUString& aURL, const Sequence< PropertyValue >& aArgs )
 {
     if ( getInstance() && getInstance()->m_xDesktop.is() )
     {
@@ -174,7 +183,6 @@ void ShutdownIcon::OpenURL( ::rtl::OUString& aURL )
         {
             try
             {
-                Sequence< PropertyValue > aArgs(0);
                 xLoader->loadComponentFromURL(
                     aURL,
                     OUString( RTL_CONSTASCII_USTRINGPARAM( "_blank" ) ),
@@ -211,13 +219,31 @@ void ShutdownIcon::FileOpen()
 
             try
             {
+
                 if ( xPicker.is() )
                 {
-                    Sequence< OUString >    sFiles = xPicker->getFiles();
-                    int                     nFiles = sFiles.getLength();
+
+                    Reference < XFilePickerControlAccess > xPickerControls ( xPicker, UNO_QUERY );
+
+                    Sequence< OUString >        sFiles = xPicker->getFiles();
+                    int                         nFiles = sFiles.getLength();
+                    Sequence< PropertyValue >   aArgs( 3 );
+
+                    if ( xPickerControls.is() )
+                    {
+
+                        aArgs[0].Name  = OUString::createFromAscii( "ReadOnly" );
+                        aArgs[0].Value = xPickerControls->getValue( ExtendedFilePickerElementIds::CHECKBOX_READONLY, 0 );
+
+                        aArgs[1].Name  = OUString::createFromAscii( "FilterName" );
+                        aArgs[1].Value = xPickerControls->getValue( CommonFilePickerElementIds::LISTBOX_FILTER, ControlActions::GET_SELECTED_ITEM );
+
+                        aArgs[2].Name  = OUString::createFromAscii( "Version" );
+                        aArgs[2].Value = xPickerControls->getValue( CommonFilePickerElementIds::LISTBOX_FILTER, ControlActions::GET_SELECTED_ITEM );
+                    }
 
                     if ( 1 == nFiles )
-                        OpenURL( sFiles[0] );
+                        OpenURL( sFiles[0], aArgs );
                     else
                     {
                         OUString    aBaseDirURL = sFiles[0];
@@ -229,12 +255,13 @@ void ShutdownIcon::FileOpen()
                         {
                             OUString    aURL = aBaseDirURL;
                             aURL += sFiles[iFiles];
-                            OpenURL( aURL );
+                            OpenURL( aURL, aArgs );
                         }
                     }
+
                 }
 
-//              OpenURL( OUString( dlg.GetPath() ) );
+
             }
             catch ( ... )
             {

@@ -84,7 +84,8 @@ class ShutdownIcon :    public ShutdownIconServiceBase
         static void addTerminateListener();
 
         static void FileOpen();
-        static void OpenURL( ::rtl::OUString& aURL );
+        static void OpenURL( ::rtl::OUString& aURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& =
+            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >( 0 ) );
         static void FromTemplate();
 
         static void SetAutostart( bool bActivate );
