@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-08 16:30:49 $
+ *  last change: $Author: cl $ $Date: 2000-11-15 12:28:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1733,8 +1733,8 @@ void SdXMLExport::ImpExportTextBoxShape(SvXMLExport& rExp,
         awt::Point aPoint( xShape->getPosition() );
         if( pRefPoint )
         {
-            aPoint.X += pRefPoint->X;
-            aPoint.Y += pRefPoint->Y;
+            aPoint.X -= pRefPoint->X;
+            aPoint.Y -= pRefPoint->Y;
         }
 
         awt::Size aSize( xShape->getSize() );
@@ -1813,8 +1813,8 @@ void SdXMLExport::ImpExportRectangleShape(SvXMLExport& rExp,
         awt::Point aPoint = xShape->getPosition();
         if( pRefPoint )
         {
-            aPoint.X += pRefPoint->X;
-            aPoint.Y += pRefPoint->Y;
+            aPoint.X -= pRefPoint->X;
+            aPoint.Y -= pRefPoint->Y;
         }
 
         awt::Size aSize = xShape->getSize();
@@ -1933,10 +1933,10 @@ void SdXMLExport::ImpExportLineShape(SvXMLExport& rExp,
 
         if( pRefPoint )
         {
-            aStart.X += pRefPoint->X;
-            aStart.Y += pRefPoint->Y;
-            aEnd.X += pRefPoint->X;
-            aEnd.Y += pRefPoint->Y;
+            aStart.X -= pRefPoint->X;
+            aStart.Y -= pRefPoint->Y;
+            aEnd.X -= pRefPoint->X;
+            aEnd.Y -= pRefPoint->Y;
         }
 
         // svg: x1
@@ -1994,8 +1994,8 @@ void SdXMLExport::ImpExportEllipseShape(SvXMLExport& rExp,
         awt::Point aPoint = xShape->getPosition();
         if( pRefPoint )
         {
-            aPoint.X += pRefPoint->X;
-            aPoint.Y += pRefPoint->Y;
+            aPoint.X -= pRefPoint->X;
+            aPoint.Y -= pRefPoint->Y;
         }
 
         awt::Size aSize = xShape->getSize();
@@ -2092,8 +2092,8 @@ void SdXMLExport::ImpExportPolygonShape(SvXMLExport& rExp,
         awt::Point aPoint = xShape->getPosition();
         if( pRefPoint )
         {
-            aPoint.X += pRefPoint->X;
-            aPoint.Y += pRefPoint->Y;
+            aPoint.X -= pRefPoint->X;
+            aPoint.Y -= pRefPoint->Y;
         }
 
         awt::Size aSize = xShape->getSize();
@@ -2274,8 +2274,8 @@ void SdXMLExport::ImpExportGraphicObjectShape(SvXMLExport& rExp,
         awt::Point aPoint = xShape->getPosition();
         if( pRefPoint )
         {
-            aPoint.X += pRefPoint->X;
-            aPoint.Y += pRefPoint->Y;
+            aPoint.X -= pRefPoint->X;
+            aPoint.Y -= pRefPoint->Y;
         }
 
         awt::Size aSize = xShape->getSize();
@@ -2393,8 +2393,8 @@ void SdXMLExport::ImpExportChartShape(SvXMLExport& rExp,
         awt::Point aPoint( xShape->getPosition());
         if( pRefPoint )
         {
-            aPoint.X += pRefPoint->X;
-            aPoint.Y += pRefPoint->Y;
+            aPoint.X -= pRefPoint->X;
+            aPoint.Y -= pRefPoint->Y;
         }
 
         awt::Size aSize( xShape->getSize());
