@@ -8,8 +8,8 @@
 #*                     (see description in headerfile)
 #*
 #*    Creation Date     Stefan Zimmermann  09/15/2000
-#*    last change       $Author: lla $ $Date: 2003-01-09 11:06:02 $
-#*    $Revision: 1.1 $
+#*    last change       $Author: hr $ $Date: 2003-08-07 15:07:41 $
+#*    $Revision: 1.2 $
 #*
 #*    Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.
 #*
@@ -17,7 +17,7 @@
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/testshl2/source/getopt.cxx,v 1.1 2003-01-09 11:06:02 lla Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/testshl2/source/getopt.cxx,v 1.2 2003-08-07 15:07:41 hr Exp $
 
       Source Code Control System - Update
 
@@ -144,7 +144,7 @@ void GetOpt::initialize( char* cmdLine[], char* optSet[] ) {
     // insert an empty OString, to mark the end.
     m_cmdline.push_back(rtl::OString());
 
-    while ( *optSet && ( rtl::OString( optSet[0] ).indexOf("-") != -1 ) ) {
+    while ( *optSet && ( rtl::OString( optSet[0] ).indexOf("-") == 0 ) ) {
         m_optionset.push_back( new OptDsc( *optSet ) );
         *optSet++;
     }
@@ -204,26 +204,26 @@ void GetOpt::createCmdLineOptions() {
     vector< rtl::OString >::iterator iter = m_cmdline.begin();
 
     int nSize = m_cmdline.size();
+
+    // extract first comandlineparameter as program name
+    m_prgname = (*iter);
+    iter++;
+
     // process the whole vector
     while ( iter != m_cmdline.end() ) {
-        // extract first comandlineparameter as program name
-        if ( (*iter) == m_cmdline.front() ) {
-            m_prgname = (*iter);
-            iter++;
-            continue;
-        }
         // extract following comandline parameter(s) as program parameter(s)
-        if ( ( (*iter) != m_cmdline.front() ) && /* not first parameter */
-             ( (*iter).indexOf("-") == -1 )    /* start without '-' */
-             )
+        // int nIdxOfMinus = (*iter).indexOf("-");
+        if ( (*iter).indexOf("-") != 0 )    /* start without '-' */
         {
             if ((*iter).getLength() > 0 )     /* is not empty */
+            {
                 m_param.push_back(*iter);
+            }
             iter++;
             continue;
         }
         // option occured
-        if ( (*iter).indexOf("-") != -1 )
+        if ( (*iter).indexOf("-") == 0 )
         {
             // ignore invalid options
             if ( ! evaluateOpt( iter ) )
@@ -233,7 +233,7 @@ void GetOpt::createCmdLineOptions() {
                 // and skip that, too
                 if( (iter + 1) != m_cmdline.end() )
                 {
-                    if ( (*(iter + 1)).indexOf("-") == -1 )
+                    if ( (*(iter + 1)).indexOf("-") != 0 )
                     {
                         iter++;
                     }
@@ -664,7 +664,7 @@ const rtl::OString GetOpt::optDsc2Str( OptDsc* optDsc , sFormat frm ) {
                         optDsc->getHint().getLength(),  optDsc->getHint() );
     }
 
-    delete( buf );
+    delete [] buf;
 
     return oStr;
 
