@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bitmapex.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-21 14:37:52 $
+ *  last change: $Author: rt $ $Date: 2004-05-21 16:22:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
