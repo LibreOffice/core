@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attrib.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-08 07:54:20 $
+ *  last change: $Author: kz $ $Date: 2002-07-11 10:52:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -356,7 +356,7 @@ BOOL __EXPORT ScProtectionAttr::PutValue( const uno::Any& rVal, BYTE nMemberId )
         case MID_4 :
             bRet = (rVal >>= bVal); if (bRet) bHidePrint=bVal; break;
         default:
-            DBG_ERROR("Wrong MemberID!")
+            DBG_ERROR("Wrong MemberID!");
     }
 
     return bRet;
