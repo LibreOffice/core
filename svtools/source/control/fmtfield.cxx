@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtfield.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 14:37:50 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 11:03:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,11 +102,15 @@
 #include <com/sun/star/lang/Locale.hpp>
 #endif
 #ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
-#include <syslocale.hxx>
+#include "syslocale.hxx"
 #endif
 
 #ifndef REGEXP_SUPPORT
 #include <map>
+#endif
+
+#if !defined INCLUDED_RTL_MATH_HXX
+#include <rtl/math.hxx>
 #endif
 
 using namespace ::com::sun::star::lang;
@@ -538,6 +542,15 @@ String FormattedField::GetTextValue() const
 }
 
 //------------------------------------------------------------------------------
+void FormattedField::EnableNotANumber( BOOL _bEnable )
+{
+    if ( m_bEnableNaN == _bEnable )
+        return;
+
+    m_bEnableNaN = _bEnable;
+}
+
+//------------------------------------------------------------------------------
 void FormattedField::SetAutoColor(BOOL _bAutomatic)
 {
     if (_bAutomatic == m_bAutoColor)
@@ -872,7 +885,12 @@ void FormattedField::ReFormat()
 {
     if (!IsEmptyFieldEnabled() || GetText().Len())
         if (TreatingAsNumber())
-            ImplSetValue(GetValue(), TRUE);
+        {
+            double dValue = GetValue();
+            if ( m_bEnableNaN && ::rtl::math::isNan( dValue ) )
+                return;
+            ImplSetValue( dValue, TRUE );
+        }
         else
             SetTextFormatted(GetTextValue());
 }
@@ -1093,8 +1111,11 @@ double FormattedField::GetValue()
 {
     DBG_CHKTHIS(FormattedField, NULL);
 
-    if (!ImplGetValue(m_dCurrentValue))
-        m_dCurrentValue = m_dDefaultValue;
+    if ( !ImplGetValue( m_dCurrentValue ) )
+        if ( m_bEnableNaN )
+            ::rtl::math::setNan( &m_dCurrentValue );
+        else
+            m_dCurrentValue = m_dDefaultValue;
 
     m_bValueDirty = FALSE;
     return m_dCurrentValue;
