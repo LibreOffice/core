@@ -2,9 +2,9 @@
 #
 #   $RCSfile: MAKEFILE.MK,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: obo $ $Date: 2003-10-20 17:50:18 $
+#   last change: $Author: vg $ $Date: 2004-01-06 14:54:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,27 +83,12 @@ SLOFILES=   $(SLO)$/salgdi.obj   \
             $(SLO)$/salvd.obj    \
             $(SLO)$/salprn.obj   \
             $(SLO)$/salbmp.obj	 \
-            $(SLO)$/salogl.obj
+            $(SLO)$/salogl.obj	\
+            $(SLO)$/winlayout.obj	\
+            $(SLO)$/wntgdi.obj
 
-.IF "$(ENABLE_CTL)" != ""
-SLOFILES+=$(SLO)$/winlayout.obj
-.ENDIF
-
-.IF "$(GUI)" == "WNT"
-SLOFILES+=$(SLO)$/wntgdi.obj
-.ENDIF
 
 EXCEPTIONSFILES=	$(SLO)$/salprn.obj
-
-.IF "$(UPDATER)"=="YES"
-OBJFILES=   $(OBJ)$/salgdi.obj   \
-            $(OBJ)$/salgdi2.obj  \
-            $(OBJ)$/salgdi3.obj  \
-            $(OBJ)$/salvd.obj    \
-            $(OBJ)$/salprn.obj   \
-            $(OBJ)$/salbmp.obj	 \
-            $(OBJ)$/salogl.obj
-.ENDIF
 
 # --- Targets ------------------------------------------------------
 
