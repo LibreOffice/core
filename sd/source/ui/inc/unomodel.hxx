@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: cl $ $Date: 2002-07-30 14:24:16 $
+ *  last change: $Author: ka $ $Date: 2002-08-13 11:37:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,12 @@
 #ifndef _COM_SUN_STAR_PRESENTATION_XHANDOUTMASTERSUPPLIER_HPP_
 #include <com/sun/star/presentation/XHandoutMasterSupplier.hpp>
 #endif
+#ifndef _COM_SUN_STAR_VIEW_XRENDERABLE_HPP_
+#include <com/sun/star/view/XRenderable.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_MEASUREUNIT_HPP_
+#include <com/sun/star/util/MeasureUnit.hpp>
+#endif
 
 #ifndef _SFXLSTNER_HXX //autogen
 #include <svtools/lstner.hxx>
@@ -164,7 +170,8 @@ class SdXImpressDocument : public SfxBaseModel, // implements SfxListener, OWEAK
                            public ::com::sun::star::lang::XServiceInfo,
                            public ::com::sun::star::lang::XUnoTunnel,
                            public ::com::sun::star::ucb::XAnyCompareFactory,
-                           public ::com::sun::star::presentation::XHandoutMasterSupplier
+                           public ::com::sun::star::presentation::XHandoutMasterSupplier,
+                           public ::com::sun::star::view::XRenderable
 {
     friend class SdDrawPagesAccess;
     friend class SdMasterPagesAccess;
@@ -285,6 +292,10 @@ public:
 
     // XAnyCompareFactory
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XAnyCompare > SAL_CALL createAnyCompareByName( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException);
+
+    // XRenderable
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL getRenderer(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL render( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& xOptions ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
 };
 
 /***********************************************************************

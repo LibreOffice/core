@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: cl $ $Date: 2002-08-02 12:57:04 $
+ *  last change: $Author: ka $ $Date: 2002-08-13 11:39:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,9 @@
 #ifndef _COM_SUN_STAR_STYLE_XSTYLE_HPP_
 #include <com/sun/star/style/XStyle.hpp>
 #endif
+#ifndef _COM_SUN_STAR_AWT_XDEVICE_HPP_
+#include <com/sun/star/awt/XDevice.hpp>
+#endif
 
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
@@ -136,6 +139,10 @@
 #include <vos/mutex.hxx>
 #endif
 
+#ifndef _TOOLKIT_AWT_VCLXDEVICE_HXX_
+#include <toolkit/awt/vclxdevice.hxx>
+#endif
+
 #include <svtools/unoimap.hxx>
 
 #ifndef _UNO_LINGU_HXX
@@ -179,7 +186,7 @@
 #include <unogstyl.hxx>
 #include <unokywds.hxx>
 #include <frmview.hxx>
-
+#include "clview.hxx"
 #include "viewshel.hxx"
 #include "app.hrc"
 
@@ -375,6 +382,7 @@ uno::Any SAL_CALL SdXImpressDocument::queryInterface( const uno::Type & rType ) 
     else QUERYINT(style::XStyleFamiliesSupplier);
     else QUERYINT(lang::XUnoTunnel);
     else QUERYINT(com::sun::star::ucb::XAnyCompareFactory);
+    else QUERYINT(view::XRenderable);
     else if( mbImpressDoc && rType == ITYPE(presentation::XPresentationSupplier) )
             aAny <<= uno::Reference< presentation::XPresentationSupplier >(this);
     else if( mbImpressDoc && rType == ITYPE(presentation::XCustomPresentationSupplier) )
@@ -404,7 +412,7 @@ uno::Sequence< uno::Type > SAL_CALL SdXImpressDocument::getTypes(  ) throw(uno::
         const sal_Int32 nBaseTypes = aBaseTypes.getLength();
         const uno::Type* pBaseTypes = aBaseTypes.getConstArray();
 
-        const sal_Int32 nOwnTypes = mbImpressDoc ? 14 : 11;     // !DANGER! Keep this updated!
+        const sal_Int32 nOwnTypes = mbImpressDoc ? 15 : 12;     // !DANGER! Keep this updated!
 
         maTypeSequence.realloc(  nBaseTypes + nOwnTypes );
         uno::Type* pTypes = maTypeSequence.getArray();
@@ -420,6 +428,7 @@ uno::Sequence< uno::Type > SAL_CALL SdXImpressDocument::getTypes(  ) throw(uno::
         *pTypes++ = ITYPE(style::XStyleFamiliesSupplier);
         *pTypes++ = ITYPE(lang::XUnoTunnel);
         *pTypes++ = ITYPE(com::sun::star::ucb::XAnyCompareFactory);
+        *pTypes++ = ITYPE(view::XRenderable);
         if( mbImpressDoc )
         {
             *pTypes++ = ITYPE(presentation::XPresentationSupplier);
@@ -1356,6 +1365,88 @@ uno::Reference< com::sun::star::ucb::XAnyCompare > SAL_CALL SdXImpressDocument::
     throw(uno::RuntimeException)
 {
     return SvxCreateNumRuleCompare();
+}
+
+// XRenderable
+uno::Sequence< beans::PropertyValue > SAL_CALL SdXImpressDocument::getRenderer()
+    throw (uno::RuntimeException)
+{
+    OGuard aGuard( Application::GetSolarMutex() );
+
+    if( NULL == pDoc )
+        throw lang::DisposedException();
+
+    uno::Sequence< beans::PropertyValue > aRenderer;
+
+    if( pDocShell )
+    {
+        const Rectangle aVisArea( pDocShell->GetVisArea( ASPECT_DOCPRINT ) );
+        const sal_Int32 nPageCount = pDoc->GetSdPageCount( PK_STANDARD );
+        awt::Size       aPageSize( aVisArea.GetWidth(), aVisArea.GetHeight() );
+
+        aRenderer.realloc( 3 );
+
+        aRenderer[ 0 ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "PageSize" ) );
+        aRenderer[ 0 ].Value <<= aPageSize;
+
+        aRenderer[ 1 ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "PageSizeMeasureUnit" ) );
+        aRenderer[ 1 ].Value <<= util::MeasureUnit::MM_100TH;
+
+        aRenderer[ 2 ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "PageCount" ) );
+        aRenderer[ 2 ].Value <<= nPageCount;
+    }
+
+    return aRenderer;
+}
+
+void SAL_CALL SdXImpressDocument::render( const uno::Sequence< beans::PropertyValue >& rxOptions )
+    throw (lang::IllegalArgumentException, uno::RuntimeException)
+{
+    OGuard aGuard( Application::GetSolarMutex() );
+
+    if( NULL == pDoc )
+        throw lang::DisposedException();
+
+    if( pDocShell && pDoc )
+    {
+        uno::Reference< awt::XDevice >  xRenderDevice;
+        sal_Int32                       nPageNumber = 0;
+
+        for( sal_Int32 nProperty = 0, nPropertyCount = rxOptions.getLength(); nProperty < nPropertyCount; ++nProperty )
+        {
+            if( rxOptions[ nProperty ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "RenderDevice" ) ) )
+                rxOptions[ nProperty].Value >>= xRenderDevice;
+            else if( rxOptions[ nProperty ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "PageNumber" ) ) )
+                rxOptions[ nProperty ].Value >>= nPageNumber;
+        }
+
+        if( xRenderDevice.is() && nPageNumber && ( nPageNumber <= pDoc->GetSdPageCount( PK_STANDARD ) ) )
+        {
+            VCLXDevice*     pDevice = VCLXDevice::GetImplementation( xRenderDevice );
+            OutputDevice*   pOut = pDevice ? pDevice->GetOutputDevice() : NULL;
+
+            if( pOut )
+            {
+                SdClientView*   pView = new SdClientView( pDocShell, pOut, NULL );
+                SdPage*         pSelectedPage = pDoc->GetSdPage( nPageNumber - 1, PK_STANDARD );
+                Rectangle       aVisArea( pDocShell->GetVisArea( ASPECT_DOCPRINT ) );
+                Region          aRegion( aVisArea );
+                Point           aOrigin;
+
+                pView->SetHlplVisible( sal_False );
+                pView->SetGridVisible( sal_False );
+                pView->SetBordVisible( sal_False );
+                pView->SetPageVisible( sal_False );
+                pView->SetGlueVisible( sal_False );
+
+                pView->ShowPage( pSelectedPage, aOrigin );
+                pOut->IntersectClipRegion( aVisArea );
+                pView->InitRedraw( pOut, aRegion );
+
+                delete pView;
+            }
+        }
+    }
 }
 
 uno::Reference< i18n::XForbiddenCharacters > SdXImpressDocument::getForbiddenCharsTable()
