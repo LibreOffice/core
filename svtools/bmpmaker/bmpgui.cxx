@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bmpgui.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-16 10:03:06 $
+ *  last change: $Author: rt $ $Date: 2004-11-02 14:28:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,7 @@ static LangInfo aLangEntries[] =
     { "japn", 81 },
     { "chinsim", 86  },
     { "chintrad", 88 },
+    { "hebrew", 97 },
     { "russ", 07 },
     { "pol", 48 },
     { "arab",96 },
