@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swcrsr.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: fme $ $Date: 2002-12-02 10:25:41 $
+ *  last change: $Author: fme $ $Date: 2002-12-03 12:58:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1412,7 +1412,7 @@ FASTBOOL SwCursor::LeftRight( BOOL bLeft, USHORT nCnt, USHORT nMode,
 
         SvtCTLOptions aCTLOptions;
         if ( bVisualAllowed && aCTLOptions.IsCTLFontEnabled() &&
-             SvtCTLOptions::CursorMovement::MOVEMENT_VISUAL ==
+             SvtCTLOptions::MOVEMENT_VISUAL ==
              aCTLOptions.GetCTLCursorMovement() )
         {
             // for visual cursor travelling (used in bidi layout)
