@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabledlg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:48 $
+ *  last change: $Author: hjs $ $Date: 2000-11-07 12:48:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,9 @@
  *
  *
  ************************************************************************/
+
+#include <string>
+#include <algorithm>
 
 #ifdef PRECOMPILED
 #include "ui_pch.hxx"
@@ -656,7 +659,7 @@ void  SwFormatTablePage::Reset( const SfxItemSet& )
                             pTblData->GetWidth()), FUNIT_TWIP);
             aWidthMF.SaveValue();
             nSaveWidth = pTblData->GetWidth();
-            nMinTableWidth = min(nSaveWidth, nMinTableWidth);
+            nMinTableWidth = std::min(nSaveWidth, nMinTableWidth);
         }
 
         aWidthMF.SetRefValue(pTblData->GetSpace());
@@ -837,7 +840,7 @@ int  SwFormatTablePage::DeactivatePage( SfxItemSet* pSet )
             }
             if(nColSum != pTblData->GetWidth())
             {
-                SwTwips nMinWidth = min(MINLAY, pTblData->GetWidth() / pTblData->GetColCount() - 1);
+                SwTwips nMinWidth = std::min(MINLAY, pTblData->GetWidth() / pTblData->GetColCount() - 1);
                 SwTwips nDiff = nColSum - pTblData->GetWidth();
                 while ( Abs(nDiff) > pTblData->GetColCount() + 1 )
                 {
@@ -2108,6 +2111,9 @@ void SwTextFlowPage::DisablePageBreak()
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 17:14:48  hr
+    initial import
+
     Revision 1.169  2000/09/18 16:06:09  willem.vandorp
     OpenOffice header added.
 
