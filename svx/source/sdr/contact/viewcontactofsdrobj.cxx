@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewcontactofsdrobj.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 17:47:28 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 14:31:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -728,6 +728,12 @@ static sal_Bool bTestTheBitmapBufferedObjects(sal_False);
                             break;
                         }
                     }
+                }
+
+                // #116168# If object is in destruction, force animation support to sal_False
+                if(bRetval && GetSdrObject().IsInDestruction())
+                {
+                    bRetval = sal_False;
                 }
             }
 
