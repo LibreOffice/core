@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtfld.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:26 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 13:57:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,16 @@ public:
 
     const SwField *GetFld() const   { return pField; }
     SwField *GetFld()               { return pField; }
+
+    // #111840#
+    /**
+       Sets current field.
+
+       @param pField          new field
+
+       @attention The current field will be destroyed before setting the new field.
+     */
+    void SetFld(SwField * pField);
 
     const SwTxtFld *GetTxtFld() const   { return pTxtAttr; }
     SwTxtFld *GetTxtFld()               { return pTxtAttr; }
