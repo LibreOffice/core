@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macropg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 12:18:23 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 15:35:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -275,7 +275,6 @@ _SvxMacroTabPage::~_SvxMacroTabPage()
 // -----------------------------------------------------------------------------
 void _SvxMacroTabPage::InitResources()
 {
-    OSL_TRACE("test event string is %s",::rtl::OUStringToOString( ::rtl::OUString(SVX_RES(RID_SVXSTR_EVENT_STARTAPP)), RTL_TEXTENCODING_ASCII_US ).pData->buffer);
     // the event name to UI string mappings for App Events
     aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OnStartApp")),::rtl::OUString( SVX_RES( RID_SVXSTR_EVENT_STARTAPP ))));
     aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OnCloseApp")),::rtl::OUString( SVX_RES( RID_SVXSTR_EVENT_CLOSEAPP ))));
@@ -329,16 +328,6 @@ void _SvxMacroTabPage::InitResources()
     aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("approveParameter")),::rtl::OUString( SVX_RES( RID_SVXSTR_EVENT_APPROVEPARAMETER ))));
     aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("errorOccured")),::rtl::OUString( SVX_RES( RID_SVXSTR_EVENT_ERROROCCURED ))));
     aUIStrings.insert(UIEventsStringHash::value_type(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("adjustmentValueChanged")),::rtl::OUString( SVX_RES( RID_SVXSTR_EVENT_ADJUSTMENTVALUECHANGED ))));
-
-#if OSL_DEBUG_LEVEL > 0
-    UIEventsStringHash::iterator ui_it = aUIStrings.begin();
-    UIEventsStringHash::iterator ui_it_end = aUIStrings.end();
-    for(;ui_it!=ui_it_end;++ui_it)
-    {
-        OSL_TRACE("event string %s",::rtl::OUStringToOString( ui_it->second, RTL_TEXTENCODING_ASCII_US ).pData->buffer);
-    }
-    OSL_TRACE("hash size %d",aUIStrings.size());
-#endif
 }
 
 // the following method is called when the user clicks OK
@@ -446,7 +435,6 @@ void _SvxMacroTabPage::Reset()
 
 void _SvxMacroTabPage::SetReadOnly( BOOL bSet )
 {
-    OSL_TRACE("in _SvxMacroTabPage::SetReadOnly");
     mpImpl->bReadOnly = bSet;
 }
 
@@ -458,7 +446,6 @@ BOOL _SvxMacroTabPage::IsReadOnly() const
 // displays the app events if appEvents=true, otherwise displays the doc events
 void _SvxMacroTabPage::DisplayAppEvents( bool appEvents)
 {
-    OSL_TRACE("in _SvxMacroTabPage::DisplayAppEvents");
     bAppEvents = appEvents;
 
     SvHeaderTabListBox&        rListBox = mpImpl->pEventLB->GetListBox();
@@ -481,7 +468,6 @@ void _SvxMacroTabPage::DisplayAppEvents( bool appEvents)
     // not guarantee the order in which the elements are returned
     if(!nameReplace.is())
     {
-        OSL_TRACE("no XnameReplace");
         return;
     }
     Sequence< ::rtl::OUString > eventNames = nameReplace->getElementNames();
@@ -495,33 +481,17 @@ void _SvxMacroTabPage::DisplayAppEvents( bool appEvents)
         ::rtl::OUString eventURL = h_it->second.second;
         //DF better to add the L10N version
         // might also have a hash between event name & L10N display name
-        OSL_TRACE("getting ui event string for %s",::rtl::OUStringToOString( eventName, RTL_TEXTENCODING_ASCII_US ).pData->buffer);
         //for some reason the hash seems now to be empty?? Why??
         UIEventsStringHash::iterator ui_it = aUIStrings.find(eventName);
-        /*UIEventsStringHash::iterator ui_it = aUIStrings.begin();
-        UIEventsStringHash::iterator ui_it_end = aUIStrings.end();
-        if(ui_it==ui_it_end)
-            OSL_TRACE("mappings gone!!!");
-        OSL_TRACE("hash size %d",aUIStrings.size());
-
-        for(;ui_it!=ui_it_end;++ui_it)
-        {
-            OSL_TRACE("event string %s",::rtl::OUStringToOString( *(ui_it->second), RTL_TEXTENCODING_ASCII_US ).pData->buffer);
-            if(eventName.equals(*(ui_it->first)))
-                break;
-        }
-        OSL_TRACE("never here?");*/
         String sTmp;
         if( ui_it != aUIStrings.end() )
         {
-            OSL_TRACE("setting UI string");
             // we have the L10N string
             sTmp = ui_it->second;
         }
         else
         {
             //no UI name => do not add
-            OSL_TRACE("no UI name do not add");
             continue;
         }
         sTmp += '\t';
@@ -544,7 +514,6 @@ void _SvxMacroTabPage::DisplayAppEvents( bool appEvents)
 // select event handler on the listbox
 IMPL_STATIC_LINK( _SvxMacroTabPage, SelectEvent_Impl, SvTabListBox*, EMPTYARG )
 {
-    OSL_TRACE("In _SvxMacroTabPage::SelectEvent_Impl");
     _SvxMacroTabPage_Impl*    pImpl = pThis->mpImpl;
     SvHeaderTabListBox&        rListBox = pImpl->pEventLB->GetListBox();
     SvLBoxEntry*            pE = rListBox.FirstSelected();
@@ -564,7 +533,6 @@ IMPL_STATIC_LINK( _SvxMacroTabPage, SelectEvent_Impl, SvTabListBox*, EMPTYARG )
 // handler for double click on the listbox, and for the assign/delete buttons
 IMPL_STATIC_LINK( _SvxMacroTabPage, AssignDeleteHdl_Impl, PushButton*, pBtn )
 {
-    OSL_TRACE("In _SvxMacroTabPage::AssignDeleteHdl");
     _SvxMacroTabPage_Impl*    pImpl = pThis->mpImpl;
     SvHeaderTabListBox& rListBox = pImpl->pEventLB->GetListBox();
     SvLBoxEntry* pE = rListBox.FirstSelected();
@@ -579,7 +547,6 @@ IMPL_STATIC_LINK( _SvxMacroTabPage, AssignDeleteHdl_Impl, PushButton*, pBtn )
     const BOOL bAssEnabled = pBtn != pImpl->pDeletePB && pImpl->pAssignPB->IsEnabled();
 
     ::rtl::OUString* pEventName = (::rtl::OUString*)pE->GetUserData();
-    OSL_TRACE("event name is %s",::rtl::OUStringToOString( *pEventName , RTL_TEXTENCODING_ASCII_US ).pData->buffer);
 
     ::rtl::OUString sEventURL;
     ::rtl::OUString sEventType;
@@ -612,7 +579,6 @@ IMPL_STATIC_LINK( _SvxMacroTabPage, AssignDeleteHdl_Impl, PushButton*, pBtn )
     else if( bAssEnabled )
     {
         // assign pressed
-        OSL_TRACE("Launching Script Selector");
         SvxScriptSelectorDialog* pDlg = new SvxScriptSelectorDialog( pThis, FALSE );
         if( pDlg )
         {
@@ -684,15 +650,12 @@ void _SvxMacroTabPage::InitAndSetHandler( Reference< container::XNameReplace> xA
 
     if(!m_xAppEvents.is())
     {
-        OSL_TRACE("++++++++++ No app events!");
         return;
     }
     Sequence< ::rtl::OUString > eventNames = m_xAppEvents->getElementNames();
     sal_Int32 nEventCount = eventNames.getLength();
-    OSL_TRACE("app event count is %d",nEventCount);
     for(sal_Int32 nEvent = 0; nEvent < nEventCount; ++nEvent )
     {
-        OSL_TRACE("app event is %s",::rtl::OUStringToOString( eventNames[nEvent], RTL_TEXTENCODING_ASCII_US ).pData->buffer);
         //need exception handling here
         try
         {
@@ -791,7 +754,6 @@ SfxTabPage* SvxMacroTabPage::Create( Window* pParent, const SfxItemSet& rAttrSet
 SvxMacroAssignDlg::SvxMacroAssignDlg( Window* pParent, SfxItemSet& rSet, Reference< container::XNameReplace > xNameReplace, sal_uInt16 nSelectedIndex  )
     : SfxSingleTabDialog( pParent, rSet, 0 )
 {
-    OSL_TRACE("in SvxMacroAssignDlg::SvxMacroAssignDlg");
     SetTabPage( SvxMacroTabPage::Create( this, rSet, xNameReplace, nSelectedIndex ) );
 }
 
