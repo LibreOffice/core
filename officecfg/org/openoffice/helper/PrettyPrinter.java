@@ -4,7 +4,7 @@
  * Copyright:    null<p>
  * Company:      null<p>
  * @author       Dirk Grobler
- * @version      1.0
+ * @version      1.4
  */
 package org.openoffice.helper;
 
@@ -158,7 +158,7 @@ public class PrettyPrinter extends HandlerBase
                 emit (attrs.getName (i));
                 emit ("=");
                 emit ("\"");
-                emit (attrs.getValue (i));
+                emit (transform(attrs.getValue (i)));
                 emit ("\"");
             }
         }
