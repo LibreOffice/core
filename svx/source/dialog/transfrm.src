@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfrm.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 08:14:22 $
+ *  last change: $Author: vg $ $Date: 2001-05-16 16:44:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@ TabPage RID_SVXPAGE_POSITION
     Text [ English ] = "Position" ;
     Text [ norwegian ] = "Posisjon" ;
     Text [ italian ] = "Posizione" ;
-    Text [ portuguese_brazilian ] = "Posição" ;
+    Text [ portuguese_brazilian ] = "Posi??o" ;
     Text [ portuguese ] = "Posição" ;
     Text [ finnish ] = "Sijainti" ;
     Text [ danish ] = "Placering" ;
@@ -91,7 +91,7 @@ TabPage RID_SVXPAGE_POSITION
         Text [ English ] = "Position" ;
         Text [ norwegian ] = "Posisjon" ;
         Text [ italian ] = "Posizione" ;
-        Text [ portuguese_brazilian ] = "Posição" ;
+        Text [ portuguese_brazilian ] = "Posi??o" ;
         Text [ portuguese ] = "Posição" ;
         Text [ finnish ] = "Sijainti" ;
         Text [ danish ] = "Placering" ;
@@ -120,7 +120,7 @@ TabPage RID_SVXPAGE_POSITION
         Text [ English ] = "Position ~X" ;
         Text [ norwegian ] = "Posisjon~X" ;
         Text [ italian ] = "Posizione ~X" ;
-        Text [ portuguese_brazilian ] = "Posição ~X" ;
+        Text [ portuguese_brazilian ] = "Posi??o ~X" ;
         Text [ portuguese ] = "Posição ~X" ;
         Text [ finnish ] = "~Sijainti X" ;
         Text [ danish ] = "Position X" ;
@@ -149,7 +149,7 @@ TabPage RID_SVXPAGE_POSITION
         Text [ English ] = "Position ~Y" ;
         Text [ norwegian ] = "Posisjon~Y" ;
         Text [ italian ] = "Posizione ~Y" ;
-        Text [ portuguese_brazilian ] = "Posição ~Y" ;
+        Text [ portuguese_brazilian ] = "Posi??o ~Y" ;
         Text [ portuguese ] = "Posição ~Y" ;
         Text [ finnish ] = "~Sijainti Y" ;
         Text [ danish ] = "Position Y" ;
@@ -220,7 +220,7 @@ TabPage RID_SVXPAGE_POSITION
         QuickHelpText [ dutch ] = "Basispunt" ;
         QuickHelpText[ russian ] = "Òî÷êà îñíîâû";
         QuickHelpText[ polish ] = "Punkt podstawy";
-        QuickHelpText[ japanese ] = "Šî€Îß²İÄ";
+        QuickHelpText[ japanese ] = "Šî€Îß²İÄ!";
         QuickHelpText[ chinese_simplified ] = "»ùµã";
         QuickHelpText[ chinese_traditional ] = "°òÂI";
         QuickHelpText[ arabic ] = "äŞØÉ ÇáÇäØáÇŞ";
@@ -675,13 +675,13 @@ TabPage RID_SVXPAGE_POSITION
         {
                 < "Z góry" ; > ;
             < "W górze" ; > ;
-            < "Wyœrodkowany" ; > ;
+            < "Wy?rodkowany" ; > ;
             < "W dole" ; > ;
             < "Znak w górze" ; > ;
-            < "Wyœrodkowany znak" ; > ;
+            < "Wy?rodkowany znak" ; > ;
             < "Znak na dole" ; > ;
             < "Wiersz w górze" ; > ;
-            < "Wyœrodkowany wiersz" ; > ;
+            < "Wy?rodkowany wiersz" ; > ;
             < "Wiersz w dole" ; > ;
         };
         StringList [ japanese ] =
@@ -970,7 +970,7 @@ TabPage RID_SVXPAGE_SIZE
         QuickHelpText [ portuguese ] = "Ponto de base" ;
         QuickHelpText[ russian ] = "Òî÷êà îñíîâû";
         QuickHelpText[ polish ] = "Punkt podstawy";
-        QuickHelpText[ japanese ] = "Šî€Îß²İÄ";
+        QuickHelpText[ japanese ] = "Šî€Îß²İÄ!";
         QuickHelpText[ chinese_simplified ] = "»ùµã";
         QuickHelpText[ chinese_traditional ] = "°òÂI";
         QuickHelpText[ arabic ] = "äŞØÉ ÇáÇäØáÇŞ";
@@ -1088,7 +1088,7 @@ TabPage RID_SVXPAGE_SIZE
         Text [ portuguese_brazilian ] = "Br~eite an Text anpassen" ;
         Text[ chinese_simplified ] = "ºÍÎÄ×Ö¿í¶È¶ÔÓ¦(~F)";
         Text[ russian ] = "Âûğîâíÿòü øèğèíó ïî òåêñòó";
-        Text[ polish ] = "Dopasuj szerokoœæ do tekstu";
+        Text[ polish ] = "Dopasuj szeroko?æ do tekstu";
         Text[ japanese ] = "Ã·½Ä‚É•‚ğ‡‚í‚¹‚é(~F)";
         Text[ chinese_traditional ] = "©M¤º¤å¼e«×¹ï»ô(~F)";
         Text[ arabic ] = "ãáÇÁãÉ ÇáÚÑÖ ááäÕ";
@@ -1114,10 +1114,10 @@ TabPage RID_SVXPAGE_SIZE
         Text [ swedish ] = "~Anpassa höjd till text" ;
         Text [ danish ] = "Tilpas højde til tekst" ;
         Text [ portuguese ] = "Ajustar ~altura ao texto" ;
-        Text [ portuguese_brazilian ] = "Höh~e an Text anpassen" ;
+        Text [ portuguese_brazilian ] = "H?~e an Text anpassen" ;
         Text[ chinese_simplified ] = "ºÍÎÄ×Ö¸ß¶È¶ÔÓ¦(~H)";
         Text[ russian ] = "Âûğîâíÿòü âûñîòó ïî òåêñòó";
-        Text[ polish ] = "Dopasuj wysokoœæ do tekstu";
+        Text[ polish ] = "Dopasuj wysoko?æ do tekstu";
         Text[ japanese ] = "Ã·½Ä‚É‚‚³‚ğ‡‚í‚¹‚é(~H)";
         Text[ chinese_traditional ] = "©M¤º¤å°ª«×¹ï»ô(~H)";
         Text[ arabic ] = "ãáÇÁãÉ ÇáÇÑÊİÇÚ ááäÕ";
@@ -1149,7 +1149,7 @@ TabPage RID_SVXPAGE_ANGLE
     Text [ English ] = "Angle" ;
     Text [ norwegian ] = "Vinkel" ;
     Text [ italian ] = "Angolo" ;
-    Text [ portuguese_brazilian ] = "Ângulo" ;
+    Text [ portuguese_brazilian ] = "?ngulo" ;
     Text [ portuguese ] = "Ângulo" ;
     Text [ finnish ] = "Kulma" ;
     Text [ danish ] = "Vinkel" ;
@@ -1196,7 +1196,7 @@ TabPage RID_SVXPAGE_ANGLE
         Text [ English ] = "Position ~X" ;
         Text [ norwegian ] = "Posisjon~X" ;
         Text [ italian ] = "Posizione ~X" ;
-        Text [ portuguese_brazilian ] = "Posição ~X" ;
+        Text [ portuguese_brazilian ] = "Posi??o ~X" ;
         Text [ portuguese ] = "Posição ~X" ;
         Text [ finnish ] = "~Sijainti X" ;
         Text [ danish ] = "Position X" ;
@@ -1225,7 +1225,7 @@ TabPage RID_SVXPAGE_ANGLE
         Text [ English ] = "Position ~Y" ;
         Text [ norwegian ] = "Posisjon~Y" ;
         Text [ italian ] = "Posizione ~Y" ;
-        Text [ portuguese_brazilian ] = "Posição ~Y" ;
+        Text [ portuguese_brazilian ] = "Posi??o ~Y" ;
         Text [ portuguese ] = "Posição ~Y" ;
         Text [ finnish ] = "~Sijainti Y" ;
         Text [ danish ] = "Position Y" ;
@@ -1284,7 +1284,7 @@ TabPage RID_SVXPAGE_ANGLE
         Text [ ENGLISH ] = "Angle" ;
         Text [ norwegian ] = "Vinkel" ;
         Text [ italian ] = "Angolo di rotazione" ;
-        Text [ portuguese_brazilian ] = "Ângulo" ;
+        Text [ portuguese_brazilian ] = "?ngulo" ;
         Text [ portuguese ] = "Ângulo de rotação" ;
         Text [ finnish ] = "Kiertokulma" ;
         Text [ danish ] = "Rotationsvinkel" ;
@@ -1313,7 +1313,7 @@ TabPage RID_SVXPAGE_ANGLE
         Text [ ENGLISH ] = "~Angle" ;
         Text [ norwegian ] = "~Vinkel" ;
         Text [ italian ] = "~Angolo" ;
-        Text [ portuguese_brazilian ] = "~Ângulo" ;
+        Text [ portuguese_brazilian ] = "~?ngulo" ;
         Text [ portuguese ] = "~Ângulo" ;
         Text [ finnish ] = "~Kulma" ;
         Text [ danish ] = "Vinkel" ;
@@ -1392,7 +1392,7 @@ TabPage RID_SVXPAGE_ANGLE
         QuickHelpText [ portuguese ] = "Ponto de rotação" ;
         QuickHelpText[ russian ] = "Òî÷êà âğàùåíèÿ";
         QuickHelpText[ polish ] = "Punkt obrotu";
-        QuickHelpText[ japanese ] = "‰ñ“]Îß²İÄ";
+        QuickHelpText[ japanese ] = "‰ñ“]Îß²İÄ!";
         QuickHelpText[ chinese_simplified ] = "Ğı×ªµã!";
         QuickHelpText[ chinese_traditional ] = "±ÛÂàÂI";
         QuickHelpText[ arabic ] = "äŞØÉ ÇáÇÓÊÏÇÑÉ";
@@ -1440,7 +1440,7 @@ TabPage RID_SVXPAGE_SLANT
     Text [ swedish ] = "Snedställ/hörnradie" ;
     Text [ danish ] = "Hældning / hjørneradius" ;
     Text [ portuguese ] = "Inclinações /Raio do ângulo" ;
-    Text [ portuguese_brazilian ] = "Schrägstellen / Eckenradius" ;
+    Text [ portuguese_brazilian ] = "Schr?gstellen / Eckenradius" ;
     GroupBox GRP_RADIUS
     {
         Pos = MAP_APPFONT ( 6 , 3  ) ;
@@ -1525,7 +1525,7 @@ TabPage RID_SVXPAGE_SLANT
         Text [ dutch ] = "Schuintrekken" ;
         Text [ swedish ] = "Snedställ" ;
         Text [ danish ] = "Hældning" ;
-        Text [ portuguese_brazilian ] = "Schrägstellen" ;
+        Text [ portuguese_brazilian ] = "Schr?gstellen" ;
         Text [ portuguese ] = "Inclinações" ;
         Text[ chinese_simplified ] = "ÇãĞ±";
         Text[ russian ] = "Íàêëîí";
@@ -1631,7 +1631,7 @@ TabDialog RID_SVXDLG_TRANSFORM
     Text [ ENGLISH ] = "Position and Size" ;
     Text [ norwegian ] = "Posisjon og størrelse" ;
     Text [ italian ] = "Posizione e dimensione" ;
-    Text [ portuguese_brazilian ] = "Posição e Tamanho" ;
+    Text [ portuguese_brazilian ] = "Posi??o e Tamanho" ;
     Text [ portuguese ] = "Posição e tamanho" ;
     Text [ finnish ] = "Sijainti ja koko" ;
     Text [ danish ] = "Placering og størrelse" ;
@@ -1655,7 +1655,7 @@ TabDialog RID_SVXDLG_TRANSFORM
                 Text [ ENGLISH ] = "Position" ;
                 Text [ norwegian ] = "Posisjon" ;
                 Text [ italian ] = "Posizione" ;
-                Text [ portuguese_brazilian ] = "Posição" ;
+                Text [ portuguese_brazilian ] = "Posi??o" ;
                 Text [ portuguese ] = "Posição" ;
                 Text [ finnish ] = "Sijainti" ;
                 Text [ danish ] = "Placering" ;
@@ -1713,7 +1713,7 @@ TabDialog RID_SVXDLG_TRANSFORM
                 Text [ ENGLISH ] = "Rotation" ;
                 Text [ norwegian ] = "Rotation" ;
                 Text [ italian ] = "Rotazione" ;
-                Text [ portuguese_brazilian ] = "Rotação" ;
+                Text [ portuguese_brazilian ] = "Rota??o" ;
                 Text [ portuguese ] = "Rotação" ;
                 Text [ finnish ] = "Kierto" ;
                 Text [ danish ] = "Rotation" ;
@@ -1748,7 +1748,7 @@ TabDialog RID_SVXDLG_TRANSFORM
                 Text [ dutch ] = "Schuintrekken/hoekafronding" ;
                 Text [ swedish ] = "Snedställ/hörnradie" ;
                 Text [ danish ] = "Hældning / hjørneradius" ;
-                Text [ portuguese_brazilian ] = "Schrägstellen / Eckenradius" ;
+                Text [ portuguese_brazilian ] = "Schr?gstellen / Eckenradius" ;
                 Text [ portuguese ] = "Inclinações / Raio do ângulo" ;
                 Text[ chinese_simplified ] = "ÇãĞ±ºÍ½Ç°ë¾¶";
                 Text[ russian ] = "Íàêëîí / Ğàäèóñ çàêğóãëåííîãî óãëà";
