@@ -2,9 +2,9 @@
  *
  *  $RCSfile: print.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: th $ $Date: 2001-04-06 12:47:47 $
+ *  last change: $Author: ka $ $Date: 2001-04-26 19:41:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,7 +238,33 @@ void ImplUpdateJobSetupPaper( JobSetup& rJobSetup )
     }
 }
 
-// =======================================================================
+// ------------------
+// - PrinterOptions -
+// ------------------
+
+PrinterOptions::PrinterOptions() :
+    mbReduceTransparency( TRUE ),
+    meReducedTransparencyMode( PRINTER_TRANSPARENCY_AUTO ),
+    mbReduceGradients( TRUE ),
+    meReducedGradientsMode( PRINTER_GRADIENT_STRIPES ),
+    mnReducedGradientStepCount( 64 ),
+    mbReduceBitmaps( TRUE ),
+    meReducedBitmapMode( PRINTER_BITMAP_OPTIMAL ),
+    mnReducedBitmapResolution( 200 ),
+    mbReducedBitmapsIncludeTransparency( FALSE ),
+    mbConvertToGreyscales( FALSE )
+{
+}
+
+// -----------------------------------------------------------------------
+
+PrinterOptions::~PrinterOptions()
+{
+}
+
+// -------------
+// - QueueInfo -
+// -------------
 
 QueueInfo::QueueInfo()
 {
@@ -505,7 +531,6 @@ void Printer::ImplInitData()
 {
     mbDevOutput         = FALSE;
     meOutDevType        = OUTDEV_PRINTER;
-
     mbDefPrinter        = FALSE;
     mnError             = 0;
     mnCurPage           = 0;
@@ -524,6 +549,7 @@ void Printer::ImplInitData()
     mpQPrinter          = NULL;
     mpQMtf              = NULL;
     mbIsQueuePrinter    = FALSE;
+    mpPrinterOptions    = new PrinterOptions;
 
     // Printer in die Liste eintragen
     ImplSVData* pSVData = ImplGetSVData();
@@ -875,6 +901,8 @@ Printer::~Printer()
     DBG_ASSERT( !mpQPrinter, "Printer::~Printer() - QueuePrinter not destroyed" );
     DBG_ASSERT( !mpQMtf, "Printer::~Printer() - QueueMetafile not destroyed" );
 
+    delete mpPrinterOptions;
+
 #ifndef REMOTE_APPSERVER
     ImplReleaseGraphics();
     if ( mpInfoPrinter )
@@ -1111,12 +1139,13 @@ BOOL Printer::SetPrinterProps( const Printer* pPrinter )
 
     ImplSVData* pSVData = ImplGetSVData();
 
-    mbDefPrinter    = pPrinter->mbDefPrinter;
-    maPrintFile     = pPrinter->maPrintFile;
-    mbPrintFile     = pPrinter->mbPrintFile;
-    mnCopyCount     = pPrinter->mnCopyCount;
-    mbCollateCopy   = pPrinter->mbCollateCopy;
-    mnPageQueueSize = pPrinter->mnPageQueueSize;
+    mbDefPrinter        = pPrinter->mbDefPrinter;
+    maPrintFile         = pPrinter->maPrintFile;
+    mbPrintFile         = pPrinter->mbPrintFile;
+    mnCopyCount         = pPrinter->mnCopyCount;
+    mbCollateCopy       = pPrinter->mbCollateCopy;
+    mnPageQueueSize     = pPrinter->mnPageQueueSize;
+    *mpPrinterOptions   = *pPrinter->mpPrinterOptions;
 
     if ( pPrinter->IsDisplayPrinter() )
     {
@@ -1602,25 +1631,32 @@ BOOL Printer::StartJob( const XubString& rJobName )
             bCollateCopy = FALSE;
         }
     }
-    else if ( nCopies > 1 )
-    {
-        ULONG nDevCopy;
-        if ( bCollateCopy )
-            nDevCopy = GetCapabilities( PRINTER_CAPABILITIES_COLLATECOPIES );
-        else
-            nDevCopy = GetCapabilities( PRINTER_CAPABILITIES_COPIES );
-        // Muessen Kopien selber gemacht werden?
-        if ( nCopies > nDevCopy )
-        {
-            bUserCopy = TRUE;
-            nCopies = 1;
-            bCollateCopy = FALSE;
-            if ( !mnPageQueueSize )
-                mnPageQueueSize = 1;
-        }
-    }
     else
-        bCollateCopy = FALSE;
+    {
+        if ( nCopies > 1 )
+        {
+            ULONG nDevCopy;
+
+            if ( bCollateCopy )
+                nDevCopy = GetCapabilities( PRINTER_CAPABILITIES_COLLATECOPIES );
+            else
+                nDevCopy = GetCapabilities( PRINTER_CAPABILITIES_COPIES );
+
+            // Muessen Kopien selber gemacht werden?
+            if ( nCopies > nDevCopy )
+            {
+                bUserCopy = TRUE;
+                nCopies = 1;
+                bCollateCopy = FALSE;
+            }
+        }
+        else
+            bCollateCopy = FALSE;
+
+        // we need queue printing
+        if( !mnPageQueueSize )
+            mnPageQueueSize = 1;
+    }
 
     if ( !mnPageQueueSize )
     {
@@ -1661,6 +1697,7 @@ BOOL Printer::StartJob( const XubString& rJobName )
     {
         mpQPrinter = new ImplQPrinter( this );
         mpQPrinter->SetUserCopy( bUserCopy );
+        mpQPrinter->SetPrinterOptions( *mpPrinterOptions );
         if ( mpQPrinter->StartJob( rJobName ) )
         {
             mbNewJobSetup   = FALSE;
@@ -1913,6 +1950,7 @@ BOOL Printer::StartPage()
             mnCurPage++;
             if ( mpQPrinter )
             {
+                mpQPrinter->SetPrinterOptions( *mpPrinterOptions );
                 mpQMtf = new GDIMetaFile;
                 mpQMtf->Record( this );
                 mpQMtf->SaveStatus();
@@ -1970,6 +2008,7 @@ BOOL Printer::EndPage()
             mpQMtf->WindStart();
             GDIMetaFile* pPage = mpQMtf;
             mpQMtf = NULL;
+            mpQPrinter->SetPrinterOptions( *mpPrinterOptions );
             mpQPrinter->AddQueuePage( pPage, mnCurPage, mbNewJobSetup );
         }
 
