@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrols.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 11:36:46 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:47:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -804,6 +804,7 @@ UnoControlButtonModel::UnoControlButtonModel()
     ImplRegisterProperty( BASEPROPERTY_FOCUSONCLICK );
     ImplRegisterProperty( BASEPROPERTY_MULTILINE );
     ImplRegisterProperty( BASEPROPERTY_ALIGN );
+    ImplRegisterProperty( BASEPROPERTY_VERTICALALIGN );
 
     osl_incrementInterlockedCount( &m_refCount );
     {
@@ -1105,6 +1106,7 @@ UnoControlRadioButtonModel::UnoControlRadioButtonModel()
     ImplRegisterProperty( BASEPROPERTY_MULTILINE );
     ImplRegisterProperty( BASEPROPERTY_BACKGROUNDCOLOR );
     ImplRegisterProperty( BASEPROPERTY_ALIGN );
+    ImplRegisterProperty( BASEPROPERTY_VERTICALALIGN );
 }
 
 ::rtl::OUString UnoControlRadioButtonModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)
@@ -1348,6 +1350,7 @@ UnoControlCheckBoxModel::UnoControlCheckBoxModel()
     ImplRegisterProperty( BASEPROPERTY_MULTILINE );
     ImplRegisterProperty( BASEPROPERTY_BACKGROUNDCOLOR );
     ImplRegisterProperty( BASEPROPERTY_ALIGN );
+    ImplRegisterProperty( BASEPROPERTY_VERTICALALIGN );
 }
 
 ::rtl::OUString UnoControlCheckBoxModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)
@@ -1565,6 +1568,7 @@ UnoControlFixedTextModel::UnoControlFixedTextModel()
     ImplRegisterProperty( BASEPROPERTY_MULTILINE );
     ImplRegisterProperty( BASEPROPERTY_PRINTABLE );
     ImplRegisterProperty( BASEPROPERTY_TABSTOP );
+    ImplRegisterProperty( BASEPROPERTY_VERTICALALIGN );
 }
 
 ::rtl::OUString UnoControlFixedTextModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)
