@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbcontrl.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: os $ $Date: 2002-03-08 13:59:26 $
+ *  last change: $Author: os $ $Date: 2002-04-02 13:51:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,7 +147,7 @@
 
 #define IMAGE_COL_TRANSPARENT       COL_LIGHTGRAY
 #define MAX_MRU_FONTNAME_ENTRIES    5
-
+#define LOGICAL_EDIT_HEIGHT         12
 // STATIC DATA -----------------------------------------------------------
 
 #ifndef DELETEZ
@@ -532,6 +532,8 @@ void SvxStyleBox::DataChanged( const DataChangedEvent& rDCEvt )
          (rDCEvt.GetFlags() & SETTINGS_STYLE) )
     {
         SetSizePixel(LogicToPixel(aLogicalSize, MAP_APPFONT));
+        Size aDropSize( aLogicalSize.Width(), LOGICAL_EDIT_HEIGHT);
+        SetDropDownSizePixel(LogicToPixel(aDropSize, MAP_APPFONT));
     }
 
     ListBox::DataChanged( rDCEvt );
@@ -701,6 +703,8 @@ void SvxFontNameBox::DataChanged( const DataChangedEvent& rDCEvt )
          (rDCEvt.GetFlags() & SETTINGS_STYLE) )
     {
         SetSizePixel(LogicToPixel(aLogicalSize, MAP_APPFONT));
+        Size aDropSize( aLogicalSize.Width(), LOGICAL_EDIT_HEIGHT);
+        SetDropDownSizePixel(LogicToPixel(aDropSize, MAP_APPFONT));
     }
 
     FontNameBox::DataChanged( rDCEvt );
@@ -934,6 +938,8 @@ void SvxFontSizeBox::DataChanged( const DataChangedEvent& rDCEvt )
          (rDCEvt.GetFlags() & SETTINGS_STYLE) )
     {
         SetSizePixel(LogicToPixel(aLogicalSize, MAP_APPFONT));
+        Size aDropSize( aLogicalSize.Width(), LOGICAL_EDIT_HEIGHT);
+        SetDropDownSizePixel(LogicToPixel(aDropSize, MAP_APPFONT));
     }
 
     FontSizeBox::DataChanged( rDCEvt );
