@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdtxhdl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: aw $ $Date: 2001-11-29 15:54:03 $
+ *  last change: $Author: aw $ $Date: 2002-07-01 10:55:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,77 +200,98 @@ IMPL_LINK(ImpTextPortionHandler,ConvertHdl,DrawPortionInfo*,pInfo)
     // aFormTextBoundRect enthaelt den Ausgabebereich des Textobjekts
     BOOL bIsVertical(rOutliner.IsVertical());
     Point aPos(aFormTextBoundRect.TopLeft() + pInfo->rStartPos);
+    Color aColor(pInfo->rFont.GetColor());
+
     if(bIsVertical)
         aPos = aFormTextBoundRect.TopRight() + pInfo->rStartPos;
-    Color aColor(pInfo->rFont.GetColor());
-    xub_StrLen nCnt = pInfo->rText.Len();
+
+    // #100318# new for XOutGetCharOutline
+    // xub_StrLen nCnt = pInfo->nTextLen;
+
     Point aStartPos(aPos);
     SfxItemSet aAttrSet((SfxItemPool&)(*rTextObj.GetItemPool()));
+    long nHochTief(pInfo->rFont.GetEscapement());
+    FontMetric aFontMetric(aVDev.GetFontMetric());
+    sal_Int32 nLineLen(0L);
 
-    long nHochTief=pInfo->rFont.GetEscapement();
-    if (nHochTief==0) {
-        aVDev.SetFont(pInfo->rFont); // Normalstellung
-    } else { // Fuer Hoch-Tiefstellung den Font verkleinern
-        long nPercent=pInfo->rFont.GetPropr();
-        if (nPercent!=100) {
+    if(!nHochTief)
+    {
+        // Normalstellung
+        aVDev.SetFont(pInfo->rFont);
+    }
+    else
+    {
+        // Fuer Hoch-Tiefstellung den Font verkleinern
+        long nPercent(pInfo->rFont.GetPropr());
+
+        if(nPercent != 100)
+        {
             Font aFont(pInfo->rFont);
             Size aSize(aFont.GetSize());
-            aSize.Height()=(aSize.Height() * nPercent +50) / 100;
-            aSize.Width()=(aSize.Width() * nPercent +50) / 100;
+
+            aSize.Height() = (aSize.Height() * nPercent +50) / 100;
+            aSize.Width() = (aSize.Width() * nPercent +50) / 100;
             aFont.SetSize(aSize);
             aVDev.SetFont(aFont);
         }
-        FASTBOOL bNeg=nHochTief<0;
-        if (bNeg) nHochTief=-nHochTief;
-        nHochTief=(nHochTief * pInfo->rFont.GetSize().Height() +50) /100;
-        if (bNeg) nHochTief=-nHochTief;
+
+        sal_Bool bNeg(nHochTief < 0);
+
+        if(bNeg)
+            nHochTief = -nHochTief;
+
+        nHochTief = (nHochTief * pInfo->rFont.GetSize().Height() +50) /100;
+
+        if(bNeg)
+            nHochTief = -nHochTief;
     }
-    FontMetric aFontMetric(aVDev.GetFontMetric());
+
     if(bIsVertical)
         // #83068#
         aPos.X() += aFontMetric.GetAscent() + nHochTief;
     else
         aPos.Y() -= aFontMetric.GetAscent() + nHochTief;
 
-    if (pInfo->rFont.IsOutline()) {
+    if (pInfo->rFont.IsOutline())
+    {
         aAttrSet.Put(XLineColorItem(String(),aColor));
         aAttrSet.Put(XLineStyleItem(XLINE_SOLID));
         aAttrSet.Put(XLineWidthItem(0));
         aAttrSet.Put(XFillStyleItem(XFILL_NONE));
-    } else {
+    }
+    else
+    {
         aAttrSet.Put(XFillColorItem(String(),aColor));
         aAttrSet.Put(XLineStyleItem(XLINE_NONE));
         aAttrSet.Put(XFillStyleItem(XFILL_SOLID));
     }
 
-    for(xub_StrLen i = 0; i<nCnt; i++)
+    // #100318# convert in a single step
+    PolyPolygon aPolyPoly;
+    if(aVDev.GetTextOutline(aPolyPoly, pInfo->rText, pInfo->nTextStart, pInfo->nTextStart, pInfo->nTextLen)
+        && aPolyPoly.Count())
     {
-        // UNICODE: BYTE aCharByte = (BYTE)((pInfo->rText)[i]);
-        // since XOutGetCharOutline() is not yet changed, make a short
-        // term solution here
-        sal_Unicode aUnicode = (pInfo->rText).GetChar(i);
-        XPolyPolygon aXPP(XOutGetCharOutline(aUnicode, aVDev));
+        XPolyPolygon aXPP(aPolyPoly);
 
-        if(aXPP.Count())
-        {
-            aXPP.Move(aPos.X(), aPos.Y());
-            // aFormTextBoundRect enthaelt den Ausgabebereich des Textobjekts
-            // #35825# Rotieren erst nach Resize (wg. FitToSize)
-            //RotateXPoly(aXPP,aFormTextBoundRect.TopLeft(),rTextObj.aGeo.nSin,rTextObj.aGeo.nCos);
-
-            SdrObject* pObj = rTextObj.ImpConvertMakeObj(aXPP, TRUE, !bToPoly, TRUE);
-
-            pObj->SetItemSet(aAttrSet);
-            pGroup->GetSubList()->InsertObject(pObj);
-        }
-
+        // rotate 270 degree if vertical since result is unrotated
         if(bIsVertical)
-            aPos.Y() = aStartPos.Y() + pInfo->pDXArray[i]; // - nSlant;
+            aXPP.Rotate(Point(), 2700);
+
+        // result is baseline oriented, thus move one line height, too
+        if(bIsVertical)
+            aXPP.Move(-aFontMetric.GetAscent(), 0);
         else
-            aPos.X() = aStartPos.X() + pInfo->pDXArray[i]; // - nSlant;
+            aXPP.Move(0, aFontMetric.GetAscent());
+
+        // move to output coordinates
+        aXPP.Move(aPos.X(), aPos.Y());
+        SdrObject* pObj = rTextObj.ImpConvertMakeObj(aXPP, TRUE, !bToPoly, TRUE);
+
+        pObj->SetItemSet(aAttrSet);
+        pGroup->GetSubList()->InsertObject(pObj);
+        nLineLen = pInfo->pDXArray[pInfo->nTextLen - 1];
     }
 
-    long nLineLen = (bIsVertical) ? aPos.Y() - aStartPos.Y() : aPos.X() - aStartPos.X();
     FontUnderline eUndl=pInfo->rFont.GetUnderline();
     FontStrikeout eStrk=pInfo->rFont.GetStrikeout();
     if (eUndl!=UNDERLINE_NONE) {
