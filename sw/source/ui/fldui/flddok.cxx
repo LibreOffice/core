@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flddok.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-02-09 07:44:09 $
+ *  last change: $Author: os $ $Date: 2001-04-23 13:13:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -399,7 +399,7 @@ IMPL_LINK( SwFldDokPage, TypeHdl, ListBox *, EMPTYARG )
                                             aFormatLB.GetSelectEntryPos() );
                     String sOldTxt(aValueFT.GetText());
 
-                    if (FMT_NUM_PAGESPECIAL - FMT_NUM_BEGIN != nTmp)
+                    if(SVX_NUM_CHAR_SPECIAL != nTmp)
                     {
                         short nOff = GetCurField()->GetPar2().ToInt32();
                         if( TYP_NEXTPAGEFLD == nTypeId && 1 != nOff )
@@ -756,6 +756,9 @@ void    SwFldDokPage::FillUserData()
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.2  2001/02/09 07:44:09  os
+    TabPage size changed
+
     Revision 1.1.1.1  2000/09/18 17:14:36  hr
     initial import
 
