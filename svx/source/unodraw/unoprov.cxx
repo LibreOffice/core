@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprov.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-11 08:04:57 $
+ *  last change: $Author: cl $ $Date: 2001-05-15 11:14:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -980,17 +980,50 @@ bool SvxUnoGetResourceRanges( const short nWhich, int& nApiResIds, int& nIntResI
 
 bool SvxUnoConvertResourceString( int nSourceResIds, int nDestResIds, int nCount, String& rString ) throw()
 {
+    // first, calculate the search string length without an optional number behind the name
+    int nLength = rString.Len();
+    while( nLength > 0 )
+    {
+        const sal_Unicode nChar = rString.GetChar( nLength - 1 );
+        if( (nChar < '0') || (nChar > '9') )
+            break;
+
+        nLength--;
+    }
+
+    // if we cut off a number, also cut of some spaces
+    if( nLength != rString.Len() )
+    {
+        while( nLength > 0 )
+        {
+            const sal_Unicode nChar = rString.GetChar( nLength - 1 );
+            if( nChar != ' ' )
+                break;
+
+            nLength--;
+        }
+    }
+
+    const String aShortString( rString.Copy( 0, nLength ) );
+
     int i;
     for( i = 0; i < nCount; i++ )
     {
         USHORT nResId = (USHORT)(nSourceResIds + i);
         const ResId aRes( SVX_RES(nResId));
         const String aCompare( aRes );
-        if( rString.Search( aCompare ) == 0 )
+        if( aShortString == aCompare )
         {
             USHORT nNewResId = (USHORT)(nDestResIds + i);
             ResId aNewRes( SVX_RES( nNewResId ));
-            rString.Replace( 0, aCompare.Len(), String( aNewRes ) );
+            rString.Replace( 0, aShortString.Len(), String( aNewRes ) );
+            return TRUE;
+        }
+        else if( rString == aCompare )
+        {
+            USHORT nNewResId = (USHORT)(nDestResIds + i);
+            ResId aNewRes( SVX_RES( nNewResId ));
+            rString = String( aNewRes );
             return TRUE;
         }
     }
