@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basidesh.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ab $ $Date: 2001-03-28 11:26:43 $
+ *  last change: $Author: ab $ $Date: 2001-04-25 11:46:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -688,16 +688,22 @@ void BasicIDEShell::UpdateWindows()
             if ( pDocShell )
                 StartListening( *pDocShell, TRUE );
 
-            // New dialog container, now only for documents, later always
+            // Access dialog container
+            Reference< script::XLibraryContainer > xDialogContainer;
             Reference< container::XNameAccess > xDialogAccess;
             if( pDocShell )
             {
-                Reference< script::XLibraryContainer > xDialogContainer
-                    = Reference< script::XLibraryContainer >
+                xDialogContainer = Reference< script::XLibraryContainer >
                         ( pDocShell->GetDialogContainer(), uno::UNO_QUERY );
-                if( xDialogContainer.is() )
-                    xDialogAccess = Reference< container::XNameAccess >( xDialogContainer, uno::UNO_QUERY );
             }
+            else
+            {
+                // Application
+                xDialogContainer = uno::Reference< script::XLibraryContainer >
+                    ( SFX_APP()->GetDialogContainer(), uno::UNO_QUERY );
+            }
+            if( xDialogContainer.is() )
+                xDialogAccess = Reference< container::XNameAccess >( xDialogContainer, uno::UNO_QUERY );
 
             USHORT nLibs = pBasicMgr->GetLibCount();
             for ( USHORT nLib = 0; nLib < nLibs; nLib++ )
@@ -724,7 +730,7 @@ void BasicIDEShell::UpdateWindows()
                             }
                         }
 
-                        // New dialog container, now only for documents, later always
+                        // Access dialog container
                         if( xDialogAccess.is() )
                         {
                             rtl::OUString aLibName( pLib->GetName() );
@@ -749,6 +755,9 @@ void BasicIDEShell::UpdateWindows()
                         }
                         else
                         {
+                            DBG_ERROR( "Dialog Container not found!" );
+
+                            /*
                             // Und ein BasigDialog-Fenster...
                             pLib->GetAll( SbxCLASS_OBJECT );
                             for ( USHORT nObj = 0; nObj < pLib->GetObjects()->Count(); nObj++ )
@@ -761,6 +770,7 @@ void BasicIDEShell::UpdateWindows()
                                         CreateDlgWin( pLib, pObj->GetName(), pObj );
                                 }
                             }
+                            */
                         }
                     }
                 }
