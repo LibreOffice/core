@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AGroup.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:24 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 13:44:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,9 +68,6 @@
 #ifndef _CONNECTIVITY_ADO_AWRAPADOX_HXX_
 #include "ado/Awrapadox.hxx"
 #endif
-#ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
-#include <com/sun/star/lang/XUnoTunnel.hpp>
-#endif
 
 namespace connectivity
 {
@@ -79,7 +76,6 @@ namespace connectivity
         typedef sdbcx::OGroup OGroup_ADO;
 
         class OAdoGroup :   public OGroup_ADO
-                    ,   public ::com::sun::star::lang::XUnoTunnel
         {
             WpADOGroup      m_aGroup;
 
@@ -87,8 +83,8 @@ namespace connectivity
             RightsEnum      Map2Right(sal_Int32 _eNum);
             ObjectTypeEnum  MapObjectType(sal_Int32 _ObjType);
         protected:
-                        virtual void SAL_CALL getFastPropertyValue(::com::sun::star::uno::Any& rValue,sal_Int32 nHandle) const;
-                        virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const ::com::sun::star::uno::Any& rValue)throw (::com::sun::star::uno::Exception);
+            virtual void SAL_CALL getFastPropertyValue(::com::sun::star::uno::Any& rValue,sal_Int32 nHandle) const;
+            virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const ::com::sun::star::uno::Any& rValue)throw (::com::sun::star::uno::Exception);
 
         public:
             virtual void refreshUsers();
@@ -98,13 +94,9 @@ namespace connectivity
             OAdoGroup(sal_Bool _bCase, ADOGroup* _pGroup=NULL);
             OAdoGroup(sal_Bool _bCase, const ::rtl::OUString& _Name);
 
-            // XInterface
-                        virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
-            //XTypeProvider
-                        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException);
             // com::sun::star::lang::XUnoTunnel
-                        virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
-                        static ::com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
+            virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
+            static ::com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
 
             // XAuthorizable
             virtual sal_Int32 SAL_CALL getPrivileges( const ::rtl::OUString& objName, sal_Int32 objType ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AColumn.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-30 07:34:16 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 13:44:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,60 +62,50 @@
 #ifndef _CONNECTIVITY_ADO_COLUMN_HXX_
 #define _CONNECTIVITY_ADO_COLUMN_HXX_
 
-#ifndef _CONNECTIVITY_SDBCX_COLUMNDECRIPTOR_HXX_
-#include "connectivity/sdbcx/VColumnDescriptor.hxx"
+#ifndef _CONNECTIVITY_SDBCX_COLUMN_HXX_
+#include "connectivity/sdbcx/VColumn.hxx"
 #endif
 #ifndef _CONNECTIVITY_ADO_AWRAPADOX_HXX_
 #include "ado/Awrapadox.hxx"
-#endif
-#ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #endif
 
 namespace connectivity
 {
     namespace ado
     {
-        typedef sdbcx::OColumnDescriptor OColumn_ADO;
-        class OAdoColumnDescriptor :    public OColumn_ADO,
-                                        public ::com::sun::star::lang::XUnoTunnel
+        typedef sdbcx::OColumn OColumn_ADO;
+        class OAdoColumn :  public OColumn_ADO
         {
             WpADOColumn     m_aColumn;
         protected:
             virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
                                     sal_Int32 nHandle,
                                     const ::com::sun::star::uno::Any& rValue
-                                                     )
-                                 throw (::com::sun::star::uno::Exception);
+                                     )
+                                     throw (::com::sun::star::uno::Exception);
             virtual void SAL_CALL getFastPropertyValue(
                                     ::com::sun::star::uno::Any& rValue,
-                                    sal_Int32 nHandle
-                                         ) const;
+                                    sal_Int32 nHandle) const;
         public:
             DECLARE_CTY_DEFAULTS( OColumn_ADO);
 
-            OAdoColumnDescriptor(sal_Bool _bCase,_ADOColumn* _pColumn = NULL);
-            // XInterface
-            ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
-            //XTypeProvider
-            virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException);
+            OAdoColumn(sal_Bool _bCase,_ADOColumn* _pColumn = NULL);
+            OAdoColumn(const ::rtl::OUString& _Name,
+                    const ::rtl::OUString& _TypeName,
+                    const ::rtl::OUString& _DefaultValue,
+                    sal_Int32       _IsNullable,
+                    sal_Int32       _Precision,
+                    sal_Int32       _Scale,
+                    sal_Int32       _Type,
+                    sal_Bool        _IsAutoIncrement,
+                    sal_Bool        _IsCurrency,
+                    sal_Bool _bCase);
+
             // com::sun::star::lang::XUnoTunnel
             virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
             static ::com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
 
             WpADOColumn     getColumnImpl() const { return m_aColumn;}
-        };
-
-        class OAdoColumn;
-        typedef ::comphelper::OPropertyArrayUsageHelper<OAdoColumn> OAdoColumn_PROP;
-        class OAdoColumn :   public OAdoColumnDescriptor
-                            ,public OAdoColumn_PROP
-        {
-        protected:
-            DECLARE_CTY_PROPERTY(OAdoColumn_PROP,OAdoColumn)
-        public:
-            DECLARE_SERVICE_INFO();
-            OAdoColumn(sal_Bool _bCase, _ADOColumn* _pColumn=NULL);
         };
     }
 }

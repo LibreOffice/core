@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BUser.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-11 10:05:58 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 13:40:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@ namespace connectivity
         public:
             virtual void refreshGroups();
         public:
-            OAdabasUser(    OAdabasConnection* _pConnection);
+            OAdabasUser(  OAdabasConnection* _pConnection);
             OAdabasUser(  OAdabasConnection* _pConnection,const ::rtl::OUString& _Name);
 
             // XInterface
@@ -94,7 +94,10 @@ namespace connectivity
         {
         protected:
             ::rtl::OUString m_Password;
-            DECLARE_CTY_PROPERTY(OAdabasUser,OUserExtend)
+            // OPropertyArrayUsageHelper
+            virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const;
+            // OPropertySetHelper
+            virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper();
         public:
             OUserExtend(OAdabasConnection* _pConnection);
             OUserExtend(OAdabasConnection* _pConnection,const ::rtl::OUString& _Name);

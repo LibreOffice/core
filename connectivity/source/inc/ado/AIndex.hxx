@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AIndex.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-30 07:34:16 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 13:44:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,8 @@
 #ifndef _CONNECTIVITY_ADO_INDEX_HXX_
 #define _CONNECTIVITY_ADO_INDEX_HXX_
 
-#ifndef _CONNECTIVITY_SDBCX_INDEXDESCRIPTOR_HXX_
-#include "connectivity/sdbcx/VIndexDescriptor.hxx"
+#ifndef _CONNECTIVITY_SDBCX_INDEX_HXX_
+#include "connectivity/sdbcx/VIndex.hxx"
 #endif
 #ifndef _COM_SUN_STAR_SDBC_XDATABASEMETADATA_HPP_
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
@@ -71,50 +71,38 @@
 #ifndef _CONNECTIVITY_ADO_AWRAPADOX_HXX_
 #include "ado/Awrapadox.hxx"
 #endif
-#ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
-#include <com/sun/star/lang/XUnoTunnel.hpp>
-#endif
 
 namespace connectivity
 {
     namespace ado
     {
-        typedef sdbcx::OIndexDescriptor OIndexDescriptor_ADO;
+        typedef sdbcx::OIndex OIndex_ADO;
 
-        class OAdoIndexDescriptor :  public OIndexDescriptor_ADO
-                                    ,public ::com::sun::star::lang::XUnoTunnel
+        class OAdoIndex :    public OIndex_ADO
         {
             WpADOIndex      m_aIndex;
         protected:
             virtual void SAL_CALL getFastPropertyValue(::com::sun::star::uno::Any& rValue,sal_Int32 nHandle) const;
             virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const ::com::sun::star::uno::Any& rValue)throw (::com::sun::star::uno::Exception);
         public:
-            DECLARE_CTY_DEFAULTS( OIndexDescriptor_ADO);
+            virtual void refreshColumns();
+        public:
+            DECLARE_CTY_DEFAULTS( OIndex_ADO);
 
-            OAdoIndexDescriptor(sal_Bool _bCase,    ADOIndex* _pIndex=NULL);
+            OAdoIndex(sal_Bool _bCase,  ADOIndex* _pIndex=NULL);
+            OAdoIndex( const ::rtl::OUString& _Name,
+                    const ::rtl::OUString& _Catalog,
+                    sal_Bool _isUnique,
+                    sal_Bool _isPrimaryKeyIndex,
+                    sal_Bool _isClustered,
+                    sal_Bool _bCase
+                );
 
-            // XInterface
-            ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
-            //XTypeProvider
-            virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException);
             // com::sun::star::lang::XUnoTunnel
             virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
             static ::com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
 
             WpADOIndex      getImpl() const { return m_aIndex;}
-            virtual void refreshColumns();
-        };
-
-        class OAdoIndex;
-        typedef ::comphelper::OPropertyArrayUsageHelper<OAdoIndex> OAdoIndex_PROP;
-        class OAdoIndex :    public OAdoIndexDescriptor
-                            ,public OAdoIndex_PROP
-        {
-        protected:
-            DECLARE_CTY_PROPERTY(OAdoIndex_PROP,OAdoIndex)
-        public:
-            DECLARE_SERVICE_INFO();
-            OAdoIndex(sal_Bool _bCase,  ADOIndex* _pIndex=NULL);
         };
     }
 }

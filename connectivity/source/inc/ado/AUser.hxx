@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AUser.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-11 10:06:46 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 13:44:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,9 +68,6 @@
 #ifndef _CONNECTIVITY_ADO_AWRAPADOX_HXX_
 #include "ado/Awrapadox.hxx"
 #endif
-#ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
-#include <com/sun/star/lang/XUnoTunnel.hpp>
-#endif
 
 namespace connectivity
 {
@@ -79,7 +76,6 @@ namespace connectivity
         typedef connectivity::sdbcx::OUser OUser_TYPEDEF;
 
         class OAdoUser : public OUser_TYPEDEF
-                    , public ::com::sun::star::lang::XUnoTunnel
         {
         protected:
             WpADOUser       m_aUser;
@@ -100,10 +96,6 @@ namespace connectivity
             OAdoUser(sal_Bool _bCase,   ADOUser* _pUser=NULL);
             OAdoUser(sal_Bool _bCase,  const ::rtl::OUString& _Name);
 
-            // XInterface
-            virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
-            //XTypeProvider
-            virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException);
             // com::sun::star::lang::XUnoTunnel
             virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
             static ::com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
@@ -119,8 +111,10 @@ namespace connectivity
         {
         protected:
             ::rtl::OUString m_Password;
-            DECLARE_CTY_PROPERTY(OAdoUser,OUserExtend)
-
+            // OPropertyArrayUsageHelper
+            virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const;
+            // OPropertySetHelper
+            virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper();
         public:
             OUserExtend(sal_Bool _bCase,ADOUser* _pUser=NULL);
             OUserExtend(sal_Bool _bCase,const ::rtl::OUString& _Name);

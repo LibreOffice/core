@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BTable.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-30 07:32:12 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 13:40:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,9 +68,6 @@
 #ifndef _COM_SUN_STAR_SDBC_XDATABASEMETADATA_HPP_
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #endif
-#ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
-#include <com/sun/star/lang/XUnoTunnel.hpp>
-#endif
 #ifndef _CONNECTIVITY_ADABAS_BCONNECTION_HXX_
 #include "adabas/BConnection.hxx"
 #endif
@@ -83,8 +80,7 @@ namespace connectivity
 
         ::rtl::OUString getTypeString(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xColProp);
 
-        class OAdabasTable :    public OTable_TYPEDEF,
-                                public ::com::sun::star::lang::XUnoTunnel
+        class OAdabasTable :    public OTable_TYPEDEF
         {
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData > m_xMetaData;
             OAdabasConnection* m_pConnection;
@@ -99,6 +95,7 @@ namespace connectivity
 
         public:
             DECLARE_CTY_DEFAULTS( OTable_TYPEDEF);
+            OAdabasTable(   OAdabasConnection* _pConnection);
             OAdabasTable(   OAdabasConnection* _pConnection,
                     const ::rtl::OUString& _Name,
                     const ::rtl::OUString& _Type,
@@ -106,10 +103,6 @@ namespace connectivity
                     const ::rtl::OUString& _SchemaName = ::rtl::OUString(),
                     const ::rtl::OUString& _CatalogName = ::rtl::OUString()
                 );
-
-            virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
-            //XTypeProvider
-            virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException);
 
             OAdabasConnection* getConnection() { return m_pConnection;}
 

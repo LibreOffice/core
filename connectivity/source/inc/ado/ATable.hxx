@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ATable.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-30 07:34:16 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 13:44:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,94 +65,54 @@
 #ifndef _CONNECTIVITY_SDBCX_TABLE_HXX_
 #include "connectivity/sdbcx/VTable.hxx"
 #endif
-#ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
-#include <com/sun/star/lang/XUnoTunnel.hpp>
-#endif
 #ifndef _CONNECTIVITY_ADO_AWRAPADOX_HXX_
 #include "ado/Awrapadox.hxx"
 #endif
 
 namespace connectivity
 {
-    namespace sdbcx
-    {
-        class OCollection;
-    }
-
     namespace ado
     {
-        typedef connectivity::sdbcx::OTableDescriptor OTable_TYPEDEF;
+        typedef connectivity::sdbcx::OTable OTable_TYPEDEF;
 
-        class OAdoTableDescriptor : public OTable_TYPEDEF,
-                                    public ::com::sun::star::lang::XUnoTunnel
+        class OAdoTable :   public OTable_TYPEDEF
         {
-        protected:
             WpADOTable      m_aTable;
 
+        protected:
             virtual void SAL_CALL getFastPropertyValue(::com::sun::star::uno::Any& rValue,sal_Int32 nHandle) const;
             virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const ::com::sun::star::uno::Any& rValue)throw (::com::sun::star::uno::Exception);
 
         public:
             virtual void refreshColumns();
             virtual void refreshKeys();
+            virtual void refreshIndexes();
 
         public:
             DECLARE_CTY_DEFAULTS( OTable_TYPEDEF);
-            OAdoTableDescriptor(sal_Bool _bCase, _ADOTable* _pTable=NULL);
+            OAdoTable(sal_Bool _bCase, _ADOTable* _pTable=NULL);
+            OAdoTable(sal_Bool _bCase,  const ::rtl::OUString& _Name,
+                    const ::rtl::OUString& _Type,
+                    const ::rtl::OUString& _Description = ::rtl::OUString(),
+                    const ::rtl::OUString& _SchemaName = ::rtl::OUString(),
+                    const ::rtl::OUString& _CatalogName = ::rtl::OUString());
 
-            // XInterface
-            ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
-            //XTypeProvider
-            virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException);
-
-            const ::rtl::OUString& getName() const { return m_Name; }
+            ::rtl::OUString SAL_CALL getName() { return m_Name; }
             const ::rtl::OUString& getSchema() const { return m_SchemaName; }
             // com::sun::star::lang::XUnoTunnel
             virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
             static ::com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
 
+            // XRename
+            virtual void SAL_CALL rename( const ::rtl::OUString& newName ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException);
+
+            // XAlterTable
+            virtual void SAL_CALL alterColumnByName( const ::rtl::OUString& colName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL alterColumnByIndex( sal_Int32 index, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
             //
             sal_Bool create() throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
             WpADOTable getImpl() const { return m_aTable;}
-        };
-
-        class OAdoTable;
-        typedef ::comphelper::OPropertyArrayUsageHelper<OAdoTable> OAdoTable_PROP;
-        typedef sdbcx::OTable_BASE  OAdoTable_BASE;
-
-        class OAdoTable :       public OAdoTableDescriptor
-                                ,public OAdoTable_PROP
-                                ,public OAdoTable_BASE
-        {
-        protected:
-            sdbcx::OCollection* m_pIndexes;
-            DECLARE_CTY_PROPERTY(OAdoTable_PROP,OAdoTable)
-        public:
-            DECLARE_CTY_DEFAULTS( OAdoTableDescriptor);
-            DECLARE_SERVICE_INFO();
-            OAdoTable(sal_Bool _bCase,  _ADOTable* _pTable=NULL);
-            ~OAdoTable();
-
-            //XInterface
-            virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
-            //XTypeProvider
-            virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException);
-
-            virtual void refreshIndexes();
-
-            // ::cppu::OComponentHelper
-            virtual void SAL_CALL disposing(void);
-
-            // XDataDescriptorFactory
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > SAL_CALL createDataDescriptor( void ) throw(::com::sun::star::uno::RuntimeException);
-            // XIndexesSupplier
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL getIndexes(  ) throw(::com::sun::star::uno::RuntimeException);
-            // XRename
-            virtual void SAL_CALL rename( const ::rtl::OUString& newName ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException);
-            // XAlterTable
-            virtual void SAL_CALL alterColumnByName( const ::rtl::OUString& colName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL alterColumnByIndex( sal_Int32 index, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
         };
     }
 }
