@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: as $ $Date: 2002-07-05 08:04:37 $
+ *  last change: $Author: mba $ $Date: 2002-07-09 14:12:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1184,7 +1184,7 @@ void SAL_CALL Frame::activate() throw( css::uno::RuntimeException )
         implts_sendFrameActionEvent( css::frame::FrameAction_FRAME_UI_ACTIVATED );
         ::vos::OClearableGuard aSolarGuard( Application::GetSolarMutex() );
         Window* pWindow = VCLUnoHelper::GetWindow( xComponentWindow );
-        if( pWindow != NULL )
+        if( pWindow != NULL && isTop() )
         {
             Application::SetDefModalDialogParent( pWindow );
         }
@@ -1442,7 +1442,8 @@ sal_Bool SAL_CALL Frame::setComponent(  const   css::uno::Reference< css::awt::X
         Window* pOldComponentWindow = VCLUnoHelper::GetWindow( xOldComponentWindow );
         if (
             ( pOldComponentWindow                    != NULL                )   &&
-            ( Application::GetDefModalDialogParent() == pOldComponentWindow )
+            ( Application::GetDefModalDialogParent() == pOldComponentWindow ) &&
+            isTop()
            )
         {
             Application::SetDefModalDialogParent( pContainerWindow );
@@ -1492,7 +1493,7 @@ sal_Bool SAL_CALL Frame::setComponent(  const   css::uno::Reference< css::awt::X
         /* SOLAR SAFE { */
         ::vos::OClearableGuard aSolarGuard( Application::GetSolarMutex() );
         Window* pWindow = VCLUnoHelper::GetWindow( xComponentWindow );
-        if (pWindow!=NULL)
+        if ( pWindow!=NULL && isTop() )
             Application::SetDefModalDialogParent( pWindow );
         aSolarGuard.clear();
         /* } SOLAR SAFE */
