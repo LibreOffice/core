@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fusel.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:33:48 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 15:10:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1207,21 +1207,8 @@ void FuSelection::SelectionHasChanged()
         Activate();
     }
 
-    /**************************************************************************
-    * ObjectBar einschalten
-    **************************************************************************/
-    USHORT nObjBarId;
-
-    switch( pView->GetContext() )
-    {
-        case( SDRCONTEXT_POINTEDIT ): nObjBarId = RID_BEZIER_TOOLBOX; break;
-        case( SDRCONTEXT_GRAPHIC ): nObjBarId = RID_DRAW_GRAF_TOOLBOX; break;
-        case( SDRCONTEXT_MEDIA ): nObjBarId = RID_DRAW_MEDIA_TOOLBOX; break;
-
-        default: nObjBarId = RID_DRAW_OBJ_TOOLBOX; break;
-    }
-
-    pViewShell->GetObjectBarManager().SwitchObjectBar (nObjBarId);
+    // Activate the right tool bar for the current context of the view.
+    pViewShell->GetObjectBarManager().SelectionHasChanged (pView);
 }
 
 
