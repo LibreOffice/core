@@ -2,9 +2,9 @@
  *
  *  $RCSfile: columninfo.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-07 11:13:13 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 14:31:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,8 +71,8 @@
 #include "internal/fileextensions.hxx"
 #endif
 
-#ifndef METAINFO_HXX_INCLUDED
-#include "internal/metainfo.hxx"
+#ifndef METAINFOREADER_HXX_INCLUDED
+#include "internal/metainforeader.hxx"
 #endif
 
 #ifndef UTILITIES_HXX_INCLUDED
@@ -169,7 +169,7 @@ ULONG STDMETHODCALLTYPE CColumnInfo::Release( void)
 // IColumnProvider
 //-----------------------------
 
-HRESULT STDMETHODCALLTYPE CColumnInfo::Initialize(LPCSHCOLUMNINIT psci)
+HRESULT STDMETHODCALLTYPE CColumnInfo::Initialize(LPCSHCOLUMNINIT /*psci*/)
 {
     return S_OK;
 }
@@ -189,7 +189,10 @@ HRESULT STDMETHODCALLTYPE CColumnInfo::GetColumnInfo(DWORD dwIndex, SHCOLUMNINFO
     //  or an error is returned
     psci->scid.fmtid = ColumnInfoTable[dwIndex].scid.fmtid;
     psci->scid.pid   = ColumnInfoTable[dwIndex].scid.pid;
-    wcscpy(psci->wszTitle, ColumnInfoTable[dwIndex].wszTitle);
+    ZeroMemory(psci->wszTitle, sizeof(psci->wszTitle));
+    wcsncpy(psci->wszTitle, ColumnInfoTable[dwIndex].wszTitle, (sizeof(psci->wszTitle) - 1));
+
+    //wcscpy(psci->wszTitle, ColumnInfoTable[dwIndex].wszTitle);
 
     return S_OK;
 }
@@ -205,7 +208,7 @@ HRESULT STDMETHODCALLTYPE CColumnInfo::GetColumnInfo(DWORD dwIndex, SHCOLUMNINFO
         try
         {
 
-            COpenOfficeMetaInformation meta_info_accessor(WStringToString(pscd->wszFile));
+            CMetaInfoReader meta_info_accessor(WStringToString(pscd->wszFile));
 
             VariantClear(pvarData);
 
