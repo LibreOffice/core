@@ -2,9 +2,9 @@
  *
  *  $RCSfile: validate.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-05 21:55:59 $
+ *  last change: $Author: rt $ $Date: 2001-06-08 22:41:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@ TabDialog TAB_DLG_VALIDATION
                 Text[ english_us ] = "Criteria";
                 Text[ portuguese ] = "Valores";
                 Text[ russian ] = "Κπθςεπθθ";
-                Text[ greek ] = "Τιμές";
+                Text[ greek ] = "Κριτήρια";
                 Text[ dutch ] = "Waarden";
                 Text[ french ] = "Critθres";
                 Text[ spanish ] = "Criterios";
@@ -1033,7 +1033,7 @@ TabPage TP_VALIDATION_ERROR
         Text[ japanese ] = "–³ψ‚Θ’l‚Μ“ό—Ν‚Ι΄Χ°Ò―Ύ°Όή‚π•\\¦‚·‚ι(~M)";
         Text[ chinese_traditional ] = "¦bΏι¤JµL®ΔΌΖ­Θ®ΙΕγ¥άΏω»~³ψ§i(~M)";
         Text[ arabic ] = "ΕΩεΗΡ ΡΣΗαΙ ΞΨΓ ΪδΟ ΕΟΞΗα ήνγ ΫνΡ ΥΗαΝΙ";
-        Text[ greek ] = "Εμφάνιση μηνύματος σ~φάλματος σε περίπτωση εισαγωγής μη έγκυρων τιμών";
+        Text[ greek ] = "Ε~μφάνιση μηνύματος σφάλματος σε περίπτωση εισαγωγής μη έγκυρων τιμών";
         Text[ korean ] = "ΐ―ΘΏΗΟΑφ ΎΚΐΊ °ª ΐΤ·Β½Γ Ώΐ·ω Έή½ΓΑφ ³ªΕΈ³»±β(~M)";
         Text[ turkish ] = "~Geηersiz deπer girildiπinde hata iletisi gφrόntόle";
         Text[ catalan ] = "Mostrar mensaje de ~error al entrar valores incorrectos";
@@ -1355,4 +1355,5 @@ TabPage TP_VALIDATION_ERROR
     Text[ catalan ] = "Mensaje de error";
     Text[ finnish ] = "Virhehδlytys";
 };
+
 
