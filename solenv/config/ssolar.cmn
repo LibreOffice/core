@@ -79,7 +79,6 @@ common
 		NO_DEFAULT_STL
 		no_hids
 		NO_REC_RES
-		no_srs_patch
 		no_transex
 		NOSOLAR_JAVA
 		ODBCINC
