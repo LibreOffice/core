@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLBackgroundImageExport.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dvo $ $Date: 2002-08-29 17:46:18 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:22:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,8 +196,8 @@ void XMLBackgroundImageExport::exportXML( const Any& rURL,
             if( (*pTransparency) >>= nTransparency )
             {
                 OUStringBuffer aOut;
-                SvXMLUnitConverter::convertPercent( aOut, nTransparency );
-                GetExport().AddAttribute( XML_NAMESPACE_DRAW, XML_TRANSPARENCY,
+                SvXMLUnitConverter::convertPercent( aOut, 100-nTransparency );
+                GetExport().AddAttribute( XML_NAMESPACE_DRAW, XML_OPACITY,
                                           aOut.makeStringAndClear() );
             }
         }
