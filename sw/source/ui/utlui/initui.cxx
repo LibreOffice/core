@@ -2,9 +2,9 @@
  *
  *  $RCSfile: initui.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-20 09:02:23 $
+ *  last change: $Author: obo $ $Date: 2000-11-22 11:47:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -257,8 +257,8 @@ ImpAutoFmtNameListLoader::ImpAutoFmtNameListLoader( SvStringsDtor& rLst )
             p->SearchAndReplace(C2S("%2"), C2S("''"));
 #else
             //unter richtigen Betriebssystemen funktioniert es auch so
-            p->SearchAndReplace(C2S("%1"), rLclD.getDoubleQuotationMarkStartChar());
-            p->SearchAndReplace(C2S("%2"), rLclD.getDoubleQuotationMarkEndChar());
+            p->SearchAndReplace(C2S("%1"), rLclD.getDoubleQuotationMarkStart());
+            p->SearchAndReplace(C2S("%2"), rLclD.getDoubleQuotationMarkEnd());
 #endif
         }
         rLst.Insert( p, n );
@@ -302,6 +302,9 @@ const String&   SwAuthorityFieldType::GetAuthTypeName(ToxAuthorityType eType)
 /*************************************************************************
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/20 09:02:23  jp
+    should change: use LocaleDataWrapper
+
     Revision 1.2  2000/10/06 13:39:19  jp
     should changes: don't use IniManager
 
