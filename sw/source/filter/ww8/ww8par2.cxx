@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-18 15:28:33 $
+ *  last change: $Author: obo $ $Date: 2003-09-01 12:43:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -373,10 +373,8 @@ short wwSectionManager::GetPageWidth() const
     return !maSegments.empty() ? maSegments.back().nPgWidth : 0;
 }
 
-long SwWW8ImplReader::Read_Ftn(WW8PLCFManResult* pRes)
+sal_uInt16 SwWW8ImplReader::End_Ftn()
 {
-    bool bFtEdOk = false;
-
     /*
     #84095#
     Ignoring Footnote outside of the normal Text. People will put footnotes
@@ -388,38 +386,40 @@ long SwWW8ImplReader::Read_Ftn(WW8PLCFManResult* pRes)
         return 0;
     }
 
-    USHORT nType;
-    bool bAutoNum = true;
-    if( eEDN == pRes->nSprmId )
-    {
-        nType = MAN_EDN;
-        if( pPlcxMan->GetEdn() )
-            bAutoNum = 0 != *(short*)pPlcxMan->GetEdn()->GetData();
-    }
-    else
-    {
-        nType = MAN_FTN;
-        if( pPlcxMan->GetFtn() )
-            bAutoNum = 0 != *(short*)pPlcxMan->GetFtn()->GetData();
-    }
+    ASSERT(!maFtnStack.empty(), "footnote end without start");
+    if (maFtnStack.empty())
+        return 0;
 
-    WW8PLCFxSaveAll aSave;
-    pPlcxMan->SaveAllPLCFx( aSave );
-    WW8PLCFMan* pOldPlcxMan = pPlcxMan;
+    bool bFtEdOk = false;
+    const FtnDescriptor &rDesc = maFtnStack.back();
 
-    SwFmtFtn aFtn( eEDN == pRes->nSprmId ) ;            // erzeuge Fussnote
-    //rDoc.Insert( *pPaM, aFtn );
-
+    //Get the footnote character and remove it from the txtnode. We'll
+    //replace it with the footnote
     SwTxtNode* pTxt = pPaM->GetNode()->GetTxtNode();
     xub_StrLen nPos = pPaM->GetPoint()->nContent.GetIndex();
 
-    SwTxtAttr* pFN = pTxt->Insert(aFtn, nPos, nPos);
-
-    SwPosition aTmpPos( *pPaM->GetPoint() );    // merke alte Cursorposition
-
-    ASSERT(pFN, "Probleme beim Anlegen des Fussnoten-Textes");
-    if( pFN )
+    String sChar;
+    SwTxtAttr* pFN = 0;
+    //There should have been a footnote char, we will replace this.
+    if (pTxt && nPos)
     {
+        sChar.Append(pTxt->GetTxt().GetChar(--nPos));
+        pPaM->SetMark();
+        pPaM->GetMark()->nContent--;
+        rDoc.Delete( *pPaM );
+        pPaM->DeleteMark();
+        SwFmtFtn aFtn(rDesc.meType == MAN_EDN);
+        pFN = pTxt->Insert(aFtn, nPos, nPos);
+    }
+    ASSERT(pFN, "Probleme beim Anlegen des Fussnoten-Textes");
+    if (pFN)
+    {
+
+        SwPosition aTmpPos( *pPaM->GetPoint() );    // merke alte Cursorposition
+        WW8PLCFxSaveAll aSave;
+        pPlcxMan->SaveAllPLCFx( aSave );
+        WW8PLCFMan* pOldPlcxMan = pPlcxMan;
+
         const SwNodeIndex* pSttIdx = ((SwTxtFtn*)pFN)->GetStartNode();
         ASSERT(pSttIdx, "Probleme beim Anlegen des Fussnoten-Textes");
 
@@ -429,21 +429,30 @@ long SwWW8ImplReader::Read_Ftn(WW8PLCFManResult* pRes)
         bFtnEdn = true;
 
         // read content of Ft-/End-Note
-        Read_HdFtFtnText( pSttIdx, pRes->nCp2OrIdx, pRes->nMemLen, nType );
+        Read_HdFtFtnText( pSttIdx, rDesc.mnStartCp, rDesc.mnLen, rDesc.meType);
         bFtEdOk = true;
         bFtnEdn = bOld;
 
-        // falls keine automatische Numerierung eingestellt ist, so hole
-        // das 1. Zeichen aus der Fuss-/End-Note und setze das als Zeichen
-        if( !bAutoNum )
+        ASSERT(sChar.Len()==1 && ((rDesc.mbAutoNum == (sChar.GetChar(0) == 2))),
+         "footnote autonumbering must be 0x02, and everthing else must not be");
+
+        // If no automatic numbering use the following char from the main text
+        // as the footnote number
+        if (!rDesc.mbAutoNum)
+            ((SwTxtFtn*)pFN)->SetNumber(0, &sChar);
+
+        /*
+            Delete the footnote char from the footnote if its at the beginning
+            as usual. Might not be if the user has already deleted it, e.g.
+            #i14737#
+        */
+        SwNodeIndex& rNIdx = pPaM->GetPoint()->nNode;
+        rNIdx = pSttIdx->GetIndex() + 1;
+        SwTxtNode* pTNd = rNIdx.GetNode().GetTxtNode();
+        if (pTNd && pTNd->GetTxt().Len() && sChar.Len())
         {
-            SwNodeIndex& rNIdx = pPaM->GetPoint()->nNode;
-            rNIdx = pSttIdx->GetIndex() + 1;
-            SwTxtNode* pTNd = rNIdx.GetNode().GetTxtNode();
-            if (pTNd && pTNd->GetTxt().Len())
+            if (pTNd->GetTxt().GetChar(0) == sChar.GetChar(0))
             {
-                String sNo( pTNd->GetTxt().GetChar( 0 ));
-                ((SwTxtFtn*)pFN)->SetNumber( 0, &sNo );
                 pPaM->GetPoint()->nContent.Assign( pTNd, 0 );
                 pPaM->SetMark();
                 pPaM->GetMark()->nContent++;
@@ -451,22 +460,54 @@ long SwWW8ImplReader::Read_Ftn(WW8PLCFManResult* pRes)
                 pPaM->DeleteMark();
             }
         }
-    }
-    *pPaM->GetPoint() = aTmpPos;                // restore Cursor
 
-    pPlcxMan = pOldPlcxMan;             // Attributverwaltung restoren
-    pPlcxMan->RestoreAllPLCFx( aSave );
+        *pPaM->GetPoint() = aTmpPos;        // restore Cursor
 
-    if( bSymbol )
-    {
-        pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_CHRATR_FONT );
-        bSymbol = false;
+        pPlcxMan = pOldPlcxMan;             // Restore attributes
+        pPlcxMan->RestoreAllPLCFx( aSave );
     }
 
        if (bFtEdOk)
         maSectionManager.SetCurrentSectionHasFootnote();
 
-    return 1;       // das Fussnotenzeichen ueberlesen!
+    maFtnStack.pop_back();
+    return 0;
+}
+
+long SwWW8ImplReader::Read_Ftn(WW8PLCFManResult* pRes)
+{
+    /*
+    #84095#
+    Ignoring Footnote outside of the normal Text. People will put footnotes
+    into field results and field commands.
+    */
+    if (bIgnoreText ||
+        pPaM->GetPoint()->nNode < rDoc.GetNodes().GetEndOfExtras().GetIndex())
+    {
+        return 0;
+    }
+
+    FtnDescriptor aDesc;
+    bool bAutoNum = true;
+    if( eEDN == pRes->nSprmId )
+    {
+        aDesc.meType = MAN_EDN;
+        if (pPlcxMan->GetEdn())
+            aDesc.mbAutoNum = 0 != *(short*)pPlcxMan->GetEdn()->GetData();
+    }
+    else
+    {
+        aDesc.meType = MAN_FTN;
+        if (pPlcxMan->GetFtn())
+            aDesc.mbAutoNum = 0 != *(short*)pPlcxMan->GetFtn()->GetData();
+    }
+
+    aDesc.mnStartCp = pRes->nCp2OrIdx;
+    aDesc.mnLen = pRes->nMemLen;
+
+    maFtnStack.push_back(aDesc);
+
+    return 0;
 }
 
 bool SwWW8ImplReader::SearchRowEnd(WW8PLCFx_Cp_FKP* pPap, WW8_CP &rStartCp,
@@ -521,24 +562,14 @@ bool SwWW8ImplReader::SearchRowEnd(WW8PLCFx_Cp_FKP* pPap, WW8_CP &rStartCp,
     return false;
 }
 
-// TestApo() ist die aus ProcessSpecial() herausgeloeste Apo-Abfrage.
-// sie wird auch beim Aufbau der Tabellen-Struktur (ww8par6.cxx)
-// verwendet.
-// Die Parameter rbStartApo, rbStopApo und rpNowStyleApo sind reine
-// Rueckgabeparameter
-const BYTE* SwWW8ImplReader::TestApo(bool& rbStartApo, bool& rbStopApo,
-    WW8FlyPara* &rpNowStyleApo, int nCellLevel, bool bTableRowEnd,
+ApoTestResults SwWW8ImplReader::TestApo(int nCellLevel, bool bTableRowEnd,
     WW8_TablePos *pTabPos)
 {
-    const BYTE* pSprm37;
-    const BYTE* pSprm29;
+    ApoTestResults aRet;
     // Frame in Style Definition (word appears to ignore them if inside an
     // text autoshape, e.g. #94418#)
-    rpNowStyleApo = 0;
     if (!bTxbxFlySection)
-        rpNowStyleApo = StyleExists(nAktColl) ? pCollA[nAktColl].pWWFly : 0;
-
-    rbStartApo = rbStopApo  = false;
+        aRet.mpStyleApo = StyleExists(nAktColl) ? pCollA[nAktColl].pWWFly : 0;
 
     /*
     #i1140#
@@ -560,11 +591,11 @@ const BYTE* SwWW8ImplReader::TestApo(bool& rbStartApo, bool& rbStopApo,
     to see if we are still in that frame.
     */
 
-    pSprm37 = pPlcxMan->HasParaSprm( bVer67 ? 37 : 0x2423 );
-    pSprm29 = pPlcxMan->HasParaSprm( bVer67 ? 29 : 0x261B );
+    aRet.mpSprm37 = pPlcxMan->HasParaSprm( bVer67 ? 37 : 0x2423 );
+    aRet.mpSprm29 = pPlcxMan->HasParaSprm( bVer67 ? 29 : 0x261B );
 
     // Is there some frame data here
-    bool bNowApo = rpNowStyleApo || pSprm29 || pSprm37 || pTabPos;
+    bool bNowApo = aRet.HasFrame() || pTabPos;
 
     bool bTestAllowed = !bTxbxFlySection && !bTableRowEnd;
     if (bTestAllowed)
@@ -577,10 +608,10 @@ const BYTE* SwWW8ImplReader::TestApo(bool& rbStartApo, bool& rbStopApo,
     }
 
     if (!bTestAllowed)
-        return pSprm29;
+        return aRet;
 
-    rbStartApo = bNowApo && !InAnyApo();                     // APO-start
-    rbStopApo = InEqualOrHigherApo(nCellLevel) && !bNowApo;  // APO-end
+    aRet.mbStartApo = bNowApo && !InAnyApo(); // APO-start
+    aRet.mbStopApo = InEqualOrHigherApo(nCellLevel) && !bNowApo;  // APO-end
 
     //If it happens that we are in a table, then if its not the first cell
     //then any attributes that might otherwise cause the contents to jump
@@ -591,18 +622,17 @@ const BYTE* SwWW8ImplReader::TestApo(bool& rbStartApo, bool& rbStopApo,
     if (bNowApo && !bTableRowEnd && InLocalApo())
     {
         // two bordering eachother
-        if (!TestSameApo(pSprm29, rpNowStyleApo, pTabPos))
-            rbStopApo = rbStartApo = true;
+        if (!TestSameApo(aRet, pTabPos))
+            aRet.mbStopApo = aRet.mbStartApo = true;
     }
 
-    return pSprm29;
+    return aRet;
 }
-
 //---------------------------------------------------------------------
 //   Hilfroutinen fuer Kapitelnummerierung und Aufzaehlung / Gliederung
 //---------------------------------------------------------------------
 
-static void SetBaseAnlv( SwNumFmt* pNum, WW8_ANLV* pAV, BYTE nSwLevel )
+static void SetBaseAnlv(SwNumFmt &rNum, WW8_ANLV &rAV, BYTE nSwLevel )
 {
     static SvxExtNumType eNumA[8] = { SVX_NUM_ARABIC, SVX_NUM_ROMAN_UPPER, SVX_NUM_ROMAN_LOWER,
         SVX_NUM_CHARS_UPPER_LETTER_N, SVX_NUM_CHARS_LOWER_LETTER_N, SVX_NUM_ARABIC,
@@ -613,50 +643,53 @@ static void SetBaseAnlv( SwNumFmt* pNum, WW8_ANLV* pAV, BYTE nSwLevel )
 //          eigentlich folgende 2, aber Writer-UI bietet es nicht an
 //      SVX_ADJUST_CENTER, SVX_ADJUST_BLOCKLINE };
 
-    pNum->SetNumberingType(( SVBT8ToByte( pAV->nfc ) < 8 ) ?
-                    eNumA[SVBT8ToByte( pAV->nfc ) ] : SVX_NUM_NUMBER_NONE);
-    if ((SVBT8ToByte(pAV->aBits1 ) & 0x4) >> 2)
-        pNum->SetIncludeUpperLevels(nSwLevel + 1);
-    pNum->SetStart( SVBT16ToShort( pAV->iStartAt ) );
-//  pNum->eNumAdjust = eAdjA[pAV->jc];
-    pNum->SetNumAdjust( eAdjA[SVBT8ToByte( pAV->aBits1 ) & 0x3] );
+    rNum.SetNumberingType(( SVBT8ToByte( rAV.nfc ) < 8 ) ?
+                    eNumA[SVBT8ToByte( rAV.nfc ) ] : SVX_NUM_NUMBER_NONE);
+    if ((SVBT8ToByte(rAV.aBits1 ) & 0x4) >> 2)
+        rNum.SetIncludeUpperLevels(nSwLevel + 1);
+    rNum.SetStart( SVBT16ToShort( rAV.iStartAt ) );
+//  rNum.eNumAdjust = eAdjA[rAV.jc];
+    rNum.SetNumAdjust( eAdjA[SVBT8ToByte( rAV.aBits1 ) & 0x3] );
 
-    pNum->SetCharTextDistance( SVBT16ToShort( pAV->dxaSpace ) );
-    INT16 nIndent = Abs((INT16)SVBT16ToShort( pAV->dxaIndent ));
-    if( SVBT8ToByte( pAV->aBits1 ) & 0x08 ){    // fHang
-        pNum->SetFirstLineOffset( -nIndent );
-        pNum->SetLSpace( nIndent );
-        pNum->SetAbsLSpace( nIndent );
-    }else{
-        pNum->SetCharTextDistance( nIndent );       // Breite der Nummer fehlt
-    }
-    if( SVBT8ToByte( pAV->nfc ) == 5 || SVBT8ToByte( pAV->nfc ) == 7 )
+    rNum.SetCharTextDistance( SVBT16ToShort( rAV.dxaSpace ) );
+    INT16 nIndent = Abs((INT16)SVBT16ToShort( rAV.dxaIndent ));
+    if( SVBT8ToByte( rAV.aBits1 ) & 0x08 )      //fHang
     {
-        String sP( pNum->GetSuffix() );
+        rNum.SetFirstLineOffset( -nIndent );
+        rNum.SetLSpace( nIndent );
+        rNum.SetAbsLSpace( nIndent );
+    }
+    else
+    {
+        rNum.SetCharTextDistance( nIndent );        // Breite der Nummer fehlt
+    }
+    if( SVBT8ToByte( rAV.nfc ) == 5 || SVBT8ToByte( rAV.nfc ) == 7 )
+    {
+        String sP( rNum.GetSuffix() );
         sP.Insert( '.', 0 );
-        pNum->SetSuffix( sP );  // Ordinalzahlen
+        rNum.SetSuffix( sP );   // Ordinalzahlen
     }
 }
 
-void SwWW8ImplReader::SetAnlvStrings(SwNumFmt* pNum, WW8_ANLV* pAV,
+void SwWW8ImplReader::SetAnlvStrings(SwNumFmt &rNum, WW8_ANLV &rAV,
     const BYTE* pTxt, bool bOutline)
 {
     bool bInsert = false;                       // Default
     CharSet eCharSet = eStructCharSet;
 
-    const WW8_FFN* pF = pFonts->GetFont(SVBT16ToShort(pAV->ftc)); // FontInfo
+    const WW8_FFN* pF = pFonts->GetFont(SVBT16ToShort(rAV.ftc)); // FontInfo
     bool bListSymbol = pF && ( pF->chs == 2 );      // Symbol/WingDings/...
 
     String sTxt;
     if (bVer67)
     {
-        sTxt = String( (sal_Char*)pTxt,  SVBT8ToByte( pAV->cbTextBefore )
-                                 + SVBT8ToByte( pAV->cbTextAfter  ), eCharSet );
+        sTxt = String( (sal_Char*)pTxt,  SVBT8ToByte( rAV.cbTextBefore )
+                                 + SVBT8ToByte( rAV.cbTextAfter  ), eCharSet );
     }
     else
     {
-        for(xub_StrLen i = SVBT8ToByte(pAV->cbTextBefore);
-            i < SVBT8ToByte(pAV->cbTextAfter); ++i, pTxt += 2)
+        for(xub_StrLen i = SVBT8ToByte(rAV.cbTextBefore);
+            i < SVBT8ToByte(rAV.cbTextAfter); ++i, pTxt += 2)
         {
             sTxt.Append(SVBT16ToShort(*(SVBT16*)pTxt));
         }
@@ -664,8 +697,8 @@ void SwWW8ImplReader::SetAnlvStrings(SwNumFmt* pNum, WW8_ANLV* pAV,
 
     if( bOutline )
     {                             // Gliederung
-        if( !pNum->GetIncludeUpperLevels()          // es sind  <= 1 Nummern anzuzeigen
-            || pNum->GetNumberingType() == SVX_NUM_NUMBER_NONE ){   // oder dieser Level hat keine
+        if( !rNum.GetIncludeUpperLevels()           // es sind  <= 1 Nummern anzuzeigen
+            || rNum.GetNumberingType() == SVX_NUM_NUMBER_NONE ){    // oder dieser Level hat keine
                                                 // eigenen Ziffern
             bInsert = true;                     // -> dann uebernehme Zeichen
 
@@ -673,25 +706,25 @@ void SwWW8ImplReader::SetAnlvStrings(SwNumFmt* pNum, WW8_ANLV* pAV,
             if( bListSymbol )
                 //JP 14.08.96: cBulletChar benutzen, damit auf dem MAC
                 //              richtig gemappt wird
-                sTxt.Fill(  SVBT8ToByte( pAV->cbTextBefore )
-                          + SVBT8ToByte( pAV->cbTextAfter  ), cBulletChar );
+                sTxt.Fill(  SVBT8ToByte( rAV.cbTextBefore )
+                          + SVBT8ToByte( rAV.cbTextAfter  ), cBulletChar );
             }
     }
     else
     {                                       // Nummerierung / Aufzaehlung
         bInsert = true;
-//      if( SVBT16ToShort( pAV->ftc ) == 1
-//          || SVBT16ToShort( pAV->ftc ) == 3 ){    // Symbol / WingDings
+//      if( SVBT16ToShort( rAV.ftc ) == 1
+//          || SVBT16ToShort( rAV.ftc ) == 3 ){ // Symbol / WingDings
         if( bListSymbol )
         {
             FontFamily eFamily;
             String aName;
             FontPitch ePitch;
 
-            if( GetFontParams( SVBT16ToShort( pAV->ftc ), eFamily, aName,
+            if( GetFontParams( SVBT16ToShort( rAV.ftc ), eFamily, aName,
                                 ePitch, eCharSet ) ){
-//              USHORT nSiz = ( SVBT16ToShort( pAV->hps ) ) ?
-//                          SVBT16ToShort( pAV->hps ) : 24; // Groesse in 1/2 Pt
+//              USHORT nSiz = ( SVBT16ToShort( rAV.hps ) ) ?
+//                          SVBT16ToShort( rAV.hps ) : 24; // Groesse in 1/2 Pt
 //                      darf nach JP nicht gesetzt werden, da immer die Size
 //                      genommen wird, die am ZeilenAnfang benutzt wird
                 Font aFont;
@@ -699,32 +732,32 @@ void SwWW8ImplReader::SetAnlvStrings(SwNumFmt* pNum, WW8_ANLV* pAV,
                 aFont.SetFamily( eFamily );
 //              aFont.SetPitch( ePitch );       // darf nach JP nicht
                 aFont.SetCharSet( eCharSet );
-                pNum->SetNumberingType(SVX_NUM_CHAR_SPECIAL);
-//              if( pAV->ico )      // geht in UI und SWG-Writer/Reader nicht
-//                  aFont.SetColor( Color( GetCol( pAV->ico ) ) );
-                pNum->SetBulletFont( &aFont );
+                rNum.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
+//              if( rAV.ico )       // geht in UI und SWG-Writer/Reader nicht
+//                  aFont.SetColor( Color( GetCol( rAV.ico ) ) );
+                rNum.SetBulletFont( &aFont );
 
                 // take only the very first character
-                if( pAV->cbTextBefore || pAV->cbTextAfter)
-                    pNum->SetBulletChar( sTxt.GetChar( 0 ) );
+                if( rAV.cbTextBefore || rAV.cbTextAfter)
+                    rNum.SetBulletChar( sTxt.GetChar( 0 ) );
                 else
-                    pNum->SetBulletChar( 0x2190 );
+                    rNum.SetBulletChar( 0x2190 );
             }
         }
     }
     if( bInsert )
     {
-        if( pAV->cbTextBefore )
+        if( rAV.cbTextBefore )
         {
-            String sP( sTxt.Copy( 0, SVBT8ToByte( pAV->cbTextBefore ) ) );
-            pNum->SetPrefix( sP );
+            String sP( sTxt.Copy( 0, SVBT8ToByte( rAV.cbTextBefore ) ) );
+            rNum.SetPrefix( sP );
         }
-        if( SVBT8ToByte( pAV->cbTextAfter ) )
+        if( SVBT8ToByte( rAV.cbTextAfter ) )
         {
-            String sP( pNum->GetSuffix() );
-            sP.Insert( sTxt.Copy( SVBT8ToByte( pAV->cbTextBefore ),
-                                  SVBT8ToByte( pAV->cbTextAfter  ) ) );
-            pNum->SetSuffix( sP );
+            String sP( rNum.GetSuffix() );
+            sP.Insert( sTxt.Copy( SVBT8ToByte( rAV.cbTextBefore ),
+                                  SVBT8ToByte( rAV.cbTextAfter  ) ) );
+            rNum.SetSuffix( sP );
         }
 // Die Zeichen vor und hinter mehreren Ziffern koennen leider nicht uebernommen
 // werden, da sie der Writer ganz anders behandelt und das Ergebnis i.A.
@@ -739,14 +772,14 @@ void SwWW8ImplReader::SetAnld(SwNumRule* pNumR, WW8_ANLD* pAD, BYTE nSwLevel,
     bool bOutLine)
 {
     SwNumFmt aNF;
-    if( pAD )
+    if (pAD)
     {                                   // Es gibt einen Anld-Sprm
         bAktAND_fNumberAcross = 0 != SVBT8ToByte( pAD->fNumberAcross );
-        WW8_ANLV* pAV = &pAD->eAnlv;
-        SetBaseAnlv( &aNF, pAV, nSwLevel );     // Setze Basis-Format
-        SetAnlvStrings( &aNF, pAV, pAD->rgchAnld, bOutLine );// und Rest
+        WW8_ANLV &rAV = pAD->eAnlv;
+        SetBaseAnlv(aNF, rAV, nSwLevel);        // Setze Basis-Format
+        SetAnlvStrings(aNF, rAV, pAD->rgchAnld, bOutLine );// und Rest
     }
-    pNumR->Set( nSwLevel, aNF );
+    pNumR->Set(nSwLevel, aNF);
 }
 
 
@@ -858,23 +891,25 @@ void SwWW8ImplReader::Read_ANLevelDesc( USHORT, const BYTE* pData, short nLen ) 
 // ( nur fuer Gliederungen im Text; Aufzaehlungen / Nummerierungen laufen
 // ueber ANLDs )
 // dabei wird die Info aus dem OLST geholt und nicht aus dem ANLD ( s.u. )
-void SwWW8ImplReader::SetNumOlst( SwNumRule* pNumR, WW8_OLST* pO, BYTE nSwLevel )
+void SwWW8ImplReader::SetNumOlst(SwNumRule* pNumR, WW8_OLST* pO, BYTE nSwLevel)
 {
     SwNumFmt aNF;
-    WW8_ANLV* pAV = &pO->rganlv[nSwLevel];
-    SetBaseAnlv( &aNF, pAV, nSwLevel );             // Setze Basis-Format
-                                            // ... und nun die Strings
-    int i, nTxtOfs = 0;
-    register WW8_ANLV* pAV1;                 // suche String-Positionen
-    for( i = 0, pAV1 = pO->rganlv; i < nSwLevel; i++, pAV1++ ){
-        nTxtOfs += SVBT8ToByte( pAV1->cbTextBefore )
-                    + SVBT8ToByte( pAV1->cbTextAfter );
+    WW8_ANLV &rAV = pO->rganlv[nSwLevel];
+    SetBaseAnlv(aNF, rAV, nSwLevel);
+                                            // ... und then the Strings
+    int nTxtOfs = 0;
+    BYTE i;
+    register WW8_ANLV* pAV1;                 // search String-Positions
+    for (i = 0, pAV1 = pO->rganlv; i < nSwLevel; ++i, ++pAV1)
+    {
+        nTxtOfs += SVBT8ToByte(pAV1->cbTextBefore)
+            + SVBT8ToByte(pAV1->cbTextAfter);
     }
 
     if (!bVer67)
         nTxtOfs *= 2;
-    SetAnlvStrings( &aNF, pAV, pO->rgch + nTxtOfs, true); // und rein
-    pNumR->Set( nSwLevel, aNF );
+    SetAnlvStrings(aNF, rAV, pO->rgch + nTxtOfs, true); // und rein
+    pNumR->Set(nSwLevel, aNF);
 }
 
 
@@ -1005,7 +1040,16 @@ void SwWW8ImplReader::NextAnlLine(const BYTE* pSprm13)
         if (!mpNumRule->GetNumFmt(nSwNumLevel))
         {
             if (pNumOlst)                       // es gab ein OLST
+            {
+                //Assure upper levels are set, #i9556#
+                for (BYTE nI = 0; nI < nSwNumLevel; ++nI)
+                {
+                    if (!mpNumRule->GetNumFmt(nI))
+                        SetNumOlst(mpNumRule, pNumOlst, nI);
+                }
+
                 SetNumOlst(mpNumRule, pNumOlst , nSwNumLevel);
+            }
             else                                // kein Olst, nimm Anld
             {
                 // sprmAnld
@@ -1041,7 +1085,7 @@ void SwWW8ImplReader::StopAnl(bool bGoBack)
     nSwNumLevel = 0xff;
     nWwNumType = WW8_None;
     bAnl = false;
-    mpNumRule = 0; //#100doctest#
+    mpNumRule = 0;
 }
 
 WW8TabBandDesc::WW8TabBandDesc( WW8TabBandDesc& rBand )
@@ -1768,10 +1812,7 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp)
 
         //Does this row match up with the last row closely enough to be
         //considered part of the same table
-        bool bStartApo, bStopApo;
-        WW8FlyPara *rpNowStyleApo=0;
-        const BYTE* pSprm29 = pIo->TestApo(bStartApo, bStopApo, rpNowStyleApo,
-            pIo->nInTable, false, pTabPos);
+        ApoTestResults aApo = pIo->TestApo(pIo->nInTable, false, pTabPos);
 
         /*
         ##513##, #79474# If this is not sufficent, then we should look at
@@ -1779,13 +1820,12 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp)
         part of this table, but instead is an absolutely positioned table
         outside of this one
         */
-        if (bStopApo)
+        if (aApo.mbStopApo)
             break;
-        if (bStartApo)
+        if (aApo.mbStartApo)
         {
             //if there really is a fly here, and not a "null" fly then break.
-            WW8FlyPara *pNewFly =
-                pIo->ConstructApo(pSprm29, rpNowStyleApo, pTabPos);
+            WW8FlyPara *pNewFly = pIo->ConstructApo(aApo, pTabPos);
             if (pNewFly)
                 delete pNewFly;
             else
@@ -1885,6 +1925,22 @@ void WW8TabDesc::CalcDefaults()
             nMaxRight = pR->nCenter[pR->nWwCols];
     }
     nSwWidth = nMaxRight - nMinLeft;
+
+    // #109830# If the table is right aligned we need to align all rows to the
+    // row that has the furthest right point
+
+    if(eOri == HORI_RIGHT)
+    {
+        for( pR = pFirstBand; pR; pR = pR->pNextBand )
+        {
+            int adjust = nMaxRight - pR->nCenter[pR->nWwCols];
+            for( short i = 0; i < pR->nWwCols + 1; i++ )
+            {
+                pR->nCenter[i] += adjust;
+            }
+
+        }
+    }
 
     // 2. Durchlauf: Zahl der Writer-Spalten feststellen Die Zahl der Writer
     // Spalten kann um bis zu 2 hoeher sein als im WW, da der SW im Gegensatz
