@@ -2,9 +2,9 @@
  *
  *  $RCSfile: databasecontext.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-08 16:02:50 $
+ *  last change: $Author: fs $ $Date: 2000-12-10 16:14:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,14 +80,20 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XHIERARCHICALNAMEACCESS_HPP_
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #endif
+#ifndef _COM_SUN_STAR_CONTAINER_XCONTAINER_HPP_
+#include <com/sun/star/container/XContainer.hpp>
+#endif
 #ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #endif
-#ifndef _CPPUHELPER_COMPBASE6_HXX_
-#include <cppuhelper/compbase6.hxx>
+#ifndef _CPPUHELPER_COMPBASE7_HXX_
+#include <cppuhelper/compbase7.hxx>
 #endif
 #ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
+#endif
+#ifndef _CPPUHELPER_INTERFACECONTAINER_HXX_
+#include <cppuhelper/interfacecontainer.hxx>
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_ELEMENTEXISTEXCEPTION_HPP_
 #include <com/sun/star/container/ElementExistException.hpp>
@@ -122,12 +128,14 @@ namespace dbaccess
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
     ODatabaseContext_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
 
-typedef ::cppu::WeakComponentImplHelper6    <   ::com::sun::star::lang::XServiceInfo
+typedef ::cppu::WeakComponentImplHelper7    <   ::com::sun::star::lang::XServiceInfo
                                             ,   ::com::sun::star::container::XEnumerationAccess
                                             ,   ::com::sun::star::container::XNameAccess
                                             ,   ::com::sun::star::uno::XNamingService
                                             ,   ::com::sun::star::lang::XEventListener
-                                            ,   ::com::sun::star::lang::XUnoTunnel > DatabaseAccessContext_Base;
+                                            ,   ::com::sun::star::lang::XUnoTunnel
+                                            ,   ::com::sun::star::container::XContainer
+                                            >   DatabaseAccessContext_Base;
 
 class ODatabaseContext
             :public DatabaseAccessContext_Base
@@ -148,6 +156,8 @@ protected:
         // as long as the session does), but the data sources may die before the session does, and then be
         // recreated afterwards. So it's our (the context's) responsibility to store the session-persistent
         // properties.
+
+    ::cppu::OInterfaceContainerHelper       m_aContainerListeners;
 
 public:
     ODatabaseContext(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
@@ -191,6 +201,10 @@ public:
 
 // ::com::sun::star::lang::XEventListener
     virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException);
+
+// ::com::sun::star::container::XContainer
+    virtual void SAL_CALL addContainerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener >& xListener ) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeContainerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener >& xListener ) throw(::com::sun::star::uno::RuntimeException);
 
 private:
     /// get the node a data source is based on

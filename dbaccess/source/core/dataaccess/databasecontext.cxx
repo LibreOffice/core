@@ -2,9 +2,9 @@
  *
  *  $RCSfile: databasecontext.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-10 17:28:17 $
+ *  last change: $Author: fs $ $Date: 2000-12-10 16:14:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,6 +161,7 @@ Reference< XInterface >
 ODatabaseContext::ODatabaseContext(const Reference< XMultiServiceFactory >  & xServiceManager)
                        :DatabaseAccessContext_Base(m_aMutex)
                        ,m_xServiceManager(xServiceManager)
+                       ,m_aContainerListeners(m_aMutex)
 {
     DBG_CTOR(ODatabaseContext,NULL);
 
@@ -250,6 +251,11 @@ sal_Int64 SAL_CALL ODatabaseContext::getSomething(const Sequence<sal_Int8>& _rId
 //------------------------------------------------------------------------------
 void ODatabaseContext::disposing()
 {
+    // notify our listener
+    EventObject aDisposeEvent(static_cast< XContainer* >(this));
+    m_aContainerListeners.disposeAndClear(aDisposeEvent);
+
+    // dispose the data sources
     for (   ObjectCache::iterator   aIter = m_aDatabaseObjects.begin();
             aIter != m_aDatabaseObjects.end();
             ++aIter
@@ -398,6 +404,11 @@ void ODatabaseContext::registerObject(const rtl::OUString& _rName, const Referen
     else
         DBG_ERROR("ODatabaseContext::registerObject: missing the XComponent interface!");
 
+    // notify our container listeners
+    ContainerEvent aEvent(static_cast<XContainer*>(this), makeAny(_rName), makeAny(_rxObject), Any());
+    OInterfaceIteratorHelper aListenerLoop(m_aContainerListeners);
+    while (aListenerLoop.hasMoreElements())
+        static_cast<XContainerListener*>(aListenerLoop.next())->elementInserted(aEvent);
 }
 
 //------------------------------------------------------------------------------
@@ -458,6 +469,18 @@ void SAL_CALL ODatabaseContext::disposing( const EventObject& _rSource ) throw(R
 }
 
 //------------------------------------------------------------------------------
+void SAL_CALL ODatabaseContext::addContainerListener( const Reference< XContainerListener >& _rxListener ) throw(RuntimeException)
+{
+    m_aContainerListeners.addInterface(_rxListener);
+}
+
+//------------------------------------------------------------------------------
+void SAL_CALL ODatabaseContext::removeContainerListener( const Reference< XContainerListener >& _rxListener ) throw(RuntimeException)
+{
+    m_aContainerListeners.removeInterface(_rxListener);
+}
+
+//------------------------------------------------------------------------------
 void ODatabaseContext::revokeObject(const rtl::OUString& _rName) throw( Exception, RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
@@ -468,10 +491,12 @@ void ODatabaseContext::revokeObject(const rtl::OUString& _rName) throw( Exceptio
     if (!aObjectNode.isValid())
         throw NoSuchElementException();
 
+    Reference< XInterface > xExistent;
+
     ObjectCacheIterator aExistent = m_aDatabaseObjects.find(_rName);
     if (aExistent != m_aDatabaseObjects.end())
     {
-        Reference< XInterface > xExistent = aExistent->second.get();
+        xExistent = aExistent->second.get();
         if (xExistent.is())
         {
             Reference< XComponent > xComponent(xExistent, UNO_QUERY);
@@ -499,6 +524,13 @@ void ODatabaseContext::revokeObject(const rtl::OUString& _rName) throw( Exceptio
     }
     else
         DBG_ERROR("ODatabaseContext::revokeObject: inconsistent state!");
+
+    // notify our container listeners
+    ContainerEvent aEvent(static_cast<XContainer*>(this), makeAny(_rName), Any(), makeAny(xExistent));
+        // note that xExistent may be empty, in case somebody removed the data source while it is not alive at this moment
+    OInterfaceIteratorHelper aListenerLoop(m_aContainerListeners);
+    while (aListenerLoop.hasMoreElements())
+        static_cast<XContainerListener*>(aListenerLoop.next())->elementRemoved(aEvent);
 }
 
 // ::com::sun::star::container::XElementAccess
