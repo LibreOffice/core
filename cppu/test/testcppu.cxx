@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testcppu.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: jsc $ $Date: 2001-04-23 10:21:01 $
+ *  last change: $Author: jsc $ $Date: 2001-04-23 12:43:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -885,8 +885,8 @@ void testArray(void)
 
     sal_Int32 a1[2][4];
     sal_Int32 a2[2][4] = { 1,2,3,4,5,6,7,8 };
-//  uno_constructData( &a1, pType );
-    uno_type_constructData( &a1, pTypeRef );
+    uno_constructData( &a1, pType );
+//  uno_type_constructData( &a1, pTypeRef );
 
     sal_Bool bAssignable = uno_assignData(&a1, pType, a2, pType,
                    cpp_queryInterface, cpp_acquire, cpp_release );
@@ -895,8 +895,8 @@ void testArray(void)
         for ( j=0; j<4; j++ )
             OSL_ASSERT( a1[i][j] == a2[i][j] );
 
-//  uno_destructData( a1, pType, cpp_release );
-    uno_type_destructData( &a1, pTypeRef, cpp_release );
+    uno_destructData( a1, pType, cpp_release );
+//  uno_type_destructData( &a1, pTypeRef, cpp_release );
     uno_destructData( a2, pType, cpp_release );
 
     typelib_typedescription_release(pType);
