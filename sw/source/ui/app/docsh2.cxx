@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: os $ $Date: 2001-06-18 11:32:48 $
+ *  last change: $Author: os $ $Date: 2001-06-26 08:56:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -860,7 +860,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     if( xMgr.is() )
                     {
                         Sequence <Any> aProps(1);
-                        aProps.getArray()[0] <<= C2U("FileOpen");
+                        aProps.getArray()[0] <<= TemplateDescription::FILEOPEN_SIMPLE;
                         xFP = Reference< XFilePicker >(
                                 xMgr->createInstanceWithArguments(
                                     C2U( "com.sun.star.ui.dialogs.FilePicker" ), aProps ),
