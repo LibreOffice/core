@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdocapt.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 14:01:51 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 10:10:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,15 @@
 #ifndef _SDR_PROPERTIES_CAPTIONPROPERTIES_HXX
 #include <svx/sdr/properties/captionproperties.hxx>
 #endif
+
+// #i32599#
+#ifndef _SV_SALBTYPE_HXX
+#include <vcl/salbtype.hxx>     // FRound
+#endif
+
+// #i32599#
+inline double ImplTwipsToMM(double fVal) { return (fVal * (127.0 / 72.0)); }
+inline double ImplMMToTwips(double fVal) { return (fVal * (72.0 / 127.0)); }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -350,6 +359,11 @@ UINT16 SdrCaptionObj::GetObjIdentifier() const
 void SdrCaptionObj::RecalcBoundRect()
 {
     aOutRect=GetSnapRect();
+
+    // #i32599#
+    // Add BoundRect of TailPlygon here, not in RecalcSnapRect()
+    aOutRect.Union(aTailPoly.GetBoundRect());
+
     long nLineWdt=ImpGetLineWdt();
     nLineWdt++; nLineWdt/=2;
     long nLEndWdt=ImpGetLineEndAdd();
@@ -800,7 +814,9 @@ const Point& SdrCaptionObj::GetAnchorPos() const
 void SdrCaptionObj::RecalcSnapRect()
 {
     SdrRectObj::RecalcSnapRect();
-    maSnapRect.Union(aTailPoly.GetBoundRect());
+    // #i32599#
+    // Add BoundRect of TailPlygon in RecalcBoundRect(), not here
+    // maSnapRect.Union(aTailPoly.GetBoundRect());
     // !!!!! fehlende Impl.
 }
 
@@ -811,55 +827,11 @@ const Rectangle& SdrCaptionObj::GetSnapRect() const
 
 void SdrCaptionObj::NbcSetSnapRect(const Rectangle& rRect)
 {
-    // #109587#
-    //
-    // The new SnapRect contains the tail BoundRect, see
-    // RecalcSnapRect() above. Thus, the new to-be-setted
-    // SnapRect needs to be 'cleared' from that tail offsets
-    // before setting it as new SnapRect at the SdrRectObj.
-    //
-    // As base for 'clearing' the old text rect is taken from aRect
-    // using GetLogicRect(), see below. Second the outer tail point
-    // wich expanded that rect. Since the other end of the
-    // connection polygon always resides at one edge of the text rect
-    // this is sufficient information.
-    Rectangle aNewSnapRect(rRect);
-    const Rectangle aOriginalTextRect(GetLogicRect());
-    const Point aTailPoint = GetTailPos();
-
-    // #109992#
-    // This compares only make sense when aOriginalTextRect and the
-    // aTailPoint contain useful data. Thus, test it before usage.
-    if(!aOriginalTextRect.IsEmpty())
-    {
-        if(aTailPoint.X() < aOriginalTextRect.Left())
-        {
-            const sal_Int32 nDist = aOriginalTextRect.Left() - aTailPoint.X();
-            aNewSnapRect.Left() = aNewSnapRect.Left() + nDist;
-        }
-        else if(aTailPoint.X() > aOriginalTextRect.Right())
-        {
-            const sal_Int32 nDist = aTailPoint.X() - aOriginalTextRect.Right();
-            aNewSnapRect.Right() = aNewSnapRect.Right() - nDist;
-        }
-
-        if(aTailPoint.Y() < aOriginalTextRect.Top())
-        {
-            const sal_Int32 nDist = aOriginalTextRect.Top() - aTailPoint.Y();
-            aNewSnapRect.Top() = aNewSnapRect.Top() + nDist;
-        }
-        else if(aTailPoint.Y() > aOriginalTextRect.Bottom())
-        {
-            const sal_Int32 nDist = aTailPoint.Y() - aOriginalTextRect.Bottom();
-            aNewSnapRect.Bottom() = aNewSnapRect.Bottom() - nDist;
-        }
-
-        // make sure rectangle is correctly defined
-        ImpJustifyRect(aNewSnapRect);
-
-        // #86616#
-        SdrRectObj::NbcSetSnapRect(aNewSnapRect);
-    }
+    // #i32599#
+    // Move back to see the rectangle of the underlying SdrRectObj
+    // as the SnapRect, without the TailPos. That simplifies SnapRect
+    // handling again, if not allows it at all...
+    SdrRectObj::NbcSetSnapRect(rRect);
 }
 
 const Rectangle& SdrCaptionObj::GetLogicRect() const
@@ -1018,3 +990,58 @@ void SdrCaptionObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
     }
 }
 
+// #i32599#
+// Add own implementation for TRSetBaseGeometry to handle TailPos over changes.
+void SdrCaptionObj::TRSetBaseGeometry(const Matrix3D& rMat, const XPolyPolygon& rPolyPolygon)
+{
+    // break up matrix
+    Vector2D aScale, aTranslate;
+    double fShear, fRotate;
+    rMat.DecomposeAndCorrect(aScale, fShear, fRotate, aTranslate);
+
+    // force metric to pool metric
+    SfxMapUnit eMapUnit = pModel->GetItemPool().GetMetric(0);
+    if(eMapUnit != SFX_MAPUNIT_100TH_MM)
+    {
+        switch(eMapUnit)
+        {
+            case SFX_MAPUNIT_TWIP :
+            {
+                // position
+                // #104018#
+                aTranslate.X() = ImplMMToTwips(aTranslate.X());
+                aTranslate.Y() = ImplMMToTwips(aTranslate.Y());
+
+                // size
+                // #104018#
+                aScale.X() = ImplMMToTwips(aScale.X());
+                aScale.Y() = ImplMMToTwips(aScale.Y());
+
+                break;
+            }
+            default:
+            {
+                DBG_ERROR("TRSetBaseGeometry: Missing unit translation to PoolMetric!");
+            }
+        }
+    }
+
+    // if anchor is used, make position relative to it
+    if( pModel->IsWriter() )
+    {
+        if(GetAnchorPos().X() != 0 || GetAnchorPos().Y() != 0)
+            aTranslate += Vector2D(GetAnchorPos().X(), GetAnchorPos().Y());
+    }
+
+    // build BaseRect
+    Point aPoint(FRound(aTranslate.X()), FRound(aTranslate.Y()));
+    Rectangle aBaseRect(aPoint, Size(FRound(aScale.X()), FRound(aScale.Y())));
+
+    // set BaseRect, but rescue TailPos over this call
+    const Point aTailPoint = GetTailPos();
+    SetSnapRect(aBaseRect);
+    SetTailPos(aTailPoint);
+    ImpRecalcTail();
+}
+
+// eof
