@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndole.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ama $ $Date: 2001-07-05 10:24:44 $
+ *  last change: $Author: jp $ $Date: 2001-08-16 10:39:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -455,13 +455,17 @@ void SwOLEObj::SetNode( SwOLENode* pNode )
         aName = Sw3Io::UniqueName( p->GetStorage(), "Obj" );
         SvInfoObjectRef refObj = new SvEmbeddedInfoObject( *pOLERef, aName );
 
-//JP 05.02.96: solange das Move nicht richtig funktioniert muss der
-//             (Object-)Name gesetzt werden. Sonst wird Object nicht
-//              wiedergefunden
-//(*pOLERef)->SetName( new SvLinkName( aName ));
-
+        ULONG nLstLen = p->GetObjectList() ? p->GetObjectList()->Count() : 0;
         if ( !p->Move( refObj, aName ) ) // Eigentuemer Uebergang!
             refObj.Clear();
+        else if( nLstLen == p->GetObjectList()->Count() )
+        {
+            // Task 91051: Info-Object not insertet, so it exist another
+            //              InfoObject to the same Object and the Objects
+            //              is stored in the persist. This InfoObject we must
+            //              found.
+            p->Insert( refObj );
+        }
         ASSERT( refObj.Is(), "InsertObject failed" );
     }
 }
