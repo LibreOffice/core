@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tphf.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-01 14:10:17 $
+ *  last change: $Author: nn $ $Date: 2001-03-01 14:37:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,7 @@ ScHFPage::ScHFPage( Window* pParent, USHORT nResId,
     // aBackgroundBtn position not changed anymore
 
     aPos.X() += aBackgroundBtn.GetSizePixel().Width();
-    aPos.X() += 6;
+    aPos.X() += LogicToPixel( Size(3,0), MAP_APPFONT ).Width();
     aBtnEdit.SetPosPixel( aPos );
     aBtnEdit.Show();
 
