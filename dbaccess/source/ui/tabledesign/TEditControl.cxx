@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TEditControl.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-26 07:11:02 $
+ *  last change: $Author: oj $ $Date: 2001-08-14 07:56:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1405,11 +1405,7 @@ void OTableEditorCtrl::Copy()
 //------------------------------------------------------------------------------
 void OTableEditorCtrl::Paste()
 {
-#if SUPD<631
-    TransferableDataHelper aTransferData(TransferableDataHelper::CreateFromSystemClipboard());
-#else
     TransferableDataHelper aTransferData(TransferableDataHelper::CreateFromSystemClipboard(GetParent()));
-#endif
     if(aTransferData.HasFormat(SOT_FORMATSTR_ID_SBA_TABED))
     {
         if( nPasteEvent )

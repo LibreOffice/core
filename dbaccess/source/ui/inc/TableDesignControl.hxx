@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableDesignControl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-29 08:35:25 $
+ *  last change: $Author: oj $ $Date: 2001-08-14 07:56:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,10 +113,14 @@ namespace dbaui
     protected:
         void Paste( long nRow );
 
-        virtual void CopyRows() = 0;
-        virtual void DeleteRows() = 0;
-        virtual void InsertRows( long nRow ) = 0;
-        virtual void InsertNewRows( long nRow ) = 0;
+        virtual void CopyRows()                             = 0;
+        virtual void DeleteRows()                           = 0;
+        virtual void InsertRows( long nRow )                = 0;
+        virtual void InsertNewRows( long nRow )             = 0;
+
+        virtual sal_Bool IsPrimaryKeyAllowed( long nRow )   = 0;
+        virtual sal_Bool IsInsertNewAllowed( long nRow )    = 0;
+        virtual sal_Bool IsDeleteAllowed( long nRow )       = 0;
 
         virtual BOOL IsUpdatable() const {return m_bUpdatable;}
         virtual void SetUpdatable( BOOL bUpdate=TRUE );

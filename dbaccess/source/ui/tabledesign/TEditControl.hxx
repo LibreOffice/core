@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TEditControl.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-16 07:55:35 $
+ *  last change: $Author: oj $ $Date: 2001-08-14 07:56:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,6 +163,10 @@ namespace dbaui
         virtual void DeleteRows();
         virtual void InsertNewRows( long nRow );
 
+        virtual sal_Bool IsPrimaryKeyAllowed( long nRow );
+        virtual sal_Bool IsInsertNewAllowed( long nRow );
+        virtual sal_Bool IsDeleteAllowed( long nRow );
+
         void         ClearModified();
 
         void         SetPrimaryKey( BOOL bSet );
@@ -227,9 +231,7 @@ namespace dbaui
         String GenerateName( const String& rName );
         BOOL SetDataPtr( long nRow );
         OFieldDescription* GetFieldDescr( long nRow );
-        BOOL IsPrimaryKeyAllowed( long nRow );
-        BOOL IsInsertNewAllowed( long nRow );
-        BOOL IsDeleteAllowed( long nRow );
+
         void SetEditMode( EEditMode eMode ){ eEditMode = eMode; }
         EEditMode GetEditMode(){ return eEditMode; }
         BOOL SaveData(long nRow, USHORT nColumnId);

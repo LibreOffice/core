@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableDesignControl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-29 08:41:14 $
+ *  last change: $Author: oj $ $Date: 2001-08-14 07:56:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,7 +145,7 @@ void OTableRowView::Init()
 //------------------------------------------------------------------------
 void OTableRowView::KeyInput( const KeyEvent& rEvt )
 {
-    if (IsUpdatable() && GetSelectRowCount())
+    if (IsDeleteAllowed(0))
     {
         if (rEvt.GetKeyCode().GetCode() == KEY_DELETE &&    // Delete rows
             !rEvt.GetKeyCode().IsShift() &&
