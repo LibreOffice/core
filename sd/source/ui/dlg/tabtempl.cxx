@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabtempl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dl $ $Date: 2001-05-16 08:09:06 $
+ *  last change: $Author: dl $ $Date: 2001-08-23 14:27:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -272,11 +272,6 @@ void SdTabTemplateDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
             ( (SvxConnectionPage&) rPage ).Construct();
         }
         break;
-
-        case RID_SVXPAGE_TABULATOR:
-            ( (SvxTabulatorTabPage&) rPage ).
-                    DisableControls( TABTYPE_ALL &~TABTYPE_LEFT |
-                                     TABFILL_ALL &~TABFILL_NONE );
     }
 }
 
