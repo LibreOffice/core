@@ -2,9 +2,9 @@
  *
  *  $RCSfile: system.h,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 16:46:05 $
+ *  last change: $Author: vg $ $Date: 2003-04-11 14:24:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,16 @@
 #include <sys/wait.h>
 
 #include <sys/types.h>
-#include <sys/socket.h>
+
+/* Make sockets of type AF_UNIX use underlying FS rights */
+#ifdef SOLARIS
+#   define _XOPEN_SOURCE 500
+#   include <sys/socket.h>
+#   undef _XOPEN_SOURCE
+#else
+#   include <sys/socket.h>
+#endif
+
 #include <netinet/in.h>
 #include <arpa/inet.h>
 
