@@ -1,0 +1,26 @@
+[OOO_RADIOBUTTON_1]
+en-US = "{&MSSansBold8}&Modify"
+
+[OOO_RADIOBUTTON_2]
+en-US = "{&MSSansBold8}Re&pair"
+
+[OOO_RADIOBUTTON_3]
+en-US = "{&MSSansBold8}&Remove"
+
+[OOO_RADIOBUTTON_4]
+en-US = "{&MSSansBold8}&Complete"
+
+[OOO_RADIOBUTTON_5]
+en-US = "{&MSSansBold8}Cu&stom"
+
+[OOO_RADIOBUTTON_6]
+en-US = "I &do not accept the terms in the license agreement"
+
+[OOO_RADIOBUTTON_7]
+en-US = "I &accept the terms in the license agreement"
+
+[OOO_RADIOBUTTON_8]
+en-US = "&Anyone who uses this computer (all users)"
+
+[OOO_RADIOBUTTON_9]
+en-US = "Only for &me ([USERNAME])"
