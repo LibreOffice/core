@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageBuffer.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mtg $ $Date: 2000-12-01 10:50:49 $
+ *  last change: $Author: mtg $ $Date: 2000-12-13 17:00:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,14 +100,19 @@ void SAL_CALL  ZipPackageBuffer::release(void)
 sal_Int32 SAL_CALL ZipPackageBuffer::readBytes( Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
         throw(NotConnectedException, BufferSizeExceededException, IOException, RuntimeException)
 {
+    if (nBytesToRead < 0)
+        throw BufferSizeExceededException(::rtl::OUString(),*this);
+
     if (nBytesToRead + nCurrent > nEnd)
         nBytesToRead = static_cast < sal_Int32 > (nEnd - nCurrent);
-    sal_Int64 nEndRead = nBytesToRead+nCurrent;
 
-    for (sal_Int32 i =0; nCurrent < nEndRead; nCurrent++, i++)
-        aData[i] = aBuffer[static_cast < sal_Int32 > (nCurrent)];
+    aData.realloc(nBytesToRead);
+    memcpy(aData.getArray(), aBuffer.getConstArray() + nCurrent, nBytesToRead);
+    nCurrent +=nBytesToRead;
+
     return nBytesToRead;
 }
+
 sal_Int32 SAL_CALL ZipPackageBuffer::readSomeBytes( Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead )
         throw(NotConnectedException, BufferSizeExceededException, IOException, RuntimeException)
 {
@@ -120,11 +125,19 @@ sal_Int32 SAL_CALL ZipPackageBuffer::readSomeBytes( Sequence< sal_Int8 >& aData,
         aData[i] = aBuffer[nCurrent];
     return nMaxBytesToRead;
     */
+
+    // all data is available at once
     return readBytes(aData, nMaxBytesToRead);
 }
 void SAL_CALL ZipPackageBuffer::skipBytes( sal_Int32 nBytesToSkip )
         throw(NotConnectedException, BufferSizeExceededException, IOException, RuntimeException)
 {
+    if (nBytesToSkip < 0)
+        throw BufferSizeExceededException(::rtl::OUString(),*this);
+
+    if (nBytesToSkip + nCurrent > nEnd)
+        nBytesToSkip = static_cast < sal_Int32 > (nEnd - nCurrent);
+
     nCurrent+=nBytesToSkip;
 }
 sal_Int32 SAL_CALL ZipPackageBuffer::available(  )
@@ -142,11 +155,13 @@ void SAL_CALL ZipPackageBuffer::writeBytes( const Sequence< sal_Int8 >& aData )
     sal_Int64 nDataLen = aData.getLength();
     if (nEnd + nDataLen > nBufferSize)
     {
-        nBufferSize *=2;
+        while (nEnd + nDataLen > nBufferSize)
+            nBufferSize *=2;
         aBuffer.realloc(static_cast < sal_Int32 > (nBufferSize));
     }
-    for (sal_Int32 i=0; i<nDataLen;i++,nCurrent++)
-        aBuffer[static_cast < sal_Int32 > (nCurrent) ] = aData[i];
+
+    memcpy(aBuffer.getArray()+nCurrent, aData.getConstArray(), static_cast < sal_Int32 > (nDataLen));
+    nCurrent+=nDataLen;
     if (nCurrent>nEnd)
         nEnd = nCurrent;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EntryInputStream.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2000-12-08 12:28:22 $
+ *  last change: $Author: mtg $ $Date: 2000-12-13 17:00:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,10 @@ using namespace com::sun::star;
 
 /** Provides access to the compressed data in a zipfile. Decompresses on the fly, but
  * does not currently support XSeekable into the compressed data stream.
+ *
+ * 04/12/00 - uncompresses the stream into memory and seeks on it 'in memory'
+ * This is a "temporary" fix which will be changed ASAP (read 2001)
+ *
  * Acts on the same underlying XInputStream as both the full Zip File and other
  * EntryInputStreams, and thus must maintain its current position in the stream and
  * seek to it before performing any reads.
@@ -97,6 +101,7 @@ EntryInputStream::EntryInputStream( uno::Reference < io::XInputStream > xNewInpu
         xStream->readBytes(aSequence, static_cast < sal_Int32 > (nNewEnd - nNewBegin));
         aInflater.setInputSegment(aSequence, 0, static_cast < sal_Int32 > (nNewEnd - nNewBegin) );
         aInflater.doInflate(aBuffer);
+        aInflater.end();
     }
     else
     {
@@ -124,20 +129,15 @@ sal_Int32 SAL_CALL EntryInputStream::readBytes( uno::Sequence< sal_Int8 >& aData
                                         sal_Int32 nBytesToRead )
     throw(io::NotConnectedException, io::BufferSizeExceededException, io::IOException, uno::RuntimeException)
 {
-    if (nBytesToRead <=0)
-        return 0;
+    if (nBytesToRead <0)
+        throw io::BufferSizeExceededException(::rtl::OUString(), *this);
 
     if (nBytesToRead + nCurrent > nEnd)
-    {
-        if (nCurrent > nEnd)
-            return 0;
         nBytesToRead = static_cast < sal_Int32> (nEnd - nCurrent);
-    }
 
     aData.realloc( nBytesToRead );
-
-    for ( sal_Int32 i = 0; i< nBytesToRead;i++,nCurrent++)
-        aData[i] = aBuffer[static_cast < sal_Int32 > (nCurrent)];
+    memcpy(aData.getArray(), aBuffer.getConstArray() + nCurrent, nBytesToRead);
+    nCurrent+=nBytesToRead;
 
     return nBytesToRead;
     /*
@@ -186,8 +186,8 @@ sal_Int32 SAL_CALL EntryInputStream::readSomeBytes( uno::Sequence< sal_Int8 >& a
 void SAL_CALL EntryInputStream::skipBytes( sal_Int32 nBytesToSkip )
     throw(io::NotConnectedException, io::BufferSizeExceededException, io::IOException, uno::RuntimeException)
 {
-    if (nBytesToSkip == 0)
-        return;
+    if (nBytesToSkip < 0)
+        throw io::BufferSizeExceededException(::rtl::OUString(), *this);
     if (nBytesToSkip + nCurrent > nEnd )
         nBytesToSkip = static_cast < sal_Int32 > (nEnd - nCurrent);
 

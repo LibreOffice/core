@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipFile.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mtg $ $Date: 2000-12-04 11:30:06 $
+ *  last change: $Author: mtg $ $Date: 2000-12-13 17:00:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,7 +121,12 @@ public:
     ZipFile( com::sun::star::uno::Reference < com::sun::star::io::XInputStream > &xInput, sal_Bool bInitialise)
         throw(::com::sun::star::io::IOException, com::sun::star::package::ZipException, com::sun::star::uno::RuntimeException);
     void updateFromManList(std::vector < ManifestEntry * > &rManList);
+    void setInputStream ( com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xNewStream );
+    sal_uInt32 SAL_CALL getHeader(const ::com::sun::star::package::ZipEntry& rEntry)
+        throw(::com::sun::star::io::IOException, ::com::sun::star::package::ZipException, ::com::sun::star::uno::RuntimeException);
     virtual ~ZipFile();
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL getRawStream( const ::com::sun::star::package::ZipEntry& rEntry )
+        throw(::com::sun::star::io::IOException, ::com::sun::star::package::ZipException, ::com::sun::star::uno::RuntimeException);
 
     // XElementAccess
     virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  )

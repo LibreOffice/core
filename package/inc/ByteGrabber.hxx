@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ByteGrabber.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-29 13:47:16 $
+ *  last change: $Author: mtg $ $Date: 2000-12-13 17:00:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,9 +79,10 @@ private:
     com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xStream;
     com::sun::star::uno::Reference < com::sun::star::io::XSeekable > xSeek;
 public:
-    ByteGrabber (com::sun::star::uno::Reference<com::sun::star::io::XInputStream> xIstream);
+    ByteGrabber (com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xIstream);
     ~ByteGrabber();
 
+    void setInputStream (com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xNewStream);
     // XInputStream
     virtual sal_Int32 SAL_CALL readBytes( ::com::sun::star::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
         throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);

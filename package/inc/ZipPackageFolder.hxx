@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageFolder.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mtg $ $Date: 2000-12-04 11:30:06 $
+ *  last change: $Author: mtg $ $Date: 2000-12-13 17:00:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,15 +77,15 @@
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #endif
 
-#ifndef __com_sun_star_package_ZipEntry_hpp__
+#ifndef _COM_SUN_STAR_PACKAGE_ZIPENTRY_HPP_
 #include <com/sun/star/package/ZipEntry.hpp>
 #endif
 
-#ifndef __com_sun_star_beans_XPropertySet_hpp__
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
 
-#ifndef __com_sun_star_lang_XUnoTunnel_hpp__
+#ifndef _COM_SUN_STAR_LANG_XUNOTUNNEl_HPP_
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #endif
 
@@ -131,6 +131,14 @@ struct hashFunc
 #include "ZipPackageStream.hxx"
 #endif
 
+#ifndef _ZIP_PACKAGE_HXX
+#include "ZipPackage.hxx"
+#endif
+
+#ifndef _ZIP_PACKAGE_BUFFER_HXX
+#include "ZipPackageBuffer.hxx"
+#endif
+
 #ifndef _ZIP_OUTPUT_STREAM_HXX
 #include "ZipOutputStream.hxx"
 #endif
@@ -143,12 +151,8 @@ struct hashFunc
 #include "ManifestEntry.hxx"
 #endif
 
-#ifdef _DEBUG_RECURSION_
-#include "testzip.hxx"
-#endif
-
 typedef std::hash_map < rtl::OUString, com::sun::star::uno::Reference < com::sun::star::lang::XUnoTunnel > , hashFunc, eqFunc > TunnelHash;
-
+class ZipPackage;
 class ZipPackageFolder : public ZipPackageEntry,
                          public ::com::sun::star::container::XNameContainer,
                          public ::com::sun::star::container::XEnumerationAccess,
@@ -158,16 +162,18 @@ private:
     ::rtl::OUString sMediaType;
     TunnelHash aContents;
     com::sun::star::uno::Reference < com::sun::star::uno::XInterface > xParent;
-    void setEntry(com::sun::star::package::ZipEntry &rDest, com::sun::star::package::ZipEntry &rSrc);
 public:
-    ZipPackageFolder ( void ) ;
+    ZipPackage *pPackage;
+    ZipPackageFolder ( void );
+    virtual ~ZipPackageFolder( void );
+
+    static void copyZipEntry( com::sun::star::package::ZipEntry &rDest, const com::sun::star::package::ZipEntry &rSource);
     void  saveContents(rtl::OUString &rPath, std::vector < ManifestEntry * > &rManList, ZipOutputStream & rZipOut)
         throw(::com::sun::star::uno::RuntimeException);
     void  updateReferences( ZipFile * pNewZipFile);
     inline sal_Bool isFolder( void ) {return sal_True;}
     inline sal_Bool isStream( void ) {return sal_False;}
 
-    virtual ~ZipPackageFolder( void );
     // XInterface
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& rType )
         throw(::com::sun::star::uno::RuntimeException);

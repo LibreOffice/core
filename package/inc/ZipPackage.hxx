@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-29 13:47:16 $
+ *  last change: $Author: mtg $ $Date: 2000-12-13 17:00:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,8 @@
 #ifndef _ZIP_PACKAGE_HXX
 #define _ZIP_PACKAGE_HXX
 
-#ifndef _CPPUHELPER_IMPLBASE4_HXX_
-#include <cppuhelper/implbase4.hxx> // helper for implementations
+#ifndef _CPPUHELPER_WEAK_HXX_
+#include <cppuhelper/weak.hxx> // helper for implementations
 #endif
 
 #ifndef _CPPUHELPER_FACTORY_HXX_
@@ -83,6 +83,10 @@
 
 #ifndef _COM_SUN_STAR_UTIL_XCHANGESBATCH_HPP_
 #include <com/sun/star/util/XChangesBatch.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
+#include <com/sun/star/lang/XUnoTunnel.hpp>
 #endif
 
 #ifndef _UCBHELPER_CONTENT_HXX
@@ -113,10 +117,6 @@
 #include "ZipPackageBuffer.hxx"
 #endif
 
-#ifdef _DEBUG_RECURSION_
-#include "testzip.hxx"
-#endif
-
 #ifndef _MANIFEST_ENTRY_HXX
 #include "ManifestEntry.hxx"
 #endif
@@ -130,18 +130,20 @@
 #endif
 
 #include <vector>
+class ZipPackageFolder;
 
-class ZipPackage : public cppu::WeakImplHelper4<
-                        com::sun::star::lang::XInitialization,
-                        com::sun::star::container::XHierarchicalNameAccess,
-                        com::sun::star::lang::XSingleServiceFactory,
-                        com::sun::star::util::XChangesBatch
-                        >
+class ZipPackage : public com::sun::star::lang::XInitialization,
+                   public com::sun::star::lang::XSingleServiceFactory,
+                   public com::sun::star::lang::XUnoTunnel,
+                   public com::sun::star::container::XHierarchicalNameAccess,
+                   public com::sun::star::util::XChangesBatch,
+                   public ::cppu::OWeakObject
 {
 private:
     ZipPackageFolder *pRootFolder;
     ZipFile          *pZipFile;
     ::ucb::Content   *pContent;
+    sal_Bool         bContained;
     ::std::vector < com::sun::star::uno::Reference < com::sun::star::lang::XSingleServiceFactory > > aContainedZips;
     ::com::sun::star::uno::Reference < com::sun::star::package::XZipFile > xZipFile;
     ::com::sun::star::uno::Reference < com::sun::star::lang::XUnoTunnel > xRootFolder;
@@ -151,6 +153,7 @@ private:
     sal_Bool isZipFile(com::sun::star::package::ZipEntry &rEntry);
     void getZipFileContents();
     void destroyFolderTree( ::com::sun::star::uno::Reference < ::com::sun::star::lang::XUnoTunnel > xFolder );
+
 public:
     ZipPackage (com::sun::star::uno::Reference < com::sun::star::io::XInputStream > &xInput,
                 const ::com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > &xNewFactory);
@@ -159,7 +162,16 @@ public:
     {
         return pRootFolder;
     }
+    ZipPackageBuffer & SAL_CALL ZipPackage::writeToBuffer()
+        throw(::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
     virtual ~ZipPackage( void );
+    // XInterface
+    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& rType )
+        throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL acquire(  )
+        throw();
+    virtual void SAL_CALL release(  )
+        throw();
     // XInitialization
     virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments )
         throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
@@ -183,5 +195,9 @@ public:
     // Uno componentiseralation
     com::sun::star::uno::Reference< com::sun::star::uno::XInterface > ZipFile_create(
             const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > & xMgr );
+    virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier )
+        throw(::com::sun::star::uno::RuntimeException);
+    com::sun::star::uno::Sequence < sal_Int8 > getUnoTunnelImplementationId( void )
+        throw(::com::sun::star::uno::RuntimeException);
 };
 #endif

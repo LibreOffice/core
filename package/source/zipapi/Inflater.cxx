@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Inflater.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-21 12:07:21 $
+ *  last change: $Author: mtg $ $Date: 2000-12-13 17:00:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,8 +116,7 @@ Inflater::Inflater()
 }
 Inflater::~Inflater()
 {
-    if (pStream)
-        delete pStream;
+    end();
 }
 void SAL_CALL Inflater::setInputSegment( const com::sun::star::uno::Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength )
         throw(com::sun::star::uno::RuntimeException)
@@ -231,7 +230,11 @@ void SAL_CALL Inflater::reset(  )
 void SAL_CALL Inflater::end(  )
         throw(com::sun::star::uno::RuntimeException)
 {
-    z_inflateEnd(pStream);
+    if (pStream != NULL)
+    {
+        z_inflateEnd(pStream);
+        delete pStream;
+    }
     pStream = NULL;
 }
 

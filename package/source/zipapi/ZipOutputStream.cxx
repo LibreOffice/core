@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipOutputStream.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mtg $ $Date: 2000-12-07 11:04:05 $
+ *  last change: $Author: mtg $ $Date: 2000-12-13 17:00:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,6 +217,16 @@ void SAL_CALL ZipOutputStream::write( const uno::Sequence< sal_Int8 >& rBuffer, 
             break;
     }
     aCRC.updateSegment(rBuffer, nNewOffset, nNewLength);
+}
+void SAL_CALL ZipOutputStream::rawWrite( const uno::Sequence< sal_Int8 >& rBuffer)
+{
+    aChucker.writeBytes(rBuffer);
+}
+void SAL_CALL ZipOutputStream::rawCloseEntry(  )
+{
+    writeEXT(*pCurrentEntry);
+    aCRC.reset();
+    pCurrentEntry = NULL;
 }
 void SAL_CALL ZipOutputStream::finish(  )
     throw(io::IOException, uno::RuntimeException)

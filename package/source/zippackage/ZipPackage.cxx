@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2000-12-08 12:37:08 $
+ *  last change: $Author: mtg $ $Date: 2000-12-13 17:00:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,9 +90,9 @@ ZipPackage::ZipPackage (Reference < XInputStream > &xNewInput,
     {
         pZipFile    = new ZipFile(xContentStream, sal_True);
     }
-    catch (ZipException& rException)
+    catch (ZipException&)// rException)
     {
-        VOS_DEBUG_ONLY(rException.Message);
+        VOS_ENSURE( 0, "ZipException thrown...bad ZipFile"); // rException.Message );
     }
 
     xZipFile    = Reference < XZipFile > ( pZipFile );
@@ -120,16 +120,6 @@ ZipPackage::~ZipPackage( void )
 {
     if (pContent)
         delete pContent;
-/*  if (pZipFile)
-        delete pZipFile;
-    if (pZipOut)
-        delete pZipOut;
-    if (pZipBuffer)
-        delete pZipBuffer;
-    if (pRootFolder)
-        delete pRootFolder;
-    destroyFolderTree(xRootFolder);
-*/
 }
 
 void ZipPackage::destroyFolderTree( Reference < XUnoTunnel > xFolder )
@@ -190,11 +180,11 @@ void ZipPackage::getZipFileContents()
             while ((nIndex = rName.indexOf('/', nOldIndex)) != -1)
             {
                 OUString sTemp = rName.copy (nOldIndex, nIndex - nOldIndex);
-                if (nIndex == nOldIndex) //sTemp.getLength() == 1)
+                if (nIndex == nOldIndex)
                     break;
                 if (!xCurrent->hasByName(sTemp))
                 {
-                    pPkgFolder = new ZipPackageFolder();//*this);
+                    pPkgFolder = new ZipPackageFolder();
                     pPkgFolder->setName(sTemp);
                     try
                     {
@@ -202,10 +192,8 @@ void ZipPackage::getZipFileContents()
                     }
                     catch ( NoSupportException& )
                     {
-                        VOS_DEBUG_ONLY("setParent threw an exception: attempted to set Parent to non-existing interface!");
+                        VOS_ENSURE(0, "setParent threw an exception: attempted to set Parent to non-existing interface!");
                     }
-                    aAny <<= Reference < XUnoTunnel > (pPkgFolder);
-                    //xCurrent->insertByName(sTemp, aAny);
                     xCurrent = Reference < XNameContainer > (pPkgFolder);
                 }
                 else
@@ -224,11 +212,11 @@ void ZipPackage::getZipFileContents()
             while ((nIndex = rName.indexOf('/', nOldIndex)) != -1)
             {
                 OUString sTemp = rName.copy (nOldIndex, nIndex - nOldIndex);
-                if (nIndex == nOldIndex) //sTemp.getLength() == 1)
+                if (nIndex == nOldIndex)
                     break;
                 if (!xCurrent->hasByName(sTemp))
                 {
-                    pPkgFolder = new ZipPackageFolder();//*this);
+                    pPkgFolder = new ZipPackageFolder();
                     pPkgFolder->setName(sTemp);
                     try
                     {
@@ -236,10 +224,8 @@ void ZipPackage::getZipFileContents()
                     }
                     catch ( NoSupportException& )
                     {
-                        VOS_DEBUG_ONLY("setParent threw an exception: attempted to set Parent to non-existing interface!");
+                        VOS_ENSURE( 0, "setParent threw an exception: attempted to set Parent to non-existing interface!");
                     }
-                    aAny <<= Reference < XUnoTunnel > (pPkgFolder);
-                    //xCurrent->insertByName(sTemp, aAny);
                     xCurrent = Reference < XNameContainer > (pPkgFolder);
                 }
                 else
@@ -256,19 +242,17 @@ void ZipPackage::getZipFileContents()
             {
                 Reference < XInputStream > xContentStream = pZipFile->getInputStream(aEntry);
                 ZipPackage *pInZip = new ZipPackage (xContentStream, xFactory );
-                aContainedZips.push_back (Reference < XSingleServiceFactory > (pInZip));
                 pPkgFolder = pInZip->getRootFolder();
                 pPkgFolder->setName(sStreamName);
+                pPkgFolder->pPackage = pInZip;
                 try
                 {
                     pPkgFolder->setParent( Reference < XInterface >(xCurrent, UNO_QUERY));
                 }
                 catch ( NoSupportException& )
                 {
-                    VOS_DEBUG_ONLY("setParent threw an exception: attempted to set Parent to non-existing interface!");
+                    VOS_ENSURE( 0, "setParent threw an exception: attempted to set Parent to non-existing interface!");
                 }
-                aAny <<= Reference < XUnoTunnel > (pPkgFolder);
-                //xCurrent->insertByName(sStreamName, aAny);
             }
             else
             {
@@ -282,10 +266,8 @@ void ZipPackage::getZipFileContents()
                 }
                 catch ( NoSupportException& )
                 {
-                    VOS_DEBUG_ONLY("setParent threw an exception: attempted to set Parent to non-existing interface!");
+                    VOS_ENSURE( 0, "setParent threw an exception: attempted to set Parent to non-existing interface!");
                 }
-                aAny <<= Reference < XUnoTunnel > (pPkgStream);
-                //xCurrent->insertByName(sStreamName, aAny);
             }
         }
     }
@@ -304,7 +286,7 @@ void ZipPackage::getZipFileContents()
             }
             catch ( com::sun::star::xml::sax::SAXException & )
             {
-                VOS_DEBUG_ONLY( "SAX threw an exception when reading XML Manifest!");
+                VOS_ENSURE( 0,  "SAX threw an exception when reading XML Manifest!");
             }
         }
     }
@@ -327,9 +309,9 @@ void SAL_CALL ZipPackage::initialize( const Sequence< Any >& aArguments )
             pZipFile    = new ZipFile(xContentStream, sal_True);
             xZipFile    = Reference < XZipFile > ( pZipFile );
         }
-        catch (ZipException& rException)
+        catch (ZipException&)// rException)
         {
-            VOS_DEBUG_ONLY(rException.Message);
+            VOS_ENSURE( 0, "ZipException thrown - bad Zip File"); //rException.Message);
         }
         getZipFileContents();
     }
@@ -357,7 +339,7 @@ Any SAL_CALL ZipPackage::getByHierarchicalName( const OUString& aName )
         while ((nIndex = aName.indexOf('/', nOldIndex)) != -1)
         {
             OUString sTemp = aName.copy (nOldIndex, nIndex - nOldIndex);
-            if (nIndex == nOldIndex) //sTemp.getLength() == 1)
+            if (nIndex == nOldIndex)
                 break;
             if (xCurrent->hasByName(sTemp))
             {
@@ -376,7 +358,7 @@ Any SAL_CALL ZipPackage::getByHierarchicalName( const OUString& aName )
         while ((nIndex = aName.indexOf('/', nOldIndex)) != -1)
         {
             OUString sTemp = aName.copy (nOldIndex, nIndex - nOldIndex);
-            if (nIndex == nOldIndex) //sTemp.getLength() == 1)
+            if (nIndex == nOldIndex)
                 break;
             if (xCurrent->hasByName(sTemp))
             {
@@ -474,8 +456,7 @@ Reference< XInterface > SAL_CALL ZipPackage::createInstanceWithArguments( const 
 
     return xRef;
 }
-// XChangesBatch
-void SAL_CALL ZipPackage::commitChanges(  )
+ZipPackageBuffer & SAL_CALL ZipPackage::writeToBuffer(  )
         throw(WrappedTargetException, RuntimeException)
 {
     std::vector < ManifestEntry * > aManList;
@@ -525,7 +506,7 @@ void SAL_CALL ZipPackage::commitChanges(  )
     }
     catch ( com::sun::star::xml::sax::SAXException & )
     {
-        VOS_DEBUG_ONLY( "SAX threw an exception when writing XML Manifest!");
+        VOS_ENSURE( 0,  "SAX threw an exception when writing XML Manifest!");
     }
     pManifestStream->setInputStream(Reference < XInputStream > (xManOutStream, UNO_QUERY));
 
@@ -544,47 +525,66 @@ void SAL_CALL ZipPackage::commitChanges(  )
     }
     catch (::com::sun::star::io::IOException & )
     {
-        VOS_DEBUG_ONLY ( "Error writing ZipOutputStream" );
+        VOS_ENSURE( 0, "Error writing ZipOutputStream" );
     }
-
-    pZipBuffer->seek(0);
 
     aAny <<= Reference < XUnoTunnel > (pManifestStream);
     pMetaInfFolder->insertByName(OUString::createFromAscii("manifest.xml"), aAny);
+    pManifestStream->aEntry.nOffset *=-1;
 
+    xContentStream = Reference < XInputStream > (pZipBuffer);
+    xContentSeek   = Reference < XSeekable > (pZipBuffer);
 
-    for (sal_uInt32 i=0 ; i < aManList.size(); i++)
-    {
-        ZipEntry * pEntry = aManList[i]->pEntry;
-        pEntry->sName = aManList[i]->sShortName;
-    }
+    // If we have a valid pZipFile pointer, then we opened a stream
+    // earlier and read from it
+    // Otherwise we are writing a new ZipFile
+    pZipBuffer->seek(0);
+    /*
     try
     {
-        pContent->writeStream(Reference < XInputStream > (pZipBuffer), sal_True);
+        pZipFile    = new ZipFile(xContentStream, sal_False);
+        xZipFile    = Reference < XZipFile > ( pZipFile );
+        pRootFolder->updateReferences ( pZipFile );
+    }
+    catch (ZipException&)// rException)
+    {
+        VOS_ENSURE( 0, "ZipException thrown - bad ZipFile " );//rException.Message);
+    }
+    */
+
+    pZipFile->setInputStream ( xContentStream );
+    pZipFile->updateFromManList( aManList );
+    for (sal_uInt32 i=0 ; i < aManList.size(); i++)
+    {
+        aManList[i]->aEntry.sName = aManList[i]->sShortName;
+        delete aManList[i];
+    }
+
+    pZipBuffer->seek(0);
+        // If we are writing the zip file for the first time, pZipBuffer becomes
+        // the xContentStream. If so, it will have a refcount of 1 before the following
+        // call.
+        //
+        // Otherwise, it will have a refcount of 0, and will be deleted after the
+        // following call
+        //
+        // (at least...that's the plan!) mtg 6/12/00
+    return *pZipBuffer;
+    // Likewise, pBuffer and pZipOut will be deleted automagically due to the xZipOut and xOutStream
+}
+// XChangesBatch
+void SAL_CALL ZipPackage::commitChanges(  )
+        throw(WrappedTargetException, RuntimeException)
+{
+    try
+    {
+        pContent->writeStream(Reference < XInputStream > (&writeToBuffer()), sal_True);
     }
     catch (::com::sun::star::ucb::CommandAbortedException&)
     {
-        VOS_DEBUG_ONLY( "Unable to write Zip File to disk!");
+        VOS_ENSURE( 0, "Unable to write Zip File to disk!");
     }
-    if (!pZipFile)
-    {
-        // If we have a valid pZipFile pointer, then we opened a stream
-        // earlier and read from it
-        // Otherwise we are writing a new ZipFile
-        xContentStream = Reference < XInputStream > (pZipBuffer);
-        xContentSeek   = Reference < XSeekable > (pZipBuffer);
-        try
-        {
-            pZipFile    = new ZipFile(xContentStream, sal_False);
-            xZipFile    = Reference < XZipFile > ( pZipFile );
-            pRootFolder->updateReferences ( pZipFile );
-        }
-        catch (ZipException& rException)
-        {
-            VOS_DEBUG_ONLY(rException.Message);
-        }
-    }
-    pZipFile->updateFromManList( aManList );
+
 }
 
 sal_Bool SAL_CALL ZipPackage::hasPendingChanges(  )
@@ -600,22 +600,12 @@ Sequence< ElementChange > SAL_CALL ZipPackage::getPendingChanges(  )
 
 sal_Bool ZipPackage::isZipFile(com::sun::star::package::ZipEntry &rEntry)
 {
-    Reference < XInputStream > xEntryStream = pZipFile->getInputStream(rEntry);
-    Sequence < sal_Int8 > aSequence (4);
-
-    if (xEntryStream->readBytes(aSequence, 4) < 4)
-        return sal_False;
-
-    sal_uInt32 nTestSig = static_cast < sal_uInt32 >
-            (static_cast < sal_uInt8> (aSequence[0]& 0xFF)
-           | static_cast < sal_uInt8> (aSequence[1]& 0xFF) << 8
-           | static_cast < sal_uInt8> (aSequence[2]& 0xFF) << 16
-           | static_cast < sal_uInt8> (aSequence[3]& 0xFF) << 24);
-
-    if (nTestSig == LOCSIG)
-        return sal_True;
-    else
-        return sal_False;
+    if (rEntry.nMethod == STORED)
+    {
+        if (rEntry.nSize < 98) // smallest possible zip file size
+            return sal_False;
+    }
+    return (pZipFile->getHeader(rEntry) == LOCSIG);
 }
 
 /**
@@ -664,7 +654,7 @@ extern "C" sal_Bool SAL_CALL component_writeInfo( void* pServiceManager, void* p
         }
         catch ( InvalidRegistryException& )
         {
-            VOS_DEBUG_ONLY( "InvalidRegistryException detected\n");
+            VOS_ENSURE( 0, "InvalidRegistryException detected\n");
             return sal_False;
         }
 
@@ -702,3 +692,63 @@ extern "C" void * SAL_CALL component_getFactory(
     }
     return pRet;
 }
+//XInterface
+Any SAL_CALL ZipPackage::queryInterface( const Type& rType )
+    throw(RuntimeException)
+{
+    // Ask for my own supported interfaces ...
+    Any aReturn ( ::cppu::queryInterface    (   rType                                       ,
+                                                static_cast< XInitialization*               > ( this )  ,
+                                                static_cast< XSingleServiceFactory*     > ( this )  ,
+                                                static_cast< XUnoTunnel*                    > ( this )  ,
+                                                static_cast< XHierarchicalNameAccess*> ( this ) ,
+                                                static_cast< XChangesBatch*             > ( this ) ) );
+
+    // If searched interface supported by this class ...
+    if ( aReturn.hasValue () == sal_True )
+    {
+        // ... return this information.
+        return aReturn ;
+    }
+    else
+    {
+        // Else; ... ask baseclass for interfaces!
+        return OWeakObject::queryInterface ( rType ) ;
+    }
+}
+void SAL_CALL ZipPackage::acquire(  )
+    throw()
+{
+    OWeakObject::acquire();
+}
+void SAL_CALL ZipPackage::release(  )
+    throw()
+{
+    OWeakObject::release();
+}
+
+// XUnoTunnel
+Sequence< sal_Int8 > ZipPackage::getUnoTunnelImplementationId( void )
+    throw (RuntimeException)
+{
+    static ::cppu::OImplementationId * pId = 0;
+    if (! pId)
+    {
+        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+        if (! pId)
+        {
+            static ::cppu::OImplementationId aId;
+            pId = &aId;
+        }
+    }
+    return pId->getImplementationId();
+}
+
+sal_Int64 SAL_CALL ZipPackage::getSomething( const Sequence< sal_Int8 >& aIdentifier )
+    throw(RuntimeException)
+{
+    if (aIdentifier.getLength() == 16 && 0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  aIdentifier.getConstArray(), 16 ) )
+        return reinterpret_cast < sal_Int64 > ( this );
+    return 0;
+}
+

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageStream.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mtg $ $Date: 2000-12-04 11:30:09 $
+ *  last change: $Author: mtg $ $Date: 2000-12-13 17:00:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,6 +139,26 @@ void SAL_CALL ZipPackageStream::setInputStream( const uno::Reference< io::XInput
     bPackageMember = sal_False;
     aEntry.nTime = -1;
 }
+
+uno::Reference< io::XInputStream > SAL_CALL ZipPackageStream::getRawStream( com::sun::star::package::ZipEntry &rEntry )
+        throw(uno::RuntimeException)
+{
+    if (bPackageMember)
+    {
+        try
+        {
+            return pZipFile->getRawStream(rEntry);
+        }
+        catch (package::ZipException &)//rException)
+        {
+            VOS_ENSURE( 0, "ZipException thrown");//rException.Message);
+            return uno::Reference < io::XInputStream > ();
+        }
+    }
+    else
+        return xStream;
+}
+
 uno::Reference< io::XInputStream > SAL_CALL ZipPackageStream::getInputStream(  )
         throw(uno::RuntimeException)
 {
@@ -148,9 +168,9 @@ uno::Reference< io::XInputStream > SAL_CALL ZipPackageStream::getInputStream(  )
         {
             return pZipFile->getInputStream(aEntry);
         }
-        catch (package::ZipException &rException)
+        catch (package::ZipException &)//rException)
         {
-            VOS_DEBUG_ONLY(rException.Message);
+            VOS_ENSURE( 0,"ZipException thrown");//rException.Message);
             return uno::Reference < io::XInputStream > ();
         }
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageFolder.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hjs $ $Date: 2000-12-07 15:48:04 $
+ *  last change: $Author: mtg $ $Date: 2000-12-13 17:00:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,7 @@ using namespace com::sun::star;
 using namespace rtl;
 
 ZipPackageFolder::ZipPackageFolder (void)
+: pPackage( NULL )
 {
     aEntry.nVersion     = -1;
     aEntry.nFlag        = 0;
@@ -78,9 +79,23 @@ ZipPackageFolder::ZipPackageFolder (void)
     aEntry.nOffset      = -1;
 }
 
+
 ZipPackageFolder::~ZipPackageFolder( void )
 {
-
+}
+void ZipPackageFolder::copyZipEntry( com::sun::star::package::ZipEntry &rDest, const com::sun::star::package::ZipEntry &rSource)
+{
+      rDest.nVersion            = rSource.nVersion;
+    rDest.nFlag             = rSource.nFlag;
+    rDest.nMethod           = rSource.nMethod;
+    rDest.nTime             = rSource.nTime;
+    rDest.nCrc              = rSource.nCrc;
+    rDest.nCompressedSize   = rSource.nCompressedSize;
+    rDest.nSize             = rSource.nSize;
+    rDest.nOffset           = rSource.nOffset;
+    rDest.sName             = rSource.sName;
+    rDest.extra             = rSource.extra;
+    rDest.sComment          = rSource.sComment;
 }
 uno::Any SAL_CALL ZipPackageFolder::queryInterface( const uno::Type& rType )
     throw(uno::RuntimeException)
@@ -143,7 +158,7 @@ void SAL_CALL ZipPackageFolder::insertByName( const ::rtl::OUString& aName, cons
         }
         catch ( lang::NoSupportException& )
         {
-            VOS_DEBUG_ONLY("setParent threw an exception: attempted to set Parent to non-existing interface!");
+            VOS_ENSURE( 0, "setParent threw an exception: attempted to set Parent to non-existing interface!");
         }
     }
 }
@@ -281,13 +296,10 @@ void ZipPackageFolder::saveContents(rtl::OUString &rPath, std::vector < Manifest
     throw(uno::RuntimeException)
 {
     uno::Reference < lang::XUnoTunnel > xTunnel;
-    package::ZipEntry *aEntry = NULL;
     ZipPackageFolder *pFolder = NULL;
     ZipPackageStream *pStream = NULL;
     sal_Bool bIsFolder = sal_False;
     TunnelHash::const_iterator aCI = aContents.begin();
-
-    //rPath = rPath + getName();
 
     for (;aCI!=aContents.end();aCI++)
     {
@@ -314,76 +326,162 @@ void ZipPackageFolder::saveContents(rtl::OUString &rPath, std::vector < Manifest
 
         if (bIsFolder)
         {
-            time_t nTime = time(NULL);
-            ManifestEntry *pMan = new ManifestEntry;
-            pMan->sShortName = (*aCI).first;
-            pFolder->aEntry.sName = rPath + pMan->sShortName + OUString::createFromAscii("/");
-            pFolder->aEntry.nTime = ZipOutputStream::tmDateToDosDate ( *localtime(&nTime));
-            pFolder->aEntry.nCrc = 0;
-            pFolder->aEntry.nSize = 0;
-            pFolder->aEntry.nCompressedSize = 0;
-            pFolder->aEntry.nMethod = STORED;
-            try
+            if (pFolder->pPackage)
             {
-                rZipOut.putNextEntry(pFolder->aEntry);
-                rZipOut.closeEntry();
+                // This ZipPackageFolder is the root folder of a zipfile contained within
+                // this zipfile. Things will get a little strange from here on in...
+                ManifestEntry *pMan = new ManifestEntry;
+                pMan->sShortName = (*aCI).first;
+
+                ZipPackageFolder::copyZipEntry(pMan->aEntry, pFolder->aEntry);
+                pMan->aEntry.sName = rPath + pMan->sShortName;
+
+                pMan->aEntry.nCrc = -1;
+                pMan->aEntry.nSize = -1;
+                pMan->aEntry.nCompressedSize = -1;
+                pMan->aEntry.nMethod = STORED;
+
+                try
+                {
+                    rZipOut.putNextEntry(pMan->aEntry);
+                    ZipPackageBuffer &rBuffer = pFolder->pPackage->writeToBuffer();
+                    pMan->aEntry.nSize = pMan->aEntry.nCompressedSize = static_cast < sal_Int32 > (rBuffer.getLength());
+                    rZipOut.write(rBuffer.aBuffer, 0, static_cast < sal_Int32 > (rBuffer.getLength()));
+                    rZipOut.closeEntry();
+                }
+                catch (::com::sun::star::io::IOException & )
+                {
+                    VOS_ENSURE( 0, "Error writing ZipOutputStream" );
+                }
+                // Then copy it back
+                ZipPackageFolder::copyZipEntry(pFolder->aEntry, pMan->aEntry);
+                pFolder->aEntry.nOffset *= -1;
+                rManList.push_back (pMan);
             }
-            catch (::com::sun::star::io::IOException & )
+            else
             {
-                VOS_DEBUG_ONLY ( "Error writing ZipOutputStream" );
+                // In case the entry we are reading is also the entry we are writing, we will
+                // store the ZipEntry data in the ManifestEntry struct and then update the
+                // ZipEntry data in the ZipPackageFolder later
+
+                time_t nTime = time(NULL);
+                ManifestEntry *pMan = new ManifestEntry;
+                pMan->sShortName = (*aCI).first;
+
+                // First copy current data to ManifestEntry
+                ZipPackageFolder::copyZipEntry(pMan->aEntry, pFolder->aEntry);
+
+                pMan->aEntry.sName = rPath + pMan->sShortName + OUString::createFromAscii("/");
+                pMan->aEntry.nTime = ZipOutputStream::tmDateToDosDate ( *localtime(&nTime));
+                pMan->aEntry.nCrc = 0;
+                pMan->aEntry.nSize = 0;
+                pMan->aEntry.nCompressedSize = 0;
+                pMan->aEntry.nMethod = STORED;
+
+                try
+                {
+                    rZipOut.putNextEntry(pMan->aEntry);
+                    rZipOut.closeEntry();
+                }
+                catch (::com::sun::star::io::IOException & )
+                {
+                    VOS_ENSURE( 0, "Error writing ZipOutputStream" );
+                }
+                pMan->sMediaType = OUString::createFromAscii("");
+                // Then copy it back
+                ZipPackageFolder::copyZipEntry(pFolder->aEntry, pMan->aEntry);
+                pFolder->aEntry.nOffset *= -1;
+                pFolder->saveContents(pFolder->aEntry.sName, rManList, rZipOut);
+                rManList.push_back (pMan);
             }
-            pMan->sMediaType = OUString::createFromAscii("");
-            pMan->pEntry = &(pFolder->aEntry);
-            pFolder->saveContents(pFolder->aEntry.sName, rManList, rZipOut);
-            rManList.push_back (pMan);
         }
         else
         {
+            // In case the entry we are reading is also the entry we are writing, we will
+            // store the ZipEntry data in the ManifestEntry struct and then update the
+            // ZipEntry data in the ZipPackageStream later
+
             ManifestEntry *pMan = new ManifestEntry;
             pMan->sShortName = (*aCI).first;
-            pStream->aEntry.sName = rPath + pMan->sShortName;
 
-            uno::Reference < io::XInputStream > xStream = pStream->getInputStream();
-            uno::Reference < io::XSeekable > xSeek (xStream, uno::UNO_QUERY);
-            sal_Bool bTrackLength = sal_True;
+            // Copy current info to pMan...
+            ZipPackageFolder::copyZipEntry(pMan->aEntry, pStream->aEntry);
+            pMan->aEntry.sName = rPath + pMan->sShortName;
 
-            pStream->aEntry.nCrc = -1;
-            pStream->aEntry.nSize = -1;
-            pStream->aEntry.nCompressedSize = -1;
-            if (xSeek.is())
+            if (pStream->bPackageMember)
             {
-                xSeek->seek(0);
-                if (pStream->aEntry.nMethod == STORED)
+                try
                 {
-                    pStream->aEntry.nSize = pStream->aEntry.nCompressedSize = static_cast < sal_Int32 > (xSeek->getLength());
-                    bTrackLength = sal_False;
+                    uno::Reference < io::XInputStream > xStream = pStream->getRawStream( pMan->aEntry );
+                    try
+                    {
+                        rZipOut.putNextEntry(pMan->aEntry);
+                        while (1)
+                        {
+                            uno::Sequence < sal_Int8 > aSeq (65535);
+                            sal_Int32 nLength;
+                            nLength = xStream->readBytes(aSeq, 65535);
+                            if (nLength < 65535)
+                                aSeq.realloc(nLength);
+                            rZipOut.rawWrite(aSeq);
+                            if (nLength < 65535) // EOF
+                                break;
+                        }
+                        rZipOut.rawCloseEntry();
+                    }
+                    catch (package::ZipException&)
+                    {
+                    }
+                }
+                catch (::com::sun::star::io::IOException & )
+                {
+                    VOS_ENSURE( 0, "Error writing ZipOutputStream" );
                 }
             }
-
-            try
+            else
             {
-                rZipOut.putNextEntry(pStream->aEntry);
-                while (1)
+                uno::Reference < io::XInputStream > xStream = pStream->getInputStream();
+                uno::Reference < io::XSeekable > xSeek (xStream, uno::UNO_QUERY);
+                sal_Bool bTrackLength = sal_True;
+
+                pMan->aEntry.nCrc = -1;
+                pMan->aEntry.nSize = -1;
+                pMan->aEntry.nCompressedSize = -1;
+                if (xSeek.is())
                 {
-                    uno::Sequence < sal_Int8 > aSeq (65535);
-                    sal_Int32 nLength;
-                    nLength = xStream->readBytes(aSeq, 65535);
-                    if (nLength < 65535)
-                        aSeq.realloc(nLength);
-                    rZipOut.write(aSeq, 0, nLength);
+                    xSeek->seek(0);
+                    if (pMan->aEntry.nMethod == STORED)
+                    {
+                        pMan->aEntry.nSize = pMan->aEntry.nCompressedSize = static_cast < sal_Int32 > (xSeek->getLength());
+                        bTrackLength = sal_False;
+                    }
+                }
+
+                try
+                {
+                    rZipOut.putNextEntry(pMan->aEntry);
+                    while (1)
+                    {
+                        uno::Sequence < sal_Int8 > aSeq (65535);
+                        sal_Int32 nLength;
+                        nLength = xStream->readBytes(aSeq, 65535);
+                        if (nLength < 65535)
+                            aSeq.realloc(nLength);
+                        rZipOut.write(aSeq, 0, nLength);
+                        if (bTrackLength)
+                            pMan->aEntry.nSize+=nLength;
+                        if (nLength < 65535) // EOF
+                            break;
+                    }
                     if (bTrackLength)
-                        pStream->aEntry.nSize+=nLength;
-                    if (nLength < 65535) // EOF
-                    break;
+                        pMan->aEntry.nCompressedSize = pStream->aEntry.nSize;
+                    pStream->bPackageMember = sal_True;
+                    rZipOut.closeEntry();
                 }
-                if (bTrackLength)
-                    pStream->aEntry.nCompressedSize = pStream->aEntry.nSize;
-                pStream->bPackageMember = sal_True;
-                rZipOut.closeEntry();
-            }
-            catch (::com::sun::star::io::IOException & )
-            {
-                VOS_DEBUG_ONLY ( "Error writing ZipOutputStream" );
+                catch (::com::sun::star::io::IOException & )
+                {
+                    VOS_ENSURE( 0, "Error writing ZipOutputStream" );
+                }
             }
             try
             {
@@ -392,26 +490,14 @@ void ZipPackageFolder::saveContents(rtl::OUString &rPath, std::vector < Manifest
             }
             catch (::com::sun::star::beans::UnknownPropertyException & )
             {
-                VOS_DEBUG_ONLY ( "MediaType is an unknown property!!" );
+                VOS_ENSURE( 0, "MediaType is an unknown property!!" );
             }
-            pMan->pEntry = &(pStream->aEntry);
+            // Then copy it back afterwards...
+            ZipPackageFolder::copyZipEntry(pStream->aEntry, pMan->aEntry);
+            pStream->aEntry.nOffset *= -1;
             rManList.push_back (pMan);
         }
     }
-}
-void ZipPackageFolder::setEntry(package::ZipEntry &rDest, package::ZipEntry &rSrc)
-{
-    rDest.nVersion = rSrc.nVersion;
-    rDest.nFlag = rSrc.nFlag;
-    rDest.nMethod = rSrc.nMethod;
-    rDest.nTime = rSrc.nTime;
-    rDest.nCrc = rSrc.nCrc;
-    rDest.nCompressedSize = rSrc.nCompressedSize;
-    rDest.nSize = rSrc.nSize;
-    rDest.nOffset = rSrc.nOffset;
-    rDest.sName = rSrc.sName;
-    rDest.extra = rSrc.extra;
-    rDest.sComment = rSrc.sComment;
 }
 void ZipPackageFolder::updateReferences( ZipFile * pNewZipFile)
 {
@@ -445,7 +531,12 @@ void ZipPackageFolder::updateReferences( ZipFile * pNewZipFile)
         }
 
         if (bIsFolder)
-            pFolder->updateReferences(pNewZipFile);
+        {
+            //if pPackage is set,then this is the root folder of a different ZipPackage and
+            // should not be changed
+            if (!pFolder->pPackage)
+                pFolder->updateReferences(pNewZipFile);
+        }
         else
             pStream->pZipFile = pNewZipFile;
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipFile.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mtg $ $Date: 2000-12-08 13:40:03 $
+ *  last change: $Author: mtg $ $Date: 2000-12-13 17:00:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ ZipFile::ZipFile (uno::Reference < io::XInputStream > &xInput)
 {
     readCEN();
 }
-ZipFile::ZipFile( com::sun::star::uno::Reference < com::sun::star::io::XInputStream > &xInput, sal_Bool bInitialise)
+ZipFile::ZipFile( uno::Reference < io::XInputStream > &xInput, sal_Bool bInitialise)
     throw(io::IOException, package::ZipException, uno::RuntimeException)
 : xStream(xInput)
 , aGrabber(xInput)
@@ -84,28 +84,38 @@ ZipFile::ZipFile( com::sun::star::uno::Reference < com::sun::star::io::XInputStr
     if (bInitialise)
         readCEN();
 }
+void ZipFile::setInputStream ( uno::Reference < io::XInputStream > xNewStream )
+{
+    xStream = xNewStream;
+    aGrabber.setInputStream ( xStream );
+}
 
 void ZipFile::updateFromManList(std::vector < ManifestEntry * > &rManList)
 {
     sal_Int32 i=0, nSize = rManList.size();
     aEntries.clear();
+    package::ZipEntry *pEntry = &rManList[i]->aEntry;
 
     for (;i < nSize ; i++)
     {
+        // This is a bitwise copy, = is not an overloaded operator
+        // I'm not sure how evil this is in this case...
+        aEntries[pEntry->sName] = *pEntry;//rManList[i]->aEntry;
+        /*
         package::ZipEntry *pEntry = new package::ZipEntry;
-        pEntry->nVersion        = rManList[i]->pEntry->nVersion;
-        pEntry->nFlag           = rManList[i]->pEntry->nFlag;
-        pEntry->nMethod         = rManList[i]->pEntry->nMethod;
-        pEntry->nTime           = rManList[i]->pEntry->nTime;
-        pEntry->nCrc            = rManList[i]->pEntry->nCrc;
-        pEntry->nCompressedSize = rManList[i]->pEntry->nCompressedSize;
-        pEntry->nSize           = rManList[i]->pEntry->nSize;
-        rManList[i]->pEntry->nOffset *=-1;
-        pEntry->nOffset         = rManList[i]->pEntry->nOffset;
-        pEntry->sName           = rManList[i]->pEntry->sName;
-        pEntry->extra           = rManList[i]->pEntry->extra;
-        pEntry->sComment        = rManList[i]->pEntry->sComment;
+        pEntry->nVersion        = rManList[i]->aEntry.nVersion;
+        pEntry->nFlag           = rManList[i]->aEntry.nFlag;
+        pEntry->nMethod         = rManList[i]->aEntry.nMethod;
+        pEntry->nTime           = rManList[i]->aEntry.nTime;
+        pEntry->nCrc            = rManList[i]->aEntry.nCrc;
+        pEntry->nCompressedSize = rManList[i]->aEntry.nCompressedSize;
+        pEntry->nSize           = rManList[i]->aEntry.nSize;
+        pEntry->nOffset         = rManList[i]->aEntry.nOffset;
+        pEntry->sName           = rManList[i]->aEntry.sName;
+        pEntry->extra           = rManList[i]->aEntry.extra;
+        pEntry->sComment        = rManList[i]->aEntry.sComment;
         aEntries[pEntry->sName] = *pEntry;
+        */
     }
 }
 
@@ -177,7 +187,7 @@ sal_Bool SAL_CALL ZipFile::hasByName( const ::rtl::OUString& aName )
 }
 
 uno::Reference< io::XInputStream > SAL_CALL ZipFile::getInputStream( const package::ZipEntry& rEntry )
-        throw(io::IOException, package::ZipException, uno::RuntimeException)
+    throw(io::IOException, package::ZipException, uno::RuntimeException)
 {
     sal_Int64 nEnd = rEntry.nCompressedSize == 0 ? rEntry.nSize : rEntry.nCompressedSize;
     if (rEntry.nOffset <= 0)
@@ -186,6 +196,64 @@ uno::Reference< io::XInputStream > SAL_CALL ZipFile::getInputStream( const packa
     nEnd +=nBegin;
 
     uno::Reference< io::XInputStream > xStreamRef = new EntryInputStream(xStream, nBegin, nEnd, 1024, rEntry.nSize, rEntry.nMethod == DEFLATED );
+    return xStreamRef;
+}
+
+sal_uInt32 SAL_CALL ZipFile::getHeader(const package::ZipEntry& rEntry)
+    throw(io::IOException, package::ZipException, uno::RuntimeException)
+{
+    uno::Sequence < sal_Int8 > aSequence (4);
+
+    try
+    {
+        if (rEntry.nOffset <= 0)
+            readLOC(rEntry);
+    }
+    catch (package::ZipException&)
+    {
+        VOS_ENSURE(0, "Zip file bug!");
+        return 0;
+    }
+
+    aGrabber.seek(rEntry.nOffset);
+    if (rEntry.nMethod == STORED)
+    {
+        if (xStream->readBytes(aSequence, 4) < 4)
+            return 0;
+    }
+    else if (rEntry.nMethod == DEFLATED)
+    {
+        uno::Reference < io::XInputStream > xEntryStream = getInputStream (rEntry);
+        if (xEntryStream->readBytes(aSequence, 4) < 4)
+            return 0;
+        /*
+        Inflater aInflater ( sal_True );
+        sal_Int32 nSize = rEntry.nCompressedSize < 50 ? rEntry.nCompressedSize : 50;
+        uno::Sequence < sal_Int8 > aCompSeq (nSize );
+        if (xStream->readBytes(aCompSeq, nSize) < nSize)
+            return 0;
+        aInflater.setInput(aCompSeq);
+        aInflater.doInflate(aSequence);
+        aInflater.end();
+        */
+    }
+    return (static_cast < sal_uInt32 >
+            (static_cast < sal_uInt8> (aSequence[0]& 0xFF)
+           | static_cast < sal_uInt8> (aSequence[1]& 0xFF) << 8
+           | static_cast < sal_uInt8> (aSequence[2]& 0xFF) << 16
+           | static_cast < sal_uInt8> (aSequence[3]& 0xFF) << 24));
+}
+
+uno::Reference< io::XInputStream > SAL_CALL ZipFile::getRawStream( const package::ZipEntry& rEntry )
+        throw(io::IOException, package::ZipException, uno::RuntimeException)
+{
+    sal_Int64 nSize = rEntry.nMethod == DEFLATED ? rEntry.nCompressedSize : rEntry.nSize;
+
+    if (rEntry.nOffset <= 0)
+        readLOC(rEntry);
+    sal_Int64 nBegin = rEntry.nOffset;
+
+    uno::Reference< io::XInputStream > xStreamRef = new EntryInputStream(xStream, nBegin, nSize+nBegin, 1024, nSize, sal_False);
     return xStreamRef;
 }
 
@@ -296,9 +364,9 @@ sal_Int32 ZipFile::readCEN()
     nLocPos = nCenPos - nCenOff;
     aGrabber.seek(nCenPos);
 
+    package::ZipEntry *pEntry = new package::ZipEntry;
     for (nCount = 0 ; nCount < nTotal; nCount++)
     {
-        package::ZipEntry *pEntry = new package::ZipEntry;
         sal_Int32 nTestSig, nCRC, nCompressedSize, nTime, nSize, nExtAttr, nOffset;
         sal_Int16 nVerMade, nVersion, nFlag, nHow, nNameLen, nExtraLen, nCommentLen;
         sal_Int16 nDisk, nIntAttr;
@@ -368,6 +436,7 @@ sal_Int32 ZipFile::readCEN()
         }
         aEntries[pEntry->sName] = *pEntry;
     }
+    delete pEntry;
 
     if (nCount != nTotal)
         throw package::ZipException(OUString::createFromAscii("Count != Total"), uno::Reference < uno::XInterface > ());
