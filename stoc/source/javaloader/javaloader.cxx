@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javaloader.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-12 15:34:53 $
+ *  last change: $Author: kr $ $Date: 2001-04-18 09:16:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -358,8 +358,7 @@ extern "C"
         void * pRet = 0;
 
 
-        OString xx(::loader::JavaComponentLoader::implname.getStr(), ::loader::JavaComponentLoader::implname.getLength(), RTL_TEXTENCODING_DONTKNOW);
-        if (pServiceManager && rtl_str_compare(pImplName, xx) == 0)
+        if (pServiceManager && ::loader::JavaComponentLoader::implname.equals(OUString::createFromAscii(pImplName)))
         {
             Reference<XSingleServiceFactory> xFactory(createOneInstanceFactory(pServiceManager,
                                                                                OUString::createFromAscii(pImplName),
