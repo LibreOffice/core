@@ -2,9 +2,9 @@
  *
  *  $RCSfile: soreport.cpp,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-01-07 16:18:35 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 11:05:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,12 @@
 
 #include <dbghelp.h>
 
+#ifdef _UNICODE
+#define tstring wstring
+#else
+#define tstring string
+#endif
+
 using namespace ::std;
 
 
@@ -137,6 +143,9 @@ TCHAR   g_szDumpFileName[MAX_PATH] = TEXT("");
 CHAR    g_szDumpFileNameA[MAX_PATH] = "";
 CHAR    g_szCommentFileNameA[MAX_PATH] = "";
 CHAR    g_szReportFileNameA[MAX_PATH] = "";
+
+
+bool    g_bNoUserInterface = false;
 
 #define REPORT_SERVER   g_szReportServerA
 #define REPORT_PORT     g_uReportPort
@@ -183,16 +192,18 @@ static FILE *_tmpfile(void)
 struct CrashReportParams
 {
     BOOL                fAllowContact;
-    TCHAR               szEmail[1024];
-    TCHAR               szTitle[1024];
-    TCHAR               szComment[2048];
+    tstring             sEmail;
+    tstring             sTitle;
+    tstring             sComment;
     ULONG               uInternetConnection;
-    TCHAR               szProxyServer[1024];
-    TCHAR               szProxyPort[50];
+    tstring             sProxyServer;
+    tstring             sProxyPort;
 
     CrashReportParams();
+
     void WriteToRegistry();
     void ReadFromRegistry();
+    void ReadFromEnvironment();
 };
 
 bool SendCrashReport( HWND hwndParent, const CrashReportParams &rParams );
@@ -239,24 +250,27 @@ LONG RegWriteValue( HKEY hBaseKey, LPCTSTR lpSubKey, LPCTSTR lpValueName, DWORD 
 CrashReportParams::CrashReportParams()
 {
     fAllowContact = FALSE;
-    _tcscpy( szTitle, TEXT("") );
-    _tcscpy( szComment, TEXT("") );
-    _tcscpy( szEmail, TEXT("") );
+    sTitle = TEXT("");
+    sComment = TEXT("");
+    sEmail = TEXT("");
     uInternetConnection = 0;
-    _tcscpy( szProxyServer, TEXT("") );
-    _tcscpy( szProxyPort, TEXT("") );
+    sProxyServer = TEXT("");
+    sProxyPort = TEXT("");
 }
 
 //***************************************************************************
 
 void CrashReportParams::ReadFromRegistry()
 {
-    RegReadValue(
+    TCHAR   szBuffer[2048];
+
+    if ( ERROR_SUCCESS == RegReadValue(
         HKEY_CURRENT_USER,
         TEXT("SOFTWARE\\OpenOffice.org\\CrashReport"),
         TEXT("HTTPProxyServer"),
-        szProxyServer,
-        sizeof(szProxyServer) );
+        szBuffer,
+        sizeof(szBuffer) ) )
+        sProxyServer = szBuffer;
 
     DWORD   dwProxyPort;
 
@@ -266,14 +280,18 @@ void CrashReportParams::ReadFromRegistry()
         TEXT("HTTPProxyPort"),
         &dwProxyPort,
         sizeof(dwProxyPort) ) )
-        _stprintf( szProxyPort, TEXT("%d"), dwProxyPort );
+    {
+        _stprintf( szBuffer, TEXT("%d"), dwProxyPort );
+        sProxyPort = szBuffer;
+    }
 
-    RegReadValue(
+    if ( ERROR_SUCCESS == RegReadValue(
         HKEY_CURRENT_USER,
         TEXT("SOFTWARE\\OpenOffice.org\\CrashReport"),
         TEXT("ReturnAddress"),
-        szEmail,
-        sizeof(szEmail) );
+        szBuffer,
+        sizeof(szBuffer) ) )
+        sEmail = szBuffer;
 
     RegReadValue(
         HKEY_CURRENT_USER,
@@ -288,7 +306,6 @@ void CrashReportParams::ReadFromRegistry()
         TEXT("HTTPConnection"),
         &uInternetConnection,
         sizeof(uInternetConnection) );
-
 }
 
 //***************************************************************************
@@ -299,11 +316,11 @@ void CrashReportParams::WriteToRegistry()
         HKEY_CURRENT_USER,
         TEXT("SOFTWARE\\OpenOffice.org\\CrashReport"),
         TEXT("HTTPProxyServer"), REG_SZ,
-        szProxyServer,
-        sizeof(TCHAR) * (_tcslen( szProxyServer ) + 1) );
+        sProxyServer.c_str(),
+        sizeof(TCHAR) * (sProxyServer.length() + 1) );
 
     LPTSTR endptr = NULL;
-    DWORD dwProxyPort = _tcstoul( szProxyPort, &endptr, 10 );
+    DWORD dwProxyPort = _tcstoul( sProxyPort.c_str(), &endptr, 10 );
 
     RegWriteValue(
         HKEY_CURRENT_USER,
@@ -331,8 +348,77 @@ void CrashReportParams::WriteToRegistry()
         HKEY_CURRENT_USER,
         TEXT("SOFTWARE\\OpenOffice.org\\CrashReport"),
         TEXT("ReturnAddress"), REG_SZ,
-        szEmail,
-        sizeof(TCHAR) * (_tcslen( szEmail ) + 1) );
+        sEmail.c_str(),
+        sizeof(TCHAR) * (sEmail.length() + 1) );
+}
+
+//***************************************************************************
+
+void CrashReportParams::ReadFromEnvironment()
+{
+    TCHAR   szBuffer[2048];
+
+    DWORD dwResult = GetEnvironmentVariable( TEXT("ERRORREPORT_HTTPPROXYSERVER"), szBuffer, elementsof(szBuffer) );
+
+    if ( dwResult && dwResult < elementsof(szBuffer) )
+        sProxyServer = szBuffer;
+
+    dwResult = GetEnvironmentVariable( TEXT("ERRORREPORT_HTTPPROXYPORT"), szBuffer, elementsof(szBuffer) );
+
+    if ( dwResult && dwResult < elementsof(szBuffer) )
+        sProxyPort = szBuffer;
+
+    dwResult = GetEnvironmentVariable( TEXT("ERRORREPORT_RETURNADDRESS"), szBuffer, elementsof(szBuffer) );
+
+    if ( dwResult && dwResult < elementsof(szBuffer) )
+    {
+        sEmail = szBuffer;
+        fAllowContact = TRUE;
+    }
+
+    dwResult = GetEnvironmentVariable( TEXT("ERRORREPORT_HTTPCONNECTIONTYPE"), szBuffer, elementsof(szBuffer) );
+
+    if ( dwResult && dwResult < elementsof(szBuffer) )
+    {
+        if ( 0 == _tcsicmp( szBuffer, _T("DIRECT") ) )
+            uInternetConnection = 1;
+        else if ( 0 == _tcsicmp( szBuffer, _T("MANUALPROXY") ) )
+            uInternetConnection = 2;
+        else if ( 0 == _tcsicmp( szBuffer, _T("SYSTEMDEFAULT") ) )
+            uInternetConnection = 0;
+    }
+
+    dwResult = GetEnvironmentVariable( TEXT("ERRORREPORT_SUBJECT"), szBuffer, elementsof(szBuffer) );
+
+    if ( dwResult && dwResult < elementsof(szBuffer) )
+        sTitle = szBuffer;
+
+
+    dwResult = GetEnvironmentVariable( TEXT("ERRORREPORT_BODYFILE"), szBuffer, elementsof(szBuffer) );
+
+    if ( dwResult && dwResult < elementsof(szBuffer) )
+    {
+        FILE *fp = _tfopen( szBuffer, _T("rb") );
+
+        if ( fp )
+        {
+            CHAR    aUTF8Buffer[256];
+            size_t  nBytesRead;
+
+            sComment = TEXT("");
+
+            while ( 0 != (nBytesRead = fread( aUTF8Buffer, sizeof(aUTF8Buffer[0]), elementsof(aUTF8Buffer), fp )) )
+            {
+                TCHAR   aBuffer[256+1];
+
+                DWORD   dwCharacters = MultiByteToWideChar( CP_UTF8, 0, aUTF8Buffer, nBytesRead, aBuffer, elementsof(aBuffer) - 1 );
+                aBuffer[dwCharacters] = 0;
+                sComment += aBuffer;
+            }
+
+            fclose( fp );
+        }
+    }
 }
 
 //***************************************************************************
@@ -554,9 +640,9 @@ BOOL WriteReportFile( CrashReportParams *pParams )
                 CHAR    szEmail[1024] = "";
                 const char *pszUserType = getenv( "STAROFFICE_USERTYPE" );
 
-                WideCharToMultiByte( CP_UTF8, 0, pParams->szTitle, -1, szTitle, sizeof(szTitle), NULL, NULL );
+                WideCharToMultiByte( CP_UTF8, 0, pParams->sTitle.c_str(), -1, szTitle, sizeof(szTitle), NULL, NULL );
                 WideCharToMultiByte( CP_UTF8, 0, g_szBuildId, -1, szBuildId, sizeof(szBuildId), NULL, NULL );
-                WideCharToMultiByte( CP_UTF8, 0, pParams->szEmail, -1, szEmail, sizeof(szEmail), NULL, NULL );
+                WideCharToMultiByte( CP_UTF8, 0, pParams->sEmail.c_str(), -1, szEmail, sizeof(szEmail), NULL, NULL );
 
                 fprintf( fp,
                     "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
@@ -784,9 +870,9 @@ BOOL CALLBACK PreviewDialogProc(
 
             basic_string<TCHAR> aString;
 
-            aString.append( pParams->szTitle );
+            aString.append( pParams->sTitle );
             aString.append( _T("\r\n\r\n") );
-            aString.append( pParams->szComment );
+            aString.append( pParams->sComment );
             aString.append( _T("\r\n---------- report ----------\r\n") );
 
             FILE    *fp = fopen( g_szReportFileNameA, "r" );
@@ -955,8 +1041,8 @@ BOOL CALLBACK OptionsDialogProc(
             LoadAndFormatString( hInstance, IDS_CANCEL_BUTTON, szBuffer, elementsof(szBuffer) );
             Button_SetText( GetDlgItem(hwndDlg, IDCANCEL), szBuffer );
 
-            Edit_SetText( GetDlgItem(hwndDlg, IDC_EDIT_PROXYSERVER), pParams->szProxyServer );
-            Edit_SetText( GetDlgItem(hwndDlg, IDC_EDIT_PROXYPORT), pParams->szProxyPort );
+            Edit_SetText( GetDlgItem(hwndDlg, IDC_EDIT_PROXYSERVER), pParams->sProxyServer.c_str() );
+            Edit_SetText( GetDlgItem(hwndDlg, IDC_EDIT_PROXYPORT), pParams->sProxyPort.c_str() );
 
             Button_SetCheck( GetDlgItem(hwndDlg, IDC_RADIO_SYSTEM + pParams->uInternetConnection), BST_CHECKED );
 
@@ -982,8 +1068,14 @@ BOOL CALLBACK OptionsDialogProc(
             break;
         case IDOK:
             {
-            Edit_GetText( GetDlgItem(hwndDlg, IDC_EDIT_PROXYSERVER), pParams->szProxyServer, elementsof(pParams->szProxyServer) );
-            Edit_GetText( GetDlgItem(hwndDlg, IDC_EDIT_PROXYPORT), pParams->szProxyPort, elementsof(pParams->szProxyPort) );
+            TCHAR szBuffer[1024];
+
+            Edit_GetText( GetDlgItem(hwndDlg, IDC_EDIT_PROXYSERVER), szBuffer, elementsof(szBuffer) );
+            pParams->sProxyServer = szBuffer;
+
+            Edit_GetText( GetDlgItem(hwndDlg, IDC_EDIT_PROXYPORT), szBuffer, elementsof(szBuffer) );
+            pParams->sProxyPort = szBuffer;
+
             if ( Button_GetCheck( GetDlgItem(hwndDlg, IDC_RADIO_DIRECT) ) & BST_CHECKED )
                 pParams->uInternetConnection = 1;
             else if ( Button_GetCheck( GetDlgItem(hwndDlg, IDC_RADIO_MANUAL) ) & BST_CHECKED )
@@ -1081,7 +1173,7 @@ BOOL CALLBACK ReportDialogProc(
             LoadAndFormatString( hInstance, IDS_LABEL_EMAIL, szBuffer, elementsof(szBuffer) );
             Button_SetText( GetDlgItem(hwndDlg, IDC_LABEL_EMAIL), szBuffer );
 
-            Edit_SetText( GetDlgItem(hwndDlg, IDC_EDIT_EMAIL), pParams->szEmail );
+            Edit_SetText( GetDlgItem(hwndDlg, IDC_EDIT_EMAIL), pParams->sEmail.c_str() );
 
             UpdateReportDialogControls( hwndDlg );
         }
@@ -1090,6 +1182,7 @@ BOOL CALLBACK ReportDialogProc(
         if ( (BOOL)wParam )
         {
             HINSTANCE   hInstance = (HINSTANCE)GetWindowLong(hwndDlg, GWL_HINSTANCE );
+            CrashReportParams   *pParams = (CrashReportParams*)GetWindowLong( GetParent(hwndDlg), GWL_USERDATA );
             TCHAR       szBuffer[FORMATBUFSIZE];
 
             LoadAndFormatString( hInstance, IDS_REPORT_CAPTION, szBuffer, elementsof(szBuffer) );
@@ -1106,6 +1199,9 @@ BOOL CALLBACK ReportDialogProc(
             ShowWindow( GetDlgItem(GetParent(hwndDlg),IDFINISH), TRUE );
             ShowWindow( GetDlgItem(GetParent(hwndDlg),IDNEXT), FALSE );
 
+            Edit_SetText( GetDlgItem(hwndDlg, IDC_EDIT_TITLE), pParams->sTitle.c_str() );
+            Edit_SetText( GetDlgItem(hwndDlg, IDC_EDIT_DESCRIPTION), pParams->sComment.c_str() );
+
             /*
             SetWindowLong( GetDlgItem(GetParent(hwndDlg),IDFINISH), GWL_STYLE,
                 GetWindowLong( GetDlgItem(GetParent(hwndDlg),IDFINISH), GWL_STYLE) | BS_DEFPUSHBUTTON );
@@ -1120,12 +1216,21 @@ BOOL CALLBACK ReportDialogProc(
         {
         case IDC_SHOW_REPORT:
             {
+                TCHAR   szBuffer[32767];
+
                 CrashReportParams   *pParams = (CrashReportParams*)GetWindowLong( GetParent(hwndDlg), GWL_USERDATA );
 
                 pParams->fAllowContact = Button_GetCheck( GetDlgItem(hwndDlg, IDC_ALLOW_CONTACT) ) ? TRUE : FALSE;
-                Edit_GetText( GetDlgItem(hwndDlg, IDC_EDIT_TITLE), pParams->szTitle, elementsof(pParams->szTitle) );
-                Edit_GetText( GetDlgItem(hwndDlg, IDC_EDIT_DESCRIPTION), pParams->szComment, elementsof(pParams->szComment) );
-                Edit_GetText( GetDlgItem(hwndDlg, IDC_EDIT_EMAIL), pParams->szEmail, elementsof(pParams->szEmail) );
+
+                Edit_GetText( GetDlgItem(hwndDlg, IDC_EDIT_TITLE), szBuffer, elementsof(szBuffer) );
+                pParams->sTitle = szBuffer;
+
+                Edit_GetText( GetDlgItem(hwndDlg, IDC_EDIT_DESCRIPTION), szBuffer, elementsof(szBuffer) );
+                pParams->sComment = szBuffer;
+
+                Edit_GetText( GetDlgItem(hwndDlg, IDC_EDIT_EMAIL), szBuffer, elementsof(szBuffer) );
+                pParams->sEmail = szBuffer;
+
                 PreviewReport( GetParent(hwndDlg), pParams );
             }
             return TRUE;
@@ -1319,14 +1424,21 @@ BOOL CALLBACK DialogProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam 
             return TRUE;
         case IDFINISH:
             {
+                TCHAR   szBuffer[32767];
                 CrashReportParams   *pParams = (CrashReportParams*)GetWindowLong( hwndDlg, GWL_USERDATA );
 
                 pParams->fAllowContact = Button_GetCheck( GetDlgItem(hwndPages[1], IDC_ALLOW_CONTACT) ) ? TRUE : FALSE;
-                Edit_GetText( GetDlgItem(hwndPages[1], IDC_EDIT_TITLE), pParams->szTitle, elementsof(pParams->szTitle) );
-                Edit_GetText( GetDlgItem(hwndPages[1], IDC_EDIT_DESCRIPTION), pParams->szComment, elementsof(pParams->szComment) );
-                Edit_GetText( GetDlgItem(hwndPages[1], IDC_EDIT_EMAIL), pParams->szEmail, elementsof(pParams->szEmail) );
 
-                if ( pParams->fAllowContact && !pParams->szEmail[0] )
+                Edit_GetText( GetDlgItem(hwndPages[1], IDC_EDIT_TITLE), szBuffer, elementsof(szBuffer) );
+                pParams->sTitle = szBuffer;
+
+                Edit_GetText( GetDlgItem(hwndPages[1], IDC_EDIT_DESCRIPTION), szBuffer, elementsof(szBuffer) );
+                pParams->sComment = szBuffer;
+
+                Edit_GetText( GetDlgItem(hwndPages[1], IDC_EDIT_EMAIL), szBuffer, elementsof(szBuffer) );
+                pParams->sEmail = szBuffer;
+
+                if ( pParams->fAllowContact && !pParams->sEmail.length() )
                 {
                     TCHAR   szMessage[MAX_TEXT_BUFFER];
 
@@ -1339,7 +1451,7 @@ BOOL CALLBACK DialogProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam 
                 {
                     pParams->WriteToRegistry();
 
-                    WriteCommentFile( pParams->szComment );
+                    WriteCommentFile( pParams->sComment.c_str() );
                     WriteReportFile( pParams );
 
                     if ( !SendCrashReport( hwndDlg, *pParams ) )
@@ -1850,6 +1962,11 @@ static bool ParseCommandArgs( LPDWORD pdwProcessId, PEXCEPTION_POINTERS* ppExcep
             else
                 bSuccess = false;
         }
+        else if ( 0 == _tcsicmp( argv[argn], _T("-noui") ) ||
+                  0 == _tcsicmp( argv[argn], _T("/noui") ) )
+        {
+            g_bNoUserInterface = true;
+        }
         else // treat parameter as image path
         {
             TCHAR   szImagePath[MAX_PATH];
@@ -2021,7 +2138,7 @@ static string get_script_string( const char *pFileName, const char *pKeyName )
     return retValue;
 }
 
-static bool ReadBootstrapParams()
+static bool ReadBootstrapParams( CrashReportParams &rParams )
 {
     TCHAR   szBuffer[256] = TEXT("");
     TCHAR   szModuleName[MAX_PATH];
@@ -2101,6 +2218,17 @@ static bool ReadBootstrapParams()
     {
         bSuccess = 0 != WideCharToMultiByte( CP_ACP, 0, szReportServer, -1, g_szReportServerA, elementsof(g_szReportServerA), NULL, NULL );
     }
+
+    LPCTSTR lpEnvString;
+
+    if ( 0 != (lpEnvString = _tgetenv( _T("ERRORREPORT_PROXYSERVER") )) )
+        rParams.sProxyServer = lpEnvString;
+
+    if ( 0 != (lpEnvString = _tgetenv( _T("ERRORREPORT_PROXYPORT") )) )
+        rParams.sProxyPort = lpEnvString;
+
+    if ( 0 != (lpEnvString = _tgetenv( _T("ERRORREPORT_SENDERADDRESS") )) )
+        rParams.sEmail = lpEnvString;
 
     return bSuccess;
 }
@@ -2368,9 +2496,9 @@ bool SendCrashReport( HWND hwndParent, const CrashReportParams &rParams )
     case 2:
         {
             WideCharToMultiByte(
-                CP_ACP, 0, rParams.szProxyServer, -1,
+                CP_ACP, 0, rParams.sProxyServer.c_str(), -1,
                 szProxyServer, sizeof(szProxyServer), NULL, NULL );
-            uProxyPort = (unsigned short)_tcstoul( rParams.szProxyPort, &endptr, 10 );
+            uProxyPort = (unsigned short)_tcstoul( rParams.sProxyPort.c_str(), &endptr, 10 );
         }
         break;
     case 0:
@@ -2433,9 +2561,6 @@ bool SendCrashReport( HWND hwndParent, const CrashReportParams &rParams )
     FILE    *fptemp = _tmpfile();
     if ( fptemp )
     {
-        WriteSOAPRequest( fptemp );
-        fseek( fptemp, 0, SEEK_SET );
-
         RequestParams   request;
 
         request.success = false;
@@ -2446,38 +2571,67 @@ bool SendCrashReport( HWND hwndParent, const CrashReportParams &rParams )
         request.uProxyPort = uProxyPort;
         request.hwndStatus = NULL;
 
-        int retid = DialogBoxParam(
-            GetModuleHandle(NULL),
-            MAKEINTRESOURCE(IDD_SENDING_STATUS),
-            hwndParent,
-            SendingStatusDialogProc,
-            (LPARAM)&request
-            );
+        WriteSOAPRequest( fptemp );
+        fseek( fptemp, 0, SEEK_SET );
 
-        success = request.success;
-
-        if ( IDOK == retid )
+        if ( hwndParent )
         {
+            int retid = DialogBoxParam(
+                GetModuleHandle(NULL),
+                MAKEINTRESOURCE(IDD_SENDING_STATUS),
+                hwndParent,
+                SendingStatusDialogProc,
+                (LPARAM)&request
+                );
+
+            success = request.success;
+
+            if ( IDOK == retid )
+            {
+                if ( !success )
+                {
+                    TCHAR   szMessage[1024];
+
+                    LoadAndFormatString( GetModuleHandle(NULL), IDS_ERROR_MSG_PROXY, szMessage, elementsof(szMessage) );
+
+                    MessageBox( hwndParent, szMessage, NULL, MB_ICONERROR | MB_OK );
+                }
+                else
+                {
+                    TCHAR   szMessage[1024];
+                    TCHAR   szTitle[1024];
+
+                    LoadAndFormatString( GetModuleHandle(NULL), IDS_SENDING_REPORT_STATUS_FINISHED, szMessage, elementsof(szMessage) );
+                    LoadAndFormatString( GetModuleHandle(NULL), IDS_SENDING_REPORT_HEADER, szTitle, elementsof(szTitle) );
+
+                    MessageBox( hwndParent, szMessage, szTitle, MB_ICONINFORMATION | MB_OK );
+                }
+            }
+
+        }
+        else
+        {
+            HANDLE hSendingThread = (HANDLE)_beginthread( SendingThread, 0, (void *)&request );
+
+            WaitForSingleObject( hSendingThread, INFINITE );
+
+            success = request.success;
             if ( !success )
             {
                 TCHAR   szMessage[1024];
 
                 LoadAndFormatString( GetModuleHandle(NULL), IDS_ERROR_MSG_PROXY, szMessage, elementsof(szMessage) );
-
-                MessageBox( hwndParent, szMessage, NULL, MB_ICONERROR | MB_OK );
+                _ftprintf( stderr, _T("ERROR: %s\n"), szMessage );
             }
             else
             {
                 TCHAR   szMessage[1024];
-                TCHAR   szTitle[1024];
 
                 LoadAndFormatString( GetModuleHandle(NULL), IDS_SENDING_REPORT_STATUS_FINISHED, szMessage, elementsof(szMessage) );
-                LoadAndFormatString( GetModuleHandle(NULL), IDS_SENDING_REPORT_HEADER, szTitle, elementsof(szTitle) );
 
-                MessageBox( hwndParent, szMessage, szTitle, MB_ICONINFORMATION | MB_OK );
+                _ftprintf( stderr, _T("SUCCESS: %s\n"), szMessage );
             }
         }
-
         fclose( fptemp );
     }
     else
@@ -2486,7 +2640,10 @@ bool SendCrashReport( HWND hwndParent, const CrashReportParams &rParams )
 
         LoadAndFormatString( GetModuleHandle(NULL), IDS_ERROR_MSG_DISK_FULL, szMessage, elementsof(szMessage) );
 
-        MessageBox( hwndParent, szMessage, NULL, MB_ICONERROR | MB_OK );
+        if ( hwndParent )
+            MessageBox( hwndParent, szMessage, NULL, MB_ICONERROR | MB_OK );
+        else
+            _ftprintf( stderr, _T("ERROR: %s\n"), szMessage );
     }
 
     return success;
@@ -2509,27 +2666,27 @@ int WINAPI _tWinMain( HINSTANCE hInstance, HINSTANCE, LPTSTR lpCmdLine, int )
     wVersionRequested = MAKEWORD(1, 1);
     WSAStartup(wVersionRequested, &wsaData);
 
-    if ( ReadBootstrapParams() && ParseCommandArgs( &dwProcessId, &pExceptionPointers, &dwThreadId ) && dwProcessId )
+    CrashReportParams   Params;
+
+    Params.ReadFromRegistry();
+    Params.ReadFromEnvironment();
+
+    if ( ReadBootstrapParams( Params ) && ParseCommandArgs( &dwProcessId, &pExceptionPointers, &dwThreadId ) && dwProcessId )
     {
         if ( WriteDumpFile( dwProcessId, pExceptionPointers, dwThreadId ) )
         {
             hash_map< string, string > aLibraries;
 
             g_fpStackFile = _tmpfile();
-
             WriteStackFile( g_fpStackFile, aLibraries, dwProcessId, pExceptionPointers );
 
             g_fpChecksumFile = _tmpfile();
-
             WriteChecksumFile( g_fpChecksumFile, aLibraries );
 
             InitCommonControls();
 
-            if ( InitRichEdit() )
+            if ( !g_bNoUserInterface && InitRichEdit() )
             {
-                CrashReportParams   Params;
-
-                Params.ReadFromRegistry();
 
                 INT_PTR result = DialogBoxParam( hInstance, MAKEINTRESOURCE(IDD_DIALOG_FRAME), NULL, DialogProc, (LPARAM)&Params );
 
@@ -2539,6 +2696,14 @@ int WINAPI _tWinMain( HINSTANCE hInstance, HINSTANCE, LPTSTR lpCmdLine, int )
                 }
                 DeinitRichEdit();
             }
+            else
+            {
+                WriteCommentFile( Params.sComment.c_str() );
+                WriteReportFile( &Params );
+                if ( SendCrashReport( NULL, Params ) )
+                    exitcode = 0;
+            }
+
 
             if ( g_szReportFileNameA[0] )
                 DeleteFileA( g_szReportFileNameA );
