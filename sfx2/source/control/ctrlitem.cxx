@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrlitem.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 13:08:17 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 13:33:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,7 +196,7 @@ void SfxControllerItem::ReBind()
 
 {
     DBG_MEMTEST();
-    DBG_CHKTHIS(SfxControllerItem, 0);
+DBG_CHKTHIS(SfxControllerItem, 0);
     DBG_ASSERT(pBindings, "Keine Bindings");
     DBG_ASSERT( !IsBound(), "bindings rebound SfxControllerItem" );
 
