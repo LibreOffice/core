@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementimport_impl.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-30 15:04:34 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:17:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,8 +130,7 @@ void OContainerImport< BASE >::EndElement()
 template <class BASE>
 OColumnImport< BASE >::OColumnImport(IFormsImportContext& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
         const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& _rxParentContainer,
-        OControlElement::ElementType _eType,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxOuterAttribs)
+        OControlElement::ElementType _eType)
     :BASE(_rImport, _rEventManager, _nPrefix, _rName, _rxParentContainer, _eType)
     ,m_xColumnFactory(_rxParentContainer, ::com::sun::star::uno::UNO_QUERY)
 {
@@ -157,6 +156,13 @@ template <class BASE>
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5.2.1  2004/10/15 13:54:39  fs
+ *  #i30706# removed obsolete parameter from OColumnWrapper
+ *
+ *  Revision 1.5  2004/07/30 15:04:34  kz
+ *  INTEGRATION: CWS gcc340fixes01 (1.4.334); FILE MERGED
+ *  2004/07/13 20:28:08 fa 1.4.334.1: #i31445# explicitly scope data member to satisfy gcc 3.4
+ *
  *  Revision 1.4.334.1  2004/07/13 20:28:08  fa
  *  #i31445# explicitly scope data member to satisfy gcc 3.4
  *
