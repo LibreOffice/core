@@ -2,9 +2,9 @@
  *
  *  $RCSfile: databases.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: abi $ $Date: 2001-10-31 13:08:14 $
+ *  last change: $Author: abi $ $Date: 2001-10-31 13:53:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,8 +109,19 @@ Databases::Databases( const rtl::OUString& instPath,
       m_nErrorDocLength( 0 ),
       m_pErrorDoc( 0 ),
       m_nCustomCSSDocLength( 0 ),
-      m_pCustomCSSDoc( 0 )
+      m_pCustomCSSDoc( 0 ),
+      prodName( rtl::OUString::createFromAscii( "%PRODUCTNAME" ) ),
+      prodVersion( rtl::OUString::createFromAscii( "%PRODUCTVERSION" ) ),
+      vendName( rtl::OUString::createFromAscii( "%VENDORNAME" ) ),
+      vendVersion( rtl::OUString::createFromAscii( "%VENDORVERSION" ) ),
+      vendShort( rtl::OUString::createFromAscii( "%VENDORSHORT" ) )
 {
+    m_vAdd[0] = 12;
+    m_vAdd[1] = 15;
+    m_vAdd[2] = 11;
+    m_vAdd[3] = 14;
+    m_vAdd[4] = 12;
+
     m_vReplacement[0] = productName;
     m_vReplacement[1] = productVersion;
     m_vReplacement[2] = vendorName;
@@ -173,46 +184,26 @@ Databases::~Databases()
 
 void Databases::replaceName( rtl::OUString& oustring ) const
 {
-    sal_Int32 idx = -1,k = 0,add,off;
+    sal_Int32 idx = -1,k = 0,off;
     bool cap = false;
     rtl::OUStringBuffer aStrBuf( 0 );
 
     while( ( idx = oustring.indexOf( sal_Unicode('%'),++idx ) ) != -1 )
     {
-        if( oustring.indexOf( rtl::OUString::createFromAscii( "%PRODUCTNAME" ),
-                              idx ) == idx )
-        {
-            add = 12;
+        if( oustring.indexOf( prodName,idx ) == idx )
             off = PRODUCTNAME;
-        }
-        else if( oustring.indexOf( rtl::OUString::createFromAscii( "%PRODUCTVERSION" ),
-                                   idx ) == idx )
-        {
-            add = 15;
+        else if( oustring.indexOf( prodVersion,idx ) == idx )
             off = PRODUCTVERSION;
-        }
-        else if( oustring.indexOf( rtl::OUString::createFromAscii( "%VENDORNAME" ),
-                                   idx ) == idx )
-        {
-            add = 11;
+        else if( oustring.indexOf( vendName,idx ) == idx )
             off = VENDORNAME;
-        }
-        else if( oustring.indexOf( rtl::OUString::createFromAscii( "%VENDORVERSION" ),
-                                   idx ) == idx )
-        {
-            add = 14;
+        else if( oustring.indexOf( vendVersion,idx ) == idx )
             off = VENDORVERSION;
-        }
-        else if( oustring.indexOf( rtl::OUString::createFromAscii( "%VENDORSHORT" ),
-                                   idx ) == idx )
-        {
-            add = 12;
+        else if( oustring.indexOf( vendShort,idx ) == idx )
             off = VENDORSHORT;
-        }
         else
-            add = 0;
+            off = -1;
 
-        if( add )
+        if( off != -1 )
         {
             if( ! cap )
             {
@@ -222,7 +213,7 @@ void Databases::replaceName( rtl::OUString& oustring ) const
 
             aStrBuf.append( &oustring.getStr()[k],idx - k );
             aStrBuf.append( m_vReplacement[off] );
-            k = idx + add;
+            k = idx + m_vAdd[off];
         }
     }
 
@@ -232,6 +223,65 @@ void Databases::replaceName( rtl::OUString& oustring ) const
             aStrBuf.append( &oustring.getStr()[k],oustring.getLength()-k );
         oustring = aStrBuf.makeStringAndClear();
     }
+//      sal_Int32 idx = -1,k = 0,add,off;
+//      bool cap = false;
+//      rtl::OUStringBuffer aStrBuf( 0 );
+
+//      while( ( idx = oustring.indexOf( sal_Unicode('%'),++idx ) ) != -1 )
+//      {
+//          if( oustring.indexOf( rtl::OUString::createFromAscii( "%PRODUCTNAME" ),
+//                                idx ) == idx )
+//          {
+//              add = 12;
+//              off = PRODUCTNAME;
+//          }
+//          else if( oustring.indexOf( rtl::OUString::createFromAscii( "%PRODUCTVERSION" ),
+//                                     idx ) == idx )
+//          {
+//              add = 15;
+//              off = PRODUCTVERSION;
+//          }
+//          else if( oustring.indexOf( rtl::OUString::createFromAscii( "%VENDORNAME" ),
+//                                     idx ) == idx )
+//          {
+//              add = 11;
+//              off = VENDORNAME;
+//          }
+//          else if( oustring.indexOf( rtl::OUString::createFromAscii( "%VENDORVERSION" ),
+//                                     idx ) == idx )
+//          {
+//              add = 14;
+//              off = VENDORVERSION;
+//          }
+//          else if( oustring.indexOf( rtl::OUString::createFromAscii( "%VENDORSHORT" ),
+//                                     idx ) == idx )
+//          {
+//              add = 12;
+//              off = VENDORSHORT;
+//          }
+//          else
+//              add = 0;
+
+//          if( add )
+//          {
+//              if( ! cap )
+//              {
+//                  cap = true;
+//                  aStrBuf.ensureCapacity( 256 );
+//              }
+
+//              aStrBuf.append( &oustring.getStr()[k],idx - k );
+//              aStrBuf.append( m_vReplacement[off] );
+//              k = idx + add;
+//          }
+//      }
+
+//      if( cap )
+//      {
+//          if( k < oustring.getLength() )
+//              aStrBuf.append( &oustring.getStr()[k],oustring.getLength()-k );
+//          oustring = aStrBuf.makeStringAndClear();
+//      }
 }
 
 

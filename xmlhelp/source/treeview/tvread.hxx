@@ -55,8 +55,11 @@ namespace treeview {
 #define VENDORVERSION  3
 #define VENDORSHORT    4
 #define MAX_MODULE_COUNT 16
-
+        ConfigData();
+        int                    m_vAdd[5];
         rtl::OUString          m_vReplacement[5];
+        rtl::OUString          prodName,prodVersion,vendName,vendVersion,vendShort;
+
         sal_uInt64    filelen[MAX_MODULE_COUNT];
         rtl::OUString fileurl[MAX_MODULE_COUNT];
         rtl::OUString locale,system;

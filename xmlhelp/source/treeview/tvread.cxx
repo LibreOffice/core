@@ -163,49 +163,37 @@ using namespace com::sun::star::frame;
 using namespace com::sun::star::container;
 
 
+ConfigData::ConfigData()
+    : prodName( rtl::OUString::createFromAscii( "%PRODUCTNAME" ) ),
+      prodVersion( rtl::OUString::createFromAscii( "%PRODUCTVERSION" ) ),
+      vendName( rtl::OUString::createFromAscii( "%VENDORNAME" ) ),
+      vendVersion( rtl::OUString::createFromAscii( "%VENDORVERSION" ) ),
+      vendShort( rtl::OUString::createFromAscii( "%VENDORSHORT" ) )
+{
+}
 
 void SAL_CALL ConfigData::replaceName( rtl::OUString& oustring ) const
 {
-    sal_Int32 idx = -1,k = 0,add,off;
+    sal_Int32 idx = -1,k = 0,off;
     bool cap = false;
     rtl::OUStringBuffer aStrBuf( 0 );
 
     while( ( idx = oustring.indexOf( sal_Unicode('%'),++idx ) ) != -1 )
     {
-        if( oustring.indexOf( rtl::OUString::createFromAscii( "%PRODUCTNAME" ),
-                              idx ) == idx )
-        {
-            add = 12;
+        if( oustring.indexOf( prodName,idx ) == idx )
             off = PRODUCTNAME;
-        }
-        else if( oustring.indexOf( rtl::OUString::createFromAscii( "%PRODUCTVERSION" ),
-                                   idx ) == idx )
-        {
-            add = 15;
+        else if( oustring.indexOf( prodVersion,idx ) == idx )
             off = PRODUCTVERSION;
-        }
-        else if( oustring.indexOf( rtl::OUString::createFromAscii( "%VENDORNAME" ),
-                                   idx ) == idx )
-        {
-            add = 11;
+        else if( oustring.indexOf( vendName,idx ) == idx )
             off = VENDORNAME;
-        }
-        else if( oustring.indexOf( rtl::OUString::createFromAscii( "%VENDORVERSION" ),
-                                   idx ) == idx )
-        {
-            add = 14;
+        else if( oustring.indexOf( vendVersion,idx ) == idx )
             off = VENDORVERSION;
-        }
-        else if( oustring.indexOf( rtl::OUString::createFromAscii( "%VENDORSHORT" ),
-                                   idx ) == idx )
-        {
-            add = 12;
+        else if( oustring.indexOf( vendShort,idx ) == idx )
             off = VENDORSHORT;
-        }
         else
-            add = 0;
+            off = -1;
 
-        if( add )
+        if( off != -1 )
         {
             if( ! cap )
             {
@@ -215,7 +203,7 @@ void SAL_CALL ConfigData::replaceName( rtl::OUString& oustring ) const
 
             aStrBuf.append( &oustring.getStr()[k],idx - k );
             aStrBuf.append( m_vReplacement[off] );
-            k = idx + add;
+            k = idx + m_vAdd[off];
         }
     }
 
@@ -752,6 +740,11 @@ ConfigData TVChildTarget::init( const Reference< XMultiServiceFactory >& xSMgr )
         aDirectory.close();
     }
 
+    configData.m_vAdd[0] = 12;
+    configData.m_vAdd[1] = 15;
+    configData.m_vAdd[2] = 11;
+    configData.m_vAdd[3] = 14;
+    configData.m_vAdd[4] = 12;
     configData.m_vReplacement[0] = productName;
     configData.m_vReplacement[1] = productVersion;
     configData.m_vReplacement[2] = vendorName;
