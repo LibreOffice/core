@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrl.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 15:41:56 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 17:47:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,9 @@
 #endif
 #ifndef _SV_CTRL_HXX
 #include <ctrl.hxx>
+#endif
+#ifndef _SV_DECOVIEW_HXX
+#include <decoview.hxx>
 #endif
 #ifndef _VCL_CONTROLLAYOUT_HXX
 #include <controllayout.hxx>
@@ -417,6 +420,33 @@ void Control::SetLayoutDataParent( const Control* pParent ) const
 void Control::ImplClearLayoutData() const
 {
     delete mpLayoutData, mpLayoutData = NULL;
+}
+
+// -----------------------------------------------------------------------
+
+void Control::ImplDrawFrame( OutputDevice* pDev, Rectangle& rRect )
+{
+    // use a deco view to draw the frame
+    // However, since there happens a lot of magic there, we need to fake some (style) settings
+    // on the device
+    AllSettings aOriginalSettings( pDev->GetSettings() );
+
+    AllSettings aNewSettings( aOriginalSettings );
+    StyleSettings aStyle( aNewSettings.GetStyleSettings() );
+
+    // The *only known* clients of the Draw methods of the various VCL-controls are form controls:
+    // During print preview, and during printing, Draw is called. Thus, drawing always happens with a
+    // mono (colored) border
+    aStyle.SetOptions( aStyle.GetOptions() | STYLE_OPTION_MONO );
+    aStyle.SetMonoColor( GetSettings().GetStyleSettings().GetMonoColor() );
+
+    aNewSettings.SetStyleSettings( aStyle );
+    pDev->SetSettings( aNewSettings );
+
+    DecorationView aDecoView( pDev );
+    rRect = aDecoView.DrawFrame( rRect, FRAME_DRAW_WINDOWBORDER );
+
+    pDev->SetSettings( aOriginalSettings );
 }
 
 // -----------------------------------------------------------------------
