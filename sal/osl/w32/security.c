@@ -2,9 +2,9 @@
  *
  *  $RCSfile: security.c,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hro $ $Date: 2002-08-14 11:21:21 $
+ *  last change: $Author: hro $ $Date: 2002-08-15 09:54:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,6 +150,7 @@ oslSecurityError SAL_CALL osl_loginUser( rtl_uString *strUserName, rtl_uString *
         sal_Unicode*    strUser;
         sal_Unicode*    strDomain = _wcsdup(rtl_uString_getStr(strUserName));
         HANDLE  hUserToken;
+        LUID    luid;
 
         if (strUser = wcschr(strDomain, L'/'))
             *strUser++ = L'\0';
