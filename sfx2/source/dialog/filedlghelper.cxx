@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.96 $
+ *  $Revision: 1.97 $
  *
- *  last change: $Author: gt $ $Date: 2002-10-31 13:50:31 $
+ *  last change: $Author: gt $ $Date: 2002-10-31 14:52:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -254,13 +254,27 @@ const short FILESAVE_AUTOEXTENSION = TemplateDescription::FILESAVE_AUTOEXTENSION
 #define IODLG_CONFIGNAME        String(DEFINE_CONST_UNICODE("FilePicker_Save"))
 #define IMPGRF_CONFIGNAME       String(DEFINE_CONST_UNICODE("FilePicker_Graph"))
 #define USERITEM_NAME           ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "UserItem" ))
-#define SD_EXPORT_IDENTIFIER    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "SdExportLastFilter" ))
-#define SI_EXPORT_IDENTIFIER    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "SiExportLastFilter" ))
 
 //-----------------------------------------------------------------------------
 
 namespace sfx2
 {
+
+const OUString* GetLastFilterConfigId( FileDialogHelper::Context _eContext )
+{
+    static const OUString   aSD_EXPORT_IDENTIFIER( RTL_CONSTASCII_USTRINGPARAM( "SdExportLastFilter" ) );
+    static const OUString   aSI_EXPORT_IDENTIFIER( RTL_CONSTASCII_USTRINGPARAM( "SiExportLastFilter" ) );
+
+    const OUString* pRet = NULL;
+
+    switch( _eContext )
+    {
+        case FileDialogHelper::SD_EXPORT:   pRet = &aSD_EXPORT_IDENTIFIER;  break;
+        case FileDialogHelper::SI_EXPORT:   pRet = &aSI_EXPORT_IDENTIFIER;  break;
+    }
+
+    return pRet;
+}
 
 String EncodeSpaces_Impl( const String& rSource );
 String DecodeSpaces_Impl( const String& rSource );
@@ -485,14 +499,9 @@ void FileDialogHelper_Impl::SaveLastUsedFilter( const OUString& _rContextIdentif
 // ------------------------------------------------------------------------
 void FileDialogHelper_Impl::SaveLastUsedFilter( void )
 {
-    OUString aConfigId;
-    switch( meContext )
-    {
-        case FileDialogHelper::SD_EXPORT:   aConfigId = SD_EXPORT_IDENTIFIER;   break;
-        case FileDialogHelper::SI_EXPORT:   aConfigId = SI_EXPORT_IDENTIFIER;   break;
-    }
-    if( aConfigId.getLength() )
-        SaveLastUsedFilter( aConfigId );
+    const OUString* pConfigId = GetLastFilterConfigId( meContext );
+    if( pConfigId )
+        SaveLastUsedFilter( *pConfigId );
 }
 
 // ------------------------------------------------------------------------
@@ -2047,8 +2056,8 @@ void FileDialogHelper_Impl::SetContext( FileDialogHelper::Context _eNewContext )
 {
     meContext = _eNewContext;
 
-    sal_Int32   nNewHelpId = 0;
-    OUString    aConfigId;
+    sal_Int32       nNewHelpId = 0;
+    OUString        aConfigId;
 
     switch( _eNewContext )
     {
@@ -2061,12 +2070,11 @@ void FileDialogHelper_Impl::SetContext( FileDialogHelper::Context _eNewContext )
         case FileDialogHelper::SW_INSERT_VIDEO:
         case FileDialogHelper::SC_INSERT_VIDEO:
         case FileDialogHelper::SD_INSERT_VIDEO:         nNewHelpId = SID_INSERT_VIDEO;          break;
-        case FileDialogHelper::SD_EXPORT:               aConfigId = SD_EXPORT_IDENTIFIER;       break;
-        case FileDialogHelper::SI_EXPORT:               aConfigId = SI_EXPORT_IDENTIFIER;       break;
     }
 
-    if( aConfigId.getLength() )
-        LoadLastUsedFilter( aConfigId );
+    const OUString* pConfigId = GetLastFilterConfigId( _eNewContext );
+    if( pConfigId )
+        LoadLastUsedFilter( *pConfigId );
 
     if( nNewHelpId )
         this->setDialogHelpId( nNewHelpId );
