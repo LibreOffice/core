@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optjsearch.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-30 19:46:57 $
+ *  last change: $Author: kz $ $Date: 2001-06-05 21:45:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,7 +116,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ spanish ] = "May˙sculas/min˙sculas";
         Text[ italian ] = "Maiuscole/minuscole";
         Text[ danish ] = "Match case";
-        Text[ swedish ] = "Stora/smÂ bokst‰ver";
+        Text[ swedish ] = "~Stora/smÂ bokst‰ver";
         Text[ polish ] = "Wielkie i ma≥e litery";
         Text[ portuguese_brazilian ] = "Match case";
         Text[ japanese ] = "ëÂï∂éö/è¨ï∂éö";
@@ -144,7 +144,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ spanish ] = "Formas normales/medio anchas";
         Text[ italian ] = "Forme larghezza normale/dimezzata";
         Text[ danish ] = "Match full/half width form";
-        Text[ swedish ] = "Normala/halvbreda former";
+        Text[ swedish ] = "~Normala/halvbreda former";
         Text[ polish ] = "Zwyk≥a/po≥owa szerokoúci";
         Text[ portuguese_brazilian ] = "Match full/half width form";
         Text[ japanese ] = "ëSäp/îºäp";
@@ -172,7 +172,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ spanish ] = "Hiragana/katakana";
         Text[ italian ] = "Hiragana/katakana";
         Text[ danish ] = "Match hiragana/katakana";
-        Text[ swedish ] = "Hiragana/katakana";
+        Text[ swedish ] = "~Hiragana/katakana";
         Text[ polish ] = "Hiragana/Katakana";
         Text[ portuguese_brazilian ] = "Match hiragana/katakana";
         Text[ japanese ] = "Ç–ÇÁÇ™Ç»/ÉJÉ^ÉJÉi";
@@ -200,7 +200,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ spanish ] = "Contracciones (yo-on, sokuon)";
         Text[ italian ] = "Contrazioni (yo-on, sokuon)";
         Text[ danish ] = "Match contractions (yo-on, sokuon)";
-        Text[ swedish ] = "Kontraktioner (yo-on, sokuon)";
+        Text[ swedish ] = "~Kontraktioner (yo-on, sokuon)";
         Text[ polish ] = "Kontrakcje (yo-on, sokuon)";
         Text[ portuguese_brazilian ] = "Match contractions (yo-on, sokuon)";
         Text[ japanese ] = "ùXâπÅAë£âπ";
@@ -228,7 +228,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ spanish ] = "Menos/GuiÛn/cho-on";
         Text[ italian ] = "Meno/trattino/cho-on";
         Text[ danish ] = "Match minus/dash/cho-on";
-        Text[ swedish ] = "Minus/bindestreck/cho-on";
+        Text[ swedish ] = "~Minus/bindestreck/cho-on";
         Text[ polish ] = "Minus/myúlnik/cho-on";
         Text[ portuguese_brazilian ] = "Match minus/dash/cho-on";
         Text[ japanese ] = "É}ÉCÉiÉX/ÉnÉCÉtÉì/í∑âπ[Å|/Å]/Å[]";
@@ -256,7 +256,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ spanish ] = "Car·cter de repeticiÛn";
         Text[ italian ] = "Caratteri di ripetizione";
         Text[ danish ] = "Match 'repeat character' marks";
-        Text[ swedish ] = "Upprepningstecken";
+        Text[ swedish ] = "Upp~repningstecken";
         Text[ polish ] = "Znaki powtÛrki";
         Text[ portuguese_brazilian ] = "Match 'repeat character' marks";
         Text[ japanese ] = "åJÇËï‘ÇµãLçÜ[ÅRÅSÅTÅUÅX]";
@@ -284,7 +284,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ spanish ] = "Variante Kanji (itaiji)";
         Text[ italian ] = "Varianti kanji (itaiji)";
         Text[ danish ] = "Match variant-form kanji (itaiji)";
-        Text[ swedish ] = "Kanji-variant (itaiji)";
+        Text[ swedish ] = "K~anji-variant (itaiji)";
         Text[ polish ] = "Wariant kanji (itaiji)";
         Text[ portuguese_brazilian ] = "Match variant-form kanji (itaiji)";
         Text[ japanese ] = "äøéöï\\ãLÇÃÇ‰ÇÍ(àŸëÃéö)";
@@ -312,7 +312,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ spanish ] = "Antiguas formas Kana";
         Text[ italian ] = "Tutte le vecchie forme kana";
         Text[ danish ] = "Match old kana forms";
-        Text[ swedish ] = "Gamla kana-former";
+        Text[ swedish ] = "Gam~la kana-former";
         Text[ polish ] = "Stare formy kana";
         Text[ portuguese_brazilian ] = "Match old kana forms";
         Text[ japanese ] = "êVãåÇ©Ç»éöëÃ";
@@ -340,7 +340,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ spanish ] = "Di/zi, du/zu";
         Text[ italian ] = "Di/zi, du/zu";
         Text[ danish ] = "Match di/zi, du/zu";
-        Text[ swedish ] = "Di/zi, du/zu";
+        Text[ swedish ] = "~Di/zi, du/zu";
         Text[ polish ] = "Di/zi, du/zu";
         Text[ portuguese_brazilian ] = "Match di/zi, du/zu";
         Text[ japanese ] = "Éa/ÉWÅAÉd/ÉY";
@@ -368,7 +368,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ spanish ] = "Ba/va, ha/fa";
         Text[ italian ] = "Ba/va, ha/fa";
         Text[ danish ] = "Match ba/va, ha/fa";
-        Text[ swedish ] = "Ba/va, ha/fa";
+        Text[ swedish ] = "~Ba/va, ha/fa";
         Text[ polish ] = "Ba/va, ha/fa";
         Text[ portuguese_brazilian ] = "Match ba/va, ha/fa";
         Text[ japanese ] = "Éo/ÉîÉ@ÅAÉn/ÉtÉ@";
@@ -396,7 +396,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ spanish ] = "Tsi/thi/chi, dhi/zi";
         Text[ italian ] = "Tsi/thi/chi, dhi/zi";
         Text[ danish ] = "Match tsi/thi/chi, dhi/zi";
-        Text[ swedish ] = "Tsi/thi/chi, dhi/zi";
+        Text[ swedish ] = "~Tsi/thi/chi, dhi/zi";
         Text[ polish ] = "Tsi/thi/chi, dhi/zi";
         Text[ portuguese_brazilian ] = "Match tsi/thi/chi, dhi/zi";
         Text[ japanese ] = "ÉcÉB/ÉeÉB/É`ÅAÉfÉB/ÉW";
@@ -424,7 +424,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ spanish ] = "hyu/fyu, byu/vyu";
         Text[ italian ] = "hyu/fyu, byu/vyu";
         Text[ danish ] = "Match hyu/fyu, byu/vyu";
-        Text[ swedish ] = "Hyu/fyu, byu/vyu";
+        Text[ swedish ] = "H~yu/fyu, byu/vyu";
         Text[ polish ] = "Hyu/fyu, byu/vyu";
         Text[ portuguese_brazilian ] = "Match hyu/fyu, byu/vyu";
         Text[ japanese ] = "ÉqÉÖ/ÉtÉÖÅAÉrÉÖ/ÉîÉÖ";
@@ -452,7 +452,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ spanish ] = "Se/she, ze/je";
         Text[ italian ] = "Se/she, ze/je";
         Text[ danish ] = "Match se/she, ze/je";
-        Text[ swedish ] = "Se/she, ze/je";
+        Text[ swedish ] = "~Se/she, ze/je";
         Text[ polish ] = "Se/she, ze/je";
         Text[ portuguese_brazilian ] = "Match se/she, ze/je";
         Text[ japanese ] = "ÉZ/ÉVÉFÅAÉ[/ÉWÉF";
@@ -480,7 +480,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ spanish ] = "Ia/iya (piano/piyano)";
         Text[ italian ] = "Ia/iya (piano/piyano)";
         Text[ danish ] = "Match ia/iya (piano/piyano)";
-        Text[ swedish ] = "Ia/iya (piano/piyano)";
+        Text[ swedish ] = "Ia/iya (~piano/piyano)";
         Text[ polish ] = "Ia/iya (piano/piyano)";
         Text[ portuguese_brazilian ] = "Match ia/iya (piano/piyano)";
         Text[ japanese ] = "ÉCíiÅAÉGíiÇ…ë±Ç≠ÉA/ÉÑ(ÉsÉAÉm/ÉsÉÑÉm)";
@@ -508,7 +508,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ spanish ] = "Ki/ku (tekisuto/tekusuto)";
         Text[ italian ] = "Ki/ku (tekisuto/tekusuto)";
         Text[ danish ] = "Match ki/ku (tekisuto/tekusuto)";
-        Text[ swedish ] = "Ki/ku (tekisuto/tekusuto)";
+        Text[ swedish ] = "Ki/k~u (tekisuto/tekusuto)";
         Text[ polish ] = "Ki/ku (tekisuto/tekusuto)";
         Text[ portuguese_brazilian ] = "Match ki/ku (tekisuto/tekusuto)";
         Text[ japanese ] = "ÉTçsÇÃëOÇÃÉL/ÉN (ÉeÉLÉXÉg/ÉeÉNÉXÉg)";
@@ -563,7 +563,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ spanish ] = "Caracteres de puntuaciÛn";
         Text[ italian ] = "Segni di punteggiatura";
         Text[ danish ] = "Punctuation characters";
-        Text[ swedish ] = "Interpunktionstecken";
+        Text[ swedish ] = "Int~erpunktionstecken";
         Text[ polish ] = "Znak interpunkcji";
         Text[ portuguese_brazilian ] = "Punctuation characters";
         Text[ japanese ] = "ãÊêÿÇËãLçÜ";
@@ -590,7 +590,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ spanish ] = "Car·cter de espacio";
         Text[ italian ] = "Spazio";
         Text[ danish ] = "Whitespace characters";
-        Text[ swedish ] = "Mellanrumstecken";
+        Text[ swedish ] = "Mellanrumste~cken";
         Text[ polish ] = "Znak spacji";
         Text[ portuguese_brazilian ] = "Whitespace characters";
         Text[ japanese ] = "ãÛîíÇ∆ÇµÇƒégópÇ≥ÇÍÇÈï∂éö";
@@ -617,7 +617,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ spanish ] = "Vocales largas (cho-on)";
         Text[ italian ] = "Vocale lunga (cho-on)";
         Text[ danish ] = "Prolonged soundmarks (cho-on)";
-        Text[ swedish ] = "Fˆrl‰ngda vokaler (cho-on)";
+        Text[ swedish ] = "Fˆrl~‰ngda vokaler (cho-on)";
         Text[ polish ] = "Przed≥uøone samog≥oski (cho-on)";
         Text[ portuguese_brazilian ] = "Prolonged soundmarks (cho-on)";
         Text[ japanese ] = "í∑âπ(ïÍâπÇ≈ÇÃÇŒÇ∑âπ) [Å[]";
@@ -644,7 +644,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ spanish ] = "Punto centrado";
         Text[ italian ] = "Punto al centro";
         Text[ danish ] = "Middle dots";
-        Text[ swedish ] = "Mittpunkt";
+        Text[ swedish ] = "M~ittpunkt";
         Text[ polish ] = "Kropka poúrodku";
         Text[ portuguese_brazilian ] = "Middle dots";
         Text[ japanese ] = "íÜçï";
@@ -662,12 +662,12 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
     Text[ greek ] = "Searching in Japanese";
     Text[ dutch ] = "Searching in Japanese";
     Text[ french ] = "Searching in Japanese";
-    Text[ spanish ] = "Searching in Japanese";
+    Text[ spanish ] = "Opciones de b˙squeda para japonÈs";
     Text[ finnish ] = "Searching in Japanese";
     Text[ italian ] = "Searching in Japanese";
     Text[ danish ] = "Searching in Japanese";
     Text[ swedish ] = "Sˆkalternativ fˆr japanska";
-    Text[ polish ] = "Searching in Japanese";
+    Text[ polish ] = "Opcje wyszukiwania w jÍzyku japoÒskim";
     Text[ portuguese_brazilian ] = "Searching in Japanese";
     Text[ japanese ] = "Searching in Japanese";
     Text[ korean ] = "Searching in Japanese";
