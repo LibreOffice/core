@@ -2,9 +2,9 @@
  *
  *  $RCSfile: office_connect.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:43:45 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 20:02:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -78,7 +78,7 @@ int main( )
     {
         // resolve the uno-url
         rInstance = rResolver->resolve( OUString::createFromAscii(
-            "uno:socket,host=localhost,port=8100;urp;StarOffice.ServiceManager" ) );
+            "uno:socket,host=localhost,port=2083;urp;StarOffice.ServiceManager" ) );
 
         if( ! rInstance.is() )
         {
