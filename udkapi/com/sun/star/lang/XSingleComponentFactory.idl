@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSingleComponentFactory.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2002-01-23 08:52:20 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 16:02:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@ module com {  module sun {  module star {  module lang {
 
     @see XInitialization
 */
-interface XSingleComponentFactory : com::sun::star::uno::XInterface
+published interface XSingleComponentFactory : com::sun::star::uno::XInterface
 {
     /** Creates an instance of a service implementation.
 
