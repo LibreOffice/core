@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: cd $ $Date: 2001-07-19 12:31:07 $
+ *  last change: $Author: cd $ $Date: 2001-07-24 10:39:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -418,7 +418,7 @@ void SfxApplication::SetApp( SfxApplication* pSfxApp )
     ::osl::MutexGuard aGuard( aProtector );
 
 #if SUPD>637
-    RTL_LOGFILE_CONTEXT( aLog, "SfxApplication::SetApp()" );
+    RTL_LOGFILE_CONTEXT( aLog, "sfx2 (mba) ::SfxApplication::SetApp" );
 #endif
     DBG_ASSERT( !pApp, "SfxApplication already created!" );
     if ( pApp )
@@ -453,11 +453,14 @@ SfxApplication::SfxApplication()
     , pImageMgr( 0 )
     , nInterfaces( 0 )
 {
+#if SUPD>637
+    RTL_LOGFILE_CONTEXT( aLog, "sfx2 (mba) ::SfxApplication::SfxApplication" );
+#endif
+
     GetpApp()->SetPropertyHandler( GetOrCreatePropertyHandler() );
 
 #if SUPD>637
-    RTL_LOGFILE_CONTEXT( aLog, "SfxApplication::SfxApplication()" );
-    RTL_LOGFILE_CONTEXT_TRACE( aLog, "start create svtools option objects" );
+    RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ precreate svtools options objects" );
 #endif
     pSaveOptions = new SvtSaveOptions;
     pUndoOptions = new SvtUndoOptions;
@@ -476,12 +479,18 @@ SfxApplication::SfxApplication()
     pInternalOptions = new SvtInternalOptions;
     pSysLocaleOptions = new SvtSysLocaleOptions;
     SvtViewOptions::AcquireOptions();
-
-    UCB_Helper::Initialize();
+#if SUPD>637
+    RTL_LOGFILE_CONTEXT_TRACE( aLog, "} precreate svtools options objects" );
+#endif
 
 #if SUPD>637
-    RTL_LOGFILE_CONTEXT_TRACE( aLog, "end create svtools option objects" );
+    RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ UCB_Helper::Initialize" );
 #endif
+    UCB_Helper::Initialize();
+#if SUPD>637
+    RTL_LOGFILE_CONTEXT_TRACE( aLog, "} UCB_Helper::Initialize" );
+#endif
+
     pImp = new SfxApplication_Impl;
     pImp->bConfigLoaded = sal_False;
     pImp->pEmptyMenu = 0;
@@ -501,6 +510,10 @@ SfxApplication::SfxApplication()
     pImp->pSimpleResManager = 0;
     pImp->nWarnLevel = 0;
     pImp->pAutoSaveTimer = 0;
+
+#if SUPD>637
+    RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ set locale settings" );
+#endif
     String sLanguage = SvtPathOptions().SubstituteVariable(String::CreateFromAscii("$(langid)"));
     LanguageType eUILanguage = (LanguageType) sLanguage.ToInt32();
     LanguageType eLanguage = pSysLocaleOptions->GetLocaleLanguageType();
@@ -511,21 +524,24 @@ SfxApplication::SfxApplication()
     // Create instance of SvtSysLocale _after_ setting the locale at the application,
     // so that it can initialize itself correctly.
     pSysLocale = new SvtSysLocale;
+#if SUPD>637
+    RTL_LOGFILE_CONTEXT_TRACE( aLog, "} set locale settings" );
+#endif
 
     pAppData_Impl = new SfxAppData_Impl( this );
     pAppData_Impl->UpdateApplicationSettings( SvtMenuOptions().IsEntryHidingEnabled() );
     pApp->PreInit();
 
 #if SUPD>637
-    RTL_LOGFILE_CONTEXT_TRACE( aLog, "start create SfxConfigManager" );
+    RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ create SfxConfigManager" );
 #endif
     pCfgMgr = new SfxConfigManager;
 #if SUPD>637
-    RTL_LOGFILE_CONTEXT_TRACE( aLog, "end create SfxConfigManager" );
+    RTL_LOGFILE_CONTEXT_TRACE( aLog, "} create SfxConfigManager" );
 #endif
 
 #if SUPD>637
-    RTL_LOGFILE_CONTEXT_TRACE( aLog, "start InitializeDDE()" );
+    RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ initialize DDE" );
 #endif
 #ifdef DDE_AVAILABLE
 #ifdef PRODUCT
@@ -543,7 +559,7 @@ SfxApplication::SfxApplication()
 #endif
 #endif
 #if SUPD>637
-    RTL_LOGFILE_CONTEXT_TRACE( aLog, "end InitializeDDE()" );
+    RTL_LOGFILE_CONTEXT_TRACE( aLog, "} initialize DDE" );
 #endif
 }
 

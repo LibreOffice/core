@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmload.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: as $ $Date: 2001-07-16 09:41:42 $
+ *  last change: $Author: cd $ $Date: 2001-07-24 10:44:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,7 @@
 #endif
 
 #include <rtl/ustring.h>
+#include <rtl/logfile.hxx>
 #include <svtools/itemset.hxx>
 #include <vcl/window.hxx>
 #include <svtools/eitem.hxx>
@@ -175,6 +176,8 @@ SfxFrameLoader::~SfxFrameLoader()
 sal_Bool SAL_CALL SfxFrameLoader::load( const Sequence< PropertyValue >& rArgs, const Reference< XFrame >& rFrame ) throw( RuntimeException )
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
+    RTL_LOGFILE_CONTEXT( aLog, "sfx2 (mba) ::SfxFrameLoader::load" );
 
     // Extract URL from given descriptor.
     String rURL;
@@ -412,6 +415,7 @@ SfxObjectFactory& SfxFrameLoader_Impl::GetFactory()
     // It can detect all types for that an internal filter is known, even if the preselected filter is an external one.
     // Internal filters may have "old" names that must be retrieved from a table using a static method in class SfxFilterContainer, or it may have
     // a "new name that follows the rules for filter names that can be used as configuration keys.
+    RTL_LOGFILE_CONTEXT( aLog, "sfx2 (mba) ::SfxFrameLoader::detect" );
 
     Reference < XInputStream > xStream;
     String aURL;

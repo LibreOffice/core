@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltfnc.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: as $ $Date: 2001-07-16 09:41:10 $
+ *  last change: $Author: cd $ $Date: 2001-07-24 10:42:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2052,7 +2052,7 @@ const SfxFilter* SfxExecutableFilterContainer::GetChooserFilter()
 
 void SfxFilterContainer::ReadExternalFilters( const String& rDocServiceName )
 {
-    RTL_LOGFILE_CONTEXT( aMeasure, "SfxFilterContainer::ReadExternalFilters()" );
+    RTL_LOGFILE_CONTEXT( aMeasure, "sfx2 (as) ::SfxFilterContainer::ReadExternalFilters" );
 
     try
     {
