@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DragGestureEvent.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: obr $ $Date: 2001-01-26 11:27:46 $
+ *  last change: $Author: pl $ $Date: 2001-01-31 14:43:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,12 +105,14 @@ struct DragGestureEvent: com::sun::star::lang::EventObject
     com::sun::star::uno::XInterface DragSource;
 
     //-------------------------------------------------------------------------
-    /** the events comprising the gesture.
+    /** the last event comprising the gesture.
 
-    <p> the initial trigger event is stored with an index of 0. </p>
+    <p> the initial trigger event will presumably be a <type scope="com::sun::star::awt">MouseEvent</type> event.
+    if it is not the implementation should either react accordingly or
+    presume that the left mouse button was clicked. </p>
     */
 
-    sequence < com::sun::star::awt::InputEvent > Events;
+    any Event;
 };
 
 //=============================================================================
