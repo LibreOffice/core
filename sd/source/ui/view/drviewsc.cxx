@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsc.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:57:13 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 09:19:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -877,6 +877,7 @@ USHORT DrawViewShell::GetIdBySubId( USHORT nSId )
         case SID_ATTR_TABLE:
         case SID_INSERTFILE:
         case SID_INSERT_GRAPHIC:
+        case SID_INSERT_AVMEDIA:
         case SID_INSERTPAGE:
         case SID_INSERT_MATH:
         case SID_INSERT_FLOATINGFRAME:
