@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit4.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mt $ $Date: 2000-11-28 15:56:53 $
+ *  last change: $Author: mt $ $Date: 2000-11-29 15:55:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,7 @@
 #include "udlnitem.hxx"
 #include "ulspitem.hxx"
 #include "wghtitem.hxx"
+#include "langitem.hxx"
 
 #include <rtl/tencinfo.h>
 
@@ -724,7 +725,7 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
             nTxtFirst = (short)LogicToTwips( nTxtFirst );
             rOutput.WriteNumber( nTxtFirst );
             rOutput << sRTF_LI;
-            sal_uInt16 nTxtLeft = ((const SvxLRSpaceItem&)rItem).GetTxtLeft();
+            sal_uInt16 nTxtLeft = (USHORT)((const SvxLRSpaceItem&)rItem).GetTxtLeft();
             nTxtLeft = (sal_uInt16)LogicToTwips( nTxtLeft );
             rOutput.WriteNumber( nTxtLeft );
             rOutput << sRTF_RI;
@@ -1269,6 +1270,7 @@ void ImpEditEngine::SetText( const EditTextObject& rTextObject )
     EnableUndo( sal_False );
 
     InsertText( rTextObject, EditSelection( aPaM, aPaM ) );
+    SetVertical( rTextObject.IsVertical() );
 
     DBG_ASSERT( !HasUndoManager() || !GetUndoManager().GetUndoActionCount(), "Woher kommt das Undo in SetText ?!" );
     SetUpdateMode( bUpdate );
@@ -1452,6 +1454,25 @@ EditSelection ImpEditEngine::InsertBinTextObject( BinTextObject& rTextObject, Ed
     return aSel;
 }
 
+::com::sun::star::lang::Locale ImpEditEngine::GetLocale( const EditPaM& rPaM )
+{
+    short nScriptType = GetScriptType( rPaM );
+    USHORT nLangId = GetScriptItemId( EE_CHAR_LANGUAGE, nScriptType );
+    const SvxLanguageItem* pLangItem = &(const SvxLanguageItem&)rPaM.GetNode()->GetContentAttribs().GetItem( nLangId );
+    EditCharAttrib* pAttr = rPaM.GetNode()->GetCharAttribs().FindAttrib( nLangId, rPaM.GetIndex() );
+    if ( pAttr )
+        pLangItem = (const SvxLanguageItem*)pAttr->GetItem();
+
+    ::com::sun::star::lang::Locale aLocale;
+    String aLanguage, aCountry;
+    ConvertLanguageToIsoNames( pLangItem->GetLanguage(), aLanguage, aCountry );
+    aLocale.Language = aLanguage;
+    aLocale.Country = aCountry;
+
+    return aLocale;
+}
+
+/*
 ::com::sun::star::lang::Locale ImpEditEngine::GetLocale()
 {
     if ( !aDefaultLocale.Language.getLength() )
@@ -1463,6 +1484,7 @@ EditSelection ImpEditEngine::InsertBinTextObject( BinTextObject& rTextObject, Ed
     }
     return aDefaultLocale;
 }
+*/
 
 Reference< XSpellChecker1 > ImpEditEngine::GetSpeller()
 {

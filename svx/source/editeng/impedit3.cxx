@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mt $ $Date: 2000-11-28 15:56:53 $
+ *  last change: $Author: mt $ $Date: 2000-11-29 15:55:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,7 @@
 #include <postitem.hxx>
 #include <langitem.hxx>
 
+#include <unotools/localedatawrapper.hxx>
 
 #include <textconv.hxx>
 
@@ -1360,7 +1361,7 @@ void ImpEditEngine::CreateAndInsertEmptyLine( ParaPortion* pParaPortion, sal_uIn
     Rectangle aBulletArea = Rectangle( Point(), Point() );
     if ( bLineBreak == sal_True )
     {
-        nStartX = GetXValue( rLRItem.GetTxtLeft() );
+        nStartX = (short)GetXValue( rLRItem.GetTxtLeft() );
     }
     else
     {
@@ -1371,7 +1372,7 @@ void ImpEditEngine::CreateAndInsertEmptyLine( ParaPortion* pParaPortion, sal_uIn
             pParaPortion->SetBulletX( 0 ); // Falls Bullet falsch eingestellt.
         if ( pParaPortion->GetBulletX() > nStartX )
         {
-            nStartX = GetXValue( rLRItem.GetTxtLeft() );
+            nStartX = (short)GetXValue( rLRItem.GetTxtLeft() );
             if ( pParaPortion->GetBulletX() > nStartX )
                 nStartX = pParaPortion->GetBulletX();
         }
@@ -1527,6 +1528,8 @@ void ImpEditEngine::ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, Te
 
     sal_uInt16 nBreakPos = nMaxBreakPos;
 
+    lang::Locale aLocale = GetLocale( EditPaM( pNode, nBreakPos ) );
+
     Reference < i18n::XBreakIterator > xBI = ImplGetBreakIterator();
     OUString aText( *pNode );
     Reference< XHyphenator > xHyph;
@@ -1534,8 +1537,18 @@ void ImpEditEngine::ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, Te
         xHyph = GetHyphenator();
     i18n::LineBreakHyphenationOptions aHyphOptions( xHyph, 1 );
     i18n::LineBreakUserOptions aUserOptions;
-    i18n::LineBreakResults aLBR = xBI->getLineBreak( *pNode, nBreakPos, GetLocale(), nMinBreakPos, aHyphOptions, aUserOptions );
-    nBreakPos = aLBR.breakIndex;
+
+    uno::Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
+    LocaleDataWrapper aWrapper( xMSF, aLocale );
+    i18n::ForbiddenCharacters aForbidden = aWrapper.getForbiddenCharacters();
+    aUserOptions.forbiddenBeginCharacters = aForbidden.beginLine;
+    aUserOptions.forbiddenEndCharacters = aForbidden.endLine;
+    aUserOptions.applyForbiddenRules = ((const SfxBoolItem&)pNode->GetContentAttribs().GetItem( EE_PARA_FORBIDDENRULES )).GetValue();
+    aUserOptions.allowPunctuationOutsideMargin = FALSE; // ((const SfxBoolItem&)pNode->GetContentAttribs().GetItem( EE_PARA_HANGINGPUNCTUATION )).GetValue();
+    aUserOptions.allowHyphenateEnglish = FALSE;
+
+    i18n::LineBreakResults aLBR = xBI->getLineBreak( *pNode, nBreakPos, aLocale, nMinBreakPos, aHyphOptions, aUserOptions );
+    nBreakPos = (USHORT)aLBR.breakIndex;
 
     sal_Bool bBlankSeparator = ( ( nBreakPos >= pLine->GetStart() ) &&
                     ( pNode->GetChar( nBreakPos ) == ' ' ) ) ? sal_True : sal_False;
@@ -1570,8 +1583,7 @@ void ImpEditEngine::ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, Te
             sal_uInt16 nMinTrail = nWordEnd-nMaxBreakPos+1;     //+1: Vor dem angeknacksten Buchstaben
             Reference< XHyphenatedWord > xHyphWord;
             if (xHyphenator.is())
-                xHyphWord = xHyphenator->hyphenate( aWord, GetLocale(),
-                                aWord.Len() - nMinTrail, Sequence< PropertyValue >() );
+                xHyphWord = xHyphenator->hyphenate( aWord, aLocale, aWord.Len() - nMinTrail, Sequence< PropertyValue >() );
             if (xHyphWord.is())
             {
                 sal_Bool bAlternate = xHyphWord->isAlternativeSpelling();
@@ -2474,7 +2486,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                                         nChars = 3; // sieht besser aus
 
                                     String aText;
-                                    aText.Fill( nChars, pTextPortion->GetExtraValue() );
+                                    aText.Fill( (USHORT)nChars, pTextPortion->GetExtraValue() );
                                     pOutDev->DrawStretchText( aTmpPos, pTextPortion->GetSize().Width(), aText );
                                 }
                                 if ( !IsVertical() )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mt $ $Date: 2000-11-28 15:56:53 $
+ *  last change: $Author: mt $ $Date: 2000-11-29 15:55:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -396,7 +396,7 @@ private:
     LanguageType        eDefaultLanguage;   // aktuelle Sprache (des Wortes) wird immer
                                             // zusammen mit dem Wort fuer die neuen
                                             // Lingu Interfaces benoetigt.
-    ::com::sun::star::lang::Locale aDefaultLocale;
+//  ::com::sun::star::lang::Locale aDefaultLocale;
     ::com::sun::star::uno::Reference < ::com::sun::star::i18n::XBreakIterator > xBI;
 
     XubString           aAutoCompleteText;
@@ -775,7 +775,7 @@ public:
 
     void                SetLanguage( LanguageType eLang )   { eDefaultLanguage = eLang;}
     LanguageType        GetLanguage() const                 { return eDefaultLanguage; }
-    ::com::sun::star::lang::Locale GetLocale();
+    ::com::sun::star::lang::Locale GetLocale( const EditPaM& rPaM );
 
     void                DoOnlineSpelling( ContentNode* pThisNodeOnly = 0, sal_Bool bSpellAtCursorPos = sal_False, sal_Bool bInteruptable = sal_True );
     EESpellState        Spell( EditView* pEditView, sal_Bool bMultipleDoc );
