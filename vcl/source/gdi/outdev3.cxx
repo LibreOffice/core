@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.181 $
+ *  $Revision: 1.182 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-30 16:21:21 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:06:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3927,8 +3927,8 @@ void OutputDevice::ImplDrawTextLine( long nBaseX,
     Color           aStrikeoutColor = GetTextColor();
     long            nBaseY = nY;
     long            nLineHeight;
-    long            nLinePos;
-    long            nLinePos2;
+    long            nLinePos = 0;
+    long            nLinePos2 = 0;
     long            nLeft;
     BOOL            bNormalLines = TRUE;
 
@@ -6190,7 +6190,7 @@ void OutputDevice::DrawText( const Rectangle& rRect,
 
     Color aOldTextColor;
     Color aOldTextFillColor;
-    BOOL  bRestoreFillColor;
+    BOOL  bRestoreFillColor = false;
     if ( (nStyle & TEXT_DRAW_DISABLE) && ! pVector )
     {
         BOOL  bHighContrastBlack = FALSE;
@@ -6404,9 +6404,9 @@ void OutputDevice::DrawText( const Rectangle& rRect,
         else if ( nStyle & TEXT_DRAW_VCENTER )
             aPos.Y() += (nHeight-nTextHeight)/2;
 
-        long        nMnemonicX;
-        long        nMnemonicY;
-        long        nMnemonicWidth;
+        long        nMnemonicX = 0;
+        long        nMnemonicY = 0;
+        long        nMnemonicWidth = 0;
         if ( nMnemonicPos != STRING_NOTFOUND )
         {
             sal_Int32* pCaretXArray = (sal_Int32*) alloca( 2 * sizeof(sal_Int32) * aStr.Len() );
@@ -6732,9 +6732,9 @@ void OutputDevice::DrawCtrlText( const Point& rPos, const XubString& rStr,
     XubString   aStr = rStr;
     xub_StrLen  nMnemonicPos = STRING_NOTFOUND;
 
-    long        nMnemonicX;
-    long        nMnemonicY;
-    long        nMnemonicWidth;
+    long        nMnemonicX = 0;
+    long        nMnemonicY = 0;
+    long        nMnemonicWidth = 0;
     if ( nStyle & TEXT_DRAW_MNEMONIC )
     {
         aStr = GetNonMnemonicString( aStr, nMnemonicPos );
@@ -7308,7 +7308,8 @@ BOOL OutputDevice::GetTextBoundRect( Rectangle& rRect,
     const BitmapColor aBlack( pAcc->GetBestMatchingColor( Color( COL_BLACK ) ) );
     const long nW = pAcc->Width();
     const long nH = pAcc->Height();
-    long nLeft, nRight;
+    long nLeft = 0;
+    long nRight = 0;
 
     // find top left point
     long nTop = 0;
