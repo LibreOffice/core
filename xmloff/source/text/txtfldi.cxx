@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfldi.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:59:33 $
+ *  last change: $Author: hjs $ $Date: 2003-08-19 12:02:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2279,6 +2279,7 @@ XMLConditionalTextImportContext::XMLConditionalTextImportContext(
         sPropertyTrueContent(RTL_CONSTASCII_USTRINGPARAM(sAPI_true_content)),
         sPropertyFalseContent(RTL_CONSTASCII_USTRINGPARAM(sAPI_false_content)),
         sPropertyIsConditionTrue(RTL_CONSTASCII_USTRINGPARAM(sAPI_is_condition_true)),
+        sPropertyCurrentPresentation(RTL_CONSTASCII_USTRINGPARAM(sAPI_current_presentation)),
         sCondition(),
         sTrueContent(),
         sFalseContent(),
@@ -2337,6 +2338,9 @@ void XMLConditionalTextImportContext::PrepareField(
 
     aAny.setValue( &bCurrentValue, ::getBooleanCppuType() );
     xPropertySet->setPropertyValue(sPropertyIsConditionTrue, aAny);
+
+    aAny <<= GetContent();
+    xPropertySet->setPropertyValue(sPropertyCurrentPresentation, aAny);
 }
 
 
