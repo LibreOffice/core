@@ -3,6 +3,7 @@ s72	s50	s50	s50
 EventMapping	Dialog_	Control_	Event
 CustomSetup	ItemDescription	SelectionDescription	Text
 CustomSetup	Location	SelectionPath	Text
+CustomSetup	Next	SelectionPathOn	Enabled
 CustomSetup	Size	SelectionSize	Text
 SetupInitialization	ActionData	ActionData	Text
 SetupInitialization	ActionText	ActionText	Text
