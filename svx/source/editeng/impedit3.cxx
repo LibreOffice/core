@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: mt $ $Date: 2002-07-17 09:39:10 $
+ *  last change: $Author: mt $ $Date: 2002-07-17 10:01:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1050,20 +1050,11 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
                 USHORT nPortionEnd = nTmpPos + pPortion->GetLen();
                 if( bScriptSpace && ( nPortionEnd < pNode->Len() ) && ( nTmpWidth < nXWidth ) && IsScriptChange( EditPaM( pNode, nPortionEnd ) ) )
                 {
-                    // itrform2.cxx:
-                    // BOOL bAllowBefore = rCC.isLetterNumeric( *pNode, nPortionEnd - 1 );
-                    // BOOL bAllowBehind = rCC.isLetterNumeric( *pNode, nPortionEnd );
-
-                    BOOL bAllow = TRUE;
-                    if ( pPortion->GetRightToLeft() )
-                    {
-                        if ( nTmpPortion && pParaPortion->GetTextPortions().GetObject( nTmpPortion-1 )->GetRightToLeft() )
-                            bAllow = FALSE;
-                    }
-                    else
-                    {
-                        // Check if paragraph writing direction is R2L...
-                    }
+                    BOOL bAllow = FALSE;
+                    USHORT nScriptTypeLeft = GetScriptType( EditPaM( pNode, nPortionEnd ) );
+                    USHORT nScriptTypeRight = GetScriptType( EditPaM( pNode, nPortionEnd+1 ) );
+                    if ( ( nScriptTypeLeft == i18n::ScriptType::ASIAN ) || ( nScriptTypeRight == i18n::ScriptType::ASIAN ) )
+                        bAllow = TRUE;
 
                     // No spacing within L2R/R2L nesting
                     if ( bAllow )
