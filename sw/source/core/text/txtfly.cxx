@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfly.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 14:15:54 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:37:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,9 +58,6 @@
  *
  *
  ************************************************************************/
-
-
-#pragma hdrstop
 
 #include "frmsh.hxx"
 #include "doc.hxx"
@@ -2192,7 +2189,6 @@ _FlyCntnt SwTxtFly::CalcSmart( const SdrObject *pObj ) const
         eOrder = SURROUND_PARALLEL;
     else
     {
-#ifndef USED
         long nLeft = nFlyLeft - nCurrLeft;
         long nRight = nCurrRight - nFlyRight;
         if( nFlyRight - nFlyLeft > FRAME_MAX )
@@ -2210,32 +2206,6 @@ _FlyCntnt SwTxtFly::CalcSmart( const SdrObject *pObj ) const
             eOrder = nRight ? SURROUND_PARALLEL : SURROUND_LEFT;
         else
             eOrder = nRight ? SURROUND_RIGHT: SURROUND_NONE;
-#else
-        if ( nFlyRight > nCurrRight )
-            nFlyRight = nCurrRight;
-        if ( nFlyLeft < nCurrLeft )
-            nFlyLeft = nCurrLeft;
-        const long nCurrPart = ( nCurrRight - nCurrLeft )/3;
-        const long nFlyWidth = nFlyRight - nFlyLeft;
-
-        if( nFlyWidth < nCurrPart )
-            eOrder = SURROUND_PARALLEL;
-        else
-        {
-            if( nFlyWidth > (nCurrPart * 2) )
-                eOrder = SURROUND_NONE;
-            else
-            {
-                const long nHalfCurr = ( nCurrRight + nCurrLeft ) / 2;
-                const long nHalfFly  = ( nFlyRight + nFlyLeft ) / 2 ;
-                if ( nHalfFly == nHalfCurr )
-                    eOrder = SURROUND_COLUMN;
-                else
-                    eOrder = nHalfFly < nHalfCurr ?
-                             SURROUND_RIGHT : SURROUND_LEFT;
-            }
-        }
-#endif
     }
 
     return eOrder;
@@ -2299,64 +2269,3 @@ sal_Bool SwTxtFly::IsAnyFrm( const SwRect &rLine ) const
     UNDO_SWAP( pCurrFrm )
     return bRet;
 }
-
-const SwFrmFmt* SwTxtFrm::IsFirstBullet()
-{
-    GetFormatted();
-    const SwLineLayout *pLayout = GetPara();
-    if( !pLayout ||
-        ( !pLayout->GetLen() && !pLayout->GetPortion() && !pLayout->GetNext() ) )
-        return NULL;
-
-    SwLinePortion* pPor = pLayout->GetFirstPortion();
-    while( pPor->IsFlyPortion() && pPor->GetPortion() )
-        pPor = pPor->GetPortion();
-    SwLinePortion* pTmp;
-    do
-    {
-        pTmp = pLayout->GetFirstPortion();
-        while( pTmp && !pTmp->InTxtGrp() )
-            pTmp = pTmp->GetPortion();
-        pLayout = pLayout->GetNext();
-    } while( !pTmp && pLayout );
-    long nMaxHeight = pTmp ? ( pTmp->Height() * 15 ) / 10 : 0;
-    if( !nMaxHeight )
-        return NULL;
-
-    long nMaxWidth = 2*pTmp->Height();
-    if( pPor->IsFlyCntPortion() &&
-        ( pPor->Height() < nMaxHeight && pPor->Width() < nMaxWidth ) )
-        return ((SwFlyCntPortion*)pPor)->GetFrmFmt();
-
-    const SwFrmFmt* pRet = NULL;
-
-    SwPageFrm* pPage = FindPageFrm();
-    const SwSortedObjs *pSorted = pPage->GetSortedObjs();
-    if( pSorted )
-    {
-        for ( MSHORT i = 0; i < pSorted->Count(); ++i )
-        {
-            const SdrObject* pObj = (*pSorted)[i]->GetDrawObj();
-            if( this == &lcl_TheAnchor( pObj ) )
-            {
-                SwRect aBound( GetBoundRect( pObj ) );
-                if( aBound.Top() > Frm().Top() + Prt().Top() )
-                    aBound.Top( Frm().Top() + Prt().Top() );
-                if( aBound.Left() > Frm().Left() + Prt().Left() )
-                    aBound.Left( Frm().Left() + Prt().Left() );
-                if( aBound.Height() < nMaxHeight && aBound.Width() < nMaxWidth )
-                {
-                    pRet = ((SwContact*)GetUserCall(pObj))->GetFmt();
-                    _FlyCntnt eOrder = pRet->GetSurround().GetSurround();
-                    if( SURROUND_THROUGHT == eOrder || SURROUND_NONE == eOrder )
-                        pRet = NULL;
-                    else
-                        break;
-                }
-            }
-        }
-    }
-    return pRet;
-}
-
-
