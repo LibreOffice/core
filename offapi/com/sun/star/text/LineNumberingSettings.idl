@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LineNumberingSettings.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 00:07:09 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 23:09:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,42 +68,39 @@
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::text::LineNumberingSettings
 /** provides access to the settings of the line numbering.
+    @deprecated
+
+    Actually there never was an implementation for this service.
  */
 published service LineNumberingSettings
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::text::LineNumberingSettings::On
     /** If <TRUE/>, line numbering is used.
      */
     [property] boolean On;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::text::LineNumberingSettings::CharStyle
     /** The name of the character style that is used for the line number.
      */
     [property] string CharStyle;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::text::LineNumberingSettings::CountEmptyLines
     /** If <TRUE/>, empty lines are counted.
      */
     [property] boolean CountEmptyLines;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::text::LineNumberingSettings::CountLinesInFrames
     /** If <TRUE/>, lines in frames are included in counting.
      */
     [property] boolean CountLinesInFrames;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::text::LineNumberingSettings::Distance
     /** specifies the distance between the line number and the start or
         end of the text area.
      */
@@ -111,28 +108,24 @@ published service LineNumberingSettings
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::text::LineNumberingSettings::LineInterval
     /** Line numbers are shown on every <var>LineInterval</var>th line.
      */
     [property] short LineInterval;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::text::LineNumberingSettings::LineSeparator
     /** specifies the symbol that is shown between the line numbers.
      */
     [property] string LineSeparator;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::text::LineNumberingSettings::SeparatorLineDistance
     /** The line separator is shown every <var>SeparatorLineDistance</var>th line.
      */
     [property] short SeparatorLineDistance;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::text::LineNumberingSettings::NumberPosition
     /** specifies the position of the line number
         (constant <type scope="com::sun::star::style::">LineNumberPosition</type> - left/right/inside/outside).
      */
@@ -140,7 +133,6 @@ published service LineNumberingSettings
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::text::LineNumberingSettings::NumberingType
     /** specifies the type of the numbering.
      */
     [property] short NumberingType;
