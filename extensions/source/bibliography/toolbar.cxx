@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbar.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: gt $ $Date: 2002-04-25 09:27:20 $
+ *  last change: $Author: os $ $Date: 2002-05-07 13:49:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,9 @@
 #ifndef _TOOLS_DEBUG_HXX //autogen wg. DBG_ASSERT
 #include <tools/debug.hxx>
 #endif
-
+#ifndef _SVX_SVXIDS_HRC
+#include <svx/svxids.hrc>
+#endif
 #include "bibbeam.hxx"
 #include "toolbar.hrc"
 #include "bibresid.hxx"
@@ -259,9 +261,12 @@ BibToolBar::BibToolBar(Window* pParent, WinBits nStyle):
     aLBSource(this,WB_DROPDOWN),
     aFtQuery(this,WB_VCENTER),
     aEdQuery(this),
+    aImgLst(BibResId(  RID_TOOLBAR_IMGLIST       )),
+    aImgLstHC(BibResId(RID_TOOLBAR_IMGLIST_HC  )),
     nSelMenuItem(0),
     nMenuId(0)
 {
+    ApplyImageList();
     SetStyle(GetStyle()|nStyle);
     SetOutStyle(TOOLBOX_STYLE_FLAT);
     Size aSize=GetSizePixel();
@@ -586,3 +591,25 @@ void    BibToolBar::statusChanged(const frame::FeatureStateEvent& rEvent)
         (*pListener)->statusChanged(rEvent);
     }
 }
+/* -----------------------------07.05.2002 15:08------------------------------
+
+ ---------------------------------------------------------------------------*/
+void BibToolBar::DataChanged( const DataChangedEvent& rDCEvt )
+{
+    if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
+         (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+            ApplyImageList();
+    Window::DataChanged( rDCEvt );
+}
+/* -----------------------------07.05.2002 15:09------------------------------
+
+ ---------------------------------------------------------------------------*/
+void BibToolBar::ApplyImageList()
+{
+    ImageList& rList = GetSettings().GetStyleSettings().GetHighContrastMode() ?
+                        aImgLstHC : aImgLst;
+    SetItemImage(TBC_BT_AUTOFILTER  , rList.GetImage(SID_FM_AUTOFILTER));
+    SetItemImage(TBC_BT_FILTERCRIT  , rList.GetImage(SID_FM_FILTERCRIT));
+    SetItemImage(TBC_BT_REMOVEFILTER, rList.GetImage(SID_FM_REMOVE_FILTER_SORT ));
+}
+

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbar.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-22 07:31:42 $
+ *  last change: $Author: os $ $Date: 2002-05-07 13:49:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,7 +182,8 @@ class BibToolBar:   public ToolBox
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >            xController;
         Timer                   aTimer;
         Timer                   aMenuTimer;
-
+        ImageList               aImgLst;
+        ImageList               aImgLstHC;
         FixedText               aFtSource;
         ListBox                 aLBSource;
         FixedText               aFtQuery;
@@ -197,8 +198,10 @@ class BibToolBar:   public ToolBox
         DECL_LINK( SendSelHdl, Timer* );
         DECL_LINK( MenuHdl, Timer* );
 
+        void                    ApplyImageList();
     protected:
 
+        void                    DataChanged( const DataChangedEvent& rDCEvt );
         void                    InitListener();
         virtual void            Select();
         virtual void            Click();

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: fs $ $Date: 2001-10-22 07:31:42 $
+#   last change: $Author: os $ $Date: 2002-05-07 13:49:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,6 +67,7 @@ GEN_HID=TRUE
 ENABLE_EXCEPTIONS=TRUE
 USE_DEFFILE=TRUE
 NO_BSYMBOLIC=TRUE
+IMGLST_SRS=$(SRS)$/bib.srs
 
 # --- Settings -----------------------------------------------------
 .INCLUDE :	$(PRJ)$/util$/makefile.pmk
