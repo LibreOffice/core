@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SortingComponent.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-27 13:42:16 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 14:06:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -57,7 +57,6 @@
  *  Contributor(s): Berend Cornelius
  *
  */
-
 package com.sun.star.wizards.ui;
 
 import java.beans.PropertyChangeEvent;
@@ -183,6 +182,28 @@ public class SortingComponent {
         for (int i = 0; i <= MAXSORTCRITERIAINDEX; i++) {
             if (xSortListBox[i].getSelectedItemPos() > 0)
                 MaxSortIndex += 1;
+        }
+    }
+
+    /**
+     * sets the controls of a Sorting criterion to readonly or not.
+     * @param _index index of the Sorting criterion
+     * @param _breadonly
+     */
+    public void setReadOnly(int _index, boolean _breadonly){
+        CurUnoDialog.setControlProperty("lstSort" + new Integer(_index + 1).toString(), "ReadOnly", new Boolean(_breadonly));
+    }
+
+
+    /**
+     *
+     * @param _index the first Sorting criterion in which 'ReadOnly is set to 'false'
+     * @param _bcomplete
+     */
+    public void setReadOnlyUntil(int _index, boolean _bcomplete){
+        for (int i = 0; i <= 4; i++) {
+            boolean breadonly = i < _index;
+            setReadOnly(i, breadonly);
         }
     }
 
