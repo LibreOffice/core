@@ -4,8 +4,11 @@ REM This script sets all enviroment variables, which
 REM are necessary for building the examples of the Office Development Kit.
 REM The Script was developed for the operating systems Windows.
 
+REM The SDK name
+set OO_SDK_NAME=[SDKNAME]
+
 REM Installation directory of the Software Development Kit.
-REM Example: set OO_SDK_HOME=D:\StarOfficeSDK
+REM Example: set OO_SDK_HOME=D:\StarOffice_SDK
 set OO_SDK_HOME=
 
 REM Office installation directory.
@@ -23,6 +26,10 @@ set OO_SDK_CPP_HOME=
 REM Java installation directory.
 REM Example: set OO_SDK_JAVA_HOME=c:\j2sdk1.4.1_01
 set OO_SDK_JAVA_HOME=
+
+REM Special output directory
+REM Example: set OO_SDK_OUTPUT_DIR=c:\temp
+REM set OO_SDK_OUTPUT_DIR=
 
 REM Automatic deployment
 REM Example: set SDK_AUTO_DEPLOYMENT=YES
@@ -59,8 +66,18 @@ set LIB=%OO_SDK_HOME%\windows\lib;%OO_SDK_HOME%\WINexample.out\lib;%LIB%
 REM Set office program path.
 set OFFICE_PROGRAM_PATH=%OFFICE_HOME%\program
 
+REM Set classpath
+set CLASSPATH=%OFFICE_PROGRAM_PATH%\classes\jurt.jar;%OFFICE_PROGRAM_PATH%\classes\unoil.jar;%OFFICE_PROGRAM_PATH%\classes\ridl.jar;%OFFICE_PROGRAM_PATH%\classes\sandbox.jar;%OFFICE_PROGRAM_PATH%\classes\juh.jar
+
 REM Add directory of the SDK tools to the path.
-set PATH=%OO_SDK_HOME%\windows\bin;%OFFICE_HOME%\program;%OO_SDK_HOME%\WINexample.out\bin;%PATH%
+set PATH=%OO_SDK_HOME%\windows\bin;%OFFICE_HOME%\program;%PATH%
+
+REM Set PATH appropriate to the output directory
+if defined OO_SDK_OUTPUT_DIR (
+  set PATH=%OO_SDK_OUTPUT_DIR%\%OO_SDK_NAME%\WINexample.out\bin;%PATH%
+) else (
+  set PATH=%OO_SDK_HOME%\WINexample.out\bin;%PATH%
+)
 
 REM Add directory of the command make to the path, if necessary.
 if defined OO_SDK_MAKE_HOME set PATH=%OO_SDK_MAKE_HOME%;%PATH%
