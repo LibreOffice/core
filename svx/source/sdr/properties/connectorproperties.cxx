@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connectorproperties.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:48:30 $
+ *  last change: $Author: vg $ $Date: 2003-12-16 13:09:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,6 +154,9 @@ namespace sdr
         {
             // call parent
             TextProperties::PreProcessSave();
+
+            // force ItemSet
+            GetObjectItemSet();
 
             // prepare SetItems for storage
             const SfxItemSet& rSet = *mpItemSet;

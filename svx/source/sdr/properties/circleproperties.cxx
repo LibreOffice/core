@@ -2,9 +2,9 @@
  *
  *  $RCSfile: circleproperties.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:48:17 $
+ *  last change: $Author: vg $ $Date: 2003-12-16 13:09:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,6 +170,9 @@ namespace sdr
             // call parent
             RectangleProperties::PreProcessSave();
 
+            // force ItemSet
+            GetObjectItemSet();
+
             // prepare SetItems for storage
             const SfxItemSet& rSet = *mpItemSet;
             const SfxItemSet* pParent = mpStyleSheet ? &(mpStyleSheet->GetItemSet()) : 0L;
@@ -213,7 +216,9 @@ namespace sdr
 
             if(eKindA != SDRCIRC_FULL)
             {
+                // force ItemSet
                 GetObjectItemSet();
+
                 mpItemSet->Put(SdrCircKindItem(eKindA));
 
                 if(rObj.GetStartWink())
