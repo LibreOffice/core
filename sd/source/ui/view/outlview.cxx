@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlview.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: cl $ $Date: 2002-08-01 09:15:03 $
+ *  last change: $Author: cl $ $Date: 2002-08-29 12:23:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2120,6 +2120,10 @@ void SdOutlineView::onUpdateStyleSettings( bool bForceUpdate /* = false */ )
 
             }
         }
+
+        if( pOutliner )
+            pOutliner->SetBackgroundColor( aDocColor );
+
         maDocColor = aDocColor;
     }
 }
