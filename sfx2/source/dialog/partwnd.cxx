@@ -2,9 +2,9 @@
  *
  *  $RCSfile: partwnd.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mba $ $Date: 2000-12-07 11:20:35 $
+ *  last change: $Author: mba $ $Date: 2000-12-18 09:01:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -282,7 +282,7 @@ sal_Bool SfxPartDockWnd_Impl::QueryClose()
 
 long SfxPartDockWnd_Impl::Notify( NotifyEvent& rEvt )
 {
-    if ( rEvt.GetType() == EVENT_GETFOCUS )
+    if ( rEvt.GetType() == EVENT_GETFOCUS && m_xFrame.is() )
         m_xFrame->activate();
     return SfxDockingWindow::Notify( rEvt );
 }
