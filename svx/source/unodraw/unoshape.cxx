@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:27 $
+ *  last change: $Author: cl $ $Date: 2000-10-27 10:42:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,6 +156,8 @@ class SvStream;
 sal_Bool ConvertGDIMetaFileToWMF( const GDIMetaFile & rMTF, SvStream & rTargetStream,
                               PFilterCallback pCallback=NULL, void * pCallerData=NULL,
                               sal_Bool bPlaceable=sal_True);
+
+uno::Reference< uno::XInterface > SAL_CALL SvxUnoGluePointAccess_createInstance( SdrObject* pObject );
 
 DECLARE_LIST( SvxShapeList, SvxShape * );
 
@@ -550,6 +552,8 @@ uno::Any SAL_CALL SvxShape::queryAggregation( const uno::Type & rType ) throw(un
         aAny <<= Reference<XServiceInfo>(this);
     else if( rType == ::getCppuType((const Reference< XUnoTunnel >*)0))
         aAny <<= Reference<XUnoTunnel>(this);
+    else if( rType == ::getCppuType((const Reference< drawing::XGluePointsSupplier >*)0))
+        aAny <<= Reference<drawing::XGluePointsSupplier>(this);
     else
         aAny <<= OWeakAggObject::queryAggregation( rType );
 
@@ -618,7 +622,7 @@ uno::Sequence< uno::Type > SAL_CALL SvxShape::getTypes()
         const uno::Sequence< uno::Type > aBaseTypes( SvxUnoText::getStaticTypes() );
         const uno::Type* pBaseTypes = aBaseTypes.getConstArray();
         const sal_Int32 nBaseTypes = aBaseTypes.getLength();
-        const sal_Int32 nOwnTypes = 5;      // !DANGER! Keep this updated!
+        const sal_Int32 nOwnTypes = 6;      // !DANGER! Keep this updated!
 
         maTypeSequence.realloc( nBaseTypes  + nOwnTypes );
         uno::Type* pTypes = maTypeSequence.getArray();
@@ -627,6 +631,7 @@ uno::Sequence< uno::Type > SAL_CALL SvxShape::getTypes()
         *pTypes++ = ::getCppuType((const uno::Reference< lang::XComponent >*)0);
         *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertySet >*)0);
         *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertyState >*)0);
+        *pTypes++ = ::getCppuType((const uno::Reference< drawing::XGluePointsSupplier >*)0);
         *pTypes++ = ::getCppuType((const uno::Reference< lang::XServiceInfo >*)0);
 
         for( sal_Int32 nType = 0; nType < nBaseTypes; nType++ )
@@ -1022,6 +1027,47 @@ void SAL_CALL SvxShape::setPropertyValue( const OUString& rPropertyName, const u
                 }
                 break;
             }
+            case OWN_ATTR_EDGE_START_OBJ:
+            case OWN_ATTR_EDGE_END_OBJ:
+            case OWN_ATTR_GLUEID_HEAD:
+            case OWN_ATTR_GLUEID_TAIL:
+            {
+                SdrEdgeObj* pEdgeObj = PTR_CAST(SdrEdgeObj,pObj);
+                if(pEdgeObj)
+                {
+                    switch(pMap->nWID)
+                    {
+                    case OWN_ATTR_EDGE_START_OBJ:
+                    case OWN_ATTR_EDGE_END_OBJ:
+                        {
+                            Reference< drawing::XShape > xShape;
+                            if( rVal >>= xShape )
+                            {
+                                SdrObject* pNode = GetSdrObjectFromXShape( xShape );
+                                if( pNode )
+                                {
+                                    pEdgeObj->ConnectToNode( pMap->nWID == OWN_ATTR_EDGE_START_OBJ, pNode );
+                                    pEdgeObj->setGluePointIndex( pMap->nWID == OWN_ATTR_EDGE_START_OBJ, -1 );
+                                    return;
+                                }
+                            }
+                            break;
+                        }
+
+                    case OWN_ATTR_GLUEID_HEAD:
+                    case OWN_ATTR_GLUEID_TAIL:
+                        {
+                            sal_Int32 nId;
+                            if( rVal >>= nId )
+                            {
+                                pEdgeObj->setGluePointIndex( pMap->nWID == OWN_ATTR_GLUEID_HEAD, nId );
+                                return;
+                            }
+                        }
+                    }
+                }
+                break;
+            }
             case XATTR_FILLBITMAP:
             case XATTR_FILLGRADIENT:
             case XATTR_FILLHATCH:
@@ -1320,6 +1366,8 @@ uno::Any SAL_CALL SvxShape::getPropertyValue( const OUString& PropertyName )
             case OWN_ATTR_EDGE_START_POS:
             case OWN_ATTR_EDGE_END_POS:
             case OWN_ATTR_EDGE_END_OBJ:
+            case OWN_ATTR_GLUEID_HEAD:
+            case OWN_ATTR_GLUEID_TAIL:
             {
                 SdrEdgeObj* pEdgeObj = PTR_CAST(SdrEdgeObj,pObj);
                 if(pEdgeObj)
@@ -1332,18 +1380,7 @@ uno::Any SAL_CALL SvxShape::getPropertyValue( const OUString& PropertyName )
                             SdrObject* pNode = pEdgeObj->GetConnectedNode(pMap->nWID == OWN_ATTR_EDGE_START_OBJ);
                             if(pNode)
                             {
-                                Reference< drawing::XShape > xShape = SvxShape::GetShapeForSdrObj( pNode );
-                                if(!xShape.is())
-                                {
-                                    SvxDrawPage* pUnoPage;
-                                    Reference< drawing::XDrawPage > xPage = pUnoPage = SvxDrawPage::GetPageForSdrPage( pNode->GetPage() );
-                                    if(!xPage.is())
-                                        xPage = pUnoPage = new SvxDrawPage( pNode->GetPage() );
-
-                                    if(xPage.is())
-                                        xShape = pUnoPage->_CreateShape( pNode );
-                                }
-
+                                Reference< drawing::XShape > xShape( GetXShapeForSdrObject( pNode ) );
                                 if(xShape.is())
                                     aAny <<= xShape;
 
@@ -1357,6 +1394,12 @@ uno::Any SAL_CALL SvxShape::getPropertyValue( const OUString& PropertyName )
                             Point aPoint( pEdgeObj->GetTailPoint( pMap->nWID == OWN_ATTR_EDGE_START_POS ) );
                             awt::Point aUnoPoint( aPoint.X(), aPoint.Y() );
                             aAny <<= aUnoPoint;
+                            break;
+                        }
+                    case OWN_ATTR_GLUEID_HEAD:
+                    case OWN_ATTR_GLUEID_TAIL:
+                        {
+                            aAny <<= pEdgeObj->getGluePointIndex( pMap->nWID == OWN_ATTR_GLUEID_TAIL );
                             break;
                         }
                     }
@@ -1719,6 +1762,21 @@ uno::Sequence< OUString > SAL_CALL SvxShape::getSupportedServiceNames()
     }
 
     return aSeq;
+}
+
+// XGluePointsSupplier
+uno::Reference< container::XIndexContainer > SAL_CALL SvxShape::getGluePoints()
+    throw(uno::RuntimeException)
+{
+    uno::Reference< container::XIndexContainer > xGluePoints( mxGluePoints );
+
+    if( !xGluePoints.is() )
+    {
+        uno::Reference< container::XIndexContainer > xNew( SvxUnoGluePointAccess_createInstance( pObj ), uno::UNO_QUERY );
+        mxGluePoints = xGluePoints = xNew;
+    }
+
+    return xGluePoints;
 }
 
 /***********************************************************************
