@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmload.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-03 16:22:44 $
+ *  last change: $Author: mba $ $Date: 2002-07-18 15:02:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,7 +145,7 @@ namespace com
 #define SEQUENCE ::com::sun::star::uno::Sequence
 #define RUNTIME_EXCEPTION ::com::sun::star::uno::RuntimeException
 
-class SfxFrameLoader : public ::cppu::WeakImplHelper2< ::com::sun::star::frame::XSynchronousFrameLoader, ::com::sun::star::document::XExtendedFilterDetection  >
+class SfxFrameLoader_Impl : public ::cppu::WeakImplHelper3< ::com::sun::star::frame::XSynchronousFrameLoader, ::com::sun::star::document::XExtendedFilterDetection, ::com::sun::star::lang::XServiceInfo >
 {
     REFERENCE < ::com::sun::star::frame::XFrame > xFrame;
     REFERENCE < ::com::sun::star::frame::XLoadEventListener > xListener;
@@ -159,13 +159,10 @@ class SfxFrameLoader : public ::cppu::WeakImplHelper2< ::com::sun::star::frame::
     DECL_LINK( LoadDone_Impl, void* );
 
 public:
-                            SfxFrameLoader( const REFERENCE < ::com::sun::star::lang::XMultiServiceFactory >& xFactory );
-    virtual                 ~SfxFrameLoader();
+                            SfxFrameLoader_Impl( const REFERENCE < ::com::sun::star::lang::XMultiServiceFactory >& xFactory );
+    virtual                 ~SfxFrameLoader_Impl();
 
-    void                    SetFilterName( const ::rtl::OUString& rFilterName )
-                            { aFilterName = rFilterName; }
-    String                  GetFilterName() const
-                            { return aFilterName; }
+    SFX_DECL_XSERVICEINFO
 
     //----------------------------------------------------------------------------------
     // XSynchronousFrameLoader
@@ -177,25 +174,6 @@ public:
     // XExtendedFilterDetect
     //----------------------------------------------------------------------------------
     virtual ::rtl::OUString SAL_CALL detect( SEQUENCE< ::com::sun::star::beans::PropertyValue >& lDescriptor ) throw( RUNTIME_EXCEPTION );
-    // Muss noch bleiben, wegen "MISSING ORDINAL NUMBER" aus OFA!
-    virtual ::rtl::OUString SAL_CALL detect( const ::rtl::OUString& sURL, const SEQUENCE< ::com::sun::star::beans::PropertyValue >& aArgumentlist ) throw( RUNTIME_EXCEPTION )
-    {
-        DBG_ERROR( "Obsolete function!\n");
-        return ::rtl::OUString();
-    }
-
-protected:
-    virtual SfxObjectFactory&   GetFactory()=0;
-};
-
-class SfxFrameLoader_Impl : public SfxFrameLoader, public ::com::sun::star::lang::XServiceInfo
-{
-public:
-    SFX_DECL_XINTERFACE
-    SFX_DECL_XSERVICEINFO
-                            SfxFrameLoader_Impl( const REFERENCE < ::com::sun::star::lang::XMultiServiceFactory >& xFactory );
-protected:
-    virtual SfxObjectFactory&   GetFactory();
 };
 
 #endif
