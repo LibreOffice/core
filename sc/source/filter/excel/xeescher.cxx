@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xeescher.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 13:28:05 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:38:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,7 +201,7 @@ XclExpObjOcxCtrl::XclExpObjOcxCtrl(
         // name of the control
         OUString aCtrlName;
         //! TODO - this does not work - property is empty
-        if( ::getPropValue( aCtrlName, xShapePS, PROPNAME( "Name" ) ) && aCtrlName.getLength() )
+        if( ::getPropValue( aCtrlName, xShapePS, CREATE_OUSTRING( "Name" ) ) && aCtrlName.getLength() )
         {
             XclExpString aCtrlNameEx( aCtrlName, EXC_STR_FORCEUNICODE );
             sal_uInt32 nBufferSize = aCtrlNameEx.GetBufferSize() + 2;   // plus trailing zero
@@ -308,7 +308,7 @@ XclExpObjTbxCtrl::XclExpObjTbxCtrl(
 
     // control type
     sal_Int16 nClassId;
-    if( ::getPropValue( nClassId, xPropSet, PROPNAME( "ClassId" ) ) )
+    if( ::getPropValue( nClassId, xPropSet, CREATE_OUSTRING( "ClassId" ) ) )
     {
         switch( nClassId )
         {
@@ -353,7 +353,7 @@ XclExpObjTbxCtrl::XclExpObjTbxCtrl(
 
     // control label
     OUString aString;
-    if( ::getPropValue( aString, xPropSet, PROPNAME( "Label" ) ) )
+    if( ::getPropValue( aString, xPropSet, CREATE_OUSTRING( "Label" ) ) )
     {
         /*  Be sure to construct the MSODRAWING ClientTextbox record after the
             base OBJ's MSODRAWING record Escher data is completed. */
@@ -369,27 +369,27 @@ XclExpObjTbxCtrl::XclExpObjTbxCtrl(
             float fFloatVal;
             sal_Int16 nShortVal;
 
-            if( ::getPropValue( aFontName, xPropSet, PROPNAME( "FontName" ) ) )
+            if( ::getPropValue( aFontName, xPropSet, CREATE_OUSTRING( "FontName" ) ) )
                 aFontData.maName = XclTools::GetXclFontName( aFontName );
-            if( ::getPropValue( fFloatVal, xPropSet, PROPNAME( "FontHeight" ) ) )
+            if( ::getPropValue( fFloatVal, xPropSet, CREATE_OUSTRING( "FontHeight" ) ) )
                 aFontData.SetApiHeight( fFloatVal );
-            if( ::getPropValue( nShortVal, xPropSet, PROPNAME( "FontFamily" ) ) )
+            if( ::getPropValue( nShortVal, xPropSet, CREATE_OUSTRING( "FontFamily" ) ) )
                 aFontData.SetApiFamily( nShortVal );
-            if( ::getPropValue( nShortVal, xPropSet, PROPNAME( "FontCharset" ) ) )
+            if( ::getPropValue( nShortVal, xPropSet, CREATE_OUSTRING( "FontCharset" ) ) )
                 aFontData.SetApiCharSet( nShortVal );
-            if( ::getPropValue( nShortVal, xPropSet, PROPNAME( "FontSlant" ) ) )
+            if( ::getPropValue( nShortVal, xPropSet, CREATE_OUSTRING( "FontSlant" ) ) )
                 aFontData.SetApiPosture( static_cast< ::com::sun::star::awt::FontSlant >( nShortVal ) );
-            if( ::getPropValue( fFloatVal, xPropSet, PROPNAME( "FontWeight" ) ) )
+            if( ::getPropValue( fFloatVal, xPropSet, CREATE_OUSTRING( "FontWeight" ) ) )
                 aFontData.SetApiWeight( fFloatVal );
-            if( ::getPropValue( nShortVal, xPropSet, PROPNAME( "FontUnderline" ) ) )
+            if( ::getPropValue( nShortVal, xPropSet, CREATE_OUSTRING( "FontUnderline" ) ) )
                 aFontData.SetApiUnderline( nShortVal );
-            if( ::getPropValue( nShortVal, xPropSet, PROPNAME( "FontStrikeout" ) ) )
+            if( ::getPropValue( nShortVal, xPropSet, CREATE_OUSTRING( "FontStrikeout" ) ) )
                 aFontData.SetApiStrikeout( nShortVal );
 
             if( aFontData.maName.Len() && aFontData.mnHeight )
             {
                 sal_Int32 nApiColor;
-                if( ::getPropValue( nApiColor, xPropSet, PROPNAME( "TextColor" ) ) )
+                if( ::getPropValue( nApiColor, xPropSet, CREATE_OUSTRING( "TextColor" ) ) )
                 {
                     Color aColor( static_cast< sal_uInt32 >( nApiColor ) );
                     aFontData.SetColorId( GetRoot(), aColor );
@@ -406,7 +406,7 @@ XclExpObjTbxCtrl::XclExpObjTbxCtrl(
     rEscherEx.CloseContainer();  // ESCHER_SpContainer
 
     // other properties
-    ::getPropValue( mnLineCount, xPropSet, PROPNAME( "LineCount" ) );
+    ::getPropValue( mnLineCount, xPropSet, CREATE_OUSTRING( "LineCount" ) );
 
     // border style
     sal_Int16 nApiButton = AwtVisualEffect::LOOK3D;
@@ -415,11 +415,11 @@ XclExpObjTbxCtrl::XclExpObjTbxCtrl(
     {
         case FormCompType::LISTBOX:
         case FormCompType::COMBOBOX:
-            ::getPropValue( nApiBorder, xPropSet, PROPNAME( "Border" ) );
+            ::getPropValue( nApiBorder, xPropSet, CREATE_OUSTRING( "Border" ) );
         break;
         case FormCompType::CHECKBOX:
         case FormCompType::RADIOBUTTON:
-            ::getPropValue( nApiButton, xPropSet, PROPNAME( "VisualEffect" ) );
+            ::getPropValue( nApiButton, xPropSet, CREATE_OUSTRING( "VisualEffect" ) );
             nApiBorder = AwtVisualEffect::NONE;
         break;
         // Push button cannot be set to flat in Excel
@@ -447,7 +447,7 @@ XclExpObjTbxCtrl::XclExpObjTbxCtrl(
 
     // control state
     sal_Int16 nApiState = 0;
-    if( ::getPropValue( nApiState, xPropSet, PROPNAME( "State" ) ) )
+    if( ::getPropValue( nApiState, xPropSet, CREATE_OUSTRING( "State" ) ) )
     {
         switch( nApiState )
         {
@@ -464,7 +464,7 @@ XclExpObjTbxCtrl::XclExpObjTbxCtrl(
         {
             mbMultiSel = ::getPropBool( xPropSet, CREATE_OUSTRING( "MultiSelection" ) );
             Sequence< sal_Int16 > aSelection;
-            if( ::getPropValue( aSelection, xPropSet, PROPNAME( "SelectedItems" ) ) )
+            if( ::getPropValue( aSelection, xPropSet, CREATE_OUSTRING( "SelectedItems" ) ) )
             {
                 sal_Int32 nLen = aSelection.getLength();
                 if( nLen > 0 )
@@ -477,7 +477,7 @@ XclExpObjTbxCtrl::XclExpObjTbxCtrl(
             }
 
             // convert listbox with dropdown button to Excel combobox
-            if( ::getPropBool( xPropSet, PROPNAME( "Dropdown" ) ) )
+            if( ::getPropBool( xPropSet, CREATE_OUSTRING( "Dropdown" ) ) )
                 mnObjType = EXC_OBJ_CMO_COMBOBOX;
         }
         break;
@@ -486,8 +486,8 @@ XclExpObjTbxCtrl::XclExpObjTbxCtrl(
         {
             Sequence< OUString > aStringList;
             OUString aDefText;
-            if( ::getPropValue( aStringList, xPropSet, PROPNAME( "StringItemList" ) ) &&
-                ::getPropValue( aDefText, xPropSet, PROPNAME( "Text" ) ) &&
+            if( ::getPropValue( aStringList, xPropSet, CREATE_OUSTRING( "StringItemList" ) ) &&
+                ::getPropValue( aDefText, xPropSet, CREATE_OUSTRING( "Text" ) ) &&
                 aStringList.getLength() && aDefText.getLength() )
             {
                 const OUString* pBegin = aStringList.getConstArray();
@@ -500,7 +500,7 @@ XclExpObjTbxCtrl::XclExpObjTbxCtrl(
             }
 
             // convert combobox without dropdown button to Excel listbox
-            if( !::getPropBool( xPropSet, PROPNAME( "Dropdown" ) ) )
+            if( !::getPropBool( xPropSet, CREATE_OUSTRING( "Dropdown" ) ) )
                 mnObjType = EXC_OBJ_CMO_LISTBOX;
         }
         break;
