@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resmgr.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: pl $ $Date: 2001-07-05 10:58:16 $
+ *  last change: $Author: pl $ $Date: 2001-07-13 08:11:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -262,7 +262,8 @@ void InternalResMgr::GetResMgrPath( InternalResMgr* pThis,
         {
             ::rtl::OUString aUrl;
             ::osl::File::getFileURLFromSystemPath( aPath, aUrl );
-            aUrl += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/" ) );
+            if( aUrl.lastIndexOf( '/' ) != aUrl.getLength()-1 )
+                aUrl += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/" ) );
             aUrl += aFileName;
             ::osl::FileStatus aStatus( FileStatusMask_Type | FileStatusMask_LinkTargetURL );
             ::osl::DirectoryItem aItem;
