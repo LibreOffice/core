@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryProcessor.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: abi $ $Date: 2001-05-08 12:02:45 $
+ *  last change: $Author: abi $ $Date: 2001-05-11 12:39:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@ QueryResults* QueryProcessor::processQuery( const QueryStatement& ment )
 {
     Search search( env_ );
     Query* query = processQuery( search,ment );
-    query->setIgnoredElements( rtl::OUString::createFromAscii("") );
+    query->setIgnoredElements( 0,0 );
     search.startSearch();
     return makeQueryResults( query,ment.getHitCount() );
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Search.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: abi $ $Date: 2001-05-10 15:25:32 $
+ *  last change: $Author: abi $ $Date: 2001-05-11 12:39:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,13 +68,177 @@ using namespace xmlsearch;
 using namespace xmlsearch::qe;
 
 
+
+
+/******************************************************************************/
+/*                                                                            */
+/*                  Emtpy  ConceptData/Query                                  */
+/*                                                                            */
+/******************************************************************************/
+
+
+class EmptyConceptData
+    : public ConceptData
+{
+public:
+
+    virtual void generateFillers( std::vector< RoleFiller* >& array, sal_Int32 last ) { }
+
+};  // end class EmptyQuery
+
+
+
+class EmptyQuery
+    : public Query
+{
+public:
+
+    EmptyQuery()
+        : Query( 0,0,0,0,0 ),
+          conceptDataInstance_( )
+    {
+    }
+
+    virtual ConceptData* makeConceptData( sal_Int32 query,
+                                          sal_Int32 col,
+                                          sal_Int32 concept,
+                                          double score )
+    {
+        return &conceptDataInstance_;
+    }
+
+private:
+
+    EmptyConceptData  conceptDataInstance_;
+
+};  // end class EmptyQuery
+
+
+
+/******************************************************************************/
+/*                                                                            */
+/*                    ConceptData1/Query1                                     */
+/*                                                                            */
+/******************************************************************************/
+
+
+class ConceptData1
+    : public ConceptData
+{
+public:
+
+    ConceptData1( sal_Int32 id,
+                  sal_Int32 role,
+                  double score,
+                  sal_Int32 queryNo,
+                  sal_Int32 nColumns,
+                  ContextTables* ctxInfo,
+                  sal_Int32 code )
+        : ConceptData( id,role,score,queryNo,nColumns,ctxInfo ),
+          fieldCode_( code )
+    {
+    }
+
+    virtual void generateFillers( std::vector< RoleFiller* >& array, sal_Int32 pos );
+
+
+private:
+
+    sal_Int32 fieldCode_;
+
+};  // end class ConceptData1
+
+
+class Query1
+    : public Query
+{
+public:
+
+    Query1( XmlIndex* env,
+            sal_Int32 nColumns,
+            sal_Int32 nHits,
+            sal_Int32 missingPenaltiesL,
+            double* missingPenalties,
+            sal_Int32 fieldCode )
+        : Query( env,nColumns,nHits,missingPenaltiesL,missingPenalties ),
+          searchFieldCode_( fieldCode )
+    {
+    }
+
+    virtual ConceptData* makeConceptData( sal_Int32 col,
+                                          sal_Int32 concept,
+                                          double score,
+                                          sal_Int32 query );
+
+
+private:
+
+    sal_Int32 searchFieldCode_;
+};
+
+
+
+/********************************************************************************/
+// Impl
+/********************************************************************************/
+
+
+void ConceptData1::generateFillers( std::vector< RoleFiller* >& array, sal_Int32 pos )
+{
+    if( array[ queryNo_ ] != RoleFiller::STOP() )
+    {   // not 'prohibited'
+        // !!! candidate for a single _ctx op
+        sal_Int32 ancestor = ctx_->firstParentWithCode(pos,fieldCode_);
+        if( ancestor != -1 )
+        {
+
+
+            RoleFiller* p = new RoleFiller( nColumns_,
+                                            this,
+                                            role_,
+                                            pos,
+                                            ancestor,
+                                            pos + proximity_);
+            p->use( array,queryNo_ );
+        }
+    }
+
+    if( next_ )
+        next_->generateFillers( array,pos );
+}
+
+
+
+ConceptData* Query1::makeConceptData( sal_Int32 col,
+                                      sal_Int32 concept,
+                                      double score,
+                                      sal_Int32 query )
+{
+    return new ConceptData1( concept,col,score,query,nColumns_,ctx_,searchFieldCode_ );
+}
+
+
+
+/******************************************************************************/
+/*                                                                            */
+/*                       QueryFactoryImpl                                     */
+/*                                                                            */
+/******************************************************************************/
+
+
 class QueryFactoryImpl
 {
 public:
 
     Query* makeQuery( XmlIndex* env,const rtl::OUString& context,sal_Int32 nColumns,sal_Int32 nHits);
 
-};
+private:
+
+    EmptyQuery   emptyQueryInstance_;
+
+};  // end class QueryFactoryImpl
+
+
 
 
 Query* QueryFactoryImpl::makeQuery( XmlIndex* env,
@@ -82,36 +246,35 @@ Query* QueryFactoryImpl::makeQuery( XmlIndex* env,
                                     sal_Int32 nColumns,
                                     sal_Int32 nHits )
 {
-    // ContextTables* contextTables = env->getContextInfo();
-
     if( ! context.getLength() )
-    {
-        // cout << "contextlength zero" << endl;
         return new Query( env,nColumns,nHits,0,0 );
-    }
     else if( context.indexOf( sal_Unicode( '|' ) ) != -1 )
     {
-        return 0;      // needs to be modified
+        return 0;      //t
     }
     else if( context.indexOf( rtl::OUString::createFromAscii( "//" ) ) != -1 )
     {
-        return 0;      // needs to be modified
+        return 0;      //t
     }
     else if( context.indexOf( sal_Unicode( '/' ) ) != -1 )
     {
-        return 0;      // needs to be modified
+        return 0;      //t
     }
     else if( context.indexOf( sal_Unicode( '@' ) ) != -1 )
     {
-        return 0;     // needs to be modified
+        return 0;     //t
     }
     else if( context.indexOf( sal_Unicode( '[' ) ) != -1 )
     {
-        return 0;     // needs to be modified
+        return 0;     //t
     }
     else
     {
-        return 0;     // needs to be modified
+        sal_Int32 code = env->getContextInfo()->linkCode( context );
+        if( code != -1 )
+            return new Query1( env,nColumns,nHits,0,0,code);
+        else
+            return &emptyQueryInstance_;
     }
 }
 

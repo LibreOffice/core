@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Query.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: abi $ $Date: 2001-05-10 15:25:32 $
+ *  last change: $Author: abi $ $Date: 2001-05-11 12:39:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,61 +139,26 @@ QueryHit* HitStore::createQueryHit( double penalty,sal_Int32 doc,sal_Int32 begin
 
 struct CompareQueryHit
 {
-    inline int operator()( const QueryHit* l,const QueryHit* r );
+    bool operator()( const QueryHit* l,const QueryHit* r )
+    {
+        return l->compareTo( r );
+    }
 };
-
-
-int CompareQueryHit::operator()( const QueryHit* l,const QueryHit* r )
-{
-    return l->compareTo( r );
-}
 
 
 #include <stl/algorithm>
 
 
-sal_Int32 QueryHit::compareTo( const QueryHit* o ) const
-{
-    if( penalty_ != o->penalty_ )
-        return penalty_ < o->penalty_ ? -1 : 1;
-    else if( begin_ != o->begin_ )
-        return begin_ < o->begin_ ? -1 : 1;
-    else if( end_ != o->end_ )
-        return end_ < o->end_ ? -1 : 1;
-    else
-        return 0;
-}
-
-
 QueryHit* HitStore::firstBestQueryHit()
 {
-//      for( sal_uInt32 i = 0; i < heap_.size(); ++i )
-//      {
-//          heap_[i]->setNum( i );
-//          printf( " element %d = %x\n",i,heap_[i] );
-//      }
-
-//      printf( " and the size %d(%d)\n", free_,heap_.size() );
-
     if( free_ > 0)
     {
-//          std::vector< sal_Int32 > bla(100);
-//          for( i = 0; i < 100; ++i )
-//              bla[i] = i*(i-99);
-//          std::sort( bla.begin(),bla.end() );
+//          for( sal_uInt32 i = 0; i < heap_.size(); ++i )
+//              printf( " number = %x\n",heap_[i] );
 
-//          CompareQueryHit bla;
-
-//          std::sort( heap_.begin(),heap_.end(),bla );
-
-    //  quicksort( 0,free_ - 1 );
-
-//          for( i = 0; i < heap_.size(); ++i )
-//          {
-//              heap_[i]->setNum( i );
-//              printf( " element %d = %x\n",i,heap_[i] );
-//          }
-
+          CompareQueryHit bla;
+        heap_.resize( free_ );
+          std::stable_sort( heap_.begin(),heap_.end(),bla );
         index_ = 0;
         return nextBestQueryHit();
     }
@@ -229,37 +194,37 @@ void HitStore::heapify( sal_Int32 i )
 }
 
 
-sal_Int32 HitStore::partition( sal_Int32 p,sal_Int32 r )
-{
-    QueryHit* x = heap_[ ((p + r) >> 1) & 0x7FFFFFFF ];
-    sal_Int32 i = p - 1, j = r + 1;
-    while( true )
-    {
-        while( x->compareTo( heap_[--j] ) )
-            ;
-        while( heap_[++i]->compareTo( x ) )
-            ;
-        if( i < j )
-        {
-            QueryHit* t = heap_[i];
-            heap_[i] = heap_[j];
-            heap_[j] = t;
-        }
-        else
-            return j;
-    }
-}
+//  sal_Int32 HitStore::partition( sal_Int32 p,sal_Int32 r )
+//  {
+//      QueryHit* x = heap_[ ((p + r) >> 1) & 0x7FFFFFFF ];
+//      sal_Int32 i = p - 1, j = r + 1;
+//      while( true )
+//      {
+//          while( x->compareTo( heap_[--j] ) )
+//              ;
+//          while( heap_[++i]->compareTo( x ) )
+//              ;
+//          if( i < j )
+//          {
+//              QueryHit* t = heap_[i];
+//              heap_[i] = heap_[j];
+//              heap_[j] = t;
+//          }
+//          else
+//              return j;
+//      }
+//  }
 
 
-void HitStore::quicksort( sal_Int32 p,sal_Int32 r )
-{
-    while( p < r )
-    {
-        sal_Int32 q = partition( p,r );
-        quicksort(p, q);
-        p = q + 1;
-    }
-}
+//  void HitStore::quicksort( sal_Int32 p,sal_Int32 r )
+//  {
+//      while( p < r )
+//      {
+//          sal_Int32 q = partition( p,r );
+//          quicksort(p, q);
+//          p = q + 1;
+//      }
+//  }
 
 
 
@@ -315,19 +280,17 @@ Query::~Query()
 }
 
 
-void Query::setIgnoredElements( const rtl::OUString& element )
-{
-}
-
-
-
 void Query::setIgnoredElements( const sal_Int32 ignoredElementsL,const rtl::OUString* ignoredElements )
 {
     if( ctx_ )
         ignoredElements_ = ctx_->getIgnoredElementsSet( ignoredElementsL_,
                                                         ignoredElementsL,ignoredElements );
 
-    if( ! ctx_ ) ignoredElementsL_ = 0;
+    if( ! ctx_ )
+    {
+        ignoredElementsL_ = 0;
+        ignoredElements_   = 0;
+    }
 }
 
 
@@ -361,7 +324,7 @@ void Query::getHits( std::vector< QueryHitData* >& data,sal_Int32 n )
 
 
 QueryHit* Query::maybeCreateQueryHit( double penalty,
-                                      sal_Int32 doc, sal_Int32 begin, sal_Int32 end, sal_Int32 parentContext)
+                                      sal_Int32 doc, sal_Int32 begin, sal_Int32 end, sal_Int32 parentContext )
 {
     // hits are located using only terms actually present in text
     // if B is not present, the query A B C reduces to A C and penalties
@@ -369,13 +332,14 @@ QueryHit* Query::maybeCreateQueryHit( double penalty,
     // to meaningfully merge results from different servers, some of which
     // may have B, penalty has to be normalized to the common computing scheme
 
-    return
+    QueryHit* res =
         ( store_.goodEnough( penalty += missingTermsPenalty_,begin,end )
           && ( ! ignoredElements_ || ctx_->notIgnored( parentContext,ignoredElementsL_,ignoredElements_ ) ) )
         ?
         store_.createQueryHit( penalty,doc,begin,end )
         :
         0;
+    return res;
 }
 
 
