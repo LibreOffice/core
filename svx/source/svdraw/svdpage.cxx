@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpage.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: cl $ $Date: 2002-02-25 15:46:54 $
+ *  last change: $Author: thb $ $Date: 2002-03-12 10:33:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,7 @@
 #include "svdlayer.hxx"
 #include "svdotext.hxx"
 #include "svdpagv.hxx"
+#include "svdundo.hxx"
 #include "fmglob.hxx"
 #include "polysc3d.hxx"
 
@@ -1264,6 +1265,53 @@ void SdrObjList::AfterRead()
     for (ULONG i=0; i<nAnz; i++) {
         GetObj(i)->AfterRead();
     }
+}
+
+void SdrObjList::FlattenGroups()
+{
+    sal_Int32 nObj = GetObjCount();
+    sal_Int32 i;
+    for( i=nObj-1; i>=0; --i)
+        UnGroupObj(i);
+}
+
+void SdrObjList::UnGroupObj( ULONG nObjNum )
+{
+    // if the given object is no group, this method is a noop
+    SdrObject* pUngroupObj = GetObj( nObjNum );
+    if( pUngroupObj )
+    {
+        SdrObjList* pSrcLst = pUngroupObj->GetSubList();
+        sal_Int32 nCount( 0 );
+        if( pUngroupObj->ISA( SdrObjGroup ) && pSrcLst )
+        {
+            SdrObjGroup* pUngroupGroup = static_cast< SdrObjGroup* > (pUngroupObj);
+
+            // ungroup recursively (has to be head recursion,
+            // otherwise our indices will get trashed when doing it in
+            // the loop)
+            pSrcLst->FlattenGroups();
+
+            // the position at which we insert the members of rUngroupGroup
+            sal_Int32 nInsertPos( pUngroupGroup->GetOrdNum() );
+
+            SdrObject* pObj;
+            sal_Int32 i, nAnz = pSrcLst->GetObjCount();
+            for( i=0; i<nAnz; ++i )
+            {
+                pObj = pSrcLst->RemoveObject(0);
+                SdrInsertReason aReason(SDRREASON_VIEWCALL, pUngroupGroup);
+                InsertObject(pObj, nInsertPos, &aReason);
+                ++nInsertPos;
+            }
+
+            RemoveObject(nInsertPos);
+        }
+    }
+#ifdef DBG_UTIL
+    else
+        DBG_ERROR("SdrObjList::UnGroupObj: object index invalid");
+#endif
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
