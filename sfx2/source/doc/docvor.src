@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvor.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 19:29:10 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 05:27:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ ModalDialog DLG_ORGANIZE
     Text [ italian ] = "Gestione dei modelli" ;
     Text [ portuguese_brazilian ] = "Editar os modelos do documento" ;
     Text [ portuguese ] = "Gerir modelos de documentos" ;
-    Text [ finnish ] = "Muokkaa asiakirjamalleja" ;
+    Text [ finnish ] = "Mallipohjien hallinta" ;
     Text [ danish ] = "Administrer dokumentskabeloner" ;
     Text [ french ] = "Gestion des modèles de document" ;
     Text [ swedish ] = "Administrera dokumentmallar" ;
@@ -135,7 +135,7 @@ ModalDialog DLG_ORGANIZE
         Text [ italian ] = "~File..." ;
         Text [ portuguese_brazilian ] = "~Arquivos..." ;
         Text [ portuguese ] = "~Ficheiro..." ;
-        Text [ finnish ] = "~Tiedostot..." ;
+        Text [ finnish ] = "~Tiedosto" ;
         Text [ danish ] = "~Fil..." ;
         Text [ french ] = "~Fichier..." ;
         Text [ swedish ] = "~Fil..." ;
@@ -180,6 +180,7 @@ ModalDialog DLG_ORGANIZE
         Text[ turkish ] = "~Address Book...";
         Text[ arabic ] = "ÏÝÊÑ ÇáÚäÇæíä...";
         Text[ catalan ] = "~Libreta de direcciones...";
+        Text[ finnish ] = "~Osoitekirja";
     };
     ListBox LB_LEFT_TYP
     {
@@ -221,8 +222,8 @@ ModalDialog DLG_ORGANIZE
         };
         StringList [ finnish ] =
         {
-            < "Dokumentvorlagen" ; Default ; > ;
-            < "Dokumente" ; Default ; > ;
+            < "Mallipohjat" ; Default ; > ;
+            < "Asiakirjat" ; Default ; > ;
         };
         StringList [ danish ] =
         {
@@ -350,8 +351,8 @@ ModalDialog DLG_ORGANIZE
         };
         StringList [ finnish ] =
         {
-            < "Dokumentvorlagen" ; Default ; > ;
-            < "Dokumente" ; Default ; > ;
+            < "Mallipohjat" ; Default ; > ;
+            < "Asiakirjat" ; Default ; > ;
         };
         StringList [ danish ] =
         {
@@ -489,7 +490,7 @@ ModalDialog DLG_ORGANIZE
         Text [ italian ] = "Comandi" ;
         Text [ portuguese_brazilian ] = "~Editar" ;
         Text [ portuguese ] = "~Comandos" ;
-        Text [ finnish ] = "~Muokkaa" ;
+        Text [ finnish ] = "Komennot" ;
         Text [ danish ] = "Kommandoer" ;
         Text [ french ] = "~Commandes" ;
         Text [ swedish ] = "~Kommandon" ;
@@ -612,7 +613,7 @@ ModalDialog DLG_ORGANIZE
                     Text [ italian ] = "~Importa modello..." ;
                     Text [ portuguese_brazilian ] = "Copiar para..." ;
                     Text [ portuguese ] = "I~mportar modelo..." ;
-                    Text [ finnish ] = "Kopioi mihin..." ;
+                    Text [ finnish ] = "Tuo mallipohja" ;
                     Text [ danish ] = "Importer skabelon..." ;
                     Text [ french ] = "I~mporter un modèle..." ;
                     Text [ swedish ] = "~Importera mall..." ;
@@ -641,7 +642,7 @@ ModalDialog DLG_ORGANIZE
                     Text [ italian ] = "Esporta modello..." ;
                     Text [ portuguese_brazilian ] = "Copiar de..." ;
                     Text [ portuguese ] = "E~xportar modelo..." ;
-                    Text [ finnish ] = "Kopioi mistä..." ;
+                    Text [ finnish ] = "Vie mallipohja" ;
                     Text [ danish ] = "Eksporter skabelon..." ;
                     Text [ french ] = "E~xporter un modèle..." ;
                     Text [ swedish ] = "~Exportera mall..." ;
@@ -674,7 +675,7 @@ ModalDialog DLG_ORGANIZE
                     Text [ italian ] = "Stam~pa" ;
                     Text [ portuguese_brazilian ] = "~Imprimir" ;
                     Text [ portuguese ] = "~Imprimir" ;
-                    Text [ finnish ] = "Tul~osta" ;
+                    Text [ finnish ] = "~Tulosta" ;
                     Text [ danish ] = "~Udskriv" ;
                     Text [ french ] = "~Imprimer" ;
                     Text [ swedish ] = "Skriv ~ut" ;
@@ -708,7 +709,7 @@ ModalDialog DLG_ORGANIZE
                     Text [ spanish ] = "~Configuración de la impresora..." ;
                     Text [ danish ] = "Udskriftsindstillin~ger..." ;
                     Text [ swedish ] = "~Skrivarinställningar..." ;
-                    Text [ finnish ] = "~Printer Setup..." ;
+                    Text [ finnish ] = "Tulostimen asetukset" ;
                     Text [ english_us ] = "Printer Settings..." ;
                     Text[ chinese_simplified ] = "Éè¶¨´òÓ¡»ú...";
                     Text[ russian ] = "Íàñòðîéêè ïðèíòåðà...";
@@ -736,7 +737,7 @@ ModalDialog DLG_ORGANIZE
                     Text [ italian ] = "~Aggiorna" ;
                     Text [ portuguese_brazilian ] = "~Atualizar" ;
                     Text [ portuguese ] = "~Actualizar" ;
-                    Text [ finnish ] = "~Laske uudelleen" ;
+                    Text [ finnish ] = "Päivitä" ;
                     Text [ danish ] = "Opdater" ;
                     Text [ french ] = "~Actualiser" ;
                     Text [ swedish ] = "Upp~datera" ;
