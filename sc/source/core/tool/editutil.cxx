@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editutil.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-22 13:45:15 $
+ *  last change: $Author: er $ $Date: 2001-03-14 14:41:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,7 @@
 #include <vcl/system.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
+#include <unotools/localedatawrapper.hxx>
 
 #include "editutil.hxx"
 #include "global.hxx"
@@ -557,7 +558,7 @@ String __EXPORT ScHeaderEditEngine::CalcFieldValue( const SvxFieldItem& rField,
         else if (aType == TYPE(SvxPagesField))
             aRet = lcl_GetNumStr( (USHORT)aData.nTotalPages,aData.eNumType );
         else if (aType == TYPE(SvxTimeField))
-            aRet = Application::GetAppInternational().GetTime(aData.aTime);
+            aRet = ScGlobal::pLocaleData->getTime(aData.aTime);
         else if (aType == TYPE(SvxFileField))
             aRet = aData.aTitle;
         else if (aType == TYPE(SvxExtFileField))
@@ -574,7 +575,7 @@ String __EXPORT ScHeaderEditEngine::CalcFieldValue( const SvxFieldItem& rField,
         else if (aType == TYPE(SvxTableField))
             aRet = aData.aTabName;
         else if (aType == TYPE(SvxDateField))
-            aRet = Application::GetAppInternational().GetDate(aData.aDate);
+            aRet = ScGlobal::pLocaleData->getDate(aData.aDate);
         else
         {
             //DBG_ERROR("unbekannter Feldbefehl");
