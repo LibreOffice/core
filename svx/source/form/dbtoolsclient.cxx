@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtoolsclient.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:02:24 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 18:13:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,7 +161,8 @@ namespace svxform
             {
                 // get the symbol for the method creating the factory
                 const ::rtl::OUString sFactoryCreationFunc = ::rtl::OUString::createFromAscii("createDataAccessToolsFactory");
-                s_pFactoryCreationFunc = reinterpret_cast<createDataAccessToolsFactoryFunction>(
+                //  reinterpret_cast<createDataAccessToolsFactoryFunction>
+                s_pFactoryCreationFunc = (createDataAccessToolsFactoryFunction)(
                     osl_getSymbol(s_hDbtoolsModule, sFactoryCreationFunc.pData));
 
                 if (NULL == s_pFactoryCreationFunc)
