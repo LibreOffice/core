@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawview.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 16:16:14 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:30:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,8 +155,8 @@
 #include "FrameView.hxx"
 #endif
 #include "anminfo.hxx"
-#ifndef SD_FU_SLIDE_SHOW_HXX
-#include "fuslshow.hxx"
+#ifndef _SD_SLIDESHOW_HXX
+#include "slideshow.hxx"
 #endif
 #ifndef SD_PREVIEW_WINDOW_HXX
 #include "PreviewWindow.hxx"
@@ -176,6 +176,8 @@
 #ifndef _SDR_CONTACT_DISPLAYINFO_HXX
 #include <svx/sdr/contact/displayinfo.hxx>
 #endif
+
+#include "ShowWindow.hxx"
 
 using namespace ::com::sun::star;
 
@@ -199,10 +201,10 @@ DrawView::DrawView (
       pDrawViewShell(pShell),
       pDocShell(pDocSh),
       nPOCHSmph(0),
-      nPresPaintSmph(0),
+//      nPresPaintSmph(0),
       pVDev(NULL),
       bPixelMode(FALSE),
-      pSlideShow(NULL),
+      mpSlideShow(NULL),
       nMagic(SDDRAWVIEW_MAGIC),
       bInAnimation(FALSE),
       bActionMode(TRUE)
@@ -224,8 +226,8 @@ DrawView::~DrawView()
     nMagic = 0;
     delete pVDev;
 
-    if( pSlideShow )
-        pSlideShow->Destroy();
+    if( mpSlideShow )
+        mpSlideShow->dispose();
 }
 
 /*************************************************************************
@@ -256,42 +258,9 @@ void DrawView::ModelHasChanged()
     SfxStyleSheetBasePool* pSSPool = pDoc->GetStyleSheetPool();
     pSSPool->Broadcast(SfxStyleSheetPoolHint(SFX_STYLESHEETPOOL_CHANGES));
 
-    if (pViewSh)
-    {
-        // falls wir in der Diashow sind und das Gliederungstextobjekt selektiert
-        // ist wird der Gliederungsclone der Diashow aktualisiert
-        FuSlideShow* pFuSlideShow = pSlideShow;
-
-        if (!pFuSlideShow)
-        {
-            pFuSlideShow = pViewSh->GetSlideShow();
-        }
-
-        if (pFuSlideShow)
-        {
-            SdrRectObj* pLayoutText = pFuSlideShow->GetLayoutText();
-            if (pLayoutText)
-            {
-                const SdrMarkList& rMarkList  = GetMarkedObjectList();
-                ULONG              nMarkCount = rMarkList.GetMarkCount();
-                ULONG              nMark;
-
-                for (nMark = 0; nMark < nMarkCount; nMark++ )
-                {
-                    SdrObject* pObject = rMarkList.GetMark(nMark)->GetObj();
-                    if (pObject == pLayoutText)
-                        break;
-                }
-
-                if (nMark < nMarkCount)     // gefunden?
-                {
-                    pFuSlideShow->CreateLayoutClone();
-                }
-            }
-        }
-
+    if( pDrawViewShell )
         pDrawViewShell->ModelHasChanged();
-    }
+
 }
 
 /*************************************************************************
@@ -709,43 +678,23 @@ void DrawView::CompleteRedraw(OutputDevice* pOutDev, const Region& rReg, ::sdr::
     SdDrawDocument* pDoc = pDocShell->GetDoc();
     if(pDoc && pDoc->GetDocumentType() == DOCUMENT_TYPE_IMPRESS)
     {
-        /*******************************************************************
-        |* Paint-Event fuer eine Praesentation?
-        \******************************************************************/
-        FuSlideShow* pFuSlideShow = pSlideShow;
+        sd::Slideshow* pSlideShow = mpSlideShow;
 
         // Paint-Event fuer eine Praesentation im Vollbildmodus oder Fenster?
-        if (!pFuSlideShow && pViewSh)
-        {
-            pFuSlideShow = pViewSh->GetSlideShow();
-        }
-        // Paint-Event fuer das Preview-Fenster?
-        else
-        {
-            SfxViewFrame*   pViewFrm = pDrawViewShell ? pDrawViewShell->GetViewFrame() : NULL;
-            SfxChildWindow* pPreviewChildWindow = pViewFrm ?
-                pViewFrm->GetChildWindow(PreviewChildWindow::GetChildWindowId()) : NULL;
-            if (pPreviewChildWindow)
-            {
-                PreviewWindow* pPreviewWin = static_cast<PreviewWindow*>(
-                    pPreviewChildWindow->GetWindow());
-                if (pPreviewWin && pPreviewWin->GetDoc() == pDoc)
-                    pFuSlideShow = pPreviewWin->GetSlideShow();
-            }
-        }
+        if(!pSlideShow && pViewSh)
+            pSlideShow = pViewSh->GetSlideShow();
 
-        if (pFuSlideShow)
+        if(pSlideShow)
         {
-            OutputDevice* pShowWindow = (OutputDevice*)pFuSlideShow->GetShowWindow();
-            if (pShowWindow == pOutDev ||
-                pFuSlideShow->GetAnimationMode() == ANIMATIONMODE_VIEW)
+            OutputDevice* pShowWindow = ( OutputDevice* )pSlideShow->getShowWindow();
+            if (pShowWindow == pOutDev || pSlideShow->getAnimationMode() == ANIMATIONMODE_PREVIEW)
             {
-                PresPaint(rReg);
+                if( pShowWindow == pOutDev )
+                    PresPaint(rReg);
                 bStandardPaint = FALSE;
             }
         }
     }
-
 
     if (bStandardPaint)
     {
@@ -781,6 +730,7 @@ void DrawView::CompleteRedraw(OutputDevice* pOutDev, const Region& rReg, ::sdr::
 |*
 \************************************************************************/
 
+/*
 void  DrawView::AllowPresPaint(BOOL bAllowed)
 {
     if (bAllowed)
@@ -794,6 +744,7 @@ void  DrawView::AllowPresPaint(BOOL bAllowed)
         nPresPaintSmph++;
     }
 }
+*/
 
 /*************************************************************************
 |*
@@ -828,389 +779,25 @@ DrawViewRedirector::~DrawViewRedirector()
 // different, overload the method and at least do what the method does.
 void DrawViewRedirector::PaintObject(::sdr::contact::ViewObjectContact& rOriginal, ::sdr::contact::DisplayInfo& rDisplayInfo)
 {
-    SdrObject* pObject = rOriginal.GetViewContact().TryToGetSdrObject();
-
-    if(pObject)
-    {
-        OutputDevice* pOutDev = rDisplayInfo.GetOutputDevice();
-        SdAnimationInfo*    pInfo = mrDrawView.pDoc->GetAnimationInfo(pObject);
-        const USHORT nOldAntialiasing = pOutDev->GetAntialiasing();
-
-        if( !pObject->IsEmptyPresObj() )
-        {
-            FuSlideShow* pFuSlideShow = mrDrawView.pSlideShow;
-
-            // Paint-Event fuer eine Praesentation im Vollbildmodus oder Fenster?
-            if( !pFuSlideShow && mrDrawView.pViewSh )
-                pFuSlideShow = mrDrawView.pViewSh->GetSlideShow();
-            else
-            {
-                // Paint-Event fuer das Preview-Fenster?
-                SfxViewFrame*   pViewFrm = mrDrawView.pDrawViewShell ? mrDrawView.pDrawViewShell->GetViewFrame() : NULL;
-                SfxChildWindow* pPreviewChildWindow = pViewFrm ?
-                    pViewFrm->GetChildWindow(
-                        PreviewChildWindow::GetChildWindowId()) : NULL;
-                if (pPreviewChildWindow)
-                {
-                    PreviewWindow* pPreviewWin = static_cast<PreviewWindow*>(
-                        pPreviewChildWindow->GetWindow());
-                    if (pPreviewWin && pPreviewWin->GetDoc() == mrDrawView.pDoc)
-                        pFuSlideShow = pPreviewWin->GetSlideShow();
-                }
-            }
-
-            const BOOL  bPreview = pFuSlideShow->GetAnimationMode() == ANIMATIONMODE_PREVIEW;
-            BOOL        bDrawn = FALSE;
-
-            if( bPreview && ( !pInfo || pInfo->bIsShown ) )
-                pFuSlideShow->StopTextOrGraphicAnimation( pObject, TRUE );
-
-            if( pInfo && ( pInfo->bInvisibleInPresentation || !pInfo->bIsShown ) )
-                bDrawn = TRUE;
-            else if( pInfo && pInfo->bIsShown )
-            {
-                const BOOL      bLive = pFuSlideShow->IsLivePresentation();
-                const BOOL      bDimmed = pInfo->bDimmed;
-
-                // in case of a move effect we have to disable antialiasing
-                // (we don't want to use alpha masks for performance reasons)
-                switch( pInfo->eEffect )
-                {
-                    case presentation::AnimationEffect_MOVE_FROM_LEFT:
-                    case presentation::AnimationEffect_MOVE_FROM_UPPERLEFT:
-                    case presentation::AnimationEffect_MOVE_FROM_TOP:
-                    case presentation::AnimationEffect_MOVE_FROM_UPPERRIGHT:
-                    case presentation::AnimationEffect_MOVE_FROM_RIGHT :
-                    case presentation::AnimationEffect_MOVE_FROM_LOWERRIGHT:
-                    case presentation::AnimationEffect_MOVE_FROM_BOTTOM:
-                    case presentation::AnimationEffect_MOVE_FROM_LOWERLEFT:
-                    case presentation::AnimationEffect_MOVE_SHORT_FROM_LEFT:
-                    case presentation::AnimationEffect_MOVE_SHORT_FROM_UPPERLEFT:
-                    case presentation::AnimationEffect_MOVE_SHORT_FROM_TOP:
-                    case presentation::AnimationEffect_MOVE_SHORT_FROM_UPPERRIGHT:
-                    case presentation::AnimationEffect_MOVE_SHORT_FROM_RIGHT:
-                    case presentation::AnimationEffect_MOVE_SHORT_FROM_LOWERRIGHT:
-                    case presentation::AnimationEffect_MOVE_SHORT_FROM_BOTTOM:
-                    case presentation::AnimationEffect_MOVE_SHORT_FROM_LOWERLEFT:
-                    case presentation::AnimationEffect_MOVE_TO_LEFT:
-                    case presentation::AnimationEffect_MOVE_TO_UPPERLEFT:
-                    case presentation::AnimationEffect_MOVE_TO_TOP:
-                    case presentation::AnimationEffect_MOVE_TO_UPPERRIGHT:
-                    case presentation::AnimationEffect_MOVE_TO_RIGHT :
-                    case presentation::AnimationEffect_MOVE_TO_LOWERRIGHT:
-                    case presentation::AnimationEffect_MOVE_TO_BOTTOM:
-                    case presentation::AnimationEffect_MOVE_TO_LOWERLEFT:
-                    case presentation::AnimationEffect_MOVE_SHORT_TO_LEFT:
-                    case presentation::AnimationEffect_MOVE_SHORT_TO_UPPERLEFT:
-                    case presentation::AnimationEffect_MOVE_SHORT_TO_TOP:
-                    case presentation::AnimationEffect_MOVE_SHORT_TO_UPPERRIGHT:
-                    case presentation::AnimationEffect_MOVE_SHORT_TO_RIGHT:
-                    case presentation::AnimationEffect_MOVE_SHORT_TO_LOWERRIGHT:
-                    case presentation::AnimationEffect_MOVE_SHORT_TO_BOTTOM:
-                    case presentation::AnimationEffect_MOVE_SHORT_TO_LOWERLEFT:
-                    case presentation::AnimationEffect_STRETCH_FROM_LEFT:
-                    case presentation::AnimationEffect_STRETCH_FROM_UPPERLEFT:
-                    case presentation::AnimationEffect_STRETCH_FROM_TOP:
-                    case presentation::AnimationEffect_STRETCH_FROM_UPPERRIGHT:
-                    case presentation::AnimationEffect_STRETCH_FROM_RIGHT:
-                    case presentation::AnimationEffect_STRETCH_FROM_LOWERRIGHT:
-                    case presentation::AnimationEffect_STRETCH_FROM_BOTTOM:
-                    case presentation::AnimationEffect_STRETCH_FROM_LOWERLEFT:
-                    case presentation::AnimationEffect_HORIZONTAL_STRETCH:
-                    case presentation::AnimationEffect_VERTICAL_STRETCH:
-                    case presentation::AnimationEffect_HORIZONTAL_ROTATE:
-                    case presentation::AnimationEffect_VERTICAL_ROTATE:
-                    case presentation::AnimationEffect_PATH:
-                    case presentation::AnimationEffect_LASER_FROM_LEFT:
-                    case presentation::AnimationEffect_LASER_FROM_UPPERLEFT:
-                    case presentation::AnimationEffect_LASER_FROM_TOP:
-                    case presentation::AnimationEffect_LASER_FROM_UPPERRIGHT:
-                    case presentation::AnimationEffect_LASER_FROM_RIGHT:
-                    case presentation::AnimationEffect_LASER_FROM_LOWERRIGHT:
-                    case presentation::AnimationEffect_LASER_FROM_BOTTOM:
-                    case presentation::AnimationEffect_LASER_FROM_LOWERLEFT:
-                    {
-                        pOutDev->SetAntialiasing( ANTIALIASING_DISABLE_TEXT );
-                    }
-                }
-
-                switch( pInfo->eTextEffect )
-                {
-                    case presentation::AnimationEffect_MOVE_FROM_LEFT:
-                    case presentation::AnimationEffect_MOVE_FROM_UPPERLEFT:
-                    case presentation::AnimationEffect_MOVE_FROM_TOP:
-                    case presentation::AnimationEffect_MOVE_FROM_UPPERRIGHT:
-                    case presentation::AnimationEffect_MOVE_FROM_RIGHT :
-                    case presentation::AnimationEffect_MOVE_FROM_LOWERRIGHT:
-                    case presentation::AnimationEffect_MOVE_FROM_BOTTOM:
-                    case presentation::AnimationEffect_MOVE_FROM_LOWERLEFT:
-                    case presentation::AnimationEffect_MOVE_SHORT_FROM_LEFT:
-                    case presentation::AnimationEffect_MOVE_SHORT_FROM_UPPERLEFT:
-                    case presentation::AnimationEffect_MOVE_SHORT_FROM_TOP:
-                    case presentation::AnimationEffect_MOVE_SHORT_FROM_UPPERRIGHT:
-                    case presentation::AnimationEffect_MOVE_SHORT_FROM_RIGHT:
-                    case presentation::AnimationEffect_MOVE_SHORT_FROM_LOWERRIGHT:
-                    case presentation::AnimationEffect_MOVE_SHORT_FROM_BOTTOM:
-                    case presentation::AnimationEffect_MOVE_SHORT_FROM_LOWERLEFT:
-                    case presentation::AnimationEffect_MOVE_TO_LEFT:
-                    case presentation::AnimationEffect_MOVE_TO_UPPERLEFT:
-                    case presentation::AnimationEffect_MOVE_TO_TOP:
-                    case presentation::AnimationEffect_MOVE_TO_UPPERRIGHT:
-                    case presentation::AnimationEffect_MOVE_TO_RIGHT :
-                    case presentation::AnimationEffect_MOVE_TO_LOWERRIGHT:
-                    case presentation::AnimationEffect_MOVE_TO_BOTTOM:
-                    case presentation::AnimationEffect_MOVE_TO_LOWERLEFT:
-                    case presentation::AnimationEffect_MOVE_SHORT_TO_LEFT:
-                    case presentation::AnimationEffect_MOVE_SHORT_TO_UPPERLEFT:
-                    case presentation::AnimationEffect_MOVE_SHORT_TO_TOP:
-                    case presentation::AnimationEffect_MOVE_SHORT_TO_UPPERRIGHT:
-                    case presentation::AnimationEffect_MOVE_SHORT_TO_RIGHT:
-                    case presentation::AnimationEffect_MOVE_SHORT_TO_LOWERRIGHT:
-                    case presentation::AnimationEffect_MOVE_SHORT_TO_BOTTOM:
-                    case presentation::AnimationEffect_MOVE_SHORT_TO_LOWERLEFT:
-                    case presentation::AnimationEffect_STRETCH_FROM_LEFT:
-                    case presentation::AnimationEffect_STRETCH_FROM_UPPERLEFT:
-                    case presentation::AnimationEffect_STRETCH_FROM_TOP:
-                    case presentation::AnimationEffect_STRETCH_FROM_UPPERRIGHT:
-                    case presentation::AnimationEffect_STRETCH_FROM_RIGHT:
-                    case presentation::AnimationEffect_STRETCH_FROM_LOWERRIGHT:
-                    case presentation::AnimationEffect_STRETCH_FROM_BOTTOM:
-                    case presentation::AnimationEffect_STRETCH_FROM_LOWERLEFT:
-                    case presentation::AnimationEffect_HORIZONTAL_STRETCH:
-                    case presentation::AnimationEffect_VERTICAL_STRETCH:
-                    case presentation::AnimationEffect_HORIZONTAL_ROTATE:
-                    case presentation::AnimationEffect_VERTICAL_ROTATE:
-                    case presentation::AnimationEffect_PATH:
-                    case presentation::AnimationEffect_LASER_FROM_LEFT:
-                    case presentation::AnimationEffect_LASER_FROM_UPPERLEFT:
-                    case presentation::AnimationEffect_LASER_FROM_TOP:
-                    case presentation::AnimationEffect_LASER_FROM_UPPERRIGHT:
-                    case presentation::AnimationEffect_LASER_FROM_RIGHT:
-                    case presentation::AnimationEffect_LASER_FROM_LOWERRIGHT:
-                    case presentation::AnimationEffect_LASER_FROM_BOTTOM:
-                    case presentation::AnimationEffect_LASER_FROM_LOWERLEFT:
-                    {
-                        pOutDev->SetAntialiasing( ANTIALIASING_DISABLE_TEXT );
-                    }
-                }
-
-                if( pObject == pFuSlideShow->GetLayoutText() )
-                {
-                    pFuSlideShow->PaintLayoutClone(pOutDev);
-                    bDrawn = TRUE;
-                }
-                else if( pInfo->bIsMovie )
-                {
-                    if( bDimmed )
-                    {
-                        if( !bLive )
-                        {
-                            pFuSlideShow->PaintDimmedObject(((SdrAttrObj*) pObject), pOutDev, pInfo->aDimColor, TRUE );
-                        }
-                        else
-                        {
-                            rOriginal.PaintObject(rDisplayInfo);
-                        }
-                    }
-                    else if( bLive )
-                    {
-                        rOriginal.PaintObject(rDisplayInfo);
-                    }
-                    else
-                    {
-                        // nur das letzte Bild
-                        SdrObjList* pObjList = ((SdrObjGroup*)pObject)->GetSubList();
-                        SdrObject* pLast = (SdrObject*)pObjList->GetObj(pObjList->GetObjCount() - 1);
-                        pLast->SingleObjectPainter(*rDisplayInfo.GetExtendedOutputDevice(), *rDisplayInfo.GetPaintInfoRec());
-                    }
-
-                    bDrawn = TRUE;
-                }
-                else if( bDimmed )
-                {
-                    pFuSlideShow->PaintDimmedObject(((SdrAttrObj*)pObject), pOutDev, pInfo->aDimColor, TRUE );
-                    bDrawn = TRUE;
-                }
-            }
-
-            if( !bDrawn )
-            {
-                const BOOL bGrafAnim = OBJIS_GRAFANIM( pObject );
-                const BOOL bTextAnim = OBJIS_TEXTANIM( pObject );
-
-                // falls es sich um ein animiertes Objekt handelt,
-                // das nicht animiert dargestellt werden soll, muessen
-                // wir ein nicht animiertes Clone-Objekt ausgeben
-                if( !pFuSlideShow->IsAnimationAllowed() && ( bGrafAnim || bTextAnim ) )
-                {
-                    SdrObject* pClone = pObject->Clone();
-
-                    if( bGrafAnim )
-                        ( (SdrGrafObj*) pClone )->SetGraphic( ( (SdrGrafObj*) pObject )->GetTransformedGraphic().GetBitmapEx() );
-
-                    if( bTextAnim )
-                    {
-                        SfxItemSet aTempAttr( mrDrawView.pDoc->GetPool(), SDRATTR_TEXT_ANIKIND, SDRATTR_TEXT_ANIKIND );
-                        aTempAttr.InvalidateItem( SDRATTR_TEXT_ANIKIND );
-                        aTempAttr.Put( SdrTextAniKindItem() );
-                        pClone->SetMergedItemSet(aTempAttr);
-                    }
-
-                    pClone->SingleObjectPainter(*rDisplayInfo.GetExtendedOutputDevice(), *rDisplayInfo.GetPaintInfoRec());
-                    delete pClone;
-                }
-                else
-                {
-                    SdrObject* pObj = pObject;
-                    if( pObj->GetPage() && pObj->GetPage()->checkVisibility(rOriginal, rDisplayInfo, false))
-                    {
-                        rOriginal.PaintObject(rDisplayInfo);
-                    }
-                }
-            }
-        }
-        // das Hintergrundrechteck gibt sich faelschlicherweise als EmptyPresObj
-        // aus, das kann auch nicht geaendert werden, da es sonst von anderen
-        // Methoden nicht erkannt wird und neue Hintergrundrechtecke erzeugt
-        // werden --> sieht aus wie n-faches Redraw des Hintergrunds
-        // (siehe auch FuSlideShow::PaintProc)
-        else
-        {
-            SdPage* pPage = (SdPage*)pObject->GetPage();
-
-            if( ( pPage->GetPresObj(PRESOBJ_BACKGROUND) == pObject ) ||
-                ( ANIMATIONMODE_PREVIEW == mrDrawView.eAnimationMode ) )
-            {
-                rOriginal.PaintObject(rDisplayInfo);
-            }
-        }
-
-        pOutDev->SetAntialiasing( nOldAntialiasing );
-    }
-    else
-    {
-        // not an object, maybe a page
-        rOriginal.PaintObject(rDisplayInfo);
-    }
+    // not an object, maybe a page
+    rOriginal.PaintObject(rDisplayInfo);
 }
 
 /*************************************************************************
 |*
-|* Paint-Event waehrend der Praesenation
+|* Paint-Event during running slide show
 |*
 \************************************************************************/
 
 void DrawView::PresPaint(const Region& rRegion)
 {
-    if (nPresPaintSmph == 0)
-    {
-        FuSlideShow* pFuSlideShow = pSlideShow;
+    Slideshow* pSlideShow = mpSlideShow;
 
-        // Paint-Event fuer eine Praesentation im Vollbildmodus oder Fenster?
-        if (!pFuSlideShow && pViewSh)
-        {
-            pFuSlideShow = pViewSh->GetSlideShow();
-        }
-        // Paint-Event fuer das Preview-Fenster?
-        else
-        {
-            SfxViewFrame*   pViewFrm = pDrawViewShell ? pDrawViewShell->GetViewFrame() : NULL;
-            SfxChildWindow* pPreviewChildWindow = pViewFrm ?
-                pViewFrm->GetChildWindow(
-                    PreviewChildWindow::GetChildWindowId()) : NULL;
-            if (pPreviewChildWindow)
-            {
-                PreviewWindow* pPreviewWin = static_cast<PreviewWindow*>(
-                        pPreviewChildWindow->GetWindow());
-                if (pPreviewWin && pPreviewWin->GetDoc() == pDoc )
-                    pFuSlideShow = pPreviewWin->GetSlideShow();
-            }
-        }
+    if(!pSlideShow && pViewSh)
+        pSlideShow = pViewSh->GetSlideShow();
 
-        ::sd::Window* pWindow = static_cast< ::sd::Window*>(GetWin(0));
-
-        BOOL bLivePresentation = FALSE;
-
-        if (pFuSlideShow)
-        {
-            const ULONG nFuslCacheMode = pFuSlideShow->GetMasterPageCacheMode();
-
-            bLivePresentation = pFuSlideShow->IsLivePresentation();
-
-// #110094#-7
-//          if( IsMasterPagePaintCaching() && ( nFuslCacheMode != GetMasterPagePaintCacheMode() ) )
-//          {
-//              if( nFuslCacheMode == SDR_MASTERPAGECACHE_NONE )
-//              {
-//                  ReleaseMasterPagePaintCache();
-//                  SetMasterPagePaintCaching( FALSE );
-//              }
-//              else
-//                  SetMasterPagePaintCaching( TRUE, nFuslCacheMode );
-//          }
-        }
-
-        if (!bLivePresentation || IsShownXorVisible(pWindow))
-        {
-            // Selektionsdarstellung ausblenden
-            HideShownXor(pWindow);
-        }
-
-        if (pFuSlideShow &&
-            (pFuSlideShow->GetAnimationMode() == ANIMATIONMODE_SHOW ||
-             pFuSlideShow->GetAnimationMode() == ANIMATIONMODE_PREVIEW))
-        {
-            // Schwarzer Hintergrund
-            Point       aPos(pWindow->PixelToLogic(Point(0,0)));
-            Size        aSize(pWindow->GetOutputSize());
-            Rectangle   aRect(aPos, aSize);
-            const Color aBlack(COL_BLACK);
-            const Color aOldColor( pWindow->GetFillColor() );
-            const ULONG nOldDrawMode( pWindow->GetDrawMode() );
-
-            pWindow->SetDrawMode( DRAWMODE_DEFAULT );
-            pWindow->SetFillColor( aBlack );
-
-            pWindow->DrawRect( aRect );
-
-            pWindow->SetFillColor( aOldColor );
-            pWindow->SetDrawMode( nOldDrawMode );
-        }
-
-        // Clipping auf angezeigten Seitenbereich
-        SdrPageView* pPageView = GetPageViewPvNum( 0 );
-
-        if( pPageView )
-        {
-            // #i18640#
-            // We know always display a black page only before the
-            // presentation displays anything
-            bool bAllowPaint = true;
-            if( pFuSlideShow && (pFuSlideShow->GetAnimationMode() == ANIMATIONMODE_SHOW) && (pFuSlideShow->GetActualPage() == NULL) )
-                bAllowPaint = false;
-
-            if( bAllowPaint )
-            {
-                SdrOutliner& rOutl=pDoc->GetDrawOutliner(NULL);
-                rOutl.SetBackgroundColor( pPageView->GetPage()->GetBackgroundColor(pPageView) );
-
-                pWindow->Push( PUSH_CLIPREGION );
-                pWindow->IntersectClipRegion( pPageView->GetPageRect() );
-
-                OutputDevice* pOut = pPageView->GetView().GetWin(0);
-                if(pOut)
-                {
-                    DrawViewRedirector aDrawViewRedirector(*this);
-                    pPageView->CompleteRedraw( pOut, rRegion, 0, &aDrawViewRedirector );
-                }
-
-                pWindow->Pop();
-            }
-
-            if( ( bLivePresentation && !IsShownXorVisible( pWindow ) ) || pSlideShow )
-                ShowShownXor( pWindow );
-        }
-    }
+    if( pSlideShow )
+        pSlideShow->paint( rRegion.GetBoundRect() );
 }
 
 /*************************************************************************
@@ -1220,40 +807,7 @@ void DrawView::PresPaint(const Region& rRegion)
 
 BOOL DrawView::IsObjMarkable(SdrObject* pObj, SdrPageView* pPV) const
 {
-    // erstmal die DrawingEngine pruefen lassen (gesperrter oder unsichtbarer
-    // Layer usw.)
-    BOOL bResult = FmFormView::IsObjMarkable(pObj, pPV);
-
-    // wenn die DrawingEngine ihr OK gibt, pruefen wir noch nach weiteren
-    // Kriterien, die sie nicht kennen kann;
-    // dies ist nur fuer die Praesentation interessant (pViewSh != NULL);
-    // in der Preview kann sowieso niemand selektieren
-    if (bResult && pViewSh)
-    {
-        FuSlideShow* pFuSlideShow = pSlideShow;
-
-        // Paint-Event fuer eine Praesentation im Vollbildmodus oder Fenster?
-        if (!pFuSlideShow && pViewSh)
-        {
-            pFuSlideShow = pViewSh->GetSlideShow();
-        }
-
-        if (pFuSlideShow)
-        {
-            SdAnimationInfo* pInfo = pDoc->GetAnimationInfo(pObj);
-            if (pInfo)
-            {
-                if (!pInfo->bIsShown)
-                    bResult = FALSE;
-            }
-            else
-            {
-                if (pObj->IsEmptyPresObj())
-                    bResult = FALSE;
-            }
-        }
-    }
-    return bResult;
+    return FmFormView::IsObjMarkable(pObj, pPV);;
 }
 
 /*************************************************************************
@@ -1360,6 +914,7 @@ void DrawView::MakeVisible(const Rectangle& rRect, ::Window& rWin)
 
 void DrawView::SetAnimationMode(BOOL bStart)
 {
+/*
     if (!pSlideShow || !bStart || pDrawViewShell->GetEditMode() != EM_MASTERPAGE)
     {
         // Verhindern, dass im EM_MASTERPAGE die Show mehrfach gestartet wird
@@ -1380,7 +935,7 @@ void DrawView::SetAnimationMode(BOOL bStart)
             // Aktuelle Einstellungen merken
             pViewSh->WriteFrameViewData();
 
-            // SlideShow erzeugen
+            // Slideshow erzeugen
             SfxAllItemSet aSet(pDoc->GetItemPool());
             {
             SfxBoolItem aBitem(ATTR_PRESENT_ALL, FALSE);
@@ -1437,7 +992,7 @@ void DrawView::SetAnimationMode(BOOL bStart)
             SfxRequest aReq(SID_PRESENTATION, 0, aSet);
             pSlideShow = new FuSlideShow(NULL, NULL, this, pDoc, aReq);
 
-            // SlideShow starten und aktuellen MapMode setzen
+            // Slideshow starten und aktuellen MapMode setzen
             ::sd::Window* pWindow = static_cast< ::sd::Window*>(GetWin(0));
             MapMode aMapMode = pWindow->GetMapMode();
             pSlideShow->SetAnimationMode(ANIMATIONMODE_VIEW,
@@ -1456,35 +1011,8 @@ void DrawView::SetAnimationMode(BOOL bStart)
         pWindow->Invalidate();
         pWindow->Update();
     }
+*/
 }
-
-
-/*************************************************************************
-|*
-|* Objekt animieren
-|*
-\************************************************************************/
-
-void DrawView::HideAndAnimateObject(SdrObject* pObj)
-{
-    if (pSlideShow && !bInAnimation)
-    {
-        bInAnimation = TRUE;
-        SetAnimationEnabled(FALSE);
-
-        pSlideShow->HideAndAnimateObject(pObj);
-
-        // im Reschedule des Effekts zerstoert?
-        if (nMagic != SDDRAWVIEW_MAGIC)
-        {
-            return;
-        }
-
-        SetAnimationEnabled(TRUE);
-        bInAnimation = FALSE;
-    }
-}
-
 
 /*************************************************************************
 |*
@@ -1494,22 +1022,7 @@ void DrawView::HideAndAnimateObject(SdrObject* pObj)
 
 void DrawView::AnimatePage()
 {
-    if (pSlideShow && !bInAnimation)
-    {
-        bInAnimation = TRUE;
-        SetAnimationEnabled(FALSE);
-
-        pSlideShow->AnimatePage();
-
-        // im Reschedule des Effekts zerstoert?
-        if (nMagic != SDDRAWVIEW_MAGIC)
-        {
-            return;
-        }
-
-        SetAnimationEnabled(TRUE);
-        bInAnimation = FALSE;
-    }
+    DBG_ERROR( "not implemented" );
 }
 
 /*************************************************************************
