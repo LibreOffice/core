@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh2.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2001-07-11 12:10:54 $
+ *  last change: $Author: os $ $Date: 2001-10-16 11:11:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,6 +133,9 @@
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
+#ifndef _COM_SUN_STAR_SDBC_XROWSET_HPP_
+#include <com/sun/star/sdbc/XRowSet.hpp>
+#endif
 #ifndef _SFXFRAME_HXX
 #include <sfx2/frame.hxx>
 #endif
@@ -168,7 +171,11 @@ using namespace com::sun::star::beans;
 #define C2S(cChar) UniString::CreateFromAscii(cChar)
 #define DB_DD_DELIM 0x0b
 
-
+struct DBTextStruct_Impl
+{
+    SwDBData aDBData;
+    Sequence<Any> aSelection;
+};
 inline void AddSelList( List& rLst, long nRow )
 {
     rLst.Insert( (void*)nRow , LIST_APPEND );
@@ -178,70 +185,128 @@ void SwTextShell::ExecDB(SfxRequest &rReq)
     const SfxItemSet *pArgs = rReq.GetArgs();
     SwNewDBMgr* pNewDBMgr = GetShell().GetNewDBMgr();
     USHORT nSlot = rReq.GetSlot();
+    OUString sSourceArg, sCommandArg;
+    sal_Int32 nCommandTypeArg = 0;
+
+    const SfxPoolItem* pSourceItem = 0;
+    const SfxPoolItem* pCommandItem = 0;
+    const SfxPoolItem* pCommandTypeItem = 0;
+    const SfxPoolItem* pSelectionItem = 0;
+    pArgs->GetItemState(FN_DB_DATA_SELECTION_ANY, FALSE, &pSelectionItem);
+    Sequence<Any> aSelection;
+    if(pSelectionItem)
+    {
+        ((SfxUsrAnyItem*)pSelectionItem)->GetValue() >>= aSelection;
+    }
+    pArgs->GetItemState(FN_DB_DATA_SOURCE_ANY, FALSE, &pSourceItem);
+    if(pSourceItem)
+        ((const SfxUsrAnyItem*)pSourceItem)->GetValue() >>= sSourceArg;
+    pArgs->GetItemState(FN_DB_DATA_COMMAND_ANY, FALSE, &pCommandItem);
+    if(pCommandItem)
+        ((const SfxUsrAnyItem*)pCommandItem)->GetValue() >>= sCommandArg;
+    pArgs->GetItemState(FN_DB_DATA_COMMAND_TYPE_ANY, FALSE, &pCommandTypeItem);
+    if(pCommandTypeItem)
+        ((const SfxUsrAnyItem*)pCommandTypeItem)->GetValue() >>= nCommandTypeArg;
 
     switch (nSlot)
     {
         case FN_QRY_INSERT:
             {
-                String* pNew = new String( ((const SfxStringItem&)pArgs->
-                                            Get(nSlot)).GetValue() );
-                Application::PostUserEvent( STATIC_LINK( this, SwBaseShell,
+                if(pSourceItem && pCommandItem && pCommandTypeItem)
+                {
+                    DBTextStruct_Impl* pNew = new DBTextStruct_Impl;
+                    pNew->aDBData.sDataSource = sSourceArg;
+                    pNew->aDBData.sCommand = sCommandArg;
+                    pNew->aDBData.nCommandType = nCommandTypeArg;
+                    pNew->aSelection = aSelection;
+                    Application::PostUserEvent( STATIC_LINK( this, SwBaseShell,
                                             InsertDBTextHdl ), pNew );
-                // der String wird im InsertDBTextHdl geloescht !!
+                    // the pNew will be removed in InsertDBTextHdl !!
+                }
             }
             break;
 
         case FN_QRY_MERGE_FIELD:
             {
-                String sSbaData = ((const SfxStringItem&)pArgs->Get(nSlot)).GetValue();
-                String sDBName = sSbaData.GetToken(0, DB_DD_DELIM);
-                String sTableName(sSbaData.GetToken(1, DB_DD_DELIM));
-                BOOL bTable = sSbaData.GetToken(2, DB_DD_DELIM) == C2S("1");
-                String sStatement = sSbaData.GetToken(3, DB_DD_DELIM);
-
-                USHORT nCount = sSbaData.GetTokenCount(DB_DD_DELIM);
-                Sequence<sal_Int32> aSelection(nCount - 4);
-                sal_Int32 * pSelection = aSelection.getArray();
+                Sequence<sal_Int32> aIntSelection(aSelection.getLength());
+                sal_Int32 * pIntSelection = aIntSelection.getArray();
+                const Any* pSelection = aSelection.getConstArray();
                 sal_Int32 nIdx = 0;
-                for( USHORT i = 4; i < nCount; i++ , nIdx++)
-                    pSelection[nIdx] = sSbaData.GetToken( i, DB_DD_DELIM).ToInt32();
+                for( sal_Int32 i = 0; i < aSelection.getLength(); i++ , nIdx++)
+                    pSelection[nIdx] >>= pIntSelection[nIdx];
 
                 Reference<XResultSet>  xResultSet;
                 Reference<XDataSource> xSource;
                 SwDBData aData;
-                aData.sDataSource = sDBName;
-                aData.sCommand = sTableName;
-                aData.nCommandType = 0;
-                Reference< XConnection> xConnection = pNewDBMgr->GetConnection(sDBName, xSource);
+                aData.sDataSource = sSourceArg;
+                aData.sCommand = sCommandArg;
+                aData.nCommandType = nCommandTypeArg;
+                Reference< XConnection> xConnection = pNewDBMgr->GetConnection(aData.sDataSource, xSource);
                 if(!xConnection.is())
                     return ;
-                Reference<XStatement> xStatement = xConnection->createStatement();
+                String sStatement;
+                if(nCommandTypeArg == CommandType::COMMAND)
+                    sStatement = sCommandArg;
+                BOOL bDisposeResultSet = FALSE;
                 if(!sStatement.Len())
                 {
-                    Reference< sdbc::XDatabaseMetaData >  xMetaData = xConnection->getMetaData();
-                    OUString aQuoteChar = xMetaData->getIdentifierQuoteString();
-                    OUString sStatement(C2U("SELECT * FROM "));
-                    sStatement = C2U("SELECT * FROM ");
-                    sStatement += aQuoteChar;
-                    sStatement += aData.sCommand;
-                    sStatement += aQuoteChar;
+                    Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
+                    if( xMgr.is() )
+                    {
+                        Reference<XInterface> xInstance = xMgr->createInstance(
+                            C2U( "com.sun.star.sdb.RowSet" ));
+                        Reference <XPropertySet> xRowSetPropSet(xInstance, UNO_QUERY);
+                        if(xRowSetPropSet.is())
+                        {
+                            Any aConnection;
+                            aConnection <<= xConnection;
+                            xRowSetPropSet->setPropertyValue(C2U("ActiveConnection"), aConnection);
+                            Any aString;
+                            aString <<= aData.sDataSource;
+                            xRowSetPropSet->setPropertyValue(C2U("DataSourceName"), aString);
+                            aString <<= aData.sCommand;
+                            xRowSetPropSet->setPropertyValue(C2U("Command"), aString);
+                            Any aInt;
+                            aInt <<= aData.nCommandType;
+                            xRowSetPropSet->setPropertyValue(C2U("CommandType"), aInt);
+                            Reference< XRowSet > xRowSet(xInstance, UNO_QUERY);
+                            xRowSet->execute();
+                            xResultSet = Reference<XResultSet>(xRowSet, UNO_QUERY);
+                            bDisposeResultSet = TRUE;
+                        }
+                    }
                 }
-                xResultSet = xStatement->executeQuery( sStatement );
+                else
+                {
+                    try
+                    {
+                        Reference<XStatement> xStatement = xConnection->createStatement();
+                        xResultSet = xStatement->executeQuery( sStatement );
+                    }
+                    catch(Exception& rExcept)
+                    {
+                    }
+                }
                 Sequence<PropertyValue> aProperties(5);
                 PropertyValue* pProperties = aProperties.getArray();
                 pProperties[0].Name = C2U("DataSourceName");
-                pProperties[0].Value <<= (OUString)sDBName;
+                pProperties[0].Value <<= (OUString)aData.sDataSource;
                 pProperties[1].Name = C2U("Command");
-                pProperties[1].Value <<= (OUString)sTableName;
+                pProperties[1].Value <<= (OUString)aData.sCommand;
                 pProperties[2].Name = C2U("Cursor");
                 pProperties[2].Value <<= xResultSet;
                 pProperties[3].Name = C2U("Selection");
-                pProperties[3].Value <<= aSelection;
+                pProperties[3].Value <<= aIntSelection;
                 pProperties[4].Name = C2U("CommandType");
-                pProperties[4].Value <<= (sal_Int32)0;
+                pProperties[4].Value <<= aData.nCommandType;
 
                 pNewDBMgr->MergeNew(DBMGR_MERGE, *GetShellPtr(), aProperties);
-
+                if(bDisposeResultSet)
+                {
+                    Reference<XComponent> xComp(xResultSet, UNO_QUERY);
+                    if(xComp.is())
+                        xComp->dispose();
+                }
             }
             break;
 
@@ -249,16 +314,10 @@ void SwTextShell::ExecDB(SfxRequest &rReq)
             {
                 const SfxPoolItem* pConnectionItem = 0;
                 const SfxPoolItem* pColumnItem = 0;
-                const SfxPoolItem* pSourceItem = 0;
-                const SfxPoolItem* pCommandItem = 0;
-                const SfxPoolItem* pCommandTypeItem = 0;
                 const SfxPoolItem* pColumnNameItem = 0;
 
                 pArgs->GetItemState(FN_DB_CONNECTION_ANY, FALSE, &pConnectionItem);
                 pArgs->GetItemState(FN_DB_COLUMN_ANY, FALSE, &pColumnItem);
-                pArgs->GetItemState(FN_DB_DATA_SOURCE_ANY, FALSE, &pSourceItem);
-                pArgs->GetItemState(FN_DB_DATA_COMMAND_ANY, FALSE, &pCommandItem);
-                pArgs->GetItemState(FN_DB_DATA_COMMAND_TYPE_ANY, FALSE, &pCommandTypeItem);
                 pArgs->GetItemState(FN_DB_DATA_COLUMN_NAME_ANY, FALSE, &pColumnNameItem);
 
                 OUString sSource, sCommand;
@@ -300,30 +359,23 @@ void SwTextShell::ExecDB(SfxRequest &rReq)
     Beschreibung:
  --------------------------------------------------------------------*/
 
-IMPL_STATIC_LINK( SwBaseShell, InsertDBTextHdl, String*, pString )
+IMPL_STATIC_LINK( SwBaseShell, InsertDBTextHdl, DBTextStruct_Impl*, pDBStruct )
 {
-    if( pString )
+    if( pDBStruct )
     {
-
-        USHORT nTokenPos = 0;
-        String sSourceName( pString->GetToken( 0, DB_DD_DELIM, nTokenPos ));
-        String sTblQryName( pString->GetToken( 0, DB_DD_DELIM, nTokenPos ));
-        String sStatmnt( pString->GetToken( 1, DB_DD_DELIM, nTokenPos ));
-
         Reference<XDataSource> xSource;
-        Reference< sdbc::XConnection> xConnection = SwNewDBMgr::GetConnection(sSourceName, xSource);
+        Reference< sdbc::XConnection> xConnection =
+            SwNewDBMgr::GetConnection(pDBStruct->aDBData.sDataSource, xSource);
         Reference< XColumnsSupplier> xColSupp;
         if(xConnection.is())
             xColSupp = SwNewDBMgr::GetColumnSupplier(xConnection,
-                                    sTblQryName,
-                                    SW_DB_SELECT_UNKNOWN);
+                                    pDBStruct->aDBData.sCommand,
+                                    pDBStruct->aDBData.nCommandType == CommandType::QUERY ?
+                                        SW_DB_SELECT_QUERY : SW_DB_SELECT_TABLE);
 
         if( xColSupp.is() )
         {
-            SwDBData aDBData;
-            aDBData.sDataSource = sSourceName;
-            aDBData.sCommand = sStatmnt.Len() ? sStatmnt  : sTblQryName;
-            aDBData.nCommandType = sStatmnt.Len() ? sdb::CommandType::COMMAND : sdb::CommandType::TABLE;
+            SwDBData aDBData = pDBStruct->aDBData;
             SwInsertDBColAutoPilot *pDlg = new SwInsertDBColAutoPilot(
                     pThis->GetView(),
                     xSource,
@@ -331,18 +383,8 @@ IMPL_STATIC_LINK( SwBaseShell, InsertDBTextHdl, String*, pString )
                     aDBData );
             if( RET_OK == pDlg->Execute() )
             {
-                sal_Int32 nTokenCount = pString->GetTokenCount(DB_DD_DELIM);
-                if(!pString->GetToken(nTokenCount -1 , DB_DD_DELIM).Len())
-                    --nTokenCount;
-                sal_Int32 nSelectionCount = nTokenCount - 4;
-                Sequence<Any> aSelection(nSelectionCount);
-                Any* pSelection = aSelection.getArray();
-                for(sal_Int32 nPos = 0; nPos < nSelectionCount; nPos++)
-                {
-                    pSelection[nPos] <<= pString->GetToken( 0, DB_DD_DELIM, nTokenPos ).ToInt32();
-                }
                 Reference <XResultSet> xResSet;
-                pDlg->DataToDoc( aSelection, xSource, xConnection, xResSet);
+                pDlg->DataToDoc( pDBStruct->aSelection, xSource, xConnection, xResSet);
             }
             delete pDlg;
         }
@@ -351,7 +393,7 @@ IMPL_STATIC_LINK( SwBaseShell, InsertDBTextHdl, String*, pString )
             xComp->dispose();
     }
 
-    delete pString;
+    delete pDBStruct;
     return 0;
 }
 

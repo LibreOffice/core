@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basesh.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-04-02 05:54:45 $
+ *  last change: $Author: os $ $Date: 2001-10-16 11:12:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@ class SfxItemSet;
 class Graphic;
 
 extern void DisableAllItems(SfxItemSet &);
-
+struct DBTextStruct_Impl;
 class SwBaseShell: public SfxShell
 {
     SwView      &rView;
@@ -119,7 +119,7 @@ protected:
 
     SwFlyFrmAttrMgr *pFrmMgr;
 
-    DECL_STATIC_LINK( SwBaseShell, InsertDBTextHdl, String* );
+    DECL_STATIC_LINK( SwBaseShell, InsertDBTextHdl, DBTextStruct_Impl* );
 
     void SetGetStateSet( SfxItemSet* p )            { pGetStateSet = p; }
     BOOL AddGrfUpdateSlot( USHORT nSlot )
