@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDataTransferProviderAccess.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:00:59 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 09:00:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,47 +86,55 @@ module com { module sun { module star { module awt {
 interface XWindow;
 
 //=============================================================================
+
 /** This interface extends the XToolkit interface with clipboard and
     drag-and-drop support.
 */
-
 interface XDataTransferProviderAccess: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-    /** @returns the drag gesture recognizer of the specified window.
+
+    /** returns the drag gesture recognizer of the specified window.
+
+        @returns the drag gesture recognizer.
 
         @param window
         a window created by the same toolkit instance.
     */
-
     com::sun::star::datatransfer::dnd::XDragGestureRecognizer getDragGestureRecognizer( [in] XWindow window );
 
     //-------------------------------------------------------------------------
-    /** @returns the drag source of the specified window.
+
+    /** returns the drag source of the specified window.
+
+        @returns the drag source.
 
         @param window
         a window created by the same toolkit instance.
     */
-
     com::sun::star::datatransfer::dnd::XDragSource getDragSource( [in] XWindow window );
 
     //-------------------------------------------------------------------------
-    /** @returns the drop target of the specified window.
+
+    /** returns the drop target of the specified window.
+
+        @returns the drop target.
 
         @param window
         a window created by the same toolkit instance.
     */
-
     com::sun::star::datatransfer::dnd::XDropTarget getDropTarget( [in] XWindow window );
 
     //-------------------------------------------------------------------------
-    /** @returns the specified clipboard (if available).
+
+    /** returns the specified clipboard.
+
+        @returns the specified clipboard (if available).
 
         @param clipboardName
-        the name of the clipboard to return. If an empty string is passed in,
-        the default clipboard is returned.
+        the name of the clipboard to return.
+        If an empty string is passed in, the default clipboard is returned.
     */
-
     com::sun::star::datatransfer::clipboard::XClipboard getClipboard( [in] string clipboardName );
 };
 
