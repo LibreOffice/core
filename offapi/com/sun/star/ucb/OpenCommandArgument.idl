@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OpenCommandArgument.idl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:10:24 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 01:19:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ module com { module sun { module star { module ucb {
 
     @see XCommandProcessor
 */
-struct OpenCommandArgument
+published struct OpenCommandArgument
 {
     //-------------------------------------------------------------------------
     /** A mode.
