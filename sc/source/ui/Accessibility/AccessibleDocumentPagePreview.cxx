@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocumentPagePreview.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: sab $ $Date: 2002-09-24 09:27:45 $
+ *  last change: $Author: sab $ $Date: 2002-11-21 16:54:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,6 +165,8 @@ struct ScAccNote
     accessibility::AccessibleTextHelper* mpTextHelper;
     sal_Int32   mnParaCount;
     sal_Bool    mbMarkNote;
+
+                ScAccNote() : mpTextHelper(NULL), mnParaCount(0) {}
 };
 
 class ScNotesChilds
@@ -335,7 +337,7 @@ uno::Reference<XAccessible> ScNotesChilds::GetChild(sal_Int32 nIndex) const
                 DBG_ERRORFILE("wrong note found");
             if (!aItr->mpTextHelper)
                 aItr->mpTextHelper = CreateTextHelper(maMarks[nIndex].maNoteText, maMarks[nIndex].maRect, maMarks[nIndex].maNoteCell, maMarks[nIndex].mbMarkNote, nIndex + mnOffset); // the marks are the first and every mark has only one paragraph
-            xAccessible = aItr->mpTextHelper->GetChild(aParaFound.mnIndex);
+            xAccessible = aItr->mpTextHelper->GetChild(aParaFound.mnIndex + aItr->mpTextHelper->GetStartIndex());
         }
         else
         {
@@ -347,7 +349,7 @@ uno::Reference<XAccessible> ScNotesChilds::GetChild(sal_Int32 nIndex) const
             {
                 if (!aItr->mpTextHelper)
                     aItr->mpTextHelper = CreateTextHelper(aItr->maNoteText, aItr->maRect, aItr->maNoteCell, aItr->mbMarkNote, (nIndex - aParaFound.mnIndex) + mnOffset + maMarks.size());
-                xAccessible = aItr->mpTextHelper->GetChild(aParaFound.mnIndex);
+                xAccessible = aItr->mpTextHelper->GetChild(aParaFound.mnIndex + aItr->mpTextHelper->GetStartIndex());
             }
         }
     }
@@ -412,7 +414,7 @@ void ScNotesChilds::CollectChilds(const ScAccNote& rNote, ScXAccList& rList)
 {
     if (rNote.mpTextHelper)
         for (sal_Int32 i = 0; i < rNote.mnParaCount; ++i)
-            rList.push_back(rNote.mpTextHelper->GetChild(i));
+            rList.push_back(rNote.mpTextHelper->GetChild(i + rNote.mpTextHelper->GetStartIndex()));
 }
 
 sal_Int32 ScNotesChilds::CheckChanges(const ScPreviewLocationData& rData,
@@ -450,7 +452,9 @@ sal_Int32 ScNotesChilds::CheckChanges(const ScPreviewLocationData& rData,
                     aNote.maNoteText = aPostIt.GetText();
                 }
 
-                sal_Int8 nCompare(CompareCell(aNote.maNoteCell, aItr->maNoteCell));
+                sal_Int8 nCompare(-1); // if there are no more old childs it is always a new one
+                if (aItr != aEndItr)
+                    nCompare = CompareCell(aNote.maNoteCell, aItr->maNoteCell);
                 if (nCompare == 0)
                 {
                     if (aNote.maNoteText == aItr->maNoteText)
@@ -476,6 +480,8 @@ sal_Int32 ScNotesChilds::CheckChanges(const ScPreviewLocationData& rData,
                         CollectChilds(aNote, rNewParas);
                     }
                     bAddNote = sal_True;
+                    // not necessary, because this branch should not be reached if it is the end
+                    //if (aItr != aEndItr)
                     ++aItr;
                 }
                 else if (nCompare < 0)
@@ -494,6 +500,8 @@ sal_Int32 ScNotesChilds::CheckChanges(const ScPreviewLocationData& rData,
                     DELETEZ(aItr->mpTextHelper);
 
                     // no note to add
+                    // not necessary, because this branch should not be reached if it is the end
+                    //if (aItr != aEndItr)
                     ++aItr;
                 }
                 if (bAddNote)
