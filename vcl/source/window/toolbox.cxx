@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 14:19:46 $
+ *  last change: $Author: rt $ $Date: 2004-01-07 16:22:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,9 @@
 #endif
 #ifndef _SV_SALFRAME_HXX
 #include <salframe.hxx>
+#endif
+#ifndef _SV_MNEMONIC_HXX
+#include <mnemonic.hxx>
 #endif
 
 // =======================================================================
@@ -4035,13 +4038,11 @@ void ToolBox::RequestHelp( const HelpEvent& rHEvt )
             XubString aStr = GetQuickHelpText( nItemId );
             const XubString& rHelpStr = GetHelpText( nItemId );
             if ( !aStr.Len() )
-                aStr = GetItemText( nItemId );
+                aStr = MnemonicGenerator::EraseAllMnemonicChars( GetItemText( nItemId ) );
             if ( rHEvt.GetMode() & HELPMODE_BALLOON )
             {
                 if ( rHelpStr.Len() )
                     aStr = rHelpStr;
-                else
-                    aStr.EraseAllChars( '~' );
                 Help::ShowBalloon( this, aHelpPos, aTempRect, aStr );
             }
             else
