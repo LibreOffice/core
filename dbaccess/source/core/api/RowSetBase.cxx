@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetBase.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:02:32 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 15:47:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1015,7 +1015,10 @@ void ORowSetBase::setCurrentRow(sal_Bool _bMoved,const ORowSetRow& _rOldValues,:
         OSL_ENSURE(m_aCurrentRow->isValid(),"Currentrow isn't valid");
         OSL_ENSURE(m_aBookmark.hasValue(),"Bookmark has no value!");
 
+        sal_Int32 nOldRow = m_pCache->getRow();
         positionCache();
+        sal_Int32 nNewRow = m_pCache->getRow();
+        OSL_ENSURE(nOldRow == nNewRow,"Old position is not eual to new postion");
         m_aCurrentRow   = m_pCache->m_aMatrixIter;
         OSL_ENSURE(m_aCurrentRow,"CurrentRow is nul after positionCache!");
     }
@@ -1104,23 +1107,11 @@ sal_Bool SAL_CALL ORowSetBase::rowDeleted(  ) throw(SQLException, RuntimeExcepti
 // XWarningsSupplier
 Any SAL_CALL ORowSetBase::getWarnings(  ) throw(SQLException, RuntimeException)
 {
-    ::connectivity::checkDisposed(m_rBHelper.bDisposed);
-
-    if(!m_pCache)
-        return Any();
-
-    ::osl::MutexGuard aGuard( *m_pMutex );
-
-    return m_pCache->getWarnings();
+    return Any();
 }
 // -------------------------------------------------------------------------
 void SAL_CALL ORowSetBase::clearWarnings(  ) throw(SQLException, RuntimeException)
 {
-    ::connectivity::checkDisposed(m_rBHelper.bDisposed);
-
-    ::osl::MutexGuard aGuard( *m_pMutex );
-    if(m_pCache)
-        m_pCache->clearWarnings();
 }
 // -------------------------------------------------------------------------
 void ORowSetBase::firePropertyChange(const ORowSetRow& _rOldRow)
