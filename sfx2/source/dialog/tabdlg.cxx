@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabdlg.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-05 08:33:31 $
+ *  last change: $Author: pb $ $Date: 2001-02-09 06:51:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,10 +70,8 @@
 #ifndef _SV_CLIP_HXX //autogen
 #include <vcl/clip.hxx>
 #endif
-#if SUPD<613//MUSTINI
-    #ifndef _SFXINIMGR_HXX //autogen
-    #include <svtools/iniman.hxx>
-    #endif
+#ifndef INCLUDED_SVTOOLS_VIEWOPTIONS_HXX
+#include <svtools/viewoptions.hxx>
 #endif
 #pragma hdrstop
 
@@ -86,9 +84,6 @@
 #include "tabdlg.hxx"
 #include "viewfrm.hxx"
 #include "app.hxx"
-#if SUPD<613//MUSTINI
-#include "inimgr.hxx"
-#endif
 #include "sfxresid.hxx"
 #include "sfxhelp.hxx"
 
@@ -429,19 +424,29 @@ SfxTabDialog::SfxTabDialog
 
 SfxTabDialog::~SfxTabDialog()
 {
-    // Konfiguration in Ini-Manager abspeichern
-    String aDlgData(',');
-    aDlgData += String::CreateFromInt32( aTabCtrl.GetCurPageId() );
-    const USHORT nCount = pImpl->pData->Count();
 
+    // save settings (screen position and current page)
+    SvtViewOptions aDlgOpt( E_TABDIALOG, String::CreateFromInt32( nResId ) );
+    Point aPos = GetPosPixel();
+    aDlgOpt.SetPosition( aPos.X(), aPos.Y() );
+    aDlgOpt.SetPageID( aTabCtrl.GetCurPageId() );
+
+    const USHORT nCount = pImpl->pData->Count();
     for ( USHORT i = 0; i < nCount; ++i )
     {
         Data_Impl* pDataObject = pImpl->pData->GetObject(i);
 
         if ( pDataObject->pTabPage )
         {
+            // save settings of all pages (user data)
             pDataObject->pTabPage->FillUserData();
-            String aPageData(pDataObject->pTabPage->GetUserData());
+            String aPageData( pDataObject->pTabPage->GetUserData() );
+            if ( aPageData.Len() )
+            {
+                // save settings of all pages (user data)
+                SvtViewOptions aPageOpt( E_TABPAGE, String::CreateFromInt32( pDataObject->nId ) );
+                aPageOpt.SetUserData( aPageData );
+            }
 
             if ( pDataObject->bOnDemand )
                 delete (SfxItemSet*)&pDataObject->pTabPage->GetItemSet();
@@ -449,6 +454,7 @@ SfxTabDialog::~SfxTabDialog()
         }
         delete pDataObject;
     }
+
     delete pImpl->pApplyButton;
     delete pImpl->pData;
     delete pImpl;
@@ -456,11 +462,6 @@ SfxTabDialog::~SfxTabDialog()
     delete pOutSet;
     delete pExampleSet;
     delete pRanges;
-/*
-    SfxHelpPI *pHelpPI = SFX_APP()->GetHelpPI();
-    if ( pHelpPI )
-        pHelpPI->ResetTopic();
- */
 }
 
 // -----------------------------------------------------------------------
@@ -625,33 +626,26 @@ PushButton* SfxTabDialog::GetApplyButton()
 
 void SfxTabDialog::Start_Impl()
 {
-    DBG_ASSERT( pImpl->pData->Count() == aTabCtrl.GetPageCount(),
-                "nicht alle Seiten angemeldet" );
+    DBG_ASSERT( pImpl->pData->Count() == aTabCtrl.GetPageCount(), "not all pages registered" );
     Point aPos;
     USHORT nActPage = aTabCtrl.GetPageId( 0 );
 
-    // Konfiguration vorhanden?
-#if SUPD<613//MUSTINI
-    SfxApplication *pSfxApp = SFX_APP();
-    SfxIniManager* pIniMgr = pSfxApp->GetAppIniManager();
-    String aDlgData( pIniMgr->Get( SFX_KEY_DIALOG, nResId ) );
-
-    if ( aDlgData.Len() > 0 )
+    // load old settings, when exists
+    SvtViewOptions aDlgOpt( E_TABDIALOG, String::CreateFromInt32( nResId ) );
+    if ( aDlgOpt.Exists() )
     {
-        // ggf. Position aus Konfig
-        Size aDummySize;
-
-        if ( pIniMgr->GetPosSize( aDlgData.GetToken( 0, pIniMgr->GetToken() ), aPos, aDummySize ) )
-            SetPosPixel( aPos );
+        Point aPos;
+        aDlgOpt.GetPosition( aPos.X(), aPos.Y() );
+        SetPosPixel( aPos );
 
         // initiale TabPage aus Programm/Hilfe/Konfig
-        nActPage = (USHORT)aDlgData.GetToken( 1, pIniMgr->GetToken() ).ToInt32();
+        nActPage = (USHORT)aDlgOpt.GetPageID();
+
         if ( USHRT_MAX != nAppPageId )
             nActPage = nAppPageId;
         else
         {
-            USHORT nAutoTabPageId = pSfxApp->Get_Impl()->nAutoTabPageId;
-
+            USHORT nAutoTabPageId = SFX_APP()->Get_Impl()->nAutoTabPageId;
             if ( nAutoTabPageId )
                 nActPage = nAutoTabPageId;
         }
@@ -659,14 +653,8 @@ void SfxTabDialog::Start_Impl()
         if ( TAB_PAGE_NOTFOUND == aTabCtrl.GetPagePos( nActPage ) )
             nActPage = aTabCtrl.GetPageId( 0 );
     }
-    else if ( USHRT_MAX != nAppPageId &&
-              TAB_PAGE_NOTFOUND != aTabCtrl.GetPagePos( nAppPageId ) )
+    else if ( USHRT_MAX != nAppPageId && TAB_PAGE_NOTFOUND != aTabCtrl.GetPagePos( nAppPageId ) )
         nActPage = nAppPageId;
-#else
-    if ( USHRT_MAX != nAppPageId &&
-              TAB_PAGE_NOTFOUND != aTabCtrl.GetPagePos( nAppPageId ) )
-        nActPage = nAppPageId;
-#endif
 
     aTabCtrl.SetCurPageId( nActPage );
     ActivatePageHdl( &aTabCtrl );
@@ -771,13 +759,12 @@ void SfxTabDialog::RemoveTabPage( USHORT nId )
         if ( pDataObject->pTabPage )
         {
             pDataObject->pTabPage->FillUserData();
-            String aPageData(pDataObject->pTabPage->GetUserData());
+            String aPageData( pDataObject->pTabPage->GetUserData() );
             if ( aPageData.Len() )
             {
-#if SUPD<613//MUSTINI
-                SfxIniManager* pIniMgr = SFX_APP()->GetAppIniManager();
-                pIniMgr->Set( aPageData, SFX_KEY_PAGE, pDataObject->nId);
-#endif
+                // save settings of this page (user data)
+                SvtViewOptions aPageOpt( E_TABPAGE, String::CreateFromInt32( pDataObject->nId ) );
+                aPageOpt.SetUserData( aPageData );
             }
 
             if ( pDataObject->bOnDemand )
@@ -1208,19 +1195,6 @@ IMPL_LINK( SfxTabDialog, ActivatePageHdl, TabControl *, pTabCtrl )
     DBG_ASSERT( pImpl->pData->Count(), "keine Pages angemeldet" );
     const USHORT nId = pTabCtrl->GetCurPageId();
     SfxApplication *pSfxApp = SFX_APP();
-#if SUPD<613//MUSTINI
-    SfxIniManager* pIniMgr = pSfxApp->GetAppIniManager();
-    if ( BOOL( pIniMgr->Get( SFX_GROUP_USER, DEFINE_CONST_UNICODE("HelpAuthor") ).ToInt32() ) )
-    {
-        String aText( DEFINE_CONST_UNICODE("slot:") );
-        aText += pSfxApp->Get_Impl()->nExecutingSID;
-        aText += 0x0023; // '#' = 23h
-        aText += String::CreateFromInt32(nId);
-        GetpApp()->ShowStatusText( aText );
-        Clipboard::Clear();
-        Clipboard::CopyString( aText );
-    }
-#endif
 
     // Tab Page schon da?
     SfxTabPage* pTabPage = (SfxTabPage *)pTabCtrl->GetTabPage( nId );
@@ -1245,12 +1219,11 @@ IMPL_LINK( SfxTabDialog, ActivatePageHdl, TabControl *, pTabCtrl )
         else
             pTabPage = (pDataObject->fnCreatePage)
                             ( pTabCtrl, *CreateInputItemSet( nId ) );
-        DBG_ASSERT( NULL == pDataObject->pTabPage, "TabPage mehrfach erzeugt" );
+        DBG_ASSERT( NULL == pDataObject->pTabPage, "create TabPage more than once" );
         pDataObject->pTabPage = pTabPage;
         pDataObject->pTabPage->SetTabDialog( this );
-#if SUPD<613//MUSTINI
-        pTabPage->SetUserData(pIniMgr->Get( SFX_KEY_PAGE, pDataObject->nId ));
-#endif
+        SvtViewOptions aPageOpt( E_TABPAGE, String::CreateFromInt32( pDataObject->nId ) );
+        pTabPage->SetUserData( aPageOpt.GetUserData() );
         Size aSiz = pTabPage->GetSizePixel();
         Size aCtrlSiz = pTabCtrl->GetOutputSizePixel();
         // Gr"o/se am TabControl nur dann setzen, wenn < als TabPage
@@ -1271,11 +1244,6 @@ IMPL_LINK( SfxTabDialog, ActivatePageHdl, TabControl *, pTabCtrl )
 
     if ( pExampleSet )
         pTabPage->ActivatePage( *pExampleSet );
-/*
-    SfxHelpPI *pHelpPI = pSfxApp->GetHelpPI();
-    if ( pHelpPI )
-        pHelpPI->LoadTopic( pTabPage->GetHelpId() );
-*/
     BOOL bReadOnly = pTabPage->IsReadOnly();
     ( bReadOnly || pImpl->bHideResetBtn ) ? aResetBtn.Hide() : aResetBtn.Show();
     return 0;
@@ -1297,11 +1265,6 @@ IMPL_LINK( SfxTabDialog, DeactivatePageHdl, TabControl *, pTabCtrl )
 {
     USHORT nId = pTabCtrl->GetCurPageId();
     SfxApplication *pSfxApp = SFX_APP();
-#if SUPD<613//MUSTINI
-    SfxIniManager* pIniMgr = pSfxApp->GetAppIniManager();
-    if ( BOOL( pIniMgr->Get( SFX_GROUP_USER, DEFINE_CONST_UNICODE("HelpAuthor") ).ToInt32() ) )
-        GetpApp()->HideStatusText();
-#endif
     SfxTabPage *pPage = (SfxTabPage*)pTabCtrl->GetTabPage( nId );
     DBG_ASSERT( pPage, "keine aktive Page" );
 #ifdef DBG_UTIL
@@ -1570,5 +1533,4 @@ void SfxTabDialog::SetInputSet( const SfxItemSet* pInSet )
         pOutSet = new SfxItemSet( *pSet->GetPool(), pSet->GetRanges() );
     }
 }
-
 
