@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.hxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 09:56:05 $
+ *  last change: $Author: kz $ $Date: 2003-10-15 09:55:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,8 +221,8 @@ protected:
     ViewShell    *pVsh;
 
     // pOut is the output device, pRef is the device used for formatting
-    OutputDevice *pOut;
-    OutputDevice *pRef;
+    OutputDevice* pOut;
+    OutputDevice* pRef;
 
     SwFont *pFnt;
     SwUnderlineFont *pUnderFnt; // Font for underlining
@@ -333,7 +333,7 @@ public:
     //
     // GetTxtSize
     //
-    SwPosSize GetTxtSize( OutputDevice *pOut, const SwScriptInfo* pSI,
+    SwPosSize GetTxtSize( OutputDevice* pOut, const SwScriptInfo* pSI,
                           const XubString& rTxt, const xub_StrLen nIdx,
                           const xub_StrLen nLen, const USHORT nComp ) const;
     SwPosSize GetTxtSize() const;
@@ -855,12 +855,14 @@ public:
 
 inline KSHORT SwTxtSizeInfo::GetAscent() const
 {
-    return ((SwFont*)GetFont())->GetAscent( pVsh, GetOut() );
+    ASSERT( GetOut(), "SwTxtSizeInfo::GetAscent() without pOut" )
+    return ((SwFont*)GetFont())->GetAscent( pVsh, *GetOut() );
 }
 
 inline KSHORT SwTxtSizeInfo::GetTxtHeight() const
 {
-    return ((SwFont*)GetFont())->GetHeight( pVsh, GetOut() );
+    ASSERT( GetOut(), "SwTxtSizeInfo::GetTxtHeight() without pOut" )
+    return ((SwFont*)GetFont())->GetHeight( pVsh, *GetOut() );
 }
 
 inline SwPosSize SwTxtSizeInfo::GetTxtSize( const XubString &rTxt ) const
