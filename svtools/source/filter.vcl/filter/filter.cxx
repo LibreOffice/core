@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: sj $ $Date: 2001-08-20 11:55:30 $
+ *  last change: $Author: sj $ $Date: 2001-08-20 15:17:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1080,11 +1080,8 @@ GraphicFilter::GraphicFilter( sal_Bool bConfig ) :
 GraphicFilter::~GraphicFilter()
 {
     pFilterHdlList->Remove( (void*)this );
-    if ( pFilterHdlList->Count() )
-        Application::SetFilterHdl( LINK( pFilterHdlList->First(), GraphicFilter, FilterCallback ) );
-    else
+    if ( !pFilterHdlList->Count() )
     {
-        Application::SetFilterHdl( Link() );
         delete pFilterHdlList, pFilterHdlList = NULL;
         delete pConfig;
     }
@@ -1104,7 +1101,6 @@ void GraphicFilter::ImplInit()
         pConfig = ((GraphicFilter*)pFilterHdlList->First())->pConfig;
 
     pFilterHdlList->Insert( (void*)this );
-    Application::SetFilterHdl( LINK( this, GraphicFilter, FilterCallback ) );
 
     SvtPathOptions aPathOpt;
     aFilterPath = aPathOpt.GetFilterPath();
@@ -2145,6 +2141,14 @@ const FilterErrorEx& GraphicFilter::GetLastError() const
 void GraphicFilter::ResetLastError()
 {
     pErrorEx->nFilterError = pErrorEx->nStreamError = 0UL;
+}
+
+// ------------------------------------------------------------------------
+
+const Link GraphicFilter::GetFilterCallback() const
+{
+    const Link aLink( LINK( this, GraphicFilter, FilterCallback ) );
+    return aLink;
 }
 
 // ------------------------------------------------------------------------
