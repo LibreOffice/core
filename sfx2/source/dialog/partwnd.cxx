@@ -2,9 +2,9 @@
  *
  *  $RCSfile: partwnd.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:28:01 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 09:11:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,8 +204,8 @@ SfxPartChildWnd_Impl::SfxPartChildWnd_Impl
     if ( pInfo )
         pInfo->nFlags |= SFX_CHILDWIN_FORCEDOCK;
 
-    ((SfxDockingWindow*)pWindow)->SetFloatingSize( Size( 240, 240 ) );
-    pWindow->SetSizePixel( Size( 240, 240 ) );
+    ((SfxDockingWindow*)pWindow)->SetFloatingSize( Size( 175, 175 ) );
+    pWindow->SetSizePixel( Size( 175, 175 ) );
 
     ( ( SfxDockingWindow* ) pWindow )->Initialize( pInfo );
 }
