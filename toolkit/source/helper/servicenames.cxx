@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servicenames.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:02:09 $
+ *  last change: $Author: mt $ $Date: 2001-01-24 14:54:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,8 @@ const sal_Char __FAR_DATA szServiceName_UnoControlContainer[] = "stardiv.vcl.con
 const sal_Char __FAR_DATA szServiceName_UnoControlContainerModel[] = "stardiv.vcl.controlmodel.ControlContainer", szServiceName2_UnoControlContainerModel[] = "com.sun.star.awt.UnoControlContainerModel";
 const sal_Char __FAR_DATA szServiceName_TabController[] = "stardiv.vcl.control.TabController", szServiceName2_TabController[] = "com.sun.star.awt.TabController";
 const sal_Char __FAR_DATA szServiceName_TabControllerModel[] = "stardiv.vcl.controlmodel.TabController", szServiceName2_TabControllerModel[] = "com.sun.star.awt.TabControllerModel";
+const sal_Char __FAR_DATA szServiceName_UnoControlDialog[] = "stardiv.vcl.control.Dialog", szServiceName2_UnoControlDialog[] = "com.sun.star.awt.UnoControlDialog";
+const sal_Char __FAR_DATA szServiceName_UnoControlDialogModel[] = "stardiv.vcl.controlmodel.Dialog", szServiceName2_UnoControlDialogModel[] = "com.sun.star.awt.UnoControlDialogModel";
 const sal_Char __FAR_DATA szServiceName_UnoControlEdit[] = "stardiv.vcl.control.Edit", szServiceName2_UnoControlEdit[] = "com.sun.star.awt.UnoControlEdit";
 const sal_Char __FAR_DATA szServiceName_UnoControlEditModel[] = "stardiv.vcl.controlmodel.Edit", szServiceName2_UnoControlEditModel[] = "com.sun.star.awt.UnoControlEditModel";
 const sal_Char __FAR_DATA szServiceName_UnoControlFileControl[] = "stardiv.vcl.control.FileControl", szServiceName2_UnoControlFileControl[] = "com.sun.star.awt.UnoControlFileControl";

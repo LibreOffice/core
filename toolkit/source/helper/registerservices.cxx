@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registerservices.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:02:09 $
+ *  last change: $Author: mt $ $Date: 2001-01-24 14:54:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,7 @@ IMPL_CREATEINSTANCE( UnoControlContainer )
 IMPL_CREATEINSTANCE( UnoControlContainerModel )
 IMPL_CREATEINSTANCE( UnoControlCurrencyFieldModel )
 IMPL_CREATEINSTANCE( UnoControlDateFieldModel )
+IMPL_CREATEINSTANCE( UnoControlDialogModel )
 IMPL_CREATEINSTANCE( UnoControlEditModel )
 IMPL_CREATEINSTANCE( UnoControlFileControlModel )
 IMPL_CREATEINSTANCE( UnoControlFixedTextModel )
@@ -145,6 +146,7 @@ IMPL_CREATEINSTANCE( UnoControlRadioButtonModel )
 IMPL_CREATEINSTANCE( UnoControlTimeFieldModel )
 IMPL_CREATEINSTANCE( UnoCurrencyFieldControl )
 IMPL_CREATEINSTANCE( UnoDateFieldControl )
+IMPL_CREATEINSTANCE( UnoDialogControl )
 IMPL_CREATEINSTANCE( UnoEditControl )
 IMPL_CREATEINSTANCE( UnoFileControl )
 IMPL_CREATEINSTANCE( UnoFixedTextControl )
@@ -185,6 +187,8 @@ sal_Bool SAL_CALL component_writeInfo( void* _pServiceManager, void* _pRegistryK
         REGISTER_SERVICES( UnoControlContainerModel, ::rtl::OUString::createFromAscii( szServiceName_UnoControlContainerModel ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlContainerModel ) );
         REGISTER_SERVICES( StdTabController, ::rtl::OUString::createFromAscii( szServiceName_TabController ), ::rtl::OUString::createFromAscii( szServiceName2_TabController ) );
         REGISTER_SERVICES( StdTabControllerModel, ::rtl::OUString::createFromAscii( szServiceName_TabControllerModel ), ::rtl::OUString::createFromAscii( szServiceName2_TabControllerModel ) );
+        REGISTER_SERVICES( UnoDialogControl, ::rtl::OUString::createFromAscii( szServiceName_UnoControlDialog ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlDialog ) );
+        REGISTER_SERVICES( UnoControlDialogModel, ::rtl::OUString::createFromAscii( szServiceName_UnoControlDialogModel ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlDialogModel ) );
         REGISTER_SERVICES( UnoEditControl, ::rtl::OUString::createFromAscii( szServiceName_UnoControlEdit ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlEdit ) );
         REGISTER_SERVICES( UnoControlEditModel, ::rtl::OUString::createFromAscii( szServiceName_UnoControlEditModel ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlEditModel ) );
         REGISTER_SERVICES( UnoDateFieldControl, ::rtl::OUString::createFromAscii( szServiceName_UnoControlDateField ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlDateField ) );
@@ -241,6 +245,8 @@ void* SAL_CALL component_getFactory( const sal_Char* sImplementationName, void* 
         else CHECKANDCREATEFACTORY( UnoControlContainerModel, ::rtl::OUString::createFromAscii( szServiceName_UnoControlContainerModel ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlContainerModel ) )
         else CHECKANDCREATEFACTORY( StdTabController, ::rtl::OUString::createFromAscii( szServiceName_TabController ), ::rtl::OUString::createFromAscii( szServiceName2_TabController ) )
         else CHECKANDCREATEFACTORY( StdTabControllerModel, ::rtl::OUString::createFromAscii( szServiceName_TabControllerModel ), ::rtl::OUString::createFromAscii( szServiceName2_TabControllerModel ) )
+        else CHECKANDCREATEFACTORY( UnoDialogControl, ::rtl::OUString::createFromAscii( szServiceName_UnoControlDialog ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlDialog ) )
+        else CHECKANDCREATEFACTORY( UnoControlDialogModel, ::rtl::OUString::createFromAscii( szServiceName_UnoControlDialogModel ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlDialogModel ) )
         else CHECKANDCREATEFACTORY( UnoEditControl, ::rtl::OUString::createFromAscii( szServiceName_UnoControlEdit ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlEdit ) )
         else CHECKANDCREATEFACTORY( UnoControlEditModel, ::rtl::OUString::createFromAscii( szServiceName_UnoControlEditModel ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlEditModel ) )
         else CHECKANDCREATEFACTORY( UnoDateFieldControl, ::rtl::OUString::createFromAscii( szServiceName_UnoControlDateField ), ::rtl::OUString::createFromAscii( szServiceName2_UnoControlDateField ) )
