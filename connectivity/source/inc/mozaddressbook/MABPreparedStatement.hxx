@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MABPreparedStatement.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dkenny $ $Date: 2001-05-23 10:48:00 $
+ *  last change: $Author: oj $ $Date: 2001-05-29 13:06:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@ namespace connectivity
             virtual file::OResultSet* createResultSet();
         public:
             //  DECLARE_CTY_DEFAULTS(file::OStatement);
-            OMozabPreparedStatement( file::OConnection* _pConnection,const ::std::vector<connectivity::OTypeInfo>& _TypeInfo ) : file::OPreparedStatement( _pConnection, _TypeInfo ){}
+            OMozabPreparedStatement( file::OConnection* _pConnection ) : file::OPreparedStatement( _pConnection ){}
             DECLARE_SERVICE_INFO();
         };
     }
