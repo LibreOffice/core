@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file.h,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hro $ $Date: 2001-05-10 07:31:43 $
+ *  last change: $Author: obr $ $Date: 2001-05-10 14:14:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -963,10 +963,6 @@ oslFileError SAL_CALL osl_getCanonicalName( rtl_uString *strRequested, rtl_uStri
 
     @see    osl_getFileStatus
 */
-
-
-oslFileError SAL_CALL osl_getAbsolutePath( rtl_uString* strDirBase, rtl_uString *strRelative, rtl_uString **strAbsolute );
-
 
 oslFileError SAL_CALL osl_getAbsoluteFileURL( rtl_uString* strDirBase, rtl_uString *strRelative, rtl_uString **strAbsolute );
 
