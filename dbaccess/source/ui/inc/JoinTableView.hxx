@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinTableView.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-05 16:19:35 $
+ *  last change: $Author: fs $ $Date: 2001-02-13 16:43:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,11 +105,15 @@ namespace dbaui
     {
         ScrollBar           m_aHScrollBar;
         ScrollBar           m_aVScrollBar;
+        Window*             m_pCornerWindow;
         OJoinTableView*     m_pTableView;
+
     protected:
         virtual void Resize();
     public:
         OScrollWindowHelper( Window* pParent);
+        ~OScrollWindowHelper();
+
         void setTableView(OJoinTableView* _pTableView);
 
         // own methods

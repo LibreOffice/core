@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinTableView.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-05 16:17:40 $
+ *  last change: $Author: fs $ $Date: 2001-02-13 16:44:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,7 @@ OScrollWindowHelper::OScrollWindowHelper( Window* pParent) : Window( pParent)
     ,m_aHScrollBar( this, WB_HSCROLL|WB_REPEAT|WB_DRAG )
     ,m_aVScrollBar( this, WB_VSCROLL|WB_REPEAT|WB_DRAG )
     ,m_pTableView(NULL)
+    ,m_pCornerWindow(new ScrollBarBox(this, WB_3DLOOK))
 {
     //////////////////////////////////////////////////////////////////////
     // ScrollBars
@@ -133,8 +134,15 @@ OScrollWindowHelper::OScrollWindowHelper( Window* pParent) : Window( pParent)
 
     GetHScrollBar()->Show();
     GetVScrollBar()->Show();
-
+    m_pCornerWindow->Show();
 }
+
+// -----------------------------------------------------------------------------
+OScrollWindowHelper::~OScrollWindowHelper()
+{
+    delete m_pCornerWindow;
+}
+
 // -----------------------------------------------------------------------------
 void OScrollWindowHelper::setTableView(OJoinTableView* _pTableView)
 {
@@ -161,6 +169,11 @@ void OScrollWindowHelper::Resize()
     GetVScrollBar()->SetPosSizePixel(
         Point( aTotalOutputSize.Width()-nVScrollWidth, 0 ),
         Size( nVScrollWidth, aTotalOutputSize.Height()-nHScrollHeight )
+        );
+
+    m_pCornerWindow->SetPosSizePixel(
+        Point( aTotalOutputSize.Width() - nVScrollWidth, aTotalOutputSize.Height() - nHScrollHeight),
+        Size( nVScrollWidth, nHScrollHeight )
         );
 
     GetHScrollBar()->SetPageSize( aTotalOutputSize.Width() );
