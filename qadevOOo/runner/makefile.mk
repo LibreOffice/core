@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Date: 2004-09-08 15:54:48 $
+#   last change: $Date: 2004-11-02 11:06:44 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -68,24 +68,26 @@ TARGET  = $(PRJNAME)
 
 .INCLUDE: settings.mk
 
-.IF "$(RUNNER)" == ""
-R_SUBDIRS = util share stats lib complexlib helper basicrunner \
-            base org$/openoffice mod ifc
-.ELSE   #"$(RUNNER)" == ""
-R_SUBDIRS = util share stats lib complexlib helper basicrunner \
+SUBDIRS_TESTS = mod ifc
+SUBDIRS_RUNNER = util share stats lib complexlib helper basicrunner convwatch \
             base org$/openoffice
-.ENDIF  #"$(RUNNER)" == ""
 
-MYJARCOMMANDS = $(foreach,i,$(R_SUBDIRS) -C $(CLASSDIR) $i)
+JARCOMMANDS_TESTS = $(foreach,i,$(SUBDIRS_TESTS) -C $(CLASSDIR) $i)
+JARCOMMANDS_RUNNER = $(foreach,i,$(SUBDIRS_RUNNER) -C $(CLASSDIR) $i)
 
 # --- Targets ------------------------------------------------------
 .IF "$(SOLAR_JAVA)"!=""
 OWNJAR: ALLTAR
 
+
 .INCLUDE :  target.mk
 
-OWNJAR:
-    +jar cvfm $(CLASSDIR)$/$(TARGET).jar manifest -C $(PRJ) objdsc $(MYJARCOMMANDS)
+OWNJAR: LIGHT
+    +jar cvfm $(CLASSDIR)$/$(TARGET).jar manifest -C $(PRJ) objdsc $(JARCOMMANDS_TESTS) $(JARCOMMANDS_RUNNER)
+
+LIGHT:
+    +jar cvfm $(CLASSDIR)$/$(TARGET)Light.jar manifest $(JARCOMMANDS_RUNNER)
+
 .ELSE
 all:
         @echo "no java"
