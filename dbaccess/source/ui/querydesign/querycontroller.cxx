@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:04:18 $
+ *  last change: $Author: hjs $ $Date: 2003-08-18 15:05:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,9 +251,10 @@ namespace dbaui
                 {
 
                 case SQL_NODE_KEYWORD:
-                    {rString+= ::rtl::OUString::createFromAscii("SQL_KEYWORD:");
-                     rString += ::rtl::OUString::createFromAscii(OSQLParser::TokenIDToStr(_pNode->getTokenID()).getStr());
-
+                    {
+                        rString+= ::rtl::OUString::createFromAscii("SQL_KEYWORD:");
+                        ::rtl::OString sT = OSQLParser::TokenIDToStr(_pNode->getTokenID());
+                        rString += ::rtl::OUString(sT,sT.getLength(),RTL_TEXTENCODING_UTF8);
                      break;}
 
                 case SQL_NODE_COMPARISON:
