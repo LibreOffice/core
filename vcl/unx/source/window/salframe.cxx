@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:48 $
+ *  last change: $Author: cp $ $Date: 2000-09-26 14:40:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -445,7 +445,7 @@ void SalFrameData::Init( USHORT nSalFrameStyle, SystemParentData* pParentData )
 
     // Setup for use of InputMethod
     if (   nSalFrameStyle & SAL_FRAME_STYLE_MOVEABLE
-        && nSalFrameStyle & SAL_FRAME_STYLE_SIZEABLE )
+        || nSalFrameStyle & SAL_FRAME_STYLE_SIZEABLE )
     {
         mpInputContext = new SalI18N_InputContext( pFrame_ );
         if ( mpInputContext->UseContext() )
