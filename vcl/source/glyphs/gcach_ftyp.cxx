@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.69 $
- *  last change: $Author: hdu $ $Date: 2002-01-02 10:38:06 $
+ *  $Revision: 1.70 $
+ *  last change: $Author: hdu $ $Date: 2002-02-15 16:45:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -601,6 +601,13 @@ FreetypeServerFont::~FreetypeServerFont()
     mpFontInfo->Unmap();
 }
 
+ // -----------------------------------------------------------------------
+
+int FreetypeServerFont::GetEmUnits() const
+{
+    return maFaceFT->units_per_EM;
+}
+
 // -----------------------------------------------------------------------
 
 void FreetypeServerFont::FetchFontMetric( ImplFontMetricData& rTo, long& rFactor ) const
@@ -713,7 +720,6 @@ int FreetypeServerFont::ApplyGlyphTransform( int nGlyphFlags, FT_GlyphRec_* pGly
         nAngle -= 900;
         bStretched = (mfStretch != 1.0);
         aVector.x = -maFaceFT->glyph->metrics.horiAdvance;
-        aVector.y = 0;
         aVector.x += (rMetrics.descender * nSin/65536.0);
         aVector.y = -(rMetrics.descender * mfStretch * nCos/65536.0);
         aMatrix.xx = +nSin / mfStretch;
@@ -751,7 +757,7 @@ int FreetypeServerFont::ApplyGlyphTransform( int nGlyphFlags, FT_GlyphRec_* pGly
 
 // -----------------------------------------------------------------------
 
-int FreetypeServerFont::GetGlyphIndex( sal_Unicode aChar ) const
+int FreetypeServerFont::GetRawGlyphIndex( sal_Unicode aChar ) const
 {
     if( mpFontInfo->GetFontData().meCharSet == RTL_TEXTENCODING_SYMBOL )
     {
@@ -769,7 +775,7 @@ int FreetypeServerFont::GetGlyphIndex( sal_Unicode aChar ) const
     // need to recode from unicode to font encoding?
     if( maRecodeConverter )
     {
-        sal_Char aTempArray[2];
+        sal_Char aTempArray[8];
         sal_Size nTempSize;
         sal_uInt32 nCvtInfo;
 
@@ -787,6 +793,13 @@ int FreetypeServerFont::GetGlyphIndex( sal_Unicode aChar ) const
     }
 
     int nGlyphIndex = FT_Get_Char_Index( maFaceFT, aChar );
+    return nGlyphIndex;
+}
+
+// -----------------------------------------------------------------------
+
+int FreetypeServerFont::FixupGlyphIndex( int nGlyphIndex, sal_Unicode aChar ) const
+{
     int nGlyphFlags = GF_NONE;
 
     // do glyph substitution if necessary
@@ -812,6 +825,15 @@ int FreetypeServerFont::GetGlyphIndex( sal_Unicode aChar ) const
     if( nGlyphIndex !=0 )
         SetGlyphFlags( nGlyphIndex, nGlyphFlags );
 
+    return nGlyphIndex;
+}
+
+// -----------------------------------------------------------------------
+
+int FreetypeServerFont::GetGlyphIndex( sal_Unicode aChar ) const
+{
+    int nGlyphIndex = GetRawGlyphIndex( aChar );
+    nGlyphIndex = FixupGlyphIndex( nGlyphIndex, aChar );
     return nGlyphIndex;
 }
 
@@ -956,6 +978,7 @@ bool FreetypeServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& rRawBitmap
     rRawBitmap.mnBitCount       = 1;
 
     const ULONG nNeededSize = rRawBitmap.mnScanlineSize * rRawBitmap.mnHeight;
+
     if( rRawBitmap.mnAllocated < nNeededSize )
     {
         delete[] rRawBitmap.mpBits;
@@ -1181,6 +1204,17 @@ ULONG FreetypeServerFont::GetFontCodeRanges( sal_uInt32* pCodes ) const
 }
 // -----------------------------------------------------------------------
 // kerning stuff
+// -----------------------------------------------------------------------
+
+int FreetypeServerFont::GetGlyphKernValue( int nGlyphLeft, int nGlyphRight ) const
+{
+    FT_Vector aKernVal;
+    FT_Error rcFT = FT_Get_Kerning( maFaceFT, nGlyphLeft, nGlyphRight,
+                ft_kerning_default, &aKernVal );
+    int nResult = (rcFT == FT_Err_Ok) ? (aKernVal.x + 32) >> 6 : 0;
+    return nResult;
+}
+
 // -----------------------------------------------------------------------
 
 ULONG FreetypeServerFont::GetKernPairs( ImplKernPairData** ppKernPairs ) const

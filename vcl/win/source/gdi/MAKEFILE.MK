@@ -3,8 +3,8 @@
 #*    $Workfile:   makefile.  $
 #*
 #*    Ersterstellung    TH 01.04.97
-#*    Letzte Aenderung  $Author: hr $ $Date: 2000-09-18 17:05:49 $
-#*    $Revision: 1.1.1.1 $
+#*    Letzte Aenderung  $Author: hdu $ $Date: 2002-02-15 16:49:58 $
+#*    $Revision: 1.2 $
 #*
 #*    $Logfile:   T:/sv2/win/source/gdi/makefile.__v  $
 #*
@@ -22,6 +22,7 @@ TARGET=salgdi
 .INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
 .INCLUDE :  sv.mk
+.INCLUDE :  $(PRJ)/util/makefile.pmk
 
 # --- Files --------------------------------------------------------
 
@@ -32,6 +33,10 @@ SLOFILES=   $(SLO)$/salgdi.obj   \
             $(SLO)$/salprn.obj   \
             $(SLO)$/salbmp.obj	 \
             $(SLO)$/salogl.obj
+
+.IF "$(ENABLE_CTL)" != ""
+SLOFILES+=$(SLO)$/winlayout.obj
+.ENDIF
 
 .IF "$(GUI)" == "WNT"
 SLOFILES+=$(SLO)$/wntgdi.obj
