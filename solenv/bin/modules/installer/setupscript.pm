@@ -2,9 +2,9 @@
 #
 #   $RCSfile: setupscript.pm,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: kz $ $Date: 2004-06-11 18:17:39 $
+#   last change: $Author: rt $ $Date: 2004-07-06 14:59:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -98,10 +98,14 @@ sub set_setupscript_name
     # and now the complete path for the setup script is needed
     # The log file cannot be used, because this is the language independent section
 
-    $scriptnameref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$scriptname, $includepatharrayref, 0);
+    $scriptnameref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$scriptname, $includepatharrayref, 1);
 
     $installer::globals::setupscriptname = $$scriptnameref;
 
+    if ( $installer::globals::setupscriptname eq "" )
+    {
+        installer::exiter::exit_program("ERROR: Script $scriptname not found!", "set_setupscript_name");
+    }
 }
 
 #####################################################################
