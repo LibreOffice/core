@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyMaps.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: bm $ $Date: 2000-12-13 17:22:07 $
+ *  last change: $Author: bm $ $Date: 2000-12-14 12:47:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -331,7 +331,7 @@ SvXMLEnumMapEntry aXMLChartRegressionCurveTypeEnumMap[] =
     { sXML_logarithmic, chart::ChartRegressionCurveType_LOGARITHM },
     { sXML_exponential, chart::ChartRegressionCurveType_EXPONENTIAL },
     { sXML_polynomial,  chart::ChartRegressionCurveType_POLYNOMIAL },
-    { sXML_monomial,    chart::ChartRegressionCurveType_POWER }
+    { sXML_power,       chart::ChartRegressionCurveType_POWER }
 };
 
 SvXMLEnumMapEntry aXMLChartSolidTypeEnumMap[] =
