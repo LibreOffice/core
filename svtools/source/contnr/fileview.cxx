@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileview.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-19 13:06:26 $
+ *  last change: $Author: hr $ $Date: 2003-09-29 15:01:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,6 +180,9 @@
 #endif
 #ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
 #include "syslocale.hxx"
+#endif
+#ifndef SVTOOLS_URL_FILTER_HXX
+#include "urlfilter.hxx"
 #endif
 
 using namespace ::com::sun::star::lang;
@@ -657,6 +660,7 @@ public:
 
     ViewTabListBox_Impl*    mpView;
     NameTranslator_Impl*    mpNameTrans;
+    const IUrlFilter*       mpUrlFilter;
     Reference< XPersist >   xDocInfo;
     sal_uInt16              mnSortColumn;
     sal_Bool                mbAscending     : 1;
@@ -1708,6 +1712,18 @@ void SvtFileView::SetConfigString( const String& rCfgStr )
 }
 
 // -----------------------------------------------------------------------
+void SvtFileView::SetUrlFilter( const IUrlFilter* _pFilter )
+{
+    mpImp->mpUrlFilter = _pFilter;
+}
+
+// -----------------------------------------------------------------------
+const IUrlFilter* SvtFileView::GetUrlFilter( ) const
+{
+    return mpImp->mpUrlFilter;
+}
+
+// -----------------------------------------------------------------------
 // class NameTranslator_Impl
 // -----------------------------------------------------------------------
 
@@ -1785,6 +1801,7 @@ SvtFileView_Impl::SvtFileView_Impl( Window* pParent, sal_Int16 nFlags, sal_Bool 
     ,maFolderImage              ( SvtResId( IMG_SVT_FOLDER ) )
     ,mpNameTrans                ( NULL )
     ,mbSuspendSelectCallback    ( sal_False )
+    ,mpUrlFilter                ( NULL )
 
 {
     maAllFilter = String::CreateFromAscii( "*.*" );
@@ -1886,7 +1903,7 @@ sal_Bool SvtFileView_Impl::GetFolderContent_Impl( const String& rFolder )
                     // don't show hidden files
                     if ( !bIsHidden )
                     {
-                        pData = new SortingData_Impl;
+                        pData = NULL;
 
                         aDT = xRow->getTimestamp( ROW_DATE_MOD );
                         if ( xRow->wasNull() )
@@ -1895,6 +1912,16 @@ sal_Bool SvtFileView_Impl::GetFolderContent_Impl( const String& rFolder )
                         OUString aContentURL = xContentAccess->queryContentIdentifierString();
                         OUString aTargetURL = xRow->getString( ROW_TARGET_URL );
                         sal_Bool bHasTargetURL = aTargetURL.getLength() > 0;
+
+                        OUString sRealURL = bHasTargetURL ? aTargetURL : aContentURL;
+
+                        // check for restrictions
+                        if ( mpUrlFilter && !mpUrlFilter->isUrlAllowed( sRealURL ) )
+                            continue;
+
+                        pData = new SortingData_Impl;
+                        pData->maTargetURL = sRealURL;
+
                         pData->mbIsFolder = xRow->getBoolean( ROW_IS_FOLDER );
                         pData->mbIsVolume = xRow->getBoolean( ROW_IS_VOLUME );
                         pData->mbIsRemote = xRow->getBoolean( ROW_IS_REMOTE );
@@ -1913,11 +1940,6 @@ sal_Bool SvtFileView_Impl::GetFolderContent_Impl( const String& rFolder )
                         }
 
                         CONVERT_DATETIME( aDT, pData->maModDate );
-
-                        if ( bHasTargetURL )
-                            pData->maTargetURL = aTargetURL;
-                        else
-                            pData->maTargetURL = aContentURL;
 
                         if ( pData->mbIsFolder )
                         {
