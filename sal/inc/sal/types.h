@@ -2,9 +2,9 @@
  *
  *  $RCSfile: types.h,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dbo $ $Date: 2001-05-17 13:04:06 $
+ *  last change: $Author: mh $ $Date: 2001-08-15 03:35:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,7 @@ typedef unsigned long       sal_Size;
 #define SAL_MAX_ENUM 0x7fff
 #endif
 
-#ifdef _MSC_VER
+#if defined(_MSC_VER) || (defined(WNT) && defined(__GNUC__))
 #   define SAL_DLLEXPORT    __declspec(dllexport)
 #   define SAL_CALL         __cdecl
 #   define SAL_CALL_ELLIPSE __cdecl

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: config.h,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hro $ $Date: 2001-06-26 16:58:22 $
+ *  last change: $Author: mh $ $Date: 2001-08-15 03:35:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,7 @@ extern "C" {
 #define SAL_CONFIGFILE( name ) name ".ini"
 #define SAL_SYSCONFIGFILE( name ) name ".ini"
 
+#ifdef __MSC_VER
 /* No warning for: C++ Exception Specification ignored */
 #pragma warning( disable : 4290 )
 
@@ -90,6 +91,7 @@ extern "C" {
     #pragma warning( disable : 4786 )
     #endif
 
+#endif
 #endif
 
 /* BR: 16bit fuer Borland-Compiler */
