@@ -34,12 +34,12 @@ int SAL_CALL main( int argc, char **argv )
      if (argc < 2)
     {
         printf("using: DocumentLoader <file_url> [<uno_connection_url>]\n\n"
-               "example: DocumentLoader  \"file://e:/temp/test.sxw\" \"uno:socket,host=localhost,port=8100;urp;StarOffice.ServiceManager\"\n");
+               "example: DocumentLoader  \"file:///e:/temp/test.sxw\" \"uno:socket,host=localhost,port=8100;urp;StarOffice.ServiceManager\"\n");
         exit(1);
     }
      if (argc == 3)
     {
-        sConnectionString = OUString(RTL_CONSTASCII_USTRINGPARAM(argv[2]));
+        sConnectionString = OUString::createFromAscii(argv[2]);
     }
 
 
