@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scmod2.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2001-04-20 10:52:07 $
+ *  last change: $Author: nn $ $Date: 2002-02-14 19:23:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,7 @@
 #include <comphelper/processfactory.hxx>
 #include <vos/xception.hxx>
 #include <svx/unolingu.hxx>
+#include <svtools/lingucfg.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
@@ -97,101 +98,42 @@ using namespace com::sun::star;
 void ScModule::GetSpellSettings( USHORT& rDefLang, USHORT& rCjkLang, USHORT& rCtlLang,
                                     BOOL& rAutoSpell, BOOL& rHideAuto )
 {
-    // GetLinguConfig is no longer needed, LinguProperties load themselves
+    //  use SvtLinguConfig instead of service LinguProperties to avoid
+    //  loading the linguistic component
+    SvtLinguConfig aConfig;
 
-    rDefLang = rCjkLang = rCtlLang = LANGUAGE_SYSTEM;
-    rAutoSpell = rHideAuto = FALSE;
+    SvtLinguOptions aOptions;
+    aConfig.GetOptions( aOptions );
 
-    TRY
-    {
-        uno::Reference< lang::XMultiServiceFactory > xManager = comphelper::getProcessServiceFactory();
-        uno::Reference< beans::XPropertySet > xProp( xManager->createInstance(
-                            rtl::OUString::createFromAscii( SERVICE_LINGUPROP ) ),
-                        uno::UNO_QUERY );
-        if ( xProp.is() )
-        {
-            uno::Any aAny;
-            lang::Locale aLocale;
-
-            // SvxLocaleToLanguage returns LANGUAGE_NONE for empty locale
-            // (LANGUAGE_SYSTEM is not allowed in linguistic)
-
-            aAny = xProp->getPropertyValue(
-                rtl::OUString::createFromAscii( LINGUPROP_DEFLOCALE ) );
-            aAny >>= aLocale;
-            rDefLang = SvxLocaleToLanguage( aLocale );
-
-            aAny = xProp->getPropertyValue(
-                rtl::OUString::createFromAscii( LINGUPROP_CJKLOCALE ) );
-            aAny >>= aLocale;
-            rCjkLang = SvxLocaleToLanguage( aLocale );
-
-            aAny = xProp->getPropertyValue(
-                rtl::OUString::createFromAscii( LINGUPROP_CTLLOCALE ) );
-            aAny >>= aLocale;
-            rCtlLang = SvxLocaleToLanguage( aLocale );
-
-            aAny = xProp->getPropertyValue(
-                rtl::OUString::createFromAscii( LINGUPROP_AUTOSPELL ) );
-            aAny >>= rAutoSpell;
-            aAny = xProp->getPropertyValue(
-                rtl::OUString::createFromAscii( LINGUPROP_HIDEAUTO ) );
-            aAny >>= rHideAuto;
-        }
-    }
-    CATCH_ALL()
-    {
-        DBG_ERROR("Error in LinguProperties");
-    }
-    END_CATCH
+    rDefLang = aOptions.nDefaultLanguage;
+    rCjkLang = aOptions.nDefaultLanguage_CJK;
+    rCtlLang = aOptions.nDefaultLanguage_CTL;
+    rAutoSpell = aOptions.bIsSpellAuto;
+    rHideAuto = aOptions.bIsSpellHideMarkings;
 }
 
 // static
 void ScModule::SetAutoSpellProperty( BOOL bSet )
 {
-    //  config item must be loaded/stored from outside
-    TRY
-    {
-        uno::Reference< lang::XMultiServiceFactory > xManager = comphelper::getProcessServiceFactory();
-        uno::Reference< beans::XPropertySet > xProp( xManager->createInstance(
-                            rtl::OUString::createFromAscii( SERVICE_LINGUPROP ) ),
-                        uno::UNO_QUERY );
-        if ( xProp.is() )
-        {
-            uno::Any aAny;
-            aAny <<= bSet;
-            xProp->setPropertyValue( rtl::OUString::createFromAscii( LINGUPROP_AUTOSPELL ), aAny );
-        }
-    }
-    CATCH_ALL()
-    {
-        DBG_ERROR("Error in LinguProperties");
-    }
-    END_CATCH
+    //  use SvtLinguConfig instead of service LinguProperties to avoid
+    //  loading the linguistic component
+    SvtLinguConfig aConfig;
+
+    uno::Any aAny;
+    aAny <<= bSet;
+    aConfig.SetProperty( rtl::OUString::createFromAscii( LINGUPROP_AUTOSPELL ), aAny );
 }
 
 // static
 void ScModule::SetHideAutoProperty( BOOL bSet )
 {
-    //  config item must be loaded/stored from outside
-    TRY
-    {
-        uno::Reference< lang::XMultiServiceFactory > xManager = comphelper::getProcessServiceFactory();
-        uno::Reference< beans::XPropertySet > xProp( xManager->createInstance(
-                            rtl::OUString::createFromAscii( SERVICE_LINGUPROP ) ),
-                        uno::UNO_QUERY );
-        if ( xProp.is() )
-        {
-            uno::Any aAny;
-            aAny <<= bSet;
-            xProp->setPropertyValue( rtl::OUString::createFromAscii( LINGUPROP_HIDEAUTO ), aAny );
-        }
-    }
-    CATCH_ALL()
-    {
-        DBG_ERROR("Error in LinguProperties");
-    }
-    END_CATCH
+    //  use SvtLinguConfig instead of service LinguProperties to avoid
+    //  loading the linguistic component
+    SvtLinguConfig aConfig;
+
+    uno::Any aAny;
+    aAny <<= bSet;
+    aConfig.SetProperty( rtl::OUString::createFromAscii( LINGUPROP_HIDEAUTO ), aAny );
 }
 
 
