@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sb.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 17:00:29 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 16:27:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1029,7 +1029,9 @@ BOOL StarBASIC::LoadData( SvStream& r, USHORT nVer )
     // in SbxVarable::GetType() if dialogs are accessed
     USHORT nObjCount = pObjs->Count();
     SbxVariable** ppDeleteTab = new SbxVariable*[ nObjCount ];
-    for( USHORT nObj = 0 ; nObj < nObjCount ; nObj++ )
+    USHORT nObj;
+
+    for( nObj = 0 ; nObj < nObjCount ; nObj++ )
     {
         SbxVariable* pVar = pObjs->Get( nObj );
         StarBASIC* pBasic = PTR_CAST( StarBASIC, pVar );
