@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gloslst.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-08 18:26:23 $
+ *  last change: $Author: kz $ $Date: 2001-02-09 20:54:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,7 @@ ModalDialog DLG_GLOSSARY_DECIDE_DLG
         Text[ chinese_traditional ] = "¦Ϋ°ΚΉΟ¤ε¶°¤p²Υ";
         Text[ arabic ] = "γΜγζΪΙ δΥ ΚαήΗΖν";
         Text[ greek ] = "Ομάδα ΑυτοΚειμένου";
-        Text[ korean ] = "ΐΪµΏ ΕΨ½ΊΖ® ±Χ·μ";
+        Text[ korean ] = "ΐΪµΏΕΨ½ΊΖ®£­±Χ·μ";
         Text[ turkish ] = "Otomatik metin - Grup";
         Text[ language_user1 ] = " ";
     };
@@ -145,7 +145,7 @@ ModalDialog DLG_GLOSSARY_DECIDE_DLG
     Text[ chinese_traditional ] = "ΏοΎά¦Ϋ°ΚΉΟ¤ε¶°΅G ";
     Text[ arabic ] = "ΗΞΚνΗΡ ΪδΥΡ ΗαδΥ: ";
     Text[ greek ] = "Επιλογή τμήματος κειμένου: ";
-    Text[ korean ] = "ΐΪµΏ ΕΨ½ΊΖ® Ό±ΕΓ: ";
+    Text[ korean ] = "ΕΨ½ΊΖ® Ό±ΕΓ: ";
     Text[ turkish ] = "Metin bileώeni seη: ";
     Text[ language_user1 ] = " ";
 };
