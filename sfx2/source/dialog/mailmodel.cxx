@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmodel.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:33:16 $
+ *  last change: $Author: kz $ $Date: 2005-03-04 00:19:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -371,7 +371,7 @@ SfxMailModel_Impl::SaveResult SfxMailModel_Impl::SaveDocAsPDF( String& rFileName
 
         // Get PDF Filter from document
         SfxFilterMatcher aMatcher( String::CreateFromAscii(xDocShell->GetFactory().GetShortName()) );
-        String aPDFExtension = String::CreateFromAscii( "pdf" );
+        String aPDFExtension = String::CreateFromAscii( "pdf" ); // Extension without dot!
 
         const SfxFilter*    pFilter     = aMatcher.GetFilter4Extension( aPDFExtension, SFX_FILTER_EXPORT );
         sal_Bool            bHasFilter  = pFilter ? sal_True : sal_False;
@@ -389,7 +389,7 @@ SfxMailModel_Impl::SaveResult SfxMailModel_Impl::SaveDocAsPDF( String& rFileName
             String aName;
             if ( aFileObj.hasExtension() )
             {
-                pExt = new String( aPDFExtension );
+                pExt = new String( String::CreateFromAscii( "." ) + (OUString)aPDFExtension );
                 aFileObj.removeExtension();
                 aLeadingStr = aFileObj.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
                 aLeadingStr += String::CreateFromAscii( "_" );
