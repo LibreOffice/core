@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-16 14:25:00 $
+ *  last change: $Author: fs $ $Date: 2001-06-22 15:59:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,7 @@ namespace dbaui
     //------------------------------------------------------------------
     struct SbaURLCompare : public binary_function< ::com::sun::star::util::URL, ::com::sun::star::util::URL, bool>
     {
-        bool operator() (const ::com::sun::star::util::URL& x, const ::com::sun::star::util::URL& y) const {return x.Complete < y.Complete;}
+        bool operator() (const ::com::sun::star::util::URL& x, const ::com::sun::star::util::URL& y) const {return x.Complete < y.Complete ? true : false;}
     };
 
     struct SbaURLHash
@@ -129,6 +129,10 @@ namespace dbaui
         // UNO
         DECLARE_UNO3_DEFAULTS(SbaXGridControl, FmXGridControl);
         virtual ::com::sun::star::uno::Any  SAL_CALL queryInterface(const ::com::sun::star::uno::Type& _rType) throw (::com::sun::star::uno::RuntimeException);
+
+        // XTypeProvider
+        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw (::com::sun::star::uno::RuntimeException);
 
         // ::com::sun::star::lang::XServiceInfo
         ::rtl::OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException );

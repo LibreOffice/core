@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-15 09:38:17 $
+ *  last change: $Author: fs $ $Date: 2001-06-22 16:00:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,12 +143,8 @@
 #include <tools/urlobj.hxx>
 #endif
 
-#ifndef _SFXINTITEM_HXX //autogen
+#ifndef _SFXINTITEM_HXX
 #include <svtools/intitem.hxx>
-#endif
-
-#ifndef _SVX_COLRITEM_HXX //autogen
-#include <svx/colritem.hxx>
 #endif
 
 #ifndef _SVX_ALGITEM_HXX //autogen
@@ -183,38 +179,6 @@
 #include <vcl/system.hxx>
 #endif
 
-#ifndef _SVX_FONTITEM_HXX //autogen wg. SvxFontItem
-#include <svx/fontitem.hxx>
-#endif
-
-#ifndef _SVX_FHGTITEM_HXX //autogen wg. SvxFontHeightItem
-#include <svx/fhgtitem.hxx>
-#endif
-
-#ifndef _SVX_WGHTITEM_HXX //autogen wg. SvxWeightItem
-#include <svx/wghtitem.hxx>
-#endif
-
-#ifndef _SVX_POSTITEM_HXX //autogen wg. SvxPostureItem
-#include <svx/postitem.hxx>
-#endif
-
-#ifndef _SVX_SHDDITEM_HXX //autogen wg. SvxShadowedItem
-#include <svx/shdditem.hxx>
-#endif
-
-#ifndef _SVX_ITEM_HXX //autogen wg. SvxContourItem
-#include <svx/cntritem.hxx>
-#endif
-
-#ifndef _SVX_CRSDITEM_HXX //autogen wg. SvxCrossedOutItem
-#include <svx/crsditem.hxx>
-#endif
-
-#ifndef _SVX_UDLNITEM_HXX //autogen wg. SvxUnderlineItem
-#include <svx/udlnitem.hxx>
-#endif
-
 #ifndef _SFXRNGITEM_HXX
 #include <svtools/rngitem.hxx>
 #endif
@@ -236,14 +200,14 @@
 #ifndef _CPPUHELPER_QUERYINTERFACE_HXX_
 #include <cppuhelper/queryinterface.hxx>
 #endif
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
-#include <comphelper/processfactory.hxx>
-#endif
 #ifndef _CONNECTIVITY_DBTOOLS_HXX_
 #include <connectivity/dbtools.hxx>
 #endif
 #ifndef _DBHELPER_DBCONVERSION_HXX_
 #include <connectivity/dbconversion.hxx>
+#endif
+#ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
+#include <cppuhelper/typeprovider.hxx>
 #endif
 #ifndef _RTL_UUID_H_
 #include <rtl/uuid.h>
@@ -331,12 +295,6 @@ Reference< XInterface > SAL_CALL SbaXGridControl::Create(const Reference<XMultiS
 {
     return *(new SbaXGridControl(_rxFactory));
 }
-
-/// collect the SBA_DEF_...-items and use them to create a new font based on the given one
-::com::sun::star::awt::FontDescriptor   BuildFontFromItems(const SfxItemSet* pAttr, const Font& rBase);
-
-/// translate the given font into SBA_DEF_...-items, put them into the set
-void            BuildItemsFromFont(SfxItemSet* pAttr, const ::com::sun::star::awt::FontDescriptor& rFont);
 
 //------------------------------------------------------------------
 String Any2String(const Any& rValue)
@@ -508,7 +466,26 @@ Any SAL_CALL SbaXGridControl::queryInterface(const Type& _rType) throw (RuntimeE
     Any aRet = ::cppu::queryInterface(_rType,(::com::sun::star::frame::XDispatch*)this);
     if(aRet.hasValue())
         return aRet;
-    return UnoControl::queryInterface(_rType);
+    return FmXGridControl::queryInterface(_rType);
+}
+
+//------------------------------------------------------------------------------
+Sequence< Type > SAL_CALL SbaXGridControl::getTypes(  ) throw (RuntimeException)
+{
+    Sequence< Type > aTypes = FmXGridControl::getTypes();
+
+    sal_Int32 nTypes = aTypes.getLength();
+    aTypes.realloc(nTypes + 1);
+    aTypes[nTypes] = ::getCppuType(static_cast< Reference< ::com::sun::star::frame::XDispatch >* >(NULL));
+
+    return aTypes;
+}
+
+//------------------------------------------------------------------------------
+Sequence< sal_Int8 > SAL_CALL SbaXGridControl::getImplementationId(  ) throw (RuntimeException)
+{
+    static ::cppu::OImplementationId aId;
+    return aId.getImplementationId();
 }
 
 //---------------------------------------------------------------------------------------
@@ -2064,103 +2041,6 @@ Reference< XPropertySet >  SbaGridControl::getDataSource() const
 
 
 
-//------------------------------------------------------------------------------
-::com::sun::star::awt::FontDescriptor BuildFontFromItems(const SfxItemSet* pAttr, const Font& rBase)
-{
-    Font aReturn(rBase);
-
-    const SfxPoolItem* pAnyItem;
-
-    pAnyItem = &pAttr->Get( SBA_DEF_FONT );
-    const SvxFontItem* pFontItem = (SvxFontItem*)pAnyItem;
-
-    pAnyItem = &pAttr->Get( SBA_DEF_FONTWEIGHT );
-    const SvxWeightItem* pWeightItem = (SvxWeightItem*)pAnyItem;
-
-    pAnyItem = &pAttr->Get( SBA_DEF_FONTHEIGHT );
-    const SvxFontHeightItem* pFontHeightItem = (SvxFontHeightItem*)pAnyItem;
-
-    pAnyItem = &pAttr->Get( SBA_DEF_POSTURE );
-    const SvxPostureItem* pFontItalicItem = (SvxPostureItem*)pAnyItem;
-
-    pAnyItem = &pAttr->Get( SBA_DEF_SHADOWED );
-    const SvxShadowedItem* pFontShadowItem = (SvxShadowedItem*)pAnyItem;
-
-    pAnyItem = &pAttr->Get( SBA_DEF_CONTOUR );
-    const SvxContourItem* pFontContourItem = (SvxContourItem*)pAnyItem;
-
-    pAnyItem = &pAttr->Get( SBA_DEF_UNDERLINE );
-    const SvxUnderlineItem* pFontUnderlineItem = (SvxUnderlineItem*)pAnyItem;
-
-    pAnyItem = &pAttr->Get( SBA_DEF_CROSSEDOUT );
-    const SvxCrossedOutItem* pFontCrossedOutItem = (SvxCrossedOutItem*)pAnyItem;
-
-    pAnyItem = &pAttr->Get( SBA_DEF_WORDLINEMODE );
-    const SfxBoolItem* pWordLineModeItem = (SfxBoolItem*)pAnyItem;
-
-    // build the returned font
-    aReturn.SetFamily( pFontItem->GetFamily() );
-    aReturn.SetName( pFontItem->GetFamilyName() );
-    aReturn.SetStyleName( pFontItem->GetStyleName() );
-    aReturn.SetCharSet( pFontItem->GetCharSet() );
-
-    aReturn.SetWeight( pWeightItem->GetWeight() );
-    aReturn.SetItalic( pFontItalicItem->GetPosture() );
-    aReturn.SetUnderline( pFontUnderlineItem->GetUnderline() );
-
-    aReturn.SetShadow( pFontShadowItem->GetValue() );
-    aReturn.SetOutline( pFontContourItem->GetValue() );
-    aReturn.SetStrikeout( pFontCrossedOutItem->GetStrikeout() );
-
-    aReturn.SetWordLineMode( pWordLineModeItem->GetValue() );
-
-    sal_uInt32 nHeight = pFontHeightItem->GetHeight();
-
-    Size aSize(Size(0, nHeight));
-    aSize = OutputDevice::LogicToLogic(aSize, MAP_TWIP, MAP_POINT);
-    aReturn.SetSize(aSize);
-
-    // now create a font descriptor
-    ::com::sun::star::awt::FontDescriptor aRealReturn;
-    aRealReturn.Name = aReturn.GetName();
-    aRealReturn.StyleName = aReturn.GetStyleName();
-    aRealReturn.Height = aReturn.GetSize().Height();
-    aRealReturn.Width = aReturn.GetSize().Width();
-    aRealReturn.Family = aReturn.GetFamily();
-    aRealReturn.CharSet = aReturn.GetCharSet();
-    aRealReturn.Pitch = aReturn.GetPitch();
-    aRealReturn.CharacterWidth = VCLUnoHelper::ConvertFontWidth(aReturn.GetWidthType());
-    aRealReturn.Weight= VCLUnoHelper::ConvertFontWeight(aReturn.GetWeight());
-    aRealReturn.Slant = (::com::sun::star::awt::FontSlant)aReturn.GetItalic();
-    aRealReturn.Underline = aReturn.GetUnderline();
-    aRealReturn.Strikeout = aReturn.GetStrikeout();
-    aRealReturn.Orientation = aReturn.GetOrientation();
-    aRealReturn.Kerning = aReturn.IsKerning();
-    aRealReturn.WordLineMode = aReturn.IsWordLineMode();
-    aRealReturn.Type = 0;
-    return aRealReturn;
-}
-
-//------------------------------------------------------------------------------
-void BuildItemsFromFont(SfxItemSet* pAttr, const ::com::sun::star::awt::FontDescriptor& rFont)
-{
-    // the following items are not aupported by the FontDescriptor structure
-//  pAttr->Put(SvxContourItem(rFont.IsOutline(), SBA_DEF_CONTOUR));
-//  pAttr->Put(SvxShadowedItem(rFont.IsShadow(), SBA_DEF_SHADOWED));
-//
-    pAttr->Put(SvxWeightItem(VCLUnoHelper::ConvertFontWeight(rFont.Weight), SBA_DEF_FONTWEIGHT));
-    pAttr->Put(SvxPostureItem((FontItalic)rFont.Slant, SBA_DEF_POSTURE));
-    pAttr->Put(SvxUnderlineItem((FontUnderline)rFont.Underline, SBA_DEF_UNDERLINE));
-    pAttr->Put(SvxCrossedOutItem((FontStrikeout)rFont.Strikeout, SBA_DEF_CROSSEDOUT));
-    pAttr->Put(SfxBoolItem(rFont.WordLineMode, SBA_DEF_WORDLINEMODE));
-
-    Size aSize(0, rFont.Height);
-    aSize = OutputDevice::LogicToLogic(aSize, MAP_POINT, MAP_TWIP);
-    pAttr->Put(SvxFontHeightItem(aSize.Height(), 100, SBA_DEF_FONTHEIGHT));
-
-    pAttr->Put(SvxFontItem((FontFamily)rFont.Family, rFont.Name, rFont.StyleName,
-        PITCH_DONTKNOW, (CharSet)rFont.CharSet, SBA_DEF_FONT));
-}
 // -------------------------------------------------------------------------
 
 
