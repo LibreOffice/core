@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImplHelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-15 06:56:03 $
+ *  last change: $Author: tra $ $Date: 2001-03-15 08:10:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,16 +234,18 @@ void SAL_CALL DeleteTargetDevice( DVTARGETDEVICE* ptd )
 
 DVTARGETDEVICE* SAL_CALL CopyTargetDevice( DVTARGETDEVICE* ptdSrc )
 {
-    DVTARGETDEVICE* ptdDest;
+    DVTARGETDEVICE* ptdDest = NULL;
 
     __try
     {
-        ptdDest = static_cast< DVTARGETDEVICE* >( CoTaskMemAlloc( ptdSrc->tdSize ) );
-        rtl_copyMemory( ptdDest, ptdSrc, static_cast< size_t >( ptdSrc->tdSize ) );
+        if ( NULL != ptdSrc )
+        {
+            ptdDest = static_cast< DVTARGETDEVICE* >( CoTaskMemAlloc( ptdSrc->tdSize ) );
+            rtl_copyMemory( ptdDest, ptdSrc, static_cast< size_t >( ptdSrc->tdSize ) );
+        }
     }
     __except( EXCEPTION_EXECUTE_HANDLER )
     {
-        ptdDest = NULL;
     }
 
     return ptdDest;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MtaOleClipb.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-14 14:47:01 $
+ *  last change: $Author: tra $ $Date: 2001-03-15 08:11:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,20 +87,20 @@
 // messages constants
 //--------------------------------------------------------
 
-const sal_uInt32 MSG_SETCLIPBOARD       = WM_USER + 0x0001;
-const sal_uInt32 MSG_GETCLIPBOARD       = WM_USER + 0x0002;
-const sal_uInt32 MSG_REGCLIPVIEWER      = WM_USER + 0x0003;
-const sal_uInt32 MSG_FLUSHCLIPBOARD     = WM_USER + 0x0004;
-const sal_uInt32 MSG_SHUTDOWN           = WM_USER + 0x0006;
+const sal_uInt32 MSG_SETCLIPBOARD               = WM_USER + 0x0001;
+const sal_uInt32 MSG_GETCLIPBOARD               = WM_USER + 0x0002;
+const sal_uInt32 MSG_REGCLIPVIEWER              = WM_USER + 0x0003;
+const sal_uInt32 MSG_FLUSHCLIPBOARD             = WM_USER + 0x0004;
+const sal_uInt32 MSG_SHUTDOWN                   = WM_USER + 0x0006;
 
 const sal_uInt32 MAX_WAITTIME                   = 60000;
 const sal_uInt32 MAX_OPCOMPLET_WAITTIME         = 60000;
 const sal_uInt32 MAX_WAIT_SHUTDOWN              = 30000;
 const sal_uInt32 MAX_CLIPEVENT_PROCESSING_TIME  = 5000;
 
-const sal_Bool MANUAL_RESET     = sal_True;
-const sal_Bool AUTO_RESET       = sal_False;
-const sal_Bool INIT_NONSIGNALED = sal_False;
+const sal_Bool MANUAL_RESET                     = sal_True;
+const sal_Bool AUTO_RESET                       = sal_False;
+const sal_Bool INIT_NONSIGNALED                 = sal_False;
 
 //----------------------------------------------------------------
 //  static member initialization
@@ -118,6 +118,7 @@ HRESULT MarshalIDataObjectInStream( IDataObject* pIDataObject, LPSTREAM* ppStrea
     OSL_ASSERT( NULL != pIDataObject );
     OSL_ASSERT( NULL != ppStream );
 
+    *ppStream = NULL;
     return CoMarshalInterThreadInterfaceInStream(
         __uuidof(IDataObject),  //The IID of inteface to be marshaled
         pIDataObject,           //The interface pointer
@@ -135,6 +136,7 @@ HRESULT UnmarshalIDataObjectAndReleaseStream( LPSTREAM lpStream, IDataObject** p
     OSL_ASSERT( NULL != lpStream );
     OSL_ASSERT( NULL != ppIDataObject );
 
+    *ppIDataObject = NULL;
     return CoGetInterfaceAndReleaseStream(
         lpStream,
         __uuidof(IDataObject),
@@ -168,19 +170,15 @@ CMtaOleClipboard::CMtaOleClipboard( ) :
     m_uOleThreadId( 0 ),
     m_hEvtThrdReady( NULL ),
     m_hEvtOpComplete( NULL ),
-    m_hEvtWmDrawClipboardReady( NULL ),
     m_hwndMtaOleReqWnd( NULL ),
     m_hwndNextClipViewer( NULL ),
     m_pfncClipViewerCallback( NULL ),
-    m_bInFlushClipboard( sal_False )
+    m_bInCallbackTriggerOperation( sal_False )
 {
     // signals that the thread was successfully set up
     m_hEvtThrdReady  = CreateEvent( 0, MANUAL_RESET, INIT_NONSIGNALED, NULL );
     m_hEvtOpComplete = CreateEvent( 0, AUTO_RESET,   INIT_NONSIGNALED, NULL );
-    m_hEvtWmDrawClipboardReady = CreateEvent( 0, AUTO_RESET, INIT_NONSIGNALED, NULL );
-    OSL_ASSERT( (NULL != m_hEvtThrdReady) &&
-                (NULL != m_hEvtOpComplete) &&
-                (NULL != m_hEvtWmDrawClipboardReady) );
+    OSL_ASSERT( (NULL != m_hEvtThrdReady) && (NULL != m_hEvtOpComplete) );
 
     s_theMtaOleClipboardInst = this;
 
@@ -220,9 +218,6 @@ CMtaOleClipboard::~CMtaOleClipboard( )
     if ( NULL != m_hEvtOpComplete )
         CloseHandle( m_hEvtOpComplete );
 
-    if ( NULL != m_hEvtWmDrawClipboardReady )
-        CloseHandle( m_hEvtWmDrawClipboardReady );
-
     OSL_ENSURE( ( NULL == m_pfncClipViewerCallback ) &&
                 !IsWindow( m_hwndNextClipViewer ), \
                 "Clipboard viewer not properly unregistered" );
@@ -242,7 +237,7 @@ HRESULT CMtaOleClipboard::flushClipboard( )
 
     HRESULT hr;
 
-    m_bInFlushClipboard = sal_True;
+    m_bInCallbackTriggerOperation = sal_True;
 
     // we don't need to post the request if we are
     // the ole thread self
@@ -254,26 +249,11 @@ HRESULT CMtaOleClipboard::flushClipboard( )
                      static_cast< WPARAM >( 0 ),
                      reinterpret_cast< LPARAM >( &hr ) );
 
-        // we have to wait a little bit different here
-        // because if we are not the first in the clipviewer
-        // chain OleFlushClipboard returns before the
-        // WM_DRAWCLIPBOARD message will be received, so we
-        // use another event which will be signaled be the
-        // WM_DRAWCLIPBOARD handler if we are in a flush
-        // clipboard operation so the call becomes synchronous
-        // for the caller
-        HANDLE hEvt[2];
-        hEvt[0] = m_hEvtOpComplete;
-        hEvt[1] = m_hEvtWmDrawClipboardReady;
-
-        DWORD dwResult = WaitForMultipleObjects(
-            2, hEvt, TRUE, MAX_OPCOMPLET_WAITTIME );
-
-        if ( WAIT_OBJECT_0 != dwResult )
+        if ( !WaitOpComplete( ) )
             hr = E_FAIL;
     }
 
-    m_bInFlushClipboard = sal_False;
+    m_bInCallbackTriggerOperation = sal_False;
 
     return hr;
 }
@@ -292,10 +272,8 @@ HRESULT CMtaOleClipboard::getClipboard( IDataObject** ppIDataObject )
 
     CAutoComInit comAutoInit;
 
-    LPSTREAM lpStream = NULL;
+    LPSTREAM lpStream;
     HRESULT  hr;
-
-    *ppIDataObject = NULL;
 
     // we don't need to post the request if we are
     // the ole thread self
@@ -330,6 +308,8 @@ HRESULT CMtaOleClipboard::setClipboard( IDataObject* pIDataObject )
 
     HRESULT hr;
 
+    m_bInCallbackTriggerOperation = sal_True;
+
     // we don't need to post the request if we are
     // the ole thread self
     if ( GetCurrentThreadId( ) == m_uOleThreadId )
@@ -343,6 +323,8 @@ HRESULT CMtaOleClipboard::setClipboard( IDataObject* pIDataObject )
         if ( !WaitOpComplete( ) )
             hr = E_FAIL;
     }
+
+    m_bInCallbackTriggerOperation = sal_False;
 
     return hr;
 }
@@ -358,6 +340,8 @@ sal_Bool CMtaOleClipboard::registerClipViewer( LPFNC_CLIPVIEWER_CALLBACK_t pfncC
 
     sal_Bool bRet = sal_False;
 
+    m_bInCallbackTriggerOperation = sal_True;
+
     if ( GetCurrentThreadId( ) == m_uOleThreadId )
         OSL_ENSURE( sal_False, "registerClipViewer from within the OleThread called" );
     else
@@ -369,6 +353,8 @@ sal_Bool CMtaOleClipboard::registerClipViewer( LPFNC_CLIPVIEWER_CALLBACK_t pfncC
         if ( !WaitOpComplete( ) )
             bRet = sal_False;
     }
+
+    m_bInCallbackTriggerOperation = sal_False;
 
     return bRet;
 }
@@ -408,6 +394,11 @@ sal_Bool CMtaOleClipboard::onRegisterClipViewer( LPFNC_CLIPVIEWER_CALLBACK_t pfn
         // as clipboard viewer
         ChangeClipboardChain( m_hwndMtaOleReqWnd, m_hwndNextClipViewer );
         m_hwndNextClipViewer = NULL;
+
+        // because ChnageClipboardChain doesn't trigger a
+        // WM_DRAWCLIPBOARD message we have to release the
+        // waiting thread exclusively
+        SetEvent( m_hEvtOpComplete );
     }
 
     return bRet;
@@ -450,7 +441,6 @@ LRESULT CMtaOleClipboard::onFlushClipboard( )
     // the call will be block until the
     // WM_DRAWCLIPBOARD message has been
     // processed
-    ResetEvent( m_hEvtWmDrawClipboardReady );
     return static_cast<LRESULT>( OleFlushClipboard( ) );
 }
 
@@ -487,11 +477,8 @@ LRESULT CMtaOleClipboard::onDrawClipboard( )
 {
     // we don't send a notification if we are
     // registering ourself as clipboard
-    if ( !m_bInRegisterClipViewer )
-    {
-        if ( NULL != m_pfncClipViewerCallback )
-            m_pfncClipViewerCallback( );
-    }
+    if ( !m_bInRegisterClipViewer && (NULL != m_pfncClipViewerCallback) )
+        m_pfncClipViewerCallback( );
 
     // foward the message to the next viewer in the chain
     if ( IsWindow( m_hwndNextClipViewer ) )
@@ -507,8 +494,16 @@ LRESULT CMtaOleClipboard::onDrawClipboard( )
             &dwResult );
     }
 
-    if ( m_bInFlushClipboard )
-        SetEvent( m_hEvtWmDrawClipboardReady );
+    // we have to wait a little bit different here
+    // because if we are not the first in the clipviewer
+    // chain OleFlushClipboard returns before the
+    // WM_DRAWCLIPBOARD message will be received, so we
+    // use another event which will be signaled be the
+    // WM_DRAWCLIPBOARD handler if we are in a flush
+    // clipboard operation so the call becomes synchronous
+    // for the caller
+    if ( m_bInCallbackTriggerOperation )
+        SetEvent( m_hEvtOpComplete );
 
     return 0;
 }
@@ -551,7 +546,6 @@ LRESULT CALLBACK CMtaOleClipboard::mtaOleReqWndProc( HWND hWnd, UINT uMsg, WPARA
     case MSG_SETCLIPBOARD:
         *(reinterpret_cast< HRESULT* >( lParam )) =
             pImpl->onSetClipboard( reinterpret_cast< IDataObject* >(wParam) );
-        SetEvent( pImpl->m_hEvtOpComplete );
         break;
 
     case MSG_GETCLIPBOARD:
@@ -562,13 +556,11 @@ LRESULT CALLBACK CMtaOleClipboard::mtaOleReqWndProc( HWND hWnd, UINT uMsg, WPARA
 
     case MSG_FLUSHCLIPBOARD:
         *(reinterpret_cast< HRESULT* >( lParam )) = pImpl->onFlushClipboard( );
-        SetEvent( pImpl->m_hEvtOpComplete );
         break;
 
     case MSG_REGCLIPVIEWER:
         *(reinterpret_cast<sal_Bool*>(lParam)) = pImpl->onRegisterClipViewer(
             reinterpret_cast<LPFNC_CLIPVIEWER_CALLBACK_t>(wParam) );
-        SetEvent( pImpl->m_hEvtOpComplete );
         break;
 
     case WM_CHANGECBCHAIN:
