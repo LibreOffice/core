@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xehelper.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-29 11:47:54 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:38:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -767,6 +767,11 @@ XclExpStringRef XclExpStringHelper::CreateString(
         xString->AppendFormat( xString->Len(), EXC_FONT_APP );
     }
     return xString;
+}
+
+sal_Int16 XclExpStringHelper::GetScriptType( const XclExpRoot& rRoot, const String& rString )
+{
+    return rRoot.GetDoc().GetBreakIterator()->getScriptType( OUString( rString ), 0 );
 }
 
 // Header/footer conversion ===================================================
