@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewprt.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 15:44:02 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:39:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -145,8 +144,11 @@
 #ifndef _SWPRTOPT_HXX
 #include <swprtopt.hxx>
 #endif
-#ifndef _OPTPAGE_HXX
-#include <optpage.hxx>
+//CHINA001 #ifndef _OPTPAGE_HXX
+//CHINA001 #include <optpage.hxx>
+//CHINA001 #endif
+#ifndef _FONTCFG_HXX
+#include <fontcfg.hxx>
 #endif
 #ifndef _CFGITEMS_HXX
 #include <cfgitems.hxx>
@@ -182,7 +184,14 @@
 #ifndef _APP_HRC
 #include <app.hrc>
 #endif
-
+#ifndef _SFXENUMITEM_HXX
+#include <svtools/eitem.hxx>
+#endif
+#include <swwrtshitem.hxx> //CHINA001
+#include "swabstdlg.hxx" //CHINA001
+#ifndef _SFXSLSTITM_HXX //CHINA001
+#include <svtools/slstitm.hxx> //CHINA001
+#endif //CHINA001
 #define C2U(cChar) ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(cChar))
 
 /*--------------------------------------------------------------------
@@ -622,19 +631,32 @@ void __EXPORT SwView::ExecutePrint(SfxRequest& rReq)
 SfxTabPage* CreatePrintOptionsPage( Window *pParent,
                                 const SfxItemSet &rOptions, BOOL bPreview )
 {
-    SwAddPrinterTabPage* pPage = ( SwAddPrinterTabPage* )
-                            SwAddPrinterTabPage::Create(pParent, rOptions);
-    pPage->SetPreview(bPreview);
-
-    SvStringsDtor aFaxList;
-    const USHORT nCount = Printer::GetQueueCount();
-    pPage->Reset(rOptions);
-    for (USHORT i = 0; i < nCount; ++i)
+//CHINA001  SwAddPrinterTabPage* pPage = ( SwAddPrinterTabPage* )
+//CHINA001  SwAddPrinterTabPage::Create(pParent, rOptions);
+    SfxTabPage* pPage = NULL;
+    SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+    if ( pFact )
     {
-        String* pString = new String( Printer::GetQueueInfo( i ).GetPrinterName() );
-        aFaxList.Insert(pString, 0);
+        ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc( TP_OPTPRINT_PAGE );
+        if ( fnCreatePage )
+            pPage = (*fnCreatePage)( pParent, rOptions );
     }
-    pPage->SetFax( aFaxList );
+    SfxAllItemSet aSet(*(rOptions.GetPool()));
+    //CHINA001 pPage->SetPreview(bPreview);
+    aSet.Put (SfxBoolItem(SID_PREVIEWFLAG_TYPE, bPreview));
+//CHINA001  SvStringsDtor aFaxList;
+//CHINA001  const USHORT nCount = Printer::GetQueueCount();
+//CHINA001  pPage->Reset(rOptions);
+//CHINA001  for (USHORT i = 0; i < nCount; ++i)
+//CHINA001  {
+//CHINA001  String* pString = new String( Printer::GetQueueInfo( i ).GetPrinterName() );
+//CHINA001  aFaxList.Insert(pString, 0);
+//CHINA001 }
+//CHINA001  pPage->SetFax( aFaxList );
+    //CHINA001 Reset(rOptions); can't be transfer as Item, so in SwAddPrinterTabPage::PageCreated(), call Reset() after SetPreview().
+    //CHINA001 It's difficult to transfer SvStringsDtor as Item, so move above code directly to SwAddPrinterTabPage::PageCreated()
+    aSet.Put (SfxBoolItem(SID_FAX_LIST, sal_True));
+    pPage->PageCreated(aSet);
     return pPage;
 }
 
