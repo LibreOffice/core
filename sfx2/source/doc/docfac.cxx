@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfac.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:28:11 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 07:59:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,13 @@ TYPEINIT1(SfxObjectFactory,SvFactory);
 
 static SfxObjectFactoryArr_Impl* pObjFac = 0;
 
+static SfxObjectFactoryArr_Impl& GetObjFacArray_Impl()
+{
+    if ( !pObjFac )
+        pObjFac = new SfxObjectFactoryArr_Impl;
+    return *pObjFac;
+}
+
 //========================================================================
 
 struct SfxObjectFactory_Impl
@@ -122,7 +129,7 @@ struct SfxObjectFactory_Impl
     ::rtl::OUString             aServiceName;
     sal_Bool                    bInitFactoryCalled;
     SfxVoidFunc                 pInitFactory;
-    SfxFactoryFilterContainer*  pFilterContainer;
+    SfxFilterContainer*         pFilterContainer;
     SfxModule*                  pModule;
     SfxAcceleratorManager*      pAccMgr;
     sal_uInt16                  nImageId;
@@ -168,7 +175,7 @@ struct SfxObjectFactory_Impl
 
 //========================================================================
 
-SfxFactoryFilterContainer* SfxObjectFactory::GetFilterContainer(
+SfxFilterContainer* SfxObjectFactory::GetFilterContainer(
     sal_Bool bForceLoad ) const
 {
     if( bForceLoad )
@@ -181,7 +188,7 @@ void SfxObjectFactory::RegisterInitFactory(SfxVoidFunc pFunc)
     pImpl->pInitFactory = pFunc;
     DoInitFactory();
 }
-
+/*
 void SfxObjectFactory::RegisterFilter
 (
     const String&       rName,          // Klartext-Name f"ur Anzeige im Dialog
@@ -201,15 +208,10 @@ void SfxObjectFactory::RegisterFilter
     SfxFilter* pFilter = new SfxFilter(
         rName, rWildcard, eType, lFormat, rMacType,
         rTypeName, nIconId, rMimeType, pImpl->pFilterContainer, rUserData );
-/*  if( nDemo != SFX_DEMOKIND_DEMO && nDemo != SFX_DEMOKIND_INVALID ||
-        pFilter->IsOwnFormat() )*/
-    // Jetzt immer uebernehmen, da es keine Demo mehr gibt. Sonst bei Ablauf
-    // Absturz in sba
     pImpl->pFilterContainer->AddFilter(
         pFilter, pImpl->pFilterContainer->GetFilterCount() );
-/*  else
-        delete pFilter;*/
 }
+*/
 
 //--------------------------------------------------------------------
 
@@ -237,14 +239,6 @@ void SfxObjectFactory::DoInitFactory()
             pImpl->pNameResId = new SfxResId( STR_DOCTYPENAME_SD );
         else if ( aShortName.EqualsAscii( "message" ) )
             pImpl->pNameResId = new SfxResId( STR_DOCTYPENAME_MESSAGE );
-
-        // There are no filters for "dummy" factory!
-        if( pImpl->aServiceName.compareToAscii("dummy") != 0 )
-        {
-            DBG_ASSERT( pImpl->aServiceName.getLength(), "No service name - no filters!" )
-            SfxFilterContainer *pCont = GetFilterContainer();
-            pCont->ReadExternalFilters( pImpl->aServiceName );
-        }
     }
 }
 
@@ -293,13 +287,8 @@ void SfxObjectFactory::Construct
     nFlags = nFlagsP;
     fnCreate = fnCreateFnc;
     nId = nFactoryId;
-//  pIniMgr = 0;
     pShortName = pName;
-    pImpl->pFilterContainer = new SfxFactoryFilterContainer(
-        String::CreateFromAscii( pName ), *this );
-    SFX_APP()->GetFilterMatcher().AddContainer( pImpl->pFilterContainer );
-    if( !(nFlagsP & SFXOBJECTSHELL_DONTLOADFILTERS) )
-        pImpl->pFilterContainer->LoadFilters( String::CreateFromAscii( pName ) );
+    pImpl->pFilterContainer = new SfxFilterContainer( String::CreateFromAscii( pName ) );
 
     pImpl->aHelpFile = String::CreateFromAscii(pShortName);
     pImpl->aHelpFile.Erase( 8 );
@@ -350,6 +339,9 @@ SfxObjectFactory::~SfxObjectFactory()
 
 void SfxObjectFactory::RemoveAll_Impl()
 {
+    if ( !pObjFac )
+        return;
+
     for( USHORT n=0; n<pObjFac->Count(); )
     {
         SfxObjectFactoryPtr pFac = pObjFac->GetObject(n);
@@ -362,6 +354,9 @@ void SfxObjectFactory::RemoveAll_Impl()
 
 void SfxObjectFactory::ClearAll_Impl()
 {
+    if ( !pObjFac )
+        return;
+
     for( USHORT n=0; n<pObjFac->Count(); n++ )
     {
         // Clear accelerator manager as it uses the same global SfxMacroConfig object as
@@ -529,33 +524,25 @@ sal_uInt16 SfxObjectFactory::GetExplorerImageId() const
     return pImpl->nImageId;
 }
 
-void SfxObjectFactory::SetStandardTemplate( const String& rFactoryURL, const String& rTemplate )
+void SfxObjectFactory::SetStandardTemplate( const String& rServiceName, const String& rTemplate )
 {
-    const SfxObjectFactory* pFactory = SfxObjectFactory::GetFactory( rFactoryURL );
-    if ( pFactory )
-    {
-        ((SfxObjectFactory*)pFactory)->pImpl->aStandardTemplate = rTemplate;
-        SvtModuleOptions aModOpt;
-        SvtModuleOptions::EFactory eFac = SvtModuleOptions::E_WRITER;
-        if ( SvtModuleOptions::ClassifyFactoryByName( pFactory->GetDocumentServiceName(), eFac ) )
-            aModOpt.SetFactoryStandardTemplate( eFac, rTemplate );
-    }
+    SvtModuleOptions aModOpt;
+    SvtModuleOptions::EFactory eFac = SvtModuleOptions::E_WRITER;
+    if ( SvtModuleOptions::ClassifyFactoryByName( rServiceName, eFac ) )
+        aModOpt.SetFactoryStandardTemplate( eFac, rTemplate );
 }
 
-const String& SfxObjectFactory::GetStandardTemplate() const
+String SfxObjectFactory::GetStandardTemplate( const String& rServiceName )
 {
-    if ( !pImpl->bTemplateInitialized )
-    {
-        pImpl->bTemplateInitialized = sal_True;
-        SvtModuleOptions aModOpt;
-        SvtModuleOptions::EFactory eFac = SvtModuleOptions::E_WRITER;
-        if ( SvtModuleOptions::ClassifyFactoryByName( GetDocumentServiceName(), eFac ) )
-            pImpl->aStandardTemplate = aModOpt.GetFactoryStandardTemplate( eFac );
-    }
+    SvtModuleOptions aModOpt;
+    SvtModuleOptions::EFactory eFac = SvtModuleOptions::E_WRITER;
+    if ( SvtModuleOptions::ClassifyFactoryByName( rServiceName, eFac ) )
+        return aModOpt.GetFactoryStandardTemplate( eFac );
 
-    return pImpl->aStandardTemplate;
+    return String();
 }
 
+/*
 const SfxObjectFactory* SfxObjectFactory::GetFactory( const String& rFactoryURL )
 {
     const SfxObjectFactory* pFactory = 0;
@@ -584,7 +571,7 @@ const SfxObjectFactory* SfxObjectFactory::GetFactory( const String& rFactoryURL 
 
     return pFactory;
 }
-
+*/
 const SfxFilter* SfxObjectFactory::GetTemplateFilter() const
 {
     USHORT nFilterCount = pImpl->pFilterContainer->GetFilterCount();
@@ -596,7 +583,7 @@ const SfxFilter* SfxObjectFactory::GetTemplateFilter() const
         if( pTemp && pTemp->IsOwnFormat() && pTemp->IsOwnTemplateFormat() && ( pTemp->GetVersion() > nVersion ) )
         {
             pFilter = pTemp;
-            nVersion = pTemp->GetVersion();
+            nVersion = (USHORT) pTemp->GetVersion();
         }
     }
 
@@ -644,7 +631,7 @@ void SfxObjectFactory::RegisterObjectFactory_Impl( SfxObjectFactory &rFac )
 }
 
 //--------------------------------------------------------------------
-
+/*
 USHORT SfxObjectFactory::GetObjectFactoryCount_Impl()
 {
     return GetObjFacArray_Impl().Count();
@@ -674,7 +661,7 @@ SfxObjectFactoryArr_Impl&   SfxObjectFactory::GetObjFacArray_Impl()
         pObjFac = new SfxObjectFactoryArr_Impl;
     return *pObjFac;
 }
-
+*/
 String SfxObjectFactory::GetModuleName() const
 {
     SvtModuleOptions::EFactory eFac = SvtModuleOptions::E_WRITER;
