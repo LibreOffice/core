@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewhdl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2001-09-13 08:46:25 $
+ *  last change: $Author: tl $ $Date: 2001-09-14 11:59:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,20 +164,6 @@ void SmClipboardChangeListener::AddRemoveListener( BOOL bAdd )
             Reference< XClipboard > xClipboard;
             if( pView && 0 != ( pW = pView->GetEditWindow()) )
                 xClipboard = pW->GetClipboard();
-            else
-            {
-                DBG_ASSERT( pView, "no SmViewShell" );
-
-                Reference< lang::XMultiServiceFactory > xFact(
-                                    ::comphelper::getProcessServiceFactory() );
-                if( !xFact.is() )
-                    break;
-                xClipboard = Reference< XClipboard > ( xFact->createInstance(
-                    ::rtl::OUString::createFromAscii(
-                        "com.sun.star.datatransfer.clipboard.SystemClipboard" ) ),
-                    UNO_QUERY );
-            }
-
             if( !xClipboard.is() )
                 break;
 
