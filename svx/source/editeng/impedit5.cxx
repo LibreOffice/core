@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit5.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mt $ $Date: 2001-03-19 16:09:39 $
+ *  last change: $Author: mt $ $Date: 2001-05-03 08:19:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -855,4 +855,5 @@ void ImplIMEInfos::DestroyAttribs()
 {
     delete pAttribs;
     pAttribs = NULL;
+    nLen = 0;
 }
