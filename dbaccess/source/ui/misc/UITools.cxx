@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UITools.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: oj $ $Date: 2002-09-26 10:49:05 $
+ *  last change: $Author: oj $ $Date: 2002-10-07 13:06:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -283,7 +283,7 @@ void composeTableName(  const Reference< XDatabaseMetaData >& _rxMetaData,
             _rxTable->getPropertyValue(PROPERTY_SCHEMANAME) >>= aSchema;
             _rxTable->getPropertyValue(PROPERTY_NAME)       >>= aTable;
 
-            ::dbtools::composeTableName(_rxMetaData,aCatalog,aSchema,aTable,_rComposedName,_bQuote);
+            ::dbtools::composeTableName(_rxMetaData,aCatalog,aSchema,aTable,_rComposedName,_bQuote,::dbtools::eInDataManipulation);
         }
     }
 }
@@ -701,7 +701,7 @@ void setColumnProperties(const Reference<XPropertySet>& _rxColumn,const OFieldDe
         {
             sSchema = _xMetaData->getUserName();
         }
-        ::dbtools::composeTableName(_xMetaData,sCatalog,sSchema,_sName,sCompsedName,sal_False);
+        ::dbtools::composeTableName(_xMetaData,sCatalog,sSchema,_sName,sCompsedName,sal_False,::dbtools::eInDataManipulation);
         sDefaultName = ::dbtools::createUniqueName(_xTables,sCompsedName);
     }
     catch(const SQLException&)

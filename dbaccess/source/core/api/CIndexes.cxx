@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CIndexes.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-08 15:40:35 $
+ *  last change: $Author: oj $ $Date: 2002-10-07 12:57:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,7 +121,7 @@ Reference< XNamed > OIndexes::createObject(const ::rtl::OUString& _rName)
             aName       = _rName;
 
         ::rtl::OUString aCatalog,aSchema,aTable;
-        dbtools::qualifiedNameComponents(m_pTable->getMetaData(),m_pTable->getName(),aCatalog,aSchema,aTable);
+        dbtools::qualifiedNameComponents(m_pTable->getMetaData(),m_pTable->getName(),aCatalog,aSchema,aTable,::dbtools::eInDataManipulation);
 
         Reference< XResultSet > xResult = m_pTable->getMetaData()->getIndexInfo(makeAny(aCatalog),aSchema,aTable,sal_False,sal_False);
 
@@ -188,14 +188,10 @@ void OIndexes::appendObject( const Reference< XPropertySet >& descriptor )
 
 
             ::rtl::OUString aCatalog,aSchema,aTable;
-            dbtools::qualifiedNameComponents(m_pTable->getMetaData(),m_pTable->getName(),aCatalog,aSchema,aTable);
+            dbtools::qualifiedNameComponents(m_pTable->getMetaData(),m_pTable->getName(),aCatalog,aSchema,aTable,::dbtools::eInDataManipulation);
             ::rtl::OUString aComposedName;
-            if(!m_pTable->getMetaData()->supportsCatalogsInIndexDefinitions())
-                aCatalog = ::rtl::OUString();
-            if(!m_pTable->getMetaData()->supportsSchemasInIndexDefinitions())
-                aSchema = ::rtl::OUString();
 
-            dbtools::composeTableName(m_pTable->getMetaData(),aCatalog,aSchema,aTable,aComposedName,sal_True);
+            dbtools::composeTableName(m_pTable->getMetaData(),aCatalog,aSchema,aTable,aComposedName,sal_True,::dbtools::eInIndexDefinitions);
             if(aName.getLength())
             {
                 aSql = aSql + ::dbtools::quoteName( aQuote,aName )
@@ -267,13 +263,9 @@ void OIndexes::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
             ::rtl::OUString aDot    = ::rtl::OUString::createFromAscii(".");
 
             ::rtl::OUString aCatalog,aSchema2,aTable;
-            dbtools::qualifiedNameComponents(m_pTable->getMetaData(),m_pTable->getName(),aCatalog,aSchema2,aTable);
+            dbtools::qualifiedNameComponents(m_pTable->getMetaData(),m_pTable->getName(),aCatalog,aSchema2,aTable,::dbtools::eInDataManipulation);
             ::rtl::OUString aComposedName;
-            if(!m_pTable->getMetaData()->supportsCatalogsInIndexDefinitions())
-                aCatalog = ::rtl::OUString();
-            if(!m_pTable->getMetaData()->supportsSchemasInIndexDefinitions())
-                aSchema2 = ::rtl::OUString();
-            dbtools::composeTableName(m_pTable->getMetaData(),aCatalog,aSchema2,aTable,aComposedName,sal_True);
+            dbtools::composeTableName(m_pTable->getMetaData(),aCatalog,aSchema2,aTable,aComposedName,sal_True,::dbtools::eInIndexDefinitions);
 
             aSql = aSql + ::dbtools::quoteName( aQuote,aSchema)
                         + aDot   + ::dbtools::quoteName( aQuote,aName)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: oj $ $Date: 2002-03-27 14:59:31 $
+ *  last change: $Author: oj $ $Date: 2002-10-07 12:57:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,7 +253,7 @@ OColumn* ODBTable::createColumn(const ::rtl::OUString& _rName) const
                     ::rtl::OUString sSelect = ::rtl::OUString::createFromAscii("SELECT ");
                     sSelect += ::dbtools::quoteName(sQuote,_rName);
                     ::rtl::OUString sComposedName;
-                    ::dbtools::composeTableName(m_xMetaData,getString(aCatalog),aSchema,aTable,sComposedName,sal_True);
+                    ::dbtools::composeTableName(m_xMetaData,getString(aCatalog),aSchema,aTable,sComposedName,sal_True,::dbtools::eInDataManipulation);
 
                     sSelect += ::rtl::OUString::createFromAscii(" FROM ");
                     sSelect += sComposedName;
@@ -548,14 +548,9 @@ void SAL_CALL ODBTable::alterColumnByName( const ::rtl::OUString& _rName, const 
     {
         ::rtl::OUString sSql = ::rtl::OUString::createFromAscii("ALTER TABLE ");
         ::rtl::OUString aQuote  = m_xMetaData->getIdentifierQuoteString(  );
-        ::rtl::OUString sCatalog,sSchema,sTable,sComposedName;
+        ::rtl::OUString sComposedName;
 
-        if(m_xMetaData->supportsCatalogsInTableDefinitions())
-            sCatalog = m_CatalogName;
-        if(m_xMetaData->supportsSchemasInTableDefinitions())
-            sSchema = m_SchemaName;
-
-        ::dbtools::composeTableName(m_xMetaData,sCatalog,sSchema,m_Name,sComposedName,sal_True);
+        ::dbtools::composeTableName(m_xMetaData,m_CatalogName,m_SchemaName,m_Name,sComposedName,sal_True,::dbtools::eInTableDefinitions);
         if(!sComposedName.getLength())
             ::dbtools::throwFunctionSequenceException(*this);
 
@@ -627,6 +622,7 @@ void ODBTable::refreshColumns()
             Reference< XRow > xRow(xResult,UNO_QUERY);
             while(xResult->next())
                 aVector.push_back(xRow->getString(4));
+            OSL_ENSURE(!aVector.empty(),"getColumns returns no columns!");
         }
 
 
@@ -767,7 +763,7 @@ void ODBTable::refreshIndexes()
 ::rtl::OUString SAL_CALL ODBTable::getName() throw(RuntimeException)
 {
     ::rtl::OUString aVal;
-    dbtools::composeTableName(m_xMetaData,m_CatalogName,m_SchemaName,m_Name,aVal,sal_False);
+    dbtools::composeTableName(m_xMetaData,m_CatalogName,m_SchemaName,m_Name,aVal,sal_False,::dbtools::eInDataManipulation);
     return aVal;
 }
 // -----------------------------------------------------------------------------

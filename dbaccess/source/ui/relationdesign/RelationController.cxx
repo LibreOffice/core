@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelationController.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-19 07:52:45 $
+ *  last change: $Author: oj $ $Date: 2002-10-07 13:06:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -475,7 +475,8 @@ void ORelationController::loadData()
                                                 *pBegin,
                                                 sCatalog,
                                                 sSchema,
-                                                sTable);
+                                                sTable,
+                                                ::dbtools::eInDataManipulation);
             Any aCatalog;
             if(sCatalog.getLength())
                 aCatalog <<= sCatalog;

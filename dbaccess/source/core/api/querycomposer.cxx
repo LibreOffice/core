@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycomposer.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-30 11:16:57 $
+ *  last change: $Author: oj $ $Date: 2002-10-07 12:57:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -698,8 +698,8 @@ void SAL_CALL OQueryComposer::appendFilterByColumn( const Reference< XPropertySe
         if(sTableName.indexOf('.',0) != -1)
         {
             ::rtl::OUString aCatlog,aSchema,aTable;
-            ::dbtools::qualifiedNameComponents(m_xMetaData,sTableName,aCatlog,aSchema,aTable);
-            ::dbtools::composeTableName(m_xMetaData,aCatlog,aSchema,aTable,sTableName,sal_True);
+            ::dbtools::qualifiedNameComponents(m_xMetaData,sTableName,aCatlog,aSchema,aTable,::dbtools::eInDataManipulation);
+            ::dbtools::composeTableName(m_xMetaData,aCatlog,aSchema,aTable,sTableName,sal_True,::dbtools::eInDataManipulation);
         }
         else
             sTableName = ::dbtools::quoteName(aQuote,sTableName);
@@ -871,8 +871,8 @@ void SAL_CALL OQueryComposer::appendOrderByColumn( const Reference< XPropertySet
         if(sTableName.indexOf('.',0) != -1)
         {
             ::rtl::OUString aCatlog,aSchema,aTable;
-            ::dbtools::qualifiedNameComponents(m_xMetaData,sTableName,aCatlog,aSchema,aTable);
-            ::dbtools::composeTableName(m_xMetaData,aCatlog,aSchema,aTable,sTableName,sal_True);
+            ::dbtools::qualifiedNameComponents(m_xMetaData,sTableName,aCatlog,aSchema,aTable,::dbtools::eInDataManipulation);
+            ::dbtools::composeTableName(m_xMetaData,aCatlog,aSchema,aTable,sTableName,sal_True,::dbtools::eInDataManipulation);
         }
         else
             sTableName = ::dbtools::quoteName(aQuote,sTableName);
@@ -1322,7 +1322,7 @@ void OQueryComposer::resetIterator(const ::rtl::OUString& aSql)
         }
         else
         {
-            ::dbtools::composeTableName(m_xMetaData,aCatalog,aSchema,aTable,aComposedName,sal_False);
+            ::dbtools::composeTableName(m_xMetaData,aCatalog,aSchema,aTable,aComposedName,sal_False,::dbtools::eInDataManipulation);
 
             // first check if this is the table we want to or has it a tablealias
 
@@ -1354,7 +1354,7 @@ void OQueryComposer::resetIterator(const ::rtl::OUString& aSql)
         }
         if(pBegin != pEnd)
         {
-            ::dbtools::composeTableName(m_xMetaData,aCatalog,aSchema,aTable,sReturn,sal_True);
+            ::dbtools::composeTableName(m_xMetaData,aCatalog,aSchema,aTable,sReturn,sal_True,::dbtools::eInDataManipulation);
             sReturn += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("."));
         }
     }

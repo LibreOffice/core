@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WCopyTable.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-19 07:51:08 $
+ *  last change: $Author: oj $ $Date: 2002-10-07 13:06:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,15 +191,8 @@ OCopyTableWizard::OCopyTableWizard(Window * pParent,
         if(xColSupp.is())
             m_xSourceColumns = xColSupp->getColumns();
 
-        if(!m_xSourceObject->getPropertySetInfo()->hasPropertyByName(PROPERTY_COMMAND))
-        {
-            ::rtl::OUString sCatalog,sSchema,sTable;
-            m_xSourceObject->getPropertyValue(PROPERTY_CATALOGNAME) >>= sCatalog;
-            m_xSourceObject->getPropertyValue(PROPERTY_SCHEMANAME)  >>= sSchema;
-            m_xSourceObject->getPropertyValue(PROPERTY_NAME)        >>= sTable;
-
-            ::dbtools::composeTableName(m_xConnection->getMetaData(),sCatalog,sSchema,sTable,m_sSourceName,sal_False);
-        }
+        if ( !m_xSourceObject->getPropertySetInfo()->hasPropertyByName(PROPERTY_COMMAND) )
+            ::dbaui::composeTableName(m_xConnection->getMetaData(),m_xSourceObject,m_sSourceName,sal_False);
         else
             _xSourceObject->getPropertyValue(PROPERTY_NAME)         >>= m_sSourceName;
         m_sName = m_sSourceName;
@@ -766,7 +759,8 @@ Reference< XPropertySet > OCopyTableWizard::createView()
                                         m_sName,
                                         sCatalog,
                                         sSchema,
-                                        sTable);
+                                        sTable,
+                                        ::dbtools::eInDataManipulation);
 
     m_xDestObject->setPropertyValue(PROPERTY_CATALOGNAME,makeAny(sCatalog));
     m_xDestObject->setPropertyValue(PROPERTY_SCHEMANAME,makeAny(sSchema));
@@ -826,7 +820,8 @@ Reference< XPropertySet > OCopyTableWizard::createTable()
                                             m_sName,
                                             sCatalog,
                                             sSchema,
-                                            sTable);
+                                            sTable,
+                                            ::dbtools::eInDataManipulation);
 
         m_xDestObject->setPropertyValue(PROPERTY_CATALOGNAME,makeAny(sCatalog));
         m_xDestObject->setPropertyValue(PROPERTY_SCHEMANAME,makeAny(sSchema));

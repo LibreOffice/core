@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetCache.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-08 07:07:42 $
+ *  last change: $Author: oj $ $Date: 2002-10-07 12:57:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1180,7 +1180,7 @@ sal_Bool SAL_CALL ORowSetCache::first(  ) throw(SQLException, RuntimeException)
     }
     else
     {
-        OSL_ENSURE(m_bBeforeFirst,"ORowSetCache::first return false and BeforeFirst isn't true");
+        OSL_ENSURE(m_bBeforeFirst || (m_bNew && m_bInserted),"ORowSetCache::first return false and BeforeFirst isn't true");
         m_aMatrixIter = m_pMatrix->end();
     }
     return bRet;

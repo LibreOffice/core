@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WCPage.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-21 06:31:38 $
+ *  last change: $Author: oj $ $Date: 2002-10-07 13:06:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -297,7 +297,8 @@ sal_Bool OCopyTable::LeavePage()
                                                 m_edTableName.GetText(),
                                                 sCatalog,
                                                 sSchema,
-                                                sTable);
+                                                sTable,
+                                                ::dbtools::eInDataManipulation);
             sal_Int32 nMaxLength = xMeta->getMaxTableNameLength();
             if ( nMaxLength && sTable.getLength() > nMaxLength )
             {

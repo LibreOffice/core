@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: oj $ $Date: 2002-09-24 09:13:41 $
+ *  last change: $Author: oj $ $Date: 2002-10-07 12:57:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1037,7 +1037,7 @@ void OColumns::appendObject( const Reference< XPropertySet >& descriptor )
         m_pTable->getPropertyValue(PROPERTY_NAME)           >>= aTable;
 
         ::rtl::OUString aComposedName;
-        dbtools::composeTableName(m_pTable->getMetaData(),aCatalog,aSchema,aTable,aComposedName,sal_True);
+        dbtools::composeTableName(m_pTable->getMetaData(),aCatalog,aSchema,aTable,aComposedName,sal_True,::dbtools::eInTableDefinitions);
 
         aSql += aComposedName;
         aSql += ::rtl::OUString::createFromAscii(" ADD ");
@@ -1123,7 +1123,7 @@ void OColumns::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
         m_pTable->getPropertyValue(PROPERTY_NAME)           >>= aTable;
 
         ::rtl::OUString aComposedName;
-        dbtools::composeTableName(m_pTable->getMetaData(),aCatalog,aSchema,aTable,aComposedName,sal_True);
+        dbtools::composeTableName(m_pTable->getMetaData(),aCatalog,aSchema,aTable,aComposedName,sal_True,::dbtools::eInTableDefinitions);
 
         aSql += aComposedName;
         aSql += ::rtl::OUString::createFromAscii(" DROP ");

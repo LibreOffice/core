@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablecontainer.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-23 05:54:32 $
+ *  last change: $Author: oj $ $Date: 2002-10-07 12:57:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -260,7 +260,8 @@ Reference< XNamed > OTableContainer::createObject(const ::rtl::OUString& _rName)
                                             _rName,
                                             sCatalog,
                                             sSchema,
-                                            sTable);
+                                            sTable,
+                                            ::dbtools::eInDataManipulation);
         Any aCatalog;
         if(sCatalog.getLength())
             aCatalog <<= sCatalog;
@@ -336,14 +337,11 @@ void OTableContainer::appendObject( const Reference< XPropertySet >& descriptor 
             ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("CREATE TABLE ");
             ::rtl::OUString sCatalog,sSchema,sTable,sComposedName;
 
-            if(m_xMetaData->supportsCatalogsInTableDefinitions())
-                descriptor->getPropertyValue(PROPERTY_CATALOGNAME)  >>= sCatalog;
-            if(m_xMetaData->supportsSchemasInTableDefinitions())
-                descriptor->getPropertyValue(PROPERTY_SCHEMANAME)   >>= sSchema;
-
+            descriptor->getPropertyValue(PROPERTY_CATALOGNAME)  >>= sCatalog;
+            descriptor->getPropertyValue(PROPERTY_SCHEMANAME)   >>= sSchema;
             descriptor->getPropertyValue(PROPERTY_NAME)         >>= sTable;
 
-            ::dbtools::composeTableName(m_xMetaData,sCatalog,sSchema,sTable,sComposedName,sal_True);
+            ::dbtools::composeTableName(m_xMetaData,sCatalog,sSchema,sTable,sComposedName,sal_True,::dbtools::eInTableDefinitions);
             if(!sComposedName.getLength())
                 ::dbtools::throwFunctionSequenceException(*this);
 
@@ -368,7 +366,7 @@ void OTableContainer::appendObject( const Reference< XPropertySet >& descriptor 
                 if ( (xColumns->getByIndex(i) >>= xColProp) && xColProp.is() )
                 {
 
-                    aSql += ::dbtools::quoteTableName(m_xMetaData,::comphelper::getString(xColProp->getPropertyValue(PROPERTY_NAME)));
+                    aSql += ::dbtools::quoteTableName(m_xMetaData,::comphelper::getString(xColProp->getPropertyValue(PROPERTY_NAME)),::dbtools::eInTableDefinitions);
 
                     aSql += ::rtl::OUString::createFromAscii(" ");
 
@@ -478,7 +476,7 @@ void OTableContainer::appendObject( const Reference< XPropertySet >& descriptor 
                             for(sal_Int32 i=0;i<xColumns->getCount();++i)
                             {
                                 if(::cppu::extractInterface(xColProp,xColumns->getByIndex(i)) && xColProp.is())
-                                    aSql += ::dbtools::quoteTableName(m_xMetaData,::comphelper::getString(xColProp->getPropertyValue(PROPERTY_NAME)))
+                                    aSql += ::dbtools::quoteTableName(m_xMetaData,::comphelper::getString(xColProp->getPropertyValue(PROPERTY_NAME)),::dbtools::eInTableDefinitions)
                                             +   ::rtl::OUString::createFromAscii(",");
                             }
 
@@ -495,7 +493,7 @@ void OTableContainer::appendObject( const Reference< XPropertySet >& descriptor 
                             for(sal_Int32 i=0;i<xColumns->getCount();++i)
                             {
                                 if(::cppu::extractInterface(xColProp,xColumns->getByIndex(i)) && xColProp.is())
-                                    aSql += ::dbtools::quoteTableName(m_xMetaData,::comphelper::getString(xColProp->getPropertyValue(PROPERTY_NAME)))
+                                    aSql += ::dbtools::quoteTableName(m_xMetaData,::comphelper::getString(xColProp->getPropertyValue(PROPERTY_NAME)),::dbtools::eInTableDefinitions)
                                          + ::rtl::OUString::createFromAscii(",");
                             }
 
@@ -516,8 +514,9 @@ void OTableContainer::appendObject( const Reference< XPropertySet >& descriptor 
                                                                 sRefTable,
                                                                 sCatalog,
                                                                 sSchema,
-                                                                sTable);
-                            ::dbtools::composeTableName(m_xMetaData,sCatalog, sSchema, sTable,sComposedName,sal_True);
+                                                                sTable,
+                                                                ::dbtools::eInDataManipulation);
+                            ::dbtools::composeTableName(m_xMetaData,sCatalog, sSchema, sTable,sComposedName,sal_True,::dbtools::eInTableDefinitions);
 
 
                             if(!sComposedName.getLength())
@@ -527,7 +526,7 @@ void OTableContainer::appendObject( const Reference< XPropertySet >& descriptor 
                             for(sal_Int32 i=0;i<xColumns->getCount();++i)
                             {
                                 if(::cppu::extractInterface(xColProp,xColumns->getByIndex(i)) && xColProp.is())
-                                    aSql += ::dbtools::quoteTableName(m_xMetaData,::comphelper::getString(xColProp->getPropertyValue(PROPERTY_NAME)))
+                                    aSql += ::dbtools::quoteTableName(m_xMetaData,::comphelper::getString(xColProp->getPropertyValue(PROPERTY_NAME)),::dbtools::eInTableDefinitions)
                                                 + ::rtl::OUString::createFromAscii(",");
                             }
 
@@ -574,7 +573,7 @@ void OTableContainer::appendObject( const Reference< XPropertySet >& descriptor 
             descriptor->getPropertyValue(PROPERTY_SCHEMANAME)   >>= sSchema;
             descriptor->getPropertyValue(PROPERTY_NAME)         >>= sTable;
 
-            ::dbtools::composeTableName(m_xMetaData,sCatalog,sSchema,sTable,sComposedName,sal_False);
+            ::dbtools::composeTableName(m_xMetaData,sCatalog,sSchema,sTable,sComposedName,sal_False,::dbtools::eInDataManipulation);
 
             OConfigurationNode aTableConfig;
             if(m_aTablesConfig.hasByName(sComposedName))
@@ -638,7 +637,7 @@ void OTableContainer::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElement
                     xTable->getPropertyValue(PROPERTY_SCHEMANAME)   >>= sSchema;
                 xTable->getPropertyValue(PROPERTY_NAME)         >>= sTable;
 
-                ::dbtools::composeTableName(m_xMetaData,sCatalog,sSchema,sTable,sComposedName,sal_True);
+                ::dbtools::composeTableName(m_xMetaData,sCatalog,sSchema,sTable,sComposedName,sal_True,::dbtools::eInTableDefinitions);
             }
 
             if(!sComposedName.getLength())

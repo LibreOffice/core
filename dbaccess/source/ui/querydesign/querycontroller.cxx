@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-04 12:32:24 $
+ *  last change: $Author: oj $ $Date: 2002-10-07 13:06:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1318,7 +1318,7 @@ void OQueryController::doSaveAsDoc(sal_Bool _bSaveAs)
                                     xProp->getPropertyValue(PROPERTY_SCHEMANAME)    >>= sSchema;
                                     xProp->getPropertyValue(PROPERTY_NAME)          >>= sTable;
 
-                                    ::dbtools::composeTableName(getMetaData(),sCatalog,sSchema,sTable,sComposedName,sal_False);
+                                    ::dbtools::composeTableName(getMetaData(),sCatalog,sSchema,sTable,sComposedName,sal_False,::dbtools::eInDataManipulation);
                                     m_sName = sComposedName;
                                 }
                                 // now check if our datasource has set a tablefilter and if append the new table name to it

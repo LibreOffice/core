@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryTableView.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-19 08:01:28 $
+ *  last change: $Author: oj $ $Date: 2002-10-07 13:06:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -503,7 +503,8 @@ void OQueryTableView::AddTabWin(const ::rtl::OUString& strDatabase, const ::rtl:
                                     strDatabase,
                                     sCatalog,
                                     sSchema,
-                                    sTable);
+                                    sTable,
+                                    ::dbtools::eInDataManipulation);
         ::rtl::OUString sRealName(sSchema);
         if (sRealName.getLength())
             sRealName+= ::rtl::OUString('.');

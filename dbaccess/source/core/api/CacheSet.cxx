@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CacheSet.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-26 12:35:31 $
+ *  last change: $Author: oj $ $Date: 2002-10-07 12:57:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,7 +173,8 @@ void OCacheSet::fillTableName(const Reference<XPropertySet>& _xTable)  throw(SQL
                         ,comphelper::getString(_xTable->getPropertyValue(PROPERTY_SCHEMANAME))
                         ,comphelper::getString(_xTable->getPropertyValue(PROPERTY_NAME))
                         ,m_aComposedTableName
-                        ,sal_True);
+                        ,sal_True
+                        ,::dbtools::eInDataManipulation);
     }
 }
 // -------------------------------------------------------------------------

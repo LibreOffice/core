@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsbrowserDnD.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-19 07:32:51 $
+ *  last change: $Author: oj $ $Date: 2002-10-07 13:06:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1205,7 +1205,7 @@ namespace dbaui
                                     {// special handling for tables and views
                                          xProp->getPropertyValue(PROPERTY_SCHEMANAME)  >>= sSchema;
                                         xProp->getPropertyValue(PROPERTY_CATALOGNAME) >>= sCatalog;
-                                        ::dbtools::composeTableName(xMeta,sCatalog,sSchema,sNewName,sName,sal_False);
+                                        ::dbtools::composeTableName(xMeta,sCatalog,sSchema,sNewName,sName,sal_False,::dbtools::eInDataManipulation);
                                         sOldName = sName;
                                         // now check if our datasource has set a tablefilter and if append the new table name to it
                                         ::dbaui::appendToFilter(xConnection,sOldName,getORB(),getView()); // we are not interessted in the return value
@@ -1388,6 +1388,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.53  2002/08/19 07:32:51  oj
+ *  #99473# change string resource files
+ *
  *  Revision 1.52  2002/07/11 06:53:41  oj
  *  #95978# check if name for table is valid
  *

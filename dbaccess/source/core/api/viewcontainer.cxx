@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewcontainer.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2002-09-20 11:23:22 $
+ *  last change: $Author: oj $ $Date: 2002-10-07 12:57:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,7 +179,8 @@ Reference< XNamed > OViewContainer::createObject(const ::rtl::OUString& _rName)
                                             _rName,
                                             sCatalog,
                                             sSchema,
-                                            sTable);
+                                            sTable,
+                                            ::dbtools::eInDataManipulation);
         return new ::connectivity::sdbcx::OView(isCaseSensitive(),
                                 sTable,
                                 m_xMetaData,
@@ -227,14 +228,11 @@ void OViewContainer::appendObject( const Reference< XPropertySet >& descriptor )
         ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("CREATE VIEW ");
         ::rtl::OUString sCatalog,sSchema,sTable,sComposedName;
 
-        if(m_xMetaData->supportsCatalogsInTableDefinitions())
-            descriptor->getPropertyValue(PROPERTY_CATALOGNAME)  >>= sCatalog;
-        if(m_xMetaData->supportsSchemasInTableDefinitions())
-            descriptor->getPropertyValue(PROPERTY_SCHEMANAME)   >>= sSchema;
-
+        descriptor->getPropertyValue(PROPERTY_CATALOGNAME)  >>= sCatalog;
+        descriptor->getPropertyValue(PROPERTY_SCHEMANAME)   >>= sSchema;
         descriptor->getPropertyValue(PROPERTY_NAME)         >>= sTable;
 
-        ::dbtools::composeTableName(m_xMetaData,sCatalog,sSchema,sTable,sComposedName,sal_True);
+        ::dbtools::composeTableName(m_xMetaData,sCatalog,sSchema,sTable,sComposedName,sal_True,::dbtools::eInTableDefinitions);
         if(!sComposedName.getLength())
             ::dbtools::throwFunctionSequenceException(*this);
 
@@ -268,13 +266,11 @@ void OViewContainer::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementN
         Reference<XPropertySet> xTable(aIter->second.get(),UNO_QUERY);
         if(xTable.is())
         {
-            if(m_xMetaData->supportsCatalogsInTableDefinitions())
-                xTable->getPropertyValue(PROPERTY_CATALOGNAME)  >>= sCatalog;
-            if(m_xMetaData->supportsSchemasInTableDefinitions())
-                xTable->getPropertyValue(PROPERTY_SCHEMANAME)   >>= sSchema;
+            xTable->getPropertyValue(PROPERTY_CATALOGNAME)  >>= sCatalog;
+            xTable->getPropertyValue(PROPERTY_SCHEMANAME)   >>= sSchema;
             xTable->getPropertyValue(PROPERTY_NAME)         >>= sTable;
 
-            ::dbtools::composeTableName(m_xMetaData,sCatalog,sSchema,sTable,sComposedName,sal_True);
+            ::dbtools::composeTableName(m_xMetaData,sCatalog,sSchema,sTable,sComposedName,sal_True,::dbtools::eInTableDefinitions);
         }
 
         if(!sComposedName.getLength())

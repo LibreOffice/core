@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.110 $
+ *  $Revision: 1.111 $
  *
- *  last change: $Author: oj $ $Date: 2002-09-27 13:02:06 $
+ *  last change: $Author: oj $ $Date: 2002-10-07 12:57:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1545,7 +1545,7 @@ void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotifi
                     // create the composed table name
                     ::rtl::OUString aComposedTableName;
                     if(m_aUpdateTableName.getLength())
-                        composeTableName(m_xActiveConnection->getMetaData(),m_aUpdateCatalogName,m_aUpdateSchemaName,m_aUpdateTableName,aComposedTableName,sal_False);
+                        composeTableName(m_xActiveConnection->getMetaData(),m_aUpdateCatalogName,m_aUpdateSchemaName,m_aUpdateTableName,aComposedTableName,sal_False,::dbtools::eInDataManipulation);
 
                     m_pCache = new ORowSetCache(xRs,m_xComposer,m_xServiceManager,m_aParameterRow,aComposedTableName,m_bModified,m_bNew);
                     m_pCache->setMaxRowSize(m_nFetchSize);
@@ -1982,7 +1982,7 @@ rtl::OUString ORowSet::getCommand(sal_Bool& bEscapeProcessing,::com::sun::star::
                         m_xColumns = xSup->getColumns();
                 }
                 aQuery = rtl::OUString::createFromAscii("SELECT * FROM ");
-                aQuery += ::dbtools::quoteTableName(m_xActiveConnection->getMetaData(), m_aCommand);
+                aQuery += ::dbtools::quoteTableName(m_xActiveConnection->getMetaData(), m_aCommand,::dbtools::eInDataManipulation);
             }
                 break;
             case CommandType::QUERY:
@@ -2003,7 +2003,7 @@ rtl::OUString ORowSet::getCommand(sal_Bool& bEscapeProcessing,::com::sun::star::
                         xQuery->getPropertyValue(PROPERTY_UPDATE_SCHEMANAME)    >>= aSchema;
                         xQuery->getPropertyValue(PROPERTY_UPDATE_TABLENAME)     >>= aTable;
                         if(aTable.getLength())
-                            composeTableName(m_xActiveConnection->getMetaData(),aCatalog,aSchema,aTable,m_aUpdateTableName,sal_False);
+                            composeTableName(m_xActiveConnection->getMetaData(),aCatalog,aSchema,aTable,m_aUpdateTableName,sal_False,::dbtools::eInDataManipulation);
 
                         Reference<XColumnsSupplier> xSup(xQuery,UNO_QUERY);
                         if(xSup.is())

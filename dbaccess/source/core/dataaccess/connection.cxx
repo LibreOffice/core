@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connection.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-23 05:56:21 $
+ *  last change: $Author: oj $ $Date: 2002-10-07 13:04:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -735,7 +735,7 @@ Reference< XPreparedStatement >  SAL_CALL OConnection::prepareCommand( const ::r
     {
         case CommandType::TABLE:
             aStatement = rtl::OUString::createFromAscii("SELECT * FROM ");
-            aStatement += ::dbtools::quoteTableName(getMetaData(), command);
+            aStatement += ::dbtools::quoteTableName(getMetaData(), command,::dbtools::eInDataManipulation);
             break;
         case CommandType::QUERY:
             if (m_aQueries.hasByName(command))

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FilteredContainer.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-26 07:59:23 $
+ *  last change: $Author: oj $ $Date: 2002-10-07 12:57:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -262,7 +262,7 @@ namespace dbaccess
                         // we're not interested in the "wasNull", as the getStrings would return an empty string in
                         // that case, which is sufficient here
 
-                        composeTableName(m_xMetaData, sCatalog, sSchema, sName, sComposedName, sal_False);
+                        composeTableName(m_xMetaData, sCatalog, sSchema, sName, sComposedName, sal_False,::dbtools::eInDataManipulation);
                         bFilterMatch =  bNoTableFilters
                                     ||  ((nTableFilterLen != 0) && (NULL != bsearch(&sComposedName, aTableFilter.getConstArray(), nTableFilterLen, sizeof(::rtl::OUString), NameCompare)));
                         // the table is allowed to "pass" if we had no filters at all or any of the non-wildcard filters matches

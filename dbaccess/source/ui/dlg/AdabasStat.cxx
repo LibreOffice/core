@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AdabasStat.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-19 07:43:43 $
+ *  last change: $Author: oj $ $Date: 2002-10-07 13:06:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,7 +160,7 @@ OAdabasStatistics::OAdabasStatistics( Window* pParent,
             {
                 aStmt = ::rtl::OUString::createFromAscii("SELECT SERVERDBSIZE, UNUSEDPAGES FROM ");
 
-                aStmt += ::dbtools::quoteTableName(xMetaData,sSchema);
+                aStmt += ::dbtools::quoteTableName(xMetaData,sSchema,::dbtools::eInDataManipulation);
                 aStmt += ::rtl::OUString::createFromAscii(".\"SERVERDBSTATISTICS\"");
 
                 xStmt = m_xConnection->createStatement();
@@ -207,7 +207,7 @@ OAdabasStatistics::OAdabasStatistics( Window* pParent,
                 {
                     // then the db files
                     aStmt = ::rtl::OUString::createFromAscii("SELECT DEVSPACENAME FROM ");
-                    aStmt += ::dbtools::quoteTableName(xMetaData,sSchema);
+                    aStmt += ::dbtools::quoteTableName(xMetaData,sSchema,::dbtools::eInDataManipulation);
                     aStmt += ::rtl::OUString::createFromAscii(".\"DATADEVSPACES\"");
                     xStmt = m_xConnection->createStatement();
                     xRes = xStmt->executeQuery(aStmt);
@@ -243,7 +243,7 @@ OAdabasStatistics::OAdabasStatistics( Window* pParent,
                     if(bCanSelect)
                     {
                         aStmt = ::rtl::OUString::createFromAscii("SELECT * FROM ");
-                        aStmt += ::dbtools::quoteTableName(xMetaData,sSchema);
+                        aStmt += ::dbtools::quoteTableName(xMetaData,sSchema,::dbtools::eInDataManipulation);
                         aStmt += ::rtl::OUString::createFromAscii(".CONFIGURATION WHERE DESCRIPTION LIKE 'SYS%DEVSPACE%NAME'");
                         xStmt = m_xConnection->createStatement();
                         xRes = xStmt->executeQuery(aStmt);
@@ -256,7 +256,7 @@ OAdabasStatistics::OAdabasStatistics( Window* pParent,
                             showError();
 
                         aStmt = ::rtl::OUString::createFromAscii("SELECT * FROM ");
-                        aStmt += ::dbtools::quoteTableName(xMetaData,sSchema);
+                        aStmt += ::dbtools::quoteTableName(xMetaData,sSchema,::dbtools::eInDataManipulation);
                         aStmt += ::rtl::OUString::createFromAscii(".CONFIGURATION WHERE DESCRIPTION = 'TRANSACTION LOG NAME'");
                         xRes = xStmt->executeQuery(aStmt);
                         if(xRes.is() && xRes->next())

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryDesignView.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: oj $ $Date: 2002-09-27 11:26:28 $
+ *  last change: $Author: oj $ $Date: 2002-10-07 13:06:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -450,8 +450,8 @@ namespace
                 Reference< XDatabaseMetaData >  xMetaData = _xConnection->getMetaData();
 
                 ::rtl::OUString aCatalog,aSchema,aTable,sComposedName;
-                ::dbtools::qualifiedNameComponents(xMetaData,aDBName,aCatalog,aSchema,aTable);
-                ::dbtools::composeTableName(xMetaData,aCatalog,aSchema,aTable,sComposedName,sal_True);
+                ::dbtools::qualifiedNameComponents(xMetaData,aDBName,aCatalog,aSchema,aTable,::dbtools::eInDataManipulation);
+                ::dbtools::composeTableName(xMetaData,aCatalog,aSchema,aTable,sComposedName,sal_True,::dbtools::eInDataManipulation);
 
                 ::rtl::OUString aQuote = xMetaData->getIdentifierQuoteString();
                 ::rtl::OUString aTableListStr(sComposedName);
@@ -1265,6 +1265,7 @@ namespace
             // first make the logical easier
             ::connectivity::OSQLParseNode::negateSearchCondition(pCondition);
             ::connectivity::OSQLParseNode *pNodeTmp = pNode->getChild(1);
+
             ::connectivity::OSQLParseNode::disjunctiveNormalForm(pNodeTmp);
             pNodeTmp = pNode->getChild(1);
             ::connectivity::OSQLParseNode::absorptions(pNodeTmp);
@@ -1849,7 +1850,7 @@ namespace
                                 if(aKeyComp(sComposedName,aIter->first))
                                 {
                                     ::rtl::OUString sCatalog,sSchema,sTable;
-                                    ::dbtools::qualifiedNameComponents(xMetaData,sComposedName,sCatalog,sSchema,sTable);
+                                    ::dbtools::qualifiedNameComponents(xMetaData,sComposedName,sCatalog,sSchema,sTable,::dbtools::eInDataManipulation);
                                     sAlias = sTable;
                                 }
 

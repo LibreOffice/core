@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabletree.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-19 07:41:26 $
+ *  last change: $Author: oj $ $Date: 2002-10-07 13:06:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -323,7 +323,7 @@ Reference< XConnection > OTableTreeListBox::UpdateTableList( const ::rtl::OUStri
                         sSchema     = xCurrentRow->getString(2);
                         sName       = xCurrentRow->getString(3);
                         sType       = xCurrentRow->getString(4);
-                        ::dbtools::composeTableName(xMetaData, sCatalog, sSchema, sName, sComposedName, sal_False);
+                        ::dbtools::composeTableName(xMetaData, sCatalog, sSchema, sName, sComposedName, sal_False,::dbtools::eInDataManipulation);
                         if (s_sTableTypeView.equals(sType))
                             aViewNames.insert(sComposedName);
                         else
@@ -564,7 +564,7 @@ void OTableTreeListBox::implAddEntry(
 {
     // split the complete name into it's components
     ::rtl::OUString sCatalog, sSchema, sName;
-    qualifiedNameComponents(_rxConnMetaData, _rTableName, sCatalog, sSchema, sName);
+    qualifiedNameComponents(_rxConnMetaData, _rTableName, sCatalog, sSchema, sName,::dbtools::eInDataManipulation);
 
     SvLBoxEntry* pCat = NULL;
     SvLBoxEntry* pSchema = NULL;
@@ -641,6 +641,9 @@ void OTableTreeListBox::removedTable( const Reference< XConnection >& _rxConn, c
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.21  2002/08/19 07:41:26  oj
+ *  #99473# change string resource files
+ *
  *  Revision 1.20  2002/04/29 08:49:26  oj
  *  #98772# hi contrast changes
  *

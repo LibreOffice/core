@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablespage.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-19 07:40:31 $
+ *  last change: $Author: oj $ $Date: 2002-10-07 13:06:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -343,7 +343,7 @@ namespace dbaui
         for (sal_Int32 i=0; i<_rTables.getLength(); ++i, ++pIncludeTable)
         {
             if (xMeta.is())
-                qualifiedNameComponents(xMeta, pIncludeTable->getStr(), sCatalog, sSchema, sName);
+                qualifiedNameComponents(xMeta, pIncludeTable->getStr(), sCatalog, sSchema, sName,::dbtools::eInDataManipulation);
             else
                 sName = pIncludeTable->getStr();
 
@@ -1477,6 +1477,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.13  2002/08/19 07:40:31  oj
+ *  #99473# change string resource files
+ *
  *  Revision 1.12  2002/04/29 08:27:33  oj
  *  #98772# impl toolbox hi contrast
  *
