@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: vg $ $Date: 2005-03-10 18:15:03 $
+#   last change: $Author: rt $ $Date: 2005-03-29 13:27:44 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -88,7 +88,8 @@ SHARE_LIBS =	\
     $(UCBHELPERLIB) \
     $(UNOTOOLSLIB)	    \
     $(TOOLSLIB) \
-    $(XMLOFFLIB)
+    $(XMLOFFLIB) \
+    $(COMPHELPERLIB)
 
         
 .IF "$(GUI)"=="WNT"
@@ -153,7 +154,8 @@ APP3STDLIBS+=	\
 #
 # The 4rd application
 #
-#APP4TARGET=	moz_profile
+.IF "$(CRYPTO_ENGINE)" == "nss"
+APP4TARGET=	moz_profile
 APP4OBJS=	\
         $(SLO)$/moz_profile.obj
         
@@ -163,6 +165,7 @@ APP4STDLIBS+= -lstdc++
 
 APP4STDLIBS+=	\
         $(SHARE_LIBS)
+.ENDIF
 
 # --- Targets ------------------------------------------------------
 
