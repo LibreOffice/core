@@ -63,6 +63,7 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Element;
 
 import java.io.IOException;
+import java.util.Vector;
 
 import org.openoffice.xmerge.Document;
 import org.openoffice.xmerge.ConvertData;
@@ -76,7 +77,6 @@ import org.openoffice.xmerge.converter.xml.sxc.CellStyle;
 import org.openoffice.xmerge.converter.xml.StyleCatalog;
 
 import org.openoffice.xmerge.util.Debug;
-import org.openoffice.xmerge.util.IntArrayList;
 import org.openoffice.xmerge.util.XmlUtil;
 
 /**
@@ -126,7 +126,7 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
      *  An array of column widths of the current worksheet.  Width is
      *  measured in number of characters.
      */
-    private IntArrayList ColumnWidthList;
+    private Vector ColumnRowList;
 
     /**  Width, in characters, of the current cell display data. */
     private int displayWidth = 0;
@@ -180,13 +180,16 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
      */
     protected void loadStyles(SxcDocument sxwDoc) {
         org.w3c.dom.Document contentDom = sxwDoc.getContentDOM();
-        // org.w3c.dom.Document styleDom   = sxwDoc.getStyleDOM();
 
         styleCat = new StyleCatalog(25);
 
         NodeList nl = null;
-        String families[] = new String[] { SxcConstants.TABLE_CELL_STYLE_FAMILY };
-        Class classes[]   = new Class[] { CellStyle.class };
+        String families[] = new String[] {  SxcConstants.COLUMN_STYLE_FAMILY,
+                                            SxcConstants.ROW_STYLE_FAMILY,
+                                            SxcConstants.TABLE_CELL_STYLE_FAMILY };
+        Class classes[]   = new Class[] {   ColumnStyle.class,
+                                            RowStyle.class,
+                                            CellStyle.class};
 
         /*
          * Process the content XML for any other style info.
@@ -344,7 +347,7 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
 
         Debug.log(Debug.TRACE, "<TABLE>");
 
-        ColumnWidthList = new IntArrayList();
+        ColumnRowList = new Vector();
 
         // Get table attributes
         // TODO - extract style from attribute
@@ -389,11 +392,10 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
                     }
                 }
             }
-
         }
 
         // Add column width info to the current sheet
-        encoder.setColumnWidths(ColumnWidthList);
+        encoder.setColumnRows(ColumnRowList);
 
         Debug.log(Debug.TRACE, "</TABLE>");
     }
@@ -412,6 +414,42 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
         NamedNodeMap cellAtt = node.getAttributes();
 
         if (cellAtt != null) {
+
+            Node rowStyle =
+                cellAtt.getNamedItem(ATTRIBUTE_TABLE_STYLE_NAME);
+
+            Node tableNumRowRepeatingNode = cellAtt.getNamedItem(ATTRIBUTE_TABLE_NUM_ROWS_REPEATED);
+            int repeatedRows = 1;
+
+            if(tableNumRowRepeatingNode!=null) {
+                String repeatStr = tableNumRowRepeatingNode.getNodeValue();
+                Debug.log(Debug.TRACE, "traverseTableRow() repeated-rows : " + repeatStr);
+                repeatedRows = Integer.parseInt(repeatStr);
+            }
+
+            String styleName = new String("");
+
+            if ( rowStyle != null) {
+                styleName = rowStyle.getNodeValue();
+            }
+            if(styleName.equalsIgnoreCase("Default") || styleName.length()==0) {
+
+                Debug.log(Debug.TRACE, "No defined Row Style Attribute was found");
+
+            } else {
+
+                RowStyle rStyle = ( RowStyle)styleCat.lookup(styleName,
+                                        SxcConstants.ROW_STYLE_FAMILY, null,
+                                        RowStyle.class);
+
+                int rowHeight = rStyle.getRowHeight();
+
+                Debug.log(Debug.TRACE, "traverseTableRow() Row Height : " + rowHeight);
+                ColumnRowInfo ri = new ColumnRowInfo(   rowHeight,
+                                                            repeatedRows,
+                                                            ColumnRowInfo.ROW);
+                ColumnRowList.add(ri);
+            }
 
             // Get the attribute representing the number of rows repeated
             Node rowsRepeatedNode =
@@ -488,9 +526,46 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
      */
     protected void traverseTableColumn(Node node) throws IOException {
 
-        // TODO
-    }
+        Debug.log(Debug.TRACE, "traverseColumn() : ");
+        NamedNodeMap cellAtt = node.getAttributes();
+        Node tableStyleNode = cellAtt.getNamedItem(ATTRIBUTE_TABLE_STYLE_NAME);
 
+        Node tableNumColRepeatingNode = cellAtt.getNamedItem(ATTRIBUTE_TABLE_NUM_COLUMNS_REPEATED);
+        int repeatedColumns = 1;
+
+        if(tableNumColRepeatingNode!=null) {
+            Debug.log(Debug.TRACE, "traverseColumn() repeated-cols : " + tableNumColRepeatingNode.getNodeValue());
+            repeatedColumns = Integer.parseInt(tableNumColRepeatingNode.getNodeValue());
+        }
+
+        String styleName = new String("");
+
+        if(tableStyleNode!=null) {
+            styleName = tableStyleNode.getNodeValue();
+        }
+
+        if(styleName.equalsIgnoreCase("Default") || styleName.length()==0) {
+
+            Debug.log(Debug.TRACE, "No defined Style Attribute was found");
+
+        } else {
+
+            ColumnStyle cStyle = (ColumnStyle)styleCat.lookup(styleName,
+                                SxcConstants.COLUMN_STYLE_FAMILY, null,
+                                ColumnStyle.class);
+
+            int columnWidth = cStyle.getColWidth();
+
+            Debug.log(Debug.TRACE, "traverseColumn() Column Width : " + columnWidth);
+
+            ColumnRowInfo col = new ColumnRowInfo(  columnWidth,
+                                                    repeatedColumns, ColumnRowInfo.COLUMN);
+            ColumnRowList.add(col);
+
+        }
+
+
+    }
 
     /**
      *  This method traverses a <i>table:table-cell</i> element
@@ -546,16 +621,12 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
 
         } else {
 
-            Debug.log(Debug.TRACE, "TRACE 1");
             CellStyle cStyle = (CellStyle)styleCat.lookup(styleName,
                                 SxcConstants.TABLE_CELL_STYLE_FAMILY, null,
                                 CellStyle.class);
-            Debug.log(Debug.TRACE, "TRACE 2");
 
             Format definedFormat = cStyle.getFormat();
-            Debug.log(Debug.TRACE, "TRACE 3");
             fmt = new Format(definedFormat);
-            Debug.log(Debug.TRACE, "TRACE 4");
         }
 
         // There is a number of cols repeated attribute
@@ -773,7 +844,7 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
             }
 
             String s = buffer.toString();
-            displayWidth = calculateContentWidth(s);
+            // displayWidth = calculateContentWidth(s);
             addCell(s);
 
         }
@@ -813,10 +884,6 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
                 // Add the cell data to the encoded spreadsheet document
                 encoder.addCell(row, col, fmt, cellValue);
 
-                // Check the column width to see if it affects the limits
-                // of the column
-                processColumnWidth(col);
-
                 Debug.log(Debug.TRACE, cellValue);
                 Debug.log(Debug.TRACE, "</TD>");
 
@@ -829,45 +896,6 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
 
     }
 
-
-    /**
-     *  This method calculates the width of the input
-     *  <code>String</code>.  This value is used in the calculation
-     *  of column widths.
-     *
-     *  @param  content  The contents from which to calculate
-     *                   the width.
-     */
-    protected int calculateContentWidth(String content) {
-
-        // We currently use number of characters as our measure
-        // of width, so width is simply String.length().
-        return content.length();
-    }
-
-
-    /**
-     *  This method maintains an array of integers that
-     *  contains the desired widths (in number of chars)
-     *  for each column.
-     *
-     *  @param  column  The current column number.
-     */
-    protected void processColumnWidth(int column) {
-
-        // Make sure the list has the current column
-        ColumnWidthList.ensureCapacityAndFill(column, 0);
-
-        int index = column - 1;
-
-        int currentWidth = ColumnWidthList.get(index);
-
-        // displayWidth is the size (in characters) of the expected
-        // content of the cell.
-        if (displayWidth > currentWidth) {
-            ColumnWidthList.set(index, displayWidth);
-        }
-    }
 
 
     /**
@@ -917,7 +945,7 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
 
                     String s = child.getNodeValue();
 
-                    displayWidth = calculateContentWidth(s);
+                    // displayWidth = calculateContentWidth(s);
 
                     int k = s.lastIndexOf(".");
                     if (k > 0) {

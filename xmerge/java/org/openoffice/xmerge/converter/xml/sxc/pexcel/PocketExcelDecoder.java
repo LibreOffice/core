@@ -73,6 +73,7 @@ import org.openoffice.xmerge.converter.xml.sxc.SxcDocumentDeserializer;
 import org.openoffice.xmerge.converter.xml.sxc.SpreadsheetDecoder;
 import org.openoffice.xmerge.converter.xml.sxc.Format;
 import org.openoffice.xmerge.converter.xml.sxc.NameDefinition;
+import org.openoffice.xmerge.converter.xml.sxc.ColumnRowInfo;
 import org.openoffice.xmerge.converter.xml.sxc.pexcel.records.*;
 
 /**
@@ -157,6 +158,41 @@ final class PocketExcelDecoder extends SpreadsheetDecoder {
         }
         Debug.log(Debug.TRACE,"Getting " + nameDefinitionVector.size() + " DefinedName records");
         return (nameDefinitionVector.elements());
+    }
+
+    /**
+     *  This method returns the number of spreadsheets
+     *  stored in the WorkBook.
+     *
+     *  @return  The number of sheets in the WorkBook.
+     */
+    public Enumeration getColumnRowInfos() {
+
+        Vector colRowVector = new Vector();
+
+        // Collect Columns from worksheet and add them to the vector
+        for(Enumeration e  = ws.getColInfos();e.hasMoreElements();) {
+            ColInfo ci = (ColInfo)e.nextElement();
+            int repeated = ci.getLast() - ci.getFirst() + 1;
+            ColumnRowInfo colInfo = new ColumnRowInfo(  ci.getColWidth(),
+                                                        repeated,
+                                                        ColumnRowInfo.COLUMN);
+            colRowVector.add(colInfo);
+        }
+
+        // Collect Rows from worksheet and add them to the vector
+        for(Enumeration e  = ws.getRows();e.hasMoreElements();) {
+            Row rw = (Row)e.nextElement();
+            // We will use the repeat field for number (unlike columns rows
+            // cannot be repeated, we have unique record for each row in pxl
+            int repeated = rw.getRowNumber();
+            ColumnRowInfo rowInfo = new ColumnRowInfo(  rw.getRowHeight(),
+                                                        repeated,
+                                                        ColumnRowInfo.ROW);
+            colRowVector.add(rowInfo);
+        }
+        Debug.log(Debug.TRACE,"Getting " + colRowVector.size() + " ColRowInfo records");
+        return (colRowVector.elements());
     }
 
     /**
@@ -406,7 +442,12 @@ final class PocketExcelDecoder extends SpreadsheetDecoder {
         fmt.setAttribute(Format.UNDERLINE, fd.isUnderline());
 
         fmt.setAlign(xf.getAlign());
+        fmt.setAttribute(Format.WORD_WRAP, xf.isWordWrap());
 
+        fmt.setAttribute(Format.TOP_BORDER, xf.isBorder(ExtendedFormat.TOP_BORDER));
+        fmt.setAttribute(Format.BOTTOM_BORDER, xf.isBorder(ExtendedFormat.BOTTOM_BORDER));
+        fmt.setAttribute(Format.RIGHT_BORDER, xf.isBorder(ExtendedFormat.RIGHT_BORDER));
+        fmt.setAttribute(Format.LEFT_BORDER, xf.isBorder(ExtendedFormat.LEFT_BORDER));
         fmt.setCategory(getCellDataType());
 
     }

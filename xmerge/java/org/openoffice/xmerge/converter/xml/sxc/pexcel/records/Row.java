@@ -79,9 +79,9 @@ public class Row implements BIFFRecord {
      *
      * @param   is InputStream containing a Pocket Excel Data file.
      */
-    public Row() {
-        rw      = EndianConverter.writeShort((short) 0);
-        miyRw   = EndianConverter.writeShort((short) 330);
+    public Row(int rw, int miyRw) {
+        this.rw     = EndianConverter.writeShort((short) rw);
+        this.miyRw  = EndianConverter.writeShort((short) miyRw);
         grbit   = EndianConverter.writeShort((short) 0);
         ixfe    = EndianConverter.writeShort((short) 0);
     }
@@ -102,6 +102,24 @@ public class Row implements BIFFRecord {
      */
     public short getBiffType() {
         return PocketExcelBiffConstants.ROW_DESCRIPTION;
+    }
+
+    /**
+     * Get the height of this row
+     *
+     * @return the height of this row
+     */
+    public short getRowHeight() {
+        return EndianConverter.readShort(miyRw);
+    }
+
+    /**
+     * Get the rown number for this style
+     *
+     * @return the row this style applies to
+     */
+    public short getRowNumber() {
+        return EndianConverter.readShort(rw);
     }
 
     /**

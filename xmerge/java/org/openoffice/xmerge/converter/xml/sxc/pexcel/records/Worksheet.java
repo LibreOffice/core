@@ -63,6 +63,7 @@ import java.util.Enumeration;
 
 import org.openoffice.xmerge.util.IntArrayList;
 import org.openoffice.xmerge.util.Debug;
+import org.openoffice.xmerge.converter.xml.sxc.ColumnRowInfo;
 
 /**
  *  This class is used by <code>PxlDocument</code> to maintain pexcel
@@ -117,8 +118,8 @@ public class Worksheet {
         }
         drh.write(os);
         for(Enumeration e = rows.elements();e.hasMoreElements();) {
-            ColInfo ci = (ColInfo) e.nextElement();
-            ci.write(os);
+            Row rw = (Row) e.nextElement();
+            rw.write(os);
         }
         for(Enumeration e = cells.elements();e.hasMoreElements();) {
             BIFFRecord cv = (BIFFRecord) e.nextElement();
@@ -194,12 +195,12 @@ public class Worksheet {
                     Debug.log(Debug.TRACE,"EOF Marker");
                     eof = new Eof();
                     return true;
-
+                   /*
                 case PocketExcelBiffConstants.DEFINED_NAME:
                     Debug.log(Debug.TRACE,"NAME: Defined Name (18h)");
                     DefinedName dn = new DefinedName(is, wb);
                     break;
-
+                     */
                 case PocketExcelBiffConstants.CURRENT_SELECTION:
                     Debug.log(Debug.TRACE,"SELECTION: Current Selection (1Dh)");
                     Selection s = new Selection(is);
@@ -233,6 +234,7 @@ public class Worksheet {
                 case PocketExcelBiffConstants.COLINFO:
                     Debug.log(Debug.TRACE,"COLINFO: Column Formatting Information (7Dh) [PXL 2.0]");
                     ColInfo ci = new ColInfo(is);
+                    colInfo.add(ci);
                     break;
 
                 default:
@@ -271,32 +273,56 @@ public class Worksheet {
      *
       * @param  list of column widths
       */
-    public void addColInfo(IntArrayList columnWidths) {
+    public void addColRows(Vector columnWidths) {
 
-        int numColumns  = columnWidths.size();
-        int interval    = 0;
-        ColInfo newColInfo;
+        int nCols = 0;
+        int nRows = 0;
 
-        Debug.log(Debug.TRACE,"Worksheet: addColInfo");
-        for (int i = 0; i < numColumns; i++)    // for each Column width in the IntArrayList
-            {
-            int width = columnWidths.get(i);
-            Debug.log(Debug.TRACE,"Worksheet: addColInfo width = " + width);
-
-            if (numColumns == i + 1)            // The last ColInfo Record
-                {
-                newColInfo = new ColInfo(i-interval, i, width * 256, (byte) 2);
+        Debug.log(Debug.TRACE,"Worksheet: addColInfo : " + columnWidths);
+        for(Enumeration e = columnWidths.elements();e.hasMoreElements();) {
+            ColumnRowInfo cri =(ColumnRowInfo) e.nextElement();
+            int size = cri.getSize();
+            int repeated = cri.getRepeated();
+            if(cri.isColumn()) {
+                Debug.log(Debug.TRACE,"Worksheet: adding ColInfo width = " + size);
+                ColInfo newColInfo = new ColInfo(   nCols,
+                                                    nCols+repeated,
+                                                    size, (byte) 2);
                 colInfo.add(newColInfo);
-            }
-        else if (width == columnWidths.get(i+1)) // Look ahead to the next column
-            interval++;                         // Skip creatig a colInfo and
-                                                // increment the interval
-        else
-            {
-            newColInfo = new ColInfo(i-interval, i, width * 256, (byte) 2);
-            interval=0;
-            colInfo.add(newColInfo);
+                nCols += repeated;
+            } else if(cri.isRow()) {
+                Debug.log(Debug.TRACE,"Worksheet: adding Row Height = " + size);
+                if(size!=255) {
+                    for(int i=0;i<repeated;i++) {
+                        Row newRow = new Row(nRows++, size);
+                        rows.add(newRow);
+                    }
+                } else {
+                    // If it is the Default Row we don't need to add it
+                    nRows += repeated;
+                }
             }
         }
     }
+
+    /**
+     * Returns an <code>Enumeration</code> to the ColInfo's for this worksheet
+     *
+     * @return an <code>Enumeration</code> to the ColInfo's
+     */
+     public Enumeration getColInfos() {
+
+         return (colInfo.elements());
+     }
+
+    /**
+     * Returns an <code>Enumeration</code> to the Rows for this worksheet
+     *
+     * @return an <code>Enumeration</code> to the Rows
+     */
+     public Enumeration getRows() {
+
+         return (rows.elements());
+     }
+
 }

@@ -63,6 +63,7 @@ import org.openoffice.xmerge.util.Debug;
  *  This class specifies the format for a given spreadsheet cell.
  *
  *  @author  Mark Murnane
+ *  @author  Martin Maher (Extended Style Support)
  */
 public class Format implements Cloneable {
 
@@ -72,7 +73,6 @@ public class Format implements Cloneable {
     final public static int LEFT_ALIGN      = 0x03;
     final public static int JUST_ALIGN      = 0x04;
 
-    // final protected static int FIRST_ATTR = 0x01;
     /** Indicates <i>bold</i> text. */
     final public static int BOLD        = 0x01;
     /** Indicates <i>italic</i> text. */
@@ -85,7 +85,13 @@ public class Format implements Cloneable {
     final public static int SUPERSCRIPT = 0x10;
     /** Indicates <i>subscripted</i> text. */
     final public static int SUBSCRIPT   = 0x20;
-    // final protected static int LAST_ATTR = 0x20;
+
+    final public static int LEFT_BORDER     = 0x40;
+    final public static int RIGHT_BORDER    = 0x80;
+    final public static int TOP_BORDER      = 0x100;
+    final public static int BOTTOM_BORDER   = 0x200;
+
+    final public static int WORD_WRAP       = 0x400;
 
     private int align;
     private String category;
@@ -114,6 +120,7 @@ public class Format implements Cloneable {
         formatSpecifier = "";
         fontName = "";
         align = 0;
+        attributes = 0;
         foreground = Color.black;
         background = Color.white;
     }
@@ -446,6 +453,9 @@ public class Format implements Cloneable {
             if (!background.equals(rhs.background))
                 return false;
         }
+
+        if (rhs.align!= align)
+                return false;
 
         return true;
     }

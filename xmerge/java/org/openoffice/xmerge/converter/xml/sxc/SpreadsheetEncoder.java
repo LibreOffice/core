@@ -56,6 +56,7 @@
 package org.openoffice.xmerge.converter.xml.sxc;
 
 import java.io.IOException;
+import java.util.Vector;
 
 import org.openoffice.xmerge.util.IntArrayList;
 
@@ -137,7 +138,7 @@ public abstract class SpreadsheetEncoder {
      *  @param  columnWidths  An <code>IntArrayList</code> of column
      *                        widths.
      */
-    public abstract void setColumnWidths(IntArrayList columnWidths) throws IOException;
+    public abstract void setColumnRows(Vector columnRows) throws IOException;
 
     /**
      *  Set the width of the columns in the WorkBook.

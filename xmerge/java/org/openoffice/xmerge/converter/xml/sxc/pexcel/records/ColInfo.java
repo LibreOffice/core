@@ -74,6 +74,7 @@ public class ColInfo implements BIFFRecord {
     private byte[] colDX    = new byte[2];  // column width
     private byte[] ixfe     = new byte[2];  // index for formatting
     private byte   grbit;                   // options flags
+    private float  scale = (float) 1.798;
 
     /**
       * Constructs a pocket Excel Document from the
@@ -87,6 +88,7 @@ public class ColInfo implements BIFFRecord {
     public ColInfo(int colFirst, int colLast, int colDX, byte grbit) {
         this.colFirst   = EndianConverter.writeShort((short)colFirst);
         this.colLast    = EndianConverter.writeShort((short)colLast);
+        colDX *= scale;
         this.colDX      = EndianConverter.writeShort((short)colDX);
         this.ixfe       = EndianConverter.writeShort((short)0);
         this.grbit  = grbit;
@@ -99,6 +101,8 @@ public class ColInfo implements BIFFRecord {
      */
     public ColInfo(InputStream is) throws IOException {
         read(is);
+        short scaledDX = (short) (EndianConverter.readShort(colDX) / scale);
+        colDX = EndianConverter.writeShort((short)scaledDX);;
     }
 
     public int read(InputStream input) throws IOException {
@@ -126,6 +130,32 @@ public class ColInfo implements BIFFRecord {
      */
     public short getBiffType() {
         return PocketExcelBiffConstants.COLINFO;
+    }
+    /**
+     * Get the width of this column
+     *
+     * @return the width of this column
+     */
+    public short getColWidth() {
+        return EndianConverter.readShort(colDX);
+    }
+
+    /**
+     * Get the hex code for this particular <code>BIFFRecord</code>
+     *
+     * @return the hex code for <code>ColInfo</code>
+     */
+    public short getFirst() {
+        return EndianConverter.readShort(colFirst);
+    }
+
+    /**
+     * Get the hex code for this particular <code>BIFFRecord</code>
+     *
+     * @return the hex code for <code>ColInfo</code>
+     */
+    public short getLast() {
+        return EndianConverter.readShort(colLast);
     }
 
     /**

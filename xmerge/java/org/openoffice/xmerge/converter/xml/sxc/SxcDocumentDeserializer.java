@@ -108,6 +108,9 @@ public abstract class SxcDocumentDeserializer implements OfficeConstants,
     private StyleCatalog styleCat = null;
 
     private int textStyles = 1;
+    private int colStyles = 1;
+    private int rowStyles = 1;
+
     /**
      *  Constructor.
      *
@@ -338,12 +341,63 @@ public abstract class SxcDocumentDeserializer implements OfficeConstants,
 
         Debug.log(Debug.TRACE, "<SheetName>" + sheetName + "</SheetName>");
 
+        // add the various different table-columns
+        processColumns(tableElement);
+
         // Get each cell and add to doc
         processCells(tableElement);
 
         Debug.log(Debug.TRACE, "</TABLE>");
     }
 
+    /**
+     *  <p>This method process the cells in a <code>Document</code>
+     *  and generates a portion of the <code>Document</code>.</p>
+     *
+     *  <p>This method assumes that records are sorted by
+     *  row and then column.</p>
+     *
+     *  @param  root  The <code>Node</code> of the <code>Document</code>
+     *                we are building that we will append our cell
+     *                <code>Node</code> objects.  This <code>Node</code>
+     *                should be a TAG_TABLE tag.
+     *
+     *  @throws  IOException  If any I/O error occurs.
+     */
+    protected void processColumns(Node root) throws IOException {
+
+        for(Enumeration e = decoder.getColumnRowInfos();e.hasMoreElements();) {
+
+            ColumnRowInfo ci = (ColumnRowInfo) e.nextElement();
+            if(ci.isColumn()) {
+                ColumnStyle cStyle = new ColumnStyle("Default",SxcConstants.COLUMN_STYLE_FAMILY,
+                            SxcConstants.DEFAULT_STYLE, ci.getSize(), null);
+
+                Style result[] = (Style[]) styleCat.getMatching(cStyle);
+                String styleName;
+                if(result.length==0) {
+
+                        cStyle.setName("co" + colStyles++);
+                        styleName = cStyle.getName();
+                        Debug.log(Debug.TRACE,"No existing style found, adding " + styleName);
+                        styleCat.add(cStyle);
+                } else {
+                        ColumnStyle existingStyle = (ColumnStyle) result[0];
+                        styleName = existingStyle.getName();
+                        Debug.log(Debug.TRACE,"Existing style found : " + styleName);
+                }
+
+                // Create an element node for the new row
+                Element colElement = (Element) doc.createElement(TAG_TABLE_COLUMN);
+                colElement.setAttribute(ATTRIBUTE_TABLE_STYLE_NAME, styleName);
+                if(ci.getRepeated()!=1) {
+                    String repeatStr = String.valueOf(ci.getRepeated());
+                    colElement.setAttribute(ATTRIBUTE_TABLE_NUM_COLUMNS_REPEATED, repeatStr);
+                }
+                root.appendChild(colElement);
+            }
+        }
+    }
 
     /**
      *  <p>This method process the cells in a <code>Document</code>
@@ -417,10 +471,31 @@ public abstract class SxcDocumentDeserializer implements OfficeConstants,
                 // Create an element node for the new row
                 rowElement = (Element) doc.createElement(TAG_TABLE_ROW);
 
-                // TODO - style currently hardcoded - get real value
-                // Set row style-name attribute
-                rowElement.setAttribute(ATTRIBUTE_TABLE_STYLE_NAME,
-                                        "Default");
+
+                for(Enumeration e = decoder.getColumnRowInfos();e.hasMoreElements();) {
+                    ColumnRowInfo cri = (ColumnRowInfo) e.nextElement();
+                    if(cri.isRow() && cri.getRepeated()==newRow-1) {
+                        // We have the correct Row BIFFRecord for this row
+                        RowStyle rStyle = new RowStyle("Default",SxcConstants.ROW_STYLE_FAMILY,
+                                    SxcConstants.DEFAULT_STYLE, cri.getSize(), null);
+
+                        Style result[] = (Style[]) styleCat.getMatching(rStyle);
+                        String styleName;
+                        if(result.length==0) {
+
+                                rStyle.setName("ro" + rowStyles++);
+                                styleName = rStyle.getName();
+                                Debug.log(Debug.TRACE,"No existing style found, adding " + styleName);
+                                styleCat.add(rStyle);
+                        } else {
+                                RowStyle existingStyle = (RowStyle) result[0];
+                                styleName = existingStyle.getName();
+                                Debug.log(Debug.TRACE,"Existing style found : " + styleName);
+                        }
+                        rowElement.setAttribute(ATTRIBUTE_TABLE_STYLE_NAME, styleName);
+                        // For now we will not use the repeat column attribute
+                    }
+                }
 
                 // Append the row element to the root node
                 root.appendChild(rowElement);

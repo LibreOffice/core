@@ -84,6 +84,20 @@ org.openoffice.xmerge.converter.xml.OfficeConstants {
     private byte bBottom;                       // Bottom border style
     private byte backstyle;
     private byte borderstyle;
+    private Format fmt;
+
+    public static final int TOP_BORDER      = 0x01;
+    public static final int LEFT_BORDER     = 0x02;
+    public static final int BOTTOM_BORDER   = 0x04;
+    public static final int RIGHT_BORDER    = 0x08;
+
+    // Horizontal Alignment Styles
+    public static final int NORMAL_ALIGN    = 0x00;
+    public static final int LEFT_ALIGN      = 0x01;
+    public static final int CENTER_ALIGN    = 0x02;
+    public static final int RIGHT_ALIGN     = 0x03;
+
+    public static final int WORD_WRAP       = 0x08;
 
     /**
       * Constructs an <code>ExtendedFormat</code> from the
@@ -103,6 +117,7 @@ org.openoffice.xmerge.converter.xml.OfficeConstants {
       */
     public ExtendedFormat(int ixfnt, Format fmt) {
 
+        this.fmt = fmt;
         this.ixfnt          = EndianConverter.writeShort((short)ixfnt);
         String category = fmt.getCategory();
         if(category.equalsIgnoreCase(CELLTYPE_CURRENCY)) {
@@ -117,16 +132,37 @@ org.openoffice.xmerge.converter.xml.OfficeConstants {
         this.fattributes    = new byte[] {(byte)0xFF,(byte)0xFF,(byte)0xFF,(byte)0xFF};
         this.fBaseAttr      = new byte[] {(byte)0x02,(byte)0x00};
 
+        this.fTextAttr      = new byte[] {(byte)0x30, (byte)0x00};
+
         int align = fmt.getAlign();
+
         if(align==Format.CENTER_ALIGN) {
-            this.fTextAttr      = new byte[] {(byte)0x32,(byte)0x00};
+            fTextAttr[0] |= CENTER_ALIGN;
         } else if(align==Format.LEFT_ALIGN) {
-            this.fTextAttr      = new byte[] {(byte)0x31,(byte)0x00};
+            fTextAttr[0] |= LEFT_ALIGN;
         } else if(align==Format.RIGHT_ALIGN) {
-            this.fTextAttr      = new byte[] {(byte)0x33,(byte)0x00};
+            fTextAttr[0] |= RIGHT_ALIGN;
         } else {
-            this.fTextAttr      = new byte[] {(byte)0x30,(byte)0x00};
+            fTextAttr[0] |= NORMAL_ALIGN;
         }
+
+        if(fmt.getAttribute(Format.WORD_WRAP)) {
+            fTextAttr[0] |= WORD_WRAP;
+        }
+
+        if(fmt.getAttribute(Format.LEFT_BORDER)) {
+            fTextAttr[1] |= LEFT_BORDER;
+        }
+        if(fmt.getAttribute(Format.RIGHT_BORDER)) {
+            fTextAttr[1] |= RIGHT_BORDER;
+        }
+        if(fmt.getAttribute(Format.TOP_BORDER)) {
+            fTextAttr[1] |= TOP_BORDER;
+        }
+        if(fmt.getAttribute(Format.BOTTOM_BORDER)) {
+            fTextAttr[1] |= BOTTOM_BORDER;
+        }
+
         this.icvFore        = new byte[] {(byte)0xFF,(byte)0x00};
         this.icvFill        = new byte[] {(byte)0xFF,(byte)0x00};
         this.bRight         = (byte) 0xFF;
@@ -157,6 +193,15 @@ org.openoffice.xmerge.converter.xml.OfficeConstants {
     }
 
     /**
+     * Get the font index this format uses
+     *
+     * @return the font index
+     */
+    public int getTextAttr() {
+        return EndianConverter.readShort(fTextAttr);
+    }
+
+    /**
      * Get the alignment for this Format
      *
      * @return the alignment
@@ -165,7 +210,7 @@ org.openoffice.xmerge.converter.xml.OfficeConstants {
 
         int align;
 
-        switch(EndianConverter.readShort(fTextAttr)) {
+        switch(fTextAttr[0]) {
             case 0x31:
                 align = Format.LEFT_ALIGN;
                 break;
@@ -184,6 +229,24 @@ org.openoffice.xmerge.converter.xml.OfficeConstants {
     }
 
     /**
+     * Is the word wrap set
+     *
+     * @return true if it is selected
+     */
+    public boolean isWordWrap() {
+        return (!((fTextAttr[0] & WORD_WRAP) == 0));
+    }
+    /**
+     * Get the border style
+     *
+     * @param side the side to test
+     * @return true if it is selected
+     */
+    public boolean isBorder(int side) {
+        return (!((fTextAttr[1] & side) == 0));
+    }
+
+    /**
      * Compare two ExtendedFormat to see if the font index is the same
      *
      * @param the ExtendedFormat to be used in the comaprison
@@ -191,14 +254,19 @@ org.openoffice.xmerge.converter.xml.OfficeConstants {
      */
     public boolean compareTo(ExtendedFormat rhs) {
 
-        int currentAlignment = this.getAlign();
-
-        if (this.getFontIndex() == rhs.getFontIndex() &&
-            this.getFormatIndex() == rhs.getFormatIndex() &&
-            currentAlignment == rhs.getAlign())
-            return true;
-        else
+        if(this.getTextAttr() != rhs.getTextAttr())
             return false;
+
+        if(this.getAlign() != rhs.getAlign())
+            return false;
+
+        if (this.getFontIndex() != rhs.getFontIndex())
+            return false;
+
+        if (this.getFormatIndex() != rhs.getFormatIndex())
+            return false;
+
+        return true;
     }
 
     /**

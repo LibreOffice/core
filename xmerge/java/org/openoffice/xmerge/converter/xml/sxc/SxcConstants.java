@@ -66,6 +66,12 @@ package org.openoffice.xmerge.converter.xml.sxc;
  */
 public interface SxcConstants {
 
+    /** Family name for column styles. */
+    public static final String COLUMN_STYLE_FAMILY = "table-column";
+
+    /** Family name for row styles. */
+    public static final String ROW_STYLE_FAMILY = "table-row";
+
     /** Family name for table-cell styles. */
     public static final String TABLE_CELL_STYLE_FAMILY = "table-cell";
 

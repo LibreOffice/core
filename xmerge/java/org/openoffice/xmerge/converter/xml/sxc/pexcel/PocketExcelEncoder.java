@@ -244,9 +244,9 @@ final class PocketExcelEncoder extends SpreadsheetEncoder {
      *  @param  columnWidths  An <code>IntArrayList</code> of column
      *                        widths.
      */
-    public void setColumnWidths(IntArrayList columnWidths) throws IOException {
+    public void setColumnRows(Vector columnRows) throws IOException {
 
-        wb.addColInfo(columnWidths);
+        wb.addColInfo(columnRows);
     }
 
      /**

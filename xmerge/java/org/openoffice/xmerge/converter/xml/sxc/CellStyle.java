@@ -171,7 +171,7 @@ public class CellStyle extends Style implements Cloneable {
     /**
      * Returns the <code>Format</code> object for this particular style
      *
-     * @returns the <code>Format</code> object
+     * @return the <code>Format</code> object
      */
     public Format getFormat() {
         return fmt;
@@ -182,7 +182,7 @@ public class CellStyle extends Style implements Cloneable {
      *
      *  @param  value  <code>Color</code> specification to parse.
      *
-     *  @returns  The <code>Color</code> associated the value.
+     *  @return  The <code>Color</code> associated the value.
      */
     private Color parseColorString(String value) {
         // Assume color value is of form #rrggbb
@@ -279,6 +279,27 @@ public class CellStyle extends Style implements Cloneable {
             } else if(value.equals("start")) {
                 fmt.setAlign(Format.LEFT_ALIGN);
             }
+        }
+        else if (attr.equals("fo:border")) {
+            fmt.setAttribute(Format.TOP_BORDER, true);
+            fmt.setAttribute(Format.BOTTOM_BORDER, true);
+            fmt.setAttribute(Format.LEFT_BORDER, true);
+            fmt.setAttribute(Format.RIGHT_BORDER, true);
+        }
+        else if (attr.equals("fo:border-top")) {
+                fmt.setAttribute(Format.TOP_BORDER, !value.equals("none"));
+        }
+        else if (attr.equals("fo:border-bottom")) {
+            fmt.setAttribute(Format.BOTTOM_BORDER, !value.equals("none"));
+        }
+        else if (attr.equals("fo:border-left")) {
+            fmt.setAttribute(Format.LEFT_BORDER, !value.equals("none"));
+        }
+        else if (attr.equals("fo:border-right")) {
+            fmt.setAttribute(Format.RIGHT_BORDER, !value.equals("none"));
+        }
+        else if (attr.equals("fo:wrap-option")) {
+            fmt.setAttribute(Format.WORD_WRAP, value.equals("wrap"));
         }
 
         else if (isIgnored(attr)) {}
@@ -447,6 +468,22 @@ public class CellStyle extends Style implements Cloneable {
         if (fmt.getBackground() != null)
             node.setAttribute("style:text-background-color",
                               buildColorString(fmt.getBackground()));
+
+        if (fmt.getAttribute(Format.TOP_BORDER))
+            node.setAttribute("fo:border-top", "0.0008inch solid #000000");
+
+        if (fmt.getAttribute(Format.BOTTOM_BORDER))
+            node.setAttribute("fo:border-bottom", "0.0008inch solid #000000");
+
+        if (fmt.getAttribute(Format.RIGHT_BORDER))
+            node.setAttribute("fo:border-right", "0.0008inch solid #000000");
+
+        if (fmt.getAttribute(Format.LEFT_BORDER))
+            node.setAttribute("fo:border-left", "0.0008inch solid #000000");
+
+        if (fmt.getAttribute(Format.WORD_WRAP))
+            node.setAttribute("fo:wrap-option", "wrap");
+
     }
 
 

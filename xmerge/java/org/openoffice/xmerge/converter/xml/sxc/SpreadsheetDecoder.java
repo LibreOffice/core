@@ -86,9 +86,16 @@ public abstract class SpreadsheetDecoder {
     /**
      *  Returns an Enumeration to a Vector of <code>NameDefinition</code>.
      *
-     *  @return  The number of sheets in the WorkBook.
+     *  @return  The Enumeration
      */
     public abstract Enumeration getNameDefinitions();
+
+     /**
+     *  Returns an Enumeration to a Vector of <code>ColumnRowInfo</code>.
+     *
+     *  @return  The Enumeration
+     */
+    public abstract Enumeration getColumnRowInfos();
 
     /**
      *  Returns the number of populated rows in the current WorkSheet.

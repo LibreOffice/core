@@ -103,8 +103,12 @@ OfficeConstants {
      * @param   name    Name of the Pocket Excel Data file. (excluding the file
      *                  extension)
      */
-    public Workbook(String name) {
+    public Workbook(String name) throws IOException {
         fileName = name + ".pxl";
+        Format defaultFormat = new Format();
+        FontDescription fd = new FontDescription(defaultFormat);
+        ExtendedFormat xf = new ExtendedFormat(0, defaultFormat);
+        extendedFormats.add(xf);
     }
 
     /**
@@ -424,9 +428,9 @@ OfficeConstants {
      *
       * @param  an integer list representing the column widths
       */
-    public void addColInfo(IntArrayList columnWidths) {
+    public void addColInfo(Vector columnRows) {
         Worksheet currentWS = (Worksheet) worksheets.elementAt(worksheets.size()-1);
-        currentWS.addColInfo(columnWidths);
+        currentWS.addColRows(columnRows);
     }
 
     /**

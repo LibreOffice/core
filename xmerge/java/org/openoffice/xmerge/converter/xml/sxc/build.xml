@@ -135,7 +135,10 @@
                deprecation="${deprecation}"
                optimize="${optimize}">
             <classpath refid="classpath"/>
-            <include name="${package}/CellType.java"/>
+            <include name="${package}/CellStyle.java"/>
+            <include name="${package}/ColumnStyle.java"/>
+            <include name="${package}/ColumnRowInfo.java"/>
+            <include name="${package}/RowStyle.java"/>
             <include name="${package}/SxcConstants.java"/>
             <include name="${package}/SxcDocument.java"/>
             <include name="${package}/Format.java"/>
