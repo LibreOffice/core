@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hints.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:49 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 16:04:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,5 +195,16 @@ public:
     const String&   GetStyle2() const   { return aStyle2; }
 };
 
+class ScDBRangeRefreshedHint : public SfxHint
+{
+    ScImportParam   aParam;
+
+public:
+                    TYPEINFO();
+                    ScDBRangeRefreshedHint( const ScImportParam& rP );
+                    ~ScDBRangeRefreshedHint();
+
+    const ScImportParam&  GetImportParam() const    { return aParam; }
+};
 
 #endif
