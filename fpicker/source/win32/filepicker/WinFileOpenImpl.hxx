@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WinFileOpenImpl.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tra $ $Date: 2001-07-30 07:28:38 $
+ *  last change: $Author: tra $ $Date: 2001-08-03 14:07:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,10 @@
 
 #ifndef _DIBPREVIEW_HXX_
 #include "dibpreview.hxx"
+#endif
+
+#ifndef _HELPPOPUPWINDOW_HXX_
+#include "helppopupwindow.hxx"
 #endif
 
 #include <utility>
@@ -264,6 +268,7 @@ private:
     sal_Bool                            m_bInExecuteMode;
     ControlCache_T                      m_ControlCache;
     sal_Bool                            m_bInitialSelChanged;
+    CHelpPopupWindow                    m_HelpPopupWindow;
 };
 
 

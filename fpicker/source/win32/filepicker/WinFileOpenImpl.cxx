@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WinFileOpenImpl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tra $ $Date: 2001-07-30 07:28:38 $
+ *  last change: $Author: tra $ $Date: 2001-08-03 14:07:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,7 +199,8 @@ CWinFileOpenImpl::CWinFileOpenImpl(
     m_FilePicker( aFilePicker ),
     m_bPreviewExists( sal_False ),
     m_bInExecuteMode( sal_False ),
-    m_bInitialSelChanged( sal_True )
+    m_bInitialSelChanged( sal_True ),
+    m_HelpPopupWindow( hInstance, m_hwndFileOpenDlg )
 {
 }
 
@@ -792,8 +793,31 @@ unsigned int CALLBACK CWinFileOpenImpl::SubClassFunc(
     {
     case WM_HELP:
     {
-        FilePickerEvent evt;
-        pImpl->m_FilePicker->helpRequested( evt );
+        LPHELPINFO lphi = reinterpret_cast< LPHELPINFO >( lParam );
+
+        // we handle only our own elements ourself
+        if ( (lphi->iCtrlId != IDOK) && (lphi->iCtrlId != IDCANCEL) && (lphi->iCtrlId < ctlFirst) )
+        {
+            FilePickerEvent evt;
+            evt.ElementId = lphi->iCtrlId;
+
+            OUString aPopupHelpText = pImpl->m_FilePicker->helpRequested( evt );
+
+            if ( aPopupHelpText.getLength( ) )
+            {
+                pImpl->m_HelpPopupWindow.setText( aPopupHelpText );
+
+                DWORD dwMsgPos = GetMessagePos( );
+                pImpl->m_HelpPopupWindow.show( LOWORD( dwMsgPos ), HIWORD( dwMsgPos ) );
+            }
+        }
+        else // call the standard help
+            lResult = CallWindowProcA(
+                reinterpret_cast< WNDPROC >( pImpl->m_pfnOldDlgProc ),
+                hWnd,
+                wMessage,
+                wParam,
+                lParam );
     }
     break;
 
@@ -1090,6 +1114,9 @@ void SAL_CALL CWinFileOpenImpl::onInitDone()
         (LPARAM)&enumParam );
 
     SetDefaultExtension( );
+
+    // but now we have a valid parent handle
+    m_HelpPopupWindow.setParent( m_hwndFileOpenDlg );
 }
 
 //-----------------------------------------------------------------
