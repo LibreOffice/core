@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: tl $ $Date: 2002-03-21 10:13:38 $
+ *  last change: $Author: tl $ $Date: 2002-05-24 07:48:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -369,6 +369,16 @@ void SmDocShell::SetFormat(SmFormat& rFormat)
     SetModified(TRUE);
 }
 
+String SmDocShell::GetAccessibleText()
+{
+    String aAccTxt;
+    if (!pTree)
+        Parse();
+    DBG_ASSERT( pTree, "Tree missing" );
+    if (pTree)
+        aAccTxt = pTree->GetAccessibleText();
+    return aAccTxt;
+}
 
 void SmDocShell::Parse()
 {

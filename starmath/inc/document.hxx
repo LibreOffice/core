@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: tl $ $Date: 2002-01-04 13:29:11 $
+ *  last change: $Author: tl $ $Date: 2002-05-24 07:47:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -257,6 +257,8 @@ public:
     SmParser &      GetParser() { return aInterpreter; }
     const SmNode *  GetFormulaTree() const  { return pTree; }
     void            SetFormulaTree(SmNode *&rTree) { pTree = rTree; }
+
+    String          GetAccessibleText();
 
     EditEngine &    GetEditEngine();
     SfxItemPool &   GetEditEngineItemPool();

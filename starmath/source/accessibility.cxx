@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessibility.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2002-05-23 13:00:49 $
+ *  last change: $Author: tl $ $Date: 2002-05-24 07:48:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
 #include <drafts/com/sun/star/accessibility/AccessibleStateType.hpp>
 #endif
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLETEXTTYPE_HPP_
+#include <drafts/com/sun/star/accessibility/AccessibleTextType.hpp>
+#endif
 #ifndef _COM_SUN_STAR_AWT_FOCUSEVENT_HPP_
 #include <com/sun/star/awt/FocusEvent.hpp>
 #endif
@@ -72,6 +75,12 @@
 #include <com/sun/star/awt/XFocusListener.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_DATATRANSFER_CLIPBOARD_XCLIPBOARD_HPP_
+#include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DATATRANSFER_CLIPBOARD_XFLUSHABLECLIPBOARD_HPP_
+#include <com/sun/star/datatransfer/clipboard/XFlushableClipboard.hpp>
+#endif
 
 #ifndef _UTL_ACCESSIBLESTATESETHELPER_HXX_
 #include <unotools/accessiblestatesethelper.hxx>
@@ -88,9 +97,9 @@
 #ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
 #endif
-/*#ifndef _SVX_UNOEDACC_HXX_
-#include <svx/inc/unoedacc.hxx>
-#endif*/
+#ifndef _SVX_UNOEDACC_HXX_
+#include <svx/unoedacc.hxx>
+#endif
 
 #ifndef _ACCESSIBILITY_HXX_
 #include "accessibility.hxx"
@@ -115,7 +124,7 @@ using namespace drafts::com::sun::star::accessibility;
 //////////////////////////////////////////////////////////////////////
 
 SmAccessibility::SmAccessibility( SmGraphicWindow *pGraphicWin ) :
-    pWin    (pGraphicWin),
+    pWin                (pGraphicWin),
     aFocusListeners     (aListenerMutex),
     aAccEventListeners  (aListenerMutex)
 {
@@ -150,6 +159,15 @@ SmDocShell * SmAccessibility::GetDoc_Impl()
 {
     SmViewShell *pView = pWin ? pWin->GetView() : 0;
     return pView ? pView->GetDoc() : 0;
+}
+
+String SmAccessibility::GetAccessibleText_Impl()
+{
+    String aTxt;
+    SmDocShell *pDoc = GetDoc_Impl();
+    if (pDoc)
+        aTxt = pDoc->GetAccessibleText();
+    return aTxt;
 }
 
 void SmAccessibility::ClearWin()
@@ -439,18 +457,40 @@ Locale SAL_CALL SmAccessibility::getLocale()
 }
 
 
+void SAL_CALL SmAccessibility::addEventListener(
+        const Reference< XAccessibleEventListener >& xListener )
+    throw (RuntimeException)
+{
+    //vos::OGuard aGuard(Application::GetSolarMutex());
+    if (pWin)   // not disposing (about to destroy view shell)
+        aAccEventListeners.addInterface( xListener );
+}
+
+void SAL_CALL SmAccessibility::removeEventListener(
+        const Reference< XAccessibleEventListener >& xListener )
+    throw (RuntimeException)
+{
+    //vos::OGuard aGuard(Application::GetSolarMutex());
+    aAccEventListeners.removeInterface( xListener );
+}
+
 sal_Int32 SAL_CALL SmAccessibility::getCaretPosition()
     throw (RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    return 0;
+    return -1;
 }
 
 sal_Unicode SAL_CALL SmAccessibility::getCharacter( sal_Int32 nIndex )
     throw (IndexOutOfBoundsException, RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    return '\0';
+
+    xub_StrLen nIdx = (xub_StrLen) nIndex;
+    String aTxt( GetAccessibleText_Impl() );
+    if (!(0 <= nIdx  &&  nIdx < aTxt.Len()))
+        throw IndexOutOfBoundsException();
+    return aTxt.GetChar( nIdx );
 }
 
 Sequence< beans::PropertyValue > SAL_CALL SmAccessibility::getCharacterAttributes(
@@ -472,14 +512,14 @@ sal_Int32 SAL_CALL SmAccessibility::getCharacterCount()
     throw (RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    return 0;
+    return GetAccessibleText_Impl().Len();
 }
 
 sal_Int32 SAL_CALL SmAccessibility::getIndexAtPoint( const awt::Point& aPoint )
     throw (RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    return 0;
+    return -1;
 }
 
 OUString SAL_CALL SmAccessibility::getSelectedText()
@@ -493,14 +533,14 @@ sal_Int32 SAL_CALL SmAccessibility::getSelectionStart()
     throw (RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    return 0;
+    return -1;
 }
 
 sal_Int32 SAL_CALL SmAccessibility::getSelectionEnd()
     throw (RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    return 0;
+    return -1;
 }
 
 sal_Bool SAL_CALL SmAccessibility::setSelection(
@@ -516,7 +556,7 @@ OUString SAL_CALL SmAccessibility::getText()
     throw (RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    return OUString();
+    return GetAccessibleText_Impl();
 }
 
 OUString SAL_CALL SmAccessibility::getTextRange(
@@ -525,7 +565,15 @@ OUString SAL_CALL SmAccessibility::getTextRange(
     throw (IndexOutOfBoundsException, RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    return OUString();
+    String aTxt( GetAccessibleText_Impl() );
+    xub_StrLen nStart = (xub_StrLen) nStartIndex;
+    xub_StrLen nEnd   = (xub_StrLen) nEndIndex;
+    if (!(0 <= nStart  &&  nStart < aTxt.Len()) ||
+        !(0 <= nEnd    &&  nEnd   < aTxt.Len()))
+        throw IndexOutOfBoundsException();
+    if (nStartIndex > nEndIndex)
+        return OUString();
+    return aTxt.Copy( nStart, nEnd );
 }
 
 OUString SAL_CALL SmAccessibility::getTextAtIndex(
@@ -534,7 +582,10 @@ OUString SAL_CALL SmAccessibility::getTextAtIndex(
     throw (IndexOutOfBoundsException, RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    return OUString();
+    if (AccessibleTextType::CHARACTER != aTextType)
+        return OUString();
+    String aTxt( GetAccessibleText_Impl() );
+    return aTxt.Copy(nIndex, 1);
 }
 
 OUString SAL_CALL SmAccessibility::getTextBeforeIndex(
@@ -543,7 +594,10 @@ OUString SAL_CALL SmAccessibility::getTextBeforeIndex(
     throw (IndexOutOfBoundsException, RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    return OUString();
+    if (AccessibleTextType::CHARACTER != aTextType)
+        return OUString();
+    String aTxt( GetAccessibleText_Impl() );
+    return aTxt.Copy(0, nIndex);
 }
 
 OUString SAL_CALL SmAccessibility::getTextBehindIndex(
@@ -552,7 +606,10 @@ OUString SAL_CALL SmAccessibility::getTextBehindIndex(
     throw (IndexOutOfBoundsException, RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    return OUString();
+    if (AccessibleTextType::CHARACTER != aTextType)
+        return OUString();
+    String aTxt( GetAccessibleText_Impl() );
+    return aTxt.Copy(nIndex, aTxt.Len()-1);
 }
 
 sal_Bool SAL_CALL SmAccessibility::copyText(
@@ -561,24 +618,33 @@ sal_Bool SAL_CALL SmAccessibility::copyText(
     throw (IndexOutOfBoundsException, RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    return FALSE;
+    String aTxt( GetAccessibleText_Impl() );
+    String aCopy( aTxt.Copy(nStartIndex, nEndIndex - nStartIndex + 1) );
+
+    sal_Bool bReturn = sal_False;
+/*
+    if ( pWin )
+    {
+        Reference< datatransfer::clipboard::XClipboard > xClipboard = pWin->GetClipboard();
+        if ( xClipboard.is() )
+        {
+            ::rtl::OUString sText( getTextRange( nStartIndex, nEndIndex ) );
+
+            ::vcl::unohelper::TextDataObject* pDataObj = new ::vcl::unohelper::TextDataObject( sText );
+            const sal_uInt32 nRef = Application::ReleaseSolarMutex();
+            xClipboard->setContents( pDataObj, NULL );
+
+            Reference< datatransfer::clipboard::XFlushableClipboard > xFlushableClipboard( xClipboard, uno::UNO_QUERY );
+            if( xFlushableClipboard.is() )
+                xFlushableClipboard->flushClipboard();
+
+            Application::AcquireSolarMutex( nRef );
+
+            bReturn = sal_True;
+        }
+    }
+*/
+    return bReturn;
 }
 
-
-void SAL_CALL SmAccessibility::addEventListener(
-        const Reference< XAccessibleEventListener >& xListener )
-    throw (RuntimeException)
-{
-    //vos::OGuard aGuard(Application::GetSolarMutex());
-    if (pWin)   // not disposing (about to destroy view shell)
-        aAccEventListeners.addInterface( xListener );
-}
-
-void SAL_CALL SmAccessibility::removeEventListener(
-        const Reference< XAccessibleEventListener >& xListener )
-    throw (RuntimeException)
-{
-    //vos::OGuard aGuard(Application::GetSolarMutex());
-    aAccEventListeners.removeInterface( xListener );
-}
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: node.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: tl $ $Date: 2002-04-18 11:50:14 $
+ *  last change: $Author: tl $ $Date: 2002-05-24 07:48:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -604,6 +604,12 @@ const SmNode * SmNode::FindRectClosestTo(const Point &rPoint) const
     return pResult;
 }
 
+String SmNode::GetAccessibleText() const
+{
+    DBG_ERROR( "SmNode: GetAccessibleText not overloaded" );
+    return String();
+}
+
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -691,6 +697,23 @@ SmNode * SmStructureNode::GetSubNode(USHORT nIndex)
 }
 
 
+String SmStructureNode::GetAccessibleText() const
+{
+    String aTxt;
+    USHORT nNodes = GetNumSubNodes();
+    for (USHORT i = 0;  i < nNodes;  ++i)
+    {
+        const SmNode *pNode = ((SmStructureNode *) this)->GetSubNode(i);
+        if (pNode)
+        {
+            aTxt += pNode->GetAccessibleText();
+            if (aTxt.Len()  &&  ' ' != aTxt.GetChar( aTxt.Len() - 1 ))
+                aTxt += String::CreateFromAscii( " " );
+        }
+    }
+    return aTxt;
+}
+
 ///////////////////////////////////////////////////////////////////////////
 
 
@@ -711,6 +734,13 @@ SmNode * SmVisibleNode::GetSubNode(USHORT nIndex)
     return NULL;
 }
 
+
+///////////////////////////////////////////////////////////////////////////
+
+String SmGraphicNode::GetAccessibleText() const
+{
+    return String::CreateFromAscii( " " );
+}
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -2557,6 +2587,10 @@ void SmTextNode::Draw(OutputDevice &rDev, const Point& rPosition) const
 #endif
 }
 
+String SmTextNode::GetAccessibleText() const
+{
+    return aText;
+}
 
 /**************************************************************************/
 

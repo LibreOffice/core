@@ -2,9 +2,9 @@
  *
  *  $RCSfile: node.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cmc $ $Date: 2001-12-06 14:22:20 $
+ *  last change: $Author: tl $ $Date: 2002-05-24 07:47:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,6 +188,8 @@ public:
 
     virtual void Draw(OutputDevice &rDev, const Point &rPosition) const;
 
+    virtual String  GetAccessibleText() const;
+
     USHORT  GetRow() const    { return (USHORT)aNodeToken.nRow; }
     USHORT  GetColumn() const { return (USHORT)aNodeToken.nCol; }
 
@@ -235,6 +237,8 @@ public:
             void SetSubNodes(const SmNodeArray &rNodeArray);
 
     virtual SmStructureNode & operator = ( const SmStructureNode &rNode );
+
+    virtual String  GetAccessibleText() const;
 };
 
 
@@ -267,6 +271,8 @@ protected:
     {}
 
 public:
+
+    virtual String  GetAccessibleText() const;
 };
 
 
@@ -404,6 +410,8 @@ public:
     virtual void CreateTextFromNode(String &rText);
 
     virtual void Draw(OutputDevice &rDev, const Point &rPosition) const;
+
+    virtual String  GetAccessibleText() const;
 };
 
 
