@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EditBase.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-23 08:48:15 $
+ *  last change: $Author: fs $ $Date: 2001-05-31 14:07:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,7 +135,8 @@ public:
     OEditBaseModel(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory,
         const ::rtl::OUString& rUnoControlModelName,
-        const ::rtl::OUString& rDefault );
+        const ::rtl::OUString& rDefault,
+        const sal_Bool _bSetDelegator = sal_True);
 
 // ::com::sun::star::io::XPersistObject
     virtual void SAL_CALL write(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream>& _rxOutStream);
