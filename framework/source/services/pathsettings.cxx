@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pathsettings.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 18:21:53 $
+ *  last change: $Author: vg $ $Date: 2005-03-11 10:39:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 // ______________________________________________
 // my own includes
 
@@ -345,6 +344,7 @@ PathSettingsCfg::PathSettingsCfg( const css::uno::Reference< css::lang::XMultiSe
     // directly to an ID by it's position inside the array ...
     const css::uno::Sequence< ::rtl::OUString > lNames(PathSettingsCfg::PropNames,PATHSETTINGS_PROPCOUNT);
     impl_read(lNames,sal_False);
+    EnableNotification( lNames, sal_True );
 }
 
 // ______________________________________________
