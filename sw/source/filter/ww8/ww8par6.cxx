@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: cmc $ $Date: 2001-04-27 11:17:02 $
+ *  last change: $Author: cmc $ $Date: 2001-04-27 12:10:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1771,8 +1771,8 @@ BYTE lcl_ReadBorders( BOOL bVer67, WW8_BRC* brc,
         {
              BYTE* pSprm[4];
 
-            //  sprmSBrcTop, sprmSBrcLeft, sprmSBrcRight, sprmSBrcBottom
-             if( pSep->Find4Sprms(  0x702B,   0x702C,   0x702E,   0x702D,
+            //  sprmSBrcTop, sprmSBrcLeft, sprmSBrcBottom, sprmSBrcRight
+             if( pSep->Find4Sprms(  0x702B,   0x702C,   0x702D,   0x702E,
                                     pSprm[0], pSprm[1], pSprm[2], pSprm[3] ) )
              {
                 for( int i = 0; i < 4; ++i )
@@ -1784,10 +1784,10 @@ BYTE lcl_ReadBorders( BOOL bVer67, WW8_BRC* brc,
     {
 
         static USHORT __READONLY_DATA aVer67Ids[5] =
-                { 38, 39, 41, 40, 42 };
+                { 38, 39, 40, 41, 42 };
 
         static USHORT __READONLY_DATA aVer8Ids[5] =
-                { 0x6424, 0x6425, 0x6427, 0x6426, 0x6428 };
+                { 0x6424, 0x6425, 0x6426, 0x6427, 0x6428 };
 
         const USHORT* pIds = bVer67 ? aVer67Ids : aVer8Ids;
 
@@ -2054,7 +2054,7 @@ BOOL SwWW8ImplReader::SetBorder( SvxBoxItem& rBox, const WW8_BRC* pbrc,
             rBox.SetLine( &Set1Border( bVer67, aLine, rB ), aIdArr[ i+1 ] );
             bChange = TRUE;
         }
-        else if (nSetBorders & (1<<(i/2)))
+        else if ( nSetBorders & (1 << aIdArr[i]) )
         {
             /*
             ##826##, ##653##
@@ -5098,12 +5098,15 @@ short SwWW8ImplReader::ImportSprm( BYTE* pPos, short nSprmsLen, USHORT nId )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par6.cxx,v 1.24 2001-04-27 11:17:02 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par6.cxx,v 1.25 2001-04-27 12:10:54 cmc Exp $
 
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.24  2001/04/27 11:17:02  cmc
+      ##826## Allow borders set in styles to be removed by sprms with empty line descriptions
+
       Revision 1.23  2001/04/24 16:17:10  cmc
       ##761## workaround. No automatic colour for table borders, cells or sdrtextobjs
 
