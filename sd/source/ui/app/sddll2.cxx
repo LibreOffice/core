@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sddll2.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 13:47:40 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 10:08:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,6 +186,9 @@
 #ifndef SD_GRAPHIC_VIEW_SHELL_HXX
 #include "GraphicViewShell.hxx"
 #endif
+#ifndef _SVX_FORMATPAINTBRUSHCTRL_HXX
+#include <svx/formatpaintbrushctrl.hxx>
+#endif
 #ifndef SD_PANE_CHILD_WINDOWS_HXX
 #include "PaneChildWindows.hxx"
 #endif
@@ -294,6 +297,8 @@ void SdDLL::RegisterControllers()
     // #UndoRedo#
     SvxUndoRedoControl::RegisterControl( SID_UNDO , pMod );
     SvxUndoRedoControl::RegisterControl( SID_REDO , pMod );
+
+    svx::FormatPaintBrushToolBoxControl::RegisterControl(SID_FORMATPAINTBRUSH, pMod );
 
     SvxClipBoardControl::RegisterControl( SID_PASTE, pMod );
 
