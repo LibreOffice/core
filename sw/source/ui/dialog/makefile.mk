@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: hr $ $Date: 2004-05-11 10:19:28 $
+#   last change: $Author: hr $ $Date: 2004-05-14 08:17:54 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -99,7 +99,6 @@ SLOFILES =  \
         $(SLO)$/swdlgfact.obj \
         $(SLO)$/swwrtshitem.obj \
         $(SLO)$/swdialmgr.obj  \
-        $(SLO)$/wordcountdialog.obj
 
 LIB1TARGET = $(SLB)$/$(TARGET).lib
 
@@ -107,7 +106,9 @@ LIB1OBJFILES =  \
         $(SLO)$/macassgn.obj \
         $(SLO)$/regionsw.obj \
         $(SLO)$/swabstdlg.obj \
-        $(SLO)$/swwrtshitem.obj
+        $(SLO)$/swwrtshitem.obj\
+        $(SLO)$/wordcountdialog.obj
+
 # --- Tagets -------------------------------------------------------
 
 .INCLUDE :  target.mk
