@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpoption.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: os $ $Date: 2001-03-22 14:15:58 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 07:15:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,7 +131,7 @@ TabPage TP_OPTIONS_CONTENTS
         Text[ chinese_traditional ] = "Εγ¥ά¨δ¥L®ζ¦΅ΉΟ§ΞªΊΓδ®Ψ(~P)";
         Text[ arabic ] = "ΚαγνΝ αΥζΡ ΞΗΡΜνΙ";
         Text[ greek ] = "Υποδήλωση εξωτερικών γρα~φικών";
-        Text[ korean ] = "ΏάΊΞ±Χ·΅ΗΘ Η¥½Γ";
+        Text[ korean ] = "ΏάΊΞ±Χ·΅ΗΘ Η¥½Γ(~P)";
         Text[ turkish ] = "Harici grafik iηin yer tutucu";
         Text[ language_user1 ] = " ";
     };
@@ -151,11 +151,11 @@ TabPage TP_OPTIONS_CONTENTS
         Text [ danish ] = "Konturmodus" ;
         Text [ portuguese ] = "Modo de ~contorno" ;
         Text [ portuguese_brazilian ] = "Umriίmodus" ;
-        Text[ chinese_simplified ] = "ΒΦΐªΔ£Κ½(~O)";
+        Text[ chinese_simplified ] = "ΒΦΐªΔ£Κ½(~C)";
         Text[ russian ] = "~Πεζθμ κξνςσπΰ";
         Text[ polish ] = "Tryb konturu";
-        Text[ japanese ] = "—ΦsΣ°Δή(~O)";
-        Text[ chinese_traditional ] = "½όΉψΌÒ¦΅(~O)";
+        Text[ japanese ] = "—ΦsΣ°Δή(~C)";
+        Text[ chinese_traditional ] = "½όΉψΌÒ¦΅(~C)";
         Text[ arabic ] = "Τία ΗαΞΨ ΗαίέΗέν";
         Text[ greek ] = "Κατάσταση περιγράμματος";
         Text[ korean ] = "ΐ±°ϋ Έπµε(~C)";
@@ -185,7 +185,7 @@ TabPage TP_OPTIONS_CONTENTS
         Text[ chinese_traditional ] = "¤ε¦r¤θ¶τ(~T)";
         Text[ arabic ] = "ΚαγνΝ Εαμ ΗαδΥ";
         Text[ greek ] = "Υποδήλωση κειμένου";
-        Text[ korean ] = "ΕΨ½ΊΖ® Η¥½Γ";
+        Text[ korean ] = "ΕΨ½ΊΖ® Η¥½Γ(~T)";
         Text[ turkish ] = "Metin iηin yer tutucu";
         Text[ language_user1 ] = " ";
     };
@@ -266,7 +266,7 @@ TabPage TP_OPTIONS_CONTENTS
         Text[ russian ] = "~Οξκΰηΰςό λθνεικσ";
         Text[ polish ] = "Widoczne linijki";
         Text[ japanese ] = "Ω°Χ‚Μ•\\¦(~V)";
-        Text[ chinese_traditional ] = "Εγ¥άΌΠ¤Ψ(~V)";
+        Text[ chinese_traditional ] = "Εγ¥άΌΠ¤Ψ";
         Text[ arabic ] = "ΗαγΣΗΨΡ γΡΖνΙ";
         Text[ greek ] = "Χάρακες ορατά";
         Text[ korean ] = "΄«±έΐΪ Η¥½Γ";
@@ -292,8 +292,8 @@ TabPage TP_OPTIONS_CONTENTS
         Text[ chinese_simplified ] = "ΤΪÒΖ¶―¶ΤΟσΚ±ΟΤΚΎΈ¨ΦϊΟί(~G)";
         Text[ russian ] = "Νΰοπΰβ. λθνθθ οπθ οεπεμεωενθθ ξαϊεκςΰ";
         Text[ polish ] = "Linie pomocnicze przy przesuwaniu obiektu";
-        Text[ japanese ] = "Ϊ“®‚³‚Ή‚ι‚Ζ‚«‚Ι•β•ό‚Μ•\\¦(~G)";
-        Text[ chinese_traditional ] = "¦b²Ύ°Κ®ΙΕγ¥ά»²§U½u(~G)";
+        Text[ japanese ] = "Ϊ“®‚Μ•β•ό‚π•\\¦(~G)";
+        Text[ chinese_traditional ] = "¦b²Ύ°Κ®ΙΕγ¥ά»²§U½u";
         Text[ arabic ] = "ΗαΞΨζΨ ΗαγΣΗΪΟΙ ΓΛδΗΑ ΗαΕÒΗΝΙ";
         Text[ greek ] = "Βοηθητικές γραμμές κατά τη μετακίνηση";
         Text[ korean ] = "°³ΓΌ ΐΜµΏ½Γ ΎΘ³»Ό±(~G)";
@@ -319,8 +319,8 @@ TabPage TP_OPTIONS_CONTENTS
         Text[ chinese_simplified ] = "ΗϊΟί±ΰΌ­ΖχΔΪµΔΘ«²ΏΏΨµγ(~A)";
         Text[ russian ] = "~Βρε ςξχκθ β Πεδΰκςξπε Αεηόε";
         Text[ polish ] = "~Wszystkie punkty sterown. w edytorze Beziera";
-        Text[ japanese ] = "ΝήΌήª‹Θό•ÒW‚Μ§δ“_‚π‚·‚Χ‚Δ•\\¦(~A)";
-        Text[ chinese_traditional ] = "¦±½u½sΏθµ{¦΅¤ΊªΊ¥ώ³΅±±ΒI(~A)";
+        Text[ japanese ] = "ΝήΌήª‹Θό•ÒW‚Ε§δ“_‚π‚·‚Χ‚Δ•\\¦(~A)";
+        Text[ chinese_traditional ] = "¦±½u½sΏθµ{¦΅¤ΊªΊ¥ώ³΅±±ΒI";
         Text[ arabic ] = "ία δήΗΨ ΗαΚΝίγ έν γΝΡΡ Bιzier";
         Text[ greek ] = "Όλες τα σημε~ία ελέγχου σε επεξεργασία Bιzier";
         Text[ korean ] = "Ί£ΑφΏ΅ ΖνΑύ±βΐΗ Έπµη ΗΪµι";
@@ -347,7 +347,7 @@ TabPage TP_OPTIONS_CONTENTS
         Text[ russian ] = "Κξνςσπ κΰζδξγξ ξαϊεκςΰ ξςδελόνξ";
         Text[ polish ] = "Kontur kaΏdego oddzielnego obiektu";
         Text[ japanese ] = "eµΜήΌήªΈΔ‚Ι“K‚µ‚½—Φs‚Μ•\\¦(~C)";
-        Text[ chinese_traditional ] = "¨C­Σª«¥σªΊ½όΉψ(~C)";
+        Text[ chinese_traditional ] = "¨C­Σª«¥σªΊ½όΉψ";
         Text[ arabic ] = "ΗαΞΨ ΗαίέΗέν αία ίΗΖδ έΡΟν";
         Text[ greek ] = "Περίγραμμα κάθε μεμονωμέν. αντικειμένο~υ";
         Text[ korean ] = "°Ά °³Ί° °³ΓΌΐΗ ΐ±°ϋ(~C)";
@@ -715,6 +715,24 @@ TabPage TP_OPTIONS_MISC
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Einstellungen" ;
         Text [ ENGLISH ] = "Settings" ;
+        Text[ english_us ] = "Settings";
+        Text[ portuguese ] = "Settings";
+        Text[ russian ] = "Settings";
+        Text[ greek ] = "Settings";
+        Text[ dutch ] = "Settings";
+        Text[ french ] = "Settings";
+        Text[ spanish ] = "Settings";
+        Text[ italian ] = "Settings";
+        Text[ danish ] = "Settings";
+        Text[ swedish ] = "Settings";
+        Text[ polish ] = "Settings";
+        Text[ portuguese_brazilian ] = "Settings";
+        Text[ japanese ] = "έ’θ";
+        Text[ korean ] = "Settings";
+        Text[ chinese_simplified ] = "Settings";
+        Text[ chinese_traditional ] = "³]©w";
+        Text[ turkish ] = "Settings";
+        Text[ arabic ] = "Settings";
     };
     FixedText FT_METRIC
     {
@@ -736,8 +754,8 @@ TabPage TP_OPTIONS_MISC
         Text[ chinese_simplified ] = "¶ΘΑΏµ¥Ξ»";
         Text[ russian ] = "Εδθνθφΰ θημεπενθÿ";
         Text[ polish ] = "Jednostka miary";
-        Text[ japanese ] = "“x—Κ’PΚ";
-        Text[ chinese_traditional ] = "«Χ¶q³ζ¦μ";
+        Text[ japanese ] = "g‚¤’PΚ";
+        Text[ chinese_traditional ] = "­p¶q³ζ¦μ";
         Text[ arabic ] = "ζΝΟΙ ΗαήνΗΣ";
         Text[ greek ] = "Μονάδα μέτρησης";
         Text[ korean ] = "΄άΐ§";
