@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crsrsh.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 13:43:47 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 10:21:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,11 @@
 #ifndef _TXTFRM_HXX
 #include <txtfrm.hxx>
 #endif
+// --> FME 2004-06-22 #114856# edit in readonly sections
+#ifndef _SECTFRM_HXX
+#include <sectfrm.hxx>
+#endif
+// <--
 #ifndef _SWTABLE_HXX
 #include <swtable.hxx>
 #endif
@@ -1635,8 +1640,8 @@ void SwCrsrShell::UpdateCrsr( USHORT eFlags, BOOL bIdleEnd )
 #ifndef REMOTE_APPSERVER
 
     // switch from blinking cursor to read-only-text-selection cursor
-    long nBlinkTime = GetOut()->GetSettings().GetStyleSettings().
-                      GetCursorBlinkTime();
+    const long nBlinkTime = GetOut()->GetSettings().GetStyleSettings().
+                            GetCursorBlinkTime();
 
     if ( (IsCrsrReadonly() && GetViewOptions()->IsSelectionInReadonly()) ==
         ( nBlinkTime != STYLE_CURSOR_NOBLINKTIME ) )
@@ -2118,7 +2123,9 @@ FASTBOOL SwCrsrShell::IsOverReadOnlyPos( const Point& rPt ) const
     Point aPt( rPt );
     SwPaM aPam( *pCurCrsr->GetPoint() );
     GetLayout()->GetCrsrOfst( aPam.GetPoint(), aPt );
-    return aPam.HasReadonlySel();
+    // --> FME 2004-06-29 #114856# Formular view
+    return aPam.HasReadonlySel( GetViewOptions()->IsFormView() );
+    // <--
 }
 
 
@@ -2700,10 +2707,15 @@ void SwCrsrShell::NewCoreSelection()
 
 FASTBOOL SwCrsrShell::IsCrsrReadonly() const
 {
-    if ( GetViewOptions()->IsReadonly() )
+    if ( GetViewOptions()->IsReadonly() ||
+         // --> FME 2004-06-29 #114856# Formular view
+         GetViewOptions()->IsFormView() )
+         // <--
     {
         SwFrm *pFrm = GetCurrFrm( FALSE );
-        SwFlyFrm *pFly;
+        const SwFlyFrm* pFly;
+        const SwSection* pSection;
+
         if( pFrm && pFrm->IsInFly() &&
              (pFly = pFrm->FindFlyFrm())->GetFmt()->GetEditInReadonly().GetValue() &&
              pFly->Lower() &&
@@ -2712,6 +2724,15 @@ FASTBOOL SwCrsrShell::IsCrsrReadonly() const
         {
             return FALSE;
         }
+        // --> FME 2004-06-22 #114856# edit in readonly sections
+        else if ( pFrm->IsInSct() &&
+                  0 != ( pSection = pFrm->FindSctFrm()->GetSection() ) &&
+                  pSection->IsEditInReadonlyFlag() )
+        {
+            return FALSE;
+        }
+        // <--
+
         return TRUE;
     }
     return FALSE;
@@ -2741,17 +2762,26 @@ void SwCrsrShell::SetReadOnlyAvailable( BOOL bFlag )
 FASTBOOL SwCrsrShell::HasReadonlySel() const
 {
     FASTBOOL bRet = FALSE;
-    if( IsReadOnlyAvailable() )
+    if( IsReadOnlyAvailable() ||
+        // --> FME 2004-06-29 #114856# Formular view
+        GetViewOptions()->IsFormView() )
+        // <--
     {
         if( pTblCrsr )
             bRet = pTblCrsr->HasReadOnlyBoxSel() ||
-                    pTblCrsr->HasReadonlySel();
+                   pTblCrsr->HasReadonlySel(
+                            // --> FME 2004-06-29 #114856# Formular view
+                            GetViewOptions()->IsFormView() );
+                            // <--
         else
         {
             const SwPaM* pCrsr = pCurCrsr;
 
             do {
-                if( pCrsr->HasReadonlySel() )
+                if( pCrsr->HasReadonlySel(
+                        // --> FME 2004-06-29 #114856# Formular view
+                        GetViewOptions()->IsFormView() ) )
+                        // <--
                     bRet = TRUE;
             } while( !bRet && pCurCrsr != ( pCrsr = (SwPaM*)pCrsr->GetNext() ));
         }
