@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ViewShellManager.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 16:15:51 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 15:07:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -306,21 +306,39 @@ void ViewShellManager::MoveToTop (const ViewShell* pShell)
         mpActiveViewShells->begin(),
         mpActiveViewShells->end(),
         IsShell(pShell)));
-    bool bMove = false;
+    bool bMove = true;
     if (aI != mpActiveViewShells->end())
     {
-        // Is the shell already at the top of the stack?
-        if (aI->mpViewShell->IsMainViewShell()
-            && aI == mpActiveViewShells->begin())
+        // Is the shell already at the top of the stack?  We have to keep
+        // the case in mind that mbKeepMainViewShellOnTop is true.  Shells
+        // that are not the main view shell are placed on the second-to-top
+        // position in this case.
+        if (aI == mpActiveViewShells->begin()
+            && (aI->mpViewShell->IsMainViewShell() || ! mbKeepMainViewShellOnTop))
+        {
+            // The shell is at the top position and is either a) the main
+            // view shell or b) another shell but the main view shell is not
+            // kept at the top position.  We do not have to move the shell.
             bMove = false;
-        else if (mbKeepMainViewShellOnTop
+        }
+        else if (aI == ++mpActiveViewShells->begin()
             && ! aI->mpViewShell->IsMainViewShell()
-            && aI == ++mpActiveViewShells->begin())
+            && mbKeepMainViewShellOnTop)
+        {
+            // The shell is a the second-to-top position, not the main view
+            // shell and the main view shell is kept at the top position.
+            // Therefore we do not have to move the shell.
             bMove = false;
-        else
-            bMove = true;
+        }
     }
+    else
+        // The shell is not on the stack.  Therefore it can not be moved.
+        // We could insert it but we don't.  Use ActivateViewShell() for
+        // that.
+        bMove = false;
 
+    // When the shell is not at the right position it is removed from the
+    // internal list of shells and inserted at the correct position.
     if (bMove)
     {
         UpdateLocker aLock (*this);
@@ -333,7 +351,19 @@ void ViewShellManager::MoveToTop (const ViewShell* pShell)
             mpActiveViewShells->begin(),
             ActiveShellDescriptor(pNonConstViewShell,nId));
 
-        InvalidateShellStack();
+        // Find out whether to insert at the top or one below.
+        ActiveShellList::iterator aInsertPosition (
+            mpActiveViewShells->begin());
+        if (mbKeepMainViewShellOnTop && ! aI->mpViewShell->IsMainViewShell())
+        {
+            if (mpActiveViewShells->back().mpViewShell->IsMainViewShell())
+                aInsertPosition++;
+        }
+
+        PrepareStackModification();
+        mpActiveViewShells->insert (
+            aInsertPosition,
+            ActiveShellDescriptor(pNonConstViewShell,nId));
     }
 }
 
@@ -404,14 +434,14 @@ void ViewShellManager::GatherActiveShells (
          aI!=mpActiveViewShells->end();
          aI++)
     {
-        // Get all its sub shells that are placed below the shell.
-        aI->mpViewShell->GetLowerShellList (rShellList);
+        // Get all its sub shells that are placed above the shell.
+        aI->mpViewShell->GetUpperShellList (rShellList);
 
         // Put the shell itself on the local stack.
         rShellList.push_back (aI->mpViewShell);
 
-        // Get all its sub shells that are placed above the shell.
-        aI->mpViewShell->GetUpperShellList (rShellList);
+        // Get all its sub shells that are placed below the shell.
+        aI->mpViewShell->GetLowerShellList (rShellList);
     }
 
     OSL_TRACE ("gathered shell list:");
@@ -476,6 +506,8 @@ void ViewShellManager::PushShellsOnStack (void)
              iShell!=aShellsToPush.rend();
              iShell++)
         {
+            OSL_TRACE ("    putting %s on stack",
+                ::rtl::OUStringToOString((*iShell)->GetName(),RTL_TEXTENCODING_UTF8).getStr());
             mrBase.AddSubShell (**iShell);
         }
         if (mrBase.GetDispatcher() != NULL)
