@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GraphicalTestArguments.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Date: 2004-12-10 16:57:26 $
+ *  last change: $Date: 2005-02-24 17:20:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@ import com.sun.star.lang.XMultiServiceFactory;
 import lib.TestParameters;
 import java.io.File;
 import java.io.FileFilter;
+
+import com.sun.star.container.XNameAccess;
+import com.sun.star.uno.UnoRuntime;
 
 /**
  * This class object is more a Helper or Controller.
@@ -131,6 +134,8 @@ public class GraphicalTestArguments
 
     boolean m_bStoreFile = true;
     boolean m_bResuseOffice = false;
+
+    boolean m_bDebugMode = false;
 
     // CONSTRUCTOR
     private GraphicalTestArguments(){}
@@ -204,6 +209,12 @@ public class GraphicalTestArguments
             {
                 // System.out.println("found " + PropertyName.DOC_CONVERTER_IMPORT_FILTER_NAME + " " + sImportFilterName );
                 m_sImportFilterName = sImportFilterName;
+
+                if (sImportFilterName.toLowerCase().equals("help"))
+                {
+                    showInternalFilterName(sImportFilterName, getMultiServiceFactory() );
+                    System.out.println("Must quit.");
+                }
             }
             // ----------------------------------------
             String sExportFilterName = (String)param.get(PropertyName.DOC_CONVERTER_EXPORT_FILTER_NAME);
@@ -211,7 +222,13 @@ public class GraphicalTestArguments
             {
                 // System.out.println("found " + PropertyName.DOC_CONVERTER_EXPORT_FILTER_NAME + " " + sExportFilterName );
                 m_sExportFilterName = sExportFilterName;
+                if (sExportFilterName.toLowerCase().equals("help"))
+                {
+                    showInternalFilterName(sExportFilterName, getMultiServiceFactory() );
+                    System.out.println("Must quit.");
+                }
             }
+
             // ----------------------------------------
             String sOfficeProgram = (String)param.get(PropertyName.DOC_CONVERTER_OFFICE_PROGRAM);
             if (sOfficeProgram != null && sOfficeProgram.length() > 0)
@@ -258,6 +275,49 @@ public class GraphicalTestArguments
             else
             {
                 m_bWithBorderMove = false;
+            }
+        }
+
+    static void showInternalFilterName(String _sFilterName, XMultiServiceFactory _xMSF)
+        {
+            if (_sFilterName.length() == 0)
+            {
+                // System.out.println("No FilterName set.");
+                return;
+            }
+
+            if (_xMSF == null)
+            {
+                System.out.println("MultiServiceFactory not set.");
+                return;
+            }
+            // XFilterFactory aFilterFactory = null;
+            Object aObj = null;
+            try
+            {
+                aObj = _xMSF.createInstance("com.sun.star.document.FilterFactory");
+            }
+            catch(com.sun.star.uno.Exception e)
+            {
+                System.out.println("Can't get com.sun.star.document.FilterFactory.");
+                return;
+            }
+            if (aObj != null)
+            {
+                XNameAccess aNameAccess = (XNameAccess)UnoRuntime.queryInterface(XNameAccess.class, aObj);
+                if (aNameAccess != null)
+                {
+
+                    if (_sFilterName.toLowerCase().equals("help"))
+                    {
+                        System.out.println("Show all possible ElementNames from current version." );
+                        String[] aElementNames = aNameAccess.getElementNames();
+                        for (int i = 0; i<aElementNames.length; i++)
+                        {
+                            System.out.println(aElementNames[i]);
+                        }
+                    }
+                }
             }
         }
 
@@ -378,6 +438,19 @@ public class GraphicalTestArguments
      */
     public int getResolutionInDPI() {return m_nResolutionInDPI;}
 
+    public static void checkIfMSWindowsConformPath(String _sPath)
+        {
+            if (_sPath.charAt(1) == ':')
+            {
+                if (_sPath.charAt(2) != '\\')
+                {
+                    System.out.println("This is not a Microsoft Windows conform path: '" + _sPath + "' please fix.");
+                    System.exit(1);
+                }
+            }
+        }
+
+
     /**
      * @return the INPUT_PATH out of the TestParameters
      */
@@ -385,6 +458,7 @@ public class GraphicalTestArguments
         {
             String sInputPath;
             sInputPath = (String)m_aCurrentParams.get(PropertyName.DOC_COMPARATOR_INPUT_PATH);
+            checkIfMSWindowsConformPath(sInputPath);
             return sInputPath;
         }
     /**
@@ -394,6 +468,7 @@ public class GraphicalTestArguments
         {
             String sOutputPath;
             sOutputPath = (String)m_aCurrentParams.get(PropertyName.DOC_COMPARATOR_OUTPUT_PATH);
+            checkIfMSWindowsConformPath(sOutputPath);
             return sOutputPath;
         }
     /**
@@ -403,6 +478,7 @@ public class GraphicalTestArguments
         {
             String sReferencePath;
             sReferencePath = (String)m_aCurrentParams.get(PropertyName.DOC_COMPARATOR_REFERENCE_PATH);
+            checkIfMSWindowsConformPath(sReferencePath);
             return sReferencePath;
         }
     /**
@@ -412,6 +488,7 @@ public class GraphicalTestArguments
         {
             String sDiffPath;
             sDiffPath = (String)m_aCurrentParams.get(PropertyName.DOC_COMPARATOR_DIFF_PATH);
+            checkIfMSWindowsConformPath(sDiffPath);
             return sDiffPath;
         }
 
@@ -519,7 +596,6 @@ public class GraphicalTestArguments
         {
             return m_bWithBorderMove;
         }
-
 }
 
 
