@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vendorplugin.h,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jl $ $Date: 2004-04-19 15:01:15 $
+ *  last change: $Author: jl $ $Date: 2004-04-21 09:30:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,11 @@ typedef enum
     In case an error occurred parJavaInfo does not to be freed.
     </p>
     The array parJavaInfo must be freed by the caller with rtl_freeMemory.
+    @return
+    JFW_PLUGIN_E_NONE,
+    JFW_PLUGIN_E_ERROR,
+    JFW_PLUGIN_E_INVALID_ARG,
+    JFW_PLUGIN_E_WRONG_VERSION_FORMAT
  */
 javaPluginError getAllJavaInfos(
     rtl_uString *sMinVersion,
@@ -103,6 +108,15 @@ javaPluginError getAllJavaInfos(
     JavaInfo*** parJavaInfo,
     sal_Int32 *nLenInfoList);
 
+/**
+   @return
+   JFW_PLUGIN_E_NONE
+    JFW_PLUGIN_E_ERROR
+    JFW_PLUGIN_E_INVALID_ARG
+    JFW_PLUGIN_E_WRONG_VERSION_FORMAT
+    JFW_PLUGIN_E_FAILED_REQUIREMENTS
+    JFW_PLUGIN_E_NO_JRE
+ */
 javaPluginError getJavaInfoByPath(
     rtl_uString *path,
     rtl_uString *sMinVersion,
@@ -115,6 +129,10 @@ javaPluginError getJavaInfoByPath(
     <p>
     The function shall ensure, that the VM does not abort the process
     during instantiation.</p>
+    @param
+    JFW_PLUGIN_E_NONE,
+    JFW_PLUGIN_E_ERROR,
+    JFW_PLUGIN_E_INVALID_ARG,
 
  */
 javaPluginError startJavaVirtualMachine(

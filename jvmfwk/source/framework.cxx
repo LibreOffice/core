@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framework.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jl $ $Date: 2004-04-19 15:55:05 $
+ *  last change: $Author: jl $ $Date: 2004-04-21 09:30:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,7 @@
 #include "libxml/xpath.h"
 #include "libxml/xpathinternals.h"
 #include <vector>
+#include <algorithm>
 #include "jni.h"
 
 #include "framework.hxx"
@@ -88,6 +89,181 @@
 
 namespace {
 JavaVM * g_pJavaVM = NULL;
+}
+
+javaFrameworkError SAL_CALL jfw_findAllJREs(JavaInfo ***pparInfo, sal_Int32 *pSize)
+{
+    osl::MutexGuard guard(jfw::getFwkMutex());
+    javaFrameworkError errcode = JFW_E_NONE;
+    if (pparInfo == NULL || pSize == NULL)
+        return JFW_E_INVALID_ARG;
+
+    //Prepare the xml document and context
+    rtl::OString sSettingsPath = jfw::getVendorSettingsPath();
+     jfw::CXmlDocPtr doc = xmlParseFile(sSettingsPath.getStr());
+    if (doc == NULL)
+    {
+        OSL_ASSERT(0);
+        return JFW_E_ERROR;
+    }
+    jfw::CXPathContextPtr context = xmlXPathNewContext(doc);
+    int reg = xmlXPathRegisterNs(context, (xmlChar*) "jf",
+        (xmlChar*) NS_JAVA_FRAMEWORK);
+    if (reg == -1)
+        return JFW_E_ERROR;
+
+    //Get a list of plugins which provide Java information
+    std::vector<jfw::PluginLibrary> vecPlugins;
+    errcode = jfw::getVendorPluginURLs(doc, context, & vecPlugins);
+    if (errcode != JFW_E_NONE)
+        return errcode;
+
+
+    //Add the JavaInfos found by getAllJavaInfos to the vector
+    //Make sure that the contents are destroyed if this
+    //function returns with an error
+    std::vector<JavaInfo*> vecInfo;
+    //Add the JavaInfos found by getJavaInfoByPath to this vector
+    //Make sure that the contents are destroyed if this
+    //function returns with an error
+    std::vector<JavaInfo*> vecInfoManual;
+    typedef std::vector<JavaInfo*>::iterator it_info;
+    //get the list of paths to jre locations which have been
+    //added manually
+    jfw::CNodeJava node;
+    errcode = node.loadFromSettings();
+    if (errcode != JFW_E_NONE)
+        return errcode;
+
+    const std::vector<rtl::OString> vecJRELocations =
+        node.getJRELocations();
+    //Use every plug-in library to get Java installations.
+    typedef std::vector<jfw::PluginLibrary>::const_iterator ci_pl;
+    for (ci_pl i = vecPlugins.begin(); i != vecPlugins.end(); i++)
+    {
+        const jfw::PluginLibrary & library = *i;
+        jfw::VersionInfo versionInfo;
+        errcode =  jfw::getVersionInformation(doc, context, library.sVendor,
+                                         & versionInfo);
+        if (errcode != JFW_E_NONE)
+        {   //delete JavaInfo objects
+            std::for_each(vecInfo.begin(), vecInfo.end(), jfw_freeJavaInfo);
+            std::for_each(vecInfoManual.begin(), vecInfoManual.end(),
+                          jfw_freeJavaInfo);
+            return JFW_E_CONFIG_READWRITE;
+        }
+        osl::Module pluginLib(library.sPath);
+        if (pluginLib.is() == sal_False)
+        {
+            //delete JavaInfo objects
+            std::for_each(vecInfo.begin(), vecInfo.end(), jfw_freeJavaInfo);
+            std::for_each(vecInfoManual.begin(), vecInfoManual.end(),
+                          jfw_freeJavaInfo);
+            return JFW_E_NO_PLUGIN;
+        }
+        getAllJavaInfos_ptr getAllJavaFunc =
+            (getAllJavaInfos_ptr) pluginLib.getSymbol(
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("getAllJavaInfos")));
+
+        OSL_ASSERT(getAllJavaFunc);
+        if (getAllJavaFunc == NULL)
+        {
+            //delete JavaInfo objects
+            std::for_each(vecInfo.begin(), vecInfo.end(), jfw_freeJavaInfo);
+            std::for_each(vecInfoManual.begin(), vecInfoManual.end(),
+                          jfw_freeJavaInfo);
+            return JFW_E_ERROR;
+        }
+        //get all installations of one vendor according to minVersion,
+        //maxVersion and excludeVersions
+        sal_Int32 cInfos = 0;
+        JavaInfo** arInfos = NULL;
+        javaPluginError plerr  = (*getAllJavaFunc)(
+            versionInfo.sMinVersion.pData,
+            versionInfo.sMaxVersion.pData,
+            versionInfo.getExcludeVersions(),
+            versionInfo.getExcludeVersionSize(),
+            & arInfos,
+            & cInfos);
+
+        if (plerr != JFW_PLUGIN_E_NONE)
+        {   //delete JavaInfo objects
+            std::for_each(vecInfo.begin(), vecInfo.end(), jfw_freeJavaInfo);
+            std::for_each(vecInfoManual.begin(), vecInfoManual.end(),
+                          jfw_freeJavaInfo);
+            return JFW_E_ERROR;
+        }
+        for (int i = 0; i < cInfos; i++)
+            vecInfo.push_back(arInfos[i]);
+        rtl_freeMemory(arInfos);
+
+        //Check if the current plugin can detect JREs at the location
+        // of the paths added by jfw_setJRELocations or jfw_addJRELocation
+        //get the function from the plugin
+        getJavaInfoByPath_ptr getJavaInfoByPathFunc =
+            (getJavaInfoByPath_ptr) pluginLib.getSymbol(
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("getJavaInfoByPath")));
+
+        OSL_ASSERT(getJavaInfoByPathFunc);
+        if (getJavaInfoByPathFunc == NULL)
+        {   //delete JavaInfo objects
+            std::for_each(vecInfo.begin(), vecInfo.end(), jfw_freeJavaInfo);
+            std::for_each(vecInfoManual.begin(), vecInfoManual.end(),
+                          jfw_freeJavaInfo);
+            return JFW_E_ERROR;
+        }
+        typedef std::vector<rtl::OString>::const_iterator citLoc;
+        for (citLoc i = vecJRELocations.begin();
+             i != vecJRELocations.end(); i++)
+        {
+            rtl::OUString sLocation =
+                rtl::OStringToOUString(*i, RTL_TEXTENCODING_UTF8);
+            JavaInfo* pInfo = NULL;
+            plerr = (*getJavaInfoByPathFunc)(
+                sLocation.pData,
+                versionInfo.sMinVersion.pData,
+                versionInfo.sMaxVersion.pData,
+                versionInfo.getExcludeVersions(),
+                versionInfo.getExcludeVersionSize(),
+                & pInfo);
+            if (plerr == JFW_PLUGIN_E_NO_JRE)
+                continue;
+            if (plerr == JFW_PLUGIN_E_FAILED_REQUIREMENTS)
+                continue;
+            else if (plerr !=JFW_PLUGIN_E_NONE)
+            {   //delete JavaInfo objects
+                std::for_each(vecInfo.begin(), vecInfo.end(), jfw_freeJavaInfo);
+                std::for_each(vecInfoManual.begin(), vecInfoManual.end(),
+                              jfw_freeJavaInfo);
+                return JFW_E_ERROR;
+            }
+            if (pInfo)
+                vecInfoManual.push_back(pInfo);
+        }
+    }
+    //create an fill the array of JavaInfo*
+    sal_Int32 nSize = vecInfo.size() + vecInfoManual.size();
+    *pparInfo = (JavaInfo**) rtl_allocateMemory(
+        nSize * sizeof(JavaInfo*));
+    if (*pparInfo == NULL)
+    {   //delete JavaInfo objects
+        std::for_each(vecInfo.begin(), vecInfo.end(), jfw_freeJavaInfo);
+        std::for_each(vecInfoManual.begin(), vecInfoManual.end(), jfw_freeJavaInfo);
+        return JFW_E_ERROR;
+    }
+    typedef std::vector<JavaInfo*>::iterator it;
+    int index = 0;
+    //Add the automatically detected JREs
+    for (it i = vecInfo.begin(); i != vecInfo.end(); i++)
+        (*pparInfo)[index++] = *i;
+    //Add the manually detected JREs
+    //ToDo compare if the javainfo is already contained
+    //new function jfw_isEqualJavaInfo
+    for (it i = vecInfoManual.begin();i != vecInfoManual.end(); i++)
+        (*pparInfo)[index++] = *i;
+
+    *pSize = nSize;
+    return errcode;
 }
 
 javaFrameworkError SAL_CALL jfw_startJava(JavaVMOption *arOptions, sal_Int32 cOptions,
@@ -421,8 +597,8 @@ javaFrameworkError SAL_CALL jfw_getJavaInfoByPath(
     if (pPath == NULL || ppInfo == NULL)
         return JFW_E_INVALID_ARG;
     javaFrameworkError errcode = JFW_E_NONE;
-        sal_Int64 nFeatureFlags = 0L;
-    jfw::CJavaInfo aCurrentInfo;
+//        sal_Int64 nFeatureFlags = 0L;
+//    jfw::CJavaInfo aCurrentInfo;
     //Prepare the xml document and context
     rtl::OString sSettingsPath = jfw::getVendorSettingsPath();
      jfw::CXmlDocPtr doc = xmlParseFile(sSettingsPath.getStr());
@@ -596,6 +772,58 @@ javaFrameworkError SAL_CALL jfw_getUserClassPath(rtl_uString ** ppCP)
     {
         *ppCP = node.getUserClassPath().pData;
         rtl_uString_acquire(*ppCP);
+    }
+    return errcode;
+}
+
+javaFrameworkError SAL_CALL jfw_addJRELocation(rtl_uString * sLocation)
+{
+    osl::MutexGuard guard(jfw::getFwkMutex());
+    javaFrameworkError errcode = JFW_E_NONE;
+    jfw::CNodeJava node;
+
+    if (sLocation == NULL)
+        return JFW_E_INVALID_ARG;
+    errcode = node.loadFromSettings();
+    if (errcode != JFW_E_NONE)
+        return errcode;
+    node.addJRELocation(sLocation);
+    errcode = node.writeSettings();
+    if (errcode != JFW_E_NONE)
+        return errcode;
+    return errcode;
+
+}
+
+javaFrameworkError SAL_CALL jfw_setJRELocations(
+    rtl_uString ** arLocations, sal_Int32 nLen)
+{
+    osl::MutexGuard guard(jfw::getFwkMutex());
+    javaFrameworkError errcode = JFW_E_NONE;
+    jfw::CNodeJava node;
+
+    if (arLocations == NULL && nLen != 0)
+        return JFW_E_INVALID_ARG;
+    node.setJRELocations(arLocations, nLen);
+    errcode = node.writeSettings();
+    if (errcode != JFW_E_NONE)
+        return errcode;
+    return errcode;
+
+}
+
+javaFrameworkError SAL_CALL jfw_getJRELocations(
+    rtl_uString *** parLocations, sal_Int32 *pLen)
+{
+    osl::MutexGuard guard(jfw::getFwkMutex());
+    javaFrameworkError errcode = JFW_E_NONE;
+    if (parLocations == NULL || pLen == NULL)
+        return JFW_E_INVALID_ARG;
+    jfw::CNodeJava node;
+    errcode = node.loadFromSettings();
+    if (errcode == JFW_E_NONE)
+    {
+        node.getJRELocations(parLocations, pLen);
     }
     return errcode;
 }

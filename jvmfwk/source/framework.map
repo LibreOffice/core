@@ -2,6 +2,7 @@ UDK_3_0_0 {
     global:
         # jvmfwk/framework.h:
     jfw_freeJavaInfo;
+    jfw_findAllJREs;
     jfw_findAndSelectJava;
     jfw_startJava;
     jfw_isJavaRunning;
@@ -14,6 +15,9 @@ UDK_3_0_0 {
     jfw_getVMParameters;
     jfw_setUserClassPath;
     jfw_getUserClassPath;
+    jfw_setJRELocations;
+    jfw_getJRELocations;
+    jfw_addJRELocation;
     jfw_lock;
     jfw_unlock;
     local:

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elements.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jl $ $Date: 2004-04-19 15:55:35 $
+ *  last change: $Author: jl $ $Date: 2004-04-21 09:30:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,6 +168,16 @@ class CNodeJava
     */
     std::vector<rtl::OString>  m_arVmParameters;
     bool m_bVmParametersModified;
+
+    /** User configurable option. /java/jreLocations
+        The value is valid after loadFromSettings has been called successfully.
+        The value is that of the user setting. If it is nil
+        (/java/jreLocations[@xsi:nil = true]) then it represents the share setting.
+        If there are no share settings then array is empty.
+    */
+    std::vector<rtl::OString>  m_arJRELocations;
+    bool m_bJRELocationsModified;
+
 public:
 
 
@@ -214,7 +224,30 @@ public:
     void setVmParameters(rtl_uString  * * arParameters, sal_Int32 size);
     /** returns the parameters from the element /java/vmParameters/param.
      */
-    const std::vector<rtl::OString> & getVmParameters();
+    const std::vector<rtl::OString> & getVmParameters() const;
+
+    /** returns an array.
+        Caller must free the strings and the array.
+     */
+    void getVmParametersArray(rtl_uString *** parParameters, sal_Int32 * size) const;
+
+    /** sets the /java/jreLocations/location elements.
+        The values are kept in a vector m_arJRELocations. When this method is
+        called then the vector is cleared and the new values are inserted.
+        The xsi:nil attribute of vmParameters will be set to true;
+     */
+    void setJRELocations(rtl_uString  * * arParameters, sal_Int32 size);
+
+    void addJRELocation(rtl_uString * sLocation);
+    /** returns the parameters from the element /java/jreLocations/location.
+     */
+    const std::vector<rtl::OString> & getJRELocations() const;
+
+
+    /** returns an array.
+        Caller must free the strings and the array.
+     */
+    void getJRELocations(rtl_uString *** parLocations, sal_Int32 * size) const;
 
 
     /** reads user and share settings. user data supersede
@@ -228,10 +261,6 @@ public:
      */
     javaFrameworkError writeSettings() const;
 
-    /** returns an array.
-        Caller must free the strings and the array.
-     */
-    void getVmParametersArray(rtl_uString *** parParameters, sal_Int32 * size);
 };
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framework.h,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jl $ $Date: 2004-04-19 14:09:00 $
+ *  last change: $Author: jl $ $Date: 2004-04-21 09:30:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,7 +168,8 @@ javaFrameworkError SAL_CALL jfw_findAndSelectJava(JavaInfo **pInfo);
     pparInfo. If the path for some reason is no JRE then the path will be
     removed from an internal list.</p>
  */
-javaFrameworkError SAL_CALL jfw_findAllJavas(JavaInfo ***pparInfo, sal_Int32 size);
+javaFrameworkError SAL_CALL jfw_findAllJREs(
+    JavaInfo ***pparInfo, sal_Int32 *pSize);
 
 /** determines if a path belongs to a Java installation.
    <p>
@@ -327,13 +328,13 @@ javaFrameworkError SAL_CALL jfw_getEnabled(sal_Bool *pbEnabled);
 
 /** sets options, such as debug options.
 
-    arOptions can be null if nLen is also 0.
+    arOptions can be null if nSize is also 0.
 
     @return
-    JFW_E_INVALIDARG arOptions is NULL and nLen is not 0
+    JFW_E_INVALIDARG arOptions is NULL and nSize is not 0
  */
 javaFrameworkError SAL_CALL jfw_setVMParameters(
-    rtl_uString **  arParameters, sal_Int32 nLen);
+    rtl_uString **  arParameters, sal_Int32 nSize);
 /**
    Caller needs to free the returned array with rtl_freeMemory. The
    containes rtl_uStrings must be released with rtl_uString_release.
@@ -344,11 +345,11 @@ javaFrameworkError SAL_CALL jfw_setVMParameters(
     JFW_E_CONFIG_READWRITE Error during access of internal data store.<br/>
     JFW_E_FORMAT_STORE The structure of the internal data store is not
     as expected. <br/>
-    JFW_E_INVALIDARG parOptions or pLen are  NULL<br/>
+    JFW_E_INVALIDARG parOptions or pSize are  NULL<br/>
  */
 javaFrameworkError SAL_CALL jfw_getVMParameters(
     rtl_uString *** parParameters,
-    sal_Int32 * pLen);
+    sal_Int32 * pSize);
 
 /**
    The argument pC must be a valid string. If the value is NULL then
@@ -362,22 +363,43 @@ javaFrameworkError SAL_CALL jfw_getUserClassPath(rtl_uString ** ppCP);
 
 /** saves the location of a JRE.
     <p>
-    When jfw_findAllJavas is called then the paths added by this
+    When jfw_findAllJREs is called then the paths added by this
     function are evaluated. If the location still represents a
     JRE then a JavaInfo object is created which is returned along with
-    all other JavaInfo objects by jfw_findAllJavas. If the location
-    cannot be recognized then the location string is deleted from
-    an internal list. The next time jfw_findAllJavas is called the
-    location is not taken into account anymore.
+    all other JavaInfo objects by jfw_findAllJREs. If the location
+    cannot be recognized then the location string is ignored.
     </p>
     <p>
     A validation if <code> sLocation </code> points to a JRE is not
     performed. To do that one has to use jfw_getJavaInfoByPath.
     </p>
+    <p>
+    Adding a path that is already stored causes no error.
     @param sLocation
     File URL to an directory which contains a JRE.
  */
 javaFrameworkError SAL_CALL jfw_addJRELocation(rtl_uString * sLocation);
+
+/** stores an array containing paths to JRE installations.
+    <p>
+    The function does not verify if the paths points to JRE. However,
+    it makes sure that every path is unique. That is, if the array
+    contains string which are the same then only one is stored.</p>
+    <p>
+    If arLocations is NULL or arLocations has the length null
+    then all previously stored paths are deleted. Otherwise,
+    the old values are overwritten.</p>
+ */
+javaFrameworkError SAL_CALL jfw_setJRELocations(
+    rtl_uString ** arLocations, sal_Int32 nSize);
+/** obtains an array containing paths to JRE installations.
+    <p>
+    It is not guaranteed that the returned paths represent
+    a valid JRE. One can use jfw_getJavaInfoByPath to check this.
+    </p>
+ */
+javaFrameworkError SAL_CALL jfw_getJRELocations(
+    rtl_uString *** parLocations, sal_Int32 * pSize);
 
 
 void SAL_CALL jfw_lock();

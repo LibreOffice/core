@@ -21,6 +21,7 @@
    <element name="userClassPath" nillable="true" type="string"/>
    <element name="javaInfo" nillable="true" type="jf:javaInfoType"/>
    <element name="vmParameters" nillable="true" type="jf:vmParametersType"/>
+   <element name="jreLocations" nillable="true" type="jf:jreLocationsType"/>
   </sequence>
  </complexType>
 
@@ -42,6 +43,12 @@
 <complexType name="vmParametersType">
  <sequence>
   <element name="param" minOccurs="0" maxOccurs="unbounded" type="string"/>
+ </sequence>
+</complexType>
+
+<complexType name="jreLocationsType">
+ <sequence>
+  <element name="location" minOccurs="0" maxOccurs="unbounded" type="string"/>
  </sequence>
 </complexType>
 

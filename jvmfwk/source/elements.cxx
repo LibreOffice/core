@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elements.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jl $ $Date: 2004-04-19 15:54:55 $
+ *  last change: $Author: jl $ $Date: 2004-04-21 09:30:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,7 @@
 #include "fwkutil.hxx"
 #include "libxmlutil.hxx"
 #include "osl/thread.hxx"
+#include <algorithm>
 #include "libxml/parser.h"
 #include "libxml/xpath.h"
 #include "libxml/xpathinternals.h"
@@ -113,32 +114,10 @@ sal_Int32 VersionInfo::getExcludeVersionSize()
 CNodeJava::CNodeJava():
     m_bEnabled(sal_True), m_bEnabledModified(false),
     m_bUserClassPathModified(false), m_bJavaInfoModified(false),
-    m_bVmParametersModified(false)
+    m_bVmParametersModified(false), m_bJRELocationsModified(false)
 {
 }
 
-void CNodeJava::getVmParametersArray(rtl_uString *** parParams, sal_Int32 * size)
-{
-    osl::MutexGuard guard(getFwkMutex());
-    OSL_ASSERT(parParams != NULL && size != NULL);
-
-    *parParams = (rtl_uString **)
-        rtl_allocateMemory(sizeof(rtl_uString*) * m_arVmParameters.size());
-    if (*parParams == NULL)
-        return;
-
-    int j=0;
-    typedef std::vector<rtl::OString>::const_iterator it;
-    for (it i = m_arVmParameters.begin(); i != m_arVmParameters.end();
-         i++, j++)
-    {
-        rtl::OUString sParam =
-            rtl::OStringToOUString(*i, RTL_TEXTENCODING_UTF8);
-        (*parParams)[j] = sParam.pData;
-        rtl_uString_acquire(sParam.pData);
-    }
-    *size = m_arVmParameters.size();
-}
 
 javaFrameworkError CNodeJava::loadFromSettings()
 {
@@ -255,6 +234,33 @@ javaFrameworkError CNodeJava::loadUserSettings()
                 }
             }
         }
+        else if (xmlStrcmp(cur->name, (xmlChar*) "jreLocations") == 0)
+        {
+            CXmlCharPtr sNil = xmlGetNsProp(
+                cur, (xmlChar*) "nil", (xmlChar*) NS_SCHEMA_INSTANCE);
+            if (sNil == NULL)
+            {
+                OSL_ASSERT(0);
+                return JFW_E_FORMAT_STORE;
+            }
+            if (xmlStrcmp(sNil, (xmlChar*) "false") == 0)
+            {
+                //throw away share settings
+                m_arJRELocations.clear();
+                xmlNode * pLoc = cur->children;
+                while (pLoc != NULL)
+                {
+                    if (xmlStrcmp(pLoc->name, (xmlChar*) "location") == 0)
+                    {
+                        CXmlCharPtr sLoc = xmlNodeListGetString(
+                            docUser, pLoc->children, 1);
+                        m_arJRELocations.push_back(sLoc);
+                    }
+                    pLoc = pLoc->next;
+                }
+            }
+        }
+
         cur = cur->next;
     }
     return errcode;
@@ -265,7 +271,7 @@ javaFrameworkError CNodeJava::loadShareSettings()
     javaFrameworkError errcode = JFW_E_NONE;
     CXmlDocPtr docShare;
 
-    //Read the share elements, do not head the nil attributes
+    //Read the share elements, do not heed the nil attributes
     rtl::OString sSettingsPath = jfw::getSharedSettingsPath();
     //There must not be a share settings file
     docShare = xmlParseFile(sSettingsPath.getStr());
@@ -312,26 +318,30 @@ javaFrameworkError CNodeJava::loadShareSettings()
         }
         else if (xmlStrcmp(cur->name, (xmlChar*) "vmParameters") == 0)
         {
-            CXmlCharPtr sNil = xmlGetNsProp(
-                cur, (xmlChar*) "nil", (xmlChar*) NS_SCHEMA_INSTANCE);
-            if (sNil == NULL)
+            xmlNode * pOpt = cur->children;
+            while (pOpt != NULL)
             {
-                OSL_ASSERT(0);
-                return JFW_E_FORMAT_STORE;
-            }
-            if (xmlStrcmp(sNil, (xmlChar*) "false") == 0)
-            {
-                xmlNode * pOpt = cur->children;
-                while (pOpt != NULL)
+                if (xmlStrcmp(pOpt->name, (xmlChar*) "param") == 0)
                 {
-                    if (xmlStrcmp(pOpt->name, (xmlChar*) "param") == 0)
-                    {
-                        CXmlCharPtr sOpt = xmlNodeListGetString(
-                            docShare, pOpt->children, 1);
-                        m_arVmParameters.push_back(sOpt);
-                    }
-                    pOpt = pOpt->next;
+                    CXmlCharPtr sOpt = xmlNodeListGetString(
+                        docShare, pOpt->children, 1);
+                    m_arVmParameters.push_back(sOpt);
                 }
+                    pOpt = pOpt->next;
+            }
+        }
+        else if (xmlStrcmp(cur->name, (xmlChar*) "jreLocations") == 0)
+        {
+            xmlNode * pLoc = cur->children;
+            while (pLoc != NULL)
+            {
+                if (xmlStrcmp(pLoc->name, (xmlChar*) "location") == 0)
+                {
+                    CXmlCharPtr sLoc = xmlNodeListGetString(
+                        docShare, pLoc->children, 1);
+                    m_arJRELocations.push_back(sLoc);
+                }
+                pLoc = pLoc->next;
             }
         }
 
@@ -454,7 +464,7 @@ javaFrameworkError CNodeJava::writeSettings() const
         typedef std::vector<rtl::OString>::const_iterator cit;
         for (cit i = m_arVmParameters.begin(); i != m_arVmParameters.end(); i++)
         {
-            xmlNewTextChild(vmParameters, NULL, (xmlChar*) "option",
+            xmlNewTextChild(vmParameters, NULL, (xmlChar*) "param",
                             (xmlChar*) i->getStr());
             //add a new line
             xmlNode * nodeCrLf = xmlNewText((xmlChar*) "\n");
@@ -462,8 +472,47 @@ javaFrameworkError CNodeJava::writeSettings() const
         }
     }
 
+    //set <jreLocations> element
+    if (m_bJRELocationsModified)
+    {
+        rtl::OString sExpression= rtl::OString(
+            "/jf:java/jf:jreLocations");
+        pathObj = xmlXPathEvalExpression((xmlChar*) sExpression.getStr(),
+                                         contextUser);
+        if ( ! pathObj || xmlXPathNodeSetIsEmpty(pathObj->nodesetval))
+            return JFW_E_FORMAT_STORE;
+        xmlNode* jreLocationsNode = pathObj->nodesetval->nodeTab[0];
+        //set xsi:nil = false;
+        xmlSetNsProp(jreLocationsNode, nsXsi,(xmlChar*) "nil",
+                     (xmlChar*) "false");
 
-    //set <userClassPath>, element must exist
+        //remove option elements
+        xmlNode* cur = jreLocationsNode->children;
+        while (cur != NULL)
+        {
+            xmlNode* lastNode = cur;
+            cur = cur->next;
+            xmlUnlinkNode(lastNode);
+            xmlFreeNode(lastNode);
+        }
+        //add a new line after <vmParameters>
+        if (m_arJRELocations.size() > 0)
+        {
+            xmlNode * nodeCrLf = xmlNewText((xmlChar*) "\n");
+            xmlAddChild(jreLocationsNode, nodeCrLf);
+        }
+
+        typedef std::vector<rtl::OString>::const_iterator cit;
+        for (cit i = m_arJRELocations.begin(); i != m_arJRELocations.end(); i++)
+        {
+            xmlNewTextChild(jreLocationsNode, NULL, (xmlChar*) "location",
+                            (xmlChar*) i->getStr());
+            //add a new line
+            xmlNode * nodeCrLf = xmlNewText((xmlChar*) "\n");
+            xmlAddChild(jreLocationsNode, nodeCrLf);
+        }
+    }
+
 //    sExpression =
     if (xmlSaveFormatFile(sSettingsPath.getStr(), docUser, 1) == -1)
         return JFW_E_CONFIG_READWRITE;
@@ -533,7 +582,7 @@ rtl::OUString const & CNodeJava::getJavaInfoAttrVendorUpdate() const
     return m_aInfo.sAttrVendorUpdate;
 }
 
-const std::vector<rtl::OString> & CNodeJava::getVmParameters()
+const std::vector<rtl::OString> & CNodeJava::getVmParameters() const
 {
     return m_arVmParameters;
 }
@@ -553,6 +602,99 @@ void CNodeJava::setVmParameters(rtl_uString * * arOptions, sal_Int32 size)
         }
     }
     m_bVmParametersModified = true;
+}
+
+void CNodeJava::getVmParametersArray(
+    rtl_uString *** parParams, sal_Int32 * size) const
+{
+    osl::MutexGuard guard(getFwkMutex());
+    OSL_ASSERT(parParams != NULL && size != NULL);
+
+    *parParams = (rtl_uString **)
+        rtl_allocateMemory(sizeof(rtl_uString*) * m_arVmParameters.size());
+    if (*parParams == NULL)
+        return;
+
+    int j=0;
+    typedef std::vector<rtl::OString>::const_iterator it;
+    for (it i = m_arVmParameters.begin(); i != m_arVmParameters.end();
+         i++, j++)
+    {
+        rtl::OUString sParam =
+            rtl::OStringToOUString(*i, RTL_TEXTENCODING_UTF8);
+        (*parParams)[j] = sParam.pData;
+        rtl_uString_acquire(sParam.pData);
+    }
+    *size = m_arVmParameters.size();
+}
+
+
+void CNodeJava::setJRELocations(rtl_uString  * * arLocations, sal_Int32 size)
+{
+    OSL_ASSERT( !(arLocations == 0 && size != 0));
+    m_arJRELocations.clear();
+    if (arLocations != NULL)
+    {
+        for (int i  = 0; i < size; i++)
+        {
+            const rtl::OUString & usLocation = (rtl_uString*) arLocations[i];
+            rtl::OString osLocation = rtl::OUStringToOString(
+                usLocation, RTL_TEXTENCODING_UTF8);
+            //only add the path if not already present
+            std::vector<rtl::OString>::const_iterator it =
+                std::find(m_arJRELocations.begin(), m_arJRELocations.end(),
+                          osLocation);
+            if (it == m_arJRELocations.end())
+                m_arJRELocations.push_back(osLocation);
+        }
+    }
+    m_bJRELocationsModified = true;
+}
+
+void CNodeJava::addJRELocation(rtl_uString * sLocation)
+{
+    OSL_ASSERT( sLocation);
+
+    const rtl::OUString & usLocation = sLocation;
+    rtl::OString osLocation = rtl::OUStringToOString(
+        usLocation, RTL_TEXTENCODING_UTF8);
+    //only add the path if not already present
+    std::vector<rtl::OString>::const_iterator it =
+        std::find(m_arJRELocations.begin(), m_arJRELocations.end(),
+                  osLocation);
+    if (it == m_arJRELocations.end())
+        m_arJRELocations.push_back(osLocation);
+
+    m_bJRELocationsModified = true;
+}
+
+const std::vector<rtl::OString> & CNodeJava::getJRELocations() const
+{
+    return m_arJRELocations;
+}
+
+void CNodeJava::getJRELocations(
+    rtl_uString *** parLocations, sal_Int32 * size) const
+{
+    osl::MutexGuard guard(getFwkMutex());
+    OSL_ASSERT(parLocations != NULL && size != NULL);
+
+    *parLocations = (rtl_uString **)
+        rtl_allocateMemory(sizeof(rtl_uString*) * m_arJRELocations.size());
+    if (*parLocations == NULL)
+        return;
+
+    int j=0;
+    typedef std::vector<rtl::OString>::const_iterator it;
+    for (it i = m_arJRELocations.begin(); i != m_arJRELocations.end();
+         i++, j++)
+    {
+        rtl::OUString sLocation =
+            rtl::OStringToOUString(*i, RTL_TEXTENCODING_UTF8);
+        (*parLocations)[j] = sLocation.pData;
+        rtl_uString_acquire(sLocation.pData);
+    }
+    *size = m_arJRELocations.size();
 }
 
 //=====================================================================
@@ -687,20 +829,20 @@ javaFrameworkError CNodeJavaInfo::writeToNode(xmlDoc* pDoc,
                  (xmlChar*) "nil",
                  (xmlChar*) "false");
 
-    //Check if the JavaInfo was set with an empty value, then all
-    //children are deleted
-    if (m_bEmptyNode && pJavaInfoNode->children != NULL)
+    //Delete the children of JavaInfo
+    xmlNode* cur = pJavaInfoNode->children;
+    while (cur != NULL)
     {
-        xmlNode* cur = pJavaInfoNode->children;
-        while (cur != NULL)
-        {
-            xmlNode* lastNode = cur;
-            cur = cur->next;
-            xmlUnlinkNode(lastNode);
-            xmlFreeNode(lastNode);
-        }
-        return errcode;
+        xmlNode* lastNode = cur;
+        cur = cur->next;
+        xmlUnlinkNode(lastNode);
+        xmlFreeNode(lastNode);
     }
+
+    //If the JavaInfo was set with an empty value,
+    //then we are done.
+    if (m_bEmptyNode)
+        return errcode;
 
     //add a new line after <javaInfo>
     xmlNode * nodeCrLf = xmlNewText((xmlChar*) "\n");
