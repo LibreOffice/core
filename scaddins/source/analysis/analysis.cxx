@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysis.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: gt $ $Date: 2001-05-07 06:56:53 $
+ *  last change: $Author: gt $ $Date: 2001-05-08 09:53:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1427,7 +1427,6 @@ STRING SAL_CALL AnalysisAddIn::getImlog2( constREFXPS&, const STRING& aNum ) THR
 }
 
 
-//STRING SAL_CALL AnalysisAddIn::getImproduct( constREFXPS&, const STRING& aNum1, const STRING& aNum2 ) THROWDEF_RTE_IAE
 STRING SAL_CALL AnalysisAddIn::getImproduct(
     constREFXPS&, const STRING& aNum1, const SEQ( uno::Any )& aNL ) THROWDEF_RTE_IAE
 {
@@ -1439,8 +1438,6 @@ STRING SAL_CALL AnalysisAddIn::getImproduct(
 
     for( const Complex* p = aNumList.First(); p ; p = aNumList.Next() )
         z.Mult( *p );
-
-//  z.Mult( Complex( aNum2 ) );
 
     return z.GetString();
 }
@@ -1472,7 +1469,6 @@ STRING SAL_CALL AnalysisAddIn::getImsub( constREFXPS&, const STRING& aNum1, cons
 }
 
 
-//STRING SAL_CALL AnalysisAddIn::getImsum( constREFXPS&, const STRING& aNum1, const STRING& aNum2 ) THROWDEF_RTE_IAE
 STRING SAL_CALL AnalysisAddIn::getImsum( constREFXPS&, const STRING& aNum1,
     const SEQ( CSS::uno::Any )& aFollowingPars ) THROWDEF_RTE_IAE
 {
@@ -1484,9 +1480,6 @@ STRING SAL_CALL AnalysisAddIn::getImsum( constREFXPS&, const STRING& aNum1,
 
     for( const Complex* p = z_list.First() ; p ; p = z_list.Next() )
         z.Add( *p );
-
-//  Complex         z( aNum1 );
-//  z.Add( Complex( aNum2 ) );
 
     return z.GetString();
 }

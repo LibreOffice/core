@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysishelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: gt $ $Date: 2001-05-07 06:56:53 $
+ *  last change: $Author: gt $ $Date: 2001-05-08 09:53:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1655,38 +1655,27 @@ void SortedIndividualInt32List::InsertHolidayList( const SEQSEQ( sal_Int32 )& aH
 void SortedIndividualInt32List::InsertHolidayList( const SEQ( double )& aHD, sal_Int32 nND, sal_Bool bInsOnWE )
     THROWDEF_RTE_IAE
 {
-//  sal_Int32   n1, n2;
     sal_Int32   n1;
-//  sal_Int32   nE1 = aHD.getLength();
-//  sal_Int32   nE2;
     sal_Int32   nE = aHD.getLength();
 
-//  for( n1 = 0 ; n1 < nE1 ; n1++ )
-//  {
-//      const SEQ( double )&    rList = aHD[ n1 ];
-//      nE2 = rList.getLength();
-        nE = aHD.getLength();
-//      const double*   pList = rList.getConstArray();
-        const double*   pList = aHD.getConstArray();
+    nE = aHD.getLength();
+    const double*   pList = aHD.getConstArray();
 
-//      for( n2 = 0 ; n2 < nE2 ; n2++ )
-        for( n1 = 0 ; n1 < nE ; n1++ )
+    for( n1 = 0 ; n1 < nE ; n1++ )
+    {
+        double      f = pList[ n1 ];
+        if( f < -2147483648.0 || f >= 2147483648.0 )
+            THROW_IAE;
+
+        sal_Int32   n = sal_Int32( f );
+
+        if( n )
         {
-//          double      f = pList[ n2 ];
-            double      f = pList[ n1 ];
-            if( f < -2147483648.0 || f >= 2147483648.0 )
-                THROW_IAE;
-
-            sal_Int32   n = sal_Int32( f );
-
-            if( n )
-            {
-                n += nND;
-                if( bInsOnWE || GetDayOfWeek( n ) < 5 )
-                    Insert( n );
-            }
+            n += nND;
+            if( bInsOnWE || GetDayOfWeek( n ) < 5 )
+                Insert( n );
         }
-//  }
+    }
 }
 
 
@@ -1696,7 +1685,6 @@ void SortedIndividualInt32List::InsertHolidayList(
     switch( aHDay.getValueTypeClass() )
     {
         case uno::TypeClass_VOID:       break;
-//      case uno::TypeClass_STRING:     Append( new Complex( *( STRING* ) r.getValue() ) );     break;
         case uno::TypeClass_DOUBLE:
             {
             double                  f = *( double* ) aHDay.getValue();
@@ -1715,13 +1703,22 @@ void SortedIndividualInt32List::InsertHolidayList(
             break;
         case uno::TypeClass_SEQUENCE:
             {
-/*          const uno::Sequence*    pSeq = ( const uno::Sequence* ) aHDay.getValue();
-            const uno::Type&        rType = pSeq->getElementType();
-            const uno::TypeClass    eType = rType.getTypeClass();
-            if( eType == uno::TypeClass_DOUBLE )
-                InsertHolidayList( *( ( const SEQ( double )* ) aHDay.getValue() ), nNullDate, bInsOnWE );
+            SEQSEQ( uno::Any )          aValArr;
+            if( aHDay >>= aValArr )
+            {
+                sal_Int32               nE = aValArr.getLength();
+                const SEQ( uno::Any )*  pArr = aValArr.getConstArray();
+                for( sal_Int32 n = 0 ; n < nE ; n++ )
+                {
+                    sal_Int32           nF = pArr[ n ].getLength();
+                    const uno::Any*     pAny = pArr[ n ].getConstArray();
+
+                    for( sal_Int32 m = 0 ; m < nF ; m++ )
+                        InsertHolidayList( pAny[ m ], nNullDate, bInsOnWE );
+                }
+            }
             else
-                THROW_IAE;*/
+                THROW_IAE;
             }
             break;
         default:
@@ -2049,9 +2046,33 @@ void ComplexList::Append( const SEQ( uno::Any )& aMultPars ) THROWDEF_RTE_IAE
         switch( r.getValueTypeClass() )
         {
             case uno::TypeClass_VOID:       break;
-            case uno::TypeClass_STRING:     Append( new Complex( *( STRING* ) r.getValue() ) );     break;
-            case uno::TypeClass_DOUBLE:     Append( new Complex( *( double* ) r.getValue(), 0.0 ) );    break;
-//          case uno::TypeClass_SEQUENCE:   break;
+            case uno::TypeClass_STRING:
+                Append( new Complex( *( STRING* ) r.getValue() ) );
+                break;
+            case uno::TypeClass_DOUBLE:
+                Append( new Complex( *( double* ) r.getValue(), 0.0 ) );
+                break;
+            case uno::TypeClass_SEQUENCE:
+                {
+                SEQSEQ( uno::Any )          aValArr;
+                if( r >>= aValArr )
+                {
+                    sal_Int32               nE = aValArr.getLength();
+                    const SEQ( uno::Any )*  pArr = aValArr.getConstArray();
+                    for( sal_Int32 n = 0 ; n < nE ; n++ )
+                        Append( pArr[ n ] );
+/*                  {
+                        sal_Int32           nF = pArr[ n ].getLength();
+                        const uno::Any*     pAny = pArr[ n ].getConstArray();
+
+                        for( sal_Int32 m = 0 ; m < nF ; m++ )
+                            InsertHolidayList( pAny[ m ], nNullDate, bInsOnWE );
+                    }*/
+                }
+                else
+                    THROW_IAE;
+                }
+                break;
             default:
                 THROW_IAE;
         }
