@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2001-06-21 12:54:53 $
+ *  last change: $Author: vg $ $Date: 2003-06-12 10:14:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,5 +109,5 @@ private:
 }   // namespace frm
 //.........................................................................
 
-#endif _CONFIGMGR_STRINGS_HXX_
+#endif // _CONFIGMGR_STRINGS_HXX_
 
