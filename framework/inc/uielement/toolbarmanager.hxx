@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbarmanager.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-15 09:33:22 $
+ *  last change: $Author: kz $ $Date: 2005-03-21 14:02:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,6 +224,8 @@ class ToolBarManager : public ::com::sun::star::frame::XFrameActionListener     
         void ImplClearPopupMenu( ToolBox *pToolBar );
         void RequestImages();
         sal_uInt16 ConvertStyleToToolboxItemBits( sal_Int32 nStyle );
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > GetModelFromFrame() const;
+        sal_Bool IsPluginMode() const;
 
     protected:
         struct CommandInfo
