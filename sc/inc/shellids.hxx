@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shellids.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:50 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 09:27:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,7 @@
 #define SCID_CHART_SHELL        (SFX_INTERFACE_SC_START+14)
 #define SCID_GRAPHIC_SHELL      (SFX_INTERFACE_SC_START+15)
 #define SCID_PAGEBREAK_SHELL    (SFX_INTERFACE_SC_START+16)
+#define SCID_MEDIA_SHELL        (SFX_INTERFACE_SC_START+17)
 
 
 #endif
