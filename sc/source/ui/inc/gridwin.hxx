@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 16:13:12 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 12:31:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,6 +228,7 @@ private:
 
     BOOL            TestMouse( const MouseEvent& rMEvt, BOOL bAction );
 
+    BOOL            DoPageFieldSelection( USHORT nCol, USHORT nRow );
     void            DoPushButton( USHORT nCol, USHORT nRow, const MouseEvent& rMEvt );
     void            PivotMouseMove( const MouseEvent& rMEvt );
     void            PivotMouseButtonUp( const MouseEvent& rMEvt );
@@ -250,6 +251,8 @@ private:
     void            FilterSelect( ULONG nSel );
 
     void            ExecDataSelect( USHORT nCol, USHORT nRow, const String& rStr );
+
+    void            ExecPageFieldSelect( USHORT nCol, USHORT nRow, BOOL bHasSelection, const String& rStr );
 
     BOOL            HasScenarioButton( const Point& rPosPixel, ScRange& rScenRange );
 
@@ -352,6 +355,7 @@ public:
 
     void            DoAutoFilterMenue( USHORT nCol, USHORT nRow, BOOL bDataSelect );
     void            DoScenarioMenue( const ScRange& rScenRange );
+    void            DoPageFieldMenue( USHORT nCol, USHORT nRow );
 
     void            DrawButtons( USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2,
                                     RowInfo* pRowInfo, USHORT nArrCount );
