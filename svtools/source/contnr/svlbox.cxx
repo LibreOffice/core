@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svlbox.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: pb $ $Date: 2002-04-23 07:54:12 $
+ *  last change: $Author: pb $ $Date: 2002-04-30 08:54:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -708,15 +708,6 @@ SvLBoxItem* SvLBoxEntry::GetFirstItem( USHORT nId )
     return 0;
 }
 
-::com::sun::star::uno::Reference< XAccessible > SvLBoxEntry::CreateAccessibleEntry( void* pParentPath )
-{
-    return ::com::sun::star::uno::Reference< XAccessible >();
-}
-
-void SvLBoxEntry::FillAccessibleStateSet( ::utl::AccessibleStateSetHelper& rStateSet ) const
-{
-}
-
 // ***************************************************************
 // class SvLBoxViewData
 // ***************************************************************
@@ -1270,6 +1261,8 @@ void SvLBox::SelectAll( BOOL /* bSelect */ , BOOL /* bPaint */ )
 
 SvLBoxEntry* SvLBox::GetEntryFromPath( const ::std::deque< sal_Int32 >& _rPath ) const
 {
+    DBG_CHKTHIS(SvLBox,0);
+
     SvLBoxEntry* pEntry = NULL;
     SvLBoxEntry* pParent = NULL;
     for( ::std::deque< sal_Int32 >::const_iterator pItem = _rPath.begin(); pItem != _rPath.end(); ++pItem )
@@ -1285,6 +1278,8 @@ SvLBoxEntry* SvLBox::GetEntryFromPath( const ::std::deque< sal_Int32 >& _rPath )
 
 void SvLBox::FillEntryPath( SvLBoxEntry* pEntry, ::std::deque< sal_Int32 >& _rPath ) const
 {
+    DBG_CHKTHIS(SvLBox,0);
+
     if ( pEntry )
     {
         SvLBoxEntry* pParentEntry = GetParent( pEntry );
@@ -1313,8 +1308,17 @@ void SvLBox::FillEntryPath( SvLBoxEntry* pEntry, ::std::deque< sal_Int32 >& _rPa
     }
 }
 
+String SvLBox::GetEntryText( SvLBoxEntry* pEntry ) const
+{
+    DBG_CHKTHIS(SvLBox,0);
+
+    return String();
+}
+
 ULONG SvLBox::GetLevelChildCount( SvLBoxEntry* _pParent ) const
 {
+    DBG_CHKTHIS(SvLBox,0);
+
     ULONG nCount = 0;
     SvLBoxEntry* pEntry = FirstChild( _pParent );
     while ( pEntry )
