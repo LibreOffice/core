@@ -2,9 +2,9 @@
  *
  *  $RCSfile: print.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 13:53:20 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 09:18:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1248,6 +1248,13 @@ BOOL Printer::SetPaperFromInfo( const vcl::PaperInfo& rInfo )
     aSize = LogicToPixel( aSize, aMap );
     aSize = PixelToLogic( aSize );
     return SetPaperSizeUser( aSize );
+}
+
+// -----------------------------------------------------------------------
+
+DuplexMode Printer::GetDuplexMode() const
+{
+    return mpInfoPrinter ? mpInfoPrinter->GetDuplexMode( maJobSetup.ImplGetConstData() ) : DUPLEX_UNKNOWN;
 }
 
 // -----------------------------------------------------------------------
