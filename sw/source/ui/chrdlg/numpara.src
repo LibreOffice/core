@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpara.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-14 17:24:32 $
+ *  last change: $Author: dr $ $Date: 2001-06-22 07:34:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,12 +73,12 @@ TabPage TP_NUMPARA
     Hide = TRUE ;
     FixedText FT_NUMBER_STYLE
     {
-        Pos = MAP_APPFONT ( 6 , 16 ) ;
-        Size = MAP_APPFONT ( 100 , 8 ) ;
-        Text = "Nummerierungsvorlage" ;
-        Text [ ENGLISH ] = "Number style" ;
+        Pos = MAP_APPFONT ( 12 , 16 ) ;
+        Size = MAP_APPFONT ( 112 , 8 ) ;
+        Text = "~Nummerierungsvorlage" ;
+        Text [ ENGLISH ] = "~Number style" ;
         Text [ portuguese ] = "Estilo de numeraÁ„o" ;
-        Text [ english_us ] = "Numbering Style" ;
+        Text [ english_us ] = "~Numbering Style" ;
         Text [ portuguese_brazilian ] = "Numerierungsvorlage" ;
         Text [ swedish ] = "Numreringsformatmall" ;
         Text [ danish ] = "Nummereringstypografi" ;
@@ -149,54 +149,54 @@ TabPage TP_NUMPARA
         {
             < "Nenhum" ; > ;
         };
-    StringList [ chinese_simplified ] =
-    {
+        StringList [ chinese_simplified ] =
+        {
              < "Œﬁ" ; > ;
-    };
-    StringList [ russian ] =
-    {
+        };
+        StringList [ russian ] =
+        {
              < "ÌÂÚ" ; > ;
-    };
-    StringList [ polish ] =
-    {
+        };
+        StringList [ polish ] =
+        {
              < "brak" ; > ;
-    };
-    StringList [ japanese ] =
-    {
+        };
+        StringList [ japanese ] =
+        {
              < "Ç»Çµ" ; > ;
-    };
-    StringList [ chinese_traditional ] =
-    {
+        };
+        StringList [ chinese_traditional ] =
+        {
              < "µL" ; > ;
-    };
-    StringList [ arabic ] =
-    {
+        };
+        StringList [ arabic ] =
+        {
              < "»œÊ‰" ; > ;
-    };
-    StringList [ greek ] =
-    {
+        };
+        StringList [ greek ] =
+        {
              < "Í·Ì›Ì·" ; > ;
-    };
-    StringList [ korean ] =
-    {
+        };
+        StringList [ korean ] =
+        {
              < "æ¯¿Ω" ; > ;
-    };
-    StringList [ turkish ] =
-    {
+        };
+        StringList [ turkish ] =
+        {
              < "yok" ; > ;
-    };
-    StringList [ language_user1 ] =
-    {
+        };
+        StringList [ language_user1 ] =
+        {
              < " " ; > ;
-    };
-    StringList [ catalan ] =
-    {
+        };
+        StringList [ catalan ] =
+        {
              < "Ninguno" ; > ;
-    };
-    StringList [ finnish ] =
-    {
+        };
+        StringList [ finnish ] =
+        {
              < "Ei mit‰‰n" ; > ;
-    };
+        };
     };
     FixedLine FL_NEW_START
     {
@@ -204,7 +204,6 @@ TabPage TP_NUMPARA
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Nummerierung" ;
         Text [ English ] = "Numbering" ;
-        TabStop = TRUE ;
         Hide = TRUE ;
         Text [ portuguese ] = "NumeraÁ„o" ;
         Text [ english_us ] = "Numbering" ;
@@ -261,32 +260,32 @@ TabPage TP_NUMPARA
     FixedText FT_NEW_START
     {
         Pos = MAP_APPFONT ( 21 , 59 ) ;
-        Size = MAP_APPFONT ( 50 , 8 ) ;
-        Text = "~Beginnen mit:" ;
-        Text [ English ] = "~Start at:" ;
+        Size = MAP_APPFONT ( 103 , 8 ) ;
+        Text = "~Beginnen mit" ;
+        Text [ English ] = "~Start at" ;
         Hide = TRUE ;
         Disable = TRUE ;
-        Text [ portuguese ] = "~ComeÁar em:" ;
-        Text [ english_us ] = "~Start with:" ;
-        Text [ portuguese_brazilian ] = "~Beginnen mit:" ;
-        Text [ swedish ] = "~Bˆrja med:" ;
-        Text [ danish ] = "Begynd med:" ;
-        Text [ italian ] = "~Inizia con..." ;
-        Text [ spanish ] = "Empezar ~con:" ;
-        Text [ french ] = "~Commencer avec :" ;
-        Text [ dutch ] = "~Beginnen met:" ;
+        Text [ portuguese ] = "~ComeÁar em" ;
+        Text [ english_us ] = "~Start with" ;
+        Text [ portuguese_brazilian ] = "~Beginnen mit" ;
+        Text [ swedish ] = "~Bˆrja med" ;
+        Text [ danish ] = "Begynd med" ;
+        Text [ italian ] = "~Inizia con" ;
+        Text [ spanish ] = "Empezar ~con" ;
+        Text [ french ] = "~Commencer avec" ;
+        Text [ dutch ] = "~Beginnen met" ;
         Text[ chinese_simplified ] = "ø™ º¥”(~S)";
-        Text[ russian ] = "Õ‡˜‡Ú¸ Ò:";
-        Text[ polish ] = "Zacznij od:";
-        Text[ japanese ] = "äJénî‘çÜ(~S):";
+        Text[ russian ] = "Õ‡˜‡Ú¸ Ò";
+        Text[ polish ] = "Zacznij od";
+        Text[ japanese ] = "äJénî‘çÜ(~S)";
         Text[ chinese_traditional ] = "∂}©l±q(~S)";
-        Text[ arabic ] = "«·»œ¡ »‹:";
-        Text[ greek ] = "∏Ì·ÒÓÁ ·¸:";
-        Text[ korean ] = "øÕ «‘≤≤ Ω√¿€(~S):";
-        Text[ turkish ] = "~Ba˛lang˝Á deeri:";
+        Text[ arabic ] = "«·»œ¡ »‹";
+        Text[ greek ] = "∏Ì·ÒÓÁ ·¸";
+        Text[ korean ] = "øÕ «‘≤≤ Ω√¿€(~S)";
+        Text[ turkish ] = "~Ba˛lang˝Á deeri";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Empezar ~con:";
-        Text[ finnish ] = "~Aloita kohteella:";
+        Text[ catalan ] = "Empezar ~con";
+        Text[ finnish ] = "~Aloita kohteella";
     };
     NumericField NF_NEW_START
     {
@@ -311,7 +310,6 @@ TabPage TP_NUMPARA
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Zeilennummerierung" ;
         Text [ English ] = "Line numbering" ;
-        TabStop = TRUE ;
         Text [ portuguese ] = "NumeraÁ„o de linhas" ;
         Text [ english_us ] = "Line numbering" ;
         Text [ portuguese_brazilian ] = "Zeilennumerierung" ;
@@ -395,31 +393,31 @@ TabPage TP_NUMPARA
     FixedText FT_RESTART_NO
     {
         Pos = MAP_APPFONT ( 21 , 116 ) ;
-        Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text = "B~eginnen mit:" ;
-        Text [ English ] = "~Start at:" ;
+        Size = MAP_APPFONT ( 103 , 8 ) ;
+        Text = "B~eginnen mit" ;
+        Text [ English ] = "~Start at" ;
         Disable = TRUE ;
-        Text [ portuguese ] = "~ComeÁar em:" ;
-        Text [ english_us ] = "~Start with:" ;
-        Text [ portuguese_brazilian ] = "~Beginnen mit:" ;
-        Text [ swedish ] = "Bˆrja m~ed:" ;
-        Text [ danish ] = "Begynd med:" ;
-        Text [ italian ] = "~Inizia con..." ;
-        Text [ spanish ] = "Empezar ~con:" ;
-        Text [ french ] = "~Commencer avec :" ;
-        Text [ dutch ] = "~Beginnen met:" ;
+        Text [ portuguese ] = "~ComeÁar em" ;
+        Text [ english_us ] = "~Start with" ;
+        Text [ portuguese_brazilian ] = "~Beginnen mit" ;
+        Text [ swedish ] = "Bˆrja m~ed" ;
+        Text [ danish ] = "Begynd med" ;
+        Text [ italian ] = "~Inizia con" ;
+        Text [ spanish ] = "Empezar ~con" ;
+        Text [ french ] = "~Commencer avec" ;
+        Text [ dutch ] = "~Beginnen met" ;
         Text[ chinese_simplified ] = "ø™ º¥”(~S)£∫";
-        Text[ russian ] = "Õ‡˜‡Ú¸ Ò:";
-        Text[ polish ] = "Zacznij od:";
-        Text[ japanese ] = "äJénî‘çÜ(~S):";
+        Text[ russian ] = "Õ‡˜‡Ú¸ Ò";
+        Text[ polish ] = "Zacznij od";
+        Text[ japanese ] = "äJénî‘çÜ(~S)";
         Text[ chinese_traditional ] = "∂}©l±q(~S)°G";
-        Text[ arabic ] = "«·»œ¡ »‹:";
-        Text[ greek ] = "∏Ì·ÒÓÁ Ï~Â:";
-        Text[ korean ] = "øÕ «‘≤≤ Ω√¿€(~S):";
-        Text[ turkish ] = "~Ba˛lang˝Á deeri:";
+        Text[ arabic ] = "«·»œ¡ »‹";
+        Text[ greek ] = "∏Ì·ÒÓÁ Ï~Â";
+        Text[ korean ] = "øÕ «‘≤≤ Ω√¿€(~S)";
+        Text[ turkish ] = "~Ba˛lang˝Á deeri";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Empezar ~con:";
-        Text[ finnish ] = "~Aloitus:";
+        Text[ catalan ] = "Empezar ~con";
+        Text[ finnish ] = "~Aloitus";
     };
     NumericField NF_RESTART_PARA
     {

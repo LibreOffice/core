@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-01 10:20:44 $
+ *  last change: $Author: dr $ $Date: 2001-06-22 07:38:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,7 +188,7 @@ class SwFrmPage: public SfxTabPage
 
     void            Init(const SfxItemSet& rSet, BOOL bReset = FALSE);
     USHORT          FillPosLB(FrmMap *pMap, USHORT nAlign, ListBox &rLB);
-    ULONG           FillRelLB(FrmMap *pMap, USHORT nLBSelPos, USHORT nAlign, USHORT nRel, ListBox &rLB);
+    ULONG           FillRelLB(FrmMap *pMap, USHORT nLBSelPos, USHORT nAlign, USHORT nRel, ListBox &rLB, FixedText &rFT);
     USHORT          GetMapPos(FrmMap *pMap, ListBox &rAlignLB);
     USHORT          GetAlignment(FrmMap *pMap, USHORT nMapPos, ListBox &rAlignLB, ListBox &rRelationLB);
     USHORT          GetRelation(FrmMap *pMap, ListBox &rRelationLB);
@@ -255,11 +255,11 @@ class SwFrmURLPage : public SfxTabPage
     FixedLine       aHyperLinkFL;
     FixedText       aURLFT;
     Edit            aURLED;
+    PushButton      aSearchPB;
     FixedText       aNameFT;
     Edit            aNameED;
     FixedText       aFrameFT;
     ComboBox        aFrameCB;
-    PushButton      aSearchPB;
 
     //Image map
     FixedLine       aImageFL;

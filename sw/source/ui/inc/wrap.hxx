@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrap.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-30 16:23:35 $
+ *  last change: $Author: dr $ $Date: 2001-06-22 07:38:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,22 +108,16 @@ public:
 class SwWrapTabPage: public SfxTabPage
 {
     // WRAPPING
+    FixedLine           aWrapFLC;
     ImageRadioButton    aNoWrapRB;
     ImageRadioButton    aWrapLeftRB;
     ImageRadioButton    aWrapRightRB;
     ImageRadioButton    aWrapParallelRB;
     ImageRadioButton    aWrapThroughRB;
     ImageRadioButton    aIdealWrapRB;
-    FixedLine           aWrapFLC;
-
-    CheckBox            aWrapAnchorOnlyCB;
-    CheckBox            aWrapTransparentCB;
-    CheckBox            aWrapOutlineCB;
-    CheckBox            aWrapOutsideCB;
-    FixedLine           aOptionsFL;
-    FixedLine           aOptionsSepFL;
 
     // MARGIN
+    FixedLine           aMarginFL;
     FixedText           aLeftMarginFT;
     MetricField         aLeftMarginED;
     FixedText           aRightMarginFT;
@@ -132,7 +126,14 @@ class SwWrapTabPage: public SfxTabPage
     MetricField         aTopMarginED;
     FixedText           aBottomMarginFT;
     MetricField         aBottomMarginED;
-    FixedLine           aMarginFL;
+
+    // OPTIONS
+    FixedLine           aOptionsSepFL;
+    FixedLine           aOptionsFL;
+    CheckBox            aWrapAnchorOnlyCB;
+    CheckBox            aWrapTransparentCB;
+    CheckBox            aWrapOutlineCB;
+    CheckBox            aWrapOutsideCB;
 
     ImageList           aWrapIL;
 

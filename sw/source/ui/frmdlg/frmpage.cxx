@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2001-06-15 13:07:36 $
+ *  last change: $Author: dr $ $Date: 2001-06-22 07:35:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1055,7 +1055,7 @@ void SwFrmPage::InitPos(USHORT nId,
         nHRel = nOldHRel;
     }
     USHORT nMapPos = FillPosLB(pHMap, nH, aHorizontalDLB);
-    FillRelLB(pHMap, nMapPos, nH, nHRel, aHoriRelationLB);
+    FillRelLB(pHMap, nMapPos, nH, nHRel, aHoriRelationLB, aHoriRelationFT);
 
     // Vertikal
     if ( nV == USHRT_MAX )
@@ -1064,7 +1064,7 @@ void SwFrmPage::InitPos(USHORT nId,
         nVRel = nOldVRel;
     }
     nMapPos = FillPosLB(pVMap, nV, aVerticalDLB);
-    FillRelLB(pVMap, nMapPos, nV, nVRel, aVertRelationLB);
+    FillRelLB(pVMap, nMapPos, nV, nVRel, aVertRelationLB, aVertRelationFT);
 
     // Edits init
     bEnable = nH == HORI_NONE && nId != FLY_IN_CNTNT;//#61359# warum nicht in Formaten&& !bFormat;
@@ -1151,7 +1151,7 @@ USHORT SwFrmPage::FillPosLB(FrmMap *pMap, USHORT nAlign, ListBox &rLB)
     Beschreibung:
  --------------------------------------------------------------------*/
 
-ULONG SwFrmPage::FillRelLB(FrmMap *pMap, USHORT nMapPos, USHORT nAlign, USHORT nRel, ListBox &rLB)
+ULONG SwFrmPage::FillRelLB(FrmMap *pMap, USHORT nMapPos, USHORT nAlign, USHORT nRel, ListBox &rLB, FixedText &rFT)
 {
     String sSelEntry;
     ULONG  nLBRelations = 0;
@@ -1274,6 +1274,7 @@ ULONG SwFrmPage::FillRelLB(FrmMap *pMap, USHORT nMapPos, USHORT nAlign, USHORT n
     }
 
     rLB.Enable(rLB.GetEntryCount() != 0);
+    rFT.Enable(rLB.GetEntryCount() != 0);
 
     RelHdl(&rLB);
 
@@ -1610,6 +1611,7 @@ IMPL_LINK( SwFrmPage, PosHdl, ListBox *, pLB )
 {
     BOOL bHori = pLB == &aHorizontalDLB;
     ListBox *pRelLB = bHori ? &aHoriRelationLB : &aVertRelationLB;
+    FixedText *pRelFT = bHori ? &aHoriRelationFT : &aVertRelationFT;
     FrmMap *pMap = bHori ? pHMap : pVMap;
 
     USHORT nLBSelPos = pLB->GetSelectEntryPos();
@@ -1641,7 +1643,7 @@ IMPL_LINK( SwFrmPage, PosHdl, ListBox *, pLB )
         if (pRelLB->GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND)
             nRel = ((RelationMap *)pRelLB->GetEntryData(pRelLB->GetSelectEntryPos()))->nRelation;
 
-        FillRelLB(pMap, nMapPos, nAlign, nRel, *pRelLB);
+        FillRelLB(pMap, nMapPos, nAlign, nRel, *pRelLB, *pRelFT);
     }
     else
         pRelLB->Clear();
@@ -2090,17 +2092,19 @@ void SwFrmPage::SetFormatUsed(BOOL bFmt)
     bFormat     = bFmt;
     if(bFormat)
     {
-        aAnchorAtPageRB.Show(FALSE);
-        aAnchorAtParaRB.Show(FALSE);
-        aAnchorAtCharRB.Show(FALSE);
-        aAnchorAsCharRB.Show(FALSE);
-        aAnchorAtFrameRB.Show(FALSE);
+        aAnchorAtPageRB.Hide();
+        aAnchorAtParaRB.Hide();
+        aAnchorAtCharRB.Hide();
+        aAnchorAsCharRB.Hide();
+        aAnchorAtFrameRB.Hide();
+        aTypeFL.Hide();
+        aTypeSepFL.Hide();
 
-        Point aSizePos = aSizeFL.GetPosPixel();
-        Size aSizeSize = aSizeFL.GetSizePixel();
-        aSizeSize.Width() = aTypeFL.GetPosPixel().X() +
-                    aTypeFL.GetSizePixel().Width() - aSizePos.X();
-        aSizeFL.SetSizePixel(aSizeSize);
+//        Point aSizePos = aSizeFL.GetPosPixel();
+//        Size aSizeSize = aSizeFL.GetSizePixel();
+//        aSizeSize.Width() = aTypeFL.GetPosPixel().X() +
+//                    aTypeFL.GetSizePixel().Width() - aSizePos.X();
+//        aSizeFL.SetSizePixel(aSizeSize);
     }
 }
 
