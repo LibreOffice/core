@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editutil.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 13:45:18 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 15:41:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,7 +224,7 @@ Rectangle ScEditUtil::GetEditArea( const ScPatternAttr* pPattern, BOOL bForceToT
 
 //------------------------------------------------------------------------
 
-ScEditAttrTester::ScEditAttrTester( EditEngine* pEng ) :
+ScEditAttrTester::ScEditAttrTester( ScEditEngineDefaulter* pEng ) :
     pEngine( pEng ),
     pEditAttrs( NULL ),
     bNeedsObject( FALSE ),
@@ -239,7 +239,7 @@ ScEditAttrTester::ScEditAttrTester( EditEngine* pEng ) :
         const SfxPoolItem* pItem = NULL;
         pEditAttrs = new SfxItemSet( pEngine->GetAttribs(
                                         ESelection(0,0,0,pEngine->GetTextLen(0)) ) );
-        const SfxItemPool* pEditPool = pEditAttrs->GetPool();
+        const SfxItemSet& rEditDefaults = pEngine->GetDefaults();
 
         for (USHORT nId = EE_CHAR_START; nId <= EE_CHAR_END && !bNeedsObject; nId++)
         {
@@ -256,14 +256,14 @@ ScEditAttrTester::ScEditAttrTester( EditEngine* pEng ) :
                     //  EditEngine because "user attributes applied to all the text" is different
                     //  from "user attributes applied to the cell".
 
-                    if ( *pItem != pEditPool->GetDefaultItem(nId) )
+                    if ( *pItem != rEditDefaults.Get(nId) )
                         bNeedsObject = TRUE;
                 }
                 else
                     if (!bNeedsCellAttr)
-                        if ( *pItem != pEditPool->GetDefaultItem(nId) )
+                        if ( *pItem != rEditDefaults.Get(nId) )
                             bNeedsCellAttr = TRUE;
-                //  SetDefaults an der EditEngine setzt Pool-Defaults
+                //  rEditDefaults contains the defaults from the cell format
             }
         }
 
@@ -397,6 +397,15 @@ void ScEditEngineDefaulter::SetDefaultItem( const SfxPoolItem& rItem )
     SetDefaults( *pDefaults, FALSE );
 }
 
+const SfxItemSet& ScEditEngineDefaulter::GetDefaults()
+{
+    if ( !pDefaults )
+    {
+        pDefaults = new SfxItemSet( GetEmptyItemSet() );
+        bDeleteDefaults = TRUE;
+    }
+    return *pDefaults;
+}
 
 void ScEditEngineDefaulter::SetText( const EditTextObject& rTextObject )
 {
