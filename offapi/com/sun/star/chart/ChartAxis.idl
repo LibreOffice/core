@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartAxis.idl,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 17:51:27 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 15:50:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@ published service ChartAxis
             service should be supported in order to preserve unparsed XML
             attributes.
 
-        @since #107627#
+        @since OOo 1.1.2
      */
     [optional] service com::sun::star::xml::UserDefinedAttributeSupplier;
 
