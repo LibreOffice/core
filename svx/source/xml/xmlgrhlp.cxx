@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlgrhlp.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ka $
+ *  last change: $Author: rt $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,7 +182,7 @@ sal_Int32 SAL_CALL SvXMLGraphicInputStream::readBytes( Sequence< sal_Int8 >& rDa
     throw( NotConnectedException, BufferSizeExceededException, RuntimeException )
 {
     if( !mxStmWrapper.is() )
-        throw( NotConnectedException() );
+        throw NotConnectedException();
 
     return mxStmWrapper->readBytes( rData, nBytesToRead );
 }
@@ -193,7 +193,7 @@ sal_Int32 SAL_CALL SvXMLGraphicInputStream::readSomeBytes( Sequence< sal_Int8 >&
     throw( NotConnectedException, BufferSizeExceededException, RuntimeException )
 {
     if( !mxStmWrapper.is() )
-        throw( NotConnectedException() );
+        throw NotConnectedException() ;
 
     return mxStmWrapper->readSomeBytes( rData, nMaxBytesToRead );
 }
@@ -204,7 +204,7 @@ void SAL_CALL SvXMLGraphicInputStream::skipBytes( sal_Int32 nBytesToSkip )
     throw( NotConnectedException, BufferSizeExceededException, RuntimeException )
 {
     if( !mxStmWrapper.is() )
-        throw( NotConnectedException() );
+        throw NotConnectedException() ;
 
     mxStmWrapper->skipBytes( nBytesToSkip );
 }
@@ -214,7 +214,7 @@ void SAL_CALL SvXMLGraphicInputStream::skipBytes( sal_Int32 nBytesToSkip )
 sal_Int32 SAL_CALL SvXMLGraphicInputStream::available() throw( NotConnectedException, RuntimeException )
 {
     if( !mxStmWrapper.is() )
-        throw( NotConnectedException() );
+        throw NotConnectedException() ;
 
     return mxStmWrapper->available();
 }
@@ -224,7 +224,7 @@ sal_Int32 SAL_CALL SvXMLGraphicInputStream::available() throw( NotConnectedExcep
 void SAL_CALL SvXMLGraphicInputStream::closeInput() throw( NotConnectedException, RuntimeException )
 {
     if( !mxStmWrapper.is() )
-        throw( NotConnectedException() );
+        throw NotConnectedException() ;
 
     mxStmWrapper->closeInput();
 }
@@ -291,7 +291,7 @@ void SAL_CALL SvXMLGraphicOutputStream::writeBytes( const Sequence< sal_Int8 >& 
     throw( NotConnectedException, BufferSizeExceededException, IOException, RuntimeException )
 {
     if( !mxStmWrapper.is() )
-        throw( NotConnectedException() );
+        throw NotConnectedException() ;
 
     mxStmWrapper->writeBytes( rData );
 }
@@ -302,7 +302,7 @@ void SAL_CALL SvXMLGraphicOutputStream::flush()
     throw( NotConnectedException, BufferSizeExceededException, IOException, RuntimeException )
 {
     if( !mxStmWrapper.is() )
-        throw( NotConnectedException() );
+        throw NotConnectedException() ;
 
     mxStmWrapper->flush();
 }
@@ -313,7 +313,7 @@ void SAL_CALL SvXMLGraphicOutputStream::closeOutput()
     throw( NotConnectedException, BufferSizeExceededException, IOException, RuntimeException )
 {
     if( !mxStmWrapper.is() )
-        throw( NotConnectedException() );
+        throw NotConnectedException() ;
 
     mxStmWrapper->closeOutput();
     mxStmWrapper = Reference< XOutputStream >();
