@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editbrowsebox.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-19 13:05:17 $
+ *  last change: $Author: vg $ $Date: 2003-06-06 10:53:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,9 @@
 #endif
 #ifndef _SVTOOLS_ACCESSIBILEEDITBROWSEBOXTABLECELL_HXX
 #include "editbrowseboxcell.hxx"
+#endif
+#ifndef _SVTOOLS_ACCESSIBLEBROWSEBOX_HXX
+#include "AccessibleBrowseBox.hxx"
 #endif
 
 // .......................................................................
@@ -1071,7 +1074,7 @@ namespace svt
                 aController->SetModifyHdl(LINK(this,EditBrowseBox,ModifyHdl));
                 EnableAndShow();
 
-                if ( isAccessibleAlive( ) )
+                if ( isAccessibleAlive() )
                     implCreateActiveAccessible();
 
                 // activate the cell only of the browser has the focus
@@ -1082,10 +1085,13 @@ namespace svt
             {
                 // no controller -> we have a new "active descendant"
                 if ( isAccessibleAlive() && HasFocus() )
-                    commitTableEvent(ACTIVE_DESCENDANT_CHANGED,
+                {
+                    commitTableEvent(
+                        ACTIVE_DESCENDANT_CHANGED,
                         makeAny( CreateAccessibleCell( nRow, GetColumnPos( nCol ) ) ),
                         Any()
                     );
+                }
             }
         }
     }
