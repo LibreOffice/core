@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8nds.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 12:34:35 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 13:25:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2057,7 +2057,8 @@ Writer& OutWW8_SwTblNode( Writer& rWrt, SwTableNode & rNode )
     */
     const SwFmtFrmSize &rSize = pFmt->GetFrmSize();
     int nWidthPercent = rSize.GetWidthPercent();
-    if (pFmt->GetHoriOrient().GetHoriOrient() == HORI_FULL)
+    bool bManualAligned = pFmt->GetHoriOrient().GetHoriOrient() == HORI_NONE;
+    if ( (pFmt->GetHoriOrient().GetHoriOrient() == HORI_FULL) || bManualAligned )
         nWidthPercent = 100;
     bool bRelBoxSize = nWidthPercent != 0;
     unsigned long nTblSz = static_cast<unsigned long>(rSize.GetWidth());
@@ -2088,7 +2089,16 @@ Writer& OutWW8_SwTblNode( Writer& rWrt, SwTableNode & rNode )
             }
         }
         else
+        {
             nPageSize = aRect.Width();
+            if(bManualAligned)
+            {
+                // #i37571# For manually aligned tables
+                const SvxLRSpaceItem &rLR = pFmt->GetLRSpace();
+                nPageSize -= (rLR.GetLeft() + rLR.GetRight());
+            }
+
+        }
 
         ASSERT(nWidthPercent, "Impossible");
         if (nWidthPercent)
