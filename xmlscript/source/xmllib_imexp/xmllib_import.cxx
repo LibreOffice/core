@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmllib_import.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ab $ $Date: 2001-10-23 15:30:18 $
+ *  last change: $Author: ab $ $Date: 2001-10-25 15:05:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,6 +243,7 @@ Reference< xml::XImportContext > LibrariesElement::createChildContext(
     else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("library") ))
     {
         LibDescriptor aDesc;
+        aDesc.bLink = aDesc.bReadOnly = aDesc.bPasswordProtected = sal_False;
 
         aDesc.aName = xAttributes->getValueByUidName(
             XMLNS_LIBRARY_UID, OUString( RTL_CONSTASCII_USTRINGPARAM("name") ) );
