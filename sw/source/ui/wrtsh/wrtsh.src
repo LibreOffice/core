@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:08:26 $
+ *  last change: $Author: vg $ $Date: 2003-07-22 16:52:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3303,6 +3303,7 @@ String STR_DDEERROR_LINK2
     TEXT[ hindi ] = "] स्थापित नहीं कर सकते है";
     TEXT[ slovak ] = "] nemožno vykonať";
 };
+
 
 
 
