@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fly.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: fme $ $Date: 2002-10-29 08:55:58 $
+ *  last change: $Author: fme $ $Date: 2002-11-05 12:30:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,16 +217,9 @@ SwFlyFrm::SwFlyFrm( SwFlyFrmFmt *pFmt, SwFrm *pAnch ) :
         else
             bRightToLeft = 0;
     }
-    if( bVert )
-    {
-        Frm().Width( rFrmSize.GetHeight() );
-        Frm().Height( rFrmSize.GetWidth() );
-    }
-    else
-    {
-        Frm().Width( rFrmSize.GetWidth() );
-        Frm().Height( rFrmSize.GetHeight() );
-    }
+
+    Frm().Width( rFrmSize.GetWidth() );
+    Frm().Height( rFrmSize.GetHeight() );
 
     //Hoehe Fix oder Variabel oder was?
     if ( rFrmSize.GetSizeType() == ATT_MIN_SIZE )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dview.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fme $ $Date: 2002-10-21 12:16:02 $
+ *  last change: $Author: fme $ $Date: 2002-11-05 12:33:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -511,24 +511,15 @@ const SwFrm *SwDrawView::CalcAnchor()
 
     SdrObject *pObj = rMrkList.GetMark( 0 )->GetObj();
 
-    Point aPt;
-    if ( IsAction() )
-    {
-        if ( !TakeDragObjAnchorPos( aPt ) )
-            return NULL;
-    }
-    else
-        aPt = pObj->GetAnchorPos() + pObj->GetRelativePos();
-
     //Fuer Absatzgebundene Objekte suchen, andernfalls einfach nur
     //der aktuelle Anker. Nur suchen wenn wir gerade draggen.
     const SwFrm *pAnch;
-    Point aMyPt;
+    Rectangle aMyRect;
     const BOOL bFly = pObj->IsWriterFlyFrame();
     if ( bFly )
     {
         pAnch = ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm()->GetAnchor();
-        aMyPt = ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm()->Frm().Pos();
+        aMyRect = ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm()->Frm().SVRect();
     }
     else
     {
@@ -539,7 +530,24 @@ const SwFrm *SwDrawView::CalcAnchor()
             pC->ConnectToLayout();
             pAnch = pC->GetAnchor();
         }
-        aMyPt = pObj->GetAnchorPos() + pObj->GetRelativePos();
+        aMyRect = pObj->GetSnapRect();
+    }
+
+    const sal_Bool bTopRight = pAnch && ( pAnch->IsVertical() ||
+                                          pAnch->IsRightToLeft() );
+
+    const Point aMyPt = bTopRight ? aMyRect.TopRight() : aMyRect.TopLeft();
+
+    Point aPt;
+    if ( IsAction() )
+    {
+        if ( !TakeDragObjAnchorPos( aPt, bTopRight ) )
+            return NULL;
+    }
+    else
+    {
+        Rectangle aRect = pObj->GetSnapRect();
+        aPt = bTopRight ? aRect.TopRight() : aRect.TopLeft();
     }
 
     if ( aPt != aMyPt )
@@ -547,7 +555,9 @@ const SwFrm *SwDrawView::CalcAnchor()
         if ( pAnch->IsCntntFrm() )
             pAnch = ::FindAnchor( (SwCntntFrm*)pAnch, aPt, !bFly );
         else if ( !bFly )
-        {   const SwRect aRect( aPt.X(), aPt.Y(), 1, 1 );
+        {
+            const SwRect aRect( aPt.X(), aPt.Y(), 1, 1 );
+
             SwDrawContact* pContact = (SwDrawContact*)GetUserCall(pObj);
             if( pContact->GetAnchor() && pContact->GetAnchor()->IsPageFrm() )
                 pAnch = pContact->GetPage();
