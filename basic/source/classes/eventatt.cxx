@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventatt.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 10:20:28 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 17:00:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,10 @@
 #include <com/sun/star/awt/XWindow.hpp>
 #endif
 
+#include <drafts/com/sun/star/script/provider/XScriptProviderSupplier.hpp>
+#include <drafts/com/sun/star/script/provider/XScriptProvider.hpp>
+
+#include <com/sun/star/frame/XModel.hpp>
 
 //==================================================================================================
 
@@ -121,6 +125,10 @@
 
 
 #include <cppuhelper/implbase1.hxx>
+using namespace ::drafts::com::sun::star::script;
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+
 typedef ::cppu::WeakImplHelper1< ::com::sun::star::script::XScriptEventsAttacher > ScriptEventsAttacherHelper;
 
 
@@ -166,16 +174,134 @@ using namespace ::rtl;
 
 
 //===================================================================
+void unoToSbxValue( SbxVariable* pVar, const Any& aValue );
+Any sbxToUnoValue( SbxVariable* pVar );
+
+
+Reference< frame::XModel >  getModelFromBasic( SbxObject* pBasic )
+{
+    Reference< frame::XModel > xModel;
+
+    SbxObject* basicChosen = pBasic;
+
+    if ( basicChosen == NULL)
+    {
+        OSL_TRACE("getModelFromBasic() StarBASIC* is NULL" );
+        return xModel;
+    }
+    SbxObject* p = pBasic;
+    SbxObject* pParent = p->GetParent();
+    SbxObject* pParentParent = pParent ? pParent->GetParent() : NULL;
+
+    if( pParentParent )
+    {
+        basicChosen = pParentParent;
+    }
+    else if( pParent )
+    {
+        basicChosen = pParent;
+    }
+
+
+    Any aModel;
+    SbxVariable *pCompVar = basicChosen->Find(  UniString(RTL_CONSTASCII_USTRINGPARAM("ThisComponent")), SbxCLASS_OBJECT );
+
+    if ( pCompVar )
+    {
+         aModel = sbxToUnoValue( pCompVar );
+         if ( sal_False == ( aModel >>= xModel ) ||
+              !xModel.is() )
+         {
+             OSL_TRACE("Failed to extract model from thisComponent ");
+             return xModel;
+         }
+         else
+         {
+             OSL_TRACE("Have model ThisComponent points to url %s",
+                 ::rtl::OUStringToOString( xModel->getURL(),
+                     RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+
+         }
+    }
+    else
+    {
+        OSL_TRACE("Failed to get ThisComponent");
+    }
+    return xModel;
+}
+
+void SFURL_firing_impl( const ScriptEvent& aScriptEvent, Any* pRet, const Reference< frame::XModel >& xModel )
+{
+        OSL_TRACE("SFURL_firing_impl() processing script url %s",
+            ::rtl::OUStringToOString( aScriptEvent.ScriptCode,
+                RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+        try
+        {
+            Reference< provider::XScriptProviderSupplier > xSPS =
+                Reference< provider::XScriptProviderSupplier >
+                    ( xModel, UNO_QUERY );
+
+            if ( !xSPS.is() )
+            {
+                OSL_TRACE("SFURL_firing_impl(): Failed to get XScriptProvider");
+                return;
+            }
+
+            Reference< provider::XScriptProvider > xScriptProvider =
+                xSPS->getScriptProvider();
+
+            if ( !xScriptProvider.is() )
+            {
+                OSL_TRACE("SFURL_firing_impl() Failed to create msp");
+                return;
+            }
+            Sequence< Any > inArgs( 0 );
+            Sequence< Any > outArgs( 0 );
+            Sequence< sal_Int16 > outIndex;
+
+            // get Arguments for script
+            inArgs = aScriptEvent.Arguments;
+
+            Reference< provider::XScript > xScript = xScriptProvider->getScript( aScriptEvent.ScriptCode );
+
+            if ( !xScript.is() )
+            {
+                OSL_TRACE("SFURL_firing_impl() Failed to obtain XScript");
+                return;
+            }
+
+            Any result = xScript->invoke( inArgs, outIndex, outArgs );
+            if ( pRet )
+            {
+                *pRet = result;
+            }
+        }
+        catch ( RuntimeException& re )
+        {
+            OSL_TRACE("SFURL_firing_impl() Caught RuntimeException reason %s.",
+                ::rtl::OUStringToOString( re.Message,
+                    RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+        }
+        catch ( Exception& e )
+        {
+            OSL_TRACE("SFURL_firing_impl() Caught Exception reason %s.",
+                ::rtl::OUStringToOString( e.Message,
+                    RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+        }
+
+}
+
 
 class BasicScriptListener_Impl : public WeakImplHelper1< XScriptListener >
 {
     StarBASICRef maBasicRef;
+        Reference< frame::XModel > m_xModel;
 
     virtual void firing_impl(const ScriptEvent& aScriptEvent, Any* pRet);
 
 public:
-    BasicScriptListener_Impl( StarBASIC* pBasic )
-        : maBasicRef( pBasic ) {}
+    BasicScriptListener_Impl( StarBASIC* pBasic, const Reference< frame::XModel >& xModel )
+        : maBasicRef( pBasic ), m_xModel( xModel ) {}
 
     // Methoden von XAllListener
     virtual void SAL_CALL firing(const ScriptEvent& aScriptEvent)
@@ -210,14 +336,11 @@ void BasicScriptListener_Impl::disposing(const EventObject& ) throw ( RuntimeExc
     //xSbxObj.Clear();
 }
 
-void unoToSbxValue( SbxVariable* pVar, const Any& aValue );
-Any sbxToUnoValue( SbxVariable* pVar );
 
 void BasicScriptListener_Impl::firing_impl( const ScriptEvent& aScriptEvent, Any* pRet )
 {
     //Guard< Mutex > aGuard( Mutex::getGlobalMutex() );
     //{
-
     if( aScriptEvent.ScriptType.compareToAscii( "StarBasic" ) == 0 )
     {
         // Full qualified name?
@@ -343,6 +466,12 @@ void BasicScriptListener_Impl::firing_impl( const ScriptEvent& aScriptEvent, Any
             *pRet = sbxToUnoValue( xValue );
         pMeth->SetParameters( NULL );
     }
+        else // scripting framework script
+        {
+            //callBasic via scripting framework
+            SFURL_firing_impl( aScriptEvent, pRet, m_xModel );
+
+        }
 }
 
 
@@ -350,7 +479,8 @@ void BasicScriptListener_Impl::firing_impl( const ScriptEvent& aScriptEvent, Any
 
 // Function to map from NameContainer to sequence needed
 // to call XScriptEventsAttacher::attachEvents
-void SAL_CALL attachDialogEvents( StarBASIC* pBasic,
+//void SAL_CALL attachDialogEvents( StarBASIC* pBasic,
+void SAL_CALL attachDialogEvents( StarBASIC* pBasic, const Reference< frame::XModel >& xModel,
     const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& xDialogControl )
     //const ::com::sun::star::uno::Reference< ::com::sun::star::script::XScriptListener >& xListener )
 {
@@ -384,7 +514,7 @@ void SAL_CALL attachDialogEvents( StarBASIC* pBasic,
     Reference< XInterface > xDialogIface( xDialogControl, UNO_QUERY );
     pObjects[ nControlCount ] = xDialogIface;
 
-    Reference< XScriptListener > xScriptListener = new BasicScriptListener_Impl( pBasic );
+    Reference< XScriptListener > xScriptListener = new BasicScriptListener_Impl( pBasic, xModel );
     Any Helper;
     xEventsAttacher->attachEvents( aObjectSeq, xScriptListener, Helper );
 }
@@ -652,8 +782,12 @@ void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite )
     Reference< XToolkit > xToolkit( xMSF->createInstance(
         OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.ExtToolkit" ) ) ), UNO_QUERY );
     xDlg->createPeer( xToolkit, NULL );
-    StarBASIC* pStartedBasic = pINST->GetBasic();
-    attachDialogEvents( pStartedBasic, xDlg );
+        StarBASIC* pStartedBasic = pINST->GetBasic();
+        // need ThisCompoent from calling script
+
+        OSL_TRACE("About to try get a hold of ThisComponent");
+        Reference< frame::XModel > xModel = getModelFromBasic( pStartedBasic ) ;
+    attachDialogEvents( pStartedBasic, xModel, xDlg );
 
     // Return dialog
     Any aRetVal;
