@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.125 $
+ *  $Revision: 1.126 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-06 10:48:30 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 13:57:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -318,6 +318,7 @@ ImageList IMG_DOCUMENTLINKS_LCH
         Text[ czech ] = "Získat vygenerované hodnoty";\
         Text[ hebrew ] = "Generierte Werte ~berücksichtigen";\
         Text[ hindi ] = "Re~trieve generated values";\
+        Text[ slovak ] = "Získať vypočí~tané hodnoty";\
     };                                                                      \
                                                                             \
     FixedText FT_AUTOINCREMENTVALUE                                         \
@@ -350,6 +351,7 @@ ImageList IMG_DOCUMENTLINKS_LCH
         Text[ czech ] = "Výraz pro automatický přírůstek";\
         Text[ hebrew ] = "~Auto-Increment-Ausdruck";\
         Text[ hindi ] = "~Auto-increment statement";\
+        Text[ slovak ] = "~Automaticky rastúca hodnota";\
     };                                                                       \
                                                                              \
     Edit ET_AUTOINCREMENTVALUE                                               \
@@ -391,6 +393,7 @@ ImageList IMG_DOCUMENTLINKS_LCH
         Text[ czech ] = "Dotaz z vygenerovaných hodnot";\
         Text[ hebrew ] = "Abfrage der generierten ~Werte";\
         Text[ hindi ] = "~Query of generated values";\
+        Text[ slovak ] = "~Dotaz vypočítaných hodnôt";\
     };                                                                      \
                                                                             \
     Edit ET_RETRIEVE_AUTO                                                   \
@@ -454,6 +457,7 @@ TabDialog DLG_DATABASE_ADMINISTRATION
             Text[ czech ] = "Nový zdroj dat";
             Text[ hebrew ] = "Neue Datenquelle";
             Text[ hindi ] = "नया ड़ॉटा मूल";
+            Text[ slovak ] = "Nový zdroj dát";
         };
         ListBox LB_DATASOURCES
         {
@@ -509,6 +513,7 @@ TabDialog DLG_DATABASE_ADMINISTRATION
         Text[ czech ] = "Obecné";
         Text[ hebrew ] = "‮כללי‬";
         Text[ hindi ] = "सामान्य";
+        Text[ slovak ] = "Všeobecný";
     };
     String STR_PAGETITLE_DBASE
     {
@@ -540,6 +545,7 @@ TabDialog DLG_DATABASE_ADMINISTRATION
         Text[ czech ] = "dBase";
         Text[ hebrew ] = "dBase";
         Text[ hindi ] = "dBase";
+        Text[ slovak ] = "dBase";
     };
     String STR_PAGETITLE_JDBC
     {
@@ -571,6 +577,7 @@ TabDialog DLG_DATABASE_ADMINISTRATION
         Text[ czech ] = "JDBC";
         Text[ hebrew ] = "JDBC";
         Text[ hindi ] = "JDBC";
+        Text[ slovak ] = "JDBC";
     };
     String STR_PAGETITLE_ADO
     {
@@ -600,6 +607,7 @@ TabDialog DLG_DATABASE_ADMINISTRATION
         Text[ czech ] = "ADO";
         Text[ hebrew ] = "ADO";
         Text[ hindi ] = "ADO";
+        Text[ slovak ] = "ADO";
     };
     String STR_PAGETITLE_ODBC
     {
@@ -631,6 +639,7 @@ TabDialog DLG_DATABASE_ADMINISTRATION
         Text[ czech ] = "ODBC";
         Text[ hebrew ] = "ODBC";
         Text[ hindi ] = "ODBC";
+        Text[ slovak ] = "ODBC";
     };
     String STR_PAGETITLE_LDAP
     {
@@ -660,6 +669,7 @@ TabDialog DLG_DATABASE_ADMINISTRATION
         Text[ czech ] = "LDAP";
         Text[ hebrew ] = "LDAP";
         Text[ hindi ] = "LDAP";
+        Text[ slovak ] = "LDAP";
     };
     String STR_PAGETITLE_ADABAS
     {
@@ -689,6 +699,7 @@ TabDialog DLG_DATABASE_ADMINISTRATION
         Text[ czech ] = "Adabas D";
         Text[ hebrew ] = "Adabas D";
         Text[ hindi ] = "Adabas D";
+        Text[ slovak ] = "Adabas D";
     };
     String STR_PAGETITLE_ADABAS_STATISTIC
     {
@@ -718,6 +729,7 @@ TabDialog DLG_DATABASE_ADMINISTRATION
         Text[ czech ] = "Statistika Adabas D";
         Text[ hebrew ] = "Adabas D Statistik";
         Text[ hindi ] = "Adabas D अँकड़े";
+        Text[ slovak ] = "Štatistika Adabas D";
     };
 
     String STR_PAGETITLE_MYSQL
@@ -753,6 +765,7 @@ TabDialog DLG_DATABASE_ADMINISTRATION
         Text[ czech ] = "Uživatelská nastavení";
         Text[ hebrew ] = "Benutzereinstellungen";
         Text[ hindi ] = "उपभोक्ता निर्धारण";
+        Text[ slovak ] = "Užívateľské nastavenia";
     };
     String STR_PAGETITLE_TEXT
     {
@@ -784,6 +797,7 @@ TabDialog DLG_DATABASE_ADMINISTRATION
         Text[ czech ] = "Text";
         Text[ hebrew ] = "‮טקסט‬";
         Text[ hindi ] = "टेक्स्ट्";
+        Text[ slovak ] = "Text";
     };
     String STR_PAGETITLE_TABLESUBSCRIPTION
     {
@@ -813,6 +827,7 @@ TabDialog DLG_DATABASE_ADMINISTRATION
         Text[ czech ] = "Tabulky";
         Text[ hebrew ] = "‮טבלאות‬";
         Text[ hindi ] = "सारणियाँ";
+        Text[ slovak ] = "Tabuľky";
     };
     String STR_PAGETITLE_QUERIES
     {
@@ -842,6 +857,7 @@ TabDialog DLG_DATABASE_ADMINISTRATION
         Text[ czech ] = "Dotazy";
         Text[ hebrew ] = "‮שאילתות‬";
         Text[ hindi ] = "जानकारी";
+        Text[ slovak ] = "Dotazy";
     };
     String STR_PAGETITLE_DOCUMENTS
     {
@@ -871,6 +887,7 @@ TabDialog DLG_DATABASE_ADMINISTRATION
         Text[ czech ] = "Odkazy";
         Text[ hebrew ] = "‮קישורים‬";
         Text[ hindi ] = "लिंक्स";
+        Text[ slovak ] = "Odkazy";
     };
     Text [ portuguese ] = "Gerir fontes de dados";
     Text [ russian ] = "���������� ����������� ������";
@@ -895,6 +912,7 @@ TabDialog DLG_DATABASE_ADMINISTRATION
     Text[ czech ] = "Správa zdroje dat";
     Text[ hebrew ] = "‮ניהול מקור נתונים‬";
     Text[ hindi ] = "ड़ॉटा मूल प्रशासन";
+    Text[ slovak ] = "Administrácia zdroja dát";
 };
 
 //-------------------------------------------------------------------------
@@ -977,6 +995,7 @@ TabPage PAGE_GENERAL
         Text[ czech ] = "Název";
         Text[ hebrew ] = "~Name";
         Text[ hindi ] = "~नाम्";
+        Text[ slovak ] = "~Názov";
     };
 
     Edit ET_DATASOURCENAME
@@ -1018,6 +1037,7 @@ TabPage PAGE_GENERAL
         Text[ czech ] = "Připojení";
         Text[ hebrew ] = "Verbindung";
         Text[ hindi ] = "कनेक्शन";
+        Text[ slovak ] = "Pripojenie";
     };
 
     FixedText FT_DATATYPE
@@ -1051,6 +1071,7 @@ TabPage PAGE_GENERAL
         Text[ czech ] = "Typ databáze ";
         Text[ hebrew ] = "Datenbank~typ";
         Text[ hindi ] = "~लेखासंचय वर्ग";
+        Text[ slovak ] = "~Typ databázy ";
     };
     ListBox LB_DATATYPE
     {
@@ -1075,7 +1096,7 @@ TabPage PAGE_GENERAL
         Text [ dutch ] = "~Gegevensbronnen URL";
         Text [ french ] = "URL de la source de donn�es" ;
         Text [ spanish ] = "~Fuente de datos URL:";
-        Text [ italian ] = "~Fonte di dati URL";
+        Text [ italian ] = "URL sorgente dati";
         Text [ danish ] = "URL til ~datakilde";
         Text [ swedish ] = "~URL f�r datak�lla";
         Text [ polish ] = "Adres URL �r�d�a ~danych";
@@ -1092,6 +1113,7 @@ TabPage PAGE_GENERAL
         Text[ czech ] = "URL zdroje dat";
         Text[ hebrew ] = "‮מקור הנתונים‬ URL";
         Text[ hindi ] = "~ड़ॉटा मूल URL";
+        Text[ slovak ] = "URL zdroja ~dát";
     };
     Edit ET_CONNECTURL
     {
@@ -1132,6 +1154,7 @@ TabPage PAGE_GENERAL
         Text[ czech ] = "...";
         Text[ hebrew ] = "~...";
         Text[ hindi ] = "~...";
+        Text[ slovak ] = "~...";
     };
     FixedText FT_LOGINTIMEOUT
     {
@@ -1163,6 +1186,7 @@ TabPage PAGE_GENERAL
         Text[ czech ] = "Čas vypršení:";
         Text[ hebrew ] = "Abfallzeit:";
         Text[ hindi ] = "समय पूरा हुआ:";
+        Text[ slovak ] = "Vypršanie času:";
     };
     Edit ET_TIMEOUT_NUMBER
     {
@@ -1220,6 +1244,7 @@ TabPage PAGE_GENERAL
         Text[ czech ] = "Nová databáze...";
         Text[ hebrew ] = "N~eue Datenbank...";
         Text[ hindi ] = "~नया लेखासंचय...";
+        Text[ slovak ] = "~Nová Databáza...";
     };
     String STR_NAMEINVALID
     {
@@ -1251,6 +1276,7 @@ TabPage PAGE_GENERAL
         Text[ czech ] = "Tento název má již jiný datový zdroj. Protože datové zdroje musí mít jedinečné názvy, vyberte, prosím, jiné.";
         Text[ hebrew ] = "Es existiert schon eine andere Datenquelle mit diesem Namen. Da Datenquellennamen global eindeutig sein müssen, sollten sie einen anderen wählen.";
         Text[ hindi ] = "इस नाम का अन्य ड़ॉटा मूल पहिले से है । ड़ॉटा मूल को ग्लोबली अनोखा नाम रहने के कारण, कृपया अन्य नाम को चुनिए ।";
+        Text[ slovak ] = "Iný zdroj dát už má tento názov. Keďže zdroje dát musia mať globálne rôzne názvy, zvoľte si prosím iný názov.";
     };
     String STR_DATASOURCEDELETED
     {
@@ -1280,6 +1306,7 @@ TabPage PAGE_GENERAL
         Text[ czech ] = "Tento datový zdroj jste smazal.";
         Text[ hebrew ] = "Diese Datenquelle haben Sie gelöscht.";
         Text[ hindi ] = "आपने इस ड़ॉटा मूल को मिटाया है ।";
+        Text[ slovak ] = "Tento zdroj dát bol zmazaný.";
     };
     String STR_COULDNOTLOAD_ODBCLIB
     {
@@ -1309,6 +1336,7 @@ TabPage PAGE_GENERAL
         Text[ czech ] = "Nebylo možno načíst knihovnu programu #lib# nebo je poškozena. Výběr zdroje dat ODBC není možný.";
         Text[ hebrew ] = "Die Programmbibliothek #lib# konnte nicht geladen werden oder ist defekt. Die ODBC-Datenquellen-Auswahl ist nicht verfügbar.";
         Text[ hindi ] = "प्रोग्राम लैब्ररी #lib# को लोड़ नहीं कर सकते है अथवा दोषयुक्त है । ODBC ड़ॉटा मूल चुनाव अनुपलब्ध है ।";
+        Text[ slovak ] = "Nebolo možné načítať programovú knižnicu #lib# alebo je poškodená. Výber ODBC zdroja dát nieje možný.";
     };
     String STR_NO_ADABASE_DATASOURCES
     {
@@ -1338,6 +1366,7 @@ TabPage PAGE_GENERAL
         Text[ czech ] = "Ve vašem systému není žádný zdroj dat Adabas.";
         Text[ hebrew ] = "Auf Ihrem System wurden keine Adabas-Datenquellen gefunden.";
         Text[ hindi ] = "आपके सिस्टम में कोई Adabas ड़ॉटा मूल नहीं है ।";
+        Text[ slovak ] = "Vo vašom systéme nie sú žiadne zdroje dát Adabas.";
     };
     String STR_UNSUPPORTED_DATASOURCE_TYPE
     {
@@ -1348,7 +1377,7 @@ TabPage PAGE_GENERAL
         Text[ russian ] = "������ ��� ���������� ������ �� ���� ��������� �� ��������������.\n�� ������ �������� ���������, ��, ��������, ����������� � ���� ����� ������ ����� ����������.";
         Text[ greek ] = "This kind of data source is not supported on this platform.\nYou are allowed to change the settings, but you probably won't be able to connect to the database.";
         Text[ dutch ] = "Dit type gegevensbron wordt op dit platform niet ondersteund.\nU kunt wel de instellingen wijzigen, maar vermoedelijk geen verbinding met de database tot stand brengen.";
-        Text[ french ] = "Ce type de source de donn�es n'est pas support� par la plateforme en question.\nM�me si les param�tres sont modifiables, une connexion � la BD n'est pas garantie.";
+        Text[ french ] = "Ce type de source de donn�es n'est pas support� par la plate-forme en question.\nM�me si les param�tres sont modifiables, une connexion � la BD n'est pas garantie.";
         Text[ spanish ] = "Esta plataforma no admite este tipo de fuente de datos.\nPuede modificar los datos, pero seguramente no podr� establecer una conexi�n con la base de datos.";
         Text[ finnish ] = "T�m� k�ytt�ymp�rist� ei tue t�t� tietol�hdett�.\nVoit muuttaa asetuksia, mutta et todenn�k�isesti pysty muodostamaan yhteytt� tietokantaan.";
         Text[ italian ] = "Questo tipo di sorgente dati non � supportata dal presente sistema.\nPotete modificare le impostazioni ma � probabile che non riusciate ad effettuare un collegamento con il database.";
@@ -1367,6 +1396,7 @@ TabPage PAGE_GENERAL
         Text[ czech ] = "Tento druh zdroje dat není na této platformě podporován.\nMůžete změnit nastavení, ale pravděpodobně nebude možno připojit se k databázi.";
         Text[ hebrew ] = "Dieser Datenquellen-Typ wird auf dieser Plattform nicht unterstützt.\nSie können die Einstellungen verändern, werden aber vermutlich keine Verbindung zu der Datenbank herstellen können.";
         Text[ hindi ] = "इस प्लॉटफोर्म में इस प्रकार का ड़ॉटा मूल मर्थित नहीं है ।\nआप निर्धारणों को बदल सकते है, लेकिन शायद आप लेखासंचय से कनेक्ट नहीं कर सकते है ।";
+        Text[ slovak ] = "Tento druh dátového zdroja nieje podporovaný na tejto platforme.\nMáte možnosť zmeniť nastavenia, ale pravdepodobne nebude možnéspojiť sa s databázou.";
     };
     String STR_MYSQL_CONFIG_NEXT_PAGE
     {
@@ -1396,6 +1426,7 @@ TabPage PAGE_GENERAL
         Text[ czech ] = "Pokud chcete změnit konfiguraci, přejděte na záložku MySQL.";
         Text[ hebrew ] = "Wechseln Sie zur MySQL-Registerseite um die Einstellungen vorzunehmen.";
         Text[ hindi ] = "To adjust the settings, go to the MySQL tab page.";
+        Text[ slovak ] = "Pre zmenu nastavení, choďte na záložku MySQL.";
     };
 };
 
@@ -1425,7 +1456,7 @@ TabPage PAGE_DBASE
         Text [ SPANISH ] = "J~uego de caracteres" ;
         Text [ FINNISH ] = "~Merkist�" ;
         Text [ FRENCH ] = "~Jeu de caract�res" ;
-        Text [ ITALIAN ] = "~Tipo di carattere" ;
+        Text [ ITALIAN ] = "Set di caratteri" ;
         Text [ DUTCH ] = "~Tekenset" ;
         Text [ PORTUGUESE_BRAZILIAN ] = "~Conjunto de caracteres" ;
         Text [ SWEDISH ] = "Te~ckenupps�ttning" ;
@@ -1445,6 +1476,7 @@ TabPage PAGE_DBASE
         Text[ czech ] = "Znaková sada";
         Text[ hebrew ] = "~Zeichensatz";
         Text[ hindi ] = "~अक्षर समूह";
+        Text[ slovak ] = "~Znaková sada";
     };
     ListBox LB_CHARSET
     {
@@ -1486,6 +1518,7 @@ TabPage PAGE_DBASE
         Text[ czech ] = "Obecné";
         Text[ hebrew ] = "‮כללי‬";
         Text[ hindi ] = "सामान्य";
+        Text[ slovak ] = "Všeobecný";
     };
     CheckBox CB_SHOWDELETEDROWS
     {
@@ -1521,6 +1554,7 @@ TabPage PAGE_DBASE
         Text[ czech ] = "Zobrazit neaktivní záznamy";
         Text[ hebrew ] = "I~naktive Datensätze anzeigen";
         Text[ hindi ] = "~निष्क्रिय अभिलेखों को दिखाओ";
+        Text[ slovak ] = "Zobraziť ~neaktívne záznamy";
     };
     CheckBox CB_SQL92CHECK
     {
@@ -1554,6 +1588,7 @@ TabPage PAGE_DBASE
         Text[ portuguese_brazilian ] = "Use SQL92 naming constraints";
         Text[ thai ] = "Use SQL92 naming constraints";
         Text[ hindi ] = "Use SQL92 naming constraints";
+        Text[ slovak ] = "Použite SQL92 pomenovanie";
     };
     PushButton PB_INDICIES
     {
@@ -1588,6 +1623,7 @@ TabPage PAGE_DBASE
         Text[ czech ] = "Rejstříky...";
         Text[ hebrew ] = "~Indizes...";
         Text[ hindi ] = "अनुक्रमणी...";
+        Text[ slovak ] = "Indexy...";
     };
 };
 
@@ -1631,6 +1667,7 @@ TabPage PAGE_ADO
         Text[ czech ] = "URL";
         Text[ hebrew ] = "U~RL";
         Text[ hindi ] = "U~RL";
+        Text[ slovak ] = "U~RL";
     };
     Edit ET_CONNECTURL
     {
@@ -1679,6 +1716,7 @@ TabPage PAGE_ADO
         Text[ czech ] = "Uživatelské jméno";
         Text[ hebrew ] = "~Benutzername";
         Text[ hindi ] = "~उपभोक्ता नाम";
+        Text[ slovak ] = "~Užívateľské meno";
     };
     Edit ET_USERNAME
     {
@@ -1719,6 +1757,7 @@ TabPage PAGE_ADO
         Text[ czech ] = "Požadované heslo";
         Text[ hebrew ] = "Kennwort erforderlich";
         Text[ hindi ] = "कूटशब्द का आवश्यकता";
+        Text[ slovak ] = "Požadované heslo";
     };
 
     FixedLine FL_SEPARATOR2
@@ -1751,6 +1790,7 @@ TabPage PAGE_ADO
         Text[ czech ] = "Obecné";
         Text[ hebrew ] = "‮כללי‬";
         Text[ hindi ] = "सामान्य";
+        Text[ slovak ] = "Všeobecný";
     };
 
     CheckBox CB_SQL92CHECK
@@ -1785,6 +1825,7 @@ TabPage PAGE_ADO
         Text[ portuguese_brazilian ] = "Use SQL92 naming constraints";
         Text[ thai ] = "Use SQL92 naming constraints";
         Text[ hindi ] = "Use SQL92 naming constraints";
+        Text[ slovak ] = "Použite SQL92 pomenovanie";
     };
 };
 
@@ -1828,6 +1869,7 @@ TabPage PAGE_JDBC
         Text[ czech ] = "Třída JDBC ovladače";
         Text[ hebrew ] = "~JDBC Treiberklasse";
         Text[ hindi ] = "~JDBC ड्रइवर वर्ग";
+        Text[ slovak ] = "~JDBC driver class";
     };
     Edit ET_JDBCDRIVERCLASS
     {
@@ -1868,6 +1910,7 @@ TabPage PAGE_JDBC
         Text[ czech ] = "URL";
         Text[ hebrew ] = "U~RL";
         Text[ hindi ] = "U~RL";
+        Text[ slovak ] = "U~RL";
     };
     Edit ET_CONNECTURL
     {
@@ -1911,6 +1954,7 @@ TabPage PAGE_JDBC
         Text[ czech ] = "Uživatelské jméno";
         Text[ hebrew ] = "~Benutzername";
         Text[ hindi ] = "~उपभोक्ता नाम";
+        Text[ slovak ] = "~Užívateľské meno";
     };
     Edit ET_USERNAME
     {
@@ -1951,6 +1995,7 @@ TabPage PAGE_JDBC
         Text[ czech ] = "Požadované heslo";
         Text[ hebrew ] = "Kennwort erforderlich";
         Text[ hindi ] = "कूटशब्द का आवश्यकता";
+        Text[ slovak ] = "Požadované heslo";
     };
     FixedLine FL_SEPARATOR1
     {
@@ -1982,6 +2027,7 @@ TabPage PAGE_JDBC
         Text[ czech ] = "Obecné";
         Text[ hebrew ] = "‮כללי‬";
         Text[ hindi ] = "सामान्य";
+        Text[ slovak ] = "Všeobecný";
     };
 
     AUTO_INCREMENT_CONTROLS (73)
@@ -2018,6 +2064,7 @@ TabPage PAGE_JDBC
         Text[ portuguese_brazilian ] = "Use SQL92 naming constraints";
         Text[ thai ] = "Use SQL92 naming constraints";
         Text[ hindi ] = "Use SQL92 naming constraints";
+        Text[ slovak ] = "Použite SQL92 pomenovanie";
     };
 };
 
@@ -2062,6 +2109,7 @@ TabPage PAGE_ODBC
         Text[ czech ] = "Uživatelské jméno";
         Text[ hebrew ] = "~Benutzername";
         Text[ hindi ] = "~उपभोक्ता नाम";
+        Text[ slovak ] = "~Užívateľské meno";
     };
     Edit ET_USERNAME
     {
@@ -2102,6 +2150,7 @@ TabPage PAGE_ODBC
         Text[ czech ] = "Požadované heslo";
         Text[ hebrew ] = "Kennwort erforderlich";
         Text[ hindi ] = "कूटशब्द का आवश्यकता";
+        Text[ slovak ] = "Požadované heslo";
     };
     FixedLine FL_SEPARATOR1
     {
@@ -2140,6 +2189,7 @@ TabPage PAGE_ODBC
         Text[ czech ] = "Nastavení ovladače";
         Text[ hebrew ] = "~Treibereinstellungen";
         Text[ hindi ] = "ड्रइव निर्धारण";
+        Text[ slovak ] = "Nastavenie ovládača";
     };
     Edit ET_OPTIONS
     {
@@ -2161,7 +2211,7 @@ TabPage PAGE_ODBC
         Text [ SPANISH ] = "J~uego de caracteres" ;
         Text [ FINNISH ] = "~Merkist�" ;
         Text [ FRENCH ] = "~Jeu de caract�res" ;
-        Text [ ITALIAN ] = "~Tipo di carattere" ;
+        Text [ ITALIAN ] = "Set di caratteri" ;
         Text [ DUTCH ] = "~Tekenset" ;
         Text [ PORTUGUESE_BRAZILIAN ] = "~Conjunto de caracteres" ;
         Text [ SWEDISH ] = "~Teckenupps�ttning" ;
@@ -2181,6 +2231,7 @@ TabPage PAGE_ODBC
         Text[ czech ] = "Znaková sada";
         Text[ hebrew ] = "~Zeichensatz";
         Text[ hindi ] = "~अक्षर समूह";
+        Text[ slovak ] = "~Znaková sada";
     };
     ListBox LB_CHARSET
     {
@@ -2223,6 +2274,7 @@ TabPage PAGE_ODBC
         Text[ czech ] = "Obecné";
         Text[ hebrew ] = "‮כללי‬";
         Text[ hindi ] = "सामान्य";
+        Text[ slovak ] = "Všeobecný";
     };
 
     AUTO_INCREMENT_CONTROLS (80 )
@@ -2259,6 +2311,7 @@ TabPage PAGE_ODBC
         Text[ portuguese_brazilian ] = "Use SQL92 naming constraints";
         Text[ thai ] = "Use SQL92 naming constraints";
         Text[ hindi ] = "Use SQL92 naming constraints";
+        Text[ slovak ] = "Použite SQL92 pomenovanie";
     };
 
     CheckBox CB_USECATALOG
@@ -2294,6 +2347,7 @@ TabPage PAGE_ODBC
         Text[ czech ] = "Pro souborové databáze použít katalog";
         Text[ hebrew ] = "Catalog verwenden bei dateibasierten Datenbanken";
         Text[ hindi ] = "फाइल-आधारित लेखासंचय केलिए सूचीपत्र का उपयोग करो";
+        Text[ slovak ] = "Pre súborové databázy použiť katalóg";
     };
 };
 //.........................................................................
@@ -2339,6 +2393,7 @@ TabPage PAGE_MYSQL
         Text[ czech ] = "Typ spojení";
         Text[ hebrew ] = "Art der Verbindung";
         Text[ hindi ] = "Type of connection";
+        Text[ slovak ] = "Typ spojenia";
     };
 
     RadioButton RB_USEMYODBC
@@ -2371,6 +2426,7 @@ TabPage PAGE_MYSQL
         Text[ czech ] = "Použít existující MyODBC datový zdroj";
         Text[ hebrew ] = "Existierende My~ODBC Datenquelle verwenden";
         Text[ hindi ] = "Use existing My~ODBC data source";
+        Text[ slovak ] = "Použiť existujúci My~ODBC zdroj dát";
     };
 
     RadioButton RB_USECONNECTORJ3
@@ -2404,6 +2460,7 @@ TabPage PAGE_MYSQL
         Text[ czech ] = "Použít konektor/J3";
         Text[ hebrew ] = "Connector/~J3 verwenden";
         Text[ hindi ] = "Use Connector/~J3";
+        Text[ slovak ] = "Použiť Connector/~J3";
     };
 
     FixedText FT_JDBCDRIVERCLASS
@@ -2436,6 +2493,7 @@ TabPage PAGE_MYSQL
         Text[ czech ] = "Ovladač typu MySQL JDBC";
         Text[ hebrew ] = "MySQL JDBC ~Treiberklasse";
         Text[ hindi ] = "MySQL JDBC d~river class";
+        Text[ slovak ] = "MySQL JDBC d~river class";
     };
     Edit ET_JDBCDRIVERCLASS
     {
@@ -2475,6 +2533,7 @@ TabPage PAGE_MYSQL
         Text[ czech ] = "Obecné";
         Text[ hebrew ] = "‮כללי‬";
         Text[ hindi ] = "सामान्य";
+        Text[ slovak ] = "Všeobecný";
     };
 
     FixedText FT_CONNECTURL
@@ -2487,7 +2546,7 @@ TabPage PAGE_MYSQL
         Text[ portuguese ] = "~Fonte de dados URL";
         Text[ russian ] = "~�������� ������ URL";
         Text[ spanish ] = "~URL de la fuente de datos";
-        Text[ italian ] = "~Sorgente dati URL";
+        Text[ italian ] = "URL sorgente dati";
         Text[ swedish ] = "~URL f�r datak�lla";
         Text[ polish ] = "URL �r�d�a danych";
         Text[ portuguese_brazilian ] = "~URL da fonte de dados ";
@@ -2508,6 +2567,7 @@ TabPage PAGE_MYSQL
         Text[ czech ] = "URL zdroje dat";
         Text[ hebrew ] = "‮מקור הנתונים‬ URL";
         Text[ hindi ] = "~ड़ॉटा मूल URL";
+        Text[ slovak ] = "URL zdroja ~dát";
     };
     Edit ET_CONNECTURL
     {
@@ -2556,6 +2616,7 @@ TabPage PAGE_MYSQL
         Text[ czech ] = "~Uživatelské jméno";
         Text[ hebrew ] = "~Benutzername";
         Text[ hindi ] = "~उपभोक्ता का नाम";
+        Text[ slovak ] = "~Užívateľské meno";
     };
     Edit ET_USERNAME
     {
@@ -2595,6 +2656,7 @@ TabPage PAGE_MYSQL
         Text[ czech ] = "Je vyžadováno heslo";
         Text[ hebrew ] = "Kennwort ~erforderlich";
         Text[ hindi ] = "Password r~equired";
+        Text[ slovak ] = "Požadované h~eslo";
     };
     FixedText FT_CHARSET
     {
@@ -2605,7 +2667,7 @@ TabPage PAGE_MYSQL
         Text[ portuguese ] = "~Conjunto de caracteres";
         Text[ russian ] = "����� ������";
         Text[ spanish ] = "J~uego de caracteres";
-        Text[ italian ] = "~Tipo di carattere";
+        Text[ italian ] = "Set di caratteri";
         Text[ swedish ] = "Te~ckenupps�ttning";
         Text[ polish ] = "Zbi�r znak�w";
         Text[ portuguese_brazilian ] = "~Conjunto de caracteres";
@@ -2626,6 +2688,7 @@ TabPage PAGE_MYSQL
         Text[ czech ] = "Znaková sada";
         Text[ hebrew ] = "~Zeichensatz";
         Text[ hindi ] = "~अक्षर समूह";
+        Text[ slovak ] = "~Znaková sada";
     };
     ListBox LB_CHARSET
     {
@@ -2666,6 +2729,7 @@ TabPage PAGE_MYSQL
         Text[ czech ] = "<host>:<3306>/<DBNAME>";
         Text[ hebrew ] = "<Rechnername>:<3306>/<DBNAME>";
         Text[ hindi ] = "<host>:<3306>/<DBNAME>";
+        Text[ slovak ] = "<host>:<3306>/<DBNAME>";
     };
 
 };
@@ -2709,6 +2773,7 @@ TabPage PAGE_LDAP
         Text[ czech ] = "Název hostitele";
         Text[ hebrew ] = "~Rechnername";
         Text[ hindi ] = "~होस्ट् नाम";
+        Text[ slovak ] = "Názov ~hostiteľa";
     };
     Edit ET_HOSTNAME
     {
@@ -2750,6 +2815,7 @@ TabPage PAGE_LDAP
         Text[ czech ] = "Základní DN";
         Text[ hebrew ] = "~Base DN";
         Text[ hindi ] = "~आधार DN";
+        Text[ slovak ] = "Zákla~dné DN";
     };
     Edit ET_BASEDN
     {
@@ -2795,6 +2861,7 @@ TabPage PAGE_LDAP
         Text[ czech ] = "Číslo portu";
         Text[ hebrew ] = "~Portnummer";
         Text[ hindi ] = "~पोर्ट संख्या";
+        Text[ slovak ] = "Číslo ~portu";
     };
     NumericField NF_PORTNUMBER
     {
@@ -2835,6 +2902,7 @@ TabPage PAGE_LDAP
         Text[ czech ] = "Záznamů (max.)";
         Text[ hebrew ] = "~Datensätze (max.)";
         Text[ hindi ] = "~अभिलेख (अधिकतम)";
+        Text[ slovak ] = "~Záznamy (max.)";
     };
     NumericField NF_LDAPROWCOUNT
     {
@@ -2885,6 +2953,7 @@ TabPage PAGE_TEXT
         Text[ czech ] = "Formát řádku";
         Text[ hebrew ] = "Zeilenformat";
         Text[ hindi ] = "पंक्ति रचना";
+        Text[ slovak ] = "Formát riadka";
     };
     CheckBox CB_HEADER
     {
@@ -2920,6 +2989,7 @@ TabPage PAGE_TEXT
         Text[ czech ] = "Text obsahuje záhlaví";
         Text[ hebrew ] = "~Text beinhaltet Kopfzeile";
         Text[ hindi ] = "~टेक्स्ट् में शीर्षक है";
+        Text[ slovak ] = "~Text obsahuje záhlavia";
     };
     FixedText FT_FIELDSEPARATOR
     {
@@ -2953,6 +3023,7 @@ TabPage PAGE_TEXT
         Text[ czech ] = "Oddělovač polí";
         Text[ hebrew ] = "~Feldtrenner";
         Text[ hindi ] = "क्षेत्र अलगानेवाला";
+        Text[ slovak ] = "Oddeľovač poľa";
     };
     ComboBox CM_FIELDSEPARATOR
     {
@@ -2995,6 +3066,7 @@ TabPage PAGE_TEXT
         Text[ czech ] = "Oddělovač textu";
         Text[ hebrew ] = "T~exttrenner";
         Text[ hindi ] = "टेक्स्ट् अलगानेवाला";
+        Text[ slovak ] = "Oddeľovač textu";
     };
     ComboBox CM_TEXTSEPARATOR
     {
@@ -3037,6 +3109,7 @@ TabPage PAGE_TEXT
         Text[ czech ] = "Oddělovač desetin";
         Text[ hebrew ] = "~Dezimaltrennzeichen";
         Text[ hindi ] = "दशांश अलगानेवाला";
+        Text[ slovak ] = "Oddeľovač desatín";
     };
     ComboBox CM_DECIMALSEPARATOR
     {
@@ -3087,6 +3160,7 @@ TabPage PAGE_TEXT
         Text[ czech ] = "Oddělovač tisíců";
         Text[ hebrew ] = "T~ausendertrennzeichen";
         Text[ hindi ] = "हजार अलगानेवाला";
+        Text[ slovak ] = "Oddeľovač tisícok";
     };
     ComboBox CM_THOUSANDSSEPARATOR
     {
@@ -3133,6 +3207,7 @@ TabPage PAGE_TEXT
         Text[ czech ] = "Formát souboru";
         Text[ hebrew ] = "Dateiformat";
         Text[ hindi ] = "फाइल रचना";
+        Text[ slovak ] = "Formát súboru";
     };
     FixedText FT_EXTENSION
     {
@@ -3165,6 +3240,7 @@ TabPage PAGE_TEXT
         Text[ czech ] = "Přípona";
         Text[ hebrew ] = "E~rweiterung";
         Text[ hindi ] = "विस्तार";
+        Text[ slovak ] = "Prípona";
     };
     ComboBox CM_EXTENSION
     {
@@ -3194,7 +3270,7 @@ TabPage PAGE_TEXT
         Text [ SPANISH ] = "J~uego de caracteres" ;
         Text [ FINNISH ] = "~Merkist�" ;
         Text [ FRENCH ] = "~Jeu de caract�res" ;
-        Text [ ITALIAN ] = "~Tipo di carattere" ;
+        Text [ ITALIAN ] = "Set di caratteri" ;
         Text [ DUTCH ] = "~Tekenset" ;
         Text [ PORTUGUESE_BRAZILIAN ] = "~Conjunto de caracteres" ;
         Text [ SWEDISH ] = "~Teckenupps�ttning" ;
@@ -3214,6 +3290,7 @@ TabPage PAGE_TEXT
         Text[ czech ] = "Znaková sada";
         Text[ hebrew ] = "~Zeichensatz";
         Text[ hindi ] = "~अक्षर समूह";
+        Text[ slovak ] = "~Znaková sada";
     };
     ListBox LB_CHARSET
     {
@@ -3256,6 +3333,7 @@ TabPage PAGE_TEXT
         Text[ czech ] = ";\t59\t,\t44\t:\t58\t{Tab}\t9\t{Space}\t32";
         Text[ hebrew ] = ";\t59\t,\t44\t:\t58\t{Tab}\t9\t{Leerzeichen}\t32";
         Text[ hindi ] = ";\t59\t,\t44\t:\t58\t{Tab}\t9\t{empty}\t32";
+        Text[ slovak ] = ";\t59\t,\t44\t:\t58\t{Tabulátor}\t9\t{prázdny}\t32";
     };
 
     String STR_TEXTSEPARATORLIST
@@ -3291,6 +3369,7 @@ TabPage PAGE_TEXT
         Text[ czech ] = "{None}";
         Text[ hebrew ] = "‮{ללא}‬";
         Text[ hindi ] = "{None}";
+        Text[ slovak ] = "{None}";
     };
 
     String STR_DELIMITER_MISSING
@@ -3322,6 +3401,7 @@ TabPage PAGE_TEXT
         Text[ czech ] = "#1 musí být nastaven.";
         Text[ hebrew ] = "#1 muss angegeben sein.";
         Text[ hindi ] = "#1 को सेट्ट करना है ।";
+        Text[ slovak ] = "#1 musí byť nastavený.";
     };
     String STR_DELIMITER_MUST_DIFFER
     {
@@ -3352,6 +3432,7 @@ TabPage PAGE_TEXT
         Text[ czech ] = "#1 a #2 musí být různé.";
         Text[ hebrew ] = "#1 und #2 müssen unterschiedlich sein.";
         Text[ hindi ] = "#1 और #2 भिन्न होना चाहिए ।";
+        Text[ slovak ] = "#1 a #2 musia byť rôzne.";
     };
     String STR_NO_WILDCARDS
     {
@@ -3382,6 +3463,7 @@ TabPage PAGE_TEXT
         Text[ czech ] = "Zástupné znaky jako ? a * nejsou povoleny v #1.";
         Text[ hebrew ] = "Platzhalter wie *,? sind in der #1 nicht möglich.";
         Text[ hindi ] = "#1 में ?,* जैसे वैल्डकार्ड स्वीकृत नहीं है ।";
+        Text[ slovak ] = "Zástupné znaky ako ? a * nie sú povolené v #1.";
     };
 
     FixedLine FL_SEPARATOR3
@@ -3414,6 +3496,7 @@ TabPage PAGE_TEXT
         Text[ czech ] = "Obecné";
         Text[ hebrew ] = "‮כללי‬";
         Text[ hindi ] = "सामान्य";
+        Text[ slovak ] = "Všeobecný";
     };
 
     CheckBox CB_SQL92CHECK
@@ -3448,6 +3531,7 @@ TabPage PAGE_TEXT
         Text[ portuguese_brazilian ] = "Use SQL92 naming constraints";
         Text[ thai ] = "Use SQL92 naming constraints";
         Text[ hindi ] = "Use SQL92 naming constraints";
+        Text[ slovak ] = "Použite SQL92 pomenovanie";
     };
 };
 //.........................................................................
@@ -3489,6 +3573,7 @@ TabPage PAGE_TABLESUBSCRIPTION
         Text[ czech ] = "Tabulky a filtry tabulek";
         Text[ hebrew ] = "‮טבלאות ומסנני נתונים‬";
         Text[ hindi ] = "सारणी और सारणी फिल्टरें";
+        Text[ slovak ] = "Tabuľky a filtre tabuliek";
     };
     ToolBox TLB_ACTIONS
     {
@@ -3556,6 +3641,7 @@ TabPage PAGE_TABLESUBSCRIPTION
         Text[ czech ] = "V seznamu nahoře označte tabulky, které by měly být viditelné v aplikacích.";
         Text[ hebrew ] = "‮ברשימה למעלה יש לסמן את הטבלאות שיהיו נגישות‬";
         Text[ hindi ] = "ऊपर दी हुयी सूची में, कार्यक्रमों को दृष्टिगोचर होनेवाला सारणियों को सूचित करो ।";
+        Text[ slovak ] = "V hreuvedenom zozname označte tabuľky, ktoré majú byť viditeľné pre aplikácie.";
     };
     FixedLine FL_SEPARATOR2
     {
@@ -3587,6 +3673,7 @@ TabPage PAGE_TABLESUBSCRIPTION
         Text[ czech ] = "Sloupce";
         Text[ hebrew ] = "‮טורים‬";
         Text[ hindi ] = "स्तंभें";
+        Text[ slovak ] = "Stĺpce";
     };
     CheckBox CB_SUPPRESVERSIONCL
     {
@@ -3621,6 +3708,7 @@ TabPage PAGE_TABLESUBSCRIPTION
         Text[ czech ] = "Zobrazit sloupce verzí (jsou-li k dispozici)";
         Text[ hebrew ] = "‮כאשר אפשרי הצג טורי גרסאות ‬";
         Text[ hindi ] = "आवर्तन स्तंभों को दिखाओ (जब उपलब्ध है)";
+        Text[ slovak ] = "Zobraziť vezie stĺpcov (kde je to možné)";
     };
 };
 
@@ -3663,6 +3751,7 @@ TabPage PAGE_QUERYADMINISTRATION
         Text[ czech ] = "Dotazy";
         Text[ hebrew ] = "‮שאילתות‬";
         Text[ hindi ] = "जानकारी";
+        Text[ slovak ] = "Dotazy";
     };
     ToolBox TLB_ACTIONS
     {
@@ -3751,6 +3840,7 @@ TabPage PAGE_DOCUMENTLINKS
         Text[ czech ] = "Odkazy";
         Text[ hebrew ] = "‮קישורים‬";
         Text[ hindi ] = "लिंक्स";
+        Text[ slovak ] = "Odkazy";
     };
     ToolBox TLB_ACTIONS
     {
@@ -3837,6 +3927,7 @@ WarningBox ERR_NOREGISTEREDDATASOURCES
     Message[ czech ] = "V současnosti nejsou zaregistrovány žádné datové zdroje.";
     Message[ hebrew ] = "Es sind augenblicklich keine Datenquellen registriert.";
     Message[ hindi ] = "वर्तमान में, कोई रजिस्टर की हुयी ड़ॉटा मूल नहीं है ।";
+    Message[ slovak ] = "V súčasnosti nieje registrovaný žiadny zdroj dát.";
 };
 ErrorBox ERR_COULDNOTRESTOREDS
 {
@@ -3866,6 +3957,7 @@ ErrorBox ERR_COULDNOTRESTOREDS
     Message[ czech ] = "Název smazaného datového zdroje byl již přiřazen jinému. Tento další zdroj musíte nejprve přejmenovat, pokud chcete smazaný obnovit.";
     Message[ hebrew ] = "Sie haben schon einer anderen Datenquellen den Namen der gelöschten gegeben! Sie müssen erstere umbenennen, um die aktuelle wiederherstellen zu können.";
     Message[ hindi ] = "मिटाया हुआ ड़ॉटा मूल का नाम को पहिले से ही किसी दूसरा ड़ॉटा मूल केलिए दिया है । पहिले का मूल को पूर्व अवस्था में लाने से पहिले, बाद का मूल को पुनः नाम देना चाहिए ।";
+    Message[ slovak ] = "Názov zmazaného dátového zdroja bol už použitý pre iný zdroj dát. Musíte premenovať nový zdroj dát aby ste starý mohli obnoviť.";
 };
 
 String STR_ENTER_CONNECTION_PASSWORD
@@ -3896,6 +3988,7 @@ String STR_ENTER_CONNECTION_PASSWORD
     Text[ czech ] = "Pro připojení k datovému zdroji \"$name$\" potřebujete heslo.";
     Text[ hebrew ] = "Die Verbindung zur Datenquelle \"$name$\" erfordert die Eingabe eines Passwortes.";
     Text[ hindi ] = "$name$ ड़ॉटा मूल को कनेक्ट करने केलिए एक कूटशब्द का आवश्यकता है ।";
+    Text[ slovak ] = "Pre pripojenie na zdroj dát \"$name$\" je potrebné heslo.";
 };
 String STR_DATASOURCE_DEFAULTNAME
 {
@@ -3925,6 +4018,7 @@ String STR_DATASOURCE_DEFAULTNAME
     Text[ czech ] = "Zdroj dat";
     Text[ hebrew ] = "‮מקור הנתונים‬";
     Text[ hindi ] = "ड़ॉटा मूल";
+    Text[ slovak ] = "Zdroj dát";
 };
 String STR_ERR_EMPTY_DSN_NAME
 {
@@ -3954,6 +4048,7 @@ String STR_ERR_EMPTY_DSN_NAME
     Text[ czech ] = "Název datového zdroje musí být zadán!";
     Text[ hebrew ] = "Der Datenquellen-Name darf nicht leer sein";
     Text[ hindi ] = "ड़ॉटा मूल का नाम खाली नहीं होना चाहिए !";
+    Text[ slovak ] = "Názov zdroja dát nemôže byť prázdny!";
 };
 Menu MENU_DATASOURCELIST_POPUP
 {
@@ -3990,6 +4085,7 @@ Menu MENU_DATASOURCELIST_POPUP
             Text[ czech ] = "Nový zdroj dat";
             Text[ hebrew ] = "neue Datenquelle";
             Text[ hindi ] = "नया ड़ॉटा मूल";
+            Text[ slovak ] = "Nový zdroj dát";
         };
         MenuItem
         {
@@ -4002,7 +4098,7 @@ Menu MENU_DATASOURCELIST_POPUP
             Text [ russian ] = "������� �������� ������";
             Text [ greek ] = "�������� ���������� ���������";
             Text [ dutch ] = "Gegevensbron wissen";
-            Text [ french ] = "Source de donn�es supprim�e";
+            Text [ french ] = "Supprimer la source de donn�es";
             Text [ spanish ] = "Borrar la fuente de datos";
             Text [ italian ] = "Elimina sorgente dati";
             Text [ danish ] = "Slet datakilde";
@@ -4021,6 +4117,7 @@ Menu MENU_DATASOURCELIST_POPUP
             Text[ czech ] = "Odstranit zdroj dat";
             Text[ hebrew ] = "Datenquelle löschen";
             Text[ hindi ] = "ड़ॉटा मूल मिटाओ";
+            Text[ slovak ] = "Odstrániť zdroj dát";
         };
         MenuItem
         {
@@ -4052,6 +4149,7 @@ Menu MENU_DATASOURCELIST_POPUP
             Text[ czech ] = "Obnovit zdroj dat";
             Text[ hebrew ] = "Datenquelle wiederherstellen";
             Text[ hindi ] = "ड़ॉटा मूल को पूर्व अवस्था में पहुँचाना";
+            Text[ slovak ] = "Obnoviť zdroj dát";
         };
     };
 };
@@ -4089,6 +4187,7 @@ Menu RID_NEW_FORM
             Text[ czech ] = "Textový dokument";
             Text[ hebrew ] = "~Textdokument";
             Text[ hindi ] = "~टेक्स्ट् लेखपत्र";
+            Text[ slovak ] = "~Textový dokument";
         };
         MenuItem
         {
@@ -4119,6 +4218,7 @@ Menu RID_NEW_FORM
             Text[ czech ] = "Sešit";
             Text[ hebrew ] = "‮גליון אלקטרוני‬";
             Text[ hindi ] = "~स्प्रेडशीट्";
+            Text[ slovak ] = "~Zošit";
         };
         MenuItem
         {
@@ -4149,6 +4249,7 @@ Menu RID_NEW_FORM
             Text[ czech ] = "Prezentace";
             Text[ hebrew ] = "‮מצגת‬";
             Text[ hindi ] = "~प्रस्तुति";
+            Text[ slovak ] = "~Prezentácia";
         };
         MenuItem
         {
@@ -4195,6 +4296,7 @@ Menu RID_NEW_FORM
             Text[ czech ] = "Ze šablony...";
             Text[ hebrew ] = "Aus ~Vorlage...";
             Text[ hindi ] = "~नमूने से...";
+            Text[ slovak ] = "Podľ~a predlohy...";
         };
     };
 
@@ -4235,6 +4337,7 @@ WarningBox WARN_SAVEFORQUERIES
     Message[ czech ] = "Před administrací objektů $objects$ datového zdroje musí být zdroj uložen.\nMají být nyní všechny změny provedené v tomto dialogu uloženy?";
     Message[ hebrew ] = "Um die $objects$ einer Datenquelle zu administrieren, muss diese gespeichert werden.\nSollen sämtliche bis jetzt in diesem Dialog vorgenommene Änderungen jetzt gespeichert werden?";
     Message[ hindi ] = "ड़ॉटा मूल का $objects$ को प्रशासन करने केलिए, ड़ॉटा मूल को संचित करना चाहिए ।\nइस डयलॉग में की हुयी सभी परिवर्तनों को अभी संचित करना है ?";
+    Message[ slovak ] = "Aby ste mohli administrovať $objects$ v zdroji dát, zdroj dát musí byť uložený.\nMajú sa všetky zmeny v tomto dialógu uložiť?";
 };
 
 ErrorBox ERR_CANTADMINQUERIES
@@ -4271,6 +4374,7 @@ ErrorBox ERR_CANTADMINQUERIES
     Message[ czech ] = "Před administrací objektů $objects$ datového zdroje musí být zdroj uložen.\nAvšak současné nastavení neumožňuje uložit změny (z důvodu konfliktu názvů).\n\nNebude možno administrovat objekty $objects$ dokud tyto konflikty nebudou odstraněny a změny uloženy. Mají být nyní všechny změny provedené v tomto dialogu uloženy?";
     Message[ hebrew ] = "Um die $objects$ einer Datenquelle zu administrieren, muss diese gespeichert werden.\nAllerdings erlauben die aktuellen Eingaben es nicht, die Änderungen zu speichern (es gibt Namenskonflikte).\n\nSie können die $objects$ nicht administrieren, solange diese Konflikte nicht gelöst sind und die Änderungen gespeichert wurden.";
     Message[ hindi ] = "ड़ॉटा मूल का $objects$ को प्रशासन करने केलिए, ड़ॉटा मूल को संचित करना चाहिए ।\nवर्तमान निर्धारणों द्वारा आप परिवर्तनों को संचित नहीं कर सकते है (विरोध नामों के कारण) ।\n\nइस विरोध को मिटाने तक $objects$ को प्रशासन नहीं कर सकते है और परिवर्तनों को संचित कर सकते है ।";
+    Message[ slovak ] = "Aby ste mohli administrovať $objects$ v zdroji dát, zdroj dát musí byť uložený.\nAle súčasné nastavenie neumožňuje uložiť zmeny (konflikt v názve).\n\nNebude možné administrovať $objects$ pokým nebude tento konflikt odstránený a vykonané zmeny uložené.";
 };
 
 ErrorBox ERR_CANTDOTABLEACTION
@@ -4305,6 +4409,7 @@ ErrorBox ERR_CANTDOTABLEACTION
     Message[ czech ] = "Před touto operací být změny datového zdroje uloženy.\nAvšak tyto změny nemohou být uloženy z důvodu konfliktu názvů různých datových zdrojů.\n\nPokud chcete provést tuto operaci, musíte nejprve odstranit tento konflikt.";
     Message[ hebrew ] = "Für diese Aktion müssen die Änderungen an der Datenquelle gespeichert werden.\nAllerdings erlauben die aktuellen Eingaben es nicht, dies zu tun, da es Namenskonflikte zwischen verschiedenen Datenquellen gibt.\n\nSolange diese Konflikte nicht gelöst sind, können Sie die Aktion nicht ausführen.";
     Message[ hindi ] = "इस कार्य केलिए, ड़ॉटा मूल का परिवर्तनों को संचित करना ज़रूरी है ।\nअन्य ड़ॉटा मूलों में विरोध नाम है तो उसके कारण उनको संचित नहीं कर सकते है ।\n\nअगर कार्य को पूरा करना है तो इस विरोध को हल करना चाहिए ।";
+    Message[ slovak ] = "Zmeny v zdroji dát musia byť uložené aby mohla byť vykonaná táto operácia.\nAle súčasné nastavenie neumožňuje uložiť zmeny (konflikt v názve rôznych zdrojov dát).\n\nMusíte odstrániť tento konflikt aby mohla byť vykonaná operácia.";
 };
 
 String STR_QUERY_OBJECTS
@@ -4337,6 +4442,7 @@ String STR_QUERY_OBJECTS
     Text[ czech ] = "dotazy";
     Text[ hebrew ] = "‮שאילתות‬";
     Text[ hindi ] = "जानकारी";
+    Text[ slovak ] = "dotazy";
 };
 
 String STR_DOCUMENT_OBJECTS
@@ -4369,6 +4475,7 @@ String STR_DOCUMENT_OBJECTS
     Text[ czech ] = "odkazy";
     Text[ hebrew ] = "‮קישורים‬";
     Text[ hindi ] = "लिंक्स";
+    Text[ slovak ] = "odkazy";
 };
 
 String STR_QUERY_DROP_ALL
@@ -4399,6 +4506,7 @@ String STR_QUERY_DROP_ALL
     Text[ czech ] = "Chcete odstranit všechny vybrané položky?";
     Text[ hebrew ] = "Wollen Sie die alle Selektierten löschen?";
     Text[ hindi ] = "आप चुने हुए सबको मिटाना चाहते है?";
+    Text[ slovak ] = "Chcete zmazať všetky označené prvky?";
 };
 
 String STR_QUERY_DROP_DOCUMENT_LINK
@@ -4431,6 +4539,7 @@ String STR_QUERY_DROP_DOCUMENT_LINK
     Text[ czech ] = "Chcete odstranit odkaz \"$name$\" na dokument?\n\nPoznámka: Odstraněno bude pouze přiřazení dokumentu k datovému zdroji, nikoliv dokument sám.";
     Text[ hebrew ] = "Wollen Sie die Dokument-Verknüpfung \"$name$\" löschen?\n\nHinweis: Es wird lediglich die Zuordnung dieses Dokumentes zu der Datenquelle gelöscht, nicht das Dokument selber.";
     Text[ hindi ] = "आप लेखपत्र लिंक \"$name$\" को मिटाना चाहते है?\n\nसूचना: केवल लेखपत्र का ड़ॉटा मूल का नियत कार्य मिट जायेगा, लेकिन लेखपत्र स्वयं नहीं मिट जायेगा ।";
+    Text[ slovak ] = "Chcete zmazať odkaz na dokument \"$name$\"?\n\nPoznámka: Bude zmazané len priradenie dokumentu ku zdroju dát, nie dokument samotný.";
 };
 
 String STR_ASK_FOR_DIRECTORY_CREATION
@@ -4461,6 +4570,7 @@ String STR_ASK_FOR_DIRECTORY_CREATION
     Text[ czech ] = "Adresář\n\n$path$\n\nneexistuje. Má být vytvořen?";
     Text[ hebrew ] = "Das Verzeichnis\n\n$path$\n\nexistiert nicht. Soll es angelegt werden?";
     Text[ hindi ] = "डैरक्टरी\n\n$path$\n\nअस्तित्व में नहीं है । इसको उत्पन्न करना है ?";
+    Text[ slovak ] = "Adresár\n\n$path$\n\nneexistuje. Má byť vytvorený?";
 };
 
 String STR_COULD_NOT_CREATE_DIRECTORY
@@ -4491,6 +4601,7 @@ String STR_COULD_NOT_CREATE_DIRECTORY
     Text[ czech ] = "Adresář $name$ nemohl být vytvořen.";
     Text[ hebrew ] = "Das Verzeichnis $name$ konnte nicht angelegt werden.";
     Text[ hindi ] = "$name$ डैरक्टरी को उत्पन्न नहीं कर सकते है । ";
+    Text[ slovak ] = "Adresár $name$ nemohol byť vytvorený.";
 };
 
 QueryBox QUERY_NEED_TO_SAVE_FILTER
@@ -4524,6 +4635,7 @@ QueryBox QUERY_NEED_TO_SAVE_FILTER
     Message[ czech ] = "Pokud chcete provést tuto operaci, musí být uloženy změny provedené v tomto dialogu.\nChcete pokračovat?";
     Message[ hebrew ] = "Um diese Aktion auszuführen, müssen die bis jetzt in diesem Dialog vorgenommene Änderungen gespeichert werden.\nWollen Sie fortfahren?";
     Message[ hindi ] = "इस कार्य को पूरा करने केलिए, इस डयलॉग में की हुयी परिवर्तनों को संचित करना चाहिए ।\nआप जारी रखना चाहते है ?";
+    Message[ slovak ] = "Zmeny v tomto dialógu musia byť uložené aby mohla byť vykonaná táto operácia.\nChcete pokračovať?";
 };
 String STR_ADDRESSBOOK_SYSTEM
 {
@@ -4553,6 +4665,7 @@ String STR_ADDRESSBOOK_SYSTEM
     Text[ czech ] = "Databáze kontaktů op. systému Windows";
     Text[ hebrew ] = "Windows Adressbuch";
     Text[ hindi ] = "विन्डोस पता पुस्तक";
+    Text[ slovak ] = "Adresár Windows";
 };
 String STR_ADDRESSBOOK_OUTLOOK
 {
@@ -4582,6 +4695,7 @@ String STR_ADDRESSBOOK_OUTLOOK
     Text[ czech ] = "MS Outlook";
     Text[ hebrew ] = "MS Outlook";
     Text[ hindi ] = "MS Outlook";
+    Text[ slovak ] = "MS Outlook";
 };
 String STR_ADDRESSBOOK_MOZILLA
 {
@@ -4611,6 +4725,7 @@ String STR_ADDRESSBOOK_MOZILLA
     Text[ czech ] = "Databáze kontaktů z Mozilly";
     Text[ hebrew ] = "Mozilla Adressbuch";
     Text[ hindi ] = "Mozilla पता पुस्तक";
+    Text[ slovak ] = "Adresár Mozilla";
 };
 String STR_ADDRESSBOOK_EVOLUTION
 {
@@ -4666,6 +4781,7 @@ String STR_ADDRESSBOOK_LDAP
     Text[ czech ] = "Databáze kontaktů v LDAP";
     Text[ hebrew ] = "LDAP Adressbuch";
     Text[ hindi ] = "LDAP पता पुस्तक";
+    Text[ slovak ] = "Adresár LDAP";
 };
 String STR_CALCDOC_DOESNOTEXIST
 {
@@ -4695,6 +4811,7 @@ String STR_CALCDOC_DOESNOTEXIST
     Text[ czech ] = "Soubor \"$file$\" neexistuje.";
     Text[ hebrew ] = "Die Datei \"$file$\" existiert nicht.";
     Text[ hindi ] = "$file$ फाइल अस्तित्व में नहीं है ।";
+    Text[ slovak ] = "Súbor \"$file$\" neexistuje.";
 };
 
 String STR_HINT_READONLY_CONNECTION
@@ -4725,6 +4842,7 @@ String STR_HINT_READONLY_CONNECTION
     Text[ czech ] = "(Připojení je pouze pro čtení)";
     Text[ hebrew ] = "(Verbindung ist nur-lesend)";
     Text[ hindi ] = "(कनेक्शन केवल पढ़ने केलिए)";
+    Text[ slovak ] = "(Pripojenie je len na čítanie)";
 };
 
 String STR_HINT_CONNECTION_NOT_CAPABLE
@@ -4755,6 +4873,7 @@ String STR_HINT_CONNECTION_NOT_CAPABLE
     Text[ czech ] = "(Není podporováno tímto připojením)";
     Text[ hebrew ] = "(nicht unterstützt von dieser Verbindung)";
     Text[ hindi ] = "(इस कनेक्शन से असमर्थित)";
+    Text[ slovak ] = "(Nepodporované týmto spojením)";
 };
 
 #define EDIT_SIZE_X     50
@@ -4780,6 +4899,29 @@ ModalDialog DLG_DOMAINPASSWORD
         Text = "Bitte geben Sie das ~Kennwort f�r den Benutzer 'DOMAIN' ein" ;
         Text [ English ] = "Please enter the ~password for the user 'DOMAIN'." ;
         Text[ english_us ] = "Please enter the ~password for the user 'DOMAIN'.";
+        Text[ portuguese ] = "Please enter the ~password for the user 'DOMAIN'.";
+        Text[ russian ] = "Please enter the ~password for the user 'DOMAIN'.";
+        Text[ greek ] = "Please enter the ~password for the user 'DOMAIN'.";
+        Text[ dutch ] = "Please enter the ~password for the user 'DOMAIN'.";
+        Text[ french ] = "Saisissez le mot de passe de l'utilisateur 'DOMAIN'.";
+        Text[ spanish ] = "Introduzca la ~contrase�a para el usuario 'DOMAIN'.";
+        Text[ finnish ] = "Please enter the ~password for the user 'DOMAIN'.";
+        Text[ italian ] = "Indicate una ~password per il 'DOMAIN' dell'utente.";
+        Text[ czech ] = "Please enter the ~password for the user 'DOMAIN'.";
+        Text[ danish ] = "Please enter the ~password for the user 'DOMAIN'.";
+        Text[ swedish ] = "Ange ~l�senordet f�r anv�ndaren 'DOMAIN'.";
+        Text[ polish ] = "Please enter the ~password for the user 'DOMAIN'.";
+        Text[ portuguese_brazilian ] = "Please enter the ~password for the user 'DOMAIN'.";
+        Text[ japanese ] = "ユーザー DOMAIN のパスワードを入力してください。";
+        Text[ korean ] = "'DOMAIN' 사용자의 암호를 입력해주십시오.";
+        Text[ chinese_simplified ] = "请为使用者 'DOMAIN' 输入密码。";
+        Text[ chinese_traditional ] = "請為使用者 'DOMAIN' 輸入密碼。";
+        Text[ turkish ] = "Please enter the ~password for the user 'DOMAIN'.";
+        Text[ arabic ] = "Please enter the ~password for the user 'DOMAIN'.";
+        Text[ hebrew ] = "Please enter the ~password for the user 'DOMAIN'.";
+        Text[ catalan ] = "Please enter the ~password for the user 'DOMAIN'.";
+        Text[ thai ] = "Please enter the ~password for the user 'DOMAIN'.";
+        Text[ slovak ] = "Prosím zadajte heslo ~pre užívateľa 'DOMAIN'.";
     };
 
     Edit ET_PASSWORD
@@ -4805,6 +4947,29 @@ ModalDialog DLG_DOMAINPASSWORD
         Pos = MAP_APPFONT ( WIN_X - 56 , 43 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
     };
+    Text[ portuguese ] = "Convert Database";
+    Text[ russian ] = "Convert Database";
+    Text[ greek ] = "Convert Database";
+    Text[ dutch ] = "Convert Database";
+    Text[ french ] = "Conversion de base de donn�es";
+    Text[ spanish ] = "Conversi�n de la base de datos";
+    Text[ finnish ] = "Convert Database";
+    Text[ italian ] = "Converti database";
+    Text[ czech ] = "Convert Database";
+    Text[ danish ] = "Convert Database";
+    Text[ swedish ] = "Konvertera databas";
+    Text[ polish ] = "Convert Database";
+    Text[ portuguese_brazilian ] = "Convert Database";
+    Text[ japanese ] = "データベースの変換";
+    Text[ korean ] = "데이터베이스 변환";
+    Text[ chinese_simplified ] = "转换数据库";
+    Text[ chinese_traditional ] = "轉換資料庫";
+    Text[ turkish ] = "Convert Database";
+    Text[ arabic ] = "Convert Database";
+    Text[ hebrew ] = "Convert Database";
+    Text[ catalan ] = "Convert Database";
+    Text[ thai ] = "Convert Database";
+    Text[ slovak ] = "Konvertovať databázu";
 };
 //.........................................................................
 TabPage PAGE_USERDRIVER
@@ -5081,3 +5246,5 @@ TabPage PAGE_USERDRIVER
         Text[ hindi ] = "फाइल-आधारित लेखासंचय केलिए सूचीपत्र का उपयोग करो";
     };
 };
+
+
