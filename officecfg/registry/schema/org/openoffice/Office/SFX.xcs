@@ -3,9 +3,9 @@
  *
  *  $RCSfile: SFX.xcs,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jb $ $Date: 2002-11-20 17:03:39 $
+ *  last change: $Author: mba $ $Date: 2002-12-06 14:14:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,7 @@
 <oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="SFX" oor:package="org.openoffice.Office" xml:lang="en-US">
 	<info>
 		<author>MBA</author>
-		<desc xml:lang="en-US">Contains the component-schema for the framework module.</desc>
+		<desc xml:lang="en-US">Contains the component-schema for the sfx module.</desc>
 	</info>
 	<component>
 		<group oor:name="Help">
