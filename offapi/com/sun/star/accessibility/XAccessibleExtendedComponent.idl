@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XAccessibleExtendedComponent.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-20 09:49:56 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 12:10:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,10 +83,11 @@
 #ifndef __com_sun_star_awt_Size_idl__
 #include <com/sun/star/awt/Size.idl>
 #endif
+#ifndef __com_sun_star_accessibility_XAccessibleComponent_idl__
+#include <com/sun/star/accessibility/XAccessibleComponent.idl>
+#endif
 
 module com { module sun { module star { module accessibility {
-
-interface XAccessibleComponent;
 
 /** The <type>XAccessibleExtendedComponent</type> interface contains
     additional methods to those of the <type>XAccessibleComponent</type>
