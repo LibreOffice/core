@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regactivex.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mav $ $Date: 2004-05-27 14:47:14 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:03:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,7 +152,7 @@ BOOL GetMsiProp( MSIHANDLE hMSI, const wchar_t* pPropName, wchar_t** ppValue )
 BOOL GetActiveXControlPath( MSIHANDLE hMSI, char** ppActiveXPath )
 {
     wchar_t* pProgPath = NULL;
-    if ( GetMsiProp( hMSI, L"OfficeFolder", &pProgPath ) && pProgPath )
+    if ( GetMsiProp( hMSI, L"INSTALLLOCATION", &pProgPath ) && pProgPath )
        {
         char* pCharProgPath = UnicodeToAnsiString( pProgPath );
         if ( pCharProgPath )
