@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pptin.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-13 17:25:56 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 15:13:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,10 +198,6 @@
 #endif
 #ifndef _SD_CUSSHOW_HXX
 #include <cusshow.hxx>
-#endif
-
-#ifndef _SFXSTBMGR_HXX
-#include <sfx2/stbmgr.hxx>
 #endif
 
 #ifndef _SV_BMPACC_HXX
