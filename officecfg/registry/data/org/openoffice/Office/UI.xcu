@@ -3,9 +3,9 @@
  *
  *  $RCSfile: UI.xcu,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-24 13:12:04 $
+ *  last change: $Author: nf $ $Date: 2003-07-25 08:26:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,7 @@
                         <value xml:lang="de">Textdokumente</value>
                         <value xml:lang="en">Text Documents</value>
                         <value xml:lang="en-US">Text documents</value>
-                        <value xml:lang="x-comment">; Text documents</value>
+                        <value xml:lang="x-comment">Text documents</value>
                         <value xml:lang="pt">Documentos de texto</value>
                         <value xml:lang="ru">Текстовые документы</value>
                         <value xml:lang="el">Έγγραφα κειμένων</value>
@@ -139,7 +139,7 @@
                         <value xml:lang="de">Präsentationen</value>
                         <value xml:lang="en">Presentations</value>
                         <value xml:lang="en-US">Presentations</value>
-                        <value xml:lang="x-comment">; Presentations</value>
+                        <value xml:lang="x-comment">Presentations</value>
                         <value xml:lang="pt">Apresentações</value>
                         <value xml:lang="ru">Презентации</value>
                         <value xml:lang="el">Παρουσιάσεις</value>
@@ -174,7 +174,7 @@
                         <value xml:lang="de">Zeichnungen</value>
                         <value xml:lang="en">Drawings</value>
                         <value xml:lang="en-US">Drawings</value>
-                        <value xml:lang="x-comment">; Drawings</value>
+                        <value xml:lang="x-comment">Drawings</value>
                         <value xml:lang="pt">Desenhos</value>
                         <value xml:lang="ru">Рисунки</value>
                         <value xml:lang="el">Σχέδια</value>
@@ -209,7 +209,7 @@
                         <value xml:lang="de">Webseiten</value>
                         <value xml:lang="en">Web Pages</value>
                         <value xml:lang="en-US">Web pages</value>
-                        <value xml:lang="x-comment">; web pages</value>
+                        <value xml:lang="x-comment">web pages</value>
                         <value xml:lang="pt">Web pages</value>
                         <value xml:lang="ru">Web-страницы</value>
                         <value xml:lang="el">Web pages</value>
@@ -244,7 +244,7 @@
                         <value xml:lang="de">Globaldokumente</value>
                         <value xml:lang="en">Master Documents</value>
                         <value xml:lang="en-US">Master documents</value>
-                        <value xml:lang="x-comment">; Master documents</value>
+                        <value xml:lang="x-comment">Master documents</value>
                         <value xml:lang="pt">Documentos-mestre</value>
                         <value xml:lang="ru">Главные документы</value>
                         <value xml:lang="el">Κύρια έγγραφα</value>
@@ -279,7 +279,7 @@
                         <value xml:lang="de">Formeln</value>
                         <value xml:lang="en">Formulas</value>
                         <value xml:lang="en-US">Formulas</value>
-                        <value xml:lang="x-comment">; Formulas</value>
+                        <value xml:lang="x-comment">Formulas</value>
                         <value xml:lang="pt">Formulas</value>
                         <value xml:lang="ru">Формулы</value>
                         <value xml:lang="el">Formulas</value>
@@ -302,7 +302,6 @@
                         <value xml:lang="sk">Vzorce</value>
                         <value xml:lang="ca">Fórmules</value>
                         <value xml:lang="th">สูตร</value>
-                        <value xml:lang="he">Formulas</value>
                     </prop>
                     <prop oor:name="Filters">
                         <value oor:separator=";">MathML XML (Math);MathType 3.x;StarMath 2.0;StarMath 3.0;StarMath 4.0;StarMath 5.0;StarOffice XML (Math)</value>
@@ -317,7 +316,7 @@
                         <value xml:lang="de">Microsoft Word 6.0 / 95</value>
                         <value xml:lang="en">Microsoft Word 6.0 / 95</value>
                         <value xml:lang="en-US">Microsoft Word 6.0 / 95</value>
-                        <value xml:lang="x-comment">; Microsoft Word 6.0 / 95</value>
+                        <value xml:lang="x-comment">Microsoft Word 6.0 / 95</value>
                         <value xml:lang="pt">Microsoft Word 6.0 / 95</value>
                         <value xml:lang="ru">Microsoft Word 6.0 / 95</value>
                         <value xml:lang="el">Microsoft Word 6.0 / 95</value>
@@ -352,7 +351,7 @@
                         <value xml:lang="de">StarWriter 3.0 - 5.0</value>
                         <value xml:lang="en">StarWriter 3.0 - 5.0</value>
                         <value xml:lang="en-US">StarWriter 3.0 - 5.0</value>
-                        <value xml:lang="x-comment">; StarWriter 3.0 - 5.0</value>
+                        <value xml:lang="x-comment">StarWriter 3.0 - 5.0</value>
                         <value xml:lang="pt">StarWriter 3.0 - 5.0</value>
                         <value xml:lang="ru">StarWriter 3.0 - 5.0</value>
                         <value xml:lang="el">StarWriter 3.0 - 5.0</value>
@@ -387,7 +386,7 @@
                         <value xml:lang="de">StarWriter 3.0 - 5.0 Vorlagen</value>
                         <value xml:lang="en">StarWriter 3.0 - 5.0 Templates</value>
                         <value xml:lang="en-US">StarWriter 3.0 - 5.0 Templates</value>
-                        <value xml:lang="x-comment">; StarWriter 3.0 - 5.0 Templates</value>
+                        <value xml:lang="x-comment">StarWriter 3.0 - 5.0 Templates</value>
                         <value xml:lang="pt">StarWriter 3.0 - 5.0 Templates</value>
                         <value xml:lang="ru">StarWriter 3.0 - 5.0 Шаблоны</value>
                         <value xml:lang="el">StarWriter 3.0 - 5.0 Templates</value>
@@ -422,7 +421,7 @@
                         <value xml:lang="de">Text</value>
                         <value xml:lang="en">Text</value>
                         <value xml:lang="en-US">Text</value>
-                        <value xml:lang="x-comment">; Text</value>
+                        <value xml:lang="x-comment">Text</value>
                         <value xml:lang="pt">Texto</value>
                         <value xml:lang="ru">Текст</value>
                         <value xml:lang="el">Κείμενο</value>
@@ -457,7 +456,7 @@
                         <value xml:lang="de">Microsoft Excel 4.x - 5.0 / 95</value>
                         <value xml:lang="en">Microsoft Excel 4.x - 5.0 / 95</value>
                         <value xml:lang="en-US">Microsoft Excel 4.x - 5.0 / 95</value>
-                        <value xml:lang="x-comment">; Microsoft Excel 4.x - 5.0 / 95</value>
+                        <value xml:lang="x-comment">Microsoft Excel 4.x - 5.0 / 95</value>
                         <value xml:lang="pt">Microsoft Excel 4.x - 5.0 / 95</value>
                         <value xml:lang="ru">Microsoft Excel 4.x - 5.0 / 95</value>
                         <value xml:lang="el">Microsoft Excel 4.x - 5.0 / 95</value>
@@ -492,7 +491,7 @@
                         <value xml:lang="de">Microsoft Excel 4.x - 5.0 / 95 Vorlagen</value>
                         <value xml:lang="en">Microsoft Excel 4.x - 5.0 / 95 Templates</value>
                         <value xml:lang="en-US">Microsoft Excel 4.x - 5.0 / 95 Templates</value>
-                        <value xml:lang="x-comment">; Microsoft Excel 4.x - 5.0 / 95 Templates</value>
+                        <value xml:lang="x-comment">Microsoft Excel 4.x - 5.0 / 95 Templates</value>
                         <value xml:lang="pt">Microsoft Excel 4.x - 5.0 / 95 Templates</value>
                         <value xml:lang="ru">Microsoft Excel 4.x - 5.0 / 95 Шаблоны</value>
                         <value xml:lang="el">Microsoft Excel 4.x - 5.0 / 95 Templates</value>
@@ -527,7 +526,7 @@
                         <value xml:lang="de">StarCalc 3.0 - 5.0</value>
                         <value xml:lang="en">StarCalc 3.0 - 5.0</value>
                         <value xml:lang="en-US">StarCalc 3.0 - 5.0</value>
-                        <value xml:lang="x-comment">; StarCalc 3.0 - 5.0</value>
+                        <value xml:lang="x-comment">StarCalc 3.0 - 5.0</value>
                         <value xml:lang="pt">StarCalc 3.0 - 5.0</value>
                         <value xml:lang="ru">StarCalc 3.0 - 5.0</value>
                         <value xml:lang="el">StarCalc 3.0 - 5.0</value>
@@ -562,7 +561,7 @@
                         <value xml:lang="de">StarCalc 3.0 - 5.0 Vorlagen</value>
                         <value xml:lang="en">StarCalc 3.0 - 5.0 Templates</value>
                         <value xml:lang="en-US">StarCalc 3.0 - 5.0 Templates</value>
-                        <value xml:lang="x-comment">; StarCalc 3.0 - 5.0 Templates</value>
+                        <value xml:lang="x-comment">StarCalc 3.0 - 5.0 Templates</value>
                         <value xml:lang="pt">StarCalc 3.0 - 5.0 Templates</value>
                         <value xml:lang="ru">StarCalc 3.0 - 5.0 Шаблоны</value>
                         <value xml:lang="el">StarCalc 3.0 - 5.0 Templates</value>
@@ -597,7 +596,7 @@
                         <value xml:lang="de">StarDraw 3.0 / 5.0 (StarImpress)</value>
                         <value xml:lang="en">StarDraw 3.0 / 5.0 (StarImpress)</value>
                         <value xml:lang="en-US">StarDraw 3.0 / 5.0 (StarImpress)</value>
-                        <value xml:lang="x-comment">; StarDraw 3.0 / 5.0 (StarImpress)</value>
+                        <value xml:lang="x-comment">StarDraw 3.0 / 5.0 (StarImpress)</value>
                         <value xml:lang="pt">StarDraw 3.0 / 5.0 (StarImpress)</value>
                         <value xml:lang="ru">StarDraw 3.0 / 5.0 (StarImpress)</value>
                         <value xml:lang="el">StarDraw 3.0 / 5.0 (StarImpress)</value>
@@ -632,7 +631,7 @@
                         <value xml:lang="de">StarDraw 3.0 / 5.0 Vorlagen (StarImpress)</value>
                         <value xml:lang="en">StarDraw 3.0 / 5.0 Templates (StarImpress)</value>
                         <value xml:lang="en-US">StarDraw 3.0 / 5.0 Templates (StarImpress)</value>
-                        <value xml:lang="x-comment">; StarDraw 3.0 / 5.0 Templates (StarImpress)</value>
+                        <value xml:lang="x-comment">StarDraw 3.0 / 5.0 Templates (StarImpress)</value>
                         <value xml:lang="pt">StarDraw 3.0 / 5.0 (StarImpress)</value>
                         <value xml:lang="ru">StarDraw 3.0 / 5.0 (StarImpress)</value>
                         <value xml:lang="el">StarDraw 3.0 / 5.0 (StarImpress)</value>
@@ -667,7 +666,7 @@
                         <value xml:lang="de">StarImpress 4.0 / 5.0</value>
                         <value xml:lang="en">StarImpress 4.0 / 5.0</value>
                         <value xml:lang="en-US">StarImpress 4.0 / 5.0</value>
-                        <value xml:lang="x-comment">; StarImpress 4.0 / 5.0</value>
+                        <value xml:lang="x-comment">StarImpress 4.0 / 5.0</value>
                         <value xml:lang="pt">StarImpress 4.0 / 5.0</value>
                         <value xml:lang="ru">StarImpress 4.0 / 5.0</value>
                         <value xml:lang="el">StarImpress 4.0 / 5.0</value>
@@ -702,7 +701,7 @@
                         <value xml:lang="de">StarImpress 4.0 / 5.0 Vorlagen</value>
                         <value xml:lang="en">StarImpress 4.0 / 5.0 Templates</value>
                         <value xml:lang="en-US">StarImpress 4.0 / 5.0 Templates</value>
-                        <value xml:lang="x-comment">; StarImpress 4.0 / 5.0 Templates</value>
+                        <value xml:lang="x-comment">StarImpress 4.0 / 5.0 Templates</value>
                         <value xml:lang="pt">StarImpress 4.0 / 5.0 Templates</value>
                         <value xml:lang="ru">StarImpress 4.0 / 5.0 Шаблоны</value>
                         <value xml:lang="el">StarImpress 4.0 / 5.0 Templates</value>
@@ -737,7 +736,7 @@
                         <value xml:lang="de">StarDraw 3.0 / 5.0</value>
                         <value xml:lang="en">StarDraw 3.0 / 5.0</value>
                         <value xml:lang="en-US">StarDraw 3.0 / 5.0</value>
-                        <value xml:lang="x-comment">; StarDraw 3.0 / 5.0</value>
+                        <value xml:lang="x-comment">StarDraw 3.0 / 5.0</value>
                         <value xml:lang="pt">StarDraw 3.0 / 5.0</value>
                         <value xml:lang="ru">StarDraw 3.0 / 5.0</value>
                         <value xml:lang="el">StarDraw 3.0 / 5.0</value>
@@ -807,7 +806,7 @@
                         <value xml:lang="de">StarWriter/Web 4.0 / 5.0 Vorlagen</value>
                         <value xml:lang="en">StarWriter/Web 4.0 / 5.0 Templates</value>
                         <value xml:lang="en-US">StarWriter/Web 4.0 / 5.0 Templates</value>
-                        <value xml:lang="x-comment">; StarWriter/Web 4.0 / 5.0 Templates</value>
+                        <value xml:lang="x-comment">StarWriter/Web 4.0 / 5.0 Templates</value>
                         <value xml:lang="pt">StarWriter/Web 4.0 / 5.0 Templates</value>
                         <value xml:lang="ru">StarWriter/Web 4.0 / 5.0 Шаблоны</value>
                         <value xml:lang="el">StarWriter/Web 4.0 / 5.0 Templates</value>
@@ -877,7 +876,7 @@
                         <value xml:lang="de">Text (StarWriter/Web)</value>
                         <value xml:lang="en">Text (StarWriter/Web)</value>
                         <value xml:lang="en-US">Text (StarWriter/Web)</value>
-                        <value xml:lang="x-comment">; Text (StarWriter/Web)</value>
+                        <value xml:lang="x-comment">Text (StarWriter/Web)</value>
                         <value xml:lang="pt">Text (StarWriter/Web)</value>
                         <value xml:lang="ru">Текст (StarWriter/Web)</value>
                         <value xml:lang="el">Text (StarWriter/Web)</value>
@@ -912,7 +911,7 @@
                         <value xml:lang="de">StarWriter 4.0 / 5.0 Globaldokumente</value>
                         <value xml:lang="en">StarWriter 4.0 / 5.0 Master Documents</value>
                         <value xml:lang="en-US">StarWriter 4.0 / 5.0 Master Documents</value>
-                        <value xml:lang="x-comment">; StarWriter 4.0 / 5.0 Master Documents</value>
+                        <value xml:lang="x-comment">StarWriter 4.0 / 5.0 Master Documents</value>
                         <value xml:lang="pt">StarWriter4.0/ 5.0 Master Documents</value>
                         <value xml:lang="ru">StarWriter4.0/ 5.0 Главные документы</value>
                         <value xml:lang="el">StarWriter4.0/ 5.0 Master Documents</value>
@@ -947,7 +946,7 @@
                         <value xml:lang="de">StarMath 2.0 - 5.0</value>
                         <value xml:lang="en">StarMath 2.0 - 5.0</value>
                         <value xml:lang="en-US">StarMath 2.0 - 5.0</value>
-                        <value xml:lang="x-comment">; StarMath 2.0 - 5.0</value>
+                        <value xml:lang="x-comment">StarMath 2.0 - 5.0</value>
                         <value xml:lang="pt">StarMath 2.0 - 5.0</value>
                         <value xml:lang="ru">StarMath 2.0 - 5.0</value>
                         <value xml:lang="el">StarMath 2.0 - 5.0</value>
@@ -982,7 +981,7 @@
                         <value xml:lang="de">WordPerfect (Win) 6.0 - 7.0</value>
                         <value xml:lang="en">WordPerfect (Win) 6.0 - 7.0</value>
                         <value xml:lang="en-US">WordPerfect (Win) 6.0 - 7.0</value>
-                        <value xml:lang="x-comment">; WordPerfect (Win) 6.0 - 7.0</value>
+                        <value xml:lang="x-comment">WordPerfect (Win) 6.0 - 7.0</value>
                         <value xml:lang="pt">WordPerfect (Win) 6.0 - 7.0</value>
                         <value xml:lang="ru">WordPerfect (Win) 6.0 - 7.0</value>
                         <value xml:lang="el">WordPerfect (Win) 6.0 - 7.0</value>
@@ -1255,7 +1254,6 @@
         </node>
     </node>
 </oor:component-data>
-
 
 
 
