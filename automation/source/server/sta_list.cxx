@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sta_list.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 15:54:02 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 17:08:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,8 +72,6 @@
 #include <basic/ttstrhlp.hxx>
 #endif
 
-#include <vcl/rcid.h>
-
 #ifndef _STATEMNT_HXX
 #include "statemnt.hxx"
 #endif
@@ -93,8 +91,6 @@
 #endif
 
 #include "profiler.hxx"
-
-#include <vcl/rcid.h>
 
 #ifndef _SV_FLOATWIN_HXX //autogen
 #include <vcl/floatwin.hxx>
