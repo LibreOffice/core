@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlged.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: tbe $ $Date: 2002-08-01 15:06:26 $
+ *  last change: $Author: vg $ $Date: 2003-03-26 12:49:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,14 @@
 
 #ifndef _BASCTL_DLGEDFAC_HXX
 #include "dlgedfac.hxx"
+#endif
+
+#ifndef _BASCTL_DLGEDMOD_HXX
+#include <dlgedmod.hxx>
+#endif
+
+#ifndef _BASCTL_DLGEDPAGE_HXX
+#include "dlgedpage.hxx"
 #endif
 
 #ifndef _BASCTL_DLGEDVIEW_HXX
@@ -150,7 +158,37 @@ using namespace ::com::sun::star::io;
 using namespace ::rtl;
 
 
+//============================================================================
+// DlgEdHint
+//============================================================================
+
+TYPEINIT1( DlgEdHint, SfxHint );
+
 //----------------------------------------------------------------------------
+
+DlgEdHint::DlgEdHint( DlgEdHintKind eHint )
+    :eHintKind( eHint )
+{
+}
+
+//----------------------------------------------------------------------------
+
+DlgEdHint::DlgEdHint( DlgEdHintKind eHint, DlgEdObj* pObj )
+    :eHintKind( eHint )
+    ,pDlgEdObj( pObj )
+{
+}
+
+//----------------------------------------------------------------------------
+
+DlgEdHint::~DlgEdHint()
+{
+}
+
+
+//============================================================================
+// DlgEditor
+//============================================================================
 
 void DlgEditor::ShowDialog()
 {
@@ -183,13 +221,13 @@ void DlgEditor::ShowDialog()
 
 BOOL DlgEditor::UnmarkDialog()
 {
-    SdrObject*      pDlgObj = pSdrModel->GetPage(0)->GetObj(0);
-    SdrPageView*    pPgView = pSdrView->GetPageViewPvNum(0);
+    SdrObject*      pDlgObj = pDlgEdModel->GetPage(0)->GetObj(0);
+    SdrPageView*    pPgView = pDlgEdView->GetPageViewPvNum(0);
 
-    BOOL bWasMarked = pSdrView->IsObjMarked( pDlgObj );
+    BOOL bWasMarked = pDlgEdView->IsObjMarked( pDlgObj );
 
     if( bWasMarked )
-        pSdrView->MarkObj( pDlgObj, pPgView, TRUE );
+        pDlgEdView->MarkObj( pDlgObj, pPgView, TRUE );
 
     return bWasMarked;
 }
@@ -198,13 +236,13 @@ BOOL DlgEditor::UnmarkDialog()
 
 BOOL DlgEditor::RemarkDialog()
 {
-    SdrObject*      pDlgObj = pSdrModel->GetPage(0)->GetObj(0);
-    SdrPageView*    pPgView = pSdrView->GetPageViewPvNum(0);
+    SdrObject*      pDlgObj = pDlgEdModel->GetPage(0)->GetObj(0);
+    SdrPageView*    pPgView = pDlgEdView->GetPageViewPvNum(0);
 
-    BOOL bWasMarked = pSdrView->IsObjMarked( pDlgObj );
+    BOOL bWasMarked = pDlgEdView->IsObjMarked( pDlgObj );
 
     if( !bWasMarked )
-        pSdrView->MarkObj( pDlgObj, pPgView, FALSE );
+        pDlgEdView->MarkObj( pDlgObj, pPgView, FALSE );
 
     return bWasMarked;
 }
@@ -214,9 +252,9 @@ BOOL DlgEditor::RemarkDialog()
 DlgEditor::DlgEditor()
     :pHScroll(NULL)
     ,pVScroll(NULL)
-    ,pSdrModel(NULL)
-    ,pSdrPage(NULL)
-    ,pSdrView(NULL)
+    ,pDlgEdModel(NULL)
+    ,pDlgEdPage(NULL)
+    ,pDlgEdView(NULL)
     ,pDlgEdForm(NULL)
     ,m_xUnoControlDialogModel(NULL)
     ,m_ClipboardDataFlavors(1)
@@ -232,16 +270,16 @@ DlgEditor::DlgEditor()
     ,bCreateOK(TRUE)
     ,bDialogModelChanged(FALSE)
 {
-    pSdrModel = new DlgEdModel();
-    pSdrModel->GetItemPool().FreezeIdRanges();
-    pSdrModel->SetScaleUnit( MAP_100TH_MM );
+    pDlgEdModel = new DlgEdModel();
+    pDlgEdModel->GetItemPool().FreezeIdRanges();
+    pDlgEdModel->SetScaleUnit( MAP_100TH_MM );
 
-    SdrLayerAdmin& rAdmin = pSdrModel->GetLayerAdmin();
+    SdrLayerAdmin& rAdmin = pDlgEdModel->GetLayerAdmin();
     rAdmin.NewStandardLayer();
     rAdmin.NewLayer( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "HiddenLayer" ) ) );
 
-    pSdrPage = new DlgEdPage( *pSdrModel );
-    pSdrModel->InsertPage( pSdrPage );
+    pDlgEdPage = new DlgEdPage( *pDlgEdModel );
+    pDlgEdModel->InsertPage( pDlgEdPage );
 
     pObjFac = new DlgEdFactory();
 
@@ -262,8 +300,8 @@ DlgEditor::~DlgEditor()
 {
     delete pObjFac;
     delete pFunc;
-    delete pSdrView;
-    delete pSdrModel;
+    delete pDlgEdView;
+    delete pDlgEdModel;
 }
 
 //----------------------------------------------------------------------------
@@ -272,21 +310,21 @@ void DlgEditor::SetWindow( Window* pWindow )
 {
     DlgEditor::pWindow = pWindow;
     pWindow->SetMapMode( MapMode( MAP_100TH_MM ) );
-    pSdrPage->SetSize( pWindow->PixelToLogic( Size( 1280, 1024 ) ) );
+    pDlgEdPage->SetSize( pWindow->PixelToLogic( Size( 1280, 1024 ) ) );
 
-    pSdrView = new DlgEdView( pSdrModel, pWindow, this );
-    pSdrView->ShowPagePgNum( 0, Point() );
-    pSdrView->SetLayerVisible( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "HiddenLayer" ) ), FALSE );
-    pSdrView->SetMoveSnapOnlyTopLeft( TRUE );
-    pSdrView->SetWorkArea( Rectangle( Point( 0, 0 ), pSdrPage->GetSize() ) );
+    pDlgEdView = new DlgEdView( pDlgEdModel, pWindow, this );
+    pDlgEdView->ShowPagePgNum( 0, Point() );
+    pDlgEdView->SetLayerVisible( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "HiddenLayer" ) ), FALSE );
+    pDlgEdView->SetMoveSnapOnlyTopLeft( TRUE );
+    pDlgEdView->SetWorkArea( Rectangle( Point( 0, 0 ), pDlgEdPage->GetSize() ) );
 
-    pSdrView->SetGridCoarse( aGridSize );
-    pSdrView->SetSnapGrid( aGridSize );
-    pSdrView->SetGridSnap( bGridSnap );
-    pSdrView->SetGridVisible( bGridVisible );
-    pSdrView->SetDragStripes( FALSE );
+    pDlgEdView->SetGridCoarse( aGridSize );
+    pDlgEdView->SetSnapGrid( aGridSize );
+    pDlgEdView->SetGridSnap( bGridSnap );
+    pDlgEdView->SetGridVisible( bGridVisible );
+    pDlgEdView->SetDragStripes( FALSE );
 
-    pSdrView->SetDesignMode( TRUE );
+    pDlgEdView->SetDesignMode( TRUE );
 }
 
 //----------------------------------------------------------------------------
@@ -297,7 +335,7 @@ void DlgEditor::SetScrollBars( ScrollBar* pHS, ScrollBar* pVS )
     pVScroll = pVS;
 
     Size aOutSize = pWindow->GetOutputSize();
-    Size aPgSize  = pSdrPage->GetSize();
+    Size aPgSize  = pDlgEdPage->GetSize();
 
     pHScroll->SetRange( Range( 0, aPgSize.Width()  ));
     pVScroll->SetRange( Range( 0, aPgSize.Height() ));
@@ -344,6 +382,9 @@ void DlgEditor::DoScroll( ScrollBar* pActScroll )
     pWindow->Update();
 
     pWindow->SetBackgroundBrush( aOldBrush );
+
+    DlgEdHint aHint( DLGED_HINT_WINDOWSCROLLED );
+    Broadcast( aHint );
 }
 
 //----------------------------------------------------------------------------
@@ -372,8 +413,8 @@ void DlgEditor::SetDialog( uno::Reference< container::XNameContainer > xUnoContr
     uno::Reference< awt::XControlModel > xDlgMod( m_xUnoControlDialogModel , uno::UNO_QUERY );
     pDlgEdForm->SetUnoControlModel(xDlgMod);
     pDlgEdForm->SetDlgEditor( this );
-    ((DlgEdPage*)pSdrModel->GetPage(0))->SetDlgEdForm( pDlgEdForm );
-    pSdrModel->GetPage(0)->InsertObject( pDlgEdForm );
+    ((DlgEdPage*)pDlgEdModel->GetPage(0))->SetDlgEdForm( pDlgEdForm );
+    pDlgEdModel->GetPage(0)->InsertObject( pDlgEdForm );
     pDlgEdForm->SetRectFromProps();
     pDlgEdForm->SortByTabIndex();       // for backward compatibility
     pDlgEdForm->StartListening();
@@ -395,7 +436,7 @@ void DlgEditor::SetDialog( uno::Reference< container::XNameContainer > xUnoContr
             pCtrlObj->SetUnoControlModel( xCtrlModel );
             pCtrlObj->SetDlgEdForm(pDlgEdForm);
             pDlgEdForm->AddChild(pCtrlObj);                     // add child to parent form
-            pSdrModel->GetPage(0)->InsertObject( pCtrlObj );    // insert object into drawing page
+            pDlgEdModel->GetPage(0)->InsertObject( pCtrlObj );  // insert object into drawing page
             pCtrlObj->SetRectFromProps();
             pCtrlObj->UpdateStep();
             pCtrlObj->StartListening();
@@ -404,7 +445,7 @@ void DlgEditor::SetDialog( uno::Reference< container::XNameContainer > xUnoContr
 
     bFirstDraw = TRUE;
 
-    pSdrModel->SetChanged( FALSE );
+    pDlgEdModel->SetChanged( FALSE );
 }
 
 //----------------------------------------------------------------------------
@@ -472,7 +513,7 @@ void DlgEditor::Paint( const Rectangle& rRect )
 IMPL_LINK( DlgEditor, PaintTimeout, Timer *, EMPTYARG )
 {
     static int nInPaint = FALSE;
-    if( !pSdrView )
+    if( !pDlgEdView )
         return 0;
 
     nInPaint = TRUE;
@@ -499,7 +540,7 @@ IMPL_LINK( DlgEditor, PaintTimeout, Timer *, EMPTYARG )
                 Size   aSize = pWindow->PixelToLogic( Size( 400, 300 ) );
 
                 // align with grid
-                Size  aGridSize = pSdrView->GetSnapGrid();
+                Size  aGridSize = pDlgEdView->GetSnapGrid();
                 aSize.Width()  -= aSize.Width()  % aGridSize.Width();
                 aSize.Height() -= aSize.Height() % aGridSize.Height();
 
@@ -530,11 +571,11 @@ IMPL_LINK( DlgEditor, PaintTimeout, Timer *, EMPTYARG )
 
                 // set position and size of controls
                 ULONG nObjCount;
-                if ( pSdrPage && ( ( nObjCount = pSdrPage->GetObjCount() ) > 0 ) )
+                if ( pDlgEdPage && ( ( nObjCount = pDlgEdPage->GetObjCount() ) > 0 ) )
                 {
                     for ( ULONG i = 0 ; i < nObjCount ; i++ )
                     {
-                        SdrObject* pObj = pSdrPage->GetObj(i);
+                        SdrObject* pObj = pDlgEdPage->GetObj(i);
                         DlgEdObj* pDlgEdObj = PTR_CAST(DlgEdObj, pObj);
                         if ( pDlgEdObj && !pDlgEdObj->ISA(DlgEdForm) )
                             pDlgEdObj->SetRectFromProps();
@@ -544,7 +585,7 @@ IMPL_LINK( DlgEditor, PaintTimeout, Timer *, EMPTYARG )
         }
     }
 
-    pSdrView->InitRedraw( pWindow, Region( aPaintRect ) );
+    pDlgEdView->InitRedraw( pWindow, Region( aPaintRect ) );
 
     nInPaint = FALSE;
 
@@ -566,9 +607,9 @@ void DlgEditor::SetMode( DlgEdMode eNewMode )
             pFunc = new DlgEdFuncSelect( this );
 
         if ( eNewMode == DLGED_READONLY )
-            pSdrModel->SetReadOnly( TRUE );
+            pDlgEdModel->SetReadOnly( TRUE );
         else
-            pSdrModel->SetReadOnly( FALSE );
+            pDlgEdModel->SetReadOnly( FALSE );
     }
 
     if ( eNewMode == DLGED_TEST )
@@ -583,8 +624,8 @@ void DlgEditor::SetInsertObj( USHORT eObj )
 {
     eActObj = eObj;
 
-    if( pSdrView )
-        pSdrView->SetCurrentObj( eActObj, DlgInventor );
+    if( pDlgEdView )
+        pDlgEdView->SetCurrentObj( eActObj, DlgInventor );
 }
 
 //----------------------------------------------------------------------------
@@ -599,7 +640,7 @@ USHORT DlgEditor::GetInsertObj() const
 void DlgEditor::CreateDefaultObject()
 {
     // create object by factory
-    SdrObject* pObj = SdrObjFactory::MakeNewObject( pSdrView->GetCurrentObjInventor(), pSdrView->GetCurrentObjIdentifier(), pSdrPage );
+    SdrObject* pObj = SdrObjFactory::MakeNewObject( pDlgEdView->GetCurrentObjInventor(), pDlgEdView->GetCurrentObjIdentifier(), pDlgEdPage );
 
     DlgEdObj* pDlgEdObj = PTR_CAST( DlgEdObj, pObj );
     if ( pDlgEdObj )
@@ -615,8 +656,8 @@ void DlgEditor::CreateDefaultObject()
         pDlgEdObj->SetDefaults();
 
         // insert object into drawing page
-        SdrPageView* pPageView = pSdrView->GetPageViewPvNum(0);
-        pSdrView->InsertObject( pDlgEdObj, *pPageView, 0 );
+        SdrPageView* pPageView = pDlgEdView->GetPageViewPvNum(0);
+        pDlgEdView->InsertObject( pDlgEdObj, *pPageView, 0 );
 
         // start listening
         pDlgEdObj->StartListening();
@@ -635,11 +676,11 @@ void DlgEditor::Cut()
 
 void DlgEditor::Copy()
 {
-    if( !pSdrView->HasMarkedObj() )
+    if( !pDlgEdView->HasMarkedObj() )
         return;
 
     // stop all drawing actions
-    pSdrView->BrkAction();
+    pDlgEdView->BrkAction();
 
     // create an empty clipboard dialog model
     Reference< util::XCloneable > xClone( m_xUnoControlDialogModel, UNO_QUERY );
@@ -660,10 +701,10 @@ void DlgEditor::Copy()
     }
 
     // insert control models of marked objects into clipboard dialog model
-    ULONG nMark = pSdrView->GetMarkList().GetMarkCount();
+    ULONG nMark = pDlgEdView->GetMarkList().GetMarkCount();
     for( ULONG i = 0; i < nMark; i++ )
     {
-        SdrObject* pObj = pSdrView->GetMarkList().GetMark(i)->GetObj();
+        SdrObject* pObj = pDlgEdView->GetMarkList().GetMark(i)->GetObj();
         DlgEdObj* pDlgEdObj = PTR_CAST(DlgEdObj, pObj);
 
         if (pDlgEdObj && !pDlgEdObj->ISA(DlgEdForm) )
@@ -735,10 +776,10 @@ void DlgEditor::Copy()
 void DlgEditor::Paste()
 {
     // stop all drawing actions
-    pSdrView->BrkAction();
+    pDlgEdView->BrkAction();
 
     // unmark all objects
-    pSdrView->UnmarkAll();
+    pDlgEdView->UnmarkAll();
 
     // get clipboard
     Reference< datatransfer::clipboard::XClipboard > xClipboard = GetWindow()->GetClipboard();
@@ -814,23 +855,23 @@ void DlgEditor::Paste()
                         m_xUnoControlDialogModel->insertByName( aOUniqueName , aCtrlModel );
 
                         // insert object into drawing page
-                        pSdrModel->GetPage(0)->InsertObject( pCtrlObj );
+                        pDlgEdModel->GetPage(0)->InsertObject( pCtrlObj );
                         pCtrlObj->SetRectFromProps();
                         pCtrlObj->UpdateStep();
                         pCtrlObj->StartListening();                         // start listening
 
                         // mark object
-                        SdrPageView* pPgView = pSdrView->GetPageViewPvNum(0);
-                        pSdrView->MarkObj( pCtrlObj, pPgView, FALSE, TRUE);
+                        SdrPageView* pPgView = pDlgEdView->GetPageViewPvNum(0);
+                        pDlgEdView->MarkObj( pCtrlObj, pPgView, FALSE, TRUE);
                     }
 
                     // center marked objects in dialog editor form
-                    Point aMarkCenter = (pSdrView->GetMarkedObjRect()).Center();
+                    Point aMarkCenter = (pDlgEdView->GetMarkedObjRect()).Center();
                     Point aFormCenter = (pDlgEdForm->GetSnapRect()).Center();
                     Point aPoint = aFormCenter - aMarkCenter;
                     Size  aSize( aPoint.X() , aPoint.Y() );
-                    pSdrView->MoveMarkedObj( aSize );                       // update of control model properties (position + size) in NbcMove
-                    pSdrView->MarkListHasChanged();
+                    pDlgEdView->MoveMarkedObj( aSize );                     // update of control model properties (position + size) in NbcMove
+                    pDlgEdView->MarkListHasChanged();
 
                     // dialog model changed
                     SetDialogModelChanged(TRUE);
@@ -844,15 +885,15 @@ void DlgEditor::Paste()
 
 void DlgEditor::Delete()
 {
-    if( !pSdrView->HasMarkedObj() )
+    if( !pDlgEdView->HasMarkedObj() )
         return;
 
     // remove control models of marked objects from dialog model
-    ULONG nMark = pSdrView->GetMarkList().GetMarkCount();
+    ULONG nMark = pDlgEdView->GetMarkList().GetMarkCount();
 
     for( ULONG i = 0; i < nMark; i++ )
     {
-        SdrObject* pObj = pSdrView->GetMarkList().GetMark(i)->GetObj();
+        SdrObject* pObj = pDlgEdView->GetMarkList().GetMark(i)->GetObj();
         DlgEdObj* pDlgEdObj = PTR_CAST(DlgEdObj, pObj);
 
         if ( pDlgEdObj && !pDlgEdObj->ISA(DlgEdForm) )
@@ -884,10 +925,10 @@ void DlgEditor::Delete()
     // update tabindex
     pDlgEdForm->SortByTabIndex();
 
-    pSdrView->BrkAction();
+    pDlgEdView->BrkAction();
 
     BOOL bDlgMarked = UnmarkDialog();
-    pSdrView->DeleteMarked();
+    pDlgEdView->DeleteMarked();
     if( bDlgMarked )
         RemarkDialog();
 }
@@ -932,14 +973,14 @@ void DlgEditor::ShowProperties()
 
 BOOL DlgEditor::IsModified() const
 {
-    return pSdrModel->IsChanged() || bDialogModelChanged;
+    return pDlgEdModel->IsChanged() || bDialogModelChanged;
 }
 
 //----------------------------------------------------------------------------
 
 void DlgEditor::ClearModifyFlag()
 {
-    pSdrModel->SetChanged( FALSE );
+    pDlgEdModel->SetChanged( FALSE );
     bDialogModelChanged = FALSE;
 }
 
@@ -1000,7 +1041,7 @@ void lcl_PrintHeader( Printer* pPrinter, const String& rTitle ) // not working y
 
 void DlgEditor::PrintData( Printer* pPrinter, const String& rTitle )    // not working yet
 {
-    if( pSdrView )
+    if( pDlgEdView )
     {
         MapMode aOldMap( pPrinter->GetMapMode());
         Font aOldFont( pPrinter->GetFont() );
