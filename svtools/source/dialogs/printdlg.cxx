@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printdlg.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-08-20 15:03:44 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 10:02:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,9 +104,6 @@
 #endif
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
-#ifndef  _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
-#include <com/sun/star/lang/XInitialization.hpp>
 #endif
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
@@ -420,25 +417,24 @@ bool PrintDialog::ImplGetFilename()
     Reference< XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
     if( xFactory.is() )
     {
-        Reference< XFilePicker > xFilePicker( xFactory->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.FilePicker" ) ) ), UNO_QUERY );
+        Sequence< Any > aTempl( 1 );
+        aTempl.getArray()[0] <<= TemplateDescription::FILESAVE_AUTOEXTENSION;
+
+        Reference< XFilePicker > xFilePicker( xFactory->
+                                              createInstanceWithArguments( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.FilePicker" ) ),
+                                                                           aTempl ),
+                                              UNO_QUERY );
         DBG_ASSERT( xFilePicker.is(), "could not get FilePicker service" );
 
-        Reference< XInitialization > xInit( xFilePicker, UNO_QUERY );
         Reference< XFilterManager > xFilterMgr( xFilePicker, UNO_QUERY );
-        if( xInit.is() && xFilePicker.is() && xFilterMgr.is() )
+        if( xFilePicker.is() && xFilterMgr.is() )
         {
-//          svt::SetDialogHelpId( xFilePicker, HID_PRINTDIALOG_TOFILE );
-
-            Sequence< Any > aServiceType( 1 );
-            aServiceType[0] <<= TemplateDescription::FILESAVE_SIMPLE;
-            xInit->initialize( aServiceType );
-
-#ifdef UNX
-            if( ! Application::IsRemoteServer() )
-                // sensible only for Unix local
+            try
             {
+#ifdef UNX
                 // add PostScript and PDF
-                try
+                if( ! Application::IsRemoteServer() )
+                    // sensible only for Unix local
                 {
                     Printer* pPrinter = TEMPPRINTER() ? TEMPPRINTER() : mpPrinter;
                     bool bPS = true, bPDF = true;
@@ -454,23 +450,16 @@ bool PrintDialog::ImplGetFilename()
                     if( bPDF )
                         xFilterMgr->appendFilter( OUString( RTL_CONSTASCII_USTRINGPARAM( "Portable Document Format" ) ), OUString( RTL_CONSTASCII_USTRINGPARAM( "*.pdf" ) ) );
                 }
-                catch( IllegalArgumentException& rExc )
-                {
-                    DBG_ASSERT( 0, "caught IllegalArgumentException when registering filter\n" );
-                }
-            }
+#elif defined WNT
+                xFilterMgr->appendFilter( OUString( RTL_CONSTASCII_USTRINGPARAM( "*.PRN" ) ), OUString( RTL_CONSTASCII_USTRINGPARAM( "*.prn" ) ) );
 #endif
-
-            // add arbitrary files
-            try
-            {
+                // add arbitrary files
                 xFilterMgr->appendFilter( maAllFilterStr, OUString( RTL_CONSTASCII_USTRINGPARAM( "*.*" ) ) );
             }
-            catch( IllegalArgumentException& )
+            catch( IllegalArgumentException rExc )
             {
                 DBG_ASSERT( 0, "caught IllegalArgumentException when registering filter\n" );
             }
-
             if( xFilePicker->execute() == ExecutableDialogResults::OK )
             {
                 Sequence< OUString > aPathSeq( xFilePicker->getFiles() );
