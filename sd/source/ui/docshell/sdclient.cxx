@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdclient.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:34 $
+ *  last change: $Author: ka $ $Date: 2001-08-29 13:55:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,30 +221,31 @@ void __EXPORT SdClient::ViewChanged(USHORT nAspect)
         if (pView)
         {
             // Der sichtbare Ausschnitt hat sich eventuell geaendert
-            SvEmbeddedObject* pObj = GetEmbedObj();
-            Rectangle aObjVisArea = OutputDevice::LogicToLogic(
-                                    pObj->GetVisArea(), pObj->GetMapUnit(),
-                                    MAP_100TH_MM );
-            Size aVisSize = aObjVisArea.GetSize();
+            SvEmbeddedObject*   pObj = GetEmbedObj();
+            const MapMode       aMap100( MAP_100TH_MM );
+            Rectangle           aObjVisArea( OutputDevice::LogicToLogic( pObj->GetVisArea(),
+                                                                         pObj->GetMapUnit(),
+                                                                         aMap100 ) );
+            Size                aVisSize( aObjVisArea.GetSize() );
+            SvClientData*       pClientData = GetEnv();
 
-            SvClientData* pClientData = GetEnv();
-
-            if (pClientData)
+            if( pClientData )
             {
-                Fraction aFractX = pClientData->GetScaleWidth();
-                Fraction aFractY = pClientData->GetScaleHeight();
-                aFractX *= aVisSize.Width();
-                aFractY *= aVisSize.Height();
-                aVisSize = Size( (long) aFractX, (long) aFractY );
+                Fraction aFractX( pClientData->GetScaleWidth() );
+                Fraction aFractY( pClientData->GetScaleHeight() );
 
-                Rectangle aLogicRect = pSdrOle2Obj->GetLogicRect();
-                Rectangle aObjArea = aLogicRect;
+                aVisSize = Size( (long) ( aFractX *= aVisSize.Width() ), (long) ( aFractY *= aVisSize.Height() ) );
 
-                // Dokument-Groesse vom Server
-                aObjArea.SetSize(aObjVisArea.GetSize());
-                pClientData->SetObjArea(aObjArea);
+                Rectangle aLogicRect( pSdrOle2Obj->GetLogicRect() );
+                Rectangle aObjArea( aLogicRect );
 
-                if (aLogicRect.GetSize() != aVisSize)
+                aObjArea.SetSize( aObjVisArea.GetSize() );
+                pClientData->SetObjArea( aObjArea );
+
+                const Size aVisSizePix( Application::GetDefaultDevice()->LogicToPixel( aVisSize, aMap100 ) );
+                const Size aObjSizePix( Application::GetDefaultDevice()->LogicToPixel( aLogicRect.GetSize(), aMap100 ) );
+
+                if( aVisSizePix != aObjSizePix )
                 {
                     aLogicRect.SetSize(aVisSize);
                     pSdrOle2Obj->SetLogicRect(aLogicRect);
