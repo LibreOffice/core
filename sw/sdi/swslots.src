@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swslots.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-03 19:30:39 $
+ *  last change: $Author: kz $ $Date: 2001-04-06 07:42:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -518,7 +518,7 @@ SfxSlotInfo FN_CNTNT_TO_NEXT_FRAME
     SlotName[ swedish ] = "Till nästa ram";
     SlotName[ polish ] = "Do nastêpnej ramki";
     SlotName[ portuguese_brazilian ] = "ContentsToNextFrame";
-    SlotName[ japanese ] = "Ÿ‚Ì˜g‚Ö";
+    SlotName[ japanese ] = "Ÿ‚ÌÃ·½ÄÎŞ¯¸½‚Ö";
     SlotName[ chinese_simplified ] = "×ªµ½ÏÂÒ»¸ö¿ò";
     SlotName[ chinese_traditional ] = "Âà¨ì¤U¤@­Ó®Ø";
     SlotName[ arabic ] = "Åáì ÇáßÇÏÑ ÇáÊÇáí";
@@ -1766,7 +1766,7 @@ SfxSlotInfo FN_FORMAT_FRAME_DLG
     SlotName[ swedish ] = "Ramegenskaper";
     SlotName[ polish ] = "Edytuj ramkê";
     SlotName[ portuguese_brazilian ] = "FormatFrame";
-    SlotName[ japanese ] = "˜g‚Ì‘®«";
+    SlotName[ japanese ] = "Ã·½ÄÎŞ¯¸½‚Ì‘®«";
     SlotName[ chinese_simplified ] = "ÎÄ±¾¿òÊôĞÔ";
     SlotName[ chinese_traditional ] = "¤å¦r¤è¶ôÄİ©Ê";
     SlotName[ arabic ] = "ÎÕÇÆÕ ÇáßÇÏÑ";
@@ -3535,7 +3535,7 @@ SfxSlotInfo FN_INSERT_FRAME_INTERACT_NOCOL
     SlotName[ swedish ] = "Infoga ram med en kolumn manuellt";
     SlotName[ polish ] = "Wstaw rêcznie ramkê z jedn¹ kolumn¹";
     SlotName[ portuguese_brazilian ] = "Insert single column frame manually";
-    SlotName[ japanese ] = "1’i‚Ì˜g‚ğè“®‘}“ü";
+    SlotName[ japanese ] = "1’i‚ÌÃ·½ÄÎŞ¯¸½‚ğè“®‘}“ü";
     SlotName[ korean ] = "1¿­ ÇÁ·¹ÀÓ ¼öµ¿À¸·Î »ğÀÔ";
     SlotName[ chinese_simplified ] = "ÊÖ¹¤²åÈëµ¥À¸Ê½¿ò";
     SlotName[ chinese_traditional ] = "¤â°Ê´¡¤J³æÄæ¤å¦r®Ø¡C";
@@ -3557,7 +3557,7 @@ SfxSlotInfo FN_INSERT_FRAME_INTERACT
     SlotName[ swedish ] = "Infoga ram manuellt";
     SlotName[ polish ] = "Wstaw rêcznie ramkê";
     SlotName[ portuguese_brazilian ] = "InsertFrameInteract";
-    SlotName[ japanese ] = "˜g‚Ìè“®‘}“ü";
+    SlotName[ japanese ] = "Ã·½ÄÎŞ¯¸½‚Ìè“®‘}“ü";
     SlotName[ chinese_simplified ] = "ÊÖ¹¤²åÈë¿ò";
     SlotName[ chinese_traditional ] = "¤â°Ê´¡¤J¤å¦r¤è¶ô";
     SlotName[ arabic ] = "ÅÏÑÇÌ ßÇÏÑ íÏæíÇğ";
@@ -3712,7 +3712,7 @@ SfxSlotInfo FN_INSERT_IDX_ENTRY_DLG
     SlotName[ swedish ] = "Infoga indexmarkering";
     SlotName[ polish ] = "Wstaw znacznik indeksu";
     SlotName[ portuguese_brazilian ] = "InsertIndexEntry";
-    SlotName[ japanese ] = "²İÃŞ¯¸½Ï°¶°‚Ì‘}“ü";
+    SlotName[ japanese ] = "–ÚŸEõˆø€–Ú‚Ì“o˜^";
     SlotName[ chinese_simplified ] = "²åÈëË÷Òı±ê¼Ç";
     SlotName[ chinese_traditional ] = "´¡¤J¯Á¤Ş¿ï¨ú";
     SlotName[ arabic ] = "ÅÏÑÇÌ ÊÍÏíÏ İåÑÓí";
@@ -4328,7 +4328,7 @@ SfxSlotInfo FN_NEXT_BOOKMARK
     SlotName[ russian ] = "Äî ñëåäóşùåé òåêñòîâîé ïîìåòêè";
     SlotName[ dutch ] = "Naar volgende tekstmarkering";
     SlotName[ french ] = "Aller au repère de texte suivant";
-    SlotName[ spanish ] = "Ir al marcador siguiente";
+    SlotName[ spanish ] = "Ir a la marca siguiente";
     SlotName[ italian ] = "Al segnalibro successivo";
     SlotName[ danish ] = "Til næste tekstmarkering";
     SlotName[ swedish ] = "Till nästa bokmärke";
@@ -4542,7 +4542,7 @@ SfxSlotInfo FN_NEXT_TOXMARK
     SlotName[ swedish ] = "Till nästa indexmarkering";
     SlotName[ polish ] = "PrzejdŸ do nastêpnego znacznika indeksu";
     SlotName[ portuguese_brazilian ] = "GotoNextIndexMark";
-    SlotName[ japanese ] = "Ÿ‚Ì²İÃŞ¸½Ï°¸‚Ö";
+    SlotName[ japanese ] = "Ÿ‚Ì–ÚŸEõˆø€–Ú‚Ö";
     SlotName[ chinese_simplified ] = "×ªµ½ÏÂÒ»¸öË÷Òı±ê¼Ç";
     SlotName[ chinese_traditional ] = "Âà¨ì¤U¤@­Ó¯Á¤Ş¼Ğ°O";
     SlotName[ arabic ] = "Åáì ÇáÊÍÏíÏ ÇáİåÑÓí ÇáÊÇáí";
@@ -5498,7 +5498,7 @@ SfxSlotInfo FN_PREV_BOOKMARK
     SlotName[ russian ] = "Äî ïğåäûäóùåé òåêñòîâîé ïîìåòêè";
     SlotName[ dutch ] = "Naar vorige tekstmarkering";
     SlotName[ french ] = "Aller au repère de texte précédent";
-    SlotName[ spanish ] = "Ir al marcador anterior";
+    SlotName[ spanish ] = "Ir a la marca anterior";
     SlotName[ italian ] = "Al segnalibro precedente";
     SlotName[ danish ] = "Til forrige tekstmarkering";
     SlotName[ swedish ] = "Till föregående bokmärke";
@@ -5712,7 +5712,7 @@ SfxSlotInfo FN_PREV_TOXMARK
     SlotName[ swedish ] = "Till föregående indexmarkering";
     SlotName[ polish ] = "PrzejdŸ do poprzedniego znacznika indeksu";
     SlotName[ portuguese_brazilian ] = "GotoPrevIndexMark";
-    SlotName[ japanese ] = "‘O‚Ì²İÃŞ¯¸½Ï°¸‚Ö";
+    SlotName[ japanese ] = "‘O‚Ì–ÚŸEõˆø€–Ú‚Ö";
     SlotName[ chinese_simplified ] = "×ªµ½ÉÏÒ»¸öË÷Òı±ê¼Ç";
     SlotName[ chinese_traditional ] = "Âà¨ì¤W¤@­Ó¯Á¤Ş¼Ğ°O";
     SlotName[ arabic ] = "Åáì ÇáÊÍÏíÏ ÇáİåÑÓí ÇáÓÇÈŞ";
