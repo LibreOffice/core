@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.112 $
+ *  $Revision: 1.113 $
  *
- *  last change: $Author: pl $ $Date: 2001-12-07 16:48:42 $
+ *  last change: $Author: cp $ $Date: 2001-12-17 17:31:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1730,13 +1730,12 @@ void SalFrame::SetPointerPos(long nX, long nY)
 {
     /* #87921# when the application tries to center the mouse in the dialog the
      * window isn't mapped already. So use coordinates relative to the root window.
-     * Please note that the window isn't reparented yet and still will be moved out of
-     * center */
-    unsigned int nWindowLeft = maGeometry.nX + maGeometry.nLeftDecoration;
-    unsigned int nWindowTop  = maGeometry.nY + maGeometry.nTopDecoration;
+     */
+    unsigned int nWindowLeft = maGeometry.nX + nX;
+    unsigned int nWindowTop  = maGeometry.nY + nY;
 
     XWarpPointer( _GetXDisplay(), None, maFrameData.pDisplay_->GetRootWindow(),
-                  0, 0, 0, 0, nWindowLeft + nX, nWindowTop + nY);
+                  0, 0, 0, 0, nWindowLeft, nWindowTop);
 }
 
 // delay handling of extended text input
