@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SmGraphicAccessible.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change:$Date: 2003-09-08 12:29:28 $
+ *  last change:$Date: 2004-11-02 12:05:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,7 @@ import util.utils;
 
 import com.sun.star.accessibility.AccessibleRole;
 import com.sun.star.accessibility.XAccessible;
+import com.sun.star.accessibility.XAccessibleComponent;
 import com.sun.star.awt.XWindow;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.frame.XModel;
@@ -163,6 +164,9 @@ public class SmGraphicAccessible extends TestCase {
 
         log.println("ImplementationName " + utils.getImplName(oObj));
 
+        final XAccessibleComponent xAC = (XAccessibleComponent)
+            UnoRuntime.queryInterface(XAccessibleComponent.class, oObj);
+
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
         tEnv.addObjRelation("EditOnly",
@@ -173,6 +177,7 @@ public class SmGraphicAccessible extends TestCase {
             new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer(){
                 public void fireEvent() {
                     try {
+                        xAC.grabFocus();
                         xPS.setPropertyValue("Formula", "sum hat x");
                         shortWait();
                         xPS.setPropertyValue("Formula", expFormula);
