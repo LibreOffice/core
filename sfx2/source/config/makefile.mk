@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 15:28:27 $
+#   last change: $Author: hr $ $Date: 2004-02-03 19:55:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -97,7 +97,6 @@ SLOFILES =	\
         $(SLO)$/cfgmgr.obj \
         $(SLO)$/cfgimex.obj \
         $(SLO)$/cfgitem.obj \
-        $(SLO)$/misccfg.obj \
         $(SLO)$/evntconf.obj
 
 # --- Tagets -------------------------------------------------------
