@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imapwnd.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 14:33:36 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:56:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -976,9 +976,9 @@ void IMapWindow::DoPropertyDialog()
 
                 if ( aURLText.Len() )
                 {
-                    pIMapObj->SetURL( ::URIHelper::SmartRelToAbs( aURLText, FALSE,
-                                                                INetURLObject::WAS_ENCODED,
-                                                                INetURLObject::DECODE_UNAMBIGUOUS ) );
+                    INetURLObject aObj( aURLText, INET_PROT_FILE );
+                    DBG_ASSERT( aObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL" );
+                    pIMapObj->SetURL( aObj.GetMainURL( INetURLObject::NO_DECODE ) );
                 }
                 else
                     pIMapObj->SetURL( aURLText );
