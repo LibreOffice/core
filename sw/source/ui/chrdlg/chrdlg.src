@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chrdlg.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-10 06:25:21 $
+ *  last change: $Author: kz $ $Date: 2001-05-17 08:13:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,7 @@ String STR_TEXTCOLL_HEADER
     TEXT [ English ] = " (Paragraph Style: " ;
     TEXT [ norwegian ] = " (Avsnittsmal: " ;
     TEXT [ italian ] = "(Modello di paragrafo: " ;
-    TEXT [ portuguese_brazilian ] = "(Estilo de Parágrafo: " ;
+    TEXT [ portuguese_brazilian ] = "(Estilo de Par?grafo: " ;
     TEXT [ portuguese ] = "(Estilo de parágrafo: " ;
     TEXT [ finnish ] = "(Kappaleen tyyli: " ;
     TEXT [ danish ] = "(Afsnitstypografi: " ;
@@ -93,7 +93,7 @@ String STR_PAGEFMT_HEADER
     TEXT [ English ] = " (Page Style: " ;
     TEXT [ norwegian ] = " (Sidemal: " ;
     TEXT [ italian ] = "(Modello di pagina: " ;
-    TEXT [ portuguese_brazilian ] = "(Estilo de Página: " ;
+    TEXT [ portuguese_brazilian ] = "(Estilo de P?gina: " ;
     TEXT [ portuguese ] = "(Estilo de página: " ;
     TEXT [ finnish ] = "(Sivun tyyli: " ;
     TEXT [ danish ] = "(Sidetypografi: " ;
@@ -150,7 +150,7 @@ InfoBox MSG_ILLEGAL_PAGENUM
     MESSAGE [ English ] = "Page number can't be applied to the actual page.  Even numbers can be used on left pages, odd numbers on right pages." ;
     MESSAGE [ norwegian ] = "Sidenummer kan ikke brukes på den aktuelle siden. Partall kan brukes på venstre sider, oddetall på høyre sider." ;
     MESSAGE [ italian ] = "Impossibile usare il numero pagina alla pagina corrente. I numeri pari possono essere usati sulle pagine sinistre, i numeri dispari sulle pagine destre." ;
-    MESSAGE [ portuguese_brazilian ] = "Número de página não pode ser aplicado à página atual.  Números pares podem ser utilizados em páginas esquerdas, números ímpares em páginas direitas." ;
+    MESSAGE [ portuguese_brazilian ] = "N?ero de p?gina n?o pode ser aplicado ? p?gina atual.  N?eros pares podem ser utilizados em p?ginas esquerdas, n?eros ?mpares em p?ginas direitas." ;
     MESSAGE [ portuguese ] = "Número de página não pode ser atribuído à página actual. Nas páginas da esquerda podem apenas ser usados números pares e nas páginas da direita números ímpares." ;
     MESSAGE [ finnish ] = "Käsiteltävälle sivulle ei voi lisätä sivunumeroita.  Parillisia numeroita voi käyttää vasemmanpuoleisilla sivuilla, parittomia numeroita oikeanpuoleisilla." ;
     MESSAGE [ danish ] = "Sidetallet kan ikke indsættes. Der må kun bruges lige sidetal på venstre side og ulige sidetal på højre sider." ;
@@ -161,11 +161,11 @@ InfoBox MSG_ILLEGAL_PAGENUM
     MESSAGE [ english_us ] = "Page numbers cannot be applied to the current page.  Even numbers can be used on left pages, odd numbers on right pages." ;
     MESSAGE[ chinese_simplified ] = "ÎŞ·¨Éè¶¨Ò³Âë¡£ÔÚ×óÒ³ÉÏÖ»ÔÊĞí²ÉÓÃÅ¼ÊıÒ³Âë£¬ÔÚÓÒÒ³ÉÏÖ»ÔÊĞí²ÉÓÃÆæÊıÒ³Âë¡£";
     MESSAGE[ russian ] = "Íîìåğà ñòğàíèö ïğîñòàâèòü íåâîçìîæíî. Ñ ëåâîé ñòîğîíû ìîãóò áûòü ïğîñòàâëåíû òîëüêî ÷åòíûå, ñ ïğàâîé - òîëüêî íå÷åòíûå öèôğû.";
-    MESSAGE[ polish ] = "Nie mo¿na nanieœæ numeru stron. Na lewych stronach mo¿na nanieœæ tylko parzyste numery stron, na prawych tylko nieparzyste numery stron.";
+    MESSAGE[ polish ] = "Nie mo¿na nanie?æ numeru stron. Na lewych stronach mo¿na nanie?æ tylko parzyste numery stron, na prawych tylko nieparzyste numery stron.";
     MESSAGE[ japanese ] = "Íß°¼Ş”Ô†‚Í“K—p‚Å‚«‚Ü‚¹‚ñB¶Íß°¼Ş‚É‚Í‹ô”A‰EÍß°¼Ş‚É‚ÍŠï”‚ğg—p‚µ‚Ü‚·B";
     MESSAGE[ chinese_traditional ] = "µLªk³]©w­¶½X¡C¦b¥ª­¶¥u¯à°÷³]©w°¸¼Æ¡A¦b¥k­¶¥u¯à³]©w©_¼Æ¡C";
     MESSAGE[ arabic ] = "áÇ íãßä ÅÏÑÇÌ ÃÑŞÇã ÇáÕİÍÇÊ İí ÇáÕİÍÉ ÇáÍÇáíÉ. Úáì ÇáÕİÍÇÊ ÇáíÓÑì¡ íÓãÍ ÈÇÓÊÎÏÇã ÃÑŞÇã ÒæÌíÉ İŞØ¡ æÚáì ÇáÕİÍÇÊ Çáíãäì¡ ÃÑŞÇã İÑÏíÉ İŞØ.";
-    MESSAGE[ greek ] = "Äåí åßíáé äõíáôüí íá ôïğïèåôçèåß ï áñéèìüò óåëßäáò. Óå áñéóôåñİò óåëßäåò åğéôñİğåôáé ç ôïğïèİôçóç ìüíï æõãşí áñéèìşí óåëßäáò, åíş óå äåîéİò óåëßäåò ìüíï áñôßùí áñéèìşí.";
+    MESSAGE[ greek ] = "Äåí åßíáé äõíáôüí íá ôïğïèåôçèåß ï áñéèìüò óåëßäáò. Óå áñéóôåñİò óåëßäåò åğéôñİğåôáé ç ôïğïèİôçóç ìüíï æõãşí áñéèìşí óåëßäáò, åíş óå äåîéİ?";
     MESSAGE[ korean ] = "ÂÊ ¹øÈ£´Â ¼³Á¤ÇÒ ¼ö ¾ø½À´Ï´Ù. Â¦¼ö ÂÊ ¹øÈ£´Â ¿ŞÂÊ ÂÊ¿¡¸¸ »ç¿ëµÇ°í, È¦¼ö ÂÊ ¹øÈ£´Â ¿À¸¥ÂÊ ÂÊ¿¡¸¸ »ç¿ëµË´Ï´Ù.";
     MESSAGE[ turkish ] = "Sayfa numarası verilemiyor. Sol sayfalarda yalnızca çift sayfa numaraları, sağ sayfalarda ise yalnızca tek sayfa numaraları kullanılabilir.";
     MESSAGE[ language_user1 ] = " ";
