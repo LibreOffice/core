@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxruler.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: os $ $Date: 2002-03-07 08:53:45 $
+ *  last change: $Author: os $ $Date: 2002-03-12 16:46:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -673,9 +673,9 @@ void SvxRuler::MouseMove( const MouseEvent& rMEvt )
         pBindings->Update( SID_ATTR_LONG_ULSPACE );
         pBindings->Update( SID_ATTR_LONG_LRSPACE );
         pBindings->Update( SID_RULER_PAGE_POS );
-        pBindings->Update( SID_ATTR_TABSTOP );
-        pBindings->Update( SID_ATTR_PARA_LRSPACE );
-        pBindings->Update( SID_RULER_BORDERS );
+        pBindings->Update( bHorz ? SID_ATTR_TABSTOP : SID_ATTR_TABSTOP_VERTICAL);
+        pBindings->Update( bHorz ? SID_ATTR_PARA_LRSPACE : SID_ATTR_PARA_LRSPACE_VERTICAL);
+        pBindings->Update( bHorz ? SID_RULER_BORDERS : SID_RULER_BORDERS_VERTICAL);
         pBindings->Update( SID_RULER_OBJECT );
         pBindings->Update( SID_RULER_PROTECT );
     }
@@ -2174,7 +2174,8 @@ void SvxRuler::ApplyIndents()
                              pIndents[INDENT_RIGHT_MARGIN].nPos) -
             lAppNullOffset, pParaItem->GetRight()));
 
-    pBindings->GetDispatcher()->Execute( pParaItem->Which(), SFX_CALLMODE_RECORD, pParaItem, 0L );
+    USHORT nParaId  = bHorz ? SID_ATTR_PARA_LRSPACE : SID_ATTR_PARA_LRSPACE_VERTICAL;
+    pBindings->GetDispatcher()->Execute( nParaId, SFX_CALLMODE_RECORD, pParaItem, 0L );
     UpdateTabs();
 }
 
@@ -2230,7 +2231,8 @@ void SvxRuler::ApplyTabs()
         pTabStopItem->Remove(nCoreIdx);
         pTabStopItem->Insert(aTabStop);
     }
-    pBindings->GetDispatcher()->Execute( pTabStopItem->Which(), SFX_CALLMODE_RECORD, pTabStopItem, 0L );
+    USHORT nTabStopId = bHorz ? SID_ATTR_TABSTOP : SID_ATTR_TABSTOP_VERTICAL;
+    pBindings->GetDispatcher()->Execute( nTabStopId, SFX_CALLMODE_RECORD, pTabStopItem, 0L );
     UpdateTabs();
 }
 
@@ -2276,7 +2278,8 @@ void SvxRuler::ApplyBorders()
 #endif // DEBUGLIN
     SfxBoolItem aFlag(SID_RULER_ACT_LINE_ONLY,
                       nDragType & DRAG_OBJECT_ACTLINE_ONLY? TRUE: FALSE);
-    pBindings->GetDispatcher()->Execute( pColumnItem->Which(), SFX_CALLMODE_RECORD, pColumnItem, &aFlag, 0L );
+    USHORT nColId = bHorz ? SID_RULER_BORDERS : SID_RULER_BORDERS_VERTICAL;
+    pBindings->GetDispatcher()->Execute( nColId, SFX_CALLMODE_RECORD, pColumnItem, &aFlag, 0L );
 }
 
 void SvxRuler::ApplyObject()
@@ -2443,14 +2446,12 @@ void __EXPORT SvxRuler::Click()
         pBindings->Update( SID_ATTR_LONG_ULSPACE );
         pBindings->Update( SID_ATTR_LONG_LRSPACE );
         pBindings->Update( SID_RULER_PAGE_POS );
-        pBindings->Update( SID_ATTR_TABSTOP );
-        pBindings->Update( SID_ATTR_PARA_LRSPACE );
-        pBindings->Update( SID_RULER_BORDERS );
+        pBindings->Update( bHorz ? SID_ATTR_TABSTOP : SID_ATTR_TABSTOP_VERTICAL);
+        pBindings->Update( bHorz ? SID_ATTR_PARA_LRSPACE : SID_ATTR_PARA_LRSPACE_VERTICAL);
+        pBindings->Update( bHorz ? SID_RULER_BORDERS : SID_RULER_BORDERS_VERTICAL);
         pBindings->Update( SID_RULER_OBJECT );
         pBindings->Update( SID_RULER_PROTECT );
         pBindings->Update( SID_ATTR_PARA_LRSPACE_VERTICAL );
-        pBindings->Update( SID_ATTR_TABSTOP_VERTICAL );
-        pBindings->Update( SID_RULER_BORDERS_VERTICAL );
     }
     if(pTabStopItem &&
        (nFlags & SVXRULER_SUPPORT_TABS) == SVXRULER_SUPPORT_TABS) {
@@ -3214,7 +3215,8 @@ IMPL_LINK( SvxRuler, TabMenuSelect, Menu *, pMenu )
     aTabStop.GetAdjustment() = ToAttrTab_Impl(pMenu->GetCurItemId()-1);
     pTabStopItem->Remove(pRuler_Imp->nIdx);
     pTabStopItem->Insert(aTabStop);
-    pBindings->GetDispatcher()->Execute( pTabStopItem->Which(), SFX_CALLMODE_RECORD, pTabStopItem, 0L );
+    USHORT nTabStopId = bHorz ? SID_ATTR_TABSTOP : SID_ATTR_TABSTOP_VERTICAL;
+    pBindings->GetDispatcher()->Execute( nTabStopId, SFX_CALLMODE_RECORD, pTabStopItem, 0L );
     UpdateTabs();
     pRuler_Imp->nIdx = 0;
     return 0;
