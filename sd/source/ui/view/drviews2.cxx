@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews2.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: aw $ $Date: 2001-10-24 14:48:09 $
+ *  last change: $Author: aw $ $Date: 2001-12-14 13:59:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -733,7 +733,15 @@ void SdDrawViewShell::FuTemporary(SfxRequest& rReq)
                 BOOL bHandoutMode = FALSE;
                 SdPage* pHandoutMPage = NULL;
                 String aNewName;
+
+                // #95981#
+                String aOldName;
+
                 AutoLayout aNewAutoLayout;
+
+                // #95981#
+                AutoLayout aOldAutoLayout;
+
                 BOOL bBVisible;
                 BOOL bBObjsVisible;
                 const SfxItemSet* pArgs = rReq.GetArgs();
@@ -742,8 +750,10 @@ void SdDrawViewShell::FuTemporary(SfxRequest& rReq)
                 {
                     SfxItemSet aAttrSet( GetPool(), ATTR_PAGE_START, ATTR_PAGE_END );
 
-                    aAttrSet.Put( SfxStringItem( ATTR_PAGE_NAME,
-                                                 pActualPage->GetName() ) );
+                    // #95981# keep old name
+                    aOldName = pActualPage->GetName();
+
+                    aAttrSet.Put( SfxStringItem( ATTR_PAGE_NAME, aOldName ) );
                     aAttrSet.Put( SfxBoolItem( ATTR_PAGE_BACKGROUND,
                                                aVisibleLayers.IsSet(aBckgrnd) ) );
                     aAttrSet.Put( SfxBoolItem( ATTR_PAGE_OBJECTS,
@@ -770,7 +780,10 @@ void SdDrawViewShell::FuTemporary(SfxRequest& rReq)
                         }
                     }
 
-                    aAttrSet.Put( SfxAllEnumItem( ATTR_PAGE_LAYOUT, eNewAutoLayout ) );
+                    // #95981# keep old AutoLayout
+                    aOldAutoLayout = eNewAutoLayout;
+
+                    aAttrSet.Put( SfxAllEnumItem( ATTR_PAGE_LAYOUT, aOldAutoLayout ) );
 
                     SdNewFoilDlg* pDlg = new SdNewFoilDlg(pWindow, aAttrSet, ePageKind, pDocSh, TRUE);
 
@@ -851,7 +864,18 @@ void SdDrawViewShell::FuTemporary(SfxRequest& rReq)
                 {
                     // #90356# get SdOptions
                     SdOptions* pOptions = SD_MOD()->GetSdOptions(pDoc->GetDocumentType());
-                    BOOL bShowDialog(pOptions->IsShowUndoDeleteWarning());
+                    sal_Bool bShowDialog(pOptions->IsShowUndoDeleteWarning());
+
+                    // #95981# If only name is changed do not show
+                    // ImpUndoDeleteWarning dialog
+                    if(bShowDialog)
+                    {
+                        sal_Bool bNameChanged(aNewName != aOldName);
+                        sal_Bool bLayoutChanged(aNewAutoLayout != aOldAutoLayout);
+
+                        if(bNameChanged && !bLayoutChanged)
+                            bShowDialog = sal_False;
+                    }
 
                     if(bShowDialog)
                     {
