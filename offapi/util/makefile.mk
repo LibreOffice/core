@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.62 $
+#   $Revision: 1.63 $
 #
-#   last change: $Author: hr $ $Date: 2003-06-30 16:23:23 $
+#   last change: $Author: obo $ $Date: 2003-09-04 09:11:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -130,6 +130,7 @@ UNOIDLDBFILES= \
     $(UCR)$/csssync.db \
     $(UCR)$/csssync2.db \
     $(UCR)$/cssxml.db \
+    $(UCR)$/cssxmlinput.db \
     $(UCR)$/csssetup.db \
     $(UCR)$/cssimage.db\
     $(UCR)$/cssuidialogs.db \
