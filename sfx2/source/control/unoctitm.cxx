@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoctitm.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 13:35:14 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:39:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -483,12 +483,12 @@ SfxDispatcher* SfxOfficeDispatch::GetDispatcher_Impl()
 }
 
 SfxDispatchController_Impl::SfxDispatchController_Impl( SfxOfficeDispatch* pDisp, SfxBindings* pBind, SfxDispatcher* pDispat, sal_uInt16 nSlotId, const ::com::sun::star::util::URL& rURL, sal_Bool bInter )
-    : pDispatch( pDisp )
-    , aDispatchURL( rURL )
-    , pBindings( pBind )
+    : aDispatchURL( rURL )
     , pDispatcher( pDispat )
+    , pBindings( pBind )
     , pLastState( 0 )
     , nSlot( nSlotId )
+    , pDispatch( pDisp )
 {
     SetId( nSlot );
 }
