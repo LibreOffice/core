@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-10 08:21:12 $
+ *  last change: $Author: fs $ $Date: 2001-08-14 12:11:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -249,6 +249,7 @@ using namespace ::com::sun::star::container;
 using namespace ::dbtools;
 using namespace ::comphelper;
 using namespace ::svt;
+using namespace ::svx;
 
 #define HANDLE_SQL_ERRORS( action, successflag, context, message )          \
     try                                                                     \
@@ -347,7 +348,7 @@ protected:
 SbaXDataBrowserController::FormControllerImpl::FormControllerImpl(SbaXDataBrowserController* m_pOwner)
     :m_pOwner(m_pOwner)
     ,m_bActive(sal_False)
-    ,m_aActivateListeners(m_pOwner->m_aPropertyMutex)
+    ,m_aActivateListeners(m_pOwner->getMutex())
 {
     OSL_ENSURE(m_pOwner, "SbaXDataBrowserController::FormControllerImpl::FormControllerImpl : invalid Owner !");
 }
@@ -535,8 +536,7 @@ void SAL_CALL SbaXDataBrowserController::release(  ) throw ()
 //------------------------------------------------------------------------------
 SbaXDataBrowserController::SbaXDataBrowserController(const Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM)
     :OGenericUnoController(_rM)
-    ,::comphelper::OPropertyContainer(m_aPropertyBroadcastHelper)
-    ,m_aPropertyBroadcastHelper(m_aPropertyMutex)
+    ,::comphelper::OPropertyContainer(getBroadcastHelper())
     ,m_pLoadThread(NULL)
     ,m_bClosingKillOpen(sal_False)
     ,m_nPendingLoadFinished(0)
@@ -749,20 +749,8 @@ sal_Bool SbaXDataBrowserController::Construct(Window* pParent)
 //------------------------------------------------------------------------------
 sal_Bool SbaXDataBrowserController::LoadForm()
 {
-//  sal_Bool bThreadSafe(sal_False);
-//  if (bThreadSafe)
-//  {   // load in an own thread so the office doesn't block meanwhile
-//      m_pLoadThread = new LoadFormThread(getRowSet(), m_sLoadStopperCaption);
-//      ((LoadFormThread*)m_pLoadThread)->SetTerminationHdl(LINK(this, SbaXDataBrowserController, OnOpenFinished));
-//      m_pLoadThread->create();
-//
-//      InvalidateAll();
-//      return sal_True;
-//  }
-
     Reference< XLoadable > xLoadable(getRowSet(),UNO_QUERY);
-    xLoadable->load();
-    LoadFinished(sal_True);
+    reloadForm( xLoadable );
     return sal_True;
 }
 //------------------------------------------------------------------------------
@@ -1588,7 +1576,7 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId)
 #if DBG_UTIL
         String sMessage("SbaXDataBrowserController::GetState(", RTL_TEXTENCODING_ASCII_US);
         sMessage += String::CreateFromInt32(nId);
-        sMessage.AppendAscii(") : catched an exception ! message : ");
+        sMessage.AppendAscii(") : caught an exception ! message : ");
         sMessage += (const sal_Unicode*)e.Message;
         DBG_ERROR(ByteString(sMessage, gsl_getSystemTextEncoding()).GetBuffer());
 #else
@@ -1901,7 +1889,7 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId)
                 m_xParser->setOrder(::rtl::OUString()); m_xParser->appendOrderByColumn(xField, bSortUp),
                 bParserSuccess,
                 UniString(ModuleRes(SBA_BROWSER_SETTING_ORDER)),
-                "SbaXDataBrowserController::Execute : catched an exception while composing the new filter !"
+                "SbaXDataBrowserController::Execute : caught an exception while composing the new filter !"
             )
 
             if (bParserSuccess)
@@ -1929,7 +1917,7 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId)
             // -> completely overwrite it, else append one
             if (!bApplied)
             {
-                DO_SAFE( m_xParser->setFilter(::rtl::OUString()), "SbaXDataBrowserController::Execute : catched an exception while resetting the new filter !" );
+                DO_SAFE( m_xParser->setFilter(::rtl::OUString()), "SbaXDataBrowserController::Execute : caught an exception while resetting the new filter !" );
             }
 
             sal_Bool bParserSuccess;
@@ -1937,7 +1925,7 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId)
                 m_xParser->appendFilterByColumn(xField),
                 bParserSuccess,
                 UniString(ModuleRes(SBA_BROWSER_SETTING_FILTER)),
-                "SbaXDataBrowserController::Execute : catched an exception while composing the new filter !"
+                "SbaXDataBrowserController::Execute : caught an exception while composing the new filter !"
             )
 
             if (bParserSuccess)
@@ -1984,8 +1972,14 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId)
 
         case ID_BROWSER_REFRESH:
             if (SaveData(sal_True, sal_False))
+            {
+                // check if the signature of the object to be reloaded changed
+                // TODO
+
+                // reload
                 if (!reloadForm(Reference< XLoadable >(getRowSet(), UNO_QUERY)))
                     criticalFail();
+            }
             break;
 
         case ID_BROWSER_SAVEDOC:
