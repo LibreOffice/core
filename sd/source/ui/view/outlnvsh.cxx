@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlnvsh.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: willem.vandorp $ $Date: 2000-09-29 12:36:55 $
+ *  last change: $Author: dl $ $Date: 2000-10-25 10:34:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,8 +135,11 @@
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
-#ifndef _COM_SUN_STAR_LINGUISTIC_XTHESAURUS_HPP_
-#include <com/sun/star/linguistic/XThesaurus.hpp>
+#ifndef _COM_SUN_STAR_LINGUISTIC2_XTHESAURUS_HPP_
+#include <com/sun/star/linguistic2/XThesaurus.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LINGUISTIC2_XLINGUSERVICEMANAGER_HPP_
+#include <com/sun/star/linguistic2/XLinguServiceManager.hpp>
 #endif
 #ifndef _UNO_LINGU_HXX
 #include <svx/unolingu.hxx>
@@ -172,7 +175,11 @@
 #include "prevchld.hxx"
 #include "fuslshow.hxx"
 
+using namespace ::rtl;
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::linguistic2;
 
 #define MIN_ZOOM           10       // Minimaler Zoomfaktor
 #define MAX_ZOOM         1000       // Maximaler Zoomfaktor
@@ -1204,14 +1211,18 @@ void SdOutlineViewShell::GetMenuState( SfxItemSet &rSet )
         else
         {
             LanguageType eLang = pDoc->GetLanguage();
-             uno::Reference< lang::XMultiServiceFactory > xMgr( ::utl::getProcessServiceFactory() );
-             uno::Reference< linguistic::XThesaurus > xThes( xMgr->createInstance(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.linguistic.Thesaurus" ))),
-                                                            uno::UNO_QUERY );
+            Reference< XMultiServiceFactory > xMgr( ::utl::getProcessServiceFactory() );
+            Reference< XLinguServiceManager > xLinguServiceManager( xMgr->createInstance(
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.linguistic2.LinguServiceManager" ))),
+                                                                uno::UNO_QUERY );
 
-            lang::Locale aLocale;
+            Reference< XThesaurus > xThesaurus;
+            if ( xLinguServiceManager.is() )
+                xThesaurus = xLinguServiceManager->getThesaurus();
+
+            Locale aLocale;
             SvxLanguageToLocale( aLocale, eLang );
-            if (!xThes.is() || eLang == LANGUAGE_NONE || !xThes->hasLocale(aLocale))
+            if (!xThesaurus.is() || eLang == LANGUAGE_NONE || !xThesaurus->hasLocale(aLocale))
                 rSet.DisableItem( SID_THESAURUS );
         }
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futhes.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:36 $
+ *  last change: $Author: dl $ $Date: 2000-10-25 10:27:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@
 #ifndef _SVDOTEXT_HXX //autogen
 #include <svx/svdotext.hxx>
 #endif
+#ifndef _COM_SUN_STAR_LINGUISTIC2_XLINGUSERVICEMANAGER_HPP_
+#include <com/sun/star/linguistic2/XLinguServiceManager.hpp>
+#endif
 
 #define ITEMID_LANGUAGE         SID_ATTR_CHAR_LANGUAGE
 #include <svx/dialogs.hrc>
@@ -85,6 +88,7 @@
 #ifndef _UNO_LINGU_HXX
 #include <svx/unolingu.hxx>
 #endif
+#include <unotools/processfactory.hxx>
 
 #include "app.hrc"
 #include "strings.hrc"
@@ -98,7 +102,11 @@
 #include "sdwindow.hxx"
 #include "sdresid.hxx"
 
+using namespace ::rtl;
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::linguistic2;
 
 class SfxRequest;
 
@@ -144,13 +152,21 @@ FuThesaurus::FuThesaurus( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
         {
             if ( !pOutliner->GetSpeller().is() )
             {
-                uno::Reference< linguistic::XSpellChecker1 > xSpellChecker( SvxGetSpellChecker() );
-                if ( xSpellChecker.is() )
-                    pOutliner->SetSpeller( xSpellChecker );
+                Reference< XMultiServiceFactory > xMgr( ::utl::getProcessServiceFactory() );
+                Reference< XLinguServiceManager > xLinguServiceManager( xMgr->createInstance(
+                    OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.linguistic2.LinguServiceManager" ))),
+                                                                    uno::UNO_QUERY );
 
-                uno::Reference< linguistic::XHyphenator > xHyphenator( OFF_APP()->GetHyphenator() );
-                if( xHyphenator.is() )
-                    pOutliner->SetHyphenator( xHyphenator );
+                if ( xLinguServiceManager.is() )
+                {
+                    Reference< XSpellChecker1 > xSpellChecker( xLinguServiceManager->getSpellChecker(), UNO_QUERY );
+                    if ( xSpellChecker.is() )
+                        pOutliner->SetSpeller( xSpellChecker );
+
+                    Reference< XHyphenator > xHyphenator( xLinguServiceManager->getHyphenator(), UNO_QUERY );
+                    if( xHyphenator.is() )
+                        pOutliner->SetHyphenator( xHyphenator );
+                }
 
                 pOutliner->SetDefaultLanguage( pDoc->GetLanguage() );
             }
@@ -173,13 +189,21 @@ FuThesaurus::FuThesaurus( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
 
         if ( !pOutliner->GetSpeller().is() )
         {
-            uno::Reference< linguistic::XSpellChecker1 > xSpellChecker( SvxGetSpellChecker() );
-            if ( xSpellChecker.is() )
-                pOutliner->SetSpeller( xSpellChecker );
+            Reference< XMultiServiceFactory > xMgr( ::utl::getProcessServiceFactory() );
+            Reference< XLinguServiceManager > xLinguServiceManager( xMgr->createInstance(
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.linguistic2.LinguServiceManager" ))),
+                                                                uno::UNO_QUERY );
 
-            uno::Reference< linguistic::XHyphenator > xHyphenator( OFF_APP()->GetHyphenator() );
-            if( xHyphenator.is() )
-                pOutliner->SetHyphenator( xHyphenator );
+            if ( xLinguServiceManager.is() )
+            {
+                Reference< XSpellChecker1 > xSpellChecker( xLinguServiceManager->getSpellChecker(), UNO_QUERY );
+                if ( xSpellChecker.is() )
+                    pOutliner->SetSpeller( xSpellChecker );
+
+                Reference< XHyphenator1 > xHyphenator( xLinguServiceManager->getHyphenator(), UNO_QUERY );
+                if( xHyphenator.is() )
+                    pOutliner->SetHyphenator( xHyphenator );
+            }
 
             pOutliner->SetDefaultLanguage( pDoc->GetLanguage() );
         }

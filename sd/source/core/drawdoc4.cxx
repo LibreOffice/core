@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc4.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pw $ $Date: 2000-10-12 11:40:48 $
+ *  last change: $Author: dl $ $Date: 2000-10-25 10:29:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,7 @@
 #ifndef _OUTLINER_HXX //autogen wg. Outliner
 #include <svx/outliner.hxx>
 #endif
+#include <unotools/processfactory.hxx>
 #endif // !SVX_LIGHT
 
 #ifndef _EEITEM_HXX //autogen
@@ -198,8 +199,14 @@
 #ifndef _UNO_LINGU_HXX
 #include <svx/unolingu.hxx>
 #endif
-#ifndef _COM_SUN_STAR_LINGUISTIC_XHYPHENATOR_HPP_
-#include <com/sun/star/linguistic/XHyphenator.hpp>
+#ifndef _COM_SUN_STAR_LINGUISTIC2_XHYPHENATOR_HPP_
+#include <com/sun/star/linguistic2/XHyphenator.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LINGUISTIC2_XLINGUSERVICEMANAGER_HPP_
+#include <com/sun/star/linguistic2/XLinguServiceManager.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
 #ifndef _SFXITEMPOOL_HXX
 #include <svtools/itempool.hxx>
@@ -220,7 +227,11 @@
 #include "helpids.h"
 #include "sdiocmpt.hxx"
 
+using namespace ::rtl;
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::linguistic2;
 
 /*************************************************************************
 |*
@@ -670,13 +681,21 @@ void SdDrawDocument::StartOnlineSpelling(BOOL bForceSpelling)
 
         SdOutliner* pOutl = GetInternalOutliner(TRUE);
 
-        uno::Reference< linguistic::XSpellChecker1 > xSpellChecker( SvxGetSpellChecker() );
-        if ( xSpellChecker.is() )
-            pOutl->SetSpeller( xSpellChecker );
+        Reference< XMultiServiceFactory > xMgr( ::utl::getProcessServiceFactory() );
+        Reference< XLinguServiceManager > xLinguServiceManager( xMgr->createInstance(
+            OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.linguistic2.LinguServiceManager" ))),
+                                                            uno::UNO_QUERY );
 
-        uno::Reference< linguistic::XHyphenator > xHyphenator( OFF_APP()->GetHyphenator() );
-        if( xHyphenator.is() )
-            pOutl->SetHyphenator( xHyphenator );
+        if ( xLinguServiceManager.is() )
+        {
+            Reference< XSpellChecker1 > xSpellChecker( xLinguServiceManager->getSpellChecker(), UNO_QUERY );
+            if ( xSpellChecker.is() )
+                pOutl->SetSpeller( xSpellChecker );
+
+            Reference< XHyphenator > xHyphenator( xLinguServiceManager->getHyphenator(), UNO_QUERY );
+            if( xHyphenator.is() )
+                pOutl->SetHyphenator( xHyphenator );
+        }
 
         pOutl->SetDefaultLanguage( eLanguage );
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ka $ $Date: 2000-10-24 11:14:37 $
+ *  last change: $Author: dl $ $Date: 2000-10-25 10:32:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,9 +129,18 @@
 #ifndef _UNO_LINGU_HXX
 #include <svx/unolingu.hxx>
 #endif
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
 #include <svx/xtable.hxx>
-#ifndef _COM_SUN_STAR_LINGUISTIC_XHYPHENATOR_HPP_
-#include <com/sun/star/linguistic/XHyphenator.hpp>
+#ifndef _COM_SUN_STAR_LINGUISTIC2_XHYPHENATOR_HPP_
+#include <com/sun/star/linguistic2/XHyphenator.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LINGUISTIC2_XLINGUSERVICEMANAGER_HPP_
+#include <com/sun/star/linguistic2/XLinguServiceManager.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LINGUISTIC2_XSPELLCHECKER1_HPP_
+#include <com/sun/star/linguistic2/XSpellChecker1.hpp>
 #endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -150,6 +159,8 @@
 #include <tools/isolang.hxx>
 #endif
 #include <unotools/charclass.hxx>
+#include <unotools/processfactory.hxx>
+
 
 #include "drawdoc.hxx"
 #include "sdpage.hxx"
@@ -185,7 +196,11 @@
 #include "frmview.hxx"
 #endif
 
+using namespace ::rtl;
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::linguistic2;
 
 TYPEINIT1( SdDrawDocument, FmFormModel );
 
@@ -359,14 +374,18 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh) :
 
     try
     {
-        uno::Reference< linguistic::XSpellChecker1 > xSpellChecker( SvxGetSpellChecker() );
-        if ( xSpellChecker.is() )
-            rOutliner.SetSpeller(xSpellChecker);
+        Reference< XMultiServiceFactory > xMgr( ::utl::getProcessServiceFactory() );
+        Reference< XLinguServiceManager > xLinguServiceManager( xMgr->createInstance(
+            OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.linguistic2.LinguServiceManager" ))),
+                                                            uno::UNO_QUERY );
 
-        uno::Reference< linguistic::XHyphenator > xHyphenator( OFF_APP()->GetHyphenator() );
+        Reference< XSpellChecker1 > xSpellChecker( xLinguServiceManager->getSpellChecker(), UNO_QUERY );
+        if ( xSpellChecker.is() )
+            rOutliner.SetSpeller( xSpellChecker );
+
+        Reference< XHyphenator > xHyphenator( xLinguServiceManager->getHyphenator(), UNO_QUERY );
         if( xHyphenator.is() )
             rOutliner.SetHyphenator( xHyphenator );
-
     }
     catch(...)
     {
@@ -396,13 +415,21 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh) :
     pHitTestOutliner->SetCalcFieldValueHdl( LINK(SFX_APP(), SdModule, CalcFieldValueHdl) );
     try
     {
-        uno::Reference< linguistic::XSpellChecker1 > xSpellChecker( SvxGetSpellChecker() );
-        if ( xSpellChecker.is() )
-            pHitTestOutliner->SetSpeller( xSpellChecker );
+        Reference< XMultiServiceFactory > xMgr( ::utl::getProcessServiceFactory() );
+        Reference< XLinguServiceManager > xLinguServiceManager( xMgr->createInstance(
+            OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.linguistic2.LinguServiceManager" ))),
+                                                            uno::UNO_QUERY );
 
-        uno::Reference< linguistic::XHyphenator > xHyphenator( OFF_APP()->GetHyphenator() );
-        if( xHyphenator.is() )
-            pHitTestOutliner->SetHyphenator( xHyphenator );
+        if ( xLinguServiceManager.is() )
+        {
+            Reference< XSpellChecker1 > xSpellChecker( xLinguServiceManager->getSpellChecker(), UNO_QUERY );
+            if ( xSpellChecker.is() )
+                pHitTestOutliner->SetSpeller( xSpellChecker );
+
+            Reference< XHyphenator > xHyphenator( xLinguServiceManager->getHyphenator(), UNO_QUERY );
+            if( xHyphenator.is() )
+                pHitTestOutliner->SetHyphenator( xHyphenator );
+        }
     }
     catch(...)
     {

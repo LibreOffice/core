@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futext.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tbe $ $Date: 2000-10-23 10:38:55 $
+ *  last change: $Author: dl $ $Date: 2000-10-25 10:28:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,6 +127,13 @@
 #ifndef _UNO_LINGU_HXX
 #include <svx/unolingu.hxx>
 #endif
+#ifndef _COM_SUN_STAR_LINGUISTIC2_XLINGUSERVICEMANAGER_HPP_
+#include <com/sun/star/linguistic2/XLinguServiceManager.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LINGUISTIC2_XSPELLCHECKER1_HPP_
+#include <com/sun/star/linguistic2/XSpellChecker1.hpp>
+#endif
+#include <unotools/processfactory.hxx>
 
 #include "sdresid.hxx"
 #include "app.hrc"
@@ -144,7 +151,11 @@
 #include "glob.hrc"
 #include "pres.hxx"
 
+using namespace ::rtl;
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::linguistic2;
 
 static USHORT SidArray[] = {
     SID_STYLE_FAMILY2,                //    5542
@@ -947,13 +958,21 @@ void FuText::SetInEditMode(const MouseEvent& rMEvt, BOOL bQuickDrag)
 
                 pOutl->SetControlWord(nCntrl);
 
-                uno::Reference< linguistic::XSpellChecker1 > xSpellChecker( SvxGetSpellChecker() );
-                if ( xSpellChecker.is() )
-                    pOutl->SetSpeller(xSpellChecker);
+                Reference< XMultiServiceFactory > xMgr( ::utl::getProcessServiceFactory() );
+                Reference< XLinguServiceManager > xLinguServiceManager( xMgr->createInstance(
+                    OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.linguistic2.LinguServiceManager" ))),
+                                                                    uno::UNO_QUERY );
 
-                uno::Reference< linguistic::XHyphenator > xHyphenator( OFF_APP()->GetHyphenator() );
-                if( xHyphenator.is() )
-                    pOutl->SetHyphenator( xHyphenator );
+                if ( xLinguServiceManager.is() )
+                {
+                    Reference< XSpellChecker1 > xSpellChecker( xLinguServiceManager->getSpellChecker(), UNO_QUERY );
+                    if ( xSpellChecker.is() )
+                        pOutl->SetSpeller( xSpellChecker );
+
+                    Reference< XHyphenator > xHyphenator( xLinguServiceManager->getHyphenator(), UNO_QUERY );
+                    if( xHyphenator.is() )
+                        pOutl->SetHyphenator( xHyphenator );
+                }
 
                 pOutl->SetDefaultLanguage( pDoc->GetLanguage() );
 
