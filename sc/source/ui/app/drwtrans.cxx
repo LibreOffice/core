@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwtrans.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: nn $ $Date: 2001-10-11 10:06:29 $
+ *  last change: $Author: er $ $Date: 2001-10-25 17:42:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,7 +121,8 @@ ScDrawTransferObj::ScDrawTransferObj( SdrModel* pClipModel, ScDocShell* pContain
     bOleObj( FALSE ),
     pDragSourceView( NULL ),
     nDragSourceFlags( 0 ),
-    bDragWasInternal( FALSE )
+    bDragWasInternal( FALSE ),
+    nSourceDocID( 0 )
 {
     //
     //  check what kind of objects are contained
@@ -230,6 +231,16 @@ ScDrawTransferObj::ScDrawTransferObj( SdrModel* pClipModel, ScDocShell* pContain
     aView.MarkAll(pPv);
     aSrcSize = aView.GetAllMarkedRect().GetSize();
     aObjDesc.maSize = aSrcSize;
+
+    //
+    // remember a unique ID of the source document
+    //
+    if ( pContainerShell )
+    {
+        const ScDocument* pDoc = pContainerShell->GetDocument();
+        if ( pDoc )
+            nSourceDocID = pDoc->GetDocumentID();
+    }
 }
 
 ScDrawTransferObj::~ScDrawTransferObj()

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawvie4.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: nn $ $Date: 2001-07-11 14:13:45 $
+ *  last change: $Author: er $ $Date: 2001-10-25 17:46:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,28 +110,19 @@ Point aDragStartDiff;
 void lcl_CheckOle( const SdrMarkList& rMarkList, BOOL& rAnyOle, BOOL& rOneOle )
 {
     rAnyOle = rOneOle = FALSE;
-
     ULONG nCount = rMarkList.GetMarkCount();
-    if (nCount == 1)
+    for (ULONG i=0; i<nCount; i++)
     {
-        SdrMark* pMark = rMarkList.GetMark(0);
+        SdrMark* pMark = rMarkList.GetMark(i);
         SdrObject* pObj = pMark->GetObj();
         UINT16 nSdrObjKind = pObj->GetObjIdentifier();
         if (nSdrObjKind == OBJ_OLE2)
-            rAnyOle = rOneOle = TRUE;
-    }
-    else
-        for (ULONG i=0; i<nCount; i++)
         {
-            SdrMark* pMark = rMarkList.GetMark(i);
-            SdrObject* pObj = pMark->GetObj();
-            UINT16 nSdrObjKind = pObj->GetObjIdentifier();
-            if (nSdrObjKind == OBJ_OLE2)
-            {
-                rAnyOle = TRUE;
-                break;
-            }
+            rAnyOle = TRUE;
+            rOneOle = (nCount == 1);
+            break;
         }
+    }
 }
 
 #if 0
@@ -169,6 +160,7 @@ void lcl_RefreshChartData( SdrModel* pModel, ScDocument* pSourceDoc )
     }
 }
 #endif
+
 
 BOOL ScDrawView::BeginDrag( Window* pWindow, const Point& rStartPos )
 {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun7.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-14 08:43:38 $
+ *  last change: $Author: er $ $Date: 2001-10-25 17:46:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,7 +115,8 @@ void lcl_AdjustInsertPos( ScViewData* pData, Point& rPos, Size& rSize )
     rPos.Y() += rSize.Height() / 2;
 }
 
-void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel, BOOL bGroup )
+void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
+        BOOL bGroup, BOOL bSameDocClipboard )
 {
     MakeDrawLayer();
     Point aPos( rLogicPos );
@@ -215,7 +216,15 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel, BOOL bGrou
         if ( pClient && pClient->IsInPlaceActive() )
             nOptions |= SDRINSERT_DONTMARK;
 
+        // #89247# Set flag for ScDocument::UpdateChartListeners() which is
+        // called during paste.
+        if ( !bSameDocClipboard )
+            GetViewData()->GetDocument()->SetPastingDrawFromOtherDoc( TRUE );
+
         pDrawView->Paste( *pModel, aPos, NULL, nOptions );
+
+        if ( !bSameDocClipboard )
+            GetViewData()->GetDocument()->SetPastingDrawFromOtherDoc( FALSE );
 
         // #68991# Paste puts all objects on the active (front) layer
         // controls must be on SC_LAYER_CONTROLS

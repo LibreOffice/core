@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun5.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: nn $ $Date: 2001-10-19 12:11:59 $
+ *  last change: $Author: er $ $Date: 2001-10-25 17:46:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,9 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
                     const uno::Reference<datatransfer::XTransferable>& rxTransferable,
                     USHORT nPosX, USHORT nPosY, Point* pLogicPos )
 {
+    ScDocument* pDoc = GetViewData()->GetDocument();
+    pDoc->SetPastingDrawFromOtherDoc( TRUE );
+
     Point aPos;                     //  inserting position (1/100 mm)
     if (pLogicPos)
         aPos = *pLogicPos;
@@ -538,6 +541,8 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
     {
         bRet = PasteBookmark( nFormatId, rxTransferable, nPosX, nPosY );
     }
+
+    pDoc->SetPastingDrawFromOtherDoc( FALSE );
 
     return bRet;
 }

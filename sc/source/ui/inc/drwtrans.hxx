@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwtrans.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-11 18:26:59 $
+ *  last change: $Author: er $ $Date: 2001-10-25 17:43:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,8 @@ private:
     USHORT                          nDragSourceFlags;
     BOOL                            bDragWasInternal;
 
+    sal_uInt32                      nSourceDocID;
+
 
     void                InitDocShell();
     SvInPlaceObjectRef  GetSingleObject();
@@ -128,6 +130,10 @@ public:
 
     SdrView*            GetDragSourceView()             { return pDragSourceView; }
     USHORT              GetDragSourceFlags() const      { return nDragSourceFlags; }
+
+    void                SetSourceDocID( sal_uInt32 nVal )
+                            { nSourceDocID = nVal; }
+    sal_uInt32          GetSourceDocID() const      { return nSourceDocID; }
 
     static ScDrawTransferObj* GetOwnClipboard( Window* pUIWin );
 };

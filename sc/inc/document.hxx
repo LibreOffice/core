@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: nn $ $Date: 2001-10-19 15:56:12 $
+ *  last change: $Author: er $ $Date: 2001-10-25 17:36:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -417,6 +417,8 @@ private:
     USHORT              nHardRecalcState;               // 0: soft, 1: hard-warn, 2: hard
     USHORT              nVisibleTab;                    // fuer OLE etc.
 
+    ScLkUpdMode         eLinkMode;
+
     BOOL                bProtected;
     BOOL                bAutoCalc;                      // Automatisch Berechnen
     BOOL                bAutoCalcShellDisabled;         // in/von/fuer ScDocShell disabled
@@ -466,9 +468,9 @@ private:
     BYTE                nAsianCompression;
     BYTE                nAsianKerning;
 
-    inline BOOL         RowHidden( USHORT nRow, USHORT nTab );      // FillInfo
+    BOOL                bPastingDrawFromOtherDoc;
 
-    ScLkUpdMode         eLinkMode;
+    inline BOOL         RowHidden( USHORT nRow, USHORT nTab );      // FillInfo
 
 public:
     long            GetCellCount() const;       // alle Zellen
@@ -1539,6 +1541,14 @@ public:
     BOOL            SymbolStringCellsPending() const;
                     /// get list of ScSymbolStringCellEntry, create if necessary
     List&           GetLoadedSymbolStringCellsList();
+
+    void            SetPastingDrawFromOtherDoc( BOOL bVal )
+                        { bPastingDrawFromOtherDoc = bVal; }
+    BOOL            PastingDrawFromOtherDoc() const
+                        { return bPastingDrawFromOtherDoc; }
+
+                    /// an ID unique to each document instance
+    sal_uInt32      GetDocumentID() const;
 
 private: // CLOOK-Impl-Methoden
     void    ImplLoadDocOptions( SvStream& rStream );

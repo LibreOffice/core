@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfunc.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: nn $ $Date: 2001-08-20 17:00:27 $
+ *  last change: $Author: er $ $Date: 2001-10-25 17:43:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,7 +155,7 @@ public:
 
     void            PasteDraw();
     void            PasteDraw( const Point& rLogicPos, SdrModel* pModel,
-                                BOOL bGroup = FALSE );
+                                BOOL bGroup = FALSE, BOOL bSameDocClipboard = FALSE );
 
     BOOL            PasteOnDrawObject( const ::com::sun::star::uno::Reference<
                                             ::com::sun::star::datatransfer::XTransferable >& rxTransferable,

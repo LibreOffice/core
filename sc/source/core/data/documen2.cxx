@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen2.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: nn $ $Date: 2001-10-19 15:57:42 $
+ *  last change: $Author: er $ $Date: 2001-10-25 17:40:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -271,6 +271,9 @@
 #ifndef _LIST_HXX
 #include <tools/list.hxx>
 #endif
+#ifndef _RTL_CRC_H_
+#include <rtl/crc.h>
+#endif
 
 #include "document.hxx"
 #include "table.hxx"
@@ -376,7 +379,8 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
         pScriptTypeData( NULL ),
         nAsianCompression(SC_ASIANCOMPRESSION_INVALID),
         nAsianKerning(SC_ASIANKERNING_INVALID),
-        pLoadedSymbolStringCellList( NULL )
+        pLoadedSymbolStringCellList( NULL ),
+        bPastingDrawFromOtherDoc( FALSE )
 {
     eSrcSet = gsl_getSystemTextEncoding();
     nSrcVer = SC_CURRENT_VERSION;
@@ -419,6 +423,17 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
     aTrackTimer.SetTimeoutHdl( LINK( this, ScDocument, TrackTimeHdl ) );
     aTrackTimer.SetTimeout( 100 );
 }
+
+
+sal_uInt32 ScDocument::GetDocumentID() const
+{
+    const ScDocument* pThis = this;
+    sal_uInt32 nCrc = rtl_crc32( 0, &pThis, sizeof(ScDocument*) );
+    // the this pointer only might not be sufficient
+    nCrc = rtl_crc32( nCrc, &pShell, sizeof(SfxObjectShell*) );
+    return nCrc;
+}
+
 
 void ScDocument::StartChangeTracking()
 {

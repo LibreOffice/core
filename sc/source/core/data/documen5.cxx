@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen5.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: nn $ $Date: 2001-10-04 20:00:19 $
+ *  last change: $Author: er $ $Date: 2001-10-25 17:40:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -525,48 +525,66 @@ void ScDocument::UpdateChartListenerCollection()
                                     ((!bSO6 && pChartData->SomeData1().Len()) ||
                                     (bSO6 && pChartData->GetChartRange().maRanges.size())) )
                                 {
-                                    bIsChart = TRUE;
-
-                                    ScChartArray aArray( this, *pChartData );
-                                    ScChartListener* pCL = new ScChartListener(
-                                        aObjName,
-                                        this, aArray.GetRangeList() );
-                                    pChartListenerCollection->Insert( pCL );
-                                    pCL->StartListeningTo();
-                                    pCL->SetUsed( TRUE );
-
-                                    //  Set ReadOnly flag at MemChart, so Chart knows
-                                    //  about the external data in a freshly loaded document.
-                                    //  #73642# only if the chart really has external data
-                                    if ( aArray.IsValid() )
+                                    if ( PastingDrawFromOtherDoc() )
                                     {
-                                        pChartData->SetReadOnly( TRUE );
-
-                                        //  #81525# re-create series ranges from old extra string
-                                        //  if not set (after loading)
-                                        if ( !bSO6 )
-                                            aArray.SetExtraStrings( *pChartData );
+                                        // #89247# Remove series ranges from
+                                        // charts not originating from the
+                                        // same document, they become true OLE
+                                        // objects.
+                                        pChartData->SomeData1().Erase();
+                                        pChartData->SomeData2().Erase();
+                                        pChartData->SomeData3().Erase();
+                                        pChartData->SomeData4().Erase();
+                                        SchChartRange aChartRange;
+                                        pChartData->SetChartRange( aChartRange );
+                                        pChartData->SetReadOnly( FALSE );
+                                        SchDLL::Update( aIPObj, pChartData );
                                     }
+                                    else
+                                    {
+                                        bIsChart = TRUE;
+
+                                        ScChartArray aArray( this, *pChartData );
+                                        ScChartListener* pCL = new ScChartListener(
+                                            aObjName,
+                                            this, aArray.GetRangeList() );
+                                        pChartListenerCollection->Insert( pCL );
+                                        pCL->StartListeningTo();
+                                        pCL->SetUsed( TRUE );
+
+                                        //  Set ReadOnly flag at MemChart, so Chart knows
+                                        //  about the external data in a freshly loaded document.
+                                        //  #73642# only if the chart really has external data
+                                        if ( aArray.IsValid() )
+                                        {
+                                            pChartData->SetReadOnly( TRUE );
+
+                                            //  #81525# re-create series ranges from old extra string
+                                            //  if not set (after loading)
+                                            if ( !bSO6 )
+                                                aArray.SetExtraStrings( *pChartData );
+                                        }
 
 #if 1
 // #74046# initially loaded charts need the number formatter standard precision
-                                    BOOL bEnabled = aIPObj->IsEnableSetModified();
-                                    if (bEnabled)
-                                        aIPObj->EnableSetModified(FALSE);
-                                    pChartData->SetNumberFormatter( GetFormatTable() );
-                                    SchDLL::Update( aIPObj, pChartData );
-                                    //! pChartData got deleted, don't use it anymore
-                                    if (bEnabled)
-                                        aIPObj->EnableSetModified(TRUE);
+                                        BOOL bEnabled = aIPObj->IsEnableSetModified();
+                                        if (bEnabled)
+                                            aIPObj->EnableSetModified(FALSE);
+                                        pChartData->SetNumberFormatter( GetFormatTable() );
+                                        SchDLL::Update( aIPObj, pChartData );
+                                        //! pChartData got deleted, don't use it anymore
+                                        if (bEnabled)
+                                            aIPObj->EnableSetModified(TRUE);
 #ifndef PRODUCT
-//                                  static BOOL bShown74046 = 0;
-//                                  if ( !bShown74046 && SOFFICE_FILEFORMAT_NOW > SOFFICE_FILEFORMAT_50 )
-//                                  {
-//                                      bShown74046 = 1;
-//                                      DBG_ERRORFILE( "on incompatible file format save number formatter standard precision in chart" );
-//                                  }
+//                                      static BOOL bShown74046 = 0;
+//                                      if ( !bShown74046 && SOFFICE_FILEFORMAT_NOW > SOFFICE_FILEFORMAT_50 )
+//                                      {
+//                                          bShown74046 = 1;
+//                                          DBG_ERRORFILE( "on incompatible file format save number formatter standard precision in chart" );
+//                                      }
 #endif
 #endif
+                                    }
                                 }
                             }
                             if (!bIsChart)

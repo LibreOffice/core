@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun3.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: nn $ $Date: 2001-10-18 20:31:07 $
+ *  last change: $Author: er $ $Date: 2001-10-25 17:46:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -403,7 +403,8 @@ void ScViewFunc::PasteDraw()
                                      pViewData->GetActivePart() ) );
     ScDrawTransferObj* pDrawClip = ScDrawTransferObj::GetOwnClipboard( pWin );
     if (pDrawClip)
-        PasteDraw( aPos, pDrawClip->GetModel() );
+        PasteDraw( aPos, pDrawClip->GetModel(), FALSE,
+            pDrawClip->GetSourceDocID() == pViewData->GetDocument()->GetDocumentID() );
 }
 
 void ScViewFunc::PasteFromSystem()
