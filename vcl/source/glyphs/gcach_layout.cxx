@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_layout.cxx,v $
  *
- *  $Revision: 1.20 $
- *  last change: $Author: hr $ $Date: 2003-03-27 17:58:13 $
+ *  $Revision: 1.21 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:06:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  ************************************************************************/
 
 #define ENABLE_ICU_LAYOUT
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 //#define VERBOSE_DEBUG
 #endif
 
@@ -83,7 +83,7 @@
 #include <alloca.h>
 #endif
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 #include <cstdio>
 #endif
 
@@ -335,7 +335,7 @@ le_bool IcuFontFromServerFont::getGlyphPoint( LEGlyphID glyph,
     le_int32 pointNumber, LEPoint& point ) const
 {
     //TODO: replace dummy implementation
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     fprintf(stderr,"getGlyphPoint(%d)\n", pointNumber );
 #endif
     return false;
