@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeimport.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-26 19:46:41 $
+ *  last change: $Author: cl $ $Date: 2000-11-27 11:15:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -774,8 +774,9 @@ SvXMLImportContext* XMLShapeImportHelper::CreateGroupChildContext(
             pContext = new SdXMLGraphicObjectShapeContext( rImport, nPrefix, rLocalName, xAttrList, rShapes );
             break;
         }
-
         // add other shapes here...
+        default:
+            return new SvXMLImportContext( rImport, nPrefix, rLocalName );
     }
 
     // now parse the attribute list and call the child context for each unknown attribute
