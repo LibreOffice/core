@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: nn $ $Date: 2001-06-22 19:55:20 $
+ *  last change: $Author: nn $ $Date: 2001-06-26 18:52:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -597,6 +597,9 @@ BOOL __EXPORT ScDocShell::Load( SvStorage* pStor )
 
     if (!bRet && !pStor->GetError())
         pStor->SetError( SVSTREAM_FILEFORMAT_ERROR );
+
+    if (pStor->GetError())
+        SetError( pStor->GetError() );
 
     InitItems();
     CalcOutputFactor();
