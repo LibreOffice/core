@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLDDELinksContext.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 07:46:12 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 12:48:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,7 +206,7 @@ void ScXMLDDELinkContext::AddCellToRow(const ScDDELinkCell& aCell)
 
 void ScXMLDDELinkContext::AddRowsToTable(const sal_Int32 nRows)
 {
-    for (sal_Int32 i = 0; i < nRows; i++)
+    for (sal_Int32 i = 0; i < nRows; ++i)
         aDDELinkTable.insert(aDDELinkTable.end(), aDDELinkRow.begin(), aDDELinkRow.end());
     aDDELinkRow.clear();
 }
@@ -221,15 +221,17 @@ void ScXMLDDELinkContext::EndElement()
         sal_Int32 nCol(0);
         sal_Int32 nRow(-1);
         sal_Int32 nIndex(0);
-        for (ScDDELinkCells::iterator aItr = aDDELinkTable.begin(); aItr != aDDELinkTable.end(); ++aItr)
+        ScDDELinkCells::iterator aItr(aDDELinkTable.begin());
+        ScDDELinkCells::iterator aEndItr(aDDELinkTable.end());
+        while (aItr != aEndItr)
         {
             if (nIndex % nColumns == 0)
             {
-                nRow++;
+                ++nRow;
                 nCol = 0;
             }
             else
-                nCol++;
+                ++nCol;
 
             SCSIZE nScCol( static_cast< SCSIZE >( nCol ) );
             SCSIZE nScRow( static_cast< SCSIZE >( nRow ) );
@@ -240,7 +242,8 @@ void ScXMLDDELinkContext::EndElement()
             else
                 pMatrix->PutDouble( aItr->fValue, nScCol, nScRow );
 
-            nIndex++;
+            ++nIndex;
+            ++aItr;
         }
 
         GetScImport().GetDocument()->SetDdeLinkResultMatrix( static_cast< USHORT >( nPosition ), pMatrix );
@@ -260,10 +263,10 @@ ScXMLDDESourceContext::ScXMLDDESourceContext( ScXMLImport& rImport,
 
     sal_Int16               nAttrCount      = xAttrList->getLength();
 
-    for( sal_Int16 nIndex = 0; nIndex < nAttrCount; nIndex++ )
+    for( sal_Int16 nIndex = 0; nIndex < nAttrCount; ++nIndex )
     {
-        OUString sAttrName  = xAttrList->getNameByIndex( nIndex );
-        OUString sValue     = xAttrList->getValueByIndex( nIndex );
+        const rtl::OUString& sAttrName  (xAttrList->getNameByIndex( nIndex ));
+        const rtl::OUString& sValue     (xAttrList->getValueByIndex( nIndex ));
         OUString aLocalName;
         USHORT nPrefix      = GetScImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
 
@@ -358,10 +361,10 @@ ScXMLDDEColumnContext::ScXMLDDEColumnContext( ScXMLImport& rImport,
 
     sal_Int16               nAttrCount      = xAttrList->getLength();
 
-    for( sal_Int16 nIndex = 0; nIndex < nAttrCount; nIndex++ )
+    for( sal_Int16 nIndex = 0; nIndex < nAttrCount; ++nIndex )
     {
-        OUString sAttrName  = xAttrList->getNameByIndex( nIndex );
-        OUString sValue     = xAttrList->getValueByIndex( nIndex );
+        const rtl::OUString& sAttrName  (xAttrList->getNameByIndex( nIndex ));
+        const rtl::OUString& sValue     (xAttrList->getValueByIndex( nIndex ));
         OUString aLocalName;
         USHORT nPrefix      = GetScImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
 
@@ -404,10 +407,10 @@ ScXMLDDERowContext::ScXMLDDERowContext( ScXMLImport& rImport,
 
     sal_Int16               nAttrCount      = xAttrList->getLength();
 
-    for( sal_Int16 nIndex = 0; nIndex < nAttrCount; nIndex++ )
+    for( sal_Int16 nIndex = 0; nIndex < nAttrCount; ++nIndex )
     {
-        OUString sAttrName  = xAttrList->getNameByIndex( nIndex );
-        OUString sValue     = xAttrList->getValueByIndex( nIndex );
+        const rtl::OUString& sAttrName  (xAttrList->getNameByIndex( nIndex ));
+        const rtl::OUString& sValue     (xAttrList->getValueByIndex( nIndex ));
         OUString aLocalName;
         USHORT nPrefix      = GetScImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
 
@@ -463,10 +466,10 @@ ScXMLDDECellContext::ScXMLDDECellContext( ScXMLImport& rImport,
 
     sal_Int16               nAttrCount      = xAttrList->getLength();
 
-    for( sal_Int16 nIndex = 0; nIndex < nAttrCount; nIndex++ )
+    for( sal_Int16 nIndex = 0; nIndex < nAttrCount; ++nIndex )
     {
-        OUString sAttrName  = xAttrList->getNameByIndex( nIndex );
-        OUString sTempValue     = xAttrList->getValueByIndex( nIndex );
+        const rtl::OUString& sAttrName  (xAttrList->getNameByIndex( nIndex ));
+        const rtl::OUString& sTempValue (xAttrList->getValueByIndex( nIndex ));
         OUString aLocalName;
         USHORT nPrefix      = GetScImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
 
@@ -522,6 +525,6 @@ void ScXMLDDECellContext::EndElement()
     aCell.fValue = fValue;
     aCell.bEmpty = bEmpty;
     aCell.bString = bString2;
-    for(sal_Int32 i = 0; i < nCells; i++)
+    for(sal_Int32 i = 0; i < nCells; ++i)
         pDDELink->AddCellToRow(aCell);
 }
