@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toxhlp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 10:54:23 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:39:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,25 +162,6 @@ IndexEntrySupplierWrapper::GetAlgorithmList( const STAR_NMSPC::lang::Locale& rLc
     {
 #ifndef PRODUCT
         ByteString aMsg( "getAlgorithmList: Exception caught\n" );
-        aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
-        DBG_ERRORFILE( aMsg.GetBuffer() );
-#endif
-    }
-    return sRet;
-}
-
-STAR_NMSPC::uno::Sequence < com::sun::star::lang::Locale >
-IndexEntrySupplierWrapper::GetLocaleList() const
-{
-    ::com::sun::star::uno::Sequence< com::sun::star::lang::Locale > sRet;
-
-    try {
-        sRet = xIES->getLocaleList();
-    }
-    catch ( UNO_NMSPC::Exception& e )
-    {
-#ifndef PRODUCT
-        ByteString aMsg( "getLocaleList: Exception caught\n" );
         aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
         DBG_ERRORFILE( aMsg.GetBuffer() );
 #endif
