@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 17:03:54 $
+#   last change: $Author: bmahbod $ $Date: 2000-10-06 23:53:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -97,14 +97,23 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Files -------------------------------------
 
-SLOFILES=	$(SLO)$/types.obj \
-            $(SLO)$/datetime.obj \
-            $(SLO)$/numbers.obj \
-            $(SLO)$/guarding.obj \
-            $(SLO)$/sequence.obj \
-            $(SLO)$/querydeep.obj \
-            $(SLO)$/regpathhelper.obj \
+SLOFILES=	$(SLO)$/types.obj         \
+        $(SLO)$/datetime.obj      \
+        $(SLO)$/numbers.obj       \
+        $(SLO)$/guarding.obj      \
+        $(SLO)$/sequence.obj      \
+        $(SLO)$/querydeep.obj     \
+        $(SLO)$/regpathhelper.obj
 
+
+# NETBSD: somewhere we have to instantiate the static data members.
+# NETBSD-1.2.1 doesn't know about weak symbols so the default mechanism 
+# for GCC won't work.  SCO and MACOSX: the linker does know about weak 
+# symbols, but we can't ignore multiple defined symbols
+
+.IF "$(OS)"=="NETBSD" || "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX"
+SLOFILES+=$(SLO)$/staticmbmisc.obj
+.ENDIF
 
 # --- Targets ----------------------------------
 
