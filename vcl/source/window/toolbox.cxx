@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: ssa $ $Date: 2002-04-22 14:26:53 $
+ *  last change: $Author: ssa $ $Date: 2002-04-24 12:12:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3998,7 +3998,26 @@ void ToolBox::Resize()
 
 void ToolBox::RequestHelp( const HelpEvent& rHEvt )
 {
-    USHORT nItemId = GetItemId( ScreenToOutputPixel( rHEvt.GetMousePosPixel() ) );
+    USHORT nItemId;
+    Point aHelpPos;
+
+    if( !rHEvt.KeyboardActivated() )
+    {
+        nItemId = GetItemId( ScreenToOutputPixel( rHEvt.GetMousePosPixel() ) );
+        aHelpPos = rHEvt.GetMousePosPixel();
+    }
+    else
+    {
+        if( !mnHighItemId )
+            return;
+        else
+            nItemId = mnHighItemId;
+        Rectangle aRect( GetItemRect( nItemId ) );
+        if( aRect.IsEmpty() )
+            return;
+        else
+            aHelpPos = OutputToScreenPixel( aRect.Center() );
+    }
 
     if ( nItemId )
     {
@@ -4024,7 +4043,7 @@ void ToolBox::RequestHelp( const HelpEvent& rHEvt )
                     aStr = rHelpStr;
                 else
                     aStr.EraseAllChars( '~' );
-                Help::ShowBalloon( this, rHEvt.GetMousePosPixel(), aTempRect, aStr );
+                Help::ShowBalloon( this, aHelpPos, aTempRect, aStr );
             }
             else
                 Help::ShowQuickHelp( this, aTempRect, aStr, rHelpStr, QUICKHELP_CTRLTEXT );

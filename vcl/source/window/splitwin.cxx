@@ -2,9 +2,9 @@
  *
  *  $RCSfile: splitwin.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:40 $
+ *  last change: $Author: ssa $ $Date: 2002-04-24 12:12:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2521,7 +2521,8 @@ void SplitWindow::Resize()
 
 void SplitWindow::RequestHelp( const HelpEvent& rHEvt )
 {
-    if ( rHEvt.GetMode() & (HELPMODE_BALLOON | HELPMODE_QUICK) )
+    // no keyboard help for splitwin
+    if ( rHEvt.GetMode() & (HELPMODE_BALLOON | HELPMODE_QUICK) && !rHEvt.KeyboardActivated() )
     {
         Point       aMousePosPixel = ScreenToOutputPixel( rHEvt.GetMousePosPixel() );
         Rectangle   aHelpRect;

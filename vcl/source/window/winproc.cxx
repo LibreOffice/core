@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winproc.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: ssa $ $Date: 2002-04-18 15:04:39 $
+ *  last change: $Author: ssa $ $Date: 2002-04-24 12:12:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -236,7 +236,7 @@ static BOOL ImplHandleMouseFloatMode( Window* pChild, const Point& rMousePos,
 
             if ( !pFloat || (nHitTest & IMPL_FLOATWIN_HITTEST_RECT) )
             {
-                if ( pSVData->maHelpData.mpHelpWin )
+                if ( pSVData->maHelpData.mpHelpWin && !pSVData->maHelpData.mbKeyboardHelp )
                     ImplDestroyHelpWindow();
                 pChild->mpFrame->SetPointer( POINTER_ARROW );
                 return TRUE;
@@ -428,7 +428,7 @@ long ImplHandleMouseEvent( Window* pWindow, USHORT nSVEvent, BOOL bMouseLeave,
     if ( bMouseLeave )
     {
         pWindow->mpFrameData->mbMouseIn = FALSE;
-        if ( pSVData->maHelpData.mpHelpWin )
+        if ( pSVData->maHelpData.mpHelpWin && !pSVData->maHelpData.mbKeyboardHelp )
             ImplDestroyHelpWindow();
     }
     else
@@ -840,7 +840,7 @@ long ImplHandleMouseEvent( Window* pWindow, USHORT nSVEvent, BOOL bMouseLeave,
 
     if ( nSVEvent == EVENT_MOUSEMOVE )
     {
-        if ( bCallHelpRequest )
+        if ( bCallHelpRequest && !pSVData->maHelpData.mbKeyboardHelp )
             ImplHandleMouseHelpRequest( pChild, pChild->OutputToScreenPixel( aMEvt.GetPosPixel() ) );
         nRet = 1;
     }
@@ -1101,6 +1101,18 @@ static long ImplHandleKey( Window* pWindow, USHORT nSVEvent,
                     else
                         nRet = 0;
                 }
+            }
+            else if ( (nCode == KEY_F2) && aKeyCode.IsShift() )
+            {
+                // simulate mouseposition at center of window
+                Size aSize = pChild->GetOutputSize();
+                Point aPos = Point( aSize.getWidth()/2, aSize.getHeight()/2 );
+                aPos = pChild->OutputToScreenPixel( aPos );
+
+                HelpEvent aHelpEvent( aPos, HELPMODE_BALLOON );
+                aHelpEvent.SetKeyboardActivated( TRUE );
+                pSVData->maHelpData.mbKeyboardHelp = TRUE;
+                pChild->RequestHelp( aHelpEvent );
             }
             else
             {

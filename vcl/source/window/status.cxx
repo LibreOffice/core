@@ -2,9 +2,9 @@
  *
  *  $RCSfile: status.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mt $ $Date: 2001-11-27 09:52:58 $
+ *  last change: $Author: ssa $ $Date: 2002-04-24 12:12:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -720,6 +720,10 @@ void StatusBar::Resize()
 
 void StatusBar::RequestHelp( const HelpEvent& rHEvt )
 {
+    // no keyboard help in status bar
+    if( rHEvt.KeyboardActivated() )
+        return;
+
     USHORT nItemId = GetItemId( ScreenToOutputPixel( rHEvt.GetMousePosPixel() ) );
 
     if ( nItemId )

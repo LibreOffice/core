@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brdwin.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ssa $ $Date: 2001-11-23 12:33:48 $
+ *  last change: $Author: ssa $ $Date: 2002-04-24 12:12:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3360,7 +3360,8 @@ void ImplBorderWindow::Deactivate()
 
 void ImplBorderWindow::RequestHelp( const HelpEvent& rHEvt )
 {
-    if ( rHEvt.GetMode() & (HELPMODE_BALLOON | HELPMODE_QUICK) )
+    // no keyboard help for border win
+    if ( rHEvt.GetMode() & (HELPMODE_BALLOON | HELPMODE_QUICK) && !rHEvt.KeyboardActivated() )
     {
         Point       aMousePosPixel = ScreenToOutputPixel( rHEvt.GetMousePosPixel() );
         Rectangle   aHelpRect;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabctrl.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: th $ $Date: 2001-08-13 11:06:40 $
+ *  last change: $Author: ssa $ $Date: 2002-04-24 12:10:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1228,7 +1228,7 @@ void TabControl::LoseFocus()
 
 void TabControl::RequestHelp( const HelpEvent& rHEvt )
 {
-    USHORT nItemId = GetPageId( ScreenToOutputPixel( rHEvt.GetMousePosPixel() ) );
+    USHORT nItemId = rHEvt.KeyboardActivated() ? mnCurPageId : GetPageId( ScreenToOutputPixel( rHEvt.GetMousePosPixel() ) );
 
     if ( nItemId )
     {

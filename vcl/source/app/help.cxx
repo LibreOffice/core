@@ -2,9 +2,9 @@
  *
  *  $RCSfile: help.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ssa $ $Date: 2002-03-22 14:16:55 $
+ *  last change: $Author: ssa $ $Date: 2002-04-24 12:09:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,7 @@
 #include <stdio.h>
 
 #pragma hdrstop
+
 
 // =======================================================================
 
@@ -632,6 +633,7 @@ void ImplDestroyHelpWindow( BOOL bUpdate )
         if( pHelpWin->IsVisible() )
             pWindow->Invalidate( aInvRect );
         pSVData->maHelpData.mpHelpWin = NULL;
+        pSVData->maHelpData.mbKeyboardHelp = FALSE;
         pHelpWin->Hide();
         delete pHelpWin;
     }

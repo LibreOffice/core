@@ -2,9 +2,9 @@
  *
  *  $RCSfile: decoview.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:39 $
+ *  last change: $Author: ssa $ $Date: 2002-04-24 12:12:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -917,6 +917,8 @@ static void ImplDrawFrame( OutputDevice* pDev, Rectangle& rRect,
         if ( nStyle & FRAME_DRAW_MONO )
         {
             Color aColor( COL_BLACK );
+            if( pDev->GetSettings().GetStyleSettings().GetFaceColor().IsDark() )
+                aColor = Color( COL_WHITE );
             ImplDrawDPILineRect( pDev, rRect, &aColor );
         }
         else
