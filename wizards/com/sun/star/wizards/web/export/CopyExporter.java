@@ -27,6 +27,11 @@ public class CopyExporter extends AbstractExporter{
         try {
             task.advance(true);
 
+
+            /*
+             * this will open the document, and calculate the pages/slides number
+             * in it.
+             */
             if (exporter.cp_PageType > 0) {
                 closeDocument(openDocument(source,xmsf),xmsf);
             }

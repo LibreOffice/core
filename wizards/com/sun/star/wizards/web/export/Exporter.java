@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Exporter.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $  $Date: 2004-05-19 13:20:19 $
+ *  last change: $Author: kz $  $Date: 2004-11-27 09:10:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,12 +73,17 @@ public interface Exporter {
      * This method exports a document with a specified filter.<br/>
      * The method is responsible for exporting the given source document
      * to the given target directory.
+     * The exporter *must* also set the given CGDocument sizeBytes field to the
+     * size of the converted document, *if* the target document is
+     * of a binary format.
+     * always use source.urlFilename as destination filename.
      * @param source is a CGDocument object.
      * @param target contains the URL of a directory to which the
      * file should be exported to.
      * @param xmsf this is a basic multiServiceFactory.
      * @param task - a task monitoring object. This should advance
      * (call task.advacne(true) ) 3 times, while exporting.
+     *
      */
     public boolean export(CGDocument source, String targetDirectory ,XMultiServiceFactory xmsf, Task task);
 
