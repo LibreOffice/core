@@ -2,8 +2,8 @@
  *
  *  $RCSfile: addonsoptions.cxx,v $
  *
- *  $Revision: 1.5 $
- *  last change: $Author: vg $ $Date: 2003-05-28 13:29:22 $
+ *  $Revision: 1.6 $
+ *  last change: $Author: rt $ $Date: 2004-05-21 12:36:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1038,26 +1038,29 @@ void AddonsOptions_Impl::SubstituteVariables( OUString& aURL )
 //*****************************************************************************************************************
 Image AddonsOptions_Impl::ReadImageFromURL( ImageSize nImageSize, const OUString& aImageURL )
 {
-    const Color aTransparentColor( COL_LIGHTMAGENTA );
-
     Image aImage;
 
     SvStream* pStream = UcbStreamHelper::CreateStream( aImageURL, STREAM_STD_READ );
     if ( pStream && ( pStream->GetErrorCode() == 0 ))
     {
-        Bitmap aBitmap;
+        BitmapEx aBitmapEx;
 
-        aBitmap.Read( *pStream );
+        *pStream >> aBitmapEx;
 
         const Size aSize = ( nImageSize == IMGSIZE_SMALL ) ? aImageSizeSmall : aImageSizeBig; // Sizes used for menu/toolbox images
-        if ( aBitmap.GetSizePixel() != aSize )
-            aBitmap.Scale( aSize, BMP_SCALE_INTERPOLATE );
+        if ( aBitmapEx.GetSizePixel() != aSize )
+            aBitmapEx.Scale( aSize, BMP_SCALE_INTERPOLATE );
 
-        aImage = Image( aBitmap, aTransparentColor );
+        if( !aBitmapEx.IsTransparent() )
+        {
+            DBG_ERROR( "AddonsOptions_Impl::CreateImageFromSequence: Image is not transparent" );
+            // aBitmapEx = BitmapEx( aBitmapEx.GetBitmap(), COL_LIGHTMAGENTA );
+        }
+
+        aImage = Image( aBitmapEx );
     }
 
-    if ( pStream )
-        delete pStream;
+    delete pStream;
 
     return aImage;
 }
@@ -1076,7 +1079,6 @@ void AddonsOptions_Impl::ReadAndAssociateImages( const OUString& aURL, const OUS
 
     bool        bImageFound = true;
     ImageEntry  aImageEntry;
-    Bitmap      aBitmap;
     OUString    aImageURL( aImageId );
 
     SubstituteVariables( aImageURL );
@@ -1193,20 +1195,26 @@ AddonsOptions_Impl::ImageEntry* AddonsOptions_Impl::ReadImageData( const OUStrin
 sal_Bool AddonsOptions_Impl::CreateImageFromSequence( Image& rImage, sal_Bool bBig, Sequence< sal_Int8 >& rBitmapDataSeq ) const
 {
     sal_Bool    bResult = sal_False;
-    Color       aTransparentColor( COL_LIGHTMAGENTA );
     Size        aSize = bBig ? aImageSizeBig : aImageSizeSmall; // Sizes used for menu/toolbox images
 
     if ( rBitmapDataSeq.getLength() > 0 )
     {
-        SvMemoryStream aMemStream( rBitmapDataSeq.getArray(), rBitmapDataSeq.getLength(), STREAM_STD_READ );
-        Bitmap aBitmap;
-        aBitmap.Read( aMemStream );
+        SvMemoryStream  aMemStream( rBitmapDataSeq.getArray(), rBitmapDataSeq.getLength(), STREAM_STD_READ );
+        BitmapEx        aBitmapEx;
+
+        aMemStream >> aBitmapEx;
 
         // Scale bitmap to fit the correct size for the menu/toolbar. Use best quality
-        if ( aBitmap.GetSizePixel() != aSize )
-            aBitmap.Scale( aSize, BMP_SCALE_INTERPOLATE );
+        if ( aBitmapEx.GetSizePixel() != aSize )
+            aBitmapEx.Scale( aSize, BMP_SCALE_INTERPOLATE );
 
-        rImage = Image( aBitmap, aTransparentColor );
+        if( !aBitmapEx.IsTransparent() )
+        {
+            DBG_ERROR( "AddonsOptions_Impl::CreateImageFromSequence: Image is not transparent" );
+            // aBitmapEx = BitmapEx( aBitmapEx.GetBitmap(), COL_LIGHTMAGENTA );
+        }
+
+        rImage = Image( aBitmapEx );
         bResult = sal_True;
     }
 
