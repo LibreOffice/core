@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetBase.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:51:57 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:20:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -476,7 +476,6 @@ sal_Bool SAL_CALL ORowSetBase::moveToBookmark( const Any& bookmark ) throw(SQLEx
         }
         else
         {
-            OSL_ENSURE(0,"MoveToBookmark doesn't work!");
             movementFailed();
         }
 
