@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gloshdl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2001-04-27 17:17:52 $
+ *  last change: $Author: vg $ $Date: 2001-05-18 14:30:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,6 +172,7 @@ struct TextBlockInfo_Impl
 typedef TextBlockInfo_Impl* TextBlockInfo_ImplPtr;
 SV_DECL_PTRARR_DEL( TextBlockInfoArr, TextBlockInfo_ImplPtr, 0, 4 )
 SV_IMPL_PTRARR( TextBlockInfoArr, TextBlockInfo_ImplPtr )
+SV_IMPL_REF( SwDocShell )
 /*------------------------------------------------------------------------
     Beschreibung:   Dialog fuer Bearbeiten Vorlagen
 ------------------------------------------------------------------------*/
@@ -1026,6 +1027,9 @@ String SwGlossaryHdl::GetValidShortCut( const String& rLong,
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2001/04/27 17:17:52  jp
+    use Collator for international string compare
+
     Revision 1.5  2001/03/20 10:52:16  os
     #85103# enable rename and delete for old text blocks
 
