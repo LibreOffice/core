@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileview.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: pb $ $Date: 2001-12-04 10:30:37 $
+ *  last change: $Author: pb $ $Date: 2002-08-22 11:13:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,8 @@ private:
 
     void                    OpenFolder( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aContents );
 
-    DECL_LINK( HeaderSelect_Impl, HeaderBar * );
+    DECL_LINK(              HeaderSelect_Impl, HeaderBar * );
+    DECL_LINK(              HeaderEndDrag_Impl, HeaderBar * );
 
 protected:
     virtual void GetFocus();
@@ -137,6 +138,10 @@ public:
     void                    EnableNameReplacing( sal_Bool bEnable = sal_True );
                                 // translate folder names or display doc-title instead of file name
                                 // EnableContextMenu( TRUE )/EnableDelete(TRUE) disable name replacing!
+
+                            // save and load column size and sort order
+    String                  GetConfigString() const;
+    void                    SetConfigString( const String& rCfgStr );
 };
 
 // struct SvtContentEntry ------------------------------------------------
