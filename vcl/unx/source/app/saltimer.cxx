@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saltimer.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-18 15:16:43 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 14:43:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,16 +79,20 @@
 #ifndef _SV_SALDISP_HXX
 #include <saldisp.hxx>
 #endif
-#ifndef _SV_SALTIMER_HXX
-#include <saltimer.hxx>
+#ifndef _SV_SALTIMER_H
+#include <saltimer.h>
+#endif
+#ifndef _SV_SALINST_H
+#include <salinst.h>
 #endif
 
 // -=-= SalData =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void SalData::Timeout() const
 {
-    if( pTimerProc_ )
-        pTimerProc_();
+    ImplSVData* pSVData = ImplGetSVData();
+    if( pSVData->mpSalTimer )
+        pSVData->mpSalTimer->CallCallback();
 }
 
 // -=-= SalXLib =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -117,16 +121,21 @@ inline void SalXLib::StartTimer( ULONG nMS )
 
 // -=-= SalTimer -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-/* static */ void SalTimer::SetCallback( SALTIMERPROC pProc )
-{ GetSalData()->SetCallback( pProc ); }
+SalTimer* X11SalInstance::CreateSalTimer()
+{
+    return new X11SalTimer();
+}
 
+X11SalTimer::~X11SalTimer()
+{
+}
 
-/* static */ void SalTimer::Stop()
+void X11SalTimer::Stop()
 {
     GetSalData()->GetLib()->StopTimer();
 }
 
-/* static */ void SalTimer::Start( ULONG nMS )
+void X11SalTimer::Start( ULONG nMS )
 {
     GetSalData()->GetLib()->StartTimer( nMS );
 }
