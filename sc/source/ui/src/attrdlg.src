@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attrdlg.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-17 12:10:21 $
+ *  last change: $Author: vg $ $Date: 2001-05-30 19:54:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,7 +165,7 @@ TabDialog RID_SCDLG_ATTR
                 Text[ spanish ] = "Efectos de fuente";
                 Text[ italian ] = "Effetto carattere";
                 Text[ danish ] = "Character Extension";
-                Text[ swedish ] = "Teckensnittseffekt";
+                Text[ swedish ] = "Teckeneffekt";
                 Text[ polish ] = "Efekt czcionki";
                 Text[ portuguese_brazilian ] = "Character Extension";
                 Text[ japanese ] = "М«ЭДЊш‰К";
@@ -457,7 +457,7 @@ TabPage RID_SCPAGE_PROTECTION
         Text [ spanish ] = "La protecciуn de celdas es efectiva solamente si la hoja activa estб protegida.\n\nSeleccione en 'Herramientas' la instrucciуn 'Proteger documento' y luego 'Hoja'." ;
         Text [ english_us ] = "Cell protection is only effective after the current sheet has been protected. \n\nSelect 'Protect Document' from the 'Tools' menu, and specify 'Sheet'." ;
         Text[ chinese_simplified ] = "Ц»УРФЪДъј¤»о±Ј»¤№¤Чч±нєуЈ¬µҐФЄёсІЕ»бКЬµЅ±Ј»¤ЎЈ\n\nЗлДъ°ґ»чІЛµҐГьБоЎ°№¤ѕЯЎ±Ј¬Ў°±Ј»¤ОДµµЎ±Ј¬Ў°№¤Чч±нЎ±ЎЈ";
-        Text[ russian ] = "Защита ячейки действует только после защиты текущего листа.\n\nДля защиты листа выберите в меню 'Сервис' команду 'Защита документа', а затем к";
+        Text[ russian ] = "Защита ячейки действует только после установления защиты текущего листа.\n\nДля защиты листа выберите в меню 'Сервис' команду 'Защита документа', а затем команду 'Лист'.";
         Text[ polish ] = "Ochrona komуrek aktywna bкdzie dopiero po zabezpieczeniu aktualnego arkusza.\n\nNaleїy wybraж w tym celu z menu 'Narzкdzia' polecenie 'Chroс dokument', a nastкpnie polecenie 'Arkusz'.";
         Text[ japanese ] = "ѕЩ‚М•ЫЊм‚НЊ»ЌЭ‚М•\\‚Є•ЫЊм‚і‚к‚Д‚ў‚йЋћ‚М‚Э—LЊш‚Е‚·ЃB\n\n•\\‚р•ЫЊм‚·‚й‚Й‚НЃAТЖ­°‚ЕВ°ЩЃЁДЮ·­ТЭД‚М•ЫЊмЃЁ•\\‚р‘I‘р‚µ‚Ь‚·ЃB";
         Text[ chinese_traditional ] = "Ґu¦і¦b±z±Т°К«OЕ@¤u§@Єн«бЎAАx¦s®ж¤~·|ЁьЁм«OЕ@ЎC\n\nЅР±z«ц¤@¤Uіo­УҐ\\ЇаЄн«ьҐOЎG\"«OЕ@¤еҐу\"ЎA\"¤u§@Єн\"ЎC";
