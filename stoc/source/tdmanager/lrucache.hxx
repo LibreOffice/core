@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lrucache.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2001-05-10 14:35:25 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 14:31:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,7 +191,7 @@ inline sal_Bool LRU_Cache< t_Key, t_Val, t_KeyHash, t_KeyEqual >::hasValue(
     t_Key const & rKey ) const
 {
     ::osl::MutexGuard aGuard( _aCacheMutex );
-    t_Key2Element::const_iterator const iFind( _aKey2Element.find( rKey ) );
+    typename t_Key2Element::const_iterator const iFind( _aKey2Element.find( rKey ) );
     return (iFind != _aKey2Element.end());
 }
 //__________________________________________________________________________________________________
@@ -200,7 +200,7 @@ inline t_Val LRU_Cache< t_Key, t_Val, t_KeyHash, t_KeyEqual >::getValue(
     t_Key const & rKey ) const
 {
     ::osl::MutexGuard aGuard( _aCacheMutex );
-    const t_Key2Element::const_iterator iFind( _aKey2Element.find( rKey ) );
+    const typename t_Key2Element::const_iterator iFind( _aKey2Element.find( rKey ) );
     if (iFind != _aKey2Element.end())
     {
         CacheEntry * pEntry = (*iFind).second;
@@ -222,7 +222,7 @@ inline void LRU_Cache< t_Key, t_Val, t_KeyHash, t_KeyEqual >::setValue(
     if (_nCachedElements > 0)
     {
         ::osl::MutexGuard aGuard( _aCacheMutex );
-        t_Key2Element::const_iterator const iFind( _aKey2Element.find( rKey ) );
+        typename t_Key2Element::const_iterator const iFind( _aKey2Element.find( rKey ) );
 
         CacheEntry * pEntry;
         if (iFind == _aKey2Element.end())
