@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.25 $
-# Date:        $Date: 2004-10-27 16:17:53 $
+# Version:     $Revision: 1.26 $
+# Date:        $Date: 2004-11-15 14:11:32 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -1706,6 +1706,7 @@ ToFile( "WITH_LIBSN",        "@WITH_LIBSN@",       "e" );
 ToFile( "LIBSN_CFLAGS",      "@LIBSN_CFLAGS@",     "e" );
 ToFile( "LIBSN_LIBS",        "@LIBSN_LIBS@",       "e" );
 ToFile( "WITH_MOZILLA",      "@WITH_MOZILLA@",     "e" );
+ToFile( "WITH_OPENLDAP",     "@WITH_OPENLDAP@",    "e" );
 ToFile( "WITH_FONTS",        "@WITH_FONTS@",       "e" );
 if ( '@ENABLE_RPATH@' eq "no" ) {
   ToFile( "LINKFLAGSRUNPATH",'',                   "e" );
