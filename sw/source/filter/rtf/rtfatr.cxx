@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfatr.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:34:15 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 12:46:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,8 +75,8 @@
 #include <com/sun/star/i18n/ScriptType.hdl>
 #endif
 
-#ifndef _OUTDEV_HXX //autogen
-#include <vcl/outdev.hxx>
+#ifndef _SV_CVTGRF_HXX
+#include <vcl/cvtgrf.hxx>
 #endif
 #ifndef SVTOOLS_URIHELPER_HXX
 #include <svtools/urihelper.hxx>
@@ -364,6 +364,11 @@
 #ifndef _FMTROWSPLT_HXX //autogen
 #include <fmtrowsplt.hxx>
 #endif
+
+#ifndef SW_MS_MSFILTER_HXX
+#include <msfilter.hxx>
+#endif
+
 
 
 
@@ -727,7 +732,7 @@ void OutRTF_SwFlyFrmFmt( SwRTFWriter& rRTFWrt )
     if( rRTFWrt.bOutFmtAttr )
     {
         rRTFWrt.Strm() << ' ';
-        rRTFWrt.bOutFmtAttr = FALSE;
+        rRTFWrt.bOutFmtAttr = false;
     }
     // gebe erstmal alle RTF-Spezifischen Attribute aus
     rRTFWrt.bRTFFlySyntax = TRUE;
@@ -741,7 +746,7 @@ void OutRTF_SwFlyFrmFmt( SwRTFWriter& rRTFWrt )
         SvStream* pSaveStrm = &rRTFWrt.Strm();
         rRTFWrt.SetStrm( aTmpStrm );
 
-        rRTFWrt.bRTFFlySyntax = FALSE;
+        rRTFWrt.bRTFFlySyntax = false;
         OutRTF_SwFmt( rRTFWrt, *rRTFWrt.pFlyFmt );
 
         rRTFWrt.SetStrm( *pSaveStrm );  // Stream-Pointer wieder zurueck
@@ -827,7 +832,8 @@ public:
 
     const SfxPoolItem* HasItem( USHORT nWhich ) const;
     const SfxPoolItem& GetItem( USHORT nWhich ) const;
-    void OutFontAttrs( USHORT nScript );
+    void OutFontAttrs(const SfxPoolItem &rItem);
+    void OutFontAttrs(USHORT nScript, bool bRTL);
 
     SfxItemPool& GetPool() {return *rNode.GetSwAttrSet().GetPool(); }
 };
@@ -852,70 +858,13 @@ BOOL SttEndPos::HasScriptChange() const
     for( USHORT n = 0, nEnd = aArr.Count(); n < nEnd; ++n )
         if( RES_FLTR_SCRIPTTYPE == aArr[ n ]->Which() )
             return TRUE;
-    return FALSE;
+    return false;
 }
 
 void SttEndPos::AddAttr( const SfxPoolItem& rAttr )
 {
-#if 1
     const SfxPoolItem* pI = &rAttr;
     aArr.Insert(pI, aArr.Count());
-#else
-    const SfxPoolItem* pI = &rAttr;
-    USHORT n = aArr.Count();
-    switch( rAttr.Which() )
-    {
-    case RES_FLTR_SCRIPTTYPE:
-        {
-            while( n )
-                switch( aArr[ --n ]->Which() )
-                {
-                case RES_CHRATR_FONT:
-                case RES_CHRATR_FONTSIZE:
-                case RES_CHRATR_LANGUAGE:
-                case RES_CHRATR_POSTURE:
-                case RES_CHRATR_WEIGHT:
-                case RES_CHRATR_CJK_FONT:
-                case RES_CHRATR_CJK_FONTSIZE:
-                case RES_CHRATR_CJK_LANGUAGE:
-                case RES_CHRATR_CJK_POSTURE:
-                case RES_CHRATR_CJK_WEIGHT:
-                case RES_CHRATR_CTL_FONT:
-                case RES_CHRATR_CTL_FONTSIZE:
-                case RES_CHRATR_CTL_LANGUAGE:
-                case RES_CHRATR_CTL_POSTURE:
-                case RES_CHRATR_CTL_WEIGHT:
-                    aArr.Remove( n, 1 );
-                    break;
-                }
-        }
-        break;
-    case RES_CHRATR_FONT:
-    case RES_CHRATR_FONTSIZE:
-    case RES_CHRATR_LANGUAGE:
-    case RES_CHRATR_POSTURE:
-    case RES_CHRATR_WEIGHT:
-    case RES_CHRATR_CJK_FONT:
-    case RES_CHRATR_CJK_FONTSIZE:
-    case RES_CHRATR_CJK_LANGUAGE:
-    case RES_CHRATR_CJK_POSTURE:
-    case RES_CHRATR_CJK_WEIGHT:
-    case RES_CHRATR_CTL_FONT:
-    case RES_CHRATR_CTL_FONTSIZE:
-    case RES_CHRATR_CTL_LANGUAGE:
-    case RES_CHRATR_CTL_POSTURE:
-    case RES_CHRATR_CTL_WEIGHT:
-        while( n )
-            if( RES_FLTR_SCRIPTTYPE == aArr[ --n ]->Which() )
-            {
-                pI = 0;
-                break;
-            }
-        break;
-    }
-    if( pI )
-        aArr.Insert( pI, aArr.Count() );
-#endif
 }
 
 RTFEndPosLst::RTFEndPosLst(SwRTFWriter& rWriter, const SwTxtNode& rNd,
@@ -925,35 +874,18 @@ RTFEndPosLst::RTFEndPosLst(SwRTFWriter& rWriter, const SwTxtNode& rNd,
     pOldPosLst = rWrt.pCurEndPosLst;
     rWrt.pCurEndPosLst = this;
 
-    // JP 15.11.00: first default to latin - this must be change, if it
-    //              clear how we handle empty paragraphs
-    nCurScript = ::com::sun::star::i18n::ScriptType::LATIN;
-
-    // search the script changes and add this positions as a Item into
-    // the attribute list
-    if( pBreakIt->xBreak.is() )
+    using namespace sw::util;
+    CharRuns aCharRuns(GetPseudoCharRuns(rNd, nStart));
+    cCharRunIter aEnd = aCharRuns.end();
+    xub_StrLen nSttPos = nStart;
+    for (cCharRunIter aI = aCharRuns.begin(); aI != aEnd; ++aI)
     {
-        const String& rTxt = rNode.GetTxt();
-        xub_StrLen nChg = nStart, nSttPos = nChg, nLen = rTxt.Len();
-
-        while( nChg < nLen )
+        if (nSttPos != aI->mnEndPos)
         {
-            USHORT nScript = pBreakIt->xBreak->getScriptType( rTxt, nChg );
-            nChg = (xub_StrLen)pBreakIt->xBreak->endOfScript( rTxt, nChg, nScript );
-               switch( nScript )
-            {
-            case ::com::sun::star::i18n::ScriptType::LATIN:
-            case ::com::sun::star::i18n::ScriptType::ASIAN:
-            case ::com::sun::star::i18n::ScriptType::COMPLEX:
-                if( nSttPos != nChg )
-                {
-                    SfxPoolItem* pAttr = new
-                        SfxInt16Item( RES_FLTR_SCRIPTTYPE, nScript );
-                    Insert( *pAttr, nSttPos, nChg );
-                    nSttPos = nChg;
-                }
-                break;
-            }
+            SfxPoolItem* pChg = new SfxUInt32Item(RES_FLTR_SCRIPTTYPE,
+                (sal_uInt32(aI->mnScript) << 16) | static_cast<sal_uInt32>(aI->mbRTL));
+            Insert(*pChg, nSttPos, aI->mnEndPos);
+            nSttPos = aI->mnEndPos;
         }
     }
 }
@@ -970,7 +902,7 @@ int RTFEndPosLst::Insert( const SfxPoolItem& rAttr, xub_StrLen nStt,
         return false;
 
     if( nStt == nEnd )
-        return FALSE;
+        return false;
 
     USHORT nPos;
     for( nPos = 0; nPos < Count(); ++nPos )
@@ -979,7 +911,7 @@ int RTFEndPosLst::Insert( const SfxPoolItem& rAttr, xub_StrLen nStt,
         if( pTmp->GetStart() == nStt && pTmp->GetEnd() == nEnd )
         {
             pTmp->AddAttr( rAttr );
-            return FALSE;       // schon vorhanden
+            return false;       // schon vorhanden
         }
         if( nEnd < pTmp->GetEnd() )
         {
@@ -1018,7 +950,7 @@ void RTFEndPosLst::OutAttrs( xub_StrLen nStrPos )
             {
                 const SfxPoolItem* pItem = pStt->GetAttrs()[i];
                 if( RES_FLTR_SCRIPTTYPE == pItem->Which() )
-                    OutFontAttrs( ((SfxUInt16Item*)pItem)->GetValue() );
+                    OutFontAttrs(*pItem);
                 else
                     Out( aRTFAttrFnTab, *pItem, rWrt );
             }
@@ -1027,7 +959,16 @@ void RTFEndPosLst::OutAttrs( xub_StrLen nStrPos )
     nCurPos = STRING_NOTFOUND;
 }
 
-void RTFEndPosLst::OutFontAttrs( USHORT nScript )
+//Just a little decoding hack for the RES_FLTR_SCRIPTTYPE thing
+void RTFEndPosLst::OutFontAttrs(const SfxPoolItem &rItem)
+{
+    sal_uInt32 nValue = ((const SfxUInt32Item&)rItem).GetValue();
+    sal_uInt16 nScript = static_cast<sal_uInt16>(nValue >> 16);
+    bool bBiDi = nValue & 0x1;
+    OutFontAttrs(nScript, bBiDi);
+}
+
+void RTFEndPosLst::OutFontAttrs(USHORT nScript, bool bRTL)
 {
     // script change, write the correct attributes:
     // start first with the Fontname
@@ -1035,7 +976,7 @@ void RTFEndPosLst::OutFontAttrs( USHORT nScript )
     rWrt.bOutFmtAttr = TRUE;
     nCurScript = nScript;
     rWrt.SetCurrScriptType( nScript );
-    rWrt.SetAssociatedFlag( FALSE );
+    rWrt.SetAssociatedFlag(false);
 
     // the font MUST be at the first position !!!
     static const USHORT aLatinIds[] =
@@ -1060,6 +1001,28 @@ void RTFEndPosLst::OutFontAttrs( USHORT nScript )
         0
     };
 
+    /*
+     You would have thought that
+     rWrt.Strm() << (bRTL ? sRTF_RTLCH : sRTF_LTRCH); would be sufficent here ,
+     but looks like word needs to see the other directional token to be
+     satisified that all is kosher, otherwise it seems in ver 2003 to go and
+     semi-randomlyly stick strike through about the place. Perhaps
+     strikethrough is some ms developers "something is wrong signal" debugging
+     code that we're triggering ?
+    */
+    if (bRTL)
+    {
+        rWrt.Strm() << sRTF_LTRCH;
+        rWrt.Strm() << ' ';
+        rWrt.Strm() << sRTF_RTLCH;
+    }
+    else
+    {
+        rWrt.Strm() << sRTF_RTLCH;
+        rWrt.Strm() << ' ';
+        rWrt.Strm() << sRTF_LTRCH;
+    }
+
     // size/weight/posture optional
     const USHORT* pIdArr = 0;
     ByteString sOut;
@@ -1068,32 +1031,26 @@ void RTFEndPosLst::OutFontAttrs( USHORT nScript )
         default:    //fall through
             ASSERT(pIdArr, "unknown script, strange");
         case ::com::sun::star::i18n::ScriptType::LATIN:
-            sOut = sRTF_LOCH;
+            rWrt.Strm() << sRTF_LOCH;
             pIdArr = aLatinIds;
             break;
         case ::com::sun::star::i18n::ScriptType::ASIAN:
-            sOut = sRTF_DBCH;
+            rWrt.Strm() << sRTF_DBCH;
             pIdArr = aAsianIds;
             break;
         case ::com::sun::star::i18n::ScriptType::COMPLEX:
-            sOut = sRTF_RTLCH;
             pIdArr = aCmplxIds;
             break;
     }
 
-    if (sOut.Len())
+    for (const USHORT* pId = pIdArr; *pId; ++pId)
     {
-        rWrt.Strm() << sOut.GetBuffer();
-
-        for (const USHORT* pId = pIdArr; *pId; ++pId)
+        if (FnAttrOut pOut = aRTFAttrFnTab[ *pId - RES_CHRATR_BEGIN])
         {
-            if (FnAttrOut pOut = aRTFAttrFnTab[ *pId - RES_CHRATR_BEGIN])
-            {
-                const SfxPoolItem* pItem = HasItem(*pId);
-                if (!pItem)
-                    pItem = &GetPool().GetDefaultItem(*pId);
-                (*pOut)(rWrt, *pItem);
-            }
+            const SfxPoolItem* pItem = HasItem(*pId);
+            if (!pItem)
+                pItem = &GetPool().GetDefaultItem(*pId);
+            (*pOut)(rWrt, *pItem);
         }
     }
 }
@@ -1108,21 +1065,14 @@ void RTFEndPosLst::EndAttrs( xub_StrLen nStrPos )
     {
         const SfxPoolItems& rAttrs = pSEPos->GetAttrs();
         for( USHORT nAttr = rAttrs.Count(); nAttr; )
+        {
             switch( rAttrs[ --nAttr ]->Which() )
             {
-#if 0
-            case RES_TXTATR_INETFMT:
-                // Hyperlinks werden als Felder geschrieben, aber der
-                // "FieldResult" steht als Text im TextNode. Also muss
-                // bei diesen Attributen am Ende 2 Klammern stehen!
-                rWrt.Strm() << "}}";
-                break;
-#endif
-
-            case RES_TXTATR_CJK_RUBY:
-                rWrt.Strm() << ")}{" << sRTF_FLDRSLT << " }}";
-                break;
+                case RES_TXTATR_CJK_RUBY:
+                    rWrt.Strm() << ")}{" << sRTF_FLDRSLT << " }}";
+                    break;
             }
+        }
 
         rWrt.Strm() << '}';     // end of all attributes from this position
         if (pSEPos->GetStart() < nClipStart)
@@ -1160,7 +1110,7 @@ void RTFEndPosLst::EndAttrs( xub_StrLen nStrPos )
                 {
                     const SfxPoolItem* pItem = pStt->GetAttrs()[i];
                     if( RES_FLTR_SCRIPTTYPE == pItem->Which() )
-                        OutFontAttrs( ((SfxUInt16Item*)pItem)->GetValue() );
+                        OutFontAttrs(*pItem);
                     else
                         Out( aRTFAttrFnTab, *pItem, rWrt );
                 }
@@ -1171,7 +1121,7 @@ void RTFEndPosLst::EndAttrs( xub_StrLen nStrPos )
 
 BOOL RTFEndPosLst::MatchScriptToId( USHORT nWhich ) const
 {
-    BOOL bRet = FALSE;
+    BOOL bRet = false;
     switch( nWhich )
     {
     case RES_CHRATR_FONT:
@@ -1366,7 +1316,7 @@ static Writer& OutRTF_SwTxtINetFmt( Writer& rWrt, const SfxPoolItem& rHt )
         }
 
         rWrt.Strm() << "}{" << sRTF_FLDRSLT << ' ';
-        rRTFWrt.bOutFmtAttr = FALSE;
+        rRTFWrt.bOutFmtAttr = false;
 
         // und dann noch die Attributierung ausgeben
         const SwCharFmt* pFmt;
@@ -1433,9 +1383,9 @@ static Writer& OutRTF_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
                 while( TRUE )
                 {
                     if( SFX_ITEM_SET != pNdSet->GetItemState( pCurr->Which(),
-                        FALSE, &pItem ) || *pItem != *pCurr )
+                        false, &pItem ) || *pItem != *pCurr )
                     {
-                        bEqual = FALSE;
+                        bEqual = false;
                         break;
                     }
 
@@ -1444,8 +1394,8 @@ static Writer& OutRTF_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
                     pCurr = aIter.NextItem();
                 }
             }
-            if( bEqual )
-                bNewFmts = FALSE;
+            if (bEqual)
+                bNewFmts = false;
         }
         rRTFWrt.SetAttrSet( &pNd->GetSwAttrSet() );
         rRTFWrt.bAutoAttrSet = 0 != pNdSet;
@@ -1453,11 +1403,11 @@ static Writer& OutRTF_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
 
     // Flag zuruecksetzen, damit nach der Ausgabe der Collection
     // getestet werden kann, ob noch ein Blank auszugeben ist
-    rRTFWrt.bOutFmtAttr = FALSE;
+    rRTFWrt.bOutFmtAttr = false;
 
     // in der Ausgabe eines Flys? Dann vorm ausgeben der AbsatzAttribute
     // den Format-Pointer auf 0 setzen!
-    SwFlyFrmFmt* pSaveFmt = rRTFWrt.pFlyFmt;
+    const SwFlyFrmFmt* pSaveFmt = rRTFWrt.pFlyFmt;
 
     SfxItemSet aMergedSet(rRTFWrt.pDoc->GetAttrPool(), POOLATTR_BEGIN,
         POOLATTR_END-1);
@@ -1579,7 +1529,7 @@ static Writer& OutRTF_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
     xub_StrLen nChrCnt = 0;
     for( ; nStrPos <= nEnde; nStrPos++ )
     {
-        rRTFWrt.bOutFmtAttr = FALSE;
+        rRTFWrt.bOutFmtAttr = false;
         if( nStrPos != nEnde && aEndPosLst.Count() )
             aEndPosLst.EndAttrs( nStrPos );
 
@@ -1596,10 +1546,10 @@ static Writer& OutRTF_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
             && nStrPos != nEnde )
         {
             do {
-                BOOL bEmpty = FALSE;
+                BOOL bEmpty = false;
                 if( pHt->GetEnd() )
                 {
-                    if( FALSE == (bEmpty = *pHt->GetEnd() == nStrPos) )
+                    if (false == (bEmpty = *pHt->GetEnd() == nStrPos))
                     {
                         aEndPosLst.Insert( pHt->GetAttr(), nStrPos,
                                             *pHt->GetEnd() );
@@ -1611,7 +1561,7 @@ static Writer& OutRTF_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
                 if( bEmpty )
                 {
                     rRTFWrt.Strm() << '}';
-                    rRTFWrt.bOutFmtAttr = FALSE;
+                    rRTFWrt.bOutFmtAttr = false;
                 }
             } while( ++nAttrPos < nCntAttr && nStrPos ==
                 *( pHt = pNd->GetSwpHints()[ nAttrPos ] )->GetStart() );
@@ -1659,22 +1609,208 @@ static Writer& OutRTF_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
     return rRTFWrt;
 }
 
+bool IsEMF(const sal_uInt8 *pGraphicAry, unsigned long nSize)
+{
+    if (pGraphicAry && (nSize > 0x2c ))
+    {
+        // check the magic number
+        if (
+             (pGraphicAry[0x28] == 0x20 ) && (pGraphicAry[0x29] == 0x45) &&
+             (pGraphicAry[0x2a] == 0x4d ) && (pGraphicAry[0x2b] == 0x46)
+           )
+        {
+            //emf detected
+            return true;
+        }
+    }
+    return false;
+}
 
+bool StripMetafileHeader(const sal_uInt8 *&rpGraphicAry, unsigned long &rSize)
+{
+    if (rpGraphicAry && (rSize > 0x22))
+    {
+        if (
+             (rpGraphicAry[0] == 0xd7) && (rpGraphicAry[1] == 0xcd) &&
+             (rpGraphicAry[2] == 0xc6) && (rpGraphicAry[3] == 0x9a)
+           )
+        {   // we have to get rid of the metafileheader
+            rpGraphicAry += 22;
+            rSize -= 22;
+            return true;
+        }
+    }
+    return false;
+}
 
-static Writer& OutRTF_SwGrfNode( Writer& rWrt, SwCntntNode & rNode )
+void ExportPICT(const Size &rOrig, const Size &rRendered, const Size &rMapped,
+    const SwCropGrf &rCr, const char *pBLIPType, const sal_uInt8 *pGraphicAry,
+    unsigned long nSize, SwRTFWriter &rWrt)
+{
+    bool bIsWMF = pBLIPType == sRTF_WMETAFILE ? true : false;
+    if (pBLIPType && nSize && pGraphicAry)
+    {
+        rWrt.Strm() << '{' << sRTF_PICT;
+
+        long nXSizeAdd = -(rCr.GetLeft() + rCr.GetRight());
+        long nYSizeAdd = -(rCr.GetTop() + rCr.GetBottom());
+
+        //Given the original size and taking cropping into account
+        //first, how much has the original been scaled to get the
+        //final rendered size
+        rWrt.Strm() << sRTF_PICSCALEX;
+        rWrt.OutLong((100 * rRendered.Width()) / (rOrig.Width() + nXSizeAdd));
+        rWrt.Strm() << sRTF_PICSCALEY;
+        rWrt.OutLong((100 * rRendered.Height()) / (rOrig.Height() + nYSizeAdd));
+
+        rWrt.Strm() << sRTF_PICCROPL;
+        rWrt.OutLong(rCr.GetLeft());
+        rWrt.Strm() << sRTF_PICCROPR;
+        rWrt.OutLong(rCr.GetRight());
+        rWrt.Strm() << sRTF_PICCROPT;
+        rWrt.OutLong(rCr.GetTop());
+        rWrt.Strm() << sRTF_PICCROPB;
+        rWrt.OutLong(rCr.GetBottom());
+
+        rWrt.Strm() << sRTF_PICW;
+        rWrt.OutLong(rMapped.Width());
+        rWrt.Strm() << sRTF_PICH;
+        rWrt.OutLong(rMapped.Height());
+
+        rWrt.Strm() << sRTF_PICWGOAL;
+        rWrt.OutLong(rOrig.Width());
+        rWrt.Strm() << sRTF_PICHGOAL;
+        rWrt.OutLong(rOrig.Height());
+
+        rWrt.Strm() << pBLIPType;
+        if (bIsWMF)
+        {
+            rWrt.OutLong(8);
+            StripMetafileHeader(pGraphicAry, nSize);
+        }
+        rWrt.Strm() << SwRTFWriter::sNewLine;
+
+        sal_uInt32 nBreak = 0;
+        for (sal_uInt32 nI = 0; nI < nSize; ++nI)
+        {
+            ByteString sNo = ByteString::CreateFromInt32(pGraphicAry[nI], 16);
+            if (sNo.Len() < 2)
+                rWrt.Strm() << '0';
+            rWrt.Strm() << sNo.GetBuffer();
+            if (++nBreak == 64)
+            {
+                rWrt.Strm() << SwRTFWriter::sNewLine;
+                nBreak = 0;
+            }
+        }
+
+        rWrt.Strm() << '}';
+    }
+}
+
+static Writer& OutRTF_SwGrfNode(Writer& rWrt, SwCntntNode & rNode)
 {
     SwRTFWriter & rRTFWrt = (SwRTFWriter&)rWrt;
-    SwGrfNode * pNd = &((SwGrfNode&)rNode);
+    SwGrfNode &rNd = (SwGrfNode&)rNode;
 
     // ist der aktuelle Absatz in einem freifliegenden Rahmen ? Dann
     // muessen noch die Attribute dafuer ausgegeben werden.
-    if( rRTFWrt.pFlyFmt )
-        OutRTF_SwFlyFrmFmt( rRTFWrt );
+    if (rRTFWrt.pFlyFmt && !ExportAsInline(*rRTFWrt.pFlyFmt))
+        OutRTF_SwFlyFrmFmt(rRTFWrt);    //"classic" positioning and size export
+
+#if 1
+    SvMemoryStream aStream;
+    const sal_uInt8* pGraphicAry = 0;
+    sal_uInt32 nSize = 0;
+
+    Graphic aGraphic(rNd.GetGrf());
+    GfxLink aGraphicLink;
+    const sal_Char* pBLIPType = 0;
+    if (aGraphic.IsLink())
+    {
+        aGraphicLink = aGraphic.GetLink();
+        nSize = aGraphicLink.GetDataSize();
+        pGraphicAry = aGraphicLink.GetData();
+        switch (aGraphicLink.GetType())
+        {
+            case GFX_LINK_TYPE_NATIVE_JPG:
+                pBLIPType = sRTF_JPEGBLIP;
+                break;
+            case GFX_LINK_TYPE_NATIVE_PNG:
+                pBLIPType = sRTF_PNGBLIP;
+            case GFX_LINK_TYPE_NATIVE_WMF:
+                pBLIPType =
+                    IsEMF(pGraphicAry, nSize) ? sRTF_EMFBLIP : sRTF_WMETAFILE;
+                break;
+            default:
+                break;
+        }
+    }
+
+    GraphicType eGraphicType = aGraphic.GetType();
+    if (!pGraphicAry)
+    {
+        if (ERRCODE_NONE == GraphicConverter::Export(aStream, aGraphic,
+            (eGraphicType == GRAPHIC_BITMAP) ? CVT_PNG : CVT_WMF))
+        {
+            pBLIPType = (eGraphicType == GRAPHIC_BITMAP) ?
+                sRTF_PNGBLIP : sRTF_WMETAFILE;
+            aStream.Seek(STREAM_SEEK_TO_END);
+            nSize = aStream.Tell();
+            pGraphicAry = (sal_uInt8*)aStream.GetData();
+        }
+    }
+
+    Size aMapped(eGraphicType == GRAPHIC_BITMAP ? aGraphic.GetSizePixel() : aGraphic.GetPrefSize());
+
+    const SwCropGrf &rCr = (const SwCropGrf &)rNd.GetAttr(RES_GRFATR_CROPGRF);
+
+    //Get original size in twips
+    Size aSize(sw::util::GetSwappedInSize(rNd));
+    Size aRendered(aSize);
+    if (rRTFWrt.pFlyFmt)
+    {
+        const SwFmtFrmSize& rS = rRTFWrt.pFlyFmt->GetFrmSize();
+        aRendered.Width() = rS.GetWidth();
+        aRendered.Height() = rS.GetHeight();
+    }
+
+    /*
+     If the graphic is not of type WMF then we will have to store two
+     graphics, one in the native format wrapped in shppict, and the other in
+     the wmf format wrapped in nonshppict, so as to keep wordpad happy. If its
+     a wmf already then we don't need any such wrapping
+    */
+    bool bIsWMF = pBLIPType == sRTF_WMETAFILE ? true : false;
+    if (!bIsWMF)
+        OutComment(rRTFWrt, sRTF_SHPPICT);
+
+    ExportPICT(aSize, aRendered, aMapped, rCr, pBLIPType, pGraphicAry, nSize, rRTFWrt);
+
+    if (!bIsWMF)
+    {
+        rRTFWrt.Strm() << '}' << '{' << sRTF_NONSHPPICT;
+
+        aStream.Seek(0);
+        GraphicConverter::Export(aStream, aGraphic, CVT_WMF);
+        pBLIPType = sRTF_WMETAFILE;
+        aStream.Seek(STREAM_SEEK_TO_END);
+        nSize = aStream.Tell();
+        pGraphicAry = (sal_uInt8*)aStream.GetData();
+
+        ExportPICT(aSize, aRendered, aMapped, rCr, pBLIPType, pGraphicAry, nSize,
+            rRTFWrt);
+
+        rRTFWrt.Strm() << '}';
+    }
+
+    rRTFWrt.Strm() << SwRTFWriter::sNewLine;
+#else
     rRTFWrt.Strm() << "{{";
 
     // damit die eigenen Grafik-Attribute nach der PICT / import Anweisung
     // stehen, muessen die am Anfang ausgegeben werden.
-    rRTFWrt.bOutFmtAttr = FALSE;
+    rRTFWrt.bOutFmtAttr = false;
     OutRTF_SwFmt( rRTFWrt, *pNd->GetFmtColl() );
 
     if( rRTFWrt.bOutFmtAttr )       // wurde ueberhaupt ein Attrribut
@@ -1739,8 +1875,8 @@ static Writer& OutRTF_SwGrfNode( Writer& rWrt, SwCntntNode & rNode )
     RTFOutFuncs::Out_String( rWrt.Strm(), aGrfNm, DEF_ENCODING,
                                 rRTFWrt.bWriteHelpFmt );
     rRTFWrt.Strm() << "}}{" << sRTF_FLDRSLT << " }}";
-
     rRTFWrt.Strm() << '}' << SwRTFWriter::sNewLine;
+#endif
     return rRTFWrt;
 }
 
@@ -1848,7 +1984,7 @@ static void OutSwTblBackground( SwRTFWriter& rWrt, const SvxBrushItem& rBack )
 }
 
 
-Writer& OutRTF_SwTblNode( Writer& rWrt, SwTableNode & rNode )
+Writer& OutRTF_SwTblNode(Writer& rWrt, const SwTableNode & rNode)
 {
     SwRTFWriter & rRTFWrt = (SwRTFWriter&)rWrt;
     const SwTable& rTbl = rNode.GetTable();
@@ -1867,12 +2003,12 @@ Writer& OutRTF_SwTblNode( Writer& rWrt, SwTableNode & rNode )
     ASSERT(pFmt, "Impossible");
     {
         Point aPt;
-        SwRect aRect( pFmt->FindLayoutRect( FALSE, &aPt ));
+        SwRect aRect( pFmt->FindLayoutRect( false, &aPt ));
         if( aRect.IsEmpty() )
         {
             // dann besorge mal die Seitenbreite ohne Raender !!
             const SwFrmFmt* pFmt = rRTFWrt.pFlyFmt ? rRTFWrt.pFlyFmt :
-                rWrt.pDoc->GetPageDesc(0).GetPageFmtOfNode( rNode, FALSE );
+                rWrt.pDoc->GetPageDesc(0).GetPageFmtOfNode(rNode, false);
 
             aRect = pFmt->FindLayoutRect( TRUE );
             if( 0 == ( nPageSize = aRect.Width() ))
@@ -1923,8 +2059,8 @@ Writer& OutRTF_SwTblNode( Writer& rWrt, SwTableNode & rNode )
     if( pLayout && pLayout->IsExportable() )
         pTableWrt = new SwWriteTable( pLayout );
     else
-        pTableWrt = new SwWriteTable( rTbl.GetTabLines(), (USHORT)nPageSize,
-                                          (USHORT)nTblSz, FALSE );
+        pTableWrt = new SwWriteTable(rTbl.GetTabLines(), (USHORT)nPageSize,
+                                          (USHORT)nTblSz, false);
 
     // rCols are the array of all cols of the table
     const SwWriteTableCols& rCols = pTableWrt->GetCols();
@@ -1941,7 +2077,7 @@ Writer& OutRTF_SwTblNode( Writer& rWrt, SwTableNode & rNode )
         const SwWriteTableRow *pRow = rRows[ nLine ];
         const SwWriteTableCells& rCells = pRow->GetCells();
 
-        BOOL bFixRowHeight = FALSE;
+        BOOL bFixRowHeight = false;
         for( nColCnt = 0, nBox = 0; nBox < rCells.Count(); ++nColCnt )
         {
             if( !pRowSpans[ nColCnt ] )
@@ -2125,7 +2261,7 @@ Writer& OutRTF_SwSectionNode( Writer& rWrt, SwSectionNode& rNode )
     // folgt dahinter noch ein SectionNode? Dann wird erst die innere
     // Section aktiv. Hier wird die Verschachtelung aufgebrochen, weil
     // RTF das nicht kennt
-    BOOL bPgDscWrite = FALSE;
+    BOOL bPgDscWrite = false;
     {
         SwNodeIndex aIdx( rNode, 1 );
         const SwNode& rNd = aIdx.GetNode();
@@ -2165,7 +2301,7 @@ Writer& OutRTF_SwSectionNode( Writer& rWrt, SwSectionNode& rNode )
         const SwFrmFmt *pFmt = rSect.GetFmt();
         ASSERT(pFmt, "Impossible");
         const SfxItemSet& rSet = pFmt->GetAttrSet();
-        if( SFX_ITEM_SET == rSet.GetItemState( RES_COL, FALSE, &pItem ))
+        if( SFX_ITEM_SET == rSet.GetItemState( RES_COL, false, &pItem ))
             OutRTF_SwFmtCol( rWrt, *pItem );
         else
         {
@@ -2174,7 +2310,7 @@ Writer& OutRTF_SwSectionNode( Writer& rWrt, SwSectionNode& rNode )
         }
 
         if( SFX_ITEM_SET == rSet.GetItemState( RES_COLUMNBALANCE,
-            FALSE, &pItem ) && ((SwFmtNoBalancedColumns*)pItem)->GetValue() )
+            false, &pItem ) && ((SwFmtNoBalancedColumns*)pItem)->GetValue() )
             OutComment( rWrt, sRTF_BALANCEDCOLUMN ) << '}';
 
         if (FRMDIR_HORI_RIGHT_TOP == rRTFWrt.TrueFrameDirection(*pFmt))
@@ -2921,14 +3057,11 @@ static Writer& OutRTF_SwField( Writer& rWrt, const SfxPoolItem& rHt )
 static Writer& OutRTF_SwFlyCntnt( Writer& rWrt, const SfxPoolItem& rHt )
 {
     SwFrmFmt* pFmt = ((SwFmtFlyCnt&)rHt).GetFrmFmt();
-    if( RES_DRAWFRMFMT != pFmt->Which() )
+    if (RES_DRAWFRMFMT != pFmt->Which())
     {
-        OutComment( rWrt, sRTF_FLYINPARA );
         ((SwRTFWriter&)rWrt).OutRTFFlyFrms( *((SwFlyFrmFmt*)pFmt) );
-        rWrt.Strm() << '}';
-        ((SwRTFWriter&)rWrt).bOutFmtAttr = FALSE;
+        ((SwRTFWriter&)rWrt).bOutFmtAttr = false;
     }
-// Zeichengebundene Zeichenobjekte werden ignoriert.
     return rWrt;
 }
 
