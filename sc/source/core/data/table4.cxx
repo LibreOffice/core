@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table4.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:28:53 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 17:56:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -805,7 +805,7 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                             {
                                 case CELLTYPE_STRING:
                                     aCol[nCol].Insert(static_cast<SCROW>(nRow),
-                                        new ScStringCell(*(ScStringCell*)pSrcCell));
+                                        new ScStringCell(*(ScStringCell*)pSrcCell, pDocument));
                                 break;
                                 case CELLTYPE_EDIT:
                                     aCol[nCol].Insert(static_cast<SCROW>(nRow),
