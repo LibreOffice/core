@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: er $ $Date: 2001-10-12 12:31:07 $
+ *  last change: $Author: er $ $Date: 2002-09-16 12:42:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -307,14 +307,17 @@ class ScTokenArray
     friend class ScCompiler;
     friend class ScTokenIterator;
 
-    ScToken** pCode;        // Token->Array
-    ScToken** pRPN;         // RPN-Array
-    USHORT nLen;            // Laenge des TokenArrays
-    USHORT nRPN;            // Laenge des RPN-Arrays
-    USHORT nIndex;          // aktueller Step-Index
-    USHORT nError;          // Fehlercode
-    short  nRefs;           // Anzahl Referenzen
-    ScRecalcMode nMode;     // wann muss berechnet werden?
+    ScToken**       pCode;                  // Token code array
+    ScToken**       pRPN;                   // RPN array
+    USHORT          nLen;                   // Length of token array
+    USHORT          nRPN;                   // Length of RPN array
+    USHORT          nIndex;                 // Current step index
+    USHORT          nError;                 // Error code
+    short           nRefs;                  // Count of cell references
+    ScRecalcMode    nMode;                  // Flags to indicate when to recalc this code
+    BOOL            bReplacedSharedFormula; // If code was created by replacing
+                            // a shared formula, a temporary flag during
+                            // UpdateReference() until StartListeningTo()
 
     void                    Assign( const ScTokenArray& );
 
@@ -373,6 +376,8 @@ public:
     USHORT    GetError() const { return nError; }
     void      SetError( USHORT n ) { nError = n; }
     short     GetRefs()  const { return nRefs;  }
+    void      SetReplacedSharedFormula( BOOL bVal ) { bReplacedSharedFormula = bVal; }
+    BOOL      IsReplacedSharedFormula() const       { return bReplacedSharedFormula; }
 
     inline  ScRecalcMode    GetRecalcMode() const { return nMode; }
             void            AddRecalcMode( ScRecalcMode nBits );

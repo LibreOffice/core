@@ -2,9 +2,9 @@
  *
  *  $RCSfile: token.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: er $ $Date: 2002-06-14 14:27:21 $
+ *  last change: $Author: er $ $Date: 2002-09-16 12:41:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1347,6 +1347,7 @@ ScTokenArray::ScTokenArray()
 {
     pCode = NULL; pRPN = NULL;
     nError = nLen = nIndex = nRPN = nRefs = 0;
+    bReplacedSharedFormula = FALSE;
     ClearRecalcMode();
 }
 
@@ -1368,6 +1369,7 @@ void ScTokenArray::Assign( const ScTokenArray& r )
     nError = r.nError;
     nRefs  = r.nRefs;
     nMode  = r.nMode;
+    bReplacedSharedFormula = FALSE;
     pCode  = NULL;
     pRPN   = NULL;
     ScToken** pp;
@@ -1458,6 +1460,7 @@ void ScTokenArray::Clear()
     }
     pCode = NULL; pRPN = NULL;
     nError = nLen = nIndex = nRPN = nRefs = 0;
+    bReplacedSharedFormula = FALSE;
     ClearRecalcMode();
 }
 
