@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.97 $
+ *  $Revision: 1.98 $
  *
- *  last change: $Author: pl $ $Date: 2001-11-02 12:54:31 $
+ *  last change: $Author: pl $ $Date: 2001-11-02 14:16:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -941,7 +941,9 @@ void SalFrame::ToTop( USHORT nFlags )
 {
     int i;
 
-    if( nFlags & SAL_FRAME_TOTOP_RESTOREWHENMIN )
+    if( ( nFlags & SAL_FRAME_TOTOP_RESTOREWHENMIN )
+        && ! ( maFrameData.nStyle_ & SAL_FRAME_STYLE_FLOAT )
+        )
     {
         if( maFrameData.GetWindow() != maFrameData.GetShellWindow() )
             XMapWindow( _GetXDisplay(), maFrameData.GetShellWindow() );
