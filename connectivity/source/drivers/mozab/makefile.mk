@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: kz $ $Date: 2004-09-08 12:10:48 $
+#   last change: $Author: vg $ $Date: 2005-02-21 12:24:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -121,7 +121,7 @@ ENVCFLAGS+=/FR$(SLO)$/
 
 # --- Recursiveness  ---------------------------------------------------
 
-RC_SUBDIRS = mozillasrc
+RC_SUBDIRS = mozillasrc bootstrap
 
 # --- Files -------------------------------------
 
@@ -129,6 +129,7 @@ SLOFILES=\
         $(SLO)$/MDriver.obj						\
         $(SLO)$/MServices.obj
 
+            
 # --- MOZAB BASE Library -----------------------------------
 
 SHL1VERSIONMAP= $(TARGET).map
@@ -165,7 +166,15 @@ MOZSLOFILES=\
     $(SLO)$/MTypeConverter.obj              \
     $(SLO)$/MNameMapper.obj					\
     $(SLO)$/MNSMozabProxy.obj	\
-    $(SLO)$/MNSTerminateListener.obj
+    $(SLO)$/MNSTerminateListener.obj	\
+    $(SLO)$/MMozillaBootstrap.obj	\
+    $(SLO)$/MNSFolders.obj	\
+    $(SLO)$/MNSProfileDiscover.obj	\
+    $(SLO)$/MNSProfileManager.obj	\
+    $(SLO)$/MNSINIParser.obj	\
+    $(SLO)$/MNSRunnable.obj	\
+    $(SLO)$/MNSProfile.obj					\
+    $(SLO)$/MNSProfileDirServiceProvider.obj
 
 
 SLO2FILES=\
@@ -196,9 +205,12 @@ SHL2STDLIBS=\
     $(SALLIB)					\
     $(DBTOOLSLIB)				\
     $(COMPHELPERLIB)			\
-    -lmsgbaseutil               \
     $(MOZ_LIB_XPCOM)
 
+.IF "$(GUI)"=="WNT"
+    SHL2STDLIBS += \
+                 shell32.lib
+.ENDIF # "$(GUI)"=="WNT"
 
 SHL2DEPN=
 SHL2IMPLIB=	i$(TARGET2)
