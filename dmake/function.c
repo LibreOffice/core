@@ -2,9 +2,9 @@
  *
  *  $RCSfile: function.c,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 14:02:11 $
+ *  last change: $Author: hjs $ $Date: 2003-08-18 15:04:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -374,7 +374,7 @@ char *data;
 
 /* do not map escape sequences while writing a tmpfile */
 /*  Append_line( data, FALSE, tmpfile, name, FALSE, TRUE ); */
-   Append_line( data, FALSE, tmpfile, name, FALSE, FALSE );
+   Append_line( data, TRUE, tmpfile, name, FALSE, FALSE );
    Close_temp( Current_target, tmpfile );
    FREE(data);
 
