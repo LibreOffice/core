@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svmain.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: obo $ $Date: 2004-02-25 11:24:54 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 15:45:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -507,6 +507,7 @@ void DeInitVCL()
     DeInitTools();
 
     DeInitSalMain();
+
     if( pOwnSvApp )
     {
         delete pOwnSvApp;
