@@ -2,9 +2,9 @@
  *
  *  $RCSfile: label1.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: os $ $Date: 2001-07-20 12:49:57 $
+ *  last change: $Author: os $ $Date: 2001-09-14 14:53:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -594,6 +594,7 @@ void lcl_ChgYPos(Window& rWin, long nDiff)
 
 void SwLabPage::SetToBusinessCard()
 {
+    SetHelpId(HID_BUSINESS_FMT_PAGE);
     m_bLabel = sal_False;
     aWritingText.Hide();
     aAddrBox.Hide();
