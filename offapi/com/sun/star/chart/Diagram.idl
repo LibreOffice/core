@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Diagram.idl,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 18:00:18 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 15:51:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,7 @@ published service Diagram
         service should be supported in order to preserve unparsed XML
         attributes.
 
-    @since #107627#
+    @since OOo 1.1.2
      */
     [optional] service com::sun::star::xml::UserDefinedAttributeSupplier;
 
