@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewse.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: aw $ $Date: 2002-03-18 15:30:07 $
+ *  last change: $Author: aw $ $Date: 2002-03-21 16:31:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -581,16 +581,18 @@ void SdDrawViewShell::FuPermanent(SfxRequest& rReq)
         SdOptions* pOptions = SD_MOD()->GetSdOptions(pDoc->GetDocumentType());
         sal_uInt32 nDefaultObjectSizeWidth(pOptions->GetDefaultObjectSizeWidth());
         sal_uInt32 nDefaultObjectSizeHeight(pOptions->GetDefaultObjectSizeHeight());
+
+        // calc position and size
+        Rectangle aVisArea = pWindow->PixelToLogic(Rectangle(Point(0,0), pWindow->GetOutputSizePixel()));
+        Point aPagePos = aVisArea.Center();
+        aPagePos.X() -= nDefaultObjectSizeWidth / 2;
+        aPagePos.Y() -= nDefaultObjectSizeHeight / 2;
+        Rectangle aNewObjectRectangle(aPagePos, Size(nDefaultObjectSizeWidth, nDefaultObjectSizeHeight));
         SdrPageView* pPageView = pDrView->GetPageViewPvNum(0);
 
         if(pPageView)
         {
-            // calc position and size
-            Point aPagePos = pPageView->GetOffset();
-            Size aPageSize = pPageView->GetPage()->GetSize();
-            aPagePos.X() += (aPageSize.Width() / 2) - (nDefaultObjectSizeWidth / 2);
-            aPagePos.Y() += (aPageSize.Height() / 2) - (nDefaultObjectSizeHeight / 2);
-            Rectangle aNewObjectRectangle(aPagePos, Size(nDefaultObjectSizeWidth, nDefaultObjectSizeHeight));
+            // create the default object
             SdrObject* pObj = pFuActual->CreateDefaultObject(nSId, aNewObjectRectangle);
 
             if(pObj)
