@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dapitype.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-30 19:52:22 $
+ *  last change: $Author: rt $ $Date: 2001-06-08 22:31:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,7 +200,7 @@ ModalDialog RID_SCDLG_DAPITYPE
         Text[ japanese ] = "‘I‘π";
         Text[ korean ] = "Ό±ΕΓ";
         Text[ chinese_simplified ] = "Ρ΅Τρ";
-        Text[ chinese_traditional ] = "ΏοΎά";
+        Text[ chinese_traditional ] = "Ώο¨ϊ";
         Text[ arabic ] = "ΚΝΟνΟ";
         Text[ turkish ] = "Seηim";
         Text[ language_user1 ] = " ";
@@ -461,7 +461,7 @@ ModalDialog RID_SCDLG_DAPISERVICE
         Text[ japanese ] = "‘I‘π";
         Text[ korean ] = "Ό±ΕΓ";
         Text[ chinese_simplified ] = "Ρ΅Τρ";
-        Text[ chinese_traditional ] = "ΏοΎά";
+        Text[ chinese_traditional ] = "Ώο¨ϊ";
         Text[ arabic ] = "ΚΝΟνΟ";
         Text[ turkish ] = "Seηim";
         Text[ language_user1 ] = " ";
@@ -471,7 +471,7 @@ ModalDialog RID_SCDLG_DAPISERVICE
     Text[ english_us ] = "External Source";
     Text[ portuguese ] = "Fonte de dados externa";
     Text[ russian ] = "Βνεψνθι θρςξχνθκ δΰννϋυ";
-    Text[ greek ] = "Εξωτερικό αρχείο προέλευσης";
+    Text[ greek ] = "Εξωτερικό αρχείο προέλευσης δεδομένων";
     Text[ dutch ] = "Externe bron";
     Text[ french ] = "Source de donnιes externe";
     Text[ spanish ] = "Fuente de datos externa";
@@ -818,7 +818,7 @@ ModalDialog RID_SCDLG_DAPIDATA
         Text[ japanese ] = "‘I‘π";
         Text[ korean ] = "Ό±ΕΓ";
         Text[ chinese_simplified ] = "Ρ΅Τρ";
-        Text[ chinese_traditional ] = "ΏοΎά";
+        Text[ chinese_traditional ] = "Ώο¨ϊ";
         Text[ arabic ] = "ΚΝΟνΟ";
         Text[ turkish ] = "Seηim";
         Text[ language_user1 ] = " ";
@@ -847,5 +847,6 @@ ModalDialog RID_SCDLG_DAPIDATA
     Text[ catalan ] = "Seleccionar fuente de datos";
     Text[ finnish ] = "Valitse tietolδhde";
 };
+
 
 
