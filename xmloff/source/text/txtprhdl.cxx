@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprhdl.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-04 12:32:29 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 08:15:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1461,6 +1461,11 @@ const XMLPropertyHandler *XMLTextPropertyHandlerFactory_Impl::GetPropertyHandler
         pHdl = new XMLNamedBoolPropertyHdl(
                                     ::xmloff::token::XML_ALWAYS,
                                     ::xmloff::token::XML_AUTO);
+        break;
+    case XML_TYPE_TEXT_NKEEP:
+        pHdl = new XMLNamedBoolPropertyHdl(
+                                    ::xmloff::token::XML_AUTO,
+                                    ::xmloff::token::XML_ALWAYS);
         break;
     }
 
