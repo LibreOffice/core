@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsort.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-16 09:38:49 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 10:04:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -135,6 +134,9 @@
 #endif
 #ifndef _REDLINE_HXX
 #include <redline.hxx>
+#endif
+#ifndef _NODE2LAY_HXX
+#include <node2lay.hxx>
 #endif
 
 #if OSL_DEBUG_LEVEL > 1
@@ -637,6 +639,11 @@ BOOL SwDoc::SortTbl(const SwSelBoxes& rBoxes, const SwSortOptions& rOpt)
     // MIB 9.7.97: HTML-Layout loeschen
     pTblNd->GetTable().SetHTMLTableLayout( 0 );
 
+    // --> FME 2004-11-26 #i37739# A simple 'MakeFrms' after the node sorting
+    // does not work if the table is inside a frame and has no prev/next.
+    SwNode2Layout aNode2Layout( *pTblNd );
+    // <--
+
     // loesche die Frames der Tabelle
     pTblNd->DelFrms();
     // und dann noch fuers Chart die Daten sichern
@@ -673,9 +680,6 @@ BOOL SwDoc::SortTbl(const SwSelBoxes& rBoxes, const SwSortOptions& rOpt)
         aSortList.Insert(pEle);
     }
 
-    SwNodeIndex aBehindIdx( *pTblNd->EndOfSectionNode());
-    GetNodes().GoNext( &aBehindIdx );           // Index in Cntnt, hinter der Tabelle
-
     // nach Sortierung verschieben
     SwMovedBoxes aMovedList;
     for(i=0; i < aSortList.Count(); ++i)
@@ -687,8 +691,13 @@ BOOL SwDoc::SortTbl(const SwSelBoxes& rBoxes, const SwSortOptions& rOpt)
             MoveCol(this, aFlatBox, pBox->nRow, i + nStart, aMovedList, pUndoSort);
     }
 
-    // Neue Frames erzeugen
-    pTblNd->MakeFrms( &aBehindIdx );
+    // Restore table frames:
+    // --> FME 2004-11-26 #i37739# A simple 'MakeFrms' after the node sorting
+    // does not work if the table is inside a frame and has no prev/next.
+    const ULONG nIdx = pTblNd->GetIndex();
+    aNode2Layout.RestoreUpperFrms( GetNodes(), nIdx, nIdx + 1 );
+    // <--
+
     aFndBox.RestoreChartData( pTblNd->GetTable() );
 
     // Alle Elemente aus dem SortArray loeschen
