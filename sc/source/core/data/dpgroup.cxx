@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dpgroup.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-03 11:30:50 $
+ *  last change: $Author: vg $ $Date: 2005-02-24 14:46:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1214,7 +1214,7 @@ BOOL ScDPGroupTableData::HasCommonElement( const ScDPItemData& rFirstData, long 
     const ScDPGroupDimension* pSecondDim = NULL;
     for ( ScDPGroupDimensionVec::const_iterator aIter(aGroups.begin()); aIter != aGroups.end(); aIter++ )
     {
-        const ScDPGroupDimension* pDim = aIter;
+        const ScDPGroupDimension* pDim = &(*aIter);
         if ( pDim->GetGroupDim() == nFirstIndex )
             pFirstDim = pDim;
         else if ( pDim->GetGroupDim() == nSecondIndex )
