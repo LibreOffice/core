@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctempl.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:00:18 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 16:28:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@
 #endif
 
 #ifndef _SV_RESARY_HXX
-#include <vcl/resary.hxx>
+#include <tools/resary.hxx>
 #endif
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
