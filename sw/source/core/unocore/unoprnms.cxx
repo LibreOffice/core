@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.cxx,v $
  *
- *  $Revision: 1.102 $
+ *  $Revision: 1.103 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 15:43:11 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:03:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -751,7 +751,9 @@ const SwPropNameTab aPropNameTab = {
 /* 0669 UNO_NAME_COLLAPSING_BORDERS*/ {MAP_CHAR_LEN("CollapsingBorders")},
 /* 0670 UNO_NAME_WRAP_INFLUENCE_ON_POSITION*/ {MAP_CHAR_LEN("WrapInfluenceOnPosition")},
 /* 0671 DATA_BASE_URL */            {MAP_CHAR_LEN("DataBaseURL")},
-/* 0672 DATA_BASE_RESOURCE */       {MAP_CHAR_LEN("DataBaseResource")}
+/* 0672 DATA_BASE_RESOURCE */       {MAP_CHAR_LEN("DataBaseResource")},
+/* 0673 UNO_NAME_TRANSFORMATION_IN_HORI_L2R*/ {MAP_CHAR_LEN("TransformationInHoriL2R")},
+/* 0674 UNO_NAME_POSITION_LAYOUT_DIR*/ {MAP_CHAR_LEN("PositionLayoutDir")}
 };
 
 const SwPropNameLen& GetPropName( USHORT nId )
