@@ -2,9 +2,9 @@
  *
  *  $RCSfile: InterruptEngineEvent.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 12:44:17 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 16:21:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,10 +76,9 @@
 
 //=============================================================================
 /** describes an interrupt which occurs in the scripting engine.
-
     @deprecated
  */
-struct InterruptEngineEvent: com::sun::star::lang::EventObject
+published struct InterruptEngineEvent: com::sun::star::lang::EventObject
 {
     //-------------------------------------------------------------------------
     /** fully qualified name to address the module or function affected by the event that
