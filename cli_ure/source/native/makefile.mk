@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2004-07-12 13:05:40 $
+#   last change: $Author: vg $ $Date: 2004-08-23 09:10:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -141,7 +141,8 @@ SHL1STDLIBS = \
     $(SALLIB)		\
     delayimp.lib \
     advapi32.lib \
-    mscoree.lib
+    mscoree.lib \
+    Advapi32.lib
 
 SHL1VERSIONMAP = msvc.map
 
