@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLChangeElementImportContext.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-10 20:51:01 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 15:30:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,14 @@ public:
         const ::rtl::OUString& rLocalName,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList> & xAttrList);
+
+    // #107848#
+    // Start- and EndElement are needed here to set the inside_deleted_section
+    // flag at the corresponding TextImportHelper
+    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
+
+    // #107848#
+    virtual void EndElement();
 };
 
 #endif
