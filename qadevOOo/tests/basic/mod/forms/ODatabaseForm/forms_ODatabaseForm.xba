@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: forms_ODatabaseForm.xba,v $ 
 '*
-'*  $Revision: 1.3 $ 
+'*  $Revision: 1.4 $ 
 '*
-'*  last change:$Date: 2003-03-26 14:54:06 $ 
+'*  last change:$Date: 2003-08-07 15:05:47 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -114,7 +114,10 @@ option explicit
   Global XTabControlModel2 As Object
 
   Global oConnection As Object
-
+  
+' Required for com.sun.star.container.XContainer
+  Global oElementToInsert As Object
+  Global oContainer As Object
 
 Sub CreateObj()
 
@@ -134,7 +137,7 @@ On Error Goto ErrHndl
     ' Copying DB file to temp location
     srcFile = utils.Path2URL(cTestDocsDir) + "TestDB/testDB.dbf"
     dstFile = utils.getTempFileURL("TestDB.dbf")
-    dbSrcURL = "sdbc:dbase:" + gsub(dstFile, "/testDB.dbf", "")
+    dbSrcURL = "sdbc:dbase:" + utils.StrReplace(dstFile, "/testDB.dbf", "")
 
     Out.Log("Copying file '" + srcFile + "' to '" + dstFile + "'")
     facc = createUnoService("com.sun.star.ucb.SimpleFileAccess")
@@ -177,7 +180,10 @@ On Error Goto ErrHndl
 
     'for XNameContainer, XIndexContainer
     oInstance = oDoc.createInstance("com.sun.star.form.component.ComboBox")
-
+    
+    'for XContainer
+    oElementToInsert = oDoc.createInstance("com.sun.star.form.component.ComboBox")
+    
     'for XNameReplace
     oReplaceInstance = oDoc.createInstance("com.sun.star.form.component.ComboBox")
     oObj.insertByName(cObjectName + "Replace", oDoc.createInstance("com.sun.star.form.component.ComboBox"))
