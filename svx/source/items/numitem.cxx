@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numitem.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: os $ $Date: 2001-08-06 12:22:31 $
+ *  last change: $Author: hr $ $Date: 2001-10-17 13:44:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -581,7 +581,7 @@ String SvxNumberFormat::CreateRomanString( ULONG nNo, BOOL bUpper )
     nNo %= 4000;            // mehr kann nicht dargestellt werden
 //      i, ii, iii, iv, v, vi, vii, vii, viii, ix
 //                          (Dummy),1000,500,100,50,10,5,1
-    char *cRomanArr = bUpper
+    const char *cRomanArr = bUpper
                         ? "MDCLXVI--"   // +2 Dummy-Eintraege !!
                         : "mdclxvi--";  // +2 Dummy-Eintraege !!
 
