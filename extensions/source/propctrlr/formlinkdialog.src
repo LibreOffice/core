@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formlinkdialog.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 12:02:06 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 11:25:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,9 +77,8 @@ ModalDialog RID_DLG_FORMLINKS
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 252, 110 ) ;
 
-    Text = "Felder verknüpfen";
-    Text [ english ] = "Link fields";
-    Text [ english_us ] = "Link fields";
+    Text [ de ] = "Felder verknüpfen";
+    Text [ en-US ] = "Link fields";
 
     FixedText FT_EXPLANATION
     {
@@ -88,9 +87,8 @@ ModalDialog RID_DLG_FORMLINKS
 
         WordBreak = TRUE;
 
-        Text = "Unterformulare können benutzt werden, um Detaildaten zu dem aktuellen Datensatz des Hauptformulars anzuzeigen. Dazu können Sie festlegen, welche Spalten sich jeweils entsprechen sollen.";
-        Text [ english ] = "Subforms can be used to display detailed data about the current record of the master form. To do this, you can specify which columns in the subform match which columns in the master form.";
-        Text [ english_us ] = "Subforms can be used to display detailed data about the current record of the master form. To do this, you can specify which columns in the subform match which columns in the master form.";
+        Text [ de ] = "Unterformulare können benutzt werden, um Detaildaten zu dem aktuellen Datensatz des Hauptformulars anzuzeigen. Dazu können Sie festlegen, welche Spalten sich jeweils entsprechen sollen.";
+        Text [ en-US ] = "Subforms can be used to display detailed data about the current record of the master form. To do this, you can specify which columns in the subform match which columns in the master form.";
     };
 
     FixedText FT_DETAIL_LABEL
@@ -180,35 +178,30 @@ ModalDialog RID_DLG_FORMLINKS
         Hide    = FALSE;
         Disable =  TRUE;
 
-        Text = "Vorschlagen";
-        Text [ english ] = "Suggest";
-        Text [ english_us ] = "Suggest";
+        Text [ de ] = "Vorschlagen";
+        Text [ en-US ] = "Suggest";
     };
 
     String STR_DETAIL_FORM
     {
-        Text = "Unterformular";
-        Text [ english ] = "Subform";
-        Text [ english_us ] = "Subform";
+        Text [ de ] = "Unterformular";
+        Text [ en-US ] = "Subform";
     };
 
     String STR_MASTER_FORM
     {
-        Text = "Hauptformular";
-        Text [ english ] = "Master form";
-        Text [ english_us ] = "Master form";
+        Text [ de ] = "Hauptformular";
+        Text [ en-US ] = "Master form";
     };
 
     String STR_ERROR_RETRIEVING_MASTER_COLUMNS
     {
-        Text = "Die Spalten des Hauptformulars konnten nicht ermittelt werden.";
-        Text [ english ] = "The columns of the master form could not be retrieved.";
-        Text [ english_us ] = "The columns of the master form could not be retrieved.";
+        Text [ de ] = "Die Spalten des Hauptformulars konnten nicht ermittelt werden.";
+        Text [ en-US ] = "The columns of the master form could not be retrieved.";
     };
     String STR_ERROR_RETRIEVING_DETAIL_COLUMNS
     {
-        Text = "Die Spalten des Unterformulars konnten nicht ermittelt werden.";
-        Text [ english ] = "The columns of the sub form could not be retrieved.";
-        Text [ english_us ] = "The columns of the sub form could not be retrieved.";
+        Text [ de ] = "Die Spalten des Unterformulars konnten nicht ermittelt werden.";
+        Text [ en-US ] = "The columns of the sub form could not be retrieved.";
     };
 };
