@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dg $ $Date: 2001-02-12 16:23:45 $
+ *  last change: $Author: kso $ $Date: 2001-02-12 16:50:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,7 @@ void PreloadConfigTrees()
     // these tree are preloaded to get a faster startup for the office
     Sequence <rtl::OUString> aPreloadPathList(6);
     aPreloadPathList[0] =  rtl::OUString::createFromAscii("org.openoffice.Office.Common");
-    aPreloadPathList[1] =  rtl::OUString::createFromAscii("org.openoffice.ucb.Configuration/ContentProviders/Office/SecondaryKeys/Local/ProviderData");
+    aPreloadPathList[1] =  rtl::OUString::createFromAscii("org.openoffice.ucb.Configuration");
     aPreloadPathList[2] =  rtl::OUString::createFromAscii("org.openoffice.Office.Writer");
     aPreloadPathList[3] =  rtl::OUString::createFromAscii("org.openoffice.Office.WriterWeb");
     aPreloadPathList[4] =  rtl::OUString::createFromAscii("org.openoffice.Office.Calc");
