@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sta_list.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: gh $ $Date: 2002-11-27 12:37:52 $
+ *  last change: $Author: gh $ $Date: 2002-11-27 14:03:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -957,7 +957,22 @@ void StatementList::DirectLog(ULONG nUId, String aMessage)
 void ImplKeyInput( Window* pWin, KeyEvent &aKEvnt )
 {
     if ( !Application::CallAccel( aKEvnt.GetKeyCode() ) )
+    {
         CALL_EVENT_WITH_NOTIFY( EVENT_KEYINPUT, aKEvnt, pWin, KeyInput )
+
+        KeyCode aCode = aKEvnt.GetKeyCode();
+        if ( (aCode.GetCode() == KEY_CONTEXTMENU) || ((aCode.GetCode() == KEY_F10) && aCode.IsShift()) )
+        {
+            Point aPos;
+            // simulate mouseposition at center of window
+            Size aSize = pWin->GetOutputSize();
+            aPos = Point( aSize.getWidth()/2, aSize.getHeight()/2 );
+
+            CommandEvent aEvent( aPos, COMMAND_CONTEXTMENU, FALSE );
+            ImplCommand( pWin, aEvent );
+        }
+    }
+
     CALL_EVENT_WITH_NOTIFY( EVENT_KEYUP, aKEvnt, pWin, KeyUp )
 };
 
