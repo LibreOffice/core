@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-05 16:04:25 $
+ *  last change: $Author: fs $ $Date: 2001-01-17 16:25:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1310,7 +1310,7 @@ void SbaGridControl::SetBrowserAttrs()
         new SvxFontItem(aFont.GetFamily(), aFont.GetName(), String(), PITCH_DONTKNOW, RTL_TEXTENCODING_DONTKNOW, SBA_DEF_FONT),
         new SvxFontHeightItem(nFontHeight, 100, SBA_DEF_FONTHEIGHT ),
         new SvxColorItem(aFont.GetColor(), SBA_DEF_FONTCOLOR ),
-        new SvxWeightItem(WEIGHT_LIGHT, SBA_DEF_FONTWEIGHT),
+        new SvxWeightItem(WEIGHT_NORMAL, SBA_DEF_FONTWEIGHT),
         new SvxPostureItem( ITALIC_NONE, SBA_DEF_POSTURE ),
         new SvxShadowedItem( sal_False, SBA_DEF_SHADOWED ),
         new SvxContourItem( sal_False, SBA_DEF_CONTOUR ),
@@ -1327,6 +1327,10 @@ void SbaGridControl::SetBrowserAttrs()
     // initialize it with the current settings (font/color)
     ::com::sun::star::awt::FontDescriptor aCurrentFont;
     xGridModel->getPropertyValue(PROPERTY_FONT) >>= aCurrentFont;
+    if (!aCurrentFont.Name.getLength())
+        // the property is defaulted, so the control has the default font
+        aCurrentFont = BuildFontFromItems(pFontDescriptor, aFont);
+
     BuildItemsFromFont(pFontDescriptor, aCurrentFont);
     Any aColor = xGridModel->getPropertyValue(PROPERTY_TEXTCOLOR);
     if (aColor.hasValue())
