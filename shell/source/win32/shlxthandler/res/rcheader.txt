@@ -1,0 +1,6 @@
+#include <winres.h>
+#include "internal/resource.h"
+
+MANIFEST_RESOURCE_ID RT_MANIFEST "shlxthdl.manifest"
+
+IDB_PROPERTY_IMAGES BITMAP "prop_img.bmp"
