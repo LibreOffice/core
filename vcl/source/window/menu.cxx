@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mt $ $Date: 2001-08-08 10:32:36 $
+ *  last change: $Author: mt $ $Date: 2001-08-21 16:19:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -314,7 +314,7 @@ private:
     Timer           aHighlightChangedTimer;
     Timer           aScrollTimer;
     ULONG           nSaveFocusId;
-    long            nStartY;
+//    long            nStartY;
     USHORT          nHighlightedItem;       // gehighlightetes/selektiertes Item
     USHORT          nMBDownPos;
     USHORT          nScrollerHeight;
@@ -341,6 +341,7 @@ protected:
     void            ImplScroll( BOOL bUp );
     void            ImplCursorUpDown( BOOL bUp );
     void            ImplHighlightItem( const MouseEvent& rMEvt, BOOL bMBDown );
+    long            ImplGetStartY() const;
 
 public:
                     MenuFloatingWindow( Menu* pMenu, Window* pParent, WinBits nStyle );
@@ -883,6 +884,36 @@ USHORT Menu::ImplGetVisibleItemCount() const
             nItems++;
     }
     return nItems;
+}
+
+USHORT Menu::ImplGetFirstVisible() const
+{
+    for ( USHORT n = 0; n < pItemList->Count(); n++ )
+    {
+        if ( ImplIsVisible( n ) )
+            return n;
+    }
+    return ITEMPOS_INVALID;
+}
+
+USHORT Menu::ImplGetPrevVisible( USHORT nPos ) const
+{
+    for ( USHORT n = nPos; n; )
+    {
+        if ( n && ImplIsVisible( --n ) )
+            return n;
+    }
+    return ITEMPOS_INVALID;
+}
+
+USHORT Menu::ImplGetNextVisible( USHORT nPos ) const
+{
+    for ( USHORT n = nPos+1; n < pItemList->Count(); n++ )
+    {
+        if ( ImplIsVisible( n ) )
+            return n;
+    }
+    return ITEMPOS_INVALID;
 }
 
 USHORT Menu::GetItemId( USHORT nPos ) const
@@ -1985,7 +2016,8 @@ USHORT PopupMenu::ImplExecute( Window* pW, const Rectangle& rRect, ULONG nPopupM
     if ( aSz.Height() > nMaxHeight )
     {
         pWin->EnableScrollMenu( TRUE );
-        USHORT nEntries = ImplCalcVisEntries( nMaxHeight );
+        USHORT nStart = ImplGetFirstVisible();
+        USHORT nEntries = ImplCalcVisEntries( nMaxHeight, nStart );
         aSz.Height() = ImplCalcHeight( nEntries );
     }
 
@@ -2049,13 +2081,17 @@ USHORT PopupMenu::ImplExecute( Window* pW, const Rectangle& rRect, ULONG nPopupM
     return bRealExecute ? nSelectedId : 0;
 }
 
-USHORT PopupMenu::ImplCalcVisEntries( long nMaxHeight, USHORT nStartEntry ) const
+USHORT PopupMenu::ImplCalcVisEntries( long nMaxHeight, USHORT nStartEntry, USHORT* pLastVisible ) const
 {
     nMaxHeight -= 2 * ImplGetFloatingWindow()->GetScrollerHeight();
 
     long nHeight = 0;
     USHORT nEntries = (USHORT) pItemList->Count();
     USHORT nVisEntries = 0;
+
+    if ( pLastVisible )
+        *pLastVisible = 0;
+
     for ( USHORT n = nStartEntry; n < nEntries; n++ )
     {
         if ( ImplIsVisible( n ) )
@@ -2064,6 +2100,9 @@ USHORT PopupMenu::ImplCalcVisEntries( long nMaxHeight, USHORT nStartEntry ) cons
             nHeight += pData->aSz.Height();
             if ( nHeight > nMaxHeight )
                 break;
+
+            if ( pLastVisible )
+                *pLastVisible = n;
             nVisEntries++;
         }
     }
@@ -2074,13 +2113,15 @@ long PopupMenu::ImplCalcHeight( USHORT nEntries ) const
 {
     long nHeight = 0;
 
-    if ( nEntries > pItemList->Count() )
-        nEntries = (USHORT) pItemList->Count();
-
-    for ( ULONG n = 0; n < nEntries; n++ )
+    USHORT nFound = 0;
+    for ( ULONG n = 0; ( nFound < nEntries ) && ( n < pItemList->Count() ); n++ )
     {
-        MenuItemData* pData = pItemList->GetDataFromPos( n );
-        nHeight += pData->aSz.Height();
+        if ( ImplIsVisible( n ) )
+        {
+            MenuItemData* pData = pItemList->GetDataFromPos( n );
+            nHeight += pData->aSz.Height();
+            nFound++;
+        }
     }
 
     nHeight += 2*ImplGetFloatingWindow()->GetScrollerHeight();
@@ -2112,7 +2153,7 @@ MenuFloatingWindow::MenuFloatingWindow( Menu* pMen, Window* pParent, WinBits nSt
     nHighlightedItem    = ITEMPOS_INVALID;
     nMBDownPos          = ITEMPOS_INVALID;
     nScrollerHeight     = 0;
-    nStartY             = 0;
+//    nStartY             = 0;
     nBorder             = EXTRASPACEY;
     nFirstEntry         = 0;
     bScrollUp           = FALSE;
@@ -2142,6 +2183,14 @@ MenuFloatingWindow::~MenuFloatingWindow()
 void MenuFloatingWindow::Resize()
 {
     ImplInitClipRegion();
+}
+
+long MenuFloatingWindow::ImplGetStartY() const
+{
+    long nY = 0;
+    for ( USHORT n = 0; n < nFirstEntry; n++ )
+        nY += pMenu->GetItemList()->GetDataFromPos( n )->aSz.Height();
+    return -nY;
 }
 
 Region MenuFloatingWindow::ImplCalcClipRegion( BOOL bIncludeLogo ) const
@@ -2184,7 +2233,7 @@ void MenuFloatingWindow::ImplHighlightItem( const MouseEvent& rMEvt, BOOL bMBDow
     {
         BOOL bHighlighted = FALSE;
         USHORT nCount = (USHORT)pMenu->pItemList->Count();
-        nY += nStartY;  // ggf. gescrollt.
+        nY += ImplGetStartY();  // ggf. gescrollt.
         for ( USHORT n = 0; !bHighlighted && ( n < nCount ); n++ )
         {
             if ( pMenu->ImplIsVisible( n ) )
@@ -2307,7 +2356,7 @@ IMPL_LINK( MenuFloatingWindow, HighlightChanged, Timer*, pTimer )
         if ( pData->bEnabled && pData->pSubMenu && pData->pSubMenu->GetItemCount() && ( pData->pSubMenu != pActivePopup ) )
         {
             pActivePopup = (PopupMenu*)pData->pSubMenu;
-            long nY = nScrollerHeight+nStartY;
+            long nY = nScrollerHeight+ImplGetStartY();
             MenuItemData* pData = 0;
             for ( ULONG n = 0; n < nHighlightedItem; n++ )
             {
@@ -2547,10 +2596,12 @@ void MenuFloatingWindow::ImplScroll( BOOL bUp )
 
     if ( bScrollUp && bUp )
     {
-        MenuItemData* pData = pMenu->GetItemList()->GetDataFromPos( --nFirstEntry );
-        long nEntryHeight = pData->aSz.Height();
+        nFirstEntry = pMenu->ImplGetPrevVisible( nFirstEntry );
+        DBG_ASSERT( nFirstEntry != ITEMPOS_INVALID, "Scroll?!" );
 
-        nStartY += nEntryHeight;
+        long nScrollEntryHeight = pMenu->GetItemList()->GetDataFromPos( nFirstEntry )->aSz.Height();
+
+//        nStartY += nEntryHeight;
 
         if ( !bScrollDown )
         {
@@ -2558,17 +2609,21 @@ void MenuFloatingWindow::ImplScroll( BOOL bUp )
             ImplDrawScroller( FALSE );
         }
 
-        if ( nFirstEntry == 0 )
+        if ( pMenu->ImplGetPrevVisible( nFirstEntry ) == ITEMPOS_INVALID )
         {
             bScrollUp = FALSE;
             ImplDrawScroller( TRUE );
         }
-        Scroll( 0, nEntryHeight, ImplCalcClipRegion( FALSE ).GetBoundRect(), SCROLL_CLIP );
+
+        Scroll( 0, nScrollEntryHeight, ImplCalcClipRegion( FALSE ).GetBoundRect(), SCROLL_CLIP );
     }
     else if ( bScrollDown && !bUp )
     {
-        MenuItemData* pData = pMenu->GetItemList()->GetDataFromPos( nFirstEntry++ );
-        long nEntryHeight = pData->aSz.Height();
+        long nScrollEntryHeight = pMenu->GetItemList()->GetDataFromPos( nFirstEntry )->aSz.Height();
+
+        nFirstEntry = pMenu->ImplGetNextVisible( nFirstEntry );
+        DBG_ASSERT( nFirstEntry != ITEMPOS_INVALID, "Scroll?!" );
+
 
         if ( !bScrollUp )
         {
@@ -2576,16 +2631,17 @@ void MenuFloatingWindow::ImplScroll( BOOL bUp )
             ImplDrawScroller( TRUE );
         }
 
-        Size aOutSz = GetOutputSizePixel();
-        USHORT nVisible = ((PopupMenu*)pMenu)->ImplCalcVisEntries( aOutSz.Height(), nFirstEntry );
-        if ( ( nFirstEntry + nVisible ) >= (USHORT) pMenu->GetItemList()->Count() )
+        long nHeight = GetOutputSizePixel().Height();
+        USHORT nLastVisible;
+        USHORT nVisible = ((PopupMenu*)pMenu)->ImplCalcVisEntries( nHeight, nFirstEntry, &nLastVisible );
+        if ( pMenu->ImplGetNextVisible( nLastVisible ) == ITEMPOS_INVALID )
         {
             bScrollDown = FALSE;
             ImplDrawScroller( FALSE );
         }
 
-        nStartY -= nEntryHeight;
-        Scroll( 0, -nEntryHeight, ImplCalcClipRegion( FALSE ).GetBoundRect(), SCROLL_CLIP );
+//        nStartY -= nEntryHeight;
+        Scroll( 0, -nScrollEntryHeight, ImplCalcClipRegion( FALSE ).GetBoundRect(), SCROLL_CLIP );
     }
 
     HighlightItem( nHighlightedItem, TRUE );
@@ -2653,6 +2709,7 @@ void MenuFloatingWindow::HighlightItem( USHORT nPos, BOOL bHighlight )
 {
     Size    aSz = GetOutputSizePixel();
     USHORT  nBorder = nScrollerHeight;
+    long    nStartY = ImplGetStartY();
     long    nY = nBorder+nStartY;
     long    nX = 0;
 
@@ -2857,7 +2914,7 @@ void MenuFloatingWindow::Paint( const Rectangle& rRect )
         ImplDrawScroller( TRUE );
         ImplDrawScroller( FALSE );
     }
-    pMenu->ImplPaint( this, nScrollerHeight, nStartY );
+    pMenu->ImplPaint( this, nScrollerHeight, ImplGetStartY() );
     if ( nHighlightedItem != ITEMPOS_INVALID )
         HighlightItem( nHighlightedItem, TRUE );
 }
