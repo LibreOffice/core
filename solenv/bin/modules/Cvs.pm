@@ -2,9 +2,9 @@
 #
 #   $RCSfile: Cvs.pm,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: dc $ $Date: 2002-03-05 16:22:27 $
+#   last change: $Author: hr $ $Date: 2002-08-22 18:03:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,7 +70,8 @@ use strict;
 
 ##### ctor ####
 
-sub new {
+sub new
+{
     my $proto = shift;
     my $class = ref($proto) || $proto;
     my $self = {};
@@ -79,10 +80,12 @@ sub new {
     $self->{FLAGS} = undef;
     if ( $ENV{CVS_BINARY} ) {
         $self->{CVS_BINARY} = $ENV{CVS_BINARY};
-    } else {
+    }
+    else {
         if ($^O eq "MSWin32" || $^O eq "os2" ) {
             $self->{CVS_BINARY} = "cvsclt2.exe";
-        } else {
+        }
+        else {
             $self->{CVS_BINARY} = "cvs.clt2";
         }
     }
@@ -99,109 +102,116 @@ sub new {
 
 #### methods to access per object data ####
 
-sub name {
+sub name
+{
     my $self = shift;
     if ( @_ ) {
-    $self->{name} = shift;
+        $self->{name} = shift;
     }
     return $self->{name};
 }
 
-sub cvs_binary {
+sub cvs_binary
+{
     my $self = shift;
     if ( @_ ) {
-    $self->{CVS_BINARY} = shift;
+        $self->{CVS_BINARY} = shift;
     }
     return $self->{CVS_BINARY};
 }
 
-sub get_data_by_rev {
+sub get_data_by_rev
+{
     my $self = shift;
     $self->parse_log();
 
     return $self->{REV_DATA};
 }
 
-sub get_sorted_revs {
+sub get_sorted_revs
+{
     my $self = shift;
 
     if ( $self->{"_SORTED"} ) {
-    return $self->{REV_TAGS};
+        return $self->{REV_TAGS};
     }
 
     $self->parse_log();
 
     sub by_rev {
-    # comparison function for sorting
-    my (@field_a, @field_b, $min_field, $i);
+        # comparison function for sorting
+        my (@field_a, @field_b, $min_field, $i);
 
-    @field_a = split /\./, $a;
-    @field_b = split /\./, $b;
-    $min_field = ($#field_a > $#field_b) ? $#field_b : $#field_a;
+        @field_a = split /\./, $a;
+        @field_b = split /\./, $b;
+        $min_field = ($#field_a > $#field_b) ? $#field_b : $#field_a;
 
-    for ($i = 0; $i <= $min_field; $i++)
-      {
-          if ( ($field_a[$i] < $field_b[$i]) ) {
-          return -1;
-          }
-          if ( ($field_a[$i] > $field_b[$i]) ) {
-          return 1;
-          }
-      }
+        for ($i = 0; $i <= $min_field; $i++) {
+            if ( ($field_a[$i] < $field_b[$i]) ) {
+                return -1;
+            }
+            if ( ($field_a[$i] > $field_b[$i]) ) {
+                return 1;
+            }
+        }
 
-    if ( $#field_a == $#field_b ) {
-        return 0;
+        if ( $#field_a == $#field_b ) {
+            return 0;
+        }
+        # eg. 1.70 sorts before 1.70.1.0
+        ($#field_a < $#field_b) ? return -1 : return 1;
     }
-    # eg. 1.70 sorts before 1.70.1.0
-    ($#field_a < $#field_b) ? return -1 : return 1;
-    }
-
 
     @{$self->{REV_SORTED}} = sort by_rev (keys %{$self->{REV_DATA}});
     $self->{"_SORTED"} = 1;
     return $self->{REV_SORTED};
 }
 
-sub get_tags_by_rev {
+sub get_tags_by_rev
+{
     my $self = shift;
     my ($tag, $rev);
 
     if ( $self->{"_TAGGED"} ) {
-    return $self->{REV_TAGS};
+        return $self->{REV_TAGS};
     }
 
     $self->parse_log();
     foreach $tag (keys %{$self->{TAGS}}) {
-    $rev = $self->{TAGS}->{$tag};
-    push (@{$self->{REV_TAGS}->{$rev}}, $tag);
+        $rev = $self->{TAGS}->{$tag};
+        push (@{$self->{REV_TAGS}->{$rev}}, $tag);
     }
 
     $self->{"_TAGGED"} = 1;
     return $self->{REV_TAGS};
 }
 
-sub get_flags {
+sub get_flags
+{
     my $self = shift;
     $self->parse_log();
 
     return $self->{FLAGS};
 }
 
-sub get_tags {
+sub get_tags
+{
     my $self = shift;
 
     $self->parse_log();
     return $self->{TAGS};
 }
 
-sub get_head {
+sub get_head
+{
     my $self = shift;
 
     $self->parse_log();
     return $self->{HEAD};
 }
 
-sub is_tag {
+sub is_tag
+{
     my $self = shift;
     my $tag  = shift;
 
@@ -209,7 +219,8 @@ sub is_tag {
     return exists($$tags_ref{$tag}) ? 1 : 0;
 }
 
-sub get_branch_rev {
+sub get_branch_rev
+{
     # check if $label is branch label and returns revision
     my $self  = shift;
     my $label = shift;
@@ -226,19 +237,19 @@ sub get_branch_rev {
     return join('.', @field);
 }
 
-
 #### methods to manipulate archive ####
-sub delete_rev {
+
+sub delete_rev
+{
     my $self = shift;
     my $rev = shift;
     my $file = $self->name;
 
     if ( $^O eq "MSWin32" || $^O eq 'os2' ) {
-    open (CVSDELETE,
-          "$self->{CVS_BINARY} admin -o$rev $file 2>nul |");
-    } else {
-    open (CVSDELETE,
-          "$self->{CVS_BINARY} admin -o$rev $file 2>/dev/null |");
+        open (CVSDELETE, "$self->{CVS_BINARY} admin -o$rev $file 2>nul |");
+    }
+    else {
+        open (CVSDELETE, "$self->{CVS_BINARY} admin -o$rev $file 2>/dev/null |");
     }
     while(<CVSDELETE>) {
         /deleting revision $rev/ && return 1;
@@ -247,7 +258,8 @@ sub delete_rev {
     return 0;
 }
 
-sub update {
+sub update
+{
     # Update archive with options $options.
     # Returns 'success' on success or reason of failure.
     # If no update happens because file was up-to-date
@@ -257,11 +269,10 @@ sub update {
 
     my $file = $self->name;
     if ( $^O eq "MSWin32" || $^O eq 'os2' ) {
-    open (CVSUPDATE,
-          "$self->{CVS_BINARY} update $options $file 2>&1 |");
-    } else {
-    open (CVSUPDATE,
-          "$self->{CVS_BINARY} update $options $file 2>&1 |");
+        open (CVSUPDATE, "$self->{CVS_BINARY} update $options $file 2>&1 |");
+    }
+    else {
+        open (CVSUPDATE, "$self->{CVS_BINARY} update $options $file 2>&1 |");
     }
     my $conflict = 0;
     my $notknown = 0;
@@ -279,7 +290,8 @@ sub update {
     return 'success'
 }
 
-sub commit {
+sub commit
+{
     # commit $file with option $option
     # return 'success' or reason for failure
     my $self = shift;
@@ -287,11 +299,10 @@ sub commit {
 
     my $file = $self->name;
     if ( $^O eq "MSWin32" || $^O eq 'os2' ) {
-    open (CVSCOMMIT,
-          "$self->{CVS_BINARY} commit $options $file 2>&1 |");
-    } else {
-    open (CVSCOMMIT,
-          "$self->{CVS_BINARY} commit $options $file 2>&1 |");
+        open (CVSCOMMIT, "$self->{CVS_BINARY} commit $options $file 2>&1 |");
+    }
+    else {
+        open (CVSCOMMIT, "$self->{CVS_BINARY} commit $options $file 2>&1 |");
     }
     my $conflict = 0;
     my $uptodate = 0;
@@ -316,10 +327,11 @@ sub commit {
 
 
 #### private methods ####
-sub parse_log {
+sub parse_log
+{
     my $self = shift;
     if ( $self->{"_PARSED"} ) {
-    return;
+        return;
     }
     my $file = $self->name;
     my $in_revisions = 0;
@@ -330,54 +342,44 @@ sub parse_log {
     open(CVSLOG, "$self->{CVS_BINARY} log $file |");
 
     while( <CVSLOG> ) {
-    chomp;
+        chomp;
 
-    if ( $in_revisions ) {
+        if ( $in_revisions ) {
+            /revision\s((\d|\.)+)$/o && do { $rev = $1; next; };
+            /^date:\s(\S+\s\S+);\s+author:\s(\S+);\s+state:\s(\S+);/
+                && do { $date = $1; $author = $2; $state = $3; next; };
+            /^branches:((\s+(\d|\.)+;)+)$/o && do {
+                my $line;
+                $line = $1;
+                $line =~ s/\s//go;
+                @branches = split(/;/, $line);
+                next;
+            };
 
-        /revision\s((\d|\.)+)$/o && do { $rev = $1; next; };
+            (/^----------------------------$/o || /^=============================================================================$/o) && do {
+                $rev_data = {
+                    DATE => $date,
+                    AUTHOR => $author,
+                    STATE => $state,
+                    COMMENT => $comment,
+                    BRANCHES => [ @branches ]
+                };
+                $self->{REV_DATA}->{$rev} = $rev_data;
+                $comment = undef;
+                @branches = ();
+                next;
+            };
 
-        /^date:\s(\S+\s\S+);\s+author:\s(\S+);\s+state:\s(\S+);/
-          && do { $date = $1; $author = $2; $state = $3; next; };
-
-        /^branches:((\s+(\d|\.)+;)+)$/o && do {
-        my $line;
-        $line = $1;
-        $line =~ s/\s//go;
-        @branches = split(/;/, $line);
-        next;
-        };
-
-        (/^----------------------------$/o || /^=============================================================================$/o)
-          && do {
-          $rev_data = {
-                   DATE => $date,
-                   AUTHOR => $author,
-                   STATE => $state,
-                   COMMENT => $comment,
-                   BRANCHES => [ @branches ]
-                  };
-          $self->{REV_DATA}->{$rev} = $rev_data;
-          $comment = undef;
-          @branches = ();
-          next;
-          };
-
-        $comment .= $_ . "\n" ;
-    } elsif ( $in_tags ) {
-        /^keyword\ssubstitution:/o
-          && do { $self->{FLAGS} = $'; $in_tags--; next; };
-
-        /^\t(\w+):\s((\d|\.)+)$/o
-          && do { $self->{TAGS}->{$1} = $2; next; };
-
-    } else {
-        /^----------------------------$/o
-          && do { $in_revisions++; next; };
-
-        /^symbolic\snames:$/o && do { $in_tags++; next; };
-
-        /^head:\s((\d|\.)+)$/o && do { $self->{HEAD} = $1; next; };
-    }
+            $comment .= $_ . "\n" ;
+        } elsif ( $in_tags ) {
+            /^keyword\ssubstitution:/o && do { $self->{FLAGS} = $'; $in_tags--; next; };
+            /^\t(\w+):\s((\d|\.)+)$/o && do { $self->{TAGS}->{$1} = $2; next; };
+        }
+        else {
+            /^----------------------------$/o && do { $in_revisions++; next; };
+            /^symbolic\snames:$/o && do { $in_tags++; next; };
+            /^head:\s((\d|\.)+)$/o && do { $self->{HEAD} = $1; next; };
+        }
     }
 
     close(CVSLOG);
