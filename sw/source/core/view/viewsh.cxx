@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: fme $ $Date: 2002-05-07 10:53:41 $
+ *  last change: $Author: mib $ $Date: 2002-05-16 08:22:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2200,6 +2200,12 @@ BOOL ViewShell::IsNewLayout() const
         xAcc = Imp()->GetAccessibleMap().GetDocumentView();
 
     return xAcc;
+}
+
+void ViewShell::InvalidateAccessibleFocus()
+{
+    if( Imp()->IsAccessible() )
+        Imp()->GetAccessibleMap().InvalidateFocus();
 }
 #endif
 /* -----------------------------06.05.2002 13:23------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accframebase.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mib $ $Date: 2002-04-05 12:08:57 $
+ *  last change: $Author: mib $ $Date: 2002-05-16 08:17:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,10 +81,12 @@ class SwAccessibleFrameBase : public    SwAccessibleContext
 protected:
 
     // Set states for getAccessibleStateSet.
-    // This drived class additionaly sets SELECTABLE(1) and SELECTED(+)
+    // This drived class additionaly sets SELECTABLE(1), SELECTED(+),
+    // FOCUSABLE(1) and FOCUSED(+)
     virtual void GetStates( ::utl::AccessibleStateSetHelper& rStateSet );
 
     virtual void _InvalidateCursorPos();
+    virtual void _InvalidateFocus();
 
     virtual ~SwAccessibleFrameBase();
 

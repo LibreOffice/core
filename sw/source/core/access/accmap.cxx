@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accmap.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: mib $ $Date: 2002-05-15 13:17:31 $
+ *  last change: $Author: mib $ $Date: 2002-05-16 08:17:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -311,7 +311,63 @@ public:
     }
 
     const accessibility::AccessibleShapeTreeInfo& GetInfo() const { return maInfo; }
+
+    ::vos::ORef < accessibility::AccessibleShape > *Copy( size_t& rSize,
+        const SwFEShell *pFESh = 0,
+        ::vos::ORef < accessibility::AccessibleShape > **pSelShape = 0 ) const;
 };
+
+::vos::ORef < accessibility::AccessibleShape >
+    *SwAccessibleShapeMap_Impl::Copy(
+            size_t& rSize, const SwFEShell *pFESh,
+            ::vos::ORef < accessibility::AccessibleShape > **pSelStart ) const
+{
+    ::vos::ORef < accessibility::AccessibleShape > *pShapes = 0;
+    ::vos::ORef < accessibility::AccessibleShape > *pSelShape = 0;
+
+    sal_uInt16 nSelShapes = pFESh ? pFESh->IsObjSelected() : 0;
+    rSize = size();
+
+    if( rSize > 0 )
+    {
+        pShapes =
+            new ::vos::ORef < accessibility::AccessibleShape >[rSize];
+
+        const_iterator aIter = begin();
+        const_iterator aEndIter = end();
+
+        ::vos::ORef < accessibility::AccessibleShape > *pShape = pShapes;
+        pSelShape = &(pShapes[rSize]);
+        while( aIter != aEndIter )
+        {
+            const SdrObject *pObj = (*aIter).first;
+            Reference < XAccessible > xAcc( (*aIter).second );
+            if( nSelShapes && pFESh->IsObjSelected( *pObj ) )
+            {
+                // selected objects are inserted from the back
+                --pSelShape;
+                *pSelShape =
+                    static_cast < accessibility::AccessibleShape* >(
+                                                    xAcc.get() );
+                --nSelShapes;
+            }
+            else
+            {
+                *pShape =
+                    static_cast < accessibility::AccessibleShape* >(
+                                                    xAcc.get() );
+                ++pShape;
+            }
+            ++aIter;
+        }
+        ASSERT( pSelShape == pShape, "copying shapes went wrong!" );
+    }
+
+    if( pSelStart )
+        *pSelStart = pSelShape;
+
+    return pShapes;
+}
 
 //------------------------------------------------------------------------------
 struct SwAccessibleEvent_Impl
@@ -681,47 +737,13 @@ void SwAccessibleMap::DoInvalidateShapeSelection()
     {
         vos::OGuard aGuard( maMutex );
         if( mpShapeMap )
-        {
-            nShapes = mpShapeMap->size();
-            if( nShapes > 0 )
-            {
-                pShapes =
-                    new ::vos::ORef < accessibility::AccessibleShape >[nShapes];
-
-                SwAccessibleShapeMap_Impl::iterator aIter = mpShapeMap->begin();
-                SwAccessibleShapeMap_Impl::iterator aEndIter = mpShapeMap->end();
-
-                ::vos::ORef < accessibility::AccessibleShape > *pShape = pShapes;
-                pSelShape = &(pShapes[nShapes]);
-                while( aIter != aEndIter )
-                {
-                    const SdrObject *pObj = (*aIter).first;
-                    Reference < XAccessible > xAcc( (*aIter).second );
-                    if( nSelShapes && pFESh->IsObjSelected( *pObj ) )
-                    {
-                        // selected objects are inserted from the back
-                        --pSelShape;
-                        *pSelShape =
-                            static_cast < accessibility::AccessibleShape* >(
-                                                            xAcc.get() );
-                        --nSelShapes;
-                    }
-                    else
-                    {
-                        *pShape =
-                            static_cast < accessibility::AccessibleShape* >(
-                                                            xAcc.get() );
-                        ++pShape;
-                    }
-                    ++aIter;
-                }
-                ASSERT( pSelShape == pShape, "copying shapes went wrong!" );
-            }
-        }
+            pShapes = mpShapeMap->Copy( nShapes, pFESh, &pSelShape );
     }
 
     if( pShapes )
     {
+        Window *pWin = GetShell()->GetWin();
+        sal_Bool bFocused = pWin && pWin->HasFocus();
         ::vos::ORef < accessibility::AccessibleShape > *pShape = pShapes;
         while( nShapes )
         {
@@ -730,7 +752,7 @@ void SwAccessibleMap::DoInvalidateShapeSelection()
                 if( pShape >= pSelShape )
                 {
                     (*pShape)->SetState( AccessibleStateType::SELECTED );
-                    if( 1 == nSelShapes )
+                    if( bFocused && 1 == nSelShapes )
                         (*pShape)->SetState( AccessibleStateType::FOCUSED );
                     else
                         (*pShape)->ResetState( AccessibleStateType::FOCUSED );
@@ -746,6 +768,50 @@ void SwAccessibleMap::DoInvalidateShapeSelection()
             ++pShape;
         }
         // TODO: Selection event
+
+        delete[] pShapes;
+    }
+}
+
+void SwAccessibleMap::DoInvalidateShapeFocus()
+{
+    const ViewShell *pVSh = GetShell();
+    const SwFEShell *pFESh = pVSh->ISA( SwFEShell ) ?
+                            static_cast< const SwFEShell * >( pVSh ) : 0;
+    sal_uInt16 nSelShapes = pFESh ? pFESh->IsObjSelected() : 0;
+
+    if( nSelShapes != 1 )
+        return;
+
+    ::vos::ORef < accessibility::AccessibleShape > *pShapes = 0;
+    ::vos::ORef < accessibility::AccessibleShape > *pSelShape = 0;
+    size_t nShapes = 0;
+
+
+    {
+        vos::OGuard aGuard( maMutex );
+        if( mpShapeMap )
+            pShapes = mpShapeMap->Copy( nShapes, pFESh, &pSelShape );
+    }
+
+    if( pShapes )
+    {
+        Window *pWin = GetShell()->GetWin();
+        sal_Bool bFocused = pWin && pWin->HasFocus();
+        ::vos::ORef < accessibility::AccessibleShape > *pShape = pShapes;
+        while( nShapes )
+        {
+            if( pShape->isValid() )
+            {
+                if( bFocused && pShape >= pSelShape )
+                    (*pShape)->SetState( AccessibleStateType::FOCUSED );
+                else
+                    (*pShape)->ResetState( AccessibleStateType::FOCUSED );
+            }
+
+            --nShapes;
+            ++pShape;
+        }
 
         delete[] pShapes;
     }
@@ -1507,6 +1573,29 @@ void SwAccessibleMap::InvalidateCursorPosition( const SwFrm *pFrm )
         InvalidateShapeSelection();
     if( xAcc.is() )
         InvalidateCursorPosition( xAcc );
+}
+
+void SwAccessibleMap::InvalidateFocus()
+{
+    Reference < XAccessible > xAcc;
+    sal_Bool bShapeSelected;
+    {
+        vos::OGuard aGuard( maMutex );
+
+        xAcc = mxCursorContext;
+        bShapeSelected = mbShapeSelected;
+    }
+
+    if( xAcc.is() )
+    {
+        SwAccessibleContext *pAccImpl =
+            static_cast< SwAccessibleContext *>( xAcc.get() );
+        pAccImpl->InvalidateFocus();
+    }
+    else if( bShapeSelected  )
+    {
+        DoInvalidateShapeFocus();
+    }
 }
 
 void SwAccessibleMap::SetCursorContext(

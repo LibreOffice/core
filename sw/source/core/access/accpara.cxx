@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accpara.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: dvo $ $Date: 2002-05-06 14:03:40 $
+ *  last change: $Author: mib $ $Date: 2002-05-16 08:17:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -391,7 +391,9 @@ void SwAccessibleParagraph::GetStates(
     if( pCaret != 0 && pTxtNd != 0 &&
         pTxtNd->GetIndex() == pCaret->GetPoint()->nNode.GetIndex() )
     {
-        rStateSet.AddState( AccessibleStateType::FOCUSED );
+        Window *pWin = GetWindow();
+        if( pWin && pWin->HasFocus() )
+            rStateSet.AddState( AccessibleStateType::FOCUSED );
         ASSERT( -1 != nOldCaretPos, "caret pos invalid" );
         ::vos::ORef < SwAccessibleContext > xThis( this );
         GetMap()->SetCursorContext( xThis );
@@ -471,11 +473,13 @@ void SwAccessibleParagraph::_InvalidateCursorPos()
         GetMap()->SetCursorContext( xThis );
     }
 
+    Window *pWin = GetWindow();
     if( nOld != nNew )
     {
         // The cursor's node position is sumilated by the focus!
-        if( -1 == nOld )
+        if( pWin && pWin->HasFocus() && -1 == nOld )
             FireStateChangedEvent( AccessibleStateType::FOCUSED, sal_True );
+
 
         AccessibleEventObject aEvent;
         aEvent.EventId = AccessibleEventId::ACCESSIBLE_CARET_EVENT;
@@ -484,8 +488,25 @@ void SwAccessibleParagraph::_InvalidateCursorPos()
 
         FireAccessibleEvent( aEvent );
 
-        if( -1 == nNew )
+        if( pWin && pWin->HasFocus() && -1 == nNew )
             FireStateChangedEvent( AccessibleStateType::FOCUSED, sal_False );
+    }
+}
+
+void SwAccessibleParagraph::_InvalidateFocus()
+{
+    Window *pWin = GetWindow();
+    if( pWin )
+    {
+        sal_Int32 nPos;
+        {
+            vos::OGuard aGuard( aMutex );
+            nPos = nOldCaretPos;
+        }
+        ASSERT( nPos != -1, "focus object should be selected" );
+
+        FireStateChangedEvent( AccessibleStateType::FOCUSED,
+                               pWin->HasFocus() && nPos != -1 );
     }
 }
 

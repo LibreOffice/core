@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccontext.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: mib $ $Date: 2002-05-15 13:17:31 $
+ *  last change: $Author: mib $ $Date: 2002-05-16 08:17:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,6 +207,7 @@ protected:
     virtual void _InvalidateContent( sal_Bool bVisibleDataFired );
 
     virtual void _InvalidateCursorPos();
+    virtual void _InvalidateFocus();
 
 public:
 
@@ -395,6 +396,9 @@ public:
 
     // The caretPos has changed
     void InvalidateCursorPos();
+
+    // The Focus state has changed
+    void InvalidateFocus();
 
     // Check states
     void InvalidateStates( sal_uInt8 nStates );

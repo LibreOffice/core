@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccontext.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: mib $ $Date: 2002-05-15 13:17:31 $
+ *  last change: $Author: mib $ $Date: 2002-05-16 08:17:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -488,6 +488,10 @@ void SwAccessibleContext::_InvalidateContent( sal_Bool )
 }
 
 void SwAccessibleContext::_InvalidateCursorPos()
+{
+}
+
+void SwAccessibleContext::_InvalidateFocus()
 {
 }
 
@@ -1260,6 +1264,13 @@ void SwAccessibleContext::InvalidateCursorPos()
     vos::OGuard aGuard(Application::GetSolarMutex());
 
     _InvalidateCursorPos();
+}
+
+void SwAccessibleContext::InvalidateFocus()
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+
+    _InvalidateFocus();
 }
 
 void SwAccessibleContext::InvalidateStates( sal_uInt8 nStates )

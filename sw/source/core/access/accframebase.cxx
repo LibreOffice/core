@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accframebase.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2002-04-11 13:45:32 $
+ *  last change: $Author: mib $ $Date: 2002-05-16 08:17:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,9 @@
 #ifndef _SV_SVAPP_HXX //autogen
 #include <vcl/svapp.hxx>
 #endif
+#ifndef _SV_WINDOW_HXX
+#include <vcl/window.hxx>
+#endif
 
 #ifndef _FRMFMT_HXX
 #include <frmfmt.hxx>
@@ -143,13 +146,20 @@ void SwAccessibleFrameBase::GetStates(
     // SELECTABLE
     rStateSet.AddState( AccessibleStateType::SELECTABLE );
 
-    // SELECTED
+    // FOCUSABLE
+    rStateSet.AddState( AccessibleStateType::FOCUSABLE );
+
+    // SELECTED and FOCUSED
     if( IsSelected() )
     {
         rStateSet.AddState( AccessibleStateType::SELECTED );
         ASSERT( bIsSelected, "bSelected out of sync" );
         ::vos::ORef < SwAccessibleContext > xThis( this );
         GetMap()->SetCursorContext( xThis );
+
+        Window *pWin = GetWindow();
+        if( pWin && pWin->HasFocus() )
+            rStateSet.AddState( AccessibleStateType::FOCUSED );
     }
 }
 
@@ -199,14 +209,16 @@ SwAccessibleFrameBase::SwAccessibleFrameBase(
 
 void SwAccessibleFrameBase::_InvalidateCursorPos()
 {
-    sal_Bool bNew = IsSelected();
-    sal_Bool bOld;
+    sal_Bool bNewSelected = IsSelected();
+    sal_Bool bOldSelected;
+
     {
         vos::OGuard aGuard( aMutex );
-        bOld = bIsSelected;
-        bIsSelected = bNew;
+        bOldSelected = bIsSelected;
+        bIsSelected = bNewSelected;
     }
-    if( bNew )
+
+    if( bNewSelected )
     {
         // remember that object as the one that has the caret. This is
         // neccessary to notify that object if the cursor leaves it.
@@ -214,9 +226,14 @@ void SwAccessibleFrameBase::_InvalidateCursorPos()
         GetMap()->SetCursorContext( xThis );
     }
 
-    if( bOld != bNew )
+    if( bOldSelected != bNewSelected )
     {
-        FireStateChangedEvent( AccessibleStateType::SELECTED, bNew );
+        Window *pWin = GetWindow();
+        if( pWin && pWin->HasFocus() && bNewSelected )
+            FireStateChangedEvent( AccessibleStateType::FOCUSED, bNewSelected );
+        FireStateChangedEvent( AccessibleStateType::SELECTED, bNewSelected );
+        if( pWin && pWin->HasFocus() && !bNewSelected )
+            FireStateChangedEvent( AccessibleStateType::FOCUSED, bNewSelected );
 
         Reference< XAccessible > xParent( GetWeakParent() );
         if( xParent.is() )
@@ -228,6 +245,24 @@ void SwAccessibleFrameBase::_InvalidateCursorPos()
             aEvent.EventId = AccessibleEventId::ACCESSIBLE_SELECTION_EVENT;
             pAcc->FireAccessibleEvent( aEvent );
         }
+    }
+}
+
+void SwAccessibleFrameBase::_InvalidateFocus()
+{
+    Window *pWin = GetWindow();
+    if( pWin )
+    {
+        sal_Bool bSelected;
+
+        {
+            vos::OGuard aGuard( aMutex );
+            bSelected = bIsSelected;
+        }
+        ASSERT( bSelected, "focus object should be selected" );
+
+        FireStateChangedEvent( AccessibleStateType::FOCUSED,
+                               pWin->HasFocus() && bSelected );
     }
 }
 

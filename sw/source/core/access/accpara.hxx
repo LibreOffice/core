@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accpara.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: dvo $ $Date: 2002-05-06 14:03:40 $
+ *  last change: $Author: mib $ $Date: 2002-05-16 08:17:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,6 +175,7 @@ protected:
     virtual void _InvalidateContent( sal_Bool bVisibleDataFired );
 
     virtual void _InvalidateCursorPos();
+    virtual void _InvalidateFocus();
 
     virtual ~SwAccessibleParagraph();
 
