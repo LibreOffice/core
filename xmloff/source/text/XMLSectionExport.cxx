@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSectionExport.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-17 16:28:17 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:35:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -290,9 +290,9 @@ void XMLSectionExport::ExportSectionStart(
     {
         // always export section style
         GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_STYLE_NAME,
-                                 GetParaExport().Find(
+                                     GetParaExport().Find(
                                      XML_STYLE_FAMILY_TEXT_SECTION,
-                                     xPropertySet, sEmpty ));
+                                     xPropertySet, sEmpty ) );
 
         // export index or regular section
         Reference<XDocumentIndex> xIndex;
@@ -559,7 +559,10 @@ void XMLSectionExport::ExportRegularSectionStart(
     enum XMLTokenEnum eDisplay = XML_TOKEN_INVALID;
     if (sCond.getLength() > 0)
     {
-        GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_CONDITION, sCond);
+        OUString sQValue =
+            GetExport().GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_OOOW,
+                                                         sCond );
+        GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_CONDITION, sQValue);
         eDisplay = XML_CONDITION;
 
         // #97450# store hidden-status (of conditional sections only)
@@ -801,7 +804,7 @@ void XMLSectionExport::ExportAlphabeticalIndexStart(
         {
             GetExport().AddAttribute(XML_NAMESPACE_TEXT,
                                      XML_MAIN_ENTRY_STYLE_NAME,
-                                     sStyleName);
+                                     GetExport().EncodeStyleName( sStyleName ));
         }
 
         // other (boolean) attributes
@@ -981,7 +984,7 @@ void XMLSectionExport::ExportBaseIndexSource(
         aAny >>= sStyleName;
         GetExport().AddAttribute(XML_NAMESPACE_TEXT,
                                  XML_STYLE_NAME,
-                                 sStyleName);
+                                 GetExport().EncodeStyleName( sStyleName ));
 
         // title template
         SvXMLElementExport aHeaderTemplate(GetExport(),
@@ -1215,7 +1218,7 @@ sal_Bool XMLSectionExport::ExportIndexTemplate(
             aAny >>= sParaStyleName;
             GetExport().AddAttribute(XML_NAMESPACE_TEXT,
                                      XML_STYLE_NAME,
-                                     sParaStyleName);
+                                     GetExport().EncodeStyleName( sParaStyleName ));
         }
 
         // template element
@@ -1468,7 +1471,7 @@ void XMLSectionExport::ExportIndexTemplateElement(
             pElement = sXML_index_entry_chapter;
             break;
         case TOK_TTYPE_ENTRY_NUMBER:    // table of content
-            pElement = sXML_index_entry_chapter_number;
+            pElement = sXML_index_entry_chapter;
             break;
         case TOK_TTYPE_HYPERLINK_START:
             pElement = sXML_index_entry_link_start;
@@ -1503,7 +1506,8 @@ void XMLSectionExport::ExportIndexTemplateElement(
                 case TOK_TTYPE_CHAPTER_INFO:
                 case TOK_TTYPE_TAB_STOP:
                     GetExport().AddAttribute(XML_NAMESPACE_TEXT,
-                                             XML_STYLE_NAME, sCharStyle);
+                                             XML_STYLE_NAME,
+                                 GetExport().EncodeStyleName( sCharStyle) );
                     break;
                 default:
                     ; // nothing: no character style
@@ -1615,7 +1619,7 @@ void XMLSectionExport::ExportLevelParagraphStyles(
                 // stylename attribute
                 GetExport().AddAttribute(XML_NAMESPACE_TEXT,
                                          XML_STYLE_NAME,
-                                         aStyleNames[nName]);
+                             GetExport().EncodeStyleName( aStyleNames[nName]) );
 
                 // element
                 SvXMLElementExport aParaStyle(GetExport(),
@@ -1927,7 +1931,7 @@ void XMLSectionExport::ExportMasterDocHeadingDummies()
         if( sStyle.getLength() > 0 )
         {
             GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_STYLE_NAME,
-                                      sStyle );
+                                      GetExport().EncodeStyleName( sStyle ) );
 
             OUStringBuffer sTmp;
             sTmp.append( nLevel+1L );
