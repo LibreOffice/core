@@ -2,9 +2,9 @@
 #
 #   $RCSfile: sw.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: fme $ $Date: 2002-06-10 09:12:44 $
+#   last change: $Author: vg $ $Date: 2002-07-01 16:10:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -135,8 +135,3 @@ CFLAGSOBJGUIST=-Alfd -GA -GEd
 
 .ENDIF # WINMSCI
 # ------------------------------------------------------------------------
-
-# ------------------------------------------------------------------------
-# add uno headers to inlude path
-# ------------------------------------------------------------------------
-INCPRE+=$(SOLARINCDIR)$/offuh
