@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eppt.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 16:05:37 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 13:23:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1378,9 +1378,9 @@ sal_Bool PPTWriter::ImplCreateMaster( sal_uInt32 nPageNum )
         {
             EscherExContainer aProgBinaryTag( *mpStrm, EPP_ProgBinaryTag );
             {
-                EscherExAtom( *mpStrm, EPP_CString );
-               *mpStrm << (sal_uInt32)0x5f005f << (sal_uInt32)0x50005f
-                       << (sal_uInt32)0x540050 << (sal_uInt16)0x39;
+                EscherExAtom aCString( *mpStrm, EPP_CString );
+                *mpStrm << (sal_uInt32)0x5f005f << (sal_uInt32)0x50005f
+                        << (sal_uInt32)0x540050 << (sal_uInt16)0x39;
             }
             ImplProgBinaryTag( &aBuExMasterStream );
         }
