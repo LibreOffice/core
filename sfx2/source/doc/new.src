@@ -2,9 +2,9 @@
  *
  *  $RCSfile: new.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-02 16:01:16 $
+ *  last change: $Author: kz $ $Date: 2001-02-09 21:38:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,7 +162,7 @@ ModalDialog DLG_NEW_FILE
         Text[ chinese_traditional ] = "ΌΛ¦΅(~T)";
         Text[ arabic ] = "ήζΗαΘ";
         Text[ greek ] = "Πρότυπα";
-        Text[ korean ] = "Ό­½Δ ΖΔΐΟ(~T)";
+        Text[ korean ] = "Ό­½ΔΖΔΐΟ(~T)";
         Text[ turkish ] = "~ήablon";
         Text[ language_user1 ] = " ";
     };
@@ -238,7 +238,7 @@ ModalDialog DLG_NEW_FILE
         Text[ chinese_traditional ] = "ΐΛµψ(~V)";
         Text[ arabic ] = "γΪΗνδΙ";
         Text[ greek ] = "Προεπισκόπηση";
-        Text[ korean ] = "ΉΜΈ® ΊΈ±β(~V)";
+        Text[ korean ] = "ΉΜΈ®ΊΈ±β(~V)";
         Text[ turkish ] = "Φ~nizleme";
         Text[ language_user1 ] = " ";
     };
