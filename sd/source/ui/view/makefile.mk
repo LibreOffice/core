@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: rt $ $Date: 2004-11-26 20:33:51 $
+#   last change: $Author: rt $ $Date: 2005-01-27 14:22:38 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -127,7 +127,6 @@ SLOFILES =	\
         $(SLO)$/slidview.obj \
         $(SLO)$/outlnvsh.obj \
         $(SLO)$/outlnvs2.obj \
-        $(SLO)$/prvwshll.obj \
         $(SLO)$/presvish.obj \
         $(SLO)$/outlview.obj \
         $(SLO)$/tabcontr.obj \
