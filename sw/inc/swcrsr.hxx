@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swcrsr.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 09:00:54 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 15:39:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,10 @@
  ************************************************************************/
 #ifndef _SWCRSR_HXX
 #define _SWCRSR_HXX
+
+#ifndef _COM_SUN_STAR_I18N_WORDTYPE_HPP_
+#include <com/sun/star/i18n/WordType.hpp>
+#endif
 
 #ifndef _PAM_HXX //autogen
 #include <pam.hxx>
@@ -166,7 +170,8 @@ public:
                 const com::sun::star::util::SearchOptions* pSearchOpt = 0,
                 const SfxItemSet* rReplSet = 0 );
 
-    FASTBOOL IsStartWord()const;
+    // UI versions
+    FASTBOOL IsStartWord() const;
     FASTBOOL IsEndWord() const;
     FASTBOOL IsInWord() const;
     FASTBOOL GoStartWord();
@@ -174,6 +179,17 @@ public:
     FASTBOOL GoNextWord();
     FASTBOOL GoPrevWord();
     FASTBOOL SelectWord( const Point* pPt = 0 );
+
+    // API versions of above functions (will be used with a different
+    // WordType for the break iterator)
+    FASTBOOL IsStartWordWT( sal_Int16 nWordType ) const;
+    FASTBOOL IsEndWordWT( sal_Int16 nWordType ) const;
+    FASTBOOL IsInWordWT( sal_Int16 nWordType ) const;
+    FASTBOOL GoStartWordWT( sal_Int16 nWordType );
+    FASTBOOL GoEndWordWT( sal_Int16 nWordType );
+    FASTBOOL GoNextWordWT( sal_Int16 nWordType );
+    FASTBOOL GoPrevWordWT( sal_Int16 nWordType );
+    FASTBOOL SelectWordWT( sal_Int16 nWordType, const Point* pPt = 0 );
 
     enum SentenceMoveType
     {
