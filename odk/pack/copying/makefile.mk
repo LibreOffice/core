@@ -309,7 +309,7 @@ all : 	\
     $(EXAMPLESLIST) \
     $(DESTIDLLIST)  \
     $(DESTDIRBIN)$/applicat.rdb  \
-    $(DESTDIRLIB)$/libofficebean.so  \
+    $(DESTDIRLIB)$/$(MY_DLLPREFIX)officebean$(MY_DLLPOSTFIX)  \
     $(DESTDIR)$/settings$/dk.mk \
     $(DESTDIR)$/classes$/unoil.jar \
     $(DESTDIR)$/classes$/officebean.jar \
