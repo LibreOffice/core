@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XCompatibilityNames.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:38 $
+ *  last change: $Author: arellano $ $Date: 2001-06-11 23:03:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,9 @@ interface XCompatibilityNames: com::sun::star::uno::XInterface
         locale (used for a locale that is not in the list).
         If a function doesn't have any compatibility names,
         the returned sequence is empty.</p>
+
+    <!-- Editor: The sentence "The default name for each locale must be the first for that locale" is confusing -->
+    <!-- Editor: Maybe an example would help. -->
      */
     sequence<LocalizedName> getCompatibilityNames( [in] string aProgrammaticName );
 };
