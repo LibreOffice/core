@@ -2,10 +2,6 @@
  *
  *  $RCSfile: file_math.scp,v $
  *
- *  $Revision: 1.13 $
- *
- *  last change: $Author: rt $ $Date: 2005-01-28 17:25:21 $
- *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
  *
@@ -121,7 +117,7 @@ End
 File gid_File_Share_Xdg_Math
 	TXT_FILE_BODY;
 	Dir = gid_Dir_Share_Xdg;
-	Name = "math.desktop"
+	Name = "math.desktop";
 	Styles = (PACKED);
 End
 
