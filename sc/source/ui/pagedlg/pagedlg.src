@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagedlg.src,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:06:24 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 17:08:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,7 @@ ModelessDialog RID_SCDLG_AREAS
         Text [ FRENCH ] = "Zone d'~impression" ;
         Text [ ITALIAN ] = "Area di stampa" ;
         Text [ DUTCH ] = "~Afdrukbereik" ;
-        Text [ PORTUGUESE_BRAZILIAN ] = "Area de impress?o" ;
+        Text [ PORTUGUESE_BRAZILIAN ] = "Intervalo de impressão" ;
         Text [ SWEDISH ] = "Utskriftsområ~de" ;
         Text [ PORTUGUESE ] = "Á~rea de impressão" ;
         Text[ chinese_simplified ] = "æ‰“å°åŒºåŸŸ";
@@ -117,9 +117,12 @@ ModelessDialog RID_SCDLG_AREAS
         Text[ arabic ] = "äØÇŞ ÇáØÈÇÚÉ";
         Text[ greek ] = "Ğåñéï÷Ş åêôığùóçò";
         Text[ korean ] = "ì¸ì‡„ ë²”ìœ„";
-        Text[ turkish ] = "Yazdırma aralığı";
+        Text[ turkish ] = "Basım aralığı";
         Text[ catalan ] = "Àrea d'impressió";
         Text[ thai ] = "à¸Šà¹ˆà¸§à¸‡à¸à¸²à¸£à¸à¸´à¸¡à¸à¹Œ";
+        Text[ czech ] = "Tisknout oblast";
+        Text[ hebrew ] = "â€®×˜×•×•×— ×”×“×¤×¡×”â€¬";
+        Text[ hindi ] = "à¤›à¤ªà¤¾à¤ˆ à¤«à¥ˆà¤²à¤¾à¤µ";
     };
     ListBox LB_PRINTAREA
     {
@@ -153,9 +156,9 @@ ModelessDialog RID_SCDLG_AREAS
         };
         StringList [ portuguese_brazilian ] =
         {
-            < "- keiner -" ; Default ; > ;
-            < "- benutzerdefiniert -" ; Default ; > ;
-            < "- selection -" ; Default ; > ;
+            < "- nenhum -" ; Default ; > ;
+            < "- definido pelo usuário -" ; Default ; > ;
+            < "- seleção -" ; Default ; > ;
         };
         StringList [ portuguese ] =
         {
@@ -220,8 +223,8 @@ ModelessDialog RID_SCDLG_AREAS
     StringList [ polish ] =
     {
             < "- brak -" ; Default ; > ;
-        < "- ustawienia indywidualne -" ; Default ; > ;
-        < "- Zaznaczanie -" ; Default ; > ;
+        < "- niestandardowe -" ; Default ; > ;
+        < "- zaznaczenie -" ; Default ; > ;
     };
     StringList [ japanese ] =
     {
@@ -277,6 +280,24 @@ ModelessDialog RID_SCDLG_AREAS
         < "- à¸£à¸°à¸šà¸¸à¸œà¸¹à¹‰à¹ƒà¸Šà¹‰ -" ; Default ; > ;
         < "- à¹€à¸¥à¸·à¸­à¸ -" ; Default ; > ;
     };
+    StringList [ czech ] =
+    {
+         < "- Å¾Ã¡dnÃ© -" ; Default ; > ;
+        < "- uÅ¾ivatelem definovanÃ© -" ; Default ; > ;
+        < "- vÃ½bÄ›r -" ; Default ; > ;
+    };
+    StringList [ hebrew ] =
+    {
+         < "- keiner -" ; Default ; > ;
+        < "- benutzerdefiniert -" ; Default ; > ;
+        < "- Selektion -" ; Default ; > ;
+    };
+    StringList [ hindi ] =
+    {
+         < "- à¤•à¥‹à¤ˆ à¤¨à¤¹à¥€à¤‚ -" ; Default ; > ;
+        < "- à¤‰à¤ªà¤­à¥‹à¤•à¥à¤¤à¤¾ à¤¸à¥‡ à¤ªà¤°à¤¿à¤­à¤¾à¤·à¤¿à¤¤ -" ; Default ; > ;
+        < "- à¤šà¥à¤¨à¤¾à¤µ -" ; Default ; > ;
+    };
     };
     Edit ED_PRINTAREA
     {
@@ -292,7 +313,7 @@ ModelessDialog RID_SCDLG_AREAS
         Size = MAP_APPFONT ( 12 , 12 ) ;
         TabStop = FALSE ;
         QuickHelpText [ english_us ] = "Shrink" ;
-        QuickHelpText [ portuguese_brazilian ] = "Verkleinern" ;
+        QuickHelpText [ portuguese_brazilian ] = "Reduzir" ;
         QuickHelpText [ swedish ] = "Förminska" ;
         QuickHelpText [ danish ] = "Formindsk" ;
         QuickHelpText [ italian ] = "Zoom indietro" ;
@@ -312,6 +333,9 @@ ModelessDialog RID_SCDLG_AREAS
         QuickHelpText[ catalan ] = "Redueix";
         QuickHelpText[ finnish ] = "Kutista";
         QuickHelpText[ thai ] = "Shrink";
+        QuickHelpText[ czech ] = "ZmenÅ¡it";
+        QuickHelpText[ hebrew ] = "Verkleinern";
+        QuickHelpText[ hindi ] = "à¤¸à¤¿à¤•à¥à¤¡à¤¨à¤¾";
     };
     FixedLine FL_REPEATROW
     {
@@ -327,20 +351,23 @@ ModelessDialog RID_SCDLG_AREAS
         Text [ FRENCH ] = "~Ligne à répéter" ;
         Text [ ITALIAN ] = "Riga da ripetere" ;
         Text [ DUTCH ] = "~Rij herhalen" ;
-        Text [ PORTUGUESE_BRAZILIAN ] = "Fileira para repetir no topo" ;
+        Text [ PORTUGUESE_BRAZILIAN ] = "Linhas a repetir" ;
         Text [ SWEDISH ] = "~Upprepningsrad" ;
         Text [ PORTUGUESE ] = "Linha a repetir" ;
         Text[ chinese_simplified ] = "é‡å¤çš„è¡Œ";
         Text[ russian ] = "Ïîâòîğ ñòğîêè";
-        Text[ polish ] = "Wiersz powtórzony";
+        Text[ polish ] = "Wiersze powtórzone";
         Text[ japanese ] = "ç¹°ã‚Šè¿”ã™è¡Œ";
         Text[ chinese_traditional ] = "é‡è¤‡çš„åˆ—";
         Text[ arabic ] = "ÇáÕİ ÇáãßÑÑ";
         Text[ greek ] = "Åğáíáëáìâáíüìåíç ãñáììŞ";
         Text[ korean ] = "í–‰ ë°˜ë³µ";
-        Text[ turkish ] = "Yinelenen satır";
+        Text[ turkish ] = "Yinelenecek satırlar";
         Text[ catalan ] = "Fila ~a repetir";
         Text[ thai ] = "à¹à¸–à¸§à¸‹à¹‰à¸³";
+        Text[ czech ] = "Opakovat Å™Ã¡dky";
+        Text[ hebrew ] = "Wiederholungs~zeile";
+        Text[ hindi ] = "à¤¦à¥à¤¹à¤°à¤¾à¤¨à¥‡à¤µà¤¾à¤²à¤¾ à¤ªà¤‚à¤•à¥à¤¤à¤¿à¤¯à¤¾à¤";
     };
     ListBox LB_REPEATROW
     {
@@ -370,8 +397,8 @@ ModelessDialog RID_SCDLG_AREAS
         };
         StringList [ portuguese_brazilian ] =
         {
-            < "- keine -" ; Default ; > ;
-            < "- definido pelo usu?rio -" ; Default ; > ;
+            < "- nenhum -" ; Default ; > ;
+            < "- definido pelo usuário -" ; Default ; > ;
         };
         StringList [ portuguese ] =
         {
@@ -426,7 +453,7 @@ ModelessDialog RID_SCDLG_AREAS
     StringList [ polish ] =
     {
             < "- brak -" ; Default ; > ;
-        < "- Ustawienia indywidualne -" ; Default ; > ;
+        < "- niestandardowe -" ; Default ; > ;
     };
     StringList [ japanese ] =
     {
@@ -473,6 +500,21 @@ ModelessDialog RID_SCDLG_AREAS
          < "- à¹„à¸¡à¹ˆà¸¡à¸µ -" ; Default ; > ;
         < "- à¸£à¸°à¸šà¸¸à¸œà¸¹à¹‰à¹ƒà¸Šà¹‰ -" ; Default ; > ;
     };
+    StringList [ czech ] =
+    {
+         < "- Å¾Ã¡dnÃ© -" ; Default ; > ;
+        < "- uÅ¾ivatelem definovanÃ© -" ; Default ; > ;
+    };
+    StringList [ hebrew ] =
+    {
+         < "- keine -" ; Default ; > ;
+        < "- benutzerdefiniert -" ; Default ; > ;
+    };
+    StringList [ hindi ] =
+    {
+         < "- à¤•à¥‹à¤ˆ à¤¨à¤¹à¥€à¤‚ -" ; Default ; > ;
+        < "- à¤‰à¤ªà¤­à¥‹à¤•à¥à¤¤à¤¾ à¤¸à¥‡ à¤ªà¤°à¤¿à¤­à¤¾à¤·à¤¿à¤¤ -" ; Default ; > ;
+    };
     };
     Edit ED_REPEATROW
     {
@@ -488,7 +530,7 @@ ModelessDialog RID_SCDLG_AREAS
         Size = MAP_APPFONT ( 12 , 12 ) ;
         TabStop = FALSE ;
         QuickHelpText [ english_us ] = "Shrink" ;
-        QuickHelpText [ portuguese_brazilian ] = "Verkleinern" ;
+        QuickHelpText [ portuguese_brazilian ] = "Reduzir" ;
         QuickHelpText [ swedish ] = "Förminska" ;
         QuickHelpText [ danish ] = "Formindsk" ;
         QuickHelpText [ italian ] = "Zoom indietro" ;
@@ -508,6 +550,9 @@ ModelessDialog RID_SCDLG_AREAS
         QuickHelpText[ catalan ] = "Redueix";
         QuickHelpText[ finnish ] = "Kutista";
         QuickHelpText[ thai ] = "Shrink";
+        QuickHelpText[ czech ] = "ZmenÅ¡it";
+        QuickHelpText[ hebrew ] = "Verkleinern";
+        QuickHelpText[ hindi ] = "à¤¸à¤¿à¤•à¥à¤¡à¤¨à¤¾";
     };
     FixedLine FL_REPEATCOL
     {
@@ -523,20 +568,23 @@ ModelessDialog RID_SCDLG_AREAS
         Text [ FRENCH ] = "~Colonne à répéter" ;
         Text [ ITALIAN ] = "Colonna da ripetere" ;
         Text [ DUTCH ] = "~Kolom herhalen" ;
-        Text [ PORTUGUESE_BRAZILIAN ] = "Colunas para repetir ? esquerda" ;
+        Text [ PORTUGUESE_BRAZILIAN ] = "Colunas a repetir" ;
         Text [ SWEDISH ] = "Upprepning~skolumn" ;
         Text [ PORTUGUESE ] = "~Coluna a repetir" ;
         Text[ chinese_simplified ] = "é‡å¤çš„åˆ—";
         Text[ russian ] = "Ïîâòîğ ñòîëáöà";
-        Text[ polish ] = "Kolumna powtórzona";
+        Text[ polish ] = "Kolumny powtórzone";
         Text[ japanese ] = "ç¹°ã‚Šè¿”ã™åˆ—";
         Text[ chinese_traditional ] = "é‡è¤‡çš„æ¬„";
         Text[ arabic ] = "ÇáÚãæÏ ÇáãßÑÑ";
         Text[ greek ] = "Åğáíáëáìâáíüìåíç ~óôŞëç";
         Text[ korean ] = "ì—´ ë°˜ë³µ";
-        Text[ turkish ] = "Yinelenen sütun";
+        Text[ turkish ] = "Yinelenecek sütunlar";
         Text[ catalan ] = "~Columna a repetir";
         Text[ thai ] = "à¸—à¸³à¸„à¸­à¸¥à¸±à¸¡à¸™à¹Œà¸‹à¹‰à¸³";
+        Text[ czech ] = "Opakovat sloupce";
+        Text[ hebrew ] = "Wiederholungs~spalte";
+        Text[ hindi ] = "à¤¦à¥à¤¹à¤°à¤¾à¤¨à¥‡à¤µà¤¾à¤²à¤¾ à¤¸à¥à¤¤à¤‚à¤­à¥‡à¤‚";
     };
     ListBox LB_REPEATCOL
     {
@@ -566,8 +614,8 @@ ModelessDialog RID_SCDLG_AREAS
         };
         StringList [ portuguese_brazilian ] =
         {
-            < "- keine -" ; Default ; > ;
-            < "- definido pelo usu?rio -" ; Default ; > ;
+            < "- nenhum -" ; Default ; > ;
+            < "- definido pelo usuário -" ; Default ; > ;
         };
         StringList [ portuguese ] =
         {
@@ -622,7 +670,7 @@ ModelessDialog RID_SCDLG_AREAS
     StringList [ polish ] =
     {
             < "- brak -" ; Default ; > ;
-        < "- ustawienia indywidualne -" ; Default ; > ;
+        < "- niestandardowe -" ; Default ; > ;
     };
     StringList [ japanese ] =
     {
@@ -669,6 +717,21 @@ ModelessDialog RID_SCDLG_AREAS
          < "- à¹„à¸¡à¹ˆà¸¡à¸µ -" ; Default ; > ;
         < "- à¸£à¸°à¸šà¸¸à¸œà¸¹à¹‰à¹ƒà¸Šà¹‰ -" ; Default ; > ;
     };
+    StringList [ czech ] =
+    {
+         < "- Å¾Ã¡dnÃ© -" ; Default ; > ;
+        < "- uÅ¾ivatelem definovanÃ© -" ; Default ; > ;
+    };
+    StringList [ hebrew ] =
+    {
+         < "- keine -" ; Default ; > ;
+        < "- benutzerdefiniert -" ; Default ; > ;
+    };
+    StringList [ hindi ] =
+    {
+         < "- à¤•à¥‹à¤ˆ à¤¨à¤¹à¥€à¤‚ -" ; Default ; > ;
+        < "- à¤‰à¤ªà¤­à¥‹à¤•à¥à¤¤à¤¾ à¤¸à¥‡ à¤ªà¤°à¤¿à¤­à¤¾à¤·à¤¿à¤¤ -" ; Default ; > ;
+    };
     };
     Edit ED_REPEATCOL
     {
@@ -684,7 +747,7 @@ ModelessDialog RID_SCDLG_AREAS
         Size = MAP_APPFONT ( 12 , 12 ) ;
         TabStop = FALSE ;
         QuickHelpText [ english_us ] = "Shrink" ;
-        QuickHelpText [ portuguese_brazilian ] = "Verkleinern" ;
+        QuickHelpText [ portuguese_brazilian ] = "Reduzir" ;
         QuickHelpText [ swedish ] = "Förminska" ;
         QuickHelpText [ danish ] = "Fomindsk" ;
         QuickHelpText [ italian ] = "Zoom indietro" ;
@@ -704,14 +767,17 @@ ModelessDialog RID_SCDLG_AREAS
         QuickHelpText[ catalan ] = "Redueix";
         QuickHelpText[ finnish ] = "Kutista";
         QuickHelpText[ thai ] = "Shrink";
+        QuickHelpText[ czech ] = "ZmenÅ¡it";
+        QuickHelpText[ hebrew ] = "Verkleinern";
+        QuickHelpText[ hindi ] = "à¤¸à¤¿à¤•à¥à¤¡à¤¨à¤¾";
     };
     Text [ swedish ] = "Redigera utskriftsområden" ;
     Text [ danish ] = "Rediger udskriftsområde" ;
     Text [ portuguese ] = "Editar áreas de impressão" ;
-    Text [ portuguese_brazilian ] = "Druckbereiche bearbeiten" ;
+    Text [ portuguese_brazilian ] = "Editar Intervalos de Impressão" ;
     Text[ chinese_simplified ] = "ç¼–è¾‘æ‰“å°åŒºåŸŸ";
     Text[ russian ] = "Èçìåíåíèå îáëàñòåé ïå÷àòè";
-    Text[ polish ] = "Edytuj obszar wydruku";
+    Text[ polish ] = "Edytuj zakresy wydruku";
     Text[ japanese ] = "å°åˆ·ç¯„å›²ã®ç·¨é›†";
     Text[ chinese_traditional ] = "ç·¨è¼¯åˆ—å°ç¯„åœ";
     Text[ arabic ] = "ÊÍÑíÑ äØÇŞÇÊ ÇáØÈÇÚÉ";
@@ -721,6 +787,9 @@ ModelessDialog RID_SCDLG_AREAS
     Text[ catalan ] = "Edita les àrees d'impressió";
     Text[ finnish ] = "Muuta tulostusalueita";
     Text[ thai ] = "à¹à¸à¹‰à¹„à¸‚à¸Šà¹ˆà¸§à¸‡à¸à¸²à¸£à¸à¸´à¸¡à¸à¹Œ";
+    Text[ czech ] = "Upravit oblasti tisku";
+    Text[ hebrew ] = "Druckbereiche bearbeiten";
+    Text[ hindi ] = "à¤›à¤ªà¤¾à¤ˆ à¤«à¥ˆà¤²à¤¾à¤µ à¤•à¤¾ à¤¸à¤‚à¤ªà¤¾à¤¦à¤¨";
 };
 TabPage RID_SCPAGE_TABLE
 {
@@ -737,7 +806,7 @@ TabPage RID_SCPAGE_TABLE
         Text [ ENGLISH ] = "Column- & row he~adings" ;
         Text [ norwegian ] = "Column- & row he~adings" ;
         Text [ italian ] = "Intesta~zioni colonna/riga" ;
-        Text [ portuguese_brazilian ] = "T?~tulos de Coluna- & fileira" ;
+        Text [ portuguese_brazilian ] = "Cabeçalhos de linhas e ~colunas" ;
         Text [ portuguese ] = "Tí~tulos de colunas & linhas" ;
         Text [ finnish ] = "~Sarake- ja rivitunnukset" ;
         Text [ danish ] = "Række-/kolonneoverskrifter" ;
@@ -749,7 +818,7 @@ TabPage RID_SCPAGE_TABLE
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "è¡Œæ ‡é¢˜å’Œåˆ—æ ‡é¢˜(~C)";
         Text[ russian ] = "Çàãîëîâêè ñòğîê è ñòîëáöîâ";
-        Text[ polish ] = "~Nag³ówki wierszy & kolumn";
+        Text[ polish ] = "~Nag³ówki wierszy i kolumn";
         Text[ japanese ] = "è¡Œã¨åˆ—ã®ç•ªå·(~C)";
         Text[ chinese_traditional ] = "æ¬„å’Œåˆ—æ¨™é¡Œ(~C)";
         Text[ arabic ] = "ÑÄæÓ ÇáÃÓØÑ æÇáÃÚãÏÉ";
@@ -758,6 +827,9 @@ TabPage RID_SCPAGE_TABLE
         Text[ turkish ] = "Satır ve sütun ~başlıkları";
         Text[ catalan ] = "Capçaleres de ~columnes i files";
         Text[ thai ] = "à¸ªà¹ˆà¸§à¸™à¸«à¸±à¸§~à¸„à¸­à¸¥à¸±à¸¡à¸™à¹Œà¹à¸¥à¸°à¹à¸–à¸§";
+        Text[ czech ] = "Nadpisy sloupcÅ¯ a Å™Ã¡dkÅ¯";
+        Text[ hebrew ] = "Zeilen- & Sp~altenkÃ¶pfe";
+        Text[ hindi ] = "~à¤¸à¥à¤¤à¤‚à¤­ à¤”à¤° à¤ªà¤‚à¤•à¥à¤¤à¤¿ à¤¶à¥€à¤°à¥à¤·à¤•à¥‡à¤‚";
     };
     CheckBox BTN_GRID
     {
@@ -779,7 +851,7 @@ TabPage RID_SCPAGE_TABLE
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "å·¥ä½œè¡¨ç½‘æ ¼(~G)";
         Text[ russian ] = "Ñåòêà";
-        Text[ polish ] = "Siatka tabeli";
+        Text[ polish ] = "~Siatka";
         Text[ japanese ] = "è¡¨ã®ã‚°ãƒªãƒƒãƒ‰ç·š(~G)";
         Text[ chinese_traditional ] = "å·¥ä½œè¡¨ç¶²æ ¼(~G)";
         Text[ arabic ] = "ÔÈßÉ ÇáÌÏæá";
@@ -788,6 +860,9 @@ TabPage RID_SCPAGE_TABLE
         Text[ turkish ] = "~Kılavuz çizgiler";
         Text[ catalan ] = "~Graella";
         Text[ thai ] = "à¹€~à¸ªà¹‰à¸™à¸•à¸²à¸£à¸²à¸‡";
+        Text[ czech ] = "MÅ™Ã­Å¾ka";
+        Text[ hebrew ] = "Tabellen~gitter";
+        Text[ hindi ] = "~à¤œà¤¾à¤²";
     };
     CheckBox BTN_NOTES
     {
@@ -797,7 +872,7 @@ TabPage RID_SCPAGE_TABLE
         Text [ ENGLISH ] = "~Notes" ;
         Text [ norwegian ] = "~Notes" ;
         Text [ italian ] = "~Note" ;
-        Text [ portuguese_brazilian ] = "~Observa??s" ;
+        Text [ portuguese_brazilian ] = "~Anotações" ;
         Text [ portuguese ] = "~Anotações" ;
         Text [ finnish ] = "H~uomautukset" ;
         Text [ danish ] = "Noter" ;
@@ -809,7 +884,7 @@ TabPage RID_SCPAGE_TABLE
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "å¤‡æ³¨(~N)";
         Text[ russian ] = "Ïğèìå÷àíèÿ";
-        Text[ polish ] = "Notatki";
+        Text[ polish ] = "No~tatki";
         Text[ japanese ] = "ã‚³ãƒ¡ãƒ³ãƒˆ(~N)";
         Text[ chinese_traditional ] = "å‚™è¨»(~N)";
         Text[ arabic ] = "ãáÇÍÙÇÊ";
@@ -818,6 +893,9 @@ TabPage RID_SCPAGE_TABLE
         Text[ turkish ] = "~Notlar";
         Text[ catalan ] = "~Notes";
         Text[ thai ] = "~à¸šà¸±à¸™à¸—à¸¶à¸";
+        Text[ czech ] = "PoznÃ¡mky";
+        Text[ hebrew ] = "â€®×”×¢×¨×•×ªâ€¬";
+        Text[ hindi ] = "~à¤Ÿà¤¿à¤ªà¥à¤ªà¤£à¥€";
     };
     CheckBox BTN_OBJECTS
     {
@@ -827,7 +905,7 @@ TabPage RID_SCPAGE_TABLE
         Text [ ENGLISH ] = "~Objects/Images" ;
         Text [ norwegian ] = "~Objects/Images" ;
         Text [ italian ] = "~Oggetti/immagini" ;
-        Text [ portuguese_brazilian ] = "~Objects/Images" ;
+        Text [ portuguese_brazilian ] = "~Objetos/figuras" ;
         Text [ portuguese ] = "~Objectos/Imagens" ;
         Text [ finnish ] = "O~bjektit/grafiikka" ;
         Text [ danish ] = "Objekter/grafik" ;
@@ -839,7 +917,7 @@ TabPage RID_SCPAGE_TABLE
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "å¯¹è±¡/å›¾å½¢(~O)";
         Text[ russian ] = "Âíåäğåííûå/ãğà~ôè÷åñêèå îáúåêòû";
-        Text[ polish ] = "Obiekty/~Grafiki";
+        Text[ polish ] = "~Obiekty/grafiki";
         Text[ japanese ] = "ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã¨å›³(~O)";
         Text[ chinese_traditional ] = "ç‰©ä»¶/åœ–å½¢(~O)";
         Text[ arabic ] = "ßÇÆäÇÊ/ÕæÑ";
@@ -848,6 +926,9 @@ TabPage RID_SCPAGE_TABLE
         Text[ turkish ] = "~Nesne/grafikler";
         Text[ catalan ] = "~Objectes/gràfics";
         Text[ thai ] = "~à¸§à¸±à¸•à¸–à¸¸/à¸à¸£à¸²à¸Ÿà¸´à¸„";
+        Text[ czech ] = "Objekty/ObrÃ¡zky";
+        Text[ hebrew ] = "~Objekte/Grafiken";
+        Text[ hindi ] = "~à¤µà¤¸à¥à¤¤à¥/à¤¸à¥à¤šà¤¿à¤¤à¥à¤°";
     };
     CheckBox BTN_CHARTS
     {
@@ -857,7 +938,7 @@ TabPage RID_SCPAGE_TABLE
         Text [ ENGLISH ] = "~Charts" ;
         Text [ norwegian ] = "~Charts" ;
         Text [ italian ] = "Diagrammi" ;
-        Text [ portuguese_brazilian ] = "~Gr?ficos" ;
+        Text [ portuguese_brazilian ] = "~Gráficos" ;
         Text [ portuguese ] = "~Gráficos" ;
         Text [ finnish ] = "Kaav~iot" ;
         Text [ danish ] = "Diagrammer" ;
@@ -869,15 +950,18 @@ TabPage RID_SCPAGE_TABLE
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "å›¾è¡¨(~R)";
         Text[ russian ] = "Äèàãğàììû";
-        Text[ polish ] = "Wy~kresy";
+        Text[ polish ] = "Wyk~resy";
         Text[ japanese ] = "ã‚°ãƒ©ãƒ•(~R)";
         Text[ chinese_traditional ] = "åœ–è¡¨(~R)";
         Text[ arabic ] = "ÑÓæã ÈíÇäíÉ";
         Text[ greek ] = "ÄéáãñÜììáôá";
         Text[ korean ] = "ì°¨íŠ¸(~R)";
-        Text[ turkish ] = "~Şemalar";
+        Text[ turkish ] = "Şema~lar";
         Text[ catalan ] = "Dia~grames";
         Text[ thai ] = "à¹à¸œà¸™~à¸ à¸¹à¸¡à¸´";
+        Text[ czech ] = "Grafy";
+        Text[ hebrew ] = "~Diagramme";
+        Text[ hindi ] = "à¤šà¤¾~à¤°à¥à¤Ÿ";
     };
     CheckBox BTN_DRAWINGS
     {
@@ -887,7 +971,7 @@ TabPage RID_SCPAGE_TABLE
         Text [ ENGLISH ] = "Drawob~jects" ;
         Text [ norwegian ] = "Drawob~jects" ;
         Text [ italian ] = "Oggetti di d~isegno" ;
-        Text [ portuguese_brazilian ] = "Drawob~jects" ;
+        Text [ portuguese_brazilian ] = "Objetos de ~desenho" ;
         Text [ portuguese ] = "Objectos de ~desenho" ;
         Text [ finnish ] = "~Piirrosobjektit" ;
         Text [ danish ] = "T~egneobjekter" ;
@@ -899,15 +983,18 @@ TabPage RID_SCPAGE_TABLE
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "ç»˜å›¾å¯¹è±¡(~D)";
         Text[ russian ] = "Ğèñ~óíêè";
-        Text[ polish ] = "Obiekty g~raficzne";
+        Text[ polish ] = "O~biekty rysunkowe";
         Text[ japanese ] = "å›³å½¢æç”»ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ(~D)";
         Text[ chinese_traditional ] = "ç¹ªåœ–ç‰©ä»¶(~D)";
         Text[ arabic ] = "ßÇÆäÇÊ ÑÓæãíÉ";
         Text[ greek ] = "Áíôéêåßìåíá ó÷åäßáóçò";
         Text[ korean ] = "ê·¸ë¦¬ê¸° ê°œì²´(~D)";
-        Text[ turkish ] = "Çizim nesnele~ri";
+        Text[ turkish ] = "~Çizim nesneleri";
         Text[ catalan ] = "Objectes de ~dibuix";
         Text[ thai ] = "à¸§à¸±à¸•à¸–à¸¸~à¸§à¸²à¸”à¸£à¸¹à¸›";
+        Text[ czech ] = "Kresby";
+        Text[ hebrew ] = "Zeichenob~jekte";
+        Text[ hindi ] = "~à¤°à¥‡à¤–à¤¾à¤šà¤¿à¤¤à¥à¤° à¤µà¤¸à¥à¤¤à¥";
     };
     CheckBox BTN_FORMULAS
     {
@@ -917,7 +1004,7 @@ TabPage RID_SCPAGE_TABLE
         Text [ ENGLISH ] = "~Formulas" ;
         Text [ norwegian ] = "~Formulas" ;
         Text [ italian ] = "~Formula" ;
-        Text [ portuguese_brazilian ] = "~F?mulas" ;
+        Text [ portuguese_brazilian ] = "~Fórmulas" ;
         Text [ portuguese ] = "~Fórmulas" ;
         Text [ finnish ] = "~Kaavat" ;
         Text [ danish ] = "~Formler" ;
@@ -929,15 +1016,18 @@ TabPage RID_SCPAGE_TABLE
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "å…¬å¼(~F)";
         Text[ russian ] = "Ôîğìóëû";
-        Text[ polish ] = "Formu³y";
+        Text[ polish ] = "~Formu³y";
         Text[ japanese ] = "æ•°å¼(~F)";
         Text[ chinese_traditional ] = "å…¬å¼(~F)";
         Text[ arabic ] = "ÕíÛ";
         Text[ greek ] = "Ôığïé";
         Text[ korean ] = "ìˆ˜ì‹(~F)";
-        Text[ turkish ] = "~Formül";
+        Text[ turkish ] = "~Formüller";
         Text[ catalan ] = "~Fórmules";
         Text[ thai ] = "~à¸ªà¸¹à¸•à¸£à¸„à¸³à¸™à¸§à¸“";
+        Text[ czech ] = "Vzorce";
+        Text[ hebrew ] = "~Formeln";
+        Text[ hindi ] = "~à¤¸à¥‚à¤¤à¥à¤°";
     };
     CheckBox BTN_NULLVALS
     {
@@ -947,7 +1037,7 @@ TabPage RID_SCPAGE_TABLE
         Text [ ENGLISH ] = "N~ull values" ;
         Text [ norwegian ] = "N~ull values" ;
         Text [ italian ] = "Valori zero" ;
-        Text [ portuguese_brazilian ] = "~Null values" ;
+        Text [ portuguese_brazilian ] = "~Valores zero" ;
         Text [ portuguese ] = "~Valores zero" ;
         Text [ finnish ] = "~Nolla-arvot" ;
         Text [ danish ] = "Nulværdier" ;
@@ -959,7 +1049,7 @@ TabPage RID_SCPAGE_TABLE
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "é›¶å€¼(~U)";
         Text[ russian ] = "Íóëåâûå çíà÷åíèÿ";
-        Text[ polish ] = "Warto~œci zerowe";
+        Text[ polish ] = "Wartoœci ~zerowe";
         Text[ japanese ] = "ã‚¼ãƒ­å€¤(~U)";
         Text[ chinese_traditional ] = "é›¶å€¼(~U)";
         Text[ arabic ] = "Şíã ÇáÕİÑ";
@@ -968,6 +1058,9 @@ TabPage RID_SCPAGE_TABLE
         Text[ turkish ] = "Sıfır değer~leri";
         Text[ catalan ] = "~Valors zero";
         Text[ thai ] = "~à¸„à¹ˆà¸²à¸¨à¸¹à¸™à¸¢à¹Œ";
+        Text[ czech ] = "NulovÃ© hodnoty";
+        Text[ hebrew ] = "N~ullwerte";
+        Text[ hindi ] = "à¤¶à¥‚à¤¨à¥à¤¯ à¤®à¥‚~à¤²à¥à¤¯";
     };
     FixedLine FL_PRINT
     {
@@ -997,6 +1090,9 @@ TabPage RID_SCPAGE_TABLE
         Text[ turkish ] = "Yazdır";
         Text[ catalan ] = "Impressió";
         Text[ thai ] = "à¸à¸´à¸¡à¸à¹Œ";
+        Text[ czech ] = "Tisknout";
+        Text[ hebrew ] = "â€®×”×“×¤×¡×”â€¬";
+        Text[ hindi ] = "à¤›à¤ªà¤¾à¤ˆ";
     };
     RadioButton BTN_TOPDOWN
     {
@@ -1006,7 +1102,7 @@ TabPage RID_SCPAGE_TABLE
         Text [ ENGLISH ] = "~Top to bottom, then to right" ;
         Text [ norwegian ] = "~Top to bottom" ;
         Text [ italian ] = "Dall'al~to in basso, poi a destra" ;
-        Text [ portuguese_brazilian ] = "~De cima para baixo" ;
+        Text [ portuguese_brazilian ] = "De ~cima para baixo, depois à direita" ;
         Text [ portuguese ] = "De ~cima para baixo, depois à direita" ;
         Text [ finnish ] = "~Ylhäältä alas, sitten oikealle" ;
         Text [ danish ] = "Oppefra og ned, derefter til højre" ;
@@ -1018,15 +1114,18 @@ TabPage RID_SCPAGE_TABLE
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "ä»ä¸Šå‘ä¸‹ï¼Œå†å‘å³(~T)";
         Text[ russian ] = "Ñâåğõó âíèç, çàòåì âïğàâî";
-        Text[ polish ] = "Od g~óry do do³u, nastêpnie w prawo";
+        Text[ polish ] = "Od ~góry do do³u, nastêpnie w prawo";
         Text[ japanese ] = "ä¸Šã‹ã‚‰ä¸‹ã¸ã€ãã®å¾Œå³ã¸(~T)";
         Text[ chinese_traditional ] = "å¾ä¸Šå‘ä¸‹ï¼Œç„¶å¾Œå‘å³(~T)";
         Text[ arabic ] = "ãä ÃÚáì áÃÓİá";
         Text[ greek ] = "Áğü ğÜíù ğñïò ôá êÜôù, óôç óõíİ÷åéá ğñïò ôá äåîéÜ";
         Text[ korean ] = "í–‰ ìš°ì„ (~T)";
-        Text[ turkish ] = "~Yukardan aşağı";
+        Text[ turkish ] = "~Yukardan aşağı, sonra sağa";
         Text[ catalan ] = "De la part ~superior a la part inferior";
         Text[ thai ] = "~à¸šà¸™à¸¥à¸‡à¸¥à¹ˆà¸²à¸‡";
+        Text[ czech ] = "Shora dolÅ¯, pak vpravo";
+        Text[ hebrew ] = "Von o~ben nach unten, dann nach rechts";
+        Text[ hindi ] = "~à¤Šà¤ªà¤° à¤¸à¥‡ à¤¨à¤¿à¤šà¥‡, à¤”à¤° à¤¦à¤¾à¤¹à¤¿à¤¨à¥€ à¤“à¤°";
     };
     RadioButton BTN_LEFTRIGHT
     {
@@ -1036,7 +1135,7 @@ TabPage RID_SCPAGE_TABLE
         Text [ ENGLISH ] = "Left to rig~ht, then to bottom" ;
         Text [ norwegian ] = "Left to rig~ht" ;
         Text [ italian ] = "Da sinistra a d~estra, poi in basso" ;
-        Text [ portuguese_brazilian ] = "Da esquerda para a di~reita" ;
+        Text [ portuguese_brazilian ] = "Da esquerda para a di~reita, depois para baixo" ;
         Text [ portuguese ] = "Da esquerda para a di~reita, depois para baixo" ;
         Text [ finnish ] = "~Vasemmalta oikealle, sitten alas" ;
         Text [ danish ] = "Fra ~venstre mod højre, derefter nedad" ;
@@ -1048,16 +1147,19 @@ TabPage RID_SCPAGE_TABLE
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "ä»å·¦å‘å³ï¼Œå†å‘ä¸‹(~E)";
         Text[ russian ] = "Ñëåâà íàïğàâî, çàòåì âíèç";
-        Text[ polish ] = "Od lewej do prawej, nastêpnie na dó³";
+        Text[ polish ] = "O~d lewej do prawej, nastêpnie na dó³";
         Text[ japanese ] = "å·¦ã‹ã‚‰å³ã¸ã€ãã®å¾Œä¸‹ã¸(~E)";
         Text[ chinese_traditional ] = "å¾å·¦å‘å³ï¼Œç„¶å¾Œå‘ä¸‹(~E)";
         Text[ arabic ] = "ãä ÇáíÓÇÑ Åáì Çáíãíä";
         Text[ language_user1 ] = "ÌŞêïò; - - - -";
         Text[ greek ] = "Áğü áñéóôåñÜ ğñïò ôá äåîéÜ, óôç óõíİ÷åéá ğñïò ôá ~êÜôù";
         Text[ korean ] = "ì™¼ìª½ì—ì„œ ì˜¤ë¥¸ìª½ìœ¼ë¡œ, ê·¸ ë‹¤ìŒ ì•„ë˜ë¡œ";
-        Text[ turkish ] = "S~oldan sağa";
+        Text[ turkish ] = "~Soldan sağa, sonra aşağıya";
         Text[ catalan ] = "D'~esquerra a dreta";
         Text[ thai ] = "à¸‹à¹‰à¸²~à¸¢à¹„à¸›à¸‚à¸§à¸²";
+        Text[ czech ] = "Zleva doprava, pak dolÅ¯";
+        Text[ hebrew ] = "Von Lin~ks-nach-rechts, dann nach unten";
+        Text[ hindi ] = "à¤¬à¤¾~à¤¯à¤¾à¤ à¤“à¤° à¤¸à¥‡ à¤¦à¤¾à¤¹à¤¿à¤¨à¥€ à¤“à¤°, à¤”à¤° à¤¨à¥€à¤šà¥‡ à¤•à¥€ à¤“à¤°";
     };
     FixedImage BMP_PAGEDIR
     {
@@ -1092,7 +1194,7 @@ TabPage RID_SCPAGE_TABLE
         Text [ ENGLISH ] = "First ~page" ;
         Text [ norwegian ] = "First ~page" ;
         Text [ italian ] = "Primo numero di ~pagina" ;
-        Text [ portuguese_brazilian ] = "Primeira p?gina" ;
+        Text [ portuguese_brazilian ] = "Número da ~primeira página" ;
         Text [ portuguese ] = "~Número da primeira página" ;
         Text [ finnish ] = "~1. sivun numero" ;
         Text [ danish ] = "Første sidetal" ;
@@ -1104,15 +1206,18 @@ TabPage RID_SCPAGE_TABLE
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "ç¬¬ä¸€ä¸ªé¡µç (~P)";
         Text[ russian ] = "¹ ïåğâîé ñòğàíèöû";
-        Text[ polish ] = "Pierwszy nu~mer strony";
+        Text[ polish ] = "Numer ~pierwszej strony";
         Text[ japanese ] = "æœ€åˆã®ãƒšãƒ¼ã‚¸ç•ªå·(~P)";
         Text[ chinese_traditional ] = "ç¬¬ä¸€å€‹é ç¢¼(~P)";
         Text[ arabic ] = "ÑŞã ÇáÕİÍÉ ÇáÃæáì";
         Text[ greek ] = "Ğñşôïò áñéèìüò óåëßäáò";
         Text[ korean ] = "ì‹œì‘ í˜ì´ì§€ ë²ˆí˜¸(~P)";
-        Text[ turkish ] = "İlk sayfa ~numarası";
+        Text[ turkish ] = "İlk ~sayfa numarası";
         Text[ catalan ] = "Número primera ~pàgina";
         Text[ thai ] = "à¹€à¸¥à¸‚~à¸«à¸™à¹‰à¸²à¹à¸£à¸";
+        Text[ czech ] = "ÄŒÃ­slo prvnÃ­ strÃ¡nky";
+        Text[ hebrew ] = "Erste Seiten~zahl";
+        Text[ hindi ] = "à¤ªà¤¹à¤¿à¤²à¤¾ ~à¤ªà¥ƒà¤·à¥à¤  à¤¸à¤‚à¤–à¥à¤¯à¤¾";
     };
     NumericField ED_PAGENO
     {
@@ -1134,7 +1239,7 @@ TabPage RID_SCPAGE_TABLE
         Text [ ENGLISH ] = "Page Order" ;
         Text [ norwegian ] = "Page Order" ;
         Text [ italian ] = "Sequenza pagine" ;
-        Text [ portuguese_brazilian ] = "Ordem das P?ginas" ;
+        Text [ portuguese_brazilian ] = "Ordem da página" ;
         Text [ portuguese ] = "Ordem das páginas" ;
         Text [ finnish ] = "Sivujärjestys" ;
         Text [ danish ] = "Siderækkefølge" ;
@@ -1154,6 +1259,9 @@ TabPage RID_SCPAGE_TABLE
         Text[ turkish ] = "Sayfa sırası";
         Text[ catalan ] = "Ordre de pàgines";
         Text[ thai ] = "à¸¥à¸³à¸”à¸±à¸šà¸«à¸™à¹‰à¸²";
+        Text[ czech ] = "UspoÅ™Ã¡dÃ¡nÃ­ strÃ¡nky";
+        Text[ hebrew ] = "â€®×¡×“×¨ ×”×“×¤×¡×•×ª ×”×“×¤×™×â€¬";
+        Text[ hindi ] = "à¤ªà¥ƒà¤·à¥à¤  à¤•à¥à¤°à¤®";
     };
     RadioButton BTN_SCALEALL
     {
@@ -1167,22 +1275,25 @@ TabPage RID_SCPAGE_TABLE
         Text[ russian ] = "Óìåíüøèòü/óâåëè÷èòü ğàñïå÷àòêó";
         Text[ greek ] = "Óìßêñõíóç/Ìåãİèõíóç åêôığùóçò";
         Text[ dutch ] = "Afdruk v~erkleinen/vergroten";
-        Text[ french ] = "~Reduire/agrandir l'impression";
+        Text[ french ] = "~Réduire/agrandir l'impression";
         Text[ spanish ] = "Aumentar/disminuir impresión [%]";
         Text[ finnish ] = "Pienennä/suurenna tulostetta";
         Text[ italian ] = "Riduci/ingrandisci ~stampa";
         Text[ danish ] = "Formindsk/Forstør udskrift";
         Text[ swedish ] = "För~minska/förstora utskrift";
         Text[ polish ] = "Pomniejsz/powiêksz wydruk";
-        Text[ portuguese_brazilian ] = "~Todas as p?ginas para [%]";
+        Text[ portuguese_brazilian ] = "Ampliar/Diminuir impressão";
         Text[ japanese ] = "æ‹¡å¤§ç¸®å°å°åˆ·";
         Text[ korean ] = "ì¸ì‡„ ì¶•ì†Œ/í™•ëŒ€";
         Text[ chinese_simplified ] = "ç¼©å°æˆ–æ”¾å¤§æ‰“å°é¡µé¢";
         Text[ chinese_traditional ] = "ç¸®å°æˆ–æ”¾å¤§åˆ—å°";
-        Text[ turkish ] = "T~ümü [%]";
+        Text[ turkish ] = "Çıktı küçült/büyüt ";
         Text[ arabic ] = "Çáßá Åáì  [%]";
         Text[ catalan ] = "~Tot al [%]";
         Text[ thai ] = "~à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”à¸–à¸¶à¸‡ [%]";
+        Text[ czech ] = "Upravit mÄ›Å™Ã­tko tisku";
+        Text[ hebrew ] = "Ausdruck verk~leinern/vergrÃ¶ÃŸern";
+        Text[ hindi ] = "à¤›à¤ªà¤¾à¤ˆ à¤•à¤¿à¤¯à¤¾ à¤¹à¥à¤† à¤¶à¥€à¤Ÿà¥ à¤•à¥‹ à¤˜à¤Ÿà¤¾à¤“/à¤¬à¤¢à¤¼à¤¾à¤“";
     };
     RadioButton BTN_SCALEPAGENUM
     {
@@ -1202,16 +1313,19 @@ TabPage RID_SCPAGE_TABLE
         Text[ italian ] = "~Adatta la stampa al numero di pagine";
         Text[ danish ] = "Til~pas udskrift til sidetal";
         Text[ swedish ] = "An~passa utskrift till antal sidor";
-        Text[ polish ] = "Dopasuj wydruk do liczby stron";
-        Text[ portuguese_brazilian ] = "Para ~se ajustar nas p?ginas";
+        Text[ polish ] = "Dopasuj wydruk do ~liczby stron";
+        Text[ portuguese_brazilian ] = "A~justar impressão ao número de páginas";
         Text[ japanese ] = "ãƒšãƒ¼ã‚¸æ•°ã«åˆã‚ã›ã¦å°åˆ·(~M)";
         Text[ korean ] = "í˜ì´ì§€ ë²ˆí˜¸ë¡œ ì¸ì‡„ ë§ì¶¤(~M)";
         Text[ chinese_simplified ] = "æŒ‰é¡µæ•°è°ƒæ•´æ‰“å°é¡µé¢(~M)";
         Text[ chinese_traditional ] = "æŒ‰é æ•¸èª¿æ•´åˆ—å°(~M)";
-        Text[ turkish ] = "A~zami sayfa sayısı";
+        Text[ turkish ] = "Çıktıyı sayfa sayısına göre ayarla ";
         Text[ arabic ] = "ÇáÚÏÏ ÇáÃŞÕì ááÕİÍÇÊ";
         Text[ catalan ] = "Nombre ~màxim de pàgines";
         Text[ thai ] = "à¸ˆà¸³à¸™à¸§à¸™à¸«à¸™à¹‰à¸²~à¸¡à¸²à¸à¸—à¸µà¹ˆà¸ªà¸¸à¸”";
+        Text[ czech ] = "Tisk pÅ™izpÅ¯sobit na urÄenÃ½ poÄet strÃ¡nek";
+        Text[ hebrew ] = "Ausdruck auf Seitenzahl an~passen";
+        Text[ hindi ] = "~à¤ªà¥ƒà¤·à¥à¤ à¥‹à¤‚ à¤®à¥‡à¤‚ à¤›à¤ªà¤¾à¤ˆ à¤•à¤¿à¤¯à¤¾ à¤¹à¥à¤† à¤¶à¥€à¤Ÿà¥ à¤•à¥‹ à¤¯à¥‹à¤—à¥à¤¯ à¤¬à¤¨à¤¾à¤“";
     };
     MetricField ED_SCALEALL
     {
@@ -1254,10 +1368,10 @@ TabPage RID_SCPAGE_TABLE
         Text [ swedish ] = "Skala" ;
         Text [ danish ] = "Skaler" ;
         Text [ portuguese ] = "Escala" ;
-        Text [ portuguese_brazilian ] = "Skalierung" ;
+        Text [ portuguese_brazilian ] = "Escala" ;
         Text[ chinese_simplified ] = "æ˜¾ç¤ºæ¯”ä¾‹";
         Text[ russian ] = "Ìàñøòàá";
-        Text[ polish ] = "Skalowanie";
+        Text[ polish ] = "Skala";
         Text[ japanese ] = "å€ç‡";
         Text[ chinese_traditional ] = "é¡¯ç¤ºæ¯”ä¾‹";
         Text[ arabic ] = "ÇáãŞíÇÓ";
@@ -1267,8 +1381,24 @@ TabPage RID_SCPAGE_TABLE
         Text[ catalan ] = "Escala";
         Text[ finnish ] = "Skaalaa";
         Text[ thai ] = "à¸ªà¹€à¸à¸¥";
+        Text[ czech ] = "MÄ›Å™Ã­tko";
+        Text[ hebrew ] = "â€®×”×ª×××ª ×’×•×“×œâ€¬";
+        Text[ hindi ] = "à¤¸à¥à¤•à¥‡à¤²";
     };
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
