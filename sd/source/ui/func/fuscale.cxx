@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuscale.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 11:11:41 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 10:11:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,8 +104,11 @@
 #ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
 #endif
-#ifndef _SVX_ZOOM_HXX //autogen
-#include <svx/zoom.hxx>
+//CHINA001 #ifndef _SVX_ZOOM_HXX //autogen
+//CHINA001 #include <svx/zoom.hxx>
+//CHINA001 #endif
+#ifndef _SVX_ZOOM_DEF_HXX //autogen
+#include <svx/zoom_def.hxx>
 #endif
 #ifndef _SVX_ZOOMITEM_HXX //autogen
 #include <svx/zoomitem.hxx>
@@ -113,6 +116,8 @@
 #ifndef _SFXREQUEST_HXX //autogen
 #include <sfx2/request.hxx>
 #endif
+#include <svx/svxdlg.hxx> //CHINA001
+#include <svx/dialogs.hrc> //CHINA001
 
 namespace sd {
 
@@ -181,11 +186,22 @@ FuScale::FuScale (
         pZoomItem->SetValueSet( nZoomValues );
         aNewAttr.Put( *pZoomItem );
 
+<<<<<<< fuscale.cxx
         SvxZoomDialog* pDlg = new SvxZoomDialog( NULL, aNewAttr );
         pDlg->SetLimits((USHORT)pWin->GetMinZoom(),
             (USHORT)pWin->GetMaxZoom() );
+=======
+        //CHINA001 SvxZoomDialog* pDlg = new SvxZoomDialog( NULL, aNewAttr );
+        AbstractSvxZoomDialog* pDlg=NULL;
+        SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+        if(pFact)
+        {
+            pDlg = pFact->CreateSvxZoomDialog(NULL, aNewAttr, ResId(RID_SVXDLG_ZOOM));
+            DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+        }
+        pDlg->SetLimits( pWin->GetMinZoom(), pWin->GetMaxZoom() );
+>>>>>>> 1.2.316.1
         USHORT nResult = pDlg->Execute();
-
         switch( nResult )
         {
             case RET_CANCEL:
@@ -195,13 +211,12 @@ FuScale::FuScale (
                 rReq.Ignore ();
                 return; // Abbruch
             }
-
             default:
             {
                 rReq.Ignore ();
-/*
-                rReq.Done( *( pDlg->GetOutputItemSet() ) );
-                pArgs = rReq.GetArgs();*/
+    /*
+                    rReq.Done( *( pDlg->GetOutputItemSet() ) );
+                    pArgs = rReq.GetArgs();*/
             }
             break;
         }
@@ -209,6 +224,7 @@ FuScale::FuScale (
         const SfxItemSet aArgs (*(pDlg->GetOutputItemSet ()));
 
         delete pDlg;
+
         delete pZoomItem;
 
 //      SvxZoomType eZT = ((const SvxZoomItem &) aArgs.Get (RID_SVXDLG_ZOOM)).GetType ();
