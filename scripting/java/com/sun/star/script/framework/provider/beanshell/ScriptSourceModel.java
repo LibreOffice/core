@@ -2,9 +2,9 @@
 *
 *  $RCSfile: ScriptSourceModel.java,v $
 *
-*  $Revision: 1.6 $
+*  $Revision: 1.7 $
 *
-*  last change: $Author: rt $ $Date: 2004-11-15 15:57:11 $
+*  last change: $Author: rt $ $Date: 2005-01-27 15:29:19 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -120,10 +120,6 @@ public class ScriptSourceModel {
 
     public void setView(ScriptSourceView view) {
         this.view = view;
-    }
-
-    public boolean isModified() {
-        return false;
     }
 
     public Object execute(final XScriptContext context, ClassLoader cl )
