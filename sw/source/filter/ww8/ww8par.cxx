@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.135 $
+ *  $Revision: 1.136 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-11 11:29:04 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 15:50:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,16 @@
 #ifndef _MSDFFIMP_HXX
 #include <svx/msdffimp.hxx>
 #endif
+#ifndef _SVDMODEL_HXX
+#include <svx/svdmodel.hxx>
+#endif
+#ifndef _SVDOGRP_HXX
+#include <svx/svdogrp.hxx>
+#endif
+#ifndef _SVX_XFLCLIT_HXX
+#include <svx/xflclit.hxx>
+#endif
+
 
 #include <svtools/fltrcfg.hxx>
 
@@ -236,6 +246,7 @@
 #ifndef _CHARFMT_HXX
 #include <charfmt.hxx>
 #endif
+
 
 #ifndef _COM_SUN_STAR_I18N_FORBIDDENCHARACTERS_HPP_
 #include <com/sun/star/i18n/ForbiddenCharacters.hpp>
@@ -374,6 +385,492 @@ void SwWW8ImplReader::SetToggleBiDiAttrFlags(USHORT nFlags)
         pCtrlStck->SetToggleBiDiAttrFlags(nFlags);
 }
 
+
+SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
+                                       DffObjData& rObjData,
+                                       void* pData,
+                                       Rectangle& rTextRect,
+                                       SdrObject* pObj
+                                       )
+{
+    if( !rTextRect.IsEmpty() )
+    {
+        SvxMSDffImportData& rImportData = *(SvxMSDffImportData*)pData;
+        SvxMSDffImportRec* pImpRec = new SvxMSDffImportRec;
+        SvxMSDffImportRec* pTextImpRec = pImpRec;
+
+        // fill Import Record with data
+        pImpRec->nShapeId   = rObjData.nShapeId;
+        pImpRec->eShapeType = rObjData.eShapeType;
+
+        MSO_WrapMode eWrapMode( (MSO_WrapMode)GetPropertyValue(
+                                                            DFF_Prop_WrapText,
+                                                            mso_wrapSquare ) );
+        rObjData.bClientAnchor = maShapeRecords.SeekToContent( rSt,
+                                            DFF_msofbtClientAnchor,
+                                            SEEK_FROM_CURRENT_AND_RESTART );
+        if( rObjData.bClientAnchor )
+            ProcessClientAnchor( rSt,
+                    maShapeRecords.Current()->nRecLen,
+                    pImpRec->pClientAnchorBuffer, pImpRec->nClientAnchorLen );
+
+        rObjData.bClientData = maShapeRecords.SeekToContent( rSt,
+                                            DFF_msofbtClientData,
+                                            SEEK_FROM_CURRENT_AND_RESTART );
+        if( rObjData.bClientData )
+            ProcessClientData( rSt,
+                    maShapeRecords.Current()->nRecLen,
+                    pImpRec->pClientDataBuffer, pImpRec->nClientDataLen );
+
+
+        // process user (== Winword) defined parameters in 0xF122 record
+        if(    maShapeRecords.SeekToContent( rSt,
+                                             DFF_msofbtUDefProp,
+                                             SEEK_FROM_CURRENT_AND_RESTART )
+            && maShapeRecords.Current()->nRecLen )
+        {
+            UINT32  nBytesLeft = maShapeRecords.Current()->nRecLen;
+            UINT32  nUDData;
+            UINT16  nPID;
+            while( 5 < nBytesLeft )
+            {
+                rSt >> nPID;
+                if ( rSt.GetError() != 0 )
+                    break;
+                rSt >> nUDData;
+                switch( nPID )
+                {
+                    case 0x038F: pImpRec->nXAlign = nUDData; break;
+                    case 0x0390: pImpRec->nXRelTo = nUDData; break;
+                    case 0x0391: pImpRec->nYAlign = nUDData; break;
+                    case 0x0392: pImpRec->nYRelTo = nUDData; break;
+                    case 0x03BF: pImpRec->nLayoutInTableCell = nUDData; break;
+                }
+                if ( rSt.GetError() != 0 )
+                    break;
+                pImpRec->bHasUDefProp = TRUE;
+                nBytesLeft  -= 6;
+            }
+        }
+
+        //  Textrahmen, auch Title oder Outline
+        SdrObject*  pOrgObj  = pObj;
+        SdrRectObj* pTextObj = 0;
+        UINT32 nTextId = GetPropertyValue( DFF_Prop_lTxid, 0 );
+        if( nTextId )
+        {
+            SfxItemSet aSet( pSdrModel->GetItemPool() );
+
+            //Originally anything that as a mso_sptTextBox was created as a
+            //textbox, this was changed for #88277# to be created as a simple
+            //rect to keep impress happy. For the rest of us we'd like to turn
+            //it back into a textbox again.
+            FASTBOOL bTextFrame = (pImpRec->eShapeType == mso_sptTextBox);
+            if (!bTextFrame)
+            {
+                //Either
+                //a) its a simple text object or
+                //b) its a rectangle with text and square wrapping.
+                bTextFrame =
+                (
+                    (pImpRec->eShapeType == mso_sptTextSimple) ||
+                    (
+                        (pImpRec->eShapeType == mso_sptRectangle)
+                        && (eWrapMode == mso_wrapSquare)
+                        && ShapeHasText(pImpRec->nShapeId, rObjData.rSpHd.GetRecBegFilePos() )
+                    )
+                );
+            }
+
+            if (bTextFrame)
+            {
+                delete pObj;
+                pObj = pOrgObj = 0;
+            }
+
+            // Distance of Textbox to it's surrounding Autoshape
+            INT32 nTextLeft = GetPropertyValue( DFF_Prop_dxTextLeft, 91440L);
+            INT32 nTextRight = GetPropertyValue( DFF_Prop_dxTextRight, 91440L );
+            INT32 nTextTop = GetPropertyValue( DFF_Prop_dyTextTop, 45720L  );
+            INT32 nTextBottom = GetPropertyValue( DFF_Prop_dyTextBottom, 45720L );
+
+            ScaleEmu( nTextLeft );
+            ScaleEmu( nTextRight );
+            ScaleEmu( nTextTop );
+            ScaleEmu( nTextBottom );
+
+            INT32 nTextRotationAngle=0;
+            bool bVerticalText = false;
+            if ( IsProperty( DFF_Prop_txflTextFlow ) )
+            {
+                MSO_TextFlow eTextFlow = (MSO_TextFlow)(GetPropertyValue(
+                    DFF_Prop_txflTextFlow) & 0xFFFF);
+                switch( eTextFlow )
+                {
+                    case mso_txflBtoT:
+                        nTextRotationAngle = 9000;
+                    break;
+                    case mso_txflVertN:
+                    case mso_txflTtoBN:
+                        nTextRotationAngle = 27000;
+                        break;
+                    case mso_txflTtoBA:
+                        bVerticalText = true;
+                    break;
+                    case mso_txflHorzA:
+                        bVerticalText = true;
+                        nTextRotationAngle = 9000;
+                    case mso_txflHorzN:
+                    default :
+                        break;
+                }
+            }
+
+            if (nTextRotationAngle)
+            {
+                while (nTextRotationAngle > 360000)
+                    nTextRotationAngle-=9000;
+                switch (nTextRotationAngle)
+                {
+                    case 9000:
+                        {
+                            long nWidth = rTextRect.GetWidth();
+                            rTextRect.Right() = rTextRect.Left() + rTextRect.GetHeight();
+                            rTextRect.Bottom() = rTextRect.Top() + nWidth;
+
+                            INT32 nOldTextLeft = nTextLeft;
+                            INT32 nOldTextRight = nTextRight;
+                            INT32 nOldTextTop = nTextTop;
+                            INT32 nOldTextBottom = nTextBottom;
+
+                            nTextLeft = nOldTextBottom;
+                            nTextRight = nOldTextTop;
+                            nTextTop = nOldTextLeft;
+                            nTextBottom = nOldTextRight;
+                        }
+                        break;
+                    case 27000:
+                        {
+                            long nWidth = rTextRect.GetWidth();
+                            rTextRect.Right() = rTextRect.Left() + rTextRect.GetHeight();
+                            rTextRect.Bottom() = rTextRect.Top() + nWidth;
+
+                            INT32 nOldTextLeft = nTextLeft;
+                            INT32 nOldTextRight = nTextRight;
+                            INT32 nOldTextTop = nTextTop;
+                            INT32 nOldTextBottom = nTextBottom;
+
+                            nTextLeft = nOldTextTop;
+                            nTextRight = nOldTextBottom;
+                            nTextTop = nOldTextRight;
+                            nTextBottom = nOldTextLeft;
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            pTextObj = new SdrRectObj(OBJ_TEXT, rTextRect);
+            pTextImpRec = new SvxMSDffImportRec(*pImpRec);
+
+            // Die vertikalen Absatzeinrueckungen sind im BoundRect mit drin,
+            // hier rausrechnen
+            Rectangle aNewRect(rTextRect);
+            aNewRect.Bottom() -= nTextTop + nTextBottom;
+            aNewRect.Right() -= nTextLeft + nTextRight;
+
+            // Nur falls es eine einfache Textbox ist, darf der Writer
+            // das Objekt durch einen Rahmen ersetzen, ansonsten
+            if( bTextFrame )
+            {
+                SvxMSDffShapeInfo aTmpRec( 0, pImpRec->nShapeId );
+                aTmpRec.bSortByShapeId = TRUE;
+
+                USHORT nFound;
+                if( GetShapeInfos()->Seek_Entry( &aTmpRec, &nFound ) )
+                {
+                    SvxMSDffShapeInfo& rInfo = *GetShapeInfos()->GetObject(nFound);
+                    pTextImpRec->bReplaceByFly   = rInfo.bReplaceByFly;
+                    pTextImpRec->bLastBoxInChain = rInfo.bLastBoxInChain;
+                }
+            }
+
+            if( !pObj )
+                ApplyAttributes( rSt, aSet, rObjData.eShapeType, rObjData.nSpFlags );
+
+            bool bFitText = false;
+            if (GetPropertyValue(DFF_Prop_FitTextToShape) & 2)
+            {
+                aSet.Put( SdrTextAutoGrowHeightItem( TRUE ) );
+                aSet.Put( SdrTextMinFrameHeightItem(
+                    aNewRect.Bottom() - aNewRect.Top() ) );
+                aSet.Put( SdrTextMinFrameWidthItem(
+                    aNewRect.Right() - aNewRect.Left() ) );
+                bFitText = true;
+            }
+            else
+            {
+                aSet.Put( SdrTextAutoGrowHeightItem( FALSE ) );
+                aSet.Put( SdrTextAutoGrowWidthItem( FALSE ) );
+            }
+
+            switch ( (MSO_WrapMode)
+                GetPropertyValue( DFF_Prop_WrapText, mso_wrapSquare ) )
+            {
+                case mso_wrapNone :
+                    aSet.Put( SdrTextAutoGrowWidthItem( TRUE ) );
+                    pTextImpRec->bAutoWidth = true;
+                break;
+                case mso_wrapByPoints :
+                    aSet.Put( SdrTextContourFrameItem( TRUE ) );
+                break;
+            }
+
+            // Abstaende an den Raendern der Textbox setzen
+            aSet.Put( SdrTextLeftDistItem( nTextLeft ) );
+            aSet.Put( SdrTextRightDistItem( nTextRight ) );
+            aSet.Put( SdrTextUpperDistItem( nTextTop ) );
+            aSet.Put( SdrTextLowerDistItem( nTextBottom ) );
+            pTextImpRec->nDxTextLeft    = nTextLeft;
+            pTextImpRec->nDyTextTop     = nTextTop;
+            pTextImpRec->nDxTextRight   = nTextRight;
+            pTextImpRec->nDyTextBottom  = nTextBottom;
+
+            // Textverankerung lesen
+            if ( IsProperty( DFF_Prop_anchorText ) )
+            {
+                MSO_Anchor eTextAnchor =
+                    (MSO_Anchor)GetPropertyValue( DFF_Prop_anchorText );
+
+                SdrTextVertAdjust eTVA = SDRTEXTVERTADJUST_CENTER;
+                BOOL bTVASet(FALSE);
+                SdrTextHorzAdjust eTHA = SDRTEXTHORZADJUST_CENTER;
+                BOOL bTHASet(FALSE);
+
+                switch( eTextAnchor )
+                {
+                    case mso_anchorTop:
+                    {
+                        eTVA = SDRTEXTVERTADJUST_TOP;
+                        bTVASet = TRUE;
+                    }
+                    break;
+                    case mso_anchorTopCentered:
+                    {
+                        eTVA = SDRTEXTVERTADJUST_TOP;
+                        bTVASet = TRUE;
+                        bTHASet = TRUE;
+                    }
+                    break;
+
+                    case mso_anchorMiddle:
+                        bTVASet = TRUE;
+                    break;
+                    case mso_anchorMiddleCentered:
+                    {
+                        bTVASet = TRUE;
+                        bTHASet = TRUE;
+                    }
+                    break;
+                    case mso_anchorBottom:
+                    {
+                        eTVA = SDRTEXTVERTADJUST_BOTTOM;
+                        bTVASet = TRUE;
+                    }
+                    break;
+                    case mso_anchorBottomCentered:
+                    {
+                        eTVA = SDRTEXTVERTADJUST_BOTTOM;
+                        bTVASet = TRUE;
+                        bTHASet = TRUE;
+                    }
+                    break;
+    /*
+                    case mso_anchorTopBaseline:
+                    case mso_anchorBottomBaseline:
+                    case mso_anchorTopCenteredBaseline:
+                    case mso_anchorBottomCenteredBaseline:
+                    break;
+    */
+                }
+                // Einsetzen
+                if ( bTVASet )
+                    aSet.Put( SdrTextVertAdjustItem( eTVA ) );
+                if ( bTHASet )
+                    aSet.Put( SdrTextHorzAdjustItem( eTHA ) );
+            }
+
+            pTextObj->SetMergedItemSet(aSet);
+            pTextObj->SetModel(pSdrModel);
+
+            if (bVerticalText)
+                pTextObj->SetVerticalWriting(sal_True);
+
+            if (nTextRotationAngle)
+            {
+                long nMinWH = rTextRect.GetWidth() < rTextRect.GetHeight() ?
+                    rTextRect.GetWidth() : rTextRect.GetHeight();
+                nMinWH /= 2;
+                Point aPivot(rTextRect.TopLeft());
+                aPivot.X() += nMinWH;
+                aPivot.Y() += nMinWH;
+                double a = nTextRotationAngle * nPi180;
+                pTextObj->NbcRotate(aPivot, nTextRotationAngle, sin(a), cos(a));
+            }
+
+            // rotate text with shape ?
+            if ( mnFix16Angle )
+            {
+                double a = mnFix16Angle * nPi180;
+                pTextObj->NbcRotate( rObjData.rBoundRect.Center(), mnFix16Angle,
+                    sin( a ), cos( a ) );
+            }
+
+            if( !pObj )
+            {
+                pObj = pTextObj;
+            }
+            else
+            {
+                if( pTextObj != pObj )
+                {
+                    SdrObject* pGroup = new SdrObjGroup;
+                    pGroup->GetSubList()->NbcInsertObject( pObj );
+                    pGroup->GetSubList()->NbcInsertObject( pTextObj );
+                    if (pOrgObj == pObj)
+                        pOrgObj = pGroup;
+                    else
+                        pOrgObj = pObj;
+                    pObj = pGroup;
+                }
+            }
+        }
+        else if( !pObj )
+        {
+            // simple rectangular objects are ignored by ImportObj()  :-(
+            // this is OK for Draw but not for Calc and Writer
+            // cause here these objects have a default border
+            pObj = new SdrRectObj(rTextRect);
+            pOrgObj = pObj;
+            pObj->SetModel( pSdrModel );
+            SfxItemSet aSet( pSdrModel->GetItemPool() );
+            ApplyAttributes( rSt, aSet, rObjData.eShapeType, rObjData.nSpFlags );
+
+            const SfxPoolItem* pPoolItem=NULL;
+            SfxItemState eState = aSet.GetItemState( XATTR_FILLCOLOR,
+                                                     FALSE, &pPoolItem );
+            if( SFX_ITEM_DEFAULT == eState )
+                aSet.Put( XFillColorItem( String(),
+                          Color( mnDefaultColor ) ) );
+            pObj->SetMergedItemSet(aSet);
+        }
+
+        //Means that fBehindDocument is set
+        if (GetPropertyValue(DFF_Prop_fPrint) & 0x20)
+            pImpRec->bDrawHell = TRUE;
+        else
+            pImpRec->bDrawHell = FALSE;
+        if (GetPropertyValue(DFF_Prop_fPrint) & 0x02)
+            pImpRec->bHidden = TRUE;
+        pTextImpRec->bDrawHell  = pImpRec->bDrawHell;
+        pTextImpRec->bHidden = pImpRec->bHidden;
+        pImpRec->nNextShapeId   = GetPropertyValue( DFF_Prop_hspNext, 0 );
+        pTextImpRec->nNextShapeId=pImpRec->nNextShapeId;
+
+        if ( nTextId )
+        {
+            pTextImpRec->aTextId.nTxBxS = (UINT16)( nTextId >> 16 );
+            pTextImpRec->aTextId.nSequence = (UINT16)nTextId;
+        }
+
+        pTextImpRec->nDxWrapDistLeft = GetPropertyValue(
+                                    DFF_Prop_dxWrapDistLeft, 114935L ) / 635L;
+        pTextImpRec->nDyWrapDistTop = GetPropertyValue(
+                                    DFF_Prop_dyWrapDistTop, 0 ) / 635L;
+        pTextImpRec->nDxWrapDistRight = GetPropertyValue(
+                                    DFF_Prop_dxWrapDistRight, 114935L ) / 635L;
+        pTextImpRec->nDyWrapDistBottom = GetPropertyValue(
+                                    DFF_Prop_dyWrapDistBottom, 0 ) / 635L;
+        // 16.16 fraction times total image width or height, as appropriate.
+
+        if (SeekToContent(DFF_Prop_pWrapPolygonVertices, rSt))
+        {
+            delete pTextImpRec->pWrapPolygon;
+            sal_uInt16 nNumElemVert, nNumElemMemVert, nElemSizeVert;
+            rSt >> nNumElemVert >> nNumElemMemVert >> nElemSizeVert;
+            if (nNumElemVert && ((nElemSizeVert == 8) || (nElemSizeVert == 4)))
+            {
+                pTextImpRec->pWrapPolygon = new Polygon(nNumElemVert);
+                for (sal_uInt16 i = 0; i < nNumElemVert; ++i)
+                {
+                    sal_Int32 nX, nY;
+                    if (nElemSizeVert == 8)
+                        rSt >> nX >> nY;
+                    else
+                    {
+                        sal_Int16 nSmallX, nSmallY;
+                        rSt >> nSmallX >> nSmallY;
+                        nX = nSmallX;
+                        nY = nSmallY;
+                    }
+                    (*(pTextImpRec->pWrapPolygon))[i].X() = nX;
+                    (*(pTextImpRec->pWrapPolygon))[i].Y() = nY;
+                }
+            }
+        }
+
+        pImpRec->nCropFromTop = GetPropertyValue(
+                                    DFF_Prop_cropFromTop, 0 );
+        pImpRec->nCropFromBottom = GetPropertyValue(
+                                    DFF_Prop_cropFromBottom, 0 );
+        pImpRec->nCropFromLeft = GetPropertyValue(
+                                    DFF_Prop_cropFromLeft, 0 );
+        pImpRec->nCropFromRight = GetPropertyValue(
+                                    DFF_Prop_cropFromRight, 0 );
+
+        UINT32 nLineFlags = GetPropertyValue( DFF_Prop_fNoLineDrawDash );
+        pImpRec->eLineStyle = (nLineFlags & 8)
+                            ? (MSO_LineStyle)GetPropertyValue(
+                                                DFF_Prop_lineStyle,
+                                                mso_lineSimple )
+                            : (MSO_LineStyle)USHRT_MAX;
+        pTextImpRec->eLineStyle = pImpRec->eLineStyle;
+
+        if( pImpRec->nShapeId )
+        {
+            // Import-Record-Liste ergaenzen
+            if( pOrgObj )
+            {
+                pImpRec->pObj = pOrgObj;
+                rImportData.aRecords.Insert( pImpRec );
+            }
+
+            if( pTextObj && (pOrgObj != pTextObj) )
+            {
+                // Modify ShapeId (must be unique)
+                pImpRec->nShapeId |= 0x8000000;
+                pTextImpRec->pObj = pTextObj;
+                rImportData.aRecords.Insert( pTextImpRec );
+            }
+
+            // Eintrag in Z-Order-Liste um Zeiger auf dieses Objekt ergaenzen
+            /*Only store objects which are not deep inside the tree*/
+            if( ( rObjData.nCalledByGroup == 0 )
+                ||
+                ( (rObjData.nSpFlags & SP_FGROUP)
+                 && (rObjData.nCalledByGroup < 2) )
+              )
+                StoreShapeOrder( pImpRec->nShapeId,
+                                ( ( (ULONG)pImpRec->aTextId.nTxBxS ) << 16 )
+                                    + pImpRec->aTextId.nSequence, pObj );
+        }
+        else
+            delete pImpRec;
+    }
+
+    return pObj;
+}
 
 /***************************************************************************
 #  Spezial FastSave - Attribute
