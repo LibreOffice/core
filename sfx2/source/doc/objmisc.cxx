@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objmisc.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 15:34:18 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:38:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -467,14 +467,6 @@ void SfxObjectShell::ModifyChanged()
         if( pDoc->IsModified() )
             break;
     SfxApplication *pSfxApp = SFX_APP();
-    Timer *pTimer = pSfxApp->GetAutoSaveTimer_Impl();
-    if( pDoc )
-    {
-        if( !pTimer->IsActive() )
-            pTimer->Start();
-    }
-    else
-        pTimer->Stop();
 
     SfxViewFrame* pViewFrame = SfxViewFrame::Current();
     if ( pViewFrame )
