@@ -2,9 +2,9 @@
  *
  *  $RCSfile: output2.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: nn $ $Date: 2001-11-12 20:04:36 $
+ *  last change: $Author: nn $ $Date: 2001-12-17 19:27:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -506,6 +506,15 @@ void ScDrawStringsVars::SetHashText()
 
 double ScOutputData::GetStretch()
 {
+    if ( pRefDevice->IsMapMode() )
+    {
+        //  #95920# If a non-trivial MapMode is set, its scale is now already
+        //  taken into account in the OutputDevice's font handling
+        //  (OutputDevice::ImplNewFont, see #95414#).
+        //  The old handling below is only needed for pixel output.
+        return 1.0;
+    }
+
     // calculation in double is faster than Fraction multiplication
     // and doesn't overflow
 
