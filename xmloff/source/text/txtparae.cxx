@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.118 $
+ *  $Revision: 1.119 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-25 13:56:25 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 11:31:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1009,13 +1009,6 @@ XMLTextParagraphExport::XMLTextParagraphExport(
     xFramePropMapper = new XMLTextExportPropertySetMapper( xPropMapper,
                                                               GetExport() );
 
-    xPropMapper = new XMLTextPropertySetMapper( TEXT_PROP_MAP_PARA );
-    xParaDefaultPropMapper = new XMLTextExportPropertySetMapper( xPropMapper,
-                                                                 GetExport() );
-    xPropMapper = new XMLTextPropertySetMapper( TEXT_PROP_MAP_TEXT_ADDITIONAL_DEFAULTS );
-    xParaDefaultPropMapper->ChainExportMapper(
-        new SvXMLExportPropertyMapper( xPropMapper ) );
-
     pSectionExport = new XMLSectionExport( rExp, *this );
     pIndexMarkExport = new XMLIndexMarkExport( rExp, *this );
     pRedlineExport = IsBlockMode() ? NULL : new XMLRedlineExport( rExp );
@@ -1078,6 +1071,14 @@ SvXMLExportPropertyMapper *XMLTextParagraphExport::CreateParaExtPropMapper(
 {
     XMLPropertySetMapper *pPropMapper =
         new XMLTextPropertySetMapper( TEXT_PROP_MAP_SHAPE_PARA );
+    return new XMLTextExportPropertySetMapper( pPropMapper, rExport );
+}
+
+SvXMLExportPropertyMapper *XMLTextParagraphExport::CreateParaDefaultExtPropMapper(
+        SvXMLExport& rExport)
+{
+    XMLPropertySetMapper *pPropMapper =
+        new XMLTextPropertySetMapper( TEXT_PROP_MAP_TEXT_ADDITIONAL_DEFAULTS );
     return new XMLTextExportPropertySetMapper( pPropMapper, rExport );
 }
 
