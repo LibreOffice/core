@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-21 07:30:09 $
+ *  last change: $Author: kz $ $Date: 2001-06-29 02:31:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2210,8 +2210,8 @@ TabPage RID_SVXPAGE_PARA_ASIAN
         Text[ spanish ] = "Cambio de fila";
         Text[ italian ] = "Cambio ~riga";
         Text[ danish ] = "Options";
-        Text[ swedish ] = "Radbr~ytning";
-        Text[ polish ] = "Wiersze";
+        Text[ swedish ] = "Radbrytning";
+        Text[ polish ] = "Zmiana wiersza";
         Text[ portuguese_brazilian ] = "Options";
         Text[ japanese ] = "â¸çséûÇÃèàóù(~I)";
         Text[ korean ] = "ø…º«(~I)";
@@ -2582,5 +2582,6 @@ TabPage RID_SVXPAGE_PARA_ASIAN
 };
 
  // ********************************************************************** EOF
+
 
 
