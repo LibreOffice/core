@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.19 $
- *  last change: $Author: hdu $ $Date: 2001-03-14 18:52:19 $
+ *  $Revision: 1.20 $
+ *  last change: $Author: hdu $ $Date: 2001-03-15 15:14:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -506,6 +506,10 @@ void FreetypeServerFont::InitGlyphData( int nGlyphIndex, GlyphData& rGD ) const
 
     FT_Glyph aGlyphFT;
     rc = FT_Get_Glyph( maFaceFT->glyph, &aGlyphFT );
+
+    if( (nCos!=0x10000) || (nGlyphFlags!=0) )
+        SetTransform( nSin, nCos, GetFontSelData().mnHeight,
+            nGlyphFlags, aGlyphFT );
 
     rGD.SetDelta( (aGlyphFT->advance.x + 0x8000) >> 16, -((aGlyphFT->advance.y + 0x8000) >> 16) );
 
