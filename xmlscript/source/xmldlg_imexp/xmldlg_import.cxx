@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_import.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: dbo $ $Date: 2001-09-25 11:13:16 $
+ *  last change: $Author: tbe $ $Date: 2001-09-28 14:56:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -878,6 +878,7 @@ struct StringTriple
 static StringTriple const s_aEventTranslations[] =
 {
     // from xmloff/source/forms/formevents.cxx
+    // 28.09.2001 tbe added on-adjustmentvaluechange
     { "com.sun.star.form.XApproveActionListener", "approveAction", "on-approveaction" },
     { "com.sun.star.awt.XActionListener", "actionPerformed", "on-performaction" },
     { "com.sun.star.form.XChangeListener", "changed", "on-change" },
@@ -910,6 +911,7 @@ static StringTriple const s_aEventTranslations[] =
     { "com.sun.star.sdbc.XRowSetListener", "cursorMoved", "on-cursormove" },
     { "com.sun.star.form.XDatabaseParameterListener", "approveParameter", "on-supplyparameter" },
     { "com.sun.star.sdb.XSQLErrorListener", "errorOccured", "on-error" },
+    { "com.sun.star.awt.XAdjustmentListener", "adjustmentValueChanged", "on-adjustmentvaluechange" },
     { 0, 0, 0 }
 };
 extern StringTriple const * const g_pEventTranslations;
