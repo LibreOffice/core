@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlfd_extd.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:11:13 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:58:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,8 @@ class ExtendedXlfd {
         int                 GetEncodingIdx( rtl_TextEncoding nEncoding ) const;
         unsigned short      NumEncodings() const
                                     { return mnEncodings; }
+        virtual unsigned short  GetPixelSize( int nOrigPixelSize ) const
+                                    { return nOrigPixelSize; }
         virtual void        ToString( ByteString &rString,
                                     unsigned short nPixelSize,
                                        rtl_TextEncoding nEncoding ) const ;
@@ -194,7 +196,7 @@ class BitmapXlfd : public ExtendedXlfd {
                             ~BitmapXlfd();
         Bool                AddEncoding( const Xlfd *pXlfd );
         Bool                AddEncoding( const ScalableXlfd *pXlfd );
-        unsigned short      GetPixelSize() const
+        virtual unsigned short  GetPixelSize( int ) const
                                     { return mnPixelSize; }
         virtual void        ToString( ByteString &rString,
                                     unsigned short nPixelSize,
