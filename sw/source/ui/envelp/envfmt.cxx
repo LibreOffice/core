@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envfmt.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:24:15 $
+ *  last change: $Author: hjs $ $Date: 2003-08-19 11:57:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,12 +198,26 @@ SwEnvFmtPage::SwEnvFmtPage(Window* pParent, const SfxItemSet& rSet) :
 
     // Handler installieren
     Link aLk = LINK(this, SwEnvFmtPage, ModifyHdl);
-    aAddrLeftField  .SetModifyHdl( aLk );
-    aAddrTopField   .SetModifyHdl( aLk );
-    aSendLeftField  .SetModifyHdl( aLk );
-    aSendTopField   .SetModifyHdl( aLk );
-    aSizeWidthField .SetModifyHdl( aLk );
-    aSizeHeightField.SetModifyHdl( aLk );
+    aAddrLeftField  .SetUpHdl( aLk );
+    aAddrTopField   .SetUpHdl( aLk );
+    aSendLeftField  .SetUpHdl( aLk );
+    aSendTopField   .SetUpHdl( aLk );
+    aSizeWidthField .SetUpHdl( aLk );
+    aSizeHeightField.SetUpHdl( aLk );
+
+    aAddrLeftField  .SetDownHdl( aLk );
+    aAddrTopField   .SetDownHdl( aLk );
+    aSendLeftField  .SetDownHdl( aLk );
+    aSendTopField   .SetDownHdl( aLk );
+    aSizeWidthField .SetDownHdl( aLk );
+    aSizeHeightField.SetDownHdl( aLk );
+
+    aAddrLeftField  .SetLoseFocusHdl( aLk );
+    aAddrTopField   .SetLoseFocusHdl( aLk );
+    aSendLeftField  .SetLoseFocusHdl( aLk );
+    aSendTopField   .SetLoseFocusHdl( aLk );
+    aSizeWidthField .SetLoseFocusHdl( aLk );
+    aSizeHeightField.SetLoseFocusHdl( aLk );
 
     aLk = LINK(this, SwEnvFmtPage, EditHdl );
     aAddrEditButton.SetSelectHdl( aLk );
@@ -239,9 +253,6 @@ SwEnvFmtPage::SwEnvFmtPage(Window* pParent, const SfxItemSet& rSet) :
     aSizeFormatBox.InsertEntry(SvxPaperInfo::GetName(SVX_PAPER_USER));
     aIDs.Insert((USHORT) SVX_PAPER_USER, aIDs.Count());
 
-    // Timer einstellen
-    aPreviewTimer.SetTimeout(500);
-    aPreviewTimer.SetTimeoutHdl(LINK(this, SwEnvFmtPage, PreviewHdl));
 }
 
 // --------------------------------------------------------------------------
@@ -259,8 +270,35 @@ __EXPORT SwEnvFmtPage::~SwEnvFmtPage()
 
 IMPL_LINK_INLINE_START( SwEnvFmtPage, ModifyHdl, Edit *, pEdit )
 {
-    pLastEdit = pEdit;
-    aPreviewTimer.Start();
+    long lWVal = GetFldVal(aSizeWidthField );
+    long lHVal = GetFldVal(aSizeHeightField);
+
+    long lWidth  = Max(lWVal, lHVal);
+    long lHeight = Min(lWVal, lHVal);
+
+    if (pEdit == &aSizeWidthField || pEdit == &aSizeHeightField)
+    {
+        SvxPaper ePaper = SvxPaperInfo::GetPaper(
+            Size(lHeight, lWidth), MAP_TWIP, TRUE);
+        for (USHORT i = 0; i < aIDs.Count(); i++)
+            if (aIDs[i] == (USHORT)ePaper)
+                aSizeFormatBox.SelectEntryPos(i);
+
+        // Benutzergroesse merken
+        if (aIDs[aSizeFormatBox.GetSelectEntryPos()] == (USHORT)SVX_PAPER_USER)
+        {
+            lUserW = lWidth ;
+            lUserH = lHeight;
+        }
+
+        aSizeFormatBox.GetSelectHdl().Call(&aSizeFormatBox);
+    }
+    else
+    {
+        FillItem(GetParent()->aEnvItem);
+        SetMinMax();
+        aPreview.Invalidate();
+    }
     return 0;
 }
 IMPL_LINK_INLINE_END( SwEnvFmtPage, ModifyHdl, Edit *, pEdit )
@@ -507,43 +545,6 @@ IMPL_LINK( SwEnvFmtPage, FormatHdl, ListBox *, EMPTYARG )
 
     FillItem(GetParent()->aEnvItem);
     aPreview.Invalidate();
-    return 0;
-}
-
-// --------------------------------------------------------------------------
-
-
-IMPL_LINK( SwEnvFmtPage, PreviewHdl, Timer *, EMPTYARG )
-{
-    long lWVal = GetFldVal(aSizeWidthField );
-    long lHVal = GetFldVal(aSizeHeightField);
-
-    long lWidth  = Max(lWVal, lHVal);
-    long lHeight = Min(lWVal, lHVal);
-
-    if (pLastEdit == &aSizeWidthField || pLastEdit == &aSizeHeightField)
-    {
-        SvxPaper ePaper = SvxPaperInfo::GetPaper(
-            Size(lHeight, lWidth), MAP_TWIP, TRUE);
-        for (USHORT i = 0; i < aIDs.Count(); i++)
-            if (aIDs[i] == (USHORT)ePaper)
-                aSizeFormatBox.SelectEntryPos(i);
-
-        // Benutzergroesse merken
-        if (aIDs[aSizeFormatBox.GetSelectEntryPos()] == (USHORT)SVX_PAPER_USER)
-        {
-            lUserW = lWidth ;
-            lUserH = lHeight;
-        }
-
-        aSizeFormatBox.GetSelectHdl().Call(&aSizeFormatBox);
-    }
-    else
-    {
-        FillItem(GetParent()->aEnvItem);
-        SetMinMax();
-        aPreview.Invalidate();
-    }
     return 0;
 }
 
