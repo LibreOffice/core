@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dociter.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: er $ $Date: 2001-06-21 12:08:38 $
+ *  last change: $Author: er $ $Date: 2001-07-12 11:09:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -545,6 +545,7 @@ ScQueryValueIterator::ScQueryValueIterator(ScDocument* pDocument, USHORT nTable,
 BOOL ScQueryValueIterator::GetThis(double& rValue, USHORT& rErr)
 {
     ScColumn* pCol = &(pDoc->pTab[nTab])->aCol[nCol];
+    USHORT nFirstQueryField = aParam.GetEntry(0).nField;
     for ( ;; )
     {
         if ( nRow > aParam.nRow2 )
@@ -573,7 +574,8 @@ BOOL ScQueryValueIterator::GetThis(double& rValue, USHORT& rErr)
         {
             nRow = pCol->pItems[nColRow].nRow;
             ScBaseCell* pCell = pCol->pItems[nColRow].pCell;
-            if ((pDoc->pTab[nTab])->ValidQuery( nRow, aParam, NULL, pCell ))
+            if ( (pDoc->pTab[nTab])->ValidQuery( nRow, aParam, NULL,
+                    (nCol == nFirstQueryField ? pCell : NULL) ) )
             {
                 switch (pCell->GetCellType())
                 {
@@ -830,6 +832,7 @@ ScQueryCellIterator::ScQueryCellIterator(ScDocument* pDocument, USHORT nTable,
 ScBaseCell* ScQueryCellIterator::GetThis()
 {
     ScColumn* pCol = &(pDoc->pTab[nTab])->aCol[nCol];
+    USHORT nFirstQueryField = aParam.GetEntry(0).nField;
     for ( ;; )
     {
         if ( nRow > aParam.nRow2 )
@@ -840,7 +843,10 @@ ScBaseCell* ScQueryCellIterator::GetThis()
             do
             {
                 if ( bAdvanceQuery )
+                {
                     AdvanceQueryParamEntryField();
+                    nFirstQueryField = aParam.GetEntry(0).nField;
+                }
                 if ( ++nCol > aParam.nCol2 )
                     return NULL;                // Ende und Aus
                 pCol = &(pDoc->pTab[nTab])->aCol[nCol];
@@ -859,7 +865,8 @@ ScBaseCell* ScQueryCellIterator::GetThis()
             {
                 nRow = pCol->pItems[nColRow].nRow;
                 ScBaseCell* pCell = pCol->pItems[nColRow].pCell;
-                if ((pDoc->pTab[nTab])->ValidQuery( nRow, aParam, NULL, pCell ))
+                if ( (pDoc->pTab[nTab])->ValidQuery( nRow, aParam, NULL,
+                        (nCol == nFirstQueryField ? pCell : NULL) ) )
                     return pCell;     // found
                 else if ( nStopOnMismatch )
                 {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table3.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: er $ $Date: 2001-07-11 15:22:13 $
+ *  last change: $Author: er $ $Date: 2001-07-12 11:09:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -911,8 +911,6 @@ BOOL ScTable::ValidQuery(USHORT nRow, const ScQueryParam& rParam,
     const USHORT nFixedBools = 32;
     BOOL aBool[nFixedBools];
     USHORT nEntryCount = rParam.GetEntryCount();
-    if ( pCell && nEntryCount > 1 && rParam.GetEntry(1).bDoQuery )
-        pCell = NULL;   // we can only handle one single direct query
     BOOL* pPasst = ( nEntryCount <= nFixedBools ? &aBool[0] : new BOOL[nEntryCount] );
 
     short   nPos = -1;
@@ -926,6 +924,9 @@ BOOL ScTable::ValidQuery(USHORT nRow, const ScQueryParam& rParam,
     while ( (i < nEntryCount) && rParam.GetEntry(i).bDoQuery )
     {
         ScQueryEntry& rEntry = rParam.GetEntry(i);
+        // we can only handle one single direct query
+        if ( !pCell || i > 0 )
+            pCell = GetCell( rEntry.nField, nRow );
 
         BOOL bOk = FALSE;
 
@@ -989,7 +990,7 @@ BOOL ScTable::ValidQuery(USHORT nRow, const ScQueryParam& rParam,
             {
                 if (pCell->GetCellType() != CELLTYPE_NOTE)
                 {
-                    ULONG nFormat = GetNumberFormat( nRow );
+                    ULONG nFormat = GetNumberFormat( rEntry.nField, nRow );
                     ScCellFormat::GetInputString( pCell, nFormat, aCellStr, *(pDocument->GetFormatTable()) );
                 }
             }
