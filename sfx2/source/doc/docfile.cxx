@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-25 15:37:46 $
+ *  last change: $Author: mba $ $Date: 2001-06-26 14:45:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,9 +87,6 @@
 #ifndef _COM_SUN_STAR_IO_XACTIVEDATASOURCE_HPP_
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #endif
-#ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_HPP_
-#include <com/sun/star/io/XInputStream.hpp>
-#endif
 #ifndef _COM_SUN_STAR_IO_XSEEKABLE_HPP_
 #include <com/sun/star/io/XSeekable.hpp>
 #endif
@@ -151,6 +148,9 @@
 #ifndef _SFXINTITEM_HXX
 #include <svtools/intitem.hxx>
 #endif
+#ifndef _CPPUHELPER_WEAKREF_HXX_
+#include <cppuhelper/weakref.hxx>
+#endif
 
 #define _SVSTDARR_ULONGS
 #define _SVSTDARR_STRINGSDTOR
@@ -187,9 +187,6 @@ using namespace ::com::sun::star::io;
 #include "doc.hrc"          // MSG_WARNING_BACKUP, MSG_OPEN_READONLY
 #include "openflag.hxx"     // SFX_STREAM_READONLY etc.
 #include "sfxresid.hxx"
-#if SUPD<613//MUSTINI
-#include "inimgr.hxx"       // Backup Path
-#endif
 
 #include "xmlversion.hxx"
 
@@ -351,10 +348,7 @@ FileSink_Impl::FileSink_Impl( SfxMedium* pMed )
 FileSink_Impl::~FileSink_Impl()
 {
     if ( pMedium )
-    {
-        pMedium->ResetDataSink();
         pMedium->ReleaseRef();
-    }
 }
 
 void SAL_CALL FileSink_Impl::writeBytes(const ::com::sun::star::uno::Sequence< sal_Int8 >& Buffer) throw( ::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::uno::RuntimeException )
@@ -411,10 +405,7 @@ FileSource_Impl::FileSource_Impl( SfxMedium* pMed )
 FileSource_Impl::~FileSource_Impl()
 {
     if ( pMedium )
-    {
-        pMedium->ResetDataSource();
         pMedium->ReleaseRef();
-    }
 }
 
 void SAL_CALL  FileSource_Impl::addListener(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStreamListener > & aListener) throw( ::com::sun::star::uno::RuntimeException )
@@ -588,10 +579,13 @@ public:
     SfxLockBytesHandler_ImplRef  aHandler;
 
     SfxVersionTableDtor*    pVersions;
-    FileSource_Impl*    pSource;
-    FileSink_Impl*      pSink;
     ::utl::TempFile*           pTempDir;
     ::utl::TempFile*           pTempFile;
+
+    Reference < XInputStream > xInputStream;
+    WeakReference < XActiveDataSource > wSource;
+    WeakReference < XOutputStream > wSink;
+    ::utl::UcbLockBytesRef     xLockBytes;
 
     SfxPoolCancelManager* GetCancelManager();
 
@@ -604,6 +598,9 @@ void SfxMedium::Done_Impl( ErrCode nError )
     DELETEZ( pImp->pCancellable );
     pImp->bDownloadDone = sal_True;
     SetError( nError );
+    if ( pImp->xLockBytes.Is() )
+        pImp->xInputStream = pImp->xLockBytes->getInputStream();
+
     if ( ( !nError || !pImp->bDontCallDoneLinkOnSharingError ) && ( pImp->bStreamReady || !pInStream ) )
     {
         pImp->aDoneLink.ClearPendingCall();
@@ -647,7 +644,7 @@ SfxMedium_Impl::SfxMedium_Impl( SfxMedium* pAntiImplP )
     nPrio( 99 ), aExpireTime( Date() + 10, Time() ),
     bForceSynchron( sal_False ), bStreamReady( sal_False ), bIsStorage( sal_False ),
     pLoadEnv( 0 ), pAntiImpl( pAntiImplP ),
-    bDontCreateCancellable( sal_False ), pSource( NULL ), pSink( NULL ), pTempDir( NULL ),
+    bDontCreateCancellable( sal_False ), pTempDir( NULL ),
     bDownloadDone( sal_True ), bDontCallDoneLinkOnSharingError( sal_False ),nFileVersion( 0 ), pEaMgr( NULL ), pTempFile( NULL )
 {
     aHandler = new SfxLockBytesHandler_Impl( pAntiImpl );
@@ -667,18 +664,6 @@ SfxMedium_Impl::~SfxMedium_Impl()
 
     delete pEaMgr;
     delete pVersions;
-
-    if ( pSource )
-    {
-        pSource->ResetMedium();
-        pSource->release();
-    }
-
-    if ( pSink )
-    {
-        pSink->ResetMedium();
-        pSink->release();
-    }
 
     if ( pTempFile )
         delete pTempFile;
@@ -812,6 +797,11 @@ void SfxMedium::CloseInStream_Impl()
     }
 
     DELETEZ( pInStream );
+    pImp->xInputStream = Reference < XInputStream >();
+    pImp->xLockBytes.Clear();
+    if ( pSet )
+        pSet->ClearItem( SID_INPUTSTREAM );
+
     DELETEZ( pImp->pCancellable );
 }
 
@@ -1069,13 +1059,6 @@ ErrCode SfxMedium::Unpack_Impl( const String& rDest )
 }
 
 //------------------------------------------------------------------
-#if SUPD<615
-SvStorage* SfxMedium::GetOutputStorage()
-{
-    return GetOutputStorage( FALSE );
-}
-#endif
-
 SvStorage* SfxMedium::GetOutputStorage( BOOL bUCBStorage )
 {
     // if the medium was constructed with a SvStorage: use this one, not a temp. storage
@@ -1521,7 +1504,7 @@ void SfxMedium::GetMedium_Impl()
         pImp->bDownloadDone = sal_False;
         pImp->bStreamReady = sal_False;
 
-        ::utl::UcbLockBytesRef xLockBytes;
+//        ::utl::UcbLockBytesRef xLockBytes;
         ::utl::UcbLockBytesHandler* pHandler = pImp->aHandler;
         INetProtocol eProt = GetURLObject().GetProtocol();
         if ( eProt != INET_PROT_HTTP && eProt != INET_PROT_FTP )
@@ -1530,10 +1513,21 @@ void SfxMedium::GetMedium_Impl()
         SFX_ITEMSET_ARG( pSet, pStreamItem, SfxUsrAnyItem, SID_INPUTSTREAM, sal_False);
         if ( pStreamItem )
         {
+            if ( GetContent().is() && !IsReadOnly() )
+            {
+                Any aAny( UCB_Helper::GetProperty( GetContent(), WID_FLAG_READONLY ) );
+                BOOL bReadonly;
+                if ( !( aAny >>= bReadonly ) || bReadonly )
+                {
+                    GetItemSet()->Put( SfxBoolItem(SID_DOC_READONLY, sal_True));
+                    SetOpenMode(SFX_STREAM_READONLY, sal_False);
+                }
+            }
+
             Reference < ::com::sun::star::io::XInputStream > xStream;
             if ( ( pStreamItem->GetValue() >>= xStream ) && xStream.is() )
-                xLockBytes = utl::UcbLockBytes::CreateInputLockBytes( xStream );
-            Done_Impl( xLockBytes.Is() ? xLockBytes->GetError() : ERRCODE_IO_NOTSUPPORTED );
+                pImp->xLockBytes = utl::UcbLockBytes::CreateInputLockBytes( xStream );
+            Done_Impl( pImp->xLockBytes.Is() ? pImp->xLockBytes->GetError() : ERRCODE_IO_NOTSUPPORTED );
         }
         else
         {
@@ -1586,43 +1580,43 @@ void SfxMedium::GetMedium_Impl()
                     xPostData = new ::utl::OInputStreamHelper( xRef, nLen );
                 }
 
-                xLockBytes = ::utl::UcbLockBytes::CreateLockBytes( GetContent(), aProps, xPostData, pHandler );
+                pImp->xLockBytes = ::utl::UcbLockBytes::CreateLockBytes( GetContent(), aProps, xPostData, pHandler );
             }
             else
             {
                 // no callbacks for opening read/write because we might try readonly later
                 pImp->bDontCallDoneLinkOnSharingError = ( bIsWritable && bAllowReadOnlyMode );
-                xLockBytes = ::utl::UcbLockBytes::CreateLockBytes( GetContent(), aProps, nStorOpenMode, bIsWritable ? NULL : pHandler );
+                pImp->xLockBytes = ::utl::UcbLockBytes::CreateLockBytes( GetContent(), aProps, nStorOpenMode, bIsWritable ? NULL : pHandler );
             }
 
-            if ( !xLockBytes.Is() )
+            if ( !pImp->xLockBytes.Is() )
             {
                 pImp->bDontCallDoneLinkOnSharingError = sal_False;
                 Done_Impl( ERRCODE_IO_NOTEXISTS );
             }
-            else if ( xLockBytes->GetError() == ERRCODE_IO_NOTEXISTS && bIsWritable && bAllowReadOnlyMode )
+            else if ( pImp->xLockBytes->GetError() == ERRCODE_IO_NOTEXISTS && bIsWritable && bAllowReadOnlyMode )
             {
                 GetItemSet()->Put( SfxBoolItem(SID_DOC_READONLY, sal_True));
                 SetOpenMode(SFX_STREAM_READONLY, sal_False);
                 ResetError();
                 pImp->bDownloadDone = sal_False;
                 pImp->bDontCallDoneLinkOnSharingError = sal_False;
-                xLockBytes = ::utl::UcbLockBytes::CreateLockBytes( GetContent(), aProps, nStorOpenMode, pHandler );
+                pImp->xLockBytes = ::utl::UcbLockBytes::CreateLockBytes( GetContent(), aProps, nStorOpenMode, pHandler );
                 if ( !pHandler && !pImp->bDownloadDone )
-                    Done_Impl( xLockBytes->GetError() );
+                    Done_Impl( pImp->xLockBytes->GetError() );
             }
             else if ( !pHandler && !pImp->bDownloadDone )
                 // opening readwrite is always done synchronously
-                Done_Impl( xLockBytes->GetError() );
+                Done_Impl( pImp->xLockBytes->GetError() );
         }
 
-        if ( xLockBytes.Is() )
+        if ( pImp->xLockBytes.Is() )
         {
             if ( bSynchron )
-                xLockBytes->SetSynchronMode( sal_True );
+                pImp->xLockBytes->SetSynchronMode( sal_True );
             if ( !pImp->bDownloadDone )
-                pImp->pCancellable = new UcbLockBytesCancellable_Impl( xLockBytes, pImp->GetCancelManager(), aLogicName );
-            pInStream = new SvStream( xLockBytes );
+                pImp->pCancellable = new UcbLockBytesCancellable_Impl( pImp->xLockBytes, pImp->GetCancelManager(), aLogicName );
+            pInStream = new SvStream( pImp->xLockBytes );
             pInStream->SetBufferSize( 4096 );
             pImp->bStreamReady = sal_True;
         }
@@ -1905,6 +1899,10 @@ void SfxMedium::Close()
         if ( pStream && pStream == pInStream )
         {
             pInStream = NULL;
+            pImp->xInputStream = Reference < XInputStream >();
+            pImp->xLockBytes.Clear();
+            if ( pSet )
+                pSet->ClearItem( SID_INPUTSTREAM );
             aStorage->SetDeleteStream( TRUE );
         }
         else if ( pStream && pStream == pOutStream )
@@ -2279,21 +2277,6 @@ void SfxMedium::SetLoadTargetFrame(SfxFrame* pFrame )
 }
 //----------------------------------------------------------------
 
-SvStream* SfxMedium::RemoveStream_Impl()
-{
-    SvStream* pRet = GetInStream();
-    pInStream = 0;
-    return pRet;
-}
-//----------------------------------------------------------------
-
-void SfxMedium::SetStream_Impl( SvStream* pStrm )
-{
-    CloseInStream_Impl();
-    pInStream = pStrm;
-}
-//----------------------------------------------------------------
-
 void SfxMedium::SetStorage_Impl( SvStorage* pStor )
 {
     aStorage = pStor;
@@ -2368,56 +2351,42 @@ void SfxMedium::SetDontCreateCancellable( )
 
 ::com::sun::star::uno::Reference< ::com::sun::star::io::XActiveDataSource >  SfxMedium::GetDataSource()
 {
-    if ( !pImp->pSource )
-        CreateDataSource();
-    return pImp->pSource;
+    Reference < XActiveDataSource > xRet( pImp->wSource.get(), UNO_QUERY );
+    if ( !xRet.is() )
+    {
+        SfxLoadEnvironment *pEnv = NULL;
+        if ( pImp->pLoadEnv )
+        {
+            pEnv = new SfxLoadEnvironment( pImp->pLoadEnv );
+            SfxRefItem aItem( SID_LOADENVIRONMENT, pEnv );
+            GetItemSet()->Put( aItem );
+        }
+
+        FileSource_Impl* pSource = new FileSource_Impl( this );
+        xRet = pSource;
+        pImp->wSource = xRet;
+        if ( pEnv )
+            pEnv->SetDataAvailableLink( LINK( pSource, FileSource_Impl, DataAvailableHdl ) );
+    }
+
+    return xRet;
 }
 
 ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >  SfxMedium::GetDataSink()
 {
-    if ( !pImp->pSink )
-        CreateDataSink();
-    return pImp->pSink;
-}
-
-void SfxMedium::CreateDataSource()
-{
-    SfxLoadEnvironment *pEnv = NULL;
-    if ( pImp->pLoadEnv )
+    Reference < XOutputStream > xRet( pImp->wSink.get(), UNO_QUERY );
+    if ( !xRet.is() )
     {
-        pEnv = new SfxLoadEnvironment( pImp->pLoadEnv );
-        SfxRefItem aItem( SID_LOADENVIRONMENT, pEnv );
-        GetItemSet()->Put( aItem );
+        xRet = new FileSink_Impl( this );
+        pImp->wSink = xRet;
     }
 
-    pImp->pSource = new FileSource_Impl( this );
-    pImp->pSource->acquire();
-    if ( pEnv )
-        pEnv->SetDataAvailableLink( LINK( pImp->pSource, FileSource_Impl, DataAvailableHdl ) );
+    return xRet;
 }
 
-void SfxMedium::CreateDataSink()
+::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >  SfxMedium::GetInputStream()
 {
-    pImp->pSink = new FileSink_Impl( this );
-    pImp->pSink->acquire();
-}
-
-void SfxMedium::ResetDataSource()
-{
-    if ( pImp->pSource )
-    {
-        pImp->pSource->ResetMedium();
-        pImp->pSource->release();
-    }
-}
-
-void SfxMedium::ResetDataSink()
-{
-    if ( pImp->pSink )
-    {
-        pImp->pSink->ResetMedium();
-        pImp->pSink->release();
-    }
+    return pImp->xInputStream;
 }
 
 const SfxVersionTableDtor* SfxMedium::GetVersionList()
@@ -2433,13 +2402,11 @@ const SfxVersionTableDtor* SfxMedium::GetVersionList()
         }
         else
         {
-#if SUPD>622
             SfxVersionTableDtor *pList = new SfxVersionTableDtor;
             if ( SfxXMLVersList_Impl::ReadInfo( GetStorage(), pList ) )
                 pImp->pVersions = pList;
             else
                 delete pList;
-#endif
         }
     }
 
@@ -2525,9 +2492,7 @@ sal_Bool SfxMedium::SaveVersionList_Impl( sal_Bool bUseXML )
 
         if ( bUseXML )
         {
-#if SUPD>622
             SfxXMLVersList_Impl::WriteInfo( aStorage, pImp->pVersions );
-#endif
             return sal_True;
         }
         else
