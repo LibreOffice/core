@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MiscUtils.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 14:04:15 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 15:30:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,6 @@ class MiscUtils
 public:
     static css::uno::Sequence< ::rtl::OUString > allOpenTDocUrls( const  css::uno::Reference< css::uno::XComponentContext >& xCtx)
 {
-    OSL_TRACE("MiscUtils::allOpenTDocUrls");
     css::uno::Sequence< ::rtl::OUString > result;
     try
     {
@@ -104,9 +103,7 @@ public:
             css::uno::Reference < com::sun::star::ucb::XSimpleFileAccess > xSFA( xFac->createInstanceWithContext( OUSTR("com.sun.star.ucb.SimpleFileAccess"), xCtx ), css::uno::UNO_QUERY );
             if ( xSFA.is() )
             {
-                OSL_TRACE("Getting folder contents of vnd.sun.star.tdoc:");
                 result = xSFA->getFolderContents( OUSTR("vnd.sun.star.tdoc:/"), true );
-                OSL_TRACE("Getting folder contents is %d", result.getLength());
             }
         }
     }
@@ -117,7 +114,6 @@ public:
 }
     static ::rtl::OUString xModelToDocTitle( const css::uno::Reference< css::frame::XModel >& xModel )
 {
-    OSL_TRACE("MiscUtils::xModelToDocTitle() ");
     // Set a default name, this should never be seen.
     ::rtl::OUString docNameOrURL =
         ::rtl::OUString::createFromAscii("Unknown");
@@ -138,9 +134,6 @@ public:
                         // to get UntitledX
                         sal_Int32 pos = 0;
                         docNameOrURL = tempName.getToken(0,' ',pos);
-                        OSL_TRACE("MiscUtils::xModelToDocTitle() Title for document is %s.",
-                            ::rtl::OUStringToOString( docNameOrURL,
-                                            RTL_TEXTENCODING_ASCII_US ).pData->buffer );
                     }
                     else
                     {
@@ -163,11 +156,6 @@ public:
                 ::rtl::OUStringToOString( e.Message,
                     RTL_TEXTENCODING_ASCII_US ).pData->buffer );
         }
-
-    }
-    else
-    {
-        OSL_TRACE("MiscUtils::xModelToDocTitle() doc model is null" );
     }
     return docNameOrURL;
 }
@@ -175,19 +163,29 @@ public:
     static ::rtl::OUString tDocUrlToTitle( const ::rtl::OUString& url )
 {
     ::rtl::OUString title;
-    ::ucb::Content root( url, NULL );
-    ::rtl::OUString propName =  OUSTR("Title");
-    getUCBProperty( root, propName ) >>= title;
+
+    try
+    {
+        ::ucb::Content root( url, NULL );
+        ::rtl::OUString propName =  OUSTR("Title");
+        getUCBProperty( root, propName ) >>= title;
+    }
+    catch ( css::ucb::ContentCreationException& cce )
+    {
+        // carry on, empty value will be returned
+    }
+    catch ( css::uno::RuntimeException& re )
+    {
+        // carry on, empty value will be returned
+    }
+
     return title;
 }
     static ::rtl::OUString xModelToTdocUrl( const css::uno::Reference< css::frame::XModel >& xModel )
 {
-    OSL_TRACE("MiscUtils::xModelToDocTitle() ");
     css::uno::Reference < com::sun::star::ucb::XCommandEnvironment > dummy;
     ::rtl::OUString sDocRoot = OUSTR( "vnd.sun.star.tdoc:/" );
     ::ucb::Content root( sDocRoot, dummy );
-
-    OSL_TRACE( "get root content" );
 
     css::uno::Sequence < ::rtl::OUString > aPropertyNames( 0 );
     ::rtl::OUString propName = OUSTR( "DocumentModel" );
@@ -195,11 +193,8 @@ public:
     css::uno::Reference < com::sun::star::sdbc::XResultSet > xResultSet =
         root.createCursor( aPropertyNames );
 
-    OSL_TRACE( "get list of documents" );
-
     css::uno::Reference< com::sun::star::ucb::XContentAccess > xContentAccess(
         xResultSet, css::uno::UNO_QUERY );
-    OSL_TRACE( "got contentaccess" );
     ::rtl::OUString docUrl;
     if ( xResultSet.is() && xContentAccess.is() )
     {
@@ -211,15 +206,9 @@ public:
                 ::rtl::OUString url = xContentAccess->queryContentIdentifierString();
                 css::uno::Reference < css::frame::XModel > xMod( tDocUrlToModel( url ), css::uno::UNO_QUERY );
 
-                OSL_TRACE( "xModelToTdocUrl: url is %s",
-                    ::rtl::OUStringToOString( url,
-                            RTL_TEXTENCODING_ASCII_US ).pData->buffer );
                 if ( xMod.is() && xMod == xModel )
                 {
                     docUrl = url;
-                    OSL_TRACE( "xModelToTdocUrl: match for model url is %s",
-                        ::rtl::OUStringToOString( url,
-                            RTL_TEXTENCODING_ASCII_US ).pData->buffer );
                     break;
                 }
             }
@@ -230,11 +219,25 @@ public:
     static css::uno::Reference< css::frame::XModel > tDocUrlToModel( const ::rtl::OUString& url )
 {
     css::uno::Any result;
-    ::ucb::Content root( url, NULL );
-    ::rtl::OUString propName =  OUSTR("DocumentModel");
-    result = getUCBProperty( root, propName );
 
-    css::uno::Reference< css::frame::XModel > xModel( result, css::uno::UNO_QUERY );
+    try
+    {
+        ::ucb::Content root( url, NULL );
+        ::rtl::OUString propName =  OUSTR("DocumentModel");
+        result = getUCBProperty( root, propName );
+    }
+    catch ( css::ucb::ContentCreationException& cce )
+    {
+        // carry on, empty value will be returned
+    }
+    catch ( css::uno::RuntimeException& re )
+    {
+        // carry on, empty value will be returned
+    }
+
+    css::uno::Reference< css::frame::XModel > xModel(
+        result, css::uno::UNO_QUERY );
+
     return xModel;
 }
 
@@ -273,11 +276,6 @@ static ::rtl::OUString parseLocationName( const ::rtl::OUString& location )
     if ( ( lastSlashIndex + 1 ) <  temp.getLength()  )
     {
         temp = temp.copy( lastSlashIndex + 1 );
-    }
-    // maybe we should throw here!!!
-    else
-    {
-        OSL_TRACE("Something wrong with name, perhaps we should throw an exception");
     }
     return temp;
 }
