@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndole.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-05 16:01:01 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:20:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -573,17 +573,20 @@ uno::Reference < embed::XEmbeddedObject > SwOLEObj::GetOleRef()
         // MIB 18.5.97: DIe Base-URL wird jetzt gesetzt, damit Plugins
         // nach dem Laden und vor dem Aktivieren des Frames korrekt
         // geladen werden koennen
-        String sBaseURL( INetURLObject::GetBaseURL() );
         const SwDocShell *pDocSh = pOLENd->GetDoc()->GetDocShell();
         const SfxMedium *pMedium;
+
+        // os TODO: temporary replacment of base URL
+        String sBaseURL;
         if( pDocSh && 0 != (pMedium = pDocSh->GetMedium()) &&
             pMedium->GetName() != sBaseURL )
-                INetURLObject::SetBaseURL( pMedium->GetName() );
+        {
+            DBG_ERROR( "removed in sb19: INetURLObject::SetBaseURL( pMedium->GetName() );");
+            DBG_ERROR("replacement of base URL still missing")
+        }
 
         uno::Reference < embed::XEmbeddedObject > xObj = p->GetEmbeddedObjectContainer().GetEmbeddedObject( aName );
         ASSERT( !xOLERef.is(), "rekursiver Aufruf von GetOleRef() ist nicht erlaubt" )
-
-        INetURLObject::SetBaseURL( sBaseURL );
 
         if ( !xObj.is() )
         {
