@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlencryption_mscryptimpl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mmi $ $Date: 2004-07-23 03:12:26 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:58:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,10 @@
 #include "xmlsecuritycontext_mscryptimpl.hxx"
 #endif
 
+#ifndef _ERRORCALLBACK_XMLSECIMPL_HXX_
+#include "errorcallback.hxx"
+#endif
+
 #include "xmlsec/xmlsec.h"
 #include "xmlsec/xmltree.h"
 #include "xmlsec/xmlenc.h"
@@ -142,31 +146,19 @@ SAL_CALL XMLEncryption_MSCryptImpl :: encrypt(
     if( pSecCtxt == NULL )
         throw RuntimeException() ;
 
-    pMngr = pSecCtxt->keysManager() ;
-
-
-    //Create Encryption context
-    pEncCtx = xmlSecEncCtxCreate( pMngr ) ;
-    if( pEncCtx == NULL )
-        throw XMLEncryptionException() ;
-
-
     //Get the encryption template
     Reference< XXMLElementWrapper > xTemplate = aTemplate->getTemplate() ;
     if( !xTemplate.is() ) {
-        xmlSecEncCtxDestroy( pEncCtx ) ;
         throw RuntimeException() ;
     }
 
     Reference< XUnoTunnel > xTplTunnel( xTemplate , UNO_QUERY ) ;
     if( !xTplTunnel.is() ) {
-        xmlSecEncCtxDestroy( pEncCtx ) ;
         throw RuntimeException() ;
     }
 
     XMLElementWrapper_XmlSecImpl* pTemplate = ( XMLElementWrapper_XmlSecImpl* )xTplTunnel->getSomething( XMLElementWrapper_XmlSecImpl::getUnoTunnelImplementationId() ) ;
     if( pTemplate == NULL ) {
-        xmlSecEncCtxDestroy( pEncCtx ) ;
         throw RuntimeException() ;
     }
 
@@ -181,7 +173,6 @@ SAL_CALL XMLEncryption_MSCryptImpl :: encrypt(
     }
 
     if( pCipherData == NULL ) {
-        xmlSecEncCtxDestroy( pEncCtx ) ;
         throw XMLEncryptionException() ;
     }
 
@@ -192,14 +183,12 @@ SAL_CALL XMLEncryption_MSCryptImpl :: encrypt(
     }
 
     if( pCipherValue == NULL ) {
-        xmlSecEncCtxDestroy( pEncCtx ) ;
         throw XMLEncryptionException() ;
     }
 
     pContent = pCipherValue->children;
 
     if( pContent == NULL ) {
-        xmlSecEncCtxDestroy( pEncCtx ) ;
         throw XMLEncryptionException() ;
     }
 
@@ -221,10 +210,27 @@ SAL_CALL XMLEncryption_MSCryptImpl :: encrypt(
         isParentRef = sal_False;
     }
 
+    pMngr = pSecCtxt->keysManager() ;
+
+     setErrorRecorder( aTemplate );
+
+    //Create Encryption context
+    pEncCtx = xmlSecEncCtxCreate( pMngr ) ;
+    if( pEncCtx == NULL )
+    {
+        //throw XMLEncryptionException() ;
+        clearErrorRecorder();
+        return aTemplate;
+    }
+
+
     //Encrypt the template
     if( xmlSecEncCtxXmlEncrypt( pEncCtx , pEncryptedData , pContent ) < 0 ) {
         xmlSecEncCtxDestroy( pEncCtx ) ;
-        throw XMLEncryptionException() ;
+
+        //throw XMLEncryptionException() ;
+        clearErrorRecorder();
+        return aTemplate;
     }
 
     xmlSecEncCtxDestroy( pEncCtx ) ;
@@ -239,11 +245,12 @@ SAL_CALL XMLEncryption_MSCryptImpl :: encrypt(
         pTemplate->setNativeElement(referenceNode->next);
     }
 
+    clearErrorRecorder();
     return aTemplate ;
 }
 
 /* XXMLEncryption */
-Reference< XXMLElementWrapper > SAL_CALL
+Reference< XXMLEncryptionTemplate > SAL_CALL
 XMLEncryption_MSCryptImpl :: decrypt(
     const Reference< XXMLEncryptionTemplate >& aTemplate ,
     const Reference< XXMLSecurityContext >& aSecurityCtx
@@ -270,31 +277,19 @@ XMLEncryption_MSCryptImpl :: decrypt(
     if( pSecCtxt == NULL )
         throw RuntimeException() ;
 
-    pMngr = pSecCtxt->keysManager() ;
-
-
-    //Create Encryption context
-    pEncCtx = xmlSecEncCtxCreate( pMngr ) ;
-    if( pEncCtx == NULL )
-        throw XMLEncryptionException() ;
-
-
     //Get the encryption template
     Reference< XXMLElementWrapper > xTemplate = aTemplate->getTemplate() ;
     if( !xTemplate.is() ) {
-        xmlSecEncCtxDestroy( pEncCtx ) ;
         throw RuntimeException() ;
     }
 
     Reference< XUnoTunnel > xTplTunnel( xTemplate , UNO_QUERY ) ;
     if( !xTplTunnel.is() ) {
-        xmlSecEncCtxDestroy( pEncCtx ) ;
         throw RuntimeException() ;
     }
 
     XMLElementWrapper_XmlSecImpl* pTemplate = ( XMLElementWrapper_XmlSecImpl* )xTplTunnel->getSomething( XMLElementWrapper_XmlSecImpl::getUnoTunnelImplementationId() ) ;
     if( pTemplate == NULL ) {
-        xmlSecEncCtxDestroy( pEncCtx ) ;
         throw RuntimeException() ;
     }
 
@@ -315,10 +310,26 @@ XMLEncryption_MSCryptImpl :: decrypt(
         isParentRef = sal_False;
     }
 
+    pMngr = pSecCtxt->keysManager() ;
+
+     setErrorRecorder( aTemplate );
+
+    //Create Encryption context
+    pEncCtx = xmlSecEncCtxCreate( pMngr ) ;
+    if( pEncCtx == NULL )
+    {
+        //throw XMLEncryptionException() ;
+        clearErrorRecorder();
+        return aTemplate;
+    }
+
     //Decrypt the template
     if( xmlSecEncCtxDecrypt( pEncCtx , pEncryptedData ) < 0 || pEncCtx->result == NULL ) {
         xmlSecEncCtxDestroy( pEncCtx ) ;
-        throw XMLEncryptionException() ;
+
+        //throw XMLEncryptionException() ;
+        clearErrorRecorder();
+        return aTemplate;
     }
     /*----------------------------------------
     if( pEncCtx->resultReplaced != 0 ) {
@@ -349,7 +360,11 @@ XMLEncryption_MSCryptImpl :: decrypt(
     XMLElementWrapper_XmlSecImpl * ret = new XMLElementWrapper_XmlSecImpl(isParentRef?
         (referenceNode->children):(referenceNode->next));
 
-    return ret;
+    //return ret;
+    aTemplate->setTemplate(ret);
+
+    clearErrorRecorder();
+    return aTemplate;
 }
 
 /* XInitialization */
