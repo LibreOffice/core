@@ -6,7 +6,7 @@
         <prop oor:name="Preferred"><value>false</value></prop>
         <prop oor:name="PreferredFilter"><value>Frame Work III (W4W)</value></prop>
         <prop oor:name="UIName">
-            <value xml:lang="en-US">Frame Work III</value>
+            <value>Frame Work III</value>
         </prop>
         <prop oor:name="ClipboardFormat"/>
     </node>

@@ -6,7 +6,7 @@
         <prop oor:name="Preferred"><value>false</value></prop>
         <prop oor:name="PreferredFilter"><value>Frame Maker MIF 5.0 (W4W)</value></prop>
         <prop oor:name="UIName">
-            <value xml:lang="en-US">Frame Maker Melse if 5.0</value>
+            <value>Frame Maker Melse if 5.0</value>
         </prop>
         <prop oor:name="ClipboardFormat"/>
     </node>
