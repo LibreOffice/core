@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLPlotAreaContext.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: bm $ $Date: 2000-11-29 13:57:56 $
+ *  last change: $Author: bm $ $Date: 2000-12-09 15:53:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,7 +136,8 @@ SchXMLPlotAreaContext::SchXMLPlotAreaContext( SchXMLImportHelper& rImpHelper,
         SvXMLImportContext( rImport, XML_NAMESPACE_CHART, rLocalName ),
         mrImportHelper( rImpHelper ),
         mrSeriesAddresses( rSeriesAddresses ),
-        mrCategoriesAddress( rCategoriesAddress )
+        mrCategoriesAddress( rCategoriesAddress ),
+        mnDomainOffset( 0 )
 {
     // get Diagram
     uno::Reference< chart::XChartDocument > xDoc( rImpHelper.GetChartDocument(), uno::UNO_QUERY );
@@ -235,7 +236,7 @@ SvXMLImportContext* SchXMLPlotAreaContext::CreateChildContext(
 
                 pContext = new SchXMLSeriesContext( mrImportHelper, GetImport(), rLocalName,
                                                     mxDiagram, mrSeriesAddresses[ nIndex ],
-                                                    nIndex );
+                                                    nIndex, mnDomainOffset );
             }
             break;
 
@@ -782,13 +783,15 @@ SchXMLSeriesContext::SchXMLSeriesContext(
     SvXMLImport& rImport, const rtl::OUString& rLocalName,
     uno::Reference< chart::XDiagram >& xDiagram,
     com::sun::star::chart::ChartSeriesAddress& rSeriesAddress,
-    sal_Int32 nSeriesIndex ) :
+    sal_Int32 nSeriesIndex,
+    sal_Int32& rDomainOffset ) :
         SvXMLImportContext( rImport, XML_NAMESPACE_CHART, rLocalName ),
         mxDiagram( xDiagram ),
         mrImportHelper( rImpHelper ),
         mrSeriesAddress( rSeriesAddress ),
         mnSeriesIndex( nSeriesIndex ),
-        mnDataPointIndex( -1 )
+        mnDataPointIndex( -1 ),
+        mrDomainOffset( rDomainOffset )
 {
 }
 
@@ -837,14 +840,14 @@ void SchXMLSeriesContext::EndElement()
 
         try
         {
-            xProp = mxDiagram->getDataRowProperties( mnSeriesIndex );
+            xProp = mxDiagram->getDataRowProperties( mnSeriesIndex + mrDomainOffset );
         }
         catch( lang::IndexOutOfBoundsException )
         {
             try
             {
                 mrImportHelper.ResizeChartData( mnSeriesIndex + 1 );
-                xProp = mxDiagram->getDataRowProperties( mnSeriesIndex );
+                xProp = mxDiagram->getDataRowProperties( mnSeriesIndex + mrDomainOffset );
             }
             catch( lang::IndexOutOfBoundsException )
             {
@@ -881,6 +884,7 @@ SvXMLImportContext* SchXMLSeriesContext::CreateChildContext(
             {
                 sal_Int32 nIndex = mrSeriesAddress.DomainRangeAddresses.getLength();
                 mrSeriesAddress.DomainRangeAddresses.realloc( nIndex + 1 );
+                mrDomainOffset++;
                 pContext = new SchXMLCategoriesDomainContext(
                     mrImportHelper, GetImport(),
                     nPrefix, rLocalName,
@@ -890,7 +894,7 @@ SvXMLImportContext* SchXMLSeriesContext::CreateChildContext(
         case XML_TOK_SERIES_DATA_POINT:
             mnDataPointIndex++;
             pContext = new SchXMLDataPointContext( mrImportHelper, GetImport(), rLocalName, mxDiagram,
-                                                   mnSeriesIndex, mnDataPointIndex );
+                                                   mnSeriesIndex + mrDomainOffset, mnDataPointIndex );
         default:
             pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
     }

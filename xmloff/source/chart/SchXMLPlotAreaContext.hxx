@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLPlotAreaContext.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: bm $ $Date: 2000-11-29 14:18:44 $
+ *  last change: $Author: bm $ $Date: 2000-12-09 15:53:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,7 @@ private:
     rtl::OUString msAutoStyleName;
     com::sun::star::uno::Sequence< com::sun::star::chart::ChartSeriesAddress >& mrSeriesAddresses;
     rtl::OUString& mrCategoriesAddress;
+    sal_Int32 mnDomainOffset;
 
 public:
     SchXMLPlotAreaContext( SchXMLImportHelper& rImpHelper,
@@ -150,13 +151,15 @@ private:
     rtl::OUString msAutoStyleName;
     sal_Int32 mnSeriesIndex;
     sal_Int32 mnDataPointIndex;
+    sal_Int32& mrDomainOffset;
 
 public:
     SchXMLSeriesContext( SchXMLImportHelper& rImpHelper,
                          SvXMLImport& rImport, const rtl::OUString& rLocalName,
                          com::sun::star::uno::Reference< com::sun::star::chart::XDiagram >& xDiagram,
                          com::sun::star::chart::ChartSeriesAddress& rSeriesAddress,
-                         sal_Int32 nSeriesIndex );
+                         sal_Int32 nSeriesIndex,
+                         sal_Int32& rDomainOffset );
     ~SchXMLSeriesContext();
 
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
