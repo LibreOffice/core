@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleComponentBase.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: af $ $Date: 2002-12-04 15:14:17 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 16:52:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,8 @@
 
 #include "AccessibleComponentBase.hxx"
 
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLE_ROLE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleRole.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLE_ROLE_HPP_
+#include <com/sun/star/accessibility/AccessibleRole.hpp>
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
 #include <com/sun/star/container/XChild.hpp>
@@ -86,7 +86,7 @@
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star::accessibility;
+using namespace ::com::sun::star::accessibility;
 
 namespace accessibility {
 
@@ -108,7 +108,7 @@ AccessibleComponentBase::~AccessibleComponentBase (void)
 
 //=====  XAccessibleComponent  ================================================
 
-sal_Bool SAL_CALL AccessibleComponentBase::contains (
+sal_Bool SAL_CALL AccessibleComponentBase::containsPoint (
         const ::com::sun::star::awt::Point& aPoint)
         throw (::com::sun::star::uno::RuntimeException)
 {
@@ -123,7 +123,7 @@ sal_Bool SAL_CALL AccessibleComponentBase::contains (
 
 
 uno::Reference<XAccessible > SAL_CALL
-    AccessibleComponentBase::getAccessibleAt (
+    AccessibleComponentBase::getAccessibleAtPoint (
         const awt::Point& aPoint)
     throw (uno::RuntimeException)
 {
