@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpputype.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:25:27 $
+ *  last change: $Author: ts $ $Date: 2000-12-11 13:57:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,6 +156,15 @@ protected:
     ::rtl::OString  checkRealBaseType(const ::rtl::OString& type, sal_Bool bResolveTypeOnly = sal_False);
     void    dumpCppuGetTypeMemberDecl(FileStream& o, CppuTypeDecl eDeclFlag);
 
+     sal_Bool isNestedType()
+        { return m_bIsNestedType; };
+
+     RegistryKeyNames& getNestedTypeNames()
+        { return  m_nestedTypeNames; };
+
+     sal_Bool isNestedTypeByName(const ::rtl::OString& type);
+     sal_Bool hasNestedType(const ::rtl::OString& type);
+
 protected:
     sal_uInt32          m_inheritedMemberCount;
 
@@ -168,6 +177,8 @@ protected:
     TypeReader          m_reader;
     TypeManager&        m_typeMgr;
     TypeDependency      m_dependencies;
+    sal_Bool            m_bIsNestedType;
+    RegistryKeyNames    m_nestedTypeNames;
 };
 
 class InterfaceType : public CppuType
@@ -180,6 +191,7 @@ public:
 
     virtual ~InterfaceType();
 
+    sal_Bool    dumpDeclaration(FileStream& o) throw( CannotDumpException );
     sal_Bool    dumpHFile(FileStream& o) throw( CannotDumpException );
     sal_Bool    dumpHxxFile(FileStream& o) throw( CannotDumpException );
 
@@ -217,6 +229,8 @@ public:
     virtual ~ModuleType();
 
     virtual sal_Bool    dump(CppuOptions* pOptions) throw( CannotDumpException );
+
+    sal_Bool            dumpDeclaration(FileStream& o) throw( CannotDumpException );
     sal_Bool            dumpHFile(FileStream& o) throw( CannotDumpException );
     sal_Bool            dumpHxxFile(FileStream& o) throw( CannotDumpException );
     sal_Bool            hasConstants();
@@ -245,6 +259,7 @@ public:
 
     virtual ~StructureType();
 
+    sal_Bool    dumpDeclaration(FileStream& o) throw( CannotDumpException );
     sal_Bool    dumpHFile(FileStream& o) throw( CannotDumpException );
     sal_Bool    dumpHxxFile(FileStream& o) throw( CannotDumpException );
 
@@ -261,6 +276,7 @@ public:
 
     virtual ~ExceptionType();
 
+    sal_Bool    dumpDeclaration(FileStream& o) throw( CannotDumpException );
     sal_Bool    dumpHFile(FileStream& o) throw( CannotDumpException );
     sal_Bool    dumpHxxFile(FileStream& o) throw( CannotDumpException );
 
@@ -277,6 +293,7 @@ public:
 
     virtual ~EnumType();
 
+    sal_Bool    dumpDeclaration(FileStream& o) throw( CannotDumpException );
     sal_Bool    dumpHFile(FileStream& o) throw( CannotDumpException );
     sal_Bool    dumpHxxFile(FileStream& o) throw( CannotDumpException );
 
@@ -294,6 +311,7 @@ public:
 
     virtual ~TypeDefType();
 
+    sal_Bool    dumpDeclaration(FileStream& o) throw( CannotDumpException );
     sal_Bool    dumpHFile(FileStream& o) throw( CannotDumpException );
     sal_Bool    dumpHxxFile(FileStream& o) throw( CannotDumpException );
 
