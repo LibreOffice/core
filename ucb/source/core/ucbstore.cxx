@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbstore.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-26 15:17:16 $
+ *  last change: $Author: kso $ $Date: 2000-12-08 12:24:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,12 +65,9 @@
 
   *************************************************************************/
 
-#ifndef __LIST__
-#include <stl/list>
-#endif
-#ifndef __HASH_MAP__
-#include <stl/hash_map>
-#endif
+#include <list>
+#include <hash_map>
+
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
 #endif
@@ -193,6 +190,8 @@ public:
 
 struct UcbStore_Impl
 {
+    osl::Mutex                        m_aMutex;
+    Reference< XPropertySetRegistry > m_xTheRegistry;
 };
 
 //=========================================================================
@@ -272,8 +271,13 @@ UcbStore::createPropertySetRegistry( const OUString& URL )
     // URL is ignored by this interface implementation. It always uses
     // the configuration server as storage medium.
 
-    return Reference< XPropertySetRegistry >(
-                            new PropertySetRegistry( m_xSMgr, *this ) );
+    if ( !m_pImpl->m_xTheRegistry.is() )
+    {
+        osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
+        if ( !m_pImpl->m_xTheRegistry.is() )
+            m_pImpl->m_xTheRegistry = new PropertySetRegistry( m_xSMgr, *this );
+    }
+    return m_pImpl->m_xTheRegistry;
 }
 
 //=========================================================================
@@ -284,8 +288,12 @@ UcbStore::createPropertySetRegistry( const OUString& URL )
 
 void UcbStore::removeRegistry( const OUString& URL )
 {
-    // nothing to do, since this implementation does not maintain
-    // different regsitry instances.
+    if ( m_pImpl->m_xTheRegistry.is() )
+    {
+        osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
+        if ( m_pImpl->m_xTheRegistry.is() )
+            m_pImpl->m_xTheRegistry = 0;
+    }
 }
 
 //=========================================================================
@@ -299,6 +307,7 @@ struct PropertySetRegistry_Impl
     UcbStore*                         m_pCreator;
     PropertySetMap_Impl               m_aPropSets;
     Reference< XMultiServiceFactory > m_xConfigProvider;
+    Reference< XInterface >           m_xRootReadAccess;
     osl::Mutex                        m_aMutex;
 
     PropertySetRegistry_Impl( UcbStore& rCreator )
@@ -816,11 +825,7 @@ void PropertySetRegistry::add( PersistentPropertySet* pSet )
     if ( key.getLength() )
     {
         osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
-
-        PropertySetMap_Impl& rSets = m_pImpl->m_aPropSets;
-
-        PropertySetMap_Impl::const_iterator it = rSets.find( key );
-        rSets[ key ] = pSet;
+        m_pImpl->m_aPropSets[ key ] = pSet;
     }
 }
 
@@ -1003,7 +1008,7 @@ void PropertySetRegistry::renamePropertySet( const OUString& rOldKey,
                         // Obtain property names.
                         Sequence< OUString > aElems
                                         = xOldNameAccess->getElementNames();
-                        sal_uInt32 nCount = aElems.getLength();
+                        sal_Int32 nCount = aElems.getLength();
                         if ( nCount )
                         {
                             OUString aNewValuesKey( aNewKey );
@@ -1215,28 +1220,33 @@ Reference< XInterface > PropertySetRegistry::getRootConfigReadAccess()
     {
         osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
 
-        if ( !m_pImpl->m_xConfigProvider.is() )
-            m_pImpl->m_xConfigProvider = Reference< XMultiServiceFactory >(
-                m_xSMgr->createInstance(
-                    OUString::createFromAscii(
-                        "com.sun.star.configuration.ConfigurationProvider" ) ),
-                UNO_QUERY );
-
-        if ( m_pImpl->m_xConfigProvider.is() )
+        if ( !m_pImpl->m_xRootReadAccess.is() )
         {
-            Sequence< Any > aArguments( 1 );
-            aArguments[ 0 ]
-                <<= OUString::createFromAscii( STORE_CONTENTPROPERTIES_KEY );
+            if ( !m_pImpl->m_xConfigProvider.is() )
+                m_pImpl->m_xConfigProvider = Reference< XMultiServiceFactory >(
+                    m_xSMgr->createInstance(
+                        OUString::createFromAscii(
+                        "com.sun.star.configuration.ConfigurationProvider" ) ),
+                    UNO_QUERY );
 
-            Reference< XInterface > xInterface(
-                m_pImpl->m_xConfigProvider->createInstanceWithArguments(
-                    OUString::createFromAscii(
-                        "com.sun.star.configuration.ConfigurationAccess" ),
-                    aArguments ) );
+            if ( m_pImpl->m_xConfigProvider.is() )
+            {
+                Sequence< Any > aArguments( 1 );
+                aArguments[ 0 ] <<= OUString::createFromAscii(
+                                                 STORE_CONTENTPROPERTIES_KEY );
 
-            if ( xInterface.is() )
-                return xInterface;
+                m_pImpl->m_xRootReadAccess =
+                    m_pImpl->m_xConfigProvider->createInstanceWithArguments(
+                        OUString::createFromAscii(
+                            "com.sun.star.configuration.ConfigurationAccess" ),
+                        aArguments );
+
+                if ( m_pImpl->m_xRootReadAccess.is() )
+                    return m_pImpl->m_xRootReadAccess;
+            }
         }
+        else
+            return m_pImpl->m_xRootReadAccess;
     }
     catch ( RuntimeException& )
     {
@@ -2149,7 +2159,7 @@ Sequence< PropertyValue > SAL_CALL PersistentPropertySet::getPropertyValues()
 
                 Sequence< OUString > aElems = xNameAccess->getElementNames();
 
-                sal_uInt32 nCount = aElems.getLength();
+                sal_Int32 nCount = aElems.getLength();
                 if ( nCount )
                 {
                     Reference< XHierarchicalNameAccess > xHierNameAccess(
@@ -2301,7 +2311,7 @@ void SAL_CALL PersistentPropertySet::setPropertyValues(
         aFullPropNamePrefix += OUString::createFromAscii( "/" );
 
         // Iterate over given property value sequence.
-        for ( sal_uInt32 n = 0; n < nCount; ++n )
+        for ( sal_Int32 n = 0; n < nCount; ++n )
         {
             const PropertyValue& rNewValue = pNewValues[ n ];
             const OUString& rName = rNewValue.Name;
@@ -2676,7 +2686,8 @@ Sequence< Property > SAL_CALL PropertySetInfo_Impl::getProperties()
 
                                     sal_Int32 nAttribs = 0;
                                     if ( aKeyValue >>= nAttribs )
-                                        rProp.Attributes = nAttribs;
+                                        rProp.Attributes
+                                            = sal_Int16( nAttribs );
                                     else
                                         OSL_ENSURE( sal_False,
                                           "PropertySetInfo_Impl::getProperties - "
@@ -2770,7 +2781,7 @@ Property SAL_CALL PropertySetInfo_Impl::getPropertyByName(
             sal_Int32 nAttribs = 0;
             if ( xRootHierNameAccess->getByHierarchicalName( aKey )
                     >>= nAttribs )
-                aProp.Attributes = nAttribs;
+                aProp.Attributes = sal_Int16( nAttribs );
             else
             {
                 OSL_ENSURE( sal_False,
