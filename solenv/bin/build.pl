@@ -5,9 +5,9 @@ eval 'exec perl -S $0 ${1+"$@"}'
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.77 $
+#   $Revision: 1.78 $
 #
-#   last change: $Author: vg $ $Date: 2002-12-12 16:22:50 $
+#   last change: $Author: vg $ $Date: 2002-12-12 17:54:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,7 +84,7 @@ if (defined $ENV{CWS_WORK_STAMP}) {
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.77 $ ';
+$id_str = ' $Revision: 1.78 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -1038,7 +1038,7 @@ sub are_all_dependent {
 };
 
 #
-# Procedure checks out $prj_name/prj (concised image of a project)
+# Procedure checks out module or its image ($prj_name/prj)
 #
 sub checkout_module {
     my $prj_name = shift;
@@ -1201,7 +1201,11 @@ sub ensure_clear_module {
     };
     if ($module_type eq 'lnk') {
         $$Prj =~ /\.lnk$/;
-        unlink $StandDir.$$Prj;
+        if ( $^O eq 'MSWin32' ) {
+            rename("$StandDir$$Prj", "$StandDir$`.backup.lnk");
+        } else {
+            unlink $StandDir.$$Prj;
+        };
         $$Prj = $`;
     } else {
         rmtree($StandDir.$$Prj, 1, 1);
@@ -1215,7 +1219,7 @@ sub ensure_clear_module {
 sub clear_module {
     my $Prj = shift;
     if (!defined $ENV{INPATH}) {
-        &print_error("\$ENV\{INPATH\} is not set. Please use setsolar!!");
+        &print_error("\$INPATH environment variable is not set. Please use setsolar!!");
     }
     rmtree($StandDir.$Prj.'/'. $ENV{INPATH}, 1, 1);
     return;
@@ -1232,7 +1236,7 @@ sub check_module_consistency {
         &checkout_module($Prj, 'image');
         if (!-f $prj_buld_lst) {
             print "Cannot checkout consistent $Prj\n";
-            # For Ause: Uncomment following line,
+            # For Ause: Uncomment following line and
             # remove the upper one
             #&print_error "Cannot checkout consistent $Prj";
         };
