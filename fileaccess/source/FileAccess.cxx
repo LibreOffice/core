@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FileAccess.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2004-05-28 15:19:28 $
+ *  last change: $Author: kz $ $Date: 2004-06-11 11:56:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -437,6 +437,9 @@ void OFileAccess::createFolder( const rtl::OUString& NewFolderURL )
             {
                 if ( !aCnt.insertNewContent( rCurr.Type, aNames, aValues, aNew ) )
                     continue;
+
+                // Success. We're done.
+                return;
             }
             catch ( ::com::sun::star::ucb::CommandFailedException const & )
             {
