@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Frame.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:15:28 $
+ *  last change:$Date: 2003-05-27 12:47:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,7 @@ import java.io.PrintWriter;
 import lib.TestEnvironment;
 import lib.StatusException;
 import lib.Status;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.util.*;
 import com.sun.star.beans.*;
 import com.sun.star.uno.XInterface;
@@ -113,7 +114,7 @@ public class Frame extends TestCase {
         log.println( "creating a test environment" );
 
         // get a soffice factory object
-        SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)Param.getMSF());
 
         try {
             log.println( "creating a text document" );

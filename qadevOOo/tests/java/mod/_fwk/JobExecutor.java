@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JobExecutor.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:15:28 $
+ *  last change:$Date: 2003-05-27 12:47:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,7 @@ import com.sun.star.container.XNamed;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XServiceInfo;
 import com.sun.star.lang.XSingleServiceFactory;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XTypeProvider;
 import com.sun.star.registry.XImplementationRegistration;
 import com.sun.star.task.XJob;
@@ -142,14 +143,14 @@ public class JobExecutor extends TestCase {
      * for <code>JobExecutor</code> in some reasons). <p>
      *
      * Note: SOffice is started again while the next
-     * <code>SOLink.getMSF()</code>  call.
+     * <code>(XMultiServiceFactory)SOLink.getMSF()</code>  call.
      */
     protected void initialize(TestParameters Param, PrintWriter log) {
         boolean serviceRegistered = false;
         boolean configured = false;
 
         try {
-            Object obj = Param.getMSF().createInstance("test.Job");
+            Object obj = ((XMultiServiceFactory)Param.getMSF()).createInstance("test.Job");
             serviceRegistered = obj != null;
         } catch(com.sun.star.uno.Exception e) {}
 
@@ -160,7 +161,7 @@ public class JobExecutor extends TestCase {
         XNameAccess jobs = null;
         XNameAccess events = null;
         try {
-            Object obj = Param.getMSF().createInstance
+            Object obj = ((XMultiServiceFactory)Param.getMSF()).createInstance
                 ("com.sun.star.configuration.ConfigurationProvider");
             XMultiServiceFactory xConfigMSF = (XMultiServiceFactory)
                 UnoRuntime.queryInterface(XMultiServiceFactory.class, obj);
@@ -227,7 +228,7 @@ public class JobExecutor extends TestCase {
             }
         }
 
-        String regFile = utils.getOfficeURL(Param.getMSF()) + "/types.rdb";
+        String regFile = utils.getOfficeURL((XMultiServiceFactory)Param.getMSF()) + "/types.rdb";
 
         if (!configured || !serviceRegistered) {
             log.println("Destroying SOffice ...");
@@ -277,9 +278,9 @@ public class JobExecutor extends TestCase {
 
         Object job = null;
         try {
-            oObj = (XInterface)Param.getMSF().createInstance(
+            oObj = (XInterface)((XMultiServiceFactory)Param.getMSF()).createInstance(
                 "com.sun.star.comp.framework.JobExecutor");
-            job = (XInterface)Param.getMSF().createInstance("test.Job");
+            job = (XInterface)((XMultiServiceFactory)Param.getMSF()).createInstance("test.Job");
         } catch(com.sun.star.uno.Exception e) {
             e.printStackTrace(log);
             throw new StatusException(
