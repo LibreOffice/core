@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdxcgv.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2001-01-26 14:08:54 $
+ *  last change: $Author: ka $ $Date: 2001-01-31 12:08:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -541,6 +541,7 @@ void SdrExchangeView::ImpYank(ULONG nFormat, BOOL bClp) const
             SvMemoryStream aMemStream(4096,4096);
             aMemStream.SetVersion(SOFFICE_FILEFORMAT_NOW);
             // StyleSheetPool und Persist fehlt hier wohl noch ...
+            pModel->GetItemPool().SetFileFormatVersion( aMemStream.GetVersion() );
             pModel->GetItemPool().Store(aMemStream);
             aMemStream<<*pModel;
             if (bClp) Clipboard::CopyData(aMemStream.GetData(),aMemStream.GetSize(),nSdrFormat);
