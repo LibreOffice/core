@@ -2,9 +2,9 @@
  *
  *  $RCSfile: base.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:14:01 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 02:31:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,10 @@ using namespace com::sun::star::reflection;
 
 namespace stoc_rdbtdp
 {
+
+Reference< XTypeDescription > resolveTypedefs(
+    Reference< XTypeDescription > const & type);
+
 
 ::osl::Mutex & getMutex();
 
@@ -241,13 +245,15 @@ class InterfaceTypeDescriptionImpl : public WeakImplHelper1< XInterfaceTypeDescr
     OUString                              _aName;
 
     Sequence< OUString >                  _aBaseTypes;
-    Sequence< Reference< XInterfaceTypeDescription2 > > _xBaseTDs;
+    Sequence< Reference< XTypeDescription > > _xBaseTDs;
     Sequence< OUString >                  _aOptionalBaseTypes;
-    Sequence< Reference< XInterfaceTypeDescription2 > > _xOptionalBaseTDs;
+    Sequence< Reference< XTypeDescription > > _xOptionalBaseTDs;
 
     sal_Int32                             _nBaseOffset;
     Sequence< Reference< XInterfaceMemberTypeDescription > > _members;
     bool _membersInit;
+
+    void checkInterfaceType(Reference< XTypeDescription > const & type);
 
 public:
     InterfaceTypeDescriptionImpl( const Reference< XHierarchicalNameAccess > & xTDMgr,
@@ -265,10 +271,10 @@ public:
     virtual Reference< XTypeDescription > SAL_CALL getBaseType() throw(::com::sun::star::uno::RuntimeException);
     virtual Sequence< Reference< XInterfaceMemberTypeDescription > > SAL_CALL getMembers() throw(::com::sun::star::uno::RuntimeException);
 
-    virtual Sequence< Reference< XInterfaceTypeDescription2 > > SAL_CALL
-    getBaseTypes() throw (RuntimeException);
+    virtual Sequence< Reference< XTypeDescription > > SAL_CALL getBaseTypes()
+        throw (RuntimeException);
 
-    virtual Sequence< Reference< XInterfaceTypeDescription2 > > SAL_CALL
+    virtual Sequence< Reference< XTypeDescription > > SAL_CALL
     getOptionalBaseTypes() throw (RuntimeException);
 };
 
@@ -386,7 +392,7 @@ class ServiceTypeDescriptionImpl : public WeakImplHelper1< XServiceTypeDescripti
     Reference< XHierarchicalNameAccess >  _xTDMgr;
     bool _bInitReferences;
 
-    Reference< XInterfaceTypeDescription > _xInterfaceTD;
+    Reference< XTypeDescription > _xInterfaceTD;
     std::auto_ptr< Sequence< Reference< XServiceConstructorDescription > > >
     _pCtors;
     Sequence< Reference< XServiceTypeDescription > >   _aMandatoryServices;
@@ -444,9 +450,8 @@ public:
     // XServiceTypeDescription2
     virtual sal_Bool SAL_CALL isSingleInterfaceBased()
         throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Reference< XInterfaceTypeDescription >
-    SAL_CALL getInterface()
-        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< XTypeDescription > SAL_CALL
+    getInterface() throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence<
         ::com::sun::star::uno::Reference<
             ::com::sun::star::reflection::XServiceConstructorDescription > >
@@ -557,7 +562,7 @@ class SingletonTypeDescriptionImpl : public WeakImplHelper1< XSingletonTypeDescr
     OUString _aName;
     OUString _aBaseName;
     Reference< XHierarchicalNameAccess >   _xTDMgr;
-    Reference< XInterfaceTypeDescription > _xInterfaceTD;
+    Reference< XTypeDescription > _xInterfaceTD;
     Reference< XServiceTypeDescription > _xServiceTD;
 
     void init();
@@ -589,7 +594,7 @@ public:
     // XSingletonTypeDescription2
     virtual sal_Bool SAL_CALL isInterfaceBased()
         throw (::com::sun::star::uno::RuntimeException);
-    virtual Reference< XInterfaceTypeDescription > SAL_CALL getInterface()
+    virtual Reference< XTypeDescription > SAL_CALL getInterface()
         throw (::com::sun::star::uno::RuntimeException);
 };
 
