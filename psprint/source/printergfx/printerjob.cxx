@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printerjob.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-08 11:46:04 $
+ *  last change: $Author: jbu $ $Date: 2001-05-14 08:52:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,7 +112,11 @@ PrinterJob::CreateSpoolFile (const rtl::OUString& rName, const rtl::OUString& rE
     rtl::OUString aFileName = maSpoolDirName + rtl::OUString::createFromAscii ("/")
         + rName + rExtension;
     rtl::OUString aUNCFileName;
+#ifdef
+    OSL_VERIFY( osl_File_E_None == osl::File::getFileURLFromSystemPath( aSubDir, aUNCSubDir ) );
+#else
     osl::File::normalizePath (aFileName, aUNCFileName);
+#endif
 
     osl::File* pFile = new osl::File (aUNCFileName);
     pFile->open (OpenFlag_Read | OpenFlag_Write | OpenFlag_Create);
@@ -293,7 +297,17 @@ void
 removeSpoolDir (const rtl::OUString& rSpoolDir)
 {
     rtl::OUString aSysPath;
+#ifdef TF_FILEURL
+    if( osl_File_E_None != osl::File::getSystemPathFromFileURL( rSpoolDir, aSysPath ) )
+    {
+        // Conversion did not work, as this is quite a dangerous action,
+        // we should abort here ....
+        OSL_ENSURE( 0, "psprint: couldn't remove spool directory" );
+        return;
+    }
+#else
     osl::File::getSystemPathFromNormalizedPath (rSpoolDir, aSysPath);
+#endif
     rtl::OString aSysPathByte =
         rtl::OUStringToOString (aSysPath, osl_getThreadTextEncoding());
     sal_Char  pSystem [128];
