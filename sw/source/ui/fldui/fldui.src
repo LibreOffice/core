@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldui.src,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 11:55:27 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 15:56:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -902,7 +902,11 @@ String STR_COMBINED_CHARS
     TEXT[ hindi ] = "अक्षरों को मिलाओ";
     TEXT[ slovak ] = "Zrovnať znaky";
 };
-
+String STR_DROPDOWN
+{
+    TEXT = "Eingabeliste" ;
+    TEXT[ english_us ] = "Input list" ;
+};
  //
  // Bereich Referenzen
  //
