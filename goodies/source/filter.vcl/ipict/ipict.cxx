@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ipict.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:30:15 $
+ *  last change: $Author: sj $ $Date: 2000-09-28 13:26:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -637,26 +637,21 @@ void PictReader::DrawingMethod(PictDrawingMethod eMethod)
 
 ULONG PictReader::ReadAndDrawText()
 {
-    char nByteLen;
-    ULONG nLen,i,nDataLen;
-    char sText[256];
+    char        nByteLen;
+    sal_uInt32  nLen, nDataLen;
+    sal_Char    sText[256];
 
     DrawingMethod(PDM_TEXT);
     *pPict >> nByteLen; nLen=((ULONG)nByteLen)&0x000000ff;
-    nDataLen=nLen+1;
-
-    for ( i = 0; i < nLen; i++ )
-    {
-        *pPict >> sText[i];
-    }
+    nDataLen = nLen + 1;
+    pPict->Read( &sText, nLen );
 
     // Stoerende Steuerzeuichen wegnehmen:
-    while (nLen>0 && ((unsigned char)sText[nLen-1])<32) nLen--;
-
-    sText[nLen]=0;
-
-    pVirDev->DrawText( Point( aTextPosition.X(), aTextPosition.Y() ), String::CreateFromAscii( sText ) );
-
+    while ( nLen > 0 && ( (unsigned char)sText[ nLen - 1 ] ) < 32 )
+            nLen--;
+    sText[ nLen ] = 0;
+    String aString( (const sal_Char*)&sText, gsl_getSystemTextEncoding() );
+    pVirDev->DrawText( Point( aTextPosition.X(), aTextPosition.Y() ), aString );
     return nDataLen;
 }
 
@@ -1422,8 +1417,8 @@ ULONG PictReader::ReadData(USHORT nOpcode)
         break;
 
     case 0x002c: { // fontName
-        char sFName[256], nByteLen;
-        USHORT nLen,i;
+        char        sFName[ 256 ], nByteLen;
+        sal_uInt16  nLen;
         *pPict >> nUSHORT; nDataSize=nUSHORT+2;
         *pPict >> nUSHORT;
         if      (nUSHORT <=    1) aActFont.SetFamily(FAMILY_SWISS);
@@ -1436,10 +1431,10 @@ ULONG PictReader::ReadData(USHORT nOpcode)
         if (nUSHORT==23) aActFont.SetCharSet( RTL_TEXTENCODING_SYMBOL);
         else aActFont.SetCharSet( gsl_getSystemTextEncoding() );
         *pPict >> nByteLen; nLen=((USHORT)nByteLen)&0x00ff;
-        for ( i = 0; i < nLen; i++ )
-            *pPict >> sFName[i];
-        sFName[ nLen ]=0;
-        aActFont.SetName( String::CreateFromAscii( sFName ) );
+        pPict->Read( &sFName, nLen );
+        sFName[ nLen ] = 0;
+        String aString( (const sal_Char*)&sFName, gsl_getSystemTextEncoding() );
+        aActFont.SetName( aString );
         eActMethod=PDM_UNDEFINED;
         break;
     }

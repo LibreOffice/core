@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epict.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:30:12 $
+ *  last change: $Author: sj $ $Date: 2000-09-28 13:27:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,7 +166,7 @@ private:
     void WritePoint(const Point & rPoint);
     void WriteSize(const Size & rSize);
     void WriteRGBColor(const Color & rColor);
-    void WriteString( const ByteString & rString );
+    void WriteString( const String & rString );
     void WriteRectangle(const Rectangle & rRect);
     void WritePolygon(const Polygon & rPoly);
     void WriteArcAngles(const Rectangle & rRect, const Point & rStartPt, const Point & rEndPt);
@@ -188,7 +188,7 @@ private:
     void WriteOpcode_RGBBkCol(const Color & rColor);
     void WriteOpcode_Line(const Point & rLocPt, const Point & rNewPt);
     void WriteOpcode_LineFrom(const Point & rNewPt);
-    void WriteOpcode_Text(const Point & rPoint, const ByteString& rString, BOOL bDelta);
+    void WriteOpcode_Text(const Point & rPoint, const String& rString, BOOL bDelta);
     void WriteOpcode_FontName(const Font & rFont);
     void WriteOpcode_Rect(PictDrawingMethod eMethod, const Rectangle & rRect);
     void WriteOpcode_SameRect(PictDrawingMethod eMethod);
@@ -208,7 +208,7 @@ private:
     void SetAttrForFrame();
     void SetAttrForText();
 
-    void WriteTextArray(Point & rPoint, const ByteString& rString, const long * pDXAry);
+    void WriteTextArray(Point & rPoint, const String& rString, const long * pDXAry);
 
     void WriteOpcodes(const GDIMetaFile & rMTF);
 
@@ -363,16 +363,17 @@ void PictWriter::WriteRGBColor(const Color & rColor)
 }
 
 
-void PictWriter::WriteString( const ByteString & rString )
+void PictWriter::WriteString( const String & rString )
 {
     USHORT i,nLen;
 
-    nLen = rString.Len();
+    ByteString aByteString( rString, gsl_getSystemTextEncoding() );
+    nLen = aByteString.Len();
     if ( nLen > 255 )
         nLen = 255;
     *pPict << ( (BYTE)nLen );
     for ( i = 0; i < nLen; i++ )
-        *pPict << rString.GetChar( i );
+        *pPict << aByteString.GetChar( i );
 }
 
 
@@ -730,7 +731,7 @@ void PictWriter::WriteOpcode_LineFrom(const Point & rNewPt)
 }
 
 
-void PictWriter::WriteOpcode_Text(const Point & rPoint, const ByteString& rString, BOOL bDelta)
+void PictWriter::WriteOpcode_Text(const Point & rPoint, const String& rString, BOOL bDelta)
 {
     Point aPoint = OutputDevice::LogicToLogic( rPoint,
                                                aSrcMapMode,
@@ -780,12 +781,16 @@ void PictWriter::WriteOpcode_FontName(const Font & rFont)
         default:                nFontId=1;
     }
 
-    if (bDstFontNameValid==FALSE || nDstFontNameId!=nFontId || aDstFontName!=rFont.GetName()) {
-        if (rFont.GetName().Len()>0) {
-            nDataLen=3+rFont.GetName().Len();
+    if (bDstFontNameValid==FALSE || nDstFontNameId!=nFontId || aDstFontName!=rFont.GetName())
+    {
+        ByteString aByteString( rFont.GetName(), gsl_getSystemTextEncoding() );
+        sal_Int32 nFontNameLen = aByteString.Len();
+        if ( nFontNameLen > 0 )
+        {
+            nDataLen = 3 + nFontNameLen;
             *pPict << (USHORT)0x002c << nDataLen << nFontId;
-            WriteString( ByteString( rFont.GetName(), RTL_TEXTENCODING_UTF8 ) );
-            if ( ( ( rFont.GetName().Len() ) & 1 ) == 0 )
+            WriteString( rFont.GetName() );
+            if ( ( nFontNameLen & 1 ) == 0 )
                 *pPict << (BYTE)0;
         }
         *pPict << (USHORT)0x0003 << nFontId;
@@ -1377,10 +1382,10 @@ void PictWriter::SetAttrForText()
 }
 
 
-void PictWriter::WriteTextArray(Point & rPoint, const ByteString& rString, const long * pDXAry)
+void PictWriter::WriteTextArray(Point & rPoint, const String& rString, const long * pDXAry)
 {
     USHORT i,nLen;
-    sal_Char c;
+    sal_Unicode c;
     BOOL bDelta;
     Point aPt;
 
@@ -1393,13 +1398,13 @@ void PictWriter::WriteTextArray(Point & rPoint, const ByteString& rString, const
         for ( i = 0; i < nLen; i++ )
         {
             c = rString.GetChar( i );
-            if ( (unsigned char) c > 32 )
+            if ( c && ( c != 0x20 ) )
             {
                 aPt = rPoint;
                 if ( i > 0 )
                     aPt.X() += pDXAry[ i - 1 ];
 
-                WriteOpcode_Text( aPt, ByteString( c ), bDelta );
+                WriteOpcode_Text( aPt, String( c ), bDelta );
                 bDelta = TRUE;
             }
         }
@@ -1679,7 +1684,7 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
 
                 SetAttrForText();
                 String aStr( pA->GetText(),pA->GetIndex(),pA->GetLen() );
-                WriteOpcode_Text( aPt, ByteString( aStr, RTL_TEXTENCODING_UTF8 ) ,FALSE );
+                WriteOpcode_Text( aPt, aStr, FALSE );
             }
             break;
 
@@ -1699,7 +1704,7 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
                 }
                 SetAttrForText();
                 String aStr( pA->GetText(),pA->GetIndex(),pA->GetLen() );
-                WriteTextArray( aPt, ByteString( aStr, RTL_TEXTENCODING_UTF8 ), pA->GetDXArray() );
+                WriteTextArray( aPt, aStr, pA->GetDXArray() );
                 break;
             }
 
@@ -1725,7 +1730,7 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
                     pDXAry[ i ] = pDXAry[ i ] * ( (long)pA->GetWidth() ) / nNormSize;
 
                 SetAttrForText();
-                WriteTextArray( aPt, ByteString( aStr, RTL_TEXTENCODING_UTF8 ), pDXAry );
+                WriteTextArray( aPt, aStr, pDXAry );
                 delete[] pDXAry;
             }
             break;
