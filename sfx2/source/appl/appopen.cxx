@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: mba $ $Date: 2001-12-10 14:24:40 $
+ *  last change: $Author: cd $ $Date: 2001-12-12 13:14:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1281,7 +1281,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
         // synchron loading without a given frame or as blank frame
         SFX_REQUEST_ARG( rReq, pFileNameItem, SfxStringItem, SID_FILE_NAME, FALSE );
         Reference < XComponentLoader > xDesktop( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.frame.Desktop")), UNO_QUERY );
-        Reference < XModel > xModel( xDesktop->loadComponentFromURL( pFileNameItem->GetValue(), ::rtl::OUString::createFromAscii("_blank"), 0, aArgs ), UNO_QUERY );
+        Reference < XModel > xModel( xDesktop->loadComponentFromURL( pFileNameItem->GetValue(), aTarget, 0, aArgs ), UNO_QUERY );
         if ( xModel.is() )
             xController = xModel->getCurrentController();
     }

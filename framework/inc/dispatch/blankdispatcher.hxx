@@ -2,9 +2,9 @@
  *
  *  $RCSfile: blankdispatcher.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-28 11:03:50 $
+ *  last change: $Author: cd $ $Date: 2001-12-12 13:15:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,6 +139,18 @@ class BlankDispatcher   :   // -interfaces  ... are supported by our BaseDispatc
                                                      const css::uno::Sequence< css::beans::PropertyValue >&       lDescriptor ,
                                                            sal_Bool                                               bState      ,
                                                      const css::uno::Any&                                         aAsyncInfo  );
+
+    //-------------------------------------------------------------------------------------------------------------
+    //  protected methods
+    //-------------------------------------------------------------------------------------------------------------
+    private:
+        sal_Bool implts_findAndActivateAlreadyLoadedTask( const css::util::URL&                                   aURL       ,
+                                                          const css::uno::Sequence< css::beans::PropertyValue >&  lArguments ,
+                                                          const css::uno::Reference< css::frame::XFrame >         xDesktop   );
+
+        css::uno::Reference< css::frame::XFrame > implts_findAndLockRecycleTask( const css::util::URL&                                   aURL       ,
+                                                                                 const css::uno::Sequence< css::beans::PropertyValue >&  lArguments ,
+                                                                                 const css::uno::Reference< css::frame::XFrame >         xDesktop   );
 
     //-------------------------------------------------------------------------------------------------------------
     //  debug methods

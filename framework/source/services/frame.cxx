@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: mba $ $Date: 2001-12-11 16:57:06 $
+ *  last change: $Author: cd $ $Date: 2001-12-12 13:16:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -285,7 +285,7 @@ DEFINE_XINTERFACE_17                (   Frame                                   
                                         DIRECT_INTERFACE(css::document::XActionLockable                         )
                                     )
 
-DEFINE_XTYPEPROVIDER_17             (   Frame                                                                   ,
+DEFINE_XTYPEPROVIDER_16             (   Frame                                                                   ,
                                         css::lang::XTypeProvider                                                ,
                                         css::lang::XServiceInfo                                                 ,
                                         css::frame::XFramesSupplier                                             ,
@@ -301,8 +301,7 @@ DEFINE_XTYPEPROVIDER_17             (   Frame                                   
                                         css::awt::XWindowListener                                               ,
                                         css::awt::XTopWindowListener                                            ,
                                         css::awt::XFocusListener                                                ,
-                                        css::lang::XEventListener                                               ,
-                                        css::document::XActionLockable
+                                        css::lang::XEventListener
                                     )
 
 DEFINE_XSERVICEINFO_MULTISERVICE    (   Frame                                                                   ,
@@ -1449,6 +1448,8 @@ void SAL_CALL Frame::dispose() throw( css::uno::RuntimeException )
 
     // Disable this instance for further working realy!
     m_aTransactionManager.setWorkingMode( E_CLOSE );
+
+    LOG_ASSERT2( m_nExternalLockCount!=0, "Frame::dispose()", "Frame was locked ... but disposed! Multithreading problem?" )
 }
 
 /*-****************************************************************************************************//**
@@ -1910,7 +1911,7 @@ sal_Bool SAL_CALL Frame::isActionLocked() throw( css::uno::RuntimeException )
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     ReadGuard aReadLock( m_aLock );
-    return( m_nExternalLockCount>0 );
+    return( m_nExternalLockCount!=0);
 }
 
 //*****************************************************************************************************************
@@ -1933,24 +1934,36 @@ void SAL_CALL Frame::removeActionLock() throw( css::uno::RuntimeException )
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     WriteGuard aWriteLock( m_aLock );
 
-    LOG_ASSERT2( m_nExternalLockCount<=0, "Frame::removeActionLock()", "Wrong using of frame lock detected! You remove a unregistered lock ... " )
-    if( m_nExternalLockCount>0 )
-    {
-        --m_nExternalLockCount;
-    }
+    LOG_ASSERT2( m_nExternalLockCount<=0, "Frame::removeActionLock()", "Frame isn't locked! Possible multithreading problem detected." )
+    --m_nExternalLockCount;
 }
 
 //*****************************************************************************************************************
 void SAL_CALL Frame::setActionLocks( sal_Int16 nLock ) throw( css::uno::RuntimeException )
 {
-    LOG_WARNING( "Frame::resetActionLocks()", "Not supported yet!" )
+    /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
+    TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
+
+    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+    WriteGuard aWriteLock( m_aLock );
+    // Attention: If somewhere called resetActionLocks() before and get e.g. 5 locks ...
+    //            and tried to set these 5 ones here after his operations ...
+    //            we can't ignore setted requests during these two calls!
+    //            So we must add(!) these 5 locks here.
+    m_nExternalLockCount += nLock;
 }
 
 //*****************************************************************************************************************
 sal_Int16 SAL_CALL Frame::resetActionLocks() throw( css::uno::RuntimeException )
 {
-    LOG_WARNING( "Frame::resetActionLocks()", "Not supported yet!" )
-    return 0;
+    /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
+    TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
+
+    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+    WriteGuard aWriteLock( m_aLock );
+    sal_Int16 nCurrentLocks        = m_nExternalLockCount;
+              m_nExternalLockCount = 0                   ;
+    return nCurrentLocks;
 }
 
 /*-****************************************************************************************************//**

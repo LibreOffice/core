@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shutdownicon.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: mba $ $Date: 2001-12-07 14:58:48 $
+ *  last change: $Author: cd $ $Date: 2001-12-12 13:14:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -296,7 +296,7 @@ void ShutdownIcon::FileOpen()
 
                         if ( iVersion >= 0 )
                         {
-                        sal_uInt16  uVersion = (sal_uInt16)iVersion;
+                            sal_Int16   uVersion = (sal_Int16)iVersion;
 
                             aArgs.realloc( ++nArgs );
                             aArgs[nArgs-1].Name  = OUString::createFromAscii( "Version" );
