@@ -1,16 +1,17 @@
-oc  officecfg   :   soltools solenv external NULL
+oc  officecfg   :   soltools solenv external transex3 NULL
 oc  officecfg                               usr30073    -   none NULL
 oc  officecfg                               usr1        -   all oc_mkout NULL
 oc  officecfg\org\openoffice\configuration  nmake       -   all oc_config NULL
 oc  officecfg\org\openoffice\helper         nmake       -   all oc_helper NULL
 oc  officecfg\registry\schema               nmake       -   all oc_reg_schema NULL
+oc  officecfg\registry                      nmake       -   all oc_reg NULL
 oc  officecfg\registry\schema\org\openoffice	            nmake -   all oc_reg_schema_ooo oc_helper oc_config NULL
 oc  officecfg\registry\schema\org\openoffice\Office	        nmake -   all oc_reg_schema_ooo_office oc_helper oc_config NULL
 oc  officecfg\registry\schema\org\openoffice\Office\UI	    nmake -   all oc_reg_schema_ooo_office_ui oc_helper oc_config NULL
 oc  officecfg\registry\schema\org\openoffice\TypeDetection	nmake -   all oc_reg_schema_ooo_td oc_helper oc_config NULL
 oc  officecfg\registry\schema\org\openoffice\ucb	        nmake -   all oc_reg_schema_ooo_ucb oc_helper oc_config NULL
-oc  officecfg\registry\data\org\openoffice	            nmake -   all oc_reg_data_ooo oc_helper oc_config NULL
-oc  officecfg\registry\data\org\openoffice\Office	    nmake -   all oc_reg_data_ooo_office oc_helper oc_config NULL
-oc  officecfg\registry\data\org\openoffice\Office\UI	nmake -   all oc_reg_data_ooo_office_ui oc_helper oc_config NULL
-oc  officecfg\registry\data\org\openoffice\ucb	        nmake -   all oc_reg_data_ooo_ucb oc_helper oc_config NULL
+oc  officecfg\registry\data\org\openoffice	            nmake -   all oc_reg_data_ooo oc_helper oc_config oc_reg NULL
+oc  officecfg\registry\data\org\openoffice\Office	    nmake -   all oc_reg_data_ooo_office oc_helper oc_config oc_reg NULL
+oc  officecfg\registry\data\org\openoffice\Office\UI	nmake -   all oc_reg_data_ooo_office_ui oc_helper oc_config oc_reg NULL
+oc  officecfg\registry\data\org\openoffice\ucb	        nmake -   all oc_reg_data_ooo_ucb oc_helper oc_config oc_reg NULL
 oc  officecfg\util                          nmake       -   all oc_util oc_reg_schema oc_reg_schema_ooo oc_reg_schema_ooo_office oc_reg_schema_ooo_office_ui oc_reg_schema_ooo_td oc_reg_schema_ooo_ucb oc_reg_data_ooo oc_reg_data_ooo_office oc_reg_data_ooo_office_ui oc_reg_data_ooo_ucb NULL
