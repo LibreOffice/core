@@ -2,9 +2,9 @@
  *
  *  $RCSfile: langbox.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dr $ $Date: 2002-07-19 10:07:00 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 09:57:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -363,11 +363,11 @@ void SvxLanguageBox::SetLanguageList( INT16 nLangList,
                 if (!bInsert && (nLangList & LANG_LIST_ALL))
                     bInsert |= TRUE;
                 if (!bInsert && (nLangList & LANG_LIST_WESTERN))
-                    bInsert |= SCRIPTTYPE_LATIN == GetScriptTypeOfLanguage( nLangType );
+                    bInsert |= SCRIPTTYPE_LATIN == SvtLanguageOptions::GetScriptTypeOfLanguage( nLangType );
                 if (!bInsert && (nLangList & LANG_LIST_CTL))
-                    bInsert |= SCRIPTTYPE_COMPLEX == GetScriptTypeOfLanguage( nLangType );
+                    bInsert |= SCRIPTTYPE_COMPLEX == SvtLanguageOptions::GetScriptTypeOfLanguage( nLangType );
                 if (!bInsert && (nLangList & LANG_LIST_CJK))
-                    bInsert |= SCRIPTTYPE_ASIAN == GetScriptTypeOfLanguage( nLangType );
+                    bInsert |= SCRIPTTYPE_ASIAN == SvtLanguageOptions::GetScriptTypeOfLanguage( nLangType );
                 if (!bInsert && (nLangList & LANG_LIST_FBD_CHARS))
                     bInsert |= lcl_HasLanguage( aForbiddenCharLang,
                                         nForbiddenCharLang, nLangType );
