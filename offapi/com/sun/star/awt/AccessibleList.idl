@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleList.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-20 09:51:40 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 08:43:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,14 +102,14 @@ service AccessibleList
        <li>Description: The description of a list is its localized
            help text.</li>
        <li>Children: There exists children.
-            Each child is of type <type scope="::com::sun::star::awt">AccessibleListItem</type>. </li>
+            Each child is of type <type scope="com::sun::star::awt">AccessibleListItem</type>. </li>
        <li>Parent: The parent can be of type
             <ul>
             <li>
-                <type scope="::com::sun::star::awt">AccessibleComboBox</type>
-                <type scope="::com::sun::star::awt">AccessibleListBox</type>
-                <type scope="::com::sun::star::awt">AccessibleDropDownListBox</type>
-                <type scope="::com::sun::star::awt">AccessibleDropDownComboBox</type>
+                <type scope="com::sun::star::awt">AccessibleComboBox</type>
+                <type scope="com::sun::star::awt">AccessibleListBox</type>
+                <type scope="com::sun::star::awt">AccessibleDropDownListBox</type>
+                <type scope="com::sun::star::awt">AccessibleDropDownComboBox</type>
             </li>
             .
        </li>
