@@ -2,9 +2,9 @@
  *
  *  $RCSfile: settings.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: th $ $Date: 2001-06-15 13:24:46 $
+ *  last change: $Author: th $ $Date: 2001-06-15 15:55:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1845,19 +1845,25 @@ void AllSettings::SetLocale( const ::com::sun::star::lang::Locale& rLocale )
 
     mpData->maLocale = rLocale;
 
-    mpData->meLanguage = ConvertIsoNamesToLanguage( rLocale.Language, rLocale.Country );
+    if ( !rLocale.Language.getLength() )
+        mpData->meLanguage = LANGUAGE_SYSTEM;
+    else
+        mpData->meLanguage = ConvertIsoNamesToLanguage( rLocale.Language, rLocale.Country );
     mpData->maInternational = International( mpData->meUILanguage, mpData->meLanguage );
 }
 
 // -----------------------------------------------------------------------
 
-void AllSettings::SeUILocale( const ::com::sun::star::lang::Locale& rLocale )
+void AllSettings::SetUILocale( const ::com::sun::star::lang::Locale& rLocale )
 {
     CopyData();
 
-    mpData->maLocale = rLocale;
+    mpData->maUILocale = rLocale;
 
-    mpData->meUILanguage = ConvertIsoNamesToLanguage( rLocale.Language, rLocale.Country );
+    if ( !rLocale.Language.getLength() )
+        mpData->meUILanguage = LANGUAGE_SYSTEM;
+    else
+        mpData->meUILanguage = ConvertIsoNamesToLanguage( rLocale.Language, rLocale.Country );
     mpData->maInternational = International( mpData->meUILanguage, mpData->meLanguage );
 }
 
@@ -1895,7 +1901,7 @@ const ::com::sun::star::lang::Locale& AllSettings::GetLocale() const
     {
         String  aLanguage;
         String  aCountry;
-        ConvertLanguageToIsoNames( mpData->meLanguage, aLanguage, aCountry );
+        ConvertLanguageToIsoNames( GetLanguage(), aLanguage, aCountry );
         ((AllSettings*)this)->mpData->maLocale.Language = aLanguage;
         ((AllSettings*)this)->mpData->maLocale.Country = aCountry;
     }
@@ -1911,7 +1917,7 @@ const ::com::sun::star::lang::Locale& AllSettings::GetUILocale() const
     {
         String  aLanguage;
         String  aCountry;
-        ConvertLanguageToIsoNames( mpData->meUILanguage, aLanguage, aCountry );
+        ConvertLanguageToIsoNames( GetUILanguage(), aLanguage, aCountry );
         ((AllSettings*)this)->mpData->maLocale.Language = aLanguage;
         ((AllSettings*)this)->mpData->maLocale.Country = aCountry;
     }
@@ -1923,6 +1929,9 @@ const ::com::sun::star::lang::Locale& AllSettings::GetUILocale() const
 
 LanguageType AllSettings::GetLanguage() const
 {
+    if ( mpData->meLanguage == LANGUAGE_SYSTEM )
+        return GetSystemLanguage();
+
     return mpData->meLanguage;
 }
 
@@ -1930,6 +1939,9 @@ LanguageType AllSettings::GetLanguage() const
 
 LanguageType AllSettings::GetUILanguage() const
 {
+    if ( mpData->meUILanguage == LANGUAGE_SYSTEM )
+        return GetSystemLanguage();
+
     return mpData->meUILanguage;
 }
 
