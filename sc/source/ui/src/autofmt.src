@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autofmt.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-29 20:46:57 $
+ *  last change: $Author: kz $ $Date: 2001-09-26 20:35:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -481,7 +481,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text [ portuguese ] = "Adicionar AutoFormato" ;
         Text [ finnish ] = "Lis?? automaattinen muotoilu" ;
         Text [ danish ] = "Tilføj AutoFormat" ;
-        Text [ french ] = "Ajouter AutoFormat" ;
+        Text [ french ] = "Ajouter un AutoFormat" ;
         Text [ swedish ] = "Lägg till autoformat" ;
         Text [ dutch ] = "AutoOpmaak toevoegen" ;
         Text [ spanish ] = "Añadir AutoFormato" ;
@@ -840,6 +840,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "AutoFormato";
 };
+
 
 
 
