@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XFormController.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:10:03 $
+ *  last change:$Date: 2003-09-08 10:34:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,13 +61,14 @@
 
 package ifc.form;
 
+import lib.MultiMethodTest;
+
 import com.sun.star.awt.XControl;
 import com.sun.star.awt.XWindow;
 import com.sun.star.form.XFormController;
 import com.sun.star.form.XFormControllerListener;
 import com.sun.star.lang.EventObject;
 import com.sun.star.uno.UnoRuntime;
-import lib.MultiMethodTest;
 
 /**
 * Testing <code>com.sun.star.form.XFormController</code>
@@ -197,7 +198,7 @@ public class _XFormController extends MultiMethodTest {
     */
     private void shortWait() {
         try {
-            Thread.currentThread().sleep(1000) ;
+            Thread.sleep(1000) ;
         } catch (InterruptedException e) {
             System.out.println("While waiting :" + e) ;
         }

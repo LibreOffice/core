@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XGrid.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:10:02 $
+ *  last change:$Date: 2003-09-08 10:34:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,9 @@
 
 package ifc.form;
 
-import com.sun.star.form.XGrid;
 import lib.MultiMethodTest;
+
+import com.sun.star.form.XGrid;
 
 /**
 * Testing <code>com.sun.star.form.XGrid</code>
