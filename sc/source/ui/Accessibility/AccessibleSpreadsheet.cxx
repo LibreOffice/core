@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleSpreadsheet.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: sab $ $Date: 2002-07-08 09:40:36 $
+ *  last change: $Author: sab $ $Date: 2002-08-01 12:42:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -489,6 +489,8 @@ uno::Reference<XAccessibleRelationSet> SAL_CALL ScAccessibleSpreadsheet::getAcce
     utl::AccessibleRelationSetHelper* pRelationSet = NULL;
     if(mpAccDoc)
         pRelationSet = mpAccDoc->GetRelationSet(NULL);
+    if (!pRelationSet)
+        pRelationSet = new utl::AccessibleRelationSetHelper();
     return pRelationSet;
 }
 

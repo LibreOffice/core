@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleContextBase.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: sab $ $Date: 2002-06-13 12:26:31 $
+ *  last change: $Author: sab $ $Date: 2002-08-01 12:41:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,9 @@
  ************************************************************************/
 
 
+#ifndef _SC_ACCESSIBLECONTEXTBASE_HXX
 #include "AccessibleContextBase.hxx"
+#endif
 #ifndef SC_UNOGUARD_HXX
 #include "unoguard.hxx"
 #endif
@@ -99,6 +101,9 @@
 #endif
 #ifndef _COMPHELPER_SEQUENCE_HXX_
 #include <comphelper/sequence.hxx>
+#endif
+#ifndef _UTL_ACCESSIBLERELATIONSETHELPER_HXX_
+#include <unotools/accessiblerelationsethelper.hxx>
 #endif
 
 using namespace ::rtl;
@@ -430,7 +435,7 @@ uno::Reference<XAccessibleRelationSet> SAL_CALL
        ScAccessibleContextBase::getAccessibleRelationSet(void)
     throw (uno::RuntimeException)
 {
-    return uno::Reference<XAccessibleRelationSet>();
+    return new utl::AccessibleRelationSetHelper();
 }
 
 uno::Reference<XAccessibleStateSet> SAL_CALL
