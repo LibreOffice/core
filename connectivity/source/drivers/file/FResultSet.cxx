@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-30 14:23:23 $
+ *  last change: $Author: oj $ $Date: 2001-11-15 15:20:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -499,7 +499,7 @@ sal_Bool SAL_CALL OResultSet::first(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-    return m_aSkipDeletedSet.skipDeleted(IResultSetHelper::FIRST,1,sal_True);
+    return m_pTable ? m_aSkipDeletedSet.skipDeleted(IResultSetHelper::FIRST,1,sal_True) : sal_False;
 }
 // -------------------------------------------------------------------------
 
@@ -508,28 +508,28 @@ sal_Bool SAL_CALL OResultSet::last(  ) throw(SQLException, RuntimeException)
     // here I know definitely that I stand on the last record
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-    return m_aSkipDeletedSet.skipDeleted(IResultSetHelper::LAST,1,sal_True);
+    return m_pTable ? m_aSkipDeletedSet.skipDeleted(IResultSetHelper::LAST,1,sal_True) : sal_False;
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL OResultSet::absolute( sal_Int32 row ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-    return m_aSkipDeletedSet.skipDeleted(IResultSetHelper::ABSOLUTE,row,sal_True);
+    return m_pTable ? m_aSkipDeletedSet.skipDeleted(IResultSetHelper::ABSOLUTE,row,sal_True) : sal_False;
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL OResultSet::relative( sal_Int32 row ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-    return m_aSkipDeletedSet.skipDeleted(IResultSetHelper::RELATIVE,row,sal_True);
+    return m_pTable ? m_aSkipDeletedSet.skipDeleted(IResultSetHelper::RELATIVE,row,sal_True) : sal_False;
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL OResultSet::previous(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-    return m_aSkipDeletedSet.skipDeleted(IResultSetHelper::PRIOR,0,sal_True);
+    return m_pTable ? m_aSkipDeletedSet.skipDeleted(IResultSetHelper::PRIOR,0,sal_True) : sal_False;
 }
 // -------------------------------------------------------------------------
 Reference< XInterface > SAL_CALL OResultSet::getStatement(  ) throw(SQLException, RuntimeException)
@@ -647,7 +647,7 @@ void SAL_CALL OResultSet::insertRow(  ) throw(SQLException, RuntimeException)
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
 
-    if(!m_bInserted)
+    if(!m_bInserted || !m_pTable)
         throwFunctionSequenceException(*this);
 
     // we know that we append new rows at the end
@@ -670,7 +670,7 @@ void SAL_CALL OResultSet::updateRow(  ) throw(SQLException, RuntimeException)
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
-    if(m_pTable->isReadOnly())
+    if(!m_pTable || m_pTable->isReadOnly())
         throw SQLException(::rtl::OUString::createFromAscii("Table is readonly!"),*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
     m_bRowUpdated = m_pTable->UpdateRow(m_aInsertRow.getBody(), m_aRow,Reference<XIndexAccess>(m_xColNames,UNO_QUERY));
     (*m_aInsertRow)[0] = (sal_Int32)(*m_aRow)[0];
@@ -684,7 +684,7 @@ void SAL_CALL OResultSet::deleteRow() throw(SQLException, RuntimeException)
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
 
-    if(m_pTable->isReadOnly())
+    if(!m_pTable || m_pTable->isReadOnly())
         throw SQLException(::rtl::OUString::createFromAscii("Table is readonly!"),*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
     if (m_bShowDeleted)
         throw SQLException(::rtl::OUString::createFromAscii("Row could not be deleted. The option \"Display inactive records\" is set!"),*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
@@ -729,7 +729,7 @@ void SAL_CALL OResultSet::moveToInsertRow(  ) throw(SQLException, RuntimeExcepti
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
-    if(m_pTable->isReadOnly())
+    if(!m_pTable || m_pTable->isReadOnly())
         throw SQLException(::rtl::OUString::createFromAscii("Table is readonly!"),*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
 
     m_bInserted     = sal_True;
@@ -911,7 +911,7 @@ again:
         return sal_False;
     }
 
-    if (!m_pTable->seekRow(eCursorPosition, nOffset, m_nFilePos))
+    if (!m_pTable || !m_pTable->seekRow(eCursorPosition, nOffset, m_nFilePos))
     {
         return sal_False;
     }
@@ -1246,6 +1246,9 @@ BOOL OResultSet::OpenImpl()
         m_xColNames = xTable->getColumns();
         m_xColsIdx = Reference<XIndexAccess>(m_xColNames,UNO_QUERY);
         doTableSpecials(xTable);
+        Reference<XComponent> xComp(xTable,UNO_QUERY);
+        if(xComp.is())
+            xComp->addEventListener(this);
     }
 
     m_pTable->refreshHeader();
@@ -1806,5 +1809,16 @@ sal_Bool OResultSet::deletedVisible() const
 sal_Bool OResultSet::isRowDeleted() const
 {
     return m_aRow->isDeleted();
+}
+// -----------------------------------------------------------------------------
+void SAL_CALL OResultSet::disposing( const EventObject& Source ) throw (RuntimeException)
+{
+    //  Reference<XInterface> xInt = m_pTable;
+    Reference<XPropertySet> xProp = m_pTable;
+    if(m_pTable && Source.Source == xProp)
+    {
+        m_pTable->release();
+        m_pTable = NULL;
+    }
 }
 // -----------------------------------------------------------------------------

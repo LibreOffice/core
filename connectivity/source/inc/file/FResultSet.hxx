@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-26 07:41:55 $
+ *  last change: $Author: oj $ $Date: 2001-11-15 15:20:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,8 +89,8 @@
 #ifndef _COM_SUN_STAR_SQLC_XROWUPDATE_HPP_
 #include <com/sun/star/sdbc/XRowUpdate.hpp>
 #endif
-#ifndef _CPPUHELPER_COMPBASE11_HXX_
-#include <cppuhelper/compbase11.hxx>
+#ifndef _CPPUHELPER_COMPBASE12_HXX_
+#include <cppuhelper/compbase12.hxx>
 #endif
 #ifndef _COMPHELPER_PROPERTY_ARRAY_HELPER_HXX_
 #include <comphelper/proparrhlp.hxx>
@@ -122,6 +122,9 @@
 #ifndef CONNECTIVITY_SKIPDELETEDSSET_HXX
 #include "TSkipDeletedSet.hxx"
 #endif
+#ifndef _COM_SUN_STAR_LANG_XEVENTLISTENER_HPP_
+#include <com/sun/star/lang/XEventListener.hpp>
+#endif
 
 namespace connectivity
 {
@@ -130,7 +133,7 @@ namespace connectivity
         /*
         **  java_sql_ResultSet
         */
-        typedef ::cppu::WeakComponentImplHelper11<  ::com::sun::star::sdbc::XResultSet,
+        typedef ::cppu::WeakComponentImplHelper12<  ::com::sun::star::sdbc::XResultSet,
                                                     ::com::sun::star::sdbc::XRow,
                                                     ::com::sun::star::sdbc::XResultSetMetaDataSupplier,
                                                     ::com::sun::star::util::XCancellable,
@@ -140,6 +143,7 @@ namespace connectivity
                                                     ::com::sun::star::sdbc::XCloseable,
                                                     ::com::sun::star::sdbc::XColumnLocate,
                                                     ::com::sun::star::lang::XServiceInfo,
+                                                    ::com::sun::star::lang::XEventListener,
                                                     ::com::sun::star::lang::XUnoTunnel> OResultSet_BASE;
 
         class OResultSet :  public  comphelper::OBaseMutex,
@@ -347,6 +351,8 @@ namespace connectivity
             // com::sun::star::lang::XUnoTunnel
             virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
             static ::com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
+            //XEventlistener
+            virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException);
 
             // special methods
             inline sal_Int32 mapColumn(sal_Int32    column);

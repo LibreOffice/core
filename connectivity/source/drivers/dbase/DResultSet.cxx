@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DResultSet.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-26 07:44:25 $
+ *  last change: $Author: oj $ $Date: 2001-11-15 15:20:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,13 +157,15 @@ sal_Bool SAL_CALL ODbaseResultSet::moveToBookmark( const  Any& bookmark ) throw(
 
     m_bRowDeleted = m_bRowInserted = m_bRowUpdated = sal_False;
 
-    return Move(IResultSetHelper::BOOKMARK,comphelper::getINT32(bookmark),sal_True);
+    return m_pTable ? Move(IResultSetHelper::BOOKMARK,comphelper::getINT32(bookmark),sal_True) : sal_False;
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODbaseResultSet::moveRelativeToBookmark( const  Any& bookmark, sal_Int32 rows ) throw( SQLException,  RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+    if(!m_pTable)
+        return sal_False;
 
 
     Move(IResultSetHelper::BOOKMARK,comphelper::getINT32(bookmark),sal_False);
