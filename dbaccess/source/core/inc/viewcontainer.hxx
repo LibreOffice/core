@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewcontainer.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-23 05:55:56 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:15:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,13 +93,6 @@
 #ifndef _COM_SUN_STAR_SDB_SQLCONTEXT_HPP_
 #include <com/sun/star/sdb/SQLContext.hpp>
 #endif
-#ifndef _COM_SUN_STAR_UTIL_XFLUSHABLE_HPP_
-#include <com/sun/star/util/XFlushable.hpp>
-#endif
-#ifndef _UNOTOOLS_CONFIGNODE_HXX_
-#include <unotools/confignode.hxx>
-#endif
-
 #ifndef _COM_SUN_STAR_CONTAINER_XCONTAINERLISTENER_HPP_
 #include <com/sun/star/container/XContainerListener.hpp>
 #endif
