@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formcontroller.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-30 15:17:57 $
+ *  last change: $Author: tbe $ $Date: 2001-11-09 13:35:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -535,7 +535,7 @@ namespace pcr
 
             // (one more) special handling : we have a prop which has a TypeClass "ANY" and needs a double
             // (originally it needed a double _or_ a string, but our UI only supports a double for it)
-            if ((TypeClass_ANY == ePropertyType) && (PROPERTY_ID_EFFECTIVE_DEFAULT == _nPropId))
+            if ((TypeClass_ANY == ePropertyType) && ((PROPERTY_ID_EFFECTIVE_DEFAULT == _nPropId) || (PROPERTY_ID_EFFECTIVE_VALUE == _nPropId)))
                 ePropertyType = TypeClass_DOUBLE;
 
             switch (ePropertyType)
@@ -1849,6 +1849,18 @@ namespace pcr
                     else
                         pProperty->eControlType = BCT_MEDIT;
                 }
+                else if (nPropId == PROPERTY_ID_TEXT)
+                {
+                    if ( m_xIntrospecteeAsProperty.is() )
+                    {
+                        Reference< XPropertySetInfo > xPropInfo = m_xIntrospecteeAsProperty->getPropertySetInfo();
+                        if ( xPropInfo.is() )
+                        {
+                            if ( xPropInfo->hasPropertyByName( PROPERTY_MULTILINE ) )
+                                pProperty->eControlType = BCT_MEDIT;
+                        }
+                    }
+                }
                 else if (PROPERTY_ID_CONTROLLABEL == nPropId)
                 {
                     bFilter = sal_False;
@@ -1858,7 +1870,8 @@ namespace pcr
                     pProperty->nUniqueButtonId = UID_PROP_DLG_CONTROLLABEL;
                 }
                 else if ((PROPERTY_ID_FORMATKEY == nPropId) || (PROPERTY_ID_EFFECTIVE_MIN == nPropId)
-                    || (PROPERTY_ID_EFFECTIVE_MAX == nPropId) || (PROPERTY_ID_EFFECTIVE_DEFAULT == nPropId))
+                    || (PROPERTY_ID_EFFECTIVE_MAX == nPropId) || (PROPERTY_ID_EFFECTIVE_DEFAULT == nPropId)
+                    || (PROPERTY_ID_EFFECTIVE_VALUE == nPropId))
                 {
                     // only if the set has a formatssupplier, too
                     if  (   !::comphelper::hasProperty(PROPERTY_FORMATSSUPPLIER, m_xPropValueAccess)
@@ -2579,6 +2592,10 @@ namespace pcr
                 pControl = getPropertyBox()->GetPropertyControl(PROPERTY_EFFECTIVE_DEFAULT);
                 if (pControl)
                     ((OFormattedNumericControl*)pControl)->SetFormatDescription(aNewDesc);
+
+                pControl = getPropertyBox()->GetPropertyControl(PROPERTY_EFFECTIVE_VALUE);
+                if (pControl)
+                    ((OFormattedNumericControl*)pControl)->SetFormatDescription(aNewDesc);
             }
 
                 //////////////////////////////////////////////////////////////////////
@@ -2633,6 +2650,12 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.45  2001/10/30 15:17:57  fs
+ *  connectRowSet: better error message upon failure
+ *
+ *  Revision 1.44.4.1  2001/11/08 17:42:26  tbe
+ *  #92755# Assign Standard Values for Basic Controls in Designmode
+ *
  *  Revision 1.44  2001/10/19 12:58:51  tbe
  *  #92755# Assign Standard Values for Basic Controls in Designmode
  *
