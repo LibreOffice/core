@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cshtyp.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:13:20 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:29:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,10 @@
 
 #ifndef _SOLAR_H
 #include <tools/solar.h>
+#endif
+
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
 #endif
 
 class UniString;
@@ -143,10 +147,13 @@ enum SwDocPositions
     DOCPOS_OTHEREND
 };
 
-extern SwWhichPara SwuiGetfnParaCurr();//CHINA001
-extern SwPosPara SwuiGetfnParaStart();//CHINA001
-extern SwWhichTable SwuiGetfnTablePrev(); //CHINA001
-extern SwWhichTable SwuiGetfnTableCurr(); //CHINA001
-extern SwPosTable SwuiGetfnTableStart(); //CHINA001
-extern SwPosTable SwuiGetfnTableEnd(); //CHINA001
+SW_DLLPUBLIC SwWhichPara SwuiGetfnParaCurr(); //CHINA001
+SW_DLLPUBLIC SwPosPara SwuiGetfnParaStart(); //CHINA001
+SW_DLLPUBLIC SwPosPara SwuiGetfnParaEnd(); //CHINA001
+
+SW_DLLPUBLIC SwWhichTable SwuiGetfnTablePrev(); //CHINA001
+SW_DLLPUBLIC SwWhichTable SwuiGetfnTableCurr(); //CHINA001
+SW_DLLPUBLIC SwPosTable SwuiGetfnTableStart(); //CHINA001
+SW_DLLPUBLIC SwPosTable SwuiGetfnTableEnd(); //CHINA001
+
 #endif  // _CSHTYP_HXX
