@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ama $ $Date: 2002-07-03 10:55:30 $
+ *  last change: $Author: pb $ $Date: 2002-07-05 13:12:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1224,85 +1224,6 @@
                 </info>
             </group>
         </group>
-        <group oor:name="FileDialog">
-            <prop oor:name="Extension" oor:type="xs:boolean">
-                <!-- OldPath: Common/FileDialogExt -->
-                <!-- OldLocation: soffice.ini -->
-                <!-- Responsible: PB -->
-                <!-- UIHints: File  SaveAs - Automatic file name extension -->
-                <value>true</value>
-                <info>
-                    <desc xml:lang="en-US">Function for saving a file with its corresponding file extension.</desc>
-                </info>
-            </prop>
-            <prop oor:name="FilterCache" oor:type="xs:int">
-                <!-- OldPath: Common/FileDialogFilterCache -->
-                <!-- OldLocation: soffice.ini -->
-                <!-- Responsible: PB -->
-                <info>
-                    <desc xml:lang="en-US">The last five used import filters. These filters are shown as first in the dialog.</desc>
-                </info>
-            </prop>
-            <prop oor:name="FileDialogSize" oor:type="xs:string">
-                <!-- OldPath: soffice_View -->
-                <!-- OldLocation: soffice.ini -->
-                <!-- Responsible: PB -->
-                <info>
-                    <desc xml:lang="en-US">Specifies size and position of the FileOpen dialog</desc>
-                </info>
-            </prop>
-            <group oor:name="ImportGraphic">
-                <prop oor:name="Position" oor:type="xs:int">
-                    <!-- OldPath: Common/ImpGrfDialogSize -->
-                    <!-- OldLocation: soffice.ini -->
-                    <!-- Responsible: PB -->
-                    <!-- UIHints: Insert - Graphics - From File -->
-                    <info>
-                        <desc xml:lang="en-US">Specifies the position of the Graphic Import dialog</desc>
-                    </info>
-                    <constraints>
-                        <enumeration oor:value="0">
-                            <info>
-                                <desc xml:lang="en-US">Centered</desc>
-                            </info>
-                        </enumeration>
-                        <minInclusive oor:value="0"/>
-                        <maxInclusive oor:value="0"/>
-                    </constraints>
-                </prop>
-                <prop oor:name="AsLink" oor:type="xs:boolean">
-                    <!-- OldPath: Common/ImportGraphicAsLink -->
-                    <!-- OldLocation: soffice.ini -->
-                    <!-- Responsible: PB -->
-                    <!-- UIHints: Insert - Graphics - From File -->
-                    <value>false</value>
-                    <info>
-                        <desc xml:lang="en-US">Determines, if graphics should be linked to a document instead of embedding it. When importing a graphic as link only a reference to the graphic file will exist in the document</desc>
-                        <label xml:lang="en-US">Link</label>
-                    </info>
-                </prop>
-                <prop oor:name="Preview" oor:type="xs:boolean">
-                    <!-- OldPath: Common/ImportGraphicPreview -->
-                    <!-- OldLocation: soffice.ini -->
-                    <!-- Responsible: PB -->
-                    <!-- UIHints: Insert - Graphics - From File -->
-                    <value>false</value>
-                    <info>
-                        <desc xml:lang="en-US">Determines, if the selected graphic file should be displayed in a preview.</desc>
-                        <label xml:lang="en-US">Preview</label>
-                    </info>
-                </prop>
-                <node-ref oor:name="Size" oor:node-type="DialogSize">
-                    <!-- OldPath: Common/ImpGrfDialogSize -->
-                    <!-- OldLocation: soffice.ini -->
-                    <!-- Responsible: PB -->
-                    <!-- UIHints: Insert - Graphics - From File -->
-                    <info>
-                        <desc xml:lang="en-US">Specifies the size of the Graphic Import dialog</desc>
-                    </info>
-                </node-ref>
-            </group>
-        </group>
         <group oor:name="Font">
             <group oor:name="Substitution">
                 <prop oor:name="Replacement" oor:type="xs:boolean">
@@ -1334,7 +1255,7 @@
                     <!-- UIHints: Tools - Options - General - View -->
                     <value>true</value>
                     <info>
-                        <desc xml:lang="en-US">The last 5 fonts will be shown and the last one will be the first name on the list. These will be displayed in the Font name combo box on the Object bar.</desc>
+                        <desc xml:lang="en-US">The last five fonts will be shown on the top of the list, beginning with the last one. This list will be displayed on the font-name-box of the object bar.</desc>
                     </info>
                 </prop>
                 <prop oor:name="ShowFontBoxWYSIWYG" oor:type="xs:boolean">
@@ -1344,7 +1265,7 @@
                     <!-- UIHints: Tools - Options - General - View -->
                     <value>true</value>
                     <info>
-                        <desc xml:lang="en-US">With this option the names of the selectable fonts (for example, the fonts in the Font field in the object bar) will be formatted as the current font</desc>
+                        <desc xml:lang="en-US">This option enables that the names of the selectable fonts (for example, the fonts in the font-name-box of the object bar) will be displayed with this font.</desc>
                     </info>
                 </prop>
             </group>
