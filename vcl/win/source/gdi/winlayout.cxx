@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 14:52:40 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:59:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -814,16 +814,15 @@ int SimpleWinLayout::GetTextBreak( long nMaxWidth, long nCharExtra, int nFactor 
             return STRING_LEN;
 
     long nExtraWidth = mnBaseAdv * nFactor;
-    for( int i = 0; i < mnCharCount; ++i )
+    for( int n = 0; n < mnCharCount; ++n )
     {
-        nExtraWidth += mpCharWidths[ i ] * nFactor;
+        // skip unused characters
+        if( mpChars2Glyphs && (mpChars2Glyphs[n] < 0) )
+            continue;
+        // add char widths until max
+        nExtraWidth += mpCharWidths[ n ] * nFactor;
         if( nExtraWidth >= nMaxWidth )
-        {
-            if( mpGlyphs2Chars )
-                return mpGlyphs2Chars[ i ];
-            else
-                return (mnMinCharPos + i);
-        }
+            return (mnMinCharPos + n);
         nExtraWidth += nCharExtra;
     }
 
