@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: mib $ $Date: 2001-05-04 09:49:55 $
+ *  last change: $Author: dvo $ $Date: 2001-05-04 14:42:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1376,9 +1376,7 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
                                        xAttrList, bHeading );
         if( bProgress && XML_TEXT_TYPE_SHAPE != eType )
         {
-            ProgressBarHelper *pProgress = rImport.GetProgressBarHelper();
-            if( pProgress )
-                pProgress->SetValue( ++nProgress );
+            rImport.GetProgressBarHelper()->Increment();
         }
         break;
     case XML_TOK_TEXT_ORDERED_LIST:
