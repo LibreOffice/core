@@ -53,15 +53,15 @@ class SdUnoDrawView
 public:
     enum properties
     {
-        PROPERTY_FIRST = DrawController::PROPERTY_FIRST_FREE,
-        PROPERTY_CURRENTPAGE = PROPERTY_FIRST,
+        PROPERTY__BEGIN = DrawController::PROPERTY__BEGIN,
+        PROPERTY_CURRENTPAGE = PROPERTY__BEGIN,
         PROPERTY_MASTERPAGEMODE,
         PROPERTY_LAYERMODE,
         PROPERTY_ACTIVE_LAYER,
         PROPERTY_ZOOMTYPE,
         PROPERTY_ZOOMVALUE,
         PROPERTY_VIEWOFFSET,
-        PROPERTY_FIRST_FREE
+        PROPERTY__END
     };
 
     SdUnoDrawView (
