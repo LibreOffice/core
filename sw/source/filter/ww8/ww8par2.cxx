@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 15:10:41 $
+ *  last change: $Author: vg $ $Date: 2003-05-19 12:27:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -336,7 +336,6 @@ public:
 
     const WW8_TCell* GetAktWWCell() const { return pAktWWCell; }
     const short GetAktCol() const { return nAktCol; }
-    SwTableBox* GetTableBox() { return pTabBox; }
     // find name of numrule valid for current WW-COL
     const String& GetNumRuleName() const;
     void SetNumRuleName( const String& rName );
@@ -917,7 +916,6 @@ WW8LvlType GetNumType(BYTE nWwLevelNo)
 
 // StartAnl wird am Anfang eines Zeilenbereichs gerufen,
 //  der Gliederung / Nummerierung / Aufzaehlung enthaelt
-#define MAX_ANLV_NUM 12
 void SwWW8ImplReader::StartAnl( const BYTE* pSprm13 )
 {
     bAktAND_fNumberAcross = false;
@@ -3393,8 +3391,6 @@ SwCharFmt* WW8RStyle::MakeNewCharFmt( WW8_STD* pStd, const String& rName )
 SwCharFmt* WW8RStyle::MakeOrGetCharFmt(bool * pbStyExist, WW8_STD* pStd,
     const String& rName )
 {
-#define RES_NO RES_POOLCHR_END
-
     static USHORT __READONLY_DATA aArr1[]={
         RES_POOLCHR_FOOTNOTE, 0, RES_POOLCHR_LINENUM,
         RES_POOLCHR_PAGENO, RES_POOLCHR_ENDNOTE };
