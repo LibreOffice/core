@@ -10575,3 +10575,4 @@ _TI3?AVSAXParseException@sax@xml@star@sun@com@@
 ??0SchXMLStockContext@@QAE@AAVSchXMLImportHelper@@AAVSvXMLImport@@GABVOUString@rtl@@AAV?$Reference@VXDiagram@chart@star@sun@com@@@uno@star@sun@com@@W4ContextType@0@@Z
 ??1SchXMLStockContext@@UAE@XZ
 ?StartElement@SchXMLStockContext@@UAEXABV?$Reference@VXAttributeList@sax@xml@star@sun@com@@@uno@star@sun@com@@@Z
+??0SdXMLImExPointsElement@@QAE@PAV?$Sequence@UPoint@awt@star@sun@com@@@uno@star@sun@com@@ABVSdXMLImExViewBox@@ABUPoint@awt@345@ABUSize@8345@ABVSvXMLUnitConverter@@E@Z
