@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgmerge.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 12:40:34 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 13:51:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,7 @@ BOOL bMergeMode;
 BOOL bErrorLog;
 BOOL bForce;
 BOOL bUTF8;
+bool bQuiet;
 ByteString sPrj;
 ByteString sPrjRoot;
 ByteString sInputFileName;
@@ -106,15 +107,16 @@ extern "C" {
 extern char *GetOutputFile( int argc, char* argv[])
 /*****************************************************************************/
 {
-    bEnableExport = FALSE;
-    bMergeMode = FALSE;
-    bErrorLog = TRUE;
-    bForce = FALSE;
-    bUTF8 = TRUE;
-    sPrj = "";
-    sPrjRoot = "";
-    sInputFileName = "";
-    sActFileName = "";
+    bEnableExport   = FALSE;
+    bMergeMode      = FALSE;
+    bErrorLog       = TRUE;
+    bForce          = FALSE;
+    bUTF8           = TRUE;
+    bQuiet          = false;
+    sPrj            = "";
+    sPrjRoot        = "";
+    sInputFileName  = "";
+    sActFileName    = "";
     Export::sLanguages = "";
 
     USHORT nState = STATE_NON;
@@ -152,6 +154,9 @@ extern char *GetOutputFile( int argc, char* argv[])
         else if ( ByteString( argv[ i ] ).ToUpperAscii() == "-F" ) {
             nState = STATE_FORCE;
             bForce = TRUE;
+        }
+        else if ( ByteString( argv[ i ] ).ToUpperAscii() == "-QQ" ) {
+            bQuiet = true;
         }
         else if ( ByteString( argv[ i ] ).ToUpperAscii() == "-L" ) {
             nState = STATE_LANGUAGES;
@@ -211,7 +216,10 @@ extern char *GetOutputFile( int argc, char* argv[])
     // command line is not valid
     return NULL;
 }
-
+int isQuiet(){
+    if( bQuiet )    return 1;
+    else            return 0;
+}
 /*****************************************************************************/
 int InitCfgExport( char *pOutput )
 /*****************************************************************************/
@@ -268,7 +276,8 @@ extern FILE *GetCfgFile()
             sActFileName = sFullEntry.Copy( sPrjEntry.Len() + 1 );
 //          sActFileName.ToLowerAscii();
 
-            fprintf( stdout, "\nProcessing File %s ...\n", sInputFileName.GetBuffer());
+            if( !bQuiet )
+                fprintf( stdout, "\nProcessing File %s ...\n", sInputFileName.GetBuffer());
 
             sActFileName.SearchAndReplaceAll( "/", "\\" );
 
