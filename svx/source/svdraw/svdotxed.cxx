@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotxed.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:25 $
+ *  last change: $Author: aw $ $Date: 2000-09-26 10:46:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,9 +152,16 @@ FASTBOOL SdrTextObj::BegTextEdit(SdrOutliner& rOutl)
         ImpSetCharStretching(rOutl,aTextRect,aAnchorRect,aFitXKorreg);
     }
 
-    if (pOutlinerParaObject!=NULL && (aGeo.nDrehWink!=0 || IsFontwork())) {
-        SendRepaintBroadcast();
+    if(pOutlinerParaObject)
+    {
+        // #78476# also repaint when animated text is put to edit mode
+        // to not make appear the text double
+        BOOL bIsAnimated(pPlusData && pPlusData->pAnimator);
+
+        if(aGeo.nDrehWink || IsFontwork() || bIsAnimated)
+            SendRepaintBroadcast();
     }
+
     rOutl.UpdateFields();
     rOutl.ClearModifyFlag();
     return TRUE;
