@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XUIConfigurationManager.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Date: 2004-02-25 18:11:53 $
+ *  last change: $Date: 2004-07-23 10:46:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -295,7 +295,7 @@ public class _XUIConfigurationManager extends MultiMethodTest {
 
     public void _getImageManager() {
         Object o = oObj.getImageManager();
-        tRes.tested("getImageManager()", o == null);
+        tRes.tested("getImageManager()", o != null);
     }
 
     public void _getShortCutManager() {
