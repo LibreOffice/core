@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathml.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cmc $ $Date: 2000-11-15 10:43:57 $
+ *  last change: $Author: cmc $ $Date: 2001-01-11 13:44:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,8 @@ public:
         const rtl::OUString &rFileName) : SvXMLImport(rModel) ,
         pMathElemTokenMap(0), pPresLayoutElemTokenMap(0), pPresElemTokenMap(0),
         pPresScriptEmptyElemTokenMap(0), pPresTableElemTokenMap(0),
-        pPresLayoutAttrTokenMap(0),pFencedAttrTokenMap(0)
+        pPresLayoutAttrTokenMap(0),pFencedAttrTokenMap(0),
+        pOperatorAttrTokenMap(0)
         {}
     SvXMLImportContext *CreateContext(sal_uInt16 nPrefix,
         const rtl::OUString &rLocalName,
@@ -224,6 +225,7 @@ public:
     const SvXMLTokenMap &GetPresLayoutElemTokenMap();
     const SvXMLTokenMap &GetPresLayoutAttrTokenMap();
     const SvXMLTokenMap &GetFencedAttrTokenMap();
+    const SvXMLTokenMap &GetOperatorAttrTokenMap();
     const SvXMLTokenMap &GetPresElemTokenMap();
     const SvXMLTokenMap &GetPresScriptEmptyElemTokenMap();
     const SvXMLTokenMap &GetPresTableElemTokenMap();
@@ -235,6 +237,7 @@ private:
         SvXMLTokenMap *pPresLayoutElemTokenMap;
         SvXMLTokenMap *pPresLayoutAttrTokenMap;
         SvXMLTokenMap *pFencedAttrTokenMap;
+        SvXMLTokenMap *pOperatorAttrTokenMap;
         SvXMLTokenMap *pPresElemTokenMap;
         SvXMLTokenMap *pPresScriptEmptyElemTokenMap;
         SvXMLTokenMap *pPresTableElemTokenMap;
@@ -309,6 +312,10 @@ enum SmXMLPresScriptEmptyElemTokenMap
     XML_TOK_NONE
 };
 
+enum SmXMLOperatorAttrTokenMap
+{
+    XML_TOK_STRETCHY
+};
 
 class SmXMLExport : public SvXMLExport
 {

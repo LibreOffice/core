@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathml.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cmc $ $Date: 2000-12-11 16:57:11 $
+ *  last change: $Author: cmc $ $Date: 2001-01-11 13:44:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -740,8 +740,12 @@ class SmXMLOperatorContext_Impl : public SmXMLImportContext
 public:
     SmXMLOperatorContext_Impl(SmXMLImport &rImport,sal_uInt16 nPrefix,
         const OUString& rLName)
-        : SmXMLImportContext(rImport,nPrefix,rLName) {}
-    virtual void TCharacters(const ::rtl::OUString &rChars);
+        : SmXMLImportContext(rImport,nPrefix,rLName), bIsStretchy(sal_False) {}
+    void TCharacters(const ::rtl::OUString &rChars);
+    void StartElement(const uno::Reference<
+        xml::sax::XAttributeList > &xAttrList );
+private:
+    sal_Bool bIsStretchy;
 };
 
 void SmXMLOperatorContext_Impl::TCharacters(const ::rtl::OUString &rChars)
@@ -753,8 +757,43 @@ void SmXMLOperatorContext_Impl::TCharacters(const ::rtl::OUString &rChars)
 
     aToken.eType = TSPECIAL;
     aToken.nLevel = 5;
-    GetSmImport().GetNodeStack().Push(new SmMathSymbolNode(aToken));
+    SmMathSymbolNode *pNode = new SmMathSymbolNode(aToken);
+    //For stretchy scaling the scaling must be retrieved from this node
+    //and applied to the expression itself so as to get the expression
+    //to scale the operator to the height of the expression itself
+    if (bIsStretchy)
+        pNode->SetScaleMode(SCALE_HEIGHT);
+    GetSmImport().GetNodeStack().Push(pNode);
 }
+
+
+void SmXMLOperatorContext_Impl::StartElement(const uno::Reference<
+    xml::sax::XAttributeList > & xAttrList )
+{
+    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+    for (sal_Int16 i=0;i<nAttrCount;i++)
+    {
+        OUString sAttrName = xAttrList->getNameByIndex(i);
+        OUString aLocalName;
+        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
+            GetKeyByAttrName(sAttrName,&aLocalName);
+
+        OUString sValue = xAttrList->getValueByIndex(i);
+        const SvXMLTokenMap &rAttrTokenMap =
+            GetSmImport().GetOperatorAttrTokenMap();
+        switch(rAttrTokenMap.Get(nPrefix,aLocalName))
+        {
+            case XML_TOK_STRETCHY:
+                bIsStretchy = sValue.equals(
+                    OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_true)));
+                break;
+            default:
+                break;
+        }
+    }
+}
+
+
 
 static __FAR_DATA SvXMLTokenMapEntry aMathElemTokenMap[] =
 {
@@ -1147,7 +1186,11 @@ static __FAR_DATA SvXMLTokenMapEntry aFencedAttrTokenMap[] =
     XML_TOKEN_MAP_END
 };
 
-
+static __FAR_DATA SvXMLTokenMapEntry aOperatorAttrTokenMap[] =
+{
+    { XML_NAMESPACE_MATH,   sXML_stretchy,      XML_TOK_STRETCHY },
+    XML_TOKEN_MAP_END
+};
 
 static __FAR_DATA SvXMLTokenMapEntry aPresElemTokenMap[] =
 {
@@ -1174,7 +1217,6 @@ static __FAR_DATA SvXMLTokenMapEntry aPresTableElemTokenMap[] =
     { XML_NAMESPACE_MATH,   sXML_mtd,       XML_TOK_MTD },
     XML_TOKEN_MAP_END
 };
-
 
 
 const SvXMLTokenMap& SmXMLImport::GetMathElemTokenMap()
@@ -1204,6 +1246,13 @@ const SvXMLTokenMap& SmXMLImport::GetFencedAttrTokenMap()
     if(!pFencedAttrTokenMap)
         pFencedAttrTokenMap = new SvXMLTokenMap(aFencedAttrTokenMap);
     return *pFencedAttrTokenMap;
+}
+
+const SvXMLTokenMap& SmXMLImport::GetOperatorAttrTokenMap()
+{
+    if(!pOperatorAttrTokenMap)
+        pOperatorAttrTokenMap = new SvXMLTokenMap(aOperatorAttrTokenMap);
+    return *pOperatorAttrTokenMap;
 }
 
 
@@ -1425,8 +1474,68 @@ void SmXMLRowContext_Impl::EndElement()
     if (nSize)
     {
         aRelationArray.SetSize(nSize);
-        for(USHORT i=rNodeStack.Count()-nElementCount;i > 0;i--)
-            aRelationArray.Put(i-1,rNodeStack.Pop());
+        for(USHORT j=rNodeStack.Count()-nElementCount;j > 0;j--)
+            aRelationArray.Put(j-1,rNodeStack.Pop());
+
+
+        //If the first or last element is an operator with stretchyness
+        //set then we must create a brace node here from those elements,
+        //removing the stretchness from the operators and applying it to
+        //ourselves, and creating the appropiate dummy StarMath none bracket
+        //to balance the arrangement
+        if (((aRelationArray.Get(0)->GetScaleMode() == SCALE_HEIGHT)
+            && (aRelationArray.Get(0)->GetType() == NMATH))
+        || ((aRelationArray.Get(nSize-1)->GetScaleMode() == SCALE_HEIGHT)
+            && (aRelationArray.Get(nSize-1)->GetType() == NMATH)))
+        {
+            SmToken aToken;
+            aToken.cMathChar = '\0';
+            aToken.aText = 'none';
+            aToken.nGroup = 0;
+            aToken.nLevel = 5;
+
+            int nLeft=0,nRight=0;
+            if ((aRelationArray.Get(0)->GetScaleMode() == SCALE_HEIGHT)
+                && (aRelationArray.Get(0)->GetType() == NMATH))
+            {
+                aToken = aRelationArray.Get(0)->GetToken();
+                nLeft=1;
+            }
+            else
+                aToken.cMathChar = '\0';
+
+            aToken.eType = TLPARENT;
+            SmNode *pLeft = new SmMathSymbolNode(aToken);
+
+            if ((aRelationArray.Get(nSize-1)->GetScaleMode() == SCALE_HEIGHT)
+                && (aRelationArray.Get(nSize-1)->GetType() == NMATH))
+            {
+                aToken = aRelationArray.Get(nSize-1)->GetToken();
+                nRight=1;
+            }
+            else
+                aToken.cMathChar = '\0';
+
+            aToken.eType = TRPARENT;
+            SmNode *pRight = new SmMathSymbolNode(aToken);
+
+            SmNodeArray aRelationArray2;
+
+            aRelationArray2.SetSize(nSize-nLeft-nRight);
+
+            for(ULONG i=0;i < nSize-nLeft-nRight;i++)
+                aRelationArray2.Put(i,aRelationArray.Get(i+nLeft));
+
+            SmToken aDummy;
+            SmStructureNode *pSNode = new SmBraceNode(aToken);
+            SmStructureNode *pBody = new SmExpressionNode(aDummy);
+            pBody->SetSubNodes(aRelationArray2);
+
+            pSNode->SetSubNodes(pLeft,pBody,pRight);
+            pSNode->SetScaleMode(SCALE_HEIGHT);
+            rNodeStack.Push(pSNode);
+            return;
+        }
     }
     else //Multiple newlines result in empty row elements
     {
@@ -1966,6 +2075,8 @@ SmXMLImport::~SmXMLImport()
         delete pPresLayoutAttrTokenMap;
     if (pFencedAttrTokenMap)
         delete pFencedAttrTokenMap;
+    if (pOperatorAttrTokenMap)
+        delete pOperatorAttrTokenMap;
 }
 
 void SmXMLExport::_ExportContent()
@@ -2219,14 +2330,16 @@ void SmXMLExport::ExportSubSupScript(const SmNode *pNode,int nLevel)
 
 void SmXMLExport::ExportBrace(const SmNode *pNode, int nLevel)
 {
-    //USHORT  nSize = pNode->GetNumSubNodes();
+    //ULONG  nSize = pNode->GetNumSubNodes();
     const SmNode *pTemp;
     const SmMathSymbolNode *pLeft=static_cast<const SmMathSymbolNode *>
         (pNode->GetSubNode(0));
     const SmMathSymbolNode *pRight=static_cast<const SmMathSymbolNode *>
         (pNode->GetSubNode(2));
-    SvXMLElementExport *aFences=0;
-    if ((pLeft) && (pRight) && (pNode->GetScaleMode() == SCALE_HEIGHT))
+    SvXMLElementExport *pFences=0,*pRow=0;
+    if ( ((pLeft) && (pLeft->GetToken().eType != TNONE)) &&
+        ((pRight) && (pRight->GetToken().eType != TNONE)) &&
+        (pNode->GetScaleMode() == SCALE_HEIGHT))
     {
         sal_Unicode nArse[2];
         nArse[1] = 0;
@@ -2234,22 +2347,43 @@ void SmXMLExport::ExportBrace(const SmNode *pNode, int nLevel)
         AddAttribute(XML_NAMESPACE_MATH,sXML_open,nArse);
         nArse[0] = aMathTypeTable[pRight->GetText().GetChar(0)&0x00FF];
         AddAttribute(XML_NAMESPACE_MATH,sXML_close,nArse);
-        aFences = new SvXMLElementExport(*this,XML_NAMESPACE_MATH,sXML_mfenced,
+        pFences = new SvXMLElementExport(*this,XML_NAMESPACE_MATH,sXML_mfenced,
             sal_True,sal_True);
     }
-    else if (pLeft)
+    else if (pLeft && (pLeft->GetToken().eType != TNONE))
+    {
+        pRow = new SvXMLElementExport(*this,XML_NAMESPACE_MATH,sXML_mrow,
+            sal_True, sal_True);
+        if (pNode->GetScaleMode() == SCALE_HEIGHT)
+            AddAttribute(XML_NAMESPACE_MATH,sXML_stretchy,OUString(
+            RTL_CONSTASCII_USTRINGPARAM(sXML_true)));
+        else
+            AddAttribute(XML_NAMESPACE_MATH,sXML_stretchy,OUString(
+            RTL_CONSTASCII_USTRINGPARAM(sXML_false)));
         ExportMath(pLeft,nLevel+1);
+    }
+    else
+        pRow = new SvXMLElementExport(*this,XML_NAMESPACE_MATH,sXML_mrow,
+            sal_True, sal_True);
+
+
 
     if (pTemp = pNode->GetSubNode(1))
-    {
-        SvXMLElementExport aRow(*this,XML_NAMESPACE_MATH,sXML_mrow,sal_True,
-            sal_True);
         ExportExpression(pTemp,nLevel+1);
-    }
-    if (aFences)
-        delete aFences;
-    else if (pRight)
+    if (pFences)
+        delete pFences;
+    else if (pRight && (pRight->GetToken().eType != TNONE))
+    {
+        if (pNode->GetScaleMode() == SCALE_HEIGHT)
+            AddAttribute(XML_NAMESPACE_MATH,sXML_stretchy,OUString(
+            RTL_CONSTASCII_USTRINGPARAM(sXML_true)));
+        else
+            AddAttribute(XML_NAMESPACE_MATH,sXML_stretchy,OUString(
+            RTL_CONSTASCII_USTRINGPARAM(sXML_false)));
         ExportMath(pRight,nLevel+1);
+    }
+    if (pRow)
+        delete pRow;
 }
 
 void SmXMLExport::ExportRoot(const SmNode *pNode, int nLevel)
