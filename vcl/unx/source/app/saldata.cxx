@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldata.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2004-01-08 14:55:41 $
+ *  last change: $Author: obo $ $Date: 2004-02-20 08:57:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -282,10 +282,10 @@ static const char* XRequest[] = {
     "X_NoOperation"
 };
 
-BEGIN_C
 // -=-= C statics =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
+BEGIN_C
 
 static oslSignalAction SalSignalHdl (void* pData, oslSignalInfo* pInfo)
 {
@@ -305,14 +305,15 @@ static oslSignalAction SalSignalHdl (void* pData, oslSignalInfo* pInfo)
     return osl_Signal_ActAbortApp;
 }
 
+END_C
 
-static int sal_XErrorHdl( Display *pDisplay, XErrorEvent *pEvent )
+int SalData::XErrorHdl( Display *pDisplay, XErrorEvent *pEvent )
 {
     GetSalData()->XError( pDisplay, pEvent );
     return 0;
 }
 
-static int sal_XIOErrorHdl( Display *pDisplay )
+int SalData::XIOErrorHdl( Display *pDisplay )
 {
     /*  #106197# hack: until a real shutdown procedure exists
      *  _exit ASAP
@@ -336,18 +337,15 @@ static int sal_XIOErrorHdl( Display *pDisplay )
     return 0;
 }
 
-END_C
-
 // -=-= SalData =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pthread.h>
 
 SalData::SalData()
 {
-    memset( sig_, 0, sizeof( sig_ ) ); // SIG_DFL
     bNoExceptions_  = !!getenv( "SAL_NOSEGV" );
 
-    pXLib_          = new SalXLib();
+    pXLib_          = NULL;
     pDefDisp_       = 0;
     pCurDisp_       = 0;
 
@@ -375,10 +373,6 @@ void SalData::DeleteDisplays()
 
 long SalData::Close() const
 {
-    signal( SIGTERM, sig_[SIGTERM] );
-    if( !pFirstFrame_ )
-        return 1;
-
     X11SalFrame *pFrame = pFirstFrame_;
     while( pFrame )
     {
@@ -391,9 +385,6 @@ long SalData::Close() const
 
 long SalData::ShutDown() const
 {
-    if( !pFirstFrame_ )
-        return 1;
-
     X11SalFrame *pFrame = pFirstFrame_;
     while( pFrame )
     {
@@ -406,9 +397,6 @@ long SalData::ShutDown() const
 
 SalDisplay *SalData::GetDisplay( Display *pDisplay )
 {
-#if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "shutting down display\n" );
-#endif
     SalDisplay *pSalDisplay = SalDisplays_.First();
     while( pSalDisplay && pSalDisplay->GetDisplay() != pDisplay )
         pSalDisplay = SalDisplays_.Next();
@@ -417,6 +405,7 @@ SalDisplay *SalData::GetDisplay( Display *pDisplay )
 
 void SalData::Init()
 {
+    pXLib_ = new SalXLib();
     pXLib_->Init();
 }
 
@@ -470,7 +459,6 @@ SalXLib::SalXLib()
     bWasXError_             = FALSE;
     bIgnoreXErrors_         = !!getenv( "SAL_IGNOREXERRORS" );
     nIgnoreErrorLevel               = 0;
-    nStateOfYield_          = 0;
 }
 
 SalXLib::~SalXLib()
@@ -566,10 +554,10 @@ void SalXLib::Init()
                                    aVI.visual,
                                    AllocNone );
 
-    XSetIOErrorHandler    ( (XIOErrorHandler)sal_XIOErrorHdl );
-    XSetErrorHandler      ( (XErrorHandler)sal_XErrorHdl );
+    XSetIOErrorHandler    ( (XIOErrorHandler)SalData::XIOErrorHdl );
+    XSetErrorHandler      ( (XErrorHandler)SalData::XErrorHdl );
 
-    SalDisplay *pSalDisplay = new SalDisplay( pDisp, aVI.visual, aColMap );
+    SalDisplay *pSalDisplay = new SalX11Display( pDisp, aVI.visual, aColMap );
 
     pInputMethod->CreateMethod( pDisp );
     pInputMethod->AddConnectionWatch( pDisp, (void*)this );
@@ -646,7 +634,7 @@ void SalXLib::XError( Display *pDisplay, XErrorEvent *pEvent )
 #endif
         fprintf( stderr, "X-Error: %s\n", msg );
         if( pEvent->request_code > capacityof( XRequest ) )
-            fprintf( stderr, "\tMajor opcode: %d (Shm?)\n", pEvent->request_code );
+            fprintf( stderr, "\tMajor opcode: %d\n", pEvent->request_code );
         else if( XRequest[pEvent->request_code] )
             fprintf( stderr, "\tMajor opcode: %d (%s)\n",
                      pEvent->request_code, XRequest[pEvent->request_code] );
@@ -775,8 +763,6 @@ void SalXLib::Yield( BOOL bWait )
     if (p_prioritize_timer != NULL)
         CheckTimeout();
 
-    nStateOfYield_ = 0; // is not 0 if we are recursive called
-
     // first, check for already queued events.
     for ( int nFD = 0; nFD < nFDs_; nFD++ )
     {
@@ -828,7 +814,6 @@ void SalXLib::Yield( BOOL bWait )
         }
     }
 
-    nStateOfYield_ = 1;
     {
         // release YieldMutex (and re-acquire at block end)
         YieldMutexReleaser aReleaser;
@@ -839,10 +824,8 @@ void SalXLib::Yield( BOOL bWait )
     if( nFound < 0 ) // error
     {
 #ifdef DBG_UTIL
-        fprintf( stderr, "SalXLib::Yield s=%d e=%d f=%d\n",
-                 nStateOfYield_, errno, nFound );
+        fprintf( stderr, "SalXLib::Yield e=%d f=%d\n", errno, nFound );
 #endif
-        nStateOfYield_ = 0;
         if( EINTR == errno )
         {
             errno = 0;
@@ -874,10 +857,7 @@ void SalXLib::Yield( BOOL bWait )
 
         // someone-else has done the job for us
         if (nFound == 0)
-        {
-            nStateOfYield_ = 0;
             return;
-        }
 
         for ( int nFD = 0; nFD < nFDs_; nFD++ )
         {
@@ -892,22 +872,17 @@ void SalXLib::Yield( BOOL bWait )
                 }
                 if ( FD_ISSET( nFD, &ReadFDS ) )
                 {
-                    nStateOfYield_ = 3;
                     if ( pEntry->IsEventQueued() )
                     {
-                        nStateOfYield_ = 4;
                         pEntry->HandleNextEvent();
                         // if a recursive call has done the job
                         // so abort here
-                        if ( nStateOfYield_ != 4 )
-                            break;
                     }
                     nFound--;
                 }
             }
         }
     }
-    nStateOfYield_ = 0;
 }
 
 void SalXLib::Wakeup()
