@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:25 $
+ *  last change: $Author: ama $ $Date: 2000-09-22 11:40:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -940,8 +940,12 @@ xub_StrLen SwTxtFormatInfo::ScanPortionEnd( const xub_StrLen nEnd, sal_Bool bSki
         default:
             if( cTabDec == cPos )
             {
-                cHookChar = cPos;
-                return i;
+                ASSERT( cPos, "Unexspected end of string" );
+                if( cPos ) // robust
+                {
+                    cHookChar = cPos;
+                    return i;
+                }
             }
         }
     }
