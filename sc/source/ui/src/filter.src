@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter.src,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:55:15 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 20:02:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,8 @@ ModelessDialog RID_SCDLG_FILTER
         Text[ hebrew ] = "Verknüpfung";
         Text[ hindi ] = "प्रवर्तक";
         Text[ slovak ] = "Operátor";
+        Text[ hungarian ] = "Operátor";
+        Text[ slovenian ] = "Operator";
     };
     FixedText FT_FIELD
     {
@@ -149,6 +151,8 @@ ModelessDialog RID_SCDLG_FILTER
         Text[ hebrew ] = "Feldname";
         Text[ hindi ] = "क्षेत्र का नाम";
         Text[ slovak ] = "Názov poľa";
+        Text[ hungarian ] = "Mezőnév";
+        Text[ slovenian ] = "Ime polja";
     };
     FixedText FT_COND
     {
@@ -183,6 +187,8 @@ ModelessDialog RID_SCDLG_FILTER
         Text[ hebrew ] = "Bedingung";
         Text[ hindi ] = "शर्त";
         Text[ slovak ] = "Podmienka";
+        Text[ hungarian ] = "Feltétel";
+        Text[ slovenian ] = "Pogoj";
     };
     FixedText FT_VAL
     {
@@ -217,6 +223,8 @@ ModelessDialog RID_SCDLG_FILTER
         Text[ hebrew ] = "Wert";
         Text[ hindi ] = "मूल्य";
         Text[ slovak ] = "Hodnota";
+        Text[ hungarian ] = "Érték";
+        Text[ slovenian ] = "Vrednost";
     };
     ListBox LB_OP1
     {
@@ -370,6 +378,16 @@ ModelessDialog RID_SCDLG_FILTER
          < "AND" ; Default ; > ;
         < "OR" ; Default ; > ;
     };
+    StringList [ hungarian ] =
+    {
+         < "ÉS" ; Default ; > ;
+        < "VAGY" ; Default ; > ;
+    };
+    StringList [ slovenian ] =
+    {
+         < "AND" ; Default ; > ;
+        < "ALI" ; Default ; > ;
+    };
     };
     ListBox LB_OP2
     {
@@ -522,6 +540,16 @@ ModelessDialog RID_SCDLG_FILTER
     {
          < "AND" ; Default ; > ;
         < "OR" ; Default ; > ;
+    };
+    StringList [ hungarian ] =
+    {
+         < "ÉS" ; Default ; > ;
+        < "VAGY" ; Default ; > ;
+    };
+    StringList [ slovenian ] =
+    {
+         < "AND" ; Default ; > ;
+        < "ALI" ; Default ; > ;
     };
     };
     ListBox LB_FIELD1
@@ -919,6 +947,32 @@ ModelessDialog RID_SCDLG_FILTER
         < "Najväčšie %" ; Default ; > ;
         < "Najmenší %" ; Default ; > ;
     };
+    StringList [ hungarian ] =
+    {
+         < "=" ; Default ; > ;
+        < "<" ; Default ; > ;
+        < ">" ; Default ; > ;
+        < "<=" ; Default ; > ;
+        < ">=" ; Default ; > ;
+        < "<>" ; Default ; > ;
+        < "Legnagyobb" ; Default ; > ;
+        < "Legkisebb" ; Default ; > ;
+        < "Legnagyobb %" ; Default ; > ;
+        < "Legkisebb %" ; Default ; > ;
+    };
+    StringList [ slovenian ] =
+    {
+         < "=" ; Default ; > ;
+        < "<" ; Default ; > ;
+        < ">" ; Default ; > ;
+        < "<=" ; Default ; > ;
+        < ">=" ; Default ; > ;
+        < "<>" ; Default ; > ;
+        < "največji" ; Default ; > ;
+        < "najmanjši" ; Default ; > ;
+        < "največji %" ; Default ; > ;
+        < "najmanjši %" ; Default ; > ;
+    };
     };
     ListBox LB_COND2
     {
@@ -1290,6 +1344,32 @@ ModelessDialog RID_SCDLG_FILTER
         < "Najmenší" ; Default ; > ;
         < "najväčšie %" ; Default ; > ;
         < "Najmenší %" ; Default ; > ;
+    };
+    StringList [ hungarian ] =
+    {
+         < "=" ; Default ; > ;
+        < "<" ; Default ; > ;
+        < ">" ; Default ; > ;
+        < "<=" ; Default ; > ;
+        < ">=" ; Default ; > ;
+        < "<>" ; Default ; > ;
+        < "Legnagyobb" ; Default ; > ;
+        < "Legkisebb" ; Default ; > ;
+        < "Legnagyobb %" ; Default ; > ;
+        < "Legkisebb %" ; Default ; > ;
+    };
+    StringList [ slovenian ] =
+    {
+         < "=" ; Default ; > ;
+        < "<" ; Default ; > ;
+        < ">" ; Default ; > ;
+        < "<=" ; Default ; > ;
+        < ">=" ; Default ; > ;
+        < "<>" ; Default ; > ;
+        < "največji" ; Default ; > ;
+        < "najmanjši" ; Default ; > ;
+        < "največji %" ; Default ; > ;
+        < "najmanjši %" ; Default ; > ;
     };
     };
     ListBox LB_COND3
@@ -1663,6 +1743,32 @@ ModelessDialog RID_SCDLG_FILTER
         < "najväčšie %" ; Default ; > ;
         < "Najmenší %" ; Default ; > ;
     };
+    StringList [ hungarian ] =
+    {
+         < "=" ; Default ; > ;
+        < "<" ; Default ; > ;
+        < ">" ; Default ; > ;
+        < "<=" ; Default ; > ;
+        < ">=" ; Default ; > ;
+        < "<>" ; Default ; > ;
+        < "Legnagyobb" ; Default ; > ;
+        < "Legkisebb" ; Default ; > ;
+        < "Legnagyobb %" ; Default ; > ;
+        < "Legkisebb %" ; Default ; > ;
+    };
+    StringList [ slovenian ] =
+    {
+         < "=" ; Default ; > ;
+        < "<" ; Default ; > ;
+        < ">" ; Default ; > ;
+        < "<=" ; Default ; > ;
+        < ">=" ; Default ; > ;
+        < "<>" ; Default ; > ;
+        < "največji" ; Default ; > ;
+        < "najmanjši" ; Default ; > ;
+        < "največji %" ; Default ; > ;
+        < "najmanjši %" ; Default ; > ;
+    };
     };
     ComboBox ED_VAL1
     {
@@ -1716,6 +1822,8 @@ ModelessDialog RID_SCDLG_FILTER
         Text[ hebrew ] = "Filterkriterien";
         Text[ hindi ] = "फिल्टर सिद्धान्त";
         Text[ slovak ] = "Filter";
+        Text[ hungarian ] = "Szűrőfeltétel";
+        Text[ slovenian ] = "Pogoji filtra";
     };
     CheckBox BTN_CASE
     {
@@ -1729,7 +1837,7 @@ ModelessDialog RID_SCDLG_FILTER
         Text [ portuguese_brazilian ] = "~Diferenciar mai�sculas/min�sculas" ;
         Text [ portuguese ] = "~Mai�sculas/min�sculas" ;
         Text [ finnish ] = "Sama ~kirjainkoko" ;
-        Text [ danish ] = "Store og sm� bogstaver" ;
+        Text [ danish ] = "~STORE og sm� bogstaver" ;
         Text [ french ] = "Respecter la casse" ;
         Text [ swedish ] = "Versalk�nsli~g" ;
         Text [ dutch ] = "~Hoofdletters/kleine letters" ;
@@ -1752,6 +1860,8 @@ ModelessDialog RID_SCDLG_FILTER
         Text[ hebrew ] = "~Groß-/Kleinschreibung";
         Text[ hindi ] = "केस ~सचेतन";
         Text[ slovak ] = "Rozlišovať malé/veľké pí~smená";
+        Text[ hungarian ] = "~Kis- és nagybetűk megkülönböztetése";
+        Text[ slovenian ] = "Ra~zlikuj velike in male črke";
     };
     CheckBox BTN_REGEXP
     {
@@ -1765,10 +1875,10 @@ ModelessDialog RID_SCDLG_FILTER
         Text [ portuguese_brazilian ] = "~Express�o regular" ;
         Text [ portuguese ] = "~Express�o regular" ;
         Text [ finnish ] = "~S��nn�llinen lauseke" ;
-        Text [ danish ] = "Regul�rt udtryk" ;
+        Text [ danish ] = "R~egul�rt udtryk" ;
         Text [ french ] = "Caract�re ~g�n�rique" ;
         Text [ swedish ] = "~Regulj�rt uttryck" ;
-        Text [ dutch ] = "~Gangbare uitdrukking" ;
+        Text [ dutch ] = "Re~guliere expressie" ;
         Text [ spanish ] = "~Expresi�n regular" ;
         Text [ english_us ] = "Regular ~expression" ;
         TabStop = TRUE ;
@@ -1788,6 +1898,8 @@ ModelessDialog RID_SCDLG_FILTER
         Text[ hebrew ] = "‮ביטויים רגולריים‬";
         Text[ hindi ] = "नियमित ~वर्णन";
         Text[ slovak ] = "R~egulárny výraz";
+        Text[ hungarian ] = "~Reguláris kifejezés";
+        Text[ slovenian ] = "Re~gularni izraz";
     };
     CheckBox BTN_HEADER
     {
@@ -1801,7 +1913,7 @@ ModelessDialog RID_SCDLG_FILTER
         Text [ portuguese_brazilian ] = "O Intervalo ~cont�m cabe�alhos das colunas" ;
         Text [ portuguese ] = "A �rea ~cont�m cabe�alhos de colunas" ;
         Text [ finnish ] = "~Alue sis�lt�� sarakeotsikot" ;
-        Text [ danish ] = "Omr�de indholder kolonneoverskrifter" ;
+        Text [ danish ] = "Omr�de indholder ~kolonneetiketter" ;
         Text [ french ] = "La plage contient des �tiquettes de colonne." ;
         Text [ swedish ] = "Omr�de ~inneh�ller kolumnetiketter" ;
         Text [ dutch ] = "Bereik bevat ~kolomkoppen" ;
@@ -1824,6 +1936,8 @@ ModelessDialog RID_SCDLG_FILTER
         Text[ hebrew ] = "Bereich enthält ~Spaltenbeschriftungen";
         Text[ hindi ] = "फैलाव ~स्तंभ शीर्षकों को सम्मिलित किया है";
         Text[ slovak ] = "Oblasť obsahuje záhlavie stĺp~ca";
+        Text[ hungarian ] = "A tartomány ~oszlopcímkéket tartalmaz";
+        Text[ slovenian ] = "Obseg vsebuje oznake ~stolpcev";
     };
     CheckBox BTN_UNIQUE
     {
@@ -1837,7 +1951,7 @@ ModelessDialog RID_SCDLG_FILTER
         Text [ portuguese_brazilian ] = "Sem d~uplica��o" ;
         Text [ portuguese ] = "~�nico" ;
         Text [ finnish ] = "~Ei monistusta" ;
-        Text [ danish ] = "Kun unikke poster" ;
+        Text [ danish ] = "~Kun unikke poster" ;
         Text [ french ] = "~Sans doublons" ;
         Text [ swedish ] = "~Unika" ;
         Text [ dutch ] = "~Alleen originelen" ;
@@ -1860,6 +1974,8 @@ ModelessDialog RID_SCDLG_FILTER
         Text[ hebrew ] = "Keine ~Duplikate";
         Text[ hindi ] = "कोई द्वितीया वृत्ति ~नहीं";
         Text[ slovak ] = "Žiad~ne duplicity";
+        Text[ hungarian ] = "~Nincs másolat";
+        Text[ slovenian ] = "Brez podvaja~nja";
     };
     CheckBox BTN_COPY_RESULT
     {
@@ -1873,10 +1989,10 @@ ModelessDialog RID_SCDLG_FILTER
         Text [ portuguese_brazilian ] = "Copiar ~resultados para..." ;
         Text [ portuguese ] = "Gravar ~resultado em" ;
         Text [ finnish ] = "~Kopioi tulokset kohteeseen..." ;
-        Text [ danish ] = "Filterresultat-output til" ;
+        Text [ danish ] = "Kopier ~resultater til..." ;
         Text [ french ] = "Copier le r�sultat vers" ;
         Text [ swedish ] = "Skriv result~at till" ;
-        Text [ dutch ] = "~Resultaat weergeven na" ;
+        Text [ dutch ] = "~Resultaat kopi�ren naar" ;
         Text [ spanish ] = "Copia~r resultado en..." ;
         Text [ english_us ] = "Copy ~results to..." ;
         TabStop = TRUE ;
@@ -1896,6 +2012,8 @@ ModelessDialog RID_SCDLG_FILTER
         Text[ hebrew ] = "Filterergebnis ~ausgeben nach";
         Text[ hindi ] = "में ~नतीजों की प्रतिलिपि...";
         Text[ slovak ] = "Kopí~ruj výsledok do ...";
+        Text[ hungarian ] = "E~redmények másolása...";
+        Text[ slovenian ] = "Kopiraj ~rezultate v...";
     };
     CheckBox BTN_DEST_PERS
     {
@@ -1908,7 +2026,7 @@ ModelessDialog RID_SCDLG_FILTER
         Text [ english_us ] = "~Keep filter criteria" ;
         Text [ portuguese_brazilian ] = "~Manter crit�rios do filtro" ;
         Text [ swedish ] = "~Beh�ll filterkriterier" ;
-        Text [ danish ] = "Persistent" ;
+        Text [ danish ] = "~Bevar filterkriterier" ;
         Text [ italian ] = "Mantieni criteri" ;
         Text [ spanish ] = "~Conservar los criterios de filtrado" ;
         Text [ french ] = "Conserver les crit�res de filtre" ;
@@ -1931,6 +2049,8 @@ ModelessDialog RID_SCDLG_FILTER
         Text[ hebrew ] = "~Persistent";
         Text[ hindi ] = "~फिल्टर सिद्धान्त ~रखो";
         Text[ slovak ] = "Ponechaj ~kritéria filtra";
+        Text[ hungarian ] = "~Szűrőfeltétel megtartása";
+        Text[ slovenian ] = "Ob~drži kriterije filtriranja";
     };
     ListBox LB_COPY_AREA
     {
@@ -1983,6 +2103,8 @@ ModelessDialog RID_SCDLG_FILTER
         QuickHelpText[ hebrew ] = "Verkleinern";
         QuickHelpText[ hindi ] = "सिकुडना";
         QuickHelpText[ slovak ] = "Zmenšiť";
+        QuickHelpText[ hungarian ] = "Zsugorítás";
+        QuickHelpText[ slovenian ] = "Skrči";
     };
     FixedLine FL_OPTIONS
     {
@@ -2018,6 +2140,8 @@ ModelessDialog RID_SCDLG_FILTER
         Text[ hebrew ] = "‮אפשרויות‬";
         Text[ hindi ] = "Options";
         Text[ slovak ] = "Nastavenia";
+        Text[ hungarian ] = "Beállítások";
+        Text[ slovenian ] = "Možnosti";
     };
     FixedText FT_DBAREA
     {
@@ -2054,6 +2178,8 @@ ModelessDialog RID_SCDLG_FILTER
         Text[ hebrew ] = "dummy";
         Text[ hindi ] = "बनावटी";
         Text[ slovak ] = "dummy";
+        Text[ hungarian ] = "izé";
+        Text[ slovenian ] = "lažno";
     };
     FixedText FT_DBAREA_LABEL
     {
@@ -2089,6 +2215,8 @@ ModelessDialog RID_SCDLG_FILTER
         Text[ hebrew ] = "Datenbereich:";
         Text[ hindi ] = "ड़ॉटा फैलाव:";
         Text[ slovak ] = "Dátová oblasť:";
+        Text[ hungarian ] = "Adattartomány:";
+        Text[ slovenian ] = "Obseg podatkov:";
     };
     OKButton BTN_OK
     {
@@ -2133,6 +2261,8 @@ ModelessDialog RID_SCDLG_FILTER
     Text[ hebrew ] = "Standardfilter";
     Text[ hindi ] = "स्टान्डर्ड फ़िल्टर";
     Text[ slovak ] = "Štandardný filter";
+    Text[ hungarian ] = "Általános szűrő";
+    Text[ slovenian ] = "Standardni filter";
 };
  //============================================================================
 ModelessDialog RID_SCDLG_SPEC_FILTER
@@ -2152,7 +2282,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
     Text [ danish ] = "Specialfilter" ;
     Text [ french ] = "Filtre sp�cial" ;
     Text [ swedish ] = "Specialfilter" ;
-    Text [ dutch ] = "Speciale filter" ;
+    Text [ dutch ] = "Speciaal filter" ;
     Text [ spanish ] = "Filtro especial" ;
     Text [ english_us ] = "Advanced Filter" ;
     Moveable = TRUE ;
@@ -2168,7 +2298,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text [ portuguese_brazilian ] = "Ler os ~crit�rios do filtro a partir de" ;
         Text [ portuguese ] = "~Crit�rios de filtro encontram-se em" ;
         Text [ finnish ] = "~Lue suodatusehdot kohteesta" ;
-        Text [ danish ] = "Filterkriterier befinder sig i" ;
+        Text [ danish ] = "L�s ~filterkriterier fra" ;
         Text [ french ] = "Lire les crit�res de filtre dans" ;
         Text [ swedish ] = "Fi~lterkriterier finns i" ;
         Text [ dutch ] = "~Filtercriteria bevinden zich in" ;
@@ -2190,6 +2320,8 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text[ hebrew ] = "~Filterkriterien befinden sich in";
         Text[ hindi ] = "से ~फिल्टर सिद्धान्त पढ़ो";
         Text[ slovak ] = "Načítaj kritériá ~filtra z";
+        Text[ hungarian ] = "~Szűrőfeltétel beolvasása innen:";
+        Text[ slovenian ] = "Preberi pogoje ~filtra iz";
     };
     ListBox LB_CRITERIA_AREA
     {
@@ -2240,6 +2372,8 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         QuickHelpText[ hebrew ] = "Verkleinern";
         QuickHelpText[ hindi ] = "सिकुडना";
         QuickHelpText[ slovak ] = "Zmenšiť";
+        QuickHelpText[ hungarian ] = "Zsugorítás";
+        QuickHelpText[ slovenian ] = "Skrči";
     };
     CheckBox BTN_CASE
     {
@@ -2253,7 +2387,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text [ portuguese_brazilian ] = "Diferen~ciar mai�sculas/min�sculas" ;
         Text [ portuguese ] = "~Mai�sculas/min�sculas" ;
         Text [ finnish ] = "~Kirjainkoon erottelu" ;
-        Text [ danish ] = "Store og sm� bogstaver" ;
+        Text [ danish ] = "~STORE og sm� bogstaver" ;
         Text [ french ] = "Respecter la casse" ;
         Text [ swedish ] = "Versalk�nsli~g" ;
         Text [ dutch ] = "~Hoofdletters/kleine letters" ;
@@ -2276,6 +2410,8 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text[ hebrew ] = "~Groß-/Kleinschreibung";
         Text[ hindi ] = "~केस सचेतन";
         Text[ slovak ] = "Rozlišovať veľké/~malé písmená";
+        Text[ hungarian ] = "~Kis- és nagybetűk megkülönböztetése";
+        Text[ slovenian ] = "Raz~likuj velike in male črke";
     };
     CheckBox BTN_REGEXP
     {
@@ -2289,10 +2425,10 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text [ portuguese_brazilian ] = "~Express�es regulares" ;
         Text [ portuguese ] = "~Express�o regular" ;
         Text [ finnish ] = "~S��nn�lliset lausekkeet" ;
-        Text [ danish ] = "Regul�rt udtryk" ;
+        Text [ danish ] = "R~egul�rt udtryk" ;
         Text [ french ] = "Caract�re ~g�n�rique" ;
         Text [ swedish ] = "~Regulj�rt uttryck" ;
-        Text [ dutch ] = "~Gangbare uitdrukking" ;
+        Text [ dutch ] = "Re~guliere expressies" ;
         Text [ spanish ] = "~Expresi�n regular" ;
         Text [ english_us ] = "Regular ~expressions" ;
         TabStop = TRUE ;
@@ -2312,6 +2448,8 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text[ hebrew ] = "‮ביטויים רגולריים‬";
         Text[ hindi ] = "नियमित ~वर्णन";
         Text[ slovak ] = "R~egulárne výrazy";
+        Text[ hungarian ] = "Reguláris ~kifejezések";
+        Text[ slovenian ] = "Re~gularni izrazi";
     };
     CheckBox BTN_HEADER
     {
@@ -2325,7 +2463,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text [ portuguese_brazilian ] = "Cont�m cabe�alhos das ~colunas" ;
         Text [ portuguese ] = "Cont�m ~cabe�alhos para colunas" ;
         Text [ finnish ] = "~Sis�lt�� sarakeotsikot" ;
-        Text [ danish ] = "Indeholder kolonneoverskrifter" ;
+        Text [ danish ] = "Omr�de indeholder ~kolonneetiketter" ;
         Text [ french ] = "La plage contient des �tiquettes de colonne." ;
         Text [ swedish ] = "Omr�de ~inneh�ller kolumnetiketter" ;
         Text [ dutch ] = "Bereik bevat ~kolomkoppen" ;
@@ -2348,6 +2486,8 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text[ hebrew ] = "Bereich enthält ~Spaltenköpfe";
         Text[ hindi ] = "स्तंभ शीर्षकों को स~म्मिलित किया है";
         Text[ slovak ] = "~Obsahujú záhlavia stĺpcov";
+        Text[ hungarian ] = "A tartomány oszlop~címkéket tartalmaz";
+        Text[ slovenian ] = "Obseg vs~ebuje oznake stolpcev";
     };
     CheckBox BTN_UNIQUE
     {
@@ -2361,7 +2501,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text [ portuguese_brazilian ] = "Sem d~uplica��o" ;
         Text [ portuguese ] = "~�nico" ;
         Text [ finnish ] = "~Ei monistusta" ;
-        Text [ danish ] = "Kun unikke poster" ;
+        Text [ danish ] = "~Kun unikke poster" ;
         Text [ french ] = "~Sans doublons" ;
         Text [ swedish ] = "~Unika" ;
         Text [ dutch ] = "~Alleen originelen" ;
@@ -2384,6 +2524,8 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text[ hebrew ] = "Keine ~Duplikate";
         Text[ hindi ] = "कोई द्वितीया वृत्ति ~नहीं";
         Text[ slovak ] = "Žiad~ne duplicity";
+        Text[ hungarian ] = "~Nincs másolat";
+        Text[ slovenian ] = "Brez podvaja~nja";
     };
     CheckBox BTN_COPY_RESULT
     {
@@ -2397,7 +2539,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text [ portuguese_brazilian ] = "Copiar ~resultados para" ;
         Text [ portuguese ] = "Copiar ~resultados para" ;
         Text [ finnish ] = "~Kopioi tulokset kohteeseen" ;
-        Text [ danish ] = "Filterresultat-output til" ;
+        Text [ danish ] = "Ko~pier resultater til" ;
         Text [ french ] = "Copier le r�sultat vers" ;
         Text [ swedish ] = "Skriv result~at till" ;
         Text [ dutch ] = "~Resultaat weergeven na" ;
@@ -2420,6 +2562,8 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text[ hebrew ] = "Filterergebnis ~ausgeben nach";
         Text[ hindi ] = "में नतीजों की प्रति~लिपि";
         Text[ slovak ] = "Ko~píruj výsledky do";
+        Text[ hungarian ] = "E~redmény másolási helye";
+        Text[ slovenian ] = "Ko~piraj rezultate v";
     };
     CheckBox BTN_DEST_PERS
     {
@@ -2432,7 +2576,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text [ english_us ] = "~Keep filter criteria" ;
         Text [ portuguese_brazilian ] = "~Manter crit�rios do filtro" ;
         Text [ swedish ] = "~Beh�ll filterkriterier" ;
-        Text [ danish ] = "Persistent" ;
+        Text [ danish ] = "~Bevar filterkriterier" ;
         Text [ italian ] = "Mantieni criteri" ;
         Text [ spanish ] = "~Conservar los criterios de filtrado" ;
         Text [ french ] = "Conserver les crit�res de filtre" ;
@@ -2455,6 +2599,8 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text[ hebrew ] = "~Persistent";
         Text[ hindi ] = "फिल्टर सिद्धान्त ~रखो";
         Text[ slovak ] = "Ponechaj ~kritériá filtra";
+        Text[ hungarian ] = "~Szűrőfeltétel megtartása";
+        Text[ slovenian ] = "~Obdrži kriterije filtriranja";
     };
     ListBox LB_COPY_AREA
     {
@@ -2507,6 +2653,8 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         QuickHelpText[ hebrew ] = "Verkleinern";
         QuickHelpText[ hindi ] = "सिकुडना";
         QuickHelpText[ slovak ] = "Zmenšiť";
+        QuickHelpText[ hungarian ] = "Zsugorítás";
+        QuickHelpText[ slovenian ] = "Skrči";
     };
     FixedLine FL_OPTIONS
     {
@@ -2542,6 +2690,8 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text[ hebrew ] = "‮אפשרויות‬";
         Text[ hindi ] = "विकल्प";
         Text[ slovak ] = "Nastavenia";
+        Text[ hungarian ] = "Beállítások";
+        Text[ slovenian ] = "Možnosti";
     };
     FixedText FT_DBAREA
     {
@@ -2578,6 +2728,8 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text[ hebrew ] = "dummy";
         Text[ hindi ] = "बनावटी";
         Text[ slovak ] = "dummy";
+        Text[ hungarian ] = "izé";
+        Text[ slovenian ] = "lažno";
     };
     FixedText FT_DBAREA_LABEL
     {
@@ -2613,6 +2765,8 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text[ hebrew ] = "Datenbereich:";
         Text[ hindi ] = "ड़ॉटा फैलाव:";
         Text[ slovak ] = "Dátová oblasť:";
+        Text[ hungarian ] = "Adattartomány:";
+        Text[ slovenian ] = "Obseg podatkov:";
     };
     OKButton BTN_OK
     {
@@ -2657,6 +2811,8 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
     Text[ hebrew ] = "Spezialfilter";
     Text[ hindi ] = "उच्च फ़िल्टर";
     Text[ slovak ] = "Rozšírený filter";
+    Text[ hungarian ] = "Irányított szűrés";
+    Text[ slovenian ] = "Napredni filter";
 };
  //============================================================================
 ModalDialog RID_SCDLG_PIVOTFILTER
@@ -2714,6 +2870,8 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Text[ hebrew ] = "Verknüpfung";
         Text[ hindi ] = "प्रवर्तक";
         Text[ slovak ] = "Operátor";
+        Text[ hungarian ] = "Operátor";
+        Text[ slovenian ] = "Operator";
     };
     FixedText FT_FIELD
     {
@@ -2748,6 +2906,8 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Text[ hebrew ] = "Feldname";
         Text[ hindi ] = "क्षेत्र नाम";
         Text[ slovak ] = "Názov poľa";
+        Text[ hungarian ] = "Mezőnév";
+        Text[ slovenian ] = "Ime polja";
     };
     FixedText FT_COND
     {
@@ -2782,6 +2942,8 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Text[ hebrew ] = "Bedingung";
         Text[ hindi ] = "शर्त";
         Text[ slovak ] = "Podmienka";
+        Text[ hungarian ] = "Feltétel";
+        Text[ slovenian ] = "Pogoj";
     };
     FixedText FT_VAL
     {
@@ -2816,6 +2978,8 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Text[ hebrew ] = "Wert";
         Text[ hindi ] = "मूल्य";
         Text[ slovak ] = "Hodnota";
+        Text[ hungarian ] = "Érték";
+        Text[ slovenian ] = "Vrednost";
     };
     ListBox LB_OP1
     {
@@ -2969,6 +3133,16 @@ ModalDialog RID_SCDLG_PIVOTFILTER
          < "AND" ; Default ; > ;
         < "OR" ; Default ; > ;
     };
+    StringList [ hungarian ] =
+    {
+         < "AND" ; Default ; > ;
+        < "OR" ; Default ; > ;
+    };
+    StringList [ slovenian ] =
+    {
+         < "AND" ; Default ; > ;
+        < "ALI" ; Default ; > ;
+    };
     };
     ListBox LB_OP2
     {
@@ -3121,6 +3295,16 @@ ModalDialog RID_SCDLG_PIVOTFILTER
     {
          < "AND" ; Default ; > ;
         < "OR" ; Default ; > ;
+    };
+    StringList [ hungarian ] =
+    {
+         < "AND" ; Default ; > ;
+        < "OR" ; Default ; > ;
+    };
+    StringList [ slovenian ] =
+    {
+         < "AND" ; Default ; > ;
+        < "ALI" ; Default ; > ;
     };
     };
     ListBox LB_FIELD1
@@ -3415,6 +3599,24 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         < ">=" ; Default ; > ;
         < "<>" ; Default ; > ;
     };
+    StringList [ hungarian ] =
+    {
+         < "=" ; Default ; > ;
+        < "<" ; Default ; > ;
+        < ">" ; Default ; > ;
+        < "<=" ; Default ; > ;
+        < ">=" ; Default ; > ;
+        < "<>" ; Default ; > ;
+    };
+    StringList [ slovenian ] =
+    {
+         < "=" ; Default ; > ;
+        < "<" ; Default ; > ;
+        < ">" ; Default ; > ;
+        < "<=" ; Default ; > ;
+        < ">=" ; Default ; > ;
+        < "<>" ; Default ; > ;
+    };
     };
     ListBox LB_COND2
     {
@@ -3676,6 +3878,24 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         < "<>" ; Default ; > ;
     };
     StringList [ slovak ] =
+    {
+         < "=" ; Default ; > ;
+        < "<" ; Default ; > ;
+        < ">" ; Default ; > ;
+        < "<=" ; Default ; > ;
+        < ">=" ; Default ; > ;
+        < "<>" ; Default ; > ;
+    };
+    StringList [ hungarian ] =
+    {
+         < "=" ; Default ; > ;
+        < "<" ; Default ; > ;
+        < ">" ; Default ; > ;
+        < "<=" ; Default ; > ;
+        < ">=" ; Default ; > ;
+        < "<>" ; Default ; > ;
+    };
+    StringList [ slovenian ] =
     {
          < "=" ; Default ; > ;
         < "<" ; Default ; > ;
@@ -3953,6 +4173,24 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         < ">=" ; Default ; > ;
         < "<>" ; Default ; > ;
     };
+    StringList [ hungarian ] =
+    {
+         < "=" ; Default ; > ;
+        < "<" ; Default ; > ;
+        < ">" ; Default ; > ;
+        < "<=" ; Default ; > ;
+        < ">=" ; Default ; > ;
+        < "<>" ; Default ; > ;
+    };
+    StringList [ slovenian ] =
+    {
+         < "=" ; Default ; > ;
+        < "<" ; Default ; > ;
+        < ">" ; Default ; > ;
+        < "<=" ; Default ; > ;
+        < ">=" ; Default ; > ;
+        < "<>" ; Default ; > ;
+    };
     };
     ComboBox ED_VAL1
     {
@@ -4006,6 +4244,8 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Text[ hebrew ] = "Filterkriterien";
         Text[ hindi ] = "फिल्टर सिद्धान्त";
         Text[ slovak ] = "Filter";
+        Text[ hungarian ] = "Szűrőfeltétel";
+        Text[ slovenian ] = "Pogoji filtra";
     };
     CheckBox BTN_CASE
     {
@@ -4019,7 +4259,7 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Text [ portuguese_brazilian ] = "Diferen~ciar mai�sculas/min�sculas" ;
         Text [ portuguese ] = "~Mai�sculas/min�sculas" ;
         Text [ finnish ] = "~Kirjainkoon erottelu" ;
-        Text [ danish ] = "Store og sm� bogstaver" ;
+        Text [ danish ] = "~STORE og sm� bogstaver" ;
         Text [ french ] = "Respecter la casse" ;
         Text [ swedish ] = "Versalk�nsli~g" ;
         Text [ dutch ] = "~Hoofdletters/kleine letters" ;
@@ -4042,6 +4282,8 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Text[ hebrew ] = "~Groß-/Kleinschreibung";
         Text[ hindi ] = "~केस सचेतन";
         Text[ slovak ] = "Rozlišovať veľké/~malé písmená";
+        Text[ hungarian ] = "~Kis- és nagybetűk megkülönböztetése";
+        Text[ slovenian ] = "Raz~likuj velike in male črke";
     };
     CheckBox BTN_REGEXP
     {
@@ -4055,10 +4297,10 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Text [ portuguese_brazilian ] = "~Express�o regular" ;
         Text [ portuguese ] = "~Express�o regular" ;
         Text [ finnish ] = "~S��nn�llinen lauseke" ;
-        Text [ danish ] = "Regul�rt udtryk" ;
+        Text [ danish ] = "R~egul�rt udtryk" ;
         Text [ french ] = "Caract�re ~g�n�rique" ;
         Text [ swedish ] = "~Regulj�rt uttryck" ;
-        Text [ dutch ] = "~Gangbare uitdrukking" ;
+        Text [ dutch ] = "Re~guliere expressie" ;
         Text [ spanish ] = "~Expresi�n regular" ;
         Text [ english_us ] = "~Regular expression" ;
         TabStop = TRUE ;
@@ -4078,6 +4320,8 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Text[ hebrew ] = "‮ביטויים רגולריים‬";
         Text[ hindi ] = "~नियमित वर्णन";
         Text[ slovak ] = "~Regulárny výraz";
+        Text[ hungarian ] = "~Reguláris kifejezés";
+        Text[ slovenian ] = "~Regularni izraz";
     };
     CheckBox BTN_UNIQUE
     {
@@ -4091,7 +4335,7 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Text [ portuguese_brazilian ] = "Sem d~uplica��o" ;
         Text [ portuguese ] = "~�nico" ;
         Text [ finnish ] = "~Ei monistusta" ;
-        Text [ danish ] = "Kun unikke poster" ;
+        Text [ danish ] = "~Kun unikke poster" ;
         Text [ french ] = "~Sans doublons" ;
         Text [ swedish ] = "~Unika" ;
         Text [ dutch ] = "~Alleen originelen" ;
@@ -4114,6 +4358,8 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Text[ hebrew ] = "Keine ~Duplikate";
         Text[ hindi ] = "कोई द्वितीया वृत्ति ~नहीं";
         Text[ slovak ] = "Žiad~ne duplicity";
+        Text[ hungarian ] = "~Nincs másolat";
+        Text[ slovenian ] = "Brez podvaja~nja";
     };
     FixedLine FL_OPTIONS
     {
@@ -4149,6 +4395,8 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Text[ hebrew ] = "‮אפשרויות‬";
         Text[ hindi ] = "विकल्प";
         Text[ slovak ] = "Nastavenia";
+        Text[ hungarian ] = "Beállítások";
+        Text[ slovenian ] = "Možnosti";
     };
     FixedText FT_DBAREA
     {
@@ -4185,6 +4433,8 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Text[ hebrew ] = "dummy";
         Text[ hindi ] = "बनावटी";
         Text[ slovak ] = "dummy";
+        Text[ hungarian ] = "izé";
+        Text[ slovenian ] = "lažno";
     };
     FixedText FT_DBAREA_LABEL
     {
@@ -4220,6 +4470,8 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Text[ hebrew ] = "Datenbereich:";
         Text[ hindi ] = "ड़ॉटा फैलाव:";
         Text[ slovak ] = "Dátová oblasť:";
+        Text[ hungarian ] = "Adattartomány:";
+        Text[ slovenian ] = "Obseg podatkov:";
     };
     OKButton BTN_OK
     {
@@ -4264,7 +4516,14 @@ ModalDialog RID_SCDLG_PIVOTFILTER
     Text[ hebrew ] = "‮סינון‬";
     Text[ hindi ] = "फिल्टर";
     Text[ slovak ] = "Filter";
+    Text[ hungarian ] = "Szűrő";
+    Text[ slovenian ] = "Filtriraj";
 };
+
+
+
+
+
 
 
 
