@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XUnoTunnel.idl,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:35:57 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 16:03:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@ module com {  module sun {  module star {  module lang {
     implementation directly, most often because of a design flaw.
     </p>
 */
-interface XUnoTunnel: com::sun::star::uno::XInterface
+published interface XUnoTunnel: com::sun::star::uno::XInterface
 {
     /** Call this method to get something which is not specified in UNO, e.g.
         an address to some C++ object.
