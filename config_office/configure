@@ -309,7 +309,7 @@ ac_includes_default="\
 # include <unistd.h>
 #endif"
 
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS AWK SED OSVERSION PTHREAD_CFLAGS PTHREAD_LIBS ENABLE_CRASHDUMP ENABLE_VCTK VC_STANDARD ENABLE_DEBUG PRODUCT PROFULLSWITCH PROEXT ENABLE_SYMBOLS ENABLE_CUPS ENABLE_FONTCONFIG WITH_BINFILTER ENABLE_DIRECTX NETTOOLKIT ENABLE_RPATH WITH_MYSPELL_DICTS USE_SHELL WITH_MINGWIN TCSH GCC_HOME CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT COMPATH GCCVER HAVE_GCC_VISIBILITY_FEATURE RPM GNUMAKE _cc MSPDB_PATH COMEX MIDL_PATH CSC_PATH NMAKE_PATH FRAME_HOME CPP EGREP CXX CXXFLAGS ac_ct_CXX GXX_INCLUDE_PATH EXCEPTIONS CXXCPP STLPORT4 USE_SYSTEM_STL SOLAR_JAVA JAVAINTERPRETER JAVACOMPILER JAVADOC JAVA_HOME JDK XSLTPROC XMKMF PERL DMAKE BUILD_DMAKE EPM SYSTEM_STDLIBS SYSTEM_ZLIB SYSTEM_JPEG SYSTEM_EXPAT PKG_CONFIG FREETYPE_CFLAGS FREETYPE_LIBS SYSTEM_FREETYPE LIBWPD_CFLAGS LIBWPD_LIBS SYSTEM_LIBWPD LIBXML_CFLAGS LIBXML_LIBS SYSTEM_LIBXML PYTHON PYTHON_VERSION PYTHON_PREFIX PYTHON_EXEC_PREFIX PYTHON_PLATFORM pythondir pkgpythondir pyexecdir pkgpyexecdir SYSTEM_PYTHON PYTHON_CFLAGS PYTHON_LIBS SABLOTCONFIG SYSTEM_SABLOT SABLOT_LIBS CURLCONFIG SYSTEM_CURL CURL_CFLAGS CURL_LIBS SYSTEM_BOOST SYSTEM_ODBC_HEADERS SYSTEM_SANE_HEADER X_CFLAGS X_PRE_LIBS X_LIBS X_EXTRA_LIBS XINC XLIB SYSTEM_XRENDER_HEADERS SYSTEM_NAS NAS_INCLUDES ENABLE_PASF SYSTEM_PORTAUDIO SYSTEM_SNDFILE BUILD_TYPE NEON_CFLAGS NEON_LIBS SYSTEM_NEON PSDK_HOME DIRECTXSDK_HOME DIRECTXSDK_LIB EXTRA_DOTNET_FILES BISON FLEX PATCH GNUPATCH GNUCP CYGWIN_PATH ML_EXE ASM_HOME ZIP ZIP_HOME LIBART_CFLAGS LIBART_LIBS WITH_LIBART WITH_GPC ENABLE_GTK ENABLE_KDE GNOMEVFS_CFLAGS GNOMEVFS_LIBS GCONF_CFLAGS GCONF_LIBS ENABLE_GNOMEVFS GTK_CFLAGS GTK_LIBS GDKPIXBUF_CFLAGS GDKPIXBUF_LIBS KDE_CFLAGS KDE_LIBS LIBSN_CFLAGS LIBSN_LIBS WITH_LIBSN WITH_MOZILLA WITH_OPENLDAP MOZILLA_CFLAGS MOZILLA_LIBS MOZILLABASE_CFLAGS MOZILLABASE_LIBS SYSTEM_MOZILLA MOZILLA_VERSION MOZILLA_TOOLKIT MOZLIBREQ_CFLAGS MOZLIBREQ_LIBS BUILD_MOZAB WITH_FONTOOO SYSTEM_MSPACK WITH_FONTS SCPDEFS USE_XINERAMA XINERAMA_LINK ANT ANT_HOME ANT_LIB WITH_LANG WITH_DICT ENABLE_STATIC_GTK CUSTOM_IMAGE_SETS LOCAL_SOLENV UPD SOURCEVERSION LOCAL_SOLVER LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS AWK SED LOCAL_SOLENV UPD SOURCEVERSION build build_cpu build_vendor build_os host host_cpu host_vendor host_os target target_cpu target_vendor target_os OSVERSION PTHREAD_CFLAGS PTHREAD_LIBS ENABLE_CRASHDUMP ENABLE_VCTK VC_STANDARD ENABLE_DEBUG PRODUCT PROFULLSWITCH PROEXT ENABLE_SYMBOLS ENABLE_CUPS ENABLE_FONTCONFIG WITH_BINFILTER ENABLE_DIRECTX NETTOOLKIT ENABLE_RPATH WITH_MYSPELL_DICTS USE_SHELL WITH_MINGWIN TCSH GCC_HOME CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT COMPATH GCCVER HAVE_GCC_VISIBILITY_FEATURE RPM GNUMAKE _cc MSPDB_PATH COMEX MIDL_PATH CSC_PATH NMAKE_PATH FRAME_HOME CPP EGREP CXX CXXFLAGS ac_ct_CXX GXX_INCLUDE_PATH EXCEPTIONS CXXCPP STLPORT4 USE_SYSTEM_STL SOLAR_JAVA JAVAINTERPRETER JAVACOMPILER JAVADOC JAVA_HOME JDK XSLTPROC XMKMF PERL DMAKE BUILD_DMAKE EPM SYSTEM_STDLIBS SYSTEM_ZLIB SYSTEM_JPEG SYSTEM_EXPAT PKG_CONFIG FREETYPE_CFLAGS FREETYPE_LIBS SYSTEM_FREETYPE LIBWPD_CFLAGS LIBWPD_LIBS SYSTEM_LIBWPD LIBXML_CFLAGS LIBXML_LIBS SYSTEM_LIBXML PYTHON PYTHON_VERSION PYTHON_PREFIX PYTHON_EXEC_PREFIX PYTHON_PLATFORM pythondir pkgpythondir pyexecdir pkgpyexecdir SYSTEM_PYTHON PYTHON_CFLAGS PYTHON_LIBS SABLOTCONFIG SYSTEM_SABLOT SABLOT_LIBS CURLCONFIG SYSTEM_CURL CURL_CFLAGS CURL_LIBS SYSTEM_BOOST SYSTEM_ODBC_HEADERS SYSTEM_SANE_HEADER X_CFLAGS X_PRE_LIBS X_LIBS X_EXTRA_LIBS XINC XLIB SYSTEM_XRENDER_HEADERS SYSTEM_NAS NAS_INCLUDES ENABLE_PASF SYSTEM_PORTAUDIO SYSTEM_SNDFILE BUILD_TYPE NEON_CFLAGS NEON_LIBS SYSTEM_NEON PSDK_HOME DIRECTXSDK_HOME DIRECTXSDK_LIB EXTRA_DOTNET_FILES BISON FLEX PATCH GNUPATCH GNUCP CYGWIN_PATH ML_EXE ASM_HOME ZIP ZIP_HOME LIBART_CFLAGS LIBART_LIBS WITH_LIBART WITH_GPC ENABLE_GTK ENABLE_KDE GNOMEVFS_CFLAGS GNOMEVFS_LIBS GCONF_CFLAGS GCONF_LIBS ENABLE_GNOMEVFS GTK_CFLAGS GTK_LIBS GDKPIXBUF_CFLAGS GDKPIXBUF_LIBS KDE_CFLAGS KDE_LIBS LIBSN_CFLAGS LIBSN_LIBS WITH_LIBSN WITH_MOZILLA WITH_OPENLDAP MOZILLA_CFLAGS MOZILLA_LIBS MOZILLABASE_CFLAGS MOZILLABASE_LIBS SYSTEM_MOZILLA MOZILLA_VERSION MOZILLA_TOOLKIT MOZLIBREQ_CFLAGS MOZLIBREQ_LIBS BUILD_MOZAB WITH_FONTOOO SYSTEM_MSPACK WITH_FONTS SCPDEFS USE_XINERAMA XINERAMA_LINK ANT ANT_HOME ANT_LIB WITH_LANG WITH_DICT ENABLE_STATIC_GTK CUSTOM_IMAGE_SETS LOCAL_SOLVER LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -846,6 +846,11 @@ _ACEOF
 X features:
   --x-includes=DIR    X include files are in DIR
   --x-libraries=DIR   X library files are in DIR
+
+System types:
+  --build=BUILD     configure for building on BUILD [guessed]
+  --host=HOST       cross-compile to build programs to run on HOST [BUILD]
+  --target=TARGET   configure for building compilers for TARGET [HOST]
 _ACEOF
 fi
 
@@ -2251,14 +2256,152 @@ echo "$as_me: error: install sed to run this script" >&2;}
    { (exit 1); exit 1; }; }
 fi
 
-echo "$as_me:$LINENO: checking the operating system" >&5
-echo $ECHO_N "checking the operating system... $ECHO_C" >&6
-_os=`uname`
-echo "$as_me:$LINENO: result: $_os" >&5
-echo "${ECHO_T}$_os" >&6
+echo "$as_me:$LINENO: checking for solenv environment" >&5
+echo $ECHO_N "checking for solenv environment... $ECHO_C" >&6
+if test -z "$with_local_solenv"; then
+   LOCAL_SOLENV="DEFAULT"
+   echo "$as_me:$LINENO: result: default" >&5
+echo "${ECHO_T}default" >&6
+else
+   LOCAL_SOLENV=$with_local_solenv
+   echo "$as_me:$LINENO: result: $with_local_solenv" >&5
+echo "${ECHO_T}$with_local_solenv" >&6
+fi
 
-if test `echo $_os | $AWK -F_ '{ print $1 }'` = "CYGWIN"; then
-   _os="WINNT"
+
+if test "$LOCAL_SOLENV" = "DEFAULT"; then
+  _solenv="../solenv"
+else
+  _solenv="$LOCAL_SOLENV"
+fi
+
+if test -e $_solenv/inc/minor.mk; then
+   # Get UPD number from ../solenv/inc/minor.mk
+   UPD="`grep RSCVERSION= ../solenv/inc/minor.mk | $AWK -F"=" '{ print $2 }'`"
+
+   SOURCEVERSION="`grep SOURCEVERSION= ../solenv/inc/minor.mk | $AWK -F"=" '{ print $2 }'`"
+
+else
+   { { echo "$as_me:$LINENO: error: $_solenv/inc/minor.mk missing. Needed for proper environment script generation..." >&5
+echo "$as_me: error: $_solenv/inc/minor.mk missing. Needed for proper environment script generation..." >&2;}
+   { (exit 1); exit 1; }; }
+fi
+
+ac_aux_dir=
+for ac_dir in $_solenv/bin; do
+  if test -f $ac_dir/install-sh; then
+    ac_aux_dir=$ac_dir
+    ac_install_sh="$ac_aux_dir/install-sh -c"
+    break
+  elif test -f $ac_dir/install.sh; then
+    ac_aux_dir=$ac_dir
+    ac_install_sh="$ac_aux_dir/install.sh -c"
+    break
+  elif test -f $ac_dir/shtool; then
+    ac_aux_dir=$ac_dir
+    ac_install_sh="$ac_aux_dir/shtool install -c"
+    break
+  fi
+done
+if test -z "$ac_aux_dir"; then
+  { { echo "$as_me:$LINENO: error: cannot find install-sh or install.sh in $_solenv/bin" >&5
+echo "$as_me: error: cannot find install-sh or install.sh in $_solenv/bin" >&2;}
+   { (exit 1); exit 1; }; }
+fi
+ac_config_guess="$SHELL $ac_aux_dir/config.guess"
+ac_config_sub="$SHELL $ac_aux_dir/config.sub"
+ac_configure="$SHELL $ac_aux_dir/configure" # This should be Cygnus configure.
+
+# Make sure we can run config.sub.
+$ac_config_sub sun4 >/dev/null 2>&1 ||
+  { { echo "$as_me:$LINENO: error: cannot run $ac_config_sub" >&5
+echo "$as_me: error: cannot run $ac_config_sub" >&2;}
+   { (exit 1); exit 1; }; }
+
+echo "$as_me:$LINENO: checking build system type" >&5
+echo $ECHO_N "checking build system type... $ECHO_C" >&6
+if test "${ac_cv_build+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_cv_build_alias=$build_alias
+test -z "$ac_cv_build_alias" &&
+  ac_cv_build_alias=`$ac_config_guess`
+test -z "$ac_cv_build_alias" &&
+  { { echo "$as_me:$LINENO: error: cannot guess build type; you must specify one" >&5
+echo "$as_me: error: cannot guess build type; you must specify one" >&2;}
+   { (exit 1); exit 1; }; }
+ac_cv_build=`$ac_config_sub $ac_cv_build_alias` ||
+  { { echo "$as_me:$LINENO: error: $ac_config_sub $ac_cv_build_alias failed" >&5
+echo "$as_me: error: $ac_config_sub $ac_cv_build_alias failed" >&2;}
+   { (exit 1); exit 1; }; }
+
+fi
+echo "$as_me:$LINENO: result: $ac_cv_build" >&5
+echo "${ECHO_T}$ac_cv_build" >&6
+build=$ac_cv_build
+build_cpu=`echo $ac_cv_build | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\1/'`
+build_vendor=`echo $ac_cv_build | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\2/'`
+build_os=`echo $ac_cv_build | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\3/'`
+
+
+echo "$as_me:$LINENO: checking host system type" >&5
+echo $ECHO_N "checking host system type... $ECHO_C" >&6
+if test "${ac_cv_host+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_cv_host_alias=$host_alias
+test -z "$ac_cv_host_alias" &&
+  ac_cv_host_alias=$ac_cv_build_alias
+ac_cv_host=`$ac_config_sub $ac_cv_host_alias` ||
+  { { echo "$as_me:$LINENO: error: $ac_config_sub $ac_cv_host_alias failed" >&5
+echo "$as_me: error: $ac_config_sub $ac_cv_host_alias failed" >&2;}
+   { (exit 1); exit 1; }; }
+
+fi
+echo "$as_me:$LINENO: result: $ac_cv_host" >&5
+echo "${ECHO_T}$ac_cv_host" >&6
+host=$ac_cv_host
+host_cpu=`echo $ac_cv_host | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\1/'`
+host_vendor=`echo $ac_cv_host | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\2/'`
+host_os=`echo $ac_cv_host | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\3/'`
+
+
+echo "$as_me:$LINENO: checking target system type" >&5
+echo $ECHO_N "checking target system type... $ECHO_C" >&6
+if test "${ac_cv_target+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_cv_target_alias=$target_alias
+test "x$ac_cv_target_alias" = "x" &&
+  ac_cv_target_alias=$ac_cv_host_alias
+ac_cv_target=`$ac_config_sub $ac_cv_target_alias` ||
+  { { echo "$as_me:$LINENO: error: $ac_config_sub $ac_cv_target_alias failed" >&5
+echo "$as_me: error: $ac_config_sub $ac_cv_target_alias failed" >&2;}
+   { (exit 1); exit 1; }; }
+
+fi
+echo "$as_me:$LINENO: result: $ac_cv_target" >&5
+echo "${ECHO_T}$ac_cv_target" >&6
+target=$ac_cv_target
+target_cpu=`echo $ac_cv_target | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\1/'`
+target_vendor=`echo $ac_cv_target | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\2/'`
+target_os=`echo $ac_cv_target | sed 's/^\([^-]*\)-\([^-]*\)-\(.*\)$/\3/'`
+
+
+# The aliases save the names the user supplied, while $host etc.
+# will get canonicalized.
+test -n "$target_alias" &&
+  test "$program_prefix$program_suffix$program_transform_name" = \
+    NONENONEs,x,x, &&
+  program_prefix=${target_alias}-
+if test "$build" != "$host" -o "$build" != "$target" \
+  -o "$host" != "$target"; then
+	{ echo "$as_me:$LINENO: WARNING: cross-compiling by any means is not supported (yet)!" >&5
+echo "$as_me: WARNING: cross-compiling by any means is not supported (yet)!" >&2;}
+	echo "cross-compiling by any means is not supported (yet)!" >> warn
+fi
+
+if echo "$build_os" | grep cygwin; then
    echo "$as_me:$LINENO: checking Cygwin version" >&5
 echo $ECHO_N "checking Cygwin version... $ECHO_C" >&6
    CygwinVer=`uname -r`
@@ -2273,18 +2416,17 @@ else
    CygwinVer="false"
 fi
 
-case "$_os" in
-	"SunOS")
+case "$build_os" in
+	solaris*)
 		test_x=yes
 		test_gtk=yes
-      		test_kde=yes
-      		test_cups=yes
-
-		_machine_type=`uname -m`
+		test_kde=yes
+		test_cups=yes
+		_os=Solaris
 
 						   		echo "$as_me:$LINENO: checking the Solaris operating system release" >&5
 echo $ECHO_N "checking the Solaris operating system release... $ECHO_C" >&6
-   		_os_release=`uname -r | $AWK -F. '{ print $2 }'`
+   		_os_release=`echo $build_os | $SED -e s/solaris2\.//`
 		if test "$_os_release" -lt "6"; then
       			{ { echo "$as_me:$LINENO: error: use solaris >= 6 to build OpenOffice.org" >&5
 echo "$as_me: error: use solaris >= 6 to build OpenOffice.org" >&2;}
@@ -2296,39 +2438,42 @@ echo "${ECHO_T}ok ($_os_release)" >&6
 
    		   		echo "$as_me:$LINENO: checking the processor type" >&5
 echo $ECHO_N "checking the processor type... $ECHO_C" >&6
-   		_processor=`uname -p`
-   		if test "$_processor" = "sparc" -o "$_processor" = "i386"; then
-      			echo "$as_me:$LINENO: result: ok ($_processor)" >&5
-echo "${ECHO_T}ok ($_processor)" >&6
+   		if test "$build_cpu" = "sparc" -o "$build_cpu" = "i386"; then
+      			echo "$as_me:$LINENO: result: ok ($build_cpu)" >&5
+echo "${ECHO_T}ok ($build_cpu)" >&6
    		else
       			{ { echo "$as_me:$LINENO: error: only sparc and i386 processors are supported" >&5
 echo "$as_me: error: only sparc and i386 processors are supported" >&2;}
    { (exit 1); exit 1; }; }
    		fi
 		;;
-	"Linux")
+	linux-gnu)
 		test_x=yes
 		test_gtk=yes
-      		test_kde=yes
-      		test_cups=yes
+		test_kde=yes
+		test_cups=yes
+		_os=Linux
 		;;
-	"GNU")
+	gnu)
 		test_x=yes
-      		test_cups=no
+		test_cups=no
+		_os=GNU
 		;;
-	"WINNT")
+	cygwin*) # Windows
 		test_x=no
-      		test_cups=no
+		test_cups=no
+		_os=WINNT
 		;;
-	"Darwin")
+	darwin) # Mac OS X
 		test_x=no
-      		test_cups=no
+		test_cups=no
+		_os=Darwin
 		;;
-	"FreeBSD")
+	freebsd)
 		test_x=yes
 		test_gtk=yes
-      		test_kde=yes
-      		test_cups=yes
+		test_kde=yes
+		test_cups=yes
 		echo "$as_me:$LINENO: checking the FreeBSD operating system release" >&5
 echo $ECHO_N "checking the FreeBSD operating system release... $ECHO_C" >&6
 		if test -n "$with_os_version"; then
@@ -2352,32 +2497,33 @@ echo $ECHO_N "checking which thread library to use... $ECHO_C" >&6
 		fi
 		echo "$as_me:$LINENO: result: $PTHREAD_LIBS" >&5
 echo "${ECHO_T}$PTHREAD_LIBS" >&6
+		_os=FreeBSD
 		;;
-	"OSF1")
+	osf)
 		test_x=dontknow
-      		test_cups=no
+		test_cups=no
+		_os=OSF1
 		;;
-	"NetBSD")
+	netbsd)
 		test_x=yes
 		test_gtk=yes
-      		test_kde=yes
-      		test_cups=no
+		test_kde=yes
+		test_cups=no
 		PTHREAD_CFLAGS="-pthread"
 		PTHREAD_LIBS="-pthread -lpthread"
+		_os=NetBSD
 		;;
-	"IRIX")
+	irix*)
 		test_x=yes
-      		test_cups=no
+		test_cups=no
+		_os=IRIX
 		;;
-	"IRIX64")
+	aix*)
 		test_x=yes
-      		test_cups=no
-		;;
-	"AIX")
-		test_x=yes
-      		test_cups=no
-	   	PTHREAD_LIBS=-pthread
+		test_cups=no
+	   PTHREAD_LIBS=-pthread
 		echo "AIX is an alpha port --- Use at own risk" >> warn
+		_os=AIX
 		;;
    *)
    { { echo "$as_me:$LINENO: error: $_os operating system is not suitable to build OpenOffice.org!" >&5
@@ -15294,7 +15440,7 @@ elif test "$_os" = "Linux" -o "$_os" = "FreeBSD"; then
       XINERAMA_LINK=dynamic
    elif test -e "$XLIB/libXinerama.a"; then
       # static version
-      if test "`uname -m`" = "i586" -o "`uname -m`" = "i686"; then
+      if echo $build_cpu | grep -E 'i[3456]86' 2>/dev/null >/dev/null; then
          USE_XINERAMA=YES
          XINERAMA_LINK=static
       else
@@ -15802,37 +15948,6 @@ echo "$as_me: error: No compiler found." >&2;}
 fi
 
 
-echo "$as_me:$LINENO: checking for solenv environment" >&5
-echo $ECHO_N "checking for solenv environment... $ECHO_C" >&6
-if test -z "$with_local_solenv"; then
-   LOCAL_SOLENV="DEFAULT"
-   echo "$as_me:$LINENO: result: default" >&5
-echo "${ECHO_T}default" >&6
-else
-   LOCAL_SOLENV=$with_local_solenv
-   echo "$as_me:$LINENO: result: $with_local_solenv" >&5
-echo "${ECHO_T}$with_local_solenv" >&6
-fi
-
-
-if test "$LOCAL_SOLENV" = "DEFAULT"; then
-  _solenv="../solenv"
-else
-  _solenv="$LOCAL_SOLENV"
-fi
-
-if test -e $_solenv/inc/minor.mk; then
-   # Get UPD number from ../solenv/inc/minor.mk
-   UPD="`grep RSCVERSION= ../solenv/inc/minor.mk | $AWK -F"=" '{ print $2 }'`"
-
-   SOURCEVERSION="`grep SOURCEVERSION= ../solenv/inc/minor.mk | $AWK -F"=" '{ print $2 }'`"
-
-else
-   { { echo "$as_me:$LINENO: error: $_solenv/inc/minor.mk missing. Needed for proper environment script generation..." >&5
-echo "$as_me: error: $_solenv/inc/minor.mk missing. Needed for proper environment script generation..." >&2;}
-   { (exit 1); exit 1; }; }
-fi
-
 echo "$as_me:$LINENO: checking solver path" >&5
 echo $ECHO_N "checking solver path... $ECHO_C" >&6
 if test -z "$with_local_solver"; then
@@ -15848,6 +15963,8 @@ fi
 
 
 
+# make sure config.guess is +x; we execute config.guess, so it has to be so;
+chmod +x $_solenv/bin/config.guess
 
           ac_config_files="$ac_config_files set_soenv"
 cat >confcache <<\_ACEOF
@@ -16486,6 +16603,21 @@ s,@ECHO_T@,$ECHO_T,;t t
 s,@LIBS@,$LIBS,;t t
 s,@AWK@,$AWK,;t t
 s,@SED@,$SED,;t t
+s,@LOCAL_SOLENV@,$LOCAL_SOLENV,;t t
+s,@UPD@,$UPD,;t t
+s,@SOURCEVERSION@,$SOURCEVERSION,;t t
+s,@build@,$build,;t t
+s,@build_cpu@,$build_cpu,;t t
+s,@build_vendor@,$build_vendor,;t t
+s,@build_os@,$build_os,;t t
+s,@host@,$host,;t t
+s,@host_cpu@,$host_cpu,;t t
+s,@host_vendor@,$host_vendor,;t t
+s,@host_os@,$host_os,;t t
+s,@target@,$target,;t t
+s,@target_cpu@,$target_cpu,;t t
+s,@target_vendor@,$target_vendor,;t t
+s,@target_os@,$target_os,;t t
 s,@OSVERSION@,$OSVERSION,;t t
 s,@PTHREAD_CFLAGS@,$PTHREAD_CFLAGS,;t t
 s,@PTHREAD_LIBS@,$PTHREAD_LIBS,;t t
@@ -16660,9 +16792,6 @@ s,@WITH_LANG@,$WITH_LANG,;t t
 s,@WITH_DICT@,$WITH_DICT,;t t
 s,@ENABLE_STATIC_GTK@,$ENABLE_STATIC_GTK,;t t
 s,@CUSTOM_IMAGE_SETS@,$CUSTOM_IMAGE_SETS,;t t
-s,@LOCAL_SOLENV@,$LOCAL_SOLENV,;t t
-s,@UPD@,$UPD,;t t
-s,@SOURCEVERSION@,$SOURCEVERSION,;t t
 s,@LOCAL_SOLVER@,$LOCAL_SOLVER,;t t
 s,@LIBOBJS@,$LIBOBJS,;t t
 s,@LTLIBOBJS@,$LTLIBOBJS,;t t
