@@ -2,9 +2,9 @@
  *
  *  $RCSfile: custsdlg.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2001-05-10 06:23:27 $
+ *  last change: $Author: kz $ $Date: 2001-05-17 08:13:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,7 +141,7 @@ ModalDialog DLG_CUSTOMSHOW
         TabStop = TRUE ;
         Text [ portuguese ] = "E~liminar" ;
         Text [ english_us ] = "~Delete" ;
-        Text [ portuguese_brazilian ] = "~Löschen" ;
+        Text [ portuguese_brazilian ] = "~L?chen" ;
         Text [ swedish ] = "~Radera" ;
         Text [ danish ] = "Slet" ;
         Text [ italian ] = "~Elimina" ;
@@ -235,7 +235,7 @@ ModalDialog DLG_CUSTOMSHOW
         DefButton = TRUE ;
         Text [ portuguese ] = "~Fechar" ;
         Text [ english_us ] = "~Close" ;
-        Text [ portuguese_brazilian ] = "~Schließen" ;
+        Text [ portuguese_brazilian ] = "~Schlie?en" ;
         Text [ swedish ] = "~Stäng" ;
         Text [ danish ] = "Luk" ;
         Text [ italian ] = "~Chiudi" ;
@@ -270,7 +270,7 @@ ModalDialog DLG_CUSTOMSHOW
         Text [ ENGLISH ] = "~Use Custom Show" ;
         TabStop = TRUE ;
         Text [ english_us ] = "~Use Custom Slide Show" ;
-        Text [ portuguese_brazilian ] = "~Individuelle Präsentation benutzen" ;
+        Text [ portuguese_brazilian ] = "~Individuelle Pr?sentation benutzen" ;
         Text [ swedish ] = "Använd ~individuell bildskärmspresentation" ;
         Text [ danish ] = "Brug individuel præsentation" ;
         Text [ italian ] = "Usa presentaz~ione su schermo personalizzata" ;
@@ -292,7 +292,7 @@ ModalDialog DLG_CUSTOMSHOW
         Text[ finnish ] = "~Käytä mukautettua diaesitystä";
     };
     Text [ english_us ] = "Custom Slide Shows" ;
-    Text [ portuguese_brazilian ] = "Individuelle Präsentationen" ;
+    Text [ portuguese_brazilian ] = "Individuelle Pr?sentationen" ;
     Text [ swedish ] = "Individuella bildskärmspresentationer" ;
     Text [ danish ] = "Individuel præsentation" ;
     Text [ italian ] = "Presentazioni su schermo personalizzate" ;
@@ -415,7 +415,7 @@ ModalDialog DLG_DEFINE_CUSTOMSHOW
         Text = "Seiten der Präsentation" ;
         Text [ ENGLISH ] = "Document Pages" ;
         Text [ english_us ] = "Existing slides" ;
-        Text [ portuguese_brazilian ] = "Seiten der Präsentation" ;
+        Text [ portuguese_brazilian ] = "Seiten der Pr?sentation" ;
         Text [ swedish ] = "Presentationens sidor" ;
         Text [ danish ] = "Præsentationens sider" ;
         Text [ italian ] = "Pagine della presentazione" ;
@@ -444,7 +444,7 @@ ModalDialog DLG_DEFINE_CUSTOMSHOW
         Text [ ENGLISH ] = "Custom Show" ;
         Text [ portuguese ] = "Diapositivos seleccionados" ;
         Text [ english_us ] = "Selected slides" ;
-        Text [ portuguese_brazilian ] = "Individuelle Präsentation" ;
+        Text [ portuguese_brazilian ] = "Individuelle Pr?sentation" ;
         Text [ swedish ] = "Individuell presentation" ;
         Text [ danish ] = "Individuel præsentation" ;
         Text [ italian ] = "Presentazione personalizzata" ;
@@ -465,7 +465,7 @@ ModalDialog DLG_DEFINE_CUSTOMSHOW
         Text[ finnish ] = "Valitut diat";
     };
     Text [ english_us ] = "Define Custom Slide Show" ;
-    Text [ portuguese_brazilian ] = "Individuelle Präsentation definieren" ;
+    Text [ portuguese_brazilian ] = "Individuelle Pr?sentation definieren" ;
     Text [ swedish ] = "Definiera individuell bildskärmspresentation" ;
     Text [ danish ] = "Definer individuel præsentation" ;
     Text [ italian ] = "Definisci presentazione su schermo personalizzata" ;
@@ -475,7 +475,7 @@ ModalDialog DLG_DEFINE_CUSTOMSHOW
     Text [ portuguese ] = "Definir apresentação personalizada" ;
     Text[ chinese_simplified ] = "¶¨Òå×Ô¶¨µÄÑÝÊ¾ÎÄ¸å";
     Text[ russian ] = "Îïðåäåëèòü ïðîèçâîëüíóþ äåìîíñòðàöèþ";
-    Text[ polish ] = "Okreœl indywidualne pokazy slajdów";
+    Text[ polish ] = "Okre?l indywidualne pokazy slajdów";
     Text[ japanese ] = "–Ú“I•Ê½×²ÄÞ¼®°‚Ì’è‹`•t‚¯";
     Text[ chinese_traditional ] = "©w¸q­Ó¤HÂ²³ø";
     Text[ arabic ] = "ÊÚÑíÝ ÇáÚÑÖ ÇáÊÞÏíãí ÇáãÎÕÕ";
