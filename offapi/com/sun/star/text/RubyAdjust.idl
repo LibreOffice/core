@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RubyAdjust.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: os $ $Date: 2001-02-02 10:46:59 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 00:12:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@
 
 /** These enumeration values describe the adjustment of ruby text.
  */
-enum RubyAdjust
+published enum RubyAdjust
 {
     //-------------------------------------------------------------------------
     /** adjusted to the left.
