@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLConverter.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-09 09:44:27 $
+ *  last change: $Author: dr $ $Date: 2000-11-10 09:57:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -601,6 +601,84 @@ void ScXMLConverter::GetStringFromOrientation(
         break;
     }
     AssignString( rString, sOrientStr, bAppendStr );
+}
+
+
+//___________________________________________________________________
+
+ScDetectiveObjType ScXMLConverter::GetDetObjTypeFromString( const OUString& rString )
+{
+    if( rString.compareToAscii( sXML_from_same_table ) == 0 )
+        return SC_DETOBJ_ARROW;
+    if( rString.compareToAscii( sXML_from_another_table ) == 0 )
+        return SC_DETOBJ_FROMOTHERTAB;
+    if( rString.compareToAscii( sXML_to_another_table ) == 0 )
+        return SC_DETOBJ_TOOTHERTAB;
+    return SC_DETOBJ_NONE;
+}
+
+ScDetOpType ScXMLConverter::GetDetOpTypeFromString( const OUString& rString )
+{
+    if( rString.compareToAscii( sXML_trace_dependents ) == 0 )
+        return SCDETOP_ADDSUCC;
+    if( rString.compareToAscii( sXML_trace_precedents ) == 0 )
+        return SCDETOP_ADDPRED;
+    if( rString.compareToAscii( sXML_remove_dependents ) == 0 )
+        return SCDETOP_DELSUCC;
+    if( rString.compareToAscii( sXML_remove_precedents ) == 0 )
+        return SCDETOP_DELPRED;
+    return SCDETOP_ADDERROR;
+}
+
+
+//___________________________________________________________________
+
+void ScXMLConverter::GetStringFromDetObjType(
+        OUString& rString,
+        const ScDetectiveObjType eObjType,
+        sal_Bool bAppendStr )
+{
+    OUString sTypeStr;
+    switch( eObjType )
+    {
+        case SC_DETOBJ_ARROW:
+            sTypeStr = OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_from_same_table ) );
+        break;
+        case SC_DETOBJ_FROMOTHERTAB:
+            sTypeStr = OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_from_another_table ) );
+        break;
+        case SC_DETOBJ_TOOTHERTAB:
+            sTypeStr = OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_to_another_table ) );
+        break;
+    }
+    AssignString( rString, sTypeStr, bAppendStr );
+}
+
+void ScXMLConverter::GetStringFromDetOpType(
+        OUString& rString,
+        const ScDetOpType eOpType,
+        sal_Bool bAppendStr )
+{
+    OUString sTypeStr;
+    switch( eOpType )
+    {
+        case SCDETOP_ADDSUCC:
+            sTypeStr = OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_trace_dependents ) );
+        break;
+        case SCDETOP_ADDPRED:
+            sTypeStr = OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_trace_precedents ) );
+        break;
+        case SCDETOP_ADDERROR:
+            sTypeStr = OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_trace_errors ) );
+        break;
+        case SCDETOP_DELSUCC:
+            sTypeStr = OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_remove_dependents ) );
+        break;
+        case SCDETOP_DELPRED:
+            sTypeStr = OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_remove_precedents ) );
+        break;
+    }
+    AssignString( rString, sTypeStr, bAppendStr );
 }
 
 

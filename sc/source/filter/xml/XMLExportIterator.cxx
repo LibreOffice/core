@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportIterator.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-09 09:44:27 $
+ *  last change: $Author: dr $ $Date: 2000-11-10 09:57:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,22 +166,24 @@ sal_Bool ScMyShapesContainer::GetFirstAddress( table::CellAddress& rCellAddress 
 
 void ScMyShapesContainer::SetCellData( ScMyCell& rMyCell )
 {
-    rMyCell.aShapes.clear();
+    rMyCell.aShapeVec.clear();
     ScAddress aAddress;
     ScUnoConversion::FillScAddress( aAddress, rMyCell.aCellAddress );
 
     ScMyShapeVec::iterator aItr = aShapeVec.begin();
     while( (aItr != aShapeVec.end()) && (aItr->aAddress == aAddress) )
     {
-        rMyCell.aShapes.push_back(*aItr);
+        rMyCell.aShapeVec.push_back(*aItr);
         aItr = aShapeVec.erase(aItr);
     }
-    rMyCell.bHasShape = (rMyCell.aShapes.size() != 0);
+    rMyCell.bHasShape = (rMyCell.aShapeVec.size() != 0);
 }
 
 sal_Bool LessMyShape(const ScMyShape& aShape1, const ScMyShape& aShape2)
 {
-    if( aShape1.aAddress.Row() != aShape2.aAddress.Row() )
+    if( aShape1.aAddress.Tab() != aShape2.aAddress.Tab() )
+        return (aShape1.aAddress.Tab() < aShape2.aAddress.Tab());
+    else if( aShape1.aAddress.Row() != aShape2.aAddress.Row() )
         return (aShape1.aAddress.Row() < aShape2.aAddress.Row());
     else
         return (aShape1.aAddress.Col() < aShape2.aAddress.Col());
@@ -261,7 +263,9 @@ void ScMyMergedRangesContainer::SetCellData( ScMyCell& rMyCell )
 
 sal_Bool LessMyMergedRange(const ScMyMergedRange& aRange1, const ScMyMergedRange& aRange2)
 {
-    if( aRange1.aCellRange.StartRow != aRange2.aCellRange.StartRow )
+    if( aRange1.aCellRange.Sheet != aRange2.aCellRange.Sheet )
+        return (aRange1.aCellRange.Sheet < aRange2.aCellRange.Sheet);
+    else if( aRange1.aCellRange.StartRow != aRange2.aCellRange.StartRow )
         return (aRange1.aCellRange.StartRow < aRange2.aCellRange.StartRow);
     else
         return (aRange1.aCellRange.StartColumn < aRange2.aCellRange.StartColumn);
@@ -409,7 +413,9 @@ void ScMyEmptyDatabaseRangesContainer::SetCellData( ScMyCell& rMyCell )
 
 sal_Bool LessMyEmptyDatabaseRange(const table::CellRangeAddress& aRange1, const table::CellRangeAddress& aRange2)
 {
-    if( aRange1.StartRow != aRange2.StartRow )
+    if( aRange1.Sheet != aRange2.Sheet )
+        return (aRange1.Sheet < aRange2.Sheet);
+    else if( aRange1.StartRow != aRange2.StartRow )
         return (aRange1.StartRow < aRange2.StartRow);
     else
         return (aRange1.StartColumn < aRange2.StartColumn);
@@ -857,14 +863,147 @@ void ScMyValidationsContainer::Sort()
 
 //==============================================================================
 
+sal_Bool ScMyDetectiveObj::operator<(
+        const ScMyDetectiveObj& rDetObj1,
+        const ScMyDetectiveObj& rDetObj2 )
+{
+    if( rDetObj1.aPosition.Sheet != rDetObj2.aPosition.Sheet )
+        return (rDetObj1.aPosition.Sheet < rDetObj2.aPosition.Sheet);
+    else if( rDetObj1.aPosition.Row != rDetObj2.aPosition.Row )
+        return (rDetObj1.aPosition.Row < rDetObj2.aPosition.Row);
+    else
+        return (rDetObj1.aPosition.Column != rDetObj2.aPosition.Column);
+}
+
+ScMyDetectiveObjContainer::ScMyDetectiveObjContainer() :
+    aDetectiveObjVec()
+{
+}
+
+ScMyDetectiveObjContainer::~ScMyDetectiveObjContainer()
+{
+}
+
+void ScMyDetectiveObjContainer::AddObject( ScDetectiveObjType eObjType, const ScAddress& rPosition,
+                                            const ScRange& rSourceRange, sal_Bool bHasError )
+{
+    if( (eObjType == SC_DETOBJ_ARROW) ||
+        (eObjType == SC_DETOBJ_FROMOTHERTAB) ||
+        (eObjType == SC_DETOBJ_TOOTHERTAB) )
+    {
+        ScMyDetectiveObj aDetObj;
+        aDetObj.eObjType = eObjType;
+        if( eObjType == SC_DETOBJ_TOOTHERTAB )
+            ScUnoConversion::FillApiAddress( aDetObj.aPosition, rSourceRange.aStart );
+        else
+            ScUnoConversion::FillApiAddress( aDetObj.aPosition, rPosition );
+        ScUnoConversion::FillApiRange( aDetObj.aSourceRange, rSourceRange );
+        aDetObj.bHasError = bHasError;
+        aDetectiveObjVec.push_back( aDetObj );
+    }
+}
+
+sal_Bool ScMyDetectiveObjContainer::GetFirstAddress( table::CellAddress& rCellAddress )
+{
+    sal_Int16 nTable = rCellAddress.Sheet;
+    if( aDetectiveObjVec.size() )
+    {
+        rCellAddress = aDetectiveObjVec[0].aPosition;
+        return (nTable == rCellAddress.Sheet);
+    }
+    return sal_False;
+}
+
+void ScMyDetectiveObjContainer::SetCellData( ScMyCell& rMyCell )
+{
+    rMyCell.aDetectiveObjVec.clear();
+    ScMyDetectiveObjVec::iterator aItr = aDetectiveObjVec.begin();
+    while( (aItr != aDetectiveObjVec.end()) && (aItr->aPosition == rMyCell.aCellAddress) )
+    {
+        rMyCell.aDetectiveObjVec.push_back( *aItr );
+        aItr = aDetectiveObjVec.erase( aItr );
+    }
+    rMyCell.bHasDetectiveObj = (rMyCell.aDetectiveObjVec.size() != 0);
+}
+
+void ScMyDetectiveObjContainer::Sort()
+{
+    ::std::sort( aDetectiveObjVec.begin(), aDetectiveObjVec.end(), ScMyDetectiveObj::operator< );
+}
+
+//==============================================================================
+
+sal_Bool ScMyDetectiveOp::operator<(
+        const ScMyDetectiveOp& rDetOp1,
+        const ScMyDetectiveOp& rDetOp2 )
+{
+    if( rDetOp1.aPosition.Sheet != rDetOp2.aPosition.Sheet )
+        return (rDetOp1.aPosition.Sheet < rDetOp2.aPosition.Sheet);
+    else if( rDetOp1.aPosition.Row != rDetOp2.aPosition.Row )
+        return (rDetOp1.aPosition.Row < rDetOp2.aPosition.Row);
+    else
+        return (rDetOp1.aPosition.Column != rDetOp2.aPosition.Column);
+}
+
+ScMyDetectiveOpContainer::ScMyDetectiveOpContainer() :
+    aDetectiveOpVec()
+{
+}
+
+ScMyDetectiveOpContainer::~ScMyDetectiveOpContainer()
+{
+}
+
+void ScMyDetectiveOpContainer::AddOperation( ScDetOpType eOpType, const ScAddress& rPosition )
+{
+    ScMyDetectiveOp aDetOp;
+    aDetOp.eOpType = eOpType;
+    ScUnoConversion::FillApiAddress( aDetOp.aPosition, rPosition );
+    aDetOp.nIndex = aDetectiveOpVec.size();
+    aDetectiveOpVec.push_back( aDetOp );
+}
+
+sal_Bool ScMyDetectiveOpContainer::GetFirstAddress( table::CellAddress& rCellAddress )
+{
+    sal_Int16 nTable = rCellAddress.Sheet;
+    if( aDetectiveOpVec.size() )
+    {
+        rCellAddress = aDetectiveOpVec[0].aPosition;
+        return (nTable == rCellAddress.Sheet);
+    }
+    return sal_False;
+}
+
+void ScMyDetectiveOpContainer::SetCellData( ScMyCell& rMyCell )
+{
+    rMyCell.aDetectiveOpVec.clear();
+    ScMyDetectiveOpVec::iterator aItr = aDetectiveOpVec.begin();
+    while( (aItr != aDetectiveOpVec.end()) && (aItr->aPosition == rMyCell.aCellAddress) )
+    {
+        rMyCell.aDetectiveOpVec.push_back( *aItr );
+        aItr = aDetectiveOpVec.erase( aItr );
+    }
+    rMyCell.bHasDetectiveOp = (rMyCell.aDetectiveOpVec.size() != 0);
+}
+
+void ScMyDetectiveOpContainer::Sort()
+{
+    ::std::sort( aDetectiveOpVec.begin(), aDetectiveOpVec.end(), ScMyDetectiveOp::operator< );
+}
+
+//==============================================================================
+
 ScMyCell::ScMyCell() :
-    aShapes(),
+    aShapeVec(),
+    aDetectiveObjVec(),
     bHasShape( sal_False ),
     bIsMergedBase( sal_False ),
     bIsCovered( sal_False ),
     bHasAreaLink( sal_False ),
     bHasEmptyDatabase( sal_False ),
     nValidationIndex( -1 ),
+    bHasDetectiveObj( sal_False ),
+    bHasDetectiveOp( sal_False ),
     bIsMatrixBase( sal_False ),
     bIsMatrixCovered( sal_False ),
     bHasAnnotation( sal_False )
@@ -885,6 +1024,8 @@ ScMyNotEmptyCellsIterator::ScMyNotEmptyCellsIterator(ScXMLExport& rTempXMLExport
     pAreaLinks(NULL),
     pEmptyDatabaseRanges(NULL),
     pValidations(NULL),
+    pDetectiveObj(NULL),
+    pDetectiveOp(NULL),
     nCurrentTable(-1)
 {
 }
@@ -893,31 +1034,6 @@ ScMyNotEmptyCellsIterator::~ScMyNotEmptyCellsIterator()
 {
     if (pCellItr)
         delete pCellItr;
-}
-
-void ScMyNotEmptyCellsIterator::SetShapes(ScMyShapesContainer* pTempShapes)
-{
-    pShapes = pTempShapes;
-}
-
-void ScMyNotEmptyCellsIterator::SetEmptyDatabaseRanges(ScMyEmptyDatabaseRangesContainer* pTempEmptyDatabaseRanges)
-{
-    pEmptyDatabaseRanges = pTempEmptyDatabaseRanges;
-}
-
-void ScMyNotEmptyCellsIterator::SetMergedRanges(ScMyMergedRangesContainer* pTempMergedRanges)
-{
-    pMergedRanges = pTempMergedRanges;
-}
-
-void ScMyNotEmptyCellsIterator::SetAreaLinks(ScMyAreaLinksContainer* pNewAreaLinks)
-{
-    pAreaLinks = pNewAreaLinks;
-}
-
-void ScMyNotEmptyCellsIterator::SetValidations(ScMyValidationsContainer* pTempValidations)
-{
-    pValidations = pTempValidations;
 }
 
 void ScMyNotEmptyCellsIterator::UpdateAddress( table::CellAddress& rAddress )
@@ -1014,6 +1130,10 @@ sal_Bool ScMyNotEmptyCellsIterator::GetNext(ScMyCell& aCell)
         pAreaLinks->UpdateAddress( aAddress );
     if( pValidations )
         pValidations->UpdateAddress( aAddress );
+    if( pDetectiveObj )
+        pDetectiveObj->UpdateAddress( aAddress );
+    if( pDetectiveOp )
+        pDetectiveOp->UpdateAddress( aAddress );
 
     sal_Bool bFoundCell = (aAddress.Column <= MAXCOL) && (aAddress.Row <= MAXROW);
     if( bFoundCell )
@@ -1029,6 +1149,10 @@ sal_Bool ScMyNotEmptyCellsIterator::GetNext(ScMyCell& aCell)
             pAreaLinks->SetCellData( aCell );
         if( pValidations )
             pValidations->SetCellData( aCell );
+        if( pDetectiveObj )
+            pDetectiveObj->SetCellData( aCell );
+        if( pDetectiveOp )
+            pDetectiveOp->SetCellData( aCell );
 
         SetMatrixCellData( aCell );
         HasAnnotation( aCell );

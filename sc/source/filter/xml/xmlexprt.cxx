@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-08 12:56:05 $
+ *  last change: $Author: dr $ $Date: 2000-11-10 09:57:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -952,6 +952,23 @@ void ScXMLExport::GetAreaLinks( uno::Reference< sheet::XSpreadsheetDocument>& xS
     rAreaLinks.Sort();
 }
 
+// core implementation
+void ScXMLExport::GetDetectiveOpList( ScMyDetectiveOpContainer& rDetOp )
+{
+    ScDetOpList* pOpList = pDoc->GetDetOpList();
+    if( pOpList )
+    {
+        sal_Int32 nCount = pOpList->Count();
+        for( sal_Int32 nIndex = 0; nIndex < nCount; nIndex++ )
+        {
+            ScDetOpData* pDetData = pOpList->GetObject( nIndex );
+            if( pDetData )
+                rDetOp.AddOperation( pDetData->GetOperation(), pDetData->GetPos() );
+        }
+        rDetOp.Sort();
+    }
+}
+
 sal_Bool ScXMLExport::GetxCurrentShapes(uno::Reference<container::XIndexAccess>& xShapes)
 {
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xCurrentTable, uno::UNO_QUERY);
@@ -1467,11 +1484,14 @@ void ScXMLExport::_ExportContent()
             ScMyAreaLinksContainer aAreaLinks;
             GetAreaLinks( xSpreadDoc, aAreaLinks );
             ScMyEmptyDatabaseRangesContainer aEmptyRanges = GetEmptyDatabaseRanges();
+            ScMyDetectiveOpContainer aDetectiveOpContainer;
+            GetDetectiveOpList( aDetectiveOpContainer );
 
             aCellStyles.Sort();
             aShapesContainer.Sort();
             aMergedRangesContainer.Sort();
             aValidationsContainer.Sort();
+            aDetectiveObjContainer.Sort();
 
             ScMyNotEmptyCellsIterator aCellsItr(*this);
             pCellsItr = &aCellsItr;
@@ -1480,6 +1500,8 @@ void ScXMLExport::_ExportContent()
             aCellsItr.SetAreaLinks( &aAreaLinks );
             aCellsItr.SetEmptyDatabaseRanges( &aEmptyRanges );
             aCellsItr.SetValidations( &aValidationsContainer );
+            aCellsItr.SetDetectiveObj( &aDetectiveObjContainer );
+            aCellsItr.SetDetectiveOp( &aDetectiveOpContainer );
 
             if (nTableCount > 0)
                 aValidationsContainer.WriteValidations(*this);
@@ -1983,13 +2005,20 @@ void ScXMLExport::_ExportMasterStyles()
 
 void ScXMLExport::CollectInternalShape( uno::Reference< drawing::XShape > xShape )
 {
-    // detective
+    // detective objects
     SvxShape* pShapeImp = SvxShape::getImplementation( xShape );
     if( pShapeImp )
     {
         SdrObject *pObject = pShapeImp->GetSdrObject();
         if( pObject )
         {
+            ScDetectiveFunc aDetFunc( pDoc, nCurrentTable );
+            ScAddress       aPosition;
+            ScRange         aSourceRange;
+            sal_Bool        bRedLine;
+            ScDetectiveObjType eObjType = aDetFunc.GetDetectiveObjectType(
+                pObject, aPosition, aSourceRange, bRedLine );
+            aDetectiveObjContainer.AddObject( eObjType, aPosition, aSourceRange, bRedLine );
         }
     }
 }
@@ -2280,10 +2309,9 @@ void ScXMLExport::WriteCell (const ScMyCell& aCell)
     {
         SvXMLElementExport aElemC(*this, XML_NAMESPACE_TABLE, sXML_covered_table_cell, sal_True, sal_True);
         CheckAttrList();
-        if (aCell.bHasAreaLink)
-            WriteAreaLink(aCell.aAreaLink);
-        if (aCell.bHasAnnotation)
-            WriteAnnotation(aCell.xCell);
+        WriteAreaLink(aCell);
+        WriteAnnotation(aCell);
+        WriteDetective(aCell);
         if (!bIsEmpty)
         {
             if (IsEditCell(aCell.xCell))
@@ -2300,8 +2328,7 @@ void ScXMLExport::WriteCell (const ScMyCell& aCell)
                     GetDocHandler()->characters(sOUText);
             }
         }
-        if (aCell.bHasShape)
-            WriteShapes(aCell);
+        WriteShapes(aCell);
     }
     else
     {
@@ -2318,11 +2345,9 @@ void ScXMLExport::WriteCell (const ScMyCell& aCell)
         }
         SvXMLElementExport aElemC(*this, XML_NAMESPACE_TABLE, sXML_table_cell, sal_True, sal_True);
         CheckAttrList();
-
-        if (aCell.bHasAreaLink)
-            WriteAreaLink(aCell.aAreaLink);
-        if (aCell.bHasAnnotation)
-            WriteAnnotation(aCell.xCell);
+        WriteAreaLink(aCell);
+        WriteAnnotation(aCell);
+        WriteDetective(aCell);
         if (!bIsEmpty)
         {
             if (IsEditCell(aCell.xCell))
@@ -2340,91 +2365,130 @@ void ScXMLExport::WriteCell (const ScMyCell& aCell)
                     GetDocHandler()->characters(sOUText);
             }
         }
-        if (aCell.bHasShape)
-            WriteShapes(aCell);
+        WriteShapes(aCell);
     }
 }
 
-void ScXMLExport::WriteShapes(const ScMyCell& aCell)
+void ScXMLExport::WriteShapes(const ScMyCell& rMyCell)
 {
-    if (xCurrentShapes.is())
+    if( rMyCell.bHasShape && xCurrentShapes.is() && rMyCell.aShapeVec.size() && pDoc )
     {
-        if (aCell.aShapes.size())
+        awt::Point aPoint;
+        Rectangle aRec = pDoc->GetMMRect(rMyCell.aCellAddress.Column, rMyCell.aCellAddress.Row,
+            rMyCell.aCellAddress.Column, rMyCell.aCellAddress.Row, rMyCell.aCellAddress.Sheet);
+        aPoint.X = aRec.Left();
+        aPoint.Y = aRec.Top();
+        awt::Point* pPoint = &aPoint;
+        ScMyShapeVec::const_iterator aItr = rMyCell.aShapeVec.begin();
+        while (aItr != rMyCell.aShapeVec.end())
         {
-            if (pDoc)
-            {
-                awt::Point aPoint;
-                Rectangle aRec = pDoc->GetMMRect(aCell.aCellAddress.Column, aCell.aCellAddress.Row,
-                    aCell.aCellAddress.Column, aCell.aCellAddress.Row, aCell.aCellAddress.Sheet);
-                aPoint.X = aRec.Left();
-                aPoint.Y = aRec.Top();
-                awt::Point* pPoint = &aPoint;
-                std::vector<ScMyShape>::const_iterator aItr = aCell.aShapes.begin();
-                while (aItr != aCell.aShapes.end())
-                {
-                    uno::Any aAny = xCurrentShapes->getByIndex(aItr->nIndex);
-                    uno::Reference<drawing::XShape> xShape;
-                    if (aAny >>= xShape)
-                        GetShapeExport()->exportShape(xShape/*, pPoint*/);
-                    aItr++;
-                }
-            }
+            uno::Any aAny = xCurrentShapes->getByIndex(aItr->nIndex);
+            uno::Reference<drawing::XShape> xShape;
+            if (aAny >>= xShape)
+                GetShapeExport()->exportShape(xShape/*, pPoint*/);
+            aItr++;
         }
     }
 }
 
-void ScXMLExport::WriteAreaLink( const ScMyAreaLink& rAreaLink )
+void ScXMLExport::WriteAreaLink( const ScMyCell& rMyCell )
 {
-    AddAttribute( XML_NAMESPACE_TABLE, sXML_name, rAreaLink.sSourceStr );
-    AddAttribute( XML_NAMESPACE_XLINK, sXML_href, rAreaLink.sURL );
-    AddAttribute( XML_NAMESPACE_TABLE, sXML_filter_name, rAreaLink.sFilter );
-    if( rAreaLink.sFilterOptions.getLength() )
-        AddAttribute( XML_NAMESPACE_TABLE, sXML_filter_options, rAreaLink.sFilterOptions );
-    OUStringBuffer sValue;
-    SvXMLUnitConverter::convertNumber( sValue, rAreaLink.GetColCount() );
-    AddAttribute( XML_NAMESPACE_TABLE, sXML_last_column_spanned, sValue.makeStringAndClear() );
-    SvXMLUnitConverter::convertNumber( sValue, rAreaLink.GetRowCount() );
-    AddAttribute( XML_NAMESPACE_TABLE, sXML_last_row_spanned, sValue.makeStringAndClear() );
-    SvXMLElementExport aElem( *this, XML_NAMESPACE_TABLE, sXML_cell_range_source, sal_True, sal_True );
+    if( rMyCell.bHasAreaLink )
+    {
+        const ScMyAreaLink& rAreaLink = rMyCell.aAreaLink;
+        AddAttribute( XML_NAMESPACE_TABLE, sXML_name, rAreaLink.sSourceStr );
+        AddAttribute( XML_NAMESPACE_XLINK, sXML_href, rAreaLink.sURL );
+        AddAttribute( XML_NAMESPACE_TABLE, sXML_filter_name, rAreaLink.sFilter );
+        if( rAreaLink.sFilterOptions.getLength() )
+            AddAttribute( XML_NAMESPACE_TABLE, sXML_filter_options, rAreaLink.sFilterOptions );
+        OUStringBuffer sValue;
+        SvXMLUnitConverter::convertNumber( sValue, rAreaLink.GetColCount() );
+        AddAttribute( XML_NAMESPACE_TABLE, sXML_last_column_spanned, sValue.makeStringAndClear() );
+        SvXMLUnitConverter::convertNumber( sValue, rAreaLink.GetRowCount() );
+        AddAttribute( XML_NAMESPACE_TABLE, sXML_last_row_spanned, sValue.makeStringAndClear() );
+        SvXMLElementExport aElem( *this, XML_NAMESPACE_TABLE, sXML_cell_range_source, sal_True, sal_True );
+    }
 }
 
-void ScXMLExport::WriteAnnotation(const uno::Reference<table::XCell>& xCell)
+void ScXMLExport::WriteAnnotation(const ScMyCell& rMyCell)
 {
-    uno::Reference<sheet::XSheetAnnotationAnchor> xSheetAnnotationAnchor(xCell, uno::UNO_QUERY);
-    if (xSheetAnnotationAnchor.is())
+    if( rMyCell.bHasAnnotation )
     {
-        uno::Reference <sheet::XSheetAnnotation> xSheetAnnotation = xSheetAnnotationAnchor->getAnnotation();
-        uno::Reference<text::XSimpleText> xSimpleText(xSheetAnnotation, uno::UNO_QUERY);
-        if (xSheetAnnotation.is() && xSimpleText.is())
+        uno::Reference<sheet::XSheetAnnotationAnchor> xSheetAnnotationAnchor(rMyCell.xCell, uno::UNO_QUERY);
+        if (xSheetAnnotationAnchor.is())
         {
-            rtl::OUString sText = xSimpleText->getString();
-            if (sText.getLength())
+            uno::Reference <sheet::XSheetAnnotation> xSheetAnnotation = xSheetAnnotationAnchor->getAnnotation();
+            uno::Reference<text::XSimpleText> xSimpleText(xSheetAnnotation, uno::UNO_QUERY);
+            if (xSheetAnnotation.is() && xSimpleText.is())
             {
-                AddAttribute(XML_NAMESPACE_OFFICE, sXML_author, xSheetAnnotation->getAuthor());
-                String aDate(xSheetAnnotation->getDate());
-                if (pDoc)
+                rtl::OUString sText = xSimpleText->getString();
+                if (sText.getLength())
                 {
-                    SvNumberFormatter* pNumForm = pDoc->GetFormatTable();
-                    double fDate;
-                    sal_uInt32 nfIndex = pNumForm->GetFormatIndex(NF_DATE_SYS_DDMMYYYY, LANGUAGE_SYSTEM);
-                    if (pNumForm->IsNumberFormat(aDate, nfIndex, fDate))
+                    AddAttribute(XML_NAMESPACE_OFFICE, sXML_author, xSheetAnnotation->getAuthor());
+                    String aDate(xSheetAnnotation->getDate());
+                    if (pDoc)
                     {
-                        rtl::OUStringBuffer sBuf;
-                        GetMM100UnitConverter().convertDateTime(sBuf, fDate);
-                        AddAttribute(XML_NAMESPACE_OFFICE, sXML_create_date, sBuf.makeStringAndClear());
+                        SvNumberFormatter* pNumForm = pDoc->GetFormatTable();
+                        double fDate;
+                        sal_uInt32 nfIndex = pNumForm->GetFormatIndex(NF_DATE_SYS_DDMMYYYY, LANGUAGE_SYSTEM);
+                        if (pNumForm->IsNumberFormat(aDate, nfIndex, fDate))
+                        {
+                            rtl::OUStringBuffer sBuf;
+                            GetMM100UnitConverter().convertDateTime(sBuf, fDate);
+                            AddAttribute(XML_NAMESPACE_OFFICE, sXML_create_date, sBuf.makeStringAndClear());
+                        }
+                        else
+                            AddAttribute(XML_NAMESPACE_OFFICE, sXML_create_date_string, rtl::OUString(aDate));
                     }
                     else
                         AddAttribute(XML_NAMESPACE_OFFICE, sXML_create_date_string, rtl::OUString(aDate));
+                    if (!xSheetAnnotation->getIsVisible())
+                        AddAttributeASCII(XML_NAMESPACE_OFFICE, sXML_display, sXML_false);
+                    SvXMLElementExport aElemA(*this, XML_NAMESPACE_OFFICE, sXML_annotation, sal_True, sal_False);
+                    GetDocHandler()->characters(sText);
                 }
-                else
-                    AddAttribute(XML_NAMESPACE_OFFICE, sXML_create_date_string, rtl::OUString(aDate));
-                if (!xSheetAnnotation->getIsVisible())
-                    AddAttributeASCII(XML_NAMESPACE_OFFICE, sXML_display, sXML_false);
-                SvXMLElementExport aElemA(*this, XML_NAMESPACE_OFFICE, sXML_annotation, sal_True, sal_False);
-                GetDocHandler()->characters(sText);
+            }
+            CheckAttrList();
+        }
+    }
+}
+
+void ScXMLExport::WriteDetective( const ScMyCell& rMyCell )
+{
+    if( rMyCell.bHasDetectiveObj || rMyCell.bHasDetectiveOp )
+    {
+        const ScMyDetectiveObjVec& rObjVec = rMyCell.aDetectiveObjVec;
+        const ScMyDetectiveOpVec& rOpVec = rMyCell.aDetectiveOpVec;
+        sal_Int32 nObjCount = rObjVec.size();
+        sal_Int32 nOpCount = rOpVec.size();
+        if( nObjCount || nOpCount )
+        {
+            SvXMLElementExport aDetElem( *this, XML_NAMESPACE_TABLE, sXML_detective, sal_True, sal_True );
+            OUString sString;
+            for( ScMyDetectiveObjVec::const_iterator aObjItr = rObjVec.begin(); aObjItr != rObjVec.end(); aObjItr++ )
+            {
+                if( aObjItr->eObjType == SC_DETOBJ_ARROW )
+                {
+                    ScXMLConverter::GetStringFromRange( sString, aObjItr->aSourceRange, pDoc );
+                    AddAttribute( XML_NAMESPACE_TABLE, sXML_cell_range_address, sString );
+                }
+                ScXMLConverter::GetStringFromDetObjType( sString, aObjItr->eObjType );
+                AddAttribute( XML_NAMESPACE_TABLE, sXML_direction, sString );
+                if( aObjItr->bHasError )
+                    AddAttributeASCII( XML_NAMESPACE_TABLE, sXML_contains_error, sXML_true );
+                SvXMLElementExport aRangeElem( *this, XML_NAMESPACE_TABLE, sXML_highlighted_range, sal_True, sal_True );
+            }
+            OUStringBuffer aBuffer;
+            for( ScMyDetectiveOpVec::const_iterator aOpItr = rOpVec.begin(); aOpItr != rOpVec.end(); aOpItr++ )
+            {
+                OUString sString;
+                ScXMLConverter::GetStringFromDetOpType( sString, aOpItr->eOpType );
+                AddAttribute( XML_NAMESPACE_TABLE, sXML_name, sString );
+                SvXMLUnitConverter::convertNumber( aBuffer, aOpItr->nIndex );
+                AddAttribute( XML_NAMESPACE_TABLE, sXML_index, aBuffer.makeStringAndClear() );
+                SvXMLElementExport aRangeElem( *this, XML_NAMESPACE_TABLE, sXML_operation, sal_True, sal_True );
             }
         }
-        CheckAttrList();
     }
 }
 
@@ -2507,7 +2571,8 @@ sal_Bool ScXMLExport::IsCellEqual (const ScMyCell& aCell1, const ScMyCell& aCell
         aCell1.bHasAnnotation == aCell2.bHasAnnotation &&
         !aCell1.bHasShape && !aCell2.bHasShape &&
         aCell1.nValidationIndex == aCell2.nValidationIndex &&
-        aCell1.bHasAreaLink == aCell2.bHasAreaLink)
+        aCell1.bHasAreaLink == aCell2.bHasAreaLink &&
+        !aCell1.bHasDetectiveObj && !aCell2.bHasDetectiveObj)
     {
         if( aCell1.bHasAreaLink &&
             (aCell1.aAreaLink.GetColCount() == 1) &&

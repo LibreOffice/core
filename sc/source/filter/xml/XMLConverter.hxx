@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLConverter.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-09 09:44:27 $
+ *  last change: $Author: dr $ $Date: 2000-11-10 09:57:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,12 @@
 
 #ifndef SC_SCGLOB_HXX
 #include "global.hxx"
+#endif
+#ifndef SC_DETFUNC_HXX
+#include "detfunc.hxx"
+#endif
+#ifndef SC_DETDATA_HXX
+#include "detdata.hxx"
 #endif
 
 #ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
@@ -237,6 +243,23 @@ public:
     static void         GetStringFromOrientation(
                             ::rtl::OUString& rString,
                             const ::com::sun::star::sheet::DataPilotFieldOrientation eOrientation,
+                            sal_Bool bAppendStr = sal_False );
+
+// IMPORT: Detective
+    static ScDetectiveObjType
+                        GetDetObjTypeFromString(
+                            const ::rtl::OUString& rString );
+    static ScDetOpType  GetDetOpTypeFromString(
+                            const ::rtl::OUString& rString );
+
+// EXPORT: Detective
+    static void         GetStringFromDetObjType(
+                            ::rtl::OUString& rString,
+                            const ScDetectiveObjType eObjType,
+                            sal_Bool bAppendStr = sal_False );
+    static void         GetStringFromDetOpType(
+                            ::rtl::OUString& rString,
+                            const ScDetOpType eOpType,
                             sal_Bool bAppendStr = sal_False );
 
 // IMPORT: Formulas

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-08 12:56:05 $
+ *  last change: $Author: dr $ $Date: 2000-11-10 09:57:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -310,6 +310,7 @@ class ScXMLExport : public SvXMLExport
     ScMyShapesContainer         aShapesContainer;
     ScMyMergedRangesContainer   aMergedRangesContainer;
     ScMyValidationsContainer    aValidationsContainer;
+    ScMyDetectiveObjContainer   aDetectiveObjContainer;
     ScMyNotEmptyCellsIterator*  pCellsItr;
 
     virtual void _ExportStyles( sal_Bool bUsed );
@@ -326,6 +327,7 @@ class ScXMLExport : public SvXMLExport
                                                         const sal_Int16 nTable);
     ScMyEmptyDatabaseRangesContainer GetEmptyDatabaseRanges();
     void GetAreaLinks( com::sun::star::uno::Reference< com::sun::star::sheet::XSpreadsheetDocument>& xSpreadDoc, ScMyAreaLinksContainer& rAreaLinks );
+    void GetDetectiveOpList( ScMyDetectiveOpContainer& rDetOp );
     sal_Bool GetxCurrentShapes(com::sun::star::uno::Reference<com::sun::star::container::XIndexAccess>& xShapes);
     void WriteColumn(const sal_Int32 nRepeatColumns, const sal_Int32 nStyleIndex, const sal_Bool bIsVisible);
     void OpenHeaderColumn();
@@ -361,9 +363,10 @@ class ScXMLExport : public SvXMLExport
     rtl::OUString GetPrintRanges();
 
     void WriteCell (const ScMyCell& aCell);
-    void WriteAreaLink(const ScMyAreaLink& rAreaLink);
-    void WriteAnnotation(const com::sun::star::uno::Reference<com::sun::star::table::XCell>& xCell);
-    void WriteShapes(const ScMyCell& aCell);
+    void WriteAreaLink(const ScMyCell& rMyCell);
+    void WriteAnnotation(const ScMyCell& rMyCell);
+    void WriteDetective(const ScMyCell& rMyCell);
+    void WriteShapes(const ScMyCell& rMyCell);
     void SetRepeatAttribute (const sal_Int32 nEqualCellCount);
 
     sal_Bool IsCellTypeEqual (const com::sun::star::uno::Reference <com::sun::star::table::XCell>& xCell1,

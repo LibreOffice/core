@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportIterator.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-08 12:56:05 $
+ *  last change: $Author: dr $ $Date: 2000-11-10 09:57:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,12 @@
 
 #ifndef SC_SCGLOB_HXX
 #include "global.hxx"
+#endif
+#ifndef SC_DETFUNC_HXX
+#include "detfunc.hxx"
+#endif
+#ifndef SC_DETDATA_HXX
+#include "detdata.hxx"
 #endif
 
 class   ScHorizontalCellIterator;
@@ -299,6 +305,75 @@ public:
 
 //==============================================================================
 
+struct ScMyDetectiveObj
+{
+    ::com::sun::star::table::CellAddress        aPosition;
+    ::com::sun::star::table::CellRangeAddress   aSourceRange;
+    ScDetectiveObjType                          eObjType;
+    sal_Bool                                    bHasError;
+
+    static sal_Bool             operator<(
+                                    const ScMyDetectiveObj& rDetObj1,
+                                    const ScMyDetectiveObj& rDetObj2 );
+};
+
+typedef ::std::vector< ScMyDetectiveObj > ScMyDetectiveObjVec;
+
+class ScMyDetectiveObjContainer : ScMyIteratorBase
+{
+private:
+    ScMyDetectiveObjVec         aDetectiveObjVec;
+protected:
+    virtual sal_Bool            GetFirstAddress( ::com::sun::star::table::CellAddress& rCellAddress );
+public:
+                                ScMyDetectiveObjContainer();
+    virtual                     ~ScMyDetectiveObjContainer();
+
+    void                        AddObject(
+                                    ScDetectiveObjType eObjType,
+                                    const ScAddress& rPosition,
+                                    const ScRange& rSourceRange,
+                                    sal_Bool bHasError );
+
+                                ScMyIteratorBase::UpdateAddress;
+    virtual void                SetCellData( ScMyCell& rMyCell );
+    virtual void                Sort();
+};
+
+//==============================================================================
+
+struct ScMyDetectiveOp
+{
+    ::com::sun::star::table::CellAddress    aPosition;
+    ScDetOpType                             eOpType;
+    sal_Int32                               nIndex;
+
+    static sal_Bool             operator<(
+                                    const ScMyDetectiveOp& rDetOp1,
+                                    const ScMyDetectiveOp& rDetOp2 );
+};
+
+typedef ::std::vector< ScMyDetectiveOp > ScMyDetectiveOpVec;
+
+class ScMyDetectiveOpContainer : ScMyIteratorBase
+{
+private:
+    ScMyDetectiveOpVec          aDetectiveOpVec;
+protected:
+    virtual sal_Bool            GetFirstAddress( ::com::sun::star::table::CellAddress& rCellAddress );
+public:
+                                ScMyDetectiveOpContainer();
+    virtual                     ~ScMyDetectiveOpContainer();
+
+    void                        AddOperation( ScDetOpType eOpType, const ScAddress& rPosition );
+
+                                ScMyIteratorBase::UpdateAddress;
+    virtual void                SetCellData( ScMyCell& rMyCell );
+    virtual void                Sort();
+};
+
+//==============================================================================
+
 // contains data to export for the current cell position
 struct ScMyCell
 {
@@ -308,7 +383,9 @@ struct ScMyCell
     com::sun::star::table::CellRangeAddress aMatrixRange;
 
     ScMyAreaLink                aAreaLink;
-    std::vector<ScMyShape>      aShapes;
+    ScMyShapeVec                aShapeVec;
+    ScMyDetectiveObjVec         aDetectiveObjVec;
+    ScMyDetectiveOpVec          aDetectiveOpVec;
     sal_Int32                   nValidationIndex;
 
     sal_Bool                    bHasShape;
@@ -316,6 +393,8 @@ struct ScMyCell
     sal_Bool                    bIsCovered;
     sal_Bool                    bHasAreaLink;
     sal_Bool                    bHasEmptyDatabase;
+    sal_Bool                    bHasDetectiveObj;
+    sal_Bool                    bHasDetectiveOp;
 
     sal_Bool                    bIsMatrixBase;
     sal_Bool                    bIsMatrixCovered;
@@ -336,6 +415,8 @@ class ScMyNotEmptyCellsIterator
     ScMyMergedRangesContainer*          pMergedRanges;
     ScMyAreaLinksContainer*             pAreaLinks;
     ScMyValidationsContainer*           pValidations;
+    ScMyDetectiveObjContainer*          pDetectiveObj;
+    ScMyDetectiveOpContainer*           pDetectiveOp;
 
     ScXMLExport&                rExport;
     ScHorizontalCellIterator*   pCellItr;
@@ -353,11 +434,21 @@ public:
                                 ScMyNotEmptyCellsIterator(ScXMLExport& rExport);
                                 ~ScMyNotEmptyCellsIterator();
 
-    void                        SetShapes(ScMyShapesContainer* pShapes);
-    void                        SetEmptyDatabaseRanges(ScMyEmptyDatabaseRangesContainer* pEmptyDatabaseRanges);
-    void                        SetMergedRanges(ScMyMergedRangesContainer* pMergedRanges);
-    void                        SetAreaLinks(ScMyAreaLinksContainer* pAreaLinks);
-    void                        SetValidations(ScMyValidationsContainer* pValidations);
+    inline void                 SetShapes(ScMyShapesContainer* pNewShapes)
+                                    { pShapes = pNewShapes; }
+    inline void                 SetEmptyDatabaseRanges(ScMyEmptyDatabaseRangesContainer* pNewEmptyDatabaseRanges)
+                                    { pEmptyDatabaseRanges = pNewEmptyDatabaseRanges; }
+    inline void                 SetMergedRanges(ScMyMergedRangesContainer* pNewMergedRanges)
+                                    { pMergedRanges = pNewMergedRanges; }
+    inline void                 SetAreaLinks(ScMyAreaLinksContainer* pNewAreaLinks)
+                                    { pAreaLinks = pNewAreaLinks; }
+    inline void                 SetValidations(ScMyValidationsContainer* pNewValidations)
+                                    { pValidations = pNewValidations; }
+    inline void                 SetDetectiveObj(ScMyDetectiveObjContainer* pNewDetectiveObj)
+                                    { pDetectiveObj = pNewDetectiveObj; }
+    inline void                 SetDetectiveOp(ScMyDetectiveOpContainer* pNewDetectiveOp)
+                                    { pDetectiveOp = pNewDetectiveOp; }
+
     void                        SetCurrentTable(const sal_Int32 nTable);
 
     sal_Bool                    GetNext(ScMyCell& aCell);
