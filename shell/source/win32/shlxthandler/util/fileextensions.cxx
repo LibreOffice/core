@@ -1,0 +1,125 @@
+/*************************************************************************
+ *
+ *  $RCSfile: fileextensions.cxx,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: hr $ $Date: 2004-04-07 11:17:17 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef FILEEXTENSIONS_HXX_INCLUDED
+#include "internal/fileextensions.hxx"
+#endif
+
+//------------------------------------
+//
+//------------------------------------
+
+const std::string WRITER_FILE_EXTENSIONS  = "sxwstwsxg";
+const std::string CALC_FILE_EXTENSIONS    = "sxcstc";
+const std::string DRAW_FILE_EXTENSIONS    = "sxdstd";
+const std::string IMPRESS_FILE_EXTENSIONS = "sxisti";
+const std::string MATH_FILE_EXTENSIONS    = "sxm";
+
+FileExtensionEntry OOFileExtensionTable[] = {
+    { ".sxw", L".sxw", "soffice.StarWriterDocument.6"      },
+    { ".sxc", L".sxc", "soffice.StarCalcDocument.6"        },
+    { ".sxi", L".sxi", "soffice.StarImpressDocument.6"     },
+    { ".sxd", L".sxd", "soffice.StarDrawDocument.6"        },
+    { ".sxm", L".sxm", "soffice.StarMathDocument.6"        },
+    { ".stw", L".stw", "soffice.StarWriterTemplate.6"      },
+    { ".sxg", L".sxg", "soffice.StarWriterGlobalDocument.6"},
+    { ".std", L".std", "soffice.StarDrawTemplate.6"        },
+    { ".sti", L".sti", "soffice.StarImpressTemplate.6"     },
+    { ".stc", L".stc", "soffice.StarCalcTemplate.6"        }};
+
+size_t OOFileExtensionTableSize = sizeof(OOFileExtensionTable)/sizeof(OOFileExtensionTable[0]);
+
+//---------------------------------
+/** Return the extension of a file
+    name without the '.'
+*/
+std::string get_file_name_extension(const std::string& file_name)
+{
+    std::string::size_type idx = file_name.find_last_of(".");
+
+    if (std::string::npos != idx++)
+        return std::string(file_name.begin() + idx, file_name.end());
+
+    return std::string();
+}
+
+//---------------------------------
+/** Return the type of a file
+*/
+
+File_Type_t get_file_type(const std::string& file_name)
+{
+    std::string fext = get_file_name_extension(file_name);
+
+    if (std::string::npos != WRITER_FILE_EXTENSIONS.find(fext))
+        return WRITER;
+    else if (std::string::npos != CALC_FILE_EXTENSIONS.find(fext))
+        return CALC;
+    else if (std::string::npos != DRAW_FILE_EXTENSIONS.find(fext))
+        return DRAW;
+    else if (std::string::npos != IMPRESS_FILE_EXTENSIONS.find(fext))
+        return IMPRESS;
+    else if (std::string::npos != MATH_FILE_EXTENSIONS.find(fext))
+        return MATH;
+    else
+        return UNKNOWN;
+}
+
