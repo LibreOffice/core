@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcnitm.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mib $ $Date: 2001-07-04 14:07:58 $
+ *  last change: $Author: cl $ $Date: 2002-02-05 13:47:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,7 +149,8 @@ BOOL SvXMLAttrContainerItem::PutValue( const com::sun::star::uno::Any& rVal, BYT
     {
         xRef = *(Reference<XInterface>*)rVal.getValue();
         Reference<XUnoTunnel> xTunnel(xRef, UNO_QUERY);
-        pContainer = (SvUnoAttributeContainer*)xTunnel->getSomething(SvUnoAttributeContainer::getUnoTunnelId());
+        if( xTunnel.is() )
+            pContainer = (SvUnoAttributeContainer*)xTunnel->getSomething(SvUnoAttributeContainer::getUnoTunnelId());
     }
 
     if( pContainer )
