@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chartins.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:24:19 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:01:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,7 @@ ModelessDialog DLG_INSERT_CHART
         Text[ czech ] = "Výběr";
         Text[ hebrew ] = "‮מבחר‬";
         Text[ hindi ] = "चुनाव";
+        Text[ slovak ] = "Výber";
     };
     FixedText FT_RANGE
     {
@@ -138,6 +139,7 @@ ModelessDialog DLG_INSERT_CHART
         Text[ czech ] = "Oblast";
         Text[ hebrew ] = "~Bereich";
         Text[ hindi ] = "~विस्तीर्ण";
+        Text[ slovak ] = "~Oblasť";
     };
     Edit ED_RANGE
     {
@@ -179,6 +181,7 @@ ModelessDialog DLG_INSERT_CHART
         Text[ czech ] = "První řádek jako popisek";
         Text[ hebrew ] = "Erste ~Zeile als Beschriftung";
         Text[ hindi ] = "~पहिला पंक्ति कॉप्शन् जैसे";
+        Text[ slovak ] = "P~rvý riadok ako popisok";
     };
     CheckBox CB_FIRST_COL
     {
@@ -214,6 +217,7 @@ ModelessDialog DLG_INSERT_CHART
         Text[ czech ] = "První sloupec jako popisek";
         Text[ hebrew ] = "Erste ~Spalte als Beschriftung";
         Text[ hindi ] = "पहिला स्तं~भ कॉप्शन् जैसे";
+        Text[ slovak ] = "Prvý s~tĺpec ako popisok";
     };
     FixedText FT_TEXT
     {
@@ -249,6 +253,7 @@ ModelessDialog DLG_INSERT_CHART
         Text[ czech ] = "Pokud označené buňky nereprezentují požadovaná data, označte oblast nyní.\nZahrňte buňky obsahující popisky sloupců a řádků, pokud je chcete mít ve svém grafu.";
         Text[ hebrew ] = "Falls die ausgewählten Zellen nicht die gewünschten Daten enthalten, wählen Sie jetzt den Bereich aus.\n\nBeziehen Sie die Zellen mit Spalten- bzw. Zeilenbeschriftungen mit ein, wenn Sie diese in Ihrer Grafik dargestellt haben möchten.";
         Text[ hindi ] = "अगर सूचित की हुयी कोष्ठें उद्देशित ड़ॉटा को प्रतिनिधित्व नहीं करता है, तो विस्तीर्ण को सूचित करो ।\nअगर आप चाहते है कि स्तंभ और पंक्ति लेबिलों को सम्मिलित की हुयी कोष्ठों को आपके चार्ट में सम्मिलित कर सकते है ।";
+        Text[ slovak ] = "Ak označené bunky nereprezentujú požadované údaje, označte správnu oblasť.\nZahrňte aj bunky obsahujúce popisy riadkov a stĺpcov, ak ich chcete mať v grafe.";
     };
     FixedLine FL_HLINE
     {
@@ -303,6 +308,7 @@ ModelessDialog DLG_INSERT_CHART
         Text[ czech ] = "<< Zpět";
         Text[ hebrew ] = "<< ‮הקודם‬";
         Text[ hindi ] = "<< ~पीछे";
+        Text[ slovak ] = "<< ~Späť";
     };
     PushButton BT_NEXT
     {
@@ -338,6 +344,7 @@ ModelessDialog DLG_INSERT_CHART
         Text[ czech ] = "Další >>";
         Text[ hebrew ] = "‮הבא‬ >>";
         Text[ hindi ] = "~आगे >>";
+        Text[ slovak ] = "Ďa~lší >>";
     };
     PushButton BT_FINISH
     {
@@ -372,6 +379,7 @@ ModelessDialog DLG_INSERT_CHART
         Text[ czech ] = "Vytvořit";
         Text[ hebrew ] = "~Fertig stellen";
         Text[ hindi ] = "~उत्पन्न करो";
+        Text[ slovak ] = "Vy~tvoriť";
     };
     Text [ italian ] = "Formattazione automatica diagramma (1-4)" ;
     Text [ spanish ] = "Formateado autom�tico de diagrama (1-4)" ;
@@ -398,7 +406,10 @@ ModelessDialog DLG_INSERT_CHART
     Text[ czech ] = "Automatický formát grafu (1-4)";
     Text[ hebrew ] = "Autoformat Diagramm (1-4)";
     Text[ hindi ] = "स्वचालित रचना का चार्ट (1-4)";
+    Text[ slovak ] = "Automatický formát grafu (1-4)";
 };
+
+
 
 
 
