@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XImplementationLoader.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 12:44:05 $
+ *  last change: $Author: mi $ $Date: 2002-12-10 10:31:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,7 @@ interface XImplementationLoader: com::sun::star::uno::XInterface
         @return returns a factory interface, which allows to create an instance of
                 the concrete implementation. In general, the object supports a
                 <type>com::sun::star::lang::XSingleComponentFactory</type>
-                and the <type>com::sun::star::lang::XServiceInfo</type> interface. The
+                and the <type scope="com::sun::star::lang">XServiceInfo</type> interface. The
                 XServiceInfo interface informs about the capabilities of the
                 service implementation, not the factory itself.
      */
@@ -157,6 +157,9 @@ interface XImplementationLoader: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2002/10/03 12:44:05  mi
+    #94968# IDL reviews merged
+
     Revision 1.5.16.1  2002/06/05 16:38:41  jbu
     documentation reviewed
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XComponent.idl,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: sb $ $Date: 2002-12-06 13:26:40 $
+ *  last change: $Author: mi $ $Date: 2002-12-10 10:31:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,8 @@ interface XComponent: com::sun::star::uno::XInterface
         in case it can comply with its specification (for instance addEventListener()).
         Often the object can't fulfill its specification anymore,
         in this case it must throw the <type>DisposedException</type>
-        (which is derived from <type>RuntimeException</type>) when it gets called.</p>
+        (which is derived from <type scope="com::sun::star::uno">RuntimeException</type>)
+    when it gets called.</p>
 
         <p>For some objects no real owner can be identified, thus it can be
         disposed from multiple reference holders. In this case
@@ -176,6 +177,9 @@ interface XComponent: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.11  2002/12/06 13:26:40  sb
+    #105668#, #105983# Clarified documentation.
+
     Revision 1.10  2002/08/05 09:33:56  mi
     add/remove...Listener more precisely specified for adding the same interface multiple times
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Locale.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-13 15:47:00 $
+ *  last change: $Author: mi $ $Date: 2002-12-10 10:31:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@ module com {  module sun {  module star {  module lang {
     <p> Because a <code>Locale</code> object is just an identifier for a
     region, no validity check is performed.  If you want to see whether
     particular resources are available for the <code>Locale</code>, use
-    the <code>XLocalize::getAvailableLocales</code> method to ask for the
+    the <method scope="com::sun::star::resource">XLocale::getAvailableLocales</method> method to ask for the
     locales it supports.</p>
 
     <p> <strong>Note:</strong> When you ask for a resource for a
@@ -93,7 +93,7 @@ module com {  module sun {  module star {  module lang {
 
     <p> Each implementation that performs locale-sensitive operations
     allows you to get all the available objects of that type. Use the
-    <type>XLocalize</type> interface to set the locale. </p>
+    <typed scope="com::sun::star::resource">XLocale</type> interface to set the locale. </p>
  */
 struct Locale
 {
@@ -153,6 +153,9 @@ struct Locale
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2000/12/13 15:47:00  mi
+    symtactical documentation and minor semantic documentation flaws fixed
+
     Revision 1.4  2000/11/08 12:28:41  mi
     moved from api
 

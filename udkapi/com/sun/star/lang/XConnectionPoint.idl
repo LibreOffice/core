@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XConnectionPoint.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:37 $
+ *  last change: $Author: mi $ $Date: 2002-12-10 10:31:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,7 +135,7 @@ module com {  module sun {  module star {  module lang {
 
         <LI>to obtain access to connection point sub-objects with the
             <type>XConnectionPoint</type> interface for each
-            outgoing type. Through the IConnectionPoint interface,
+            outgoing type. Through the XConnectionPoint interface,
             a client starts or terminates an advisory loop with the
             connectable object and the client's own sink.  The
             client can also use the <type>XConnectionPoint</type>
@@ -162,7 +162,7 @@ interface XConnectionPoint: com::sun::star::uno::XInterface
         this same connection point through
         <member>XConnectionPointContainer::findConnectionPoint</member>.
 
-        @see IConnectionPointContainer::FindConnectionPoint
+        @see XConnectionPointContainer::findConnectionPoint
      */
     type getConnectionType();
 
@@ -173,7 +173,7 @@ interface XConnectionPoint: com::sun::star::uno::XInterface
             the <type>XConnectionPointContainer</type> interface on
             the parent connectable object.
 
-        @see IConnectionPointContainer
+        @see XConnectionPointContainer
      */
     com::sun::star::lang::XConnectionPointContainer getConnectionPointContainer();
 
@@ -242,6 +242,9 @@ interface XConnectionPoint: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.8  2001/03/16 15:10:37  jsc
+    remove interfaceheader with uik and remove [const] in method definitions
+
     Revision 1.7  2001/01/31 09:45:41  mi
     TYPE_XIDLCLASS is now 'type'
 

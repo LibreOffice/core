@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XHierarchicalPropertySet.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 12:43:40 $
+ *  last change: $Author: mi $ $Date: 2002-12-10 10:31:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,10 +155,10 @@ interface XHierarchicalPropertySet: com::sun::star::uno::XInterface
                 nested name for this hierarchy.
                 An implementation is not required to detect the latter condition.
 
-        @throws com::sun::star::uno::lang::WrappedTargetException
+        @throws com::sun::star::lang::WrappedTargetException
                 if the implementation has an internal reason for the exception.
                 In this case the original exception is wrapped into that
-                <type scope="com::sun::star::uno::lang">WrappedTargetException</type>.
+                <type scope="com::sun::star::lang">WrappedTargetException</type>.
 
         @see XPropertySet::setPropertyValue
      */
@@ -186,10 +186,10 @@ interface XHierarchicalPropertySet: com::sun::star::uno::XInterface
                    An implementation is not required to detect this
                 condition.
 
-        @throws com::sun::star::uno::lang::WrappedTargetException
+        @throws com::sun::star::lang::WrappedTargetException
                 if the implementation has an internal reason for the exception.
                 In this case the original exception is wrapped into that
-                <type scope="com::sun::star::uno::lang">WrappedTargetException</type>.
+                <type scope="com::sun::star::lang">WrappedTargetException</type>.
 
         @see XPropertySet::getPropertyValue
      */

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XNameAccess.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 12:43:54 $
+ *  last change: $Author: mi $ $Date: 2002-12-10 10:31:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,7 @@ interface XNameAccess: com::sun::star::container::XElementAccess
 
         @throws  com::sun::star::lang::WrappedTargetException
             If the implementation has internal reasons for exceptions,
-            then wrap these in a <type>WrappedTargetException</type>
+            then wrap these in a <type scope="com::sun::star::lang">WrappedTargetException</type>
             exception.
      */
     any getByName( [in] string aName )

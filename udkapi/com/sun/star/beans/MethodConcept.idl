@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MethodConcept.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 12:43:37 $
+ *  last change: $Author: mi $ $Date: 2002-12-10 10:31:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,9 +118,9 @@ constants MethodConcept
         <p>These methods have the signature
         <code>create...Enumeration</code> and return an interface
         that is derived from <type scope="com::sun::star::container">
-        XEnumeration</type> Additionally, the method <member scope=
-        "com::sun::star::container">XEnumerationAccess::getElementType
-        </member> belongs to this concept.</p>
+        XEnumeration</type> Additionally, the method
+        <method scope="com::sun::star::container">XEnumerationAccess::getElementType</method>
+        belongs to this concept.</p>
      */
     const long ENUMERATION = 8;
 
@@ -134,7 +134,7 @@ constants MethodConcept
         <code>remove...ByName()</code>,
         <code>has...ByName()</code>, or
         <code>get...Names</code>.  In addition, the method
-        <member>XNameAccess::getElementType()</member>
+        <method scope="com::sun::star::container">XEnumerationAccess::getElementType</method>
         belongs to this concept. </p>
      */
     const long NAMECONTAINER = 16;

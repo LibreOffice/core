@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XAllListenerAdapterService.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 12:44:18 $
+ *  last change: $Author: mi $ $Date: 2002-12-10 10:31:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@ interface XAllListenerAdapterService: com::sun::star::uno::XInterface
         listener.
 
         To get the correct listener interface the returned
-        <type>com::sun::star::uno::XInterface</type> has to
+        <type scope="com::sun::star::uno">XInterface</type> has to
         be queried for it.
      */
     com::sun::star::uno::XInterface createAllListerAdapter( [in] type xListenerType,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XPropertiesChangeListener.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mi $ $Date: 2002-08-05 09:22:24 $
+ *  last change: $Author: mi $ $Date: 2002-12-10 10:31:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@ interface XPropertiesChangeListener: com::sun::star::lang::XEventListener
     /** gets called when bound properties are changed.
 
         @param aEvent
-            contains a sequence of <type>PropertiesChangeEvent</type> objects
+            contains a sequence of <type>PropertyChangeEvent</type> objects
             which describe the event source and the properites wich have
             changed.
      */

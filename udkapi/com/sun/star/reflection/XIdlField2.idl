@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XIdlField2.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2002-03-08 17:19:13 $
+ *  last change: $Author: mi $ $Date: 2002-12-10 10:31:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,7 +119,7 @@ interface XIdlField2: com::sun::star::reflection::XIdlMember
                 value of field
 
         @throws IllegalAccessException
-        An <type scope="com::sun::star::lang>IllegalAccessException</type>
+        An <type scope="com::sun::star::lang">IllegalAccessException</type>
         is thrown if the given object is no interface, enum or compound type;
         or the given object does not have the reflected field.
     */
@@ -136,7 +136,7 @@ interface XIdlField2: com::sun::star::reflection::XIdlMember
                value to be set
 
         @throws IllegalAccessException
-        An <type scope="com::sun::star::lang>IllegalAccessException</type>
+        An <type scope="com::sun::star::lang">IllegalAccessException</type>
         is thrown if the given object is no interface or compound type;
         or the given object does not have the reflected field.
     */
@@ -154,6 +154,9 @@ interface XIdlField2: com::sun::star::reflection::XIdlMember
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2002/03/08 17:19:13  dbo
+    #96711# reviewed reflection API documentation
+
     Revision 1.2  2001/11/16 15:02:57  mi
     proofing by Richard Holt
 

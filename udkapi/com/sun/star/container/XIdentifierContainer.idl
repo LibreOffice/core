@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XIdentifierContainer.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 12:43:52 $
+ *  last change: $Author: mi $ $Date: 2002-12-10 10:31:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@ interface XIdentifierContainer: com::sun::star::container::XIdentifierReplace
 
         @throws  com::sun::star::lang::WrappedTargetException
             If the implementation has internal reasons for exceptions,
-            then wrap these in a <type>WrappedTargetException</type>
+            then wrap these in a <type scope="com::sun::star::lang">WrappedTargetException</type>
             exception.
 
      */
@@ -129,7 +129,7 @@ interface XIdentifierContainer: com::sun::star::container::XIdentifierReplace
 
         @throws  com::sun::star::lang::WrappedTargetException
             If the implementation has internal reasons for exceptions,
-            then wrap these in a <type>WrappedTargetException</type>
+            then wrap these in a <type scope="com::sun::star::lang">WrappedTargetException</type>
             exception.
      */
     void removeByIdentifier( [in] long Identifier )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: InvocationInfo.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 12:44:17 $
+ *  last change: $Author: mi $ $Date: 2002-12-10 10:31:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ struct InvocationInfo
 
     /** Only for property members:
         This field may contain zero or more constants of the
-        <type>com::sun::star::beans::PropertyAttribute</type>
+        <type scope="com::sun::star::beans">PropertyAttribute</type>
         constants group. It is not guaranteed that all necessary
         constants are set to describe the property completely,
         but a flag will only be set, if the corresponding charac-

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NullPointerException.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-19 16:15:26 $
+ *  last change: $Author: mi $ $Date: 2002-12-10 10:31:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@
     <p>Applications should throw instances of this class to indicate
     other illegal uses of the <NULL/> object.  </p>
 
-    @see XIdlReflection::forName
+    @see com::sun::star::reflection::XIdlReflection::forName
  */
 exception NullPointerException: com::sun::star::uno::Exception
 {
@@ -92,6 +92,9 @@ exception NullPointerException: com::sun::star::uno::Exception
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.7  2000/12/19 16:15:26  mi
+    documentation syntax fixed
+
     Revision 1.6  2000/12/19 13:49:35  mi
     syntax errors in documentation fixed
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TypeDescriptionManager.idl,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jsc $ $Date: 2002-12-03 17:20:50 $
+ *  last change: $Author: mi $ $Date: 2002-12-10 10:31:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@
 /** This service manages type descriptions and acts as a central access point
     to every type description.  It delegates calls for demanded types to
     subsequent
-    <type scope="com::sun::star::reflection>TypeDescriptionProvider</type>s
+    <type scope="com::sun::star::reflection">TypeDescriptionProvider</type>s
     and may cache type descriptions.<br>
     Using cppuhelper's bootstrapping routines bootstrapping an initial
     component context, there is a singleton accessable via key
@@ -136,6 +136,9 @@ service TypeDescriptionManager
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.11  2002/12/03 17:20:50  jsc
+    #105668# remove incompatibilities
+
     Revision 1.10  2002/11/11 08:30:08  kso
     #104677# - Introduced/modified for Type Description Manager/Provider Enumeration
                Interface.
