@@ -2,9 +2,9 @@
  *
  *  $RCSfile: authratr.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 18:12:34 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:27:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,9 +70,13 @@
 #include <tools/color.hxx>
 #endif
 
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
+#endif
+
 #define COL_NONE        TRGB_COLORDATA( 0x80, 0xFF, 0xFF, 0xFF )
 
-class AuthorCharAttr
+class SW_DLLPUBLIC AuthorCharAttr
 {
 public:
     USHORT  nItemId;
