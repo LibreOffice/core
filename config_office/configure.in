@@ -131,11 +131,6 @@ if test "$_os" = "SunOS"; then
       AC_MSG_RESULT([ok ($_os_release)])
    fi
 fi
-dnl !!! This configure script is not suitable for windows nt !!!
-if test "$_os" = "WINNT"
-then
-   AC_MSG_WARN([use the windows configure script.])
-fi
 dnl check whether we're using a sparc processor
 if test "$_os" = "SunOS"
 then
@@ -744,15 +739,17 @@ fi
 if test -z "$CYGWIN"; then
    CYGWIN="NO_CYGWIN"
 fi
+
 # Substituting blank spaces in windows pathnames with '#'
 if test "$_os" = "WINNT"; then
-   COMPATH=`echo $COMPATH | $SED "s/ /#/g"`
+#   COMPATH=`echo $COMPATH | $SED "s/ /#/g"`
    JAVA_HOME=`echo $JAVA_HOME | $SED "s/ /#/g"`
    PERL=`echo $PERL | $SED "s/ /#/g"`
    _LOCAL_SOLENV=`echo $_LOCAL_SOLENV | $SED "s/ /#/g"`
    _LOCAL_SOLVER=`echo $_LOCAL_SOLVER | $SED "s/ /#/g"`
    CYGWIN=`echo $CYGWIN | $SED "s/ /#/g"`
 fi
+
 # Print args passed to set_soenv.
 if test 1 = 1; then
 echo
@@ -774,9 +771,6 @@ fi
 # Executing the set_soenv script to setup the environment variables.
 if test -z "$enable_check_only"; then
    './set_soenv' $COMPATH $_gcc_include_path $_gxx_include_path $JAVA_HOME $TCSH $PERL $x_libraries $x_includes $_LOCAL_SOLENV $_LOCAL_SOLVER $upd $CYGWIN
-#   if test "$_os" = "WINNT"; then
-#     mv WindowsNTEnv.bat ..
-#   fi
 else
    echo
    echo Test Complete
