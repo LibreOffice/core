@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: cwsresync.pl,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2004-08-23 11:26:52 $
+#   last change: $Author: hr $ $Date: 2004-09-07 09:52:22 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -108,7 +108,7 @@ use CwsConfig;
 ( my $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
 my $script_rev;
-my $id_str = ' $Revision: 1.4 $ ';
+my $id_str = ' $Revision: 1.5 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -151,7 +151,9 @@ my $parameter_list = $log->array2string(";",@args_bak) if (defined $log);
 
 my ($dir, $milestone, @args) = parse_options();
 my $cws = get_and_verify_cws();
-verify_milestone_or_exit($cws, $milestone);
+if ( $milestone ) {
+    verify_milestone_or_exit($cws, $milestone);
+}
 my @action_list = parse_args($cws, $dir, @args);
 walk_action_list($cws, $dir, $milestone, @action_list);
 log_stats();
