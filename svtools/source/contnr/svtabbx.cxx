@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svtabbx.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:57 $
+ *  last change: $Author: gt $ $Date: 2002-08-22 07:52:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -596,6 +596,17 @@ long SvTabListBox::GetLogicTab( USHORT nTab )
 SvHeaderTabListBox::SvHeaderTabListBox( Window* pParent, WinBits nWinStyle ) :
 
     SvTabListBox( pParent, nWinStyle ),
+
+    mbFirstPaint( TRUE )
+
+{
+}
+
+// -----------------------------------------------------------------------
+
+SvHeaderTabListBox::SvHeaderTabListBox( Window* pParent, const ResId& rResId ) :
+
+    SvTabListBox( pParent, rResId ),
 
     mbFirstPaint( TRUE )
 
