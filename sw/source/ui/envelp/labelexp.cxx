@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labelexp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:25:22 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:51:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,10 @@
  *
  ************************************************************************/
 
+#ifdef SW_DLLIMPLEMENTATION
+#undef SW_DLLIMPLEMENTATION
+#endif
+
 
 #pragma hdrstop
 
@@ -106,6 +110,11 @@ using namespace ::comphelper;
 using namespace ::rtl;
 
 #define C2U(char) rtl::OUString::createFromAscii(char)
+
+#ifdef SW_PROP_NAME_STR
+#undef SW_PROP_NAME_STR
+#endif
+#define SW_PROP_NAME_STR(nId) SwGetPropName((nId)).pName
 
 /* -----------------08.07.99 15:15-------------------
 
