@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.50 $
+#   $Revision: 1.51 $
 #
-#   last change: $Author: vg $ $Date: 2002-04-05 09:39:19 $
+#   last change: $Author: vg $ $Date: 2002-04-09 08:00:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -69,15 +69,13 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 
 use Cwd;
 use Config;
-#use POSIX 'wait';
-#use POSIX 'waitpid';
-#use POSIX 'pause';
+use POSIX;
 
 #### script id #####
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.50 $ ';
+$id_str = ' $Revision: 1.51 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -120,10 +118,8 @@ $dlv_switch = '';
 $child = 0;
 $children = 0;
 %processes_hash = ();
-$SIG{CHLD} = '';
 
 &get_options;
-$SIG{CHLD} = \&handle_dead_child if ($QuantityToBuild);
 
 $deliver_commando = $ENV{DELIVER};
 $deliver_commando .= ' '. $dlv_switch;
@@ -269,8 +265,6 @@ sub BuildAll {
 sub dmake_dir {
     my ($DirToBuild, $BuildDir);
     $DirToBuild = shift;
-    #print "\n\n\nStarting $DirToBuild\n\n\n";
-    #print "$may_be_built\n";
     $BuildDir = &CorrectPath($StandDir . $PathHash{$DirToBuild});
     if ($cmd_file) {
         print "cd $BuildDir\n";
@@ -293,9 +287,8 @@ sub dmake_dir {
     if ($child) {
         my $oldfh = select STDERR;
         $| = 1;
-#select $oldfh;
-        POSIX::_exit($? >> 8) if ($? && ($? != -1));
-        POSIX::_exit(0);
+        _exit($? >> 8) if ($? && ($? != -1));
+        _exit(0);
     };
 };
 
@@ -516,21 +509,13 @@ sub cancel_build {
 # child handler (clears the terminated child)
 #
 sub handle_dead_child {
-    $SIG{CHLD} = \&handle_dead_child if (!$Config{d_sigaction});
-    use POSIX ":sys_wait_h";
     my $pid = 0;
-    WAITLOOP: {
-        if (($pid = POSIX::waitpid(-1, WNOHANG)) != -1) {
-            redo WAITLOOP if (!(defined $processes_hash{$pid}));
+    foreach (keys %processes_hash) {
+        if (($pid = waitpid($_, &WNOHANG)) > 0) {
             &cancel_build($?) if ($?);
             &clear_from_child($pid);
-            redo WAITLOOP;
         };
     };
-    #print "\n\nChild has been handled\n\n";
-#   print "Sending alarm\n";
-#   alarm(1);
-#   print "Sent alarm\n";
 };
 
 sub clear_from_child {
@@ -538,10 +523,8 @@ sub clear_from_child {
       &RemoveFromDependencies($processes_hash{$pid},
                             \%LocalDepsHash);
     delete $processes_hash{$pid};
-    &start_child;
     $children = scalar (keys %processes_hash);
     $only_dependent = 0;
-    print 'Running processes: ', $children, "\n";
 };
 
 sub start_child {
@@ -554,6 +537,7 @@ sub start_child {
             if ($pid = fork) { # parent
                 $processes_hash{$pid} = $child_dir;
                 $children = scalar (keys %processes_hash);
+                print 'Running processes: ', $children, "\n";
                 $child_dir = '';
             } elsif (defined $pid) { # child
                 $child = 1;
@@ -564,32 +548,30 @@ sub start_child {
 };
 
 #
+# Register signal handler & unblock SIGALRM
+#
+sub register_signal_handler {
+    $sigaction = POSIX::SigAction->new('main::handle_dead_child');
+    sigaction(SIGCHLD, $sigaction);
+};
+
+#
 # Build the entire project according to queue of dependencies
 #
 sub BuildDependent {
     my $pid = 0;
     while ($child_dir = &PickPrjToBuild(\%LocalDepsHash)) {
         if ($QuantityToBuild) { # multyprocessing
+            &register_signal_handler;
             while (!$no_projects) {
-                if ($only_dependent || ($children >= $QuantityToBuild)) {
-                    #print "******* Children: $children *******\n";
-                    #print "*******************************\n";
-                    #print "***** Parent is sleeping! *****\n";
-                    #print "*******************************\n";
-                    #alarm(1);
-                    sleep;
-                    #POSIX::pause();
-                    #print "*****************************\n";
-                    #print "***** Parent is awaken! *****\n";
-                    #print "*****************************\n";
-                    next;
-                };
                 &start_child;
+                sleep if ($only_dependent ||
+                            ($children >= $QuantityToBuild));
+            };
+            while ($children) {
+                sleep();
             };
             print STDERR "Multiprocessing build is finished\n";
-            do {
-                POSIX::sleep(1);
-            } while ($children);
         } else {
             &dmake_dir($child_dir);
         };
@@ -833,16 +815,16 @@ sub get_options {
         push (@dmake_args, $arg);
     };
     if ($build_from && $build_from_opt) {
-        &print_error('Switches -from an -from_opt collision');
+        &print_error('Switches -from and -from_opt collision');
     };
 
     if ($build_from && $build_since) {
-        &print_error('Switches -from an -since collision');
+        &print_error('Switches -from and -since collision');
     };
     @ARGV = @dmake_args;
     if ($show) {
         $cmd_file = '';
-        $QuantityToBuild = 0;
+#$QuantityToBuild = 0;
     };
     if (($ENV{GUI} eq 'WNT') && $QuantityToBuild) {
         $QuantityToBuild = 0;
