@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ResultSet.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-24 16:31:08 $
+ *  last change: $Author: jl $ $Date: 2001-03-20 17:03:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,7 +141,7 @@ jclass java_sql_ResultSet::theClass = 0;
 
 java_sql_ResultSet::~java_sql_ResultSet()
 {
-    SDBThreadAttach t; OSL_ENSHURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv )
     {
         char * cSignature = "()V";
@@ -157,9 +157,9 @@ jclass java_sql_ResultSet::getMyClass()
 {
     // die Klasse muss nur einmal geholt werden, daher statisch
     if( !theClass ){
-        SDBThreadAttach t; OSL_ENSHURE(t.pEnv,"Java Enviroment gelöscht worden!");
+        SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
         if( !t.pEnv ) return (jclass)0;
-        jclass tempClass = t.pEnv->FindClass("java/sql/ResultSet"); OSL_ENSHURE(tempClass,"Java : FindClass nicht erfolgreich!");
+        jclass tempClass = t.pEnv->FindClass("java/sql/ResultSet"); OSL_ENSURE(tempClass,"Java : FindClass nicht erfolgreich!");
         jclass globClass = (jclass)t.pEnv->NewGlobalRef( tempClass );
         t.pEnv->DeleteLocalRef( tempClass );
         saveClassRef( globClass );
@@ -204,7 +204,7 @@ void java_sql_ResultSet::disposing(void)
 sal_Int32 SAL_CALL java_sql_ResultSet::findColumn( const ::rtl::OUString& columnName ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     jint out(0);
-    SDBThreadAttach t; OSL_ENSHURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv ){
     jvalue args[1];
         // Parameter konvertieren
@@ -229,7 +229,7 @@ sal_Int32 SAL_CALL java_sql_ResultSet::findColumn( const ::rtl::OUString& column
 Reference< ::com::sun::star::io::XInputStream > SAL_CALL java_sql_ResultSet::getBinaryStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     jobject out(0);
-    SDBThreadAttach t; OSL_ENSHURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv )
     {
         // temporaere Variable initialisieren
@@ -250,7 +250,7 @@ Reference< ::com::sun::star::io::XInputStream > SAL_CALL java_sql_ResultSet::get
 Reference< ::com::sun::star::io::XInputStream > SAL_CALL java_sql_ResultSet::getCharacterStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     jobject out(0);
-    SDBThreadAttach t; OSL_ENSHURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv )
     {
         // temporaere Variable initialisieren
@@ -272,7 +272,7 @@ Reference< ::com::sun::star::io::XInputStream > SAL_CALL java_sql_ResultSet::get
 sal_Bool SAL_CALL java_sql_ResultSet::getBoolean( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     jboolean out(sal_False);
-    SDBThreadAttach t; OSL_ENSHURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv )
     {
         // temporaere Variable initialisieren
@@ -293,7 +293,7 @@ sal_Bool SAL_CALL java_sql_ResultSet::getBoolean( sal_Int32 columnIndex ) throw(
 sal_Int8 SAL_CALL java_sql_ResultSet::getByte( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     jbyte out;
-    SDBThreadAttach t; OSL_ENSHURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv )
     {
         // temporaere Variable initialisieren
@@ -314,7 +314,7 @@ sal_Int8 SAL_CALL java_sql_ResultSet::getByte( sal_Int32 columnIndex ) throw(SQL
 Sequence< sal_Int8 > SAL_CALL java_sql_ResultSet::getBytes( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
         Sequence< sal_Int8 > aSeq;
-    SDBThreadAttach t; OSL_ENSHURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv )
     {
         char * cSignature = "(I)[B";
@@ -341,7 +341,7 @@ Sequence< sal_Int8 > SAL_CALL java_sql_ResultSet::getBytes( sal_Int32 columnInde
 ::com::sun::star::util::Date SAL_CALL java_sql_ResultSet::getDate( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     jobject out(0);
-    SDBThreadAttach t; OSL_ENSHURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv )
     {
         // temporaere Variable initialisieren
@@ -363,7 +363,7 @@ Sequence< sal_Int8 > SAL_CALL java_sql_ResultSet::getBytes( sal_Int32 columnInde
 double SAL_CALL java_sql_ResultSet::getDouble( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     jdouble out;
-    SDBThreadAttach t; OSL_ENSHURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv )
     {
         // temporaere Variable initialisieren
@@ -384,7 +384,7 @@ double SAL_CALL java_sql_ResultSet::getDouble( sal_Int32 columnIndex ) throw(SQL
 float SAL_CALL java_sql_ResultSet::getFloat( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     jfloat out;
-    SDBThreadAttach t; OSL_ENSHURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv )
     {
         // temporaere Variable initialisieren
@@ -405,7 +405,7 @@ float SAL_CALL java_sql_ResultSet::getFloat( sal_Int32 columnIndex ) throw(SQLEx
 sal_Int32 SAL_CALL java_sql_ResultSet::getInt( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     jint out(0);
-    SDBThreadAttach t; OSL_ENSHURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv )
     {
         // temporaere Variable initialisieren
@@ -426,7 +426,7 @@ sal_Int32 SAL_CALL java_sql_ResultSet::getInt( sal_Int32 columnIndex ) throw(SQL
 sal_Int32 SAL_CALL java_sql_ResultSet::getRow(  ) throw(SQLException, RuntimeException)
 {
     jint out(0);
-    SDBThreadAttach t; OSL_ENSHURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv ){
         // temporaere Variable initialisieren
         char * cSignature = "()I";
@@ -446,7 +446,7 @@ sal_Int32 SAL_CALL java_sql_ResultSet::getRow(  ) throw(SQLException, RuntimeExc
 sal_Int64 SAL_CALL java_sql_ResultSet::getLong( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     jlong out;
-    SDBThreadAttach t; OSL_ENSHURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv ){
         // temporaere Variable initialisieren
         char * cSignature = "(I)J";
@@ -466,7 +466,7 @@ sal_Int64 SAL_CALL java_sql_ResultSet::getLong( sal_Int32 columnIndex ) throw(SQ
 ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData > SAL_CALL java_sql_ResultSet::getMetaData(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     jobject out(0);
-    SDBThreadAttach t; OSL_ENSHURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv )
 
     {
@@ -487,7 +487,7 @@ sal_Int64 SAL_CALL java_sql_ResultSet::getLong( sal_Int32 columnIndex ) throw(SQ
 Reference< XArray > SAL_CALL java_sql_ResultSet::getArray( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     jobject out(0);
-    SDBThreadAttach t; OSL_ENSHURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv ){
         // temporaere Variable initialisieren
         char * cSignature = "(I)Ljava/sql/Ref;";
@@ -508,7 +508,7 @@ Reference< XArray > SAL_CALL java_sql_ResultSet::getArray( sal_Int32 columnIndex
 Reference< XClob > SAL_CALL java_sql_ResultSet::getClob( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     jobject out(0);
-    SDBThreadAttach t; OSL_ENSHURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv ){
         // temporaere Variable initialisieren
         char * cSignature = "(I)Ljava/sql/Ref;";
@@ -528,7 +528,7 @@ Reference< XClob > SAL_CALL java_sql_ResultSet::getClob( sal_Int32 columnIndex )
 Reference< XBlob > SAL_CALL java_sql_ResultSet::getBlob( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     jobject out(0);
-    SDBThreadAttach t; OSL_ENSHURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv ){
         // temporaere Variable initialisieren
         char * cSignature = "(I)Ljava/sql/Ref;";
@@ -549,7 +549,7 @@ Reference< XBlob > SAL_CALL java_sql_ResultSet::getBlob( sal_Int32 columnIndex )
 Reference< XRef > SAL_CALL java_sql_ResultSet::getRef( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     jobject out(0);
-    SDBThreadAttach t; OSL_ENSHURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv ){
         // temporaere Variable initialisieren
         char * cSignature = "(I)Ljava/sql/Ref;";
@@ -570,7 +570,7 @@ Reference< XRef > SAL_CALL java_sql_ResultSet::getRef( sal_Int32 columnIndex ) t
 Any SAL_CALL java_sql_ResultSet::getObject( sal_Int32 columnIndex, const Reference< ::com::sun::star::container::XNameAccess >& typeMap ) throw(SQLException, RuntimeException)
 {
     jobject out(0);
-    SDBThreadAttach t; OSL_ENSHURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv ){
         jvalue args[2];
         // Parameter konvertieren
@@ -596,7 +596,7 @@ Any SAL_CALL java_sql_ResultSet::getObject( sal_Int32 columnIndex, const Referen
 sal_Int16 SAL_CALL java_sql_ResultSet::getShort( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     jshort out;
-    SDBThreadAttach t; OSL_ENSHURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv ){
         // temporaere Variable initialisieren
         char * cSignature = "(I)S";
@@ -617,7 +617,7 @@ sal_Int16 SAL_CALL java_sql_ResultSet::getShort( sal_Int32 columnIndex ) throw(S
 ::rtl::OUString SAL_CALL java_sql_ResultSet::getString( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     jstring out(0);
-    SDBThreadAttach t; OSL_ENSHURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     ::rtl::OUString aStr;
     if( t.pEnv ){
         // temporaere Variable initialisieren
@@ -642,7 +642,7 @@ sal_Int16 SAL_CALL java_sql_ResultSet::getShort( sal_Int32 columnIndex ) throw(S
 ::com::sun::star::util::Time SAL_CALL java_sql_ResultSet::getTime( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     jobject out(0);
-    SDBThreadAttach t; OSL_ENSHURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv )
     {
         // temporaere Variable initialisieren
@@ -665,7 +665,7 @@ sal_Int16 SAL_CALL java_sql_ResultSet::getShort( sal_Int32 columnIndex ) throw(S
 ::com::sun::star::util::DateTime SAL_CALL java_sql_ResultSet::getTimestamp( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     jobject out(0);
-    SDBThreadAttach t; OSL_ENSHURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv ){
         jvalue args[1];
         // Parameter konvertieren
@@ -689,7 +689,7 @@ sal_Int16 SAL_CALL java_sql_ResultSet::getShort( sal_Int32 columnIndex ) throw(S
 sal_Bool SAL_CALL java_sql_ResultSet::isAfterLast(  ) throw(SQLException, RuntimeException)
 {
     jboolean out(sal_False);
-    SDBThreadAttach t; OSL_ENSHURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv )
 
     {
@@ -709,7 +709,7 @@ sal_Bool SAL_CALL java_sql_ResultSet::isAfterLast(  ) throw(SQLException, Runtim
 sal_Bool SAL_CALL java_sql_ResultSet::isFirst(  ) throw(SQLException, RuntimeException)
 {
     jboolean out(sal_False);
-    SDBThreadAttach t; OSL_ENSHURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv )
 
     {
@@ -729,7 +729,7 @@ sal_Bool SAL_CALL java_sql_ResultSet::isFirst(  ) throw(SQLException, RuntimeExc
 sal_Bool SAL_CALL java_sql_ResultSet::isLast(  ) throw(SQLException, RuntimeException)
 {
     jboolean out(sal_False);
-    SDBThreadAttach t; OSL_ENSHURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv )
 
     {
@@ -748,7 +748,7 @@ sal_Bool SAL_CALL java_sql_ResultSet::isLast(  ) throw(SQLException, RuntimeExce
 // -------------------------------------------------------------------------
 void SAL_CALL java_sql_ResultSet::beforeFirst(  ) throw(SQLException, RuntimeException)
 {
-    SDBThreadAttach t; OSL_ENSHURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv )
 
     {
@@ -766,7 +766,7 @@ void SAL_CALL java_sql_ResultSet::beforeFirst(  ) throw(SQLException, RuntimeExc
 // -------------------------------------------------------------------------
 void SAL_CALL java_sql_ResultSet::afterLast(  ) throw(SQLException, RuntimeException)
 {
-    SDBThreadAttach t; OSL_ENSHURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv )
 
     {
@@ -785,7 +785,7 @@ void SAL_CALL java_sql_ResultSet::afterLast(  ) throw(SQLException, RuntimeExcep
 
 void SAL_CALL java_sql_ResultSet::close(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
-    SDBThreadAttach t; OSL_ENSHURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv )
     {
         // temporaere Variable initialisieren
@@ -804,7 +804,7 @@ void SAL_CALL java_sql_ResultSet::close(  ) throw(::com::sun::star::sdbc::SQLExc
 sal_Bool SAL_CALL java_sql_ResultSet::first(  ) throw(SQLException, RuntimeException)
 {
     jboolean out(sal_False);
-    SDBThreadAttach t; OSL_ENSHURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv )
     {
         // temporaere Variable initialisieren
@@ -824,7 +824,7 @@ sal_Bool SAL_CALL java_sql_ResultSet::first(  ) throw(SQLException, RuntimeExcep
 sal_Bool SAL_CALL java_sql_ResultSet::last(  ) throw(SQLException, RuntimeException)
 {
     jboolean out(sal_False);
-    SDBThreadAttach t; OSL_ENSHURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv )
     {
         // temporaere Variable initialisieren
@@ -843,7 +843,7 @@ sal_Bool SAL_CALL java_sql_ResultSet::last(  ) throw(SQLException, RuntimeExcept
 sal_Bool SAL_CALL java_sql_ResultSet::absolute( sal_Int32 row ) throw(SQLException, RuntimeException)
 {
     jboolean out(sal_False);
-    SDBThreadAttach t; OSL_ENSHURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv )
     {
         // temporaere Variable initialisieren
@@ -862,7 +862,7 @@ sal_Bool SAL_CALL java_sql_ResultSet::absolute( sal_Int32 row ) throw(SQLExcepti
 sal_Bool SAL_CALL java_sql_ResultSet::relative( sal_Int32 row ) throw(SQLException, RuntimeException)
 {
     jboolean out(sal_False);
-    SDBThreadAttach t; OSL_ENSHURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv )
     {
         // temporaere Variable initialisieren
@@ -881,7 +881,7 @@ sal_Bool SAL_CALL java_sql_ResultSet::relative( sal_Int32 row ) throw(SQLExcepti
 sal_Bool SAL_CALL java_sql_ResultSet::previous(  ) throw(SQLException, RuntimeException)
 {
     jboolean out(sal_False);
-    SDBThreadAttach t; OSL_ENSHURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv )
 
     {
@@ -901,7 +901,7 @@ sal_Bool SAL_CALL java_sql_ResultSet::previous(  ) throw(SQLException, RuntimeEx
 Reference< XInterface > SAL_CALL java_sql_ResultSet::getStatement(  ) throw(SQLException, RuntimeException)
 {
 //  jobject out(0);
-//  SDBThreadAttach t; OSL_ENSHURE(t.pEnv,"Java Enviroment gelöscht worden!");
+//  SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
 //  if( t.pEnv )
 //  {
 //      // temporaere Variable initialisieren
@@ -923,7 +923,7 @@ Reference< XInterface > SAL_CALL java_sql_ResultSet::getStatement(  ) throw(SQLE
 sal_Bool SAL_CALL java_sql_ResultSet::rowDeleted(  ) throw(SQLException, RuntimeException)
 {
     jboolean out(sal_False);
-    SDBThreadAttach t; OSL_ENSHURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv )
     {
         // temporaere Variable initialisieren
@@ -942,7 +942,7 @@ sal_Bool SAL_CALL java_sql_ResultSet::rowDeleted(  ) throw(SQLException, Runtime
 sal_Bool SAL_CALL java_sql_ResultSet::rowInserted(  ) throw(SQLException, RuntimeException)
 {
     jboolean out(sal_False);
-    SDBThreadAttach t; OSL_ENSHURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv )
     {
         // temporaere Variable initialisieren
@@ -961,7 +961,7 @@ sal_Bool SAL_CALL java_sql_ResultSet::rowInserted(  ) throw(SQLException, Runtim
 sal_Bool SAL_CALL java_sql_ResultSet::rowUpdated(  ) throw(SQLException, RuntimeException)
 {
     jboolean out(sal_False);
-    SDBThreadAttach t; OSL_ENSHURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv )
     {
         // temporaere Variable initialisieren
@@ -981,7 +981,7 @@ sal_Bool SAL_CALL java_sql_ResultSet::rowUpdated(  ) throw(SQLException, Runtime
 sal_Bool SAL_CALL java_sql_ResultSet::isBeforeFirst(  ) throw(SQLException, RuntimeException)
 {
     jboolean out(sal_False);
-    SDBThreadAttach t; OSL_ENSHURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv )
     {
         // temporaere Variable initialisieren
@@ -1001,7 +1001,7 @@ sal_Bool SAL_CALL java_sql_ResultSet::isBeforeFirst(  ) throw(SQLException, Runt
 sal_Bool SAL_CALL java_sql_ResultSet::next(  ) throw(SQLException, RuntimeException)
 {
     jboolean out(sal_False);
-    SDBThreadAttach t; OSL_ENSHURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv )
 
     {
@@ -1022,7 +1022,7 @@ sal_Bool SAL_CALL java_sql_ResultSet::next(  ) throw(SQLException, RuntimeExcept
 sal_Bool SAL_CALL java_sql_ResultSet::wasNull(  ) throw(SQLException, RuntimeException)
 {
     jboolean out(sal_False);
-    SDBThreadAttach t; OSL_ENSHURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv )
     {
         // temporaere Variable initialisieren
@@ -1041,7 +1041,7 @@ sal_Bool SAL_CALL java_sql_ResultSet::wasNull(  ) throw(SQLException, RuntimeExc
 
 void SAL_CALL java_sql_ResultSet::cancel(  ) throw(::com::sun::star::uno::RuntimeException)
 {
-    SDBThreadAttach t; OSL_ENSHURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv )
     {
         // temporaere Variable initialisieren
@@ -1564,7 +1564,7 @@ void SAL_CALL java_sql_ResultSet::updateObject( sal_Int32 columnIndex, const ::c
                 break;
                         case TypeClass_ENUM:
             default:
-                OSL_ENSHURE(0,"UNKOWN TYPE for java_sql_ResultSet::updateObject");
+                OSL_ENSURE(0,"UNKOWN TYPE for java_sql_ResultSet::updateObject");
         }
         return;
         // Parameter konvertieren
@@ -1590,7 +1590,7 @@ void SAL_CALL java_sql_ResultSet::updateObject( sal_Int32 columnIndex, const ::c
 
 void SAL_CALL java_sql_ResultSet::updateNumericObject( sal_Int32 columnIndex, const ::com::sun::star::uno::Any& x, sal_Int32 scale ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
-    OSL_ENSHURE(0,"java_sql_ResultSet::updateNumericObject: NYI");
+    OSL_ENSURE(0,"java_sql_ResultSet::updateNumericObject: NYI");
 //  SDBThreadAttach t;
 //  if( t.pEnv )
 //  {
@@ -1614,7 +1614,7 @@ void SAL_CALL java_sql_ResultSet::updateNumericObject( sal_Int32 columnIndex, co
 sal_Int32 java_sql_ResultSet::getResultSetConcurrency() const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     jint out(0);
-    SDBThreadAttach t; OSL_ENSHURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv ){
         // temporaere Variable initialisieren
         char * cSignature = "()I";
@@ -1633,7 +1633,7 @@ sal_Int32 java_sql_ResultSet::getResultSetConcurrency() const throw(::com::sun::
 sal_Int32 java_sql_ResultSet::getResultSetType() const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     jint out(0);
-    SDBThreadAttach t; OSL_ENSHURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv ){
         // temporaere Variable initialisieren
         char * cSignature = "()I";
@@ -1651,7 +1651,7 @@ sal_Int32 java_sql_ResultSet::getResultSetType() const throw(::com::sun::star::s
 sal_Int32 java_sql_ResultSet::getFetchDirection() const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     jint out(0);
-    SDBThreadAttach t; OSL_ENSHURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv ){
         // temporaere Variable initialisieren
         char * cSignature = "()I";
@@ -1669,7 +1669,7 @@ sal_Int32 java_sql_ResultSet::getFetchDirection() const throw(::com::sun::star::
 sal_Int32 java_sql_ResultSet::getFetchSize() const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     jint out(0);
-    SDBThreadAttach t; OSL_ENSHURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv ){
         // temporaere Variable initialisieren
         char * cSignature = "()I";
@@ -1686,7 +1686,7 @@ sal_Int32 java_sql_ResultSet::getFetchSize() const throw(::com::sun::star::sdbc:
 //------------------------------------------------------------------------------
 ::rtl::OUString java_sql_ResultSet::getCursorName() const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
-    SDBThreadAttach t; OSL_ENSHURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     ::rtl::OUString aStr;
     if( t.pEnv )
     {
@@ -1709,7 +1709,7 @@ sal_Int32 java_sql_ResultSet::getFetchSize() const throw(::com::sun::star::sdbc:
 //------------------------------------------------------------------------------
 void java_sql_ResultSet::setFetchDirection(sal_Int32 _par0) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
-    SDBThreadAttach t; OSL_ENSHURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv ){
         // temporaere Variable initialisieren
         char * cSignature = "(I)V";
@@ -1726,7 +1726,7 @@ void java_sql_ResultSet::setFetchDirection(sal_Int32 _par0) throw(::com::sun::st
 //------------------------------------------------------------------------------
 void SAL_CALL java_sql_ResultSet::refreshRow(  ) throw(SQLException, RuntimeException)
 {
-    SDBThreadAttach t; OSL_ENSHURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv )
     {
         // temporaere Variable initialisieren
@@ -1744,7 +1744,7 @@ void SAL_CALL java_sql_ResultSet::refreshRow(  ) throw(SQLException, RuntimeExce
 void java_sql_ResultSet::setFetchSize(sal_Int32 _par0) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     jint out(0);
-    SDBThreadAttach t; OSL_ENSHURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv ){
         // temporaere Variable initialisieren
         char * cSignature = "(I)V";

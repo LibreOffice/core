@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Object.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-12-12 13:33:31 $
+ *  last change: $Author: jl $ $Date: 2001-03-20 17:03:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,7 @@ int SDB_JRE_InitJava(const Reference<XMultiServiceFactory >& _rxFactory)
         Reference< ::starjava::XJavaVM > xVM(_rxFactory->createInstance(
             rtl::OUString::createFromAscii("com.sun.star.java.JavaVirtualMachine")), UNO_QUERY);
 
-        OSL_ENSHURE(_rxFactory.is(),"SDB_JRE_InitJava: I have no factory!");
+        OSL_ENSURE(_rxFactory.is(),"SDB_JRE_InitJava: I have no factory!");
         if (!xVM.is() || !_rxFactory.is())
             throw Exception(); // -2;
 
@@ -325,7 +325,7 @@ java_lang_Object::~java_lang_Object()
 // der protected-Konstruktor fuer abgeleitete Klassen
 void java_lang_Object::saveRef( JNIEnv * pXEnv, jobject myObj )
 {
-    OSL_ENSHURE( myObj, "object in c++ -> Java Wrapper" );
+    OSL_ENSURE( myObj, "object in c++ -> Java Wrapper" );
     SDBThreadAttach t;
     if( t.pEnv && myObj )
         object = t.pEnv->NewGlobalRef( myObj );

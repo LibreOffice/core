@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SQLException.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:22 $
+ *  last change: $Author: jl $ $Date: 2001-03-20 17:03:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,7 @@ jclass java_sql_SQLException_BASE::getMyClass()
         SDBThreadAttach t;
         if( !t.pEnv ) return (jclass)NULL;
         jclass tempClass = t.pEnv->FindClass("java/sql/SQLException");
-        OSL_ENSHURE(tempClass,"Java : FindClass nicht erfolgreich!");
+        OSL_ENSURE(tempClass,"Java : FindClass nicht erfolgreich!");
         if(!tempClass)
         {
             t.pEnv->ExceptionDescribe();
@@ -168,7 +168,7 @@ starsdbc::SQLException java_sql_SQLException_BASE::getNextException()  const
 sal_Int32 java_sql_SQLException_BASE::getErrorCode() const
 {
     jint out(0);
-    SDBThreadAttach t; OSL_ENSHURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv ){
 
         // temporaere Variable initialisieren

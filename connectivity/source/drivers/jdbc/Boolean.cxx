@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Boolean.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:22 $
+ *  last change: $Author: jl $ $Date: 2001-03-20 17:03:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@ jclass java_lang_Boolean::getMyClass()
     if( !theClass ){
         SDBThreadAttach t;
         if( !t.pEnv ) return (jclass)NULL;
-        jclass tempClass = t.pEnv->FindClass("java/lang/Boolean"); OSL_ENSHURE(tempClass,"Java : FindClass nicht erfolgreich!");
+        jclass tempClass = t.pEnv->FindClass("java/lang/Boolean"); OSL_ENSURE(tempClass,"Java : FindClass nicht erfolgreich!");
         jclass globClass = (jclass)t.pEnv->NewGlobalRef( tempClass );
         t.pEnv->DeleteLocalRef( tempClass );
         saveClassRef( globClass );

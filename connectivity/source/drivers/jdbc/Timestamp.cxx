@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Timestamp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-09-29 15:04:24 $
+ *  last change: $Author: jl $ $Date: 2001-03-20 17:03:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,9 +82,9 @@ jclass java_sql_Date::getMyClass()
 {
     // die Klasse muss nur einmal geholt werden, daher statisch
     if( !theClass ){
-        SDBThreadAttach t; OSL_ENSHURE(t.pEnv,"Java Enviroment gelöscht worden!");
+        SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
         if( !t.pEnv ) return (jclass)0;
-        jclass tempClass = t.pEnv->FindClass("java/sql/Date"); OSL_ENSHURE(tempClass,"Java : FindClass nicht erfolgreich!");
+        jclass tempClass = t.pEnv->FindClass("java/sql/Date"); OSL_ENSURE(tempClass,"Java : FindClass nicht erfolgreich!");
         jclass globClass = (jclass)t.pEnv->NewGlobalRef( tempClass );
         t.pEnv->DeleteLocalRef( tempClass );
         saveClassRef( globClass );
@@ -113,9 +113,9 @@ jclass java_sql_Time::getMyClass()
 {
     // die Klasse muss nur einmal geholt werden, daher statisch
     if( !theClass ){
-        SDBThreadAttach t; OSL_ENSHURE(t.pEnv,"Java Enviroment gelöscht worden!");
+        SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
         if( !t.pEnv ) return (jclass)0;
-        jclass tempClass = t.pEnv->FindClass("java/sql/Time"); OSL_ENSHURE(tempClass,"Java : FindClass nicht erfolgreich!");
+        jclass tempClass = t.pEnv->FindClass("java/sql/Time"); OSL_ENSURE(tempClass,"Java : FindClass nicht erfolgreich!");
         jclass globClass = (jclass)t.pEnv->NewGlobalRef( tempClass );
         t.pEnv->DeleteLocalRef( tempClass );
         saveClassRef( globClass );
@@ -163,9 +163,9 @@ jclass java_sql_Timestamp::getMyClass()
 {
     // die Klasse muss nur einmal geholt werden, daher statisch
     if( !theClass ){
-        SDBThreadAttach t; OSL_ENSHURE(t.pEnv,"Java Enviroment gelöscht worden!");
+        SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
         if( !t.pEnv ) return (jclass)0;
-        jclass tempClass = t.pEnv->FindClass("java/sql/Timestamp"); OSL_ENSHURE(tempClass,"Java : FindClass nicht erfolgreich!");
+        jclass tempClass = t.pEnv->FindClass("java/sql/Timestamp"); OSL_ENSURE(tempClass,"Java : FindClass nicht erfolgreich!");
         jclass globClass = (jclass)t.pEnv->NewGlobalRef( tempClass );
         t.pEnv->DeleteLocalRef( tempClass );
         saveClassRef( globClass );

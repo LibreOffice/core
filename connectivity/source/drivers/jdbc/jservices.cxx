@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jservices.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-24 11:41:12 $
+ *  last change: $Author: jl $ $Date: 2001-03-20 17:03:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,7 @@ void REGISTER_PROVIDER(
     aMainKeyName += OUString::createFromAscii("/UNO/SERVICES");
 
     Reference< ::com::sun::star::registry::XRegistryKey >  xNewKey( xKey->createKey(aMainKeyName) );
-    OSL_ENSHURE(xNewKey.is(), "SBA::component_writeInfo : could not create a registry key !");
+    OSL_ENSURE(xNewKey.is(), "SBA::component_writeInfo : could not create a registry key !");
 
     for (sal_uInt32 i=0; i<Services.getLength(); ++i)
         xNewKey->createKey(Services[i]);
@@ -174,7 +174,7 @@ extern "C" sal_Bool SAL_CALL component_writeInfo(
     }
     catch (::com::sun::star::registry::InvalidRegistryException& )
     {
-        OSL_ENSHURE(sal_False, "SBA::component_writeInfo : could not create a registry key ! ## InvalidRegistryException !");
+        OSL_ENSURE(sal_False, "SBA::component_writeInfo : could not create a registry key ! ## InvalidRegistryException !");
     }
 
     return sal_False;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JDriver.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-07 08:19:46 $
+ *  last change: $Author: jl $ $Date: 2001-03-20 17:03:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,7 @@ using namespace ::com::sun::star::lang;
 java_sql_Driver::java_sql_Driver(const Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory)
     : java_lang_Object(_rxFactory)
 {
-//  SDBThreadAttach t; OSL_ENSHURE(t.pEnv,"Java Enviroment gelöscht worden!");
+//  SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
 //  // this object is not the right one
 //  if(t.pEnv)
 //      t.pEnv->DeleteGlobalRef( object );
@@ -152,10 +152,10 @@ jclass java_sql_Driver::getMyClass()
     // die Klasse muss nur einmal geholt werden, daher statisch
     if( !theClass )
     {
-        SDBThreadAttach t; OSL_ENSHURE(t.pEnv,"Java Enviroment gelöscht worden!");
+        SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
         if( !t.pEnv ) return (jclass)0;
         jclass tempClass = t.pEnv->FindClass("java/sql/Driver");
-        OSL_ENSHURE(tempClass,"Java : FindClass nicht erfolgreich!");
+        OSL_ENSURE(tempClass,"Java : FindClass nicht erfolgreich!");
         jclass globClass = (jclass)t.pEnv->NewGlobalRef( tempClass );
         t.pEnv->DeleteLocalRef( tempClass );
         saveClassRef( globClass );
@@ -174,7 +174,7 @@ void java_sql_Driver::saveClassRef( jclass pClass )
 Reference< XConnection > SAL_CALL java_sql_Driver::connect( const ::rtl::OUString& url, const
                                                          Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException)
 {
-    SDBThreadAttach t(getORB()); OSL_ENSHURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t(getORB()); OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     Reference< XConnection > xRet;
     // first try if the jdbc driver is alraedy registered at the driver manager
     try
@@ -245,7 +245,7 @@ sal_Bool SAL_CALL java_sql_Driver::acceptsURL( const ::rtl::OUString& url ) thro
     // I feel responsible for all jdbc url's
     if(!url.compareTo(::rtl::OUString::createFromAscii("jdbc:"),5) && url.getLength() > 5)
     {
-        SDBThreadAttach t(getORB()); OSL_ENSHURE(t.pEnv,"Java Enviroment gelöscht worden!");
+        SDBThreadAttach t(getORB()); OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
         if(!object)
             object = java_sql_DriverManager::getDriver(url);
         return object != NULL;
@@ -256,7 +256,7 @@ sal_Bool SAL_CALL java_sql_Driver::acceptsURL( const ::rtl::OUString& url ) thro
 Sequence< DriverPropertyInfo > SAL_CALL java_sql_Driver::getPropertyInfo( const ::rtl::OUString& url,
                                                                          const Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException)
 {
-    SDBThreadAttach t(getORB()); OSL_ENSHURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t(getORB()); OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if(!object)
         object = java_sql_DriverManager::getDriver(url);
 
@@ -298,7 +298,7 @@ sal_Int32 SAL_CALL java_sql_Driver::getMajorVersion(  ) throw(RuntimeException)
     if(!object)
         throw RuntimeException();
     jint out(0);
-    SDBThreadAttach t(getORB()); OSL_ENSHURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t(getORB()); OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
@@ -318,7 +318,7 @@ sal_Int32 SAL_CALL java_sql_Driver::getMinorVersion(  ) throw(RuntimeException)
     if(!object)
         throw RuntimeException();
     jint out(0);
-    SDBThreadAttach t(getORB()); OSL_ENSHURE(t.pEnv,"Java Enviroment gelöscht worden!");
+    SDBThreadAttach t(getORB()); OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv ){
 
         // temporaere Variable initialisieren
