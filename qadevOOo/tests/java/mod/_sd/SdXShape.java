@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SdXShape.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:17:26 $
+ *  last change:$Date: 2003-02-06 09:47:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,9 @@ import lib.TestEnvironment;
 import lib.TestParameters;
 import util.SOfficeFactory;
 
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
+
 /**
 * Test for object which is represented by service
 * <code>com.sun.star.drawing.Shape</code>. <p>
@@ -150,8 +153,7 @@ public class SdXShape extends TestCase {
     * @see com.sun.star.drawing.XDrawPagesSupplier
     * @see com.sun.star.drawing.Shape
     */
-    public synchronized TestEnvironment createTestEnvironment(
-        TestParameters Param, PrintWriter log) throws StatusException {
+    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
 
         log.println( "creating a test environment" );
 
@@ -167,11 +169,15 @@ public class SdXShape extends TestCase {
             UnoRuntime.queryInterface(XIndexAccess.class, oDPn);
         XDrawPage oDP = null;
         try {
-            oDP = (XDrawPage) oDPi.getByIndex(0);
+            oDP = (XDrawPage) AnyConverter.toObject(
+                        new Type(XDrawPage.class),oDPi.getByIndex(0));
         } catch (com.sun.star.lang.WrappedTargetException e) {
             e.printStackTrace( log );
             throw new StatusException("Couldn't get by index", e);
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
+            e.printStackTrace( log );
+            throw new StatusException("Couldn't get by index", e);
+        } catch (com.sun.star.lang.IllegalArgumentException e) {
             e.printStackTrace( log );
             throw new StatusException("Couldn't get by index", e);
         }
@@ -200,7 +206,8 @@ public class SdXShape extends TestCase {
             UnoRuntime.queryInterface(XPropertySet.class, oObj);
         XStyle aStyle = null;
         try {
-            aStyle = (XStyle) oShapeProps.getPropertyValue("Style");
+            aStyle = (XStyle) AnyConverter.toObject(
+                new Type(XStyle.class),oShapeProps.getPropertyValue("Style"));
             oShapeProps.setPropertyValue("ZOrder", new Integer(1));
         } catch (com.sun.star.lang.WrappedTargetException e) {
             e.printStackTrace(log);
@@ -220,11 +227,15 @@ public class SdXShape extends TestCase {
         oShapeProps = (XPropertySet)
             UnoRuntime.queryInterface(XPropertySet.class, oShape);
         try {
-            aStyle = (XStyle) oShapeProps.getPropertyValue("Style");
+            aStyle = (XStyle) AnyConverter.toObject(
+                new Type(XStyle.class),oShapeProps.getPropertyValue("Style"));
         } catch (com.sun.star.lang.WrappedTargetException e) {
             e.printStackTrace(log);
             throw new StatusException("Couldn't get property value", e);
         } catch (com.sun.star.beans.UnknownPropertyException e) {
+            e.printStackTrace(log);
+            throw new StatusException("Couldn't get property value", e);
+        } catch (com.sun.star.lang.IllegalArgumentException e) {
             e.printStackTrace(log);
             throw new StatusException("Couldn't get property value", e);
         }
@@ -235,4 +246,3 @@ public class SdXShape extends TestCase {
     } // finish method createTestEnvironment
 
 }    // finish class SdXShape
-
