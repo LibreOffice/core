@@ -2,9 +2,9 @@
  *
  *  $RCSfile: certificatechooser.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-15 12:28:21 $
+ *  last change: $Author: mt $ $Date: 2004-07-22 15:37:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,7 @@
 // MM : added for password exception
 #include <vcl/msgbox.hxx>
 #include <com/sun/star/security/NoPasswordException.hpp>
+#include <com/sun/star/security/CertificateCharacters.hpp>
 using namespace ::com::sun::star::security;
 
 // Only for bigIntegerToNumericString
@@ -120,38 +121,54 @@ CertificateChooser::CertificateChooser( Window* _pParent, uno::Reference< dcss::
 
     mxSecurityEnvironment = _rxSecurityEnvironment;
 
-
     maCertLB.SetSelectHdl( LINK( this, CertificateChooser, CertificateHighlightHdl ) );
     maCertLB.SetDoubleClickHdl( LINK( this, CertificateChooser, CertificateSelectHdl ) );
 
-        // MM : added for password exception
     try
     {
         maCerts = mxSecurityEnvironment->getPersonalCertificates();
     }
     catch (NoPasswordException&)
     {
-            InfoBox( this, rtl::OUString( String( RTL_CONSTASCII_USTRINGPARAM( "No password is provided!\n\n" ) ) ) ).Execute();
     }
 
     sal_Int32 nCertificates = maCerts.getLength();
     sal_Int32 nCertificatesToIgnore = _rCertsToIgnore.size();
-    if( nCertificatesToIgnore )
+    for( sal_Int32 nCert = nCertificates; nCert; )
     {
-        for( sal_Int32 nCert = nCertificates; nCert; )
+        uno::Reference< security::XCertificate > xCert = maCerts[ --nCert ];
+        sal_Bool bIgnoreThis = false;
+
+        // Do we already use that?
+        if( nCertificatesToIgnore )
         {
-            uno::Reference< security::XCertificate > xCert = maCerts[ --nCert ];
-            int nCertsToIgnore = _rCertsToIgnore.size();
+            rtl::OUString aIssuerName = xCert->getIssuerName();
             for( sal_Int32 nSig = 0; nSig < nCertificatesToIgnore; ++nSig )
             {
                 const SignatureInformation& rInf = _rCertsToIgnore[ nSig ];
-                if( ( xCert->getIssuerName() == rInf.ouX509IssuerName ) && ( bigIntegerToNumericString( xCert->getSerialNumber() ) == rInf.ouX509SerialNumber ) )
+                if( ( aIssuerName == rInf.ouX509IssuerName ) && ( bigIntegerToNumericString( xCert->getSerialNumber() ) == rInf.ouX509SerialNumber ) )
                 {
-                    ::comphelper::removeElementAt( maCerts, nCert );
+                    bIgnoreThis = true;
+                    break;
                 }
             }
         }
-        nCertificates = maCerts.getLength();
+
+        if ( !bIgnoreThis )
+        {
+            // Check if we have a private key for this...
+            long nCertificateCharacters = mxSecurityEnvironment->getCertificateCharacters( xCert );
+
+            if ( !( nCertificateCharacters & security::CertificateCharacters::CERT_CHARACTER_HAS_PRIVATE_KEY ) )
+                bIgnoreThis = true;
+
+        }
+
+        if ( bIgnoreThis )
+        {
+            ::comphelper::removeElementAt( maCerts, nCert );
+            nCertificates = maCerts.getLength();
+        }
     }
 
     String  aCN_Id( String::CreateFromAscii( "CN" ) );

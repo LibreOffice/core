@@ -2,9 +2,9 @@
  *
  *  $RCSfile: certificateviewer.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-21 13:57:52 $
+ *  last change: $Author: mt $ $Date: 2004-07-22 15:37:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@
 #ifndef _COM_SUN_STAR_SECURITY_XCERTIFICATE_HPP_
 #include <com/sun/star/security/XCertificate.hpp>
 #endif
+
+#include <com/sun/star/security/CertificateCharacters.hpp>
+
 
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/datetime.hxx>
@@ -245,6 +248,14 @@ CertificateViewerGeneralTP::CertificateViewerGeneralTP( Window* _pParent, Certif
     ShrinkToFit( maKeyImg );
     AlignAfterImage( maCertImg, maCertInfoFI, 12 );
     AlignAfterImage( maKeyImg, maHintCorrespPrivKeyFI, 12 );
+
+    // Check if we have the private key...
+    long nCertificateCharacters = _pDlg->mxSecurityEnvironment->getCertificateCharacters( xCert );
+    if ( !( nCertificateCharacters & security::CertificateCharacters::CERT_CHARACTER_HAS_PRIVATE_KEY ) )
+    {
+        maKeyImg.Hide();
+        maHintCorrespPrivKeyFI.Hide();
+    }
 }
 
 void CertificateViewerGeneralTP::ActivatePage()
@@ -439,6 +450,9 @@ CertificateViewerCertPathTP::CertificateViewerCertPathTP( Window* _pParent, Cert
     {
            pParent = InsertCert( pParent, XmlSec::GetContentPart( pCertPath[ --i ]->getSubjectName(), aCN_Id ), pCertPath[ i ] );
     }
+
+    maCertPathLB.Select( pParent );
+    maViewCertPB.Disable(); // Own certificate selected
 
     while( pParent )
     {
