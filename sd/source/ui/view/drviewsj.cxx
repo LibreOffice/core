@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsj.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cl $ $Date: 2002-11-20 10:27:19 $
+ *  last change: $Author: vg $ $Date: 2003-05-16 14:18:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -635,6 +635,21 @@ void SdDrawViewShell::SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType,
             SfxBoolItem aItem( SID_FM_DESIGN_MODE, !bReadOnly );
             GetViewFrame()->GetDispatcher()->Execute( SID_FM_DESIGN_MODE,
                       SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
+        }
+    }
+
+    if( rHint.IsA(TYPE(SfxEventHint)) )
+    {
+        if( ((SfxEventHint&)rHint).GetEventId() == SFX_EVENT_OPENDOC )
+        {
+            if( pDoc && pDoc->IsStartWithPresentation() )
+            {
+                if( GetViewFrame() )
+                {
+                    pDoc->SetStartWithPresentation( false );
+                    GetViewFrame()->GetDispatcher()->Execute( SID_PRESENTATION, SFX_CALLMODE_ASYNCHRON );
+                }
+            }
         }
     }
 }
