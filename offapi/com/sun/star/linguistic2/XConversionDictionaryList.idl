@@ -1,0 +1,243 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XConversionDictionaryList.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: vg $ $Date: 2003-04-17 17:58:12 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_linguistic2_XConversionDictionaryList_idl__
+#define __com_sun_star_linguistic2_XConversionDictionaryList_idl__
+
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_container_XNameContainer_idl__
+#include <com/sun/star/container/XNameContainer.idl>
+#endif
+
+#ifndef __com_sun_star_linguistic2_XConversionDictionary_idl__
+#include <com/sun/star/linguistic2/XConversionDictionary.idl>
+#endif
+
+#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#endif
+
+#ifndef __com_sun_star_lang_NoSupportException_idl__
+#include <com/sun/star/lang/NoSupportException.idl>
+#endif
+
+
+//=============================================================================
+
+module com { module sun { module star { module linguistic2 {
+
+//=============================================================================
+/** is used to manage and maintain a list of conversion dictionaries.
+
+    <p>The dictionaries added to the list may or may not support the
+    <type scope="com::sun::star::util">XFlushable</type> interface.
+    If they do those dictionaries have to be flushed upon termination
+    of the dictionary list.</p>
+*/
+interface XConversionDictionaryList : com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+    /**
+        @returns
+            the name container interface to the dictionaries in the list.
+
+        <p>The interface can be used to add, remove or retrieve dictionaries
+        from the list by specifying the name of the dictionary, and
+        (in case of inserting) the interface to the dictionary as second
+        parameter.</p>
+
+        <p>A dictionary to be added must support the
+        <type scope="com::sun::star::linguistic2">XConversionDictionary</type>
+        interface.
+        The dictionary to be added needs not necessarily be created by
+        this service.</p>
+
+        <p>The <member scope="com::sun::star::container::XNameReplace">replaceByName<member>
+        function is implemented empty since renaming of dictionaries
+        is not allowed.</p>
+    */
+    com::sun::star::container::XNameContainer   getDictionaryContainer();
+
+    //-------------------------------------------------------------------------
+    /** creates a new dictionary and adds it to the dictionary list.
+
+        <p>The dictionary will be empty and active.</p>
+
+        @returns
+            an empty dictionary with the given name, locale and
+            conversion type.
+             <NULL/> on failure.
+
+        @param  aName
+            is the name of the dictionary (should be unique).
+
+        @param  aLocale
+            defines the language of the dictionary.
+
+        @param nTextConversionType
+            One of <type scope="com::sun::star::linguistic2">ConversionDictionaryType</type> values.
+
+        @throws NoSupportException
+            when <var>nConversionDictionaryType</var> is not known by the implementation.
+    */
+    com::sun::star::linguistic2::XConversionDictionary addNewDictionary(
+            [in] string aName,
+            [in] com::sun::star::lang::Locale aLocale,
+            [in] short nConversionDictionaryType )
+        raises( com::sun::star::lang::NoSupportException );
+
+    //-------------------------------------------------------------------------
+    /** searches for entries that match the given text.
+
+        <p>All active dictionaries with matching locales and conversion
+        type will be searched
+        for entries matching the given text.</p>
+
+        <p>The exact string to be looked for is the substring from the
+        aText parameter that starts at position nStartPos and has the
+        length nLength.</p>
+
+        @returns
+            the list of entries found. If no entry was found,
+            it is empty.
+
+        @param  aText
+            the text where the substring to be looked for will be taken from.
+        @param  nStartPos
+            the starting pos of the substring to be looked for.
+        @param  nLength
+            the length of the substring to be looked for.
+
+
+        @param aLocale
+            Locale the conversion is refered to.
+
+        @param nConversionDictionaryType
+            specifies the type of conversion the dictionary
+            can be used for. It is one of
+            <type scope="com::sun::star::linguistic2">ConversionDictionaryType</type>.
+
+        @param eConversionDirection
+            specifies the direction of the conversion to look for.
+            It is one of
+            <type scope="com::sun::star::linguistic2">ConversionDirection</type>.
+
+        @param nTextConversionOptions
+            Combination of <type scope="com::sun::star::i18n">TextConversionOptions</type>
+            values.
+
+        @throws com::sun::star::lang::IllegalArgumentException
+            if the nTextConversionOptions parameter is invalid for
+            the given locale.
+
+        @throws NoSupportException
+            when <var>nConversionDictionaryType</var> is not known by the implementation,
+            or when the locale is not supported (i.e. there are no dictionaries
+            for that locale available).
+    */
+    sequence< string >    queryConversions(
+            [in] string aText,
+            [in] long nStartPos,
+            [in] long nLength,
+            [in] com::sun::star::lang::Locale aLocale,
+            [in] short nConversionDictionaryType,
+            [in] com::sun::star::linguistic2::ConversionDirection eDirection,
+            [in] long nTextConversionOptions )
+        raises( com::sun::star::lang::IllegalArgumentException,
+                com::sun::star::lang::NoSupportException );
+
+    //-------------------------------------------------------------------------
+    /** returns the maximum number of characters used as left or right text
+        in entries.
+
+        <p>All active dictionaries of the specified locale and type
+        will be looked up to get the result.</p>
+        <p>The parameter eDirection specifies if only the left text or the
+        right text from entries should be considered.</p>
+
+        @param aLocale
+            Locale the conversion is refered to.
+        @param nConversionDictionaryType
+            specifies the type of conversion dictionaries to be looked up.
+            It is one of
+            <type scope="com::sun::star::linguistic2">ConversionDictionaryType</type>.
+        @param eDirection
+            specifies if the left text or the right text of entries will
+            be used.
+
+        @see com::sun::star::linguistic2::ConversionDirection
+    */
+    short queryMaxCharCount(
+            [in] com::sun::star::lang::Locale aLocale,
+            [in] short nConversionDictionaryType,
+            [in] com::sun::star::linguistic2::ConversionDirection eDirection );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+
