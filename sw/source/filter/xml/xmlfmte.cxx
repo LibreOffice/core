@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfmte.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-23 16:13:54 $
+ *  last change: $Author: dvo $ $Date: 2001-02-06 13:11:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -270,7 +270,6 @@ void SwXMLExport::_ExportAutoStyles()
 
     GetTextParagraphExport()->exportTextAutoStyles();
     GetPageExport()->exportAutoStyles();
-    GetFormExport()->exportAutoStyles();
 
     // we rely on data styles being written after cell styles in the
     // ExportFmt() method; so be careful when changing order.
