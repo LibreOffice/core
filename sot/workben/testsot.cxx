@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testsot.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: st $ $Date: 2001-12-13 15:26:15 $
+ *  last change: $Author: st $ $Date: 2001-12-13 15:27:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,5 +83,4 @@ int main (int argc, sal_Char **argv)
 */
     return 0;
 }
-
 
