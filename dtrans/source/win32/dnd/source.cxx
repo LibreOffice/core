@@ -2,9 +2,9 @@
  *
  *  $RCSfile: source.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: jl $ $Date: 2002-09-17 16:01:31 $
+ *  last change: $Author: tra $ $Date: 2002-11-25 11:34:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,12 +131,15 @@ DragSource::~DragSource()
     g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
 }
 
-//#############################
-// - BAD HACK - BAD HACK - BAD HACK - BAD HACK
-
 //----------------------------------------------------
 /** First start a new drag and drop thread if
      the last one has finished
+
+     ????
+          Do we really need a separate thread for
+          every Dnd opeartion or only if the source
+          thread is an MTA thread
+     ????
 */
 void DragSource::StartDragImpl(
     const DragGestureEvent& trigger,
@@ -146,10 +149,6 @@ void DragSource::StartDragImpl(
     const Reference<XTransferable >& trans,
     const Reference<XDragSourceListener >& listener )
 {
-#ifdef _DEBUG
-    OSL_TRACE("\n\nWin DnD: StartDrag\n\n" );
-#endif
-
     // The actions supported by the drag source
     m_sourceActions= sourceActions;
     // We need to know which mouse button triggered the operation.
@@ -428,6 +427,7 @@ unsigned __stdcall DndOleSTAFunc(LPVOID pParams)
         PeekMessage( &msgtemp, NULL, WM_USER, WM_USER, PM_NOREMOVE);
 
         DWORD threadId= GetCurrentThreadId();
+
         // This thread is attached to the thread that created the window. Hence
         // this thread also receives all mouse and keyboard messages which are
         // needed by DoDragDrop
@@ -440,6 +440,11 @@ unsigned __stdcall DndOleSTAFunc(LPVOID pParams)
             dndActionsToDropEffects( pSource->m_sourceActions),
             &dwEffect);
 
+        // #105428 detach my message queue from the other threads
+        // message queue before calling fire_dragDropEnd else
+        // the office may appear to hang sometimes
+        AttachThreadInput( threadId, pSource->m_threadIdWindow, FALSE);
+
         //--> TRA
         // clear the global transferable again
         g_XTransferable = Reference< XTransferable >( );
@@ -448,23 +453,15 @@ unsigned __stdcall DndOleSTAFunc(LPVOID pParams)
         OSL_ENSURE( hr != E_INVALIDARG, "IDataObject impl does not contain valid data");
 
         //Fire event
-        sal_Int8 action= hr == DRAGDROP_S_DROP ? dndOleDropEffectsToActions( dwEffect) :
-                                                                     ACTION_NONE;
+        sal_Int8 action= hr == DRAGDROP_S_DROP ? dndOleDropEffectsToActions( dwEffect) : ACTION_NONE;
 
         static_cast<SourceContext*>(pSource->m_currentContext.get())->fire_dragDropEnd(
                                                         hr == DRAGDROP_S_DROP ? sal_True : sal_False, action);
-
-#ifdef _DEBUG
-        OSL_TRACE("\n\nWin DnD: DragEnd\n\n" );
-#endif
 
         // Destroy SourceContextslkfgj
         pSource->m_currentContext= 0;
         // Destroy the XTransferable wrapper
         pSource->m_spDataObject=0;
-
-        // Detach this thread from the window thread
-        AttachThreadInput( threadId, pSource->m_threadIdWindow, FALSE);
 
         OleUninitialize();
     }
