@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextNumRuleInfo.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-31 09:00:40 $
+ *  last change: $Author: mib $ $Date: 2001-04-18 08:52:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,7 +160,12 @@ void XMLTextNumRuleInfo::Set(
             }
         }
 
-        DBG_ASSERT( nLevel < xNumRules->getCount(), "wrong num rule level" );
+        OSL_ENSURE( nLevel < xNumRules->getCount(), "wrong num rule level" );
+        if( nLevel >= xNumRules->getCount() )
+        {
+            Reset();
+            return;
+        }
 
         aAny = xNumRules->getByIndex( nLevel );
         Sequence<PropertyValue> aProps;
