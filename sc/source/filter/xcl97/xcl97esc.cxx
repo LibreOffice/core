@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97esc.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 13:49:48 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:48:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,12 +58,10 @@
  *
  *
  ************************************************************************/
-#ifdef PCH
-#include "filt_pch.hxx"
+
+#ifndef _XCL97ESC_HXX
+#include "xcl97esc.hxx"
 #endif
-
-#pragma hdrstop
-
 
 #ifndef _OUTLOBJ_HXX //autogen wg. OutlinerParaObject
 #include <svx/outlobj.hxx>
@@ -108,9 +106,11 @@
 #include "global.hxx"
 #include "document.hxx"
 #include "drwlayer.hxx"
-#include "xcl97esc.hxx"
 #include "xcl97rec.hxx"
 
+#ifndef SC_XEHELPER_HXX
+#include "xehelper.hxx"
+#endif
 #ifndef SC_XCLEXPCHARTS_HXX
 #include "XclExpCharts.hxx"
 #endif
@@ -487,13 +487,12 @@ XclExpEscherNoteAnchor::XclExpEscherNoteAnchor( const XclExpRoot& rRoot, const R
 
 // ----------------------------------------------------------------------------
 
-XclExpEscherDropDownAnchor::XclExpEscherDropDownAnchor( const XclExpRoot& rRoot, const ScAddress& rPos ) :
+XclExpEscherDropDownAnchor::XclExpEscherDropDownAnchor( const XclExpRoot& rRoot, const ScAddress& rScPos ) :
     XclExpEscherAnchor( rRoot, EXC_ESC_ANCHOR_POSLOCKED )
 {
-    maAnchor.mnLCol = static_cast<sal_uInt16>(rPos.Col());
-    maAnchor.mnTRow = static_cast<sal_uInt16>(rPos.Row());
-    maAnchor.mnRCol = maAnchor.mnLCol + 1;
-    maAnchor.mnBRow = maAnchor.mnTRow + 1;
+    GetAddressConverter().ConvertAddress( maAnchor.maXclRange.maFirst, rScPos, true );
+    maAnchor.maXclRange.maLast.mnCol = maAnchor.maXclRange.maFirst.mnCol + 1;
+    maAnchor.maXclRange.maLast.mnRow = maAnchor.maXclRange.maFirst.mnRow + 1;
     maAnchor.mnLX = maAnchor.mnTY = maAnchor.mnRX = maAnchor.mnBY = 0;
 }
 
