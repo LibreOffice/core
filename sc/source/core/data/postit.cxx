@@ -2,9 +2,9 @@
  *
  *  $RCSfile: postit.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 17:56:14 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:38:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,6 +227,16 @@ void ScPostIt::SetEditTextObject( const EditTextObject* pTextObj)
     {
         ScNoteEditEngine& rEE = mpDoc->GetNoteEngine();
         rEE.SetText( *pTextObj );
+        sal_uInt16 nCount = pTextObj->GetParagraphCount();
+        for( sal_uInt16 nPara = 0; nPara < nCount; ++nPara )
+        {
+            String aParaText( rEE.GetText( nPara ) );
+            if( aParaText.Len() )
+            {
+                SfxItemSet aSet( pTextObj->GetParaAttribs( nPara));
+                rEE.SetParaAttribs(nPara, aSet);
+            }
+        }
         mpEditObj.reset(rEE.CreateTextObject());
     }
     else
@@ -291,6 +301,33 @@ Rectangle ScPostIt::DefaultRectangle(const ScAddress& rPos) const
     return Rectangle(aRectPos, aRectSize);
 }
 
+Rectangle ScPostIt::MimicOldRectangle(const ScAddress& rPos) const
+{
+    // Mimic the functionality prior to the support for note positioning:
+    // The DefaultRectangle() is modified once it is inserted in the
+    // DrawPage. The Bottom part of the rectangle is modified against
+    // the text.  Thus using the DefaultRectangle() does not always return
+    // the previous cell note appearance [see #i38350#] of sxc docs
+    // containing notes created without a stored note position.
+    Rectangle aDefaultRect(DefaultRectangle(rPos));
+    SCCOL nNextCol = rPos.Col()+1;
+    Point aTailPos = ScDetectiveFunc(mpDoc, rPos.Tab()).GetDrawPos( nNextCol, rPos.Row(), FALSE );
+
+    SdrCaptionObj* pCaption = new SdrCaptionObj(aDefaultRect, aTailPos );
+    InsertObject( pCaption,*mpDoc,rPos.Tab() );
+    pCaption->SetText( GetText() );
+    Rectangle aRect = pCaption->GetLogicRect();
+    if ( aRect.Bottom() > aDefaultRect.Bottom() )
+    {
+        long nDif = aRect.Bottom() - aDefaultRect.Bottom();
+        aRect.Bottom() = aDefaultRect.Bottom();
+        aRect.Top() = Max( aDefaultRect.Top(), static_cast<long>((aRect.Top() - nDif)) );
+    }
+    RemoveObject( pCaption,*mpDoc,rPos.Tab() );
+    delete pCaption;
+    return aRect;
+}
+
 SfxItemSet ScPostIt::DefaultItemSet() const
 {
     SfxItemSet  aCaptionSet( mpDoc->GetNoteItemPool(), SDRATTR_START,  SDRATTR_END, EE_ITEMS_START, EE_ITEMS_END, 0,0);
@@ -337,6 +374,27 @@ SfxItemSet ScPostIt::DefaultItemSet() const
 void ScPostIt::SetItemSet(const SfxItemSet& rItemSet)
 {
     maItemSet.PutExtended(rItemSet, SFX_ITEM_DONTCARE, SFX_ITEM_DEFAULT);
+}
+
+// Called from Excel import - Excel supports alignment on a per note
+// basis while Calc uses a per paragraph alignment. Thus we need to
+// apply the Note alignment to all paragraphs.
+void ScPostIt::SetAndApplyItemSet(const SfxItemSet& rItemSet)
+{
+    SetItemSet(rItemSet);
+    if(mpEditObj.get() && mpDoc)
+    {
+        ScNoteEditEngine& rEE = mpDoc->GetNoteEngine();
+        rEE.SetText( *mpEditObj);
+        sal_uInt16 nCount = mpEditObj.get()->GetParagraphCount();
+        for( sal_uInt16 nPara = 0; nPara < nCount; ++nPara )
+        {
+            String aParaText( rEE.GetText( nPara ) );
+            if( aParaText.Len() )
+                rEE.SetParaAttribs(nPara, rItemSet);
+        }
+        mpEditObj.reset(rEE.CreateTextObject());
+    }
 }
 
 void ScPostIt::InsertObject(SdrCaptionObj* pObj, ScDocument& rDoc, SCTAB nTab) const
