@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iconcdlg.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:14:57 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 11:52:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1444,23 +1444,5 @@ void IconChoiceDialog::FocusOnIcon( USHORT nId )
 
 void IconChoiceDialog::CreateIconTextAutoMnemonics( void )
 {
-    // !!!!!!! this might be done by IconChoice control -> SvtIconChoiceCtrl::CreateAutoMnemonics() !!!!!!!
-    MnemonicGenerator   aMnemonicGenerator;
-    const ULONG         nEntryCount = maIconCtrl.GetEntryCount();
-    ULONG               i;
-
-    for( i = 0 ; i < nEntryCount ; ++i )
-    {
-        DBG_ASSERT( maIconCtrl.GetEntry( i ), "-IconChoiceDialog::CreateIconTextAutoMnemonics(): NULL-entry found!" );
-        aMnemonicGenerator.RegisterMnemonic( maIconCtrl.GetEntry( i )->GetText() );
-    }
-
-    for( i = 0 ; i < nEntryCount ; ++i )
-    {
-        SvxIconChoiceCtrlEntry* pEntry = maIconCtrl.GetEntry( i );
-        DBG_ASSERT( pEntry, "-IconChoiceDialog::CreateIconTextAutoMnemonics(): NULL-entry found!" );
-        String                  aText = pEntry->GetText();
-        if( aMnemonicGenerator.CreateMnemonic( aText ) )
-            pEntry->SetText( aText );
-    }
+    maIconCtrl.CreateAutoMnemonics();
 }
