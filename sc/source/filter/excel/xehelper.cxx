@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xehelper.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 08:00:26 $
+ *  last change: $Author: kz $ $Date: 2005-01-14 12:03:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -494,6 +494,14 @@ XclExpStringRef XclExpStringHelper::CreateString(
         xString->Assign( rString, nFlags, nMaxLen );
     else
         xString->AssignByte( rString, rRoot.GetCharSet(), nFlags, nMaxLen );
+    return xString;
+}
+
+XclExpStringRef XclExpStringHelper::CreateString(
+        const XclExpRoot& rRoot, sal_Unicode cChar, XclStrFlags nFlags, sal_uInt16 nMaxLen )
+{
+    XclExpStringRef xString = CreateString( rRoot, EMPTY_STRING, nFlags, nMaxLen );
+    AppendChar( *xString, rRoot, cChar );
     return xString;
 }
 
