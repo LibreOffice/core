@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imgmgr.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: cd $ $Date: 2002-09-12 15:42:50 $
+ *  last change: $Author: cd $ $Date: 2002-10-28 16:17:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1385,7 +1385,7 @@ void SfxImageManager::ReplaceImage( USHORT nId, Bitmap* pBmp )
         else
             pUserDefList->ReplaceBitmap( nId, *pBmp );
 
-        Color aColor ( 0xC0, 0xC0, 0xC0 );
+        Color aColor( GetMaskColor() );
         Image aImage( *pBmp, aColor );
         if ( pBmp->GetSizePixel() != pImageList->GetImageSize() )
         {
@@ -1520,7 +1520,7 @@ Color SfxImageManager::GetMaskColor() const
     if ( pImageList->HasMaskColor() )
         return pImageList->GetMaskColor();
     else
-        return Color(0xC0, 0xC0, 0xC0);
+        return Color( COL_LIGHTMAGENTA );
 }
 
 //-------------------------------------------------------------------------
@@ -1658,6 +1658,11 @@ Image SfxImageManager::GetGlobalImage( USHORT nId, BOOL bBig, BOOL bHiContrast )
     if ( !pGlobalConfig )
         return Image();
     return pGlobalConfig->GetImage( nId, NULL, bBig, bHiContrast );
+}
+
+ImageList* SfxImageManager::GetGlobalDefaultImageList( BOOL bBig, BOOL bHiContrast )
+{
+    return GetImageList( bBig, bHiContrast );
 }
 
 IMPL_LINK( SfxImageManager, ConfigChanged_Impl, void*, pVoid )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imgmgr.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cd $ $Date: 2002-08-30 09:14:31 $
+ *  last change: $Author: cd $ $Date: 2002-10-28 16:15:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,11 +94,12 @@ class SfxImageManager
     DECL_LINK(      ConfigChanged_Impl, void* );
 
 public:
-    static BOOL     Import( SvStream& rInStream, SotStorage& rOutStorage );
-    static BOOL     Export( SotStorage& rInStorage, SvStream& rOutStream );
-    static BOOL     Copy( SotStorage& rIn, SotStorage& rOut );
-    static Image    GetGlobalImage( USHORT nId, BOOL bBig );
-    static Image    GetGlobalImage( USHORT nId, BOOL bBig, BOOL bHiContrast );
+    static BOOL         Import( SvStream& rInStream, SotStorage& rOutStorage );
+    static BOOL         Export( SotStorage& rInStorage, SvStream& rOutStream );
+    static BOOL         Copy( SotStorage& rIn, SotStorage& rOut );
+    static Image        GetGlobalImage( USHORT nId, BOOL bBig );
+    static Image        GetGlobalImage( USHORT nId, BOOL bBig, BOOL bHiContrast );
+    static ImageList*   GetGlobalDefaultImageList( BOOL bBig, BOOL bHiContrast );
 
                     // each document may have its own imagemanager, but all documents without an own
                     // image configuration share the same instance
