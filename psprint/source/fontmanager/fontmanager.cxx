@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontmanager.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: pl $ $Date: 2002-09-30 19:00:52 $
+ *  last change: $Author: pl $ $Date: 2002-10-21 15:05:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,7 @@
 #include <unistd.h>
 #include <sys/stat.h>
 #include <dirent.h>
+#include <stdlib.h>
 
 #ifndef _OSL_THREAD_H_
 #include <osl/thread.h>
@@ -1492,10 +1493,18 @@ bool PrintFontManager::analyzeTrueTypeFile( PrintFont* pFont ) const
 
 static void normPath( ByteString& rPath )
 {
+    char buf[PATH_MAX];
+
+    // double slashes and slash at end are probably
+    // removed by realpath anyway, but since this runs
+    // on many different platforms let's play it safe
     while( rPath.SearchAndReplace( "//", "/" ) != STRING_NOTFOUND )
         ;
     if( rPath.Len() > 0 && rPath.GetChar( rPath.Len()-1 ) == '/' )
         rPath.Erase( rPath.Len()-1 );
+
+    if( realpath( rPath.GetBuffer(), buf ) )
+        rPath = buf;
 }
 
 void PrintFontManager::getServerDirectories()
