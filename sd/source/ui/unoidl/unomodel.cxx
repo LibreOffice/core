@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: cl $ $Date: 2002-07-01 08:22:19 $
+ *  last change: $Author: cl $ $Date: 2002-07-15 13:08:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1121,7 +1121,7 @@ void SAL_CALL SdXImpressDocument::setPropertyValue( const OUString& aPropertyNam
                     break;
 
                 awt::Rectangle aVisArea;
-                if( !(aValue >>= aVisArea) )
+                if( !(aValue >>= aVisArea) || (aVisArea.Width < 0) || (aVisArea.Height < 0) )
                     throw lang::IllegalArgumentException();
 
                 pEmbeddedObj->SetVisArea( Rectangle( aVisArea.X, aVisArea.Y, aVisArea.X + aVisArea.Width - 1, aVisArea.Y + aVisArea.Height - 1 ) );
@@ -1185,6 +1185,7 @@ uno::Any SAL_CALL SdXImpressDocument::getPropertyValue( const OUString& Property
                 const Rectangle& aRect = pEmbeddedObj->GetVisArea();
                 awt::Rectangle aVisArea( aRect.nLeft, aRect.nTop, aRect.getWidth(), aRect.getHeight() );
 
+                DBG_ASSERT( (aVisArea.Width >= 0) && (aVisArea.Height >= 0), "corrupted visible area for sd document! [CL]" );
                 aAny <<= aVisArea;
             }
             break;
