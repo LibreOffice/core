@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.hxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:27:40 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:11:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -273,6 +273,7 @@ private:
 
     DECL_LINK(          SearchHdl, PushButton* );
     DECL_LINK(          OpenHdl, PushButton* );
+    DECL_LINK(          ModifyHdl, Edit* );
 
 public:
     SearchTabPage_Impl( Window* pParent );
