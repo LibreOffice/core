@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-19 09:02:45 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 13:22:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -464,6 +464,15 @@ hidspecial HID_OFA_CONNPOOL_DRIVERLIST              { HelpId = HID_OFA_CONNPOOL_
 
 hidspecial HID_HANGULDLG_BUTTON_OPTIONS             { HelpId = HID_HANGULDLG_BUTTON_OPTIONS; };
 
-hidspecial HID_SCRIPTSBOX                           { HelpId = HID_SCRIPTSBOX; };
-hidspecial HID_SELECTOR_CATEGORIES                  { HelpId = HID_SELECTOR_CATEGORIES; };
-hidspecial HID_SELECTOR_COMMANDS                    { HelpId = HID_SELECTOR_COMMANDS; };
+hidspecial HID_SCRIPTSBOX             { HelpId = HID_SCRIPTSBOX; };
+hidspecial HID_SELECTOR_CATEGORIES    { HelpId = HID_SELECTOR_CATEGORIES; };
+hidspecial HID_SELECTOR_COMMANDS      { HelpId = HID_SELECTOR_COMMANDS; };
+hidspecial HID_SVX_MACRO_LB_EVENT     { HelpId = HID_SVX_MACRO_LB_EVENT; };
+hidspecial HID_SVX_CONFIG_EVENT       { HelpId = HID_SVX_CONFIG_EVENT; };
+hidspecial HID_SELECTOR_DIALOG        { HelpId = HID_SELECTOR_DIALOG; };
+hidspecial HID_SVX_CONFIG_MENU        { HelpId = HID_SVX_CONFIG_MENU; };
+hidspecial HID_SVX_CONFIG_TOOLBAR     { HelpId = HID_SVX_CONFIG_TOOLBAR; };
+hidspecial HID_CONFIG_EVENT_OFFICE_BASED { HelpId = HID_CONFIG_EVENT_OFFICE_BASED; };
+hidspecial HID_CONFIG_EVENT_DOCUMENT_BASED { HelpId = HID_CONFIG_EVENT_DOCUMENT_BASED; };
+hidspecial HID_SVX_CONFIG_MENU_CONTENTS { HelpId = HID_SVX_CONFIG_MENU_CONTENTS; };
+hidspecial HID_SVX_CONFIG_TOOLBAR_CONTENTS { HelpId = HID_SVX_CONFIG_TOOLBAR_CONTENTS; };
