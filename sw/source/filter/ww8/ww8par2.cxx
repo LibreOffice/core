@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cmc $ $Date: 2001-03-12 12:58:56 $
+ *  last change: $Author: cmc $ $Date: 2001-03-16 14:23:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2833,6 +2833,7 @@ void WW8RStyle::Import1Style( USHORT nNr )
         {
             pSI->pFmt->SetDerivedFrom( pj->pFmt );  // ok, Based on eintragen
             pSI->eFontSrcCharSet = pj->eFontSrcCharSet; // CharSet als Default
+            pSI->n81Flags = pj->n81Flags;
         }
     }
     else if( pIo->bNew && bStyExist )
@@ -3023,11 +3024,14 @@ void SwWW8ImplReader::ReadDocInfo()
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par2.cxx,v 1.6 2001-03-12 12:58:56 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par2.cxx,v 1.7 2001-03-16 14:23:21 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.6  2001/03/12 12:58:56  cmc
+      ##510##, #81434# Set default asian fontsize to winword default as well as western fontsize
+
       Revision 1.5  2001/03/12 12:07:19  cmc
       ##513##, #79474# a set of floating table rows following inline table rows are not to be counted as rows in first table
 
