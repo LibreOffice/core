@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: nn $ $Date: 2001-11-07 08:40:50 $
+ *  last change: $Author: mba $ $Date: 2001-11-30 14:00:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,7 @@
 
 #include "scitems.hxx"
 
+#include <svtools/securityoptions.hxx>
 #include <tools/stream.hxx>
 #include <tools/string.hxx>
 #include <tools/urlobj.hxx>
@@ -273,8 +274,7 @@ USHORT ScDocShell::GetSaveTab()
 
 BOOL ScDocShell::LoadCalc( SvStorage* pStor )       // StarCalc 3, 4 or 5 file
 {
-    SfxEventConfiguration* pConf = SFX_APP()->GetEventConfig();
-    BOOL bWarningEnabled = pConf && pConf->IsWarningForced();
+    BOOL bWarningEnabled = SvtSecurityOptions().IsWarningEnabled();
     if (bWarningEnabled)
         aDocument.SetMacroCallMode(SC_MACROCALL_ASK);   // ask before executing
 
