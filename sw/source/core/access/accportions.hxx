@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accportions.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2002-02-20 15:22:26 $
+ *  last change: $Author: dvo $ $Date: 2002-02-21 14:55:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,14 +107,14 @@ class SwAccessiblePortionData : public SwPortionHandler
     Positions_t* pWords;        /// positions of word breaks
     Positions_t* pSentences;    /// positions of sentence breaks
 
-    /// returns the index of the smallest position whose value in the
-    /// positions array is equal or larger
-    sal_Int32 FindBreak( const Positions_t& rPositions, sal_Int32 nValue );
+    /// returns the index of the first position whose value is smaller
+    /// or equal, and whose following value is equal or larger
+    size_t FindBreak( const Positions_t& rPositions, sal_Int32 nValue );
 
     /// fill the boundary with the values from rPositions[nPos]
     void FillBoundary(com::sun::star::i18n::Boundary& rBound,
                       const Positions_t& rPositions,
-                      sal_Int32 nPos );
+                      size_t nPos );
 
 public:
     SwAccessiblePortionData( const String& rCoreString );
@@ -124,13 +124,15 @@ public:
     virtual void Text(USHORT nLength);
     virtual void Special(USHORT nLength, const String& rText, USHORT nType);
     virtual void LineBreak();
+    virtual void Skip(USHORT nLength);
     virtual void Finish();
+
 
     // access to the portion data
     const rtl::OUString& GetAccesibleString();
     void GetLineBoundary( com::sun::star::i18n::Boundary& rBound,
                           sal_Int32 nPos );
-    sal_Int32 GetModelPosition( sal_Int32 nPos );
+    USHORT GetModelPosition( sal_Int32 nPos );
 
     // get boundaries of words/sentences. The data structures are
     // created on-demand.  The SwTxtNode is needed to get the language

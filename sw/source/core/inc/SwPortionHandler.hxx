@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwPortionHandler.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2002-02-19 14:34:55 $
+ *  last change: $Author: dvo $ $Date: 2002-02-21 14:55:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,18 @@ public:
      * layout occurs.
      */
     virtual void LineBreak() = 0;
+
+    /** skip characters. The SwTxtFrame may only display partially
+     * display a certain paragraph (e.g. when the paragaph is split
+     * across multiple pages). In this case, the Skip() method must be
+     * called to inform the portion handler to ignore a certain run of
+     * characters in the 'model string'. Skip(), if used at all, must
+     * be called before any of the other methods is called. Calling
+     * Skip() between portions is not allowed.
+     */
+    virtual void Skip(
+        USHORT nLength   /// number of 'model string' characters to be skipped
+        ) = 0;
 
     /** end of paragraph. This method is to be called when all the
      * paragraph's portions have been processed.

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accportions.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2002-02-20 15:22:26 $
+ *  last change: $Author: dvo $ $Date: 2002-02-21 14:55:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,6 +170,14 @@ void SwAccessiblePortionData::LineBreak()
     aLineBreaks.push_back( aBuffer.getLength() );
 }
 
+void SwAccessiblePortionData::Skip(USHORT nLength)
+{
+    DBG_ASSERT( !bFinished, "We are already done!" );
+    DBG_ASSERT( aModelPositions.size() == 0, "Never Skip() after portions" );
+
+    nModelPosition += nLength;
+}
+
 void SwAccessiblePortionData::Finish()
 {
     DBG_ASSERT( !bFinished, "We are already done!" );
@@ -202,13 +210,13 @@ void SwAccessiblePortionData::GetLineBoundary(
                   FindBreak( aLineBreaks, nPos ) );
 }
 
-sal_Int32 SwAccessiblePortionData::GetModelPosition( sal_Int32 nPos )
+USHORT SwAccessiblePortionData::GetModelPosition( sal_Int32 nPos )
 {
     DBG_ASSERT( nPos >= 0, "illegal position" );
     DBG_ASSERT( nPos <= sAccessibleString.getLength(), "illegal position" );
 
     // find the portion number
-    sal_Int32 nPortionNo = FindBreak( aAccessiblePositions, nPos );
+    size_t nPortionNo = FindBreak( aAccessiblePositions, nPos );
 
     // get model portion size
     sal_Int32 nStartPos = aModelPositions[nPortionNo];
@@ -229,59 +237,71 @@ sal_Int32 SwAccessiblePortionData::GetModelPosition( sal_Int32 nPos )
     }
     // else: return startPos unmodified
 
-    return nStartPos;
+    DBG_ASSERT( (nStartPos >= 0) && (nStartPos < USHRT_MAX),
+                "Why can the SwTxtNode have so many characters?" );
+    return static_cast<USHORT>(nStartPos);
 }
 
 void SwAccessiblePortionData::FillBoundary(
     Boundary& rBound,
     const Positions_t& rPositions,
-    sal_Int32 nPos )
+    size_t nPos )
 {
     rBound.startPos = rPositions[nPos];
     rBound.endPos = rPositions[nPos+1];
 }
 
 
-sal_Int32 SwAccessiblePortionData::FindBreak(
+size_t SwAccessiblePortionData::FindBreak(
     const Positions_t& rPositions,
     sal_Int32 nValue )
 {
-    DBG_ASSERT( rPositions.size() >= 2, "need min + may value" );
-    DBG_ASSERT( rPositions[0] == 0, "need min value" );
+    DBG_ASSERT( rPositions.size() >= 2, "need min + max value" );
+    DBG_ASSERT( rPositions[0] <= nValue, "need min value" );
     DBG_ASSERT( rPositions[rPositions.size()-1] >= nValue,
                 "need first terminator value" );
     DBG_ASSERT( rPositions[rPositions.size()-2] >= nValue,
                 "need second terminator value" );
 
-    sal_Int32 nMin = 0;
+    size_t nMin = 0;
+    size_t nMax = rPositions.size()-2;
 
-    // early out if first position is first value
-    if( ! (rPositions[nMin] == nValue) )
+    // loop until no more than two candidates are left
+    while( nMin+1 < nMax )
     {
-        sal_Int32 nMax = rPositions.size()-2;
+        // check loop invariants
+        DBG_ASSERT( ( (nMin == 0) && (rPositions[nMin] <= nValue) ) ||
+                    ( (nMin != 0) && (rPositions[nMin] < nValue) ),
+                    "minvalue not minimal" );
+        DBG_ASSERT( nValue <= rPositions[nMax], "max value not maximal" );
 
-        while( nMin < nMax )
-        {
-            // check loop invariants
-            DBG_ASSERT( rPositions[nMin] < nValue, "search failed" );
-            DBG_ASSERT( nValue <= rPositions[nMax+1], "search failed" );
+        // get middle (and ensure progress)
+        size_t nMiddle = (nMin + nMax)/2;
+        DBG_ASSERT( nMin < nMiddle, "progress?" );
+        DBG_ASSERT( nMiddle < nMax, "progress?" );
 
-            // get middle (and ensure progress)
-            sal_Int32 nMiddle = (nMin + nMax + 1)/2;
+        // check array
+        DBG_ASSERT( rPositions[nMin] <= rPositions[nMiddle],
+                    "garbled positions array" );
+        DBG_ASSERT( rPositions[nMiddle] <= rPositions[nMax],
+                    "garbled positions array" );
 
-            // check array
-            DBG_ASSERT( rPositions[nMin] <= rPositions[nMiddle],
-                        "garbled positions array" );
-            DBG_ASSERT( rPositions[nMiddle] <= rPositions[nMax],
-                        "garbled positions array" );
-
-            sal_Int32 nMiddleValue = rPositions[nMiddle];
-            if( nValue > nMiddleValue )
-                nMin = nMiddle;
-            else
-                nMax = nMiddle - 1;
-        }
+        if( nValue > rPositions[nMiddle] )
+            nMin = nMiddle;
+        else
+            nMax = nMiddle;
     }
+
+    // only two are left; we only need to check which one is the winner
+    DBG_ASSERT( (nMax == nMin) || (nMax == nMin+1), "only two left" );
+    if( (rPositions[nMin] < nValue) && (rPositions[nMin+1] <= nValue) )
+        nMin = nMin+1;
+
+    // finally, check to see whether the returned value is the 'right' position
+    DBG_ASSERT( rPositions[nMin] <= nValue, "not smaller or equal" );
+    DBG_ASSERT( nValue <= rPositions[nMin+1], "not equal or larger" );
+    DBG_ASSERT( (nMin == 0) || (rPositions[nMin-1] <= nValue),
+                "earlier value should have been returned" );
 
     DBG_ASSERT( nMin < rPositions.size()-1,
                 "shouldn't return last position (due to termintator values)" );
@@ -316,8 +336,7 @@ void SwAccessiblePortionData::GetWordBoundary(
              {
                  pWords->push_back( nCurrent );
 
-                 sal_uInt32 nModelPos = static_cast<sal_uInt32>(
-                     GetModelPosition( nCurrent ) );
+                 USHORT nModelPos = GetModelPosition( nCurrent );
 
                  nCurrent = pBreakIt->xBreak->nextWord(
                      sAccessibleString, nCurrent,
@@ -328,7 +347,9 @@ void SwAccessiblePortionData::GetWordBoundary(
                      nCurrent = nLength;
              }
              while (nCurrent < nLength);
-             pWords->push_back( nLength );  // terminators
+
+             // finish with two terminators
+             pWords->push_back( nLength );
              pWords->push_back( nLength );
          }
          else
@@ -368,8 +389,7 @@ void SwAccessiblePortionData::GetSentenceBoundary(
              {
                  pSentences->push_back( nCurrent );
 
-                 sal_uInt32 nModelPos = static_cast<sal_uInt32>(
-                     GetModelPosition( nCurrent ) );
+                 USHORT nModelPos = GetModelPosition( nCurrent );
 
                  nCurrent = pBreakIt->xBreak->endOfSentence(
                      sAccessibleString, nCurrent,
@@ -379,7 +399,9 @@ void SwAccessiblePortionData::GetSentenceBoundary(
                      nCurrent = nLength;
              }
              while (nCurrent < nLength);
-             pSentences->push_back( nLength );  // terminators
+
+             // finish with two terminators
+             pSentences->push_back( nLength );
              pSentences->push_back( nLength );
          }
          else

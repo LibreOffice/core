@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accpara.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mib $ $Date: 2002-02-20 17:55:57 $
+ *  last change: $Author: dvo $ $Date: 2002-02-21 14:55:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,44 +190,6 @@ void SwAccessibleParagraph::UpdatePortionData()
     delete pPortionData;
     pPortionData = new SwAccessiblePortionData( rModelString );
     pFrm->VisitPortions( *pPortionData );
-
-//     //
-//     // replacement code, as long as portion visitor is not ready
-//     //
-
-
-//     // iterate over characters and replace 'specials'
-//     sal_Int32 nLength = rModelString.Len();
-//     const sal_Unicode* pData = rModelString.GetBuffer();
-//     String sBreak(RTL_CONSTASCII_USTRINGPARAM("[BREAK]"));
-//     String sIn(RTL_CONSTASCII_USTRINGPARAM("[IN]"));
-//     const sal_Int32 nLineLength = 30;
-//     USHORT nLast = 0;
-//     for( USHORT i = 0; i < nLength; i++ )
-//     {
-//         sal_Unicode aChar = pData[i];
-//         if( (aChar == CH_TXTATR_BREAKWORD) ||
-//             (aChar == CH_TXTATR_INWORD) )
-//         {
-//             if( nLast != i )
-//             {
-//                 pPortionData->Text( i - nLast );
-//                 nLast = i+1;
-//             }
-//             pPortionData->Special(
-//                 1, (aChar == CH_TXTATR_BREAKWORD) ? sBreak : sIn, 0 );
-//         }
-//         else if ( (i % nLineLength) == (nLineLength-1))
-//         {
-//             // simulate line break
-//             pPortionData->Text( i - nLast );
-//             pPortionData->LineBreak();
-//             nLast = i+1;
-//         }
-//     }
-//     if( nLast < nLength )
-//         pPortionData->Text( nLength - nLast );
-//     pPortionData->Finish();
 
     DBG_ASSERT( pPortionData != NULL, "UpdatePortionData() failed" );
 }
@@ -418,50 +380,38 @@ OUString SAL_CALL SwAccessibleParagraph::getAccessibleDescription (void)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
-    CHECK_FOR_DEFUNC( XAccessibleContext )
+    CHECK_FOR_DEFUNC( XAccessibleContext );
 
-    SwTxtFrm *pTxtFrm = PTR_CAST( SwTxtFrm, GetFrm() );
-    if( !pTxtFrm )
+    const OUString& rText = GetString();
+
+    // the description contains the first sentence up to
+    // MAX_DESC_TEXT_LEN characters (including the next full word)
+    Boundary aBound;
+    if( rText.getLength() > 0 )
     {
-        THROW_RUNTIME_EXCEPTION( XAccessibleContext, "internal error (no text frame)" );
+        GetSentenceBoundary( aBound, rText, 0 );
+        if( aBound.endPos > MAX_DESC_TEXT_LEN )
+        {
+            GetWordBoundary( aBound, rText, MAX_DESC_TEXT_LEN );
+            aBound.startPos = 0;
+        }
     }
-
-    const SwTxtNode *pTxtNd = pTxtFrm->GetTxtNode();
-    const String& rText = pTxtNd->GetTxt();
-    xub_StrLen  nLen = (xub_StrLen)pBreakIt->xBreak->endOfSentence(
-                                    rText, 0, pBreakIt->GetLocale(
-                                                pTxtNd->GetLang( 0 ) ));
-    if( nLen > MAX_DESC_TEXT_LEN )
-    {
-        nLen = (xub_StrLen)pBreakIt->xBreak->getWordBoundary(
-                                rText, MAX_DESC_TEXT_LEN,
-                                pBreakIt->GetLocale( pTxtNd->GetLang( MAX_DESC_TEXT_LEN ) ),
-                                WordType::ANY_WORD, sal_True ).endPos;
-    }
-
-    OUString sArg1( rText.Copy( 0, nLen ) );
+    else
+        GetEmptyBoundary( aBound );
+    OUString sArg1( rText.copy( aBound.startPos, aBound.endPos ) );
 
     sal_uInt16 nResId;
-    OUString sArg2, *pArg2 = 0;
+    const SwTxtNode* pTxtNd = GetTxtNode();
     if( pTxtNd->GetOutlineNum() && !pTxtNd->GetNum() )
     {
-        sArg2 = OUString( pTxtNd->GetNumString() );
-        if( sArg2.getLength() )
-        {
-            nResId = STR_ACCESS_HEADING_WITH_NUM_DESC;
-            pArg2 = &sArg2;
-        }
-        else
-        {
-            nResId = STR_ACCESS_HEADING_DESC;
-        }
+        nResId = STR_ACCESS_HEADING_DESC;
     }
     else
     {
         nResId = STR_ACCESS_PARAGRAPH_DESC;
     }
 
-    return GetResource( nResId, &sArg1, pArg2 );
+    return GetResource( nResId, &sArg1 );
 }
 
 Locale SAL_CALL SwAccessibleParagraph::getLocale (void)
@@ -749,15 +699,12 @@ sal_Bool SwAccessibleParagraph::replaceText(
         SwTxtNode* pNode = const_cast<SwTxtNode*>( GetTxtNode() );
 
         // create SwPosition for nStartIndex
-        SwIndex aIndex(
-            pNode, static_cast<sal_uInt16>(
-                GetPortionData().GetModelPosition( nStartIndex )) );
+        SwIndex aIndex( pNode, GetPortionData().GetModelPosition(nStartIndex));
         SwPosition aStartPos( *pNode, aIndex );
 
         // create SwPosition for nEndIndex
         SwPosition aEndPos( aStartPos );
-        aEndPos.nContent = static_cast<sal_uInt16>(
-            GetPortionData().GetModelPosition( nEndIndex ) );
+        aEndPos.nContent = GetPortionData().GetModelPosition( nEndIndex );
 
         // now create XTextRange as helper and set string
         SwXTextRange::CreateTextRangeFromPosition(
