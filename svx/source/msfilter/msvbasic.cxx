@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msvbasic.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 17:41:48 $
+ *  last change: $Author: rt $ $Date: 2004-05-18 12:41:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,6 +203,11 @@ int VBA_Impl::ReadVBAProject(const SvStorageRef &rxVBAStorage)
         return 0;
     }
 
+    static const sal_uInt8 aOffice2003LE_2[] =
+    {
+        0x79, 0x00, 0x00, 0x01, 0x00, 0xFF
+    };
+
     static const sal_uInt8 aOffice2003LE[] =
     {
         0x76, 0x00, 0x00, 0x01, 0x00, 0xFF
@@ -234,7 +239,8 @@ int VBA_Impl::ReadVBAProject(const SvStorageRef &rxVBAStorage)
     xVBAProject->Read( aProduct, sizeof(aProduct) );
 
     bool bIsUnicode;
-    if (!(memcmp(aProduct, aOffice2003LE, sizeof(aProduct))))
+    if (!(memcmp(aProduct, aOffice2003LE, sizeof(aProduct))) ||
+        !(memcmp(aProduct, aOffice2003LE_2, sizeof(aProduct))) )
     {
         xVBAProject->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
         bIsUnicode = true;
