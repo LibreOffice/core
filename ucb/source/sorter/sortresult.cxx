@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sortresult.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kso $ $Date: 2001-04-05 09:49:31 $
+ *  last change: $Author: th $ $Date: 2001-05-11 08:43:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,7 +185,7 @@ public:
 struct equalStr_Impl
 {
     bool operator()( const OUString& s1, const OUString& s2 ) const
-      {
+    {
         return !!( s1 == s2 );
     }
 };
@@ -281,7 +281,7 @@ XINTERFACE_IMPL_9( SortedResultSet,
 
 XTYPEPROVIDER_IMPL_9( SortedResultSet,
                       XTypeProvider,
-                         XServiceInfo,
+                      XServiceInfo,
                       XComponent,
                       XContentAccess,
                       XResultSet,
@@ -295,10 +295,10 @@ XTYPEPROVIDER_IMPL_9( SortedResultSet,
 //--------------------------------------------------------------------------
 
 XSERVICEINFO_NOFACTORY_IMPL_1( SortedResultSet,
-                                   OUString::createFromAscii(
-                                   "com.sun.star.comp.ucb.SortedResultSet" ),
-                                   OUString::createFromAscii(
-                                   RESULTSET_SERVICE_NAME ) );
+                               OUString::createFromAscii(
+                                "com.sun.star.comp.ucb.SortedResultSet" ),
+                               OUString::createFromAscii(
+                                RESULTSET_SERVICE_NAME ) );
 
 //--------------------------------------------------------------------------
 // XComponent methods.
@@ -1142,8 +1142,8 @@ long SortedResultSet::CompareImpl( Reference < XResultSet > xResultOne,
 
                 if ( ! pSortInfo->mbCaseSensitive )
                 {
-                    aOne = aOne.toLowerCase();
-                    aTwo = aTwo.toLowerCase();
+                    aOne = aOne.toAsciiLowerCase();
+                    aTwo = aTwo.toAsciiLowerCase();
                 }
 
                 nCompare = aOne.compareTo( aTwo );
@@ -2073,8 +2073,8 @@ XINTERFACE_IMPL_2( SRSPropertySetInfo,
 //-------------------------------------------------------------------------
 
 XTYPEPROVIDER_IMPL_2( SRSPropertySetInfo,
-                          XTypeProvider,
-                          XPropertySetInfo );
+                      XTypeProvider,
+                      XPropertySetInfo );
 
 //-------------------------------------------------------------------------
 // XPropertySetInfo methods.

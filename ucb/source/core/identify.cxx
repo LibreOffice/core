@@ -2,9 +2,9 @@
  *
  *  $RCSfile: identify.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-16 14:52:48 $
+ *  last change: $Author: th $ $Date: 2001-05-11 08:42:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,7 +112,7 @@ XINTERFACE_IMPL_2( ContentIdentifier,
 
 XTYPEPROVIDER_IMPL_2( ContentIdentifier,
                       XTypeProvider,
-                         XContentIdentifier );
+                      XContentIdentifier );
 
 //=========================================================================
 //
@@ -140,7 +140,7 @@ OUString SAL_CALL ContentIdentifier::getContentProviderScheme()
         if ( nPos != -1 )
         {
             OUString aScheme( m_aContentId.copy( 0, nPos ) );
-            m_aProviderScheme = aScheme.toLowerCase();
+            m_aProviderScheme = aScheme.toAsciiLowerCase();
         }
     }
 
