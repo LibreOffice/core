@@ -2,9 +2,9 @@
 *
 *  $RCSfile: ScriptSourceModel.java,v $
 *
-*  $Revision: 1.5 $
+*  $Revision: 1.6 $
 *
-*  last change: $Author: rt $ $Date: 2004-10-22 13:59:02 $
+*  last change: $Author: rt $ $Date: 2004-11-15 15:57:11 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -160,7 +160,7 @@ public class ScriptSourceModel {
                 currentPosition = -1;
                 view.update();
 
-                interpreter.set("context", context);
+                interpreter.set("XSCRIPTCONTEXT", context);
                 interpreter.set("ARGUMENTS", new Object[0]);
 
                 if (view.isModified()) {
