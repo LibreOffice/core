@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textenc.h,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: th $ $Date: 2001-05-17 10:13:04 $
+ *  last change: $Author: sb $ $Date: 2001-10-29 15:14:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,16 @@
 #include <sal/types.h>
 #endif
 
+/** The various supported text encodings.
+
+    Possible values include a wide range of single- and multi-byte encodings
+    (ranging from RTL_TEXTENCODING_MS_1252 to RTL_TEXTENCODING_GB_18030),
+    the ISO 10646 (Unicode) specific encodings RTL_TEXTENCODING_UCS4 and
+    RTL_TEXTENCODING_UCS2 (aka RTL_TEXTENCODING_UNICODE), and
+    RTL_TEXTENCODING_DONTKNOW to indicate an unknown or missing encoding.
+ */
 typedef sal_uInt16 rtl_TextEncoding;
+
 #define RTL_TEXTENC_CAST( val ) ((rtl_TextEncoding) val)
 
 #endif /* _SOLAR_RSC_INVOKED */
