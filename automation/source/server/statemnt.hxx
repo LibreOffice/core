@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statemnt.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 12:06:57 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:49:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -266,7 +266,8 @@ protected:
     Window* GetAnyActive( BOOL MaybeBase = TRUE );
     ScrollBar* GetScrollBar( Window *pBase, USHORT nDirection, BOOL MaybeBase = TRUE );
     Window* GetPopupFloatingWin( BOOL MaybeBase = TRUE );
-    Window* GetWinByRT( Window *pBase, WindowType nRT, BOOL MaybeBase = TRUE, USHORT nSkip = 0 );
+    Menu* GetMatchingMenu( Window* pWin, Menu* pBaseMenu = NULL );
+    Window* GetWinByRT( Window *pBase, WindowType nRT, BOOL MaybeBase = TRUE, USHORT nSkip = 0, BOOL bSearchAll = FALSE );
     USHORT CountWinByRT( Window *pBase, WindowType nRT, BOOL MaybeBase = TRUE );
     Window* GetDocWin( USHORT nNr );
     USHORT GetDocWinCount();
@@ -312,6 +313,7 @@ public:
     BOOL bWasExecuting;                 // Wurde bei einem MaybeResetSafeReschedule resettet, so wird der Zustand danach wiederhergestellt
     static SmartId aSubMenuId1;         // Untermenüs bei PopupMenus
     static SmartId aSubMenuId2;         // erstmal 2-Stufig
+    static SmartId aSubMenuId3;         // and now even 3 levels #i31512#
     static SystemWindow *pMenuWindow;   // when using MenuBar as base for MenuCommands
     static TTProperties *pTTProperties; // Hier stehen die SlotIDs aus dem SFX drin
 
@@ -326,6 +328,7 @@ public:
     static MenuBar* GetDocFrameMenuBar( Window* pWin );
     static USHORT GetDocFrameCount();
 
+    static BOOL bCatchGPF;
 #if OSL_DEBUG_LEVEL > 1
     static EditWindow *m_pDbgWin;
 #endif
@@ -382,7 +385,8 @@ protected:
     void HandleMacroRecorder();
 
 public:
-    StatementCommand (SCmdStream *pIn);
+    StatementCommand( SCmdStream *pIn );
+    StatementCommand( StatementList *pAfterThis, USHORT MethodId, USHORT Params, USHORT Nr1 );
     virtual BOOL Execute();
     BOOL DisplayHID();
     void Translate();
