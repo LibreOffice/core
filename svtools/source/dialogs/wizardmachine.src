@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wizardmachine.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-09 22:49:46 $
+ *  last change: $Author: kz $ $Date: 2001-04-11 18:07:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,7 +124,7 @@ String STR_WIZDLG_PREVIOUS
     Text[ greek ] = "<< Ðßóù";
     Text[ dutch ] = "<< ~Vorige";
     Text[ french ] = "<< ~Précédent";
-    Text[ spanish ] = "<< ~Anterior";
+    Text[ spanish ] = "<< ~Regresar";
     Text[ italian ] = "<< ~Previous";
     Text[ danish ] = "<< ~Previous";
     Text[ swedish ] = "<< T~illbaka";
@@ -141,6 +141,9 @@ String STR_WIZDLG_PREVIOUS
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.6  2001/04/09 22:49:46  kz
+ *  Merge SRC627: 10.04.01 - 00:49:22
+ *
  *  Revision 1.5  2001/03/31 05:15:22  kz
  *  Merge SRC627: 03/31/01 - 07:15:06 (NoBranch)
  *
