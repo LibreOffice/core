@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.119 $
+#   $Revision: 1.120 $
 #
-#   last change: $Author: hjs $ $Date: 2002-07-18 10:12:53 $
+#   last change: $Author: kz $ $Date: 2002-07-24 15:27:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -1455,6 +1455,11 @@ CFLAGSAPPEND+=$(ENVWARNFLAGS)
 #to be removed soon!!!
 .IF "$(TF_CNTEX)"=="$(WORK_STAMP)"
 CDEFS+= -DTF_CNTEX
+.ENDIF
+
+#to be removed soon!!!
+.IF "$(TF_CAPELLA)"!=""
+CDEFS+= -DTF_CAPELLA
 .ENDIF
 
 #.IF "$(UPDATER)"=="YES"
