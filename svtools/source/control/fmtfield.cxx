@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtfield.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: fs $ $Date: 2002-09-27 13:49:10 $
+ *  last change: $Author: fs $ $Date: 2002-10-15 07:38:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -605,6 +605,24 @@ void FormattedField::FormatChanged( FORMAT_CHANGE_TYPE _nWhat )
 }
 
 //------------------------------------------------------------------------------
+void FormattedField::Commit()
+{
+    // remember the old text
+    String sOld( GetText() );
+
+    // do the reformat
+    ReFormat();
+
+    // did the text change?
+    if ( GetText() != sOld )
+    {   // consider the field as modified
+        Modify();
+        // but we have the most recent value now
+        m_bValueDirty = FALSE;
+    }
+}
+
+//------------------------------------------------------------------------------
 void FormattedField::ReFormat()
 {
     if (!IsEmptyFieldEnabled() || GetText().Len())
@@ -679,13 +697,7 @@ long FormattedField::Notify(NotifyEvent& rNEvt)
         }
         else
         {
-            String sOld = GetText();
-            ReFormat();
-            if (GetText() != sOld)
-            {
-                Modify();
-                m_bValueDirty = FALSE;
-            }
+            Commit();
         }
     }
 
