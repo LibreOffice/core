@@ -2,9 +2,9 @@
  *
  *  $RCSfile: texteng.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2003-10-06 14:49:14 $
+ *  last change: $Author: hr $ $Date: 2003-11-07 15:08:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2922,8 +2922,8 @@ void TextEngine::ImpInitWritingDirections( ULONG nPara )
 
         long nCount = ubidi_countRuns( pBidi, &nError );
 
-        UTextOffset nStart = 0;
-        UTextOffset nEnd;
+        int32_t nStart = 0;
+        int32_t nEnd;
         UBiDiLevel nCurrDir;
 
         for ( USHORT nIdx = 0; nIdx < nCount; ++nIdx )
