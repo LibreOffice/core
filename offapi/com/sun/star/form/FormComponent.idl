@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormComponent.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:53:49 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 19:34:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,7 @@
     @see FormControlModel
     @see com::sun::star::form::component::Form
  */
-service FormComponent
+published service FormComponent
 {
     /** identifies the component as a candidate for being part of a form.
         <p>This interface also provides the access to the component's parent.</p>
