@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FTable.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-30 10:44:16 $
+ *  last change: $Author: fs $ $Date: 2001-07-17 12:34:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,6 +158,13 @@ namespace connectivity
 
 
             sal_Int32 getFilePos() const { return m_nFilePos; }
+
+        public:
+            // helper
+
+            // creates a stream using ::utl::UcbStreamHelper::CreateStream, but the error is simplified
+            // (NULL or non-NULL is returned)
+            static SvStream* createStream_simpleError( const String& _rFileName, StreamMode _eOpenMode);
         };
     }
 }

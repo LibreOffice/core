@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FTable.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-30 10:44:16 $
+ *  last change: $Author: fs $ $Date: 2001-07-17 12:34:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,9 @@
 #endif
 #ifndef _COM_SUN_STAR_SDBC_COLUMNVALUE_HPP_
 #include <com/sun/star/sdbc/ColumnValue.hpp>
+#endif
+#ifndef _UNTOOLS_UCBSTREAMHELPER_HXX
+#include <unotools/ucbstreamhelper.hxx>
 #endif
 
 using namespace connectivity;
@@ -253,7 +256,18 @@ void OFileTable::addColumn(const ::com::sun::star::uno::Reference< ::com::sun::s
 void OFileTable::dropColumn(sal_Int32 _nPos)
 {
 }
+
 // -----------------------------------------------------------------------------
+SvStream* OFileTable::createStream_simpleError( const String& _rFileName, StreamMode _eOpenMode)
+{
+    SvStream* pReturn = ::utl::UcbStreamHelper::CreateStream( _rFileName, _eOpenMode, NULL);
+    if (pReturn && (ERRCODE_NONE != pReturn->GetErrorCode()))
+    {
+        delete pReturn;
+        pReturn = NULL;
+    }
+    return pReturn;
+}
 
-
+// -----------------------------------------------------------------------------
 
