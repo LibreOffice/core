@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextSortable.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:56:57 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:15:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,8 @@ module com {  module sun {  module star {  module text {
 //=============================================================================
 
 /** provides an interface for sorting.
+
+    @deprecated
  */
 service TextSortable
 {
