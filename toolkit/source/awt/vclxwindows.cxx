@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindows.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 10:33:00 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 12:49:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2367,6 +2367,26 @@ void VCLXScrollBar::setProperty( const ::rtl::OUString& PropertyName, const ::co
         sal_uInt16 nPropType = GetPropertyId( PropertyName );
         switch ( nPropType )
         {
+            case BASEPROPERTY_LIVE_SCROLL:
+            {
+                sal_Bool bDo = sal_False;
+                if ( !bVoid )
+                {
+                    OSL_VERIFY( Value >>= bDo );
+                }
+                AllSettings aSettings( pScrollBar->GetSettings() );
+                StyleSettings aStyle( aSettings.GetStyleSettings() );
+                ULONG nDragOptions = aStyle.GetDragFullOptions();
+                if ( bDo )
+                    nDragOptions |= DRAGFULL_OPTION_SCROLL;
+                else
+                    nDragOptions &= ~DRAGFULL_OPTION_SCROLL;
+                aStyle.SetDragFullOptions( nDragOptions );
+                aSettings.SetStyleSettings( aStyle );
+                pScrollBar->SetSettings( aSettings );
+            }
+            break;
+
             case BASEPROPERTY_SCROLLVALUE:
             {
                 if ( !bVoid )
@@ -2462,6 +2482,11 @@ void VCLXScrollBar::setProperty( const ::rtl::OUString& PropertyName, const ::co
 
         switch ( nPropType )
         {
+            case BASEPROPERTY_LIVE_SCROLL:
+            {
+                aProp <<= (sal_Bool)( 0 != ( pScrollBar->GetSettings().GetStyleSettings().GetDragFullOptions() & DRAGFULL_OPTION_SCROLL ) );
+            }
+            break;
             case BASEPROPERTY_SCROLLVALUE:
             {
                 aProp <<= (sal_Int32) getValue();
