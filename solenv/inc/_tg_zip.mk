@@ -60,6 +60,7 @@ $(ZIP1TARGETN) :
     +-zip $(ZIP1FLAGS) $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) $(foreach,j,$(ZIP1LIST) $(subst,LANGDIR,$($(langdir_type)_{$(subst,$(ZIP1HELPVAR), $(@:db))}) $j )) -x delzip $(avoid_cvs_dir)
 .ENDIF			# "$(ZIP1DIR)" != ""
     @+-$(GNUCOPY) -p $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) $@.$(INPATH) >& $(NULLDEV)
+    @+-$(RM) $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@)
     @+-$(RM) $@ >& $(NULLDEV)
 .IF "$(GUI)"=="UNX"
     @+if ( -r $@.$(INPATH) ) $(RENAME) $@.$(INPATH) $@
@@ -159,6 +160,7 @@ $(ZIP2TARGETN) :
     +-zip $(ZIP2FLAGS) $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) $(foreach,j,$(ZIP2LIST) $(subst,LANGDIR,$($(langdir_type)_{$(subst,$(ZIP2HELPVAR), $(@:db))}) $j )) -x delzip $(avoid_cvs_dir)
 .ENDIF			# "$(ZIP2DIR)" != ""
     @+-$(GNUCOPY) -p $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) $@.$(INPATH) >& $(NULLDEV)
+    @+-$(RM) $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@)
     @+-$(RM) $@ >& $(NULLDEV)
 .IF "$(GUI)"=="UNX"
     @+if ( -r $@.$(INPATH) ) $(RENAME) $@.$(INPATH) $@
@@ -258,6 +260,7 @@ $(ZIP3TARGETN) :
     +-zip $(ZIP3FLAGS) $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) $(foreach,j,$(ZIP3LIST) $(subst,LANGDIR,$($(langdir_type)_{$(subst,$(ZIP3HELPVAR), $(@:db))}) $j )) -x delzip $(avoid_cvs_dir)
 .ENDIF			# "$(ZIP3DIR)" != ""
     @+-$(GNUCOPY) -p $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) $@.$(INPATH) >& $(NULLDEV)
+    @+-$(RM) $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@)
     @+-$(RM) $@ >& $(NULLDEV)
 .IF "$(GUI)"=="UNX"
     @+if ( -r $@.$(INPATH) ) $(RENAME) $@.$(INPATH) $@
@@ -357,6 +360,7 @@ $(ZIP4TARGETN) :
     +-zip $(ZIP4FLAGS) $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) $(foreach,j,$(ZIP4LIST) $(subst,LANGDIR,$($(langdir_type)_{$(subst,$(ZIP4HELPVAR), $(@:db))}) $j )) -x delzip $(avoid_cvs_dir)
 .ENDIF			# "$(ZIP4DIR)" != ""
     @+-$(GNUCOPY) -p $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) $@.$(INPATH) >& $(NULLDEV)
+    @+-$(RM) $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@)
     @+-$(RM) $@ >& $(NULLDEV)
 .IF "$(GUI)"=="UNX"
     @+if ( -r $@.$(INPATH) ) $(RENAME) $@.$(INPATH) $@
@@ -456,6 +460,7 @@ $(ZIP5TARGETN) :
     +-zip $(ZIP5FLAGS) $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) $(foreach,j,$(ZIP5LIST) $(subst,LANGDIR,$($(langdir_type)_{$(subst,$(ZIP5HELPVAR), $(@:db))}) $j )) -x delzip $(avoid_cvs_dir)
 .ENDIF			# "$(ZIP5DIR)" != ""
     @+-$(GNUCOPY) -p $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) $@.$(INPATH) >& $(NULLDEV)
+    @+-$(RM) $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@)
     @+-$(RM) $@ >& $(NULLDEV)
 .IF "$(GUI)"=="UNX"
     @+if ( -r $@.$(INPATH) ) $(RENAME) $@.$(INPATH) $@
@@ -555,6 +560,7 @@ $(ZIP6TARGETN) :
     +-zip $(ZIP6FLAGS) $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) $(foreach,j,$(ZIP6LIST) $(subst,LANGDIR,$($(langdir_type)_{$(subst,$(ZIP6HELPVAR), $(@:db))}) $j )) -x delzip $(avoid_cvs_dir)
 .ENDIF			# "$(ZIP6DIR)" != ""
     @+-$(GNUCOPY) -p $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) $@.$(INPATH) >& $(NULLDEV)
+    @+-$(RM) $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@)
     @+-$(RM) $@ >& $(NULLDEV)
 .IF "$(GUI)"=="UNX"
     @+if ( -r $@.$(INPATH) ) $(RENAME) $@.$(INPATH) $@
@@ -654,6 +660,7 @@ $(ZIP7TARGETN) :
     +-zip $(ZIP7FLAGS) $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) $(foreach,j,$(ZIP7LIST) $(subst,LANGDIR,$($(langdir_type)_{$(subst,$(ZIP7HELPVAR), $(@:db))}) $j )) -x delzip $(avoid_cvs_dir)
 .ENDIF			# "$(ZIP7DIR)" != ""
     @+-$(GNUCOPY) -p $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) $@.$(INPATH) >& $(NULLDEV)
+    @+-$(RM) $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@)
     @+-$(RM) $@ >& $(NULLDEV)
 .IF "$(GUI)"=="UNX"
     @+if ( -r $@.$(INPATH) ) $(RENAME) $@.$(INPATH) $@
@@ -753,6 +760,7 @@ $(ZIP8TARGETN) :
     +-zip $(ZIP8FLAGS) $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) $(foreach,j,$(ZIP8LIST) $(subst,LANGDIR,$($(langdir_type)_{$(subst,$(ZIP8HELPVAR), $(@:db))}) $j )) -x delzip $(avoid_cvs_dir)
 .ENDIF			# "$(ZIP8DIR)" != ""
     @+-$(GNUCOPY) -p $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) $@.$(INPATH) >& $(NULLDEV)
+    @+-$(RM) $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@)
     @+-$(RM) $@ >& $(NULLDEV)
 .IF "$(GUI)"=="UNX"
     @+if ( -r $@.$(INPATH) ) $(RENAME) $@.$(INPATH) $@
@@ -852,6 +860,7 @@ $(ZIP9TARGETN) :
     +-zip $(ZIP9FLAGS) $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) $(foreach,j,$(ZIP9LIST) $(subst,LANGDIR,$($(langdir_type)_{$(subst,$(ZIP9HELPVAR), $(@:db))}) $j )) -x delzip $(avoid_cvs_dir)
 .ENDIF			# "$(ZIP9DIR)" != ""
     @+-$(GNUCOPY) -p $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) $@.$(INPATH) >& $(NULLDEV)
+    @+-$(RM) $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@)
     @+-$(RM) $@ >& $(NULLDEV)
 .IF "$(GUI)"=="UNX"
     @+if ( -r $@.$(INPATH) ) $(RENAME) $@.$(INPATH) $@
@@ -951,6 +960,7 @@ $(ZIP10TARGETN) :
     +-zip $(ZIP10FLAGS) $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) $(foreach,j,$(ZIP10LIST) $(subst,LANGDIR,$($(langdir_type)_{$(subst,$(ZIP10HELPVAR), $(@:db))}) $j )) -x delzip $(avoid_cvs_dir)
 .ENDIF			# "$(ZIP10DIR)" != ""
     @+-$(GNUCOPY) -p $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) $@.$(INPATH) >& $(NULLDEV)
+    @+-$(RM) $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@)
     @+-$(RM) $@ >& $(NULLDEV)
 .IF "$(GUI)"=="UNX"
     @+if ( -r $@.$(INPATH) ) $(RENAME) $@.$(INPATH) $@

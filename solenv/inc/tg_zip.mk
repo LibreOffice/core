@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_zip.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: hjs $ $Date: 2002-08-22 17:26:07 $
+#   last change: $Author: rt $ $Date: 2002-11-26 09:15:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -151,6 +151,7 @@ $(ZIP$(TNR)TARGETN) :
     +-zip $(ZIP$(TNR)FLAGS) $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) $(foreach,j,$(ZIP$(TNR)LIST) $(subst,LANGDIR,$($(langdir_type)_{$(subst,$(ZIP$(TNR)HELPVAR), $(@:db))}) $j )) -x delzip $(avoid_cvs_dir)
 .ENDIF			# "$(ZIP$(TNR)DIR)" != ""
     @+-$(GNUCOPY) -p $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) $@.$(INPATH) >& $(NULLDEV)
+    @+-$(RM) $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@)
     @+-$(RM) $@ >& $(NULLDEV)
 .IF "$(GUI)"=="UNX"
     @+if ( -r $@.$(INPATH) ) $(RENAME) $@.$(INPATH) $@
