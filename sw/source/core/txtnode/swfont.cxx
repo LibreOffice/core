@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfont.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ama $ $Date: 2001-04-10 14:24:56 $
+ *  last change: $Author: fme $ $Date: 2001-04-18 12:23:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1177,19 +1177,8 @@ void SwSubFont::_DrawText( SwDrawTextInfo &rInf, const BOOL bGrey )
     rInf.SetPos( aPos );
 
     if( GetEscapement() )
-    {
-        if( DFLT_ESC_AUTO_SUB == GetEscapement() )
-            aPos.Y() += nOrgHeight - nOrgAscent -
-                    pLastFont->GetHeight( rInf.GetShell(), rInf.GetpOut() ) +
-                    pLastFont->GetAscent( rInf.GetShell(), rInf.GetpOut() );
-        else if( DFLT_ESC_AUTO_SUPER == GetEscapement() )
-        {
-            aPos.Y() += pLastFont->GetAscent( rInf.GetShell(), rInf.GetpOut() );
-            aPos.Y() -= nOrgAscent;
-        }
-        else
-            aPos.Y() -= short( ((long)nOrgHeight * GetEscapement()) / 100L );
-    }
+        CalcEsc( rInf, aPos );
+
     rInf.SetKern( CheckKerning() + rInf.GetSperren() );
 
     if( IsCapital() )
@@ -1271,17 +1260,8 @@ void SwSubFont::_DrawStretchText( SwDrawTextInfo &rInf )
     Point aPos( rInf.GetPos() );
 
     if( GetEscapement() )
-    {
-        if( DFLT_ESC_AUTO_SUB == GetEscapement() )
-            aPos.Y() += nOrgHeight - nOrgAscent -
-                    pLastFont->GetHeight( rInf.GetShell(), rInf.GetpOut() ) +
-                    pLastFont->GetAscent( rInf.GetShell(), rInf.GetpOut() );
-        else if( DFLT_ESC_AUTO_SUPER == GetEscapement() )
-            aPos.Y() += pLastFont->GetAscent( rInf.GetShell(), rInf.GetpOut())-
-                        nOrgAscent;
-        else
-            aPos.Y() -= short( ((long)nOrgHeight * GetEscapement()) / 100L );
-    }
+        CalcEsc( rInf, aPos );
+
     rInf.SetKern( CheckKerning() + rInf.GetSperren() );
 
     if( IsCapital() )
@@ -1366,3 +1346,69 @@ xub_StrLen SwSubFont::_GetCrsrOfst( SwDrawTextInfo& rInf )
     return nCrsr;
 }
 
+/*************************************************************************
+ *                    SwSubFont::CalcEsc()
+ *************************************************************************/
+
+void SwSubFont::CalcEsc( SwDrawTextInfo& rInf, Point& rPos )
+{
+    const USHORT nOrientation = GetOrientation();
+    const USHORT nEscapement = GetEscapement();
+    long nOfst;
+
+    switch ( nEscapement )
+    {
+    case DFLT_ESC_AUTO_SUB :
+        nOfst = nOrgHeight - nOrgAscent -
+            pLastFont->GetHeight( rInf.GetShell(), rInf.GetpOut() ) +
+            pLastFont->GetAscent( rInf.GetShell(), rInf.GetpOut() );
+
+        switch ( nOrientation )
+        {
+        case 0 :
+            rPos.Y() += nOfst;
+            break;
+        case 900 :
+            rPos.X() += nOfst;
+            break;
+        case 2700 :
+            rPos.X() -= nOfst;
+            break;
+        }
+
+        break;
+    case DFLT_ESC_AUTO_SUPER :
+        nOfst = pLastFont->GetAscent( rInf.GetShell(), rInf.GetpOut() ) -
+                nOrgAscent;
+
+        switch ( nOrientation )
+        {
+        case 0 :
+            rPos.Y() += nOfst;
+            break;
+        case 900 :
+            rPos.X() += nOfst;
+            break;
+        case 2700 :
+            rPos.X() -= nOfst;
+            break;
+        }
+
+        break;
+    default :
+        nOfst = ((long)nOrgHeight * GetEscapement()) / 100L;
+
+        switch ( nOrientation )
+        {
+        case 0 :
+            rPos.Y() -= nOfst;
+            break;
+        case 900 :
+            rPos.X() -= nOfst;
+            break;
+        case 2700 :
+            rPos.X() += nOfst;
+            break;
+        }
+    }
+}
