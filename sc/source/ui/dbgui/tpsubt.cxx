@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpsubt.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 18:58:38 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:22:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,9 +201,9 @@ BOOL ScTpSubTotalGroup::DoReset( USHORT             nGroupNo,
 
     if ( theSubTotalData.bGroupActive[nGroupIdx] )
     {
-        USHORT          nField      = theSubTotalData.nField[nGroupIdx];
-        USHORT          nSubTotals  = theSubTotalData.nSubTotals[nGroupIdx];
-        USHORT*         pSubTotals  = theSubTotalData.pSubTotals[nGroupIdx];
+        SCCOL           nField      = theSubTotalData.nField[nGroupIdx];
+        SCCOL           nSubTotals  = theSubTotalData.nSubTotals[nGroupIdx];
+        SCCOL*          pSubTotals  = theSubTotalData.pSubTotals[nGroupIdx];
         ScSubTotalFunc* pFunctions  = theSubTotalData.pFunctions[nGroupIdx];
 
         aLbGroup.SelectEntryPos( GetFieldSelPos( nField )+1 );
@@ -264,7 +264,7 @@ BOOL ScTpSubTotalGroup::DoFillItemSet( USHORT       nGroupNo,
     }
 
     ScSubTotalFunc* pFunctions  = NULL;
-    USHORT*         pSubTotals  = NULL;
+    SCCOL*          pSubTotals  = NULL;
     USHORT          nGroup      = aLbGroup.GetSelectEntryPos();
     USHORT          nEntryCount = (USHORT)aLbColumns.GetEntryCount();
     USHORT          nCheckCount = aLbColumns.GetCheckedEntryCount();
@@ -276,13 +276,13 @@ BOOL ScTpSubTotalGroup::DoFillItemSet( USHORT       nGroupNo,
     theSubTotalData.bGroupActive[nGroupIdx] = (nGroup != 0);
     theSubTotalData.nField[nGroupIdx]       = (nGroup != 0)
                                                 ? nFieldArr[nGroup-1]
-                                                : 0;
+                                                : static_cast<SCCOL>(0);
 
     if ( nEntryCount>0 && nCheckCount>0 && nGroup!=0 )
     {
         USHORT nFunction    = 0;
 
-        pSubTotals = new USHORT         [nCheckCount];
+        pSubTotals = new SCCOL          [nCheckCount];
         pFunctions = new ScSubTotalFunc [nCheckCount];
 
         for ( USHORT i=0, nCheck=0; i<nEntryCount; i++ )
@@ -320,11 +320,11 @@ void ScTpSubTotalGroup::FillListBoxes()
 
     if ( pViewData && pDoc )
     {
-        USHORT  nFirstCol   = rSubTotalData.nCol1;
-        USHORT  nFirstRow   = rSubTotalData.nRow1;
-        USHORT  nTab        = pViewData->GetTabNo();
-        USHORT  nMaxCol     = rSubTotalData.nCol2;
-        USHORT  col;
+        SCCOL   nFirstCol   = rSubTotalData.nCol1;
+        SCROW   nFirstRow   = rSubTotalData.nRow1;
+        SCTAB   nTab        = pViewData->GetTabNo();
+        SCCOL   nMaxCol     = rSubTotalData.nCol2;
+        SCCOL   col;
         USHORT  i=0;
         String  aFieldName;
 
@@ -355,7 +355,7 @@ void ScTpSubTotalGroup::FillListBoxes()
 
 // -----------------------------------------------------------------------
 
-USHORT ScTpSubTotalGroup::GetFieldSelPos( USHORT nField )
+USHORT ScTpSubTotalGroup::GetFieldSelPos( SCCOL nField )
 {
     USHORT  nFieldPos   = 0;
     BOOL    bFound      = FALSE;
