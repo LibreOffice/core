@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshimp.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-17 10:58:36 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:24:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -345,7 +345,8 @@ class SAL_DLLPRIVATE FmXFormShell   :public FmXFormShell_BASE
     SvLongs             m_arrRelativeGridColumn;
 
     ::osl::Mutex    m_aMutex;
-    sal_uInt32      m_nInvalidationEvent;
+    ULONG           m_nInvalidationEvent;
+    ULONG           m_nActivationEvent;
     ::std::queue< FmLoadAction >
                     m_aLoadingPages;
 
@@ -403,6 +404,7 @@ class SAL_DLLPRIVATE FmXFormShell   :public FmXFormShell_BASE
     sal_Bool        m_bChangingDesignMode:1;    // sal_True within SetDesignMode
     sal_Bool        m_bPreparedClose    : 1;    // for the current modification state of the current form
                                                 //  PrepareClose had been called and the user denied to save changes
+    sal_Bool        m_bFirstActivation  : 1;    // has the shell ever been activated?
 
 public:
     // attribute access
@@ -478,6 +480,10 @@ public:
     void        SetY2KState(sal_uInt16 n);
 
 protected:
+    // activation handling
+    inline  sal_Bool    hasEverBeenActivated( ) const { return !m_bFirstActivation; }
+    inline  void        setHasBeenActivated( ) { m_bFirstActivation = sal_False; }
+
     // form handling
     /// load or unload the forms on a page
             void        loadForms( FmFormPage* _pPage, const sal_uInt16 _nBehaviour = FORMS_LOAD | FORMS_SYNC );
@@ -610,6 +616,7 @@ private:
     DECL_LINK(OnCanceledNotFound, FmFoundRecordInformation*);
     DECL_LINK(OnSearchContextRequest, FmSearchContext*);
     DECL_LINK(OnTimeOut, void*);
+    DECL_LINK(OnFirstTimeActivation, void*);
 
     void LoopGrids(sal_Int16 nWhat);
 
