@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glyphset.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cp $ $Date: 2001-11-01 16:22:47 $
+ *  last change: $Author: cp $ $Date: 2001-11-19 18:00:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -458,31 +458,43 @@ GlyphSet::ImplDrawText (PrinterGfx &rGfx, const Point& rPoint,
         Point     aPoint  = rPoint;
         sal_Int32 nOffset = 0;
         sal_Int32 nGlyphs = 0;
+        sal_Int32 nChar;
+
+        // get offset to first glyph
+        for (nChar = 0; (nChar < nLen) && (pGlyphSetID[nChar] != *aSet); nChar++)
+        {
+            nOffset = pDeltaArray [nChar];
+        }
 
         // loop over all chars to extract those that share the current glyph set
-        for (int nChar = 0; nChar < nLen; nChar++)
+        for (nChar = 0; nChar < nLen; nChar++)
         {
             if (pGlyphSetID[nChar] == *aSet)
             {
                 pGlyphSubset [nGlyphs] = pGlyphID [nChar];
-                pDeltaSubset [nGlyphs] = nOffset;
+                // the offset to the next glyph is determined by the glyph in
+                // front of the next glyph with the same glyphset id
+                // most often, this will be the current glyph
+                while ((nChar + 1) < nLen)
+                {
+                    if (pGlyphSetID[nChar + 1] == *aSet)
+                        break;
+                    else
+                        nChar += 1;
+                }
+                pDeltaSubset [nGlyphs] = pDeltaArray[nChar] - nOffset;
 
-                nOffset  = nChar < nLen - 1 ? pDeltaArray [nChar] : 0;
                 nGlyphs += 1;
-            }
-            else
-            {
-                nOffset += nChar < nLen - 1 ? pDeltaArray [nChar] : 0;
             }
         }
 
         // show the text using the PrinterGfx text api
-        aPoint.Move (pDeltaSubset[0], 0);
+        aPoint.Move (nOffset, 0);
 
         rtl::OString aGlyphSetName(GetGlyphSetName(*aSet));
         rGfx.PSSetFont  (aGlyphSetName, GetGlyphSetEncoding(*aSet));
         rGfx.PSMoveTo   (aPoint);
-        rGfx.PSShowText (pGlyphSubset, nGlyphs, nGlyphs, nGlyphs > 1 ? pDeltaSubset + 1 : NULL);
+        rGfx.PSShowText (pGlyphSubset, nGlyphs, nGlyphs, nGlyphs > 1 ? pDeltaSubset : NULL);
     }
 }
 
