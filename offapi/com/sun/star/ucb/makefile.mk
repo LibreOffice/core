@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.30 $
+#   $Revision: 1.31 $
 #
-#   last change: $Author: sb $ $Date: 2001-08-20 15:33:04 $
+#   last change: $Author: kso $ $Date: 2001-09-07 09:16:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -115,6 +115,7 @@ IDLFILES=\
         DefaultHierarchyDataSource.idl\
     DocumentHeaderField.idl\
     DocumentStoreMode.idl\
+        DuplicateCommandIdentifierException.idl\
     DuplicateProviderException.idl\
     DynamicResultSet.idl\
     Error.idl\
