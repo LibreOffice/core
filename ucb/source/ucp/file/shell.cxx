@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: hr $ $Date: 2001-11-05 20:24:36 $
+ *  last change: $Author: hr $ $Date: 2001-11-08 16:28:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -986,17 +986,6 @@ shell::setv( sal_Int32 CommandId,
 
     return ret;
 }
-
-#if ( defined(GCC) && __GNUC__ >= 3 )
-static void dummy (void) throw (InteractiveAugmentedIOException)
-{
-    // This one is never called. One throw statement is needed to convince
-    // the gcc-3.0.x compiler to place the RTTI information for
-    // InteractiveAugmentedIOException into the object file.
-    throw InteractiveAugmentedIOException();
-}
-#endif
-
 
 /*********************************************************************************/
 /*                                                                               */
