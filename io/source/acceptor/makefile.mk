@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: rt $ $Date: 2003-04-23 16:21:07 $
+#   last change: $Author: hjs $ $Date: 2003-08-18 14:58:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -95,7 +95,7 @@ SHL1STDLIBS= \
         $(CPPULIB) 	\
         $(CPPUHELPERLIB) 
 
-.IF "$(OS)"=="MACOSX"
+.IF "$(OS)$(CVER)"=="MACOSXC295"
 SHL1STDLIBS+= -lconnectr
 .ENDIF
 
