@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XHandoutMasterSupplier.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-15 12:18:47 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 21:29:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@
 
 /** returns the handout master page for this document
  */
-interface XHandoutMasterSupplier: com::sun::star::uno::XInterface
+published interface XHandoutMasterSupplier: com::sun::star::uno::XInterface
 {
     /** returns the <type>DrawPage</type>.
      */
