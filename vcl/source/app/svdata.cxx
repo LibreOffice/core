@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdata.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obr $ $Date: 2002-10-02 09:50:05 $
+ *  last change: $Author: obr $ $Date: 2002-10-08 11:03:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -316,6 +316,7 @@ com::sun::star::uno::Any AccessBridgeCurrentContext::getValueByName( const rtl::
 bool ImplInitAccessBridge()
 {
     bool bSuccess = true;
+    bool bErrorMessage = (FALSE != vcl::SettingsConfigItem::get()->IsValidConfigMgr());
     ImplSVData* pSVData = ImplGetSVData();
     if( ! pSVData->mxAccessBridge.is() )
     {
@@ -350,43 +351,49 @@ bool ImplInitAccessBridge()
         {
             bSuccess = false;
 
-            ResMgr *pResMgr = ImplGetResMgr();
-
-            String aTitle(ResId(SV_ACCESSERROR_MISSING_JAVA, pResMgr));
-            String aMessage(ResId(SV_ACCESSERROR_MISSING_JAVA_MSG, pResMgr));
-
-            ::std::list< String > aButtonList;
-            aButtonList.push_back(String(ResId(SV_BUTTONTEXT_OK, pResMgr)));
-
-            ImplShowNativeDialog(aTitle, aMessage, aButtonList);
-        }
-
-        catch(::com::sun::star::uno::Exception exception)
-        {
-            String aTitle;
-            String aMessage;
-            ResMgr *pResMgr = ImplGetResMgr();
-
-            if( exception.Message.compareTo(::rtl::OUString::createFromAscii("ClassNotFound"), 13) )
+            if( bErrorMessage )
             {
-                aTitle = String(ResId(SV_ACCESSERROR_MISSING_BRIDGE, pResMgr));
-                aMessage = String(ResId(SV_ACCESSERROR_MISSING_BRIDGE_MSG, pResMgr));
-            }
-            else if( exception.Message.compareTo(::rtl::OUString::createFromAscii("NoSuchMethod"), 12) )
-            {
-                aTitle = String(ResId(SV_ACCESSERROR_WRONG_VERSION, pResMgr));
-                aMessage = String(ResId(SV_ACCESSERROR_WRONG_VERSION_MSG, pResMgr));
-            }
+                ResMgr *pResMgr = ImplGetResMgr();
 
-            if( aTitle.Len() != 0 )
-            {
+                String aTitle(ResId(SV_ACCESSERROR_MISSING_JAVA, pResMgr));
+                String aMessage(ResId(SV_ACCESSERROR_MISSING_JAVA_MSG, pResMgr));
+
                 ::std::list< String > aButtonList;
                 aButtonList.push_back(String(ResId(SV_BUTTONTEXT_OK, pResMgr)));
 
                 ImplShowNativeDialog(aTitle, aMessage, aButtonList);
             }
+        }
 
+        catch(::com::sun::star::uno::Exception exception)
+        {
             bSuccess = false;
+
+            if( bErrorMessage )
+            {
+                String aTitle;
+                String aMessage;
+                ResMgr *pResMgr = ImplGetResMgr();
+
+                if( exception.Message.compareTo(::rtl::OUString::createFromAscii("ClassNotFound"), 13) )
+                {
+                    aTitle = String(ResId(SV_ACCESSERROR_MISSING_BRIDGE, pResMgr));
+                    aMessage = String(ResId(SV_ACCESSERROR_MISSING_BRIDGE_MSG, pResMgr));
+                }
+                else if( exception.Message.compareTo(::rtl::OUString::createFromAscii("NoSuchMethod"), 12) )
+                {
+                    aTitle = String(ResId(SV_ACCESSERROR_WRONG_VERSION, pResMgr));
+                    aMessage = String(ResId(SV_ACCESSERROR_WRONG_VERSION_MSG, pResMgr));
+                }
+
+                if( aTitle.Len() != 0 )
+                {
+                    ::std::list< String > aButtonList;
+                    aButtonList.push_back(String(ResId(SV_BUTTONTEXT_OK, pResMgr)));
+
+                    ImplShowNativeDialog(aTitle, aMessage, aButtonList);
+                }
+            }
         }
     }
     return bSuccess;
