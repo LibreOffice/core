@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.97 $
+ *  $Revision: 1.98 $
  *
- *  last change: $Author: cdt $ $Date: 2002-05-31 09:15:16 $
+ *  last change: $Author: ssa $ $Date: 2002-06-03 13:05:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -848,7 +848,7 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, const ::com::sun::star::
 
 #ifndef REMOTE_APPSERVER
         static const char* pEnv = getenv("SAL_ACCESSIBILITY_ENABLED" );
-        if( true || ( pEnv && *pEnv ) || Application::GetSettings().GetMiscSettings().GetEnableATToolSupport() )
+        if( ( pEnv && *pEnv ) || Application::GetSettings().GetMiscSettings().GetEnableATToolSupport() )
         {
             // instanciate access bridge service
             if(!pSVData->mxAccessBridge.is())
