@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqlmessage.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-04 20:16:28 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 06:10:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,6 +205,7 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
         Text[ arabic ] = "«· ›«’Ì·";
         Text[ turkish ] = "Ayr˝nt˝lar";
         Text[ catalan ] = "Detalles";
+        Text[ finnish ] = "Lis‰tiedot";
     };
     FixedText FT_ERRORLIST
     {
@@ -232,6 +233,7 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
         Text[ arabic ] = "ﬁ«∆„… «·√Œÿ«¡:";
         Text[ turkish ] = "Hata listesi:";
         Text[ catalan ] = "Lista de ~errores:";
+        Text[ finnish ] = "Virhe~luettelo:";
     };
     Control CTL_ERRORLIST
     {
@@ -267,6 +269,7 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
         Text[ arabic ] = "«·Ê’›:";
         Text[ turkish ] = "AÁ˝klama:";
         Text[ catalan ] = "~DescripciÛn:";
+        Text[ finnish ] = "~Kuvaus:";
     };
     MultiLineEdit ME_DESCRIPTION
     {
@@ -308,6 +311,7 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
         Text[ turkish ] = "Error";
         Text[ arabic ] = "Œÿ√";
         Text[ catalan ] = "Error";
+        Text[ finnish ] = "Virhe";
     };
     String STR_EXCEPTION_WARNING
     {
@@ -332,6 +336,7 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
         Text[ turkish ] = "Warning";
         Text[ arabic ] = " Õ–Ì—";
         Text[ catalan ] = "Advertencia";
+        Text[ finnish ] = "Varoitus";
     };
     String STR_EXCEPTION_INFO
     {
@@ -353,9 +358,10 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
         Text[ korean ] = "¡§∫∏";
         Text[ chinese_simplified ] = "–≈œ¢";
         Text[ chinese_traditional ] = "∏Í∞T";
-        Text[ turkish ] = "Information";
+        Text[ turkish ] = "Bilgi";
         Text[ arabic ] = "„⁄·Ê„« ";
         Text[ catalan ] = "InformaciÛn";
+        Text[ finnish ] = "Tiedot";
     };
     String STR_EXCEPTION_DETAILS
     {
@@ -377,9 +383,10 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
         Text[ korean ] = "ªÛºº";
         Text[ chinese_simplified ] = "œ∏Ω⁄";
         Text[ chinese_traditional ] = "≤”∏`";
-        Text[ turkish ] = "Details";
+        Text[ turkish ] = "Ayr˝nt˝lar";
         Text[ arabic ] = " ›«’Ì·";
         Text[ catalan ] = "Detalles";
+        Text[ finnish ] = "Lis‰tiedot";
     };
     String STR_EXCEPTION_STATUS
     {
@@ -404,6 +411,7 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
         Text[ turkish ] = "SQL State";
         Text[ arabic ] = "Õ«·…SQL";
         Text[ catalan ] = "Estado SQL";
+        Text[ finnish ] = "SQL-tila";
     };
     String STR_EXCEPTION_ERRORCODE
     {
@@ -428,6 +436,7 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
         Text[ turkish ] = "Error code";
         Text[ arabic ] = "—„“ «·Œÿ√";
         Text[ catalan ] = "CÛdigo de error";
+        Text[ finnish ] = "Virhekoodi";
     };
 };
 
@@ -435,6 +444,9 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.10  2001/05/04 20:16:28  rt
+ *  Merge SRC630: 04.05.01 - 22:16:34 (NoBranch)
+ *
  *  Revision 1.9  2001/03/31 06:08:21  kz
  *  Merge SRC627: 31.03.01 - 08:07:51 (NoBranch)
  *
