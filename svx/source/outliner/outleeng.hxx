@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outleeng.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: aw $ $Date: 2002-08-01 14:45:29 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 15:49:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef _OUTLEENG_HXX
 #define _OUTLEENG_HXX
 
@@ -93,6 +92,9 @@ public:
     virtual void        ParagraphHeightChanged( USHORT nPara );
     virtual BOOL        SpellNextDocument();
     virtual XubString   GetUndoComment( USHORT nUndoId ) const;
+
+    // for text conversion
+    virtual BOOL        ConvertNextDocument();
 
     virtual void        FieldClicked( const SvxFieldItem& rField, USHORT nPara, USHORT nPos );
     virtual void        FieldSelected( const SvxFieldItem& rField, USHORT nPara, USHORT nPos );
