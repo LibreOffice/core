@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 14:29:41 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:33:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,11 +87,12 @@
 				<desc xml:lang="sv">Contains a container for passwords.</desc>
 				<desc xml:lang="pl">Contains a container for passwords.</desc>
 				<desc xml:lang="pt-BR">Contains a container for passwords.</desc>
-				<desc xml:lang="ja">Contains a container for passwords.</desc>
+				<desc xml:lang="ja">パスワードのコンテナが含まれます。</desc>
 				<desc xml:lang="ko">Contains a container for passwords.</desc>
 				<desc xml:lang="tr">Contains a container for passwords.</desc>
 				<desc xml:lang="th">Contains a container for passwords.</desc>
 				<desc xml:lang="hi-IN">Contains a container for passwords.</desc>
+				<desc xml:lang="x-comment">Contains a container for passwords.</desc>
 			</info>
 			<prop oor:name="Password" oor:type="xs:string" oor:localized="false">
 				<info>
@@ -114,11 +115,12 @@
 					<desc xml:lang="sv">Contains a password encoded with the master password.</desc>
 					<desc xml:lang="pl">Contains a password encoded with the master password.</desc>
 					<desc xml:lang="pt-BR">Contains a password encoded with the master password.</desc>
-					<desc xml:lang="ja">Contains a password encoded with the master password.</desc>
+					<desc xml:lang="ja">マスターパスワードでエンコードされたパスワードが含まれます。</desc>
 					<desc xml:lang="ko">Contains a password encoded with the master password.</desc>
 					<desc xml:lang="tr">Contains a password encoded with the master password.</desc>
 					<desc xml:lang="th">Contains a password encoded with the master password.</desc>
 					<desc xml:lang="hi-IN">Contains a password encoded with the master password.</desc>
+					<desc xml:lang="x-comment">Contains a password encoded with the master password.</desc>
 				</info>
 			</prop>
 		</group>
@@ -144,11 +146,12 @@
 				<desc xml:lang="sv">Contains settings for a history entry in the history list.</desc>
 				<desc xml:lang="pl">Contains settings for a history entry in the history list.</desc>
 				<desc xml:lang="pt-BR">Contains settings for a history entry in the history list.</desc>
-				<desc xml:lang="ja">Contains settings for a history entry in the history list.</desc>
+				<desc xml:lang="ja">履歴リスト内の履歴項目の設定が含まれます。</desc>
 				<desc xml:lang="ko">Contains settings for a history entry in the history list.</desc>
 				<desc xml:lang="tr">Contains settings for a history entry in the history list.</desc>
 				<desc xml:lang="th">Contains settings for a history entry in the history list.</desc>
 				<desc xml:lang="hi-IN">Contains settings for a history entry in the history list.</desc>
+				<desc xml:lang="x-comment">Contains settings for a history entry in the history list.</desc>
 			</info>
 			<prop oor:name="URL" oor:type="xs:string">
 				<info>
@@ -171,11 +174,12 @@
 					<desc xml:lang="sv">Specifies the document URL.</desc>
 					<desc xml:lang="pl">Specifies the document URL.</desc>
 					<desc xml:lang="pt-BR">Specifies the document URL.</desc>
-					<desc xml:lang="ja">Specifies the document URL.</desc>
+					<desc xml:lang="ja">ドキュメントの URL を指定します。</desc>
 					<desc xml:lang="ko">Specifies the document URL.</desc>
 					<desc xml:lang="tr">Specifies the document URL.</desc>
 					<desc xml:lang="th">Specifies the document URL.</desc>
 					<desc xml:lang="hi-IN">Specifies the document URL.</desc>
+					<desc xml:lang="x-comment">Specifies the document URL.</desc>
 				</info>
 			</prop>
 			<prop oor:name="Filter" oor:type="xs:string">
@@ -199,11 +203,12 @@
 					<desc xml:lang="sv">Specifies the filter name that was chosen to load the document.</desc>
 					<desc xml:lang="pl">Specifies the filter name that was chosen to load the document.</desc>
 					<desc xml:lang="pt-BR">Specifies the filter name that was chosen to load the document.</desc>
-					<desc xml:lang="ja">Specifies the filter name that was chosen to load the document.</desc>
+					<desc xml:lang="ja">ドキュメントのロード時に選択されるフィルタ名を指定します。</desc>
 					<desc xml:lang="ko">Specifies the filter name that was chosen to load the document.</desc>
 					<desc xml:lang="tr">Specifies the filter name that was chosen to load the document.</desc>
 					<desc xml:lang="th">Specifies the filter name that was chosen to load the document.</desc>
 					<desc xml:lang="hi-IN">Specifies the filter name that was chosen to load the document.</desc>
+					<desc xml:lang="x-comment">Specifies the filter name that was chosen to load the document.</desc>
 				</info>
 			</prop>
 			<prop oor:name="Title" oor:type="xs:string">
@@ -227,11 +232,12 @@
 					<desc xml:lang="sv">Indicates the title of the URL that is displayed on the user-interface.</desc>
 					<desc xml:lang="pl">Indicates the title of the URL that is displayed on the user-interface.</desc>
 					<desc xml:lang="pt-BR">Indicates the title of the URL that is displayed on the user-interface.</desc>
-					<desc xml:lang="ja">Indicates the title of the URL that is displayed on the user-interface.</desc>
+					<desc xml:lang="ja">ユーザーインタフェースに表示される URL のタイトルを示します。</desc>
 					<desc xml:lang="ko">Indicates the title of the URL that is displayed on the user-interface.</desc>
 					<desc xml:lang="tr">Indicates the title of the URL that is displayed on the user-interface.</desc>
 					<desc xml:lang="th">Indicates the title of the URL that is displayed on the user-interface.</desc>
 					<desc xml:lang="hi-IN">Indicates the title of the URL that is displayed on the user-interface.</desc>
+					<desc xml:lang="x-comment">Indicates the title of the URL that is displayed on the user-interface.</desc>
 				</info>
 			</prop>
 			<prop oor:name="Password" oor:type="xs:string">
@@ -255,11 +261,12 @@
 					<desc xml:lang="sv">Contains an encoded password used to open the document.</desc>
 					<desc xml:lang="pl">Contains an encoded password used to open the document.</desc>
 					<desc xml:lang="pt-BR">Contains an encoded password used to open the document.</desc>
-					<desc xml:lang="ja">Contains an encoded password used to open the document.</desc>
+					<desc xml:lang="ja">ドキュメントを開くために使用するエンコード済みのパスワードが含まれます。</desc>
 					<desc xml:lang="ko">Contains an encoded password used to open the document.</desc>
 					<desc xml:lang="tr">Contains an encoded password used to open the document.</desc>
 					<desc xml:lang="th">Contains an encoded password used to open the document.</desc>
 					<desc xml:lang="hi-IN">Contains an encoded password used to open the document.</desc>
+					<desc xml:lang="x-comment">Contains an encoded password used to open the document.</desc>
 				</info>
 			</prop>
 		</group>
@@ -285,11 +292,12 @@
 				<desc xml:lang="sv">Describes a menu entry for configurable office menus (e.g. file new).</desc>
 				<desc xml:lang="pl">Describes a menu entry for configurable office menus (e.g. file new).</desc>
 				<desc xml:lang="pt-BR">Describes a menu entry for configurable office menus (e.g. file new).</desc>
-				<desc xml:lang="ja">Describes a menu entry for configurable office menus (e.g. file new).</desc>
+				<desc xml:lang="ja">構成可能なオフィスメニュー (たとえば「新規ファイル」) のメニュー項目を記述します。</desc>
 				<desc xml:lang="ko">Describes a menu entry for configurable office menus (e.g. file new).</desc>
 				<desc xml:lang="tr">Describes a menu entry for configurable office menus (e.g. file new).</desc>
 				<desc xml:lang="th">Describes a menu entry for configurable office menus (e.g. file new).</desc>
 				<desc xml:lang="hi-IN">Describes a menu entry for configurable office menus (e.g. file new).</desc>
+				<desc xml:lang="x-comment">Describes a menu entry for configurable office menus (e.g. file new).</desc>
 			</info>
 			<prop oor:name="URL" oor:type="xs:string">
 				<info>
@@ -312,11 +320,12 @@
 					<desc xml:lang="sv">Specifies the URL for dispatch.</desc>
 					<desc xml:lang="pl">Specifies the URL for dispatch.</desc>
 					<desc xml:lang="pt-BR">Specifies the URL for dispatch.</desc>
-					<desc xml:lang="ja">Specifies the URL for dispatch.</desc>
+					<desc xml:lang="ja">ディスパッチ用 URL を指定します。</desc>
 					<desc xml:lang="ko">Specifies the URL for dispatch.</desc>
 					<desc xml:lang="tr">Specifies the URL for dispatch.</desc>
 					<desc xml:lang="th">Specifies the URL for dispatch.</desc>
 					<desc xml:lang="hi-IN">Specifies the URL for dispatch.</desc>
+					<desc xml:lang="x-comment">Specifies the URL for dispatch.</desc>
 				</info>
 			</prop>
 			<prop oor:name="Title" oor:type="xs:string" oor:localized="true">
@@ -340,11 +349,12 @@
 					<desc xml:lang="sv">Specifies the label of a menu entry.</desc>
 					<desc xml:lang="pl">Specifies the label of a menu entry.</desc>
 					<desc xml:lang="pt-BR">Specifies the label of a menu entry.</desc>
-					<desc xml:lang="ja">Specifies the label of a menu entry.</desc>
+					<desc xml:lang="ja">メニュー項目のラベルを指定します。</desc>
 					<desc xml:lang="ko">Specifies the label of a menu entry.</desc>
 					<desc xml:lang="tr">Specifies the label of a menu entry.</desc>
 					<desc xml:lang="th">Specifies the label of a menu entry.</desc>
 					<desc xml:lang="hi-IN">Specifies the label of a menu entry.</desc>
+					<desc xml:lang="x-comment">Specifies the label of a menu entry.</desc>
 				</info>
 			</prop>
 			<prop oor:name="ImageIdentifier" oor:type="xs:string">
@@ -368,11 +378,12 @@
 					<desc xml:lang="sv">Specifies the identifier of an assigned icon.</desc>
 					<desc xml:lang="pl">Specifies the identifier of an assigned icon.</desc>
 					<desc xml:lang="pt-BR">Specifies the identifier of an assigned icon.</desc>
-					<desc xml:lang="ja">Specifies the identifier of an assigned icon.</desc>
+					<desc xml:lang="ja">割り当てられたアイコンの識別子を指定します。</desc>
 					<desc xml:lang="ko">Specifies the identifier of an assigned icon.</desc>
 					<desc xml:lang="tr">Specifies the identifier of an assigned icon.</desc>
 					<desc xml:lang="th">Specifies the identifier of an assigned icon.</desc>
 					<desc xml:lang="hi-IN">Specifies the identifier of an assigned icon.</desc>
+					<desc xml:lang="x-comment">Specifies the identifier of an assigned icon.</desc>
 				</info>
 			</prop>
 			<prop oor:name="TargetName" oor:type="xs:string">
@@ -396,11 +407,12 @@
 					<desc xml:lang="sv">Specifies the dispatch target (for example, _blank to open URL in new frame).</desc>
 					<desc xml:lang="pl">Specifies the dispatch target (for example, _blank to open URL in new frame).</desc>
 					<desc xml:lang="pt-BR">Specifies the dispatch target (for example, _blank to open URL in new frame).</desc>
-					<desc xml:lang="ja">Specifies the dispatch target (for example, _blank to open URL in new frame).</desc>
+					<desc xml:lang="ja">ディスパッチターゲットを指定します (たとえば、新しいフレーム内で URL を開くための_blank など)。</desc>
 					<desc xml:lang="ko">Specifies the dispatch target (for example, _blank to open URL in new frame).</desc>
 					<desc xml:lang="tr">Specifies the dispatch target (for example, _blank to open URL in new frame).</desc>
 					<desc xml:lang="th">Specifies the dispatch target (for example, _blank to open URL in new frame).</desc>
 					<desc xml:lang="hi-IN">Specifies the dispatch target (for example, _blank to open URL in new frame).</desc>
+					<desc xml:lang="x-comment">Specifies the dispatch target (for example, _blank to open URL in new frame).</desc>
 				</info>
 			</prop>
 		</group>
@@ -426,11 +438,12 @@
 				<desc xml:lang="sv">Contains the width and height of the dialog size.</desc>
 				<desc xml:lang="pl">Contains the width and height of the dialog size.</desc>
 				<desc xml:lang="pt-BR">Contains the width and height of the dialog size.</desc>
-				<desc xml:lang="ja">Contains the width and height of the dialog size.</desc>
+				<desc xml:lang="ja">ダイアログのサイズの幅と高さが含まれます。</desc>
 				<desc xml:lang="ko">Contains the width and height of the dialog size.</desc>
 				<desc xml:lang="tr">Contains the width and height of the dialog size.</desc>
 				<desc xml:lang="th">Contains the width and height of the dialog size.</desc>
 				<desc xml:lang="hi-IN">Contains the width and height of the dialog size.</desc>
+				<desc xml:lang="x-comment">Contains the width and height of the dialog size.</desc>
 			</info>
 			<prop oor:name="Height" oor:type="xs:int">
 				<info>
@@ -453,11 +466,12 @@
 					<desc xml:lang="sv">Contains the height of the dialog  [UNIT=pixel].</desc>
 					<desc xml:lang="pl">Contains the height of the dialog  [UNIT=pixel].</desc>
 					<desc xml:lang="pt-BR">Contains the height of the dialog  [UNIT=pixel].</desc>
-					<desc xml:lang="ja">Contains the height of the dialog  [UNIT=pixel].</desc>
+					<desc xml:lang="ja">ダイアログの高さが含まれます [単位 = ピクセル]。</desc>
 					<desc xml:lang="ko">Contains the height of the dialog  [UNIT=pixel].</desc>
 					<desc xml:lang="tr">Contains the height of the dialog  [UNIT=pixel].</desc>
 					<desc xml:lang="th">Contains the height of the dialog  [UNIT=pixel].</desc>
 					<desc xml:lang="hi-IN">Contains the height of the dialog  [UNIT=pixel].</desc>
+					<desc xml:lang="x-comment">Contains the height of the dialog  [UNIT=pixel].</desc>
 				</info>
 			</prop>
 			<prop oor:name="Width" oor:type="xs:int">
@@ -481,11 +495,12 @@
 					<desc xml:lang="sv">Contains the width of the dialog  [UNIT=pixel].</desc>
 					<desc xml:lang="pl">Contains the width of the dialog  [UNIT=pixel].</desc>
 					<desc xml:lang="pt-BR">Contains the width of the dialog  [UNIT=pixel].</desc>
-					<desc xml:lang="ja">Contains the width of the dialog  [UNIT=pixel].</desc>
+					<desc xml:lang="ja">ダイアログの幅が含まれます [単位 = ピクセル]。</desc>
 					<desc xml:lang="ko">Contains the width of the dialog  [UNIT=pixel].</desc>
 					<desc xml:lang="tr">Contains the width of the dialog  [UNIT=pixel].</desc>
 					<desc xml:lang="th">Contains the width of the dialog  [UNIT=pixel].</desc>
 					<desc xml:lang="hi-IN">Contains the width of the dialog  [UNIT=pixel].</desc>
+					<desc xml:lang="x-comment">Contains the width of the dialog  [UNIT=pixel].</desc>
 				</info>
 			</prop>
 		</group>
@@ -511,11 +526,12 @@
 				<desc xml:lang="sv">Describes the characteristics of a font.</desc>
 				<desc xml:lang="pl">Describes the characteristics of a font.</desc>
 				<desc xml:lang="pt-BR">Describes the characteristics of a font.</desc>
-				<desc xml:lang="ja">Describes the characteristics of a font.</desc>
+				<desc xml:lang="ja">フォントの特性を記述します。</desc>
 				<desc xml:lang="ko">Describes the characteristics of a font.</desc>
 				<desc xml:lang="tr">Describes the characteristics of a font.</desc>
 				<desc xml:lang="th">Describes the characteristics of a font.</desc>
 				<desc xml:lang="hi-IN">Describes the characteristics of a font.</desc>
+				<desc xml:lang="x-comment">Describes the characteristics of a font.</desc>
 			</info>
 			<prop oor:name="Name" oor:type="xs:string">
 				<info>
@@ -538,11 +554,12 @@
 					<desc xml:lang="sv">Specifies the exact name of the font (&quot;Arial&quot;,&quot;Courier&quot;, &quot;Frutiger&quot;).</desc>
 					<desc xml:lang="pl">Specifies the exact name of the font (&quot;Arial&quot;,&quot;Courier&quot;, &quot;Frutiger&quot;).</desc>
 					<desc xml:lang="pt-BR">Specifies the exact name of the font (&quot;Arial&quot;,&quot;Courier&quot;, &quot;Frutiger&quot;).</desc>
-					<desc xml:lang="ja">Specifies the exact name of the font (&quot;Arial&quot;,&quot;Courier&quot;, &quot;Frutiger&quot;).</desc>
+					<desc xml:lang="ja">フォントの正確な名前を指定します (Arial、Courier、Frutiger)。</desc>
 					<desc xml:lang="ko">Specifies the exact name of the font (&quot;Arial&quot;,&quot;Courier&quot;, &quot;Frutiger&quot;).</desc>
 					<desc xml:lang="tr">Specifies the exact name of the font (&quot;Arial&quot;,&quot;Courier&quot;, &quot;Frutiger&quot;).</desc>
 					<desc xml:lang="th">Specifies the exact name of the font (&quot;Arial&quot;,&quot;Courier&quot;, &quot;Frutiger&quot;).</desc>
 					<desc xml:lang="hi-IN">Specifies the exact name of the font (&quot;Arial&quot;,&quot;Courier&quot;, &quot;Frutiger&quot;).</desc>
+					<desc xml:lang="x-comment">Specifies the exact name of the font (&quot;Arial&quot;,&quot;Courier&quot;, &quot;Frutiger&quot;).</desc>
 				</info>
 			</prop>
 			<prop oor:name="Height" oor:type="xs:short">
@@ -566,11 +583,12 @@
 					<desc xml:lang="sv">Specifies the height of the font in the measure of the destination.</desc>
 					<desc xml:lang="pl">Specifies the height of the font in the measure of the destination.</desc>
 					<desc xml:lang="pt-BR">Specifies the height of the font in the measure of the destination.</desc>
-					<desc xml:lang="ja">Specifies the height of the font in the measure of the destination.</desc>
+					<desc xml:lang="ja">フォントの高さをターゲットの単位で指定します。</desc>
 					<desc xml:lang="ko">Specifies the height of the font in the measure of the destination.</desc>
 					<desc xml:lang="tr">Specifies the height of the font in the measure of the destination.</desc>
 					<desc xml:lang="th">Specifies the height of the font in the measure of the destination.</desc>
 					<desc xml:lang="hi-IN">Specifies the height of the font in the measure of the destination.</desc>
+					<desc xml:lang="x-comment">Specifies the height of the font in the measure of the destination.</desc>
 				</info>
 			</prop>
 			<prop oor:name="Width" oor:type="xs:short">
@@ -594,11 +612,12 @@
 					<desc xml:lang="sv">Specifies the width of the font in the measure of the destination.</desc>
 					<desc xml:lang="pl">Specifies the width of the font in the measure of the destination.</desc>
 					<desc xml:lang="pt-BR">Specifies the width of the font in the measure of the destination.</desc>
-					<desc xml:lang="ja">Specifies the width of the font in the measure of the destination.</desc>
+					<desc xml:lang="ja">フォントの幅をターゲットの単位で指定します。</desc>
 					<desc xml:lang="ko">Specifies the width of the font in the measure of the destination.</desc>
 					<desc xml:lang="tr">Specifies the width of the font in the measure of the destination.</desc>
 					<desc xml:lang="th">Specifies the width of the font in the measure of the destination.</desc>
 					<desc xml:lang="hi-IN">Specifies the width of the font in the measure of the destination.</desc>
+					<desc xml:lang="x-comment">Specifies the width of the font in the measure of the destination.</desc>
 				</info>
 			</prop>
 			<prop oor:name="StyleName" oor:type="xs:string">
@@ -622,11 +641,12 @@
 					<desc xml:lang="sv">Specifies the style name of the font (&quot;Bold&quot;, &quot;Italic&quot;, &quot;Italic Bold&quot;).</desc>
 					<desc xml:lang="pl">Specifies the style name of the font (&quot;Bold&quot;, &quot;Italic&quot;, &quot;Italic Bold&quot;).</desc>
 					<desc xml:lang="pt-BR">Specifies the style name of the font (&quot;Bold&quot;, &quot;Italic&quot;, &quot;Italic Bold&quot;).</desc>
-					<desc xml:lang="ja">Specifies the style name of the font (&quot;Bold&quot;, &quot;Italic&quot;, &quot;Italic Bold&quot;).</desc>
+					<desc xml:lang="ja">フォントのスタイル名を指定します (Bold、Italic、Italic Bold)。</desc>
 					<desc xml:lang="ko">Specifies the style name of the font (&quot;Bold&quot;, &quot;Italic&quot;, &quot;Italic Bold&quot;).</desc>
 					<desc xml:lang="tr">Specifies the style name of the font (&quot;Bold&quot;, &quot;Italic&quot;, &quot;Italic Bold&quot;).</desc>
 					<desc xml:lang="th">Specifies the style name of the font (&quot;Bold&quot;, &quot;Italic&quot;, &quot;Italic Bold&quot;).</desc>
 					<desc xml:lang="hi-IN">Specifies the style name of the font (&quot;Bold&quot;, &quot;Italic&quot;, &quot;Italic Bold&quot;).</desc>
+					<desc xml:lang="x-comment">Specifies the style name of the font (&quot;Bold&quot;, &quot;Italic&quot;, &quot;Italic Bold&quot;).</desc>
 				</info>
 			</prop>
 			<prop oor:name="Family" oor:type="xs:short">
@@ -650,11 +670,12 @@
 					<desc xml:lang="sv">Specifies the general style of the font.</desc>
 					<desc xml:lang="pl">Specifies the general style of the font.</desc>
 					<desc xml:lang="pt-BR">Specifies the general style of the font.</desc>
-					<desc xml:lang="ja">Specifies the general style of the font.</desc>
+					<desc xml:lang="ja">フォントの全般的なスタイルを指定します。</desc>
 					<desc xml:lang="ko">Specifies the general style of the font.</desc>
 					<desc xml:lang="tr">Specifies the general style of the font.</desc>
 					<desc xml:lang="th">Specifies the general style of the font.</desc>
 					<desc xml:lang="hi-IN">Specifies the general style of the font.</desc>
+					<desc xml:lang="x-comment">Specifies the general style of the font.</desc>
 				</info>
 				<constraints>
 					<enumeration oor:value="0">
@@ -666,7 +687,7 @@
 							<desc xml:lang="fi">DONTKNOW</desc>
 							<desc xml:lang="cs">DONTKNOW</desc>
 							<desc xml:lang="da">DONTKNOW</desc>
-							<desc xml:lang="zh-CN">DONTKNOW</desc>
+							<desc xml:lang="zh-CN">不知道</desc>
 							<desc xml:lang="zh-TW">DONTKNOW</desc>
 							<desc xml:lang="ar">DONTKNOW</desc>
 							<desc xml:lang="he">DONTKNOW</desc>
@@ -683,6 +704,7 @@
 							<desc xml:lang="tr">DONTKNOW</desc>
 							<desc xml:lang="th">DONTKNOW</desc>
 							<desc xml:lang="hi-IN">DONTKNOW</desc>
+							<desc xml:lang="x-comment">DONTKNOW</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="1">
@@ -694,7 +716,7 @@
 							<desc xml:lang="fi">DECORATIVE</desc>
 							<desc xml:lang="cs">DECORATIVE</desc>
 							<desc xml:lang="da">DECORATIVE</desc>
-							<desc xml:lang="zh-CN">DECORATIVE</desc>
+							<desc xml:lang="zh-CN">修饰的</desc>
 							<desc xml:lang="zh-TW">DECORATIVE</desc>
 							<desc xml:lang="ar">DECORATIVE</desc>
 							<desc xml:lang="he">DECORATIVE</desc>
@@ -711,6 +733,7 @@
 							<desc xml:lang="tr">DECORATIVE</desc>
 							<desc xml:lang="th">DECORATIVE</desc>
 							<desc xml:lang="hi-IN">DECORATIVE</desc>
+							<desc xml:lang="x-comment">DECORATIVE</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="2">
@@ -739,6 +762,7 @@
 							<desc xml:lang="tr">MODERN</desc>
 							<desc xml:lang="th">MODERN</desc>
 							<desc xml:lang="hi-IN">MODERN</desc>
+							<desc xml:lang="x-comment">MODERN</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="3">
@@ -767,6 +791,7 @@
 							<desc xml:lang="tr">ROMAN</desc>
 							<desc xml:lang="th">ROMAN</desc>
 							<desc xml:lang="hi-IN">ROMAN</desc>
+							<desc xml:lang="x-comment">ROMAN</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="4">
@@ -790,11 +815,13 @@
 							<desc xml:lang="sv">Skript</desc>
 							<desc xml:lang="pl">Skrypt</desc>
 							<desc xml:lang="pt-BR">SCRIPT</desc>
-							<desc xml:lang="ja">スクリプト</desc>
+							<desc xml:lang="ja">SCRIPT</desc>
 							<desc xml:lang="ko">스크립트</desc>
 							<desc xml:lang="tr">Betik</desc>
 							<desc xml:lang="th">สคริปต์</desc>
 							<desc xml:lang="hi-IN">स्क्रिप्ट्</desc>
+							<desc xml:lang="x-comment">SCRIPT</desc>
+							<desc xml:lang="sk">Skript</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="5">
@@ -823,6 +850,7 @@
 							<desc xml:lang="tr">SWISS</desc>
 							<desc xml:lang="th">SWISS</desc>
 							<desc xml:lang="hi-IN">SWISS</desc>
+							<desc xml:lang="x-comment">SWISS</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="6">
@@ -846,11 +874,12 @@
 							<desc xml:lang="sv">SYSTEM</desc>
 							<desc xml:lang="pl">SYSTEM</desc>
 							<desc xml:lang="pt-BR">Sistema</desc>
-							<desc xml:lang="ja">システム</desc>
+							<desc xml:lang="ja">SYSTEM</desc>
 							<desc xml:lang="ko">시스템</desc>
 							<desc xml:lang="tr">Sistem</desc>
 							<desc xml:lang="th">ระบบ</desc>
 							<desc xml:lang="hi-IN">सिस्टम</desc>
+							<desc xml:lang="x-comment">SYSTEM</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="7">
@@ -862,7 +891,7 @@
 							<desc xml:lang="fi">DONTKNOW</desc>
 							<desc xml:lang="cs">DONTKNOW</desc>
 							<desc xml:lang="da">DONTKNOW</desc>
-							<desc xml:lang="zh-CN">DONTKNOW</desc>
+							<desc xml:lang="zh-CN">不知道</desc>
 							<desc xml:lang="zh-TW">DONTKNOW</desc>
 							<desc xml:lang="ar">DONTKNOW</desc>
 							<desc xml:lang="he">DONTKNOW</desc>
@@ -879,6 +908,7 @@
 							<desc xml:lang="tr">DONTKNOW</desc>
 							<desc xml:lang="th">DONTKNOW</desc>
 							<desc xml:lang="hi-IN">DONTKNOW</desc>
+							<desc xml:lang="x-comment">DONTKNOW</desc>
 						</info>
 					</enumeration>
 				</constraints>
@@ -904,11 +934,12 @@
 					<desc xml:lang="sv">Specifies the character set which is supported by the font.</desc>
 					<desc xml:lang="pl">Specifies the character set which is supported by the font.</desc>
 					<desc xml:lang="pt-BR">Specifies the character set which is supported by the font.</desc>
-					<desc xml:lang="ja">Specifies the character set which is supported by the font.</desc>
+					<desc xml:lang="ja">フォントによってサポートされる文字種を指定します。</desc>
 					<desc xml:lang="ko">Specifies the character set which is supported by the font.</desc>
 					<desc xml:lang="tr">Specifies the character set which is supported by the font.</desc>
 					<desc xml:lang="th">Specifies the character set which is supported by the font.</desc>
 					<desc xml:lang="hi-IN">Specifies the character set which is supported by the font.</desc>
+					<desc xml:lang="x-comment">Specifies the character set which is supported by the font.</desc>
 				</info>
 				<constraints>
 					<enumeration oor:value="0">
@@ -920,7 +951,7 @@
 							<desc xml:lang="fi">DONTKNOW</desc>
 							<desc xml:lang="cs">DONTKNOW</desc>
 							<desc xml:lang="da">DONTKNOW</desc>
-							<desc xml:lang="zh-CN">DONTKNOW</desc>
+							<desc xml:lang="zh-CN">不知道</desc>
 							<desc xml:lang="zh-TW">DONTKNOW</desc>
 							<desc xml:lang="ar">DONTKNOW</desc>
 							<desc xml:lang="he">DONTKNOW</desc>
@@ -937,6 +968,7 @@
 							<desc xml:lang="tr">DONTKNOW</desc>
 							<desc xml:lang="th">DONTKNOW</desc>
 							<desc xml:lang="hi-IN">DONTKNOW</desc>
+							<desc xml:lang="x-comment">DONTKNOW</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="1">
@@ -965,6 +997,7 @@
 							<desc xml:lang="tr">ANSI</desc>
 							<desc xml:lang="th">ANSI</desc>
 							<desc xml:lang="hi-IN">ANSI</desc>
+							<desc xml:lang="x-comment">ANSI</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="2">
@@ -993,6 +1026,7 @@
 							<desc xml:lang="tr">MAC</desc>
 							<desc xml:lang="th">MAC</desc>
 							<desc xml:lang="hi-IN">MAC</desc>
+							<desc xml:lang="x-comment">; MAC</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="3">
@@ -1021,6 +1055,7 @@
 							<desc xml:lang="tr">IBMPC_437</desc>
 							<desc xml:lang="th">IBMPC_437</desc>
 							<desc xml:lang="hi-IN">IBMPC_437</desc>
+							<desc xml:lang="x-comment">IBMPC_437</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="4">
@@ -1049,6 +1084,7 @@
 							<desc xml:lang="tr">IBMPC_850</desc>
 							<desc xml:lang="th">IBMPC_850</desc>
 							<desc xml:lang="hi-IN">IBMPC_850</desc>
+							<desc xml:lang="x-comment">IBMPC_850</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="5">
@@ -1077,6 +1113,7 @@
 							<desc xml:lang="tr">IBMPC_860</desc>
 							<desc xml:lang="th">IBMPC_860</desc>
 							<desc xml:lang="hi-IN">IBMPC_860</desc>
+							<desc xml:lang="x-comment">IBMPC_860</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="6">
@@ -1105,6 +1142,7 @@
 							<desc xml:lang="tr">IBMPC_861</desc>
 							<desc xml:lang="th">IBMPC_861</desc>
 							<desc xml:lang="hi-IN">IBMPC_861</desc>
+							<desc xml:lang="x-comment">IBMPC_861</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="7">
@@ -1133,6 +1171,7 @@
 							<desc xml:lang="tr">IBMPC_863</desc>
 							<desc xml:lang="th">IBMPC_863</desc>
 							<desc xml:lang="hi-IN">IBMPC_863</desc>
+							<desc xml:lang="x-comment">IBMPC_863</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="8">
@@ -1161,6 +1200,7 @@
 							<desc xml:lang="tr">IBMPC_865</desc>
 							<desc xml:lang="th">IBMPC_865</desc>
 							<desc xml:lang="hi-IN">IBMPC_865</desc>
+							<desc xml:lang="x-comment">IBMPC_865</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="9">
@@ -1184,11 +1224,12 @@
 							<desc xml:lang="sv">SYSTEM</desc>
 							<desc xml:lang="pl">SYSTEM</desc>
 							<desc xml:lang="pt-BR">Sistema</desc>
-							<desc xml:lang="ja">システム</desc>
+							<desc xml:lang="ja">SYSTEM</desc>
 							<desc xml:lang="ko">시스템</desc>
 							<desc xml:lang="tr">Sistem</desc>
 							<desc xml:lang="th">ระบบ</desc>
 							<desc xml:lang="hi-IN">सिस्टम</desc>
+							<desc xml:lang="x-comment">SYSTEM</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="10">
@@ -1217,6 +1258,7 @@
 							<desc xml:lang="tr">Simge</desc>
 							<desc xml:lang="th">SYMBOL</desc>
 							<desc xml:lang="hi-IN">SYMBOL</desc>
+							<desc xml:lang="x-comment">SYMBOL</desc>
 						</info>
 					</enumeration>
 				</constraints>
@@ -1242,11 +1284,12 @@
 					<desc xml:lang="sv">Specifies the pitch of the font.</desc>
 					<desc xml:lang="pl">Specifies the pitch of the font.</desc>
 					<desc xml:lang="pt-BR">Specifies the pitch of the font.</desc>
-					<desc xml:lang="ja">Specifies the pitch of the font.</desc>
+					<desc xml:lang="ja">フォントのピッチを指定します。</desc>
 					<desc xml:lang="ko">Specifies the pitch of the font.</desc>
 					<desc xml:lang="tr">Specifies the pitch of the font.</desc>
 					<desc xml:lang="th">Specifies the pitch of the font.</desc>
 					<desc xml:lang="hi-IN">Specifies the pitch of the font.</desc>
+					<desc xml:lang="x-comment">Specifies the pitch of the font.</desc>
 				</info>
 				<constraints>
 					<enumeration oor:value="0">
@@ -1258,7 +1301,7 @@
 							<desc xml:lang="fi">DONTKNOW</desc>
 							<desc xml:lang="cs">DONTKNOW</desc>
 							<desc xml:lang="da">DONTKNOW</desc>
-							<desc xml:lang="zh-CN">DONTKNOW</desc>
+							<desc xml:lang="zh-CN">不知道</desc>
 							<desc xml:lang="zh-TW">DONTKNOW</desc>
 							<desc xml:lang="ar">DONTKNOW</desc>
 							<desc xml:lang="he">DONTKNOW</desc>
@@ -1275,6 +1318,7 @@
 							<desc xml:lang="tr">DONTKNOW</desc>
 							<desc xml:lang="th">DONTKNOW</desc>
 							<desc xml:lang="hi-IN">DONTKNOW</desc>
+							<desc xml:lang="x-comment">DONTKNOW</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="1">
@@ -1298,11 +1342,13 @@
 							<desc xml:lang="sv">Fast</desc>
 							<desc xml:lang="pl">stałe</desc>
 							<desc xml:lang="pt-BR">Largura Fixa</desc>
-							<desc xml:lang="ja">固定</desc>
+							<desc xml:lang="ja">FIXED</desc>
 							<desc xml:lang="ko">고정</desc>
 							<desc xml:lang="tr">Sabit</desc>
 							<desc xml:lang="th">คงที่</desc>
 							<desc xml:lang="hi-IN">स्थिर</desc>
+							<desc xml:lang="x-comment">FIXED</desc>
+							<desc xml:lang="sk">Písmo s nemennou šírkou</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="2">
@@ -1326,11 +1372,13 @@
 							<desc xml:lang="sv">Variabel</desc>
 							<desc xml:lang="pl">Zmienna</desc>
 							<desc xml:lang="pt-BR">Variável</desc>
-							<desc xml:lang="ja">変数</desc>
+							<desc xml:lang="ja">VARIABLE</desc>
 							<desc xml:lang="ko">변수</desc>
 							<desc xml:lang="tr">Değişken</desc>
 							<desc xml:lang="th">ตัวแปร</desc>
 							<desc xml:lang="hi-IN">परिवर्ती</desc>
+							<desc xml:lang="x-comment">VARIABLE</desc>
+							<desc xml:lang="sk">Premenný</desc>
 						</info>
 					</enumeration>
 				</constraints>
@@ -1356,11 +1404,12 @@
 					<desc xml:lang="sv">Specifies the character width. Depending on the specified width, a font that supports this width may be selected.  [UNIT=%].</desc>
 					<desc xml:lang="pl">Specifies the character width. Depending on the specified width, a font that supports this width may be selected.  [UNIT=%].</desc>
 					<desc xml:lang="pt-BR">Specifies the character width. Depending on the specified width, a font that supports this width may be selected.  [UNIT=%].</desc>
-					<desc xml:lang="ja">Specifies the character width. Depending on the specified width, a font that supports this width may be selected.  [UNIT=%].</desc>
+					<desc xml:lang="ja">文字の幅を指定します。指定した幅に応じて、その幅をサポートするフォントの選択が可能になります。[単位 = %].</desc>
 					<desc xml:lang="ko">Specifies the character width. Depending on the specified width, a font that supports this width may be selected.  [UNIT=%].</desc>
 					<desc xml:lang="tr">Specifies the character width. Depending on the specified width, a font that supports this width may be selected.  [UNIT=%].</desc>
 					<desc xml:lang="th">Specifies the character width. Depending on the specified width, a font that supports this width may be selected.  [UNIT=%].</desc>
 					<desc xml:lang="hi-IN">Specifies the character width. Depending on the specified width, a font that supports this width may be selected.  [UNIT=%].</desc>
+					<desc xml:lang="x-comment">Specifies the character width. Depending on the specified width, a font that supports this width may be selected.  [UNIT=%].</desc>
 				</info>
 			</prop>
 			<prop oor:name="Weight" oor:type="xs:double">
@@ -1384,11 +1433,12 @@
 					<desc xml:lang="sv">Specifies the thickness of the line.</desc>
 					<desc xml:lang="pl">Specifies the thickness of the line.</desc>
 					<desc xml:lang="pt-BR">Specifies the thickness of the line.</desc>
-					<desc xml:lang="ja">Specifies the thickness of the line.</desc>
+					<desc xml:lang="ja">線の太さを指定します。</desc>
 					<desc xml:lang="ko">Specifies the thickness of the line.</desc>
 					<desc xml:lang="tr">Specifies the thickness of the line.</desc>
 					<desc xml:lang="th">Specifies the thickness of the line.</desc>
 					<desc xml:lang="hi-IN">Specifies the thickness of the line.</desc>
+					<desc xml:lang="x-comment">Specifies the thickness of the line.</desc>
 				</info>
 			</prop>
 			<prop oor:name="Slant" oor:type="xs:short">
@@ -1412,11 +1462,12 @@
 					<desc xml:lang="sv">Specifies if there is a character slant (italic).</desc>
 					<desc xml:lang="pl">Specifies if there is a character slant (italic).</desc>
 					<desc xml:lang="pt-BR">Specifies if there is a character slant (italic).</desc>
-					<desc xml:lang="ja">Specifies if there is a character slant (italic).</desc>
+					<desc xml:lang="ja">文字を傾斜 (斜体) させるかどうかを指定します 。</desc>
 					<desc xml:lang="ko">Specifies if there is a character slant (italic).</desc>
 					<desc xml:lang="tr">Specifies if there is a character slant (italic).</desc>
 					<desc xml:lang="th">Specifies if there is a character slant (italic).</desc>
 					<desc xml:lang="hi-IN">Specifies if there is a character slant (italic).</desc>
+					<desc xml:lang="x-comment">Specifies if there is a character slant (italic).</desc>
 				</info>
 				<constraints>
 					<enumeration oor:value="0">
@@ -1440,11 +1491,13 @@
 							<desc xml:lang="sv">Ingen</desc>
 							<desc xml:lang="pl">Brak</desc>
 							<desc xml:lang="pt-BR">Nenhum</desc>
-							<desc xml:lang="ja">なし</desc>
+							<desc xml:lang="ja">NONE</desc>
 							<desc xml:lang="ko">없음</desc>
 							<desc xml:lang="tr">Yok</desc>
 							<desc xml:lang="th">ไม่มี</desc>
 							<desc xml:lang="hi-IN">कोई नहीं</desc>
+							<desc xml:lang="x-comment">NONE</desc>
+							<desc xml:lang="sk">Žiadne</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="1">
@@ -1468,11 +1521,13 @@
 							<desc xml:lang="sv">Kursiv</desc>
 							<desc xml:lang="pl">Ukośny</desc>
 							<desc xml:lang="pt-BR">Oblíquo</desc>
-							<desc xml:lang="ja">斜体</desc>
+							<desc xml:lang="ja">OBLIQUE</desc>
 							<desc xml:lang="ko">기울임</desc>
 							<desc xml:lang="tr">Eğimli</desc>
 							<desc xml:lang="th">เฉ</desc>
 							<desc xml:lang="hi-IN">तिर्यक</desc>
+							<desc xml:lang="x-comment">OBLIQUE</desc>
+							<desc xml:lang="sk">Šikmé</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="2">
@@ -1484,7 +1539,7 @@
 							<desc xml:lang="fi"> ITALIC</desc>
 							<desc xml:lang="cs"> ITALIC</desc>
 							<desc xml:lang="da"> ITALIC</desc>
-							<desc xml:lang="zh-CN"> ITALIC</desc>
+							<desc xml:lang="zh-CN"> 斜体</desc>
 							<desc xml:lang="zh-TW"> ITALIC</desc>
 							<desc xml:lang="ar"> ITALIC</desc>
 							<desc xml:lang="he"> ITALIC</desc>
@@ -1501,6 +1556,7 @@
 							<desc xml:lang="tr"> ITALIC</desc>
 							<desc xml:lang="th"> ITALIC</desc>
 							<desc xml:lang="hi-IN"> ITALIC</desc>
+							<desc xml:lang="x-comment"> ITALIC</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="3">
@@ -1512,7 +1568,7 @@
 							<desc xml:lang="fi">DONTKNOW</desc>
 							<desc xml:lang="cs">DONTKNOW</desc>
 							<desc xml:lang="da">DONTKNOW</desc>
-							<desc xml:lang="zh-CN">DONTKNOW</desc>
+							<desc xml:lang="zh-CN">不知道</desc>
 							<desc xml:lang="zh-TW">DONTKNOW</desc>
 							<desc xml:lang="ar">DONTKNOW</desc>
 							<desc xml:lang="he">DONTKNOW</desc>
@@ -1529,6 +1585,7 @@
 							<desc xml:lang="tr">DONTKNOW</desc>
 							<desc xml:lang="th">DONTKNOW</desc>
 							<desc xml:lang="hi-IN">DONTKNOW</desc>
+							<desc xml:lang="x-comment">DONTKNOW</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="4">
@@ -1540,7 +1597,7 @@
 							<desc xml:lang="fi">REVERSE_OBLIQUE</desc>
 							<desc xml:lang="cs">REVERSE_OBLIQUE</desc>
 							<desc xml:lang="da">REVERSE_OBLIQUE</desc>
-							<desc xml:lang="zh-CN">REVERSE_OBLIQUE</desc>
+							<desc xml:lang="zh-CN">逆向斜体</desc>
 							<desc xml:lang="zh-TW">REVERSE_OBLIQUE</desc>
 							<desc xml:lang="ar">REVERSE_OBLIQUE</desc>
 							<desc xml:lang="he">REVERSE_OBLIQUE</desc>
@@ -1557,6 +1614,7 @@
 							<desc xml:lang="tr">REVERSE_OBLIQUE</desc>
 							<desc xml:lang="th">REVERSE_OBLIQUE</desc>
 							<desc xml:lang="hi-IN">REVERSE_OBLIQUE</desc>
+							<desc xml:lang="x-comment">REVERSE_OBLIQUE</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="5">
@@ -1568,7 +1626,7 @@
 							<desc xml:lang="fi">REVERSE_ITALIC</desc>
 							<desc xml:lang="cs">REVERSE_ITALIC</desc>
 							<desc xml:lang="da">REVERSE_ITALIC</desc>
-							<desc xml:lang="zh-CN">REVERSE_ITALIC</desc>
+							<desc xml:lang="zh-CN">反斜体</desc>
 							<desc xml:lang="zh-TW">REVERSE_ITALIC</desc>
 							<desc xml:lang="ar">REVERSE_ITALIC</desc>
 							<desc xml:lang="he">REVERSE_ITALIC</desc>
@@ -1585,6 +1643,7 @@
 							<desc xml:lang="tr">REVERSE_ITALIC</desc>
 							<desc xml:lang="th">REVERSE_ITALIC</desc>
 							<desc xml:lang="hi-IN">REVERSE_ITALIC</desc>
+							<desc xml:lang="x-comment">REVERSE_ITALIC</desc>
 						</info>
 					</enumeration>
 				</constraints>
@@ -1610,11 +1669,12 @@
 					<desc xml:lang="sv">Specifies the type of underline.</desc>
 					<desc xml:lang="pl">Specifies the type of underline.</desc>
 					<desc xml:lang="pt-BR">Specifies the type of underline.</desc>
-					<desc xml:lang="ja">Specifies the type of underline.</desc>
+					<desc xml:lang="ja">下線の種類を指定します。</desc>
 					<desc xml:lang="ko">Specifies the type of underline.</desc>
 					<desc xml:lang="tr">Specifies the type of underline.</desc>
 					<desc xml:lang="th">Specifies the type of underline.</desc>
 					<desc xml:lang="hi-IN">Specifies the type of underline.</desc>
+					<desc xml:lang="x-comment">Specifies the type of underline.</desc>
 				</info>
 				<constraints>
 					<enumeration oor:value="0">
@@ -1638,11 +1698,13 @@
 							<desc xml:lang="sv">Ingen</desc>
 							<desc xml:lang="pl">Brak</desc>
 							<desc xml:lang="pt-BR">Nenhum</desc>
-							<desc xml:lang="ja">なし</desc>
+							<desc xml:lang="ja">NONE</desc>
 							<desc xml:lang="ko">없음</desc>
 							<desc xml:lang="tr">Yok</desc>
 							<desc xml:lang="th">ไม่มี</desc>
 							<desc xml:lang="hi-IN">कोई नहीं</desc>
+							<desc xml:lang="x-comment">NONE</desc>
+							<desc xml:lang="sk">Žiadne</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="1">
@@ -1666,11 +1728,13 @@
 							<desc xml:lang="sv">~Enkelt</desc>
 							<desc xml:lang="pl">~pojedyncze</desc>
 							<desc xml:lang="pt-BR">Simples</desc>
-							<desc xml:lang="ja">1行</desc>
+							<desc xml:lang="ja">SINGLE</desc>
 							<desc xml:lang="ko">1줄형</desc>
 							<desc xml:lang="tr">Tek</desc>
 							<desc xml:lang="th">บรรทัดเดียว</desc>
 							<desc xml:lang="hi-IN">अकेला</desc>
+							<desc xml:lang="x-comment">SINGLE</desc>
+							<desc xml:lang="sk">Jednoduché</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="2">
@@ -1694,11 +1758,13 @@
 							<desc xml:lang="sv">Dubbelt</desc>
 							<desc xml:lang="pl">podwójne</desc>
 							<desc xml:lang="pt-BR">Duplo</desc>
-							<desc xml:lang="ja">2行</desc>
+							<desc xml:lang="ja">DOUBLE</desc>
 							<desc xml:lang="ko">2 줄</desc>
 							<desc xml:lang="tr">İki satır</desc>
 							<desc xml:lang="th">บรรทัดคู่</desc>
 							<desc xml:lang="hi-IN">द्विगुणित</desc>
+							<desc xml:lang="x-comment">DOUBLE</desc>
+							<desc xml:lang="sk">Dvojité</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="3">
@@ -1722,11 +1788,13 @@
 							<desc xml:lang="sv">Prickar</desc>
 							<desc xml:lang="pl">Kropki</desc>
 							<desc xml:lang="pt-BR">Pontilhado</desc>
-							<desc xml:lang="ja">点線</desc>
+							<desc xml:lang="ja">DOTTED</desc>
 							<desc xml:lang="ko">점</desc>
 							<desc xml:lang="tr">Noktalı</desc>
 							<desc xml:lang="th">จุด</desc>
 							<desc xml:lang="hi-IN">बिन्दी</desc>
+							<desc xml:lang="x-comment">DOTTED</desc>
+							<desc xml:lang="sk">Bodkované</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="4">
@@ -1738,7 +1806,7 @@
 							<desc xml:lang="fi">DONTKNOW</desc>
 							<desc xml:lang="cs">DONTKNOW</desc>
 							<desc xml:lang="da">DONTKNOW</desc>
-							<desc xml:lang="zh-CN">DONTKNOW</desc>
+							<desc xml:lang="zh-CN">不知道</desc>
 							<desc xml:lang="zh-TW">DONTKNOW</desc>
 							<desc xml:lang="ar">DONTKNOW</desc>
 							<desc xml:lang="he">DONTKNOW</desc>
@@ -1755,6 +1823,7 @@
 							<desc xml:lang="tr">DONTKNOW</desc>
 							<desc xml:lang="th">DONTKNOW</desc>
 							<desc xml:lang="hi-IN">DONTKNOW</desc>
+							<desc xml:lang="x-comment">DONTKNOW</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="5">
@@ -1778,11 +1847,13 @@
 							<desc xml:lang="sv">streck</desc>
 							<desc xml:lang="pl">Kreski</desc>
 							<desc xml:lang="pt-BR">Traço</desc>
-							<desc xml:lang="ja">破線</desc>
+							<desc xml:lang="ja">DASH</desc>
 							<desc xml:lang="ko">대쉬</desc>
 							<desc xml:lang="tr">Çizgi</desc>
 							<desc xml:lang="th">เส้นประ</desc>
 							<desc xml:lang="hi-IN">डॉश</desc>
+							<desc xml:lang="x-comment">DASH</desc>
+							<desc xml:lang="sk">Čiarka</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="6">
@@ -1794,7 +1865,7 @@
 							<desc xml:lang="fi">LONGDASH</desc>
 							<desc xml:lang="cs">LONGDASH</desc>
 							<desc xml:lang="da">LONGDASH</desc>
-							<desc xml:lang="zh-CN">LONGDASH</desc>
+							<desc xml:lang="zh-CN">长划线</desc>
 							<desc xml:lang="zh-TW">LONGDASH</desc>
 							<desc xml:lang="ar">LONGDASH</desc>
 							<desc xml:lang="he">LONGDASH</desc>
@@ -1811,6 +1882,7 @@
 							<desc xml:lang="tr">LONGDASH</desc>
 							<desc xml:lang="th">LONGDASH</desc>
 							<desc xml:lang="hi-IN">LONGDASH</desc>
+							<desc xml:lang="x-comment">LONGDASH</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="7">
@@ -1822,7 +1894,7 @@
 							<desc xml:lang="fi">DASHDOT</desc>
 							<desc xml:lang="cs">DASHDOT</desc>
 							<desc xml:lang="da">DASHDOT</desc>
-							<desc xml:lang="zh-CN">DASHDOT</desc>
+							<desc xml:lang="zh-CN">划线点线</desc>
 							<desc xml:lang="zh-TW">DASHDOT</desc>
 							<desc xml:lang="ar">DASHDOT</desc>
 							<desc xml:lang="he">DASHDOT</desc>
@@ -1839,6 +1911,7 @@
 							<desc xml:lang="tr">DASHDOT</desc>
 							<desc xml:lang="th">DASHDOT</desc>
 							<desc xml:lang="hi-IN">DASHDOT</desc>
+							<desc xml:lang="x-comment">DASHDOT</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="8">
@@ -1850,7 +1923,7 @@
 							<desc xml:lang="fi">DASHDOTDOT</desc>
 							<desc xml:lang="cs">DASHDOTDOT</desc>
 							<desc xml:lang="da">DASHDOTDOT</desc>
-							<desc xml:lang="zh-CN">DASHDOTDOT</desc>
+							<desc xml:lang="zh-CN">划线点点</desc>
 							<desc xml:lang="zh-TW">DASHDOTDOT</desc>
 							<desc xml:lang="ar">DASHDOTDOT</desc>
 							<desc xml:lang="he">DASHDOTDOT</desc>
@@ -1867,6 +1940,7 @@
 							<desc xml:lang="tr">DASHDOTDOT</desc>
 							<desc xml:lang="th">DASHDOTDOT</desc>
 							<desc xml:lang="hi-IN">DASHDOTDOT</desc>
+							<desc xml:lang="x-comment">DASHDOTDOT</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="9">
@@ -1878,7 +1952,7 @@
 							<desc xml:lang="fi">SMALLWAVE</desc>
 							<desc xml:lang="cs">SMALLWAVE</desc>
 							<desc xml:lang="da">SMALLWAVE</desc>
-							<desc xml:lang="zh-CN">SMALLWAVE</desc>
+							<desc xml:lang="zh-CN">小波浪</desc>
 							<desc xml:lang="zh-TW">SMALLWAVE</desc>
 							<desc xml:lang="ar">SMALLWAVE</desc>
 							<desc xml:lang="he">SMALLWAVE</desc>
@@ -1895,6 +1969,7 @@
 							<desc xml:lang="tr">SMALLWAVE</desc>
 							<desc xml:lang="th">SMALLWAVE</desc>
 							<desc xml:lang="hi-IN">SMALLWAVE</desc>
+							<desc xml:lang="x-comment">SMALLWAVE</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="10">
@@ -1918,11 +1993,13 @@
 							<desc xml:lang="sv">Våg</desc>
 							<desc xml:lang="pl">Faliste</desc>
 							<desc xml:lang="pt-BR">Ondulação</desc>
-							<desc xml:lang="ja">波線</desc>
+							<desc xml:lang="ja">WAVE</desc>
 							<desc xml:lang="ko">반복 기호</desc>
 							<desc xml:lang="tr">Dalga</desc>
 							<desc xml:lang="th">ลอน</desc>
 							<desc xml:lang="hi-IN">लहर</desc>
+							<desc xml:lang="x-comment">WAVE</desc>
+							<desc xml:lang="sk">Vlnka</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="11">
@@ -1934,7 +2011,7 @@
 							<desc xml:lang="fi">DOUBLEWAVE</desc>
 							<desc xml:lang="cs">DOUBLEWAVE</desc>
 							<desc xml:lang="da">DOUBLEWAVE</desc>
-							<desc xml:lang="zh-CN">DOUBLEWAVE</desc>
+							<desc xml:lang="zh-CN">粗体双波浪</desc>
 							<desc xml:lang="zh-TW">DOUBLEWAVE</desc>
 							<desc xml:lang="ar">DOUBLEWAVE</desc>
 							<desc xml:lang="he">DOUBLEWAVE</desc>
@@ -1951,6 +2028,7 @@
 							<desc xml:lang="tr">DOUBLEWAVE</desc>
 							<desc xml:lang="th">DOUBLEWAVE</desc>
 							<desc xml:lang="hi-IN">DOUBLEWAVE</desc>
+							<desc xml:lang="x-comment">DOUBLEWAVE</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="12">
@@ -1974,11 +2052,13 @@
 							<desc xml:lang="sv">~Fet</desc>
 							<desc xml:lang="pl">Pogrubienie</desc>
 							<desc xml:lang="pt-BR">Negrito</desc>
-							<desc xml:lang="ja">太字</desc>
+							<desc xml:lang="ja">BOLD</desc>
 							<desc xml:lang="ko">굵게</desc>
 							<desc xml:lang="tr">Kalın</desc>
 							<desc xml:lang="th">หนา</desc>
 							<desc xml:lang="hi-IN">बोल्ड्</desc>
+							<desc xml:lang="x-comment">BOLD</desc>
+							<desc xml:lang="sk">Tučné</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="13">
@@ -1990,7 +2070,7 @@
 							<desc xml:lang="fi">BOLDDOTTED</desc>
 							<desc xml:lang="cs">BOLDDOTTED</desc>
 							<desc xml:lang="da">BOLDDOTTED</desc>
-							<desc xml:lang="zh-CN">BOLDDOTTED</desc>
+							<desc xml:lang="zh-CN">粗体点线</desc>
 							<desc xml:lang="zh-TW">BOLDDOTTED</desc>
 							<desc xml:lang="ar">BOLDDOTTED</desc>
 							<desc xml:lang="he">BOLDDOTTED</desc>
@@ -2007,6 +2087,7 @@
 							<desc xml:lang="tr">BOLDDOTTED</desc>
 							<desc xml:lang="th">BOLDDOTTED</desc>
 							<desc xml:lang="hi-IN">BOLDDOTTED</desc>
+							<desc xml:lang="x-comment">BOLDDOTTED</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="14">
@@ -2018,7 +2099,7 @@
 							<desc xml:lang="fi">BOLDDASH</desc>
 							<desc xml:lang="cs">BOLDDASH</desc>
 							<desc xml:lang="da">BOLDDASH</desc>
-							<desc xml:lang="zh-CN">BOLDDASH</desc>
+							<desc xml:lang="zh-CN">粗体划线</desc>
 							<desc xml:lang="zh-TW">BOLDDASH</desc>
 							<desc xml:lang="ar">BOLDDASH</desc>
 							<desc xml:lang="he">BOLDDASH</desc>
@@ -2035,6 +2116,7 @@
 							<desc xml:lang="tr">BOLDDASH</desc>
 							<desc xml:lang="th">BOLDDASH</desc>
 							<desc xml:lang="hi-IN">BOLDDASH</desc>
+							<desc xml:lang="x-comment">BOLDDASH</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="15">
@@ -2046,7 +2128,7 @@
 							<desc xml:lang="fi">BOLDLONGDASH</desc>
 							<desc xml:lang="cs">BOLDLONGDASH</desc>
 							<desc xml:lang="da">BOLDLONGDASH</desc>
-							<desc xml:lang="zh-CN">BOLDLONGDASH</desc>
+							<desc xml:lang="zh-CN">粗体长划线</desc>
 							<desc xml:lang="zh-TW">BOLDLONGDASH</desc>
 							<desc xml:lang="ar">BOLDLONGDASH</desc>
 							<desc xml:lang="he">BOLDLONGDASH</desc>
@@ -2063,6 +2145,7 @@
 							<desc xml:lang="tr">BOLDLONGDASH</desc>
 							<desc xml:lang="th">BOLDLONGDASH</desc>
 							<desc xml:lang="hi-IN">BOLDLONGDASH</desc>
+							<desc xml:lang="x-comment">BOLDLONGDASH</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="16">
@@ -2074,7 +2157,7 @@
 							<desc xml:lang="fi">BOLDDASHDOT</desc>
 							<desc xml:lang="cs">BOLDDASHDOT</desc>
 							<desc xml:lang="da">BOLDDASHDOT</desc>
-							<desc xml:lang="zh-CN">BOLDDASHDOT</desc>
+							<desc xml:lang="zh-CN">粗体点线</desc>
 							<desc xml:lang="zh-TW">BOLDDASHDOT</desc>
 							<desc xml:lang="ar">BOLDDASHDOT</desc>
 							<desc xml:lang="he">BOLDDASHDOT</desc>
@@ -2091,6 +2174,7 @@
 							<desc xml:lang="tr">BOLDDASHDOT</desc>
 							<desc xml:lang="th">BOLDDASHDOT</desc>
 							<desc xml:lang="hi-IN">BOLDDASHDOT</desc>
+							<desc xml:lang="x-comment">BOLDDASHDOT</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="17">
@@ -2102,7 +2186,7 @@
 							<desc xml:lang="fi">BOLDDASHDOTDOT</desc>
 							<desc xml:lang="cs">BOLDDASHDOTDOT</desc>
 							<desc xml:lang="da">BOLDDASHDOTDOT</desc>
-							<desc xml:lang="zh-CN">BOLDDASHDOTDOT</desc>
+							<desc xml:lang="zh-CN">粗体点线点线</desc>
 							<desc xml:lang="zh-TW">BOLDDASHDOTDOT</desc>
 							<desc xml:lang="ar">BOLDDASHDOTDOT</desc>
 							<desc xml:lang="he">BOLDDASHDOTDOT</desc>
@@ -2119,6 +2203,7 @@
 							<desc xml:lang="tr">BOLDDASHDOTDOT</desc>
 							<desc xml:lang="th">BOLDDASHDOTDOT</desc>
 							<desc xml:lang="hi-IN">BOLDDASHDOTDOT</desc>
+							<desc xml:lang="x-comment">BOLDDASHDOTDOT</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="18">
@@ -2130,7 +2215,7 @@
 							<desc xml:lang="fi">BOLDWAVE</desc>
 							<desc xml:lang="cs">BOLDWAVE</desc>
 							<desc xml:lang="da">BOLDWAVE</desc>
-							<desc xml:lang="zh-CN">BOLDWAVE</desc>
+							<desc xml:lang="zh-CN">粗体波浪</desc>
 							<desc xml:lang="zh-TW">BOLDWAVE</desc>
 							<desc xml:lang="ar">BOLDWAVE</desc>
 							<desc xml:lang="he">BOLDWAVE</desc>
@@ -2147,6 +2232,7 @@
 							<desc xml:lang="tr">BOLDWAVE</desc>
 							<desc xml:lang="th">BOLDWAVE</desc>
 							<desc xml:lang="hi-IN">BOLDWAVE</desc>
+							<desc xml:lang="x-comment">BOLDWAVE</desc>
 						</info>
 					</enumeration>
 				</constraints>
@@ -2172,11 +2258,12 @@
 					<desc xml:lang="sv">Specifies the type of strikeout.</desc>
 					<desc xml:lang="pl">Specifies the type of strikeout.</desc>
 					<desc xml:lang="pt-BR">Specifies the type of strikeout.</desc>
-					<desc xml:lang="ja">Specifies the type of strikeout.</desc>
+					<desc xml:lang="ja">取り消し線の種類を指定します。</desc>
 					<desc xml:lang="ko">Specifies the type of strikeout.</desc>
 					<desc xml:lang="tr">Specifies the type of strikeout.</desc>
 					<desc xml:lang="th">Specifies the type of strikeout.</desc>
 					<desc xml:lang="hi-IN">Specifies the type of strikeout.</desc>
+					<desc xml:lang="x-comment">Specifies the type of strikeout.</desc>
 				</info>
 				<constraints>
 					<enumeration oor:value="0">
@@ -2200,11 +2287,13 @@
 							<desc xml:lang="sv">Ingen</desc>
 							<desc xml:lang="pl">Brak</desc>
 							<desc xml:lang="pt-BR">Nenhum</desc>
-							<desc xml:lang="ja">なし</desc>
+							<desc xml:lang="ja">NONE</desc>
 							<desc xml:lang="ko">없음</desc>
 							<desc xml:lang="tr">Yok</desc>
 							<desc xml:lang="th">ไม่มี</desc>
 							<desc xml:lang="hi-IN">कोई नहीं</desc>
+							<desc xml:lang="x-comment">NONE</desc>
+							<desc xml:lang="sk">Žiadne</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="1">
@@ -2228,11 +2317,13 @@
 							<desc xml:lang="sv">~Enkelt</desc>
 							<desc xml:lang="pl">~pojedyncze</desc>
 							<desc xml:lang="pt-BR">Simples</desc>
-							<desc xml:lang="ja">1行</desc>
+							<desc xml:lang="ja">SINGLE</desc>
 							<desc xml:lang="ko">1줄형</desc>
 							<desc xml:lang="tr">Tek</desc>
 							<desc xml:lang="th">บรรทัดเดียว</desc>
 							<desc xml:lang="hi-IN">अकेला</desc>
+							<desc xml:lang="x-comment">SINGLE</desc>
+							<desc xml:lang="sk">Jednoduché</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="2">
@@ -2256,11 +2347,13 @@
 							<desc xml:lang="sv">Dubbelt</desc>
 							<desc xml:lang="pl">podwójne</desc>
 							<desc xml:lang="pt-BR">Duplo</desc>
-							<desc xml:lang="ja">2行</desc>
+							<desc xml:lang="ja">DOUBLE</desc>
 							<desc xml:lang="ko">2 줄</desc>
 							<desc xml:lang="tr">İki satır</desc>
 							<desc xml:lang="th">บรรทัดคู่</desc>
 							<desc xml:lang="hi-IN">द्विगुणित</desc>
+							<desc xml:lang="x-comment">DOUBLE</desc>
+							<desc xml:lang="sk">Dvojité</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="3">
@@ -2272,7 +2365,7 @@
 							<desc xml:lang="fi">DONTKNOW</desc>
 							<desc xml:lang="cs">DONTKNOW</desc>
 							<desc xml:lang="da">DONTKNOW</desc>
-							<desc xml:lang="zh-CN">DONTKNOW</desc>
+							<desc xml:lang="zh-CN">不知道</desc>
 							<desc xml:lang="zh-TW">DONTKNOW</desc>
 							<desc xml:lang="ar">DONTKNOW</desc>
 							<desc xml:lang="he">DONTKNOW</desc>
@@ -2289,6 +2382,7 @@
 							<desc xml:lang="tr">DONTKNOW</desc>
 							<desc xml:lang="th">DONTKNOW</desc>
 							<desc xml:lang="hi-IN">DONTKNOW</desc>
+							<desc xml:lang="x-comment">DONTKNOW</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="4">
@@ -2312,11 +2406,13 @@
 							<desc xml:lang="sv">~Fet</desc>
 							<desc xml:lang="pl">Pogrubienie</desc>
 							<desc xml:lang="pt-BR">Negrito</desc>
-							<desc xml:lang="ja">太字</desc>
+							<desc xml:lang="ja">BOLD</desc>
 							<desc xml:lang="ko">굵게</desc>
 							<desc xml:lang="tr">Kalın</desc>
 							<desc xml:lang="th">หนา</desc>
 							<desc xml:lang="hi-IN">बोल्ड्</desc>
+							<desc xml:lang="x-comment">BOLD</desc>
+							<desc xml:lang="sk">Tučné</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="5">
@@ -2328,7 +2424,7 @@
 							<desc xml:lang="fi">SLASH</desc>
 							<desc xml:lang="cs">SLASH</desc>
 							<desc xml:lang="da">SLASH</desc>
-							<desc xml:lang="zh-CN">SLASH</desc>
+							<desc xml:lang="zh-CN">斜杠</desc>
 							<desc xml:lang="zh-TW">SLASH</desc>
 							<desc xml:lang="ar">SLASH</desc>
 							<desc xml:lang="he">SLASH</desc>
@@ -2345,6 +2441,7 @@
 							<desc xml:lang="tr">SLASH</desc>
 							<desc xml:lang="th">SLASH</desc>
 							<desc xml:lang="hi-IN">SLASH</desc>
+							<desc xml:lang="x-comment">SLASH</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="6">
@@ -2356,7 +2453,7 @@
 							<desc xml:lang="fi">X</desc>
 							<desc xml:lang="cs">X</desc>
 							<desc xml:lang="da">Tal_s</desc>
-							<desc xml:lang="zh-CN">number_s</desc>
+							<desc xml:lang="zh-CN">X</desc>
 							<desc xml:lang="zh-TW">number_s</desc>
 							<desc xml:lang="ar">Number_s</desc>
 							<desc xml:lang="he">X</desc>
@@ -2368,11 +2465,12 @@
 							<desc xml:lang="sv">X</desc>
 							<desc xml:lang="pl">próbka_s</desc>
 							<desc xml:lang="pt-BR">X</desc>
-							<desc xml:lang="ja">数値</desc>
+							<desc xml:lang="ja">X</desc>
 							<desc xml:lang="ko">X</desc>
 							<desc xml:lang="tr">Örn</desc>
 							<desc xml:lang="th">X</desc>
 							<desc xml:lang="hi-IN">X</desc>
+							<desc xml:lang="x-comment">; X</desc>
 						</info>
 					</enumeration>
 				</constraints>
@@ -2398,11 +2496,12 @@
 					<desc xml:lang="sv">Specifies the rotation of the font.  [UNIT=degree].</desc>
 					<desc xml:lang="pl">Specifies the rotation of the font.  [UNIT=degree].</desc>
 					<desc xml:lang="pt-BR">Specifies the rotation of the font.  [UNIT=degree].</desc>
-					<desc xml:lang="ja">Specifies the rotation of the font.  [UNIT=degree].</desc>
+					<desc xml:lang="ja">フォントの回転を指定します。[単位 = 度].</desc>
 					<desc xml:lang="ko">Specifies the rotation of the font.  [UNIT=degree].</desc>
 					<desc xml:lang="tr">Specifies the rotation of the font.  [UNIT=degree].</desc>
 					<desc xml:lang="th">Specifies the rotation of the font.  [UNIT=degree].</desc>
 					<desc xml:lang="hi-IN">Specifies the rotation of the font.  [UNIT=degree].</desc>
+					<desc xml:lang="x-comment">Specifies the rotation of the font.  [UNIT=degree].</desc>
 				</info>
 			</prop>
 			<prop oor:name="Kerning" oor:type="xs:boolean">
@@ -2426,11 +2525,12 @@
 					<desc xml:lang="sv">Specifies if a kerning table is available (for requesting). For selecting, specifies if the kerning table is to be used.</desc>
 					<desc xml:lang="pl">Specifies if a kerning table is available (for requesting). For selecting, specifies if the kerning table is to be used.</desc>
 					<desc xml:lang="pt-BR">Specifies if a kerning table is available (for requesting). For selecting, specifies if the kerning table is to be used.</desc>
-					<desc xml:lang="ja">Specifies if a kerning table is available (for requesting). For selecting, specifies if the kerning table is to be used.</desc>
+					<desc xml:lang="ja">(要求時に) カーニングテーブルの利用を許容するかどうかを指定します。(選択時に) カーニングテーブルを使用するかどうかを指定します。</desc>
 					<desc xml:lang="ko">Specifies if a kerning table is available (for requesting). For selecting, specifies if the kerning table is to be used.</desc>
 					<desc xml:lang="tr">Specifies if a kerning table is available (for requesting). For selecting, specifies if the kerning table is to be used.</desc>
 					<desc xml:lang="th">Specifies if a kerning table is available (for requesting). For selecting, specifies if the kerning table is to be used.</desc>
 					<desc xml:lang="hi-IN">Specifies if a kerning table is available (for requesting). For selecting, specifies if the kerning table is to be used.</desc>
+					<desc xml:lang="x-comment">Specifies if a kerning table is available (for requesting). For selecting, specifies if the kerning table is to be used.</desc>
 				</info>
 			</prop>
 			<prop oor:name="WordLineMode" oor:type="xs:boolean">
@@ -2454,11 +2554,12 @@
 					<desc xml:lang="sv">Specifies if only words get underlined.</desc>
 					<desc xml:lang="pl">Specifies if only words get underlined.</desc>
 					<desc xml:lang="pt-BR">Specifies if only words get underlined.</desc>
-					<desc xml:lang="ja">Specifies if only words get underlined.</desc>
+					<desc xml:lang="ja">単語に下線を引くかどうかを指定します。</desc>
 					<desc xml:lang="ko">Specifies if only words get underlined.</desc>
 					<desc xml:lang="tr">Specifies if only words get underlined.</desc>
 					<desc xml:lang="th">Specifies if only words get underlined.</desc>
 					<desc xml:lang="hi-IN">Specifies if only words get underlined.</desc>
+					<desc xml:lang="x-comment">Specifies if only words get underlined.</desc>
 				</info>
 			</prop>
 			<prop oor:name="Type" oor:type="xs:short">
@@ -2482,11 +2583,12 @@
 					<desc xml:lang="sv">Specifies the technology of the font representation.</desc>
 					<desc xml:lang="pl">Specifies the technology of the font representation.</desc>
 					<desc xml:lang="pt-BR">Specifies the technology of the font representation.</desc>
-					<desc xml:lang="ja">Specifies the technology of the font representation.</desc>
+					<desc xml:lang="ja">フォント表現のための技術を指定します。</desc>
 					<desc xml:lang="ko">Specifies the technology of the font representation.</desc>
 					<desc xml:lang="tr">Specifies the technology of the font representation.</desc>
 					<desc xml:lang="th">Specifies the technology of the font representation.</desc>
 					<desc xml:lang="hi-IN">Specifies the technology of the font representation.</desc>
+					<desc xml:lang="x-comment">Specifies the technology of the font representation.</desc>
 				</info>
 				<constraints>
 					<enumeration oor:value="0">
@@ -2498,7 +2600,7 @@
 							<desc xml:lang="fi">DONTKNOW</desc>
 							<desc xml:lang="cs">DONTKNOW</desc>
 							<desc xml:lang="da">DONTKNOW</desc>
-							<desc xml:lang="zh-CN">DONTKNOW</desc>
+							<desc xml:lang="zh-CN">不知道</desc>
 							<desc xml:lang="zh-TW">DONTKNOW</desc>
 							<desc xml:lang="ar">DONTKNOW</desc>
 							<desc xml:lang="he">DONTKNOW</desc>
@@ -2515,6 +2617,7 @@
 							<desc xml:lang="tr">DONTKNOW</desc>
 							<desc xml:lang="th">DONTKNOW</desc>
 							<desc xml:lang="hi-IN">DONTKNOW</desc>
+							<desc xml:lang="x-comment">DONTKNOW</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="1">
@@ -2526,7 +2629,7 @@
 							<desc xml:lang="fi">RASTER</desc>
 							<desc xml:lang="cs">RASTER</desc>
 							<desc xml:lang="da">RASTER</desc>
-							<desc xml:lang="zh-CN">RASTER</desc>
+							<desc xml:lang="zh-CN">格线</desc>
 							<desc xml:lang="zh-TW">RASTER</desc>
 							<desc xml:lang="ar">RASTER</desc>
 							<desc xml:lang="he">RASTER</desc>
@@ -2543,6 +2646,7 @@
 							<desc xml:lang="tr">RASTER</desc>
 							<desc xml:lang="th">RASTER</desc>
 							<desc xml:lang="hi-IN">RASTER</desc>
+							<desc xml:lang="x-comment">RASTER</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="2">
@@ -2566,11 +2670,13 @@
 							<desc xml:lang="sv">Enhet</desc>
 							<desc xml:lang="pl">Sprzęt</desc>
 							<desc xml:lang="pt-BR">Dispositivo</desc>
-							<desc xml:lang="ja">デバイス</desc>
+							<desc xml:lang="ja">DEVICE</desc>
 							<desc xml:lang="ko">장치</desc>
 							<desc xml:lang="tr">Aygıt</desc>
 							<desc xml:lang="th">อุปกรณ์</desc>
 							<desc xml:lang="hi-IN">साधन</desc>
+							<desc xml:lang="x-comment">DEVICE</desc>
+							<desc xml:lang="sk">Zariadenie</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="3">
@@ -2582,7 +2688,7 @@
 							<desc xml:lang="fi">SCALABLE</desc>
 							<desc xml:lang="cs">SCALABLE</desc>
 							<desc xml:lang="da">SCALABLE</desc>
-							<desc xml:lang="zh-CN">SCALABLE</desc>
+							<desc xml:lang="zh-CN">可伸缩的</desc>
 							<desc xml:lang="zh-TW">SCALABLE</desc>
 							<desc xml:lang="ar">SCALABLE</desc>
 							<desc xml:lang="he">SCALABLE</desc>
@@ -2599,6 +2705,7 @@
 							<desc xml:lang="tr">SCALABLE</desc>
 							<desc xml:lang="th">SCALABLE</desc>
 							<desc xml:lang="hi-IN">SCALABLE</desc>
+							<desc xml:lang="x-comment">SCALABLE</desc>
 						</info>
 					</enumeration>
 				</constraints>
@@ -2626,11 +2733,12 @@
 				<desc xml:lang="sv">Contains settings for the font replacement.</desc>
 				<desc xml:lang="pl">Contains settings for the font replacement.</desc>
 				<desc xml:lang="pt-BR">Contains settings for the font replacement.</desc>
-				<desc xml:lang="ja">Contains settings for the font replacement.</desc>
+				<desc xml:lang="ja">フォントの置換に関する設定が含まれます。</desc>
 				<desc xml:lang="ko">Contains settings for the font replacement.</desc>
 				<desc xml:lang="tr">Contains settings for the font replacement.</desc>
 				<desc xml:lang="th">Contains settings for the font replacement.</desc>
 				<desc xml:lang="hi-IN">Contains settings for the font replacement.</desc>
+				<desc xml:lang="x-comment">Contains settings for the font replacement.</desc>
 			</info>
 			<prop oor:name="ReplaceFont" oor:type="xs:string">
 				<info>
@@ -2653,11 +2761,12 @@
 					<desc xml:lang="sv">Contains the name of font that is to be replaced.</desc>
 					<desc xml:lang="pl">Contains the name of font that is to be replaced.</desc>
 					<desc xml:lang="pt-BR">Contains the name of font that is to be replaced.</desc>
-					<desc xml:lang="ja">Contains the name of font that is to be replaced.</desc>
+					<desc xml:lang="ja">置換されるフォントの名前が含まれます。</desc>
 					<desc xml:lang="ko">Contains the name of font that is to be replaced.</desc>
 					<desc xml:lang="tr">Contains the name of font that is to be replaced.</desc>
 					<desc xml:lang="th">Contains the name of font that is to be replaced.</desc>
 					<desc xml:lang="hi-IN">Contains the name of font that is to be replaced.</desc>
+					<desc xml:lang="x-comment">Contains the name of font that is to be replaced.</desc>
 				</info>
 			</prop>
 			<prop oor:name="SubstituteFont" oor:type="xs:string">
@@ -2681,11 +2790,12 @@
 					<desc xml:lang="sv">Contains the name of the replacing font.</desc>
 					<desc xml:lang="pl">Contains the name of the replacing font.</desc>
 					<desc xml:lang="pt-BR">Contains the name of the replacing font.</desc>
-					<desc xml:lang="ja">Contains the name of the replacing font.</desc>
+					<desc xml:lang="ja">置換するフォントの名前が含まれます。</desc>
 					<desc xml:lang="ko">Contains the name of the replacing font.</desc>
 					<desc xml:lang="tr">Contains the name of the replacing font.</desc>
 					<desc xml:lang="th">Contains the name of the replacing font.</desc>
 					<desc xml:lang="hi-IN">Contains the name of the replacing font.</desc>
+					<desc xml:lang="x-comment">Contains the name of the replacing font.</desc>
 				</info>
 			</prop>
 			<prop oor:name="OnScreenOnly" oor:type="xs:boolean">
@@ -2709,11 +2819,12 @@
 					<desc xml:lang="sv">Determines if the font pair replacement is applied on the screen.</desc>
 					<desc xml:lang="pl">Determines if the font pair replacement is applied on the screen.</desc>
 					<desc xml:lang="pt-BR">Determines if the font pair replacement is applied on the screen.</desc>
-					<desc xml:lang="ja">Determines if the font pair replacement is applied on the screen.</desc>
+					<desc xml:lang="ja">画面表示時にフォントペアを置換するかどうかを指定します。</desc>
 					<desc xml:lang="ko">Determines if the font pair replacement is applied on the screen.</desc>
 					<desc xml:lang="tr">Determines if the font pair replacement is applied on the screen.</desc>
 					<desc xml:lang="th">Determines if the font pair replacement is applied on the screen.</desc>
 					<desc xml:lang="hi-IN">Determines if the font pair replacement is applied on the screen.</desc>
+					<desc xml:lang="x-comment">Determines if the font pair replacement is applied on the screen.</desc>
 				</info>
 				<value>false</value>
 			</prop>
@@ -2738,11 +2849,12 @@
 					<desc xml:lang="sv">Determines if the font pair replacement is applied on the printer.</desc>
 					<desc xml:lang="pl">Determines if the font pair replacement is applied on the printer.</desc>
 					<desc xml:lang="pt-BR">Determines if the font pair replacement is applied on the printer.</desc>
-					<desc xml:lang="ja">Determines if the font pair replacement is applied on the printer.</desc>
+					<desc xml:lang="ja">印刷時にフォントペアを置換するかどうかを指定します。</desc>
 					<desc xml:lang="ko">Determines if the font pair replacement is applied on the printer.</desc>
 					<desc xml:lang="tr">Determines if the font pair replacement is applied on the printer.</desc>
 					<desc xml:lang="th">Determines if the font pair replacement is applied on the printer.</desc>
 					<desc xml:lang="hi-IN">Determines if the font pair replacement is applied on the printer.</desc>
+					<desc xml:lang="x-comment">Determines if the font pair replacement is applied on the printer.</desc>
 				</info>
 				<value>false</value>
 			</prop>
@@ -2770,11 +2882,12 @@
 				<desc xml:lang="sv">Specifies the size of a graphic. [UNIT=1/100 mm].</desc>
 				<desc xml:lang="pl">Specifies the size of a graphic. [UNIT=1/100 mm].</desc>
 				<desc xml:lang="pt-BR">Specifies the size of a graphic. [UNIT=1/100 mm].</desc>
-				<desc xml:lang="ja">Specifies the size of a graphic. [UNIT=1/100 mm].</desc>
+				<desc xml:lang="ja">図のサイズを指定します。[単位=1/100 mm]</desc>
 				<desc xml:lang="ko">Specifies the size of a graphic. [UNIT=1/100 mm].</desc>
 				<desc xml:lang="tr">Specifies the size of a graphic. [UNIT=1/100 mm].</desc>
 				<desc xml:lang="th">Specifies the size of a graphic. [UNIT=1/100 mm].</desc>
 				<desc xml:lang="hi-IN">Specifies the size of a graphic. [UNIT=1/100 mm].</desc>
+				<desc xml:lang="x-comment">Specifies the size of a graphic. [UNIT=1/100 mm].</desc>
 			</info>
 			<prop oor:name="Width" oor:type="xs:int">
 				<info>
@@ -2797,11 +2910,12 @@
 					<desc xml:lang="sv">Specifies the width of graphic. [UNIT=1/100 mm].</desc>
 					<desc xml:lang="pl">Specifies the width of graphic. [UNIT=1/100 mm].</desc>
 					<desc xml:lang="pt-BR">Specifies the width of graphic. [UNIT=1/100 mm].</desc>
-					<desc xml:lang="ja">Specifies the width of graphic. [UNIT=1/100 mm].</desc>
+					<desc xml:lang="ja">図の幅を指定します。[単位=1/100 mm]</desc>
 					<desc xml:lang="ko">Specifies the width of graphic. [UNIT=1/100 mm].</desc>
 					<desc xml:lang="tr">Specifies the width of graphic. [UNIT=1/100 mm].</desc>
 					<desc xml:lang="th">Specifies the width of graphic. [UNIT=1/100 mm].</desc>
 					<desc xml:lang="hi-IN">Specifies the width of graphic. [UNIT=1/100 mm].</desc>
+					<desc xml:lang="x-comment">Specifies the width of graphic. [UNIT=1/100 mm].</desc>
 				</info>
 				<constraints>
 					<minInclusive oor:value="100">
@@ -2813,7 +2927,7 @@
 							<desc xml:lang="fi">Represents the highest value that can be entered in the dialog.</desc>
 							<desc xml:lang="cs">Represents the highest value that can be entered in the dialog.</desc>
 							<desc xml:lang="da">Represents the highest value that can be entered in the dialog.</desc>
-							<desc xml:lang="zh-CN">Represents the highest value that can be entered in the dialog.</desc>
+							<desc xml:lang="zh-CN">代表可输入的对话框内的最大值。</desc>
 							<desc xml:lang="zh-TW">Represents the highest value that can be entered in the dialog.</desc>
 							<desc xml:lang="ar">Represents the highest value that can be entered in the dialog.</desc>
 							<desc xml:lang="he">Represents the highest value that can be entered in the dialog.</desc>
@@ -2825,11 +2939,12 @@
 							<desc xml:lang="sv">Represents the highest value that can be entered in the dialog.</desc>
 							<desc xml:lang="pl">Represents the highest value that can be entered in the dialog.</desc>
 							<desc xml:lang="pt-BR">Represents the highest value that can be entered in the dialog.</desc>
-							<desc xml:lang="ja">Represents the highest value that can be entered in the dialog.</desc>
+							<desc xml:lang="ja">ダイアログに入力できる最大値を示します。</desc>
 							<desc xml:lang="ko">Represents the highest value that can be entered in the dialog.</desc>
 							<desc xml:lang="tr">Represents the highest value that can be entered in the dialog.</desc>
 							<desc xml:lang="th">Represents the highest value that can be entered in the dialog.</desc>
 							<desc xml:lang="hi-IN">Represents the highest value that can be entered in the dialog.</desc>
+							<desc xml:lang="x-comment">Represents the highest value that can be entered in the dialog.</desc>
 						</info>
 					</minInclusive>
 					<maxInclusive oor:value="99999">
@@ -2841,7 +2956,7 @@
 							<desc xml:lang="fi">Represents the lowest value that can be entered in the dialog.</desc>
 							<desc xml:lang="cs">Represents the lowest value that can be entered in the dialog.</desc>
 							<desc xml:lang="da">Represents the lowest value that can be entered in the dialog.</desc>
-							<desc xml:lang="zh-CN">Represents the lowest value that can be entered in the dialog.</desc>
+							<desc xml:lang="zh-CN">代表可输入的对话框内的最小值。</desc>
 							<desc xml:lang="zh-TW">Represents the lowest value that can be entered in the dialog.</desc>
 							<desc xml:lang="ar">Represents the lowest value that can be entered in the dialog.</desc>
 							<desc xml:lang="he">Represents the lowest value that can be entered in the dialog.</desc>
@@ -2853,11 +2968,12 @@
 							<desc xml:lang="sv">Represents the lowest value that can be entered in the dialog.</desc>
 							<desc xml:lang="pl">Represents the lowest value that can be entered in the dialog.</desc>
 							<desc xml:lang="pt-BR">Represents the lowest value that can be entered in the dialog.</desc>
-							<desc xml:lang="ja">Represents the lowest value that can be entered in the dialog.</desc>
+							<desc xml:lang="ja">ダイアログに入力できる最小値を示します。</desc>
 							<desc xml:lang="ko">Represents the lowest value that can be entered in the dialog.</desc>
 							<desc xml:lang="tr">Represents the lowest value that can be entered in the dialog.</desc>
 							<desc xml:lang="th">Represents the lowest value that can be entered in the dialog.</desc>
 							<desc xml:lang="hi-IN">Represents the lowest value that can be entered in the dialog.</desc>
+							<desc xml:lang="x-comment">Represents the lowest value that can be entered in the dialog.</desc>
 						</info>
 					</maxInclusive>
 				</constraints>
@@ -2884,11 +3000,12 @@
 					<desc xml:lang="sv">Specifies the height of graphic. [UNIT=1/100 mm].</desc>
 					<desc xml:lang="pl">Specifies the height of graphic. [UNIT=1/100 mm].</desc>
 					<desc xml:lang="pt-BR">Specifies the height of graphic. [UNIT=1/100 mm].</desc>
-					<desc xml:lang="ja">Specifies the height of graphic. [UNIT=1/100 mm].</desc>
+					<desc xml:lang="ja">図の高さを指定します。[単位=1/100 mm]</desc>
 					<desc xml:lang="ko">Specifies the height of graphic. [UNIT=1/100 mm].</desc>
 					<desc xml:lang="tr">Specifies the height of graphic. [UNIT=1/100 mm].</desc>
 					<desc xml:lang="th">Specifies the height of graphic. [UNIT=1/100 mm].</desc>
 					<desc xml:lang="hi-IN">Specifies the height of graphic. [UNIT=1/100 mm].</desc>
+					<desc xml:lang="x-comment">Specifies the height of graphic. [UNIT=1/100 mm].</desc>
 				</info>
 				<constraints>
 					<minInclusive oor:value="100">
@@ -2900,7 +3017,7 @@
 							<desc xml:lang="fi">Represents the lowest value that can be entered in the dialog.</desc>
 							<desc xml:lang="cs">Represents the lowest value that can be entered in the dialog.</desc>
 							<desc xml:lang="da">Represents the lowest value that can be entered in the dialog.</desc>
-							<desc xml:lang="zh-CN">Represents the lowest value that can be entered in the dialog.</desc>
+							<desc xml:lang="zh-CN">代表可输入的对话框内的最小值。</desc>
 							<desc xml:lang="zh-TW">Represents the lowest value that can be entered in the dialog.</desc>
 							<desc xml:lang="ar">Represents the lowest value that can be entered in the dialog.</desc>
 							<desc xml:lang="he">Represents the lowest value that can be entered in the dialog.</desc>
@@ -2912,11 +3029,12 @@
 							<desc xml:lang="sv">Represents the lowest value that can be entered in the dialog.</desc>
 							<desc xml:lang="pl">Represents the lowest value that can be entered in the dialog.</desc>
 							<desc xml:lang="pt-BR">Represents the lowest value that can be entered in the dialog.</desc>
-							<desc xml:lang="ja">Represents the lowest value that can be entered in the dialog.</desc>
+							<desc xml:lang="ja">ダイアログに入力できる最小値を示します。</desc>
 							<desc xml:lang="ko">Represents the lowest value that can be entered in the dialog.</desc>
 							<desc xml:lang="tr">Represents the lowest value that can be entered in the dialog.</desc>
 							<desc xml:lang="th">Represents the lowest value that can be entered in the dialog.</desc>
 							<desc xml:lang="hi-IN">Represents the lowest value that can be entered in the dialog.</desc>
+							<desc xml:lang="x-comment">Represents the lowest value that can be entered in the dialog.</desc>
 						</info>
 					</minInclusive>
 					<maxInclusive oor:value="99999">
@@ -2928,7 +3046,7 @@
 							<desc xml:lang="fi">Represents the highest value that can be entered in the dialog.</desc>
 							<desc xml:lang="cs">Represents the highest value that can be entered in the dialog.</desc>
 							<desc xml:lang="da">Represents the highest value that can be entered in the dialog.</desc>
-							<desc xml:lang="zh-CN">Represents the highest value that can be entered in the dialog.</desc>
+							<desc xml:lang="zh-CN">代表可输入的对话框内的最大值。</desc>
 							<desc xml:lang="zh-TW">Represents the highest value that can be entered in the dialog.</desc>
 							<desc xml:lang="ar">Represents the highest value that can be entered in the dialog.</desc>
 							<desc xml:lang="he">Represents the highest value that can be entered in the dialog.</desc>
@@ -2940,11 +3058,12 @@
 							<desc xml:lang="sv">Represents the highest value that can be entered in the dialog.</desc>
 							<desc xml:lang="pl">Represents the highest value that can be entered in the dialog.</desc>
 							<desc xml:lang="pt-BR">Represents the highest value that can be entered in the dialog.</desc>
-							<desc xml:lang="ja">Represents the highest value that can be entered in the dialog.</desc>
+							<desc xml:lang="ja">ダイアログに入力できる最大値を示します。</desc>
 							<desc xml:lang="ko">Represents the highest value that can be entered in the dialog.</desc>
 							<desc xml:lang="tr">Represents the highest value that can be entered in the dialog.</desc>
 							<desc xml:lang="th">Represents the highest value that can be entered in the dialog.</desc>
 							<desc xml:lang="hi-IN">Represents the highest value that can be entered in the dialog.</desc>
+							<desc xml:lang="x-comment">Represents the highest value that can be entered in the dialog.</desc>
 						</info>
 					</maxInclusive>
 				</constraints>
@@ -2973,11 +3092,12 @@
 				<desc xml:lang="sv">Specifies the logical size of a graphic. [UNIT=1/100 mm].</desc>
 				<desc xml:lang="pl">Specifies the logical size of a graphic. [UNIT=1/100 mm].</desc>
 				<desc xml:lang="pt-BR">Specifies the logical size of a graphic. [UNIT=1/100 mm].</desc>
-				<desc xml:lang="ja">Specifies the logical size of a graphic. [UNIT=1/100 mm].</desc>
+				<desc xml:lang="ja">図の論理サイズを指定します。[単位=1/100 mm]</desc>
 				<desc xml:lang="ko">Specifies the logical size of a graphic. [UNIT=1/100 mm].</desc>
 				<desc xml:lang="tr">Specifies the logical size of a graphic. [UNIT=1/100 mm].</desc>
 				<desc xml:lang="th">Specifies the logical size of a graphic. [UNIT=1/100 mm].</desc>
 				<desc xml:lang="hi-IN">Specifies the logical size of a graphic. [UNIT=1/100 mm].</desc>
+				<desc xml:lang="x-comment">Specifies the logical size of a graphic. [UNIT=1/100 mm].</desc>
 			</info>
 			<prop oor:name="LogicalWidth" oor:type="xs:int">
 				<info>
@@ -3000,11 +3120,12 @@
 					<desc xml:lang="sv">Specifies the logical width of a graphic. [UNIT=1/100 mm].</desc>
 					<desc xml:lang="pl">Specifies the logical width of a graphic. [UNIT=1/100 mm].</desc>
 					<desc xml:lang="pt-BR">Specifies the logical width of a graphic. [UNIT=1/100 mm].</desc>
-					<desc xml:lang="ja">Specifies the logical width of a graphic. [UNIT=1/100 mm].</desc>
+					<desc xml:lang="ja">図の論理幅を指定します。[単位=1/100 mm]</desc>
 					<desc xml:lang="ko">Specifies the logical width of a graphic. [UNIT=1/100 mm].</desc>
 					<desc xml:lang="tr">Specifies the logical width of a graphic. [UNIT=1/100 mm].</desc>
 					<desc xml:lang="th">Specifies the logical width of a graphic. [UNIT=1/100 mm].</desc>
 					<desc xml:lang="hi-IN">Specifies the logical width of a graphic. [UNIT=1/100 mm].</desc>
+					<desc xml:lang="x-comment">Specifies the logical width of a graphic. [UNIT=1/100 mm].</desc>
 				</info>
 				<constraints>
 					<minInclusive oor:value="100">
@@ -3016,7 +3137,7 @@
 							<desc xml:lang="fi">Represents the lowest value that can be entered in the dialog.</desc>
 							<desc xml:lang="cs">Represents the lowest value that can be entered in the dialog.</desc>
 							<desc xml:lang="da">Represents the lowest value that can be entered in the dialog.</desc>
-							<desc xml:lang="zh-CN">Represents the lowest value that can be entered in the dialog.</desc>
+							<desc xml:lang="zh-CN">代表可输入的对话框内的最小值。</desc>
 							<desc xml:lang="zh-TW">Represents the lowest value that can be entered in the dialog.</desc>
 							<desc xml:lang="ar">Represents the lowest value that can be entered in the dialog.</desc>
 							<desc xml:lang="he">Represents the lowest value that can be entered in the dialog.</desc>
@@ -3028,11 +3149,12 @@
 							<desc xml:lang="sv">Represents the lowest value that can be entered in the dialog.</desc>
 							<desc xml:lang="pl">Represents the lowest value that can be entered in the dialog.</desc>
 							<desc xml:lang="pt-BR">Represents the lowest value that can be entered in the dialog.</desc>
-							<desc xml:lang="ja">Represents the lowest value that can be entered in the dialog.</desc>
+							<desc xml:lang="ja">ダイアログに入力できる最小値を示します。</desc>
 							<desc xml:lang="ko">Represents the lowest value that can be entered in the dialog.</desc>
 							<desc xml:lang="tr">Represents the lowest value that can be entered in the dialog.</desc>
 							<desc xml:lang="th">Represents the lowest value that can be entered in the dialog.</desc>
 							<desc xml:lang="hi-IN">Represents the lowest value that can be entered in the dialog.</desc>
+							<desc xml:lang="x-comment">Represents the lowest value that can be entered in the dialog.</desc>
 						</info>
 					</minInclusive>
 					<maxInclusive oor:value="99999">
@@ -3044,7 +3166,7 @@
 							<desc xml:lang="fi">Represents the highest value that can be entered in the dialog.</desc>
 							<desc xml:lang="cs">Represents the highest value that can be entered in the dialog.</desc>
 							<desc xml:lang="da">Represents the highest value that can be entered in the dialog.</desc>
-							<desc xml:lang="zh-CN">Represents the highest value that can be entered in the dialog.</desc>
+							<desc xml:lang="zh-CN">代表可输入的对话框内的最大值。</desc>
 							<desc xml:lang="zh-TW">Represents the highest value that can be entered in the dialog.</desc>
 							<desc xml:lang="ar">Represents the highest value that can be entered in the dialog.</desc>
 							<desc xml:lang="he">Represents the highest value that can be entered in the dialog.</desc>
@@ -3056,11 +3178,12 @@
 							<desc xml:lang="sv">Represents the highest value that can be entered in the dialog.</desc>
 							<desc xml:lang="pl">Represents the highest value that can be entered in the dialog.</desc>
 							<desc xml:lang="pt-BR">Represents the highest value that can be entered in the dialog.</desc>
-							<desc xml:lang="ja">Represents the highest value that can be entered in the dialog.</desc>
+							<desc xml:lang="ja">ダイアログに入力できる最大値を示します。</desc>
 							<desc xml:lang="ko">Represents the highest value that can be entered in the dialog.</desc>
 							<desc xml:lang="tr">Represents the highest value that can be entered in the dialog.</desc>
 							<desc xml:lang="th">Represents the highest value that can be entered in the dialog.</desc>
 							<desc xml:lang="hi-IN">Represents the highest value that can be entered in the dialog.</desc>
+							<desc xml:lang="x-comment">Represents the highest value that can be entered in the dialog.</desc>
 						</info>
 					</maxInclusive>
 				</constraints>
@@ -3087,11 +3210,12 @@
 					<desc xml:lang="sv">Specifies the logical height of graphic. [UNIT=1/100 mm].</desc>
 					<desc xml:lang="pl">Specifies the logical height of graphic. [UNIT=1/100 mm].</desc>
 					<desc xml:lang="pt-BR">Specifies the logical height of graphic. [UNIT=1/100 mm].</desc>
-					<desc xml:lang="ja">Specifies the logical height of graphic. [UNIT=1/100 mm].</desc>
+					<desc xml:lang="ja">図の論理的な高さを指定します。[単位=1/100 mm]</desc>
 					<desc xml:lang="ko">Specifies the logical height of graphic. [UNIT=1/100 mm].</desc>
 					<desc xml:lang="tr">Specifies the logical height of graphic. [UNIT=1/100 mm].</desc>
 					<desc xml:lang="th">Specifies the logical height of graphic. [UNIT=1/100 mm].</desc>
 					<desc xml:lang="hi-IN">Specifies the logical height of graphic. [UNIT=1/100 mm].</desc>
+					<desc xml:lang="x-comment">Specifies the logical height of graphic. [UNIT=1/100 mm].</desc>
 				</info>
 				<constraints>
 					<minInclusive oor:value="100">
@@ -3103,7 +3227,7 @@
 							<desc xml:lang="fi">Represents the lowest value that can be entered in the dialog.</desc>
 							<desc xml:lang="cs">Represents the lowest value that can be entered in the dialog.</desc>
 							<desc xml:lang="da">Represents the lowest value that can be entered in the dialog.</desc>
-							<desc xml:lang="zh-CN">Represents the lowest value that can be entered in the dialog.</desc>
+							<desc xml:lang="zh-CN">代表可输入的对话框内的最小值。</desc>
 							<desc xml:lang="zh-TW">Represents the lowest value that can be entered in the dialog.</desc>
 							<desc xml:lang="ar">Represents the lowest value that can be entered in the dialog.</desc>
 							<desc xml:lang="he">Represents the lowest value that can be entered in the dialog.</desc>
@@ -3115,11 +3239,12 @@
 							<desc xml:lang="sv">Represents the lowest value that can be entered in the dialog.</desc>
 							<desc xml:lang="pl">Represents the lowest value that can be entered in the dialog.</desc>
 							<desc xml:lang="pt-BR">Represents the lowest value that can be entered in the dialog.</desc>
-							<desc xml:lang="ja">Represents the lowest value that can be entered in the dialog.</desc>
+							<desc xml:lang="ja">ダイアログに入力できる最小値を示します。</desc>
 							<desc xml:lang="ko">Represents the lowest value that can be entered in the dialog.</desc>
 							<desc xml:lang="tr">Represents the lowest value that can be entered in the dialog.</desc>
 							<desc xml:lang="th">Represents the lowest value that can be entered in the dialog.</desc>
 							<desc xml:lang="hi-IN">Represents the lowest value that can be entered in the dialog.</desc>
+							<desc xml:lang="x-comment">Represents the lowest value that can be entered in the dialog.</desc>
 						</info>
 					</minInclusive>
 					<maxInclusive oor:value="99999">
@@ -3131,7 +3256,7 @@
 							<desc xml:lang="fi">Represents the highest value that can be entered in the dialog.</desc>
 							<desc xml:lang="cs">Represents the highest value that can be entered in the dialog.</desc>
 							<desc xml:lang="da">Represents the highest value that can be entered in the dialog.</desc>
-							<desc xml:lang="zh-CN">Represents the highest value that can be entered in the dialog.</desc>
+							<desc xml:lang="zh-CN">代表可输入的对话框内的最大值。</desc>
 							<desc xml:lang="zh-TW">Represents the highest value that can be entered in the dialog.</desc>
 							<desc xml:lang="ar">Represents the highest value that can be entered in the dialog.</desc>
 							<desc xml:lang="he">Represents the highest value that can be entered in the dialog.</desc>
@@ -3143,11 +3268,12 @@
 							<desc xml:lang="sv">Represents the highest value that can be entered in the dialog.</desc>
 							<desc xml:lang="pl">Represents the highest value that can be entered in the dialog.</desc>
 							<desc xml:lang="pt-BR">Represents the highest value that can be entered in the dialog.</desc>
-							<desc xml:lang="ja">Represents the highest value that can be entered in the dialog.</desc>
+							<desc xml:lang="ja">ダイアログに入力できる最大値を示します。</desc>
 							<desc xml:lang="ko">Represents the highest value that can be entered in the dialog.</desc>
 							<desc xml:lang="tr">Represents the highest value that can be entered in the dialog.</desc>
 							<desc xml:lang="th">Represents the highest value that can be entered in the dialog.</desc>
 							<desc xml:lang="hi-IN">Represents the highest value that can be entered in the dialog.</desc>
+							<desc xml:lang="x-comment">Represents the highest value that can be entered in the dialog.</desc>
 						</info>
 					</maxInclusive>
 				</constraints>
@@ -3176,11 +3302,12 @@
 				<desc xml:lang="sv">Specifies the object names for the different Office modules.  Each module is assigned to a worldwide unique key. The different object names are filled by the setup.</desc>
 				<desc xml:lang="pl">Specifies the object names for the different Office modules.  Each module is assigned to a worldwide unique key. The different object names are filled by the setup.</desc>
 				<desc xml:lang="pt-BR">Specifies the object names for the different Office modules.  Each module is assigned to a worldwide unique key. The different object names are filled by the setup.</desc>
-				<desc xml:lang="ja">Specifies the object names for the different Office modules.  Each module is assigned to a worldwide unique key. The different object names are filled by the setup.</desc>
+				<desc xml:lang="ja">さまざまな Office モジュールのオブジェクト名を指定します。各モジュールには、世界的に固有のキーが割り当てられています。各種オブジェクト名がセットアップによって設定されます。</desc>
 				<desc xml:lang="ko">Specifies the object names for the different Office modules.  Each module is assigned to a worldwide unique key. The different object names are filled by the setup.</desc>
 				<desc xml:lang="tr">Specifies the object names for the different Office modules.  Each module is assigned to a worldwide unique key. The different object names are filled by the setup.</desc>
 				<desc xml:lang="th">Specifies the object names for the different Office modules.  Each module is assigned to a worldwide unique key. The different object names are filled by the setup.</desc>
 				<desc xml:lang="hi-IN">Specifies the object names for the different Office modules.  Each module is assigned to a worldwide unique key. The different object names are filled by the setup.</desc>
+				<desc xml:lang="x-comment">Specifies the object names for the different Office modules.  Each module is assigned to a worldwide unique key. The different object names are filled by the setup.</desc>
 			</info>
 			<prop oor:name="Name" oor:type="xs:string" oor:localized="true">
 				<info>
@@ -3204,11 +3331,12 @@
 					<desc xml:lang="sv">Specifies the object name for the Office module.</desc>
 					<desc xml:lang="pl">Specifies the object name for the Office module.</desc>
 					<desc xml:lang="pt-BR">Specifies the object name for the Office module.</desc>
-					<desc xml:lang="ja">Specifies the object name for the Office module.</desc>
+					<desc xml:lang="ja">Office モジュールのオブジェクト名を指定します。</desc>
 					<desc xml:lang="ko">Specifies the object name for the Office module.</desc>
 					<desc xml:lang="tr">Specifies the object name for the Office module.</desc>
 					<desc xml:lang="th">Specifies the object name for the Office module.</desc>
 					<desc xml:lang="hi-IN">Specifies the object name for the Office module.</desc>
+					<desc xml:lang="x-comment">Specifies the object name for the Office module.</desc>
 				</info>
 			</prop>
 			<prop oor:name="Key" oor:type="xs:string">
@@ -3233,11 +3361,12 @@
 					<desc xml:lang="sv">Specifies the unique key for the Office module.</desc>
 					<desc xml:lang="pl">Specifies the unique key for the Office module.</desc>
 					<desc xml:lang="pt-BR">Specifies the unique key for the Office module.</desc>
-					<desc xml:lang="ja">Specifies the unique key for the Office module.</desc>
+					<desc xml:lang="ja">Office モジュールの固有のキーを指定します。</desc>
 					<desc xml:lang="ko">Specifies the unique key for the Office module.</desc>
 					<desc xml:lang="tr">Specifies the unique key for the Office module.</desc>
 					<desc xml:lang="th">Specifies the unique key for the Office module.</desc>
 					<desc xml:lang="hi-IN">Specifies the unique key for the Office module.</desc>
+					<desc xml:lang="x-comment">Specifies the unique key for the Office module.</desc>
 				</info>
 			</prop>
 		</group>
@@ -3263,11 +3392,12 @@
 				<desc xml:lang="sv">Specifies an entry of the recovery list which is then used by CrashGuard to save information about the last opened files.</desc>
 				<desc xml:lang="pl">Specifies an entry of the recovery list which is then used by CrashGuard to save information about the last opened files.</desc>
 				<desc xml:lang="pt-BR">Specifies an entry of the recovery list which is then used by CrashGuard to save information about the last opened files.</desc>
-				<desc xml:lang="ja">Specifies an entry of the recovery list which is then used by CrashGuard to save information about the last opened files.</desc>
+				<desc xml:lang="ja">最後に開いたファイルに関する情報を保存するために CrashGuard が使用する復元リストの項目を指定します。</desc>
 				<desc xml:lang="ko">Specifies an entry of the recovery list which is then used by CrashGuard to save information about the last opened files.</desc>
 				<desc xml:lang="tr">Specifies an entry of the recovery list which is then used by CrashGuard to save information about the last opened files.</desc>
 				<desc xml:lang="th">Specifies an entry of the recovery list which is then used by CrashGuard to save information about the last opened files.</desc>
 				<desc xml:lang="hi-IN">Specifies an entry of the recovery list which is then used by CrashGuard to save information about the last opened files.</desc>
+				<desc xml:lang="x-comment">Specifies an entry of the recovery list which is then used by CrashGuard to save information about the last opened files.</desc>
 			</info>
 			<prop oor:name="URL" oor:type="xs:string">
 				<info>
@@ -3290,11 +3420,12 @@
 					<desc xml:lang="sv">Specifies an URL that should be recovered after the next Office start.</desc>
 					<desc xml:lang="pl">Specifies an URL that should be recovered after the next Office start.</desc>
 					<desc xml:lang="pt-BR">Specifies an URL that should be recovered after the next Office start.</desc>
-					<desc xml:lang="ja">Specifies an URL that should be recovered after the next Office start.</desc>
+					<desc xml:lang="ja">次回に Office を開始した後に復元する URL を指定します。</desc>
 					<desc xml:lang="ko">Specifies an URL that should be recovered after the next Office start.</desc>
 					<desc xml:lang="tr">Specifies an URL that should be recovered after the next Office start.</desc>
 					<desc xml:lang="th">Specifies an URL that should be recovered after the next Office start.</desc>
 					<desc xml:lang="hi-IN">Specifies an URL that should be recovered after the next Office start.</desc>
+					<desc xml:lang="x-comment">Specifies an URL that should be recovered after the next Office start.</desc>
 				</info>
 			</prop>
 			<prop oor:name="Filter" oor:type="xs:string">
@@ -3318,11 +3449,12 @@
 					<desc xml:lang="sv">Specifies a filter that should be used to open the document referenced by the URL property.</desc>
 					<desc xml:lang="pl">Specifies a filter that should be used to open the document referenced by the URL property.</desc>
 					<desc xml:lang="pt-BR">Specifies a filter that should be used to open the document referenced by the URL property.</desc>
-					<desc xml:lang="ja">Specifies a filter that should be used to open the document referenced by the URL property.</desc>
+					<desc xml:lang="ja">URL プロパティの参照先ドキュメントを開くためのフィルタを指定します。</desc>
 					<desc xml:lang="ko">Specifies a filter that should be used to open the document referenced by the URL property.</desc>
 					<desc xml:lang="tr">Specifies a filter that should be used to open the document referenced by the URL property.</desc>
 					<desc xml:lang="th">Specifies a filter that should be used to open the document referenced by the URL property.</desc>
 					<desc xml:lang="hi-IN">Specifies a filter that should be used to open the document referenced by the URL property.</desc>
+					<desc xml:lang="x-comment">Specifies a filter that should be used to open the document referenced by the URL property.</desc>
 				</info>
 			</prop>
 			<prop oor:name="TempName" oor:type="xs:string">
@@ -3346,11 +3478,12 @@
 					<desc xml:lang="sv">Contains the name of the temporary file which represents the document.</desc>
 					<desc xml:lang="pl">Contains the name of the temporary file which represents the document.</desc>
 					<desc xml:lang="pt-BR">Contains the name of the temporary file which represents the document.</desc>
-					<desc xml:lang="ja">Contains the name of the temporary file which represents the document.</desc>
+					<desc xml:lang="ja">ドキュメントを表わす一時ファイルの名前が含まれます。</desc>
 					<desc xml:lang="ko">Contains the name of the temporary file which represents the document.</desc>
 					<desc xml:lang="tr">Contains the name of the temporary file which represents the document.</desc>
 					<desc xml:lang="th">Contains the name of the temporary file which represents the document.</desc>
 					<desc xml:lang="hi-IN">Contains the name of the temporary file which represents the document.</desc>
+					<desc xml:lang="x-comment">Contains the name of the temporary file which represents the document.</desc>
 				</info>
 			</prop>
 		</group>
@@ -3376,11 +3509,12 @@
 				<desc xml:lang="sv">Contains the characters (so called forbidden characters) that are not allowed at the beginning or end of a line.</desc>
 				<desc xml:lang="pl">Contains the characters (so called forbidden characters) that are not allowed at the beginning or end of a line.</desc>
 				<desc xml:lang="pt-BR">Contains the characters (so called forbidden characters) that are not allowed at the beginning or end of a line.</desc>
-				<desc xml:lang="ja">Contains the characters (so called forbidden characters) that are not allowed at the beginning or end of a line.</desc>
+				<desc xml:lang="ja">行の先頭または末尾で許容されない文字 (禁則文字) が含まれます。</desc>
 				<desc xml:lang="ko">Contains the characters (so called forbidden characters) that are not allowed at the beginning or end of a line.</desc>
 				<desc xml:lang="tr">Contains the characters (so called forbidden characters) that are not allowed at the beginning or end of a line.</desc>
 				<desc xml:lang="th">Contains the characters (so called forbidden characters) that are not allowed at the beginning or end of a line.</desc>
 				<desc xml:lang="hi-IN">Contains the characters (so called forbidden characters) that are not allowed at the beginning or end of a line.</desc>
+				<desc xml:lang="x-comment">Contains the characters (so called forbidden characters) that are not allowed at the beginning or end of a line.</desc>
 			</info>
 			<prop oor:name="StartCharacters" oor:type="xs:string">
 				<info>
@@ -3403,11 +3537,12 @@
 					<desc xml:lang="sv">Contains the characters that are not allowed at the beginning of a line.</desc>
 					<desc xml:lang="pl">Contains the characters that are not allowed at the beginning of a line.</desc>
 					<desc xml:lang="pt-BR">Contains the characters that are not allowed at the beginning of a line.</desc>
-					<desc xml:lang="ja">Contains the characters that are not allowed at the beginning of a line.</desc>
+					<desc xml:lang="ja">行の先頭で許容されない文字が含まれます。</desc>
 					<desc xml:lang="ko">Contains the characters that are not allowed at the beginning of a line.</desc>
 					<desc xml:lang="tr">Contains the characters that are not allowed at the beginning of a line.</desc>
 					<desc xml:lang="th">Contains the characters that are not allowed at the beginning of a line.</desc>
 					<desc xml:lang="hi-IN">Contains the characters that are not allowed at the beginning of a line.</desc>
+					<desc xml:lang="x-comment">Contains the characters that are not allowed at the beginning of a line.</desc>
 				</info>
 			</prop>
 			<prop oor:name="EndCharacters" oor:type="xs:string">
@@ -3431,11 +3566,12 @@
 					<desc xml:lang="sv">Contains the characters that are not allowed at the end of a line.</desc>
 					<desc xml:lang="pl">Contains the characters that are not allowed at the end of a line.</desc>
 					<desc xml:lang="pt-BR">Contains the characters that are not allowed at the end of a line.</desc>
-					<desc xml:lang="ja">Contains the characters that are not allowed at the end of a line.</desc>
+					<desc xml:lang="ja">行の末尾で許容されない文字が含まれます。</desc>
 					<desc xml:lang="ko">Contains the characters that are not allowed at the end of a line.</desc>
 					<desc xml:lang="tr">Contains the characters that are not allowed at the end of a line.</desc>
 					<desc xml:lang="th">Contains the characters that are not allowed at the end of a line.</desc>
 					<desc xml:lang="hi-IN">Contains the characters that are not allowed at the end of a line.</desc>
+					<desc xml:lang="x-comment">Contains the characters that are not allowed at the end of a line.</desc>
 				</info>
 			</prop>
 		</group>
@@ -3461,11 +3597,12 @@
 				<desc xml:lang="sv">Stores an association between a numeric value and a name.</desc>
 				<desc xml:lang="pl">Stores an association between a numeric value and a name.</desc>
 				<desc xml:lang="pt-BR">Stores an association between a numeric value and a name.</desc>
-				<desc xml:lang="ja">Stores an association between a numeric value and a name.</desc>
+				<desc xml:lang="ja">数値と名前の間の関連付けを格納します。</desc>
 				<desc xml:lang="ko">Stores an association between a numeric value and a name.</desc>
 				<desc xml:lang="tr">Stores an association between a numeric value and a name.</desc>
 				<desc xml:lang="th">Stores an association between a numeric value and a name.</desc>
 				<desc xml:lang="hi-IN">Stores an association between a numeric value and a name.</desc>
+				<desc xml:lang="x-comment">Stores an association between a numeric value and a name.</desc>
 			</info>
 			<prop oor:name="Name" oor:type="xs:string">
 				<info>
@@ -3488,11 +3625,12 @@
 					<desc xml:lang="sv">Specifies a name that is associated with a counter.</desc>
 					<desc xml:lang="pl">Specifies a name that is associated with a counter.</desc>
 					<desc xml:lang="pt-BR">Specifies a name that is associated with a counter.</desc>
-					<desc xml:lang="ja">Specifies a name that is associated with a counter.</desc>
+					<desc xml:lang="ja">カウンタに関連する名前を指定します。</desc>
 					<desc xml:lang="ko">Specifies a name that is associated with a counter.</desc>
 					<desc xml:lang="tr">Specifies a name that is associated with a counter.</desc>
 					<desc xml:lang="th">Specifies a name that is associated with a counter.</desc>
 					<desc xml:lang="hi-IN">Specifies a name that is associated with a counter.</desc>
+					<desc xml:lang="x-comment">Specifies a name that is associated with a counter.</desc>
 				</info>
 			</prop>
 			<prop oor:name="Counter" oor:type="xs:int">
@@ -3516,11 +3654,12 @@
 					<desc xml:lang="sv">Specifies a number that is associated with a name.</desc>
 					<desc xml:lang="pl">Specifies a number that is associated with a name.</desc>
 					<desc xml:lang="pt-BR">Specifies a number that is associated with a name.</desc>
-					<desc xml:lang="ja">Specifies a number that is associated with a name.</desc>
+					<desc xml:lang="ja">名前に関連する番号を指定します。</desc>
 					<desc xml:lang="ko">Specifies a number that is associated with a name.</desc>
 					<desc xml:lang="tr">Specifies a number that is associated with a name.</desc>
 					<desc xml:lang="th">Specifies a number that is associated with a name.</desc>
 					<desc xml:lang="hi-IN">Specifies a number that is associated with a name.</desc>
+					<desc xml:lang="x-comment">Specifies a number that is associated with a name.</desc>
 				</info>
 			</prop>
 		</group>
@@ -3546,11 +3685,12 @@
 				<desc xml:lang="sv">Contains the command line profile for external mail applications.</desc>
 				<desc xml:lang="pl">Contains the command line profile for external mail applications.</desc>
 				<desc xml:lang="pt-BR">Contains the command line profile for external mail applications.</desc>
-				<desc xml:lang="ja">Contains the command line profile for external mail applications.</desc>
+				<desc xml:lang="ja">外部メールアプリケーション用のコマンド行プロファイルが含まれます。</desc>
 				<desc xml:lang="ko">Contains the command line profile for external mail applications.</desc>
 				<desc xml:lang="tr">Contains the command line profile for external mail applications.</desc>
 				<desc xml:lang="th">Contains the command line profile for external mail applications.</desc>
 				<desc xml:lang="hi-IN">Contains the command line profile for external mail applications.</desc>
+				<desc xml:lang="x-comment">Contains the command line profile for external mail applications.</desc>
 			</info>
 			<group oor:name="FormatStrings">
 				<info>
@@ -3573,11 +3713,12 @@
 					<desc xml:lang="sv">Contains the different string tokens for &quot;to&quot; and &quot;cc&quot; etc. Addresses will be concatenated to create the command line.</desc>
 					<desc xml:lang="pl">Contains the different string tokens for &quot;to&quot; and &quot;cc&quot; etc. Addresses will be concatenated to create the command line.</desc>
 					<desc xml:lang="pt-BR">Contains the different string tokens for &quot;to&quot; and &quot;cc&quot; etc. Addresses will be concatenated to create the command line.</desc>
-					<desc xml:lang="ja">Contains the different string tokens for &quot;to&quot; and &quot;cc&quot; etc. Addresses will be concatenated to create the command line.</desc>
+					<desc xml:lang="ja">「to」や「cc」など、各種の文字列トークンが含まれます。一連のアドレスが連結され、それによってコマンド行が作成されます。</desc>
 					<desc xml:lang="ko">Contains the different string tokens for &quot;to&quot; and &quot;cc&quot; etc. Addresses will be concatenated to create the command line.</desc>
 					<desc xml:lang="tr">Contains the different string tokens for &quot;to&quot; and &quot;cc&quot; etc. Addresses will be concatenated to create the command line.</desc>
 					<desc xml:lang="th">Contains the different string tokens for &quot;to&quot; and &quot;cc&quot; etc. Addresses will be concatenated to create the command line.</desc>
 					<desc xml:lang="hi-IN">Contains the different string tokens for &quot;to&quot; and &quot;cc&quot; etc. Addresses will be concatenated to create the command line.</desc>
+					<desc xml:lang="x-comment">Contains the different string tokens for &quot;to&quot; and &quot;cc&quot; etc. Addresses will be concatenated to create the command line.</desc>
 				</info>
 				<prop oor:name="base" oor:type="xs:string">
 					<info>
@@ -3600,11 +3741,12 @@
 						<desc xml:lang="sv">Contains the fixed text (optional) preceding the mail arguments.</desc>
 						<desc xml:lang="pl">Contains the fixed text (optional) preceding the mail arguments.</desc>
 						<desc xml:lang="pt-BR">Contains the fixed text (optional) preceding the mail arguments.</desc>
-						<desc xml:lang="ja">Contains the fixed text (optional) preceding the mail arguments.</desc>
+						<desc xml:lang="ja">メール引数に先行する固定テキスト (オプション) が含まれます。</desc>
 						<desc xml:lang="ko">Contains the fixed text (optional) preceding the mail arguments.</desc>
 						<desc xml:lang="tr">Contains the fixed text (optional) preceding the mail arguments.</desc>
 						<desc xml:lang="th">Contains the fixed text (optional) preceding the mail arguments.</desc>
 						<desc xml:lang="hi-IN">Contains the fixed text (optional) preceding the mail arguments.</desc>
+						<desc xml:lang="x-comment">Contains the fixed text (optional) preceding the mail arguments.</desc>
 					</info>
 				</prop>
 				<prop oor:name="from" oor:type="xs:string">
@@ -3628,11 +3770,12 @@
 						<desc xml:lang="sv">Contains the string token describing the &quot;from&quot; address field.</desc>
 						<desc xml:lang="pl">Contains the string token describing the &quot;from&quot; address field.</desc>
 						<desc xml:lang="pt-BR">Contains the string token describing the &quot;from&quot; address field.</desc>
-						<desc xml:lang="ja">Contains the string token describing the &quot;from&quot; address field.</desc>
+						<desc xml:lang="ja">「from」アドレスフィールドを記述する文字列トークンが含まれます。</desc>
 						<desc xml:lang="ko">Contains the string token describing the &quot;from&quot; address field.</desc>
 						<desc xml:lang="tr">Contains the string token describing the &quot;from&quot; address field.</desc>
 						<desc xml:lang="th">Contains the string token describing the &quot;from&quot; address field.</desc>
 						<desc xml:lang="hi-IN">Contains the string token describing the &quot;from&quot; address field.</desc>
+						<desc xml:lang="x-comment">Contains the string token describing the &quot;from&quot; address field.</desc>
 					</info>
 				</prop>
 				<prop oor:name="to" oor:type="xs:string">
@@ -3656,11 +3799,12 @@
 						<desc xml:lang="sv">Contains the string token describing the &quot;to&quot; address field.</desc>
 						<desc xml:lang="pl">Contains the string token describing the &quot;to&quot; address field.</desc>
 						<desc xml:lang="pt-BR">Contains the string token describing the &quot;to&quot; address field.</desc>
-						<desc xml:lang="ja">Contains the string token describing the &quot;to&quot; address field.</desc>
+						<desc xml:lang="ja">「to」アドレスフィールドを記述する文字列トークンが含まれます。</desc>
 						<desc xml:lang="ko">Contains the string token describing the &quot;to&quot; address field.</desc>
 						<desc xml:lang="tr">Contains the string token describing the &quot;to&quot; address field.</desc>
 						<desc xml:lang="th">Contains the string token describing the &quot;to&quot; address field.</desc>
 						<desc xml:lang="hi-IN">Contains the string token describing the &quot;to&quot; address field.</desc>
+						<desc xml:lang="x-comment">Contains the string token describing the &quot;to&quot; address field.</desc>
 					</info>
 				</prop>
 				<prop oor:name="cc" oor:type="xs:string">
@@ -3684,11 +3828,12 @@
 						<desc xml:lang="sv">Contains the string token describing the &quot;cc&quot; address field.</desc>
 						<desc xml:lang="pl">Contains the string token describing the &quot;cc&quot; address field.</desc>
 						<desc xml:lang="pt-BR">Contains the string token describing the &quot;cc&quot; address field.</desc>
-						<desc xml:lang="ja">Contains the string token describing the &quot;cc&quot; address field.</desc>
+						<desc xml:lang="ja">「cc」アドレスフィールドを記述する文字列トークンが含まれます。</desc>
 						<desc xml:lang="ko">Contains the string token describing the &quot;cc&quot; address field.</desc>
 						<desc xml:lang="tr">Contains the string token describing the &quot;cc&quot; address field.</desc>
 						<desc xml:lang="th">Contains the string token describing the &quot;cc&quot; address field.</desc>
 						<desc xml:lang="hi-IN">Contains the string token describing the &quot;cc&quot; address field.</desc>
+						<desc xml:lang="x-comment">Contains the string token describing the &quot;cc&quot; address field.</desc>
 					</info>
 				</prop>
 				<prop oor:name="bcc" oor:type="xs:string">
@@ -3712,11 +3857,12 @@
 						<desc xml:lang="sv">Contains the string token describing the &quot;bcc&quot; address field.</desc>
 						<desc xml:lang="pl">Contains the string token describing the &quot;bcc&quot; address field.</desc>
 						<desc xml:lang="pt-BR">Contains the string token describing the &quot;bcc&quot; address field.</desc>
-						<desc xml:lang="ja">Contains the string token describing the &quot;bcc&quot; address field.</desc>
+						<desc xml:lang="ja">「bcc」アドレスフィールドを記述する文字列トークンが含まれます。</desc>
 						<desc xml:lang="ko">Contains the string token describing the &quot;bcc&quot; address field.</desc>
 						<desc xml:lang="tr">Contains the string token describing the &quot;bcc&quot; address field.</desc>
 						<desc xml:lang="th">Contains the string token describing the &quot;bcc&quot; address field.</desc>
 						<desc xml:lang="hi-IN">Contains the string token describing the &quot;bcc&quot; address field.</desc>
+						<desc xml:lang="x-comment">Contains the string token describing the &quot;bcc&quot; address field.</desc>
 					</info>
 				</prop>
 				<prop oor:name="subject" oor:type="xs:string">
@@ -3740,11 +3886,12 @@
 						<desc xml:lang="sv">Contains the string token describing the subject.</desc>
 						<desc xml:lang="pl">Contains the string token describing the subject.</desc>
 						<desc xml:lang="pt-BR">Contains the string token describing the subject.</desc>
-						<desc xml:lang="ja">Contains the string token describing the subject.</desc>
+						<desc xml:lang="ja">件名を記述する文字列トークンが含まれます。</desc>
 						<desc xml:lang="ko">Contains the string token describing the subject.</desc>
 						<desc xml:lang="tr">Contains the string token describing the subject.</desc>
 						<desc xml:lang="th">Contains the string token describing the subject.</desc>
 						<desc xml:lang="hi-IN">Contains the string token describing the subject.</desc>
+						<desc xml:lang="x-comment">Contains the string token describing the subject.</desc>
 					</info>
 				</prop>
 				<prop oor:name="attachment" oor:type="xs:string">
@@ -3768,11 +3915,12 @@
 						<desc xml:lang="sv">Contains the string token describing the attachments of the message.</desc>
 						<desc xml:lang="pl">Contains the string token describing the attachments of the message.</desc>
 						<desc xml:lang="pt-BR">Contains the string token describing the attachments of the message.</desc>
-						<desc xml:lang="ja">Contains the string token describing the attachments of the message.</desc>
+						<desc xml:lang="ja">メッセージの添付ファイルを記述する文字列トークンが含まれます。</desc>
 						<desc xml:lang="ko">Contains the string token describing the attachments of the message.</desc>
 						<desc xml:lang="tr">Contains the string token describing the attachments of the message.</desc>
 						<desc xml:lang="th">Contains the string token describing the attachments of the message.</desc>
 						<desc xml:lang="hi-IN">Contains the string token describing the attachments of the message.</desc>
+						<desc xml:lang="x-comment">Contains the string token describing the attachments of the message.</desc>
 					</info>
 				</prop>
 				<prop oor:name="body" oor:type="xs:string">
@@ -3796,11 +3944,12 @@
 						<desc xml:lang="sv">Contains the string token describing the body of the message.</desc>
 						<desc xml:lang="pl">Contains the string token describing the body of the message.</desc>
 						<desc xml:lang="pt-BR">Contains the string token describing the body of the message.</desc>
-						<desc xml:lang="ja">Contains the string token describing the body of the message.</desc>
+						<desc xml:lang="ja">メッセージの本文を記述する文字列トークンが含まれます。</desc>
 						<desc xml:lang="ko">Contains the string token describing the body of the message.</desc>
 						<desc xml:lang="tr">Contains the string token describing the body of the message.</desc>
 						<desc xml:lang="th">Contains the string token describing the body of the message.</desc>
 						<desc xml:lang="hi-IN">Contains the string token describing the body of the message.</desc>
+						<desc xml:lang="x-comment">Contains the string token describing the body of the message.</desc>
 					</info>
 				</prop>
 			</group>
@@ -3825,11 +3974,12 @@
 					<desc xml:lang="sv">Contains the delimiters used to separate values for various command line parameters of the external mailer.</desc>
 					<desc xml:lang="pl">Contains the delimiters used to separate values for various command line parameters of the external mailer.</desc>
 					<desc xml:lang="pt-BR">Contains the delimiters used to separate values for various command line parameters of the external mailer.</desc>
-					<desc xml:lang="ja">Contains the delimiters used to separate values for various command line parameters of the external mailer.</desc>
+					<desc xml:lang="ja">外部メーラーの各種コマンド行パラメータの値を区切るために使用する区切り記号が含まれます。</desc>
 					<desc xml:lang="ko">Contains the delimiters used to separate values for various command line parameters of the external mailer.</desc>
 					<desc xml:lang="tr">Contains the delimiters used to separate values for various command line parameters of the external mailer.</desc>
 					<desc xml:lang="th">Contains the delimiters used to separate values for various command line parameters of the external mailer.</desc>
 					<desc xml:lang="hi-IN">Contains the delimiters used to separate values for various command line parameters of the external mailer.</desc>
+					<desc xml:lang="x-comment">Contains the delimiters used to separate values for various command line parameters of the external mailer.</desc>
 				</info>
 				<prop oor:name="base" oor:type="xs:string">
 					<info>
@@ -3852,11 +4002,12 @@
 						<desc xml:lang="sv">Contains the delimiter used between the external mailer name and the &quot;to&quot; field.</desc>
 						<desc xml:lang="pl">Contains the delimiter used between the external mailer name and the &quot;to&quot; field.</desc>
 						<desc xml:lang="pt-BR">Contains the delimiter used between the external mailer name and the &quot;to&quot; field.</desc>
-						<desc xml:lang="ja">Contains the delimiter used between the external mailer name and the &quot;to&quot; field.</desc>
+						<desc xml:lang="ja">外部メーラーの名前と「to」フィールドの間で使用する区切り記号が含まれます。</desc>
 						<desc xml:lang="ko">Contains the delimiter used between the external mailer name and the &quot;to&quot; field.</desc>
 						<desc xml:lang="tr">Contains the delimiter used between the external mailer name and the &quot;to&quot; field.</desc>
 						<desc xml:lang="th">Contains the delimiter used between the external mailer name and the &quot;to&quot; field.</desc>
 						<desc xml:lang="hi-IN">Contains the delimiter used between the external mailer name and the &quot;to&quot; field.</desc>
+						<desc xml:lang="x-comment">Contains the delimiter used between the external mailer name and the &quot;to&quot; field.</desc>
 					</info>
 				</prop>
 				<prop oor:name="cc" oor:type="xs:string">
@@ -3880,11 +4031,12 @@
 						<desc xml:lang="sv">Contains the delimiters between different cc addressees.</desc>
 						<desc xml:lang="pl">Contains the delimiters between different cc addressees.</desc>
 						<desc xml:lang="pt-BR">Contains the delimiters between different cc addressees.</desc>
-						<desc xml:lang="ja">Contains the delimiters between different cc addressees.</desc>
+						<desc xml:lang="ja">各 cc 宛先間を区切る記号が含まれます。</desc>
 						<desc xml:lang="ko">Contains the delimiters between different cc addressees.</desc>
 						<desc xml:lang="tr">Contains the delimiters between different cc addressees.</desc>
 						<desc xml:lang="th">Contains the delimiters between different cc addressees.</desc>
 						<desc xml:lang="hi-IN">Contains the delimiters between different cc addressees.</desc>
+						<desc xml:lang="x-comment">Contains the delimiters between different cc addressees.</desc>
 					</info>
 				</prop>
 				<prop oor:name="bcc" oor:type="xs:string">
@@ -3908,11 +4060,12 @@
 						<desc xml:lang="sv">Contains the delimiters between different bcc addressees.</desc>
 						<desc xml:lang="pl">Contains the delimiters between different bcc addressees.</desc>
 						<desc xml:lang="pt-BR">Contains the delimiters between different bcc addressees.</desc>
-						<desc xml:lang="ja">Contains the delimiters between different bcc addressees.</desc>
+						<desc xml:lang="ja">各 bcc 宛先間を区切る記号が含まれます。</desc>
 						<desc xml:lang="ko">Contains the delimiters between different bcc addressees.</desc>
 						<desc xml:lang="tr">Contains the delimiters between different bcc addressees.</desc>
 						<desc xml:lang="th">Contains the delimiters between different bcc addressees.</desc>
 						<desc xml:lang="hi-IN">Contains the delimiters between different bcc addressees.</desc>
+						<desc xml:lang="x-comment">Contains the delimiters between different bcc addressees.</desc>
 					</info>
 				</prop>
 				<prop oor:name="attachment" oor:type="xs:string">
@@ -3936,11 +4089,12 @@
 						<desc xml:lang="sv">Contains the delimiters between different attachments.</desc>
 						<desc xml:lang="pl">Contains the delimiters between different attachments.</desc>
 						<desc xml:lang="pt-BR">Contains the delimiters between different attachments.</desc>
-						<desc xml:lang="ja">Contains the delimiters between different attachments.</desc>
+						<desc xml:lang="ja">各 cc 宛先間を区切る記号が含まれます。</desc>
 						<desc xml:lang="ko">Contains the delimiters between different attachments.</desc>
 						<desc xml:lang="tr">Contains the delimiters between different attachments.</desc>
 						<desc xml:lang="th">Contains the delimiters between different attachments.</desc>
 						<desc xml:lang="hi-IN">Contains the delimiters between different attachments.</desc>
+						<desc xml:lang="x-comment">Contains the delimiters between different attachments.</desc>
 					</info>
 				</prop>
 			</group>
@@ -3968,11 +4122,12 @@
 				<desc xml:lang="sv">Use cfg package Jobs instead of this.</desc>
 				<desc xml:lang="pl">Use cfg package Jobs instead of this.</desc>
 				<desc xml:lang="pt-BR">Use cfg package Jobs instead of this.</desc>
-				<desc xml:lang="ja">Use cfg package Jobs instead of this.</desc>
+				<desc xml:lang="ja">代わりに cfg パッケージジョブを使用してください。</desc>
 				<desc xml:lang="ko">Use cfg package Jobs instead of this.</desc>
 				<desc xml:lang="tr">Use cfg package Jobs instead of this.</desc>
 				<desc xml:lang="th">Use cfg package Jobs instead of this.</desc>
 				<desc xml:lang="hi-IN">Use cfg package Jobs instead of this.</desc>
+				<desc xml:lang="x-comment">Use cfg package Jobs instead of this.</desc>
 			</info>
 			<prop oor:name="ServiceName" oor:type="xs:string">
 				<info>
@@ -3995,11 +4150,12 @@
 					<desc xml:lang="sv">Use cfg package Jobs instead of this.</desc>
 					<desc xml:lang="pl">Use cfg package Jobs instead of this.</desc>
 					<desc xml:lang="pt-BR">Use cfg package Jobs instead of this.</desc>
-					<desc xml:lang="ja">Use cfg package Jobs instead of this.</desc>
+					<desc xml:lang="ja">代わりに cfg パッケージジョブを使用してください。</desc>
 					<desc xml:lang="ko">Use cfg package Jobs instead of this.</desc>
 					<desc xml:lang="tr">Use cfg package Jobs instead of this.</desc>
 					<desc xml:lang="th">Use cfg package Jobs instead of this.</desc>
 					<desc xml:lang="hi-IN">Use cfg package Jobs instead of this.</desc>
+					<desc xml:lang="x-comment">Use cfg package Jobs instead of this.</desc>
 				</info>
 			</prop>
 			<prop oor:name="UserInteraction" oor:type="xs:boolean">
@@ -4023,11 +4179,12 @@
 					<desc xml:lang="sv">Use cfg package Jobs instead of this.</desc>
 					<desc xml:lang="pl">Use cfg package Jobs instead of this.</desc>
 					<desc xml:lang="pt-BR">Use cfg package Jobs instead of this.</desc>
-					<desc xml:lang="ja">Use cfg package Jobs instead of this.</desc>
+					<desc xml:lang="ja">代わりに cfg パッケージジョブを使用してください。</desc>
 					<desc xml:lang="ko">Use cfg package Jobs instead of this.</desc>
 					<desc xml:lang="tr">Use cfg package Jobs instead of this.</desc>
 					<desc xml:lang="th">Use cfg package Jobs instead of this.</desc>
 					<desc xml:lang="hi-IN">Use cfg package Jobs instead of this.</desc>
+					<desc xml:lang="x-comment">Use cfg package Jobs instead of this.</desc>
 				</info>
 			</prop>
 			<prop oor:name="AllowAsync" oor:type="xs:boolean">
@@ -4051,11 +4208,12 @@
 					<desc xml:lang="sv">Use cfg package Jobs instead of this.</desc>
 					<desc xml:lang="pl">Use cfg package Jobs instead of this.</desc>
 					<desc xml:lang="pt-BR">Use cfg package Jobs instead of this.</desc>
-					<desc xml:lang="ja">Use cfg package Jobs instead of this.</desc>
+					<desc xml:lang="ja">代わりに cfg パッケージジョブを使用してください。</desc>
 					<desc xml:lang="ko">Use cfg package Jobs instead of this.</desc>
 					<desc xml:lang="tr">Use cfg package Jobs instead of this.</desc>
 					<desc xml:lang="th">Use cfg package Jobs instead of this.</desc>
 					<desc xml:lang="hi-IN">Use cfg package Jobs instead of this.</desc>
+					<desc xml:lang="x-comment">Use cfg package Jobs instead of this.</desc>
 				</info>
 			</prop>
 			<group oor:name="ExecutionArguments" oor:extensible="true">
@@ -4079,11 +4237,12 @@
 					<desc xml:lang="sv">Use cfg package Jobs instead of this.</desc>
 					<desc xml:lang="pl">Use cfg package Jobs instead of this.</desc>
 					<desc xml:lang="pt-BR">Use cfg package Jobs instead of this.</desc>
-					<desc xml:lang="ja">Use cfg package Jobs instead of this.</desc>
+					<desc xml:lang="ja">代わりに cfg パッケージジョブを使用してください。</desc>
 					<desc xml:lang="ko">Use cfg package Jobs instead of this.</desc>
 					<desc xml:lang="tr">Use cfg package Jobs instead of this.</desc>
 					<desc xml:lang="th">Use cfg package Jobs instead of this.</desc>
 					<desc xml:lang="hi-IN">Use cfg package Jobs instead of this.</desc>
+					<desc xml:lang="x-comment">Use cfg package Jobs instead of this.</desc>
 				</info>
 			</group>
 		</group>
@@ -4106,15 +4265,16 @@
 				<desc xml:lang="sv">Contains internal MSExport settings that are common for all apps.</desc>
 				<desc xml:lang="pl">Contains internal MSExport settings that are common for all apps.</desc>
 				<desc xml:lang="pt-BR">Contains internal MSExport settings that are common for all apps.</desc>
-				<desc xml:lang="ja">Contains internal MSExport settings that are common for all apps.</desc>
+				<desc xml:lang="ja">すべてのアプリケーションに共通の、内部 MSExport 設定。</desc>
 				<desc xml:lang="ko">Contains internal MSExport settings that are common for all apps.</desc>
-				<desc xml:lang="zh-CN">Contains internal MSExport settings that are common for all apps.</desc>
+				<desc xml:lang="zh-CN">包含用于全部应用程序的内部输出的 MS 设定。</desc>
 				<desc xml:lang="zh-TW">Contains internal MSExport settings that are common for all apps.</desc>
 				<desc xml:lang="tr">Contains internal MSExport settings that are common for all apps.</desc>
 				<desc xml:lang="ar">Contains internal MSExport settings that are common for all apps.</desc>
 				<desc xml:lang="he">Contains internal MSExport settings that are common for all apps.</desc>
 				<desc xml:lang="ca">Contains internal MSExport settings that are common for all apps.</desc>
 				<desc xml:lang="th">Contains internal MSExport settings that are common for all apps.</desc>
+				<desc xml:lang="x-comment">Contains internal MSExport settings that are common for all apps.</desc>
 			</info>
 			<prop oor:name="UseOldExport" oor:type="xs:boolean">
 				<info>
@@ -4132,15 +4292,16 @@
 					<desc xml:lang="sv">Specifies if an old ( 5.0 format )way instead of a new one ( 6.0 OLE embedded document ) should be used for export of inplace objects in case MS-filters are not used for them.</desc>
 					<desc xml:lang="pl">Specifies if an old ( 5.0 format )way instead of a new one ( 6.0 OLE embedded document ) should be used for export of inplace objects in case MS-filters are not used for them.</desc>
 					<desc xml:lang="pt-BR">Specifies if an old ( 5.0 format )way instead of a new one ( 6.0 OLE embedded document ) should be used for export of inplace objects in case MS-filters are not used for them.</desc>
-					<desc xml:lang="ja">Specifies if an old ( 5.0 format )way instead of a new one ( 6.0 OLE embedded document ) should be used for export of inplace objects in case MS-filters are not used for them.</desc>
+					<desc xml:lang="ja">オブジェクトのエクスポートに MS フィルタを使用しない場合、新しい形式 (6.0 OLE 埋め込みドキュメント) ではなく古い形式 (5.0 形式) を使用する。</desc>
 					<desc xml:lang="ko">Specifies if an old ( 5.0 format )way instead of a new one ( 6.0 OLE embedded document ) should be used for export of inplace objects in case MS-filters are not used for them.</desc>
-					<desc xml:lang="zh-CN">Specifies if an old ( 5.0 format )way instead of a new one ( 6.0 OLE embedded document ) should be used for export of inplace objects in case MS-filters are not used for them.</desc>
+					<desc xml:lang="zh-CN">指定输出 inplace 对象在不使用 MS 过滤器情况下是否要使用旧的( 5.0 格式)来取代新的( 6.0 OLE 嵌入式文档)。</desc>
 					<desc xml:lang="zh-TW">Specifies if an old ( 5.0 format )way instead of a new one ( 6.0 OLE embedded document ) should be used for export of inplace objects in case MS-filters are not used for them.</desc>
 					<desc xml:lang="tr">Specifies if an old ( 5.0 format )way instead of a new one ( 6.0 OLE embedded document ) should be used for export of inplace objects in case MS-filters are not used for them.</desc>
 					<desc xml:lang="ar">Specifies if an old ( 5.0 format )way instead of a new one ( 6.0 OLE embedded document ) should be used for export of inplace objects in case MS-filters are not used for them.</desc>
 					<desc xml:lang="he">Specifies if an old ( 5.0 format )way instead of a new one ( 6.0 OLE embedded document ) should be used for export of inplace objects in case MS-filters are not used for them.</desc>
 					<desc xml:lang="ca">Specifies if an old ( 5.0 format )way instead of a new one ( 6.0 OLE embedded document ) should be used for export of inplace objects in case MS-filters are not used for them.</desc>
 					<desc xml:lang="th">Specifies if an old ( 5.0 format )way instead of a new one ( 6.0 OLE embedded document ) should be used for export of inplace objects in case MS-filters are not used for them.</desc>
+					<desc xml:lang="x-comment">Specifies if an old ( 5.0 format )way instead of a new one ( 6.0 OLE embedded document ) should be used for export of inplace objects in case MS-filters are not used for them.</desc>
 				</info>
 				<value>false</value>
 			</prop>
@@ -4167,11 +4328,12 @@
 				<desc xml:lang="sv">Contains a description of the persistent password container.</desc>
 				<desc xml:lang="pl">Contains a description of the persistent password container.</desc>
 				<desc xml:lang="pt-BR">Contains a description of the persistent password container.</desc>
-				<desc xml:lang="ja">Contains a description of the persistent password container.</desc>
+				<desc xml:lang="ja">持続性を持つパスワードコンテナの説明が含まれます。</desc>
 				<desc xml:lang="ko">Contains a description of the persistent password container.</desc>
 				<desc xml:lang="tr">Contains a description of the persistent password container.</desc>
 				<desc xml:lang="th">Contains a description of the persistent password container.</desc>
 				<desc xml:lang="hi-IN">Contains a description of the persistent password container.</desc>
+				<desc xml:lang="x-comment">Contains a description of the persistent password container.</desc>
 			</info>
 			<prop oor:name="UseStorage" oor:type="xs:boolean">
 				<info>
@@ -4194,11 +4356,12 @@
 					<desc xml:lang="sv">Specifies if passwords can be stored persistently.</desc>
 					<desc xml:lang="pl">Specifies if passwords can be stored persistently.</desc>
 					<desc xml:lang="pt-BR">Specifies if passwords can be stored persistently.</desc>
-					<desc xml:lang="ja">Specifies if passwords can be stored persistently.</desc>
+					<desc xml:lang="ja">パスワードの永続的な格納を許容するかどうかを指定します。</desc>
 					<desc xml:lang="ko">Specifies if passwords can be stored persistently.</desc>
 					<desc xml:lang="tr">Specifies if passwords can be stored persistently.</desc>
 					<desc xml:lang="th">Specifies if passwords can be stored persistently.</desc>
 					<desc xml:lang="hi-IN">Specifies if passwords can be stored persistently.</desc>
+					<desc xml:lang="x-comment">Specifies if passwords can be stored persistently.</desc>
 				</info>
 				<value>true</value>
 			</prop>
@@ -4223,11 +4386,12 @@
 					<desc xml:lang="sv">Specifies if there is a valid master password.</desc>
 					<desc xml:lang="pl">Specifies if there is a valid master password.</desc>
 					<desc xml:lang="pt-BR">Specifies if there is a valid master password.</desc>
-					<desc xml:lang="ja">Specifies if there is a valid master password.</desc>
+					<desc xml:lang="ja">有効なマスターパスワードが存在するかどうかを指定します。</desc>
 					<desc xml:lang="ko">Specifies if there is a valid master password.</desc>
 					<desc xml:lang="tr">Specifies if there is a valid master password.</desc>
 					<desc xml:lang="th">Specifies if there is a valid master password.</desc>
 					<desc xml:lang="hi-IN">Specifies if there is a valid master password.</desc>
+					<desc xml:lang="x-comment">Specifies if there is a valid master password.</desc>
 				</info>
 				<value>false</value>
 			</prop>
@@ -4252,11 +4416,12 @@
 					<desc xml:lang="sv">Contains the master password encrypted by itself.</desc>
 					<desc xml:lang="pl">Contains the master password encrypted by itself.</desc>
 					<desc xml:lang="pt-BR">Contains the master password encrypted by itself.</desc>
-					<desc xml:lang="ja">Contains the master password encrypted by itself.</desc>
+					<desc xml:lang="ja">単独で暗号化されたマスターパスワードのみが含まれます。</desc>
 					<desc xml:lang="ko">Contains the master password encrypted by itself.</desc>
 					<desc xml:lang="tr">Contains the master password encrypted by itself.</desc>
 					<desc xml:lang="th">Contains the master password encrypted by itself.</desc>
 					<desc xml:lang="hi-IN">Contains the master password encrypted by itself.</desc>
+					<desc xml:lang="x-comment">Contains the master password encrypted by itself.</desc>
 				</info>
 				<value/>
 			</prop>
@@ -4281,11 +4446,12 @@
 					<desc xml:lang="sv">Contains a list of passwords encoded with the master password.</desc>
 					<desc xml:lang="pl">Contains a list of passwords encoded with the master password.</desc>
 					<desc xml:lang="pt-BR">Contains a list of passwords encoded with the master password.</desc>
-					<desc xml:lang="ja">Contains a list of passwords encoded with the master password.</desc>
+					<desc xml:lang="ja">マスターパスワードでエンコードされたパスワードのリストが含まれます。</desc>
 					<desc xml:lang="ko">Contains a list of passwords encoded with the master password.</desc>
 					<desc xml:lang="tr">Contains a list of passwords encoded with the master password.</desc>
 					<desc xml:lang="th">Contains a list of passwords encoded with the master password.</desc>
 					<desc xml:lang="hi-IN">Contains a list of passwords encoded with the master password.</desc>
+					<desc xml:lang="x-comment">Contains a list of passwords encoded with the master password.</desc>
 				</info>
 			</set>
 		</group>
@@ -4311,11 +4477,12 @@
 				<desc xml:lang="sv">Specifies settings for the 3D engine.</desc>
 				<desc xml:lang="pl">Specifies settings for the 3D engine.</desc>
 				<desc xml:lang="pt-BR">Specifies settings for the 3D engine.</desc>
-				<desc xml:lang="ja">Specifies settings for the 3D engine.</desc>
+				<desc xml:lang="ja">3D エンジンの設定を指定します。</desc>
 				<desc xml:lang="ko">Specifies settings for the 3D engine.</desc>
 				<desc xml:lang="tr">Specifies settings for the 3D engine.</desc>
 				<desc xml:lang="th">Specifies settings for the 3D engine.</desc>
 				<desc xml:lang="hi-IN">Specifies settings for the 3D engine.</desc>
+				<desc xml:lang="x-comment">Specifies settings for the 3D engine.</desc>
 			</info>
 			<prop oor:name="Dithering" oor:type="xs:boolean">
 				<!-- OldPath: 3D-Engine/Dithering -->
@@ -4342,11 +4509,12 @@
 						<desc xml:lang="sv">Specifies if dithering is used to display more colors with few colors available.</desc>
 						<desc xml:lang="pl">Specifies if dithering is used to display more colors with few colors available.</desc>
 						<desc xml:lang="pt-BR">Specifies if dithering is used to display more colors with few colors available.</desc>
-						<desc xml:lang="ja">Specifies if dithering is used to display more colors with few colors available.</desc>
+						<desc xml:lang="ja">利用可能な色が少ない場合に、ディザリングを使用してより多くの色を表示するかどうかを指定します。</desc>
 						<desc xml:lang="ko">Specifies if dithering is used to display more colors with few colors available.</desc>
 						<desc xml:lang="tr">Specifies if dithering is used to display more colors with few colors available.</desc>
 						<desc xml:lang="th">Specifies if dithering is used to display more colors with few colors available.</desc>
 						<desc xml:lang="hi-IN">Specifies if dithering is used to display more colors with few colors available.</desc>
+						<desc xml:lang="x-comment">Specifies if dithering is used to display more colors with few colors available.</desc>
 					<label xml:lang="en-US">Use Dithering</label>
 					<label xml:lang="el">Use Dithering</label>
 					<label xml:lang="nl">Use Dithering</label>
@@ -4366,11 +4534,12 @@
 					<label xml:lang="sv">Use Dithering</label>
 					<label xml:lang="pl">Use Dithering</label>
 					<label xml:lang="pt-BR">Use Dithering</label>
-					<label xml:lang="ja">Use Dithering</label>
+					<label xml:lang="ja">ディザリングを使用</label>
 					<label xml:lang="ko">Use Dithering</label>
 					<label xml:lang="tr">Use Dithering</label>
 					<label xml:lang="th">Use Dithering</label>
 					<label xml:lang="hi-IN">Use Dithering</label>
+					<label xml:lang="x-comment">Use Dithering</label>
 				</info>
 				<value>true</value>
 			</prop>
@@ -4399,11 +4568,12 @@
 						<desc xml:lang="sv">Specifies if 3D graphics from Draw and Impress will be displayed on the user&amp;apos;s system using an OpenGL capable hardware. If the system does not have an OpenGL capable hardware, this setting will be ignored. The 3D display is always done per software.</desc>
 						<desc xml:lang="pl">Specifies if 3D graphics from Draw and Impress will be displayed on the user&amp;apos;s system using an OpenGL capable hardware. If the system does not have an OpenGL capable hardware, this setting will be ignored. The 3D display is always done per software.</desc>
 						<desc xml:lang="pt-BR">Specifies if 3D graphics from Draw and Impress will be displayed on the user&amp;apos;s system using an OpenGL capable hardware. If the system does not have an OpenGL capable hardware, this setting will be ignored. The 3D display is always done per software.</desc>
-						<desc xml:lang="ja">Specifies if 3D graphics from Draw and Impress will be displayed on the user&amp;apos;s system using an OpenGL capable hardware. If the system does not have an OpenGL capable hardware, this setting will be ignored. The 3D display is always done per software.</desc>
+						<desc xml:lang="ja">Draw/Impress の 3D 図形を OpenGL 対応のハードウェアを使用してユーザーのシステムに表示するかどうかを指定します。システムに OpenGL 対応のハードウェアが存在しない場合、この設定は無視されます。3D 表示は常に、ソフトウェアごとに行われます。</desc>
 						<desc xml:lang="ko">Specifies if 3D graphics from Draw and Impress will be displayed on the user&amp;apos;s system using an OpenGL capable hardware. If the system does not have an OpenGL capable hardware, this setting will be ignored. The 3D display is always done per software.</desc>
 						<desc xml:lang="tr">Specifies if 3D graphics from Draw and Impress will be displayed on the user&amp;apos;s system using an OpenGL capable hardware. If the system does not have an OpenGL capable hardware, this setting will be ignored. The 3D display is always done per software.</desc>
 						<desc xml:lang="th">Specifies if 3D graphics from Draw and Impress will be displayed on the user&amp;apos;s system using an OpenGL capable hardware. If the system does not have an OpenGL capable hardware, this setting will be ignored. The 3D display is always done per software.</desc>
 						<desc xml:lang="hi-IN">Specifies if 3D graphics from Draw and Impress will be displayed on the user&amp;apos;s system using an OpenGL capable hardware. If the system does not have an OpenGL capable hardware, this setting will be ignored. The 3D display is always done per software.</desc>
+						<desc xml:lang="x-comment">Specifies if 3D graphics from Draw and Impress will be displayed on the user&amp;apos;s system using an OpenGL capable hardware. If the system does not have an OpenGL capable hardware, this setting will be ignored. The 3D display is always done per software.</desc>
 					<label xml:lang="en-US">Use OpenGL</label>
 					<label xml:lang="el">Use OpenGL</label>
 					<label xml:lang="nl">Use OpenGL</label>
@@ -4423,11 +4593,12 @@
 					<label xml:lang="sv">Use OpenGL</label>
 					<label xml:lang="pl">Use OpenGL</label>
 					<label xml:lang="pt-BR">Use OpenGL</label>
-					<label xml:lang="ja">Use OpenGL</label>
+					<label xml:lang="ja">OpenGL を使用</label>
 					<label xml:lang="ko">Use OpenGL</label>
 					<label xml:lang="tr">Use OpenGL</label>
 					<label xml:lang="th">Use OpenGL</label>
 					<label xml:lang="hi-IN">Use OpenGL</label>
+					<label xml:lang="x-comment">Use OpenGL</label>
 				</info>
 				<value>true</value>
 			</prop>
@@ -4456,11 +4627,12 @@
 						<desc xml:lang="sv">Specifies whether all geometry data will be simultaneously transferred in an array to the graphic driver. Not every graphic driver correctly supports this OpenGL capability. For this reason, this option can be deactivated in case of presentation errors of 3D output. All geometry data will be then transferred as single components. This option is only available if OpenGL is used, otherwise it is disabled.</desc>
 						<desc xml:lang="pl">Specifies whether all geometry data will be simultaneously transferred in an array to the graphic driver. Not every graphic driver correctly supports this OpenGL capability. For this reason, this option can be deactivated in case of presentation errors of 3D output. All geometry data will be then transferred as single components. This option is only available if OpenGL is used, otherwise it is disabled.</desc>
 						<desc xml:lang="pt-BR">Specifies whether all geometry data will be simultaneously transferred in an array to the graphic driver. Not every graphic driver correctly supports this OpenGL capability. For this reason, this option can be deactivated in case of presentation errors of 3D output. All geometry data will be then transferred as single components. This option is only available if OpenGL is used, otherwise it is disabled.</desc>
-						<desc xml:lang="ja">Specifies whether all geometry data will be simultaneously transferred in an array to the graphic driver. Not every graphic driver correctly supports this OpenGL capability. For this reason, this option can be deactivated in case of presentation errors of 3D output. All geometry data will be then transferred as single components. This option is only available if OpenGL is used, otherwise it is disabled.</desc>
+						<desc xml:lang="ja">配列内のすべての幾何学データをグラフィックドライバに同時に転送するかどうかを指定します。すべてのグラフィックドライバがこの OpenGL 機能を正しくサポートしているわけではありません。この理由のために、3D 出力のプレゼンテーションエラーの発生時に、このオプションが非アクティブになる場合があります。すべての幾何学データが単一コンポーネントとして転送されます。OpenGLを使用する場合にのみこのオプションは有効になります。それ以外の場合には、無効になります。</desc>
 						<desc xml:lang="ko">Specifies whether all geometry data will be simultaneously transferred in an array to the graphic driver. Not every graphic driver correctly supports this OpenGL capability. For this reason, this option can be deactivated in case of presentation errors of 3D output. All geometry data will be then transferred as single components. This option is only available if OpenGL is used, otherwise it is disabled.</desc>
 						<desc xml:lang="tr">Specifies whether all geometry data will be simultaneously transferred in an array to the graphic driver. Not every graphic driver correctly supports this OpenGL capability. For this reason, this option can be deactivated in case of presentation errors of 3D output. All geometry data will be then transferred as single components. This option is only available if OpenGL is used, otherwise it is disabled.</desc>
 						<desc xml:lang="th">Specifies whether all geometry data will be simultaneously transferred in an array to the graphic driver. Not every graphic driver correctly supports this OpenGL capability. For this reason, this option can be deactivated in case of presentation errors of 3D output. All geometry data will be then transferred as single components. This option is only available if OpenGL is used, otherwise it is disabled.</desc>
 						<desc xml:lang="hi-IN">Specifies whether all geometry data will be simultaneously transferred in an array to the graphic driver. Not every graphic driver correctly supports this OpenGL capability. For this reason, this option can be deactivated in case of presentation errors of 3D output. All geometry data will be then transferred as single components. This option is only available if OpenGL is used, otherwise it is disabled.</desc>
+						<desc xml:lang="x-comment">Specifies whether all geometry data will be simultaneously transferred in an array to the graphic driver. Not every graphic driver correctly supports this OpenGL capability. For this reason, this option can be deactivated in case of presentation errors of 3D output. All geometry data will be then transferred as single components. This option is only available if OpenGL is used, otherwise it is disabled.</desc>
 					<label xml:lang="en-US">Optimized output</label>
 					<label xml:lang="el">Optimized output</label>
 					<label xml:lang="nl">Optimized output</label>
@@ -4480,11 +4652,12 @@
 					<label xml:lang="sv">Optimized output</label>
 					<label xml:lang="pl">Optimized output</label>
 					<label xml:lang="pt-BR">Optimized output</label>
-					<label xml:lang="ja">Optimized output</label>
+					<label xml:lang="ja">出力の最適化</label>
 					<label xml:lang="ko">Optimized output</label>
 					<label xml:lang="tr">Optimized output</label>
 					<label xml:lang="th">Optimized output</label>
 					<label xml:lang="hi-IN">Optimized output</label>
+					<label xml:lang="x-comment">Optimized output</label>
 				</info>
 				<value>true</value>
 			</prop>
@@ -4513,11 +4686,12 @@
 						<desc xml:lang="sv">Specifies interaction with full display. If a 3-D object is rotated or moved, the full display is rotated or moved and not a grid frame.</desc>
 						<desc xml:lang="pl">Specifies interaction with full display. If a 3-D object is rotated or moved, the full display is rotated or moved and not a grid frame.</desc>
 						<desc xml:lang="pt-BR">Specifies interaction with full display. If a 3-D object is rotated or moved, the full display is rotated or moved and not a grid frame.</desc>
-						<desc xml:lang="ja">Specifies interaction with full display. If a 3-D object is rotated or moved, the full display is rotated or moved and not a grid frame.</desc>
+						<desc xml:lang="ja">全画面表示のインタラクションを指定します。3D オブジェクトを回転または移動する場合に、グリッドフレームではなく、全画面表示を回転または移動します。</desc>
 						<desc xml:lang="ko">Specifies interaction with full display. If a 3-D object is rotated or moved, the full display is rotated or moved and not a grid frame.</desc>
 						<desc xml:lang="tr">Specifies interaction with full display. If a 3-D object is rotated or moved, the full display is rotated or moved and not a grid frame.</desc>
 						<desc xml:lang="th">Specifies interaction with full display. If a 3-D object is rotated or moved, the full display is rotated or moved and not a grid frame.</desc>
 						<desc xml:lang="hi-IN">Specifies interaction with full display. If a 3-D object is rotated or moved, the full display is rotated or moved and not a grid frame.</desc>
+						<desc xml:lang="x-comment">Specifies interaction with full display. If a 3-D object is rotated or moved, the full display is rotated or moved and not a grid frame.</desc>
 					<label xml:lang="en-US">Object refresh during interaction</label>
 					<label xml:lang="el">Object refresh during interaction</label>
 					<label xml:lang="nl">Object refresh during interaction</label>
@@ -4537,11 +4711,12 @@
 					<label xml:lang="sv">Object refresh during interaction</label>
 					<label xml:lang="pl">Object refresh during interaction</label>
 					<label xml:lang="pt-BR">Object refresh during interaction</label>
-					<label xml:lang="ja">Object refresh during interaction</label>
+					<label xml:lang="ja">インタラクション中のオブジェクトの更新</label>
 					<label xml:lang="ko">Object refresh during interaction</label>
 					<label xml:lang="tr">Object refresh during interaction</label>
 					<label xml:lang="th">Object refresh during interaction</label>
 					<label xml:lang="hi-IN">Object refresh during interaction</label>
+					<label xml:lang="x-comment">Object refresh during interaction</label>
 				</info>
 				<value>false</value>
 			</prop>
@@ -4568,11 +4743,12 @@
 				<desc xml:lang="sv">Contains miscellaneous settings for the auto correction.</desc>
 				<desc xml:lang="pl">Contains miscellaneous settings for the auto correction.</desc>
 				<desc xml:lang="pt-BR">Contains miscellaneous settings for the auto correction.</desc>
-				<desc xml:lang="ja">Contains miscellaneous settings for the auto correction.</desc>
+				<desc xml:lang="ja">オートコレクトに関するその他の設定が含まれます。</desc>
 				<desc xml:lang="ko">Contains miscellaneous settings for the auto correction.</desc>
 				<desc xml:lang="tr">Contains miscellaneous settings for the auto correction.</desc>
 				<desc xml:lang="th">Contains miscellaneous settings for the auto correction.</desc>
 				<desc xml:lang="hi-IN">Contains miscellaneous settings for the auto correction.</desc>
+				<desc xml:lang="x-comment">Contains miscellaneous settings for the auto correction.</desc>
 			</info>
 			<prop oor:name="UseReplacementTable" oor:type="xs:boolean">
 				<!-- OldPath: AutoCorrect/Options/All -->
@@ -4599,11 +4775,12 @@
 						<desc xml:lang="sv">Specifies if the replacement table should be used to replace letter combinations with defined text</desc>
 						<desc xml:lang="pl">Specifies if the replacement table should be used to replace letter combinations with defined text</desc>
 						<desc xml:lang="pt-BR">Specifies if the replacement table should be used to replace letter combinations with defined text</desc>
-						<desc xml:lang="ja">Specifies if the replacement table should be used to replace letter combinations with defined text</desc>
+						<desc xml:lang="ja">文字の組み合わせを定義済みテキストに置換するために、置換テーブルを使用するかどうかを指定します。</desc>
 						<desc xml:lang="ko">Specifies if the replacement table should be used to replace letter combinations with defined text</desc>
 						<desc xml:lang="tr">Specifies if the replacement table should be used to replace letter combinations with defined text</desc>
 						<desc xml:lang="th">Specifies if the replacement table should be used to replace letter combinations with defined text</desc>
 						<desc xml:lang="hi-IN">Specifies if the replacement table should be used to replace letter combinations with defined text</desc>
+						<desc xml:lang="x-comment">Specifies if the replacement table should be used to replace letter combinations with defined text</desc>
 					<label xml:lang="en-US">Use replacement table</label>
 					<label xml:lang="el">Εφαρμογή του πίνακα αντικατάστασης</label>
 					<label xml:lang="nl">Vervangingstabel gebruiken</label>
@@ -4623,11 +4800,13 @@
 					<label xml:lang="sv">Använd ersättningstabell</label>
 					<label xml:lang="pl">Użyj tabeli zamian</label>
 					<label xml:lang="pt-BR">Aplicar tabela de substituição</label>
-					<label xml:lang="ja">置換テーブルの使用</label>
+					<label xml:lang="ja">置換テーブルを使用</label>
 					<label xml:lang="ko">대체 표 적용</label>
 					<label xml:lang="tr">Değiştirme tablosunu kullan</label>
 					<label xml:lang="th">ใช้ตารางแทนที่</label>
 					<label xml:lang="hi-IN">प्रतिस्थापना सारणी को उपयोग करो</label>
+					<label xml:lang="x-comment">Use replacement table</label>
+					<label xml:lang="sk">Použiť tabuľku náhrad</label>
 				</info>
 				<value>true</value>
 			</prop>
@@ -4656,11 +4835,12 @@
 						<desc xml:lang="sv">Specifies if two initial capitals should be corrected automatically.</desc>
 						<desc xml:lang="pl">Specifies if two initial capitals should be corrected automatically.</desc>
 						<desc xml:lang="pt-BR">Specifies if two initial capitals should be corrected automatically.</desc>
-						<desc xml:lang="ja">Specifies if two initial capitals should be corrected automatically.</desc>
+						<desc xml:lang="ja">先頭に並ぶ２つの大文字を自動的に修正するかどうかを指定します。</desc>
 						<desc xml:lang="ko">Specifies if two initial capitals should be corrected automatically.</desc>
 						<desc xml:lang="tr">Specifies if two initial capitals should be corrected automatically.</desc>
 						<desc xml:lang="th">Specifies if two initial capitals should be corrected automatically.</desc>
 						<desc xml:lang="hi-IN">Specifies if two initial capitals should be corrected automatically.</desc>
+						<desc xml:lang="x-comment">Specifies if two initial capitals should be corrected automatically.</desc>
 					<label xml:lang="en-US">Correct two initial capitals</label>
 					<label xml:lang="el">Διόρθωση ΔΥο κεφαλαίων γραμμάτων στην ΑΡχή της λέξης</label>
 					<label xml:lang="nl">TWee hoofdletters aan WOordbegin corrigeren</label>
@@ -4680,11 +4860,13 @@
 					<label xml:lang="sv">KOrrigera två versaler i BÖrjan av ordet</label>
 					<label xml:lang="pl">Poprawiaj DWa POczątkowe WErsaliki</label>
 					<label xml:lang="pt-BR">Correct two initial capitals</label>
-					<label xml:lang="ja">2文字目を小文字にする</label>
+					<label xml:lang="ja">先頭の２つの大文字を修正</label>
 					<label xml:lang="ko">단어 시작부분에서 두 대문자 수정</label>
 					<label xml:lang="tr">SÖzcük başındaki İKi büyük harfi düzelt</label>
 					<label xml:lang="th">เปลี่ยนตัวพิมพ์ใหญ่สองตัวติดกัน</label>
 					<label xml:lang="hi-IN">पहिले का दो बड़े अक्षर को ठीक करो</label>
+					<label xml:lang="x-comment">Correct two initial capitals</label>
+					<label xml:lang="sk">Opraviť prvé DVe VEľké písmená</label>
 				</info>
 				<value>true</value>
 			</prop>
@@ -4713,11 +4895,12 @@
 						<desc xml:lang="sv">Specifies if the letter at the beginning of a sentence should be capitalized automatically.</desc>
 						<desc xml:lang="pl">Specifies if the letter at the beginning of a sentence should be capitalized automatically.</desc>
 						<desc xml:lang="pt-BR">Specifies if the letter at the beginning of a sentence should be capitalized automatically.</desc>
-						<desc xml:lang="ja">Specifies if the letter at the beginning of a sentence should be capitalized automatically.</desc>
+						<desc xml:lang="ja">文の先頭の文字を自動的に大文字にするかどうかを指定します。</desc>
 						<desc xml:lang="ko">Specifies if the letter at the beginning of a sentence should be capitalized automatically.</desc>
 						<desc xml:lang="tr">Specifies if the letter at the beginning of a sentence should be capitalized automatically.</desc>
 						<desc xml:lang="th">Specifies if the letter at the beginning of a sentence should be capitalized automatically.</desc>
 						<desc xml:lang="hi-IN">Specifies if the letter at the beginning of a sentence should be capitalized automatically.</desc>
+						<desc xml:lang="x-comment">Specifies if the letter at the beginning of a sentence should be capitalized automatically.</desc>
 					<label xml:lang="en-US">Capitalize first letter of every sentence</label>
 					<label xml:lang="el">Εκκίνηση κάθε πρότασης με κεφαλαίο γράμμα</label>
 					<label xml:lang="nl">Elke zin met een hoofdletter beginnen</label>
@@ -4737,11 +4920,13 @@
 					<label xml:lang="sv">Börja varje mening med stor bokstav</label>
 					<label xml:lang="pl">Początek zdania z wielkiej litery</label>
 					<label xml:lang="pt-BR">Iniciar todas as frases com maiúsculas</label>
-					<label xml:lang="ja">すべての文を大文字で始める</label>
+					<label xml:lang="ja">各文の最初の文字を大文字にします。</label>
 					<label xml:lang="ko">모든 문장을 대문자로 시작</label>
 					<label xml:lang="tr">Her cümleye büyük harfle başla</label>
 					<label xml:lang="th">เปลี่ยนตัวอักษรแรกของประโยคให้เป็นตัวพิมพ์ใหญ่</label>
 					<label xml:lang="hi-IN">हर वाक्य का प्रारंभ का अक्षर को बड़े अक्षर में बदलो</label>
+					<label xml:lang="x-comment">Capitalize first letter of every sentence</label>
+					<label xml:lang="sk">Každé prvé písmeno vety veľkým</label>
 				</info>
 				<value>true</value>
 			</prop>
@@ -4770,11 +4955,12 @@
 						<desc xml:lang="sv">Specifies if text should be formatted in bold or underlined when the corresponding characters are entered (*bold*, _underline_).</desc>
 						<desc xml:lang="pl">Specifies if text should be formatted in bold or underlined when the corresponding characters are entered (*bold*, _underline_).</desc>
 						<desc xml:lang="pt-BR">Specifies if text should be formatted in bold or underlined when the corresponding characters are entered (*bold*, _underline_).</desc>
-						<desc xml:lang="ja">Specifies if text should be formatted in bold or underlined when the corresponding characters are entered (*bold*, _underline_).</desc>
+						<desc xml:lang="ja">該当文字 (*bold*、_underline_) を入力した場合に、テキストに太字または下線の書式を適用するかどうかを指定します。</desc>
 						<desc xml:lang="ko">Specifies if text should be formatted in bold or underlined when the corresponding characters are entered (*bold*, _underline_).</desc>
 						<desc xml:lang="tr">Specifies if text should be formatted in bold or underlined when the corresponding characters are entered (*bold*, _underline_).</desc>
 						<desc xml:lang="th">Specifies if text should be formatted in bold or underlined when the corresponding characters are entered (*bold*, _underline_).</desc>
 						<desc xml:lang="hi-IN">Specifies if text should be formatted in bold or underlined when the corresponding characters are entered (*bold*, _underline_).</desc>
+						<desc xml:lang="x-comment">Specifies if text should be formatted in bold or underlined when the corresponding characters are entered (*bold*, _underline_).</desc>
 					<label xml:lang="en-US">Apply underline or bold</label>
 					<label xml:lang="el">Apply underline or bold</label>
 					<label xml:lang="nl">Apply underline or bold</label>
@@ -4794,11 +4980,12 @@
 					<label xml:lang="sv">Apply underline or bold</label>
 					<label xml:lang="pl">Apply underline or bold</label>
 					<label xml:lang="pt-BR">Apply underline or bold</label>
-					<label xml:lang="ja">Apply underline or bold</label>
+					<label xml:lang="ja">下線または太字を適用</label>
 					<label xml:lang="ko">Apply underline or bold</label>
 					<label xml:lang="tr">Apply underline or bold</label>
 					<label xml:lang="th">Apply underline or bold</label>
 					<label xml:lang="hi-IN">Apply underline or bold</label>
+					<label xml:lang="x-comment">Apply underline or bold</label>
 				</info>
 				<value>true</value>
 			</prop>
@@ -4827,11 +5014,12 @@
 						<desc xml:lang="sv">Specifies if character strings which could represent an URL should be converted to a hyperlink.</desc>
 						<desc xml:lang="pl">Specifies if character strings which could represent an URL should be converted to a hyperlink.</desc>
 						<desc xml:lang="pt-BR">Specifies if character strings which could represent an URL should be converted to a hyperlink.</desc>
-						<desc xml:lang="ja">Specifies if character strings which could represent an URL should be converted to a hyperlink.</desc>
+						<desc xml:lang="ja">URL として解釈できる文字列をハイパーリンクに変換するかどうかを指定します。</desc>
 						<desc xml:lang="ko">Specifies if character strings which could represent an URL should be converted to a hyperlink.</desc>
 						<desc xml:lang="tr">Specifies if character strings which could represent an URL should be converted to a hyperlink.</desc>
 						<desc xml:lang="th">Specifies if character strings which could represent an URL should be converted to a hyperlink.</desc>
 						<desc xml:lang="hi-IN">Specifies if character strings which could represent an URL should be converted to a hyperlink.</desc>
+						<desc xml:lang="x-comment">Specifies if character strings which could represent an URL should be converted to a hyperlink.</desc>
 					<label xml:lang="en-US">Detect URL</label>
 					<label xml:lang="el">Detect URL</label>
 					<label xml:lang="nl">Detect URL</label>
@@ -4851,11 +5039,12 @@
 					<label xml:lang="sv">Detect URL</label>
 					<label xml:lang="pl">Detect URL</label>
 					<label xml:lang="pt-BR">Detect URL</label>
-					<label xml:lang="ja">Detect URL</label>
+					<label xml:lang="ja">URL を検出</label>
 					<label xml:lang="ko">Detect URL</label>
 					<label xml:lang="tr">Detect URL</label>
 					<label xml:lang="th">Detect URL</label>
 					<label xml:lang="hi-IN">Detect URL</label>
+					<label xml:lang="x-comment">Detect URL</label>
 				</info>
 				<value>true</value>
 			</prop>
@@ -4884,11 +5073,12 @@
 						<desc xml:lang="sv">Specifies if ordinal numbers should be displayed with raised endings.</desc>
 						<desc xml:lang="pl">Specifies if ordinal numbers should be displayed with raised endings.</desc>
 						<desc xml:lang="pt-BR">Specifies if ordinal numbers should be displayed with raised endings.</desc>
-						<desc xml:lang="ja">Specifies if ordinal numbers should be displayed with raised endings.</desc>
+						<desc xml:lang="ja">序数の末尾を上付きで表示するかどうかを指定します。</desc>
 						<desc xml:lang="ko">Specifies if ordinal numbers should be displayed with raised endings.</desc>
 						<desc xml:lang="tr">Specifies if ordinal numbers should be displayed with raised endings.</desc>
 						<desc xml:lang="th">Specifies if ordinal numbers should be displayed with raised endings.</desc>
 						<desc xml:lang="hi-IN">Specifies if ordinal numbers should be displayed with raised endings.</desc>
+						<desc xml:lang="x-comment">Specifies if ordinal numbers should be displayed with raised endings.</desc>
 					<label xml:lang="en-US">Replace ordinal numbers</label>
 					<label xml:lang="el">Replace ordinal numbers</label>
 					<label xml:lang="nl">Replace ordinal numbers</label>
@@ -4908,11 +5098,12 @@
 					<label xml:lang="sv">Replace ordinal numbers</label>
 					<label xml:lang="pl">Replace ordinal numbers</label>
 					<label xml:lang="pt-BR">Replace ordinal numbers</label>
-					<label xml:lang="ja">Replace ordinal numbers</label>
+					<label xml:lang="ja">序数を置換</label>
 					<label xml:lang="ko">Replace ordinal numbers</label>
 					<label xml:lang="tr">Replace ordinal numbers</label>
 					<label xml:lang="th">Replace ordinal numbers</label>
 					<label xml:lang="hi-IN">Replace ordinal numbers</label>
+					<label xml:lang="x-comment">Replace ordinal numbers</label>
 				</info>
 				<value>true</value>
 			</prop>
@@ -4941,11 +5132,12 @@
 						<desc xml:lang="sv">Specifies if character combinations for fractions should be replaced with a corresponding single character.</desc>
 						<desc xml:lang="pl">Specifies if character combinations for fractions should be replaced with a corresponding single character.</desc>
 						<desc xml:lang="pt-BR">Specifies if character combinations for fractions should be replaced with a corresponding single character.</desc>
-						<desc xml:lang="ja">Specifies if character combinations for fractions should be replaced with a corresponding single character.</desc>
+						<desc xml:lang="ja">分数の文字の組み合わせを対応する単一文字に置換するかどうかを指定します。</desc>
 						<desc xml:lang="ko">Specifies if character combinations for fractions should be replaced with a corresponding single character.</desc>
 						<desc xml:lang="tr">Specifies if character combinations for fractions should be replaced with a corresponding single character.</desc>
 						<desc xml:lang="th">Specifies if character combinations for fractions should be replaced with a corresponding single character.</desc>
 						<desc xml:lang="hi-IN">Specifies if character combinations for fractions should be replaced with a corresponding single character.</desc>
+						<desc xml:lang="x-comment">Specifies if character combinations for fractions should be replaced with a corresponding single character.</desc>
 					<label xml:lang="en-US">Replace fractions</label>
 					<label xml:lang="el">Replace fractions</label>
 					<label xml:lang="nl">Replace fractions</label>
@@ -4965,11 +5157,12 @@
 					<label xml:lang="sv">Replace fractions</label>
 					<label xml:lang="pl">Replace fractions</label>
 					<label xml:lang="pt-BR">Replace fractions</label>
-					<label xml:lang="ja">Replace fractions</label>
+					<label xml:lang="ja">分数を置換</label>
 					<label xml:lang="ko">Replace fractions</label>
 					<label xml:lang="tr">Replace fractions</label>
 					<label xml:lang="th">Replace fractions</label>
 					<label xml:lang="hi-IN">Replace fractions</label>
+					<label xml:lang="x-comment">Replace fractions</label>
 				</info>
 				<value>true</value>
 			</prop>
@@ -4998,11 +5191,12 @@
 						<desc xml:lang="sv">Specifies if minus signs should be replaced by dashes automatically.</desc>
 						<desc xml:lang="pl">Specifies if minus signs should be replaced by dashes automatically.</desc>
 						<desc xml:lang="pt-BR">Specifies if minus signs should be replaced by dashes automatically.</desc>
-						<desc xml:lang="ja">Specifies if minus signs should be replaced by dashes automatically.</desc>
+						<desc xml:lang="ja">マイナス符号を自動的にダッシュに置換するかどうかを指定します。</desc>
 						<desc xml:lang="ko">Specifies if minus signs should be replaced by dashes automatically.</desc>
 						<desc xml:lang="tr">Specifies if minus signs should be replaced by dashes automatically.</desc>
 						<desc xml:lang="th">Specifies if minus signs should be replaced by dashes automatically.</desc>
 						<desc xml:lang="hi-IN">Specifies if minus signs should be replaced by dashes automatically.</desc>
+						<desc xml:lang="x-comment">Specifies if minus signs should be replaced by dashes automatically.</desc>
 					<label xml:lang="en-US">Replace dashes</label>
 					<label xml:lang="el">Αντικατάσταση παυλών</label>
 					<label xml:lang="nl">Streepjes vervangen</label>
@@ -5022,11 +5216,13 @@
 					<label xml:lang="sv">Ersätt tankstreck</label>
 					<label xml:lang="pl">Zamieniaj myślniki</label>
 					<label xml:lang="pt-BR">Substituir hífens</label>
-					<label xml:lang="ja">ダッシュに置換</label>
+					<label xml:lang="ja">ダッシュを置換</label>
 					<label xml:lang="ko">대시 바꾸기</label>
 					<label xml:lang="tr">Tireleri değiştir</label>
 					<label xml:lang="th">แทนที่เส้นประยาว</label>
 					<label xml:lang="hi-IN">डॉशों को प्रतिस्थापित करो</label>
+					<label xml:lang="x-comment">Replace dashes</label>
+					<label xml:lang="sk">Nahradiť pomlčky</label>
 				</info>
 				<value>true</value>
 			</prop>
@@ -5055,11 +5251,12 @@
 						<desc xml:lang="sv">Specifies if multiple spaces should be combined into one.</desc>
 						<desc xml:lang="pl">Specifies if multiple spaces should be combined into one.</desc>
 						<desc xml:lang="pt-BR">Specifies if multiple spaces should be combined into one.</desc>
-						<desc xml:lang="ja">Specifies if multiple spaces should be combined into one.</desc>
+						<desc xml:lang="ja">複数のスペースを単一のスペースに結合するかどうかを指定します。</desc>
 						<desc xml:lang="ko">Specifies if multiple spaces should be combined into one.</desc>
 						<desc xml:lang="tr">Specifies if multiple spaces should be combined into one.</desc>
 						<desc xml:lang="th">Specifies if multiple spaces should be combined into one.</desc>
 						<desc xml:lang="hi-IN">Specifies if multiple spaces should be combined into one.</desc>
+						<desc xml:lang="x-comment">Specifies if multiple spaces should be combined into one.</desc>
 					<label xml:lang="en-US">Ignore double spaces</label>
 					<label xml:lang="el">Παράβλεψη διπλών κενών</label>
 					<label xml:lang="nl">Dubbele spaties negeren</label>
@@ -5079,11 +5276,12 @@
 					<label xml:lang="sv">Ignore double spaces</label>
 					<label xml:lang="pl">Ignore double spaces</label>
 					<label xml:lang="pt-BR">Ignore double spaces</label>
-					<label xml:lang="ja">ダブルスペースを無視する</label>
+					<label xml:lang="ja">二重のスペースを無視</label>
 					<label xml:lang="ko">이중 공백 무시</label>
 					<label xml:lang="tr">Çift boşlukları yok say</label>
 					<label xml:lang="th">ยกเลิกช่องว่างสองช่อง</label>
 					<label xml:lang="hi-IN">द्विगुणित अंतरों को उपेक्षा करो</label>
+					<label xml:lang="x-comment">Ignore double spaces</label>
 				</info>
 				<value>false</value>
 			</prop>
@@ -5112,11 +5310,12 @@
 						<desc xml:lang="sv">Specifies if single quotes should be replaced.</desc>
 						<desc xml:lang="pl">Specifies if single quotes should be replaced.</desc>
 						<desc xml:lang="pt-BR">Specifies if single quotes should be replaced.</desc>
-						<desc xml:lang="ja">Specifies if single quotes should be replaced.</desc>
+						<desc xml:lang="ja">シングルクォーテーションマークを置換するかどうかを指定します。</desc>
 						<desc xml:lang="ko">Specifies if single quotes should be replaced.</desc>
 						<desc xml:lang="tr">Specifies if single quotes should be replaced.</desc>
 						<desc xml:lang="th">Specifies if single quotes should be replaced.</desc>
 						<desc xml:lang="hi-IN">Specifies if single quotes should be replaced.</desc>
+						<desc xml:lang="x-comment">Specifies if single quotes should be replaced.</desc>
 					<label xml:lang="en-US">Single quotes - Replace</label>
 					<label xml:lang="el">Single quotes - Replace</label>
 					<label xml:lang="nl">Single quotes - Replace</label>
@@ -5136,11 +5335,12 @@
 					<label xml:lang="sv">Single quotes - Replace</label>
 					<label xml:lang="pl">Single quotes - Replace</label>
 					<label xml:lang="pt-BR">Single quotes - Replace</label>
-					<label xml:lang="ja">Single quotes - Replace</label>
+					<label xml:lang="ja">シングルクォーテーションマーク - 置換</label>
 					<label xml:lang="ko">Single quotes - Replace</label>
 					<label xml:lang="tr">Single quotes - Replace</label>
 					<label xml:lang="th">Single quotes - Replace</label>
 					<label xml:lang="hi-IN">Single quotes - Replace</label>
+					<label xml:lang="x-comment">Single quotes - Replace</label>
 				</info>
 				<value>false</value>
 			</prop>
@@ -5169,11 +5369,12 @@
 						<desc xml:lang="sv">Specifies the start single quote.</desc>
 						<desc xml:lang="pl">Specifies the start single quote.</desc>
 						<desc xml:lang="pt-BR">Specifies the start single quote.</desc>
-						<desc xml:lang="ja">Specifies the start single quote.</desc>
+						<desc xml:lang="ja">左側のシングルクォーテーションマークを指定します。</desc>
 						<desc xml:lang="ko">Specifies the start single quote.</desc>
 						<desc xml:lang="tr">Specifies the start single quote.</desc>
 						<desc xml:lang="th">Specifies the start single quote.</desc>
 						<desc xml:lang="hi-IN">Specifies the start single quote.</desc>
+						<desc xml:lang="x-comment">Specifies the start single quote.</desc>
 					<label xml:lang="en-US">Start single quote</label>
 					<label xml:lang="el">Start single quote</label>
 					<label xml:lang="nl">Start single quote</label>
@@ -5193,11 +5394,12 @@
 					<label xml:lang="sv">Start single quote</label>
 					<label xml:lang="pl">Start single quote</label>
 					<label xml:lang="pt-BR">Start single quote</label>
-					<label xml:lang="ja">Start single quote</label>
+					<label xml:lang="ja">左側のシングルクォーテーションマーク</label>
 					<label xml:lang="ko">Start single quote</label>
 					<label xml:lang="tr">Start single quote</label>
 					<label xml:lang="th">Start single quote</label>
 					<label xml:lang="hi-IN">Start single quote</label>
+					<label xml:lang="x-comment">Start single quote</label>
 				</info>
 			</prop>
 			<prop oor:name="SingleQuoteAtEnd" oor:type="xs:int">
@@ -5225,11 +5427,12 @@
 						<desc xml:lang="sv">Specifies the end single quote.</desc>
 						<desc xml:lang="pl">Specifies the end single quote.</desc>
 						<desc xml:lang="pt-BR">Specifies the end single quote.</desc>
-						<desc xml:lang="ja">Specifies the end single quote.</desc>
+						<desc xml:lang="ja">右側のシングルクォーテーションマークを指定します。</desc>
 						<desc xml:lang="ko">Specifies the end single quote.</desc>
 						<desc xml:lang="tr">Specifies the end single quote.</desc>
 						<desc xml:lang="th">Specifies the end single quote.</desc>
 						<desc xml:lang="hi-IN">Specifies the end single quote.</desc>
+						<desc xml:lang="x-comment">Specifies the end single quote.</desc>
 					<label xml:lang="en-US">End Single quote</label>
 					<label xml:lang="el">End Single quote</label>
 					<label xml:lang="nl">End Single quote</label>
@@ -5249,11 +5452,12 @@
 					<label xml:lang="sv">End Single quote</label>
 					<label xml:lang="pl">End Single quote</label>
 					<label xml:lang="pt-BR">End Single quote</label>
-					<label xml:lang="ja">End Single quote</label>
+					<label xml:lang="ja">右側のシングルクォーテーションマーク</label>
 					<label xml:lang="ko">End Single quote</label>
 					<label xml:lang="tr">End Single quote</label>
 					<label xml:lang="th">End Single quote</label>
 					<label xml:lang="hi-IN">End Single quote</label>
+					<label xml:lang="x-comment">End Single quote</label>
 				</info>
 			</prop>
 			<prop oor:name="ReplaceDoubleQuote" oor:type="xs:boolean">
@@ -5281,11 +5485,12 @@
 						<desc xml:lang="sv">Specifies if double quotes should be replaced.</desc>
 						<desc xml:lang="pl">Specifies if double quotes should be replaced.</desc>
 						<desc xml:lang="pt-BR">Specifies if double quotes should be replaced.</desc>
-						<desc xml:lang="ja">Specifies if double quotes should be replaced.</desc>
+						<desc xml:lang="ja">ダブルクォーテーションマークを置換するかどうかを指定します。</desc>
 						<desc xml:lang="ko">Specifies if double quotes should be replaced.</desc>
 						<desc xml:lang="tr">Specifies if double quotes should be replaced.</desc>
 						<desc xml:lang="th">Specifies if double quotes should be replaced.</desc>
 						<desc xml:lang="hi-IN">Specifies if double quotes should be replaced.</desc>
+						<desc xml:lang="x-comment">Specifies if double quotes should be replaced.</desc>
 					<label xml:lang="en-US">Double quotes - Replace</label>
 					<label xml:lang="el">Double quotes - Replace</label>
 					<label xml:lang="nl">Double quotes - Replace</label>
@@ -5305,11 +5510,12 @@
 					<label xml:lang="sv">Double quotes - Replace</label>
 					<label xml:lang="pl">Double quotes - Replace</label>
 					<label xml:lang="pt-BR">Double quotes - Replace</label>
-					<label xml:lang="ja">Double quotes - Replace</label>
+					<label xml:lang="ja">ダブルクォーテーションマーク - 置換</label>
 					<label xml:lang="ko">Double quotes - Replace</label>
 					<label xml:lang="tr">Double quotes - Replace</label>
 					<label xml:lang="th">Double quotes - Replace</label>
 					<label xml:lang="hi-IN">Double quotes - Replace</label>
+					<label xml:lang="x-comment">Double quotes - Replace</label>
 				</info>
 				<value>true</value>
 			</prop>
@@ -5338,11 +5544,12 @@
 						<desc xml:lang="sv">Specifies the start quote.</desc>
 						<desc xml:lang="pl">Specifies the start quote.</desc>
 						<desc xml:lang="pt-BR">Specifies the start quote.</desc>
-						<desc xml:lang="ja">Specifies the start quote.</desc>
+						<desc xml:lang="ja">左側のクォーテーションマークを指定します。</desc>
 						<desc xml:lang="ko">Specifies the start quote.</desc>
 						<desc xml:lang="tr">Specifies the start quote.</desc>
 						<desc xml:lang="th">Specifies the start quote.</desc>
 						<desc xml:lang="hi-IN">Specifies the start quote.</desc>
+						<desc xml:lang="x-comment">Specifies the start quote.</desc>
 					<label xml:lang="en-US">Start quote</label>
 					<label xml:lang="el">Χαρακτήρας για την αρχή της λέξης</label>
 					<label xml:lang="nl">Teken voor woordbegin</label>
@@ -5362,11 +5569,13 @@
 					<label xml:lang="sv">Tecken för början av ordet</label>
 					<label xml:lang="pl">Znak początku słowa</label>
 					<label xml:lang="pt-BR">Iniciar citação</label>
-					<label xml:lang="ja">単語左の記号</label>
+					<label xml:lang="ja">左側のクォーテーションマーク</label>
 					<label xml:lang="ko">단어시작의 따옴표</label>
 					<label xml:lang="tr">Sözcük başı için karakter</label>
 					<label xml:lang="th">อัญประกาศเปิด</label>
 					<label xml:lang="hi-IN">प्रारंभ का क्वोट्</label>
+					<label xml:lang="x-comment">Start quote</label>
+					<label xml:lang="sk">Ľavá úvodzovka</label>
 				</info>
 			</prop>
 			<prop oor:name="DoubleQuoteAtEnd" oor:type="xs:int">
@@ -5394,11 +5603,12 @@
 						<desc xml:lang="sv">Specifies the end quote.</desc>
 						<desc xml:lang="pl">Specifies the end quote.</desc>
 						<desc xml:lang="pt-BR">Specifies the end quote.</desc>
-						<desc xml:lang="ja">Specifies the end quote.</desc>
+						<desc xml:lang="ja">右側のクォーテーションマークを指定します。</desc>
 						<desc xml:lang="ko">Specifies the end quote.</desc>
 						<desc xml:lang="tr">Specifies the end quote.</desc>
 						<desc xml:lang="th">Specifies the end quote.</desc>
 						<desc xml:lang="hi-IN">Specifies the end quote.</desc>
+						<desc xml:lang="x-comment">Specifies the end quote.</desc>
 					<label xml:lang="en-US">End quote</label>
 					<label xml:lang="el">Χαρακτήρας για το τέλος της λέξης</label>
 					<label xml:lang="nl">Teken voor woordeinde</label>
@@ -5418,11 +5628,13 @@
 					<label xml:lang="sv">Tecken för slutet av ordet</label>
 					<label xml:lang="pl">Znacznik końca słowa</label>
 					<label xml:lang="pt-BR">Término da citação</label>
-					<label xml:lang="ja">単語右の記号</label>
+					<label xml:lang="ja">右側のクォーテーションマーク</label>
 					<label xml:lang="ko">단어끝의 따옴표</label>
 					<label xml:lang="tr">Sözcük sonu için karakter</label>
 					<label xml:lang="th">อัญประกาศปิด</label>
 					<label xml:lang="hi-IN">अंतिम क्वोट्</label>
+					<label xml:lang="x-comment">End quote</label>
+					<label xml:lang="sk">Pravá úvodzovka</label>
 				</info>
 			</prop>
 			<group oor:name="Exceptions">
@@ -5446,11 +5658,12 @@
 					<desc xml:lang="sv">Contains settings to apply replacement rules and exceptions.</desc>
 					<desc xml:lang="pl">Contains settings to apply replacement rules and exceptions.</desc>
 					<desc xml:lang="pt-BR">Contains settings to apply replacement rules and exceptions.</desc>
-					<desc xml:lang="ja">Contains settings to apply replacement rules and exceptions.</desc>
+					<desc xml:lang="ja">置換の規則と例外を適用する設定が含まれます。</desc>
 					<desc xml:lang="ko">Contains settings to apply replacement rules and exceptions.</desc>
 					<desc xml:lang="tr">Contains settings to apply replacement rules and exceptions.</desc>
 					<desc xml:lang="th">Contains settings to apply replacement rules and exceptions.</desc>
 					<desc xml:lang="hi-IN">Contains settings to apply replacement rules and exceptions.</desc>
+					<desc xml:lang="x-comment">Contains settings to apply replacement rules and exceptions.</desc>
 				</info>
 				<prop oor:name="TwoCapitalsAtStart" oor:type="xs:boolean">
 					<!-- OldPath: AutoCorrect/Options/All -->
@@ -5477,11 +5690,12 @@
 							<desc xml:lang="sv">Specifies if defined words with two initial capital letters should not be included in the AutoCorrect replacement.</desc>
 							<desc xml:lang="pl">Specifies if defined words with two initial capital letters should not be included in the AutoCorrect replacement.</desc>
 							<desc xml:lang="pt-BR">Specifies if defined words with two initial capital letters should not be included in the AutoCorrect replacement.</desc>
-							<desc xml:lang="ja">Specifies if defined words with two initial capital letters should not be included in the AutoCorrect replacement.</desc>
+							<desc xml:lang="ja">先頭に２つの大文字が並ぶ定義した単語について、オートコレクト置換機能の対象から除外するかどうかを指定します。</desc>
 							<desc xml:lang="ko">Specifies if defined words with two initial capital letters should not be included in the AutoCorrect replacement.</desc>
 							<desc xml:lang="tr">Specifies if defined words with two initial capital letters should not be included in the AutoCorrect replacement.</desc>
 							<desc xml:lang="th">Specifies if defined words with two initial capital letters should not be included in the AutoCorrect replacement.</desc>
 							<desc xml:lang="hi-IN">Specifies if defined words with two initial capital letters should not be included in the AutoCorrect replacement.</desc>
+							<desc xml:lang="x-comment">Specifies if defined words with two initial capital letters should not be included in the AutoCorrect replacement.</desc>
 						<label xml:lang="en-US">Words with two initial capital letters - Add automatically</label>
 						<label xml:lang="el">Words with two initial capital letters - Add automatically</label>
 						<label xml:lang="nl">Words with two initial capital letters - Add automatically</label>
@@ -5501,11 +5715,12 @@
 						<label xml:lang="sv">Words with two initial capital letters - Add automatically</label>
 						<label xml:lang="pl">Words with two initial capital letters - Add automatically</label>
 						<label xml:lang="pt-BR">Words with two initial capital letters - Add automatically</label>
-						<label xml:lang="ja">Words with two initial capital letters - Add automatically</label>
+						<label xml:lang="ja">先頭に２つの大文字が並ぶ単語 - 自動的に追加</label>
 						<label xml:lang="ko">Words with two initial capital letters - Add automatically</label>
 						<label xml:lang="tr">Words with two initial capital letters - Add automatically</label>
 						<label xml:lang="th">Words with two initial capital letters - Add automatically</label>
 						<label xml:lang="hi-IN">Words with two initial capital letters - Add automatically</label>
+						<label xml:lang="x-comment">Words with two initial capital letters - Add automatically</label>
 					</info>
 					<value>true</value>
 				</prop>
@@ -5534,11 +5749,12 @@
 							<desc xml:lang="sv">Specifies if defined abbreviations should be taken into account to exclude a preceding capital letter.</desc>
 							<desc xml:lang="pl">Specifies if defined abbreviations should be taken into account to exclude a preceding capital letter.</desc>
 							<desc xml:lang="pt-BR">Specifies if defined abbreviations should be taken into account to exclude a preceding capital letter.</desc>
-							<desc xml:lang="ja">Specifies if defined abbreviations should be taken into account to exclude a preceding capital letter.</desc>
+							<desc xml:lang="ja">先行する大文字を除外するときに、定義済みの略語を考慮に入れるかどうかを指定します。</desc>
 							<desc xml:lang="ko">Specifies if defined abbreviations should be taken into account to exclude a preceding capital letter.</desc>
 							<desc xml:lang="tr">Specifies if defined abbreviations should be taken into account to exclude a preceding capital letter.</desc>
 							<desc xml:lang="th">Specifies if defined abbreviations should be taken into account to exclude a preceding capital letter.</desc>
 							<desc xml:lang="hi-IN">Specifies if defined abbreviations should be taken into account to exclude a preceding capital letter.</desc>
+							<desc xml:lang="x-comment">Specifies if defined abbreviations should be taken into account to exclude a preceding capital letter.</desc>
 						<label xml:lang="en-US">Abbreviations (no subsequent capital letter) - Add automatically</label>
 						<label xml:lang="el">Abbreviations (no subsequent capital letter) - Add automatically</label>
 						<label xml:lang="nl">Abbreviations (no subsequent capital letter) - Add automatically</label>
@@ -5558,11 +5774,12 @@
 						<label xml:lang="sv">Abbreviations (no subsequent capital letter) - Add automatically</label>
 						<label xml:lang="pl">Abbreviations (no subsequent capital letter) - Add automatically</label>
 						<label xml:lang="pt-BR">Abbreviations (no subsequent capital letter) - Add automatically</label>
-						<label xml:lang="ja">Abbreviations (no subsequent capital letter) - Add automatically</label>
+						<label xml:lang="ja">略語 (以降を大文字にしない) - 自動的に追加</label>
 						<label xml:lang="ko">Abbreviations (no subsequent capital letter) - Add automatically</label>
 						<label xml:lang="tr">Abbreviations (no subsequent capital letter) - Add automatically</label>
 						<label xml:lang="th">Abbreviations (no subsequent capital letter) - Add automatically</label>
 						<label xml:lang="hi-IN">Abbreviations (no subsequent capital letter) - Add automatically</label>
+						<label xml:lang="x-comment">Abbreviations (no subsequent capital letter) - Add automatically</label>
 					</info>
 					<value>true</value>
 				</prop>
@@ -5590,11 +5807,12 @@
 				<desc xml:lang="sv">Specifies cache related options.</desc>
 				<desc xml:lang="pl">Specifies cache related options.</desc>
 				<desc xml:lang="pt-BR">Specifies cache related options.</desc>
-				<desc xml:lang="ja">Specifies cache related options.</desc>
+				<desc xml:lang="ja">キャッシュ関連のオプションを指定します。</desc>
 				<desc xml:lang="ko">Specifies cache related options.</desc>
 				<desc xml:lang="tr">Specifies cache related options.</desc>
 				<desc xml:lang="th">Specifies cache related options.</desc>
 				<desc xml:lang="hi-IN">Specifies cache related options.</desc>
+				<desc xml:lang="x-comment">Specifies cache related options.</desc>
 			</info>
 			<group oor:name="DrawingEngine">
 				<info>
@@ -5618,11 +5836,12 @@
 					<desc xml:lang="sv">Specifies the cache related options for the drawing engine.</desc>
 					<desc xml:lang="pl">Specifies the cache related options for the drawing engine.</desc>
 					<desc xml:lang="pt-BR">Specifies the cache related options for the drawing engine.</desc>
-					<desc xml:lang="ja">Specifies the cache related options for the drawing engine.</desc>
+					<desc xml:lang="ja">図形描画エンジンに関連するキャッシュオプションを指定します。</desc>
 					<desc xml:lang="ko">Specifies the cache related options for the drawing engine.</desc>
 					<desc xml:lang="tr">Specifies the cache related options for the drawing engine.</desc>
 					<desc xml:lang="th">Specifies the cache related options for the drawing engine.</desc>
 					<desc xml:lang="hi-IN">Specifies the cache related options for the drawing engine.</desc>
+					<desc xml:lang="x-comment">Specifies the cache related options for the drawing engine.</desc>
 				</info>
 				<prop oor:name="OLE_Objects" oor:type="xs:int">
 					<!-- OldPath: soffice-WorkingSet -->
@@ -5649,11 +5868,12 @@
 						<desc xml:lang="sv">Determines the maximum number of OLE objects that can be held in RAM for drawings, presentations and inserted drawing objects. The fewer OLE objects contained in RAM, the more space is available for other functions. The more OLE objects in RAM, the faster you can page through the objects since they do not always need to be loaded from the hard drive.</desc>
 						<desc xml:lang="pl">Determines the maximum number of OLE objects that can be held in RAM for drawings, presentations and inserted drawing objects. The fewer OLE objects contained in RAM, the more space is available for other functions. The more OLE objects in RAM, the faster you can page through the objects since they do not always need to be loaded from the hard drive.</desc>
 						<desc xml:lang="pt-BR">Determines the maximum number of OLE objects that can be held in RAM for drawings, presentations and inserted drawing objects. The fewer OLE objects contained in RAM, the more space is available for other functions. The more OLE objects in RAM, the faster you can page through the objects since they do not always need to be loaded from the hard drive.</desc>
-						<desc xml:lang="ja">Determines the maximum number of OLE objects that can be held in RAM for drawings, presentations and inserted drawing objects. The fewer OLE objects contained in RAM, the more space is available for other functions. The more OLE objects in RAM, the faster you can page through the objects since they do not always need to be loaded from the hard drive.</desc>
+						<desc xml:lang="ja">図形描画、プレゼンテーション、挿入済み図形描画オブジェクトに関連して RAM に保存可能な OLE オブジェクトの最大数を指定します。RAM に含める OLE オブジェクトの数を減らすと、他の関数で利用できるスペースが増えます。RAM 内により多くの OLE オブジェクトを含めると、ハードディスクから OLE オブジェクトをロードする必要性が低下するので、オブジェクトのページ処理が高速化します。</desc>
 						<desc xml:lang="ko">Determines the maximum number of OLE objects that can be held in RAM for drawings, presentations and inserted drawing objects. The fewer OLE objects contained in RAM, the more space is available for other functions. The more OLE objects in RAM, the faster you can page through the objects since they do not always need to be loaded from the hard drive.</desc>
 						<desc xml:lang="tr">Determines the maximum number of OLE objects that can be held in RAM for drawings, presentations and inserted drawing objects. The fewer OLE objects contained in RAM, the more space is available for other functions. The more OLE objects in RAM, the faster you can page through the objects since they do not always need to be loaded from the hard drive.</desc>
 						<desc xml:lang="th">Determines the maximum number of OLE objects that can be held in RAM for drawings, presentations and inserted drawing objects. The fewer OLE objects contained in RAM, the more space is available for other functions. The more OLE objects in RAM, the faster you can page through the objects since they do not always need to be loaded from the hard drive.</desc>
 						<desc xml:lang="hi-IN">Determines the maximum number of OLE objects that can be held in RAM for drawings, presentations and inserted drawing objects. The fewer OLE objects contained in RAM, the more space is available for other functions. The more OLE objects in RAM, the faster you can page through the objects since they do not always need to be loaded from the hard drive.</desc>
+						<desc xml:lang="x-comment">Determines the maximum number of OLE objects that can be held in RAM for drawings, presentations and inserted drawing objects. The fewer OLE objects contained in RAM, the more space is available for other functions. The more OLE objects in RAM, the faster you can page through the objects since they do not always need to be loaded from the hard drive.</desc>
 					</info>
 					<value>20</value>
 				</prop>
@@ -5680,11 +5900,12 @@
 					<desc xml:lang="sv">Specifies the cache related options for Writer.</desc>
 					<desc xml:lang="pl">Specifies the cache related options for Writer.</desc>
 					<desc xml:lang="pt-BR">Specifies the cache related options for Writer.</desc>
-					<desc xml:lang="ja">Specifies the cache related options for Writer.</desc>
+					<desc xml:lang="ja">Writer に関連するキャッシュオプションを指定します。</desc>
 					<desc xml:lang="ko">Specifies the cache related options for Writer.</desc>
 					<desc xml:lang="tr">Specifies the cache related options for Writer.</desc>
 					<desc xml:lang="th">Specifies the cache related options for Writer.</desc>
 					<desc xml:lang="hi-IN">Specifies the cache related options for Writer.</desc>
+					<desc xml:lang="x-comment">Specifies the cache related options for Writer.</desc>
 				</info>
 				<prop oor:name="OLE_Objects" oor:type="xs:int">
 					<!-- OldPath: soffice-WorkingSet -->
@@ -5711,11 +5932,12 @@
 						<desc xml:lang="sv">Determines the maximum number of OLE objects that can be held in RAM for the writer. The fewer OLE objects contained in RAM, the more space is available for other functions. The more OLE objects in RAM, the faster you can page through the objects since they do not always need to be loaded from the hard drive.</desc>
 						<desc xml:lang="pl">Determines the maximum number of OLE objects that can be held in RAM for the writer. The fewer OLE objects contained in RAM, the more space is available for other functions. The more OLE objects in RAM, the faster you can page through the objects since they do not always need to be loaded from the hard drive.</desc>
 						<desc xml:lang="pt-BR">Determines the maximum number of OLE objects that can be held in RAM for the writer. The fewer OLE objects contained in RAM, the more space is available for other functions. The more OLE objects in RAM, the faster you can page through the objects since they do not always need to be loaded from the hard drive.</desc>
-						<desc xml:lang="ja">Determines the maximum number of OLE objects that can be held in RAM for the writer. The fewer OLE objects contained in RAM, the more space is available for other functions. The more OLE objects in RAM, the faster you can page through the objects since they do not always need to be loaded from the hard drive.</desc>
+						<desc xml:lang="ja">Writer に関連して RAM に保存可能な OLE オブジェクトの最大数を指定します。RAM に含める OLE オブジェクトの数を減らすと、他の関数で利用できるスペースが増えます。RAM 内により多くの OLE オブジェクトを含めると、ハードディスクから OLE オブジェクトをロードする必要性が低下するので、オブジェクトのページ処理が高速化します。</desc>
 						<desc xml:lang="ko">Determines the maximum number of OLE objects that can be held in RAM for the writer. The fewer OLE objects contained in RAM, the more space is available for other functions. The more OLE objects in RAM, the faster you can page through the objects since they do not always need to be loaded from the hard drive.</desc>
 						<desc xml:lang="tr">Determines the maximum number of OLE objects that can be held in RAM for the writer. The fewer OLE objects contained in RAM, the more space is available for other functions. The more OLE objects in RAM, the faster you can page through the objects since they do not always need to be loaded from the hard drive.</desc>
 						<desc xml:lang="th">Determines the maximum number of OLE objects that can be held in RAM for the writer. The fewer OLE objects contained in RAM, the more space is available for other functions. The more OLE objects in RAM, the faster you can page through the objects since they do not always need to be loaded from the hard drive.</desc>
 						<desc xml:lang="hi-IN">Determines the maximum number of OLE objects that can be held in RAM for the writer. The fewer OLE objects contained in RAM, the more space is available for other functions. The more OLE objects in RAM, the faster you can page through the objects since they do not always need to be loaded from the hard drive.</desc>
+						<desc xml:lang="x-comment">Determines the maximum number of OLE objects that can be held in RAM for the writer. The fewer OLE objects contained in RAM, the more space is available for other functions. The more OLE objects in RAM, the faster you can page through the objects since they do not always need to be loaded from the hard drive.</desc>
 					</info>
 					<value>20</value>
 				</prop>
@@ -5741,11 +5963,12 @@
 						<desc xml:lang="sv">Specifies a group of graphic manager cache options.</desc>
 						<desc xml:lang="pl">Specifies a group of graphic manager cache options.</desc>
 						<desc xml:lang="pt-BR">Specifies a group of graphic manager cache options.</desc>
-						<desc xml:lang="ja">Specifies a group of graphic manager cache options.</desc>
+						<desc xml:lang="ja">グラフィックマネージャのキャッシュオプションのグループを指定します。</desc>
 						<desc xml:lang="ko">Specifies a group of graphic manager cache options.</desc>
 						<desc xml:lang="tr">Specifies a group of graphic manager cache options.</desc>
 						<desc xml:lang="th">Specifies a group of graphic manager cache options.</desc>
 						<desc xml:lang="hi-IN">Specifies a group of graphic manager cache options.</desc>
+						<desc xml:lang="x-comment">Specifies a group of graphic manager cache options.</desc>
 					<label xml:lang="en-US">Graphic Manager Cache</label>
 					<label xml:lang="el">Graphic Manager Cache</label>
 					<label xml:lang="nl">Graphic Manager Cache</label>
@@ -5765,11 +5988,12 @@
 					<label xml:lang="sv">Graphic Manager Cache</label>
 					<label xml:lang="pl">Graphic Manager Cache</label>
 					<label xml:lang="pt-BR">Graphic Manager Cache</label>
-					<label xml:lang="ja">Graphic Manager Cache</label>
+					<label xml:lang="ja">グラフィックマネージャのキャッシュ</label>
 					<label xml:lang="ko">Graphic Manager Cache</label>
 					<label xml:lang="tr">Graphic Manager Cache</label>
 					<label xml:lang="th">Graphic Manager Cache</label>
 					<label xml:lang="hi-IN">Graphic Manager Cache</label>
+					<label xml:lang="x-comment">Graphic Manager Cache</label>
 				</info>
 				<prop oor:name="TotalCacheSize" oor:type="xs:int">
 					<info>
@@ -9929,6 +10153,7 @@
 		</group>
 	</component>
 </oor:component-schema>
+
 
 
 
