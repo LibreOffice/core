@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctempl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dv $ $Date: 2000-12-04 10:32:11 $
+ *  last change: $Author: dv $ $Date: 2000-12-04 13:36:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1152,8 +1152,6 @@ BOOL SfxDocumentTemplates::CopyOrMove
     { return FALSE; }
     catch ( CommandAbortedException& )
     { return FALSE; }
-    catch ( ... )
-    { return FALSE; }
 
     // update data structures ...
     if ( bMove )
@@ -1307,8 +1305,6 @@ BOOL SfxDocumentTemplates::CopyTo
     { return FALSE; }
     catch ( CommandAbortedException& )
     { return FALSE; }
-    catch ( ... )
-    { return FALSE; }
 
     return TRUE;
 }
@@ -1378,8 +1374,6 @@ BOOL SfxDocumentTemplates::CopyFrom
     catch ( ContentCreationException& )
     { return FALSE; }
     catch ( CommandAbortedException& )
-    { return FALSE; }
-    catch ( ... )
     { return FALSE; }
 
     // update data structures ...
@@ -1467,11 +1461,6 @@ BOOL SfxDocumentTemplates::Delete
     catch ( ContentCreationException& )
     {
         DBG_ERRORFILE( "Template or Region doesn't exist!" );
-        return bRet;
-    }
-    catch ( ... )
-    {
-        DBG_ERRORFILE( "Any Other Exception!" );
         return bRet;
     }
 
@@ -1646,11 +1635,6 @@ BOOL SfxDocumentTemplates::SetName
         DBG_ERRORFILE( "Hierarchy object doesn't exist?" );
         return FALSE;
     }
-    catch( ... )
-    {
-        DBG_ERRORFILE( "Any other exception" );
-        return FALSE;
-    }
 
     // Create a folder Content with the old title and
     // rename it
@@ -1663,11 +1647,6 @@ BOOL SfxDocumentTemplates::SetName
     catch( ContentCreationException& )
     {
         DBG_ERRORFILE( "Folder object doesn't exist?" );
-        return FALSE;
-    }
-    catch( ... )
-    {
-        DBG_ERRORFILE( "Any other exception" );
         return FALSE;
     }
 
@@ -2064,9 +2043,12 @@ void EntryData_Impl::SetType( const OUString& rType )
             aContent.setPropertyValues( aPropNames, aPropValues );
         }
     }
-    catch ( ... )
-    {
-    }
+    catch ( CommandAbortedException& )
+    {}
+    catch ( RuntimeException& )
+    {}
+    catch ( Exception& )
+    {}
 }
 
 // -----------------------------------------------------------------------
@@ -2105,8 +2087,6 @@ void RegionData_Impl::SetTargetURL( const OUString& rTargetURL )
         }
         catch( ContentCreationException& )
         {}
-        catch( ... )
-        { DBG_ERRORFILE( "Any other exception" ); }
     }
 
     maTargetURL = rTargetURL;
@@ -2209,11 +2189,6 @@ EntryData_Impl* RegionData_Impl::AddEntry( Content& rParentFolder,
             {
                 return NULL;
             }
-            catch( ... )
-            {
-                DBG_ERRORFILE( "Any other exception" );
-                return NULL;
-            }
         }
 
         try
@@ -2223,11 +2198,6 @@ EntryData_Impl* RegionData_Impl::AddEntry( Content& rParentFolder,
         catch( CommandAbortedException& )
         {
             DBG_ERRORFILE( "CommandAbortedException" );
-            return NULL;
-        }
-        catch( ... )
-        {
-            DBG_ERRORFILE( "Any other exception" );
             return NULL;
         }
     }
@@ -2412,10 +2382,6 @@ void SfxDocTemplate_Impl::AddRegion( const OUString& rTitle,
     {
         DBG_ERRORFILE( "createCursor: CommandAbortedException" );
     }
-    catch( ... )
-    {
-        DBG_ERRORFILE( "createCursor: Any other exception" );
-    }
 
     if ( xResultSet.is() )
     {
@@ -2436,10 +2402,6 @@ void SfxDocTemplate_Impl::AddRegion( const OUString& rTitle,
         catch( CommandAbortedException& )
         {
             DBG_ERRORFILE( "XContentAccess::next(): CommandAbortedException" );
-        }
-        catch( ... )
-        {
-            DBG_ERRORFILE( "XContentAccess::next(): Any other exception" );
         }
     }
 }
@@ -2463,10 +2425,6 @@ void SfxDocTemplate_Impl::CreateFromHierarchy( Content &rTemplRoot )
     catch( CommandAbortedException& )
     {
         DBG_ERRORFILE( "createCursor: CommandAbortedException" );
-    }
-    catch( ... )
-    {
-        DBG_ERRORFILE( "createCursor: Any other exception" );
     }
 
     if ( xResultSet.is() )
@@ -2493,10 +2451,6 @@ void SfxDocTemplate_Impl::CreateFromHierarchy( Content &rTemplRoot )
         catch( CommandAbortedException& )
         {
             DBG_ERRORFILE( "XContentAccess::next(): CommandAbortedException" );
-        }
-        catch( ... )
-        {
-            DBG_ERRORFILE( "XContentAccess::next(): Any other exception" );
         }
     }
 }
@@ -2585,14 +2539,6 @@ sal_Bool SfxDocTemplate_Impl::GetTemplateRoot( Content &rTemplRoot,
         {
             DBG_ERRORFILE( "CommandAbortedException" );
         }
-        catch( ... )
-        {
-            DBG_ERRORFILE( "Any other exception" );
-        }
-    }
-    catch( ... )
-    {
-        DBG_ERRORFILE( "Any other exception" );
     }
 
     return bRet;
@@ -2621,11 +2567,6 @@ sal_Bool SfxDocTemplate_Impl::GetTemplateDir( USHORT nIndex,
         DBG_ERRORFILE( "GetTemplateDir(): Template directory doesn't exist" );
         bRet = sal_False;
     }
-    catch( ... )
-    {
-        DBG_ERRORFILE( "Any other exception" );
-        bRet = sal_False;
-    }
 
     return bRet;
 }
@@ -2649,10 +2590,6 @@ void SfxDocTemplate_Impl::GetFolders( Content& rRoot,
     catch( CommandAbortedException& )
     {
         DBG_ERRORFILE( "createCursor: CommandAbortedException" );
-    }
-    catch( ... )
-    {
-        DBG_ERRORFILE( "createCursor: Any other exception" );
     }
 
     if ( xResultSet.is() )
@@ -2758,10 +2695,6 @@ void SfxDocTemplate_Impl::GetFolders( Content& rRoot,
                     {
                         DBG_ERRORFILE( "CommandAbortedException" );
                     }
-                    catch( ... )
-                    {
-                        DBG_ERRORFILE( "Any other exception" );
-                    }
                 }
 
                 RegionData_Impl *pRegion = new RegionData_Impl( aURLTitle, aTitle );
@@ -2781,11 +2714,7 @@ void SfxDocTemplate_Impl::GetFolders( Content& rRoot,
         }
         catch( CommandAbortedException& )
         {
-            DBG_ERRORFILE( "XContentAccess::next(): CommandAbortedException" );
-        }
-        catch( ... )
-        {
-            DBG_ERRORFILE( "XContentAccess::next(): Any other exception" );
+            DBG_ERRORFILE( "GetFolders::next(): CommandAbortedException" );
         }
     }
 }
@@ -2811,10 +2740,6 @@ void SfxDocTemplate_Impl::GetTemplates( Content& rTargetFolder,
     catch( CommandAbortedException& )
     {
         DBG_ERRORFILE( "createCursor: CommandAbortedException" );
-    }
-    catch( ... )
-    {
-        DBG_ERRORFILE( "createCursor: Any other exception" );
     }
 
     if ( xResultSet.is() )
@@ -2846,10 +2771,6 @@ void SfxDocTemplate_Impl::GetTemplates( Content& rTargetFolder,
         catch( CommandAbortedException& )
         {
             DBG_ERRORFILE( "XContentAccess::next(): CommandAbortedException" );
-        }
-        catch( ... )
-        {
-            DBG_ERRORFILE( "XContentAccess::next(): Any other exception" );
         }
     }
 }
@@ -3031,10 +2952,6 @@ sal_Bool SfxDocTemplate_Impl::InsertNewRegionToHierarchy(
         {
             DBG_ERRORFILE( "CommandAbortedException" );
         }
-        catch( ... )
-        {
-            DBG_ERRORFILE( "Any other exception" );
-        }
     }
 
     if ( !bExists )
@@ -3087,11 +3004,6 @@ sal_Bool SfxDocTemplate_Impl::InsertNewRegionToFolder(
     {
         bExists = sal_True;
         DBG_ERRORFILE( "CommandAbortedException" );
-    }
-    catch( ... )
-    {
-        bExists = sal_True;
-        DBG_ERRORFILE( "Any other exception" );
     }
 
     return bExists;
