@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ama $ $Date: 2001-04-25 10:37:17 $
+ *  last change: $Author: kz $ $Date: 2001-04-26 20:49:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1799,6 +1799,25 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text = "Hu~renkinderregelung" ;
         Text [ ENGLISH ] = "~Widow control" ;
         Group = TRUE ;
+        Text[ language_user1 ] = " ";
+        Text[ english_us ] = "~Orphan control";
+        Text[ portuguese ] = "Controlo de linhas ~isoladas";
+        Text[ russian ] = "Áåç êîíöåâûõ âèñÿ÷èõ ñòğîê";
+        Text[ greek ] = "Êáíüíáò '~ïñöáíïı'";
+        Text[ dutch ] = "~Zwevende regels: wezen";
+        Text[ french ] = "Traitement des orphelines";
+        Text[ spanish ] = "Ajuste de ~huérfanas";
+        Text[ italian ] = "Vedove";
+        Text[ danish ] = "Fransk horeunge-ordning";
+        Text[ swedish ] = "~Änkekontroll";
+        Text[ polish ] = "Bez oddz. pierw. wiersza akap.";
+        Text[ portuguese_brazilian ] = "~Viúvas";
+        Text[ japanese ] = "‰üÍß°¼Ş‚Éc‚·s”(~O)";
+        Text[ korean ] = "Ã³À½ ÇÑÁÙ ºĞ¸® ¹æÁö(~O)";
+        Text[ chinese_simplified ] = "¶ÎÂäÖ®ÖĞ²»·ÖÒ³(~O)";
+        Text[ chinese_traditional ] = "¬q¸¨¤§¤¤¤£¤À­¶(~O)";
+        Text[ turkish ] = "~İlk satırı paragrafla birleştir";
+        Text[ arabic ] = "ÊÚÏíá ÇäİÕÇá ÓØÑ ÇáİŞÑÉ ÇáÃæá";
     };
     NumericField ED_WIDOWS
     {
@@ -1854,6 +1873,25 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text = "Schuster~jungenregelung" ;
         Text [ ENGLISH ] = "~Orphan control" ;
         Group = TRUE ;
+        Text[ language_user1 ] = " ";
+        Text[ english_us ] = "~Widow control";
+        Text[ portuguese ] = "Controlo de linhas ~viúvas";
+        Text[ russian ] = "Áåç íà÷àëüíûõ âèñÿ÷èõ ñòğîê";
+        Text[ greek ] = "Êáíüíáò \"~÷Şñáò\"";
+        Text[ dutch ] = "Z~wevende regels: weduwen";
+        Text[ french ] = "Traitement des veuves";
+        Text[ spanish ] = "Ajuste de ~viudas";
+        Text[ italian ] = "~Orfane";
+        Text[ danish ] = "Horeunge-ordning";
+        Text[ swedish ] = "H~orungekontroll";
+        Text[ polish ] = "Bez oddz. os~tat. wiersza akap.";
+        Text[ portuguese_brazilian ] = "~Órfãos";
+        Text[ japanese ] = "’i—‘O‚Å‰üÍß°¼Ş(~W)";
+        Text[ korean ] = "¸¶Áö¸·  ÇÑÁÙ ºĞ¸® ¹æÁö(~W)";
+        Text[ chinese_simplified ] = "ÓëÏÂ¶ÎÍ¬Ò³(~W)";
+        Text[ chinese_traditional ] = "»P¤U¬q¦P­¶(~W)";
+        Text[ turkish ] = "So~n satırı paragrafla birleştir";
+        Text[ arabic ] = "ÊÚÏíá ÇäİÕÇá ÓØÑ ÇáİŞÑÉ ÇáÃÎíÑ";
     };
     NumericField ED_ORPHANS
     {
@@ -1958,13 +1996,13 @@ TabPage RID_SVXPAGE_PARA_ASIAN
         Text = "Z~eilenwechsel" ;
         Text [ ENGLISH ] = "Line break" ;
         Text[ english_us ] = "L~ine change";
-        Text[ portuguese ] = "Opções";
+        Text[ portuguese ] = "~Mudar de linha";
         Text[ russian ] = "Ñìåíà ñòğîêè";
         Text[ greek ] = "ÁëëáãŞ ó~åéñÜò";
-        Text[ dutch ] = "Opties";
-        Text[ french ] = "Chang~ement de ligne";
+        Text[ dutch ] = "~Nieuwe regel";
+        Text[ french ] = "R~etour à la ligne";
         Text[ spanish ] = "Cambio de fila";
-        Text[ italian ] = "Opzioni";
+        Text[ italian ] = "Cambio ~riga";
         Text[ danish ] = "Options";
         Text[ swedish ] = "Radbr~ytning";
         Text[ polish ] = "Zmiana wierszy";
@@ -1983,13 +2021,13 @@ TabPage RID_SVXPAGE_PARA_ASIAN
         Text = "~Liste der verbotenen Zeichen an Zeilenanfang und -ende berücksichtigen" ;
         Text [ ENGLISH ] = "Apply list of forbidden characters at line end and line start" ;
         Text[ english_us ] = "Apply list of forbidden characters to the beginning and end of lines";
-        Text[ portuguese ] = "Apply list of forbidden characters at line end and line start";
-        Text[ russian ] = "Ó÷èòûâàòü ñïèñîê çàïğåùåííûõ çíàêîâ â íà÷àëå è êîíöå ñòğîêè";
+        Text[ portuguese ] = "Considerar ~lista dos caracteres interditos no início e final de linha.";
+        Text[ russian ] = "Ó÷èòûâàòü ñïèñîê íåäîïóñòèìûõ çíàêîâ â íà÷àëå è êîíöå ñòğîêè";
         Text[ greek ] = "Íá ëçöèåß õğüøç ç ~ëßóôá ôùí ìç åğéôñåğüìåíùí ÷áñáêôŞñùí óôçí áñ÷Ş êáé óôï ôİëïò ôçò óåéñÜò";
-        Text[ dutch ] = "Apply list of forbidden characters at line end and line start";
+        Text[ dutch ] = "~Lijst met verboden tekens aan regelbegin en -einde toepassen";
         Text[ french ] = "Tenir compte de la ~liste des caractères interdits en début et en fin de ligne";
         Text[ spanish ] = "Considerar lista de caracteres no aceptables a comienzo y fin de línea.";
-        Text[ italian ] = "Apply list of forbidden characters at line end and line start";
+        Text[ italian ] = "Considera elenco dei caratteri non ammessi all'inizio e fine della riga.";
         Text[ danish ] = "Apply list of forbidden characters at line end and line start";
         Text[ swedish ] = "Använd ~lista med förbjudna tecken i början och slutet av rader";
         Text[ polish ] = "Uwzglêdnij listê znaków niedozwolonych na pocz¹tku i na koñcu wiersza";
@@ -2007,14 +2045,14 @@ TabPage RID_SVXPAGE_PARA_ASIAN
         Size = MAP_APPFONT ( 240 , 10 ) ;
         Text = "~Textumbruch innerhalb von Wötern im lateinischen Text zulassen" ;
         Text [ ENGLISH ] = "Allow break inside of words in latin text" ;
-        Text[ english_us ] = "Allow hyphenation in Latin text";
-        Text[ portuguese ] = "Allow break inside of words in latin text";
+        Text[ english_us ] = "Allow ~breaks in words in Latin text";
+        Text[ portuguese ] = "Permitir ~divisão de palavras em texto com caracteres latinos";
         Text[ russian ] = "Äîïóñòèòü ğàçğûâ âíóòğè ñëîâ ëàòèíñêîãî òåêñòà";
         Text[ greek ] = "Íá åğé~ôñáğåß ç áëëáãŞ êåéìİíïõ åíôüò ôùí ëİîåùí ôïõ ëáôéíéêïı êåéìİíïõ";
-        Text[ dutch ] = "Allow break inside of words in latin text";
+        Text[ dutch ] = "~Woordafbreking binnen woorden in Latijnse tekst toestaan";
         Text[ french ] = "Autoriser la ~coupure en milieu de mot pour le texte en caractères latins";
         Text[ spanish ] = "Permitir salto dentro de palabras en texto con caracteres latinos.";
-        Text[ italian ] = "Allow break inside of words in latin text";
+        Text[ italian ] = "Sono ammessi i separatori all'interno di parole scritte con caratteri latini.";
         Text[ danish ] = "Allow break inside of words in latin text";
         Text[ swedish ] = "Tillåt ~textbrytning inuti ord i latinsk text";
         Text[ polish ] = "Dopuœæ podzia³ wyrazów napisanych alfabetem ³aciñskim";
@@ -2033,13 +2071,13 @@ TabPage RID_SVXPAGE_PARA_ASIAN
         Text = "Hängende ~Interpunktion zulassen" ;
         Text [ ENGLISH ] = "Hanging punctuation" ;
         Text[ english_us ] = "Allow hanging punctuation";
-        Text[ portuguese ] = "Hanging punctuation";
+        Text[ portuguese ] = "Permitir pontuação negativa";
         Text[ russian ] = "Äîïóñòèòü âèñÿ÷óş ïóíêòóàöèş";
         Text[ greek ] = "Íá åğ~éôñáğïıí ğñïåîİ÷ïíôá óçìåßá óôßîçò";
-        Text[ dutch ] = "Hanging punctuation";
+        Text[ dutch ] = "Hangende interpunctie toestaan";
         Text[ french ] = "Autoriser la ponctuation en retrait";
         Text[ spanish ] = "Permitir puntuación libre";
-        Text[ italian ] = "Hanging punctuation";
+        Text[ italian ] = "Interpunzioni di rientro";
         Text[ danish ] = "Hanging punctuation";
         Text[ swedish ] = "Tillåt hängande ~interpunktion";
         Text[ polish ] = "Dopuœæ sieroty i wdowy";
@@ -2058,13 +2096,13 @@ TabPage RID_SVXPAGE_PARA_ASIAN
         Text = "Zeichenabstand" ;
         Text [ ENGLISH ] = "Character distance" ;
         Text[ english_us ] = "Character spacing";
-        Text[ portuguese ] = "Character distance";
+        Text[ portuguese ] = "Espaçamento entre caracteres";
         Text[ russian ] = "Ğàññòîÿíèå ìåæäó çíàêàìè";
         Text[ greek ] = "Áğüóôáóç ÷áñáêôŞñùí";
-        Text[ dutch ] = "Character distance";
+        Text[ dutch ] = "Spatiëring";
         Text[ french ] = "Espacement des caractères";
         Text[ spanish ] = "Espacio entre caracteres";
-        Text[ italian ] = "Character distance";
+        Text[ italian ] = "Distanza carattere";
         Text[ danish ] = "Character distance";
         Text[ swedish ] = "Teckenavstånd";
         Text[ polish ] = "Odstêp miêdzy znakami";
@@ -2083,13 +2121,13 @@ TabPage RID_SVXPAGE_PARA_ASIAN
         Text = "I~nterpunktion am Zeilenbeginn zum Komprimieren zulassen" ;
         Text [ ENGLISH ] = "Allow punctuation at line start" ;
         Text[ english_us ] = "Allow punctuation at line start";
-        Text[ portuguese ] = "Allow punctuation at line start";
+        Text[ portuguese ] = "Permitir pontuação no início de linha para compressão";
         Text[ russian ] = "Äîïóñòèòü ïóíêòóàöèş â íà÷àëå ñòğîêè äëÿ óæàòèÿ";
         Text[ greek ] = "~Íá åğéôñáğåß ç óõìğßåóç ôùí óçìåßùí óôßîçò óôçí áñ÷Ş ôçò óåéñÜò";
-        Text[ dutch ] = "Allow punctuation at line start";
+        Text[ dutch ] = "I~nterpunctie ter comprimering aan regelbegin toestaan";
         Text[ french ] = "Autoriser la po~nctuation en début de ligne pour compression";
         Text[ spanish ] = "Permitir puntuación al comienzo de fila para comprimir";
-        Text[ italian ] = "Allow punctuation at line start";
+        Text[ italian ] = "Interpunzioni all'inizio di riga per compressione";
         Text[ danish ] = "Allow punctuation at line start";
         Text[ swedish ] = "Tillåt komprimering av i~nterpunktion i början av rad";
         Text[ polish ] = "Dopuœæ interpuncjê na pocz¹tku wiersza w celu kompresji";
@@ -2108,13 +2146,13 @@ TabPage RID_SVXPAGE_PARA_ASIAN
         Text = "~Abstand zwischen asiatischem, lateinischem und komplexem Text anwenden" ;
         Text [ ENGLISH ] = "Apply distance between asian, latin and complex text" ;
         Text[ english_us ] = "Apply spacing between Asian, Latin and Complex text";
-        Text[ portuguese ] = "Apply distance between asian, latin and complex text";
+        Text[ portuguese ] = "Aplicar espaçamento entre texto asiático, latino e complexo.";
         Text[ russian ] = "Ïğèìåíèòü èíòåğâàë ìåæäó àçèàòñêèì, ëàòèíñêèì è ñìåøàííûì òåêñòîì";
         Text[ greek ] = "ÅöáñìïãŞ ~áğüóôáóçò ìåôáîı áóéÜôéêïõ, ëáôéíéêïı êáé ğïëığëïêïõ êåéìİíïõ";
-        Text[ dutch ] = "Apply distance between asian, latin and complex text";
+        Text[ dutch ] = "~Afstand tussen Aziatische, Latijnse en complexe tekst aanpassen";
         Text[ french ] = "Appliquer l'esp~acement entre les textes asiatiques, latins et complexes.";
         Text[ spanish ] = "Aplicar espacio entre texto asiático, latino y complejo.";
-        Text[ italian ] = "Apply distance between asian, latin and complex text";
+        Text[ italian ] = "Applica spazio tra testo asiatico, latino e complesso.";
         Text[ danish ] = "Apply distance between asian, latin and complex text";
         Text[ swedish ] = "Använd ~avstånd mellan asiatisk, latinsk och komplex text";
         Text[ polish ] = "Utwórz odstêp miêdzy tekstem azjatyckim, ³aciñskim i kompleksowym";
@@ -2133,13 +2171,13 @@ TabPage RID_SVXPAGE_PARA_ASIAN
         Text = "Abstan~d zwischen asiatischem Text und Zahlen automatisch anpassen" ;
         Text [ ENGLISH ] = "Automatically adjust distance between asian text and numbers" ;
         Text[ english_us ] = "Automatically adjust space between Asian text and numbers";
-        Text[ portuguese ] = "Automatically adjust distance between asian text and numbers";
+        Text[ portuguese ] = "Ajustar automaticamente o espaçamento entre o texto asiático e os números";
         Text[ russian ] = "Àâòîïîäáîğ ğàññòîÿíèÿ ìåæäó àçèàòñêèì òåêñòîì è ÷èñëàìè";
         Text[ greek ] = "Áõôüìáôç ğñïóáñìïãŞ ôçò áğüóôáóçò ìåôáîı ôïõ áóéÜôéêïõ êåéìİíïõ êáé ôùí áñéèìşí";
-        Text[ dutch ] = "Automatically adjust distance between asian text and numbers";
+        Text[ dutch ] = "Afstan~d tussen Aziatische tekst en getallen automatisch aanpassen";
         Text[ french ] = "A~dapter automatiquement l'espacement entre le texte asiatique et les nombres.";
         Text[ spanish ] = "Ajustar automáticamente espacio entre texto asiático y números";
-        Text[ italian ] = "Automatically adjust distance between asian text and numbers";
+        Text[ italian ] = "Aggiusta automaticamente la distanza tra testo asiatico e numeri";
         Text[ danish ] = "Automatically adjust distance between asian text and numbers";
         Text[ swedish ] = "Anpassa automatiskt avstån~d mellan asiatisk text och siffror";
         Text[ polish ] = "Dopasuj automatycznie odstêp miêdzy tekstem azjatyckim a liczbami";
@@ -2158,13 +2196,13 @@ TabPage RID_SVXPAGE_PARA_ASIAN
         Text = "Te~xtausrichtung" ;
         Text [ ENGLISH ] = "Text alignment" ;
         Text[ english_us ] = "~Text alignment";
-        Text[ portuguese ] = "Text alignment";
+        Text[ portuguese ] = "A~linhamento do texto";
         Text[ russian ] = "Âûğàâíèâàíèå òåêñòà";
         Text[ greek ] = "Óôïß~÷éóç êåéìİíïõ";
-        Text[ dutch ] = "Text alignment";
+        Text[ dutch ] = "~Tekstuitlijning";
         Text[ french ] = "Alignement du te~xte";
         Text[ spanish ] = "Alineación de texto";
-        Text[ italian ] = "Text alignment";
+        Text[ italian ] = "Allineamento testo";
         Text[ danish ] = "Text alignment";
         Text[ swedish ] = "Te~xtjustering";
         Text[ polish ] = "Wyrównanie tekstu";
@@ -2203,8 +2241,8 @@ TabPage RID_SVXPAGE_PARA_ASIAN
     };
     StringList [ portuguese ] =
     {
-            < "Automatisch" ; Default ; > ;
-        < "??Manuell" ; Default ; > ;
+            < "Automático" ; Default ; > ;
+        < "??Manual" ; Default ; > ;
     };
     StringList [ russian ] =
     {
@@ -2219,7 +2257,7 @@ TabPage RID_SVXPAGE_PARA_ASIAN
     StringList [ dutch ] =
     {
             < "Automatisch" ; Default ; > ;
-        < "??Manuell" ; Default ; > ;
+        < "??Handmatig" ; Default ; > ;
     };
     StringList [ french ] =
     {
@@ -2233,8 +2271,8 @@ TabPage RID_SVXPAGE_PARA_ASIAN
     };
     StringList [ italian ] =
     {
-            < "Automatisch" ; Default ; > ;
-        < "??Manuell" ; Default ; > ;
+            < "Automatico" ; Default ; > ;
+        < "??Manuale" ; Default ; > ;
     };
     StringList [ danish ] =
     {
@@ -2291,7 +2329,7 @@ TabPage RID_SVXPAGE_PARA_ASIAN
     Text[ portuguese ] = "Tipografia asiática";
     Text[ russian ] = "Àçèàòñêèå øğèôòû";
     Text[ greek ] = "ÁóéáôéêŞ ôõğïãñáößá";
-    Text[ dutch ] = "Asiatische typografie";
+    Text[ dutch ] = "Aziatische typografie";
     Text[ french ] = "Typographie asiatique";
     Text[ spanish ] = "Tipografía asiática";
     Text[ italian ] = "Tipografia asiatica";
