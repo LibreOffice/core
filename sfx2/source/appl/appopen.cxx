@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: pb $ $Date: 2001-05-07 11:00:05 $
+ *  last change: $Author: dv $ $Date: 2001-05-10 13:03:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -884,10 +884,6 @@ void SfxApplication::NewDocExec_Impl( SfxRequest& rReq )
 {
     DBG_MEMTEST();
 
-    SvtDocumentTemplateDialog aDlg( GetTopWindow() );
-    aDlg.Execute();
-
-/* (pb) new by SvtDocumentTemplateDialog, see above
     // keine Parameter vom BASIC nur Factory angegeben?
     SFX_REQUEST_ARG(rReq, pTemplNameItem, SfxStringItem, SID_TEMPLATE_NAME, FALSE);
     SFX_REQUEST_ARG(rReq, pTemplFileNameItem, SfxStringItem, SID_FILE_NAME, FALSE);
@@ -901,7 +897,10 @@ void SfxApplication::NewDocExec_Impl( SfxRequest& rReq )
     SfxErrorContext aEc(ERRCTX_SFX_NEWDOC);
     if ( !pTemplNameItem && !pTemplFileNameItem )
     {
-        SfxNewFileDialog *pDlg = CreateNewDialog();
+        SvtDocumentTemplateDialog aDlg( GetTopWindow() );
+        aDlg.Execute();
+        return;
+        /*! pb
         if ( RET_OK == pDlg->Execute() )
         {
             if ( pDlg->IsTemplate() )
@@ -928,6 +927,7 @@ void SfxApplication::NewDocExec_Impl( SfxRequest& rReq )
             delete pDlg;
             return;
         }
+        */
     }
     else
     {
@@ -947,20 +947,6 @@ void SfxApplication::NewDocExec_Impl( SfxRequest& rReq )
         }
     }
 
-    INetURLObject aTestObj( aTemplateFileName );
-    if( aTestObj.GetProtocol() == INET_PROT_NOT_VALID )
-    {
-        // temp. fix until Templates are managed by UCB compatible service
-        // does NOT work in locally cached components !
-        String aTemp;
-        utl::LocalFileHelper::ConvertPhysicalNameToURL( aTemplateFileName, aTemp );
-        aTemplateFileName = aTemp;
-    }
-
-    INetURLObject aObj( aTemplateFileName );
-    DBG_ASSERT( aObj.GetProtocol() != INET_PROT_NOT_VALID, "Illegal URL!" );
-
-    SfxErrorContext aEC( ERRCTX_SFX_LOADTEMPLATE, aObj.PathToFileName() );
 //! (pb) MaxLen?         DirEntry(aTemplateName).GetFull( FSYS_STYLE_HOST,FALSE,20));
 
     ULONG lErr = 0;
@@ -975,6 +961,9 @@ void SfxApplication::NewDocExec_Impl( SfxRequest& rReq )
         if( !aTemplateFileName.Len() )
             lErr = ERRCODE_SFX_TEMPLATENOTFOUND;
     }
+
+    INetURLObject aObj( aTemplateFileName );
+    SfxErrorContext aEC( ERRCTX_SFX_LOADTEMPLATE, aObj.PathToFileName() );
 
     if ( lErr != ERRCODE_NONE )
     {
@@ -1007,7 +996,6 @@ void SfxApplication::NewDocExec_Impl( SfxRequest& rReq )
         if ( pRet )
             rReq.SetReturnValue( *pRet );
     }
-*/
 }
 
 
