@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshe3.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ka $ $Date: 2001-05-03 09:09:13 $
+ *  last change: $Author: os $ $Date: 2001-05-04 09:19:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -574,12 +574,10 @@ PrintDialog* __EXPORT SdViewShell::CreatePrintDialog(Window *pParent)
 SfxTabPage* __EXPORT SdViewShell::CreatePrintOptionsPage( Window *pParent,
                                                  const SfxItemSet &rOptions )
 {
-    BOOL bHide = FALSE;
     DocumentType eDocType = pDoc->GetDocumentType();
+    SdPrintOptions* pPage = new SdPrintOptions( pParent, rOptions );
     if( eDocType == DOCUMENT_TYPE_DRAW )
-        bHide = TRUE;
-    SfxTabPage* pPage = new SdPrintOptions( pParent, rOptions, bHide );
-
+        pPage->SetDrawMode();
     return( pPage );
 }
 

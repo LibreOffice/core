@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prntopts.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-03-22 14:13:39 $
+ *  last change: $Author: os $ $Date: 2001-05-04 09:19:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,8 @@ private:
     CheckBox            aCbxHandout;
     CheckBox            aCbxOutline;
 
+    FixedLine           aSeparator1FL;
+
     FixedLine           aGrpPrintExt;
     CheckBox            aCbxPagename;
     CheckBox            aCbxDate;
@@ -107,6 +109,8 @@ private:
     RadioButton         aRbtColor;
     RadioButton         aRbtGrayscale;
     RadioButton         aRbtBlackWhite;
+
+    FixedLine           aSeparator2FL;
 
     FixedLine           aGrpPageoptions;
     RadioButton         aRbtDefault;
@@ -124,8 +128,7 @@ private:
     DECL_LINK( ClickBookletHdl, CheckBox * );
 
 public:
-            SdPrintOptions( Window* pParent, const SfxItemSet& rInAttrs,
-                            BOOL bHide = FALSE );
+            SdPrintOptions( Window* pParent, const SfxItemSet& rInAttrs);
             ~SdPrintOptions();
 
     static  SfxTabPage* Create( Window*, const SfxItemSet& );
@@ -133,6 +136,8 @@ public:
 
     virtual BOOL FillItemSet( SfxItemSet& );
     virtual void Reset( const SfxItemSet & );
+
+    void    SetDrawMode();
 };
 
 

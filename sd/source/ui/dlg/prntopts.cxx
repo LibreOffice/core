@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prntopts.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dl $ $Date: 2001-04-02 08:37:03 $
+ *  last change: $Author: os $ $Date: 2001-05-04 09:19:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@ static USHORT pPrintOptRanges[] =
 |*
 \************************************************************************/
 
-SdPrintOptions::SdPrintOptions( Window* pParent, const SfxItemSet& rInAttrs, BOOL bHide ) :
+SdPrintOptions::SdPrintOptions( Window* pParent, const SfxItemSet& rInAttrs ) :
         SfxTabPage          ( pParent, SdResId( TP_PRINT_OPTIONS ), rInAttrs ),
         //aLbPrint          ( this, SdResId( LB_PRINT ) ),
 
@@ -94,6 +94,7 @@ SdPrintOptions::SdPrintOptions( Window* pParent, const SfxItemSet& rInAttrs, BOO
         aCbxOutline             ( this, SdResId( CBX_OUTLINE ) ),
         aGrpPrint               ( this, SdResId( GRP_PRINT ) ),
 
+        aSeparator1FL            ( this, SdResId( FL_SEPARATOR1 ) ),
         aCbxDate                ( this, SdResId( CBX_DATE ) ),
         aCbxTime                ( this, SdResId( CBX_TIME ) ),
         aCbxPagename            ( this, SdResId( CBX_PAGENAME ) ),
@@ -116,11 +117,13 @@ SdPrintOptions::SdPrintOptions( Window* pParent, const SfxItemSet& rInAttrs, BOO
 /// Neu
 
         aCbxPaperbin            ( this, SdResId( CBX_PAPERBIN ) ),
-//        aGrpPaperbin            ( this, SdResId( GRP_PAPERBIN ) ),
+        aSeparator2FL            ( this, SdResId( FL_SEPARATOR2 ) ),
 
         rOutAttrs               ( rInAttrs )
 {
     FreeResource();
+    aSeparator1FL.SetStyle( aSeparator1FL.GetStyle() | WB_VERT );
+    aSeparator2FL.SetStyle( aSeparator2FL.GetStyle() | WB_VERT );
 
     Link aLink = LINK( this, SdPrintOptions, ClickBookletHdl );
     aRbtDefault.SetClickHdl( aLink );
@@ -128,24 +131,11 @@ SdPrintOptions::SdPrintOptions( Window* pParent, const SfxItemSet& rInAttrs, BOO
     aRbtPagetile.SetClickHdl( aLink );
     aRbtBooklet.SetClickHdl( aLink );
 
-    if( bHide )
-    {
-        aCbxNotes.Hide();
-        aCbxHandout.Hide();
-        aCbxOutline.Hide();
-
-        aCbxDraw.Check(); // Wohl nicht noetig !?
-        aCbxDraw.Disable();
-        aGrpPrint.Disable();
-    }
-    else
-    {
-        aLink = LINK( this, SdPrintOptions, ClickCheckboxHdl );
-        aCbxDraw.SetClickHdl( aLink );
-        aCbxNotes.SetClickHdl( aLink );
-        aCbxHandout.SetClickHdl( aLink );
-        aCbxOutline.SetClickHdl( aLink );
-    }
+    aLink = LINK( this, SdPrintOptions, ClickCheckboxHdl );
+    aCbxDraw.SetClickHdl( aLink );
+    aCbxNotes.SetClickHdl( aLink );
+    aCbxHandout.SetClickHdl( aLink );
+    aCbxOutline.SetClickHdl( aLink );
 }
 
 // -----------------------------------------------------------------------
@@ -334,6 +324,37 @@ IMPL_LINK( SdPrintOptions, ClickBookletHdl, CheckBox *, EMPTYARG )
     }
     return 0;
 }
+/* -----------------------------04.05.01 10:53--------------------------------
 
+ ---------------------------------------------------------------------------*/
+void lcl_MoveRB_Impl(Window& rBtn, long nXDiff)
+{
+    Point aPos(rBtn.GetPosPixel());
+    aPos.X() -= nXDiff;
+    rBtn.SetPosPixel(aPos);
+}
 
+void    SdPrintOptions::SetDrawMode()
+{
+    if(aCbxNotes.IsVisible())
+    {
+        aCbxNotes.Hide();
+        aCbxHandout.Hide();
+        aCbxOutline.Hide();
+        aCbxDraw.Hide();
+        aGrpPrint.Hide();
+
+        aSeparator1FL.Hide();
+        long nXDiff = aGrpOutput.GetPosPixel().X() - aGrpPrint.GetPosPixel().X();
+        lcl_MoveRB_Impl(aRbtColor, nXDiff);
+        lcl_MoveRB_Impl(aRbtGrayscale, nXDiff);
+        lcl_MoveRB_Impl(aRbtBlackWhite, nXDiff);
+        lcl_MoveRB_Impl(aGrpOutput, nXDiff);
+
+        long nWidth =  aGrpOutput.GetSizePixel().Width() + nXDiff;
+        Size aSize(aGrpOutput.GetSizePixel());
+        aSize.Width() = nWidth;
+        aGrpOutput.SetSizePixel(aSize);
+    }
+}
 

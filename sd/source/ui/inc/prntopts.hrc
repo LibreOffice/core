@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prntopts.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:41 $
+ *  last change: $Author: os $ $Date: 2001-05-04 09:19:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,3 +85,6 @@
 #define RBT_GRAYSCALE   6
 #define RBT_BLACKWHITE  7
 #define GRP_OUTPUT      5
+#define FL_SEPARATOR1   6
+#define FL_SEPARATOR2   7
+

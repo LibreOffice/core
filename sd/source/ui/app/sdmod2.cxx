@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod2.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: sj $ $Date: 2001-04-24 11:31:55 $
+ *  last change: $Author: os $ $Date: 2001-05-04 09:19:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -712,15 +712,7 @@ SfxTabPage*  SdModule::CreateTabPage( USHORT nId, Window* pParent, const SfxItem
         case SID_SI_TP_PRINT:
             pRet = SdPrintOptions::Create(pParent, rSet);
             if(SID_SD_TP_PRINT == nId)
-            {
-                ( (SdPrintOptions*) pRet )->aCbxNotes.Hide();
-                ( (SdPrintOptions*) pRet )->aCbxHandout.Hide();
-                ( (SdPrintOptions*) pRet )->aCbxOutline.Hide();
-
-                ( (SdPrintOptions*) pRet )->aCbxDraw.Check(); // Wohl nicht noetig !?
-                ( (SdPrintOptions*) pRet )->aCbxDraw.Disable();
-                ( (SdPrintOptions*) pRet )->aGrpPrint.Disable();
-            }
+                ( (SdPrintOptions*) pRet )->SetDrawMode();
         break;
         case SID_SI_TP_MISC:
         case SID_SD_TP_MISC:

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpoption.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: os $ $Date: 2001-04-27 06:55:41 $
+ *  last change: $Author: os $ $Date: 2001-05-04 09:19:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -922,7 +922,8 @@ TabPage TP_OPTIONS_MISC
         Hide = TRUE;
         Pos = MAP_APPFONT ( 12 , 149 ) ;
         Size = MAP_APPFONT ( 36 , 70 ) ;
-        SCALE_TEXT
+        Text = "Zeichnungsmaﬂstab" ;
+        Text [ ENGLISH ] = "Drawing scale" ;
     };
     ComboBox CB_SCALE
     {
