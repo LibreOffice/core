@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pptin.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sj $ $Date: 2002-03-26 16:13:16 $
+ *  last change: $Author: hr $ $Date: 2003-08-07 15:26:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,9 @@
 #endif
 #ifndef _SVDTYPES_HXX //autogen
 #include <svx/svdtypes.hxx>
+#endif
+#ifndef _MS_FILTERTRACER_HXX
+#include <svx/msfiltertracer.hxx>
 #endif
 
 class SdDrawDocument;
@@ -139,7 +142,7 @@ class SdPPTImport
 
     public:
 
-        SdPPTImport( SdDrawDocument* pDoc, SvStream& rDocStream, SvStorage& rStorage, SfxMedium& rMed );
+        SdPPTImport( SdDrawDocument* pDoc, SvStream& rDocStream, SvStorage& rStorage, SfxMedium& rMed, MSFilterTracer* pTracer = NULL );
         ~SdPPTImport();
 
         sal_Bool Import();
