@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlimp_impl.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-05 23:22:55 $
+ *  last change: $Author: cl $ $Date: 2000-12-12 14:38:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,7 @@ enum SdXMLDocElemTokenMap
     XML_TOK_DOC_MASTERSTYLES,
     XML_TOK_DOC_META,
     XML_TOK_DOC_BODY,
+    XML_TOK_DOC_SCRIPT,
     XML_TOK_OFFICE_END = XML_TOK_UNKNOWN
 };
 
@@ -249,6 +250,7 @@ public:
     // namespace office
     SvXMLImportContext* CreateMetaContext(const rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList);
+    SvXMLImportContext* CreateScriptContext( const ::rtl::OUString& rLocalName );
     SvXMLImportContext* CreateBodyContext(const rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList);
     SvXMLStylesContext* CreateStylesContext(const rtl::OUString& rLocalName,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlimp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-05 23:21:20 $
+ *  last change: $Author: cl $ $Date: 2000-12-12 14:38:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,10 @@
  ************************************************************************/
 
 #pragma hdrstop
+
+#ifndef _XMLOFF_XMLMETAI_HXX
+#include "xmlscripti.hxx"
+#endif
 
 #ifndef _SDXMLIMP_HXX
 #include "sdxmlimp.hxx"
@@ -140,6 +144,7 @@ static __FAR_DATA SvXMLTokenMapEntry aDocElemTokenMap[] =
     { XML_NAMESPACE_OFFICE, sXML_automatic_styles,  XML_TOK_DOC_AUTOSTYLES      },
     { XML_NAMESPACE_OFFICE, sXML_master_styles,     XML_TOK_DOC_MASTERSTYLES    },
     { XML_NAMESPACE_OFFICE, sXML_meta,              XML_TOK_DOC_META            },
+    { XML_NAMESPACE_OFFICE, sXML_script,            XML_TOK_DOC_SCRIPT          },
     { XML_NAMESPACE_OFFICE, sXML_body,              XML_TOK_DOC_BODY            },
     XML_TOKEN_MAP_END
 };
@@ -287,6 +292,12 @@ SvXMLImportContext *SdXMLDocContext_Impl::CreateChildContext(
         {
             // office:meta inside office:document
             pContext = GetSdImport().CreateMetaContext(rLocalName, xAttrList);
+            break;
+        }
+        case XML_TOK_DOC_SCRIPT:
+        {
+            // office:script inside office:document
+            pContext = GetSdImport().CreateScriptContext( rLocalName );
             break;
         }
         case XML_TOK_DOC_BODY:
@@ -627,6 +638,18 @@ void SdXMLImport::ImportPoolDefaults(const XMLPropStyleContext* pPool)
 {
 }
 
+//////////////////////////////////////////////////////////////////////////////
+
+SvXMLImportContext *SdXMLImport::CreateScriptContext(
+                                       const OUString& rLocalName )
+{
+    SvXMLImportContext *pContext = 0;
+
+    pContext = new XMLScriptContext( *this,
+                                    XML_NAMESPACE_OFFICE, rLocalName,
+                                    GetModel() );
+    return pContext;
+}
 //////////////////////////////////////////////////////////////////////////////
 
 uno::Reference< xml::sax::XDocumentHandler >
