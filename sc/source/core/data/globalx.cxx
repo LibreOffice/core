@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globalx.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-31 10:12:25 $
+ *  last change: $Author: nn $ $Date: 2000-12-12 11:38:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,10 @@ void ScGlobal::InitAddIns()
                     {
                         xResultSet = aCnt.createCursor(
                             aProps, ::ucb::INCLUDE_DOCUMENTS_ONLY );
+                    }
+                    catch ( CommandAbortedException& )
+                    {
+                        // no assertion if AddIn directory doesn't exist
                     }
                     catch ( Exception& )
                     {
