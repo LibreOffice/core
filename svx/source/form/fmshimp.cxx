@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshimp.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-09 13:03:24 $
+ *  last change: $Author: obo $ $Date: 2000-11-14 15:34:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -634,7 +634,7 @@ FmXFormShell::FmXFormShell( FmFormShell* _pShell, SfxViewFrame* _pViewFrame )
     // dispatch interception for the frame
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterception> xSupplier(xUnoFrame, ::com::sun::star::uno::UNO_QUERY);
 
-    ::rtl::OUString sInterceptorScheme(FMURL_FORMSLOTS_PREFIX);
+    ::rtl::OUString sInterceptorScheme = FMURL_FORMSLOTS_PREFIX;
     sInterceptorScheme += ::rtl::OUString::createFromAscii("*");
     m_pMainFrameInterceptor = new FmXDispatchInterceptorImpl(xSupplier, this, 0, Sequence< ::rtl::OUString >(&sInterceptorScheme, 1));
     m_pMainFrameInterceptor->acquire();
@@ -4262,7 +4262,7 @@ void FmXFormShell::CreateExternalView()
     if (!m_pExternalViewInterceptor)
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterception> xSupplier(xExternalViewFrame, ::com::sun::star::uno::UNO_QUERY);
-        ::rtl::OUString sInterceptorScheme(FMURL_FORMSLOTS_PREFIX);
+        ::rtl::OUString sInterceptorScheme = FMURL_FORMSLOTS_PREFIX;
         sInterceptorScheme += ::rtl::OUString::createFromAscii("*");
         m_pExternalViewInterceptor = new FmXDispatchInterceptorImpl(xSupplier, this, 1, Sequence< ::rtl::OUString >(&sInterceptorScheme, 1));
         m_pExternalViewInterceptor->acquire();
