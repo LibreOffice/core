@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docholder.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 16:16:06 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:53:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,8 +101,8 @@
 #ifndef _COM_SUN_STAR_EMBED_XHATCHWINDOWCONTROLLER_HPP_
 #include <com/sun/star/embed/XHatchWindowController.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
-#include <drafts/com/sun/star/frame/XLayoutManager.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
+#include <com/sun/star/frame/XLayoutManager.hpp>
 #endif
 
 #ifndef _CPPUHELPER_IMPLBASE6_HXX_
@@ -150,7 +150,7 @@ private:
 
     sal_Int32 m_nNoBorderResizeReact;
 
-    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::ui::XDockingAreaAcceptor > m_xCachedDocAreaAcc;
+    ::com::sun::star::uno::Reference< ::com::sun::star::ui::XDockingAreaAcceptor > m_xCachedDocAreaAcc;
 
 
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > GetDocFrame();
@@ -163,8 +163,8 @@ private:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > RetrieveOwnMenu_Impl();
     sal_Bool MergeMenues_Impl(
-                const ::com::sun::star::uno::Reference< drafts::com::sun::star::frame::XLayoutManager >& xOwnLM,
-                   const ::com::sun::star::uno::Reference< drafts::com::sun::star::frame::XLayoutManager >& xContLM,
+                const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager >& xOwnLM,
+                   const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager >& xContLM,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& xContDisp );
 
 public:
@@ -216,10 +216,10 @@ public:
                       const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& xContainerDP );
 
     sal_Bool ShowUI(
-        const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::frame::XLayoutManager >& xContainerLM,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager >& xContainerLM,
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& xContainerDP );
     sal_Bool HideUI(
-        const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::frame::XLayoutManager >& xContainerLM );
+        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager >& xContainerLM );
 
     void Show();
 
