@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paramdialog.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-07 15:09:39 $
+ *  last change: $Author: oj $ $Date: 2001-07-11 10:10:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -299,7 +299,7 @@ namespace dbaui
                     sTransformedText = ::rtl::OUString();
 
                     String sLanguage, sCountry;
-                    ConvertLanguageToIsoNames(Application::GetAppInternational().GetLanguage(), sLanguage, sCountry);
+                    ConvertLanguageToIsoNames(Window::GetSettings().GetLanguage(), sLanguage, sCountry);
                     pParseNode->parseNodeToPredicateStr(sTransformedText, m_xConnection->getMetaData(), m_xFormatter, xParamAsSet, Locale(sLanguage, sCountry, ::rtl::OUString()), '.');
                     m_aParam.SetText(sTransformedText);
                     delete pParseNode;
@@ -370,7 +370,6 @@ namespace dbaui
                 {
                     String sValue;
                     ::rtl::OUString sError;
-                    International aAppInternational = Application::GetAppInternational();
                     PropertyValue* pValues = m_aFinalValues.getArray();
                     for (sal_Int32 i = 0, nCount = m_xParams->getCount(); i<nCount; ++i, ++pValues)
                     {
@@ -548,6 +547,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2001/06/07 15:09:39  fs
+ *  #87912# redesigned the dialog
+ *
  *  Revision 1.4  2001/03/13 08:23:17  oj
  *  #84710# use stream operators instead of cast
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-06 11:12:33 $
+ *  last change: $Author: oj $ $Date: 2001-07-11 10:10:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1263,7 +1263,7 @@ void SbaGridControl::SetColAttrs(sal_uInt16 nColId)
                 pFormatDescriptor->Put(SfxBoolItem(SID_ATTR_NUMBERFORMAT_ONE_AREA, sal_True));
                 if (!pFormatter->IsTextFormat(nFormatKey))
                     // text fields can only have text formats
-                    nFormatKey = pFormatter->GetStandardFormat(NUMBERFORMAT_TEXT, Application::GetAppInternational().GetLanguage());
+                    nFormatKey = pFormatter->GetStandardFormat(NUMBERFORMAT_TEXT, Window::GetSettings().GetLanguage());
             }
 
             pFormatDescriptor->Put(SfxUInt32Item(SBA_DEF_FMTVALUE, nFormatKey));

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-06 11:33:29 $
+ *  last change: $Author: oj $ $Date: 2001-07-11 10:10:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -582,6 +582,9 @@ void ODbAdminDialog::PageCreated(USHORT _nId, SfxTabPage& _rPage)
     }
 
     AdjustLayout();
+    Window *pWin = GetViewWindow();
+    if(pWin)
+        pWin->Invalidate();
 
     SfxTabDialog::PageCreated(_nId, _rPage);
 }
@@ -847,6 +850,13 @@ IMPL_LINK(ODbAdminDialog, OnTypeSelected, OGeneralPage*, _pTabPage)
             addDetailPage(TAB_PAGE_USERADMIN, STR_PAGETITLE_USERADMIN, OUserAdmin::Create);
             addDetailPage(TAB_PAG_ADABAS_SETTINGS, STR_PAGETITLE_ADABAS_STATISTIC, OAdabasAdminSettings::Create);
             addDetailPage(PAGE_ADABAS, STR_PAGETITLE_ADABAS, OAdabasDetailsPage::Create);
+            {
+//              Size aOldSize = pTabControl->GetSizePixel();
+//              pTabControl->SetTabPageSizePixel( ... );
+//              Size aNewSize = pTabControl->GetSizePixel();
+//              if ( aOldSize != aNewSize )
+//                  pTabDialog->AdjustLayout();
+            }
             break;
 
         case DST_ADDRESSBOOK:
@@ -1891,6 +1901,9 @@ IMPL_LINK(ODbAdminDialog, OnApplyChanges, PushButton*, EMPTYARG)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.63  2001/07/06 11:33:29  oj
+ *  #89359# now dialog saves password temp
+ *
  *  Revision 1.62  2001/06/25 16:04:40  fs
  *  #88004# outsourced ODataSourceMap and ODataSourceSelector / adjusted fillDatasourceInfo so that settings without and UI are do not survive the method
  *
