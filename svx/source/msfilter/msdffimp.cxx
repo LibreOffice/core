@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: cmc $ $Date: 2002-09-20 10:57:50 $
+ *  last change: $Author: cmc $ $Date: 2002-09-23 16:10:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3666,7 +3666,6 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
                     SdrObject* pGroup = new SdrObjGroup;
                     pGroup->GetSubList()->NbcInsertObject( pObj );
                     pGroup->GetSubList()->NbcInsertObject( pTextObj );
-                    pGroup->NbcSetLogicRect(rTextRect);
                     pOrgObj = pObj;
                     pObj    = pGroup;
                 }
