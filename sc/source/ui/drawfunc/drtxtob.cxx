@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drtxtob.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 20:32:37 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 12:58:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -729,18 +729,22 @@ void __EXPORT ScDrawTextObjectBar::ExecuteAttr( SfxRequest &rReq )
                 break;
 
             case SID_ALIGNLEFT:
+            case SID_ALIGN_ANY_LEFT:
                 aNewAttr.Put( SvxAdjustItem( SVX_ADJUST_LEFT, EE_PARA_JUST ) );
                 break;
 
             case SID_ALIGNCENTERHOR:
+            case SID_ALIGN_ANY_HCENTER:
                 aNewAttr.Put( SvxAdjustItem( SVX_ADJUST_CENTER, EE_PARA_JUST ) );
                 break;
 
             case SID_ALIGNRIGHT:
+            case SID_ALIGN_ANY_RIGHT:
                 aNewAttr.Put( SvxAdjustItem( SVX_ADJUST_RIGHT, EE_PARA_JUST ) );
                 break;
 
             case SID_ALIGNBLOCK:
+            case SID_ALIGN_ANY_JUSTIFIED:
                 aNewAttr.Put( SvxAdjustItem( SVX_ADJUST_BLOCK, EE_PARA_JUST ) );
                 break;
 
@@ -902,6 +906,11 @@ void __EXPORT ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
             rDestSet.Put( SfxBoolItem( SID_ALIGNBLOCK, TRUE ) );
             break;
     }
+    // pseudo slots for Format menu
+    rDestSet.Put( SfxBoolItem( SID_ALIGN_ANY_LEFT,      eAdj == SVX_ADJUST_LEFT ) );
+    rDestSet.Put( SfxBoolItem( SID_ALIGN_ANY_HCENTER,   eAdj == SVX_ADJUST_CENTER ) );
+    rDestSet.Put( SfxBoolItem( SID_ALIGN_ANY_RIGHT,     eAdj == SVX_ADJUST_RIGHT ) );
+    rDestSet.Put( SfxBoolItem( SID_ALIGN_ANY_JUSTIFIED, eAdj == SVX_ADJUST_BLOCK ) );
 
     //  Zeilenabstand
 
