@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.95 $
+ *  $Revision: 1.96 $
  *
- *  last change: $Author: mav $ $Date: 2002-02-26 15:28:47 $
+ *  last change: $Author: mba $ $Date: 2002-03-27 16:29:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,6 +184,9 @@
 #ifndef _CPPUHELPER_WEAKREF_HXX_
 #include <cppuhelper/weakref.hxx>
 #endif
+#ifndef _CPPUHELPER_IMPLBASE1_HXX_
+#include <cppuhelper/implbase1.hxx>
+#endif
 
 #define _SVSTDARR_ULONGS
 #define _SVSTDARR_STRINGSDTOR
@@ -305,6 +308,36 @@ public:
 void UcbLockBytesCancellable_Impl::Cancel()
 {
     xLockBytes->Cancel();
+}
+
+class SfxMediumHandler_Impl : public ::cppu::WeakImplHelper1< com::sun::star::task::XInteractionHandler >
+{
+    com::sun::star::uno::Reference< com::sun::star::task::XInteractionHandler > m_xInter;
+
+public:
+    virtual void SAL_CALL handle( const com::sun::star::uno::Reference< com::sun::star::task::XInteractionRequest >& xRequest )
+            throw( com::sun::star::uno::RuntimeException );
+
+    SfxMediumHandler_Impl( com::sun::star::uno::Reference< com::sun::star::task::XInteractionHandler > xInteraction )
+        : m_xInter( xInteraction )
+        {}
+
+    ~SfxMediumHandler_Impl();
+};
+
+SfxMediumHandler_Impl::~SfxMediumHandler_Impl()
+{
+}
+
+void SAL_CALL SfxMediumHandler_Impl::handle( const com::sun::star::uno::Reference< com::sun::star::task::XInteractionRequest >& xRequest )
+        throw( com::sun::star::uno::RuntimeException )
+{
+    com::sun::star::uno::Any aRequest = xRequest->getRequest();
+    com::sun::star::ucb::InteractiveIOException aIoException;
+    if ( (aRequest >>= aIoException) && ( aIoException.Code == IOErrorCode_ACCESS_DENIED || aIoException.Code == IOErrorCode_LOCKING_VIOLATION ) )
+        return;
+    else
+        m_xInter->handle( xRequest );
 }
 
 class FileSource_Impl   :   public ::com::sun::star::lang::XTypeProvider    ,
@@ -1663,7 +1696,7 @@ void SfxMedium::GetMedium_Impl()
                 pImp->bDontCallDoneLinkOnSharingError = ( bIsWritable && bAllowReadOnlyMode );
                 if ( pImp->bDontCallDoneLinkOnSharingError )
                     pImp->xLockBytes = ::utl::UcbLockBytes::CreateLockBytes(
-                        GetContent(), aProps, nStorOpenMode, Reference < ::com::sun::star::task::XInteractionHandler >() );
+                        GetContent(), aProps, nStorOpenMode, new SfxMediumHandler_Impl( xInteractionHandler ) );
                 else
                     pImp->xLockBytes = ::utl::UcbLockBytes::CreateLockBytes(
                         GetContent(), aProps, nStorOpenMode, xInteractionHandler, bIsWritable ? NULL : pHandler );
