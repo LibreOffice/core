@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit4.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: kz $ $Date: 2003-10-15 09:47:57 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 15:29:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,6 @@
 #include <vcl/svapp.hxx>
 #pragma hdrstop
 
-#include <vcl/system.hxx>
 #include <srchitem.hxx>
 #include <lspcitem.hxx>
 #include <adjitem.hxx>
@@ -1530,7 +1529,7 @@ EESpellState ImpEditEngine::Spell( EditView* pEditView, sal_Bool bMultipleDoc )
     else if ( !bForward && ( CreateEPaM( aEditDoc.GetEndPaM() ) == pSpellInfo->aSpellStart ) )
         bIsStart = sal_True;
 
-    EditSpellWrapper* pWrp = new EditSpellWrapper( Application::GetDefModalDialogParent(),
+    EditSpellWrapper* pWrp = new EditSpellWrapper( Application::GetDefDialogParent(),
             xSpeller, bIsStart, sal_False, pEditView );
     pWrp->SpellDocument();
     delete pWrp;
