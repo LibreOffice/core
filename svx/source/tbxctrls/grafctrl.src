@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grafctrl.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-26 15:14:03 $
+ *  last change: $Author: rt $ $Date: 2000-12-01 08:04:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -376,7 +376,7 @@ String RID_SVXSTR_GRAFCROP
     Text[ chinese_simplified ] = "¼ôÏÂ";
     Text[ chinese_traditional ] = "°Å¤U";
     Text[ turkish ] = "Crop";
-    Text[ arabic ] = "Crop";
+    Text[ arabic ] = "ÇÞÊÕÇÕ";
 };
 
 // ********************************************************************** EOF
