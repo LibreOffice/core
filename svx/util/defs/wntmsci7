@@ -18615,3 +18615,16 @@ _real@8@40088f3d4c83f2e79800
 ??0FmSearchEngine@@QAE@ABV?$Reference@VXMultiServiceFactory@lang@star@sun@com@@@uno@star@sun@com@@ABV?$Reference@VXResultSet@sdbc@star@sun@com@@@2345@ABVOUString@rtl@@ABV?$Reference@VXNumberFormatsSupplier@util@star@sun@com@@@2345@W4SEARCH_MODE@FmSearchDialog@@@Z
 ??0FmSearchEngine@@QAE@ABV?$Reference@VXMultiServiceFactory@lang@star@sun@com@@@uno@star@sun@com@@ABV?$Reference@VXResultSet@sdbc@star@sun@com@@@2345@ABVOUString@rtl@@ABV?$vector@V?$Reference@VXInterface@uno@star@sun@com@@@uno@star@sun@com@@V?$allocator@V?$Reference@VXInterface@uno@star@sun@com@@@uno@star@sun@com@@@_STL@@@_STL@@W4SEARCH_MODE@FmSearchDialog@@@Z
 ?toLower_rtl@CharClass@@QBEABVOUString@rtl@@AAV23@@Z
+?getImplementationId@FmXFormController@@WDE@AA?AV?$Sequence@C@uno@star@sun@com@@XZ
+?getImplementationId@FmXFormController@@WGI@AA?AV?$Sequence@C@uno@star@sun@com@@XZ
+?_M_empty_initialize@?$_Rb_tree@VOUString@rtl@@V12@U?$_Identity@VOUString@rtl@@@_STL@@U?$less@VOUString@rtl@@@4@V?$allocator@VOUString@rtl@@@4@@_STL@@AAEXXZ
+??1SvPersistRef@@QAE@XZ
+?Create@SvXMLEmbeddedObjectHelper@@SAPAV1@AAVSvPersist@@W4SvXMLEmbeddedObjectHelperMode@@@Z
+?Init@SvXMLEmbeddedObjectHelper@@IAEXPAVSvStorage@@AAVSvPersist@@W4SvXMLEmbeddedObjectHelperMode@@@Z
+?getByName@SvXMLEmbeddedObjectHelper@@UAA?AVAny@uno@star@sun@com@@ABVOUString@rtl@@@Z
+?getElementNames@SvXMLEmbeddedObjectHelper@@UAA?AV?$Sequence@VOUString@rtl@@@uno@star@sun@com@@XZ
+?getElementType@SvXMLEmbeddedObjectHelper@@UAA?AVType@uno@star@sun@com@@XZ
+?getImplementationId@?$WeakComponentImplHelper2@VXEmbeddedObjectResolver@document@star@sun@com@@VXNameAccess@container@345@@cppu@@UAA?AV?$Sequence@C@uno@star@sun@com@@XZ
+?getImplementationId@?$WeakImplHelper1@VXInputStream@io@star@sun@com@@@cppu@@UAA?AV?$Sequence@C@uno@star@sun@com@@XZ
+?hasByName@SvXMLEmbeddedObjectHelper@@UAAEABVOUString@rtl@@@Z
+?hasElements@SvXMLEmbeddedObjectHelper@@UAAEXZ
