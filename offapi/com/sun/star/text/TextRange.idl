@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextRange.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:10:05 $
+ *  last change: $Author: tl $ $Date: 2002-10-08 11:07:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,12 @@
 #ifndef __com_sun_star_style_ParagraphProperties_idl__
 #include <com/sun/star/style/ParagraphProperties.idl>
 #endif
+#ifndef __com_sun_star_style_ParagraphPropertiesAsian_idl__
+#include <com/sun/star/style/ParagraphPropertiesAsian.idl>
+#endif
+#ifndef __com_sun_star_style_ParagraphPropertiesComplex_idl__
+#include <com/sun/star/style/ParagraphPropertiesComplex.idl>
+#endif
 #ifndef __com_sun_star_style_CharacterPropertiesAsian_idl__
 #include <com/sun/star/style/CharacterPropertiesAsian.idl>
 #endif
@@ -122,12 +128,15 @@ service TextRange
 
     service com::sun::star::style::CharacterProperties;
 
-    [optional] service com::sun::star::style::CharacterPropertiesAsian;
+        [optional] service com::sun::star::style::CharacterPropertiesAsian;
 
-    [optional] service com::sun::star::style::CharacterPropertiesComplex;
+        [optional] service com::sun::star::style::CharacterPropertiesComplex;
 
     service com::sun::star::style::ParagraphProperties;
 
+        [optional] service com::sun::star::style::ParagraphPropertiesAsian;
+
+        [optional] service com::sun::star::style::ParagraphPropertiesComplex;
 };
 
 //=============================================================================
@@ -137,6 +146,9 @@ service TextRange
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.7  2002/10/03 13:10:05  mi
+    #94968# IDL reviews merged
+
     Revision 1.6.14.1  2002/05/03 10:25:52  mi
     autodoc warnings elimitanted, part of review procss
 
