@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyphdsp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tl $ $Date: 2001-01-25 10:56:02 $
+ *  last change: $Author: tl $ $Date: 2001-01-29 14:15:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -607,7 +607,7 @@ void HyphenatorDispatcher::SetServiceList( const Locale &rLocale,
     MutexGuard  aGuard( GetLinguMutex() );
 
     INT32 nLen = rSvcImplNames.getLength();
-    DBG_ASSERT( 1 == nLen, "unexpected size of sequence" );
+    DBG_ASSERT( nLen <= 1, "unexpected size of sequence" );
     OUString aSvcImplName( nLen ? rSvcImplNames.getConstArray()[0] : OUString() );
 
     // search for entry with that language
