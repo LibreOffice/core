@@ -2,9 +2,9 @@
  *
  *  $RCSfile: syswin.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: th $ $Date: 2001-08-23 13:40:45 $
+ *  last change: $Author: obo $ $Date: 2001-08-24 10:50:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -596,7 +596,7 @@ void SystemWindow::GetWindowStateData( WindowStateData& rData ) const
         ::rtl::OUString aStr( mpFrame->GetWindowState() );
         ByteString aByteStr( aStr.getStr(), aStr.getLength(), RTL_TEXTENCODING_ASCII_US );
         WindowStateData aData;
-        ImplWindowStateFromStr( aData, rStr );
+        ImplWindowStateFromStr( aData, aByteStr );
         rData = aData;
 #endif
     }
