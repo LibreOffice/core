@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-04 15:53:10 $
+ *  last change: $Author: dr $ $Date: 2002-11-05 12:23:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1367,6 +1367,7 @@ void ImportExcel8::PostDocLoad( void )
         pWebQBuffer->Apply( pD );
 
     UINT32 nChartCnt = 0;
+    SfxObjectShell* pShell = pD->GetDocumentShell();
 
     if( aObjManager.HasEscherStream() )
     {
@@ -1379,9 +1380,9 @@ void ImportExcel8::PostDocLoad( void )
         ScMSConvertControls*    pCtrlConv;
         SvStorageStreamRef      xStStream;
 
-        if( bHasCtrls )
+        if( bHasCtrls && pShell )
         {
-            pCtrlConv = new ScMSConvertControls( pD->GetDocumentShell() );
+            pCtrlConv = new ScMSConvertControls( pShell );
             xStStream = pExcRoot->pRootStorage->OpenStream( aStrName, STREAM_READ | STREAM_SHARE_DENYALL );
         }
 
@@ -1482,7 +1483,7 @@ void ImportExcel8::PostDocLoad( void )
 
     // controls
 /*
-    ScMSConvertControls     aCtrlConverter( pD->GetDocumentShell() );
+    ScMSConvertControls     aCtrlConverter( pShell );
     String                  aStrName( String::CreateFromAscii( "Ctls" ) );
     com::sun::star::uno::Reference< com::sun::star::drawing::XShape >*  pShapeRef = NULL;
 
@@ -1502,7 +1503,7 @@ void ImportExcel8::PostDocLoad( void )
     }
 
     // BASIC
-    if( bHasBasic )
+    if( bHasBasic && pShell )
     {
         OfaFilterOptions*   pFiltOpt = OFF_APP()->GetFilterOptions();
 
@@ -1512,7 +1513,7 @@ void ImportExcel8::PostDocLoad( void )
             {
                 DBG_ASSERT( pExcRoot->pRootStorage, "-ImportExcel8::PostDocLoad(): no storage, no cookies!" );
 
-                SvxImportMSVBasic   aBasicImport( *pD->GetDocumentShell(), *pExcRoot->pRootStorage,
+                SvxImportMSVBasic   aBasicImport( *pShell, *pExcRoot->pRootStorage,
                                                     pFiltOpt->IsLoadExcelBasicCode(),
                                                     pFiltOpt->IsLoadExcelBasicStorage() );
 
@@ -1524,15 +1525,15 @@ void ImportExcel8::PostDocLoad( void )
 
     // read doc info
     // no docshell while pasting from clipboard
-    if( pD->GetDocumentShell() )
+    if( pShell )
     {
         SfxDocumentInfo     aNewDocInfo;
-        SfxDocumentInfo&    rOldDocInfo = pD->GetDocumentShell()->GetDocInfo();
+        SfxDocumentInfo&    rOldDocInfo = pShell->GetDocInfo();
 
         aNewDocInfo.LoadPropertySet( pExcRoot->pRootStorage );
 
         rOldDocInfo = aNewDocInfo;
-        pD->GetDocumentShell()->Broadcast( SfxDocumentInfoHint( &rOldDocInfo ) );
+        pShell->Broadcast( SfxDocumentInfoHint( &rOldDocInfo ) );
     }
 
     // building pivot tables
@@ -1741,13 +1742,15 @@ XclImpWebQueryBuffer::~XclImpWebQueryBuffer()
 void XclImpWebQueryBuffer::Apply( ScDocument* pDoc )
 {
     DBG_ASSERT( pDoc, "XclImpWebQueryBuffer::Apply - no document" );
+    SfxObjectShell* pShell = pDoc->GetDocumentShell();
+    if( !pShell ) return;
 
     for( XclImpWebQuery* pQuery = First(); pQuery; pQuery = Next() )
     {
         if( pQuery->IsValid() )
         {
             String sFilterName( RTL_CONSTASCII_USTRINGPARAM( EXC_WEBQRY_FILTER ) );
-            ScAreaLink* pLink = new ScAreaLink( pDoc->GetDocumentShell(),
+            ScAreaLink* pLink = new ScAreaLink( pShell,
                 pQuery->aFilename, sFilterName, EMPTY_STRING, pQuery->aTables,
                 pQuery->aDestRange, (ULONG)pQuery->nRefresh * 60 );
             pDoc->GetLinkManager()->InsertFileLink( *pLink, OBJECT_CLIENT_FILE,

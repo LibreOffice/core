@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: er $ $Date: 2002-10-30 10:41:31 $
+ *  last change: $Author: dr $ $Date: 2002-11-05 12:23:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2865,7 +2865,7 @@ void ExcXf::ScToExcBorderLine( const SvxBorderLine* pLine, UINT32& rIcvSer, UINT
 {
     if( !pLine )
     {
-        rIcvSer = 0;
+        rIcvSer = pPalette2->InsertIndex( 0 );
         rDg = 0;
         return;
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: namebuff.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dr $ $Date: 2001-11-23 13:05:08 $
+ *  last change: $Author: dr $ $Date: 2002-11-05 12:23:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -395,7 +395,7 @@ BOOL ExtSheetBuffer::GetScTabIndex( UINT16 nExcIndex, UINT16& rScIndex )
                 else
                     rTabNum = 0xFFFD;
             }
-            else
+            else if( pExcRoot->pDoc->GetDocumentShell() )
             {// Tabelle ist 'echt' extern
                 if( pExcRoot->pExtDocOpt->nLinkCnt < 1 )
                 {

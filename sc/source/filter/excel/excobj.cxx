@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excobj.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: nn $ $Date: 2002-03-04 19:33:18 $
+ *  last change: $Author: dr $ $Date: 2002-11-05 12:23:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -463,6 +463,9 @@ void ImportExcel::ChartObjectLink()
 
 void ImportExcel::EndAllChartObjects( void )
 {
+    SfxObjectShell* pSh = pD->GetDocumentShell();
+    if( !pSh ) return;
+
     ExcelChartData*             p = pUsedChartFirst;
     ExcelChartData*             pDelete;
 
@@ -470,7 +473,6 @@ void ImportExcel::EndAllChartObjects( void )
     {
         if( p->nRow1 <= p->nRow2 && p->nCol1 <= p->nCol2 )
         {
-            SfxObjectShell*     pSh = pD->GetDocumentShell();
             SvStorageRef        aStor = new SvStorage( String() );
             SvInPlaceObjectRef  aIPObj;
             //  wenn Chart nicht installiert ist, darf nicht auf SCH_MOD zugegriffen werden!
