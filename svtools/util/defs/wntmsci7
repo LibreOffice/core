@@ -7527,3 +7527,5 @@ _TI2?AVUnsupportedFlavorException@datatransfer@star@sun@com@@
 ?WriteBool@FilterConfigItem@@QAEXABVOUString@rtl@@E@Z
 ?WriteInt32@FilterConfigItem@@QAEXABVOUString@rtl@@J@Z
 ?s_pType_com_sun_star_util_XChangesBatch@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXChangesBatch@util@star@sun@com@@@3456@@Z@4PAU_typelib_TypeDescriptionReference@@A
+??1?$Reference@VXFlushableClipboard@clipboard@datatransfer@star@sun@com@@@uno@star@sun@com@@QAE@XZ
+?s_pType_com_sun_star_datatransfer_clipboard_XFlushableClipboard@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXFlushableClipboard@clipboard@datatransfer@star@sun@com@@@3456@@Z@4PAU_typelib_TypeDescriptionReference@@A
