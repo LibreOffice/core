@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XAcceptor.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:08:32 $
+ *  last change:$Date: 2003-05-27 12:25:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,7 @@ package ifc.connection;
 import com.sun.star.connection.XAcceptor;
 import com.sun.star.connection.XConnection;
 import com.sun.star.connection.XConnector;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import java.io.PrintWriter;
@@ -164,13 +165,14 @@ public class _XAcceptor extends MultiMethodTest {
 
         // creating services requierd
         try {
-            Object oConnector = tParam.getMSF().createInstance
-                ("com.sun.star.connection.Connector") ;
+            Object oConnector = ((XMultiServiceFactory)tParam.getMSF()).
+                createInstance("com.sun.star.connection.Connector") ;
 
             xConnector = (XConnector) UnoRuntime.queryInterface
                 (XConnector.class, oConnector) ;
 
-            XInterface acceptor = (XInterface) tParam.getMSF().createInstance
+            XInterface acceptor = (XInterface) ((XMultiServiceFactory)
+                tParam.getMSF()).createInstance
                 ("com.sun.star.connection.Acceptor") ;
 
             dupAcceptor = (XAcceptor) UnoRuntime.queryInterface
