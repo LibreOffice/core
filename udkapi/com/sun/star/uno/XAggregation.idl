@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XAggregation.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 11:53:34 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 16:36:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,7 +112,7 @@ module com { module sun { module star { module uno {
     several single objects in your specific programming language, though this
     depends on your programming language.
 */
-interface XAggregation: com::sun::star::uno::XInterface
+published interface XAggregation: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
     /** sets the object to which all calls to the method
