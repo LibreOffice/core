@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: jbu $ $Date: 2001-02-26 14:34:32 $
+#   last change: $Author: vg $ $Date: 2003-10-09 10:13:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,7 +80,6 @@ JARFILES = sandbox.jar unoil.jar ridl.jar
 GENJAVACLASSFILES = 
 
 JAVACLASSFILES= \
-    $(CLASSDIR)$/$(PACKAGE)$/UcbDemo.class	\
     $(CLASSDIR)$/$(PACKAGE)$/DemoServer.class	\
     $(CLASSDIR)$/$(PACKAGE)$/TestOffice.class
 
