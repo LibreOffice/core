@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prltempl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 20:13:51 $
+ *  last change: $Author: hr $ $Date: 2004-04-07 11:10:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 #pragma hdrstop
 
 #define ITEMID_FONTLIST     SID_ATTR_CHAR_FONTLIST
-#define ITEMID_ESCAPEMENT   SID_ATTR_CHAR_ESCAPEMENT
+//#define ITEMID_ESCAPEMENT SID_ATTR_CHAR_ESCAPEMENT
 #define ITEMID_CASEMAP      SID_ATTR_CHAR_CASEMAP
 
 #define ITEMID_COLOR_TABLE      SID_COLOR_TABLE
@@ -71,6 +71,8 @@
 #define ITEMID_BITMAP_LIST      SID_BITMAP_LIST
 #define ITEMID_DASH_LIST        SID_DASH_LIST
 #define ITEMID_LINEEND_LIST     SID_LINEEND_LIST
+
+#include "eetext.hxx"
 
 #include <svx/dialogs.hrc>
 #include <svx/flstitem.hxx>
@@ -102,6 +104,10 @@
 #endif
 #include <svx/numpages.hxx>
 #include <svx/numitem.hxx>
+#include <svx/tabstpge.hxx>
+#ifndef _SVTOOLS_CJKOPTIONS_HXX
+#include <svtools/cjkoptions.hxx>
+#endif
 
 #include "DrawDocShell.hxx"
 #include "glob.hrc"
@@ -275,6 +281,29 @@ SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg( SfxObjectShell* pDocSh,
         }
         break;
     }
+
+    // #112490# the tabpages Alignment, Tabs and Asian Typography are very
+    // usefull, except for the background style
+    if( (DlgId.GetId() == TAB_PRES_LAYOUT_TEMPLATE) || (DlgId.GetId() == TAB_PRES_LAYOUT_TEMPLATE_3) )
+    {
+        SvtCJKOptions aCJKOptions;
+        if( aCJKOptions.IsAsianTypographyEnabled() && (ePO != PO_BACKGROUND ) )
+            AddTabPage( RID_SVXPAGE_PARA_ASIAN, SvxAsianTabPage::Create,0);
+        else
+            RemoveTabPage( RID_SVXPAGE_PARA_ASIAN );
+
+        if( ePO != PO_BACKGROUND )
+        {
+            AddTabPage( RID_SVXPAGE_ALIGN_PARAGRAPH, SvxParaAlignTabPage::Create,0);
+            AddTabPage( RID_SVXPAGE_TABULATOR, SvxTabulatorTabPage::Create, 0);
+        }
+        else
+        {
+            RemoveTabPage( RID_SVXPAGE_ALIGN_PARAGRAPH );
+            RemoveTabPage( RID_SVXPAGE_TABULATOR );
+        }
+    }
+
     // Titel setzen und
     // entsprechende Seiten zum Dialog hinzufuegen
     String aTitle;
