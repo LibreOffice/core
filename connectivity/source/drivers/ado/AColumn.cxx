@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AColumn.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-22 10:05:53 $
+ *  last change: $Author: oj $ $Date: 2002-11-29 12:24:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,9 @@
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
 #endif
+#ifndef _CONNECTIVITY_ADO_CATALOG_HXX_
+#include "ado/ACatalog.hxx"
+#endif
 
 using namespace ::comphelper;
 
@@ -120,6 +123,7 @@ OAdoColumn::OAdoColumn(sal_Bool _bCase,OConnection* _pConnection,_ADOColumn* _pC
     construct();
     OSL_ENSURE(_pColumn,"Column can not be null!");
     m_aColumn = WpADOColumn(_pColumn);
+    //  m_aColumn.put_ParentCatalog(_pConnection->getAdoCatalog()->getCatalog());
     fillPropertyValues();
 }
 // -------------------------------------------------------------------------
@@ -128,8 +132,10 @@ OAdoColumn::OAdoColumn(sal_Bool _bCase,OConnection* _pConnection)
     ,m_pConnection(_pConnection)
 {
     m_aColumn.Create();
+    m_aColumn.put_ParentCatalog(_pConnection->getAdoCatalog()->getCatalog());
     construct();
     fillPropertyValues();
+    m_Type = DataType::OTHER;
 }
 
 //--------------------------------------------------------------------------
@@ -196,7 +202,19 @@ void OAdoColumn::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& r
                 {
                     sal_Int32 nVal=0;
                     rValue >>= nVal;
-                    m_aColumn.put_Type(ADOS::MapJdbc2ADOType(nVal,m_pConnection->getEngineType()));
+                    sal_Bool bForceTo;
+                    const OTypeInfoMap* pTypeInfoMap = m_pConnection->getTypeInfo();
+                    const OExtendedTypeInfo* pTypeInfo = OConnection::getTypeInfoFromType(  *m_pConnection->getTypeInfo()
+                                                                                            ,nVal
+                                                                                            ,m_TypeName
+                                                                                            ,m_Precision
+                                                                                            ,m_Scale
+                                                                                            ,ADOS::MapJdbc2ADOType(nVal,m_pConnection->getEngineType())
+                                                                                            ,bForceTo);
+                    if ( pTypeInfo )
+                        m_aColumn.put_Type(static_cast<DataTypeEnum>(pTypeInfo->eType));
+                    else
+                        m_aColumn.put_Type(ADOS::MapJdbc2ADOType(nVal,m_pConnection->getEngineType()));
                 }
                 break;
             case PROPERTY_ID_TYPENAME:
@@ -228,7 +246,7 @@ void OAdoColumn::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& r
                 break;
 
             case PROPERTY_ID_ISAUTOINCREMENT:
-                pAdoPropertyName = "Autoincrement";
+                OTools::putValue( m_aColumn.get_Properties(), ::rtl::OUString::createFromAscii( "Autoincrement" ), getBOOL( rValue ) );
                 break;
 
             case PROPERTY_ID_DESCRIPTION:
@@ -261,9 +279,9 @@ void OAdoColumn::fillPropertyValues()
 
         sal_Bool bForceTo = sal_True;
         const OTypeInfoMap* pTypeInfoMap = m_pConnection->getTypeInfo();
-        const ::connectivity::OTypeInfo* pTypeInfo = OConnection::getTypeInfoFromType(*m_pConnection->getTypeInfo(),m_Type,::rtl::OUString(),m_Precision,m_Scale,bForceTo);
+        const OExtendedTypeInfo* pTypeInfo = OConnection::getTypeInfoFromType(*m_pConnection->getTypeInfo(),m_Type,::rtl::OUString(),m_Precision,m_Scale,m_aColumn.get_Type(),bForceTo);
         if ( pTypeInfo )
-                m_TypeName = pTypeInfo->aTypeName;
+                m_TypeName = pTypeInfo->aSimpleType.aTypeName;
 
         // fill some specific props
         {
@@ -276,6 +294,16 @@ void OAdoColumn::fillPropertyValues()
                 m_Description = OTools::getValue( aProps, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Description")) );
 
                 m_DefaultValue = OTools::getValue( aProps, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Default")) );
+
+#ifdef _DEBUG
+                sal_Int32 nCount = aProps.GetItemCount();
+                for (sal_Int32 i = 0; i<nCount; ++i)
+                {
+                    WpADOProperty aProp = aProps.GetItem(i);
+                    ::rtl::OUString sName = aProp.GetName();
+                    ::rtl::OUString sVal = aProp.GetValue();
+                }
+#endif
             }
         }
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AIndex.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: fs $ $Date: 2002-01-18 16:33:01 $
+ *  last change: $Author: oj $ $Date: 2002-11-29 12:24:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,7 +126,7 @@ void OAdoIndex::refreshColumns()
         aColumns.fillElementNames(aVector);
     }
 
-    if(m_pColumns)
+    if ( m_pColumns )
         m_pColumns->reFill(aVector);
     else
         m_pColumns = new OColumns(*this,m_aMutex,aVector,aColumns,isCaseSensitive(),m_pConnection);

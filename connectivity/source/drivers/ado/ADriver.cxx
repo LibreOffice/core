@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ADriver.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-21 13:14:58 $
+ *  last change: $Author: oj $ $Date: 2002-11-29 12:24:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -235,8 +235,10 @@ Reference< XTablesSupplier > SAL_CALL ODriver::getDataDefinitionByConnection( co
         if(aCatalog.IsValid())
         {
             aCatalog.putref_ActiveConnection(*pConnection->getConnection());
-            xTab = new OCatalog(aCatalog,pConnection);
+            OCatalog* pCatalog = new OCatalog(aCatalog,pConnection);
+            xTab = pCatalog;
             pConnection->setCatalog(xTab);
+            pConnection->setCatalog(pCatalog);
         }
     }
     return xTab;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AConnection.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-23 10:06:33 $
+ *  last change: $Author: oj $ $Date: 2002-11-29 12:24:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,7 +126,8 @@ OConnection::OConnection(const ::rtl::OUString& url, const Sequence< PropertyVal
                          m_pDriver(_pDriver),
                          m_pAdoConnection(NULL),
                          m_bAutocommit(sal_True),
-                         m_nEngineType(0)
+                         m_nEngineType(0),
+                         m_pCatalog(NULL)
 {
     ModuleContext::AddRef();
 
@@ -483,40 +484,50 @@ void OConnection::buildTypeInfo() throw( SQLException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    Reference< XResultSet> xRs = getMetaData()->getTypeInfo();
-    Reference< XRow> xRow(xRs,UNO_QUERY);
-    // Information for a single SQL type
-
-    // Loop on the result set until we reach end of file
-    while (xRs->next())
+    ADORecordset *pRecordset = m_pAdoConnection->getTypeInfo();
+    if ( pRecordset )
     {
-        OTypeInfo* aInfo        = new OTypeInfo();
-        aInfo->aTypeName        = xRow->getString (1);
-        aInfo->nType            = xRow->getShort (2);
-        aInfo->nPrecision       = xRow->getInt (3);
-        aInfo->aLiteralPrefix   = xRow->getString (4);
-        aInfo->aLiteralSuffix   = xRow->getString (5);
-        aInfo->aCreateParams    = xRow->getString (6);
-        aInfo->bNullable        = xRow->getInt (7) == ColumnValue::NULLABLE;
-        aInfo->bCaseSensitive   = xRow->getBoolean (8);
-        aInfo->nSearchType      = xRow->getShort (9);
-        aInfo->bUnsigned        = xRow->getBoolean (10);
-        aInfo->bCurrency        = xRow->getBoolean (11);
-        aInfo->bAutoIncrement   = xRow->getBoolean (12);
-        aInfo->aLocalTypeName   = xRow->getString (13);
-        aInfo->nMinimumScale    = xRow->getShort (14);
-        aInfo->nMaximumScale    = xRow->getShort (15);
-        aInfo->nNumPrecRadix    = (sal_Int16)xRow->getInt (18);
-        // Now that we have the type info, save it
-        // in the Hashtable if we don't already have an
-        // entry for this SQL type.
+        pRecordset->AddRef();
+        VARIANT_BOOL bIsAtBOF;
+        pRecordset->get_BOF(&bIsAtBOF);
 
-        m_aTypeInfo.insert(OTypeInfoMap::value_type(aInfo->nType,aInfo));
+        sal_Bool bOk = sal_True;
+        if ( bIsAtBOF == VARIANT_TRUE )
+            bOk = SUCCEEDED(pRecordset->MoveNext());
+
+        if ( bOk )
+        {
+            do
+            {
+                sal_Int32 nPos = 1;
+                OExtendedTypeInfo* aInfo            = new OExtendedTypeInfo();
+                aInfo->aSimpleType.aTypeName        = ADOS::getField(pRecordset,nPos++).get_Value();
+                aInfo->eType                        = ADOS::getField(pRecordset,nPos++).get_Value();
+                aInfo->aSimpleType.nType            = ADOS::MapADOType2Jdbc(static_cast<DataTypeEnum>(aInfo->eType));
+                aInfo->aSimpleType.nPrecision       = ADOS::getField(pRecordset,nPos++).get_Value();
+                aInfo->aSimpleType.aLiteralPrefix   = ADOS::getField(pRecordset,nPos++).get_Value();
+                aInfo->aSimpleType.aLiteralSuffix   = ADOS::getField(pRecordset,nPos++).get_Value();
+                aInfo->aSimpleType.aCreateParams    = ADOS::getField(pRecordset,nPos++).get_Value();
+                aInfo->aSimpleType.bNullable        = ADOS::getField(pRecordset,nPos++).get_Value();
+                aInfo->aSimpleType.bCaseSensitive   = ADOS::getField(pRecordset,nPos++).get_Value();
+                aInfo->aSimpleType.nSearchType      = ADOS::getField(pRecordset,nPos++).get_Value();
+                aInfo->aSimpleType.bUnsigned        = ADOS::getField(pRecordset,nPos++).get_Value();
+                aInfo->aSimpleType.bCurrency        = ADOS::getField(pRecordset,nPos++).get_Value();
+                aInfo->aSimpleType.bAutoIncrement   = ADOS::getField(pRecordset,nPos++).get_Value();
+                aInfo->aSimpleType.aLocalTypeName   = ADOS::getField(pRecordset,nPos++).get_Value();
+                aInfo->aSimpleType.nMinimumScale    = ADOS::getField(pRecordset,nPos++).get_Value();
+                aInfo->aSimpleType.nMaximumScale    = ADOS::getField(pRecordset,nPos++).get_Value();
+                aInfo->aSimpleType.nNumPrecRadix    = ADOS::getField(pRecordset,nPos++).get_Value();
+                // Now that we have the type info, save it
+                // in the Hashtable if we don't already have an
+                // entry for this SQL type.
+
+                m_aTypeInfo.insert(OTypeInfoMap::value_type(aInfo->aSimpleType.nType,aInfo));
+            }
+            while ( SUCCEEDED(pRecordset->MoveNext()) );
+        }
+        pRecordset->Release();
     }
-
-    // Close the result set/statement.
-
-    Reference< XCloseable>(xRs,UNO_QUERY)->close();
 }
 //------------------------------------------------------------------------------
 void OConnection::disposing()
@@ -572,14 +583,15 @@ Sequence< sal_Int8 > OConnection::getUnoTunnelImplementationId()
     return pId->getImplementationId();
 }
 // -----------------------------------------------------------------------------
-const ::connectivity::OTypeInfo* OConnection::getTypeInfoFromType(const OTypeInfoMap& _rTypeInfo,
+const OExtendedTypeInfo* OConnection::getTypeInfoFromType(const OTypeInfoMap& _rTypeInfo,
                            sal_Int32 _nType,
                            const ::rtl::OUString& _sTypeName,
                            sal_Int32 _nPrecision,
                            sal_Int32 _nScale,
+                           sal_Int32 _nAdoType,
                            sal_Bool& _brForceToType)
 {
-    const ::connectivity::OTypeInfo* pTypeInfo = NULL;
+    const OExtendedTypeInfo* pTypeInfo = NULL;
     _brForceToType = sal_False;
     // search for type
     ::std::pair<OTypeInfoMap::const_iterator, OTypeInfoMap::const_iterator> aPair = _rTypeInfo.equal_range(_nType);
@@ -590,15 +602,16 @@ const ::connectivity::OTypeInfo* OConnection::getTypeInfoFromType(const OTypeInf
         {
             // search the best matching type
     #ifdef DBG_UTIL
-            ::rtl::OUString sDBTypeName = aIter->second->aTypeName;
-            sal_Int32       nDBTypePrecision = aIter->second->nPrecision;
-            sal_Int32       nDBTypeScale = aIter->second->nMaximumScale;
+            ::rtl::OUString sDBTypeName = aIter->second->aSimpleType.aTypeName;
+            sal_Int32       nDBTypePrecision = aIter->second->aSimpleType.nPrecision;
+            sal_Int32       nDBTypeScale = aIter->second->aSimpleType.nMaximumScale;
+            sal_Int32       nAdoType = aIter->second->eType;
     #endif
             if  (   (   !_sTypeName.getLength()
-                    ||  (aIter->second->aTypeName.equalsIgnoreAsciiCase(_sTypeName))
+                    ||  (aIter->second->aSimpleType.aTypeName.equalsIgnoreAsciiCase(_sTypeName))
                     )
-                &&  (aIter->second->nPrecision      >= _nPrecision)
-                &&  (aIter->second->nMaximumScale   >= _nScale)
+                &&  (aIter->second->aSimpleType.nPrecision      >= _nPrecision)
+                &&  (aIter->second->aSimpleType.nMaximumScale   >= _nScale)
                 )
                 break;
         }
@@ -608,9 +621,9 @@ const ::connectivity::OTypeInfo* OConnection::getTypeInfoFromType(const OTypeInf
             for(aIter = aPair.first; aIter != aPair.second; ++aIter)
             {
                 // search the best matching type (now comparing the local names)
-                if  (   (aIter->second->aLocalTypeName.equalsIgnoreAsciiCase(_sTypeName))
-                    &&  (aIter->second->nPrecision      >= _nPrecision)
-                    &&  (aIter->second->nMaximumScale   >= _nScale)
+                if  (   (aIter->second->aSimpleType.aLocalTypeName.equalsIgnoreAsciiCase(_sTypeName))
+                    &&  (aIter->second->aSimpleType.nPrecision      >= _nPrecision)
+                    &&  (aIter->second->aSimpleType.nMaximumScale   >= _nScale)
                     )
                 {
 // we can not assert here because we could be in d&d
@@ -655,7 +668,7 @@ const ::connectivity::OTypeInfo* OConnection::getTypeInfoFromType(const OTypeInf
                                                             ::std::compose1(
                                                                 ::std::bind2nd(aCase, _sTypeName),
                                                                 ::std::compose1(
-                                                                    ::std::mem_fun(&::connectivity::OTypeInfo::getDBName),
+                                                                    ::std::mem_fun(&OExtendedTypeInfo::getDBName),
                                                                     ::std::select2nd<OTypeInfoMap::value_type>())
                                                                 )
                                                             );

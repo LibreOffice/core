@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Awrapado.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fs $ $Date: 2002-01-18 16:35:28 $
+ *  last change: $Author: oj $ $Date: 2002-11-29 12:24:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1116,6 +1116,13 @@ void WpADOColumn::put_Precision(sal_Int32 _nPre)
     pInterface->put_Precision(_nPre);
 }
 
+sal_Int32 WpADOColumn::get_DefinedSize() const
+{
+    OSL_ENSURE(pInterface,"Interface is null!");
+    sal_Int32 nPrec=0;
+    pInterface->get_DefinedSize(&nPrec);
+    return nPrec;
+}
 sal_Int32 WpADOColumn::get_NumericScale() const
 {
     OSL_ENSURE(pInterface,"Interface is null!");
@@ -2165,13 +2172,15 @@ ADORecordset* WpADOConnection::getTypeInfo( )
 void WpADOColumn::put_ParentCatalog(/* [in] */ _ADOCatalog __RPC_FAR *ppvObject)
 {
     OSL_ENSURE(pInterface,"Interface is null!");
-    OSL_ENSURE(SUCCEEDED(pInterface->put_ParentCatalog(ppvObject)),"Could not set ParentCatalog!");
+    sal_Bool bRet = SUCCEEDED(pInterface->put_ParentCatalog(ppvObject));
+    OSL_ENSURE(bRet,"Could not set ParentCatalog!");
 }
 // -----------------------------------------------------------------------------
 void WpADOTable::putref_ParentCatalog(/* [in] */ _ADOCatalog __RPC_FAR *ppvObject)
 {
     OSL_ENSURE(pInterface,"Interface is null!");
-    OSL_ENSURE(SUCCEEDED(pInterface->putref_ParentCatalog(ppvObject)),"Could not set ParentCatalog!");
+    sal_Bool bRet = SUCCEEDED(pInterface->putref_ParentCatalog(ppvObject));
+    OSL_ENSURE(bRet,"Could not set ParentCatalog!");
 }
 // -----------------------------------------------------------------------------
 void WpBase::setIDispatch(IDispatch* _pIUnknown)
@@ -2183,8 +2192,11 @@ void OTools::putValue(const WpADOProperties& _rProps,const OLEVariant &_aPositio
 {
     OSL_ENSURE(_rProps.IsValid(),"Properties are not valid!");
     WpADOProperty aProp(_rProps.GetItem(_aPosition));
-    if(aProp.IsValid())
-        aProp.PutValue(_aValVar);
+    if ( aProp.IsValid() )
+    {
+        sal_Bool bRet = aProp.PutValue(_aValVar);
+        OSL_ENSURE(bRet,"Could not put value!");
+    }
 }
 // -----------------------------------------------------------------------------
 OLEVariant OTools::getValue(const WpADOProperties& _rProps,const OLEVariant &_aPosition)

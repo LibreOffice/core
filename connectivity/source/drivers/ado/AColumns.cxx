@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AColumns.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-22 10:05:54 $
+ *  last change: $Author: oj $ $Date: 2002-11-29 12:24:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,15 +128,36 @@ void OColumns::appendObject( const Reference< XPropertySet >& descriptor )
         sal_Int32 nScale        = aColumn.get_NumericScale();
         sal_Int32 nType         = ADOS::MapADOType2Jdbc(eType);
 
+        ::rtl::OUString sTypeName;
+        pColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPENAME)) >>= sTypeName;
+
         sal_Bool bForceTo = sal_True;
         const OTypeInfoMap* pTypeInfoMap = m_pConnection->getTypeInfo();
-        const ::connectivity::OTypeInfo* pTypeInfo = OConnection::getTypeInfoFromType(*m_pConnection->getTypeInfo(),nType,::rtl::OUString(),nPrecision,nScale,bForceTo);
-        if ( pTypeInfo && pTypeInfo->bCurrency ) // change column type if necessary
-            aColumn.put_Type(adCurrency);
+        const OExtendedTypeInfo* pTypeInfo = OConnection::getTypeInfoFromType(  *m_pConnection->getTypeInfo()
+                                                                                ,nType
+                                                                                ,sTypeName
+                                                                                ,nPrecision
+                                                                                ,nScale
+                                                                                ,eType
+                                                                                ,bForceTo);
+        if ( pTypeInfo && static_cast<DataTypeEnum>(pTypeInfo->eType) != eType ) // change column type if necessary
+            aColumn.put_Type(static_cast<DataTypeEnum>(pTypeInfo->eType));
 
+        ((ADOColumns*)m_aCollection)->Append(OLEVariant(aColumn.get_Name()),aColumn.get_Type(),aColumn.get_DefinedSize());
+        WpADOColumn aAddedColumn = m_aCollection.GetItem(OLEVariant(aColumn.get_Name()));
 
-        if ( !m_aCollection.Append(aColumn) )
-            ADOS::ThrowException(*m_pConnection->getConnection(),*this);
+        sal_Bool bAutoIncrement = sal_False;
+        pColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISAUTOINCREMENT)) >>= bAutoIncrement;
+        if ( bAutoIncrement )
+            OTools::putValue( aAddedColumn.get_Properties(), ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Autoincrement")), bAutoIncrement );
+
+        aAddedColumn.put_Precision(aColumn.get_Precision());
+        aAddedColumn.put_NumericScale(aColumn.get_NumericScale());
+        aAddedColumn.put_Attributes(aColumn.get_Attributes());
+        aAddedColumn.put_SortOrder(aColumn.get_SortOrder());
+        aAddedColumn.put_RelatedColumn(aColumn.get_RelatedColumn());
+
+        ADOS::ThrowException(*m_pConnection->getConnection(),*this);
     }
     else
         throw SQLException(::rtl::OUString::createFromAscii("Could not append column!"),*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());

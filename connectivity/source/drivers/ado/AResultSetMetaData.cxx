@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AResultSetMetaData.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-30 08:52:12 $
+ *  last change: $Author: oj $ $Date: 2002-11-29 12:24:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,7 +120,15 @@ sal_Int32 SAL_CALL OResultSetMetaData::getColumnCount(  ) throw(SQLException, Ru
 
 sal_Bool SAL_CALL OResultSetMetaData::isCaseSensitive( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
-    return sal_True;
+    sal_Bool bRet = sal_False;
+    WpADOField aField = ADOS::getField(m_pRecordSet,column);
+    if ( aField.IsValid() )
+    {
+        WpADOProperties aProps( aField.get_Properties() );
+        if ( aProps.IsValid() )
+            bRet = OTools::getValue( aProps, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ISCASESENSITIVE")) );
+    }
+    return bRet;
 }
 // -------------------------------------------------------------------------
 
@@ -141,7 +149,16 @@ sal_Bool SAL_CALL OResultSetMetaData::isCaseSensitive( sal_Int32 column ) throw(
 // -------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OResultSetMetaData::getTableName( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
-    return ::rtl::OUString();
+    ::rtl::OUString sTableName;
+
+    WpADOField aField = ADOS::getField(m_pRecordSet,column);
+    if ( aField.IsValid() )
+    {
+        WpADOProperties aProps( aField.get_Properties() );
+        if ( aProps.IsValid() )
+            sTableName = OTools::getValue( aProps, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BASETABLENAME")) );
+    }
+    return sTableName;
 }
 // -------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OResultSetMetaData::getCatalogName( sal_Int32 column ) throw(SQLException, RuntimeException)
@@ -178,7 +195,26 @@ sal_Bool SAL_CALL OResultSetMetaData::isCurrency( sal_Int32 column ) throw(SQLEx
 
 sal_Bool SAL_CALL OResultSetMetaData::isAutoIncrement( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
-    return sal_False;
+    sal_Bool bRet = sal_False;
+    WpADOField aField = ADOS::getField(m_pRecordSet,column);
+    if ( aField.IsValid() )
+    {
+        WpADOProperties aProps( aField.get_Properties() );
+        if ( aProps.IsValid() )
+        {
+            bRet = OTools::getValue( aProps, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ISAUTOINCREMENT")) );
+#ifdef _DEBUG
+            sal_Int32 nCount = aProps.GetItemCount();
+            for (sal_Int32 i = 0; i<nCount; ++i)
+            {
+                WpADOProperty aProp = aProps.GetItem(i);
+                ::rtl::OUString sName = aProp.GetName();
+                ::rtl::OUString sVal = aProp.GetValue();
+            }
+#endif
+        }
+    }
+    return bRet;
 }
 // -------------------------------------------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ATables.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-15 10:50:24 $
+ *  last change: $Author: oj $ $Date: 2002-11-29 12:24:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,6 +138,7 @@ void OTables::appendObject( const Reference< XPropertySet >& descriptor )
         OSL_ENSURE(m_aCollection.IsValid(),"Collection isn't valid");
         if(!m_aCollection.Append(pTable->getImpl()))
             ADOS::ThrowException(*m_pCatalog->getConnection()->getConnection(),*this);
+        m_aCollection.Refresh();
     }
     else
         throw SQLException(::rtl::OUString::createFromAscii("Could not append table!"),*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
