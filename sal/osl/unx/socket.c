@@ -2,9 +2,9 @@
  *
  *  $RCSfile: socket.c,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mhu $ $Date: 2000-11-20 13:02:01 $
+ *  last change: $Author: mhu $ $Date: 2000-12-14 15:19:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -818,6 +818,7 @@ static sal_Bool  _osl_getDomainName (sal_Char *buffer, sal_Int32 bufsiz)
 
             close (p[0]);
             dup2  (p[1], 1);
+            close (p[1]);
 
             if (execvp ("/bin/domainname", argv) < 0)
             {
@@ -829,7 +830,6 @@ static sal_Bool  _osl_getDomainName (sal_Char *buffer, sal_Int32 bufsiz)
             sal_Int32 k = 0, n = bufsiz;
 
             close (p[1]);
-
             if ((k = read (p[0], buffer, n - 1)) > 0)
             {
                 buffer[k] = 0;
@@ -837,6 +837,12 @@ static sal_Bool  _osl_getDomainName (sal_Char *buffer, sal_Int32 bufsiz)
                     buffer[k - 1] = 0;
                 result = sal_True;
             }
+            close (p[0]);
+        }
+        else
+        {
+            close (p[0]);
+            close (p[1]);
         }
         wait (NULL);
     }
