@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTransHelper.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tra $ $Date: 2001-04-04 14:10:12 $
+ *  last change: $Author: tra $ $Date: 2001-11-05 09:38:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,12 +248,12 @@ sal_uInt32 SAL_CALL CStgTransferHelper::memSize( CLIPFORMAT cf ) const
         HGLOBAL hGlob;
         GetHGlobalFromStream( m_lpStream, &hGlob );
 
-        if ( CF_TEXT == cf )
+        if ( CF_TEXT == cf || RegisterClipboardFormat( "HTML Format" ) == cf )
         {
             sal_Char* pText = static_cast< sal_Char* >( GlobalLock( hGlob ) );
             if ( pText )
             {
-                dwSize = strlen( pText ) + 1; // strlen + trailing '\0'
+                dwSize = strlen( pText );// + 1; // strlen + trailing '\0'
                 GlobalUnlock( hGlob );
             }
         }
