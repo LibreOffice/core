@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlview.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-09-21 16:12:20 $
+ *  last change: $Author: dl $ $Date: 2000-09-22 08:21:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1269,8 +1269,7 @@ BOOL SdOutlineView::PrepareClose(BOOL bUI)
             pOPO = NULL;
 
             // Wenn moeglich, OutlinerParaObject fuer Gliederung erzeugen
-            BOOL bHasChilds = pOutliner->HasChilds(pPara);
-            if (bHasChilds)
+            if ( pPara && pOutliner->HasChilds(pPara) )
             {
                 // wieviele Absaetze in der Gliederung?
                 ULONG nTitlePara = pOutliner->GetAbsPos(pPara);
