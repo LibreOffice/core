@@ -2,9 +2,9 @@
  *
  *  $RCSfile: base.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 12:00:39 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 12:01:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -275,7 +275,7 @@ class InterfaceIdlClassImpl
 {
     typedef pair< OUString, typelib_TypeDescription * > MemberInit;
 
-    Reference< XIdlClass >                  _xSuperClass;
+    Sequence< Reference< XIdlClass > >      _xSuperClasses;
 
     MemberInit *                            _pSortedMemberInit; // first methods, then attributes
     OUString2Field                          _aName2Field;
