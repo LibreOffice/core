@@ -2,9 +2,9 @@
  *
  *  $RCSfile: styledlg.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-06 14:55:09 $
+ *  last change: $Author: kz $ $Date: 2000-12-08 18:03:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,6 +199,24 @@ TabDialog RID_SCDLG_STYLES_PAR
                 Identifier = TP_ASIAN ;
                 Text = "Asiatische Typographie" ;
                 Text [ ENGLISH ] = "Asian typography" ;
+                Text[ english_us ] = "Asian Typography";
+                Text[ portuguese ] = "Asian typography";
+                Text[ russian ] = "Àçèàòñêàÿ òèïîãğàôèÿ";
+                Text[ greek ] = "Asian typography";
+                Text[ dutch ] = "Asian typography";
+                Text[ french ] = "Typographie asiatique";
+                Text[ spanish ] = "Asian typography";
+                Text[ italian ] = "Asian typography";
+                Text[ danish ] = "Asian typography";
+                Text[ swedish ] = "Asian typography";
+                Text[ polish ] = "Typografia azjatycka";
+                Text[ portuguese_brazilian ] = "Asian typography";
+                Text[ japanese ] = "˜a•¶ˆóü‚Ì‘ÌÙ";
+                Text[ korean ] = "Asian typography";
+                Text[ chinese_simplified ] = "ÖĞÈÕº«ÎÄ×Ö";
+                Text[ chinese_traditional ] = "¤¤¤éÁú¤å¦r";
+                Text[ turkish ] = "Asian typography";
+                Text[ arabic ] = "ÃÓáæÈ ÇáØÈÇÚÉ ÇáÂÓíæíÉ";
             };
             PageItem
             {
