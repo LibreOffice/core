@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urlparameter.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: abi $ $Date: 2001-05-25 13:46:25 $
+ *  last change: $Author: abi $ $Date: 2001-05-29 15:14:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -388,22 +388,24 @@ void URLParameter::open( const Reference< XMultiServiceFactory >& rxSMgr,
                          const Reference< XCommandEnvironment >& Environment,
                          const Reference< XActiveDataSink >& xDataSink )
 {
+    bool IsRoot;
 
-
-    if( isRoot() )
+    if( ( IsRoot = isRoot() ) || isPicture() )
     {
-//      getPicture( HelpDatabases.getCssSheet(),m_xOutputStream);
-    }
-    else if( isPicture() )
-    {
-        rtl::OUString url( rtl::OUString::createFromAscii( "vnd.sun.star.pkg://" ) );
+        rtl::OUString url;
 
-        rtl::OUString jar =
-            Databases::getInstallPathAsURL()         +
-            get_language()                           +
-            rtl::OUString::createFromAscii( "/" )    +
-            get_module()                             +
-            rtl::OUString::createFromAscii( ".jar" );
+        if( IsRoot )
+            url =
+                Databases::getInstallPathAsURL()         +
+                rtl::OUString::createFromAscii( "custom.css" );
+        else
+        {
+            url = rtl::OUString::createFromAscii( "vnd.sun.star.pkg://" );
+
+            rtl::OUString jar =
+                Databases::getInstallPathAsURL()         +
+                get_language()                           +
+                rtl::OUString::createFromAscii( "/picture.jar" );
 
             url+= rtl::Uri::encode( jar,
                                     rtl_UriCharClassUricNoSlash,
@@ -411,21 +413,21 @@ void URLParameter::open( const Reference< XMultiServiceFactory >& rxSMgr,
                                     RTL_TEXTENCODING_UTF8 );
 
             url += ( rtl::OUString::createFromAscii( "/" ) + get_path() );
+        }
 
-            rtl::OUString service = rtl::OUString::createFromAscii( "com.sun.star.ucb.UniversalContentBroker" );
-            Reference< XContentProvider > provider( rxSMgr->createInstance( service ),UNO_QUERY );
-            Reference< XContentIdentifierFactory > factory( provider,UNO_QUERY );
-            Reference< XContentIdentifier > xIdentifier = factory->createContentIdentifier( url );
-            Reference< XContent > xContent = provider->queryContent( xIdentifier );
-            Reference< XCommandProcessor > processor( xContent,UNO_QUERY );
+        rtl::OUString service = rtl::OUString::createFromAscii( "com.sun.star.ucb.UniversalContentBroker" );
+        Reference< XContentProvider > provider( rxSMgr->createInstance( service ),UNO_QUERY );
+        Reference< XContentIdentifierFactory > factory( provider,UNO_QUERY );
+        Reference< XContentIdentifier > xIdentifier = factory->createContentIdentifier( url );
+        Reference< XContent > xContent = provider->queryContent( xIdentifier );
+        Reference< XCommandProcessor > processor( xContent,UNO_QUERY );
 
-            processor->execute( aCommand,
-                                CommandId,
-                                Environment );
+        processor->execute( aCommand,
+                            CommandId,
+                            Environment );
     }
     else
-    {
-        // Now plug in a new XInputStream
+    {   // a standard document, plug in the new input stream
         xDataSink->setInputStream( new InputStreamTransformer( rxSMgr,this ) );
     }
 }
@@ -629,7 +631,6 @@ struct UserData {
 
     InputStreamTransformer*             m_pTransformer;
     Reference< XMultiServiceFactory >   m_xSMgr;
-
 };
 
 
@@ -679,8 +680,7 @@ InputStreamTransformer::InputStreamTransformer( const Reference< XMultiServiceFa
         Databases::getInstallPathAsURL()         +
         urlParam->get_language()                 +
         rtl::OUString::createFromAscii( "/" )    +
-        urlParam->get_module()                   +
-        rtl::OUString::createFromAscii( ".jar" );
+        urlParam->get_jar();
 
     url+= rtl::Uri::encode( jar,
                             rtl_UriCharClassUricNoSlash,
@@ -724,7 +724,7 @@ InputStreamTransformer::InputStreamTransformer( const Reference< XMultiServiceFa
     parameter[ 8] = "Language";
     parameter[ 9] = parameterFunc( parameter[ 8],urlParam );
     parameter[10] = "System";
-    parameter[11] = parameterFunc( parameter[10],urlParam );
+    parameter[11] = "WIN";// parameterFunc( parameter[10],urlParam );
     parameter[12] = 0;
 
     SablotRunProcessor( p,
@@ -739,7 +739,8 @@ InputStreamTransformer::InputStreamTransformer( const Reference< XMultiServiceFa
     SablotDestroyProcessor( p );
     delete[] inputStr;
     for( int i = 1; i < 1+2*parCount; i+=2 )
-        delete[] const_cast<char*>(parameter[i]);
+        if( i != 11 )
+            delete[] const_cast<char*>(parameter[i]);
 }
 
 
@@ -868,6 +869,7 @@ void InputStreamTransformer::addToBuffer( const char* buffer_,int len_ )
     buffer = new char[ len+len_ ];
     rtl_copyMemory( (void*)(buffer),(void*)(tmp),sal_uInt32( len ) );
     rtl_copyMemory( (void*)(buffer+len),(void*)(buffer_),sal_uInt32( len_ ) );
+    delete tmp;
     len += len_;
 }
 
@@ -944,8 +946,7 @@ int schemehandlergetall( void *userData,
             Databases::getInstallPathAsURL()         +
             urlpar.get_language()                    +
             rtl::OUString::createFromAscii( "/" )    +
-            urlpar.get_module()                      +
-            rtl::OUString::createFromAscii( ".jar" );
+            urlpar.get_jar();
 
         url+= rtl::Uri::encode( jar,
                                 rtl_UriCharClassUricNoSlash,

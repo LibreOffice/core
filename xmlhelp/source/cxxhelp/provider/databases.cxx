@@ -2,9 +2,9 @@
  *
  *  $RCSfile: databases.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: abi $ $Date: 2001-05-22 14:57:11 $
+ *  last change: $Author: abi $ $Date: 2001-05-29 15:14:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,8 @@ void Databases::setInstallPath( const rtl::OUString& aInstDir )
 {
     osl::MutexGuard aGuard( m_aMutex );
 
+//      if( osl::FileBase::E_None != osl::FileBase::getFileURLFromSystemPath( aInstDir,m_aInstallDirectory ) )
+//          ;
 
     if( osl::FileBase::E_None != osl::FileBase::normalizePath( aInstDir,m_aInstallDirectory ) )
         ;
@@ -120,6 +122,9 @@ rtl::OUString Databases::getInstallPathAsSystemPath()
 
     if( ! m_aInstallDirectoryAsSystemPath.getLength() )
     {
+//          bool bla =
+//              osl::FileBase::E_None ==
+//              osl::FileBase::getSystemPathFromFileURL( m_aInstallDirectory,m_aInstallDirectoryAsSystemPath );
         bool bla =
             osl::FileBase::E_None ==
             osl::FileBase::getSystemPathFromNormalizedPath( m_aInstallDirectory,m_aInstallDirectoryAsSystemPath );
@@ -145,6 +150,7 @@ rtl::OUString Databases::getInstallPathAsURL()
     }
 
     return m_aInstallDirectoryAsURL;
+//      return m_aInstallDirectory;
 }
 
 
