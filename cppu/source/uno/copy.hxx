@@ -2,9 +2,9 @@
  *
  *  $RCSfile: copy.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 10:53:05 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 12:57:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -804,12 +804,7 @@ inline void _copyConstructData(
         break;
     case typelib_TypeClass_HYPER:
     case typelib_TypeClass_UNSIGNED_HYPER:
-#if defined(GCC) && defined(SPARC)
-        *(sal_Int32 *)pDest = *(sal_Int32 *)pSource;
-        *(((sal_Int32 *)pDest) +1) = *(((sal_Int32 *)pSource) +1);
-#else
         *(sal_Int64 *)pDest = *(sal_Int64 *)pSource;
-#endif
         break;
     case typelib_TypeClass_FLOAT:
         *(float *)pDest = *(float *)pSource;
