@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swslots.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-10-27 17:35:20 $
+ *  last change: $Author: kz $ $Date: 2000-11-09 12:49:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -521,7 +521,7 @@ SfxSlotInfo FN_CNTNT_TO_NEXT_FRAME
     SlotName[ japanese ] = "‚Μg‚Φ";
     SlotName[ chinese_simplified ] = "Χªµ½ΟΒÒ»ΈφΏς";
     SlotName[ chinese_traditional ] = "Βΰ¨μ¤U¤@­Σ®Ψ";
-    SlotName[ arabic ] = "Εαμ ΗαΕΨΗΡ ΗαΚΗαν";
+    SlotName[ arabic ] = "Εαμ ΗαίΗΟΡ ΗαΚΗαν";
     SlotName[ dutch ] = "Naar het volgende kader";
     SlotName[ chinese_simplified ] = "Χªµ½ΟΒÒ»ΈφΏς";
     SlotName[ greek ] = "Επόμενο πλαίσιο";
@@ -1769,7 +1769,7 @@ SfxSlotInfo FN_FORMAT_FRAME_DLG
     SlotName[ japanese ] = "g‚ΜΜίΫΚίΓ¨";
     SlotName[ chinese_simplified ] = "ΞΔ±ΎΏςΚτΠΤ";
     SlotName[ chinese_traditional ] = "¤ε¦r¤θ¶τΔέ©Κ";
-    SlotName[ arabic ] = "ΞΥΗΖΥ ΗαΕΨΗΡ";
+    SlotName[ arabic ] = "ΞΥΗΖΥ ΗαίΗΟΡ";
     SlotName[ dutch ] = "Kadereigenschappen";
     SlotName[ chinese_simplified ] = "ΞΔ±ΎΏςΚτΠΤ";
     SlotName[ greek ] = "Ιδιότητες πλαισίου";
@@ -3005,7 +3005,7 @@ SfxSlotInfo FN_INSERT_BOOKMARK
     SlotName [ english ] =  "Textmarke einfόgen";
     SlotName[ english_us ] = "Insert Bookmark";
     SlotName[ portuguese ] = "Inserir marcador de texto";
-    SlotName[ russian ] = "Βρςΰβθςό ηΰκλΰδκσ";
+    SlotName[ russian ] = "Βρςΰβθςό ςεκρςξβσώ οξμεςκσ";
     SlotName[ dutch ] = "Tekstmarkering invoegen";
     SlotName[ french ] = "Insιrer un repθre de texte";
     SlotName[ spanish ] = "Insertar marca";
@@ -3511,7 +3511,7 @@ SfxSlotInfo FN_INSERT_FRAME
     SlotName[ japanese ] = "g‚Μ‘}“ό";
     SlotName[ chinese_simplified ] = "²εΘλΏς";
     SlotName[ chinese_traditional ] = "΄΅¤J¤ε¦r¤θ¶τ";
-    SlotName[ arabic ] = "ΕΟΡΗΜ ΕΨΗΡ";
+    SlotName[ arabic ] = "ΕΟΡΗΜ ίΗΟΡ";
     SlotName[ dutch ] = "Kader invoegen";
     SlotName[ chinese_simplified ] = "²εΘλΏς";
     SlotName[ greek ] = "Εισαγωγή πλαισίου";
@@ -3530,7 +3530,7 @@ SfxSlotInfo FN_INSERT_FRAME_INTERACT_NOCOL
     SlotName[ dutch ] = "Eenkoloms kader handmatig invoegen";
     SlotName[ french ] = "Insertion manuelle d'un cadre ΰ une colonne";
     SlotName[ spanish ] = "Insertar manualmente marco de una columna";
-    SlotName[ italian ] = "Insert single column frame manually";
+    SlotName[ italian ] = "Inserisci manualmente frame a colonna singola";
     SlotName[ danish ] = "Indsζt enkelt-kolonne ramme manuelt";
     SlotName[ swedish ] = "Infoga ram med en kolumn manuellt";
     SlotName[ polish ] = "Wstaw rκcznie ramkκ z jednΉ kolumnΉ";
@@ -3540,7 +3540,7 @@ SfxSlotInfo FN_INSERT_FRAME_INTERACT_NOCOL
     SlotName[ chinese_simplified ] = "ΚΦΉ¤²εΘλµ¥ΐΈΚ½Ώς";
     SlotName[ chinese_traditional ] = "¤β¤u΄΅¤J³ζΔζ¤ε¦r®Ψ΅C";
     SlotName[ turkish ] = "Insert single column frame manually";
-    SlotName[ arabic ] = "ΕΟΡΗΜ ΕΨΗΡ γίζδ γδ ΪγζΟ ζΗΝΟ νΟζνΗπ";
+    SlotName[ arabic ] = "ΕΟΡΗΜ ίΗΟΡ νΚίζδ γδ ΪγζΟ ζΗΝΟ νΟζνΗπ";
 };
 SfxSlotInfo FN_INSERT_FRAME_INTERACT
 {
@@ -3560,7 +3560,7 @@ SfxSlotInfo FN_INSERT_FRAME_INTERACT
     SlotName[ japanese ] = "g‚πθ“®‚Ε‘}“ό";
     SlotName[ chinese_simplified ] = "ΚΦΉ¤²εΘλΏς";
     SlotName[ chinese_traditional ] = "΄΅¤J¤ε¦r¤θ¶τ";
-    SlotName[ arabic ] = "ΕΟΡΗΜ ΕΨΗΡ νΟζνΗπ";
+    SlotName[ arabic ] = "ΕΟΡΗΜ ίΗΟΡ νΟζνΗπ";
     SlotName[ dutch ] = "Kader handmatig invoegen";
     SlotName[ chinese_simplified ] = "ΚΦΉ¤²εΘλΏς";
     SlotName[ greek ] = "Χειροκίνητη εισαγωγή πλαισίου";
@@ -4048,12 +4048,12 @@ SfxSlotInfo FN_JAVAEDIT
     SlotName[ italian ] = "Inserisci script";
     SlotName[ danish ] = "Indsζt script";
     SlotName[ swedish ] = "Infoga skript";
-    SlotName[ polish ] = "Wstaw Script";
+    SlotName[ polish ] = "Wstaw skrypt";
     SlotName[ portuguese_brazilian ] = "InsertScript";
     SlotName[ japanese ] = "½ΈΨΜίΔ‚Μ‘}“ό";
     SlotName[ chinese_simplified ] = "²εΘλ½Ε±Ύ";
     SlotName[ chinese_traditional ] = "΄΅¤J©R¥O½Z";
-    SlotName[ arabic ] = "ΕΟΡΗΜ Script";
+    SlotName[ arabic ] = "ΕΟΡΗΜ  δΥ ΘΡγΜν";
     SlotName[ dutch ] = "Script invoegen";
     SlotName[ chinese_simplified ] = "²εΘλ½Ε±Ύ";
     SlotName[ greek ] = "Εισαγωγή δέσμης ενεργειών";
@@ -4325,7 +4325,7 @@ SfxSlotInfo FN_NEXT_BOOKMARK
     SlotName [ english ] =  "Zur nδchsten Textmarke";
     SlotName[ english_us ] = "To Next Bookmark";
     SlotName[ portuguese ] = "Marcador de texto seguinte";
-    SlotName[ russian ] = "Δξ ρλεδσώωει ηΰκλΰδκθ";
+    SlotName[ russian ] = "Δξ ρλεδσώωει ςεκρςξβξι οξμεςκθ";
     SlotName[ dutch ] = "Naar volgende tekstmarkering";
     SlotName[ french ] = "Aller au repθre de texte suivant";
     SlotName[ spanish ] = "Ir al marcador siguiente";
@@ -5495,7 +5495,7 @@ SfxSlotInfo FN_PREV_BOOKMARK
     SlotName [ english ] =  "Zur vorherigen Textmarke";
     SlotName[ english_us ] = "To Previous Bookmark";
     SlotName[ portuguese ] = "Ir para marcador de texto anterior";
-    SlotName[ russian ] = "Δξ οπεδϋδσωει ηΰκλΰδκθ";
+    SlotName[ russian ] = "Δξ οπεδϋδσωει ςεκρςξβξι οξμεςκθ";
     SlotName[ dutch ] = "Naar vorige tekstmarkering";
     SlotName[ french ] = "Aller au repθre de texte prιcιdent";
     SlotName[ spanish ] = "Ir al marcador anterior";
@@ -7109,7 +7109,7 @@ SfxSlotInfo FN_TABLE_AUTOSUM
     SlotName[ dutch ] = "Som";
     SlotName[ french ] = "Somme";
     SlotName[ spanish ] = "Suma";
-    SlotName[ italian ] = "Sum";
+    SlotName[ italian ] = "Somma";
     SlotName[ danish ] = "Sum";
     SlotName[ swedish ] = "Summa";
     SlotName[ polish ] = "Suma";
@@ -7919,7 +7919,7 @@ SfxSlotInfo FN_TOOL_ANKER_FRAME
     SlotName[ japanese ] = "g‚Ι±έ¶°‚·‚ι";
     SlotName[ chinese_simplified ] = "Λψ¶¨ΤΪΏςΙΟ";
     SlotName[ chinese_traditional ] = "¦b®Ψ¤W§@ΌΠΈΉ";
-    SlotName[ arabic ] = "ΕΡΣΗΑ Ϊαμ ΗαΕΨΗΡ";
+    SlotName[ arabic ] = "ΕΡΣΗΑ Ϊαμ ΗαίΗΟΡ";
     SlotName[ dutch ] = "Aan kader verankeren";
     SlotName[ chinese_simplified ] = "Λψ¶¨ΤΪΏςΙΟ";
     SlotName[ greek ] = "Αγκύρωση στο πλαίσιο";
@@ -8101,7 +8101,7 @@ SfxSlotInfo FN_TOOL_VMIRROR
     SlotName[ japanese ] = "¶‰E”½“]";
     SlotName[ chinese_simplified ] = "΄ΉΦ±·½Ος·΄Σ³";
     SlotName[ chinese_traditional ] = "««ª½¤Ο¬M";
-    SlotName[ arabic ] = "ΗαΗδΪίΗΣ ΡΓΣνΗπ";
+    SlotName[ arabic ] = "ΗδΪίΗΣ ΡΓΣν";
     SlotName[ dutch ] = "Verticaal spiegelen";
     SlotName[ chinese_simplified ] = "΄ΉΦ±·½Ος·΄Σ³";
     SlotName[ greek ] = "Αναστροφή κατακόρυφα";
@@ -8805,7 +8805,7 @@ SfxSlotInfo FN_INSERT_AUTH_ENTRY_DLG
     SlotName[ english_us ] = "Insert Bibliography Entry";
     SlotName[ portuguese ] = "Inserir entrada bibliogrαfica";
     SlotName[ russian ] = "Βρςΰβθςό ύλεμενς ροθρκΰ λθςεπΰςσπϋ";
-    SlotName[ greek ] = "Προσθήκη εγγραφής βιβλιογραφίας";
+    SlotName[ greek ] = "Εισαγωγή καταχώρισης βιβλιογραφίας";
     SlotName[ dutch ] = "Item voor literatuurlijst invoegen";
     SlotName[ french ] = "Insιrer une entrιe de bibliographie";
     SlotName[ spanish ] = "Insertar entrada de bibliografνa";
@@ -8830,7 +8830,7 @@ SfxSlotInfo FN_EDIT_AUTH_ENTRY_DLG
     SlotName[ english_us ] = "Edit Bibliography Entry";
     SlotName[ portuguese ] = "Editar entrada bibliogrαfica";
     SlotName[ russian ] = "Οπΰβκΰ ύλεμενςΰ ροθρκΰ λθςεπΰςσπϋ";
-    SlotName[ greek ] = "Επεξεργασία εγγραφής βιβλιογραφίας";
+    SlotName[ greek ] = "Επεξεργασία καταχώρισης βιβλιογραφίας";
     SlotName[ dutch ] = "Item voor literatuurlijst bewerken";
     SlotName[ french ] = "Ιditer une entrιe de bibliographie";
     SlotName[ spanish ] = "Editar entrada de bibliografνa";
