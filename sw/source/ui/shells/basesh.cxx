@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basesh.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mtg $ $Date: 2001-06-26 11:42:49 $
+ *  last change: $Author: jp $ $Date: 2001-07-04 18:12:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -350,9 +350,12 @@ TYPEINIT1(SwBaseShell,SfxShell)
  --------------------------------------------------------------------*/
 
 
-void lcl_UpdateIMapDlg(SwWrtShell& rSh)
+void lcl_UpdateIMapDlg( SwWrtShell& rSh )
 {
-    Graphic aGrf(rSh.GetIMapGraphic());
+    Graphic aGrf( rSh.GetIMapGraphic() );
+    USHORT nGrfType = aGrf.GetType();
+    void* pEditObj = GRAPHIC_NONE != nGrfType && GRAPHIC_DEFAULT != nGrfType
+                        ? rSh.GetIMapInventor() : 0;
     TargetList* pList = new TargetList;
     rSh.GetView().GetViewFrame()->GetTopFrame()->GetTargetList(*pList);
 
@@ -360,7 +363,7 @@ void lcl_UpdateIMapDlg(SwWrtShell& rSh)
     rSh.GetFlyFrmAttr( aSet );
     const SwFmtURL &rURL = (SwFmtURL&)aSet.Get( RES_URL );
     SvxIMapDlgChildWindow::UpdateIMapDlg(
-            aGrf, rURL.GetMap(), pList, rSh.GetIMapInventor() );
+            aGrf, rURL.GetMap(), pList, pEditObj );
 
     USHORT nCount = (USHORT)pList->Count();
     if(nCount)
@@ -375,7 +378,8 @@ void lcl_UpdateIMapDlg(SwWrtShell& rSh)
 BOOL lcl_UpdateContourDlg( SwWrtShell &rSh, int nSel )
 {
     Graphic aGraf( rSh.GetIMapGraphic() );
-    BOOL bRet = GRAPHIC_NONE != aGraf.GetType();
+    USHORT nGrfType = aGraf.GetType();
+    BOOL bRet = GRAPHIC_NONE != nGrfType && GRAPHIC_DEFAULT != nGrfType;
     if( bRet )
     {
         String aGrfName;
@@ -977,7 +981,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
             pVFrame->GetBindings().Invalidate( SID_IMAP );
 
             if ( pVFrame->HasChildWindow( nId ) && rSh.IsFrmSelected() )
-                lcl_UpdateIMapDlg(rSh);
+                lcl_UpdateIMapDlg( rSh );
         }
         break;
         case SID_IMAP_EXEC:
@@ -1286,7 +1290,7 @@ IMPL_LINK(SwBaseShell, GraphicArrivedHdl, SwCrsrShell* , pCrShell )
 
                     if( pDlg && ( SID_IMAP_EXEC == nSlot ||
                                 ( SID_IMAP == nSlot && !bProtect)) &&
-                        pDlg->GetEditingObject() != rSh.GetIMapInventor() )
+                        pDlg->GetEditingObject() != rSh.GetIMapInventor())
                             lcl_UpdateIMapDlg( rSh );
 
                     if( !bProtect && SID_IMAP == nSlot )
@@ -1446,7 +1450,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                     {
                         SfxBoolItem aBool(nWhich, bHas);
                         if ( bHas && bFrmSel )
-                            lcl_UpdateIMapDlg(rSh);
+                            lcl_UpdateIMapDlg( rSh );
                         rSet.Put(aBool);
                     }
                 }
@@ -1470,7 +1474,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                     {
                         SvxIMapDlg *pDlg = SWIMAPDLG(GetView());
                         if( pDlg->GetEditingObject() != rSh.GetIMapInventor() )
-                            lcl_UpdateIMapDlg(rSh);
+                            lcl_UpdateIMapDlg( rSh );
                     }
                 }
                 rSet.Put(SfxBoolItem(nWhich, bDisable));
