@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numitem.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mt $ $Date: 2001-03-22 14:59:59 $
+ *  last change: $Author: os $ $Date: 2001-07-02 14:25:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,25 +224,11 @@ SvxNumberFormat::SvxNumberFormat(sal_Int16 eType) :
  *
  * --------------------------------------------------*/
 SvxNumberFormat::SvxNumberFormat(const SvxNumberFormat& rFormat) :
-    SvxNumberType(rFormat)
+    SvxNumberType(rFormat),
+    pGraphicBrush(0),
+    pBulletFont(0)
 {
-    eNumAdjust          = rFormat.eNumAdjust;
-    nInclUpperLevels    = rFormat.nInclUpperLevels;
-    nStart              = rFormat.nStart;
-    cBullet             = rFormat.cBullet;
-    nFirstLineOffset    = rFormat.nFirstLineOffset;
-    nAbsLSpace          = rFormat.nAbsLSpace;
-    nLSpace             = rFormat.nLSpace;
-    nCharTextDistance   = rFormat.nCharTextDistance;
-    sPrefix             = rFormat.sPrefix;
-    sSuffix             = rFormat.sSuffix;
-    sCharStyleName      = rFormat.sCharStyleName;
-    pGraphicBrush       = rFormat.pGraphicBrush ? new SvxBrushItem(*rFormat.pGraphicBrush) : 0;
-    eVertOrient         = rFormat.eVertOrient;
-    pBulletFont         = rFormat.pBulletFont  ? new Font(*rFormat.pBulletFont) : 0;
-    aGraphicSize        = rFormat.aGraphicSize;
-    nBulletColor        = rFormat.nBulletColor;
-    nBulletRelSize      = rFormat.nBulletRelSize;
+    *this = rFormat;
 }
 /* -----------------27.10.98 10:56-------------------
  *
@@ -398,7 +384,10 @@ SvxNumberFormat& SvxNumberFormat::operator=( const SvxNumberFormat& rFormat )
         sCharStyleName      = rFormat.sCharStyleName;
     DELETEZ(pGraphicBrush);
     if(rFormat.pGraphicBrush)
+    {
         pGraphicBrush = new SvxBrushItem(*rFormat.pGraphicBrush);
+        pGraphicBrush->SetDoneLink( STATIC_LINK( this, SvxNumberFormat, GraphicArrived) );
+    }
     DELETEZ(pBulletFont);
     if(rFormat.pBulletFont)
             pBulletFont = new Font(*rFormat.pBulletFont);
@@ -453,7 +442,8 @@ void SvxNumberFormat::SetGraphicBrush( const SvxBrushItem* pBrushItem,
     {
         delete pGraphicBrush;
         pGraphicBrush =  (SvxBrushItem*)pBrushItem->Clone();
-    }
+        pGraphicBrush->SetDoneLink( STATIC_LINK( this, SvxNumberFormat, GraphicArrived) );
+   }
 
     if(pOrient)
         eVertOrient = *pOrient;
@@ -519,8 +509,16 @@ IMPL_STATIC_LINK( SvxNumberFormat, GraphicArrived, void *, EMPTYARG )
         if( pGrf )
             pThis->aGraphicSize = SvxNumberFormat::GetGraphicSizeMM100( pGrf );
     }
+    pThis->NotifyGraphicArrived();
     return 0;
 }
+/* -----------------------------02.07.01 15:36--------------------------------
+
+ ---------------------------------------------------------------------------*/
+void SvxNumberFormat::NotifyGraphicArrived()
+{
+}
+
 /* -----------------28.10.98 10:38-------------------
  *
  * --------------------------------------------------*/
