@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-09 11:49:58 $
+ *  last change: $Author: nn $ $Date: 2000-11-25 12:21:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -321,9 +321,17 @@ BOOL ScGlobal::CheckWidthInvalidate( BOOL& bNumFormatChanged,
     return ( bNumFormatChanged
         || HasAttrChanged( rNewAttrs, rOldAttrs, ATTR_LANGUAGE_FORMAT )
         || HasAttrChanged( rNewAttrs, rOldAttrs, ATTR_FONT )
+        || HasAttrChanged( rNewAttrs, rOldAttrs, ATTR_CJK_FONT )
+        || HasAttrChanged( rNewAttrs, rOldAttrs, ATTR_CTL_FONT )
         || HasAttrChanged( rNewAttrs, rOldAttrs, ATTR_FONT_HEIGHT )
+        || HasAttrChanged( rNewAttrs, rOldAttrs, ATTR_CJK_FONT_HEIGHT )
+        || HasAttrChanged( rNewAttrs, rOldAttrs, ATTR_CTL_FONT_HEIGHT )
         || HasAttrChanged( rNewAttrs, rOldAttrs, ATTR_FONT_WEIGHT )
+        || HasAttrChanged( rNewAttrs, rOldAttrs, ATTR_CJK_FONT_WEIGHT )
+        || HasAttrChanged( rNewAttrs, rOldAttrs, ATTR_CTL_FONT_WEIGHT )
         || HasAttrChanged( rNewAttrs, rOldAttrs, ATTR_FONT_POSTURE )
+        || HasAttrChanged( rNewAttrs, rOldAttrs, ATTR_CJK_FONT_POSTURE )
+        || HasAttrChanged( rNewAttrs, rOldAttrs, ATTR_CTL_FONT_POSTURE )
         || HasAttrChanged( rNewAttrs, rOldAttrs, ATTR_FONT_UNDERLINE )
         || HasAttrChanged( rNewAttrs, rOldAttrs, ATTR_FONT_CROSSEDOUT )
         || HasAttrChanged( rNewAttrs, rOldAttrs, ATTR_FONT_CONTOUR )
