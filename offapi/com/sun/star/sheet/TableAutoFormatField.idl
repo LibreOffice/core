@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableAutoFormatField.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sab $ $Date: 2002-10-21 11:36:23 $
+ *  last change: $Author: sab $ $Date: 2002-10-21 11:39:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,10 @@
 
 #ifndef __com_sun_star_table_CellOrientation_idl__
 #include <com/sun/star/table/CellOrientation.idl>
+#endif
+
+#ifndef __com_sun_star_table_TableBorder_idl__
+#include <com/sun/star/table/TableBorder.idl>
 #endif
 
 //=============================================================================
