@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 16:29:57 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 15:41:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1544,18 +1544,16 @@ XclCf::XclCf( const XclExpRoot& rRoot, const ScCondFormatEntry& r ) :
         {
             Font aFont;
             ScPatternAttr::GetFont( aFont, rSet, SC_AUTOCOL_RAW );
+            XclFontData aFontData( aFont );
 
-            BOOL bItalic    = ( bHasItalic && aFont.GetItalic() != ITALIC_NONE );
-            BOOL bStrikeOut = ( bHasStrikeOut && aFont.GetStrikeout() != STRIKEOUT_NONE );
-
-            nFontData1 = bItalic ? 0x00000002 : 0;
-            nFontData1 |= bStrikeOut ? 0x00000080 : 0;
+            nFontData1 = (bHasItalic && aFontData.mbItalic) ? 0x00000002 : 0;
+            nFontData1 |= (bHasStrikeOut && aFontData.mbStrikeout) ? 0x00000080 : 0;
 
             if( bHasWeight )
-                nFontData2 = XclExpFont::GetXclWeight( aFont.GetWeight() );
+                nFontData2 = aFontData.mnWeight;
             else
                 nFontData2 = bHasItalic ? 0x00000400 : 0;
-            nFontData3 = bHasUnderline ? XclExpFont::GetXclUnderline( aFont.GetUnderline() ) : 0;
+            nFontData3 = bHasUnderline ? static_cast< sal_uInt32 >( aFontData.meUnderline ) : 0;
 
             if( bHasColor )
                 nIcvTextSer = GetPalette().InsertColor( aFont.GetColor(), xlColorCellText );
