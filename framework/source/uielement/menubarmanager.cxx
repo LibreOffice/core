@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menubarmanager.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 14:56:05 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 12:54:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,6 +165,9 @@
 #endif
 #ifndef _DRAFTS_COM_SUN_STAR_UI_XUICONFIGURATIONMANAGERSUPPLIER_HPP_
 #include <drafts/com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_STATUS_VISIBILITY_HPP_
+#include <com/sun/star/frame/status/Visibility.hpp>
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -827,54 +830,62 @@ throw ( RuntimeException )
         {
             ResetableGuard aGuard( m_aLock );
 
-            sal_Bool bSetCheckmark      = sal_False;
-            sal_Bool bCheckmark         = sal_False;
-            sal_Bool bMenuItemEnabled   = m_pVCLMenu->IsItemEnabled( pStatusChangedMenu->nItemId );
+            sal_Bool            bCheckmark( sal_False );
+            sal_Bool            bMenuItemEnabled( m_pVCLMenu->IsItemEnabled( pStatusChangedMenu->nItemId ));
+            rtl::OUString       aItemText;
+            status::Visibility  aVisibilityStatus;
+
+            if ( aFeatureURL.equalsAscii( ".uno:ChangeCaseToHalfWidth" ))
+            {
+                int a = 1;
+            }
 
             // Enable/disable item
             if ( Event.IsEnabled != bMenuItemEnabled )
                 m_pVCLMenu->EnableItem( pStatusChangedMenu->nItemId, Event.IsEnabled );
 
-            // Checkmark
             if ( Event.State >>= bCheckmark )
-                bSetCheckmark = sal_True;
-
-            if ( bSetCheckmark )
-                m_pVCLMenu->CheckItem( pStatusChangedMenu->nItemId, bCheckmark );
-            else
             {
-                rtl::OUString aItemText;
-
-                if ( Event.State >>= aItemText )
-                {
-                    // Replacement for place holders
-                    if ( aItemText.matchAsciiL( "($1)", 4 ))
-                    {
-                        String aResStr = String( FwkResId( STR_UPDATEDOC ));
-                        rtl::OUString aTmp( aResStr );
-                        aTmp += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " " ));
-                        aTmp += aItemText.copy( 4 );
-                        aItemText = aTmp;
-                    }
-                    else if ( aItemText.matchAsciiL( "($2)", 4 ))
-                    {
-                        String aResStr = String( FwkResId( STR_CLOSEDOC_ANDRETURN ));
-                        rtl::OUString aTmp( aResStr );
-                        aTmp += aItemText.copy( 4 );
-                        aItemText = aTmp;
-                    }
-                    else if ( aItemText.matchAsciiL( "($3)", 4 ))
-                    {
-                        String aResStr = String( FwkResId( STR_SAVECOPYDOC ));
-                        rtl::OUString aTmp( aResStr );
-                        aTmp += aItemText.copy( 4 );
-                        aItemText = aTmp;
-                    }
-
-                    m_pVCLMenu->SetItemText( pStatusChangedMenu->nItemId, aItemText );
-                }
+                // Checkmark
+                m_pVCLMenu->ShowItem( pStatusChangedMenu->nItemId, TRUE );
+                m_pVCLMenu->CheckItem( pStatusChangedMenu->nItemId, bCheckmark );
             }
+            else if ( Event.State >>= aItemText )
+            {
+                // Replacement for place holders
+                if ( aItemText.matchAsciiL( "($1)", 4 ))
+                {
+                    String aResStr = String( FwkResId( STR_UPDATEDOC ));
+                    rtl::OUString aTmp( aResStr );
+                    aTmp += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " " ));
+                    aTmp += aItemText.copy( 4 );
+                    aItemText = aTmp;
+                }
+                else if ( aItemText.matchAsciiL( "($2)", 4 ))
+                {
+                    String aResStr = String( FwkResId( STR_CLOSEDOC_ANDRETURN ));
+                    rtl::OUString aTmp( aResStr );
+                    aTmp += aItemText.copy( 4 );
+                    aItemText = aTmp;
+                }
+                else if ( aItemText.matchAsciiL( "($3)", 4 ))
+                {
+                    String aResStr = String( FwkResId( STR_SAVECOPYDOC ));
+                    rtl::OUString aTmp( aResStr );
+                    aTmp += aItemText.copy( 4 );
+                    aItemText = aTmp;
+                }
 
+                m_pVCLMenu->ShowItem( pStatusChangedMenu->nItemId, TRUE );
+                m_pVCLMenu->SetItemText( pStatusChangedMenu->nItemId, aItemText );
+            }
+            else if ( Event.State >>= aVisibilityStatus )
+            {
+                // Visibility
+                m_pVCLMenu->ShowItem( pStatusChangedMenu->nItemId, aVisibilityStatus.bVisible );
+            }
+            else
+                m_pVCLMenu->ShowItem( pStatusChangedMenu->nItemId, TRUE );
         }
 
         if ( Event.Requery )
