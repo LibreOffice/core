@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SpreadsheetDrawPage.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:56:08 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 10:10:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,8 +82,6 @@
 /** This abstract service is implemented by every page of a
     <type>SpreadsheetDocument</type>.
 
-
-
     @example create and insert a couple of <type scope="com::sun::star::drawing">LineShape</type>s:
 
     <listing>
@@ -97,6 +95,8 @@
     xPage.add( xShape )
     next x%
     </listing>
+
+    @since #107627#
  */
 service SpreadsheetDrawPage
 {
