@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfldi.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:16:53 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 15:59:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -299,6 +299,8 @@ const sal_Char sAPI_bibliography[]              = "Bibliography";
 const sal_Char sAPI_annotation[]                = "Annotation";
 const sal_Char sAPI_script[]                    = "Script";
 const sal_Char sAPI_measure[]                   = "Measure";
+const sal_Char sAPI_drop_down[]                 = "DropDown";
+
 
 // property names
 const sal_Char sAPI_is_fixed[]          = "IsFixed";
@@ -810,6 +812,10 @@ XMLTextFieldImportContext::CreateTextFieldImportContext(
         case XML_TOK_TEXT_TABLE_FORMULA:
             pContext = new XMLTableFormulaImportContext( rImport, rHlp,
                                                          nPrefix, rName );
+            break;
+        case XML_TOK_TEXT_DROPDOWN:
+            pContext = new XMLDropDownFieldImportContext( rImport, rHlp,
+                                                          nPrefix, rName );
             break;
 
         default:
@@ -3314,7 +3320,7 @@ void XMLDdeFieldDeclImportContext::StartElement(
                 }
                 // else: ignore
             }
-            catch (Exception & aException)
+            catch ( const Exception& )
             {
                 //ignore
             }
@@ -3960,4 +3966,125 @@ void XMLMeasureFieldImportContext::PrepareField(
     Any aAny;
     aAny <<= mnKind;
     xPropertySet->setPropertyValue(OUString::createFromAscii("Kind"), aAny);
+}
+
+
+
+//
+// dropdown field
+//
+
+
+TYPEINIT1( XMLDropDownFieldImportContext, XMLTextFieldImportContext );
+
+XMLDropDownFieldImportContext::XMLDropDownFieldImportContext(
+        SvXMLImport& rImport,
+        XMLTextImportHelper& rHlp,
+        sal_uInt16 nPrfx,
+        const ::rtl::OUString& sLocalName) :
+    XMLTextFieldImportContext( rImport, rHlp, sAPI_drop_down,
+                               nPrfx, sLocalName ),
+    aLabels(),
+    sName(),
+    nSelected( -1 ),
+    bNameOK( false ),
+    sPropertyItems( RTL_CONSTASCII_USTRINGPARAM( "Items" ) ),
+    sPropertySelectedItem( RTL_CONSTASCII_USTRINGPARAM( "SelectedItem" ) ),
+    sPropertyName( RTL_CONSTASCII_USTRINGPARAM( "Name" ) )
+{
+    bValid = sal_True;
+}
+
+bool lcl_ProcessLabel( const SvXMLImport& rImport,
+                       const Reference<XAttributeList>& xAttrList,
+                       OUString& rLabel,
+                       bool& rIsSelected )
+{
+    bool bValid = false;
+    sal_Int16 nLength = xAttrList->getLength();
+    for( sal_Int16 n = 0; n < nLength; n++ )
+    {
+        OUString sLocalName;
+        sal_uInt16 nPrefix = rImport.GetNamespaceMap().
+            GetKeyByAttrName( xAttrList->getNameByIndex(n), &sLocalName );
+        OUString sValue = xAttrList->getValueByIndex(n);
+
+        if( nPrefix == XML_NAMESPACE_TEXT )
+        {
+            if( IsXMLToken( sLocalName, XML_VALUE ) )
+            {
+                rLabel = sValue;
+                bValid = true;
+            }
+            else if( IsXMLToken( sLocalName, XML_CURRENT_SELECTED ) )
+            {
+                sal_Bool bTmp;
+                if( SvXMLUnitConverter::convertBool( bTmp, sValue ) )
+                    rIsSelected = bTmp;
+            }
+        }
+    }
+    return bValid;
+}
+
+SvXMLImportContext* XMLDropDownFieldImportContext::CreateChildContext(
+    USHORT nPrefix,
+    const OUString& rLocalName,
+    const Reference<XAttributeList>& xAttrList )
+{
+    if( nPrefix == XML_NAMESPACE_TEXT  &&
+        IsXMLToken( rLocalName, XML_LABEL ) )
+    {
+        OUString sLabel;
+        bool bIsSelected;
+        if( lcl_ProcessLabel( GetImport(), xAttrList, sLabel, bIsSelected ) )
+        {
+            if( bIsSelected )
+                nSelected = static_cast<sal_Int32>( aLabels.size() );
+            aLabels.push_back( sLabel );
+        }
+    }
+    return new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
+}
+
+void XMLDropDownFieldImportContext::ProcessAttribute(
+    sal_uInt16 nAttrToken,
+    const ::rtl::OUString& sAttrValue )
+{
+    if( nAttrToken == XML_TOK_TEXTFIELD_NAME )
+    {
+        sName = sAttrValue;
+        bNameOK = true;
+    }
+}
+
+
+void XMLDropDownFieldImportContext::PrepareField(
+    const Reference<XPropertySet>& xPropertySet)
+{
+    // create sequence
+    sal_Int32 nLength = static_cast<sal_Int32>( aLabels.size() );
+    Sequence<OUString> aSequence( nLength );
+    OUString* pSequence = aSequence.getArray();
+    for( sal_Int32 n = 0; n < nLength; n++ )
+        pSequence[n] = aLabels[n];
+
+    // now set values:
+    Any aAny;
+
+    aAny <<= aSequence;
+    xPropertySet->setPropertyValue( sPropertyItems, aAny );
+
+    if( nSelected >= 0  &&  nSelected < nLength )
+    {
+        aAny <<= pSequence[nSelected];
+        xPropertySet->setPropertyValue( sPropertySelectedItem, aAny );
+    }
+
+    // set name
+    if( bNameOK )
+    {
+        aAny <<= sName;
+        xPropertySet->setPropertyValue( sPropertyName, aAny );
+    }
 }
