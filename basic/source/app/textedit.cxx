@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textedit.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: gh $ $Date: 2001-10-09 10:29:45 $
+ *  last change: $Author: gh $ $Date: 2001-11-07 10:38:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -844,7 +844,7 @@ DBG_CHKTHIS(TextEdit,0);
         while( !aStrm.IsEof() && bOk )
         {
             aStrm.ReadByteStringLine( aLine, aFileEncoding );
-            if ( bIsFirstLine && aLine.EqualsAscii( TT_SIGNATURE_FOR_UNICODE_TEXTFILES ) )
+            if ( bIsFirstLine && IsTTSignatureForUnicodeTextfile( aLine ) )
             {
                 aFileEncoding = RTL_TEXTENCODING_UTF8;
                 bFileWasUTF8 = TRUE;

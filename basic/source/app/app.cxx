@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: gh $ $Date: 2001-10-16 14:20:21 $
+ *  last change: $Author: gh $ $Date: 2001-11-07 10:38:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -237,6 +237,19 @@ BOOL TTUniqueId::IsStrId( UIdType aUIdType )
 BOOL TTUniqueId::IsStrId() const
 {
     return IsStrId( aUIdType );
+}
+
+
+// #94145# Due to a tab in TT_SIGNATURE_FOR_UNICODE_TEXTFILES which is changed to blanks by some editors
+// this routine became necessary
+BOOL IsTTSignatureForUnicodeTextfile( String aLine )
+{
+    aLine.SearchAndReplace( '\t', ' ' );
+    String ThreeBlanks = CUniString("   ");
+    String TwoBlanks = CUniString("  ");
+    while ( aLine.SearchAndReplace( ThreeBlanks, TwoBlanks ) != STRING_NOTFOUND )
+    {}
+    return aLine.EqualsAscii( TT_SIGNATURE_FOR_UNICODE_TEXTFILES );
 }
 
 BasicApp aBasicApp;                     // Applikations-Instanz
