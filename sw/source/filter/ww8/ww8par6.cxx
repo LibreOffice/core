@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: cmc $ $Date: 2001-05-04 09:19:37 $
+ *  last change: $Author: cmc $ $Date: 2001-05-10 13:13:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4046,8 +4046,10 @@ void SwWW8ImplReader::Read_Emphasis( USHORT, BYTE* pData, short nLen )
                 (nLang == LANGUAGE_CHINESE_TRADITIONAL) ||
                 (nLang == LANGUAGE_KOREAN))
                 nVal = EMPHASISMARK_CIRCLE_ABOVE;
-            else
+            else if (nLang == LANGUAGE_JAPANESE)
                 nVal = EMPHASISMARK_SIDE_DOTS;
+            else
+                nVal = EMPHASISMARK_DOTS_BELOW;
             break;
         case 3:
             nVal = EMPHASISMARK_CIRCLE_ABOVE;
@@ -5134,12 +5136,15 @@ short SwWW8ImplReader::ImportSprm( BYTE* pPos, short nSprmsLen, USHORT nId )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par6.cxx,v 1.27 2001-05-04 09:19:37 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par6.cxx,v 1.28 2001-05-10 13:13:03 cmc Exp $
 
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.27  2001/05/04 09:19:37  cmc
+      ##766## chinese emphasis mark is comma not dot
+
       Revision 1.26  2001/04/30 08:52:17  cmc
       ##766## Emphasis mark import needs to consider CJK language to determine correct mark displayed
 
