@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-26 14:16:36 $
+ *  last change: $Author: sab $ $Date: 2001-07-27 13:18:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,6 +141,10 @@ SO2_DECL_REF(SvStorageStream)
 #include "scextopt.hxx"
 
 #include "docsh.hxx"
+
+#ifndef _RTL_LOGFILE_HXX_
+#include <rtl/logfile.hxx>
+#endif
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -511,6 +515,8 @@ BOOL ScDocShell::SaveCalc( SvStorage* pStor )           // Calc 3, 4 or 5 file
 
 BOOL ScDocShell::LoadXML( SfxMedium* pMedium, SvStorage* pStor )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "calc: (sab) ScDocShell::LoadXML" );
+
     // prevent unnecessary broadcasts and updates
     ScDocShellModificator aModificator( *this );
 
@@ -556,6 +562,8 @@ BOOL ScDocShell::LoadXML( SfxMedium* pMedium, SvStorage* pStor )
 
 BOOL ScDocShell::SaveXML( SfxMedium* pMedium, SvStorage* pStor )
 {
+    RTL_LOGFILE_CONTEXT( aLog, "calc: (sab) ScDocShell::SaveXML" );
+
     ScXMLImportWrapper aImport( aDocument, pMedium, pStor );
     sal_Bool bRet(sal_False);
     if (eShellMode != SFX_CREATE_MODE_ORGANIZER)

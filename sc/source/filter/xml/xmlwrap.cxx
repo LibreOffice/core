@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlwrap.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-26 14:09:26 $
+ *  last change: $Author: sab $ $Date: 2001-07-27 13:20:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,9 @@
 
 #ifndef _XMLEOHLP_HXX
 #include <svx/xmleohlp.hxx>
+#endif
+#ifndef _RTL_LOGFILE_HXX_
+#include <rtl/logfile.hxx>
 #endif
 
 #include "document.hxx"
@@ -327,6 +330,8 @@ sal_Bool ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiServ
 
 sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly)
 {
+    RTL_LOGFILE_CONTEXT( aLog, "calc: (sab) ScXMLImportWrapper::Import" );
+
     uno::Reference<lang::XMultiServiceFactory> xServiceFactory =
                                         comphelper::getProcessServiceFactory();
     DBG_ASSERT( xServiceFactory.is(), "got no service manager" );
@@ -378,10 +383,14 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly)
         {
             uno::Sequence<uno::Any> aMetaArgs(0);
 
+            RTL_LOGFILE_CONTEXT_TRACE( aLog, "meta import start" );
+
             sal_Bool bMetaRetval = ImportFromComponent(xServiceFactory, xModel, xXMLParser, aParserInput,
                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Calc.XMLMetaImporter")),
                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("meta.xml")),
                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Meta.xml")), aMetaArgs);
+
+            RTL_LOGFILE_CONTEXT_TRACE( aLog, "meta import end" );
         }
 
         SvXMLGraphicHelper* pGraphicHelper = NULL;
@@ -409,19 +418,30 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly)
         pStylesArgs[2] <<= xObjectResolver;
         pStylesArgs[3] <<= xInfoSet;
 
-        sal_Bool bStylesRetval = ImportFromComponent(xServiceFactory, xModel, xXMLParser, aParserInput,
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Calc.XMLStylesImporter")),
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("styles.xml")),
-            sEmpty, aStylesArgs);
+        sal_Bool bStylesRetval(sal_False);
+        {
+            RTL_LOGFILE_CONTEXT_TRACE( aLog, "styles import start" );
+
+            bStylesRetval = ImportFromComponent(xServiceFactory, xModel, xXMLParser, aParserInput,
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Calc.XMLStylesImporter")),
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("styles.xml")),
+                sEmpty, aStylesArgs);
+
+            RTL_LOGFILE_CONTEXT_TRACE( aLog, "styles import end" );
+        }
 
         if (!bStylesOnly)
         {
             uno::Sequence<uno::Any> aSettingsArgs(0);
 
+            RTL_LOGFILE_CONTEXT_TRACE( aLog, "settings import start" );
+
             sal_Bool bSettingsRetval = ImportFromComponent(xServiceFactory, xModel, xXMLParser, aParserInput,
                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Calc.XMLSettingsImporter")),
                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("settings.xml")),
                 sEmpty, aSettingsArgs);
+
+            RTL_LOGFILE_CONTEXT_TRACE( aLog, "settings import end" );
         }
 
         sal_Bool bDocRetval(sal_False);
@@ -434,10 +454,14 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly)
             pDocArgs[2] <<= xObjectResolver;
             pDocArgs[3] <<= xInfoSet;
 
+            RTL_LOGFILE_CONTEXT_TRACE( aLog, "content import start" );
+
             bDocRetval = ImportFromComponent(xServiceFactory, xModel, xXMLParser, aParserInput,
                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Calc.XMLContentImporter")),
                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("content.xml")),
                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Content.xml")), aDocArgs);
+
+            RTL_LOGFILE_CONTEXT_TRACE( aLog, "content import end" );
         }
         if( pGraphicHelper )
             SvXMLGraphicHelper::Destroy( pGraphicHelper );
@@ -516,6 +540,8 @@ sal_Bool ScXMLImportWrapper::ExportToComponent(uno::Reference<lang::XMultiServic
 
 sal_Bool ScXMLImportWrapper::Export(sal_Bool bStylesOnly)
 {
+    RTL_LOGFILE_CONTEXT( aLog, "calc: (sab) ScXMLImportWrapper::Export" );
+
     uno::Reference<lang::XMultiServiceFactory> xServiceFactory =
                                         comphelper::getProcessServiceFactory();
     DBG_ASSERT( xServiceFactory.is(), "got no service manager" );
@@ -582,10 +608,15 @@ sal_Bool ScXMLImportWrapper::Export(sal_Bool bStylesOnly)
             pMetaArgs[0] <<= xHandler;
             pMetaArgs[1] <<= xStatusIndicator;
             pMetaArgs[2] <<= xInfoSet;
+
+            RTL_LOGFILE_CONTEXT_TRACE( aLog, "meta export start" );
+
             bMetaRet = ExportToComponent(xServiceFactory, xModel, xWriter, aDescriptor,
                 rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("meta.xml")),
                 sTextMediaType, rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Calc.XMLMetaExporter")),
                 sal_True, aMetaArgs, pSharedData);
+
+            RTL_LOGFILE_CONTEXT_TRACE( aLog, "meta export end" );
         }
 
         uno::Reference< document::XEmbeddedObjectResolver > xObjectResolver;
@@ -617,10 +648,15 @@ sal_Bool ScXMLImportWrapper::Export(sal_Bool bStylesOnly)
             pStylesArgs[2] <<= xHandler;
             pStylesArgs[3] <<= xObjectResolver;
             pStylesArgs[4] <<= xInfoSet;
+
+            RTL_LOGFILE_CONTEXT_TRACE( aLog, "styles export start" );
+
             bStylesRet = ExportToComponent(xServiceFactory, xModel, xWriter, aDescriptor,
                 rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("styles.xml")),
                 sTextMediaType, rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Calc.XMLStylesExporter")),
                 sal_False, aStylesArgs, pSharedData);
+
+            RTL_LOGFILE_CONTEXT_TRACE( aLog, "styles export end" );
         }
 
         // content export
@@ -635,11 +671,14 @@ sal_Bool ScXMLImportWrapper::Export(sal_Bool bStylesOnly)
             pDocArgs[3] <<= xObjectResolver;
             pDocArgs[4] <<= xInfoSet;
 
+            RTL_LOGFILE_CONTEXT_TRACE( aLog, "content export start" );
+
             bDocRet = ExportToComponent(xServiceFactory, xModel, xWriter, aDescriptor,
                 rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("content.xml")),
                 sTextMediaType, rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Calc.XMLContentExporter")),
                 sal_False, aDocArgs, pSharedData);
 
+            RTL_LOGFILE_CONTEXT_TRACE( aLog, "content export end" );
         }
 
         if( pGraphicHelper )
@@ -657,10 +696,15 @@ sal_Bool ScXMLImportWrapper::Export(sal_Bool bStylesOnly)
             pSettingsArgs[0] <<= xHandler;
             pSettingsArgs[1] <<= xStatusIndicator;
             pSettingsArgs[2] <<= xInfoSet;
+
+            RTL_LOGFILE_CONTEXT_TRACE( aLog, "settings export start" );
+
             bSettingsRet = ExportToComponent(xServiceFactory, xModel, xWriter, aDescriptor,
                 rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("settings.xml")),
                 sTextMediaType, rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Calc.XMLSettingsExporter")),
                 sal_False, aSettingsArgs, pSharedData);
+
+            RTL_LOGFILE_CONTEXT_TRACE( aLog, "settings export end" );
         }
 
         if (xStatusIndicator.is())
