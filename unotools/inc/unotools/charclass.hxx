@@ -2,9 +2,9 @@
  *
  *  $RCSfile: charclass.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: er $ $Date: 2000-12-08 17:01:26 $
+ *  last change: $Author: fs $ $Date: 2001-05-17 12:57:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,6 +223,9 @@ public:
             String              toLower( const String& rStr, xub_StrLen nPos, xub_StrLen nCount ) const;
             String              toTitle( const String& rStr, xub_StrLen nPos, xub_StrLen nCount ) const;
 
+            ::rtl::OUString     toUpper( const ::rtl::OUString& rStr, sal_Int32 nPos, sal_Int32 nCount ) const;
+            ::rtl::OUString     toLower( const ::rtl::OUString& rStr, sal_Int32 nPos, sal_Int32 nCount ) const;
+
             sal_Int16           getType( const String& rStr, xub_StrLen nPos ) const;
             sal_Int16           getCharacterDirection( const String& rStr, xub_StrLen nPos ) const;
             sal_Int16           getScript( const String& rStr, xub_StrLen nPos ) const;
@@ -268,6 +271,9 @@ public:
                                     { return toUpper( rStr, 0, rStr.Len() ); }
     inline  String              lower( const String& rStr ) const
                                     { return toLower( rStr, 0, rStr.Len() ); }
+
+        const ::rtl::OUString&  toUpper( ::rtl::OUString& _rStr ) const { return _rStr = toUpper( _rStr, 0, _rStr.getLength() ); }
+        const ::rtl::OUString&  toLower( ::rtl::OUString& _rStr ) const { return _rStr = toLower( _rStr, 0, _rStr.getLength() ); }
 };
 
 
