@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drtxtob2.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:28:02 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:16:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,7 @@
 #include <svx/writingmodeitem.hxx>
 #endif
 #include <sfx2/bindings.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/request.hxx>
 #include <sot/formats.hxx>
