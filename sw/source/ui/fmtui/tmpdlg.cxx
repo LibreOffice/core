@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tmpdlg.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:29:24 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 16:40:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,12 +106,7 @@
 #ifndef _SVX_NUMPAGES_HXX //autogen
 #include <svx/numpages.hxx>
 #endif
-#ifndef _OFA_HTMLCFG_HXX //autogen
-#include <offmgr/htmlcfg.hxx>
-#endif
-#ifndef _OFF_APP_HXX //autogen
-#include <offmgr/app.hxx>
-#endif
+#include <svx/htmlcfg.hxx>
 #ifndef _SVTOOLS_CJKOPTIONS_HXX
 #include <svtools/cjkoptions.hxx>
 #endif
@@ -297,7 +292,7 @@ SwTemplateDlg::SwTemplateDlg(Window*            pParent,
             SvtCJKOptions aCJKOptions;
             if(nHtmlMode & HTMLMODE_ON)
             {
-                OfaHtmlOptions* pHtmlOpt = OFF_APP()->GetHtmlOptions();
+                SvxHtmlOptions* pHtmlOpt = SvxHtmlOptions::Get();
                 if (!pHtmlOpt->IsPrintLayoutExtension())
                     RemoveTabPage(TP_PARA_EXT);
                 RemoveTabPage(TP_PARA_ASIAN);
