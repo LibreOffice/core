@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cupsmgr.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:51:21 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 16:35:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,6 +131,8 @@ public:
     virtual bool removePrinter( const rtl::OUString& rPrinterName, bool bCheckOnly = false );
     virtual bool writePrinterConfig();
     virtual bool setDefaultPrinter( const rtl::OUString& rPrinterName );
+
+    virtual bool addOrRemovePossible() const;
 };
 
 } // namespace psp
