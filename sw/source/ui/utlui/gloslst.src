@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gloslst.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-16 21:48:31 $
+ *  last change: $Author: kz $ $Date: 2001-07-14 20:19:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,12 +147,13 @@ ModalDialog DLG_GLOSSARY_DECIDE_DLG
     Text[ chinese_traditional ] = "¿ï¾Ü¦Û°Ê¹Ï¤å¶°¡G ";
     Text[ arabic ] = "ÇÎÊíÇÑ ÚäÕÑ ÇáäÕ: ";
     Text[ greek ] = "ÅğéëïãŞ ôìŞìáôïò êåéìİíïõ: ";
-    Text[ korean ] = "ÅØ½ºÆ® ¼±ÅÃ: ";
+    Text[ korean ] = "ÅØ½ºÆ® ¸ğµã ¼±ÅÃ: ";
     Text[ turkish ] = "Metin bileşeni seç: ";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Seleccionar módulo de texto:  ";
     Text[ finnish ] = "Valitse automaattinen teksti: ";
 };
+
 
 
 
