@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-16 15:03:14 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 20:27:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,14 +112,14 @@ Menu MN_CLIPBOARDFUNCS
             Text [ dutch ] = "Kn~ippen" ;
             Text [ spanish ] = "C~ortar" ;
             Text [ english_us ] = "Cu~t" ;
-            Text[ chinese_simplified ] = "Ότ³ύ(~T)";
+            Text[ chinese_simplified ] = "ΌτΗΠ(~T)";
             Text[ russian ] = "Βϋπεηΰςό";
             Text[ polish ] = "~Wytnij";
             Text[ japanese ] = "Ψ‚θζ‚θ(~T)";
             Text[ chinese_traditional ] = "°Ε¤U(~T)";
             Text[ arabic ] = "ήΥ";
             Text[ dutch ] = "Kn~ippen";
-            Text[ chinese_simplified ] = "Ότ³ύ(~T)";
+            Text[ chinese_simplified ] = "ΌτΗΠ(~T)";
             Text[ greek ] = "~Αποκοπή";
             Text[ korean ] = "ΐί¶σ ³»±β(~T)";
             Text[ turkish ] = "Kes";
@@ -345,4 +345,5 @@ ImageList RID_IMGLST_BIG
 };
 
 // ******************************************************************* EOF
+
 
