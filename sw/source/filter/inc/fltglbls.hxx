@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltglbls.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:53 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:49:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,9 +140,6 @@ public:
 
     inline void     ColLimitter( USHORT &rCol );
     inline void     RowLimitter( USHORT &rRow );
-#ifdef USED
-//      inline BOOL     RowRangeLimitter( USHORT &rRS, USHORT &rRE );
-#endif
 };
 
 
@@ -192,27 +189,4 @@ inline void FilterGlobals::RowLimitter( USHORT &rRow )
         rRow = nRowEnd;
 }
 
-#ifdef USED
-
-inline BOOL FilterGlobals::RowRangeLimitter( USHORT &rRS, USHORT &rRE )
-    {
-    //  PREC / POST: analog zu ColRangeLimitter
-    BOOL bRet;
-    DBG_ASSERT( rRS <= rRE,
-        "-FilterGlobals::RowRangeLimitter(): Startzeile > Endzeile!" );
-    if( rRS > nRowEnd || rRE < nRowStart )
-        bRet = FALSE;
-    else
-        {
-        bRet = TRUE;
-        if( rRS < nRowStart )   rRS = nRowStart;
-        if( rRE > nRowEnd )     rRE = nRowEnd;
-        }
-    return bRet;
-    }
-
 #endif
-
-
-#endif
-
