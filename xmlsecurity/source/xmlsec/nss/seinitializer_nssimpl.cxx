@@ -2,9 +2,9 @@
  *
  *  $RCSfile: seinitializer_nssimpl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mmi $ $Date: 2004-07-19 07:36:28 $
+ *  last change: $Author: mmi $ $Date: 2004-07-19 10:09:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,17 @@ static NS_DEFINE_CID(kProfileCID, NS_PROFILE_CID);
 char* getCurrentProfilePath( )
 {
         nsCOMPtr<nsILocalFile> binDir;
+
+        // Note: if getenv() returns NULL, mozilla will default to using MOZILLA_FIVE_HOME in the NS_InitXPCOM2()
+        // The NS_NewNativeLocalFile() will accept NULL as its first parameter.
+        char * env = getenv("OPENOFFICE_MOZILLA_FIVE_HOME");
+        if (env)
+        {
+        nsDependentCString sPath(env);
+        nsresult rv = NS_NewNativeLocalFile(sPath, PR_TRUE, getter_AddRefs(binDir));
+        if (NS_FAILED(rv))
+            return NULL;
+        }
 
     if (sServiceManager == nsnull)
     {
