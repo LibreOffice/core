@@ -2,9 +2,9 @@
  *
  *  $RCSfile: label.src,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 11:53:25 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:05:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,7 @@
     Text[ english_us ] = "Business Cards";              \
     Text[ portuguese ] = "Cartυes de visita";           \
     Text[ russian ] = "Βθηθςνϋε κΰπςξχκθ";              \
-    Text[ greek ] = "Visiting cards";                   \
+    Text[ greek ] = "Επαγγελματικές κάρτες";                   \
     Text[ dutch ] = "Visitekaartjes";                   \
     Text[ french ] = "Cartes de visite";                \
     Text[ spanish ] = "Tarjetas de visita";             \
@@ -347,7 +347,7 @@ TabPage TP_LAB_LAB
         Text[ japanese ] = "ε®›ε…";
         Text[ chinese_traditional ] = "ζ¨™η±¤";
         Text[ arabic ] = "δΥ ΗαΘΨΗήΙ";
-        Text[ greek ] = "Επιγραφή";
+        Text[ greek ] = "Ετικέτα";
         Text[ korean ] = "λ μ΄λΈ” ν…μ¤νΈ";
         Text[ turkish ] = "Etiket metni";
         Text[ language_user1 ] = " ";
@@ -412,7 +412,7 @@ TabPage TP_LAB_LAB
         Text [ English ] = "Database" ;
         Text [ norwegian ] = "Database" ;
         Text [ italian ] = "Database" ;
-        Text [ portuguese_brazilian ] = "Base de Dados" ;
+        Text [ portuguese_brazilian ] = "Banco de dados" ;
         Text [ portuguese ] = "~Base de dados" ;
         Text [ finnish ] = "Tietokanta" ;
         Text [ danish ] = "Database" ;
@@ -459,7 +459,7 @@ TabPage TP_LAB_LAB
         Text [ dutch ] = "~Tabel" ;
         Text [ swedish ] = "Tabe~ll" ;
         Text [ danish ] = "Tabel" ;
-        Text [ portuguese_brazilian ] = "Tabelle" ;
+        Text [ portuguese_brazilian ] = "Tabela" ;
         Text [ portuguese ] = "~Tabela" ;
         Text[ chinese_simplified ] = "θ΅¨ζ Ό";
         Text[ russian ] = "Òΰαλθφΰ";
@@ -502,7 +502,7 @@ TabPage TP_LAB_LAB
         Text [ English ] = "Database field" ;
         Text [ norwegian ] = "Database field" ;
         Text [ italian ] = "Campo database" ;
-        Text [ portuguese_brazilian ] = "Database field" ;
+        Text [ portuguese_brazilian ] = "Campo do banco de dados" ;
         Text [ portuguese ] = "Campo base de dados" ;
         Text [ finnish ] = "Tietokannan kenttδ" ;
         Text [ danish ] = "Databasefelt" ;
@@ -630,7 +630,7 @@ TabPage TP_LAB_LAB
         Text[ japanese ] = "γ‚·γƒΌγƒ(~S)";
         Text[ chinese_traditional ] = "η΄™εΌµ(~S)";
         Text[ arabic ] = "έΡΞ ζΡή";
-        Text[ greek ] = "~Φάκελος";
+        Text[ greek ] = "~Φύλλο";
         Text[ korean ] = "μ‹νΈ(~S)";
         Text[ turkish ] = "Fφy";
         Text[ language_user1 ] = " ";
@@ -902,7 +902,7 @@ TabPage TP_VISITING_CARDS
         Text[ english_us ] = "AutoText - Section";
         Text[ portuguese ] = "AutoTexto - ~secηγo";
         Text[ russian ] = "ΐβςξςεκρς - Πΰηδελ";
-        Text[ greek ] = "Περιοχή ΑυτοΚειμένου";
+        Text[ greek ] = "Ενότητα αυτόματου κειμένου";
         Text[ dutch ] = "AutoTekst - ~bereik";
         Text[ french ] = "AutoTexte - ~Section";
         Text[ spanish ] = "Texto automαtico - ~Secciσn";
@@ -943,7 +943,7 @@ TabPage TP_VISITING_CARDS
         Text[ english_us ] = "Content";
         Text[ portuguese ] = "Conteϊdo";
         Text[ russian ] = "Ρξδεπζθμξε";
-        Text[ greek ] = "Περιεχόμενα";
+        Text[ greek ] = "Περιεχόμενο";
         Text[ dutch ] = "Inhoud";
         Text[ french ] = "Contenu";
         Text[ spanish ] = "Contenido";
@@ -991,7 +991,7 @@ TabPage TP_PRIVATE_DATA
         Text[ english_us ] = "Private data";
         Text[ portuguese ] = "Dados pessoais";
         Text[ russian ] = "Λθχνϋε δΰννϋε";
-        Text[ greek ] = "Προσωπικά στοιχεία";
+        Text[ greek ] = "Προσωπικά δεδομένα";
         Text[ dutch ] = "Persoonlijke gegevens";
         Text[ french ] = "Coordonnιes privιes";
         Text[ spanish ] = "Datos privados";
@@ -1343,7 +1343,7 @@ TabPage TP_PRIVATE_DATA
         Text[ english_us ] = "Fa~x";
         Text[ portuguese ] = "Fa~x";
         Text[ russian ] = "Τΰκρ";
-        Text[ greek ] = "Fax";
+        Text[ greek ] = "Φαξ";
         Text[ dutch ] = "Fa~x";
         Text[ french ] = "~Fax";
         Text[ spanish ] = "Fa~x";
@@ -1392,7 +1392,7 @@ TabPage TP_PRIVATE_DATA
         Text[ polish ] = "Strona g³σwna/e-mail";
         Text[ portuguese_brazilian ] = "Homepage / e-mail";
         Text[ japanese ] = "γƒ›γƒΌγƒ γƒγƒΌγ‚Έ/E-mail";
-        Text[ korean ] = "ν™νμ΄μ§€/μ „μλ©”μΌ";
+        Text[ korean ] = "ν™νμ΄μ§€/μ „μ λ©”μΌ";
         Text[ chinese_simplified ] = "δΈ»ι΅µ/η”µε­ι‚®δ»¶";
         Text[ chinese_traditional ] = "ι¦–ι /ι›»ε­ιƒµδ»¶";
         Text[ arabic ] = "γζήΪ ΗαΕδΚΡδΚ / ΗαΘΡνΟ ΗαΕαίΚΡζδν";
@@ -1433,7 +1433,7 @@ TabPage TP_BUSINESS_DATA
         Text[ english_us ] = "Business data";
         Text[ portuguese ] = "Dados profissionais";
         Text[ russian ] = "Ρλσζεανϋε δΰννϋε";
-        Text[ greek ] = "Επαγγελματικά στοιχεία";
+        Text[ greek ] = "Επαγγελματικά δεδομένα";
         Text[ dutch ] = "Zakelijke gegevens";
         Text[ french ] = "Coordonnιes professionnelles";
         Text[ spanish ] = "Datos del trabajo";
@@ -1795,7 +1795,7 @@ TabPage TP_BUSINESS_DATA
         Text[ english_us ] = "Fax";
         Text[ portuguese ] = "Fax";
         Text[ russian ] = "Τΰκρ";
-        Text[ greek ] = "Fax";
+        Text[ greek ] = "Φαξ";
         Text[ dutch ] = "Fax";
         Text[ french ] = "Fax";
         Text[ spanish ] = "Fax";
@@ -1843,7 +1843,7 @@ TabPage TP_BUSINESS_DATA
         Text[ polish ] = "Strona ~g³σwna/e-mail";
         Text[ portuguese_brazilian ] = "Ho~mepage / e-mail";
         Text[ japanese ] = "γƒ›γƒΌγƒ γƒγƒΌγ‚Έ/E-~mail";
-        Text[ korean ] = "ν™νμ΄μ§€/μ „μλ©”μΌ(~M)";
+        Text[ korean ] = "ν™νμ΄μ§€/μ „μ λ©”μΌ(~M)";
         Text[ chinese_simplified ] = "δΈ»ι΅µ/η”µε­ι‚®δ»¶(~M)";
         Text[ chinese_traditional ] = "ι¦–ι /ι›»ε­ιƒµδ»¶(~M)";
         Text[ arabic ] = "γζήΪ ΗαΕδΚΡδΚ / ΗαΘΡνΟ ΗαΕαίΚΡζδν";
@@ -1870,6 +1870,7 @@ TabPage TP_BUSINESS_DATA
         Border = TRUE ;
     };
 };
+
 
 
 
