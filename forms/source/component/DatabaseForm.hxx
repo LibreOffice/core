@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseForm.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:28:00 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 10:36:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,6 +163,9 @@
 #ifndef FORMS_SOURCE_COMPONENT_FORMFILTERMANAGER_HXX
 #include "formfiltermanager.hxx"
 #endif
+#ifndef FORMS_SOURCE_MISC_LISTENERCONTAINERS_HXX
+#include "listenercontainers.hxx"
+#endif
 
 #ifndef _COMPHELPER_PROPERTY_AGGREGATION_HXX_
 #include <comphelper/propagg.hxx>
@@ -209,8 +212,6 @@ namespace frm
 
 const sal_uInt16 SUCCESSFUL_REPRESENT_TEXT          = 0x0001;
 const sal_uInt16 SUCCESSFUL_REPRESENT_FILE          = 0x0002;
-
-const ::rtl::OUString ALL_COMPONENTS_GROUP_NAME = ::rtl::OUString::createFromAscii("AllComponentGroup");
 
 //------------------------------------------------------------------------------
 class HtmlSuccessfulObj
@@ -280,9 +281,9 @@ class ODatabaseForm :public OFormComponents
     ::cppu::OInterfaceContainerHelper   m_aLoadListeners;
     ::cppu::OInterfaceContainerHelper   m_aRowSetApproveListeners;
     ::cppu::OInterfaceContainerHelper   m_aRowSetListeners;
-    ::cppu::OInterfaceContainerHelper   m_aResetListeners;
     ::cppu::OInterfaceContainerHelper   m_aSubmitListeners;
     ::cppu::OInterfaceContainerHelper   m_aErrorListeners;
+    ResetListeners                      m_aResetListeners;
     ::osl::Mutex                        m_aResetSafety;
     ::com::sun::star::uno::Any          m_aCycle;
     ::com::sun::star::uno::Any          m_aIgnoreResult; // set when we are a subform and our master form positioned on a new row
@@ -315,6 +316,7 @@ class ODatabaseForm :public OFormComponents
 //  <properties>
     ::com::sun::star::uno::Any  m_aControlBorderColorFocus;
     ::com::sun::star::uno::Any  m_aControlBorderColorMouse;
+    ::com::sun::star::uno::Any  m_aControlBorderColorInvalid;
     ::com::sun::star::uno::Any  m_aDynamicControlBorder;
     ::rtl::OUString             m_sName;
     ::rtl::OUString             m_aTargetURL;
