@@ -378,9 +378,9 @@ OfficeConstants {
     }
 
     /**
-     * Returns a <code>Vector</code> containing all the worksheet Names
+     * Returns the name of the worksheet at the specified index
      *
-     * @return a <code>Vector</code> containing all the worksheet Names
+     * @return a <code>String</code> containing the name of the worksheet
      */
     public String getSheetName(int index) {
         BoundSheet bs = (BoundSheet) boundsheets.elementAt(index);
@@ -457,7 +457,7 @@ OfficeConstants {
     }
 
     /**
-      * Will create a number of ColInfo recrods based on the column widths
+      * Will create a number of ColInfo records based on the column widths
      * based in.
      *
       * @param  columnRows <code>Vector</code> of <code>ColumnRowInfo</code>
@@ -483,16 +483,18 @@ OfficeConstants {
                 currentWS.addCol(newColInfo);
                 nCols += repeated;
             } else if(cri.isRow()) {
+
                 Debug.log(Debug.TRACE,"Workbook: adding Row Height = " + size);
-                if(size!=255) {
+                if(!cri.isDefaultSize()) {
                     for(int i=0;i<repeated;i++) {
-                        Row newRow = new Row(nRows++, size);
+                        Row newRow = new Row(nRows++, size, cri.isUserDefined());
                         currentWS.addRow(newRow);
                     }
                 } else {
                     // If it is the Default Row we don't need to add it
                     nRows += repeated;
                 }
+
             }
         }
     }
@@ -533,7 +535,6 @@ OfficeConstants {
                 }
             }
         }
-
     }
 
     /**

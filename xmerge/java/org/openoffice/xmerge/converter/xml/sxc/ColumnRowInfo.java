@@ -66,9 +66,13 @@ public class ColumnRowInfo {
     final public static int COLUMN  = 0x01;
     final public static int ROW     = 0x02;
 
+    final private static int DEFAULTROWSIZE_MIN = 250;
+    final private static int DEFAULTROWSIZE_MAX = 260;
+
     private int type;
     private int dimension   = 0;
     private int repeated    = 1;
+    private boolean userDefined = true;
     private Format fmt = new Format();
 
     /**
@@ -86,13 +90,25 @@ public class ColumnRowInfo {
      * Constructor for a <code>ColumnRowInfo</code>
      *
      * @param dimension if it's a row the height, a column the width
-     * @param repeated
+     * @param repeated how many times it is repeated
+     * @param type whether Row or column record
      */
     public ColumnRowInfo(int dimension, int repeated, int type) {
 
         this.dimension = dimension;
         this.repeated = repeated;
         this.type = type;
+    }
+
+    /**
+     * Constructor that includes userDefined field
+     *
+     * @param userDefined whether the record is manually set
+     */
+    public ColumnRowInfo(int dimension, int repeated, int type, boolean userDefined) {
+
+        this(dimension, repeated, type);
+        this.userDefined = userDefined;
     }
 
     /**
@@ -175,6 +191,31 @@ public class ColumnRowInfo {
     public boolean isColumn() {
 
         if(type==COLUMN)
+            return true;
+        else
+            return false;
+    }
+
+    /**
+     * Test if the row height as been set manually
+     *
+     * @return true if user defined otherwise false
+     */
+    public boolean isUserDefined() {
+
+        return userDefined;
+    }
+
+    /**
+     * Test if the row height is default
+     *
+     * @return true if default otherwise false
+     */
+    public boolean isDefaultSize() {
+
+        if( type==ROW &&
+            dimension>DEFAULTROWSIZE_MIN &&
+            dimension<DEFAULTROWSIZE_MAX)
             return true;
         else
             return false;
