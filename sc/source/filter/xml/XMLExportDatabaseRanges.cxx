@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportDatabaseRanges.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 16:10:04 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 12:28:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -490,6 +490,8 @@ void ScXMLExportDatabaseRanges::WriteFilterDescriptor(const uno::Reference <shee
                             WriteCondition(aPrevFilterField, bIsCaseSensitive, bUseRegularExpressions);
                     }
                 }
+                if(bOpenAndElement)
+                    rExport.EndElement(aName, sal_True);
             }
         }
     }
