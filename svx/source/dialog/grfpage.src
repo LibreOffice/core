@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfpage.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:13:13 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:34:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text[ japanese ] = "γƒγƒªγƒγƒ³γ‚°";
         Text[ chinese_traditional ] = "θ£ε‰ª";
         Text[ arabic ] = "ΗήΚΥΗΥ";
-        Text[ greek ] = "Προσαρμογή";
+        Text[ greek ] = "Περικοπή";
         Text[ korean ] = "λ‹¤λ“¬κΈ°";
         Text[ turkish ] = "Kύrp";
         Text[ catalan ] = "Retalla";
@@ -330,7 +330,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text[ japanese ] = "η”»εƒγ‚µγ‚¤γ‚ΊδΏζ(~Z)";
         Text[ chinese_traditional ] = "δΏζη•«ιΆε¤§ε°(~Z)";
         Text[ arabic ] = "ΗαΗΝΚέΗΩ ΘΗαΝΜγ";
-        Text[ greek ] = "Δια~τήρηση μεγέθους";
+        Text[ greek ] = "~Διατήρηση μεγέθους εικόνας";
         Text[ korean ] = "μ΄λ―Έμ§€ ν¬κΈ° μ μ§€(~Z)";
         Text[ turkish ] = "Resim bo~yutunu koru";
         Text[ catalan ] = "Conserva la mi~da";
@@ -542,7 +542,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text[ japanese ] = "η”»εƒγ‚µγ‚¤γ‚Ί";
         Text[ chinese_traditional ] = "ε½±εƒε¤§ε°";
         Text[ arabic ] = "ΗαΝΜγ";
-        Text[ greek ] = "Μέγεθος";
+        Text[ greek ] = "Μέγεθος εικόνας";
         Text[ korean ] = "μ΄λ―Έμ§€ ν¬κΈ°";
         Text[ turkish ] = "Resim boyutu";
         Text[ catalan ] = "Mida";
@@ -694,6 +694,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text[ slovak ] = "~PΓ΄vodnΓ΅ veΔΎkosΕ¥";
     };
 };
+
 
 
 
