@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printfun.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 17:29:14 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:55:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -987,8 +987,9 @@ void ScPrintFunc::InitParam( const ScPrintOptions* pOptions )
         }
         else
         {
-            aAreaParam.bPrintArea = TRUE;
-            bPrintCurrentTable = FALSE;
+            // do not print hidden sheets with "Print entire sheet" flag
+            bPrintCurrentTable = pDoc->IsPrintEntireSheet( nPrintTab ) && pDoc->IsVisible( nPrintTab );
+            aAreaParam.bPrintArea = !bPrintCurrentTable;    // otherwise the table is always counted
         }
     }
     else
