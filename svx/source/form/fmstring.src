@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmstring.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 19:45:50 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 05:42:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,7 @@ String RID_ERR_CONTEXT_ADDFORM
     Text[ turkish ] = "Form oluþturma sýrasýnda hata";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Error en la creación de un formulario";
+    Text[ finnish ] = "Virhe lomaketta luotaessa";
 };
 String RID_ERR_FIELDREQUIRED
 {
@@ -110,6 +111,7 @@ String RID_ERR_FIELDREQUIRED
     Text[ turkish ] = "Alan '#' için bir giriþ yapýlmasý gerekiyor.\nLütfen bir deðer girin!";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "El campo '#' requiere una entrada.\nPor favor escriba un valor.";
+    Text[ finnish ] = "Kenttään '' vaaditaan syöte. Syötä arvo.";
 };
 String RID_ERR_DUPLICATE_NAME
 {
@@ -135,6 +137,7 @@ String RID_ERR_DUPLICATE_NAME
     Text[ turkish ] = "Bu giriþ mevcut durumda.\nLütfen baþka bir ad seçin.";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "El registro ya existe.\nPor favor elija otro nombre.";
+    Text[ finnish ] = "Merkintä on jo käytössä.\nValitse toinen nimi.";
 };
 String RID_STR_NEW_FORM
 {
@@ -160,6 +163,7 @@ String RID_STR_NEW_FORM
     Text[ turkish ] = "Yeni form";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Nuevo formulario";
+    Text[ finnish ] = "Uusi lomake";
 };
 String RID_STR_ALIGNMENT
 {
@@ -185,6 +189,7 @@ String RID_STR_ALIGNMENT
     Text[ turkish ] = "Sol;Orta;Sað";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Izquierda;Centrado;Derecha";
+    Text[ finnish ] = "Vasen:Keskitys;Oikea";
 };
 String RID_STR_LABEL
 {
@@ -210,6 +215,7 @@ String RID_STR_LABEL
     Text[ turkish ] = "Baþlýk";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Título";
+    Text[ finnish ] = "Nimiö";
 };
 String RID_STR_CURSORTYPE
 {
@@ -235,6 +241,7 @@ String RID_STR_CURSORTYPE
     Text[ turkish ] = "Ýmleç tipi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Tipo de cursor";
+    Text[ finnish ] = "Kohdistintyyppi";
 };
 String RID_STR_ALIGN
 {
@@ -260,6 +267,7 @@ String RID_STR_ALIGN
     Text[ turkish ] = "Hizalama";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Alineación";
+    Text[ finnish ] = "Tasaus";
 };
 String RID_STR_FONT
 {
@@ -285,6 +293,7 @@ String RID_STR_FONT
     Text[ turkish ] = "Karakter kümesi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Juego de caracteres";
+    Text[ finnish ] = "Merkistö";
 };
 String RID_STR_BACKGROUNDCOLOR
 {
@@ -310,6 +319,7 @@ String RID_STR_BACKGROUNDCOLOR
     Text[ turkish ] = "Artalan rengi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Color de fondo";
+    Text[ finnish ] = "Taustaväri";
 };
 String RID_STR_BORDER
 {
@@ -335,6 +345,7 @@ String RID_STR_BORDER
     Text[ turkish ] = "Çerçeve";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Marco";
+    Text[ finnish ] = "Reuna";
 };
 String RID_STR_BORDER_TYPE
 {
@@ -360,6 +371,7 @@ String RID_STR_BORDER_TYPE
     Text[ turkish ] = "Çerçevesiz;3B görünüm;Düz";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Sin marco;3D-Look;Plano";
+    Text[ finnish ] = "Ilman kehystä;3D-ulkoasu;Litteä";
 };
 String RID_STR_DEFAULT_CONTROL
 {
@@ -385,6 +397,7 @@ String RID_STR_DEFAULT_CONTROL
     Text[ turkish ] = "Standart komut öðesi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Elemento de control estándar";
+    Text[ finnish ] = "Oletusohjain";
 };
 String RID_STR_HSCROLL
 {
@@ -410,6 +423,7 @@ String RID_STR_HSCROLL
     Text[ turkish ] = "Yatay kaydýrma çubuðu";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Barra de deplazamiento horizontal";
+    Text[ finnish ] = "Vaakavierityspalkki";
 };
 String RID_STR_VSCROLL
 {
@@ -435,6 +449,7 @@ String RID_STR_VSCROLL
     Text[ turkish ] = "Dikey kaydýrma çubuðu";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Barra de desplazamiento vertical";
+    Text[ finnish ] = "Pystyvierityspalkki";
 };
 String RID_STR_MULTILINE
 {
@@ -461,6 +476,7 @@ String RID_STR_MULTILINE
     Text[ turkish ] = "Çok satýrlý giriþ";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Varias líneas";
+    Text[ finnish ] = "Usean rivin syöttö";
 };
 String RID_STR_MULTISELECTION
 {
@@ -486,6 +502,7 @@ String RID_STR_MULTISELECTION
     Text[ turkish ] = "Çoklu seçim";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Selección múltiple";
+    Text[ finnish ] = "Monivalinta";
 };
 String RID_STR_NAME
 {
@@ -511,6 +528,7 @@ String RID_STR_NAME
     Text[ turkish ] = "Ad";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Nombre";
+    Text[ finnish ] = "Nimi";
 };
 String RID_STR_TABSTOP
 {
@@ -536,6 +554,7 @@ String RID_STR_TABSTOP
     Text[ turkish ] = "Sekme duraðý";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Tabstop";
+    Text[ finnish ] = "Sarkain";
 };
 String RID_STR_TEXT
 {
@@ -561,6 +580,7 @@ String RID_STR_TEXT
     Text[ turkish ] = "Metin";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Texto";
+    Text[ finnish ] = "Teksti";
 };
 String RID_STR_CONTROLSOURCE
 {
@@ -586,6 +606,7 @@ String RID_STR_CONTROLSOURCE
     Text[ turkish ] = "Veri alaný";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Campo de datos";
+    Text[ finnish ] = "Kentän nimi";
 };
 String RID_STR_DROPDOWN
 {
@@ -611,6 +632,7 @@ String RID_STR_DROPDOWN
     Text[ turkish ] = "Açýlabilir";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Desplegable";
+    Text[ finnish ] = "Pudotus";
 };
 String RID_STR_BOUNDCOLUMN
 {
@@ -636,6 +658,7 @@ String RID_STR_BOUNDCOLUMN
     Text[ turkish ] = "Baðlý alan";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Campo ligado";
+    Text[ finnish ] = "Sidottu sarake";
 };
 String RID_STR_LISTSOURCE
 {
@@ -661,6 +684,7 @@ String RID_STR_LISTSOURCE
     Text[ turkish ] = "Liste içeriði";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Contenido de lista";
+    Text[ finnish ] = "Luettelon sisältö";
 };
 String RID_STR_LISTSOURCETYPE
 {
@@ -686,6 +710,7 @@ String RID_STR_LISTSOURCETYPE
     Text[ turkish ] = "Liste içeriði türü";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Tipo del contenido de lista";
+    Text[ finnish ] = "Hakemistomerkintöjen tyypit";
 };
 String RID_STR_CURSORSOURCE
 {
@@ -710,6 +735,7 @@ String RID_STR_CURSORSOURCE
     Text[ turkish ] = "Veri kaynaðý";
     Text[ arabic ] = "ÇáãÍÊæíÇÊ";
     Text[ catalan ] = "Contenido";
+    Text[ finnish ] = "Sisältö";
 };
 String RID_STR_CURSORSOURCETYPE
 {
@@ -734,6 +760,7 @@ String RID_STR_CURSORSOURCETYPE
     Text[ turkish ] = "Veri kaynaðý türü";
     Text[ arabic ] = "äæÚ ÇáãÍÊæíÇÊ";
     Text[ catalan ] = "Tipo de contenido";
+    Text[ finnish ] = "Sisältölaji";
 };
 String RID_STR_ALLOW_ADDITIONS
 {
@@ -759,6 +786,7 @@ String RID_STR_ALLOW_ADDITIONS
     Text[ turkish ] = "Veri ekle";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Añadir datos";
+    Text[ finnish ] = "Salli lisäykset";
 };
 String RID_STR_ALLOW_DELETIONS
 {
@@ -784,6 +812,7 @@ String RID_STR_ALLOW_DELETIONS
     Text[ turkish ] = "Verileri sil";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Eliminar datos";
+    Text[ finnish ] = "Poista tiedot";
 };
 String RID_STR_ALLOW_EDITS
 {
@@ -809,6 +838,7 @@ String RID_STR_ALLOW_EDITS
     Text[ turkish ] = "Verileri deðiþtir";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Modificar datos";
+    Text[ finnish ] = "Salli muokkaukset";
 };
 String RID_STR_DATAENTRY
 {
@@ -834,6 +864,7 @@ String RID_STR_DATAENTRY
     Text[ turkish ] = "Yalnýzca veri ekle";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Añadir solo datos";
+    Text[ finnish ] = "Lisää vain tietoja ";
 };
 String RID_STR_DATASOURCE
 {
@@ -858,6 +889,7 @@ String RID_STR_DATASOURCE
     Text[ turkish ] = "Veritabaný";
     Text[ arabic ] = "ãÕÏÑ ÇáÈíÇäÇÊ";
     Text[ catalan ] = "Fuente de datos";
+    Text[ finnish ] = "Tietolähde";
 };
 String RID_STR_LOCKED
 {
@@ -883,6 +915,7 @@ String RID_STR_LOCKED
     Text[ turkish ] = "Kilitli";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Protegido";
+    Text[ finnish ] = "Lukittu";
 };
 String RID_STR_MASTERFIELDS
 {
@@ -908,6 +941,7 @@ String RID_STR_MASTERFIELDS
     Text[ turkish ] = "Baðlantý öðeleri";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Vinculación de";
+    Text[ finnish ] = "Linkitetään";
 };
 String RID_STR_SLAVEFIELDS
 {
@@ -933,6 +967,7 @@ String RID_STR_SLAVEFIELDS
     Text[ turkish ] = "Alt alanlar";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Vincular con";
+    Text[ finnish ] = "Alikentät";
 };
 String RID_STR_CURSOR_TYPE
 {
@@ -958,6 +993,7 @@ String RID_STR_CURSOR_TYPE
     Text[ turkish ] = "Statik;Dinamik";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Estático;Dinámico";
+    Text[ finnish ] = "Staattinen;Dynaaminen";
 };
 String RID_STR_EVENTS
 {
@@ -983,6 +1019,7 @@ String RID_STR_EVENTS
     Text[ turkish ] = "Olaylar";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Acontecimientos";
+    Text[ finnish ] = "Tapahtumat";
 };
 String RID_STR_FORMS
 {
@@ -1008,6 +1045,7 @@ String RID_STR_FORMS
     Text[ turkish ] = "Formlar";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Formularios";
+    Text[ finnish ] = "Lomakkeet";
 };
 String RID_STR_NO_PROPERTIES
 {
@@ -1033,6 +1071,7 @@ String RID_STR_NO_PROPERTIES
     Text[ turkish ] = "Komut öðesi seçilmedi ya da karma seçim yapýldý.";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Ningún elemento de control seleccionado o selección mixta";
+    Text[ finnish ] = "Ohjainta ei ole valittu";
 };
 String RID_STR_PROPERTIES_CONTROL
 {
@@ -1059,6 +1098,7 @@ String RID_STR_PROPERTIES_CONTROL
     Text[ turkish ] = "Özellikler: ";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Propiedades: ";
+    Text[ finnish ] = "Ominaisuudet:";
 };
 String RID_STR_PROPERTIES_COLUMN
 {
@@ -1084,6 +1124,7 @@ String RID_STR_PROPERTIES_COLUMN
     Text[ turkish ] = "Sütun öðeleri: ";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Propiedades de las columnas: ";
+    Text[ finnish ] = "Sarakkeen ominaisuudet: ";
 };
 String RID_STR_PROPERTIES_FORM
 {
@@ -1109,6 +1150,7 @@ String RID_STR_PROPERTIES_FORM
     Text[ turkish ] = "Form özellikleri";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Propiedades del formulario";
+    Text[ finnish ] = "Lomakkeen ominaisuudet";
 };
 String RID_STR_FMEXPLORER
 {
@@ -1134,6 +1176,7 @@ String RID_STR_FMEXPLORER
     Text[ turkish ] = "Form navigatörü";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Navegador de formulario";
+    Text[ finnish ] = "Lomakkeen siirtymävalikko";
 };
 String RID_STR_LISTSOURCE_TYPE
 {
@@ -1158,6 +1201,7 @@ String RID_STR_LISTSOURCE_TYPE
     Text[ arabic ] = "ÞÇÆãÉ Þíã;ÌÏæá;ÇÓÊÝÓÇÑ;Sql;Sql [Native]ÍÞæá ÌÏæá";
     Text[ turkish ] = "Deðer listesi;Tablo;Sorgu;Sql;Sql [Native];Tablo alanlarý";
     Text[ catalan ] = "Lista de valores;Tabla;Consulta;Sql;Sql [Native];Campos de tablas";
+    Text[ finnish ] = "Arvoluettelo;taulukko;Kysely;Sql;Sql [alkuperäinen];Taulukkokentät";
 };
 String RID_STR_CURSORSOURCE_TYPE
 {
@@ -1182,6 +1226,7 @@ String RID_STR_CURSORSOURCE_TYPE
     Text[ arabic ] = "ÌÏæá;ÇÓÊÝÓÇÑ;ÃãÑ SQL";
     Text[ turkish ] = "Tablo;Sorgu;SQL komutu";
     Text[ catalan ] = "Tabla;Consulta;Comando SQL";
+    Text[ finnish ] = "Taulukko;Kysely;SQL-komento";
 };
 String RID_STR_COMMAND_TYPE
 {
@@ -1206,6 +1251,7 @@ String RID_STR_COMMAND_TYPE
     Text[ arabic ] = "ÌÏæá;ÇÓÊÝÓÇÑ;ÃãÑ SQL";
     Text[ turkish ] = "Tablo;Sorgu;SQL komutu";
     Text[ catalan ] = "Tabla;consulta;comando SQL";
+    Text[ finnish ] = "Taulukko;Kysely;SQL-komento";
 };
 String RID_STR_SEARCHING
 {
@@ -1231,6 +1277,7 @@ String RID_STR_SEARCHING
     Text[ turkish ] = "Arama alaný";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Campo de búsqueda";
+    Text[ finnish ] = "Hakukenttä";
 };
 String RID_STR_SEARCH_TYPE
 {
@@ -1256,6 +1303,7 @@ String RID_STR_SEARCH_TYPE
     Text[ turkish ] = "Hayýr;Etkin;Etkin deðil";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "No;Activo;Pasivo";
+    Text[ finnish ] = "Ei;Aktiivinen;Passiivinen";
 };
 String RID_STR_BOOL
 {
@@ -1281,6 +1329,7 @@ String RID_STR_BOOL
     Text[ turkish ] = "Hayýr;Evet";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "No;Sí";
+    Text[ finnish ] = "Ei;Kyllä";
 };
 String RID_STR_PROPPAGE_DEFAULT_TITLE
 {
@@ -1306,6 +1355,7 @@ String RID_STR_PROPPAGE_DEFAULT_TITLE
     Text[ turkish ] = "Genel";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "General";
+    Text[ finnish ] = "Yleiset";
 };
 String RID_STR_FORM
 {
@@ -1331,6 +1381,7 @@ String RID_STR_FORM
     Text[ turkish ] = "Form";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Formulario";
+    Text[ finnish ] = "Lomake";
 };
 String RID_STR_PROPPAGE_FORMCTL_TITLE
 {
@@ -1356,6 +1407,7 @@ String RID_STR_PROPPAGE_FORMCTL_TITLE
     Text[ turkish ] = "Veriler";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Datos";
+    Text[ finnish ] = "Tiedot";
 };
 String RID_STR_PROPPAGE_UNOCTL_TITLE
 {
@@ -1381,6 +1433,7 @@ String RID_STR_PROPPAGE_UNOCTL_TITLE
     Text[ turkish ] = "Komut öðesi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Elemento de control";
+    Text[ finnish ] = "Ohjain";
 };
 String RID_STR_TABWIN_PREFIX
 {
@@ -1405,6 +1458,7 @@ String RID_STR_TABWIN_PREFIX
     Text[ arabic ] = "ÌÏæá;ÇÓÊÝÓÇÑ;Sql;Sql [Native]";
     Text[ turkish ] = "Tablo;Sorgu;Sql;Sql [Native]";
     Text[ catalan ] = "Tabla;Consulta;Sql;Sql [Native]";
+    Text[ finnish ] = "Taulukko;kysely;Sql;Sql [alkuperäinen]";
 };
 String RID_STR_FORMSHELL
 {
@@ -1430,6 +1484,7 @@ String RID_STR_FORMSHELL
     Text[ turkish ] = "Form";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Formulario";
+    Text[ finnish ] = "Lomake";
 };
 String RID_STR_STDFORMNAME
 {
@@ -1459,6 +1514,7 @@ String RID_STR_STANDARD
     Text[ turkish ] = "Standart";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Predeterminado";
+    Text[ finnish ] = "Vakio";
 };
 String RID_STR_URLBUTTON_CLASSNAME
 {
@@ -1564,6 +1620,7 @@ String RID_STR_CONTROL
     Text[ turkish ] = "Komut alaný";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Elemento de control";
+    Text[ finnish ] = "Ohjain";
 };
 String RID_STR_REC_TEXT
 {
@@ -1589,6 +1646,7 @@ String RID_STR_REC_TEXT
     Text[ turkish ] = "Veri kümesi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Registro";
+    Text[ finnish ] = "Tietue";
 };
 String RID_STR_REC_FROM_TEXT
 {
@@ -1639,6 +1697,7 @@ String RID_STR_FORM_FILTERED
     Text[ turkish ] = "(filtrelenmiþ)";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "(filtrado)";
+    Text[ finnish ] = "(suodatettu)";
 };
 String RID_STR_FIELDSELECTION
 {
@@ -1664,6 +1723,7 @@ String RID_STR_FIELDSELECTION
     Text[ turkish ] = "Alan seçimi:";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Selección de campo:";
+    Text[ finnish ] = "Kentän valinta:";
 };
 String RID_STR_FIELDNULL
 {
@@ -1689,6 +1749,7 @@ String RID_STR_FIELDNULL
     Text[ turkish ] = "<Boþ>";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "<vacío>";
+    Text[ finnish ] = "<tyhjä>";
 };
 String RID_STR_READERROR
 {
@@ -1741,6 +1802,7 @@ String RID_STR_WRITEERROR
     Text[ turkish ] = "Veritabanýna veri yazma sýrasýnda hata";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Error al registrar datos en la base de datos";
+    Text[ finnish ] = "Virhe kirjoitettaessa tietoja tietokantaan";
 };
 String RID_STR_DELETEERROR
 {
@@ -1766,6 +1828,7 @@ String RID_STR_DELETEERROR
     Text[ turkish ] = "Veri silme sýrasýnda hata. ";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Error al eliminar datos. ";
+    Text[ finnish ] = "Virhe tietoja poistettaessa. ";
 };
 String RID_STR_ERR_CONNECTLOST
 {
@@ -1791,6 +1854,7 @@ String RID_STR_ERR_CONNECTLOST
     Text[ turkish ] = "Veritabaný baðlantýsý kesildi.";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Interrumpida la conexión con la base de datos.";
+    Text[ finnish ] = "Yhteys tietokantaan on katkennut.";
 };
 String RID_STR_CONNECTERROR
 {
@@ -1800,7 +1864,7 @@ String RID_STR_CONNECTERROR
     Text [ italian ] = "Impossibile creare la connessione" ;
     Text [ portuguese_brazilian ] = "NÆo consigo criar a conexÆo" ;
     Text [ portuguese ] = "Não foi possível estabelecer a ligação." ;
-    Text [ finnish ] = "Yhteyttä ei voi muodostaa" ;
+    Text [ finnish ] = "Yhteyden muodostus ei onnistu" ;
     Text [ danish ] = "Det var ikke muligt at oprette forbindelsen" ;
     Text [ french ] = "Création de la connexion impossible" ;
     Text [ swedish ] = "Uppkoppling avbruten" ;
@@ -1843,6 +1907,7 @@ String RID_STR_SYNTAXERROR
     Text[ korean ] = "ÁúÀÇ Ç¥Çö½ÄÀ» ºÐ¼®ÇÒ ¶§ ¿À·ù";
     Text[ turkish ] = "Sorgu ifadesinde sözdizim hatasý";
     Text[ catalan ] = "Ha ocurrido un error al analizar la expresión de la consulta";
+    Text[ finnish ] = "Syntaksivirhe kyselylausekkeessa";
 };
 
 String RID_STR_INSERTING_ALLOWED_ERROR
@@ -1868,6 +1933,7 @@ String RID_STR_INSERTING_ALLOWED_ERROR
     Text[ arabic ] = "áÇ íõÓãÍ ÈÅÏÎÇá ÇáÓÌáÇÊ!";
     Text[ turkish ] = "Veri kümeleri eklenemez!";
     Text[ catalan ] = "¡No se permite insertar registros de datos!";
+    Text[ finnish ] = "Tietuiden lisääminen ei ole sallittua.";
 };
 
 String RID_STR_UPDATING_ALLOWED_ERROR
@@ -1893,6 +1959,7 @@ String RID_STR_UPDATING_ALLOWED_ERROR
     Text[ arabic ] = "áÇ íõÓãÍ ÈÊÚÏíá ÇáÓÌáÇÊ!";
     Text[ turkish ] = "Veri kümeleri deðiþtirilemez!";
     Text[ catalan ] = "¡No se permite modificar registros de datos!";
+    Text[ finnish ] = "Tietuiden muuttaminen ei ole sallittua.";
 };
 
 String RID_STR_DELETING_ALLOWED_ERROR
@@ -1918,6 +1985,7 @@ String RID_STR_DELETING_ALLOWED_ERROR
     Text[ arabic ] = "áÇ íõÓãÍ ÈÍÐÝ ÇáÓÌáÇÊ!";
     Text[ turkish ] = "Veri kümeleri silinemez!";
     Text[ catalan ] = "¡No se permite eliminar registros de datos!";
+    Text[ finnish ] = "Tietuiden poistaminen ei ole sallittua.";
 };
 
 String RID_STR_DELETECONFIRM_RECORD
@@ -1944,6 +2012,7 @@ String RID_STR_DELETECONFIRM_RECORD
     Text[ turkish ] = "# kaydý silmek istiyorsunuz.";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Usted desea eliminar 1 registro de datos.";
+    Text[ finnish ] = "You will be deleting record #.";
 };
 String RID_STR_DELETECONFIRM_RECORDS
 {
@@ -1969,6 +2038,7 @@ String RID_STR_DELETECONFIRM_RECORDS
     Text[ turkish ] = "# kaydý silmek istiyorsunuz.";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Usted pretende eliminar # registros de datos.";
+    Text[ finnish ] = " tietuetta poistetaan.";
 };
 String RID_STR_DELETECONFIRM
 {
@@ -1994,6 +2064,7 @@ String RID_STR_DELETECONFIRM
     Text[ turkish ] = "\"Evet\" seçildiðinde, iþlem artýk geri alýnamaz!\nYinde de devam etmek istiyor musunuz?";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "¡Si ha pulsado Sí, la operación no se podrá deshacer!\n¿Desea continuar de todas formas?";
+    Text[ finnish ] = "Jos valitset Kyllä, et voi peruuttaa tätä toimintoa.\nHaluatko kuitenkin jatkaa?";
 };
 String RID_STR_WARNING
 {
@@ -2019,6 +2090,7 @@ String RID_STR_WARNING
     Text[ turkish ] = "Uyarý!";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "¡Advertencia!";
+    Text[ finnish ] = "Varoitus!";
 };
 
 String RID_STR_NO_FORM_CONNECT
@@ -2045,6 +2117,7 @@ String RID_STR_NO_FORM_CONNECT
     Text[ turkish ] = "Form '#' ile form '#' arasýnda baðlantý oluþturulamaz";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "No se pudo realizar el vínculo entre el formulario '#' y el formulario '#'.";
+    Text[ finnish ] = "Yhteyttä ei voitu muodostaa lomakkeen '' ja lomakkeen '' välille";
 };
 
 String RID_STR_FIELD_NOT_FOUND
@@ -2071,6 +2144,7 @@ String RID_STR_FIELD_NOT_FOUND
     Text[ turkish ] = "Alan '#' bulunamadý.";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "El campo '#' no pudo ser encontrado.";
+    Text[ finnish ] = "Kenttää '' ei löytynyt";
 };
 
 String RID_STR_TABLE_NOT_FOUND
@@ -2097,6 +2171,7 @@ String RID_STR_TABLE_NOT_FOUND
     Text[ turkish ] = "Tablo '#' bulunamadý.";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "No se pudo encontrar la tabla '#'.";
+    Text[ finnish ] = "Taulukkoa '' ei löytynyt";
 };
 
 String RID_STR_QUERY_NOT_FOUND
@@ -2123,6 +2198,7 @@ String RID_STR_QUERY_NOT_FOUND
     Text[ turkish ] = "Sorgu '#' bulunamadý.";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "No se pudo encontrar la consulta '#'.";
+    Text[ finnish ] = "Kyselyä '' ei löytynyt";
 };
 
 String RID_ERR_NO_ELEMENT_TITLE
@@ -2149,6 +2225,7 @@ String RID_ERR_NO_ELEMENT_TITLE
     Text[ turkish ] = "Girilen metin, listede yer alan öðelerden deðil.";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "El texto indicado no es ningún elemento de la lista.";
+    Text[ finnish ] = "Teksti ei vastaa mitään luettelon kohdetta.";
 };
 
 String RID_ERR_NO_ELEMENT
@@ -2175,6 +2252,7 @@ String RID_ERR_NO_ELEMENT
     Text[ turkish ] = "Listeden bir öðe seçin ya da listedeki öðelerden biriyle örtüþen bir metin girin.";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Seleccione un elemento de la lista o introduzca un texto que concuerde con uno de los elementos de la lista.";
+    Text[ finnish ] = "Valitse kohde luettelosta tai kirjoita jotakin luettelon kohdetta vastaava teksti.";
 };
 
 String RID_STR_READONLY
@@ -2201,6 +2279,7 @@ String RID_STR_READONLY
     Text[ turkish ] = "Salt okunur";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Solo lectura";
+    Text[ finnish ] = "Vain luku";
 };
 String RID_STR_GROUPBOX
 {
@@ -2226,6 +2305,7 @@ String RID_STR_GROUPBOX
     Text[ turkish ] = "Çerçeve öðesi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Elemento del marco";
+    Text[ finnish ] = "Kehyselementti";
 };
 String RID_STR_TABINDEX
 {
@@ -2251,6 +2331,7 @@ String RID_STR_TABINDEX
     Text[ turkish ] = "Sýra";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Orden";
+    Text[ finnish ] = "Järjestys";
 };
 String RID_STR_NAVIGATION
 {
@@ -2276,6 +2357,7 @@ String RID_STR_NAVIGATION
     Text[ turkish ] = "Dolaþma";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Navegación";
+    Text[ finnish ] = "Siirtyminen";
 };
 String RID_STR_FILTER_CRITERIA
 {
@@ -2301,6 +2383,7 @@ String RID_STR_FILTER_CRITERIA
     Text[ turkish ] = "Filtre";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Filtro";
+    Text[ finnish ] = "Suodatin";
 };
 String RID_STR_SORT_CRITERIA
 {
@@ -2326,6 +2409,7 @@ String RID_STR_SORT_CRITERIA
     Text[ turkish ] = "Sýralama";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Ordenar";
+    Text[ finnish ] = "Lajittele";
 };
 String RID_STR_NAVIGATIONBAR
 {
@@ -2351,6 +2435,7 @@ String RID_STR_NAVIGATIONBAR
     Text[ turkish ] = "Dolaþma çubuðu";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Barra de navegación";
+    Text[ finnish ] = "Siirtymistyökalurivi";
 };
 String RID_STR_CYCLE
 {
@@ -2376,6 +2461,7 @@ String RID_STR_CYCLE
     Text[ turkish ] = "Devre";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Ciclo";
+    Text[ finnish ] = "Kierto";
 };
 String RID_STR_ENUM_CYCLE
 {
@@ -2401,6 +2487,7 @@ String RID_STR_ENUM_CYCLE
     Text[ turkish ] = "Tüm veri kümeleri;Yürürlükteki veri kümesi;Yürürlükteki sayfa";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Todos los registros de datos;Registro actual;Página actual";
+    Text[ finnish ] = "Kaikki tietueet;Aktiivinen tietue;Nykyinen sivu";
 };
 String RID_STR_ENUM_NAVIGATION
 {
@@ -2426,6 +2513,7 @@ String RID_STR_ENUM_NAVIGATION
     Text[ turkish ] = "Hayýr;Evet;Üst düzey form";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "No;Sí;Formulario superior";
+    Text[ finnish ] = "Ei;Kyllä;Päälomake";
 };
 String RID_STR_DIRTY
 {
@@ -2451,6 +2539,7 @@ String RID_STR_DIRTY
     Text[ turkish ] = "Deðiþtirildi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Modificado";
+    Text[ finnish ] = "Muokattu";
 };
 String RID_STR_OLDVALUE
 {
@@ -2476,6 +2565,7 @@ String RID_STR_OLDVALUE
     Text[ turkish ] = "Eski deðer";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Valor antiguo";
+    Text[ finnish ] = "Vanha arvo";
 };
 String RID_STR_VALUE
 {
@@ -2501,6 +2591,7 @@ String RID_STR_VALUE
     Text[ turkish ] = "Deðer";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Valor";
+    Text[ finnish ] = "Arvo";
 };
 String RID_STR_FORMATKEY
 {
@@ -2526,6 +2617,7 @@ String RID_STR_FORMATKEY
     Text[ turkish ] = "Formatlama";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Formato";
+    Text[ finnish ] = "Muotoilu";
 };
 String RID_STR_REQUIRED
 {
@@ -2551,6 +2643,7 @@ String RID_STR_REQUIRED
     Text[ turkish ] = "Giriþ gerekli";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Entrada requerida";
+    Text[ finnish ] = "Merkintä pakollinen";
 };
 String RID_STR_SCALE
 {
@@ -2576,6 +2669,7 @@ String RID_STR_SCALE
     Text[ turkish ] = "Ölçeklendirme";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Escala";
+    Text[ finnish ] = "Skaalaa";
 };
 String RID_STR_SIZE
 {
@@ -2601,6 +2695,7 @@ String RID_STR_SIZE
     Text[ turkish ] = "Boyut";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Tamaño";
+    Text[ finnish ] = "Koko";
 };
 String RID_STR_UNIQUE
 {
@@ -2626,6 +2721,7 @@ String RID_STR_UNIQUE
     Text[ turkish ] = "Benzersiz";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Único";
+    Text[ finnish ] = "Ainutlaatuinen";
 };
 String RID_STR_CLASSID
 {
@@ -2651,6 +2747,7 @@ String RID_STR_CLASSID
     Text[ turkish ] = "Sýnýf dizini";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Índice de clase";
+    Text[ finnish ] = "Luokan tunnus";
 };
 String RID_STR_LEFT
 {
@@ -2676,6 +2773,7 @@ String RID_STR_LEFT
     Text[ turkish ] = "Sol";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Izquierda";
+    Text[ finnish ] = "Vasen";
 };
 String RID_STR_RIGHT
 {
@@ -2701,6 +2799,7 @@ String RID_STR_RIGHT
     Text[ turkish ] = "Sað";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Derecha";
+    Text[ finnish ] = "Oikea";
 };
 String RID_STR_HEIGHT
 {
@@ -2726,6 +2825,7 @@ String RID_STR_HEIGHT
     Text[ turkish ] = "Yükseklik";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Altura";
+    Text[ finnish ] = "Korkeus";
 };
 String RID_STR_WIDTH
 {
@@ -2751,6 +2851,7 @@ String RID_STR_WIDTH
     Text[ turkish ] = "Geniþlik";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Ancho";
+    Text[ finnish ] = "Leveys";
 };
 String RID_STR_LISTINDEX
 {
@@ -2776,6 +2877,7 @@ String RID_STR_LISTINDEX
     Text[ turkish ] = "Liste dizini";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Indice de listas";
+    Text[ finnish ] = "Luettelohakemisto";
 };
 String RID_STR_ROWHEIGHT
 {
@@ -2801,6 +2903,7 @@ String RID_STR_ROWHEIGHT
     Text[ turkish ] = "Satýr yüksekliði";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Altura de fila";
+    Text[ finnish ] = "Rivin korkeus";
 };
 String RID_STR_FILLCOLOR
 {
@@ -2826,6 +2929,7 @@ String RID_STR_FILLCOLOR
     Text[ turkish ] = "Dolgu rengi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Color de relleno";
+    Text[ finnish ] = "Täyttöväri";
 };
 String RID_STR_TEXTCOLOR
 {
@@ -2851,6 +2955,7 @@ String RID_STR_TEXTCOLOR
     Text[ turkish ] = "Metin rengi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Color de texto";
+    Text[ finnish ] = "Tekstin väri";
 };
 String RID_STR_LINECOLOR
 {
@@ -2876,6 +2981,7 @@ String RID_STR_LINECOLOR
     Text[ turkish ] = "Çizgi rengi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Color de línea";
+    Text[ finnish ] = "Viivan väri";
 };
 String RID_STR_REFVALUE
 {
@@ -2901,6 +3007,7 @@ String RID_STR_REFVALUE
     Text[ turkish ] = "Referans deðer";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Valor referencial";
+    Text[ finnish ] = "Viitteen arvo";
 };
 String RID_STR_STRINGITEMLIST
 {
@@ -2926,6 +3033,7 @@ String RID_STR_STRINGITEMLIST
     Text[ turkish ] = "Liste giriþleri";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Entradas de listas";
+    Text[ finnish ] = "Luettelomerkinnät";
 };
 String RID_STR_COLUMN
 {
@@ -2951,6 +3059,7 @@ String RID_STR_COLUMN
     Text[ turkish ] = "Sütun";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Columna";
+    Text[ finnish ] = "Sar";
 };
 String RID_STR_BUTTONTYPE
 {
@@ -2977,6 +3086,7 @@ String RID_STR_BUTTONTYPE
     Text[ turkish ] = "Düðme türü";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Tipo de botón";
+    Text[ finnish ] = "Painikkeen tyyppi";
 };
 String RID_STR_SUBMIT_ACTION
 {
@@ -3002,6 +3112,7 @@ String RID_STR_SUBMIT_ACTION
     Text[ turkish ] = "URL";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "URL";
+    Text[ finnish ] = "URL-osoite";
 };
 String RID_STR_SUBMIT_METHOD
 {
@@ -3027,6 +3138,7 @@ String RID_STR_SUBMIT_METHOD
     Text[ turkish ] = "Gönderme türü";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Tipo de submit";
+    Text[ finnish ] = "Lähetyksen tyyppi";
 };
 String RID_STR_SUBMIT_ENCODING
 {
@@ -3052,6 +3164,7 @@ String RID_STR_SUBMIT_ENCODING
     Text[ turkish ] = "Gönderme sýrasýnda kodlama";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Codificar submit";
+    Text[ finnish ] = "Lähetyskoodaus";
 };
 String RID_STR_DEFAULTVALUE
 {
@@ -3077,6 +3190,7 @@ String RID_STR_DEFAULTVALUE
     Text[ turkish ] = "Standart deðer";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Valor predeterminado";
+    Text[ finnish ] = "Oletusarvo";
 };
 String RID_STR_SUBMIT_TARGET
 {
@@ -3102,6 +3216,7 @@ String RID_STR_SUBMIT_TARGET
     Text[ turkish ] = "Frame";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Frame";
+    Text[ finnish ] = "Kohdekehys";
 };
 String RID_STR_ENUM_BUTTONTYPE
 {
@@ -3127,6 +3242,7 @@ String RID_STR_ENUM_BUTTONTYPE
     Text[ turkish ] = "Push;Submit;Reset;Url";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Push;Submit;Reset;Url";
+    Text[ finnish ] = "Työnnä;Lähetä;Palauta;Url-osoite";
 };
 String RID_STR_ENUM_SUBMIT_METHOD
 {
@@ -3152,6 +3268,7 @@ String RID_STR_ENUM_SUBMIT_METHOD
     Text[ turkish ] = "Get;Post";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Get;Post";
+    Text[ finnish ] = "Hae;Lähetä";
 };
 String RID_STR_ENUM_SUBMIT_ENCODING
 {
@@ -3177,6 +3294,7 @@ String RID_STR_ENUM_SUBMIT_ENCODING
     Text[ turkish ] = "URL;Multipart;Metin";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "URL;Multipart;Texto";
+    Text[ finnish ] = "URL;Moniosainen;Teksti";
 };
 String RID_STR_DEFAULT_CHECKED
 {
@@ -3202,6 +3320,7 @@ String RID_STR_DEFAULT_CHECKED
     Text[ turkish ] = "Standart durum";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Estado predeterminado";
+    Text[ finnish ] = "Oletustila";
 };
 String RID_STR_ENUM_CHECKED
 {
@@ -3227,6 +3346,7 @@ String RID_STR_ENUM_CHECKED
     Text[ turkish ] = "Seçilmedi;Seçildi;Belirsiz";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "No seleccionado;Seleccionado;Indeterminado";
+    Text[ finnish ] = "Ei valittu;Valittu;Ei määritetty";
 };
 String RID_STR_ENUM_SUBMIT_TARGET
 {
@@ -3256,6 +3376,7 @@ String RID_STR_IMAGE_URL
     Text[ turkish ] = "Grafik";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Imagen";
+    Text[ finnish ] = "Kuva";
 };
 String RID_STR_DEFAULT_SELECT_SEQ
 {
@@ -3281,6 +3402,7 @@ String RID_STR_DEFAULT_SELECT_SEQ
     Text[ turkish ] = "Standart seçim";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Selección predeterminada";
+    Text[ finnish ] = "Oletusvalinta";
 };
 String RID_STR_UNDO_PROPERTY
 {
@@ -3306,6 +3428,7 @@ String RID_STR_UNDO_PROPERTY
     Text[ turkish ] = "'#' özelliðini belirle";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Establecer propiedad '#'";
+    Text[ finnish ] = "Määritä ominaisuus ''";
 };
 String RID_STR_UNDO_CONTAINER_INSERT
 {
@@ -3331,6 +3454,7 @@ String RID_STR_UNDO_CONTAINER_INSERT
     TEXT[ turkish ] = "Tabloya ekle";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Insertar en el contenedor";
+    TEXT[ finnish ] = "Lisää säiliöön";
 };
 String RID_STR_UNDO_CONTAINER_REMOVE
 {
@@ -3356,6 +3480,7 @@ String RID_STR_UNDO_CONTAINER_REMOVE
     TEXT[ turkish ] = "Sil: #";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Eliminar #";
+    TEXT[ finnish ] = "Poista ";
 };
 String RID_STR_UNDO_CONTAINER_REMOVE_MULTIPLE
 {
@@ -3381,6 +3506,7 @@ String RID_STR_UNDO_CONTAINER_REMOVE_MULTIPLE
     TEXT[ turkish ] = "# nesnelerini sil";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Eliminar # objetos";
+    TEXT[ finnish ] = "Poista  objektia";
 };
 String RID_STR_UNDO_CONTAINER_REPLACE
 {
@@ -3406,6 +3532,7 @@ String RID_STR_UNDO_CONTAINER_REPLACE
     TEXT[ turkish ] = "Tablo öðesini deðiþtir";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Reemplazar un elemento del contenedor.";
+    TEXT[ finnish ] = "Korvaa säiliöelementti";
 };
 String RID_STR_UNDO_DELETE_LOGICAL
 {
@@ -3431,6 +3558,7 @@ String RID_STR_UNDO_DELETE_LOGICAL
     TEXT[ turkish ] = "Yapýyý sil";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Eliminar estructura";
+    TEXT[ finnish ] = "Poista rakenne";
 };
 String RID_STR_UNDO_TABORDER
 {
@@ -3456,6 +3584,7 @@ String RID_STR_UNDO_TABORDER
     Text[ turkish ] = "Etkinleþtirme sýrasýný belirle";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Establecer el orden de activación";
+    Text[ finnish ] = "Määritä sarkainjärjestys";
 };
 String RID_STR_UNDO_MODEL_REPLACE
 {
@@ -3480,6 +3609,7 @@ String RID_STR_UNDO_MODEL_REPLACE
     Text[ arabic ] = "ÇÓÊÈÏÇá ÚäÕÑ ÊÍßã";
     Text[ turkish ] = "Komut öðelerini deðiþtir";
     Text[ catalan ] = "Reemplazar campo de control";
+    Text[ finnish ] = "Korvaa ohjain";
 };
 String RID_STR_DATE
 {
@@ -3505,6 +3635,7 @@ String RID_STR_DATE
     Text[ turkish ] = "Tarih";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Fecha";
+    Text[ finnish ] = "Päivämäärä";
 };
 String RID_STR_DATEMIN
 {
@@ -3530,6 +3661,7 @@ String RID_STR_DATEMIN
     Text[ turkish ] = "Tarih (asgari)";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Fecha mín.";
+    Text[ finnish ] = "Päivämäärä vähintään";
 };
 String RID_STR_DATEMAX
 {
@@ -3555,6 +3687,7 @@ String RID_STR_DATEMAX
     Text[ turkish ] = "Tarih (azami)";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Fecha máx.";
+    Text[ finnish ] = "Päivämäärä enintään";
 };
 String RID_STR_DATEFORMAT
 {
@@ -3580,6 +3713,7 @@ String RID_STR_DATEFORMAT
     Text[ turkish ] = "Tarih formatý";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Formato de fecha";
+    Text[ finnish ] = "Päivämäärämuoto";
 };
 String RID_STR_DATEFORMAT_LIST
 {
@@ -3605,6 +3739,7 @@ String RID_STR_DATEFORMAT_LIST
     Text[ turkish ] = "Standart (kýsa);Standart (kýsa YY);Standart (kýsa YYYY);Standart (uzun);GG.AA.YY;AA.GG.YY;YY.AA.GG;GG.AA.YYYY;AA.GG.YYYY;YYYY.AA.GG;YY-AA-GG (DIN5008);YYYY-AA-GG (DIN5008)";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Estándar (breve);Estándar (breve JJ);Estándar (breve JJJJ);Estándar (largo);DD.MM.AA;MM.DD.AA;AA.MM.DD;DD.MM.AAAA;MM.DD.AAAA;AAAA.MM.DD;AA-MM-DD (DIN5008);JJJJ-MM-TT (DIN5008)";
+    Text[ finnish ] = "Vakio (lyhyt);Vakio (lyhyt VV);Vakio (lyhyt VVVV);Vakio (pitkä);PP.KK.VV;KK.PP.VV;VV.KK.PP;PP.KK.VVVV;KK.PP.VVVV;VVVV.KK.PP;VV-KK-PP (DIN5008);VVVV-KK-PP (DIN5008)";
 };
 String RID_STR_TIME
 {
@@ -3630,6 +3765,7 @@ String RID_STR_TIME
     Text[ turkish ] = "Zaman";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Hora";
+    Text[ finnish ] = "Aika";
 };
 String RID_STR_TIMEMIN
 {
@@ -3655,6 +3791,7 @@ String RID_STR_TIMEMIN
     Text[ turkish ] = "Zaman (asgari)";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Tiempo mín.";
+    Text[ finnish ] = "Aika väh.";
 };
 String RID_STR_TIMEMAX
 {
@@ -3680,6 +3817,7 @@ String RID_STR_TIMEMAX
     Text[ turkish ] = "Saat (azami)";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Tiempo máx.";
+    Text[ finnish ] = "Aika enint.";
 };
 String RID_STR_TIMEFORMAT
 {
@@ -3705,6 +3843,7 @@ String RID_STR_TIMEFORMAT
     Text[ turkish ] = "Zaman formatý";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Formato de hora";
+    Text[ finnish ] = "Ajan muoto";
 };
 String RID_STR_TIMEFORMAT_LIST
 {
@@ -3730,6 +3869,7 @@ String RID_STR_TIMEFORMAT_LIST
     Text[ turkish ] = "13:45;13:45:00;01:45 PM;01:45:00 PM";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "13:45;13:45:00;01:45 PM;01:45:00 PM";
+    Text[ finnish ] = "13:45;13:45:00;01:45 PM;01:45:00 PM";
 };
 String RID_STR_VALUEMIN
 {
@@ -3755,6 +3895,7 @@ String RID_STR_VALUEMIN
     Text[ turkish ] = "Asgari deðer";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Valor mín.";
+    Text[ finnish ] = "Arvo väh.";
 };
 String RID_STR_VALUEMAX
 {
@@ -3780,6 +3921,7 @@ String RID_STR_VALUEMAX
     Text[ turkish ] = "Azami deðer";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Valor máx.";
+    Text[ finnish ] = "Arvo enint.";
 };
 String RID_STR_VALUESTEP
 {
@@ -3805,6 +3947,7 @@ String RID_STR_VALUESTEP
     Text[ turkish ] = "Aralýk";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Intervalo";
+    Text[ finnish ] = "Lisäys-/vähennysarvo";
 };
 String RID_STR_CURRENCYSYMBOL
 {
@@ -3830,6 +3973,7 @@ String RID_STR_CURRENCYSYMBOL
     Text[ turkish ] = "Para birimi simgesi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Símbolo de moneda";
+    Text[ finnish ] = "Valuuttasymboli";
 };
 String RID_STR_CURRSYM_POSITION
 {
@@ -3855,6 +3999,7 @@ String RID_STR_CURRSYM_POSITION
     Text[ turkish ] = "Simge öne ekle";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Situar símbolo delante";
+    Text[ finnish ] = "Etuliitteen symboli";
 };
 String RID_STR_LIST_N_COMBO_FILLLIST
 {
@@ -3879,6 +4024,7 @@ String RID_STR_LIST_N_COMBO_FILLLIST
     Text[ arabic ] = "ÊÚÐÑ ÇáÊÚÑÝ Úáì ãÍÊæíÇÊ ãÑÈÚ ÊÍÑíÑ æÓÑÏ Ãæ ãÑÈÚ ÞÇÆãÉ.";
     Text[ turkish ] = "Kombinasyon alanýnýn ya da liste alanýnýn içeriði belirlenemedi.";
     Text[ catalan ] = "No se pudo determinar el contenido de un campo combinado o un listado.";
+    Text[ finnish ] = "Yhdistelmäruudun tai luettelokentän sisältöä ei voitu määrittää.";
 };
 String RID_STR_EDITMASK
 {
@@ -3904,6 +4050,7 @@ String RID_STR_EDITMASK
     Text[ turkish ] = "Giriþ ekraný";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Máscara de entrada";
+    Text[ finnish ] = "Muokkaa peitettä";
 };
 String RID_STR_LITERALMASK
 {
@@ -3929,6 +4076,7 @@ String RID_STR_LITERALMASK
     Text[ turkish ] = "Karakter ekraný";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Máscara de caracteres";
+    Text[ finnish ] = "Literaalipeite";
 };
 String RID_STR_ENABLED
 {
@@ -3954,6 +4102,7 @@ String RID_STR_ENABLED
     Text[ turkish ] = "Etkinleþtirildi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Activado";
+    Text[ finnish ] = "Käytössä";
 };
 String RID_STR_AUTOCOMPLETE
 {
@@ -3979,6 +4128,7 @@ String RID_STR_AUTOCOMPLETE
     Text[ turkish ] = "Otomatik olarak tamamla";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Rellenar automáticamente";
+    Text[ finnish ] = "Automaattinen täyttö";
 };
 String RID_STR_LINECOUNT
 {
@@ -4004,6 +4154,7 @@ String RID_STR_LINECOUNT
     Text[ turkish ] = "Satýr sayýsý";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Número de líneas";
+    Text[ finnish ] = "Rivimäärä";
 };
 String RID_STR_MAXTEXTLEN
 {
@@ -4029,6 +4180,7 @@ String RID_STR_MAXTEXTLEN
     Text[ turkish ] = "Azami metin uzunluðu";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Longitud máx. del texto";
+    Text[ finnish ] = "Suurin tekstin pituus";
 };
 String RID_STR_SPIN
 {
@@ -4054,6 +4206,7 @@ String RID_STR_SPIN
     Text[ arabic ] = "ÒÑ ÒíÇÏÉ æäÞÕÇä";
     Text[ turkish ] = "Deðer kutusu";
     Text[ catalan ] = "Campo giratorio";
+    Text[ finnish ] = "Askelluspainike";
 };
 String RID_STR_STRICTFORMAT
 {
@@ -4079,6 +4232,7 @@ String RID_STR_STRICTFORMAT
     Text[ turkish ] = "Format denetimi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Control de formato";
+    Text[ finnish ] = "Tarkka muoto";
 };
 String RID_STR_SHOWTHOUSANDSEP
 {
@@ -4104,6 +4258,7 @@ String RID_STR_SHOWTHOUSANDSEP
     Text[ turkish ] = "Binlik ayýrma iþareti";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Delimitador decimal";
+    Text[ finnish ] = "Tuhaterotin";
 };
 String RID_STR_HARDLINEBREAKS
 {
@@ -4129,6 +4284,7 @@ String RID_STR_HARDLINEBREAKS
     Text[ turkish ] = "Kullanýcý tanýmlý satýr sonu";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Salto de línea manual";
+    Text[ finnish ] = "Näytä rivinvaihto";
 };
 String RID_STR_PRINTABLE
 {
@@ -4154,6 +4310,7 @@ String RID_STR_PRINTABLE
     Text[ turkish ] = "Yazdýr";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Imprimir";
+    Text[ finnish ] = "Tulosta";
 };
 String RID_STR_TARGET_URL
 {
@@ -4179,6 +4336,7 @@ String RID_STR_TARGET_URL
     Text[ turkish ] = "URL";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "URL";
+    Text[ finnish ] = "URL-osoite";
 };
 String RID_STR_TARGET_FRAME
 {
@@ -4204,6 +4362,7 @@ String RID_STR_TARGET_FRAME
     Text[ turkish ] = "Frame";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Frame";
+    Text[ finnish ] = "Kohdekehys";
 };
 String RID_STR_IMPORT_GRAPHIC
 {
@@ -4229,6 +4388,7 @@ String RID_STR_IMPORT_GRAPHIC
     Text[ turkish ] = "Grafik ekle";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Insertar imagen";
+    Text[ finnish ] = "Lisää grafiikkaa";
 };
 String RID_STR_TAG
 {
@@ -4254,6 +4414,7 @@ String RID_STR_TAG
     Text[ turkish ] = "Ek bilgi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Información adicional";
+    Text[ finnish ] = "Lisätietoja";
 };
 String RID_STR_ECHO_CHAR
 {
@@ -4279,6 +4440,7 @@ String RID_STR_ECHO_CHAR
     Text[ turkish ] = "Þifre karakterleri";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Caracteres para contraseñas";
+    Text[ finnish ] = "Salasanan merkit";
 };
 String RID_STR_EMPTY_IS_NULL
 {
@@ -4304,6 +4466,7 @@ String RID_STR_EMPTY_IS_NULL
     Text[ turkish ] = "Boþ karakter dizilimi SIFIR";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Serie de caracteres vacía es NULL";
+    Text[ finnish ] = "Tyhjän merkkijonon arvo on NULL";
 };
 String RID_STR_DECIMAL_ACCURACY
 {
@@ -4329,6 +4492,7 @@ String RID_STR_DECIMAL_ACCURACY
     Text[ turkish ] = "Virgül sonrasý haneler";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Decimales";
+    Text[ finnish ] = "Desimaalitarkkuus";
 };
 String RID_STR_DATE_SHOW_CENTURY
 {
@@ -4354,6 +4518,7 @@ String RID_STR_DATE_SHOW_CENTURY
     Text[ turkish ] = "Yüzyýlý görüntüle";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Mostrar siglo";
+    Text[ finnish ] = "Näytä vuosisata";
 };
 String RID_STR_DEFAULT_BUTTON
 {
@@ -4379,6 +4544,7 @@ String RID_STR_DEFAULT_BUTTON
     Text[ turkish ] = "Standart düðme";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Botón predeterminado";
+    Text[ finnish ] = "Oletuspainike";
 };
  // Events
 String RID_STR_EVT_APPROVEPARAMETER
@@ -4405,6 +4571,7 @@ String RID_STR_EVT_APPROVEPARAMETER
     Text[ turkish ] = "Parametreleri doldur";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Rellenar parámetros";
+    Text[ finnish ] = "Täyttöparametrit";
 };
 
 String RID_STR_EVT_ACTIONPERFORMED
@@ -4431,6 +4598,7 @@ String RID_STR_EVT_ACTIONPERFORMED
     Text[ turkish ] = "Baþlatma sýrasýnda";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Al ejecutar";
+    Text[ finnish ] = "Otettaessa käyttöön";
 };
 String RID_STR_EVT_AFTERDELETE
 {
@@ -4456,6 +4624,7 @@ String RID_STR_EVT_AFTERDELETE
     Text[ turkish ] = "Silmeden sonra";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Después de eliminar";
+    Text[ finnish ] = "Poistamisen jälkeen";
 };
 String RID_STR_EVT_AFTERINSERT
 {
@@ -4481,6 +4650,7 @@ String RID_STR_EVT_AFTERINSERT
     Text[ turkish ] = "Eklemeden sonra";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Después de insertar";
+    Text[ finnish ] = "Lisäämisen jälkeen";
 };
 String RID_STR_EVT_AFTERUPDATE
 {
@@ -4506,6 +4676,7 @@ String RID_STR_EVT_AFTERUPDATE
     Text[ turkish ] = "Güncellemeden sonra";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Después de actualizar";
+    Text[ finnish ] = "Päivittämisen jälkeen";
 };
 String RID_STR_EVT_BEFOREDELETE
 {
@@ -4531,6 +4702,7 @@ String RID_STR_EVT_BEFOREDELETE
     Text[ turkish ] = "Silmeden önce";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Antes de eliminar";
+    Text[ finnish ] = "Ennen poistamista";
 };
 String RID_STR_EVT_BEFOREINSERT
 {
@@ -4556,6 +4728,7 @@ String RID_STR_EVT_BEFOREINSERT
     Text[ turkish ] = "Eklemeden önce";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Antes de insertar";
+    Text[ finnish ] = "Ennen lisäämistä";
 };
 String RID_STR_EVT_BEFOREUPDATE
 {
@@ -4581,6 +4754,7 @@ String RID_STR_EVT_BEFOREUPDATE
     Text[ turkish ] = "Güncellemeden önce";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Antes de actualizar";
+    Text[ finnish ] = "Ennen päivittämistä";
 };
 
 String RID_STR_EVT_APPROVEROWCHANGE
@@ -4606,6 +4780,7 @@ String RID_STR_EVT_APPROVEROWCHANGE
     Text[ arabic ] = "ÞÈá ÊÛííÑ ÇáÓÌá";
     Text[ turkish ] = "Veri kümesi deðiþikliðinden önce";
     Text[ catalan ] = "Antes de la modificación del registro de datos";
+    Text[ finnish ] = "Ennen tietueen muuttamista";
 };
 
 String RID_STR_EVT_ROWCHANGE
@@ -4631,6 +4806,7 @@ String RID_STR_EVT_ROWCHANGE
     Text[ arabic ] = "ÈÚÏ ÊÛííÑ ÇáÓÌá";
     Text[ turkish ] = "Veri kümesi deðiþikliðinden sonra";
     Text[ catalan ] = "Después de la modificación del registro de datos";
+    Text[ finnish ] = "Tietueen muuttamisen jälkeen";
 };
 
 String RID_STR_EVT_COMPONENTHIDDEN
@@ -4657,6 +4833,7 @@ String RID_STR_EVT_COMPONENTHIDDEN
     Text[ turkish ] = "Gizle";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Ocultar";
+    Text[ finnish ] = "Piilota";
 };
 String RID_STR_EVT_COMPONENTMOVED
 {
@@ -4682,6 +4859,7 @@ String RID_STR_EVT_COMPONENTMOVED
     Text[ turkish ] = "Taþý";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Mover";
+    Text[ finnish ] = "Siirrä";
 };
 String RID_STR_EVT_COMPONENTPAINT
 {
@@ -4707,6 +4885,7 @@ String RID_STR_EVT_COMPONENTPAINT
     Text[ turkish ] = "Yenile";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Volver a dibujar";
+    Text[ finnish ] = "Päivitä";
 };
 String RID_STR_EVT_COMPONENTRESIZED
 {
@@ -4732,6 +4911,7 @@ String RID_STR_EVT_COMPONENTRESIZED
     Text[ turkish ] = "Boyutu deðiþtirildi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Tamaño modificado";
+    Text[ finnish ] = "Komponentin koko muutettu";
 };
 String RID_STR_EVT_COMPONENTSHOWN
 {
@@ -4757,6 +4937,7 @@ String RID_STR_EVT_COMPONENTSHOWN
     Text[ turkish ] = "Görüntüle";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Mostrar";
+    Text[ finnish ] = "Näkyvä komponentti";
 };
 String RID_STR_EVT_CONFIRMDELETE
 {
@@ -4782,6 +4963,7 @@ String RID_STR_EVT_CONFIRMDELETE
     Text[ turkish ] = "Silme iþlemini onayla";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Confirmar eliminación";
+    Text[ finnish ] = "Vahvista poistaminen";
 };
 String RID_STR_EVT_ELEMENTINSERTED
 {
@@ -4807,6 +4989,7 @@ String RID_STR_EVT_ELEMENTINSERTED
     Text[ turkish ] = "Öðe eklendi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Elemento insertado";
+    Text[ finnish ] = "Elementti lisätty";
 };
 String RID_STR_EVT_ELEMENTREMOVED
 {
@@ -4832,6 +5015,7 @@ String RID_STR_EVT_ELEMENTREMOVED
     Text[ turkish ] = "Öðe kaldýrýldý";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Elemento eliminado";
+    Text[ finnish ] = "Elementti poistettu";
 };
 String RID_STR_EVT_ELEMENTREPLACED
 {
@@ -4857,6 +5041,7 @@ String RID_STR_EVT_ELEMENTREPLACED
     Text[ turkish ] = "Öðe baþkasýyla deðiþtirildi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Elemento sustituido";
+    Text[ finnish ] = "Elementti korvattu";
 };
 String RID_STR_EVT_ERROROCCURED
 {
@@ -4882,6 +5067,7 @@ String RID_STR_EVT_ERROROCCURED
     Text[ turkish ] = "Hata oluþtu";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Ha ocurrido un error";
+    Text[ finnish ] = "On ilmennyt virhe";
 };
 String RID_STR_EVT_FIRING
 {
@@ -4907,6 +5093,7 @@ String RID_STR_EVT_FIRING
     Text[ turkish ] = "Firing";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Disparo";
+    Text[ finnish ] = "Laukaistaan";
 };
 String RID_STR_EVT_FOCUSGAINED
 {
@@ -4932,6 +5119,7 @@ String RID_STR_EVT_FOCUSGAINED
     Text[ turkish ] = "Odaklandý";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Recepción de foco";
+    Text[ finnish ] = "Kohdistus saavutettu";
 };
 String RID_STR_EVT_FOCUSLOST
 {
@@ -4957,6 +5145,7 @@ String RID_STR_EVT_FOCUSLOST
     Text[ turkish ] = "Odak kayboldu";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Pérdida de foco";
+    Text[ finnish ] = "Kohdistus menetetty";
 };
 String RID_STR_EVT_ITEMSTATECHANGED
 {
@@ -4982,6 +5171,7 @@ String RID_STR_EVT_ITEMSTATECHANGED
     Text[ turkish ] = "Durum deðiþtirildi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Estado modificado";
+    Text[ finnish ] = "Nimikkeen tilaa muutettu";
 };
 String RID_STR_EVT_KEYTYPED
 {
@@ -5007,6 +5197,7 @@ String RID_STR_EVT_KEYTYPED
     Text[ turkish ] = "Tuþ basýlý";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Tecla pulsada";
+    Text[ finnish ] = "Syötetty avain";
 };
 
 String RID_STR_EVT_KEYUP
@@ -5033,6 +5224,7 @@ String RID_STR_EVT_KEYUP
     Text[ turkish ] = "Tuþ býralkýldýðýnda";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Tecla soltada";
+    Text[ finnish ] = "Vapautettu avain";
 };
 
 String RID_STR_EVT_LOADED
@@ -5059,6 +5251,7 @@ String RID_STR_EVT_LOADED
     Text[ turkish ] = "Yükleme sýrasýnda";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Al cargar";
+    Text[ finnish ] = "Ladattaessa";
 };
 
 String RID_STR_EVT_RELOADING
@@ -5084,6 +5277,7 @@ String RID_STR_EVT_RELOADING
     Text[ turkish ] = "Before reloading";
     Text[ arabic ] = "ÞÈá ÅÚÇÏÉ ÇáÊÍãíá";
     Text[ catalan ] = "Antes de recargar";
+    Text[ finnish ] = "Vor dem erneuten Laden";
 };
 
 String RID_STR_EVT_RELOADED
@@ -5109,6 +5303,7 @@ String RID_STR_EVT_RELOADED
     Text[ arabic ] = "ÚäÏ ÅÚÇÏÉ ÇáÊÍãíá";
     Text[ turkish ] = "Yeniden yükleme sýrasýnda";
     Text[ catalan ] = "Al recargar";
+    Text[ finnish ] = "Uudelleenlatauksen yhteydessä";
 };
 
 String RID_STR_EVT_MOUSEDRAGGED
@@ -5135,6 +5330,7 @@ String RID_STR_EVT_MOUSEDRAGGED
     Text[ turkish ] = "Tuþa basarak fare hareketi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Mover ratón por medio del teclado";
+    Text[ finnish ] = "Hiirtä vedetty, kun painiketta painettu";
 };
 String RID_STR_EVT_MOUSEENTERED
 {
@@ -5160,6 +5356,7 @@ String RID_STR_EVT_MOUSEENTERED
     Text[ turkish ] = "Fare içerde";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Ratón dentro";
+    Text[ finnish ] = "Hiiri sisäpuolella";
 };
 String RID_STR_EVT_MOUSEEXITED
 {
@@ -5185,6 +5382,7 @@ String RID_STR_EVT_MOUSEEXITED
     Text[ turkish ] = "Fare dýþarda";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Ratón fuera";
+    Text[ finnish ] = "Hiiri ulkopuolella";
 };
 String RID_STR_EVT_MOUSEMOVED
 {
@@ -5210,6 +5408,7 @@ String RID_STR_EVT_MOUSEMOVED
     Text[ turkish ] = "Fare hareketi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Movimiento de ratón";
+    Text[ finnish ] = "Hiirtä siirretty";
 };
 String RID_STR_EVT_MOUSEPRESSED
 {
@@ -5235,6 +5434,7 @@ String RID_STR_EVT_MOUSEPRESSED
     Text[ turkish ] = "Fare tuþu basýlý";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Pulsar botón del ratón";
+    Text[ finnish ] = "Hiiren painiketta painettu";
 };
 String RID_STR_EVT_MOUSERELEASED
 {
@@ -5260,6 +5460,7 @@ String RID_STR_EVT_MOUSERELEASED
     Text[ turkish ] = "Fare tuþu býrakýlmýþ";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Botón del ratón soltado";
+    Text[ finnish ] = "Hiiren painike vapautettu";
 };
 String RID_STR_EVT_POSITIONING
 {
@@ -5284,6 +5485,7 @@ String RID_STR_EVT_POSITIONING
     Text[ arabic ] = "ÞÈá ÊÛííÑ ÇáÓÌá";
     Text[ turkish ] = "Veri kümesi deðiþikliðinden önce";
     Text[ catalan ] = "Antes del cambio de registro de datos";
+    Text[ finnish ] = "Ennen tietueen muuttamista";
 };
 String RID_STR_EVT_POSITIONED
 {
@@ -5309,6 +5511,7 @@ String RID_STR_EVT_POSITIONED
     Text[ turkish ] = "Veri kümesi deðiþikliðinden sonra";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Tras el cambio de registro de datos";
+    Text[ finnish ] = "Tietueen muuttamisen jälkeen";
 };
 String RID_STR_EVT_PROPERTIESCHANGE
 {
@@ -5334,6 +5537,7 @@ String RID_STR_EVT_PROPERTIESCHANGE
     Text[ turkish ] = "Özellikler deðiþtirildi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Propiedades modificadas";
+    Text[ finnish ] = "Ominaisuuksien muutos";
 };
 String RID_STR_EVT_PROPERTYCHANGE
 {
@@ -5359,6 +5563,7 @@ String RID_STR_EVT_PROPERTYCHANGE
     Text[ turkish ] = "Özellik deðiþtirildi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Propiedad modificada";
+    Text[ finnish ] = "Ominaisuus muutettu";
 };
 String RID_STR_EVT_PROPERTYSTATECHANGE
 {
@@ -5384,6 +5589,7 @@ String RID_STR_EVT_PROPERTYSTATECHANGE
     Text[ turkish ] = "Durum özellikleri deðiþtirildi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Propiedad de estado modificada";
+    Text[ finnish ] = "Ominaisuustila muutettu";
 };
 String RID_STR_EVT_RESETTED
 {
@@ -5409,6 +5615,7 @@ String RID_STR_EVT_RESETTED
     Text[ turkish ] = "Geri almadan sonra";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Después de restaurar";
+    Text[ finnish ] = "Uudelleenasetuksen jälkeen";
 };
 
 String RID_STR_EVT_APPROVERESETTED
@@ -5435,6 +5642,7 @@ String RID_STR_EVT_APPROVERESETTED
     Text[ turkish ] = "Geri almadan önce";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Antes de restablecer";
+    Text[ finnish ] = "Ennen uudelleenkäynnistystä";
 };
 
 String RID_STR_EVT_APPROVEACTIONPERFORMED
@@ -5461,6 +5669,7 @@ String RID_STR_EVT_APPROVEACTIONPERFORMED
     Text[ turkish ] = "Baþlatmadan önce";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "antes de ejecutar";
+    Text[ finnish ] = "Ennen aloittamista";
 };
 
 String RID_STR_EVT_SUBMITTED
@@ -5487,6 +5696,7 @@ String RID_STR_EVT_SUBMITTED
     Text[ turkish ] = "Göndermeden önce";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Antes del envío";
+    Text[ finnish ] = "Ennen lähettämistä";
 };
 
 String RID_STR_EVT_TEXTCHANGED
@@ -5513,6 +5723,7 @@ String RID_STR_EVT_TEXTCHANGED
     Text[ turkish ] = "Metin deðiþtirildi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Texto modificado";
+    Text[ finnish ] = "Muokattu teksti";
 };
 
 String RID_STR_EVT_UNLOADING
@@ -5538,6 +5749,7 @@ String RID_STR_EVT_UNLOADING
     Text[ turkish ] = "Before unloading";
     Text[ arabic ] = "ÞÈá ÅáÛÇÁ ÇáÊÍãíá";
     Text[ catalan ] = "Antes de descargar";
+    Text[ finnish ] = "Vor dem Entladen";
 };
 
 String RID_STR_EVT_UNLOADED
@@ -5564,6 +5776,7 @@ String RID_STR_EVT_UNLOADED
     Text[ turkish ] = "Kapatma sýrasýnda";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Al descargar";
+    Text[ finnish ] = "Poistettaessa muistista";
 };
 String RID_STR_EVT_UPDATECANCELED
 {
@@ -5589,6 +5802,7 @@ String RID_STR_EVT_UPDATECANCELED
     Text[ turkish ] = "Güncelleme iptal edildi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Actualización interrumpida";
+    Text[ finnish ] = "Päivitys peruutettu";
 };
 String RID_STR_EVT_VETOABLECHANGE
 {
@@ -5614,6 +5828,7 @@ String RID_STR_EVT_VETOABLECHANGE
     Text[ turkish ] = "Reddedilebilir deðiþiklik";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Modificación rechazable";
+    Text[ finnish ] = "Hylättävä muutos";
 };
 String RID_STR_PROPTITLE_PUSHBUTTON
 {
@@ -5639,6 +5854,7 @@ String RID_STR_PROPTITLE_PUSHBUTTON
     Text[ turkish ] = "Düðme";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Botón";
+    Text[ finnish ] = "Painike";
 };
 String RID_STR_PROPTITLE_RADIOBUTTON
 {
@@ -5664,6 +5880,7 @@ String RID_STR_PROPTITLE_RADIOBUTTON
     Text[ turkish ] = "Seçim alaný";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Campo de opción";
+    Text[ finnish ] = "Valintanappi";
 };
 String RID_STR_PROPTITLE_CHECKBOX
 {
@@ -5689,6 +5906,7 @@ String RID_STR_PROPTITLE_CHECKBOX
     Text[ turkish ] = "Seçme kutusu";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Casilla de verificación";
+    Text[ finnish ] = "Valintaruutu";
 };
 String RID_STR_PROPTITLE_FIXEDTEXT
 {
@@ -5714,6 +5932,7 @@ String RID_STR_PROPTITLE_FIXEDTEXT
     Text[ turkish ] = "Etiket alaný";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Campo de etiqueta";
+    Text[ finnish ] = "Nimiökenttä";
 };
 String RID_STR_PROPTITLE_GROUPBOX
 {
@@ -5739,6 +5958,7 @@ String RID_STR_PROPTITLE_GROUPBOX
     Text[ turkish ] = "Grup çerçevesi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Marco de grupo";
+    Text[ finnish ] = "Ryhmäruutu";
 };
 String RID_STR_PROPTITLE_EDIT
 {
@@ -5764,6 +5984,7 @@ String RID_STR_PROPTITLE_EDIT
     Text[ turkish ] = "Metin alaný";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Campo de texto";
+    Text[ finnish ] = "Tekstikehys";
 };
 String RID_STR_PROPTITLE_FORMATTED
 {
@@ -5789,6 +6010,7 @@ String RID_STR_PROPTITLE_FORMATTED
     Text[ turkish ] = "Formatlý alan";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Campo formateado";
+    Text[ finnish ] = "Muotoiltu kenttä";
 };
 String RID_STR_MOVING_CURSOR
 {
@@ -5814,6 +6036,7 @@ String RID_STR_MOVING_CURSOR
     Text[ turkish ] = "Veri kaynaðýný hizala";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Alinear fuente de datos";
+    Text[ finnish ] = "tasaa tietolähde";
 };
 String RID_STR_PROPTITLE_LISTBOX
 {
@@ -5839,6 +6062,7 @@ String RID_STR_PROPTITLE_LISTBOX
     Text[ turkish ] = "Liste alaný";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Listado";
+    Text[ finnish ] = "Luetteloruutu";
 };
 String RID_STR_PROPTITLE_COMBOBOX
 {
@@ -5864,6 +6088,7 @@ String RID_STR_PROPTITLE_COMBOBOX
     Text[ turkish ] = "Kombinasyon alaný";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Campo combinado";
+    Text[ finnish ] = "Yhdistelmäruutu";
 };
 String RID_STR_PROPTITLE_IMAGEBUTTON
 {
@@ -5889,6 +6114,7 @@ String RID_STR_PROPTITLE_IMAGEBUTTON
     Text[ turkish ] = "Grafiksel düðme";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Botón gráfico";
+    Text[ finnish ] = "Kuvapainike";
 };
 String RID_STR_PROPTITLE_IMAGECONTROL
 {
@@ -5914,6 +6140,7 @@ String RID_STR_PROPTITLE_IMAGECONTROL
     Text[ turkish ] = "Grafiksel komut öðesi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Control de imagen";
+    Text[ finnish ] = "Kuvan ohjaus";
 };
 String RID_STR_PROPTITLE_FILECONTROL
 {
@@ -5939,6 +6166,7 @@ String RID_STR_PROPTITLE_FILECONTROL
     Text[ turkish ] = "Dosya seçimi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Selección de archivo";
+    Text[ finnish ] = "Tiedoston valinta";
 };
 String RID_STR_PROPTITLE_DATEFIELD
 {
@@ -5964,6 +6192,7 @@ String RID_STR_PROPTITLE_DATEFIELD
     Text[ turkish ] = "Tarih alaný";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Campo de fecha";
+    Text[ finnish ] = "Päivämääräkenttä";
 };
 String RID_STR_PROPTITLE_TIMEFIELD
 {
@@ -5989,6 +6218,7 @@ String RID_STR_PROPTITLE_TIMEFIELD
     Text[ turkish ] = "Zaman alaný";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Campo horario";
+    Text[ finnish ] = "Aikakenttä";
 };
 String RID_STR_PROPTITLE_NUMERICFIELD
 {
@@ -6014,6 +6244,7 @@ String RID_STR_PROPTITLE_NUMERICFIELD
     Text[ turkish ] = "Sayýsal alan";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Campo numérico";
+    Text[ finnish ] = "Numeerinen kenttä";
 };
 String RID_STR_PROPTITLE_CURRENCYFIELD
 {
@@ -6039,6 +6270,7 @@ String RID_STR_PROPTITLE_CURRENCYFIELD
     Text[ turkish ] = "Para birimi alaný";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Campo de moneda";
+    Text[ finnish ] = "Valuuttakenttä";
 };
 String RID_STR_PROPTITLE_PATTERNFIELD
 {
@@ -6064,6 +6296,7 @@ String RID_STR_PROPTITLE_PATTERNFIELD
     Text[ turkish ] = "Maskelenmiþ alan";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Campo enmascarado";
+    Text[ finnish ] = "Kuviokenttä";
 };
 String RID_STR_PROPTITLE_DBGRID
 {
@@ -6089,6 +6322,7 @@ String RID_STR_PROPTITLE_DBGRID
     Text[ turkish ] = "Tablo komut öðesi ";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Control de tablas ";
+    Text[ finnish ] = "Taulukko-ohjain";
 };
 String RID_STR_PROPTITLE_MULTISELECT
 {
@@ -6114,6 +6348,7 @@ String RID_STR_PROPTITLE_MULTISELECT
     Text[ turkish ] = "Çoklu seçim";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Selección múltiple";
+    Text[ finnish ] = "Monivalinta";
 };
 String RID_STR_TRISTATE
 {
@@ -6139,6 +6374,7 @@ String RID_STR_TRISTATE
     Text[ turkish ] = "Üçlü durum";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Estado triple";
+    Text[ finnish ] = "Tristate";
 };
 String RID_STR_EVT_CHANGED
 {
@@ -6164,6 +6400,7 @@ String RID_STR_EVT_CHANGED
     Text[ turkish ] = "Deðiþtirildi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Modificado";
+    Text[ finnish ] = "muutettu";
 };
 String RID_STR_NODATACONTROLS
 {
@@ -6189,6 +6426,7 @@ String RID_STR_NODATACONTROLS
     Text[ turkish ] = "Yürürlükteki formda, geçerli bir tablo alanýna baðlý komut öðeleri yok!";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "¡En el formulario actual no existen controles unidos a un campo de tabla válido!";
+    Text[ finnish ] = "Tässä lomakkeessa ei ole tietoihin liittyviä ohjaimia.";
 };
 
 String RID_STR_HELPTEXT
@@ -6215,6 +6453,7 @@ String RID_STR_HELPTEXT
     Text[ turkish ] = "Yardým metni";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Texto de ayuda";
+    Text[ finnish ] = "Ohjeteksti";
 };
 
 String RID_STR_HELPURL
@@ -6241,6 +6480,7 @@ String RID_STR_HELPURL
     Text[ turkish ] = "URL yardýmý";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Ayuda URL";
+    Text[ finnish ] = "Ohjeen URL-osoite";
 };
 
 String RID_STR_RECORDMARKER
@@ -6266,6 +6506,7 @@ String RID_STR_RECORDMARKER
     Text[ turkish ] = "Veri kümesi iþareti";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Marcador de registros";
+    Text[ finnish ] = "Tietuemerkki";
 };
 
 
@@ -6293,6 +6534,7 @@ String RID_STR_DATETIME_LABELPOSTFIX
     Text[ turkish ] = "(Tarih); (Saat)";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "(Fecha); (Hora)";
+    Text[ finnish ] = "(Päivämäärä); (Aika)";
 };
 
 String RID_STR_FILTERPROPOSAL
@@ -6319,6 +6561,7 @@ String RID_STR_FILTERPROPOSAL
     Text[ turkish ] = "Filtre önerisi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Propuesta de filtro";
+    Text[ finnish ] = "Suodata ehdotus";
 };
 
 String RID_STR_FILTER_NAVIGATOR
@@ -6345,6 +6588,7 @@ String RID_STR_FILTER_NAVIGATOR
     Text[ turkish ] = "Filtre navigatörü";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Navegador de filtros";
+    Text[ finnish ] = "Suodattimen siirtymävalikko";
 };
 
 String RID_STR_FILTER_FILTER_FOR
@@ -6371,6 +6615,7 @@ String RID_STR_FILTER_FILTER_FOR
     Text[ turkish ] = "Filtrelenecek öðe";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Filtrar por";
+    Text[ finnish ] = "Suodatin -";
 };
 
 String RID_STR_FILTER_FILTER_OR
@@ -6396,6 +6641,7 @@ String RID_STR_FILTER_FILTER_OR
     Text[ arabic ] = "Ãæ";
     Text[ turkish ] = "Veya";
     Text[ catalan ] = "O";
+    Text[ finnish ] = "Tai";
 };
 
 String RID_STR_NOCONTROLS_FOR_EXTERNALDISPLAY
@@ -6422,6 +6668,7 @@ String RID_STR_NOCONTROLS_FOR_EXTERNALDISPLAY
     Text[ turkish ] = "Yürürlükteki formda, tablo görünümünde kullanýlabilecek geçerli bir biçimde baðlanmýþ komut öðeleri yok!";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "¡El formulario actual no contiene controles unidos válidos que se puedan usar para la visualización de una tabla!";
+    Text[ finnish ] = "Nykyisessä lomakkeessa ei ole kelvollisia ohjaimia, joita voisi käyttää taulukkonäkymässä.";
 };
 
 String RID_STR_LABELCONTROL
@@ -6447,6 +6694,7 @@ String RID_STR_LABELCONTROL
     Text[ arabic ] = "ÍÞá ÚäæäÉ";
     Text[ turkish ] = "Etiket alaný";
     Text[ catalan ] = "Campo de etiqueta";
+    Text[ finnish ] = "Nimiökenttä";
 };
 
 String RID_STR_VETO_DATASOURCE
@@ -6472,6 +6720,7 @@ String RID_STR_VETO_DATASOURCE
     Text[ arabic ] = "áÇ íõÓãÍ ÈÊÛííÑ ÇáÎÇÕíÉ 'ÞÇÚÏÉ ÈíÇäÇÊ'¡ áÃä ÇáÇÓÊãÇÑÉ åí ÈÇáÝÚá ÌÒÁ ãä ÞÇÚÏÉ ÈíÇäÇÊ!";
     Text[ turkish ] = "Form bir veritabanýnýn öðesi olduðundan, 'veritabaný' özelliði deðiþtirilemez!";
     Text[ catalan ] = "¡La propiedad 'Base de datos' no se puede modificar porque el formulario ya forma parte de una base de datos!";
+    Text[ finnish ] = "Tietokanta-ominaisuutta ei voi muuttaa, koska lomake on jo tietokannassa.";
 };
 
 String RID_STR_AUTOFIELD
@@ -6497,6 +6746,7 @@ String RID_STR_AUTOFIELD
     Text[ arabic ] = "<ÍÞá ÊáÞÇÆí>";
     Text[ turkish ] = "<Otomatik alan>";
     Text[ catalan ] = "<AutoCampo>";
+    Text[ finnish ] = "<Automaattinen kenttä>";
 };
 
 QueryBox RID_QRY_SAVEMODIFIED
@@ -6525,6 +6775,7 @@ QueryBox RID_QRY_SAVEMODIFIED
     Message[ turkish ] = "Yürürlükteki formun içeriði deðiþtirildi.\nDeðiþiklikleri kaydetmek istiyor musunuz?";
     Message[ language_user1 ] = " ";
     Message[ catalan ] = "El contenido del formulario actual ha sido modificado.\n¿Desea guardar los cambios?";
+    Message[ finnish ] = "Käsiteltävänä olevan lomakkeen sisältöä on muokattu.\nHaluatko tallentaa muutokset?";
 };
 String RID_STR_ESCAPE_PROCESSING
 {
@@ -6549,6 +6800,7 @@ String RID_STR_ESCAPE_PROCESSING
     Text[ arabic ] = "ÊÍáíá ÃãÑ SQL";
     Text[ turkish ] = "SQL komutunu çözümle";
     Text[ catalan ] = "Analizar comando SQL";
+    Text[ finnish ] = "Analysoi SQL-komento";
 };
 String RID_STR_COULDNOTSETORDER
 {
@@ -6573,6 +6825,7 @@ String RID_STR_COULDNOTSETORDER
     Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ÊÚííä ãÚÇííÑ ÇáÝÑÒ";
     Text[ turkish ] = "Sýralama ölçütünü belirlemede hata";
     Text[ catalan ] = "Error al definir los criterios de ordenación";
+    Text[ finnish ] = "Virhe lajittelujärjestyksen määrityksessä";
 };
 String RID_STR_COULDNOTSETFILTER
 {
@@ -6597,6 +6850,7 @@ String RID_STR_COULDNOTSETFILTER
     Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ÊÚííä ãÚÇííÑ ÇáÊÕÝíÉ";
     Text[ turkish ] = "Filtreleme ölçütünü belirlemede hata";
     Text[ catalan ] = "Error al definir los criterios de filtro";
+    Text[ finnish ] = "Virhe suodatinehtojen määrityksessä";
 };
 String RID_STR_SQLEXCEPTIONTYPES
 {
@@ -6621,6 +6875,7 @@ String RID_STR_SQLEXCEPTIONTYPES
     Text[ arabic ] = "ÎØÃ;ÊÍÐíÑ;ãÚáæãÉ;ÊÝÇÕíá;ÍÇáÉ SQL;ÑãÒ ÇáÎØÃ";
     Text[ turkish ] = "Hata;Uyarý;Bilgi;Ayrýntýlar;SQL durumu;Hata kodu";
     Text[ catalan ] = "Error;Aviso;Información;Detalles;Estado SQL;Código de error";
+    Text[ finnish ] = "Virhe;Varoitus;Tiedot;Lisätiedot;SQL-tila;Virhekoodi";
 };
 String RID_ERR_REFRESHING_SUB_FORM
 {
@@ -6645,6 +6900,7 @@ String RID_ERR_REFRESHING_SUB_FORM
     Text[ arabic ] = "ÊÚÐÑ ÊÍÏíË ÇáãÍÊæíÇÊ ÇáÈíÇäíÉ ááÇÓÊãÇÑÉ ÇáÝÑÚíÉ.";
     Text[ turkish ] = "Alt düzey formun veri içeriði güncellenemedi.";
     Text[ catalan ] = "No se pudieron actualizar los contenidos de los datos del subformulario.";
+    Text[ finnish ] = "Alilomakkeen tietosisällön päivittäminen ei onnistunut.";
 };
 String RID_ERR_LOADING_FORM
 {
@@ -6669,6 +6925,7 @@ String RID_ERR_LOADING_FORM
     Text[ arabic ] = "ÊÚÐÑ ÊÍãíá ÇáãÍÊæíÇÊ ÇáÈíÇäíÉ.";
     Text[ turkish ] = "Veri içeriði yüklenemedi.";
     Text[ catalan ] = "No se pudieron cargar los contenidos de los datos.";
+    Text[ finnish ] = "Tietosisällön lataaminen ei onnistunut.";
 };
 String RID_ERR_REFRESHING_FORM
 {
@@ -6693,6 +6950,7 @@ String RID_ERR_REFRESHING_FORM
     Text[ arabic ] = "ÊÚÐÑ ÊÍÏíË ÇáãÍÊæíÇÊ ÇáÈíÇäíÉ.";
     Text[ turkish ] = "Veri içeriði güncellenemedi.";
     Text[ catalan ] = "No se pudieron actualizar los contenidos de los datos.";
+    Text[ finnish ] = "Tietosisällön päivittäminen ei onnistunut.";
 };
 String RID_STR_ERR_INSERTRECORD
 {
@@ -6717,6 +6975,7 @@ String RID_STR_ERR_INSERTRECORD
     Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ÅÏÑÇÌ ÇáÓÌá ÇáÌÏíÏ";
     Text[ turkish ] = "Yeni veri kümesini ekleme sýrasýnda hata";
     Text[ catalan ] = "Error al insertar un nuevo registro de datos";
+    Text[ finnish ] = "Virhe lisättäessä uutta tietuetta";
 };
 String RID_STR_ERR_UPDATERECORD
 {
@@ -6741,6 +7000,7 @@ String RID_STR_ERR_UPDATERECORD
     Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ßÊÇÈÉ ÇáÓÌá ÇáÍÇáí";
     Text[ turkish ] = "Yürürlükteki veri kümesini güncelleme sýrasýnda hata";
     Text[ catalan ] = "Error al escribir el registro actual de datos";
+    Text[ finnish ] = "Virhe päivitettäessä nykyistä tietuetta";
 };
 String RID_STR_ERR_DELETERECORD
 {
@@ -6765,6 +7025,7 @@ String RID_STR_ERR_DELETERECORD
     Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ÍÐÝ ÇáÓÌá ÇáÍÇáí";
     Text[ turkish ] = "Yürürlükteki veri kümesini silme sýrasýnda hata";
     Text[ catalan ] = "Error al eliminar el registro actual de datos";
+    Text[ finnish ] = "Virhe poistettaessa nykyistä tietuetta";
 };
 String RID_STR_ERR_DELETERECORDS
 {
@@ -6789,6 +7050,7 @@ String RID_STR_ERR_DELETERECORDS
     Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ÍÐÝ ÇáÓÌáÇÊ ÇáãÏÑÌÉ";
     Text[ turkish ] = "Belirtilen veri kümelerini silme sýrasýnda hata";
     Text[ catalan ] = "Error al eliminar los registros de datos indicados.";
+    Text[ finnish ] = "Virhe poistettaessa määritettyjä tietueita";
 };
 String RID_STR_CONTROL_SUBSTITUTED_NAME
 {
@@ -6813,6 +7075,7 @@ String RID_STR_CONTROL_SUBSTITUTED_NAME
     Text[ arabic ] = "ãÓÊÈÏá";
     Text[ turkish ] = "deðiþtirildi";
     Text[ catalan ] = "reemplazado";
+    Text[ finnish ] = "korvattu";
 };
 
 String RID_STR_CONTROL_SUBSTITUTED_EPXPLAIN
@@ -6838,6 +7101,7 @@ String RID_STR_CONTROL_SUBSTITUTED_EPXPLAIN
     Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ÊÍãíá ÚäÕÑ ÇáÊÍßã åÐÇ. áåÐÇ Êã ÇÓÊÈÏÇáå ÈÚäÕÑ äÇÆÈ.";
     Text[ turkish ] = "Komut öðesi yüklenirken bir hata oluþtu. Bu nedenle komut öðesi yerine yer tutucu görüntüleniyor.";
     Text[ catalan ] = "Ha ocurrido un error al cargar este Control. Por ello se ha reemplazado con un comodín.";
+    Text[ finnish ] = "Ohjainta ladattaessa on ilmennyt virhe. Ohjain korvattiin paikkamerkillä.";
 };
 String RID_STR_CREATECONTROLS_INVALIDSOURCE
 {
@@ -6869,6 +7133,7 @@ String RID_STR_CREATECONTROLS_INVALIDSOURCE
     Text[ portuguese_brazilian ] = "For this columns you can't create form controls within this document:\nThe document belongs to a fixed database ($docname$) which has to be used as data source for all form elements.\nBut the columns You dropped are part of a table or query within another database ($dropname$).";
     Text[ turkish ] = "Bu sütun için form komut öðeleri oluþturamazsýnýz:\nBelge, tüm form öðeleri tarafýndan veri kaynaðý olarak kullanýlan, sabit bir veritabaný ($docname$).\nAncak sizin kullandýðýnýz sütunlar, baþka bir veritabanýndaki ($dropname$) tablo ya da sorguya ait.";
     Text[ catalan ] = "Para estas columnas en este documento no puede crear campos de control:\nEl documento pertenece a una base de datos fija ($docname$), que es usada por todos los elementos del formulario como fuente de datos.\nLas columnas que usted usa pertenecen a una tabla o consulta en otra base de datos ($dropname$).";
+    Text[ finnish ] = "Et voi luoda lomakeohjauskenttiä näihin sarakkeisiin tässä asiakirjassa:\nAsiakirja ($docname$) on osa kiinteää tietokantaa, jota kaikki lomakeosat käyttävät tietolähteenä.\nSarakkeet kuuluvat toisen tietokannan taulukkoon tai kyselyyn ($dropname$).";
 };
 
 Resource RID_RES_CONTROL_WIZARDS_ERROR_CONTEXTS
@@ -6896,6 +7161,7 @@ Resource RID_RES_CONTROL_WIZARDS_ERROR_CONTEXTS
         Text[ arabic ] = "ÊÚÐÑ ÈÏÁ ÊÔÛíá ÇáãÑÔÏ ÇáÂáí áÚäÇÕÑ ÇáÊÍßã Ýí ÇáÌÏæá";
         Text[ turkish ] = "Tablo komut öðesi OtoPilotu baþlatýlamadý";
         Text[ catalan ] = "No se pudo iniciar el AutoPiloto de campos de control de tablas";
+        Text[ finnish ] = "Automaattista taulukon valintaruudun ohjausta ei voitu käynnistää.";
     };
     String RID_SUB_LISTBOX_WIZARD
     {
@@ -6920,6 +7186,7 @@ Resource RID_RES_CONTROL_WIZARDS_ERROR_CONTEXTS
         Text[ arabic ] = "ÊÚÐÑ ÈÏÁ ÊÔÛíá ÇáãÑÔÏ ÇáÂáí áãÑÈÚ ÇáÞÇÆãÉ";
         Text[ turkish ] = "Liste alaný OtoPilotu baþlatýlamadý";
         Text[ catalan ] = "No se pudo iniciar el AutoPiloto de listado";
+        Text[ finnish ] = "Automaattista luetteloruudun ohjausta ei voitu käynnistää.";
     };
     String RID_SUB_COMBOBOX_WIZARD
     {
@@ -6944,6 +7211,7 @@ Resource RID_RES_CONTROL_WIZARDS_ERROR_CONTEXTS
         Text[ arabic ] = "ÊÚÐÑ ÈÏÁ ÊÔÛíá ÇáãÑÔÏ ÇáÂáí áãÑÈÚ ÇáÊÍÑíÑ æÇáÓÑÏ";
         Text[ turkish ] = "Kombinasyon alaný OtoPilotu baþlatýlamadý";
         Text[ catalan ] = "No se pudo iniciar el AutoPiloto de campo combinado";
+        Text[ finnish ] = "Automaattista yhdistelmäruudun ohjausta ei voitu käynnistää.";
     };
     String RID_SUB_GROUPBOX_WIZARD
     {
@@ -6968,6 +7236,7 @@ Resource RID_RES_CONTROL_WIZARDS_ERROR_CONTEXTS
         Text[ arabic ] = "ÊÚÐÑ ÈÏÁ ÊÔÛíá ÇáãÑÔÏ ÇáÂáí áßÇÏÑ ÇáÊÌãíÚ";
         Text[ turkish ] = "Grup çerçevesi OtoPilotu baþlatýlamadý";
         Text[ catalan ] = "No se pudo iniciar el AutoPiloto de marcos de grupo";
+        Text[ finnish ] = "Automaattista ryhmäruudun ohjausta ei voitu käynnistää.";
     };
 };
 
