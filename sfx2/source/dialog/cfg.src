@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2001-06-08 21:54:03 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 21:55:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,7 +129,7 @@
     Text [ portuguese ] = "~Carregar..." ; \
     Text[ chinese_simplified ] = "Χ°Θλ(~L)..."; \
     Text[ russian ] = "Ηΰγπσηθςό...";   \
-    Text[ polish ] = "£aduj...";    \
+    Text[ polish ] = "£a~duj...";   \
     Text[ japanese ] = "“Η‚έ‚έ(~L)...";   \
     Text[ chinese_traditional ] = "Έό¤J(~L)...";    \
     Text[ arabic ] = "ΚΝγνα...";    \
@@ -1372,8 +1372,8 @@ QueryBox QBX_MNUCFG_POPUP_FUNCTIONS
     Message[ japanese ] = "‚ά‚ΎΞί―Μί±―Μί‚Μ‚έ‚Ι„‚θ“–‚Δ‚η‚κ‚ι‹@”\\‚Μ€–Ϊ‚ª‚ ‚θ‚ά‚·B\n\n‚±‚Μέ’θ‚π“K—p‚µ‚Δ‚ΰ‚Ά‚Ά‚Ε‚·‚©?";
     Message[ chinese_traditional ] = "ΑΩ¦s¦b¤@¨Η¥u―ΰΕύµΉ§ΦΕγ¥\\―ΰªν°υ¦ζªΊ¶µ¥Ψ΅C\n±zΑΩ¬O­n±µ¨ό³o­Σ°tΈm΅H";
     Message[ arabic ] = "γΗÒΗαΚ εδΗαί ΕΟΞΗαΗΚ ΘεΗ γεΗγ αΗ νγίδ ΚΪννδεΗ ΕαΗ αήζΗΖγ ΗδΘΛΗήνΙ έήΨ.\n\nεα ΚΡνΟ ήΘζα ΗαΚίζνδ Ϊαμ ΗαΡΫγ γδ ΠαίΏ";
-    Message[ greek ] = "Υπάρχουν ακόμη εγγραφές με λειτουργίες των οποίων μπορεί να γίνει μόνο αντιστοίχιση με αναδυόμενα παράθυρα.\n\nΘέλετε να αποδεχτείτε τη δια";
-    Message[ korean ] = "ΖΛΎχΈΈ ΗÒ΄ηµΙ Όφ ΐΦ΄Β ±β΄Ιµιΐ» °΅Αψ ΗΧΈρµιΐΜ ΎΖΑχ ΐΦ½ΐ΄Ο΄Ω. \n\n±Χ·΅µµ ΐΜ ±ΈΌΊΐ» ΐϋΏλΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
+    Message[ greek ] = "Υπάρχουν ακόμη εγγραφές με λειτουργίες των οποίων μπορεί να γίνει μόνο αντιστοίχιση με αναδυόμενα παράθυρα.\n\nΘέλετε να αποδεχτείτε τη δια ";
+    Message[ korean ] = "ΖΛΎχΈΈ ΗÒ΄ηµΙ Όφ ΐΦ΄Β ±β΄Ιµιΐ» °΅Αψ ΗΧΈρµιΐΜ ΎΖΑχ ΐΦ½ΐ΄Ο΄Ω.\n\n±Χ·΅µµ ΐΜ ±ΈΌΊΐ» ΐϋΏλΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
     Message[ turkish ] = "Yalnύzca aηύlan mφnόlere atanabilen iώlevleri olan giriώler mevcut.\n\nBu konfigόrasyon ile devam etmek istiyor musunuz?";
     Message[ language_user1 ] = " ";
     Message[ catalan ] = "Todavνa hay entradas con funciones que solo pueden ser asignadas a emergentes.\n\nΏDesea continuar de todos modos?";
@@ -1587,4 +1587,5 @@ String STR_MENU
     Text[ finnish ] = "Valikko";
 };
  // ********************************************************************** EOF
+
 
