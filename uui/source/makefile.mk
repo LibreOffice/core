@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 17:04:11 $
+#   last change: $Author: mav $ $Date: 2001-06-26 13:47:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,11 +73,13 @@ SLOFILES = \
     $(SLO)$/cookiedg.obj \
     $(SLO)$/iahndl.obj \
     $(SLO)$/logindlg.obj \
-    $(SLO)$/services.obj
+    $(SLO)$/services.obj \
+    $(SLO)$/passworddlg.obj
 
 SRCFILES = \
     cookiedg.src \
     ids.src \
-    logindlg.src
+    logindlg.src \
+    passworddlg.src
 
 .INCLUDE: target.mk
