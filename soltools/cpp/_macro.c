@@ -663,11 +663,17 @@ Tokenrow *
     for (tp = vp->bp; tp < vp->lp; tp++)
     {
         instring = tp->type == STRING || tp->type == CCON;
-        if (sp + 2 * tp->len >= &s[STRLEN - 10])
+        if (sp + 2 * tp->len + tp->wslen  >= &s[STRLEN - 10])
         {
             error(ERROR, "Stringified macro arg is too long");
             break;
         }
+
+        // Change by np 31.10.2001, #93725 - begin
+        if ( tp->wslen > 0 )
+        *sp++ = ' ';
+        // change end.
+
         for (i = 0, cp = tp->t; (unsigned int)i < tp->len; i++)
         {
             if (instring && (*cp == '"' || *cp == '\\'))
