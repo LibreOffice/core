@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imapdlg.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:09 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 19:29:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -517,21 +517,21 @@ FloatingWindow RID_SVXDLG_IMAP
                 Text [ norwegian ] = "Angre " ;
                 Text [ italian ] = "Annulla " ;
                 Text [ portuguese_brazilian ] = "Widerrufen" ;
-                Text [ portuguese ] = "Anular " ;
+                Text [ portuguese ] = "Anular  " ;
                 Text [ finnish ] = "Kumoa " ;
-                Text [ danish ] = "Fortryd " ;
+                Text [ danish ] = "Fortryd" ;
                 Text [ french ] = "Annuler " ;
                 Text [ swedish ] = "Ångra " ;
-                Text [ dutch ] = "Ongedaan maken  " ;
+                Text [ dutch ] = "Ongedaan maken " ;
                 Text [ spanish ] = "Deshacer " ;
                 Text [ english_us ] = "Undo " ;
-                Text[ chinese_simplified ] = "³·ÏûÃüÁî ";
+                Text[ chinese_simplified ] = "³·ÏûÃüÁî";
                 Text[ russian ] = "Îòìåíèòü  ";
                 Text[ polish ] = "Cofnij ";
-                Text[ japanese ] = "Œ³‚É–ß‚· ";
-                Text[ chinese_traditional ] = "´_­ì ";
+                Text[ japanese ] = "Œ³‚É–ß‚·";
+                Text[ chinese_traditional ] = "´_­ì";
                 Text[ arabic ] = "ÊÑÇÌÚ";
-                Text[ greek ] = "Áíáßñåóç ";
+                Text[ greek ] = "Áíáßñåóç";
                 Text[ korean ] = "ÀÛ¾÷Ãë¼Ò ";
                 Text[ turkish ] = "Geri al ";
                 Text[ language_user1 ] = " ";
@@ -549,22 +549,22 @@ FloatingWindow RID_SVXDLG_IMAP
 
                 Text = "Wiederherstellen " ;
                 Text [ English ] = "Redo " ;
-                Text [ english_us ] = "Restore " ;
-                Text [ portuguese ] = "Restaurar " ;
+                Text [ english_us ] = "Redo" ;
+                Text [ portuguese ] = "Restaurar  " ;
                 Text [ portuguese_brazilian ] = "Wiederholen" ;
                 Text [ swedish ] = "Återställ  " ;
-                Text [ danish ] = "Gendan " ;
+                Text [ danish ] = "Gendan" ;
                 Text [ italian ] = "Ripristina " ;
                 Text [ spanish ] = "Restaurar " ;
                 Text [ french ] = "Restaurer " ;
                 Text [ dutch ] = "Herstellen " ;
-                Text[ chinese_simplified ] = "»Ö¸´³·ÏûÃüÁî ";
+                Text[ chinese_simplified ] = "»Ö¸´³·ÏûÃüÁî";
                 Text[ russian ] = "Âåğíóòü  ";
                 Text[ polish ] = "Ponów ";
-                Text[ japanese ] = "•œŒ³‚·‚é ";
-                Text[ chinese_traditional ] = "«ì´_ ";
-                Text[ arabic ] = "ÇÓÊÚÇÏÉ";
-                Text[ greek ] = "ÅğáíáöïñÜ ";
+                Text[ japanese ] = "‚â‚è’¼‚µ";
+                Text[ chinese_traditional ] = "«ì´_";
+                Text[ arabic ] = "ÅÚÇÏÉ";
+                Text[ greek ] = "ÅğáíáöïñÜ";
                 Text[ korean ] = "º¹¿ø ";
                 Text[ turkish ] = "Yinele ";
                 Text[ language_user1 ] = " ";
@@ -752,7 +752,7 @@ FloatingWindow RID_SVXDLG_IMAP
     };
     Text [ english_us ] = "ImageMap Editor" ;
     Text [ portuguese_brazilian ] = "ImageMap-Editor" ;
-    Text [ swedish ] = "ImageMap-Editor" ;
+    Text [ swedish ] = "ImageMap-editor" ;
     Text [ danish ] = "ImageMap-redigering" ;
     Text [ italian ] = "Editor ImageMap" ;
     Text [ spanish ] = "Editor ImageMap" ;
