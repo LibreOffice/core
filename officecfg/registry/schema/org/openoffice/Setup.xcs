@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Setup.xcs,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 17:49:22 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 16:40:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,7 @@
 	<templates>
 		<group oor:name="Factory">
 			<info>
+                <author>AS</author>
 				<desc xml:lang="en-US">Describes an application module (a document factory, such as Writer).</desc>
 				<desc xml:lang="el">Describes an application module (a document factory, such as Writer).</desc>
 				<desc xml:lang="nl">Describes an application module (a document factory, such as Writer).</desc>
@@ -260,6 +261,14 @@
 					<desc xml:lang="sk">Specifies the ID of the icon for the factory</desc>
 					<desc xml:lang="hu">Specifies the ID of the icon for the factory</desc>
 					<desc xml:lang="sl">Specifies the ID of the icon for the factory</desc>
+				</info>
+                <value>0</value>
+			</prop>
+			<prop oor:name="ooSetupFactoryCommandConfigRef" oor:type="xs:string">
+				<info>
+    				<author>CD</author>
+					<desc xml:lang="en-US">Refer to a configuration file, which contains the list of UI commands, suitable for this module.</desc>
+					<desc xml:lang="x-comment">Refer to a configuration file, which contains the list of UI commands, suitable for this module.</desc>
 				</info>
 			</prop>
 		</group>
@@ -758,7 +767,7 @@
 			</prop>
 			<set oor:name="Factories" oor:node-type="Factory">
 				<info>
-					<author>MBA</author>
+					<author>AS</author>
 					<desc xml:lang="en-US">Contains all of the document factories that were installed during setup.</desc>
 					<desc xml:lang="el">Contains all of the document factories that were installed during setup.</desc>
 					<desc xml:lang="nl">Contains all of the document factories that were installed during setup.</desc>
