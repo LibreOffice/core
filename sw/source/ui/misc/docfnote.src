@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfnote.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-29 10:54:50 $
+ *  last change: $Author: kz $ $Date: 2000-12-04 11:53:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -813,7 +813,7 @@ TabPage TP_FOOTNOTEOPTION
         Text[ chinese_traditional ] = "¦bª`Έ}¥½(~N)";
         Text[ arabic ] = "ΪδΟ δεΗνΙ ΗαΝΗΤνΙ ΗαΣέανΙ";
         Text[ greek ] = "Στο τέλος της υπ~οσημείωσης";
-        Text[ korean ] = "°ΆΑΦ ³΅(~N)";
+        Text[ korean ] = "°ΆΑΦ ³΅";
         Text[ turkish ] = "~Dipnot altύnda";
         Text[ language_user1 ] = " ";
     };
@@ -852,7 +852,7 @@ TabPage TP_FOOTNOTEOPTION
         Text[ chinese_traditional ] = "±qΔς­¶¶}©l(~S)";
         Text[ arabic ] = "Ϊαμ ΗαΥέΝΙ ΗαΚΗανΙ";
         Text[ greek ] = "Στην ε~πόμενη σελίδα";
-        Text[ korean ] = "΄Ωΐ½ ΖδΐΜΑφ ½ΓΐΫ(~S)";
+        Text[ korean ] = "΄Ωΐ½ ΖδΐΜΑφΏ΅";
         Text[ turkish ] = "~Sonraki sayfada";
     };
     Edit ED_CONT_FROM
