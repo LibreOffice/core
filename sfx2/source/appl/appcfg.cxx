@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appcfg.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: pb $ $Date: 2001-01-23 07:58:50 $
+ *  last change: $Author: dv $ $Date: 2001-02-09 12:22:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,10 @@
 #endif
 #ifndef _SV_MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
+#endif
+
+#ifndef _STRING_HXX
+#include <tools/string.hxx>
 #endif
 
 #ifndef _SFXITEMPOOL_HXX //autogen
@@ -1404,13 +1408,16 @@ void SfxApplication::RegisterEvent(USHORT nId, const String& rEventName)
 {
     if (!pAppData_Impl->pEventConfig)
         pAppData_Impl->pEventConfig = new SfxEventConfiguration;
-    pAppData_Impl->pEventConfig->RegisterEvent(nId, rEventName);
+    String aDummy( "untitled event", RTL_TEXTENCODING_ASCII_US );
+    SfxEventConfiguration::RegisterEvent(nId, rEventName, aDummy);
 }
 
 //--------------------------------------------------------------------
 
 SfxEventConfiguration* SfxApplication::GetEventConfig() const
 {
+    if (!pAppData_Impl->pEventConfig)
+        pAppData_Impl->pEventConfig = new SfxEventConfiguration;
     return pAppData_Impl->pEventConfig;
 }
 
