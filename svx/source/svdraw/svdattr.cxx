@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdattr.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dl $ $Date: 2001-03-05 12:25:26 $
+ *  last change: $Author: dl $ $Date: 2001-03-05 16:25:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -326,8 +326,8 @@ void SdrItemPool::Ctor(SfxItemPool* pMaster, USHORT nAttrStart, USHORT nAttrEnd)
     ppPoolDefaults[SDRATTR_TRANSFORMREF1Y -SDRATTR_START]=new SdrTransformRef1YItem;
     ppPoolDefaults[SDRATTR_TRANSFORMREF2X -SDRATTR_START]=new SdrTransformRef2XItem;
     ppPoolDefaults[SDRATTR_TRANSFORMREF2Y -SDRATTR_START]=new SdrTransformRef2YItem;
-    ppPoolDefaults[SDRATTR_TEXTDIRECTION_LEFT_TO_RIGHT -SDRATTR_START]=new SfxBoolItem( SID_TEXTDIRECTION_LEFT_TO_RIGHT, TRUE );
-    ppPoolDefaults[SDRATTR_TEXTDIRECTION_TOP_TO_BOTTOM -SDRATTR_START]=new SfxBoolItem( SID_TEXTDIRECTION_TOP_TO_BOTTOM, FALSE );
+    ppPoolDefaults[SDRATTR_TEXTDIRECTION_LEFT_TO_RIGHT -SDRATTR_START]=new SfxBoolItem( SDRATTR_TEXTDIRECTION_LEFT_TO_RIGHT, TRUE );
+    ppPoolDefaults[SDRATTR_TEXTDIRECTION_TOP_TO_BOTTOM -SDRATTR_START]=new SfxBoolItem( SDRATTR_TEXTDIRECTION_TOP_TO_BOTTOM, FALSE );
 
     for (i=SDRATTR_NOTPERSISTRESERVE3; i<=SDRATTR_NOTPERSISTRESERVE15; i++) {
         ppPoolDefaults[i-SDRATTR_START]=new SfxVoidItem(i);
