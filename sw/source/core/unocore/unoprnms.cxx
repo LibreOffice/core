@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: mtg $ $Date: 2001-03-28 11:33:33 $
+ *  last change: $Author: mtg $ $Date: 2001-03-29 17:25:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -691,3 +691,5 @@ const SwPropNameLen __FAR_DATA UNO_NAME_CHART_AUTO_UPDATE                   (MAP
 const SwPropNameLen __FAR_DATA UNO_NAME_ADD_PARA_TABLE_SPACING              (MAP_CHAR_LEN("AddParaTableSpacing"));
 const SwPropNameLen __FAR_DATA UNO_NAME_ADD_PARA_TABLE_SPACING_AT_START     (MAP_CHAR_LEN("AddParaTableSpacingAtStart"));
 const SwPropNameLen __FAR_DATA UNO_NAME_PRINTER_NAME                        (MAP_CHAR_LEN("PrinterName"));
+const SwPropNameLen __FAR_DATA UNO_NAME_IS_KERN_ASIAN_PUNCTUATION           (MAP_CHAR_LEN("IsKernAsianPunctuation"));
+const SwPropNameLen __FAR_DATA UNO_NAME_CHARACTER_COMPRESSION_TYPE          (MAP_CHAR_LEN("CharacterCompressionType"));

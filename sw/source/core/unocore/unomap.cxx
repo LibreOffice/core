@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: os $ $Date: 2001-03-29 09:49:54 $
+ *  last change: $Author: mtg $ $Date: 2001-03-29 17:26:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1818,6 +1818,8 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_ADD_PARA_TABLE_SPACING),        WID_DOC_ADD_PARA_TABLE_SPACING,     &::getBooleanCppuType(),    PROPERTY_NONE,   0},
                     { SW_PROP_NAME(UNO_NAME_ADD_PARA_TABLE_SPACING_AT_START),WID_DOC_ADD_PARA_TABLE_SPACING_AT_START,   &::getBooleanCppuType(),    PROPERTY_NONE,   0},
                     { SW_PROP_NAME(UNO_NAME_PRINTER_NAME),                  WID_DOC_PRINTER_NAME,       &::getCppuType((const OUString*)0), PROPERTY_NONE,   0},
+                    { SW_PROP_NAME(UNO_NAME_IS_KERN_ASIAN_PUNCTUATION),     WID_DOC_IS_KERN_ASIAN_PUNCTUATION,      &::getBooleanCppuType(),    PROPERTY_NONE,   0},
+                    { SW_PROP_NAME(UNO_NAME_CHARACTER_COMPRESSION_TYPE),    WID_DOC_CHARACTER_COMPRESSION_TYPE, &::getCppuType((sal_Int16*)0),  PROPERTY_NONE,   0},
                 };
                 aMapArr[nPropertyId] = aDocMap_Impl;
             }
@@ -1961,6 +1963,16 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_CHAR_FONT_FAMILY),              RES_CHRATR_FONT,        &::getCppuType((sal_Int16*)0),                  PropertyAttribute::MAYBEVOID, MID_FONT_FAMILY   },
                     { SW_PROP_NAME(UNO_NAME_CHAR_FONT_CHAR_SET),            RES_CHRATR_FONT,        &::getCppuType((sal_Int16*)0),  PropertyAttribute::MAYBEVOID, MID_FONT_CHAR_SET },
                     { SW_PROP_NAME(UNO_NAME_CHAR_FONT_PITCH),               RES_CHRATR_FONT,        &::getCppuType((sal_Int16*)0),                  PropertyAttribute::MAYBEVOID, MID_FONT_PITCH   },
+                    { SW_PROP_NAME(UNO_NAME_CHAR_FONT_NAME_ASIAN),          RES_CHRATR_CJK_FONT,    &::getCppuType((OUString*)0),   PropertyAttribute::MAYBEVOID, MID_FONT_FAMILY_NAME },
+                    { SW_PROP_NAME(UNO_NAME_CHAR_FONT_STYLE_NAME_ASIAN),    RES_CHRATR_CJK_FONT,    &::getCppuType((OUString*)0),   PropertyAttribute::MAYBEVOID, MID_FONT_STYLE_NAME },
+                    { SW_PROP_NAME(UNO_NAME_CHAR_FONT_FAMILY_ASIAN),        RES_CHRATR_CJK_FONT,    &::getCppuType((sal_Int16*)0),  PropertyAttribute::MAYBEVOID, MID_FONT_FAMILY   },
+                    { SW_PROP_NAME(UNO_NAME_CHAR_FONT_CHAR_SET_ASIAN),      RES_CHRATR_CJK_FONT,    &::getCppuType((sal_Int16*)0),  PropertyAttribute::MAYBEVOID, MID_FONT_CHAR_SET },
+                    { SW_PROP_NAME(UNO_NAME_CHAR_FONT_PITCH_ASIAN),         RES_CHRATR_CJK_FONT,    &::getCppuType((sal_Int16*)0),  PropertyAttribute::MAYBEVOID, MID_FONT_PITCH   },
+                    { SW_PROP_NAME(UNO_NAME_CHAR_FONT_NAME_COMPLEX),        RES_CHRATR_CTL_FONT,    &::getCppuType((OUString*)0),   PropertyAttribute::MAYBEVOID, MID_FONT_FAMILY_NAME },
+                    { SW_PROP_NAME(UNO_NAME_CHAR_FONT_STYLE_NAME_COMPLEX),  RES_CHRATR_CTL_FONT,    &::getCppuType((OUString*)0),   PropertyAttribute::MAYBEVOID, MID_FONT_STYLE_NAME },
+                    { SW_PROP_NAME(UNO_NAME_CHAR_FONT_FAMILY_COMPLEX),      RES_CHRATR_CTL_FONT,    &::getCppuType((sal_Int16*)0),  PropertyAttribute::MAYBEVOID, MID_FONT_FAMILY   },
+                    { SW_PROP_NAME(UNO_NAME_CHAR_FONT_CHAR_SET_COMPLEX),    RES_CHRATR_CTL_FONT,    &::getCppuType((sal_Int16*)0),  PropertyAttribute::MAYBEVOID, MID_FONT_CHAR_SET },
+                    { SW_PROP_NAME(UNO_NAME_CHAR_FONT_PITCH_COMPLEX),       RES_CHRATR_CTL_FONT,    &::getCppuType((sal_Int16*)0),  PropertyAttribute::MAYBEVOID, MID_FONT_PITCH   },
                     {0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aTextDefaultMap_Impl;
