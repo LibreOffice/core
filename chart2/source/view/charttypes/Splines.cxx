@@ -125,6 +125,9 @@ void lcl_SplineCalculation::Calculate()
 {
     // n is the last valid index to m_aPoints
     const tPointVecType::size_type n = m_aPoints.size() - 1;
+    if( n < 1 )
+        return;
+
     ::std::vector< double > u( n );
     m_aSecDerivY.resize( n + 1, 0.0 );
 
@@ -190,11 +193,19 @@ void lcl_SplineCalculation::Calculate()
 
 double lcl_SplineCalculation::GetInterpolatedValue( double x )
 {
-    DBG_ASSERT( ( m_aPoints[ 0 ].first <= x ) &&
-                ( x <= m_aPoints[ m_aPoints.size() - 1 ].first ),
+    DBG_ASSERT( m_aPoints.size() < 1 ||
+                ( ( m_aPoints[ 0 ].first <= x ) &&
+                  ( x <= m_aPoints[ m_aPoints.size() - 1 ].first ) ),
                 "Trying to extrapolate" );
 
     const tPointVecType::size_type n = m_aPoints.size() - 1;
+    if( n < 1 )
+    {
+        double fNan;
+        ::rtl::math::setNan( & fNan );
+        return fNan;
+    }
+
     if( x < m_fLastInterpolatedValue )
     {
         m_nKLow = 0;
