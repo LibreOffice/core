@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: aw $ $Date: 2001-05-02 11:45:25 $
+ *  last change: $Author: cl $ $Date: 2001-05-03 09:32:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1979,6 +1979,9 @@ void SdXMLObjectShapeContext::StartElement( const ::com::sun::star::uno::Referen
 
         // set pos, size, shear and rotate
         SetTransformation();
+
+        SetStyle();
+
         GetImport().GetShapeImport()->finishShape( mxShape, mxAttrList, mxShapes );
     }
 }
