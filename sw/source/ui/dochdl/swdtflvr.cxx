@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 11:28:30 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 12:36:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -324,6 +324,10 @@
 // #108584#
 #ifndef _SVDPAGE_HXX
 #include <svx/svdpage.hxx>
+#endif
+
+#ifndef _AVMEDIA_MEDIAWINDOW_HXX
+#include <avmedia/mediawindow.hxx>
 #endif
 
 // #109590#
@@ -2569,15 +2573,17 @@ int SwTransferable::_PasteFileName( TransferableDataHelper& rData,
         String sFile, sDesc;
         if( rData.GetString( nFmt, sFile ) && sFile.Len() )
         {
-            if(Sound::IsSoundFile( sFile ))
+            INetURLObject aMediaURL;
+
+            aMediaURL.SetSmartURL( sFile );
+            const String aMediaURLStr( aMediaURL.GetMainURL( INetURLObject::NO_DECODE ) );
+
+            if( ::avmedia::MediaWindow::isMediaURL( aMediaURLStr ) )
             {
-                SvxHyperlinkItem aHyperLink( SID_HYPERLINK_SETLINK, sFile, sFile,
-                                aEmptyStr, aEmptyStr,
-                                SW_PASTESDR_INSERT == nAction ? HLINK_BUTTON : HLINK_FIELD);
-                SwView& rView = rSh.GetView();
-                rView.GetViewFrame()->GetDispatcher()->Execute(
-                                SID_HYPERLINK_SETLINK, SFX_CALLMODE_ASYNCHRON,
-                                &aHyperLink,0L);
+                const SfxStringItem aMediaURLItem( SID_INSERT_AVMEDIA, aMediaURLStr );
+                rSh.GetView().GetViewFrame()->GetDispatcher()->Execute(
+                                SID_INSERT_AVMEDIA, SFX_CALLMODE_SYNCHRON,
+                                &aMediaURLItem, 0L );
             }
             else
             {
