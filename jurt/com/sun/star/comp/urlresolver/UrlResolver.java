@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UrlResolver.java,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:27:52 $
+ *  last change: $Author: tpf $ $Date: 2000-11-20 11:59:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,14 +91,14 @@ import com.sun.star.uno.UnoRuntime;
 /**
  * This component gives a factory for an <code>UnoUrlResolver</code> service.
  * <p>
- * @version     $Revision: 1.1.1.1 $ $ $Date: 2000-09-18 15:27:52 $
+ * @version     $Revision: 1.2 $ $ $Date: 2000-11-20 11:59:18 $
  * @author      Kay Ramme
  * @see         com.sun.star.brige.XBrideFactory
  * @see         com.sun.star.connection.Connector
  * @since       UDK1.0
  */
 public class UrlResolver {
-    static private final boolean DEBUG = true;
+    static private final boolean DEBUG = false;
 
 
     static public class _UrlResolver implements XUnoUrlResolver {
