@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside2.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: tbe $ $Date: 2001-10-24 10:27:33 $
+ *  last change: $Author: tbe $ $Date: 2001-11-09 15:41:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,9 @@
 #ifndef _COM_SUN_STAR_UI_DIALOGS_EXTENDEDFILEPICKERELEMENTIDS_HPP_
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SCRIPT_XLIBRYARYCONTAINER2_HPP_
+#include <com/sun/star/script/XLibraryContainer2.hpp>
+#endif
 
 #ifndef _SFXDOCFILE_HXX //autogen
 #include <sfx2/docfile.hxx>
@@ -119,6 +122,10 @@
 //#define INCL_DOSPROCESS
 //#include <sysdep.hxx>
 //#endif
+
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+
 
 #define SPLIT_MARGIN    5
 #define SPLIT_HEIGHT    2
@@ -1074,17 +1081,29 @@ void __EXPORT ModulWindow::GetState( SfxItemSet &rSet )
         switch ( nWh )
         {
             // allgemeine Items:
-            case SID_CUT:
+//          case SID_CUT:
             case SID_COPY:
             {
 //              if ( !GetEditView() || !GetEditView()->HasSelection() )
 //                  rSet.DisableItem( nWh );
             }
             break;
-            case SID_PASTE:
             case SID_DELETE:
             {
                 ;
+            }
+            break;
+            case SID_CUT:
+            case SID_PASTE:
+            {
+                // disable slots for readonly libraries
+                SfxObjectShell* pShell = GetShell();
+                ::rtl::OUString aOULibName( GetLibName() );
+                Reference< script::XLibraryContainer2 > xModLibContainer( BasicIDE::GetModuleLibraryContainer( pShell ), UNO_QUERY );
+                if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) && xModLibContainer->isLibraryReadOnly( aOULibName ) )
+                {
+                    rSet.DisableItem( nWh );
+                }
             }
             break;
             case SID_BASICIDE_STAT_POS:
