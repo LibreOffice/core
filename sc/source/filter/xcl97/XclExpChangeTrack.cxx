@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XclExpChangeTrack.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 09:07:31 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:51:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,7 @@ void lcl_WriteDateTime( XclExpStream& rStrm, const DateTime& rDateTime )
 
 // write string and fill rest of <nLength> with zero bytes
 // <nLength> is without string header
-void lcl_WriteFixedString( XclExpStream& rStrm, const XclExpUniString& rString, ULONG nLength )
+void lcl_WriteFixedString( XclExpStream& rStrm, const XclExpString& rString, ULONG nLength )
 {
     ULONG nStrBytes = rString.GetBufferSize();
     DBG_ASSERT( nLength >= nStrBytes, "lcl_WriteFixedString - String too long" );
@@ -680,8 +680,8 @@ void XclExpChTrData::WriteFormula(
     {
         sal_uInt16 nXclFirst = aIter->first;
         sal_uInt16 nXclLast = aIter->second;
-        const XclExpUniString* pUrl = rRootData.pER->GetLinkManager().GetUrl( nXclFirst );
-        const XclExpUniString* pTabName = rRootData.pER->GetLinkManager().GetTabName( nXclFirst );
+        const XclExpString* pUrl = rRootData.pER->GetLinkManager().GetUrl( nXclFirst );
+        const XclExpString* pTabName = rRootData.pER->GetLinkManager().GetTabName( nXclFirst );
         if( pUrl && pTabName )
             rStrm << *pUrl << (sal_uInt8) 0x01 << *pTabName << (sal_uInt8) 0x02;
         else
@@ -802,7 +802,7 @@ void XclExpChTrCellContent::GetCellData(
                 ((const ScStringCell*) pScCell)->GetString( sCellStr );
             else
                 ((const ScEditCell*) pScCell)->GetString( sCellStr );
-            rpData->pString = new XclExpUniString( sCellStr, EXC_STR_DEFAULT, 32766 );
+            rpData->pString = new XclExpString( sCellStr, EXC_STR_DEFAULT, 32766 );
             rpData->nType = EXC_CHTR_TYPE_STRING;
             rpData->nSize = 3 + (sal_uInt16) rpData->pString->GetSize();
             rXclLength1 = 64 + (sCellStr.Len() << 1);
@@ -830,8 +830,8 @@ void XclExpChTrCellContent::GetCellData(
                 {
                     sal_uInt16 nXclFirst = aIter->first;
                     sal_uInt16 nXclLast = aIter->second;
-                    const XclExpUniString* pUrl = pExcRoot->pER->GetLinkManager().GetUrl( nXclFirst );
-                    const XclExpUniString* pTabName = pExcRoot->pER->GetLinkManager().GetTabName( nXclFirst );
+                    const XclExpString* pUrl = pExcRoot->pER->GetLinkManager().GetUrl( nXclFirst );
+                    const XclExpString* pTabName = pExcRoot->pER->GetLinkManager().GetTabName( nXclFirst );
                     if( pUrl && pTabName )
                         nSize += pUrl->GetSize() + pTabName->GetSize() + 2;
                     else
@@ -972,7 +972,7 @@ void XclExpChTrInsertTab::SaveActionData( XclExpStream& rStrm ) const
     rStrm << sal_uInt32( 0 );
     String sTabName;
     pExcRoot->pDoc->GetName( nTab, sTabName );
-    lcl_WriteFixedString( rStrm, XclExpUniString( sTabName ), 127 );
+    lcl_WriteFixedString( rStrm, XclExpString( sTabName ), 127 );
     lcl_WriteDateTime( rStrm, GetDateTime() );
     rStrm.WriteZeroBytes( 133 );
 }
