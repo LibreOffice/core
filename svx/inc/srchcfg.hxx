@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchcfg.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-05-07 10:12:20 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 15:20:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,10 @@
 #include <com/sun/star/uno/Sequence.h>
 #endif
 
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
 //-----------------------------------------------------------------------------
 struct SvxSearchConfig_Impl;
 struct SvxSearchEngineData
@@ -96,7 +100,7 @@ struct SvxSearchEngineData
 
     sal_Bool operator==(const SvxSearchEngineData& rData);
 };
-class SvxSearchConfig : public utl::ConfigItem
+class SVX_DLLPUBLIC SvxSearchConfig : public utl::ConfigItem
 {
     SvxSearchConfig_Impl* pImpl;
 
