@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lstbox.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: pl $ $Date: 2002-05-31 15:00:09 $
+ *  last change: $Author: ssa $ $Date: 2002-07-03 10:36:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,9 @@
 #endif
 #ifndef _VCL_CONTROLLAYOUT_HXX
 #include <controllayout.hxx>
+#endif
+#ifndef _DEBUG_HXX
+#include <tools/debug.hxx>
 #endif
 
 #pragma hdrstop
@@ -488,6 +491,21 @@ void ListBox::GetFocus()
     }
 
     Control::GetFocus();
+}
+
+// -----------------------------------------------------------------------
+
+Window* ListBox::GetPreferredKeyInputWindow()
+{
+    if ( mpImplLB )
+    {
+        if( IsDropDownBox() )
+            return mpImplWin->GetPreferredKeyInputWindow();
+        else
+            return mpImplLB->GetPreferredKeyInputWindow();
+    }
+
+    return Control::GetPreferredKeyInputWindow();
 }
 
 // -----------------------------------------------------------------------

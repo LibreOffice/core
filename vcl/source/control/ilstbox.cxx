@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ilstbox.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: pl $ $Date: 2002-05-31 15:00:09 $
+ *  last change: $Author: ssa $ $Date: 2002-07-03 10:36:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2008,6 +2008,13 @@ void ImplListBox::SetNoSelection()
 void ImplListBox::GetFocus()
 {
     maLBWindow.GrabFocus();
+}
+
+// -----------------------------------------------------------------------
+
+Window* ImplListBox::GetPreferredKeyInputWindow()
+{
+    return &maLBWindow;
 }
 
 // -----------------------------------------------------------------------

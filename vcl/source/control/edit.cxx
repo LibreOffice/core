@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: mt $ $Date: 2002-07-02 10:58:03 $
+ *  last change: $Author: ssa $ $Date: 2002-07-03 10:36:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1499,6 +1499,16 @@ void Edit::GetFocus()
     }
 
     Control::GetFocus();
+}
+
+// -----------------------------------------------------------------------
+
+Window* Edit::GetPreferredKeyInputWindow()
+{
+    if ( mpSubEdit )
+        return mpSubEdit->GetPreferredKeyInputWindow();
+    else
+        return this;
 }
 
 // -----------------------------------------------------------------------
