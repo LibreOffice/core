@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: pb $ $Date: 2001-08-08 08:44:39 $
+ *  last change: $Author: pb $ $Date: 2001-08-14 06:28:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -468,6 +468,7 @@ IndexTabPage_Impl::~IndexTabPage_Impl()
 void IndexTabPage_Impl::InitializeIndex()
 {
     EnterWait();
+    aIndexCB.SetUpdateMode( FALSE );
 
     try
     {
@@ -590,6 +591,7 @@ void IndexTabPage_Impl::InitializeIndex()
         DBG_ERRORFILE( "Any other exception" );
     }
 
+    aIndexCB.SetUpdateMode( TRUE );
     LeaveWait();
 }
 
@@ -1000,8 +1002,9 @@ void BookmarksBox_Impl::DoAction( USHORT nAction )
                     RemoveEntry( nPos );
                     String aImageURL = IMAGE_URL;
                     aImageURL += INetURLObject( *pURL ).GetHost();
-                    InsertEntry( aDlg.GetTitle(), SvFileInformationManager::GetImage( aImageURL ), nPos );
+                    nPos = InsertEntry( aDlg.GetTitle(), SvFileInformationManager::GetImage( aImageURL ) );
                     SetEntryData( nPos, (void*)(ULONG)( new String( *pURL ) ) );
+                    SelectEntryPos( nPos );
                     delete pURL;
                 }
             }
@@ -1450,9 +1453,11 @@ SfxHelpTextWindow_Impl::SfxHelpTextWindow_Impl( SfxHelpWindow_Impl* pParent ) :
 
 
     aToolBox.SetHelpId( HID_HELP_TOOLBOX );
+
     aToolBox.InsertItem( TBI_INDEX, aIndexOffImage );
     aToolBox.SetQuickHelpText( TBI_INDEX, aIndexOffText );
     aToolBox.SetHelpId( TBI_INDEX, HID_HELP_TOOLBOXITEM_INDEX );
+    aToolBox.InsertSeparator();
     aToolBox.InsertItem( TBI_BACKWARD, Image( SfxResId( IMG_HELP_TOOLBOX_PREV ) ) );
     aToolBox.SetQuickHelpText( TBI_BACKWARD, String( SfxResId( STR_HELP_BUTTON_PREV ) ) );
     aToolBox.SetHelpId( TBI_BACKWARD, HID_HELP_TOOLBOXITEM_BACKWARD );
@@ -1462,6 +1467,7 @@ SfxHelpTextWindow_Impl::SfxHelpTextWindow_Impl( SfxHelpWindow_Impl* pParent ) :
     aToolBox.InsertItem( TBI_START, Image( SfxResId( IMG_HELP_TOOLBOX_START ) ) );
     aToolBox.SetQuickHelpText( TBI_START, String( SfxResId( STR_HELP_BUTTON_START ) ) );
     aToolBox.SetHelpId( TBI_START, HID_HELP_TOOLBOXITEM_START );
+    aToolBox.InsertSeparator();
     aToolBox.InsertItem( TBI_PRINT, Image( SfxResId( IMG_HELP_TOOLBOX_PRINT ) ) );
     aToolBox.SetQuickHelpText( TBI_PRINT, String( SfxResId( STR_HELP_BUTTON_PRINT ) ) );
     aToolBox.SetHelpId( TBI_PRINT, HID_HELP_TOOLBOXITEM_PRINT );
@@ -1510,11 +1516,13 @@ void SfxHelpTextWindow_Impl::Resize()
 long SfxHelpTextWindow_Impl::PreNotify( NotifyEvent& rNEvt )
 {
     long nDone = 0;
-    if ( rNEvt.GetType() == EVENT_COMMAND && rNEvt.GetCommandEvent() )
+    USHORT nType = rNEvt.GetType();
+    if ( EVENT_COMMAND == nType && rNEvt.GetCommandEvent() )
     {
         const CommandEvent* pCmdEvt = rNEvt.GetCommandEvent();
 
-        if ( pCmdEvt->IsMouseEvent() && pCmdEvt->GetCommand() == COMMAND_CONTEXTMENU )
+        if ( pCmdEvt->IsMouseEvent() &&
+             pCmdEvt->GetCommand() == COMMAND_CONTEXTMENU && rNEvt.GetWindow() != &aToolBox )
         {
             // link at current mouse position ?
             const Point&  rPos = pCmdEvt->GetMousePosPixel();
@@ -1526,11 +1534,9 @@ long SfxHelpTextWindow_Impl::PreNotify( NotifyEvent& rNEvt )
             aMenu.InsertSeparator();
             aMenu.InsertItem( TBI_BACKWARD, String( SfxResId( STR_HELP_BUTTON_PREV ) ) );
             aMenu.InsertItem( TBI_FORWARD, String( SfxResId( STR_HELP_BUTTON_NEXT ) ) );
-            aMenu.InsertSeparator();
             aMenu.InsertItem( TBI_START, String( SfxResId( STR_HELP_BUTTON_START ) ) );
             aMenu.InsertSeparator();
             aMenu.InsertItem( TBI_PRINT, String( SfxResId( STR_HELP_BUTTON_PRINT ) ) );
-            aMenu.InsertSeparator();
             aMenu.InsertItem( TBI_BOOKMARKS, String( SfxResId( STR_HELP_BUTTON_ADDBOOKMARK ) ) );
             if ( bIsDebug )
             {
@@ -1542,6 +1548,16 @@ long SfxHelpTextWindow_Impl::PreNotify( NotifyEvent& rNEvt )
             pHelpWin->DoAction( nId );
             nDone = 1;
         }
+    }
+    else if ( EVENT_KEYINPUT == nType && rNEvt.GetKeyEvent() )
+    {
+         const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
+        USHORT nKeyGroup = pKEvt->GetKeyCode().GetGroup();
+        if ( KEYGROUP_ALPHA == nKeyGroup )
+        {
+            // do nothing disables the writer accelerators
+            nDone = 1;
+         }
     }
 
     return nDone ? nDone : Window::PreNotify( rNEvt );
@@ -1673,6 +1689,8 @@ void SfxHelpWindow_Impl::LoadConfig()
             nCollapseWidth = nWidth;
             nExpandWidth = nCollapseWidth * 100 / nTextSize;
         }
+
+        pTextWin->ToggleIndex( bIndex );
     }
 }
 
