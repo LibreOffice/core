@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsselect.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 22:34:19 $
+ *  last change: $Author: kz $ $Date: 2001-07-03 22:57:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,7 +217,7 @@ ModalDialog DLG_DATASOURCE_SELECTION
         Text [ english_us ] = "Could not load the program library #lib# or it is corrupted. The ODBC data source configuration is not available.";
         Text[ portuguese ] = "Ou foi impossνvel carregar a biblioteca #lib# do programa ou esta estα com defeito. A configuraηγo da fonte de dados ODBC nγo estα disponνvel.";
         Text[ russian ] = "Αθαλθξςεκΰ οπξγπΰμμϋ #lib# νε ηΰγπσζΰεςρÿ θλθ ξνΰ οξβπεζδενΰ. Βϋαξπ θρςξχνθκΰ δΰννϋυ ODBC νε δξρςσοεν.";
-        Text[ greek ] = "Η βιβλιοθήκη του προγράμματος #lib# δεν ήταν δυνατόν να φορτωθεί ή είναι ελαττωματική. Η διαμόρφωση των προελεύσεων των δεδομένων του ODBC δεν ? ";
+        Text[ greek ] = "Η βιβλιοθήκη του προγράμματος #lib# δεν ήταν δυνατόν να φορτωθεί ή είναι ελαττωματική. Η διαμόρφωση των προελεύσεων των δεδομένων του ODBC δεν";
         Text[ dutch ] = "De programmabibliotheek #lib# kon niet worden geladen of is defect. De functie ODBC gegevensbron kiezen is niet beschikbaar.";
         Text[ french ] = "La bibliothθque de programme #lib# n'a pas pu κtre chargιe ou est dιfectueuse. La configuration de la source de donnιes ODBC n'est pas disponible.";
         Text[ spanish ] = "No se pudo cargar la biblioteca de programa #lib#, quizαs estι daρada. La configuraciσn de fuente de datos ODBC no estα disponible.";
@@ -241,6 +241,9 @@ ModalDialog DLG_DATASOURCE_SELECTION
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.16  2001/06/13 22:34:19  kz
+ *  Merge SRC633: 14.06.01 - 00:34:34
+ *
  *  Revision 1.15  2001/06/08 22:06:59  rt
  *  Merge SRC633: 09.06.01 - 00:07:23
  *
@@ -289,6 +292,7 @@ ModalDialog DLG_DATASOURCE_SELECTION
  *
  *  Revision 1.0 24.10.00 09:42:47  fs
  ************************************************************************/
+
 
 
 
