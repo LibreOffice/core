@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoControlFormattedField.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-27 08:55:50 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 17:23:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@
 
 /** specifies a formatted field control.
  */
-service UnoControlFormattedField
+published service UnoControlFormattedField
 {
     service com::sun::star::awt::UnoControlEdit;
 
