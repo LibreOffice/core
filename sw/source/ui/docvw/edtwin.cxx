@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: os $ $Date: 2002-10-18 09:30:14 $
+ *  last change: $Author: fme $ $Date: 2002-10-23 10:18:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1042,7 +1042,8 @@ void SwEditWin::ChangeDrawing( BYTE nDir )
             // move handle with index nHandleIndex
             if(pHdl && (nX || nY))
             {
-                if(HDL_ANCHOR == pHdl->GetKind())
+                if( HDL_ANCHOR == pHdl->GetKind() ||
+                    HDL_ANCHOR_TR == pHdl->GetKind() )
                 {
                     // anchor move cannot be allowed when position is protected
                     if(0 == (nProtect&FLYPROTECT_POS))
@@ -1226,6 +1227,8 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
     {
         SdrHdlList& rHdlList = (SdrHdlList&)rSh.GetDrawView()->GetHdlList();
         SdrHdl* pAnchor = rHdlList.GetHdl(HDL_ANCHOR);
+        if ( ! pAnchor )
+            pAnchor = rHdlList.GetHdl(HDL_ANCHOR_TR);
         if(pAnchor)
             rHdlList.SetFocusHdl(pAnchor);
         return;
@@ -2327,9 +2330,11 @@ void SwEditWin::MouseButtonDown(const MouseEvent& rMEvt)
                 if( rSh.IsObjSelected() )
                 {
                     SdrHdl* pHdl;
-                    if( !bIsDocReadOnly && !pAnchorMarker && 0 !=
-                        ( pHdl = pSdrView->HitHandle(aDocPos, *(rSh.GetOut())) )
-                        && pHdl->GetKind() == HDL_ANCHOR )
+                    if( !bIsDocReadOnly &&
+                        !pAnchorMarker &&
+                        0 != ( pHdl = pSdrView->HitHandle(aDocPos, *(rSh.GetOut())) ) &&
+                            ( pHdl->GetKind() == HDL_ANCHOR ||
+                              pHdl->GetKind() == HDL_ANCHOR_TR ) )
                     {
                         pAnchorMarker = new SwAnchorMarker( pHdl );
                         UpdatePointer( aDocPos, rMEvt.GetModifier() );
@@ -2354,7 +2359,8 @@ void SwEditWin::MouseButtonDown(const MouseEvent& rMEvt)
                     {
                         SdrHdl* pHdl = rSh.GetDrawView()->HitHandle
                                                     (aDocPos, *(rSh.GetOut()));
-                        BOOL bHitHandle = pHdl && pHdl->GetKind() != HDL_ANCHOR;
+                        BOOL bHitHandle = pHdl && pHdl->GetKind() != HDL_ANCHOR &&
+                                                  pHdl->GetKind() != HDL_ANCHOR_TR;
 
                         if ((rSh.IsInsideSelectedObj(aDocPos) || bHitHandle) &&
                             !(rMEvt.GetModifier() == KEY_SHIFT && !bHitHandle))
@@ -2458,8 +2464,9 @@ void SwEditWin::MouseButtonDown(const MouseEvent& rMEvt)
                             rView.NoRotate();
                             SdrHdl *pHdl;
                             if( !bIsDocReadOnly && !pAnchorMarker && 0 !=
-                                ( pHdl = pSdrView->HitHandle(aDocPos, *(rSh.GetOut())) )
-                                && pHdl->GetKind() == HDL_ANCHOR )
+                                ( pHdl = pSdrView->HitHandle(aDocPos, *(rSh.GetOut())) ) &&
+                                    ( pHdl->GetKind() == HDL_ANCHOR ||
+                                      pHdl->GetKind() == HDL_ANCHOR_TR ) )
                             {
                                 pAnchorMarker = new SwAnchorMarker( pHdl );
                                 UpdatePointer( aDocPos, rMEvt.GetModifier() );
@@ -2988,7 +2995,9 @@ void SwEditWin::MouseMove(const MouseEvent& rMEvt)
                 SdrHdl* pHdl;
                 if( (0!=( pHdl = pSdrView->HitHandle( aOld, *(rSh.GetOut())) )||
                     0 !=(pHdl = pSdrView->HitHandle( pAnchorMarker->GetHdlPos(),
-                    *(rSh.GetOut())) ) ) && pHdl->GetKind() == HDL_ANCHOR )
+                    *(rSh.GetOut())) ) ) &&
+                        ( pHdl->GetKind() == HDL_ANCHOR ||
+                          pHdl->GetKind() == HDL_ANCHOR_TR ) )
                 {
                     pAnchorMarker->ChgHdl( pHdl );
                     if( aNew.X() || aNew.Y() )
