@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 13:09:47 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 14:16:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,6 +202,10 @@
 // OD 2004-01-15 #110582#
 #ifndef _DCONTACT_HXX
 #include <dcontact.hxx>
+#endif
+// OD 2004-05-24 #i28701#
+#ifndef _SORTEDOBJS_HXX
+#include <sortedobjs.hxx>
 #endif
 
 #if OSL_DEBUG_LEVEL > 1
@@ -575,7 +579,7 @@ void SwTxtFrm::HideAndShowObjects()
             // complete paragraph is hidden. Thus, hide all objects
             for ( sal_uInt32 i = 0; i < GetDrawObjs()->Count(); ++i )
             {
-                SdrObject* pObj = (*GetDrawObjs())[i];
+                SdrObject* pObj = (*GetDrawObjs())[i]->DrawObj();
                 SwContact* pContact = static_cast<SwContact*>(pObj->GetUserCall());
                 pContact->MoveObjToInvisibleLayer( pObj );
             }
@@ -594,7 +598,7 @@ void SwTxtFrm::HideAndShowObjects()
             // to the visibility of the anchor character.
             for ( sal_uInt32 i = 0; i < GetDrawObjs()->Count(); ++i )
             {
-                SdrObject* pObj = (*GetDrawObjs())[i];
+                SdrObject* pObj = (*GetDrawObjs())[i]->DrawObj();
                 SwContact* pContact = static_cast<SwContact*>(pObj->GetUserCall());
 
                 if ( pContact->ObjAnchoredAtPara() )
@@ -1149,13 +1153,13 @@ void SwTxtFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
             if( SFX_ITEM_SET == rNewSet.GetItemState( RES_BACKGROUND, sal_False)
                 && !IsFollow() && GetDrawObjs() )
             {
-                SwDrawObjs *pObjs = GetDrawObjs();
+                SwSortedObjs *pObjs = GetDrawObjs();
                 for ( int i = 0; GetDrawObjs() && i < int(pObjs->Count()); ++i )
                 {
-                    SdrObject *pO = (*pObjs)[MSHORT(i)];
-                    if ( pO->ISA(SwVirtFlyDrawObj) )
+                    SwAnchoredObject* pAnchoredObj = (*pObjs)[MSHORT(i)];
+                    if ( pAnchoredObj->ISA(SwFlyFrm) )
                     {
-                        SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
+                        SwFlyFrm *pFly = static_cast<SwFlyFrm*>(pAnchoredObj);
                         if( !pFly->IsFlyInCntFrm() )
                         {
                             const SvxBrushItem &rBack =
@@ -1486,6 +1490,11 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
                 if ( pGrid && GetTxtNode()->GetSwAttrSet().GetParaGrid().GetValue() )
                     break;
 
+                // --> OD 2004-07-16 #i28701# - consider anchored objects
+                if ( GetDrawObjs() )
+                    break;
+                // <--
+
                 return;
             }
         }
@@ -1659,18 +1668,17 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
                 {
                     if ( GetDrawObjs() )
                     {
-                        MSHORT nCnt = GetDrawObjs()->Count();
+                        const sal_uInt32 nCnt = GetDrawObjs()->Count();
                         for ( MSHORT i = 0; i < nCnt; ++i )
                         {
-                            SdrObject *pO = (*GetDrawObjs())[i];
-                            if ( pO->ISA(SwVirtFlyDrawObj) )
+                            SwAnchoredObject* pAnchoredObj = (*GetDrawObjs())[i];
+                            // --> OD 2004-07-16 #i28701# - consider all
+                            // to-character anchored objects
+                            if ( pAnchoredObj->GetFrmFmt().GetAnchor().GetAnchorId()
+                                    == FLY_AUTO_CNTNT )
                             {
-                                SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
-                                if( pFly->IsAutoPos() )
-                                {
-                                    bFormat = sal_True;
-                                    break;
-                                }
+                                bFormat = sal_True;
+                                break;
                             }
                         }
                     }
@@ -1919,7 +1927,11 @@ sal_Bool SwTxtFrm::WouldFit( SwTwips &rMaxHeight, sal_Bool &bSplit, sal_Bool bTs
     if( !IsEmpty() )
         GetFormatted();
 
-    if ( IsEmpty() )
+    // OD 2004-05-24 #i27801# - correction: 'short cut' for empty paragraph
+    // can *not* be applied, if test format is in progress. The test format doesn't
+    // adjust the frame and the printing area - see method <SwTxtFrm::_Format(..)>,
+    // which is called in <SwTxtFrm::TestFormat(..)>
+    if ( IsEmpty() && !bTst )
     {
         bSplit = sal_False;
         SwTwips nHeight = bVert ? Prt().SSize().Width() : Prt().SSize().Height();
