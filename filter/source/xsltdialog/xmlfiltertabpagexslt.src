@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfiltertabpagexslt.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 14:08:53 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 18:24:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,7 @@ TabPage RID_XML_FILTER_TABPAGE_XSLT
         Text[ chinese_simplified ] = "文件类型";
         Text[ chinese_traditional ] = "檔案類型";
         Text[ slovak ] = "Doc typ";
+        Text[ portuguese_brazilian ] = "DocType";
     };
 
     Edit ED_XML_DOCTYPE
@@ -133,6 +134,7 @@ TabPage RID_XML_FILTER_TABPAGE_XSLT
         Text[ chinese_simplified ] = "DTD";
         Text[ chinese_traditional ] = "DTD";
         Text[ slovak ] = "DTD";
+        Text[ portuguese_brazilian ] = "DTD";
     };
 
     ComboBox ED_XML_DTD_SCHEMA
@@ -167,7 +169,7 @@ TabPage RID_XML_FILTER_TABPAGE_XSLT
         Text[ czech ] = "Prohlížet...";
         Text[ danish ] = "Gennemse...";
         Text[ polish ] = "Przegl�daj...";
-        Text[ portuguese_brazilian ] = "~Procurar...";
+        Text[ portuguese_brazilian ] = "Navegar...";
         Text[ turkish ] = "Tara...";
         Text[ arabic ] = "�������...";
         Text[ hebrew ] = "‮דפדוף...‬";
@@ -193,6 +195,7 @@ TabPage RID_XML_FILTER_TABPAGE_XSLT
         Text[ chinese_simplified ] = "用于输出的 XSLT";
         Text[ chinese_traditional ] = "用於匯出的 XSLT";
         Text[ slovak ] = "XSLT pre export";
+        Text[ portuguese_brazilian ] = "XSLT para exportar";
     };
 
     ComboBox ED_XML_EXPORT_XSLT
@@ -226,7 +229,7 @@ TabPage RID_XML_FILTER_TABPAGE_XSLT
         Text[ czech ] = "Prohlížet...";
         Text[ danish ] = "Gennemse...";
         Text[ polish ] = "Przegl�daj...";
-        Text[ portuguese_brazilian ] = "~Procurar...";
+        Text[ portuguese_brazilian ] = "Navegar...";
         Text[ turkish ] = "Tara...";
         Text[ arabic ] = "�������...";
         Text[ hebrew ] = "‮דפדוף...‬";
@@ -252,6 +255,7 @@ TabPage RID_XML_FILTER_TABPAGE_XSLT
         Text[ chinese_simplified ] = "用于输入的 XSLT";
         Text[ chinese_traditional ] = "用於匯入的 XSLT";
         Text[ slovak ] = "XSLT pre import";
+        Text[ portuguese_brazilian ] = "XSLT para importar";
     };
 
     ComboBox ED_XML_IMPORT_XSLT
@@ -285,7 +289,7 @@ TabPage RID_XML_FILTER_TABPAGE_XSLT
         Text[ czech ] = "Prohlížet...";
         Text[ danish ] = "Gennemse...";
         Text[ polish ] = "Przegl�daj...";
-        Text[ portuguese_brazilian ] = "~Procurar...";
+        Text[ portuguese_brazilian ] = "Navegar...";
         Text[ turkish ] = "Tara...";
         Text[ arabic ] = "�������...";
         Text[ hebrew ] = "‮דפדוף...‬";
@@ -311,6 +315,7 @@ TabPage RID_XML_FILTER_TABPAGE_XSLT
         Text[ chinese_simplified ] = "用于输入的文档样式";
         Text[ chinese_traditional ] = "用於匯入的文件樣式";
         Text[ slovak ] = "Šablóna pre import";
+        Text[ portuguese_brazilian ] = "Modelo para importar";
     };
 
     ComboBox ED_XML_IMPORT_TEMPLATE
@@ -344,7 +349,7 @@ TabPage RID_XML_FILTER_TABPAGE_XSLT
         Text[ czech ] = "Prohlížet...";
         Text[ danish ] = "Gennemse...";
         Text[ polish ] = "Przegl�daj...";
-        Text[ portuguese_brazilian ] = "~Procurar...";
+        Text[ portuguese_brazilian ] = "Navegar...";
         Text[ turkish ] = "Tara...";
         Text[ arabic ] = "�������...";
         Text[ hebrew ] = "‮דפדוף...‬";
@@ -361,7 +366,10 @@ TabPage RID_XML_FILTER_TABPAGE_XSLT
     Text[ chinese_simplified ] = "转换";
     Text[ chinese_traditional ] = "轉換";
     Text[ slovak ] = "Transformácia";
+    Text[ portuguese_brazilian ] = "Transforma��o";
 };
+
+
 
 
 

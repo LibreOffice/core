@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfiltertestdialog.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 14:09:05 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 18:24:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,7 @@ ModalDialog DLG_XML_FILTER_TEST_DIALOG
         Text[ hebrew ] = "‮יצוא‬";
         Text[ thai ] = "ส่งออก";
         Text[ slovak ] = "Exportovať";
+        Text[ portuguese_brazilian ] = "Exportar";
     };
 
     FixedText FT_EXPORT_XSLT
@@ -129,6 +130,7 @@ ModalDialog DLG_XML_FILTER_TEST_DIALOG
         Text[ chinese_simplified ] = "用于输出的 XSLT";
         Text[ chinese_traditional ] = "用於匯出的 XSLT";
         Text[ slovak ] = "XSLT pre export";
+        Text[ portuguese_brazilian ] = "XSLT para exportar";
     };
 
     FixedText FT_EXPORT_XSLT_FILE
@@ -153,6 +155,7 @@ ModalDialog DLG_XML_FILTER_TEST_DIALOG
         Text[ chinese_simplified ] = "转换文档";
         Text[ chinese_traditional ] = "轉換文件";
         Text[ slovak ] = "Transformovať dokument";
+        Text[ portuguese_brazilian ] = "Transformar o documento";
     };
 
     PushButton PB_EXPORT_BROWSE
@@ -179,7 +182,7 @@ ModalDialog DLG_XML_FILTER_TEST_DIALOG
         Text[ czech ] = "Listovat...";
         Text[ danish ] = "Gennemse...";
         Text[ polish ] = "Przegl�daj";
-        Text[ portuguese_brazilian ] = "~Pesquisar...";
+        Text[ portuguese_brazilian ] = "Navegar...";
         Text[ turkish ] = "Tara...";
         Text[ arabic ] = "�������...";
         Text[ hebrew ] = "‮דפדוף...‬";
@@ -200,11 +203,12 @@ ModalDialog DLG_XML_FILTER_TEST_DIALOG
         Text[ spanish ] = "~Documento actual";
         Text[ italian ] = "Documento attuale";
         Text[ swedish ] = "~Aktuellt dokument";
-        Text[ japanese ] = "現在のドキュメント";
-        Text[ korean ] = "현재 문서";
+        Text[ japanese ] = "現在のドキュメント(~C)";
+        Text[ korean ] = "현재 문서(~C)";
         Text[ chinese_simplified ] = "当前的文档(~C)";
         Text[ chinese_traditional ] = "目前的文件(~C)";
         Text[ slovak ] = "~Súčasný dokument";
+        Text[ portuguese_brazilian ] = "Documento atual";
     };
 
     FixedText FT_NAME_OF_CURRENT_FILE
@@ -241,6 +245,7 @@ ModalDialog DLG_XML_FILTER_TEST_DIALOG
         Text[ hebrew ] = "‮יבוא‬";
         Text[ thai ] = "นำเข้า";
         Text[ slovak ] = "Importovať";
+        Text[ portuguese_brazilian ] = "Importar";
     };
 
     FixedText FT_IMPORT_XSLT
@@ -258,6 +263,7 @@ ModalDialog DLG_XML_FILTER_TEST_DIALOG
         Text[ chinese_simplified ] = "用于输入的 XSLT";
         Text[ chinese_traditional ] = "用於匯入的 XSLT";
         Text[ slovak ] = "XSLT pre import";
+        Text[ portuguese_brazilian ] = "XSLT para importar";
     };
 
     FixedText FT_IMPORT_XSLT_FILE
@@ -282,6 +288,7 @@ ModalDialog DLG_XML_FILTER_TEST_DIALOG
         Text[ chinese_simplified ] = "用于输入的文档样式";
         Text[ chinese_traditional ] = "用於匯入的文件樣式";
         Text[ slovak ] = "Šablóna pre import";
+        Text[ portuguese_brazilian ] = "Modelo para importar";
     };
 
     FixedText FT_IMPORT_TEMPLATE_FILE
@@ -306,6 +313,7 @@ ModalDialog DLG_XML_FILTER_TEST_DIALOG
         Text[ chinese_simplified ] = "转换文件";
         Text[ chinese_traditional ] = "轉換檔案";
         Text[ slovak ] = "Transformovať súbor";
+        Text[ portuguese_brazilian ] = "Transformar o arquivo";
     };
 
     CheckBox CBX_DISPLAY_SOURCE
@@ -319,11 +327,12 @@ ModalDialog DLG_XML_FILTER_TEST_DIALOG
         Text[ spanish ] = "~Visualizar fuente";
         Text[ italian ] = "~Visualizza sorgente";
         Text[ swedish ] = "~Visa k�lltext";
-        Text[ japanese ] = "ソーステキストの表示";
-        Text[ korean ] = "원본 텍스트 표시";
+        Text[ japanese ] = "ソーステキストの表示(~D)";
+        Text[ korean ] = "원본 텍스트 표시(~D)";
         Text[ chinese_simplified ] = "显示源文本(~D)";
         Text[ chinese_traditional ] = "顯示原始檔(~D)";
         Text[ slovak ] = "Zobraziť z~droj";
+        Text[ portuguese_brazilian ] = "Exibir c�digo fonte";
     };
 
     PushButton PB_IMPORT_BROWSE
@@ -350,7 +359,7 @@ ModalDialog DLG_XML_FILTER_TEST_DIALOG
         Text[ czech ] = "Prohlížet...";
         Text[ danish ] = "Gennemse...";
         Text[ polish ] = "Przegl�daj...";
-        Text[ portuguese_brazilian ] = "~Navegar...";
+        Text[ portuguese_brazilian ] = "Navegar...";
         Text[ turkish ] = "Tara...";
         Text[ arabic ] = "�������...";
         Text[ hebrew ] = "‮דפדוף...‬";
@@ -371,11 +380,12 @@ ModalDialog DLG_XML_FILTER_TEST_DIALOG
         Text[ spanish ] = "~Archivo reciente";
         Text[ italian ] = "File recenti";
         Text[ swedish ] = "S~enaste fil";
-        Text[ japanese ] = "前回のファイル";
-        Text[ korean ] = "최근에 사용한 파일";
+        Text[ japanese ] = "前回のファイル(~R)";
+        Text[ korean ] = "최근에 사용한 파일(~R)";
         Text[ chinese_simplified ] = "上一个文件(~R)";
         Text[ chinese_traditional ] = "上一個檔案(~R)";
         Text[ slovak ] = "Posledný súbo~r";
+        Text[ portuguese_brazilian ] = "Arquivos recentes";
     };
 
     FixedText FT_NAME_OF_RECENT_FILE
@@ -410,7 +420,7 @@ ModalDialog DLG_XML_FILTER_TEST_DIALOG
         Text[ czech ] = "Zavřít";
         Text[ danish ] = "Luk";
         Text[ polish ] = "Zamknij";
-        Text[ portuguese_brazilian ] = "~Fechar";
+        Text[ portuguese_brazilian ] = "Fechar";
         Text[ turkish ] = "~Kapat";
         Text[ arabic ] = "�����";
         Text[ hebrew ] = "‮סגירה‬";
@@ -433,7 +443,9 @@ ModalDialog DLG_XML_FILTER_TEST_DIALOG
     Text[ chinese_simplified ] = "测试 XML 筛选器：%s";
     Text[ chinese_traditional ] = "測試 XML 篩選器：%s";
     Text[ slovak ] = "Testovací XML filter: %s";
+    Text[ portuguese_brazilian ] = "Testar filtro XML: %s";
 };
+
 
 
 
