@@ -1202,6 +1202,132 @@ sub get_feature_name
     return $featurename;
 }
 
+######################################################################
+# Returning the toplevel directory name of one specific file
+######################################################################
+
+sub get_directory_name_from_file
+{
+    my ($onefile) = @_;
+
+    my $destination = $onefile->{'destination'};
+    my $name = $onefile->{'Name'};
+
+    $destination =~ s/\Q$name\E\s*$//;
+    $destination =~ s/\Q$installer::globals::separator\E\s*$//;
+
+    my $path = "";
+
+    if ( $destination =~ /\Q$installer::globals::separator\E/ )
+    {
+        if ( $destination =~ /^\s*(\S.*\S\Q$installer::globals::separator\E)(\S.+\S?)/ )
+        {
+            $path = $2;
+        }
+    }
+    else
+    {
+        $path = $destination;
+    }
+
+    return $path;
+}
+
+#############################################################
+# Including the new subdir into the directory table
+#############################################################
+
+sub include_subdirname_into_directory_table
+{
+    my ($dirname, $directorytable, $directorytablename, $onefile) = @_;
+
+    my $subdir = "";
+    if ( $onefile->{'Subdir'} ) { $subdir = $onefile->{'Subdir'}; }
+    if ( $subdir eq "" ) { installer::exiter::exit_program("ERROR: No \"Subdir\" defined for $onefile->{'Name'}", "include_subdirname_into_directory_table"); }
+
+    # program INSTALLLOCATION program -> subjava INSTALLLOCATION progam:java
+
+    my $uniquename = "";
+    my $parent = "";
+    my $name = "";
+
+    my $includedline = 0;
+
+    my $newdir = "";
+
+    for ( my $i = 0; $i <= $#{$directorytable}; $i++ )
+    {
+
+        if ( ${$directorytable}[$i] =~ /^\s*(.*?)\t(.*?)\t(.*?)\s*$/ )
+        {
+            $uniquename = $1;
+            $parent = $2;
+            $name = $3;
+
+            if ( $dirname eq $name )
+            {
+                my $newuniquename = "sub" . $subdir;
+                $newdir = $newuniquename;
+                my $newparent = $parent;
+                my $newname = $name . "\:" . $subdir;
+                my $newline =
+                $line = "$newuniquename\t$newparent\t$newname\n";
+                push(@{$directorytable}, $line);
+                installer::remover::remove_leading_and_ending_whitespaces(\$line);
+                $infoline = "Added $line into directory table $directorytablename\n";
+                push(@installer::globals::logfileinfo, $infoline);
+
+                $includedline = 1;
+                last;
+            }
+        }
+    }
+
+    if ( ! $includedline ) { installer::exiter::exit_program("ERROR: Could not include new subdirectory into directory table for file $onefile->{'Name'}!", "include_subdirname_into_directory_table"); }
+
+    return $newdir;
+}
+
+##################################################################
+# Including the new sub directory into the component table
+##################################################################
+
+sub include_subdir_into_componenttable
+{
+    my ($subdir, $onefile, $componenttable) = @_;
+
+    my $componentname = $onefile->{'componentname'};
+
+    my $changeddirectory = 0;
+
+    for ( my $i = 0; $i <= $#{$componenttable}; $i++ )
+    {
+        if ( ${$componenttable}[$i] =~ /^\s*(.*?)\t(.*?)\t(.*?)\t(.*?)\t(.*?)\t(.*?)\s*$/ )
+        {
+            my $localcomponentname = $1;
+            my $directory = $3;
+
+            if ( $componentname eq $localcomponentname )
+            {
+                my $oldvalue = ${$componenttable}[$i];
+                ${$componenttable}[$i] =~ s/\b\Q$directory\E\b/$subdir/;
+                my $newvalue = ${$componenttable}[$i];
+
+                installer::remover::remove_leading_and_ending_whitespaces(\$oldvalue);
+                installer::remover::remove_leading_and_ending_whitespaces(\$newvalue);
+                $infoline = "Change in Component table: From \"$oldvalue\" to \"$newvalue\"\n";
+                push(@installer::globals::logfileinfo, $infoline);
+
+                $changeddirectory = 1;
+                last;
+            }
+        }
+    }
+
+    if ( ! $changeddirectory ) { installer::exiter::exit_program("ERROR: Could not change directory for component: $onefile->{'Name'}!", "include_subdir_into_componenttable"); }
+
+}
+
 ################################################################################################
 # Including the content for the child installations
 # into the tables:
@@ -1210,10 +1336,16 @@ sub get_feature_name
 
 sub add_childprojects
 {
-    my ($customactiontable, $installuitable, $featuretable, $directorytable, $customactiontablename, $installuitablename, $featuretablename, $directorytablename) = @_;
+    my ($customactiontable, $installuitable, $featuretable, $directorytable, $componenttable, $customactiontablename, $installuitablename, $featuretablename, $directorytablename, $componenttablename, $filesref) = @_;
 
     my $infoline = "";
     my $line = "";
+
+    $installer::globals::javafile = installer::worker::return_first_item_with_special_flag($filesref ,"JAVAFILE");
+    $installer::globals::adafile = installer::worker::return_first_item_with_special_flag($filesref ,"ADAFILE");
+
+    if ( $installer::globals::javafile eq "" ) { installer::exiter::exit_program("ERROR: No JAVAFILE found in files collector!", "add_childprojects"); }
+    if ( $installer::globals::adafile eq "" ) { installer::exiter::exit_program("ERROR: No ADAFILE found in files collector!", "add_childprojects"); }
 
     # Content for Directory table
     # SystemFolder TARGETDIR .
@@ -1243,54 +1375,87 @@ sub add_childprojects
 
     push(@installer::globals::logfileinfo, $infoline);
 
+    # Additional content for the directory table
+    # subadabas INSTALLLOCATION program:adabas
+    # subjava   INSTALLLOCATION program:java
+
+    my $dirname = get_directory_name_from_file($installer::globals::javafile);
+    my $subjavadir = include_subdirname_into_directory_table($dirname, $directorytable, $directorytablename, $installer::globals::javafile);
+
+    $dirname = get_directory_name_from_file($installer::globals::adafile);
+    my $subadadir = include_subdirname_into_directory_table($dirname, $directorytable, $directorytablename, $installer::globals::adafile);
+
+    # Content for the Component table
+    # The Java and Ada components have new directories
+
+    include_subdir_into_componenttable($subjavadir, $installer::globals::javafile, $componenttable);
+    include_subdir_into_componenttable($subadadir, $installer::globals::adafile, $componenttable);
+
     # Content for CustomAction table
-    # InstallAdabas 98 SystemFolder msiexec.exe /i "[SourceDir]adabas\adabasd1201.msi" /qr
-    # InstallJava 98 SystemFolder msiexec.exe /i "[SourceDir]java\Java 2 Runtime Environment, SE v1.4.2.msi" /qr REBOOT=R
 
-    my $sopackpath = "";
-    if ( $ENV{'SO_PACK'} ) { $sopackpath  = $ENV{'SO_PACK'}; }
-    else { installer::exiter::exit_program("ERROR: Environment variable SO_PACK not set!", "add_childprojects"); }
-
-    my $adabasinstallsetdir = $sopackpath . $installer::globals::separator . $installer::globals::compiler . $installer::globals::separator . "adabas" . $installer::globals::separator . $installer::globals::adafilename;
-    my $msifilenamesref = installer::systemactions::find_file_with_file_extension("msi", $adabasinstallsetdir);
-    if ( ! ($#{$msifilenamesref} > -1) ) { installer::exiter::exit_program("ERROR: Did not find msi file in $adabasinstallsetdir !", "add_childprojects"); }
-
-    $line = "InstallAdabas\t98\tSystemFolder\tmsiexec.exe /i \"\[SourceDir\]adabas\\${$msifilenamesref}[0]\" \/qr\n";
+    $line = "InstallAdabas\t98\tSystemFolder\t$installer::globals::adafile->{'Subdir'}\\$installer::globals::adafile->{'Name'} /S\n";
     push(@{$customactiontable} ,$line);
     installer::remover::remove_leading_and_ending_whitespaces(\$line);
     $infoline = "Added $line into table $customactiontablename\n";
     push(@installer::globals::logfileinfo, $infoline);
 
-    # $line = "InstallJava\t98\tSystemFolder\tmsiexec.exe /i \"\[SourceDir\]java\\$installer::globals::javafilename\" \/qr REBOOT=R\n";
-    $line = "InstallJava\t98\tSystemFolder\t\[SourceDir\]java\\$installer::globals::javafilename \/s \/v\"\/qr REBOOT=Suppress\"\n";
+    $line = "InstallJava\t98\tSystemFolder\t$installer::globals::javafile->{'Subdir'}\\$installer::globals::javafile->{'Name'} \/s \/v\"\/qr REBOOT=Suppress\"\n";
+    push(@{$customactiontable} ,$line);
+    installer::remover::remove_leading_and_ending_whitespaces(\$line);
+    $infoline = "Added $line into table $customactiontablename\n";
+    push(@installer::globals::logfileinfo, $infoline);
+
+    $line = "MaintenanceAdabas\t82\t$installer::globals::adafile->{'uniquename'}\t\/S\n";
+    push(@{$customactiontable} ,$line);
+    installer::remover::remove_leading_and_ending_whitespaces(\$line);
+    $infoline = "Added $line into table $customactiontablename\n";
+    push(@installer::globals::logfileinfo, $infoline);
+
+    $line = "MaintenanceJava\t82\t$installer::globals::javafile->{'uniquename'}\t\/s \/v\"\/qr REBOOT=Suppress\"\n";
     push(@{$customactiontable} ,$line);
     installer::remover::remove_leading_and_ending_whitespaces(\$line);
     $infoline = "Added $line into table $customactiontablename\n";
     push(@installer::globals::logfileinfo, $infoline);
 
     # Content for InstallUISequence table
-    # InstallJava &gm_o_Java=3 830
-    # InstallAdabas &gm_o_Adabas=3 840
+    # InstallAdabas &gm_o_Adabas=3 825
+    # InstallJava &gm_o_Java=3 827
 
     my $number = get_free_number_in_uisequence_table($installuitable);
-    my $featurename = get_feature_name("_Java", $featuretable);
-    $line = "InstallJava\t\&$featurename\=3\t$number\n";
+    my $featurename = get_feature_name("_Adabas", $featuretable);
+    $line = "InstallAdabas\t\&$featurename\=3 And Not Installed\t$number\n";
     push(@{$installuitable} ,$line);
     installer::remover::remove_leading_and_ending_whitespaces(\$line);
     $infoline = "Added $line into table $installuitablename\n";
     push(@installer::globals::logfileinfo, $infoline);
 
     $number = get_free_number_in_uisequence_table($installuitable) + 2;
+    $featurename = get_feature_name("_Java", $featuretable);
+    $line = "InstallJava\t\&$featurename\=3 And Not Installed And JAVAPATH\=\"\"\t$number\n";
+    push(@{$installuitable} ,$line);
+    installer::remover::remove_leading_and_ending_whitespaces(\$line);
+    $infoline = "Added $line into table $installuitablename\n";
+    push(@installer::globals::logfileinfo, $infoline);
+
+    $number = get_free_number_in_uisequence_table($installuitable) + 4;
     $featurename = get_feature_name("_Adabas", $featuretable);
-    $line = "InstallAdabas\t\&$featurename\=3\t$number\n";
+    $line = "MaintenanceAdabas\t\&$featurename\=3 And Installed\t$number\n";
+    push(@{$installuitable} ,$line);
+    installer::remover::remove_leading_and_ending_whitespaces(\$line);
+    $infoline = "Added $line into table $installuitablename\n";
+    push(@installer::globals::logfileinfo, $infoline);
+
+    $number = get_free_number_in_uisequence_table($installuitable) + 6;
+    $featurename = get_feature_name("_Java", $featuretable);
+    $line = "MaintenanceJava\t\&$featurename\=3 And Installed And JAVAPATH\=\"\"\t$number\n";
     push(@{$installuitable} ,$line);
     installer::remover::remove_leading_and_ending_whitespaces(\$line);
     $infoline = "Added $line into table $installuitablename\n";
     push(@installer::globals::logfileinfo, $infoline);
 
     # Content for Feature table, better from scp (translation)
-    # gm_o_java gm_optional Java 1.4.2 Description 2 200
     # gm_o_adabas gm_optional Adabas Description 2 200
+    # gm_o_java gm_optional Java 1.4.2 Description 2 200
 
 }
 
