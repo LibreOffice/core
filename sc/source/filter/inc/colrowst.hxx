@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colrowst.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:51:48 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:38:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,9 +66,6 @@
 #include <tools/debug.hxx>
 #endif
 
-#ifndef _SCEXTOPT_HXX
-#include "scextopt.hxx"
-#endif
 #ifndef _ROOT_HXX
 #include "root.hxx"
 #endif
@@ -93,9 +90,6 @@ class ColRowSettings : public ExcRoot
 {
 private:
     // ACHTUNG: Col-/Row-Angaben in TWIPS
-    friend class ScExtDocOptions;
-
-    ScExtTabOptions*    pExtTabOpt;
     INT32*              pWidth;
     BOOL*               pColHidden;
     UINT16*             pHeight;
@@ -108,9 +102,6 @@ private:
     BOOL                bSetByStandard;     // StandardWidth hat Vorrang vor DefColWidth!
 
     void                _SetRowSettings( const SCROW nRow, const UINT16 nExcelHeight, const UINT16 nGrbit );
-
-    inline ScExtTabOptions& GetExtTabOpt()
-                            { if( !pExtTabOpt ) pExtTabOpt = new ScExtTabOptions; return *pExtTabOpt; }
 
 public:
                         ColRowSettings( RootData& rRootData );
@@ -133,19 +124,6 @@ public:
     inline void         HideRow( const SCROW nRow );
     inline void         SetRowSettings( const SCROW nRow, const UINT16 nExcelHeight, const UINT16 nGrbit );
                                     // Auswertung/Umrechung von nExcelHeight und Auswertung nGrbit
-
-    inline UINT16       GetActivePane() const
-                            { return pExtTabOpt ? pExtTabOpt->nActPane : 3; }
-
-    void                ReadSplit( XclImpStream& rIn );
-    void                SetVisCorner( SCCOL nCol, SCROW nRow );
-    void                SetFrozen( const BOOL bFrozen );
-    inline void         SetTabSelected( const BOOL bSelected )
-                            { GetExtTabOpt().bSelected = bSelected; }
-    inline void         SetSelection( const ScRange& rSel )
-                            { GetExtTabOpt().SetSelection( rSel ); }
-    inline void         SetDimension( const ScRange& rDim )
-                            { GetExtTabOpt().SetDimension( rDim ); }
 
     /** Inserts all column and row settings of the specified sheet, except the hidden flags. */
     void                Apply( SCTAB nScTab );
@@ -185,7 +163,7 @@ inline void ColRowSettings::SetHeight( const SCROW nRow, const UINT16 n )
 {
     if( ValidRow(nRow) )
     {
-        pHeight[ nRow ] = ( UINT16 ) ( ( double ) ( n & 0x7FFF ) * pExcRoot->fRowScale );
+        pHeight[ nRow ] = n & 0x7FFF;
 
         INT8    nFlags = pRowFlags[ nRow ];
         nFlags |= ROWFLAG_USED;
