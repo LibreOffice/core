@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: lla $ $Date: 2001-05-28 11:10:41 $
+#   last change: $Author: jb $ $Date: 2001-05-28 14:44:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,19 +82,13 @@ SLOFILES=\
     $(SLO)$/matchlocale.obj \
     $(SLO)$/treebuildercallback.obj \
     $(SLO)$/notifycallback.obj \
-    $(SLO)$/dataconverter.obj \
     $(SLO)$/valuehandler.obj \
     $(SLO)$/typeconverter.obj \
     $(SLO)$/xmltreebuilder.obj \
     $(SLO)$/xmlformater.obj \
     $(SLO)$/localsession.obj \
     $(SLO)$/setupsession.obj \
-    $(SLO)$/mergeupdates.obj \
-    $(SLO)$/dataexport.obj \
-    $(SLO)$/dataimport.obj \
-    $(SLO)$/xmlimport.obj \
     $(SLO)$/saxadapter.obj \
-    $(SLO)$/updatedom.obj \
     $(SLO)$/updatehandler.obj \
     $(SLO)$/updatetree.obj \
     $(SLO)$/namehelper.obj \
@@ -106,7 +100,6 @@ SLOFILES=\
     $(SLO)$/binarydecide.obj \
     $(SLO)$/pathhelper.obj \
     $(SLO)$/binarybasereader.obj \
-
 
 # --- Targets ---
 
