@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_registry.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:09:56 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 16:49:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,6 @@
 #include <vector>
 #include <hash_map>
 #include <memory>
-
 
 using namespace ::dp_misc;
 using namespace ::com::sun::star;
