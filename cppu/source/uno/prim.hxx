@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prim.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2003-03-20 12:30:00 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:38:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,7 @@
 #include "rtl/alloc.h"
 #endif
 
-#if defined DEBUG
+#if OSL_DEBUG_LEVEL > 1
 #include "rtl/ustrbuf.hxx"
 #include "rtl/string.hxx"
 #endif
@@ -183,7 +183,7 @@ inline typelib_TypeDescriptionReference * _getVoidType()
 }
 
 //--------------------------------------------------------------------------------------------------
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
 #define CONSTRUCT_EMPTY_ANY( pAny ) \
 (pAny)->pType = _getVoidType(); \
 (pAny)->pData = (void *)0xdeadbeef;
