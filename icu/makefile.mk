@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: rt $ $Date: 2004-05-12 08:05:07 $
+#   last change: $Author: kz $ $Date: 2004-07-30 13:01:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -132,15 +132,9 @@ CONFIGURE_DIR=source
 .IF "$(USE_SHELL)"=="4nt"
 BUILD_ACTION_SEP=^
 CONFIGURE_ACTION=$(BACK_PATH)..$/..$/convert.bat
-.IF "$(COMEX)"=="10"
-CONFIGURE_ACTION+= $(BUILD_ACTION_SEP)$(BACK_PATH)..$/..$/rmvcprj.bat
-.ENDIF			# "$(COMEX)"=="10"
 .ELSE			# "$(USE_SHELL)"=="4nt"
 BUILD_ACTION_SEP=;
 CONFIGURE_ACTION=$(BACK_PATH)..$/..$/convert.sh
-.IF "$(COMEX)"=="10"
-CONFIGURE_ACTION+= $(BUILD_ACTION_SEP)$(BACK_PATH)..$/..$/rmvcprj.sh
-.ENDIF			# "$(COMEX)"=="10"
 .ENDIF			# "$(USE_SHELL)"=="4nt"
 BUILD_DIR=source
 .IF "full_debug" == ""
@@ -168,9 +162,12 @@ ICU_BUILD_LIBPOST=d
 ICU_BUILD_VERSION=Release
 ICU_BUILD_LIBPOST=
 .ENDIF
-.IF "$(COMEX)"=="8" || "$(COMEX)"=="10"
+.IF "$(COMEX)"=="8"
 CONFIGURE_ACTION+= $(BUILD_ACTION_SEP) wdevenv allinone$/allinone $(ICU_BUILD_VERSION)
 BUILD_ACTION=devenv allinone$/allinone.sln /build $(ICU_BUILD_VERSION) /project all /useenv
+.ELIF "$(COMEX)"=="10"
+CONFIGURE_ACTION+= $(BUILD_ACTION_SEP) cp ..$/..$/..$/..$/..$/makefiles.zip . $(BUILD_ACTION_SEP) unzip makefiles.zip
+BUILD_ACTION=cd allinone$/all && cmd /c nmake /f all.mak CFG="all - Win32 Release" && cd ..$/..
 .ELSE
 BUILD_ACTION=msdev allinone$/allinone.dsw /useenv /MAKE "all - Win32 $(ICU_BUILD_VERSION)"
 .ENDIF
