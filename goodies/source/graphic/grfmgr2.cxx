@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfmgr2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ka $ $Date: 2001-05-08 09:09:18 $
+ *  last change: $Author: ka $ $Date: 2001-06-18 13:15:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -552,10 +552,26 @@ BOOL GraphicManager::ImplCreateOutput( OutputDevice* pOut,
     }
     else
     {
+        Size aNewSize( rMtf.GetPrefSize() );
+
         *pMtf = rMtf;
 
-        if( rAttr.IsSpecialDrawMode() || rAttr.IsAdjusted() || rAttr.IsRotated() || rAttr.IsTransparent() )
-            ImplAdjust( *pMtf, rAttr, ADJUSTMENT_DRAWMODE | ADJUSTMENT_COLORS | ADJUSTMENT_ROTATE | ADJUSTMENT_TRANSPARENCY );
+        if( aNewSize.Width() && aNewSize.Height() && rSz.Width() && rSz.Height() )
+        {
+            const double fGrfWH = (double) aNewSize.Width() / aNewSize.Height();
+            const double fOutWH = (double) rSz.Width() / rSz.Height();
+
+            pMtf->Scale( fOutWH / fGrfWH, 1.0 );
+/*
+            if( fGrfWH < fWinWH )
+                aNewSize.Width() = (long) ( ( aNewSize.Height() = rSz.Height.Height() ) * fGrfWH );
+            else
+                aNewSize.Height()= (long) ( ( aNewSize.Width() = rSz.Width() ) / fGrfWH );
+*/
+        }
+
+        if( rAttr.IsSpecialDrawMode() || rAttr.IsAdjusted() || rAttr.IsMirrored() || rAttr.IsRotated() || rAttr.IsTransparent() )
+            ImplAdjust( *pMtf, rAttr, ADJUSTMENT_ALL );
 
         ImplDraw( pOut, rPt, rSz, *pMtf, rAttr );
     }
@@ -1417,28 +1433,12 @@ void GraphicManager::ImplAdjust( GDIMetaFile& rMtf, const GraphicAttr& rAttr, UL
 
     if( ( nAdjustmentFlags & ADJUSTMENT_MIRROR ) && aAttr.IsMirrored() )
     {
-        Size    aPrefSize( rMtf.GetPrefSize() );
-        long    nMoveX, nMoveY;
-        double  fScaleX, fScaleY;
-
-        if( aAttr.GetMirrorFlags() & BMP_MIRROR_HORZ )
-            nMoveX = VOS_ABS( aPrefSize.Width() ) - 1, fScaleX = -1.0;
-        else
-            nMoveX = 0, fScaleX = 1.0;
-
-        if( aAttr.GetMirrorFlags() & BMP_MIRROR_VERT )
-            nMoveY = VOS_ABS( aPrefSize.Height() ) - 1, fScaleY = -1.0;
-        else
-            nMoveY = 0, fScaleY = 1.0;
-
-        rMtf.Scale( fScaleX, fScaleY );
-        rMtf.Move( nMoveX, nMoveY );
-        rMtf.SetPrefSize( aPrefSize );
+        rMtf.Mirror( aAttr.GetMirrorFlags() );
     }
 
     if( ( nAdjustmentFlags & ADJUSTMENT_ROTATE ) && aAttr.IsRotated() )
     {
-        DBG_ERROR( "Missing implementation: Mtf-Rotation" );
+        rMtf.Rotate( aAttr.GetRotation() );
     }
 
     if( ( nAdjustmentFlags & ADJUSTMENT_TRANSPARENCY ) && aAttr.IsTransparent() )
@@ -1485,7 +1485,9 @@ void GraphicManager::ImplAdjust( Animation& rAnimation, const GraphicAttr& rAttr
     }
 
     if( ( nAdjustmentFlags & ADJUSTMENT_MIRROR ) && aAttr.IsMirrored() )
+    {
         rAnimation.Mirror( aAttr.GetMirrorFlags() );
+    }
 
     if( ( nAdjustmentFlags & ADJUSTMENT_ROTATE ) && aAttr.IsRotated() )
     {
@@ -1503,31 +1505,26 @@ void GraphicManager::ImplAdjust( Animation& rAnimation, const GraphicAttr& rAttr
 void GraphicManager::ImplDraw( OutputDevice* pOut, const Point& rPt, const Size& rSz,
                                const GDIMetaFile& rMtf, const GraphicAttr& rAttr )
 {
-    Point   aPt( rPt );
-    Size    aSz( rSz );
+       USHORT   nRot10 = rAttr.GetRotation() % 3600;
+    Point   aOutPt( rPt );
+    Size    aOutSz( rSz );
 
-    if( rAttr.IsMirrored() )
+    if( nRot10 )
     {
-        if( rAttr.GetMirrorFlags() & BMP_MIRROR_HORZ )
-        {
-            aPt.X() += aSz.Width() - 1;
-            aSz.Width() = -aSz.Width();
-        }
+        Polygon aPoly( Rectangle( aOutPt, aOutSz ) );
 
-        if( rAttr.GetMirrorFlags() & BMP_MIRROR_VERT )
-        {
-            aPt.Y() += aSz.Height() - 1;
-            aSz.Height() = -aSz.Height();
-        }
+        aPoly.Rotate( aOutPt, nRot10 );
+        const Rectangle aRotBoundRect( aPoly.GetBoundRect() );
+        aOutPt = aRotBoundRect.TopLeft();
+        aOutSz = aRotBoundRect.GetSize();
     }
 
     pOut->Push( PUSH_CLIPREGION );
-    pOut->IntersectClipRegion( Rectangle( aPt, aSz ) );
+    pOut->IntersectClipRegion( Rectangle( aOutPt, aOutSz ) );
 
     ( (GDIMetaFile&) rMtf ).WindStart();
-    ( (GDIMetaFile&) rMtf ).Play( pOut, aPt, aSz );
+    ( (GDIMetaFile&) rMtf ).Play( pOut, aOutPt, aOutSz );
     ( (GDIMetaFile&) rMtf ).WindStart();
 
     pOut->Pop();
 }
-
