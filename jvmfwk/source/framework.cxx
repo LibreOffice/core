@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framework.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 16:03:39 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 11:52:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,9 @@
 #include <vector>
 #include <algorithm>
 #include <functional>
+#ifdef SOLAR_JAVA
 #include "jni.h"
+#endif
 
 #include "framework.hxx"
 #include "libxmlutil.hxx"
@@ -341,6 +343,9 @@ javaFrameworkError SAL_CALL jfw_findAllJREs(JavaInfo ***pparInfo, sal_Int32 *pSi
 javaFrameworkError SAL_CALL jfw_startVM(JavaVMOption *arOptions, sal_Int32 cOptions,
                                  JavaVM **ppVM, JNIEnv **ppEnv)
 {
+#ifndef SOLAR_JAVA
+    return JFW_E_ERROR;
+#else
     osl::MutexGuard guard(jfw::getFwkMutex());
     javaFrameworkError errcode = JFW_E_NONE;
     //We keep this pointer so we can determine if a VM has already
@@ -514,6 +519,7 @@ javaFrameworkError SAL_CALL jfw_startVM(JavaVMOption *arOptions, sal_Int32 cOpti
     }
     OSL_ASSERT(plerr != JFW_PLUGIN_E_WRONG_VENDOR);
     return errcode;
+#endif
 }
 
 /** We do not use here jfw_findAllJREs and then check if a JavaInfo
