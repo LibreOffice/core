@@ -2,9 +2,9 @@
  *
  *  $RCSfile: highred.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 13:39:11 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:18:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ ModelessDialog RID_SCDLG_HIGHLIGHT_CHANGES
         Text[ japanese ] = "θ΅¨ε†…γ®ε¤‰ζ›΄η®‡ζ‰€γ‚’θ΅¨η¤Ί(~S)";
         Text[ chinese_traditional ] = "ι΅―η¤Ίε·¥δ½θ΅¨ε…§η„θ®ζ›΄(~S)";
         Text[ arabic ] = "ΕΩεΗΡ ΗαΚΫννΡΗΚ έν ΗαΜΟζα";
-        Text[ greek ] = "Εμφάνιση αλλαγών πίνακα";
+        Text[ greek ] = "Εμφάνιση αλλαγών υπολογιστικού φύλλου";
         Text[ korean ] = "μ¤ν”„λ λ“μ‹νΈμ— λ³€κ²½ μ‚¬ν•­ ν‘μ‹(~S)";
         Text[ turkish ] = "~Deπiώiklikleri tabloda gφrόntόle";
         Text[ language_user1 ] = " ";
@@ -296,6 +296,7 @@ ModelessDialog RID_SCDLG_HIGHLIGHT_CHANGES
     Text[ hindi ] = "ΰ¤ªΰ¤°ΰ¤Ώΰ¤µΰ¤°ΰ¥ΰ¤¤ΰ¤¨ΰ¥‹ΰ¤‚ ΰ¤•ΰ¥‹ ΰ¤¦ΰ¤Ώΰ¤–ΰ¤Ύΰ¤“";
     Text[ slovak ] = "ZobraziΕ¥ zmeny";
 };
+
 
 
 
