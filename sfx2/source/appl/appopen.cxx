@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: mba $ $Date: 2001-07-10 11:39:05 $
+ *  last change: $Author: cd $ $Date: 2001-08-17 06:53:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1009,7 +1009,12 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
     SFX_REQUEST_ARG(rReq, pHyperLinkUsedItem, SfxBoolItem, SID_BROWSE, FALSE);
     if ( pHyperLinkUsedItem )
         bHyperlinkUsed = pHyperLinkUsedItem->GetValue();
-    if ( bHyperlinkUsed )
+
+    SFX_REQUEST_ARG( rReq, pFileName, SfxStringItem, SID_FILE_NAME, FALSE );
+    String aFileName = pFileName->GetValue();
+
+    // Mark without URL cannot be handled by hyperlink code
+    if ( bHyperlinkUsed && aFileName.Len() && aFileName.GetChar(0) != '#' )
     {
         Reference< ::com::sun::star::document::XTypeDetection > xTypeDetection(
                                                                     ::comphelper::getProcessServiceFactory()->createInstance(
@@ -1019,8 +1024,6 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
         {
             URL             aURL;
             ::rtl::OUString aTypeName;
-            SFX_REQUEST_ARG( rReq, pFileNameItem, SfxStringItem, SID_FILE_NAME, FALSE );
-            String aFileName = pFileNameItem->GetValue();
 
             aURL.Complete = aFileName;
             Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance(
