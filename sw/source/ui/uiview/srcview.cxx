@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srcview.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:31:59 $
+ *  last change: $Author: hr $ $Date: 2004-12-13 12:37:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -433,7 +433,7 @@ SwSrcView::~SwSrcView()
 
 
     SfxDocumentInfo& rDocInfo = pDocShell->GetDocInfo();
-    pDocShell->SetAutoLoad(rDocInfo.GetReloadURL(),
+    pDocShell->SetAutoLoad(INetURLObject(rDocInfo.GetReloadURL()),
                                 rDocInfo.GetReloadDelay(),
                                 rDocInfo.IsReloadEnabled() );
 //  EndListening(*GetViewFrame());
