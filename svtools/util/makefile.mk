@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.1.1.1 $
+#*  $Revision: 1.2 $
 #*
-#*  last change: $Author: hr $ $Date: 2000-09-18 16:59:07 $
+#*  last change: $Author: er $ $Date: 2000-10-22 17:22:16 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -188,6 +188,7 @@ SHL1STDLIBS=$(TOOLSLIB)			\
             $(SVLLIB)			\
             $(SALLIB)			\
             $(UNOTOOLSLIB)		\
+            $(COMPHELPERLIB)		\
             $(UCBHELPERLIB)
 
 
