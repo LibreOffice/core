@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testtool.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-15 20:38:21 $
+ *  last change: $Author: kz $ $Date: 2000-11-24 15:42:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ String S_INVALID_KEYCODE
     Text[ polish ] = "Nieprawid³owy KeyCode!";
     Text[ portuguese_brazilian ] = "Ist kein gültiger KeyCode!";
     Text[ japanese ] = "·°º°ÄŞ‚Í–³Œø‚Å‚·B";
-    Text[ korean ] = "Å° ÄÚµå°¡ ¸ÂÁö¾Ê½À´Ï´Ù!";
+    Text[ korean ] = "Å° ÄÚµå°¡ ¸ÂÁö ¾Ê½À´Ï´Ù!";
     Text[ chinese_simplified ] = "ÊÇÒ»¸öÎŞĞ§µÄ¼üÂë£¡";
     Text[ chinese_traditional ] = "µL®ÄªºÁä½X¡I";
     Text[ arabic ] = "Is an invalid KeyCode!";
@@ -146,7 +146,7 @@ String S_READING_SLOT_IDS
     Text[ polish ] = "Czytanie Slot ID";
     Text[ portuguese_brazilian ] = "Einlesen der Slot IDs";
     Text[ japanese ] = "½Û¯Ä ID ‚Ì“Ç‚İæ‚è";
-    Text[ korean ] = "½½·Ô ¾ÆÀÌµğ ÀĞ±â";
+    Text[ korean ] = "½½·ÔID ÀĞ±â";
     Text[ chinese_simplified ] = "¶ÁÈ¡ Slot IDs";
     Text[ chinese_traditional ] = "Åª¨ú Slot IDs";
     Text[ arabic ] = "Reading Slot IDs";
