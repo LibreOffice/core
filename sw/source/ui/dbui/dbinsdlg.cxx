@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinsdlg.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: os $ $Date: 2000-12-09 13:03:26 $
+ *  last change: $Author: os $ $Date: 2001-01-19 14:45:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1953,12 +1953,14 @@ void SwInsertDBColAutoPilot::Load()
                  pNewData->bIsEmptyHeadln = *(sal_Bool*)pDataSourceProps[10].getValue();
 
             OUString sSubNodeName(pNames[nNode]);
-            sSubNodeName += C2U("/ColumnSet");
+            sSubNodeName += C2U("/ColumnSet/");
             Sequence <OUString> aSubNames = GetNodeNames(sSubNodeName);
             const OUString* pSubNames = aSubNames.getConstArray();
             for(sal_Int32 nSub = 0; nSub < aSubNames.getLength(); nSub++)
             {
-                Sequence <OUString> aSubNodeNames = lcl_CreateSubNames(sSubNodeName);
+                OUString sSubSubNodeName(sSubNodeName);
+                sSubSubNodeName += pSubNames[nSub];
+                Sequence <OUString> aSubNodeNames = lcl_CreateSubNames(sSubSubNodeName);
                 Sequence< Any> aSubProps = GetProperties(aSubNodeNames);
                 const Any* pSubProps = aSubProps.getConstArray();
 
