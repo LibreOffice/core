@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmsrcimp.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-18 07:43:06 $
+ *  last change: $Author: fs $ $Date: 2001-05-17 12:43:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,13 @@
 #ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
 #endif
+#ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
+#endif
+
+#ifndef _UNOTOOLS_CHARCLASS_HXX
+#include <unotools/charclass.hxx>
+#endif
 
 // ===================================================================================================
 // Hilfsstrukturen
@@ -200,7 +206,9 @@ class FmSearchEngine
 
     // der Formatter
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >  m_xFormatSupplier;
-    ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >            m_xFormatter;
+    ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >        m_xFormatter;
+
+    CharClass               m_aCharacterClassficator;
 
     // die Sammlung aller interesanten Felder (bzw. ihre ::com::sun::star::data::XDatabaseVariant-Interfaces und ihre FormatKeys)
     struct FieldInfo
@@ -211,7 +219,7 @@ class FmSearchEngine
     };
 
     DECLARE_STL_VECTOR(FieldInfo, FieldCollection);
-    FieldCollection         m_arrUsedFields;
+    FieldCollection             m_arrUsedFields;
     sal_Int32                   m_nCurrentFieldIndex;   // der letzte Parameter von RebuildUsedFields, ermoeglicht mir Checks in FormatField
 
     // We have three possible control types we may search in, determined by the supported interfaces : ::com::sun::star::awt::XTextComponent, ::com::sun::star::awt::XListBox, ::com::sun::star::awt::XCheckBox.
@@ -349,9 +357,17 @@ public:
         wurde, dann kann man das Ergebnis danach abfragen. Ist zusaetzlich der ProgressHandler gesetzt, wird dieser fuer jeden neuen
         Datensatz sowie am Ende der Suche aufgerufen.
     */
-    FmSearchEngine(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >& xCursor, const ::rtl::OUString& strVisibleFields, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& xFormat,
+    FmSearchEngine(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >& xCursor,
+        const ::rtl::OUString& strVisibleFields,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& xFormat,
         FmSearchDialog::SEARCH_MODE eMode);
-    FmSearchEngine(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >& xCursor, const ::rtl::OUString& strVisibleFields, const InterfaceArray& arrFields,
+    FmSearchEngine(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >& xCursor,
+        const ::rtl::OUString& strVisibleFields,
+        const InterfaceArray& arrFields,
         FmSearchDialog::SEARCH_MODE eMode);
 
     virtual ~FmSearchEngine();

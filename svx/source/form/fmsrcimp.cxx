@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmsrcimp.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: th $ $Date: 2001-05-11 16:02:48 $
+ *  last change: $Author: fs $ $Date: 2001-05-17 12:47:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,6 +188,7 @@
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::i18n;
 using namespace ::svxform;
 
@@ -612,6 +613,7 @@ INLINE_METHOD FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchWildcard(const
     // --------------------------------------------------------------
     sal_Bool bFound(sal_False);
     sal_Bool bMovedAround(sal_False);
+    ::rtl::OUString sCurrentCheck;
     do
     {
         if (m_eMode == FmSearchDialog::SM_ALLOWSCHEDULE)
@@ -633,10 +635,11 @@ INLINE_METHOD FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchWildcard(const
             sCurrentCheck = iterFieldLoop->xContents->getString();
 
         if (!GetCaseSensitive())
-        {// normieren, wenn kein Gross/Klein
-//            Locale aAppLocale = buildApplicationLocale();
-//            sCurrentCheck.toLowerCase(::rtl::OLocale::registerLocale(aAppLocale.Language, aAppLocale.Country));
-            sCurrentCheck.toAsciiLowerCase();
+        {   // norm the string
+            String sNeedToAddOUStringVersionsToCharClassHelper(sCurrentCheck);
+                // TODO ....
+            m_aCharacterClassficator.toLower(sNeedToAddOUStringVersionsToCharClassHelper);
+            sCurrentCheck = sNeedToAddOUStringVersionsToCharClassHelper;
         }
 
         // jetzt ist der Test einfach ...
@@ -793,8 +796,9 @@ INLINE_METHOD FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchRegularApprox(
 
 DBG_NAME(FmSearchEngine);
 //------------------------------------------------------------------------
-FmSearchEngine::FmSearchEngine(const Reference< ::com::sun::star::sdbc::XResultSet > & xCursor, const ::rtl::OUString& sVisibleFields,
-    const Reference< ::com::sun::star::util::XNumberFormatsSupplier > & xFormatSupplier, FmSearchDialog::SEARCH_MODE eMode)
+FmSearchEngine::FmSearchEngine(const Reference< XMultiServiceFactory >& _rxORB,
+            const Reference< XResultSet > & xCursor, const ::rtl::OUString& sVisibleFields,
+            const Reference< XNumberFormatsSupplier > & xFormatSupplier, FmSearchDialog::SEARCH_MODE eMode)
     :m_xSearchCursor(xCursor)
     ,m_xFormatSupplier(xFormatSupplier)
     ,m_bUsingTextComponents(sal_False)
@@ -807,6 +811,7 @@ FmSearchEngine::FmSearchEngine(const Reference< ::com::sun::star::sdbc::XResultS
     ,m_eMode(eMode)
     ,m_bCancelAsynchRequest(sal_False)
     ,m_bSearchingCurrently(sal_False)
+    ,m_aCharacterClassficator(_rxORB, buildApplicationLocale())
 {
     DBG_CTOR(FmSearchEngine,NULL);
 
@@ -819,8 +824,9 @@ FmSearchEngine::FmSearchEngine(const Reference< ::com::sun::star::sdbc::XResultS
 }
 
 //------------------------------------------------------------------------
-FmSearchEngine::FmSearchEngine(const Reference< ::com::sun::star::sdbc::XResultSet > & xCursor, const ::rtl::OUString& sVisibleFields,
-    const InterfaceArray& arrFields, FmSearchDialog::SEARCH_MODE eMode)
+FmSearchEngine::FmSearchEngine(const Reference< XMultiServiceFactory >& _rxORB,
+        const Reference< XResultSet > & xCursor, const ::rtl::OUString& sVisibleFields,
+        const InterfaceArray& arrFields, FmSearchDialog::SEARCH_MODE eMode)
     :m_xSearchCursor(xCursor)
     ,m_xOriginalIterator(xCursor)
     ,m_xClonedIterator(m_xOriginalIterator, sal_True)
@@ -834,6 +840,7 @@ FmSearchEngine::FmSearchEngine(const Reference< ::com::sun::star::sdbc::XResultS
     ,m_eMode(eMode)
     ,m_bCancelAsynchRequest(sal_False)
     ,m_bSearchingCurrently(sal_False)
+    ,m_aCharacterClassficator(_rxORB, buildApplicationLocale())
 {
     DBG_CTOR(FmSearchEngine,NULL);
 
@@ -1031,10 +1038,11 @@ void FmSearchEngine::SearchNextImpl()
     // die Parameter der Suche
     ::rtl::OUString strSearchExpression(m_strSearchExpression); // brauche ich non-const
     if (!GetCaseSensitive())
-    {// normieren, wenn kein Gross/Klein
-//        Locale aAppLocale = buildApplicationLocale();
-//        strSearchExpression.toLowerCase(::rtl::OLocale::registerLocale(aAppLocale.Language, aAppLocale.Country));
-        strSearchExpression.toAsciiLowerCase();
+    {   // norm the string
+        String sNeedToAddOUStringVersionsToCharClassHelper(strSearchExpression);
+            // TODO ....
+        m_aCharacterClassficator.toLower(sNeedToAddOUStringVersionsToCharClassHelper);
+        strSearchExpression = sNeedToAddOUStringVersionsToCharClassHelper;
     }
 
     if (!m_bRegular && !m_bLevenshtein)
