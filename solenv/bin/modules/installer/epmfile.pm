@@ -699,6 +699,19 @@ sub set_revision_in_pkginfo
     }
 }
 
+########################################################
+# Setting MAXINST=1000 into the pkginfo file.
+########################################################
+
+sub set_maxinst_in_pkginfo
+{
+    my ($changefile, $filename) = @_;
+
+    my $newline = "MAXINST\=1000";
+
+    add_one_line_into_file($changefile, $newline, $filename);
+}
+
 #####################################################################
 # Adding a new line for topdir into specfile, removing old
 # topdir if set.
@@ -805,6 +818,29 @@ sub set_packager_in_specfile
             my $oldstring = $1;
             ${$changefile}[$i] =~ s/\Q$oldstring\E/$packager/;
             my $infoline = "Info: Changed Packager in spec file from $oldstring to $packager!\n";
+            push( @installer::globals::logfileinfo, $infoline);
+            last;
+        }
+    }
+}
+
+#####################################################################
+# Replacing Copyright with License in the spec file
+# Syntax: License: LGPL, SISSL
+#####################################################################
+
+sub set_license_in_specfile
+{
+    my ($changefile, $variableshashref) = @_;
+
+    my $license = $variableshashref->{'LICENSENAME'};
+
+    for ( my $i = 0; $i <= $#{$changefile}; $i++ )
+    {
+        if ( ${$changefile}[$i] =~ /^\s*Copyright\s*:\s*(.+?)\s*$/ )
+        {
+            ${$changefile}[$i] = "License: $license\n";
+            my $infoline = "Info: Replaced Copyright with License: $license !\n";
             push( @installer::globals::logfileinfo, $infoline);
             last;
         }
@@ -949,6 +985,7 @@ sub prepare_packages
         set_topdir_in_specfile($changefile, $filename, $newepmdir);
         set_releaseversion_in_specfile($changefile, $variableshashref);
         set_packager_in_specfile($changefile);
+        set_license_in_specfile($changefile, $variableshashref);
         installer::files::save_file($completefilename, $changefile);
     }
 
@@ -957,6 +994,7 @@ sub prepare_packages
     if ( $installer::globals::issolarispkgbuild )
     {
         set_revision_in_pkginfo($changefile, $filename);
+        set_maxinst_in_pkginfo($changefile, $filename);
         installer::files::save_file($completefilename, $changefile);
 
         my $prototypefilename = $packagename . ".prototype";
