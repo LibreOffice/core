@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testcppu.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:25:54 $
+ *  last change: $Author: dbo $ $Date: 2000-12-14 14:48:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -670,6 +670,14 @@ static void testAssignment()
     OSL_ASSERT( !(a != aSeq) );
     OSL_ASSERT( aSeq == aSeq2 );
     OSL_ASSERT( aSeq[1].Byte == 20 );
+
+    // equals...
+    sal_uInt64 n = (sal_uInt64)(sal_Int64)-5;
+    a.setValue( &n, getCppuType( (sal_uInt64 *)0 ) );
+    Any b;
+    sal_Int8 n2 = -5;
+    b.setValue( &n2, getCppuType( (sal_Int8 *)0 ) );
+    OSL_ASSERT( a != b );
 }
 
 void test_interface()
@@ -862,10 +870,12 @@ int SAL_CALL main(int argc, char **argv)
     testEnvironment();
     testMappingCallback();
 
+    // security test
+//      void test_security( const Reference< XMultiServiceFactory > & );
+//      test_security( xMgr );
     // perform test
     void test_di(void);
     test_di();
-    void test_performance(void);
     testAssignment();
     testCppu();
 //  test_cache(); // cache test not possible if types are loaded dynamically...
