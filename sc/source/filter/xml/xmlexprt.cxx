@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-01 14:08:43 $
+ *  last change: $Author: sab $ $Date: 2000-11-02 09:53:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2309,7 +2309,13 @@ void ScXMLExport::OpenNewRow(const sal_Int32 nIndex, const sal_Int8 nFlag, const
 {
     nOpenRow = nStartRow;
     if (aGroupRows.IsGroupStart(nStartRow))
+    {
+        if (bHasRowHeader && bRowHeaderOpen)
+            CloseHeaderRows();
         aGroupRows.OpenGroups(nStartRow);
+        if (bHasRowHeader && bRowHeaderOpen)
+            OpenHeaderRows();
+    }
     if (bHasRowHeader && !bRowHeaderOpen && nStartRow >= aRowHeaderRange.StartRow && nStartRow <= aRowHeaderRange.EndRow)
     {
         if (nStartRow == aRowHeaderRange.StartRow)
