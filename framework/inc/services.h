@@ -2,9 +2,9 @@
  *
  *  $RCSfile: services.h,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 16:01:03 $
+ *  last change: $Author: vg $ $Date: 2003-05-15 10:52:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,7 @@ namespace framework{
 #define SERVICENAME_PATHSETTINGS                            DECLARE_ASCII("com.sun.star.util.PathSettings"                      )
 #define SERVICENAME_DISPATCHHELPER                          DECLARE_ASCII("com.sun.star.frame.DispatchHelper"                   )
 #define SERVICENAME_DETECTORFACTORY                         DECLARE_ASCII("com.sun.star.document.ExtendedTypeDetectionFactory"  )
+#define SERVICENAME_SCRIPTCONVERTER                         DECLARE_ASCII("com.sun.star.script.Converter"                       )
 
 //_________________________________________________________________________________________________________________
 //  used implementationnames by framework
