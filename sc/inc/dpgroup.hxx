@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dpgroup.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-03 11:28:49 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 12:51:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,17 +70,6 @@
 
 class ScDocument;
 class SvNumberFormatter;
-
-// --------------------------------------------------------------------
-
-//! API constants?
-const sal_Int32 SC_DP_DATE_SECONDS  = 1;
-const sal_Int32 SC_DP_DATE_MINUTES  = 2;
-const sal_Int32 SC_DP_DATE_HOURS    = 4;
-const sal_Int32 SC_DP_DATE_DAYS     = 8;
-const sal_Int32 SC_DP_DATE_MONTHS   = 16;
-const sal_Int32 SC_DP_DATE_QUARTERS = 32;
-const sal_Int32 SC_DP_DATE_YEARS    = 64;
 
 // --------------------------------------------------------------------
 
