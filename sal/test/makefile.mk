@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: sb $ $Date: 2002-09-24 10:31:50 $
+#   last change: $Author: rt $ $Date: 2004-05-03 09:20:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -87,23 +87,8 @@ MY_SCRIPTCAT=tr -d "\015" <
 
 APP2OBJS = $(OBJ)$/testbootstrap.obj
 
-APP1OBJS=	\
-                $(OBJ)$/testprofile.obj		\
-                $(OBJ)$/teststring.obj		\
-                $(OBJ)$/testuuid.obj		\
-                $(OBJ)$/teststrbuf.obj		\
-                $(OBJ)$/testbyteseq.obj		\
-                $(OBJ)$/testtextenc.obj		\
-                $(OBJ)$/testuri.obj			\
-                $(OBJ)$/test.obj			\
-                $(OBJ)$/testlogfile.obj		\
-                $(OBJ)$/test_file.obj
 OBJFILES= \
-    $(APP1OBJS) \
     $(APP2OBJS) 
-
-APP1TARGET=	test
-APP1STDLIBS=$(SALLIB) $(TSLLIB)
 
 APP2TARGET = testbootstrap
 APP2STDLIBS = $(SALLIB)
