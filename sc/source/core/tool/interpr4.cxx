@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr4.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 18:06:55 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 11:30:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,13 +58,6 @@
  *
  *
  ************************************************************************/
-
-#ifdef PCH
-#include "core_pch.hxx"
-#endif
-
-#pragma hdrstop
-
 // INCLUDE ---------------------------------------------------------------
 
 #include <rangelst.hxx>
@@ -1093,7 +1086,6 @@ void ScInterpreter::PopDoubleRefPushMatrix()
 bool ScInterpreter::ConvertMatrixParameters()
 {
     USHORT nParams = pCur->GetParamCount();
-    OpCode eOp = pCur->GetOpCode();
     DBG_ASSERT( nParams <= sp, "ConvertMatrixParameters: stack/param count mismatch");
     SCSIZE nJumpCols = 0, nJumpRows = 0;
     for ( USHORT i=1; i <= nParams && i <= sp; ++i )
@@ -1578,16 +1570,8 @@ const String& ScInterpreter::GetString()
                 ;   // nothing
             else if ( !pJumpMatrix )
             {
-                if (pMat->IsString(0))
-                    return pMat->GetString(0);
-                else
-                {
-                    double fVal = pMat->GetDouble(0);
-                    ULONG nIndex = pFormatter->GetStandardFormat(
-                            NUMBERFORMAT_NUMBER, ScGlobal::eLnge);
-                    pFormatter->GetInputLineString( fVal, nIndex, aTempStr);
-                    return aTempStr;
-                }
+                aTempStr = pMat->GetString( *pFormatter, 0, 0);
+                return aTempStr;
             }
             else
             {
@@ -1596,16 +1580,8 @@ const String& ScInterpreter::GetString()
                 pJumpMatrix->GetPos( nC, nR);
                 if ( nC < nCols && nR < nRows )
                 {
-                    if (pMat->IsString( nC, nR))
-                        return pMat->GetString( nC, nR);
-                    else
-                    {
-                        double fVal = pMat->GetDouble( nC, nR);
-                        ULONG nIndex = pFormatter->GetStandardFormat(
-                                NUMBERFORMAT_NUMBER, ScGlobal::eLnge);
-                        pFormatter->GetInputLineString( fVal, nIndex, aTempStr);
-                        return aTempStr;
-                    }
+                    aTempStr = pMat->GetString( *pFormatter, nC, nR);
+                    return aTempStr;
                 }
                 else
                     SetError( errNoValue);
@@ -1775,7 +1751,6 @@ void ScInterpreter::ScExternal()
 
             for (i = nParamCount; (i > 0) && (nGlobalError == 0); i--)
             {
-                BYTE nStackType = GetStackType();
                 switch (eParamType[i])
                 {
                     case PTR_DOUBLE :
@@ -3103,13 +3078,13 @@ void ScInterpreter::ScTTT()
 
 ScInterpreter::ScInterpreter( ScFormulaCell* pCell, ScDocument* pDoc,
         const ScAddress& rPos, ScTokenArray& r ) :
-    pMyFormulaCell( pCell ),
-    pDok( pDoc ),
     aCode( r ),
     aPos( rPos ),
     rArr( r ),
-    bCalcAsShown( pDoc->GetDocOptions().IsCalcAsShown() ),
-    pFormatter( pDoc->GetFormatTable() )
+    pDok( pDoc ),
+    pMyFormulaCell( pCell ),
+    pFormatter( pDoc->GetFormatTable() ),
+    bCalcAsShown( pDoc->GetDocOptions().IsCalcAsShown() )
 {
 //  pStack = new ScToken*[ MAXSTACK ];
 
@@ -3163,6 +3138,7 @@ StackVar ScInterpreter::Interpret()
     ULONG nRetIndexExpr = 0;
     USHORT nErrorFunction = 0;
     USHORT nErrorFunctionCount = 0;
+    USHORT nErrorCodeAtArray = rArr.GetError();
     USHORT nStackBase;
 
     nGlobError = nGlobalError;
@@ -3205,6 +3181,8 @@ StackVar ScInterpreter::Interpret()
             // default function's format, others are set if needed
             nFuncFmtType = NUMBERFORMAT_NUMBER;
             nFuncFmtIndex = 0;
+
+            nErrorCodeAtArray = rArr.GetError();
 
             if ( eOp == ocIf || eOp == ocChose )
                 nStackBase = sp;        // don't mess around with the jumps
@@ -3562,11 +3540,11 @@ StackVar ScInterpreter::Interpret()
         } while ( bGotResult );
 
 // Functions that evaluate an error code and directly set nGlobalError to 0,
-// usage: switch( OpCode ) { OCERRFUNCCASE( ++n ) }
+// usage: switch( OpCode ) { OCERRFUNCCASE statements; }
 // TODO: may spoil array calculation if such functions are used inside, could
 // be terminated with an error condition. Would need change in error handling,
 // real error tokens instead of the faked error stack.
-#define CASEOCERRFUNC( statement ) \
+#define CASE_OCERRFUNC \
     case ocErrorType : \
     case ocIsEmpty : \
     case ocIsErr : \
@@ -3579,12 +3557,16 @@ StackVar ScInterpreter::Interpret()
     case ocIsString : \
     case ocIsValue : \
     case ocN : \
-    case ocType : \
-        statement;
+    case ocType :
 
         switch ( eOp )
         {
-            CASEOCERRFUNC( ++nErrorFunction )
+            CASE_OCERRFUNC
+                 ++ nErrorFunction;
+                 if (rArr.GetError() != nErrorCodeAtArray)
+                     rArr.SetError( nErrorCodeAtArray);
+            default:
+                ;   // nothing
         }
         if ( nGlobalError )
         {
@@ -3594,7 +3576,10 @@ StackVar ScInterpreter::Interpret()
                 {
                     switch ( t->GetOpCode() )
                     {
-                        CASEOCERRFUNC( ++nErrorFunctionCount )
+                        CASE_OCERRFUNC
+                             ++nErrorFunctionCount;
+                        default:
+                            ;   // nothing
                     }
                 }
             }
