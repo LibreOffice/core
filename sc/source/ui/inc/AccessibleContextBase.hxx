@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleContextBase.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: sab $ $Date: 2002-05-24 15:13:41 $
+ *  last change: $Author: sab $ $Date: 2002-05-31 07:59:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,9 @@
 #endif
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_IllegalAccessibleComponentStateException_HPP_
 #include <drafts/com/sun/star/accessibility/IllegalAccessibleComponentStateException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
+#include <com/sun/star/lang/DisposedException.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
@@ -362,6 +365,9 @@ protected:
     void CommitFocusLost() const;
 
     sal_Bool IsDefunc() const { return rBHelper.bDisposed; }
+
+    virtual void IsObjectValid() const
+        throw (::com::sun::star::lang::DisposedException);
 
 private:
     /// Reference to the parent object.
