@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ComboBox.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-25 11:18:37 $
+ *  last change: $Author: fs $ $Date: 2001-01-25 12:01:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -785,7 +785,8 @@ sal_Bool OComboBoxModel::_commit()
 {
     ::rtl::OUString aNewValue;
     m_xAggregateFastSet->getFastPropertyValue(OComboBoxModel::nTextHandle) >>= aNewValue;
-    if (aNewValue != m_aSaveValue)
+    sal_Bool bModified = (aNewValue != m_aSaveValue);
+    if (bModified)
     {
         if (!aNewValue.getLength() && !m_bRequired && m_bEmptyIsNull)
             m_xColumnUpdate->updateNull();
@@ -805,12 +806,12 @@ sal_Bool OComboBoxModel::_commit()
     }
 
     // add the new value to the list
-    sal_Bool bAddToList = sal_True;
+    sal_Bool bAddToList = bModified;
     // (only if this is not the "commit" triggered by a "reset")
     if  (m_bResetting)
         bAddToList = sal_False;
 
-        Any aAnyList = m_xAggregateSet->getPropertyValue(PROPERTY_STRINGITEMLIST);
+    Any aAnyList = m_xAggregateSet->getPropertyValue(PROPERTY_STRINGITEMLIST);
     if (bAddToList && aAnyList.getValueType().equals(::getCppuType(reinterpret_cast<StringSequence*>(NULL))))
     {
         StringSequence aStringItemList = *(StringSequence*)aAnyList.getValue();
@@ -821,6 +822,7 @@ sal_Bool OComboBoxModel::_commit()
             if (pStringItems->equals(aNewValue))
                 break;
         }
+
         // not found -> add
         if (i >= aStringItemList.getLength())
         {
