@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: mtg $ $Date: 2001-07-19 16:21:30 $
+#   last change: $Author: hr $ $Date: 2002-08-23 16:18:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -126,6 +126,10 @@ SLOFILES =	\
         $(SLO)$/tblrwcl.obj \
         $(SLO)$/visiturl.obj \
         $(SLO)$/htmltbl.obj
+
+.IF "$(OS)"=="MACOSX"
+SLOFILES += $(SLO)$/gcc_outl.obj
+.ENDIF
 
 # --- Tagets -------------------------------------------------------
 
