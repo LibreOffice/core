@@ -2,9 +2,9 @@
  *
  *  $RCSfile: definitioncolumn.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-25 06:31:31 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 10:34:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -459,13 +459,16 @@ OColumnWrapper::OColumnWrapper(const Reference< XPropertySet > & rCol)
         // Description  0x0001
         // Hidden       0x0002
         // IsRowVersion 0x0004
-        Reference <XPropertySetInfo > xInfo(m_xAggregate->getPropertySetInfo());
         m_nColTypeID = 0;
-        m_nColTypeID |= xInfo->hasPropertyByName(PROPERTY_DESCRIPTION) ? HAS_DESCRIPTION : 0;
-        m_nColTypeID |= xInfo->hasPropertyByName(PROPERTY_DEFAULTVALUE) ? HAS_DEFAULTVALUE : 0;
-        m_nColTypeID |= xInfo->hasPropertyByName(PROPERTY_ISROWVERSION) ? HAS_ROWVERSION : 0;
+        if ( m_xAggregate.is() )
+        {
+            Reference <XPropertySetInfo > xInfo(m_xAggregate->getPropertySetInfo());
+            m_nColTypeID |= xInfo->hasPropertyByName(PROPERTY_DESCRIPTION) ? HAS_DESCRIPTION : 0;
+            m_nColTypeID |= xInfo->hasPropertyByName(PROPERTY_DEFAULTVALUE) ? HAS_DEFAULTVALUE : 0;
+            m_nColTypeID |= xInfo->hasPropertyByName(PROPERTY_ISROWVERSION) ? HAS_ROWVERSION : 0;
 
-        m_xAggregate->getPropertyValue(PROPERTY_NAME) >>= m_sName;
+            m_xAggregate->getPropertyValue(PROPERTY_NAME) >>= m_sName;
+        }
     }
 }
 // -----------------------------------------------------------------------------
