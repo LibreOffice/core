@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 17:05:39 $
+#   last change: $Author: hjs $ $Date: 2000-09-21 15:03:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,6 +76,7 @@ TARGET=helper
 # --- Files --------------------------------------------------------
 
 SLOFILES=\
+    $(SLO)$/evntpost.obj		\
     $(SLO)$/sunowrap.obj		\
     $(SLO)$/atom.obj			\
     $(SLO)$/threadex.obj
