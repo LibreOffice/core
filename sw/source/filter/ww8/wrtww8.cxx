@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: cmc $ $Date: 2001-10-31 12:26:26 $
+ *  last change: $Author: jp $ $Date: 2001-11-28 11:50:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -606,15 +606,30 @@ const SfxPoolItem& SwWW8Writer::GetItem( USHORT nWhich ) const
 //------------------------------------------------------------------------------
 
 WW8_WrPlc1::WW8_WrPlc1( USHORT nStructSz )
-    : aPos( 16, 16 ), aDat( 16 * (int)nStructSz, 16 * (int)nStructSz ),
-    nStructSiz( nStructSz )
+    : aPos( 16, 16 ), nStructSiz( nStructSz )
 {
+    nDataLen = 16 * nStructSz;
+    pData = new BYTE[ nDataLen ];
 }
 
-void WW8_WrPlc1::Append( WW8_CP nCp, const void* pData )
+WW8_WrPlc1::~WW8_WrPlc1()
 {
+    delete [] pData;
+}
+
+void WW8_WrPlc1::Append( WW8_CP nCp, const void* pNewData )
+{
+    ULONG nInsPos = aPos.Count() * nStructSiz;
     aPos.Insert( nCp, aPos.Count() );
-    aDat.Insert( (BYTE*)pData, nStructSiz, aDat.Count() );
+    if( nDataLen < nInsPos + nStructSiz )
+    {
+        BYTE* pNew = new BYTE[ 2 * nDataLen ];
+        memmove( pNew, pData, nDataLen );
+        delete [] pData;
+        pData = pNew;
+        nDataLen *= 2;
+    }
+    memcpy( pData + nInsPos, pNewData, nStructSiz );
 }
 
 void WW8_WrPlc1::Finish( ULONG nLastCp, ULONG nSttCp )
@@ -631,9 +646,11 @@ void WW8_WrPlc1::Finish( ULONG nLastCp, ULONG nSttCp )
 
 void WW8_WrPlc1::Write( SvStream& rStrm )
 {
-    for( USHORT i = 0; i < aPos.Count(); ++i )
+    USHORT i;
+    for( i = 0; i < aPos.Count(); ++i )
         SwWW8Writer::WriteLong( rStrm, aPos[i] );
-    rStrm.Write( aDat.GetData(), aDat.Count() );    // Anz Eintraege
+    if( i )
+        rStrm.Write( pData, (i-1) * nStructSiz );
 }
 
 //------------------------------------------------------------------------------

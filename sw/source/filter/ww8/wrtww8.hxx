@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: cmc $ $Date: 2001-11-02 09:59:45 $
+ *  last change: $Author: jp $ $Date: 2001-11-28 11:50:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -650,7 +650,8 @@ public:
 class WW8_WrPlc1
 {
     SvULongs aPos;              // PTRARR von CPs
-    WW8Bytes aDat;              // Inhalte ( Strukturen )
+    BYTE* pData;                // Inhalte ( Strukturen )
+    ULONG nDataLen;
     USHORT nStructSiz;
 protected:
     USHORT Count() const { return aPos.Count(); }
@@ -658,6 +659,7 @@ protected:
 
 public:
     WW8_WrPlc1( USHORT nStructSz );
+    ~WW8_WrPlc1();
     void Append( WW8_CP nCp, const void* pData );
     void Finish( ULONG nLastCp, ULONG nStartCp );
 };
