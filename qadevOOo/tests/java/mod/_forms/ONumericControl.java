@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ONumericControl.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-02-25 11:07:59 $
+ *  last change:$Date: 2003-05-27 12:45:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 package mod._forms;
 
 import com.sun.star.awt.XControlModel;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.awt.XDevice;
 import com.sun.star.awt.XGraphics;
 import com.sun.star.awt.XTextComponent;
@@ -136,7 +137,7 @@ public class ONumericControl extends TestCase {
      * Creates a new text document.
      */
     protected void initialize ( TestParameters Param, PrintWriter log) {
-        SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF() );
+        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)Param.getMSF() );
 
         try {
             log.println( "creating a textdocument" );
