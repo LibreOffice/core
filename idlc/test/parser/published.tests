@@ -1,0 +1,852 @@
+#*************************************************************************
+#
+#   $RCSfile: published.tests,v $
+#
+#   $Revision: 1.2 $
+#
+#   last change: $Author: obo $ $Date: 2004-06-03 15:12:58 $
+#
+#   The Contents of this file are made available subject to the terms of
+#   either of the following licenses
+#
+#          - GNU Lesser General Public License Version 2.1
+#          - Sun Industry Standards Source License Version 1.1
+#
+#   Sun Microsystems Inc., October, 2000
+#
+#   GNU Lesser General Public License Version 2.1
+#   =============================================
+#   Copyright 2000 by Sun Microsystems, Inc.
+#   901 San Antonio Road, Palo Alto, CA 94303, USA
+#
+#   This library is free software; you can redistribute it and/or
+#   modify it under the terms of the GNU Lesser General Public
+#   License version 2.1, as published by the Free Software Foundation.
+#
+#   This library is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+#   Lesser General Public License for more details.
+#
+#   You should have received a copy of the GNU Lesser General Public
+#   License along with this library; if not, write to the Free Software
+#   Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+#   MA  02111-1307  USA
+#
+#
+#   Sun Industry Standards Source License Version 1.1
+#   =================================================
+#   The contents of this file are subject to the Sun Industry Standards
+#   Source License Version 1.1 (the "License"); You may not use this file
+#   except in compliance with the License. You may obtain a copy of the
+#   License at http://www.openoffice.org/license.html.
+#
+#   Software provided under this License is provided on an "AS IS" basis,
+#   WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+#   WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+#   MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+#   See the License for the specific provisions governing your rights and
+#   obligations concerning the Software.
+#
+#   The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+#
+#   Copyright: 2000 by Sun Microsystems, Inc.
+#
+#   All Rights Reserved.
+#
+#   Contributor(s): _______________________________________
+#
+#
+#*************************************************************************
+
+EXPECT SUCCESS "published.tests 1":
+module com { module sun { module star { module uno {
+published enum Enum { VALUE };
+published struct Struct1 { long member; };
+published struct Struct2<T> { T member; };
+published exception Exception {};
+published interface XInterface {};
+published typedef long Typedef;
+published const long Constant = 1;
+published constants Constants { const long Constant = 1; };
+published service Service1: XInterface {};
+published service Service2 { interface XInterface; };
+published singleton Singleton1: XInterface;
+published singleton Singleton2 { service Service2; };
+}; }; }; };
+
+
+EXPECT FAILURE "published.tests 2":
+constants Constants { published const long C = 1; };
+
+
+EXPECT FAILURE "published.tests 3":
+published constants Constants { published const long C = 1; };
+
+
+EXPECT FAILURE "published.tests 4":
+published module m {};
+
+
+EXPECT SUCCESS "published.tests 5":
+module com { module sun { module star { module uno {
+interface XInterface;
+interface XInterface {};
+}; }; }; };
+
+
+EXPECT SUCCESS "published.tests 6":
+module com { module sun { module star { module uno {
+interface XInterface;
+published interface XInterface {};
+}; }; }; };
+
+
+EXPECT FAILURE "published.tests 7":
+module com { module sun { module star { module uno {
+published interface XInterface;
+interface XInterface {};
+}; }; }; };
+
+
+EXPECT SUCCESS "published.tests 8":
+module com { module sun { module star { module uno {
+published interface XInterface;
+published interface XInterface {};
+}; }; }; };
+
+
+EXPECT SUCCESS "published.tests 9":
+struct S1 { long m1; };
+struct S2: S1 { long m2; };
+
+
+EXPECT FAILURE "published.tests 10":
+struct S1 { long m1; };
+published struct S2: S1 { long m2; };
+
+
+EXPECT SUCCESS "published.tests 11":
+published struct S1 { long m1; };
+struct S2: S1 { long m2; };
+
+
+EXPECT SUCCESS "published.tests 12":
+published struct S1 { long m1; };
+published struct S2: S1 { long m2; };
+
+
+EXPECT SUCCESS "published.tests 13":
+enum E { V };
+struct S1<T> { T m1; };
+struct S2 { S1<E> m2; };
+
+
+EXPECT FAILURE "published.tests 14":
+enum E { V };
+struct S1<T> { T m1; };
+published struct S2 { S1<E> m2; };
+
+
+EXPECT SUCCESS "published.tests 15":
+enum E { V };
+published struct S1<T> { T m1; };
+struct S2 { S1<E> m2; };
+
+
+EXPECT FAILURE "published.tests 16":
+enum E { V };
+published struct S1<T> { T m1; };
+published struct S2 { S1<E> m2; };
+
+
+EXPECT SUCCESS "published.tests 17":
+published enum E { V };
+struct S1<T> { T m1; };
+struct S2 { S1<E> m2; };
+
+
+EXPECT FAILURE "published.tests 18":
+published enum E { V };
+struct S1<T> { T m1; };
+published struct S2 { S1<E> m2; };
+
+
+EXPECT SUCCESS "published.tests 19":
+published enum E { V };
+published struct S1<T> { T m1; };
+struct S2 { S1<E> m2; };
+
+
+EXPECT SUCCESS "published.tests 20":
+published enum E { V };
+published struct S1<T> { T m1; };
+published struct S2 { S1<E> m2; };
+
+
+EXPECT SUCCESS "published.tests 21":
+module com { module sun { module star { module uno {
+exception Exception {};
+exception E2: Exception {};
+}; }; }; };
+
+
+EXPECT FAILURE "published.tests 22":
+module com { module sun { module star { module uno {
+exception Exception {};
+published exception E2: Exception {};
+}; }; }; };
+
+
+EXPECT SUCCESS "published.tests 23":
+module com { module sun { module star { module uno {
+published exception Exception {};
+exception E2: Exception {};
+}; }; }; };
+
+
+EXPECT SUCCESS "published.tests 24":
+module com { module sun { module star { module uno {
+published exception Exception {};
+published exception E2: Exception {};
+}; }; }; };
+
+
+EXPECT SUCCESS "published.tests 25":
+enum E { V };
+module com { module sun { module star { module uno {
+exception Exception { E m; };
+}; }; }; };
+
+
+EXPECT FAILURE "published.tests 26":
+enum E { V };
+module com { module sun { module star { module uno {
+published exception Exception { E m; };
+}; }; }; };
+
+
+EXPECT SUCCESS "published.tests 27":
+published enum E { V };
+module com { module sun { module star { module uno {
+exception Exception { E m; };
+}; }; }; };
+
+
+EXPECT SUCCESS "published.tests 28":
+published enum E { V };
+module com { module sun { module star { module uno {
+published exception Exception { E m; };
+}; }; }; };
+
+
+EXPECT SUCCESS "published.tests 29":
+module com { module sun { module star { module uno {
+interface XInterface {};
+interface I2: XInterface {};
+}; }; }; };
+
+
+EXPECT FAILURE "published.tests 30":
+module com { module sun { module star { module uno {
+interface XInterface {};
+published interface I2: XInterface {};
+}; }; }; };
+
+
+EXPECT SUCCESS "published.tests 31":
+module com { module sun { module star { module uno {
+published interface XInterface {};
+interface I2: XInterface {};
+}; }; }; };
+
+
+EXPECT SUCCESS "published.tests 32":
+module com { module sun { module star { module uno {
+published interface XInterface {};
+published interface I2: XInterface {};
+}; }; }; };
+
+
+EXPECT SUCCESS "published.tests 33":
+enum E { V };
+module com { module sun { module star { module uno {
+interface XInterface { [attribute] E m; };
+}; }; }; };
+
+
+EXPECT FAILURE "published.tests 34":
+enum E { V };
+module com { module sun { module star { module uno {
+published interface XInterface { [attribute] E m; };
+}; }; }; };
+
+
+EXPECT SUCCESS "published.tests 35":
+published enum E { V };
+module com { module sun { module star { module uno {
+interface XInterface { [attribute] E m; };
+}; }; }; };
+
+
+EXPECT SUCCESS "published.tests 36":
+published enum E { V };
+module com { module sun { module star { module uno {
+published interface XInterface { [attribute] E m; };
+}; }; }; };
+
+
+EXPECT SUCCESS "published.tests 36a.1":
+module com { module sun { module star { module uno {
+exception Exception {};
+interface XInterface { [attribute] long m { get raises (Exception); }; };
+}; }; }; };
+
+
+EXPECT FAILURE "published.tests 36a.2":
+module com { module sun { module star { module uno {
+exception Exception {};
+published interface XInterface {
+	[attribute] long m { get raises (Exception); }; };
+}; }; }; };
+
+
+EXPECT SUCCESS "published.tests 36a.3":
+module com { module sun { module star { module uno {
+published exception Exception {};
+interface XInterface { [attribute] long m { get raises (Exception); }; };
+}; }; }; };
+
+
+EXPECT SUCCESS "published.tests 36a.4":
+module com { module sun { module star { module uno {
+published exception Exception {};
+published interface XInterface {
+	 [attribute] long m { get raises (Exception); }; };
+}; }; }; };
+
+
+EXPECT SUCCESS "published.tests 37":
+enum E { V };
+module com { module sun { module star { module uno {
+interface XInterface { E f(); };
+}; }; }; };
+
+
+EXPECT FAILURE "published.tests 38":
+enum E { V };
+module com { module sun { module star { module uno {
+published interface XInterface { E f(); };
+}; }; }; };
+
+
+EXPECT SUCCESS "published.tests 39":
+published enum E { V };
+module com { module sun { module star { module uno {
+interface XInterface { E f(); };
+}; }; }; };
+
+
+EXPECT SUCCESS "published.tests 40":
+published enum E { V };
+module com { module sun { module star { module uno {
+published interface XInterface { E f(); };
+}; }; }; };
+
+
+EXPECT SUCCESS "published.tests 41":
+enum E { V };
+module com { module sun { module star { module uno {
+interface XInterface { void f([in] E p); };
+}; }; }; };
+
+
+EXPECT FAILURE "published.tests 42":
+enum E { V };
+module com { module sun { module star { module uno {
+published interface XInterface { void f([in] E p); };
+}; }; }; };
+
+
+EXPECT SUCCESS "published.tests 43":
+published enum E { V };
+module com { module sun { module star { module uno {
+interface XInterface { void f([in] E p); };
+}; }; }; };
+
+
+EXPECT SUCCESS "published.tests 44":
+published enum E { V };
+module com { module sun { module star { module uno {
+published interface XInterface { void f([in] E p); };
+}; }; }; };
+
+
+EXPECT SUCCESS "published.tests 45":
+module com { module sun { module star { module uno {
+exception Exception {};
+interface XInterface { void f() raises (Exception); };
+}; }; }; };
+
+
+EXPECT FAILURE "published.tests 46":
+module com { module sun { module star { module uno {
+exception Exception {};
+published interface XInterface { void f() raises (Exception); };
+}; }; }; };
+
+
+EXPECT SUCCESS "published.tests 47":
+module com { module sun { module star { module uno {
+published exception Exception {};
+interface XInterface { void f() raises (Exception); };
+}; }; }; };
+
+
+EXPECT SUCCESS "published.tests 48":
+module com { module sun { module star { module uno {
+published exception Exception {};
+published interface XInterface { void f() raises (Exception); };
+}; }; }; };
+
+
+EXPECT SUCCESS "published.tests 49":
+module com { module sun { module star { module uno {
+interface XInterface {};
+interface I2 { interface XInterface; };
+}; }; }; };
+
+
+EXPECT FAILURE "published.tests 50":
+module com { module sun { module star { module uno {
+interface XInterface {};
+published interface I2 { interface XInterface; };
+}; }; }; };
+
+
+EXPECT SUCCESS "published.tests 51":
+module com { module sun { module star { module uno {
+published interface XInterface {};
+interface I2 { interface XInterface; };
+}; }; }; };
+
+
+EXPECT SUCCESS "published.tests 52":
+module com { module sun { module star { module uno {
+published interface XInterface {};
+published interface I2 { interface XInterface; };
+}; }; }; };
+
+
+EXPECT SUCCESS "published.tests 53":
+module com { module sun { module star { module uno {
+interface XInterface {};
+interface I2 {};
+}; }; }; };
+
+
+EXPECT FAILURE "published.tests 54":
+module com { module sun { module star { module uno {
+interface XInterface {};
+published interface I2 {};
+}; }; }; };
+
+
+EXPECT SUCCESS "published.tests 55":
+module com { module sun { module star { module uno {
+published interface XInterface {};
+interface I2 {};
+}; }; }; };
+
+
+EXPECT SUCCESS "published.tests 56":
+module com { module sun { module star { module uno {
+published interface XInterface {};
+published interface I2 {};
+}; }; }; };
+
+
+EXPECT SUCCESS "published.tests 57":
+enum E { V };
+typedef E T;
+
+
+EXPECT FAILURE "published.tests 58":
+enum E { V };
+published typedef E T;
+
+
+EXPECT SUCCESS "published.tests 59":
+published enum E { V };
+typedef E T;
+
+
+EXPECT SUCCESS "published.tests 60":
+published enum E { V };
+published typedef E T;
+
+
+EXPECT SUCCESS "published.tests 61":
+enum E { V };
+typedef E T;
+struct S { T m; };
+
+
+EXPECT FAILURE "published.tests 62":
+enum E { V };
+typedef E T;
+published struct S { T m; };
+
+
+EXPECT FAILURE "published.tests 63":
+enum E { V };
+published typedef E T;
+struct S { T m; };
+
+
+EXPECT FAILURE "published.tests 64":
+enum E { V };
+published typedef E T;
+published struct S { T m; };
+
+
+EXPECT SUCCESS "published.tests 65":
+published enum E { V };
+typedef E T;
+struct S { T m; };
+
+
+EXPECT FAILURE "published.tests 66":
+published enum E { V };
+typedef E T;
+published struct S { T m; };
+
+
+EXPECT SUCCESS "published.tests 67":
+published enum E { V };
+published typedef E T;
+struct S { T m; };
+
+
+EXPECT SUCCESS "published.tests 68":
+published enum E { V };
+published typedef E T;
+published struct S { T m; };
+
+
+EXPECT SUCCESS "published.tests 69":
+const long C1 = 1;
+const long C2 = C1 + 1;
+
+
+EXPECT FAILURE "published.tests 70":
+const long C1 = 1;
+published const long C2 = C1 + 1;
+
+
+EXPECT SUCCESS "published.tests 71":
+published const long C1 = 1;
+const long C2 = C1 + 1;
+
+
+EXPECT SUCCESS "published.tests 72":
+published const long C1 = 1;
+published const long C2 = C1 + 1;
+
+
+EXPECT SUCCESS "published.tests 73":
+constants Cs {
+	const long C1 = 1;
+	const long C2 = C1 + 1;
+};
+
+
+EXPECT SUCCESS "published.tests 74":
+published constants Cs {
+	const long C1 = 1;
+	const long C2 = C1 + 1;
+};
+
+
+EXPECT SUCCESS "published.tests 75":
+constants Cs { const long C1 = 1; };
+const long C2 = Cs::C1 + 1;
+
+
+EXPECT FAILURE "published.tests 76":
+constants Cs { const long C1 = 1; };
+published const long C2 = Cs::C1 + 1;
+
+
+EXPECT SUCCESS "published.tests 77":
+published constants Cs { const long C1 = 1; };
+const long C2 = Cs::C1 + 1;
+
+
+EXPECT SUCCESS "published.tests 78":
+published constants Cs { const long C1 = 1; };
+published const long C2 = Cs::C1 + 1;
+
+
+EXPECT SUCCESS "published.tests 79":
+const long C1 = 1;
+constants Cs { const long C2 = C1 + 1; };
+
+
+EXPECT FAILURE "published.tests 80":
+const long C1 = 1;
+published constants Cs { const long C2 = C1 + 1; };
+
+
+EXPECT SUCCESS "published.tests 81":
+published const long C1 = 1;
+constants Cs { const long C2 = C1 + 1; };
+
+
+EXPECT SUCCESS "published.tests 82":
+published const long C1 = 1;
+published constants Cs { const long C2 = C1 + 1; };
+
+
+EXPECT SUCCESS "published.tests 83":
+constants Cs1 { const long C1 = 1; };
+constants Cs2 { const long C2 = Cs1::C1 + 1; };
+
+
+EXPECT FAILURE "published.tests 84":
+constants Cs1 { const long C1 = 1; };
+published constants Cs2 { const long C2 = Cs1::C1 + 1; };
+
+
+EXPECT SUCCESS "published.tests 85":
+published constants Cs1 { const long C1 = 1; };
+constants Cs2 { const long C2 = Cs1::C1 + 1; };
+
+
+EXPECT SUCCESS "published.tests 86":
+published constants Cs1 { const long C1 = 1; };
+published constants Cs2 { const long C2 = Cs1::C1 + 1; };
+
+
+EXPECT SUCCESS "published.tests 87":
+typedef long T;
+const T C = 1;
+
+
+EXPECT FAILURE "published.tests 88":
+typedef long T;
+published const T C = 1;
+
+
+EXPECT SUCCESS "published.tests 89":
+published typedef long T;
+const T C = 1;
+
+
+EXPECT SUCCESS "published.tests 90":
+published typedef long T;
+published const T C = 1;
+
+
+EXPECT SUCCESS "published.tests 91":
+service S1 {};
+service S2 { service S1; };
+
+
+EXPECT FAILURE "published.tests 92":
+service S1 {};
+published service S2 { service S1; };
+
+
+EXPECT SUCCESS "published.tests 93":
+published service S1 {};
+service S2 { service S1; };
+
+
+EXPECT SUCCESS "published.tests 94":
+published service S1 {};
+published service S2 { service S1; };
+
+
+EXPECT SUCCESS "published.tests 95":
+module com { module sun { module star { module uno {
+interface XInterface {};
+service S { interface XInterface; };
+}; }; }; };
+
+
+EXPECT FAILURE "published.tests 96":
+module com { module sun { module star { module uno {
+interface XInterface {};
+published service S { interface XInterface; };
+}; }; }; };
+
+
+EXPECT SUCCESS "published.tests 97":
+module com { module sun { module star { module uno {
+published interface XInterface {};
+service S { interface XInterface; };
+}; }; }; };
+
+
+EXPECT SUCCESS "published.tests 98":
+module com { module sun { module star { module uno {
+published interface XInterface {};
+published service S { interface XInterface; };
+}; }; }; };
+
+
+EXPECT SUCCESS "published.tests 99":
+module com { module sun { module star { module uno {
+interface XInterface {};
+service S: XInterface;
+}; }; }; };
+
+
+EXPECT FAILURE "published.tests 100":
+module com { module sun { module star { module uno {
+interface XInterface {};
+published service S: XInterface;
+}; }; }; };
+
+
+EXPECT SUCCESS "published.tests 101":
+module com { module sun { module star { module uno {
+published interface XInterface {};
+service S: XInterface;
+}; }; }; };
+
+
+EXPECT SUCCESS "published.tests 102":
+module com { module sun { module star { module uno {
+published interface XInterface {};
+published service S: XInterface;
+}; }; }; };
+
+
+EXPECT SUCCESS "published.tests 103":
+enum E { V };
+module com { module sun { module star { module uno {
+interface XInterface {};
+service S: XInterface {
+	f([in] E p);
+};
+}; }; }; };
+
+
+EXPECT FAILURE "published.tests 104":
+enum E { V };
+module com { module sun { module star { module uno {
+published interface XInterface {};
+published service S: XInterface {
+	f([in] E p);
+};
+}; }; }; };
+
+
+EXPECT SUCCESS "published.tests 105":
+published enum E { V };
+module com { module sun { module star { module uno {
+interface XInterface {};
+service S: XInterface {
+	f([in] E p);
+};
+}; }; }; };
+
+
+EXPECT SUCCESS "published.tests 106":
+published enum E { V };
+module com { module sun { module star { module uno {
+published interface XInterface {};
+published service S: XInterface {
+	f([in] E p);
+};
+}; }; }; };
+
+
+EXPECT SUCCESS "published.tests 107":
+module com { module sun { module star { module uno {
+exception Exception {};
+interface XInterface {};
+service S: XInterface {
+	f() raises (Exception);
+};
+}; }; }; };
+
+
+EXPECT FAILURE "published.tests 108":
+module com { module sun { module star { module uno {
+exception Exception {};
+published interface XInterface {};
+published service S: XInterface {
+	f() raises (Exception);
+};
+}; }; }; };
+
+
+EXPECT SUCCESS "published.tests 109":
+module com { module sun { module star { module uno {
+published exception Exception {};
+interface XInterface {};
+service S: XInterface {
+	f() raises (Exception);
+};
+}; }; }; };
+
+
+EXPECT SUCCESS "published.tests 110":
+module com { module sun { module star { module uno {
+published exception Exception {};
+published interface XInterface {};
+published service S: XInterface {
+	f() raises (Exception);
+};
+}; }; }; };
+
+
+EXPECT SUCCESS "published.tests 111":
+service S1 {};
+singleton S2 { service S1; };
+
+
+EXPECT FAILURE "published.tests 112":
+service S1 {};
+published singleton S2 { service S1; };
+
+
+EXPECT SUCCESS "published.tests 113":
+published service S1 {};
+singleton S2 { service S1; };
+
+
+EXPECT SUCCESS "published.tests 114":
+published service S1 {};
+published singleton S2 { service S1; };
+
+
+EXPECT SUCCESS "published.tests 115":
+module com { module sun { module star { module uno {
+interface XInterface {};
+singleton S: XInterface;
+}; }; }; };
+
+
+EXPECT FAILURE "published.tests 116":
+module com { module sun { module star { module uno {
+interface XInterface {};
+published singleton S: XInterface;
+}; }; }; };
+
+
+EXPECT SUCCESS "published.tests 117":
+module com { module sun { module star { module uno {
+published interface XInterface {};
+singleton S: XInterface;
+}; }; }; };
+
+
+EXPECT SUCCESS "published.tests 118":
+module com { module sun { module star { module uno {
+published interface XInterface {};
+published singleton S: XInterface;
+}; }; }; };
