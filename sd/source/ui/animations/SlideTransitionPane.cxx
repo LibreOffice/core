@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlideTransitionPane.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-28 15:39:55 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 16:46:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1134,6 +1134,7 @@ void SlideTransitionPane::applyToSelectedPages()
         {
             lcl_CreateUndoForPages( aSelectedPages, mrBase );
             lcl_ApplyToPages( aSelectedPages, getTransitionEffectFromControls() );
+            mrBase.GetDocShell()->SetModified();
         }
         if( maCB_AUTO_PREVIEW.IsEnabled() &&
             maCB_AUTO_PREVIEW.IsChecked())
