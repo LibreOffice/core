@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrform2.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: fme $ $Date: 2002-02-07 11:18:13 $
+ *  last change: $Author: fme $ $Date: 2002-02-08 13:42:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,9 +65,16 @@
 
 #pragma hdrstop
 
+#include "hintids.hxx"
+
 #ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
 #include <com/sun/star/i18n/ScriptType.hdl>
 #endif
+
+#ifndef _SVX_LSPCITEM_HXX //autogen
+#include <svx/lspcitem.hxx>
+#endif
+
 #ifndef _TXATBASE_HXX //autogen
 #include <txatbase.hxx>
 #endif
@@ -1605,6 +1612,148 @@ xub_StrLen SwTxtFormatter::FormatLine( const xub_StrLen nStart )
         UpdatePos( pCurr, GetTopLeft(), GetStart() );
 
     return nNewStart;
+}
+
+/*************************************************************************
+ *                      SwTxtFormatter::RecalcRealHeight()
+ *************************************************************************/
+
+void SwTxtFormatter::RecalcRealHeight()
+{
+    sal_Bool bMore = sal_True;
+    while(bMore)
+    {
+        DBG_LOOP;
+        CalcRealHeight();
+        bMore = Next() != 0;
+    }
+}
+
+/*************************************************************************
+ *                    SwTxtFormatter::CalcRealHeight()
+ *************************************************************************/
+
+void SwTxtFormatter::CalcRealHeight( sal_Bool bNewLine )
+{
+    KSHORT nLineHeight = pCurr->Height();
+    pCurr->SetClipping( sal_False );
+
+#ifdef VERTICAL_LAYOUT
+    GETGRID( pFrm->FindPageFrm() )
+    if ( pGrid && GetInfo().SnapToGrid() )
+    {
+        const USHORT nGridWidth = pGrid->GetBaseHeight();
+        const USHORT nRubyHeight = pGrid->GetRubyHeight();
+        const sal_Bool bRubyTop = ! pGrid->GetRubyTextBelow();
+
+        USHORT nLineHeight = nGridWidth + nRubyHeight;
+        USHORT nLineDist = nLineHeight;
+
+        while ( pCurr->Height() > nLineHeight )
+            nLineHeight += nLineDist;
+
+        KSHORT nAsc = pCurr->GetAscent() +
+                      ( bRubyTop ?
+                       ( nLineHeight - pCurr->Height() + nRubyHeight ) / 2 :
+                       ( nLineHeight - pCurr->Height() - nRubyHeight ) / 2 );
+
+        pCurr->Height( nLineHeight );
+        pCurr->SetAscent( nAsc );
+        pInf->GetParaPortion()->SetFixLineHeight();
+
+        // Zwischenraum
+//        if( !IsParaLine() )
+//            nLineHeight += nInterLineHeight;
+
+        pCurr->SetRealHeight( nLineHeight );
+        return;
+    }
+#endif
+
+    // Das Dummyflag besitzen Zeilen, die nur Flyportions enthalten, diese
+    // sollten kein Register etc. beachten. Dummerweise hat kann es eine leere
+    // Zeile am Absatzende geben (bei leeren Abs„tzen oder nach einem
+    // Shift-Return), die das Register durchaus beachten soll.
+    if( !pCurr->IsDummy() || ( !pCurr->GetNext() &&
+        GetStart() >= GetTxtFrm()->GetTxt().Len() && !bNewLine ) )
+    {
+        const SvxLineSpacingItem *pSpace = aLineInf.GetLineSpacing();
+        if( pSpace )
+        {
+            switch( pSpace->GetLineSpaceRule() )
+            {
+                case SVX_LINE_SPACE_AUTO:
+                break;
+                case SVX_LINE_SPACE_MIN:
+                {
+                    if( nLineHeight < KSHORT( pSpace->GetLineHeight() ) )
+                        nLineHeight = pSpace->GetLineHeight();
+                    break;
+                }
+                case SVX_LINE_SPACE_FIX:
+                {
+                    nLineHeight = pSpace->GetLineHeight();
+                    KSHORT nAsc = ( 4 * nLineHeight ) / 5;  // 80%
+                    if( nAsc < pCurr->GetAscent() ||
+                        nLineHeight - nAsc < pCurr->Height() - pCurr->GetAscent() )
+                        pCurr->SetClipping( sal_True );
+                    pCurr->Height( nLineHeight );
+                    pCurr->SetAscent( nAsc );
+                    pInf->GetParaPortion()->SetFixLineHeight();
+                }
+                break;
+                default: ASSERT( sal_False, ": unknown LineSpaceRule" );
+            }
+            if( !IsParaLine() )
+                switch( pSpace->GetInterLineSpaceRule() )
+                {
+                    case SVX_INTER_LINE_SPACE_OFF:
+                    break;
+                    case SVX_INTER_LINE_SPACE_PROP:
+                    {
+                        long nTmp = pSpace->GetPropLineSpace();
+                        // 50% ist das Minimum, bei 0% schalten wir auf
+                        // den Defaultwert 100% um ...
+                        if( nTmp < 50 )
+                            nTmp = nTmp ? 50 : 100;
+
+                        nTmp *= nLineHeight;
+                        nTmp /= 100;
+                        if( !nTmp )
+                            ++nTmp;
+                        nLineHeight = (KSHORT)nTmp;
+                        break;
+                    }
+                    case SVX_INTER_LINE_SPACE_FIX:
+                    {
+                        nLineHeight += pSpace->GetInterLineSpace();
+                        break;
+                    }
+                    default: ASSERT( sal_False, ": unknown InterLineSpaceRule" );
+                }
+        }
+#ifdef DEBUG
+        KSHORT nDummy = nLineHeight + 1;
+#endif
+
+        if( IsRegisterOn() )
+        {
+#ifdef VERTICAL_LAYOUT
+            SwTwips nTmpY = Y() + pCurr->GetAscent() + nLineHeight - pCurr->Height();
+            SWRECTFN( pFrm )
+            if ( bVert )
+                nTmpY = pFrm->SwitchHorizontalToVertical( nTmpY );
+            nTmpY = (*fnRect->fnYDiff)( nTmpY, RegStart() );
+#else
+            SwTwips nTmpY = Y() + pCurr->GetAscent()
+                            + nLineHeight - pCurr->Height() - RegStart();
+#endif
+            KSHORT nDiff = KSHORT( nTmpY % RegDiff() );
+            if( nDiff )
+                nLineHeight += RegDiff() - nDiff;
+        }
+    }
+    pCurr->SetRealHeight( nLineHeight );
 }
 
 /*************************************************************************

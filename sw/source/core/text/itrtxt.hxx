@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrtxt.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fme $ $Date: 2002-02-01 08:08:31 $
+ *  last change: $Author: fme $ $Date: 2002-02-08 13:42:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,8 +133,6 @@ public:
     const SwLineLayout *Next();
     const SwLineLayout *Prev();
 
-    void RecalcRealHeight();
-
     // Ueberspringt die Dummyzeilen der FlyFrms
     const SwLineLayout *NextLine();
     const SwLineLayout *PrevLine();
@@ -148,7 +146,6 @@ public:
     void TruncLines( sal_Bool bNoteFollow = sal_False );
 
     inline KSHORT GetLineHeight() const { return pCurr->GetRealHeight(); }
-    void CalcRealHeight( sal_Bool bNewLine = sal_False );
     void CalcAscentAndHeight( KSHORT &rAscent, KSHORT &rHeight ) const;
 
     // 5298, viel Aerger durch die Abfrage auf pCurr == pPara

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrform2.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fme $ $Date: 2001-11-02 13:28:47 $
+ *  last change: $Author: fme $ $Date: 2002-02-08 13:42:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,9 @@ class SwTxtFormatter : public SwTxtPainter
     // wird von SwTxtFormatter wegen UpdatePos ueberladen
     void CalcAdjustLine( SwLineLayout *pCurr );
 
+    // consideres line spacing attributes
+    void CalcRealHeight( sal_Bool bNewLine = sal_False );
+
     // uebertraegt die Daten nach rInf
     void FeedInf( SwTxtFormatInfo &rInf ) const;
 
@@ -173,6 +176,8 @@ public:
     ~SwTxtFormatter();
 
     xub_StrLen FormatLine( const xub_StrLen nStart );
+
+    void RecalcRealHeight();
 
     // Wir formatieren eine Zeile fuer die interaktive Trennung
     sal_Bool Hyphenate( SwInterHyphInfo &rInf );
