@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configmgr.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: pb $ $Date: 2002-11-07 08:28:49 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 14:18:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,11 +123,11 @@ namespace utl
 
             enum ConfigProperty
             {
-                INSTALLPATH,
+                INSTALLPATH,        // deprecated. don't use
                 LOCALE,
-                OFFICEINSTALL,
-                USERINSTALLURL,
-                OFFICEINSTALLURL,
+                OFFICEINSTALL,      // deprecated. don't use
+                USERINSTALLURL,     // deprecated. don't use
+                OFFICEINSTALLURL,   // deprecated. don't use
                 PRODUCTNAME,
                 PRODUCTVERSION,
                 PRODUCTEXTENSION,
