@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: pl $ $Date: 2002-05-02 13:38:38 $
+ *  last change: $Author: hdu $ $Date: 2002-05-08 12:42:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1043,16 +1043,16 @@ void SalGraphicsData::DrawServerAAFontString( const ServerFontLayout& rLayout )
 
 //--------------------------------------------------------------------------
 
-bool SalGraphicsData::DrawServerAAForcedString( const ServerFontLayout& rSalLayout )
+bool SalGraphicsData::DrawServerAAForcedString( const ServerFontLayout& rLayout )
 {
-    ServerFont* pFont = rSalLayout.GetServerFont();
+    ServerFont* pFont = rLayout.GetServerFont();
 
     // prepare glyphs and get extent of operation
     int nXmin, nXmax, nYmin, nYmax;
     int nStart = 0;
     Point aPos;
     long nGlyph;
-    for( bool bFirst=true; rSalLayout.GetNextGlyphs( 1, &nGlyph, aPos, nStart, NULL ); )
+    for( bool bFirst=true; rLayout.GetNextGlyphs( 1, &nGlyph, aPos, nStart, NULL ); )
     {
         const RawBitmap* const pRawBitmap = aX11GlyphPeer.GetRawBitmap( *pFont, nGlyph );
         if( !pRawBitmap )
@@ -1136,7 +1136,7 @@ bool SalGraphicsData::DrawServerAAForcedString( const ServerFontLayout& rSalLayo
 
     // work on XImage
     const int bpp = pImg->bits_per_pixel >> 3;
-    for( nStart = 0; rSalLayout.GetNextGlyphs( 1, &nGlyph, aPos, nStart, NULL ); )
+    for( nStart = 0; rLayout.GetNextGlyphs( 1, &nGlyph, aPos, nStart, NULL ); )
     {
         const RawBitmap* const pRawBitmap = aX11GlyphPeer.GetRawBitmap( *pFont, nGlyph );
         if( !pRawBitmap )
@@ -1219,7 +1219,7 @@ void SalGraphicsData::DrawServerSimpleFontString( const ServerFontLayout& rSalLa
     for( int nStart = 0; rSalLayout.GetNextGlyphs( 1, &nGlyph, aPos, nStart, NULL ); )
     {
         Pixmap aStipple = aX11GlyphPeer.GetPixmap( *pFont, nGlyph );
-        const GlyphMetric& rGM  = pFont->GetGlyphMetric( nGlyph );
+        const GlyphMetric& rGM = pFont->GetGlyphMetric( nGlyph );
 
         if( aStipple != None )
         {
@@ -1383,7 +1383,7 @@ void SalGraphicsData::DrawX11FontString( const X11FontLayout& rLayout )
 #if 1 // TODO: enable fallback
     const X11FontLayout* pLayout = &rLayout;
 #else
-    SalLayout* pSalLayout = rLayout.ExtractLayout( 0, GlyphItem::FALLBACK_MASK );
+    SalLayout* pLayout = rLayout.ExtractLayout( 0, GlyphItem::FALLBACK_MASK );
     if( !pLayout )
         return;
 #endif
@@ -1403,18 +1403,16 @@ void SalGraphicsData::DrawX11FontString( const X11FontLayout& rLayout )
         for( int i = 0; i < nGlyphs; ++i )
             pStr[ i ] = aGlyphAry[ i ];
 
-        long nX = aPos.X();
-        long nY = aPos.Y();
         if( xFont_->GetAsciiEncoding() == RTL_TEXTENCODING_UNICODE )
-            DrawStringUCS2 ( nX, nY, pStr, nGlyphs );
+            DrawStringUCS2 ( aPos.X(), aPos.Y(), pStr, nGlyphs );
         else
-            DrawStringMB ( nX, nY, pStr, nGlyphs );
+            DrawStringMB ( aPos.X(), aPos.Y(), pStr, nGlyphs );
     }
 
-/*###
+#if 0
     // release fallback layout
     pLayout->Release();
-###*/
+#endif
 }
 
 // ---------------------------------------------------------------------------
@@ -1439,9 +1437,9 @@ void SalGraphics::DrawSalLayout( const SalLayout& rSalLayout )
 #ifndef _USE_PRINT_EXTENSION_
     if( maGraphicsData.m_pPrinterGfx != NULL )
     {
-        const GenericSalLayout& rLayout( reinterpret_cast<const GenericSalLayout&>( rSalLayout ) );
 #define MAX_GLYPHS 160
-        long aGlyphAry[MAX_GLYPHS];
+        const GenericSalLayout& rLayout = reinterpret_cast<const GenericSalLayout&>( rSalLayout );
+        long        aGlyphAry[MAX_GLYPHS];
         sal_Int32   aIdxAry[MAX_GLYPHS];
         sal_Unicode aUnicodes[MAX_GLYPHS];
         memset( aUnicodes, 0, sizeof(aUnicodes));
@@ -1961,9 +1959,7 @@ SalGraphics::GetFontMetric( ImplFontMetricData *pMetric )
         if ( maGraphicsData.bFontVertical_ )
             pMetric->mnOrientation = 0;
 
-        long n;
-
-        n = maGraphicsData.aScale_.GetNumerator();
+        long n = maGraphicsData.aScale_.GetNumerator();
         if( n != 1 )
         {
             pMetric->mnWidth    *= n;
@@ -2281,43 +2277,53 @@ BOOL SalGraphics::GetLayoutOutline( const SalLayout& rSalLayout, PolyPolygon& rP
     rPolyPoly.Clear();
 
     // try to use selected font
-    SalLayout* pSalLayout = NULL;
+    GenericSalLayout* pSalLayout = NULL;
+    GenericSalLayout* pMergedLayout = (GenericSalLayout*)&rSalLayout;
     PolyPolygon aPolyPoly;
     long nGlyphIndex;
     Point aPos;
 
     ServerFont* pSF = maGraphicsData.mpServerSideFont;
-/*### TODO: finish GetLayoutOutline implementation
-    if( pSF && (pSalLayout = rSalLayout.ExtractLayout( 0, GlyphItem::FALLBACK_MASK )) )
+    if( pSF )
     {
-        int nStart = 0;
-        while( pSalLayout->GetNextGlyphs( 1, &nGlyphIndex, aPos, nStart ) )
+        pSalLayout = pMergedLayout->ExtractLayout( 0, GlyphItem::FALLBACK_MASK );
+        if( pSalLayout )
         {
-            if( !pSF->GetGlyphOutline( nGlyphIndex, aPolyPoly ) )
-                return FALSE;
-            bRet = TRUE;
-            aPolyPoly.Translate( aPos );
-            for( int i = 0; i < aPolyPoly.Count(); ++i )
-                rPolyPoly.Insert( aPolyPoly[i] );
+            int nStart = 0;
+            while( pSalLayout->GetNextGlyphs( 1, &nGlyphIndex, aPos, nStart ) )
+            {
+                if( !pSF->GetGlyphOutline( nGlyphIndex, aPolyPoly ) )
+                    continue;
+                bRet = TRUE;
+                aPos -= pSalLayout->GetDrawPosition();
+                aPolyPoly.Translate( aPos );
+                for( int i = 0; i < aPolyPoly.Count(); ++i )
+                    rPolyPoly.Insert( aPolyPoly[i] );
+            }
+            pSalLayout->Release();
         }
-        pSalLayout->Release();
     }
 
+/*###
     // if needed use fallback font
     pSF = maGraphicsData.mpSrvFallbackFont;
-    if( pSF && (pSalLayout = rSalLayout.ExtractLayout( 1, GlyphItem::FALLBACK_MASK )) )
+    if( pSF && pSalLayout )
     {
-        int nStart = 0;
-        while( pSalLayout->GetNextGlyphs( 1, &nGlyphIndex, aPos, nStart ) )
+        pSalLayout = pMergedLayout->ExtractLayout( 1, GlyphItem::FALLBACK_MASK );
+        if( pSalLayout )
         {
-            if( !pSF->GetGlyphOutline( nGlyphIndex, aPolyPoly ) )
-                return FALSE;
-            bRet = TRUE;
-            aPolyPoly.Translate( aPos );
-            for( int i = 0; i < aPolyPoly.Count(); ++i )
-                rPolyPoly.Insert( aPolyPoly[i] );
+            int nStart = 0;
+            while( pSalLayout->GetNextGlyphs( 1, &nGlyphIndex, aPos, nStart ) )
+            {
+                if( !pSF->GetGlyphOutline( nGlyphIndex, aPolyPoly ) )
+                    continue;
+                bRet = TRUE;
+                aPolyPoly.Translate( aPos );
+                for( int i = 0; i < aPolyPoly.Count(); ++i )
+                    rPolyPoly.Insert( aPolyPoly[i] );
+            }
+            pSalLayout->Release();
         }
-        pSalLayout->Release();
     }
 ###*/
 
@@ -2330,7 +2336,7 @@ BOOL SalGraphics::GetLayoutOutline( const SalLayout& rSalLayout, PolyPolygon& rP
 #ifdef ENABLE_CTL
 SalLayout* SalGraphicsData::LayoutText( const ImplLayoutArgs& rArgs )
 {
-    SalLayout* pSalLayout = NULL;
+    GenericSalLayout* pSalLayout = NULL;
 
     if( mpServerSideFont != NULL )
     {
