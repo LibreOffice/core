@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: pb $ $Date: 2000-12-11 12:02:25 $
+ *  last change: $Author: pb $ $Date: 2000-12-19 12:10:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,8 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 using namespace com::sun::star::ucb;
 
+extern void AppendConfigToken_Impl( String& rURL, sal_Bool bQuestionMark ); // sfxhelp.cxx
+
 // defines ---------------------------------------------------------------
 
 #define SPLITSET_ID         0
@@ -217,6 +219,9 @@ void IndexTabPage_Impl::InitializeIndex()
         ::rtl::OUString aURL = HELP_URL;
         ::rtl::OUString _aFactory( aFactory );
         aURL += _aFactory;
+        String aTemp = aURL;
+        AppendConfigToken_Impl( aTemp, sal_True );
+        aURL = aTemp;
         Content aCnt( aURL, Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > xInfo = aCnt.getProperties();
         if ( xInfo->hasPropertyByName( PROPERTY_KEYWORDLIST ) )
@@ -422,6 +427,7 @@ IMPL_LINK( SearchTabPage_Impl, SearchHdl, PushButton*, EMPTYARG )
     aSearchURL += aFactory;
     aSearchURL += String( HELP_SEARCH_TAG );
     aSearchURL += aSearchED.GetText();
+    AppendConfigToken_Impl( aSearchURL, sal_False );
 
     Sequence< ::rtl::OUString > aFactories = SfxContentHelper::GetResultSet( aSearchURL );
     const ::rtl::OUString* pFacs  = aFactories.getConstArray();
@@ -538,7 +544,9 @@ SfxHelpIndexWindow_Impl::~SfxHelpIndexWindow_Impl()
 
 void SfxHelpIndexWindow_Impl::Initialize()
 {
-    Sequence< ::rtl::OUString > aFactories = SfxContentHelper::GetResultSet( HELP_URL );
+    String aHelpURL = HELP_URL;
+    AppendConfigToken_Impl( aHelpURL, sal_True );
+    Sequence< ::rtl::OUString > aFactories = SfxContentHelper::GetResultSet( aHelpURL );
     const ::rtl::OUString* pFacs  = aFactories.getConstArray();
     UINT32 i, nCount = aFactories.getLength();
     for ( i = 0; i < nCount; ++i )
@@ -892,15 +900,21 @@ IMPL_LINK( SfxHelpWindow_Impl, SelectHdl, ToolBox* , pToolBox )
 
             case TBI_START :
             {
+                String aStartURL;
+                aStartURL = HELP_URL;
+                aStartURL += pIndexWin->GetFactory();
+                aStartURL += DEFINE_CONST_UNICODE("/start");
+                AppendConfigToken_Impl( aStartURL, sal_True );
+
                 URL aURL;
-                aURL.Complete = HELP_URL;
-                aURL.Complete += pIndexWin->GetFactory();
-                aURL.Complete += DEFINE_CONST_UNICODE("/start");
+                aURL.Complete = aStartURL;
                 PARSE_URL( aURL );
+
                 String aTarget( DEFINE_CONST_UNICODE("_self") );
                 Reference < XDispatchProvider > xProv( pTextWin->getFrame(), UNO_QUERY );
                 Reference < XDispatch > xDisp = xProv.is() ?
                     xProv->queryDispatch( aURL, aTarget, 0 ) : Reference < XDispatch >();
+
                 if ( xDisp.is() )
                 {
                     Sequence < PropertyValue > aArgs( 1 );
@@ -962,6 +976,7 @@ IMPL_LINK( SfxHelpWindow_Impl, OpenHdl, ListBox* , pBox )
             aEntry += pIndexWin->GetFactory();
             aEntry += '/';
             aEntry += *pData;
+            AppendConfigToken_Impl( aEntry, sal_True );
         }
         URL aURL;
         aURL.Complete = aEntry;

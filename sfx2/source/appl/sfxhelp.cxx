@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxhelp.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mba $ $Date: 2000-12-15 13:27:25 $
+ *  last change: $Author: pb $ $Date: 2000-12-19 12:10:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,10 @@
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <toolkit/helper/vclunohelper.hxx>
 
+#ifndef INCLUDED_SVTOOLS_HELPOPT_HXX
+#include <svtools/helpopt.hxx>
+#endif
+
 #include "sfxsids.hrc"
 #include "app.hxx"
 #include "viewfrm.hxx"
@@ -110,6 +114,19 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
+
+void AppendConfigToken_Impl( String& rURL, sal_Bool bQuestionMark )
+{
+    SvtHelpOptions aHelpOpt;
+    if ( bQuestionMark )
+        rURL += '?';
+    else
+        rURL += '&';
+    rURL += DEFINE_CONST_UNICODE("Locale=");
+    rURL += aHelpOpt.GetLocale();
+    rURL += DEFINE_CONST_UNICODE("&System=");
+    rURL += aHelpOpt.GetSystem();
+}
 
 SfxHelp_Impl::SfxHelp_Impl()
 {
@@ -186,6 +203,7 @@ BOOL SfxHelp_Impl::Start( ULONG nHelpId )
         aHelpURL += '/';
         aHelpURL += String::CreateFromInt32( nHelpId );
     }
+    AppendConfigToken_Impl( aHelpURL, sal_True );
 
     if ( aTicket.Len() )
     {
