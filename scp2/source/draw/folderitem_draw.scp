@@ -2,9 +2,9 @@
  *
  *  $RCSfile: folderitem_draw.scp,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: is $ $Date: 2004-02-05 18:09:01 $
+ *  last change: $Author: kz $ $Date: 2004-06-11 17:50:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,11 +62,11 @@
 #include "macros.inc"
 
 FolderItem gid_Folderitem_Sdraw
-    FOLDERITEM_NAME_LNG(ZEICHNUNG)
+    Name = "%PRODUCTNAME %PRODUCTVERSION Draw";
     ModuleID = gid_Module_Prg_Draw_Bin;
     FolderID = gid_Folder_Staroffice51;
-    FileID = gid_File_Bin_Soffice;
-    IconFile = gid_File_Bin_Soffice;
+    FileID = gid_File_Exe_Sdraw;
+    IconFile = gid_File_Exe_Sdraw;
     IconID = 5;
     Parameter = "-draw";
     Styles = (NOWEB);
