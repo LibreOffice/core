@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flyfrm.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-02-16 11:57:21 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 15:28:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,6 +153,9 @@ protected:
     BOOL bLayout        :1; // FLY_PAGE, FLY_AT_FLY, an Seite oder Rahmen
     BOOL bAutoPosition  :1; // FLY_AUTO_CNTNT, im Text verankerter Rahmen
     BOOL bNoShrink      :1; // temporary forbud of shrinking to avoid loops
+    BOOL bLockDeleteContent :1;           // If the flag is set, the content of the
+                                        // fly frame is not deleted if moved to
+                                        // invisible layer.
 
     friend class SwNoTxtFrm; // Darf NotifyBackground rufen
     virtual void NotifyBackground( SwPageFrm *pPage,
@@ -173,6 +176,7 @@ protected:
     Size CalcRel( const SwFmtFrmSize &rSz ) const;
 
     SwFlyFrm( SwFlyFrmFmt*, SwFrm *pAnchor );
+
 public:
 
     virtual ~SwFlyFrm();
@@ -231,6 +235,9 @@ public:
     void ResetNotifyBack()    { bNotifyBack = FALSE; }
     BOOL IsNoShrink()   const { return bNoShrink; }
     void SetNoShrink( BOOL bNew ) { bNoShrink = bNew; }
+    BOOL IsLockDeleteContent()  const { return bLockDeleteContent; }
+    void SetLockDeleteContent( BOOL bNew ) { bLockDeleteContent = bNew; }
+
 
     BOOL IsClipped()        const   { return bHeightClipped || bWidthClipped; }
     BOOL IsHeightClipped()  const   { return bHeightClipped; }
@@ -277,6 +284,15 @@ public:
         @return true, if shadow color is transparent.
     */
     const sal_Bool IsShadowTransparent() const;
+
+    // OD 2004-01-19 #110582#
+    void Chain( SwFrm* _pAnchor );
+    void Unchain();
+    void InsertCnt();
+    void DeleteCnt();
+    // OD 2004-02-12 #110582#-2
+    void InsertColumns();
+
 };
 
 inline BOOL SwFlyFrm::IsUpperOf( const SwFlyFrm *pLower ) const
