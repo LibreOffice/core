@@ -2,9 +2,9 @@
  *
  *  $RCSfile: misc.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-11-17 12:37:30 $
+ *  last change: $Author: tl $ $Date: 2000-12-21 09:56:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,6 +175,13 @@ LanguageType
 
 ///////////////////////////////////////////////////////////////////////////
 
+BOOL        HasHyphens( const rtl::OUString &rTxt );
+INT32       GetNumControlChars( const rtl::OUString &rTxt );
+BOOL        RemoveHyphens( rtl::OUString &rTxt );
+BOOL        RemoveControlChars( rtl::OUString &rTxt );
+
+///////////////////////////////////////////////////////////////////////////
+
 BOOL        IsUpper( const String &rText, INT16 nLanguage );
 BOOL        IsLower( const String &rText, INT16 nLanguage );
 String      ToLower( const String &rText, INT16 nLanguage );
@@ -204,6 +211,10 @@ BOOL        IsNumeric( const String &rText );
 ///////////////////////////////////////////////////////////////////////////
 
 BOOL IsUseDicList( const ::com::sun::star::beans::PropertyValues &rProperties,
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::beans::XPropertySet > &rxPropSet );
+
+BOOL IsIgnoreControlChars( const ::com::sun::star::beans::PropertyValues &rProperties,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet > &rxPropSet );
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: misc.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tl $ $Date: 2000-12-15 10:21:30 $
+ *  last change: $Author: tl $ $Date: 2000-12-21 09:57:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,9 @@
 #endif
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
+#endif
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
 #endif
 #ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
 #include <svtools/pathoptions.hxx>
@@ -144,6 +147,32 @@ BOOL IsUseDicList( const PropertyValues &rProperties,
         Reference< XFastPropertySet > xFast( rxProp, UNO_QUERY );
         if (xFast.is())
             xFast->getFastPropertyValue( UPH_IS_USE_DICTIONARY_LIST ) >>= bRes;
+    }
+
+    return bRes;
+}
+
+
+BOOL IsIgnoreControlChars( const PropertyValues &rProperties,
+        const Reference< XPropertySet > &rxProp )
+{
+    BOOL bRes = TRUE;
+
+    INT32 nLen = rProperties.getLength();
+    const PropertyValue *pVal = rProperties.getConstArray();
+    for (INT32 i = 0;  i < nLen;  ++i)
+    {
+        if (UPH_IS_IGNORE_CONTROL_CHARACTERS == pVal[i].Handle)
+        {
+            pVal[i].Value >>= bRes;
+            break;
+        }
+    }
+    if (i >= nLen)  // no temporary value found in 'rProperties'
+    {
+        Reference< XFastPropertySet > xFast( rxProp, UNO_QUERY );
+        if (xFast.is())
+            xFast->getFastPropertyValue( UPH_IS_IGNORE_CONTROL_CHARACTERS ) >>= bRes;
     }
 
     return bRes;
@@ -277,6 +306,85 @@ uno::Sequence< INT16 >
     }
 
     return aLangs;
+}
+
+///////////////////////////////////////////////////////////////////////////
+
+#define SOFT_HYPHEN ((sal_Unicode) 0x00AD)
+#define HARD_HYPHEN ((sal_Unicode) 0x2011)
+
+
+inline BOOL IsHyphen( sal_Unicode cChar )
+{
+    return cChar == SOFT_HYPHEN  ||  cChar == HARD_HYPHEN;
+}
+
+
+inline BOOL IsControlChar( sal_Unicode cChar )
+{
+    return cChar < (sal_Unicode) ' ';
+}
+
+
+inline BOOL HasHyphens( const OUString &rTxt )
+{
+    return  rTxt.indexOf( SOFT_HYPHEN ) != -1  ||
+            rTxt.indexOf( HARD_HYPHEN ) != -1;
+}
+
+
+INT32 GetNumControlChars( const OUString &rTxt )
+{
+    INT32 nCnt = 0;
+    INT32 nLen = rTxt.getLength();
+    for (INT32 i = 0;  i < nLen;  ++i)
+    {
+        if (IsControlChar( rTxt[i] ))
+            ++nCnt;
+    }
+    return nCnt;
+}
+
+
+BOOL RemoveHyphens( OUString &rTxt )
+{
+    BOOL bModified = FALSE;
+    if (HasHyphens( rTxt ))
+    {
+        String aTmp( rTxt );
+        aTmp.EraseAllChars( SOFT_HYPHEN );
+        aTmp.EraseAllChars( HARD_HYPHEN );
+        rTxt = aTmp;
+        bModified = TRUE;
+    }
+    return bModified;
+}
+
+
+BOOL RemoveControlChars( OUString &rTxt )
+{
+    BOOL bModified = FALSE;
+    INT32 nCtrlChars = GetNumControlChars( rTxt );
+    if (nCtrlChars)
+    {
+        INT32 nLen  = rTxt.getLength();
+        INT32 nSize = nLen - nCtrlChars;
+        OUStringBuffer aBuf( nSize );
+        INT32 nCnt = 0;
+        for (INT32 i = 0;  i < nLen;  ++i)
+        {
+            sal_Unicode cChar = rTxt[i];
+            if (!IsControlChar( cChar ))
+            {
+                DBG_ASSERT( nCnt < nSize, "index out of range" );
+                aBuf.setCharAt( nCnt++, cChar );
+            }
+        }
+        DBG_ASSERT( nCnt == nSize, "wrong size" );
+        rTxt = aBuf.makeStringAndClear();
+        bModified = TRUE;
+    }
+    return bModified;
 }
 
 ///////////////////////////////////////////////////////////////////////////
