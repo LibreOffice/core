@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dataaccessdescriptor.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2002-12-05 15:06:24 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 18:02:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -266,13 +266,15 @@ namespace svx
         static PropertyMapEntry s_aDesriptorProperties[] =
         {
             { CONST_CHAR("ActiveConnection"),   daConnection,       &::getCppuType( static_cast< Reference< XConnection >* >(NULL) ),   PropertyAttribute::TRANSIENT, 0 },
+            { CONST_CHAR("BookmarkSelection"),  daBookmarkSelection,&::getBooleanCppuType( ),                                           PropertyAttribute::TRANSIENT, 0 },
             { CONST_CHAR("Column"),             daColumnObject,     &::getCppuType( static_cast< Reference< XPropertySet >* >(NULL) ),  PropertyAttribute::TRANSIENT, 0 },
             { CONST_CHAR("ColumnName"),         daColumnName,       &::getCppuType( static_cast< ::rtl::OUString* >(NULL) ),            PropertyAttribute::TRANSIENT, 0 },
             { CONST_CHAR("Command"),            daCommand,          &::getCppuType( static_cast< ::rtl::OUString* >(NULL) ),            PropertyAttribute::TRANSIENT, 0 },
             { CONST_CHAR("CommandType"),        daCommandType,      &::getCppuType( static_cast< sal_Int32* >(NULL) ),                  PropertyAttribute::TRANSIENT, 0 },
-            { CONST_CHAR("Cursor"),             daCursor,           &::getCppuType( static_cast< Reference< XResultSet>* >(NULL) ),         PropertyAttribute::TRANSIENT, 0 },
+            { CONST_CHAR("Cursor"),             daCursor,           &::getCppuType( static_cast< Reference< XResultSet>* >(NULL) ),     PropertyAttribute::TRANSIENT, 0 },
             { CONST_CHAR("DataSourceName"),     daDataSource,       &::getCppuType( static_cast< ::rtl::OUString* >(NULL) ),            PropertyAttribute::TRANSIENT, 0 },
             { CONST_CHAR("EscapeProcessing"),   daEscapeProcessing, &::getBooleanCppuType( ),                                           PropertyAttribute::TRANSIENT, 0 },
+            { CONST_CHAR("Filter"),             daFilter,           &::getCppuType( static_cast< ::rtl::OUString* >(NULL) ),            PropertyAttribute::TRANSIENT, 0 },
             { CONST_CHAR("Selection"),          daSelection,        &::getCppuType( static_cast< Sequence< Any >* >(NULL) ),            PropertyAttribute::TRANSIENT, 0 },
             { NULL, 0, 0, NULL, 0, 0 }
         };
