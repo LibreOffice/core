@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galtheme.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-23 13:04:26 $
+ *  last change: $Author: ka $ $Date: 2000-12-09 15:24:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1221,9 +1221,13 @@ BOOL GalleryTheme::InsertDataXChgData( SvDataObjectRef& rxData, ULONG nInsertPos
                         else
                             bRet = InsertURL( aURL, nInsertPos );
                     }
-                    catch( ... )
+                    catch( const ContentCreationException& )
                     {
-                        DBG_ERROR( "GalleryTheme::InsertDataXChgData: ucb error" );
+                        DBG_ERROR( "ContentCreationException" );
+                    }
+                    catch( const ::com::sun::star::uno::RuntimeException& )
+                    {
+                        DBG_ERROR( "RuntimeException" );
                     }
                 }
             }

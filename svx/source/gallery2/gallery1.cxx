@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gallery1.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ka $ $Date: 2000-12-01 14:03:35 $
+ *  last change: $Author: ka $ $Date: 2000-12-09 15:24:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -427,9 +427,13 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, BOOL bReadOnly )
             }
         }
     }
-    catch( ... )
+    catch( const ContentCreationException& )
     {
-        DBG_ERRORFILE( "GetFolderContents: Any other exception" );
+        DBG_ERROR( "ContentCreationException" );
+    }
+    catch( const ::com::sun::star::uno::RuntimeException& )
+    {
+        DBG_ERROR( "RuntimeException" );
     }
 }
 

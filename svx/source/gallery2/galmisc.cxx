@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galmisc.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-16 12:17:44 $
+ *  last change: $Author: ka $ $Date: 2000-12-09 15:24:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -391,9 +391,13 @@ BOOL FileExists( const INetURLObject& rURL )
             aCnt.getPropertyValue( OUString::createFromAscii( "Title" ) ) >>= aTitle;
             bRet = ( aTitle.getLength() > 0 );
         }
-        catch( ... )
+        catch( const ContentCreationException& )
         {
-            DBG_ERROR( "Gallery: FileExists: ucb error" );
+            DBG_ERROR( "ContentCreationException" );
+        }
+        catch( const ::com::sun::star::uno::RuntimeException& )
+        {
+            DBG_ERROR( "RuntimeException" );
         }
     }
 
@@ -423,9 +427,13 @@ BOOL CreateDir( const INetURLObject& rURL )
             bRet = aParent.insertNewContent( OUString::createFromAscii( "application/vnd.sun.staroffice.fsys-folder" ),
                                              aProps, aValues, Content( aNewFolderURL.GetMainURL(), aCmdEnv ) );
         }
-        catch( ... )
+        catch( const ContentCreationException& )
         {
-            DBG_ERROR( "Gallery: CreateDir: ucb error" );
+            DBG_ERROR( "ContentCreationException" );
+        }
+        catch( const ::com::sun::star::uno::RuntimeException& )
+        {
+            DBG_ERROR( "RuntimeException" );
         }
     }
 
@@ -447,9 +455,13 @@ BOOL CopyFile(  const INetURLObject& rSrcURL, const INetURLObject& rDstURL )
                                                 rDstURL.GetName(), NameClash::OVERWRITE ) ) );
         bRet = TRUE;
     }
-    catch( ... )
+    catch( const ContentCreationException& )
     {
-        DBG_ERROR( "Gallery: CopyFile: ucb error" );
+        DBG_ERROR( "ContentCreationException" );
+    }
+    catch( const ::com::sun::star::uno::RuntimeException& )
+    {
+        DBG_ERROR( "RuntimeException" );
     }
 
     return bRet;
@@ -468,10 +480,15 @@ BOOL KillFile( const INetURLObject& rURL )
             Content aCnt( rURL.GetMainURL(), uno::Reference< XCommandEnvironment >() );
             aCnt.executeCommand( OUString::createFromAscii( "delete" ), uno::makeAny( sal_Bool( sal_True ) ) );
         }
-        catch( ... )
+        catch( const ContentCreationException& )
         {
             bRet = FALSE;
-            DBG_ERROR( "Gallery: KillFile: ucb error" );
+            DBG_ERROR( "ContentCreationException" );
+        }
+        catch( const ::com::sun::star::uno::RuntimeException& )
+        {
+            bRet = FALSE;
+            DBG_ERROR( "RuntimeException" );
         }
     }
 

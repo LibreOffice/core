@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galbrws1.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ka $ $Date: 2000-12-01 14:03:35 $
+ *  last change: $Author: ka $ $Date: 2000-12-09 15:24:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,9 +226,13 @@ void GalleryBrowser1::ImplFillExchangeData( const GalleryTheme* pThm, ExchangeDa
         rData.aThemeChangeDate = aDateTime;
         rData.aThemeChangeTime = aDateTime;
     }
-    catch( ... )
+    catch( const ContentCreationException& )
     {
-        DBG_ERRORFILE( "GalleryBrowser1::ImplFillExchangeData: ucb exception" );
+        DBG_ERROR( "ContentCreationException" );
+    }
+    catch( const ::com::sun::star::uno::RuntimeException& )
+    {
+        DBG_ERROR( "RuntimeException" );
     }
 }
 
