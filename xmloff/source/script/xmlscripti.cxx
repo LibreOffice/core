@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlscripti.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ab $ $Date: 2000-12-07 14:58:42 $
+ *  last change: $Author: dvo $ $Date: 2000-12-19 18:53:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,17 +174,23 @@ XMLScriptElementContext::XMLScriptElementContext( SvXMLImport& rImport, sal_uInt
         {
             OUString sFullAttrName = xAttrList->getNameByIndex( i );
             OUString sAttrName;
-            GetImport().GetNamespaceMap().GetKeyByAttrName( sFullAttrName,  &sAttrName );
+            sal_Int16 nAttrPrefix =
+                GetImport().GetNamespaceMap().GetKeyByAttrName( sFullAttrName,
+                                                                &sAttrName );
 
-            if( sAttrName.equalsAsciiL( sXML_name, sizeof(sXML_name)-1 ) )
+            if( (XML_NAMESPACE_SCRIPT == nAttrPrefix) &&
+                sAttrName.equalsAsciiL( sXML_name, sizeof(sXML_name)-1 ) )
             {
                 msLibName = xAttrList->getValueByIndex( i );
             }
-            else if( sAttrName.equalsAsciiL( sXML_password, sizeof(sXML_password)-1 ) )
+            else if( (XML_NAMESPACE_SCRIPT == nAttrPrefix) &&
+                     sAttrName.equalsAsciiL( sXML_password,
+                                             sizeof(sXML_password)-1 ) )
             {
                 sPassword = xAttrList->getValueByIndex( i );
             }
-            else if( bLinked && sAttrName.equalsAsciiL( sXML_href, sizeof(sXML_href)-1 ) )
+            else if( (XML_NAMESPACE_XLINK == nAttrPrefix) && bLinked &&
+                     sAttrName.equalsAsciiL( sXML_href, sizeof(sXML_href)-1 ) )
             {
                 sLinkTargetURL = xAttrList->getValueByIndex( i );
             }
@@ -211,19 +217,23 @@ SvXMLImportContext* XMLScriptElementContext::CreateChildContext( sal_uInt16 nPre
 {
     SvXMLImportContext* pContext = NULL;
 
-    if( msLName.equalsAsciiL( sXML_library_embedded, sizeof(sXML_library_embedded)-1 ) )
+    if ( XML_NAMESPACE_SCRIPT == nPrefix)
     {
-        if( rLName.equalsAsciiL( sXML_module, sizeof(sXML_module)-1 ) )
+        if( msLName.equalsAsciiL( sXML_library_embedded, sizeof(sXML_library_embedded)-1 ) )
         {
-            pContext = new XMLScriptModuleContext( GetImport(), nPrefix,
-                rLName, msLibName, xAttrList, *this, mxBasicAccess );
+            if( rLName.equalsAsciiL( sXML_module, sizeof(sXML_module)-1 ) )
+            {
+                pContext = new XMLScriptModuleContext( GetImport(), nPrefix,
+                    rLName, msLibName, xAttrList, *this, mxBasicAccess );
+            }
+            //else if( rLName.equalsAsciiL( sXML_dialog, sizeof(sXML_dilaog)-1 ) )
+            //{
+                //pContext = new XMLScriptDialogContext( GetImport(),
+                    //nPrefix, rLName, xAttrList, *this, mxBasicAccess );
+            //}
         }
-        //else if( rLName.equalsAsciiL( sXML_dialog, sizeof(sXML_dilaog)-1 ) )
-        //{
-            //pContext = new XMLScriptDialogContext( GetImport(),
-                //nPrefix, rLName, xAttrList, *this, mxBasicAccess );
-        //}
     }
+    // else: unknown namespace: ignore
 
     if ( !pContext )
     {
@@ -261,13 +271,18 @@ XMLScriptModuleContext::XMLScriptModuleContext( SvXMLImport& rImport, sal_uInt16
     {
         OUString sFullAttrName = xAttrList->getNameByIndex( i );
         OUString sAttrName;
-        GetImport().GetNamespaceMap().GetKeyByAttrName( sFullAttrName,  &sAttrName );
+        sal_Int16 nAttrPrefix =
+            GetImport().GetNamespaceMap().GetKeyByAttrName( sFullAttrName,
+                                                            &sAttrName );
 
-        if( sAttrName.equalsAsciiL( sXML_name, sizeof(sXML_name)-1 ) )
+        if( (XML_NAMESPACE_SCRIPT == nAttrPrefix) &&
+            sAttrName.equalsAsciiL( sXML_name, sizeof(sXML_name)-1 ) )
         {
             msModuleName = xAttrList->getValueByIndex( i );
         }
-        else if( sAttrName.equalsAsciiL( sXML_language, sizeof(sXML_language)-1 ) )
+        else if( (XML_NAMESPACE_SCRIPT == nAttrPrefix) &&
+                 sAttrName.equalsAsciiL( sXML_language,
+                                         sizeof(sXML_language)-1 ) )
         {
             msLanguage = xAttrList->getValueByIndex( i );
         }
