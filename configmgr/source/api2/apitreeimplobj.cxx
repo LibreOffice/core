@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apitreeimplobj.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: jb $ $Date: 2000-12-11 17:04:56 $
+ *  last change: $Author: lla $ $Date: 2000-12-12 13:07:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -305,6 +305,8 @@ bool ApiRootTreeImpl::enableNotification(bool bEnable)
 
 bool ApiTreeImpl::disposeTree(bool bForce)
 {
+    // ensure our provider stays alive
+    UnoInterfaceRef xKeepParentAlive(this->getParentComponent());
     OWriteSynchronized aLocalGuard(getDataLock());
     if (!bForce)
     {
