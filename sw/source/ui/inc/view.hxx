@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:43:45 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 15:32:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,7 @@ class InsCaptionOpt;
 class SvGlobalName;
 class SvtAccessibilityOptions;
 class SwPrtOptions;
+class SwTransferable;
 struct SwPrintData;
 
 namespace com{ namespace sun { namespace star {
@@ -621,6 +622,8 @@ public:
 
     SfxObjectShellRef & GetTmpSelectionDoc();
     SfxObjectShellRef & GetOrCreateTmpSelectionDoc();
+
+    void        AddTransferable(SwTransferable& rTransferable);
 };
 
 // ----------------- inline Methoden ----------------------
