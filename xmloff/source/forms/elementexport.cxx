@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementexport.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 13:01:22 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 14:56:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1819,19 +1819,19 @@ namespace xmloff
     void OControlExport::exportXFormsBindAttributes()
     {
         rtl::OUString sBindName = getXFormsBindName( m_xProps );
-        AddAttribute( XML_NAMESPACE_XFORMS, "bind", sBindName );
+        AddAttribute( XML_NAMESPACE_XFORMS, XML_BIND, sBindName );
     }
     //---------------------------------------------------------------------
     void OControlExport::exportXFormsListAttributes()
     {
         rtl::OUString sBindName = getXFormsListBindName( m_xProps );
-        AddAttribute( XML_NAMESPACE_FORM, "xforms-list-source", sBindName );
+        AddAttribute( XML_NAMESPACE_FORM, XML_XFORMS_LIST_SOURCE, sBindName );
     }
     //---------------------------------------------------------------------
     void OControlExport::exportXFormsSubmissionAttributes()
     {
         rtl::OUString sSubmission = getXFormsSubmissionName( m_xProps );
-        AddAttribute( XML_NAMESPACE_XFORMS, "submission", sSubmission );
+        AddAttribute( XML_NAMESPACE_FORM, XML_XFORMS_SUBMISSION, sSubmission );
     }
     //---------------------------------------------------------------------
     void OControlExport::exportCellListSourceRange( )
