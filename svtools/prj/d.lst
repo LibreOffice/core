@@ -267,4 +267,5 @@ hedabu: ..\inc\pathoptions.hxx %_DEST%\inc%_EXT%\svtools\pathoptions.hxx
 hedabu: ..\inc\useroptions.hxx %_DEST%\inc%_EXT%\svtools\useroptions.hxx
 hedabu: ..\inc\fstathelper.hxx %_DEST%\inc%_EXT%\svtools\fstathelper.hxx
 hedabu: ..\inc\saveopt.hxx %_DEST%\inc%_EXT%\svtools\saveopt.hxx
-
+hedabu: ..\inc\undoopt.hxx %_DEST%\inc%_EXT%\svtools\undoopt.hxx
+hedabu: ..\inc\helpopt.hxx %_DEST%\inc%_EXT%\svtools\helpopt.hxx
