@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_im.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-18 15:15:07 $
+ *  last change: $Author: kz $ $Date: 2003-08-25 13:55:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -524,15 +524,11 @@ SalI18N_InputMethod::FilterEvent( XEvent *pEvent, XLIB_Window window    )
 
     Bool bFilterEvent = XFilterEvent (pEvent, window);
 
-    if (! IMServerKinput2())
-        return bFilterEvent;
     if (pEvent->type != XLIB_KeyPress && pEvent->type != KeyRelease)
-        return bFilterEvent;
-    if (mbMultiLingual)
         return bFilterEvent;
 
     /*
-     * fix kinput2 key release handling
+     * fix broken key release handling of some IMs
      */
     XKeyEvent*         pKeyEvent = &(pEvent->xkey);
     static XKeyEventOp maLastKeyPress;
