@@ -21377,3 +21377,11 @@ _TI2?AVIllegalAccessibleComponentStateException@accessibility@star@sun@com@draft
 ?LoseFocus@SvxLightCtl3D@@UAEXXZ
 ?move@SvxLightCtl3D@@IAEXNN@Z
 ?CreatePageVDev@svx@@YAPAVVirtualDevice@@PAVSdrPage@@KK@Z
+?IsA@SdrPaintView@@WBA@BEEP6APAXXZ@Z
+?Type@SdrPaintView@@WBA@BEP6APAXXZXZ
+?IsA@SdrView@@WBA@BEEP6APAXXZ@Z
+?Type@SdrView@@WBA@BEP6APAXXZXZ
+?IsA@FmFormView@@WBA@BEEP6APAXXZ@Z
+?Type@FmFormView@@WBA@BEP6APAXXZXZ
+?IsA@E3dView@@WBA@BEEP6APAXXZ@Z
+?Type@E3dView@@WBA@BEP6APAXXZXZ
