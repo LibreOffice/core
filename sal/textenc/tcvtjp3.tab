@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tcvtjp3.tab,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:17:28 $
+ *  last change: $Author: sb $ $Date: 2002-11-08 14:53:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,13 @@
 
 /* This file contain the DBCS to UniCode tables for the following */
 /* japanese charsets: JIS201, JIS208, JIS212 */
+
+/* For compatibility reasons, the Shift-JIS row 8740--879E as defined in
+   http://www.unicode.org/Public/MAPPINGS/VENDORS/MICSFT/WINDOWS/CP932.TXT
+   ("Table version: 2.01," "Date: 04/15/98") is used as the 13th row (i.e.,
+   ISO-2022-JP 2D21--2D7E) of JIS X 0208 (officially, that 13th row contains no
+   characters).
+ */
 
 /* ======================================================================= */
 
@@ -210,6 +217,26 @@ static sal_uInt16 const aImplDBCSToUniTab_JIS0208_28[] =
     0x252F, 0x2528, 0x2537, 0x253F, 0x251D, 0x2530, 0x2525, 0x2538, /* 0x30 */
     0x2542                                                          /* 0x40 */
                                                                     /* 0x40 */
+};
+
+/* ----------------------------------------------------------------------- */
+
+static sal_uInt16 const aImplDBCSToUniTab_JIS0208_2D[] =
+{
+/*       0       1       2       3       4       5       6       7 */
+/*       8       9       A       B       C       D       E       F */
+            0x2460, 0x2461, 0x2462, 0x2463, 0x2464, 0x2465, 0x2466, /* 0x20 */
+    0x2467, 0x2468, 0x2469, 0x246A, 0x246B, 0x246C, 0x246D, 0x246E, /* 0x20 */
+    0x246F, 0x2470, 0x2471, 0x2472, 0x2473, 0x2160, 0x2161, 0x2162, /* 0x30 */
+    0x2163, 0x2164, 0x2165, 0x2166, 0x2167, 0x2168, 0x2169,      0, /* 0x30 */
+    0x3349, 0x3314, 0x3322, 0x334D, 0x3318, 0x3327, 0x3303, 0x3336, /* 0x40 */
+    0x3351, 0x3357, 0x330D, 0x3326, 0x3323, 0x332B, 0x334A, 0x333B, /* 0x40 */
+    0x339C, 0x339D, 0x339E, 0x338E, 0x338F, 0x33C4, 0x33A1,      0, /* 0x50 */
+         0,      0,      0,      0,      0,      0,      0, 0x337B, /* 0x50 */
+         0, 0x301D, 0x301F, 0x2116, 0x33CD, 0x2121, 0x32A4, 0x32A5, /* 0x60 */
+    0x32A6, 0x32A7, 0x32A8, 0x3231, 0x3232, 0x3239, 0x337E, 0x337D, /* 0x60 */
+    0x337C, 0x2252, 0x2261, 0x222B, 0x222E, 0x2211, 0x221A, 0x22A5, /* 0x70 */
+    0x2220, 0x221F, 0x22BF, 0x2235, 0x2229, 0x222A                  /* 0x70 */
 };
 
 /* ----------------------------------------------------------------------- */

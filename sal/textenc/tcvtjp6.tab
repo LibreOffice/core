@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tcvtjp6.tab,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sb $ $Date: 2002-10-04 13:37:04 $
+ *  last change: $Author: sb $ $Date: 2002-11-08 14:53:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1798,7 +1798,7 @@ static ImplDBCSToUniLeadTab const aJIS0208UniLeadTab[128] =
     {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x2A */ /* We convert this as double byte */
     {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x2B */ /* We convert this as double byte */
     {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x2C */ /* We convert this as double byte */
-    {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x2D */ /* We convert this as double byte */
+    {      0, 0x21, 0x7D, aImplDBCSToUniTab_JIS0208_2D },       /* 0x2D */
     {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x2E */ /* We convert this as double byte */
     {      0,    1,    0, aImplDoubleByteIdentifierTab },       /* 0x2F */ /* We convert this as double byte */
     {      0, 0x21, 0x7E, aImplDBCSToUniTab_JIS0208_30 },       /* 0x30 */
@@ -1921,9 +1921,9 @@ static ImplUniToDBCSHighTab const aJIS0208DBCSHighTab[256] =
     {    1,    0, NULL },                                       /* 0x1F */
     { 0x10, 0x3B, aImplUniToDBCSTab_JIS0208_20 },               /* 0x20 */
     { 0x03, 0xD4, aImplUniToDBCSTab_JIS0208_21 },               /* 0x21 */
-    { 0x00, 0xA5, aImplUniToDBCSTab_JIS0208_22 },               /* 0x22 */
+    { 0x00, 0xBF, aImplUniToDBCSTab_JIS0208_22 },               /* 0x22 */
     { 0x12, 0x12, aImplUniToDBCSTab_JIS0208_23 },               /* 0x23 */
-    {    1,    0, NULL },                                       /* 0x24 */
+    { 0x60, 0x73, aImplUniToDBCSTab_JIS0208_24 },               /* 0x24 */
     { 0x00, 0xEF, aImplUniToDBCSTab_JIS0208_25 },               /* 0x25 */
     { 0x05, 0x6F, aImplUniToDBCSTab_JIS0208_26 },               /* 0x26 */
     {    1,    0, NULL },                                       /* 0x27 */
@@ -1937,8 +1937,8 @@ static ImplUniToDBCSHighTab const aJIS0208DBCSHighTab[256] =
     {    1,    0, NULL },                                       /* 0x2F */
     { 0x00, 0xFE, aImplUniToDBCSTab_JIS0208_30 },               /* 0x30 */
     {    1,    0, NULL },                                       /* 0x31 */
-    {    1,    0, NULL },                                       /* 0x32 */
-    {    1,    0, NULL },                                       /* 0x33 */
+    { 0x31, 0xA8, aImplUniToDBCSTab_JIS0208_32 },               /* 0x32 */
+    { 0x03, 0xCD, aImplUniToDBCSTab_JIS0208_33 },               /* 0x33 */
     {    1,    0, NULL },                                       /* 0x34 */
     {    1,    0, NULL },                                       /* 0x35 */
     {    1,    0, NULL },                                       /* 0x36 */
