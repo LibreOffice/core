@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globdoc.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 16:09:28 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 11:57:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,20 +122,24 @@ String STR_WRITER_GLOBALDOC_FULLTYPE
     TEXT[ chinese_simplified ] = "%PRODUCTNAME %PRODUCTVERSION 主控文档";
     TEXT[ chinese_traditional ] = "%PRODUCTNAME %PRODUCTVERSION 主控文件";
     TEXT[ turkish ] = "%PRODUCTNAME 6.0 Ana Belge";
-    TEXT[ arabic ] = "%PRODUCTNAME 6.0 Master Document";
+    TEXT[ arabic ] = "����� ����%PRODUCTNAME %PRODUCTVERSION ";
     TEXT[ catalan ] = "%PRODUCTNAME 6.0 Document mestre";
     TEXT[ finnish ] = "%PRODUCTNAME 6.0 -perusasiakirja";
     TEXT[ thai ] = "เอกสารต้นฉบับ %PRODUCTNAME 6.0 ";
-    TEXT[ czech ] = "Hlavní dokument %PRODUCTNAME 6.0";
+    TEXT[ czech ] = "Hlavní dokument %PRODUCTNAME %PRODUCTVERSION";
     TEXT[ hebrew ] = "%PRODUCTNAME 6.0 Global Dokument";
     TEXT[ hindi ] = "%PRODUCTNAME 6.0 मास्टर लेखपत्र";
-    TEXT[ slovak ] = "Hlavný dokument %PRODUCTNAME 6.0";
+    TEXT[ slovak ] = "Hlavný dokument %PRODUCTNAME %PRODUCTVERSION";
 };
 
 #define MN_SW_GLOBAL
 #include "swmn.hrc"
 #define MN_SW_PORTAL
 #include "swmn.hrc"
+
+
+
+
 
 
 
