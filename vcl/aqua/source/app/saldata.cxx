@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldata.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pluby $ $Date: 2000-12-06 03:11:32 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 12:42:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,6 @@
  *
  *
  ************************************************************************/
-
-#define _SV_SALDATA_CXX
 
 #ifndef _SV_SALDATA_HXX
 #include <saldata.hxx>
