@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documentdigitalsignatures.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-16 15:58:49 $
+ *  last change: $Author: gt $ $Date: 2004-07-19 15:46:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,12 +62,16 @@
 
 #include <documentdigitalsignatures.hxx>
 #include <xmlsecurity/digitalsignaturesdialog.hxx>
+#include <xmlsecurity/macrosecurity.hxx>
 
 #ifndef _COM_SUN_STAR_EMBED_XSTORAGE_HPP_
 #include <com/sun/star/embed/XStorage.hpp>
 #endif
 #ifndef _COM_SUN_STAR_EMBED_ELEMENTMODES_HPP_
 #include <com/sun/star/embed/ElementModes.hpp>
+#endif
+#ifndef INCLUDED_SVTOOLS_SECURITYOPTIONS_HXX
+#include <svtools/securityoptions.hxx>
 #endif
 
 
@@ -209,6 +213,10 @@ com::sun::star::uno::Sequence< ::com::sun::star::security::DocumentSignaturesInf
 
 void DocumentDigitalSignatures::manageTrustedSources(  ) throw (::com::sun::star::uno::RuntimeException)
 {
+    cssu::Reference< css::lang::XMultiServiceFactory >          xMSF;
+    cssu::Reference< dcss::xml::crypto::XSecurityEnvironment >  xSecurityEnvironment;
+    MacroSecurity   aDlg( NULL, xMSF, xSecurityEnvironment );
+    aDlg.Execute();
 }
 
 ::sal_Bool DocumentDigitalSignatures::isAuthorTrusted( const ::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificate >& Author ) throw (::com::sun::star::uno::RuntimeException)
@@ -227,6 +235,9 @@ void DocumentDigitalSignatures::addAuthorToTrustedSources( const ::com::sun::sta
 
 void DocumentDigitalSignatures::addLocationToTrustedSources( const ::rtl::OUString& Location ) throw (::com::sun::star::uno::RuntimeException)
 {
+    SvtSecurityOptions  aSecOpt;
+
+//  aSecOpt.AddSecureURL( Location );
 }
 
 
