@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propcontroller.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: fs $ $Date: 2001-12-13 09:14:26 $
+ *  last change: $Author: fs $ $Date: 2002-01-09 14:01:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,7 +173,6 @@ namespace pcr
             ,m_nDataPageId(0)
             ,m_nEventPageId(0)
             ,m_sStandard(ModuleRes(RID_STR_STANDARD))
-            ,m_bInitialized(sal_False)
             ,m_bContainerFocusListening(sal_False)
     {
         DBG_CTOR(OPropertyBrowserController,NULL);
@@ -224,7 +223,7 @@ namespace pcr
             }
         }
 
-        DBG_ASSERT(m_bContainerFocusListening, "OPropertyBrowserController::stopContainerWindowListening: unable to start listening (inconsistence)!");
+        DBG_ASSERT(m_bContainerFocusListening, "OPropertyBrowserController::startContainerWindowListening: unable to start listening (inconsistence)!");
     }
 
     //------------------------------------------------------------------------
@@ -346,8 +345,15 @@ namespace pcr
 
         if (haveView())
             m_pView->setActiveController(NULL);
+
         // don't delete explicitly (this is done by the frame we reside in)
         m_pView = NULL;
+
+        Reference< XComponent > xViewAsComp( m_xView, UNO_QUERY );
+        if ( xViewAsComp.is() )
+            xViewAsComp->removeEventListener( this );
+        m_xView.clear( );
+
     }
 
     //------------------------------------------------------------------------
@@ -360,45 +366,6 @@ namespace pcr
     void SAL_CALL OPropertyBrowserController::removeEventListener( const Reference< XEventListener >& _rxListener ) throw(RuntimeException)
     {
         m_aDisposeListeners.removeInterface(_rxListener);
-    }
-
-    //------------------------------------------------------------------------
-    void SAL_CALL OPropertyBrowserController::initialize( const Sequence< Any >& _rArguments ) throw(Exception, RuntimeException)
-    {
-        ::osl::MutexGuard aGuard(m_aMutex);
-        if (m_bInitialized)
-            throw Exception(::rtl::OUString::createFromAscii("The object has already been initialized."), static_cast< XInitialization* >(this));
-
-//      sal_Bool bConstructed = sal_False;
-//      PropertyValue aCurrentArg;
-//      const Any* pStart = _rArguments.getConstArray();
-//      const Any* pEnd = pStart + _rArguments.getLength();
-//      for (const Any* pLoop = pStart; pLoop != pEnd; ++pLoop)
-//      {
-//          if ((*pLoop) >>= aCurrentArg)
-//          {
-//              if (aCurrentArg.Name.equalsAsciiL("ParentWindow", sizeof("ParentWindow") - 1))
-//              {
-//                  Reference< XWindow > xContainerWindow;
-//                  ::cppu::extractInterface(xContainerWindow, aCurrentArg.Value);
-//                  VCLXWindow* pContainerWindow = VCLXWindow::GetImplementation(xContainerWindow);
-//                  Window* pParentWin = pContainerWindow ? pContainerWindow->GetWindow() : NULL;
-//                  if (!pParentWin)
-//                      throw Exception(::rtl::OUString::createFromAscii("The frame is invalid. Unable to extract the container window."),*this);
-//
-//                  bConstructed = Construct(pParentWin);
-//                  break;
-//              }
-//          }
-//      }
-//
-//      if (!bConstructed)
-//      {
-//          DBG_ERROR("OPropertyBrowserController::initialize: need a parent window argument!");
-//          throw Exception(::rtl::OUString::createFromAscii("Invalid arguments specified. No parent window found."), static_cast< XInitialization* >(this));
-//      }
-//
-        m_bInitialized = sal_True;
     }
 
     //------------------------------------------------------------------------
@@ -1103,6 +1070,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.17  2001/12/13 09:14:26  fs
+ *  preparations for #95343# - support the XLayoutConstraints interface
+ *
  *  Revision 1.16  2001/10/19 12:58:51  tbe
  *  #92755# Assign Standard Values for Basic Controls in Designmode
  *

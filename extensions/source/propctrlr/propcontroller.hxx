@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propcontroller.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fs $ $Date: 2001-12-13 09:14:26 $
+ *  last change: $Author: fs $ $Date: 2002-01-09 14:01:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,9 +110,6 @@
 #ifndef _COM_SUN_STAR_SCRIPT_XTYPECONVERTER_HPP_
 #include <com/sun/star/script/XTypeConverter.hpp>
 #endif
-#ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
-#include <com/sun/star/lang/XInitialization.hpp>
-#endif
 #ifndef _COM_SUN_STAR_FRAME_XCONTROLLER_HPP_
 #include <com/sun/star/frame/XController.hpp>
 #endif
@@ -122,8 +119,8 @@
 #ifndef _CPPUHELPER_INTERFACECONTAINER_HXX_
 #include <cppuhelper/interfacecontainer.hxx>
 #endif
-#ifndef _CPPUHELPER_IMPLBASE5_HXX_
-#include <cppuhelper/implbase5.hxx>
+#ifndef _CPPUHELPER_IMPLBASE4_HXX_
+#include <cppuhelper/implbase4.hxx>
 #endif
 #ifndef _COMPHELPER_PROPERTYCONTAINER_HXX_
 #include <comphelper/propertycontainer.hxx>
@@ -170,9 +167,8 @@ namespace pcr
     //========================================================================
     //= OPropertyBrowserController
     //========================================================================
-    typedef ::cppu::WeakImplHelper5 <   ::com::sun::star::frame::XController
+    typedef ::cppu::WeakImplHelper4 <   ::com::sun::star::frame::XController
                                     ,   ::com::sun::star::lang::XServiceInfo
-                                    ,   ::com::sun::star::lang::XInitialization
                                     ,   ::com::sun::star::awt::XFocusListener
                                     ,   ::com::sun::star::awt::XLayoutConstrains
                                     >   OPropertyBrowserController_Base;
@@ -247,7 +243,6 @@ namespace pcr
 
         sal_Bool    m_bHasListSource            : 1;
         sal_Bool    m_bHasCursorSource          : 1;
-        sal_Bool    m_bInitialized              : 1;
         sal_Bool    m_bContainerFocusListening  : 1;
 
     protected:
@@ -282,9 +277,6 @@ namespace pcr
         virtual void SAL_CALL dispose(  ) throw(::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw(::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw(::com::sun::star::uno::RuntimeException);
-
-        // XInitialization
-        virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
 
         // XTypeProvider
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException);
@@ -435,6 +427,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.14  2001/12/13 09:14:26  fs
+ *  preparations for #95343# - support the XLayoutConstraints interface
+ *
  *  Revision 1.13  2001/10/19 12:58:51  tbe
  *  #92755# Assign Standard Values for Basic Controls in Designmode
  *
