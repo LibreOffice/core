@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paraitem.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: mba $ $Date: 2002-05-27 14:27:44 $
+ *  last change: $Author: mba $ $Date: 2002-06-19 17:16:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1105,7 +1105,47 @@ sal_Bool SvxTabStopItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
         {
             uno::Sequence< style::TabStop> aSeq;
             if(!(rVal >>= aSeq))
-                return sal_False;
+            {
+                uno::Sequence < uno::Sequence < uno::Any >  > aAnySeq;
+                if (!(rVal >>= aAnySeq))
+                    return sal_False;
+                sal_Int32 nLength = aAnySeq.getLength();
+                aSeq.realloc( nLength );
+                for ( sal_Int32 n=0; n<nLength; n++ )
+                {
+                    uno::Sequence < uno::Any >& rAnySeq = aAnySeq[n];
+                    if ( rAnySeq.getLength() == 4 )
+                    {
+                        if (!(rAnySeq[0] >>= aSeq[n].Position)) return sal_False;
+                        if (!(rAnySeq[1] >>= aSeq[n].Alignment))
+                        {
+                            sal_Int32 nVal;
+                            if (rAnySeq[1] >>= nVal)
+                                aSeq[n].Alignment = (com::sun::star::style::TabAlign) nVal;
+                            else
+                                return sal_False;
+                        }
+                        if (!(rAnySeq[2] >>= aSeq[n].DecimalChar))
+                        {
+                            ::rtl::OUString aVal;
+                            if ( (rAnySeq[2] >>= aVal) && aVal.getLength() == 1 )
+                                aSeq[n].DecimalChar = aVal.toChar();
+                            else
+                                return sal_False;
+                        }
+                        if (!(rAnySeq[3] >>= aSeq[n].FillChar))
+                        {
+                            ::rtl::OUString aVal;
+                            if ( (rAnySeq[3] >>= aVal) && aVal.getLength() == 1 )
+                                aSeq[n].FillChar = aVal.toChar();
+                            else
+                                return sal_False;
+                        }
+                    }
+                    else
+                        return sal_False;
+                }
+            }
 
             SvxTabStopArr::Remove( 0, Count() );
             const style::TabStop* pArr = aSeq.getConstArray();
