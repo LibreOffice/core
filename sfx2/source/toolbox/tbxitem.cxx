@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxitem.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 13:59:06 $
+ *  last change: $Author: obo $ $Date: 2004-11-19 11:38:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1640,6 +1640,24 @@ SfxPopupWindow* SfxAppToolBoxControl_Impl::CreatePopupWindow()
     return 0;
 }
 
+static sal_Int16 GetCurrentSymbolSet()
+{
+    sal_Int16   eOptSymbolSet = SvtMiscOptions().GetSymbolSet();
+
+    if ( eOptSymbolSet == SFX_SYMBOLS_AUTO )
+    {
+        // Use system settings, we have to retrieve the toolbar icon size from the
+        // Application class
+        ULONG nStyleIconSize = Application::GetSettings().GetStyleSettings().GetToolbarIconSize();
+        if ( nStyleIconSize == STYLE_TOOLBAR_ICONSIZE_LARGE )
+            eOptSymbolSet = SFX_SYMBOLS_LARGE;
+        else
+            eOptSymbolSet = SFX_SYMBOLS_SMALL;
+    }
+
+    return eOptSymbolSet;
+}
+
 void SfxAppToolBoxControl_Impl::SetImage( const String &rURL )
 {
     /* We accept URL's here only, which exist as items of our internal popup menu.
@@ -1650,7 +1668,7 @@ void SfxAppToolBoxControl_Impl::SetImage( const String &rURL )
     if (!bValid)
         aURL = sFallback;
 
-    BOOL bBig = ( SfxImageManager::GetCurrentSymbolSet() == SFX_SYMBOLS_LARGE );
+    BOOL bBig = ( GetCurrentSymbolSet() == SFX_SYMBOLS_LARGE );
     GetToolBox().SetItemImage( GetId(),
                                SvFileInformationManager::GetImage( INetURLObject( aURL ),
                                bBig,
