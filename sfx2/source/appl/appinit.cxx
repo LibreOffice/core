@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appinit.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: mba $ $Date: 2001-09-10 16:37:27 $
+ *  last change: $Author: mba $ $Date: 2001-12-05 10:33:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -374,6 +374,7 @@ FASTBOOL SfxApplication::Initialize_Impl()
 
     // App-Dispatcher aufbauen
     pAppDispat->Push(*this);
+    pAppDispat->Flush();
     pAppDispat->DoActivate_Impl( sal_True );
 
     SvtSaveOptions aSaveOptions;
