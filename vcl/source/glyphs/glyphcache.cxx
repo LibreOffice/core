@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glyphcache.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 09:31:08 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 16:33:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,6 +251,8 @@ ServerFont* GlyphCache::CacheFont( const ImplFontSelectData& rFontSelData )
 {
     if( rFontSelData.mpFontData == NULL )
         return NULL;
+    if( rFontSelData.mpFontData->GetFontId() <= 0 )
+        return NULL;
 
     FontList::iterator it = maFontList.find( rFontSelData );
     if( it != maFontList.end() )
@@ -267,9 +269,9 @@ ServerFont* GlyphCache::CacheFont( const ImplFontSelectData& rFontSelData )
         pNew = mpFtManager->CreateFont( rFontSelData );
     // TODO: pNew = VirtDevServerFont::CreateFont( rFontSelData );
 
-    maFontList[ rFontSelData ] = pNew;
     if( pNew )
     {
+        maFontList[ rFontSelData ] = pNew;
         mnBytesUsed += pNew->GetByteCount();
 
         // enable garbage collection for new font
