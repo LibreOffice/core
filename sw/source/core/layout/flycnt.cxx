@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flycnt.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ama $ $Date: 2002-02-07 13:35:15 $
+ *  last change: $Author: ama $ $Date: 2002-03-13 15:44:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1045,15 +1045,10 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
     const SwFrm *pFrm = 0;
     SwTwips nY;
     SWRECTFN( pCnt )
-    BOOL bFlyVert = IsVertical();
     if ( pCnt->Frm().IsInside( aNew ) )
     {
         if( bVert )
-        {
-            nY = pCnt->Frm().Left() + pCnt->Frm().Width() - rNew.X();
-            if( bFlyVert )
-                nY += Frm().Width();
-        }
+            nY = pCnt->Frm().Left()+pCnt->Frm().Width()-rNew.X()+Frm().Width();
         else
             nY = rNew.Y() - pCnt->Frm().Top();
     }
@@ -1637,7 +1632,6 @@ void SwFlyAtCntFrm::MakeFlyPos()
         //Sie koennen jeweils Fix oder Variabel sein.
 #ifdef VERTICAL_LAYOUT
         SWRECTFN( pAutoOrient )
-        BOOL bFlyVert = IsVertical();
 
         //Zuerst die vertikale Position, damit feststeht auf welcher Seite
         //bzw. in welchen Upper sich der Fly befindet.
@@ -1680,7 +1674,7 @@ void SwFlyAtCntFrm::MakeFlyPos()
                 else if( pAutoPos && aVert.GetVertOrient() == VERT_CHAR_BOTTOM )
                 {
                     nRelPosY = nHeight + nUpper;
-                    if( bVert && !bFlyVert )
+                    if( bVert )
                         nRelPosY += aFrm.Width();
                 }
                 else
@@ -1852,10 +1846,8 @@ void SwFlyAtCntFrm::MakeFlyPos()
         //absolute Position berechnet werden.
         if( bVert )
         {
-            aFrm.Pos().X() = GetAnchor()->Frm().Left() +
+            aFrm.Pos().X() = GetAnchor()->Frm().Left() - aFrm.Width() +
                              GetAnchor()->Frm().Width() - aRelPos.X() +nRelDiff;
-            if( bFlyVert )
-                aFrm.Pos().X() -= aFrm.Width();
         }
         else
             aFrm.Pos().Y() = GetAnchor()->Frm().Top() +
@@ -1954,7 +1946,7 @@ void SwFlyAtCntFrm::MakeFlyPos()
                         if( bVertX )
                             aFrm.Pos().X() = GetAnchor()->Frm().Left()
                                              + GetAnchor()->Frm().Width()
-                                             - aRelPos.X();
+                                             - aRelPos.X() - aFrm.Width();
                         else
                             aFrm.Pos().Y() = GetAnchor()->Frm().Top()
                                              + aRelPos.Y();
@@ -1985,12 +1977,8 @@ void SwFlyAtCntFrm::MakeFlyPos()
         //werden, sonst habe ich Schwierigkeiten den virtuellen Anker
         //zu ermitteln.
         if( bVert )
-        {
-            aFrm.Pos().X() = GetAnchor()->Frm().Left() +
+            aFrm.Pos().X() = GetAnchor()->Frm().Left() - aFrm.Width() +
                              GetAnchor()->Frm().Width() - aRelPos.X();
-            if( bFlyVert )
-                aFrm.Pos().X() -= aFrm.Width();
-        }
         else
             aFrm.Pos().Y() = aRelPos.Y() + GetAnchor()->Frm().Top();
         //Den Frm besorgen, an dem sich die horizontale Ausrichtung orientiert.
@@ -2835,9 +2823,7 @@ void SwFlyAtCntFrm::MakeFlyPos()
         {
             aFrm.Pos().X() = GetAnchor()->Frm().Left() +
                              GetAnchor()->Frm().Width() -
-                             aRelPos.X();
-            if( bFlyVert )
-                aFrm.Pos().X() -= aFrm.Width();
+                             aFrm.Width() - aRelPos.X();
             aFrm.Pos().Y() = GetAnchor()->Frm().Top() + aRelPos.Y();
             AssertPage();
         }

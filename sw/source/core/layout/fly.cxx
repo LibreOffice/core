@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fly.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ama $ $Date: 2002-02-07 13:34:53 $
+ *  last change: $Author: ama $ $Date: 2002-03-13 15:43:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1637,7 +1637,6 @@ void SwFlyFrm::MakeFlyPos()
         GetAnchor()->Calc();
 #ifdef VERTICAL_LAYOUT
         SWRECTFN( GetAnchor() );
-        BOOL bFlyVert = IsVertical();
 #endif
             //Die Werte in den Attributen muessen ggf. upgedated werden,
             //deshalb werden hier Attributinstanzen und Flags benoetigt.
@@ -1687,8 +1686,7 @@ void SwFlyFrm::MakeFlyPos()
             if( bVert )
             {
                 aRelPos.X() = bRev ? nYPos : -nYPos;
-                if( bFlyVert )
-                    aRelPos.X() -= Frm().Width();
+                aRelPos.X() -= Frm().Width();
             }
             else
                 aRelPos.Y() = nYPos;
@@ -1729,14 +1727,17 @@ void SwFlyFrm::MakeFlyPos()
             if( bFlyAtFly && VERT_TOP != aVert.GetVertOrient() &&
                 SURROUND_THROUGHT != pFmt->GetSurround().GetSurround() &&
                 !GetAnchor()->HasFixSize() )
-                nRelPosY = rUL.GetUpper();
+                nRelPosY = bVert ? rLR.GetRight() : rUL.GetUpper();
             else if ( aVert.GetVertOrient() == VERT_CENTER )
                 nRelPosY = (nRel / 2) - (nFrmHeight / 2);
             else if ( aVert.GetVertOrient() == VERT_BOTTOM )
-                nRelPosY = nRel - (nFrmHeight + rUL.GetLower());
+                nRelPosY = nRel - ( nFrmHeight +
+                                   ( bVert ? rLR.GetLeft() : rUL.GetLower() ) );
             else
-                nRelPosY = rUL.GetUpper();
+                nRelPosY = bVert ? rLR.GetRight() : rUL.GetUpper();
             nRelPosY += nAdd;
+            if( bVert )
+                nRelPosY += nFrmHeight;
 
             if ( aVert.GetPos() != nRelPosY )
             {   aVert.SetPos( nRelPosY );
@@ -1906,9 +1907,10 @@ void SwFlyFrm::MakeFlyPos()
         else if ( HORI_CENTER == eHOri )
             nRelX = (nRel / 2) - (nFrmWidth / 2);
         else if ( HORI_RIGHT == eHOri )
-            nRelX = nRel - ( nFrmWidth + rLR.GetRight() );
+            nRelX = nRel - ( nFrmWidth +
+                                ( bVert ? rUL.GetLower() : rLR.GetRight() ) );
         else
-            nRelX = rLR.GetLeft();
+            nRelX = bVert ? rUL.GetUpper() : rLR.GetLeft();
         nRelX += nAdd;
 
         if( ( nRelX < 0 ) != bRev )
@@ -1916,11 +1918,7 @@ void SwFlyFrm::MakeFlyPos()
         if( bVert )
             aRelPos.Y() = nRelX;
         else
-        {
             aRelPos.X() = nRelX;
-            if( bFlyVert )
-                aRelPos.X() -= Frm().Width();
-        }
         if ( HORI_NONE != aHori.GetHoriOrient() &&
             aHori.GetPos() != nRelX )
         {   aHori.SetPos( nRelX );

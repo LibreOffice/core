@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wsfrm.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ama $ $Date: 2002-01-24 16:20:45 $
+ *  last change: $Author: ama $ $Date: 2002-03-13 15:41:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3186,7 +3186,7 @@ void SwLayoutFrm::Format( const SwBorderAttrs *pAttrs )
 #ifdef VERTICAL_LAYOUT
     const USHORT nRight = (USHORT)pAttrs->CalcRight();
     const USHORT nLower = pAttrs->CalcBottom();
-    BOOL bVert = IsVertical();
+    BOOL bVert = IsVertical() && !IsPageFrm();
     SwRectFn fnRect = bVert ? fnRectVert : fnRectHori;
     if ( !bValidPrtArea )
     {
