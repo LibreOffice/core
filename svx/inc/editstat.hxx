@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editstat.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mt $ $Date: 2002-08-20 17:35:27 $
+ *  last change: $Author: vg $ $Date: 2002-08-27 14:28:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,10 @@
 
 #ifndef _STRING_HXX
 #include <tools/string.hxx>
+#endif
+
+#ifndef _LANG_HXX
+#include <tools/lang.hxx>
 #endif
 
 #define EE_CNTRL_USECHARATTRIBS     0x00000001  // Verwendung harter ZeichenAttr.
