@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsSelectionFunction.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 15:18:40 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 15:42:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,6 +147,13 @@ private:
 
     model::PageDescriptor* mpRangeSelectionAnchor;
 
+    /** We use this flag to filter out the cases where MouseMotion() is called
+        with a pressed mouse button but without a prior MouseButtonDown()
+        call.  This is an indication that the mouse button was pressed over
+        another control, e.g. the view tab bar, and that a re-layout of the
+        controls moved the slide sorter under the mouse.
+    */
+    bool mbProcessingMouseButtonDown;
 
     /** Show the effect of the specified page.
     */
