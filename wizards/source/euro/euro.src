@@ -2,9 +2,9 @@
  *
  *  $RCSfile: euro.src,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:58:37 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 17:35:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,8 +80,8 @@ Text[ english_us ] = "~Cancel";
     Text[ italian ] = "Esci";
     Text[ danish ] = "~Afslut";
     Text[ swedish ] = "~Avbryt";
-    Text[ polish ] = "~Zako�cz";
-    Text[ portuguese_brazilian ] = "~Cancel";
+    Text[ polish ] = "~Anuluj";
+    Text[ portuguese_brazilian ] = "Ca~ncelar";
     Text[ japanese ] = "キャンセル(~C)";
     Text[ korean ] = "취소(~C)";
     Text[ chinese_simplified ] = "结束(~C)";
@@ -91,6 +91,9 @@ Text[ english_us ] = "~Cancel";
     Text[ finnish ] = "~Peruuta";
     Text[ catalan ] = "~Cancel.la";
     Text[ thai ] = "~ยกเลิก";
+    Text[ czech ] = "Zrušit";
+    Text[ hebrew ] = "‮ביטול‬";
+    Text[ hindi ] = "~रद्द करो";
 };
 
 String STEP_ZERO + 1
@@ -107,8 +110,8 @@ Text[ english_us ] = "~Help";
     Text[ italian ] = "~Guida";
     Text[ danish ] = "~Hj�lp";
     Text[ swedish ] = "~Hj�lp";
-    Text[ polish ] = "~Pomoc";
-    Text[ portuguese_brazilian ] = "~Help";
+    Text[ polish ] = "Po~moc";
+    Text[ portuguese_brazilian ] = "~Ajuda";
     Text[ japanese ] = "ヘルプ(~H)";
     Text[ korean ] = "도움말(~H)";
     Text[ chinese_simplified ] = "帮助(~H)";
@@ -118,6 +121,9 @@ Text[ english_us ] = "~Help";
     Text[ finnish ] = "~Ohje";
     Text[ catalan ] = "~Ajuda";
     Text[ thai ] = "~ช่วยเหลือ";
+    Text[ czech ] = "Nápověda";
+    Text[ hebrew ] = "‮עזרה‬";
+    Text[ hindi ] = "~सहायता";
 };
 
 String STEP_ZERO + 2
@@ -134,17 +140,20 @@ Text[ english_us ] = "<<~Back";
     Text[ italian ] = "<<~Indietro";
     Text[ danish ] = "<<~Tilbage";
     Text[ swedish ] = "<<~Tillbaka";
-    Text[ polish ] = "<<~Wstecz";
-    Text[ portuguese_brazilian ] = "~Back";
+    Text[ polish ] = "<< ~Wstecz";
+    Text[ portuguese_brazilian ] = "<<~Voltar";
     Text[ japanese ] = "<< 戻る(~B)";
     Text[ korean ] = "<< 뒤로(~B)";
     Text[ chinese_simplified ] = "<<返回(~B)";
     Text[ chinese_traditional ] = "返回(~B)";
     Text[ arabic ] = "~>> ������";
-    Text[ turkish ] = "<<Ge~ri";
+    Text[ turkish ] = "<<~Geri";
     Text[ finnish ] = "<< ~Edellinen";
     Text[ catalan ] = "<<~Enrere";
     Text[ thai ] = "<<~กลับไป";
+    Text[ czech ] = "<<Zpět";
+    Text[ hebrew ] = "‮<< הקודם‬";
+    Text[ hindi ] = "<<~पीछे";
 };
 
 String STEP_ZERO + 3
@@ -162,7 +171,7 @@ Text[ english_us ] = "~Convert";
     Text[ danish ] = "~Konverter";
     Text[ swedish ] = "~Konvertera";
     Text[ polish ] = "~Konwertuj";
-    Text[ portuguese_brazilian ] = "~Ready";
+    Text[ portuguese_brazilian ] = "~Converter";
     Text[ japanese ] = "変換(~C)";
     Text[ korean ] = "변환(~C)";
     Text[ chinese_simplified ] = "转换(~C)";
@@ -172,6 +181,9 @@ Text[ english_us ] = "~Convert";
     Text[ finnish ] = "~Muunna";
     Text[ catalan ] = "~Converteix";
     Text[ thai ] = "แ~ปลง";
+    Text[ czech ] = "Konvertovat";
+    Text[ hebrew ] = "‮המרה‬";
+    Text[ hindi ] = "~बदलो";
 };
 
 String STEP_ZERO + 4
@@ -188,17 +200,20 @@ Text[ english_us ] = "Note: Currency amounts from external links and currency co
     Text[ italian ] = "Nota: non � possibile convertire gli importi monetari provenienti da riferimenti esterni, nonch� fattori di conversione monetaria in formule.";
     Text[ danish ] = "Bem�rk! Valutabel�b, som relaterer til eksterne referencer, samt valutaomregningsfaktorer i celleformler kan ikke konverteres.";
     Text[ swedish ] = "OBS: valutabelopp som har externa referenser, liksom valutaomr�kningsfaktorer i formler kan inte konverteras.";
-    Text[ polish ] = "Wskaz�wka: Kwot (waluty) z zewn�trznych po��cze� oraz przelicznik�w waluty w formu�ach kom�rek nie mo�na skonwertowa�.";
-    Text[ portuguese_brazilian ] = "Hint: Currency amounts that refer to external Links as well as currency -converting factors in Cell formulas cannot be converted.";
+    Text[ polish ] = "Uwaga: Nie mo�na dokona� konwersji kwot (waluty) z zewn�trznych po��cze� ani przelicznik�w waluty w formu�ach kom�rek.";
+    Text[ portuguese_brazilian ] = "Observa��o: Valores monet�rios dos v�nculos externos e fatores de convers�o de moeda em f�rmulas n�o podem ser convertidos.";
     Text[ japanese ] = "注意: 外部参照する為替相場と数式の通貨換算ファクタは変換できません。";
     Text[ korean ] = "참고: 수식 내의 통화 변환 요소와 외부에 연결된 통화량은 변환되지 않습니다.";
     Text[ chinese_simplified ] = "提示：无法转换引用外来数据的货币金额和公式中的货币换算系数。";
     Text[ chinese_traditional ] = "提示：無法轉換含有外來引用的貨幣數額及公式的貨幣換算值。";
     Text[ arabic ] = "������: ����� ������ �������� ������ �����ɡ ������ ����� ��� ������ �� ����� ��� ����� �������.";
-    Text[ turkish ] = "Bilgi: D�� referanslara ba�l� para birimi mebla�lar� ve h�cre form�lleri i�indeki para birimi d�n��t�rme etkenleri d�n��t�r�lemez.";
+    Text[ turkish ] = "Not: D�� referanslardaki para miktarlar� ve h�cre form�lleri i�indeki para pariteleri d�n��t�r�lemez.";
     Text[ finnish ] = "Huomautus: Ulkoisten linkkien valuuttam��ri� ja kaavojen valuutanmuuntokertoimia ei voi muuntaa.";
     Text[ catalan ] = "Advert�ncia: No es poden convertir els imports monetaris de refer�ncies externes ni dels factors de conversi� de monedes en les f�rmules.";
     Text[ thai ] = "หมายเหตุ: ไม่สามารถแปลงจำนวนสกุลเงินจากการเชื่อมโยงภายนอกและปัจจัยการแปลงสกุลเงินในสูตรคำนวณได้";
+    Text[ czech ] = "Pozor: Není možné konvertovat částky získané z externích odkazů a kurzové indexy zadané ve vzorcích.";
+    Text[ hebrew ] = "‮לתשומת לב: כמויות מטבעות מקישורים חיצוניים והמרות מטבע בנוסחאות אינן ניתנות להמרה.‬";
+    Text[ hindi ] = "सूचना: बाहरी लिंक्स से मुद्रा और मुद्रा बदलनेवाला फॉक्टर को सूत्र में नहीं बदल सकते है ।";
 };
 
 String STEP_ZERO + 5
@@ -215,17 +230,20 @@ Text[ english_us ] = "First, unprotect all sheets.";
     Text[ italian ] = "Eliminate la protezione dalle tabelle.";
     Text[ danish ] = "Deaktiver f�rst beskyttelsen af alle tabeller!";
     Text[ swedish ] = "Upph�v f�rst skyddet f�r alla tabeller";
-    Text[ polish ] = "Odbezpiecz najpierw wszystkie tabele!";
-    Text[ portuguese_brazilian ] = "Unprotect all sheets beforehand!";
+    Text[ polish ] = "Najpierw znie� ochron� wszystkich arkuszy.";
+    Text[ portuguese_brazilian ] = "Desproteja primeiro as planilhas.";
     Text[ japanese ] = "前もってすべての表の保護を解除しておきます。";
     Text[ korean ] = "모든 시트 보호를 사전에 해제하십시오.";
     Text[ chinese_simplified ] = "事先取消所有工作表保护";
     Text[ chinese_traditional ] = "先取消所有工作表的保護";
     Text[ arabic ] = "�� ����� ������ ����� ���� �������!";
-    Text[ turkish ] = "�nce b�t�n tablolar�n korumas�n� kald�r�n!";
+    Text[ turkish ] = "�nce t�m yapraklar�n korumas�n� kald�r�n";
     Text[ finnish ] = "Poista kaikkien taulukoiden suojaus ensin.";
     Text[ catalan ] = "S'han de desprotegir totes les taules!";
     Text[ thai ] = "ไม่ป้องกันแผ่นงานทั้งหมดล่วงหน้า!";
+    Text[ czech ] = "Nejdříve musíte odemknout všechny listy.";
+    Text[ hebrew ] = "‮יש להסיר הגנה מכל הגליונות.‬";
+    Text[ hindi ] = "पहिले, सब शीटों को अरक्षित करो ।";
 };
 
 String STEP_ZERO + 6
@@ -243,7 +261,7 @@ Text[ english_us ] = "Currencies:";
     Text[ danish ] = "Valutaer:";
     Text[ swedish ] = "Valutor:";
     Text[ polish ] = "Waluty:";
-    Text[ portuguese_brazilian ] = "Currencies:";
+    Text[ portuguese_brazilian ] = "Moedas:";
     Text[ japanese ] = "通貨:";
     Text[ korean ] = "통화:";
     Text[ chinese_simplified ] = "货币：";
@@ -253,6 +271,9 @@ Text[ english_us ] = "Currencies:";
     Text[ finnish ] = "Valuutat:";
     Text[ catalan ] = "Monedes:";
     Text[ thai ] = "สกุลเงิน:";
+    Text[ czech ] = "Měny:";
+    Text[ hebrew ] = "‮מטבעות:‬";
+    Text[ hindi ] = "मुद्रा:";
 };
 
 
@@ -270,8 +291,8 @@ Text[ english_us ] = "C~ontinue>>";
     Text[ italian ] = "Avanti>>";
     Text[ danish ] = "~N�ste>>";
     Text[ swedish ] = "~N�sta>>";
-    Text[ polish ] = "~Dalej>>";
-    Text[ portuguese_brazilian ] = "C~ontinue>>";
+    Text[ polish ] = "K~ontynuuj >>";
+    Text[ portuguese_brazilian ] = "~Continuar>>";
     Text[ japanese ] = "次へ(~O) >>";
     Text[ korean ] = "다음(~O) >>";
     Text[ chinese_simplified ] = "继续(~O) >>";
@@ -281,6 +302,9 @@ Text[ english_us ] = "C~ontinue>>";
     Text[ finnish ] = "~Jatka>>";
     Text[ catalan ] = "C~ontinua>>";
     Text[ thai ] = "ทำต่~อ>>";
+    Text[ czech ] = "Pokračovat>>";
+    Text[ hebrew ] = "‮המשך >>‬";
+    Text[ hindi ] = "जा~री रखो>>";
 };
 
 
@@ -291,7 +315,7 @@ Text[English] = "C~lose";
 Text[ english_us ] = "C~lose";
     Text[ portuguese ] = "~Fechar";
     Text[ russian ] = "~�������";
-    Text[ greek ] = "C~lose";
+    Text[ greek ] = "��������";
     Text[ dutch ] = "~Sluiten";
     Text[ french ] = "Fermer";
     Text[ spanish ] = "~Cerrar";
@@ -299,16 +323,19 @@ Text[ english_us ] = "C~lose";
     Text[ italian ] = "~Chiudi";
     Text[ danish ] = "~Luk";
     Text[ swedish ] = "~St�ng";
-    Text[ polish ] = "Zamknij";
-    Text[ portuguese_brazilian ] = "C~lose";
+    Text[ polish ] = "~Zamknij";
+    Text[ portuguese_brazilian ] = "~Fechar";
     Text[ japanese ] = "閉じる(~L)";
     Text[ korean ] = "닫기(~L)";
     Text[ chinese_simplified ] = "关闭(~L)";
     Text[ chinese_traditional ] = "關閉(~L)";
-    Text[ turkish ] = "C~lose";
-    Text[ arabic ] = "C~lose";
+    Text[ turkish ] = "K~apat";
+    Text[ arabic ] = "�����";
     Text[ catalan ] = "~Tanca";
     Text[ thai ] = "ปิ~ด";
+    Text[ czech ] = "Zavřít";
+    Text[ hebrew ] = "‮סגירה‬";
+    Text[ hindi ] = "ब~न्द करो";
 };
 
 String STEP_CONVERTER
@@ -326,7 +353,7 @@ Text[ english_us ] = "~Entire document";
     Text[ danish ] = "Hele ~dokumentet";
     Text[ swedish ] = "Kom~plett dokument";
     Text[ polish ] = "~Ca�y dokument";
-    Text[ portuguese_brazilian ] = "~Entire Document";
+    Text[ portuguese_brazilian ] = "~Documento inteiro";
     Text[ japanese ] = "全ドキュメント(~E)";
     Text[ korean ] = "전체 문서(~E)";
     Text[ chinese_simplified ] = "整个文档(~E)";
@@ -336,6 +363,9 @@ Text[ english_us ] = "~Entire document";
     Text[ finnish ] = "~Koko asiakirja";
     Text[ catalan ] = "Document ~sencer";
     Text[ thai ] = "~ทั้งเอกสาร";
+    Text[ czech ] = "Celý dokument";
+    Text[ hebrew ] = "‮המסמך כולו‬";
+    Text[ hindi ] = "~सम्पूर्ण लेखपत्र";
 };
 
 String STEP_CONVERTER + 1
@@ -352,8 +382,8 @@ Text[ english_us ] = "Selection";
     Text[ italian ] = "Selezione";
     Text[ danish ] = "Markering";
     Text[ swedish ] = "Markering";
-    Text[ polish ] = "Selekcja";
-    Text[ portuguese_brazilian ] = "Selection";
+    Text[ polish ] = "Zaznaczenie";
+    Text[ portuguese_brazilian ] = "Sele��o";
     Text[ japanese ] = "選択範囲";
     Text[ korean ] = "선택";
     Text[ chinese_simplified ] = "选中";
@@ -364,6 +394,9 @@ Text[ english_us ] = "Selection";
     Text[ finnish ] = "Valinta";
     Text[ catalan ] = "Selecci�";
     Text[ thai ] = "ส่วนที่เลือก";
+    Text[ czech ] = "Výběr";
+    Text[ hebrew ] = "‮מבחר‬";
+    Text[ hindi ] = "चुनाव";
 };
 
 String STEP_CONVERTER + 2
@@ -380,17 +413,20 @@ Text[ english_us ] = "Cell S~tyles";
     Text[ italian ] = "Modelli di cella";
     Text[ danish ] = "~Celletypografier";
     Text[ swedish ] = "Cell~mallar";
-    Text[ polish ] = "~Style kom�rki";
-    Text[ portuguese_brazilian ] = "Cell~templates";
+    Text[ polish ] = "S~tyle kom�rki";
+    Text[ portuguese_brazilian ] = "Estilos de ~C�lulas";
     Text[ japanese ] = "セルスタイル(~T)";
     Text[ korean ] = "셀 스타일(~T)";
     Text[ chinese_simplified ] = "单元格样式(~T)";
     Text[ chinese_traditional ] = "儲存格樣式(~T)";
     Text[ arabic ] = "����� �������~";
-    Text[ turkish ] = "~H�cre �ablonlar�";
+    Text[ turkish ] = "H�cre ~�ablonlar�";
     Text[ finnish ] = "Solu~tyylit";
     Text[ catalan ] = "~Estils de cel.la";
     Text[ thai ] = "ลั~กษณะเซลล์";
+    Text[ czech ] = "Formát buněk";
+    Text[ hebrew ] = "‮סגנונות תאים‬";
+    Text[ hindi ] = "कोष्ठ शै~लियाँ";
 };
 
 String STEP_CONVERTER + 3
@@ -407,8 +443,8 @@ Text[ english_us ] = "Currency cells in the current ~sheet";
     Text[ italian ] = "Celle della valuta nella tabella corrente";
     Text[ danish ] = "Valutaceller i det aktuelle ~ark";
     Text[ swedish ] = "Valutaceller p� det aktuella ~tabellbladet";
-    Text[ polish ] = "Kom�rki waluty w aktualnym ~arkuszu";
-    Text[ portuguese_brazilian ] = "Currency Cells in the current ~Sheet";
+    Text[ polish ] = "Kom�rki walutowe w bie��cym ~arkuszu";
+    Text[ portuguese_brazilian ] = "C�lulas monet�rias na ~planilha atual";
     Text[ japanese ] = "現在の表の通貨セル(~S)";
     Text[ korean ] = "현재 시트의 통화 셀(~S)";
     Text[ chinese_simplified ] = "当前工作表中的货币单元格(~S)";
@@ -418,6 +454,9 @@ Text[ english_us ] = "Currency cells in the current ~sheet";
     Text[ finnish ] = "Nykyisen ~taulukon valuuttasolut";
     Text[ catalan ] = "Cel.les monet�ries del full a~ctiu";
     Text[ thai ] = "เซลล์สกุลเงินในแ~ผ่นงานปัจจุบัน";
+    Text[ czech ] = "Buňky z aktuálního listu, které mají formát měny";
+    Text[ hebrew ] = "‮תאי מטבע בגליון הנוכחי‬";
+    Text[ hindi ] = "वर्तमान ~शीट् का मुद्रा कोष्ठें";
 };
 
 String STEP_CONVERTER + 4
@@ -434,8 +473,8 @@ Text[ english_us ] = "Currency cells in the entire ~document";
     Text[ italian ] = "Celle della valuta nell'intero documento";
     Text[ danish ] = "Valutaceller i hele ~dokumentet";
     Text[ swedish ] = "Valutaceller i hela ~dokumentet";
-    Text[ polish ] = "Kom�rki waluty w ca�ym ~dokumencie";
-    Text[ portuguese_brazilian ] = "Currency Cells in the entire ~Document";
+    Text[ polish ] = "Kom�rki walutowe w ca�ym ~dokumencie";
+    Text[ portuguese_brazilian ] = "C�lulas monet�rias no ~documento inteiro";
     Text[ japanese ] = "全ドキュメントの通貨セル(~D)";
     Text[ korean ] = "전체 문서의 통화 셀(~D)";
     Text[ chinese_simplified ] = "整个文档中的货币单元格(~D)";
@@ -445,6 +484,9 @@ Text[ english_us ] = "Currency cells in the entire ~document";
     Text[ finnish ] = "Koko ~asiakirjan valuuttasolut";
     Text[ catalan ] = "Cel.les monet�ries de tot el ~document";
     Text[ thai ] = "เซลล์สกุลเงินในทั้งเ~อกสาร";
+    Text[ czech ] = "Buňky z celého sešitu, které mají formát měny";
+    Text[ hebrew ] = "‮תאי מטבע במסמך כולו‬";
+    Text[ hindi ] = "सम्पूर्ण ~लेखपत्र का मुद्रा कोष्ठें";
 };
 
 String STEP_CONVERTER + 5
@@ -461,17 +503,20 @@ Text[ english_us ] = "~Selected range";
     Text[ italian ] = "Area selezionata";
     Text[ danish ] = "~Markeret omr�de";
     Text[ swedish ] = "~Utvalt omr�de";
-    Text[ polish ] = "~Zaznaczony obszar";
-    Text[ portuguese_brazilian ] = "~Selected Range";
+    Text[ polish ] = "~Zaznaczony zakres";
+    Text[ portuguese_brazilian ] = "~Intervalo selecionado";
     Text[ japanese ] = "選択した範囲(~S)";
     Text[ korean ] = "선택된 범위(~S)";
     Text[ chinese_simplified ] = "选中的区域(~S)";
     Text[ chinese_traditional ] = "選中的區域(~S)";
     Text[ arabic ] = "~������ ������";
-    Text[ turkish ] = "Se�ilen aral�k";
+    Text[ turkish ] = "~Se�ilen aral�k";
     Text[ finnish ] = "~Valittu alue";
     Text[ catalan ] = "�rea ~seleccionada";
     Text[ thai ] = "เ~ลือกช่วง";
+    Text[ czech ] = "Vybranou oblast";
+    Text[ hebrew ] = "‮טווח נבחר‬";
+    Text[ hindi ] = "~चुना हुआ फैलाव";
 };
 
 String STEP_CONVERTER + 6
@@ -489,7 +534,7 @@ Text[ english_us ] = "Select Cell Styles";
     Text[ danish ] = "V�lg celletypografier:";
     Text[ swedish ] = "V�lj ut cellmallar";
     Text[ polish ] = "Wybierz style kom�rki:";
-    Text[ portuguese_brazilian ] = "Select Celltemplates";
+    Text[ portuguese_brazilian ] = "Selecione os Estilos de C�lulas";
     Text[ japanese ] = "セルスタイルの選択:";
     Text[ korean ] = "셀 스타일 선택:";
     Text[ chinese_simplified ] = "选择单元格样式：";
@@ -499,6 +544,9 @@ Text[ english_us ] = "Select Cell Styles";
     Text[ finnish ] = "Valitse solutyylit";
     Text[ catalan ] = "Seleccioneu els estils de cel.la:";
     Text[ thai ] = "เลือกลักษณะเซลล์";
+    Text[ czech ] = "Vybrat formát buněk";
+    Text[ hebrew ] = "‮בחירת סגנונות תאים‬";
+    Text[ hindi ] = "कोष्ठ शैलियों को चुनो";
 };
 
 String STEP_CONVERTER + 7
@@ -515,8 +563,8 @@ Text[ english_us ] = "Select currency cells";
     Text[ italian ] = "Seleziona celle della valuta";
     Text[ danish ] = "V�lg valutaceller:";
     Text[ swedish ] = "V�lj ut valutaceller:";
-    Text[ polish ] = "Wybierz kom�rki waluty:";
-    Text[ portuguese_brazilian ] = "Select Currency Cells";
+    Text[ polish ] = "Zaznacz kom�rki waluty:";
+    Text[ portuguese_brazilian ] = "Selecione as c�lulas monet�rias";
     Text[ japanese ] = "通貨セルの選択:";
     Text[ korean ] = "통화 셀 선택";
     Text[ chinese_simplified ] = "选择货币单元格：";
@@ -526,6 +574,9 @@ Text[ english_us ] = "Select currency cells";
     Text[ finnish ] = "Valitse valuuttasolut";
     Text[ catalan ] = "Seleccioneu les cel.les monet�ries:";
     Text[ thai ] = "เลือกเซลล์สกุลเงิน";
+    Text[ czech ] = "Vybrat buňky, které mají formát měny";
+    Text[ hebrew ] = "‮בחירת תאי מטבע‬";
+    Text[ hindi ] = "मुद्रा कोष्ठों को चुनो";
 };
 
 String STEP_CONVERTER + 8
@@ -542,8 +593,8 @@ Text[ english_us ] = "Currency ranges:";
     Text[ italian ] = "Aree valuta";
     Text[ danish ] = "Valutaomr�der:";
     Text[ swedish ] = "Valutaomr�den:";
-    Text[ polish ] = "Obszary waluty:";
-    Text[ portuguese_brazilian ] = "Currency Ranges";
+    Text[ polish ] = "Zakresy walutowe:";
+    Text[ portuguese_brazilian ] = "Intervalos monet�rios:";
     Text[ japanese ] = "通貨範囲:";
     Text[ korean ] = "통화 범위:";
     Text[ chinese_simplified ] = "货币区域：";
@@ -553,6 +604,9 @@ Text[ english_us ] = "Currency ranges:";
     Text[ finnish ] = "Valuutta-alueet:";
     Text[ catalan ] = "�rees monet�ries:";
     Text[ thai ] = "ช่วงสกุลเงิน:";
+    Text[ czech ] = "Rozsahy peněžních částek";
+    Text[ hebrew ] = "‮טווח מטבע:‬";
+    Text[ hindi ] = "मुद्रा फैलाव:";
 };
 
 String STEP_CONVERTER + 9
@@ -569,8 +623,8 @@ Text[ english_us ] = "Templates:";
     Text[ italian ] = "Modelli:";
     Text[ danish ] = "Typografier:";
     Text[ swedish ] = "Mallar:";
-    Text[ polish ] = "Style:";
-    Text[ portuguese_brazilian ] = "Templates:";
+    Text[ polish ] = "Szablony:";
+    Text[ portuguese_brazilian ] = "Modelos:";
     Text[ japanese ] = "スタイル:";
     Text[ korean ] = "서식 파일:";
     Text[ chinese_simplified ] = "样式：";
@@ -580,6 +634,9 @@ Text[ english_us ] = "Templates:";
     Text[ finnish ] = "Mallit:";
     Text[ catalan ] = "Plantilles:";
     Text[ thai ] = "แม่แบบ:";
+    Text[ czech ] = "Šablony:";
+    Text[ hebrew ] = "‮תבניות:‬";
+    Text[ hindi ] = "नमूनें:";
 };
 
 
@@ -598,7 +655,7 @@ Text[ english_us ] = "Extent";
     Text[ danish ] = "Omfang";
     Text[ swedish ] = "Omfattning";
     Text[ polish ] = "Zakres";
-    Text[ portuguese_brazilian ] = "~Extent";
+    Text[ portuguese_brazilian ] = "Extens�o";
     Text[ japanese ] = "範囲";
     Text[ korean ] = "범위";
     Text[ chinese_simplified ] = "范围";
@@ -608,6 +665,9 @@ Text[ english_us ] = "Extent";
     Text[ finnish ] = "Raja";
     Text[ catalan ] = "Abast";
     Text[ thai ] = "ขอบเขต";
+    Text[ czech ] = "Konvertovat";
+    Text[ hebrew ] = "‮היקף‬";
+    Text[ hindi ] = "विस्तार";
 };
 
 String STEP_AUTOPILOT + 1
@@ -624,17 +684,20 @@ Text[ english_us ] = "~Single %PRODUCTNAME Calc document";
     Text[ italian ] = "~Documento singolo %PRODUCTNAME";
     Text[ danish ] = "~Enkelt %PRODUCTNAME -dokument";
     Text[ swedish ] = "~Enskilt %PRODUCTNAME-dokument";
-    Text[ polish ] = "~Pojedynczy dokument %PRODUCTNAME";
-    Text[ portuguese_brazilian ] = "~Single File";
+    Text[ polish ] = "Pojedynczy d~okument programu %PRODUCTNAME Calc";
+    Text[ portuguese_brazilian ] = "~Documento individual do %PRODUCTNAME Calc";
     Text[ japanese ] = "１つの %PRODUCTNAME ドキュメント(~S)";
     Text[ korean ] = "개별 %PRODUCTNAME Calc 문서(~S)";
     Text[ chinese_simplified ] = "单个 %PRODUCTNAME 文档(~S)";
     Text[ chinese_traditional ] = "單個 %PRODUCTNAME 文件(~S)";
     Text[ arabic ] = "~��� %PRODUCTNAME Calc ����";
-    Text[ turkish ] = "~Tek %PRODUCTNAME Calc belgesi";
+    Text[ turkish ] = "~Tekli %PRODUCTNAME Calc Belgesi";
     Text[ finnish ] = "~Yksi %PRODUCTNAME Calc -asiakirja";
     Text[ catalan ] = "~Un fitxer d'%PRODUCTNAME Calc";
     Text[ thai ] = "เอกสาร %PRODUCTNAME Calc เท่า~นั้น";
+    Text[ czech ] = "Samostatný soubor %PRODUCTNAME";
+    Text[ hebrew ] = "‮קובץ %PRODUCTNAME calc יחיד‬";
+    Text[ hindi ] = "~अकेला %PRODUCTNAME गणना लेखपत्र";
 };
 
 String STEP_AUTOPILOT + 2
@@ -652,7 +715,7 @@ Text[ english_us ] = "Complete ~directory";
     Text[ danish ] = "Hele ~biblioteket";
     Text[ swedish ] = "H~ela katalogen";
     Text[ polish ] = "~Ca�y katalog";
-    Text[ portuguese_brazilian ] = "Complete ~Directory";
+    Text[ portuguese_brazilian ] = "Diret�rio ~inteiro";
     Text[ japanese ] = "全ディレクトリ(~D)";
     Text[ korean ] = "전체 디렉토리(~D)";
     Text[ chinese_simplified ] = "全部的目录(~D)";
@@ -662,6 +725,9 @@ Text[ english_us ] = "Complete ~directory";
     Text[ finnish ] = "Koko ~hakemisto";
     Text[ catalan ] = "Completa el ~Directori";
     Text[ thai ] = "ไ~ดเร็กทอรี่ที่สมบูรณ์";
+    Text[ czech ] = "Celý adresář";
+    Text[ hebrew ] = "‮ספריה שלמה‬";
+    Text[ hindi ] = "सम्पूर्ण ~डैरक्टरी";
 };
 
 String STEP_AUTOPILOT + 3
@@ -679,7 +745,7 @@ Text[ english_us ] = "Source Document:";
     Text[ danish ] = "Kildedokument:";
     Text[ swedish ] = "K�lldokument:";
     Text[ polish ] = "Dokument �r�d�owy:";
-    Text[ portuguese_brazilian ] = "Source File:";
+    Text[ portuguese_brazilian ] = "Documento de Origem:";
     Text[ japanese ] = "ソース ドキュメント:";
     Text[ korean ] = "원본 문서:";
     Text[ chinese_simplified ] = "源文档：";
@@ -689,6 +755,9 @@ Text[ english_us ] = "Source Document:";
     Text[ finnish ] = "L�hdeasiakirja:";
     Text[ catalan ] = "Document font:";
     Text[ thai ] = "แหล่งเอกสาร:";
+    Text[ czech ] = "Dokument ke konverzi:";
+    Text[ hebrew ] = "‮קובץ מקור:‬";
+    Text[ hindi ] = "मूल लेखपत्र:";
 };
 
 String STEP_AUTOPILOT + 4
@@ -706,7 +775,7 @@ Text[ english_us ] = "Source directory:";
     Text[ danish ] = "Kildebibliotek:";
     Text[ swedish ] = "K�llkatalog:";
     Text[ polish ] = "Katalog �r�d�owy:";
-    Text[ portuguese_brazilian ] = "Source Directory:";
+    Text[ portuguese_brazilian ] = "Diret�rio de origem:";
     Text[ japanese ] = "ソース ディレクトリ:";
     Text[ korean ] = "원본 디렉토리:";
     Text[ chinese_simplified ] = "源目录：";
@@ -716,6 +785,9 @@ Text[ english_us ] = "Source directory:";
     Text[ finnish ] = "L�hdehakemisto:";
     Text[ catalan ] = "Directori font:";
     Text[ thai ] = "แหล่งไดเร็กทอรี่:";
+    Text[ czech ] = "Adresář ke konverzi:";
+    Text[ hebrew ] = "‮ספרית מקור:‬";
+    Text[ hindi ] = "मूल डैरक्टरी:";
 };
 
 String STEP_AUTOPILOT + 5
@@ -732,8 +804,8 @@ Text[ english_us ] = "~Including subfolders";
     Text[ italian ] = "Comprese le sottocartelle";
     Text[ danish ] = "~Inklusive underbiblioteker";
     Text[ swedish ] = "~Inklusive undermappar";
-    Text[ polish ] = "~��cznie z katalogami podrz�dn.";
-    Text[ portuguese_brazilian ] = "~Including Subfolders";
+    Text[ polish ] = "��cz~nie z podkatalogami";
+    Text[ portuguese_brazilian ] = "Incluindo ~sub pastas";
     Text[ japanese ] = "サブフォルダも含む(~I)";
     Text[ korean ] = "하위 폴더 포함(~I)";
     Text[ chinese_simplified ] = "包括子目录(~I)";
@@ -743,6 +815,9 @@ Text[ english_us ] = "~Including subfolders";
     Text[ finnish ] = "My~�s alikansiot";
     Text[ catalan ] = "~Inclou les subcarpetes";
     Text[ thai ] = "~รวมโฟลเดอร์ย่อย";
+    Text[ czech ] = "Včetně podadresářů";
+    Text[ hebrew ] = "‮כולל תתי-ספריות‬";
+    Text[ hindi ] = "अधीन कोष्ठों को ~सम्मिलित करना";
 };
 
 String STEP_AUTOPILOT + 6
@@ -760,7 +835,7 @@ Text[ english_us ] = "Target directory:";
     Text[ danish ] = "M�lbibliotek:";
     Text[ swedish ] = "M�lmapp";
     Text[ polish ] = "Katalog docelowy:";
-    Text[ portuguese_brazilian ] = "Target Directory";
+    Text[ portuguese_brazilian ] = "Diret�rio de destino:";
     Text[ japanese ] = "ターゲット ディレクトリ:";
     Text[ korean ] = "대상 디렉토리:";
     Text[ chinese_simplified ] = "目标目录：";
@@ -770,6 +845,9 @@ Text[ english_us ] = "Target directory:";
     Text[ finnish ] = "Kohdehakemisto:";
     Text[ catalan ] = "Directori dest�:";
     Text[ thai ] = "ไดเร็กทอรี่เป้าหมาย";
+    Text[ czech ] = "Cílový adresář:";
+    Text[ hebrew ] = "‮ספרית יעד:‬";
+    Text[ hindi ] = "लक्ष्य डैरक्टरी:";
 };
 
 
@@ -788,7 +866,7 @@ Text[ english_us ] = "Temporarily unprotect sheet without query";
     Text[ danish ] = "Oph�v arkbeskyttelse midlertidig uden forsp�rgsel";
     Text[ swedish ] = "Upph�v tabellskydd tempor�rt utan s�kerhetsfr�ga";
     Text[ polish ] = "Znie� tymczasowo ochron� arkusza bez uprzedniego potwierdzenia";
-    Text[ portuguese_brazilian ] = "Always raise Sheet Protection";
+    Text[ portuguese_brazilian ] = "Desproteger a planilha temporariamente sem consultar";
     Text[ japanese ] = "一時的に確認なしで表の保護を解除";
     Text[ korean ] = "시트 보호를 일시적으로 조회 없이 해제";
     Text[ chinese_simplified ] = "不需确认直接暂时取消表格保护";
@@ -798,6 +876,9 @@ Text[ english_us ] = "Temporarily unprotect sheet without query";
     Text[ finnish ] = "Poista taulukoiden suojaus v�liaikaisesti ilman kysely�";
     Text[ catalan ] = "Full desprotegit temporalment sense consulta";
     Text[ thai ] = "แผ่นงานที่ไม่ป้องกันแบบชั่วคราวที่ไม่มีแบบสอบถาม";
+    Text[ czech ] = "Dočasně odemkni listy bez dalších dotazů";
+    Text[ hebrew ] = "‮הסרת הגנה על גליון באופן זמני ללא הצגת שאלה‬";
+    Text[ hindi ] = "जानकारी के बिना कुछ समय केलिए शीट् को अरक्षित करो";
 };
 
 
@@ -809,7 +890,7 @@ Text[ english_us ] = "Also convert fields and tables in text documents";
 Text[ language_user1 ] = "Label einer Checkbox";
     Text[ portuguese ] = "Converter tamb�m campos e tabelas em documentos de texto.";
     Text[ russian ] = "�������������� ���� � ������� ���������� ���������";
-    Text[ greek ] = "Also convert Fields and Tables in Text Documents";
+    Text[ greek ] = "Also convert fields and tables in text documents";
     Text[ dutch ] = "Ook veldopdrachten en tabellen in tekstdocumenten converteren.";
     Text[ french ] = "Conversion �galement pour les champs et les tables des textes.";
     Text[ spanish ] = "Convertir tambi�n campos y tablas en documentos de texto.";
@@ -818,15 +899,18 @@ Text[ language_user1 ] = "Label einer Checkbox";
     Text[ danish ] = "Konverter ogs� felter og tabeller i tekstdokumenter";
     Text[ swedish ] = "Konvertera �ven f�ltkommandon och tabeller i textdokument";
     Text[ polish ] = "Konwertuj r�wnie� pola i tabele w dokumentach tekstowych";
-    Text[ portuguese_brazilian ] = "Also convert Fields and Tables in Text Documents";
+    Text[ portuguese_brazilian ] = "Converter tamb�m campos e tabelas em documentos de texto";
     Text[ japanese ] = "文書ドキュメントのフィールドと表も変換";
     Text[ korean ] = "텍스트 문서의 필드와 테이블도 변환";
     Text[ chinese_simplified ] = "也转换文本文档之中的字段指令和表格";
     Text[ chinese_traditional ] = "也轉換文字文件之中的欄位指令和表格";
-    Text[ turkish ] = "Also convert Fields and Tables in Text Documents";
-    Text[ arabic ] = "Also convert Fields and Tables in Text Documents";
+    Text[ turkish ] = "Metin belgedeki alan ve tablolar� da d�n��t�r";
+    Text[ arabic ] = "Also convert fields and tables in text documents";
     Text[ catalan ] = "Converteix camps i taules de documents de text";
     Text[ thai ] = "แปลงเขตข้อมูลและตารางในเอกสารข้อความด้วย";
+    Text[ czech ] = "Převést i pole a tabulky v textových dokumentech";
+    Text[ hebrew ] = "‮כולל תרגום שדות וטבלאות במסמכי טקסט‬";
+    Text[ hindi ] = "टेक्स्ट् लेखपत्र में क्षेत्रों को और सारणियों को बदलो";
 };
 
 
@@ -844,17 +928,20 @@ Text[ english_us ] = "Conversion status: ";
     Text[ italian ] = "Stato conversione: ";
     Text[ danish ] = "Konverteringsstatus: ";
     Text[ swedish ] = "Konverteringsframsteg:  ";
-    Text[ polish ] = "Progres w konwersji:";
-    Text[ portuguese_brazilian ] = "Progress of the Conversion";
+    Text[ polish ] = "Stan konwersji:";
+    Text[ portuguese_brazilian ] = "Status da convers�o:";
     Text[ japanese ] = "変換ステータス: ";
     Text[ korean ] = "변환 상태: ";
     Text[ chinese_simplified ] = "转换状态： ";
     Text[ chinese_traditional ] = "轉換進展： ";
     Text[ arabic ] = "������ �� ����� �������: ";
-    Text[ turkish ] = "D�n��t�rme geli�imi:";
+    Text[ turkish ] = "D�n��t�rme durumu:";
     Text[ finnish ] = "Muunnon tila: ";
     Text[ catalan ] = "Progr�s de conversi�: ";
     Text[ thai ] = "การแปลงสถานะ: ";
+    Text[ czech ] = "Stav konverze:";
+    Text[ hebrew ] = "‮מצב המרה: ‬";
+    Text[ hindi ] = "परिवर्तन वस्तुस्थिति: ";
 };
 
 String STATUSLINE + 1
@@ -871,17 +958,20 @@ Text[ english_us ] = "Conversion status of the cell templates:";
     Text[ italian ] = "Stato conversione per i modelli di cella:";
     Text[ danish ] = "Celletypografiernes konverteringsstatus:";
     Text[ swedish ] = "Konverteringsframsteg f�r cellformatmallarna";
-    Text[ polish ] = "Progres w konwersji dot. styl�w kom�rki";
-    Text[ portuguese_brazilian ] = "Progress Of The Conversion of The Celltemplates";
+    Text[ polish ] = "Stan konwersji szablon�w kom�rek:";
+    Text[ portuguese_brazilian ] = "Status da convers�o dos modelos de c�lulas:";
     Text[ japanese ] = "セルスタイルの変換ステータス:";
     Text[ korean ] = "셀 서식 파일의 변환 상태:";
     Text[ chinese_simplified ] = "单元格样式的转换状态";
     Text[ chinese_traditional ] = "儲存格樣式的轉換進展";
     Text[ arabic ] = "������ ������ �� ����� ����� ����� �������:";
-    Text[ turkish ] = "H�cre �ablonlar�n�n d�n��t�rme geli�imi:";
+    Text[ turkish ] = "H�cre �ablonlar�n�n d�n��t�rme durumu:";
     Text[ finnish ] = "Solumallien muuntotila:";
     Text[ catalan ] = "Progr�s de conversi� per estils de cel.les:";
     Text[ thai ] = "การแปลงสถานะของแม่แบบเซลล์:";
+    Text[ czech ] = "Stav konverze šablon buněk:";
+    Text[ hebrew ] = "‮מצב המרת תבניות התאים:‬";
+    Text[ hindi ] = "कोष्ठ नमूने का परिवर्तन वस्तुस्थिति:";
 };
 
 String STATUSLINE + 2
@@ -898,8 +988,8 @@ Text[ english_us ] = "Registration of the relevant ranges: Sheet %1Number%1 of %
     Text[ italian ] = "Rilevamento delle aree da considerare. pagina %1Number%1 di %2TotPageCount%2";
     Text[ danish ] = "Registrerer de relevante omr�der: Ark %1Number%1 af %2TotPageCount%2";
     Text[ swedish ] = "Best�mning av omr�dena som skall r�knas om: Ark %1Number%1 av %2TotPageCount%2";
-    Text[ polish ] = "Uj�cie obszar�w do przeliczenia: Strona %1Number%1 z %2TotPageCount%2";
-    Text[ portuguese_brazilian ] = "Surveying the relevant Ranges...";
+    Text[ polish ] = "Rejestracja odpowiednich zakres�w: Strona %1Number%1 z %2TotPageCount%2";
+    Text[ portuguese_brazilian ] = "Registro dos intervalos relevantes: Planilha %1N�mero%1 de %2TotPageCount%2";
     Text[ japanese ] = "換算する範囲の登録: %2TotPageCount%2 の表 %1Number%1 ";
     Text[ korean ] = "환산할 범위 등록: %2TotPageCount%2의 시트 %1Number%1";
     Text[ chinese_simplified ] = "纳入换算的区域：工作簿 %2TotPageCount%2 内的 %1Number%1";
@@ -909,6 +999,9 @@ Text[ english_us ] = "Registration of the relevant ranges: Sheet %1Number%1 of %
     Text[ finnish ] = "Merkitsevien alueiden rekister�inti: Taulukko %1Number%1 / %2TotPageCount%2";
     Text[ catalan ] = "Registre de les �rees per calcular: Full %1Number%1 de %2TotPageCount%2 .";
     Text[ thai ] = "การลงทะเบียนของช่วงที่สัมพันธ์กัน: แผ่นงาน %1หมายเลข%1 ของ %2TotPageCount%2";
+    Text[ czech ] = "Zadání příslušného rozsahu: List %1 Číslo %1 z %2 Celkem stran %2";
+    Text[ hebrew ] = "‮רישום טווחים לעניין: %1Number%1 מתוך %2TotPageCount%2‬";
+    Text[ hindi ] = "अनुरूप फैलाव की रजिस्टरी: शीट् %1Number%1 का %2TotPageCount%2";
 };
 
 
@@ -926,8 +1019,8 @@ Text[ english_us ] = "Entry of the ranges to be converted...";
     Text[ italian ] = "Rilevamento delle aree da calcolare...";
     Text[ danish ] = "Registrerer de relevante omr�der...";
     Text[ swedish ] = "Best�mning av omr�dena som skall r�knas om...";
-    Text[ polish ] = "Uj�cie obszar�w do przeliczenia...";
-    Text[ portuguese_brazilian ] = "Converting the Currencyunits in the Celltemplates...";
+    Text[ polish ] = "Wprowadzanie zakres�w do konwersji...";
+    Text[ portuguese_brazilian ] = "Entrada dos intervalos a converter...";
     Text[ japanese ] = "換算する範囲の登録...";
     Text[ korean ] = "변환할 범위 항목...";
     Text[ chinese_simplified ] = "纳入换算的区域...";
@@ -937,6 +1030,9 @@ Text[ english_us ] = "Entry of the ranges to be converted...";
     Text[ finnish ] = "Muunnettavien alueiden sy�tt�minen...";
     Text[ catalan ] = "Registre de les �rees per calcular...";
     Text[ thai ] = "รายการของช่วงที่จะถูกแปลง...";
+    Text[ czech ] = "Zadání rozsahu ke konverzi...";
+    Text[ hebrew ] = "‮הכנסת טווחים להמרה...‬";
+    Text[ hindi ] = "फैलाव की प्रविष्टि को बदलना चाहिए...";
 };
 
 
@@ -955,18 +1051,21 @@ Text[ english_us ] = "Sheet protection for each sheet will be restored...";
     Text[ italian ] = "Protezione tabella in corso di ripristinamento...";
     Text[ danish ] = "Hver enkelt tabelbeskyttelse oprettes igen...";
     Text[ swedish ] = "Varje enskilt tabellskydd �terst�lls igen...";
-    Text[ polish ] = "Pojedyncze funkcje ochrony arkuszy zostan� odnowione...";
-    Text[ portuguese_brazilian ] = "Sheets are reprotected...";
+    Text[ polish ] = "Zostanie przywr�cona ochrona poszczeg�lnych arkuszy...";
+    Text[ portuguese_brazilian ] = "A prote��o de cada planilha ser� restaurada...";
     Text[ japanese ] = "それぞれの表が再び保護されます...";
     Text[ korean ] = "모든 시트에 적용된 보호가 개별로 다시 복구됩니다...";
     Text[ chinese_simplified ] = "重新恢复每个表格的保护...";
     Text[ chinese_traditional ] = "重新恢复每個表格的保護區域。";
     Text[ arabic ] = "����� ����� ����� �������...";
     Text[ language_user1 ] = " ";
-    Text[ turkish ] = "Tablo korumalar� yeniden olu�turulacak...";
+    Text[ turkish ] = "Her yaprak i�in yaprak korumas� tekrar olu�turulacak...";
     Text[ finnish ] = "Kunkin taulukon suojaus palautetaan...";
     Text[ catalan ] = "Es tornaran a crear les proteccions de taules";
     Text[ thai ] = "การป้องกันแผ่นงานในแต่ละแผ่นงานจะถูกคืนสภาพ...";
+    Text[ czech ] = "Uzamčení jednotlivých listů je obnovováno...";
+    Text[ hebrew ] = "‮הגנת הגליונות תוחזר...‬";
+    Text[ hindi ] = "हरेक शीट् केलिए शीट् की रक्षा को पूर्व अवस्था में पहुँचा सकते है...";
 };
 
 
@@ -984,8 +1083,8 @@ Text[ english_us ] = "Conversion of the currency units in the cell templates..."
     Text[ italian ] = "Conversione delle unit� di misura nei modelli di cella.";
     Text[ danish ] = "Konverterer valutaenhederne i celletypografierne...";
     Text[ swedish ] = "Konvertering av valutaenheterna i cellformatmallarna...";
-    Text[ polish ] = "Konwersja jednostek waluty w stylach kom�rki...";
-    Text[ portuguese_brazilian ] = "Converting the Currencyunits in the Celltemplates...";
+    Text[ polish ] = "Konwersja jednostek walutowych w szablonach kom�rek...";
+    Text[ portuguese_brazilian ] = "Convers�o das unidades monet�rias nos modelos de c�lulas...";
     Text[ japanese ] = "通貨単位を次のセルスタイルに変換...";
     Text[ korean ] = "셀 서식 파일로 통화 단위 변환...";
     Text[ chinese_simplified ] = "单元格样式中货币单位的转换...";
@@ -995,6 +1094,9 @@ Text[ english_us ] = "Conversion of the currency units in the cell templates..."
     Text[ finnish ] = "Solumallien valuuttayksikk�jen muunto...";
     Text[ catalan ] = "Conversi� d'unitats monet�ries en estils de cel.les...";
     Text[ thai ] = "การแปลงของหน่วยสกุลเงินในแม่แบบเซลล์...";
+    Text[ czech ] = "Převod měnových jednotek v buňkách šablon...";
+    Text[ hebrew ] = "‮המרת מטבע בתבניות התאים...‬";
+    Text[ hindi ] = "कोष्ठ नमूनें में मुद्रा यूनिट् का परिवर्तन...";
 };
 
 
@@ -1013,18 +1115,21 @@ Text[ english_us ] = "~Finish";
     Text[ italian ] = "...fine!";
     Text[ danish ] = "~F�rdig";
     Text[ swedish ] = "~F�rdig";
-    Text[ polish ] = "Gotowe!";
-    Text[ portuguese_brazilian ] = "Ready";
+    Text[ polish ] = "~Zako�cz";
+    Text[ portuguese_brazilian ] = "~Concluir";
     Text[ japanese ] = "完了(~F)";
     Text[ korean ] = "완료(~F)";
     Text[ chinese_simplified ] = "完成(~F)";
     Text[ chinese_traditional ] = "完成(~F)";
     Text[ arabic ] = "...��!";
-    Text[ turkish ] = "Bitti!";
+    Text[ turkish ] = "~Bitti!";
     Text[ finnish ] = "~Valmis";
     Text[ language_user1 ] = "Statt in einer Msgbox taucht dieser String jetzt im Label eines Buttons auf";
     Text[ catalan ] = "Finalitzat";
     Text[ thai ] = "เสร็จสิ้น!";
+    Text[ czech ] = "Dokončit";
+    Text[ hebrew ] = "‮סיום‬";
+    Text[ hindi ] = "~समाप्ती";
 };
 
 String MESSAGES + 1
@@ -1042,7 +1147,7 @@ Text[ english_us ] = "Select directory";
     Text[ danish ] = "V�lg et bibliotek";
     Text[ swedish ] = "V�lj en mapp";
     Text[ polish ] = "Wybierz katalog";
-    Text[ portuguese_brazilian ] = "Select a Directory";
+    Text[ portuguese_brazilian ] = "Selecionar diret�rio";
     Text[ japanese ] = "ディレクトリを選択します。";
     Text[ korean ] = "디렉토리를 선택하십시오.";
     Text[ chinese_simplified ] = "请选择一个目录";
@@ -1053,6 +1158,9 @@ Text[ english_us ] = "Select directory";
     Text[ finnish ] = "Valitse hakemisto";
     Text[ catalan ] = "Seleccioneu el directori";
     Text[ thai ] = "เลือกไดเร็กทอรี่";
+    Text[ czech ] = "Vybrat adresář";
+    Text[ hebrew ] = "‮בחירת ספריה‬";
+    Text[ hindi ] = "डैरक्टरी चुनो";
 };
 
 String MESSAGES + 2
@@ -1070,7 +1178,7 @@ Text[ english_us ] = "Select file";
     Text[ danish ] = "V�lg en fil";
     Text[ swedish ] = "V�lj en fil";
     Text[ polish ] = "Wybierz plik";
-    Text[ portuguese_brazilian ] = "Select a File";
+    Text[ portuguese_brazilian ] = "Selecionar arquivo";
     Text[ japanese ] = "ファイルを選択します。";
     Text[ korean ] = "파일을 선택하십시오.";
     Text[ chinese_simplified ] = "请选择一个文件";
@@ -1081,6 +1189,9 @@ Text[ english_us ] = "Select file";
     Text[ finnish ] = "Valitse tiedosto";
     Text[ catalan ] = "Seleccioneu el fitxer";
     Text[ thai ] = "เลือกแฟ้ม";
+    Text[ czech ] = "Vybrat soubor";
+    Text[ hebrew ] = "‮בחירת קובץ‬";
+    Text[ hindi ] = "फाइल चुनो";
 };
 
 String MESSAGES + 3
@@ -1098,7 +1209,7 @@ Text[ english_us ] = "Select target directory";
     Text[ danish ] = "V�lg m�lbiblioteket";
     Text[ swedish ] = "V�lj m�lmappen";
     Text[ polish ] = "Wybierz katalog docelowy";
-    Text[ portuguese_brazilian ] = "Select the Targetdirectory";
+    Text[ portuguese_brazilian ] = "Selecionar o diret�rio de destino";
     Text[ japanese ] = "ターゲットディレクトリを選択します。";
     Text[ korean ] = "대상 디렉토리를 선택하십시오.";
     Text[ chinese_simplified ] = "请选择一个目标目录";
@@ -1108,6 +1219,9 @@ Text[ english_us ] = "Select target directory";
     Text[ finnish ] = "Valitse kohdehakemisto";
     Text[ catalan ] = "Seleccioneu el directori de dest�";
     Text[ thai ] = "เลือกไดเร็กทอรี่เป้าหมาย";
+    Text[ czech ] = "Vybrat cílový adresář";
+    Text[ hebrew ] = "‮בחירת ספרית יעד‬";
+    Text[ hindi ] = "लक्ष्य डैरक्टरी चुनो";
 };
 
 String MESSAGES + 4
@@ -1125,7 +1239,7 @@ Text[ english_us ] = "non-existant";
     Text[ danish ] = "eksisterer ikke";
     Text[ swedish ] = "finns ej";
     Text[ polish ] = "nie istnieje";
-    Text[ portuguese_brazilian ] = "not there";
+    Text[ portuguese_brazilian ] = "inexistente";
     Text[ japanese ] = "ありません";
     Text[ korean ] = "없음";
     Text[ chinese_simplified ] = "不存在";
@@ -1135,6 +1249,9 @@ Text[ english_us ] = "non-existant";
     Text[ finnish ] = "ei olemassa";
     Text[ catalan ] = "no existent";
     Text[ thai ] = "ไม่มีอยู่";
+    Text[ czech ] = "neexistuje";
+    Text[ hebrew ] = "‮לא קיים‬";
+    Text[ hindi ] = "अस्तित्व हीन";
 };
 
 
@@ -1153,7 +1270,7 @@ Text[ english_us ] = "Euro Converter";
     Text[ danish ] = "Euro-konverter";
     Text[ swedish ] = "Eurokonverterare";
     Text[ polish ] = "Konwerter Euro";
-    Text[ portuguese_brazilian ] = "Euro-Converter";
+    Text[ portuguese_brazilian ] = "Conversor Euro";
     Text[ japanese ] = "ユーロ通貨換算";
     Text[ korean ] = "유로 변환기";
     Text[ chinese_simplified ] = "欧元换算器";
@@ -1163,6 +1280,9 @@ Text[ english_us ] = "Euro Converter";
     Text[ finnish ] = "Euromuunnin";
     Text[ catalan ] = "Convertidor d'euros";
     Text[ thai ] = "ตัวแปลงเงินยูโร";
+    Text[ czech ] = "Eurokonvertor";
+    Text[ hebrew ] = "‮המרה לאירו‬";
+    Text[ hindi ] = "यूरो में बदलनेवाला";
 };
 
 
@@ -1181,17 +1301,20 @@ Text[ english_us ] = "Should protected spreadsheets be temporarily unprotected?"
     Text[ italian ] = "Volete disattivare temporaneamente la protezione da tutte le celle?";
     Text[ danish ] = "Skal beskyttelsen oph�ves midlertidigt for alle ark?";
     Text[ swedish ] = "Skall skyddet f�r alla tabeller upph�vas tempor�rt?";
-    Text[ polish ] = "Czy ochrona chronionych arkuszy ma by� tymczasowo zniesiona?";
-    Text[ portuguese_brazilian ] = "Shall protected Sheets be temporarily unprotected?";
+    Text[ polish ] = "Czy ochrona arkuszy ma by� tymczasowo zniesiona?";
+    Text[ portuguese_brazilian ] = "As planilhas podem ser desprotegidas temporariamente?";
     Text[ japanese ] = "すべての表の保護を一時的に解除しますか。";
     Text[ korean ] = "모든 스프레드시트의 보호를 일시적으로 해제하시겠습니까?";
     Text[ chinese_simplified ] = "要对受保护的表格暂时取消保护吗？";
     Text[ chinese_traditional ] = "要暫時取消工作表區域保護？";
     Text[ arabic ] = "�� ���� ����� ����� ������� ���� ���ʿ";
-    Text[ turkish ] = "T�m tablolar�n korumas� ge�ici olarak kald�r�ls�n m�?";
+    Text[ turkish ] = "Korumal� tablolar�n korumas� ge�ici olarak kald�r�ls�n m�?";
     Text[ finnish ] = "Poistetaanko suojattujen laskentataulukoiden suojaus v�liaikaisesti?";
     Text[ catalan ] = "Voleu desprotegir temporalment tots els fulls?";
     Text[ thai ] = "จะป้องกันกระดาษคำนวณเป็นแบบไม่ป้องกันชั่วคราวหรือไม่?";
+    Text[ czech ] = "Mají být zamčené sešity dočasně odemknuty?";
+    Text[ hebrew ] = "‮האם להסיר זמנית את ההגנה מגליונות מוגנות?‬";
+    Text[ hindi ] = "रक्षित स्प्रेडशीटों को कुछ समय केलिए अरक्षित करना है?";
 };
 
 
@@ -1209,8 +1332,8 @@ Text[ english_us ] = "Enter the password to unprotect the table %1TableName%1";
     Text[ italian ] = "Password per togliere la protezione alla tabella %1TableName%1:";
     Text[ danish ] = "Adgangskode til oph�velse af beskyttelsen for arket %1TableName%1:";
     Text[ swedish ] = "L�senord f�r upph�vning av skyddet f�r tabell %1TableName%1:";
-    Text[ polish ] = "Has�o w celu zniesienia ochrony arkusza %1NazwaArkusza%1";
-    Text[ portuguese_brazilian ] = "Surveying the relevant Ranges of the Table %1TableName%1:";
+    Text[ polish ] = "Wprowad� has�o w celu zniesienia ochrony tabeli %1TableName%1";
+    Text[ portuguese_brazilian ] = "Digite a senha para desproteger a tabela %1NomeTabela%1";
     Text[ japanese ] = "表 %1TableName%1 の保護を解除するためのパスワード:";
     Text[ korean ] = "표 %1TableName%1의 보호를 해제하기 위한 암호:";
     Text[ chinese_simplified ] = "请输入密码，取消表格%1TableName%1保护锁定";
@@ -1220,6 +1343,9 @@ Text[ english_us ] = "Enter the password to unprotect the table %1TableName%1";
     Text[ finnish ] = "Anna taulukon %1TableName%1 suojauksen purun salasana";
     Text[ catalan ] = "Contrasenya per desprotegir el full %1TableName%1:";
     Text[ thai ] = "ใส่รหัสผ่านเพื่อไม่ป้องกันตาราง %1TableName%1";
+    Text[ czech ] = "Zadejte heslo k odemknutí tabulky %1 jména %1";
+    Text[ hebrew ] = "‮יש להקיש סיסמה כדי להסיר הגנה מטבלת %1TableName%1‬";
+    Text[ hindi ] = "सारणी %1TableName%1 को अरक्षित करने केलिए कूटशब्द को प्रविष्ट करो";
 };
 
 
@@ -1238,7 +1364,7 @@ Text[ english_us ] = "Wrong Password!";
     Text[ danish ] = "Forkert adgangskode!";
     Text[ swedish ] = "Fel l�senord!";
     Text[ polish ] = "Nieprawid�owe has�o!";
-    Text[ portuguese_brazilian ] = "Wrong Password!";
+    Text[ portuguese_brazilian ] = "Senha incorreta!";
     Text[ japanese ] = "パスワードが正しくありません";
     Text[ korean ] = "암호가 옳지 않습니다.";
     Text[ chinese_simplified ] = "密码无效！";
@@ -1248,6 +1374,9 @@ Text[ english_us ] = "Wrong Password!";
     Text[ finnish ] = "V��r� salasana";
     Text[ catalan ] = "Contrasenya incorrecta!";
     Text[ thai ] = "รหัสผ่านผิด!";
+    Text[ czech ] = "Neplatné heslo!";
+    Text[ hebrew ] = "‮סיסמה שגויה‬";
+    Text[ hindi ] = "गलत कूटशब्द!";
 };
 
 
@@ -1265,8 +1394,8 @@ Text[ english_us ] = "Protected Sheet";
     Text[ italian ] = "Tabella protetta";
     Text[ danish ] = "Bekyttede ark";
     Text[ swedish ] = "Skyddad tabell";
-    Text[ polish ] = "Chronione arkusze";
-    Text[ portuguese_brazilian ] = "Protected Sheet";
+    Text[ polish ] = "Chroniony arkusz";
+    Text[ portuguese_brazilian ] = "Planilha protegida";
     Text[ japanese ] = "保護された表";
     Text[ korean ] = "보호된 시트";
     Text[ chinese_simplified ] = "受保护的表格";
@@ -1276,6 +1405,9 @@ Text[ english_us ] = "Protected Sheet";
     Text[ finnish ] = "Suojattu taulukko";
     Text[ catalan ] = "Full protegit";
     Text[ thai ] = "ป้องกันแผ่นงาน";
+    Text[ czech ] = "Zamknutý list";
+    Text[ hebrew ] = "‮גליון מוגן‬";
+    Text[ hindi ] = "रक्षित शीट्";
 };
 
 
@@ -1294,7 +1426,7 @@ Text[ english_us ] = "Warning!";
     Text[ danish ] = "Advarsel!";
     Text[ swedish ] = "Varning!";
     Text[ polish ] = "Ostrze�enie!";
-    Text[ portuguese_brazilian ] = "Warning!";
+    Text[ portuguese_brazilian ] = "Aviso!";
     Text[ japanese ] = "警告";
     Text[ korean ] = "경고";
     Text[ chinese_simplified ] = "警告！";
@@ -1304,6 +1436,9 @@ Text[ english_us ] = "Warning!";
     Text[ finnish ] = "Varoitus";
     Text[ catalan ] = "Atenci�!";
     Text[ thai ] = "คำเตือน!";
+    Text[ czech ] = "Upozornění!";
+    Text[ hebrew ] = "‮אזהרה!‬";
+    Text[ hindi ] = "चेतावनी!";
 };
 
 
@@ -1322,16 +1457,19 @@ Text[ english_us ] = "Protection for the sheets will not be removed.";
     Text[ danish ] = "Beskyttelsen af tabellerne oph�ves ikke!";
     Text[ swedish ] = "Tabellskydd upph�vs inte!";
     Text[ polish ] = "Ochrona arkuszy nie zostanie zniesiona!";
-    Text[ portuguese_brazilian ] = "Sheets are not protected!";
+    Text[ portuguese_brazilian ] = "A prote��o para as planilhas n�o ser� removida.";
     Text[ japanese ] = "表の保護は解除できません。";
     Text[ korean ] = "데이블 보호는 제거되지 않습니다.";
     Text[ chinese_simplified ] = "无法取消表格的保护！";
     Text[ chinese_traditional ] = "無法取消表格的保護！";
     Text[ arabic ] = "�� ��� ����� ����� �������!";
-    Text[ turkish ] = "Tablolardaki koruma kald�r�lm�yor!";
+    Text[ turkish ] = "Yaprak korumas� silinmeyecek.";
     Text[ finnish ] = "Taulukoiden suojausta ei poisteta.";
     Text[ catalan ] = "Les fulles no es desprotegiran!";
     Text[ thai ] = "การป้องกันแผ่นงานจะไม่ถูกเอาออก";
+    Text[ czech ] = "Listy nebudou odemčeny.";
+    Text[ hebrew ] = "‮הגנת הגליונות לא תוסר.‬";
+    Text[ hindi ] = "शीट् केलिए रक्षा को नहीं हटा सकते है ।";
 };
 
 
@@ -1349,17 +1487,20 @@ Text[ english_us ] = "Sheet cannot be unprotected";
     Text[ italian ] = "La protezione della tabella non verr� disattivata!";
     Text[ danish ] = "Arkbeskyttelsen oph�ves ikke!";
     Text[ swedish ] = "Tabellskydd upph�vs inte!";
-    Text[ polish ] = "Ochrona arkusza nie zostanie zniesiona!";
-    Text[ portuguese_brazilian ] = "Sheet is not protected!";
+    Text[ polish ] = "Nie mo�na usun�� ochrony arkusza";
+    Text[ portuguese_brazilian ] = "A planilha n�o pode ser desprotegida";
     Text[ japanese ] = "表の保護は解除できません。";
     Text[ korean ] = "시트 보호는 해제되지 않습니다.";
     Text[ chinese_simplified ] = "无法取消表格保护！";
     Text[ chinese_traditional ] = "工作表的保護沒有被取消！";
     Text[ arabic ] = "�� ��� ����� ����� ������!";
-    Text[ turkish ] = "Tablo korumas� kald�r�lm�yor!";
+    Text[ turkish ] = "Tablo korumas� kald�rlam�yor!";
     Text[ finnish ] = "Taulukon suojausta ei voi purkaa.";
     Text[ catalan ] = "El full no es pot desprotegir";
     Text[ thai ] = "ไม่สามารถไม่ป้องกันแผ่นงานได้";
+    Text[ czech ] = "List nemůže být odemčen";
+    Text[ hebrew ] = "‮לא ניתן להסיר הגנת הגליון‬";
+    Text[ hindi ] = "शीट् को अरक्षित नहीं कर सकते है";
 };
 
 
@@ -1377,8 +1518,8 @@ Text[ english_us ] = "The AutoPilot cannot edit this document as cell formats ca
     Text[ italian ] = "Il Pilota automatico non pu� modificare questo documento in quanto non � possibile modificare i modelli di cella nei documenti con tabelle protette.";
     Text[ danish ] = "AutoPiloten kan ikke redigere dette dokument, da det ikke er muligt at modificere celletypografier i dokumenter med beskyttede regneark.";
     Text[ swedish ] = "AutoPilot kan inte redigera det h�r dokumentet eftersom ingen cellmall kan modifieras i dokument med skyddade tabeller.";
-    Text[ polish ] = "AutoPilot nie jest w stanie edytowa� tego dokumentu, poniewa� w dokumentach zawieraj�cych chronione arkusze nie mo�na modyfikowa� styl�w kom�rki.";
-    Text[ portuguese_brazilian ] = "But by modified celltempltates even cells in protected sheets may be modified!";
+    Text[ polish ] = "AutoPilot nie jest w stanie edytowa� tego dokumentu, poniewa� w dokumentach zawieraj�cych chronione arkusze nie mo�na modyfikowa� formatowania kom�rek.";
+    Text[ portuguese_brazilian ] = "O Assistente n�o pode editar este documento por que os formatos das c�lulas n�o podem ser modificados em documentos que contenham planilhas protegidas.";
     Text[ japanese ] = "保護された表を含むドキュメントではセルスタイルが変更できないため、オートパイロットはこのドキュメントを編集できません。";
     Text[ korean ] = "보호된 스프레드시트가 있는 문서에서는 셀 서식 파일이 변경될 수 없기 때문에 자동 파일럿은 이 문서를 편집할 수 없습니다.";
     Text[ chinese_simplified ] = "自动文件助理无法编辑这个文档，因为在文档内含有受保护的工作表时无法更改其单元格样式。";
@@ -1388,6 +1529,9 @@ Text[ english_us ] = "The AutoPilot cannot edit this document as cell formats ca
     Text[ finnish ] = "Ohjattu toiminto ei voi muokata t�t� asiakirjaa, koska suojattujen laskentataulukkoasiakirjojen solujen muotoilua ei voi muokata.";
     Text[ catalan ] = "L'AutoPilot no pot editar aquest document perqu� no es poden modificar els estils de cel.la en documents amb fulls protegits.";
     Text[ thai ] = "การนำร่องอัตโนมัติไม่สามารถแก้ไขเอกสารนี้เป็นรูปแบบเซลล์ที่ไม่สามารถถูกดัดแปลงแก้ไขในเอกสารที่มีการป้องกันกระดาษคำนวณได้";
+    Text[ czech ] = "Průvodce nemůže editovat tento dokument, protože formáty buněk v dokumentech, které obsahují uzamčené tabulky, nemohou být měněny.";
+    Text[ hebrew ] = "‮טייס האוטומטי אינו מסוגל לערוך מסמך זה כי לא ניתן לשנות את עיצוב התאים במסמכים המכילים גליונות מוגנים.‬";
+    Text[ hindi ] = "कोष्ठ रचना को रक्षित स्प्रेडशीट् में न सुधारने के कारण ओटोपैलट् इस लेखपत्र में संपादन नहीं कर सकता है";
 };
 
 
@@ -1406,8 +1550,8 @@ Text[ english_us ] = "Please note that the Euro Converter will, otherwise, not b
     Text[ italian ] = "Vi preghiamo di notare che altrimenti il convertitore Euro non pu� modificare il documento!";
     Text[ danish ] = "Bem�rk venligst, at Eurokonverteren ellers ikke kan redigere dokumentet!";
     Text[ swedish ] = "T�nk p� att Eurokonverteraren inte kan redigera dokumentet annars!";
-    Text[ polish ] = "Uwzgl�dnij prosz�, �e w innym wypadku konwerter Euro nie b�dzie w stanie edytowa� dokumentu!";
-    Text[ portuguese_brazilian ] = "Please note that the Euroconverter can otherwise not edit this document!";
+    Text[ polish ] = "Nale�y wzi�� pod uwag�, �e w przeciwnym razie konwerter euro nie b�dzie w stanie edytowa� dokumentu!";
+    Text[ portuguese_brazilian ] = "Note que, de outra forma, o Conversor Euro n�o poder� editar este documento!";
     Text[ japanese ] = "そうでない場合はユーロ通貨換算でドキュメントの編集ができませんので注意してください。";
     Text[ korean ] = "유로 변환기가 문서를 편집할 수 없음에 유의하십시오.";
     Text[ chinese_simplified ] = "请注意：否则欧币换算器无法编辑这个文档！";
@@ -1417,6 +1561,9 @@ Text[ english_us ] = "Please note that the Euro Converter will, otherwise, not b
     Text[ finnish ] = "Euromuunnin ei muutoin pysty muokkaamaan t�t� asiakirjaa.";
     Text[ catalan ] = "En cas que no sigui aix�, l'Euroconvertidor no podr� editar el document!";
     Text[ thai ] = "กรุณาหมายเหตุว่าตัวแปลงเงินยูโร มิฉะนั้น จะไม่สามารถแก้ไขเอกสารนี้ได้ !";
+    Text[ czech ] = "Pozor: Eurokonvertor nebude v opačném případě schopen editovat tento dokument!";
+    Text[ hebrew ] = "‮סימו לב שאחרת, ממיר האירו לא יכול לערוך מסמך זה!‬";
+    Text[ hindi ] = "कृपया ध्यान दीजिए कि यूरो बदलनेवाला, इस लेखपत्र में संपादन नहीं कर सकते है!";
 };
 
 
@@ -1435,17 +1582,20 @@ Text[ english_us ] = "Please choose a currency to be converted first!";
     Text[ italian ] = "Selezionate una valuta da convertire!";
     Text[ danish ] = "V�lg venligst f�rst en valuta, som skal konverteres!";
     Text[ swedish ] = "V�lj f�rst ut en valuta som skall konverteras!";
-    Text[ polish ] = "Wybierz najpierw walut�, kt�r� chcesz skonwertowa�!";
-    Text[ portuguese_brazilian ] = "Please choose a currency first!";
+    Text[ polish ] = "Najpierw wybierz walut�, kt�ra b�dzie konwertowana!";
+    Text[ portuguese_brazilian ] = "Por favor, escolha primeiro uma moeda a ser convertida!";
     Text[ japanese ] = "最初に換算する通貨を選択してください｡";
     Text[ korean ] = "우선 변환할 통화를 선택하십시오.";
     Text[ chinese_simplified ] = "请首先选择一个要转换的货币！";
     Text[ chinese_traditional ] = "請您先選擇要轉換的一個貨幣！";
     Text[ arabic ] = "������ ������ ������ ������ ������� �����!";
-    Text[ turkish ] = "�nce konvertibl olan bir para birimi se�in!";
+    Text[ turkish ] = "�nce d�n��t�r�lecek bir para birimi se�in!";
     Text[ finnish ] = "Valitse ensin muunnettava valuutta.";
     Text[ catalan ] = "Si us plau, seleccioneu en primer lloc una moneda per convertir!";
     Text[ thai ] = "กรุณาเลือกสกุลเงินเพื่อทำการแปลงก่อน!";
+    Text[ czech ] = "Prosím, nejdříve zadejte měnu, kterou chcete konvertovat!";
+    Text[ hebrew ] = "‮נא לבחור מטבע לפני פעולה זו!‬";
+    Text[ hindi ] = "कृपया पहिले बदलने केलिए एक मुद्रा को चुनिए!";
 };
 
 String MESSAGES + 16
@@ -1463,7 +1613,7 @@ Text[ english_us ] = "Password:";
     Text[ danish ] = "Adgangskode:";
     Text[ swedish ] = "L�senord:";
     Text[ polish ] = "Has�o:";
-    Text[ portuguese_brazilian ] = "Password:";
+    Text[ portuguese_brazilian ] = "Senha:";
     Text[ japanese ] = "パスワード:";
     Text[ korean ] = "암호:";
     Text[ chinese_simplified ] = "密码：";
@@ -1473,6 +1623,9 @@ Text[ english_us ] = "Password:";
     Text[ finnish ] = "Salasana:";
     Text[ catalan ] = "Contrasenya:";
     Text[ thai ] = "รหัสผ่าน:";
+    Text[ czech ] = "Heslo:";
+    Text[ hebrew ] = "‮סיסמה:‬";
+    Text[ hindi ] = "कूटशब्द:";
 };
 
 String MESSAGES + 17
@@ -1500,6 +1653,9 @@ Text[ english_us ] = "OK";
     Text[ finnish ] = "OK";
     Text[ catalan ] = "D'acord";
     Text[ thai ] = "ตกลง";
+    Text[ czech ] = "OK";
+    Text[ hebrew ] = "‮אישור‬";
+    Text[ hindi ] = "ठीक";
 };
 
 String MESSAGES + 18
@@ -1517,7 +1673,7 @@ Text[ english_us ] = "Cancel";
     Text[ danish ] = "Annuller";
     Text[ swedish ] = "Avbryt";
     Text[ polish ] = "Anuluj";
-    Text[ portuguese_brazilian ] = "Cancel";
+    Text[ portuguese_brazilian ] = "Cancelar";
     Text[ japanese ] = "キャンセル";
     Text[ korean ] = "취소";
     Text[ chinese_simplified ] = "取消";
@@ -1527,6 +1683,9 @@ Text[ english_us ] = "Cancel";
     Text[ finnish ] = "Peruuta";
     Text[ catalan ] = "Cancel.la";
     Text[ thai ] = "ยกเลิก";
+    Text[ czech ] = "Zrušit";
+    Text[ hebrew ] = "‮ביטול‬";
+    Text[ hindi ] = "रद्द करो";
 };
 
 
@@ -1544,17 +1703,20 @@ Text[ english_us ] = "Please select a %PRODUCTNAME Calc document for editing!";
     Text[ italian ] = "Scegliete un documento %PRODUCTNAME Calc per modificarlo.";
     Text[ danish ] = "V�lg et %PRODUCTNAME Calc-dokument, som du vil redigere!";
     Text[ swedish ] = "V�lj ett %PRODUCTNAME Calc-dokument som du vill redigera!";
-    Text[ polish ] = "Nale�y wybra� dokument %PRODUCTNAME Calc, kt�ry ma zosta� opracowany.";
-    Text[ portuguese_brazilian ] = "Please choose a %PRODUCTNAME Calc-document to work on!";
+    Text[ polish ] = "Wybierz dokument %PRODUCTNAME Calc do edytowania.";
+    Text[ portuguese_brazilian ] = "Selecione o documento %PRODUCTNAME Calc para edi��o!";
     Text[ japanese ] = "編集する %PRODUCTNAME Calc ドキュメントを選択してください。";
     Text[ korean ] = "편집하기 위해 %PRODUCTNAME Calc 문서를  선택하십시오.";
     Text[ chinese_simplified ] = "请您选择一个要编辑的 %PRODUCTNAME Calc 文档！";
     Text[ chinese_traditional ] = "請您選擇一個要編輯的 %PRODUCTNAME Calc 文件！";
-    Text[ turkish ] = "Please choose a %PRODUCTNAME Calc-document to work on!";
+    Text[ turkish ] = "L�tfen d�zenlemek �zere %PRODUCTNAME Calc-belgesi se�in!";
     Text[ arabic ] = "������ ������ ����� %PRODUCTNAME Calc �������!";
     Text[ finnish ] = "Valitse %PRODUCTNAME Calc -asiakirja muokattavaksi.";
     Text[ catalan ] = "Seleccioneu un document %PRODUCTNAME Calc per treballar";
     Text[ thai ] = "กรุณาเลือกเอกสาร %PRODUCTNAME Calc เพื่อแก้ไข!";
+    Text[ czech ] = "Prosím vyberte dokument %PRODUCTNAME Calc k editaci!";
+    Text[ hebrew ] = "‮נא לבחור מסמך %PRODUCTNAME Calcלעריכה!‬";
+    Text[ hindi ] = "कृपया %PRODUCTNAME गणना लेखपत्र को संपादन करने केलिए चुनो!";
 };
 
 
@@ -1573,16 +1735,19 @@ Text[ english_us ] = "'<1>' is not a directory!";
     Text[ danish ] = "'<1>' er ikke et bibliotek!";
     Text[ swedish ] = "'<1>' �r inte en katalog!";
     Text[ polish ] = "'<1>' nie jest katalogiem!";
-    Text[ portuguese_brazilian ] = "<1> is not a directory!";
+    Text[ portuguese_brazilian ] = "'<1>' n�o � um diret�rio!";
     Text[ japanese ] = "'<1>' はディレクトリではありません。";
     Text[ korean ] = "'<1>'은(는) 디렉토리가 아닙니다.";
     Text[ chinese_simplified ] = "'<1>' 不是一个目录！";
     Text[ chinese_traditional ] = "<1>不是一個目錄！";
-    Text[ turkish ] = "<1> is not a directory!";
+    Text[ turkish ] = "<1> bir dizin de�il!";
     Text[ arabic ] = "'<1>' ��� ������!";
     Text[ finnish ] = "<1> ei ole hakemisto.";
     Text[ catalan ] = "'<1>' no �s un directori!";
     Text[ thai ] = "'<1>' ไม่ใช่ไดเร็กทอรี่!";
+    Text[ czech ] = "'<1>' není adresář!";
+    Text[ hebrew ] = "‮'<1>' אינו ספריה!‬";
+    Text[ hindi ] = "'<1>' डैरक्टरी नहीं है!";
 };
 
 
@@ -1601,16 +1766,19 @@ Text[ english_us ] = "Document is read-only!";
     Text[ danish ] = "Dokumentet er skrivebeskyttet!";
     Text[ swedish ] = "Dokument �r skrivskyddat!";
     Text[ polish ] = "Dokument jest tylko do odczytu!";
-    Text[ portuguese_brazilian ] = "Document is Read Only!";
+    Text[ portuguese_brazilian ] = "O documento � de somente leitura!";
     Text[ japanese ] = "ドキュメントは読み取り専用です。";
     Text[ korean ] = "읽기 전용 문서입니다.";
     Text[ chinese_simplified ] = "文档是防改写的！";
     Text[ chinese_traditional ] = "文件是唯讀的！";
-    Text[ turkish ] = "Document is Read Only!";
+    Text[ turkish ] = "Belge okuma ama�l� a��lm��!";
     Text[ arabic ] = "Document is Read Only!";
     Text[ catalan ] = "El document �s de nom�s lectura!";
     Text[ finnish ] = "Asiakirja on vain luku -muotoa.";
     Text[ thai ] = "เอกสารแบบอ่านอย่างเดียว!";
+    Text[ czech ] = "Přístupová práva dovolují pouze čtení dokumentu!";
+    Text[ hebrew ] = "‮המסמך לקריאה בלבד‬";
+    Text[ hindi ] = "लेखपत्र केवल पढ़ने केलिए!";
 };
 
 
@@ -1619,9 +1787,9 @@ String MESSAGES + 22
     Text = "Die Datei '<1>' existiert bereits.<CR>M�chten Sie sie �berschreiben?";
     Text[English] = "The File '<1>' already exists. Do you want to overwrite it?";
     Text[ English_us ] = "The '<1>' file already exists.<CR>Do you want to overwrite it?";
-    Text[ portuguese ] = "The '<1>' file already exists.<CR>Do you want to overwrite it?";
+    Text[ portuguese ] = "O ficheiro '<1>' j� existe.<CR>Substituir?";
     Text[ russian ] = "���� '<1>' ��� ����������.<CR>��������?";
-    Text[ greek ] = "The '<1>' file already exists.<CR>Do you want to overwrite it?";
+    Text[ greek ] = "�� ������ '<1>' ������� ���.<CR>������ �� ��������������;";
     Text[ dutch ] = "Bestand '<1>' bestaat reeds.<CR>Overschrijven?";
     Text[ french ] = "Le fichier '<1>' existe d�j�.<CR>Voulez-vous l'�craser ?";
     Text[ spanish ] = "El archivo '<1>' ya existe.<CR>�Desea sobrescribirlo?";
@@ -1629,16 +1797,19 @@ String MESSAGES + 22
     Text[ italian ] = "Il file '<1>' esiste gi�. <CR>Volete sovrascriverlo?";
     Text[ danish ] = "Filen '<1>' findes allerede.<CR>Skal den overskrives?";
     Text[ swedish ] = "Filen '<1>' finns redan.<CR>Vill du skriva �ver den?";
-    Text[ polish ] = "Plik '<1>' ju� istnieje.<CR>Skasowa� go przez zapisanie?";
-    Text[ portuguese_brazilian ] = "The '<1>' file already exists.<CR>Do you want to overwrite it?";
+    Text[ polish ] = "Plik '<1>' ju� istnieje.<CR>Czy go zast�pi�?";
+    Text[ portuguese_brazilian ] = "O arquivo '<1>' j� existe. <CR>Deseja sobrescreve-lo?";
     Text[ japanese ] = "ファイル '<1>' はすでにあります。<CR>上書きしますか。";
     Text[ korean ] = "'<1>' 파일이 이미 있습니다.<CR>덮어쓰시겠습니까?";
     Text[ chinese_simplified ] = "文件 '<1>'已经存在。<CR>您要改写这个文件？";
     Text[ chinese_traditional ] = "'<1>' 檔案已經存在。<CR>要覆寫？";
-    Text[ turkish ] = "The '<1>' file already exists.<CR>Do you want to overwrite it?";
-    Text[ arabic ] = "The '<1>' file already exists.<CR>Do you want to overwrite it?";
+    Text[ turkish ] = "The '<1>' dosya zaten mevcut.<CR>�st�ne yazmak istermisiniz?";
+    Text[ arabic ] = "����� '<1>' ����� ������. <CR>�� ���� ������� ����";
     Text[ catalan ] = "El fitxer '<1>' ja existeix.<CR>Voleu sobreescriure'l?";
     Text[ thai ] = "The '<1>' file already exists.<CR>Do you want to overwrite it?";
+    Text[ czech ] = "Soubor '<1>' již existuje.<CR>Přejete si jej přepsat?";
+    Text[ hebrew ] = "‮הקובץ '<1>' כבר קיים<CR>האם להחליף אותו?‬";
+    Text[ hindi ] = "'<1>' फाइल पहिले से ही अस्तित्व में है ।<CR>आप ओवररइट करना चाहते है?";
 };
 
 
@@ -1647,9 +1818,9 @@ String MESSAGES + 23
     Text = "M�chten Sie das Konvertieren an dieser Stelle wirklich abbrechen ?";
     Text[English] = "Do you really want to cancel the conversion at this point?";
     Text[ English_us ] = "Do you really want to terminate conversion at this point?";
-    Text[ portuguese ] = "Do you really want to terminate conversion at this point?";
+    Text[ portuguese ] = "Cancelar realmente a convers�o em curso?";
     Text[ russian ] = "�� ������������� ������ �������� ������� ��������������?";
-    Text[ greek ] = "Do you really want to terminate conversion at this point?";
+    Text[ greek ] = "������ ���������� �� �������� � ��������� �� ���� �� ������;";
     Text[ dutch ] = "Wilt u het converteren werkelijk annuleren?";
     Text[ french ] = "Interrompre la conversion � ce stade ?";
     Text[ spanish ] = "�Desea realmente interrumpir el proceso de conversi�n?";
@@ -1657,16 +1828,19 @@ String MESSAGES + 23
     Text[ italian ] = "Volete davvero annullare la conversione in questo punto?";
     Text[ danish ] = "Er du sikker p�, at du vil annullere konverteringen nu?";
     Text[ swedish ] = "Vill du verkligen avbryta konverteringen nu?";
-    Text[ polish ] = "Na pewno przerwa� konwersj� w tym miejscu?";
-    Text[ portuguese_brazilian ] = "Do you really want to terminate conversion at this point?";
+    Text[ polish ] = "Czy na pewno chcesz przerwa� konwersj� w tym miejscu?";
+    Text[ portuguese_brazilian ] = "Deseja realmente encerrar a convers�o neste ponto?";
     Text[ japanese ] = "本当にここで変換を中止しますか。";
     Text[ korean ] = "정말로 변환을 취소하시겠습니까?";
     Text[ chinese_simplified ] = "您真的要现在取消转换？";
     Text[ chinese_traditional ] = "現在真的要取消轉換？";
-    Text[ turkish ] = "Do you really want to terminate conversion at this point?";
-    Text[ arabic ] = "Do you really want to terminate conversion at this point?";
+    Text[ turkish ] = "D�n���m� bu noktada kesmek istedinizden eminmisiniz";
+    Text[ arabic ] = "�� ���� ������ ��� ����� ������� �� ��� ������ɿ";
     Text[ catalan ] = "Realment voleu acabar la conversi� en aquest punt?";
     Text[ thai ] = "Do you really want to terminate conversion at this point?";
+    Text[ czech ] = "Skutečně si přejete nyní ukončit konverzi?";
+    Text[ hebrew ] = "‮האם אכן להפסיק את ההמרה בנקודה זו?‬";
+    Text[ hindi ] = "आप इस सचमुच में परिवर्तन को समाप्त करना चाहते है?";
 };
 
 String MESSAGES + 24
@@ -1685,15 +1859,18 @@ String MESSAGES + 24
     Text[ danish ] = "Annuller Autopilot";
     Text[ swedish ] = "Avbryt AutoPiloten";
     Text[ polish ] = "Anuluj AutoPilota";
-    Text[ portuguese_brazilian ] = "Cancel AutoPilot";
+    Text[ portuguese_brazilian ] = "Cancelar Assistente";
     Text[ japanese ] = "オートパイロットを中止";
     Text[ korean ] = "자동 파일럿 취소";
     Text[ chinese_simplified ] = "取消自动文档助理";
     Text[ chinese_traditional ] = "取消自動檔案助理";
-    Text[ turkish ] = "Cancel AutoPilot";
+    Text[ turkish ] = "OtoPilot iptal et";
     Text[ arabic ] = "Cancel AutoPilot";
     Text[ catalan ] = "Cancel.la AutoPilot";
     Text[ thai ] = "Cancel AutoPilot";
+    Text[ czech ] = "Zrušit průvodce";
+    Text[ hebrew ] = "‮בטל טייס אוטומטי‬";
+    Text[ hindi ] = "ओटोपैलट् रद्द करो";
 };
 
  String CURRENCIES
@@ -1710,8 +1887,8 @@ Text[ english_us ] = "Portuguese Escudo";
     Text[ italian ] = "Scudo portoghese";
     Text[ danish ] = "Portugisisk escudo";
     Text[ swedish ] = "Portugisisk escudo";
-    Text[ polish ] = "Escudo portugalski";
-    Text[ portuguese_brazilian ] = "Portuguese Escudo";
+    Text[ polish ] = "Escudo portugalskie";
+    Text[ portuguese_brazilian ] = "Escudo portugu�s";
     Text[ japanese ] = "ポルトガル エスクード";
     Text[ korean ] = "포르투갈 에스쿠도";
     Text[ chinese_simplified ] = "葡萄牙埃斯库多";
@@ -1721,6 +1898,9 @@ Text[ english_us ] = "Portuguese Escudo";
     Text[ finnish ] = "Portugalin escudo";
     Text[ catalan ] = "Escut portugu�s";
     Text[ thai ] = "เงินเอสคูโดของโปรตุเกส";
+    Text[ czech ] = "Portugalské Escudo";
+    Text[ hebrew ] = "Portuguese Escudo";
+    Text[ hindi ] = "पोर्चुगीस एस्कुडो";
 };
 
 String CURRENCIES + 1
@@ -1738,7 +1918,7 @@ Text[ english_us ] = "Dutch Guilder";
     Text[ danish ] = "Nederlandsk gylden";
     Text[ swedish ] = "Holl�ndsk gulden";
     Text[ polish ] = "Gulden holenderski";
-    Text[ portuguese_brazilian ] = "Dutch Guilder";
+    Text[ portuguese_brazilian ] = "Florim holand�s";
     Text[ japanese ] = "オランダ ギルダー";
     Text[ korean ] = "네델란드 길더";
     Text[ chinese_simplified ] = "荷兰盾";
@@ -1748,6 +1928,9 @@ Text[ english_us ] = "Dutch Guilder";
     Text[ finnish ] = "Hollannin guldeni";
     Text[ catalan ] = "Flor� holand�s";
     Text[ thai ] = "เงินกีลของฮอลล์แลนด์";
+    Text[ czech ] = "Holandský gulden";
+    Text[ hebrew ] = "‮גילדן הולנדי‬";
+    Text[ hindi ] = "डच गिल्डर";
 };
 
 String CURRENCIES + 2
@@ -1765,7 +1948,7 @@ Text[ english_us ] = "French Franc";
     Text[ danish ] = "Fransk franc";
     Text[ swedish ] = "Fransk franc";
     Text[ polish ] = "Frank francuski";
-    Text[ portuguese_brazilian ] = "French Franc";
+    Text[ portuguese_brazilian ] = "Franco franc�s";
     Text[ japanese ] = "フランス フラン";
     Text[ korean ] = "프랑스 프랑";
     Text[ chinese_simplified ] = "法国法郎";
@@ -1775,6 +1958,9 @@ Text[ english_us ] = "French Franc";
     Text[ finnish ] = "Ranskan frangi";
     Text[ catalan ] = "Franc franc�s";
     Text[ thai ] = "เงินฟรังก์ของฝรั่งเศส";
+    Text[ czech ] = "Francouzský frank";
+    Text[ hebrew ] = "‮פרנק צרפתי‬";
+    Text[ hindi ] = "फ्रेन्च फ्रान्क";
 };
 
 String CURRENCIES + 3
@@ -1792,7 +1978,7 @@ Text[ english_us ] = "Spanish Peseta";
     Text[ danish ] = "Spansk peseta";
     Text[ swedish ] = "Spansk peseta";
     Text[ polish ] = "Hiszpa�ska peseta";
-    Text[ portuguese_brazilian ] = "Spanish Peseta";
+    Text[ portuguese_brazilian ] = "Peseta espanhola";
     Text[ japanese ] = "スペイン ペセタ";
     Text[ korean ] = "스페인 페세타";
     Text[ chinese_simplified ] = "西班牙比塞塔";
@@ -1802,6 +1988,9 @@ Text[ english_us ] = "Spanish Peseta";
     Text[ finnish ] = "Espanjan peseta";
     Text[ catalan ] = "Pesseta espanyola";
     Text[ thai ] = "เงินเปเซตาของสเปน";
+    Text[ czech ] = "Španělská peseta";
+    Text[ hebrew ] = "‮פזטה ספרדית‬";
+    Text[ hindi ] = "स्पॉनिश पेसेटा";
 };
 
 String CURRENCIES + 4
@@ -1819,7 +2008,7 @@ Text[ english_us ] = "Italian Lira";
     Text[ danish ] = "Italiensk lira";
     Text[ swedish ] = "Italiensk lire";
     Text[ polish ] = "Lir w�oski";
-    Text[ portuguese_brazilian ] = "Italian Lira";
+    Text[ portuguese_brazilian ] = "Lira italiana";
     Text[ japanese ] = "イタリア リラ";
     Text[ korean ] = "이탈리아 리라";
     Text[ chinese_simplified ] = "意大利里拉";
@@ -1829,6 +2018,9 @@ Text[ english_us ] = "Italian Lira";
     Text[ finnish ] = "Italian liira";
     Text[ catalan ] = "Lira italiana";
     Text[ thai ] = "เงินลีร์ของอิตาลี";
+    Text[ czech ] = "Italská lira";
+    Text[ hebrew ] = "‮לירטה איטלקית‬";
+    Text[ hindi ] = "इटालियन लिरा";
 };
 
 String CURRENCIES + 5
@@ -1846,7 +2038,7 @@ Text[ english_us ] = "German Mark";
     Text[ danish ] = "Tysk mark";
     Text[ swedish ] = "Tysk mark";
     Text[ polish ] = "Marka niemiecka";
-    Text[ portuguese_brazilian ] = "German Mark";
+    Text[ portuguese_brazilian ] = "Marco alem�o";
     Text[ japanese ] = "ドイツ マルク";
     Text[ korean ] = "독일 마르크";
     Text[ chinese_simplified ] = "德国马克";
@@ -1856,6 +2048,9 @@ Text[ english_us ] = "German Mark";
     Text[ finnish ] = "Saksan markka";
     Text[ catalan ] = "Marc alemany";
     Text[ thai ] = "เงินมาร์คของเยอรมัน";
+    Text[ czech ] = "Německá marka";
+    Text[ hebrew ] = "‮מארק גרמני‬";
+    Text[ hindi ] = "जर्मन मार्क";
 };
 
 String CURRENCIES + 6
@@ -1873,7 +2068,7 @@ Text[ english_us ] = "Belgian Franc";
     Text[ danish ] = "Belgisk franc";
     Text[ swedish ] = "Belgisk franc";
     Text[ polish ] = "Frank belgijski";
-    Text[ portuguese_brazilian ] = "Belgian Franc";
+    Text[ portuguese_brazilian ] = "Franco belga";
     Text[ japanese ] = "ベルギー フラン";
     Text[ korean ] = "벨기에 프랑";
     Text[ chinese_simplified ] = "比利时法郎";
@@ -1883,6 +2078,9 @@ Text[ english_us ] = "Belgian Franc";
     Text[ finnish ] = "Belgian frangi";
     Text[ catalan ] = "Franc belga";
     Text[ thai ] = "เงินฟรังก์ของเบลเยี่ยม";
+    Text[ czech ] = "Belgický frank";
+    Text[ hebrew ] = "‮פרנק בלגי‬";
+    Text[ hindi ] = "बेल्जियन फ्रान्क ";
 };
 
 String CURRENCIES + 7
@@ -1899,8 +2097,8 @@ Text[ english_us ] = "Irish Punt";
     Text[ italian ] = "Sterlina irlandese";
     Text[ danish ] = "Irsk pund";
     Text[ swedish ] = "Irl�ndskt pund";
-    Text[ polish ] = "Funt irlandski";
-    Text[ portuguese_brazilian ] = "Irish Pound";
+    Text[ polish ] = "Funt irlandzki";
+    Text[ portuguese_brazilian ] = "Libra Irlandesa";
     Text[ japanese ] = "アイルランド ポンド";
     Text[ korean ] = "아일랜드 파운드";
     Text[ chinese_simplified ] = "爱尔兰镑";
@@ -1910,6 +2108,9 @@ Text[ english_us ] = "Irish Punt";
     Text[ finnish ] = "Irlannin punta";
     Text[ catalan ] = "Lliura irlandesa";
     Text[ thai ] = "เงินพันท์ของไอร์แลนด์";
+    Text[ czech ] = "Irská libra";
+    Text[ hebrew ] = "‮פאנט אירי‬";
+    Text[ hindi ] = "अइरिश पन्ट";
 };
 
 String CURRENCIES + 8
@@ -1927,7 +2128,7 @@ Text[ english_us ] = "Luxembourg Franc";
     Text[ danish ] = "Luxembourgsk franc";
     Text[ swedish ] = "Luxemburgisk franc";
     Text[ polish ] = "Frank luksemburski";
-    Text[ portuguese_brazilian ] = "Luxembourg Franc";
+    Text[ portuguese_brazilian ] = "Franco Luxemburgu�s";
     Text[ japanese ] = "ルクセンブルグ フラン";
     Text[ korean ] = "룩셈브르크 프랑";
     Text[ chinese_simplified ] = "卢森堡法郎";
@@ -1937,6 +2138,9 @@ Text[ english_us ] = "Luxembourg Franc";
     Text[ finnish ] = "Luxemburgin frangi";
     Text[ catalan ] = "Franc luxemburgu�s";
     Text[ thai ] = "เงินฟรังค์ของลักเซมเบิร์ก";
+    Text[ czech ] = "Lucemburský frank";
+    Text[ hebrew ] = "‮פרנק לוקסמבורגי‬";
+    Text[ hindi ] = "लक्सम्बर्ग फ्रान्क";
 };
 
 String CURRENCIES + 9
@@ -1954,7 +2158,7 @@ Text[ english_us ] = "Austrian Schilling";
     Text[ danish ] = "�strigsk schilling";
     Text[ swedish ] = "�sterrikisk schilling";
     Text[ polish ] = "Szyling austriacki";
-    Text[ portuguese_brazilian ] = "Austrian Schilling";
+    Text[ portuguese_brazilian ] = "Schilling Austr�aco";
     Text[ japanese ] = "オーストリア シリング";
     Text[ korean ] = "오스트리아 쉴링";
     Text[ chinese_simplified ] = "奥地利先令";
@@ -1964,6 +2168,9 @@ Text[ english_us ] = "Austrian Schilling";
     Text[ finnish ] = "It�vallan shillinki";
     Text[ catalan ] = "Xel� austr�ac";
     Text[ thai ] = "เงินชิลลิ่งของออสเตรีย";
+    Text[ czech ] = "Rakouský šilink";
+    Text[ hebrew ] = "‮שילינג אוסטרי‬";
+    Text[ hindi ] = "ऑस्ट्रियन शिल्लिंग";
 };
 
 String CURRENCIES + 10
@@ -1981,7 +2188,7 @@ Text[ english_us ] = "Finnish Mark";
     Text[ danish ] = "Finsk markka";
     Text[ swedish ] = "Finsk mark";
     Text[ polish ] = "Marka fi�ska";
-    Text[ portuguese_brazilian ] = "Finnish Mark";
+    Text[ portuguese_brazilian ] = "Marco finland�s";
     Text[ japanese ] = "フィンランド マルッカ";
     Text[ korean ] = "핀란드 마르크";
     Text[ chinese_simplified ] = "芬兰马克";
@@ -1991,6 +2198,9 @@ Text[ english_us ] = "Finnish Mark";
     Text[ finnish ] = "Suomen markka";
     Text[ catalan ] = "Marc finland�s";
     Text[ thai ] = "เงินมาร์คของฟินแลนด์";
+    Text[ czech ] = "Finská marka";
+    Text[ hebrew ] = "‮מארק פיני‬";
+    Text[ hindi ] = "फिन्निश मार्क";
 };
 
 String CURRENCIES + 11
@@ -2009,15 +2219,18 @@ Text[ english_us ] = "Greek Drachma";
     Text[ danish ] = "Gr�ske drakmer";
     Text[ swedish ] = "Grekisk drakma";
     Text[ polish ] = "Drachma grecka";
-    Text[ portuguese_brazilian ] = "The Language of the Document is not known to the Autopilot";
+    Text[ portuguese_brazilian ] = "Dracma Grego";
     Text[ japanese ] = "ギリシャ ドラクマ";
     Text[ korean ] = "그리스 드라크마";
     Text[ chinese_simplified ] = "希腊的德拉赫马";
     Text[ chinese_traditional ] = "希腊的德拉赫馬";
-    Text[ turkish ] = "Belge i�in ayarlanan para birimi, Euro-para birimi de�il!";
+    Text[ turkish ] = "Yunan Drahmisi";
     Text[ arabic ] = "������ ���� �� ������� ������� �� ����� ��� ����� ���� ������?!";
     Text[ catalan ] = "La moneda determinada del document no pertany a la zona de l'Euro!";
     Text[ thai ] = "เงินแดร็คมาของกรีซ";
+    Text[ czech ] = "Řecká drachma";
+    Text[ hebrew ] = "‮דרכמה יוונית‬";
+    Text[ hindi ] = "ग्रीक ड्राक्मा";
 };
 
 String CURRENCIES + 12
@@ -2034,17 +2247,20 @@ Text[ english_us ] = "The currency set for the document is not a European curren
     Text[ italian ] = "La lingua impostata nel vostro sistema operativo non � parte dell'Euro.";
     Text[ danish ] = "Den for dokumentet indstillede valuta er ikke en euro-valuta!";
     Text[ swedish ] = "Valutan som �r inst�lld f�r ditt dokument �r ingen eurovaluta!";
-    Text[ polish ] = "Waluta wybrana do zastosowania w dokumencie nie jest walut� Euro.";
-    Text[ portuguese_brazilian ] = "The language set for the operation system is not a language of the European Currency Union!";
+    Text[ polish ] = "Waluta wybrana do zastosowania w dokumencie nie jest walut� europejsk�.";
+    Text[ portuguese_brazilian ] = "A moeda definida para o documento n�o � uma moeda europ�ia!";
     Text[ japanese ] = "このドキュメント用に設定されている通貨はユーロではありません。";
     Text[ korean ] = "이 문서에 설정된 통화 단위는 유럽 통화가 아닙니다.";
     Text[ chinese_simplified ] = "为文档设定的货币不是欧洲共同体使用的欧元！";
     Text[ chinese_traditional ] = "為文件設定的語言不是歐元！";
     Text[ arabic ] = "����� ���� �� ������� ����� ������� ����� �� ���� �� ��� ���� ����� ������� �� ����������!";
-    Text[ turkish ] = "��letim sisteminiz i�in se�ti�iniz dil, Avrupa Para Birli�i dillerinden biri de�il!";
+    Text[ turkish ] = "Belge i�in se�ilmi� birim bir Avrupa para birimi de�ildir.!";
     Text[ finnish ] = "Asiakirjaan m��ritetty valuutta ei ole eurooppalainen valuutta.";
     Text[ catalan ] = "L'idioma definit pel sistema operatiu no pertany a la uni� monet�ria europea!";
     Text[ thai ] = "สกุลเงินของเอกสารไม่ใช่สกุลเงินของยุโรป!";
+    Text[ czech ] = "Měna použitá v dokumentu není měnou používanou v Evropské Unii!";
+    Text[ hebrew ] = "‮מטבע המסמך אינו מטבע אירופאי!‬";
+    Text[ hindi ] = "लेखपत्र केलिए सेट्ट किया हुआ मुद्रा युरोपियन मुद्रा नहीं है !";
 };
 
 String CURRENCIES + 13
@@ -2061,17 +2277,20 @@ Text[ english_us ] = "The language set for your operating system is not a langua
     Text[ italian ] = "La lingua impostata nel vostro sistema operativo non fa parte dell'Unione Monetaria Europea!";
     Text[ danish ] = "Det indstillede sprog for operativsystemet er ikke et sprog fra et deltagerland i Den �konomiske og Monet�re Unions tredje fase!";
     Text[ swedish ] = "Spr�ket som �r inst�llt f�r ditt operativsystem finns inte i den europeiska valutaunionen!";
-    Text[ polish ] = "J�zyk systemu operacyjnego na komputerze u�ytkownika nie jest j�zykiem �adnego z kraj�w Europejskiej Unii Walutowej!";
-    Text[ portuguese_brazilian ] = "The language set for the operation system is not a language of the European Currency Union!";
+    Text[ polish ] = "J�zyk, ustawiony w systemie operacyjnym, nie j�zykiem �adnego z kraj�w Europejskiej Unii Walutowej!";
+    Text[ portuguese_brazilian ] = "O idioma definido para o seu sistema operacional n�o � um idioma dos pa�ses da Uni�o Monet�ria Europ�ia!";
     Text[ japanese ] = "お使いのオペレーティングシステムに設定されている言語は、ユーロ加盟国の言語ではありません。";
     Text[ korean ] = "사용자의 운영체제에 설정된 언어는 유럽 통화 연방의 언어가 아닙니다.";
     Text[ chinese_simplified ] = "您的操作系统使用的语言不是欧洲货币联盟的使用语言！";
     Text[ chinese_traditional ] = "為操作系統設定的語言不是歐洲貨幣聯盟的語言。";
     Text[ arabic ] = "����� ���� �� ������� ����� ������� ����� �� ���� �� ��� ���� ����� ������� �� ����������!";
-    Text[ turkish ] = "��letim sisteminiz i�in se�ti�iniz dil, Avrupa Para Birli�i dillerinden biri de�il!";
+    Text[ turkish ] = "��letim sisteminizin kulland��� dil k�mesi, Avrupa Para Birimi dil k�mesinden bir tanesi i�inde de�il.";
     Text[ finnish ] = "K�ytt�j�rjestelm�n kielim��ritys ei ole mink��n EMU-alueen maan kieli.";
     Text[ catalan ] = "L'idioma definit pel sistema operatiu no pertany a la uni� monet�ria europea!";
     Text[ thai ] = "ภาษาของระบบปฏิบัติการของคุณไม่ใช่ภาษาของสหภาพสกุลเงินยุโรป";
+    Text[ czech ] = "Jazyk vašeho operačního systému není jazykem používaným v Evropské Unii.";
+    Text[ hebrew ] = "‮ השפה בה משתמשת מערכת ההפעלה הנוכחית אינה משפות האיחוד המוניטרי האירופי‬";
+    Text[ hindi ] = "आपका ओपरेटिंग सिस्टम केलिए सेट्ट किया हुआ भाषा युरोपियन मोनेटरी यूनियन का भाषा नहीं है ।";
 };
 
 
@@ -2089,8 +2308,8 @@ Text[ english_us ] = "Progress";
     Text[ italian ] = "Progressione";
     Text[ danish ] = "Arbejdsfremgang";
     Text[ swedish ] = "Arbetsframsteg";
-    Text[ polish ] = "Post�p w pracy";
-    Text[ portuguese_brazilian ] = "Progress";
+    Text[ polish ] = "Post�p";
+    Text[ portuguese_brazilian ] = "Progresso";
     Text[ japanese ] = "進捗状況";
     Text[ korean ] = "진행 상태";
     Text[ chinese_simplified ] = "已经完成";
@@ -2100,6 +2319,9 @@ Text[ english_us ] = "Progress";
     Text[ finnish ] = "Tilanne";
     Text[ catalan ] = "Progr�s";
     Text[ thai ] = "คืบหน้า";
+    Text[ czech ] = "Průběh";
+    Text[ hebrew ] = "‮התקדמות‬";
+    Text[ hindi ] = "प्रस्थान";
 };
 
 
@@ -2117,8 +2339,8 @@ Text[ english_us ] = "Retrieving the relevant documents...";
     Text[ italian ] = "Rilevamento dei documenti importanti...";
     Text[ danish ] = "Bestemmer de relevante dokumenter...";
     Text[ swedish ] = "Samlar de relevanta dokumenten...";
-    Text[ polish ] = "Przywracanie wa�nych dokument�w...";
-    Text[ portuguese_brazilian ] = "Retrieving the relevant Documents...";
+    Text[ polish ] = "Pobieranie odpowiednich dokument�w...";
+    Text[ portuguese_brazilian ] = "Recuperando os documentos relevantes...";
     Text[ japanese ] = "関連するドキュメントをまとめる...";
     Text[ korean ] = "관련 문서 검색...";
     Text[ chinese_simplified ] = "检索相关文档...";
@@ -2128,6 +2350,9 @@ Text[ english_us ] = "Retrieving the relevant documents...";
     Text[ finnish ] = "Haetaan asianmukaiset asiakirjat...";
     Text[ catalan ] = "S'estan recuperant els documents rellevants...";
     Text[ thai ] = "กู้คืนเอกสารที่เกี่ยวข้อง...";
+    Text[ czech ] = "Získávám příslušné dokumenty...";
+    Text[ hebrew ] = "‮מאחזר מסמכים מתאימים...‬";
+    Text[ hindi ] = "अनुरूप लेखपत्रों को प्राप्त कर रहा है...";
 };
 
 String STEP_LASTPAGE + 2
@@ -2144,8 +2369,8 @@ Text[ english_us ] = "Converting the documents...";
     Text[ italian ] = "Conversione dei documenti...";
     Text[ danish ] = "Konverterer dokumenterne...";
     Text[ swedish ] = "Konvertering av dokumenten...";
-    Text[ polish ] = "Konwertuj dokumenty...";
-    Text[ portuguese_brazilian ] = "Converting the Documents...";
+    Text[ polish ] = "Konwersja dokument�w...";
+    Text[ portuguese_brazilian ] = "Convertendo os documentos...";
     Text[ japanese ] = "ドキュメントの変換...";
     Text[ korean ] = "문서 변환 중...";
     Text[ chinese_simplified ] = "转换文档...";
@@ -2155,6 +2380,9 @@ Text[ english_us ] = "Converting the documents...";
     Text[ finnish ] = "Muunnetaan asiakirjat...";
     Text[ catalan ] = "S'estan convertint els documents...";
     Text[ thai ] = "กำลังแปลงเอกสาร...";
+    Text[ czech ] = "Konvertuji dokumenty...";
+    Text[ hebrew ] = "‮ממיר את המסמכים...‬";
+    Text[ hindi ] = "लेखपत्रों को बदल रहा है...";
 };
 
 String STEP_LASTPAGE + 3
@@ -2172,7 +2400,7 @@ Text[ english_us ] = "Settings:";
     Text[ danish ] = "Indstillinger:";
     Text[ swedish ] = "Inst�llningar:";
     Text[ polish ] = "Ustawienia:";
-    Text[ portuguese_brazilian ] = "Configurations:";
+    Text[ portuguese_brazilian ] = "Defini��es:";
     Text[ japanese ] = "設定:";
     Text[ korean ] = "설정:";
     Text[ chinese_simplified ] = "设定：";
@@ -2182,6 +2410,9 @@ Text[ english_us ] = "Settings:";
     Text[ finnish ] = "Asetukset:";
     Text[ catalan ] = "Configuraci�:";
     Text[ thai ] = "กำหนดค่า:";
+    Text[ czech ] = "Nastavení:";
+    Text[ hebrew ] = "‮הגדרות:‬";
+    Text[ hindi ] = "निर्धारण:";
 };
 
 String STEP_LASTPAGE + 4
@@ -2198,18 +2429,34 @@ Text[ english_us ] = "Sheet is always unprotected";
     Text[ italian ] = "Disattiva sempre la protezione tabella";
     Text[ danish ] = "Arkbeskyttelsen oph�ves altid";
     Text[ swedish ] = "Tabellskydd upph�vs alltid";
-    Text[ polish ] = "Zniesienie ochrony arkusza za ka�dym razem";
-    Text[ portuguese_brazilian ] = "Sheet Protection is always raised";
+    Text[ polish ] = "Arkusz jest zawsze niechroniony";
+    Text[ portuguese_brazilian ] = "A planilha est� sempre desprotegida";
     Text[ japanese ] = "常に表の保護を解除";
     Text[ korean ] = "시트 보호 항상 해제";
     Text[ chinese_simplified ] = "自动取消表格保护";
     Text[ chinese_traditional ] = "自動取消工作表保護";
-    Text[ turkish ] = "Tablo korumas� her zaman kald�r�l�yor";
+    Text[ turkish ] = "Tablo her zaman korunmas�zd�r";
     Text[ arabic ] = "��� ��� ����� ����� ������ ������";
     Text[ finnish ] = "Taulukko on aina suojaamaton";
     Text[ catalan ] = "Elimina sempre la protecci� de full";
     Text[ thai ] = "ไม่ป้องกันแผ่นงานเสมอ";
+    Text[ czech ] = "List je trvale odemknut";
+    Text[ hebrew ] = "‮הגליון ללא הגנה תמיד‬";
+    Text[ hindi ] = "शीट् हमेशा अरक्षित";
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
