@@ -1,0 +1,132 @@
+#*************************************************************************
+#
+#  $RCSfile: Makefile,v $
+#
+#  $Revision: 1.2 $
+#
+#  last change: $Author: rt $ $Date: 2005-01-31 16:04:58 $
+#
+#  The Contents of this file are made available subject to the terms of
+#  the BSD license.
+#  
+#  Copyright (c) 2003 by Sun Microsystems, Inc.
+#  All rights reserved.
+#
+#  Redistribution and use in source and binary forms, with or without
+#  modification, are permitted provided that the following conditions
+#  are met:
+#  1. Redistributions of source code must retain the above copyright
+#     notice, this list of conditions and the following disclaimer.
+#  2. Redistributions in binary form must reproduce the above copyright
+#     notice, this list of conditions and the following disclaimer in the
+#     documentation and/or other materials provided with the distribution.
+#  3. Neither the name of Sun Microsystems, Inc. nor the names of its
+#     contributors may be used to endorse or promote products derived
+#     from this software without specific prior written permission.
+#
+#  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+#  "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+#  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+#  FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+#  COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+#  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+#  BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS
+#  OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+#  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
+#  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
+#  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+#     
+#**************************************************************************
+
+# Builds the CreatingDialogs example of the Developers Guide.
+
+PRJ=../../../..
+SETTINGS=$(PRJ)/settings
+
+include $(SETTINGS)/settings.mk
+include $(SETTINGS)/std.mk
+include $(SETTINGS)/dk.mk
+
+# Define non-platform/compiler specific settings
+SAMPLE_NAME=BaDToolkitControls
+SAMPLE_GEN_OUT=$(OUT_MISC)/$(SAMPLE_NAME)
+
+COMP_NAME=ToolkitControls
+COMP_GEN_OUT=$(SAMPLE_GEN_OUT)/$(COMP_NAME)
+COMP_PACKAGE = $(OUT_BIN)/$(COMP_NAME).$(UNOPKG_EXT)
+COMP_PACKAGE_URL = $(subst \\,\,"$(COMP_PACKAGE_DIR)$(PS)$(COMP_NAME).$(UNOPKG_EXT)")
+COMP_UNOPKG_MANIFEST = $(COMP_GEN_OUT)/META-INF/manifest.xml
+COMP_REGISTERFLAG=$(COMP_GEN_OUT)$(PS)devguide_basic_$(COMP_NAME)_register_component.flag
+
+COMP_LIBRARY_FILES=\
+	ToolkitControls/dialog.xlb\
+	ToolkitControls/FileDialog.xba\
+	ToolkitControls/FileDialogDlg.xdl\
+	ToolkitControls/MultiPage.xba\
+	ToolkitControls/MultiPageDlg.xdl\
+	ToolkitControls/ProgressBar.xba\
+	ToolkitControls/ProgressBarDlg.xdl\
+	ToolkitControls/script.xlb\
+	ToolkitControls/ScrollBar.xba\
+	ToolkitControls/ScrollBarDlg.xdl
+
+# Targets
+.PHONY: ALL
+ALL : $(SAMPLE_NAME)
+
+include $(SETTINGS)/stdtarget.mk
+
+# rule for component package manifest
+$(COMP_GEN_OUT)/%/manifest.xml :
+	-$(MKDIR) $(subst /,$(PS),$(@D))
+	@echo $(OSEP)?xml version="$(QM)1.0$(QM)" encoding="$(QM)UTF-8$(QM)"?$(CSEP) > $@
+	@echo $(OSEP)!DOCTYPE manifest:manifest PUBLIC "$(QM)-//OpenOffice.org//DTD Manifest 1.0//EN$(QM)" "$(QM)Manifest.dtd$(QM)"$(CSEP) >> $@
+	@echo $(OSEP)manifest:manifest xmlns:manifest="$(QM)http://openoffice.org/2001/manifest$(QM)"$(CSEP) >> $@
+	@echo $(SQM)  $(SQM)$(OSEP)manifest:file-entry manifest:media-type="$(QM)application/vnd.sun.star.basic-library$(QM)" >> $@
+	@echo $(SQM)                       $(SQM)manifest:full-path="$(QM)$(COMP_NAME)$(QM)"/$(CSEP) >> $@
+	@echo $(OSEP)/manifest:manifest$(CSEP) >> $@
+
+# rule for component package file
+$(COMP_PACKAGE) : $(COMP_UNOPKG_MANIFEST) $(COMP_LIBRARY_FILES)
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
+	-$(MKDIR) $(subst /,$(PS),$(@D))
+	$(SDK_ZIP) $@ ToolkitControls/dialog.xlb \
+	ToolkitControls/FileDialog.xba ToolkitControls/FileDialogDlg.xdl \
+	ToolkitControls/MultiPage.xba ToolkitControls/MultiPageDlg.xdl \
+	ToolkitControls/ProgressBar.xba ToolkitControls/ProgressBarDlg.xdl \
+	ToolkitControls/script.xlb ToolkitControls/ScrollBar.xba \
+	ToolkitControls/ScrollBarDlg.xdl 
+	cd $(subst /,$(PS),$(COMP_GEN_OUT)) && $(SDK_ZIP) -u ../../../bin/$(@F) META-INF/manifest.xml
+
+$(COMP_REGISTERFLAG) : $(COMP_PACKAGE)
+ifeq "$(SDK_AUTO_DEPLOYMENT)" "YES"
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
+	-$(MKDIR) $(subst /,$(PS),$(@D))
+	$(DEPLOYTOOL) $(COMP_PACKAGE_URL)
+	@echo flagged > $(subst /,$(PS),$@)
+else
+	@echo --------------------------------------------------------------------------------
+	@echo  If you want to install your component automatically, please set the environment
+	@echo  variable SDK_AUTO_DEPLOYMENT = YES. But note that auto deployment is only 
+	@echo  possible if no office instance is running. 
+	@echo --------------------------------------------------------------------------------
+endif
+
+$(SAMPLE_NAME) : $(COMP_REGISTERFLAG)
+	@echo --------------------------------------------------------------------------------
+	@echo The "$(QM)ToolkitControls$(QM)" library was installed in your office installation
+	@echo if SDK_AUTO_DEPLOYMENT = YES. You can use it in the BASIC IDE as a normal
+	@echo Basic library. 
+	@echo You can also load the document "$(QM)$(COMP_NAME).odt$(QM)" and press a button 
+	@echo to run one of the example macros.
+	@echo -
+	@echo make $(COMP_NAME).odt.load
+	@echo --------------------------------------------------------------------------------
+
+$(COMP_NAME).odt.load : $(COMP_REGISTERFLAG)
+	"$(OFFICE_PROGRAM_PATH)$(PS)soffice" $(basename $@)
+
+.PHONY: clean
+clean :
+	-$(DELRECURSIVE) $(subst /,$(PS),$(COMP_GEN_OUT))
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMP_PACKAGE_URL)))
