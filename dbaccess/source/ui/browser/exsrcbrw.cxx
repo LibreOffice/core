@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exsrcbrw.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 13:53:58 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 13:04:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,12 +172,6 @@ Reference< XRowSet >  SbaExternalSourceBrowser::CreateForm()
 
 //------------------------------------------------------------------------------
 sal_Bool SbaExternalSourceBrowser::InitializeForm(const Reference< XRowSet > & xForm)
-{
-    return sal_True;
-}
-
-//------------------------------------------------------------------
-sal_Bool SbaExternalSourceBrowser::InitializeGridModel(const Reference< ::com::sun::star::form::XFormComponent > & xGrid)
 {
     return sal_True;
 }
