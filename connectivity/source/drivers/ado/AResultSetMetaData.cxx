@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AResultSetMetaData.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-29 12:24:20 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:36:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,7 +203,7 @@ sal_Bool SAL_CALL OResultSetMetaData::isAutoIncrement( sal_Int32 column ) throw(
         if ( aProps.IsValid() )
         {
             bRet = OTools::getValue( aProps, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ISAUTOINCREMENT")) );
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
             sal_Int32 nCount = aProps.GetItemCount();
             for (sal_Int32 i = 0; i<nCount; ++i)
             {
