@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews1.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: cl $ $Date: 2002-11-29 14:55:51 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 10:58:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -303,6 +303,10 @@ void SdDrawViewShell::SelectionHasChanged()
         /**********************************************************************
         * Ggf. OLE-Objekt beruecksichtigen und deaktivieren
         **********************************************************************/
+
+        // if we have no ole object marked and have an inplace active ipc client
+        // this means we recently deselected an inplace active ole object so
+        // we need to deselect it now
         if (!pOleObj)
         {
             pIPClient->GetProtocol().Reset2Open();
@@ -475,8 +479,9 @@ USHORT SdDrawViewShell::PrepareClose( BOOL bUI, BOOL bForBrowsing )
 
         if( pPreviewWin->GetDoc() == pDoc && pShow && pShow->IsInputLocked() )
         {
-            pShow->Terminate();
-            bRet = FALSE;
+            //          pShow->Terminate();
+            //          bRet = FALSE;
+            pShow->Destroy ();
         }
     }
 
@@ -1248,6 +1253,7 @@ BOOL SdDrawViewShell::SwitchPage(USHORT nSelectedPage)
         SfxBindings& rBindings = GetViewFrame()->GetBindings();
         rBindings.Invalidate(SID_NAVIGATOR_PAGENAME, TRUE, FALSE);
         rBindings.Invalidate(SID_EFFECT_STATE, TRUE, FALSE);
+        rBindings.Invalidate(SID_STATUS_PAGE, TRUE, FALSE);
         UpdateSlideChangeWindow();
         UpdatePreview( pActualPage );
 
@@ -1292,6 +1298,12 @@ BOOL SdDrawViewShell::IsSwitchPageAllowed() const
 
 void SdDrawViewShell::ResetActualLayer()
 {
+    // remember old layer cound and current layer id
+    // this is needed when one layer is renamed to
+    // restore current layer
+    USHORT nOldLayerCnt = aLayerTab.GetPageCount();
+    USHORT nOldLayerId = aLayerTab.GetCurPageId();
+
     /*************************************************************
     * Update fuer LayerTab
     *************************************************************/
@@ -1364,7 +1376,15 @@ void SdDrawViewShell::ResetActualLayer()
 
     if ( nActiveLayer == SDRLAYER_NOTFOUND )
     {
-        nActiveLayer = ( eEditMode == EM_MASTERPAGE ) ? 2 : 0;
+        if( nOldLayerCnt == aLayerTab.GetPageCount() )
+        {
+            nActiveLayer = nOldLayerId - 1;
+        }
+        else
+        {
+            nActiveLayer = ( eEditMode == EM_MASTERPAGE ) ? 2 : 0;
+        }
+
         pDrView->SetActiveLayer( aLayerTab.GetPageText(nActiveLayer + 1) );
     }
 
@@ -1571,4 +1591,4 @@ sal_Int8 SdDrawViewShell::ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetH
 #ifdef WNT
 #pragma optimize ( "", on )
 #endif
-    
+

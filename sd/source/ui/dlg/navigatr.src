@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navigatr.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: cl $ $Date: 2002-05-30 12:43:41 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 10:57:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,17 +106,18 @@ Window FLT_NAVIGATOR
                 Text [ portuguese ] = "Ao vivo" ;
                 Text [ swedish ] = "Liveläge" ;
                 Text[ chinese_simplified ] = "å®å†µæ¨¡å¼";
-                Text[ russian ] = "Ğåæèì Live";
+                Text[ russian ] = "Ğåæèì èíòåğàêòèâíîãî ğåäàêòèğîâàíèÿ";
                 Text[ polish ] = "Tryb Live";
-                Text[ japanese ] = "ï¾—ï½²ï¾Œï¾ï¾“ï½°ï¾„ï¾";
+                Text[ japanese ] = "ãƒ©ã‚¤ãƒ–ãƒ¢ãƒ¼ãƒ‰";
                 Text[ chinese_traditional ] = "å¯¦æ³æ¨¡å¼";
                 Text[ arabic ] = "ÇáæÖÚ ÇáãÈÇÔÑ";
                 Text[ greek ] = "ÊáôÜóôáóç æùíôáíŞò óıíäåóçò";
                 Text[ korean ] = "ë¼ì´ë¸Œ ëª¨ë“œ";
                 Text[ turkish ] = "\"Canlı sunu\" kipi";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Modo en vivo";
-                Text[ finnish ] = "Reaaliaikainen tila";
+                Text[ catalan ] = "Mode en viu";
+                Text[ finnish ] = "Muokkaa esitettäessä";
+                Text[ thai ] = "à¹‚à¸«à¸¡à¸”à¸–à¹ˆà¸²à¸¢à¸—à¸­à¸”à¸ªà¸”";
             };
             ToolBoxItem
             {
@@ -137,15 +138,16 @@ Window FLT_NAVIGATOR
                 Text[ chinese_simplified ] = "ç¬”";
                 Text[ russian ] = "Êàğàíäàø";
                 Text[ polish ] = "Kredka";
-                Text[ japanese ] = "ï¾ï¾Ÿï¾";
+                Text[ japanese ] = "ãƒšãƒ³";
                 Text[ chinese_traditional ] = "ç•«ç­†";
                 Text[ arabic ] = "Şáã";
                 Text[ greek ] = "Ğİíá";
                 Text[ korean ] = "í¬ì¸í„°";
                 Text[ turkish ] = "Kalem";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Pluma";
+                Text[ catalan ] = "Punter";
                 Text[ finnish ] = "Osoitin";
+                Text[ thai ] = "à¸•à¸±à¸§à¸Šà¸µà¹‰";
             };
             ToolBoxItem
             {
@@ -155,6 +157,7 @@ Window FLT_NAVIGATOR
             {
                 Identifier = TBI_FIRST ;
                 HelpId = HID_SD_NAVIGATOR_TBI_FIRST ;
+                 //Symbol = IMAGEBUTTON_FIRST ;
                 Text = "Erste Seite" ;
                 Text [ ENGLISH ] = "First page" ;
                 Text [ english_us ] = "First Slide" ;
@@ -169,20 +172,22 @@ Window FLT_NAVIGATOR
                 Text[ chinese_simplified ] = "é¦–é¡µ";
                 Text[ russian ] = "Ïåğâûé ñëàéä";
                 Text[ polish ] = "Pierwszy slajd";
-                Text[ japanese ] = "æœ€åˆã®ï¾ï¾Ÿï½°ï½¼ï¾";
+                Text[ japanese ] = "æœ€åˆã®ãƒšãƒ¼ã‚¸";
                 Text[ chinese_traditional ] = "é¦–é ";
                 Text[ arabic ] = "ÇáÕİÍÉ ÇáÃæáì";
                 Text[ greek ] = "Ğñşôç óåëßäá";
                 Text[ korean ] = "ì²«ë²ˆì§¸ ìŠ¬ë¼ì´ë“œ";
                 Text[ turkish ] = "İlk sayfa";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Primera página";
+                Text[ catalan ] = "Primera diapositiva";
                 Text[ finnish ] = "Ensimmäinen dia";
+                Text[ thai ] = "à¸ à¸²à¸à¸™à¸´à¹ˆà¸‡à¸­à¸±à¸™à¹à¸£à¸";
             };
             ToolBoxItem
             {
                 Identifier = TBI_PREVIOUS ;
                 HelpId = HID_SD_NAVIGATOR_TBI_PREV ;
+                 //Symbol = IMAGEBUTTON_PREV ;
                 Text = "vorherige Seite" ;
                 Text [ ENGLISH ] = "Previous page" ;
                 Text [ dutch ] = "Vorige pagina" ;
@@ -197,22 +202,26 @@ Window FLT_NAVIGATOR
                 Text[ chinese_simplified ] = "ä¸Šä¸€é¡µ";
                 Text[ russian ] = "Ïğåäûäóùèé ñëàéä";
                 Text[ polish ] = "Poprzedni slajd";
-                Text[ japanese ] = "å‰ã®ï¾ï¾Ÿï½°ï½¼ï¾";
+                Text[ japanese ] = "å‰ã®ãƒšãƒ¼ã‚¸";
                 Text[ chinese_traditional ] = "ä¸Šä¸€é ";
                 Text[ arabic ] = "ÇáÕİÍÉ ÇáÓÇÈŞÉ";
                 Text[ greek ] = "Ğñïçãïıìåíç óåëßäá";
                 Text[ korean ] = "ì´ì „ ìŠ¬ë¼ì´ë“œ";
                 Text[ turkish ] = "Önceki sayfa";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Página anterior";
+                Text[ catalan ] = "Diapositiva anterior";
                 Text[ finnish ] = "Edellinen dia";
+                Text[ thai ] = "à¸ à¸²à¸à¸™à¸´à¹ˆà¸‡à¸­à¸±à¸™à¸à¹ˆà¸­à¸™";
             };
             ToolBoxItem
             {
                 Identifier = TBI_NEXT ;
                 HelpId = HID_SD_NAVIGATOR_TBI_NEXT ;
+                 //Symbol = IMAGEBUTTON_NEXT ;
+                /* ### ACHTUNG: Neuer Text in Resource? Nächste Seite : Nõchste Seite */
                 Text = "Nächste Seite" ;
                 Text [ ENGLISH ] = "Next page" ;
+                /* ### ACHTUNG: Neuer Text in Resource? Zur nächsten Seite springen : Zur nõchsten Seite springen */
                 Text [ dutch ] = "Volgende pagina" ;
                 Text [ english_us ] = "Next Slide" ;
                 Text [ italian ] = "Pagina successiva" ;
@@ -225,20 +234,22 @@ Window FLT_NAVIGATOR
                 Text[ chinese_simplified ] = "ä¸‹ä¸€é¡µ";
                 Text[ russian ] = "Ñëåäóşùèé ñëàéä";
                 Text[ polish ] = "Nastêpny slajd";
-                Text[ japanese ] = "æ¬¡ã®ï¾ï¾Ÿï½°ï½¼ï¾";
+                Text[ japanese ] = "æ¬¡ã®ãƒšãƒ¼ã‚¸";
                 Text[ chinese_traditional ] = "ä¸‹ä¸€é ";
                 Text[ arabic ] = "ÇáÕİÍÉ ÇáÊÇáíÉ";
                 Text[ greek ] = "Åğüìåíç óåëßäá";
                 Text[ korean ] = "ë‹¤ìŒ ìŠ¬ë¼ì´ë“œ";
                 Text[ turkish ] = "Sonraki sayfa";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Página siguiente";
+                Text[ catalan ] = "Pàgina següent";
                 Text[ finnish ] = "Seuraava dia";
+                Text[ thai ] = "à¸ à¸²à¸à¸™à¸´à¹ˆà¸‡à¸–à¸±à¸”à¹„à¸›";
             };
             ToolBoxItem
             {
                 Identifier = TBI_LAST ;
                 HelpId = HID_SD_NAVIGATOR_TBI_LAST ;
+                 //Symbol = IMAGEBUTTON_LAST ;
                 Text = "Letzte Seite" ;
                 Text [ ENGLISH ] = "Last page" ;
                 Text [ dutch ] = "Laatste pagina" ;
@@ -253,15 +264,16 @@ Window FLT_NAVIGATOR
                 Text[ chinese_simplified ] = "æœ€åä¸€é¡µ";
                 Text[ russian ] = "Ïîñëåäíèé ñëàéä";
                 Text[ polish ] = "Ostatni slajd";
-                Text[ japanese ] = "æœ€å¾Œã®ï¾ï¾Ÿï½°ï½¼ï¾";
+                Text[ japanese ] = "æœ€å¾Œã®ãƒšãƒ¼ã‚¸";
                 Text[ chinese_traditional ] = "æœ€å¾Œä¸€é ";
                 Text[ arabic ] = "ÇáÕİÍÉ ÇáÃÎíÑÉ";
                 Text[ greek ] = "Ôåëåõôáßá óåëßäá";
                 Text[ korean ] = "ë§ˆì§€ë§‰ ìŠ¬ë¼ì´ë“œ";
                 Text[ turkish ] = "Son sayfa";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Última página";
+                Text[ catalan ] = "Última pàgina";
                 Text[ finnish ] = "Viimeinen dia";
+                Text[ thai ] = "à¸ à¸²à¸à¸™à¸´à¹ˆà¸‡à¸­à¸±à¸™à¸ªà¸¸à¸”à¸—à¹‰à¸²à¸¢";
             };
             ToolBoxItem
             {
@@ -272,13 +284,15 @@ Window FLT_NAVIGATOR
                 Identifier = TBI_DRAGTYPE ;
                 HelpId = HID_SD_NAVIGATOR_TBI_DRAGTYPE ;
                 DropDown = TRUE ;
+                 //Left = FALSE;
                 Text = "Dragmodus" ;
                 Text [ English ] = "Drag Mode" ;
+                /* ### ACHTUNG: Neuer Text in Resource? Modus für Drag & Drop auswählen : Modus f³r Drag & Drop auswõhlen */
                 Text [ english_us ] = "Drag Mode" ;
                 Text [ italian ] = "Modo drag" ;
                 Text [ spanish ] = "Modo Arrastrar" ;
                 Text [ french ] = "Mode Glisser" ;
-                Text [ dutch ] = "Dragmodus" ;
+                Text [ dutch ] = "Sleepmodus" ;
                 Text [ danish ] = "Trækmodus" ;
                 Text [ portuguese_brazilian ] = "Dragmodus" ;
                 Text [ portuguese ] = "Modo Arrastar" ;
@@ -286,15 +300,16 @@ Window FLT_NAVIGATOR
                 Text[ chinese_simplified ] = "æ‹–æ›³æ¨¡å¼";
                 Text[ russian ] = "Ğåæèì ïåğåòàñêèâàíèÿ";
                 Text[ polish ] = "Tryb przeci¹gania";
-                Text[ japanese ] = "ï¾„ï¾ï¾—ï½¯ï½¸ï¾ï¾“ï½°ï¾„ï¾";
+                Text[ japanese ] = "ãƒ‰ãƒ©ãƒƒã‚°ãƒ¢ãƒ¼ãƒ‰";
                 Text[ chinese_traditional ] = "æ‹–æ›³æ¨¡å¼";
                 Text[ arabic ] = "ØÑíŞÉ ÇáÓÍÈ";
                 Text[ greek ] = "ÊáôÜóôáóç ìåôáêßíçóçò";
-                Text[ korean ] = "ë“œë˜ê·¸ ëª¨ë“œ";
+                Text[ korean ] = "ëŒê¸° ëª¨ë“œ";
                 Text[ turkish ] = "Sürükleme kipi";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Modo Arrastrar";
+                Text[ catalan ] = "Mode d'arrossegament";
                 Text[ finnish ] = "Vetotila";
+                Text[ thai ] = "à¹‚à¸«à¸¡à¸”à¸¥à¸²à¸";
             };
         };
     };
@@ -316,10 +331,11 @@ Window FLT_NAVIGATOR
         QuickHelpText [ danish ] = "Dokumenter" ;
         QuickHelpText [ portuguese ] = "Documentos" ;
         QuickHelpText [ portuguese_brazilian ] = "Dokumente" ;
+        /* ### ACHTUNG: Neuer Text in Resource? Geöffnete Dokumente : Ge÷ffnete Dokumente */
         QuickHelpText [ swedish ] = "Dokument" ;
-        QuickHelpText[ russian ] = "Äîêóìåíòû";
+    QuickHelpText[ russian ] = "Äîêóìåíòû";
         QuickHelpText[ polish ] = "Dokumenty";
-        QuickHelpText[ japanese ] = "ï¾„ï¾ï½·ï½­ï¾’ï¾ï¾„";
+        QuickHelpText[ japanese ] = "ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆ";
         QuickHelpText[ chinese_simplified ] = "æ–‡æ¡£";
         QuickHelpText[ chinese_traditional ] = "æ–‡ä»¶";
         QuickHelpText[ arabic ] = "ãÓÊäÏÇÊ";
@@ -330,12 +346,12 @@ Window FLT_NAVIGATOR
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Dokumente";
-        QuickHelpText[ catalan ] = "Documentos";
-        QuickHelpText[ finnish ] = "Asiakirjat!";
+        QuickHelpText[ catalan ] = "Documents";
+        QuickHelpText[ finnish ] = "Asiakirjat";
+        QuickHelpText[ thai ] = "Documents";
     };
 
-
-#define NAVIGATR_IDLIST \
+    #define NAVIGATR_IDLIST \
         IdList =            \
         {                   \
             TBI_LIVE ;  \
@@ -350,19 +366,25 @@ Window FLT_NAVIGATOR
         };                 \
         IdCount = { 9 ; };
 
+    #define IMAGE_STDBTN_COLOR Color { Red = 0xff00; Green = 0x0000; Blue = 0xff00; }
+
     ImageList IL_NAVIGATR
     {
         ImageBitmap = Bitmap { File = "nv_imagelist.bmp" ; };
-        MaskColor = IMAGE_MASK_STDCOLOR_HC ;
+        MaskColor = IMAGE_STDBTN_COLOR ;
         NAVIGATR_IDLIST
     };
     ImageList ILH_NAVIGATR
     {
         ImageBitmap = Bitmap { File = "nvh_imagelist.bmp" ; };
-        MaskColor = IMAGE_MASK_STDCOLOR_HC ;
+        MaskColor = IMAGE_STDBTN_COLOR ;
         NAVIGATR_IDLIST
     };
 };
+
+
+
+
 
 
 

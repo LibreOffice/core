@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unchss.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dl $ $Date: 2001-09-27 15:01:34 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 10:57:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,9 @@
 #ifndef _SFXSMPLHINT_HXX //autogen
 #include <svtools/smplhint.hxx>
 #endif
+#ifndef _SVDOBJ_HXX
+#include <svx/svdobj.hxx>
+#endif
 
 #include "unchss.hxx"
 
@@ -101,8 +104,11 @@ StyleSheetUndoAction::StyleSheetUndoAction(SdDrawDocument* pTheDoc,
 
     // ItemSets anlegen; Vorsicht, das neue koennte aus einem anderen Pool
     // stammen, also mitsamt seinen Items clonen
-    pNewSet = pTheNewItemSet->Clone(TRUE, &(pTheDoc->GetPool()));
-    pOldSet = new SfxItemSet(pStyleSheet->GetItemSet());
+    pNewSet = new SfxItemSet(*(SfxItemPool*)SdrObject::GetGlobalDrawObjectItemPool(), pTheNewItemSet->GetRanges());
+    pTheDoc->MigrateItemSet( pTheNewItemSet, pNewSet, pTheDoc );
+
+    pOldSet = new SfxItemSet(*(SfxItemPool*)SdrObject::GetGlobalDrawObjectItemPool(),pStyleSheet->GetItemSet().GetRanges());
+    pTheDoc->MigrateItemSet( &pStyleSheet->GetItemSet(), pOldSet, pTheDoc );
 
     aComment = String(SdResId(STR_UNDO_CHANGE_PRES_OBJECT));
     String aName(pStyleSheet->GetName());
@@ -128,7 +134,10 @@ StyleSheetUndoAction::StyleSheetUndoAction(SdDrawDocument* pTheDoc,
 
 void StyleSheetUndoAction::Undo()
 {
-    pStyleSheet->GetItemSet().Set(*pOldSet);
+    SfxItemSet aNewSet( pDoc->GetItemPool(), pOldSet->GetRanges() );
+    pDoc->MigrateItemSet( pOldSet, &aNewSet, pDoc );
+
+    pStyleSheet->GetItemSet().Set(aNewSet);
     if( pStyleSheet->GetFamily() == SFX_STYLE_FAMILY_PSEUDO )
         ( (SdStyleSheet*)pStyleSheet )->GetRealStyleSheet()->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
     else
@@ -143,7 +152,10 @@ void StyleSheetUndoAction::Undo()
 
 void StyleSheetUndoAction::Redo()
 {
-    pStyleSheet->GetItemSet().Set(*pNewSet);
+    SfxItemSet aNewSet( pDoc->GetItemPool(), pOldSet->GetRanges() );
+    pDoc->MigrateItemSet( pNewSet, &aNewSet, pDoc );
+
+    pStyleSheet->GetItemSet().Set(aNewSet);
     if( pStyleSheet->GetFamily() == SFX_STYLE_FAMILY_PSEUDO )
         ( (SdStyleSheet*)pStyleSheet )->GetRealStyleSheet()->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
     else

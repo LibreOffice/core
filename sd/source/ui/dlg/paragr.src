@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragr.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: cl $ $Date: 2002-09-03 11:58:44 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 10:57:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,17 +106,18 @@ TabDialog TAB_PARAGRAPH
                 Text [ spanish ] = "Sangrías y espacios" ;
                 Text [ english_us ] = "Indents & Spacing" ;
                 PageResID = RID_SVXPAGE_STD_PARAGRAPH ;
-                Text[ chinese_simplified ] = "Ëõ½øºÍ¼ä¸ô";
+                Text[ chinese_simplified ] = "ç¼©è¿›å’Œé—´éš”";
                 Text[ russian ] = "Îòñòóïû è èíòåğâàëû";
                 Text[ polish ] = "Wciêcia i odstêpy";
-                Text[ japanese ] = "²İÃŞİÄ‚ÆsŠÔŠu";
-                Text[ chinese_traditional ] = "ÁY±Æ©M¶¡¹j";
+                Text[ japanese ] = "ã‚¤ãƒ³ãƒ‡ãƒ³ãƒˆã¨è¡Œé–“éš”";
+                Text[ chinese_traditional ] = "ç¸®æ’å’Œé–“éš”";
                 Text[ arabic ] = "ÇáÅÒÇÍÉ æÇáÊÈÇÚÏ";
                 Text[ greek ] = "Åóï÷İò êáé áğïóôÜóåéò";
-                Text[ korean ] = "µé¿©¾²±â¿Í °£°İ";
+                Text[ korean ] = "ë“¤ì—¬ì“°ê¸° ë° ê°„ê²©";
                 Text[ turkish ] = "Girintiler ve aralıklar";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Sangrías y espacios";
+                Text[ catalan ] = "Sagnats i espaiat";
+                Text[ thai ] = "à¸£à¸°à¸¢à¸°à¹€à¸¢à¸·à¹‰à¸­à¸‡à¹à¸¥à¸°à¸£à¸°à¸¢à¸°à¸«à¹ˆà¸²à¸‡";
             };
             PageItem
             {
@@ -133,18 +134,19 @@ TabDialog TAB_PARAGRAPH
                 Text [ french ] = "Alignement" ;
                 Text [ dutch ] = "Uitlijning" ;
                 Text [ portuguese_brazilian ] = "Ausrichtung" ;
-                Text[ chinese_simplified ] = "¶ÔÆë";
+                Text[ chinese_simplified ] = "å¯¹é½";
                 Text[ russian ] = "Âûğàâíèâàíèå";
                 Text[ polish ] = "Wyrównanie";
-                Text[ japanese ] = "”z’u";
-                Text[ chinese_traditional ] = "¹ï»ô";
+                Text[ japanese ] = "é…ç½®";
+                Text[ chinese_traditional ] = "å°é½Š";
                 Text[ arabic ] = "ÇáãÍÇĞÇÉ";
                 Text[ greek ] = "Óôïß÷éóç";
-                Text[ korean ] = "¸ÂÃã";
+                Text[ korean ] = "ë§ì¶¤";
                 Text[ turkish ] = "Hizalama";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Alineación";
+                Text[ catalan ] = "Alineament";
                 Text[ finnish ] = "Tasaus";
+                Text[ thai ] = "à¸ˆà¸±à¸”à¸•à¸³à¹à¸«à¸™à¹ˆà¸‡";
             };
             PageItem
             {
@@ -154,24 +156,25 @@ TabDialog TAB_PARAGRAPH
                 Text [ ENGLISH ] = "Asian typography" ;
                 Text[ english_us ] = "Asian Typography";
                 Text[ portuguese ] = "Tipografia asiática";
-                Text[ russian ] = "Àçèàòñêèå øğèôòû";
+                Text[ russian ] = "Àçèàòñêîå îôîğìëåíèå";
                 Text[ greek ] = "ÁóéáôéêŞ ôõğïãñáößá";
                 Text[ dutch ] = "Aziatische typografie";
                 Text[ french ] = "Typographie asiatique";
                 Text[ spanish ] = "Tipografía asiática";
                 Text[ italian ] = "Tipografia asiatica";
-                Text[ danish ] = "Asian typography";
+                Text[ danish ] = "Asiatisk typografi";
                 Text[ swedish ] = "Asiatisk typografi";
                 Text[ polish ] = "Typografia azjatycka";
                 Text[ portuguese_brazilian ] = "Asian typography";
-                Text[ japanese ] = "“ú–{Œê•¶‚Ì‘ÌÙ";
-                Text[ korean ] = "¾Æ½Ã¾Æ  Å¸ÀÌÆ÷±×·¡ÇÇ";
-                Text[ chinese_simplified ] = "ÖĞÈÕº«ÎÄ×Ö";
-                Text[ chinese_traditional ] = "¤¤¤éÁú¤å¦r";
+                Text[ japanese ] = "æ—¥æœ¬èªæ–‡ã®ä½“è£";
+                Text[ korean ] = "í•œê¸€ ì…ë ¥ ì²´ê³„";
+                Text[ chinese_simplified ] = "ä¸­æ—¥éŸ©æ–‡å­—";
+                Text[ chinese_traditional ] = "ä¸­æ—¥éŸ“æ–‡å­—";
                 Text[ turkish ] = "Asian typography";
                 Text[ arabic ] = "ÃÓáæÈ ÇáØÈÇÚÉ ÇáÂÓíæíÉ";
-                Text[ catalan ] = "Tipografía asiática";
+                Text[ catalan ] = "Tipografia asiàtica";
                 Text[ finnish ] = "Aasialaiset merkit";
+                Text[ thai ] = "à¸à¸²à¸£à¸à¸´à¸¡à¸à¹Œà¹à¸šà¸šà¹€à¸­à¹€à¸Šà¸µà¸¢";
             };
             /*
             PageItem  {
@@ -206,20 +209,21 @@ TabDialog TAB_PARAGRAPH
                 Text [ french ] = "Tabulation" ;
                 Text [ swedish ] = "Tabulator" ;
                 Text [ dutch ] = "Tab" ;
-                Text [ spanish ] = "Tabulación" ;
+                Text [ spanish ] = "Tabulador" ;
                 Text [ english_us ] = "Tabs" ;
                 PageResID = RID_SVXPAGE_TABULATOR ;
-                Text[ chinese_simplified ] = "ÖÆ±í·û";
-                Text[ russian ] = "Òàáóëÿòîğ";
+                Text[ chinese_simplified ] = "åˆ¶è¡¨ç¬¦";
+                Text[ russian ] = "Òàáóëÿöèÿ";
                 Text[ polish ] = "Tabulator";
-                Text[ japanese ] = "ÀÌŞ";
-                Text[ chinese_traditional ] = "»sªí²Å";
+                Text[ japanese ] = "ã‚¿ãƒ–";
+                Text[ chinese_traditional ] = "å®šä½éµ";
                 Text[ arabic ] = "ÚáÇãÉ ÌÏæáÉ";
                 Text[ greek ] = "Óôçëïèİôçò";
-                Text[ korean ] = "ÅÇ Á¤Áö";
+                Text[ korean ] = "íƒ­";
                 Text[ turkish ] = "Sekmeler";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Tabulación";
+                Text[ catalan ] = "Pestanyes";
+                Text[ thai ] = "à¸£à¸°à¸¢à¸°à¸à¸±à¹‰à¸™";
             };
         };
     };
@@ -260,30 +264,44 @@ TabDialog TAB_PARAGRAPH
         Text [ spanish ] = "Regresar" ;
         Text [ english_us ] = "Return" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "·µ»Ø";
-        Text[ russian ] = "Íàçàä";
+        Text[ chinese_simplified ] = "è¿”å›";
+        Text[ russian ] = "Âîññòàíîâèòü";
         Text[ polish ] = "Wstecz";
-        Text[ japanese ] = "–ß‚é";
-        Text[ chinese_traditional ] = "ªğ¦^";
+        Text[ japanese ] = "æˆ»ã‚‹";
+        Text[ chinese_traditional ] = "è¿”å›";
         Text[ arabic ] = "ÇáÓÇÈŞ";
         Text[ greek ] = "ÅğéóôñïöŞ";
-        Text[ korean ] = "µÇµ¹¾Æ°¡±â";
+        Text[ korean ] = "ë’¤ë¡œ";
         Text[ turkish ] = "Geri";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Regresar";
+        Text[ catalan ] = "Torna";
+        Text[ thai ] = "à¸ªà¹ˆà¸‡à¸à¸¥à¸±à¸š";
     };
-    Text[ chinese_simplified ] = "¶ÎÂä";
+    Text[ chinese_simplified ] = "æ®µè½";
     Text[ russian ] = "Àáçàö";
     Text[ polish ] = "Akapit";
-    Text[ japanese ] = "’i—";
-    Text[ chinese_traditional ] = "¬q¸¨";
+    Text[ japanese ] = "æ®µè½";
+    Text[ chinese_traditional ] = "æ®µè½";
     Text[ arabic ] = "ÇáİŞÑÉ";
     Text[ greek ] = "ĞáñÜãñáöïò";
-    Text[ korean ] = "´Ü¶ô";
+    Text[ korean ] = "ë‹¨ë½";
     Text[ turkish ] = "Paragraf";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Párrafo";
+    Text[ catalan ] = "Paràgraf";
+    Text[ thai ] = "à¸¢à¹ˆà¸­à¸«à¸™à¹‰à¸²";
 };
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

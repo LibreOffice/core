@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgfield.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cl $ $Date: 2002-10-21 15:29:16 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 10:57:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,7 +121,7 @@ SdModifyFieldDlg::SdModifyFieldDlg( Window* pWindow, const SvxFieldData* pInFiel
 {
     FreeResource();
 
-    maLbLanguage.SetLanguageList( LANG_LIST_ALL, false );
+    maLbLanguage.SetLanguageList( LANG_LIST_ALL|LANG_LIST_ONLY_KNOWN, false );
     maLbLanguage.SetSelectHdl( LINK( this, SdModifyFieldDlg, LanguageChangeHdl ) );
     FillControls();
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessibility.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2002-09-17 13:27:00 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 10:57:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,7 +191,7 @@ String SID_SD_A11Y_I_OUTLINEVIEW_N
     Text[ polish ] = "Outline View";
     Text[ portuguese_brazilian ] = "Outline View";
     Text[ japanese ] = "アウトラインモード";
-    Text[ korean ] = "아웃트라인 보기";
+    Text[ korean ] = "개요 보기";
     Text[ chinese_simplified ] = "大纲视图";
     Text[ chinese_traditional ] = "大綱預覽";
     Text[ turkish ] = "Outline View";
@@ -218,7 +218,7 @@ String SID_SD_A11Y_I_OUTLINEVIEW_D
     Text[ polish ] = "This is where you enter or edit text in list form.";
     Text[ portuguese_brazilian ] = "This is where you enter or edit text in list form.";
     Text[ japanese ] = "ここで、アウトライン用テキストの入力と編集ができます。";
-    Text[ korean ] = "여기에서 아웃트라인용 텍스트를 입력하거나 편집할 수 있습니다.";
+    Text[ korean ] = "여기에서 텍스트를 개요 보기로 입력하거나 편집할 수 있습니다.";
     Text[ chinese_simplified ] = "在这里您能够在大纲视图之中输入和编辑文字。";
     Text[ chinese_traditional ] = "在此您能夠在大綱預覽之中輸入和編輯文字。";
     Text[ turkish ] = "This is where you enter or edit text in list form.";
@@ -388,3 +388,5 @@ String SID_SD_A11Y_I_HANDOUTVIEW_D
     Text[ catalan ] = "This is where you decide on the layout for handouts.";
     Text[ thai ] = "This is where you decide on the layout for handouts.";
 };
+
+

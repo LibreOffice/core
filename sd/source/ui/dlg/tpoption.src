@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpoption.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: aw $ $Date: 2002-02-27 14:56:45 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 10:57:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,18 +74,19 @@
         Text [ danish ] = "Målestok" ;                  \
         Text [ portuguese ] = "Escala" ;                \
         Text [ portuguese_brazilian ] = "Ma?stab" ;     \
-        Text[ chinese_simplified ] = "ÏÔÊ¾±ÈÁĞ";        \
+        Text[ chinese_simplified ] = "æ˜¾ç¤ºæ¯”ä¾‹";        \
         Text[ russian ] = "Ìàñøòàá";                    \
         Text[ polish ] = "Skala";                       \
-        Text[ japanese ] = "”{—¦";                      \
-        Text[ chinese_traditional ] = "Åã¥Ü¤ñ¨Ò";       \
+        Text[ japanese ] = "å€ç‡";                      \
+        Text[ chinese_traditional ] = "é¡¯ç¤ºæ¯”ä¾‹";       \
         Text[ arabic ] = "ÊßÈíÑ/ÊÕÛíÑ";                 \
         Text[ greek ] = "Êëßìáêá";                      \
-        Text[ korean ] = "¹èÀ²";                        \
+        Text[ korean ] = "ë°°ìœ¨";                        \
         Text[ turkish ] = "Ölçek";                      \
         Text[ language_user1 ] = " ";   \
-    Text[ finnish ] = "Zoomaa"; \
-    Text[ catalan ] = "Maßstab";
+    Text[ finnish ] = "Skaalaa";    \
+    Text[ catalan ] = "Escala"; \
+    Text[ thai ] = "à¸ªà¹€à¸à¸¥";
 
  // Contents (Inhalte)
 TabPage TP_OPTIONS_CONTENTS
@@ -99,7 +100,7 @@ TabPage TP_OPTIONS_CONTENTS
     Text [ swedish ] = "Innehåll" ;
     Text [ danish ] = "Indhold" ;
     Text [ italian ] = "Contenuti" ;
-    Text [ spanish ] = "Contenidos" ;
+    Text [ spanish ] = "Contenido" ;
     Text [ french ] = "Contenu" ;
     Text [ dutch ] = "Inhoud" ;
     Text [ portuguese ] = "Conteúdos" ;
@@ -121,17 +122,18 @@ TabPage TP_OPTIONS_CONTENTS
         Text [ PORTUGUESE_BRAZILIAN ] = "Ersatzdarstellung" ;
         Text [ SWEDISH ] = "Ersättningsvisning" ;
         Text [ PORTUGUESE ] = "Visualização de substituição" ;
-        Text[ chinese_simplified ] = "Ìæ»»ÏÔÊ¾ÄÚÈİ";
-        Text[ russian ] = "Àëüòåğíàòèâíûé ïîêàç";
+        Text[ chinese_simplified ] = "æ›¿æ¢æ˜¾ç¤ºå†…å®¹";
+        Text[ russian ] = "Àëüòåğíàòèâíûé ıêğàí";
         Text[ polish ] = "Widok opcjonalny";
-        Text[ japanese ] = "‰¼•\\¦";
-        Text[ chinese_traditional ] = "´À¥NÅã¥Ü¤º®e";
+        Text[ japanese ] = "ä»®è¡¨ç¤º";
+        Text[ chinese_traditional ] = "æ›¿ä»£é¡¯ç¤ºå…§å®¹";
         Text[ arabic ] = "ÇáÚÑÖ ÇáÈÏíá";
         Text[ greek ] = "ÅíáëëáêôéêŞ ğñïâïëŞ";
-        Text[ korean ] = "´ëÃ¼ µğ½ºÇÃ·¹ÀÌ";
+        Text[ korean ] = "ëŒ€ì²´ í‘œì‹œ";
         Text[ turkish ] = "Alternatif görüntü";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Visualización alternativa";
+        Text[ catalan ] = "Visualització alternativa";
+        Text[ thai ] = "à¹à¸ªà¸”à¸‡à¸œà¸¥à¸—à¸”à¹à¸—à¸™";
     };
     CheckBox CBX_EXTERN_GRAPHIC
     {
@@ -146,22 +148,23 @@ TabPage TP_OPTIONS_CONTENTS
         Text [ SPANISH ] = "~Indicar imágenes externas" ;
         Text [ FINNISH ] = "~Kuvien paikkamerkit" ;
         Text [ FRENCH ] = "Ébaucher les images externes" ;
-        Text [ ITALIAN ] = "Mostra solo ~ingombro immagini" ;
+        Text [ ITALIAN ] = "Mostra solo ingombro immagini" ;
         Text [ DUTCH ] = "~Externe afbeeldingen aanduiden" ;
         Text [ PORTUGUESE_BRAZILIAN ] = "Fremdgrafiken andeuten" ;
         Text [ SWEDISH ] = "Antyd extern gra~fik" ;
         Text [ PORTUGUESE ] = "Delinear imagens e~xternas" ;
-        Text[ chinese_simplified ] = "ÏÔÊ¾ÆäËü¸ñÊ½Í¼ĞÎµÄ±ß¿ò(~I)";
-        Text[ russian ] = "Îáîçíà÷èòü âíåøíèå ğèñóíêè";
+        Text[ chinese_simplified ] = "æ˜¾ç¤ºå…¶ä»–æ ¼å¼çš„å›¾å½¢è¾¹æ¡†(~I)";
+        Text[ russian ] = "Ïîëÿ ïîäñòàíîâêè èçîáğàæåíèÿ";
         Text[ polish ] = "Symbol zastêpczy grafik";
-        Text[ japanese ] = "²Ò°¼Ş˜g‚Ì•\\¦(~I)";
-        Text[ chinese_traditional ] = "Åã¥Ü¨ä¥L®æ¦¡¹Ï§ÎªºÃä®Ø(~I)";
+        Text[ japanese ] = "ã‚¤ãƒ¡ãƒ¼ã‚¸æ ã®è¡¨ç¤º(~I)";
+        Text[ chinese_traditional ] = "é¡¯ç¤ºå…¶ä»–æ ¼å¼çš„åœ–å½¢é‚Šæ¡†(~I)";
         Text[ arabic ] = "ÊáãíÍ áÕæÑ ÎÇÑÌíÉ";
         Text[ greek ] = "ÕğïäŞëùóç åîùôåñéêşí ãñá~öéêşí";
-        Text[ korean ] = "¿ÜºÎ±×·¡ÇÈ Ç¥½Ã(~I)";
+        Text[ korean ] = "ê·¸ë¦¼ ê°œì²´ í‹€(~I)";
         Text[ turkish ] = "Harici grafik için yer tutucu";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Indicar imágenes externas";
+        Text[ catalan ] = "~Marcadors de la imatge";
+        Text[ thai ] = "à¸•à¸³à¹à¸«à¸™à¹ˆà¸‡à¸§à¸²à¸‡~à¸ à¸²à¸";
     };
     CheckBox CBX_OUTLINEMODE
     {
@@ -172,25 +175,26 @@ TabPage TP_OPTIONS_CONTENTS
         Text [ ENGLISH ] = "Umrißmodus" ;
         Text [ english_us ] = "C~ontour mode" ;
         Text [ italian ] = "Modo profilo" ;
-        Text [ spanish ] = "Modo ~contorno" ;
-        Text [ french ] = "Mode ~Contour" ;
+        Text [ spanish ] = "Modo contorno" ;
+        Text [ french ] = "Mode Contour" ;
         Text [ dutch ] = "~Contourmodus" ;
         Text [ swedish ] = "~Konturläge" ;
         Text [ danish ] = "Konturmodus" ;
         Text [ portuguese ] = "Modo de ~contorno" ;
         Text [ portuguese_brazilian ] = "Umri?modus" ;
-        Text[ chinese_simplified ] = "ÂÖÀªÄ£Ê½(~O)";
-        Text[ russian ] = "~Ğåæèì êîíòóğà";
+        Text[ chinese_simplified ] = "è½®å»“æ¨¡å¼(~O)";
+        Text[ russian ] = "Ğå~æèì êîíòóğà";
         Text[ polish ] = "Tryb konturu";
-        Text[ japanese ] = "—ÖŠsÓ°ÄŞ(~O)";
-        Text[ chinese_traditional ] = "½ü¹ø¼Ò¦¡(~O)";
+        Text[ japanese ] = "è¼ªéƒ­ãƒ¢ãƒ¼ãƒ‰(~O)";
+        Text[ chinese_traditional ] = "è¼ªå»“æ¨¡å¼(~O)";
         Text[ arabic ] = "Ôßá ÇáÎØ ÇáßİÇİí";
         Text[ greek ] = "ÊáôÜóôáóç ğåñéãñÜììáôïò";
-        Text[ korean ] = "À±°û ¸ğµå(~O)";
+        Text[ korean ] = "ìœ¤ê³½ ëª¨ë“œ(~O)";
         Text[ turkish ] = "Kontur kipi";
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "~Ääriviivatila";
-        Text[ catalan ] = "Modo ~contorno";
+        Text[ catalan ] = "Mode del c~ontorn";
+        Text[ thai ] = "à¹‚à¸«à¸¡à¸”à¹‚à¸„~à¸£à¸‡à¸£à¹ˆà¸²à¸‡";
     };
     CheckBox CBX_NOTEXT
     {
@@ -202,24 +206,25 @@ TabPage TP_OPTIONS_CONTENTS
         Text [ dutch ] = "~Tekst aanduiden" ;
         Text [ english_us ] = "~Text placeholders" ;
         Text [ italian ] = "~Accenna testo" ;
-        Text [ spanish ] = "C~omodín para texto" ;
+        Text [ spanish ] = "C~omodín de texto" ;
         Text [ french ] = "~Ébaucher le texte" ;
-        Text [ swedish ] = "Antyd ~text" ;
-        Text [ danish ] = "Antyd tekst" ;
+        Text [ swedish ] = "Antyd te~xt" ;
+        Text [ danish ] = "Ant~yd tekst" ;
         Text [ portuguese ] = "Separadores de ~texto" ;
         Text [ portuguese_brazilian ] = "Text andeuten" ;
-        Text[ chinese_simplified ] = "ÏÔÊ¾ÎÄ×Ö¿ò(~T)";
-        Text[ russian ] = "~Îáîçíà÷èòü òåêñò";
+        Text[ chinese_simplified ] = "æ˜¾ç¤ºæ–‡å­—æ¡†(~T)";
+        Text[ russian ] = "~Òåêñò ïîëåé ïîäñòàíîâêè";
         Text[ polish ] = "Symbol zastêpczy tekstu";
-        Text[ japanese ] = "Ã·½Ä‚ÌÌßÚ°½ÎÙÀŞ(~T)";
-        Text[ chinese_traditional ] = "¤å¦r¤è¶ô(~T)";
+        Text[ japanese ] = "ãƒ†ã‚­ã‚¹ãƒˆã®ãƒ—ãƒ¬ãƒ¼ã‚¹ãƒ›ãƒ«ãƒ€(~T)";
+        Text[ chinese_traditional ] = "æ–‡å­—æ–¹å¡Š(~T)";
         Text[ arabic ] = "ÊáãíÍ Åáì ÇáäÕ";
         Text[ greek ] = "ÕğïäŞëùóç êåéìİíïõ";
-        Text[ korean ] = "ÅØ½ºÆ® Ç¥½Ã(~T)";
+        Text[ korean ] = "í…ìŠ¤íŠ¸ ê°œì²´ í‹€(~T)";
         Text[ turkish ] = "Metin için yer tutucu";
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "~Tekstin paikkamerkit";
-        Text[ catalan ] = "C~omodín para texto";
+        Text[ catalan ] = "Marcadors del ~text";
+        Text[ thai ] = "à¸•à¸³à¹à¸«à¸™à¹ˆà¸‡à¸§à¸²à¸‡~à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡";
     };
     CheckBox CBX_HAIRLINEMODE
     {
@@ -231,25 +236,26 @@ TabPage TP_OPTIONS_CONTENTS
         Text [ NORWEGIAN ] = "Nur Haarlinien anzeigen" ;
         Text [ DANISH ] = "Vis kun konturlinjer" ;
         Text [ ENGLISH_US ] = "~Line contour only" ;
-        Text [ SPANISH ] = "~Mostrar solo líneas finas" ;
+        Text [ SPANISH ] = "~Mostrar sólo líneas finas" ;
         Text [ FINNISH ] = "~Vain ääriviiva" ;
         Text [ FRENCH ] = "Afficher uniquement les lignes ~fines" ;
         Text [ ITALIAN ] = "Mostra solo linee sottili" ;
         Text [ DUTCH ] = "~Alleen haarlijnen weergeven" ;
         Text [ PORTUGUESE_BRAZILIAN ] = "Nur Haarlinien anzeigen" ;
-        Text [ SWEDISH ] = "Visa ~bara hjälplinjer" ;
+        Text [ SWEDISH ] = "Visa ~bara fina linjer" ;
         Text [ PORTUGUESE ] = "Mostrar só linhas finas" ;
-        Text[ chinese_simplified ] = "Ö»ÏÔÊ¾ÂÖÀªÏß(~L)";
+        Text[ chinese_simplified ] = "åªæ˜¾ç¤ºè½®å»“çº¿(~L)";
         Text[ russian ] = "Òîëüêî òîíêèé êîíòóğ";
         Text[ polish ] = "Tylko kontur";
-        Text[ japanese ] = "ü‚Ì—ÖŠs‚¾‚¯‚ğ•\\¦(~L)";
-        Text[ chinese_traditional ] = "¥uÅã¥Ü½ü¹ø½u(~L)";
+        Text[ japanese ] = "ç·šã®è¼ªéƒ­ã ã‘ã‚’è¡¨ç¤º(~L)";
+        Text[ chinese_traditional ] = "åªé¡¯ç¤ºè¼ªå»“ç·š(~L)";
         Text[ arabic ] = "ÅÙåÇÑ ÍÏæÏ ÇáÎØ İŞØ";
         Text[ greek ] = "ÅìöÜ~íéóç ìüíï ğïëı ëåğôşí ãñáììşí";
-        Text[ korean ] = "°¡´Â ¼±¸¸ Ç¥½Ã(~L)";
+        Text[ korean ] = "ì„  ìœ¤ê³½ë§Œ í‘œì‹œ(~L)";
         Text[ turkish ] = "Kontur çizgilerini göster";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Mostrar solo líneas finas";
+        Text[ catalan ] = "~Mostra només les línies fines";
+        Text[ thai ] = "à¹‚à¸„à¸£à¸‡à¸£à¹ˆà¸²à¸‡à¹€~à¸ªà¹‰à¸™à¹€à¸—à¹ˆà¸²à¸™à¸±à¹‰à¸™";
     };
     FixedLine GRP_DISPLAY
     {
@@ -266,18 +272,19 @@ TabPage TP_OPTIONS_CONTENTS
         Text [ danish ] = "Vis" ;
         Text [ portuguese ] = "Mostrar" ;
         Text [ portuguese_brazilian ] = "Anzeigen" ;
-        Text[ chinese_simplified ] = "ÏÔÊ¾";
+        Text[ chinese_simplified ] = "æ˜¾ç¤º";
         Text[ russian ] = "Ïîêàçàòü";
         Text[ polish ] = "Poka¿";
-        Text[ japanese ] = "•\\¦";
-        Text[ chinese_traditional ] = "Åã¥Ü";
+        Text[ japanese ] = "è¡¨ç¤º";
+        Text[ chinese_traditional ] = "é¡¯ç¤º";
         Text[ arabic ] = "ÅÙåÇÑ";
         Text[ greek ] = "ĞñïâïëŞ";
-        Text[ korean ] = "Ç¥½Ã";
+        Text[ korean ] = "í‘œì‹œ";
         Text[ turkish ] = "Görüntüle";
         Text[ language_user1 ] = " ";
-        Text[ finnish ] = "Näkyvä komponentti";
-        Text[ catalan ] = "Mostrar";
+        Text[ finnish ] = "Näytä";
+        Text[ catalan ] = "Visualitza";
+        Text[ thai ] = "à¹à¸ªà¸”à¸‡à¸œà¸¥";
     };
     CheckBox CBX_RULER
     {
@@ -287,27 +294,28 @@ TabPage TP_OPTIONS_CONTENTS
         Text = "~Lineale sichtbar" ;
         Text [ ENGLISH ] = "Lineale" ;
         Text [ NORWEGIAN ] = "Lineale" ;
-        Text [ DANISH ] = "Linealer synlige" ;
+        Text [ DANISH ] = "~Lineal synlig" ;
         Text [ ENGLISH_US ] = "~Rulers visible" ;
         Text [ SPANISH ] = "Reglas ~visibles" ;
-        Text [ FINNISH ] = "~Viivaimet näkyvissä" ;
-        Text [ FRENCH ] = "~Règles visibles" ;
+        Text [ FINNISH ] = "V~iivaimet näkyvissä" ;
+        Text [ FRENCH ] = "Règles visibles" ;
         Text [ ITALIAN ] = "Righelli visibili" ;
-        Text [ DUTCH ] = "~Linialen zichbaar" ;
+        Text [ DUTCH ] = "~Linialen zichtbaar" ;
         Text [ PORTUGUESE_BRAZILIAN ] = "Lineale" ;
         Text [ SWEDISH ] = "~Linjaler synliga" ;
         Text [ PORTUGUESE ] = "Réguas visíveis" ;
-        Text[ chinese_simplified ] = "ÏÔÊ¾±ê³ß(~R)";
+        Text[ chinese_simplified ] = "æ˜¾ç¤ºæ ‡å°º(~R)";
         Text[ russian ] = "~Ïîêàçàòü ëèíåéêè";
         Text[ polish ] = "Widoczne linijki";
-        Text[ japanese ] = "Ù°×‚Ì•\\¦(~R)";
-        Text[ chinese_traditional ] = "Åã¥Ü¼Ğ¤Ø(~R)";
+        Text[ japanese ] = "ãƒ«ãƒ¼ãƒ©ã®è¡¨ç¤º(~R)";
+        Text[ chinese_traditional ] = "é¡¯ç¤ºæ¨™å°º(~R)";
         Text[ arabic ] = "ÇáãÓÇØÑ ãÑÆíÉ";
         Text[ greek ] = "×Üñáêåò ïñáôÜ";
-        Text[ korean ] = "´«±İÀÚ Ç¥½Ã(~R)";
+        Text[ korean ] = "ëˆˆê¸ˆì í‘œì‹œ(~R)";
         Text[ turkish ] = "Cetvelleri göster";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Reglas ~visibles";
+        Text[ catalan ] = "~Regles visibles";
+        Text[ thai ] = "à¸¡à¸­à¸‡à¹€à¸«à¹‡à¸™à¹„~à¸¡à¹‰à¸šà¸£à¸£à¸—à¸±à¸”";
     };
     CheckBox CBX_HELPLINES
     {
@@ -316,27 +324,28 @@ TabPage TP_OPTIONS_CONTENTS
         TabStop = TRUE ;
         Text = "Hilfslinien beim ~Verschieben" ;
         Text [ ENGLISH ] = "Hilfslinien beim Verschieben" ;
-        Text [ dutch ] = "Hulplijnen bij ~verplaatsen" ;
+        Text [ dutch ] = "Hul~plijnen bij verplaatsen" ;
         Text [ english_us ] = "~Guides when moving" ;
         Text [ italian ] = "Linee guida durante lo spostamento" ;
         Text [ spanish ] = "~Guías al desplazar" ;
-        Text [ french ] = "~Repères lors du déplacement" ;
-        Text [ swedish ] = "Hjälplinjer vid ~förflyttning" ;
-        Text [ danish ] = "Hjælpelinjer ved flytning" ;
+        Text [ french ] = "Repères lors du déplacement" ;
+        Text [ swedish ] = "Hjälplinjer vid förfl~yttning" ;
+        Text [ danish ] = "Hjælpelinjer ved ~flytning" ;
         Text [ portuguese ] = "Guias ao ~mover" ;
         Text [ portuguese_brazilian ] = "Hilfslinien beim ~Verschieben" ;
-        Text[ chinese_simplified ] = "ÔÚÒÆ¶¯¶ÔÏóÊ±ÏÔÊ¾¸¨ÖúÏß(~G)";
-        Text[ russian ] = "Íàïğàâ. ëèíèè ïğè ïåğåìåùåíèè îáúåêòà";
+        Text[ chinese_simplified ] = "åœ¨ç§»åŠ¨æ—¶æ˜¾ç¤ºè¾…åŠ©çº¿(~G)";
+        Text[ russian ] = "Íàïğàâ. ~ëèíèè ïğè ïåğåìåùåíèè îáúåêòà";
         Text[ polish ] = "Linie pomocnicze przy przesuwaniu obiektu";
-        Text[ japanese ] = "ˆÚ“®‚Ì•â•ü‚ğ•\\¦(~G)";
-        Text[ chinese_traditional ] = "¦b²¾°Ê®ÉÅã¥Ü»²§U½u(~G)";
+        Text[ japanese ] = "ç§»å‹•æ™‚ã®è£œåŠ©ç·šã‚’è¡¨ç¤º(~G)";
+        Text[ chinese_traditional ] = "åœ¨ç§»å‹•æ™‚é¡¯ç¤ºè¼”åŠ©ç·š(~G)";
         Text[ arabic ] = "ÇáÎØæØ ÇáãÓÇÚÏÉ ÃËäÇÁ ÇáÅÒÇÍÉ";
         Text[ greek ] = "Âïçèçôéêİò ãñáììİò êáôÜ ôç ìåôáêßíçóç";
-        Text[ korean ] = "°³Ã¼ ÀÌµ¿½Ã ¾È³»¼±(~G)";
+        Text[ korean ] = "ì´ë™ì‹œ ì•ˆë‚´ì„ (~G)";
         Text[ turkish ] = "Taşıma sırasında yardımcı çizgiler";
         Text[ language_user1 ] = " ";
-        Text[ finnish ] = "~Ohjaimet siirrettäessä";
-        Text[ catalan ] = "~Guías al desplazar";
+        Text[ finnish ] = "~Apuviivat siirrettäessä";
+        Text[ catalan ] = "~Guies en moure";
+        Text[ thai ] = "à¹~à¸™à¸°à¸™à¸³à¹€à¸¡à¸·à¹ˆà¸­à¸à¸³à¸¥à¸±à¸‡à¸¢à¹‰à¸²à¸¢";
     };
     CheckBox CBX_HANDLES_BEZIER
     {
@@ -345,27 +354,28 @@ TabPage TP_OPTIONS_CONTENTS
         TabStop = TRUE ;
         Text = "~Alle Steuerpunkte im Bezier-Editor" ;
         Text [ ENGLISH ] = "~All handles in Bézier editor" ;
-        Text [ dutch ] = "~Alle besturingspunten in de Bézier-editor" ;
+        Text [ dutch ] = "Alle ~besturingspunten in de Bézier-editor" ;
         Text [ english_us ] = "~All control points in Bézier editor" ;
         Text [ italian ] = "Tutti i punti di controllo nell'editor Bézier" ;
         Text [ spanish ] = "~Todos los puntos de control en el editor Bézier" ;
         Text [ french ] = "~Tous les points de contrôle de l'éditeur Bézier" ;
         Text [ swedish ] = "~Alla kontrollpunkter i Bézier-editorn" ;
-        Text [ danish ] = "Alle kontrolpunkter i bezier-redigeringen" ;
+        Text [ danish ] = "~Alle kontrolpunkter i Bezier-editor" ;
         Text [ portuguese_brazilian ] = "~Alle Handles im Bezier-Editor" ;
         Text [ portuguese ] = "~Todos os pontos de controlo do editor Bézier" ;
-        Text[ chinese_simplified ] = "ÇúÏß±à¼­Æ÷Ö®ÄÚµÄÈ«²¿¿Øµã(~A)";
+        Text[ chinese_simplified ] = "æ›²çº¿ç¼–è¾‘å™¨ä¹‹å†…çš„å…¨éƒ¨æ§ç‚¹(~A)";
         Text[ russian ] = "~Âñå òî÷êè â ğåäàêòîğå Áåçüå";
         Text[ polish ] = "~Wszystkie punkty sterownicze w edytorze Beziera";
-        Text[ japanese ] = "ÍŞ¼Şª‹Èü•ÒW‚Å§Œä“_‚ğ‚·‚×‚Ä•\\¦(~A)";
-        Text[ chinese_traditional ] = "¦±½u½s¿èµ{¦¡¤ºªº¥ş³¡±±ÂI(~A)";
+        Text[ japanese ] = "ãƒ™ã‚¸ã‚§æ›²ç·šç·¨é›†ã§åˆ¶å¾¡ç‚¹ã‚’ã™ã¹ã¦è¡¨ç¤º(~A)";
+        Text[ chinese_traditional ] = "æ›²ç·šç·¨è¼¯ç¨‹å¼å…§çš„å…¨éƒ¨æ§é»(~A)";
         Text[ arabic ] = "ßá äŞÇØ ÇáÊÍßã İí ãÍÑÑ Bézier";
         Text[ greek ] = "¼ëåò ôá óçìå~ßá åëİã÷ïõ óå åğåîåñãáóßá Bézier";
-        Text[ korean ] = "º£Áö¿¡ ÆíÁı±âÀÇ ¸ğµç ÇÚµé(~A)";
+        Text[ korean ] = "ë² ì§€ì— í¸ì§‘ê¸°ì˜ ëª¨ë“  ì œì–´ì ì„ í‘œì‹œ(~A)";
         Text[ turkish ] = "Bézier düzenleyicisindeki tüm denetim nokt.";
         Text[ language_user1 ] = " ";
-        Text[ finnish ] = "~Kaikki Bézier-editorin ohjauspisteet";
-        Text[ catalan ] = "~Todos los puntos de control en el editor Bézier";
+        Text[ finnish ] = "Kaikki ~Bézier-editorin ohjauspisteet";
+        Text[ catalan ] = "~Tots els punts de control en l'editor Bézier";
+        Text[ thai ] = "à¸ˆà¸¸à¸”à¸„à¸§à¸šà¸„à¸¸à¸¡~à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”à¹ƒà¸™à¸•à¸±à¸§à¹à¸à¹‰à¹„à¸‚ Bà¹‰zier ";
     };
     CheckBox CBX_MOVE_OUTLINE
     {
@@ -376,38 +386,40 @@ TabPage TP_OPTIONS_CONTENTS
         Text [ ENGLISH ] = "Umriß jedes einzelnen Objektes" ;
         Text [ english_us ] = "~Contour of each individual object" ;
         Text [ italian ] = "Profilo di ogni singolo oggetto" ;
-        Text [ spanish ] = "~Contorno de cada objeto" ;
-        Text [ french ] = "~Contour de chaque objet" ;
-        Text [ dutch ] = "~Contour om ieder object" ;
+        Text [ spanish ] = "Contorno de cada objeto" ;
+        Text [ french ] = "Contour de chaque objet" ;
+        Text [ dutch ] = "C~ontour om ieder object" ;
         Text [ swedish ] = "Kont~ur för varje enskilt objekt" ;
-        Text [ danish ] = "Hvert enkelt objekts kontur" ;
+        Text [ danish ] = "Ko~ntur for hvert objekt" ;
         Text [ portuguese ] = "~Contorno de cada objecto" ;
         Text [ portuguese_brazilian ] = "~Umri? jedes einzelnen Objektes" ;
-        Text[ chinese_simplified ] = "Ã¿¸öµ¥Ò»¶ÔÏóµÄÂÖÀª(~C)";
+        Text[ chinese_simplified ] = "æ¯ä¸ªå•ä¸€å¯¹è±¡çš„è½®å»“(~C)";
         Text[ russian ] = "Êîíòóğ êàæäîãî îáúåêòà îòäåëüíî";
         Text[ polish ] = "Obrys pojedynczych obiektów";
-        Text[ japanese ] = "ŠeµÌŞ¼Şª¸Ä‚É“K‚µ‚½—ÖŠs‚Ì•\\¦(~C)";
-        Text[ chinese_traditional ] = "¨C­Óª«¥óªº½ü¹ø(~C)";
+        Text[ japanese ] = "å„ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã«é©ã—ãŸè¼ªéƒ­ã®è¡¨ç¤º(~C)";
+        Text[ chinese_traditional ] = "æ¯å€‹ç‰©ä»¶çš„è¼ªå»“(~C)";
         Text[ arabic ] = "ÇáÎØ ÇáßİÇİí áßá ßÇÆä İÑÏí";
         Text[ greek ] = "Ğåñßãñáììá êÜèå ~ìåìïíùìİíïõ áíôéêåéìİíïõ";
-        Text[ korean ] = "¸ğµç °³º° °³Ã¼ÀÇ À±°û(~C)";
+        Text[ korean ] = "ëª¨ë“  ê°œë³„ ê°œì²´ì˜ ìœ¤ê³½ì„ í‘œì‹œ(~C)";
         Text[ turkish ] = "Her bir nesnenin konturu";
         Text[ language_user1 ] = " ";
-        Text[ finnish ] = "~Kunkin yksittäisen objektin ääriviiva";
-        Text[ catalan ] = "~Contorno de cada objeto";
+        Text[ finnish ] = "Kunki~n yksittäisen objektin ääriviiva";
+        Text[ catalan ] = "~Contorn de cada objecte individual";
+        Text[ thai ] = "à¹‚~à¸„à¸£à¸‡à¸£à¹ˆà¸²à¸‡à¸‚à¸­à¸‡à¸§à¸±à¸•à¸–à¸¸à¹€à¸‰à¸à¸²à¸°à¹à¸•à¹ˆà¸¥à¸°à¸­à¸±à¸™";
     };
-    Text[ chinese_simplified ] = "ÄÚÈİ";
+    Text[ chinese_simplified ] = "å†…å®¹";
     Text[ russian ] = "Ñîäåğæèìîå";
     Text[ polish ] = "Zawartoœci";
-    Text[ japanese ] = "“à—e";
-    Text[ chinese_traditional ] = "¤º®e";
+    Text[ japanese ] = "å†…å®¹";
+    Text[ chinese_traditional ] = "å…§å®¹";
     Text[ arabic ] = "ÇáãÍÊæíÇÊ";
     Text[ greek ] = "Ğåñéå÷üìåíá";
-    Text[ korean ] = "³»¿ë";
+    Text[ korean ] = "ë‚´ìš©";
     Text[ turkish ] = "İçerik";
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Sisältö";
-    Text[ catalan ] = "Contenidos";
+    Text[ catalan ] = "Contingut";
+    Text[ thai ] = "à¹€à¸™à¸·à¹‰à¸­à¸«à¸²";
 };
  // MISC (Sonstiges)
 TabPage TP_OPTIONS_MISC
@@ -441,18 +453,19 @@ TabPage TP_OPTIONS_MISC
         Text [ danish ] = "Tekstobjekter" ;
         Text [ portuguese ] = "Objectos de texto" ;
         Text [ portuguese_brazilian ] = "Textobjekte" ;
-        Text[ chinese_simplified ] = "ÎÄ×Ö¶ÔÏó";
+        Text[ chinese_simplified ] = "æ–‡å­—å¯¹è±¡";
         Text[ russian ] = "Îáúåêòû òåêñòà";
         Text[ polish ] = "Obiekty tekstowe";
-        Text[ japanese ] = "Ã·½ÄµÌŞ¼Şª¸Ä";
-        Text[ chinese_traditional ] = "¤å¦rª«¥ó";
+        Text[ japanese ] = "ãƒ†ã‚­ã‚¹ãƒˆã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ";
+        Text[ chinese_traditional ] = "æ–‡å­—ç‰©ä»¶";
         Text[ arabic ] = "ßÇÆäÇÊ äÕíÉ";
         Text[ greek ] = "Áíôéêåßìåíá êåéìİíïõ";
-        Text[ korean ] = "ÅØ½ºÆ® °³Ã¼";
+        Text[ korean ] = "í…ìŠ¤íŠ¸ ê°œì²´";
         Text[ turkish ] = "Metin nesneleri";
         Text[ language_user1 ] = " ";
-        Text[ finnish ] = "Tekstiobjektit";
-        Text[ catalan ] = "Objetos de texto";
+        Text[ finnish ] = "Tekstin muotoilurivi";
+        Text[ catalan ] = "Objectes de text";
+        Text[ thai ] = "à¸§à¸±à¸•à¸–à¸¸à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡";
     };
     CheckBox CBX_QUICKEDIT
     {
@@ -466,22 +479,23 @@ TabPage TP_OPTIONS_MISC
         Text [ italian ] = "Permetti modifica rapida" ;
         Text [ spanish ] = "~Permitir edición rápida" ;
         Text [ french ] = "Permettre l'édition ~rapide" ;
-        Text [ swedish ] = "Tillåt snabbredigering" ;
-        Text [ danish ] = "Tillad hurtigredigering" ;
+        Text [ swedish ] = "Tillåt ~snabbredigering" ;
+        Text [ danish ] = "T~illad hurtigredigering" ;
         Text [ portuguese ] = "Permitir edição rápida" ;
         Text [ portuguese_brazilian ] = "Schnellbearbeitung zulassen" ;
-        Text[ chinese_simplified ] = "ÔÊĞí¿ìËÙ±à¼­";
-        Text[ russian ] = "~Äîïóñòèòü áûñòğîå ğåäàêòèğîâàíèå";
+        Text[ chinese_simplified ] = "å…è®¸å¿«é€Ÿç¼–è¾‘";
+        Text[ russian ] = "~Ğàçğåøèòü áûñòğîå ğåäàêòèğîâàíèå";
         Text[ polish ] = "Dopuœæ szybk¹ edycjê";
-        Text[ japanese ] = "v‘¬•ÒW‚³‚¹‚é";
-        Text[ chinese_traditional ] = "¤¹³\\§Ö³t½s¿è";
+        Text[ japanese ] = "ã‚¯ã‚¤ãƒƒã‚¯ç·¨é›†ã‚’è¡Œã†";
+        Text[ chinese_traditional ] = "å…è¨±å¿«é€Ÿç·¨è¼¯";
         Text[ arabic ] = "ÇáÓãÇÍ ÈÇáÊÍÑíÑ ÇáÓÑíÚ";
         Text[ greek ] = "Ìå ãñŞãïñç åğåîåñãáóßá";
-        Text[ korean ] = "ºü¸¥ ÆíÁı Çã¿ë";
+        Text[ korean ] = "ë¹ ë¥¸ í¸ì§‘ í—ˆìš©";
         Text[ turkish ] = "Hızlı düzenlemeye izin ver";
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "Salli pikamuokkaus";
-        Text[ catalan ] = "~Permitir edición rápida";
+        Text[ catalan ] = "~Permet l'edició ràpida";
+        Text[ thai ] = "à¹ƒà¸«à¹‰à¸¡à¸µà¸à¸²à¸£à¹à¸à¹‰à¹„à¸‚à¸”à¹ˆà¸§à¸™";
     };
     CheckBox CBX_PICKTHROUGH
     {
@@ -493,24 +507,25 @@ TabPage TP_OPTIONS_MISC
         Text [ dutch ] = "~Alleen tekstbereik selecteerbaar" ;
         Text [ english_us ] = "Only text area selectable" ;
         Text [ italian ] = "Seleziona solo area testo" ;
-        Text [ spanish ] = "~Seleccionar solo áreas de texto" ;
+        Text [ spanish ] = "Seleccionar sólo áreas de texto" ;
         Text [ french ] = "Sélection que pour la zone texte" ;
         Text [ swedish ] = "Bara textområde ka~n markeras" ;
         Text [ danish ] = "Kun tekstområde markerbar" ;
         Text [ portuguese ] = "Apenas área do texto seleccionável" ;
         Text [ portuguese_brazilian ] = "Nur Textbereich selektierbar" ;
-        Text[ chinese_simplified ] = "Ö»ÄÜ¹»Ñ¡ÔñÎÄ×ÖÇøÓò";
-        Text[ russian ] = "~Âûäåëåíèå òîëüêî îáëàñòè òåêñòà";
+        Text[ chinese_simplified ] = "åªèƒ½å¤Ÿé€‰æ‹©æ–‡å­—åŒºåŸŸ";
+        Text[ russian ] = "Â~ûäåëåíèå òîëüêî îáëàñòè òåêñòà";
         Text[ polish ] = "Selekcja mo¿liwa tylko w obszarze tekstu";
-        Text[ japanese ] = "Ã·½Ä—Ìˆæ‚¾‚¯‘I‘ğ‰Â”\\";
-        Text[ chinese_traditional ] = "¥u¯à°÷¿ï¾Ü¤å¦r½d³ò";
+        Text[ japanese ] = "ãƒ†ã‚­ã‚¹ãƒˆé ˜åŸŸã ã‘é¸æŠå¯èƒ½";
+        Text[ chinese_traditional ] = "åªèƒ½å¤ é¸æ“‡æ–‡å­—ç¯„åœ";
         Text[ arabic ] = "äØÇŞ ÇáäÕ İŞØ ŞÇÈá ááÊÍÏíÏ";
         Text[ greek ] = "ÅğéëïãŞ ìü~íï ğåñéï÷Şò êåéìİíïõ";
-        Text[ korean ] = "ÅØ½ºÆ® ¿µ¿ª¸¸ ¼±ÅÃ °¡´É";
+        Text[ korean ] = "í…ìŠ¤íŠ¸ ì˜ì—­ë§Œ ì„ íƒ ê°€ëŠ¥";
         Text[ turkish ] = "Yalnızca metin bölümü seçilebilir";
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "Vain tekstialue valittavissa";
-        Text[ catalan ] = "~Seleccionar solo áreas de texto";
+        Text[ catalan ] = "~Selecciona només àrees de text";
+        Text[ thai ] = "à¸ªà¸²à¸¡à¸²à¸£à¸–à¹€à¸¥à¸·à¸­à¸à¸à¸·à¹‰à¸™à¸—à¸µà¹ˆà¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡à¹„à¸”à¹‰à¸­à¸¢à¹ˆà¸²à¸‡à¹€à¸”à¸µà¸¢à¸§";
     };
     FixedLine GRP_PROGRAMSTART
     {
@@ -523,22 +538,23 @@ TabPage TP_OPTIONS_MISC
         Text [ swedish ] = "Nytt dokument" ;
         Text [ danish ] = "Nyt dokument" ;
         Text [ italian ] = "Nuovo documento" ;
-        Text [ spanish ] = "Nuevo documento" ;
+        Text [ spanish ] = "Documento nuevo" ;
         Text [ french ] = "Nouveau document" ;
         Text [ dutch ] = "Nieuw document" ;
         Text [ portuguese ] = "Novo documento" ;
-        Text[ chinese_simplified ] = "ĞÂÎÄµµ";
+        Text[ chinese_simplified ] = "æ–°å»ºæ–‡æ¡£";
         Text[ russian ] = "Íîâûé äîêóìåíò";
         Text[ polish ] = "Nowy dokument";
-        Text[ japanese ] = "V‚µ‚¢ÄŞ·­ÒİÄ";
-        Text[ chinese_traditional ] = "·s¼W¤å¥ó";
+        Text[ japanese ] = "æ–°ã—ã„ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆ";
+        Text[ chinese_traditional ] = "æ–°å¢æ–‡ä»¶";
         Text[ arabic ] = "ÇáãÓÊäÏ ÇáÌÏíÏ";
         Text[ greek ] = "Äçìéïõñãßá åããñÜöïõ";
-        Text[ korean ] = "»õ ¹®¼­";
+        Text[ korean ] = "ìƒˆ ë¬¸ì„œ";
         Text[ turkish ] = "Yeni belge";
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "Uusi asiakirja";
-        Text[ catalan ] = "Nuevo documento";
+        Text[ catalan ] = "Document nou";
+        Text[ thai ] = "à¹€à¸­à¸à¸ªà¸²à¸£à¹ƒà¸«à¸¡à¹ˆ";
     };
     CheckBox CBX_START_WITH_TEMPLATE
     {
@@ -549,25 +565,26 @@ TabPage TP_OPTIONS_MISC
         Text [ ENGLISH ] = "~Start with autopilot" ;
         Text [ english_us ] = "Start with AutoPilot" ;
         Text[ portuguese ] = "Iniciar com A~utoPiloto";
-        Text[ russian ] = "Çàïóñê ñ ïîìîùüş Àâòîïèëîòà";
+        Text[ russian ] = "Ñîçäàâàòü ñ ïîìîùüş Ìàñòåğà";
         Text[ dutch ] = "~Met AutoPiloot starten";
         Text[ french ] = "Démarrer avec l'AutoPilote";
-        Text[ spanish ] = "~Comenzar con AutoPiloto";
+        Text[ spanish ] = "~Comenzar con el Piloto automático ";
         Text[ italian ] = "Avvia con il Pilota ~automatico";
         Text[ danish ] = "Start med AutoPiloter";
         Text[ swedish ] = "Starta med ~AutoPiloten";
         Text[ polish ] = "Generuj korzystaj¹c z AutoPilota";
         Text[ portuguese_brazilian ] = "Pr?sentationsdialoge zeigen";
-        Text[ japanese ] = "µ°ÄÊß²Û¯Ä‚ÅŠJn";
-        Text[ chinese_simplified ] = "ºÍ×Ô¶¯ÎÄ¼şÖúÀíÒ»ÆğÆô¶¯";
-        Text[ chinese_traditional ] = "©M¦Û°ÊÀÉ®×§U²z¤@°_±Ò°Ê";
+        Text[ japanese ] = "ã‚ªãƒ¼ãƒˆãƒ‘ã‚¤ãƒ­ãƒƒãƒˆã§é–‹å§‹";
+        Text[ chinese_simplified ] = "å’Œè‡ªåŠ¨æ–‡ä»¶åŠ©ç†ä¸€èµ·å¯åŠ¨";
+        Text[ chinese_traditional ] = "å’Œè‡ªå‹•æª”æ¡ˆåŠ©ç†ä¸€èµ·å•Ÿå‹•";
         Text[ arabic ] = "ÇáÈÏÁ ãÚ ÇáãÑÔÏíä ÇáÂáííä";
         Text[ greek ] = "Åêêßíçóç ìå ~AutoPilot";
-        Text[ korean ] = "ÀÚµ¿ÆÄÀÏ·µÀ¸·Î ½ÃÀÛ";
+        Text[ korean ] = "ìë™ íŒŒì¼ëŸ¿ìœ¼ë¡œ ì‹œì‘";
         Text[ turkish ] = "OtoPilot ile başla";
         Text[ language_user1 ] = " ";
-        Text[ finnish ] = "Aloita automaattisella ohjauksella";
-        Text[ catalan ] = "~Comenzar con AutoPiloto";
+        Text[ finnish ] = "Aloita ohjatulla toiminnolla";
+        Text[ catalan ] = "Inicia amb els AutoPilots";
+        Text[ thai ] = "à¹€à¸£à¸´à¹ˆà¸¡à¸”à¹‰à¸§à¸¢à¸à¸²à¸£à¸™à¸³à¸£à¹ˆà¸­à¸‡à¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´";
     };
     FixedLine GRP_SETTINGS
     {
@@ -583,18 +600,19 @@ TabPage TP_OPTIONS_MISC
         Text[ french ] = "Paramètres";
         Text[ spanish ] = "Configuración";
         Text[ italian ] = "Impostazioni";
-        Text[ danish ] = "Settings";
+        Text[ danish ] = "Indstillinger";
         Text[ swedish ] = "Inställningar";
         Text[ polish ] = "Ustawienia";
         Text[ portuguese_brazilian ] = "Settings";
-        Text[ japanese ] = "İ’è";
-        Text[ korean ] = "¼¼ÆÃ";
-        Text[ chinese_simplified ] = "Éè¶¨";
-        Text[ chinese_traditional ] = "³]©w";
+        Text[ japanese ] = "è¨­å®š";
+        Text[ korean ] = "ì„¤ì •";
+        Text[ chinese_simplified ] = "è®¾å®š";
+        Text[ chinese_traditional ] = "è¨­å®š";
         Text[ turkish ] = "Settings";
         Text[ arabic ] = "ÇáÅÚÏÇÏÇÊ";
         Text[ finnish ] = "Asetukset";
-        Text[ catalan ] = "Settings";
+        Text[ catalan ] = "Configuració";
+        Text[ thai ] = "à¸à¸³à¸«à¸™à¸”";
     };
     CheckBox CBX_MASTERPAGE_CACHE
     {
@@ -606,24 +624,25 @@ TabPage TP_OPTIONS_MISC
         Text [ dutch ] = "~Cache voor achtergrond gebruiken" ;
         Text [ english_us ] = "Use background cache" ;
         Text [ italian ] = "Utilizza la cache per lo sfondo" ;
-        Text [ spanish ] = "~Utilizar el caché para el fondo" ;
+        Text [ spanish ] = "~Utilizar la antememoria para el fondo" ;
         Text [ french ] = "Utiliser le cache pour arrière-plan" ;
         Text [ swedish ] = "Använd ~cache för bakgrund" ;
         Text [ danish ] = "Brug cache til baggrunden" ;
         Text [ portuguese ] = "Usar cache para plano de f~undo" ;
         Text [ portuguese_brazilian ] = "Cache f? Hintergrund benutzen" ;
-        Text[ chinese_simplified ] = "²ÉÓÃºóÌ¨Ê½»º³åÇøÄ£Ê½";
-        Text[ russian ] = "~Èñïîëüçîâàòü êıø äëÿ ôîíà";
+        Text[ chinese_simplified ] = "é‡‡ç”¨åå°å¼ç¼“å†²åŒºæ¨¡å¼";
+        Text[ russian ] = "~Èñïîëüçîâàòü êıø ôîíà";
         Text[ polish ] = "U¿yj pamiêci podrêcznej dla t³a";
-        Text[ japanese ] = "·¬¯¼­‚ğ”wŒi‚Ég‚¤";
-        Text[ chinese_traditional ] = "±Ä¥Î¦Z¥x½w½Ä°Ï¼Ò¦¡";
+        Text[ japanese ] = "ãƒã‚¹ã‚¿ãƒ¼å‡¦ç†ã§ã‚­ãƒ£ãƒƒã‚·ãƒ¥ã‚’ä½¿ç”¨ã™ã‚‹";
+        Text[ chinese_traditional ] = "æ¡ç”¨åå°ç·©è¡å€æ¨¡å¼";
         Text[ arabic ] = "ÇÓÊÎÏÇã æÍÏÉ ÇáÊÎÒíä ÇáãÄŞÊ ááÎáİíÉ";
         Text[ greek ] = "×ñŞóç êñõöŞò ìíŞìçò öüíôïõ";
-        Text[ korean ] = "¹è°æ Ä³½Ã »ç¿ë";
+        Text[ korean ] = "ë°°ê²½ ìºì‹œ ì‚¬ìš©";
         Text[ turkish ] = "Artalan için önbellek kullan";
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "Käytä taustavälimuistia";
-        Text[ catalan ] = "~Utilizar el caché para el fondo";
+        Text[ catalan ] = "~Utilitza la memòria cau per al fons";
+        Text[ thai ] = "à¹ƒà¸Šà¹‰à¹à¸„à¸Šà¸à¸·à¹‰à¸™à¸«à¸¥à¸±à¸‡";
     };
     CheckBox CBX_COPY
     {
@@ -636,23 +655,24 @@ TabPage TP_OPTIONS_MISC
         Text [ english_us ] = "Copy when moving" ;
         Text [ italian ] = "Copia nello spostare" ;
         Text [ spanish ] = "~Copia al desplazar" ;
-        Text [ french ] = "Copie lors du ~déplacement" ;
+        Text [ french ] = "Copie lors du déplacement" ;
         Text [ swedish ] = "~Kopia vid förflyttning" ;
         Text [ danish ] = "Kopi ved flytning" ;
         Text [ portuguese_brazilian ] = "Kopie beim Verschieben" ;
         Text [ portuguese ] = "Cópia ao deslocar" ;
-        Text[ chinese_simplified ] = "ÔÚÒÆ¶¯Ê±Éú³É¸´ÖÆ¼ş";
-        Text[ russian ] = "~Êîïèÿ ïğè ïåğåìåùåíèè";
+        Text[ chinese_simplified ] = "åœ¨ç§»åŠ¨æ—¶ç”Ÿæˆå¤åˆ¶ä»¶";
+        Text[ russian ] = "~Êîïèğîâàòü ïğè ïåğåìåùåíèè";
         Text[ polish ] = "Kopiuj przy przenoszeniu";
-        Text[ japanese ] = "ˆÚ“®‚³‚¹‚é‚Æ‚«‚ÉºËß°";
-        Text[ chinese_traditional ] = "²¾°Ê®É²£¥Í½Æ»s¥ó";
+        Text[ japanese ] = "ç§»å‹•ã•ã›ã‚‹ã¨ãã«ã‚³ãƒ”ãƒ¼";
+        Text[ chinese_traditional ] = "ç§»å‹•æ™‚ç”¢ç”Ÿè¤‡è£½ä»¶";
         Text[ arabic ] = "Úãá äÓÎÉ ÃËäÇÁ ÇáÅÒÇÍÉ";
         Text[ greek ] = "Áíôßãñáöï êáôÜ ôçí ìåôá~êßíçóç";
-        Text[ korean ] = "ÀÌµ¿½Ã º¹»ç";
+        Text[ korean ] = "ì´ë™ì‹œ ë³µì‚¬";
         Text[ turkish ] = "Taşırken kopyala";
         Text[ language_user1 ] = " ";
         Text[ finnish ] = "Kopioi siirrettäessä";
-        Text[ catalan ] = "~Copia al desplazar";
+        Text[ catalan ] = "Copia en moure";
+        Text[ thai ] = "à¸„à¸±à¸”à¸¥à¸­à¸à¹€à¸¡à¸·à¹ˆà¸­à¸à¸³à¸¥à¸±à¸‡à¸¢à¹‰à¸²à¸¢";
     };
     CheckBox CBX_MARKED_HIT_MOVES_ALWAYS
     {
@@ -665,24 +685,25 @@ TabPage TP_OPTIONS_MISC
         Text [ DANISH ] = "Objekter altid flytbare" ;
         Text [ ENGLISH_US ] = "Objects always moveable" ;
         Text [ SPANISH ] = "~Objetos siempre desplazables" ;
-        Text [ FINNISH ] = "Objektit aina siirrettävissä" ;
+        Text [ FINNISH ] = "O~bjektit aina siirrettävissä" ;
         Text [ FRENCH ] = "~Objets toujours déplaçables" ;
         Text [ ITALIAN ] = "Oggetti sempre spostabili" ;
         Text [ DUTCH ] = "~Objecten altijd verschuifbaar" ;
         Text [ PORTUGUESE_BRAZILIAN ] = "Objekte immer verschiebbar" ;
         Text [ SWEDISH ] = "Objekt alltid flyttbara" ;
         Text [ PORTUGUESE ] = "Objectos sempre deslocáveis" ;
-        Text[ chinese_simplified ] = "×ÜÊÇÄÜ¹»ÒÆ¶¯¶ÔÏó";
-        Text[ russian ] = "~Îáúåêòû âñåãäà ïåğåùàåìû";
+        Text[ chinese_simplified ] = "å¯¹è±¡å¯è‡ªåŠ¨ç§»åŠ¨";
+        Text[ russian ] = "~Îáúåêòû âñåãäà ïåğåìåùàåìû";
         Text[ polish ] = "Obiekty zawsze przesuwalne";
-        Text[ japanese ] = "µÌŞ¼Şª¸Ä‚Íí‚ÉˆÚ“®‰Â”\\";
-        Text[ chinese_traditional ] = "Á`¬O¯à°÷²¾°Êª«¥ó";
+        Text[ japanese ] = "ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã¯å¸¸ã«ç§»å‹•å¯èƒ½";
+        Text[ chinese_traditional ] = "ç‰©ä»¶å¯è‡ªå‹•ç§»å‹•";
         Text[ arabic ] = "ÇáßÇÆäÇÊ ŞÇÈáÉ ááÅÒÇÍÉ ÏÇÆãÇğ";
         Text[ greek ] = "~ĞÜíôá äõíáôüôçôá ìåôáêßíçóçò áíôéêåéìİíùí";
-        Text[ korean ] = "°³Ã¼´Â Ç×»ó ÀÌµ¿ÀÌ °¡´É";
+        Text[ korean ] = "ê°œì²´ëŠ” í•­ìƒ ì´ë™ì´ ê°€ëŠ¥";
         Text[ turkish ] = "Nesneler hep taşınabilir";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Objetos siempre desplazables";
+        Text[ catalan ] = "Objectes sempre movibles";
+        Text[ thai ] = "à¸ªà¸²à¸¡à¸²à¸£à¸–à¸¢à¹‰à¸²à¸¢à¸§à¸±à¸•à¸–à¸¸à¹„à¸”à¹‰à¹€à¸ªà¸¡à¸­";
     };
     CheckBox CBX_CROOK_NO_CONTORTION
     {
@@ -694,26 +715,27 @@ TabPage TP_OPTIONS_MISC
         Text [ ENGLISH ] = "Setzen auf Kreis: nicht verzerren" ;
         Text [ NORWEGIAN ] = "Setzen auf Kreis: nicht verzerren" ;
         Text [ DANISH ] = "Sæt på cirkel: vrid ikke" ;
-        Text [ ENGLISH_US ] = "Don't distort objects in curve" ;
+        Text [ ENGLISH_US ] = "Do not distort objects in curve" ;
         Text [ SPANISH ] = "~Inscribir en círculo sin distorsión" ;
         Text [ FINNISH ] = "Älä vääristä käyrän objekteja" ;
-        Text [ FRENCH ] = "~Position sur cercle sans déformation" ;
+        Text [ FRENCH ] = "Position sur cercle sans déformation" ;
         Text [ ITALIAN ] = "Poni su cerchio: non distorcere" ;
         Text [ DUTCH ] = "C~irkel niet vervormen" ;
         Text [ PORTUGUESE_BRAZILIAN ] = "Setzen auf Kreis: nicht verzerren" ;
         Text [ SWEDISH ] = "Sätt på cirkel; förvräng inte" ;
         Text [ PORTUGUESE ] = "Não distorcer objectos curvos" ;
-        Text[ chinese_simplified ] = "Éè¶¨³ÉÔ²ĞÎ£º²»±äĞÎ";
-        Text[ russian ] = "Íå ïğåâğàùàòü îáúåêò â êğèâóş";
+        Text[ chinese_simplified ] = "è®¾å®šæˆåœ†å½¢ï¼šä¸å˜å½¢";
+        Text[ russian ] = "Íå ïğå~âğàùàòü îáúåêò â êğèâóş";
         Text[ polish ] = "OsadŸ na kole: nie zniekszta³caj";
-        Text[ japanese ] = "‰~Œ`‚É‚·‚éA‚ä‚ª‚ß‚È‚¢";
-        Text[ chinese_traditional ] = "³]©w¦¨¶ê§Î¡G¤£ÅÜ§Î";
+        Text[ japanese ] = "å††å½¢ã«ã™ã‚‹ã€ã‚†ãŒã‚ãªã„";
+        Text[ chinese_traditional ] = "è¨­å®šæˆåœ“å½¢ï¼šä¸è®Šé«”";
         Text[ arabic ] = "ÚÏã ÊÔæíå ÇáßÇÆä";
         Text[ greek ] = "Ôïğïèİô. ó~å êıêëï: ¼÷é ğáñáìüñöùóç";
-        Text[ korean ] = "¿øÀ¸·Î : ÀÏ±×·¯¶ß¸®Áö ¾ÊÀ½";
+        Text[ korean ] = "ì›ìœ¼ë¡œ : ì¼ê·¸ëŸ¬ëœ¨ë¦¬ì§€ ì•ŠìŒ";
         Text[ turkish ] = "Daireye oturt (çarpıtmadan)";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Inscribir en círculo sin distorsión";
+        Text[ catalan ] = "No distorsionis els objectes a les corbes";
+        Text[ thai ] = "à¸­à¸¢à¹ˆà¸²à¸šà¸´à¸”à¹€à¸šà¸·à¸­à¸™à¸§à¸±à¸•à¸–à¸¸à¹€à¸›à¹‡à¸™à¹€à¸ªà¹‰à¸™à¹‚à¸„à¹‰à¸‡";
     };
     FixedText FT_METRIC
     {
@@ -725,24 +747,25 @@ TabPage TP_OPTIONS_MISC
         Text [ italian ] = "Unità di misura" ;
         Text [ portuguese_brazilian ] = "Unidades m?tricas" ;
         Text [ portuguese ] = "~Unidade de medida" ;
-        Text [ finnish ] = "Mittayksikkö" ;
-        Text [ danish ] = "Måleenhed" ;
+        Text [ finnish ] = "~Mittayksikkö" ;
+        Text [ danish ] = "~Måleenhed" ;
         Text [ french ] = "Unité de ~mesure" ;
         Text [ swedish ] = "~Måttenhet" ;
-        Text [ dutch ] = "~Maateenheid" ;
+        Text [ dutch ] = "Maat~eenheid" ;
         Text [ spanish ] = "Unidad de medida" ;
-        Text [ english_us ] = "~Meas. unit" ;
-        Text[ chinese_simplified ] = "³ß´çµ¥Î»(~M)";
+        Text [ english_us ] = "Unit of ~measurement" ;
+        Text[ chinese_simplified ] = "å®šé‡å•ä½(~M)";
         Text[ russian ] = "Åäèíèöà èçìåğåíèÿ";
         Text[ polish ] = "Jednostka miary";
-        Text[ japanese ] = "g‚¤’PˆÊ(~M)";
-        Text[ chinese_traditional ] = "¤Ø¤o³æ¦ì(~M)";
+        Text[ japanese ] = "ä½¿ã†å˜ä½(~M)";
+        Text[ chinese_traditional ] = "å®šé‡å–®ä½(~M)";
         Text[ arabic ] = "æÍÏÉ ÇáŞíÇÓ";
         Text[ greek ] = "~ÌïíÜäá ìİôñçóçò";
-        Text[ korean ] = "Ä¡¼ö ´ÜÀ§(~M)";
+        Text[ korean ] = "ì¹˜ìˆ˜ ë‹¨ìœ„(~M)";
         Text[ turkish ] = "Ölçü birimi";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Unidad de medida";
+        Text[ catalan ] = "Unitats de mesura";
+        Text[ thai ] = "à¸«à¸™à¹ˆà¸§à¸¢~à¸§à¸±à¸”";
     };
     ListBox LB_METRIC
     {
@@ -759,26 +782,27 @@ TabPage TP_OPTIONS_MISC
         Text = "~Tabulatorabstand" ;
         Text [ ENGLISH ] = "Tab distance" ;
         Text [ english_us ] = "Ta~b stops" ;
-        Text [ swedish ] = "~Tabulatoravstånd" ;
-        Text [ danish ] = "Tabulatorafstand" ;
+        Text [ swedish ] = "Ta~bulatoravstånd" ;
+        Text [ danish ] = "Ta~bulatorafstand" ;
         Text [ italian ] = "Posizione tabulazioni" ;
-        Text [ spanish ] = "Distancia entre tabuladores" ;
-        Text [ french ] = "Espace entre les ~tabulations" ;
+        Text [ spanish ] = "~Espacio entre tabuladores" ;
+        Text [ french ] = "Espace entre les tabulations" ;
         Text [ dutch ] = "~Tabstops" ;
         Text [ portuguese ] = "I~ntervalo entre tabulações" ;
         Text [ portuguese_brazilian ] = "Tabulatorabstand" ;
-        Text[ chinese_simplified ] = "ÖÆ±í·ûµÄ¼ä¸ô(~B)";
-        Text[ russian ] = "Ïîçèöèÿ òàáóëÿòîğà";
+        Text[ chinese_simplified ] = "åˆ¶è¡¨ç¬¦çš„é—´éš”(~B)";
+        Text[ russian ] = "Ïîçèöèÿ òàáóëÿöèè";
         Text[ polish ] = "Tabulatory";
-        Text[ japanese ] = "ÀÌŞŠÔŠu(~B)";
-        Text[ chinese_traditional ] = "»sªí²Åªº¶¡¹j(~B)";
+        Text[ japanese ] = "ã‚¿ãƒ–é–“éš”(~B)";
+        Text[ chinese_traditional ] = "å®šä½éµé–“éš”(~B)";
         Text[ arabic ] = "ÚáÇãÇÊ ÇáÌÏæáÉ";
         Text[ greek ] = "Áğüó~ôáóç óôçëïèåôşí";
-        Text[ korean ] = "ÅÇ °£°İ(~B)";
+        Text[ korean ] = "íƒ­ ê°„ê²©(~B)";
         Text[ turkish ] = "Sekme durakları";
         Text[ language_user1 ] = " ";
-        Text[ finnish ] = "Sarkainkeskeytykset";
-        Text[ catalan ] = "Distancia entre tabuladores";
+        Text[ finnish ] = "~Sarkaimet";
+        Text[ catalan ] = "Distància entre tabuladors";
+        Text[ thai ] = "à¸•à¸±à¸§à¸«à¸¢à¸¸à¸”à¸£à¸°~à¸¢à¸°à¸à¸±à¹‰à¸™";
     };
     MetricField MTR_FLD_TABSTOP
     {
@@ -791,7 +815,7 @@ TabPage TP_OPTIONS_MISC
         Unit = FUNIT_CM ;
         SpinSize = 10 ;
         Minimum = 50 ;
-        Maximum = 2000 ;
+        Maximum = 2000;
         First = 50 ;
         Last = 2000 ;
         StrictFormat = TRUE ;
@@ -806,24 +830,25 @@ TabPage TP_OPTIONS_MISC
         Text [ english_us ] = "Start presentation" ;
         Text [ portuguese_brazilian ] = "Starten der Pr?sentation" ;
         Text [ swedish ] = "Starta presentation" ;
-        Text [ danish ] = "Start præsentation" ;
+        Text [ danish ] = "Start af præsentation" ;
         Text [ italian ] = "Avvio della presentazione" ;
         Text [ spanish ] = "Iniciar la presentación" ;
         Text [ french ] = "Lancement de la présentation" ;
         Text [ dutch ] = "Presentatie starten" ;
         Text [ portuguese ] = "Iniciar apresentação" ;
-        Text[ chinese_simplified ] = "·ÅÓ³ÑİÊ¾ÎÄ¸å";
+        Text[ chinese_simplified ] = "æ”¾æ˜ æ¼”ç¤ºæ–‡ç¨¿";
         Text[ russian ] = "Çàïóñê ïğåçåíòàöèè";
         Text[ polish ] = "Pocz¹tek prezentacji";
-        Text[ japanese ] = "ÌßÚ¾ŞİÃ°¼®İ‚ÌŠJn";
-        Text[ chinese_traditional ] = "©ñ¬MÂ²³ø";
+        Text[ japanese ] = "ãƒ—ãƒ¬ã‚¼ãƒ³ãƒ†ãƒ¼ã‚·ãƒ§ãƒ³ã®é–‹å§‹";
+        Text[ chinese_traditional ] = "æ”¾æ˜ ç°¡å ±";
         Text[ arabic ] = "ÈÏÁ ÇáÚÑÖ ÇáÊŞÏíãí";
         Text[ greek ] = "Åêêßíçóç ğáñïõóßáóçò";
-        Text[ korean ] = "ÇÁ¸®Á¨Å×ÀÌ¼Ç ½ÃÀÛ";
+        Text[ korean ] = "í”„ë ˆì  í…Œì´ì…˜ ì‹œì‘";
         Text[ turkish ] = "Sunuyu başlat";
         Text[ language_user1 ] = " ";
-        Text[ finnish ] = "Aloita esitys";
-        Text[ catalan ] = "Iniciar la presentación";
+        Text[ finnish ] = "Esityksen aloittaminen";
+        Text[ catalan ] = "Inicia la presentació";
+        Text[ thai ] = "à¹€à¸£à¸´à¹ˆà¸¡à¸à¸²à¸£à¸™à¸³à¹€à¸ªà¸™à¸­";
     };
     CheckBox CBX_START_WITH_ACTUAL_PAGE
     {
@@ -836,23 +861,24 @@ TabPage TP_OPTIONS_MISC
         Text [ portuguese_brazilian ] = "~Immer mit aktueller Seite" ;
         Text [ swedish ] = "Allt~id med aktuell sida" ;
         Text [ danish ] = "Altid med aktuel side" ;
-        Text [ italian ] = "Sempre con la pag~ina corrente" ;
-        Text [ spanish ] = "~Siempre con página actual" ;
-        Text [ french ] = "~Toujours avec la page active" ;
-        Text [ dutch ] = "~Steeds met actuele pagina" ;
+        Text [ italian ] = "Sempre con la pagina corrente" ;
+        Text [ spanish ] = "~Siempre con la página actual" ;
+        Text [ french ] = "Toujours avec la page active" ;
+        Text [ dutch ] = "Stee~ds met huidige pagina" ;
         Text [ portuguese ] = "~Sempre com página actual" ;
-        Text[ chinese_simplified ] = "×ÜÊÇ´Óµ±Ç°µÄÒ³Ãæ¿ªÊ¼";
+        Text[ chinese_simplified ] = "è‡ªåŠ¨ä»å½“å‰çš„é¡µé¢å¼€å§‹";
         Text[ russian ] = "~Âñåãäà ñ òåêóùåãî ñëàéäà";
         Text[ polish ] = "Za~wsze od bie¿¹cej strony";
-        Text[ japanese ] = "í‚ÉŒ»İ‚ÌÍß°¼Ş";
-        Text[ chinese_traditional ] = "Á`¬O±q·í«eªº­¶­±¶}©l";
+        Text[ japanese ] = "å¸¸ã«ç¾åœ¨ã®ãƒšãƒ¼ã‚¸";
+        Text[ chinese_traditional ] = "è‡ªå‹•å¾ç›®å‰çš„é é¢é–‹å§‹";
         Text[ arabic ] = "ÏÇÆãÇğ ãÚ ÇáÕİÍÉ ÇáÍÇáíÉ";
         Text[ greek ] = "ĞÜíôá ìå ôçí ôñİ÷ïõóá óåëßäá";
-        Text[ korean ] = "Ç×»ó ÇöÀç ÂÊÀ¸·Î";
+        Text[ korean ] = "í•­ìƒ í˜„ì¬ í˜ì´ì§€";
         Text[ turkish ] = "Hep güncel sayfa ile";
         Text[ language_user1 ] = " ";
-        Text[ finnish ] = "Aina nykyisellä sivulla";
-        Text[ catalan ] = "~Siempre con página actual";
+        Text[ finnish ] = "Aina nykyisestä diasta";
+        Text[ catalan ] = "~Sempre amb pàgina actual";
+        Text[ thai ] = "à¸«à¸™à¹‰à¸²à¸›à¸±à¸ˆà¸ˆà¸¸à¸šà¸±à¸™à¹€à¸ªà¸¡à¸­";
     };
     FixedLine FT_COMPATIBILITY
     {
@@ -868,18 +894,19 @@ TabPage TP_OPTIONS_MISC
         Text[ french ] = "Compatibilité";
         Text[ spanish ] = "Compatibilidad";
         Text[ italian ] = "Compatibilità";
-        Text[ danish ] = "Compatibility";
+        Text[ danish ] = "Kompatibilitet";
         Text[ swedish ] = "Kompatibilitet";
         Text[ polish ] = "Zgodnoœæ";
         Text[ portuguese_brazilian ] = "Compatibility";
-        Text[ japanese ] = "ŒİŠ·«";
-        Text[ korean ] = "È£È¯";
-        Text[ chinese_simplified ] = "ºÍ MS Office ÎÄµµ¼æÈİ";
-        Text[ chinese_traditional ] = "©M MS Office ¤å¥ó¬Û®e";
+        Text[ japanese ] = "äº’æ›æ€§";
+        Text[ korean ] = "í˜¸í™˜";
+        Text[ chinese_simplified ] = "å’Œ MS Office æ–‡æ¡£å…¼å®¹";
+        Text[ chinese_traditional ] = "å’Œ MS Office æ–‡ä»¶ç›¸å®¹";
         Text[ turkish ] = "Compatibility";
         Text[ arabic ] = "Compatibility";
         Text[ finnish ] = "Yhteensopivuus";
-        Text[ catalan ] = "Kompatibilität";
+        Text[ catalan ] = "Compatibilitat";
+        Text[ thai ] = "à¹€à¸‚à¹‰à¸²à¸à¸±à¸™à¹„à¸”à¹‰";
     };
     CheckBox CB_MERGE_PARA_DIST
     {
@@ -889,24 +916,25 @@ TabPage TP_OPTIONS_MISC
         Text [ English ] = "Add ~distances between paragraphs" ;
         Text[ english_us ] = "Add ~spacing between paragraphs in the current document";
         Text[ portuguese ] = "A~dicionar espaçamento entre os parágrafos no documento activo";
-        Text[ russian ] = "Ñëîæèòü âñå èíòåğâàëû ìåæäó àáçàöàìè â òåêóùåì äîêóìåíòå";
+        Text[ russian ] = "Äîáàâèòü â òåêóùåì äîêóìåíòå èíòåğâàëû ìåæäó àáçàöàìè";
         Text[ greek ] = "Ğñüóèåóç ôùí áğïóôÜóåùí ôùí ğáñáãñÜö~ùí óôï ôñİ÷ïí İããñáöï";
-        Text[ dutch ] = "Alle afstanden tussen ~alinea's optellen";
+        Text[ dutch ] = "Alle a~fstanden tussen alinea's optellen";
         Text[ french ] = "~Additionner les espacements entre les paragraphes dans le document actif";
-        Text[ spanish ] = "Su~mar espacios de párrafo en documento actual";
+        Text[ spanish ] = "Su~mar espacios de párrafo en el documento actual";
         Text[ italian ] = "Aggiungi tutti gli spazi tra ~paragrafi nel documento attuale";
-        Text[ danish ] = "Add ~distances between paragraphs";
+        Text[ danish ] = "Adder alle afsnitsafst~ande i det aktuelle dokument";
         Text[ swedish ] = "A~ddera alla styckeavstånd i det aktuella dokumentet";
         Text[ polish ] = "Dodaj w bie¿¹cym dokumencie wszystkie odstêpy miêdzy akapitami";
         Text[ portuguese_brazilian ] = "Add ~distances between paragraphs";
-        Text[ japanese ] = "Œ»İ‚ÌÄŞ·­ÒİÄ‚Å‚·‚×‚Ä‚Ì’i—‚ÌŠÔŠu‚ğ‰ÁZ‚·‚é(~S)";
-        Text[ korean ] = "ÇöÀç ¹®¼­¿¡¼­ ¸ğµç ´Ü¶ô °£°İÀ» ÇÕ»êÇÕ´Ï´Ù(~S)";
-        Text[ chinese_simplified ] = "µ±Ç°ÎÄµµÖ®ÖĞËùÓĞ¶ÎÂä¼ä¸ñÏà¼Ó(~S)";
-        Text[ chinese_traditional ] = "·í«eªº¤å¥ó¤§¤¤©Ò¦³ªº¬q¸¨¶¡¹j¬Û¥[(~S)";
+        Text[ japanese ] = "ç¾åœ¨ã®ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã§ã™ã¹ã¦ã®æ®µè½ã®é–“éš”ã‚’åŠ ç®—ã™ã‚‹(~S)";
+        Text[ korean ] = "í˜„ì¬ ë¬¸ì„œì—ì„œ ëª¨ë“  ë‹¨ë½ ê°„ê²©ì„ í•©ì‚°í•©ë‹ˆë‹¤(~S)";
+        Text[ chinese_simplified ] = "å½“å‰æ–‡æ¡£ä¹‹ä¸­æ‰€æœ‰æ®µè½é—´æ ¼ç›¸åŠ (~S)";
+        Text[ chinese_traditional ] = "ç›®å‰çš„æ–‡ä»¶ä¹‹ä¸­æ‰€æœ‰çš„æ®µè½é–“éš”ç›¸åŠ (~S)";
         Text[ turkish ] = "Add ~distances between paragraphs";
         Text[ arabic ] = "Add ~distances between paragraphs";
-        Text[ finnish ] = "Im aktuellen Dokument alle ~Absatzabstände addieren";
-        Text[ catalan ] = "Im aktuellen Dokument alle ~Absatzabstände addieren";
+        Text[ finnish ] = "~Lisää välit nykyisen asiakirjan kappaleiden väliin";
+        Text[ catalan ] = "Afegeix e~spais entre paràgrafs en el document actual";
+        Text[ thai ] = "à¹€à¸à¸´à¹ˆà¸¡~à¸£à¸°à¸¢à¸°à¸«à¹ˆà¸²à¸‡à¸£à¸°à¸«à¸§à¹ˆà¸²à¸‡à¸¢à¹ˆà¸­à¸«à¸™à¹‰à¸²à¹ƒà¸™à¹€à¸­à¸à¸ªà¸²à¸£à¸›à¸±à¸ˆà¸ˆà¸¸à¸šà¸±à¸™";
     };
     FixedLine GRP_SCALE
     {
@@ -934,14 +962,15 @@ TabPage TP_OPTIONS_MISC
         Text[ swedish ] = "Original";
         Text[ polish ] = "Orygina³";
         Text[ portuguese_brazilian ] = "Original";
-        Text[ japanese ] = "µØ¼ŞÅÙ";
-        Text[ korean ] = "¿À¸®Áö³Î";
-        Text[ chinese_simplified ] = "Ô­¼ş";
-        Text[ chinese_traditional ] = "­ì¥ó";
+        Text[ japanese ] = "ã‚ªãƒªã‚¸ãƒŠãƒ«";
+        Text[ korean ] = "ì˜¤ë¦¬ì§€ë„";
+        Text[ chinese_simplified ] = "åŸä»¶";
+        Text[ chinese_traditional ] = "åŸä»¶";
         Text[ turkish ] = "Aslı";
         Text[ arabic ] = "ÇáÃÕá";
         Text[ finnish ] = "Alkuperäinen";
         Text[ catalan ] = "Original";
+        Text[ thai ] = "à¸•à¹‰à¸™à¸‰à¸šà¸±à¸š";
     };
     FixedText FT_EQUIVALENT
     {
@@ -958,18 +987,19 @@ TabPage TP_OPTIONS_MISC
         Text[ french ] = "Correspond à";
         Text[ spanish ] = "Corresponde a";
         Text[ italian ] = "Corrisponde a";
-        Text[ danish ] = "Equivalent to";
+        Text[ danish ] = "Svarer til";
         Text[ swedish ] = "Motsvarar";
         Text[ polish ] = "Odpowiada";
         Text[ portuguese_brazilian ] = "Equivalent to";
-        Text[ japanese ] = "’Ş‚è‡‚¢";
-        Text[ korean ] = "°°À½";
-        Text[ chinese_simplified ] = "Ïàµ±ÓÚ";
-        Text[ chinese_traditional ] = "¬Ûµ¥©ó";
+        Text[ japanese ] = "é‡£ã‚Šåˆã„";
+        Text[ korean ] = "ì§€ì •í•œ ì¡°ê±´ê³¼ ê°™ìŒ";
+        Text[ chinese_simplified ] = "ç›¸å½“äº";
+        Text[ chinese_traditional ] = "ç›¸ç­‰æ–¼";
         Text[ turkish ] = "Equivalent to";
         Text[ arabic ] = "Equivalent to";
-        Text[ finnish ] = "Entspricht";
-        Text[ catalan ] = "Entspricht";
+        Text[ finnish ] = "Vastaa kohdetta";
+        Text[ catalan ] = "Equivalent a";
+        Text[ thai ] = "à¸„à¸¥à¹‰à¸²à¸¢à¸„à¸¥à¸¶à¸‡à¸à¸±à¸š";
     };
     FixedText FT_SCALE
     {
@@ -983,21 +1013,22 @@ TabPage TP_OPTIONS_MISC
         Text[ russian ] = "Ìàñøòàá ğèñóíêà";
         Text[ greek ] = "Êëßìáêá ó÷åäéáó~ìïı";
         Text[ dutch ] = "Teken~maatstaf";
-        Text[ french ] = "Échelle de ~dessin";
+        Text[ french ] = "Échelle de dessin";
         Text[ spanish ] = "Escala de dibujo";
         Text[ italian ] = "Scala di disegno";
-        Text[ danish ] = "Drawing scale";
-        Text[ swedish ] = "Te~ckningsskala";
+        Text[ danish ] = "Tegningsm~ålestok";
+        Text[ swedish ] = "T~eckningsskala";
         Text[ polish ] = "Skala rysunku";
         Text[ portuguese_brazilian ] = "Drawing scale";
-        Text[ japanese ] = "}Œ`•`‰æ‚Ì”{—¦(~D)";
-        Text[ korean ] = "±×¸®±â ±âÁØ(~D)";
-        Text[ chinese_simplified ] = "»æÍ¼µÄÏÔÊ¾¿Ì¶È(~D)";
-        Text[ chinese_traditional ] = "Ã¸¹ÏªºÅã¥Ü¨è«×(~D)";
+        Text[ japanese ] = "å›³å½¢æç”»ã®å€ç‡(~D)";
+        Text[ korean ] = "ê·¸ë¦¬ê¸° ê¸°ì¤€(~D)";
+        Text[ chinese_simplified ] = "ç»˜å›¾çš„æ˜¾ç¤ºæ¯”ä¾‹(~D)";
+        Text[ chinese_traditional ] = "ç¹ªåœ–çš„é¡¯ç¤ºåˆ»åº¦(~D)";
         Text[ turkish ] = "Drawing scale";
         Text[ arabic ] = "Drawing scale";
-        Text[ catalan ] = "Drawing scale";
-        Text[ finnish ] = "Zeichnungsmaßstab";
+        Text[ catalan ] = "Escala de dibuix";
+        Text[ finnish ] = "P~iirroksen mittakaava";
+        Text[ thai ] = "à¸ªà¹€à¸à¸¥à¸à¸²à¸£~à¸§à¸²à¸”à¸£à¸¹à¸›";
     };
     ComboBox CB_SCALE
     {
@@ -1020,21 +1051,22 @@ TabPage TP_OPTIONS_MISC
         Text [ french ] = "~Largeur de page" ;
         Text [ dutch ] = "~Paginabreedte" ;
         Text [ swedish ] = "Sid~bredd" ;
-        Text [ danish ] = "Sidebredde" ;
+        Text [ danish ] = "Side~bredde" ;
         Text [ portuguese ] = "~Largura de página" ;
         Text [ portuguese_brazilian ] = "Seitenbreite" ;
-        Text[ chinese_simplified ] = "Ò³Ãæ¿í¶È(~W)";
+        Text[ chinese_simplified ] = "é¡µé¢å®½åº¦(~W)";
         Text[ russian ] = "Øèğèíà ñòğàíèöû";
         Text[ polish ] = "Szerokoœæ strony";
-        Text[ japanese ] = "Íß°¼Ş•(~W)";
-        Text[ chinese_traditional ] = "­¶­±¼e«×(~W)";
+        Text[ japanese ] = "ãƒšãƒ¼ã‚¸å¹…(~W)";
+        Text[ chinese_traditional ] = "é é¢å¯¬åº¦(~W)";
         Text[ arabic ] = "ÚÑÖ ÇáÕİÍÉ";
         Text[ greek ] = "~ĞëÜôïò óåëßäáò";
-        Text[ korean ] = "ÆäÀÌÁö ³Êºñ(~W)";
+        Text[ korean ] = "í˜ì´ì§€ ë„ˆë¹„(~W)";
         Text[ turkish ] = "Sayfa genişliği";
         Text[ language_user1 ] = " ";
-        Text[ finnish ] = "Sivun leveys";
-        Text[ catalan ] = "Seitenbreite";
+        Text[ finnish ] = "Sivun ~leveys";
+        Text[ catalan ] = "Llargada de la pàgina";
+        Text[ thai ] = "à¸„à¸§à¸²à¸¡~à¸à¸§à¹‰à¸²à¸‡à¸‚à¸­à¸‡à¸«à¸™à¹‰à¸²";
     };
     FixedText FI_INFO_1
     {
@@ -1073,21 +1105,22 @@ TabPage TP_OPTIONS_MISC
         Text [ spanish ] = "Altura de página" ;
         Text [ french ] = "~Hauteur de page" ;
         Text [ swedish ] = "S~idhöjd" ;
-        Text [ danish ] = "Sidehøjde" ;
+        Text [ danish ] = "S~idehøjde" ;
         Text [ portuguese ] = "~Altura da página" ;
         Text [ portuguese_brazilian ] = "Seitenh?e" ;
-        Text[ chinese_simplified ] = "Ò³Ãæ¸ß¶È(~H)";
+        Text[ chinese_simplified ] = "é¡µé¢é«˜åº¦(~H)";
         Text[ russian ] = "Âûñîòà ñòğàíèöû";
         Text[ polish ] = "Wysokoœæ strony";
-        Text[ japanese ] = "Íß°¼Ş‚Ì‚‚³(~H)";
-        Text[ chinese_traditional ] = "­¶­±°ª«×(~H)";
+        Text[ japanese ] = "ãƒšãƒ¼ã‚¸ã®é«˜ã•(~H)";
+        Text[ chinese_traditional ] = "é é¢é«˜åº¦(~H)";
         Text[ arabic ] = "ÇÑÊİÇÚ ÇáÕİÍÉ";
         Text[ greek ] = "¾ø~ïò óåëßäáò";
-        Text[ korean ] = "ÆäÀÌÁö ³ôÀÌ(~H)";
+        Text[ korean ] = "í˜ì´ì§€ ë†’ì´(~H)";
         Text[ turkish ] = "Sayfa yüksekliği";
         Text[ language_user1 ] = " ";
-        Text[ finnish ] = "Sivun korkeus";
-        Text[ catalan ] = "Seitenhöhe";
+        Text[ finnish ] = "Sivun ~korkeus";
+        Text[ catalan ] = "Alçada de la pàgina";
+        Text[ thai ] = "à¸„à¸§à¸²à¸¡~à¸ªà¸¹à¸‡à¸‚à¸­à¸‡à¸«à¸™à¹‰à¸²";
     };
     FixedText FI_INFO_2
     {
@@ -1114,19 +1147,30 @@ TabPage TP_OPTIONS_MISC
         Last = 999999999 ;
     };
 
-    Text[ chinese_simplified ] = "ÆäËü";
+    Text[ chinese_simplified ] = "å…¶ä»–";
     Text[ russian ] = "Ïğî÷åå";
     Text[ polish ] = "Inne";
-    Text[ japanese ] = "‚»‚Ì‘¼";
-    Text[ chinese_traditional ] = "¨ä¥¦";
+    Text[ japanese ] = "ãã®ä»–";
+    Text[ chinese_traditional ] = "å…¶ä»–";
     Text[ arabic ] = "ÛíÑ Ğáß";
     Text[ greek ] = "¢ëëá";
-    Text[ korean ] = "±âÅ¸";
+    Text[ korean ] = "ê¸°íƒ€";
     Text[ turkish ] = "Diğer";
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Muu";
-    Text[ catalan ] = "Otros";
+    Text[ catalan ] = "Altres";
+    Text[ thai ] = "à¸­à¸·à¹ˆà¸™ à¹†";
 };
+
+
+
+
+
+
+
+
+
+
 
 
 

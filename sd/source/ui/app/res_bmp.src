@@ -2,9 +2,9 @@
  *
  *  $RCSfile: res_bmp.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-27 16:37:47 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 10:57:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1375,7 +1375,7 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
             Text [ ENGLISH ] = "Graphic Objects Styles" ;
             Text [ english_us ] = "Graphics Styles" ;
             Text [ italian ] = "Modelli di oggetti grafici" ;
-            Text [ spanish ] = "Estilos de objetos grαficos" ;
+            Text [ spanish ] = "Estilos de objeto grαfico" ;
             Text [ french ] = "Styles d'objet graphique" ;
             Text [ dutch ] = "Opmaakprofielen voor grafische objecten" ;
             Text [ swedish ] = "Grafikobjektmallar" ;
@@ -1389,7 +1389,7 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
             Text[ chinese_traditional ] = "ε–ε½Άη‰©δ»¶ζ¨£εΌ";
             Text[ arabic ] = "ΓδγΗΨ ίΗΖδΗΚ ΥζΡΙ";
             Text[ greek ] = "Στυλ αντικειμένων γραφικών";
-            Text[ korean ] = "κ·Έλν”½κ°μ²΄ ν…ν”λ¦Ώ";
+            Text[ korean ] = "κ·Έλ¦Ό μ¤νƒ€μΌ";
             Text[ turkish ] = "Grafik nesne biηimi";
             StyleFamily = SFX_STYLE_FAMILY_PARA ;
             FilterList =
@@ -1419,7 +1419,7 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
             Text[ chinese_traditional ] = "η°΅ε ±ζ¨£εΌ";
             Text[ arabic ] = "ΓδγΗΨ ίΗΖδ ΪΡΦ ΚήΟνγν";
             Text[ greek ] = "Πρότυπα αντικειμένων παρουσίασης";
-            Text[ korean ] = "ν”„λ μ  ν…μ΄μ… κ°μ²΄ ν…ν”λ¦Ώ";
+            Text[ korean ] = "ν”„λ μ  ν…μ΄μ… μ¤νƒ€μΌ";
             Text[ turkish ] = "Sunu nesne biηimi";
             StyleFamily = SFX_STYLE_FAMILY_PSEUDO ;
             FilterList =
@@ -1500,6 +1500,11 @@ Bitmap BMP_PRESOBJ_IMAGE
     File = "image.bmp" ;
 };
 #endif
+
+
+
+
+
 
 
 

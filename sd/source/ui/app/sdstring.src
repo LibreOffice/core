@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdstring.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: af $ $Date: 2002-08-07 17:24:25 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 10:57:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,10 +83,11 @@ String STR_SOLID
     Text[ chinese_traditional ] = "æŒçºŒçš„";
     Text[ arabic ] = "ãÊæÇÕá";
     Text[ greek ] = "Óõíå÷üìåíá";
-    Text[ korean ] = "ì—°ì†";
+    Text[ korean ] = "ê³„ì†";
     Text[ turkish ] = "Düz";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Continuo";
+    Text[ catalan ] = "Continu";
+    Text[ thai ] = "à¸•à¹ˆà¸­à¹€à¸™à¸·à¹ˆà¸­à¸‡";
 };
 String STR_GRADIENT
 {
@@ -96,24 +97,25 @@ String STR_GRADIENT
     Text [ italian ] = "Sfumatura" ;
     Text [ portuguese_brazilian ] = "D?grad?" ;
     Text [ portuguese ] = "Gradação" ;
-    Text [ finnish ] = "Gradientti" ;
+    Text [ finnish ] = "Liukuvärjäys" ;
     Text [ danish ] = "Farvegraduering" ;
     Text [ french ] = "Dégradé" ;
     Text [ swedish ] = "Färggradient" ;
-    Text [ dutch ] = "Kleurverloop" ;
+    Text [ dutch ] = "Kleurovergangen" ;
     Text [ spanish ] = "Gradiente" ;
     Text [ english_us ] = "Gradient" ;
     Text[ chinese_simplified ] = "å½©è‰²å›¾æ¡ˆ";
-    Text[ russian ] = "Ãğàäèåíòíàÿ";
+    Text[ russian ] = "Ãğàäèåíò";
     Text[ polish ] = "Gradient";
-    Text[ japanese ] = "ï½¸ï¾ï¾—ï¾ƒï¾ï½°ï½¼ï½®ï¾";
+    Text[ japanese ] = "ã‚°ãƒ©ãƒ‡ãƒ¼ã‚·ãƒ§ãƒ³";
     Text[ chinese_traditional ] = "å½©è‰²åœ–æ¡ˆ";
     Text[ arabic ] = "ÊÏÑÌ Çááæä";
     Text[ greek ] = "ÄéáâÜèìéóç ÷ñşìáôïò";
-    Text[ korean ] = "ê·¸ë¼ë°ì´ì…˜";
+    Text[ korean ] = "ê·¸ë¼ë””ì–¸íŠ¸";
     Text[ turkish ] = "Gradyan";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Gradiente  de color";
+    Text[ catalan ] = "Gradient de color";
+    Text[ thai ] = "à¹„à¸¥à¹ˆà¸£à¸°à¸”à¸±à¸šà¸ªà¸µ";
 };
 String STR_DESC_GRADIENT
 {
@@ -124,24 +126,25 @@ String STR_DESC_GRADIENT
     Text [ italian ] = "Digitate un nome per la nuova sfumatura:" ;
     Text [ portuguese_brazilian ] = "Insira um nome para o novo d?grad?:" ;
     Text [ portuguese ] = "Introduza um nome para a nova gradação de cor:" ;
-    Text [ finnish ] = "Määritä uuden gradientin nimi:" ;
+    Text [ finnish ] = "Määritä uuden liukuvärjäyksen nimi:" ;
     Text [ danish ] = "Indtast venligst et navn til den nye farvegraduering:" ;
     Text [ french ] = "Veuillez saisir un nom pour le nouveau dégradé :" ;
     Text [ swedish ] = "Mata in namnet för den nya färggradienten här:" ;
-    Text [ dutch ] = "Typ een naam voor het nieuwe kleurverloop:" ;
-    Text [ spanish ] = "Inserte aquí el nombre para el nuevo gradiente de color:" ;
+    Text [ dutch ] = "Typ een naam voor de nieuwe kleurovergangen:" ;
+    Text [ spanish ] = "Introduzca aquí un nombre para el nuevo gradiente de color:" ;
     Text [ english_us ] = "Please enter a name for the new gradient:" ;
     Text[ chinese_simplified ] = "è¯·æ‚¨è¾“å…¥æ–°å½©è‰²å›¾æ¡ˆçš„åç§°ï¼š";
-    Text[ russian ] = "Ââåäèòå, ïîæàëóéñòà, èìÿ íîâîé ãğàäèåíòíîé:";
+    Text[ russian ] = "Ââåäèòå èìÿ íîâîãî ãğàäèåíòà:";
     Text[ polish ] = "Wstaw nazwê nowego gradientu:";
-    Text[ japanese ] = "ã“ã“ã«æ–°ã—ã„ï½¸ï¾ï¾—ï¾ƒï¾ï½°ï½¼ï½®ï¾ã®åå‰ã‚’å…¥åŠ›ã—ã¾ã™:";
+    Text[ japanese ] = "ã“ã“ã«æ–°ã—ã„ã‚°ãƒ©ãƒ‡ãƒ¼ã‚·ãƒ§ãƒ³ã®åå‰ã‚’å…¥åŠ›ã—ã¾ã™:";
     Text[ chinese_traditional ] = "è«‹æ‚¨è¼¸å…¥æ–°å½©è‰²åœ–æ¡ˆçš„åç¨±ï¼š";
     Text[ arabic ] = "ÇáÑÌÇÁ ÅÏÎÇá ÇÓã ÇáÊÏÑÌ ÇáÌÏíÏ ááæä:";
     Text[ greek ] = "Ğáñáêáëş åéóÜãåôå ôï üíïìá ãéá ôç íİá äéáâÜèìéóç ÷ñşìáôïò:";
-    Text[ korean ] = "ìƒˆ ê·¸ë¼ë°ì´ì…˜ì˜ ì´ë¦„ì„ ì—¬ê¸°ì— ì…ë ¥í•˜ì‹­ì‹œì˜¤:";
+    Text[ korean ] = "ìƒˆ ê·¸ë¼ë””ì–¸íŠ¸ì˜ ì´ë¦„ì„ ì—¬ê¸°ì— ì…ë ¥í•˜ì‹­ì‹œì˜¤:";
     Text[ turkish ] = "Yeni gradyan için bir ad girin:";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Inserte aquí el nombre para el nuevo gradiente de color:";
+    Text[ catalan ] = "Introdueixi aquí el nom pel nou gradient de color:";
+    Text[ thai ] = "à¸à¸£à¸¸à¸“à¸²à¹ƒà¸ªà¹ˆà¸Šà¸·à¹ˆà¸­à¸•à¸±à¸§à¹„à¸¥à¹ˆà¸£à¸°à¸”à¸±à¸šà¸ªà¸µà¹ƒà¸«à¸¡à¹ˆ:";
 };
 String STR_DEL_GRADIENT
 {
@@ -152,24 +155,25 @@ String STR_DEL_GRADIENT
     Text [ italian ] = "Elimina sfumatura" ;
     Text [ portuguese_brazilian ] = "Apagar d?grad?" ;
     Text [ portuguese ] = "Eliminar gradação" ;
-    Text [ finnish ] = "Poista gradientti" ;
+    Text [ finnish ] = "Poista liukuvärjäys" ;
     Text [ danish ] = "Slet farvegraduering" ;
     Text [ french ] = "Supprimer le dégradé" ;
     Text [ swedish ] = "Radera färggradient" ;
-    Text [ dutch ] = "Kleurverloop wissen" ;
-    Text [ spanish ] = "Eliminar gradiente" ;
+    Text [ dutch ] = "Kleurovergangen wissen" ;
+    Text [ spanish ] = "Borrar gradiente" ;
     Text [ english_us ] = "Delete gradient" ;
     Text[ chinese_simplified ] = "åˆ é™¤å½©è‰²å›¾æ¡ˆ";
-    Text[ russian ] = "Óäàëèòü ãğàäèåíòíóş";
+    Text[ russian ] = "Óäàëèòü ãğàäèåíò";
     Text[ polish ] = "Usuñ gradient";
-    Text[ japanese ] = "ï½¸ï¾ï¾—ï¾ƒï¾ï½°ï½¼ï½®ï¾ã®å‰Šé™¤";
+    Text[ japanese ] = "ã‚°ãƒ©ãƒ‡ãƒ¼ã‚·ãƒ§ãƒ³ã®å‰Šé™¤";
     Text[ chinese_traditional ] = "åˆªé™¤å½©è‰²åœ–æ¡ˆ";
     Text[ arabic ] = "ÍĞİ ÊÏÑÌ Çááæä";
     Text[ greek ] = "ÄéáãñáöŞ äéáâÜèìéóç ÷ñşìáôïò";
-    Text[ korean ] = "ê·¸ë¼ë°ì´ì…˜ ì‚­ì œ";
+    Text[ korean ] = "ê·¸ë¼ë””ì–¸íŠ¸ ì‚­ì œ";
     Text[ turkish ] = "Gradyanı sil";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Eliminar gradiente";
+    Text[ catalan ] = "Elimina el gradient";
+    Text[ thai ] = "à¸¥à¸šà¸•à¸±à¸§à¹„à¸¥à¹ˆà¸£à¸°à¸”à¸±à¸šà¸ªà¸µ";
 };
 String STR_ASK_DEL_GRADIENT
 {
@@ -180,24 +184,25 @@ String STR_ASK_DEL_GRADIENT
     Text [ italian ] = "Eliminare la sfumatura?" ;
     Text [ portuguese_brazilian ] = "Deseja apagar o d?grad??" ;
     Text [ portuguese ] = "Deseja realmente eliminar a gradação?" ;
-    Text [ finnish ] = "Haluatko poistaa gradientin?" ;
+    Text [ finnish ] = "Haluatko poistaa liukuvärjäyksen?" ;
     Text [ danish ] = "Er du sikker på, at du vil slette farvegradueringen?" ;
     Text [ french ] = "Confirmez-vous la suppression du dégradé ?" ;
     Text [ swedish ] = "Skall färggradienten verkligen raderas?" ;
-    Text [ dutch ] = "Wilt u het kleurverloop werkelijk wissen?" ;
-    Text [ spanish ] = "¿Desea realmente eliminar el gradiente de color?" ;
+    Text [ dutch ] = "Wilt u de kleurovergangen werkelijk wissen?" ;
+    Text [ spanish ] = "¿Desea realmente borrar el gradiente de color?" ;
     Text [ english_us ] = "Do you want to delete the gradient?" ;
     Text[ chinese_simplified ] = "çœŸçš„è¦åˆ é™¤è¿™ä¸ªå½©è‰²å›¾æ¡ˆå—ï¼Ÿ";
-    Text[ russian ] = "Âû äåéñòâèòåëüíî õîòèòå óäàëèòü ıòó ãğàäèåíòíóş?";
+    Text[ russian ] = "Óäàëèòü ãğàäèåíò?";
     Text[ polish ] = "Chcesz na pewno usun¹æ gradient?";
-    Text[ japanese ] = "ï½¸ï¾ï¾—ï¾ƒï¾ï½°ï½¼ï½®ï¾ã‚’å‰Šé™¤ã—ã¦ã‹ã¾ã„ã¾ã›ã‚“ã‹ã€‚";
+    Text[ japanese ] = "ã‚°ãƒ©ãƒ‡ãƒ¼ã‚·ãƒ§ãƒ³ã‚’å‰Šé™¤ã—ã¦ã‹ã¾ã„ã¾ã›ã‚“ã‹ã€‚";
     Text[ chinese_traditional ] = "æ‚¨çœŸè¦åˆªé™¤é€™å€‹å½©è‰²åœ–æ¡ˆï¼Ÿ";
     Text[ arabic ] = "åá ÊÑíÏ ÈÇáİÚá ÍĞİ ÊÏÑÌ Çááæä¿";
     Text[ greek ] = "Èİëåôå ğñáãìáôéêÜ íá ãßíåé äéáãñáöŞ ôçò äéáâÜèìéóçò ÷ñşìáôïò;";
-    Text[ korean ] = "ê·¸ë¼ë°ì´ì…˜ì„ ì •ë§ë¡œ ì‚­ì œí•˜ì‹œê² ìŠµë‹ˆê¹Œ?";
+    Text[ korean ] = "ê·¸ë¼ë””ì–¸íŠ¸ë¥¼ ì •ë§ë¡œ ì‚­ì œí•˜ì‹œê² ìŠµë‹ˆê¹Œ?";
     Text[ turkish ] = "Gradyanı gerçekten silmek istiyor musunuz?";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "¿Desea realmente eliminar el gradiente de color?";
+    Text[ catalan ] = "Voleu eliminar realment el gradient de color?";
+    Text[ thai ] = "à¸„à¸¸à¸“à¸•à¹‰à¸­à¸‡à¸à¸²à¸£à¸¥à¸šà¸•à¸±à¸§à¹„à¸¥à¹ˆà¸£à¸°à¸”à¸±à¸šà¸ªà¸µà¸«à¸£à¸·à¸­à¹„à¸¡à¹ˆ?";
 };
 String STR_ASK_CHANGE_GRADIENT
 {
@@ -208,24 +213,25 @@ String STR_ASK_CHANGE_GRADIENT
     Text [ italian ] = "La sfumatura è stata modificata senza essere salvata.\nPotete modificare la sfumatura o aggiungerne una nuova" ;
     Text [ portuguese_brazilian ] = "O d?grad? foi modificado sem gravar. Voc? poder  modificar o d?grad? selecionado ou adicionar um novo d?grad?" ;
     Text [ portuguese ] = "A gradação da cor foi modificada sem ter sido guardada. Poderá modificar a gradação seleccionada ou adicionar uma nova." ;
-    Text [ finnish ] = "Gradienttia ei tallennettu muokkauksen jälkeen. \nVoit vaihtaa valitun gradientin\n tai lisätä uuden." ;
+    Text [ finnish ] = "Liukuvärjäystä ei tallennettu muokkauksen jälkeen. \nVoit vaihtaa valitun liukuvärjäyksen\n tai lisätä uuden." ;
     Text [ danish ] = "Farvegradueringen er blevet ændret, men ikke gemt. \nDu kan ændre den markerede farvegraduering \neller tilføje en ny." ;
     Text [ french ] = "Les dernières modifications apportées au dégradé n'ont pas été sauvegardées. \nVous pouvez modifier le dégradé sélectionné ou en ajouter un nouveau." ;
     Text [ swedish ] = "Färggradienten ändrades utan att sparas.\nDu kan ändra den markerade färggradienten eller lägga\ntill en ny färggradient." ;
-    Text [ dutch ] = "Het kleurverloop is zonder opslaan gewijzigd. \nU kunt het geselecteerde kleurverloop wijzigen \nof een nieuw kleurverloop toevoegen." ;
+    Text [ dutch ] = "De kleurovergangen is zonder opslaan gewijzigd. \nU kunt de geselecteerde kleurovergangen wijzigen \nof nieuwe kleurovergangen toevoegen." ;
     Text [ spanish ] = "El gradiente de color ha sido modificado sin guardar.\nUsted puede modificar el gradiente seleccionado\no añadir uno nuevo." ;
     Text [ english_us ] = "The gradient was modified without saving. \nYou can change the selected gradient \nor add a new one." ;
     Text[ chinese_simplified ] = "å½©è‰²å›¾æ¡ˆå·²ç»è¢«æ›´æ”¹ï¼Œä½†æ˜¯å°šæœªè¢«ä¿å­˜ã€‚ \næ‚¨èƒ½å¤Ÿæ›´æ”¹é€‰ä¸­çš„å½©è‰²å›¾æ¡ˆ\næˆ–è€…æ–°å¢ä¸€ä¸ªå½©è‰²å›¾æ¡ˆã€‚";
-    Text[ russian ] = "Ãğàäèåíòíàÿ áûëà èçìåíåíà, íî íå ñîõğíåíà. \nÂû ìîæåòå èçìåíèòü âûáğàííóş ãğàäèåíòíóş \nèëè äîáàâèòü íîâóş ãğàäèåíòíóş.";
+    Text[ russian ] = "Ãğàäèåíò áûë èçìåíåí, íî íå ñîõğàíåí. \nÂû ìîæåòå èçìåíèòü âûáğàííûé ãğàäèåíò \nèëè äîáàâèòü íîâûé.";
     Text[ polish ] = "Gradient zosta³ zmieniony i nie zapisany. \nMo¿esz zmieniæ zaznaczony gradient \nlub dodaæ nowy gradient.";
-    Text[ japanese ] = "ï½¸ï¾ï¾—ï¾ƒï¾ï½°ï½¼ï½®ï¾ãŒå¤‰æ›´ã•ã‚Œä¿å­˜ã•ã‚Œã¦ã„ã¾ã›ã‚“ã€‚\né¸æŠã—ãŸï½¸ï¾ï¾—ï¾ƒï¾ï½°ï½¼ï½®ï¾ã‚’å¤‰æ›´ã™ã‚‹ã‹ã€ \næ–°ã—ã„ï½¸ï¾ï¾—ï¾ƒï¾ï½°ï½¼ï½®ï¾ã‚’è¿½åŠ ã™ã‚‹ã“ã¨ãŒã§ãã¾ã™ã€‚";
+    Text[ japanese ] = "ã‚°ãƒ©ãƒ‡ãƒ¼ã‚·ãƒ§ãƒ³ãŒå¤‰æ›´ã•ã‚Œä¿å­˜ã•ã‚Œã¦ã„ã¾ã›ã‚“ã€‚\né¸æŠã—ãŸã‚°ãƒ©ãƒ‡ãƒ¼ã‚·ãƒ§ãƒ³ã‚’å¤‰æ›´ã™ã‚‹ã‹ã€ \næ–°ã—ã„ã‚°ãƒ©ãƒ‡ãƒ¼ã‚·ãƒ§ãƒ³ã‚’è¿½åŠ ã™ã‚‹ã“ã¨ãŒã§ãã¾ã™ã€‚";
     Text[ chinese_traditional ] = "å½©è‰²åœ–æ¡ˆå·²ç¶“è®Šæ›´ï¼Œä½†æ˜¯å°šæœªè¢«å„²å­˜ã€‚ \næ‚¨èƒ½å¤ è®Šæ›´é¸å–çš„å½©è‰²åœ–æ¡ˆ\næˆ–è€…æ–°å¢ä¸€å€‹å½©è‰²åœ–æ¡ˆã€‚";
     Text[ arabic ] = "áã íÊã ÍİÙ ÊÏÑÌ Çááæä ÈÚÏ ÊÛííÑå. \níãßäß ÊÛííÑ ÊÏÑÌ Çááæä ÇáãÍÏÏ¡ \nÃæ ÅÖÇİÉ ÊÏÑÌ áæä ÌÏíÏ.";
     Text[ greek ] = "Ç äéáâÜèìéóç ÷ñşìáôïò ôñïğïğïéŞèçêå ÷ùñßò íá áğïèçêåõôåß. \nÌğïñåßôå íá áëëÜîåôå ôçí åğéëåãìİíç äéáâÜèìéóç \\Ş íá ğñïóèİóåôå ìéá íİá.";
-    Text[ korean ] = "ê·¸ë¼ë°ì´ì…˜ì´ ë³€ê²½ë˜ì—ˆìœ¼ë‚˜ ì €ì¥ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤. \nì„ íƒëœ ê·¸ë¼ë°ì´ì…˜ì„ ë³€ê²½í•˜ê±°ë‚˜ \nìƒˆ ê·¸ë¼ë°ì´ì…˜ì„ ì¶”ê°€í•  ìˆ˜ ìˆìŠµë‹ˆë‹¤.";
+    Text[ korean ] = "ê·¸ë¼ë””ì–¸íŠ¸ê°€ ë³€ê²½ë˜ì—ˆìœ¼ë‚˜ ì €ì¥ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤.\nì„ íƒëœ ê·¸ë¼ë””ì–¸íŠ¸ë¥¼ ë³€ê²½í•˜ê±°ë‚˜ \nìƒˆ ê·¸ë¼ë””ì–¸íŠ¸ë¥¼ ì¶”ê°€í•  ìˆ˜ ìˆìŠµë‹ˆë‹¤.";
     Text[ turkish ] = "Gradyan değiştirildi, ancak kaydedilmedi. \nSeçilen gradyanı değiştirebilir \nya da yeni bir gradyan ekleyebilirsiniz.";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "El gradiente de color ha sido modificado sin guardar.\nUsted puede modificar el gradiente seleccionado\no añadir uno nuevo.";
+    Text[ catalan ] = "El gradient de color s'ha modificat i no s'ha guardat.\nEs pot modificar el gradient seleccionat\no afegir-ne un de nou.";
+    Text[ thai ] = "à¸”à¸±à¸”à¹à¸›à¸¥à¸‡à¸•à¸±à¸§à¹„à¸¥à¹ˆà¸£à¸°à¸”à¸±à¸šà¸ªà¸µà¹‚à¸”à¸¢à¹„à¸¡à¹ˆà¹„à¸”à¹‰à¸šà¸±à¸™à¸—à¸¶à¸à¹„à¸§à¹‰. \nà¸„à¸¸à¸“à¸•à¹‰à¸­à¸‡à¸à¸²à¸£à¹€à¸›à¸¥à¸µà¹ˆà¸¢à¸™à¸•à¸±à¸§à¹„à¸¥à¹ˆà¸£à¸°à¸”à¸±à¸šà¸ªà¸µà¸—à¸µà¹ˆà¹€à¸¥à¸·à¸­à¸ \nà¸«à¸£à¸·à¸­à¹€à¸à¸´à¹ˆà¸¡à¸•à¸±à¸§à¹„à¸¥à¹ˆà¸£à¸°à¸”à¸±à¸šà¸ªà¸µà¹ƒà¸«à¸¡à¹ˆà¸«à¸£à¸·à¸­à¹„à¸¡à¹ˆ";
 };
 String STR_BITMAP
 {
@@ -243,16 +249,17 @@ String STR_BITMAP
     Text [ spanish ] = "Bitmap" ;
     Text [ english_us ] = "Bitmap" ;
     Text[ chinese_simplified ] = "ä½å›¾";
-    Text[ russian ] = "Bitmap";
+    Text[ russian ] = "Ğàñòğ";
     Text[ polish ] = "Mapa bitowa";
-    Text[ japanese ] = "ï¾‹ï¾ï½¯ï¾„ï¾ï½¯ï¾Œï¾Ÿ";
+    Text[ japanese ] = "ãƒ“ãƒƒãƒˆãƒãƒƒãƒ—";
     Text[ chinese_traditional ] = "é»é™£åœ–";
     Text[ arabic ] = "ÕæÑÉ äŞØíÉ";
     Text[ greek ] = "Bitmap";
     Text[ korean ] = "ë¹„íŠ¸ë§µ";
     Text[ turkish ] = "Bit eşlem";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Bitmap";
+    Text[ catalan ] = "Mapa de bits";
+    Text[ thai ] = "à¸šà¸´à¸—à¹à¸¡à¸›";
 };
 String STR_DESC_NEW_BITMAP
 {
@@ -268,19 +275,20 @@ String STR_DESC_NEW_BITMAP
     Text [ french ] = "Veuillez saisir un nom pour le nouveau bitmap :" ;
     Text [ swedish ] = "Ange namn för den nya bitmappen:" ;
     Text [ dutch ] = "Typ een naam voor de nieuwe bitmap in:" ;
-    Text [ spanish ] = "Inserte aquí el nombre para la nueva bitmap:" ;
+    Text [ spanish ] = "Introduzca aquí un nombre para la nueva bitmap:" ;
     Text [ english_us ] = "Please enter a name for the new bitmap:" ;
     Text[ chinese_simplified ] = "è¯·æ‚¨è¾“å…¥ä¸€ä¸ªæ–°ä½å›¾çš„åç§°ï¼š";
-    Text[ russian ] = "Ââåäèòå, ïîæàëóéñòà, èìÿ äëÿ íîâîãî bitmap:";
+    Text[ russian ] = "Ââåäèòå èìÿ íîâîãî ğàñòğà:";
     Text[ polish ] = "Wstaw nazwê nowej mapy bitowej:";
-    Text[ japanese ] = "ã“ã“ã«æ–°ã—ã„ï¾‹ï¾ï½¯ï¾„ï¾ï½¯ï¾Œï¾Ÿã®åå‰ã‚’å…¥åŠ›ã—ã¾ã™:";
+    Text[ japanese ] = "ã“ã“ã«æ–°ã—ã„ãƒ“ãƒƒãƒˆãƒãƒƒãƒ—ã®åå‰ã‚’å…¥åŠ›ã—ã¾ã™:";
     Text[ chinese_traditional ] = "è«‹æ‚¨è¼¸å…¥ä¸€å€‹æ–°é»é™£åœ–çš„åç¨±ï¼š";
     Text[ arabic ] = "ãä İÖáß ÇßÊÈ ÇÓã ÇáÕæÑÉ ÇáäŞØíÉ ÇáÌÏíÏÉ åäÇ:";
     Text[ language_user1 ] = ":";
     Text[ greek ] = "Ğáñáêáëş åéóÜãåôå ôï üíïìá ãéá ôï íİï bitmap:";
     Text[ korean ] = "ìƒˆ ë¹„íŠ¸ë§µì˜ ì´ë¦„ì„ ì—¬ê¸°ì— ì…ë ¥í•˜ì‹­ì‹œì˜¤:";
     Text[ turkish ] = "Yeni bit eşlem için bir ad girin:";
-    Text[ catalan ] = "Inserte aquí el nombre para la nueva bitmap:";
+    Text[ catalan ] = "Introdueix aquí el nom per al nou bitmap:";
+    Text[ thai ] = "à¸à¸£à¸¸à¸“à¸²à¹ƒà¸ªà¹ˆà¸Šà¸·à¹ˆà¸­à¸šà¸´à¸—à¹à¸¡à¸›à¹ƒà¸«à¸¡à¹ˆ:";
 };
 String STR_DESC_EXT_BITMAP
 {
@@ -296,19 +304,20 @@ String STR_DESC_EXT_BITMAP
     Text [ french ] = "Veuillez saisir un nom pour le bitmap externe :" ;
     Text [ swedish ] = "Ange namn för extern bitmap:" ;
     Text [ dutch ] = "Geef een naam voor de externe bitmap op:" ;
-    Text [ spanish ] = "Inserte aquí el nombre para la bitmap externa:" ;
+    Text [ spanish ] = "Introduzca aquí un nombre para la bitmap externa:" ;
     Text [ english_us ] = "Please enter the name of the external bitmap:" ;
     Text[ chinese_simplified ] = "è¯·æ‚¨è¾“å…¥ä¸€ä¸ªå¤–æ¥ä½å›¾çš„åç§°ï¼š";
-    Text[ russian ] = "Ââåäèòå, ïîæàëóéñòà, èìÿ âíåøíåãî bitmap:";
+    Text[ russian ] = "Ââåäèòå èìÿ âíåøíåãî ğàñòğà:";
     Text[ polish ] = "Wstaw nazwê zewnêtrznej mapy bitowej:";
-    Text[ japanese ] = "ã“ã“ã«å¤–éƒ¨ï¾‹ï¾ï½¯ï¾„ï¾ï½¯ï¾Œï¾Ÿã®åå‰ã‚’å…¥åŠ›ã—ã¾ã™:";
+    Text[ japanese ] = "ã“ã“ã«å¤–éƒ¨ãƒ“ãƒƒãƒˆãƒãƒƒãƒ—ã®åå‰ã‚’å…¥åŠ›ã—ã¾ã™:";
     Text[ chinese_traditional ] = "è«‹æ‚¨è¼¸å…¥ä¸€å€‹å¤–ä¾†é»é™£åœ–çš„åç¨±ï¼š";
     Text[ arabic ] = "ãä İÖáß ÇßÊÈ ÇÓã ÇáÕæÑÉ ÇáäŞØíÉ ÇáÎÇÑÌíÉ åäÇ:";
     Text[ language_user1 ] = ":";
     Text[ greek ] = "Ğáñáêáëş åéóÜãåôå ôï üíïìá ãéá ôï åîùôåñéêü bitmap:";
     Text[ korean ] = "ì™¸ë¶€ ë¹„íŠ¸ë§µì˜ ì´ë¦„ì„ ì—¬ê¸°ì— ì…ë ¥í•˜ì‹­ì‹œì˜¤:";
     Text[ turkish ] = "Harici bit eşlemin adını girin:";
-    Text[ catalan ] = "Inserte aquí el nombre para la bitmap externa:";
+    Text[ catalan ] = "Introdueix aquí el nom per al bitmap extern:";
+    Text[ thai ] = "à¸à¸£à¸¸à¸“à¸²à¹ƒà¸ªà¹ˆà¸Šà¸·à¹ˆà¸­à¸šà¸´à¸—à¹à¸¡à¸›à¸ à¸²à¸¢à¸™à¸­à¸:";
 };
 String STR_DEL_BITMAP
 {
@@ -324,19 +333,20 @@ String STR_DEL_BITMAP
     Text [ french ] = "Supprimer le bitmap" ;
     Text [ swedish ] = "Radera bitmap" ;
     Text [ dutch ] = "Bitmap wissen" ;
-    Text [ spanish ] = "Eliminar bitmap" ;
+    Text [ spanish ] = "Borrar bitmap" ;
     Text [ english_us ] = "Delete bitmap" ;
     Text[ chinese_simplified ] = "åˆ é™¤ä½å›¾";
-    Text[ russian ] = "Óäàëèòü bitmap";
+    Text[ russian ] = "Óäàëèòü ğàñòğ";
     Text[ polish ] = "Usuñ mapê bitow¹";
-    Text[ japanese ] = "ï¾‹ï¾ï½¯ï¾„ï¾ï½¯ï¾Œï¾Ÿã®å‰Šé™¤";
+    Text[ japanese ] = "ãƒ“ãƒƒãƒˆãƒãƒƒãƒ—ã®å‰Šé™¤";
     Text[ chinese_traditional ] = "åˆªé™¤é»é™£åœ–";
     Text[ arabic ] = "ÍĞİ ÕæÑÉ äŞØíÉ";
     Text[ greek ] = "ÄéáãñáöŞ bitmap";
     Text[ korean ] = "ë¹„íŠ¸ë§µ ì‚­ì œ";
     Text[ turkish ] = "Bit eşlemi sil";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Eliminar bitmap";
+    Text[ catalan ] = "Suprimeix el mapa de bits";
+    Text[ thai ] = "à¸¥à¸šà¸šà¸´à¸—à¹à¸¡à¸›";
 };
 String STR_ASK_DEL_BITMAP
 {
@@ -350,21 +360,22 @@ String STR_ASK_DEL_BITMAP
     Text [ finnish ] = "Haluatko poistaa bittikartan?" ;
     Text [ danish ] = "Er du sikker på, at du vil slette denne bitmap?" ;
     Text [ french ] = "Confirmez-vous la suppression du bitmap ?" ;
-    Text [ swedish ] = "Vill Du verkligen radera bitmappen?" ;
+    Text [ swedish ] = "Vill du verkligen radera bitmappen?" ;
     Text [ dutch ] = "Wilt u de bitmap werkelijk wissen?" ;
-    Text [ spanish ] = "¿Desea realmente eliminar la bitmap?" ;
+    Text [ spanish ] = "¿Desea realmente borrar el bitmap?" ;
     Text [ english_us ] = "Do you want to delete the bitmap?" ;
     Text[ chinese_simplified ] = "çœŸè¦åˆ é™¤è¿™ä¸ªä½å›¾å—ï¼Ÿ";
-    Text[ russian ] = "Âû äåéñòâèòåëüíî õîòèòå óäàëèòü âûáğàííûé bitmap?";
+    Text[ russian ] = "Óäàëèòü âûáğàííûé ğàñòğ?";
     Text[ polish ] = "Chcesz na pewno usun¹æ mapê bitow¹?";
-    Text[ japanese ] = "ï¾‹ï¾ï½¯ï¾„ï¾ï½¯ï¾Œï¾Ÿã‚’å‰Šé™¤ã—ã¦ã‹ã¾ã„ã¾ã›ã‚“ã‹ã€‚";
+    Text[ japanese ] = "ãƒ“ãƒƒãƒˆãƒãƒƒãƒ—ã‚’å‰Šé™¤ã—ã¦ã‹ã¾ã„ã¾ã›ã‚“ã‹ã€‚";
     Text[ chinese_traditional ] = "æ‚¨çœŸè¦åˆªé™¤é€™å€‹é»é™£åœ–ï¼Ÿ";
     Text[ arabic ] = "åá ÊÑíÏ ÈÇáİÚá ÍĞİ ÇáÕæÑÉ ÇáäŞØíÉ¿";
     Text[ greek ] = "Èİëåôå ğñáãìáôéêÜ íá äéáãñáöåß ôï bitmap;";
     Text[ korean ] = "ë¹„íŠ¸ë§µì„ ì •ë§ë¡œ ì‚­ì œí•˜ì‹œê² ìŠµë‹ˆê¹Œ?";
     Text[ turkish ] = "Bit eşlemi gerçekten silmek istiyor musunuz?";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "¿Desea realmente eliminar la bitmap?";
+    Text[ catalan ] = "Voleu suprimir el mapa de bits?";
+    Text[ thai ] = "à¸„à¸¸à¸“à¸•à¹‰à¸­à¸‡à¸à¸²à¸£à¸¥à¸šà¸šà¸´à¸—à¹à¸¡à¸›à¸«à¸£à¸·à¸­à¹„à¸¡à¹ˆ?";
 };
 String STR_ASK_CHANGE_BITMAP
 {
@@ -383,16 +394,17 @@ String STR_ASK_CHANGE_BITMAP
     Text [ spanish ] = "El bitmap ha sido modificado sin guardar.\nPuede modificar el bitmap seleccionado\no añadir uno nuevo." ;
     Text [ english_us ] = "The bitmap was modified without saving. \nYou can change the selected bitmap \\or add a new one." ;
     Text[ chinese_simplified ] = "ä½å›¾å·²ç»æ›´æ”¹ï¼Œä½†å¹¶æ²¡æœ‰è¢«ä¿å­˜ã€‚\næ‚¨èƒ½å¤Ÿæ›´æ”¹é€‰ä¸­çš„ä½å›¾\næˆ–è€…æ–°å¢ä¸€ä¸ªæ–°ä½å›¾ã€‚";
-    Text[ russian ] = "Bitmap áûë èçìåíåí, íî íå ñîõğàíåí. \nÂû ìîæåòå èçìåíèòü âûáğàííûé bitmap \nèëè äîáàâèòü íîâûé bitmap.";
+    Text[ russian ] = "Ğàñòğ áûë èçìåíåí, íî íå ñîõğàíåí. \nÂû ìîæåòå èçìåíèòü âûáğàííûé ğàñòğ \nèëè äîáàâèòü íîâûé.";
     Text[ polish ] = "Mapa bitowa zosta³a zmieniona i nie zapisana. \nMo¿esz zmieniæ zaznaczon¹ mapê bitow¹ \nlub dodaæ now¹ mapê bitow¹.";
-    Text[ japanese ] = "ï¾‹ï¾ï½¯ï¾„ï¾ï½¯ï¾Œï¾ŸãŒå¤‰æ›´ã•ã‚Œã¦ä¿å­˜ã•ã‚Œã¦ã„ã¾ã›ã‚“ã€‚\né¸æŠã—ãŸï¾‹ï¾ï½¯ï¾„ï¾ï½¯ï¾Œï¾Ÿã‚’å¤‰æ›´ã™ã‚‹ã‹ã€\næ–°ã—ã„ï¾‹ï¾ï½¯ï¾„ï¾ï½¯ï¾Œï¾Ÿã‚’è¿½åŠ ã™ã‚‹ã“ã¨ãŒã§ãã¾ã™ã€‚";
+    Text[ japanese ] = "ãƒ“ãƒƒãƒˆãƒãƒƒãƒ—ãŒå¤‰æ›´ã•ã‚Œã¦ä¿å­˜ã•ã‚Œã¦ã„ã¾ã›ã‚“ã€‚\né¸æŠã—ãŸãƒ“ãƒƒãƒˆãƒãƒƒãƒ—ã‚’å¤‰æ›´ã™ã‚‹ã‹ã€\næ–°ã—ã„ãƒ“ãƒƒãƒˆãƒãƒƒãƒ—ã‚’è¿½åŠ ã™ã‚‹ã“ã¨ãŒã§ãã¾ã™ã€‚";
     Text[ chinese_traditional ] = "é»é™£åœ–å·²ç¶“è®Šæ›´ï¼Œä½†ä¸¦æ²’æœ‰è¢«ä¿å­˜ã€‚\næ‚¨èƒ½å¤ æ›´æ”¹é¸ä¸­çš„é»é™£åœ–\næˆ–è€…æ–°å¢ä¸€å€‹æ–°é»é™£åœ–ã€‚";
     Text[ arabic ] = "áã íÊã ÍİÙ ÇáÕæÑÉ ÇáäŞØíÉ ÈÚÏ ÊÛííÑåÇ.\níãßäß ÊÛííÑ ÇáÕæÑÉ ÇáäŞØíÉ ÇáãÍÏÏÉ¡ \nÃæ ÅÖÇİÉ ÕæÑÉ äŞØíÉ ÌÏíÏÉ.";
     Text[ greek ] = "Ôï bitmap ôñïğïğïéŞèçêå ÷ùñßò íá áğïèçêåõôåß. \nÌğïñåßôå íá áëëÜîåôå ôï åğéëåãìİíï bitmap \\Ş íá ğñïóèİóåôå İíá íİï.";
-    Text[ korean ] = "ë¹„íŠ¸ë§µì´ ë³€ê²½ë˜ì—ˆìœ¼ë‚˜ ì €ì¥ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤. \nì„ íƒëœ ë¹„íŠ¸ë§µì„ ë³€ê²½í•˜ê±°ë‚˜ \n ìƒˆ ë¹„íŠ¸ë§µì„ ì¶”ê°€í•  ìˆ˜ ìˆìŠµë‹ˆë‹¤.";
+    Text[ korean ] = "ë¹„íŠ¸ë§µì´ ë³€ê²½ë˜ì—ˆìœ¼ë‚˜ ì €ì¥ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤.\nì„ íƒëœ ë¹„íŠ¸ë§µì„ ë³€ê²½í•˜ê±°ë‚˜ \n ìƒˆ ë¹„íŠ¸ë§µì„ ì¶”ê°€í•  ìˆ˜ ìˆìŠµë‹ˆë‹¤.";
     Text[ turkish ] = "Bit eşlem değiştirildi, ancak kaydedilmedi.\nSeçilen bit eşlemi değiştirebilir \nya da yeni bir bit eşlem ekleyebilirsiniz.";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "El bitmap ha sido modificado sin guardar.\nPuede modificar el bitmap seleccionado\no añadir uno nuevo.";
+    Text[ catalan ] = "El mapa de bits s'ha modificat sense desar-lo. \nPodeu canviar el mapa de bits seleccionat \no afegir-ne un de nou.";
+    Text[ thai ] = "à¸”à¸±à¸”à¹à¸›à¸¥à¸‡à¸šà¸´à¸—à¹à¸¡à¸›à¹‚à¸”à¸¢à¹„à¸¡à¹ˆà¹„à¸”à¹‰à¸šà¸±à¸™à¸—à¸¶à¸. \nà¸„à¸¸à¸“à¸•à¹‰à¸­à¸‡à¸à¸²à¸£à¹€à¸›à¸¥à¸µà¹ˆà¸¢à¸™à¸šà¸´à¸—à¹à¸¡à¸›à¸—à¸µà¹ˆà¹€à¸¥à¸·à¸­à¸ \\à¸«à¸£à¸·à¸­à¹€à¸à¸´à¹ˆà¸¡à¸šà¸´à¸—à¹à¸¡à¸›à¹ƒà¸«à¸¡à¹ˆà¸«à¸£à¸·à¸­à¹„à¸¡à¹ˆ";
 };
 String STR_LINESTYLE
 {
@@ -412,14 +424,15 @@ String STR_LINESTYLE
     Text[ chinese_simplified ] = "çº¿æ¡å¼æ ·";
     Text[ russian ] = "Ñòèëü ëèíèè";
     Text[ polish ] = "Styl linii";
-    Text[ japanese ] = "ç·šï½½ï¾€ï½²ï¾™";
+    Text[ japanese ] = "ç·šã‚¹ã‚¿ã‚¤ãƒ«";
     Text[ chinese_traditional ] = "ç·šæ¢å¼æ¨£";
     Text[ arabic ] = "äãØ ÇáÎØ";
     Text[ greek ] = "Óôõë ãñáììŞò";
-    Text[ korean ] = "ì„  ìœ í˜•";
+    Text[ korean ] = "ì„  ìŠ¤íƒ€ì¼";
     Text[ turkish ] = "Çizgi biçimi";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Estilo de línea";
+    Text[ catalan ] = "Estil de línia";
+    Text[ thai ] = "à¸¥à¸±à¸à¸©à¸“à¸°à¹€à¸ªà¹‰à¸™";
 };
 String STR_DESC_LINESTYLE
 {
@@ -434,20 +447,21 @@ String STR_DESC_LINESTYLE
     Text [ danish ] = "Indtast venligst et navn til den nye stregtype:" ;
     Text [ french ] = "Veuillez saisir un nom pour le nouveau style de ligne :" ;
     Text [ swedish ] = "Mata in namnet för den nya linjestilen här:" ;
-    Text [ dutch ] = "Geef het nieuwe lijntype een naam:" ;
-    Text [ spanish ] = "Inserte aquí el nombre para el nuevo estilo de línea:" ;
+    Text [ dutch ] = "Geef een naam op voor het nieuwe lijntype:" ;
+    Text [ spanish ] = "Introduzca un nombre para el estilo de línea nuevo:" ;
     Text [ english_us ] = "Please enter a name for the new line style:" ;
     Text[ chinese_simplified ] = "è¯·æ‚¨è¾“å…¥ä¸€ä¸ªæ–°çš„çº¿æ¡å¼æ ·åç§°ï¼š";
-    Text[ russian ] = "Ââåäèòå, ïîæàëóéñòà, èìÿ äëÿ íîâîãî ñòèëÿ ëèíèè:";
+    Text[ russian ] = "Ââåäèòå èìÿ íîâîãî ñòèëÿ ëèíèè:";
     Text[ polish ] = "Wstaw nazwê nowego stylu linii:";
-    Text[ japanese ] = "ã“ã“ã«æ–°ã—ã„ç·šï½½ï¾€ï½²ï¾™ã®åå‰ã‚’å…¥åŠ›ã—ã¾ã™:";
+    Text[ japanese ] = "ã“ã“ã«æ–°ã—ã„ç·šã‚¹ã‚¿ã‚¤ãƒ«ã®åå‰ã‚’å…¥åŠ›ã—ã¾ã™:";
     Text[ chinese_traditional ] = "è«‹è¼¸å…¥ä¸€å€‹æ–°ç·šæ¢å¼æ¨£çš„åç¨±ï¼š";
     Text[ arabic ] = "ãä İÖáß ÇßÊÈ ÇÓã ÇáäãØ ÇáÌÏíÏ ááÎØ åäÇ:";
     Text[ language_user1 ] = ":";
     Text[ greek ] = "Ğáñáêáëş åéóÜãåôå ôï üíïìá ãéá ôï íİï óôõë ãñáììŞò:";
-    Text[ korean ] = "ìƒˆ ì„  ìœ í˜•ì˜ ì´ë¦„ì„ ì—¬ê¸°ì— ì…ë ¥í•˜ì‹­ì‹œì˜¤:";
+    Text[ korean ] = "ìƒˆ ì„  ìŠ¤íƒ€ì¼ì˜ ì´ë¦„ì„ ì—¬ê¸°ì— ì…ë ¥í•˜ì‹­ì‹œì˜¤:";
     Text[ turkish ] = "Yeni çizgi biçimi için bir ad girin:";
-    Text[ catalan ] = "Inserte aquí el nombre para el nuevo estilo de línea:";
+    Text[ catalan ] = "Introdueix aquí el nom del nou estil de línia:";
+    Text[ thai ] = "à¸à¸£à¸¸à¸“à¸²à¹ƒà¸ªà¹ˆà¸Šà¸·à¹ˆà¸­à¸¥à¸±à¸à¸©à¸“à¸°à¹€à¸ªà¹‰à¸™à¹ƒà¸«à¸¡à¹ˆ:";
 };
 String STR_DEL_LINESTYLE
 {
@@ -463,19 +477,20 @@ String STR_DEL_LINESTYLE
     Text [ french ] = "Supprimer le style de ligne" ;
     Text [ swedish ] = "Radera linjestil" ;
     Text [ dutch ] = "Lijntype wissen" ;
-    Text [ spanish ] = "Eliminar estilo de línea" ;
+    Text [ spanish ] = "Borrar estilo de línea" ;
     Text [ english_us ] = "Delete line style" ;
     Text[ chinese_simplified ] = "åˆ é™¤çº¿æ¡å¼æ ·";
     Text[ russian ] = "Óäàëèòü ñòèëü ëèíèè";
     Text[ polish ] = "Usuñ styl linii";
-    Text[ japanese ] = "ç·šï½½ï¾€ï½²ï¾™ã®å‰Šé™¤";
+    Text[ japanese ] = "ç·šã‚¹ã‚¿ã‚¤ãƒ«ã®å‰Šé™¤";
     Text[ chinese_traditional ] = "åˆªé™¤ç·šæ¢å¼æ¨£";
     Text[ arabic ] = "ÍĞİ äãØ ÇáÎØ";
     Text[ greek ] = "ÄéáãñáöŞ óôõë ãñáììŞò";
-    Text[ korean ] = "ì„  ìœ í˜• ì‚­ì œ";
+    Text[ korean ] = "ì„  ìŠ¤íƒ€ì¼ ì‚­ì œ";
     Text[ turkish ] = "Çizgi biçimini sil";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Eliminar estilo de línea";
+    Text[ catalan ] = "Elimina estil de línia";
+    Text[ thai ] = "à¸¥à¸šà¸¥à¸±à¸à¸©à¸“à¸°à¹€à¸ªà¹‰à¸™";
 };
 String STR_ASK_DEL_LINESTYLE
 {
@@ -486,24 +501,25 @@ String STR_ASK_DEL_LINESTYLE
     Text [ italian ] = "Eliminare lo stile riga?" ;
     Text [ portuguese_brazilian ] = "Deseja Apagar o estilo de linha?" ;
     Text [ portuguese ] = "Deseja realmente eliminar o estilo de linha?" ;
-    Text [ finnish ] = "Halutko poistaa viivatyylin?" ;
+    Text [ finnish ] = "Haluatko poistaa viivatyylin?" ;
     Text [ danish ] = "Er du sikker på, at du vil slette stregtypen?" ;
     Text [ french ] = "Confirmez-vous la suppression du style de ligne ?" ;
     Text [ swedish ] = "Skall linjestilen verkligen raderas?" ;
     Text [ dutch ] = "Wilt u het lijntype werkelijk wissen?" ;
-    Text [ spanish ] = "¿Desea realmente eliminar el estilo de línea?" ;
+    Text [ spanish ] = "¿Desea realmente borrar el estilo de línea?" ;
     Text [ english_us ] = "Do you want to delete the line style?" ;
     Text[ chinese_simplified ] = "æ‚¨çœŸçš„è¦åˆ é™¤è¿™ä¸ªçº¿æ¡å¼æ ·å—ï¼Ÿ";
-    Text[ russian ] = "Âû äåéñòâèòåëüíî õîòèòå óäàëèòü ıòîò ñòèëü ëèíèè?";
+    Text[ russian ] = "Óäàëèòü ıòîò ñòèëü ëèíèè?";
     Text[ polish ] = "Chcesz na pewno usun¹æ styl linii?";
-    Text[ japanese ] = "ç·šï½½ï¾€ï½²ï¾™ã‚’æœ¬å½“ã«å‰Šé™¤ã—ã¾ã™ã‹ã€‚";
+    Text[ japanese ] = "ç·šã‚¹ã‚¿ã‚¤ãƒ«ã‚’æœ¬å½“ã«å‰Šé™¤ã—ã¾ã™ã‹ã€‚";
     Text[ chinese_traditional ] = "çœŸè¦åˆªé™¤é€™å€‹ç·šæ¢å¼æ¨£ï¼Ÿ";
     Text[ arabic ] = "åá ÊÑíÏ ÈÇáİÚá ÍĞİ äãØ ÇáÎØ¿";
     Text[ greek ] = "Èİëåôå óßãïõñá íá äéáãñáöåß ôï óôõë ãñáììŞò;";
-    Text[ korean ] = "ì„  ìœ í˜•ì„ ì •ë§ë¡œ ì‚­ì œí•˜ì‹œê² ìŠµë‹ˆê¹Œ?";
+    Text[ korean ] = "ì„  ìŠ¤íƒ€ì¼ì„ ì‚­ì œí•˜ì‹œê² ìŠµë‹ˆê¹Œ?";
     Text[ turkish ] = "Çizgi biçimini gerçekten silmek istiyor musunuz?";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "¿Desea realmente eliminar el estilo de línea?";
+    Text[ catalan ] = "Voleu eliminar realment l'estil de línia?";
+    Text[ thai ] = "à¸„à¸¸à¸“à¸•à¹‰à¸­à¸‡à¸à¸²à¸£à¸¥à¸šà¸¥à¸±à¸à¸©à¸“à¸˜à¹€à¸ªà¹‰à¸™à¸«à¸£à¸·à¸­à¹„à¸¡à¹ˆ?";
 };
 String STR_ASK_CHANGE_LINESTYLE
 {
@@ -518,20 +534,21 @@ String STR_ASK_CHANGE_LINESTYLE
     Text [ danish ] = "Stregtypen er blevet ændret, men ikke gemt. \nDu kan ændre den markerede stregtype \neller tilføje en ny." ;
     Text [ french ] = "Les dernières modifications apportées au style de ligne n'ont pas été sauvegardées. \nVous pouvez modifier le style de ligne sélectionné ou en ajouter un nouveau." ;
     Text [ swedish ] = "Linjestilen ändrades utan att sparas.\n Du kan ändra den markerade linjestilen eller\nlägga till en ny linjestil." ;
-    Text [ dutch ] = "De wijzigingen in het lijntype werden niet opgeslagen. \nU kunt het geselecteerde lijntype wijzigen \nof een nieuw lijntype toevoegen." ;
+    Text [ dutch ] = "De wijzigingen in het lijntype zijn niet opgeslagen. \nU kunt het geselecteerde lijntype wijzigen \nof een nieuw lijntype toevoegen." ;
     Text [ spanish ] = "El estilo de línea ha sido modificado sin guardar.\nUsted puede modificar el estilo de línea seleccionado\no añadir uno nuevo." ;
     Text [ english_us ] = "The line style was modified without saving. \nYou can change the selected line style \nor add a new one." ;
     Text[ chinese_simplified ] = "çº¿æ¡å¼æ ·å·²ç»æ›´æ”¹ï¼Œä½†æ˜¯å°šæœªä¿å­˜ã€‚ \næ‚¨èƒ½å¤Ÿæ›´æ”¹é€‰ä¸­çš„çº¿æ¡å¼æ ·\næˆ–è€…æ–°å¢ä¸€ä¸ªçº¿æ¡å¼æ ·ã€‚";
-    Text[ russian ] = "Ñòèëü ëèíèè áûë èçìåíåí, íî íå ñîõğàíåí. \nÂû ìîæåòå èçìåíèòü âûáğàííûé ñòèëü ëèíèè \nèëè äîáàâèòü íîâûé ñòèëü ëèíèè.";
+    Text[ russian ] = "Ñòèëü ëèíèè áûë èçìåíåí, íî íå ñîõğàíåí. \nÂû ìîæåòå èçìåíèòü âûáğàííûé ñòèëü ëèíèè \nèëè äîáàâèòü íîâûé ñòèëü.";
     Text[ polish ] = "Styl linii zosta³ zmieniony i nie zapisany. \nMo¿esz zmieniæ zaznaczony styl linii \nlub dodaæ nowy styl linii.";
-    Text[ japanese ] = "ç·šï½½ï¾€ï½²ï¾™ãŒå¤‰æ›´ã•ã‚Œä¿å­˜ã•ã‚Œã¦ã„ã¾ã›ã‚“ã€‚\né¸æŠã—ãŸç·šï½½ï¾€ï½²ï¾™ã‚’å¤‰æ›´ã™ã‚‹ã‹ã€\næ–°ã—ã„ç·šï½½ï¾€ï½²ï¾™ã‚’è¿½åŠ ã™ã‚‹ã“ã¨ãŒã§ãã¾ã™ã€‚";
+    Text[ japanese ] = "ç·šã‚¹ã‚¿ã‚¤ãƒ«ãŒå¤‰æ›´ã•ã‚Œä¿å­˜ã•ã‚Œã¦ã„ã¾ã›ã‚“ã€‚\né¸æŠã—ãŸç·šã‚¹ã‚¿ã‚¤ãƒ«ã‚’å¤‰æ›´ã™ã‚‹ã‹ã€\næ–°ã—ã„ç·šã‚¹ã‚¿ã‚¤ãƒ«ã‚’è¿½åŠ ã™ã‚‹ã“ã¨ãŒã§ãã¾ã™ã€‚";
     Text[ chinese_traditional ] = "ç·šæ¢å¼æ¨£å·²ç¶“è®Šæ›´ï¼Œä½†æ˜¯å°šæœªå„²å­˜ã€‚ \næ‚¨èƒ½å¤ è®Šæ›´é¸å–çš„ç·šæ¢å¼æ¨£\næˆ–è€…æ–°å¢ä¸€å€‹ç·šæ¢å¼æ¨£ã€‚";
     Text[ arabic ] = "áã íÊã ÍİÙ äãØ ÇáÎØ ÈÚÏ ÊÛííÑå. \níãßäß ÊÛííÑ äãØ ÇáÎØ ÇáãÍÏÏ¡ \nÃæ ÅÖÇİÉ äãØ ÎØ ÌÏíÏ.";
     Text[ greek ] = "Ôï óôõë ãñáììŞò ôñïğïğïéŞèçêå ÷ùñßò íá áğïèçêåõôåß. \nÌğïñåßôå íá áëëÜîåôå ôï åğéëåãìİíï óôõë \\Ş íá ğñïóèİóåôå İíá íİï.";
-    Text[ korean ] = "ì„  ìœ í˜•ì´ ë³€ê²½ë˜ì—ˆìœ¼ë‚˜ ì €ì¥ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤. \nì„ íƒëœ ì„  ìœ í˜•ì„ ë³€ê²½í•˜ê±°ë‚˜ \nìƒˆ ì„  ìœ í˜•ì„ ì¶”ê°€í•  ìˆ˜ ìˆìŠµë‹ˆë‹¤.";
+    Text[ korean ] = "ì„  ìŠ¤íƒ€ì¼ì´ ë³€ê²½ë˜ì—ˆìœ¼ë‚˜ ì €ì¥ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤. \nì„ íƒëœ ì„  ìŠ¤íƒ€ì¼ì„ ë³€ê²½í•˜ê±°ë‚˜ \nìƒˆ ì„  ìŠ¤íƒ€ì¼ì„ ì¶”ê°€í•  ìˆ˜ ìˆìŠµë‹ˆë‹¤.";
     Text[ turkish ] = "Çizgi biçimi değiştirildi, ancak kaydedilmedi. \nSeçilen çizgi biçimini değiştirebilir \nya da yeni bir çizgi biçimi ekleyebilirsiniz.";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "El estilo de línea ha sido modificado sin guardar.\nUsted puede modificar el estilo de línea seleccionado\no añadir uno nuevo.";
+    Text[ catalan ] = "L'estil de línia s'ha modificat sense desar-lo. \nPodeu canviar l'estil de línia seleccionat \no afegir-ne un de nou.";
+    Text[ thai ] = "à¸”à¸±à¸”à¹à¸›à¸¥à¸‡à¸¥à¸±à¸à¸©à¸“à¸°à¹€à¸ªà¹‰à¸™à¹‚à¸”à¸¢à¹„à¸¡à¹ˆà¹„à¸”à¹‰à¸šà¸±à¸™à¸—à¸¶à¸. \nà¸„à¸¸à¸“à¸•à¹‰à¸­à¸‡à¸à¸²à¸£à¹€à¸›à¸¥à¸µà¹ˆà¸¢à¸™à¸¥à¸±à¸à¸©à¸“à¸°à¹€à¸ªà¹‰à¸™à¸—à¸µà¹ˆà¹€à¸¥à¸·à¸­à¸ \nà¸«à¸£à¸·à¸­à¹€à¸à¸´à¹ˆà¸¡à¸¥à¸±à¸à¸©à¸“à¸°à¹€à¸ªà¹‰à¸™à¹ƒà¸«à¸¡à¹ˆà¸«à¸£à¸·à¸­à¹„à¸¡à¹ˆ";
 };
 String STR_INVISIBLE
 {
@@ -549,16 +566,17 @@ String STR_INVISIBLE
     Text [ spanish ] = "Invisible" ;
     Text [ english_us ] = "Invisible" ;
     Text[ chinese_simplified ] = "éšå…¥çš„";
-    Text[ russian ] = "Íåâèäèìàÿ";
+    Text[ russian ] = "Ïğîçğà÷íûé";
     Text[ polish ] = "Niewidoczny";
     Text[ japanese ] = "ç›®ã«è¦‹ãˆãªã„";
     Text[ chinese_traditional ] = "éš±å…¥çš„";
     Text[ arabic ] = "ÛíÑ ãÑÆí";
     Text[ greek ] = "Ìç ïñáôÜ";
-    Text[ korean ] = "ë³´ì´ì§€ ì•Šê²Œ";
+    Text[ korean ] = "ìˆ¨ê¹€";
     Text[ turkish ] = "Görünmez";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Invisible";
+    Text[ thai ] = "à¸¡à¸­à¸‡à¹„à¸¡à¹ˆà¹€à¸«à¹‡à¸™";
 };
 String STR_COLOR
 {
@@ -579,13 +597,14 @@ String STR_COLOR
     Text[ russian ] = "Öâåò";
     Text[ polish ] = "Kolor";
     Text[ japanese ] = "è‰²";
-    Text[ chinese_traditional ] = "é¡”è‰²";
+    Text[ chinese_traditional ] = "é¡è‰²";
     Text[ arabic ] = "áæä";
     Text[ greek ] = "×ñşìá";
     Text[ korean ] = "ìƒ‰ìƒ";
     Text[ turkish ] = "Renk";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Color";
+    Text[ thai ] = "à¸ªà¸µ";
 };
 String STR_HATCH
 {
@@ -605,14 +624,15 @@ String STR_HATCH
     Text[ chinese_simplified ] = "é˜´å½±çº¿";
     Text[ russian ] = "Øòğèõîâêà";
     Text[ polish ] = "Kreskowanie";
-    Text[ japanese ] = "ï¾Šï½¯ï¾ï¾ï½¸ï¾";
+    Text[ japanese ] = "ãƒãƒƒãƒãƒ³ã‚°";
     Text[ chinese_traditional ] = "é™°å½±ç·š";
     Text[ arabic ] = "äŞÔ";
     Text[ greek ] = "ÃñáììïóêéÜ";
     Text[ korean ] = "í•´ì¹­";
     Text[ turkish ] = "Tarama";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Trama";
+    Text[ catalan ] = "Ombreig";
+    Text[ thai ] = "à¸‹à¹ˆà¸­à¸™à¹à¸à¸‡";
 };
 String STR_CHANGE
 {
@@ -623,7 +643,7 @@ String STR_CHANGE
     Text [ italian ] = "Modifica" ;
     Text [ portuguese_brazilian ] = "Modificar" ;
     Text [ portuguese ] = "Alterar" ;
-    Text [ finnish ] = "Muokkaa" ;
+    Text [ finnish ] = "Muuta" ;
     Text [ danish ] = "Modificer" ;
     Text [ french ] = "Modifier" ;
     Text [ swedish ] = "Ändra" ;
@@ -640,7 +660,8 @@ String STR_CHANGE
     Text[ korean ] = "ë³€ê²½";
     Text[ turkish ] = "Değiştir";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Modificar";
+    Text[ catalan ] = "Modifica";
+    Text[ thai ] = "à¸”à¸±à¸”à¹à¸›à¸¥à¸‡";
 };
 String STR_ADD
 {
@@ -668,29 +689,169 @@ String STR_ADD
     Text[ korean ] = "ì¶”ê°€";
     Text[ turkish ] = "Ekle";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Añadir";
+    Text[ catalan ] = "Afegeix";
+    Text[ thai ] = "à¹€à¸à¸´à¹ˆà¸¡";
 };
 
 String STR_SAR_TITLE
 {
     Text = "Suchen & Ersetzen" ;
     Text [ ENGLISH ] = "Find & Replace" ;
+    Text[ english_us ] = "Find & Replace";
+    Text[ portuguese ] = "Find & Replace";
+    Text[ russian ] = "Find & Replace";
+    Text[ greek ] = "Find & Replace";
+    Text[ dutch ] = "Find & Replace";
+    Text[ french ] = "Rechercher & remplacer";
+    Text[ spanish ] = "Buscar y reemplazar";
+    Text[ finnish ] = "Find & Replace";
+    Text[ italian ] = "Cerca e sostituisci";
+    Text[ danish ] = "Find & Replace";
+    Text[ swedish ] = "Sök och ersätt";
+    Text[ polish ] = "Find & Replace";
+    Text[ portuguese_brazilian ] = "Find & Replace";
+    Text[ japanese ] = "æ¤œç´¢ã¨ç½®æ›";
+    Text[ korean ] = "ì°¾ê¸° ë° ë°”ê¾¸ê¸°";
+    Text[ chinese_simplified ] = "æœå¯»å’Œæ›¿æ¢";
+    Text[ chinese_traditional ] = "æœå°‹å’Œæ›¿ä»£";
+    Text[ turkish ] = "Find & Replace";
+    Text[ arabic ] = "Find & Replace";
+    Text[ catalan ] = "Find & Replace";
+    Text[ thai ] = "Find & Replace";
 };
 
 String STR_SAR_NOT_FOUND
 {
     Text = "Suchbegriff nicht gefunden." ;
     Text [ ENGLISH ] = "Search key not found." ;
+    Text[ english_us ] = "Search key not found.";
+    Text[ portuguese ] = "Search key not found.";
+    Text[ russian ] = "Search key not found.";
+    Text[ greek ] = "Search key not found.";
+    Text[ dutch ] = "Search key not found.";
+    Text[ french ] = "Terme recherché introuvable !";
+    Text[ spanish ] = "No se encontró la expresión buscada.";
+    Text[ finnish ] = "Search key not found.";
+    Text[ italian ] = "Termine non trovato";
+    Text[ danish ] = "Search key not found.";
+    Text[ swedish ] = "Sökord hittades inte.";
+    Text[ polish ] = "Search key not found.";
+    Text[ portuguese_brazilian ] = "Search key not found.";
+    Text[ japanese ] = "æ¤œç´¢ã‚­ãƒ¼ã¯è¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã€‚";
+    Text[ korean ] = "ê²€ìƒ‰ í‚¤ë¥¼ ì°¾ì§€ ëª»í–ˆìŠµë‹ˆë‹¤.";
+    Text[ chinese_simplified ] = "æ²¡æœ‰æ‰¾åˆ°æ‰€è¦æœå¯»çš„å†…å®¹ã€‚";
+    Text[ chinese_traditional ] = "æ²’æœ‰æ‰¾åˆ°æœå°‹çš„å†…å®¹ã€‚";
+    Text[ turkish ] = "Search key not found.";
+    Text[ arabic ] = "Search key not found.";
+    Text[ catalan ] = "Search key not found.";
+    Text[ thai ] = "Search key not found.";
 };
 
 String STR_SAR_WRAP_FORWARD
 {
     Text = "%PRODUCTNAME Impress hat bis zum Ende der Präsentation gesucht. Möchten Sie die Suche am Anfang fortsetzen?" ;
     Text [ ENGLISH ] = "%PRODUCTNAME Impress has searched to the end of the presentation. Do you want to continue at the beginning?" ;
+    Text[ english_us ] = "%PRODUCTNAME Impress has searched to the end of the presentation. Do you want to continue at the beginning?";
+    Text[ portuguese ] = "%PRODUCTNAME Impress has searched to the end of the presentation. Do you want to continue at the beginning?";
+    Text[ russian ] = "%PRODUCTNAME Impress has searched to the end of the presentation. Do you want to continue at the beginning?";
+    Text[ greek ] = "%PRODUCTNAME Impress has searched to the end of the presentation. Do you want to continue at the beginning?";
+    Text[ dutch ] = "%PRODUCTNAME Impress has searched to the end of the presentation. Do you want to continue at the beginning?";
+    Text[ french ] = "%PRODUCTNAME Impress a atteint la fin de la présentation. Souhaitez-vous reprendre la recherche au début de la présentation ?";
+    Text[ spanish ] = "%PRODUCTNAME Impress ha llegado hasta el final de la presentación. ¿Desea continuar la búsqueda desde el principio? ";
+    Text[ finnish ] = "%PRODUCTNAME Impress has searched to the end of the presentation. Do you want to continue at the beginning?";
+    Text[ italian ] = "%PRODUCTNAME Impress ha eseguito la ricerca fino al termine della presentazione. Volete continuare la ricerca dall'inizio?";
+    Text[ danish ] = "%PRODUCTNAME Impress has searched to the end of the presentation. Do you want to continue at the beginning?";
+    Text[ swedish ] = "%PRODUCTNAME Impress har sökt till slutet av presentationen. Vill du fortsätta sökningen i början?";
+    Text[ polish ] = "%PRODUCTNAME Impress has searched to the end of the presentation. Do you want to continue at the beginning?";
+    Text[ portuguese_brazilian ] = "%PRODUCTNAME Impress has searched to the end of the presentation. Do you want to continue at the beginning?";
+    Text[ japanese ] = "%PRODUCTNAME Impress ã¯ã€ãƒ—ãƒ¬ã‚¼ãƒ³ãƒ†ãƒ¼ã‚·ãƒ§ãƒ³ã®çµ‚ã‚ã‚Šã¾ã§æ¤œç´¢ã—ã¾ã—ãŸã€‚ãƒ—ãƒ¬ã‚¼ãƒ³ãƒ†ãƒ¼ã‚·ãƒ§ãƒ³ã®å§‹ã‚ã«æˆ»ã£ã¦æ¤œç´¢ã‚’ç¶šè¡Œã—ã¾ã™ã‹ã€‚";
+    Text[ korean ] = "%PRODUCTNAME Impress ëŠ” í”„ë ˆì  í…Œì´ì…˜ì˜ ëê¹Œì§€ ê²€ìƒ‰í–ˆìŠµë‹ˆë‹¤. ì‹œì‘ì—ì„œ ê²€ìƒ‰ì„ ê³„ì†í•˜ì‹œê² ìŠµë‹ˆê¹Œ?";
+    Text[ chinese_simplified ] = "%PRODUCTNAME Impress å·²ç»æœå¯»è‡³æ¼”ç¤ºæ–‡ç¨¿çš„é¡µå°¾ã€‚æ‚¨è¦ç»§ç»­ä»æ–‡æ¡£çš„é¡µé¦–ä½ç½®æœå¯»ï¼Ÿ";
+    Text[ chinese_traditional ] = "%PRODUCTNAME Impress å·²ç¶“æœå°‹è‡³ç°¡å ±é å°¾ã€‚è¦ç¹¼çºŒå¾é é¦–ä½ç½®æœå°‹ï¼Ÿ";
+    Text[ turkish ] = "%PRODUCTNAME Impress has searched to the end of the presentation. Do you want to continue at the beginning?";
+    Text[ arabic ] = "%PRODUCTNAME Impress has searched to the end of the presentation. Do you want to continue at the beginning?";
+    Text[ catalan ] = "%PRODUCTNAME Impress has searched to the end of the presentation. Do you want to continue at the beginning?";
+    Text[ thai ] = "%PRODUCTNAME Impress has searched to the end of the presentation. Do you want to continue at the beginning?";
 };
 
 String STR_SAR_WRAP_BACKWARD
 {
     Text = "%PRODUCTNAME Impress hat bis zum Anfang der Präsentation gesucht. Möchten Sie die Suche am Ende fortsetzen?" ;
     Text [ ENGLISH ] = "%PRODUCTNAME Impress has searched to the beginning of the presentation. Do you want to continue at the end?" ;
+    Text[ english_us ] = "%PRODUCTNAME Impress has searched to the beginning of the presentation. Do you want to continue at the end?";
+    Text[ portuguese ] = "%PRODUCTNAME Impress has searched to the beginning of the presentation. Do you want to continue at the end?";
+    Text[ russian ] = "%PRODUCTNAME Impress has searched to the beginning of the presentation. Do you want to continue at the end?";
+    Text[ greek ] = "%PRODUCTNAME Impress has searched to the beginning of the presentation. Do you want to continue at the end?";
+    Text[ dutch ] = "%PRODUCTNAME Impress has searched to the beginning of the presentation. Do you want to continue at the end?";
+    Text[ french ] = "%PRODUCTNAME Impress a atteint le début de la présentation. Souhaitez-vous reprendre la recherche à la fin de la présentation ?";
+    Text[ spanish ] = "%PRODUCTNAME Impress ha llegado hasta el principio de la presentación. ¿Desea continuar la búsqueda desde el final? ";
+    Text[ finnish ] = "%PRODUCTNAME Impress has searched to the beginning of the presentation. Do you want to continue at the end?";
+    Text[ italian ] = "%PRODUCTNAME Impress eseguito la ricerca fino all'inizio della presentazione. Volete proseguire fino alla fine?";
+    Text[ danish ] = "%PRODUCTNAME Impress has searched to the beginning of the presentation. Do you want to continue at the end?";
+    Text[ swedish ] = "%PRODUCTNAME Impress har sökt till början av presentationen. Vill du fortsätta sökningen i slutet?";
+    Text[ polish ] = "%PRODUCTNAME Impress has searched to the beginning of the presentation. Do you want to continue at the end?";
+    Text[ portuguese_brazilian ] = "%PRODUCTNAME Impress has searched to the beginning of the presentation. Do you want to continue at the end?";
+    Text[ japanese ] = "%PRODUCTNAME Impress ã¯ã€ãƒ—ãƒ¬ã‚¼ãƒ³ãƒ†ãƒ¼ã‚·ãƒ§ãƒ³ã®å§‹ã‚ã¾ã§æ¤œç´¢ã—ã¾ã—ãŸã€‚ãƒ—ãƒ¬ã‚¼ãƒ³ãƒ†ãƒ¼ã‚·ãƒ§ãƒ³ã®çµ‚ã‚ã‚Šã«æˆ»ã£ã¦æ¤œç´¢ã‚’ç¶šè¡Œã—ã¾ã™ã‹ã€‚";
+    Text[ korean ] = "%PRODUCTNAME Impress ëŠ” í”„ë ˆì  í…Œì´ì…˜ì˜ ì‹œì‘ê¹Œì§€ ê²€ìƒ‰í–ˆìŠµë‹ˆë‹¤. ëì—ì„œ ê²€ìƒ‰ì„ ê³„ì†í•˜ì‹œê² ìŠµë‹ˆê¹Œ?";
+    Text[ chinese_simplified ] = "%PRODUCTNAME Impress å·²ç»æœå¯»åˆ°æ¼”ç¤ºæ–‡ç¨¿çš„å¼€å¤´ä½ç½®ã€‚æ‚¨è¦ç»§ç»­æœå¯»è‡³æ–‡æ¡£çš„ç»“å°¾ä½ç½®ï¼Ÿ";
+    Text[ chinese_traditional ] = "%PRODUCTNAME Impress å·²ç¶“æœå°‹è‡³ç°¡å ±é é¦–ä½ç½®ã€‚è¦ç¹¼çºŒå¾é å°¾ä½ç½®æœå°‹ï¼Ÿ";
+    Text[ turkish ] = "%PRODUCTNAME Impress has searched to the beginning of the presentation. Do you want to continue at the end?";
+    Text[ arabic ] = "%PRODUCTNAME Impress has searched to the beginning of the presentation. Do you want to continue at the end?";
+    Text[ catalan ] = "%PRODUCTNAME Impress has searched to the beginning of the presentation. Do you want to continue at the end?";
+    Text[ thai ] = "%PRODUCTNAME Impress has searched to the beginning of the presentation. Do you want to continue at the end?";
 };
+
+String STR_SAR_WRAP_FORWARD_DRAW
+{
+    Text = "%PRODUCTNAME Draw hat bis zum Ende des Dokuments gesucht. Möchten Sie die Suche am Anfang fortsetzen?" ;
+    Text [ ENGLISH ] = "%PRODUCTNAME Draw has searched to the end of the document. Do you want to continue at the beginning?" ;
+    Text[ english_us ] = "%PRODUCTNAME Draw has searched to the end of the document. Do you want to continue at the beginning?";
+    Text[ portuguese ] = "%PRODUCTNAME Draw has searched to the end of the document. Do you want to continue at the beginning?";
+    Text[ russian ] = "%PRODUCTNAME Draw has searched to the end of the document. Do you want to continue at the beginning?";
+    Text[ greek ] = "%PRODUCTNAME Draw has searched to the end of the document. Do you want to continue at the beginning?";
+    Text[ dutch ] = "%PRODUCTNAME Draw has searched to the end of the document. Do you want to continue at the beginning?";
+    Text[ french ] = "%PRODUCTNAME Draw a atteint la fin de la présentation. Souhaitez-vous reprendre la recherche au début de la présentation ?";
+    Text[ spanish ] = "%PRODUCTNAME Draw ha llegado hasta el final de la presentación. ¿Desea continuar la búsqueda desde el principio? ";
+    Text[ finnish ] = "%PRODUCTNAME Draw has searched to the end of the document. Do you want to continue at the beginning?";
+    Text[ italian ] = "%PRODUCTNAME Draw ha eseguito la ricerca fino al termine della presentazione. Volete continuare la ricerca dall'inizio?";
+    Text[ danish ] = "%PRODUCTNAME Draw has searched to the end of the document. Do you want to continue at the beginning?";
+    Text[ swedish ] = "%PRODUCTNAME Draw har sökt till slutet av presentationen. Vill du fortsätta sökningen i början?";
+    Text[ polish ] = "%PRODUCTNAME Draw has searched to the end of the document. Do you want to continue at the beginning?";
+    Text[ portuguese_brazilian ] = "%PRODUCTNAME Draw has searched to the end of the document. Do you want to continue at the beginning?";
+    Text[ japanese ] = "%PRODUCTNAME Draw ã¯ã€ãƒ—ãƒ¬ã‚¼ãƒ³ãƒ†ãƒ¼ã‚·ãƒ§ãƒ³ã®çµ‚ã‚ã‚Šã¾ã§æ¤œç´¢ã—ã¾ã—ãŸã€‚ãƒ—ãƒ¬ã‚¼ãƒ³ãƒ†ãƒ¼ã‚·ãƒ§ãƒ³ã®å§‹ã‚ã«æˆ»ã£ã¦æ¤œç´¢ã‚’ç¶šè¡Œã—ã¾ã™ã‹ã€‚";
+    Text[ korean ] = "%PRODUCTNAME Draw ëŠ” í”„ë ˆì  í…Œì´ì…˜ì˜ ëê¹Œì§€ ê²€ìƒ‰í–ˆìŠµë‹ˆë‹¤. ì‹œì‘ì—ì„œ ê²€ìƒ‰ì„ ê³„ì†í•˜ì‹œê² ìŠµë‹ˆê¹Œ?";
+    Text[ chinese_simplified ] = "%PRODUCTNAME Draw å·²ç»æœå¯»è‡³æ¼”ç¤ºæ–‡ç¨¿çš„é¡µå°¾ã€‚æ‚¨è¦ç»§ç»­ä»æ–‡æ¡£çš„é¡µé¦–ä½ç½®æœå¯»ï¼Ÿ";
+    Text[ chinese_traditional ] = "%PRODUCTNAME Draw å·²ç¶“æœå°‹è‡³ç°¡å ±é å°¾ã€‚è¦ç¹¼çºŒå¾é é¦–ä½ç½®æœå°‹ï¼Ÿ";
+    Text[ turkish ] = "%PRODUCTNAME Draw has searched to the end of the document. Do you want to continue at the beginning?";
+    Text[ arabic ] = "%PRODUCTNAME Draw has searched to the end of the document. Do you want to continue at the beginning?";
+    Text[ catalan ] = "%PRODUCTNAME Draw has searched to the end of the document. Do you want to continue at the beginning?";
+    Text[ thai ] = "%PRODUCTNAME Draw has searched to the end of the document. Do you want to continue at the beginning?";
+};
+
+String STR_SAR_WRAP_BACKWARD_DRAW
+{
+    Text = "%PRODUCTNAME Draw hat bis zum Anfang des Dokuments gesucht. Möchten Sie die Suche am Ende fortsetzen?" ;
+    Text [ ENGLISH ] = "%PRODUCTNAME Draw has searched to the beginning of the document. Do you want to continue at the end?" ;
+    Text[ english_us ] = "%PRODUCTNAME Draw has searched to the beginning of the document. Do you want to continue at the end?";
+    Text[ portuguese ] = "%PRODUCTNAME Draw has searched to the beginning of the document. Do you want to continue at the end?";
+    Text[ russian ] = "%PRODUCTNAME Draw has searched to the beginning of the document. Do you want to continue at the end?";
+    Text[ greek ] = "%PRODUCTNAME Draw has searched to the beginning of the document. Do you want to continue at the end?";
+    Text[ dutch ] = "%PRODUCTNAME Draw has searched to the beginning of the document. Do you want to continue at the end?";
+    Text[ french ] = "%PRODUCTNAME Draw a atteint le début de la présentation. Souhaitez-vous reprendre la recherche à la fin de la présentation ?";
+    Text[ spanish ] = "%PRODUCTNAME Draw ha llegado hasta el principio de la presentación. ¿Desea continuar la búsqueda desde el final? ";
+    Text[ finnish ] = "%PRODUCTNAME Draw has searched to the beginning of the document. Do you want to continue at the end?";
+    Text[ italian ] = "%PRODUCTNAME Draw eseguito la ricerca fino all'inizio della presentazione. Volete proseguire fino alla fine?";
+    Text[ danish ] = "%PRODUCTNAME Draw has searched to the beginning of the document. Do you want to continue at the end?";
+    Text[ swedish ] = "%PRODUCTNAME Draw har sökt till början av presentationen. Vill du fortsätta sökningen i slutet?";
+    Text[ polish ] = "%PRODUCTNAME Draw has searched to the beginning of the document. Do you want to continue at the end?";
+    Text[ portuguese_brazilian ] = "%PRODUCTNAME Draw has searched to the beginning of the document. Do you want to continue at the end?";
+    Text[ japanese ] = "%PRODUCTNAME Draw ã¯ã€ãƒ—ãƒ¬ã‚¼ãƒ³ãƒ†ãƒ¼ã‚·ãƒ§ãƒ³ã®å§‹ã‚ã¾ã§æ¤œç´¢ã—ã¾ã—ãŸã€‚ãƒ—ãƒ¬ã‚¼ãƒ³ãƒ†ãƒ¼ã‚·ãƒ§ãƒ³ã®çµ‚ã‚ã‚Šã«æˆ»ã£ã¦æ¤œç´¢ã‚’ç¶šè¡Œã—ã¾ã™ã‹ã€‚";
+    Text[ korean ] = "%PRODUCTNAME Draw ëŠ” í”„ë ˆì  í…Œì´ì…˜ì˜ ì‹œì‘ê¹Œì§€ ê²€ìƒ‰í–ˆìŠµë‹ˆë‹¤. ëì—ì„œ ê²€ìƒ‰ì„ ê³„ì†í•˜ì‹œê² ìŠµë‹ˆê¹Œ?";
+    Text[ chinese_simplified ] = "%PRODUCTNAME Draw å·²ç»æœå¯»åˆ°æ¼”ç¤ºæ–‡ç¨¿çš„å¼€å¤´ä½ç½®ã€‚æ‚¨è¦ç»§ç»­æœå¯»è‡³æ–‡æ¡£çš„ç»“å°¾ä½ç½®ï¼Ÿ";
+    Text[ chinese_traditional ] = "%PRODUCTNAME Draw å·²ç¶“æœå°‹è‡³ç°¡å ±é é¦–ä½ç½®ã€‚è¦ç¹¼çºŒå¾é å°¾ä½ç½®æœå°‹ï¼Ÿ";
+    Text[ turkish ] = "%PRODUCTNAME Draw has searched to the beginning of the document. Do you want to continue at the end?";
+    Text[ arabic ] = "%PRODUCTNAME Draw has searched to the beginning of the document. Do you want to continue at the end?";
+    Text[ catalan ] = "%PRODUCTNAME Draw has searched to the beginning of the document. Do you want to continue at the end?";
+    Text[ thai ] = "%PRODUCTNAME Draw has searched to the beginning of the document. Do you want to continue at the end?";
+};
+

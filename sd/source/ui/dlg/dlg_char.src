@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlg_char.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2001-11-16 23:17:55 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 10:57:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@ TabDialog TAB_CHAR
     Text [ portuguese ] = "Caracteres" ;
     Text [ finnish ] = "Merkki" ;
     Text [ danish ] = "Tegn" ;
-    Text [ french ] = "Caractère" ;
+    Text [ french ] = "Caractères" ;
     Text [ swedish ] = "Tecken" ;
     Text [ dutch ] = "Teken" ;
     Text [ spanish ] = "Caracteres" ;
@@ -108,14 +108,15 @@ TabDialog TAB_CHAR
                 Text[ chinese_simplified ] = "å­—ä½“";
                 Text[ russian ] = "Øğèôò";
                 Text[ polish ] = "Czcionka";
-                Text[ japanese ] = "ï¾Œï½«ï¾ï¾„";
+                Text[ japanese ] = "ãƒ•ã‚©ãƒ³ãƒˆ";
                 Text[ chinese_traditional ] = "å­—å‹";
                 Text[ arabic ] = "ÇáÎØ";
                 Text[ greek ] = "ÃñáììáôïóåéñÜ";
                 Text[ korean ] = "ê¸€ê¼´";
                 Text[ turkish ] = "Yazıtipi";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Fuente";
+                Text[ catalan ] = "Tipus de lletra";
+                Text[ thai ] = "à¸•à¸±à¸§à¸­à¸±à¸à¸©à¸£";
             };
             PageItem
             {
@@ -137,14 +138,15 @@ TabDialog TAB_CHAR
                 Text[ chinese_simplified ] = "å­—ä½“æ•ˆæœ";
                 Text[ russian ] = "İôôåêòû øğèôòà";
                 Text[ polish ] = "Efekt czcionki";
-                Text[ japanese ] = "ï¾Œï½«ï¾ï¾„åŠ¹æœ";
+                Text[ japanese ] = "ãƒ•ã‚©ãƒ³ãƒˆåŠ¹æœ";
                 Text[ chinese_traditional ] = "å­—å‹æ•ˆæœ";
                 Text[ arabic ] = "ÊÃËíÑÇÊ ÇáÎØæØ";
                 Text[ greek ] = "Åöİ ÷áñáêôŞñùí";
                 Text[ korean ] = "ê¸€ê¼´ íš¨ê³¼";
                 Text[ turkish ] = "Yazıtipi efekti";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Efectos de fuente";
+                Text[ catalan ] = "Efectes de lletra";
+                Text[ thai ] = "à¸¥à¸±à¸à¸©à¸“à¸°à¸•à¸±à¸§à¸­à¸±à¸à¸©à¸£";
             };
             PageItem
             {
@@ -160,7 +162,7 @@ TabDialog TAB_CHAR
                 Text[ french ] = "Position";
                 Text[ spanish ] = "Posición";
                 Text[ italian ] = "Posizione";
-                Text[ danish ] = "Start_ved";
+                Text[ danish ] = "Placering";
                 Text[ swedish ] = "Position";
                 Text[ polish ] = "Pozycja";
                 Text[ portuguese_brazilian ] = "Position";
@@ -170,8 +172,9 @@ TabDialog TAB_CHAR
                 Text[ chinese_traditional ] = "ä½ç½®";
                 Text[ turkish ] = "Konum";
                 Text[ arabic ] = "ÇáãæÖÚ";
-                Text[ catalan ] = "Posición";
+                Text[ catalan ] = "Posició";
                 Text[ finnish ] = "Sijainti";
+                Text[ thai ] = "à¸•à¸³à¹à¸«à¸™à¹ˆà¸‡";
             };
         };
     };
@@ -213,19 +216,20 @@ TabDialog TAB_CHAR
         Text [ english_us ] = "Return" ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "è¿”å›";
-        Text[ russian ] = "Íàçàä";
+        Text[ russian ] = "Âåğíóòüñÿ";
         Text[ polish ] = "Wstecz";
         Text[ japanese ] = "æˆ»ã‚‹";
         Text[ chinese_traditional ] = "è¿”å›";
         Text[ arabic ] = "ÇáÓÇÈŞ";
         Text[ greek ] = "ÅğéóôñïöŞ";
-        Text[ korean ] = "ë˜ëŒì•„ ê°€ê¸°";
+        Text[ korean ] = "ë’¤ë¡œ";
         Text[ turkish ] = "Geri";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Regresar";
+        Text[ catalan ] = "Torna";
+        Text[ thai ] = "à¸ªà¹ˆà¸‡à¸à¸¥à¸±à¸š";
     };
     Text[ chinese_simplified ] = "å­—ç¬¦";
-    Text[ russian ] = "Çíàêè";
+    Text[ russian ] = "Øğèôò";
     Text[ polish ] = "Znak";
     Text[ japanese ] = "æ–‡å­—";
     Text[ chinese_traditional ] = "å­—å…ƒ";
@@ -234,8 +238,17 @@ TabDialog TAB_CHAR
     Text[ korean ] = "ë¬¸ì";
     Text[ turkish ] = "Yazıtipi";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Caracteres";
+    Text[ catalan ] = "Caràcters";
+    Text[ thai ] = "à¸•à¸±à¸§à¸­à¸±à¸à¸‚à¸£à¸°";
 };
+
+
+
+
+
+
+
+
 
 
 

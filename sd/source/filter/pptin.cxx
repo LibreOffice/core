@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pptin.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: sj $ $Date: 2002-11-18 12:58:25 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 10:57:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -821,104 +821,111 @@ sal_Bool ImplSdPPTImport::Import()
         PptSlidePersistList* pList = GetPageList( eAktPageKind );
         PptSlidePersistEntry* pPersist = ( pList && ( nAktPageNum < pList->Count() ) )
                                                     ? (*pList)[ nAktPageNum ] : NULL;
-
-        if ( pPersist && ( pPersist->bStarDrawFiller == FALSE ) )
+        if ( pPersist )
         {
-            PptSlidePersistEntry* pE = pPersist;
-            while( ( pE->aSlideAtom.nFlags & 4 ) && pE->aSlideAtom.nMasterId )
+            if ( pPersist->bStarDrawFiller && pPersist->bNotesMaster && ( nAktPageNum > 3 ) && ( ( nAktPageNum & 1 ) == 0 ) )
             {
-                sal_uInt16 nNextMaster = pMasterPages->FindPage( pE->aSlideAtom.nMasterId );
-                if ( nNextMaster == PPTSLIDEPERSIST_ENTRY_NOTFOUND )
-                    break;
-                else
-                    pE = (*pList)[ nNextMaster ];
+                pSdrModel->DeleteMasterPage( nAktPageNum );
+                pSdrModel->InsertMasterPage( pSdrModel->GetMasterPage( nAktPageNum - 2 )->Clone(), nAktPageNum );
             }
-            SdrObject* pObj = ImportPageBackgroundObject( *pMPage, pE->nBackgroundOffset, TRUE );   // import background
-            if ( pObj )
-                pMPage->NbcInsertObject( pObj );
-
-            ProcessData aProcessData( *(*pList)[ nAktPageNum ], (SdPage*)pMPage );
-            sal_uInt32 nFPosMerk = rStCtrl.Tell();
-            DffRecordHeader aPageHd;
-            if ( SeekToAktPage( &aPageHd ) )
+            else if ( ( pPersist->bStarDrawFiller == FALSE ) )
             {
-                sal_uInt32 nPageRecEnd = aPageHd.GetRecEndFilePos();
-                DffRecordHeader aPPDrawHd;
-                if ( SeekToRec( rStCtrl, PPT_PST_PPDrawing, nPageRecEnd, &aPPDrawHd ) )
+                PptSlidePersistEntry* pE = pPersist;
+                while( ( pE->aSlideAtom.nFlags & 4 ) && pE->aSlideAtom.nMasterId )
                 {
-                    sal_uInt32 nPPDrawEnd = aPPDrawHd.GetRecEndFilePos();
-                    DffRecordHeader aEscherF002Hd;
-                    if ( SeekToRec( rStCtrl, DFF_msofbtDgContainer, nPPDrawEnd, &aEscherF002Hd ) )
+                    sal_uInt16 nNextMaster = pMasterPages->FindPage( pE->aSlideAtom.nMasterId );
+                    if ( nNextMaster == PPTSLIDEPERSIST_ENTRY_NOTFOUND )
+                        break;
+                    else
+                        pE = (*pList)[ nNextMaster ];
+                }
+                SdrObject* pObj = ImportPageBackgroundObject( *pMPage, pE->nBackgroundOffset, TRUE );   // import background
+                if ( pObj )
+                    pMPage->NbcInsertObject( pObj );
+
+                ProcessData aProcessData( *(*pList)[ nAktPageNum ], (SdPage*)pMPage );
+                sal_uInt32 nFPosMerk = rStCtrl.Tell();
+                DffRecordHeader aPageHd;
+                if ( SeekToAktPage( &aPageHd ) )
+                {
+                    sal_uInt32 nPageRecEnd = aPageHd.GetRecEndFilePos();
+                    DffRecordHeader aPPDrawHd;
+                    if ( SeekToRec( rStCtrl, PPT_PST_PPDrawing, nPageRecEnd, &aPPDrawHd ) )
                     {
-                        sal_uInt32 nEscherF002End = aEscherF002Hd.GetRecEndFilePos();
-                        DffRecordHeader aEscherObjListHd;
-                        if ( SeekToRec( rStCtrl, DFF_msofbtSpgrContainer, nEscherF002End, &aEscherObjListHd ) )
+                        sal_uInt32 nPPDrawEnd = aPPDrawHd.GetRecEndFilePos();
+                        DffRecordHeader aEscherF002Hd;
+                        if ( SeekToRec( rStCtrl, DFF_msofbtDgContainer, nPPDrawEnd, &aEscherF002Hd ) )
                         {
-                            sal_uInt32 nObjCount = 0;
-                            while( ( rStCtrl.GetError() == 0 ) && ( rStCtrl.Tell() < aEscherObjListHd.GetRecEndFilePos() ) )
+                            sal_uInt32 nEscherF002End = aEscherF002Hd.GetRecEndFilePos();
+                            DffRecordHeader aEscherObjListHd;
+                            if ( SeekToRec( rStCtrl, DFF_msofbtSpgrContainer, nEscherF002End, &aEscherObjListHd ) )
                             {
-                                DffRecordHeader aHd;
-                                rStCtrl >> aHd;
-                                if ( ( aHd.nRecType == DFF_msofbtSpContainer ) || ( aHd.nRecType == DFF_msofbtSpgrContainer ) )
+                                sal_uInt32 nObjCount = 0;
+                                while( ( rStCtrl.GetError() == 0 ) && ( rStCtrl.Tell() < aEscherObjListHd.GetRecEndFilePos() ) )
                                 {
-                                    if ( nObjCount++ )      // skipping the first object
+                                    DffRecordHeader aHd;
+                                    rStCtrl >> aHd;
+                                    if ( ( aHd.nRecType == DFF_msofbtSpContainer ) || ( aHd.nRecType == DFF_msofbtSpgrContainer ) )
                                     {
-                                        aHd.SeekToBegOfRecord( rStCtrl );
-                                        SdrObject* pObj = ImportObj( rStCtrl, (void*)&aProcessData, NULL );
-                                        if ( pObj )
+                                        if ( nObjCount++ )      // skipping the first object
                                         {
-                                            pObj->SetLayer( nBackgroundObjectsLayerID );
-                                            pMPage->NbcInsertObject( pObj );
+                                            aHd.SeekToBegOfRecord( rStCtrl );
+                                            SdrObject* pObj = ImportObj( rStCtrl, (void*)&aProcessData, NULL );
+                                            if ( pObj )
+                                            {
+                                                pObj->SetLayer( nBackgroundObjectsLayerID );
+                                                pMPage->NbcInsertObject( pObj );
+                                            }
                                         }
                                     }
+                                    aHd.SeekToEndOfRecord( rStCtrl );
                                 }
-                                aHd.SeekToEndOfRecord( rStCtrl );
                             }
                         }
                     }
                 }
-            }
-            rStCtrl.Seek( nFPosMerk );
+                rStCtrl.Seek( nFPosMerk );
+                ImportPageEffect( (SdPage*)pMPage );
 
-            ImportPageEffect( (SdPage*)pMPage );
-            if( pStbMgr )
-                pStbMgr->SetState( nImportedPages++ );
-        }
-        ///////////////////////
-        // background object //
-        ///////////////////////
-        SdrObject* pObj = pMPage->GetObj( 0 );
-        if ( pObj && pObj->GetObjIdentifier() == OBJ_RECT )
-        {
-            if ( pMPage->GetPageKind() == PK_STANDARD )
-            {
-                // Hintergrundobjekt gefunden (erstes Objekt der MasterPage)
-                pObj->SetEmptyPresObj( TRUE );
-                pObj->SetUserCall( pMPage );
-                pObj->SetLayer( nBackgroundLayerID );
-
-                // Schatten am ersten Objekt (Hintergrundobjekt) entfernen (#57918#)
-                SfxItemSet aTempAttr( pDoc->GetPool() );
-                aTempAttr.Put( pObj->GetItemSet() );
-
-                BOOL bShadowIsOn = ( (SdrShadowItem&)( aTempAttr.Get( SDRATTR_SHADOW ) ) ).GetValue();
-                if( bShadowIsOn )
+                ///////////////////////
+                // background object //
+                ///////////////////////
+                pObj = pMPage->GetObj( 0 );
+                if ( pObj && pObj->GetObjIdentifier() == OBJ_RECT )
                 {
-                    aTempAttr.Put( SdrShadowItem( FALSE ) );
-                    pObj->SetItemSet( aTempAttr );
+                    if ( pMPage->GetPageKind() == PK_STANDARD )
+                    {
+                        // Hintergrundobjekt gefunden (erstes Objekt der MasterPage)
+                        pObj->SetEmptyPresObj( TRUE );
+                        pObj->SetUserCall( pMPage );
+                        pObj->SetLayer( nBackgroundLayerID );
+
+                        // Schatten am ersten Objekt (Hintergrundobjekt) entfernen (#57918#)
+                        SfxItemSet aTempAttr( pDoc->GetPool() );
+                        aTempAttr.Put( pObj->GetItemSet() );
+
+                        BOOL bShadowIsOn = ( (SdrShadowItem&)( aTempAttr.Get( SDRATTR_SHADOW ) ) ).GetValue();
+                        if( bShadowIsOn )
+                        {
+                            aTempAttr.Put( SdrShadowItem( FALSE ) );
+                            pObj->SetItemSet( aTempAttr );
+                        }
+                        SfxStyleSheet* pSheet = pMPage->GetStyleSheetForPresObj( PRESOBJ_BACKGROUND );
+                        if ( pSheet )
+                        {   // StyleSheet fuellen und dem Objekt zuweisen
+                            pSheet->GetItemSet().ClearItem();
+                            pSheet->GetItemSet().Put( pObj->GetItemSet() );
+                            aTempAttr.ClearItem();
+                            pObj->SetItemSet( aTempAttr );
+                            pObj->SetStyleSheet( pSheet, FALSE );
+                        }
+                        pMPage->GetPresObjList()->Insert( pObj, LIST_APPEND );
+                    }
                 }
-                SfxStyleSheet* pSheet = pMPage->GetStyleSheetForPresObj( PRESOBJ_BACKGROUND );
-                if ( pSheet )
-                {   // StyleSheet fuellen und dem Objekt zuweisen
-                    pSheet->GetItemSet().ClearItem();
-                    pSheet->GetItemSet().Put( pObj->GetItemSet() );
-                    aTempAttr.ClearItem();
-                    pObj->SetItemSet( aTempAttr );
-                    pObj->SetStyleSheet( pSheet, FALSE );
-                }
-                pMPage->GetPresObjList()->Insert( pObj, LIST_APPEND );
             }
         }
+        if( pStbMgr )
+            pStbMgr->SetState( nImportedPages++ );
     }
     ////////////////////////////////////
     // importing slide pages          //
@@ -2264,6 +2271,8 @@ void ImplSdPPTImport::FillSdAnimationInfo( SdAnimationInfo* pInfo, PptAnimationI
         if ( pAnim->nBuildType > 1 )                        // texteffect active ( paragraph grouping level )
         {
             pInfo->eTextEffect = pInfo->eEffect;
+            if ( pInfo->eTextEffect == ::com::sun::star::presentation::AnimationEffect_RANDOM ) // I11195
+                pInfo->eTextEffect = ::com::sun::star::presentation::AnimationEffect_APPEAR;
             if ( ! ( pAnim->nFlags & 0x4000 ) )
             {
     // Verknuepfte Form animieren aus

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlnvsh.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: af $ $Date: 2002-11-28 13:11:36 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 10:58:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,6 +213,8 @@ SFX_IMPL_INTERFACE(SdOutlineViewShell, SfxViewShell, SdResId(STR_OUTLINEVIEWSHEL
     SFX_OBJECTBAR_REGISTRATION( SFX_OBJECTBAR_TOOLS | SFX_VISIBILITY_STANDARD |
                                 SFX_VISIBILITY_FULLSCREEN | SFX_VISIBILITY_SERVER,
                                 SdResId(RID_OUTLINE_TOOLBOX) );
+    SFX_OBJECTBAR_REGISTRATION( SFX_OBJECTBAR_APPLICATION | SFX_VISIBILITY_DESKTOP | SFX_VISIBILITY_STANDARD | SFX_VISIBILITY_CLIENT | SFX_VISIBILITY_VIEWER | SFX_VISIBILITY_READONLYDOC,
+                                SdResId(RID_DRAW_VIEWER_TOOLBOX) );
     SFX_CHILDWINDOW_REGISTRATION( SfxTemplateDialogWrapper::GetChildWindowId() );
     SFX_CHILDWINDOW_REGISTRATION( SvxHyperlinkDlgWrapper::GetChildWindowId() );
     SFX_CHILDWINDOW_REGISTRATION( SdPreviewChildWindow::GetChildWindowId() );
@@ -1493,6 +1495,9 @@ void SdOutlineViewShell::SetZoom(long nZoom)
             }
         }
     }
+
+    // #106268#
+    GetViewFrame()->GetBindings().Invalidate( SID_ATTR_ZOOM );
 }
 
 /*************************************************************************
@@ -1520,6 +1525,9 @@ void SdOutlineViewShell::SetZoomRect(const Rectangle& rZoomRect)
             }
         }
     }
+
+    // #106268#
+    GetViewFrame()->GetBindings().Invalidate( SID_ATTR_ZOOM );
 }
 
 

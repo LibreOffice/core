@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgolbul.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2001-11-16 23:15:40 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 10:57:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,11 +94,12 @@ TabDialog TAB_OUTLINEBULLET
                 Text[ chinese_traditional ] = "é …ç›®ç¬¦è™Ÿ";
                 Text[ arabic ] = "ÚáÇãÇÊ ÇáÊÚÏÇÏ";
                 Text[ greek ] = "Êïõêßäåò";
-                Text[ korean ] = "ê¸€ë¨¸ë¦¬ê¸°í˜¸";
+                Text[ korean ] = "ê¸€ë¨¸ë¦¬ ê¸°í˜¸";
                 Text[ turkish ] = "Madde işaretleri";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Viñetas";
+                Text[ catalan ] = "Pics";
                 Text[ finnish ] = "Luettelomerkit";
+                Text[ thai ] = "à¸ªà¸±à¸à¸¥à¸±à¸à¸©à¸“à¹Œà¹à¸ªà¸”à¸‡à¸«à¸±à¸§à¸‚à¹‰à¸­à¸¢à¹ˆà¸­à¸¢";
             };
             PageItem
             {
@@ -112,20 +113,21 @@ TabDialog TAB_OUTLINEBULLET
                 Text [ italian ] = "Tipo di numerazione" ;
                 Text [ spanish ] = "Tipo de numeración" ;
                 Text [ french ] = "Type de numérotation" ;
-                Text [ dutch ] = "Nummeringstijl" ;
+                Text [ dutch ] = "Nummeringsstijl" ;
                 Text [ portuguese ] = "Tipo de numeração" ;
                 Text[ chinese_simplified ] = "ç¼–å·ç±»å‹";
-                Text[ russian ] = "Âèä íóìåğàöèè";
+                Text[ russian ] = "Òèï íóìåğàöèè";
                 Text[ polish ] = "Rodzaj numeracji";
                 Text[ japanese ] = "ç•ªå·ä»˜ã‘ã®ç¨®é¡";
                 Text[ chinese_traditional ] = "ç·¨è™Ÿé¡å‹";
                 Text[ language_user1 ] = "MS Word, KeyID23276";
                 Text[ arabic ] = "ØÑíŞÉ ÇáÊÑŞíã";
                 Text[ greek ] = "Óôõë áñßèìçóçò";
-                Text[ korean ] = "ë²ˆí˜¸ë§¤ê¸°ê¸° ìœ í˜•";
+                Text[ korean ] = "ë²ˆí˜¸ ë§¤ê¸°ê¸° ìœ í˜•";
                 Text[ turkish ] = "Numaralama türü";
-                Text[ catalan ] = "Tipo de numeración";
+                Text[ catalan ] = "Tipus de numeració";
                 Text[ finnish ] = "Numerointityyppi";
+                Text[ thai ] = "à¸Šà¸™à¸´à¸”à¸¥à¸³à¸”à¸±à¸šà¸•à¸±à¸§à¹€à¸¥à¸‚";
             };
             PageItem
             {
@@ -142,17 +144,18 @@ TabDialog TAB_OUTLINEBULLET
                 Text [ dutch ] = "Afbeeldingen" ;
                 Text [ portuguese ] = "Imagens" ;
                 Text[ chinese_simplified ] = "å›¾å½¢";
-                Text[ russian ] = "Ğèñóíêè";
+                Text[ russian ] = "Ãğàôè÷åñêèå îáúåêòû";
                 Text[ polish ] = "Grafiki";
                 Text[ japanese ] = "å›³";
                 Text[ chinese_traditional ] = "åœ–å½¢";
                 Text[ arabic ] = "ÕæÑ";
                 Text[ greek ] = "ÃñáöéêÜ";
-                Text[ korean ] = "ê·¸ë˜í”½";
+                Text[ korean ] = "ê·¸ë¦¼";
                 Text[ turkish ] = "Grafikler";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Imágenes";
-                Text[ finnish ] = "Kuvat";
+                Text[ catalan ] = "Imatges";
+                Text[ finnish ] = "Grafiikka";
+                Text[ thai ] = "à¸à¸£à¸²à¸Ÿà¸´à¸„";
             };
             PageItem
             {
@@ -169,7 +172,7 @@ TabDialog TAB_OUTLINEBULLET
                 Text [ dutch ] = "Positie" ;
                 Text [ portuguese ] = "Posição" ;
                 Text[ chinese_simplified ] = "ä½ç½®";
-                Text[ russian ] = "Ïîçèöèÿ";
+                Text[ russian ] = "Ïîëîæåíèå";
                 Text[ polish ] = "Pozycja";
                 Text[ japanese ] = "ä½ç½®";
                 Text[ chinese_traditional ] = "ä½ç½®";
@@ -178,8 +181,9 @@ TabDialog TAB_OUTLINEBULLET
                 Text[ korean ] = "ìœ„ì¹˜";
                 Text[ turkish ] = "Konum";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Posición";
+                Text[ catalan ] = "Posició";
                 Text[ finnish ] = "Sijainti";
+                Text[ thai ] = "à¸•à¸³à¹à¸«à¸™à¹ˆà¸‡";
             };
             PageItem
             {
@@ -198,15 +202,16 @@ TabDialog TAB_OUTLINEBULLET
                 Text[ chinese_simplified ] = "é€‰é¡¹";
                 Text[ russian ] = "Ïàğàìåòğû";
                 Text[ polish ] = "Opcje";
-                Text[ japanese ] = "ï½µï¾Œï¾Ÿï½¼ï½®ï¾";
+                Text[ japanese ] = "ã‚ªãƒ—ã‚·ãƒ§ãƒ³";
                 Text[ chinese_traditional ] = "é¸é …";
                 Text[ arabic ] = "ÎíÇÑÇÊ";
                 Text[ greek ] = "Åğéëïãİò";
                 Text[ korean ] = "ì˜µì…˜";
                 Text[ turkish ] = "Seçenekler";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Opciones";
+                Text[ catalan ] = "Personalitza";
                 Text[ finnish ] = "Mukauta";
+                Text[ thai ] = "à¸à¸³à¸«à¸™à¸”à¹€à¸­à¸‡";
             };
         };
     };
@@ -220,19 +225,28 @@ TabDialog TAB_OUTLINEBULLET
     Text [ french ] = "Numérotation/Puces" ;
     Text [ dutch ] = "Nummering/opsomming" ;
     Text [ portuguese ] = "Numeração & Marcas" ;
-    Text[ chinese_simplified ] = "æ ‡å·/é¡¹ç›®ç¬¦å·";
-    Text[ russian ] = "Íóìåğàöèÿ/Ñïèñîê";
+    Text[ chinese_simplified ] = "ç¼–å·/é¡¹ç›®ç¬¦å·";
+    Text[ russian ] = "Íóìåğàöèÿ/ìàğêèğîâêà";
     Text[ polish ] = "Numeracja/Wypunktowanie";
     Text[ japanese ] = "ç®‡æ¡æ›¸ãã¨ç•ªå·ä»˜ã‘";
     Text[ chinese_traditional ] = "ç·¨è™Ÿ/é …ç›®ç¬¦è™Ÿ";
     Text[ arabic ] = "ÊÑŞíã/ÊÚÏÇÏ";
     Text[ greek ] = "Áñßèìçóç/Êïõêßäåò";
-    Text[ korean ] = "ë²ˆí˜¸ë§¤ê¸°ê¸°/ê¸€ë¨¸ë¦¬ê¸°í˜¸";
+    Text[ korean ] = "ë²ˆí˜¸ ë§¤ê¸°ê¸°/ê¸€ë¨¸ë¦¬ ê¸°í˜¸";
     Text[ turkish ] = "Numaralama/madde işaretleri";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Numeración/Viñetas";
-    Text[ finnish ] = "Numerointi/luettelomerkit";
+    Text[ catalan ] = "Numeració/Vinyetes";
+    Text[ finnish ] = "Luettelomerkit ja numerointi";
+    Text[ thai ] = "à¸¥à¸³à¸”à¸±à¸šà¸•à¸±à¸§à¹€à¸¥à¸‚/à¸ªà¸±à¸à¸¥à¸±à¸à¸©à¸“à¹Œà¹à¸ªà¸”à¸‡à¸«à¸±à¸§à¸‚à¹‰à¸­à¸¢à¹ˆà¸­à¸¢";
 };
+
+
+
+
+
+
+
+
 
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews4.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: thb $ $Date: 2002-07-26 09:50:47 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 10:58:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -804,7 +804,38 @@ void SdDrawViewShell::Command(const CommandEvent& rCEvt, SdWindow* pWin)
             if (nSdResId)
             {
                 pWindow->ReleaseMouse();
-                GetViewFrame()->GetDispatcher()->ExecutePopup(SdResId(nSdResId));
+
+                if(rCEvt.IsMouseEvent())
+                    GetViewFrame()->GetDispatcher()->ExecutePopup(SdResId(nSdResId));
+                else
+                {
+                    //#106326# don't open contextmenu at mouse position if not opened via mouse
+
+                    //middle of the window if nothing is marked
+                    Point aMenuPos(pWindow->GetSizePixel().Width()/2
+                            ,pWindow->GetSizePixel().Height()/2);
+
+                    //middle of the bounding rect if something is marked
+                    if( pDrView->HasMarkedObj() && pDrView->GetMarkList().GetMarkCount() >= 1 )
+                    {
+                        Rectangle aMarkRect;
+                        pDrView->GetMarkList().TakeBoundRect(NULL,aMarkRect);
+                        aMenuPos = pWindow->LogicToPixel( aMarkRect.Center() );
+
+                        //move the point into the visible window area
+                        if( aMenuPos.X() < 0 )
+                            aMenuPos.X() = 0;
+                        if( aMenuPos.Y() < 0 )
+                            aMenuPos.Y() = 0;
+                        if( aMenuPos.X() > pWindow->GetSizePixel().Width() )
+                            aMenuPos.X() = pWindow->GetSizePixel().Width();
+                        if( aMenuPos.Y() > pWindow->GetSizePixel().Height() )
+                            aMenuPos.Y() = pWindow->GetSizePixel().Height();
+                    }
+
+                    //open context menu at that point
+                    GetViewFrame()->GetDispatcher()->ExecutePopup(SdResId(nSdResId),pWindow,&aMenuPos);
+                }
                 bMousePosFreezed = FALSE;
             }
         }

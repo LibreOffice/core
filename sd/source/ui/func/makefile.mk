@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: cl $ $Date: 2002-12-12 18:39:58 $
+#   last change: $Author: hr $ $Date: 2003-03-27 10:57:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -152,7 +152,8 @@ CXXFILES = $(PRJ)$/util$/sd.cxx \
         fucushow.cxx	\
         speedctl.cxx	\
         fuvect.cxx      \
-        bulmaper.cxx
+        bulmaper.cxx    \
+        undoback.cxx    
 
 EXCEPTIONSFILES= \
         $(SLO)$/futext2.obj		\
@@ -232,8 +233,8 @@ SLOFILES = \
         $(SLO)$/fucushow.obj	\
         $(SLO)$/speedctl.obj	\
         $(SLO)$/fuvect.obj		\
-        $(SLO)$/bulmaper.obj
-
+        $(SLO)$/bulmaper.obj    \
+        $(SLO)$/undoback.obj    
 
 .IF "$(GUI)" == "WNT"
 

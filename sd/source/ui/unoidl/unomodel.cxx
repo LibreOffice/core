@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: cl $ $Date: 2002-12-06 10:37:28 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 10:58:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -905,36 +905,42 @@ uno::Reference< uno::XInterface > SAL_CALL SdXImpressDocument::createInstance( c
     {
         if( !mxDashTable.is() )
             mxDashTable = SvxUnoDashTable_createInstance( pDoc );
+
         return mxDashTable;
     }
     if( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.GradientTable") ) )
     {
         if( !mxGradientTable.is() )
             mxGradientTable = SvxUnoGradientTable_createInstance( pDoc );
+
         return mxGradientTable;
     }
     if( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.HatchTable") ) )
     {
         if( !mxHatchTable.is() )
             mxHatchTable = SvxUnoHatchTable_createInstance( pDoc );
+
         return mxHatchTable;
     }
     if( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.BitmapTable") ) )
     {
         if( !mxBitmapTable.is() )
             mxBitmapTable = SvxUnoBitmapTable_createInstance( pDoc );
+
         return mxBitmapTable;
     }
     if( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.TransparencyGradientTable") ) )
     {
         if( !mxTransGradientTable.is() )
             mxTransGradientTable = SvxUnoTransGradientTable_createInstance( pDoc );
+
         return mxTransGradientTable;
     }
     if( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.MarkerTable") ) )
     {
         if( !mxMarkerTable.is() )
             mxMarkerTable = SvxUnoMarkerTable_createInstance( pDoc );
+
         return mxMarkerTable;
     }
     if( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.NumberingRules" ) ) )
@@ -957,6 +963,7 @@ uno::Reference< uno::XInterface > SAL_CALL SdXImpressDocument::createInstance( c
             mxDrawingPool = SdUnoCreatePool( pDoc );
 
         return mxDrawingPool;
+
     }
 
     if( aServiceSpecifier.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(sUNO_Service_ImageMapRectangleObject) ) )

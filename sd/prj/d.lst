@@ -1,6 +1,3 @@
-..\%__SRC%\inc\sdinter.h %_DEST%\ODK\inc%_EXT%\sdinter.h
-..\%__SRC%\lib\sdinter.lib %_DEST%\ODK\lib%_EXT%\sdinter.lib
-..\%__SRC%\misc\sdinter.c %_DEST%\ODK\src%_EXT%\sdinter.c
 ..\%__SRC%\misc\*.map %_DEST%\bin%_EXT%\*.map
 touch: ..\%__SRC%\misc\sd.hid %_DEST%\bin%_EXT%\sd.hid
 ..\inc\sd.lst %_DEST%\inc%_EXT%\sd.lst

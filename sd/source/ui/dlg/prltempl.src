@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prltempl.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-14 20:20:18 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 10:57:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE
     Text [ danish ] = "Præsentationslayout" ;
     Text [ french ] = "Mise en page de la présentation" ;
     Text [ swedish ] = "Presentationslayout" ;
-    Text [ dutch ] = "Presentatie-lay-out" ;
+    Text [ dutch ] = "Presentatielay-out" ;
     Text [ spanish ] = "Diseño de presentación" ;
     Text [ english_us ] = "Presentation Layout" ;
     Moveable = TRUE ;
@@ -105,17 +105,18 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE
                 Text [ spanish ] = "Línea" ;
                 Text [ english_us ] = "Line" ;
                 PageResID = RID_SVXPAGE_LINE ;
-                Text[ chinese_simplified ] = "ÏßÌõ";
+                Text[ chinese_simplified ] = "çº¿æ¡";
                 Text[ russian ] = "Ëèíèÿ";
                 Text[ polish ] = "Linia";
-                Text[ japanese ] = "ü";
-                Text[ chinese_traditional ] = "½u±ø";
+                Text[ japanese ] = "ç·š";
+                Text[ chinese_traditional ] = "ç·šæ¢";
                 Text[ arabic ] = "ÎØ ÑÓã";
                 Text[ greek ] = "ÃñáììŞ";
-                Text[ korean ] = "¼±";
+                Text[ korean ] = "ì„ ";
                 Text[ turkish ] = "Çizgi";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Línea";
+                Text[ catalan ] = "Línia";
+                Text[ thai ] = "à¸šà¸£à¸£à¸—à¸±à¸”";
             };
             PageItem
             {
@@ -131,20 +132,21 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE
                 Text [ french ] = "Remplissage" ;
                 Text [ swedish ] = "Yta" ;
                 Text [ dutch ] = "Vlak" ;
-                Text [ spanish ] = "Relleno" ;
+                Text [ spanish ] = "Área" ;
                 Text [ english_us ] = "Area" ;
                 PageResID = RID_SVXPAGE_AREA ;
-                Text[ chinese_simplified ] = "³äÌî";
-                Text[ russian ] = "Çàëèâêà";
+                Text[ chinese_simplified ] = "å……å¡«";
+                Text[ russian ] = "Îáëàñòü";
                 Text[ polish ] = "Powierzchnia";
-                Text[ japanese ] = "•\\–Ê";
-                Text[ chinese_traditional ] = "¥R¶ñ";
+                Text[ japanese ] = "è¡¨é¢";
+                Text[ chinese_traditional ] = "å……å¡«";
                 Text[ arabic ] = "ÊÚÈÆÉ";
                 Text[ greek ] = "ÅğéöÜíåéá";
-                Text[ korean ] = "¸é";
+                Text[ korean ] = "ë©´";
                 Text[ turkish ] = "Alan";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Relleno";
+                Text[ catalan ] = "Àrea";
+                Text[ thai ] = "à¸à¸·à¹‰à¸™à¸—à¸µà¹ˆ";
             };
             PageItem
             {
@@ -161,18 +163,19 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE
                 Text [ danish ] = "Skygge" ;
                 Text [ portuguese ] = "Sombras" ;
                 Text [ portuguese_brazilian ] = "Schatten" ;
-                Text[ chinese_simplified ] = "ÒõÓ°";
-                Text[ russian ] = "Òåíü";
+                Text[ chinese_simplified ] = "é˜´å½±";
+                Text[ russian ] = "Çàòåíåíèå";
                 Text[ polish ] = "Cieñ";
-                Text[ japanese ] = "‰e";
-                Text[ chinese_traditional ] = "³±¼v";
+                Text[ japanese ] = "å½±";
+                Text[ chinese_traditional ] = "é™°å½±";
                 Text[ arabic ] = "ÇáÙá";
                 Text[ greek ] = "ÓêéÜ";
-                Text[ korean ] = "À½¿µ";
+                Text[ korean ] = "ê·¸ë¦¼ì";
                 Text[ turkish ] = "Gölge";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Sombra";
-                Text[ finnish ] = "Varjo ";
+                Text[ catalan ] = "Ombra";
+                Text[ finnish ] = "Varjostus";
+                Text[ thai ] = "à¹€à¸‡à¸²";
             };
             PageItem
             {
@@ -181,7 +184,7 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE
                 Text [ ENGLISH ] = "Transparence" ;
                 Text[ english_us ] = "Transparency";
                 Text[ portuguese ] = "Transparência";
-                Text[ russian ] = "Ïğîçğà÷íûé";
+                Text[ russian ] = "Ïğîçğà÷íîñòü";
                 Text[ greek ] = "ÄéáöÜíåéá";
                 Text[ dutch ] = "Transparantie";
                 Text[ french ] = "Transparence";
@@ -191,14 +194,15 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE
                 Text[ swedish ] = "Transparens";
                 Text[ polish ] = "Przezroczystoœæ";
                 Text[ portuguese_brazilian ] = "Transparence";
-                Text[ japanese ] = "“§‰ß«";
-                Text[ korean ] = "Åõ¸í";
-                Text[ chinese_simplified ] = "Í¸Ã÷";
-                Text[ chinese_traditional ] = "³z©ú";
+                Text[ japanese ] = "é€éæ€§";
+                Text[ korean ] = "íˆ¬ëª…ë„";
+                Text[ chinese_simplified ] = "é€æ˜";
+                Text[ chinese_traditional ] = "é€æ˜";
                 Text[ arabic ] = "ÔİÇİíÉ";
                 Text[ turkish ] = "Saydamlık";
                 Text[ catalan ] = "Transparencia";
-                Text[ finnish ] = "Läpikuultavuus";
+                Text[ finnish ] = "Läpinäkyvyys";
+                Text[ thai ] = "à¹‚à¸›à¸£à¹ˆà¸‡à¹à¸ªà¸‡";
             };
             PageItem
             {
@@ -217,17 +221,18 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE
                 Text [ spanish ] = "Fuente" ;
                 Text [ english_us ] = "Font" ;
                 PageResID = RID_SVXPAGE_CHAR_NAME;
-                Text[ chinese_simplified ] = "×ÖÌå";
+                Text[ chinese_simplified ] = "å­—ä½“";
                 Text[ russian ] = "Øğèôò";
                 Text[ polish ] = "Czcionka";
-                Text[ japanese ] = "Ì«İÄ";
-                Text[ chinese_traditional ] = "¦r«¬";
+                Text[ japanese ] = "ãƒ•ã‚©ãƒ³ãƒˆ";
+                Text[ chinese_traditional ] = "å­—å‹";
                 Text[ arabic ] = "ÇáÎØ";
                 Text[ greek ] = "ÃñáììáôïóåéñÜ";
-                Text[ korean ] = "±Û²Ã";
+                Text[ korean ] = "ê¸€ê¼´";
                 Text[ turkish ] = "Yazıtipi";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Fuente";
+                Text[ catalan ] = "Tipus de lletra";
+                Text[ thai ] = "à¸•à¸±à¸§à¸­à¸±à¸à¸©à¸£";
             };
             PageItem
             {
@@ -238,7 +243,7 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE
                 Text [ italian ] = "Effetto carattere" ;
                 Text [ portuguese_brazilian ] = "Extensão de Caracter" ;
                 Text [ portuguese ] = "Efeitos do tipo de letra" ;
-                Text [ finnish ] = "Merkin tehosteet" ;
+                Text [ finnish ] = "Fonttitehosteet" ;
                 Text [ danish ] = "Skrifteffekt" ;
                 Text [ french ] = "Effets de caractères" ;
                 Text [ swedish ] = "Teckeneffekt" ;
@@ -246,17 +251,18 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE
                 Text [ spanish ] = "Efectos de fuente" ;
                 Text [ english_us ] = "Font Effects" ;
                 PageResID = RID_SVXPAGE_CHAR_EFFECTS ;
-                Text[ chinese_simplified ] = "×ÖÌåĞ§¹û";
+                Text[ chinese_simplified ] = "å­—ä½“æ•ˆæœ";
                 Text[ russian ] = "İôôåêòû øğèôòà";
                 Text[ polish ] = "Efekt czcionki";
-                Text[ japanese ] = "Ì«İÄŒø‰Ê";
-                Text[ chinese_traditional ] = "¦r«¬®ÄªG";
+                Text[ japanese ] = "ãƒ•ã‚©ãƒ³ãƒˆåŠ¹æœ";
+                Text[ chinese_traditional ] = "å­—å‹æ•ˆæœ";
                 Text[ arabic ] = "ÊÃËíÑÇÊ ÇáÎØæØ";
                 Text[ greek ] = "Åöİ ÷áñáêôŞñùí";
-                Text[ korean ] = "±Û²Ã È¿°ú";
+                Text[ korean ] = "ê¸€ê¼´ íš¨ê³¼";
                 Text[ turkish ] = "Yazıtipi efekti";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Efectos de fuente";
+                Text[ catalan ] = "Efectes de lletra";
+                Text[ thai ] = "à¸¥à¸±à¸à¸©à¸“à¸°à¸•à¸±à¸§à¸­à¸±à¸à¸©à¸£";
             };
             PageItem
             {
@@ -275,31 +281,33 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE
                 Text [ spanish ] = "Sangrías y espacios" ;
                 Text [ english_us ] = "Indents & Spacing" ;
                 PageResID = RID_SVXPAGE_STD_PARAGRAPH ;
-                Text[ chinese_simplified ] = "Ëõ½øºÍ¼ä¸ô";
+                Text[ chinese_simplified ] = "ç¼©è¿›å’Œé—´éš”";
                 Text[ russian ] = "Îòñòóïû è èíòåğâàëû";
                 Text[ polish ] = "Wciêcia i odstêpy";
-                Text[ japanese ] = "²İÃŞİÄ‚ÆsŠÔŠu";
-                Text[ chinese_traditional ] = "ÁY±Æ©M¶¡¹j";
+                Text[ japanese ] = "ã‚¤ãƒ³ãƒ‡ãƒ³ãƒˆã¨è¡Œé–“éš”";
+                Text[ chinese_traditional ] = "ç¸®æ’å’Œé–“éš”";
                 Text[ arabic ] = "ÇáÅÒÇÍÉ æÇáÊÈÇÚÏ";
                 Text[ greek ] = "Åóï÷İò êáé áğïóôÜóåéò";
-                Text[ korean ] = "µé¿©¾²±â¿Í °£°İ";
+                Text[ korean ] = "ë“¤ì—¬ì“°ê¸° ë° ê°„ê²©";
                 Text[ turkish ] = "Girintiler ve aralıklar";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Sangrías y espacios";
+                Text[ catalan ] = "Sagnats i espaiat";
+                Text[ thai ] = "à¸£à¸°à¸¢à¸°à¹€à¸¢à¸·à¹‰à¸­à¸‡à¹à¸¥à¸°à¸£à¸°à¸¢à¸°à¸«à¹ˆà¸²à¸‡";
             };
         };
     };
-    Text[ chinese_simplified ] = "ÑİÊ¾ÎÄ¸å°æÊ½";
+    Text[ chinese_simplified ] = "æ¼”ç¤ºæ–‡ç¨¿ç‰ˆå¼";
     Text[ russian ] = "Ñòğóêòóğà ïğåçåíòàöèè";
     Text[ polish ] = "Uk³ad prezentacji";
-    Text[ japanese ] = "ÌßÚ¾ŞİÃ°¼®İ Ú²±³Ä";
-    Text[ chinese_traditional ] = "Â²³øª©¦¡";
+    Text[ japanese ] = "ãƒ—ãƒ¬ã‚¼ãƒ³ãƒ†ãƒ¼ã‚·ãƒ§ãƒ³ ãƒ¬ã‚¤ã‚¢ã‚¦ãƒˆ";
+    Text[ chinese_traditional ] = "ç°¡å ±ç‰ˆå¼";
     Text[ arabic ] = "ÊÎØíØ ÇáÚÑÖ ÇáÊŞÏíãí";
     Text[ greek ] = "ÄéÜôáîç ğáñïõóßáóçò";
-    Text[ korean ] = "ÇÁ¸®Á¨Å×ÀÌ¼Ç ·¹ÀÌ¾Æ¿ô";
+    Text[ korean ] = "í”„ë ˆì  í…Œì´ì…˜ ë ˆì´ì•„ì›ƒ";
     Text[ turkish ] = "Sunu düzeni";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Diseño de presentación";
+    Text[ catalan ] = "Disseny de presentació";
+    Text[ thai ] = "à¹€à¸„à¹‰à¸²à¹‚à¸„à¸£à¸‡à¸à¸²à¸£à¸™à¸³à¹€à¸ªà¸™à¸­";
 };
 TabDialog TAB_PRES_LAYOUT_TEMPLATE_1
 {
@@ -331,17 +339,18 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE_1
                 Text [ spanish ] = "Línea" ;
                 Text [ english_us ] = "Line" ;
                 PageResID = RID_SVXPAGE_LINE ;
-                Text[ chinese_simplified ] = "ÏßÌõ";
+                Text[ chinese_simplified ] = "çº¿æ¡";
                 Text[ russian ] = "Ëèíèÿ";
                 Text[ polish ] = "Linia";
-                Text[ japanese ] = "ü";
-                Text[ chinese_traditional ] = "½u±ø";
+                Text[ japanese ] = "ç·š";
+                Text[ chinese_traditional ] = "ç·šæ¢";
                 Text[ arabic ] = "ÎØ ÑÓã";
                 Text[ greek ] = "ÃñáììŞ";
-                Text[ korean ] = "¼±";
+                Text[ korean ] = "ì„ ";
                 Text[ turkish ] = "Çizgi";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Línea";
+                Text[ catalan ] = "Línia";
+                Text[ thai ] = "à¸šà¸£à¸£à¸—à¸±à¸”";
             };
         };
     };
@@ -373,20 +382,21 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE_2
                 Text [ french ] = "Remplissage" ;
                 Text [ swedish ] = "Yta" ;
                 Text [ dutch ] = "Vlak" ;
-                Text [ spanish ] = "Relleno" ;
+                Text [ spanish ] = "Área" ;
                 Text [ english_us ] = "Area" ;
                 PageResID = RID_SVXPAGE_AREA ;
-                Text[ chinese_simplified ] = "³äÌî";
-                Text[ russian ] = "Çàëèâêà";
-                Text[ polish ] = "Powierzchnia";
-                Text[ japanese ] = "•\\–Ê";
-                Text[ chinese_traditional ] = "¥R¶ñ";
+                Text[ chinese_simplified ] = "å……å¡«";
+                Text[ russian ] = "Îáëàñòü";
+                Text[ polish ] = "Wype³nienie";
+                Text[ japanese ] = "è¡¨é¢";
+                Text[ chinese_traditional ] = "å……å¡«";
                 Text[ arabic ] = "ÊÚÈÆÉ";
                 Text[ greek ] = "ÅğéöÜíåéá";
-                Text[ korean ] = "¸é";
+                Text[ korean ] = "ë©´";
                 Text[ turkish ] = "Alan";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Relleno";
+                Text[ catalan ] = "Àrea";
+                Text[ thai ] = "à¸à¸·à¹‰à¸™à¸—à¸µà¹ˆ";
             };
         };
     };
@@ -421,17 +431,18 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE_3
                 Text [ spanish ] = "Fuente" ;
                 Text [ english_us ] = "Font" ;
                 PageResID = RID_SVXPAGE_CHAR_NAME ;
-                Text[ chinese_simplified ] = "×ÖÌå";
+                Text[ chinese_simplified ] = "å­—ä½“";
                 Text[ russian ] = "Øğèôò";
                 Text[ polish ] = "Czcionka";
-                Text[ japanese ] = "Ì«İÄ";
-                Text[ chinese_traditional ] = "¦r«¬";
+                Text[ japanese ] = "ãƒ•ã‚©ãƒ³ãƒˆ";
+                Text[ chinese_traditional ] = "å­—å‹";
                 Text[ arabic ] = "ÇáÎØ";
                 Text[ greek ] = "ÃñáììáôïóåéñÜ";
-                Text[ korean ] = "±Û²Ã";
+                Text[ korean ] = "ê¸€ê¼´";
                 Text[ turkish ] = "Yazıtipi";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Fuente";
+                Text[ catalan ] = "Tipus de lletra";
+                Text[ thai ] = "à¸•à¸±à¸§à¸­à¸±à¸à¸©à¸£";
             };
             PageItem
             {
@@ -442,7 +453,7 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE_3
                 Text [ italian ] = "Effetto carattere" ;
                 Text [ portuguese_brazilian ] = "Extensão de Caracter" ;
                 Text [ portuguese ] = "Efeitos do tipo de letra" ;
-                Text [ finnish ] = "Merkin tehosteet" ;
+                Text [ finnish ] = "Fonttitehosteet" ;
                 Text [ danish ] = "Skrifteffekt" ;
                 Text [ french ] = "Effets de caractères" ;
                 Text [ swedish ] = "Teckeneffekt" ;
@@ -450,17 +461,18 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE_3
                 Text [ spanish ] = "Efectos de fuente" ;
                 Text [ english_us ] = "Font Effects" ;
                 PageResID = RID_SVXPAGE_CHAR_EFFECTS ;
-                Text[ chinese_simplified ] = "×ÖÌåĞ§¹û";
+                Text[ chinese_simplified ] = "å­—ä½“æ•ˆæœ";
                 Text[ russian ] = "İôôåêòû øğèôòà";
                 Text[ polish ] = "Efekt czcionki";
-                Text[ japanese ] = "Ì«İÄŒø‰Ê";
-                Text[ chinese_traditional ] = "¦r«¬®ÄªG";
+                Text[ japanese ] = "ãƒ•ã‚©ãƒ³ãƒˆåŠ¹æœ";
+                Text[ chinese_traditional ] = "å­—å‹æ•ˆæœ";
                 Text[ arabic ] = "ÊÃËíÑÇÊ ÇáÎØæØ";
                 Text[ greek ] = "Åöİ ÷áñáêôŞñùí";
-                Text[ korean ] = "±Û²Ã È¿°ú";
+                Text[ korean ] = "ê¸€ê¼´ íš¨ê³¼";
                 Text[ turkish ] = "Yazıtipi efekti";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Efectos de fuente";
+                Text[ catalan ] = "Efectes de lletra";
+                Text[ thai ] = "à¸¥à¸±à¸à¸©à¸“à¸°à¸•à¸±à¸§à¸­à¸±à¸à¸©à¸£";
             };
             PageItem
             {
@@ -479,17 +491,18 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE_3
                 Text [ spanish ] = "Sangrías y espacios" ;
                 Text [ english_us ] = "Indents & Spacing" ;
                 PageResID = RID_SVXPAGE_STD_PARAGRAPH ;
-                Text[ chinese_simplified ] = "Ëõ½øºÍ¼ä¸ô";
-                Text[ russian ] = "Îòñóïû è èíòåğâàëû";
+                Text[ chinese_simplified ] = "ç¼©è¿›å’Œé—´éš”";
+                Text[ russian ] = "Îòñòóïû è èíòåğâàëû";
                 Text[ polish ] = "Wciêcia i odstêpy";
-                Text[ japanese ] = "²İÃŞİÄ‚ÆsŠÔŠu";
-                Text[ chinese_traditional ] = "ÁY±Æ©M¶¡¹j";
+                Text[ japanese ] = "ã‚¤ãƒ³ãƒ‡ãƒ³ãƒˆã¨è¡Œé–“éš”";
+                Text[ chinese_traditional ] = "ç¸®æ’å’Œé–“éš”";
                 Text[ arabic ] = "ÇáÅÒÇÍÉ æÇáÊÈÇÚÏ";
                 Text[ greek ] = "Åóï÷İò êáé áğïóôÜóåéò";
-                Text[ korean ] = "µé¿©¾²±â¿Í °£°İ";
+                Text[ korean ] = "ë“¤ì—¬ì“°ê¸° ë° ê°„ê²©";
                 Text[ turkish ] = "Girintiler ve aralıklar";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Sangrías y espacios";
+                Text[ catalan ] = "Sagnats i espaiat";
+                Text[ thai ] = "à¸£à¸°à¸¢à¸°à¹€à¸¢à¸·à¹‰à¸­à¸‡à¹à¸¥à¸°à¸£à¸°à¸¢à¸°à¸«à¹ˆà¸²à¸‡";
             };
             PageItem
             {
@@ -505,18 +518,19 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE_3
                 Text [ french ] = "Puces" ;
                 Text [ dutch ] = "Opsommingstekens" ;
                 Text [ portuguese ] = "Marcas" ;
-                Text[ chinese_simplified ] = "ÏîÄ¿·ûºÅ";
+                Text[ chinese_simplified ] = "é¡¹ç›®ç¬¦å·";
                 Text[ russian ] = "Ìàğêåğû";
                 Text[ polish ] = "Znaki wypunktowania";
-                Text[ japanese ] = "‰Óğ‘‚«";
-                Text[ chinese_traditional ] = "¶µ¥Ø½s¸¹";
+                Text[ japanese ] = "ç®‡æ¡æ›¸ã";
+                Text[ chinese_traditional ] = "é …ç›®ç¬¦è™Ÿ";
                 Text[ arabic ] = "ÚáÇãÇÊ ÊÚÏÇÏ";
                 Text[ greek ] = "Êïõêßäåò";
-                Text[ korean ] = "±Û¸Ó¸®±âÈ£";
+                Text[ korean ] = "ê¸€ë¨¸ë¦¬ ê¸°í˜¸";
                 Text[ turkish ] = "Madde işaretleri";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Viñetas";
+                Text[ catalan ] = "Pics";
                 Text[ finnish ] = "Luettelomerkit";
+                Text[ thai ] = "à¸ªà¸±à¸à¸¥à¸±à¸à¸©à¸“à¹Œà¹à¸ªà¸”à¸‡à¸«à¸±à¸§à¸‚à¹‰à¸­à¸¢à¹ˆà¸­à¸¢";
             };
             PageItem
             {
@@ -530,20 +544,21 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE_3
                 Text [ italian ] = "Tipo di numerazione" ;
                 Text [ spanish ] = "Tipo de numeración" ;
                 Text [ french ] = "Type de numérotation" ;
-                Text [ dutch ] = "Nummeringstijl" ;
+                Text [ dutch ] = "Nummeringsstijl" ;
                 Text [ portuguese ] = "Tipo de numeração" ;
-                Text[ chinese_simplified ] = "±àºÅÀàĞÍ";
+                Text[ chinese_simplified ] = "ç¼–å·ç±»å‹";
                 Text[ russian ] = "Òèï íóìåğàöèè";
                 Text[ polish ] = "Rodzaj numeracji";
-                Text[ japanese ] = "”Ô†•t‚¯‚Ìí—Ş";
-                Text[ chinese_traditional ] = "½s¸¹Ãş«¬";
+                Text[ japanese ] = "ç•ªå·ä»˜ã‘ã®ç¨®é¡";
+                Text[ chinese_traditional ] = "ç·¨è™Ÿé¡å‹";
                 Text[ language_user1 ] = "MS Word";
                 Text[ arabic ] = "ØÑíŞÉ ÇáÊÑŞíã";
                 Text[ greek ] = "Óôõë áñßèìçóçò";
-                Text[ korean ] = "¹øÈ£¸Å±â±â À¯Çü";
+                Text[ korean ] = "ë²ˆí˜¸ ë§¤ê¸°ê¸° ìœ í˜•";
                 Text[ turkish ] = "Numaralama türü";
-                Text[ catalan ] = "Tipo de numeración";
+                Text[ catalan ] = "Tipus de numeració";
                 Text[ finnish ] = "Numerointityyppi";
+                Text[ thai ] = "à¸Šà¸™à¸´à¸”à¸¥à¸³à¸”à¸±à¸šà¸•à¸±à¸§à¹€à¸¥à¸‚";
             };
             PageItem
             {
@@ -559,18 +574,19 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE_3
                 Text [ french ] = "Images" ;
                 Text [ dutch ] = "Afbeeldingen" ;
                 Text [ portuguese ] = "Imagens" ;
-                Text[ chinese_simplified ] = "Í¼ĞÎ";
+                Text[ chinese_simplified ] = "å›¾å½¢";
                 Text[ russian ] = "Ğèñóíêè";
                 Text[ polish ] = "Grafiki";
-                Text[ japanese ] = "}";
-                Text[ chinese_traditional ] = "¹Ï§Î";
+                Text[ japanese ] = "å›³";
+                Text[ chinese_traditional ] = "åœ–å½¢";
                 Text[ arabic ] = "ÕæÑ";
                 Text[ greek ] = "ÃñáöéêÜ";
-                Text[ korean ] = "±×·¡ÇÈ";
+                Text[ korean ] = "ê·¸ë¦¼";
                 Text[ turkish ] = "Grafikler";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Imágenes";
-                Text[ finnish ] = "Kuvat";
+                Text[ catalan ] = "Imatges";
+                Text[ finnish ] = "Grafiikka";
+                Text[ thai ] = "à¸à¸£à¸²à¸Ÿà¸´à¸„";
             };
             PageItem
             {
@@ -586,22 +602,37 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE_3
                 Text [ french ] = "Options" ;
                 Text [ dutch ] = "Opties" ;
                 Text [ portuguese ] = "Opções" ;
-                Text[ chinese_simplified ] = "Ñ¡Ïî";
+                Text[ chinese_simplified ] = "é€‰é¡¹";
                 Text[ russian ] = "Ïàğàìåòğû";
                 Text[ polish ] = "Opcje";
-                Text[ japanese ] = "µÌß¼®İ";
-                Text[ chinese_traditional ] = "¿ï¶µ";
+                Text[ japanese ] = "ã‚ªãƒ—ã‚·ãƒ§ãƒ³";
+                Text[ chinese_traditional ] = "é¸é …";
                 Text[ arabic ] = "ÎíÇÑÇÊ";
                 Text[ greek ] = "Åğéëïãİò";
-                Text[ korean ] = "¿É¼Ç";
+                Text[ korean ] = "ì˜µì…˜";
                 Text[ turkish ] = "Seçenekler";
                 Text[ language_user1 ] = " ";
-                Text[ catalan ] = "Opciones";
+                Text[ catalan ] = "Personalitza";
                 Text[ finnish ] = "Mukauta";
+                Text[ thai ] = "à¸à¸³à¸«à¸™à¸”à¹€à¸­à¸‡";
             };
         };
     };
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -187,6 +187,14 @@ protected:
     */
     SdUnoDrawViewKind GetDrawViewKind (void) const;
 
+    void SetZoom( sal_Int16 nZoom );
+    sal_Int16 GetZoom(void) const;
+
+    void SetViewOffset(const com::sun::star::awt::Point& rWinPos );
+    com::sun::star::awt::Point GetViewOffset() const;
+
+    void SetZoomType( sal_Int16 nType );
+
 private:
     com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > getWindow();
 

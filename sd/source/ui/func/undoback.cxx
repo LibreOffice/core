@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: docprev.hxx,v $
+ *  $RCSfile: undoback.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 10:57:57 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 10:57:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,76 +59,78 @@
  *
  ************************************************************************/
 
-#ifndef _SD_DOCPREV_HXX_
-#define _SD_DOCPREV_HXX_
+#include "undoback.hxx"
+#include "sdpage.hxx"
+#include "sdresid.hxx"
+#include "strings.hrc"
 
-#ifndef _COM_SUN_STAR_PRESENTATION_FADEEFFECT_HPP_
-#include <com/sun/star/presentation/FadeEffect.hpp>
-#endif
+// ---------------------------
+// - BackgroundObjUndoAction -
+// ---------------------------
 
-#ifndef _SV_WINDOW_HXX //autogen
-#include <vcl/window.hxx>
-#endif
+TYPEINIT1( SdBackgroundObjUndoAction, SdUndoAction );
 
-#ifndef _SV_GEN_HXX //autogen
-#include <tools/gen.hxx>
-#endif
+// -----------------------------------------------------------------------------
 
-#ifndef _SFXLSTNER_HXX
-#include <svtools/lstner.hxx>
-#endif
-#ifndef INCLUDED_SVTOOLS_COLORCFG_HXX
-#include <svtools/colorcfg.hxx>
-#endif
-
-#ifndef _SD_FADEDEF_H
-#include <fadedef.h>
-#endif
-
-class GDIMetaFile;
-struct SdrPaintProcRec;
-
-class SdDocPreviewWin : public Control, public SfxListener
+SdBackgroundObjUndoAction::SdBackgroundObjUndoAction( SdDrawDocument& rDoc, SdPage& rPage, const SdrObject* pBackgroundObj ) :
+    SdUndoAction( pDoc ),
+    mrPage( rPage ),
+    mpBackgroundObj( pBackgroundObj ? pBackgroundObj->Clone() : NULL )
 {
-protected:
-    GDIMetaFile*    pMetaFile;
-    BOOL            bInEffect;
-    Link            aClickHdl;
-    SfxObjectShell* mpObj;
-    sal_uInt16      mnShowPage;
-    Color           maDocumentColor;
+    String aString( SdResId( STR_UNDO_CHANGE_PAGEFORMAT ) );
+    SetComment( aString );
+}
 
-    virtual void    Paint( const Rectangle& rRect );
-    static void     CalcSizeAndPos( GDIMetaFile* pFile, Size& rSize, Point& rPoint );
-    void            ImpPaint( GDIMetaFile* pFile, OutputDevice* pVDev );
+// -----------------------------------------------------------------------------
 
-    static const int FRAME;
+SdBackgroundObjUndoAction::~SdBackgroundObjUndoAction()
+{
+    delete mpBackgroundObj;
+}
 
-    svtools::ColorConfig maColorConfig;
+// -----------------------------------------------------------------------------
 
-    virtual void SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType, const SfxHint& rHint, const TypeId& rHintType);
+void SdBackgroundObjUndoAction::ImplRestoreBackgroundObj()
+{
+    SdrObject* pOldObj = mrPage.GetBackgroundObj();
 
-    void updateViewSettings();
+    if( pOldObj )
+        pOldObj = pOldObj->Clone();
 
-    DECL_LINK(PaintProc, SdrPaintProcRec*);
+    mrPage.SetBackgroundObj( mpBackgroundObj );
+    mpBackgroundObj = pOldObj;
+}
 
-public:
-                    SdDocPreviewWin( Window* pParent, const ResId& rResId );
-                    SdDocPreviewWin( Window* pParent );
-                    ~SdDocPreviewWin() { delete pMetaFile; }
-    void            SetObjectShell( SfxObjectShell* pObj, sal_uInt16 nShowPage = 0 );
-    void            SetGDIFile( GDIMetaFile* pFile );
-    virtual void    Resize();
-    void            ShowEffect( ::com::sun::star::presentation::FadeEffect eEffect, FadeSpeed eSpeed );
+// -----------------------------------------------------------------------------
 
-    virtual long    Notify( NotifyEvent& rNEvt );
+void SdBackgroundObjUndoAction::Undo()
+{
+    ImplRestoreBackgroundObj();
+}
 
-    void            SetClickHdl( const Link& rLink ) { aClickHdl = rLink; }
-    const Link&     GetClickHdl() const { return aClickHdl; }
+// -----------------------------------------------------------------------------
 
-    virtual void DataChanged( const DataChangedEvent& rDCEvt );
+void SdBackgroundObjUndoAction::Redo()
+{
+    ImplRestoreBackgroundObj();
+}
 
-};
+// -----------------------------------------------------------------------------
 
-#endif
+void SdBackgroundObjUndoAction::Repeat()
+{
+}
 
+// -----------------------------------------------------------------------------
+
+BOOL SdBackgroundObjUndoAction::CanRepeat( SfxRepeatTarget& ) const
+{
+    return FALSE;
+}
+
+// -----------------------------------------------------------------------------
+
+SdUndoAction* SdBackgroundObjUndoAction::Clone() const
+{
+    return new SdBackgroundObjUndoAction( *pDoc, mrPage, mpBackgroundObj );
+}

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdundogr.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:41 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 10:57:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,8 @@ public:
                               : SdUndoAction(pSdDrawDocument),
                                 aCtn(16, 16, 16) {}
     virtual       ~SdUndoGroup();
+
+    virtual BOOL   Merge( SfxUndoAction* pNextAction );
 
     virtual void   Undo();
     virtual void   Redo();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdwindow.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: iha $ $Date: 2002-12-03 17:26:26 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 10:58:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -537,8 +537,9 @@ void SdWindow::UpdateMapOrigin(BOOL bInvalidate)
         aPix = LogicToPixel(aPix);
         // Groesse muss vielfaches von BRUSH_SIZE sein, damit Muster
         // richtig dargestellt werden
-        aPix.Width()  -= aPix.Width() % BRUSH_SIZE;
-        aPix.Height() -= aPix.Height() % BRUSH_SIZE;
+        // #i2237#
+        // removed old stuff here which still forced zoom to be
+        // %BRUSH_SIZE which is outdated now
 
         if (pViewShell && pViewShell->ISA(SdDrawViewShell))
         {
@@ -548,11 +549,17 @@ void SdWindow::UpdateMapOrigin(BOOL bInvalidate)
             // Seite soll nicht am Fensterrand "kleben"
             if (aPix.Width() == 0)
             {
-                aPix.Width() -= BRUSH_SIZE;
+                // #i2237#
+                // Since BRUSH_SIZE alignment is outdated now, i use the
+                // former constant here directly
+                aPix.Width() -= 8;
             }
             if (aPix.Height() == 0)
             {
-                aPix.Height() -= BRUSH_SIZE;
+                // #i2237#
+                // Since BRUSH_SIZE alignment is outdated now, i use the
+                // former constant here directly
+                aPix.Height() -= 8;
             }
         }
 
@@ -842,8 +849,8 @@ void SdWindow::DataChanged( const DataChangedEvent& rDCEvt )
                 // #103100# Overwrite window color for OutlineView
                 if( pViewShell->ISA( SdOutlineViewShell ) )
                 {
-                    svx::ColorConfig aColorConfig;
-                    const Color aDocColor( aColorConfig.GetColorValue( svx::DOCCOLOR ).nColor );
+                    svtools::ColorConfig aColorConfig;
+                    const Color aDocColor( aColorConfig.GetColorValue( svtools::DOCCOLOR ).nColor );
                     SetBackground( Wallpaper( aDocColor ) );
                 }
 

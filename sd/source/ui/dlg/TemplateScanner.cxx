@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TemplateScanner.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: af $ $Date: 2002-09-11 13:29:40 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 10:57:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,8 @@ const OUString DOCTEMPLATES     = OUString::createFromAscii ("com.sun.star.frame
 //  template files.  Should probably be determined dynamically.
 const OUString IMPRESS_BIN_TEMPLATE = OUString::createFromAscii ("application/vnd.stardivision.impress");
 const OUString IMPRESS_XML_TEMPLATE = OUString::createFromAscii ("application/vnd.sun.xml.impress");
+// The following id comes from the bugdoc in #i2764#.
+const OUString IMPRESS_XML_TEMPLATE_B = OUString::createFromAscii ("Impress 2.0");
 }
 
 namespace sd
@@ -173,7 +175,8 @@ void TemplateScanner::ScanEntries (Content& rRoot, TemplateDir* pDir)
             //  new entry to the resulting list (which is created first if
             //  necessary).
             if (    (aContentType == IMPRESS_BIN_TEMPLATE)
-                ||  (aContentType == IMPRESS_XML_TEMPLATE))
+                ||  (aContentType == IMPRESS_XML_TEMPLATE)
+                ||  (aContentType == IMPRESS_XML_TEMPLATE_B))
                 pDir->m_aEntries.push_back (
                     new TemplateEntry (aTitle, aTargetURL));
         }

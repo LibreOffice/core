@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewse.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: oj $ $Date: 2002-12-02 14:01:11 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 10:58:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,6 +142,9 @@
 #endif
 #ifndef _URLOBJ_HXX //autogen
 #include <tools/urlobj.hxx>
+#endif
+#ifndef _SV_SOUND_HXX
+#include <vcl/sound.hxx>
 #endif
 
 // #UndoRedo#
@@ -648,6 +651,24 @@ void SdDrawViewShell::FuPermanent(SfxRequest& rReq)
             {
                 // insert into page
                 pView->InsertObject(pObj, *pPageView, pView->IsSolidDraggingNow() ? SDRINSERT_NOBROADCAST : 0);
+
+                // Now that pFuActual has done what it was created for we
+                // can switch on the edit mode for callout objects.
+                switch (nSId)
+                {
+                    case SID_DRAW_CAPTION:
+                    case SID_DRAW_CAPTION_VERTICAL:
+                    {
+                        // Make FuText the current function.
+                        SfxUInt16Item aItem (SID_TEXTEDIT, 1);
+                        GetViewFrame()->GetDispatcher()->
+                            Execute(SID_TEXTEDIT, SFX_CALLMODE_SYNCHRON |
+                                SFX_CALLMODE_RECORD, &aItem, 0L);
+                        // Put text object into edit mode.
+                        pView->BegTextEdit (reinterpret_cast<SdrTextObj*>(pObj), pPageView);
+                        break;
+                    }
+                }
             }
         }
     }
@@ -1731,9 +1752,12 @@ void SdDrawViewShell::InsertURLButton(const String& rURL, const String& rText,
             form::FormButtonType eButtonType = form::FormButtonType_URL;
             aTmp <<= eButtonType;
             xPropSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ButtonType" )), aTmp );
-            // #105638# OJ
-            aTmp <<= sal_True;
-            xPropSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DispatchURLInternal" )), aTmp );
+            if ( Sound::IsSoundFile( rURL ) )
+            {
+                // #105638# OJ
+                aTmp <<= sal_True;
+                xPropSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DispatchURLInternal" )), aTmp );
+            }
         }
     }
 
@@ -1769,8 +1793,11 @@ void SdDrawViewShell::InsertURLButton(const String& rURL, const String& rText,
         aTmp <<= eButtonType;
         xPropSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ButtonType" )), aTmp );
         // #105638# OJ
-        aTmp <<= sal_True;
-        xPropSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DispatchURLInternal" )), aTmp );
+        if ( Sound::IsSoundFile( rURL ) )
+        {
+            aTmp <<= sal_True;
+            xPropSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DispatchURLInternal" )), aTmp );
+        }
 
         Point aPos;
 

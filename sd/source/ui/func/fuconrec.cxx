@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuconrec.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: aw $ $Date: 2002-11-07 12:34:01 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 10:57:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -725,7 +725,12 @@ void FuConstRectangle::SetLineEnds(SfxItemSet& rAttr, SdrObject* pObj)
 
         SfxItemSet aSet( pDoc->GetPool() );
         pView->GetAttributes( aSet );
-        long nWidth = 250;
+
+        // #i3908# Here, the default Line Start/End width for arrow construction is
+        // set. To have the same value in all situations (construction) in i3908
+        // it was decided to change the default to 0.03 cm for all situations.
+        long nWidth = 300; // (1/100th mm)
+
         // Linienstaerke ermitteln und daraus die Linienendenstaerke berechnen
         if( aSet.GetItemState( XATTR_LINEWIDTH ) != SFX_ITEM_DONTCARE )
         {
@@ -1035,8 +1040,10 @@ SdrObject* FuConstRectangle::CreateDefaultObject(const sal_uInt16 nID, const Rec
                         pObj->SetItemSet(aSet);
                     }
 
-                    String aText(SdResId(STR_POOLSHEET_TEXT));
-                    ((SdrCaptionObj*)pObj)->SetText(aText);
+                    // For task #105815# the default text is not inserted anymore.
+                    //  String aText(SdResId(STR_POOLSHEET_TEXT));
+                    //  ((SdrCaptionObj*)pObj)->SetText(aText);
+
                     ((SdrCaptionObj*)pObj)->SetLogicRect(aRect);
                     ((SdrCaptionObj*)pObj)->SetTailPos(
                         aRect.TopLeft() - Point(aRect.GetWidth() / 2, aRect.GetHeight() / 2));

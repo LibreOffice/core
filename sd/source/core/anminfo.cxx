@@ -2,9 +2,9 @@
  *
  *  $RCSfile: anminfo.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ka $ $Date: 2001-10-22 13:36:37 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 10:57:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -330,10 +330,11 @@ void SdAnimationInfo::ReadData(SvStream& rIn)
 
         String aSoundFileRel;
         rIn.ReadByteString( aSoundFileRel, eTextEnc );
-        INetURLObject aURLObj(::URIHelper::SmartRelToAbs( aSoundFileRel, FALSE,
-                                                          INetURLObject::WAS_ENCODED,
-                                                          INetURLObject::DECODE_UNAMBIGUOUS ));
-        aSoundFile = aURLObj.GetMainURL( INetURLObject::NO_DECODE );
+        if( aSoundFileRel.Len() )
+        {
+            INetURLObject aURLObj(::URIHelper::SmartRel2Abs( INetURLObject(INetURLObject::GetBaseURL()), aSoundFileRel, ::URIHelper::GetMaybeFileHdl(), false, false, INetURLObject::WAS_ENCODED, INetURLObject::DECODE_UNAMBIGUOUS, RTL_TEXTENCODING_UTF8, false, INetURLObject::FSYS_DETECT ));
+            aSoundFile = aURLObj.GetMainURL( INetURLObject::NO_DECODE );
+        }
     }
 
     // ab hier werden Daten der Versionen > 1 eingelesen
@@ -380,10 +381,11 @@ void SdAnimationInfo::ReadData(SvStream& rIn)
 
         String aSecondSoundFileRel;
         rIn.ReadByteString( aSecondSoundFileRel, eTextEnc );
-        INetURLObject aURLObjSound(::URIHelper::SmartRelToAbs(aSecondSoundFileRel, FALSE,
-                                                              INetURLObject::WAS_ENCODED,
-                                                              INetURLObject::DECODE_UNAMBIGUOUS));
-        aSecondSoundFile = aURLObjSound.GetMainURL( INetURLObject::NO_DECODE );
+        if( aSecondSoundFileRel.Len() )
+        {
+            INetURLObject aURLObj(::URIHelper::SmartRel2Abs( INetURLObject(INetURLObject::GetBaseURL()), aSecondSoundFileRel, ::URIHelper::GetMaybeFileHdl(), false, false, INetURLObject::WAS_ENCODED, INetURLObject::DECODE_UNAMBIGUOUS, RTL_TEXTENCODING_UTF8, false, INetURLObject::FSYS_DETECT ));
+            aSecondSoundFile = aURLObj.GetMainURL( INetURLObject::NO_DECODE );
+        }
 
         rIn >> nTemp; bInvisibleInPresentation = (BOOL)nTemp;
         rIn >> nTemp; nVerb = (USHORT)nTemp;

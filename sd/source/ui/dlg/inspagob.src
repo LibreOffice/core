@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inspagob.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ka $ $Date: 2002-07-30 13:55:08 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 10:57:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@ ModalDialog DLG_INSERT_PAGES_OBJS
     Text[ chinese_simplified ] = "æ’å…¥é¡µé¢æˆ–å¯¹è±¡";
     Text[ russian ] = "Âñòàâèòü ñëàéäû/îáúåêòû";
     Text[ polish ] = "Wstaw slajdy/obiekty";
-    Text[ japanese ] = "ï¾ï¾Ÿï½°ï½¼ï¾/ï½µï¾Œï¾ï½¼ï¾ï½ªï½¸ï¾„ã®æŒ¿å…¥";
+    Text[ japanese ] = "ãƒšãƒ¼ã‚¸ã¾ãŸã¯ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æŒ¿å…¥";
     Text[ chinese_traditional ] = "æ’å…¥é é¢æˆ–ç‰©ä»¶";
     Text[ arabic ] = "ÅÏÑÇÌ ÕİÍÇÊ/ßÇÆäÇÊ";
     OKButton BTN_OK
@@ -133,15 +133,16 @@ ModalDialog DLG_INSERT_PAGES_OBJS
         Text[ chinese_simplified ] = "é“¾æ¥(~L)";
         Text[ russian ] = "~Ññûëêà";
         Text[ polish ] = "£¹cze";
-        Text[ japanese ] = "ï¾˜ï¾ï½¸(~L)";
+        Text[ japanese ] = "ãƒªãƒ³ã‚¯(~L)";
         Text[ chinese_traditional ] = "æ·å¾‘(~L)";
         Text[ arabic ] = "ÇÑÊÈÇØ";
         Text[ greek ] = "Óıíäåóç";
         Text[ korean ] = "ë§í¬(~L)";
         Text[ turkish ] = "Bağlantı";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Vínculo";
-        Text[ finnish ] = "~Linkki";
+        Text[ catalan ] = "~Enllaç";
+        Text[ finnish ] = "~Linkitä tiedostoon";
+        Text[ thai ] = "à¹€~à¸Šà¸·à¹ˆà¸­à¸¡à¹‚à¸¢à¸‡";
     };
     CheckBox CBX_CHECK_MASTERS
     {
@@ -152,32 +153,42 @@ ModalDialog DLG_INSERT_PAGES_OBJS
         TabStop = TRUE ;
         Text[ english_us ] = "Delete unused backg~rounds";
         Text[ portuguese ] = "~Eliminar páginas de fundo não utilizadas";
-        Text[ russian ] = "Óäàëÿòü íåèñïîëüçîâàííûå ñòğàíèöû ôîíà";
+        Text[ russian ] = "Óäàëèòü íåèñïîëüçóşùèåñÿ ôîíû";
         Text[ dutch ] = "~Niet-gebruikte achtergrondpagina's wissen";
         Text[ french ] = "Supprimer les pages d'arrière-plan ~inutilisées";
-        Text[ spanish ] = "~Eliminar páginas de fondo no usadas";
+        Text[ spanish ] = "~Borrar las páginas de fondo no utilizadas";
         Text[ italian ] = "Elimi~na pagine di sfondo non utilizzate";
         Text[ danish ] = "Slet ikke-brugte baggrundssider";
         Text[ swedish ] = "Radera ej a~nvända bakgrundssidor";
         Text[ polish ] = "Usuñ nieu¿ywane strony t³a";
         Text[ portuguese_brazilian ] = "~Remove not used master pages";
-        Text[ japanese ] = "æœªä½¿ç”¨ã®èƒŒæ™¯ï¾ï¾Ÿï½°ï½¼ï¾ã¯å‰Šé™¤ã™ã‚‹(~R)";
+        Text[ japanese ] = "æœªä½¿ç”¨ã®ãƒã‚¹ã‚¿ãƒ¼ãƒ¼ãƒšãƒ¼ã‚¸ã¯å‰Šé™¤ã™ã‚‹(~R)";
         Text[ chinese_simplified ] = "æ¸…é™¤ä¸é‡‡ç”¨çš„èƒŒæ™¯é¡µé¢(~R)";
         Text[ chinese_traditional ] = "åˆªé™¤ä¸ç”¨çš„èƒŒæ™¯é é¢(~R)";
         Text[ arabic ] = "ÍĞİ ÕİÍÇÊ ÇáÎáİíÉ ÇáÊí áã ÊõÓÊÚãá";
         Text[ greek ] = "ÄéáãñáöŞ ìç ÷ñçóéìïğïéïõìİ~íùí óåëéäşí öüíôïõ.";
-        Text[ korean ] = "ì‚¬ìš©í•˜ì§€ ì•Šì€ ë°°ê²½ í˜ì´ì§€ ì‚­ì œ(~R)";
+        Text[ korean ] = "ì‚¬ìš©í•˜ì§€ ì•Šì€ ë°°ê²½ ì‚­ì œ(~R)";
         Text[ turkish ] = "Artalandaki kullanılmayan sayfaları sil";
-        Text[ catalan ] = "~Eliminar páginas de fondo no usadas";
-        Text[ finnish ] = "Poista k?ytt?m?tt??t taus~tat";
+        Text[ catalan ] = "Suprimeix els ~fons no utilitzats";
+        Text[ finnish ] = "Poista käyttämättömät taus~tat";
+        Text[ thai ] = "à¸¥à¸šà¸à¸·à¹‰à¸™~à¸«à¸¥à¸±à¸‡à¸—à¸µà¹ˆà¹„à¸¡à¹ˆà¹ƒà¸Šà¹‰";
     };
     Text[ greek ] = "ÅéóáãùãŞ áíôéêåéìİíùí/óåëßäùí";
     Text[ korean ] = "ìŠ¬ë¼ì´ë“œ/ê°œì²´ ì‚½ì…";
     Text[ turkish ] = "Sayfa/nesne ekle";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Insertar páginas/objetos";
-    Text[ finnish ] = "Lisää diat/objektit";
+    Text[ catalan ] = "Insereix diapositives/objectes";
+    Text[ finnish ] = "Lisää dioja tai objekteja";
+    Text[ thai ] = "à¹à¸—à¸£à¸à¸ à¸²à¸à¸™à¸´à¹ˆà¸‡/à¸§à¸±à¸•à¸–à¸¸";
 };
+
+
+
+
+
+
+
+
 
 
 

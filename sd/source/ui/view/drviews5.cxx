@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews5.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: ka $ $Date: 2002-11-28 17:30:39 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 10:58:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,8 +83,8 @@
 #ifndef _SVX_FMSHELL_HXX //autogen
 #include <svx/fmshell.hxx>
 #endif
-#ifndef _SVX_COLORCFG_HXX
-#include <svx/colorcfg.hxx>
+#ifndef INCLUDED_SVTOOLS_COLORCFG_HXX
+#include <svtools/colorcfg.hxx>
 #endif
 #ifndef _SD_ACCESSIBILITY_ACCESSIBLE_DRAW_DOCUMENT_VIEW_HXX
 #include "AccessibleDrawDocumentView.hxx"
@@ -447,6 +447,12 @@ void SdDrawViewShell::ReadFrameViewData(FrameView* pView)
     if(pWindow->GetDrawMode() != pView->GetDrawMode())
       pWindow->SetDrawMode(pView->GetDrawMode());
 
+    if ( pDrView->IsDesignMode() != pView->IsDesignMode() )
+    {
+        SfxBoolItem aDesignModeItem( SID_FM_DESIGN_MODE, pView->IsDesignMode() );
+        GetViewFrame()->GetDispatcher()->Execute( SID_FM_DESIGN_MODE, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD, &aDesignModeItem, 0L );
+    }
+
     // Muss am Ende gerufen werden, da ein WriteFrameViewData() ausgeloest wird
     if (pDrView->IsFrameDragSingles() != pView->IsFrameDragSingles() )
         pDrView->SetFrameDragSingles( pView->IsFrameDragSingles() );
@@ -496,6 +502,8 @@ void SdDrawViewShell::WriteFrameViewData()
     pFrameView->SetSolidMarkHdl( pDrView->IsSolidMarkHdl() );
     pFrameView->SetSolidDragging( pDrView->IsSolidDragging() );
     pFrameView->SetQuickEdit( pDrView->IsQuickTextEditMode() );
+
+    pFrameView->SetDesignMode( pDrView->IsDesignMode() );
 
     Size aVisSizePixel = pWindow->GetOutputSizePixel();
     Rectangle aVisArea = pWindow->PixelToLogic( Rectangle( Point(0,0), aVisSizePixel) );
@@ -571,16 +579,16 @@ void SdDrawViewShell::WriteFrameViewData()
 void SdDrawViewShell::Paint(const Rectangle& rRect, SdWindow* pWin)
 {
     // #103834# Fill var FillColor here to have it available on later call
-    svx::ColorConfig aColorConfig;
+    svtools::ColorConfig aColorConfig;
     Color aFillColor;
 
     if(DOCUMENT_TYPE_IMPRESS == pDoc->GetDocumentType())
     {
-        aFillColor = Color( aColorConfig.GetColorValue( svx::APPBACKGROUND ).nColor );
+        aFillColor = Color( aColorConfig.GetColorValue( svtools::APPBACKGROUND ).nColor );
     }
     else
     {
-        aFillColor = Color( aColorConfig.GetColorValue( svx::DOCCOLOR ).nColor );
+        aFillColor = Color( aColorConfig.GetColorValue( svtools::DOCCOLOR ).nColor );
     }
 
     if( pWin )
@@ -612,7 +620,7 @@ void SdDrawViewShell::Paint(const Rectangle& rRect, SdWindow* pWin)
                 pWin->DrawRect( aOutputRect );
             else
             {
-                const Color aShadowColor( Application::GetSettings().GetStyleSettings().GetWindowTextColor() );
+                const Color aShadowColor( aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor );
                 PolyPolygon aPolyPoly( 2 );
                 Rectangle   aOutputRectExt( aOutputRect );
 

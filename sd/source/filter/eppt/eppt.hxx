@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eppt.hxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: sj $ $Date: 2002-12-10 16:57:16 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 10:57:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 
 #ifndef _EPPT_HXX_
 #define _EPPT_HXX_
+#include <vector>
 #ifndef _PptEscherEx_HXX
 #include "escherex.hxx"
 #endif
@@ -886,7 +887,9 @@ class PPTWriter : public GroupTable, public PropValue, public PPTExBulletProvide
         sal_Bool                        mbStatus;
         sal_uInt32                      mnStatMaxValue;
         sal_uInt32                      mnLatestStatValue;
+        std::vector< PPTExStyleSheet* > maStyleSheetList;
         PPTExStyleSheet*                mpStyleSheet;
+
         EscherGraphicProvider*          mpGraphicProvider;
         Fraction                        maFraction;
         MapMode                         maMapModeSrc;
@@ -921,9 +924,6 @@ class PPTWriter : public GroupTable, public PropValue, public PPTExBulletProvide
         sal_Int32           mnAngle;
         sal_uInt32          mnTextStyle;
 
-        sal_uInt32          mnMasterTitleIndex; // -1 wenn es keinen Title gibt
-        sal_uInt32          mnMasterBodyIndex;  // -1 wenn es keinen Body gibt
-
         sal_uInt32          mnTextSize;
 
         SvStorageRef        mrStg;
@@ -948,9 +948,6 @@ class PPTWriter : public GroupTable, public PropValue, public PPTExBulletProvide
                                                 // 1 -> halbautomatisch
                                                 // 2 -> automatisch
 
-
-        sal_uInt32          mnFillColor;
-        sal_uInt32          mnFillBackColor;
 
         sal_uInt32          mnShapeMasterTitle;
         sal_uInt32          mnShapeMasterBody;
@@ -980,17 +977,17 @@ class PPTWriter : public GroupTable, public PropValue, public PPTExBulletProvide
         sal_Bool            ImplCreateCurrentUserStream();
         sal_Bool            ImplCreateDocument();
         sal_Bool            ImplCreateHyperBlob( SvMemoryStream& rStream );
-        sal_Bool            ImplCreateMainMaster();
+        sal_Bool            ImplCreateMaster( sal_uInt32 nPageNum );
         sal_Bool            ImplCreateMainNotes();
-        sal_Bool            ImplCreateTitleMasterPage( int nPageNum );
-        sal_Bool            ImplCreateSlide( int nPageNum );
-        sal_Bool            ImplCreateNotes( int nPageNum );
+        sal_Bool            ImplCreateSlide( sal_uInt32 nPageNum );
+        sal_Bool            ImplCreateNotes( sal_uInt32 nPageNum );
         void                ImplWriteBackground( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXBackgroundPropSet );
         void                ImplWriteVBA( SvMemoryStream* pVBA );
         void                ImplWriteOLE( sal_uInt32 nCnvrtFlags );
         sal_Bool            ImplWriteAtomEnding();
 
         sal_Bool            ImplInitSOIface();
+        sal_Bool            ImplSetCurrentStyleSheet( sal_uInt32 nPageNum );
         sal_Bool            ImplGetPageByIndex( sal_uInt32 nIndex, PageType );
         sal_Bool            ImplGetShapeByIndex( sal_uInt32 nIndex, sal_Bool bGroup = FALSE );
         sal_uInt32          ImplGetMasterIndex( PageType ePageType );
@@ -1008,7 +1005,6 @@ class PPTWriter : public GroupTable, public PropValue, public PPTExBulletProvide
         void                ImplWriteTextBundle( EscherPropertyContainer& rPropOpt,
                                                     sal_Bool bDisableAutoGrowHeight = sal_False,
                                                         sal_Bool bWriteEvenEmptyTextObjects = sal_False );
-        sal_Bool            ImplGetMasterTitleAndBody();
         sal_Bool            ImplGetStyleSheets();
         void                ImplWriteParagraphs( SvStream& rOutStrm, TextObj& rTextObj );
         void                ImplWritePortions( SvStream& rOutStrm, TextObj& rTextObj );

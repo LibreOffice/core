@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocumentViewBase.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: thb $ $Date: 2002-11-29 17:34:58 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 10:57:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,8 +174,6 @@ AccessibleDocumentViewBase::AccessibleDocumentViewBase (
 
 AccessibleDocumentViewBase::~AccessibleDocumentViewBase (void)
 {
-    OSL_TRACE ("~AccessibleDocumentViewBase");
-
     // At this place we should be disposed.  You may want to add a
     // corresponding assertion into the destructor of a derived class.
 }
@@ -562,11 +560,13 @@ void SAL_CALL
     AccessibleDocumentViewBase::getTypes (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    // Get list of types from the context base implementation...
+    // Get list of types from the context base implementation, ...
     uno::Sequence<uno::Type> aTypeList (AccessibleContextBase::getTypes());
-    sal_Int32 nTypeCount (aTypeList.getLength());
+    // ... get list of types from component base implementation, ...
+    uno::Sequence<uno::Type> aComponentTypeList (AccessibleComponentBase::getTypes());
 
-    // ...and add the additional type for the component.
+
+    // ...and add the additional type for the component, ...
     const uno::Type aLangEventListenerType =
          ::getCppuType((const uno::Reference<lang::XEventListener>*)0);
     const uno::Type aPropertyChangeListenerType =
@@ -577,12 +577,22 @@ void SAL_CALL
          ::getCppuType((const uno::Reference<awt::XTopWindowListener>*)0);
     const uno::Type aEventBroadcaster =
          ::getCppuType((const uno::Reference<XAccessibleEventBroadcaster>*)0);
-    aTypeList.realloc (nTypeCount + 5);
-    aTypeList[nTypeCount+0] = aLangEventListenerType;
-    aTypeList[nTypeCount+1] = aPropertyChangeListenerType;
-    aTypeList[nTypeCount+2] = aWindowListenerType;
-    aTypeList[nTypeCount+3] = aTopWindowListenerType;
-    aTypeList[nTypeCount+4] = aEventBroadcaster;
+
+    // ... and merge them all into one list.
+    sal_Int32 nTypeCount (aTypeList.getLength()),
+        nComponentTypeCount (aComponentTypeList.getLength()),
+        i;
+
+    aTypeList.realloc (nTypeCount + nComponentTypeCount + 5);
+
+    for (i=0; i<nComponentTypeCount; i++)
+        aTypeList[nTypeCount + i] = aComponentTypeList[i];
+
+    aTypeList[nTypeCount + i++ ] = aLangEventListenerType;
+    aTypeList[nTypeCount + i++] = aPropertyChangeListenerType;
+    aTypeList[nTypeCount + i++] = aWindowListenerType;
+    aTypeList[nTypeCount + i++] = aTopWindowListenerType;
+    aTypeList[nTypeCount + i++] = aEventBroadcaster;
 
     return aTypeList;
 }
@@ -599,15 +609,12 @@ void SAL_CALL
     // Register this object as dispose event and document::XEventListener
     // listener at the model.
 
-    OSL_TRACE ("disposing event called");
     if ( ! rEventObject.Source.is())
     {
         // Paranoia. Can this really happen?
     }
     else if (rEventObject.Source == mxModel)
     {
-        OSL_TRACE ("  disposing model");
-
         ::osl::Guard< ::osl::Mutex> aGuard (::osl::Mutex::getGlobalMutex());
 
         mxModel->removeEventListener (
@@ -621,8 +628,6 @@ void SAL_CALL
     }
     else if (rEventObject.Source == mxController)
     {
-        OSL_TRACE ("  disposing component");
-
         ::osl::Guard< ::osl::Mutex> aGuard (::osl::Mutex::getGlobalMutex());
 
         // Unregister as property change listener at the controller.
@@ -645,9 +650,7 @@ void SAL_CALL
 void SAL_CALL
     AccessibleDocumentViewBase::propertyChange (const beans::PropertyChangeEvent& rEventObject)
     throw (::com::sun::star::uno::RuntimeException)
-{
-    OSL_TRACE ("AccessibleDocumentViewBase::propertyChange");
-}
+{}
 
 
 
@@ -718,28 +721,23 @@ void SAL_CALL
 
 void SAL_CALL AccessibleDocumentViewBase::windowOpened( const ::com::sun::star::lang::EventObject& e )
     throw (::com::sun::star::uno::RuntimeException)
-{
-}
+{}
 
 void SAL_CALL AccessibleDocumentViewBase::windowClosing( const ::com::sun::star::lang::EventObject& e )
     throw (::com::sun::star::uno::RuntimeException)
-{
-}
+{}
 
 void SAL_CALL AccessibleDocumentViewBase::windowClosed( const ::com::sun::star::lang::EventObject& e )
     throw (::com::sun::star::uno::RuntimeException)
-{
-}
+{}
 
 void SAL_CALL AccessibleDocumentViewBase::windowMinimized( const ::com::sun::star::lang::EventObject& e )
     throw (::com::sun::star::uno::RuntimeException)
-{
-}
+{}
 
 void SAL_CALL AccessibleDocumentViewBase::windowNormalized( const ::com::sun::star::lang::EventObject& e )
         throw (::com::sun::star::uno::RuntimeException)
-{
-}
+{}
 
 void SAL_CALL AccessibleDocumentViewBase::windowActivated( const ::com::sun::star::lang::EventObject& e )
         throw (::com::sun::star::uno::RuntimeException)

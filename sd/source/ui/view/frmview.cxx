@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmview.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: iha $ $Date: 2002-12-03 17:29:14 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 10:58:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,6 +205,7 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
         SetEliminatePolyPointLimitAngle( pFrameView->GetEliminatePolyPointLimitAngle() );
         SetEliminatePolyPoints( pFrameView->IsEliminatePolyPoints() );
         SetMasterPagePaintCaching( pFrameView->IsMasterPagePaintCaching() );
+        SetDesignMode( pFrameView->IsDesignMode() );
 
         SetLineDraft( pFrameView->IsLineDraft() );
         SetFillDraft( pFrameView->IsFillDraft() );
@@ -273,6 +274,21 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
         bShowPreviewInMasterPageMode = TRUE;
         bShowPreviewInOutlineMode = TRUE;
         nTabCtrlPercent = 0.0;
+
+        // get default for design mode
+        sal_Bool bInitDesignMode = pDrawDoc->GetOpenInDesignMode();
+        if( pDrawDoc->OpenInDesignModeIsDefaulted() )
+        {
+            bInitDesignMode = sal_True;
+        }
+
+        SfxObjectShell* pObjShell = pDrawDoc->GetObjectShell();
+        sal_Bool bReadOnly = sal_False;
+        if( pObjShell )
+            bReadOnly = pObjShell->IsReadOnly();
+        if( bReadOnly )
+            bInitDesignMode = sal_False;
+        SetDesignMode( bInitDesignMode );
 
         Update( SD_MOD()->GetSdOptions(pDrawDoc->GetDocumentType()) );
     }
@@ -777,8 +793,10 @@ void FrameView::WriteUserDataSequence ( ::com::sun::star::uno::Sequence < ::com:
 //  pValue++;nIndex++;
 
     aUserData.addValue( sUNO_View_SlidesPerRow, makeAny( (sal_Int16)GetSlidesPerRow() ) );
+/* #107128# Product managment decided to not make this persistent
     aUserData.addValue( sUNO_View_DrawMode, makeAny( (sal_Int32)GetDrawMode() ) );
     aUserData.addValue( sUNO_View_PreviewDrawMode, makeAny( (sal_Int32)GetPreviewDrawMode() ) );
+*/
     aUserData.addValue( sUNO_View_IsShowPreviewInPageMode, makeAny( (sal_Bool)IsShowPreviewInPageMode() ) );
     aUserData.addValue( sUNO_View_IsShowPreviewInMasterPageMode, makeAny( (sal_Bool)IsShowPreviewInMasterPageMode() ) );
     aUserData.addValue( sUNO_View_SetShowPreviewInOutlineMode, makeAny( (sal_Bool)IsShowPreviewInOutlineMode() ) );
@@ -1004,6 +1022,7 @@ void FrameView::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < :
                     SetSlidesPerRow( (USHORT)nInt16 );
                 }
             }
+/* #107128# Product managment decided to not make this persistent
             else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_DrawMode ) ) )
             {
                 if( pValue->Value >>= nInt32 )
@@ -1025,6 +1044,7 @@ void FrameView::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < :
                     SetPreviewDrawMode( (ULONG)nInt32 );
                 }
             }
+*/
             else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_IsShowPreviewInPageMode ) ) )
             {
                 if( pValue->Value >>= bBool )

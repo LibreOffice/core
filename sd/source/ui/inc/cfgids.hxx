@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgids.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:37 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 10:57:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,8 @@
 #define RID_DRAW_OPTIONS_TOOLBOX    (SFX_ITEMTYPE_SD_BEGIN + 20)
 #define RID_DRAW_COMMONTASK_TOOLBOX (SFX_ITEMTYPE_SD_BEGIN + 21)
 #define RID_FORMLAYER_TOOLBOX       (SFX_ITEMTYPE_SD_BEGIN + 22)
+#define RID_DRAW_VIEWER_TOOLBOX     (SFX_ITEMTYPE_SD_BEGIN + 23)
+#define RID_GRAPHIC_VIEWER_TOOLBOX  (SFX_ITEMTYPE_SD_BEGIN + 24)
 
 #define RID_GRAPHIC_TOOLBOX         (SFX_ITEMTYPE_SD_BEGIN + 25)
 #define RID_GRAPHIC_OPTIONS_TOOLBOX (SFX_ITEMTYPE_SD_BEGIN + 26)

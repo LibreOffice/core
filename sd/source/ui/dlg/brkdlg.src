@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brkdlg.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2002-12-09 09:54:54 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 10:57:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,23 +78,23 @@ ModalDialog DLG_BREAK
         Text[ language_user1 ] = "EM Dec 2002: This string shows up in an error message at the time when the metafile is being worked on. To read like the answer to 'Which metafile am I processing?' \"processsing metafile: 2\"";
         Text[ portuguese ] = "Processing Metafile:";
         Text[ russian ] = "Processing Metafile:";
-        Text[ spanish ] = "Processing Metafile:";
-        Text[ italian ] = "Processing Metafile:";
-        Text[ swedish ] = "Processing Metafile:";
+        Text[ spanish ] = "Procesando el metaarchivo:";
+        Text[ italian ] = "Metafile elaborati:";
+        Text[ swedish ] = "Metafil som bearbetas:";
         Text[ polish ] = "Processing Metafile:";
         Text[ portuguese_brazilian ] = "Processing Metafile:";
-        Text[ japanese ] = "Processing Metafile:";
-        Text[ korean ] = "Processing Metafile:";
+        Text[ japanese ] = "メタファイルの処理:";
+        Text[ korean ] = "처리 중인 메타 파일:";
         Text[ turkish ] = "Processing Metafile:";
         Text[ thai ] = "Processing Metafile:";
         Text[ english_us ] = "Processing metafile:";
         Text[ greek ] = "Processing Metafile:";
         Text[ dutch ] = "Processing Metafile:";
-        Text[ french ] = "Processing Metafile:";
+        Text[ french ] = "Traitement du m�tafichier :";
         Text[ finnish ] = "Processing Metafile:";
         Text[ danish ] = "Processing Metafile:";
-        Text[ chinese_simplified ] = "Processing Metafile:";
-        Text[ chinese_traditional ] = "Processing Metafile:";
+        Text[ chinese_simplified ] = "处理图元文件:";
+        Text[ chinese_traditional ] = "處理元檔案：";
         Text[ arabic ] = "Processing Metafile:";
         Text[ catalan ] = "Processing Metafile:";
     };
@@ -107,23 +107,23 @@ ModalDialog DLG_BREAK
         Text[ language_user1 ] = "EM Dec 2002: This string shows up in an error message. The colon is followed by the number of metaobjects that were broken down. (as in \"Break\" found in context menu of a selected metafile)";
         Text[ portuguese ] = "Brokened down metaobjects:";
         Text[ russian ] = "Brokened down metaobjects:";
-        Text[ spanish ] = "Brokened down metaobjects:";
-        Text[ italian ] = "Brokened down metaobjects:";
-        Text[ swedish ] = "Brokened down metaobjects:";
+        Text[ spanish ] = "Metaobjetos quebrados:";
+        Text[ italian ] = "Metaoggetti suddivisi:";
+        Text[ swedish ] = "Uppbrutna metaobjekt:";
         Text[ polish ] = "Brokened down metaobjects:";
         Text[ portuguese_brazilian ] = "Brokened down metaobjects:";
-        Text[ japanese ] = "Brokened down metaobjects:";
-        Text[ korean ] = "Brokened down metaobjects:";
+        Text[ japanese ] = "詳細なメタオブジェクト:";
+        Text[ korean ] = "메타 개체 분할됨:";
         Text[ turkish ] = "Brokened down metaobjects:";
         Text[ thai ] = "Brokened down metaobjects:";
         Text[ english_us ] = "Broken down metaobjects:";
         Text[ greek ] = "Brokened down metaobjects:";
         Text[ dutch ] = "Brokened down metaobjects:";
-        Text[ french ] = "Brokened down metaobjects:";
+        Text[ french ] = "M�ta-objets fractionn�s :";
         Text[ finnish ] = "Brokened down metaobjects:";
         Text[ danish ] = "Brokened down metaobjects:";
-        Text[ chinese_simplified ] = "Brokened down metaobjects:";
-        Text[ chinese_traditional ] = "Brokened down metaobjects:";
+        Text[ chinese_simplified ] = "拆开的图元对象：";
+        Text[ chinese_traditional ] = "分開元物件：";
         Text[ arabic ] = "Brokened down metaobjects:";
         Text[ catalan ] = "Brokened down metaobjects:";
     };
@@ -136,23 +136,23 @@ ModalDialog DLG_BREAK
         Text[ language_user1 ] = "EM Dec 2002: This string shows up in a rare error message. The colon is followed by a number. How many inserted drawing objects? \"Inserted drawing objects: 3\"";
         Text[ portuguese ] = "Inserted drawing objects:";
         Text[ russian ] = "Inserted drawing objects:";
-        Text[ spanish ] = "Inserted drawing objects:";
-        Text[ italian ] = "Inserted drawing objects:";
-        Text[ swedish ] = "Inserted drawing objects:";
+        Text[ spanish ] = "Objetos de dibujo insertados:";
+        Text[ italian ] = "Oggetti di disegno inseriti:";
+        Text[ swedish ] = "Infogade ritobjekt:";
         Text[ polish ] = "Inserted drawing objects:";
         Text[ portuguese_brazilian ] = "Inserted drawing objects:";
-        Text[ japanese ] = "Inserted drawing objects:";
-        Text[ korean ] = "Inserted drawing objects:";
+        Text[ japanese ] = "挿入された図形オブジェクト:";
+        Text[ korean ] = "그리기 개체 삽입됨:";
         Text[ turkish ] = "Inserted drawing objects:";
         Text[ thai ] = "Inserted drawing objects:";
         Text[ english_us ] = "Inserted drawing objects:";
         Text[ greek ] = "Inserted drawing objects:";
         Text[ dutch ] = "Inserted drawing objects:";
-        Text[ french ] = "Inserted drawing objects:";
+        Text[ french ] = "Objets de dessin ins�r�s :";
         Text[ finnish ] = "Inserted drawing objects:";
         Text[ danish ] = "Inserted drawing objects:";
-        Text[ chinese_simplified ] = "Inserted drawing objects:";
-        Text[ chinese_traditional ] = "Inserted drawing objects:";
+        Text[ chinese_simplified ] = "插入的绘图对象：";
+        Text[ chinese_traditional ] = "插入繪圖物件：";
         Text[ arabic ] = "Inserted drawing objects:";
         Text[ catalan ] = "Inserted drawing objects:";
     };
@@ -180,23 +180,28 @@ ModalDialog DLG_BREAK
     Text[ language_user1 ] = "EM Dec 2002: As in \"break\" found in context menu of a selected metafile inserted into a document.";
     Text[ portuguese ] = "Break";
     Text[ russian ] = "Break";
-    Text[ spanish ] = "Break";
-    Text[ italian ] = "Break";
-    Text[ swedish ] = "Break";
+    Text[ spanish ] = "Quebrar";
+    Text[ italian ] = "Suddividi";
+    Text[ swedish ] = "Bryt upp";
     Text[ polish ] = "Break";
     Text[ portuguese_brazilian ] = "Break";
-    Text[ japanese ] = "Break";
-    Text[ korean ] = "Break";
+    Text[ japanese ] = "区切る";
+    Text[ korean ] = "분할";
     Text[ turkish ] = "Break";
     Text[ thai ] = "Break";
     Text[ english_us ] = "Break";
     Text[ greek ] = "Break";
     Text[ dutch ] = "Break";
-    Text[ french ] = "Break";
+    Text[ french ] = "Fractionnement";
     Text[ finnish ] = "Break";
     Text[ danish ] = "Break";
-    Text[ chinese_simplified ] = "Break";
-    Text[ chinese_traditional ] = "Break";
+    Text[ chinese_simplified ] = "分开";
+    Text[ chinese_traditional ] = "分開";
     Text[ arabic ] = "Break";
     Text[ catalan ] = "Break";
 };
+
+
+
+
+

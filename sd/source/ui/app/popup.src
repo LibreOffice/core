@@ -2,9 +2,9 @@
  *
  *  $RCSfile: popup.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: cl $ $Date: 2002-11-26 15:40:52 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 10:57:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -282,19 +282,20 @@ Menu RID_LAYERTAB_POPUP
             Text [ spanish ] = "~Insertar capa..." ;
             Text [ danish ] = "Indsæt niveau..." ;
             Text [ swedish ] = "~Infoga nivå..." ;
-            Text [ finnish ] = "~Lis?? kerros..." ;
+            Text [ finnish ] = "~Lisää kerros..." ;
             Text [ english_us ] = "~Insert Layer..." ;
-            Text[ chinese_simplified ] = "æ’å…¥åˆ†å±‚(~Y)...";
+            Text[ chinese_simplified ] = "æ’å…¥åˆ†å±‚(~I)...";
                     Text[ russian ] = "Âñòàâèòü ñëîé...";
                     Text[ polish ] = "Wstaw warstwê...";
-                    Text[ japanese ] = "å±¤ã®æŒ¿å…¥(~Y)...";
-                    Text[ chinese_traditional ] = "æ’å…¥åˆ†å±¤(~Y)...";
+                    Text[ japanese ] = "ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®æŒ¿å…¥(~I)...";
+                    Text[ chinese_traditional ] = "æ’å…¥åˆ†å±¤(~I)...";
             Text[ arabic ] = "...ÅÏÑÇÌ ØÈŞÉ";
             Text[ greek ] = "~ÅéóáãùãŞ åğéğİäïõ...";
-            Text[ korean ] = "ê³„ì¸µ ì‚½ì…(~Y)...";
+            Text[ korean ] = "ê³„ì¸µ ì‚½ì…(~I)...";
             Text[ turkish ] = "Düzey ekle...";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Insertar capa...";
+            Text[ catalan ] = "Insereix una ~capa...";
+            Text[ thai ] = "à¹à¸—à¸£à¸à¸£à¸°~à¸”à¸±à¸š...";
         };
         MenuItem
         {
@@ -312,19 +313,20 @@ Menu RID_LAYERTAB_POPUP
             Text [ spanish ] = "~Modificar capa..." ;
             Text [ danish ] = "Rediger niveau..." ;
             Text [ swedish ] = "~Ändra nivå..." ;
-            Text [ finnish ] = "~Muokkaa kerrosta..." ;
+            Text [ finnish ] = "~Muuta kerroksen asetuksia..." ;
             Text [ english_us ] = "Modify La~yer..." ;
             Text[ chinese_simplified ] = "ä¿®æ”¹åˆ†å±‚(~Y)...";
                     Text[ russian ] = "Èçìåíèòü ñëîé...";
                     Text[ polish ] = "Modyfikuj warstwê...";
-                    Text[ japanese ] = "å±¤ã®å¤‰æ›´(~Y)...";
+                    Text[ japanese ] = "ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®å¤‰æ›´(~Y)...";
                     Text[ chinese_traditional ] = "è®Šæ›´åˆ†å±¤(~Y)...";
             Text[ arabic ] = "...ÊÚÏíá ØÈŞÉ";
             Text[ greek ] = "Ôñïğïğïßçóç å~ğéğİäïõ...";
-            Text[ korean ] = "ê³„ì¸µ ìˆ˜ì •(~Y)...";
+            Text[ korean ] = "ê³„ì¸µ ë³€ê²½(~Y)...";
             Text[ turkish ] = "Düzeyi değiştir...";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Modificar capa...";
+            Text[ catalan ] = "Modifica la ~capa...";
+            Text[ thai ] = "à¸”à¸±à¸”à¹à¸›à¸¥à¸‡à¸£à¸°~à¸”à¸±à¸š...";
         };
         MenuItem
         {
@@ -339,7 +341,7 @@ Menu RID_LAYERTAB_POPUP
             Text [ portuguese ] = "Elimi~nar nível..." ;
             Text [ french ] = "Supprimer la couche..." ;
             Text [ dutch ] = "Niveau ~wissen..." ;
-            Text [ spanish ] = "~Eliminar capa..." ;
+            Text [ spanish ] = "~Borrar capa..." ;
             Text [ danish ] = "Slet niveau..." ;
             Text [ swedish ] = "Radera ~nivå..." ;
             Text [ finnish ] = "~Poista kerros..." ;
@@ -347,18 +349,21 @@ Menu RID_LAYERTAB_POPUP
             Text[ chinese_simplified ] = "åˆ é™¤åˆ†å±‚(~L)...";
                     Text[ russian ] = "Óäàëèòü ñëîé...";
                     Text[ polish ] = "Usuñ warstwê...";
-                    Text[ japanese ] = "å±¤ã®å‰Šé™¤(~L)...";
+                    Text[ japanese ] = "ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®å‰Šé™¤(~L)...";
                     Text[ chinese_traditional ] = "åˆªé™¤åˆ†å±¤(~L)...";
             Text[ arabic ] = "...ÍĞİ ØÈŞÉ";
             Text[ greek ] = "ÄéáãñáöŞ åğéğİ~äïõ...";
             Text[ korean ] = "ê³„ì¸µ ì‚­ì œ(~L)...";
             Text[ turkish ] = "Düzeyi sil...";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Eliminar capa...";
+            Text[ catalan ] = "Suprimeix la ~capa...";
+            Text[ thai ] = "à¸¥à¸š~à¸£à¸°à¸”à¸±à¸š...";
         };
         MN_RENAME_LAYER
     };
 };
+
+
 
 
 

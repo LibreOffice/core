@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlex.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cl $ $Date: 2002-11-25 18:41:28 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 10:57:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,8 +149,8 @@
 #ifndef _GALLERY_HXX_
 #include <svx/gallery.hxx>
 #endif
-#ifndef _SVX_COLORCFG_HXX
-#include <svx/colorcfg.hxx>
+#ifndef INCLUDED_SVTOOLS_COLORCFG_HXX
+#include <svtools/colorcfg.hxx>
 #endif
 #ifndef _FILTER_HXX
 #include <svtools/filter.hxx>
@@ -720,9 +720,16 @@ void HtmlExport::InitExportParameters( const Sequence< PropertyValue >& rParams 
         }
         else if( pParams->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "WebCastScriptLanguage" ) ) )
         {
-            sal_Int32 temp;
-            pParams->Value >>= temp;
-            m_eScript = (PublishingScript)temp;
+            OUString aStr;
+            pParams->Value >>= aStr;
+            if( aStr.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM( "asp" ) ) )
+            {
+                m_eScript = SCRIPT_ASP;
+            }
+            else
+            {
+                m_eScript = SCRIPT_PERL;
+            }
         }
         else
         {
@@ -730,6 +737,13 @@ void HtmlExport::InitExportParameters( const Sequence< PropertyValue >& rParams 
         }
 
         pParams++;
+    }
+
+    if( m_eMode == PUBLISH_KIOSK )
+    {
+        m_bContentsPage = false;
+        m_bNotes = false;
+
     }
 
     // calculate image sizes
@@ -875,10 +889,10 @@ void HtmlExport::SetDocColors( SdPage* pPage )
     if( pPage == NULL )
         pPage = pDoc->GetSdPage(0, PK_STANDARD);
 
-    svx::ColorConfig aConfig;
-    m_aVLinkColor = Color(aConfig.GetColorValue(svx::LINKSVISITED).nColor);
-    m_aALinkColor = Color(aConfig.GetColorValue(svx::LINKS).nColor);
-    m_aLinkColor  = Color(aConfig.GetColorValue(svx::LINKS).nColor);
+    svtools::ColorConfig aConfig;
+    m_aVLinkColor = Color(aConfig.GetColorValue(svtools::LINKSVISITED).nColor);
+    m_aALinkColor = Color(aConfig.GetColorValue(svtools::LINKS).nColor);
+    m_aLinkColor  = Color(aConfig.GetColorValue(svtools::LINKS).nColor);
     m_aTextColor  = Color(COL_BLACK);
 
     SfxStyleSheet* pSheet = NULL;
@@ -3232,7 +3246,7 @@ ByteString HtmlExport::CreatePageURL( USHORT nPgNum )
         return *m_pHTMLFiles[nPgNum];
 }
 
-BOOL HtmlExport::CopyScript( const ByteString& rPath, const ByteString& rSource, const ByteString& rDest )
+BOOL HtmlExport::CopyScript( const ByteString& rPath, const ByteString& rSource, const ByteString& rDest, bool bUnix /* = false */ )
 {
     INetURLObject   aURL( SvtPathOptions().GetConfigPath() );
     ByteString      aScript;
@@ -3252,7 +3266,14 @@ BOOL HtmlExport::CopyScript( const ByteString& rPath, const ByteString& rSource,
         while( pIStm->ReadLine( aLine ) )
         {
             aScript += aLine;
-            aScript += "\r\n";
+            if( bUnix )
+            {
+                aScript += "\n";
+            }
+            else
+            {
+                aScript += "\r\n";
+            }
         }
 
         nErr = pIStm->GetError();
@@ -3328,14 +3349,14 @@ BOOL HtmlExport::CreatePERLScripts()
 {
     for( USHORT n = 0; n < (sizeof( PERL_Scripts ) / sizeof(char *)); n++ )
     {
-        if(!CopyScript(m_aExportPath, PERL_Scripts[n], PERL_Scripts[n]))
+        if(!CopyScript(m_aExportPath, PERL_Scripts[n], PERL_Scripts[n], true))
             return FALSE;
     }
 
-    if(!CopyScript(m_aExportPath, "edit.pl", m_aIndex ))
+    if(!CopyScript(m_aExportPath, "edit.pl", m_aIndex, true ))
         return FALSE;
 
-    if(!CopyScript(m_aExportPath, "index.pl", m_aIndexUrl ))
+    if(!CopyScript(m_aExportPath, "index.pl", m_aIndexUrl, true ))
         return FALSE;
 
     return TRUE;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: copydlg.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: vg $ $Date: 2001-11-16 22:56:05 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 10:57:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,11 +74,11 @@ ModalDialog DLG_COPY
     Text [ italian ] = "Duplicato" ;
     Text [ portuguese_brazilian ] = "Duplicar" ;
     Text [ portuguese ] = "Duplicar" ;
-    Text [ finnish ] = "Kopioi" ;
+    Text [ finnish ] = "Monista" ;
     Text [ danish ] = "Dupliker" ;
     Text [ french ] = "Dupliquer" ;
     Text [ swedish ] = "Duplicera" ;
-    Text [ dutch ] = "Verveelvoudigen" ;
+    Text [ dutch ] = "Dupliceren" ;
     Text [ spanish ] = "Duplicar" ;
     Text [ english_us ] = "Duplicate" ;
     Moveable = TRUE ;
@@ -111,24 +111,25 @@ ModalDialog DLG_COPY
         Text [ italian ] = "Numero di ~copie" ;
         Text [ portuguese_brazilian ] = "N?ero de ~C?ias" ;
         Text [ portuguese ] = "Número de ~cópias" ;
-        Text [ finnish ] = "~Kopioiden määrä" ;
+        Text [ finnish ] = "Kopioiden ~määrä" ;
         Text [ danish ] = "Antal kopier" ;
         Text [ french ] = "Nombre de co~pies" ;
         Text [ swedish ] = "Antal ~kopior" ;
         Text [ dutch ] = "~Aantal kopieën" ;
-        Text [ spanish ] = "Número de c~opias" ;
+        Text [ spanish ] = "Número de ~ejemplares" ;
         Text [ english_us ] = "Number of ~copies" ;
         Text[ chinese_simplified ] = "å¤åˆ¶ä»¶æ•°(~C)";
         Text[ russian ] = "×èñëî êîïèé";
         Text[ polish ] = "Liczba kopii";
-        Text[ japanese ] = "ï½ºï¾‹ï¾Ÿï½°ã®æ•°(~C)";
+        Text[ japanese ] = "ã‚³ãƒ”ãƒ¼ã®æ•°(~C)";
         Text[ chinese_traditional ] = "è¤‡å°ä»¶æ•¸(~C)";
         Text[ arabic ] = "ÚÏÏ ÇáäÓÎ";
         Text[ greek ] = "Áñéèìüò áíôéãñÜöùí";
-        Text[ korean ] = "ë³µì‚¬ ìˆ˜ëŸ‰(~C)";
+        Text[ korean ] = "ë³µì‚¬ ë§¤ìˆ˜(~C)";
         Text[ turkish ] = "Kopya sayısı";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Número de c~opias";
+        Text[ catalan ] = "Nombre de c~opies";
+        Text[ thai ] = "à¸ˆà¸³à¸™à¸§à¸™~à¸ªà¸³à¹€à¸™à¸²";
     };
     NumericField NUM_FLD_COPIES
     {
@@ -168,16 +169,17 @@ ModalDialog DLG_COPY
         QuickHelpText [ portuguese ] = "Aplica os valores seleccionados" ;
         QuickHelpText[ russian ] = "Çíà÷åíèÿ èç îòáîğà";
         QuickHelpText[ polish ] = "Wpisz wartoœci selekcji";
-        QuickHelpText[ japanese ] = "é¸æŠã—ãŸï½µï¾Œï¾ï½¼ï¾ï½ªï½¸ï¾„ã®æ•°å€¤ã‚’é©ç”¨";
+        QuickHelpText[ japanese ] = "é¸æŠã—ãŸã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æ•°å€¤ã‚’é©ç”¨";
         QuickHelpText[ chinese_simplified ] = "æ¥å—é€‰æ‹©çš„æ•°å€¼";
         QuickHelpText[ chinese_traditional ] = "ä½¿ç”¨é¸å–çš„æ•¸å€¼";
         QuickHelpText[ arabic ] = "ÇáŞíã ÍÓÈ ÇáÊÍÏíÏ";
         QuickHelpText[ greek ] = "Ôéìİò áğü åğéëïãŞ";
-        QuickHelpText[ korean ] = "ì„ íƒìœ¼ë¡œë¶€í„°ì˜ã€€ê°’ã€€ì¸ìˆ˜";
+        QuickHelpText[ korean ] = "ì„ íƒìœ¼ë¡œë¶€í„°ì˜ ê°’ ì¸ìˆ˜";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Werte von Selektion aufnehmen";
-        QuickHelpText[ catalan ] = "Valores seleccionados";
+        QuickHelpText[ catalan ] = "Valors seleccionats";
         QuickHelpText[ finnish ] = "Valinnan arvot";
+        QuickHelpText[ thai ] = "Values from Selection";
     };
     PushButton BTN_SET_DEFAULT
     {
@@ -188,10 +190,10 @@ ModalDialog DLG_COPY
         TabStop = TRUE ;
         Text[ english_us ] = "~Default";
         Text[ portuguese ] = "~Padrão";
-        Text[ russian ] = "~Ñòàíäàğò";
+        Text[ russian ] = "~Ïî óìîë÷àíèş";
         Text[ greek ] = "ĞñïåğéëïãŞ";
         Text[ dutch ] = "~Standaard";
-        Text[ french ] = "~Par défaut";
+        Text[ french ] = "Par défaut";
         Text[ spanish ] = "~Predeterminado";
         Text[ italian ] = "~Standard";
         Text[ danish ] = "Standard";
@@ -199,14 +201,15 @@ ModalDialog DLG_COPY
         Text[ polish ] = "Domyœlnie";
         Text[ portuguese_brazilian ] = "~Default";
         Text[ japanese ] = "æ¨™æº–(~D)";
-        Text[ korean ] = "ê¸°ë³¸(~D)";
+        Text[ korean ] = "ê¸°ë³¸ê°’(~D)";
         Text[ chinese_simplified ] = "é»˜è®¤(~D)";
         Text[ chinese_traditional ] = "é»˜èª(~D)";
         Text[ arabic ] = "ÇİÊÑÇÖí";
         Text[ turkish ] = "Standart";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Predeterminado";
-        Text[ finnish ] = "~Oletusarvo";
+        Text[ catalan ] = "Per ~defecte";
+        Text[ finnish ] = "~Oletukset";
+        Text[ thai ] = "~à¸„à¹ˆà¸²à¹€à¸£à¸´à¹ˆà¸¡à¸•à¹‰à¸™";
     };
     MetricField MTR_FLD_ANGLE
     {
@@ -233,7 +236,7 @@ ModalDialog DLG_COPY
         CustomUnitText [ dutch ] = "Graden" ;
         CustomUnitText [ portuguese ] = "~Graus" ;
         CustomUnitText[ chinese_simplified ] = "åº¦";
-        CustomUnitText[ russian ] = "Ãğàäóñ";
+        CustomUnitText[ russian ] = " ãğàäóñîâ";
         CustomUnitText[ polish ] = "Stopieñ";
         CustomUnitText[ japanese ] = "åº¦";
         CustomUnitText[ chinese_traditional ] = "åº¦";
@@ -242,8 +245,9 @@ ModalDialog DLG_COPY
         CustomUnitText[ korean ] = "ë„";
         CustomUnitText[ turkish ] = "Derece";
         CustomUnitText[ language_user1 ] = " ";
-        CustomUnitText[ catalan ] = "grados";
-        CustomUnitText[ finnish ] = " asteet";
+        CustomUnitText[ catalan ] = " graus";
+        CustomUnitText[ finnish ] = " astetta";
+        CustomUnitText[ thai ] = " à¸­à¸‡à¸¨à¸²";
     };
     FixedText FT_ANGLE
     {
@@ -255,7 +259,7 @@ ModalDialog DLG_COPY
         Text [ italian ] = "Angolo di rot." ;
         Text [ portuguese_brazilian ] = "~?ngulo" ;
         Text [ portuguese ] = "~Ângulo" ;
-        Text [ finnish ] = "~Kulma" ;
+        Text [ finnish ] = "~Kiertokulma" ;
         Text [ danish ] = "Rotationsvinkel" ;
         Text [ french ] = "~Angle rotation" ;
         Text [ swedish ] = "~Vinkel" ;
@@ -272,7 +276,8 @@ ModalDialog DLG_COPY
         Text[ korean ] = "íšŒì „ê°(~A)";
         Text[ turkish ] = "Açı";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Á~ngulo de rot.";
+        Text[ catalan ] = "~Angle";
+        Text[ thai ] = "~à¸¡à¸¸à¸¡";
     };
     FixedText FT_MOVE_X
     {
@@ -284,9 +289,9 @@ ModalDialog DLG_COPY
         Text [ italian ] = "Asse ~X" ;
         Text [ portuguese_brazilian ] = "~Eixo X" ;
         Text [ portuguese ] = "Eixo ~X" ;
-        Text [ finnish ] = "~X-akseli" ;
+        Text [ finnish ] = "~X-akselille" ;
         Text [ danish ] = "X-akse" ;
-        Text [ french ] = "Axe ~X" ;
+        Text [ french ] = "Axe X" ;
         Text [ swedish ] = "~X-axel" ;
         Text [ dutch ] = "~X-as" ;
         Text [ spanish ] = "Eje ~X" ;
@@ -301,7 +306,8 @@ ModalDialog DLG_COPY
         Text[ korean ] = "~X ì¶•";
         Text[ turkish ] = "X ekseni";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Eje ~X";
+        Text[ catalan ] = "Eix ~X";
+        Text[ thai ] = "à¹à¸à¸™ ~X ";
     };
     MetricField MTR_FLD_MOVE_X
     {
@@ -381,7 +387,7 @@ ModalDialog DLG_COPY
         Text [ italian ] = "Asse ~Y" ;
         Text [ portuguese_brazilian ] = "~Eixo Y" ;
         Text [ portuguese ] = "Eixo ~Y" ;
-        Text [ finnish ] = "~Y-akseli" ;
+        Text [ finnish ] = "~Y-akselille" ;
         Text [ danish ] = "Y-akse" ;
         Text [ french ] = "Axe ~Y" ;
         Text [ swedish ] = "~Y-axel" ;
@@ -398,7 +404,8 @@ ModalDialog DLG_COPY
         Text[ korean ] = "~Y ì¶•";
         Text[ turkish ] = "Y ekseni";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Eje ~Y";
+        Text[ catalan ] = "Eix ~Y";
+        Text[ thai ] = "à¹à¸à¸™~Y ";
     };
     FixedText FT_WIDTH
     {
@@ -407,12 +414,12 @@ ModalDialog DLG_COPY
         Text = "~Breite" ;
         Text [ ENGLISH ] = "~Width" ;
         Text [ norwegian ] = "~Bredde" ;
-        Text [ italian ] = "~Largh." ;
+        Text [ italian ] = "Larghezza" ;
         Text [ portuguese_brazilian ] = "~Largura" ;
         Text [ portuguese ] = "~Largura" ;
-        Text [ finnish ] = "~Leveys" ;
+        Text [ finnish ] = "~Leveyteen" ;
         Text [ danish ] = "Bredde" ;
-        Text [ french ] = "~Largeur" ;
+        Text [ french ] = "Largeur" ;
         Text [ swedish ] = "~Bredd" ;
         Text [ dutch ] = "B~reedte" ;
         Text [ spanish ] = "~Ancho" ;
@@ -427,7 +434,8 @@ ModalDialog DLG_COPY
         Text[ korean ] = "ë„ˆë¹„(~W)";
         Text[ turkish ] = "Genişlik";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Ancho";
+        Text[ catalan ] = "~Amplada";
+        Text[ thai ] = "à¸„à¸§à¸²à¸¡~à¸à¸§à¹‰à¸²à¸‡";
     };
     FixedText FT_HEIGHT
     {
@@ -436,12 +444,12 @@ ModalDialog DLG_COPY
         Text = "Höh~e" ;
         Text [ ENGLISH ] = "~Height" ;
         Text [ norwegian ] = "~Høyde" ;
-        Text [ italian ] = "~Altezza" ;
+        Text [ italian ] = "Altezza" ;
         Text [ portuguese_brazilian ] = "~Altura" ;
         Text [ portuguese ] = "Al~tura" ;
-        Text [ finnish ] = "~Korkeus" ;
+        Text [ finnish ] = "~Korkeuteen" ;
         Text [ danish ] = "Højde" ;
-        Text [ french ] = "~Hauteur" ;
+        Text [ french ] = "Hauteur" ;
         Text [ swedish ] = "Höj~d" ;
         Text [ dutch ] = "~Hoogte" ;
         Text [ spanish ] = "A~ltura" ;
@@ -456,7 +464,8 @@ ModalDialog DLG_COPY
         Text[ korean ] = "ë†’ì´(~H)";
         Text[ turkish ] = "Yüks.";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "A~ltura";
+        Text[ catalan ] = "A~lçada";
+        Text[ thai ] = "à¸„à¸§à¸²à¸¡~à¸ªà¸¹à¸‡";
     };
     FixedLine GRP_MOVEMENT
     {
@@ -468,9 +477,9 @@ ModalDialog DLG_COPY
         Text [ italian ] = "Spostamento" ;
         Text [ portuguese_brazilian ] = "Movimento" ;
         Text [ portuguese ] = "Deslocamento" ;
-        Text [ finnish ] = "Sijoitus" ;
-        Text [ danish ] = "Flytning" ;
-        Text [ french ] = "Déplacement" ;
+        Text [ finnish ] = "Sijoittelu" ;
+        Text [ danish ] = "Forskydning" ;
+        Text [ french ] = "Décalage" ;
         Text [ swedish ] = "Placering" ;
         Text [ dutch ] = "Verplaatsing" ;
         Text [ spanish ] = "Desplazamiento" ;
@@ -485,7 +494,8 @@ ModalDialog DLG_COPY
         Text[ korean ] = "ì´ë™";
         Text[ turkish ] = "Kaydırma";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Desplazamiento";
+        Text[ catalan ] = "Desplaçament";
+        Text[ thai ] = "à¸à¸²à¸£à¸§à¸²à¸‡";
     };
     FixedLine GRP_ENLARGEMENT
     {
@@ -497,11 +507,11 @@ ModalDialog DLG_COPY
         Text [ italian ] = "Ingrandimento" ;
         Text [ portuguese_brazilian ] = "Aumento" ;
         Text [ portuguese ] = "Aumento" ;
-        Text [ finnish ] = "Suurennus" ;
+        Text [ finnish ] = "Koon muutos" ;
         Text [ danish ] = "Forstørrelse" ;
         Text [ french ] = "Agrandissement" ;
         Text [ swedish ] = "Förstoring" ;
-        Text [ dutch ] = "Vergroting" ;
+        Text [ dutch ] = "Uitbreiding" ;
         Text [ spanish ] = "Aumento" ;
         Text [ english_us ] = "Enlargement" ;
         Text[ chinese_simplified ] = "æ”¾å¤§";
@@ -514,7 +524,8 @@ ModalDialog DLG_COPY
         Text[ korean ] = "í™•ëŒ€";
         Text[ turkish ] = "Büyütme";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Aumento";
+        Text[ catalan ] = "Augment";
+        Text[ thai ] = "à¸—à¸³à¹ƒà¸«à¹‰à¹ƒà¸«à¸à¹ˆà¸‚à¸¶à¹‰à¸™";
     };
     FixedLine GRP_COLOR
     {
@@ -535,14 +546,15 @@ ModalDialog DLG_COPY
         Text[ russian ] = "Öâåòà";
         Text[ polish ] = "Kolory";
         Text[ japanese ] = "è‰²";
-        Text[ chinese_traditional ] = "é¡”è‰²";
+        Text[ chinese_traditional ] = "é¡è‰²";
         Text[ arabic ] = "ÇáÃáæÇä";
         Text[ greek ] = "×ñşìáôá";
         Text[ korean ] = "ìƒ‰ìƒ";
         Text[ turkish ] = "Renkler";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Colores";
-        Text[ finnish ] = "Värit";
+        Text[ catalan ] = "Colors";
+        Text[ finnish ] = "Liukuvärjäys";
+        Text[ thai ] = "à¸ªà¸µ";
     };
     ListBox LB_START_COLOR
     {
@@ -578,8 +590,9 @@ ModalDialog DLG_COPY
         Text[ korean ] = "ì‹œì‘(~S)";
         Text[ turkish ] = "İlk";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Comienzo";
-        Text[ finnish ] = "~Aloita";
+        Text[ catalan ] = "~Inici";
+        Text[ finnish ] = "~Aloitusväri";
+        Text[ thai ] = "à¹€~à¸£à¸´à¹ˆà¸¡";
     };
     ListBox LB_END_COLOR
     {
@@ -615,8 +628,9 @@ ModalDialog DLG_COPY
         Text[ korean ] = "ë(~E)";
         Text[ turkish ] = "Son";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Terminar";
-        Text[ finnish ] = "~Loppu";
+        Text[ catalan ] = "~Final";
+        Text[ finnish ] = "~Lopetusväri";
+        Text[ thai ] = "~à¸ªà¸´à¹‰à¸™à¸ªà¸¸à¸”";
     };
     Text[ chinese_simplified ] = "å¤åˆ¶ä»¶";
     Text[ russian ] = "Äóáëèğîâàòü";
@@ -625,11 +639,19 @@ ModalDialog DLG_COPY
     Text[ chinese_traditional ] = "è¤‡è£½ä»¶";
     Text[ arabic ] = "äÓÎÉ ãØÇÈŞÉ";
     Text[ greek ] = "ÁíáğáñáãùãŞ";
-    Text[ korean ] = "ì¤‘ë³µ";
+    Text[ korean ] = "ë³µì œ";
     Text[ turkish ] = "Çoğalt";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Duplicar";
+    Text[ catalan ] = "Duplica";
+    Text[ thai ] = "à¸—à¸³à¸‹à¹‰à¸³";
 };
+
+
+
+
+
+
+
 
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlex.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cl $ $Date: 2002-11-25 18:41:28 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 10:57:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -256,7 +256,7 @@ class HtmlExport
 
     ByteString InsertSound( const ByteString& rSoundFile );
     BOOL CopyFile( const ByteString& rSourceFile, const ByteString& rDestPath );
-    BOOL CopyScript( const ByteString& rPath, const ByteString& rSource, const ByteString& rDest );
+    BOOL CopyScript( const ByteString& rPath, const ByteString& rSource, const ByteString& rDest, bool bUnix = false );
 
     void InitProgress( USHORT nProgrCount );
     void ResetProgress();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: iha $ $Date: 2002-12-03 17:24:55 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 10:58:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -528,101 +528,57 @@ SdrEndTextEditKind SdView::EndTextEdit(BOOL bDontDeleteReally)
 
 void SdView::SetMarkedOriginalSize()
 {
-    SdrUndoGroup* pUndoGroup = new SdrUndoGroup(*pDoc);
+    SdrUndoGroup*   pUndoGroup = new SdrUndoGroup(*pDoc);
+    ULONG           nCount = aMark.GetMarkCount();
+    BOOL            bOK = FALSE;
 
-    BOOL bOK = FALSE;
-    ULONG nCount = aMark.GetMarkCount();
-
-    for (ULONG i=0; i<nCount; i++)
+    for( sal_uInt32 i = 0; i < nCount; i++ )
     {
         SdrObject* pObj = aMark.GetMark(i)->GetObj();
 
-        if (pObj->GetObjInventor() == SdrInventor)
+        if( pObj->GetObjInventor() == SdrInventor )
         {
-            if (pObj->GetObjIdentifier() == OBJ_OLE2)
+            if( pObj->GetObjIdentifier() == OBJ_OLE2 )
             {
                 SvInPlaceObjectRef xIPObj = ((SdrOle2Obj*)pObj)->GetObjRef();
-                if (xIPObj.Is())
+
+                if( xIPObj.Is() )
                 {
-                    bOK = TRUE;
-                    Size aOleSize = OutputDevice::LogicToLogic(
-                                        xIPObj->GetVisArea().GetSize(),
-                                        xIPObj->GetMapUnit(), MAP_100TH_MM);
-                    Rectangle aDrawRect = pObj->GetLogicRect();
+                    Size        aOleSize( OutputDevice::LogicToLogic( xIPObj->GetVisArea().GetSize(), xIPObj->GetMapUnit(), MAP_100TH_MM) );
+                    Rectangle   aDrawRect( pObj->GetLogicRect() );
 
                     pUndoGroup->AddAction( new SdrUndoGeoObj( *pObj ) );
                     pObj->Resize( aDrawRect.TopLeft(), Fraction( aOleSize.Width(), aDrawRect.GetWidth() ),
                                                        Fraction( aOleSize.Height(), aDrawRect.GetHeight() ) );
+
+                    bOK = TRUE;
                 }
             }
-            else if (pObj->GetObjIdentifier() == OBJ_GRAF)
+            else if( pObj->GetObjIdentifier() == OBJ_GRAF )
             {
-                bOK = TRUE;
+                const MapMode   aMap100( MAP_100TH_MM );
+                Size            aSize;
 
-                // Falls der PrefMapMode der Graphic MAP_PIXEL ist,
-                // machen wir die logische Umrechnung ueber das Fenster,
-                // um eine 1:1-Abbildung auf Pixel zu erreichen
-                // (KA 19.12.95)
-                Size aSize;
-                if (((SdrGrafObj*) pObj)->GetGrafPrefMapMode().GetMapUnit() == MAP_PIXEL && pViewSh)
-                {
-                    SdWindow* pWindow = pViewSh->GetActiveWindow();
-                    const MapMode&   rWinMap = pWindow->GetMapMode();
-                    const Fraction&  rWinScaleX = rWinMap.GetScaleX();
-                    const Fraction&  rWinScaleY = rWinMap.GetScaleY();
-
-                    aSize = pWindow->PixelToLogic( ((SdrGrafObj*) pObj)->GetGrafPrefSize() );
-                    aSize.Width() = ( aSize.Width() * rWinScaleX.GetNumerator() /
-                                      rWinScaleX.GetDenominator() );
-                    aSize.Height() = ( aSize.Height() * rWinScaleY.GetNumerator() /
-                                       rWinScaleY.GetDenominator() );
-                }
+                if ( static_cast< SdrGrafObj* >( pObj )->GetGrafPrefMapMode().GetMapUnit() == MAP_PIXEL )
+                    aSize = Application::GetDefaultDevice()->PixelToLogic( static_cast< SdrGrafObj* >( pObj )->GetGrafPrefSize(), aMap100 );
                 else
                 {
-                    aSize = OutputDevice::LogicToLogic(((SdrGrafObj*) pObj)->GetGrafPrefSize(),
-                                                       ((SdrGrafObj*) pObj)->GetGrafPrefMapMode(),
-                                                       MapMode( MAP_100TH_MM ));
+                    aSize = OutputDevice::LogicToLogic( static_cast< SdrGrafObj* >( pObj )->GetGrafPrefSize(),
+                                                        static_cast< SdrGrafObj* >( pObj )->GetGrafPrefMapMode(),
+                                                        aMap100 );
                 }
 
-                // Groesse ggf. auf Seitengroesse begrenzen
-                SdrPage* pPage = GetPageViewPvNum(0)->GetPage();
-                Size aPageSize = pPage->GetSize();
-                aPageSize.Width() -= pPage->GetLftBorder() + pPage->GetRgtBorder();
-                aPageSize.Height() -= pPage->GetUppBorder() + pPage->GetLwrBorder();
+                pUndoGroup->AddAction( new SdrUndoGeoObj( *pObj ) );
+                Rectangle aRect( pObj->GetLogicRect() );
+                aRect.SetSize( aSize );
+                pObj->SetLogicRect( aRect );
 
-                // Falls Grafik zu gross, wird die Grafik
-                // in die Seite eingepasst
-                if ((aSize.Height() > aPageSize.Height()) ||
-                    (aSize.Width()  > aPageSize.Width()) &&
-                    aSize.Height() && aPageSize.Height())
-                {
-                    float fGrfWH =  (float)aSize.Width() /
-                                    (float)aSize.Height();
-                    float fWinWH =  (float)aPageSize.Width() /
-                                    (float)aPageSize.Height();
-
-                    // Grafik an Pagesize anpassen (skaliert)
-                    if ( fGrfWH < fWinWH )
-                    {
-                        aSize.Width() = (long)(aPageSize.Height() * fGrfWH);
-                        aSize.Height()= aPageSize.Height();
-                    }
-                    else if ( fGrfWH > 0.F )
-                    {
-                        aSize.Width() = aPageSize.Width();
-                        aSize.Height()= (long)(aPageSize.Width() / fGrfWH);
-                    }
-                }
-
-                pUndoGroup->AddAction(new SdrUndoGeoObj(*pObj));
-                Rectangle aRect = pObj->GetLogicRect();
-                aRect.SetSize(aSize);
-                pObj->SetLogicRect(aRect);
+                bOK = TRUE;
             }
         }
     }
 
-    if (bOK)
+    if( bOK )
     {
         pUndoGroup->SetComment( String(SdResId(STR_UNDO_ORIGINALSIZE)) );
         pDocSh->GetUndoManager()->AddUndoAction(pUndoGroup);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpage.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-01 11:29:44 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 10:57:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,7 +120,6 @@
 #include <svx/scripttypeitem.hxx>
 #endif
 
-#ifndef SVX_LIGHT
 #ifdef MAC
 #include "::ui:inc:docshell.hxx"
 #else
@@ -131,7 +130,6 @@
 #endif
 #endif
 #include "sdoutl.hxx"
-#endif
 
 #include "misc.hxx"
 #include "eetext.hxx"
@@ -203,9 +201,7 @@ SdPage::SdPage(SdDrawDocument& rNewDoc, StarBASIC* pBasic, BOOL bMasterPage) :
 
 SdPage::~SdPage()
 {
-#ifndef SVX_LIGHT
     DisconnectLink();
-#endif
 
     EndListenOutlineText();
 
@@ -336,11 +332,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, BOOL bVertical, const Rec
     }
     else if (eObjKind == PRESOBJ_GRAPHIC)
     {
-#ifndef SVX_LIGHT
         Graphic aGraphic ( SdResId(BMP_PRESOBJ_GRAPHIC) );
-#else
-        Graphic aGraphic;
-#endif
         OutputDevice &aOutDev = *Application::GetDefaultDevice();
         aOutDev.Push();
 
@@ -357,37 +349,29 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, BOOL bVertical, const Rec
     else if (eObjKind == PRESOBJ_OBJECT)
     {
         pSdrObj = new SdrOle2Obj();
-#ifndef SVX_LIGHT
         Graphic aGraphic( SdResId(BMP_PRESOBJ_OBJECT) );
         ( (SdrOle2Obj*) pSdrObj)->SetGraphic(&aGraphic);
-#endif
     }
     else if (eObjKind == PRESOBJ_CHART)
     {
         pSdrObj = new SdrOle2Obj();
         ( (SdrOle2Obj*) pSdrObj)->SetProgName( String( RTL_CONSTASCII_USTRINGPARAM( "StarChart" )));
-#ifndef SVX_LIGHT
         Graphic aGraphic( SdResId(BMP_PRESOBJ_CHART) );
         ( (SdrOle2Obj*) pSdrObj)->SetGraphic(&aGraphic);
-#endif
     }
     else if (eObjKind == PRESOBJ_ORGCHART)
     {
         pSdrObj = new SdrOle2Obj();
         ( (SdrOle2Obj*) pSdrObj)->SetProgName( String( RTL_CONSTASCII_USTRINGPARAM( "StarOrg" )));
-#ifndef SVX_LIGHT
         Graphic aGraphic( SdResId(BMP_PRESOBJ_ORGCHART) );
         ( (SdrOle2Obj*) pSdrObj)->SetGraphic(&aGraphic);
-#endif
     }
     else if (eObjKind == PRESOBJ_TABLE)
     {
         pSdrObj = new SdrOle2Obj();
         ( (SdrOle2Obj*) pSdrObj)->SetProgName( String( RTL_CONSTASCII_USTRINGPARAM( "StarCalc" )));
-#ifndef SVX_LIGHT
         Graphic aGraphic( SdResId(BMP_PRESOBJ_TABLE) );
         ( (SdrOle2Obj*) pSdrObj)->SetGraphic(&aGraphic);
-#endif
     }
 #ifdef STARIMAGE_AVAILABLE
     else if (eObjKind == PRESOBJ_IMAGE)
@@ -421,9 +405,24 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, BOOL bVertical, const Rec
 
     if (pSdrObj)
     {
+        // #107228# We need to put the shape that will be inserted
+        // into the aPresObjList always. This is because the accessibility
+        // api creates a XShape wrapper during the call to InsertObject.
+        // The creation fails if this is not in the aPresObjList at this point.
+        // We will remove it from the aPresObjList after InsertObject since
+        // this is needed for the correct working of SetAutoLayout
+        const bool bIsAlreadyInserted = aPresObjList.GetPos(pSdrObj) != LIST_ENTRY_NOTFOUND;
+
+        if( !bIsAlreadyInserted )
+            aPresObjList.Insert(pSdrObj, LIST_APPEND);
+
         pSdrObj->SetEmptyPresObj(TRUE);
         pSdrObj->SetLogicRect(rRect);
+
         InsertObject(pSdrObj);
+
+        if( !bIsAlreadyInserted && !bInsert )
+            aPresObjList.Remove( pSdrObj );
 
         if ( pSdrObj->ISA(SdrTextObj) )
         {
@@ -454,7 +453,6 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, BOOL bVertical, const Rec
             pSdrObj->SetItemSet(aTempAttr);
         }
 
-#ifndef SVX_LIGHT
         String aString = GetPresObjText(eObjKind);
         if ( aString.Len() && pSdrObj->ISA(SdrTextObj) )
         {
@@ -472,7 +470,6 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, BOOL bVertical, const Rec
             pOutliner->Init( nOutlMode );
             pOutliner->SetStyleSheet( 0, NULL );
         }
-#endif
 
         pSdrObj->SetUserCall(this);
         pSdrObj->RecalcBoundRect();
@@ -531,11 +528,6 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, BOOL bVertical, const Rec
             aSet.Put( SvxAdjustItem( SVX_ADJUST_CENTER ) );
 
             pSdrObj->SetItemSet(aSet);
-        }
-
-        if (bInsert)
-        {
-            aPresObjList.Insert(pSdrObj, LIST_APPEND);
         }
     }
 
@@ -605,7 +597,6 @@ SfxStyleSheet* SdPage::GetStyleSheetForPresObj(PresObjKind eObjKind)
 |*
 \************************************************************************/
 
-#ifndef SVX_LIGHT
 void SdPage::Changed(const SdrObject& rObj, SdrUserCallType eType, const Rectangle& rOldBoundRect)
 {
     if (!bOwnArrangement)
@@ -682,8 +673,6 @@ void SdPage::Changed(const SdrObject& rObj, SdrUserCallType eType, const Rectang
         }
     }
 }
-#endif // !SVX_LIGHT
-
 
 /*************************************************************************
 |*
@@ -1836,9 +1825,7 @@ void SdPage::NbcInsertObject(SdrObject* pObj, ULONG nPos, const SdrInsertReason*
 {
     FmFormPage::NbcInsertObject(pObj, nPos, pReason);
 
-#ifndef SVX_LIGHT
     ((SdDrawDocument*) pModel)->InsertObject(pObj, this);
-#endif
 
     SdrLayerID nId = pObj->GetLayer();
     if( bMaster )
@@ -1862,7 +1849,6 @@ void SdPage::NbcInsertObject(SdrObject* pObj, ULONG nPos, const SdrInsertReason*
 
 SdrObject* SdPage::RemoveObject(ULONG nObjNum)
 {
-#ifndef SVX_LIGHT
     SdrObject* pObj = FmFormPage::RemoveObject(nObjNum);
 
     if (pObj && pObj->GetUserCall()!=this &&
@@ -1874,9 +1860,6 @@ SdrObject* SdPage::RemoveObject(ULONG nObjNum)
     }
 
     ((SdDrawDocument*) pModel)->RemoveObject(pObj, this);
-#else
-    SdrObject* pObj = SdrPage::RemoveObject(nObjNum);
-#endif // !SVX_LIGHT
 
     return(pObj);
 }
@@ -1889,7 +1872,6 @@ SdrObject* SdPage::RemoveObject(ULONG nObjNum)
 
 SdrObject* SdPage::NbcRemoveObject(ULONG nObjNum)
 {
-#ifndef SVX_LIGHT
     SdrObject* pObj = FmFormPage::NbcRemoveObject(nObjNum);
 
     if (pObj && pObj->GetUserCall()!=this &&
@@ -1901,9 +1883,6 @@ SdrObject* SdPage::NbcRemoveObject(ULONG nObjNum)
     }
 
     ((SdDrawDocument*) pModel)->RemoveObject(pObj, this);
-#else
-    SdrObject* pObj = SdrPage::NbcRemoveObject(nObjNum);
-#endif // !SVX_LIGHT
 
     return(pObj);
 }
@@ -2072,7 +2051,6 @@ void SdPage::SetBackgroundFullSize( BOOL bIn )
 |*
 \************************************************************************/
 
-#ifndef SVX_LIGHT
 void SdPage::ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderRect, BOOL bScaleAllObj)
 {
     bOwnArrangement = TRUE;
@@ -2396,7 +2374,6 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderR
 
     bOwnArrangement = FALSE;
 }
-#endif // !SVX_LIGHT
 
 /*************************************************************************
 |*
@@ -2549,9 +2526,7 @@ BOOL SdPage::InsertPresObj(SdrObject* pObj, PresObjKind eObjKind, BOOL bVertical
                     aPresObjList.Remove(pSubtitle);
                     RemoveObject( pObj->GetOrdNum() );
                     ReplaceObject( pObj, pSubtitle->GetOrdNum() );
-#ifndef SVX_LIGHT
                     ( (SdDrawDocument*) pModel)->RemoveObject( pSubtitle, this );
-#endif
                     delete pSubtitle;
                 }
             }
@@ -2602,9 +2577,7 @@ BOOL SdPage::InsertPresObj(SdrObject* pObj, PresObjKind eObjKind, BOOL bVertical
                     aPresObjList.Remove(pOutlineObj);
                     RemoveObject( pObj->GetOrdNum() );
                     ReplaceObject( pObj, pOutlineObj->GetOrdNum() );
-#ifndef SVX_LIGHT
                     ( (SdDrawDocument*) pModel)->RemoveObject( pOutlineObj, this );
-#endif
                     delete pOutlineObj;
                 }
             }
@@ -2701,7 +2674,6 @@ PresObjKind SdPage::GetPresObjKind(SdrObject* pObj)
 |*
 \************************************************************************/
 
-#ifndef SVX_LIGHT
 void SdPage::RequestBasic()
 {
     SdDrawDocShell* pDocShell = ( (SdDrawDocument*) GetModel() )->GetDocSh();
@@ -2711,7 +2683,6 @@ void SdPage::RequestBasic()
         SetBasic( pDocShell->GetBasicManager()->GetLib(0) );
     }
 }
-#endif // !SVX_LIGHT
 
 /*************************************************************************
 |*
@@ -2719,7 +2690,6 @@ void SdPage::RequestBasic()
 |*
 \************************************************************************/
 
-#ifndef SVX_LIGHT
 void SdPage::SetObjText(SdrTextObj* pObj, SdrOutliner* pOutliner,
                         PresObjKind eObjKind,
                         const String& rString )
@@ -2831,7 +2801,6 @@ void SdPage::SetObjText(SdrTextObj* pObj, SdrOutliner* pOutliner,
         }
     }
 }
-#endif // !SVX_LIGHT
 
 /*************************************************************************
 |*
@@ -2981,7 +2950,6 @@ Orientation SdPage::GetOrientation() const
 |*
 \************************************************************************/
 
-#ifndef SVX_LIGHT
 String SdPage::GetPresObjText(PresObjKind eObjKind)
 {
     String aString;
@@ -3059,7 +3027,6 @@ String SdPage::GetPresObjText(PresObjKind eObjKind)
 
     return(aString);
 }
-#endif // !SVX_LIGHT
 
 extern uno::Reference< uno::XInterface > createUnoPageImpl( SdPage* pPage );
 

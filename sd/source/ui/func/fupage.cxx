@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fupage.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: cl $ $Date: 2002-09-12 15:26:08 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 10:57:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,7 @@
 #include "preview.hxx"
 #include "prevchld.hxx"
 #include "unchss.hxx"
+#include "undoback.hxx"
 
 // 50 cm 28350
 // erstmal vom Writer uebernommen
@@ -152,12 +153,13 @@ FuPage::FuPage( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
                  SdDrawDocument* pDoc, SfxRequest& rReq )
        : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
 {
-    const SfxItemSet* pArgs = rReq.GetArgs();
-    SdPage*     pPage = NULL;
-    Size        aSize;
-    PageKind    ePageKind = PK_STANDARD;
-    BOOL bMasterPage = TRUE;
-    BOOL bPageBckgrdDeleted = FALSE;
+    const SfxItemSet*           pArgs = rReq.GetArgs();
+    SdPage*                     pPage = NULL;
+    SdBackgroundObjUndoAction*  pBackgroundObjUndoAction = NULL;
+    Size                        aSize;
+    PageKind                    ePageKind = PK_STANDARD;
+    BOOL                        bMasterPage = TRUE;
+    BOOL                        bPageBckgrdDeleted = FALSE;
 
     ///////////////////////////////////////////////////////////////////////////
     //
@@ -406,25 +408,9 @@ FuPage::FuPage( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
                             bMasterPage = ( RET_YES == aQuestionBox.Execute() );
                         }
 
-                        if( bMasterPage )   // Changes for all pages choosed.
+                        if( bPageBckgrdDeleted )
                         {
-                            // delete background-objects of all pages wich use the same
-                            // background-page as of the current page
-                            SdrPage* pMasterPage = pPage->GetMasterPage( 0 );
-                            for( int i=0; i<pDoc->GetSdPageCount( ePageKind ); i++ )
-                            {
-                                SdPage* pWorkingPage = pDoc->GetSdPage( i, ePageKind );
-
-                                if( pWorkingPage->GetMasterPage( 0 ) == pMasterPage )
-                                {
-                                    pWorkingPage->SetBackgroundObj( NULL );
-                                }
-                            }
-                        }
-                        else if( bPageBckgrdDeleted )
-                        {
-                            // delete background-object of this page (but only when you also
-                            // know the fillstyle)
+                            pBackgroundObjUndoAction = new SdBackgroundObjUndoAction( *pDoc, *pPage, pPage->GetBackgroundObj() );
                             pPage->SetBackgroundObj( NULL );
                         }
 
@@ -484,17 +470,14 @@ FuPage::FuPage( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
     //
     // Set new page-attributes
     //
-    const SfxPoolItem *pPoolItem;
-    BOOL  bSetPageSizeAndBorder = FALSE;
-    Size    aNewSize(aSize);
-    INT32   nLeft  = -1,
-            nRight = -1,
-            nUpper = -1,
-            nLower = -1;
-    BOOL    bScaleAll = TRUE;
-    Orientation eOrientation = pPage->GetOrientation();
-    BOOL    bFullSize = ( (SdPage*)( pPage->GetMasterPage( 0 ) ) )->IsBackgroundFullSize();
-    USHORT  nPaperBin = pPage->GetPaperBin();
+    const SfxPoolItem*  pPoolItem;
+    BOOL                bSetPageSizeAndBorder = FALSE;
+    Size                aNewSize(aSize);
+    INT32               nLeft  = -1, nRight = -1, nUpper = -1, nLower = -1;
+    BOOL                bScaleAll = TRUE;
+    Orientation         eOrientation = pPage->GetOrientation();
+    BOOL                bFullSize = ( (SdPage*)( pPage->GetMasterPage( 0 ) ) )->IsBackgroundFullSize();
+    USHORT              nPaperBin = pPage->GetPaperBin();
 
     if( pArgs->GetItemState(SID_ATTR_PAGE, TRUE, &pPoolItem) == SFX_ITEM_SET )
     {
@@ -584,8 +567,8 @@ FuPage::FuPage( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
     }
 
     if( bSetPageSizeAndBorder || !bMasterPage )
-        pViewSh->SetPageSizeAndBorder(ePageKind, aNewSize, nLeft, nRight, nUpper, nLower,
-                                      bScaleAll, eOrientation, nPaperBin, bFullSize );
+        pViewSh->SetPageSizeAndBorder(ePageKind, aNewSize, nLeft, nRight, nUpper,
+                                      nLower, bScaleAll, eOrientation, nPaperBin, bFullSize );
 
     ////////////////////////////////////////////////////////////////////////////////
     //
@@ -601,6 +584,10 @@ FuPage::FuPage( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
         {
             // Only this page
             SdrObject* pObj = pPage->GetBackgroundObj();
+
+            delete pBackgroundObjUndoAction;
+            pBackgroundObjUndoAction = new SdBackgroundObjUndoAction( *pDoc, *pPage, pObj );
+
             if( !pObj )
             {
                 pObj = new SdrRectObj();
@@ -615,6 +602,13 @@ FuPage::FuPage( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
             pObj->SetLogicRect( aRect );
             pObj->SetItemSet(*pArgs);
         }
+    }
+
+    // add undo action for background object
+    if( pBackgroundObjUndoAction )
+    {
+        // set merge flag, because a SdUndoGroupAction could have been inserted before
+        pDocSh->GetUndoManager()->AddUndoAction( pBackgroundObjUndoAction, TRUE );
     }
 
     ///////////////////////////////////////////////////////////////////////////

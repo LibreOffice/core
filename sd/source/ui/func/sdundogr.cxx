@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdundogr.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2002-12-11 14:54:58 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 10:57:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,30 @@ SdUndoGroup::~SdUndoGroup()
 
 /*************************************************************************
 |*
+|* Merge
+|*
+\************************************************************************/
+
+BOOL SdUndoGroup::Merge( SfxUndoAction* pNextAction )
+{
+    BOOL bRet = FALSE;
+
+    if( pNextAction && pNextAction->ISA( SdUndoAction ) )
+    {
+        SdUndoAction* pClone = static_cast< SdUndoAction* >( pNextAction )->Clone();
+
+        if( pClone )
+        {
+            AddAction( pClone );
+            bRet = TRUE;
+        }
+    }
+
+    return bRet;
+}
+
+/*************************************************************************
+|*
 |* Undo, umgekehrte Reihenfolge der Ausfuehrung
 |*
 \************************************************************************/
@@ -152,5 +176,3 @@ SdUndoAction* SdUndoGroup::GetAction(ULONG nAction) const
 {
     return (SdUndoAction*)aCtn.GetObject(nAction);
 }
-
-

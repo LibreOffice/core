@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stlpool.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: cl $ $Date: 2002-11-27 16:49:25 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 10:57:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -671,6 +671,8 @@ void SdStyleSheetPool::CopyGraphicSheets(SdStyleSheetPool& rSourcePool)
 {
     ULONG nCount = rSourcePool.aStyles.Count();
 
+    std::vector< std::pair< SfxStyleSheetBase*, String > > aNewStyles;
+
     for (ULONG n = 0; n < nCount; n++)
     {
         SfxStyleSheet* pSheet = (SfxStyleSheet*) rSourcePool.aStyles.GetObject(n);
@@ -685,17 +687,19 @@ void SdStyleSheetPool::CopyGraphicSheets(SdStyleSheetPool& rSourcePool)
                 // #91588# Also set parent relation for copied style sheets
                 String aParent( pSheet->GetParent() );
                 if( aParent.Len() )
-                {
-                    // looking within the source pool is actually enough here,
-                    // because eventually *every* style sheet of type SFX_STYLE_FAMILY_PARA
-                    // will be copied to new pool, or is already there.
-                    DBG_ASSERT( rSourcePool.Find( aParent, SFX_STYLE_FAMILY_PARA ), "StyleSheet has invalid parent: Family mismatch" );
-                    rNewSheet.SetParent( aParent );
-                }
+                    aNewStyles.push_back( std::pair< SfxStyleSheetBase*, String >( &rNewSheet, aParent ) );
 
                 rNewSheet.GetItemSet().Put( pSheet->GetItemSet() );
             }
         }
+    }
+
+    // set parents on newly added stylesheets
+    std::vector< std::pair< SfxStyleSheetBase*, String > >::iterator aIter;
+    for( aIter = aNewStyles.begin(); aIter != aNewStyles.end(); aIter++ )
+    {
+        DBG_ASSERT( rSourcePool.Find( (*aIter).second, SFX_STYLE_FAMILY_PARA ), "StyleSheet has invalid parent: Family mismatch" );
+        (*aIter).first->SetParent( (*aIter).second );
     }
 }
 

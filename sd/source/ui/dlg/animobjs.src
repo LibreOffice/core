@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animobjs.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-27 16:42:00 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 10:57:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -331,7 +331,7 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText[ chinese_traditional ] = "é¡¯ç¤ºæŒçºŒæ™‚é–“";
         QuickHelpText[ arabic ] = "ÇáãÏÉ";
         QuickHelpText[ greek ] = "ÄéÜñêåéá";
-        QuickHelpText[ korean ] = "ë””ìŠ¤í”Œë ˆì´ ì†Œìš”ì‹œê°„";
+        QuickHelpText[ korean ] = "í‘œì‹œ ì§€ì† ì‹œê°„";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Anzeigedauer";
         QuickHelpText[ catalan ] = "Duració";
@@ -715,7 +715,7 @@ DockingWindow FLT_WIN_ANIMATION
         < "ÇáÃŞÕì" ; > ;
     };
         QuickHelpText[ greek ] = "ĞëŞèïò åğáíáëŞøåùí";
-        QuickHelpText[ korean ] = "ë‹¤ ëŒë¦° íšŸìˆ˜";
+        QuickHelpText[ korean ] = "ë°˜ë³µ íšŸìˆ˜";
     StringList [ greek ] =
     {
             < "1" ; > ;
@@ -947,7 +947,7 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText [ ENGLISH ] = "Remove current picture" ;
         QuickHelpText [ english_us ] = "Delete Current Image" ;
         QuickHelpText [ italian ] = "Cancella immagine attuale" ;
-        QuickHelpText [ spanish ] = "Eliminar imagen actual" ;
+        QuickHelpText [ spanish ] = "Borrar imagen actual" ;
         QuickHelpText [ french ] = "Supprimer l'image active" ;
         QuickHelpText [ dutch ] = "Actuele afbeelding wissen" ;
         QuickHelpText [ danish ] = "Slet aktuelt billede" ;
@@ -986,7 +986,7 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText [ english_us ] = "Delete All Images" ;
         QuickHelpText [ dutch ] = "Alle afbeeldingen wissen" ;
         QuickHelpText [ italian ] = "Cancella tutte le immagini" ;
-        QuickHelpText [ spanish ] = "Eliminar todas las imágenes" ;
+        QuickHelpText [ spanish ] = "Borrar todas las imágenes" ;
         QuickHelpText [ french ] = "Supprimer toutes les images" ;
         QuickHelpText [ danish ] = "Slet alle billeder" ;
         QuickHelpText [ portuguese ] = "Elimina as imagens todas" ;
@@ -1029,7 +1029,7 @@ DockingWindow FLT_WIN_ANIMATION
         Text[ chinese_traditional ] = "æ•¸ç›®";
         Text[ arabic ] = "ÇáÚÏÏ";
         Text[ greek ] = "ĞëŞèïò";
-        Text[ korean ] = "ê°œìˆ˜";
+        Text[ korean ] = "ìˆ˜";
         Text[ turkish ] = "Sayı";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Quantitat";
@@ -1065,7 +1065,7 @@ DockingWindow FLT_WIN_ANIMATION
         Text[ chinese_traditional ] = "å½±åƒ";
         Text[ arabic ] = "ÇáÕæÑÉ";
         Text[ greek ] = "Åéêüíá";
-        Text[ korean ] = "ë¹„íŠ¸ë§µ";
+        Text[ korean ] = "ì´ë¯¸ì§€";
         Text[ turkish ] = "Resim";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Imatge";
@@ -1305,15 +1305,15 @@ DockingWindow FLT_WIN_ANIMATION
         };
         StringList [ spanish ] =
         {
-            < "Izquierda/Arriba" ; Default ; > ;
+            < "Arriba a la izquierda" ; Default ; > ;
             < "Izquierda" ; Default ; > ;
-            < "Izquierda/Abajo" ; Default ; > ;
+            < "Abajo a la izquierda" ; Default ; > ;
             < "Arriba" ; Default ; > ;
             < "Centrado" ; Default ; > ;
             < "Abajo" ; Default ; > ;
-            < "Derecha/Arriba" ; Default ; > ;
+            < "Arriba a la derecha" ; Default ; > ;
             < "Derecha" ; Default ; > ;
-            < "Derecha/Abajo" ; Default ; > ;
+            < "Abajo a la derecha" ; Default ; > ;
         };
         StringList [ english_us ] =
         {
@@ -1495,7 +1495,7 @@ DockingWindow FLT_WIN_ANIMATION
         Text[ chinese_traditional ] = "å»ºç«‹";
         Text[ arabic ] = "ÅäÔÇÁ";
         Text[ greek ] = "Äçìéïõñãßá";
-        Text[ korean ] = "ì‘ì„±";
+        Text[ korean ] = "ë§Œë“¤ê¸°";
         Text[ turkish ] = "Oluştur";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Crea";
@@ -1545,4 +1545,9 @@ DockingWindow FLT_WIN_ANIMATION
     Text[ catalan ] = "Animació";
     Text[ thai ] = "à¹€à¸„à¸¥à¸·à¹ˆà¸­à¸™à¹„à¸«à¸§";
 };
+
+
+
+
+
 

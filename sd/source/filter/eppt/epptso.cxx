@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epptso.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: sj $ $Date: 2002-12-10 16:58:10 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 10:57:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1198,6 +1198,19 @@ sal_Bool PPTWriter::ImplInitSOIface()
 
 // ---------------------------------------------------------------------------------------------
 
+sal_Bool PPTWriter::ImplSetCurrentStyleSheet( sal_uInt32 nPageNum )
+{
+    sal_Bool bRet = sal_False;
+    if ( nPageNum >= maStyleSheetList.size() )
+        nPageNum = 0;
+    else
+        bRet = sal_True;
+    mpStyleSheet = maStyleSheetList[ nPageNum ];
+    return bRet;
+}
+
+// ---------------------------------------------------------------------------------------------
+
 sal_Bool PPTWriter::ImplGetPageByIndex( sal_uInt32 nIndex, PageType ePageType )
 {
     while( TRUE )
@@ -1383,7 +1396,7 @@ void PPTWriter::ImplWriteTextBundle( EscherPropertyContainer& rPropOpt, sal_Bool
                 case ::com::sun::star::drawing::TextHorizontalAdjust_LEFT :
                     eAnchor = ESCHER_AnchorBottom;
                 break;
-                case ::com::sun::star::drawing::TextVerticalAdjust_CENTER :
+                case ::com::sun::star::drawing::TextHorizontalAdjust_CENTER :
                     eAnchor = ESCHER_AnchorMiddle;
                 break;
                 default :
@@ -1500,109 +1513,113 @@ sal_uInt32 PPTWriter::ImplGetMasterIndex( PageType ePageType )
 sal_Bool PPTWriter::ImplGetStyleSheets()
 {
     int             nInstance, nLevel;
-    sal_Bool        bRetValue;
+    sal_Bool        bRetValue = sal_False;
+    sal_uInt32      nPageNum;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed >
-        aXNamed;
-
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >
-        aXNameAccess;
-
-    ::com::sun::star::uno::Reference< ::com::sun::star::style::XStyleFamiliesSupplier >
-        aXStyleFamiliesSupplier( mXModel, ::com::sun::star::uno::UNO_QUERY );
-
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
-        aXPropSet( mXModel, ::com::sun::star::uno::UNO_QUERY );
-
-    sal_uInt16 nDefaultTab = ( aXPropSet.is() && ImplGetPropertyValue( aXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "TabStop" ) ) ) )
-        ? (sal_uInt16)( *(sal_Int32*)mAny.getValue() / 4.40972 )
-        : 1250;
-
-    mpStyleSheet = new PPTExStyleSheet( nDefaultTab, (PPTExBulletProvider&)*this );
-
-    if ( ImplGetPageByIndex( 0, MASTER ) )
-        aXNamed = ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed >
-                    ( mXDrawPage, ::com::sun::star::uno::UNO_QUERY );
-
-    if ( aXStyleFamiliesSupplier.is() )
-        aXNameAccess = aXStyleFamiliesSupplier->getStyleFamilies();
-
-    bRetValue = aXNamed.is() && aXNameAccess.is() && aXStyleFamiliesSupplier.is();
-    if  ( bRetValue )
+    for ( nPageNum = 0; nPageNum < mnMasterPages; nPageNum++ )
     {
-        for ( nInstance = EPP_TEXTTYPE_Title; nInstance <= EPP_TEXTTYPE_CenterBody; nInstance++ )
+        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed >
+            aXNamed;
+
+        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >
+            aXNameAccess;
+
+        ::com::sun::star::uno::Reference< ::com::sun::star::style::XStyleFamiliesSupplier >
+            aXStyleFamiliesSupplier( mXModel, ::com::sun::star::uno::UNO_QUERY );
+
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
+            aXPropSet( mXModel, ::com::sun::star::uno::UNO_QUERY );
+
+        sal_uInt16 nDefaultTab = ( aXPropSet.is() && ImplGetPropertyValue( aXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "TabStop" ) ) ) )
+            ? (sal_uInt16)( *(sal_Int32*)mAny.getValue() / 4.40972 )
+            : 1250;
+
+        maStyleSheetList.push_back( new PPTExStyleSheet( nDefaultTab, (PPTExBulletProvider&)*this ) );
+        ImplSetCurrentStyleSheet( nPageNum );
+        if ( ImplGetPageByIndex( nPageNum, MASTER ) )
+            aXNamed = ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed >
+                        ( mXDrawPage, ::com::sun::star::uno::UNO_QUERY );
+
+        if ( aXStyleFamiliesSupplier.is() )
+            aXNameAccess = aXStyleFamiliesSupplier->getStyleFamilies();
+
+        bRetValue = aXNamed.is() && aXNameAccess.is() && aXStyleFamiliesSupplier.is();
+        if  ( bRetValue )
         {
-            String aStyle;
-            String aFamily;
-            switch ( nInstance )
+            for ( nInstance = EPP_TEXTTYPE_Title; nInstance <= EPP_TEXTTYPE_CenterBody; nInstance++ )
             {
-                case EPP_TEXTTYPE_Title :
+                String aStyle;
+                String aFamily;
+                switch ( nInstance )
                 {
-                    aStyle = String( RTL_CONSTASCII_USTRINGPARAM( "title" ) );
-                    aFamily = aXNamed->getName();
-                }
-                break;
-                case EPP_TEXTTYPE_Body :
-                {
-                    aStyle = String( RTL_CONSTASCII_USTRINGPARAM( "outline1" ) );      // SD_LT_SEPARATOR
-                    aFamily = aXNamed->getName();
-                }
-                break;
-                case EPP_TEXTTYPE_Other :
-                {
-                    aStyle = String( RTL_CONSTASCII_USTRINGPARAM( "standard" ) );
-                    aFamily = String( RTL_CONSTASCII_USTRINGPARAM( "graphics" ) );
-                }
-                break;
-                case EPP_TEXTTYPE_CenterBody :
-                {
-                    aStyle = String( RTL_CONSTASCII_USTRINGPARAM( "subtitle" ) );
-                    aFamily = aXNamed->getName();
-                }
-                break;
-            }
-            if ( aStyle.Len() && aFamily.Len() )
-            {
-                try
-                {
-                    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >xNameAccess;
-                    if ( aXNameAccess->hasByName( aFamily ) )
+                    case EPP_TEXTTYPE_Title :
                     {
-                        ::com::sun::star::uno::Any aAny( aXNameAccess->getByName( aFamily ) );
-                        if( aAny.getValue() && ::cppu::extractInterface( xNameAccess, aAny ) )
+                        aStyle = String( RTL_CONSTASCII_USTRINGPARAM( "title" ) );
+                        aFamily = aXNamed->getName();
+                    }
+                    break;
+                    case EPP_TEXTTYPE_Body :
+                    {
+                        aStyle = String( RTL_CONSTASCII_USTRINGPARAM( "outline1" ) );      // SD_LT_SEPARATOR
+                        aFamily = aXNamed->getName();
+                    }
+                    break;
+                    case EPP_TEXTTYPE_Other :
+                    {
+                        aStyle = String( RTL_CONSTASCII_USTRINGPARAM( "standard" ) );
+                        aFamily = String( RTL_CONSTASCII_USTRINGPARAM( "graphics" ) );
+                    }
+                    break;
+                    case EPP_TEXTTYPE_CenterBody :
+                    {
+                        aStyle = String( RTL_CONSTASCII_USTRINGPARAM( "subtitle" ) );
+                        aFamily = aXNamed->getName();
+                    }
+                    break;
+                }
+                if ( aStyle.Len() && aFamily.Len() )
+                {
+                    try
+                    {
+                        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >xNameAccess;
+                        if ( aXNameAccess->hasByName( aFamily ) )
                         {
-                            ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > aXFamily;
-                            if ( aAny >>= aXFamily )
+                            ::com::sun::star::uno::Any aAny( aXNameAccess->getByName( aFamily ) );
+                            if( aAny.getValue() && ::cppu::extractInterface( xNameAccess, aAny ) )
                             {
-                                if ( aXFamily->hasByName( aStyle ) )
+                                ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > aXFamily;
+                                if ( aAny >>= aXFamily )
                                 {
-                                    ::com::sun::star::uno::Reference< ::com::sun::star::style::XStyle > xStyle;
-                                    aAny = aXFamily->getByName( aStyle );
-                                    if( aAny.getValue() && ::cppu::extractInterface( xStyle, aAny ) )
+                                    if ( aXFamily->hasByName( aStyle ) )
                                     {
-                                        ::com::sun::star::uno::Reference< ::com::sun::star::style::XStyle > aXStyle;
-                                        aAny >>= aXStyle;
-                                        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
-                                            xPropSet( aXStyle, ::com::sun::star::uno::UNO_QUERY );
-                                        if( xPropSet.is() )
-                                            mpStyleSheet->SetStyleSheet( xPropSet, maFontCollection, nInstance, 0 );
-                                        if ( nInstance == EPP_TEXTTYPE_Body )
+                                        ::com::sun::star::uno::Reference< ::com::sun::star::style::XStyle > xStyle;
+                                        aAny = aXFamily->getByName( aStyle );
+                                        if( aAny.getValue() && ::cppu::extractInterface( xStyle, aAny ) )
                                         {
-                                            for ( nLevel = 1; nLevel < 5; nLevel++ )
+                                            ::com::sun::star::uno::Reference< ::com::sun::star::style::XStyle > aXStyle;
+                                            aAny >>= aXStyle;
+                                            ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
+                                                xPropSet( aXStyle, ::com::sun::star::uno::UNO_QUERY );
+                                            if( xPropSet.is() )
+                                                mpStyleSheet->SetStyleSheet( xPropSet, maFontCollection, nInstance, 0 );
+                                            if ( nInstance == EPP_TEXTTYPE_Body )
                                             {
-                                                sal_Unicode cTemp = aStyle.GetChar( aStyle.Len() - 1 );
-                                                aStyle.SetChar( aStyle.Len() - 1, ++cTemp );
-                                                if ( aXFamily->hasByName( aStyle ) )
+                                                for ( nLevel = 1; nLevel < 5; nLevel++ )
                                                 {
-                                                    aAny = aXFamily->getByName( aStyle );
-                                                    if( aAny.getValue() && ::cppu::extractInterface( xStyle, aAny ) )
+                                                    sal_Unicode cTemp = aStyle.GetChar( aStyle.Len() - 1 );
+                                                    aStyle.SetChar( aStyle.Len() - 1, ++cTemp );
+                                                    if ( aXFamily->hasByName( aStyle ) )
                                                     {
-                                                        ::com::sun::star::uno::Reference< ::com::sun::star::style::XStyle > aXStyle;
-                                                        aAny >>= aXStyle;
-                                                        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
-                                                            xPropSet( aXStyle, ::com::sun::star::uno::UNO_QUERY );
-                                                        if ( xPropSet.is() )
-                                                            mpStyleSheet->SetStyleSheet( xPropSet, maFontCollection, nInstance, nLevel );
+                                                        aAny = aXFamily->getByName( aStyle );
+                                                        if( aAny.getValue() && ::cppu::extractInterface( xStyle, aAny ) )
+                                                        {
+                                                            ::com::sun::star::uno::Reference< ::com::sun::star::style::XStyle > aXStyle;
+                                                            aAny >>= aXStyle;
+                                                            ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
+                                                                xPropSet( aXStyle, ::com::sun::star::uno::UNO_QUERY );
+                                                            if ( xPropSet.is() )
+                                                                mpStyleSheet->SetStyleSheet( xPropSet, maFontCollection, nInstance, nLevel );
+                                                        }
                                                     }
                                                 }
                                             }
@@ -1612,52 +1629,19 @@ sal_Bool PPTWriter::ImplGetStyleSheets()
                             }
                         }
                     }
-                }
-                catch( ::com::sun::star::uno::Exception& )
-                {
-                //
+                    catch( ::com::sun::star::uno::Exception& )
+                    {
+                    //
+                    }
                 }
             }
-        }
-        for ( ; nInstance <= EPP_TEXTTYPE_QuarterBody; nInstance++ )
-        {
+            for ( ; nInstance <= EPP_TEXTTYPE_QuarterBody; nInstance++ )
+            {
 
+            }
         }
     }
     return bRetValue;
-}
-
-//  -----------------------------------------------------------------------
-
-sal_Bool PPTWriter::ImplGetMasterTitleAndBody()
-{
-    sal_uInt32  i, nSearchFor, nShapes;
-
-    if ( !ImplGetPageByIndex( 0, MASTER ) )
-        return FALSE;
-
-    nShapes = mXShapes->getCount();
-
-    // ueber die Seite gehen um den Index des Title and Body Objects zu bekommen
-    for ( nSearchFor = 2, i = 0; i < nShapes; i++ )
-    {
-        if ( !ImplGetShapeByIndex( i ) )
-            break;
-
-        if ( mType == "presentation.TitleText" )
-        {
-            mnMasterTitleIndex = i;
-            if ( ! ( --nSearchFor ) )
-                break;
-        }
-        else if ( ( mType == "presentation.Outliner" ) || ( mType == "presentation.Subtitle" ) )
-        {
-            mnMasterBodyIndex = i;
-            if ( ! ( --nSearchFor ) )
-                break;
-        }
-    };
-    return TRUE;
 }
 
 //  -----------------------------------------------------------------------

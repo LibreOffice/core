@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fupoor.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: cl $ $Date: 2002-12-05 15:29:50 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 10:57:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,7 @@
 #include "drawdoc.hxx"
 #include "docshell.hxx"
 #include "zoomlist.hxx"
+#include "sdclient.hxx"
 #include "fuslshow.hxx"
 
 // #97016# IV
@@ -331,10 +332,8 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
     BOOL            bSlideShow = FALSE;
      FuSlideShow*    pFuSlideShow = pViewShell->GetSlideShow();
 
-    if (pFuSlideShow)
-    {
+    if( pFuSlideShow )
         bSlideShow = TRUE;
-    }
 
     switch (nCode)
     {
@@ -563,39 +562,45 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
         {
             if(pViewShell->ISA(SdDrawViewShell) && !bSlideShow)
             {
-                if ( ! rKEvt.GetKeyCode().GetAllModifier())
+                // The page-up key works either with no or with the CTRL
+                // modifier.  The reaction in either case is the same.
+                if ( ! rKEvt.GetKeyCode().GetAllModifier()
+                    || rKEvt.GetKeyCode().IsMod1())
                 {
-                    // Without any modifiers the page-up key moves to the
-                    // previous slide.
-
-                    pView->EndTextEdit();
-
-                    // Previous page.
-                    bReturn = TRUE;
-                    SdPage* pPage = ((SdDrawViewShell*) pViewShell)->GetActualPage();
-                    USHORT nSdPage = (pPage->GetPageNum() - 1) / 2;
-
-                    if (nSdPage > 0)
-                    {
-                        // Switch the page and send events regarding
-                        // deactivation the old page and activating the new one.
-                        SdTabControl* pPageTabControl =
-                            static_cast<SdDrawViewShell*>(pViewShell)->GetPageTabControl();
-                        if (pPageTabControl->IsReallyShown())
-                            pPageTabControl->SendDeactivatePageEvent ();
-                        ((SdDrawViewShell*) pViewShell)->SwitchPage(nSdPage - 1);
-                        if (pPageTabControl->IsReallyShown())
-                            pPageTabControl->SendActivatePageEvent ();
-                    }
-                }
-                else if (rKEvt.GetKeyCode().IsMod1())
+                    // The type of reaction depends on whether the layer
+                    // mode is active.
                     if (static_cast<SdDrawViewShell*>(pViewShell)->GetLayerMode())
                     {
-                        // With the mod1 (control) modifier and the layer
-                        // modea active pressing page-up moves to the next
-                        // layer.
+                        // With the layer mode active pressing page-up
+                        // moves to the previous layer.
                         SwitchLayer (-1);
                     }
+                    else
+                    {
+                        // When not in layer mode the page-up key moves to
+                        // the previous slide.
+
+                        pView->EndTextEdit();
+
+                        // Previous page.
+                        bReturn = TRUE;
+                        SdPage* pPage = ((SdDrawViewShell*) pViewShell)->GetActualPage();
+                        USHORT nSdPage = (pPage->GetPageNum() - 1) / 2;
+
+                        if (nSdPage > 0)
+                        {
+                            // Switch the page and send events regarding
+                            // deactivation the old page and activating the new one.
+                            SdTabControl* pPageTabControl =
+                                static_cast<SdDrawViewShell*>(pViewShell)->GetPageTabControl();
+                            if (pPageTabControl->IsReallyShown())
+                                pPageTabControl->SendDeactivatePageEvent ();
+                            ((SdDrawViewShell*) pViewShell)->SwitchPage(nSdPage - 1);
+                            if (pPageTabControl->IsReallyShown())
+                                pPageTabControl->SendActivatePageEvent ();
+                        }
+                    }
+                }
             }
         }
         break;
@@ -604,39 +609,45 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
         {
             if(pViewShell->ISA(SdDrawViewShell) && !bSlideShow)
             {
-                if ( ! rKEvt.GetKeyCode().GetAllModifier())
+                // The page-down key works either with no or with the CTRL
+                // modifier.  The reaction in either case is the same.
+                if ( ! rKEvt.GetKeyCode().GetAllModifier()
+                    || rKEvt.GetKeyCode().IsMod1())
                 {
-                    // The page down key without modifiers moves to the next
-                    // slide.
-
-                    pView->EndTextEdit();
-
-                    // Next page.
-                    bReturn = TRUE;
-                    SdPage* pPage = ((SdDrawViewShell*) pViewShell)->GetActualPage();
-                    USHORT nSdPage = (pPage->GetPageNum() - 1) / 2;
-
-                    if (nSdPage < pDoc->GetSdPageCount(pPage->GetPageKind()) - 1)
-                    {
-                        // Switch the page and send events regarding
-                        // deactivation the old page and activating the new one.
-                        SdTabControl* pPageTabControl =
-                            static_cast<SdDrawViewShell*>(pViewShell)->GetPageTabControl();
-                        if (pPageTabControl->IsReallyShown())
-                            pPageTabControl->SendDeactivatePageEvent ();
-                        ((SdDrawViewShell*) pViewShell)->SwitchPage(nSdPage + 1);
-                        if (pPageTabControl->IsReallyShown())
-                            pPageTabControl->SendActivatePageEvent ();
-                    }
-                }
-                else if (rKEvt.GetKeyCode().IsMod1())
+                    // The type of reaction depends on whether the layer
+                    // mode is active.
                     if (static_cast<SdDrawViewShell*>(pViewShell)->GetLayerMode())
                     {
-                        // With the mod1 (control) modifier and the layer
-                        // mode active pressing page-down moves to the
-                        // previous layer.
+                        // With the layer mode active pressing page-down
+                        // moves to the next layer.
                         SwitchLayer (+1);
                     }
+                    else
+                    {
+                        // When not in layer mode the page-down key moves to
+                        // the next slide.
+
+                        pView->EndTextEdit();
+
+                        // Next page.
+                        bReturn = TRUE;
+                        SdPage* pPage = ((SdDrawViewShell*) pViewShell)->GetActualPage();
+                        USHORT nSdPage = (pPage->GetPageNum() - 1) / 2;
+
+                        if (nSdPage < pDoc->GetSdPageCount(pPage->GetPageKind()) - 1)
+                        {
+                            // Switch the page and send events regarding
+                            // deactivation the old page and activating the new one.
+                            SdTabControl* pPageTabControl =
+                                static_cast<SdDrawViewShell*>(pViewShell)->GetPageTabControl();
+                            if (pPageTabControl->IsReallyShown())
+                                pPageTabControl->SendDeactivatePageEvent ();
+                            ((SdDrawViewShell*) pViewShell)->SwitchPage(nSdPage + 1);
+                            if (pPageTabControl->IsReallyShown())
+                                pPageTabControl->SendActivatePageEvent ();
+                        }
+                    }
+                }
             }
         }
         break;
@@ -1068,9 +1079,8 @@ BOOL FuPoor::MouseButtonUp (const MouseEvent& rMEvt)
     SetMouseButtonCode(rMEvt.GetButtons());
 
     aDelayToScrollTimer.Stop ();
-    bScrollable = bDelayActive = FALSE;
-
-    return FALSE;
+    return bScrollable  =
+        bDelayActive = FALSE;
 }
 
 BOOL FuPoor::MouseButtonDown(const MouseEvent& rMEvt)
@@ -1230,3 +1240,4 @@ bool FuPoor::cancel()
 
     return false;
 }
+

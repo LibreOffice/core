@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typemap.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2001-04-27 11:30:27 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 10:57:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,7 +141,7 @@
 #include <svx/protitem.hxx>
 #endif
 
-
+#include <svtools/globalnameitem.hxx>
 #include <svx/hlnkitem.hxx>
 #include <svx/postattr.hxx>
 #include <svx/editdata.hxx>

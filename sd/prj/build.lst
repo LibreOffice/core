@@ -22,4 +22,4 @@ sd	sd\source\filter\eppt					nmake	-	all	sd_eppt NULL
 sd	sd\source\filter\grf					nmake	-	all	sd_grf NULL
 sd	sd\source\filter\xml					nmake	-	all	sd_xml NULL
 sd	sd\source\filter\html					nmake	-	all	sd_html NULL
-sd	sd\util									nmake	-	all	sd_util sd_app sd_bin sd_cgm sd_core sd_dlg sd_docsh sd_eppt sd_filt sd_func sd_grf sd_unid sd_view sd_xml sd_accessibility NULL
+sd	sd\util									nmake	-	all	sd_util sd_app sd_bin sd_cgm sd_core sd_dlg sd_docsh sd_eppt sd_filt sd_func sd_grf sd_unid sd_view sd_xml sd_html sd_accessibility NULL

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: morphdlg.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-26 22:33:35 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 10:57:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,18 +111,19 @@ ModalDialog DLG_MORPH
         Text [ danish ] = "Indstillinger" ;
         Text [ portuguese ] = "Definições" ;
         Text [ portuguese_brazilian ] = "Einstellungen" ;
-        Text[ chinese_simplified ] = "Éè¶¨";
+        Text[ chinese_simplified ] = "è®¾å®š";
         Text[ russian ] = "Íàñòğîéêè";
         Text[ polish ] = "Ustawienia";
-        Text[ japanese ] = "İ’è";
-        Text[ chinese_traditional ] = "³]©w";
+        Text[ japanese ] = "è¨­å®š";
+        Text[ chinese_traditional ] = "è¨­å®š";
         Text[ arabic ] = "ÅÚÏÇÏÇÊ";
         Text[ greek ] = "Ñõèìßóåéò";
-        Text[ korean ] = "¼³Á¤";
+        Text[ korean ] = "ì„¤ì •";
         Text[ turkish ] = "Ayarlar";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Configuración";
+        Text[ catalan ] = "Configuració";
         Text[ finnish ] = "Asetukset";
+        Text[ thai ] = "à¸•à¸±à¹‰à¸‡à¸„à¹ˆà¸²";
     };
     FixedText FT_STEPS
     {
@@ -139,18 +140,19 @@ ModalDialog DLG_MORPH
         Text [ danish ] = "Trin" ;
         Text [ portuguese ] = "Passos" ;
         Text [ portuguese_brazilian ] = "Schritte" ;
-        Text[ chinese_simplified ] = "½¥Ôö";
+        Text[ chinese_simplified ] = "æ¸å¢";
         Text[ russian ] = "Øàãè";
         Text[ polish ] = "Kroki";
-        Text[ japanese ] = "½Ã¯Ìß";
-        Text[ chinese_traditional ] = "º¥¼W";
+        Text[ japanese ] = "ã‚¹ãƒ†ãƒƒãƒ—";
+        Text[ chinese_traditional ] = "æ¼¸å¢";
         Text[ arabic ] = "ÇáÎØæÇÊ";
         Text[ greek ] = "ÂŞìáôá";
-        Text[ korean ] = "Áõ°¡ºĞ";
+        Text[ korean ] = "ì¦ë¶„";
         Text[ turkish ] = "Adımlar";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Pasos";
-        Text[ finnish ] = "Lisäykset";
+        Text[ catalan ] = "Augments";
+        Text[ finnish ] = "Vaiheiden lkm";
+        Text[ thai ] = "à¸ªà¹ˆà¸§à¸™à¹€à¸à¸´à¹ˆà¸¡";
     };
     MetricField MTF_STEPS
     {
@@ -174,26 +176,27 @@ ModalDialog DLG_MORPH
         Text [ ENGLISH ] = "Fade attributes" ;
         TabStop = TRUE ;
         Text [ english_us ] = "Cross-fade attributes" ;
-        Text [ italian ] = "Nascondi gli attributi" ;
+        Text [ italian ] = "Includi gli attributi" ;
         Text [ spanish ] = "Cubrir atributos" ;
         Text [ french ] = "Fondu enchaîné d'attributs" ;
-        Text [ dutch ] = "Attributen niet weergeven" ;
+        Text [ dutch ] = "Opmaak niet weergeven" ;
         Text [ swedish ] = "Tona över attribut" ;
         Text [ danish ] = "Ton attributter over" ;
         Text [ portuguese ] = "Sobreposição de atributos" ;
         Text [ portuguese_brazilian ] = "Attributierung ?erblenden" ;
-        Text[ chinese_simplified ] = "½»ÌæÏÔÊ¾»­ÃæÌØĞÔ";
-        Text[ russian ] = "Ìîğôèíã àòğèáóòîâ";
+        Text[ chinese_simplified ] = "äº¤æ›¿æ˜¾ç¤ºç”»é¢ç‰¹æ€§";
+        Text[ russian ] = "Àòğèáóòû ìîğôèíãà";
         Text[ polish ] = "Prze~nikanie atrybutów";
-        Text[ japanese ] = "‘®«‚ğÌª°ÄŞµ°ÊŞ°";
-        Text[ chinese_traditional ] = "¥æ´ÀÅã¥Üµe­±¯S©Ê";
+        Text[ japanese ] = "å±æ€§ã‚’ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¢ã‚¦ãƒˆ";
+        Text[ chinese_traditional ] = "äº¤æ›¿é¡¯ç¤ºç•«é¢ç‰¹æ€§";
         Text[ arabic ] = "ÊÛØíÉ ÓãÇÊ ÇáßÇÆä";
         Text[ greek ] = "Éäéüôçôåò óå ğñşôï ğëÜíï";
-        Text[ korean ] = "³¯¾Æ¿À±â ¼Ó¼º";
+        Text[ korean ] = "êµì°¨í•˜ë©° íë ¤ì§€ê¸° ì†ì„±";
         Text[ turkish ] = "Öznitelikler: Serme";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Cubrir atributos";
-        Text[ finnish ] = "Ristihäivytyksen määritteet";
+        Text[ catalan ] = "Cobreix atributs";
+        Text[ finnish ] = "Muunna attribuutit";
+        Text[ thai ] = "à¸„à¸¸à¸“à¸¥à¸±à¸à¸©à¸“à¸°à¸¥à¸¹à¹ˆà¸‚à¸§à¸²à¸‡";
     };
     CheckBox CBX_ORIENTATION
     {
@@ -206,23 +209,24 @@ ModalDialog DLG_MORPH
         Text [ italian ] = "Stesso orientamento" ;
         Text [ spanish ] = "Misma orientación" ;
         Text [ french ] = "Même orientation" ;
-        Text [ dutch ] = "Gelijke oriëntering" ;
+        Text [ dutch ] = "Identieke afdrukstand" ;
         Text [ swedish ] = "Samma orientering" ;
         Text [ danish ] = "Samme retning" ;
         Text [ portuguese ] = "Mesma orientação" ;
         Text [ portuguese_brazilian ] = "Gleiche Orientierung" ;
-        Text[ chinese_simplified ] = "ÏàÍ¬·½Ïò";
+        Text[ chinese_simplified ] = "ç›¸åŒæ–¹å‘";
         Text[ russian ] = "Òàêàÿ æå îğèåíòàöèÿ";
         Text[ polish ] = "Ta sama orientacja";
-        Text[ japanese ] = "“¯‚¶•ûŒü";
-        Text[ chinese_traditional ] = "¬Û¦P¤è¦V";
+        Text[ japanese ] = "åŒã˜æ–¹å‘";
+        Text[ chinese_traditional ] = "ç›¸åŒæ–¹å‘";
         Text[ arabic ] = "äİÓ ÇáÇÊÌÇå";
         Text[ greek ] = "ºäéïò ğñïóáíáôïëéóìüò";
-        Text[ korean ] = "°°Àº ¹æÇâ";
+        Text[ korean ] = "ê°™ì€ ë°©í–¥";
         Text[ turkish ] = "Aynı yön";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Misma orientación";
-        Text[ finnish ] = "Sama suuntaus";
+        Text[ catalan ] = "Mateixa orientació";
+        Text[ finnish ] = "Samaan suuntaan";
+        Text[ thai ] = "à¸§à¸²à¸‡à¹à¸™à¸§à¹€à¸«à¸¡à¸·à¸­à¸™à¸à¸±à¸™";
     };
     Text [ english_us ] = "Cross-fading" ;
     Text [ italian ] = "Morphing" ;
@@ -233,19 +237,34 @@ ModalDialog DLG_MORPH
     Text [ danish ] = "Ton over" ;
     Text [ portuguese ] = "Dissolver" ;
     Text [ portuguese_brazilian ] = "?berblenden" ;
-    Text[ chinese_simplified ] = "½¥½¥Òş³ö";
+    Text[ chinese_simplified ] = "æ¸æ¸éšå‡º";
     Text[ russian ] = "Ìîğôèíã";
     Text[ polish ] = "Przenikaj";
-    Text[ japanese ] = "Ìª°ÄŞµ°ÊŞ°";
-    Text[ chinese_traditional ] = "º¥º¥Áô¥X";
+    Text[ japanese ] = "ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¢ã‚¦ãƒˆ";
+    Text[ chinese_traditional ] = "æ¼¸æ¼¸éš±å‡º";
     Text[ arabic ] = "ÊÛØíÉ";
     Text[ greek ] = "Âáèìéáßïò áğï÷ñùìáôéóìüò";
-    Text[ korean ] = "³¯¾Æ¿À±â";
+    Text[ korean ] = "êµì°¨í•˜ë©° íë ¤ì§€ê¸°";
     Text[ turkish ] = "Ser";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Disolvencia";
-    Text[ finnish ] = "Ristihäivytys";
+    Text[ catalan ] = "Disolvència";
+    Text[ finnish ] = "Luo muodonvaihdos";
+    Text[ thai ] = "à¸¥à¸¹à¹ˆà¸‚à¸§à¸²à¸‡";
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

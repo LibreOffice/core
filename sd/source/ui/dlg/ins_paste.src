@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ins_paste.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2002-06-10 15:23:03 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 10:57:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,16 +105,17 @@ ModalDialog DLG_INSERT_PASTE
         Text[ finnish ] = "Sijainti";
         Text[ italian ] = "Posizione";
         Text[ danish ] = "Stilling";
-        Text[ swedish ] = "Position";
+        Text[ swedish ] = "Placering";
         Text[ polish ] = "Pozycja";
-        Text[ portuguese_brazilian ] = "Position";
+        Text[ portuguese_brazilian ] = "Cargo";
         Text[ japanese ] = "位置";
         Text[ korean ] = "위치";
         Text[ chinese_simplified ] = "位置";
         Text[ chinese_traditional ] = "位置";
         Text[ turkish ] = "�� unvan�";
         Text[ arabic ] = "Start_num";
-        Text[ catalan ] = "Position";
+        Text[ catalan ] = "Mostra";
+        Text[ thai ] = "ตำแหน่ง";
     };
     RadioButton RB_BEFORE
     {
@@ -131,7 +132,7 @@ ModalDialog DLG_INSERT_PASTE
         Text [ french ] = "Avant" ;
         Text [ swedish ] = "~framf�r" ;
         Text [ dutch ] = "~ervoor" ;
-        Text [ spanish ] = "De~lante" ;
+        Text [ spanish ] = "de~lante" ;
         Text [ english_us ] = "~Before" ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "之前(~B)";
@@ -141,10 +142,11 @@ ModalDialog DLG_INSERT_PASTE
         Text[ chinese_traditional ] = "之前(~B)";
         Text[ arabic ] = "���";
         Text[ greek ] = "���� ���";
-        Text[ korean ] = "이전(~B)";
+        Text[ korean ] = "앞(~B)";
         Text[ turkish ] = "�n~�ne";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "De~lante";
+        Text[ catalan ] = "A~bans de";
+        Text[ thai ] = "~ก่อน";
     };
     RadioButton RB_AFTER
     {
@@ -172,17 +174,33 @@ ModalDialog DLG_INSERT_PASTE
         Text[ chinese_traditional ] = "之後(~F)";
         Text[ arabic ] = "���";
         Text[ greek ] = "���� ���";
-        Text[ korean ] = "이후(~F)";
+        Text[ korean ] = "뒤(~F)";
         Text[ turkish ] = "ar~kas�na";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "de~tr�s";
+        Text[ catalan ] = "da~rrera";
+        Text[ thai ] = "ห~ลังจาก";
     };
     Text[ swedish ] = "Infoga diabilder";
     Text[ spanish ] = "Insertar diapositivas";
     Text[ korean ] = "슬라이드 삽입";
     Text[ chinese_traditional ] = "插入投影片";
+    Text[ english_us ] = "Insert Slides";
+    Text[ portuguese ] = "Insert slides";
+    Text[ russian ] = "Insert slides";
+    Text[ greek ] = "Insert slides";
+    Text[ dutch ] = "Insert slides";
     Text[ french ] = "Insertion de diapos";
+    Text[ finnish ] = "Insert slides";
     Text[ italian ] = "Inserisci diapositiva";
+    Text[ danish ] = "Insert slides";
+    Text[ polish ] = "Insert slides";
     Text[ japanese ] = "スライドの挿入";
     Text[ chinese_simplified ] = "插入幻灯片";
+    Text[ turkish ] = "Insert slides";
+    Text[ arabic ] = "Insert slides";
 };
+
+
+
+
+

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews3.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: bm $ $Date: 2002-11-01 11:02:37 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 10:58:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,12 +187,28 @@ void  SdDrawViewShell::ExecCtrl(SfxRequest& rReq)
 
     CheckLineTo (rReq);
 
-    if ( pDrView->IsTextEdit() )
+    // End text edit mode for some requests.
+    USHORT nSlot = rReq.GetSlot();
+    switch (nSlot)
     {
-       pDrView->EndTextEdit();
+        case SID_OUTPUT_QUALITY_COLOR:
+        case SID_OUTPUT_QUALITY_GRAYSCALE:
+        case SID_OUTPUT_QUALITY_BLACKWHITE:
+        case SID_OUTPUT_QUALITY_CONTRAST:
+        case SID_PREVIEW_QUALITY_COLOR:
+        case SID_PREVIEW_QUALITY_GRAYSCALE:
+        case SID_PREVIEW_QUALITY_BLACKWHITE:
+        case SID_PREVIEW_QUALITY_CONTRAST:
+            // Do nothing.
+            break;
+        default:
+            if ( pDrView->IsTextEdit() )
+            {
+                pDrView->EndTextEdit();
+            }
     }
 
-    USHORT nSlot = rReq.GetSlot();
+    //  USHORT nSlot = rReq.GetSlot();
     switch (nSlot)
     {
         case SID_SWITCHPAGE:  // BASIC

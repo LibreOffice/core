@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SdUnoDrawView.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: cl $ $Date: 2002-11-19 13:06:00 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 10:58:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,10 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_VIEW_DOCUMENTZOOMTYPE_HPP_
+#include <com/sun/star/view/DocumentZoomType.hpp>
+#endif
+
 #ifndef _SVX_UNOSHAPE_HXX
 #include <svx/unoshape.hxx>
 #endif
@@ -75,6 +79,17 @@
 #include <svx/svdpagv.hxx>
 #include <svx/unoshape.hxx>
 #include <svx/unoshcol.hxx>
+
+#ifndef _SVX_ZOOMITEM_HXX
+#include <svx/zoomitem.hxx>
+#endif
+
+#ifndef _SFX_BINDINGS_HXX
+#include <sfx2/bindings.hxx>
+#endif
+#ifndef _SFXDISPATCH_HXX
+#include <sfx2/dispatch.hxx>
+#endif
 
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/helper/vclunohelper.hxx>
@@ -630,7 +645,9 @@ enum properties
     PROPERTY_LAYERMODE,
     PROPERTY_ACTIVE_LAYER,
     PROPERTY_WORKAREA,
-
+    PROPERTY_ZOOMTYPE,
+    PROPERTY_ZOOMVALUE,
+    PROPERTY_VIEWOFFSET,
     PROPERTY_COUNT
 };
 
@@ -650,10 +667,14 @@ static beans::Property * getBasicProps()
             static beans::Property aBasicProps[PROPERTY_COUNT] =
             {
                 beans::Property( OUString( RTL_CONSTASCII_USTRINGPARAM("CurrentPage") ),        PROPERTY_CURRENTPAGE,   ::getCppuType((const Reference< drawing::XDrawPage > *)0), beans::PropertyAttribute::BOUND ),
-                beans::Property( OUString( RTL_CONSTASCII_USTRINGPARAM("IsLayerMode") ),        PROPERTY_LAYERMODE,      ::getCppuBooleanType(),    beans::PropertyAttribute::BOUND ),
-                beans::Property( OUString( RTL_CONSTASCII_USTRINGPARAM("IsMasterPageMode") ),   PROPERTY_MASTERPAGEMODE,     ::getCppuBooleanType(),    beans::PropertyAttribute::BOUND ),
-                beans::Property( OUString( RTL_CONSTASCII_USTRINGPARAM("ActiveLayer") ),    PROPERTY_ACTIVE_LAYER,   ::getCppuBooleanType(),    beans::PropertyAttribute::BOUND ),
-                beans::Property( OUString( RTL_CONSTASCII_USTRINGPARAM("VisibleArea") ),        PROPERTY_WORKAREA,          ::getCppuType((const ::com::sun::star::awt::Rectangle*)0), beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY )
+                beans::Property( OUString( RTL_CONSTASCII_USTRINGPARAM("IsLayerMode") ),        PROPERTY_LAYERMODE,     ::getCppuBooleanType(), beans::PropertyAttribute::BOUND ),
+                beans::Property( OUString( RTL_CONSTASCII_USTRINGPARAM("IsMasterPageMode") ),   PROPERTY_MASTERPAGEMODE,::getCppuBooleanType(), beans::PropertyAttribute::BOUND ),
+                beans::Property( OUString( RTL_CONSTASCII_USTRINGPARAM("ActiveLayer") ),        PROPERTY_ACTIVE_LAYER,  ::getCppuBooleanType(), beans::PropertyAttribute::BOUND ),
+                beans::Property( OUString( RTL_CONSTASCII_USTRINGPARAM("VisibleArea") ),        PROPERTY_WORKAREA,      ::getCppuType((const ::com::sun::star::awt::Rectangle*)0), beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
+                beans::Property( OUString( RTL_CONSTASCII_USTRINGPARAM("ZoomValue") ),          PROPERTY_ZOOMVALUE,     ::getCppuType((const sal_Int16*)0), beans::PropertyAttribute::BOUND ),
+                beans::Property( OUString( RTL_CONSTASCII_USTRINGPARAM("ZoomType") ),           PROPERTY_ZOOMTYPE,      ::getCppuType((const sal_Int16*)0), beans::PropertyAttribute::BOUND ),
+
+                beans::Property( OUString( RTL_CONSTASCII_USTRINGPARAM("ViewOffset") ),         PROPERTY_VIEWOFFSET,    ::getCppuType((const ::com::sun::star::awt::Point*)0), beans::PropertyAttribute::BOUND ),
             };
             pTable = aBasicProps;
         }
@@ -764,6 +785,56 @@ sal_Bool SdUnoDrawView::convertFastPropertyValue
                     return sal_False;
                 }
             }
+        case PROPERTY_ZOOMVALUE:
+            {
+                sal_Int16 nOldZoom = GetZoom();
+                sal_Int16 nNewZoom;
+                convertPropertyValue( nNewZoom, rValue );
+                if( nNewZoom != nOldZoom )
+                {
+                    rConvertedValue <<= nNewZoom;
+                    rOldValue <<= nOldZoom;
+                    return sal_True;
+                }
+                else
+                {
+                    return sal_False;
+                }
+            }
+        case PROPERTY_ZOOMTYPE:
+            {
+                sal_Int16 nOldType = com::sun::star::view::DocumentZoomType::BY_VALUE;
+                sal_Int16 nNewType;
+                convertPropertyValue( nNewType, rValue );
+                if( nNewType != nOldType )
+                {
+                    rConvertedValue <<= nNewType;
+                    rOldValue <<= nOldType;
+                    return sal_True;
+                }
+                else
+                {
+                    return sal_False;
+                }
+
+            }
+        case PROPERTY_VIEWOFFSET:
+            {
+                awt::Point aOld( GetViewOffset() );
+                awt::Point aNew;
+                convertPropertyValue( aNew, rValue );
+                if( (aOld.X != aNew.X) && (aOld.Y != aNew.Y) )
+                {
+                    rConvertedValue <<= aNew;
+                    rOldValue <<= aOld;
+                    return sal_True;
+                }
+                else
+                {
+                    return sal_False;
+                }
+            }
+
         default:
             return sal_False;
     }
@@ -814,6 +885,27 @@ void SdUnoDrawView::setFastPropertyValue_NoBroadcast
                 setActiveLayer (xLayer);
             }
             break;
+        case PROPERTY_ZOOMVALUE:
+            {
+                sal_Int16 nZoom;
+                rValue >>= nZoom;
+                SetZoom( nZoom );
+            }
+            break;
+        case PROPERTY_ZOOMTYPE:
+            {
+                sal_Int16 nType;
+                rValue >>= nType;
+                SetZoomType( nType );
+            }
+            break;
+        case PROPERTY_VIEWOFFSET:
+            {
+                awt::Point aOffset;
+                rValue >>= aOffset;
+                SetViewOffset( aOffset );
+            }
+            break;
     }
 }
 
@@ -844,6 +936,17 @@ void SdUnoDrawView::getFastPropertyValue( Any & rRet, sal_Int32 nHandle ) const
         case PROPERTY_WORKAREA:
             rRet <<= awt::Rectangle( maLastVisArea.Left(), maLastVisArea.Top(), maLastVisArea.GetWidth(), maLastVisArea.GetHeight() );
             break;
+
+        case PROPERTY_ZOOMVALUE:
+            rRet <<= GetZoom();
+            break;
+        case PROPERTY_ZOOMTYPE:
+            rRet <<= (sal_Int16)com::sun::star::view::DocumentZoomType::BY_VALUE;
+            break;
+        case PROPERTY_VIEWOFFSET:
+            rRet <<= GetViewOffset();
+            break;
+
     }
 }
 
@@ -1143,3 +1246,89 @@ SdUnoDrawView::SdUnoDrawViewKind SdUnoDrawView::GetDrawViewKind (void) const
     return meKind;
 }
 
+sal_Int16 SdUnoDrawView::GetZoom(void) const
+{
+    if( mpViewSh && mpViewSh->GetActiveWindow() )
+    {
+        return (sal_Int16)mpViewSh->GetActiveWindow()->GetZoom();
+    }
+    else
+    {
+        return 0;
+    }
+}
+
+void SdUnoDrawView::SetZoom( sal_Int16 nZoom )
+{
+    SvxZoomItem aZoomItem( SVX_ZOOM_PERCENT, nZoom );
+
+    if( mpViewSh )
+    {
+        SfxViewFrame* pViewFrame = mpViewSh->GetViewFrame();
+        if( pViewFrame )
+        {
+            SfxDispatcher* pDispatcher = pViewFrame->GetDispatcher();
+            if( pDispatcher )
+            {
+                pDispatcher->Execute(SID_ATTR_ZOOM,SFX_CALLMODE_SYNCHRON,&aZoomItem, 0L);
+            }
+        }
+    }
+}
+
+
+void SdUnoDrawView::SetViewOffset(const awt::Point& rWinPos )
+{
+    if( mpViewSh )
+    {
+        Point aWinPos( rWinPos.X, rWinPos.Y );
+        aWinPos += mpViewSh->GetViewOrigin();
+        mpViewSh->SetWinViewPos( aWinPos, true );
+    }
+}
+
+awt::Point SdUnoDrawView::GetViewOffset() const
+{
+    Point aRet;
+    if( mpViewSh )
+    {
+        aRet = mpViewSh->GetWinViewPos();
+        aRet -= mpViewSh->GetViewOrigin();
+    }
+    return awt::Point( aRet.X(), aRet.Y() );
+}
+
+void SdUnoDrawView::SetZoomType( sal_Int16 nType )
+{
+    if( mpViewSh )
+    {
+        SfxViewFrame* pViewFrame = mpViewSh->GetViewFrame();
+        if( pViewFrame )
+        {
+            SfxDispatcher* pDispatcher = pViewFrame->GetDispatcher();
+            if( pDispatcher )
+            {
+                SvxZoomType eZoomType;
+                switch( nType )
+                {
+                case com::sun::star::view::DocumentZoomType::OPTIMAL:
+                    eZoomType = SVX_ZOOM_OPTIMAL;
+                    break;
+                case com::sun::star::view::DocumentZoomType::PAGE_WIDTH:
+                case com::sun::star::view::DocumentZoomType::PAGE_WIDTH_EXACT:
+                    eZoomType = SVX_ZOOM_PAGEWIDTH;
+                    break;
+                case com::sun::star::view::DocumentZoomType::ENTIRE_PAGE:
+                    eZoomType = SVX_ZOOM_WHOLEPAGE;
+                    break;
+//              case com::sun::star::view::DocumentZoomType::BY_VALUE:
+                default:
+                    return;
+                }
+                SvxZoomItem aZoomItem( eZoomType );
+                pDispatcher->Execute(SID_ATTR_ZOOM,SFX_CALLMODE_SYNCHRON,&aZoomItem, 0L);
+            }
+        }
+    }
+
+}

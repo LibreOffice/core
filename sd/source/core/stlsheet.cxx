@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stlsheet.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ka $ $Date: 2001-10-22 13:36:37 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 10:57:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,12 +179,21 @@ BOOL SdStyleSheet::SetParent(const String& rParentName)
         // PseudoStyleSheets haben keine eigenen ItemSets
         if (nFamily != SFX_STYLE_FAMILY_PSEUDO)
         {
-            SfxStyleSheetBase* pStyle = rPool.Find(rParentName, nFamily);
-            if (pStyle)
+            if( rParentName.Len() )
+            {
+                SfxStyleSheetBase* pStyle = rPool.Find(rParentName, nFamily);
+                if (pStyle)
+                {
+                    bResult = TRUE;
+                    SfxItemSet& rParentSet = pStyle->GetItemSet();
+                    GetItemSet().SetParent(&rParentSet);
+                    Broadcast( SfxSimpleHint( SFX_HINT_DATACHANGED ) );
+                }
+            }
+            else
             {
                 bResult = TRUE;
-                SfxItemSet& rParentSet = pStyle->GetItemSet();
-                GetItemSet().SetParent(&rParentSet);
+                GetItemSet().SetParent(NULL);
                 Broadcast( SfxSimpleHint( SFX_HINT_DATACHANGED ) );
             }
         }
@@ -580,3 +589,17 @@ void SdStyleSheet::AdjustToFontHeight(SfxItemSet& rSet, BOOL bOnlyMissingItems)
 
 
 
+BOOL SdStyleSheet::HasFollowSupport() const
+{
+    return FALSE;
+}
+
+BOOL SdStyleSheet::HasParentSupport() const
+{
+    return TRUE;
+}
+
+BOOL SdStyleSheet::HasClearParentSupport() const
+{
+    return TRUE;
+}

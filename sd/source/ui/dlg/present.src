@@ -2,9 +2,9 @@
  *
  *  $RCSfile: present.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-27 17:02:17 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 10:57:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@ ModalDialog DLG_START_PRESENTATION
     Text [ spanish ] = "Iniciar presentaciσn" ;
     Text [ english_us ] = "Slide Show" ;
     Text[ chinese_simplified ] = "ζ”Ύζ ζΌ”η¤Ίζ–‡η¨Ώ";
-    Text[ russian ] = "Δεμξνρςπΰφθÿ";
+    Text[ russian ] = "Νΰρςπξικθ δεμξνρςπΰφθθ";
     Text[ polish ] = "Pokaz slajdσw";
     Text[ japanese ] = "γ‚Ήγƒ©γ‚¤γƒ‰γ‚·γƒ§γƒΌγ®ε®θ΅";
     Moveable = TRUE ;
@@ -196,7 +196,7 @@ ModalDialog DLG_START_PRESENTATION
         Text[ chinese_traditional ] = "ζ•ε½±η‰‡εΎ(~F)";
         Text[ arabic ] = "ΘΟΗνΙ γδ ΗαΤΡνΝΙ:";
         Text[ greek ] = "Από τη ~διαφάνεια:";
-        Text[ korean ] = "μ¬λΌμ΄λ“λ¶€ν„°(~F):";
+        Text[ korean ] = "μ¬λΌμ΄λ“ μ§€μ •(~F)";
         Text[ turkish ] = "Baώlangύη:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Des de:";
@@ -272,7 +272,7 @@ ModalDialog DLG_START_PRESENTATION
         Text[ chinese_traditional ] = "ι΅ε‹";
         Text[ arabic ] = "ΗαδζΪ";
         Text[ greek ] = "Τύπος";
-        Text[ korean ] = "μΆ…λ¥";
+        Text[ korean ] = "μ ν•";
         Text[ turkish ] = "Tόr";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Tipus";
@@ -302,7 +302,7 @@ ModalDialog DLG_START_PRESENTATION
         Text[ chinese_traditional ] = "ζ¨™ζΊ–(~D)";
         Text[ arabic ] = "ΗέΚΡΗΦν";
         Text[ greek ] = "Προεπιλογή";
-        Text[ korean ] = "ν‘μ¤€(~D)";
+        Text[ korean ] = "κΈ°λ³Έκ°’(~D)";
         Text[ turkish ] = "Standart";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Per defecte";
@@ -351,7 +351,7 @@ ModalDialog DLG_START_PRESENTATION
         Text[ russian ] = "ΐβςξμΰςθχερκθ";
         Text[ dutch ] = "A~uto";
         Text[ french ] = "A~uto";
-        Text[ spanish ] = "~Auto";
+        Text[ spanish ] = "~Automαtico";
         Text[ italian ] = "Automatico";
         Text[ danish ] = "Auto";
         Text[ swedish ] = "A~uto";
@@ -419,7 +419,7 @@ ModalDialog DLG_START_PRESENTATION
         QuickHelpText[ chinese_traditional ] = "ι–“ι”ζ™‚ι–“";
         QuickHelpText[ arabic ] = "γΟΙ ΗαΕνήΗέ ΗαγΔήΚ";
         QuickHelpText[ greek ] = "Διάρκεια προσωρινής διακοπής";
-        QuickHelpText[ korean ] = "μΌμ‹μ¤‘μ§€ κΈ°κ°„";
+        QuickHelpText[ korean ] = "μΌμ‹ μ¤‘μ§€ κΈ°κ°„";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
@@ -629,7 +629,7 @@ ModalDialog DLG_START_PRESENTATION
         Text [ dutch ] = "Animati~es toestaan" ;
         Text [ portuguese ] = "Permitir a~nimaηυes" ;
         Text[ chinese_simplified ] = "ε…θ®Έε¨η”»(~A)";
-        Text[ russian ] = "Δξοσρςθςό ΰνθμΰφθθ";
+        Text[ russian ] = "Πΰηπεψθςό ΰνθμΰφθώ";
         Text[ polish ] = "Dopu~ζ animacje";
         Text[ japanese ] = "γ‚Άγƒ‹γƒ΅γƒΌγ‚·γƒ§γƒ³γ‚’ε…¥γ‚γ‚‹(~A)";
         Text[ chinese_traditional ] = "ε…θ¨±ε‹•η•«(~A)";
@@ -665,7 +665,7 @@ ModalDialog DLG_START_PRESENTATION
         Text[ chinese_traditional ] = "ζ‰δΈ€δΈ‹ιΌ ιµθ®ζ›΄η°΅ε ±(~K)";
         Text[ arabic ] = "ΚΫννΡ ΗαΤΡνΝΙ ΪδΟ ΗαδήΡ έζή ΗαΞαένΙ";
         Text[ greek ] = "Αλλαγή διαφάνειας (slides) με ~κλικ του φόντου";
-        Text[ korean ] = "λ°°κ²½μ— ν΄λ¦­ν•΄μ„ μ¬λΌμ΄λ“ μ „ν™(~K)";
+        Text[ korean ] = "λ°°κ²½μ„ ν΄λ¦­ν•΄μ„ μ¬λΌμ΄λ“λ¥Ό μ „ν™ν•¨(~K)";
         Text[ turkish ] = "Artalana tύklayύnca slayt deπiώtir";
         Text[ language_user1 ] = "RB: bitte auf die Lδnge des Textes achten. Der Text soll nicht die Lδnge des deutschen Textes όberschreiten.";
         Text[ catalan ] = "Canvia les diapositives fent ~clic al fons";
@@ -712,5 +712,10 @@ ModalDialog DLG_START_PRESENTATION
     Text[ catalan ] = "Inicia la presentaciσ";
     Text[ thai ] = "ΰΉΰΈªΰΈ”ΰΈ‡ΰΈ ΰΈ²ΰΈΰΈ™ΰΈ΄ΰΉΰΈ‡";
 };
+
+
+
+
+
 
 

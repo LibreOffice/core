@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docprev.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cl $ $Date: 2002-11-13 18:19:29 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 10:57:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,16 +141,16 @@ SdDocPreviewWin::SdDocPreviewWin( Window* pParent, const ResId& rResId )
 : Control(pParent, rResId), pMetaFile( 0 ), bInEffect(FALSE), mpObj(NULL), mnShowPage(0)
 {
     SetBorderStyle( WINDOW_BORDER_MONO );
-    svx::ColorConfig aColorConfig;
-    SetBackground( Wallpaper( Color( aColorConfig.GetColorValue( svx::APPBACKGROUND ).nColor ) ) );
+    svtools::ColorConfig aColorConfig;
+    SetBackground( Wallpaper( Color( aColorConfig.GetColorValue( svtools::APPBACKGROUND ).nColor ) ) );
 }
 
 SdDocPreviewWin::SdDocPreviewWin( Window* pParent )
 : Control(pParent, 0 ), pMetaFile( 0 ), bInEffect(FALSE), mpObj(NULL), mnShowPage(0)
 {
     SetBorderStyle( WINDOW_BORDER_MONO );
-    svx::ColorConfig aColorConfig;
-    SetBackground( Wallpaper( Color( aColorConfig.GetColorValue( svx::APPBACKGROUND ).nColor ) ) );
+    svtools::ColorConfig aColorConfig;
+    SetBackground( Wallpaper( Color( aColorConfig.GetColorValue( svtools::APPBACKGROUND ).nColor ) ) );
     Resize();
     Show();
 }
@@ -199,10 +199,10 @@ void SdDocPreviewWin::ImpPaint( GDIMetaFile* pFile, OutputDevice* pVDev )
     bPoint -= aPoint;
     aPoint += Point( FRAME, FRAME );
 
-    svx::ColorConfig aColorConfig;
+    svtools::ColorConfig aColorConfig;
 
     pVDev->SetLineColor();
-    pVDev->SetFillColor( Color( aColorConfig.GetColorValue( svx::APPBACKGROUND ).nColor ) );
+    pVDev->SetFillColor( Color( aColorConfig.GetColorValue( svtools::APPBACKGROUND ).nColor ) );
     pVDev->DrawRect(Rectangle( Point(0,0 ), pVDev->GetOutputSize()));
     if( pFile )
     {
@@ -229,10 +229,10 @@ void SdDocPreviewWin::ShowEffect( presentation::FadeEffect eEffect, FadeSpeed eS
 
     bInEffect = TRUE;
 
-    svx::ColorConfig aColorConfig;
+    svtools::ColorConfig aColorConfig;
 
     SetLineColor();
-    SetFillColor( Color( aColorConfig.GetColorValue( svx::APPBACKGROUND ).nColor ) );
+    SetFillColor( Color( aColorConfig.GetColorValue( svtools::APPBACKGROUND ).nColor ) );
     DrawRect(Rectangle( Point(0,0 ), GetOutputSize()));
 
     Point aPoint;
@@ -250,7 +250,7 @@ void SdDocPreviewWin::ShowEffect( presentation::FadeEffect eEffect, FadeSpeed eS
     pVDev->DrawRect(Rectangle(aPoint, aSize));
 
     pVDev->SetLineColor();
-    pVDev->SetFillColor( Color( aColorConfig.GetColorValue( svx::APPBACKGROUND ).nColor ) );
+    pVDev->SetFillColor( Color( aColorConfig.GetColorValue( svtools::APPBACKGROUND ).nColor ) );
     pVDev->DrawRect(Rectangle( Point(0,0 ), pVDev->GetOutputSize()));
     if( pMetaFile )
     {
@@ -291,11 +291,11 @@ void SdDocPreviewWin::ShowEffect( presentation::FadeEffect eEffect, FadeSpeed eS
     aPoint += Point( FRAME, FRAME );
     bPoint += Point( FRAME, FRAME );
 
-    svx::ColorConfig aColorConfig;
+    svtools::ColorConfig aColorConfig;
 
     // Hintergrund Schwarz
     SetLineColor();
-    SetFillColor( Color( aColorConfig.GetColorValue( svx::APPBACKGROUND ).nColor ) );
+    SetFillColor( Color( aColorConfig.GetColorValue( svtools::APPBACKGROUND ).nColor ) );
     DrawRect(Rectangle( Point(0,0 ), GetOutputSize()));
 
     // korrigierte Seitengroesse, sonst kommt die letzte Pixelreihe(spalte)
@@ -341,8 +341,8 @@ void SdDocPreviewWin::updateViewSettings()
     }
     else
     {
-        svx::ColorConfig aColorConfig;
-        maDocumentColor = Color( aColorConfig.GetColorValue( svx::DOCCOLOR ).nColor );
+        svtools::ColorConfig aColorConfig;
+        maDocumentColor = Color( aColorConfig.GetColorValue( svtools::DOCCOLOR ).nColor );
     }
 
     GDIMetaFile* pMtf = NULL;

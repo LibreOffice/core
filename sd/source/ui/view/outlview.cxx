@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlview.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: af $ $Date: 2002-11-04 16:40:22 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 10:58:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2105,8 +2105,8 @@ void SdOutlineView::onUpdateStyleSettings( bool bForceUpdate /* = false */ )
 
     }
 
-    svx::ColorConfig aColorConfig;
-    const Color aDocColor( aColorConfig.GetColorValue( svx::DOCCOLOR ).nColor );
+    svtools::ColorConfig aColorConfig;
+    const Color aDocColor( aColorConfig.GetColorValue( svtools::DOCCOLOR ).nColor );
     if( bForceUpdate || (maDocColor != aDocColor) )
     {
         sal_uInt16 nView;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview3.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: thb $ $Date: 2002-11-19 18:02:28 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 10:58:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -295,6 +295,7 @@ BOOL SdView::InsertData( const TransferableDataHelper& rDataHelper,
     if( pOwnData && !nFormat )
     {
         const SdView* pSourceView = pOwnData->GetView();
+
 
         if( pOwnData->GetDocShell() && pOwnData->IsPageTransferable() && ISA( SdView ) )
         {
@@ -998,6 +999,7 @@ BOOL SdView::InsertData( const TransferableDataHelper& rDataHelper,
             Point aInsertPos( rPos );
 
             if( pOwnData && pOwnData->GetWorkDocument() )
+
             {
                 const SdDrawDocument*   pWorkModel = pOwnData->GetWorkDocument();
                 SdrPage*                pWorkPage = (SdrPage*) ( ( pWorkModel->GetPageCount() > 1 ) ?
@@ -1174,30 +1176,6 @@ BOOL SdView::InsertData( const TransferableDataHelper& rDataHelper,
                 bReturn = SdrView::Paste( *xStm, EE_FORMAT_RTF, aDropPos, pPage, nPasteOptions );
         }
     }
-    else if( !bLink && CHECK_FORMAT_TRANS( FORMAT_STRING ) )
-    {
-        if( ( FORMAT_STRING == nFormat ) ||
-            ( !aDataHelper.HasFormat( SOT_FORMATSTR_ID_SOLK ) &&
-              !aDataHelper.HasFormat( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK ) &&
-              !aDataHelper.HasFormat( SOT_FORMATSTR_ID_FILENAME ) ) )
-        {
-            ::rtl::OUString aOUString;
-
-            if( aDataHelper.GetString( FORMAT_STRING, aOUString ) )
-            {
-                OutlinerView* pOLV = GetTextEditOutlinerView();
-
-                if( pOLV )
-                {
-                    pOLV->InsertText( aOUString );
-                    bReturn = TRUE;
-                }
-
-                if( !bReturn )
-                    bReturn = SdrView::Paste( aOUString, aDropPos, pPage, nPasteOptions );
-            }
-        }
-    }
     else if( CHECK_FORMAT_TRANS( FORMAT_FILE_LIST ) )
     {
         FileList aDropFileList;
@@ -1226,6 +1204,30 @@ BOOL SdView::InsertData( const TransferableDataHelper& rDataHelper,
         }
 
         bReturn = TRUE;
+    }
+    else if( !bLink && CHECK_FORMAT_TRANS( FORMAT_STRING ) )
+    {
+        if( ( FORMAT_STRING == nFormat ) ||
+            ( !aDataHelper.HasFormat( SOT_FORMATSTR_ID_SOLK ) &&
+              !aDataHelper.HasFormat( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK ) &&
+              !aDataHelper.HasFormat( SOT_FORMATSTR_ID_FILENAME ) ) )
+        {
+            ::rtl::OUString aOUString;
+
+            if( aDataHelper.GetString( FORMAT_STRING, aOUString ) )
+            {
+                OutlinerView* pOLV = GetTextEditOutlinerView();
+
+                if( pOLV )
+                {
+                    pOLV->InsertText( aOUString );
+                    bReturn = TRUE;
+                }
+
+                if( !bReturn )
+                    bReturn = SdrView::Paste( aOUString, aDropPos, pPage, nPasteOptions );
+            }
+        }
     }
 
     MarkListHasChanged();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drvwshrg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: af $ $Date: 2002-11-19 15:49:43 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 10:58:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,8 @@ SFX_IMPL_INTERFACE(SdDrawViewShell, SfxViewShell, SdResId(STR_DRAWVIEWSHELL))
     SFX_OBJECTBAR_REGISTRATION( SFX_OBJECTBAR_COMMONTASK | SFX_VISIBILITY_STANDARD |
                                 SFX_VISIBILITY_SERVER,
                                 SdResId(RID_DRAW_COMMONTASK_TOOLBOX));
+    SFX_OBJECTBAR_REGISTRATION( SFX_OBJECTBAR_APPLICATION | SFX_VISIBILITY_DESKTOP | SFX_VISIBILITY_STANDARD | SFX_VISIBILITY_CLIENT | SFX_VISIBILITY_VIEWER | SFX_VISIBILITY_READONLYDOC,
+                                SdResId(RID_DRAW_VIEWER_TOOLBOX) );
     SFX_CHILDWINDOW_CONTEXT_REGISTRATION( SID_NAVIGATOR );
     SFX_CHILDWINDOW_REGISTRATION( SfxTemplateDialogWrapper::GetChildWindowId() );
     SFX_CHILDWINDOW_REGISTRATION( SvxFontWorkChildWindow::GetChildWindowId() );
@@ -164,6 +166,8 @@ SFX_IMPL_INTERFACE(SdGraphicViewShell, SfxViewShell, SdResId(STR_DRAWVIEWSHELL))
     SFX_OBJECTBAR_REGISTRATION( SFX_OBJECTBAR_OPTIONS | SFX_VISIBILITY_STANDARD |
                                 SFX_VISIBILITY_SERVER,
                                 SdResId(RID_GRAPHIC_OPTIONS_TOOLBOX));
+    SFX_OBJECTBAR_REGISTRATION( SFX_OBJECTBAR_APPLICATION | SFX_VISIBILITY_DESKTOP | SFX_VISIBILITY_STANDARD | SFX_VISIBILITY_CLIENT | SFX_VISIBILITY_VIEWER | SFX_VISIBILITY_READONLYDOC,
+                                SdResId(RID_GRAPHIC_VIEWER_TOOLBOX) );
     /*SFX_OBJECTBAR_REGISTRATION( SFX_OBJECTBAR_COMMONTASK | SFX_VISIBILITY_STANDARD |
                                 SFX_VISIBILITY_SERVER,
                                 SdResId(RID_DRAW_COMMONTASK_TOOLBOX));*/

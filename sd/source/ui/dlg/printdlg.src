@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printdlg.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-14 20:19:10 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 10:57:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,18 +102,19 @@ ModalDialog DLG_PRINT_WARNINGS
         Text [ french ] = "Options d'impression" ;
         Text [ dutch ] = "Afdrukopties" ;
         Text [ portuguese_brazilian ] = "Druckoptionen" ;
-        Text[ chinese_simplified ] = "´òÓ¡µÄÑ¡Ïî";
+        Text[ chinese_simplified ] = "æ‰“å°é€‰é¡¹";
         Text[ russian ] = "Ïàğàìåòğû ïå÷àòè";
         Text[ polish ] = "Opcje wydruku";
-        Text[ japanese ] = "ˆóüµÌß¼®İ";
-        Text[ chinese_traditional ] = "¦C¦L¿ï¶µ";
+        Text[ japanese ] = "å°åˆ·ã‚ªãƒ—ã‚·ãƒ§ãƒ³";
+        Text[ chinese_traditional ] = "åˆ—å°é¸é …";
         Text[ arabic ] = "ÎíÇÑÇÊ ÇáØÈÇÚÉ";
         Text[ greek ] = "Åğéëïãİò åêôığùóçò";
-        Text[ korean ] = "ÀÎ¼â ¿É¼Ç";
+        Text[ korean ] = "ì¸ì‡„ ì˜µì…˜";
         Text[ turkish ] = "Yazdırma seçenekleri";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Opciones de impresión";
+        Text[ catalan ] = "Opcions d'impressió";
         Text[ finnish ] = "Tulostusasetukset";
+        Text[ thai ] = "à¸•à¸±à¸§à¹€à¸¥à¸·à¸­à¸à¸à¸²à¸£à¸à¸´à¸¡à¸à¹Œ";
     };
     RadioButton RBT_SCALE
     {
@@ -131,18 +132,19 @@ ModalDialog DLG_PRINT_WARNINGS
         Text [ spanish ] = "Ajustar ~página a área de impresión" ;
         Text [ french ] = "~Adapter la page à la zone d'impression" ;
         Text [ dutch ] = "~Pagina aanpassen aan afdrukbereik" ;
-        Text[ chinese_simplified ] = "Ò³ÃæºÍ´òÓ¡·¶Î§ÏàÊÊÓ¦(~F)";
+        Text[ chinese_simplified ] = "é¡µé¢å’Œæ‰“å°èŒƒå›´ç›¸é€‚åº”(~F)";
         Text[ russian ] = "~Ïîäáîğ ñòğàíèöû ïîä îáëàñòü ïå÷àòè";
         Text[ polish ] = "Dopasuj stronê do obszaru wydruku";
-        Text[ japanese ] = "Íß°¼Ş‚ğˆóü”ÍˆÍ‚É‡‚í‚¹‚é(~F)";
-        Text[ chinese_traditional ] = "­¶­±©M¦C¦L½d³ò¬Û¾AÀ³(~F)";
+        Text[ japanese ] = "ãƒšãƒ¼ã‚¸ã‚’å°åˆ·ç¯„å›²ã«åˆã‚ã›ã‚‹(~F)";
+        Text[ chinese_traditional ] = "é é¢å’Œåˆ—å°ç¯„åœç›¸é©æ‡‰(~F)";
         Text[ arabic ] = "ãáÇÁãÉ ÇáÕİÍÉ áäØÇŞ ÇáØÈÇÚÉ";
         Text[ greek ] = "ĞñïóáñìïãŞ óå óåëßäá";
-        Text[ korean ] = "ÂÊÀ» ÀÎ¼â¹üÀ§¿¡ ¸ÂÃã(~F)";
+        Text[ korean ] = "í˜ì´ì§€ë¥¼ ì¸ì‡„ ë²”ìœ„ì— ì¡°ì •(~F)";
         Text[ turkish ] = "Sayfaya sığdır";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Ajustar ~página a área de impresión";
+        Text[ catalan ] = "Ajusta la ~pàgina a l'àrea d'impresió";
         Text[ finnish ] = "~Sovita sivu tulostusalueen mukaan";
+        Text[ thai ] = "à¸ˆà¸±à¸”à¸«à¸™à¹‰à¸²~à¸à¸­à¸”à¸µà¸à¸±à¸šà¸Šà¹ˆà¸§à¸‡à¸à¸²à¸£à¸à¸´à¸¡à¸à¹Œ";
     };
     RadioButton RBT_POSTER
     {
@@ -159,19 +161,20 @@ ModalDialog DLG_PRINT_WARNINGS
         Text [ italian ] = "Stampa su più pagine" ;
         Text [ spanish ] = "Imprimir en ~varias páginas" ;
         Text [ french ] = "Imprimer sur plusieurs pages" ;
-        Text [ dutch ] = "Op ~meerdere pagina´s afdrukken" ;
-        Text[ chinese_simplified ] = "·Ö¿ª´òÓ¡ÔÚ¶à¸öÒ³ÃæÉÏ(~P)";
-        Text[ russian ] = "Ïå÷àòü íà íåñêîëüêèõ ñòğàíèöàõ";
+        Text [ dutch ] = "Op ~meerdere pagina's afdrukken" ;
+        Text[ chinese_simplified ] = "åˆ†å¼€æ‰“å°åœ¨å¤šä¸ªé¡µé¢ä¸Š(~P)";
+        Text[ russian ] = "Ïëàêàò";
         Text[ polish ] = "Drukuj na kilku stronach";
-        Text[ japanese ] = "‰½Íß°¼Ş‚àˆóü(~P)";
-        Text[ chinese_traditional ] = "¤À¶}¦C¦L¦b¦h­Ó­¶­±¤W(~P)";
+        Text[ japanese ] = "è¤‡æ•°ãƒšãƒ¼ã‚¸ã«å°åˆ·(~P)";
+        Text[ chinese_traditional ] = "åˆ†é–‹åˆ—å°åœ¨å¤šå€‹é é¢ä¸Š(~P)";
         Text[ arabic ] = "ØÈÇÚÉ Úáì ÕİÍÇÊ ãÊÚÏÏÉ";
         Text[ greek ] = "Åêôığùóç óå ğåñéóóüôåñåò óåëßäåò";
-        Text[ korean ] = "¿©·¯ ÂÊÀ¸·Î ÀÎ¼â(~P)";
+        Text[ korean ] = "ì—¬ëŸ¬ í˜ì´ì§€ë¡œ ì¸ì‡„(~P)";
         Text[ turkish ] = "Birden çok sayfaya yazdır";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Imprimir en ~varias páginas";
-        Text[ finnish ] = "~Tee julisteeksi";
+        Text[ catalan ] = "~Redueix la gamma de colors";
+        Text[ finnish ] = "~Värien vähennys";
+        Text[ thai ] = "à¸—à¸³à¹€à¸›à¹‡à¸™à¹‚~à¸›à¸ªà¹€à¸•à¸­à¸£à¹Œ";
     };
     RadioButton RBT_CUT
     {
@@ -186,21 +189,22 @@ ModalDialog DLG_PRINT_WARNINGS
         Text [ swedish ] = "~Klipp" ;
         Text [ danish ] = "Beskær" ;
         Text [ italian ] = "Ritaglia" ;
-        Text [ spanish ] = "~Cortar" ;
+        Text [ spanish ] = "~Recortar" ;
         Text [ french ] = "~Couper" ;
         Text [ dutch ] = "~Afknippen" ;
-        Text[ chinese_simplified ] = "¼ôÇĞ(~T)";
+        Text[ chinese_simplified ] = "å‰ªåˆ‡(~T)";
         Text[ russian ] = "~Îáğåçàòü";
         Text[ polish ] = "Przytnij";
-        Text[ japanese ] = "Ø‚èæ‚è(~T)";
-        Text[ chinese_traditional ] = "°Å¤U(~T)";
+        Text[ japanese ] = "åˆ‡ã‚Šå–ã‚Š(~T)";
+        Text[ chinese_traditional ] = "å‰ªä¸‹(~T)";
         Text[ arabic ] = "ÇŞÊÕÇÕ";
         Text[ greek ] = "ÁğïêïğŞ";
-        Text[ korean ] = "Àß¶ó ³»±â(~T)";
+        Text[ korean ] = "ì˜ë¼ë‚´ê¸°(~T)";
         Text[ turkish ] = "Kes";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Cortar";
+        Text[ catalan ] = "Re~talla";
         Text[ finnish ] = "~Siisti";
+        Text[ thai ] = "~à¸‚à¸¥à¸´à¸š";
     };
     FixedText FI_INFO
     {
@@ -219,18 +223,19 @@ ModalDialog DLG_PRINT_WARNINGS
         Text [ english_us ] = "The page settings do not match the print range.\nChoose one of the following options" ;
         WordBreak = TRUE ;
         Text [ portuguese_brazilian ] = "Die Seiteneinstellungen stimmen nicht mit dem Druckbereich ?erein.\nSie k?nen folgende Optionen w?hlen" ;
-        Text[ chinese_simplified ] = "Ò³ÃæÉè¶¨ºÍ´òÓ¡·¶Î§²»Ò»ÖÂ¡£\nÄúÄÜ¹»Ñ¡ÔñÒÔÏÂµÄÑ¡Ïî¡£";
-        Text[ russian ] = "Ïàğàìåòğû ñòğàíèöû íå ñîâïàäàşò ñ îáëàñòüş ïå÷àòè.\nÂû ìîæåòå âûáğàòü ñëåäóşùèå ïàğàìåòğû";
+        Text[ chinese_simplified ] = "é¡µé¢è®¾å®šå’Œæ‰“å°èŒƒå›´ä¸ä¸€è‡´ã€‚\næ‚¨èƒ½å¤Ÿé€‰æ‹©ä»¥ä¸‹çš„é€‰é¡¹ã€‚";
+        Text[ russian ] = "Ïàğàìåòğû ñòğàíèöû íå ñîâïàäàşò ñ îáëàñòüş ïå÷àòè.\nÂûáåğèòå îäèí èç ñëåäóşùèõ âàğèàíòîâ";
         Text[ polish ] = "Ustawienia strony s¹ niezgodne z obszarem wydruku.\nMo¿esz wybraæ nastêpuj¹ce opcje";
-        Text[ japanese ] = "Íß°¼Şİ’è‚ªˆóü”ÍˆÍ‚Æˆê’v‚µ‚Ü‚¹‚ñB\nŸ‚ÌµÌß¼®İ‚ğ‘I‘ğ‚Å‚«‚Ü‚·";
-        Text[ chinese_traditional ] = "­¶­±³]©w©M¦C¦L½d³ò¤£¤@­P¡C\n±z¯à°÷¿ï¾Ü¥H¤Uªº¿ï¶µ¡C";
+        Text[ japanese ] = "ãƒšãƒ¼ã‚¸è¨­å®šãŒå°åˆ·ç¯„å›²ã¨ä¸€è‡´ã—ã¾ã›ã‚“ã€‚\næ¬¡ã®ã‚ªãƒ—ã‚·ãƒ§ãƒ³ã‚’é¸æŠã§ãã¾ã™";
+        Text[ chinese_traditional ] = "é é¢è¨­å®šå’Œåˆ—å°ç¯„åœä¸ä¸€è‡´ã€‚\næ‚¨èƒ½å¤ é¸æ“‡ä»¥ä¸‹çš„é¸é …ã€‚";
         Text[ arabic ] = "ÅÚÏÇÏÇÊ ÇáÕİÍÉ ÛíÑ ãáÇÆãÉ áäØÇŞ ÇáØÈÇÚÉ.\nÇÎÊÑ ÃÍÏ ÇáÎíÇÑÇÊ ÇáÊÇáíÉ";
         Text[ greek ] = "Ç äéÜôáîç ôçò óåëßäáò äåí óõìğßğôåé ìå ôçí ğåñéï÷Ş åêôığùóçò.\nÅğéëİîôå ìßá áğü ôéò ğáñáêÜôù åğéëïãİò";
-        Text[ korean ] = "ÂÊ ¼³Á¤ÀÌ ÀÎ¼â¹üÀ§¿Í ÀÏÄ¡ÇÏÁö ¾Ê½À´Ï´Ù.\n»ç¿ëÀÚ´Â ´ÙÀ½°ú °°Àº ¿É¼ÇÀ» ¼±ÅÃÇÒ ¼ö ÀÖ½À´Ï´Ù.";
+        Text[ korean ] = "í˜ì´ì§€ ì„¤ì •ì´ ì¸ì‡„ ë²”ìœ„ì™€ ì¼ì¹˜í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤.\në‹¤ìŒ ì˜µì…˜ ì¤‘ í•˜ë‚˜ë¥¼ ì„ íƒí•˜ì‹­ì‹œì˜¤.";
         Text[ turkish ] = "Sayfa ayarları ile yazdırma aralığı örtüşmüyor.\nAşağıdaki seçeneklerden birini seçin:";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "La configuración de página no coincide con el área de impresión.\nSeleccione una de las siguientes opciones.";
+        Text[ catalan ] = "La configuració de pàgina no coincideix amb l'àrea d'impresió.\nSeleccioneu una de les següents opcions.";
         Text[ finnish ] = "Sivuasetukset eivät täsmää tulostusalueen kanssa.\nValitse jokin seuraavista asetuksista";
+        Text[ thai ] = "à¸•à¸±à¹‰à¸‡à¸„à¹ˆà¸²à¸«à¸™à¹‰à¸²à¸à¸£à¸°à¸”à¸²à¸©à¹„à¸¡à¹ˆà¸•à¸£à¸‡à¸à¸±à¸šà¸Šà¹ˆà¸§à¸‡à¸à¸²à¸£à¸à¸´à¸¡à¸à¹Œ\nà¹€à¸¥à¸·à¸­à¸à¸«à¸™à¸¶à¹ˆà¸‡à¸•à¸±à¸§à¹€à¸¥à¸·à¸­à¸à¸ˆà¸²à¸à¸•à¸±à¸§à¹€à¸¥à¸·à¸­à¸à¹€à¸«à¸¥à¹ˆà¸²à¸™à¸µà¹‰";
     };
     Text [ english_us ] = "Warning Print Options" ;
     Text [ portuguese ] = "Advertência sobre opções de impressão" ;
@@ -241,19 +246,34 @@ ModalDialog DLG_PRINT_WARNINGS
     Text [ french ] = "Avertissement options d'impression" ;
     Text [ dutch ] = "Waarschuwing afdrukopties" ;
     Text [ portuguese_brazilian ] = "Warnung Druckoptionen" ;
-    Text[ chinese_simplified ] = "´òÓ¡Ñ¡ÏîµÄ¾¯¸æ";
-    Text[ russian ] = "Ïğåäóïğåæäåíèå Ïàğàìåòğû ïå÷àòè";
+    Text[ chinese_simplified ] = "æ‰“å°é€‰é¡¹çš„è­¦å‘Š";
+    Text[ russian ] = "Ïğåäóïğåæäåíèå: ïàğàìåòğû ïå÷àòè";
     Text[ polish ] = "Ostrze¿enie Opcje wydruku";
-    Text[ japanese ] = "ˆóüµÌß¼®İ‚ÌŒx";
-    Text[ chinese_traditional ] = "¦C¦L¿ï¶µªºÄµ§i";
+    Text[ japanese ] = "å°åˆ·ã‚ªãƒ—ã‚·ãƒ§ãƒ³ã®è­¦å‘Š";
+    Text[ chinese_traditional ] = "åˆ—å°é¸é …çš„è­¦å‘Š";
     Text[ arabic ] = "ÊÍĞíÑ ÎíÇÑÇÊ ÇáØÈÇÚÉ";
     Text[ greek ] = "Ğñïåéäïğïßçóç åğéëïãşí åêôığùóçò";
-    Text[ korean ] = "°æ°í ÀÎ¼â¿É¼Ç";
+    Text[ korean ] = "ì¸ì‡„ ì˜µì…˜ ê²½ê³ ";
     Text[ turkish ] = "Uyarı: Yazdırma seçenekleri";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Advertencia opciones de impresión";
+    Text[ catalan ] = "Advertència de les opcions d'impresió";
     Text[ finnish ] = "Tulostimen varoitusasetukset";
+    Text[ thai ] = "à¸„à¸³à¹€à¸•à¸·à¸­à¸™à¸•à¸±à¸§à¹€à¸¥à¸·à¸­à¸à¸à¸²à¸£à¸à¸´à¸¡à¸à¹Œ";
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

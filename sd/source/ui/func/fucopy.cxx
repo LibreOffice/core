@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fucopy.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-08 11:08:29 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 10:57:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,6 @@
 #include <sfx2/request.hxx>
 #endif
 
-
 TYPEINIT1( FuCopy, FuPoor );
 
 /*************************************************************************
@@ -152,10 +151,8 @@ FuCopy::FuCopy(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
                 }
             }
 
-            SdCopyDlg* pDlg = new SdCopyDlg( NULL, aSet,
-                                pDoc->GetColorTable(), pView );
-
-            USHORT nResult = pDlg->Execute();
+            SdCopyDlg*  pDlg = new SdCopyDlg( NULL, aSet, pDoc->GetColorTable(), pView );
+            USHORT      nResult = pDlg->Execute();
 
             switch( nResult )
             {
@@ -175,17 +172,12 @@ FuCopy::FuCopy(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
             delete( pDlg );
         }
 
-        Rectangle   aRect;
-        INT32       lWidth;
-        INT32       lHeight;
-        INT32       lSizeX = 0L;
-        INT32       lSizeY = 0L;
-        INT32       lAngle = 0L;
-        UINT16      nNumber = 0;
-        Color       aStartColor;
-        Color       aEndColor;
-        BOOL        bColor = FALSE;
-        const SfxPoolItem *pPoolItem = NULL;
+        Rectangle           aRect;
+        INT32               lWidth, lHeight, lSizeX = 0L, lSizeY = 0L, lAngle = 0L;
+        UINT16              nNumber = 0;
+        Color               aStartColor, aEndColor;
+        BOOL                bColor = FALSE;
+        const SfxPoolItem*  pPoolItem = NULL;
 
         // Anzahl
         if( SFX_ITEM_SET == pArgs->GetItemState( ATTR_COPY_NUMBER, TRUE, &pPoolItem ) )
@@ -223,10 +215,8 @@ FuCopy::FuCopy(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
         // Handles wegnehmen
         pView->HideMarkHdl( NULL );
 
-
-
-        SfxProgress* pProgress = NULL;
-        BOOL bWaiting = FALSE;
+        SfxProgress*    pProgress = NULL;
+        BOOL            bWaiting = FALSE;
 
         if( nNumber > 1 )
         {
@@ -239,51 +229,34 @@ FuCopy::FuCopy(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
             bWaiting = TRUE;
         }
 
-        BOOL bFirst = TRUE;
-
-// Removed long outcommented source ( Rev. 1.28 )
-
-        SdrMarkList     aMarkList = pView->GetMarkList();
-        ULONG           nMarkCount = aMarkList.GetMarkCount();
-        SdrPageView*    pPageView = pView->GetPageViewPvNum( 0 );
-        SdrObject*      pObj = NULL;
+        const SdrMarkList   aMarkList( pView->GetMarkList() );
+        const ULONG         nMarkCount = aMarkList.GetMarkCount();
+        SdrPageView*        pPageView = pView->GetPageViewPvNum( 0 );
+        SdrObject*          pObj = NULL;
 
         // Anzahl moeglicher Kopien berechnen
         aRect = pView->GetAllMarkedRect();
+
         if( lWidth < 0L )
         {
             long nTmp = ( aRect.Right() - aRect.Left() ) / -lWidth;
             nNumber = (UINT16) Min( nTmp, (long)nNumber );
         }
+
         if( lHeight < 0L )
         {
             long nTmp = ( aRect.Bottom() - aRect.Top() ) / -lHeight;
             nNumber = (UINT16) Min( nTmp, (long)nNumber );
         }
 
-        for( unsigned short i = 1; i <= nNumber; i++ )
+        for( USHORT i = 1; i <= nNumber; i++ )
         {
-            if ( pProgress )
+            if( pProgress )
                 pProgress->SetState( i );
-
-            //
-            if( !bFirst && pPageView )
-            {
-                pView->UnmarkAll();
-                for( ULONG j = 0; j < nMarkCount; j++ )
-                {
-                    pObj = aMarkList.GetMark( j )->GetObj();
-                    if( pObj )
-                    {
-                        pView->MarkObj( pObj, pPageView, FALSE );
-                    }
-                }
-            }
 
             aRect = pView->GetAllMarkedRect();
 
-            // Das erste mal wird evtl. die Farbe des Ursprungsobjektes gesetzt
-            if( bFirst && bColor )
+            if( ( 1 == i ) && bColor )
             {
                 SfxItemSet aNewSet( pViewSh->GetPool(), XATTR_FILLSTYLE, XATTR_FILLCOLOR, 0L );
                 aNewSet.Put( XFillStyleItem( XFILL_SOLID ) );
@@ -291,42 +264,54 @@ FuCopy::FuCopy(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
                 pView->SetAttributes( aNewSet );
             }
 
-            // Pruefen, ob Objekt groesser (oder gleich) Null wird
-            /*
-            if( ( aRect.GetWidth() + lWidth <= 0 ) ||
-                ( aRect.GetHeight() + lHeight <= 0) )
-                break;
-            */
+            // make a copy of selected objects
             pView->CopyMarked();
 
-            // Das erste mal werden ggfs. die Protect-Flags entfernt
-            if( bFirst )
+            // get newly selected objects
+            SdrMarkList aCopyMarkList( pView->GetMarkList() );
+            ULONG       j, nCopyMarkCount = aMarkList.GetMarkCount();
+
+            // set protection flags at marked copies to null
+            for( j = 0; j < nCopyMarkCount; j++ )
             {
-                for( ULONG j = 0; j < nMarkCount; j++ )
+                pObj = aCopyMarkList.GetMark( j )->GetObj();
+
+                if( pObj )
                 {
-                    pObj = aMarkList.GetMark( j )->GetObj();
-                    if( pObj )
-                    {
-                        pObj->SetMoveProtect( FALSE );
-                        pObj->SetResizeProtect( FALSE );
-                    }
+                    pObj->SetMoveProtect( FALSE );
+                    pObj->SetResizeProtect( FALSE );
                 }
-                bFirst = FALSE;
             }
 
-            Fraction aWidth( aRect.Right() - aRect.Left() + lWidth * i,
-                                aRect.Right() - aRect.Left() );
-            Fraction aHeight( aRect.Bottom() - aRect.Top() + lHeight * i,
-                                aRect.Bottom() - aRect.Top() );
+            Fraction aWidth( aRect.Right() - aRect.Left() + lWidth, aRect.Right() - aRect.Left() );
+            Fraction aHeight( aRect.Bottom() - aRect.Top() + lHeight, aRect.Bottom() - aRect.Top() );
 
             if( pView->IsResizeAllowed() )
                 pView->ResizeAllMarked( aRect.TopLeft(), aWidth, aHeight );
 
             if( pView->IsRotateAllowed() )
-                pView->RotateAllMarked( aRect.Center(), lAngle * 100 * i );
+                pView->RotateAllMarked( aRect.Center(), lAngle * 100 );
 
             if( pView->IsMoveAllowed() )
-                pView->MoveAllMarked( Size( lSizeX * i, lSizeY * i ) );
+                pView->MoveAllMarked( Size( lSizeX, lSizeY ) );
+
+            // set protection flags at marked copies to original values
+            if( nMarkCount == nCopyMarkCount )
+            {
+                for( j = 0; j < nMarkCount; j++ )
+                {
+                    SdrObject* pSrcObj = aMarkList.GetMark( j )->GetObj();
+                    SdrObject* pDstObj = aCopyMarkList.GetMark( j )->GetObj();
+
+                    if( pSrcObj && pDstObj &&
+                        ( pSrcObj->GetObjInventor() == pDstObj->GetObjInventor() ) &&
+                        ( pSrcObj->GetObjIdentifier() == pDstObj->GetObjIdentifier() ) )
+                    {
+                        pDstObj->SetMoveProtect( pSrcObj->IsMoveProtect() );
+                        pDstObj->SetResizeProtect( pSrcObj->IsResizeProtect() );
+                    }
+                }
+            }
 
             if( bColor )
             {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuinsert.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: ka $ $Date: 2001-12-14 16:33:51 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 10:57:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 #include <svtools/urihelper.hxx>
 #endif
 
+#include <sfx2/request.hxx>
+#include <so3/outplace.hxx>
+#include <svtools/globalnameitem.hxx>
 #include <so3/plugin.hxx>
 #include <so3/pastedlg.hxx>
 #include <svx/pfiledlg.hxx>
@@ -467,27 +470,48 @@ FuInsertOLE::FuInsertOLE(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
 
         if (nSlotId == SID_INSERT_OBJECT)
         {
-            pOleDlg = new SvInsertOleObjectDialog();
-            pOleDlg->SetHelpId(SID_INSERT_OBJECT);
-
-            // Die Liste ist eine Memberliste, und loescht selbst ihre Eintraege
-            SvObjectServerList aServerLst;
-
-            // Liste mit Servern fuellen
-            pOleDlg->FillObjectServerList(&aServerLst);
-
-            // Eigenen Eintrag loeschen
-            if (pDoc->GetDocumentType() == DOCUMENT_TYPE_DRAW)
+            SFX_REQUEST_ARG( rReq, pNameItem, SfxGlobalNameItem, SID_INSERT_OBJECT, sal_False );
+            if ( pNameItem )
             {
-                aServerLst.Remove( *SdGraphicDocShell::ClassFactory() );
+                SvGlobalName aName = pNameItem->GetValue();
+                const SotFactory* pFact = SvFactory::Find( aName );
+                if ( pFact )
+                {
+                    SvStorageRef aStor = new SvStorage( aEmptyStr );
+                    aIPObj = &((SvFactory*)SvInPlaceObject::ClassFactory())->CreateAndInit( aName,aStor );
+                }
+                else
+                {
+                    SvStorageRef aStor = new SvStorage( FALSE, aEmptyStr );
+                    String aFileName;
+                    BOOL bOk;
+                    aIPObj = SvOutPlaceObject::InsertObject( NULL, &aStor, bOk, aName, aFileName );
+                }
             }
             else
             {
-                aServerLst.Remove( *SdDrawDocShell::ClassFactory() );
-            }
+                pOleDlg = new SvInsertOleObjectDialog();
+                pOleDlg->SetHelpId(SID_INSERT_OBJECT);
 
-            SvStorageRef aStor = new SvStorage( aEmptyStr, STREAM_STD_READWRITE );
-            aIPObj = pOleDlg->Execute(pWin, aStor, &aServerLst );
+                // Die Liste ist eine Memberliste, und loescht selbst ihre Eintraege
+                SvObjectServerList aServerLst;
+
+                // Liste mit Servern fuellen
+                pOleDlg->FillObjectServerList(&aServerLst);
+
+                // Eigenen Eintrag loeschen
+                if (pDoc->GetDocumentType() == DOCUMENT_TYPE_DRAW)
+                {
+                    aServerLst.Remove( *SdGraphicDocShell::ClassFactory() );
+                }
+                else
+                {
+                    aServerLst.Remove( *SdDrawDocShell::ClassFactory() );
+                }
+
+                SvStorageRef aStor = new SvStorage( aEmptyStr, STREAM_STD_READWRITE );
+                aIPObj = pOleDlg->Execute(pWin, aStor, &aServerLst );
+            }
         }
         else if (nSlotId == SID_INSERT_PLUGIN)
         {
@@ -646,6 +670,18 @@ FuInsertOLE::FuInsertOLE(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
 
                 if( pView->InsertObject(pObj, *pPV, SDRINSERT_SETDEFLAYER) )
                 {
+                    //  #73279# Math objects change their object size during InsertObject.
+                    //  New size must be set in SdrObject, or a wrong scale will be set at
+                    //  ActivateObject.
+
+                    Size aNewSize = Window::LogicToLogic( aIPObj->GetVisArea().GetSize(),
+                                    MapMode( aIPObj->GetMapUnit() ), MapMode( MAP_100TH_MM ) );
+                    if ( aNewSize != aSize )
+                    {
+                        aRect.SetSize( aNewSize );
+                        pObj->SetLogicRect( aRect );
+                    }
+
                     if (pOleDlg && pOleDlg->IsCreateNew())
                     {
                         pView->HideMarkHdl(NULL);

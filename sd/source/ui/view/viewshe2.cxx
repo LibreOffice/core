@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshe2.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: cl $ $Date: 2002-07-30 14:18:54 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 10:58:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1355,4 +1355,52 @@ void SdViewShell::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence <
 void SdViewShell::VisAreaChanged(const Rectangle& rRect)
 {
     SfxViewShell::VisAreaChanged(rRect);
+}
+
+void SdViewShell::SetWinViewPos(const Point& rWinPos, bool bUpdate)
+{
+    for (short nX = 0; nX < MAX_HSPLIT_CNT; nX++)
+    {
+        for (short nY = 0; nY < MAX_VSPLIT_CNT; nY++)
+        {
+            if ( pWinArray[nX][nY] )
+            {
+                pWinArray[nX][nY]->SetWinViewPos(rWinPos);
+
+                if ( bUpdate )
+                {
+                    pWinArray[nX][nY]->UpdateMapOrigin();
+                    pWinArray[nX][nY]->Invalidate();
+                }
+            }
+        }
+    }
+
+    if ( bHasRuler )
+    {
+        UpdateHRuler();
+        UpdateVRuler();
+    }
+
+    UpdateScrollBars();
+
+    Size aVisSizePixel = pWindow->GetOutputSizePixel();
+    Rectangle aVisAreaWin = pWindow->PixelToLogic( Rectangle( Point(0,0), aVisSizePixel) );
+    VisAreaChanged(aVisAreaWin);
+
+    SdView* pView = GetView();
+    if (pView)
+    {
+        pView->VisAreaChanged(pWindow);
+    }
+}
+
+Point SdViewShell::GetWinViewPos() const
+{
+    return pWinArray[0][0]->GetWinViewPos();
+}
+
+Point SdViewShell::GetViewOrigin() const
+{
+    return pWinArray[0][0]->GetViewOrigin();
 }

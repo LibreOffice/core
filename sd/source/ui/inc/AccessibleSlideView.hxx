@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleSlideView.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: thb $ $Date: 2002-12-10 15:26:32 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 10:57:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,10 +63,10 @@
 #define _SD_ACCESSIBILITY_ACCESSIBLESLIDEVIEW_HXX
 
 #ifndef _CPPUHELPER_IMPLBASE6_HXX_
-#include <cppuhelper/implbase5.hxx>
-#endif
-#ifndef _CPPUHELPER_IMPLBASE6_HXX_
 #include <cppuhelper/implbase6.hxx>
+#endif
+#ifndef _CPPUHELPER_IMPLBASE7_HXX_
+#include <cppuhelper/implbase7.hxx>
 #endif
 #include "slidview.hxx"
 
@@ -88,6 +88,9 @@
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLEEVENTBROADCASTER_HPP_
 #include <drafts/com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 #endif
+#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#endif
 
 #include <vector>
 
@@ -100,19 +103,21 @@ class AccessibleSlideView;
 // - AccessibleSlideViewObject -
 // -----------------------------
 
-class AccessibleSlideViewObject : public ::cppu::WeakImplHelper5< ::com::sun::star::lang::XUnoTunnel,
-                                                                  ::drafts::com::sun::star::accessibility::XAccessible,
-                                                                  ::drafts::com::sun::star::accessibility::XAccessibleEventBroadcaster,
-                                                                  ::drafts::com::sun::star::accessibility::XAccessibleContext,
-                                                                  ::drafts::com::sun::star::accessibility::XAccessibleComponent >
-
+class AccessibleSlideViewObject : public ::cppu::WeakImplHelper6<
+    ::com::sun::star::lang::XUnoTunnel,
+    ::drafts::com::sun::star::accessibility::XAccessible,
+    ::drafts::com::sun::star::accessibility::XAccessibleEventBroadcaster,
+    ::drafts::com::sun::star::accessibility::XAccessibleContext,
+    ::drafts::com::sun::star::accessibility::XAccessibleComponent,
+    ::com::sun::star::lang::XServiceInfo >
 {
 private:
 
     ::osl::Mutex                                                                                                            maMutex;
-    ::std::vector< ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleEventListener > >  maEventListeners;
     ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible >                                mxParent;
     AccessibleSlideView*                                                                                                    mpManager;
+    /// client id in the AccessibleEventNotifier queue
+    sal_uInt32                                                                                                              mnClientId;
     sal_uInt16                                                                                                              mnPage;
     sal_Bool                                                                                                                mbVisible;
     sal_Bool                                                                                                                mbValid;
@@ -159,6 +164,26 @@ private:
     virtual sal_Int32 SAL_CALL getBackground (void)
         throw (::com::sun::star::uno::RuntimeException);
 
+    //=====  XServiceInfo  ====================================================
+
+    /** Returns an identifier for the implementation of this object.
+    */
+    virtual ::rtl::OUString SAL_CALL
+        getImplementationName (void)
+        throw (::com::sun::star::uno::RuntimeException);
+
+    /** Return whether the specified service is supported by this class.
+    */
+    virtual sal_Bool SAL_CALL
+        supportsService (const ::rtl::OUString& sServiceName)
+        throw (::com::sun::star::uno::RuntimeException);
+
+    /** Returns a list of all supported services.
+    */
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString> SAL_CALL
+        getSupportedServiceNames (void)
+        throw (::com::sun::star::uno::RuntimeException);
+
 public:
 
     static AccessibleSlideViewObject* getImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxData ) throw();
@@ -170,7 +195,10 @@ public:
 
     void                        FireAccessibleEvent( short nEventId, const ::com::sun::star::uno::Any& rOldValue, const ::com::sun::star::uno::Any& rNewValue );
 
-    void                        Destroyed();
+    /** This method acts like a dispose call.  It sends a disposing to all
+        of its listeners.  It may be called twice.
+    */
+    void Destroyed (void);
 
     sal_uInt16                  GetPageNum() const { return mnPage; }
 
@@ -182,21 +210,24 @@ public:
 // - AccessibleSlideView -
 // -----------------------
 
-class AccessibleSlideView : public ::cppu::WeakImplHelper6< ::com::sun::star::lang::XUnoTunnel,
-                                                            ::drafts::com::sun::star::accessibility::XAccessible,
-                                                            ::drafts::com::sun::star::accessibility::XAccessibleEventBroadcaster,
-                                                            ::drafts::com::sun::star::accessibility::XAccessibleContext,
-                                                            ::drafts::com::sun::star::accessibility::XAccessibleComponent,
-                                                            ::drafts::com::sun::star::accessibility::XAccessibleSelection >
+class AccessibleSlideView : public ::cppu::WeakImplHelper7<
+    ::com::sun::star::lang::XUnoTunnel,
+    ::drafts::com::sun::star::accessibility::XAccessible,
+    ::drafts::com::sun::star::accessibility::XAccessibleEventBroadcaster,
+    ::drafts::com::sun::star::accessibility::XAccessibleContext,
+    ::drafts::com::sun::star::accessibility::XAccessibleComponent,
+    ::drafts::com::sun::star::accessibility::XAccessibleSelection,
+    ::com::sun::star::lang::XServiceInfo >
 {
 private:
 
     ::osl::Mutex                                                                                                            maMutex;
-    ::std::vector< ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleEventListener > >  maEventListeners;
     ::std::vector< ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > >               maSlidePageObjects;
     SdDrawDocument*                                                                                                         mpDoc;
     SdSlideView*                                                                                                            mpView;
     SdWindow*                                                                                                               mpParentWindow;
+     /// client id in the AccessibleEventNotifier queue
+    sal_uInt32                                                                                                              mnClientId;
 
     // internal
     static const ::com::sun::star::uno::Sequence< sal_Int8 >&                                   getUnoTunnelId();
@@ -249,6 +280,26 @@ private:
     virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > SAL_CALL getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL deselectSelectedAccessibleChild( sal_Int32 nSelectedChildIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
 
+    //=====  XServiceInfo  ====================================================
+
+    /** Returns an identifier for the implementation of this object.
+    */
+    virtual ::rtl::OUString SAL_CALL
+        getImplementationName (void)
+        throw (::com::sun::star::uno::RuntimeException);
+
+    /** Return whether the specified service is supported by this class.
+    */
+    virtual sal_Bool SAL_CALL
+        supportsService (const ::rtl::OUString& sServiceName)
+        throw (::com::sun::star::uno::RuntimeException);
+
+    /** Returns a list of all supported services.
+    */
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString> SAL_CALL
+        getSupportedServiceNames (void)
+        throw (::com::sun::star::uno::RuntimeException);
+
 public:
 
     static AccessibleSlideView* getImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxData ) throw();
@@ -260,7 +311,10 @@ public:
 
     void                        FireAccessibleEvent( short nEventId, const ::com::sun::star::uno::Any& rOldValue, const ::com::sun::star::uno::Any& rNewValue );
 
-    void                        Destroyed();
+    /** This method acts like a dispose call.  It sends a disposing to all
+        of its listeners.  It may be called twice.
+    */
+    void Destroyed (void);
 
     SdDrawDocument*             GetDrawDocument() const { return mpDoc; }
     SdSlideView*                GetSlideView() const { return mpView; }

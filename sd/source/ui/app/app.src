@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: cl $ $Date: 2002-10-31 15:56:40 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 10:57:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,6 +233,7 @@
             SID_CHAR_DLG;\
             SID_PARA_DLG;\
             SID_ATTR_FILL_SHADOW;\
+            SID_ATTR_ZOOM;\
             SID_WIN_FULLSCREEN;\
             SID_COLORVIEW;\
             SID_ATTR_LINEEND_STYLE;\
@@ -241,6 +242,7 @@
             SID_SAVEASDOC;\
             SID_BEZIER_ELIMINATE_POINTS;\
             SID_ZOOM_PANNING;\
+            SID_SEARCH_DLG;\
             SID_NAVIGATOR;\
             SID_DRAW_RECT_NOFILL;\
             SID_DRAW_RECT_ROUND_NOFILL;\
@@ -400,7 +402,7 @@
             SID_AUTOSPELL_CHECK;\
     };\
     IdCount = {\
-        288;\
+        290;\
     };
 
 

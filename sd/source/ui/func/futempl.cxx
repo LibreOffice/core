@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futempl.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: cl $ $Date: 2002-03-11 08:47:29 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 10:57:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -299,6 +299,8 @@ FuTemplate::FuTemplate( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
         case SID_STYLE_NEW:
         case SID_STYLE_EDIT:
         {
+            PresentationObjects ePO;
+
             if( pStyleSheet )
             {
                 SdTabTemplateDlg*         pStdDlg  = NULL;
@@ -318,7 +320,6 @@ FuTemplate::FuTemplate( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
                 {
                     String aStyleName(pStyleSheet->GetName());
                     USHORT nDlgId = 0;
-                    PresentationObjects ePO;
 
                     if (aStyleName == String(SdResId(STR_PSEUDOSHEET_TITLE)))
                     {
@@ -412,45 +413,52 @@ FuTemplate::FuTemplate( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
                             // Pointer auf die DefaultItems in der Vorlage;
                             // beides wuerde die Attribut-Vererbung unterbinden)
                             aTempSet.ClearInvalidItems();
-                            if (aTempSet.GetItemState(EE_PARA_NUMBULLET) == SFX_ITEM_SET)
+
+                            // EE_PARA_NUMBULLET item is only valid in first outline template
+                            if( (ePO >= PO_OUTLINE_2) && (ePO <= PO_OUTLINE_9) )
                             {
-                                SvxNumRule aRule(*((SvxNumBulletItem*)aTempSet.GetItem(EE_PARA_NUMBULLET))->GetNumRule());
-
-                                String aStyleName((SdResId(STR_PSEUDOSHEET_OUTLINE)));
-                                aStyleName.AppendAscii( RTL_CONSTASCII_STRINGPARAM( " 1" ) );
-                                SfxStyleSheetBase* pFirstStyleSheet = pSSPool->Find( aStyleName, SFX_STYLE_FAMILY_PSEUDO);
-
-                                if(pFirstStyleSheet)
+                                if (aTempSet.GetItemState(EE_PARA_NUMBULLET) == SFX_ITEM_SET)
                                 {
-                                    pFirstStyleSheet->GetItemSet().Put( SvxNumBulletItem( aRule, EE_PARA_NUMBULLET ));
-                                    SdStyleSheet* pRealSheet = ((SdStyleSheet*)pFirstStyleSheet)->GetRealStyleSheet();
-                                    pRealSheet->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
-                                }
+                                    SvxNumRule aRule(*((SvxNumBulletItem*)aTempSet.GetItem(EE_PARA_NUMBULLET))->GetNumRule());
 
-                                aTempSet.ClearItem( EE_PARA_NUMBULLET );
+                                    String aStyleName((SdResId(STR_PSEUDOSHEET_OUTLINE)));
+                                    aStyleName.AppendAscii( RTL_CONSTASCII_STRINGPARAM( " 1" ) );
+                                    SfxStyleSheetBase* pFirstStyleSheet = pSSPool->Find( aStyleName, SFX_STYLE_FAMILY_PSEUDO);
+
+                                    if(pFirstStyleSheet)
+                                    {
+                                        pFirstStyleSheet->GetItemSet().Put( SvxNumBulletItem( aRule, EE_PARA_NUMBULLET ));
+                                        SdStyleSheet* pRealSheet = ((SdStyleSheet*)pFirstStyleSheet)->GetRealStyleSheet();
+                                        pRealSheet->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
+                                    }
+
+                                    aTempSet.ClearItem( EE_PARA_NUMBULLET );
+                                }
                             }
 
                             String aStyleName((SdResId(STR_PSEUDOSHEET_OUTLINE)));
                             aStyleName.Append( sal_Unicode( ' ' ));
 
-                            for( USHORT n = 1; n < 10; n++ )
-                            {
-                                String aName( aStyleName );
-                                aName.Append( String::CreateFromInt32( (sal_Int32) n ));
-
-                                SfxStyleSheetBase* pSheet = pSSPool->Find( aName, SFX_STYLE_FAMILY_PSEUDO);
-
-                                if(pSheet)
-                                {
-                                    SdStyleSheet* pRealSheet = ((SdStyleSheet*)pSheet)->GetRealStyleSheet();
-                                    pRealSheet->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
-                                }
-                            }
-
-
                             pStyleSheet->GetItemSet().Put(aTempSet);
                             SdStyleSheet* pRealSheet =((SdStyleSheet*)pStyleSheet)->GetRealStyleSheet();
                             pRealSheet->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
+
+                            if( (ePO >= PO_OUTLINE_1) && (ePO <= PO_OUTLINE_8) )
+                            {
+                                for( USHORT n = (ePO - PO_OUTLINE_1 + 2); n < 10; n++ )
+                                {
+                                    String aName( aStyleName );
+                                    aName.Append( String::CreateFromInt32( (sal_Int32) n ));
+
+                                    SfxStyleSheetBase* pSheet = pSSPool->Find( aName, SFX_STYLE_FAMILY_PSEUDO);
+
+                                    if(pSheet)
+                                    {
+                                        SdStyleSheet* pRealSheet = ((SdStyleSheet*)pSheet)->GetRealStyleSheet();
+                                        pRealSheet->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
+                                    }
+                                }
+                            }
                         }
 
                         SfxItemSet& rAttr = pStyleSheet->GetItemSet();
@@ -463,10 +471,32 @@ FuTemplate::FuTemplate( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
                             {
                                 SvxNumBulletItem aNumBullet( (const SvxNumBulletItem&) rAttr.Get(EE_PARA_NUMBULLET) );
 
-                                EditEngine::ImportBulletItem( aNumBullet, 0, NULL,
+                                sal_uInt16 nLevel = 0;
+                                if( (ePO >= PO_OUTLINE_2) && (ePO <= PO_OUTLINE_9) )
+                                    nLevel = ePO - PO_OUTLINE_1 + 1;
+
+                                EditEngine::ImportBulletItem( aNumBullet, nLevel, NULL,
                                                         &(const SvxLRSpaceItem&) rAttr.Get( EE_PARA_LRSPACE ) );
 
-                                ( (SfxItemSet&) rAttr).Put( aNumBullet );
+                                // the numbering bullet item is not valid in styles Outline 2 to Outline 9
+                                if( nLevel != 0 )
+                                {
+                                    // so put it into Outline 1 then..
+                                    String aStyleName((SdResId(STR_PSEUDOSHEET_OUTLINE)));
+                                    aStyleName.AppendAscii( RTL_CONSTASCII_STRINGPARAM( " 1" ) );
+                                    SfxStyleSheetBase* pFirstStyleSheet = pSSPool->Find( aStyleName, SFX_STYLE_FAMILY_PSEUDO);
+
+                                    if(pFirstStyleSheet)
+                                    {
+                                        pFirstStyleSheet->GetItemSet().Put( aNumBullet);
+                                        SdStyleSheet* pRealSheet = ((SdStyleSheet*)pFirstStyleSheet)->GetRealStyleSheet();
+                                        pRealSheet->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
+                                    }
+                                }
+                                else
+                                {
+                                    ( (SfxItemSet&) rAttr).Put( aNumBullet );
+                                }
                             }
                         }
 

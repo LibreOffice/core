@@ -2,9 +2,9 @@
  *
  *  $RCSfile: custsdlg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:31 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 10:57:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,8 @@
 #include "drawdoc.hxx"
 #include "sdpage.hxx"
 #include "cusshow.hxx"
+#include "app.hxx"
+#include "optsitem.hxx"
 
 #ifndef _SV_MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
@@ -148,12 +150,15 @@ SdCustomShowDlg::~SdCustomShowDlg()
 \************************************************************************/
 void SdCustomShowDlg::CheckState()
 {
+    bool bStartWithActualPage = SD_MOD()->GetSdOptions( rDoc.GetDocumentType() )->IsStartWithActualPage();
     USHORT nPos = aLbCustomShows.GetSelectEntryPos();
+
     BOOL bEnable = nPos != LISTBOX_ENTRY_NOTFOUND;
     aBtnEdit.Enable( bEnable );
     aBtnRemove.Enable( bEnable );
     aBtnCopy.Enable( bEnable );
-    aCbxUseCustomShow.Enable( bEnable );
+    aCbxUseCustomShow.Enable( bEnable && !bStartWithActualPage);
+    aBtnStartShow.Enable( !bStartWithActualPage );
 
     if( bEnable )
         pCustomShowList->Seek( nPos );

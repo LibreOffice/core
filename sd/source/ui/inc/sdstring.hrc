@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdstring.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: af $ $Date: 2002-08-07 16:51:24 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 10:57:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,3 +92,5 @@
 #define STR_SAR_NOT_FOUND           SID_SD_STRING_START+23
 #define STR_SAR_WRAP_FORWARD        SID_SD_STRING_START+24
 #define STR_SAR_WRAP_BACKWARD       SID_SD_STRING_START+25
+#define STR_SAR_WRAP_FORWARD_DRAW   SID_SD_STRING_START+26
+#define STR_SAR_WRAP_BACKWARD_DRAW  SID_SD_STRING_START+27

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod2.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: iha $ $Date: 2002-10-01 14:44:00 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 10:57:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -350,9 +350,9 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo)
 
             String aURL = ((const SvxURLField*)pField)->GetURL();
 
-            svx::ColorConfig aConfig;
-            svx::ColorConfigEntry eEntry =
-                INetURLHistory::GetOrCreate()->QueryUrl( aURL ) ? svx::LINKSVISITED : svx::LINKS;
+            svtools::ColorConfig aConfig;
+            svtools::ColorConfigEntry eEntry =
+                INetURLHistory::GetOrCreate()->QueryUrl( aURL ) ? svtools::LINKSVISITED : svtools::LINKS;
             pInfo->SetTxtColor( aConfig.GetColorValue(eEntry).nColor );
         }
         else if (pField && pField->ISA(SdrMeasureField))

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgsnap.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: cl $ $Date: 2002-05-21 13:52:42 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 10:57:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@ ModalDialog DLG_SNAPLINE
     Text [ italian ] = "Nuovo oggetto cattura" ;
     Text [ portuguese_brazilian ] = "Novo Aderir Objeto" ;
     Text [ portuguese ] = "Novo objecto de captura" ;
-    Text [ finnish ] = "Uusi kohdistusobjekti" ;
+    Text [ finnish ] = "Lisää kohdistuspiste tai -viiva" ;
     Text [ danish ] = "Nyt fangobjekt" ;
     Text [ french ] = "Nouvel objet de capture" ;
     Text [ swedish ] = "Nytt fästobjekt" ;
@@ -114,10 +114,10 @@ ModalDialog DLG_SNAPLINE
         Text [ portuguese ] = "E~liminar" ;
         Text [ finnish ] = "~Poista" ;
         Text [ danish ] = "Slet" ;
-        Text [ french ] = "~Supprimer" ;
+        Text [ french ] = "Supprimer" ;
         Text [ swedish ] = "~Radera" ;
         Text [ dutch ] = "~Wissen" ;
-        Text [ spanish ] = "~Eliminar" ;
+        Text [ spanish ] = "~Borrar" ;
         Text [ english_us ] = "~Delete" ;
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "åˆ é™¤(~D)";
@@ -130,7 +130,8 @@ ModalDialog DLG_SNAPLINE
         Text[ korean ] = "ì‚­ì œ(~D)";
         Text[ turkish ] = "Sil";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Eliminar";
+        Text[ catalan ] = "~Suprimeix";
+        Text[ thai ] = "~à¸¥à¸š";
     };
     FixedLine FL_POSITION
     {
@@ -150,7 +151,7 @@ ModalDialog DLG_SNAPLINE
         Text [ spanish ] = "Posición" ;
         Text [ english_us ] = "Position" ;
         Text[ chinese_simplified ] = "ä½ç½®";
-        Text[ russian ] = "Ïîçèöèÿ";
+        Text[ russian ] = "Ïîëîæåíèå";
         Text[ polish ] = "Pozycja";
         Text[ japanese ] = "ä½ç½®";
         Text[ chinese_traditional ] = "ä½ç½®";
@@ -159,7 +160,8 @@ ModalDialog DLG_SNAPLINE
         Text[ korean ] = "ìœ„ì¹˜";
         Text[ turkish ] = "Konum";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Posición";
+        Text[ catalan ] = "Posició";
+        Text[ thai ] = "à¸•à¸³à¹à¸«à¸™à¹ˆà¸‡";
     };
     FixedText FT_X
     {
@@ -217,7 +219,7 @@ ModalDialog DLG_SNAPLINE
         Text [ italian ] = "Tipo" ;
         Text [ portuguese_brazilian ] = "Tipo" ;
         Text [ portuguese ] = "Tipo" ;
-        Text [ finnish ] = "Tyyppi" ;
+        Text [ finnish ] = "Kohdistusobjektin tyyppi" ;
         Text [ danish ] = "Type" ;
         Text [ french ] = "Type" ;
         Text [ swedish ] = "Typ" ;
@@ -231,10 +233,11 @@ ModalDialog DLG_SNAPLINE
         Text[ chinese_traditional ] = "é¡å‹";
         Text[ arabic ] = "ÇáäæÚ";
         Text[ greek ] = "Ôığïò";
-        Text[ korean ] = "í˜•íƒœ";
+        Text[ korean ] = "ìœ í˜•";
         Text[ turkish ] = "Tür";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Tipo";
+        Text[ catalan ] = "Tipus";
+        Text[ thai ] = "à¸Šà¸™à¸´à¸”";
     };
     ImageRadioButton RB_POINT
     {
@@ -269,7 +272,8 @@ ModalDialog DLG_SNAPLINE
         Text[ korean ] = "ì (~P)";
         Text[ turkish ] = "Nokta";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Punto";
+        Text[ catalan ] = "~Punt";
+        Text[ thai ] = "~à¸ˆà¸¸à¸”";
     };
     ImageRadioButton RB_VERTICAL
     {
@@ -278,12 +282,12 @@ ModalDialog DLG_SNAPLINE
         Text = "~Vertikal" ;
         Text [ ENGLISH ] = "~Vertical" ;
         Text [ norwegian ] = "~Vertikal" ;
-        Text [ italian ] = "~Verticale" ;
+        Text [ italian ] = "Verticale" ;
         Text [ portuguese_brazilian ] = "~Vertical" ;
         Text [ portuguese ] = "~Vertical" ;
-        Text [ finnish ] = "~Pystytaso" ;
+        Text [ finnish ] = "Pystyviiva" ;
         Text [ danish ] = "Lodret" ;
-        Text [ french ] = "~Vertical" ;
+        Text [ french ] = "Vertical" ;
         Text [ swedish ] = "~Vertikal" ;
         Text [ dutch ] = "~Verticaal" ;
         Text [ spanish ] = "~Vertical" ;
@@ -305,6 +309,7 @@ ModalDialog DLG_SNAPLINE
         Text[ turkish ] = "Dikey";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Vertical";
+        Text[ thai ] = "à¹à¸™à¸§~à¸•à¸±à¹‰à¸‡";
     };
     ImageRadioButton RB_HORIZONTAL
     {
@@ -316,7 +321,7 @@ ModalDialog DLG_SNAPLINE
         Text [ italian ] = "~Orizzontale" ;
         Text [ portuguese_brazilian ] = "~Horizontal" ;
         Text [ portuguese ] = "~Horizontal" ;
-        Text [ finnish ] = "Vaaka~taso" ;
+        Text [ finnish ] = "Vaa~kaviiva" ;
         Text [ danish ] = "Vandret" ;
         Text [ french ] = "~Horizontal" ;
         Text [ swedish ] = "H~orisontell" ;
@@ -339,19 +344,21 @@ ModalDialog DLG_SNAPLINE
         Text[ korean ] = "ìˆ˜í‰(~Z)";
         Text[ turkish ] = "Yatay";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Horizontal";
+        Text[ catalan ] = "Horit~zontal";
+        Text[ thai ] = "à¹à¸™à¸§~à¸™à¸­à¸™";
     };
     Text[ chinese_simplified ] = "æ–°å»ºåæ ‡";
     Text[ russian ] = "Íîâûé îáúåêò ïğèâÿçêè";
     Text[ polish ] = "Nowy obiekt zaczepu";
-    Text[ japanese ] = "æ–°ã—ã„ï½½ï¾…ï½¯ï¾Œï¾Ÿï½µï¾Œï¾ï½¼ï¾ï½ªï½¸ï¾„";
+    Text[ japanese ] = "æ–°ã—ã„ã‚¹ãƒŠãƒƒãƒ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ";
     Text[ chinese_traditional ] = "æ–°å»ºåº§æ¨™";
     Text[ arabic ] = "ßÇÆä ÍÈÓ ÌÏíÏ";
     Text[ greek ] = "Íİï áíôéêåßìåíï ğñïóêüëëçóçò";
     Text[ korean ] = "ìƒˆ ë§ì¶¤ ê°œì²´";
     Text[ turkish ] = "Yeni kavrama nesnesi";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Nuevo objeto de captura";
+    Text[ catalan ] = "Objecte de captura nou";
+    Text[ thai ] = "à¸ˆà¸±à¸”à¸§à¸±à¸•à¸–à¸¸à¸Šà¸´à¸”à¹ƒà¸«à¸¡à¹ˆ";
 
     Image BMP_POINT_H
     {
@@ -371,6 +378,8 @@ ModalDialog DLG_SNAPLINE
         ImageBitmap = Bitmap { File = "hlplhorz_h.bmp" ; };
     };
 };
+
+
 
 
 

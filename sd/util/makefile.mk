@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: thb $ $Date: 2002-08-12 15:41:24 $
+#   last change: $Author: hr $ $Date: 2003-03-27 10:58:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,6 +65,7 @@ PRJ=..
 PRJNAME=SD
 TARGET=sdraw3
 GEN_HID=TRUE
+GEN_HID_OTHER=TRUE
 
 # --- Settings -----------------------------------------------------------
 
@@ -206,7 +207,6 @@ LIB4OBJFILES=$(OBJ)$/sdlib.obj \
 
 .IF "$(depend)" == ""
 ALL:    \
-    $(SRS)$/hidother.hid\
     ALLTAR
 .ENDIF
 
@@ -331,18 +331,6 @@ $(MISC)$/$(SHL1TARGET).def:  makefile.mk
     @gawk -f s:\util\exp.awk temp.def                               >>$@
     del temp.def
 .ENDIF
-.ENDIF
-
-$(MISC)$/$(PRJNAME).hid : $(SRS)$/hidother.hid
-
-$(SRS)$/hidother.hid: hidother.src
-.IF "$(GUI)$(CPU)"=="WNTI"
-.IF "$(BUILD_SOSL)"==""
-    @+echo NO HIDS!!!!
-    @+-mhids hidother.src $(SRS) $(PRJNAME) dummy $(INCLUDE)
-.ENDIF
-.ELSE
-    @echo nix
 .ENDIF
 
 .ENDIF

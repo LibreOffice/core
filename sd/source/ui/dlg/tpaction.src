@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpaction.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-05 19:32:30 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 10:57:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,11 +96,12 @@ TabPage TP_ANIMATION
         Text[ chinese_traditional ] = "æŒ‰é¼ æ¨™æ™‚åŸ·è¡Œçš„å‹•ä½œ";
         Text[ arabic ] = "ÅÌÑÇÁ ÚäÏ ÇáäŞÑ ÈÇáãÇæÓ";
         Text[ greek ] = "Åíİñãåéá ìå êëéê ôïõ ğïíôéêéïı";
-        Text[ korean ] = "ë§ˆìš°ìŠ¤ í´ë¦­í•  ë•Œ ì‹¤í–‰";
+        Text[ korean ] = "ë§ˆìš°ìŠ¤ í´ë¦­í•  ë•Œ ì‘ë™";
         Text[ turkish ] = "Tıklama sonrası işlem";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Acció amb pulsació del ratolí";
         Text[ finnish ] = "Toiminto napsautettaessa";
+        Text[ thai ] = "à¸à¸£à¸°à¸—à¸³à¸à¸²à¸£à¸„à¸¥à¸´à¹Šà¸à¹€à¸¡à¹‰à¸²à¸ªà¹Œ";
     };
     ListBox LB_ACTION
     {
@@ -146,6 +147,7 @@ TabPage TP_ANIMATION
         Text[ turkish ] = "Efektler";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Efecte";
+        Text[ thai ] = "à¸¥à¸±à¸à¸©à¸“à¸°à¸à¸´à¹€à¸¨à¸©";
     };
 #define MA_Y1 (MA_Y0 + RSC_CD_FIXEDLINE_HEIGHT + RSC_SP_FLGR_INNERBORDER_TOP)
     FixedText FT_ANIMATION
@@ -175,6 +177,7 @@ TabPage TP_ANIMATION
         Text[ turkish ] = "Canlandırma";
         Text[ arabic ] = "ÍÑßÉ";
         Text[ catalan ] = "Animació";
+        Text[ thai ] = "à¸à¸²à¸£à¹€à¸„à¸¥à¸·à¹ˆà¸­à¸™à¹„à¸«à¸§";
     };
     ListBox LB_EFFECT
     {
@@ -200,7 +203,7 @@ TabPage TP_ANIMATION
         Text[ dutch ] = "Speed";
         Text[ french ] = "Vitesse";
         Text[ spanish ] = "Velocidad";
-        Text[ finnish ] = "Speed";
+        Text[ finnish ] = "Nopeus";
         Text[ italian ] = "Velocità";
         Text[ danish ] = "Hastighed";
         Text[ swedish ] = "Hastighet";
@@ -213,6 +216,7 @@ TabPage TP_ANIMATION
         Text[ turkish ] = "Speed";
         Text[ arabic ] = "Speed";
         Text[ catalan ] = "Velocitat";
+        Text[ thai ] = "à¸„à¸§à¸²à¸¡à¹€à¸£à¹‡à¸§";
     };
     RadioButton RBT_SLOW
     {
@@ -244,6 +248,7 @@ TabPage TP_ANIMATION
         Text[ turkish ] = "Yavaş";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Lenta";
+        Text[ thai ] = "~à¸Šà¹‰à¸²";
     };
     RadioButton RBT_MEDIUM
     {
@@ -260,7 +265,7 @@ TabPage TP_ANIMATION
         Text [ spanish ] = "~Media" ;
         Text [ danish ] = "~Middel" ;
         Text [ swedish ] = "~Medel" ;
-        Text [ finnish ] = "~Normaali" ;
+        Text [ finnish ] = "Normaali" ;
         Text [ english_us ] = "~Medium" ;
         TabStop = TRUE ;
         Hide = TRUE ;
@@ -271,10 +276,11 @@ TabPage TP_ANIMATION
         Text[ chinese_traditional ] = "ä¸­é€Ÿ(~M)";
         Text[ arabic ] = "ãÊæÓØ";
         Text[ greek ] = "Ìåóáßï";
-        Text[ korean ] = "ì¤‘ê°„(~M)";
+        Text[ korean ] = "ë³´í†µ(~M)";
         Text[ turkish ] = "Normal";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Mitjana";
+        Text[ thai ] = "~à¸›à¸²à¸™à¸à¸¥à¸²à¸‡";
     };
     RadioButton RBT_FAST
     {
@@ -306,6 +312,7 @@ TabPage TP_ANIMATION
         Text[ turkish ] = "Hızlı";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Ràpida";
+        Text[ thai ] = "à¹€~à¸£à¹‡à¸§";
     };
 #define MA_Y3 (MA_Y2 + 3*(RSC_CD_RADIOBUTTON_HEIGHT + RSC_SP_CTRL_GROUP_Y))
 #define MA_Y4 (MA_Y3 + RSC_CD_DROPDOWN_HEIGHT + RSC_SP_CTRL_GROUP_Y)
@@ -324,19 +331,20 @@ TabPage TP_ANIMATION
         Text[ dutch ] = "Met geluid verbergen";
         Text[ french ] = "Masquer avec son";
         Text[ spanish ] = "Ocultar con sonido";
-        Text[ finnish ] = "Vanish with sound";
+        Text[ finnish ] = "Häivytys ja ääni";
         Text[ italian ] = "Sfuma con suono";
         Text[ danish ] = "Skjul med lyd";
         Text[ swedish ] = "Tona ut med ljud";
         Text[ polish ] = "Ukryj z dŸwiêkiem";
         Text[ portuguese_brazilian ] = "Vanish with sound";
-        Text[ japanese ] = "ã‚µã‚¦ãƒ³ãƒ‰ä»˜ãã§ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¢ã‚¦ãƒˆ";
-        Text[ korean ] = "ê°œì²´ ìˆ¨ê¸¸ ë•Œ ì‚¬ìš´ë“œ ì¬ìƒ";
+        Text[ japanese ] = "ã‚µã‚¦ãƒ³ãƒ‰ä»˜ãã§ãƒ•ã‚§ãƒ¼ãƒ‰";
+        Text[ korean ] = "ì‚¬ìš´ë“œì™€ í•¨ê»˜ í˜ì´ë“œ";
         Text[ chinese_simplified ] = "æ¶ˆå¤±æ—¶æ’­æ”¾å£°éŸ³";
         Text[ chinese_traditional ] = "æ¶ˆå¤±æ™‚æ’­æ”¾è²éŸ³";
         Text[ turkish ] = "Vanish with sound";
         Text[ arabic ] = "Vanish with sound";
         Text[ catalan ] = "Oculta amb el so";
+        Text[ thai ] = "à¸¥à¸¹à¹ˆà¸”à¹‰à¸§à¸¢à¹€à¸ªà¸µà¸¢à¸‡";
     };
     Edit EDT_SOUND
     {
@@ -359,7 +367,7 @@ TabPage TP_ANIMATION
         Text [ dutch ] = "~Bladeren..." ;
         Text [ english_us ] = "~Browse..." ;
         Text [ italian ] = "~Sfoglia..." ;
-        Text [ spanish ] = "E~xaminar..." ;
+        Text [ spanish ] = "~Buscar..." ;
         Text [ french ] = "Parcourir..." ;
         Text [ swedish ] = "Genom~sök..." ;
         Text [ danish ] = "Gennem~se..." ;
@@ -372,11 +380,12 @@ TabPage TP_ANIMATION
         Text[ chinese_traditional ] = "ç€è¦½(~B)...";
         Text[ arabic ] = "ÇÓÊÚÑÇÖ...";
         Text[ greek ] = "ÁíáæŞôçóç...";
-        Text[ korean ] = "ì°¾ì•„ ë³´ê¸°(~B)...";
+        Text[ korean ] = "ì°¾ì•„ë³´ê¸°(~B)...";
         Text[ turkish ] = "Tara";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "E~xaminar...";
-        Text[ finnish ] = "~Selaa";
+        Text[ finnish ] = "~Selaa...";
+        Text[ thai ] = "à¹€~à¸£à¸µà¸¢à¸à¸”à¸¹...";
     };
     TriStateBox TSB_PLAY_FULL
     {
@@ -396,7 +405,7 @@ TabPage TP_ANIMATION
         Text [ portuguese_brazilian ] = "Klang ~vollst?ndig abspielen" ;
         Text [ portuguese ] = "Tocar som ~completo" ;
         Text[ chinese_simplified ] = "å®Œæ•´åœ°æ’­æ”¾å£°éŸ³(~P)";
-        Text[ russian ] = "Ïîëíîå âîñïğîèçâåäåíèå çâóêà";
+        Text[ russian ] = "Ïîëíîå âîñïğîèçâåäåíèå";
         Text[ polish ] = "Odtwórz pe³ny dŸwiêk";
         Text[ japanese ] = "ã‚µã‚¦ãƒ³ãƒ‰ã‚’å…¨éƒ¨å†ç”Ÿ(~P)";
         Text[ chinese_traditional ] = "å®Œæ•´åœ°æ’­æ”¾è²éŸ³(~P)";
@@ -407,6 +416,7 @@ TabPage TP_ANIMATION
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Reproduïr el so ~complet";
         Text[ finnish ] = "~Toista kokonaan";
+        Text[ thai ] = "à¹€~à¸¥à¹ˆà¸™à¹€à¸•à¹‡à¸¡à¸—à¸µà¹ˆ";
     };
 
     //------------------------------------
@@ -499,7 +509,7 @@ TabPage TP_ANIMATION
         Text [ portuguese ] = "~Localizar..." ;
         Text [ portuguese_brazilian ] = "~Buscar..." ;
         Text[ chinese_simplified ] = "æœå¯»(~F)";
-        Text[ russian ] = "~Ïîèñê";
+        Text[ russian ] = "~Íàéòè";
         Text[ polish ] = "Szukaj";
         Text[ japanese ] = "æ¤œç´¢(~F)";
         Text[ chinese_traditional ] = "æœå°‹(~F)";
@@ -509,7 +519,8 @@ TabPage TP_ANIMATION
         Text[ turkish ] = "Ara";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Cerca";
-        Text[ finnish ] = "Etsi";
+        Text[ finnish ] = "~Etsi";
+        Text[ thai ] = "~à¸«à¸²";
     };
 
     Text = "Interaktion" ;
@@ -524,17 +535,17 @@ TabPage TP_ANIMATION
     Text [ spanish ] = "Interacción";
     Text [ english_us ] = "Interaction";
     Text[ chinese_simplified ] = "äº¤äº’å¼";
-    Text[ russian ] = "Èíòåğàêöèÿ";
+    Text[ russian ] = "Äåéñòâèå ïî ùåë÷êó ìûøè";
     Text[ polish ] = "Interakcja";
     Text[ japanese ] = "ã‚¤ãƒ³ã‚¿ãƒ©ã‚¯ã‚·ãƒ§ãƒ³";
     Text[ chinese_traditional ] = "äº’å‹•å¼";
     Text[ arabic ] = "ÊİÇÚá";
     Text[ greek ] = "Áëëçëåğßäñáóç";
-    Text[ korean ] = "ìƒí˜¸ì‘ìš©";
+    Text[ korean ] = "ìƒí˜¸ ì‘ìš©";
     Text[ turkish ] = "Etkileşim";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Interacció";
-    Text[ finnish ] = "Vuorovaikutus";
+    Text[ finnish ] = "Toimintoasetukset";
     Text [ dutch ] = "Interactie" ;
     Text [ english_us ] = "Interaction" ;
     Text [ italian ] = "Interazione" ;
@@ -544,7 +555,12 @@ TabPage TP_ANIMATION
     Text [ danish ] = "Interaktion" ;
     Text [ portuguese_brazilian ] = "Interaktion" ;
     Text [ portuguese ] = "Interacção" ;
+    Text[ thai ] = "à¸›à¸à¸´à¸ªà¸±à¸¡à¸à¸±à¸™à¸˜à¹Œ";
 };
+
+
+
+
 
 
 

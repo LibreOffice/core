@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbx_ww.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-16 23:12:26 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 10:57:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,7 +126,8 @@ FloatingWindow RID_ALIGNMENT
     Text[ arabic ] = "ãÍÇĞÇÉ";
     Text[ turkish ] = "Hizalama";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Alineación";
+    Text[ catalan ] = "Alineament";
+    Text[ thai ] = "à¸ˆà¸±à¸”à¸•à¸³à¹à¸«à¸™à¹ˆà¸‡";
 };
 FloatingWindow RID_ZOOM
 {
@@ -146,7 +147,7 @@ FloatingWindow RID_ZOOM
     Text [ spanish ] = "Escala" ;
     Text [ danish ] = "Zoom" ;
     Text [ swedish ] = "Zooma" ;
-    Text [ finnish ] = "Zoomaa" ;
+    Text [ finnish ] = "Zoomaus" ;
     Text [ english_us ] = "Zoom" ;
     ToolBox RID_ZOOM_TBX
     {
@@ -214,14 +215,15 @@ FloatingWindow RID_ZOOM
     Text[ chinese_simplified ] = "æ˜¾ç¤ºæ¯”ä¾‹";
     Text[ russian ] = "Ìàñøòàá";
     Text[ polish ] = "Powiêkszenie";
-    Text[ japanese ] = "ï½½ï¾ï½°ï¾‘";
+    Text[ japanese ] = "ã‚ºãƒ¼ãƒ ";
     Text[ chinese_traditional ] = "é¡¯ç¤ºæ¯”ä¾‹";
     Text[ greek ] = "Åóôßáóç";
-    Text[ korean ] = "í™•ëŒ€/ì¶•ì†Œ";
+    Text[ korean ] = "ì¶•ì†Œ/í™•ëŒ€";
     Text[ arabic ] = "ÊßÈíÑ æÊÕÛíÑ";
     Text[ turkish ] = "Yakınlaştır";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Escala";
+    Text[ catalan ] = "Zoom";
+    Text[ thai ] = "à¸¢à¹ˆà¸­/à¸‚à¸¢à¸²à¸¢";
 };
 FloatingWindow RID_CHOOSE_MODE
 {
@@ -321,7 +323,8 @@ FloatingWindow RID_CHOOSE_MODE
     Text[ arabic ] = "ÊÃËíÑÇÊ";
     Text[ turkish ] = "Efektler";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Efectos";
+    Text[ catalan ] = "Efectes";
+    Text[ thai ] = "à¸¥à¸±à¸à¸©à¸“à¸°à¸à¸´à¹€à¸¨à¸©";
 };
 FloatingWindow RID_TEXT
 {
@@ -391,15 +394,16 @@ FloatingWindow RID_TEXT
     Text[ chinese_simplified ] = "æ–‡å­—";
     Text[ russian ] = "Òåêñò";
     Text[ polish ] = "Tekst";
-    Text[ japanese ] = "ï¾ƒï½·ï½½ï¾„";
+    Text[ japanese ] = "ãƒ†ã‚­ã‚¹ãƒˆ";
     Text[ chinese_traditional ] = "æ–‡å­—";
     Text[ greek ] = "Êåßìåíï";
     Text[ korean ] = "í…ìŠ¤íŠ¸";
     Text[ arabic ] = "äÕ";
     Text[ turkish ] = "Metin";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Texto";
+    Text[ catalan ] = "Text";
     Text[ finnish ] = "Teksti";
+    Text[ thai ] = "à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡";
 };
 FloatingWindow RID_RECTANGLES
 {
@@ -498,8 +502,9 @@ FloatingWindow RID_RECTANGLES
     Text[ arabic ] = "ãÓÊØíáÇÊ";
     Text[ turkish ] = "Dikdörtgenler";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Rectángulos";
+    Text[ catalan ] = "Rectangles";
     Text[ finnish ] = "Suorakulmiot";
+    Text[ thai ] = "à¸ªà¸µà¹ˆà¹€à¸«à¸¥à¸µà¹ˆà¸¢à¸¡";
 };
 FloatingWindow RID_ELLIPSES
 {
@@ -617,7 +622,7 @@ FloatingWindow RID_ELLIPSES
         };
     };
     Text[ chinese_simplified ] = "æ¤­åœ†";
-    Text[ russian ] = "İëëèïñû";
+    Text[ russian ] = "İëëèïñ";
     Text[ polish ] = "Elipsy";
     Text[ japanese ] = "æ¥•å††å½¢";
     Text[ chinese_traditional ] = "æ©¢åœ“";
@@ -627,7 +632,8 @@ FloatingWindow RID_ELLIPSES
     Text[ turkish ] = "Elipsler";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Elipses";
-    Text[ finnish ] = "Ellipsit";
+    Text[ finnish ] = "Soikiot";
+    Text[ thai ] = "à¸§à¸‡à¸£à¸µ";
 };
 FloatingWindow RID_LINES
 {
@@ -719,8 +725,9 @@ FloatingWindow RID_LINES
     Text[ arabic ] = "ãäÍäíÇÊ";
     Text[ turkish ] = "Eğri";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Curvas";
+    Text[ catalan ] = "Corbes";
     Text[ finnish ] = "Käyrät";
+    Text[ thai ] = "à¹€à¸ªà¹‰à¸™à¹‚à¸„à¹‰à¸‡";
 };
 FloatingWindow RID_ARROWS
 {
@@ -828,7 +835,7 @@ FloatingWindow RID_ARROWS
         };
     };
     Text[ chinese_simplified ] = "çº¿æ¡";
-    Text[ russian ] = "Ëèíèè";
+    Text[ russian ] = "Ëèíèè è ñòğåëêè";
     Text[ polish ] = "Linie";
     Text[ japanese ] = "ç·š";
     Text[ chinese_traditional ] = "ç·šæ¢";
@@ -837,8 +844,9 @@ FloatingWindow RID_ARROWS
     Text[ arabic ] = "ÎØæØ";
     Text[ turkish ] = "Çizgiler";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Líneas";
-    Text[ finnish ] = "Rivit";
+    Text[ catalan ] = "Línies";
+    Text[ finnish ] = "Viivat ja nuolet";
+    Text[ thai ] = "à¹€à¸ªà¹‰à¸™";
 };
 FloatingWindow RID_3D_OBJECTS
 {
@@ -921,17 +929,18 @@ FloatingWindow RID_3D_OBJECTS
         };
     };
     Text[ chinese_simplified ] = "3 ç»´å¯¹è±¡";
-    Text[ russian ] = "Îáúåêòû 3-Ì";
+    Text[ russian ] = "Òğåõìåğíûå îáúåêòû";
     Text[ polish ] = "Obiekty 3-W";
-    Text[ japanese ] = "3D ä½“ï½µï¾Œï¾ï½¼ï¾ï½ªï½¸ï¾„";
+    Text[ japanese ] = "3D ä½“ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ";
     Text[ chinese_traditional ] = "3D ç‰©ä»¶";
     Text[ greek ] = "Áíôéêåßìåíá 3Ä";
-    Text[ korean ] = "3ï¼¤ï¼ê°œì²´";
+    Text[ korean ] = "3ï¼¤ ê°œì²´";
     Text[ arabic ] = "ßÇÆäÇÊ ËáÇËíÉ ÇáÃÈÚÇÏ";
     Text[ turkish ] = "3B nesneler";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Objetos 3D";
-    Text[ finnish ] = "Kolmiulotteiset objektit";
+    Text[ catalan ] = "Objectes 3D";
+    Text[ finnish ] = "3D-kappale";
+    Text[ thai ] = "à¸§à¸±à¸•à¸–à¸¸3à¸¡à¸´à¸•à¸´";
 };
 FloatingWindow RID_CONNECTORS
 {
@@ -1169,17 +1178,18 @@ FloatingWindow RID_CONNECTORS
         };
     };
     Text[ chinese_simplified ] = "è¿æ¥ç¬¦";
-    Text[ russian ] = "Ñîåäèíèòåëüíàÿ ëîìàíàÿ ëèíèÿ";
+    Text[ russian ] = "Ñîåäèíèòåëüíàÿ ëèíèÿ";
     Text[ polish ] = "£¹cznik";
-    Text[ japanese ] = "ï½ºï¾ˆï½¸ï¾€";
+    Text[ japanese ] = "ã‚³ãƒã‚¯ã‚¿";
     Text[ chinese_traditional ] = "é€£æ¥ç¬¦";
     Text[ greek ] = "Óõíäİóåéò";
-    Text[ korean ] = "ì—°ê²°ì„ ";
+    Text[ korean ] = "ì—°ê²°ì";
     Text[ arabic ] = "ÑæÇÈØ";
     Text[ turkish ] = "Bağlayıcılar";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Conector";
-    Text[ finnish ] = "Liittimet";
+    Text[ catalan ] = "Connectors";
+    Text[ finnish ] = "Yhdysviivat";
+    Text[ thai ] = "à¸•à¸±à¸§à¹€à¸Šà¸·à¹ˆà¸­à¸¡à¸•à¹ˆà¸­";
 };
 FloatingWindow RID_INSERT
 {
@@ -1293,8 +1303,9 @@ FloatingWindow RID_INSERT
     Text[ arabic ] = "ÅÏÑÇÌ";
     Text[ turkish ] = "Ekle";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Insertar";
+    Text[ catalan ] = "Insereix";
     Text[ finnish ] = "Lisää";
+    Text[ thai ] = "à¹à¸—à¸£à¸";
 };
 FloatingWindow RID_POSITION
 {
@@ -1310,7 +1321,7 @@ FloatingWindow RID_POSITION
     Text [ swedish ] = "Placering" ;
     Text [ danish ] = "Placering" ;
     Text [ italian ] = "Disponi" ;
-    Text [ spanish ] = "Posición" ;
+    Text [ spanish ] = "Disposición" ;
     Text [ french ] = "Disposition" ;
     Text [ portuguese_brazilian ] = "Anordnung" ;
     Text [ portuguese ] = "Disposição" ;
@@ -1370,13 +1381,22 @@ FloatingWindow RID_POSITION
     Text[ japanese ] = "æ•´åˆ—";
     Text[ chinese_traditional ] = "æ’åº";
     Text[ greek ] = "Ôáêôïğïßçóç";
-    Text[ korean ] = "ì •ë ¬";
+    Text[ korean ] = "ë°°ì¹˜";
     Text[ arabic ] = "ÊÑÊíÈ";
     Text[ turkish ] = "Sıralama";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Posición";
+    Text[ catalan ] = "Organitza";
     Text[ finnish ] = "Järjestä";
+    Text[ thai ] = "à¸ˆà¸±à¸”à¹€à¸£à¸µà¸¢à¸‡";
 };
+
+
+
+
+
+
+
+
 
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuzoom.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2002-03-01 10:04:09 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 10:57:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,18 +193,9 @@ BOOL FuZoom::MouseMove(const MouseEvent& rMEvt)
 
             Point aScroll = aBeginPos - aEndPos;
 
-            // Nur um Vielfache der BRUSH_SIZE scrollen
-            if (Abs(aBeginPosPix.X() - aPosPix.X()) < BRUSH_SIZE)
-            {
-                aScroll.X() = 0;
-                aPosPix.X() = aBeginPosPix.X();
-            }
-
-            if (Abs(aBeginPosPix.Y() - aPosPix.Y()) < BRUSH_SIZE)
-            {
-                aScroll.Y() = 0;
-                aPosPix.Y() = aBeginPosPix.Y();
-            }
+            // #i2237#
+            // removed old stuff here which still forced zoom to be
+            // %BRUSH_SIZE which is outdated now
 
             if (aScroll.X() != 0 || aScroll.Y() != 0)
             {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stlsheet.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:28 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 10:57:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,8 +86,10 @@ public:
     virtual BOOL        SetParent (const String& rParentName);
     virtual SfxItemSet& GetItemSet();
     virtual BOOL        IsUsed() const;
-    virtual BOOL        HasFollowSupport() const    { return FALSE; }
-    virtual BOOL        HasParentSupport() const    { return TRUE; }
+    virtual BOOL        HasFollowSupport() const;
+    virtual BOOL        HasParentSupport() const;
+    virtual BOOL        HasClearParentSupport() const;
+
             List*       CreateChildList() const;
 
             void        AdjustToFontHeight(SfxItemSet& rSet,

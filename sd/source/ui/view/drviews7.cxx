@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews7.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: cl $ $Date: 2002-11-26 15:32:36 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 10:58:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -126,6 +125,9 @@
 #endif
 
 #include <svtools/moduleoptions.hxx>
+#ifndef _SVTOOLS_LANGUAGEOPTIONS_HXX
+#include <svtools/languageoptions.hxx>
+#endif
 
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
@@ -198,9 +200,17 @@ IMPL_LINK( SdDrawViewShell, ClipboardChanged, TransferableDataHelper*, pDataHelp
 void SdDrawViewShell::GetMenuState( SfxItemSet &rSet )
 {
     SdViewShell::GetMenuState(rSet);
+    BOOL bDisableVerticalText = !SvtLanguageOptions().IsVerticalTextEnabled();
 
     if (pFuSlideShow)
         rSet.Put(SfxBoolItem(SID_LIVE_PRESENTATION, pFuSlideShow->IsLivePresentation()));
+
+    if ( bDisableVerticalText )
+    {
+        rSet.DisableItem( SID_DRAW_CAPTION_VERTICAL );
+        rSet.DisableItem( SID_TEXT_FITTOSIZE_VERTICAL );
+        rSet.DisableItem( SID_DRAW_TEXT_VERTICAL );
+    }
 
     SfxApplication* pApp = SFX_APP();
 
@@ -974,7 +984,7 @@ void SdDrawViewShell::GetMenuState( SfxItemSet &rSet )
         rSet.DisableItem( SID_SIZE_ALL );
         rSet.DisableItem( SID_SIZE_PAGE_WIDTH );
         rSet.DisableItem( SID_SIZE_PAGE );
-        rSet.DisableItem( SID_INSERTPAGE );
+//      rSet.DisableItem( SID_INSERTPAGE );
         rSet.DisableItem( SID_DUPLICATE_PAGE );
         rSet.DisableItem( SID_ZOOM_TOOLBOX );
     }
@@ -1281,7 +1291,11 @@ void SdDrawViewShell::GetMenuState( SfxItemSet &rSet )
 
     const SvEditObjectProtocol& rProt = pDocSh->GetProtocol();
 
-    if (pDocSh->GetActualFunction() || rProt.IsInPlaceActive() || pFuSlideShow)
+    // #101976# Removed [pDocSh->GetActualFunction() ||] from the following
+    // clause because the current function of the docshell can only be
+    // search and replace or spell checking and in that case switching the
+    // view mode is allowed.
+    if (rProt.IsInPlaceActive() || pFuSlideShow)
     {
         if ( !rProt.IsInPlaceActive() )
         {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview2.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: ka $ $Date: 2002-12-11 14:54:59 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 10:58:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -569,17 +569,18 @@ sal_Int8 SdView::AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTar
             {
                 const SdView* pSourceView = pDragTransferable->GetView();
 
-                if( pSourceView )
+                if( pDragTransferable->IsPageTransferable() )
+                {
+                    nRet = DND_ACTION_COPY;
+                }
+                else if( pSourceView )
                 {
                     if( !( nDropAction & DND_ACTION_LINK ) ||
-                        pSourceView->GetDocSh()->GetMedium()->GetName().Len() ||
-                        pDragTransferable->IsPageTransferable() )
+                        pSourceView->GetDocSh()->GetMedium()->GetName().Len() )
                     {
                         nRet = nDropAction;
                     }
                 }
-                else if( pDragTransferable->IsPageTransferable() )
-                    nRet = nDropAction;
             }
             else
             {

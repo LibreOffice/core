@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: cl $ $Date: 2002-12-11 16:23:04 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 10:57:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,10 @@
  ************************************************************************/
 
 #define ITEMID_SEARCH           SID_SEARCH_ITEM
+
+#ifndef _COM_SUN_STAR_TEXT_WRITINGMODE_HPP_
+#include <com/sun/star/text/WritingMode.hpp>
+#endif
 
 #ifndef _FORBIDDENCHARACTERSTABLE_HXX
 #include <svx/forbiddencharacterstable.hxx>
@@ -309,11 +313,22 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh) :
         bHideSpell = aOptions.bIsSpellHideMarkings;
     }
 
+    LanguageType eRealLanguage = International::GetRealLanguage( eLanguage );
+
     mpInternational = new International(eLanguage);
     String aLanguage, aCountry, aEmpty;
-    ConvertLanguageToIsoNames( International::GetRealLanguage( eLanguage ), aLanguage, aCountry );
+    ConvertLanguageToIsoNames( eRealLanguage, aLanguage, aCountry );
     mpLocale = new ::com::sun::star::lang::Locale( aLanguage, aCountry, aEmpty );
     mpCharClass = new CharClass( *mpLocale );
+
+    // if the current language is a language that uses right-to-left text...
+    if( (LANGUAGE_ARABIC == (eRealLanguage & 0x00ff)) ||
+        (LANGUAGE_URDU == (eRealLanguage & 0x00ff)) ||
+        (LANGUAGE_HEBREW == eRealLanguage) )
+    {
+        // ... then we have to set this as a default
+        SetDefaultWritingMode( ::com::sun::star::text::WritingMode_RL_TB );
+    }
 
     // DefTab und SpellOptions setzen
     //OfaMiscCfg* pOfaMiscCfg = SFX_APP()->GetMiscConfig();
@@ -454,6 +469,8 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh) :
 
 SdDrawDocument::~SdDrawDocument()
 {
+    Broadcast(SdrHint(HINT_MODELCLEARED));
+
     if (pWorkStartupTimer)
     {
         if ( pWorkStartupTimer->IsActive() )

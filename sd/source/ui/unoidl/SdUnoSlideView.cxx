@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SdUnoSlideView.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cl $ $Date: 2002-11-19 13:06:01 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 10:58:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,12 +185,14 @@ Sequence< Type > SAL_CALL SdUnoSlideView::getTypes()
             const sal_Int32 nBaseTypes = aBaseTypes.getLength();
             const Type* pBaseTypes = aBaseTypes.getConstArray();
 
-            const sal_Int32 nOwnTypes = 6;      // !DANGER! Keep this updated!
+            const sal_Int32 nOwnTypes = 5;      // !!!!! DANGER !!!!! Keep this updated!
 
             aTypeSequence.realloc(  nBaseTypes + nOwnTypes );
             Type* pTypes = aTypeSequence.getArray();
 
-//          *pTypes++ = ITYPE(view::XSelectionSupplier);
+            // !!!!! DANGER !!!!! Keep nOwnTypes updated!
+
+//      ((  *pTypes++ = ITYPE(view::XSelectionSupplier); ))
             *pTypes++ = ITYPE(drawing::XDrawView);
             *pTypes++ = ITYPE(lang::XServiceInfo);
             *pTypes++ = ITYPE(beans::XPropertySet);

@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: docprev.hxx,v $
+ *  $RCSfile: undoback.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 10:57:57 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 10:57:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,76 +59,42 @@
  *
  ************************************************************************/
 
-#ifndef _SD_DOCPREV_HXX_
-#define _SD_DOCPREV_HXX_
+#ifndef _SD_UNDOBACK_HXX
+#define _SD_UNDOBACK_HXX
 
-#ifndef _COM_SUN_STAR_PRESENTATION_FADEEFFECT_HPP_
-#include <com/sun/star/presentation/FadeEffect.hpp>
-#endif
+#include "sdundo.hxx"
 
-#ifndef _SV_WINDOW_HXX //autogen
-#include <vcl/window.hxx>
-#endif
+class SdDrawDocument;
+class SdPage;
+class SdrObject;
 
-#ifndef _SV_GEN_HXX //autogen
-#include <tools/gen.hxx>
-#endif
+// -----------------------------
+// - SdBackgroundObjUndoAction -
+// -----------------------------
 
-#ifndef _SFXLSTNER_HXX
-#include <svtools/lstner.hxx>
-#endif
-#ifndef INCLUDED_SVTOOLS_COLORCFG_HXX
-#include <svtools/colorcfg.hxx>
-#endif
-
-#ifndef _SD_FADEDEF_H
-#include <fadedef.h>
-#endif
-
-class GDIMetaFile;
-struct SdrPaintProcRec;
-
-class SdDocPreviewWin : public Control, public SfxListener
+class SdBackgroundObjUndoAction : public SdUndoAction
 {
-protected:
-    GDIMetaFile*    pMetaFile;
-    BOOL            bInEffect;
-    Link            aClickHdl;
-    SfxObjectShell* mpObj;
-    sal_uInt16      mnShowPage;
-    Color           maDocumentColor;
+private:
 
-    virtual void    Paint( const Rectangle& rRect );
-    static void     CalcSizeAndPos( GDIMetaFile* pFile, Size& rSize, Point& rPoint );
-    void            ImpPaint( GDIMetaFile* pFile, OutputDevice* pVDev );
+    SdPage&                 mrPage;
+    SdrObject*              mpBackgroundObj;
 
-    static const int FRAME;
-
-    svtools::ColorConfig maColorConfig;
-
-    virtual void SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType, const SfxHint& rHint, const TypeId& rHintType);
-
-    void updateViewSettings();
-
-    DECL_LINK(PaintProc, SdrPaintProcRec*);
+    void                    ImplRestoreBackgroundObj();
 
 public:
-                    SdDocPreviewWin( Window* pParent, const ResId& rResId );
-                    SdDocPreviewWin( Window* pParent );
-                    ~SdDocPreviewWin() { delete pMetaFile; }
-    void            SetObjectShell( SfxObjectShell* pObj, sal_uInt16 nShowPage = 0 );
-    void            SetGDIFile( GDIMetaFile* pFile );
-    virtual void    Resize();
-    void            ShowEffect( ::com::sun::star::presentation::FadeEffect eEffect, FadeSpeed eSpeed );
 
-    virtual long    Notify( NotifyEvent& rNEvt );
+                            TYPEINFO();
 
-    void            SetClickHdl( const Link& rLink ) { aClickHdl = rLink; }
-    const Link&     GetClickHdl() const { return aClickHdl; }
+                            SdBackgroundObjUndoAction( SdDrawDocument& rDoc, SdPage& rPage, const SdrObject* pBackgroundObj );
+    virtual                 ~SdBackgroundObjUndoAction();
 
-    virtual void DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void            Undo();
+    virtual void            Redo();
+    virtual void            Repeat();
 
+    virtual BOOL            CanRepeat( SfxRepeatTarget& ) const;
+
+    virtual SdUndoAction*   Clone() const;
 };
 
-#endif
-
+#endif // _SD_UNDOBACK_HXX

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ka $ $Date: 2002-04-18 15:44:54 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 10:57:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,77 +64,6 @@
 #include "helpids.h"
 #include <offmgr/offmenu.hrc>
 #include <svx/svxids.hrc>
-ToolBox RID_PLUGINTOOLBOX
-{
-    HelpId = HID_SD_PLUGINTOOLBOX ;
-    LineSpacing = TRUE ;
-    Dockable = TRUE ;
-    Moveable = TRUE ;
-    Sizeable = TRUE ;
-    Zoomable = TRUE ;
-    Scroll = TRUE ;
-    HideWhenDeactivate = TRUE ;
-    Border = TRUE ;
-    SVLook = TRUE ;
-    MenuStrings = TRUE ;
-    Size = MAP_APPFONT ( 0 , 0 ) ;
-    ItemList =
-    {
-        ToolBoxItem
-        {
-            ITEM_FILE_SAVEDOC
-        };
-        ToolBoxItem
-        {
-            ITEM_FILE_SAVEASDOC
-        };
-        ToolBoxItem
-        {
-            ITEM_FILE_MAIL_SENDDOC
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_EXPORTDOC ;
-            HelpID = SID_EXPORTDOC ;
-        };
-        ToolBoxItem
-        {
-            ITEM_FILE_DOCINFO
-        };
-        ToolBoxItem
-        {
-            ITEM_TOOLBAR_PRINTDOCDIRECT
-        };
-        ToolBoxItem
-        {
-            Type = TOOLBOXITEM_SEPARATOR ;
-        };
-        ToolBoxItem
-        {
-            ITEM_EDIT_CUT
-        };
-        ToolBoxItem
-        {
-            ITEM_EDIT_COPY
-        };
-        ToolBoxItem
-        {
-            ITEM_EDIT_PASTE
-        };
-        ToolBoxItem
-        {
-            ITEM_EDIT_UNDO
-        };
-        ToolBoxItem
-        {
-            ITEM_EDIT_REDO
-        };
-        ToolBoxItem
-        {
-            Type = TOOLBOXITEM_SEPARATOR ;
-        };
-    };
-};
  // Werkzeugleiste (Impress)
  // Objektleiste (Impress)
  // Optionsleiste (Impress)
@@ -693,3 +622,229 @@ ToolBox RID_DRAW_GRAF_TOOLBOX
         };
     };
 };
+
+String RID_DRAW_VIEWER_TOOLBOX
+{
+    TEXT = "Funktionsleiste" ;
+    TEXT [ english ] = "Function bar" ;
+    Text [ dutch ] = "Werkbalk" ;
+    Text [ english_us ] = "Function Bar" ;
+    Text [ italian ] = "Barra delle funzioni" ;
+    Text [ spanish ] = "Barra de funciones" ;
+    Text [ french ] = "Barre de fonctions" ;
+    Text [ swedish ] = "Funktionslist" ;
+    Text [ danish ] = "Funktionslinje" ;
+    Text [ portuguese_brazilian ] = "Funktionsleiste" ;
+    Text [ portuguese ] = "Barra de funÁıes" ;
+    Text[ chinese_simplified ] = "ÂäüËÉΩÊ†è";
+    Text[ russian ] = "œ‡ÌÂÎ¸ ÙÛÌÍˆËÈ";
+    Text[ polish ] = "Pasek funkcji";
+    Text[ japanese ] = "„Éï„Ç°„É≥„ÇØ„Ç∑„Éß„É≥„Éê„Éº";
+    Text[ chinese_traditional ] = "Â∑•ÂÖ∑Âàó";
+    Text[ arabic ] = "‘—Ìÿ «·„Â«„";
+    Text[ dutch ] = "Werkbalk";
+    Text[ chinese_simplified ] = "ÂäüËÉΩÊ†è";
+    Text[ greek ] = "√Ò·ÏÏﬁ ÎÂÈÙÔıÒ„È˛Ì";
+    Text[ korean ] = "Í∏∞Îä• Î™®Ïùå";
+    Text[ turkish ] = "›˛lev Áubuu";
+    Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Barra de funcions";
+    Text[ finnish ] = "Toimintorivi";
+    Text[ thai ] = "‡πÅ‡∏ñ‡∏ö‡∏ü‡∏±‡∏á‡∏Å‡πå‡∏ä‡∏±‡πà‡∏ô";
+};
+
+ToolBox RID_DRAW_VIEWER_TOOLBOX
+{
+    Border = TRUE ;
+    SVLook = TRUE ;
+    Dockable = TRUE ;
+    Moveable = TRUE ;
+    Sizeable = TRUE ;
+    Closeable = TRUE ;
+    Zoomable = TRUE ;
+    HideWhenDeactivate = TRUE ;
+    LineSpacing = TRUE ;
+    Customize = TRUE ;
+    MenuStrings = TRUE ;
+    Hide = TRUE ;
+    ItemList =
+    {
+        ToolBoxItem
+        {
+            Identifier = SID_SAVEASDOC ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_EDITDOC ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_MAIL_SENDDOC ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_DIRECTEXPORTDOCASPDF ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_PRINTDOCDIRECT ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_COPY ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_SEARCH_DLG ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_NAVIGATOR ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_ZOOM ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_PRESENTATION;
+        };
+    };
+    Scroll = TRUE ;
+};
+
+String RID_GRAPHIC_VIEWER_TOOLBOX
+{
+    TEXT = "Funktionsleiste" ;
+    TEXT [ english ] = "Function bar" ;
+    Text [ dutch ] = "Werkbalk" ;
+    Text [ english_us ] = "Function Bar" ;
+    Text [ italian ] = "Barra delle funzioni" ;
+    Text [ spanish ] = "Barra de funciones" ;
+    Text [ french ] = "Barre de fonctions" ;
+    Text [ swedish ] = "Funktionslist" ;
+    Text [ danish ] = "Funktionslinje" ;
+    Text [ portuguese_brazilian ] = "Funktionsleiste" ;
+    Text [ portuguese ] = "Barra de funÁıes" ;
+    Text[ chinese_simplified ] = "ÂäüËÉΩÊ†è";
+    Text[ russian ] = "œ‡ÌÂÎ¸ ÙÛÌÍˆËÈ";
+    Text[ polish ] = "Pasek funkcji";
+    Text[ japanese ] = "„Éï„Ç°„É≥„ÇØ„Ç∑„Éß„É≥„Éê„Éº";
+    Text[ chinese_traditional ] = "Â∑•ÂÖ∑Âàó";
+    Text[ arabic ] = "‘—Ìÿ «·„Â«„";
+    Text[ dutch ] = "Werkbalk";
+    Text[ chinese_simplified ] = "ÂäüËÉΩÊ†è";
+    Text[ greek ] = "√Ò·ÏÏﬁ ÎÂÈÙÔıÒ„È˛Ì";
+    Text[ korean ] = "Í∏∞Îä• Î™®Ïùå";
+    Text[ turkish ] = "›˛lev Áubuu";
+    Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Barra de funcions";
+    Text[ finnish ] = "Toimintorivi";
+    Text[ thai ] = "‡πÅ‡∏ñ‡∏ö‡∏ü‡∏±‡∏á‡∏Å‡πå‡∏ä‡∏±‡πà‡∏ô";
+};
+
+ToolBox RID_GRAPHIC_VIEWER_TOOLBOX
+{
+    Border = TRUE ;
+    SVLook = TRUE ;
+    Dockable = TRUE ;
+    Moveable = TRUE ;
+    Sizeable = TRUE ;
+    Closeable = TRUE ;
+    Zoomable = TRUE ;
+    HideWhenDeactivate = TRUE ;
+    LineSpacing = TRUE ;
+    Customize = TRUE ;
+    MenuStrings = TRUE ;
+    Hide = TRUE ;
+    ItemList =
+    {
+        ToolBoxItem
+        {
+            Identifier = SID_SAVEASDOC ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_EDITDOC ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_MAIL_SENDDOC ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_DIRECTEXPORTDOCASPDF ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_PRINTDOCDIRECT ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_COPY ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_SEARCH_DLG ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_NAVIGATOR ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ATTR_ZOOM ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+    };
+    Scroll = TRUE ;
+};
+
+

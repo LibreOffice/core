@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navigatr.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: cl $ $Date: 2003-01-13 11:52:56 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 10:57:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses

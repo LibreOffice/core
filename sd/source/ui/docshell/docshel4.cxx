@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshel4.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: sj $ $Date: 2002-12-12 12:22:45 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 10:57:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -438,7 +438,12 @@ BOOL SdDrawDocShell::Load( SvStorage* pStore )
         FinishedLoading( SFX_LOADED_ALL );
     }
     else
+    {
+        if( pStore->GetError() == ERRCODE_IO_BROKENPACKAGE )
+            SetError( ERRCODE_IO_BROKENPACKAGE );
+
         pStore->SetError( SVSTREAM_WRONGVERSION );
+    }
 
     // tell SFX to change viewshell when in preview mode
     if( IsPreview() )

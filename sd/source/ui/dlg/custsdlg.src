@@ -2,9 +2,9 @@
  *
  *  $RCSfile: custsdlg.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2001-11-16 23:03:05 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 10:57:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,11 +97,12 @@ ModalDialog DLG_CUSTOMSHOW
         Text[ chinese_traditional ] = "é–‹å•Ÿæ–°æª”(~N)...";
         Text[ arabic ] = "ÌÏíÏ...";
         Text[ greek ] = "Äçìéïõñãßá...";
-        Text[ korean ] = "ìƒˆë¡œ(~N)...";
+        Text[ korean ] = "ìƒˆë¡œ ë§Œë“¤ê¸°(~N)...";
         Text[ turkish ] = "Yeni...";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Nuevo...";
-        Text[ finnish ] = "~Uusi";
+        Text[ catalan ] = "~Nou...";
+        Text[ finnish ] = "~Luo uusi...";
+        Text[ thai ] = "à¹ƒ~à¸«à¸¡à¹ˆ...";
     };
     PushButton BTN_EDIT
     {
@@ -129,8 +130,9 @@ ModalDialog DLG_CUSTOMSHOW
         Text[ korean ] = "í¸ì§‘(~E)...";
         Text[ turkish ] = "Düzenle...";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "E~ditar...";
-        Text[ finnish ] = "~Muokkaa";
+        Text[ catalan ] = "~Edita...";
+        Text[ finnish ] = "~Muokkaa...";
+        Text[ thai ] = "à¹~à¸à¹‰à¹„à¸‚...";
     };
     PushButton BTN_REMOVE
     {
@@ -145,8 +147,8 @@ ModalDialog DLG_CUSTOMSHOW
         Text [ swedish ] = "~Radera" ;
         Text [ danish ] = "Slet" ;
         Text [ italian ] = "~Elimina" ;
-        Text [ spanish ] = "~Eliminar" ;
-        Text [ french ] = "~Supprimer" ;
+        Text [ spanish ] = "~Borrar" ;
+        Text [ french ] = "Supprimer" ;
         Text [ dutch ] = "~Wissen" ;
         Text[ chinese_simplified ] = "åˆ é™¤(~D)";
         Text[ russian ] = "~Óäàëèòü";
@@ -158,8 +160,9 @@ ModalDialog DLG_CUSTOMSHOW
         Text[ korean ] = "ì‚­ì œ(~D)";
         Text[ turkish ] = "Sil";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Eliminar";
+        Text[ catalan ] = "~Suprimeix";
         Text[ finnish ] = "~Poista";
+        Text[ thai ] = "~à¸¥à¸š";
     };
     PushButton BTN_COPY
     {
@@ -174,21 +177,22 @@ ModalDialog DLG_CUSTOMSHOW
         Text [ swedish ] = "~Kopiera" ;
         Text [ danish ] = "Kopier" ;
         Text [ italian ] = "~Copia" ;
-        Text [ spanish ] = "~Copiar" ;
+        Text [ spanish ] = "Copiar" ;
         Text [ french ] = "Co~pier" ;
         Text [ dutch ] = "~Kopiëren" ;
         Text[ chinese_simplified ] = "å¤åˆ¶(~Y)";
         Text[ russian ] = "~Êîïèğîâàòü";
         Text[ polish ] = "Kopiuj";
-        Text[ japanese ] = "ï½ºï¾‹ï¾Ÿï½°(~Y)";
+        Text[ japanese ] = "ã‚³ãƒ”ãƒ¼(~Y)";
         Text[ chinese_traditional ] = "è¤‡è£½(~Y)";
         Text[ arabic ] = "äÓÎ";
         Text[ greek ] = "Áíôé~ãñáöŞ";
         Text[ korean ] = "ë³µì‚¬(~Y)";
         Text[ turkish ] = "Kopyala";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Copiar";
+        Text[ catalan ] = "~Copia";
         Text[ finnish ] = "Ko~pioi";
+        Text[ thai ] = "à¸„à¸±à¸”à¸¥~à¸­à¸";
     };
     HelpButton BTN_HELP
     {
@@ -222,8 +226,9 @@ ModalDialog DLG_CUSTOMSHOW
         Text[ korean ] = "ì‹œì‘(~S)";
         Text[ turkish ] = "Başlat";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Inicio";
+        Text[ catalan ] = "~Inicia";
         Text[ finnish ] = "~Aloita";
+        Text[ thai ] = "à¹€~à¸£à¸´à¹ˆà¸¡";
     };
     OKButton BTN_OK
     {
@@ -238,9 +243,9 @@ ModalDialog DLG_CUSTOMSHOW
         Text [ portuguese_brazilian ] = "~Schlie?en" ;
         Text [ swedish ] = "~Stäng" ;
         Text [ danish ] = "Luk" ;
-        Text [ italian ] = "~Chiudi" ;
+        Text [ italian ] = "C~hiudi" ;
         Text [ spanish ] = "~Cerrar" ;
-        Text [ french ] = "~Fermer" ;
+        Text [ french ] = "Fermer" ;
         Text [ dutch ] = "~Sluiten" ;
         Text[ chinese_simplified ] = "å…³é—­(~C)";
         Text[ russian ] = "Çàêğûòü";
@@ -252,8 +257,9 @@ ModalDialog DLG_CUSTOMSHOW
         Text[ korean ] = "ë‹«ê¸°(~C)";
         Text[ turkish ] = "Kapat";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Cerrar";
+        Text[ catalan ] = "~Tanca";
         Text[ finnish ] = "~Sulje";
+        Text[ thai ] = "~à¸›à¸´à¸”";
     };
     ListBox LB_CUSTOMSHOWS
     {
@@ -274,22 +280,23 @@ ModalDialog DLG_CUSTOMSHOW
         Text [ swedish ] = "Använd ~individuell bildskärmspresentation" ;
         Text [ danish ] = "Brug individuel præsentation" ;
         Text [ italian ] = "Usa presentaz~ione su schermo personalizzata" ;
-        Text [ spanish ] = "~Utilizar presentación personalizada" ;
+        Text [ spanish ] = "Utilizar presentación personalizada" ;
         Text [ french ] = "~Utiliser la présentation à l'écran personnalisée" ;
         Text [ dutch ] = "~Individuele schermpresentatie gebruiken" ;
         Text [ portuguese ] = "Utilizar apres~entação personalizada" ;
         Text[ chinese_simplified ] = "ä½¿ç”¨è‡ªå®šçš„æ¼”ç¤ºæ–‡ç¨¿(~U)";
-        Text[ russian ] = "Èñïîëüçîâàòü ïğîèçâîëüíóş äåìîíñòğàöèş";
+        Text[ russian ] = "Èñïîëüçîâàòü îáû÷íóş äåìîíñòğàöèş ñëàéäîâ";
         Text[ polish ] = "Zastosuj indywidualny pokaz slajdów";
-        Text[ japanese ] = "ç›®çš„åˆ¥ï½½ï¾—ï½²ï¾„ï¾ï½¼ï½®ï½°ã®ä½¿ç”¨(~U)";
+        Text[ japanese ] = "ç›®çš„åˆ¥ã‚¹ãƒ©ã‚¤ãƒ‰ã‚·ãƒ§ãƒ¼ã®ä½¿ç”¨(~U)";
         Text[ chinese_traditional ] = "æ¡ç”¨ä½¿ç”¨è€…çš„æ”¾æ˜ ç°¡å ±æŠ•å½±ç‰‡(~U)";
         Text[ arabic ] = "ÇÓÊÎÏÇã ÚÑÖ ÊŞÏíãí ãÎÕÕ";
         Text[ greek ] = "×ñŞóç ğñïóáñìïóìİí~çò ğáñïõóßáóçò ïèüíçò";
-        Text[ korean ] = "ê°œì¸ì  ìŠ¬ë¼ì´ë“œ ì‡¼ ì´ìš©(~U)";
+        Text[ korean ] = "ì‚¬ìš©ì ì •ì˜ ìŠ¬ë¼ì´ë“œ ì‡¼ ì´ìš©(~U)";
         Text[ turkish ] = "Özel ekran sunusunu kullan";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Utilizar presentación personalizada";
-        Text[ finnish ] = "~Käytä mukautettua diaesitystä";
+        Text[ catalan ] = "~Utilitza la presentació personalitzada";
+        Text[ finnish ] = "K~äytä mukautettua esitystä";
+        Text[ thai ] = "à¹ƒ~à¸Šà¹‰à¹à¸ªà¸”à¸‡à¸ à¸²à¸à¸™à¸´à¹ˆà¸‡à¹à¸šà¸šà¸à¸³à¸«à¸™à¸”à¹€à¸­à¸‡";
     };
     Text [ english_us ] = "Custom Slide Shows" ;
     Text [ portuguese_brazilian ] = "Individuelle Pr?sentationen" ;
@@ -301,17 +308,18 @@ ModalDialog DLG_CUSTOMSHOW
     Text [ dutch ] = "Individuele schermpresentaties" ;
     Text [ portuguese ] = "Apresentações personalizadas" ;
     Text[ chinese_simplified ] = "æ”¾æ˜ è‡ªå®šçš„æ¼”ç¤ºæ–‡ç¨¿";
-    Text[ russian ] = "Ïğîèçâîëüíàÿ äåìîíñòğàöèÿ";
+    Text[ russian ] = "Îáû÷íàÿ äåìîíñòğàöèÿ ñëàéäîâ";
     Text[ polish ] = "Indywidualne pokazy slajdów";
-    Text[ japanese ] = "ç›®çš„åˆ¥ï½½ï¾—ï½²ï¾„ï¾ï½¼ï½®ï½°";
+    Text[ japanese ] = "ç›®çš„åˆ¥ã‚¹ãƒ©ã‚¤ãƒ‰ã‚·ãƒ§ãƒ¼";
     Text[ chinese_traditional ] = "æ”¾æ˜ ä½¿ç”¨è€…çš„ç°¡å ±æŠ•å½±ç‰‡";
     Text[ arabic ] = "ÚÑæÖ ÊŞÏíãíÉ ãÎÕÕÉ";
     Text[ greek ] = "Ğñïóáñìïóìİíç ğáñïõóßáóç ïèüíçò";
-    Text[ korean ] = "ê°œì¸ì  ìŠ¬ë¼ì´ë“œ ì‡¼";
+    Text[ korean ] = "ì‚¬ìš©ì ì •ì˜ ìŠ¬ë¼ì´ë“œ ì‡¼";
     Text[ turkish ] = "Özel ekran sunuları";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Presentación personalizada";
-    Text[ finnish ] = "Mukautetut diaesitykset";
+    Text[ catalan ] = "Presentacions personalitzades";
+    Text[ finnish ] = "Mukautetut esitykset";
+    Text[ thai ] = "à¹à¸ªà¸”à¸‡à¸ à¸²à¸à¸™à¸´à¹ˆà¸‡à¹à¸šà¸šà¸à¸³à¸«à¸™à¸”à¹€à¸­à¸‡";
 };
 ModalDialog DLG_DEFINE_CUSTOMSHOW
 {
@@ -367,8 +375,9 @@ ModalDialog DLG_DEFINE_CUSTOMSHOW
         Text[ korean ] = "ì´ë¦„";
         Text[ turkish ] = "Ad";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Nombre";
+        Text[ catalan ] = "Nom";
         Text[ finnish ] = "Nimi";
+        Text[ thai ] = "à¸Šà¸·à¹ˆà¸­";
     };
     Edit EDT_NAME
     {
@@ -426,15 +435,16 @@ ModalDialog DLG_DEFINE_CUSTOMSHOW
         Text[ chinese_simplified ] = "æ¼”ç¤ºæ–‡ç¨¿é¡µé¢";
         Text[ russian ] = "Ñóùåñòâóşùèå ñëàéäû";
         Text[ polish ] = "Istniej¹ce slajdy";
-        Text[ japanese ] = "ï¾Œï¾Ÿï¾šï½¾ï¾ï¾ï¾ƒï½°ï½¼ï½®ï¾ã®ï¾ï¾Ÿï½°ï½¼ï¾";
+        Text[ japanese ] = "ãƒ—ãƒ¬ã‚¼ãƒ³ãƒ†ãƒ¼ã‚·ãƒ§ãƒ³ã®ãƒšãƒ¼ã‚¸";
         Text[ chinese_traditional ] = "ç°¡å ±é é¢";
         Text[ arabic ] = "ÕİÍÇÊ ÇáÚÑÖ ÇáÊŞÏíãí";
         Text[ greek ] = "Óåëßäåò ôçò ğáñïõóßáóçò";
-        Text[ korean ] = "í”„ë¦¬ì  í…Œì´ì…˜ ìŠ¬ë¼ì´ë“œ";
+        Text[ korean ] = "í˜„ì¬ ìŠ¬ë¼ì´ë“œ";
         Text[ turkish ] = "Sunu sayfaları";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Páginas existentes";
-        Text[ finnish ] = "Olemassa olevat diat";
+        Text[ catalan ] = "Diapositives existents";
+        Text[ finnish ] = "Alkuperäiset diat";
+        Text[ thai ] = "à¸ à¸²à¸à¸™à¸´à¹ˆà¸‡à¸—à¸µà¹ˆà¸¡à¸µà¸­à¸¢à¸¹à¹ˆ";
     };
     FixedText FT_CUSTOM_PAGES
     {
@@ -452,17 +462,18 @@ ModalDialog DLG_DEFINE_CUSTOMSHOW
         Text [ french ] = "Présentation personnalisée" ;
         Text [ dutch ] = "Individuele presentatie" ;
         Text[ chinese_simplified ] = "è‡ªå®šçš„æ¼”ç¤ºæ–‡ç¨¿";
-        Text[ russian ] = "Ïğîèçâîëüíàÿ äåìîíñòğàöèÿ";
+        Text[ russian ] = "Âûáğàííûå ñëàéäû";
         Text[ polish ] = "Pokaz niestandardowy";
-        Text[ japanese ] = "ç›®çš„åˆ¥ï½½ï¾—ï½²ï¾„ï¾ï½¼ï½®ï½°";
+        Text[ japanese ] = "ç›®çš„åˆ¥ã‚¹ãƒ©ã‚¤ãƒ‰ã‚·ãƒ§ãƒ¼";
         Text[ chinese_traditional ] = "å€‹äººç°¡å ±";
         Text[ arabic ] = "ÚÑÖ ÊŞÏíãí ãÎÕÕ";
         Text[ greek ] = "Åğéëåãìİíåò ğáñïõóéÜóåéò";
-        Text[ korean ] = "ê°œì¸ì  í”„ë¦¬ì  í…Œì´ì…˜";
+        Text[ korean ] = "ì„ íƒí•œ ìŠ¬ë¼ì´ë“œ";
         Text[ turkish ] = "Özel sunu";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Presentación personalizada";
+        Text[ catalan ] = "Diapositives seleccionades";
         Text[ finnish ] = "Valitut diat";
+        Text[ thai ] = "à¸ à¸²à¸à¸™à¸´à¹ˆà¸‡à¸—à¸µà¹ˆà¹€à¸¥à¸·à¸­à¸";
     };
     Text [ english_us ] = "Define Custom Slide Show" ;
     Text [ portuguese_brazilian ] = "Individuelle Pr?sentation definieren" ;
@@ -474,18 +485,23 @@ ModalDialog DLG_DEFINE_CUSTOMSHOW
     Text [ dutch ] = "Individuele schermpresentatie definiëren" ;
     Text [ portuguese ] = "Definir apresentação personalizada" ;
     Text[ chinese_simplified ] = "è®¾å®šè‡ªå®šçš„æ¼”ç¤ºæ–‡ç¨¿";
-    Text[ russian ] = "Îïğåäåëèòü ïğîèçâîëüíóş äåìîíñòğàöèş";
+    Text[ russian ] = "Çàäàòü îáû÷íóş äåìîíñòğàöèş ñëàéäîâ";
     Text[ polish ] = "Okreœl indywidualne pokazy slajdów";
-    Text[ japanese ] = "ç›®çš„åˆ¥ï½½ï¾—ï½²ï¾„ï¾ï½¼ï½®ï½°ã®å®šç¾©ä»˜ã‘";
+    Text[ japanese ] = "ç›®çš„åˆ¥ã‚¹ãƒ©ã‚¤ãƒ‰ã‚·ãƒ§ãƒ¼ã®å®šç¾©ä»˜ã‘";
     Text[ chinese_traditional ] = "è¨­å®šä½¿ç”¨è€…çš„æ”¾æ˜ ç°¡å ±æŠ•å½±ç‰‡";
     Text[ arabic ] = "ÊÚÑíİ ÇáÚÑÖ ÇáÊŞÏíãí ÇáãÎÕÕ";
     Text[ greek ] = "Ïñéóìüò ğñïóáñìïóìİíçò ğáñïõóßáóçò ïèüíçò";
-    Text[ korean ] = "ê°œì¸ì  ìŠ¬ë¼ì´ë“œ ì‡¼ ì •ì˜";
+    Text[ korean ] = "ì‚¬ìš©ì ì •ì˜ ìŠ¬ë¼ì´ë“œ ì‡¼ ì§€ì •";
     Text[ turkish ] = "Özel ekran sunusu tanımla";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Definir presentación personalizada";
-    Text[ finnish ] = "Määritä mukautettu diaesitys";
+    Text[ catalan ] = "Defineix la presentació personalitzada";
+    Text[ finnish ] = "Määritä mukautettu esitys";
+    Text[ thai ] = "à¸£à¸°à¸šà¸¸à¹à¸ªà¸”à¸‡à¸ à¸²à¸à¸™à¸´à¹ˆà¸‡à¹à¸šà¸šà¸à¸³à¸«à¸™à¸”à¹€à¸­à¸‡";
 };
+
+
+
+
 
 
 

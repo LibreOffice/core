@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drtxtob.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: cl $ $Date: 2002-09-13 10:34:58 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 10:58:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,6 +222,7 @@ void SdDrawTextObjectBar::GetAttrState( SfxItemSet& rSet )
     SfxItemSet          aAttrSet( pView->GetDoc()->GetPool() );
     SvtLanguageOptions  aLangOpt;
     sal_Bool            bDisableParagraphTextDirection = !aLangOpt.IsCTLFontEnabled();
+    sal_Bool            bDisableVerticalText = !aLangOpt.IsVerticalTextEnabled();
 
     pView->GetAttributes( aAttrSet );
 
@@ -386,22 +387,30 @@ void SdDrawTextObjectBar::GetAttrState( SfxItemSet& rSet )
             case SID_TEXTDIRECTION_LEFT_TO_RIGHT:
             case SID_TEXTDIRECTION_TOP_TO_BOTTOM:
             {
-                BOOL bLeftToRight = TRUE;
-
-                SdrOutliner* pOutl = pView->GetTextEditOutliner();
-                if( pOutl )
+                if ( bDisableVerticalText )
                 {
-                    if( pOutl->IsVertical() )
-                        bLeftToRight = FALSE;
+                    rSet.DisableItem( SID_TEXTDIRECTION_LEFT_TO_RIGHT );
+                    rSet.DisableItem( SID_TEXTDIRECTION_TOP_TO_BOTTOM );
                 }
                 else
-                    bLeftToRight = ( (const SvxWritingModeItem&) aAttrSet.Get( SDRATTR_TEXTDIRECTION ) ).GetValue() == com::sun::star::text::WritingMode_LR_TB;
+                {
+                    BOOL bLeftToRight = TRUE;
 
-                rSet.Put( SfxBoolItem( SID_TEXTDIRECTION_LEFT_TO_RIGHT, bLeftToRight ) );
-                rSet.Put( SfxBoolItem( SID_TEXTDIRECTION_TOP_TO_BOTTOM, !bLeftToRight ) );
+                    SdrOutliner* pOutl = pView->GetTextEditOutliner();
+                    if( pOutl )
+                    {
+                        if( pOutl->IsVertical() )
+                            bLeftToRight = FALSE;
+                    }
+                    else
+                        bLeftToRight = ( (const SvxWritingModeItem&) aAttrSet.Get( SDRATTR_TEXTDIRECTION ) ).GetValue() == com::sun::star::text::WritingMode_LR_TB;
 
-                if( !bLeftToRight )
-                    bDisableParagraphTextDirection = sal_True;
+                    rSet.Put( SfxBoolItem( SID_TEXTDIRECTION_LEFT_TO_RIGHT, bLeftToRight ) );
+                    rSet.Put( SfxBoolItem( SID_TEXTDIRECTION_TOP_TO_BOTTOM, !bLeftToRight ) );
+
+                    if( !bLeftToRight )
+                        bDisableParagraphTextDirection = sal_True;
+                }
             }
             break;
 

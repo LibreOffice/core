@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpreslt.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-14 20:24:53 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 10:57:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@ ModalDialog DLG_PRESLT
         /* ### ACHTUNG: Neuer Text in Resource? Wählen Sie eine ~Seitenvorlage : Wõhlen Sie eine ~Seitenvorlage */
         Text = "Wählen Sie eine ~Seitenvorlage" ;
         Text [ ENGLISH ] = "Choose a ~page template" ;
-        Text [ english_us ] = "~Select a Slide Design" ;
+        Text [ english_us ] = "~Select a slide design" ;
         Text [ italian ] = "Scegliere un modello di pagina" ;
         Text [ spanish ] = "Elija un estil~o de página" ;
         Text [ french ] = "Sélectionnez un ~style de page" ;
@@ -86,18 +86,19 @@ ModalDialog DLG_PRESLT
         Text [ danish ] = "Vælg en sidetypografi" ;
         Text [ portuguese ] = "Escolha um estilo de ~página" ;
         Text [ portuguese_brazilian ] = "W?hlen Sie eine ~Seitenvorlage" ;
-        Text[ chinese_simplified ] = "ÇëÑ¡ÔñÒ»¸öÒ³ÃæÑùÊ½(~S)";
+        Text[ chinese_simplified ] = "è¯·é€‰æ‹©ä¸€ä¸ªé¡µé¢æ ·å¼(~S)";
         Text[ russian ] = "Âûáåğèòå äèçàéí ñëàéäà";
         Text[ polish ] = "Wybierz uk³ad slajdu";
-        Text[ japanese ] = "Íß°¼Ş½À²Ù‚ğ‘I‘ğ‚µ‚Ü‚·(~S)";
-        Text[ chinese_traditional ] = "½Ğ±z¿ï¾Ü¤@­Ó­¶­±¼Ë¦¡(~S)";
+        Text[ japanese ] = "ãƒšãƒ¼ã‚¸ã‚¹ã‚¿ã‚¤ãƒ«ã‚’é¸æŠã—ã¾ã™(~S)";
+        Text[ chinese_traditional ] = "è«‹æ‚¨é¸æ“‡ä¸€å€‹é é¢æ¨£å¼(~S)";
         Text[ arabic ] = "ÇáÑÌÇÁ ÇÎÊíÇÑ ÊÎØíØ ÇáÕİÍÉ";
         Text[ greek ] = "Åğéëİîôå İíá ğñüôõğï ~óåëßäáò";
-        Text[ korean ] = "ÂÊ À¯ÇüÀ» ¼±ÅÃÇÏ½Ê½Ã¿À(~S)";
+        Text[ korean ] = "ìŠ¬ë¼ì´ë“œ ë””ìì¸ì„ ì„ íƒí•˜ì‹­ì‹œì˜¤(~S)";
         Text[ turkish ] = "Bir sayfa biçimi seçin";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Elija un estil~o de página";
-        Text[ finnish ] = "~Valitse diakuvamalli";
+        Text[ catalan ] = "~Selecciona un disseny de diapositives";
+        Text[ finnish ] = "Valitse ~diamalli";
+        Text[ thai ] = "à¹€~à¸¥à¸·à¸­à¸à¸à¸²à¸£à¸­à¸­à¸à¹à¸šà¸šà¸ à¸²à¸à¸™à¸´à¹ˆà¸‡";
     };
     Control VS_LAYOUT
     {
@@ -133,21 +134,22 @@ ModalDialog DLG_PRESLT
         Text [ danish ] = "Byt baggrundsside" ;
         Text [ italian ] = "Scambia pagina di sfondo" ;
         Text [ spanish ] = "~Intercambiar página de fondo" ;
-        Text [ french ] = "É~changer la page d'arrière-plan" ;
+        Text [ french ] = "Échanger la page d'arrière-plan" ;
         Text [ dutch ] = "Achtergrondpagina ~wisselen" ;
         Text [ portuguese_brazilian ] = "Hintergrundseite ~austauschen" ;
-        Text[ chinese_simplified ] = "¸ü»»±³¾°Ò³Ãæ(~E)";
-        Text[ russian ] = "Çàìåíà ñòğàíèö ôîíà";
+        Text[ chinese_simplified ] = "æ›´æ¢èƒŒæ™¯é¡µé¢(~E)";
+        Text[ russian ] = "Çàìåíà ôîíà ñòğàíèö";
         Text[ polish ] = "Wymieñ strony t³a";
-        Text[ japanese ] = "”wŒiÍß°¼Ş‚ğæ‚è‘Ö‚¦‚é(~E)";
-        Text[ chinese_traditional ] = "§ó´«­I´º­¶­±(~E)";
+        Text[ japanese ] = "ãƒã‚¹ã‚¿ãƒ¼ãƒšãƒ¼ã‚¸ã‚’å–ã‚Šæ›¿ãˆã‚‹(~E)";
+        Text[ chinese_traditional ] = "æ›´æ›èƒŒæ™¯é é¢(~E)";
         Text[ arabic ] = "ÇÓÊÈÏÇá ÕİÍÉ ÇáÎáİíÉ";
         Text[ greek ] = "~ÁíôáëëáãŞ óåëßäáò öüíôïõ";
-        Text[ korean ] = "¹è°æÆäÀÌÁö ¹Ù²Ù±â(~E)";
+        Text[ korean ] = "ë°°ê²½ í˜ì´ì§€ ë°”ê¾¸ê¸°(~E)";
         Text[ language_user1 ] = " ";
         Text[ turkish ] = "Artalan sayfasını değiştir";
-        Text[ catalan ] = "~Intercambiar página de fondo";
+        Text[ catalan ] = "~Intercanvia la pàgina de fons";
         Text[ finnish ] = "~Vaihda taustasivu";
+        Text[ thai ] = "à¹~à¸¥à¸à¹€à¸›à¸¥à¸µà¹ˆà¸¢à¸™à¸«à¸™à¹‰à¸²à¸‚à¸­à¸‡à¸à¸·à¹‰à¸™à¸«à¸¥à¸±à¸‡";
     };
     CheckBox CBX_CHECK_MASTERS
     {
@@ -158,25 +160,26 @@ ModalDialog DLG_PRESLT
         TabStop = TRUE ;
         Text[ english_us ] = "~Delete unused backgrounds";
         Text[ portuguese ] = "~Eliminar páginas de fundo não utilizadas";
-        Text[ russian ] = "Óäàëÿòü íåèñïîëüçîâàííûå ñòğàíèöû ôîíà";
+        Text[ russian ] = "Óäàëèòü íåèñïîëüçîâàííûå ôîíû";
         Text[ dutch ] = "~Niet-gebruikte achtergrondpagina's wissen";
         Text[ french ] = "Supprimer les pages d'arrière-plan ~inutilisées";
-        Text[ spanish ] = "~Eliminar páginas de fondo no usadas";
+        Text[ spanish ] = "~Borrar las páginas de fondo no utilizadas";
         Text[ italian ] = "Elimina pagine di sfondo non utilizzate";
         Text[ danish ] = "Slet ikke-brugte baggrundssider";
         Text[ swedish ] = "Radera ~ej använda bakgrundssidor";
         Text[ polish ] = "Usuñ nieu¿ywane strony t³a";
         Text[ portuguese_brazilian ] = "~Remove not used master pages";
-        Text[ japanese ] = "–¢g—p‚Ì”wŒiÍß°¼Ş‚Ííœ‚·‚é(~D)";
-        Text[ chinese_simplified ] = "É¾³ı²»ÓÃµÄ±³¾°Ò³Ãæ(~D)";
-        Text[ chinese_traditional ] = "§R°£¤£¥Îªº­I´º­¶­±(~D)";
+        Text[ japanese ] = "æœªä½¿ç”¨ã®ãƒã‚¹ã‚¿ãƒ¼ãƒšãƒ¼ã‚¸ã¯å‰Šé™¤ã™ã‚‹(~D)";
+        Text[ chinese_simplified ] = "åˆ é™¤ä¸ç”¨çš„èƒŒæ™¯é¡µé¢(~D)";
+        Text[ chinese_traditional ] = "åˆªé™¤ä¸ç”¨çš„èƒŒæ™¯é é¢(~D)";
         Text[ arabic ] = "ÍĞİ ÕİÍÇÊ ÇáÎáİíÉ ÇáÊí áã ÊõÓÊÚãá";
         Text[ greek ] = "ÄéáãñáöŞ ìç ÷ñçóéìïğïéïõìİíùí óåëéäşí ~öüíôïõ";
-        Text[ korean ] = "»ç¿ëÇÏÁö ¾ÊÀº ¹è°æ ÂÊ »èÁ¦(~D)";
+        Text[ korean ] = "ì‚¬ìš©í•˜ì§€ ì•Šì€ ë°°ê²½ ì‚­ì œ(~D)";
         Text[ turkish ] = "Kullanılmayan artalan sayfalarını sil";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Eliminar páginas de fondo no usadas";
+        Text[ catalan ] = "~Suprimeix els fons no utilitzats";
         Text[ finnish ] = "~Poista käyttämättömät taustat";
+        Text[ thai ] = "~à¸¥à¸šà¸à¸·à¹‰à¸™à¸«à¸¥à¸±à¸‡à¸—à¸µà¹ˆà¹„à¸¡à¹ˆà¹ƒà¸Šà¹‰";
     };
     PushButton BTN_LOAD
     {
@@ -194,18 +197,19 @@ ModalDialog DLG_PRESLT
         Text [ danish ] = "Indlæs..." ;
         Text [ portuguese_brazilian ] = "~Laden..." ;
         Text [ portuguese ] = "~Carregar..." ;
-        Text[ chinese_simplified ] = "×°Èë(~L)...";
+        Text[ chinese_simplified ] = "è£…å…¥(~L)...";
         Text[ russian ] = "~Çàãğóçêà...";
         Text[ polish ] = "Za³aduj...";
-        Text[ japanese ] = "“Ç‚İ‚İ(~L)...";
-        Text[ chinese_traditional ] = "¸ü¤J(~L)...";
+        Text[ japanese ] = "èª­ã¿è¾¼ã¿(~L)...";
+        Text[ chinese_traditional ] = "è¼‰å…¥(~L)...";
         Text[ arabic ] = "ÊÍãíá...";
         Text[ greek ] = "Öüñôùóç...";
-        Text[ korean ] = "·Îµå(~L)...";
+        Text[ korean ] = "ë¡œë“œ(~L)...";
         Text[ turkish ] = "Yükle...";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Cargar...";
-        Text[ finnish ] = "~Lataa";
+        Text[ catalan ] = "~Carrega...";
+        Text[ finnish ] = "L~ataa...";
+        Text[ thai ] = "à¹‚~à¸«à¸¥à¸”...";
     };
     HelpButton BTN_HELP
     {
@@ -222,19 +226,32 @@ ModalDialog DLG_PRESLT
     Text [ danish ] = "Sidetypografi" ;
     Text [ portuguese ] = "Estilo de página" ;
     Text [ portuguese_brazilian ] = "Seitenvorlage" ;
-    Text[ chinese_simplified ] = "Ò³ÃæÑùÊ½";
-    Text[ russian ] = "Ñòèëü ñëàéäà";
+    Text[ chinese_simplified ] = "é¡µé¢æ ·å¼";
+    Text[ russian ] = "Äèçàéí ñëàéäà";
     Text[ polish ] = "Styl strony";
-    Text[ japanese ] = "Íß°¼Ş½À²Ù";
-    Text[ chinese_traditional ] = "­¶­±¼Ë¦¡";
+    Text[ japanese ] = "ãƒšãƒ¼ã‚¸ã‚¹ã‚¿ã‚¤ãƒ«";
+    Text[ chinese_traditional ] = "é é¢æ¨£å¼";
     Text[ arabic ] = "äãØ ÕİÍÉ";
     Text[ greek ] = "Ğñüôõğï óåëßäáò";
-    Text[ korean ] = "½½¶óÀÌµå µğÀÚÀÎ";
+    Text[ korean ] = "ìŠ¬ë¼ì´ë“œ ë””ìì¸";
     Text[ turkish ] = "Sayfa biçimi";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Estilo de página";
-    Text[ finnish ] = "Diakuvasuunnitelma";
+    Text[ catalan ] = "Disseny de la diapositiva";
+    Text[ finnish ] = "Diamalli";
+    Text[ thai ] = "à¸­à¸­à¸à¹à¸šà¸šà¸ à¸²à¸à¸™à¸´à¹ˆà¸‡";
 };
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

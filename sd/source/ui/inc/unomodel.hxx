@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: cl $ $Date: 2002-09-10 14:31:48 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 10:57:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses

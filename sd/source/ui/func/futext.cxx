@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futext.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: af $ $Date: 2002-12-03 14:57:19 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 10:57:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -616,7 +616,15 @@ void FuText::ImpSetAttributesForNewTextObject(SdrTextObj* pTxtObj)
             aSet.Put(SdrTextAutoGrowHeightItem(FALSE));
 
             // #91508#
-            aSet.Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_TOP));
+            //aSet.Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_TOP));
+            //aSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_RIGHT));
+
+            // #107235#
+            // Set defaults for vertical klick-n'drag text object, pool defaults are:
+            // SdrTextVertAdjustItem: SDRTEXTVERTADJUST_TOP
+            // SdrTextHorzAdjustItem: SDRTEXTHORZADJUST_BLOCK
+            // Analog to that (thus, #91508# was not completely correct):
+            aSet.Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_BLOCK));
             aSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_RIGHT));
 
             pTxtObj->SetItemSet(aSet);
@@ -755,6 +763,25 @@ BOOL FuText::MouseButtonUp(const MouseEvent& rMEvt)
         // #91508# and #91510#
         if(pTextObj)
         {
+            // #107235#
+            // Before ImpSetAttributesForNewTextObject the vertical writing mode
+            // needs to be set at the object. This is done here at the OutlinerParaObject
+            // directly to not mirror the layout text items involved. These items will be set
+            // from ImpSetAttributesForNewTextObject and below.
+            OutlinerParaObject* pPara = pTextObj->GetOutlinerParaObject();
+
+            if(!pPara)
+            {
+                pTextObj->ForceOutlinerParaObject();
+                pPara = pTextObj->GetOutlinerParaObject();
+            }
+
+            if(pPara && bVertical != pPara->IsVertical())
+            {
+                // set ParaObject orientation accordingly
+                pPara->SetVertical(bVertical);
+            }
+
             // #97016#
             ImpSetAttributesForNewTextObject(pTextObj);
         }
@@ -859,9 +886,53 @@ BOOL FuText::MouseButtonUp(const MouseEvent& rMEvt)
                 // #91508#
                 if(nSlotId == SID_ATTR_CHAR_VERTICAL)
                 {
+                    // #107235#
+                    //
+                    // Here, all items which need to be different from pool default need to be set
+                    // again on the newly created text object.
+                    // Since this is a simple klick text object, it is first created, then SetVertical()
+                    // is used, then ImpSetAttributesForNewTextObject is called and then the object is
+                    // deleted again since not the minimum drag distance was travelled. Then, a new
+                    // klick text object is created and thus all that stuff needs to be set again here.
+                    //
+                    // Before using the new object the vertical writing mode
+                    // needs to be set. This is done here at the OutlinerParaObject
+                    // directly to not mirror the layout text items involved. These items will be set
+                    // below.
+                    OutlinerParaObject* pPara = pTextObj->GetOutlinerParaObject();
+
+                    if(!pPara)
+                    {
+                        pTextObj->ForceOutlinerParaObject();
+                        pPara = pTextObj->GetOutlinerParaObject();
+                    }
+
+                    if(pPara && sal_True != pPara->IsVertical())
+                    {
+                        // set ParaObject orientation accordingly
+                        pPara->SetVertical(sal_True);
+                    }
+
                     // #91508#
-                    aSet.Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_TOP));
+                    // aSet.Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_TOP));
                     aSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_RIGHT));
+
+                    // #107235#
+                    // Analog to the else case below, for vertical simple click texts
+                    // one of the defaulted setted items from ImpSetAttributesForNewTextObject
+                    // needs to be adapted to non-block mode. This could have been done with the
+                    // #104122#, but was obviously overseen.
+                    const SfxItemSet& rSet = pView->GetDefaultAttr();
+                    SvxFrameDirection eDirection = (SvxFrameDirection)((SvxFrameDirectionItem&)rSet.Get(EE_PARA_WRITINGDIR)).GetValue();
+
+                    if(FRMDIR_HORI_RIGHT_TOP == eDirection || FRMDIR_VERT_TOP_RIGHT == eDirection)
+                    {
+                        aSet.Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_BOTTOM));
+                    }
+                    else
+                    {
+                        aSet.Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_TOP));
+                    }
                 }
                 else
                 {

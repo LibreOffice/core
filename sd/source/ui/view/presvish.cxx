@@ -2,9 +2,9 @@
  *
  *  $RCSfile: presvish.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: cl $ $Date: 2002-02-05 10:10:49 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 10:58:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,8 @@ SFX_IMPL_INTERFACE( SdPresViewShell, SdDrawViewShell, SdResId( STR_PRESVIEWSHELL
     SFX_OBJECTBAR_REGISTRATION( SFX_OBJECTBAR_TOOLS | SFX_VISIBILITY_STANDARD |
                                 SFX_VISIBILITY_FULLSCREEN | SFX_VISIBILITY_SERVER,
                                 SdResId(RID_DRAW_TOOLBOX));
+    SFX_OBJECTBAR_REGISTRATION( SFX_OBJECTBAR_APPLICATION | SFX_VISIBILITY_DESKTOP | SFX_VISIBILITY_STANDARD | SFX_VISIBILITY_CLIENT | SFX_VISIBILITY_VIEWER | SFX_VISIBILITY_READONLYDOC,
+                                SdResId(RID_DRAW_VIEWER_TOOLBOX) );
     SFX_OBJECTBAR_REGISTRATION( SFX_OBJECTBAR_OPTIONS | SFX_VISIBILITY_STANDARD |
                                 SFX_VISIBILITY_SERVER,
                                 SdResId(RID_DRAW_OPTIONS_TOOLBOX));
@@ -181,7 +183,8 @@ void SdPresViewShell::Activate( BOOL bIsMDIActivate )
             pView->ShowMarkHdl( NULL );
     }
 
-    ReadFrameViewData( pFrameView );
+    if( bIsMDIActivate )
+        ReadFrameViewData( pFrameView );
     pDocSh->Connect( this );
 
     if( pFuSlideShow && !mbShowStarted )
