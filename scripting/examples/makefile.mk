@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2004-04-15 08:31:05 $
+#   last change: $Author: vg $ $Date: 2004-12-23 11:44:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -59,7 +59,6 @@
 #
 #
 #*************************************************************************
-
 PRJ=..
 PRJNAME=scriptinginstaller
 TARGET=scriptinginstaller
@@ -89,6 +88,6 @@ ZIP4LIST=python
 ZIP5FLAGS=-r
 ZIP5TARGET=scriptbindinglib
 ZIP5DIR=$(PRJ)$/workben$/bindings
-ZIP5LIST=*.xlb *.xdl *.xba
+ZIP5LIST=*.xlb Highlight.xdl
 
 .INCLUDE : target.mk
