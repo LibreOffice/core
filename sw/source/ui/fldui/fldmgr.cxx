@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldmgr.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:56:12 $
+ *  last change: $Author: hjs $ $Date: 2003-08-19 11:58:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -412,6 +412,7 @@ SwWrtShell* lcl_GetShell()
     SwView* pView;
     if ( 0 != (pView = ::GetActiveView()) )
         return pView->GetWrtShellPtr();
+    DBG_ERROR("no current shell found!")
     return 0;
 }
 
@@ -435,7 +436,6 @@ SwFldMgr::SwFldMgr(SwWrtShell* pSh ) :
 
 SwFldMgr::~SwFldMgr()
 {
-    aSubLst.DeleteAndDestroy(0, aSubLst.Count());
 }
 
 /*--------------------------------------------------------------------
@@ -444,14 +444,20 @@ SwFldMgr::~SwFldMgr()
 
 BOOL  SwFldMgr::CanInsertRefMark( const String& rStr )
 {
-    SwWrtShell &rSh = pWrtShell ? *pWrtShell : *lcl_GetShell();
-    USHORT nCnt = rSh.GetCrsrCnt();
+    BOOL bRet = FALSE;
+    SwWrtShell *pSh = pWrtShell ? pWrtShell : lcl_GetShell();
+    DBG_ASSERT(pSh, "no SwWrtShell found")
+    if(pSh)
+    {
+        USHORT nCnt = pSh->GetCrsrCnt();
 
-    // der letzte Crsr muss keine aufgespannte Selektion
-    if( 1 < nCnt && !rSh.SwCrsrShell::HasSelection() )
-        --nCnt;
+        // der letzte Crsr muss keine aufgespannte Selektion
+        if( 1 < nCnt && !pSh->SwCrsrShell::HasSelection() )
+            --nCnt;
 
-    return 2 > nCnt && 0 == rSh.GetRefMark( rStr );
+        bRet =  2 > nCnt && 0 == pSh->GetRefMark( rStr );
+    }
+    return bRet;
 }
 
 /*--------------------------------------------------------------------
@@ -460,15 +466,19 @@ BOOL  SwFldMgr::CanInsertRefMark( const String& rStr )
 
 void SwFldMgr::RemoveDBTypes()
 {
-    SwWrtShell &rSh = pWrtShell ? *pWrtShell : *lcl_GetShell();
-    USHORT nCount = rSh.GetFldTypeCount(RES_DBFLD);
-    for ( USHORT i=0; i < nCount ; ++i )
+    SwWrtShell * pSh = pWrtShell ? pWrtShell : lcl_GetShell();
+    DBG_ASSERT(pSh, "no SwWrtShell found")
+    if(pSh)
     {
-        SwFieldType* pType = rSh.GetFldType( i, RES_DBFLD );
-        if( !pType->GetDepends() )
+        USHORT nCount = pSh->GetFldTypeCount(RES_DBFLD);
+        for ( USHORT i=0; i < nCount ; ++i )
         {
-            rSh.RemoveFldType( i--, RES_DBFLD );
-            nCount--;
+            SwFieldType* pType = pSh->GetFldType( i, RES_DBFLD );
+            if( !pType->GetDepends() )
+            {
+                pSh->RemoveFldType( i--, RES_DBFLD );
+                nCount--;
+            }
         }
     }
 }
@@ -479,41 +489,43 @@ void SwFldMgr::RemoveDBTypes()
 
 USHORT SwFldMgr::GetFldTypeCount(USHORT nResId) const
 {
-    return pWrtShell ?
-            pWrtShell->GetFldTypeCount(nResId) :
-                ::lcl_GetShell()->GetFldTypeCount(nResId);
+    SwWrtShell * pSh = pWrtShell ? pWrtShell : lcl_GetShell();
+    DBG_ASSERT(pSh, "no SwWrtShell found")
+    return pSh ? pSh->GetFldTypeCount(nResId) : 0;
 }
 
 
 SwFieldType* SwFldMgr::GetFldType(USHORT nResId, USHORT nId) const
 {
-    return pWrtShell ?
-            pWrtShell->GetFldType(nId, nResId) :
-                ::lcl_GetShell()->GetFldType(nId, nResId);
+    SwWrtShell * pSh = pWrtShell ? pWrtShell : lcl_GetShell();
+    DBG_ASSERT(pSh, "no SwWrtShell found")
+    return pSh ? pSh->GetFldType(nId, nResId) : 0;
 }
 
 
 SwFieldType* SwFldMgr::GetFldType(USHORT nResId, const String& rName) const
 {
-    return pWrtShell ?
-            pWrtShell->GetFldType(nResId, rName) :
-                ::lcl_GetShell()->GetFldType(nResId, rName);
+    SwWrtShell * pSh = pWrtShell ? pWrtShell : lcl_GetShell();
+    DBG_ASSERT(pSh, "no SwWrtShell found")
+    return pSh ? pSh->GetFldType(nResId, rName) : 0;
 }
 
 
 void SwFldMgr::RemoveFldType(USHORT nResId, USHORT nId)
 {
-    pWrtShell ?
-            pWrtShell->RemoveFldType(nId, nResId) :
-                ::lcl_GetShell()->RemoveFldType(nId, nResId);
+    SwWrtShell * pSh = pWrtShell ? pWrtShell : lcl_GetShell();
+    DBG_ASSERT(pSh, "no SwWrtShell found")
+    if( pSh )
+        pSh->RemoveFldType(nId, nResId);
 }
 
 
 void SwFldMgr::RemoveFldType(USHORT nResId, const String& rName )
 {
-    pWrtShell ?
-            pWrtShell->RemoveFldType(nResId, rName) :
-                ::lcl_GetShell()->RemoveFldType(nResId, rName);
+    SwWrtShell * pSh = pWrtShell ? pWrtShell : lcl_GetShell();
+    DBG_ASSERT(pSh, "no SwWrtShell found")
+    if( pSh )
+        pSh->RemoveFldType(nResId, rName);
 }
 
 /*--------------------------------------------------------------------
@@ -629,14 +641,14 @@ USHORT SwFldMgr::GetGroup(BOOL bHtmlMode, USHORT nTypeId, USHORT nSubType) const
  --------------------------------------------------------------------*/
 
 
-USHORT SwFldMgr::GetTypeId(USHORT nPos) const
+USHORT SwFldMgr::GetTypeId(USHORT nPos)
 {
     ASSERT(nPos < ::GetPackCount(), "unzulaessige Pos");
     return aSwFlds[ nPos ].nTypeId;
 }
 
 
-const String& SwFldMgr::GetTypeStr(USHORT nPos) const
+const String& SwFldMgr::GetTypeStr(USHORT nPos)
 {
     ASSERT(nPos < ::GetPackCount(), "unzulaessige TypeId");
 
@@ -664,7 +676,7 @@ const String& SwFldMgr::GetTypeStr(USHORT nPos) const
  --------------------------------------------------------------------*/
 
 
-USHORT SwFldMgr::GetPos(USHORT nTypeId) const
+USHORT SwFldMgr::GetPos(USHORT nTypeId)
 {
     switch( nTypeId )
     {
@@ -685,136 +697,132 @@ USHORT SwFldMgr::GetPos(USHORT nTypeId) const
     Beschreibung: Subtypen eines Feldes lokalisieren
  --------------------------------------------------------------------*/
 
-SvStringsDtor& SwFldMgr::GetSubTypes(USHORT nTypeId)
+BOOL SwFldMgr::GetSubTypes(USHORT nTypeId, SvStringsDtor& rToFill)
 {
-    // aSubLst.DeleteAndDestroy(0, aSubLst.Count());
-    for (USHORT i=0; i < aSubLst.Count();  )
+    BOOL bRet = FALSE;
+    SwWrtShell *pSh = pWrtShell ? pWrtShell : lcl_GetShell();
+    DBG_ASSERT(pSh, "no SwWrtShell found")
+    if(pSh)
     {
-        String* pStr = aSubLst[i];
-        DELETEZ(pStr);
-        aSubLst.Remove(i);
-    }
+        const USHORT nPos = GetPos(nTypeId);
 
-    const USHORT nPos = GetPos(nTypeId);
-
-    switch(nTypeId)
-    {
-        case TYP_SETREFFLD:
-        case TYP_GETREFFLD:
+        switch(nTypeId)
         {
-            // Referenzen sind keine Felder
-            pWrtShell ?
-                pWrtShell->GetRefMarks( &aSubLst ) :
-                    ::lcl_GetShell()->GetRefMarks( &aSubLst );
-            break;
-        }
-        case TYP_MACROFLD:
-        {
-            if (sMacroPath.Len())
+            case TYP_SETREFFLD:
+            case TYP_GETREFFLD:
             {
-                String sPath = sMacroPath.Copy(sMacroPath.Search('.', 0));
-                if (pModule)
-                {
-                    SbxArray* pSbxArray = pModule->GetMethods();
-
-                    for (USHORT nMethod = 0; nMethod < pSbxArray->Count(); nMethod++)
-                    {
-                        SbMethod* pMethod = (SbMethod*)pSbxArray->Get(nMethod);
-                        DBG_ASSERT( pMethod, "Methode nicht gefunden! (NULL)" );
-
-                        String* pNew = new String(pMethod->GetName());
-                        *pNew += sPath;
-                        aSubLst.Insert(pNew, aSubLst.Count());
-                    }
-                }
-                else
-                {
-                    String* pNew = new String(sMacroPath);
-                    aSubLst.Insert(pNew, aSubLst.Count());
-                }
+                // Referenzen sind keine Felder
+                pSh->GetRefMarks( &rToFill );
+                break;
             }
-            break;
-        }
-        case TYP_INPUTFLD:
-        {   String* pNew = new SW_RESSTR(aSwFlds[nPos].nSubTypeStart);
-            aSubLst.Insert(pNew, aSubLst.Count());
-            // Weiter bei generischen Typen
-        }
-        case TYP_DDEFLD:
-        case TYP_SEQFLD:
-        case TYP_FORMELFLD:
-        case TYP_GETFLD:
-        case TYP_SETFLD:
-        case TYP_USERFLD:
-        {
-            SwWrtShell &rSh = pWrtShell ? *pWrtShell : *::lcl_GetShell();
-            const USHORT nCount = rSh.GetFldTypeCount();
-            for(USHORT i = 0; i < nCount; ++i)
+            case TYP_MACROFLD:
             {
-                SwFieldType* pFldType = rSh.GetFldType( i );
-                const USHORT nWhich = pFldType->Which();
-
-                if((nTypeId == TYP_DDEFLD && pFldType->Which() == RES_DDEFLD) ||
-
-                   (nTypeId == TYP_USERFLD && nWhich == RES_USERFLD) ||
-
-                   (nTypeId == TYP_GETFLD && nWhich == RES_SETEXPFLD &&
-                    !(((SwSetExpFieldType*)pFldType)->GetType() & GSE_SEQ)) ||
-
-                   (nTypeId == TYP_SETFLD && nWhich == RES_SETEXPFLD &&
-                    !(((SwSetExpFieldType*)pFldType)->GetType() & GSE_SEQ)) ||
-
-                   (nTypeId == TYP_SEQFLD && nWhich == RES_SETEXPFLD  &&
-                   (((SwSetExpFieldType*)pFldType)->GetType() & GSE_SEQ)) ||
-
-                   ((nTypeId == TYP_INPUTFLD  || nTypeId == TYP_FORMELFLD) &&
-                     (nWhich == RES_USERFLD ||
-                      nWhich == RES_SETEXPFLD &&
-                      !(((SwSetExpFieldType*)pFldType)->GetType() & GSE_SEQ)) ) )
+                if (sMacroPath.Len())
                 {
-                    String* pNew = new String(pFldType->GetName());
-                    aSubLst.Insert(pNew, aSubLst.Count());
-                }
-            }
-            break;
-        }
-        case TYP_DBNEXTSETFLD:
-        case TYP_DBNUMSETFLD:
-        case TYP_DBNAMEFLD:
-        case TYP_DBSETNUMBERFLD:
-            break;
-
-        default:
-        {
-            // statische SubTypes
-            if(nPos != USHRT_MAX)
-            {
-                USHORT nCount;
-                if (nTypeId == TYP_DOCINFOFLD)
-                    nCount = DI_SUBTYPE_END - DI_SUBTYPE_BEGIN;
-                else
-                    nCount = aSwFlds[nPos].nSubTypeEnd - aSwFlds[nPos].nSubTypeStart;
-
-                SwWrtShell &rSh = pWrtShell ? *pWrtShell : *::lcl_GetShell();
-                for(USHORT i = 0; i < nCount; ++i)
-                {
-                    String* pNew;
-                    if (nTypeId == TYP_DOCINFOFLD)
+                    String sPath = sMacroPath.Copy(sMacroPath.Search('.', 0));
+                    if (pModule)
                     {
-                        if (i >= DI_INFO1 && i <= DI_INFO4)
-                            pNew = new String( rSh.GetInfo()->GetUserKey(i-DI_INFO1).GetTitle());
-                        else
-                            pNew = new String(*ViewShell::GetShellRes()->aDocInfoLst[i]);
+                        SbxArray* pSbxArray = pModule->GetMethods();
+
+                        for (USHORT nMethod = 0; nMethod < pSbxArray->Count(); nMethod++)
+                        {
+                            SbMethod* pMethod = (SbMethod*)pSbxArray->Get(nMethod);
+                            DBG_ASSERT( pMethod, "Methode nicht gefunden! (NULL)" );
+
+                            String* pNew = new String(pMethod->GetName());
+                            *pNew += sPath;
+                            rToFill.Insert(pNew, rToFill.Count());
+                        }
                     }
                     else
-                        pNew = new SW_RESSTR(aSwFlds[nPos].nSubTypeStart + i);
+                    {
+                        String* pNew = new String(sMacroPath);
+                        rToFill.Insert(pNew, rToFill.Count());
+                    }
+                }
+                break;
+            }
+            case TYP_INPUTFLD:
+            {   String* pNew = new SW_RESSTR(aSwFlds[nPos].nSubTypeStart);
+                rToFill.Insert(pNew, rToFill.Count());
+                // Weiter bei generischen Typen
+            }
+            case TYP_DDEFLD:
+            case TYP_SEQFLD:
+            case TYP_FORMELFLD:
+            case TYP_GETFLD:
+            case TYP_SETFLD:
+            case TYP_USERFLD:
+            {
 
-                    aSubLst.Insert(pNew, aSubLst.Count());
+                const USHORT nCount = pSh->GetFldTypeCount();
+                for(USHORT i = 0; i < nCount; ++i)
+                {
+                    SwFieldType* pFldType = pSh->GetFldType( i );
+                    const USHORT nWhich = pFldType->Which();
+
+                    if((nTypeId == TYP_DDEFLD && pFldType->Which() == RES_DDEFLD) ||
+
+                       (nTypeId == TYP_USERFLD && nWhich == RES_USERFLD) ||
+
+                       (nTypeId == TYP_GETFLD && nWhich == RES_SETEXPFLD &&
+                        !(((SwSetExpFieldType*)pFldType)->GetType() & GSE_SEQ)) ||
+
+                       (nTypeId == TYP_SETFLD && nWhich == RES_SETEXPFLD &&
+                        !(((SwSetExpFieldType*)pFldType)->GetType() & GSE_SEQ)) ||
+
+                       (nTypeId == TYP_SEQFLD && nWhich == RES_SETEXPFLD  &&
+                       (((SwSetExpFieldType*)pFldType)->GetType() & GSE_SEQ)) ||
+
+                       ((nTypeId == TYP_INPUTFLD  || nTypeId == TYP_FORMELFLD) &&
+                         (nWhich == RES_USERFLD ||
+                          nWhich == RES_SETEXPFLD &&
+                          !(((SwSetExpFieldType*)pFldType)->GetType() & GSE_SEQ)) ) )
+                    {
+                        String* pNew = new String(pFldType->GetName());
+                        rToFill.Insert(pNew, rToFill.Count());
+                    }
+                }
+                break;
+            }
+            case TYP_DBNEXTSETFLD:
+            case TYP_DBNUMSETFLD:
+            case TYP_DBNAMEFLD:
+            case TYP_DBSETNUMBERFLD:
+                break;
+
+            default:
+            {
+                // statische SubTypes
+                if(nPos != USHRT_MAX)
+                {
+                    USHORT nCount;
+                    if (nTypeId == TYP_DOCINFOFLD)
+                        nCount = DI_SUBTYPE_END - DI_SUBTYPE_BEGIN;
+                    else
+                        nCount = aSwFlds[nPos].nSubTypeEnd - aSwFlds[nPos].nSubTypeStart;
+
+                    for(USHORT i = 0; i < nCount; ++i)
+                    {
+                        String* pNew;
+                        if (nTypeId == TYP_DOCINFOFLD)
+                        {
+                            if (i >= DI_INFO1 && i <= DI_INFO4)
+                                pNew = new String( pSh->GetInfo()->GetUserKey(i-DI_INFO1).GetTitle());
+                            else
+                                pNew = new String(*ViewShell::GetShellRes()->aDocInfoLst[i]);
+                        }
+                        else
+                            pNew = new SW_RESSTR(aSwFlds[nPos].nSubTypeStart + i);
+
+                        rToFill.Insert(pNew, rToFill.Count());
+                    }
                 }
             }
         }
+        bRet = TRUE;
     }
-    return aSubLst;
+    return bRet;
 }
 
 /*--------------------------------------------------------------------
@@ -885,7 +893,6 @@ USHORT SwFldMgr::GetFormatCount(USHORT nTypeId, BOOL bIsText, BOOL bHtmlMode) co
 String SwFldMgr::GetFormatStr(USHORT nTypeId, ULONG nFormatId) const
 {
     String aRet;
-    SwWrtShell *pSh = pWrtShell ? pWrtShell : ::lcl_GetShell();
     ASSERT(nTypeId < TYP_END, "unzulaessige TypeId");
 
     const USHORT nPos = GetPos(nTypeId);
@@ -1012,6 +1019,8 @@ USHORT SwFldMgr::GetFormatId(USHORT nTypeId, ULONG nFormatId) const
 BOOL SwFldMgr::GoNextPrev( BOOL bNext, SwFieldType* pTyp )
 {
     SwWrtShell* pSh = pWrtShell ? pWrtShell : ::lcl_GetShell();
+    if(!pSh)
+        return FALSE;
 
     if( !pTyp && pCurFld )
     {
@@ -1038,9 +1047,10 @@ BOOL SwFldMgr::GoNextPrev( BOOL bNext, SwFieldType* pTyp )
 
 void SwFldMgr::InsertFldType(SwFieldType& rType)
 {
-    pWrtShell ?
-            pWrtShell->InsertFldType(rType) :
-                ::lcl_GetShell()->InsertFldType(rType);
+    SwWrtShell* pSh = pWrtShell ? pWrtShell : ::lcl_GetShell();
+    DBG_ASSERT(pSh, "no SwWrtShell found")
+    if(pSh)
+        pSh->InsertFldType(rType);
 }
 
 /*--------------------------------------------------------------------
@@ -1050,7 +1060,7 @@ void SwFldMgr::InsertFldType(SwFieldType& rType)
 
 USHORT SwFldMgr::GetCurTypeId() const
 {
-    return pCurFld->GetTypeId();
+    return pCurFld ? pCurFld->GetTypeId() : USHRT_MAX;
 }
 
 /*--------------------------------------------------------------------
@@ -1070,6 +1080,10 @@ BOOL SwFldMgr::InsertFld(  const SwInsertFld_Data& rData )
     SwWrtShell* pCurShell = rData.pSh;
     if(!pCurShell)
         pCurShell = pWrtShell ? pWrtShell : ::lcl_GetShell();
+    SwWrtShell* pSh = pWrtShell ? pWrtShell : ::lcl_GetShell();
+    DBG_ASSERT(pCurShell, "no SwWrtShell found")
+    if(!pCurShell)
+        return FALSE;
 
     switch(rData.nTypeId)
     {   // ACHTUNG dieses Feld wird ueber einen gesonderten Dialog eingefuegt
@@ -1628,8 +1642,11 @@ void SwFldMgr::UpdateCurFld(ULONG nFormat,
     SwFieldType* pType   = pCurFld->GetTyp();
     const USHORT nTypeId = pCurFld->GetTypeId();
 
-    SwWrtShell &rSh = pWrtShell ? *pWrtShell : *::lcl_GetShell();
-    rSh.StartAllAction();
+    SwWrtShell* pSh = pWrtShell ? pWrtShell : ::lcl_GetShell();
+    DBG_ASSERT(pSh, "no SwWrtShell found")
+    if(!pSh)
+        return;
+    pSh->StartAllAction();
 
     BOOL bSetPar2 = TRUE;
     BOOL bSetPar1 = TRUE;
@@ -1739,12 +1756,12 @@ void SwFldMgr::UpdateCurFld(ULONG nFormat,
        nTypeId == TYP_USRINPFLD)
     {
         pType->UpdateFlds();
-        rSh.SetModified();
+        pSh->SetModified();
     }
     else
-        rSh.SwEditShell::UpdateFlds(*pCurFld);
+        pSh->SwEditShell::UpdateFlds(*pCurFld);
 
-    rSh.EndAllAction();
+    pSh->EndAllAction();
 }
 
 /*------------------------------------------------------------------------
@@ -1756,45 +1773,16 @@ BOOL SwFldMgr::SetFieldValue(const String &rFieldName,
                              const String &rValue)
 {
     SwWrtShell* pSh = pWrtShell ? pWrtShell : ::lcl_GetShell();
-    SwUserFieldType* pType = (SwUserFieldType*)pWrtShell->InsertFldType(
+    DBG_ASSERT(pSh, "no SwWrtShell found")
+    if(!pSh)
+        return FALSE;
+    SwUserFieldType* pType = (SwUserFieldType*)pSh->InsertFldType(
                                     SwUserFieldType( pSh->GetDoc(), rFieldName ));
 
     if(pType)
         pType->SetContent(rValue);
     return 0 != pType;
 }
-
-/*------------------------------------------------------------------------
- Beschreibung: Wert Datenbankfeld erfragen
-------------------------------------------------------------------------*/
-#if 0
-
-String SwFldMgr::GetDataBaseFieldValue(const String &rDBName, const String &rFieldName, SwWrtShell* pSh)
-{
-    String sFieldName(rFieldName);
-
-    if (rDBName.Len())
-        sFieldName = rDBName;
-    else
-        sFieldName = pSh->GetDBName();
-    sFieldName += DB_DELIM;
-    sFieldName += rFieldName;
-
-    SwFieldList aLst(pWrtShell ? pWrtShell : ::lcl_GetShell());
-
-    aLst.InsertFields(RES_DBFLD, &sFieldName);
-    SwField* pFld = aLst.GetLastField();
-
-    if(!pFld)
-        pFld = aLst.GetNextField();
-
-    if(pFld)
-        return pFld->Expand();
-
-    return aEmptyStr;
-}
-#endif
-
 
 /*--------------------------------------------------------------------
     Beschreibung: ExpressionFields explizit evaluieren
@@ -1883,10 +1871,11 @@ void SwFieldType::_GetFldName()
 BOOL SwFldMgr::SetUserSubType(const String& rName, USHORT nType)
 {
     BOOL bRet = FALSE;
+    SwWrtShell* pSh = pWrtShell ? pWrtShell : ::lcl_GetShell();
+    DBG_ASSERT(pSh, "no SwWrtShell found")
     SwUserFieldType *pType =
-        (SwUserFieldType *) (pWrtShell ?
-            pWrtShell->GetFldType(RES_USERFLD, rName) :
-                ::lcl_GetShell()->GetFldType(RES_USERFLD, rName));
+        (SwUserFieldType *) (pSh ?
+            pSh->GetFldType(RES_USERFLD, rName) : 0);
 
     if(pType)
     {
