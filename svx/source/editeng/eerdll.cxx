@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eerdll.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 19:04:00 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 12:06:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -252,7 +252,7 @@ EditDLL::EditDLL()
     ByteString aResMgrName( "svx" );
     aResMgrName += ByteString::CreateFromInt32( SOLARUPD );
     pResMgr = ResMgr::CreateResMgr(
-        aResMgrName.GetBuffer(), Application::GetSettings().GetUILanguage() );
+        aResMgrName.GetBuffer(), Application::GetSettings().GetUILocale() );
 }
 
 EditDLL::~EditDLL()
