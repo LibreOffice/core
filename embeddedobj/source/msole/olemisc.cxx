@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olemisc.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mav $ $Date: 2003-12-15 15:59:22 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 17:54:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@ OleEmbeddedObject::OleEmbeddedObject( const uno::Reference< lang::XMultiServiceF
 , m_bReadOnly( sal_False )
 , m_bDisposed( sal_False )
 , m_nObjectState( -1 )
-, m_nUpdateMode ( embed::EmbedUpdateModes::EMBED_ALWAYS_UPDATE )
+, m_nUpdateMode ( embed::EmbedUpdateModes::ALWAYS_UPDATE )
 , m_bStoreVisRepl( sal_True )
 , m_bNewStoreVisRepl( sal_True )
 , m_xFactory( xFactory )
@@ -109,7 +109,7 @@ OleEmbeddedObject::OleEmbeddedObject( const uno::Reference< lang::XMultiServiceF
 , m_bReadOnly( sal_False )
 , m_bDisposed( sal_False )
 , m_nObjectState( -1 )
-, m_nUpdateMode ( embed::EmbedUpdateModes::EMBED_ALWAYS_UPDATE )
+, m_nUpdateMode ( embed::EmbedUpdateModes::ALWAYS_UPDATE )
 , m_bStoreVisRepl( sal_True )
 , m_bNewStoreVisRepl( sal_True )
 , m_xFactory( xFactory )
@@ -141,7 +141,7 @@ void OleEmbeddedObject::GetRidOfComponent()
 #ifdef WNT
     if ( m_pOleComponent )
     {
-        if ( m_nObjectState != embed::EmbedStates::EMBED_LOADED )
+        if ( m_nObjectState != embed::EmbedStates::LOADED )
             SaveObject_Impl();
 
         m_pOleComponent->removeCloseListener( m_xClosePreventer );
@@ -244,7 +244,7 @@ uno::Reference< util::XCloseable > SAL_CALL OleEmbeddedObject::getComponent()
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
 
-    if ( m_nObjectState == -1 || m_nObjectState == embed::EmbedStates::EMBED_LOADED )
+    if ( m_nObjectState == -1 || m_nObjectState == embed::EmbedStates::LOADED )
     {
         // the object is still not running
         throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "The object is not running!\n" ),
@@ -261,6 +261,33 @@ uno::Reference< util::XCloseable > SAL_CALL OleEmbeddedObject::getComponent()
 
     return uno::Reference< util::XCloseable >( static_cast< ::cppu::OWeakObject* >( m_pOleComponent ), uno::UNO_QUERY );
 }
+
+//----------------------------------------------
+void SAL_CALL OleEmbeddedObject::addStateChangeListener( const uno::Reference< embed::XStateChangeListener >& xListener )
+    throw ( uno::RuntimeException )
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+    if ( m_bDisposed )
+        throw lang::DisposedException(); // TODO
+
+    if ( !m_pInterfaceContainer )
+        m_pInterfaceContainer = new ::cppu::OMultiTypeInterfaceContainerHelper( m_aMutex );
+
+    m_pInterfaceContainer->addInterface( ::getCppuType( (const uno::Reference< embed::XStateChangeListener >*)0 ),
+                                                        xListener );
+}
+
+//----------------------------------------------
+void SAL_CALL OleEmbeddedObject::removeStateChangeListener(
+                    const uno::Reference< embed::XStateChangeListener >& xListener )
+    throw (uno::RuntimeException)
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+    if ( m_pInterfaceContainer )
+        m_pInterfaceContainer->removeInterface( ::getCppuType( (const uno::Reference< embed::XStateChangeListener >*)0 ),
+                                                xListener );
+}
+
 
 //----------------------------------------------
 void SAL_CALL OleEmbeddedObject::close( sal_Bool bDeliverOwnership )
