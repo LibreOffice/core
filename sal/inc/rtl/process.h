@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jsc $ $Date: 2001-04-26 13:34:01 $
+ *  last change: $Author: jbu $ $Date: 2001-05-17 08:57:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 #define _RTL_PROCESS_H_
 
 #include <sal/types.h>
+#include <osl/process.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -80,6 +81,32 @@ extern "C" {
     @param pTargetUUID 16 byte of memory
  */
 void SAL_CALL rtl_getGlobalProcessId( sal_uInt8 *pTargetUUID );
+
+/** Get the nArg-th command-line argument passed to the main-function of this process.
+
+    This functions differs from osl_getCommandArg() in filtering any bootstrap values
+    given by command args, that means that all arguments starting with "-env:" will be
+    ignored by this function.
+
+    @param nArg [in] The number of the argument to return.
+    @param strCommandArg [out] The string receives the nArg-th command-line argument.
+    @return osl_Process_E_None or does not return.
+    @see osl_getCommandArg
+    @see rtl_getCommandArgCount
+*/
+oslProcessError SAL_CALL rtl_getCommandArg(sal_uInt32 nArg, rtl_uString **strCommandArg);
+
+/** Returns the number of command line arguments at process start.
+
+    This functions differs from osl_getCommandArg() in filtering any bootstrap values
+    given by command args, that means that all arguments starting with "-env:" will be
+    ignored by this function.
+
+    @return the number of commandline arguments passed to the main-function of this process.
+    @see osl_getCommandArgCount
+    @see rtl_getCommandArg
+*/
+sal_uInt32 SAL_CALL rtl_getCommandArgCount();
 
 #ifdef __cplusplus
 }
