@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldrani.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 16:10:16 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:12:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -420,8 +420,8 @@ void ScXMLDatabaseRangeContext::EndElement()
                             pDBData->SetImportSelection(bIsSelection);
                             pDBData->SetAutoFilter(bAutoFilter);
                             if (bAutoFilter)
-                                pDoc->ApplyFlagsTab( static_cast<USHORT>(aCellRangeAddress.StartColumn), static_cast<USHORT>(aCellRangeAddress.StartRow),
-                                                        static_cast<USHORT>(aCellRangeAddress.EndColumn), static_cast<USHORT>(aCellRangeAddress.StartRow),
+                                pDoc->ApplyFlagsTab( static_cast<SCCOL>(aCellRangeAddress.StartColumn), static_cast<SCROW>(aCellRangeAddress.StartRow),
+                                                        static_cast<SCCOL>(aCellRangeAddress.EndColumn), static_cast<SCROW>(aCellRangeAddress.StartRow),
                                                         aCellRangeAddress.Sheet, SC_MF_AUTO );
                             ScImportParam aImportParam;
                             ScImportDescriptor::FillImportParam(aImportParam, aImportDescriptor);
@@ -439,7 +439,7 @@ void ScXMLDatabaseRangeContext::EndElement()
 
                                 //#98317#; until now the Fields are relative to the left top edge of the range, but the
                                 // core wants to have the absolute position (column/row)
-                                sal_uInt16 nFieldStart = aSortParam.bByRow ? aCellRangeAddress.StartColumn : aCellRangeAddress.StartRow;
+                                SCCOLROW nFieldStart = aSortParam.bByRow ? static_cast<SCCOLROW>(aCellRangeAddress.StartColumn) : static_cast<SCCOLROW>(aCellRangeAddress.StartRow);
                                 for (sal_uInt16 i = 0; i < MAXSORT; ++i)
                                 {
                                     if (aSortParam.bDoSort[i])
