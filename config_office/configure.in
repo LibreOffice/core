@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2005-01-27 12:18:42 $
+dnl * Date: $Date: 2005-02-03 08:58:21 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.88 $ )
+AC_REVISION( $Revision: 1.89 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -1879,7 +1879,7 @@ if test "z$enable_epm" = "z" -o "$enable_epm" != "no"; then
             if $EPM | grep "ESP Package Manager" >/dev/null 2>/dev/null; then
                AC_MSG_RESULT([yes])
             else
-               AC_MSG_ERROR([no. Install ESP Package Manager (www.easyway.com/epm) and/or specifiy the path to the right epm])
+               AC_MSG_ERROR([no. Install ESP Package Manager (www.easyway.com/epm) and/or specify the path to the right epm])
             fi
       fi
    fi
@@ -2394,10 +2394,10 @@ if test "$_os" = "SunOS" -o "$_os" = "FreeBSD"; then
    fi
 
    AC_MSG_CHECKING([whether $GNUPATCH is GNU patch])
-   if $GNUPATCH --version | grep "Free Software Foundation" >/dev/null 2>/deV/null; then
+   if $GNUPATCH --version | grep "Free Software Foundation" >/dev/null 2>/dev/null; then
 	AC_MSG_RESULT([yes])
    else
-  	AC_MSG_ERROR([no, GNU patch needed. install or specifiy with --with-gnu-patch=/path/to/it])
+  	AC_MSG_ERROR([no, GNU patch needed. install or specify with --with-gnu-patch=/path/to/it])
    fi
 
 dnl We also need to check for --with-gnu-cp
@@ -2416,7 +2416,7 @@ dnl We also need to check for --with-gnu-cp
   if $GNUCP --version | grep "Free Software Foundation" >/dev/null 2>/dev/null; then
 	AC_MSG_RESULT([yes])
   else
-  	AC_MSG_ERROR([no, GNU patch needed. install or specifiy with --with-gnu-patch=/path/to/it])
+  	AC_MSG_ERROR([no, GNU cp needed. install or specify with --with-gnu-cp=/path/to/it])
   fi	
 
 fi
