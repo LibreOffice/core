@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.181 $
+ *  $Revision: 1.182 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-23 10:06:46 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:38:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -370,7 +370,7 @@ void X11SalFrame::Init( ULONG nSalFrameStyle, SystemParentData* pParentData )
         // do not change the input mask in that case
         const std::list< SalFrame* >& rFrames = GetDisplay()->getFrames();
         std::list< SalFrame* >::const_iterator it = rFrames.begin();
-        while( it != rFrames.end() && mhForeignParent != static_cast<X11SalFrame*>(*it)->GetWindow() )
+        while( it != rFrames.end() && mhForeignParent != static_cast<const X11SalFrame*>(*it)->GetWindow() )
             ++it;
 
         if( it == rFrames.end() )
@@ -403,12 +403,12 @@ void X11SalFrame::Init( ULONG nSalFrameStyle, SystemParentData* pParentData )
         if( ! mpParent )
         {
             // find the last document window (if any)
-            X11SalFrame* pFrame = NULL;
+            const X11SalFrame* pFrame = NULL;
             const std::list< SalFrame* >& rFrames = GetDisplay()->getFrames();
             std::list< SalFrame* >::const_iterator it = rFrames.begin();
             while( it != rFrames.end() )
             {
-                pFrame = static_cast< X11SalFrame* >(*it);
+                pFrame = static_cast< const X11SalFrame* >(*it);
                 if( ! ( pFrame->mpParent
                         || pFrame->mbFullScreen
                         || ! ( pFrame->nStyle_ & SAL_FRAME_STYLE_SIZEABLE )
@@ -676,18 +676,18 @@ void X11SalFrame::passOnSaveYourSelf()
     if( this == s_pSaveYourselfFrame )
     {
         // pass on SaveYourself
-        X11SalFrame* pFrame = NULL;
+        const X11SalFrame* pFrame = NULL;
         const std::list< SalFrame* >& rFrames = GetDisplay()->getFrames();
         std::list< SalFrame* >::const_iterator it = rFrames.begin();
         while( it != rFrames.end() )
         {
-            pFrame = static_cast< X11SalFrame* >(*it);
+            pFrame = static_cast< const X11SalFrame* >(*it);
             if( ! (pFrame->nStyle_ & (SAL_FRAME_STYLE_FLOAT|SAL_FRAME_STYLE_CHILD) || pFrame->mpParent ) )
                 break;
             ++it;
         }
 
-        s_pSaveYourselfFrame = (it != rFrames.end() ) ? pFrame : NULL;
+        s_pSaveYourselfFrame = (it != rFrames.end() ) ? const_cast<X11SalFrame*>(pFrame) : NULL;
         if( s_pSaveYourselfFrame )
         {
             Atom a[4];
@@ -984,10 +984,10 @@ void X11SalFrame::Show( BOOL bVisible, BOOL /*bNoActivate*/ )
             const std::list< SalFrame* >& rFrames = GetDisplay()->getFrames();
             for( std::list< SalFrame* >::const_iterator it = rFrames.begin(); it != rFrames.end(); ++it )
             {
-                X11SalFrame* pFrame = static_cast< X11SalFrame* >(*it);
+                const X11SalFrame* pFrame = static_cast< const X11SalFrame* >(*it);
                 // look for intro bit map; if present, hide it
                 if( pFrame->nStyle_ & SAL_FRAME_STYLE_INTRO )
-                    pFrame->Show( FALSE );
+                    const_cast<X11SalFrame*>(pFrame)->Show( FALSE );
             }
         }
 
@@ -2363,7 +2363,7 @@ long X11SalFrame::HandleMouseEvent( XEvent *pEvent )
             const std::list< SalFrame* >& rFrames = GetDisplay()->getFrames();
             for( std::list< SalFrame* >::const_iterator it = rFrames.begin(); it != rFrames.end(); ++it )
             {
-                X11SalFrame* pFrame = static_cast< X11SalFrame* >(*it);
+                const X11SalFrame* pFrame = static_cast< const X11SalFrame* >(*it);
                 if( pFrame->IsFloatGrabWindow()                                     &&
                     pFrame->bMapped_                                                &&
                     pEvent->xbutton.x_root >= pFrame->maGeometry.nX                             &&
@@ -2402,7 +2402,7 @@ long X11SalFrame::HandleMouseEvent( XEvent *pEvent )
                     const std::list< SalFrame* >& rFrames = GetDisplay()->getFrames();
                     for( std::list< SalFrame* >::const_iterator it = rFrames.begin(); it != rFrames.end(); ++it )
                     {
-                        X11SalFrame* pFrame = static_cast< X11SalFrame* >(*it);
+                        const X11SalFrame* pFrame = static_cast< const X11SalFrame* >(*it);
                         if( ! pFrame->IsFloatGrabWindow()
                             && ( pFrame->GetWindow() == aChild ||
                                  pFrame->GetShellWindow() == aChild ||
@@ -3401,12 +3401,12 @@ void X11SalFrame::SaveYourselfDone( SalFrame* pSaveFrame )
         if( pSaveFrame != s_pSaveYourselfFrame )
         {
             // check if it still exists
-            X11SalFrame* pFrame = NULL;
+            const X11SalFrame* pFrame = NULL;
             const std::list< SalFrame* >& rFrames = static_cast<X11SalFrame*>(pSaveFrame)->GetDisplay()->getFrames();
             std::list< SalFrame* >::const_iterator it = rFrames.begin();
             while( it != rFrames.end() )
             {
-                pFrame = static_cast< X11SalFrame* >(*it);
+                pFrame = static_cast< const X11SalFrame* >(*it);
                 if( pFrame == pSaveFrame )
                     break;
                 ++it;
