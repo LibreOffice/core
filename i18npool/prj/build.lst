@@ -1,7 +1,11 @@
-in	i18npool	:	bridges sax stoc svtools unotools NULL
-in	i18npool									usr1	-	all	in_mkout NULL
-in	i18npool\source\unotypes					nmake	-	all	in_utypes NULL
-in	i18npool\source\localedata_ascii			nmake	-	all	in_locdata_ascii in_xmlparser NULL
-in	i18npool\source\localedata_CJK				nmake	-	all	in_locdata_cjk in_xmlparser NULL
-in  i18npool\source\xmlparser                   nmake   -   all in_xmlparser in_utypes NULL
-in  i18npool\util                               nmake   -   all in_util in_locdata_ascii in_locdata_cjk in_xmlparser NULL
+inp	i18npool	:	bridges sax stoc svtools unotools i18npool NULL
+inp	i18npool									usr1	-	all	in_mkout NULL
+inp	i18npool\source\unotypes					nmake	-	all	in_utypes NULL
+inp	i18npool\source\registerservices			nmake	-	all	in_rserv in_utypes NULL
+inp  i18npool\source\localedata                  nmake   -   all in_localedata in_utypes NULL
+inp	i18npool\source\localedata_ascii			nmake	-	all	in_locdata_ascii in_localedata in_xmlparser NULL
+inp	i18npool\source\localedata_CJK				nmake	-	all	in_locdata_cjk in_locdata_ascii in_xmlparser NULL
+inp	i18npool\source\numberformatcode			nmake	-	all	in_numformat in_utypes NULL
+inp  i18npool\source\xmlparser                   nmake   -   all in_xmlparser in_utypes NULL
+inp  i18npool\source\defaultnumberingprovider    nmake   -   all in_dnum in_utypes NULL
+inp  i18npool\util                               nmake   -   all in_util in_dnum in_localedata in_locdata_ascii in_locdata_cjk in_numformat in_rserv in_xmlparser NULL

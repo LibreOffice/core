@@ -3,9 +3,17 @@ mkdir: %_DEST%\xml
 
 mkdir: %_DEST%\inc%_EXT%\i18npool
 
+..\%__SRC%\bin\i18npool?????.dll %_DEST%\bin%_EXT%\i18npool?????.dll
+..\%__SRC%\lib\libi18npool?????.so %_DEST%\lib%_EXT%\libi18npool?????.so
+..\%__SRC%\lib\libi18npool??????.dylib %_DEST%\lib%_EXT%\libi18npool??????.dylib
+
 ..\%__SRC%\bin\localedata_*.dll %_DEST%\bin%_EXT%\localedata_*.dll
 ..\%__SRC%\lib\liblocaledata_*.so %_DEST%\lib%_EXT%\liblocaledata_*.so
 ..\%__SRC%\lib\liblocaledata_*.dylib %_DEST%\lib%_EXT%\liblocaledata_*.dylib
+
+..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib%_EXT%\lib*static*.dylib
+..\%__SRC%\misc\*staticdatamembers.cxx %_DEST%\inc%_EXT%\*staticdatamembers.cxx
+..\%__SRC%\misc\*staticdatamembers.h* %_DEST%\inc%_EXT%\*staticdatamembers.h*
 
 dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
 dos: sh -c "if test %OS% = MACOSX; then create-libstatic-link %_DEST%\lib%_EXT%; fi"
