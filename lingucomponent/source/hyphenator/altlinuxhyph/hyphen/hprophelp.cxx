@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hprophelp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:02:06 $
+ *  last change: $Author: hjs $ $Date: 2003-08-18 14:34:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,7 @@
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
 #endif
+
 
 //using namespace utl;
 using namespace osl;
@@ -216,20 +217,21 @@ sal_Bool SAL_CALL
     return bRes;
 }
 
+
 ///////////////////////////////////////////////////////////////////////////
 
-static const char *aSP[] =
+static const char *aHP[] =
 {
-    UPN_IS_GERMAN_PRE_REFORM,
-    UPN_IS_IGNORE_CONTROL_CHARACTERS,
-    UPN_IS_USE_DICTIONARY_LIST,
+    UPN_HYPH_MIN_LEADING,
+    UPN_HYPH_MIN_TRAILING,
+    UPN_HYPH_MIN_WORD_LENGTH
 };
 
 
 PropertyHelper_Hyphen::PropertyHelper_Hyphen(
         const Reference< XInterface > & rxSource,
         Reference< XPropertySet > &rxPropSet ) :
-    PropertyChgHelper   ( rxSource, rxPropSet, aSP, sizeof(aSP) / sizeof(aSP[0]) )
+    PropertyChgHelper   ( rxSource, rxPropSet, aHP, sizeof(aHP) / sizeof(aHP[0]) )
 {
     SetDefault();
     INT32 nLen = GetPropNames().getLength();
@@ -238,31 +240,33 @@ PropertyHelper_Hyphen::PropertyHelper_Hyphen(
         const OUString *pPropName = GetPropNames().getConstArray();
         for (INT32 i = 0;  i < nLen;  ++i)
         {
-            BOOL *pbVal     = NULL,
-                 *pbResVal  = NULL;
+                INT16  *pnVal    = NULL;
+            INT16  *pnResVal = NULL;
 
-            if (A2OU( UPN_IS_GERMAN_PRE_REFORM ) == pPropName[i])
+            if (A2OU( UPN_HYPH_MIN_LEADING ) == pPropName[i])
             {
-                pbVal    = &bIsGermanPreReform;
-                pbResVal = &bResIsGermanPreReform;
+                pnVal    = &nHyphMinLeading;
+                pnResVal = &nResHyphMinLeading;
             }
-                        else if (A2OU( UPN_IS_IGNORE_CONTROL_CHARACTERS ) == pPropName[i])
-                        {
-                                pbVal    = &bIsIgnoreControlCharacters;
-                                pbResVal = &bResIsIgnoreControlCharacters;
-                        }
-                        else if (A2OU( UPN_IS_USE_DICTIONARY_LIST ) == pPropName[i])
-                        {
-                                pbVal    = &bIsUseDictionaryList;
-                                pbResVal = &bResIsUseDictionaryList;
-                        }
-            if (pbVal && pbResVal)
+            else if (A2OU( UPN_HYPH_MIN_TRAILING ) == pPropName[i])
             {
-                rxPropSet->getPropertyValue( pPropName[i] ) >>= *pbVal;
-                *pbResVal = *pbVal;
+                pnVal    = &nHyphMinTrailing;
+                pnResVal = &nResHyphMinTrailing;
+            }
+            else if (A2OU( UPN_HYPH_MIN_WORD_LENGTH ) == pPropName[i])
+            {
+                pnVal    = &nHyphMinWordLength;
+                pnResVal = &nResHyphMinWordLength;
+            }
+
+            if (pnVal && pnResVal)
+            {
+                GetPropSet()->getPropertyValue( pPropName[i] ) >>= *pnVal;
+                *pnResVal = *pnVal;
             }
         }
     }
+
 }
 
 
@@ -273,93 +277,75 @@ PropertyHelper_Hyphen::~PropertyHelper_Hyphen()
 
 void PropertyHelper_Hyphen::SetDefault()
 {
-    bResIsGermanPreReform           = bIsGermanPreReform            = FALSE;
-    bResIsIgnoreControlCharacters   = bIsIgnoreControlCharacters    = TRUE;
-    bResIsUseDictionaryList         = bIsUseDictionaryList          = TRUE;
-
-
+    nResHyphMinLeading      = nHyphMinLeading           = 2;
+    nResHyphMinTrailing     = nHyphMinTrailing      = 2;
+    nResHyphMinWordLength           = nHyphMinWordLength            = 0;
 }
 
 
 void SAL_CALL
-    PropertyHelper_Hyphen::propertyChange( const PropertyChangeEvent& rEvt )
+        PropertyHelper_Hyphen::propertyChange( const PropertyChangeEvent& rEvt )
         throw(RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
     if (GetPropSet().is()  &&  rEvt.Source == GetPropSet())
     {
-        INT16 nLngSvcFlags = 0;
-        BOOL bSCWA = FALSE, // SPELL_CORRECT_WORDS_AGAIN ?
-             bSWWA = FALSE; // SPELL_WRONG_WORDS_AGAIN ?
+        INT16 nLngSvcFlags = LinguServiceEventFlags::HYPHENATE_AGAIN;
 
-        BOOL *pbVal = NULL;
+        INT16   *pnVal = NULL;
         switch (rEvt.PropertyHandle)
         {
-            case UPH_IS_IGNORE_CONTROL_CHARACTERS :
-            {
-                pbVal = &bIsIgnoreControlCharacters;
-                break;
-            }
-            case UPH_IS_GERMAN_PRE_REFORM         :
-            {
-                pbVal = &bIsGermanPreReform;
-                bSCWA = bSWWA = TRUE;
-                break;
-            }
-            case UPH_IS_USE_DICTIONARY_LIST       :
-            {
-                pbVal = &bIsUseDictionaryList;
-                bSCWA = bSWWA = TRUE;
-                break;
-            }
+            case UPH_HYPH_MIN_LEADING     : pnVal = &nHyphMinLeading;    break;
+            case UPH_HYPH_MIN_TRAILING    : pnVal = &nHyphMinTrailing;   break;
+            case UPH_HYPH_MIN_WORD_LENGTH     : pnVal = &nHyphMinWordLength; break;
             default:
-                DBG_ERROR( "unknown property" );
+                   DBG_ERROR( "unknown property" );
         }
-        if (pbVal)
-            rEvt.NewValue >>= *pbVal;
+        if (pnVal)
+            rEvt.NewValue >>= *pnVal;
 
-        if (bSCWA)
-            nLngSvcFlags |= LinguServiceEventFlags::SPELL_CORRECT_WORDS_AGAIN;
-        if (bSWWA)
-            nLngSvcFlags |= LinguServiceEventFlags::SPELL_WRONG_WORDS_AGAIN;
-        if (nLngSvcFlags)
+        if (pnVal)
         {
-            LinguServiceEvent aEvt( GetEvtObj(), nLngSvcFlags );
-            LaunchEvent( aEvt );
+            if (nLngSvcFlags)
+            {
+                LinguServiceEvent aEvt( GetEvtObj(), nLngSvcFlags );
+                LaunchEvent( aEvt );
+            }
         }
     }
 }
 
 
+
 void PropertyHelper_Hyphen::SetTmpPropVals( const PropertyValues &rPropVals )
 {
-    // set return value to default value unless there is an
-    // explicitly supplied temporary value
-    bResIsGermanPreReform           = bIsGermanPreReform;
-    bResIsIgnoreControlCharacters   = bIsIgnoreControlCharacters;
-    bResIsUseDictionaryList         = bIsUseDictionaryList;
 
-    //
+        nResHyphMinLeading      = nHyphMinLeading;
+    nResHyphMinTrailing     = nHyphMinTrailing;
+    nResHyphMinWordLength           = nHyphMinWordLength;
+
     INT32 nLen = rPropVals.getLength();
+
     if (nLen)
     {
         const PropertyValue *pVal = rPropVals.getConstArray();
         for (INT32 i = 0;  i < nLen;  ++i)
         {
-            BOOL *pbResVal = NULL;
+            INT16   *pnResVal = NULL;
             switch (pVal[i].Handle)
             {
-                case UPH_IS_GERMAN_PRE_REFORM         : pbResVal = &bResIsGermanPreReform; break;
-                case UPH_IS_IGNORE_CONTROL_CHARACTERS : pbResVal = &bResIsIgnoreControlCharacters; break;
-                case UPH_IS_USE_DICTIONARY_LIST       : pbResVal = &bResIsUseDictionaryList; break;
+                case UPH_HYPH_MIN_LEADING     : pnResVal = &nResHyphMinLeading;    break;
+                case UPH_HYPH_MIN_TRAILING    : pnResVal = &nResHyphMinTrailing;   break;
+                case UPH_HYPH_MIN_WORD_LENGTH     : pnResVal = &nResHyphMinWordLength; break;
                 default:
-                    DBG_ERROR( "unknown property" );
+                  DBG_ERROR( "unknown property" );
             }
-            if (pbResVal)
-                pVal[i].Value >>= *pbResVal;
+            if (pnResVal)
+                pVal[i].Value >>= *pnResVal;
         }
     }
 }
 
 ///////////////////////////////////////////////////////////////////////////
+

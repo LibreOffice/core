@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hprophelp.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:02:06 $
+ *  last change: $Author: hjs $ $Date: 2003-08-18 14:34:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,45 +162,47 @@ public:
 
 ///////////////////////////////////////////////////////////////////////////
 
-
 class PropertyHelper_Hyphen :
     public PropertyChgHelper
 {
     // default values
-    BOOL    bIsGermanPreReform;
-        BOOL    bIsIgnoreControlCharacters;
-        BOOL    bIsUseDictionaryList;
+        INT16 nHyphMinLeading;
+        INT16 nHyphMinTrailing;
+        INT16 nHyphMinWordLength;
 
     // return values, will be set to default value or current temporary value
-    BOOL    bResIsGermanPreReform;
-        BOOL    bResIsIgnoreControlCharacters;
-        BOOL    bResIsUseDictionaryList;
+        INT16 nResHyphMinLeading;
+        INT16 nResHyphMinTrailing;
+        INT16 nResHyphMinWordLength;
 
     // disallow use of copy-constructor and assignment-operator
     PropertyHelper_Hyphen( const PropertyHelper_Hyphen & );
     PropertyHelper_Hyphen & operator = ( const PropertyHelper_Hyphen & );
 
-    void    SetDefault();
+protected:
+    // PropertyChgHelper
+    virtual void    SetDefault();
 
 public:
     PropertyHelper_Hyphen(
-            const Reference< XInterface > &rxSource,
-            Reference< XPropertySet > &rxPropSet );
+            const ::com::sun::star::uno::Reference<
+                ::com::sun::star::uno::XInterface > &rxSource,
+            ::com::sun::star::uno::Reference<
+                ::com::sun::star::beans::XPropertySet > &rxPropSet);
     virtual ~PropertyHelper_Hyphen();
+
+    virtual void    SetTmpPropVals( const com::sun::star::beans::PropertyValues &rPropVals );
 
     // XPropertyChangeListener
     virtual void SAL_CALL
-        propertyChange( const PropertyChangeEvent& rEvt )
-            throw(RuntimeException);
+        propertyChange( const ::com::sun::star::beans::PropertyChangeEvent& rEvt )
+            throw(::com::sun::star::uno::RuntimeException);
 
-    void    SetTmpPropVals( const PropertyValues &rPropVals );
-
-        BOOL    IsGermanPreReform() const                       { return bResIsGermanPreReform; }
-        BOOL    IsIgnoreControlCharacters() const       { return bResIsIgnoreControlCharacters; }
-        BOOL    IsUseDictionaryList() const                     { return bResIsUseDictionaryList; }
+    INT16   GetMinLeading() const               { return nHyphMinLeading; }
+    INT16   GetMinTrailing() const              { return nHyphMinTrailing; }
+    INT16   GetMinWordLength() const            { return nHyphMinWordLength; }
 };
 
 ///////////////////////////////////////////////////////////////////////////
 
 #endif
-
