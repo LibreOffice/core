@@ -37,7 +37,7 @@ public class AccessibilityTreeModel
     // The root node of the tree.  Use setRoot to change it.
     private AccessibleTreeNode maRoot = null;
 
-    // default handlers, Vector<HandlerPair>
+    // default handlers
     private static Vector aDefaultHandlers;
     private static NodeHandler maContextHandler = new AccessibleContextHandler();
     private static NodeHandler maTextHandler = new AccessibleTextHandler();
@@ -75,6 +75,7 @@ public class AccessibilityTreeModel
     public void lock ()
     {
         mnLockCount += 1;
+        System.out.println ("locking: " + mnLockCount);
     }
 
     /** Unlock the tree.  After unlocking the tree as many times as locking
@@ -86,6 +87,7 @@ public class AccessibilityTreeModel
     public void unlock (AccessibleTreeNode aNodeHint)
     {
         mnLockCount -= 1;
+        System.out.println ("unlocking: " + mnLockCount);
         if (mnLockCount == 0)
         {
             fireTreeStructureChanged (
@@ -106,7 +108,7 @@ public class AccessibilityTreeModel
         else
         {
             lock ();
-            removeChild (maRoot);
+            clear ();
             maRoot = aRoot;
             unlock (maRoot);
         }
@@ -119,11 +121,7 @@ public class AccessibilityTreeModel
         System.out.println ("clearing the whole tree");
         Object[] aNodes = maXAccessibleToNode.values().toArray();
         for (int i=0; i<aNodes.length; i++)
-        {
-            System.out.println ("removing node " + i + ": " + aNodes[i]);
-            removeNode ((AccessibleTreeNode)maXAccessibleToNode.get (
-                            (AccessibleTreeNode)aNodes[i]));
-        }
+            removeNode ((AccessibleTreeNode)aNodes[i]);
     }
 
     //
@@ -225,8 +223,6 @@ public class AccessibilityTreeModel
             }
             else
             {
-                System.out.println ("removing node " + aNode);
-
                 // depth-first removal of children
                 while (aNode.getChildCount() > 0)
                     removeChild (aNode.getChild (0));
@@ -252,15 +248,15 @@ public class AccessibilityTreeModel
     {
         try
         {
-            if (aNode != null && aNode instanceof AccTreeNode)
+            if ((aNode != null) && (aNode instanceof AccTreeNode))
             {
-                System.out.println ("removing node " + aNode);
-
                 // Remove node itself from internal data structures.
                 removeAccListener ((AccTreeNode)aNode);
                 removeFromCanvas ((AccTreeNode)aNode);
                 maXAccessibleToNode.remove (((AccTreeNode)aNode).getAccessible());
             }
+            else
+                System.out.println ("not an AccTreeNode " + aNode);
         }
         catch (Exception e)
         {
@@ -304,7 +300,6 @@ public class AccessibilityTreeModel
             XAccessible xChild = aChild.getAccessible();
             if (maXAccessibleToNode.get (xChild) == null)
             {
-                System.out.println ("adding new node " + aNode);
                 registerAccListener (aChild);
                 maXAccessibleToNode.put (xChild, aChild);
                 addToCanvas (aChild);
@@ -889,18 +884,4 @@ public class AccessibilityTreeModel
         }
     }
 
-}
-
-
-/** HandlerPair stores a NodeHandler and the appropriate type */
-class HandlerPair
-{
-    public Class aType;
-    public NodeHandler aHandler;
-
-    public HandlerPair( Class aT, NodeHandler aH )
-    {
-        aType = aT;
-        aHandler = aH;
-    }
 }

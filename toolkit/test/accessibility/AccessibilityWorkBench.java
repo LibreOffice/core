@@ -366,10 +366,6 @@ public class AccessibilityWorkBench
 
     protected void initialize ()
     {
-        // Delete the graphical representations.
-        if (maCanvas != null)
-            maCanvas.clear ();
-
         // create new model (with new documents)
         if (maTree.getModel() instanceof AccessibilityTreeModel)
         {

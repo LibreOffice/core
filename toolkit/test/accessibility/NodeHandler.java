@@ -50,7 +50,6 @@ abstract class NodeHandler
             aChild = createChild (aParent, nIndex);
             if (aChild == null)
                 aChild = new StringNode ("could not create child", aParent);
-            System.out.println ("created child "+aChild + " at index " + nIndex);
             maChildList.setElementAt (aChild, nIndex);
         }
         return aChild;

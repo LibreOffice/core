@@ -56,39 +56,27 @@ class Canvas
             maTree.addTreeSelectionListener (this);
     }
 
-    protected void addAccessible (AccTreeNode aNode)
-    {
-        AccessibleObject aObject = (AccessibleObject) maObjects.get (aNode);
-        if (aObject == null)
-        {
-            aObject = new AccessibleObject (aNode);
-            // Update bounding box that includes all objects.
-            if (maObjects.size() == 0)
-                maBoundingBox = aObject.getBBox();
-            else
-                maBoundingBox = maBoundingBox.union (aObject.getBBox());
-
-            maObjects.put (aNode, aObject);
-            maObjectList.add (aObject);
-
-            repaint ();
-        }
-    }
-
-    protected void removeAccessible (AccTreeNode aNode)
-    {
-        maObjectList.remove (maObjects.get(aNode));
-        maObjects.remove (aNode);
-        repaint ();
-    }
-
-
     public void addNode (AccTreeNode aNode)
     {
         if (maNodes.indexOf (aNode) == -1)
         {
             maNodes.add (aNode);
-            addAccessible (aNode);
+
+            AccessibleObject aObject = (AccessibleObject) maObjects.get (aNode);
+            if (aObject == null)
+            {
+                aObject = new AccessibleObject (aNode);
+                // Update bounding box that includes all objects.
+                if (maObjects.size() == 0)
+                    maBoundingBox = aObject.getBBox();
+                else
+                    maBoundingBox = maBoundingBox.union (aObject.getBBox());
+
+                maObjects.put (aNode, aObject);
+                maObjectList.add (aObject);
+
+            }
+            repaint ();
         }
     }
 
@@ -97,8 +85,11 @@ class Canvas
         int i = maNodes.indexOf (aNode);
         if( i != -1 )
         {
-            removeAccessible (aNode);
+            Object aObject = maObjects.get(aNode);
+            maObjectList.remove (aObject);
+            maObjects.remove (aObject);
             maNodes.remove (aNode);
+            repaint ();
         }
     }
 
@@ -111,8 +102,12 @@ class Canvas
 
     public void clear ()
     {
+        while (maNodes.size() > 0)
+            removeNode ((AccTreeNode)maNodes.elementAt(0));
+
         maNodes.clear();
         maObjects.clear();
+        maObjectList.clear();
     }
 
     public boolean getShowDescriptions ()
