@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dtint.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: pl $ $Date: 2002-08-26 17:05:23 $
+ *  last change: $Author: pl $ $Date: 2002-10-14 15:48:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,7 +234,7 @@ static Font parseFont( const ByteString& rLine )
         }
         while( nIndex != STRING_NOTFOUND )
         {
-            aToken = rLine.GetToken( 0, ',' );
+            aToken = rLine.GetToken( 0, ',', nIndex );
             if( aToken.Equals( "bold" ) )
                 aFont.SetWeight( WEIGHT_BOLD );
             else if( aToken.Equals( "light" ) )
@@ -528,6 +528,8 @@ void DtIntegrator::GetSystemLook( const char* pCommand, AllSettings& rSettings )
                 aStyleSettings.SetGroupTextColor( aTextColor );
                 aStyleSettings.SetLabelTextColor( aTextColor );
                 aStyleSettings.SetInfoTextColor( aTextColor );
+                aStyleSettings.SetWindowTextColor( aTextColor );
+                aStyleSettings.SetFieldTextColor( aTextColor );
             }
             break;
             case AllBackColors:
@@ -538,6 +540,8 @@ void DtIntegrator::GetSystemLook( const char* pCommand, AllSettings& rSettings )
                 aStyleSettings.SetDialogColor( aBack );
                 aStyleSettings.SetMenuColor( aBack );
                 aStyleSettings.SetMenuBarColor( aBack );
+                aStyleSettings.SetWindowColor( aBack );
+                aStyleSettings.SetFieldColor( aBack );
                 if( aBack == COL_LIGHTGRAY )
                     aStyleSettings.SetCheckedColor( Color( 0xCC, 0xCC, 0xCC ) );
                 else
