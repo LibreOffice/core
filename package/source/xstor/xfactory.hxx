@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xfactory.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2003-09-11 10:16:08 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 17:28:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,12 +91,12 @@ public:
     }
 
     static ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL
-            OStorageFactory::impl_staticGetSupportedServiceNames();
+            impl_staticGetSupportedServiceNames();
 
-    static ::rtl::OUString SAL_CALL OStorageFactory::impl_staticGetImplementationName();
+    static ::rtl::OUString SAL_CALL impl_staticGetImplementationName();
 
     static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
-        OStorageFactory::impl_staticCreateSelfInstance(
+        impl_staticCreateSelfInstance(
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager );
 
 
