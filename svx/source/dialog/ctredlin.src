@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctredlin.src,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 14:00:34 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 11:52:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,36 +68,9 @@ TabPage SID_REDLIN_FILTER_PAGE
 {
     String STR_FILTER
     {
-        Text = "Filter" ;
-        Text [ ENGLISH ] = "Filter" ;
-        Text [ portuguese ] = "Filtro" ;
-        Text [ english_us ] = "Filter" ;
-        Text [ portuguese_brazilian ] = "Filtro" ;
-        Text [ swedish ] = "Filter" ;
-        Text [ danish ] = "Filter" ;
-        Text [ italian ] = "Filtro" ;
-        Text [ spanish ] = "Filtro" ;
-        Text [ french ] = "Filtre" ;
-        Text [ dutch ] = "Filter" ;
-        Text[ chinese_simplified ] = "ç­›é€‰";
-        Text[ russian ] = "Ôèëüòğ";
-        Text[ polish ] = "Filtr";
-        Text[ japanese ] = "ãƒ•ã‚£ãƒ«ã‚¿";
-        Text[ chinese_traditional ] = "ç¯©é¸";
-        Text[ arabic ] = "İáÊÑ";
-        Text[ greek ] = "Ößëôñï";
-        Text[ korean ] = "í•„í„°";
-        Text[ turkish ] = "Filtre";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Filtre";
-        Text[ finnish ] = "Suodatus";
-        Text[ thai ] = "à¸•à¸±à¸§à¸à¸£à¸­à¸‡";
-        Text[ czech ] = "Filtr";
-        Text[ hebrew ] = "â€®×¡×™× ×•×Ÿâ€¬";
-        Text[ hindi ] = "à¤«à¤¼à¤¿à¤²à¥à¤Ÿà¤°";
-        Text[ slovak ] = "Filter";
-        Text[ hungarian ] = "SzÅ±rÅ‘";
-        Text[ slovenian ] = "Filter";
+        Text [ de ] = "Filter" ;
+        Text [ en-US ] = "Filter" ;
+        Text [ x-comment ] = " ";
     };
     HelpId = HID_REDLINING_FILTER_PAGE ;
     OutputSize = TRUE ;
@@ -108,38 +81,11 @@ TabPage SID_REDLIN_FILTER_PAGE
     {
         Pos = MAP_APPFONT ( 6 , 8 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text = "~Datum" ;
-        Text [ ENGLISH ] = "~Date" ;
+        Text [ de ] = "~Datum" ;
         TabStop = TRUE ;
         HelpId = HID_REDLINING_FILTER_CB_DATE ;
-        Text [ english_us ] = "~Date" ;
-        Text [ portuguese_brazilian ] = "~Data" ;
-        Text [ swedish ] = "~Datum" ;
-        Text [ danish ] = "~Dato" ;
-        Text [ italian ] = "Data" ;
-        Text [ spanish ] = "Fecha" ;
-        Text [ french ] = "Date" ;
-        Text [ dutch ] = "~Datum" ;
-        Text [ portuguese ] = "~Data" ;
-        Text[ chinese_simplified ] = "æ—¥æœŸ(~D)";
-        Text[ russian ] = "Äàòà";
-        Text[ polish ] = "~Data";
-        Text[ japanese ] = "æ—¥ä»˜ã¨æ™‚åˆ»(~D)";
-        Text[ chinese_traditional ] = "æ—¥æœŸ(~D)";
-        Text[ arabic ] = "ÇáÊÇÑíÎ";
-        Text[ greek ] = "Çìåñïìçíßá";
-        Text[ korean ] = "ë‚ ì§œ(~D)";
-        Text[ turkish ] = "~Tarih";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Data";
-        Text[ finnish ] = "~Päivämäärä";
-        Text[ thai ] = "~à¸§à¸±à¸™à¸—à¸µà¹ˆ";
-        Text[ czech ] = "Datum";
-        Text[ hebrew ] = "â€®×¢×œ ×¤×™ ×ª××¨×™×šâ€¬";
-        Text[ hindi ] = "~à¤¦à¤¿à¤¨à¤¾à¤‚à¤•";
-        Text[ slovak ] = "~DÃ¡tum";
-        Text[ hungarian ] = "~DÃ¡tum";
-        Text[ slovenian ] = "~Datum";
+        Text [ en-US ] = "~Date" ;
+        Text [ x-comment ] = " ";
     };
     ListBox LB_DATE
     {
@@ -150,7 +96,7 @@ TabPage SID_REDLIN_FILTER_PAGE
         Size = MAP_APPFONT ( 78 , 99 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
-        StringList =
+        StringList [ de ] =
         {
             < "vor dem" ; Default ; > ;
             < "seit dem" ; Default ; > ;
@@ -159,25 +105,7 @@ TabPage SID_REDLIN_FILTER_PAGE
             < "zwischen dem" ; Default ; > ;
             < "seit dem Speichern" ; Default ; > ;
         };
-        StringList [ ENGLISH ] =
-        {
-            < "vor dem" ; Default ; > ;
-            < "seit dem" ; Default ; > ;
-            < "gleich dem" ; Default ; > ;
-            < "ungleich dem" ; Default ; > ;
-            < "zwischen dem" ; Default ; > ;
-            < "seit dem Speichern" ; Default ; > ;
-        };
-        stringlist [ portuguese ] =
-        {
-            < "antes de" ; Default ; > ;
-            < "desde" ; Default ; > ;
-            < "igual a" ; Default ; > ;
-            < "desigual a" ; Default ; > ;
-            < "entre" ; Default ; > ;
-            < "desde o Guardar" ; Default ; > ;
-        };
-        stringlist [ english_us ] =
+        StringList [ en-US ] =
         {
             < "earlier than" ; Default ; > ;
             < "since" ; Default ; > ;
@@ -186,151 +114,7 @@ TabPage SID_REDLIN_FILTER_PAGE
             < "between" ; Default ; > ;
             < "since saving" ; Default ; > ;
         };
-        stringlist [ portuguese_brazilian ] =
-        {
-            < "antes de" ; Default ; > ;
-            < "desde" ; Default ; > ;
-            < "igual a" ; Default ; > ;
-            < "diferente de" ; Default ; > ;
-            < "entre" ; Default ; > ;
-            < "desde a gravação" ; Default ; > ;
-        };
-        stringlist [ swedish ] =
-        {
-            < "innan den" ; Default ; > ;
-            < "sedan" ; Default ; > ;
-            < "lika med" ; Default ; > ;
-            < "inte lika med" ; Default ; > ;
-            < "mellan" ; Default ; > ;
-            < "sedan sparandet" ; Default ; > ;
-        };
-        stringlist [ danish ] =
-        {
-            < "før den" ; Default ; > ;
-            < "siden den" ; Default ; > ;
-            < "lig med den" ; Default ; > ;
-            < "forskellig fra" ; Default ; > ;
-            < "mellem" ; Default ; > ;
-            < "siden der blev gemt" ; Default ; > ;
-        };
-        stringlist [ italian ] =
-        {
-            < "prima del" ; Default ; > ;
-            < "dal" ; Default ; > ;
-            < "uguale a" ; Default ; > ;
-            < "non uguale a" ; Default ; > ;
-            < "tra il" ; Default ; > ;
-            < "dal salvataggio" ; Default ; > ;
-        };
-        stringlist [ spanish ] =
-        {
-            < "antes de" ; Default ; > ;
-            < "desde el" ; Default ; > ;
-            < "igual a" ; Default ; > ;
-            < "desigual a" ; Default ; > ;
-            < "entre" ; Default ; > ;
-            < "después de guardar" ; Default ; > ;
-        };
-        stringlist [ french ] =
-        {
-            < "avant le" ; Default ; > ;
-            < "depuis le" ; Default ; > ;
-            < "égal à" ; Default ; > ;
-            < "différent de" ; Default ; > ;
-            < "entre le" ; Default ; > ;
-            < "depuis l'enregistrement" ; Default ; > ;
-        };
-        stringlist [ dutch ] =
-        {
-            < "voor de" ; Default ; > ;
-            < "na de" ; Default ; > ;
-            < "gelijk aan" ; Default ; > ;
-            < "niet gelijk aan" ; Default ; > ;
-            < "tussen de" ; Default ; > ;
-            < "na het opslaan" ; Default ; > ;
-        };
-    StringList [ chinese_simplified ] =
-    {
-            < "æ—©æ–¼" ; Default ; > ;
-        < "ä»" ; Default ; > ;
-        < "ç­‰åŒäº" ; Default ; > ;
-        < "ä¸ç­‰äº" ; Default ; > ;
-        < "ä¸­é—´äº" ; Default ; > ;
-        < "åœ¨å­˜ç›˜å" ; Default ; > ;
-    };
-    StringList [ russian ] =
-    {
-            < "ïåğåä" ; Default ; > ;
-        < "ñ ìîìåíòà" ; Default ; > ;
-        < "ğàâíî" ; Default ; > ;
-        < "íå ğàâíî" ; Default ; > ;
-        < "ìåæäó" ; Default ; > ;
-        < "ñ ìîìåíòà ñîõğàíåíèÿ" ; Default ; > ;
-    };
-    StringList [ polish ] =
-    {
-            < "przed" ; Default ; > ;
-        < "od" ; Default ; > ;
-        < "równy" ; Default ; > ;
-        < "nie równe" ; Default ; > ;
-        < "miêdzy" ; Default ; > ;
-        < "od zapisu" ; Default ; > ;
-    };
-    StringList [ japanese ] =
-    {
-            < "æ¬¡ã®æ—¥æ™‚ã¾ã§" ; Default ; > ;
-        < "æ¬¡ã®æ—¥æ™‚ã‹ã‚‰" ; Default ; > ;
-        < "æ¬¡ã®æ—¥ä»˜" ; Default ; > ;
-        < "æ¬¡ã®æ—¥ä»˜ä»¥å¤–" ; Default ; > ;
-        < "æ¬¡ã®æ—¥æ™‚ã®é–“" ; Default ; > ;
-        < "æœ€çµ‚ä¿å­˜ä»¥é™" ; Default ; > ;
-    };
-    StringList [ chinese_traditional ] =
-    {
-            < "æ—©æ–¼" ; Default ; > ;
-        < "å¾" ; Default ; > ;
-        < "ç­‰åŒæ–¼" ; Default ; > ;
-        < "ä¸ç­‰æ–¼" ; Default ; > ;
-        < "ä¸­é–“æ–¼" ; Default ; > ;
-        < "åœ¨å„²å­˜å¾Œ" ; Default ; > ;
-    };
-    StringList [ arabic ] =
-    {
-            < "ŞÈá" ; Default ; > ;
-        < "ãäĞ" ; Default ; > ;
-        < "İí" ; Default ; > ;
-        < "ÛíÑ" ; Default ; > ;
-        < "Èíä" ; Default ; > ;
-        < "ãäĞ ÇáÍİÙ" ; Default ; > ;
-    };
-    StringList [ greek ] =
-    {
-            < "ğñéí áğü" ; Default ; > ;
-        < "áğü " ; Default ; > ;
-        < "ßóï ìå" ; Default ; > ;
-        < "äéÜöïñï áğü" ; Default ; > ;
-        < "ìåôáîı" ; Default ; > ;
-        < "áğü ôçí áğïèŞêåõóç" ; Default ; > ;
-    };
-    StringList [ korean ] =
-    {
-            < "ë‹¤ìŒ ì‹œì ê¹Œì§€" ; Default ; > ;
-        < "ë‹¤ìŒ ì‹œì ë¶€í„°" ; Default ; > ;
-        < "ë‹¤ìŒ ë‚ ì§œ ë‚´" ; Default ; > ;
-        < "ë‹¤ìŒ ë‚ ì§œ ì´ì™¸" ; Default ; > ;
-        < "ë‹¤ìŒ ë‚ ì§œ ì‚¬ì´" ; Default ; > ;
-        < "ìµœì¢… ì €ì¥ ì´í›„" ; Default ; > ;
-    };
-    StringList [ turkish ] =
-    {
-            < "bu tarihten önce" ; Default ; > ;
-        < "ilk tarih" ; Default ; > ;
-        < "eşittir" ; Default ; > ;
-        < "eşit değildir" ; Default ; > ;
-        < "arasında" ; Default ; > ;
-        < "Kayıttan itibaren" ; Default ; > ;
-    };
-    StringList [ language_user1 ] =
+    StringList [ x-comment ] =
     {
             < " " ; Default ; > ;
         < " " ; Default ; > ;
@@ -338,87 +122,6 @@ TabPage SID_REDLIN_FILTER_PAGE
         < " " ; Default ; > ;
         < " " ; Default ; > ;
         < " " ; Default ; > ;
-    };
-    StringList [ catalan ] =
-    {
-            < "abans de" ; Default ; > ;
-        < "des de" ; Default ; > ;
-        < "igual que" ; Default ; > ;
-        < "desigual a" ; Default ; > ;
-        < "entre" ; Default ; > ;
-        < "des del desament" ; Default ; > ;
-    };
-    StringList [ finnish ] =
-    {
-            < "ennen kuin" ; Default ; > ;
-        < "alkaen" ; Default ; > ;
-        < "yhtä suuri kuin " ; Default ; > ;
-        < "eri suuri kuin" ; Default ; > ;
-        < "välillä" ; Default ; > ;
-        < "tallennuksesta" ; Default ; > ;
-    };
-    StringList [ thai ] =
-    {
-         < "à¹€à¸£à¹‡à¸§à¸à¸§à¹ˆà¸²" ; Default ; > ;
-        < "à¸•à¸±à¹‰à¸‡à¹à¸•à¹ˆ" ; Default ; > ;
-        < "à¹€à¸—à¹ˆà¸²à¸à¸±à¸š" ; Default ; > ;
-        < "à¹„à¸¡à¹ˆà¹€à¸—à¹ˆà¸²à¸à¸±à¸š" ; Default ; > ;
-        < "à¸£à¸°à¸«à¸§à¹ˆà¸²à¸‡" ; Default ; > ;
-        < "à¸•à¸±à¹‰à¸‡à¹à¸•à¹ˆà¸‚à¸“à¸°à¸šà¸±à¸™à¸—à¸¶à¸" ; Default ; > ;
-    };
-    StringList [ czech ] =
-    {
-         < "pÅ™ed" ; Default ; > ;
-        < "od" ; Default ; > ;
-        < "je rovno " ; Default ; > ;
-        < "nenÃ­ rovno" ; Default ; > ;
-        < "leÅ¾Ã­ mezi" ; Default ; > ;
-        < "od zÃ¡pisu" ; Default ; > ;
-    };
-    StringList [ hebrew ] =
-    {
-         < "â€®×œ×¤× ×™â€¬" ; Default ; > ;
-        < "â€®×××–â€¬" ; Default ; > ;
-        < "â€®×©×•×•×” ×œâ€¬" ; Default ; > ;
-        < "â€®×œ× ×©×•×•×” ×œâ€¬" ; Default ; > ;
-        < "â€®×‘×™×Ÿâ€¬" ; Default ; > ;
-        < "â€®×××– ×©××™×¨×” ××—×¨×•× ×”â€¬" ; Default ; > ;
-    };
-    StringList [ hindi ] =
-    {
-         < "à¤¸à¥‡ à¤ªà¤¹à¤¿à¤²à¥‡" ; Default ; > ;
-        < "à¤ªà¥‚à¤°à¥à¤µà¤•à¤¾à¤² à¤¸à¥‡" ; Default ; > ;
-        < "à¤•à¥‡ à¤¸à¤®à¤¾à¤¨" ; Default ; > ;
-        < "à¤•à¥‡ à¤…à¤¸à¤®à¤¾à¤¨" ; Default ; > ;
-        < "à¤¬à¥€à¤š à¤®à¥‡à¤‚" ; Default ; > ;
-        < "à¤¸à¥‡ à¤¸à¤‚à¤šà¤¿à¤¤ à¤•à¤° à¤°à¤¹à¤¾ à¤¹à¥ˆ" ; Default ; > ;
-    };
-    StringList [ slovak ] =
-    {
-         < "skÃ´r ako" ; Default ; > ;
-        < "od" ; Default ; > ;
-        < "je rovnÃ© " ; Default ; > ;
-        < "nie je rovnÃ©" ; Default ; > ;
-        < "medzi" ; Default ; > ;
-        < "od zÃ¡pisu" ; Default ; > ;
-    };
-    StringList [ hungarian ] =
-    {
-         < "korÃ¡bban mint" ; Default ; > ;
-        < "kÃ©sÅ‘bb mint" ; Default ; > ;
-        < "pontosan" ; Default ; > ;
-        < "mÃ¡s mint" ; Default ; > ;
-        < "kÃ¶zÃ¶tt" ; Default ; > ;
-        < "mentÃ©s Ã³ta" ; Default ; > ;
-    };
-    StringList [ slovenian ] =
-    {
-         < "pred" ; Default ; > ;
-        < "od" ; Default ; > ;
-        < "enako kot" ; Default ; > ;
-        < "ni enako" ; Default ; > ;
-        < "med" ; Default ; > ;
-        < "od zadnjega shranjevanja" ; Default ; > ;
     };
     };
     DateField DF_DATE
@@ -467,37 +170,10 @@ TabPage SID_REDLIN_FILTER_PAGE
             ImageBitmap = Bitmap { File = "time.bmp" ; };
             MASKCOLOR
         };
-        QuickHelpText = "Datum/Uhrzeit einstellen" ;
-        QuickHelpText [ ENGLISH ] = "Set date/time" ;
-        QuickHelpText [ english_us ] = "Set Date/Time" ;
-        QuickHelpText [ portuguese_brazilian ] = "Acertar Data/Hora" ;
-        QuickHelpText [ swedish ] = "Ställ in datum/klockslag" ;
-        QuickHelpText [ danish ] = "Indstil dato/klokkeslæt" ;
-        QuickHelpText [ italian ] = "Imposta data/ora" ;
-        QuickHelpText [ spanish ] = "Definir fecha/hora" ;
-        QuickHelpText [ french ] = "Définir la date/l'heure" ;
-        QuickHelpText [ dutch ] = "Datum/tijd instellen" ;
-        QuickHelpText [ portuguese ] = "Define data e hora" ;
-        QuickHelpText[ russian ] = "Âûñòàâèòü âğåìÿ è äàòó";
-        QuickHelpText[ polish ] = "Ustaw datê/godzinê";
-        QuickHelpText[ japanese ] = "æ—¥ä»˜ã¨æ™‚åˆ»ã®è¨­å®š";
-        QuickHelpText[ chinese_simplified ] = "è®¾å®šæ—¥æœŸ/æ—¶é—´";
-        QuickHelpText[ chinese_traditional ] = "è¨­å®šæ—¥æœŸ/æ™‚é–“";
-        QuickHelpText[ arabic ] = "ÖÈØ ÇáÊÇÑíÎ/ÇáæŞÊ";
-        QuickHelpText[ greek ] = "ÅéóáãùãŞ çìåñïìçíßáò/şñáò";
-        QuickHelpText[ korean ] = "ë‚ ì§œ/ì‹œê°„ ì„¤ì •";
-        QuickHelpText[ language_user1 ] = " ";
-        QuickHelpText[ language_user1 ] = " ";
-        QuickHelpText[ turkish ] = "Datum/Uhrzeit einstellen";
-        QuickHelpText[ catalan ] = "Defineix data/hora";
-        QuickHelpText[ finnish ] = "Määritä päivämäärä/aika";
-        QuickHelpText[ thai ] = "Set Date/Time";
-        QuickHelpText[ czech ] = "Nastavit datum a Äas";
-        QuickHelpText[ hebrew ] = "Datum/Uhrzeit einstellen";
-        QuickHelpText[ hindi ] = "à¤¦à¤¿à¤¨à¤¾à¤‚à¤•/à¤¸à¤®à¤¯ à¤¸à¥‡à¤Ÿà¥à¤Ÿ à¤•à¤°à¥‹";
-        QuickHelpText[ slovak ] = "NastaviÅ¥ dÃ¡tum a Äas";
-        QuickHelpText[ hungarian ] = "DÃ¡tum Ã©s idÅ‘ beÃ¡llÃ­tÃ¡sa";
-        QuickHelpText[ slovenian ] = "Nastavi datum/Äas";
+        QuickHelpText [ de ] = "Datum/Uhrzeit einstellen" ;
+        QuickHelpText [ en-US ] = "Set Date/Time" ;
+        QuickHelpText [ x-comment ] = " ";
+        QuickHelpText [ x-comment ] = " ";
     };
     FixedText FT_DATE2
     {
@@ -505,36 +181,9 @@ TabPage SID_REDLIN_FILTER_PAGE
         Size = MAP_APPFONT ( 78 , 8 ) ;
         Right = TRUE ;
         Disable = TRUE ;
-        Text = "~und dem" ;
-        Text [ ENGLISH ] = "and" ;
-        Text [ english_us ] = "and" ;
-        Text [ portuguese_brazilian ] = "e" ;
-        Text [ swedish ] = "o~ch" ;
-        Text [ danish ] = "og den" ;
-        Text [ italian ] = "e" ;
-        Text [ spanish ] = "y" ;
-        Text [ french ] = "~et" ;
-        Text [ dutch ] = "~en de" ;
-        Text [ portuguese ] = "e" ;
-        Text[ chinese_simplified ] = "å’Œ";
-        Text[ russian ] = "è";
-        Text[ polish ] = "i";
-        Text[ japanese ] = "ã¨";
-        Text[ chinese_traditional ] = "å’Œ";
-        Text[ arabic ] = "æ";
-        Text[ greek ] = "êáé";
-        Text[ korean ] = "ì™€(ê³¼)";
-        Text[ turkish ] = "ve";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "i";
-        Text[ finnish ] = "ja";
-        Text[ thai ] = "à¹à¸¥à¸°";
-        Text[ czech ] = "a";
-        Text[ hebrew ] = "â€®×• â€¬";
-        Text[ hindi ] = "à¤”à¤°";
-        Text[ slovak ] = "a";
-        Text[ hungarian ] = "Ã©s";
-        Text[ slovenian ] = "in";
+        Text [ de ] = "~und dem" ;
+        Text [ en-US ] = "and" ;
+        Text [ x-comment ] = " ";
     };
     DateField DF_DATE2
     {
@@ -582,74 +231,20 @@ TabPage SID_REDLIN_FILTER_PAGE
             ImageBitmap = Bitmap { File = "time.bmp" ; };
             MASKCOLOR
         };
-        QuickHelpText = "Datum/Uhrzeit einstellen" ;
-        QuickHelpText [ ENGLISH ] = "Set date/time" ;
-        QuickHelpText [ english_us ] = "Set Date/Time" ;
-        QuickHelpText [ portuguese_brazilian ] = "Acertar Data/Hora" ;
-        QuickHelpText [ swedish ] = "Ställ in datum/klockslag" ;
-        QuickHelpText [ danish ] = "Indstil dato/klokkeslæt" ;
-        QuickHelpText [ italian ] = "Imposta data/ora" ;
-        QuickHelpText [ spanish ] = "Definir fecha/hora" ;
-        QuickHelpText [ french ] = "Définir la date/l'heure" ;
-        QuickHelpText [ dutch ] = "Datum/tijd instellen" ;
-        QuickHelpText [ portuguese ] = "Define data e hora" ;
-        QuickHelpText[ russian ] = "Âûñòàâèòü âğåìÿ è äàòó";
-        QuickHelpText[ polish ] = "Ustaw datê/godzinê";
-        QuickHelpText[ japanese ] = "æ—¥ä»˜ã¨æ™‚åˆ»ã®è¨­å®š";
-        QuickHelpText[ chinese_simplified ] = "è®¾å®šæ—¥æœŸ/æ—¶é—´";
-        QuickHelpText[ chinese_traditional ] = "è¨­å®šæ—¥æœŸ/æ™‚é–“";
-        QuickHelpText[ arabic ] = "ÖÈØ ÇáÊÇÑíÎ/ÇáæŞÊ";
-        QuickHelpText[ greek ] = "ÅéóáãùãŞ çìåñïìçíßáò/şñáò";
-        QuickHelpText[ korean ] = "ë‚ ì§œ/ì‹œê°„ ì„¤ì •";
-        QuickHelpText[ language_user1 ] = " ";
-        QuickHelpText[ language_user1 ] = " ";
-        QuickHelpText[ turkish ] = "Datum/Uhrzeit einstellen";
-        QuickHelpText[ catalan ] = "Defineix data/hora";
-        QuickHelpText[ finnish ] = "Määritä päivämäärä/aika";
-        QuickHelpText[ thai ] = "Set Date/Time";
-        QuickHelpText[ czech ] = "Nastavit datum a Äas";
-        QuickHelpText[ hebrew ] = "Datum/Uhrzeit einstellen";
-        QuickHelpText[ hindi ] = "à¤¦à¤¿à¤¨à¤¾à¤‚à¤•/à¤¸à¤®à¤¯ à¤¸à¥‡à¤Ÿà¥à¤Ÿ à¤•à¤°à¥‹";
-        QuickHelpText[ slovak ] = "NastaviÅ¥ dÃ¡tum a Äas";
-        QuickHelpText[ hungarian ] = "DÃ¡tum Ã©s idÅ‘ beÃ¡llÃ­tÃ¡sa";
-        QuickHelpText[ slovenian ] = "Nastavi datum/Äas";
+        QuickHelpText [ de ] = "Datum/Uhrzeit einstellen" ;
+        QuickHelpText [ en-US ] = "Set Date/Time" ;
+        QuickHelpText [ x-comment ] = " ";
+        QuickHelpText [ x-comment ] = " ";
     };
     CheckBox CB_AUTOR
     {
         HelpId = HID_REDLINING_FILTER_CB_AUTOR ;
         Pos = MAP_APPFONT ( 6 , 40 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text = "~Autor" ;
-        Text [ ENGLISH ] = "~Author" ;
+        Text [ de ] = "~Autor" ;
         TabStop = TRUE ;
-        Text [ english_us ] = "~Author" ;
-        Text [ portuguese_brazilian ] = "~Autor" ;
-        Text [ swedish ] = "Förf~attare" ;
-        Text [ danish ] = "F~orfatter" ;
-        Text [ italian ] = "Autore" ;
-        Text [ spanish ] = "Autor" ;
-        Text [ french ] = "Auteur" ;
-        Text [ dutch ] = "~Auteur" ;
-        Text [ portuguese ] = "~Autor" ;
-        Text[ chinese_simplified ] = "ä½œè€…(~A)";
-        Text[ russian ] = "Àâòîğ";
-        Text[ polish ] = "~Autor";
-        Text[ japanese ] = "ä½œæˆè€…(~A)";
-        Text[ chinese_traditional ] = "ä½œè€…(~A)";
-        Text[ arabic ] = "ÇáãÄáİ";
-        Text[ greek ] = "ÓõíôÜêôçò";
-        Text[ korean ] = "ì‘ì„±ì(~A)";
-        Text[ turkish ] = "Yazan";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Autor";
-        Text[ finnish ] = "~Tekijä";
-        Text[ thai ] = "~à¸œà¸¹à¹‰à¹€à¸‚à¸µà¸¢à¸™";
-        Text[ czech ] = "Autor";
-        Text[ hebrew ] = "â€®××—×‘×¨â€¬";
-        Text[ hindi ] = "~à¤²à¥‡à¤–à¤•";
-        Text[ slovak ] = "~Autor";
-        Text[ hungarian ] = "~SzerzÅ‘";
-        Text[ slovenian ] = "~Avtor";
+        Text [ en-US ] = "~Author" ;
+        Text [ x-comment ] = " ";
     };
     ListBox LB_AUTOR
     {
@@ -666,37 +261,10 @@ TabPage SID_REDLIN_FILTER_PAGE
         HelpId = HID_REDLINING_FILTER_CB_RANGE ;
         Pos = MAP_APPFONT ( 6 , 56 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text = "~Bereich" ;
-        Text [ ENGLISH ] = "~Range" ;
+        Text [ de ] = "~Bereich" ;
         TabStop = TRUE ;
-        Text [ english_us ] = "~Range" ;
-        Text [ portuguese_brazilian ] = "I~ntervalo" ;
-        Text [ swedish ] = "~Område" ;
-        Text [ danish ] = "~Område" ;
-        Text [ italian ] = "Area" ;
-        Text [ spanish ] = "~Área" ;
-        Text [ french ] = "Plage" ;
-        Text [ dutch ] = "~Bereik" ;
-        Text [ portuguese ] = "Intervalo" ;
-        Text[ chinese_simplified ] = "åŒºåŸŸ(~R)";
-        Text[ russian ] = "Äèàïàçîí";
-        Text[ polish ] = "~Zakres";
-        Text[ japanese ] = "ç¯„å›²(~R)";
-        Text[ chinese_traditional ] = "å€åŸŸ(~R)";
-        Text[ arabic ] = "ÇáäØÇŞ";
-        Text[ greek ] = "Ğåñéï÷Ş";
-        Text[ korean ] = "ë²”ìœ„(~R)";
-        Text[ turkish ] = "Aralık";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Àrea";
-        Text[ finnish ] = "~Alue";
-        Text[ thai ] = "~à¸Šà¹ˆà¸§à¸‡";
-        Text[ czech ] = "Rozsah";
-        Text[ hebrew ] = "â€®×˜×•×•×—â€¬";
-        Text[ hindi ] = "~à¤«à¤¼à¥ˆà¤²à¤¾à¤µ";
-        Text[ slovak ] = "~Rozsah";
-        Text[ hungarian ] = "~TartomÃ¡ny";
-        Text[ slovenian ] = "~Obseg";
+        Text [ en-US ] = "~Range" ;
+        Text [ x-comment ] = " ";
     };
     Edit ED_RANGE
     {
@@ -709,36 +277,9 @@ TabPage SID_REDLIN_FILTER_PAGE
     };
     String STR_ACTION
     {
-        Text = "A~ktion" ;
-        Text [ ENGLISH ] = "A~ction" ;
-        Text [ portuguese ] = "A~cção" ;
-        Text [ english_us ] = "A~ction" ;
-        Text [ portuguese_brazilian ] = "~Ação" ;
-        Text [ swedish ] = "Åt~gärd" ;
-        Text [ danish ] = "Han~dling" ;
-        Text [ italian ] = "Opera~zione" ;
-        Text [ spanish ] = "~Acción" ;
-        Text [ french ] = "A~ction" ;
-        Text [ dutch ] = "A~ctiviteit" ;
-        Text[ chinese_simplified ] = "æ“ä½œ(~C)";
-        Text[ russian ] = "Äåéñòâèå";
-        Text[ polish ] = "A~kcja";
-        Text[ japanese ] = "ã‚¢ã‚¯ã‚·ãƒ§ãƒ³(~C)";
-        Text[ chinese_traditional ] = "å‹•ä½œ(~C)";
-        Text[ arabic ] = "ÇáÅÌÑÇÁ";
-        Text[ greek ] = "Åíİñãåéá";
-        Text[ korean ] = "ì‘ë™(~C)";
-        Text[ turkish ] = "İşlem";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Acció";
-        Text[ finnish ] = "Toiminto";
-        Text[ thai ] = "à¸à¸²à¸£à¸à¸£à¸°~à¸—à¸³";
-        Text[ czech ] = "ÄŒinnost";
-        Text[ hebrew ] = "â€®×¤×¢×•×œ×”â€¬";
-        Text[ hindi ] = "~à¤•à¤¾à¤°à¥à¤¯";
-        Text[ slovak ] = "ÄŒi~nnosÅ¥";
-        Text[ hungarian ] = "~MÅ±velet";
-        Text[ slovenian ] = "De~janje";
+        Text [ de ] = "A~ktion" ;
+        Text [ en-US ] = "A~ction" ;
+        Text [ x-comment ] = " ";
     };
     ListBox LB_ACTION
     {
@@ -758,101 +299,21 @@ TabPage SID_REDLIN_FILTER_PAGE
         Size = MAP_APPFONT ( 12 , 12 ) ;
         Disable = TRUE ;
         TabStop = TRUE ;
-        Text = "..." ;
-        QuickHelpText = "Tabellenreferenz einstellen" ;
-        QuickHelpText [ ENGLISH ] = "Set referenz" ;
-        QuickHelpText [ english_us ] = "Set Reference" ;
-        Text [ portuguese_brazilian ] = "..." ;
-        QuickHelpText [ portuguese_brazilian ] = "Definir referência" ;
-        Text [ swedish ] = "..." ;
-        QuickHelpText [ swedish ] = "Ställ in tabellreferens" ;
-        Text [ danish ] = "..." ;
-        QuickHelpText [ danish ] = "Indstil tabelreference" ;
-        Text [ italian ] = "..." ;
-        QuickHelpText [ italian ] = "Imposta il riferimento di tabella" ;
-        Text [ spanish ] = "..." ;
-        QuickHelpText [ spanish ] = "Definir referencia a tabla" ;
-        Text [ french ] = "..." ;
-        QuickHelpText [ french ] = "Définir une référence" ;
-        Text [ dutch ] = "..." ;
-        QuickHelpText [ dutch ] = "Tabellenreferentie instellen" ;
-        Text [ portuguese ] = "..." ;
-        QuickHelpText [ portuguese ] = "Definir referência" ;
-        Text [ english_us ] = "..." ;
-        Text[ chinese_simplified ] = "...";
-        Text[ russian ] = "...";
-        Text[ polish ] = "...";
-        Text[ japanese ] = "...";
-        Text[ chinese_traditional ] = "...";
-        Text[ arabic ] = "...";
-        QuickHelpText[ russian ] = "Óñòàíîâèòü ññûëêó";
-        QuickHelpText[ polish ] = "Ustaw tabelê odwo³añ";
-        QuickHelpText[ japanese ] = "è¡¨ã®å‚ç…§ã‚’è¨­å®š";
-        QuickHelpText[ chinese_simplified ] = "è®¾å®šè¡¨æ ¼å¼•ç”¨";
-        QuickHelpText[ chinese_traditional ] = "è¨­å®šå·¥ä½œè¡¨åƒç…§";
-        QuickHelpText[ arabic ] = "ÊÚííä ãÑÌÚ ÇáÌÏæá";
-        Text[ greek ] = "...";
-        Text[ korean ] = "...";
-        QuickHelpText[ greek ] = "Set Reference";
-        QuickHelpText[ korean ] = "ì°¸ì¡° ì„¤ì •";
-        Text[ turkish ] = "...";
-        Text[ language_user1 ] = " ";
-        QuickHelpText[ turkish ] = "Tabellenreferenz einstellen";
-        Text[ catalan ] = "...";
-        QuickHelpText[ catalan ] = "Defineix la referència a la taula";
-        Text[ finnish ] = "...";
-        QuickHelpText[ finnish ] = "Määritä viite";
-        Text[ thai ] = "...";
-        QuickHelpText[ thai ] = "Set Reference";
-        Text[ czech ] = "...";
-        Text[ hebrew ] = "â€®...â€¬";
-        QuickHelpText[ czech ] = "Nastavit odkaz";
-        QuickHelpText[ hebrew ] = "Tabellenreferenz einstellen";
-        Text[ hindi ] = "...";
-        QuickHelpText[ hindi ] = "à¤°à¥‡à¤«à¤°à¥‡à¤¨à¥à¤¸ à¤¸à¥‡à¤Ÿà¥à¤Ÿ à¤•à¤°à¥‹";
-        Text[ slovak ] = "...";
-        QuickHelpText[ slovak ] = "NastaviÅ¥ odkaz";
-        Text[ hungarian ] = "...";
-        Text[ slovenian ] = "...";
-        QuickHelpText[ hungarian ] = "HivatkozÃ¡s beÃ¡llÃ­tÃ¡sa";
-        QuickHelpText[ slovenian ] = "Nastavi sklic";
+        Text [ de ] = "..." ;
+        QuickHelpText [ de ] = "Tabellenreferenz einstellen" ;
+        QuickHelpText [ en-US ] = "Set Reference" ;
+        Text [ en-US ] = "..." ;
+        Text [ x-comment ] = " ";
     };
     CheckBox CB_COMMENT
     {
         HelpId = HID_REDLINING_FILTER_CB_COMMENT ;
         Pos = MAP_APPFONT ( 6 , 72 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text = "Be~schreibung" ;
-        Text [ ENGLISH ] = "~Comment" ;
+        Text [ de ] = "Be~schreibung" ;
         TabStop = TRUE ;
-        Text[ italian ] = "~Descrizione";
-        Text[ portuguese_brazilian ] = "Comentário";
-        Text[ portuguese ] = "D~escrição";
-        Text[ danish ] = "Kommentar";
-        Text[ french ] = "Description";
-        Text[ swedish ] = "Be~skrivning";
-        Text[ dutch ] = "~Opmerkingen";
-        Text[ spanish ] = "~Descripción";
-        Text[ english_us ] = "Comment";
-        Text[ chinese_simplified ] = "è¯´æ˜";
-        Text[ russian ] = "Êîììåíòàğèé";
-        Text[ polish ] = "Komentarz";
-        Text[ japanese ] = "ã‚³ãƒ¡ãƒ³ãƒˆ";
-        Text[ chinese_traditional ] = "æè¿°";
-        Text[ arabic ] = "ÇáæÕİ";
-        Text[ greek ] = "ĞåñéãñáöŞ";
-        Text[ korean ] = "ì„¤ëª…";
-        Text[ turkish ] = "Açıklama";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Comentari";
-        Text[ finnish ] = "Huomautus";
-        Text[ thai ] = "à¸‚à¹‰à¸­à¸„à¸´à¸”à¹€à¸«à¹‡à¸™";
-        Text[ czech ] = "KomentÃ¡Å™";
-        Text[ hebrew ] = "â€®×”×¢×¨×”â€¬";
-        Text[ hindi ] = "à¤…à¤ªà¤µà¤¾à¤¦";
-        Text[ slovak ] = "KomentÃ¡r";
-        Text[ hungarian ] = "MegjegyzÃ©s";
-        Text[ slovenian ] = "Komentar";
+        Text [ en-US ] = "Comment";
+        Text [ x-comment ] = " ";
     };
     Edit ED_COMMENT
     {
@@ -878,36 +339,9 @@ TabPage SID_REDLIN_VIEW_PAGE
     Hide = TRUE ;
     String STR_VIEW
     {
-        Text = "Liste" ;
-        Text [ ENGLISH ] = "List" ;
-        Text [ english_us ] = "List" ;
-        Text [ portuguese_brazilian ] = "Lista" ;
-        Text [ swedish ] = "Lista" ;
-        Text [ danish ] = "Liste" ;
-        Text [ italian ] = "Lista" ;
-        Text [ spanish ] = "Lista" ;
-        Text [ french ] = "Liste" ;
-        Text [ dutch ] = "Lijst" ;
-        Text [ portuguese ] = "Lista" ;
-        Text[ chinese_simplified ] = "åˆ—å•";
-        Text[ russian ] = "Ñïèñîê";
-        Text[ polish ] = "Lista";
-        Text[ japanese ] = "ãƒªã‚¹ãƒˆ";
-        Text[ chinese_traditional ] = "æ¸…å–®";
-        Text[ arabic ] = "ÇáŞÇÆãÉ";
-        Text[ greek ] = "Ëßóôá";
-        Text[ korean ] = "ëª©ë¡";
-        Text[ turkish ] = "Liste";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Llista";
-        Text[ finnish ] = "Luettelo";
-        Text[ thai ] = "à¸£à¸²à¸¢à¸à¸²à¸£";
-        Text[ czech ] = "Seznam";
-        Text[ hebrew ] = "â€®×¨×©×™××ª ×©×™× ×•×™×™×â€¬";
-        Text[ hindi ] = "à¤¸à¥‚à¤šà¥€";
-        Text[ slovak ] = "Zoznam";
-        Text[ hungarian ] = "Lista";
-        Text[ slovenian ] = "Seznam";
+        Text [ de ] = "Liste" ;
+        Text [ en-US ] = "List" ;
+        Text [ x-comment ] = " ";
     };
     Control DG_VIEW
     {
@@ -919,349 +353,79 @@ TabPage SID_REDLIN_VIEW_PAGE
     PushButton PB_ACCEPT
     {
         HelpId = HID_REDLINING_VIEW_PB_ACCEPT ;
-        Text = "~Akzeptieren" ;
-        Text [ ENGLISH ] = "Accept" ;
+        Text [ de ] = "~Akzeptieren" ;
         Pos = MAP_APPFONT ( 3 , 69 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
-        Text [ portuguese ] = "~Aceitar" ;
-        Text [ english_us ] = "~Accept" ;
-        Text [ portuguese_brazilian ] = "~Aceitar" ;
-        Text [ swedish ] = "~Acceptera" ;
-        Text [ danish ] = "~Accepter" ;
-        Text [ italian ] = "~Accetta" ;
-        Text [ spanish ] = "~Aceptar" ;
-        Text [ french ] = "~Accepter" ;
-        Text [ dutch ] = "~Accepteren" ;
-        Text[ chinese_simplified ] = "æ¥å—(~A)";
-        Text[ russian ] = "Ïğèíÿòü";
-        Text[ polish ] = "~Akceptuj";
-        Text[ japanese ] = "é©ç”¨(~A)";
-        Text[ chinese_traditional ] = "æ¥å—(~A)";
-        Text[ arabic ] = "ŞÈæá";
-        Text[ greek ] = "~Áğïäï÷Ş";
-        Text[ korean ] = "ë™ì˜(~A)";
-        Text[ turkish ] = "Kabul et";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Accepto";
-        Text[ finnish ] = "Hyväksy";
-        Text[ thai ] = "~à¸¢à¸­à¸¡à¸£à¸±à¸š";
-        Text[ czech ] = "PÅ™ijmout";
-        Text[ hebrew ] = "â€®×§×‘×œ×ª ×©×™× ×•×™â€¬";
-        Text[ hindi ] = "~à¤¸à¥à¤µà¥€à¤•à¤¾à¤°";
-        Text[ slovak ] = "~PrijaÅ¥";
-        Text[ hungarian ] = "~ElfogadÃ¡s";
-        Text[ slovenian ] = "~Sprejmi";
+        Text [ en-US ] = "~Accept" ;
+        Text [ x-comment ] = " ";
     };
     PushButton PB_REJECT
     {
         HelpId = HID_REDLINING_VIEW_PB_REJECT ;
-        Text = "A~blehnen" ;
-        Text [ ENGLISH ] = "Reject" ;
+        Text [ de ] = "A~blehnen" ;
         Pos = MAP_APPFONT ( 69 , 69 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
-        Text [ english_us ] = "~Reject" ;
-        Text [ portuguese_brazilian ] = "~Rejeitar" ;
-        Text [ swedish ] = "Av~böj" ;
-        Text [ danish ] = "~Afvis" ;
-        Text [ italian ] = "~Rifiuta" ;
-        Text [ spanish ] = "~Rechazar" ;
-        Text [ french ] = "~Rejeter" ;
-        Text [ dutch ] = "V~erwerpen" ;
-        Text [ portuguese ] = "~Rejeitar" ;
-        Text[ chinese_simplified ] = "æ‹’ç»(~R)";
-        Text[ russian ] = "Îòêëîíèòü";
-        Text[ polish ] = "~Odrzuæ";
-        Text[ japanese ] = "éé©ç”¨(~R)";
-        Text[ chinese_traditional ] = "æ‹’çµ•(~R)";
-        Text[ arabic ] = "ÑİÖ";
-        Text[ greek ] = "Áğüññéøç";
-        Text[ korean ] = "ê±°ë¶€(~R)";
-        Text[ turkish ] = "~Reddet";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Rebutjo";
-        Text[ finnish ] = "Hylkää";
-        Text[ thai ] = "~à¸›à¸à¸´à¹€à¸ªà¸˜";
-        Text[ czech ] = "OdmÃ­tnout";
-        Text[ hebrew ] = "â€®×“×—×™×ª ×©×™× ×•×™â€¬";
-        Text[ hindi ] = "~à¤…à¤¸à¥à¤µà¥€à¤•à¤¾à¤°";
-        Text[ slovak ] = "~OdmietnuÅ¥";
-        Text[ hungarian ] = "El~vetÃ©s";
-        Text[ slovenian ] = "~Zavrni";
+        Text [ en-US ] = "~Reject" ;
+        Text [ x-comment ] = " ";
     };
     PushButton PB_ACCEPTALL
     {
         HelpId = HID_REDLINING_VIEW_PB_ACCEPTALL ;
-        Text = "Alle ak~zeptieren" ;
-        Text [ ENGLISH ] = "Accept All" ;
+        Text [ de ] = "Alle ak~zeptieren" ;
         Pos = MAP_APPFONT ( 141 , 69 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
-        Text [ english_us ] = "A~ccept All" ;
-        Text [ portuguese_brazilian ] = "A~ceitar Tudo" ;
-        Text [ swedish ] = "A~cceptera alla" ;
-        Text [ danish ] = "A~ccepter alle" ;
-        Text [ italian ] = "Accetta t~utto" ;
-        Text [ spanish ] = "Aceptar todo" ;
-        Text [ french ] = "Tout a~ccepter" ;
-        Text [ dutch ] = "Alle ac~cepteren" ;
-        Text [ portuguese ] = "~Aceitar tudo" ;
-        Text[ chinese_simplified ] = "å…¨éƒ¨æ¥å—(~C)";
-        Text[ russian ] = "Ïğèíÿòü âñå";
-        Text[ polish ] = "A~kceptuj wszystkie";
-        Text[ japanese ] = "ã™ã¹ã¦é©ç”¨(~C)";
-        Text[ chinese_traditional ] = "å…¨éƒ¨æ¥å—(~C)";
-        Text[ arabic ] = "ŞÈæá Çáßá";
-        Text[ greek ] = "Áğïäï~÷Ş üëùí";
-        Text[ korean ] = "ëª¨ë‘ ë™ì˜(~C)";
-        Text[ turkish ] = "Tümünü kabul et";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Ho a~ccepto tot";
-        Text[ finnish ] = "Hyväksy kaikki";
-        Text[ thai ] = "à¸¢~à¸­à¸¡à¸£à¸±à¸šà¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”";
-        Text[ czech ] = "PÅ™ijmout vÅ¡e";
-        Text[ hebrew ] = "â€®×§×‘×œ×ª ×›×œ ×”×©×™× ×•×™×™×â€¬";
-        Text[ hindi ] = "à¤¸à¤¬ à¤¸à¥à¤µà¥€~à¤•à¤¾à¤°";
-        Text[ slovak ] = "PrijaÅ¥ ~vÅ¡etko";
-        Text[ hungarian ] = "Ã–~sszes elfogadÃ¡sa";
-        Text[ slovenian ] = "S~prejmi vse";
+        Text [ en-US ] = "A~ccept All" ;
+        Text [ x-comment ] = " ";
     };
     PushButton PB_REJECTALL
     {
         HelpId = HID_REDLINING_VIEW_PB_REJECTALL ;
-        Text = "Alle ab~lehnen" ;
-        Text [ ENGLISH ] = "Reject All" ;
+        Text [ de ] = "Alle ab~lehnen" ;
         Pos = MAP_APPFONT ( 207 , 69 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
-        Text [ english_us ] = "R~eject All" ;
-        Text [ portuguese_brazilian ] = "Rejeitar ~Tudo" ;
-        Text [ swedish ] = "A~vböj alla" ;
-        Text [ danish ] = "Afvis alle" ;
-        Text [ italian ] = "Rifiuta tutto" ;
-        Text [ spanish ] = "Rechazar todo" ;
-        Text [ french ] = "Tout rejeter" ;
-        Text [ dutch ] = "Alle ver~werpen" ;
-        Text [ portuguese ] = "Rejeitar ~tudo" ;
-        Text[ chinese_simplified ] = "å…¨éƒ¨æ‹’ç»(~E)";
-        Text[ russian ] = "Îòêëîíèòü âñå";
-        Text[ polish ] = "O~drzuæ wszystkie";
-        Text[ japanese ] = "ã™ã¹ã¦éé©ç”¨(~E)";
-        Text[ chinese_traditional ] = "å…¨éƒ¨æ‹’çµ•(~E)";
-        Text[ arabic ] = "ÑİÖ Çáßá";
-        Text[ greek ] = "Áğüññéøç üëùí";
-        Text[ korean ] = "ëª¨ë‘ ê±°ë¶€(~E)";
-        Text[ turkish ] = "Tümünü R~eddet";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Ho r~ebutjo tot";
-        Text[ finnish ] = "Hylkää kaikki";
-        Text[ thai ] = "à¸›~à¸à¸´à¹€à¸ªà¸˜à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”";
-        Text[ czech ] = "OdmÃ­tnout vÅ¡e";
-        Text[ hebrew ] = "â€®×“×—×™×ª ×›×œ ×”×©×™× ×•×™×™×â€¬";
-        Text[ hindi ] = "à¤¸à¤¬ à¤…à¤¸à¥à¤µà¥€à¤•à¤¾~à¤°";
-        Text[ slovak ] = "O~dmietnuÅ¥ vÅ¡etko";
-        Text[ hungarian ] = "Ã–ss~zes elvetÃ©se";
-        Text[ slovenian ] = "Za~vrni vse";
+        Text [ en-US ] = "R~eject All" ;
+        Text [ x-comment ] = " ";
     };
 
     PushButton PB_UNDO
     {
         HelpId = HID_REDLINING_VIEW_PB_UNDO ;
-        Text = "~Rückgängig" ;
-        Text [ ENGLISH ] = "Undo" ;
+        Text [ de ] = "~Rückgängig" ;
         Hide = TRUE;
         Pos  = MAP_APPFONT ( 279 , 69 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
-        Text[ italian ] = "~Annulla";
-        Text[ portuguese_brazilian ] = "Desfazer";
-        Text[ portuguese ] = "A~nular";
-        Text[ danish ] = "Fortryd";
-        Text[ french ] = "Annuler";
-        Text[ swedish ] = "~Ångra";
-        Text[ dutch ] = "~Ongedaan maken";
-        Text[ spanish ] = "~Deshacer";
-        Text[ english_us ] = "Undo";
-        Text[ chinese_simplified ] = "æ’¤æ¶ˆå‘½ä»¤";
-        Text[ russian ] = "Îòìåíèòü";
-        Text[ polish ] = "Cofnij";
-        Text[ japanese ] = "å…ƒã«æˆ»ã™";
-        Text[ chinese_traditional ] = "å¾©åŸ";
-        Text[ arabic ] = "ÊÑÇÌÚ";
-        Text[ greek ] = "Áíáßñåóç";
-        Text[ korean ] = "ì‹¤í–‰ ì·¨ì†Œ";
-        Text[ turkish ] = "Geri al";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Desfés";
-        Text[ finnish ] = "Kumoa";
-        Text[ thai ] = "à¹€à¸¥à¸´à¸à¸—à¸³";
-        Text[ czech ] = "ZpÄ›t";
-        Text[ hebrew ] = "â€®×‘×™×˜×•×œ ×¤×¢×•×œ×”â€¬";
-        Text[ hindi ] = "à¤…à¤¨à¤¾à¤µà¥ƒà¤¤à¥à¤¤à¤¿";
-        Text[ slovak ] = "SpÃ¤Å¥";
-        Text[ hungarian ] = "VisszavonÃ¡s";
-        Text[ slovenian ] = "Razveljavi";
+        Text [ en-US ] = "Undo";
+        Text [ x-comment ] = " ";
     };
     String STR_TITLE1
     {
-        Text = "Aktion" ;
-        Text [ ENGLISH ] = "Action" ;
-        Text [ english_us ] = "Action" ;
-        Text [ portuguese_brazilian ] = "Ação" ;
-        Text [ swedish ] = "Åtgärd" ;
-        Text [ danish ] = "Handling" ;
-        Text [ italian ] = "Operazione" ;
-        Text [ spanish ] = "Acción" ;
-        Text [ french ] = "Action" ;
-        Text [ dutch ] = "Activiteit" ;
-        Text [ portuguese ] = "Acção" ;
-        Text[ chinese_simplified ] = "æ“ä½œ";
-        Text[ russian ] = "Äåéñòâèå";
-        Text[ polish ] = "Akcja";
-        Text[ japanese ] = "ã‚¢ã‚¯ã‚·ãƒ§ãƒ³";
-        Text[ chinese_traditional ] = "å‹•ä½œ";
-        Text[ arabic ] = "ÇáÅÌÑÇÁ";
-        Text[ greek ] = "Åíİñãåéá";
-        Text[ korean ] = "ì‘ë™";
-        Text[ turkish ] = "İşlem";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Acció";
-        Text[ finnish ] = "Toiminto";
-        Text[ thai ] = "à¸à¸²à¸£à¸à¸£à¸°à¸—à¸³";
-        Text[ czech ] = "ÄŒinnost";
-        Text[ hebrew ] = "â€®×¤×¢×•×œ×”â€¬";
-        Text[ hindi ] = "à¤•à¤¾à¤°à¥à¤¯";
-        Text[ slovak ] = "ÄŒinnosÅ¥";
-        Text[ hungarian ] = "MÅ±velet";
-        Text[ slovenian ] = "Dejanje";
+        Text [ de ] = "Aktion" ;
+        Text [ en-US ] = "Action" ;
+        Text [ x-comment ] = " ";
     };
     String STR_TITLE2
     {
-        Text = "Position" ;
-        Text [ ENGLISH ] = "Position" ;
-        Text [ english_us ] = "Position" ;
-        Text [ portuguese_brazilian ] = "Posição" ;
-        Text [ swedish ] = "Position" ;
-        Text [ danish ] = "Placering" ;
-        Text [ italian ] = "Posizione" ;
-        Text [ spanish ] = "Posición" ;
-        Text [ french ] = "Position" ;
-        Text [ dutch ] = "Positie" ;
-        Text [ portuguese ] = "Posição" ;
-        Text[ chinese_simplified ] = "ä½ç½®";
-        Text[ russian ] = "Ïîëîæåíèå";
-        Text[ polish ] = "Pozycja";
-        Text[ japanese ] = "ä½ç½®";
-        Text[ chinese_traditional ] = "ä½ç½®";
-        Text[ arabic ] = "ÇáãæÖÚ";
-        Text[ greek ] = "Èİóç";
-        Text[ korean ] = "ìœ„ì¹˜";
-        Text[ turkish ] = "Konum";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Posició";
-        Text[ finnish ] = "Sijainti";
-        Text[ thai ] = "à¸•à¸³à¹à¸«à¸™à¹ˆà¸‡";
-        Text[ czech ] = "UmÃ­stÄ›nÃ­";
-        Text[ hebrew ] = "â€®××™×§×•×â€¬";
-        Text[ hindi ] = "à¤¸à¥à¤¥à¤¾à¤¨";
-        Text[ slovak ] = "Umiestnenie";
-        Text[ hungarian ] = "PozÃ­ciÃ³";
-        Text[ slovenian ] = "PoloÅ¾aj";
+        Text [ de ] = "Position" ;
+        Text [ en-US ] = "Position" ;
+        Text [ x-comment ] = " ";
     };
     String STR_TITLE3
     {
-        Text = "Autor" ;
-        Text [ ENGLISH ] = "Author" ;
-        Text [ english_us ] = "Author" ;
-        Text [ portuguese_brazilian ] = "Autor" ;
-        Text [ swedish ] = "Författare" ;
-        Text [ danish ] = "Forfatter" ;
-        Text [ italian ] = "Autore" ;
-        Text [ spanish ] = "Autor" ;
-        Text [ french ] = "Auteur" ;
-        Text [ dutch ] = "Auteur" ;
-        Text [ portuguese ] = "Autor" ;
-        Text[ chinese_simplified ] = "ä½œè€…";
-        Text[ russian ] = "Àâòîğ";
-        Text[ polish ] = "Autor";
-        Text[ japanese ] = "ä½œæˆè€…";
-        Text[ chinese_traditional ] = "ä½œè€…";
-        Text[ arabic ] = "ÇáãÄáİ";
-        Text[ greek ] = "ÓõíôÜêôçò";
-        Text[ korean ] = "ì‘ì„±ì";
-        Text[ turkish ] = "Yazan";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Autor";
-        Text[ finnish ] = "Tekijä";
-        Text[ thai ] = "à¸œà¸¹à¹‰à¹€à¸‚à¸µà¸¢à¸™";
-        Text[ czech ] = "Autor";
-        Text[ hebrew ] = "â€®××—×‘×¨â€¬";
-        Text[ hindi ] = "à¤²à¥‡à¤–à¤•";
-        Text[ slovak ] = "Autor";
-        Text[ hungarian ] = "SzerzÅ‘";
-        Text[ slovenian ] = "Avtor";
+        Text [ de ] = "Autor" ;
+        Text [ en-US ] = "Author" ;
+        Text [ x-comment ] = " ";
     };
     String STR_TITLE4
     {
-        Text = "Datum" ;
-        Text [ ENGLISH ] = "Date" ;
-        Text [ english_us ] = "Date" ;
-        Text [ portuguese_brazilian ] = "Data" ;
-        Text [ swedish ] = "Datum" ;
-        Text [ danish ] = "Dato" ;
-        Text [ italian ] = "Data" ;
-        Text [ spanish ] = "Fecha" ;
-        Text [ french ] = "Date" ;
-        Text [ dutch ] = "Datum" ;
-        Text [ portuguese ] = "Data" ;
-        Text[ chinese_simplified ] = "æ—¥æœŸ";
-        Text[ russian ] = "Äàòà";
-        Text[ polish ] = "Data";
-        Text[ japanese ] = "æ—¥ä»˜ã¨æ™‚åˆ»";
-        Text[ chinese_traditional ] = "æ—¥æœŸ";
-        Text[ arabic ] = "ÇáÊÇÑíÎ";
-        Text[ greek ] = "Çìåñïìçíßá";
-        Text[ korean ] = "ë‚ ì§œ";
-        Text[ turkish ] = "Tarih";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Data";
-        Text[ finnish ] = "Päivämäärä";
-        Text[ thai ] = "à¸§à¸±à¸™à¸—à¸µà¹ˆ";
-        Text[ czech ] = "Datum";
-        Text[ hebrew ] = "â€®×ª××¨×™×šâ€¬";
-        Text[ hindi ] = "à¤¦à¤¿à¤¨à¤¾à¤‚à¤•";
-        Text[ slovak ] = "DÃ¡tum";
-        Text[ hungarian ] = "DÃ¡tum";
-        Text[ slovenian ] = "Datum";
+        Text [ de ] = "Datum" ;
+        Text [ en-US ] = "Date" ;
+        Text [ x-comment ] = " ";
     };
     String STR_TITLE5
     {
-        Text = "Beschreibung" ;
-        Text [ ENGLISH ] = "Comment" ;
-        Text [ english_us ] = "Comment" ;
-        Text [ portuguese_brazilian ] = "Comentário" ;
-        Text [ swedish ] = "Beskrivning" ;
-        Text [ danish ] = "Kommentar" ;
-        Text [ italian ] = "Descrizione" ;
-        Text [ spanish ] = "Descripción" ;
-        Text [ french ] = "Description" ;
-        Text [ dutch ] = "Omschrijving" ;
-        Text [ portuguese ] = "Descrição" ;
-        Text[ chinese_simplified ] = "è¯´æ˜";
-        Text[ russian ] = "Êîììåíòàğèé";
-        Text[ polish ] = "Komentarz";
-        Text[ japanese ] = "ã‚³ãƒ¡ãƒ³ãƒˆ";
-        Text[ chinese_traditional ] = "æè¿°";
-        Text[ arabic ] = "ÇáæÕİ";
-        Text[ greek ] = "ĞåñéãñáöŞ";
-        Text[ korean ] = "ì„¤ëª…";
-        Text[ turkish ] = "Açıklama";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Comentari";
-        Text[ finnish ] = "Huomautus";
-        Text[ thai ] = "à¸‚à¹‰à¸­à¸„à¸´à¸”à¹€à¸«à¹‡à¸™";
-        Text[ czech ] = "KomentÃ¡Å™";
-        Text[ hebrew ] = "â€®×”×¢×¨×”â€¬";
-        Text[ hindi ] = "à¤…à¤ªà¤µà¤¾à¤¦";
-        Text[ slovak ] = "KomentÃ¡r";
-        Text[ hungarian ] = "MegjegyzÃ©s";
-        Text[ slovenian ] = "Komentar";
+        Text [ de ] = "Beschreibung" ;
+        Text [ en-US ] = "Comment" ;
+        Text [ x-comment ] = " ";
     };
 };
 
