@@ -59,6 +59,7 @@ import java.io.IOException;
 import java.util.Enumeration;
 import java.util.Vector;
 
+import org.openoffice.xmerge.util.Debug;
 import org.openoffice.xmerge.ConvertData;
 import org.openoffice.xmerge.converter.xml.sxc.SpreadsheetDecoder;
 import org.openoffice.xmerge.converter.xml.sxc.SxcDocumentDeserializer;
@@ -147,7 +148,7 @@ public final class SxcDocumentDeserializerImpl extends SxcDocumentDeserializer {
         int i = 0;
         while(e.hasMoreElements()) {
             worksheetNames[i] = (String) e.nextElement();
-            System.out.println("Worksheet Name : " + worksheetNames[i]);
+            Debug.log(Debug.TRACE,"Worksheet Name : " + worksheetNames[i]);
             i++;
         }
         return worksheetNames;
