@@ -2,9 +2,9 @@
  *
  *  $RCSfile: condfrmt.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 20:28:46 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 06:17:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Text[ turkish ] = "Koþul 1";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Condición 1";
+        Text[ finnish ] = "Ehto 1";
     };
     ListBox LB_COND1_1
     {
@@ -215,6 +216,11 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     {
             < "El valor de la celda es" ; Default ; > ;
         < "La fórmula es" ; Default ; > ;
+    };
+    StringList [ finnish ] =
+    {
+            < "Solun arvo:" ; Default ; > ;
+        < "Kaava on" ; Default ; > ;
     };
     };
     ListBox LB_COND1_2
@@ -457,6 +463,17 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         < "entre" ; Default ; > ;
         < "no entre" ; Default ; > ;
     };
+    StringList [ finnish ] =
+    {
+            < "yhtä suuri kuin " ; Default ; > ;
+        < "vähemmän kuin" ; Default ; > ;
+        < "suurempi kuin" ; Default ; > ;
+        < "pienempi tai yhtä suuri kuin" ; Default ; > ;
+        < "suurempi tai yhtä suuri kuin" ; Default ; > ;
+        < "ei yhtä suuri kuin" ; Default ; > ;
+        < "Välissä" ; Default ; > ;
+        < "ei välissä" ; Default ; > ;
+    };
     };
     Edit EDT_COND1_1
     {
@@ -493,6 +510,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Verkleinern";
         QuickHelpText[ catalan ] = "Reducir";
+        QuickHelpText[ finnish ] = "Pienennä!";
     };
     FixedText FT_COND1_AND
     {
@@ -520,6 +538,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Text[ turkish ] = "ve";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "y";
+        Text[ finnish ] = "ja";
     };
     Edit EDT_COND1_2
     {
@@ -556,6 +575,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Verkleinern";
         QuickHelpText[ catalan ] = "Reducir";
+        QuickHelpText[ finnish ] = "Pienennä!";
     };
     FixedText FT_COND1_TEMPLATE
     {
@@ -583,6 +603,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Text[ turkish ] = "Hücre biçimi";
         Text[ language_user1 ] = "\"Vorlagen\" Styles are always capitalized no matter where they show up. EM15.5.00";
         Text[ catalan ] = "Estilo de celda";
+        Text[ finnish ] = "Solun tyyli";
     };
     ListBox LB_COND1_TEMPLATE
     {
@@ -619,6 +640,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Text[ turkish ] = "Koþul 2";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Condición 2";
+        Text[ finnish ] = "Ehto 2";
     };
     ListBox LB_COND2_1
     {
@@ -736,6 +758,11 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     {
             < "El valor de la celda es" ; Default ; > ;
         < "La fórmula es" ; Default ; > ;
+    };
+    StringList [ finnish ] =
+    {
+            < "Solun arvo:" ; Default ; > ;
+        < "Kaava on" ; Default ; > ;
     };
     };
     ListBox LB_COND2_2
@@ -978,6 +1005,17 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         < "entre" ; Default ; > ;
         < "no entre" ; Default ; > ;
     };
+    StringList [ finnish ] =
+    {
+            < "yhtä suuri kuin " ; Default ; > ;
+        < "vähemmän kuin" ; Default ; > ;
+        < "suurempi kuin" ; Default ; > ;
+        < "pienempi tai yhtä suuri kuin" ; Default ; > ;
+        < "suurempi tai yhtä suuri kuin" ; Default ; > ;
+        < "ei yhtä suuri kuin" ; Default ; > ;
+        < "Välissä" ; Default ; > ;
+        < "ei välissä" ; Default ; > ;
+    };
     };
     Edit EDT_COND2_1
     {
@@ -1014,6 +1052,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Verkleinern";
         QuickHelpText[ catalan ] = "Reducir";
+        QuickHelpText[ finnish ] = "Pienennä!";
     };
     FixedText FT_COND2_AND
     {
@@ -1041,6 +1080,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Text[ turkish ] = "ve";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "y";
+        Text[ finnish ] = "ja";
     };
     Edit EDT_COND2_2
     {
@@ -1077,6 +1117,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Verkleinern";
         QuickHelpText[ catalan ] = "Reducir";
+        QuickHelpText[ finnish ] = "Pienennä!";
     };
     FixedText FT_COND2_TEMPLATE
     {
@@ -1104,6 +1145,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Text[ turkish ] = "Hücre biçimi";
         Text[ language_user1 ] = "\"Vorlagen\" Styles are always capitalized no matter where they show up. EM15.5.00";
         Text[ catalan ] = "Estilo de celda";
+        Text[ finnish ] = "Solun tyyli";
     };
     ListBox LB_COND2_TEMPLATE
     {
@@ -1140,6 +1182,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Text[ turkish ] = "Koþul 3";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Condición 3";
+        Text[ finnish ] = "Ehto 3";
     };
     ListBox LB_COND3_1
     {
@@ -1257,6 +1300,11 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     {
             < "El valor de la celda es" ; Default ; > ;
         < "La fórmula es" ; Default ; > ;
+    };
+    StringList [ finnish ] =
+    {
+            < "Solun arvo:" ; Default ; > ;
+        < "Kaava on" ; Default ; > ;
     };
     };
     ListBox LB_COND3_2
@@ -1499,6 +1547,17 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         < "entre" ; Default ; > ;
         < "no entre" ; Default ; > ;
     };
+    StringList [ finnish ] =
+    {
+            < "yhtä suuri kuin " ; Default ; > ;
+        < "vähemmän kuin" ; Default ; > ;
+        < "suurempi kuin" ; Default ; > ;
+        < "pienempi tai yhtä suuri kuin" ; Default ; > ;
+        < "suurempi tai yhtä suuri kuin" ; Default ; > ;
+        < "ei yhtä suuri kuin" ; Default ; > ;
+        < "Välissä" ; Default ; > ;
+        < "ei välissä" ; Default ; > ;
+    };
     };
     Edit EDT_COND3_1
     {
@@ -1535,6 +1594,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Verkleinern";
         QuickHelpText[ catalan ] = "Reducir";
+        QuickHelpText[ finnish ] = "Pienennä!";
     };
     FixedText FT_COND3_AND
     {
@@ -1562,6 +1622,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Text[ turkish ] = "ve";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "y";
+        Text[ finnish ] = "ja";
     };
     Edit EDT_COND3_2
     {
@@ -1598,6 +1659,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Verkleinern";
         QuickHelpText[ catalan ] = "Reducir";
+        QuickHelpText[ finnish ] = "Pienennä!";
     };
     FixedText FT_COND3_TEMPLATE
     {
@@ -1625,6 +1687,7 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Text[ turkish ] = "Hücre biçimi";
         Text[ language_user1 ] = "\"Vorlagen\" Styles are always capitalized no matter where they show up. EM15.5.00";
         Text[ catalan ] = "Estilo de celda";
+        Text[ finnish ] = "Solun tyyli";
     };
     ListBox LB_COND3_TEMPLATE
     {
@@ -1673,4 +1736,5 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     Text[ turkish ] = "Koþullu formatlama";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Formato condicionado";
+    Text[ finnish ] = "Ehdollinen muotoilu";
 };
