@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valueproperties.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-30 08:39:14 $
+ *  last change: $Author: fs $ $Date: 2002-09-09 13:53:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,6 +164,48 @@ namespace xmloff
         }
     }
 
+    //---------------------------------------------------------------------
+    void OValuePropertiesMetaData::getRuntimeValuePropertyNames(
+        OControlElement::ElementType _eType, sal_Int16 _nFormComponentType,
+        sal_Char const * & _rpValuePropertyName, sal_Char const * & _rpDefaultValuePropertyName )
+    {
+        // reset the pointers in case we can't determine the property names
+        _rpValuePropertyName = _rpDefaultValuePropertyName = NULL;
+        switch (_nFormComponentType)
+        {
+            case FormComponentType::TEXTFIELD:
+                if (OControlElement::FORMATTED_TEXT == _eType)
+                {
+                    _rpValuePropertyName = PROPERTY_EFFECTIVE_VALUE;
+                    _rpDefaultValuePropertyName = PROPERTY_EFFECTIVE_DEFAULT;
+                }
+                else
+                {
+                    _rpValuePropertyName = PROPERTY_TEXT;
+                    _rpDefaultValuePropertyName = PROPERTY_DEFAULT_TEXT;
+                }
+                break;
+
+            case FormComponentType::DATEFIELD:
+            case FormComponentType::TIMEFIELD:
+            case FormComponentType::NUMERICFIELD:
+            case FormComponentType::CURRENCYFIELD:
+            case FormComponentType::PATTERNFIELD:
+            case FormComponentType::FILECONTROL:
+            case FormComponentType::COMBOBOX:
+                // For these types, the runtime properties are the same as the ones which in the XML
+                // stream are named "value properties"
+                getValuePropertyNames( _eType, _nFormComponentType, _rpValuePropertyName, _rpDefaultValuePropertyName );
+                break;
+
+            case FormComponentType::CHECKBOX:
+            case FormComponentType::RADIOBUTTON:
+                _rpValuePropertyName = PROPERTY_STATE;
+                _rpDefaultValuePropertyName = PROPERTY_DEFAULT_STATE;
+                break;
+        }
+    }
+
 //.........................................................................
 }   // namespace xmloff
 //.........................................................................
@@ -171,6 +213,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2002/05/30 08:39:14  fs
+ *  #99693# corrected value property name for hidden controls
+ *
  *  Revision 1.2  2001/02/13 09:07:25  fs
  *  #83528# no CurrentValue property for password fields
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valueproperties.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-13 10:36:36 $
+ *  last change: $Author: fs $ $Date: 2002-09-09 13:53:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,15 @@ namespace xmloff
             sal_Int16 _nFormComponentType,
             sal_Char const * & _rpMinValuePropertyName,
             sal_Char const * & _rpMaxValuePropertyName);
+
+        /** calculate the names of the properties which, at runtime, are used for <em>value</em> and
+            <em>default value</em>.
+        */
+        static void getRuntimeValuePropertyNames(
+            OControlElement::ElementType _eType,
+            sal_Int16 _nFormComponentType,
+            sal_Char const * & _rpValuePropertyName,
+            sal_Char const * & _rpDefaultValuePropertyName);
     };
 
 //.........................................................................
@@ -111,6 +120,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2000/12/13 10:36:36  fs
+ *  initial checkin - helper class for meta data for the different value properties
+ *
  *
  *  Revision 1.0 12.12.00 13:22:54  fs
  ************************************************************************/
