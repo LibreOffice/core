@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleStaticTextBase.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: thb $ $Date: 2002-06-20 15:36:12 $
+ *  last change: $Author: thb $ $Date: 2002-06-26 11:24:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,11 +140,6 @@ namespace accessibility
     public:
         /** Create accessible text object for given edit source
 
-            @param rInterface
-            A reference to our interface. This is needed, since we are
-            not necessarily the actual interface object (e.g. if we're
-            just aggregated).
-
             @param pEditSource
             The edit source to use. Object ownership is transferred
             from the caller to the callee. The object listens on the
@@ -153,8 +148,7 @@ namespace accessibility
             model) contained in the given SvxEditSource.
 
         */
-        AccessibleStaticTextBase( const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible >& rInterface,
-                                  ::std::auto_ptr< SvxEditSource > pEditSource );
+        explicit AccessibleStaticTextBase( ::std::auto_ptr< SvxEditSource > pEditSource );
         virtual ~AccessibleStaticTextBase();
 
     private:
@@ -173,7 +167,7 @@ namespace accessibility
             should only be called from the main office thread.
 
         */
-        virtual const SvxEditSource& GetEditSource() const throw (::com::sun::star::uno::RuntimeException);
+        virtual const SvxEditSource& GetEditSource() const SAL_THROW((::com::sun::star::uno::RuntimeException));
 
         /** Set the current edit source
 
@@ -202,7 +196,26 @@ namespace accessibility
             The new edit source to set. Object ownership is transferred
             from the caller to the callee.
         */
-        virtual void SetEditSource( ::std::auto_ptr< SvxEditSource > pEditSource ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SetEditSource( ::std::auto_ptr< SvxEditSource > pEditSource ) SAL_THROW((::com::sun::star::uno::RuntimeException));
+
+        /** Set the event source
+
+            @attention When setting a reference here, you should call
+            Dispose() when you as the owner are disposing, since until
+            then this object will hold that reference
+
+            @param rInterface
+            The interface that should be set as the source for
+            accessibility events sent by this object.
+         */
+        virtual void SetEventSource( const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible >& rInterface );
+
+        /** Get the event source
+
+            @return the interface that is set as the source for
+            accessibility events sent by this object.
+         */
+        virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > GetEventSource() const;
 
         /** Set offset of EditEngine from parent
 
@@ -241,7 +254,17 @@ namespace accessibility
             internally. Normally, there should not be a need to call
             this method.
         */
-        virtual void UpdateChildren() throw (::com::sun::star::uno::RuntimeException);
+        virtual void UpdateChildren() SAL_THROW((::com::sun::star::uno::RuntimeException));
+
+        /** Drop all references and enter disposed state
+
+            This method drops all references to external objects (also
+            the event source reference set via SetEventSource()) and
+            sets the object into the disposed state (i.e. the methods
+            return default values or throw a uno::DisposedException
+            exception).
+         */
+        virtual void Dispose();
 
         // XAccessibleText interface implementation
         virtual sal_Int32 SAL_CALL getCaretPosition() throw (::com::sun::star::uno::RuntimeException);
