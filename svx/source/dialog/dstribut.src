@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dstribut.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:00:52 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:32:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,9 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text[ catalan ] = "Horitzontal";
         Text[ finnish ] = "Vaakataso";
         Text[ thai ] = "แนวนอน";
+        Text[ czech ] = "Vodorovně";
+        Text[ hebrew ] = "‮אופקי‬";
+        Text[ hindi ] = "समतल";
     };
 
     RadioButton BTN_HOR_NONE
@@ -120,17 +123,20 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text[ italian ] = "Senza";
         Text[ danish ] = "~Ingen";
         Text[ swedish ] = "In~gen";
-        Text[ polish ] = "Brak";
-        Text[ portuguese_brazilian ] = "None";
+        Text[ polish ] = "~Brak";
+        Text[ portuguese_brazilian ] = "~Nenhum";
         Text[ japanese ] = "なし(~N)";
         Text[ korean ] = "없음(~N)";
         Text[ chinese_simplified ] = "无(~N)";
         Text[ chinese_traditional ] = "無(~N)";
         Text[ arabic ] = "����";
-        Text[ turkish ] = "Yok";
+        Text[ turkish ] = "~Hi�biri";
         Text[ catalan ] = "Cap";
         Text[ finnish ] = "Ei mit��n";
         Text[ thai ] = "ไ~ม่มี";
+        Text[ czech ] = "Nic";
+        Text[ hebrew ] = "‮ללא‬";
+        Text[ hindi ] = "~कोई नहीं";
     };
 
     RadioButton BTN_HOR_LEFT
@@ -149,17 +155,20 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text[ italian ] = "A sinistra";
         Text[ danish ] = "~Venstre";
         Text[ swedish ] = "~V�nster";
-        Text[ polish ] = "Z lewej";
-        Text[ portuguese_brazilian ] = "Left";
+        Text[ polish ] = "Z ~lewej";
+        Text[ portuguese_brazilian ] = "~Esquerda";
         Text[ japanese ] = "左(~L)";
         Text[ korean ] = "왼쪽(~L)";
         Text[ chinese_simplified ] = "左(~L)";
         Text[ chinese_traditional ] = "左(~L)";
         Text[ arabic ] = "����";
-        Text[ turkish ] = "Sol";
+        Text[ turkish ] = "~Sol";
         Text[ catalan ] = "Esquerra";
         Text[ finnish ] = "Vasen";
         Text[ thai ] = "~ซ้าย";
+        Text[ czech ] = "Vlevo";
+        Text[ hebrew ] = "‮שמאל‬";
+        Text[ hindi ] = "~बायाँ";
     };
 
     RadioButton BTN_HOR_CENTER
@@ -178,17 +187,20 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text[ italian ] = "Al centro";
         Text[ danish ] = "~Centreret";
         Text[ swedish ] = "~Mitten";
-        Text[ polish ] = "Po�rodku";
-        Text[ portuguese_brazilian ] = "Center";
+        Text[ polish ] = "~Do �rodka";
+        Text[ portuguese_brazilian ] = "~Centro";
         Text[ japanese ] = "中央(~C)";
         Text[ korean ] = "가운데(~C)";
         Text[ chinese_simplified ] = "中心(~C)";
         Text[ chinese_traditional ] = "中心(~C)";
         Text[ arabic ] = "���";
-        Text[ turkish ] = "Orta";
+        Text[ turkish ] = "~Merkez";
         Text[ catalan ] = "Centre";
         Text[ finnish ] = "Keskit�";
         Text[ thai ] = "~ตรงกลาง";
+        Text[ czech ] = "Na střed";
+        Text[ hebrew ] = "‮מרכז‬";
+        Text[ hindi ] = "~मध्य";
     };
 
     RadioButton BTN_HOR_DISTANCE
@@ -207,17 +219,20 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text[ italian ] = "Distanza";
         Text[ danish ] = "~Afstand";
         Text[ swedish ] = "~Avst�nd";
-        Text[ polish ] = "Odst�p";
-        Text[ portuguese_brazilian ] = "Distance";
+        Text[ polish ] = "~Odst�p";
+        Text[ portuguese_brazilian ] = "A~fastamento";
         Text[ japanese ] = "間隔(~S)";
         Text[ korean ] = "간격(~S)";
         Text[ chinese_simplified ] = "间隔(~S)";
         Text[ chinese_traditional ] = "間隔(~S)";
         Text[ arabic ] = "�������";
-        Text[ turkish ] = "Aral�k";
+        Text[ turkish ] = "~Bo�luk";
         Text[ catalan ] = "Espaiat";
         Text[ finnish ] = "V�lit";
         Text[ thai ] = "~ระยะห่าง";
+        Text[ czech ] = "Mezery";
+        Text[ hebrew ] = "‮ריווח‬";
+        Text[ hindi ] = "~बीच में अंतर देना";
     };
 
     RadioButton BTN_HOR_RIGHT
@@ -236,17 +251,20 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text[ italian ] = "A destra";
         Text[ danish ] = "H~�jre";
         Text[ swedish ] = "H�ge~r";
-        Text[ polish ] = "Z prawej";
-        Text[ portuguese_brazilian ] = "Right";
+        Text[ polish ] = "Z p~rawej";
+        Text[ portuguese_brazilian ] = "~Direita";
         Text[ japanese ] = "右(~R)";
         Text[ korean ] = "오른쪽(~R)";
         Text[ chinese_simplified ] = "右(~R)";
         Text[ chinese_traditional ] = "右(~R)";
         Text[ arabic ] = "����";
-        Text[ turkish ] = "Sa�";
+        Text[ turkish ] = "~Sa�";
         Text[ catalan ] = "Dreta";
         Text[ finnish ] = "Oikea";
         Text[ thai ] = "~ขวา";
+        Text[ czech ] = "Vpravo";
+        Text[ hebrew ] = "‮ימין‬";
+        Text[ hindi ] = "~दाहिना";
     };
 
     FixedImage IMG_HOR_LOW {
@@ -316,6 +334,9 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text[ catalan ] = "Vertical";
         Text[ finnish ] = "Pystytaso";
         Text[ thai ] = "แนวตั้ง";
+        Text[ czech ] = "Svisle";
+        Text[ hebrew ] = "‮אנכי‬";
+        Text[ hindi ] = "लम्ब";
     };
 
     RadioButton BTN_VER_NONE
@@ -334,17 +355,20 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text[ italian ] = "Senza";
         Text[ danish ] = "Ing~en";
         Text[ swedish ] = "Ing~en";
-        Text[ polish ] = "Brak";
-        Text[ portuguese_brazilian ] = "None";
+        Text[ polish ] = "Br~ak";
+        Text[ portuguese_brazilian ] = "N~enhum";
         Text[ japanese ] = "なし(~O)";
         Text[ korean ] = "없음(~O)";
         Text[ chinese_simplified ] = "无(~O)";
         Text[ chinese_traditional ] = "無(~O)";
         Text[ arabic ] = "����";
-        Text[ turkish ] = "Yok";
+        Text[ turkish ] = "~Hi�biri";
         Text[ catalan ] = "Cap";
         Text[ finnish ] = "Ei mit��n";
         Text[ thai ] = "ไม่~มี";
+        Text[ czech ] = "Nic";
+        Text[ hebrew ] = "‮אף אחד‬";
+        Text[ hindi ] = "~कोई नहीं";
     };
 
     RadioButton BTN_VER_TOP
@@ -363,17 +387,20 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text[ italian ] = "In alto";
         Text[ danish ] = "T~op";
         Text[ swedish ] = "~Uppe";
-        Text[ polish ] = "U g�ry";
-        Text[ portuguese_brazilian ] = "Top";
+        Text[ polish ] = "U ~g�ry";
+        Text[ portuguese_brazilian ] = "Em ~Cima";
         Text[ japanese ] = "上(~T)";
         Text[ korean ] = "위(~T)";
         Text[ chinese_simplified ] = "上(~T)";
         Text[ chinese_traditional ] = "上(~T)";
         Text[ arabic ] = "����";
-        Text[ turkish ] = "�st";
+        Text[ turkish ] = "�~st";
         Text[ catalan ] = "Superior";
         Text[ finnish ] = "Yl�reuna";
         Text[ thai ] = "~บน";
+        Text[ czech ] = "Nahoře";
+        Text[ hebrew ] = "‮עליון‬";
+        Text[ hindi ] = "~ऊपर";
     };
 
     RadioButton BTN_VER_CENTER
@@ -392,17 +419,20 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text[ italian ] = "Al centro";
         Text[ danish ] = "Ce~ntreret";
         Text[ swedish ] = "M~itten";
-        Text[ polish ] = "Po�rodku";
-        Text[ portuguese_brazilian ] = "Center";
+        Text[ polish ] = "Do �rod~ka";
+        Text[ portuguese_brazilian ] = "~Centro";
         Text[ japanese ] = "中央(~E)";
         Text[ korean ] = "가운데(~E)";
         Text[ chinese_simplified ] = "中心(~E)";
         Text[ chinese_traditional ] = "中心(~E)";
         Text[ arabic ] = "���";
-        Text[ turkish ] = "Orta";
+        Text[ turkish ] = "Merkez";
         Text[ catalan ] = "Centre";
         Text[ finnish ] = "Keskit�";
         Text[ thai ] = "ต~รงกลาง";
+        Text[ czech ] = "Střed";
+        Text[ hebrew ] = "‮מרכז‬";
+        Text[ hindi ] = "~मध्य";
     };
 
     RadioButton BTN_VER_DISTANCE
@@ -421,17 +451,20 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text[ italian ] = "Distanza";
         Text[ danish ] = "A~fstand";
         Text[ swedish ] = "Av~st�nd";
-        Text[ polish ] = "Odst�p";
-        Text[ portuguese_brazilian ] = "Distance";
+        Text[ polish ] = "Odst�~p";
+        Text[ portuguese_brazilian ] = "A~fastamento";
         Text[ japanese ] = "間隔(~P)";
         Text[ korean ] = "간격(~P)";
         Text[ chinese_simplified ] = "间隔(~P)";
         Text[ chinese_traditional ] = "間隔(~P)";
         Text[ arabic ] = "�������";
-        Text[ turkish ] = "Aral�k";
+        Text[ turkish ] = "~Bo�luk";
         Text[ catalan ] = "Espaiat";
         Text[ finnish ] = "V�lit";
         Text[ thai ] = "ระ~ยะห่าง";
+        Text[ czech ] = "Mezery";
+        Text[ hebrew ] = "‮ריווח‬";
+        Text[ hindi ] = "~बीच में अंतर देना";
     };
 
     RadioButton BTN_VER_BOTTOM
@@ -450,17 +483,20 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         Text[ italian ] = "In basso";
         Text[ danish ] = "~Bund";
         Text[ swedish ] = "~Nere";
-        Text[ polish ] = "Na dole";
-        Text[ portuguese_brazilian ] = "Bottom";
+        Text[ polish ] = "~U do�u";
+        Text[ portuguese_brazilian ] = "Em ~Baixo";
         Text[ japanese ] = "下(~B)";
         Text[ korean ] = "아래(~B)";
         Text[ chinese_simplified ] = "下(~B)";
         Text[ chinese_traditional ] = "下(~B)";
         Text[ arabic ] = "����";
-        Text[ turkish ] = "Alt";
+        Text[ turkish ] = "~Alt";
         Text[ catalan ] = "Part inferior";
         Text[ finnish ] = "Alareuna";
         Text[ thai ] = "~ล่าง";
+        Text[ czech ] = "Dole";
+        Text[ hebrew ] = "‮תחתון‬";
+        Text[ hindi ] = "~तल";
     };
 
     FixedImage IMG_VER_HIGH {
@@ -513,7 +549,7 @@ TabPage RID_SVXPAGE_DISTRIBUTE
     Text[ danish ] = "Distribution";
     Text[ swedish ] = "F�rdelning";
     Text[ polish ] = "Rozmieszczenie";
-    Text[ portuguese_brazilian ] = "Distribution..";
+    Text[ portuguese_brazilian ] = "Distribui��o";
     Text[ japanese ] = "分布...";
     Text[ korean ] = "배분";
     Text[ chinese_simplified ] = "分布";
@@ -572,9 +608,21 @@ TabPage RID_SVXPAGE_DISTRIBUTE
         MaskColor = STD_MASKCOLOR ;
     };
 
+    Text[ czech ] = "Distribuce";
+    Text[ hebrew ] = "‮תפוצה‬";
+    Text[ hindi ] = "वितरण";
 };
 
 // ********************************************************************** EOF
+
+
+
+
+
+
+
+
+
 
 
 
