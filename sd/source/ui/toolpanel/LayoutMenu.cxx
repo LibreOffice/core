@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LayoutMenu.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-18 16:54:57 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 14:02:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -598,20 +598,20 @@ void LayoutMenu::AssignLayoutToSelectedSlides (AutoLayout aLayout)
     do
     {
         // The view shell in the center pane has to be present.
-        ViewShell* pViewShell = mrBase.GetMainViewShell();
-        if (pViewShell == NULL)
+        ViewShell* pMainViewShell = mrBase.GetMainViewShell();
+        if (pMainViewShell == NULL)
             break;
 
         // Determine if the current view is in an invalid master page mode.
         // The handout view is always in master page mode and therefore not
         // invalid.
         bool bMasterPageMode (false);
-        switch (pViewShell->GetShellType())
+        switch (pMainViewShell->GetShellType())
         {
             case ViewShell::ST_NOTES:
             case ViewShell::ST_IMPRESS:
             {
-                DrawViewShell* pDrawViewShell = static_cast<DrawViewShell*>(pViewShell);
+                DrawViewShell* pDrawViewShell = static_cast<DrawViewShell*>(pMainViewShell);
                 if (pDrawViewShell != NULL)
                     if (pDrawViewShell->GetEditMode() == EM_MASTERPAGE)
                         bMasterPageMode = true;
@@ -624,7 +624,20 @@ void LayoutMenu::AssignLayoutToSelectedSlides (AutoLayout aLayout)
         // slot for all of them.
         ::std::vector<SdPage*> aSelectedPages;
 
-        SlideSorterViewShell* pSlideSorter = SlideSorterViewShell::GetSlideSorter(mrBase);
+        // Get a list of selected pages.
+        // First we try to obtain this list from a slide sorter.  This is
+        // possible only some of the view shells in the center pane.  When
+        // no valid slide sorter is available then ask the main view shell
+        // for its current page.
+        SlideSorterViewShell* pSlideSorter = NULL;
+        switch (pMainViewShell->GetShellType())
+        {
+            case ViewShell::ST_IMPRESS:
+            case ViewShell::ST_NOTES:
+            case ViewShell::ST_SLIDE_SORTER:
+                pSlideSorter = SlideSorterViewShell::GetSlideSorter(mrBase);
+                break;
+        }
         if (pSlideSorter != NULL)
         {
             // There is a slide sorter visible so get the list of selected pages from it.
@@ -638,10 +651,8 @@ void LayoutMenu::AssignLayoutToSelectedSlides (AutoLayout aLayout)
         }
         else
         {
-            // No slide sorter visible.  Ask the main view shell for its current page.
-            ViewShell* pShell = mrBase.GetMainViewShell();
-            if (pShell != NULL)
-                aSelectedPages.push_back(pShell->GetActualPage());
+            // No valid slide sorter available.  Ask the main view shell for its current page.
+            aSelectedPages.push_back(pMainViewShell->GetActualPage());
         }
 
 
@@ -658,7 +669,7 @@ void LayoutMenu::AssignLayoutToSelectedSlides (AutoLayout aLayout)
                 SfxRequest aRequest (mrBase.GetViewFrame(), SID_ASSIGN_LAYOUT);
                 aRequest.AppendItem(SfxUInt32Item (ID_VAL_WHATPAGE, ((*iPage)->GetPageNum()-1)/2));
                 aRequest.AppendItem(SfxUInt32Item (ID_VAL_WHATLAYOUT, aLayout));
-                pViewShell->ExecuteSlot (aRequest, BOOL(FALSE));
+                pMainViewShell->ExecuteSlot (aRequest, BOOL(FALSE));
             }
 
         // Restore the previous selection.
