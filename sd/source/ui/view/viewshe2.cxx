@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshe2.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: af $ $Date: 2004-06-18 11:33:18 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 07:46:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1239,13 +1239,13 @@ void ViewShell::CancelSearching()
 |* Read user data
 |*
 \************************************************************************/
-
-void ViewShell::ReadUserData(const String& rString)
-{
-    // Auf an FrameView gemerkte VisArea zoomen
     GetDispatcher()->Execute(
         SID_SIZE_VISAREA,
         SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
+    GetDispatcher()->Execute(
+    SID_SIZE_VISAREA,
+    SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
+>>>>>>> 1.25.72.1
 }
 
 /*************************************************************************
