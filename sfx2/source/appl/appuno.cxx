@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: as $ $Date: 2002-08-26 13:14:43 $
+ *  last change: $Author: cd $ $Date: 2002-08-29 13:43:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -546,13 +546,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                 else if ( aName == sViewData )
                     rSet.Put( SfxUnoAnyItem( SID_VIEW_DATA, rProp.Value ) );
                 else if ( aName == sFilterData )
-                     {
-                        Sequence< Any > lVal;
-                        sal_Bool bOK = (rProp.Value >>= lVal);
-                        DBG_ASSERT( bOK, "invalid type for FilterData" )
-                        if (bOK)
-                            rSet.Put( SfxUnoAnyItem( SID_FILTER_DATA, rProp.Value ) );
-                     }
+                    rSet.Put( SfxUnoAnyItem( SID_FILTER_DATA, rProp.Value ) );
                 else if ( aName == sInputStream )
                      {
                         Reference< XInputStream > xVal;
