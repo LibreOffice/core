@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxlngppc4.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: vg $ $Date: 2005-02-24 14:43:41 $
+#   last change: $Author: obo $ $Date: 2005-03-15 09:57:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -150,9 +150,14 @@ STATIC		= -Wl,-Bstatic
 DYNAMIC		= -Wl,-Bdynamic
 
 # name of linker
-LINK*=gcc 
+LINK*=$(CXX)
+LINKC*=$(CC)
+
 # default linker flags
-LINKFLAGS=-Wl,-rpath,\''$$ORIGIN'\'
+
+LINKFLAGSDEFS*=-Wl,-export-dynamic
+LINKFLAGSRUNPATH*=-Wl,-rpath,\''$$ORIGIN'\'
+LINKFLAGS= $(LINKFLAGSDEFS) $(LINKFLAGSRUNPATH)
 
 # linker flags for linking applications
 LINKFLAGSAPPGUI= -Wl,-export-dynamic -Wl,--noinhibit-exec
