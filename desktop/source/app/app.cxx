@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: cd $ $Date: 2001-07-24 10:24:18 $
+ *  last change: $Author: cd $ $Date: 2001-07-26 07:45:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,9 @@
 #include <com/sun/star/awt/XTopWindow.hpp>
 #endif
 
+#ifndef _SOLAR_H
+#include <tools/solar.h>
+#endif
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
 #endif
@@ -138,14 +141,20 @@
 #ifndef INCLUDED_SVTOOLS_MODULEOPTIONS_HXX
 #include <svtools/moduleoptions.hxx>
 #endif
-#ifndef SVTOOLS_TESTTOOL_HXX
-#include <svtools/testtool.hxx>
+#ifndef _OSL_MODULE_H_
+#include <osl/module.h>
 #endif
+#ifndef _OSL_FILE_HXX_
+#include <osl/file.hxx>
+#endif
+#ifndef AUTOMATION_HXX
+#include <automation/automation.hxx>
+#endif
+
 #include <svtools/pathoptions.hxx>
 #include <svtools/cjkoptions.hxx>
 #include <svtools/internaloptions.hxx>
 #include <unotools/tempfile.hxx>
-#include <osl/file.hxx>
 
 #include <rtl/logfile.hxx>
 #include <setup2/installer.hxx>
@@ -177,7 +186,56 @@ OOfficeAcceptorThread*  pOfficeAcceptThread = 0;
 ResMgr*                 Desktop::pResMgr    = 0;
 static PluginAcceptThread* pPluginAcceptThread = 0;
 
+static oslModule        aTestToolModule     = 0;
+
 // ----------------------------------------------------------------------------
+
+void InitTestToolLib()
+{
+    RTL_LOGFILE_CONTEXT( aLog, "desktop (cd) ::InitTestToolLib" );
+
+    OUString    aFuncName( RTL_CONSTASCII_USTRINGPARAM( "CreateRemoteControl" ));
+    OUString    aModulePath;
+
+    ::vos::OStartupInfo().getExecutableFile( aModulePath );
+    sal_uInt32  lastIndex = aModulePath.lastIndexOf('/');
+    if ( lastIndex > 0 )
+        aModulePath = aModulePath.copy( 0, lastIndex+1 );
+
+    aModulePath += OUString::createFromAscii( SVLIBRARY( "sts" ) );
+
+    // Shortcut for Performance: We expect that the test tool library is not installed
+    // (only for testing purpose). It should be located beside our executable.
+    // We don't want to pay for searching through LD_LIBRARY_PATH so we check for
+    // existence only in our executable path!!
+    osl::DirectoryItem  aItem;
+    osl::FileBase::RC   nResult = osl::DirectoryItem::get( aModulePath, aItem );
+
+    if ( nResult == osl::FileBase::E_None )
+    {
+        aTestToolModule = osl_loadModule( aModulePath.pData, SAL_LOADMODULE_DEFAULT );
+        if ( aTestToolModule )
+        {
+            void* pInitFunc = osl_getSymbol( aTestToolModule, aFuncName.pData );
+            if ( pInitFunc )
+                (*(pfunc_CreateRemoteControl)pInitFunc)();
+        }
+    }
+}
+
+void DeInitTestToolLib()
+{
+    if ( aTestToolModule )
+    {
+        OUString    aFuncName( RTL_CONSTASCII_USTRINGPARAM( "DestroyRemoteControl" ));
+
+        void* pDeInitFunc = osl_getSymbol( aTestToolModule, aFuncName.pData );
+        if ( pDeInitFunc )
+            (*(pfunc_DestroyRemoteControl)pDeInitFunc)();
+
+        osl_unloadModule( aTestToolModule );
+    }
+}
 
 ResMgr* Desktop::GetDesktopResManager()
 {
@@ -579,7 +637,8 @@ void Desktop::Main()
             Reference< XConnectionBroker >  xServiceManagerBroker;
             Reference< XConnectionBroker >  xPalmPilotManagerBroker;
 
-            RemoteControl aControl;
+//          RemoteControl aControl;
+            InitTestToolLib();
 
             // the shutdown icon sits in the systray and allows the user to keep
             // the office instance running for quicker restart
@@ -672,6 +731,8 @@ void Desktop::Main()
                 pPluginAcceptThread->terminate();
                 pPluginAcceptThread->release();
             }
+
+            DeInitTestToolLib();
         }
 
         xWrapper->dispose();
@@ -1082,9 +1143,9 @@ void Desktop::OpenStartupScreen()
             else
             {
                 // Save case:
-                // Create resource manager for intro bitmap. Due to our problem that don't have
+                // Create resource manager for intro bitmap. Due to our problem that we don't have
                 // any language specific information, we have to search for the correct resource
-                // file. The resource is language independent.
+                // file. The bitmap resource is language independent.
                 const USHORT nResId = RID_DEFAULTINTRO;
                 LanguageType aLanguageType;
                 String       aMgrName = String::CreateFromAscii( "iso" );

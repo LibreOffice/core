@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: cd $ $Date: 2001-07-16 12:55:47 $
+#   last change: $Author: cd $ $Date: 2001-07-26 07:45:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -103,7 +103,6 @@ APP1TARGET=$(TARGET)
 
 APP1STDLIBS=			\
     $(APP1_STDPRE)		\
-    $(AUTOMATIONLIB)	\
     $(SETUPLIB)			\
     $(SVLLIB)			\
     $(SVMEMLIB)			\
@@ -115,6 +114,7 @@ APP1STDLIBS=			\
     $(COMPHELPERLIB)	\
     $(SALHELPERLIB)
 
+#	$(AUTOMATIONLIB)	\
 #	$(TKLIB)			\
 #	$(SJLIB)			\
 #	$(SOTLIB)			\
