@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impastp4.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2003-08-07 12:30:05 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:23:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -412,7 +412,8 @@ void SvXMLAutoStylePoolP_Impl::exportXML(
                 {
                     GetExport().AddAttribute(
                         XML_NAMESPACE_STYLE, XML_PARENT_STYLE_NAME,
-                        *aExpStyles[i].mpParent );
+                        GetExport().EncodeStyleName(
+                            *aExpStyles[i].mpParent ) );
                 }
 
                 OUString sName;
