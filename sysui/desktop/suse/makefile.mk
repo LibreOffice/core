@@ -61,11 +61,10 @@ PRJ=..$/..
 PRJNAME=sysui
 TARGET=suse
 
-RPM = rpm`test -x /usr/bin/rpmbuild && echo "build"`
-
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
+.INCLUDE :  packtools.mk
 
 # --- Product Version Information ----------------------------------
 
@@ -109,7 +108,7 @@ KDEICONLIST = \
     locolor/{16x16 22x22 32x32}/apps/$(UNIXFILENAME)-{$(LAUNCHERLIST)}.png \
     locolor/{16x16 22x22 32x32}/mimetypes/$(UNIXFILENAME)-{$(MIMELIST)}.png
 
-.IF "$(OS)"=="LINUX"
+.IF "$(RPM)"!=""
 
 RPMFLAGFILE = $(MISC)$/$(TARGET).flag 
 RPMDEPN = \
@@ -130,7 +129,7 @@ RPMDIR  = $(shell cd $(BIN); pwd)
 
 .INCLUDE :  target.mk
 
-.IF "$(OS)"=="LINUX"
+.IF "$(RPM)"!=""
 
 ALLTAR : $(RPMFLAGFILE) 
 
@@ -194,17 +193,12 @@ $(MISC)/$(TARGET)/opt/gnome/share/application-registry/$(UNIXFILENAME).applicati
     @echo ---------------------------------
     @cat $< | tr -d "\015" | sed -e "s/openoffice/$(UNIXFILENAME)/" -e "s/%PRODUCTNAME/$(LONGPRODUCTNAME)/" > $@
 
-# --- spec file ---------------------------------------------------
-
-# Copy the spec file to $(MISC)
-$(MISC)/$(TARGET)-menus.spec : $$(@:f) 
-    @cat $(@:f) | tr -d "\015" | sed "s/%PREFIX/$(UNIXFILENAME)/" > $@
-    @echo "%define _rpmdir $(RPMDIR)" >> $@
-
 # --- packaging ---------------------------------------------------
     
-$(RPMFLAGFILE) : $$(@:db)-menus.spec $(RPMDEPN)
+$(RPMFLAGFILE) : $(RPMDEPN)
+    @cat $(@:b)-menus.spec | tr -d "\015" | sed "s/%PREFIX/$(UNIXFILENAME)/" > $(@:db)-menus.spec
+    @echo "%define _rpmdir $(RPMDIR)" >> $(@:db)-menus.spec
     @$(RPM) -bb $(@:db)-menus.spec --buildroot $(LAUNCHERDIR) --target noarch
     @touch $@
-    
+
 .ENDIF
