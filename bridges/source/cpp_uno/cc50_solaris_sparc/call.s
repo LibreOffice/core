@@ -1,39 +1,32 @@
 .global privateSnippetExecutor
 .type privateSnippetExecutor,2
 privateSnippetExecutor:
-		save %sp, -104, %sp
-		! %i0 saved by codeSnippet
+		! save %sp, -96, %sp  already done in code snippet
+		st %i0, [%fp+68]
 		st %i1, [%fp+72]
 		st %i2, [%fp+76]
 		st %i3, [%fp+80]
 		st %i4, [%fp+84]
 		st %i5, [%fp+88]
-		mov %g1, %o0
-		mov %fp, %o1
-		call __1cHsunpro5Pcpp_vtable_call6Fippv_i_
-		nop
+		! %o0: functionIndex, stored by code snippet
+		! %o1: vtableOffset, stored by code snippet
+		call cpp_vtable_call
+		add %fp, 68, %o2
 .privateSnippetExecutorExceptionPosition:
 		subcc %o0, 11, %g0
-		bne .noDouble
-		nop
-		ld [%fp+68], %i0
-		ld [%fp+72], %i1
-		std %i0, [%fp-8]
-		ldd [%fp-8], %f0
-		ba .noFloat
-		nop
-.noDouble:
+		be .double
 		subcc %o0, 10, %g0
-		bne .noFloat
-		nop
-		ld [%fp+68], %f0
-.noFloat:
-		ld [%fp+68], %i0
-		ld [%fp+72], %i1
-		ld [%fp+76], %i2
-		ld [%fp+80], %i3
-		ld [%fp+84], %i4
-		ld [%fp+88], %i5
+		be .float
+		ld [%fp+72], %i0
+		ld [%fp+76], %i1
+		ret
+		restore
+.double:
+		ldd [%fp+72], %f0
+		ret
+		restore
+.float:
+		ld [%fp+72], %f0
 		ret
 		restore
 .size privateSnippetExecutor,(.-privateSnippetExecutor)
