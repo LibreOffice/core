@@ -1185,11 +1185,19 @@
         </xsl:element>
     </xsl:template>
 
-
+<!-- Change Made By Kevin Fowlks (fowlks@msu.edu) June 4th, 2003 -->
     <xsl:template match="emphasis">
         <xsl:element name="text:span">
-            <xsl:attribute name="text:style-name">Emphasis</xsl:attribute>
-            <xsl:apply-templates/>
+		<xsl:choose>
+			<xsl:when test="@role">
+				<xsl:attribute name="text:style-name">Emphasis Bold</xsl:attribute>
+				<xsl:apply-templates/>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:attribute name="text:style-name">Emphasis</xsl:attribute>
+				<xsl:apply-templates/>	
+			</xsl:otherwise>
+		</xsl:choose>
         </xsl:element>
     </xsl:template>
 

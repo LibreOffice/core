@@ -655,6 +655,15 @@
 			<xsl:apply-templates/>
                 </xsl:element>
             </xsl:when>
+<!-- Change Made By Kevin Fowlks (fowlks@msu.edu) June 4th, 2003 -->
+		<xsl:when test="@text:style-name='Emphasis Bold'">
+		<xsl:element name="emphasis">
+			<xsl:attribute name = "role" >
+				<xsl:text >bold</xsl:text>
+			</xsl:attribute>
+			<xsl:apply-templates/>
+		</xsl:element>
+		</xsl:when>
             <xsl:when test="@text:style-name=&apos;FileName&apos;">
                 <xsl:element name="filename">
 			<xsl:apply-templates/>
