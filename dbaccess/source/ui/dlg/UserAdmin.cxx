@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UserAdmin.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-23 13:33:16 $
+ *  last change: $Author: oj $ $Date: 2001-07-23 13:39:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -279,6 +279,10 @@ void OUserAdmin::FillUserNames()
     m_PB_NEWUSER.Enable(xAppend.is());
     Reference<XDrop> xDrop(m_xUsers,UNO_QUERY);
     m_PB_DELETEUSER.Enable(xDrop.is());
+
+    m_PB_CHANGEPWD.Enable(m_xUsers.is());
+    m_TableCtrl.Enable(m_xUsers.is());
+
 }
 // -----------------------------------------------------------------------
 SfxTabPage* OUserAdmin::Create( Window* pParent, const SfxItemSet& _rAttrSet )
