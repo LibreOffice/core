@@ -2,6 +2,5 @@ mkdir: %_DEST%\inc%_EXT%\jvmaccess
 ..\inc\jvmaccess\virtualmachine.hxx %_DEST%\inc%_EXT%\jvmaccess\virtualmachine.hxx
 ..\%__SRC%\bin\jvmaccess*.dll %_DEST%\bin%_EXT%\*
 ..\%__SRC%\lib\ijvmaccess.lib %_DEST%\lib%_EXT%\ijvmaccess.lib
-..\%__SRC%\lib\libjvmaccess*.so.*.*.* %_DEST%\lib%_EXT%\*
-..\%__SRC%\lib\libjvmaccess*.dylib* %_DEST%\lib%_EXT%\*
-linklib: libjvmaccess*.so.*.*.*
+..\%__SRC%\lib\libjvmaccess*.*.* %_DEST%\lib%_EXT%\*
+linklib: libjvmaccess*.*.*
