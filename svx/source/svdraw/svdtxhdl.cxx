@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdtxhdl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dl $ $Date: 2001-04-20 09:41:42 $
+ *  last change: $Author: aw $ $Date: 2001-05-18 14:50:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,9 +220,10 @@ IMPL_LINK(ImpTextPortionHandler,ConvertHdl,DrawPortionInfo*,pInfo)
     }
     FontMetric aFontMetric(aVDev.GetFontMetric());
     if(bIsVertical)
-        aPos.X() += nHochTief;
+        // #83068#
+        aPos.X() += aFontMetric.GetAscent() + nHochTief;
     else
-        aPos.Y()-=aFontMetric.GetAscent()+nHochTief;
+        aPos.Y() -= aFontMetric.GetAscent() + nHochTief;
 
     if (pInfo->rFont.IsOutline()) {
         aAttrSet.Put(XLineColorItem(String(),aColor));
@@ -243,18 +244,9 @@ IMPL_LINK(ImpTextPortionHandler,ConvertHdl,DrawPortionInfo*,pInfo)
         sal_Unicode aUnicode = (pInfo->rText).GetChar(i);
         XPolyPolygon aXPP(XOutGetCharOutline(aUnicode, aVDev));
 
-// offset in Y(!) for testing make rough correction here
-if(bIsVertical)
-{
-    Rectangle aPolyRect(aXPP.GetBoundRect());
-    aXPP.Move(0, -aPolyRect.Top());
-}
-
         if(aXPP.Count())
         {
             aXPP.Move(aPos.X(), aPos.Y());
-// offset in Y(!)           aPolyRect = aXPP.GetBoundRect();
-
             // aFormTextBoundRect enthaelt den Ausgabebereich des Textobjekts
             // #35825# Rotieren erst nach Resize (wg. FitToSize)
             //RotateXPoly(aXPP,aFormTextBoundRect.TopLeft(),rTextObj.aGeo.nSin,rTextObj.aGeo.nCos);
