@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbexchange.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-05 08:34:33 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 12:45:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,28 +70,35 @@
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
+#ifndef _COM_SUN_STAR_LANG_XEVENTLISTENER_HPP_
+#include <com/sun/star/lang/XEventListener.hpp>
+#endif
 #ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
 #include <com/sun/star/sdbc/XConnection.hpp>
 #endif
-#ifndef _COM_SUN_STAR_SDB_XSQLQUERYCOMPOSER_HPP_
-#include <com/sun/star/sdb/XSQLQueryComposer.hpp>
-#endif
-#ifndef _CPPUHELPER_IMPLBASE2_HXX_
-#include <cppuhelper/implbase2.hxx>
+#ifndef _CPPUHELPER_IMPLBASE1_HXX_
+#include <cppuhelper/implbase1.hxx>
 #endif
 #ifndef _SVX_DBAEXCHANGE_HXX_
 #include <svx/dbaexchange.hxx>
 #endif
+#ifndef _COMPHELPER_UNO3_HXX_
+#include <comphelper/uno3.hxx>
+#endif
+#include <vector>
 
 namespace dbaui
 {
 
     class ORTFImportExport;
     class OHTMLImportExport;
-    class ODataClipboard : public ::svx::ODataAccessObjectTransferable
+    typedef ::cppu::ImplHelper1< ::com::sun::star::lang::XEventListener > TDataClipboard_BASE;
+
+    class ODataClipboard :      public ::svx::ODataAccessObjectTransferable
+                            ,   public TDataClipboard_BASE
+
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener> m_xHtml;
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener> m_xRtf;
+        ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener> > m_aEventListeners;
         OHTMLImportExport*      m_pHtml;
         ORTFImportExport*       m_pRtf;
 
@@ -121,6 +128,9 @@ namespace dbaui
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _rxResultSet
         );
 
+        DECLARE_XINTERFACE( )
+
+        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException);
     protected:
         virtual void        AddSupportedFormats();
         virtual sal_Bool    GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
