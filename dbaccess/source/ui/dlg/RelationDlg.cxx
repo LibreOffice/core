@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelationDlg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-21 15:07:11 $
+ *  last change: $Author: oj $ $Date: 2001-06-28 10:07:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -505,42 +505,6 @@ ORelationDialog::ORelationDialog( OJoinTableView* pParent,
     m_pRC_Tables->SetPosSizePixel( aDlgPoint, aDlgSize );
     m_pRC_Tables->Show();
 
-    //////////////////////////////////////////////////////////////////////
-    // Radio-Buttons enablen/disablen
-    Reference<XDatabaseMetaData> xMetaData = m_xConnection->getMetaData();
-
-    // Update Rules
-//  sal_Int16 nAttributes;
-//  rMetaData->getInfo(DatabaseInfo::FOREIGN_KEY_UPDATE_RULE) >>= nAttributes;
-//  if( !(nAttributes & KeyRule::NO_ACTION) ){
-//      aRB_NoCascUpd.Enable( FALSE );
-//  }
-//  if( !(nAttributes & KeyRule::CASCADE) ){
-//      aRB_CascUpd.Enable( FALSE );
-//  }
-//  if( !(nAttributes & KeyRule::SET_NULL) ){
-//      aRB_CascUpdNull.Enable( FALSE );
-//  }
-//  if( !(nAttributes & KeyRule::SET_DEFAULT) ){
-//      aRB_CascUpdDefault.Enable( FALSE );
-//  }
-//
-//  // Delete Rules
-//  rMetaData->getInfo(DatabaseInfo::FOREIGN_KEY_DELETE_RULE) >>= nAttributes;
-//  if( !(nAttributes & KeyRule::NO_ACTION) ){
-//      aRB_NoCascDel.Enable( FALSE );
-//  }
-//  if( !(nAttributes & KeyRule::CASCADE) ){
-//      aRB_CascDel.Enable( FALSE );
-//  }
-//  if( !(nAttributes & KeyRule::SET_NULL) ){
-//      aRB_CascDelNull.Enable( FALSE );
-//  }
-//  if( !(nAttributes & KeyRule::SET_DEFAULT) ){
-//      aRB_CascDelDefault.Enable( FALSE );
-//  }
-
-
     Init(m_pConnData);
 
 
@@ -611,6 +575,7 @@ void ORelationDialog::Init(ORelationTableConnectionData* _m_pConnData)
     switch (_m_pConnData->GetUpdateRules())
     {
     case KeyRule::NO_ACTION:
+    case KeyRule::RESTRICT:
         aRB_NoCascUpd.Check( TRUE );
         break;
 
@@ -630,6 +595,7 @@ void ORelationDialog::Init(ORelationTableConnectionData* _m_pConnData)
     switch (_m_pConnData->GetDeleteRules())
     {
     case KeyRule::NO_ACTION:
+    case KeyRule::RESTRICT:
         aRB_NoCascDel.Check( TRUE );
         break;
 
