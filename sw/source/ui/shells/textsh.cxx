@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: os $ $Date: 2002-08-08 14:20:54 $
+ *  last change: $Author: os $ $Date: 2002-09-11 12:40:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -704,9 +704,13 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
 
             // Minimalgroesse in Spalten l”schen
             SvxBoxInfoItem aBoxInfo((SvxBoxInfoItem &)aSet.Get(SID_ATTR_BORDER_INNER));
+            const SvxBoxItem& rBox = (const SvxBoxItem&)aSet.Get(RES_BOX);
             aBoxInfo.SetMinDist(FALSE);
+            aBoxInfo.SetDefDist(rBox.GetDistance(BOX_LINE_LEFT));
             aSet.Put(aBoxInfo);
 
+            FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebDocShell, GetView().GetDocShell()));
+            SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, eMetric));
             SwFrmDlg* pDlg = new SwFrmDlg(GetView().GetViewFrame(), &GetView().GetViewFrame()->GetWindow(), aSet, TRUE);
 
             if(pDlg->Execute() && pDlg->GetOutputItemSet())
@@ -1214,6 +1218,9 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.19  2002/08/08 14:20:54  os
+    #98614# insert default frame via Ctrl+Return
+
     Revision 1.18  2002/08/07 11:39:35  os
     #100781# insert/frame recordable
 
