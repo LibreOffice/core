@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ListBox.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-17 10:42:23 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:30:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,9 +225,9 @@ protected:
     virtual ::com::sun::star::uno::Any
                             translateDbColumnToControlValue( );
     virtual ::com::sun::star::uno::Any
-                            translateExternalValueToControlValue( );
+                            translateExternalValueToControlValue( ) const;
     virtual ::com::sun::star::uno::Any
-                            translateControlValueToExternalValue( );
+                            translateControlValueToExternalValue( ) const;
     virtual sal_Bool        commitControlValueToDbColumn( bool _bPostReset );
 
     virtual void            onConnectedDbColumn( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxForm );
