@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: thb $ $Date: 2001-06-20 07:43:30 $
+#   last change: $Author: hjs $ $Date: 2002-04-08 14:24:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -91,8 +91,7 @@ OBJFILES=	\
 
 SRCFILES=	sb.src
 
-SECOND_BUILD=SVXLIGHT
-SVXLIGHT_SLOFILES=	$(SLO)$/eventatt.obj
+SVXLIGHTSLOFILES=	$(SLO)$/eventatt.obj
 SVXLIGHTCDEFS+=-DSVX_LIGHT
 
 
@@ -100,7 +99,7 @@ LIB1TARGET= $(SLB)$/$(TARGET).lib
 LIB1OBJFILES = $(SLOFILES)
 
 LIB2TARGET= $(SLB)$/$(TARGET)l.lib
-LIB2OBJFILES = $(REAL_SVXLIGHT_SLOFILES) $(COMMON_SLOFILES)
+LIB2OBJFILES = $(REAL_SVXLIGHTSLOFILES) $(COMMON_SLOFILES)
 
 # --- Targets -------------------------------------------------------------
 
