@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flowfrm.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-01 07:44:04 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 08:44:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -527,6 +527,17 @@ BOOL SwFlowFrm::PasteTree( SwFrm *pStart, SwLayoutFrm *pParent, SwFrm *pSibling,
             pParent->pLower = pStart;
         else
             pParent->Lower()->pNext = pStart;
+
+        // #i27145#
+        if ( pParent->IsSctFrm() )
+        {
+            // We have no sibling because pParent is a section frame and
+            // has just been created to contain some content. The printing
+            // area of the frame behind pParent has to be invalidated, so
+            // that the correct distance between pParent and the next frame
+            // can be calculated.
+            pParent->InvalidateNextPrtArea();
+        }
     }
     SwFrm *pFloat = pStart;
     SwFrm *pLst;
@@ -551,7 +562,8 @@ BOOL SwFlowFrm::PasteTree( SwFrm *pStart, SwLayoutFrm *pParent, SwFrm *pSibling,
         if ( pFloat->GetNext() )
             pFloat = pFloat->GetNext();
         else
-        {   pLst = pFloat;
+        {
+            pLst = pFloat;
             pFloat = 0;
         }
     } while ( pFloat );
@@ -2004,8 +2016,10 @@ BOOL SwFlowFrm::MoveFwd( BOOL bMakePage, BOOL bPageBreak, BOOL bMoveAlways )
         pOldBoss = pOldBoss->FindFtnBossFrm( TRUE );
         SwPageFrm* pNewPage = pOldPage;
 
-        //Erst die Fussnoten verschieben!
+        // First, we move the footnotes.
         BOOL bFtnMoved = FALSE;
+        bool bOldUpperValid = rThis.GetUpper()->IsValid();
+
         if ( pNewBoss != pOldBoss )
         {
             pNewPage = pNewBoss->FindPageFrm();
@@ -2030,7 +2044,24 @@ BOOL SwFlowFrm::MoveFwd( BOOL bMakePage, BOOL bPageBreak, BOOL bMoveAlways )
         // MoveSubTree bzw. PasteTree ist auf so etwas nicht vorbereitet.
         if( pNewUpper != rThis.GetUpper() )
         {
+            // #i27145#
+            SwSectionFrm* pOldSct = 0;
+            if ( rThis.GetUpper()->IsSctFrm() && bOldUpperValid &&
+                !rThis.GetUpper()->IsValid() )
+                pOldSct = (SwSectionFrm*)rThis.GetUpper();
+
             MoveSubTree( pNewUpper, pNewUpper->Lower() );
+
+            if ( pOldSct )
+            {
+                // #i27145# Prevent loops by setting the new height at
+                // the section frame if footnotes have been moved.
+                // Otherwise the call of SwLayNotify::~SwLayNotify() for
+                // the (invalid) section frame will invalidate the first
+                // lower of its follow, because it grows due to the removed
+                // footnotes.
+                pOldSct->SimpleFormat();
+            }
 
             if ( bFtnMoved && !bSamePage )
             {
