@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.src,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 14:50:09 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 11:18:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -901,14 +901,14 @@ ErrorBox MSG_ERROR_RESCAN
     Message [ dutch ] = "De wijzigingen kunnen niet worden opgeslagen." ;
     Message [ spanish ] = "No se pudieron guardar las actualizaciones." ;
     Message [ english_us ] = "The update could not be saved." ;
-    Message[ chinese_simplified ] = "ζ— ζ³•ε­η›ζ›΄ζ–°ε†…ε®Ήγ€‚";
+    Message[ chinese_simplified ] = "ζ— ζ³•δΏε­ζ›΄ζ–°γ€‚";
     Message[ russian ] = "Νεβξημξζνξ ρξυπΰνθςό ξανξβλενθÿ.";
     Message[ polish ] = "Aktualizacje nie mog³y zostaζ zapisane.";
     Message[ japanese ] = "ζ›΄ζ–°γ—γε†…ε®Ήγ―δΏε­γ§γγΎγ›γ‚“γ§γ—γγ€‚";
     Message[ chinese_traditional ] = "η„΅ζ³•ε„²ε­ζ›΄ζ–°ε…§ε®Ήγ€‚";
     Message[ arabic ] = "ΚΪΠΡ ΝέΩ ΗαΚΝΟνΛΗΚ.";
     Message[ dutch ] = "De wijzigingen kunnen niet worden opgeslagen.";
-    Message[ chinese_simplified ] = "ζ— ζ³•ε­η›ζ›΄ζ–°ε†…ε®Ήγ€‚";
+    Message[ chinese_simplified ] = "ζ— ζ³•δΏε­ζ›΄ζ–°γ€‚";
     Message[ greek ] = "Δεν ήταν δυνατόν να αποθηκευτούν τα δεδομένα των ενημερώσεων.";
     Message[ korean ] = "μ—…λ°μ΄νΈλ¥Ό μ €μ¥ν•μ§€ λª»ν–μµλ‹λ‹¤.";
     Message[ turkish ] = "Gόncelleme kaydolamadύ.";
