@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accfrmobj.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mib $ $Date: 2002-08-07 12:41:28 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:28:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,6 +234,12 @@ inline SwRect SwFrmOrObj::GetBox() const
             static_cast< const SwPageFrm * >( pFrm )->IsEmptyPage() )
         {
             SwRect aBox( pFrm->Frm().Left(), pFrm->Frm().Top()-1, 1, 1 );
+            return aBox;
+        }
+        else if ( pFrm->IsTabFrm() )
+        {
+            SwRect aBox( pFrm->Frm() );
+            aBox.Intersection( pFrm->GetUpper()->Frm() );
             return aBox;
         }
         else
