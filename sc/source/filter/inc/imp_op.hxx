@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imp_op.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-27 12:51:32 $
+ *  last change: $Author: dr $ $Date: 2001-08-23 09:53:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,6 +178,7 @@ protected:
     UINT16                  nIxfeIndex;         // merkt sich Angabe im IXFE-Record
     UINT16                  nLastXF;            // letzter XF in Formula-Record
     UINT16                  nBdshtTab;          // Counter fuer Boundsheet
+    UINT16                  nFirstVisTab;       // index of first visible tab for WINDOW2
     ScFormulaCell*          pLastFormCell;      // fuer String-Records
 
     BOOL                    bTabTruncated;      // wenn Bereichsueberschreitung zum

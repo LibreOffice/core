@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impop.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: dr $ $Date: 2001-08-20 14:46:22 $
+ *  last change: $Author: dr $ $Date: 2001-08-23 09:54:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,6 +192,7 @@ ImportExcel::ImportExcel( SvStream& aStream, ScDocument* pDoc ):
     aColRowBuff.SetDefWidth( STD_COL_WIDTH );
     aColRowBuff.SetDefHeight( ( UINT16 ) STD_ROW_HEIGHT );
     nTab = nBdshtTab = 0;
+    nFirstVisTab = 0xFFFF;
     nIxfeIndex = 0;     // zur Sicherheit auf 0
     aExtNameBuff.SetBase( 1 );
 
@@ -1185,6 +1186,8 @@ void ImportExcel::Boundsheet( void )
 
     if( ( nGrbit & 0x0001 ) || ( nGrbit & 0x0002 ) )
         pD->SetVisible( nBdshtTab, FALSE );
+    else if( nFirstVisTab = 0xFFFF )
+        nFirstVisTab = nBdshtTab;       // first visible for WINDOW2 import
 
     pD->RenameTab( nBdshtTab, aName );
     nBdshtTab++;
@@ -2061,7 +2064,7 @@ void ImportExcel::Window2_5( void )
             rExtOpt.SetGridCol( pColorItem->GetValue() );
     }
 
-    if( !nTab )     // nur Tabelle 0 wird uebernommen!
+    if( nTab == nFirstVisTab )     // import from first visible sheet
     {
         ScViewOptions aOpts( pD->GetViewOptions() );
         aOpts.SetOption( VOPT_FORMULAS, TRUEBOOL( nOpt & EXC_WIN2_SHOWFORMULAS ) );
