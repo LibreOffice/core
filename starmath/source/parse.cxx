@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parse.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: tl $ $Date: 2002-08-01 09:06:06 $
+ *  last change: $Author: tl $ $Date: 2002-10-10 08:24:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -467,6 +467,14 @@ const sal_Int32 coContFlags =
     ( coStartFlags | KParseTokens::ASC_DOT ) & ~KParseTokens::IGNORE_LEADING_WS
     | KParseTokens::TWO_DOUBLE_QUOTES_BREAK_STRING;
 
+// First character for numbers, may be any numeric or dot
+const sal_Int32 coNumStartFlags =
+        KParseTokens::ASC_DIGIT |
+        KParseTokens::ASC_DOT |
+        KParseTokens::IGNORE_LEADING_WS;
+// Continuing characters for numbers, may be any numeric or dot.
+const sal_Int32 coNumContFlags =
+    ( coStartFlags | KParseTokens::ASC_DOT ) & ~KParseTokens::IGNORE_LEADING_WS;
 
 void SmParser::NextToken()
 {
@@ -476,6 +484,7 @@ void SmParser::NextToken()
     ParseResult aRes;
     xub_StrLen  nRealStart;
     BOOL        bCont;
+    BOOL        bNumStart;
     const CharClass& rCC = SM_MOD1()->GetSysLocale().GetCharClass();
     do
     {
@@ -485,9 +494,19 @@ void SmParser::NextToken()
                         rCC.getType( BufferString, BufferIndex ))
            ++BufferIndex;
 
+        sal_Int32 nStartFlags = coStartFlags;
+        sal_Int32 nContFlags  = coContFlags;
+        sal_Unicode cFirstChar = BufferString.GetChar( BufferIndex );
+        bNumStart = cFirstChar == '.' || ('0' <= cFirstChar && cFirstChar <= '9');
+        if (bNumStart)
+        {
+            nStartFlags = coNumStartFlags;
+            nContFlags  = coNumContFlags;
+        }
+
         aRes = rCC.parseAnyToken( BufferString, BufferIndex,
-                                            coStartFlags, aEmptyStr,
-                                            coContFlags, aEmptyStr );
+                                            nStartFlags, aEmptyStr,
+                                            nContFlags, aEmptyStr );
 
         nRealStart = BufferIndex + (xub_StrLen) aRes.LeadingWhiteSpace;
         BufferIndex = nRealStart;
@@ -533,7 +552,8 @@ void SmParser::NextToken()
         CurToken.nLevel    = 0;
         CurToken.aText.Erase();
     }
-    else if (aRes.TokenType & (KParseType::ASC_NUMBER | KParseType::UNI_NUMBER))
+    else if ((aRes.TokenType & (KParseType::ASC_NUMBER | KParseType::UNI_NUMBER))
+             || (bNumStart && (aRes.TokenType & KParseType::IDENTNAME)))
     {
         INT32 n = aRes.EndPos - nRealStart;
         DBG_ASSERT( n >= 0, "length < 0" );
@@ -949,11 +969,24 @@ void SmParser::NextToken()
                     break;
                 case '.':
                     {
-                        CurToken.eType     = TPOINT;
+                        // for compatibility with SO5.2
+                        // texts like .34 ...56 ... h ...78..90
+                        // will be treated as numbers
+                        CurToken.eType     = TNUMBER;
                         CurToken.cMathChar = '\0';
                         CurToken.nGroup    = 0;
-                        CurToken.nLevel    = 0;
-                        CurToken.aText.AssignAscii( "." );
+                        CurToken.nLevel    = 5;
+
+                        xub_StrLen nTxtStart = BufferIndex;
+                        sal_Unicode cChar;
+                        do
+                        {
+                            cChar = BufferString.GetChar( ++BufferIndex );
+                        }
+                        while ( cChar == '.' || ('0' <= cChar && cChar <= '9') );
+
+                        CurToken.aText = BufferString.Copy( nTxtStart, BufferIndex - nTxtStart );
+                        aRes.EndPos = BufferIndex;
                     }
                     break;
                 case '/':
