@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flyincnt.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ama $ $Date: 2001-12-13 12:59:48 $
+ *  last change: $Author: ama $ $Date: 2002-08-12 07:56:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,7 +127,11 @@ void SwFlyInCntFrm::SetRefPoint( const Point& rPoint, const Point& rRelAttr,
     const Point& rRelPos )
 {
     ASSERT( rPoint != aRef || rRelAttr != aRelPos, "SetRefPoint: no change" );
-    const SwFlyNotify aNotify( this );
+    SwFlyNotify *pNotify = NULL;
+    // No notify at a locked fly frame, if a fly frame is locked, there's
+    // already a SwFlyNotify object on the stack (MakeAll).
+    if( !IsLocked() )
+        pNotify = new SwFlyNotify( this );
     aRef = rPoint;
     aRelPos = rRelAttr;
 #ifdef VERTICAL_LAYOUT
@@ -149,10 +153,14 @@ void SwFlyInCntFrm::SetRefPoint( const Point& rPoint, const Point& rRelAttr,
     if ( Frm().HasArea() && GetShell()->ISA(SwCrsrShell) )
         GetShell()->InvalidateWindows( Frm() );
 */
-    InvalidatePage();
-    bValidPos = FALSE;
-    bInvalid  = TRUE;
-    Calc();
+    if( pNotify )
+    {
+        InvalidatePage();
+        bValidPos = FALSE;
+        bInvalid  = TRUE;
+        Calc();
+        delete pNotify;
+    }
 }
 
 /*************************************************************************
