@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resmgr.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2000-12-15 10:01:38 $
+ *  last change: $Author: nf $ $Date: 2001-04-05 09:01:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1183,6 +1183,9 @@ const char* ResMgr::GetLang( LanguageType& nType, USHORT nPrio )
             case LANGUAGE_ARABIC_BAHRAIN:
             case LANGUAGE_ARABIC_QATAR:
                 return "96";
+
+            case LANGUAGE_CATALAN:
+                return "37";
 
             default:
                 return "01";
