@@ -2,9 +2,9 @@
  *
  *  $RCSfile: portxt.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-28 12:52:14 $
+ *  last change: $Author: kz $ $Date: 2004-03-25 12:53:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,12 +97,19 @@
 #ifndef _PORRST_HXX
 #include <porrst.hxx>   // SwKernPortion
 #endif
+#ifndef _PORTAB_HXX
+#include <portab.hxx>       // pLastTab->
+#endif
 #ifndef _PORFLD_HXX
 #include <porfld.hxx>       // SwFldPortion
 #endif
 #ifndef _WRONG_HXX
 #include <wrong.hxx>
 #endif
+#ifndef _VIEWSH_HXX
+#include <viewsh.hxx>
+#endif
+
 
 #if OSL_DEBUG_LEVEL > 1
 const sal_Char *GetLangName( const MSHORT nLang );
@@ -409,7 +416,7 @@ sal_Bool SwTxtPortion::_Format( SwTxtFormatInfo &rInf )
         short nKern = rInf.GetFont()->CheckKerning();
         if( nKern > 0 && rInf.Width() < rInf.X() + Width() + nKern )
         {
-            nKern = rInf.Width() - rInf.X() - Width() - 1;
+            nKern = (short)(rInf.Width() - rInf.X() - Width() - 1);
             if( nKern < 0 )
                 nKern = 0;
         }
@@ -440,7 +447,15 @@ sal_Bool SwTxtPortion::_Format( SwTxtFormatInfo &rInf )
                 rInf.GetRoot()->SetEndHyph( sal_True );
         }
         // case C1
-        else if ( IsFtnPortion() && rInf.IsFakeLineStart() )
+        // - Footnote portions with fake line start (i.e., not at beginning of line)
+        //   should keep together with the text portion.
+        // - TabPortions not at beginning of line should keep together with the
+        //   text portion.
+        else if ( ( IsFtnPortion() && rInf.IsFakeLineStart() ) ||
+                  ( rInf.GetVsh()->IsTabCompat() && rInf.GetLast() &&
+                    rInf.GetLast()->InTabGrp() &&
+                    rInf.GetLineStart() + rInf.GetLast()->GetLen() < rInf.GetIdx() &&
+                    aGuess.BreakPos() == rInf.GetIdx() ) )
             BreakUnderflow( rInf );
         // case B2
         else if( rInf.GetIdx() > rInf.GetLineStart() ||
