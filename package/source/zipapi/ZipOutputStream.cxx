@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipOutputStream.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-23 14:15:51 $
+ *  last change: $Author: mtg $ $Date: 2000-11-28 10:50:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,7 @@ void SAL_CALL ZipOutputStream::putNextEntry( const package::ZipEntry& rEntry )
     switch (pNonConstEntry->nMethod)
     {
         case DEFLATED:
+
             if (pNonConstEntry->nSize == -1 || pNonConstEntry->nCompressedSize == -1 ||
                 pNonConstEntry->nCrc == -1)
                 pNonConstEntry->nFlag = 8;
@@ -135,7 +136,7 @@ void SAL_CALL ZipOutputStream::putNextEntry( const package::ZipEntry& rEntry )
     }
     pNonConstEntry->nOffset = aChucker.getPosition();
     writeLOC(rEntry);
-    aZipList.push_back(*pNonConstEntry);
+    aZipList.push_back(pNonConstEntry);
     pCurrentEntry=pNonConstEntry;
 }
 void SAL_CALL ZipOutputStream::close(  )
@@ -187,6 +188,7 @@ void SAL_CALL ZipOutputStream::closeEntry(  )
                 if (static_cast < sal_uInt32 > (pEntry->nCrc) != static_cast <sal_uInt32> (aCRC.getValue()))
                 {
                     // boom
+
                     VOS_DEBUG_ONLY("Invalid entry crc32");
                 }
                 break;
@@ -237,7 +239,7 @@ void SAL_CALL ZipOutputStream::finish(  )
     }
     sal_Int32 nOffset= aChucker.getPosition();
     for (int i =0, nEnd = aZipList.size(); i < nEnd; i++)
-        writeCEN(aZipList[i]);
+        writeCEN(*aZipList[i]);
     writeEND( nOffset, aChucker.getPosition() - nOffset);
     bFinished = sal_True;
 }
@@ -297,7 +299,14 @@ void ZipOutputStream::writeCEN( const package::ZipEntry &rEntry )
     aChucker << static_cast < sal_Int16> (0);
     aChucker << static_cast < sal_Int32> (0);
     aChucker << rEntry.nOffset;
-
+/*
+    sal_uInt64 nCurrent = aChucker.getPosition();
+    aChucker.seek(rEntry.nOffset+16);
+    aChucker << static_cast < sal_uInt32> (rEntry.nCrc);
+    aChucker << rEntry.nCompressedSize;
+    aChucker << rEntry.nSize;
+    aChucker.seek(nCurrent);
+*/
     const sal_Unicode *pChar = rEntry.sName.getStr();
     uno::Sequence < sal_Int8 > aSequence (nNameLength);
     for ( ; i < nNameLength; i++)
