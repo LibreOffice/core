@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textaction.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 13:26:35 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 08:31:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,9 @@
  *
  ************************************************************************/
 
+#include <canvas/debug.hxx>
+#include <canvas/verbosetrace.hxx>
+
 #include <textaction.hxx>
 #include <outdevstate.hxx>
 
@@ -66,10 +69,22 @@
 #include <rtl/logfile.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_RENDERING_PATHCAPTYPE_HPP__
+#include <com/sun/star/rendering/PathCapType.hpp>
+#endif
+#ifndef _COM_SUN_STAR_RENDERING_PATHJOINTYPE_HPP__
+#include <com/sun/star/rendering/PathJoinType.hpp>
+#endif
 #ifndef _COM_SUN_STAR_RENDERING_XCANVAS_HPP_
 #include <com/sun/star/rendering/XCanvas.hpp>
 #endif
+#ifndef _COM_SUN_STAR_RENDERING_XCANVASFONT_HPP_
+#include <com/sun/star/rendering/XCanvasFont.hpp>
+#endif
 
+#ifndef _BGFX_NUMERIC_FTOOLS_HXX
+#include <basegfx/numeric/ftools.hxx>
+#endif
 #ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #endif
@@ -89,6 +104,9 @@
 #ifndef _VCL_CANVASTOOLS_HXX
 #include <vcl/canvastools.hxx>
 #endif
+#ifndef _SV_VIRDEV_HXX
+#include <vcl/virdev.hxx>
+#endif
 
 #ifndef _BGFX_TOOLS_CANVASTOOLS_HXX
 #include <basegfx/tools/canvastools.hxx>
@@ -96,6 +114,10 @@
 #ifndef _CANVAS_CANVASTOOLS_HXX
 #include <canvas/canvastools.hxx>
 #endif
+
+#include <boost/scoped_array.hpp>
+#include <boost/bind.hpp>
+#include <boost/utility.hpp>
 
 #include <mtftools.hxx>
 
@@ -106,152 +128,1845 @@ namespace cppcanvas
 {
     namespace internal
     {
-        void TextAction::init( const ::Point&                                                   rStartPoint,
-                               const OutDevState&                                               rState,
-                               const CanvasSharedPtr&                                           rCanvas,
-                               const ::comphelper::OptionalValue< ::basegfx::B2DHomMatrix >&    rTextTransform       )
+        namespace
         {
-            // ensure that mxFont is valid. It is possible that text actions
-            // are generated without previously setting a font. Then, just
-            // take a default font
-            if( !mxFont.is() )
+            void init( rendering::RenderState&                  o_rRenderState,
+                       const ::basegfx::B2DPoint&               rStartPoint,
+                       const OutDevState&                       rState,
+                       const CanvasSharedPtr&                   rCanvas      )
             {
-                // Use completely default FontRequest
-                const rendering::FontRequest aFontRequest;
+                tools::initRenderState(o_rRenderState,rState);
 
-                geometry::Matrix2D aFontMatrix;
-                ::canvas::tools::setIdentityMatrix2D( aFontMatrix );
+                // #i36950# Offset clip back to origin (as it's also moved
+                // by rStartPoint!)
+                tools::modifyClip( o_rRenderState, rState, rCanvas, rStartPoint, NULL );
 
-                mxFont =
-                    mpCanvas->getUNOCanvas()->createFont( aFontRequest,
-                                                          uno::Sequence< beans::PropertyValue >(),
-                                                          aFontMatrix );
+                ::basegfx::B2DHomMatrix aLocalTransformation;
+
+                aLocalTransformation.rotate( rState.fontRotation );
+                aLocalTransformation.translate( rStartPoint.getX(),
+                                                rStartPoint.getY() );
+                ::canvas::tools::appendToRenderState( o_rRenderState,
+                                                      aLocalTransformation );
+
+                o_rRenderState.DeviceColor = rState.textColor;
             }
 
-            tools::initRenderState(maState,rState);
-
-            // #i36950# Offset clip back to origin (as it's also moved
-            // by rStartPoint!)
-            ::Point aEmptyPoint;
-            if( rStartPoint != aEmptyPoint )
+            void init( rendering::RenderState&                  o_rRenderState,
+                       const ::basegfx::B2DPoint&               rStartPoint,
+                       const OutDevState&                       rState,
+                       const CanvasSharedPtr&                   rCanvas,
+                       const ::basegfx::B2DHomMatrix&           rTextTransform  )
             {
-                if( rState.clip.count() )
-                {
-                    ::basegfx::B2DPolyPolygon aLocalClip( rState.clip );
-                    ::basegfx::B2DHomMatrix   aTranslate;
+                init( o_rRenderState, rStartPoint, rState, rCanvas );
 
-                    aTranslate.translate( -rStartPoint.X(),
-                                          -rStartPoint.Y() );
-                    aLocalClip.transform( aTranslate );
+                // TODO(F2): Also inversely-transform clip with
+                // rTextTransform (which is actually rather hard, as the
+                // text transform is _prepended_ to the render state)!
 
-                    maState.Clip = ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon(
-                        rCanvas->getUNOCanvas()->getDevice(),
-                        aLocalClip );
-                }
-                else if( !rState.clipRect.IsEmpty() )
-                {
-                    ::Rectangle aLocalClipRect( rState.clipRect );
-
-                    aLocalClipRect.Move( -rStartPoint.X(),
-                                         -rStartPoint.Y() );
-
-                    maState.Clip = ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon(
-                        rCanvas->getUNOCanvas()->getDevice(),
-                        ::basegfx::B2DPolyPolygon(
-                            ::basegfx::tools::createPolygonFromRect(
-                                ::basegfx::B2DRectangle( aLocalClipRect.Left(),
-                                                         aLocalClipRect.Top(),
-                                                         aLocalClipRect.Right(),
-                                                         aLocalClipRect.Bottom() ) ) ) );
-                }
-            }
-
-            // TODO(F3): Also inversely-transform clip with
-            // rTextTransform!
-            if( rTextTransform.isValid() )
-            {
                 // prepend extra font transform to render state
                 // (prepend it, because it's interpreted in the unit
                 // rect coordinate space)
-                ::canvas::tools::prependToRenderState( maState,
-                                                       rTextTransform.getValue() );
+                ::canvas::tools::prependToRenderState( o_rRenderState,
+                                                       rTextTransform );
             }
 
-            ::basegfx::B2DHomMatrix aLocalTransformation( rState.fontTransform );
-
-            aLocalTransformation.translate( rStartPoint.X(),
-                                            rStartPoint.Y() );
-            ::canvas::tools::appendToRenderState( maState,
-                                                  aLocalTransformation );
-
-            // append text transform, if given
-
-            maState.DeviceColor = rState.textColor;
-
-            if( maOffsets.getLength() )
+            void init( rendering::RenderState&                      o_rRenderState,
+                       uno::Reference< rendering::XCanvasFont >&    o_rFont,
+                       const ::basegfx::B2DPoint&                   rStartPoint,
+                       const OutDevState&                           rState,
+                       const CanvasSharedPtr&                       rCanvas      )
             {
-                mxTextLayout = mxFont->createTextLayout( maStringContext, rState.textDirection, 0 );
+                // ensure that o_rFont is valid. It is possible that
+                // text actions are generated without previously
+                // setting a font. Then, just take a default font
+                if( !o_rFont.is() )
+                {
+                    // Use completely default FontRequest
+                    const rendering::FontRequest aFontRequest;
 
-                if( mxTextLayout.is() )
-                    mxTextLayout->applyLogicalAdvancements( maOffsets );
+                    geometry::Matrix2D aFontMatrix;
+                    ::canvas::tools::setIdentityMatrix2D( aFontMatrix );
+
+                    o_rFont = rCanvas->getUNOCanvas()->createFont(
+                        aFontRequest,
+                        uno::Sequence< beans::PropertyValue >(),
+                        aFontMatrix );
+                }
+
+                init( o_rRenderState,
+                      rStartPoint,
+                      rState,
+                      rCanvas );
             }
-        }
 
-        TextAction::TextAction( const ::Point&                                                  rStartPoint,
-                                const ::rtl::OUString&                                          rText,
-                                sal_Int32                                                       nStartPos,
-                                sal_Int32                                                       nLen,
-                                const CanvasSharedPtr&                                          rCanvas,
-                                const OutDevState&                                              rState,
-                                const ::comphelper::OptionalValue< ::basegfx::B2DHomMatrix >&   rTextTransform  ) :
-            mxFont( rState.xFont ),
-            maStringContext( rText, nStartPos, nLen ),
-            maOffsets(),
-            mpCanvas( rCanvas ),
-            maState(),
-            maTextDirection( rState.textDirection )
-        {
-            init( rStartPoint, rState, rCanvas, rTextTransform );
-        }
+            void init( rendering::RenderState&                      o_rRenderState,
+                       uno::Reference< rendering::XCanvasFont >&    o_rFont,
+                       const ::basegfx::B2DPoint&                   rStartPoint,
+                       const OutDevState&                           rState,
+                       const CanvasSharedPtr&                       rCanvas,
+                       const ::basegfx::B2DHomMatrix&               rTextTransform  )
+            {
+                init( o_rRenderState, o_rFont, rStartPoint, rState, rCanvas );
 
-        TextAction::TextAction( const ::Point&                                                  rStartPoint,
-                                const ::rtl::OUString&                                          rText,
-                                sal_Int32                                                       nStartPos,
-                                sal_Int32                                                       nLen,
-                                ::com::sun::star::uno::Sequence< double >                       aOffsets,
-                                const CanvasSharedPtr&                                          rCanvas,
-                                const OutDevState&                                              rState,
-                                const ::comphelper::OptionalValue< ::basegfx::B2DHomMatrix >&   rTextTransform  ) :
-            mxFont( rState.xFont ),
-            maStringContext( rText, nStartPos, nLen ),
-            maOffsets( aOffsets ),
-            mpCanvas( rCanvas ),
-            maState(),
-            maTextDirection( rState.textDirection )
-        {
-            init( rStartPoint, rState, rCanvas, rTextTransform );
-        }
+                // TODO(F2): Also inversely-transform clip with
+                // rTextTransform (which is actually rather hard, as the
+                // text transform is _prepended_ to the render state)!
 
-        TextAction::~TextAction()
-        {
-        }
+                // prepend extra font transform to render state
+                // (prepend it, because it's interpreted in the unit
+                // rect coordinate space)
+                ::canvas::tools::prependToRenderState( o_rRenderState,
+                                                       rTextTransform );
+            }
 
-        bool TextAction::render( const ::basegfx::B2DHomMatrix& rTransformation ) const
-        {
-            RTL_LOGFILE_CONTEXT( aLog, "::cppcanvas::internal::TextAction::render()" );
-            RTL_LOGFILE_CONTEXT_TRACE1( aLog, "::cppcanvas::internal::TextAction: 0x%X", this );
+            uno::Reference< rendering::XPolyPolygon2D > textLinesFromLogicalOffsets( const CanvasSharedPtr&         rCanvas,
+                                                                                     const uno::Sequence< double >& rOffsets,
+                                                                                     const tools::TextLineInfo&     rTextLineInfo )
+            {
+                return ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon(
+                    rCanvas->getUNOCanvas()->getDevice(),
+                    tools::createTextLinesPolyPolygon(
+                        0.0,
+                        // extract character cell furthest to the right
+                        *(::std::max_element(
+                              rOffsets.getConstArray(),
+                              rOffsets.getConstArray() + rOffsets.getLength() )),
+                        rTextLineInfo ) );
+            }
 
-            rendering::RenderState aLocalState( maState );
-            ::canvas::tools::prependToRenderState(aLocalState, rTransformation);
+            uno::Sequence< double > setupDXArray( const sal_Int32*  pCharWidths,
+                                                  sal_Int32         nLen,
+                                                  VirtualDevice&    rVDev )
+            {
+                // convert character widths from logical units
+                uno::Sequence< double > aCharWidthSeq( nLen );
+                double*                 pOutputWidths( aCharWidthSeq.getArray() );
+                for( int i = 0; i < nLen; ++i )
+                {
+                    // TODO(F2): use correct scale direction
+                    const Size aSize( ::basegfx::fround( *pCharWidths++ + .5 ), 0 );
+                    *pOutputWidths++ = rVDev.LogicToPixel( aSize ).Width();
+                }
 
-            if( mxTextLayout.is() )
-                mpCanvas->getUNOCanvas()->drawTextLayout( mxTextLayout, mpCanvas->getViewState(), aLocalState );
-            else
+                return aCharWidthSeq;
+            }
+
+            uno::Sequence< double > setupDXArray( const ::String&   rText,
+                                                  sal_Int32         nStartPos,
+                                                  sal_Int32         nLen,
+                                                  VirtualDevice&    rVDev )
+            {
+                // no external DX array given, create one from given
+                // string
+                ::boost::scoped_array< sal_Int32 > pCharWidths( new sal_Int32[nLen] );
+
+                rVDev.GetTextArray( rText, pCharWidths.get(),
+                                    static_cast<USHORT>(nStartPos),
+                                    static_cast<USHORT>(nLen) );
+
+                return setupDXArray( pCharWidths.get(), nLen, rVDev );
+            }
+
+            ::basegfx::B2DPoint adaptStartPoint( const ::basegfx::B2DPoint&     rStartPoint,
+                                                 const OutDevState&             rState,
+                                                 const uno::Sequence< double >& rOffsets )
+            {
+                ::basegfx::B2DPoint aLocalPoint( rStartPoint );
+
+                if( rState.textAlignment )
+                {
+                    // text origin is right, not left. Modify start point
+                    // accordingly, because XCanvas::drawTextLayout()
+                    // always aligns left!
+
+                    const double nOffset( rOffsets[ rOffsets.getLength()-1 ] );
+
+                    // correct start point for rotated text: rotate around
+                    // former start point
+                    aLocalPoint.setX( aLocalPoint.getX() + cos( rState.fontRotation )*nOffset );
+                    aLocalPoint.setY( aLocalPoint.getY() + sin( rState.fontRotation )*nOffset );
+                }
+
+                return aLocalPoint;
+            }
+
+            /** Perform common setup for array text actions
+
+                This method creates the XTextLayout object and
+                initializes it, e.g. with the logical advancements.
+             */
+            void initArrayAction( rendering::RenderState&                   o_rRenderState,
+                                  uno::Reference< rendering::XTextLayout >& o_rTextLayout,
+                                  const ::basegfx::B2DPoint&                rStartPoint,
+                                  const ::rtl::OUString&                    rText,
+                                  sal_Int32                                 nStartPos,
+                                  sal_Int32                                 nLen,
+                                  const uno::Sequence< double >&            rOffsets,
+                                  const CanvasSharedPtr&                    rCanvas,
+                                  const OutDevState&                        rState,
+                                  const ::basegfx::B2DHomMatrix*            pTextTransform )
+            {
+                ENSURE_AND_THROW( rOffsets.getLength(),
+                                  "::cppcanvas::internal::initArrayAction(): zero-length DX array" );
+
+                const ::basegfx::B2DPoint aLocalStartPoint(
+                    adaptStartPoint( rStartPoint, rState, rOffsets ) );
+
+                uno::Reference< rendering::XCanvasFont > xFont( rState.xFont );
+
+                if( pTextTransform )
+                    init( o_rRenderState, xFont, aLocalStartPoint, rState, rCanvas, *pTextTransform );
+                else
+                    init( o_rRenderState, xFont, aLocalStartPoint, rState, rCanvas );
+
+                o_rTextLayout = xFont->createTextLayout(
+                    rendering::StringContext( rText, nStartPos, nLen ),
+                    rState.textDirection,
+                    0 );
+
+                ENSURE_AND_THROW( o_rTextLayout.is(),
+                                  "::cppcanvas::internal::initArrayAction(): Invalid font" );
+
+                o_rTextLayout->applyLogicalAdvancements( rOffsets );
+            }
+
+            sal_Int32 getLineWidth( ::VirtualDevice& rVDev,
+                                    const rendering::StringContext& rStringContext )
+            {
+                // TODO(F2): use correct scale direction
+                const ::Size aSize( rVDev.GetTextWidth( rStringContext.Text,
+                                                        static_cast<USHORT>(rStringContext.StartPosition),
+                                                        static_cast<USHORT>(rStringContext.Length) ),
+                                    0 );
+
+                return rVDev.LogicToPixel( aSize ).Width();
+            }
+
+            uno::Sequence< double >
+                calcSubsetOffsets( rendering::RenderState&                          io_rRenderState,
+                                   double&                                          o_rMinPos,
+                                   double&                                          o_rMaxPos,
+                                   const uno::Reference< rendering::XTextLayout >&  rOrigTextLayout,
+                                   const ::cppcanvas::internal::Action::Subset&     rSubset )
+            {
+                ENSURE_AND_THROW( rSubset.mnSubsetEnd > rSubset.mnSubsetBegin,
+                                  "::cppcanvas::internal::calcSubsetOffsets(): invalid subset range range" );
+
+                uno::Sequence< double > aOrigOffsets( rOrigTextLayout->queryLogicalAdvancements() );
+                const double*           pOffsets( aOrigOffsets.getConstArray() );
+
+                ENSURE_AND_THROW( aOrigOffsets.getLength() >= rSubset.mnSubsetEnd,
+                                  "::cppcanvas::internal::calcSubsetOffsets(): invalid subset range range" );
+
+                // TODO(F3): It currently seems that for RTL text, the
+                // DX offsets are nevertheless increasing in logical
+                // text order (I'd expect they are decreasing,
+                // mimicking the fact that the text is output
+                // right-to-left). This breaks text effects for ALL
+                // RTL languages.
+
+                // determine leftmost position in given subset range -
+                // as the DX array contains the output positions
+                // starting with the second character (the first is
+                // assumed to have output position 0), correct begin
+                // iterator.
+                const double nMinPos( rSubset.mnSubsetBegin <= 0 ? 0 :
+                                      *(::std::min_element( pOffsets+rSubset.mnSubsetBegin-1,
+                                                            pOffsets+rSubset.mnSubsetEnd )) );
+
+                // determine rightmost position in given subset range
+                // - as the DX array contains the output positions
+                // starting with the second character (the first is
+                // assumed to have output position 0), correct begin
+                // iterator.
+                const double nMaxPos(
+                    *(::std::max_element( pOffsets + (rSubset.mnSubsetBegin <= 0 ?
+                                                      0 : rSubset.mnSubsetBegin-1),
+                                          pOffsets + rSubset.mnSubsetEnd )) );
+
+
+                // adapt render state, to move text output to given offset
+                // -------------------------------------------------------
+
+                // TODO(F1): Strictly speaking, we also have to adapt
+                // the clip here, which normally should _not_ move
+                // with the output offset. Neglected for now, as it
+                // does not matter for drawing layer output
+
+                if( rSubset.mnSubsetBegin > 0 )
+                {
+                    ::basegfx::B2DHomMatrix aTranslation;
+                    if( rOrigTextLayout->getFont()->getFontRequest().FontDescription.IsVertical )
+                    {
+                        // vertical text -> offset in y direction
+                        aTranslation.translate( 0.0, nMinPos );
+                    }
+                    else
+                    {
+                        // horizontal text -> offset in x direction
+                        aTranslation.translate( nMinPos, 0.0 );
+                    }
+
+                    ::canvas::tools::appendToRenderState( io_rRenderState,
+                                                          aTranslation );
+                }
+
+
+                // reduce DX array to given substring
+                // ----------------------------------
+
+                const sal_Int32         nNewElements( rSubset.mnSubsetEnd - rSubset.mnSubsetBegin );
+                uno::Sequence< double > aAdaptedOffsets( nNewElements );
+                double*                 pAdaptedOffsets( aAdaptedOffsets.getArray() );
+
+                // move to new output position (subtract nMinPos,
+                // which is the new '0' position), copy only the range
+                // as given by rSubset.
+                ::std::transform( pOffsets + rSubset.mnSubsetBegin,
+                                  pOffsets + rSubset.mnSubsetEnd,
+                                  pAdaptedOffsets,
+                                  ::boost::bind( ::std::minus<double>(),
+                                                 _1,
+                                                 nMinPos ) );
+
+                o_rMinPos = nMinPos;
+                o_rMaxPos = nMaxPos;
+
+                return aAdaptedOffsets;
+            }
+
+            uno::Reference< rendering::XTextLayout >
+                createSubsetLayout( const rendering::StringContext&                 rOrigContext,
+                                    const ::cppcanvas::internal::Action::Subset&    rSubset,
+                                    const uno::Reference< rendering::XTextLayout >& rOrigTextLayout )
+            {
+                // create temporary new text layout with subset string
+                // ---------------------------------------------------
+
+                const sal_Int32 nNewStartPos( rOrigContext.StartPosition + ::std::min(
+                                                  rSubset.mnSubsetBegin, rOrigContext.Length-1 ) );
+                const sal_Int32 nNewLength( ::std::max(
+                                                ::std::min(
+                                                    rSubset.mnSubsetEnd - rSubset.mnSubsetBegin,
+                                                    rOrigContext.Length ),
+                                                0L ) );
+
+                const rendering::StringContext aContext( rOrigContext.Text,
+                                                         nNewStartPos,
+                                                         nNewLength );
+
+                uno::Reference< rendering::XTextLayout > xTextLayout(
+                    rOrigTextLayout->getFont()->createTextLayout( aContext,
+                                                                  rOrigTextLayout->getMainTextDirection(),
+                                                                  0 ),
+                    uno::UNO_QUERY_THROW );
+
+                return xTextLayout;
+            }
+
+            /** Interface for renderEffectText functor below.
+
+                This is interface is used from the renderEffectText()
+                method below, to call the client implementation.
+             */
+            class TextRenderer
+            {
+            public:
+                virtual ~TextRenderer() {}
+
+                /// Render text with given RenderState
+                virtual bool operator()( const rendering::RenderState& rRenderState ) const = 0;
+            };
+
+            /** Render effect text.
+
+                @param rRenderer
+                Functor object, will be called to render the actual
+                part of the text effect (the text itself and the means
+                to render it are unknown to this method)
+             */
+            bool renderEffectText( const TextRenderer&                          rRenderer,
+                                   const rendering::RenderState&                rRenderState,
+                                   const rendering::ViewState&                  rViewState,
+                                   const ::basegfx::B2DHomMatrix&               rTransformation,
+                                   const uno::Reference< rendering::XCanvas >&  xCanvas,
+                                   const ::Color&                               rShadowColor,
+                                   const ::Size&                                rShadowOffset,
+                                   const ::Color&                               rReliefColor,
+                                   const ::Size&                                rReliefOffset )
+            {
+                rendering::RenderState aLocalState( rRenderState );
+                ::canvas::tools::prependToRenderState(aLocalState, rTransformation);
+
+                ::Color aEmptyColor( COL_AUTO );
+
+                // draw shadow text, if enabled
+                if( rShadowColor != aEmptyColor )
+                {
+                    rendering::RenderState aShadowState( aLocalState );
+                    ::basegfx::B2DHomMatrix aTranslate;
+
+                    aTranslate.translate( rShadowOffset.Width(),
+                                          rShadowOffset.Height() );
+
+                    ::canvas::tools::appendToRenderState(aShadowState, aTranslate);
+
+                    aShadowState.DeviceColor =
+                        ::vcl::unotools::colorToDoubleSequence( xCanvas->getDevice(),
+                                                                rShadowColor );
+
+                    rRenderer( aShadowState );
+                }
+
+                // draw normal text
+                rRenderer( aLocalState );
+
+                // draw relief text, if enabled
+                if( rReliefColor != aEmptyColor )
+                {
+                    rendering::RenderState aReliefState( aLocalState );
+                    ::basegfx::B2DHomMatrix aTranslate;
+
+                    aTranslate.translate( rReliefOffset.Width(),
+                                          rReliefOffset.Height() );
+
+                    ::canvas::tools::appendToRenderState(aReliefState, aTranslate);
+
+                    aReliefState.DeviceColor =
+                        ::vcl::unotools::colorToDoubleSequence( xCanvas->getDevice(),
+                                                                rReliefColor );
+
+                    rRenderer( aReliefState );
+                }
+
+                return true;
+            }
+
+
+            // -------------------------------------------------------------------------
+
+            class TextAction : public Action, private ::boost::noncopyable
+            {
+            public:
+                TextAction( const ::Point&              rStartPoint,
+                            const ::rtl::OUString&      rString,
+                            sal_Int32                   nStartPos,
+                            sal_Int32                   nLen,
+                            VirtualDevice&              rVDev,
+                            const CanvasSharedPtr&      rCanvas,
+                            const OutDevState&          rState );
+
+                TextAction( const ::Point&                  rStartPoint,
+                            const ::rtl::OUString&          rString,
+                            sal_Int32                       nStartPos,
+                            sal_Int32                       nLen,
+                            VirtualDevice&                  rVDev,
+                            const CanvasSharedPtr&          rCanvas,
+                            const OutDevState&              rState,
+                            const ::basegfx::B2DHomMatrix&  rTextTransform );
+
+                virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation ) const;
+                virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation,
+                                     const Subset&                  rSubset ) const;
+
+                virtual sal_Int32 getActionCount() const;
+
+            private:
+                // TODO(P2): This is potentially a real mass object
+                // (every character might be a separate TextAction),
+                // thus, make it as lightweight as possible. For
+                // example, share common RenderState among several
+                // TextActions, maybe using maOffsets for the
+                // translation.
+
+                uno::Reference< rendering::XCanvasFont >    mxFont;
+                const rendering::StringContext              maStringContext;
+                const CanvasSharedPtr                       mpCanvas;
+                rendering::RenderState                      maState;
+                const sal_Int8                              maTextDirection;
+            };
+
+            TextAction::TextAction( const ::Point&              rStartPoint,
+                                    const ::rtl::OUString&      rString,
+                                    sal_Int32                   nStartPos,
+                                    sal_Int32                   nLen,
+                                    VirtualDevice&              rVDev,
+                                    const CanvasSharedPtr&      rCanvas,
+                                    const OutDevState&          rState  ) :
+                mxFont( rState.xFont ),
+                maStringContext( rString, nStartPos, nLen ),
+                mpCanvas( rCanvas ),
+                maState(),
+                maTextDirection( rState.textDirection )
+            {
+                init( maState, mxFont,
+                      ::vcl::unotools::b2DPointFromPoint( rStartPoint ),
+                      rState, rCanvas );
+
+                ENSURE_AND_THROW( mxFont.is(),
+                                  "::cppcanvas::internal::TextAction(): Invalid font" );
+            }
+
+            TextAction::TextAction( const ::Point&                  rStartPoint,
+                                    const ::rtl::OUString&          rString,
+                                    sal_Int32                       nStartPos,
+                                    sal_Int32                       nLen,
+                                    VirtualDevice&                  rVDev,
+                                    const CanvasSharedPtr&          rCanvas,
+                                    const OutDevState&              rState,
+                                    const ::basegfx::B2DHomMatrix&  rTextTransform ) :
+                mxFont( rState.xFont ),
+                maStringContext( rString, nStartPos, nLen ),
+                mpCanvas( rCanvas ),
+                maState(),
+                maTextDirection( rState.textDirection )
+            {
+                init( maState, mxFont,
+                      ::vcl::unotools::b2DPointFromPoint( rStartPoint ),
+                      rState, rCanvas, rTextTransform );
+
+                ENSURE_AND_THROW( mxFont.is(),
+                                  "::cppcanvas::internal::TextAction(): Invalid font" );
+            }
+
+            bool TextAction::render( const ::basegfx::B2DHomMatrix& rTransformation ) const
+            {
+                RTL_LOGFILE_CONTEXT( aLog, "::cppcanvas::internal::TextAction::render()" );
+                RTL_LOGFILE_CONTEXT_TRACE1( aLog, "::cppcanvas::internal::TextAction: 0x%X", this );
+
+                rendering::RenderState aLocalState( maState );
+                ::canvas::tools::prependToRenderState(aLocalState, rTransformation);
+
                 mpCanvas->getUNOCanvas()->drawText( maStringContext, mxFont,
                                                     mpCanvas->getViewState(), aLocalState, maTextDirection );
 
-            return true;
+                return true;
+            }
+
+            bool TextAction::render( const ::basegfx::B2DHomMatrix& rTransformation,
+                                     const Subset&                  rSubset ) const
+            {
+                OSL_ENSURE( false,
+                            "TextAction::render(): Subset not supported by this object" );
+
+                // TODO(P1): Retrieve necessary font metric info for
+                // TextAction from XCanvas. Currently, the
+                // TextActionFactory does not generate this object for
+                // _subsettable_ text
+                return render( rTransformation );
+            }
+
+            sal_Int32 TextAction::getActionCount() const
+            {
+                // TODO(P1): Retrieve necessary font metric info for
+                // TextAction from XCanvas. Currently, the
+                // TextActionFactory does not generate this object for
+                // _subsettable_ text
+                return 1;
+            }
+
+
+            // -------------------------------------------------------------------------
+
+            class EffectTextAction :
+                public Action,
+                public TextRenderer,
+                private ::boost::noncopyable
+            {
+            public:
+                EffectTextAction( const ::Point&            rStartPoint,
+                                  const ::Size&             rReliefOffset,
+                                  const ::Color&            rReliefColor,
+                                  const ::Size&             rShadowOffset,
+                                  const ::Color&            rShadowColor,
+                                  const ::rtl::OUString&    rText,
+                                  sal_Int32                 nStartPos,
+                                  sal_Int32                 nLen,
+                                  VirtualDevice&            rVDev,
+                                  const CanvasSharedPtr&    rCanvas,
+                                  const OutDevState&        rState );
+
+                EffectTextAction( const ::Point&                    rStartPoint,
+                                  const ::Size&                     rReliefOffset,
+                                  const ::Color&                    rReliefColor,
+                                  const ::Size&                     rShadowOffset,
+                                  const ::Color&                    rShadowColor,
+                                  const ::rtl::OUString&            rText,
+                                  sal_Int32                         nStartPos,
+                                  sal_Int32                         nLen,
+                                  VirtualDevice&                    rVDev,
+                                  const CanvasSharedPtr&            rCanvas,
+                                  const OutDevState&                rState,
+                                  const ::basegfx::B2DHomMatrix&    rTextTransform );
+
+                virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation ) const;
+                virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation,
+                                     const Subset&                  rSubset ) const;
+
+                virtual sal_Int32 getActionCount() const;
+
+            private:
+                /// Interface TextRenderer
+                virtual bool operator()( const rendering::RenderState& rRenderState ) const;
+
+                // TODO(P2): This is potentially a real mass object
+                // (every character might be a separate TextAction),
+                // thus, make it as lightweight as possible. For
+                // example, share common RenderState among several
+                // TextActions, maybe using maOffsets for the
+                // translation.
+
+                uno::Reference< rendering::XCanvasFont >    mxFont;
+                const rendering::StringContext              maStringContext;
+                const CanvasSharedPtr                       mpCanvas;
+                rendering::RenderState                      maState;
+                const tools::TextLineInfo                   maTextLineInfo;
+                const sal_Int32                             mnLineWidth;
+                uno::Reference< rendering::XPolyPolygon2D > mxTextLines;
+                const ::Size                                maReliefOffset;
+                const ::Color                               maReliefColor;
+                const ::Size                                maShadowOffset;
+                const ::Color                               maShadowColor;
+                const sal_Int8                              maTextDirection;
+            };
+
+            EffectTextAction::EffectTextAction( const ::Point&          rStartPoint,
+                                                const ::Size&           rReliefOffset,
+                                                const ::Color&          rReliefColor,
+                                                const ::Size&           rShadowOffset,
+                                                const ::Color&          rShadowColor,
+                                                const ::rtl::OUString&  rText,
+                                                sal_Int32               nStartPos,
+                                                sal_Int32               nLen,
+                                                VirtualDevice&          rVDev,
+                                                const CanvasSharedPtr&  rCanvas,
+                                                const OutDevState&      rState ) :
+                mxFont( rState.xFont ),
+                maStringContext( rText, nStartPos, nLen ),
+                mpCanvas( rCanvas ),
+                maState(),
+                maTextLineInfo( tools::createTextLineInfo( rVDev, rState ) ),
+                mnLineWidth( getLineWidth( rVDev, maStringContext ) ),
+                mxTextLines( ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon(
+                                 rCanvas->getUNOCanvas()->getDevice(),
+                                 tools::createTextLinesPolyPolygon( 0.0, mnLineWidth,
+                                                                    maTextLineInfo ) ) ),
+                maReliefOffset( rReliefOffset ),
+                maReliefColor( rReliefColor ),
+                maShadowOffset( rShadowOffset ),
+                maShadowColor( rShadowColor ),
+                maTextDirection( rState.textDirection )
+            {
+                init( maState, mxFont,
+                      ::vcl::unotools::b2DPointFromPoint( rStartPoint ),
+                      rState, rCanvas );
+
+                ENSURE_AND_THROW( mxFont.is() && mxTextLines.is(),
+                                  "::cppcanvas::internal::EffectTextAction(): Invalid font or lines" );
+            }
+
+            EffectTextAction::EffectTextAction( const ::Point&                  rStartPoint,
+                                                const ::Size&                   rReliefOffset,
+                                                const ::Color&                  rReliefColor,
+                                                const ::Size&                   rShadowOffset,
+                                                const ::Color&                  rShadowColor,
+                                                const ::rtl::OUString&          rText,
+                                                sal_Int32                       nStartPos,
+                                                sal_Int32                       nLen,
+                                                VirtualDevice&                  rVDev,
+                                                const CanvasSharedPtr&          rCanvas,
+                                                const OutDevState&              rState,
+                                                const ::basegfx::B2DHomMatrix&  rTextTransform ) :
+                mxFont( rState.xFont ),
+                maStringContext( rText, nStartPos, nLen ),
+                mpCanvas( rCanvas ),
+                maState(),
+                maTextLineInfo( tools::createTextLineInfo( rVDev, rState ) ),
+                mnLineWidth( getLineWidth( rVDev, maStringContext ) ),
+                mxTextLines( ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon(
+                                 rCanvas->getUNOCanvas()->getDevice(),
+                                 tools::createTextLinesPolyPolygon( 0.0, mnLineWidth,
+                                                                    maTextLineInfo ) ) ),
+                maReliefOffset( rReliefOffset ),
+                maReliefColor( rReliefColor ),
+                maShadowOffset( rShadowOffset ),
+                maShadowColor( rShadowColor ),
+                maTextDirection( rState.textDirection )
+            {
+                init( maState, mxFont,
+                      ::vcl::unotools::b2DPointFromPoint( rStartPoint ),
+                      rState, rCanvas, rTextTransform );
+
+                ENSURE_AND_THROW( mxFont.is() && mxTextLines.is(),
+                                  "::cppcanvas::internal::EffectTextAction(): Invalid font or lines" );
+            }
+
+            bool EffectTextAction::operator()( const rendering::RenderState& rRenderState ) const
+            {
+                const rendering::ViewState& rViewState( mpCanvas->getViewState() );
+                const uno::Reference< rendering::XCanvas >& rCanvas( mpCanvas->getUNOCanvas() );
+
+                rCanvas->fillPolyPolygon( mxTextLines,
+                                          rViewState,
+                                          rRenderState );
+
+                rCanvas->drawText( maStringContext, mxFont,
+                                   rViewState,
+                                   rRenderState,
+                                   maTextDirection );
+
+                return true;
+            }
+
+            bool EffectTextAction::render( const ::basegfx::B2DHomMatrix& rTransformation ) const
+            {
+                RTL_LOGFILE_CONTEXT( aLog, "::cppcanvas::internal::EffectTextAction::render()" );
+                RTL_LOGFILE_CONTEXT_TRACE1( aLog, "::cppcanvas::internal::EffectTextAction: 0x%X", this );
+
+                return renderEffectText( *this,
+                                         maState,
+                                         mpCanvas->getViewState(),
+                                         rTransformation,
+                                         mpCanvas->getUNOCanvas(),
+                                         maShadowColor,
+                                         maShadowOffset,
+                                         maReliefColor,
+                                         maReliefOffset );
+            }
+
+            bool EffectTextAction::render( const ::basegfx::B2DHomMatrix&   rTransformation,
+                                           const Subset&                    rSubset ) const
+            {
+                OSL_ENSURE( false,
+                            "EffectTextAction::render(): Subset not supported by this object" );
+
+                // TODO(P1): Retrieve necessary font metric info for
+                // TextAction from XCanvas. Currently, the
+                // TextActionFactory does not generate this object for
+                // subsettable text
+                return render( rTransformation );
+            }
+
+            sal_Int32 EffectTextAction::getActionCount() const
+            {
+                // TODO(P1): Retrieve necessary font metric info for
+                // TextAction from XCanvas. Currently, the
+                // TextActionFactory does not generate this object for
+                // subsettable text
+                return 1;
+            }
+
+
+            // -------------------------------------------------------------------------
+
+            class TextArrayAction : public Action, private ::boost::noncopyable
+            {
+            public:
+                TextArrayAction( const ::Point&                 rStartPoint,
+                                 const ::rtl::OUString&         rString,
+                                 sal_Int32                      nStartPos,
+                                 sal_Int32                      nLen,
+                                 const uno::Sequence< double >& rOffsets,
+                                 VirtualDevice&                 rVDev,
+                                 const CanvasSharedPtr&         rCanvas,
+                                 const OutDevState&             rState );
+
+                TextArrayAction( const ::Point&                 rStartPoint,
+                                 const ::rtl::OUString&         rString,
+                                 sal_Int32                      nStartPos,
+                                 sal_Int32                      nLen,
+                                 const uno::Sequence< double >& rOffsets,
+                                 VirtualDevice&                 rVDev,
+                                 const CanvasSharedPtr&         rCanvas,
+                                 const OutDevState&             rState,
+                                 const ::basegfx::B2DHomMatrix& rTextTransform );
+
+                virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation ) const;
+                virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation,
+                                     const Subset&                  rSubset ) const;
+
+                virtual sal_Int32 getActionCount() const;
+
+            private:
+                // TODO(P2): This is potentially a real mass object
+                // (every character might be a separate TextAction),
+                // thus, make it as lightweight as possible. For
+                // example, share common RenderState among several
+                // TextActions, maybe using maOffsets for the
+                // translation.
+
+                uno::Reference< rendering::XTextLayout >    mxTextLayout;
+                const CanvasSharedPtr                       mpCanvas;
+                rendering::RenderState                      maState;
+            };
+
+            TextArrayAction::TextArrayAction( const ::Point&                    rStartPoint,
+                                              const ::rtl::OUString&            rString,
+                                              sal_Int32                         nStartPos,
+                                              sal_Int32                         nLen,
+                                              const uno::Sequence< double >&    rOffsets,
+                                              VirtualDevice&                    rVDev,
+                                              const CanvasSharedPtr&            rCanvas,
+                                              const OutDevState&                rState ) :
+                mxTextLayout(),
+                mpCanvas( rCanvas ),
+                maState()
+            {
+                initArrayAction( maState,
+                                 mxTextLayout,
+                                 ::vcl::unotools::b2DPointFromPoint( rStartPoint ),
+                                 rString,
+                                 nStartPos,
+                                 nLen,
+                                 rOffsets,
+                                 rCanvas,
+                                 rState, NULL );
+            }
+
+            TextArrayAction::TextArrayAction( const ::Point&                rStartPoint,
+                                              const ::rtl::OUString&            rString,
+                                              sal_Int32                         nStartPos,
+                                              sal_Int32                         nLen,
+                                              const uno::Sequence< double >&    rOffsets,
+                                              VirtualDevice&                    rVDev,
+                                              const CanvasSharedPtr&            rCanvas,
+                                              const OutDevState&                rState,
+                                              const ::basegfx::B2DHomMatrix&    rTextTransform ) :
+                mxTextLayout(),
+                mpCanvas( rCanvas ),
+                maState()
+            {
+                initArrayAction( maState,
+                                 mxTextLayout,
+                                 ::vcl::unotools::b2DPointFromPoint( rStartPoint ),
+                                 rString,
+                                 nStartPos,
+                                 nLen,
+                                 rOffsets,
+                                 rCanvas,
+                                 rState,
+                                 &rTextTransform );
+            }
+
+            bool TextArrayAction::render( const ::basegfx::B2DHomMatrix& rTransformation ) const
+            {
+                RTL_LOGFILE_CONTEXT( aLog, "::cppcanvas::internal::TextArrayAction::render()" );
+                RTL_LOGFILE_CONTEXT_TRACE1( aLog, "::cppcanvas::internal::TextArrayAction: 0x%X", this );
+
+                rendering::RenderState aLocalState( maState );
+                ::canvas::tools::prependToRenderState(aLocalState, rTransformation);
+
+#ifdef SPECIAL_DEBUG
+                aLocalState.Clip.clear();
+                aLocalState.DeviceColor =
+                    ::vcl::unotools::colorToDoubleSequence( mpCanvas->getUNOCanvas()->getDevice(),
+                                                            ::Color( 0x80FF0000 ) );
+
+                if( maState.Clip.is() )
+                    mpCanvas->getUNOCanvas()->fillPolyPolygon( maState.Clip,
+                                                               mpCanvas->getViewState(),
+                                                               aLocalState );
+
+                aLocalState.DeviceColor = maState.DeviceColor;
+#endif
+
+                mpCanvas->getUNOCanvas()->drawTextLayout( mxTextLayout,
+                                                          mpCanvas->getViewState(),
+                                                          aLocalState );
+
+                return true;
+            }
+
+            bool TextArrayAction::render( const ::basegfx::B2DHomMatrix&    rTransformation,
+                                          const Subset&                     rSubset ) const
+            {
+                RTL_LOGFILE_CONTEXT( aLog, "::cppcanvas::internal::TextArrayAction::render( subset )" );
+                RTL_LOGFILE_CONTEXT_TRACE1( aLog, "::cppcanvas::internal::TextArrayAction: 0x%X", this );
+
+                if( rSubset.mnSubsetBegin == rSubset.mnSubsetEnd )
+                    return true; // empty range, render nothing
+
+                const rendering::StringContext& rOrigContext( mxTextLayout->getText() );
+
+                if( rSubset.mnSubsetBegin == 0 &&
+                    rSubset.mnSubsetEnd == rOrigContext.Length )
+                {
+                    // full range, no need for subsetting
+                    return render( rTransformation );
+                }
+
+                rendering::RenderState aLocalState( maState );
+                ::canvas::tools::prependToRenderState(aLocalState, rTransformation);
+
+                uno::Reference< rendering::XTextLayout > xTextLayout(
+                    createSubsetLayout( rOrigContext, rSubset, mxTextLayout ) );
+
+                if( xTextLayout.is() )
+                {
+                    double nDummy0, nDummy1;
+
+                    xTextLayout->applyLogicalAdvancements(
+                        calcSubsetOffsets( aLocalState,
+                                           nDummy0,
+                                           nDummy1,
+                                           mxTextLayout,
+                                           rSubset ) );
+
+                    mpCanvas->getUNOCanvas()->drawTextLayout( xTextLayout,
+                                                              mpCanvas->getViewState(),
+                                                              aLocalState );
+                }
+
+                return true;
+            }
+
+            sal_Int32 TextArrayAction::getActionCount() const
+            {
+                const rendering::StringContext& rOrigContext( mxTextLayout->getText() );
+
+                return rOrigContext.Length;
+            }
+
+
+            // -------------------------------------------------------------------------
+
+            class EffectTextArrayAction :
+                public Action,
+                public TextRenderer,
+                private ::boost::noncopyable
+            {
+            public:
+                EffectTextArrayAction( const ::Point&                   rStartPoint,
+                                       const ::Size&                    rReliefOffset,
+                                       const ::Color&                   rReliefColor,
+                                       const ::Size&                    rShadowOffset,
+                                       const ::Color&                   rShadowColor,
+                                       const ::rtl::OUString&           rText,
+                                       sal_Int32                        nStartPos,
+                                       sal_Int32                        nLen,
+                                       const uno::Sequence< double >&   rOffsets,
+                                       VirtualDevice&                   rVDev,
+                                       const CanvasSharedPtr&           rCanvas,
+                                       const OutDevState&               rState  );
+                EffectTextArrayAction( const ::Point&                   rStartPoint,
+                                       const ::Size&                    rReliefOffset,
+                                       const ::Color&                   rReliefColor,
+                                       const ::Size&                    rShadowOffset,
+                                       const ::Color&                   rShadowColor,
+                                       const ::rtl::OUString&           rText,
+                                       sal_Int32                        nStartPos,
+                                       sal_Int32                        nLen,
+                                       const uno::Sequence< double >&   rOffsets,
+                                       VirtualDevice&                   rVDev,
+                                       const CanvasSharedPtr&           rCanvas,
+                                       const OutDevState&               rState,
+                                       const ::basegfx::B2DHomMatrix&   rTextTransform );
+
+                virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation ) const;
+                virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation,
+                                     const Subset&                  rSubset ) const;
+
+                virtual sal_Int32 getActionCount() const;
+
+            private:
+                // TextRenderer interface
+                virtual bool operator()( const rendering::RenderState& rRenderState ) const;
+
+                // TODO(P2): This is potentially a real mass object
+                // (every character might be a separate TextAction),
+                // thus, make it as lightweight as possible. For
+                // example, share common RenderState among several
+                // TextActions, maybe using maOffsets for the
+                // translation.
+
+                uno::Reference< rendering::XTextLayout >        mxTextLayout;
+                const CanvasSharedPtr                           mpCanvas;
+                rendering::RenderState                          maState;
+                const tools::TextLineInfo                       maTextLineInfo;
+                uno::Reference< rendering::XPolyPolygon2D >     mxTextLines;
+                const ::Size                                    maReliefOffset;
+                const ::Color                                   maReliefColor;
+                const ::Size                                    maShadowOffset;
+                const ::Color                                   maShadowColor;
+            };
+
+            EffectTextArrayAction::EffectTextArrayAction( const ::Point&                    rStartPoint,
+                                                          const ::Size&                     rReliefOffset,
+                                                          const ::Color&                    rReliefColor,
+                                                          const ::Size&                     rShadowOffset,
+                                                          const ::Color&                    rShadowColor,
+                                                          const ::rtl::OUString&            rText,
+                                                          sal_Int32                         nStartPos,
+                                                          sal_Int32                         nLen,
+                                                          const uno::Sequence< double >&    rOffsets,
+                                                          VirtualDevice&                    rVDev,
+                                                          const CanvasSharedPtr&            rCanvas,
+                                                          const OutDevState&                rState  ) :
+                mxTextLayout(),
+                mpCanvas( rCanvas ),
+                maState(),
+                maTextLineInfo( tools::createTextLineInfo( rVDev, rState ) ),
+                mxTextLines(
+                    textLinesFromLogicalOffsets(
+                        rCanvas,
+                        rOffsets,
+                        maTextLineInfo ) ),
+                maReliefOffset( rReliefOffset ),
+                maReliefColor( rReliefColor ),
+                maShadowOffset( rShadowOffset ),
+                maShadowColor( rShadowColor )
+            {
+                initArrayAction( maState,
+                                 mxTextLayout,
+                                 ::vcl::unotools::b2DPointFromPoint( rStartPoint ),
+                                 rText,
+                                 nStartPos,
+                                 nLen,
+                                 rOffsets,
+                                 rCanvas,
+                                 rState, NULL );
+            }
+
+            EffectTextArrayAction::EffectTextArrayAction( const ::Point&                    rStartPoint,
+                                                          const ::Size&                     rReliefOffset,
+                                                          const ::Color&                    rReliefColor,
+                                                          const ::Size&                     rShadowOffset,
+                                                          const ::Color&                    rShadowColor,
+                                                          const ::rtl::OUString&            rText,
+                                                          sal_Int32                         nStartPos,
+                                                          sal_Int32                         nLen,
+                                                          const uno::Sequence< double >&    rOffsets,
+                                                          VirtualDevice&                    rVDev,
+                                                          const CanvasSharedPtr&            rCanvas,
+                                                          const OutDevState&                rState,
+                                                          const ::basegfx::B2DHomMatrix&    rTextTransform ) :
+                mxTextLayout(),
+                mpCanvas( rCanvas ),
+                maState(),
+                maTextLineInfo( tools::createTextLineInfo( rVDev, rState ) ),
+                mxTextLines(
+                    textLinesFromLogicalOffsets(
+                        rCanvas,
+                        rOffsets,
+                        maTextLineInfo ) ),
+                maReliefOffset( rReliefOffset ),
+                maReliefColor( rReliefColor ),
+                maShadowOffset( rShadowOffset ),
+                maShadowColor( rShadowColor )
+            {
+                initArrayAction( maState,
+                                 mxTextLayout,
+                                 ::vcl::unotools::b2DPointFromPoint( rStartPoint ),
+                                 rText,
+                                 nStartPos,
+                                 nLen,
+                                 rOffsets,
+                                 rCanvas,
+                                 rState,
+                                 &rTextTransform );
+            }
+
+            bool EffectTextArrayAction::operator()( const rendering::RenderState& rRenderState ) const
+            {
+                const rendering::ViewState& rViewState( mpCanvas->getViewState() );
+                const uno::Reference< rendering::XCanvas >& rCanvas( mpCanvas->getUNOCanvas() );
+
+                rCanvas->fillPolyPolygon( mxTextLines,
+                                          rViewState,
+                                          rRenderState );
+
+                rCanvas->drawTextLayout( mxTextLayout,
+                                         rViewState,
+                                         rRenderState );
+
+                return true;
+            }
+
+            bool EffectTextArrayAction::render( const ::basegfx::B2DHomMatrix& rTransformation ) const
+            {
+                RTL_LOGFILE_CONTEXT( aLog, "::cppcanvas::internal::EffectTextArrayAction::render()" );
+                RTL_LOGFILE_CONTEXT_TRACE1( aLog, "::cppcanvas::internal::EffectTextArrayAction: 0x%X", this );
+
+                return renderEffectText( *this,
+                                         maState,
+                                         mpCanvas->getViewState(),
+                                         rTransformation,
+                                         mpCanvas->getUNOCanvas(),
+                                         maShadowColor,
+                                         maShadowOffset,
+                                         maReliefColor,
+                                         maReliefOffset );
+            }
+
+            class EffectTextArrayRenderHelper : public TextRenderer
+            {
+            public:
+                EffectTextArrayRenderHelper( const uno::Reference< rendering::XCanvas >&        rCanvas,
+                                             const uno::Reference< rendering::XTextLayout >&    rTextLayout,
+                                             const uno::Reference< rendering::XPolyPolygon2D >& rLinePolygon,
+                                             const rendering::ViewState&                        rViewState ) :
+                    mrCanvas( rCanvas ),
+                    mrTextLayout( rTextLayout ),
+                    mrLinePolygon( rLinePolygon ),
+                    mrViewState( rViewState )
+                {
+                }
+
+                // TextRenderer interface
+                virtual bool operator()( const rendering::RenderState& rRenderState ) const
+                {
+                    mrCanvas->drawTextLayout( mrTextLayout,
+                                              mrViewState,
+                                              rRenderState );
+
+                    mrCanvas->drawPolyPolygon( mrLinePolygon,
+                                               mrViewState,
+                                               rRenderState );
+
+                    return true;
+                }
+
+            private:
+                const uno::Reference< rendering::XCanvas >&         mrCanvas;
+                const uno::Reference< rendering::XTextLayout >&     mrTextLayout;
+                const uno::Reference< rendering::XPolyPolygon2D >&  mrLinePolygon;
+                const rendering::ViewState&                         mrViewState;
+            };
+
+            bool EffectTextArrayAction::render( const ::basegfx::B2DHomMatrix&  rTransformation,
+                                                const Subset&                   rSubset ) const
+            {
+                RTL_LOGFILE_CONTEXT( aLog, "::cppcanvas::internal::EffectTextArrayAction::render( subset )" );
+                RTL_LOGFILE_CONTEXT_TRACE1( aLog, "::cppcanvas::internal::EffectTextArrayAction: 0x%X", this );
+
+                if( rSubset.mnSubsetBegin == rSubset.mnSubsetEnd )
+                    return true; // empty range, render nothing
+
+                const rendering::StringContext& rOrigContext( mxTextLayout->getText() );
+
+                if( rSubset.mnSubsetBegin == 0 &&
+                    rSubset.mnSubsetEnd == rOrigContext.Length )
+                {
+                    // full range, no need for subsetting
+                    return render( rTransformation );
+                }
+
+                rendering::RenderState aLocalState( maState );
+                ::canvas::tools::prependToRenderState(aLocalState, rTransformation);
+
+
+                // create and setup local TextLayout
+                // =================================
+
+                uno::Reference< rendering::XTextLayout > xTextLayout(
+                    createSubsetLayout( rOrigContext, rSubset, mxTextLayout ) );
+
+                if( !xTextLayout.is() )
+                    return false;
+
+                double nMinPos(0.0);
+                double nMaxPos(0.0);
+
+                xTextLayout->applyLogicalAdvancements(
+                    calcSubsetOffsets( aLocalState,
+                                       nMinPos,
+                                       nMaxPos,
+                                       mxTextLayout,
+                                       rSubset ) );
+
+
+                // create and setup local line polygon
+                // ===================================
+
+                uno::Reference< rendering::XCanvas > xCanvas( mpCanvas->getUNOCanvas() );
+                const rendering::ViewState&          rViewState( mpCanvas->getViewState() );
+
+                uno::Reference< rendering::XPolyPolygon2D > xTextLines(
+                    ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon(
+                        xCanvas->getDevice(),
+                        tools::createTextLinesPolyPolygon(
+                            0.0, nMaxPos - nMinPos,
+                            maTextLineInfo ) ) );
+
+
+                // render everything
+                // =================
+
+                return renderEffectText(
+                    EffectTextArrayRenderHelper( xCanvas,
+                                                 xTextLayout,
+                                                 xTextLines,
+                                                 rViewState ),
+                    maState,
+                    rViewState,
+                    rTransformation,
+                    xCanvas,
+                    maShadowColor,
+                    maShadowOffset,
+                    maReliefColor,
+                    maReliefOffset );
+            }
+
+            sal_Int32 EffectTextArrayAction::getActionCount() const
+            {
+                const rendering::StringContext& rOrigContext( mxTextLayout->getText() );
+
+                return rOrigContext.Length;
+            }
+
+
+            // -------------------------------------------------------------------------
+
+            class OutlineAction :
+                public Action,
+                public TextRenderer,
+                private ::boost::noncopyable
+            {
+            public:
+                OutlineAction( const ::Point&                                       rStartPoint,
+                               const ::Size&                                        rReliefOffset,
+                               const ::Color&                                       rReliefColor,
+                               const ::Size&                                        rShadowOffset,
+                               const ::Color&                                       rShadowColor,
+                               const uno::Reference< rendering::XPolyPolygon2D >&   rTextPoly,
+                               const ::std::vector< sal_Int32 >&                    rPolygonGlyphMap,
+                               const uno::Sequence< double >&                       rOffsets,
+                               VirtualDevice&                                       rVDev,
+                               const CanvasSharedPtr&                               rCanvas,
+                               const OutDevState&                                   rState  );
+                OutlineAction( const ::Point&                                       rStartPoint,
+                               const ::Size&                                        rReliefOffset,
+                               const ::Color&                                       rReliefColor,
+                               const ::Size&                                        rShadowOffset,
+                               const ::Color&                                       rShadowColor,
+                               const uno::Reference< rendering::XPolyPolygon2D >&   rTextPoly,
+                               const ::std::vector< sal_Int32 >&                    rPolygonGlyphMap,
+                               const uno::Sequence< double >&                       rOffsets,
+                               VirtualDevice&                                       rVDev,
+                               const CanvasSharedPtr&                               rCanvas,
+                               const OutDevState&                                   rState,
+                               const ::basegfx::B2DHomMatrix&                       rTextTransform );
+
+                virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation ) const;
+                virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation,
+                                     const Subset&                  rSubset ) const;
+
+                virtual sal_Int32 getActionCount() const;
+
+            private:
+                // TextRenderer interface
+                virtual bool operator()( const rendering::RenderState& rRenderState ) const;
+
+                // TODO(P2): This is potentially a real mass object
+                // (every character might be a separate TextAction),
+                // thus, make it as lightweight as possible. For
+                // example, share common RenderState among several
+                // TextActions, maybe using maOffsets for the
+                // translation.
+
+                uno::Reference< rendering::XPolyPolygon2D >         mxTextPoly;
+
+                /** This vector denotes the index of the start polygon
+                    for the respective glyph sequence.
+
+                    To get a polygon index range for a given character
+                    index i, take [ maPolygonGlyphMap[i],
+                    maPolygonGlyphMap[i+1] ). Note that this is wrong
+                    for BiDi
+                 */
+                const ::std::vector< sal_Int32 >                    maPolygonGlyphMap;
+                const uno::Sequence< double >                       maOffsets;
+                const CanvasSharedPtr                               mpCanvas;
+                rendering::RenderState                              maState;
+                double                                              mnOutlineWidth;
+                const uno::Sequence< double >                       maFillColor;
+                const tools::TextLineInfo                           maTextLineInfo;
+                uno::Reference< rendering::XPolyPolygon2D >         mxTextLines;
+                const ::Size                                        maReliefOffset;
+                const ::Color                                       maReliefColor;
+                const ::Size                                        maShadowOffset;
+                const ::Color                                       maShadowColor;
+            };
+
+            double calcOutlineWidth( VirtualDevice& rVDev )
+            {
+                const ::Size aFontSize( 0,
+                                        rVDev.GetFont().GetHeight() / 32 );
+
+                const double nOutlineWidth(
+                    rVDev.LogicToPixel( aFontSize ).Height() );
+
+                return nOutlineWidth < 1.0 ? 1.0 : nOutlineWidth;
+            }
+
+            OutlineAction::OutlineAction( const ::Point&                                        rStartPoint,
+                                          const ::Size&                                         rReliefOffset,
+                                          const ::Color&                                        rReliefColor,
+                                          const ::Size&                                         rShadowOffset,
+                                          const ::Color&                                        rShadowColor,
+                                          const uno::Reference< rendering::XPolyPolygon2D >&    rTextPoly,
+                                          const ::std::vector< sal_Int32 >&                     rPolygonGlyphMap,
+                                          const uno::Sequence< double >&                        rOffsets,
+                                          VirtualDevice&                                        rVDev,
+                                          const CanvasSharedPtr&                                rCanvas,
+                                          const OutDevState&                                    rState  ) :
+                mxTextPoly( rTextPoly ),
+                maPolygonGlyphMap( rPolygonGlyphMap ),
+                maOffsets( rOffsets ),
+                mpCanvas( rCanvas ),
+                maState(),
+                mnOutlineWidth( calcOutlineWidth(rVDev) ),
+                maFillColor(
+                    ::vcl::unotools::colorToDoubleSequence( rCanvas->getUNOCanvas()->getDevice(),
+                                                            ::Color( COL_WHITE ) ) ),
+                maTextLineInfo( tools::createTextLineInfo( rVDev, rState ) ),
+                mxTextLines(
+                    textLinesFromLogicalOffsets(
+                        rCanvas,
+                        rOffsets,
+                        maTextLineInfo ) ),
+                maReliefOffset( rReliefOffset ),
+                maReliefColor( rReliefColor ),
+                maShadowOffset( rShadowOffset ),
+                maShadowColor( rShadowColor )
+            {
+                init( maState,
+                      ::vcl::unotools::b2DPointFromPoint( rStartPoint ),
+                      rState,
+                      rCanvas );
+            }
+
+            OutlineAction::OutlineAction( const ::Point&                                        rStartPoint,
+                                          const ::Size&                                         rReliefOffset,
+                                          const ::Color&                                        rReliefColor,
+                                          const ::Size&                                         rShadowOffset,
+                                          const ::Color&                                        rShadowColor,
+                                          const uno::Reference< rendering::XPolyPolygon2D >&    rTextPoly,
+                                          const ::std::vector< sal_Int32 >&                     rPolygonGlyphMap,
+                                          const uno::Sequence< double >&                        rOffsets,
+                                          VirtualDevice&                                        rVDev,
+                                          const CanvasSharedPtr&                                rCanvas,
+                                          const OutDevState&                                    rState,
+                                          const ::basegfx::B2DHomMatrix&                        rTextTransform ) :
+                mxTextPoly( rTextPoly ),
+                maPolygonGlyphMap( rPolygonGlyphMap ),
+                maOffsets( rOffsets ),
+                mpCanvas( rCanvas ),
+                maState(),
+                mnOutlineWidth( calcOutlineWidth(rVDev) ),
+                maFillColor(
+                    ::vcl::unotools::colorToDoubleSequence( rCanvas->getUNOCanvas()->getDevice(),
+                                                            ::Color( COL_WHITE ) ) ),
+                maTextLineInfo( tools::createTextLineInfo( rVDev, rState ) ),
+                mxTextLines(
+                    textLinesFromLogicalOffsets(
+                        rCanvas,
+                        rOffsets,
+                        maTextLineInfo ) ),
+                maReliefOffset( rReliefOffset ),
+                maReliefColor( rReliefColor ),
+                maShadowOffset( rShadowOffset ),
+                maShadowColor( rShadowColor )
+            {
+                init( maState,
+                      ::vcl::unotools::b2DPointFromPoint( rStartPoint ),
+                      rState,
+                      rCanvas,
+                      rTextTransform );
+            }
+
+            bool OutlineAction::operator()( const rendering::RenderState& rRenderState ) const
+            {
+                const rendering::ViewState&                 rViewState( mpCanvas->getViewState() );
+                const uno::Reference< rendering::XCanvas >& rCanvas( mpCanvas->getUNOCanvas() );
+
+                rendering::StrokeAttributes aStrokeAttributes;
+
+                aStrokeAttributes.StrokeWidth  = mnOutlineWidth;
+                aStrokeAttributes.MiterLimit   = 1.0;
+                aStrokeAttributes.StartCapType = rendering::PathCapType::BUTT;
+                aStrokeAttributes.EndCapType   = rendering::PathCapType::BUTT;
+                aStrokeAttributes.JoinType     = rendering::PathJoinType::MITER;
+
+                rendering::RenderState aLocalState( rRenderState );
+                aLocalState.DeviceColor = maFillColor;
+
+                // TODO(P1): implement caching
+
+                // underlines/strikethrough
+                rCanvas->fillPolyPolygon( mxTextLines,
+                                          rViewState,
+                                          rRenderState );
+
+                // background of text
+                mpCanvas->getUNOCanvas()->fillPolyPolygon( mxTextPoly,
+                                                           rViewState,
+                                                           aLocalState );
+
+                // border line of text
+                mpCanvas->getUNOCanvas()->strokePolyPolygon( mxTextPoly,
+                                                             rViewState,
+                                                             rRenderState,
+                                                             aStrokeAttributes );
+
+                return true;
+            }
+
+            bool OutlineAction::render( const ::basegfx::B2DHomMatrix& rTransformation ) const
+            {
+                RTL_LOGFILE_CONTEXT( aLog, "::cppcanvas::internal::EffectTextArrayAction::render()" );
+                RTL_LOGFILE_CONTEXT_TRACE1( aLog, "::cppcanvas::internal::EffectTextArrayAction: 0x%X", this );
+
+                return renderEffectText( *this,
+                                         maState,
+                                         mpCanvas->getViewState(),
+                                         rTransformation,
+                                         mpCanvas->getUNOCanvas(),
+                                         maShadowColor,
+                                         maShadowOffset,
+                                         maReliefColor,
+                                         maReliefOffset );
+            }
+
+            class OutlineTextArrayRenderHelper : public TextRenderer
+            {
+            public:
+                OutlineTextArrayRenderHelper( const uno::Reference< rendering::XCanvas >&        rCanvas,
+                                              const uno::Reference< rendering::XPolyPolygon2D >& rTextPolygon,
+                                              const uno::Reference< rendering::XPolyPolygon2D >& rLinePolygon,
+                                              const rendering::ViewState&                        rViewState,
+                                              double                                             nOutlineWidth ) :
+                    maFillColor(
+                        ::vcl::unotools::colorToDoubleSequence(
+                            rCanvas->getDevice(),
+                            ::Color( COL_WHITE ) ) ),
+                    mnOutlineWidth( nOutlineWidth ),
+                    mrCanvas( rCanvas ),
+                    mrTextPolygon( rTextPolygon ),
+                    mrLinePolygon( rLinePolygon ),
+                    mrViewState( rViewState )
+                {
+                }
+
+                // TextRenderer interface
+                virtual bool operator()( const rendering::RenderState& rRenderState ) const
+                {
+                    rendering::StrokeAttributes aStrokeAttributes;
+
+                    aStrokeAttributes.StrokeWidth  = mnOutlineWidth;
+                    aStrokeAttributes.MiterLimit   = 1.0;
+                    aStrokeAttributes.StartCapType = rendering::PathCapType::BUTT;
+                    aStrokeAttributes.EndCapType   = rendering::PathCapType::BUTT;
+                    aStrokeAttributes.JoinType     = rendering::PathJoinType::MITER;
+
+                    rendering::RenderState aLocalState( rRenderState );
+                    aLocalState.DeviceColor = maFillColor;
+
+                    // TODO(P1): implement caching
+
+                    // background of text
+                    mrCanvas->fillPolyPolygon( mrTextPolygon,
+                                               mrViewState,
+                                               aLocalState );
+
+                    // border line of text
+                    mrCanvas->strokePolyPolygon( mrTextPolygon,
+                                                 mrViewState,
+                                                 rRenderState,
+                                                 aStrokeAttributes );
+
+                    // underlines/strikethrough
+                    mrCanvas->drawPolyPolygon( mrLinePolygon,
+                                               mrViewState,
+                                               rRenderState );
+
+                    return true;
+                }
+
+            private:
+                const uno::Sequence< double >                       maFillColor;
+                double                                              mnOutlineWidth;
+                const uno::Reference< rendering::XCanvas >&         mrCanvas;
+                const uno::Reference< rendering::XPolyPolygon2D >&  mrTextPolygon;
+                const uno::Reference< rendering::XPolyPolygon2D >&  mrLinePolygon;
+                const rendering::ViewState&                         mrViewState;
+            };
+
+            bool OutlineAction::render( const ::basegfx::B2DHomMatrix&  rTransformation,
+                                        const Subset&                   rSubset ) const
+            {
+                RTL_LOGFILE_CONTEXT( aLog, "::cppcanvas::internal::OutlineAction::render( subset )" );
+                RTL_LOGFILE_CONTEXT_TRACE1( aLog, "::cppcanvas::internal::OutlineAction: 0x%X", this );
+
+                if( rSubset.mnSubsetBegin == rSubset.mnSubsetEnd )
+                    return true; // empty range, render nothing
+
+#if 1
+                // TODO(F3): Subsetting NYI for outline text!
+                return render( rTransformation );
+#else
+                const rendering::StringContext rOrigContext( mxTextLayout->getText() );
+
+                if( rSubset.mnSubsetBegin == 0 &&
+                    rSubset.mnSubsetEnd == rOrigContext.Length )
+                {
+                    // full range, no need for subsetting
+                    return render( rTransformation );
+                }
+
+                rendering::RenderState aLocalState( maState );
+                ::canvas::tools::prependToRenderState(aLocalState, rTransformation);
+
+
+                // create and setup local Text polygon
+                // ===================================
+
+                uno::Reference< rendering::XPolyPolygon2D > xTextPolygon();
+
+                // TODO(P3): Provide an API method for that!
+
+                if( !xTextLayout.is() )
+                    return false;
+
+                // render everything
+                // =================
+
+                return renderEffectText(
+                    OutlineTextArrayRenderHelper(
+                        xCanvas,
+                        mnOutlineWidth,
+                        xTextLayout,
+                        xTextLines,
+                        rViewState ),
+                    maState,
+                    rViewState,
+                    rTransformation,
+                    xCanvas,
+                    maShadowColor,
+                    maShadowOffset,
+                    maReliefColor,
+                    maReliefOffset );
+#endif
+            }
+
+            sal_Int32 OutlineAction::getActionCount() const
+            {
+                // TODO(F3): Subsetting NYI for outline text!
+                return maOffsets.getLength();
+            }
+
+
+            // ======================================================================
+            //
+            // Action factory methods
+            //
+            // ======================================================================
+
+            /** Create an outline action
+
+                This method extracts the polygonal outline from the
+                text, and creates a properly setup OutlineAction from
+                it.
+             */
+            ActionSharedPtr createOutline( const ::Point&                   rStartPoint,
+                                           const ::Size&                    rReliefOffset,
+                                           const ::Color&                   rReliefColor,
+                                           const ::Size&                    rShadowOffset,
+                                           const ::Color&                   rShadowColor,
+                                           const String&                    rText,
+                                           sal_Int32                        nStartPos,
+                                           sal_Int32                        nLen,
+                                           const sal_Int32*                 pDXArray,
+                                           VirtualDevice&                   rVDev,
+                                           const CanvasSharedPtr&           rCanvas,
+                                           const OutDevState&               rState,
+                                           const Renderer::Parameters&      rParms  )
+            {
+                // operate on raw DX array here (in logical coordinate
+                // system), to have a higher resolution
+                // PolyPolygon. That polygon is then converted to
+                // device coordinate system.
+
+                // TODO(F3): Don't understand parameter semantics of
+                // GetTextOutlines()
+                ::PolyPolygon   aResultingVCLPolyPolygon;
+                PolyPolyVector  aVCLPolyPolyVector;
+                if( rVDev.GetTextOutlines( aVCLPolyPolyVector, rText,
+                                           static_cast<USHORT>(nStartPos),
+                                           static_cast<USHORT>(nStartPos),
+                                           static_cast<USHORT>(nLen),
+                                           TRUE, 0, pDXArray ) )
+                {
+                    ::std::vector< sal_Int32 > aPolygonGlyphMap;
+
+                    // first glyph starts at polygon index 0
+                    aPolygonGlyphMap.push_back( 0 );
+
+                    PolyPolyVector::const_iterator       aIter( aVCLPolyPolyVector.begin() );
+                    const PolyPolyVector::const_iterator aEnd( aVCLPolyPolyVector.end() );
+                    for( ; aIter!= aEnd; ++aIter )
+                    {
+                        ::PolyPolygon aVCLPolyPolygon;
+
+                        aVCLPolyPolygon = rVDev.LogicToPixel( *aIter );
+
+                        // TODO(F3): use bezier polygon directly when it
+                        // is implemented
+                        ::PolyPolygon aNOTBEZIER;
+                        aVCLPolyPolygon.AdaptiveSubdivide( aNOTBEZIER );
+
+                        // append result to collecting polypoly
+                        for( USHORT i=0; i<aNOTBEZIER.Count(); ++i )
+                            aResultingVCLPolyPolygon.Insert( aNOTBEZIER.GetObject( i ) );
+
+                        // TODO(F3): Depending on the semantics of
+                        // GetTextOutlines(), this here is wrong!
+
+                        // calc next glyph index
+                        aPolygonGlyphMap.push_back( aResultingVCLPolyPolygon.Count() );
+                    }
+
+                    const uno::Sequence< double > aCharWidthSeq(
+                        setupDXArray( pDXArray, nLen, rVDev ) );
+                    const uno::Reference< rendering::XPolyPolygon2D > xTextPoly(
+                        ::vcl::unotools::xPolyPolygonFromPolyPolygon(
+                            rCanvas->getUNOCanvas()->getDevice(),
+                            aResultingVCLPolyPolygon ) );
+
+                    ::Point aEmptyPoint;
+                    if( rParms.maTextTransformation.isValid() )
+                    {
+                        return ActionSharedPtr(
+                            new OutlineAction(
+                                rStartPoint,
+                                rReliefOffset,
+                                rReliefColor,
+                                rShadowOffset,
+                                rShadowColor,
+                                xTextPoly,
+                                aPolygonGlyphMap,
+                                aCharWidthSeq,
+                                rVDev,
+                                rCanvas,
+                                rState,
+                                rParms.maTextTransformation.getValue() ) );
+                    }
+                    else
+                    {
+                        return ActionSharedPtr(
+                            new OutlineAction(
+                                rStartPoint,
+                                rReliefOffset,
+                                rReliefColor,
+                                rShadowOffset,
+                                rShadowColor,
+                                xTextPoly,
+                                aPolygonGlyphMap,
+                                aCharWidthSeq,
+                                rVDev,
+                                rCanvas,
+                                rState  ) );
+                    }
+                }
+
+                return ActionSharedPtr();
+            }
+
         }
 
+
+        // ---------------------------------------------------------------------------------
+
+        ActionSharedPtr TextActionFactory::createTextAction( const ::Point&                 rStartPoint,
+                                                             const ::Size&                  rReliefOffset,
+                                                             const ::Color&                 rReliefColor,
+                                                             const ::Size&                  rShadowOffset,
+                                                             const ::Color&                 rShadowColor,
+                                                             const String&                  rText,
+                                                             sal_Int32                      nStartPos,
+                                                             sal_Int32                      nLen,
+                                                             const sal_Int32*               pDXArray,
+                                                             VirtualDevice&                 rVDev,
+                                                             const CanvasSharedPtr&         rCanvas,
+                                                             const OutDevState&             rState,
+                                                             const Renderer::Parameters&    rParms,
+                                                             bool                           bSubsettable    )
+        {
+            const ::Size  aBaselineOffset( tools::getBaselineOffset( rState,
+                                                                     rVDev ) );
+            const ::Point aStartPoint( rVDev.LogicToPixel(
+                                           ::Point(
+                                               rStartPoint.X() + aBaselineOffset.Width(),
+                                               rStartPoint.Y() + aBaselineOffset.Height() ) ) );
+            const ::Size  aReliefOffset( rVDev.LogicToPixel( rReliefOffset ) );
+            const ::Size  aShadowOffset( rVDev.LogicToPixel( rShadowOffset ) );
+
+            if( rState.isTextOutlineModeSet )
+            {
+                return createOutline(
+                            aStartPoint,
+                            aReliefOffset,
+                            rReliefColor,
+                            aShadowOffset,
+                            rShadowColor,
+                            rText,
+                            nStartPos,
+                            nLen,
+                            pDXArray,
+                            rVDev,
+                            rCanvas,
+                            rState,
+                            rParms );
+            }
+
+            // convert DX array to device coordinate system (and
+            // create it in the first place, if pDXArray is NULL)
+            const uno::Sequence< double > aCharWidths(
+                pDXArray ?
+                setupDXArray( pDXArray, nLen, rVDev ) :
+                setupDXArray( rText,
+                              nStartPos,
+                              nLen,
+                              rVDev ) );
+
+            // determine type of text action to create
+            // =======================================
+
+            const ::Color aEmptyColor( COL_AUTO );
+
+            // no DX array, and no need to subset - no need to store
+            // DX array, then.
+            if( !pDXArray && !bSubsettable )
+            {
+                // effects, or not?
+                if( !rState.textUnderlineStyle &&
+                    !rState.textStrikeoutStyle &&
+                    rReliefColor == aEmptyColor &&
+                    rShadowColor == aEmptyColor )
+                {
+                    // nope
+                    if( rParms.maTextTransformation.isValid() )
+                    {
+                        return ActionSharedPtr( new TextAction(
+                                                    aStartPoint,
+                                                    rText,
+                                                    nStartPos,
+                                                    nLen,
+                                                    rVDev,
+                                                    rCanvas,
+                                                    rState,
+                                                    rParms.maTextTransformation.getValue() ) );
+                    }
+                    else
+                    {
+                        return ActionSharedPtr( new TextAction(
+                                                    aStartPoint,
+                                                    rText,
+                                                    nStartPos,
+                                                    nLen,
+                                                    rVDev,
+                                                    rCanvas,
+                                                    rState ) );
+                    }
+                }
+                else
+                {
+                    // at least one of the effects requested
+                    if( rParms.maTextTransformation.isValid() )
+                        return ActionSharedPtr( new EffectTextAction(
+                                                    aStartPoint,
+                                                    aReliefOffset,
+                                                    rReliefColor,
+                                                    aShadowOffset,
+                                                    rShadowColor,
+                                                    rText,
+                                                    nStartPos,
+                                                    nLen,
+                                                    rVDev,
+                                                    rCanvas,
+                                                    rState,
+                                                    rParms.maTextTransformation.getValue() ) );
+                    else
+                        return ActionSharedPtr( new EffectTextAction(
+                                                    aStartPoint,
+                                                    aReliefOffset,
+                                                    rReliefColor,
+                                                    aShadowOffset,
+                                                    rShadowColor,
+                                                    rText,
+                                                    nStartPos,
+                                                    nLen,
+                                                    rVDev,
+                                                    rCanvas,
+                                                    rState ) );
+                }
+            }
+            else
+            {
+                // DX array necessary - any effects?
+                if( !rState.textUnderlineStyle &&
+                    !rState.textStrikeoutStyle &&
+                    rReliefColor == aEmptyColor &&
+                    rShadowColor == aEmptyColor )
+                {
+                    // nope
+                    if( rParms.maTextTransformation.isValid() )
+                        return ActionSharedPtr( new TextArrayAction(
+                                                    aStartPoint,
+                                                    rText,
+                                                    nStartPos,
+                                                    nLen,
+                                                    aCharWidths,
+                                                    rVDev,
+                                                    rCanvas,
+                                                    rState,
+                                                    rParms.maTextTransformation.getValue() ) );
+                    else
+                        return ActionSharedPtr( new TextArrayAction(
+                                                    aStartPoint,
+                                                    rText,
+                                                    nStartPos,
+                                                    nLen,
+                                                    aCharWidths,
+                                                    rVDev,
+                                                    rCanvas,
+                                                    rState ) );
+                }
+                else
+                {
+                    // at least one of the effects requested
+                    if( rParms.maTextTransformation.isValid() )
+                        return ActionSharedPtr( new EffectTextArrayAction(
+                                                    aStartPoint,
+                                                    aReliefOffset,
+                                                    rReliefColor,
+                                                    aShadowOffset,
+                                                    rShadowColor,
+                                                    rText,
+                                                    nStartPos,
+                                                    nLen,
+                                                    aCharWidths,
+                                                    rVDev,
+                                                    rCanvas,
+                                                    rState,
+                                                    rParms.maTextTransformation.getValue() ) );
+                    else
+                        return ActionSharedPtr( new EffectTextArrayAction(
+                                                    aStartPoint,
+                                                    aReliefOffset,
+                                                    rReliefColor,
+                                                    aShadowOffset,
+                                                    rShadowColor,
+                                                    rText,
+                                                    nStartPos,
+                                                    nLen,
+                                                    aCharWidths,
+                                                    rVDev,
+                                                    rCanvas,
+                                                    rState ) );
+                }
+            }
+        }
     }
 }
