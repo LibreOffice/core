@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: obo $ $Date: 2005-03-15 11:21:41 $
+#   last change: $Author: rt $ $Date: 2005-03-30 09:44:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -89,7 +89,7 @@ EXCEPTIONSFILES=				\
         $(SLO)$/sdview4.obj  \
         $(SLO)$/slidvish.obj \
         $(SLO)$/viewshe2.obj \
-        $(SLO)$/ObjectBarManager.obj
+        $(SLO)$/UpdateLockManager.obj
 
 EXCEPTIONSNOOPTFILES=\
         $(SLO)$/drviews5.obj\
@@ -159,6 +159,7 @@ SLOFILES =	\
         $(SLO)$/SlideSorterViewShellBase.obj	\
         $(SLO)$/PresentationViewShellBase.obj	\
         $(SLO)$/PrintManager.obj				\
+        $(SLO)$/UpdateLockManager.obj			\
         $(SLO)$/ViewClipboard.obj				\
         $(SLO)$/ViewShellBase.obj				\
         $(SLO)$/ViewShellImplementation.obj		\
@@ -167,6 +168,7 @@ SLOFILES =	\
         $(SLO)$/ViewShellHint.obj				\
         $(SLO)$/ViewTabBar.obj					\
         $(SLO)$/WindowUpdater.obj
+
 
 
 # --- Tagets -------------------------------------------------------
