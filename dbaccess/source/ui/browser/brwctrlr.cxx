@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: fs $ $Date: 2002-03-21 14:58:53 $
+ *  last change: $Author: fs $ $Date: 2002-04-10 06:35:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1698,7 +1698,7 @@ void SbaXDataBrowserController::ExecuteFilterSortCrit(sal_Bool bFilter)
         xFormSet->getPropertyValue(PROPERTY_ACTIVECONNECTION) >>= xCon;
         if(bFilter)
         {
-            DlgFilterCrit aDlg(getBrowserView(),xCon,m_xParser,xSup->getColumns(),xField->getName());
+            DlgFilterCrit aDlg( getBrowserView(), m_xMultiServiceFacatory, xCon, m_xParser, xSup->getColumns(), xField->getName() );
             String aFilter;
             if(!aDlg.Execute())
             {
