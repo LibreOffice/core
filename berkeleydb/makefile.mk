@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: vg $ $Date: 2003-12-17 15:55:10 $
+#   last change: $Author: svesik $ $Date: 2004-04-21 12:55:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -106,6 +106,13 @@ OUT2BIN=java$/classes$/db.jar
 EXT_USE_STLPORT=TRUE
 
 BUILD_DIR=build_win32
+.IF "$(SOLAR_JAVA)" != ""
+BUILD_JAVA_DEVENV= /build Release /project db_java /useenv
+BUILD_JAVA_MSDEV= /MAKE "db_java - RELEASE"
+BUILD_JAVA_BIN=java$/classes$/db.jar \
+        $(BUILD_DIR)$/Release$/libdb_java32.dll
+BUILD_JAVA_LIB=$(BUILD_DIR)$/Release$/libdb_java32.lib
+.ENDIF
 .IF "$(COMEX)"=="8" || "$(COMEX)"=="10"
 CONFIGURE_DIR=build_win32
 CONFIGURE_ACTION=wdevenv Berkeley_DB Release
@@ -114,17 +121,16 @@ BUILD_ACTION_SEP=;
 .ELSE # "$(USE_SHELL)"!="4nt"
 BUILD_ACTION_SEP=^
 .ENDIF # "$(USE_SHELL)"!="4nt"
-BUILD_ACTION=devenv Berkeley_DB.sln /build Release /project db_buildall /useenv $(BUILD_ACTION_SEP) devenv Berkeley_DB.sln /build Release /project db_java /useenv
+BUILD_ACTION=devenv Berkeley_DB.sln /build Release /project db_buildall /useenv $(BUILD_ACTION_SEP) devenv Berkeley_DB.sln  $(BUILD_JAVA_DEVENV)
 .ELSE
-BUILD_ACTION=msdev Berkeley_DB.dsw /useenv /MAKE "db_buildall - RELEASE" /MAKE "db_java - RELEASE"
+BUILD_ACTION=msdev Berkeley_DB.dsw /useenv /MAKE "db_buildall - RELEASE" $(BUILD_JAVA_MSDEV)
 .ENDIF
 
-OUT2BIN=java$/classes$/db.jar \
-    $(BUILD_DIR)$/Release$/libdb_java32.dll \
-    $(BUILD_DIR)$/Release$/libdb32.dll
+OUT2BIN= $(BUILD_JAVA_BIN) \
+     $(BUILD_DIR)$/Release$/libdb32.dll
 
 OUT2LIB= \
-    $(BUILD_DIR)$/Release$/libdb_java32.lib \
+    $(BUILD_JAVA_LIB) \
     $(BUILD_DIR)$/Release$/libdb32.lib
 
 .ENDIF			# "$(GUI)"=="WNT"
