@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgolbul.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 21:02:03 $
+ *  last change: $Author: rt $ $Date: 2000-11-27 08:13:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ TabDialog TAB_OUTLINEBULLET
                 Text [ ENGLISH ] = "Bullets" ;
                 Text [ english_us ] = "Bullets" ;
                 Text [ portuguese_brazilian ] = "Bullets" ;
-                Text [ swedish ] = "Bullets" ;
+                Text [ swedish ] = "Punkter" ;
                 Text [ danish ] = "Punkttegn" ;
                 Text [ italian ] = "Punti" ;
                 Text [ spanish ] = "Viñetas" ;
