@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docst.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-06 13:31:28 $
+ *  last change: $Author: os $ $Date: 2000-11-14 11:12:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,12 @@
 #ifndef _SFXSTRITEM_HXX //autogen
 #include <svtools/stritem.hxx>
 #endif
-
+#ifndef _SVX_HTMLMODE_HXX
+#include <svx/htmlmode.hxx>
+#endif
+#ifndef _SWMODULE_HXX
+#include <swmodule.hxx>
+#endif
 #ifndef _SWWDOCSH_HXX //autogen
 #include <wdocsh.hxx>
 #endif
@@ -625,7 +630,10 @@ USHORT SwDocShell::Edit( const String &rName, const String &rParent, USHORT nFam
     if (!bBasic)
     {
         // vor dem Dialog wird der HtmlMode an der DocShell versenkt
-        PutItem(SfxUInt16Item(SID_HTML_MODE, ::GetHtmlMode(this)));
+        USHORT nHtmlMode = ::GetHtmlMode(this);
+        PutItem(SfxUInt16Item(SID_HTML_MODE, nHtmlMode));
+        FieldUnit eMetric = ::GetDfltMetric(0 != (HTMLMODE_ON&nHtmlMode));
+        SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, eMetric));
         SwTemplateDlg* pDlg = new SwTemplateDlg( 0, aTmp, nFamily, bColumn,
                             pActShell ? pActShell : pWrtShell, bNew);
         if(RET_OK == pDlg->Execute())
@@ -1190,6 +1198,9 @@ Bitmap SwDocShell::GetStyleFamilyBitmap( SfxStyleFamily eFamily )
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.2  2000/10/06 13:31:28  jp
+    should changes: don't use IniManager
+
     Revision 1.1.1.1  2000/09/18 17:14:31  hr
     initial import
 
