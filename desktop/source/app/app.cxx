@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.119 $
+ *  $Revision: 1.120 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-16 17:41:22 $
+ *  last change: $Author: vg $ $Date: 2003-07-22 08:26:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,15 @@
 #endif
 #ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
 #include <com/sun/star/lang/XComponent.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UNO_RUNTIMEEXCEPTION_HPP_
+#include <com/sun/star/uno/RuntimeException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_IO_IOEXCEPTION_HPP_
+#include <com/sun/star/io/IOException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_ILLEGALARGUMENTEXCEPTION_HPP_
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #endif
 #ifndef _COM_SUN_STAR_LANG_WRAPPEDTARGETEXCEPTION_HPP_
 #include <com/sun/star/lang/WrappedTargetException.hpp>
@@ -285,18 +294,22 @@
 
 using namespace vos;
 using namespace rtl;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::util;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::beans;
+
+namespace css = ::com::sun::star;
+
+using namespace css::uno;
+using namespace css::util;
+using namespace css::lang;
+using namespace css::beans;
 //using namespace ::com::sun::star::bridge;
-using namespace ::com::sun::star::frame;
-using namespace ::com::sun::star::document;
-using namespace ::com::sun::star::view;
-using namespace ::com::sun::star::task;
-using namespace ::com::sun::star::system;
-using namespace ::com::sun::star::ui::dialogs;
-using namespace ::com::sun::star::container;
+using namespace css::frame;
+using namespace css::document;
+using namespace css::view;
+using namespace css::task;
+using namespace css::system;
+using namespace css::ui::dialogs;
+using namespace css::container;
+
 
 ResMgr*                    desktop::Desktop::pResMgr = 0;
 sal_Bool                desktop::Desktop::bSuppressOpenDefault = sal_False;
@@ -1019,10 +1032,13 @@ void Desktop::HandleBootstrapErrors( BootstrapError aBootstrapError )
  *
  */
 
+sal_Bool Desktop::_bTasksSaved = sal_False;
+
 sal_Bool Desktop::SaveTasks(sal_Int32 options)
 {
-    sal_Bool bReturn = sal_False;
+    if (Desktop::_bTasksSaved) return sal_True;
 
+    sal_Bool bReturn = sal_False;
     if( Application::IsInExecute() &&
             (options & DESKTOP_SAVETASKS_MOD ||
              options & DESKTOP_SAVETASKS_UNMOD) )
@@ -1044,8 +1060,7 @@ sal_Bool Desktop::SaveTasks(sal_Int32 options)
         for( sal_Int32 i=0; i<nCount; ++i )
         {
             ::com::sun::star::uno::Any aVal = xList->getByIndex(i);
-            if ( !(aVal>>=xTask) || !xTask.is() )
-                continue;
+            if ( !(aVal>>=xTask) || !xTask.is() ) continue;
             try
             {
                 // ask for controller
@@ -1054,6 +1069,7 @@ sal_Bool Desktop::SaveTasks(sal_Int32 options)
                 {
                     // ask for model
                     Reference< ::com::sun::star::frame::XModel > xModel( xCtrl->getModel(), UNO_QUERY );
+                    if (!xModel.is()) continue; //if the component has no model, there is nothing to save
                     Reference< ::com::sun::star::util::XModifiable > xModifiable( xModel, UNO_QUERY );
 
                     // get URL and Name
@@ -1813,10 +1829,23 @@ void Desktop::OpenClients()
             if ( bIsURL )
                 sRealFileName = aURL.GetMainURL( INetURLObject::NO_DECODE );
 
-            String aMsg( DesktopResId( STR_RECOVER_QUERY ) );
-            aMsg.SearchAndReplaceAscii( "$1", sName );
-            MessBox aBox( NULL, WB_YES_NO_CANCEL | WB_DEF_YES | WB_3DLOOK, String( DesktopResId( STR_RECOVER_TITLE ) ), aMsg );
-            switch( aBox.Execute() )
+
+            short ret = 0;
+            if ( sName != sTempName)
+            {
+                //this is a crashrecovery file
+                //ask the user whether it is to be recovered
+                String aMsg( DesktopResId( STR_RECOVER_QUERY ) );
+                aMsg.SearchAndReplaceAscii( "$1", sName );
+                MessBox aBox( NULL, WB_YES_NO_CANCEL | WB_DEF_YES | WB_3DLOOK,
+                    String( DesktopResId( STR_RECOVER_TITLE ) ), aMsg );
+                ret = aBox.Execute();
+            } else {
+                // this is an existing unmodified file from a saved session
+                ret = RET_YES;
+            }
+
+            switch( ret )
             {
                 case RET_YES:
                 {
@@ -1844,37 +1873,52 @@ void Desktop::OpenClients()
                     }
 
                     // load the document
-                    Reference < XComponent > xDoc = xDesktop->loadComponentFromURL( sTempFileName, ::rtl::OUString::createFromAscii( "_default" ), 0, aArgs );
-                    if ( !xFirst.is() )
-                        // remember the first successfully recovered file
-                        xFirst = xDoc;
+                    try {
+                        Reference < XComponent > xDoc = xDesktop->loadComponentFromURL( sTempFileName, ::rtl::OUString::createFromAscii( "_default" ), 0, aArgs );
+                        if ( !xFirst.is() )
+                            // remember the first successfully recovered file
+                            xFirst = xDoc;
 
-                    if ( xDoc.is() && sFilter.getLength() && bIsURL )
-                    {
-                        // put the real filter name into the documents media descriptor
-                        Reference < XModel > xModel( xDoc, UNO_QUERY );
-                        Sequence < PropertyValue > sArgs = xModel->getArgs();
-                        sal_Int32 nArgs = sArgs.getLength();
-                        sal_Int32 nFilterProp = nArgs;
-                        for ( sal_Int32 n=0; n<nArgs; n++ )
+                        if ( xDoc.is() && sFilter.getLength() && bIsURL )
                         {
-                            PropertyValue& rProp = sArgs[n];
-                            if ( rProp.Name.compareToAscii("FilterName") == COMPARE_EQUAL )
+                            // put the real filter name into the documents media descriptor
+                            Reference < XModel > xModel( xDoc, UNO_QUERY );
+                            Sequence < PropertyValue > sArgs = xModel->getArgs();
+                            sal_Int32 nArgs = sArgs.getLength();
+                            sal_Int32 nFilterProp = nArgs;
+                            for ( sal_Int32 n=0; n<nArgs; n++ )
                             {
-                                nFilterProp = n;
-                                break;
+                                PropertyValue& rProp = sArgs[n];
+                                if ( rProp.Name.compareToAscii("FilterName") == COMPARE_EQUAL )
+                                {
+                                    nFilterProp = n;
+                                    break;
+                                }
                             }
-                        }
 
-                        if ( nFilterProp == nArgs )
-                        {
-                            // currently no filter set
-                            sArgs.realloc( nArgs+1 );
-                            sArgs[nFilterProp].Name = ::rtl::OUString::createFromAscii("FilterName");
-                        }
+                            if ( nFilterProp == nArgs )
+                            {
+                                // currently no filter set
+                                sArgs.realloc( nArgs+1 );
+                                sArgs[nFilterProp].Name = ::rtl::OUString::createFromAscii("FilterName");
+                            }
 
-                        sArgs[nFilterProp].Value <<= sFilter;
-                        xModel->attachResource( ::rtl::OUString( sRealFileName ), sArgs );
+                            sArgs[nFilterProp].Value <<= sFilter;
+                            xModel->attachResource( ::rtl::OUString( sRealFileName ), sArgs );
+                        }
+                    }
+                    // if we get an exception while trying to restore a document
+                    // we ignore it and continue with the next item from the list
+                    // when recovery and session mangement are seperated, each mechanism
+                    // should provide meaningful feedback.
+                    catch (css::lang::IllegalArgumentException)
+                    {
+                    }
+                    catch (css::io::IOException)
+                    {
+                    }
+                    catch (css::uno::RuntimeException)
+                    {
                     }
 
                     // backup copy will be removed when document is closed
@@ -2253,7 +2297,8 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
     }
     else if ( rAppEvent.GetEvent() == "SaveDocuments" )
     {
-        SaveTasks(DESKTOP_SAVETASKS_ALL);
+        Desktop::_bTasksSaved = sal_False;
+        Desktop::_bTasksSaved = SaveTasks(DESKTOP_SAVETASKS_ALL);
         // SaveTasks(DESKTOP_SAVETASKS_MOD);
     }
     else if ( rAppEvent.GetEvent() == "OPENHELPURL" )
