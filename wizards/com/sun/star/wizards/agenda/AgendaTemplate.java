@@ -2,9 +2,8 @@
  *
  *  $RCSfile: AgendaTemplate.java,v $
  *
- *  $Revision: 1.2 $
- *
- *  last change: $Author: obo $  $Date: 2004-09-08 13:58:27 $
+ *  $Revision: 1.3 $
+ *  last change: $Author: kz $  $Date: 2004-11-27 09:04:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +72,7 @@ import com.sun.star.container.NoSuchElementException;
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.container.XNamed;
 import com.sun.star.frame.XComponentLoader;
+import com.sun.star.frame.XTerminateListener;
 import com.sun.star.i18n.NumberFormatIndex;
 import com.sun.star.lang.Locale;
 import com.sun.star.lang.WrappedTargetException;
@@ -97,11 +97,11 @@ import com.sun.star.wizards.ui.event.DataAware;
 
 
 /**
- * @author rpiterman
+ *
  * The classes here implement the whole document-functionality of the agenda wizard:
  * the live-preview and the final "creation" of the document, when the user clicks "finish". <br/>
  * <br/>
- * Some terminology:<br/>
+ * <h2>Some terminology:<h2/>
  * items are names or headings. we don't make any distinction.
  *
  * <br/>
@@ -114,7 +114,7 @@ import com.sun.star.wizards.ui.event.DataAware;
  * <br/><br/>
  * We tried to keep the Agenda Template as flexible as possible, though there
  * must be many limitations, because it is generated dynamically.<br/><br/>
- * To keep the template flexible the following decisions were made:
+ * To keep the template flexible the following decisions were made:<br/>
  * 1. Item tables.<br/>
  * 1.a. there might be arbitrary number of Item tables.<br/>
  * 1.b. Item tables design (bordewr, background) is arbitrary.<br/>
@@ -122,9 +122,9 @@ import com.sun.star.wizards.ui.event.DataAware;
  * As result the following limitations:<br/>
  * Pairs of Name->value for each item.<br/>
  * Tables contain *only* those pairs.<br/>
- * 2. Topics table.
- * 2.a. arbitrary structure.
- * 2.b. design is arbitrary.
+ * 2. Topics table.<br/>
+ * 2.a. arbitrary structure.<br/>
+ * 2.b. design is arbitrary.<br/>
  * As result the following limitations:<br/>
  * No column merge is allowed.<br/>
  * One compolsary Heading row.<br/>
@@ -136,6 +136,8 @@ import com.sun.star.wizards.ui.event.DataAware;
  * A note about threads:<br/>
  * Many methods here are synchronized, in order to avoid colission made by
  * events fired too often.
+ * @author rpiterman
+ *
  */
 public class AgendaTemplate extends TextDocument implements TemplateConsts, DataAware.Listener
 {
@@ -322,8 +324,8 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
      * @param agenda_ the data model (CGAgenda)
      * @param resources_ resources.
      */
-    AgendaTemplate(XMultiServiceFactory xmsf_, CGAgenda agenda_ , AgendaWizardDialogResources resources_) {
-        super(xmsf_);
+    AgendaTemplate(XMultiServiceFactory xmsf_, CGAgenda agenda_ , AgendaWizardDialogResources resources_, XTerminateListener listener) {
+        super(xmsf_, listener);
 
         agenda = agenda_;
         resources = resources_;
@@ -678,12 +680,18 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
      *  F I N I S H
      *********************************************/
 
+    /** the user clicked finish **/
     public synchronized void finish(List topics) {
         createMinutes(topics);
         deleteHiddenSections();
         textSectionHandler.removeAllTextSections();
     }
 
+    /**
+     * hidden sections exist when an item's section is hidden because the
+     * user specified not to display any items which it contains.
+     * When finishing the wizard removes this sections entireley from the document.
+     */
     private void deleteHiddenSections() {
         XTextSectionsSupplier xTextSectionsSupplier = (XTextSectionsSupplier) UnoRuntime.queryInterface(XTextSectionsSupplier.class, document);
         String[] allSections = xTextSectionsSupplier.getTextSections().getElementNames();
@@ -704,10 +712,10 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
     }
 
     /**
-     * create the minutes for the given topics or remove the minues section from the document.
+     * create the minutes for the given topics or remove the minutes section from the document.
      * If no topics are supplied, or the user
      * specified not to create minuts, the minutes section will be removed,
-     * @param topicsData supplies PropertyValue arrays with the values for the topics.
+     * @param topicsData supplies PropertyValue arrays containing the values for the topics.
      */
     public synchronized void createMinutes(List topicsData) {
 
@@ -808,7 +816,14 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
         }
     }
 
-
+    /**
+     * given a text range and a text, fills the given
+     * text range with the given text.
+     * If the given text is empty, uses a placeholder with the giveb placeholder text.
+     * @param range text range to fill
+     * @param text the text to fill to the text range object.
+     * @param placeholder the placeholder text to use, if the text argument is empty (null or "")
+     */
     private void fillMinutesItem(XTextRange range, Object text, String placeholder) {
         String paraStyle = (String)Helper.getUnoPropertyValue(range,"ParaStyleName");
         range.setString((String)text);
@@ -827,6 +842,13 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
         }
     }
 
+    /**
+     * creates a placeholder field with the given text and given hint.
+     * @param xmsf service factory
+     * @param ph place holder text
+     * @param hint hint text
+     * @return the place holder field.
+     */
     public static XTextContent createPlaceHolder(XMultiServiceFactory xmsf, String ph, String hint) {
         Object placeHolder;
         try {
@@ -1029,10 +1051,9 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
 
         /**
          * A List of Cell Formatters for the last row.
+         * (will contain them in reverse order)
          */
         List lastRowFormat = new Vector();
-
-        //Map topicItems = new Hashtable(4);
 
         /**
          * the format of the cell of each topic cell.
