@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2002-12-04 16:10:43 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 10:11:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,9 @@
 #ifndef _COM_SUN_STAR_I18N_XFORBIDDENCHARACTERS_HPP_
 #include <com/sun/star/i18n/XForbiddenCharacters.hpp>
 #endif
+#ifndef _COM_SUN_STAR_DOCUMENT_PRINTERINDEPENDENTLAYOUT_HPP_
+#include <com/sun/star/document/PrinterIndependentLayout.hpp>
+#endif
 
 #ifndef _DOC_HXX
 #include <doc.hxx>
@@ -157,6 +160,10 @@
 #ifndef _XMLEOHLP_HXX
 #include <svx/xmleohlp.hxx>
 #endif
+#ifndef _SFX_PRINTER_HXX
+#include <sfx2/printer.hxx>
+#endif
+
 
 #ifndef _FORBIDDEN_CHARACTERS_ENUM_HXX
 #include <ForbiddenCharactersEnum.hxx>
@@ -764,40 +771,6 @@ void SwXMLImport::endDocument( void )
                 }
             }
         }
-#ifdef WE_ARE_SURE_WE_DONT_NEED_THIS_CODE_ANY_LONGER_REMOVE_IT
-        else if( IsInsertMode() )
-        {
-            // We're always appending a paragarph at the end of the document,
-            // so this code should enver be executed!
-            pPaM->Move( fnMoveForward, fnGoNode );
-            SwTxtNode* pTxtNode = pPos->nNode.GetNode().GetTxtNode();
-            SwNodeIndex aPrvIdx( pPos->nNode );
-            if( pTxtNode && pTxtNode->CanJoinPrev( &aPrvIdx ) &&
-                *pSttNdIdx <= aPrvIdx )
-            {
-                // In fact, we should do an JoinNext here, but the Cursor and
-                // many other stuff is registered to the current node. That for
-                // the node should remain and we do an JoinPrev here.
-
-                // Convert paragraph attributes into hints and set paragraph
-                // style at the next node.
-                SwTxtNode* pPrev = aPrvIdx.GetNode().GetTxtNode();
-                pTxtNode->ChgFmtColl( pPrev->GetTxtColl() );
-                pTxtNode->FmtToTxtAttr( pPrev );
-                pTxtNode->SwCntntNode::ResetAllAttr();
-
-                if( pPrev->GetpSwAttrSet() )
-                    pTxtNode->SwCntntNode::SetAttr( *pPrev->GetpSwAttrSet() );
-
-                if( &pPaM->GetBound(sal_True).nNode.GetNode() == pPrev )
-                    pPaM->GetBound(sal_True).nContent.Assign( pTxtNode, 0 );
-                if( &pPaM->GetBound(sal_False).nNode.GetNode() == pPrev )
-                    pPaM->GetBound(sal_False).nContent.Assign( pTxtNode, 0 );
-
-                pTxtNode->JoinPrev();
-            }
-        }
-#endif
     }
 
     if( (getImportFlags() & IMPORT_CONTENT) != 0 ||
@@ -812,6 +785,16 @@ void SwXMLImport::endDocument( void )
 
     delete pSttNdIdx;
     pSttNdIdx = 0;
+
+    if( (getImportFlags() == IMPORT_ALL ) )
+    {
+        // Notify math objects. If we are in the package filter this will
+        // be done by the filter object itself
+        if( IsInsertMode() )
+            pDoc->PrtOLENotify( FALSE );
+        else if ( pDoc->IsOLEPrtNotifyPending() )
+            pDoc->PrtOLENotify( TRUE );
+    }
 
     // delegate to parent: takes care of error handling
     SvXMLImport::endDocument();
@@ -938,12 +921,16 @@ void SwXMLImport::SetViewSettings(const Sequence < PropertyValue > & aViewProps)
         else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "ViewAreaWidth" ) ) )
         {
             pValue->Value >>= nTmp;
-            aRect.setWidth( bTwip ? MM100_TO_TWIP ( nTmp ) : nTmp );
+            Size aSize( aRect.GetSize() );
+            aSize.Width() = bTwip ? MM100_TO_TWIP ( nTmp ) : nTmp;
+            aRect.SetSize( aSize );
         }
         else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "ViewAreaHeight" ) ) )
         {
             pValue->Value >>= nTmp;
-            aRect.setHeight( bTwip ? MM100_TO_TWIP ( nTmp ) : nTmp );
+            Size aSize( aRect.GetSize() );
+            aSize.Height() = bTwip ? MM100_TO_TWIP ( nTmp ) : nTmp;
+            aRect.SetSize( aSize );
         }
         else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "ShowRedlineChanges" ) ) )
         {
@@ -982,6 +969,9 @@ void SwXMLImport::SetViewSettings(const Sequence < PropertyValue > & aViewProps)
 
 void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aConfigProps)
 {
+    // this method will modify the document directly -> lock SolarMutex
+    vos::OGuard aGuard(Application::GetSolarMutex());
+
     Reference< lang::XMultiServiceFactory > xFac( GetModel(), UNO_QUERY );
     if( !xFac.is() )
         return;
@@ -1026,7 +1016,8 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
  "PrintPaperFromSetup" ,
  "PrintTables" ,
  "PrintSingleJobs",
- "UpdateFromTemplate"
+ "UpdateFromTemplate",
+ "PrinterIndependentLayout"
   };
 #define TBL_MAX 100
 int aArr[ TBL_MAX ];
@@ -1093,49 +1084,53 @@ void main()
 }
 -----------------------------------------------------------------
     */
-    static const struct {
-        const sal_Char* pName;
-        sal_uInt16 nLen;
-    }  aNotSetArr[35] = {
-/* 0*/      {RTL_CONSTASCII_STRINGPARAM( "PrintPageBackground" )},
-/* 1*/      {RTL_CONSTASCII_STRINGPARAM( "PrintControls" )},
-/* .*/      {0,0},
-/* .*/      {0,0},
-/* 4*/      {RTL_CONSTASCII_STRINGPARAM( "PrintReversed" )},
-/* 5*/      {RTL_CONSTASCII_STRINGPARAM( "ForbiddenCharacters" )},
-/* 6*/      {RTL_CONSTASCII_STRINGPARAM( "PrintAnnotationMode" )},
-/* 7*/      {RTL_CONSTASCII_STRINGPARAM( "PrintFaxName" )},
-/* .*/      {0,0},
-/* .*/      {0,0},
-/* 10*/     {RTL_CONSTASCII_STRINGPARAM( "PrintProspect" )},
-/* .*/      {0,0},
-/* 12*/     {RTL_CONSTASCII_STRINGPARAM( "AddParaTableSpacingAtStart" )},
-/* 13*/     {RTL_CONSTASCII_STRINGPARAM( "PrintPaperFromSetup" )},
-/* 14*/     {RTL_CONSTASCII_STRINGPARAM( "AddParaTableSpacing" )},
-/* 15*/     {RTL_CONSTASCII_STRINGPARAM( "PrintDrawings" )},
-/* 16*/     {RTL_CONSTASCII_STRINGPARAM( "FieldAutoUpdate" )},
-/* .*/      {0,0},
-/* 18*/     {RTL_CONSTASCII_STRINGPARAM( "LinkUpdateMode" )},
-/* 19*/     {RTL_CONSTASCII_STRINGPARAM( "UpdateFromTemplate" )},
-/* 20*/     {RTL_CONSTASCII_STRINGPARAM( "PrintTables" )},
-/* 21*/     {RTL_CONSTASCII_STRINGPARAM( "IsKernAsianPunctuation" )},
-/* 22*/     {RTL_CONSTASCII_STRINGPARAM( "PrintLeftPages" )},
-/* 23*/     {RTL_CONSTASCII_STRINGPARAM( "PrintSingleJobs" )},
-/* 24*/     {RTL_CONSTASCII_STRINGPARAM( "CharacterCompressionType" )},
-/* .*/      {0,0},
-/* 26*/     {RTL_CONSTASCII_STRINGPARAM( "PrintGraphics" )},
-/* .*/      {0,0},
-/* .*/      {0,0},
-/* .*/      {0,0},
-/* 30*/     {RTL_CONSTASCII_STRINGPARAM( "PrintBlackFonts" )},
-/* 31*/     {RTL_CONSTASCII_STRINGPARAM( "PrintRightPages" )},
-/* 32*/     {RTL_CONSTASCII_STRINGPARAM( "ChartAutoUpdate" )},
-/* .*/      {0,0},
-/* .*/      {0,0}
+        static const struct {
+                const sal_Char* pName;
+                sal_uInt16 nLen;
+    }  aNotSetArr[40] = {
+/* 0*/      {0,0},
+/* 1*/      {RTL_CONSTASCII_STRINGPARAM( "PrintTables" )},
+/* 2*/      {RTL_CONSTASCII_STRINGPARAM( "ForbiddenCharacters" )},
+/* 3*/      {0,0},
+/* 4*/      {0,0},
+/* 5*/      {RTL_CONSTASCII_STRINGPARAM( "AddParaTableSpacingAtStart" )},
+/* 6*/      {0,0},
+/* 7*/      {RTL_CONSTASCII_STRINGPARAM( "CharacterCompressionType" )},
+/* 8*/      {0,0},
+/* 9*/      {RTL_CONSTASCII_STRINGPARAM( "PrintDrawings" )},
+/*10*/      {RTL_CONSTASCII_STRINGPARAM( "PrintRightPages" )},
+/*11*/      {RTL_CONSTASCII_STRINGPARAM( "PrintPageBackground" )},
+/*12*/      {RTL_CONSTASCII_STRINGPARAM( "LinkUpdateMode" )},
+/*13*/      {RTL_CONSTASCII_STRINGPARAM( "UpdateFromTemplate" )},
+/*14*/      {0,0},
+/*15*/      {RTL_CONSTASCII_STRINGPARAM( "PrintBlackFonts" )},
+/*16*/      {RTL_CONSTASCII_STRINGPARAM( "PrintSingleJobs" )},
+/*17*/      {RTL_CONSTASCII_STRINGPARAM( "ChartAutoUpdate" )},
+/*18*/      {RTL_CONSTASCII_STRINGPARAM( "IsKernAsianPunctuation" )},
+/*19*/      {RTL_CONSTASCII_STRINGPARAM( "AddParaTableSpacing" )},
+/*20*/      {0,0},
+/*21*/      {0,0},
+/*22*/      {0,0},
+/*23*/      {0,0},
+/*24*/      {RTL_CONSTASCII_STRINGPARAM( "PrintReversed" )},
+/*25*/      {RTL_CONSTASCII_STRINGPARAM( "FieldAutoUpdate" )},
+/*26*/      {RTL_CONSTASCII_STRINGPARAM( "PrintProspect" )},
+/*27*/      {0,0},
+/*28*/      {RTL_CONSTASCII_STRINGPARAM( "PrintControls" )},
+/*29*/      {0,0},
+/*30*/      {RTL_CONSTASCII_STRINGPARAM( "PrintAnnotationMode" )},
+/*31*/      {RTL_CONSTASCII_STRINGPARAM( "PrintGraphics" )},
+/*32*/      {RTL_CONSTASCII_STRINGPARAM( "PrinterIndependentLayout" )},
+/*33*/      {0,0},
+/*34*/      {0,0},
+/*35*/      {RTL_CONSTASCII_STRINGPARAM( "PrintPaperFromSetup" )},
+/*36*/      {RTL_CONSTASCII_STRINGPARAM( "PrintLeftPages" )},
+/*37*/      {RTL_CONSTASCII_STRINGPARAM( "PrintFaxName" )},
+/*38*/      {0,0},
+/*39*/      {0,0},
     };
-
-    const ULONG nPrime = 43;
-    const ULONG nSub = 116;
+    const ULONG nPrime = 51;
+    const ULONG nSub = 51;
 
     sal_Int32 nCount = aConfigProps.getLength();
     const PropertyValue* pValues = aConfigProps.getConstArray();
@@ -1144,12 +1139,17 @@ void main()
     BOOL bIsUserSetting = aSaveOpt.IsLoadUserSettings(),
          bSet = bIsUserSetting;
 
+    // for some properties we don't want to use the application
+    // default if they're missing. So we watch for them in the loop
+    // below, and set them if not found
+    bool bPrinterIndependentLayout = false;
+
     while( nCount-- )
     {
+        ULONG nHash = 0;
         if( !bIsUserSetting )
         {
             // test over the hash value if the entry is in the table.
-            ULONG nHash = 0;
             const sal_Unicode* p = pValues->Name;
             for( ULONG nLen = pValues->Name.getLength(); nLen; --nLen, ++p )
                 nHash = (nHash * nPrime) ^ ( *p - nSub );
@@ -1168,6 +1168,11 @@ void main()
                 {
                     xProps->setPropertyValue( pValues->Name, pValues->Value );
                 }
+
+                // did we find any of the non-default cases?
+                if( pValues->Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("PrinterIndependentLayout")) )
+                    bPrinterIndependentLayout = true;
+
             }
             catch( Exception& )
             {
@@ -1175,6 +1180,43 @@ void main()
             }
         }
         pValues++;
+    }
+
+    // finally, treat the non-default cases
+    if( ! bPrinterIndependentLayout )
+    {
+        Any aAny;
+        sal_Int16 nTmp = document::PrinterIndependentLayout::DISABLED;
+        aAny <<= nTmp;
+        xProps->setPropertyValue(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("PrinterIndependentLayout") ),
+            aAny );
+    }
+
+    Reference < XTextDocument > xTextDoc( GetModel(), UNO_QUERY );
+    Reference < XText > xText = xTextDoc->getText();
+    Reference<XUnoTunnel> xTextTunnel( xText, UNO_QUERY);
+    ASSERT( xTextTunnel.is(), "missing XUnoTunnel for Cursor" );
+    if( xTextTunnel.is() )
+    {
+        SwXText *pText = (SwXText *)xTextTunnel->getSomething(
+                                        SwXText::getUnoTunnelId() );
+        ASSERT( pText, "SwXText missing" );
+        if( pText )
+        {
+            SwDoc *pDoc = pText->GetDoc();
+            if( pDoc )
+            {
+                // If the printer is known or we use a virtual device then
+                // the OLE objects will already have correct sizes, and we
+                // don't have to call PrtOLENotify again. Otherwise we have to call it.
+                // The flag might be set from setting the printer, so it
+                // it is required to clear it.
+                SfxPrinter *pPrinter = pDoc->GetPrt( sal_False );
+                if( pPrinter )
+                    pDoc->SetOLEPrtNotifyPending( !pPrinter->IsKnown() );
+            }
+        }
     }
 }
 
