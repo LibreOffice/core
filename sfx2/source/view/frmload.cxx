@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmload.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2000-09-29 09:26:47 $
+ *  last change: $Author: mba $ $Date: 2000-10-05 12:03:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -384,13 +384,10 @@ SfxObjectFactory& SfxFrameLoader_Impl::GetFactory()
         ErrCode nErr = pFilter->GetFilterContainer()->GetFilter4Content( aMedium, &pFilter );
         if ( !pFilter )
         {
-//            if ( aMedium.IsStorage() )
-            {
-                SvStorageRef aStor = aMedium.GetStorage();
-                pFilter = rMatcher.GetFilter4ClipBoardId( aStor->GetFormat() );
-            }
-
-            nErr = pFilter->GetFilterContainer()->GetFilter4Content( aMedium, &pFilter );
+            SvStorageRef aStor = aMedium.GetStorage();
+            pFilter = rMatcher.GetFilter4ClipBoardId( aStor->GetFormat() );
+            if ( pFilter )
+                nErr = pFilter->GetFilterContainer()->GetFilter4Content( aMedium, &pFilter );
         }
 
         if ( !pFilter )
