@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propcontroller.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: tbe $ $Date: 2001-10-19 12:58:51 $
+ *  last change: $Author: fs $ $Date: 2001-12-13 09:14:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,6 +141,7 @@ namespace pcr
 {
 //............................................................................
 
+    using namespace ::com::sun::star;
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::awt;
     using namespace ::com::sun::star::form;
@@ -473,6 +474,31 @@ namespace pcr
     void SAL_CALL OPropertyBrowserController::focusLost( const FocusEvent& _rSource ) throw (RuntimeException)
     {
         // not interested in
+    }
+
+    //------------------------------------------------------------------------
+    awt::Size SAL_CALL OPropertyBrowserController::getMinimumSize(  ) throw (RuntimeException)
+    {
+        return awt::Size( 250, 300 );
+    }
+
+    //------------------------------------------------------------------------
+    awt::Size SAL_CALL OPropertyBrowserController::getPreferredSize(  ) throw (RuntimeException)
+    {
+        return getMinimumSize( );
+            // TODO: depending on the strings we have on our current page
+    }
+
+    //------------------------------------------------------------------------
+    awt::Size SAL_CALL OPropertyBrowserController::calcAdjustedSize( const awt::Size& _rNewSize ) throw (RuntimeException)
+    {
+        awt::Size aMinSize = getMinimumSize( );
+        awt::Size aAdjustedSize( _rNewSize );
+        if ( aAdjustedSize.Width < aMinSize.Width )
+            aAdjustedSize.Width = aMinSize.Width;
+        if ( aAdjustedSize.Height < aMinSize.Height )
+            aAdjustedSize.Height = aMinSize.Height;
+        return aAdjustedSize;
     }
 
     //------------------------------------------------------------------------
@@ -1077,6 +1103,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.16  2001/10/19 12:58:51  tbe
+ *  #92755# Assign Standard Values for Basic Controls in Designmode
+ *
  *  Revision 1.15  2001/08/06 14:52:59  fs
  *  #87690# don't set connections on rowsets permanently - instead dispose connections which we created ourself upon switching to a new object
  *

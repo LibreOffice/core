@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propcontroller.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: tbe $ $Date: 2001-10-19 12:58:51 $
+ *  last change: $Author: fs $ $Date: 2001-12-13 09:14:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,8 +122,8 @@
 #ifndef _CPPUHELPER_INTERFACECONTAINER_HXX_
 #include <cppuhelper/interfacecontainer.hxx>
 #endif
-#ifndef _CPPUHELPER_IMPLBASE2_HXX_
-#include <cppuhelper/implbase4.hxx>
+#ifndef _CPPUHELPER_IMPLBASE5_HXX_
+#include <cppuhelper/implbase5.hxx>
 #endif
 #ifndef _COMPHELPER_PROPERTYCONTAINER_HXX_
 #include <comphelper/propertycontainer.hxx>
@@ -139,6 +139,9 @@
 #endif
 #ifndef _COMPHELPER_BROADCASTHELPER_HXX_
 #include <comphelper/broadcasthelper.hxx>
+#endif
+#ifndef _COM_SUN_STAR_AWT_XLAYOUTCONSTRAINS_HPP_
+#include <com/sun/star/awt/XLayoutConstrains.hpp>
 #endif
 
 
@@ -167,10 +170,11 @@ namespace pcr
     //========================================================================
     //= OPropertyBrowserController
     //========================================================================
-    typedef ::cppu::WeakImplHelper4 <   ::com::sun::star::frame::XController
+    typedef ::cppu::WeakImplHelper5 <   ::com::sun::star::frame::XController
                                     ,   ::com::sun::star::lang::XServiceInfo
                                     ,   ::com::sun::star::lang::XInitialization
                                     ,   ::com::sun::star::awt::XFocusListener
+                                    ,   ::com::sun::star::awt::XLayoutConstrains
                                     >   OPropertyBrowserController_Base;
     typedef ::comphelper::OPropertyContainer    OPropertyBrowserController_PropertyBase1;
 
@@ -292,6 +296,11 @@ namespace pcr
 
         // XEventListener
         virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException);
+
+        // XLayoutConstrains
+        virtual ::com::sun::star::awt::Size SAL_CALL getMinimumSize(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::awt::Size SAL_CALL getPreferredSize(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::awt::Size SAL_CALL calcAdjustedSize( const ::com::sun::star::awt::Size& aNewSize ) throw (::com::sun::star::uno::RuntimeException);
 
         // XPropertySet and friends
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
@@ -426,6 +435,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.13  2001/10/19 12:58:51  tbe
+ *  #92755# Assign Standard Values for Basic Controls in Designmode
+ *
  *  Revision 1.12  2001/08/13 15:45:53  fs
  *  #90958# +getRowSet / +ensureRowsetConnection
  *
