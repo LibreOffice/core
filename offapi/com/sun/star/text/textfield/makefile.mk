@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: os $ $Date: 2001-10-17 11:11:54 $
+#   last change: $Author: os $ $Date: 2001-12-21 10:51:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,6 +82,7 @@ IDLFILES=\
     Input.idl\
     InputUser.idl\
     GetReference.idl\
+    PageNumber.idl\
     TableFormula.idl\
     User.idl\
 
