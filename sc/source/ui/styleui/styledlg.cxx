@@ -2,9 +2,9 @@
  *
  *  $RCSfile: styledlg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-30 18:37:29 $
+ *  last change: $Author: nn $ $Date: 2001-05-02 15:34:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,7 @@
 #include <svx/paragrph.hxx>
 #include <sfx2/objsh.hxx>
 #include <svtools/style.hxx>
+#include <svtools/cjkoptions.hxx>
 
 #include "styledlg.hxx"
 #include "tabpages.hxx"     // Zellvorlagen
@@ -102,11 +103,16 @@ ScStyleDlg::ScStyleDlg( Window*             pParent,
     {
         case RID_SCDLG_STYLES_PAR:  // Zellformatvorlagen
             {
+                SvtCJKOptions aCJKOptions;
+
                 AddTabPage( TP_NUMBER, &SvxNumberFormatTabPage::Create, &SvxNumberFormatTabPage::GetRanges );
                 AddTabPage( TP_FONT, &SvxCharNamePage::Create,          &SvxCharNamePage::GetRanges );
                 AddTabPage( TP_FONTEFF, &SvxCharEffectsPage::Create,            &SvxCharEffectsPage::GetRanges );
                 AddTabPage( TP_ALIGNMENT, &SvxAlignmentTabPage::Create, &SvxAlignmentTabPage::GetRanges );
-                AddTabPage( TP_ASIAN, &SvxAsianTabPage::Create,         &SvxAsianTabPage::GetRanges );
+                if ( aCJKOptions.IsAsianTypographyEnabled() )
+                    AddTabPage( TP_ASIAN, &SvxAsianTabPage::Create,     &SvxAsianTabPage::GetRanges );
+                else
+                    RemoveTabPage( TP_ASIAN );
                 AddTabPage( TP_BORDER, &SvxBorderTabPage::Create,       &SvxBorderTabPage::GetRanges );
                 AddTabPage( TP_BACKGROUND, &SvxBackgroundTabPage::Create,   &SvxBackgroundTabPage::GetRanges );
                 AddTabPage( TP_PROTECTION, &ScTabPageProtection::Create,    &ScTabPageProtection::GetRanges );

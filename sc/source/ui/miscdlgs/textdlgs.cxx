@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textdlgs.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-30 18:39:40 $
+ *  last change: $Author: nn $ $Date: 2001-05-02 15:33:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,7 @@
 #include <svx/paragrph.hxx>
 #include <svx/tabstpge.hxx>
 #include <sfx2/objsh.hxx>
+#include <svtools/cjkoptions.hxx>
 
 #include "textdlgs.hxx"
 #include "scresid.hxx"
@@ -133,10 +134,15 @@ ScParagraphDlg::ScParagraphDlg( Window* pParent, const SfxItemSet* pAttr ) :
 {
     FreeResource();
 
+    SvtCJKOptions aCJKOptions;
+
     AddTabPage( RID_SVXPAGE_STD_PARAGRAPH, SvxStdParagraphTabPage::Create, 0);
     AddTabPage( RID_SVXPAGE_ALIGN_PARAGRAPH, SvxParaAlignTabPage::Create, 0);
     //AddTabPage( RID_SVXPAGE_EXT_PARAGRAPH, SvxExtParagraphTabPage::Create, 0);
-    AddTabPage( RID_SVXPAGE_PARA_ASIAN, SvxAsianTabPage::Create,0);
+    if ( aCJKOptions.IsAsianTypographyEnabled() )
+        AddTabPage( RID_SVXPAGE_PARA_ASIAN, SvxAsianTabPage::Create,0);
+    else
+        RemoveTabPage( RID_SVXPAGE_PARA_ASIAN );
     AddTabPage( RID_SVXPAGE_TABULATOR, SvxTabulatorTabPage::Create, 0);
 }
 

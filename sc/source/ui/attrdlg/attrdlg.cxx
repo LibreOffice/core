@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attrdlg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-30 18:36:14 $
+ *  last change: $Author: nn $ $Date: 2001-05-02 15:32:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,39 +65,22 @@
 
 #pragma hdrstop
 
-#ifndef PCH
 #include "scitems.hxx"
 
 #include <sfx2/objsh.hxx>
-#include <svx/numfmt.hxx>
 #include <sfx2/tabdlg.hxx>
-#include <svx/chardlg.hxx>
 #include <svx/align.hxx>
-#include <svx/border.hxx>
 #include <svx/backgrnd.hxx>
+#include <svx/border.hxx>
+#include <svx/chardlg.hxx>
+#include <svx/numfmt.hxx>
 #include <svx/paragrph.hxx>
-/*
-#include <sbx.hxx>
-#include <sfxdoc.hxx>
-
-#include <dialogs.hrc>
-#include <numfmt.hxx>
-#include <chardlg.hxx>
-#include <border.hxx>
-#include <backgrnd.hxx>
-//#include <dialogs.hxx>
-*/
-#endif
-
-
-//#include <align.hxx>      // SvxAlignmentTabPage
+#include <svtools/cjkoptions.hxx>
 
 #include "tabpages.hxx"
 #include "attrdlg.hxx"
 #include "scresid.hxx"
 #include "attrdlg.hrc"
-
-#pragma hdrstop
 
 //==================================================================
 
@@ -110,11 +93,16 @@ ScAttrDlg::ScAttrDlg( SfxViewFrame*     pFrame,
                       ScResId( RID_SCDLG_ATTR ),
                       pCellAttrs )
 {
+    SvtCJKOptions aCJKOptions;
+
     AddTabPage( TP_NUMBER,      SvxNumberFormatTabPage::Create, 0 );
     AddTabPage( TP_FONT,        SvxCharNamePage::Create,        0 );
     AddTabPage( TP_FONTEFF,     SvxCharEffectsPage::Create,     0 );
     AddTabPage( TP_ALIGNMENT,   SvxAlignmentTabPage::Create,    0 );
-    AddTabPage( TP_ASIAN,       SvxAsianTabPage::Create,        0 );
+    if ( aCJKOptions.IsAsianTypographyEnabled() )
+        AddTabPage( TP_ASIAN,   SvxAsianTabPage::Create,        0 );
+    else
+        RemoveTabPage( TP_ASIAN );
     AddTabPage( TP_BORDER,      SvxBorderTabPage::Create,       0 );
     AddTabPage( TP_BACKGROUND,  SvxBackgroundTabPage::Create,   0 );
     AddTabPage( TP_PROTECTION,  ScTabPageProtection::Create,    0 );
