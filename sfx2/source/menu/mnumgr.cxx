@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mnumgr.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 15:47:28 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:44:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,9 @@
 #ifndef _POINTR_HXX //autogen
 #include <vcl/pointr.hxx>
 #endif
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #include <unotools/streamwrap.hxx>
 #include <objsh.hxx>
@@ -291,11 +293,11 @@ BOOL SfxMenuIter_Impl::IsBinding( SfxModule* pMod ) const
 
 SfxMenuManager::SfxMenuManager( const ResId& rResId, SfxBindings &rBindings, SfxConfigManager* pMgr, BOOL bBar )
 :   SfxConfigItem( rResId.GetId(), pMgr ),
-    bMenuBar(bBar),
     pMenu(0),
     pOldMenu(0),
-    pResMgr(rResId.GetResMgr()),
-    pBindings(&rBindings)
+    bMenuBar(bBar),
+    pBindings(&rBindings),
+    pResMgr(rResId.GetResMgr())
 {
     bOLE = FALSE;
     bAddClipboardFuncs = FALSE;
@@ -428,7 +430,7 @@ void SfxMenuManager::UseDefault()
 {
     DBG_MEMTEST();
 
-    SfxApplication *pSfxApp = SFX_APP();
+    SFX_APP();
     SfxVirtualMenu *pOldVirtMenu=0;
     if (pMenu)
     {
@@ -521,10 +523,9 @@ String SfxMenuManager::GetStreamName() const
 
 void SfxMenuManager::ConstructSvMenu( Menu* pSuper, SfxMenuCfgItemArr& rCfg)
 {
-    USHORT nCount = rCfg.Count();
+    // USHORT nCount = rCfg.Count();
     for ( USHORT n = 0; n < rCfg.Count(); ++n )
     {
-        SfxMenuCfgItem *pmIt=rCfg[n];
         USHORT nId = rCfg[n]->nId;
         if ( rCfg[n]->pPopup )
         {
