@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.126 $
+ *  $Revision: 1.127 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 16:47:11 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 17:09:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -470,13 +470,15 @@ void SvxShape::Init() throw()
     }
     osl_decrementInterlockedCount( &m_refCount );
 
-    // no model? this should not be
-    if(!pObj->GetModel())
-        return;
-
     pModel = pObj->GetModel();
 
-    StartListening( *pModel );
+    // #i40944#
+    // Do not simply return when no model but do the type corrections
+    // following below.
+    if(pModel)
+    {
+        StartListening( *pModel );
+    }
 
     const sal_uInt32 nInventor = pObj->GetObjInventor();
 
