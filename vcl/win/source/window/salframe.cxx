@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: ssa $ $Date: 2002-10-11 08:39:54 $
+ *  last change: $Author: ssa $ $Date: 2002-10-14 09:34:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1341,7 +1341,7 @@ void SalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight,
     if ( nY < nScreenY )
         nY = nScreenY;
 
-    UINT nPosFlags = SWP_NOACTIVATE | nPosSize;
+    UINT nPosFlags = SWP_NOACTIVATE | SWP_NOOWNERZORDER | nPosSize;
     // bring floating windows always to top
     if( !(maFrameData.mnStyle & SAL_FRAME_STYLE_FLOAT) )
         nPosFlags |= SWP_NOZORDER; // do not change z-order
