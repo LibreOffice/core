@@ -2,9 +2,9 @@
  *
  *  $RCSfile: string.c,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: th $ $Date: 2001-03-16 15:03:57 $
+ *  last change: $Author: jbu $ $Date: 2001-03-22 15:55:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,7 @@ static rtl_String aImplEmpty_rtl_String =
 {
     1,      /* sal_Int32    refCount;   */
     0,      /* sal_Int32    length;     */
-    0       /* sal_Char     buffer[1];  */
+    { 0 }   /* sal_Char     buffer[1];  */
 };
 
 /* ======================================================================= */

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ustring.c,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-21 16:26:09 $
+ *  last change: $Author: jbu $ $Date: 2001-03-22 15:55:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,7 @@ static rtl_uString aImplEmpty_rtl_uString =
 {
     1,      /* sal_Int32    refCount;   */
     0,      /* sal_Int32    length;     */
-    0       /* sal_Unicode  buffer[1];  */
+    { 0 }   /* sal_Unicode  buffer[1];  */
 };
 
 /* ======================================================================= */
