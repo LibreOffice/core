@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ViewShell.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:03:59 $
+ *  last change: $Author: rt $ $Date: 2004-08-04 08:55:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -439,6 +439,12 @@ public:
     */
     bool IsMainViewShell (void) const;
 
+    /** Set or reset the flag that indicates whether the called shell is the
+        one displayed in the center pane.  By default this flag is set to
+        <FALSE/>.  For the main view shell it thus has to be set to <TRUE/>.
+    */
+    void SetIsMainViewShell (bool bIsMainViewShell);
+
     /** Return an object that implements the necessary UNO interfaces to act
         as a controller for the ViewShellBase object.  The controller is
         created if it does not exist.  It is owned by the caller.
@@ -507,6 +513,11 @@ public:
         USHORT nTotal,
         PageKind ePageKind,
         BOOL bPrintMarkedOnly);
+
+    /** Show controls of the UI or hide them, depending on the given flag.
+        As a result the border is adapted.
+    */
+    virtual void ShowUIControls (bool bVisible = true);
 
 protected:
     friend class ViewShellBase;
