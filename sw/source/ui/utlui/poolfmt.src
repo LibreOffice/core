@@ -2,9 +2,9 @@
  *
  *  $RCSfile: poolfmt.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: nf $ $Date: 2001-08-13 10:04:00 $
+ *  last change: $Author: nf $ $Date: 2001-08-13 10:06:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3936,7 +3936,7 @@ String STR_POOLCOLL_DOC_TITEL
     Text[ chinese_traditional ] = "å¤§æ¨™é¡Œ";
     Text[ arabic ] = "ÇáÚäæÇä";
     Text[ greek ] = "Ôßôëïò";
-    Text[ korean ] = "ì œëª©";
+    Text[ korean ] = "Title";
     Text[ turkish ] = "Bölüm baþlýðý";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Título";
