@@ -2,9 +2,9 @@
  *
  *  $RCSfile: targuno.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:08 $
+ *  last change: $Author: nn $ $Date: 2001-01-11 13:31:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,7 +160,8 @@ uno::Any SAL_CALL ScLinkTargetTypesObj::getByName(const rtl::OUString& aName)
             }
     }
 
-    return uno::Any();  //! exception?
+    throw container::NoSuchElementException();
+    return uno::Any();
 }
 
 uno::Sequence<rtl::OUString> SAL_CALL ScLinkTargetTypesObj::getElementNames(void) throw( uno::RuntimeException )
@@ -341,7 +342,8 @@ uno::Any SAL_CALL ScLinkTargetsObj::getByName(const rtl::OUString& aName)
         return aRet;
     }
 
-    return uno::Any();  //! exception?
+    throw container::NoSuchElementException();
+    return uno::Any();
 }
 
 uno::Sequence<rtl::OUString> SAL_CALL ScLinkTargetsObj::getElementNames(void) throw( uno::RuntimeException )

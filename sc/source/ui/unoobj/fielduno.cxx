@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fielduno.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:07 $
+ *  last change: $Author: nn $ $Date: 2001-01-11 13:31:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -322,7 +322,10 @@ uno::Any SAL_CALL ScCellFieldsObj::getByIndex( sal_Int32 nIndex )
     ScUnoGuard aGuard;
     uno::Reference<text::XTextField> xField = GetObjectByIndex_Impl(nIndex);
     uno::Any aAny;
-    aAny <<= xField;
+    if (xField.is())
+        aAny <<= xField;
+    else
+        throw lang::IndexOutOfBoundsException();
     return aAny;
 }
 
@@ -799,7 +802,10 @@ uno::Any SAL_CALL ScHeaderFieldsObj::getByIndex( sal_Int32 nIndex )
     ScUnoGuard aGuard;
     uno::Reference<text::XTextField> xField = GetObjectByIndex_Impl(nIndex);
     uno::Any aAny;
-    aAny <<= xField;
+    if (xField.is())
+        aAny <<= xField;
+    else
+        throw lang::IndexOutOfBoundsException();
     return aAny;
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: miscuno.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-09 17:32:47 $
+ *  last change: $Author: nn $ $Date: 2001-01-11 13:31:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -319,7 +319,7 @@ sal_Int32 SAL_CALL ScNameToIndexAccess::getCount(  ) throw(::com::sun::star::uno
     if ( xNameAccess.is() && nIndex >= 0 && nIndex < aNames.getLength() )
         return xNameAccess->getByName( aNames.getConstArray()[nIndex] );
 
-    //! IndexOutOfBoundsException / ...
+    throw lang::IndexOutOfBoundsException();
     return uno::Any();
 }
 

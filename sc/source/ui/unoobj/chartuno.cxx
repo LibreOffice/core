@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chartuno.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-12-21 13:59:04 $
+ *  last change: $Author: nn $ $Date: 2001-01-11 13:31:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -368,7 +368,10 @@ uno::Any SAL_CALL ScChartsObj::getByIndex( sal_Int32 nIndex )
     ScUnoGuard aGuard;
     uno::Reference<table::XTableChart> xChart = GetObjectByIndex_Impl(nIndex);
     uno::Any aAny;
-    aAny <<= xChart;
+    if (xChart.is())
+        aAny <<= xChart;
+    else
+        throw lang::IndexOutOfBoundsException();
     return aAny;
 }
 
@@ -391,7 +394,10 @@ uno::Any SAL_CALL ScChartsObj::getByName( const rtl::OUString& aName )
     ScUnoGuard aGuard;
     uno::Reference<table::XTableChart> xChart = GetObjectByName_Impl(aName);
     uno::Any aAny;
-    aAny <<= xChart;
+    if (xChart.is())
+        aAny <<= xChart;
+    else
+        throw container::NoSuchElementException();
     return aAny;
 }
 
