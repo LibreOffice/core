@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: ssa $ $Date: 2002-05-06 15:48:55 $
+ *  last change: $Author: ssa $ $Date: 2002-05-07 10:17:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4896,7 +4896,8 @@ void ToolBox::KeyInput( const KeyEvent& rKEvt )
         break;
         default:
         {
-            DockingWindow::KeyInput( rKEvt );
+            // do nothing to avoid key presses going into the document
+            // while the toolbox has the focus
         }
     }
 
