@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: os $ $Date: 2002-05-27 10:34:59 $
+ *  last change: $Author: os $ $Date: 2002-06-19 10:54:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,9 +89,11 @@
 #define ITEMID_PARAVERTALIGN 0
 #define _SVX_PARAGRPH_CXX   0
 #define ITEMID_PARAGRID     0
+#define ITEMID_FRAMEDIR     0
 
-#ifndef _SVTOOLS_CJKOPTIONS_HXX
-#include <svtools/cjkoptions.hxx>
+
+#ifndef _SVTOOLS_LANGUAGEOPTIONS_HXX
+#include <svtools/languageoptions.hxx>
 #endif
 #ifndef _SVX_PGRDITEM_HXX
 #include <pgrditem.hxx>
@@ -99,6 +101,7 @@
 #include "dialogs.hrc"
 #include "paragrph.hrc"
 #include "paragrph.hxx"
+#include "frmdiritem.hxx"
 
 #include "lspcitem.hxx"
 #include "adjitem.hxx"
@@ -724,7 +727,7 @@ SvxStdParagraphTabPage::SvxStdParagraphTabPage( Window* pParent,
     SetExchangeSupport();
 
     aLineDistAtMetricBox.Hide();
-    SvtCJKOptions aCJKOptions;
+    SvtLanguageOptions aCJKOptions;
     if(aCJKOptions.IsAsianTypographyEnabled())
     {
         aLeftLabel.SetText(String(ResId(   ST_LEFTINDENT_ASIAN )));
@@ -1064,7 +1067,7 @@ SvxParaAlignTabPage::SvxParaAlignTabPage( Window* pParent, const SfxItemSet& rSe
     aVertAlignFT            ( this, ResId( FT_VERTALIGN ) ),
     aVertAlignLB            ( this, ResId( LB_VERTALIGN ) )
 {
-    SvtCJKOptions aCJKOptions;
+    SvtLanguageOptions aCJKOptions;
     if(aCJKOptions.IsAsianTypographyEnabled())
     {
         String sLeft(ResId(ST_LEFTALIGN_ASIAN));
@@ -1346,7 +1349,7 @@ void SvxParaAlignTabPage::EnableJustifyExt()
     aLastLineFT.Show();
     aLastLineLB.Show();
     aExpandCB  .Show();
-    SvtCJKOptions aCJKOptions;
+    SvtLanguageOptions aCJKOptions;
     if(aCJKOptions.IsAsianTypographyEnabled())
         aSnapToGridCB.Show();
 
@@ -1452,8 +1455,8 @@ BOOL SvxExtParagraphTabPage::FillItemSet( SfxItemSet& rOutSet )
 
         if ( (eModelState == SFX_ITEM_SET && STATE_CHECK == aPageBreakBox.GetState()) ||
              eState != aPageBreakBox.GetSavedValue()                ||
-             aBeforeBox.IsChecked() != aBeforeBox.GetSavedValue()   ||
-             aPageBox.IsChecked() != aPageBox.GetSavedValue() )
+             aBreakTypeLB.GetSelectEntryPos() != aBreakTypeLB.GetSavedValue()   ||
+             aBreakPositionLB.GetSelectEntryPos() != aBreakPositionLB.GetSavedValue() )
         {
             const SvxFmtBreakItem rOldBreak(
                     (const SvxFmtBreakItem&)GetItemSet().Get( nWhich ));
@@ -1463,9 +1466,9 @@ BOOL SvxExtParagraphTabPage::FillItemSet( SfxItemSet& rOutSet )
             {
                 case STATE_CHECK:
                 {
-                    BOOL bBefore = aBeforeBox.IsChecked();
+                    BOOL bBefore = aBreakPositionLB.GetSelectEntryPos() == 0;
 
-                    if ( aPageBox.IsChecked() )
+                    if ( aBreakTypeLB.GetSelectEntryPos() == 0 )
                     {
                         if ( bBefore )
                             aBreak.SetValue( SVX_BREAK_PAGE_BEFORE );
@@ -1563,6 +1566,17 @@ BOOL SvxExtParagraphTabPage::FillItemSet( SfxItemSet& rOutSet )
             bModified |= TRUE;
         }
     }
+    nWhich = GetWhich( SID_ATTR_FRAMEDIRECTION );
+    USHORT nPos;
+    if( aTextDirectionLB.IsVisible() &&
+        ( nPos = aTextDirectionLB.GetSelectEntryPos() ) !=
+                                            aTextDirectionLB.GetSavedValue() )
+    {
+        sal_uInt32 nDirection = (sal_uInt32)aTextDirectionLB.GetEntryData( nPos );
+        rOutSet.Put( SvxFrameDirectionItem( (SvxFrameDirection)nDirection, nWhich));
+        bModified = TRUE;
+    }
+
     return bModified;
 }
 
@@ -1635,17 +1649,17 @@ void SvxExtParagraphTabPage::Reset( const SfxItemSet& rSet )
 
                 aPageBreakBox.Enable();
                 aPageBreakBox.EnableTriState( FALSE );
-                aPageBox.Enable();
-                aColumnBox.Enable(!bHtmlMode);
-                aBeforeBox.Enable();
-                aAfterBox.Enable();
+                aBreakTypeFT.Enable();
+                aBreakTypeLB.Enable();
+                aBreakPositionFT.Enable();
+                aBreakPositionLB.Enable();
                 aApplyCollBtn.Enable();
                 aPageBreakBox.SetState( STATE_CHECK );
 
-                aPageBox.Check( TRUE );
-                aColumnBox.Check( FALSE );
-                aBeforeBox.Check( TRUE );
-                aAfterBox.Check( FALSE );
+                //select page break
+                aBreakTypeLB.SelectEntryPos(0);
+                //select break before
+                aBreakPositionLB.SelectEntryPos(0);
             }
             else
             {
@@ -1684,10 +1698,11 @@ void SvxExtParagraphTabPage::Reset( const SfxItemSet& rSet )
                 // dann kann CheckBox frei gegeben werden
                 aPageBreakBox.Enable();
                 aPageBreakBox.EnableTriState( FALSE );
-                aPageBox.Enable();
-                aColumnBox.Enable(!bHtmlMode);
-                aBeforeBox.Enable();
-                aAfterBox.Enable();
+                aBreakTypeFT.Enable();
+                aBreakTypeLB.Enable();
+                aBreakPositionFT.Enable();
+                aBreakPositionLB.Enable();
+
                 aPageBreakBox.SetState( STATE_CHECK );
 
                 BOOL bEnable =  eBreak != SVX_BREAK_NONE &&
@@ -1703,50 +1718,39 @@ void SvxExtParagraphTabPage::Reset( const SfxItemSet& rSet )
                 if ( eBreak == SVX_BREAK_NONE )
                     aPageBreakBox.SetState( STATE_NOCHECK );
 
+                USHORT nType = 0; // selection position in break type ListBox : Page
+                USHORT nPosition = 0; //  selection position in break position ListBox : Before
                 switch ( eBreak )
                 {
                     case SVX_BREAK_PAGE_BEFORE:
-                        aPageBox.Check( TRUE );
-                        aColumnBox.Check( FALSE );
-                        aBeforeBox.Check( TRUE );
-                        aAfterBox.Check( FALSE );
                         break;
                     case SVX_BREAK_PAGE_AFTER:
-                        aPageBox.Check( TRUE );
-                        aColumnBox.Check( FALSE );
-                        aBeforeBox.Check( FALSE );
-                        aAfterBox.Check( TRUE );
+                        nPosition = 1;
                         break;
                     case SVX_BREAK_COLUMN_BEFORE:
-                        aPageBox.Check( FALSE );
-                        aColumnBox.Check( TRUE );
-                        aBeforeBox.Check( TRUE );
-                        aAfterBox.Check( FALSE );
+                        nType = 1;
                         break;
                     case SVX_BREAK_COLUMN_AFTER:
-                        aPageBox.Check( FALSE );
-                        aColumnBox.Check( TRUE );
-                        aBeforeBox.Check( FALSE );
-                        aAfterBox.Check( TRUE );
+                        nType = 1;
+                        nPosition = 1;
                         break;
                 }
+                aBreakTypeLB.SelectEntryPos(nType);
+                aBreakPositionLB.SelectEntryPos(nPosition);
             }
             else if ( SFX_ITEM_DONTCARE == eItemState )
                 aPageBreakBox.SetState( STATE_DONTKNOW );
             else
             {
                 aPageBreakBox.Enable(FALSE);
-                aPageBox.Enable(FALSE);
-                aColumnBox.Enable(FALSE);
-                aBeforeBox.Enable(FALSE);
-                aAfterBox.Enable(FALSE);
+                aBreakTypeFT.Enable(FALSE);
+                aBreakTypeLB.Enable(FALSE);
+                aBreakPositionFT.Enable(FALSE);
+                aBreakPositionLB.Enable(FALSE);
             }
         }
 
-        if ( aBeforeBox.IsChecked() )
-            PageBreakPosHdl_Impl( &aBeforeBox );
-        else if ( aAfterBox.IsChecked() )
-            PageBreakPosHdl_Impl( &aAfterBox );
+        PageBreakPosHdl_Impl( &aBreakPositionLB );
         PageBreakHdl_Impl( &aPageBreakBox );
     }
 
@@ -1842,15 +1846,26 @@ void SvxExtParagraphTabPage::Reset( const SfxItemSet& rSet )
     WidowHdl_Impl( 0 );
     OrphanHdl_Impl( 0 );
 
+
+    nWhich = GetWhich( SID_ATTR_FRAMEDIRECTION );
+    //text direction
+    if( SFX_ITEM_AVAILABLE <= rSet.GetItemState( nWhich ) )
+    {
+        const SvxFrameDirectionItem& rFrameDirItem =
+                (const SvxFrameDirectionItem&)rSet.Get( nWhich );
+        sal_uInt32 nVal  = rFrameDirItem.GetValue();
+        USHORT nPos = aTextDirectionLB.GetEntryPos( (void*) nVal );
+        aTextDirectionLB.SelectEntryPos( nPos );
+        aTextDirectionLB.SaveValue();
+    }
+
     aHyphenBox.SaveValue();
     aExtHyphenBeforeBox.SaveValue();
     aExtHyphenAfterBox.SaveValue();
     aMaxHyphenEdit.SaveValue();
     aPageBreakBox.SaveValue();
-    aPageBox.SaveValue();
-    aColumnBox.SaveValue();
-    aBeforeBox.SaveValue();
-    aAfterBox.SaveValue();
+    aBreakPositionLB.SaveValue();
+    aBreakTypeLB.SaveValue();
     aApplyCollBtn.SaveValue();
     aApplyCollBox.SaveValue();
     aPagenumEdit.SaveValue();
@@ -1875,12 +1890,12 @@ void SvxExtParagraphTabPage::DisablePageBreak()
 {
     bPageBreak = FALSE;
     aPageBreakBox.Enable(FALSE);
-    aPageBox.Enable(FALSE);
+    aBreakTypeLB.RemoveEntry(0);
+    aBreakPositionFT.Enable(FALSE);
+    aBreakPositionLB.Enable(FALSE);
     aApplyCollBtn.Enable(FALSE);
     aApplyCollBox.Enable(FALSE);
     aPagenumEdit.Enable(FALSE);
-    aBeforeBox .Enable(FALSE);
-    aAfterBox  .Enable(FALSE);
 }
 
 // -----------------------------------------------------------------------
@@ -1900,10 +1915,14 @@ SvxExtParagraphTabPage::SvxExtParagraphTabPage( Window* pParent, const SfxItemSe
     aMaxHyphenEdit      ( this, ResId( ED_MAXHYPH ) ),
     aExtFL              ( this, ResId( FL_HYPHEN ) ),
     aPageBreakBox       ( this, ResId( BTN_PAGEBREAK ) ),
-    aPageBox            ( this, ResId( BTN_BREAKPAGE ) ),
-    aColumnBox          ( this, ResId( BTN_BREAKCOLUMN ) ),
-    aBeforeBox          ( this, ResId( BTN_PAGEBREAKBEFORE ) ),
-    aAfterBox           ( this, ResId( BTN_PAGEBREAKAFTER ) ),
+    aBreakTypeFT        ( this, ResId( FT_BREAKTYPE     )),
+    aBreakTypeLB        ( this, ResId( LB_BREAKTYPE     )),
+    aBreakPositionFT    ( this, ResId( FT_BREAKPOSITION )),
+    aBreakPositionLB    ( this, ResId( LB_BREAKPOSITION )),
+//    aPageBox            ( this, ResId( BTN_BREAKPAGE ) ),
+//    aColumnBox          ( this, ResId( BTN_BREAKCOLUMN ) ),
+//    aBeforeBox          ( this, ResId( BTN_PAGEBREAKBEFORE ) ),
+//    aAfterBox           ( this, ResId( BTN_PAGEBREAKAFTER ) ),
     aApplyCollBtn       ( this, ResId( BTN_PAGECOLL ) ),
     aApplyCollBox       ( this, ResId( LB_PAGECOLL ) ),
     aPagenumText        ( this, ResId( FT_PAGENUM ) ),
@@ -1917,7 +1936,9 @@ SvxExtParagraphTabPage::SvxExtParagraphTabPage( Window* pParent, const SfxItemSe
     aWidowRowNo         ( this, ResId( ED_WIDOWS ) ),
     aWidowRowLabel      ( this, ResId( FT_WIDOWS ) ),
     aExtendFL           ( this, ResId( FL_OPTIONS ) ),
-
+    aPropertiesFL       ( this,     ResId( FL_PROPERTIES    )),
+    aTextDirectionFT    ( this,  ResId( FT_TEXTDIRECTION )),
+    aTextDirectionLB    ( this,  ResId( LB_TEXTDIRECTION )),
     bHtmlMode   ( FALSE ),
     bPageBreak  ( TRUE ),
     nStdPos     ( 0 )
@@ -1934,10 +1955,8 @@ SvxExtParagraphTabPage::SvxExtParagraphTabPage( Window* pParent, const SfxItemSe
     aWidowBox.SetClickHdl(          LINK( this, SvxExtParagraphTabPage, WidowHdl_Impl ) );
     aOrphanBox.SetClickHdl(         LINK( this, SvxExtParagraphTabPage, OrphanHdl_Impl ) );
     aApplyCollBtn.SetClickHdl(      LINK( this, SvxExtParagraphTabPage, ApplyCollClickHdl_Impl ) );
-    aPageBox.SetClickHdl(           LINK( this, SvxExtParagraphTabPage, PageBreakTypeHdl_Impl ) );
-    aColumnBox.SetClickHdl(         LINK( this, SvxExtParagraphTabPage, PageBreakTypeHdl_Impl ) );
-    aBeforeBox.SetClickHdl(         LINK( this, SvxExtParagraphTabPage, PageBreakPosHdl_Impl ) );
-    aAfterBox.SetClickHdl(          LINK( this, SvxExtParagraphTabPage, PageBreakPosHdl_Impl ) );
+    aBreakTypeLB.SetSelectHdl(      LINK( this, SvxExtParagraphTabPage, PageBreakTypeHdl_Impl ) );
+    aBreakPositionLB.SetSelectHdl(  LINK( this, SvxExtParagraphTabPage, PageBreakPosHdl_Impl ) );
 
     SfxObjectShell* pSh = SfxObjectShell::Current();
     if ( pSh )
@@ -1974,6 +1993,19 @@ SvxExtParagraphTabPage::SvxExtParagraphTabPage( Window* pParent, const SfxItemSe
         aExtFL               .Enable(FALSE);
         aPagenumText         .Enable(FALSE);
         aPagenumEdit         .Enable(FALSE);
+        // no column break in HTML
+        aBreakTypeLB.RemoveEntry(1);
+    }
+    else
+    {
+        SvtLanguageOptions aLangOptions;
+        sal_Bool bCTL = aLangOptions.IsCTLFontEnabled();
+        if( bCTL )
+        {
+            aPropertiesFL.Show();
+            aTextDirectionFT.Show();
+            aTextDirectionLB.Show();
+        }
     }
 }
 
@@ -1997,12 +2029,13 @@ IMPL_LINK( SvxExtParagraphTabPage, PageBreakHdl_Impl, TriStateBox *, EMPTYARG )
     switch ( aPageBreakBox.GetState() )
     {
         case STATE_CHECK:
-            aPageBox.Enable();
-            aColumnBox.Enable(!bHtmlMode);
-            aBeforeBox.Enable();
-            aAfterBox.Enable();
+            aBreakTypeFT.Enable();
+            aBreakTypeLB.Enable();
+            aBreakPositionFT.Enable();
+            aBreakPositionLB.Enable();
 
-            if ( aPageBox.IsChecked() && aBeforeBox.IsChecked() )
+            if ( 0 == aBreakTypeLB.GetSelectEntryPos()&&
+                0 == aBreakPositionLB.GetSelectEntryPos() )
             {
                 aApplyCollBtn.Enable();
 
@@ -2024,10 +2057,10 @@ IMPL_LINK( SvxExtParagraphTabPage, PageBreakHdl_Impl, TriStateBox *, EMPTYARG )
             aApplyCollBox.Enable(FALSE);
             aPagenumText.Enable(FALSE);
             aPagenumEdit.Enable(FALSE);
-            aPageBox.Enable(FALSE);
-            aColumnBox.Enable(FALSE);
-            aBeforeBox.Enable(FALSE);
-            aAfterBox.Enable(FALSE);
+            aBreakTypeFT.Enable(FALSE);
+            aBreakTypeLB.Enable(FALSE);
+            aBreakPositionFT.Enable(FALSE);
+            aBreakPositionLB.Enable(FALSE);
             break;
     }
     return 0;
@@ -2139,41 +2172,23 @@ IMPL_LINK( SvxExtParagraphTabPage, ApplyCollClickHdl_Impl, TriStateBox *, EMPTYA
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxExtParagraphTabPage, PageBreakPosHdl_Impl, RadioButton *, pBtn )
+IMPL_LINK( SvxExtParagraphTabPage, PageBreakPosHdl_Impl, ListBox *, pListBox )
 {
-    if ( aPageBox.IsChecked() )
+    if ( 0 == pListBox->GetSelectEntryPos() )
     {
-        if ( pBtn == &aBeforeBox )
-        {
-            aApplyCollBtn.Enable();
+        aApplyCollBtn.Enable();
 
-            BOOL bEnable = aApplyCollBtn.GetState() == STATE_CHECK &&
-                                        aApplyCollBox.GetEntryCount();
+        BOOL bEnable = aApplyCollBtn.GetState() == STATE_CHECK &&
+                                    aApplyCollBox.GetEntryCount();
 
-            aApplyCollBox.Enable(bEnable);
-            if(!bHtmlMode)
-            {
-                aPagenumText.Enable(bEnable);
-                aPagenumEdit.Enable(bEnable);
-            }
-        }
-        else if ( pBtn == &aAfterBox )
+        aApplyCollBox.Enable(bEnable);
+        if(!bHtmlMode)
         {
-            aApplyCollBtn.SetState( STATE_NOCHECK );
-            aApplyCollBtn.Enable(FALSE);
-            aApplyCollBox.Enable(FALSE);
-            aPagenumText.Enable(FALSE);
-            aPagenumEdit.Enable(FALSE);
+            aPagenumText.Enable(bEnable);
+            aPagenumEdit.Enable(bEnable);
         }
     }
-    return 0;
-}
-
-// -----------------------------------------------------------------------
-
-IMPL_LINK( SvxExtParagraphTabPage, PageBreakTypeHdl_Impl, RadioButton *, pBtn )
-{
-    if ( pBtn == &aColumnBox || aAfterBox.IsChecked() )
+    else if ( 1 == pListBox->GetSelectEntryPos() )
     {
         aApplyCollBtn.SetState( STATE_NOCHECK );
         aApplyCollBtn.Enable(FALSE);
@@ -2181,8 +2196,25 @@ IMPL_LINK( SvxExtParagraphTabPage, PageBreakTypeHdl_Impl, RadioButton *, pBtn )
         aPagenumText.Enable(FALSE);
         aPagenumEdit.Enable(FALSE);
     }
-    else if ( aBeforeBox.IsChecked() )
-        PageBreakPosHdl_Impl( &aBeforeBox );
+    return 0;
+}
+
+// -----------------------------------------------------------------------
+
+IMPL_LINK( SvxExtParagraphTabPage, PageBreakTypeHdl_Impl, ListBox *, pListBox )
+{
+    //column break or break break after
+    USHORT nBreakPos = aBreakPositionLB.GetSelectEntryPos();
+    if ( pListBox->GetSelectEntryPos() == 1 || 1 == nBreakPos)
+    {
+        aApplyCollBtn.SetState( STATE_NOCHECK );
+        aApplyCollBtn.Enable(FALSE);
+        aApplyCollBox.Enable(FALSE);
+        aPagenumText.Enable(FALSE);
+        aPagenumEdit.Enable(FALSE);
+    }
+    else
+        PageBreakPosHdl_Impl( &aBreakPositionLB );
     return 0;
 }
 /*-- 29.11.00 11:36:24---------------------------------------------------

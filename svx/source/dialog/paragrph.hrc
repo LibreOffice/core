@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.hrc,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2002-05-27 10:34:59 $
+ *  last change: $Author: os $ $Date: 2002-06-19 10:54:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,10 +116,10 @@
 #define FL_HYPHEN                       57
 
 #define BTN_PAGEBREAK           60
-#define BTN_BREAKPAGE           61
-#define BTN_BREAKCOLUMN         62
-#define BTN_PAGEBREAKBEFORE     63
-#define BTN_PAGEBREAKAFTER      64
+#define FT_BREAKTYPE            61
+#define LB_BREAKTYPE            62
+#define FT_BREAKPOSITION        63
+#define LB_BREAKPOSITION        64
 #define BTN_PAGECOLL            65
 #define LB_PAGECOLL                     66
 #define BTN_KEEPTOGETHER        67
@@ -143,6 +143,9 @@
 #define ST_RIGHTINDENT_ASIAN            87
 #define ST_TOPSPACE_ASIAN               88
 #define ST_BOTTOMSPACE_ASIAN            89
+#define FL_PROPERTIES                   90
+#define FT_TEXTDIRECTION                91
+#define LB_TEXTDIRECTION                92
 
 
 //asian typography
