@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: mtg $ $Date: 2001-03-30 14:47:30 $
+ *  last change: $Author: mtg $ $Date: 2001-04-03 14:41:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -268,6 +268,8 @@
 #define WID_PRTSET_PAGE_BACKGROUND      8
 #define WID_PRTSET_BLACK_FONTS          9
 #define WID_PRTSET_ANNOTATION_MODE      10
+#define WID_PRTSET_FAX_NAME             11
+#define WID_PRTSET_PAPER_FROM_SETUP     12
 
 //NumberingRules
 #define WID_IS_AUTOMATIC                0
