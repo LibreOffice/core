@@ -2,9 +2,9 @@
  *
  *  $RCSfile: abspilot.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: fs $ $Date: 2002-10-28 08:55:31 $
+ *  last change: $Author: rt $ $Date: 2002-11-04 17:45:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,8 @@ ModalDialog RID_DLG_ADDRESSBOOKSOURCEPILOT
     Text[ chinese_traditional ] = "自動檔案助理 通訊錄資料源";
     Text[ turkish ] = "Autopilot Address Book Data Source";
     Text[ arabic ] = "Autopilot Address Book Data Source";
-    Text[ catalan ] = "Autopilot Address Book Data Source";
+    Text[ catalan ] = "Font de dades d'adreces de l'Autopilot";
+    Text[ thai ] = "นำร่องอัตโนมัติแหล่งข้อมูลที่อยู่";
 };
 
 //........................................................................
@@ -139,7 +140,8 @@ TabPage RID_PAGE_SELECTABTYPE
         Text[ chinese_traditional ] = "%PRODUCTNAME 向您提供一個存取系統的通訊錄資料的功能。在執行這個功能時會建立一個新的 %PRODUCTNAME 資料源，通訊錄就會變成這個資料庫的一個資料表。\n\n您透過這個自動檔案助理就可以建立這樣的一個資料源。";
         Text[ turkish ] = "%PRODUCTNAME allows you to access address data which is already present in your system.\nFor this, a new %PRODUCTNAME data source will be created, where your address data is available as tables.\n\nThis auto pilot will assist you in the creation of this data source.";
         Text[ arabic ] = "%PRODUCTNAME allows you to access address data which is already present in your system.\nFor this, a new %PRODUCTNAME data source will be created, where your address data is available as tables.\n\nThis auto pilot will assist you in the creation of this data source.";
-        Text[ catalan ] = "%PRODUCTNAME allows you to access address data which is already present in your system.\nFor this, a new %PRODUCTNAME data source will be created, where your address data is available as tables.\n\nThis auto pilot will assist you in the creation of this data source.";
+        Text[ catalan ] = "%PRODUCTNAME us permet accedir a les dades d'adreces que ja existeixen en el sistema.\nPer tal de fer aix�, es crear� una nova base de dades de l'%PRODUCTNAME, on les adreces estaran disponibles com a taules.\n\nAquest assistent us ajudar� en la creaci� d'aquesta base de dades.";
+        Text[ thai ] = "%PRODUCTNAME ให้คุณเข้าถึงข้อมูลที่อยู่ปัจจุบันในระบบของคุณแล้ว\nทำสิ่งนี้, แหล่งข้อมูล %PRODUCTNAME ใหม่จะถูกสร้างขึ้นในข้อมูลที่อยู่ที่ใช้ได้ในแบบฟอร์มตาราง\n\nการนำร่องอัตโนมัตินี้ช่วยให้คุณสร้างแหล่งข้อมูลได้";
     };
 
     FixedLine FL_TYPE
@@ -168,7 +170,8 @@ TabPage RID_PAGE_SELECTABTYPE
         Text[ chinese_traditional ] = "請選擇一個外來通訊錄的類型：";
         Text[ turkish ] = "Please choose the type of your external address book:";
         Text[ arabic ] = "Please choose the type of your external address book:";
-        Text[ catalan ] = "Please choose the type of your external address book:";
+        Text[ catalan ] = "Escolliu la llibreta d'adreces externa:";
+        Text[ thai ] = "กรุณาเลือกชนิดของสมุดที่อยู่ภายนอกของคุณ:";
     };
 
     RadioButton RB_MORK
@@ -180,25 +183,25 @@ TabPage RID_PAGE_SELECTABTYPE
         Text [ english ] = "Mozilla / Netscape";
         Text [ english_us ] = "Mozilla / Netscape";
         Group = TRUE;
-        Text[ portuguese ] = "Mozilla / Netscape";
-        Text[ russian ] = "Mozilla / Netscape";
+        Text[ portuguese ] = "Mozilla / Netscape 6.x";
+        Text[ russian ] = "Mozilla / Netscape 6.x";
         Text[ greek ] = "Mozilla / Netscape";
-        Text[ dutch ] = "Mozilla / Netscape";
-        Text[ french ] = "Mozilla / Netscape";
-        Text[ spanish ] = "Mozilla / Netscape";
+        Text[ dutch ] = "Mozilla / Netscape 6.x";
+        Text[ french ] = "Mozilla / Netscape 6.x";
+        Text[ spanish ] = "Mozilla / Netscape 6.x";
         Text[ finnish ] = "Mozilla / Netscape";
-        Text[ italian ] = "Mozilla / Netscape";
+        Text[ italian ] = "Mozilla / Netscape 6.x";
         Text[ danish ] = "Mozilla / Netscape";
-        Text[ swedish ] = "Mozilla/Netscape";
-        Text[ polish ] = "Mozilla / Netscape";
+        Text[ swedish ] = "Mozilla/Netscape 6.x";
+        Text[ polish ] = "Mozilla / Netscape 6.x";
         Text[ portuguese_brazilian ] = "Mozilla / Netscape";
-        Text[ japanese ] = "Mozilla / Netscape";
-        Text[ korean ] = "Mozilla / Netscape";
-        Text[ chinese_simplified ] = "Mozilla / Netscape";
-        Text[ chinese_traditional ] = "Mozilla / Netscape";
+        Text[ japanese ] = "Mozilla / Netscape 6.x";
+        Text[ korean ] = "Mozilla / Netscape 6.x";
+        Text[ chinese_simplified ] = "Mozilla / Netscape 6.x";
+        Text[ chinese_traditional ] = "Mozilla / Netscape 6.x";
         Text[ turkish ] = "Mozilla / Netscape";
         Text[ arabic ] = "Mozilla / Netscape";
-        Text[ catalan ] = "Mozilla / Netscape";
+        Text[ catalan ] = "Mozilla / Netscape 6.x";
     };
     RadioButton RB_LDAP
     {
@@ -226,7 +229,8 @@ TabPage RID_PAGE_SELECTABTYPE
         Text[ chinese_traditional ] = "LDAP 地址資料";
         Text[ turkish ] = "LDAP address data";
         Text[ arabic ] = "LDAP address data";
-        Text[ catalan ] = "LDAP address data";
+        Text[ catalan ] = "Dades LDAP";
+        Text[ thai ] = "ข้อมูลที่อยู่ LDAP ";
     };
     RadioButton RB_OUTLOOK
     {
@@ -254,7 +258,8 @@ TabPage RID_PAGE_SELECTABTYPE
         Text[ chinese_traditional ] = "Outlook 通訊錄";
         Text[ turkish ] = "Outlook address book";
         Text[ arabic ] = "Outlook address book";
-        Text[ catalan ] = "Outlook address book";
+        Text[ catalan ] = "Llibreta d'adreces de l'Outlook";
+        Text[ thai ] = "สมุดที่อยู่ของ Outlook ";
     };
     RadioButton RB_OUTLOOKEXPRESS
     {
@@ -282,7 +287,8 @@ TabPage RID_PAGE_SELECTABTYPE
         Text[ chinese_traditional ] = "Windows 系統通訊錄";
         Text[ turkish ] = "Windows system address book";
         Text[ arabic ] = "Windows system address book";
-        Text[ catalan ] = "Windows system address book";
+        Text[ catalan ] = "Llibreta d'adreces del Windows";
+        Text[ thai ] = "สมุดที่อยู่ของระบบวินโดวส์";
     };
     RadioButton RB_OTHER
     {
@@ -297,7 +303,7 @@ TabPage RID_PAGE_SELECTABTYPE
         Text[ greek ] = "other external data source";
         Text[ dutch ] = "andere externe gegevensbron";
         Text[ french ] = "Autre source de donn�es externe";
-        Text[ spanish ] = "otras fuentes de datos externas";
+        Text[ spanish ] = "Otras fuentes de datos externas";
         Text[ finnish ] = "other external data source";
         Text[ italian ] = "Altre sorgenti dati esterne";
         Text[ danish ] = "andre eksterne datakilder";
@@ -310,7 +316,8 @@ TabPage RID_PAGE_SELECTABTYPE
         Text[ chinese_traditional ] = "其它的資料源";
         Text[ turkish ] = "other external data source";
         Text[ arabic ] = "other external data source";
-        Text[ catalan ] = "other external data source";
+        Text[ catalan ] = "Un altre tipus de dades externes";
+        Text[ thai ] = "แหล่งข้อมูลภายนอกอื่น ๆ";
     };
     Text[ portuguese ] = "Bem-vindo ao AutoPiloto da fonte de dados dos endere�os!";
     Text[ russian ] = "����� ���������� � ��������� �������� ������ �������!";
@@ -330,7 +337,8 @@ TabPage RID_PAGE_SELECTABTYPE
     Text[ chinese_traditional ] = "歡迎使用用於建立通訊錄資料源的自動檔案助理";
     Text[ turkish ] = "Welcome to the Address Data Source AutoPilot";
     Text[ arabic ] = "Welcome to the Address Data Source AutoPilot";
-    Text[ catalan ] = "Welcome to the Address Data Source AutoPilot";
+    Text[ catalan ] = "Benvinguts a l'assistent de dades d'adreces";
+    Text[ thai ] = "ขอต้อนรับสู่การนำร่องแหล่งสมุดที่อยู่อัตโนมัติ";
 };
 
 //........................................................................
@@ -373,7 +381,8 @@ TabPage RID_PAGE_ADMININVOKATION
         Text[ chinese_traditional ] = "新建一個資料源還必須做其它的設定。\n\n按一下下方的按鈕，就會開啓一個對話方塊。在這個對話方塊之中就可以做所有未完成的設定。";
         Text[ turkish ] = "To set up the new data source, some additional information is needed.\n\nFor this, another dialog will be opened, as soon as you press the button below. There, please specify all missing settings.";
         Text[ arabic ] = "To set up the new data source, some additional information is needed.\n\nFor this, another dialog will be opened, as soon as you press the button below. There, please specify all missing settings.";
-        Text[ catalan ] = "To set up the new data source, some additional information is needed.\n\nFor this, another dialog will be opened, as soon as you press the button below. There, please specify all missing settings.";
+        Text[ catalan ] = "Per a configurar una nova font de dades, es necessita informaci� addicional.\n\nS'obrir� un nou di�leg quan feu clic al bot� de m�s avall. All� podeu especificar les dades que falten.";
+        Text[ thai ] = "การติดตั้งแหล่งข้อมูลใหม่, ต้องการข้อมูลเพิ่มเติม\n\nคลิ๊กปุ่มข้างล่างเพื่อเปิดไดอะล็อกอื่นที่ที่คุณใส่ข้อมูลที่จำเป็น";
     };
 
     PushButton PB_INVOKE_ADMIN_DIALOG
@@ -402,7 +411,8 @@ TabPage RID_PAGE_ADMININVOKATION
         Text[ chinese_traditional ] = "設定";
         Text[ turkish ] = "Settings";
         Text[ arabic ] = "Settings";
-        Text[ catalan ] = "Par�metres";
+        Text[ catalan ] = "Configuraci�";
+        Text[ thai ] = "ตั้งค่า";
     };
 
     FixedText FT_ERROR
@@ -436,7 +446,8 @@ TabPage RID_PAGE_ADMININVOKATION
         Text[ chinese_traditional ] = "無法和資料源連線。\n在繼續執行指令之前，請檢查所有完成的設定，或者返回到上一頁，選擇另外一個地址資料源。";
         Text[ turkish ] = "The connection to the data source could not be established.\nBefore you proceed, please check the settings made, or (on the previous page) choose another type of address data source.";
         Text[ arabic ] = "The connection to the data source could not be established.\nBefore you proceed, please check the settings made, or (on the previous page) choose another type of address data source.";
-        Text[ catalan ] = "The connection to the data source could not be established.\nBefore you proceed, please check the settings made, or (on the previous page) choose another type of address data source.";
+        Text[ catalan ] = "No es pot establir la connexi� amb la base de dades\nAbans de continuar, comproveu les dades o (a la p�gina anterior) escolliu un altre tipus de font.";
+        Text[ thai ] = "ไม่สามารถสร้างการเชื่อมต่อกับแหล่งข้อมูลได้\nก่อนที่คุณจะทำต่อ, กรุณาตรวจสอบการตั้งค่าที่ทำไว้, หรือ (ในหน้าก่อน) เลือกชนิดแหล่งข้อมูลที่อยู่อื่น";
     };
     Text[ portuguese ] = "Defini��es adicionais";
     Text[ russian ] = "�������������� ���������";
@@ -456,7 +467,8 @@ TabPage RID_PAGE_ADMININVOKATION
     Text[ chinese_traditional ] = "其它的設定";
     Text[ turkish ] = "Additional Settings";
     Text[ arabic ] = "Additional Settings";
-    Text[ catalan ] = "Additional Settings";
+    Text[ catalan ] = "Configuraci� addicional";
+    Text[ thai ] = "ตั้งค่าเพิ่มเติม";
 };
 
 //........................................................................
@@ -498,7 +510,8 @@ TabPage RID_PAGE_TABLESELECTION
         Text[ chinese_traditional ] = "已經選取的外來資料源內含多個地址資料(也就是多個資料表格)。\n請選擇其中一個大都會要使用的表格：";
         Text[ turkish ] = "The external data source chosen by you contains more than one address stock (or tables, respectively).\nPlease choose the one you primarily want to work with:";
         Text[ arabic ] = "The external data source chosen by you contains more than one address stock (or tables, respectively).\nPlease choose the one you primarily want to work with:";
-        Text[ catalan ] = "The external data source chosen by you contains more than one address stock (or tables, respectively).\nPlease choose the one you primarily want to work with:";
+        Text[ catalan ] = "La font de dades externa cont� m�s d'un tipus d'adreces (o taules, respectivament).\nEscolliu les dades prim�ries amb les que voleu treballar:";
+        Text[ thai ] = "แหล่งข้อมูลภายนอกที่คุณเลือกมีสมุดที่อยู่มากกว่าหนึ่ง\nกรุณาเลือกเพียงหนึ่งสมุดที่อยู่ที่คุณต้องการใช้งาน:";
     };
 
     ListBox LB_TABLELIST
@@ -529,7 +542,8 @@ TabPage RID_PAGE_TABLESELECTION
     Text[ chinese_traditional ] = "選擇表格";
     Text[ turkish ] = "Select Table";
     Text[ arabic ] = "Select Table";
-    Text[ catalan ] = "Select Table";
+    Text[ catalan ] = "Selecci� de taula";
+    Text[ thai ] = "เลือกตาราง";
 };
 
 //........................................................................
@@ -563,21 +577,22 @@ TabPage RID_PAGE_FIELDMAPPING
         Text[ russian ] = "��� ����������� ������������� �������� ������ � ��������, %PRODUCTNAME ������ \"�����\" ���� � ���������� ������, ������� ���������� � ���� �����.\n\n��������, ������ ����������� ����� ����� ���� ��������� � ���� � ������ \"E-Mail\" ��� \"����������� �����\" ��� ���������� � ������ ������.\n\n���� ������ �� ������, ����������� �����, �� ��������� ������, � ������� ����������� ��� ���������.";
         Text[ greek ] = "To incorporate the address data in your template documents, %PRODUCTNAME has to know which fields do contain which concrete data.\n\nFor instance, you could have stored the e-mail addresses in a field named \"EMail\", or \"E-Mail\" or \"EM\" - or something completely different.\n\nWhen you press the button below, another dialog will be opened, where you can do this field assignment for your data source.";
         Text[ dutch ] = "Om de adresgegevens in uw sjabloondocumenten te kunnen gebruiken moet %PRODUCTNAME weten welke velden welke concrete gegevens bevatten.\n\nU kunt bijvoorbeeld de e-mailadressen hebben opgeslagen in een veld met de naam \"E-mail\", \"EMail\", of \"EM\" - of onder een andere naam.\n\nAls u op de knop hieronder klikt wordt er een dialoog geopend waarin u de instellingen voor uw gegevensbron kunt aangeven.";
-        Text[ french ] = "Afin de pouvoir utiliser les donn�es des adresses dans les mod�les, %PRODUCTNAME doit reconna�tre les champs contenant les donn�es concr�tes.\n\nExemple : les adresses e-mail doivent �tre stock�es dans un champ pr�cis que vous pouvez nommer comme bon vous semble (e-mail, email, EM ...).\n\nUtilisez le bouton ci-dessous pour appeler une autre bo�te de dialogue permettant de d�finir ces param�tres pour la source de donn�es.";
-        Text[ spanish ] = "Para poder usar los datos de direcciones en sus plantillas, %PRODUCTNAME debe saber qu� campos contienen qu� datos.\n\nPor ejemplo usted puede haber guardado las direcciones electr�nicas en un campo con el nombre \"e-mail\", \"em\" u otro.\n\nEn cuanto pulse el bot�n que se encuentra m�s abajo, se abrir� otro di�logo en el que podr� realizar esta configuraci�n para su fuente de datos.";
+        Text[ french ] = "Afin de pouvoir utiliser les donn�es des adresses dans les mod�les, %PRODUCTNAME doit reconna�tre les champs contenant les donn�es concr�tes.\n\nExemple : les adresses e-mail pourront avoir �t� stock�es dans un champ pr�cis que vous pouvez nommer comme bon vous semble (e-mail, email, EM ...).\n\nUtilisez le bouton ci-dessous pour appeler une autre bo�te de dialogue permettant de d�finir ces param�tres pour la source de donn�es.";
+        Text[ spanish ] = "Para poder incorporar los datos de las direcciones en las plantillas, %PRODUCTNAME debe saber qu� campos contienen qu� datos.\n\nPor ejemplo, usted puede haber guardado las direcciones electr�nicas en un campo con el nombre \"e-mail\", E-mail\", \"em\" o con un nombre completamente distinto.\n\nSi pulsa el bot�n que se encuentra m�s abajo, se abrir� otro di�logo en el que podr� configurar la fuente de datos.";
         Text[ finnish ] = "To incorporate the address data in your template documents, %PRODUCTNAME has to know which fields do contain which concrete data.\n\nFor instance, you could have stored the e-mail addresses in a field named \"EMail\", or \"E-Mail\" or \"EM\" - or something completely different.\n\nWhen you press the button below, another dialog will be opened, where you can do this field assignment for your data source.";
         Text[ italian ] = "Per poter utilizzare i dati della Rubrica nei vostri modelli � necessario che %PRODUCTNAME riconosca i campi contenenti dati concreti.\n\nSupponiamo che abbiate salvato i vostri indirizzi eMail in un campo chiamato \"E-Mail\", \"eMail\", \"EM\" o un qualsiasi altro nome.\n\nPremendo il pulsante in basso si aprir� un altro dialogo in cui potrete impostare la sorgente dati.";
         Text[ danish ] = "\"For at kunne bruge adressedataene i dine skabelondokumenter skal %PRODUCTNAME vide, hvilke felter der indeholder hvilke konkrete data.\n\nFor eksempel kunne du have gemt e-mail-adresserne i et felt ved navn \"\"E-mail\"\", \"\"Email\"\" eller \"\"EM\"\" � eller under et helt andet navn.\n\nS� snart du trykker p� knappen nedenfor, �bnes en yderligere dialog, hvor du kan foretage indstillingerne for din datakilde.\"";
         Text[ swedish ] = "F�r att adressdata i dina malldokument ska kunna anv�ndas m�ste %PRODUCTNAME veta vilka f�lt som inneh�ller vilka konkreta data.\n\nDu kan till exempel ha sparat e-postadresser i ett f�lt som kallas \"E-Mail\" eller \"Email\" eller \"EM\" - eller n�got helt annat.\n\nOm du klickar p� kommandoknappen nedan �ppnas en ytterligare dialogruta d�r du kan g�ra de h�r inst�llningarna f�r din datak�lla.";
         Text[ polish ] = "Aby m�c zastoswa� dane adresowe w szablonach, program %PRODUCTNAME musi wiedzie�, w jakich polach znajduj� si� okre�lone dane.\n\nMo�na np. zapisa� adresy u�ywane w poczcie elektronicznej w polu \"e-mail\" lub w polu o innej nazwie.\n\nPo klikni�ciu poni�szego przycisku wy�wietlone zostanie nowe okno dialogowe, w kt�rym mo�na dokona� odpowiednich ustawie� �r�d�a danych.";
         Text[ portuguese_brazilian ] = "To incorporate the address data in your template documents, %PRODUCTNAME has to know which fields do contain which concrete data.\n\nFor instance, you could have stored the e-mail addresses in a field named \"EMail\", or \"E-Mail\" or \"EM\" - or something completely different.\n\nWhen you press the button below, another dialog will be opened, where you can do this field assignment for your data source.";
-        Text[ japanese ] = "アドレス帳データがテンプレートのドキュメントにも使用できるように、どのフィールドにどのデータを入力するか %PRODUCTNAME が読み取れるようにしておく必要があります。\n\nたとえば、E-mail アドレスの名前が「E-Mail」、「EMail」、「EM」、あるいは全く異なった名前で保存されている可能性もあります。\n\n下にあるボタンをクリックすると、データソースの設定に必要なその他のダイアログが開かれます。";
+        Text[ japanese ] = "アドレス帳データがテンプレートのドキュメントにも使用できるように、どのフィールドにどのデータを入力するか %PRODUCTNAME が読み取れるようにしておく必要があります。\n\nたとえば、E-mail アドレスの名前が「E-Mail」、「EMail」、「EM」、あるいは全く異なった名前で保存されている可能性もあります。\n\n下のボタンをクリックすると、データソース設定用のダイアログが開きます。";
         Text[ korean ] = "서식 파일 문서 안에 주소 데이터를 통합하려면 어떤 필드가 어떤 구체적인 데이터를 포함하는지 %PRODUCTNAME에서 어떤 필드에 구체적인 데이터가 포함되는지 알아야 합니다.\n\n예를 들면, E 메일 주소를 \"E-Mail\", \"E-Mail\", \"EM\" 또는 전혀 다른 이름의 필드에 저장했을 수 있습니다.\n\n아래 버튼을 누르면 또 하나의 대화상자가 열립니다. 이 대화상자에서는 데이터 소스에 대해 이 필드 할당을 수행할 수 있습니다.";
         Text[ chinese_simplified ] = "要在文档样式内正确使用通讯簿数据，就必须让 %PRODUCTNAME 知道哪些字段含有何种数据。\n\n例如，您可以在一个自己设定名称的字段内，或者在一个采用字段名称\"EMail\"，或\"E-Mail\" 或\"EM\"的字段之内保存电子邮件地址。\n\n点击下方的按钮后，就会打开一个提供进行数据源设定的对话框。";
         Text[ chinese_traditional ] = "要在文件樣式之中正確使用通訊錄資料就必須讓 %PRODUCTNAME 知道哪些欄位含有何種資料。\n\n例如，可以在一個自訂名稱的欄位之內或在一個採用欄位名稱<EMail>，或<E-Mail>或<EM>欄位之內儲存電子郵件地址。\n\n按下方的按鈕，就會開啓一個提供設定資料源的對話方塊。";
         Text[ turkish ] = "To incorporate the address data in your template documents, %PRODUCTNAME has to know which fields do contain which concrete data.\n\nFor instance, you could have stored the e-mail addresses in a field named \"EMail\", or \"E-Mail\" or \"EM\" - or something completely different.\n\nWhen you press the button below, another dialog will be opened, where you can do this field assignment for your data source.";
         Text[ arabic ] = "To incorporate the address data in your template documents, %PRODUCTNAME has to know which fields do contain which concrete data.\n\nFor instance, you could have stored the e-mail addresses in a field named \"EMail\", or \"E-Mail\" or \"EM\" - or something completely different.\n\nWhen you press the button below, another dialog will be opened, where you can do this field assignment for your data source.";
-        Text[ catalan ] = "To incorporate the address data in your template documents, %PRODUCTNAME has to know which fields do contain which concrete data.\n\nFor instance, you could have stored the e-mail addresses in a field named \"EMail\", or \"E-Mail\" or \"EM\" - or something completely different.\n\nWhen you press the button below, another dialog will be opened, where you can do this field assignment for your data source.";
+        Text[ catalan ] = "Per incorporar les adreces als documents de plantilles, %PRODUCTNAME ha de saber quins camps contenen les dades concretes.\n\nPer exemple, podeu tenir les adreces de correu en un camp anomenat \"EMail\", o \"Correu\" or \"Adre�a\" - o alguna cosa similar.\n\nQuan feu clic al bot� de m�s avall, s'obrir� un altre di�leg i all� podreu fer l'assignaci�.";
+        Text[ thai ] = "การผนึกข้อมูลที่อยู่ลงในแม่แบบของคุณ, %PRODUCTNAME ต้องรู้ว่าเขตข้อมูลมีข้อมูลอยู่\n\nเช่น, คุณสามารถเก็บที่อยู่อีเมล์ในเขตข้อมูลที่มีชื่อ \"อีเมล์\", หรือ \"อี-เมล์\" หรือ \"EM\" - หรืออะไรก็ได้ที่ต่างจากนี้\n\nคลิ๊กปุ่มข้างล่างเพื่อเปิดไดอะล็อกอื่นที่คุณสามารถใส่การตั้งค่าสำหรับแหล่งข้อมูลของคุณ";
     };
 
     PushButton PB_INVOKE_FIELDS_DIALOG
@@ -606,7 +621,8 @@ TabPage RID_PAGE_FIELDMAPPING
         Text[ chinese_traditional ] = "指定欄位";
         Text[ turkish ] = "Field assignment";
         Text[ arabic ] = "Field assignment";
-        Text[ catalan ] = "Field assignment";
+        Text[ catalan ] = "Assignaci� de camp";
+        Text[ thai ] = "กำหนดเขตข้อมูล";
     };
 
     FixedText FT_ASSIGNEDFIELDS
@@ -633,7 +649,8 @@ TabPage RID_PAGE_FIELDMAPPING
     Text[ chinese_traditional ] = "指定欄位";
     Text[ turkish ] = "Field Assignment";
     Text[ arabic ] = "Field Assignment";
-    Text[ catalan ] = "Field Assignment";
+    Text[ catalan ] = "Assignaci� de camp";
+    Text[ thai ] = "กำหนดเขตข้อมูล";
 };
 
 //........................................................................
@@ -675,7 +692,8 @@ TabPage RID_PAGE_FINAL
         Text[ chinese_traditional ] = "您已經完成所有必須的 %PRODUCTNAME 整合通訊錄資料的設定。\n\n現在您只需要輸入 %PRODUCTNAME 用來登記和使用這個資料源的名稱。";
         Text[ turkish ] = "This were all information necessary to integrate your address data into %PRODUCTNAME.\n\nNow, just enter the name which should be used to register the data source in %PRODUCTNAME.";
         Text[ arabic ] = "This were all information necessary to integrate your address data into %PRODUCTNAME.\n\nNow, just enter the name which should be used to register the data source in %PRODUCTNAME.";
-        Text[ catalan ] = "This were all information necessary to integrate your address data into %PRODUCTNAME.\n\nNow, just enter the name which should be used to register the data source in %PRODUCTNAME.";
+        Text[ catalan ] = "Aquesta era tota la informaci� necessaria per poder integrar les vostres adreces a %PRODUCTNAME.\n\nAra, introdu�u el nom que s'ha d'utilitzar per registrar les dades a %PRODUCTNAME.";
+        Text[ thai ] = "นั้นคือข้อมูลทั้งหมดที่จำเป็นในการรวมข้อมูลที่อยู่ลงใน %PRODUCTNAME\n\nขณะนี้, เพียงใส่ชื่อที่คุณต้องการลงทะเบียนแหล่งข้อมูลใน %PRODUCTNAME";
     };
 
     FixedText FT_NAME_EXPL
@@ -705,7 +723,8 @@ Text[ japanese ] = "タイトル";
         Text[ chinese_traditional ] = "標題";
         Text[ turkish ] = "Title";
         Text[ arabic ] = "Title";
-        Text[ catalan ] = "Etiqueta";
+        Text[ catalan ] = "T�tol";
+        Text[ thai ] = "ชื่อ";
     };
 
     Edit ET_DATASOURCENAME
@@ -746,6 +765,7 @@ Text[ japanese ] = "タイトル";
         Text [ arabic ] = "���� ������ ���� ������ ��� �� ��� �����. ����� ��� ����� ����� �������� ��� ������ �� ���� ����ɡ ������ ������ ��� ���.";
         Text[ finnish ] = "Toisella tietol�hteell� on jo sama nimi. Tietol�hteill� on oltava yksil�lliset nimet, valitse toinen nimi.";
         Text[ catalan ] = "Ja existeix una altra font de dades amb aquest nom. Has d'escollir-ne un altre perqu� el nom de la font de dades ha de ser globalment �nic.";
+        Text[ thai ] = "แหล่งข้อมูลอื่นมีชื่อนี้อยู่แล้ว แหล่งข้อมูลต้องมีชื่อที่ไม่เหมือนใครโดยรวม, คุณต้องเลือกชื่ออื่น";
     };
     Text[ portuguese ] = "T�tulo da fonte de dados";
     Text[ russian ] = "��������� �������� ������";
@@ -765,7 +785,8 @@ Text[ japanese ] = "タイトル";
     Text[ chinese_traditional ] = "資料源的名稱";
     Text[ turkish ] = "Data Source Title";
     Text[ arabic ] = "Data Source Title";
-    Text[ catalan ] = "Data Source Title";
+    Text[ catalan ] = "T�tol de la font de dades";
+    Text[ thai ] = "ชื่อแหล่งข้อมูล";
 };
 
 //........................................................................
@@ -794,7 +815,8 @@ ErrorBox RID_ERR_NEEDTYPESELECTION
     Message[ chinese_traditional ] = "請選擇一個合適的通訊錄類型。";
     Message[ turkish ] = "Bitte w�hlen sie einen Adressbuch-Typ aus";
     Message[ arabic ] = "Bitte w�hlen sie einen Adressbuch-Typ aus";
-    Message[ catalan ] = "Bitte w�hlen sie einen Adressbuch-Typ aus!";
+    Message[ catalan ] = "Seleccioneu el tipus de llibreta d'adreces!";
+    Message[ thai ] = "กรุณาเลือกชนิดของสมุดที่อยู่";
 };
 
 //........................................................................
@@ -826,7 +848,8 @@ QueryBox RID_QRY_NOTABLES
     Message[ chinese_traditional ] = "這個資料源沒有任何的資料表格。\n還是要建立這個通訊錄資料源？";
     Message[ turkish ] = "The data source does not contain any tables.\nDo you want to install it as address data source, anyway?";
     Message[ arabic ] = "The data source does not contain any tables.\nDo you want to install it as address data source, anyway?";
-    Message[ catalan ] = "The data source does not contain any tables.\nDo you want to install it as address data source, anyway?";
+    Message[ catalan ] = "La font de dades no cont� cap taula.\nVoleu instal.lar-la com a font d'adreces de totes maneres?";
+    Message[ thai ] = "แหล่งข้อมูลไม่มีตารางใด ๆ เลย\nคุณต้องการติดตั้งมันเป็นแหล่งข้อมูลที่อยู่หรือไม่?";
 };
 
 //........................................................................
@@ -853,7 +876,8 @@ String RID_STR_DEFAULT_NAME
     Text[ chinese_traditional ] = "地址";
     Text[ turkish ] = "Addresses";
     Text[ arabic ] = "Addresses";
-    Text[ catalan ] = "Addresses";
+    Text[ catalan ] = "Adreces";
+    Text[ thai ] = "ที่อยู่";
 };
 
 String RID_STR_ADMINDIALOGTITLE
@@ -879,7 +903,8 @@ String RID_STR_ADMINDIALOGTITLE
     Text[ chinese_traditional ] = "建立地址資料源";
     Text[ turkish ] = "Create Address Data Source";
     Text[ arabic ] = "Create Address Data Source";
-    Text[ catalan ] = "Create Address Data Source";
+    Text[ catalan ] = "Crea una font de dades d'adreces";
+    Text[ thai ] = "สร้างแหล่งข้อมูลที่อยู่";
 };
 
 String RID_STR_NOCONNECTION
@@ -905,7 +930,8 @@ String RID_STR_NOCONNECTION
     Text[ chinese_traditional ] = "無法連線到資料源。";
     Text[ turkish ] = "The connection could not be established.";
     Text[ arabic ] = "The connection could not be established.";
-    Text[ catalan ] = "The connection could not be established.";
+    Text[ catalan ] = "No es pot establir la connexi�";
+    Text[ thai ] = "ไม่สามารถสร้างการเชื่อมต่อได้";
 };
 
 String RID_STR_PLEASECHECKSETTINGS
@@ -931,7 +957,8 @@ String RID_STR_PLEASECHECKSETTINGS
     Text[ chinese_traditional ] = "請檢查資料源的設定。";
     Text[ turkish ] = "Please check the settings made for the data source.";
     Text[ arabic ] = "Please check the settings made for the data source.";
-    Text[ catalan ] = "Please check the settings made for the data source.";
+    Text[ catalan ] = "Comprova les dades per aquesta font de dades.";
+    Text[ thai ] = "กรุณาตรวจสอบการตั้งค่าที่ทำไว้กับแหล่งข้อมูล";
 };
 
 String RID_STR_FIELDDIALOGTITLE
@@ -957,7 +984,8 @@ String RID_STR_FIELDDIALOGTITLE
     Text[ chinese_traditional ] = "通訊錄資料 - 指定欄位";
     Text[ turkish ] = "Address data - field assignment";
     Text[ arabic ] = "Address data - field assignment";
-    Text[ catalan ] = "Address data - field assignment";
+    Text[ catalan ] = "Dades d'adreces - assignaci� de camps";
+    Text[ thai ] = "ข้อมูลที่อยู่ - กำหนดเขตข้อมูล";
 };
 
 String RID_STR_NOFIELDSASSIGNED
@@ -983,12 +1011,13 @@ String RID_STR_NOFIELDSASSIGNED
     Text[ polish ] = "Brak przyporz�dkowanych p�l.\nPola mo�na przyporz�dkowa� r�wnie� p�niej,\nwybieraj�c sekwencj� \"Plik - Szablon dokumentu - �r�d�o danych adresowych...\"";
     Text[ portuguese_brazilian ] = "Currently, there are no fields assigned.\nIf you don't want to do this assignment at the moment, you can make this up at any time later on:\nMenu \"File - Template - Address Book Source ...\"";
     Text[ japanese ] = "現在、フィールドの割り当てはされていません。\n今すぐに割り当てが決められなければ、あとからでも割り当てできます。\nそのときはメニューの ファイル → ドキュメントテンプレート → アドレス帳ソース... コマンドで実行します。";
-    Text[ korean ] = "현재는 할당된 필드가 없습니다.\n지금 할당하지 않을 경우 나중에 언제라도\n메뉴 \"파일 - 서직파일 - 주소록 ...\" 메뉴를 사용하여 할당할 수 있습니다.";
+    Text[ korean ] = "현재는 할당된 필드가 없습니다.\n지금 할당하지 않을 경우 나중에 언제라도\n메뉴 \"파일 - 템플릿 - 주소록 ...\" 메뉴를 사용하여 할당할 수 있습니다.";
     Text[ chinese_simplified ] = "至今还未指定任何的字段。\n如果现在不指定字段，也可以以后再做这个设定：\n点击菜单\"文件 - 文档样式 - 通讯簿数据源...\"";
     Text[ chinese_traditional ] = "至今還未指定任何欄位。\n如果現在不指定欄位，也可以以後再做這個設定：\n按功能表<檔案>-<文件樣式>-<通訊錄資料源...>。";
     Text[ turkish ] = "Currently, there are no fields assigned.\nIf you don't want to do this assignment at the moment, you can make this up at any time later on:\nMenu \"File - Template - Address Book Source ...\"";
     Text[ arabic ] = "Currently, there are no fields assigned.\nIf you don't want to do this assignment at the moment, you can make this up at any time later on:\nMenu \"File - Template - Address Book Source ...\"";
-    Text[ catalan ] = "Currently, there are no fields assigned.\nIf you don't want to do this assignment at the moment, you can make this up at any time later on:\nMenu \"File - Template - Address Book Source ...\"";
+    Text[ catalan ] = "Actualment, no hi ha camps assignats.\nSi no voleu fer aquesta assignaci� aquest moment, ho podeu fer m�s endavant a:\nMen� \"Fitxer - Plantilles - Font de la llibreta d'adreces ...\"";
+    Text[ thai ] = "ไม่มีเขตข้อมูลที่ได้กำหนดในตอนนี้\nขณะนี้คุณสามารถกำหนดเขตข้อมูลหรือไม่ก็ทำทีหลังโดยการเลือกเป็นอย่างแรก:\n\"แฟ้ม - แม่แบบ - แหล่งสมุดที่อยู่...\"";
 };
 
 String RID_STR_ABP_SUCCESS
@@ -996,6 +1025,26 @@ String RID_STR_ABP_SUCCESS
     Text = "Ab jetzt k�nnen Sie Ihre Adressdaten von %PRODUCTNAME aus erreichen. So �ffnen Sie z.B. mit der F4-Taste die Datenquellenansicht, um mit den Adressdaten zu arbeiten.";
     Text [ english ] = "Now you will be able to access your address data from within %PRODUCTNAME. For example, pressing F4 will open the data source view where you can work with the address data.";
     Text [ english_us ] = "Now you will be able to access your address data from within %PRODUCTNAME. For example, pressing F4 will open the data source view where you can work with the address data.";
+    Text[ portuguese ] = "O seu livro de endere�os externo foi registado no %PRODUCTNAME.\nOs dados dos endere�os podem ser agora utilizados como qualquer outra fonte de dados.";
+    Text[ russian ] = "����������� ������� �������� ����� � %PRODUCTNAME ������ �������.\n������ �������� ������ �������� ����� ��� � ����� ������ �������� ������.";
+    Text[ greek ] = "Your external address book was successully registered in %PRODUCTNAME.\nYou now can access your address data like any other data source.";
+    Text[ dutch ] = "Uw exter adresboek werd met succes in %PRODUCTNAME geregistreerd.\nNu kunt u uw adresgegevens als gegevensbron gebruiken.";
+    Text[ french ] = "Le carnet d'adresses externe a �t� enregistr� dans %PRODUCTNAME.\nLes donn�es des adresses sont � pr�sent utilisables comme les autres sources de donn�es.";
+    Text[ spanish ] = "Su libreta de direcciones externa se registr� satisfactoriamente en %PRODUCTNAME.\nAhora puede usar sus datos de direcciones como cualquier otra fuente de datos.";
+    Text[ finnish ] = "Your external address book was successully registered in %PRODUCTNAME.\nYou now can access your address data like any other data source.";
+    Text[ italian ] = "La vostra Rubrica esterna � stata registrata in %PRODUCTNAME.\nAdesso potete utilizzare i dati della Rubrica come qualsiasi altra sorgente dati.";
+    Text[ danish ] = "Registreringen af det eksterne adressekartotek i %PRODUCTNAME er gennemf�rt.\nDu kan nu bruge dine adressedata som enhver anden datakilde.";
+    Text[ swedish ] = "Din externa adressbok har registrerats i %PRODUCTNAME.\nDu kan nu anv�nda dina adressdata som vilken annan datak�lla som helst.";
+    Text[ polish ] = "Zewn�trzna ksi��ka adresowa zosta�a zarejestrowana w programie %PRODUCTNAME.\nDanych adresowych mo�na teraz u�ywa� tak jak innego �r�d�a danych.";
+    Text[ portuguese_brazilian ] = "Your external address book was successully registered in %PRODUCTNAME.\nYou now can access your address data like any other data source.";
+    Text[ japanese ] = "外部アドレス帳の %PRODUCTNAME への登録は正常に完了しました。\nこれからはアドレス帳データもほかのデータソースと同じように使用が可能です。";
+    Text[ korean ] = "외부 주소록이 성공적으로 %PRODUCTNAME에 등록되었습니다.\n이제 주소 데이터를 다른 모든 데이터 소스처럼 액세스할 수 있습니다.";
+    Text[ chinese_simplified ] = "外来的通讯簿已经成功地登记到 %PRODUCTNAME 里。\n这样，您就能够如同使用任何一个其他的数据源一样随意使用您的通讯簿。";
+    Text[ chinese_traditional ] = "%PRODUCTNAME 已經成功地登記這個外來的通訊錄。\n從現在起您就能夠如同使用任何一個其他的資料源一樣方便地使用這個通訊錄。";
+    Text[ turkish ] = "Your external address book was successully registered in %PRODUCTNAME.\nYou now can access your address data like any other data source.";
+    Text[ arabic ] = "Your external address book was successully registered in %PRODUCTNAME.\nYou now can access your address data like any other data source.";
+    Text[ catalan ] = "La font d'adreces extern s'ha registrat correctament a %PRODUCTNAME.\nPodeu accedir a aquestes dades de la mateixa manera que qualsevol altra base de dades.";
+    Text[ thai ] = "สมุดที่อยู่ภายนอกของคุณได้ลงทะเบียนสำเร็จแล้วใน %PRODUCTNAME\nขณะนี้คุณสามารถใช้ประโยชน์ข้อมูลที่อยู่ของคุณเป็นอย่างแหล่งข้อมูลอื่น ๆ ได้";
 };
 
 //........................................................................
@@ -1008,6 +1057,9 @@ Bitmap BMP_HEADERIMAGE
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.33  2002/10/28 08:55:31  fs
+ *  #i8720# not referring to 'Netscape 6.x', but to 'Netscape' only
+ *
  *  Revision 1.32  2002/10/04 07:36:02  fs
  *  #101089# changed the success message of the pilot
  *
