@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: kz $ $Date: 2004-08-31 12:35:24 $
+#   last change: $Author: kz $ $Date: 2004-10-04 20:55:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,18 +78,19 @@ SRC1FILES = \
         doc.src new.src doctdlg.src docvor.src doctempl.src sfxbasemodel.src graphhelp.src secmacrowarnings.src
 
 SLOFILES =	\
+                $(SLO)$/iframe.obj \
+                $(SLO)$/applet.obj \
+                $(SLO)$/plugin.obj \
         $(SLO)$/docfile.obj \
         $(SLO)$/objuno.obj \
         $(SLO)$/frmdescr.obj \
         $(SLO)$/docinf.obj \
-        $(SLO)$/interno.obj \
         $(SLO)$/objxtor.obj \
         $(SLO)$/objmisc.obj \
         $(SLO)$/objstor.obj \
         $(SLO)$/objcont.obj \
         $(SLO)$/objserv.obj \
         $(SLO)$/objitem.obj \
-        $(SLO)$/clientsh.obj \
         $(SLO)$/storagehelper.obj \
         $(SLO)$/docfac.obj \
         $(SLO)$/docfilt.obj \
@@ -98,35 +99,33 @@ SLOFILES =	\
         $(SLO)$/docvor.obj \
         $(SLO)$/new.obj \
         $(SLO)$/doctdlg.obj \
-        $(SLO)$/frameobj.obj \
         $(SLO)$/sfxbasemodel.obj \
         $(SLO)$/commitlistener.obj \
-        $(SLO)$/graphhelp.obj \
         $(SLO)$/xmlversion.obj \
+        $(SLO)$/guisaveas.obj\
+        $(SLO)$/objembed.obj\
+        $(SLO)$/graphhelp.obj \
         $(SLO)$/secmacrowarnings.obj 
 
-EXCEPTIONSFILES=$(SLO)$/objuno.obj \
-                $(SLO)$/objcont.obj \
-        $(SLO)$/docfac.obj \
-        $(SLO)$/docfile.obj \
-        $(SLO)$/doctempl.obj \
-        $(SLO)$/doctemplates.obj \
-        $(SLO)$/sfxbasemodel.obj \
-        $(SLO)$/commitlistener.obj \
-        $(SLO)$/objxtor.obj \
-        $(SLO)$/objstor.obj \
-        $(SLO)$/storagehelper.obj \
-        $(SLO)$/graphhelp.obj \
-        $(SLO)$/xmlversion.obj \
-        $(SLO)$/secmacrowarnings.obj
+# exception should already be switched on
+# EXCEPTIONSFILES=$(SLO)$/objuno.obj \
+#                $(SLO)$/objcont.obj \
+#		$(SLO)$/docfac.obj \
+#		$(SLO)$/docfile.obj \
+#		$(SLO)$/doctempl.obj \
+#		$(SLO)$/doctemplates.obj \
+#		$(SLO)$/sfxbasemodel.obj \
+#		$(SLO)$/commitlistener.obj \
+#		$(SLO)$/objxtor.obj \
+#		$(SLO)$/objstor.obj \
+#		$(SLO)$/storagehelper.obj \
+#		$(SLO)$/graphhelp.obj \
+#		$(SLO)$/guisaveas.obj\
+#		$(SLO)$/xmlversion.obj\
+#		$(SLO)$/secmacrowarnings.obj
 
 # --- Tagets -------------------------------------------------------
 
 .INCLUDE :  target.mk
-
-
-
-
-
 
 
