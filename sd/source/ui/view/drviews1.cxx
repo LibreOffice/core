@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews1.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 11:58:25 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:16:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -306,9 +306,9 @@ void DrawViewShell::SelectionHasChanged()
     SdrOle2Obj* pOleObj = NULL;
     SdrGrafObj* pGrafObj = NULL;
 
-    if ( pDrView->HasMarkedObj() )
+    if ( pDrView->AreObjectsMarked() )
     {
-        const SdrMarkList& rMarkList = pDrView->GetMarkList();
+        const SdrMarkList& rMarkList = pDrView->GetMarkedObjectList();
 
         if (rMarkList.GetMarkCount() == 1)
         {
@@ -646,7 +646,7 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, BOOL bLMode)
 
                 aTabControl.InsertPage(i + 1, aLayoutName);
 
-                if (pActualPage->GetMasterPage(0) == pMaster)
+                if (&(pActualPage->TRG_GetMasterPage()) == pMaster)
                 {
                     nActualMasterPageNum = i;
                 }
@@ -935,9 +935,9 @@ void DrawViewShell::ResetActualPage()
 
 ErrCode DrawViewShell::DoVerb(long nVerb)
 {
-    if ( pDrView->HasMarkedObj() )
+    if ( pDrView->AreObjectsMarked() )
     {
-        const SdrMarkList& rMarkList = pDrView->GetMarkList();
+        const SdrMarkList& rMarkList = pDrView->GetMarkedObjectList();
 
         if (rMarkList.GetMarkCount() == 1)
         {
@@ -1079,7 +1079,7 @@ BOOL DrawViewShell::SwitchPage(USHORT nSelectedPage)
             {
                 if (eEditMode == EM_MASTERPAGE)
                 {
-                    pNewPage = (SdPage*) pNewPage->GetMasterPage(0);
+                    pNewPage = (SdPage*)(&(pNewPage->TRG_GetMasterPage()));
                 }
 
                 SdrPageView* pPV = pDrView->GetPageViewPvNum(0);
@@ -1108,7 +1108,7 @@ BOOL DrawViewShell::SwitchPage(USHORT nSelectedPage)
             for (USHORT i = 0; i < nPageCount; i++)
             {
                 SdPage* pPage = GetDoc()->GetSdPage(i, ePageKind);
-                if(pPage && pPage->IsSelected() && pPage->GetMasterPage(0) == pMaster)
+                if(pPage && pPage->IsSelected() && pMaster == &(pPage->TRG_GetMasterPage()))
                 {
                     pActualPage = pPage;
                     break;
@@ -1121,7 +1121,7 @@ BOOL DrawViewShell::SwitchPage(USHORT nSelectedPage)
                 for (USHORT i = 0; i < nPageCount; i++)
                 {
                     SdPage* pPage = GetDoc()->GetSdPage(i, ePageKind);
-                    if(pPage && pPage->GetMasterPage(0) == pMaster)
+                    if(pPage && pMaster == &(pPage->TRG_GetMasterPage()))
                     {
                         pActualPage = pPage;
                         break;
@@ -1309,7 +1309,17 @@ BOOL DrawViewShell::SwitchPage(USHORT nSelectedPage)
                 {
                     if( (*aIter).meKind == PRESOBJ_HANDOUT )
                     {
-                        static_cast<SdrPageObj*>((*aIter).mpObject)->SetReferencedPage(GetDoc()->GetPage(2 * nPgNum + 1));
+                        const sal_uInt16 nDestinationPageNum(2 * nPgNum + 1);
+
+                        if(nDestinationPageNum < GetDoc()->GetPageCount())
+                        {
+                            static_cast<SdrPageObj*>((*aIter).mpObject)->SetReferencedPage(GetDoc()->GetPage(nDestinationPageNum));
+                        }
+                        else
+                        {
+                            static_cast<SdrPageObj*>((*aIter).mpObject)->SetReferencedPage(0L);
+                        }
+
                         nPgNum++;
                     }
 
@@ -1485,7 +1495,7 @@ IMPL_LINK( DrawViewShell, CloseHdl, Timer*, pTimer )
 void DrawViewShell::SetHelpIdBySelection()
 {
     UINT32 nHelpId = 0;
-    const SdrMarkList& rMarkList = pDrView->GetMarkList();
+    const SdrMarkList& rMarkList = pDrView->GetMarkedObjectList();
 
     if( rMarkList.GetMarkCount() > 0 )
     {
