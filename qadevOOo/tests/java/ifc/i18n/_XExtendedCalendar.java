@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XExtendedCalendar.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Date: 2004-07-23 10:45:11 $
+ *  last change: $Date: 2004-11-02 11:55:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,13 +119,13 @@ public class _XExtendedCalendar extends MultiMethodTest {
         Calendar cal = new GregorianCalendar();
         Date actualDate = cal.getTime();
 
-        SimpleDateFormat sdf = new SimpleDateFormat("yy");
+        SimpleDateFormat sdf = getSDF("yy");
         expectedStringResult[0] = "AD" + sdf.format(actualDate);
 
-        sdf = new SimpleDateFormat("yyyy");
+        sdf = getSDF("yyyy");
         expectedStringResult[1] = "AD" + sdf.format(actualDate);
 
-        sdf = new SimpleDateFormat("MM");
+        sdf = getSDF("MM");
         expectedStringResult[2] = sdf.format(actualDate);
 
         int month = cal.get(Calendar.MONTH) + 1;
@@ -137,7 +137,7 @@ public class _XExtendedCalendar extends MultiMethodTest {
         expectedStringResult[3] = quarter;
         expectedStringResult[4] = longQuarter;
 
-        sdf = new SimpleDateFormat("MMMMMMMMM");
+        sdf = getSDF("MMMM");
         expectedStringResult[5] = sdf.format(actualDate);
 
         displayString[0] = oObj.getDisplayString(CalendarDisplayCode.SHORT_YEAR_AND_ERA, NativeNumberMode.NATNUM0);
@@ -164,5 +164,10 @@ public class _XExtendedCalendar extends MultiMethodTest {
             }
         }
         tRes.tested("getDisplayString()", result);
+    }
+
+    private SimpleDateFormat getSDF(String format){
+        if (useUSENLocale) return new SimpleDateFormat(format, java.util.Locale.US);
+        return new SimpleDateFormat(format);
     }
 }
