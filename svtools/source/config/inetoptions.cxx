@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inetoptions.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: sb $ $Date: 2001-06-18 13:07:48 $
+ *  last change: $Author: rt $ $Date: 2001-06-19 10:36:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -479,14 +479,14 @@ SvtInetOptions::SvtInetOptions()
     if ((m_pImpl->getProperty(Impl::INDEX_PROXY_TYPE) >>= nProxyType)
         && nProxyType == 1) // 1 means "Automatic"
     {
-        uno::Reference< system::XProxySettings > xProxySettings;
+        uno::Reference< com::sun::star::system::XProxySettings > xProxySettings;
         uno::Reference< lang::XMultiServiceFactory >
             xServiceFactory(utl::getProcessServiceFactory());
         if (xServiceFactory.is())
             try
             {
                 xProxySettings
-                    = uno::Reference< system::XProxySettings >(
+                    = uno::Reference< com::sun::star::system::XProxySettings >(
                           xServiceFactory->
                               createInstance(
                                   rtl::OUString(
