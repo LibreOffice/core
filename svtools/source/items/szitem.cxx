@@ -2,9 +2,9 @@
  *
  *  $RCSfile: szitem.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2002-05-22 12:17:34 $
+ *  last change: $Author: mba $ $Date: 2002-05-28 11:37:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,13 +224,13 @@ BOOL SfxSizeItem::PutValue( const com::sun::star::uno::Any& rVal,
         bRet = ( rVal >>= nVal );
         if ( nMemberId == MID_WIDTH )
         {
-            aValue.setWidth( nVal );
-            aValue.setHeight( aVal.Height() );
+            aValue.Width = nVal;
+            aValue.Height = aVal.Height();
         }
         else
         {
-            aValue.setHeight( nVal );
-            aValue.setWidth( aVal.Width() );
+            aValue.Height = nVal;
+            aValue.Width = aVal.Width();
         }
     }
 
