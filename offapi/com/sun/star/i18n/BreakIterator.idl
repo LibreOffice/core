@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BreakIterator.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:05:37 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 20:27:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@
     <p> It also contains a BreakIterator service for asian languages.
     </p>
 */
-service BreakIterator
+published service BreakIterator
 {
     interface com::sun::star::i18n::XBreakIterator;
     interface com::sun::star::lang::XServiceInfo;
