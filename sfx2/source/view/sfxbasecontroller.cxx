@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasecontroller.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 18:04:16 $
+ *  last change: $Author: obo $ $Date: 2004-10-21 11:59:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -376,7 +376,8 @@ public:
     IMPL_SfxBaseController_CloseListenerHelper( MUTEX&              aMutex      ,
                                             SfxBaseController*  pController ) ;
     virtual ~IMPL_SfxBaseController_CloseListenerHelper() ;
-    virtual void SAL_CALL queryClosing( const EVENTOBJECT& aEvent, sal_Bool bDeliverOwnership ) throw (RUNTIMEEXCEPTION) ;
+    virtual void SAL_CALL queryClosing( const EVENTOBJECT& aEvent, sal_Bool bDeliverOwnership )
+        throw (RUNTIMEEXCEPTION, com::sun::star::util::CloseVetoException) ;
     virtual void SAL_CALL notifyClosing( const EVENTOBJECT& aEvent ) throw (RUNTIMEEXCEPTION) ;
     virtual void SAL_CALL disposing( const EVENTOBJECT& aEvent ) throw (RUNTIMEEXCEPTION) ;
 
@@ -402,7 +403,8 @@ void SAL_CALL IMPL_SfxBaseController_CloseListenerHelper::disposing( const EVENT
 {
 }
 
-void SAL_CALL IMPL_SfxBaseController_CloseListenerHelper::queryClosing( const EVENTOBJECT& aEvent, sal_Bool bDeliverOwnership ) throw (RUNTIMEEXCEPTION)
+void SAL_CALL IMPL_SfxBaseController_CloseListenerHelper::queryClosing( const EVENTOBJECT& aEvent, sal_Bool bDeliverOwnership )
+    throw (RUNTIMEEXCEPTION, com::sun::star::util::CloseVetoException)
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if  ( m_pController !=  NULL && m_pController->GetViewShell_Impl() )
