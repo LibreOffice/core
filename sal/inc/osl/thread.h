@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thread.h,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obr $ $Date: 2001-05-14 09:46:17 $
+ *  last change: $Author: jbu $ $Date: 2001-06-08 15:51:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,16 +129,16 @@ oslThread SAL_CALL osl_createSuspendedThread(oslWorkerFunction pWorker, void* pT
 */
 oslThreadIdentifier SAL_CALL osl_getThreadIdentifier(oslThread Thread);
 
-/** Forcefully abort the thread, if it is still running.
-    Then release the OS-structures and our thread data-structure.
-    If Thread is NULL, the function won't do anything.
-*/
-void SAL_CALL osl_destroyThread(oslThread Thread);
-
-/** Release our thread data-structure.
+/** Release the thread handle.
     If Thread is NULL, the function won't do anything.
     Note that we do not interfere with the actual running of
     the thread, we just free up the memory needed by the handle.
+*/
+void SAL_CALL osl_destroyThread(oslThread Thread);
+
+/** This method is non-functional.
+
+    @deprecated
 */
 void SAL_CALL osl_freeThreadHandle(oslThread Thread);
 

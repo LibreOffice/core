@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thread.c,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obr $ $Date: 2001-06-01 15:02:14 $
+ *  last change: $Author: jbu $ $Date: 2001-06-08 15:46:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,11 +207,11 @@ void SAL_CALL osl_destroyThread(oslThread Thread)
         return;
     }
 
-    if (pThreadImpl->m_hThread != 0)    /* valid handle ? */
-    {
-        /* cancel thread  */
-        TerminateThread(pThreadImpl->m_hThread, 0);
-    }
+    /* !!!! _exitthreadex does _not_ call CloseHandle !!! */
+    CloseHandle( pThreadImpl->m_hThread );
+
+    /* free memory */
+    free(Thread);
 }
 
 /*****************************************************************************/
@@ -219,19 +219,7 @@ void SAL_CALL osl_destroyThread(oslThread Thread)
 /*****************************************************************************/
 void SAL_CALL osl_freeThreadHandle(oslThread Thread)
 {
-    osl_TThreadImpl* pThreadImpl= (osl_TThreadImpl*)Thread;
-
-    if(Thread == 0)     /* valid ptr? */
-    {
-        /* thread already destroyed or not created */
-        return;
-    }
-
-    /* !!!! _exitthreadex does _not_ call CloseHandle !!! */
-    CloseHandle( pThreadImpl->m_hThread );
-
-    /* free memory */
-    free(Thread);
+    OSL_ENSURE( 0 , "osl_freeThreadHandle: deprecated, should not be called !" );
 }
 
 /*****************************************************************************/
