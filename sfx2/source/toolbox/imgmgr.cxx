@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imgmgr.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-10 17:20:11 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:45:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,9 @@
 #include <svtools/miscopt.hxx>
 #include <framework/imagesconfiguration.hxx>
 
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #include "imgmgr.hxx"
 #include "sfx.hrc"
@@ -855,7 +857,6 @@ void SfxImageManager_Impl::MakeUserList()
 
 void SfxImageManager_Impl::MakeDefaultImageList( BOOL bHiContrast )
 {
-    USHORT nType=0;
     {
         switch ( SfxImageManager::GetCurrentSymbolSet() )
         {
@@ -1177,12 +1178,12 @@ void SfxImageManager::SetSymbolSet_Impl( sal_Int16 nNewSet )
     if ( nNewSet != pData->nSet && pImageList )
     {
         pData->nSet = nNewSet;
-        Size aOldSize = pImageList->GetImageSize();
+        //Size aOldSize = pImageList->GetImageSize();
 
         // neue DefaultList erzeugen
         pImageList = NULL;
         pImp->MakeDefaultImageList();
-        Size aNewSize = pImageList->GetImageSize();
+        //Size aNewSize = pImageList->GetImageSize();
 
         if ( !pImp->IsDefault() )
             pImp->RebuildUserList();
