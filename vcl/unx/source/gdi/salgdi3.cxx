@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: cp $ $Date: 2001-03-19 08:31:46 $
+ *  last change: $Author: jl $ $Date: 2001-03-20 12:35:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,10 @@
 #include <alloca.h>
 #endif
 
+#ifndef _SAL_TYPES_H_
+#include <sal/types.h>
+#endif
+
 #include <salunx.h>
 
 #ifndef _SV_SALDATA_HXX
@@ -128,7 +132,6 @@
 #ifndef SAL_CONVERTER_CACHE_HXX_
 #include "salcvt.hxx"
 #endif
-#include <osl/types.h>
 
 #ifdef USE_BUILTIN_RASTERIZER
 #include <gcach_xpeer.hxx>
