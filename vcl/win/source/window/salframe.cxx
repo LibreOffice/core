@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: th $ $Date: 2000-12-14 13:39:14 $
+ *  last change: $Author: ssa $ $Date: 2001-04-27 14:46:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -821,8 +821,18 @@ void SalFrame::SetTitle( const XubString& rTitle )
 
 void SalFrame::SetIcon( USHORT nIcon )
 {
-//    ImplSendMessage( maFrameData.mhWnd, WM_SETICON, FALSE, hSmIcon );
-//    ImplSendMessage( maFrameData.mhWnd, WM_SETICON, TRUE, hIcon );
+    HICON hIcon = NULL, hSmIcon = NULL;
+
+    if( nIcon ) // 0 means default (class) icon
+    {
+        ImplLoadSalIcon( nIcon, hIcon, hSmIcon );
+
+        DBG_ASSERT( hIcon ,   "SalFrame::SetIcon(): Could not load large icon !" );
+        DBG_ASSERT( hSmIcon , "SalFrame::SetIcon(): Could not load small icon !" );
+    }
+
+    ImplSendMessage( maFrameData.mhWnd, WM_SETICON, ICON_BIG, (long) hIcon );
+    ImplSendMessage( maFrameData.mhWnd, WM_SETICON, ICON_SMALL, (long) hSmIcon );
 }
 
 // -----------------------------------------------------------------------
