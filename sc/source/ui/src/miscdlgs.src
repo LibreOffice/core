@@ -2,9 +2,9 @@
  *
  *  $RCSfile: miscdlgs.src,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 13:43:36 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:21:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -513,7 +513,7 @@ ModalDialog RID_SCDLG_INSCELL
     Text[ japanese ] = "γ‚»γƒ«γ®ζΏε…¥";
     Text[ chinese_traditional ] = "ζ’ε…¥ε„²ε­ζ Ό";
     Text[ arabic ] = "ΕΟΡΗΜ ΞαΗνΗ";
-    Text[ greek ] = "Προσθήκη κελιών";
+    Text[ greek ] = "Εισαγωγή κελιών";
     Text[ korean ] = "μ…€ μ‚½μ…";
     Text[ turkish ] = "Hόcre ekle";
     Text[ language_user1 ] = " ";
@@ -1171,16 +1171,16 @@ ModalDialog RID_SCDLG_INSCONT
         Text[ danish ] = "O~bjects";
         Text[ swedish ] = "O~bjekt";
         Text[ polish ] = "O~bjects";
-        Text[ japanese ] = "γ‚ªγƒ–γ‚Έγ‚§γ‚―γƒ";
-        Text[ korean ] = "κ°μ²΄";
-        Text[ chinese_simplified ] = "ε―Ήθ±΅";
+        Text[ japanese ] = "γ‚ªγƒ–γ‚Έγ‚§γ‚―γƒ(~B)";
+        Text[ korean ] = "κ°μ²΄(~B)";
+        Text[ chinese_simplified ] = "ε―Ήθ±΅(~B)";
         Text[ chinese_traditional ] = "η‰©δ»¶(~B)";
         Text[ turkish ] = "Ne~sneler";
         Text[ arabic ] = "O~bjects";
         Text[ czech ] = "Objekty";
         Text[ hebrew ] = "O~bjekte";
         Text[ catalan ] = "O~bjects";
-        Text[ portuguese_brazilian ] = "O~bjects";
+        Text[ portuguese_brazilian ] = "O~bjetos";
         Text[ thai ] = "O~bjects";
         Text[ hindi ] = "O~bjects";
         Text[ slovak ] = "~Objekty";
@@ -1440,7 +1440,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text[ japanese ] = "ζΌ”η®—";
         Text[ chinese_traditional ] = "θ¨η®—";
         Text[ arabic ] = "ΗαΪγανΗΚ ΗαΝΣΗΘνΙ";
-        Text[ greek ] = "Πράξεις υπολογισμού";
+        Text[ greek ] = "Πράξεις";
         Text[ korean ] = "μ—°μ‚°";
         Text[ turkish ] = "έώlemler";
         Text[ language_user1 ] = " ";
@@ -1848,7 +1848,7 @@ ModalDialog RID_SCDLG_MOVETAB
         Text[ japanese ] = "ζ¬΅γ®θ΅¨γ®ε‰γ«ζΏε…¥(~I)";
         Text[ chinese_traditional ] = "ε‰η½®ζ–Ό(~I)";
         Text[ arabic ] = "ΕΟΡΗΜ ήΘα";
-        Text[ greek ] = "Προσθήκη πριν από";
+        Text[ greek ] = "Εισαγωγή πριν από";
         Text[ korean ] = "λ‹¤μ ν‘ μ•μ— μ‚½μ…(~I)";
         Text[ turkish ] = "~Φne ekle";
         Text[ language_user1 ] = " ";
@@ -1939,7 +1939,7 @@ ModalDialog RID_SCDLG_MOVETAB
     Text[ japanese ] = "θ΅¨γ®η§»ε‹•γΎγγ―γ‚³γƒ”γƒΌ";
     Text[ chinese_traditional ] = "η§»ε‹•ζ–θ¤‡θ£½ε·¥δ½θ΅¨";
     Text[ arabic ] = "ΚΝΡνί\\δΣΞ ΗαΜΟζα";
-    Text[ greek ] = "Μετακίνηση/Αντιγραφή πίνακα";
+    Text[ greek ] = "Μετακίνηση/Αντιγραφή φύλλου";
     Text[ korean ] = "μ‹νΈ μ΄λ™/λ³µμ‚¬";
     Text[ turkish ] = "Sayfayύ taώύ/kopyala";
     Text[ language_user1 ] = " ";
@@ -2758,7 +2758,7 @@ ModalDialog RID_SCDLG_SHOW_TAB
         Text[ japanese ] = "θ΅¨η¤Ίγ•γ‚γ¦γ„γªγ„θ΅¨";
         Text[ chinese_traditional ] = "ι±ε…¥η„ε·¥δ½θ΅¨";
         Text[ arabic ] = "ΗαΜΟΗζα ΗαγΞένΙ";
-        Text[ greek ] = "Κρυφοί πίνακες";
+        Text[ greek ] = "Κρυφά φύλλα";
         Text[ korean ] = "μ¨κ²¨μ§„ μ‹νΈ";
         Text[ turkish ] = "Gizlenmiώ tablolar";
         Text[ language_user1 ] = " ";
@@ -2775,7 +2775,7 @@ ModalDialog RID_SCDLG_SHOW_TAB
     Text[ japanese ] = "θ΅¨γ®θ΅¨η¤Ί";
     Text[ chinese_traditional ] = "ι΅―η¤Ίε·¥δ½θ΅¨";
     Text[ arabic ] = "ΕΩεΗΡ ΗαΜΟζα";
-    Text[ greek ] = "Εμφάνιση πίνακα";
+    Text[ greek ] = "Εμφάνιση φύλλου";
     Text[ korean ] = "μ‹νΈ ν‘μ‹";
     Text[ turkish ] = "Ηalύώma sayfasύnύ gφster";
     Text[ language_user1 ] = " ";
@@ -3286,7 +3286,7 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text[ japanese ] = "γ‚ªγƒΌγƒγ‚³γƒ³γƒ—γƒªγƒΌγƒ(~A)";
         Text[ chinese_traditional ] = "θ‡ªε‹•ε΅«ε…¥(~A)";
         Text[ arabic ] = "ΚΪΘΖΙ ΚαήΗΖνΙ";
-        Text[ greek ] = "ΑυτοΓέμισμα";
+        Text[ greek ] = "Αυτόματο γέμισμα";
         Text[ korean ] = "μλ™ μ±„μ°κΈ°(~A)";
         Text[ turkish ] = "Otomatik~Doldur";
         Text[ language_user1 ] = " ";
@@ -3824,7 +3824,7 @@ ModalDialog RID_SCDLG_NAMES_CREATE
         Text[ chinese_traditional ] = "ι¦–ε—(~T)";
         Text[ arabic ] = "ΡΓΣ ΗαΥέΝΙ";
         Text[ greek ] = "Κεφαλίδα";
-        Text[ korean ] = "λ§¨μ„ ν–‰(~E)";
+        Text[ korean ] = "λ§¨μ„ ν–‰(~T)";
         Text[ turkish ] = "~En όst satύr";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Capηa~lera";
@@ -3892,7 +3892,7 @@ ModalDialog RID_SCDLG_NAMES_CREATE
         Text[ chinese_traditional ] = "ζ«ε—(~B)";
         Text[ arabic ] = "ΚΠννα ΗαΥέΝΙ";
         Text[ greek ] = "Υποσέλιδο";
-        Text[ korean ] = "λ§¨μ•„λ ν–‰(~F)";
+        Text[ korean ] = "λ§¨μ•„λ ν–‰(~B)";
         Text[ turkish ] = "~Alt satύr";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Peu de pΰgina";
@@ -4106,13 +4106,13 @@ ModalDialog RID_SCDLG_NAMES_PASTE
         Text[ chinese_simplified ] = "ε…¨ιƒ¨ζ’ε…¥(~A)";
         Text[ russian ] = "Βρςΰβθςό ροθρξκ";
         Text[ polish ] = "Wklej ~listκ";
-        Text[ japanese ] = "γ™γΉγ¦γ‚’ζΏε…¥";
+        Text[ japanese ] = "γ™γΉγ¦γ‚’ζΏε…¥(~A)";
         Text[ chinese_traditional ] = "ε…¨ιƒ¨ζ’ε…¥(~A)";
         Text[ arabic ] = "ΗαήΗΖγΙ";
         Text[ greek ] = "Λίστα";
-        Text[ korean ] = "λª¨λ‘ μ‚½μ…";
+        Text[ korean ] = "λª¨λ‘ μ‚½μ…(~A)";
         Text[ turkish ] = "~Hepsini ekle";
-        Text[ language_user1 ] = "EM Sept 2002: Has nothing to do with the Clipboard.";
+        Text[ language_user1 ] = "; EM Sept 2002: Has nothing to do with the Clipboard.";
         Text[ catalan ] = "Enganxa la ~llista";
         Text[ finnish ] = "Liitδ luettelo";
         Text[ thai ] = "ΰΈ§ΰΈ²ΰΈ‡~ΰΈ£ΰΈ²ΰΈΆΰΈΰΈ²ΰΈ£";
@@ -4217,7 +4217,7 @@ ModalDialog RID_SCDLG_CHARTCOLROW
         Text[ japanese ] = "ζ€εγ®ε—γ‚’ι …η›®εγ«εΌ•η”¨(~C)";
         Text[ chinese_traditional ] = "ε°‡η¬¬δΈ€ζ¬„η•¶δ½ζ¨™ι΅(~C)";
         Text[ arabic ] = "ΗαΪγζΟ ΗαΓζα ίΪδζΗδ";
-        Text[ greek ] = "Πρώτη στήλη ως επιγραφή";
+        Text[ greek ] = "Πρώτη στήλη ως επισήμανση";
         Text[ korean ] = "μ²« μ—΄μ„ λ μ΄λΈ”λ΅(~C)";
         Text[ turkish ] = "Etiket olarak ilk~sόtun";
         Text[ language_user1 ] = " ";
@@ -4250,7 +4250,7 @@ ModalDialog RID_SCDLG_CHARTCOLROW
         Text[ japanese ] = "ζ€εγ®θ΅γ‚’ι …η›®εγ«εΌ•η”¨(~R)";
         Text[ chinese_traditional ] = "η¬¬δΈ€ε—η•¶δ½ζ¨™ι΅(~R)";
         Text[ arabic ] = "ΗαΥέ ΗαΓζα ίΪδζΗδ";
-        Text[ greek ] = "Πρώτη γραμμή ως επιγραφή";
+        Text[ greek ] = "Πρώτη γραμμή ως επισήμανση";
         Text[ korean ] = "μ²« ν–‰μ„ λ μ΄λΈ”λ΅(~R)";
         Text[ turkish ] = "Etiket olarak ilk~satύr";
         Text[ language_user1 ] = " ";
@@ -4283,7 +4283,7 @@ ModalDialog RID_SCDLG_CHARTCOLROW
         Text[ japanese ] = "γƒ©γƒ™γƒ«";
         Text[ chinese_traditional ] = "ζ¨™η±¤";
         Text[ arabic ] = "ΗαΪδζδΙ";
-        Text[ greek ] = "Επιγραφή";
+        Text[ greek ] = "Επισήμανση";
         Text[ korean ] = "λ μ΄λΈ”";
         Text[ turkish ] = "Etiketler";
         Text[ language_user1 ] = " ";
@@ -4340,6 +4340,7 @@ ModalDialog RID_SCDLG_CHARTCOLROW
     Text[ hindi ] = "ΰ¤®ΰ¥‚ΰ¤² ΰ¤΅ΰ¤Όΰ¥‰ΰ¤ΰ¤Ύ ΰ¤«ΰ¥ΰ¤²ΰ¤Ύΰ¤µ ΰ¤•ΰ¥‹ ΰ¤¬ΰ¤¦ΰ¤²ΰ¥‹";
     Text[ slovak ] = "ZmeniΕ¥ zdrojovΓΊ dΓ΅tovΓΊ oblasΕ¥";
 };
+
 
 
 
