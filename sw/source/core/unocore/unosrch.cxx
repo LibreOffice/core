@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosrch.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2002-05-13 12:12:39 $
+ *  last change: $Author: tl $ $Date: 2002-08-14 10:29:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -596,7 +596,7 @@ void SwXTextSearch::setPropertyValue(const OUString& rPropertyName, const Any& a
     if(pMap)
     {
         if ( pMap->nFlags & PropertyAttribute::READONLY)
-            throw lang::IllegalArgumentException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ), 0 );
+            throw PropertyVetoException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
         sal_Bool bVal = FALSE;
         if(aValue.getValueType() == ::getBooleanCppuType())
             bVal = *(sal_Bool*)aValue.getValue();
@@ -824,6 +824,9 @@ void SwXTextSearch::FillSearchOptions( SearchOptions& rSearchOpt ) const
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.5  2002/05/13 12:12:39  os
+    #90353# new[]-delete[] mix fixed
+
     Revision 1.4  2001/11/28 20:25:04  mtg
     #95176# throw correct exceptions at the correct times
 

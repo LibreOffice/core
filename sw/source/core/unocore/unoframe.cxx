@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: os $ $Date: 2002-03-20 08:04:08 $
+ *  last change: $Author: tl $ $Date: 2002-08-14 10:24:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1106,7 +1106,7 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
     {
         sal_Bool bNextFrame = sal_False;
         if ( pCur->nFlags & PropertyAttribute::READONLY)
-            throw IllegalArgumentException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ), 0 );
+            throw PropertyVetoException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
 
         SwDoc* pDoc = pFmt->GetDoc();
         if( eType == FLYCNTTYPE_GRF &&
@@ -1692,7 +1692,7 @@ void SwXFrame::setPropertyToDefault( const OUString& rPropertyName )
         if (!pCur)
             throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
         if ( pCur->nFlags & PropertyAttribute::READONLY)
-            throw RuntimeException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+            throw PropertyVetoException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
 
         BOOL bNextFrame;
         if( pCur->nWID &&
@@ -1764,7 +1764,7 @@ Any SwXFrame::getPropertyDefault( const OUString& rPropertyName )
         if(pCur)
         {
             if ( pCur->nFlags & PropertyAttribute::READONLY )
-                throw RuntimeException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+                throw PropertyVetoException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
             if ( pCur->nWID < RES_FRMATR_END )
             {
                 const SfxPoolItem& rDefItem =
