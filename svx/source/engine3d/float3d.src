@@ -2,9 +2,9 @@
  *
  *  $RCSfile: float3d.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2001-02-09 21:45:53 $
+ *  last change: $Author: kz $ $Date: 2001-03-01 20:20:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1317,7 +1317,7 @@ DockingWindow RID_SVXFLOAT_3D
             MaskColor = STD_MASKCOLOR ;
         };
         TabStop = TRUE ;
-        QuickHelpText [ portuguese ] = "Activa/Desactiva Sombreado 3-D" ;
+        QuickHelpText [ portuguese ] = "Activa/Desactiva sombras 3-D!" ;
         QuickHelpText [ english_us ] = "3D Shadowing On/Off" ;
         QuickHelpText [ portuguese_brazilian ] = "3D-Schatten ein/-ausschalten" ;
         QuickHelpText [ swedish ] = "3D-skugga på/av" ;
@@ -1395,7 +1395,7 @@ DockingWindow RID_SVXFLOAT_3D
         Text [ spanish ] = "Sombra" ;
         Text [ french ] = "Ombre" ;
         Text [ dutch ] = "Schaduw" ;
-        Text [ portuguese ] = "Sombreado" ;
+        Text [ portuguese ] = "Sombras" ;
         Text[ chinese_simplified ] = "ÒõÓ°";
         Text[ russian ] = "Òåíü";
         Text[ polish ] = "Cieñ";
@@ -3227,14 +3227,14 @@ DockingWindow RID_SVXFLOAT_3D
     Text [ french ] = "Effets 3D" ;
     Text [ dutch ] = "3D-effecten" ;
     Text [ portuguese ] = "Efeitos 3D" ;
-    Text[ chinese_simplified ] = "3 Î¬-Ð§¹û";
+    Text[ chinese_simplified ] = "3 Î¬Ð§¹û";
     Text[ russian ] = "Ýôôåêòû 3-Ì";
     Text[ polish ] = "Efekty 3-W";
     Text[ japanese ] = "3D Œø‰Ê";
     Text[ chinese_traditional ] = "3D ®ÄªG";
     Text[ arabic ] = "ÊÃËíÑÇÊ ËáÇËíÉ ÇáÃÈÚÇÏ";
     Text[ dutch ] = "3D-effecten";
-    Text[ chinese_simplified ] = "3 Î¬-Ð§¹û";
+    Text[ chinese_simplified ] = "3 Î¬Ð§¹û";
     Text[ greek ] = "ÅöÝ 3Ä";
     Text[ korean ] = "3D-È¿°ú";
     Text[ turkish ] = "3B efektler";
