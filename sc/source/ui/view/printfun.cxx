@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printfun.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: nn $ $Date: 2002-08-26 18:15:47 $
+ *  last change: $Author: nn $ $Date: 2002-09-19 17:09:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1639,7 +1639,11 @@ void ScPrintFunc::PrintArea( USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2,
             MapMode aControlMode( MAP_100TH_MM, aControlOffset,
                                     aLogicMode.GetScaleX(), aLogicMode.GetScaleY() );
             pDev->SetMapMode( aControlMode );
+            pDev->SetClipRegion( aLogicRect );      // single controls may extend beyond the page
+
             pPV->RedrawOneLayer( SC_LAYER_CONTROLS, aLogicRect );
+
+            pDev->SetClipRegion();
         }
     }
 
