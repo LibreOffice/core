@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-19 11:47:08 $
+ *  last change: $Author: oj $ $Date: 2002-11-21 14:39:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -480,9 +480,7 @@ sal_Bool OTableController::doSaveDoc(sal_Bool _bSaveAs)
         // check the columns for double names
         if(!checkColumns(bNew || !xTables->hasByName(m_sName)))
         {
-            m_sName = ::rtl::OUString();
-            stopTableListening();
-            m_xTable = NULL;
+            // #105323# OJ
             return sal_False;
         }
 
@@ -1481,7 +1479,7 @@ void OTableController::alterColumns()
     // check if we have to do something with the primary key
     sal_Bool bNeedDropKey = sal_False;
     sal_Bool bNeedAppendKey = sal_False;
-    if(xKeyColumns.is())
+    if ( xKeyColumns.is() )
     {
         aIter = m_vRowList.begin();
         for(;aIter != m_vRowList.end();++aIter)
@@ -1523,7 +1521,7 @@ void OTableController::alterColumns()
 
     reSyncRows();
 
-    if(bReload)
+    if ( bReload )
         reload();
 }
 // -----------------------------------------------------------------------------
