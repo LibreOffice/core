@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Columns.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-07 16:06:29 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 12:44:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -390,43 +390,59 @@ void OGridColumn::disposing()
 }
 
 //------------------------------------------------------------------------------
-void OGridColumn::clearAggregateProperties(Sequence<Property>& seqProps, sal_Bool bAllowDropDown)
+void OGridColumn::clearAggregateProperties( Sequence< Property >& _rProps, sal_Bool bAllowDropDown )
 {
-    RemoveProperty(seqProps, PROPERTY_ALIGN);
-    RemoveProperty(seqProps, PROPERTY_AUTOCOMPLETE);
-    RemoveProperty(seqProps, PROPERTY_BACKGROUNDCOLOR);
-    RemoveProperty(seqProps, PROPERTY_BORDER);
-    if (!bAllowDropDown)
-        RemoveProperty(seqProps, PROPERTY_DROPDOWN);
-    RemoveProperty(seqProps, PROPERTY_ECHO_CHAR);
-    RemoveProperty(seqProps, PROPERTY_FILLCOLOR);
-    RemoveProperty(seqProps, PROPERTY_FONT);
-    RemoveProperty(seqProps, PROPERTY_FONT_NAME);
-    RemoveProperty(seqProps, PROPERTY_FONT_STYLENAME);
-    RemoveProperty(seqProps, PROPERTY_FONT_FAMILY);
-    RemoveProperty(seqProps, PROPERTY_FONT_CHARSET);
-    RemoveProperty(seqProps, PROPERTY_FONT_HEIGHT);
-    RemoveProperty(seqProps, PROPERTY_FONT_WEIGHT);
-    RemoveProperty(seqProps, PROPERTY_FONT_SLANT);
-    RemoveProperty(seqProps, PROPERTY_FONT_UNDERLINE);
-    RemoveProperty(seqProps, PROPERTY_FONT_STRIKEOUT);
-    RemoveProperty(seqProps, PROPERTY_FONT_WORDLINEMODE);
-    RemoveProperty(seqProps, PROPERTY_TEXTLINECOLOR);
-    RemoveProperty(seqProps, PROPERTY_FONTEMPHASISMARK);
-    RemoveProperty(seqProps, PROPERTY_FONTRELIEF);
-    RemoveProperty(seqProps, PROPERTY_HARDLINEBREAKS);
-    RemoveProperty(seqProps, PROPERTY_HSCROLL);
-    RemoveProperty(seqProps, PROPERTY_LABEL);
-    RemoveProperty(seqProps, PROPERTY_LINECOLOR);
-    RemoveProperty(seqProps, PROPERTY_MULTILINE);
-    RemoveProperty(seqProps, PROPERTY_MULTISELECTION);
-    RemoveProperty(seqProps, PROPERTY_PRINTABLE);
-    RemoveProperty(seqProps, PROPERTY_TABINDEX);
-    RemoveProperty(seqProps, PROPERTY_TABSTOP);
-    RemoveProperty(seqProps, PROPERTY_TEXTCOLOR);
-    RemoveProperty(seqProps, PROPERTY_TRISTATE);
-    RemoveProperty(seqProps, PROPERTY_VSCROLL);
-    RemoveProperty(seqProps, PROPERTY_CONTROLLABEL);
+    // some properties are not to be exposed to the outer world
+    ::std::set< ::rtl::OUString > aForbiddenProperties;
+    aForbiddenProperties.insert( PROPERTY_ALIGN );
+    aForbiddenProperties.insert( PROPERTY_AUTOCOMPLETE );
+    aForbiddenProperties.insert( PROPERTY_BACKGROUNDCOLOR );
+    aForbiddenProperties.insert( PROPERTY_BORDER );
+    aForbiddenProperties.insert( PROPERTY_ECHO_CHAR );
+    aForbiddenProperties.insert( PROPERTY_FILLCOLOR );
+    aForbiddenProperties.insert( PROPERTY_FONT );
+    aForbiddenProperties.insert( PROPERTY_FONT_NAME );
+    aForbiddenProperties.insert( PROPERTY_FONT_STYLENAME );
+    aForbiddenProperties.insert( PROPERTY_FONT_FAMILY );
+    aForbiddenProperties.insert( PROPERTY_FONT_CHARSET );
+    aForbiddenProperties.insert( PROPERTY_FONT_HEIGHT );
+    aForbiddenProperties.insert( PROPERTY_FONT_WEIGHT );
+    aForbiddenProperties.insert( PROPERTY_FONT_SLANT );
+    aForbiddenProperties.insert( PROPERTY_FONT_UNDERLINE );
+    aForbiddenProperties.insert( PROPERTY_FONT_STRIKEOUT );
+    aForbiddenProperties.insert( PROPERTY_FONT_WORDLINEMODE );
+    aForbiddenProperties.insert( PROPERTY_TEXTLINECOLOR );
+    aForbiddenProperties.insert( PROPERTY_FONTEMPHASISMARK );
+    aForbiddenProperties.insert( PROPERTY_FONTRELIEF );
+    aForbiddenProperties.insert( PROPERTY_HARDLINEBREAKS );
+    aForbiddenProperties.insert( PROPERTY_HSCROLL );
+    aForbiddenProperties.insert( PROPERTY_LABEL );
+    aForbiddenProperties.insert( PROPERTY_LINECOLOR );
+    aForbiddenProperties.insert( PROPERTY_MULTISELECTION );
+    aForbiddenProperties.insert( PROPERTY_PRINTABLE );
+    aForbiddenProperties.insert( PROPERTY_TABINDEX );
+    aForbiddenProperties.insert( PROPERTY_TABSTOP );
+    aForbiddenProperties.insert( PROPERTY_TEXTCOLOR );
+    aForbiddenProperties.insert( PROPERTY_TRISTATE );
+    aForbiddenProperties.insert( PROPERTY_VSCROLL );
+    aForbiddenProperties.insert( PROPERTY_CONTROLLABEL );
+    aForbiddenProperties.insert( PROPERTY_RICH_TEXT );
+    if ( !bAllowDropDown )
+        aForbiddenProperties.insert( PROPERTY_DROPDOWN );
+
+    Sequence< Property > aNewProps( _rProps.getLength() );
+    Property* pNewProps = aNewProps.getArray();
+
+    const Property* pProps = _rProps.getConstArray();
+    const Property* pPropsEnd = pProps + _rProps.getLength();
+    for ( ; pProps != pPropsEnd; ++pProps )
+    {
+        if ( aForbiddenProperties.find( pProps->Name ) == aForbiddenProperties.end() )
+            *pNewProps++ = *pProps;
+    }
+
+    aNewProps.realloc( pNewProps - aNewProps.getArray() );
+    _rProps = aNewProps;
 }
 
 //------------------------------------------------------------------------------
