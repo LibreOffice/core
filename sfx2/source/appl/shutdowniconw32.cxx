@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shutdowniconw32.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ssa $ $Date: 2001-06-08 10:03:22 $
+ *  last change: $Author: pb $ $Date: 2001-06-13 12:49:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,14 +93,18 @@ typedef BOOL ( WINAPI * InsertMenuItemW_Proc_T ) (
     BOOL fByPosition,       // meaning of uItem
     LPCMENUITEMINFOW lpmii  // menu item information
 );
-InsertMenuItemW_Proc_T lpfnInsertMenuItemW;
+InsertMenuItemW_Proc_T lpfnInsertMenuItemW = NULL;
 
 typedef BOOL ( WINAPI * SHGetPathFromIDListW_Proc_T ) (
     LPCITEMIDLIST pidl, LPWSTR pszPath );
-SHGetPathFromIDListW_Proc_T lpfnSHGetPathFromIDListW;
+SHGetPathFromIDListW_Proc_T lpfnSHGetPathFromIDListW = NULL;
 
 static void WINAPI User9xInit( )
 {
+    if ( lpfnInsertMenuItemW && lpfnSHGetPathFromIDListW )
+        //nothing to do
+        return;
+
     HMODULE         hModule;
     OSVERSIONINFO   OSVerInfo;
 
@@ -746,6 +750,9 @@ BOOL CreateShortcut( const OUString& rAbsObject, const OUString& rAbsObjectPath,
 
 void ShutdownIcon::SetAutostartW32( const OUString& aShortcutName, bool bActivate )
 {
+    // init wrapper if necessary
+    User9xInit();
+
     OUString aShortcut(SHGetAutostartFolderName());
     aShortcut += OUString( RTL_CONSTASCII_USTRINGPARAM( "\\" ) );
     aShortcut += aShortcutName;
@@ -790,6 +797,9 @@ void ShutdownIcon::SetAutostartW32( const OUString& aShortcutName, bool bActivat
 
 bool ShutdownIcon::GetAutostartW32( const OUString& aShortcutName )
 {
+    // init wrapper if necessary
+    User9xInit();
+
     OUString aShortcut(SHGetAutostartFolderName());
     aShortcut += OUString( RTL_CONSTASCII_USTRINGPARAM( "\\" ) );
     aShortcut += aShortcutName;
