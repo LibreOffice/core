@@ -70,7 +70,7 @@ TARGETTYPE=CUI
 
 SCP_PRODUCT_TYPE=osl
 
-LNGFILES= module_gnome.lng
+ULFFILES= module_gnome.ulf
 
 .IF "$(GUI)"=="UNX"
 PARFILES =                   \
