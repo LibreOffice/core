@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hjs $ $Date: 2002-10-04 11:06:45 $
+#   last change: $Author: hr $ $Date: 2003-04-29 17:41:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -88,9 +88,7 @@ SLOFILES = \
 OBJFILES =    $(OBJ)$/commtest.obj	$(OBJ)$/brooker.obj
 
 
-.IF "$(GUI)"!="DOS"
 SRCFILES=   testtool.src
-.ENDIF
 
 
 LIB1TARGET= $(SLB)$/plugapp.lib
