@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uno2cpp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-31 14:39:20 $
+ *  last change: $Author: hr $ $Date: 2001-10-31 14:46:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,52 +90,44 @@ static void callVirtualMethod(
     // reference parameters are pointers
 
     OSL_ENSURE( pStackLongs && pThis, "### null ptr!" );
-    OSL_ENSURE( (sizeof(void *) == 4) &&
-                 (sizeof(sal_Int32) == 4), "### unexpected size of int!" );
+    OSL_ENSURE( (sizeof(void *) == 4) && (sizeof(sal_Int32) == 4), "### unexpected size of int!" );
     OSL_ENSURE( nStackLongs && pStackLongs, "### no stack in callVirtualMethod !" );
 
     // never called
     if (! pThis) dummy_can_throw_anything("xxx"); // address something
 
     volatile long edx = 0, eax = 0; // for register returns
-    __asm__ (
+    asm volatile (
         // copy values
-        "pushl %%edx\n\t"
-        "pushl %%ecx\n\t"
-        "pushl %%eax\n\t"
-        "mov  %0, %%eax\n\t"
-        "mov  %%eax, %%edx\n\t"
-        "dec  %%edx\n\t"
-        "shl  $2, %%edx\n\t"
-        "add  %1, %%edx\n"
+        "mov   %0, %%eax\n\t"
+        "mov   %%eax, %%edx\n\t"
+        "dec   %%edx\n\t"
+        "shl   $2, %%edx\n\t"
+        "add   %1, %%edx\n"
         "Lcopy:\n\t"
-        "mov  0(%%edx), %%ecx\n\t"
-        "sub  $4, %%edx\n\t"
-        "push %%ecx\n\t"
-        "dec  %%eax\n\t"
-        "jne  Lcopy\n"
-        "Lcall:\n\t"
+        "pushl 0(%%edx)\n\t"
+        "sub   $4, %%edx\n\t"
+        "dec   %%eax\n\t"
+        "jne   Lcopy\n\t"
         // do the actual call
-        "mov  %2, %%edx\n\t"
-        "mov  0(%%edx), %%edx\n\t"
-        "mov  %3, %%eax\n\t"
-// gcc3 change
-//          "add  $2, %%eax\n\t" // first two table entries are reserved
-        "shl  $2, %%eax\n\t"
-        "add  %%eax, %%edx\n\t"
-        "mov  0(%%edx), %%edx\n\t"
-        "call *%%edx\n\t"
+        "mov   %2, %%edx\n\t"
+        "mov   0(%%edx), %%edx\n\t"
+        "mov   %3, %%eax\n\t"
+        "shl   $2, %%eax\n\t"
+        "add   %%eax, %%edx\n\t"
+        "mov   0(%%edx), %%edx\n\t"
+        "call  *%%edx\n\t"
         // save return registers
-         "mov  %%eax, %4\n\t"
-         "mov  %%edx, %5\n\t"
+         "mov   %%eax, %4\n\t"
+         "mov   %%edx, %5\n\t"
         // cleanup stack
-         "mov  %0, %%eax\n\t"
-         "shl  $2, %%eax\n\t"
-         "add  %%eax, %%esp\n\t"
-        "popl %%eax\n\t"
-        "popl %%ecx\n\t"
-        "popl %%edx\n\t"
-        : : "m"(nStackLongs), "m"(pStackLongs), "m"(pThis), "m"(nVtableIndex), "m"(eax), "m"(edx) );
+         "mov   %0, %%eax\n\t"
+         "shl   $2, %%eax\n\t"
+         "add   %%eax, %%esp\n\t"
+        :
+        : "m"(nStackLongs), "m"(pStackLongs), "m"(pThis), "m"(nVtableIndex), "m"(eax), "m"(edx)
+        : "eax", "edx" );
+
     switch( eReturnType )
     {
         case typelib_TypeClass_HYPER:
@@ -156,14 +148,10 @@ static void callVirtualMethod(
             *(unsigned char*)pRegisterReturn = eax;
             break;
         case typelib_TypeClass_FLOAT:
-            __asm__ (
-                "fstps %0\n\t"
-                : : "m"(*(char *)pRegisterReturn) );
+            asm ( "fstps %0" : : "m"(*(char *)pRegisterReturn) );
             break;
         case typelib_TypeClass_DOUBLE:
-            __asm__ (
-                "fstpl %0\n\t"
-                : : "m"(*(char *)pRegisterReturn) );
+            asm ( "fstpl %0\n\t" : : "m"(*(char *)pRegisterReturn) );
             break;
     }
 }
