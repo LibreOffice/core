@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: cl $ $Date: 2001-04-30 09:02:17 $
+ *  last change: $Author: aw $ $Date: 2001-05-02 11:45:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1590,7 +1590,26 @@ void SdXMLPageShapeContext::StartElement(const uno::Reference< xml::sax::XAttrib
 {
     // create Page shape
     // add, set style and properties from base shape
-    AddShape("com.sun.star.drawing.PageShape");
+
+    // #86163# take into account which type of PageShape needs to
+    // be constructed. It's an pres shape if presentation:sXML_class == sXML_presentation_page.
+    sal_Bool bIsPresentation(maPresentationClass.getLength() != 0);
+
+    if(bIsPresentation
+        && !maPresentationClass.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_presentation_page)))
+    {
+        bIsPresentation = FALSE;
+    }
+
+    if(bIsPresentation)
+    {
+        AddShape("com.sun.star.presentation.PageShape");
+    }
+    else
+    {
+        AddShape("com.sun.star.drawing.PageShape");
+    }
+
     if(mxShape.is())
     {
         SetStyle();
