@@ -2,9 +2,9 @@
  *
  *  $RCSfile: status.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: gh $ $Date: 2002-11-25 12:23:43 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 19:40:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,8 +63,6 @@
 #include "basic.hrc"
 #include "appwin.hxx"
 #include "status.hxx"
-
-#include <vcl/system.hxx>
 
 #include <vcl/decoview.hxx>
 
