@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf2.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:01:08 $
+ *  last change: $Author: vg $ $Date: 2003-05-19 12:26:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -581,132 +581,6 @@ void SwWW8ImplReader::PicRead(SvStream *pDataStream, WW8_PIC *pPic,
     *pDataStream >> pPic->dyaOrigin;
     if (!bVer67)
         pDataStream->SeekRel(2);  //cProps
-}
-
-bool SwWW8ImplReader::ImportURL(String &sURL,String &sMark,WW8_CP nStart)
-{
-    bool bRet = false;
-    /*
-     * Save the reader state and process the sprms for this anchor cp.
-     * Doing so will set the nPicLocFc to the offset to find the hypertext
-     * data in the data stream.
-     */
-    WW8_CP nEndCp = nStart+1; //Only interested in the single 0x01 character
-
-    WW8ReaderSave aSave(this,nStart);
-
-    WW8PLCFManResult aRes;
-    nStart = pPlcxMan->Where();
-    while(nStart <= nEndCp)
-    {
-        if (pPlcxMan->Get(&aRes) && aRes.pMemPos && aRes.nSprmId)
-        {
-            //only interested in sprms which would set nPicLocFc
-            if ( (68 == aRes.nSprmId) || (0x6A03 == aRes.nSprmId) )
-            {
-                Read_PicLoc(aRes.nSprmId, aRes.pMemPos +
-                    mpSprmParser->DistanceToData(aRes.nSprmId), 4);
-                break;
-            }
-        }
-        (*pPlcxMan)++;
-        nStart = pPlcxMan->Where();
-    }
-    ULONG nOffset = nPicLocFc;
-    aSave.Restore(this);
-
-    ULONG nOldPos = pDataStream->Tell();
-    WW8_PIC aPic;
-    pDataStream->Seek( nOffset);
-    PicRead( pDataStream, &aPic, bVer67);
-
-    if((aPic.lcb > 0x44) && !pDataStream->GetError() )
-    {
-#if OSL_DEBUG_LEVEL > 1
-        pDataStream->SeekRel( 3 );
-        const BYTE MAGIC_A[16] =
-        {
-            0xd0, 0xc9, 0xea, 0x79, 0xf9, 0xba, 0xce, 0x11,
-            0x8c, 0x82, 0x00, 0xaa, 0x00, 0x4b, 0xa9, 0x0b
-        };
-        BYTE test[16];
-
-        pDataStream->Read( test, 16 );
-        ASSERT(!memcmp(MAGIC_A,test,16),
-            "Found a different MAGIC_A, cause for concern");
-#else
-        pDataStream->SeekRel(19);
-#endif
-        ULONG nLen,nFlags;
-        *pDataStream >> nLen;
-        ASSERT(nLen == 2,"Wrong flag len, cause for concern");
-        *pDataStream >> nFlags;
-        /* all bits zero except for the bottom 4 bits which are...
-         * 0: always set. bottom bit set to denote a link ?
-         * 1: set to denote an absolute link
-         * 2: never set ?
-         * 3: set to denote an anchor
-         */
-
-        const BYTE MAGIC_B[16] =
-        {
-            0xe0, 0xc9, 0xea, 0x79, 0xf9, 0xba, 0xce, 0x11,
-            0x8c, 0x82, 0x00, 0xaa, 0x00, 0x4b, 0xa9, 0x0b
-        };
-        const BYTE MAGIC_C[18] =
-        {
-            0x03, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-            0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46,
-            0x00, 0x00
-        };
-
-        BYTE testb[16];
-        int nVersion=-1;
-
-        pDataStream->Read( testb, 16 );
-        if (memcmp(MAGIC_B,testb,16) == 0)
-            nVersion=1;
-        else if (memcmp(MAGIC_C,testb,16) == 0)
-            nVersion=2;
-        else
-        {
-            ASSERT(!this,"Found neither MAGIC_B or C, cause for concern");
-            nVersion=-1;
-        }
-
-        switch(nVersion)
-        {
-            case 1:
-                *pDataStream >> nLen;
-                sURL = WW8Read_xstz(*pDataStream, (USHORT)nLen/2, false);
-                if (nFlags & 0x08)
-                {
-                    *pDataStream >> nLen;
-                    sMark = WW8Read_xstz(*pDataStream, (USHORT)nLen, false);
-                    bRet = true;
-                }
-                break;
-            case 2:
-                pDataStream->SeekRel(2); // skip over the last two bytes
-                *pDataStream >> nLen;
-                pDataStream->SeekRel(nLen); // skip over the 1st filename
-                pDataStream->SeekRel(24); // skip over MAGIC_D
-
-                *pDataStream >> nLen;   //full len
-                *pDataStream >> nLen;   //real str len
-                pDataStream->SeekRel(2); // skip over the value 00 03
-                sURL = WW8Read_xstz(*pDataStream, (USHORT)nLen/2, false);
-                if (nFlags & 0x08)
-                {
-                    *pDataStream >> nLen;
-                    sMark = WW8Read_xstz(*pDataStream, (USHORT)nLen, false);
-                    bRet = true;
-                }
-                break;
-        }
-    }
-    pDataStream->Seek( nOldPos );
-    return( bRet );
 }
 
 SwFrmFmt* SwWW8ImplReader::ImportGraf(SdrTextObj* pTextObj,
