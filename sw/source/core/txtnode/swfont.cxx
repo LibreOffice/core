@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfont.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-30 12:50:47 $
+ *  last change: $Author: ama $ $Date: 2000-11-09 11:16:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -256,6 +256,8 @@ void SwSubFont::SetFnt( const SvxFont &rFont )
 
 void SwFont::SetFnt( const SwAttrSet *pAttrSet )
 {
+    delete pBackColor;
+    pBackColor = NULL;
     if( pAttrSet )
     {
         {   // Latin
@@ -324,6 +326,10 @@ void SwFont::SetFnt( const SwAttrSet *pAttrSet )
         SetFixKerning( pAttrSet->GetKerning().GetValue() );
         bNoHyph = pAttrSet->GetNoHyphenHere().GetValue();
         bBlink = pAttrSet->GetBlink().GetValue();
+        const SfxPoolItem* pItem;
+        if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_BACKGROUND,
+            TRUE, &pItem ))
+            pBackColor = new Color( ((const SvxBrushItem*)pItem)->GetColor() );
     }
     else
     {
