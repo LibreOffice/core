@@ -2,9 +2,9 @@
  *
  *  $RCSfile: geometrycontrolmodel.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dbo $ $Date: 2001-04-10 07:33:49 $
+ *  last change: $Author: tbe $ $Date: 2001-04-12 11:30:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,7 +125,7 @@
         ,m_nHeight(0)
         ,m_bCloneable(sal_False)
         ,m_aName(::rtl::OUString())
-        ,m_nTabIndex(0)
+        ,m_nTabIndex(-1)
         ,m_nStep(0)
         ,m_aTag(::rtl::OUString())
     {
@@ -201,7 +201,7 @@
             case GCM_PROPERTY_ID_WIDTH:         aDefault <<= (sal_Int32) 0; break;
             case GCM_PROPERTY_ID_HEIGHT:        aDefault <<= (sal_Int32) 0; break;
             case GCM_PROPERTY_ID_NAME:          aDefault <<= ::rtl::OUString(); break;
-            case GCM_PROPERTY_ID_TABINDEX:      aDefault <<= (sal_Int16) 0; break;
+            case GCM_PROPERTY_ID_TABINDEX:      aDefault <<= (sal_Int16) -1; break;
             case GCM_PROPERTY_ID_STEP:          aDefault <<= (sal_Int32) 0; break;
             case GCM_PROPERTY_ID_TAG:           aDefault <<= ::rtl::OUString(); break;
             default:                            DBG_ERROR( "ImplGetDefaultValueByHandle - unknown Property" );
@@ -411,6 +411,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.10  2001/04/10 07:33:49  dbo
+ *  #85862# have to use namespace due to symbol ambiguity
+ *
  *  Revision 1.9  2001/03/23 14:47:53  tbe
  *  removed HelpText property from geometry model
  *
