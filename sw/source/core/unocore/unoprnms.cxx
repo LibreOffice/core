@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.cxx,v $
  *
- *  $Revision: 1.97 $
+ *  $Revision: 1.98 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-19 09:06:51 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 13:34:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -747,7 +747,8 @@ const SwPropNameTab aPropNameTab = {
 /* 0665 UNO_NAME_IS_FOLLOWING_TEXT_FLOW*/ {MAP_CHAR_LEN("IsFollowingTextFlow")},
 /* 0666 UNO_NAME_WIDTH_TYPE*/ {MAP_CHAR_LEN("WidthType")},
 /* 0667 UNO_NAME_SCRIPT_URL */            {MAP_CHAR_LEN("ScriptURL")},
-/* 0668 UNO_NAME_RUNTIME_UID*/ {MAP_CHAR_LEN("RuntimeUID")}
+/* 0668 UNO_NAME_RUNTIME_UID*/ {MAP_CHAR_LEN("RuntimeUID")},
+/* 0669 UNO_NAME_COLLAPSING_BORDERS*/ {MAP_CHAR_LEN("CollapsingBorders")}
 };
 
 #ifndef PRODUCT
