@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wmadaptor.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: pl $ $Date: 2001-11-27 18:13:49 $
+ *  last change: $Author: pl $ $Date: 2001-12-07 16:41:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1348,6 +1348,7 @@ void WMAdaptor::maximizeFrame( SalFrame* pFrame, bool bHorizontal, bool bVertica
     pFrame->maFrameData.mbMaximizedHorz = bHorizontal;
 
     const SalFrameGeometry& rGeom( pFrame->GetGeometry() );
+
     if( bHorizontal || bVertical )
     {
         const Size& aScreenSize( m_pSalDisplay->GetScreenSize() );
@@ -1417,6 +1418,7 @@ void WMAdaptor::maximizeFrame( SalFrame* pFrame, bool bHorizontal, bool bVertica
             XRaiseWindow( m_pDisplay,
                           pFrame->maFrameData.GetStackingWindow()
                           );
+
     }
     else
     {
@@ -1427,6 +1429,11 @@ void WMAdaptor::maximizeFrame( SalFrame* pFrame, bool bHorizontal, bool bVertica
         pFrame->maFrameData.aRestoreFullScreen_ = Rectangle();
         pFrame->maFrameData.nWidth_             = rGeom.nWidth;
         pFrame->maFrameData.nHeight_            = rGeom.nHeight;
+        if( m_aWMName.EqualsAscii( "Dtwm" ) && pFrame->maFrameData.bMapped_ )
+        {
+            pFrame->maGeometry.nX += rGeom.nLeftDecoration;
+            pFrame->maGeometry.nY += rGeom.nTopDecoration;
+        }
     }
 }
 
