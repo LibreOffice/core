@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-26 16:47:23 $
+#   last change: $Author: rt $ $Date: 2003-04-08 15:54:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -68,7 +68,10 @@ LIBTARGET=NO
 TARGETTYPE=CUI
 ENABLE_EXCEPTIONS=TRUE
 
-TESTAPP=test_osl_joinProcess
+TESTAPP=test_osl_getVolInfo
+#TESTAPP=test_osl_joinProcess
+#TESTAPP=getlocaleinfotest
+#TESTAPP=test_osl_joinProcess
 #TESTAPP=getlocaleinfotest
 #TESTAPP=salstattest
 #TESTAPP=saldyntest
@@ -92,6 +95,28 @@ TESTAPP=test_osl_joinProcess
 .INCLUDE :  settings.mk
 
 # --- Files --------------------------------------------------------
+
+.IF "$(TESTAPP)" == "test_osl_getVolInfo"    
+
+SHL1OBJS=$(SLO)$/t_osl_getVolInfo.obj
+SHL1TARGET=togvi
+
+.IF "$(GUI)" == "WNT"
+APP1STDLIBS=kernel32.lib
+SHL1STDLIBS=$(LB)$/isal.lib
+SHL1STDLIBS+=$(SOLARLIBDIR)$/cppunit.lib
+.ENDIF
+
+.IF "$(GUI)" == "UNX"
+SHL1STDLIBS=$(LB)$/libsal.so
+SHL1STDLIBS+=$(SOLARLIBDIR)$/libcppunit$(DLLPOSTFIX).a
+.ENDIF
+    
+SHL1IMPLIB=i$(SHL1TARGET) 
+SHL1DEF=$(MISC)$/$(SHL1TARGET).def
+DEF1NAME=$(SHL1TARGET) 
+DEF1EXPORTFILE=export.exp
+.ENDIF
 
 .IF "$(TESTAPP)" == "test_osl_joinProcess"    
 OBJFILES=$(OBJ)$/t_ojp_exe.obj 
