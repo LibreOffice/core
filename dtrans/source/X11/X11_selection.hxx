@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_selection.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 20:42:44 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 11:59:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -263,7 +263,7 @@ namespace x11 {
             Sequence< sal_Int8 >        m_aData;
             Sequence< ::com::sun::star::datatransfer::DataFlavor >
                                         m_aTypes;
-            Sequence< Atom >            m_aNativeTypes;
+            std::vector< Atom >         m_aNativeTypes;
             // this is used for caching
             // m_aTypes is invalid after 2 seconds
             // m_aNativeTypes contains the corresponding original atom
