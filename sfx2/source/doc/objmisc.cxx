@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objmisc.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:32 $
+ *  last change: $Author: mba $ $Date: 2000-09-28 16:29:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -976,9 +976,8 @@ void SfxObjectShell::FinishedLoading( sal_uInt16 nFlags )
         const SfxFilter* pFilter = GetMedium()->GetFilter();
         if( !IsAbortingImport() )
         {
-            if( pFilter && !pFilter->UsesStorage() &&
-                !(GetMedium()->GetOpenMode() & STREAM_WRITE ) )
-                GetMedium()->Close();
+//            if( pFilter && !pFilter->UsesStorage() && !(GetMedium()->GetOpenMode() & STREAM_WRITE ) )
+//                GetMedium()->Close();
             PositionView_Impl();
         }
         // Salvage
