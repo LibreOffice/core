@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-26 13:53:57 $
+#   last change: $Author: hr $ $Date: 2004-04-13 11:10:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,6 +83,7 @@ IDLFILES=\
     FormComponents.idl\
     FormComponentType.idl\
     FormController.idl\
+    FormControllerDispatcher.idl\
     FormControlModel.idl\
     Forms.idl\
     FormSubmitEncoding.idl\
