@@ -2,9 +2,9 @@
  *
  *  $RCSfile: importwi.src,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 17:02:24 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 15:20:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,2730 +157,521 @@
 // --------------------------------------------------------------------
 String sHelpButton
 {
-    Text = "~Hilfe";
-    Text[English] = "~Help";
-    Text[ English_us ] = "~Help";
-    Text[ french ] = "Aide";
-    Text[ italian ] = "~?";
-    Text[ spanish ] = "~Ayuda";
-    Text[ portuguese ] = "~Ajuda";
-    Text[ dutch ] = "~Help";
-    Text[ swedish ] = "~Hjälp";
-    Text[ greek ] = "ÂïŞèåéá";
-    Text[ dutch ] = "~Help";
-    Text[ swedish ] = "~Hjälp";
-    Text[ russian ] = "Ñï~ğàâêà";
-    Text[ danish ] = "~Hjælp";
-    Text[ polish ] = "Po~moc";
-    Text[ portuguese_brazilian ] = "~Ajuda";
-    Text[ japanese ] = "ãƒ˜ãƒ«ãƒ—(~H)";
-    Text[ korean ] = "ë„ì›€ë§(~H)";
-    Text[ chinese_simplified ] = "å¸®åŠ©(~H)";
-    Text[ chinese_traditional ] = "èªªæ˜(~H)";
-    Text[ arabic ] = "~ãÓÇÚÏÉ";
-    Text[ turkish ] = "~Yardım";
-    Text[ catalan ] = "~Ajuda";
-    Text[ finnish ] = "~Ohje";
-    Text[ thai ] = "~à¸Šà¹ˆà¸§à¸¢à¹€à¸«à¸¥à¸·à¸­";
-    Text[ czech ] = "NÃ¡povÄ›da";
-    Text[ hebrew ] = "â€®×¢×–×¨×”â€¬";
-    Text[ hindi ] = "~à¤¸à¤¹à¤¾à¤¯à¤¤à¤¾";
-    Text[ slovak ] = "~PomocnÃ­k";
-    Text[ hungarian ] = "~SÃºgÃ³";
-    Text[ slovenian ] = "~PomoÄ";
+    Text [ de ] = "~Hilfe";
+    Text [ en-US ] = "~Help";
 };
 
 String sCancelButton
 {
-    Text = "~Abbrechen";
-    Text[English] = "~Cancel";
-    Text[ English_us ] = "~Cancel";
-    Text[ french ] = "Annuler";
-    Text[ italian ] = "~Annulla";
-    Text[ spanish ] = "~Cancelar";
-    Text[ portuguese ] = "Ca~ncelar";
-    Text[ dutch ] = "~Annuleren";
-    Text[ swedish ] = "~Avbryt";
-    Text[ greek ] = "~¢êõñï";
-    Text[ dutch ] = "~Annuleren";
-    Text[ swedish ] = "~Avbryt";
-    Text[ russian ] = "~Îòìåíèòü";
-    Text[ danish ] = "~Annuller";
-    Text[ polish ] = "~Anuluj";
-    Text[ portuguese_brazilian ] = "Ca~ncelar";
-    Text[ japanese ] = "ã‚­ãƒ£ãƒ³ã‚»ãƒ«(~C)";
-    Text[ korean ] = "ì·¨ì†Œ(~C)";
-    Text[ chinese_simplified ] = "å–æ¶ˆ(~C)";
-    Text[ chinese_traditional ] = "å–æ¶ˆ(~C)";
-    Text[ arabic ] = "~ÅáÛÇÁ ÇáÃãÑ";
-    Text[ turkish ] = "İ~ptal";
-    Text[ catalan ] = "~Cancel.la";
-    Text[ finnish ] = "~Peruuta";
-    Text[ thai ] = "~à¸¢à¸à¹€à¸¥à¸´à¸";
-    Text[ czech ] = "ZruÅ¡it";
-    Text[ hebrew ] = "â€®×‘×™×˜×•×œâ€¬";
-    Text[ hindi ] = "~à¤°à¤¦à¥à¤¦ à¤•à¤°à¥‹";
-    Text[ slovak ] = "~ZruÅ¡iÅ¥";
-    Text[ hungarian ] = "~MÃ©gsem";
-    Text[ slovenian ] = "Pre~kliÄi";
+    Text [ de ] = "~Abbrechen";
+    Text [ en-US ] = "~Cancel";
 };
 
 String sBackButton
 {
-    Text = "<< ~Zurück";
-    Text[English] = "<< ~Back";
-    Text[ English_us ] = "<< ~Back";
-    Text[ french ] = "<< Précédent";
-    Text[ italian ] = "<< ~Indietro";
-    Text[ spanish ] = "<< ~Regresar";
-    Text[ portuguese ] = "<< ~Anterior";
-    Text[ dutch ] = "<< ~Vorige";
-    Text[ swedish ] = "<< ~Tillbaka";
-    Text[ greek ] = "<< Ğßóù";
-    Text[ dutch ] = "<< ~Vorige";
-    Text[ swedish ] = "<< ~Tillbaka";
-    Text[ russian ] = "<< ~Íàçàä";
-    Text[ danish ] = "<< ~Tilbage";
-    Text[ polish ] = "<< ~Wstecz";
-    Text[ portuguese_brazilian ] = "<< ~Anterior";
-    Text[ japanese ] = "<< æˆ»ã‚‹(~B)";
-    Text[ korean ] = "<< ë’¤ë¡œ(~B)";
-    Text[ chinese_simplified ] = "<< è¿”å›(~B)";
-    Text[ chinese_traditional ] = "<< è¿”å›(~B)";
-    Text[ arabic ] = "<< ~ÇáÓÇÈŞ";
-    Text[ turkish ] = "<< ~Geri";
-    Text[ catalan ] = "<< ~Enrere";
-    Text[ finnish ] = "<< ~Edellinen";
-    Text[ thai ] = "<< ~à¸à¸¥à¸±à¸šà¹„à¸›";
-    Text[ czech ] = "<< ZpÄ›t";
-    Text[ hebrew ] = "â€®<< ×”×§×•×“×â€¬";
-    Text[ hindi ] = "<< ~à¤ªà¥€à¤›à¥‡";
-    Text[ slovak ] = "<<~SpÃ¤Å¥";
-    Text[ hungarian ] = "<< ~Vissza";
-    Text[ slovenian ] = "<< N~azaj";
+    Text [ de ] = "<< ~Zurück";
+    Text [ en-US ] = "<< ~Back";
 };
 
 String sNextButton
 {
-    Text = "~Weiter >>";
-    Text[English] = "C~ontinue >>";
-    Text[ English_us ] = "Ne~xt >>";
-    Text[ french ] = "Suivant >>";
-    Text[ italian ] = "A~vanti >>";
-    Text[ spanish ] = "~Continuar >>";
-    Text[ portuguese ] = "~Continuar >>";
-    Text[ dutch ] = "~Volgende >>";
-    Text[ swedish ] = "~Nästa >>";
-    Text[ greek ] = "Óõíİ÷åéá >>";
-    Text[ dutch ] = "~Volgende >>";
-    Text[ swedish ] = "~Nästa >>";
-    Text[ russian ] = "Äàëåå >>";
-    Text[ danish ] = "~Næste >>";
-    Text[ polish ] = "~Dalej >>";
-    Text[ portuguese_brazilian ] = "~Continuar >>";
-    Text[ japanese ] = "æ¬¡ã¸(~X) >>";
-    Text[ korean ] = "ë‹¤ìŒ(~X) >>";
-    Text[ chinese_simplified ] = "ç»§ç»­(~X) >>";
-    Text[ chinese_traditional ] = "ä¸‹ä¸€æ­¥(~X) >>";
-    Text[ arabic ] = "~ÇáÊÇáí >>";
-    Text[ turkish ] = "İ~leri >>";
-    Text[ catalan ] = "C~ontinua >>";
-    Text[ finnish ] = "S~euraava >>";
-    Text[ thai ] = "à¸—à¸³à¸•à¹ˆ~à¸­ >>";
-    Text[ czech ] = "DalÅ¡Ã­ >>";
-    Text[ hebrew ] = "â€®×”×‘× >>â€¬";
-    Text[ hindi ] = "à¤œà¤¾~à¤°à¥€ à¤°à¤–à¥‹ >>";
-    Text[ slovak ] = "Äa~lÅ¡Ã­ >>";
-    Text[ hungarian ] = "~TovÃ¡bb >>";
-    Text[ slovenian ] = "N~adaljuj >>";
+    Text [ de ] = "~Weiter >>";
+    Text [ en-US ] = "Ne~xt >>";
 };
 
 String sBeginButton
 {
-    Text = "~Konvertieren";
-    Text[English] = "~Convert";
-    Text[ English_us ] = "~Convert";
-    Text[ french ] = "~Convertir";
-    Text[ italian ] = "I~mporta";
-    Text[ spanish ] = "~Convertir";
-    Text[ portuguese ] = "~Converter";
-    Text[ dutch ] = "~Converteren";
-    Text[ swedish ] = "~Konvertera";
-    Text[ greek ] = "ÌåôáôñïğŞ";
-    Text[ dutch ] = "~Converteren";
-    Text[ swedish ] = "~Konvertera";
-    Text[ russian ] = "~Êîíâåğòèğîâàòü";
-    Text[ danish ] = "~Konverter";
-    Text[ polish ] = "~Konwertuj";
-    Text[ portuguese_brazilian ] = "~Converter";
-    Text[ japanese ] = "å¤‰æ›(~C)";
-    Text[ korean ] = "ë³€í™˜(~C)";
-    Text[ chinese_simplified ] = "è½¬æ¢(~C)";
-    Text[ chinese_traditional ] = "è½‰æ›(~C)";
-    Text[ arabic ] = "~ÊÍæíá";
-    Text[ turkish ] = "~Dönüştür";
-    Text[ catalan ] = "~Converteix";
-    Text[ finnish ] = "~Muunna";
-    Text[ thai ] = "à¹~à¸›à¸¥à¸‡";
-    Text[ czech ] = "Konvertovat";
-    Text[ hebrew ] = "â€®×”××¨×”â€¬";
-    Text[ hindi ] = "~à¤¬à¤¦à¤²à¥‹";
-    Text[ slovak ] = "~KonvertovaÅ¥";
-    Text[ hungarian ] = "Ã~talakÃ­tÃ¡s";
-    Text[ slovenian ] = "Pre~tvori";
+    Text [ de ] = "~Konvertieren";
+    Text [ en-US ] = "~Convert";
 };
 
 String sCloseButton
 {
-    Text = "~Schließen";
-    Text[English] = "~Close";
-    Text[ English_us ] = "~Close";
-    Text[ portuguese ] = "~Fechar";
-    Text[ russian ] = "~Çàêğûòü";
-    Text[ greek ] = "~Êëåßóéìï";
-    Text[ dutch ] = "~Sluiten";
-    Text[ french ] = "Fermer";
-    Text[ spanish ] = "~Cerrar";
-    Text[ finnish ] = "~Sulje";
-    Text[ italian ] = "~Chiudi";
-    Text[ danish ] = "~Luk";
-    Text[ swedish ] = "~Stäng";
-    Text[ polish ] = "~Zamknij";
-    Text[ portuguese_brazilian ] = "~Fechar";
-    Text[ japanese ] = "é–‰ã˜ã‚‹(~C)";
-    Text[ korean ] = "ë‹«ê¸°(~C)";
-    Text[ chinese_simplified ] = "å…³é—­(~C)";
-    Text[ chinese_traditional ] = "é—œé–‰(~C)";
-    Text[ turkish ] = "~Kapat";
-    Text[ arabic ] = "ÅÛáÇŞ";
-    Text[ catalan ] = "~Tanca";
-    Text[ thai ] = "~à¸›à¸´à¸”";
-    Text[ czech ] = "ZavÅ™Ã­t";
-    Text[ hebrew ] = "â€®×¡×’×™×¨×”â€¬";
-    Text[ hindi ] = "~à¤¬à¤¨à¥à¤¦ à¤•à¤°à¥‹";
-    Text[ slovak ] = "~ZavrieÅ¥";
-    Text[ hungarian ] = "~BezÃ¡rÃ¡s";
-    Text[ slovenian ] = "~Zapri";
+    Text [ de ] = "~Schließen";
+    Text [ en-US ] = "~Close";
 };
 
 String sWelcometextLabel1
 {
-    Text = "Dieser AutoPilot wandelt Dokumente des alten StarOffice-Formates und Microsoft Office - Dokumente in das neue %PRODUCTNAME XML-Format um.";
-    Text[English] = "This AutoPilot converts old Staroffice and Microsoft Office documents to the new StarOffice XML-Format.";
-    Text[ English_us ] = "This AutoPilot converts documents in the old StarOffice format and Microsoft Office documents to the new %PRODUCTNAME XML format.";
-    Text[ french ] = "Cet AutoPilote convertit les documents de l'ancien format StarOffice et les documents Microsoft Office au nouveau format %PRODUCTNAME XML.";
-    Text[ italian ] = "Questo pilota automatico converte i vecchi documenti del formato StarOffice e Microsoft Office nel nuovo formato  %PRODUCTNAME XML.";
-    Text[ spanish ] = "Este Piloto automático convierte documentos del antiguo StarOffice y de Microsoft Office al nuevo formato %PRODUCTNAME XML.";
-    Text[ portuguese ] = "Este AutoPiloto converte documentos em formato StarOffice antigo e Microsoft Office para o novo formato XML do %PRODUCTNAME.";
-    Text[ dutch ] = "Deze AutoPiloot converteert oude StarOffice-indelingen en Microsoft Office-documenten naar de nieuwe %PRODUCTNAME XML-indeling.";
-    Text[ swedish ] = "Den här AutoPiloten konverterar dokument i det gamla StarOffice-formatet och Microsoft Office-dokument till det nya %PRODUCTNAME-XML-formatet.";
-    Text[ greek ] = "Áõôü ôï ğñüãñáììá áõôüìáôïõ ğéëüôïõ åêôåëåß ôçí ìåôáôñïğŞ ôùí åããñÜöùí ğïõ äçìéïõñãŞèçêáí ìå êÜğïéá ğñïãåíİóôåñç ìïñöŞ ôïõ StarOffice êáé ôïõ Microsoft Office óå İããñáöá ìå ôç ìïñöŞ %PRODUCTNAME XML.";
-    Text[ dutch ] = "Deze AutoPiloot converteert oude StarOffice-indelingen en Microsoft Office-documenten naar de nieuwe %PRODUCTNAME XML-indeling.";
-    Text[ swedish ] = "Den här AutoPiloten konverterar dokument i det gamla StarOffice-formatet och Microsoft Office-dokument till det nya %PRODUCTNAME-XML-formatet.";
-    Text[ russian ] = "Ìàñòåğ ïğåîáğàçóåò ñòàğûå ôîğìàòû StarOffice è äîêóìåíòû Microsoft Office â íîâûé ôîğìàò %PRODUCTNAME XML.";
-    Text[ danish ] = "Denne AutoPilot konverterer dokumenter i det gamle StarOffice-format og Microsoft Office-dokumenter til det nye %PRODUCTNAME XML-format.";
-    Text[ polish ] = "Ten AutoPilot konwertuje dokumenty w starszym formacie StarOffice oraz dokumenty Microsoft Office do nowego formatu %PRODUCTNAME XML.";
-    Text[ portuguese_brazilian ] = "Este Assistente converte documentos em formato StarOffice antigo e documentos Microsoft Office para o novo formato XML do %PRODUCTNAME.";
-    Text[ japanese ] = "ã“ã®ã‚ªãƒ¼ãƒˆãƒ‘ã‚¤ãƒ­ãƒƒãƒˆã¯ã€æ—§ StarOffice ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã¨ Microsoft Office ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã‚’ã€æ–°ã—ã„ %PRODUCTNAME ã® XML å½¢å¼ã«å¤‰æ›ã—ã¾ã™ã€‚";
-    Text[ korean ] = "ì´ ìë™ íŒŒì¼ëŸ¿ì€ ì´ì „ StarSuiteí˜•ì‹ê³¼ Microsoft Officeë¬¸ì„œë¥¼ ìƒˆë¡œìš´ StarSuite XMLí˜•ì‹ìœ¼ë¡œ ë³€í™˜í•©ë‹ˆë‹¤.";
-    Text[ chinese_simplified ] = "è¿™ä¸ªè‡ªåŠ¨æ–‡ä»¶åŠ©ç†å°† StarOffice æ—§å¼æ–‡æ¡£å’Œ Microsoft Office æ–‡æ¡£è½¬æ¢æˆ %PRODUCTNAME XML æ ¼å¼ã€‚";
-    Text[ chinese_traditional ] = "é€™å€‹æª”æ¡ˆåŠ©ç†ç¨‹å¼å°‡ StarOffice èˆŠå¼æ ¼å¼æˆ– Microsoft Office æ–‡ä»¶è½‰æ›æˆæ–°å¼çš„ %PRODUCTNAME XML æ ¼å¼ã€‚";
-    Text[ arabic ] = "íŞæã åĞÇ ÇáãÑÔÏ ÇáÂáí ÈÊÍæíá ãÓÊäÏÇÊ StarOffice  ÇáŞÏíãÉ æãÓÊäÏÇÊ Microsoft Office  Åáì ÇáÊäÓíŞ %PRODUCTNAME XML ÇáÌÏíÏ.";
-    Text[ turkish ] = "AutoPilot yardımı ile, belgeler eski StarOffice biçimine ve  Microsoft Office belgeleri yeni %PRODUCTNAME XML biçimine kolayca çevrilir.";
-    Text[ catalan ] = "Aquest AutoPilot converteix documents vells d'StarOffice i de Microsoft Office al nou format  %PRODUCTNAME XML.";
-    Text[ finnish ] = "Tämä ohjattu toiminto muuntaa vanhojen versioiden StarOffice-asiakirjat ja Microsoft Office -asiakirjat uuteen %PRODUCTNAME XML -muotoon.";
-    Text[ thai ] = "à¸à¸²à¸£à¸™à¸³à¸£à¹ˆà¸­à¸‡à¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´à¸™à¸µà¹‰à¹à¸›à¸¥à¸‡à¹€à¸­à¸à¸ªà¸²à¸£à¹ƒà¸™à¸£à¸¹à¸›à¹à¸šà¸šà¸ªà¸•à¸²à¸£à¹Œà¸­à¸­à¸Ÿà¸Ÿà¸´à¸¨à¹€à¸à¹ˆà¸²à¹à¸¥à¸°à¹€à¸­à¸à¸ªà¸²à¸£à¹„à¸¡à¹‚à¸„à¸£à¸‹à¸­à¸Ÿà¸—à¹Œà¸­à¸­à¸Ÿà¸Ÿà¸´à¸¨à¹€à¸›à¹‡à¸™à¸£à¸¹à¸›à¹à¸šà¸š %PRODUCTNAME XML à¹ƒà¸«à¸¡à¹ˆ";
-    Text[ czech ] = "Tento prÅ¯vodce konvertuje pÅ¯vodnÃ­ dokumenty StarOffice a Microsoft Office do novÃ©ho XML formÃ¡tu %PRODUCTNAME.";
-    Text[ hebrew ] = "â€®×˜×™×™×¡ ××•×˜×•××˜×™ ×–×” ×××™×¨ ××¡××›×™× ××¦×•×¨×ª StarOffice ×”×™×©× ×”, ×•××¦×•×¨×ª Microsoft Office ×œ×¦×•×¨×ª %PRODUCTNAME XML ×”×—×“×©×”.â€¬";
-    Text[ hindi ] = "à¤‡à¤¸ à¤“à¤Ÿà¥‹à¤ªà¥ˆà¤²à¤Ÿà¥ à¤ªà¥à¤°à¤¾à¤¨à¤¾ StarOffice à¤°à¤šà¤¨à¤¾ à¤®à¥‡à¤‚ à¤°à¤¹à¤¨à¥‡à¤µà¤¾à¤²à¤¾ à¤²à¥‡à¤–à¤ªà¤¤à¥à¤° à¤”à¤° Microsoft Office à¤²à¥‡à¤–à¤ªà¤¤à¥à¤°à¥‹à¤‚ à¤•à¥‹ à¤¨à¤¯à¤¾ %PRODUCTNAME XML à¤°à¤šà¤¨à¤¾ à¤®à¥‡à¤‚ à¤¬à¤¦à¤²à¤¤à¤¾ à¤¹à¥ˆ à¥¤ ";
-    Text[ slovak ] = "Tento Sprievodca konvertuje dokumenty v starom formÃ¡te StarOffice a dokumenty Microsoft Office do novÃ©ho %PRODUCTNAME XML formÃ¡tu.";
-    Text[ hungarian ] = "A TÃ¼ndÃ©r a rÃ©gi StarOffice Ã©s Microsoft Office formÃ¡tumÃº dokumentumokat az Ãºj %PRODUCTNAME XML formÃ¡tumra alakÃ­tja Ã¡t.";
-    Text[ slovenian ] = "Ta Avtopilot pretvori dokumente iz stare oblike zapisa programov Staroffice in Microsoft Office v novo obliko zapisa programa %PRODUCTNAME XML.";
+    Text [ de ] = "Dieser AutoPilot wandelt Dokumente des alten StarOffice-Formates und Microsoft Office - Dokumente in das neue %PRODUCTNAME XML-Format um.";
+    Text [ en-US ] = "This AutoPilot converts documents in the old StarOffice format and Microsoft Office documents to the new %PRODUCTNAME XML format.";
 };
 
 String sWelcometextLabel2
 {
-    Text = "Bitte beachten Sie, dass beim Konvertieren der Microsoft - Dokumente angehängte VBA-Makros ihre Funktionalität verlieren";
-    Text[English] = "Please be aware the attached VBA-macros are loosing their functionality.";
-    Text[ English_us ] = "Please note that when converting Microsoft documents any attached VBA macros lose their functionality.";
-    Text[ french ] = "Notez que la conversion des documents Microsoft entraîne la perte de fonctionnalité des macros VBA attachées.";
-    Text[ italian ] = "Vi preghiamo di osservare che quando importate documenti Microsoft si possono perdere macro VBA connesse e la loro funzionalità.";
-    Text[ spanish ] = "No olvide que al convertir documentos de Microsoft las macros VBA que se hayan adjuntado pueden perder su funcionalidad.";
-    Text[ portuguese ] = "Não esqueça que durante a conversão dos documentos Microsoft, as macros VBA anexas perdem a respectiva funcionalidade.";
-    Text[ dutch ] = "Wij wijzen u erop dat bij het converteren van Microsoft-documenten de functionaliteit van de bijbehorende VBA-macro's verloren gaat.";
-    Text[ swedish ] = "Observera att bifogade VBA-makron förlorar sin funktionalitet när Microsoft-dokument konverteras.";
-    Text[ greek ] = "Ğáñáêáëş ğñïóİîôå üôé êáôÜ ôçí ìåôáôñïğŞ ôùí åããñÜöùí ôçò Microsoft ğáıïõí íá éó÷ıïõí ïé ôõ÷üí óõíçììİíåò ìáêñïåíôïëİò ôïõ VBA.";
-    Text[ dutch ] = "Wij wijzen u erop dat bij het converteren van Microsoft-documenten de functionaliteit van de bijbehorende VBA-macro's verloren gaat.";
-    Text[ swedish ] = "Observera att bifogade VBA-makron förlorar sin funktionalitet när Microsoft-dokument konverteras.";
-    Text[ russian ] = "Ïğè ïğåîáğàçîâàíèè äîêóìåíòîâ Microsoft, âíåäğåííûå â íèõ ìàêğîñû VBA òåğÿşò ñâîş ôóíêöèîíàëüíîñòü.";
-    Text[ danish ] = "Vær opmærksom på, at vedhæftede VBA-makroer til Microsoft-dokumenter mister deres funktioner under konverteringen";
-    Text[ polish ] = "Nale¿y wzi¹æ pod uwagê, ¿e podczas konwersji dokumentów Microsoft za³¹czone makra VBA strac¹ swoj¹ funkcjonalnoœæ.";
-    Text[ portuguese_brazilian ] = "Note que durante a conversão dos documentos Microsoft, as macros VBA anexadas perdem sua funcionalidade.";
-    Text[ japanese ] = "Microsoft ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã®å¤‰æ›æ™‚ã«ã€æ·»ä»˜ã•ã‚ŒãŸ VBA ãƒã‚¯ãƒ­ã®æ©Ÿèƒ½ãŒå¤±ã‚ã‚Œãªã„ã‚ˆã†æ³¨æ„ã—ã¦ãã ã•ã„ã€‚";
-    Text[ korean ] = "Microsoft Office ë¬¸ì„œë¥¼ ë³€í™˜í•  ë•Œ, ì²¨ë¶€ëœ VBA ë§¤í¬ë¡œëŠ” ê·¸ ê¸°ëŠ¥ì„ ìƒì‹¤í•œë‹¤ëŠ” ì ì— ìœ ì˜í•˜ì‹­ì‹œì˜¤.";
-    Text[ chinese_simplified ] = "è¯·æ‚¨æ³¨æ„åœ¨è½¬æ¢ Microsoft æ–‡æ¡£æ—¶æºæ–‡æ¡£å†…å« VBA å®çš„åŠŸèƒ½å°±ä¼šæµå¤±ã€‚";
-    Text[ chinese_traditional ] = "è«‹æ³¨æ„åœ¨æ–‡ä»¶è½‰æ›æ ¼å¼æ™‚ Microsoft æ–‡ä»¶å…§å«çš„ VBA å·¨é›†åŠŸèƒ½å°±æœƒæµå¤±ã€‚";
-    Text[ arabic ] = "ÇáÑÌÇÁ ãáÇÍÙÉ Ãäå ÚäÏ ÊÍæíá ãÓÊäÏÇÊ Microsoft Óæİ ÊİŞÏ æÍÏÇÊ ÇáãÇßÑæ VBA ÇáÊí ŞÏ Êßæä ãÑİŞÉ æÙíİÊåÇ.";
-    Text[ turkish ] = "Lütfen dikkat ediniz, Microsoft belgelerine iliştirilmiş VBA makroları işlevlerini yitirecektir.";
-    Text[ language_user1 ] = "; VBA = Visual Basics for Applications TSM 01.12.00";
-    Text[ catalan ] = "Si us plau, tingueu en compte que en convertir documents de Microsoft les macros de VBA adjuntes perden la seva funcionalitat.";
-    Text[ finnish ] = "Ota huomioon, että Microsoft-asiakirjojen VBA-makrot eivät enää toimi, jos ne muunnetaan.";
-    Text[ thai ] = "à¸à¸£à¸¸à¸“à¸²à¸«à¸¡à¸²à¸¢à¹€à¸«à¸•à¸¸à¸§à¹ˆà¸²à¸à¸²à¸£à¹à¸›à¸¥à¸‡à¹€à¸­à¸à¸ªà¸²à¸£à¹„à¸¡à¹‚à¸„à¸£à¸‹à¸­à¸Ÿà¸—à¹Œà¸—à¸µà¹ˆà¹à¸™à¸šà¸¡à¸²à¹‚à¸„à¸£ VBA à¸ªà¸¹à¸à¹€à¸ªà¸µà¸¢à¸à¸²à¸£à¸—à¸³à¸•à¸²à¸¡à¸«à¸™à¹‰à¸²à¸—à¸µà¹ˆ";
-    Text[ czech ] = "Pozor: NenÃ­ moÅ¾nÃ© konvertovat makra Visual Basicu. Tato makra vloÅ¾enÃ¡ do dokumentÅ¯ nebudou po konverzi fungovat.";
-    Text[ hebrew ] = "â€®×©×™××• ×œ×‘, ×›××©×¨ ×××™×¨×™× ××¡××›×™ Microsoft ×”×××§×¨××•×™× ×”-VBA ×”××¦×•×¨×¤×™× ××œ×™×”× ×™×¤×¡×™×§×• ×œ×ª×¤×§×“.â€¬";
-    Text[ hindi ] = "à¤•à¥ƒà¤ªà¤¯à¤¾ à¤§à¥à¤¯à¤¾à¤¨ à¤¦à¥€à¤œà¤¿à¤ à¤•à¤¿ Microsoft à¤²à¥‡à¤–à¤ªà¤¤à¥à¤°à¥‹à¤‚ à¤¬à¤¦à¤²à¤¨à¥‡ à¤•à¥‡ à¤¸à¤®à¤¯ à¤…à¤—à¤° à¤•à¥‹à¤ˆ à¤­à¥€ à¤œà¥à¤¡à¤¾ à¤¹à¥à¤† VBA à¤®à¥‰à¤•à¥à¤°à¥‹ à¤¹à¥ˆ, à¤¤à¥‹ à¤µà¤¹ à¤…à¤ªà¤¨à¤¾ à¤•à¤¾à¤°à¥à¤¯ à¤¸à¥‡ à¤µà¤‚à¤šà¤¿à¤¤ à¤¹à¥‹ à¤¸à¤•à¤¤à¤¾ à¤¹à¥ˆ à¥¤";
-    Text[ slovak ] = "Pozor: Pri konverzii dokumentov Microsoft strÃ¡cajÃº priloÅ¾enÃ© VBA makrÃ¡ funkÄnosÅ¥.";
-    Text[ hungarian ] = "A Microsoft-dokumentumok Ã¡talakÃ­tÃ¡sa utÃ¡n a VBA-makrÃ³k nem fognak mÅ±kÃ¶dni.";
-    Text[ slovenian ] = "UpoÅ¡tevajte, da pri pretvarjanju Microsoftovih dokumentov postanejo pripeti VBA makri neuporabni.";
+    Text [ de ] = "Bitte beachten Sie, dass beim Konvertieren der Microsoft - Dokumente angehängte VBA-Makros ihre Funktionalität verlieren";
+    Text [ en-US ] = "Please note that when converting Microsoft documents any attached VBA macros lose their functionality.";
+    Text [ x-comment ] = "; VBA = Visual Basics for Applications TSM 01.12.00";
 };
 
 String sWelcometextLabel3
 {
-    Text = "Wählen Sie die umzuwandelnden Dokumenttypen aus:";
-    Text[English] = "Select which kind of documents you wish to convert:";
-    Text[ English_us ] = "Select the document type for conversion:";
-    Text[ portuguese ] = "Seleccione os tipos de documentos a converter:";
-    Text[ russian ] = "Âûáåğèòå òèïû ïğåîáğàçóåìûõ äîêóìåíòîâ:";
-    Text[ greek ] = "Åğéëİîôå ôïõò ôığïõò åããñÜöùí ğïõ èİëåôå íá ìåôáôñİøåôå:";
-    Text[ dutch ] = "Kies de documenttypen die u wilt converteren:";
-    Text[ french ] = "Sélectionnez les types de documents à convertir :";
-    Text[ spanish ] = "Seleccione los tipos de documento que convertir:";
-    Text[ italian ] = "Selezionate il tipo di documento da convertire:";
-    Text[ danish ] = "Vælg de dokumenttyper, der skal omdannes:";
-    Text[ swedish ] = "Välj dokumenttyperna som ska konverteras:";
-    Text[ polish ] = "Wybierz typ dokumentu do konwersji:";
-    Text[ portuguese_brazilian ] = "Selecione o tipo de documento para converter:";
-    Text[ japanese ] = "å¤‰æ›ã™ã‚‹ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã®ç¨®é¡ã‚’é¸æŠã—ã¾ã™ã€‚";
-    Text[ korean ] = "ë³€í™˜í•  ë¬¸ì„œ ìœ í˜•ì„ ì„ íƒí•˜ì‹­ì‹œì˜¤:";
-    Text[ chinese_simplified ] = "è¯·é€‰æ‹©ä¸€ä¸ªè¦è½¬æ¢çš„æ–‡æ¡£ç±»å‹ï¼š";
-    Text[ chinese_traditional ] = "è«‹é¸æ“‡è¦è½‰æ›çš„æ–‡ä»¶é¡å‹ï¼š";
-    Text[ turkish ] = "Dönüşüm için belge tipini seçiniz:";
-    Text[ arabic ] = "ÇÎÊÑ ÃäæÇÚ ÇáãÓÊäÏÇÊ ÇáãÑÇÏ ÊÍæíáåÇ:";
-    Text[ catalan ] = "Seleccioneu el tipus de document:";
-    Text[ finnish ] = "Valitse muunnettava asiakirjatyyppi:";
-    Text[ thai ] = "à¹€à¸¥à¸·à¸­à¸à¸Šà¸™à¸´à¸”à¹€à¸­à¸à¸ªà¸²à¸£à¹€à¸à¸·à¹ˆà¸­à¸—à¸³à¸à¸²à¸£à¹à¸›à¸¥à¸‡:";
-    Text[ czech ] = "Vyberte typ dokumentÅ¯ pro konverzi:";
-    Text[ hebrew ] = "â€®×‘×—×™×¨×ª ×¡×•×’ ×”×§×‘×¦×™× ×œ×”××¨×”â€¬";
-    Text[ hindi ] = "à¤¬à¤¦à¤²à¤¨à¥‡ à¤•à¥‡à¤²à¤¿à¤ à¤²à¥‡à¤–à¤ªà¤¤à¥à¤° à¤µà¤°à¥à¤— à¤•à¥‹ à¤šà¥à¤¨à¥‹:";
-    Text[ slovak ] = "Vyberte typ dokumentu na konverziu:";
-    Text[ hungarian ] = "VÃ¡lassza ki az Ã¡talakÃ­tandÃ³ dokumentum tÃ­pusÃ¡t:";
-    Text[ slovenian ] = "Izberite vrsto dokumenta za pretvorbo:";
+    Text [ de ] = "Wählen Sie die umzuwandelnden Dokumenttypen aus:";
+    Text [ en-US ] = "Select the document type for conversion:";
 };
 
 
 
 String sMSTemplateCheckbox_1_
 {
-    Text = "Word-Vorlagen";
-    Text[English] = "Word templates";
-    Text[ English_us ] = "Word templates";
-    Text[ french ] = "Modèles Word";
-    Text[ italian ] = "Modelli di Word";
-    Text[ spanish ] = "Plantillas de Word";
-    Text[ portuguese ] = "Modelos Word";
-    Text[ dutch ] = "Word-sjablonen";
-    Text[ swedish ] = "Word-mallar";
-    Text[ greek ] = "Ğñüôõğá Word";
-    Text[ dutch ] = "Word-sjablonen";
-    Text[ swedish ] = "Word-mallar";
-    Text[ russian ] = "Øàáëîíû Word";
-    Text[ danish ] = "Word-skabeloner";
-    Text[ polish ] = "Szablony programu Word";
-    Text[ portuguese_brazilian ] = "Modelos Word";
-    Text[ japanese ] = "Word ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆ";
-    Text[ korean ] = "Word ì„œì‹ íŒŒì¼";
-    Text[ chinese_simplified ] = "Word æ¨¡æ¿";
-    Text[ chinese_traditional ] = "Word ç¯„æœ¬";
-    Text[ arabic ] = "ŞæÇáÈ Word";
-    Text[ turkish ] = "Word şablonları";
-    Text[ catalan ] = "Plantilles de Word";
-    Text[ finnish ] = "Word-asiakirjamallit";
-    Text[ thai ] = "à¹à¸¡à¹ˆà¹à¸šà¸šà¹€à¸§à¸´à¸£à¹Œà¸” ";
-    Text[ czech ] = "Å ablony z Wordu";
-    Text[ hebrew ] = "â€®×ª×‘× ×™×•×ª Wordâ€¬";
-    Text[ hindi ] = "à¤µà¤°à¥à¤¡ à¤¨à¤®à¥‚à¤¨à¥‡à¤‚";
-    Text[ slovak ] = "Å ablÃ³ny pre Word";
-    Text[ hungarian ] = "Word-sablonok";
-    Text[ slovenian ] = "Predloge programa Word";
+    Text [ de ] = "Word-Vorlagen";
+    Text [ en-US ] = "Word templates";
 };
 
 String sMSTemplateCheckbox_2_
 {
-    Text = "Excel-Vorlagen";
-    Text[English] = "Excel templates";
-    Text[ English_us ] = "Excel templates";
-    Text[ french ] = "Modèles Excel";
-    Text[ italian ] = "Modelli di Excel";
-    Text[ spanish ] = "Plantillas de Excel";
-    Text[ portuguese ] = "Modelos Excel";
-    Text[ dutch ] = "Excel-sjablonen";
-    Text[ swedish ] = "Excel-mallar";
-    Text[ greek ] = "Ğñüôõğá Excel";
-    Text[ dutch ] = "Excel-sjablonen";
-    Text[ swedish ] = "Excel-mallar";
-    Text[ russian ] = "Øàáëîíû Excel";
-    Text[ danish ] = "Excel-skabeloner";
-    Text[ polish ] = "Szablony programu Excel";
-    Text[ portuguese_brazilian ] = "Modelos Excel";
-    Text[ japanese ] = "Excel ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆ";
-    Text[ korean ] = "Excel ì„œì‹ íŒŒì¼";
-    Text[ chinese_simplified ] = "Excel æ¨¡æ¿";
-    Text[ chinese_traditional ] = "Excel ç¯„æœ¬";
-    Text[ arabic ] = "ŞæÇáÈ Excel";
-    Text[ turkish ] = "Excel şablonları";
-    Text[ catalan ] = "Plantilles d'Excel";
-    Text[ finnish ] = "Excel-asiakirjamallit";
-    Text[ thai ] = "à¹à¸¡à¹ˆà¹à¸šà¸šà¹€à¸­à¹‡à¸à¹€à¸‹à¸¥ ";
-    Text[ czech ] = "Å ablony z Excelu";
-    Text[ hebrew ] = "â€®×ª×‘× ×™×•×ª Excelâ€¬";
-    Text[ hindi ] = "à¤à¤•à¥à¤¸à¥‡à¤² à¤¨à¤®à¥‚à¤¨à¥‡à¤‚";
-    Text[ slovak ] = "Å ablÃ³ny pre Excel";
-    Text[ hungarian ] = "Excel-sablonok";
-    Text[ slovenian ] = "Predloge programa Excel";
+    Text [ de ] = "Excel-Vorlagen";
+    Text [ en-US ] = "Excel templates";
 };
 
 String sMSTemplateCheckbox_3_
 {
-    Text = "PowerPoint-Vorlagen";
-    Text[English] = "PowerPoint templates";
-    Text[ English_us ] = "PowerPoint templates";
-    Text[ french ] = "Modèles PowerPoint";
-    Text[ italian ] = "Modelli di PowerPoint";
-    Text[ spanish ] = "Plantillas de PowerPoint";
-    Text[ portuguese ] = "Modelos PowerPoint";
-    Text[ dutch ] = "PowerPoint-sjablonen";
-    Text[ swedish ] = "PowerPoint-mallar";
-    Text[ greek ] = "Ğñüôõğá PowerPoint";
-    Text[ dutch ] = "PowerPoint-sjablonen";
-    Text[ swedish ] = "PowerPoint-mallar";
-    Text[ russian ] = "Øàáëîíû PowerPoint";
-    Text[ danish ] = "PowerPoint-skabeloner";
-    Text[ polish ] = "Szablony programu PowerPoint";
-    Text[ portuguese_brazilian ] = "Modelos PowerPoint";
-    Text[ japanese ] = "PowerPoint ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆ";
-    Text[ korean ] = "PowerPoint ì„œì‹ íŒŒì¼";
-    Text[ chinese_simplified ] = "PowerPoint æ¨¡æ¿";
-    Text[ chinese_traditional ] = "PowerPoint ç¯„æœ¬";
-    Text[ arabic ] = "ŞæÇáÈ PowerPoint";
-    Text[ turkish ] = "PowerPoint şablonları";
-    Text[ catalan ] = "Plantilles de PowerPoint";
-    Text[ finnish ] = "PowerPoint-asiakirjamallit";
-    Text[ thai ] = "à¹à¸¡à¹ˆà¹à¸šà¸šà¹€à¸à¸²à¹€à¸§à¸­à¸£à¹Œà¸à¹‰à¸­à¸¢à¸—à¹Œ ";
-    Text[ czech ] = "Å ablony z PowerPointu";
-    Text[ hebrew ] = "â€®×ª×‘× ×™×•×ª PowerPointâ€¬";
-    Text[ hindi ] = "à¤ªà¤µà¤°à¤ªà¥‹à¤‡à¤¨à¥à¤Ÿ à¤¨à¤®à¥‚à¤¨à¥‡à¤‚";
-    Text[ slovak ] = "Å ablÃ³ny z PowerPoint";
-    Text[ hungarian ] = "PowerPoint-sablonok";
-    Text[ slovenian ] = "Predloge programa Powerpoint";
+    Text [ de ] = "PowerPoint-Vorlagen";
+    Text [ en-US ] = "PowerPoint templates";
 };
 
 String sMSDocumentCheckbox_1_
 {
-    Text = "Word-Dokumente";
-    Text[English] = "Word documents";
-    Text[ English_us ] = "Word documents";
-    Text[ french ] = "Documents Word";
-    Text[ italian ] = "Documenti di Word";
-    Text[ spanish ] = "Documentos de Word";
-    Text[ portuguese ] = "Documentos Word";
-    Text[ dutch ] = "Word-documenten";
-    Text[ swedish ] = "Word-dokument";
-    Text[ greek ] = "¸ããñáöá Word";
-    Text[ dutch ] = "Word-documenten";
-    Text[ swedish ] = "Word-dokument";
-    Text[ russian ] = "Äîêóìåíòû Word";
-    Text[ danish ] = "Word-dokumenter";
-    Text[ polish ] = "D~okumenty programu Word";
-    Text[ portuguese_brazilian ] = "Documentos Word";
-    Text[ japanese ] = "Word ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆ";
-    Text[ korean ] = "Word ë¬¸ì„œ";
-    Text[ chinese_simplified ] = "Word æ–‡æ¡£";
-    Text[ chinese_traditional ] = "Word æ–‡ä»¶";
-    Text[ arabic ] = "ãÓÊäÏÇÊ Word";
-    Text[ turkish ] = "Word belgeleri";
-    Text[ catalan ] = "Documents de Word";
-    Text[ finnish ] = "Word-asiakirjat";
-    Text[ thai ] = "à¹€à¸­à¸à¸ªà¸²à¸£à¹€à¸§à¸´à¸£à¹Œà¸” ";
-    Text[ czech ] = "Soubory ve Wordu";
-    Text[ hebrew ] = "â€®××¡××›×™ Wordâ€¬";
-    Text[ hindi ] = "à¤µà¤°à¥à¤¡ à¤²à¥‡à¤–à¤ªà¤¤à¥à¤°à¥‡à¤‚";
-    Text[ slovak ] = "Dokumenty Word";
-    Text[ hungarian ] = "Word-dokumentumok";
-    Text[ slovenian ] = "Dokumenti programa Word";
+    Text [ de ] = "Word-Dokumente";
+    Text [ en-US ] = "Word documents";
 };
 
 String sMSDocumentCheckbox_2_
 {
-    Text = "Excel-Dokumente";
-    Text[English] = "Excel documents";
-    Text[ English_us ] = "Excel documents";
-    Text[ french ] = "Documents Excel";
-    Text[ italian ] = "Documenti di Excel";
-    Text[ spanish ] = "Documentos de Excel";
-    Text[ portuguese ] = "Documentos Excel";
-    Text[ dutch ] = "Excel-documenten";
-    Text[ swedish ] = "Excel-dokument";
-    Text[ greek ] = "¸ããñáöá Excel";
-    Text[ dutch ] = "Excel-documenten";
-    Text[ swedish ] = "Excel-dokument";
-    Text[ russian ] = "Äîêóìåíòû Excel";
-    Text[ danish ] = "Excel-dokumenter";
-    Text[ polish ] = "Dokumenty programu Excel";
-    Text[ portuguese_brazilian ] = "Documentos Excel";
-    Text[ japanese ] = "Excel ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆ";
-    Text[ korean ] = "Excel ë¬¸ì„œ";
-    Text[ chinese_simplified ] = "Excel æ–‡æ¡£";
-    Text[ chinese_traditional ] = "Excel æ–‡ä»¶";
-    Text[ arabic ] = "ãÓÊäÏÇÊ Excel";
-    Text[ turkish ] = "Excel belgeleri";
-    Text[ catalan ] = "Documents Excel";
-    Text[ finnish ] = "Excel-asiakirjat";
-    Text[ thai ] = "à¹€à¸­à¸à¸ªà¸²à¸£à¹€à¸­à¹‡à¸à¹€à¸‹à¸¥ ";
-    Text[ czech ] = "Soubory v Excelu";
-    Text[ hebrew ] = "â€®××¡××›×™ Excelâ€¬";
-    Text[ hindi ] = "à¤à¤•à¥à¤¸à¥‡à¤² à¤²à¥‡à¤–à¤ªà¤¤à¥à¤°à¥‡à¤‚";
-    Text[ slovak ] = "Dokumenty Excel";
-    Text[ hungarian ] = "Excel-dokumentumok";
-    Text[ slovenian ] = "Dokumenti programa Excel";
+    Text [ de ] = "Excel-Dokumente";
+    Text [ en-US ] = "Excel documents";
 };
 
 String sMSDocumentCheckbox_3_
 {
-    Text = "PowerPoint-Dokumente";
-    Text[English] = "PowerPoint documents";
-    Text[ English_us ] = "PowerPoint documents";
-    Text[ french ] = "Documents PowerPoint";
-    Text[ italian ] = "Documenti di PowerPoint";
-    Text[ spanish ] = "Documentos PowerPoint";
-    Text[ portuguese ] = "Documentos PowerPoint";
-    Text[ dutch ] = "PowerPoint-documenten";
-    Text[ swedish ] = "PowerPoint-dokument";
-    Text[ greek ] = "¸ããñáöá PowerPoint";
-    Text[ dutch ] = "PowerPoint-documenten";
-    Text[ swedish ] = "PowerPoint-dokument";
-    Text[ russian ] = "Äîêóìåíòû PowerPoint";
-    Text[ danish ] = "PowerPoint-dokumenter";
-    Text[ polish ] = "Dokumenty programu PowerPoint";
-    Text[ portuguese_brazilian ] = "Documentos PowerPoint";
-    Text[ japanese ] = "PowerPoint ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆ";
-    Text[ korean ] = "PowerPoint ë¬¸ì„œ";
-    Text[ chinese_simplified ] = "PowerPoint æ–‡æ¡£";
-    Text[ chinese_traditional ] = "PowerPoint æ–‡ä»¶";
-    Text[ arabic ] = "ãÓÊäÏÇÊPowerPoint ";
-    Text[ turkish ] = "PowerPoint belgeleri";
-    Text[ catalan ] = "Documents de PowerPoint";
-    Text[ finnish ] = "PowerPoint-asiakirjat";
-    Text[ thai ] = "à¹€à¸­à¸à¸ªà¸²à¸£à¹€à¸à¸²à¹€à¸§à¸­à¸£à¹Œà¸à¹‰à¸­à¸¢à¸—à¹Œ ";
-    Text[ czech ] = "Soubory v PowerPointu";
-    Text[ hebrew ] = "â€®××¡××›×™ PowerPointâ€¬";
-    Text[ hindi ] = "à¤ªà¤µà¤°à¤ªà¥‹à¤‡à¤¨à¥à¤Ÿ à¤²à¥‡à¤–à¤ªà¤¤à¥à¤°à¥‡à¤‚";
-    Text[ slovak ] = "Dokumenty PowerPoint";
-    Text[ hungarian ] = "PowerPoint-dokumentumok";
-    Text[ slovenian ] = "Dokumenti programa Powerpoint";
+    Text [ de ] = "PowerPoint-Dokumente";
+    Text [ en-US ] = "PowerPoint documents";
 };
 
 
 String sSearchInSubDir
 {
-    Text = "inkl. Unterverzeichnisse";
-    Text[English] = "including subdirectories";
-    Text[ English_us ] = "Including subdirectories";
-    Text[ french ] = "Sous-répertoires compris";
-    Text[ italian ] = "incluse sottocartelle";
-    Text[ spanish ] = "Subdirectorios incluidos ";
-    Text[ portuguese ] = "incl. subdirectórios";
-    Text[ dutch ] = "incl. subdirectory's";
-    Text[ swedish ] = "inkl. underordnade kataloger";
-    Text[ greek ] = "óõìğåñéëáìâ. õğïêáôáëüãïõò";
-    Text[ dutch ] = "incl. subdirectory's";
-    Text[ swedish ] = "inkl. underordnade kataloger";
-    Text[ russian ] = "âêëş÷àÿ ïîäïàïêè";
-    Text[ danish ] = "Inkl. underkataloger";
-    Text[ polish ] = "£¹cznie z podkatalogami";
-    Text[ portuguese_brazilian ] = "incluindo subdiretórios";
-    Text[ japanese ] = "ä¸‹ä½ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚‚å«ã‚€";
-    Text[ korean ] = "í•˜ìœ„ ë””ë ‰í† ë¦¬ í¬í•¨";
-    Text[ chinese_simplified ] = "åŒ…æ‹¬å­ç›®å½•";
-    Text[ chinese_traditional ] = "åŒ…å«å­ç›®éŒ„";
-    Text[ arabic ] = "ÈãÇ İí Ğáß ÇáÏáÇÆá ÇáİÑÚíÉ";
-    Text[ turkish ] = "Alt dizinleri içerir";
-    Text[ catalan ] = "incloure directoris";
-    Text[ finnish ] = "sisällytetään alikansiot";
-    Text[ thai ] = "à¸£à¸§à¸¡à¹„à¸”à¹€à¸£à¹‡à¸à¸—à¸­à¸£à¸µà¹ˆà¸¢à¹ˆà¸­à¸¢";
-    Text[ czech ] = "VÄetnÄ› podadresÃ¡Å™Å¯";
-    Text[ hebrew ] = "â€®×›×•×œ×œ ×ª×ª×™ ×¡×¤×¨×™×•×ªâ€¬";
-    Text[ hindi ] = "à¤…à¤§à¥€à¤¨ à¤¡à¥ˆà¤°à¤•à¥à¤Ÿà¤°à¤¿à¤¯à¥‹à¤‚ à¤•à¥‹ à¤¸à¤®à¥à¤®à¤¿à¤²à¤¿à¤¤ à¤•à¤° à¤°à¤¹à¤¾ à¤¹à¥ˆ";
-    Text[ slovak ] = "VrÃ¡tane podadresÃ¡rov";
-    Text[ hungarian ] = "AlkÃ¶nyvtÃ¡rakkal egyÃ¼tt";
-    Text[ slovenian ] = "VkljuÄno s podmapami";
+    Text [ de ] = "inkl. Unterverzeichnisse";
+    Text [ en-US ] = "Including subdirectories";
 };
 
 
 
 String sMSContainerName
 {
-    Text = "Microsoft Office";
-    Text[English] = "Microsoft Office";
-    Text[ English_us ] = "Microsoft Office";
-    Text[ portuguese ] = "Microsoft Office";
-    Text[ russian ] = "Microsoft Office";
-    Text[ greek ] = "Microsoft Office";
-    Text[ dutch ] = "Microsoft Office";
-    Text[ french ] = "Microsoft Office";
-    Text[ spanish ] = "Microsoft Office";
-    Text[ italian ] = "Microsoft Office";
-    Text[ danish ] = "Microsoft Office";
-    Text[ swedish ] = "Microsoft Office";
-    Text[ polish ] = "Mi~crosoft Office";
-    Text[ portuguese_brazilian ] = "Microsoft Office";
-    Text[ japanese ] = "Microsoft Office";
-    Text[ korean ] = "Microsoft Office";
-    Text[ chinese_simplified ] = "Microsoft Office";
-    Text[ chinese_traditional ] = "Microsoft Office";
-    Text[ turkish ] = "Microsoft Ofis";
-    Text[ arabic ] = "Microsoft Office";
-    Text[ catalan ] = "Microsoft Office";
-    Text[ finnish ] = "Microsoft Office";
-    Text[ thai ] = "à¹„à¸¡à¹‚à¸„à¸£à¸‹à¸­à¸Ÿà¸—à¹Œà¸­à¸­à¸Ÿà¸Ÿà¸´à¸¨";
-    Text[ czech ] = "Microsoft Office";
-    Text[ hebrew ] = "â€®Microsoft Officeâ€¬";
-    Text[ hindi ] = "Microsoft Office";
-    Text[ slovak ] = "Microsoft Office";
-    Text[ hungarian ] = "Microsoft Office";
-    Text[ slovenian ] = "Microsoft Office";
+    Text [ de ] = "Microsoft Office";
+    Text [ en-US ] = "Microsoft Office";
 };
 
 
 
 String sSummaryHeader
 {
-    Text = "Zusammenfassung:";
-    Text[English] = "Summary:";
-    Text[ English_us ] = "Summary:";
-    Text[ french ] = "Récapitulatif :";
-    Text[ italian ] = "Sommario:";
-    Text[ spanish ] = "Resumen:";
-    Text[ portuguese ] = "Resumo:";
-    Text[ dutch ] = "Samenvatting:";
-    Text[ swedish ] = "Sammanfattning:";
-    Text[ greek ] = "Óıíïøç:";
-    Text[ dutch ] = "Samenvatting:";
-    Text[ swedish ] = "Sammanfattning:";
-    Text[ russian ] = "Âñåãî:";
-    Text[ danish ] = "Resume:";
-    Text[ polish ] = "Podsumowanie:";
-    Text[ portuguese_brazilian ] = "Resumo:";
-    Text[ japanese ] = "æ¦‚è¦:";
-    Text[ korean ] = "ìš”ì•½:";
-    Text[ chinese_simplified ] = "æ¦‚è¦ï¼š";
-    Text[ chinese_traditional ] = "æ¦‚è¦ï¼š";
-    Text[ arabic ] = "ÇáÊáÎíÕ:";
-    Text[ turkish ] = "Özet:";
-    Text[ catalan ] = "Resum:";
-    Text[ finnish ] = "Yhteenveto:";
-    Text[ thai ] = "à¸ªà¸£à¸¸à¸›:";
-    Text[ czech ] = "VÃ½sledek:";
-    Text[ hebrew ] = "â€®×¡×™×›×•×:â€¬";
-    Text[ hindi ] = "à¤¸à¤¾à¤°à¤¾à¤‚à¤¶:";
-    Text[ slovak ] = "SÃºhrn:";
-    Text[ hungarian ] = "Ã–sszegzÃ©s:";
-    Text[ slovenian ] = "Povzetek:";
+    Text [ de ] = "Zusammenfassung:";
+    Text [ en-US ] = "Summary:";
 };
 
 String sTextImportLabel
 {
-    Text = "Importieren von:";
-    Text[English] = "Import from:";
-    Text[ English_us ] = "Import from:";
-    Text[ portuguese ] = "Importar de:";
-    Text[ russian ] = "Èìïîğòèğîâàòü èç:";
-    Text[ greek ] = "ÅéóáãùãŞ áğü:";
-    Text[ dutch ] = "Importeren uit:";
-    Text[ french ] = "Import depuis :";
-    Text[ spanish ] = "Importar de:";
-    Text[ italian ] = "Importa da:";
-    Text[ danish ] = "Importer fra:";
-    Text[ swedish ] = "Importera från:";
-    Text[ polish ] = "Importuj z:";
-    Text[ portuguese_brazilian ] = "Importar de:";
-    Text[ japanese ] = "ã‚¤ãƒ³ãƒãƒ¼ãƒˆå…ƒ:";
-    Text[ korean ] = "ê°€ì ¸ì˜¤ê¸°:";
-    Text[ chinese_simplified ] = "è¾“å…¥æ¥æºï¼š";
-    Text[ chinese_traditional ] = "åŒ¯å…¥å¾ï¼š";
-    Text[ turkish ] = " ' dan aktarım:";
-    Text[ arabic ] = "ÇÓÊíÑÇÏ ãä:";
-    Text[ catalan ] = "Importa des de:";
-    Text[ finnish ] = "Lähde:";
-    Text[ thai ] = "à¸™à¸³à¹€à¸‚à¹‰à¸²à¸ˆà¸²à¸:";
-    Text[ czech ] = "Importovat z:";
-    Text[ hebrew ] = "â€®×™×‘×•× ××ª×•×š:â€¬";
-    Text[ hindi ] = "à¤¸à¥‡ à¤†à¤¯à¤¾à¤¤:";
-    Text[ slovak ] = "ImportovaÅ¥ z:";
-    Text[ hungarian ] = "ImportÃ¡lÃ¡s:";
-    Text[ slovenian ] = "Uvozi iz:";
+    Text [ de ] = "Importieren von:";
+    Text [ en-US ] = "Import from:";
 };
 
 
 String sTextExportLabel
 {
-    Text = "Speichern in:";
-    Text[English] = "Store in:";
-    Text[ English_us ] = "Save to:";
-    Text[ french ] = "Enregistrer dans :";
-    Text[ italian ] = "Salva in:";
-    Text[ spanish ] = "Guardar en:";
-    Text[ portuguese ] = "Guardar em:";
-    Text[ dutch ] = "Opslaan in:";
-    Text[ swedish ] = "Spara i:";
-    Text[ greek ] = "ÁğïèŞêåõóç óå:";
-    Text[ dutch ] = "Opslaan in:";
-    Text[ swedish ] = "Spara i:";
-    Text[ russian ] = "Ñîõğàíèòü â:";
-    Text[ danish ] = "Gem til:";
-    Text[ polish ] = "Zapisz w:";
-    Text[ portuguese_brazilian ] = "Salvar em:";
-    Text[ japanese ] = "ä¿å­˜å…ˆ:";
-    Text[ korean ] = "ì €ì¥:";
-    Text[ chinese_simplified ] = "å­˜ç›˜åˆ°ï¼š";
-    Text[ chinese_traditional ] = "å„²å­˜åˆ°ï¼š";
-    Text[ arabic ] = "ÍİÙ İí:";
-    Text[ turkish ] = "' a kaydet:";
-    Text[ catalan ] = "Desa a:";
-    Text[ finnish ] = "Tallenna:";
-    Text[ thai ] = "à¸šà¸±à¸™à¸—à¸¶à¸à¹„à¸›à¸¢à¸±à¸‡:";
-    Text[ czech ] = "UloÅ¾it jako:";
-    Text[ hebrew ] = "â€®×©××™×¨×” ×œ:â€¬";
-    Text[ hindi ] = "à¤•à¥‹ à¤¸à¤‚à¤šà¤¿à¤¤ à¤•à¤°à¥‹:";
-    Text[ slovak ] = "UloÅ¾iÅ¥ do:";
-    Text[ hungarian ] = "MentÃ©s mÃ¡skÃ©nt:";
-    Text[ slovenian ] = "Shrani v:";
+    Text [ de ] = "Speichern in:";
+    Text [ en-US ] = "Save to:";
 };
 
 
 String sGroupnameDefault
 {
-    Text = "Importierte_Vorlagen";
-    Text[English] = "Imported_Templates";
-    Text[ English_us ] = "Imported_Templates";
-    Text[ french ] = "Modèles_importés";
-    Text[ italian ] = "Modelli_importati";
-    Text[ spanish ] = "Plantillas de texto importadas";
-    Text[ portuguese ] = "Modelos_importados";
-    Text[ dutch ] = "Geïmporteerde_sjablonen";
-    Text[ swedish ] = "Importerade_mallar";
-    Text[ greek ] = "Åéóá÷èİíôá_Ğñüôõğá";
-    Text[ dutch ] = "Geïmporteerde_sjablonen";
-    Text[ swedish ] = "Importerade_mallar";
-    Text[ russian ] = "Èìïîğòèğîâàííûå_øàáëîíû";
-    Text[ danish ] = "Importerede_skabeloner";
-    Text[ polish ] = "Importowane_szablony";
-    Text[ portuguese_brazilian ] = "Modelos_Importados";
-    Text[ japanese ] = "ã‚¤ãƒ³ãƒãƒ¼ãƒˆã—ãŸãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆ";
-    Text[ korean ] = "ê°€ì ¸ì˜¨_ì„œì‹ íŒŒì¼";
-    Text[ chinese_simplified ] = "è¾“å…¥çš„æ ·å¼";
-    Text[ chinese_traditional ] = "åŒ¯å…¥çš„æ¨£å¼";
-    Text[ arabic ] = "ŞæÇáÈ_äÕ_ãÓÊæÑÏÉ";
-    Text[ turkish ] = "Alınan Şablonlar";
-    Text[ catalan ] = "Plantilles de text importades";
-    Text[ language_user1 ] = "; Bezeichnet einen Verzeichnis, dass zur Laufzeit angelegt wird";
-    Text[ finnish ] = "Tuodut_mallit";
-    Text[ thai ] = "à¸™à¸³à¹€à¸‚à¹‰à¸²_à¹à¸¡à¹ˆà¹à¸šà¸š_à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡";
-    Text[ czech ] = "ImportovanÃ©_Å¡ablony";
-    Text[ hebrew ] = "â€®×ª×‘× ×™×•×ª_××™×•×‘××•×ªâ€¬";
-    Text[ hindi ] = "à¤†à¤¯à¤¾à¤¤ à¤•à¥€ à¤¹à¥à¤¯à¥€ à¤¨à¤®à¥‚à¤¨à¥‡à¤‚";
-    Text[ slovak ] = "ImportovanÃ© Å¡ablÃ³ny";
-    Text[ hungarian ] = "ImportÃ¡lt sablonok";
-    Text[ slovenian ] = "UvoÅ¾ene_predloge";
+    Text [ de ] = "Importierte_Vorlagen";
+    Text [ en-US ] = "Imported_Templates";
+    Text [ x-comment ] = "; Bezeichnet einen Verzeichnis, dass zur Laufzeit angelegt wird";
 };
 
 
 String sProgressDesc1
 {
-    Text = "Fortschritt: ";
-    Text[English] = "Progress: ";
-    Text[ English_us ] = "Progress: ";
-    Text[ french ] = "Progression : ";
-    Text[ italian ] = "Progresso: ";
-    Text[ spanish ] = "Progresión:";
-    Text[ portuguese ] = "Progressão: ";
-    Text[ dutch ] = "Voortgang:";
-    Text[ swedish ] = "Framsteg: ";
-    Text[ greek ] = "Ğñüïäïò: ";
-    Text[ dutch ] = "Voortgang:";
-    Text[ swedish ] = "Framsteg: ";
-    Text[ russian ] = "Âûïîëíåíèå:   ";
-    Text[ danish ] = "Arbejdsfremgang: ";
-    Text[ polish ] = "Postêp: ";
-    Text[ portuguese_brazilian ] = "Progresso:";
-    Text[ japanese ] = "é€²æ—çŠ¶æ³: ";
-    Text[ korean ] = "ì§„í–‰ ê³¼ì •:";
-    Text[ chinese_simplified ] = "å·²ç»å®Œæˆï¼š ";
-    Text[ chinese_traditional ] = "å·²ç¶“å®Œæˆï¼š ";
-    Text[ arabic ] = "ÇáÊŞÏã: ";
-    Text[ turkish ] = "İşlem:";
-    Text[ catalan ] = "Progrés: ";
-    Text[ finnish ] = "Tilanne: ";
-    Text[ thai ] = "à¸„à¸§à¸²à¸¡à¸„à¸·à¸šà¸«à¸™à¹‰à¸²: ";
-    Text[ czech ] = "PrÅ¯bÄ›h:";
-    Text[ hebrew ] = "â€®×”×ª×§×“××•×ª:â€¬";
-    Text[ hindi ] = "à¤ªà¥à¤°à¤¸à¥à¤¥à¤¾à¤¨ à¤•à¤°à¥‹: ";
-    Text[ slovak ] = "Priebeh: ";
-    Text[ hungarian ] = "Folyamat:";
-    Text[ slovenian ] = "Potek:";
+    Text [ de ] = "Fortschritt: ";
+    Text [ en-US ] = "Progress: ";
 };
 
 String sProgressOneDoc
 {
-    Text = " Dokument";
-    Text[English] = " Document";
-    Text[ English_us ] = "Document";
-    Text[ french ] = " Document";
-    Text[ italian ] = "Documento";
-    Text[ spanish ] = "Documento";
-    Text[ portuguese ] = "Documento";
-    Text[ dutch ] = "Document";
-    Text[ swedish ] = "Dokument";
-    Text[ greek ] = "¸ããñáöï";
-    Text[ dutch ] = "Document";
-    Text[ swedish ] = "Dokument";
-    Text[ russian ] = "Äîêóìåíò";
-    Text[ danish ] = "Dokument";
-    Text[ polish ] = "Dokument";
-    Text[ portuguese_brazilian ] = "Documento";
-    Text[ japanese ] = "ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆ";
-    Text[ korean ] = "ë¬¸ì„œ";
-    Text[ chinese_simplified ] = " æ–‡æ¡£";
-    Text[ chinese_traditional ] = " æ–‡ä»¶";
-    Text[ arabic ] = "ãÓÊäÏ";
-    Text[ turkish ] = "Belge";
-    Text[ catalan ] = "Document";
-    Text[ finnish ] = "Asiakirja";
-    Text[ thai ] = "à¹€à¸­à¸à¸ªà¸²à¸£";
-    Text[ czech ] = "Dokument";
-    Text[ hebrew ] = "â€®××¡××šâ€¬";
-    Text[ hindi ] = "à¤²à¥‡à¤–à¤ªà¤¤à¥à¤°";
-    Text[ slovak ] = "Dokument";
-    Text[ hungarian ] = "Dokumentum";
-    Text[ slovenian ] = "Dokument";
+    Text [ de ] = " Dokument";
+    Text [ en-US ] = "Document";
 };
 
 String sProgressMoreDocs
 {
-    Text = "Dokumente";
-    Text[English] = "Documents";
-    Text[ English_us ] = "Documents";
-    Text[ french ] = "Documents";
-    Text[ italian ] = "Documenti";
-    Text[ spanish ] = "Documentos";
-    Text[ portuguese ] = "Documentos";
-    Text[ dutch ] = "Documenten";
-    Text[ swedish ] = "Dokument";
-    Text[ greek ] = "¸ããñáöá";
-    Text[ dutch ] = "Documenten";
-    Text[ swedish ] = "Dokument";
-    Text[ russian ] = "Äîêóìåíòû";
-    Text[ danish ] = "Dokumenter";
-    Text[ polish ] = "Dokumenty";
-    Text[ portuguese_brazilian ] = "Documentos";
-    Text[ japanese ] = "ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆ";
-    Text[ korean ] = "ë¬¸ì„œ";
-    Text[ chinese_simplified ] = "æ–‡æ¡£";
-    Text[ chinese_traditional ] = "æ–‡ä»¶";
-    Text[ arabic ] = "ãÓÊäÏÇÊ";
-    Text[ turkish ] = "Belgeler";
-    Text[ catalan ] = "Documents";
-    Text[ finnish ] = "Asiakirjat";
-    Text[ thai ] = "à¹€à¸­à¸à¸ªà¸²à¸£";
-    Text[ czech ] = "Dokumenty";
-    Text[ hebrew ] = "â€®××¡××›×™×â€¬";
-    Text[ hindi ] = "à¤²à¥‡à¤–à¤ªà¤¤à¥à¤°à¥‡à¤‚";
-    Text[ slovak ] = "Dokumenty";
-    Text[ hungarian ] = "Dokumentumok";
-    Text[ slovenian ] = "Dokumenti";
+    Text [ de ] = "Dokumente";
+    Text [ en-US ] = "Documents";
 };
 
 
 String sProgressMoreTemplates
 {
-    Text = "Vorlagen";
-    Text[English] = "Templates";
-    Text[ English_us ] = "Templates";
-    Text[ portuguese ] = "Modelos";
-    Text[ russian ] = "Øàáëîíû";
-    Text[ greek ] = "Ğñüôõğá";
-    Text[ dutch ] = "Sjablonen";
-    Text[ french ] = "Modèles";
-    Text[ spanish ] = "Plantillas";
-    Text[ italian ] = "Modelli";
-    Text[ danish ] = "Skabeloner";
-    Text[ swedish ] = "Mallar";
-    Text[ polish ] = "Szablony";
-    Text[ portuguese_brazilian ] = "Modelos";
-    Text[ japanese ] = "ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆ";
-    Text[ korean ] = "ì„œì‹ íŒŒì¼";
-    Text[ chinese_simplified ] = "æ ·å¼";
-    Text[ chinese_traditional ] = "æ¨£å¼";
-    Text[ turkish ] = "Şablon";
-    Text[ arabic ] = "ŞæÇáÈ";
-    Text[ catalan ] = "Plantilles";
-    Text[ finnish ] = "Mallit";
-    Text[ thai ] = "à¹à¸¡à¹ˆà¹à¸šà¸š";
-    Text[ czech ] = "Å ablony";
-    Text[ hebrew ] = "â€®×ª×‘× ×™×•×ªâ€¬";
-    Text[ hindi ] = "à¤¨à¤®à¥‚à¤¨à¥‡à¤‚";
-    Text[ slovak ] = "Å ablÃ³ny";
-    Text[ hungarian ] = "Sablonok";
-    Text[ slovenian ] = "Predloge";
+    Text [ de ] = "Vorlagen";
+    Text [ en-US ] = "Templates";
 };
 
 
 String sNoDirCreation
 {
-    Text = "Das Verzeichnis '%1' kann nicht angelegt werden: ";
-    Text[English] = "The following directory cannot be created: ";
-    Text[ English_us ] = "The '%1' directory cannot be created: ";
-    Text[ french ] = "Impossible de créer le répertoire '%1' : ";
-    Text[ italian ] = "Impossibile creare la cartella '%1': ";
-    Text[ spanish ] = "No se puede crear el directorio '%1': ";
-    Text[ portuguese ] = "É impossível criar o directório '%1'.";
-    Text[ dutch ] = "Directory '%1' kan niet worden aangemaakt:";
-    Text[ swedish ] = "Det går inte att skapa katalogen '%1': ";
-    Text[ greek ] = "Äåí åßíáé äõíáôüí íá äçìéïõñãçèåß ï êáôÜëïãïò '%1': ";
-    Text[ dutch ] = "Directory '%1' kan niet worden aangemaakt:";
-    Text[ swedish ] = "Det går inte att skapa katalogen '%1': ";
-    Text[ russian ] = "Íåâîçìîæíî ñîçäàòü êàòàëîã '%1': ";
-    Text[ danish ] = "Kataloget '%1' kan ikke oprettes: ";
-    Text[ polish ] = "Nie mo¿na utworzyæ katalogu '%1': ";
-    Text[ portuguese_brazilian ] = "Não foi possível criar o diretório'%1':";
-    Text[ japanese ] = "ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª '%1' ã¯æ ¼ç´ã§ãã¾ã›ã‚“ã€‚ ";
-    Text[ korean ] = "'%1' ìƒ‰ì¸ì„ ë§Œë“¤ ìˆ˜ ì—†ìŠµë‹ˆë‹¤:";
-    Text[ chinese_simplified ] = "æ— æ³•åˆ›å»ºè¿™ä¸ªç›®å½• '%1' ï¼š ";
-    Text[ chinese_traditional ] = "ç„¡æ³•å»ºç«‹ %1 ç›®éŒ„ï¼š ";
-    Text[ arabic ] = "áÇ íãßä ÅäÔÇÁ ÇáÏáíá '%1':";
-    Text[ turkish ] = "'%1' dizini yaratılamadı: ";
-    Text[ catalan ] = "No es pot crear el directori '%1': ";
-    Text[ finnish ] = "Hakemistoa %1 ei voi luoda: ";
-    Text[ thai ] = "à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¸ªà¸£à¹‰à¸²à¸‡à¹„à¸”à¹€à¸£à¹‡à¸à¸—à¸­à¸£à¸µà¹ˆ'%1' à¹„à¸”à¹‰: ";
-    Text[ czech ] = "AdresÃ¡Å™ '%1' nemÅ¯Å¾e bÃ½t vytvoÅ™en: ";
-    Text[ hebrew ] = "â€®×œ× × ×™×ª×Ÿ ×œ×™×¦×•×¨ ××ª ×”×¡×¤×¨×™×ª ×” '%1': â€¬";
-    Text[ hindi ] = "'%1' à¤¡à¥ˆà¤°à¤•à¥à¤Ÿà¤°à¥€ à¤•à¥‹ à¤‰à¤¤à¥à¤ªà¤¨à¥à¤¨ à¤¨à¤¹à¥€à¤‚ à¤•à¤° à¤¸à¤•à¤¤à¥‡ à¤¹à¥ˆ: ";
-    Text[ slovak ] = "AdresÃ¡r '%1' sa nedÃ¡ vytvoriÅ¥: ";
-    Text[ hungarian ] = "A(z) '%1' kÃ¶nyvtÃ¡r lÃ©trehozÃ¡sa sikertelen:";
-    Text[ slovenian ] = "Mape '%1' ni mogoÄe ustvariti:";
+    Text [ de ] = "Das Verzeichnis '%1' kann nicht angelegt werden: ";
+    Text [ en-US ] = "The '%1' directory cannot be created: ";
 };
 
 
 String sMsgDirNotThere
 {
-    Text = "Das Verzeichnis '%1' ist nicht vorhanden!";
-    Text[English] = "The Directory '%1' does not exist.";
-    Text[ English_us ] = "The '%1' directory does not exist.";
-    Text[ french ] = "Le répertoire '%1' n'existe pas !";
-    Text[ italian ] = "La cartella '%1' non esiste.";
-    Text[ spanish ] = "El directorio '%1' no existe.";
-    Text[ portuguese ] = "O directório '%1' não existe.";
-    Text[ dutch ] = "Directory '%1' bestaat niet!";
-    Text[ swedish ] = "Katalogen '%1' finns inte.";
-    Text[ greek ] = "Ï êáôÜëïãïò '%1' äåí õğÜñ÷åé!";
-    Text[ dutch ] = "Directory '%1' bestaat niet!";
-    Text[ swedish ] = "Katalogen '%1' finns inte.";
-    Text[ russian ] = "Êàòàëîã '%1' íå ñóùåñòâóåò.";
-    Text[ danish ] = "Kataloget '%1' findes ikke!";
-    Text[ polish ] = "Katalog '%1' nie istnieje.";
-    Text[ portuguese_brazilian ] = "O diretório '%1' não existe.";
-    Text[ japanese ] = "ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª '%1' ã¯ã‚ã‚Šã¾ã›ã‚“ã€‚";
-    Text[ korean ] = "'%1' ìƒ‰ì¸ì´ ì—†ìŠµë‹ˆë‹¤.";
-    Text[ chinese_simplified ] = "ç›®å½• '%1' ä¸å­˜åœ¨ã€‚";
-    Text[ chinese_traditional ] = "ç›®éŒ„ %1 ä¸å­˜åœ¨ã€‚";
-    Text[ arabic ] = "ÇáÏáíá '%1' ÛíÑ ãæÌæÏ.";
-    Text[ turkish ] = "'%1' dizini mevcut değil:";
-    Text[ catalan ] = "El directori '%1' no existeix.";
-    Text[ finnish ] = "Hakemistoa %1 ei ole olemassa.";
-    Text[ thai ] = "à¹„à¸¡à¹ˆà¸¡à¸µà¹„à¸”à¹€à¸£à¹‡à¸à¸—à¸­à¸£à¸µà¹ˆ '%1' à¸­à¸¢à¸¹à¹ˆ";
-    Text[ czech ] = "AdresÃ¡Å™ '%1' neexistuje.";
-    Text[ hebrew ] = "â€®×¡×¤×¨×™×ª '%1' ××™× ×” ×§×™×™××ª!â€¬";
-    Text[ hindi ] = "'%1' à¤¡à¥ˆà¤°à¤•à¥à¤Ÿà¤°à¥€ à¤…à¤¸à¥à¤¤à¤¿à¤¤à¥à¤µ à¤®à¥‡à¤‚ à¤¨à¤¹à¥€à¤‚ à¤¹à¥ˆ à¥¤";
-    Text[ slovak ] = "AdresÃ¡r '%1' neexistuje.";
-    Text[ hungarian ] = "A(z) '%1' kÃ¶nyvtÃ¡r nem lÃ©tezik.";
-    Text[ slovenian ] = "Mapa '%1' ne obstaja.";
+    Text [ de ] = "Das Verzeichnis '%1' ist nicht vorhanden!";
+    Text [ en-US ] = "The '%1' directory does not exist.";
 };
 
 
 String sQueryfornewCreation
 {
-    Text = "Soll es erstellt werden?";
-    Text[English] = "Do your want to create it now?";
-    Text[ English_us ] = "Do you want to create it now?";
-    Text[ portuguese ] = "Criá-lo agora?";
-    Text[ russian ] = "Ñîçäàòü?";
-    Text[ greek ] = "Èİëåôå íá äçìéïõñãçèåß ôşñá;";
-    Text[ dutch ] = "Wilt u deze nu aanmaken?";
-    Text[ french ] = "Doit-il être créé ?";
-    Text[ spanish ] = "¿Desea crearlo?";
-    Text[ italian ] = "Volete crearla?";
-    Text[ danish ] = "Skal det oprettes nu?";
-    Text[ swedish ] = "Ska den skapas nu?";
-    Text[ polish ] = "Czy chcesz utworzyæ teraz?";
-    Text[ portuguese_brazilian ] = "Deseja criá-lo agora?";
-    Text[ japanese ] = "ä½œæˆã—ã¾ã™ã‹ã€‚";
-    Text[ korean ] = "ìƒ‰ì¸ì„ ë§Œë“œì‹œê² ìŠµë‹ˆê¹Œ?";
-    Text[ chinese_simplified ] = "è¦å»ºç«‹è¿™ä¸ªç›®å½•ï¼Ÿ";
-    Text[ chinese_traditional ] = "è¦å»ºç«‹é€™å€‹ç›®éŒ„ï¼Ÿ";
-    Text[ turkish ] = "Şu an yaratmak istiyor musunuz?";
-    Text[ arabic ] = "åá ÊÑíÏ ÅäÔÇÄå ÇáÂä¿";
-    Text[ catalan ] = "Voleu crear-lo ara?";
-    Text[ finnish ] = "Haluatko luoda sen nyt?";
-    Text[ language_user1 ] = "; Das 'es' bezieht sich auf ein bestimmtes Verzeichnis";
-    Text[ thai ] = "à¸„à¸¸à¸“à¸•à¹‰à¸­à¸‡à¸à¸²à¸£à¸ªà¸£à¹‰à¸²à¸‡à¸¡à¸±à¸™à¸‚à¸“à¸°à¸™à¸µà¹‰à¸«à¸£à¸·à¸­à¹„à¸¡à¹ˆ?";
-    Text[ czech ] = "MÃ¡ bÃ½t zaloÅ¾en?";
-    Text[ hebrew ] = "â€®×”×× ×œ×™×¦×•×¨ ××•×ª×•\\×” ×¢×›×©×™×•?â€¬";
-    Text[ hindi ] = "à¤†à¤ª à¤‡à¤¸à¤•à¥‹ à¤…à¤­à¥€ à¤‰à¤¤à¥à¤ªà¤¨à¥à¤¨ à¤•à¤°à¤¨à¤¾ à¤šà¤¾à¤¹à¤¤à¥‡ à¤¹à¥ˆ?";
-    Text[ slovak ] = "Prajete si ho vytvoriÅ¥ teraz?";
-    Text[ hungarian ] = "LÃ©trehozza most?";
-    Text[ slovenian ] = "Ali jo Å¾elite ustvariti sedaj?";
+    Text [ de ] = "Soll es erstellt werden?";
+    Text [ en-US ] = "Do you want to create it now?";
+    Text [ x-comment ] = "; Das 'es' bezieht sich auf ein bestimmtes Verzeichnis";
 };
 
 
 String sFileExists
 {
-    Text = "Die Datei '<1>' existiert bereits.<CR>Möchten Sie sie überschreiben?";
-    Text[English] = "The File '<1>' already exists. Do you want to overwrite it?";
-    Text[ English_us ] = "The '<1>' file already exists.<CR>Do you want to overwrite it?";
-    Text[ french ] = "Le fichier '<1>' existe déjà.<CR>Voulez-vous le remplacer ?";
-    Text[ italian ] = "Il file '<1>' esiste già: <CR>Volete soprascriverlo?";
-    Text[ spanish ] = "El archivo '<1>' ya existe. <CR>¿Desea sobrescribirlo?";
-    Text[ portuguese ] = "O ficheiro '<1>' já existe.<CR>Substituir?";
-    Text[ dutch ] = "Bestand '<1>' bestaat reeds. <CR>Wilt u het overschrijven?";
-    Text[ swedish ] = "Filen '<1>' finns redan.<CR>Vill du skriva över den?";
-    Text[ greek ] = "Ôï áñ÷åßï '<1>' õğÜñ÷åé Şäç.<CR>Èİëåôå íá áíôéêáôáóôáèåß;";
-    Text[ dutch ] = "Bestand '<1>' bestaat reeds. <CR>Wilt u het overschrijven?";
-    Text[ swedish ] = "Filen '<1>' finns redan.<CR>Vill du skriva över den?";
-    Text[ russian ] = "Ôàéë '<1>' óæå ñóùåñòâóåò.<CR>Çàìåíèòü?";
-    Text[ danish ] = "Filen '<1>' findes allerede.<CR>Skal den overskrives?";
-    Text[ polish ] = "Plik '<1>' ju¿ istnieje.<CR>Czy go zast¹piæ?";
-    Text[ portuguese_brazilian ] = "O arquivo '<1>' já existe.<CR>Deseja sobrescreve-lo?";
-    Text[ japanese ] = "ãƒ•ã‚¡ã‚¤ãƒ« '<1>' ã¯ã™ã§ã«ã‚ã‚Šã¾ã™ã€‚<CR>ä¸Šæ›¸ãã—ã¾ã™ã‹ã€‚";
-    Text[ korean ] = "'<1>' íŒŒì¼ì´ ì´ë¯¸ ìˆìŠµë‹ˆë‹¤.<CR>ë®ì–´ì“°ì‹œê² ìŠµë‹ˆê¹Œ?";
-    Text[ chinese_simplified ] = "æ–‡ä»¶ '<1>' å·²ç»å­˜åœ¨ã€‚<CR>è¦æ”¹å†™è¿™ä¸ªæ–‡ä»¶ï¼Ÿ";
-    Text[ chinese_traditional ] = "æª”æ¡ˆ<1>å·²ç¶“å­˜åœ¨ã€‚<CR>è¦è¦†å¯«é€™å€‹æª”æ¡ˆï¼Ÿ";
-    Text[ arabic ] = "Çáãáİ '<1>' ãæÌæÏ ãÓÈŞÇğ. <CR>åá ÊÑíÏ ÇáßÊÇÈÉ İæŞå¿";
-    Text[ turkish ] = "'<1>' dosyası mevcut. <CR>Üzerine yazmak istiyor musunuz?";
-    Text[ catalan ] = "El fitxer '<1>' ja existeix.<CR>Voleu sobreescriure'l?";
-    Text[ finnish ] = "Tiedosto <1> on jo olemassa.<CR>Haluatko korvata tiedoston?";
-    Text[ thai ] = "à¹à¸Ÿà¹‰à¸¡ '<1>' à¸¡à¸µà¸­à¸¢à¸¹à¹ˆà¹à¸¥à¹‰à¸§<CR>à¸„à¸¸à¸“à¸•à¹‰à¸­à¸‡à¸à¸²à¸£à¹€à¸‚à¸µà¸¢à¸™à¸—à¸±à¸šà¸¡à¸±à¸™à¸«à¸£à¸·à¸­à¹„à¸¡à¹ˆ?";
-    Text[ czech ] = "Soubor '<1>' jiÅ¾ existuje.<CR>MÃ¡ bÃ½t pÅ™epsÃ¡n?";
-    Text[ hebrew ] = "â€®×”×§×•×‘×¥ '<1>' ×”×›×‘×¨ ×§×™×™×. <CR>×× ×œ×”×—×œ×™×£?â€¬";
-    Text[ hindi ] = "'<1>' à¤«à¤¾à¤‡à¤² à¤ªà¤¹à¤¿à¤²à¥‡ à¤¸à¥‡ à¤¹à¥€ à¤…à¤¸à¥à¤¤à¤¿à¤¤à¥à¤µ à¤®à¥‡à¤‚ à¤¹à¥ˆ à¥¤<CR>à¤†à¤ª à¤¸à¤•à¥‹ à¤“à¤µà¤°à¤°à¤‡à¤Ÿ à¤•à¤°à¤¨à¤¾ à¤šà¤¾à¤¹à¤¤à¥‡ à¤¹à¥ˆ?";
-    Text[ slovak ] = "SÃºbor <1> uÅ¾ existuje.<CR> Chcete ho prepÃ­saÅ¥?";
-    Text[ hungarian ] = "A(z) '<1>' fÃ¡jl mÃ¡r lÃ©tezik.<CR>FelÃ¼lÃ­rja?";
-    Text[ slovenian ] = "Datoteka '<1>' Å¾e obstaja.<CR>Ali jo Å¾elite prepisati?";
+    Text [ de ] = "Die Datei '<1>' existiert bereits.<CR>Möchten Sie sie überschreiben?";
+    Text [ en-US ] = "The '<1>' file already exists.<CR>Do you want to overwrite it?";
 };
 
 String sMorePathsError3
 {
-    Text = "Verzeichnisse nicht vorhanden";
-    Text[English] = "Directories are not available";
-    Text[ English_us ] = "Directories do not exist";
-    Text[ french ] = "Répertoires inexistants";
-    Text[ italian ] = "Cartelle inesistenti";
-    Text[ spanish ] = "Directorios no existentes";
-    Text[ portuguese ] = "Directórios não existem";
-    Text[ dutch ] = "Directory bestaat niet";
-    Text[ swedish ] = "Kataloger finns ej";
-    Text[ greek ] = "Ïé êáôÜëïãïé äåí õğÜñ÷ïõí";
-    Text[ dutch ] = "Directory bestaat niet";
-    Text[ swedish ] = "Kataloger finns ej";
-    Text[ russian ] = "Ïàïêè íå ñóùåñòâóşò";
-    Text[ danish ] = "Katalogerne findes ikke";
-    Text[ polish ] = "Katalogi nie istniej¹";
-    Text[ portuguese_brazilian ] = "Os diretórios não existem";
-    Text[ japanese ] = "ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã¯ã‚ã‚Šã¾ã›ã‚“";
-    Text[ korean ] = "ìƒ‰ì¸ì´ ì—†ìŠµë‹ˆë‹¤";
-    Text[ chinese_simplified ] = "ç›®å½•ä¸å­˜åœ¨";
-    Text[ chinese_traditional ] = "ç›®éŒ„ä¸å­˜åœ¨";
-    Text[ arabic ] = "ÏáÇÆá ÛíÑ ãæÌæÏÉ";
-    Text[ turkish ] = "Dizinler mevcut değil";
-    Text[ catalan ] = "Els directoris no existeixen";
-    Text[ finnish ] = "Hakemistoja ei ole";
-    Text[ thai ] = "à¹„à¸¡à¹ˆà¸¡à¸µà¹„à¸”à¹€à¸£à¹‡à¸à¸—à¸­à¸£à¸µà¹ˆà¸­à¸¢à¸¹à¹ˆ";
-    Text[ czech ] = "AdresÃ¡Å™e neexistujÃ­";
-    Text[ hebrew ] = "â€®×¡×¤×¨×™×•×ª ××™× ×Ÿ ×§×™×™××•×ªâ€¬";
-    Text[ hindi ] = "à¤¡à¥ˆà¤°à¤•à¥à¤Ÿà¤°à¤¿à¤¯à¤¾à¤ à¤…à¤¸à¥à¤¤à¤¿à¤¤à¥à¤µ à¤®à¥‡à¤‚ à¤¨à¤¹à¥€à¤‚ à¤¹à¥ˆ";
-    Text[ slovak ] = "AdresÃ¡re neexistujÃº";
-    Text[ hungarian ] = "A kÃ¶nyvtÃ¡rak nem lÃ©teznek";
-    Text[ slovenian ] = "Ni map";
+    Text [ de ] = "Verzeichnisse nicht vorhanden";
+    Text [ en-US ] = "Directories do not exist";
 };
 
 
 String sOverwriteallFiles
 {
-    Text = "Möchten Sie, dass Dokumente ohne Abfrage überschrieben werden?";
-    Text[English] = "Do you want to overwrite documents without query";
-    Text[ English_us ] = "Do you want to overwrite documents without being asked?";
-    Text[ portuguese ] = "Do you want to overwrite documents without query";
-    Text[ russian ] = "Do you want to overwrite documents without query";
-    Text[ greek ] = "Do you want to overwrite documents without query";
-    Text[ dutch ] = "Wilt u ongevraagd documenten overschrijven?";
-    Text[ french ] = "Écraser les documents sans demande de confirmation ?";
-    Text[ spanish ] = "¿Desea sobrescribir los documentos sin pregunta de confirmación?";
-    Text[ finnish ] = "Do you want to overwrite documents without query";
-    Text[ italian ] = "Volete soprascrivere i documenti senza domanda di controllo?";
-    Text[ danish ] = "Ønsker du at overskrive dokumenter uden at blive spurgt?";
-    Text[ swedish ] = "Vill du att dokument ska skrivas över utan att du blir tillfrågad först?";
-    Text[ polish ] = "Do you want to overwrite documents without query";
-    Text[ portuguese_brazilian ] = "Deseja sobrescrever os documentos sem prévio aviso?";
-    Text[ japanese ] = "ç¢ºèªãªã—ã§ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã«ä¸Šæ›¸ãã—ã¾ã™ã‹ã€‚";
-    Text[ korean ] = "ë¬¸ì„œë¥¼ í™•ì¸í•˜ì§€ ì•Šê³  ê²¹ì³ì“°ì‹œê² ìŠµë‹ˆê¹Œ?";
-    Text[ chinese_simplified ] = "æ‚¨è¦çœå»è¯¢é—®è€Œç›´æ¥æ”¹å†™æ–‡æ¡£ï¼Ÿ";
-    Text[ chinese_traditional ] = "æ‚¨è¦çœç•¥è©¢å•è€Œç›´æ¥å¾©å¯«æ–‡ä»¶ï¼Ÿ";
-    Text[ turkish ] = "Belgelerin sorulmadan üzerine yazılmasını ister misiniz?";
-    Text[ arabic ] = "Do you want to overwrite documents without query";
-    Text[ catalan ] = "Do you want to overwrite documents without query";
-    Text[ thai ] = "Do you want to overwrite documents without query";
-    Text[ czech ] = "PÅ™ejete si pÅ™epsat dokument bez dotazu?";
-    Text[ hebrew ] = "â€®×”×× ×œ×”×—×œ×™×£ ××¡××›×™× ××‘×œ×™ ×œ×©××•×œ?â€¬";
-    Text[ hindi ] = "Do you want to overwrite documents without being asked?";
-    Text[ slovak ] = "Chcete aby boli dokumety prepÃ­sanÃ© bez opÃ½tania?";
-    Text[ hungarian ] = "RÃ¡kÃ©rdezÃ©s nÃ©lkÃ¼l akarja felÃ¼lÃ­rni a dokumentumokat?";
-    Text[ slovenian ] = "Ali Å¾elite prepisati dokumente brez opozorila?";
+    Text [ de ] = "Möchten Sie, dass Dokumente ohne Abfrage überschrieben werden?";
+    Text [ en-US ] = "Do you want to overwrite documents without being asked?";
 };
 
 
 String sreeditMacro
 {
-    Text = "Dokumentenmakro muss überarbeitet werden";
-    Text[English] = "Document macro has to be revised";
-    Text[ English_us ] = "Document macro has to be revised.";
-    Text[ portuguese ] = "Document macro has to be revised";
-    Text[ russian ] = "Document macro has to be revised";
-    Text[ greek ] = "Document macro has to be revised";
-    Text[ dutch ] = "Documentmacro moet worden herzien";
-    Text[ french ] = "Révision de la macro de document requise";
-    Text[ spanish ] = "La macro de los documentos se debe revisar.";
-    Text[ finnish ] = "Document macro has to be revised";
-    Text[ italian ] = "La macro dei documenti dev'essere modificata";
-    Text[ danish ] = "Det er nødvendigt at gennemse makro.";
-    Text[ swedish ] = "Dokumentmakro måste revideras";
-    Text[ polish ] = "Document macro has to be revised";
-    Text[ portuguese_brazilian ] = "A macro do documento deve ser revisada";
-    Text[ japanese ] = "ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆãƒã‚¯ãƒ­ã‚’ç·¨é›†ã—ãªãŠã™å¿…è¦ãŒã‚ã‚Šã¾ã™ã€‚";
-    Text[ korean ] = "ë¬¸ì„œ macroëŠ” êµì •ì„ í•„ìš”ë¡œ í•©ë‹ˆë‹¤.";
-    Text[ chinese_simplified ] = "å¿…é¡»é‡æ–°ç¼–è¾‘æ–‡æ¡£å®";
-    Text[ chinese_traditional ] = "å¿…é ˆé‡æ–°ç·¨è¼¯å·¨é›†ã€‚";
-    Text[ turkish ] = "Belge makrosunun düzeltilmesi gereklidir.";
-    Text[ arabic ] = "Document macro has to be revised";
-    Text[ catalan ] = "Document macro has to be revised";
-    Text[ thai ] = "Document macro has to be revised";
-    Text[ czech ] = "Makro dokumentu je tÅ™eba zrevidovat.";
-    Text[ hebrew ] = "â€®×™×© ×¦×•×¨×š ×œ×¢×“×›×Ÿ ××ª ×”××§×¨×•â€¬";
-    Text[ hindi ] = "Document macro has to be revised.";
-    Text[ slovak ] = "Makro k dokumetu musÃ­ byÅ¥ prepÃ­sanÃ©.";
-    Text[ hungarian ] = "Ãt kell dolgozni a dokumentummakrÃ³t.";
-    Text[ slovenian ] = "Preglejte makro dokumenta.";
+    Text [ de ] = "Dokumentenmakro muss überarbeitet werden";
+    Text [ en-US ] = "Document macro has to be revised.";
 };
 
 String scouldNotsaveDocument
 {
-    Text = "Dokument '<1>' konnte nicht gespeichert werden";
-    Text[English] = "Document '<1>' could not be saved";
-    Text[ English_us ] = "Document '<1>' could not be saved.";
-    Text[ portuguese ] = "Document '<1>' could not be saved";
-    Text[ russian ] = "Document '<1>' could not be saved";
-    Text[ greek ] = "Document '<1>' could not be saved";
-    Text[ dutch ] = "Document '<1>' kan niet worden opgeslagen.";
-    Text[ french ] = "Impossible d'enregistrer le document '<1>' !";
-    Text[ spanish ] = "El documento '<1>' no se pudo guardar.";
-    Text[ finnish ] = "Document '<1>' could not be saved";
-    Text[ italian ] = "Non è stato possibile salvare il file '<1>'";
-    Text[ danish ] = "Dokumentet '<1>' kunne ikke gemmes";
-    Text[ swedish ] = "Det gick inte att spara dokument '<1>'";
-    Text[ polish ] = "Document '<1>' could not be saved";
-    Text[ portuguese_brazilian ] = "Não foi possível salvar o documento '<1>' ";
-    Text[ japanese ] = "ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆ '<1>' ã¯ä¿å­˜ã§ãã¾ã›ã‚“ã§ã—ãŸã€‚";
-    Text[ korean ] = "ë¬¸ì„œ '<1>'ì„(ë¥¼) ì €ì¥í•˜ì§€ ëª»í–ˆìŠµë‹ˆë‹¤.";
-    Text[ chinese_simplified ] = "æ— æ³•å­˜ç›˜æ–‡æ¡£ '<1>' ";
-    Text[ chinese_traditional ] = "ç„¡æ³•å„²å­˜æ–‡ä»¶ '<1>'";
-    Text[ turkish ] = "'<1>'  dosyası kaydedilemiyor.";
-    Text[ arabic ] = "Document '<1>' could not be saved";
-    Text[ catalan ] = "Document '<1>' could not be saved";
-    Text[ thai ] = "Document '<1>' could not be saved";
-    Text[ czech ] = "Dokument '<1>' nelze uloÅ¾it.";
-    Text[ hebrew ] = "â€®×œ× × ×™×ª×Ÿ ×œ×©××•×¨ ××¡××š '<1>'.â€¬";
-    Text[ hindi ] = "Document '<1>' could not be saved.";
-    Text[ slovak ] = "Dokument '<1>' nemohol byÅ¥ uloÅ¾enÃ½.";
-    Text[ hungarian ] = "A(z) '<1>' dokumentum mentÃ©se nem sikerÃ¼lt.";
-    Text[ slovenian ] = "Dokumenta '<1>' ni bilo mogoÄe shraniti.";
+    Text [ de ] = "Dokument '<1>' konnte nicht gespeichert werden";
+    Text [ en-US ] = "Document '<1>' could not be saved.";
 };
 
 
 String scouldNotopenDocument
 {
-    Text = "Dokument '<1>' konnte nicht geöffnet werden";
-    Text[English] = "Document '<1>' could not be opened";
-    Text[ English_us ] = "Document '<1>' could not be opened.";
-    Text[ portuguese ] = "Document '<1>' could not be opened";
-    Text[ russian ] = "Document '<1>' could not be opened";
-    Text[ greek ] = "Document '<1>' could not be opened";
-    Text[ dutch ] = "Document '<1>' kan niet worden geopend.";
-    Text[ french ] = "Impossible d'ouvrir le document '<1>' !";
-    Text[ spanish ] = "El documento '<1>' no se pudo abrir.";
-    Text[ finnish ] = "Document '<1>' could not be opened";
-    Text[ italian ] = "Impossibile aprire il documento '<1>'";
-    Text[ danish ] = "Dokumentet '<1>' kunne ikke åbnes";
-    Text[ swedish ] = "Det gick inte att öppna dokument '<1>'";
-    Text[ polish ] = "Document '<1>' could not be opened";
-    Text[ portuguese_brazilian ] = "Não foi possível abrir o documento '<1>' ";
-    Text[ japanese ] = "ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆ '<1>' ã‚’é–‹ãã“ã¨ãŒã§ãã¾ã›ã‚“ã€‚";
-    Text[ korean ] = "ë¬¸ì„œ '<1>'ì„(ë¥¼) ì—´ì§€ ëª»í–ˆìŠµë‹ˆë‹¤.";
-    Text[ chinese_simplified ] = "æ— æ³•æ‰“å¼€æ–‡æ¡£ '<1>' ";
-    Text[ chinese_traditional ] = "ç„¡æ³•é–‹å•Ÿæ–‡ä»¶ '<1>'";
-    Text[ turkish ] = "'<1>'  dosyası açılamıyor.";
-    Text[ arabic ] = "Document '<1>' could not be opened";
-    Text[ catalan ] = "Document '<1>' could not be opened";
-    Text[ thai ] = "Document '<1>' could not be opened";
-    Text[ czech ] = "Dokument '<1>' nelze otevÅ™Ã­t.";
-    Text[ hebrew ] = "â€®×œ× × ×™×ª×Ÿ ×œ×¤×ª×•×— ××¡××š '<1>'.â€¬";
-    Text[ hindi ] = "Document '<1>' could not be opened.";
-    Text[ slovak ] = "Dokument '<1>' nemohol byÅ¥ otvorenÃ½.";
-    Text[ hungarian ] = "A(z) '<1>' dokumentum megnyitÃ¡sa nem sikerÃ¼lt.";
-    Text[ slovenian ] = "Dokumenta '<1>' ni bilo mogoÄe odpreti.";
+    Text [ de ] = "Dokument '<1>' konnte nicht geöffnet werden";
+    Text [ en-US ] = "Document '<1>' could not be opened.";
 };
 
 
 
 String sConvertError1
 {
-    Text = "Möchten Sie das Konvertieren an dieser Stelle wirklich abbrechen ?";
-    Text[English] = "Do you really want to cancel the conversion at this point?";
-    Text[ English_us ] = "Do you really want to terminate conversion at this point?";
-    Text[ french ] = "Êtes-vous sûr de vouloir interrompre la conversion en cours ?";
-    Text[ italian ] = "Interrompere veramente la conversione a questo punto ?";
-    Text[ spanish ] = "¿Desea realmente interrumpir la conversión?";
-    Text[ portuguese ] = "Cancelar realmente a conversão em curso?";
-    Text[ dutch ] = "Wilt u het converteren werkelijk annuleren?";
-    Text[ swedish ] = "Vill du verkligen avbryta konverteringen nu?";
-    Text[ greek ] = "Èİëåôå ğñáãìáôéêÜ íá äéáêïğåß ç ìåôáôñïğŞ óå áõôü ôï óçìåßï;";
-    Text[ dutch ] = "Wilt u het converteren werkelijk annuleren?";
-    Text[ swedish ] = "Vill du verkligen avbryta konverteringen nu?";
-    Text[ russian ] = "Âû äåéñòâèòåëüíî õîòèòå ïğåğâàòü â ıòîì ìåñòå ïğîöåññ ïğåîáğàçîâàíèÿ?";
-    Text[ danish ] = "Er du sikker på, at du vil annullere konverteringen nu?";
-    Text[ polish ] = "Czy na pewno chcesz przerwaæ konwersjê w tym miejscu?";
-    Text[ portuguese_brazilian ] = "Deseja realmente cancelar a conversão neste ponto?";
-    Text[ japanese ] = "å¤‰æ›ã‚’ã“ã“ã§ä¸­æ–­ã—ã¾ã™ã‹ã€‚";
-    Text[ korean ] = "ì´ ì‹œì ì—ì„œ ë³€í™˜ì„ ì •ë§ë¡œ ì·¨ì†Œí•˜ì‹œê² ìŠµë‹ˆê¹Œ?";
-    Text[ chinese_simplified ] = "æ‚¨çœŸè¦ç°åœ¨ä¸­æ–­è¿™ä¸ªè½¬æ¢è¿‡ç¨‹ï¼Ÿ";
-    Text[ chinese_traditional ] = "çœŸè¦ç«‹åˆ»ä¸­æ–·é€™å€‹è½‰æ›ï¼Ÿ";
-    Text[ arabic ] = "åá ÊÑíÏ ÈÇáİÚá ŞØÚ ÚãáíÉ ÇáÊÍæíá İí åĞå ÇáãÑÍáÉ¿";
-    Text[ turkish ] = "Çevirmeyi bu noktada bitirmek istiyor musunuz?";
-    Text[ catalan ] = "Realment voleu acabar la conversió en aquest punt?";
-    Text[ finnish ] = "Haluatko varmasti lopettaa muunnoksen nyt?";
-    Text[ thai ] = "à¸„à¸¸à¸“à¸•à¹‰à¸­à¸‡à¸à¸²à¸£à¸¢à¸¸à¸•à¸´à¸à¸²à¸£à¹à¸›à¸¥à¸‡à¸—à¸µà¹ˆà¸ˆà¸¸à¸”à¸™à¸µà¹‰à¸«à¸£à¸·à¸­à¹„à¸¡à¹ˆ?";
-    Text[ czech ] = "Opravdu chcete teÄ ukonÄit konverzi?";
-    Text[ hebrew ] = "â€®×”×× ××›×Ÿ ×œ×”×¤×¡×™×§ ××ª ×”×”××¨×” ×›×¢×ª?â€¬";
-    Text[ hindi ] = "à¤†à¤ª à¤¸à¤šà¤®à¥à¤š à¤‡à¤¸ à¤¸à¤®à¤¯ à¤¬à¤¦à¤¨à¥‡à¤µà¤¾à¤²à¤¾ à¤•à¤¾à¤°à¥à¤¯ à¤•à¥‹ à¤¸à¤®à¤¾à¤ªà¥à¤¤ à¤•à¤°à¤¨à¤¾ à¤šà¤¾à¤¹à¤¤à¥‡ à¤¹à¥ˆ?";
-    Text[ slovak ] = "Å½elÃ¡te si zruÅ¡iÅ¥ konverziu?";
-    Text[ hungarian ] = "ValÃ³ban meg akarja szakÃ­tani az Ã¡talakÃ­tÃ¡st?";
-    Text[ slovenian ] = "Ali ste prepriÄani, da Å¾elite sedaj prekiniti pretvorbo?";
+    Text [ de ] = "Möchten Sie das Konvertieren an dieser Stelle wirklich abbrechen ?";
+    Text [ en-US ] = "Do you really want to terminate conversion at this point?";
 };
 
 String sConvertError2
 {
-    Text = "Autopilot abbrechen";
-    Text[English] = "Cancel Autopilot";
-    Text[ English_us ] = "Cancel AutoPilot";
-    Text[ french ] = "Annuler l'AutoPilote";
-    Text[ italian ] = "Interrompi Pilota automatico";
-    Text[ spanish ] = "Cancelar el Piloto automático";
-    Text[ portuguese ] = "Cancelar AutoPiloto";
-    Text[ dutch ] = "AutoPiloot annuleren";
-    Text[ swedish ] = "Avbryt Autopiloten";
-    Text[ greek ] = "Áêıñùóç ôïõ áõôüìáôïõ ğéëüôïõ";
-    Text[ dutch ] = "AutoPiloot annuleren";
-    Text[ swedish ] = "Avbryt Autopiloten";
-    Text[ russian ] = "Îòìåíèòü Ìàñòåğ";
-    Text[ danish ] = "Annuller Autopilot";
-    Text[ polish ] = "Anuluj AutoPilota";
-    Text[ portuguese_brazilian ] = "Cancelar Assistente";
-    Text[ japanese ] = "ã‚ªãƒ¼ãƒˆãƒ‘ã‚¤ãƒ­ãƒƒãƒˆã‚’ä¸­æ­¢";
-    Text[ korean ] = "ìë™ íŒŒì¼ëŸ¿ ì·¨ì†Œ";
-    Text[ chinese_simplified ] = "å–æ¶ˆè‡ªåŠ¨æ–‡æ¡£åŠ©ç†";
-    Text[ chinese_traditional ] = "å–æ¶ˆè‡ªå‹•æª”æ¡ˆåŠ©ç†";
-    Text[ arabic ] = "æŞİ ÊÔÛíá ÇáãÑÔÏ ÇáÂáí";
-    Text[ turkish ] = "AutoPilot'dan Vazgeç";
-    Text[ catalan ] = "Cancel.la Autopilot";
-    Text[ finnish ] = "Peruuta ohjattu toiminto";
-    Text[ thai ] = "à¸¢à¸à¹€à¸¥à¸´à¸à¸à¸²à¸£à¸™à¸³à¸£à¹ˆà¸­à¸‡à¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´";
-    Text[ czech ] = "ZruÅ¡it prÅ¯vodce";
-    Text[ hebrew ] = "â€®×‘×˜×œ ×˜×™×™×¡ ××•×˜×•××˜×™â€¬";
-    Text[ hindi ] = "à¤“à¤Ÿà¥‹à¤ªà¥ˆà¤²à¤Ÿ à¤°à¤¦à¥à¤¦ à¤•à¤°à¥‹";
-    Text[ slovak ] = "ZruÅ¡iÅ¥ Sprievodcu";
-    Text[ hungarian ] = "TÃ¼ndÃ©r leÃ¡llÃ­tÃ¡sa";
-    Text[ slovenian ] = "PrekliÄi Avtopilota";
+    Text [ de ] = "Autopilot abbrechen";
+    Text [ en-US ] = "Cancel AutoPilot";
 };
 
 String sRTErrorDesc
 {
-    Text = "Es ist ein unerwarteter Fehler im Autopiloten aufgetreten.";
-    Text[English] = "An unexpected Autopilot error has occured.";
-    Text[ English_us ] = "An unexpected error has occurred in the AutoPilot.";
-    Text[ french ] = "Une erreur imprévue s'est produite dans l'AutoPilote.";
-    Text[ italian ] = "Si è verificato un errore nel Pilota automatico.";
-    Text[ spanish ] = "Ha ocurrido un error inesperado en el Piloto automático";
-    Text[ portuguese ] = "Surgiu um erro imprevisto no AutoPiloto.";
-    Text[ dutch ] = "Er is een onverwachte fout opgetreden in de AutoPiloot.";
-    Text[ swedish ] = "Ett oväntat fel har uppstått i Autopiloten.";
-    Text[ greek ] = "ĞáñïõóéÜóôçêå İíá ìç áíáìåíüìåíï óöÜëìá óôïí áõôüìáôï ğéëüôï.";
-    Text[ dutch ] = "Er is een onverwachte fout opgetreden in de AutoPiloot.";
-    Text[ swedish ] = "Ett oväntat fel har uppstått i Autopiloten.";
-    Text[ russian ] = "Íåèçâåñòíàÿ îøèáêà â Ìàñòåğå.";
-    Text[ danish ] = "Der er opstået en uventet fejl i Autopilot.";
-    Text[ polish ] = "Wyst¹pi³ nieoczekiwany b³¹d w AutoPilocie.";
-    Text[ portuguese_brazilian ] = "Ocorreu um erro imprevisto no Assistente.";
-    Text[ japanese ] = "ã‚ªãƒ¼ãƒˆãƒ‘ã‚¤ãƒ­ãƒƒãƒˆã«äºˆæœŸã•ã‚Œãªã„ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸã€‚";
-    Text[ korean ] = "ìë™ íŒŒì¼ëŸ¿ì—ì„œ ì˜ˆìƒì¹˜ ì•Šì€ ì˜¤ë¥˜ê°€ ë°œìƒí–ˆìŠµë‹ˆë‹¤.";
-    Text[ chinese_simplified ] = "è‡ªåŠ¨æ–‡ä»¶åŠ©ç†ç¨‹åºå‡ºç°äº†ä¸€ä¸ªæ„å¤–çš„é”™è¯¯ã€‚";
-    Text[ chinese_traditional ] = "è‡ªå‹•æª”æ¡ˆåŠ©ç†ç™¼ç”Ÿäº†ä¸€å€‹æ„å¤–çš„éŒ¯èª¤ã€‚";
-    Text[ arabic ] = "ÍÏË ÎØÃ ÛíÑ ãÊæŞÚ İí ÇáãÑÔÏ ÇáÂáí.";
-    Text[ turkish ] = "AutoPilot içinde beklenmedik bir hata oluştu.";
-    Text[ catalan ] = "S'ha produït un error inesperat a l'AutoPilot.";
-    Text[ finnish ] = "Ohjatussa toiminnossa on ilmennyt odottamaton virhe.";
-    Text[ thai ] = "à¹€à¸à¸´à¸”à¸‚à¹‰à¸­à¸œà¸´à¸”à¸à¸¥à¸²à¸”à¸—à¸µà¹ˆà¹„à¸¡à¹ˆà¸„à¸²à¸”à¸„à¸´à¸”à¸‚à¸¶à¹‰à¸™à¹ƒà¸™à¸à¸²à¸£à¸™à¸³à¸£à¹ˆà¸­à¸‡à¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´";
-    Text[ czech ] = "PÅ™i bÄ›hu prÅ¯vodce doÅ¡lo k neoÄekÃ¡vanÃ© chybÄ›.";
-    Text[ hebrew ] = "â€®×©×’×™××” ×‘×œ×ª×™ ×¦×¤×•×™×” ×‘×˜×™×™×¡ ×”××•×˜×•××˜×™.â€¬";
-    Text[ hindi ] = "à¤“à¤Ÿà¥‹à¤ªà¥ˆà¤²à¤Ÿà¥ à¤®à¥‡à¤‚ à¤ªà¥à¤°à¤¤à¥€à¤•à¥à¤·à¤¾ à¤¨ à¤•à¤°à¤¨à¥‡ à¤¯à¥‹à¤—à¥à¤¯ à¤—à¤²à¤¤à¥€ à¤˜à¤Ÿà¤¿à¤¤ à¤¹à¥à¤† à¥¤ ";
-    Text[ slovak ] = "V Sprievodcovi sa vyskytla neoÄakÃ¡vanÃ¡ chyba";
-    Text[ hungarian ] = "A TÃ¼ndÃ©r mÅ±kÃ¶dÃ©se kÃ¶zben vÃ¡ratlan hiba lÃ©pett fel.";
-    Text[ slovenian ] = "V Avtopilotu je priÅ¡lo do nepriÄakovane napake.";
+    Text [ de ] = "Es ist ein unerwarteter Fehler im Autopiloten aufgetreten.";
+    Text [ en-US ] = "An unexpected error has occurred in the AutoPilot.";
 };
 
 String sRTErrorHeader
 {
-    Text = "Fehler";
-    Text[English] = "Error";
-    Text[ English_us ] = "Error";
-    Text[ french ] = "Erreur";
-    Text[ italian ] = "Errore";
-    Text[ spanish ] = "Error";
-    Text[ portuguese ] = "Erro";
-    Text[ dutch ] = "Fout";
-    Text[ swedish ] = "Fel";
-    Text[ greek ] = "ÓöÜëìá";
-    Text[ dutch ] = "Fout";
-    Text[ swedish ] = "Fel";
-    Text[ russian ] = "Îøèáêà";
-    Text[ danish ] = "Fejl";
-    Text[ polish ] = "B³¹d";
-    Text[ portuguese_brazilian ] = "Erro";
-    Text[ japanese ] = "ã‚¨ãƒ©ãƒ¼";
-    Text[ korean ] = "ì˜¤ë¥˜";
-    Text[ chinese_simplified ] = "é”™è¯¯";
-    Text[ chinese_traditional ] = "éŒ¯èª¤";
-    Text[ arabic ] = "ÎØÃ";
-    Text[ turkish ] = "Hata";
-    Text[ catalan ] = "Error";
-    Text[ finnish ] = "Virhe";
-    Text[ thai ] = "à¸‚à¹‰à¸­à¸œà¸´à¸”à¸à¸¥à¸²à¸”";
-    Text[ czech ] = "Chyba";
-    Text[ hebrew ] = "â€®×©×’×™××”â€¬";
-    Text[ hindi ] = "à¤—à¤²à¤¤à¥€";
-    Text[ slovak ] = "Chyba";
-    Text[ hungarian ] = "Hiba";
-    Text[ slovenian ] = "Napaka";
+    Text [ de ] = "Fehler";
+    Text [ en-US ] = "Error";
 };
 
 
 String sPathDialogMessage
 {
-    Text = "Wählen Sie ein Verzeichnis aus";
-    Text[English] = "Select a directory";
-    Text[ English_us ] = "Select a directory";
-    Text[ french ] = "Sélectionnez un répertoire";
-    Text[ italian ] = "Scegliete una cartella";
-    Text[ spanish ] = "Seleccione un directorio";
-    Text[ portuguese ] = "Seleccione um directório";
-    Text[ dutch ] = "Selecteer een directory";
-    Text[ swedish ] = "Välj ut en katalog";
-    Text[ greek ] = "Åğéëİîôå êáôÜëïãï";
-    Text[ dutch ] = "Selecteer een directory";
-    Text[ swedish ] = "Välj ut en katalog";
-    Text[ russian ] = "Âûáåğèòå êàòàëîã";
-    Text[ danish ] = "Vælg et katalog";
-    Text[ polish ] = "Wybierz katalog";
-    Text[ portuguese_brazilian ] = "Selecione um diretório";
-    Text[ japanese ] = "ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚’é¸æŠã—ã¾ã™ã€‚";
-    Text[ korean ] = "ìƒ‰ì¸ì„ ì„ íƒí•˜ì‹­ì‹œì˜¤.";
-    Text[ chinese_simplified ] = "è¯·æ‚¨é€‰æ‹©ä¸€ä¸ªç›®å½•";
-    Text[ chinese_traditional ] = "è«‹é¸æ“‡ä¸€å€‹ç›®éŒ„";
-    Text[ arabic ] = "ÇáÑÌÇÁ ÇÎÊíÇÑ Ïáíá";
-    Text[ turkish ] = "Bir dizin seçiniz";
-    Text[ catalan ] = "Seleccioneu un directori";
-    Text[ finnish ] = "Valitse hakemisto";
-    Text[ thai ] = "à¹€à¸¥à¸·à¸­à¸à¹„à¸”à¹€à¸£à¹‡à¸à¸—à¸­à¸£à¸µà¹ˆ";
-    Text[ czech ] = "Vyberte, prosÃ­m, adresÃ¡Å™";
-    Text[ hebrew ] = "â€®×‘×—×™×¨×ª ×¡×¤×¨×™×”â€¬";
-    Text[ hindi ] = "à¤¡à¥ˆà¤°à¤•à¥à¤Ÿà¤°à¥€ à¤šà¥à¤¨à¥‹";
-    Text[ slovak ] = "Vyberte adresÃ¡r";
-    Text[ hungarian ] = "KÃ¶nyvtÃ¡r vÃ¡lasztÃ¡sa";
-    Text[ slovenian ] = "Izberite mapo";
+    Text [ de ] = "Wählen Sie ein Verzeichnis aus";
+    Text [ en-US ] = "Select a directory";
 };
 
 String sDialogTitle
 {
-    Text = "Dokumenten-Konverter";
-    Text[English] = "Document Converter";
-    Text[ English_us ] = "Document Converter";
-    Text[ portuguese ] = "Conversor de documentos";
-    Text[ greek ] = "Ìåôáôñïğİáò åããñÜöùí";
-    Text[ dutch ] = "Documenten-converter";
-    Text[ french ] = "Convertisseur de documents";
-    Text[ spanish ] = "Convertidor de documentos";
-    Text[ swedish ] = "Dokumentkonverterare";
-    Text[ russian ] = "Êîíâåğòîğ äîêóìåíòîâ";
-    Text[ italian ] = "Convertitore di documenti";
-    Text[ danish ] = "Dokumentkonvertering";
-    Text[ polish ] = "Konwerter dokumentów";
-    Text[ portuguese_brazilian ] = "Conversor de Documentos";
-    Text[ japanese ] = "ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆå¤‰æ›";
-    Text[ korean ] = "ë¬¸ì„œ ë³€í™˜ê¸°";
-    Text[ chinese_simplified ] = "æ–‡æ¡£è½¬æ¢å™¨";
-    Text[ chinese_traditional ] = "æ–‡ä»¶è½‰æ›å™¨";
-    Text[ arabic ] = "ãÍæá ÇáãÓÊäÏÇÊ";
-    Text[ turkish ] = "Belge dönüştürücü";
-    Text[ catalan ] = "Conversor de documents";
-    Text[ finnish ] = "Asiakirjamuunnin";
-    Text[ thai ] = "à¸•à¸±à¸§à¹à¸›à¸¥à¸‡à¹€à¸­à¸à¸ªà¸²à¸£";
-    Text[ czech ] = "Konvertor dokumentÅ¯";
-    Text[ hebrew ] = "â€®×××™×¨ ××¡××›×™×â€¬";
-    Text[ hindi ] = "à¤²à¥‡à¤–à¤ªà¤¤à¥à¤° à¤¬à¤¦à¤²à¤¨à¥‡à¤µà¤¾à¤²à¤¾";
-    Text[ slovak ] = "Konvertor dokumentov";
-    Text[ hungarian ] = "DokumentumÃ¡talakÃ­tÃ³";
-    Text[ slovenian ] = "Pretvornik dokumentov";
+    Text [ de ] = "Dokumenten-Konverter";
+    Text [ en-US ] = "Document Converter";
 };
 
 String sProgressPage1
 {
-    Text = "Arbeitsfortschritt";
-    Text[English] = "Current Progress";
-    Text[ English_us ] = "Progress";
-    Text[ portuguese ] = "Progressão";
-    Text[ russian ] = "Âûïîëíåíèå";
-    Text[ greek ] = "Ğñüïäïò åñãáóßáò";
-    Text[ dutch ] = "Voortgang";
-    Text[ french ] = "Progression";
-    Text[ spanish ] = "Progresión";
-    Text[ italian ] = "Progressione";
-    Text[ danish ] = "Fremgang";
-    Text[ swedish ] = "Arbetsframsteg";
-    Text[ polish ] = "Postêp";
-    Text[ portuguese_brazilian ] = "Progresso";
-    Text[ japanese ] = "é€²æ—çŠ¶æ³";
-    Text[ korean ] = "ì§„í–‰ ìƒíƒœ";
-    Text[ chinese_simplified ] = "å·²ç»å®Œæˆ";
-    Text[ chinese_traditional ] = "å·²ç¶“å®Œæˆ";
-    Text[ turkish ] = "İlerleme";
-    Text[ arabic ] = "ÇáÊŞÏã";
-    Text[ catalan ] = "Progrés";
-    Text[ finnish ] = "Tilanne";
-    Text[ thai ] = "à¹€à¸ªà¸£à¹‡à¸ˆà¸ªà¸¡à¸šà¸¹à¸£à¸“à¹Œà¹à¸¥à¹‰à¸§";
-    Text[ czech ] = "PrÅ¯bÄ›h";
-    Text[ hebrew ] = "â€®×”×ª×§×“××•×ªâ€¬";
-    Text[ hindi ] = "à¤ªà¥à¤°à¤¸à¥à¤¥à¤¾à¤¨ à¤•à¤°à¥‹";
-    Text[ slovak ] = "Priebeh";
-    Text[ hungarian ] = "Folyamat";
-    Text[ slovenian ] = "Potek";
+    Text [ de ] = "Arbeitsfortschritt";
+    Text [ en-US ] = "Progress";
 };
 
 String sProgressPage2
 {
-    Text = "Erfassen der relevanten Dokumente:";
-    Text[English] = "Retrieval of the relevant documents";
-    Text[ English_us ] = "Retrieving the relevant documents:";
-    Text[ portuguese ] = "Recuperação de documentos relevantes...";
-    Text[ russian ] = "Âîññòàíîâëåíèå ğåëåâàíòíûõ äîêóìåíòîâ";
-    Text[ greek ] = "Åıñåóç ôùí ó÷åôéêşí åããñÜöùí:";
-    Text[ dutch ] = "De relevante documenten worden geselecteerd:";
-    Text[ french ] = "Récupération des documents importants :";
-    Text[ spanish ] = "Recuperación de documentos importantes:";
-    Text[ italian ] = "Recupero dei documenti importanti:";
-    Text[ danish ] = "Henter de relevante dokumenter:";
-    Text[ swedish ] = "Samlar de relevanta dokumenten:";
-    Text[ polish ] = "Pobieranie odpowiednich dokumentów:";
-    Text[ portuguese_brazilian ] = "Recuperando os documentos relevantes:";
-    Text[ japanese ] = "é–¢é€£ã™ã‚‹ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã‚’ã¾ã¨ã‚ã¦ã„ã¾ã™:";
-    Text[ korean ] = "ì£¼ìš” ê´€ë ¨ ë¬¸ì„œë¥¼ ê²€ìƒ‰:";
-    Text[ chinese_simplified ] = "æ±‡ç¼–ç›¸å…³çš„æ–‡æ¡£ï¼š";
-    Text[ chinese_traditional ] = "æ­£åœ¨åŒ¯ç·¨ç›¸é—œçš„æ–‡ä»¶ï¼š";
-    Text[ turkish ] = "Gerekli belgeleri alıyor:";
-    Text[ arabic ] = "ÊÓÌíá ÇáãÓÊäÏÇÊ æËíŞÉ ÇáÕáÉ:";
-    Text[ catalan ] = "S'estan recuperant els documents rellevants:";
-    Text[ finnish ] = "Haetaan asianmukaiset asiakirjat:";
-    Text[ thai ] = "à¸à¸³à¸¥à¸±à¸‡à¸„à¹‰à¸™à¸„à¸·à¸™à¹€à¸­à¸à¸ªà¸²à¸£à¸—à¸µà¹ˆà¹€à¸à¸µà¹ˆà¸¢à¸§à¸‚à¹‰à¸­à¸‡:";
-    Text[ czech ] = "ShromaÅ¾Äuji dokumenty pro konverzi:";
-    Text[ hebrew ] = "â€®××™×—×–×•×¨ ××¡××›×™× ××ª××™××™×:â€¬";
-    Text[ hindi ] = "à¤…à¤¨à¥à¤°à¥‚à¤ª à¤²à¥‡à¤–à¤ªà¤¤à¥à¤°à¥‹à¤‚ à¤•à¥‹ à¤ªà¥à¤°à¤¾à¤ªà¥à¤¤ à¤•à¤° à¤°à¤¹à¤¾ à¤¹à¥ˆ:";
-    Text[ slovak ] = "ZhromaÅ¾Äujem dokumenty pre konverziu:";
-    Text[ hungarian ] = "Dokumentumok visszanyerÃ©se:";
-    Text[ slovenian ] = "Iskanje pomembnih dokumentov:";
+    Text [ de ] = "Erfassen der relevanten Dokumente:";
+    Text [ en-US ] = "Retrieving the relevant documents:";
 };
 
 String sProgressPage3
 {
-    Text = "Konvertieren der Dokumente";
-    Text[English] = "Converting the documents";
-    Text[ English_us ] = "Converting the documents";
-    Text[ portuguese ] = "A converter documentos";
-    Text[ russian ] = "Ïğåîáğàçîâàíèå äîêóìåíòîâ";
-    Text[ greek ] = "ÌåôáôñïğŞ ôùí åããñÜöùí";
-    Text[ dutch ] = "De documenten worden geconverteerd";
-    Text[ french ] = "Conversion des documents";
-    Text[ spanish ] = "Conversión de documentos";
-    Text[ italian ] = "Conversione dei documenti";
-    Text[ danish ] = "Konverterer dokumenterne";
-    Text[ swedish ] = "Konvertering av dokumenten";
-    Text[ polish ] = "Konwersja dokumentów";
-    Text[ portuguese_brazilian ] = "Convertendo os documentos";
-    Text[ japanese ] = "ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã®å¤‰æ›";
-    Text[ korean ] = "ë¬¸ì„œ ë³€í™˜";
-    Text[ chinese_simplified ] = "è½¬æ¢æ–‡æ¡£";
-    Text[ chinese_traditional ] = "è½‰æ›æ–‡ä»¶";
-    Text[ turkish ] = "Belgeleri dönüştür";
-    Text[ arabic ] = "ÊÍæíá ÇáãÓÊäÏÇÊ";
-    Text[ catalan ] = "S'estan convertint els documents";
-    Text[ finnish ] = "Muunnetaan asiakirjat";
-    Text[ thai ] = "à¸à¸³à¸¥à¸±à¸‡à¹à¸›à¸¥à¸‡à¹€à¸­à¸à¸ªà¸²à¸£";
-    Text[ czech ] = "ProbÃ­hÃ¡ konverze dokumentÅ¯";
-    Text[ hebrew ] = "â€®×××™×¨ ××¡××›×™×â€¬";
-    Text[ hindi ] = "à¤²à¥‡à¤–à¤ªà¤¤à¥à¤°à¥‹à¤‚ à¤•à¥‹ à¤¬à¤¦à¤² à¤°à¤¹à¤¾ à¤¹à¥ˆ";
-    Text[ slovak ] = "Prebieha konverzia dokumentov";
-    Text[ hungarian ] = "A dokumentumok Ã¡talakÃ­tÃ¡sa folyamatban";
-    Text[ slovenian ] = "Pretvarjanje dokumentov";
+    Text [ de ] = "Konvertieren der Dokumente";
+    Text [ en-US ] = "Converting the documents";
 };
 
 
 String sProgressFound
 {
-    Text = "Gefunden:";
-    Text[English] = "Found:";
-    Text[ English_us ] = "Found:";
-    Text[ portuguese ] = "Encontrado:";
-    Text[ russian ] = "Íàéäåíî:";
-    Text[ greek ] = "Âñİèçêáí:";
-    Text[ dutch ] = "Gevonden:";
-    Text[ french ] = "Détecté(s) :";
-    Text[ spanish ] = "Encontrado:";
-    Text[ italian ] = "Trovato:";
-    Text[ danish ] = "Fundet:";
-    Text[ swedish ] = "Hittad:";
-    Text[ polish ] = "Znaleziono:";
-    Text[ portuguese_brazilian ] = "Encontrado:";
-    Text[ japanese ] = "è¦‹ã¤ã‹ã‚Šã¾ã—ãŸ:";
-    Text[ korean ] = "ë°œê²¬:";
-    Text[ chinese_simplified ] = "å·²ç»æ‰¾åˆ°ï¼š";
-    Text[ chinese_traditional ] = "å·²ç¶“æ‰¾åˆ°ï¼š";
-    Text[ turkish ] = "Bulunan:";
-    Text[ arabic ] = "Êã ÇáÚËæÑ Úáì:";
-    Text[ catalan ] = "Trobat:";
-    Text[ finnish ] = "Tulokset:";
-    Text[ thai ] = "à¸à¸š:";
-    Text[ czech ] = "Nalezeno:";
-    Text[ hebrew ] = "â€®××•×ª×¨×•:â€¬";
-    Text[ hindi ] = "à¤ªà¥à¤°à¤¾à¤ªà¥à¤¤ à¤¹à¥à¤†:";
-    Text[ slovak ] = "NÃ¡jdenÃ©:";
-    Text[ hungarian ] = "TalÃ¡latlista:";
-    Text[ slovenian ] = "Najdeno:";
+    Text [ de ] = "Gefunden:";
+    Text [ en-US ] = "Found:";
 };
 
 
 String sProgressPage5
 {
-    Text = "%1 gefunden";
-    Text[English] = "%1 found";
-    Text[ English_us ] = "%1 found";
-    Text[ portuguese ] = "%1 encontrado(s)";
-    Text[ russian ] = "%1 íàéäåíî";
-    Text[ greek ] = "Âñİèçêáí %1";
-    Text[ dutch ] = "%1 gevonden";
-    Text[ french ] = "%1 détecté(s)";
-    Text[ spanish ] = "%1 encontrado";
-    Text[ italian ] = "%1 trovato/i";
-    Text[ danish ] = "%1 fundet";
-    Text[ swedish ] = "%1 hittad(e)";
-    Text[ polish ] = "znaleziono %1";
-    Text[ portuguese_brazilian ] = "%1 encontrado(s)";
-    Text[ japanese ] = "%1 ãŒè¦‹ã¤ã‹ã‚Šã¾ã—ãŸã€‚";
-    Text[ korean ] = "%1ì„(ë¥¼) ì°¾ì•˜ìŠµë‹ˆë‹¤.";
-    Text[ chinese_simplified ] = "%1 è¢«æ‰¾åˆ°ã€‚";
-    Text[ chinese_traditional ] = "%1 è¢«æ‰¾åˆ°";
-    Text[ turkish ] = "%1 bulundu";
-    Text[ arabic ] = "Êã ÇáÚËæÑ Úáì %1";
-    Text[ catalan ] = "%1 trobat";
-    Text[ finnish ] = "%1 löydetty";
-    Text[ language_user1 ] = "; RB (15.06.01): %1 bezieht sich auf die Anzahl der gefundenen Dokumente bzw. Vorlagen.";
-    Text[ thai ] = "à¸à¸š %1 ";
-    Text[ czech ] = "%1";
-    Text[ hebrew ] = "â€®%1 × ××¦×â€¬";
-    Text[ hindi ] = "%1 à¤ªà¥à¤°à¤¾à¤ªà¥à¤¤ à¤¹à¥à¤†";
-    Text[ slovak ] = "%1 nÃ¡jdenÃ½";
-    Text[ hungarian ] = "%1 talÃ¡lat";
-    Text[ slovenian ] = "%1 najdenih";
+    Text [ de ] = "%1 gefunden";
+    Text [ en-US ] = "%1 found";
+    Text [ x-comment ] = "; RB (15.06.01): %1 bezieht sich auf die Anzahl der gefundenen Dokumente bzw. Vorlagen.";
 };
 
 String sReady
 {
-    Text = "Fertig";
-    Text[English] = "Ready";
-    Text[ English_us ] = "Finished";
-    Text[ portuguese ] = "Pronto!";
-    Text[ russian ] = "Ãîòîâî";
-    Text[ greek ] = "Ïëïêëçñşèçêå";
-    Text[ dutch ] = "Klaar";
-    Text[ french ] = "Terminer";
-    Text[ spanish ] = "Terminado";
-    Text[ italian ] = "Fine";
-    Text[ danish ] = "Færdig";
-    Text[ swedish ] = "Färdig";
-    Text[ polish ] = "Zakoñczone!";
-    Text[ portuguese_brazilian ] = "Concluído";
-    Text[ japanese ] = "å®Œäº†";
-    Text[ korean ] = "ì™„ë£Œ";
-    Text[ chinese_simplified ] = "å®Œæˆ";
-    Text[ chinese_traditional ] = "å®Œæˆ";
-    Text[ turkish ] = "Bitti!";
-    Text[ arabic ] = "Êã!";
-    Text[ catalan ] = "Acabat!";
-    Text[ finnish ] = "Valmis";
-    Text[ thai ] = "à¸ªà¸¡à¸šà¸¹à¸£à¸“à¹Œ!";
-    Text[ czech ] = "UkonÄeno";
-    Text[ hebrew ] = "â€®×”×¡×ª×™×™×â€¬";
-    Text[ hindi ] = "à¤¸à¤®à¤¾à¤ªà¥à¤¤ à¤¹à¥à¤†!";
-    Text[ slovak ] = "UkonÄenÃ©";
-    Text[ hungarian ] = "KÃ©sz";
-    Text[ slovenian ] = "KonÄano";
+    Text [ de ] = "Fertig";
+    Text [ en-US ] = "Finished";
 };
 
 
 String sXMLTemplateCheckbox_1_
 {
-    Text = "Textvorlagen";
-    Text[English] = "Text templates";
-    Text[ English_us ] = "Text templates";
-    Text[ french ] = "Modèles de texte";
-    Text[ italian ] = "Modelli di testo";
-    Text[ spanish ] = "Plantillas de texto";
-    Text[ portuguese ] = "Modelos de texto";
-    Text[ dutch ] = "Tekstsjablonen";
-    Text[ swedish ] = "Textmallar";
-    Text[ greek ] = "Ğñüôõğá êåéìİíùí";
-    Text[ dutch ] = "Tekstsjablonen";
-    Text[ swedish ] = "Textmallar";
-    Text[ russian ] = "Òåêñòîâûå øàáëîíû";
-    Text[ danish ] = "Tekstskabeloner";
-    Text[ polish ] = "~Szablony tekstów";
-    Text[ portuguese_brazilian ] = "Modelos de texto";
-    Text[ japanese ] = "æ–‡æ›¸ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆ";
-    Text[ korean ] = "í…ìŠ¤íŠ¸ ì„œì‹ íŒŒì¼";
-    Text[ chinese_simplified ] = "æ–‡æœ¬æ ·å¼";
-    Text[ chinese_traditional ] = "æ–‡å­—æ¨£å¼";
-    Text[ arabic ] = "ŞæÇáÈ äÕ";
-    Text[ turkish ] = "Metin şablonları";
-    Text[ catalan ] = "Plantilles de text";
-    Text[ finnish ] = "Tekstimallit";
-    Text[ thai ] = "à¹à¸¡à¹ˆà¹à¸šà¸šà¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡";
-    Text[ czech ] = "Å ablony textovÃ½ch souborÅ¯";
-    Text[ hebrew ] = "â€®×ª×‘× ×™×•×ª ×˜×§×¡×˜â€¬";
-    Text[ hindi ] = "à¤Ÿà¥‡à¤•à¥à¤¸à¥à¤Ÿà¥ à¤¨à¤®à¥‚à¤¨à¥‡à¤‚";
-    Text[ slovak ] = "Å ablÃ³ny textovÃ½ch sÃºborov";
-    Text[ hungarian ] = "SzÃ¶vegsablonok";
-    Text[ slovenian ] = "Predloge za besedilo";
+    Text [ de ] = "Textvorlagen";
+    Text [ en-US ] = "Text templates";
 };
 
 String sXMLTemplateCheckbox_2_
 {
-    Text = "Tabellenvorlagen";
-    Text[English] = "Table templates";
-    Text[ English_us ] = "Spreadsheet templates";
-    Text[ french ] = "Modèles de classeur";
-    Text[ italian ] = "Modelli di fogli elettronici";
-    Text[ spanish ] = "Plantillas de hojas de cálculo";
-    Text[ portuguese ] = "Modelos de folhas de cálculo";
-    Text[ dutch ] = "Werkbladsjablonen";
-    Text[ swedish ] = "Tabellmallar";
-    Text[ greek ] = "Ğñüôõğá õğïëïãéóôéêşí öıëëùí";
-    Text[ dutch ] = "Werkbladsjablonen";
-    Text[ swedish ] = "Tabellmallar";
-    Text[ russian ] = "Øàáëîíû ıëåêòğîííûõ òàáëèö";
-    Text[ danish ] = "Tabelskabeloner";
-    Text[ polish ] = "Szablony arkuszy kalkulacyjnych";
-    Text[ portuguese_brazilian ] = "Modelos de planilhas";
-    Text[ japanese ] = "è¡¨è¨ˆç®—ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆ";
-    Text[ korean ] = "ìŠ¤í”„ë ˆë“œì‹œíŠ¸ ì„œì‹ íŒŒì¼";
-    Text[ chinese_simplified ] = "å·¥ä½œè¡¨æ ·å¼";
-    Text[ chinese_traditional ] = "å·¥ä½œè¡¨æ¨£å¼";
-    Text[ arabic ] = "ŞæÇáÈ ÌÏæá";
-    Text[ turkish ] = "Hesap çizelgesi şablonları";
-    Text[ catalan ] = "Plantilles de fulls de càlcul";
-    Text[ finnish ] = "Laskentataulukkomallit";
-    Text[ thai ] = "à¹à¸¡à¹ˆà¹à¸šà¸šà¸à¸£à¸°à¸”à¸²à¸©à¸„à¸³à¸™à¸§à¸“";
-    Text[ czech ] = "Å ablony tabulek";
-    Text[ hebrew ] = "â€®×ª×‘× ×™×•×ª ×’×œ×™×•× ×•×ª ××œ×§×˜×¨×•× ×™×™×â€¬";
-    Text[ hindi ] = "à¤¸à¥à¤ªà¥à¤°à¥‡à¤¡à¤¶à¥€à¤Ÿà¥ à¤¨à¤®à¥‚à¤¨à¥‡à¤‚";
-    Text[ slovak ] = "Å ablÃ³ny zoÅ¡itov";
-    Text[ hungarian ] = "MunkafÃ¼zetsablonok";
-    Text[ slovenian ] = "Predloge za preglednice";
+    Text [ de ] = "Tabellenvorlagen";
+    Text [ en-US ] = "Spreadsheet templates";
 };
 
 String sXMLTemplateCheckbox_3_
 {
-    Text = "Zeichnungs/Präsentationsvorlagen";
-    Text[English] = "Drawing/Presentation templates";
-    Text[ English_us ] = "Drawing/presentation templates";
-    Text[ french ] = "Modèles de dessin / présentation";
-    Text[ italian ] = "Modelli di disegni/presentazioni";
-    Text[ spanish ] = "Plantillas de dibujo y presentación";
-    Text[ portuguese ] = "Modelos de desenho/apresentação";
-    Text[ dutch ] = "Tekening-/presentatiesjablonen";
-    Text[ swedish ] = "Tecknings-/presentationsmallar";
-    Text[ greek ] = "Ğñüôõğá ğáñïõóéÜóåùí/ó÷åäßùí";
-    Text[ dutch ] = "Tekening-/presentatiesjablonen";
-    Text[ swedish ] = "Tecknings-/presentationsmallar";
-    Text[ russian ] = "Øàáëîíû ğèñóíêîâ è ïğåçåíòàöèé";
-    Text[ danish ] = "Tegnings-/præsentationsskabeloner";
-    Text[ polish ] = "Szablony rysunków/prezentacji";
-    Text[ portuguese_brazilian ] = "Modelos de desenho/apresentação";
-    Text[ japanese ] = "å›³å½¢æç”»/ãƒ—ãƒ¬ã‚¼ãƒ³ãƒ†ãƒ¼ã‚·ãƒ§ãƒ³ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆ";
-    Text[ korean ] = "ê·¸ë¦¬ê¸°/í”„ë ˆì  í…Œì´ì…˜ ì„œì‹ íŒŒì¼";
-    Text[ chinese_simplified ] = "ç»˜å›¾/æ¼”ç¤ºæ–‡ç¨¿æ ·å¼";
-    Text[ chinese_traditional ] = "ç¹ªåœ–/ç°¡å ±æ¨£å¼";
-    Text[ arabic ] = "ŞæÇáÈ ÑÓãÉ/ÚÑÖ ÊŞÏíãí";
-    Text[ turkish ] = "Çizim/sunum şablonları";
-    Text[ catalan ] = "Plantilles de dibuixos/presentacions";
-    Text[ finnish ] = "Piirros- tai esitysmallit";
-    Text[ thai ] = "à¹à¸¡à¹ˆà¹à¸šà¸šà¸à¸²à¸£à¸§à¸²à¸”à¸£à¸¹à¸›/à¸à¸²à¸£à¸™à¸³à¹€à¸ªà¸™à¸­";
-    Text[ czech ] = "Å ablony prezentacÃ­";
-    Text[ hebrew ] = "â€®×ª×‘× ×™×•×ª ×©×¨×˜×•×˜×™×/××¦×’×•×ªâ€¬";
-    Text[ hindi ] = "à¤°à¥‡à¤–à¤¾à¤šà¤¿à¤¤à¥à¤°/à¤ªà¥à¤°à¤¸à¥à¤¤à¥à¤¤à¤¿ à¤¨à¤®à¥‚à¤¨à¥‡à¤‚";
-    Text[ slovak ] = "Å ablÃ³ny kresieb/prezentÃ¡ciÃ­";
-    Text[ hungarian ] = "Rajz- Ã©s bemutatÃ³sablonok";
-    Text[ slovenian ] = "Predloge za risbe/predstavitve";
+    Text [ de ] = "Zeichnungs/Präsentationsvorlagen";
+    Text [ en-US ] = "Drawing/presentation templates";
 };
 
 String sXMLTemplateCheckbox_4_
 {
-    Text = "Globaldokumente";
-    Text[English] = "Master Documents";
-    Text[ English_us ] = "Master documents";
-    Text[ portuguese ] = "Documentos-mestre";
-    Text[ russian ] = "Ñîñòàâíûå äîêóìåíòû";
-    Text[ greek ] = "Êıñéá İããñáöá";
-    Text[ dutch ] = "Masterdocumenten";
-    Text[ french ] = "Documents maîtres";
-    Text[ spanish ] = "Documentos maestros";
-    Text[ italian ] = "Documenti master";
-    Text[ danish ] = "Hoveddokumenter";
-    Text[ swedish ] = "Samlingsdokument";
-    Text[ polish ] = "Dokumenty g³ówne";
-    Text[ portuguese_brazilian ] = "Documentos-mestre";
-    Text[ japanese ] = "ãƒã‚¹ã‚¿ãƒ¼ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆ";
-    Text[ korean ] = "ë§ˆìŠ¤í„° ë¬¸ì„œ";
-    Text[ chinese_simplified ] = "ä¸»æ§æ–‡æ¡£";
-    Text[ chinese_traditional ] = "ä¸»æ§æ–‡ä»¶";
-    Text[ turkish ] = "Ana belgeler";
-    Text[ arabic ] = "ãÓÊäÏÇÊ ÔÇãáÉ";
-    Text[ catalan ] = "Documents mestre";
-    Text[ finnish ] = "Pääasiakirjat";
-    Text[ thai ] = "à¹€à¸­à¸à¸ªà¸²à¸£à¸•à¹‰à¸™à¸‰à¸šà¸±à¸š";
-    Text[ czech ] = "HlavnÃ­ dokumenty";
-    Text[ hebrew ] = "â€®××¡××š ××‘â€¬";
-    Text[ hindi ] = "à¤®à¤¾à¤¸à¥à¤Ÿà¤° à¤²à¥‡à¤–à¤ªà¤¤à¥à¤°à¥‡à¤‚";
-    Text[ slovak ] = "HlavnÃ© dokumenty";
-    Text[ hungarian ] = "FÅ‘dokumentumok";
-    Text[ slovenian ] = "Glavni dokumenti";
+    Text [ de ] = "Globaldokumente";
+    Text [ en-US ] = "Master documents";
 };
 
 
 String sXMLDocumentCheckbox_1_
 {
-    Text = "Textdokumente";
-    Text[English] = "Text documents";
-    Text[ English_us ] = "Text documents";
-    Text[ french ] = "Documents texte";
-    Text[ italian ] = "Documenti di testo";
-    Text[ spanish ] = "Documentos de texto";
-    Text[ portuguese ] = "Documentos de texto";
-    Text[ dutch ] = "Tekstdocumenten";
-    Text[ swedish ] = "Textdokument";
-    Text[ greek ] = "¸ããñáöá êåéìİíùí";
-    Text[ dutch ] = "Tekstdocumenten";
-    Text[ swedish ] = "Textdokument";
-    Text[ russian ] = "Òåêñòîâûå äîêóìåíòû";
-    Text[ danish ] = "Tekstdokumenter";
-    Text[ polish ] = "D~okumenty tekstowe";
-    Text[ portuguese_brazilian ] = "Documentos de texto";
-    Text[ japanese ] = "æ–‡æ›¸ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆ";
-    Text[ korean ] = "í…ìŠ¤íŠ¸ ë¬¸ì„œ";
-    Text[ chinese_simplified ] = "æ–‡æœ¬æ–‡æ¡£";
-    Text[ chinese_traditional ] = "æ–‡å­—æ–‡ä»¶";
-    Text[ arabic ] = "ãÓÊäÏÇÊ äÕ";
-    Text[ turkish ] = "Metin Belgeleri";
-    Text[ catalan ] = "Documents de text";
-    Text[ finnish ] = "Tekstiasiakirjat";
-    Text[ thai ] = "à¹€à¸­à¸à¸ªà¸²à¸£à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡";
-    Text[ czech ] = "TextovÃ© soubory";
-    Text[ hebrew ] = "â€®××¡××›×™ ×˜×§×¡×˜â€¬";
-    Text[ hindi ] = "à¤Ÿà¥‡à¤•à¥à¤¸à¥à¤Ÿà¥ à¤²à¥‡à¤–à¤ªà¤¤à¥à¤°à¥‡à¤‚";
-    Text[ slovak ] = "TextovÃ© dokumenty";
-    Text[ hungarian ] = "SzÃ¶veges dokumentumok";
-    Text[ slovenian ] = "Dokumenti z besedilom";
+    Text [ de ] = "Textdokumente";
+    Text [ en-US ] = "Text documents";
 };
 
 String sXMLDocumentCheckbox_2_
 {
-    Text = "Tabellendokumente";
-    Text[English] = "Table documents";
-    Text[ English_us ] = "Spreadsheets";
-    Text[ french ] = "Classeurs";
-    Text[ italian ] = "Fogli elettronici";
-    Text[ spanish ] = "Hojas de cálculo";
-    Text[ portuguese ] = "Folhas de cálculo ";
-    Text[ dutch ] = "Werkbladdocumenten";
-    Text[ swedish ] = "Tabelldokument";
-    Text[ greek ] = "¸ããñáöá õğïëïãéóôéêşí öıëëùí";
-    Text[ dutch ] = "Werkbladdocumenten";
-    Text[ swedish ] = "Tabelldokument";
-    Text[ russian ] = "Äîêóìåíòû ıëåêòğîííûõ òàáëèö";
-    Text[ danish ] = "Regneark";
-    Text[ polish ] = "Arkusze kalkulacyjne";
-    Text[ portuguese_brazilian ] = "Planilhas";
-    Text[ japanese ] = "è¡¨è¨ˆç®—ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆ";
-    Text[ korean ] = "ìŠ¤í”„ë ˆë“œì‹œíŠ¸";
-    Text[ chinese_simplified ] = "å·¥ä½œè¡¨æ–‡æ¡£";
-    Text[ chinese_traditional ] = "å·¥ä½œè¡¨æ–‡ä»¶";
-    Text[ arabic ] = "ãÓÊäÏÇÊ ÌÏæá";
-    Text[ turkish ] = "Tablolar";
-    Text[ catalan ] = "Documents de fulls de càlcul";
-    Text[ finnish ] = "Laskentataulukot";
-    Text[ thai ] = "à¹€à¸­à¸à¸ªà¸²à¸£à¸à¸£à¸°à¸”à¸²à¸©à¸„à¸³à¸™à¸§à¸“";
-    Text[ czech ] = "SeÅ¡ity";
-    Text[ hebrew ] = "â€®×’×œ×™×•× ×•×ª ××œ×§×˜×¨×•× ×™×™×â€¬";
-    Text[ hindi ] = "à¤¸à¥à¤ªà¥à¤°à¥‡à¤¡à¤¶à¥€à¤Ÿà¥ à¤²à¥‡à¤–à¤ªà¤¤à¥à¤°à¥‡à¤‚";
-    Text[ slovak ] = "ZoÅ¡ity";
-    Text[ hungarian ] = "MunkafÃ¼zetek";
-    Text[ slovenian ] = "Preglednice";
+    Text [ de ] = "Tabellendokumente";
+    Text [ en-US ] = "Spreadsheets";
 };
 
 String sXMLDocumentCheckbox_3_
 {
-    Text = "Zeichnungs/Präsentationsdokumente";
-    Text[English] = "Drawing/Presentation documents";
-    Text[ English_us ] = "Drawing/presentation documents";
-    Text[ french ] = "Dessins / présentations";
-    Text[ italian ] = "Disegni/presentazioni";
-    Text[ spanish ] = "Documentos de dibujo y presentación";
-    Text[ portuguese ] = "Desenhos/Apresentações";
-    Text[ dutch ] = "Tekening-/presentatiedocumenten";
-    Text[ swedish ] = "Tecknings-/presentationsdokument";
-    Text[ greek ] = "¸ããñáöá ğáñïõóéÜóåùí/ó÷åäßùí";
-    Text[ dutch ] = "Tekening-/presentatiedocumenten";
-    Text[ swedish ] = "Tecknings-/presentationsdokument";
-    Text[ russian ] = "Äîêóìåíòû ğèñóíêîâ è ïğåçåíòàöèé";
-    Text[ danish ] = "Tegnings-/præsentationsdokumenter";
-    Text[ polish ] = "Dokumenty rysunkowe/prezentacyjne";
-    Text[ portuguese_brazilian ] = "Documentos de desenho/apresentação";
-    Text[ japanese ] = "å›³å½¢æç”»/ãƒ—ãƒ¬ã‚¼ãƒ³ãƒ†ãƒ¼ã‚·ãƒ§ãƒ³ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆ";
-    Text[ korean ] = "ê·¸ë¦¬ê¸°/í”„ë ˆì  í…Œì´ì…˜ ë¬¸ì„œ";
-    Text[ chinese_simplified ] = "ç»˜å›¾å’Œæ¼”ç¤ºæ–‡ç¨¿æ–‡æ¡£";
-    Text[ chinese_traditional ] = "ç¹ªåœ–/ç°¡å ±æ–‡ä»¶";
-    Text[ arabic ] = "ãÓÊäÏÇÊ ÑÓãÉ/ÚÑÖ ÊŞÏíãí";
-    Text[ turkish ] = "Çizim/Sunu belgeleri";
-    Text[ catalan ] = "Documents de dibuix/presentacions";
-    Text[ finnish ] = "Piirros- tai esitysasiakirjat";
-    Text[ thai ] = "à¹€à¸­à¸à¸ªà¸²à¸£à¸à¸²à¸£à¸§à¸²à¸”à¸£à¸¹à¸›/à¸à¸²à¸£à¸™à¸³à¹€à¸ªà¸™à¸­";
-    Text[ czech ] = "Prezentace";
-    Text[ hebrew ] = "â€®××¡××›×™ ×©×¨×˜×•×˜/××¦×’×•×ªâ€¬";
-    Text[ hindi ] = "à¤°à¥‡à¤–à¤¾à¤šà¤¿à¤¤à¥à¤°/à¤ªà¥à¤°à¤¸à¥à¤¤à¥à¤¤à¤¿ à¤²à¥‡à¤–à¤ªà¤¤à¥à¤°à¥‡à¤‚";
-    Text[ slovak ] = "Kresby/prezentÃ¡cie";
-    Text[ hungarian ] = "Rajz- Ã©s bemutatÃ³dokumentumok";
-    Text[ slovenian ] = "Dokument z risbami/predstavitvami";
+    Text [ de ] = "Zeichnungs/Präsentationsdokumente";
+    Text [ en-US ] = "Drawing/presentation documents";
 };
 
 
 String sXMLDocumentCheckbox_4_
 {
-    Text = "Globaldokumente/Formeln";
-    Text[English] = "Master documents/Formulas";
-    Text[ English_us ] = "Master documents/formulas";
-    Text[ portuguese ] = "Documentos-mestre/Fórmulas";
-    Text[ russian ] = "Ñîñòàâíûå äîêóìåíòû / ôîğìóëû";
-    Text[ greek ] = "Êıñéá İããñáöá/Ôığïé";
-    Text[ dutch ] = "Masterdocumenten/formules";
-    Text[ french ] = "Documents maîtres / formules";
-    Text[ spanish ] = "Documentos maestros / fórmulas";
-    Text[ italian ] = "Documenti master/formule";
-    Text[ danish ] = "Hoveddokumenter/formler";
-    Text[ swedish ] = "Samlingsdokument/formler";
-    Text[ polish ] = "Dokumenty g³ówne/Formu³y";
-    Text[ portuguese_brazilian ] = "Documentos-mestre/fórmulas";
-    Text[ japanese ] = "ãƒã‚¹ã‚¿ãƒ¼ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆ/æ•°å¼";
-    Text[ korean ] = "ë§ˆìŠ¤í„° ë¬¸ì„œ/ìˆ˜ì‹";
-    Text[ chinese_simplified ] = "ä¸»æ§æ–‡æ¡£å’Œå…¬å¼";
-    Text[ chinese_traditional ] = "ä¸»æ§æ–‡ä»¶/å…¬å¼";
-    Text[ turkish ] = "Ana belge/formüller";
-    Text[ arabic ] = "ãÓÊäÏÇÊ ÔÇãáÉ/ÕíÛ";
-    Text[ catalan ] = "Documents/fórmules mestres";
-    Text[ finnish ] = "Perusasiakirjat tai kaavat";
-    Text[ thai ] = "à¸•à¹‰à¸™à¸‰à¸šà¸±à¸šà¹€à¸­à¸à¸ªà¸²à¸£/à¸ªà¸¹à¸•à¸£à¸„à¸³à¸™à¸§à¸“";
-    Text[ czech ] = "HlavnÃ­ dokumenty/vzorce";
-    Text[ hebrew ] = "â€®××¡××›×™ ××‘/× ×•×¡×—××•×ªâ€¬";
-    Text[ hindi ] = "à¤®à¤¾à¤¸à¥à¤Ÿà¤° à¤²à¥‡à¤–à¤ªà¤¤à¥à¤°à¥‡à¤‚/à¤¸à¥‚à¤¤à¥à¤°";
-    Text[ slovak ] = "HlavnÃ© dokumenty/vzorce";
-    Text[ hungarian ] = "FÅ‘dokumentumok Ã©s kÃ©pletek";
-    Text[ slovenian ] = "Glavni dokumenti/formule";
+    Text [ de ] = "Globaldokumente/Formeln";
+    Text [ en-US ] = "Master documents/formulas";
 };
 
 String sXMLHelperApplications_1
 {
-    Text = "Globaldokumente";
-    Text[English] = "Master Documents";
-    Text[ English_us ] = "Master documents";
-    Text[ language_user1 ] = "; EM(1.2.01) kommt mitten im Satz vor, deshalb kleingeschr auf Eng. Zuständig ist BC/Extras.";
-    Text[ portuguese ] = "documentos-mestre";
-    Text[ russian ] = "Ñîñòàâíûå äîêóìåíòû";
-    Text[ greek ] = "Êıñéá İããñáöá";
-    Text[ dutch ] = "Masterdocumenten";
-    Text[ french ] = "Documents maîtres";
-    Text[ spanish ] = "documentos maestros";
-    Text[ italian ] = "documenti master";
-    Text[ danish ] = "Hoveddokumenter";
-    Text[ swedish ] = "Samlingsdokument";
-    Text[ polish ] = "dokumenty g³ówne";
-    Text[ portuguese_brazilian ] = "Documentos-mestre";
-    Text[ japanese ] = "ãƒã‚¹ã‚¿ãƒ¼ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆ";
-    Text[ korean ] = "ë§ˆìŠ¤í„° ë¬¸ì„œ";
-    Text[ chinese_simplified ] = "ä¸»æ§æ–‡æ¡£";
-    Text[ chinese_traditional ] = "ä¸»æ§æ–‡ä»¶";
-    Text[ turkish ] = "Ana belgeler";
-    Text[ arabic ] = "ãÓÊäÏÇÊ ÔÇãáÉ";
-    Text[ catalan ] = "Documents mestre";
-    Text[ finnish ] = "Pääasiakirjat";
-    Text[ thai ] = "à¸•à¹‰à¸™à¸‰à¸šà¸±à¸šà¹€à¸­à¸à¸ªà¸²à¸£";
-    Text[ czech ] = "HlavnÃ­ dokumenty";
-    Text[ hebrew ] = "â€®××¡××›×™ ××‘â€¬";
-    Text[ hindi ] = "à¤®à¤¾à¤¸à¥à¤Ÿà¤° à¤²à¥‡à¤–à¤ªà¤¤à¥à¤°à¥‡à¤‚";
-    Text[ slovak ] = "HlavnÃ© dokumenty";
-    Text[ hungarian ] = "FÅ‘dokumentumok";
-    Text[ slovenian ] = "Glavni dokumenti";
+    Text [ de ] = "Globaldokumente";
+    Text [ en-US ] = "Master documents";
+    Text [ x-comment ] = "; EM(1.2.01) kommt mitten im Satz vor, deshalb kleingeschr auf Eng. Zuständig ist BC/Extras.";
 };
 
 String sXMLHelperApplications_2
 {
-    Text = "Formeln";
-    Text[English] = "Formulas";
-    Text[ English_us ] = "Formulas";
-    Text[ portuguese ] = "Fórmulas";
-    Text[ russian ] = "Ôîğìóëû";
-    Text[ greek ] = "Ôığïé";
-    Text[ dutch ] = "Formules";
-    Text[ french ] = "Formules";
-    Text[ spanish ] = "Fórmulas";
-    Text[ italian ] = "Formule";
-    Text[ danish ] = "Formler";
-    Text[ swedish ] = "Formler";
-    Text[ polish ] = "Formu³y";
-    Text[ portuguese_brazilian ] = "Formulas";
-    Text[ japanese ] = "æ•°å¼";
-    Text[ korean ] = "ìˆ˜ì‹";
-    Text[ chinese_simplified ] = "å…¬å¼";
-    Text[ chinese_traditional ] = "å…¬å¼";
-    Text[ turkish ] = "Formüller";
-    Text[ arabic ] = "ÕíÛ";
-    Text[ catalan ] = "Fórmules";
-    Text[ finnish ] = "Kaavat";
-    Text[ thai ] = "à¸ªà¸¹à¸•à¸£à¸„à¸³à¸™à¸§à¸“";
-    Text[ czech ] = "Vzorce";
-    Text[ hebrew ] = "â€®× ×•×¡×—××•×ªâ€¬";
-    Text[ hindi ] = "à¤¸à¥‚à¤¤à¥à¤°à¥‡à¤‚";
-    Text[ slovak ] = "Vzorce";
-    Text[ hungarian ] = "KÃ©pletek";
-    Text[ slovenian ] = "Formule";
+    Text [ de ] = "Formeln";
+    Text [ en-US ] = "Formulas";
 };
 
 
 String sSourceDocuments
 {
-    Text = "Quelldokumente";
-    Text[English] = "Sourcedocuments";
-    Text[ English_us ] = "Source documents";
-    Text[ portuguese ] = "Documentos fonte";
-    Text[ russian ] = "Èñõîäíûå äîêóìåíòû";
-    Text[ greek ] = "¸ããñáöá ğñïİëåõóçò";
-    Text[ dutch ] = "Brondocumenten";
-    Text[ french ] = "Documents source";
-    Text[ spanish ] = "Documentos fuente";
-    Text[ finnish ] = "Lähdeasiakirjat";
-    Text[ italian ] = "Documenti sorgente";
-    Text[ danish ] = "Kildedokumenter";
-    Text[ swedish ] = "Källdokument";
-    Text[ polish ] = "Dokumenty Ÿród³owe";
-    Text[ portuguese_brazilian ] = "Documento de origem";
-    Text[ japanese ] = "ã‚½ãƒ¼ã‚¹ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆ";
-    Text[ korean ] = "ì›ë³¸ ë¬¸ì„œ";
-    Text[ chinese_simplified ] = "æºæ–‡æ¡£";
-    Text[ chinese_traditional ] = "æºæ–‡ä»¶";
-    Text[ turkish ] = "Kaynak belgeleri";
-    Text[ arabic ] = "Sourcedocuments";
-    Text[ catalan ] = "Documents font";
-    Text[ thai ] = "à¹à¸«à¸¥à¹ˆà¸‡à¹€à¸­à¸à¸ªà¸²à¸£";
-    Text[ czech ] = "ZdrojovÃ© dokumenty";
-    Text[ hebrew ] = "â€®××¡××›×™ ××§×•×¨â€¬";
-    Text[ hindi ] = "à¤®à¥‚à¤² à¤²à¥‡à¤–à¤ªà¤¤à¥à¤°à¥‡à¤‚";
-    Text[ slovak ] = "ZdrojovÃ© dokumenty";
-    Text[ hungarian ] = "ForrÃ¡sdokumentumok";
-    Text[ slovenian ] = "Izvorni dokumenti";
+    Text [ de ] = "Quelldokumente";
+    Text [ en-US ] = "Source documents";
 };
 
 
 String sTargetDocuments
 {
-    Text = "Zieldokumente";
-    Text[English] = "Targetdocuments";
-    Text[ English_us ] = "Target documents";
-    Text[ portuguese ] = "Documentos destino";
-    Text[ russian ] = "Öåëåâûå äîêóìåíòû";
-    Text[ greek ] = "¸ããñáöá ğñïïñéóìïı";
-    Text[ dutch ] = "Doeldocumenten";
-    Text[ french ] = "Documents cible";
-    Text[ spanish ] = "Documentos destino";
-    Text[ finnish ] = "Kohdeasiakirjat";
-    Text[ italian ] = "Documenti di destinazione";
-    Text[ danish ] = "Måldokumenter";
-    Text[ swedish ] = "Måldokument";
-    Text[ polish ] = "Dokumenty docelowe";
-    Text[ portuguese_brazilian ] = "Documentos de destino";
-    Text[ japanese ] = "ã‚¿ãƒ¼ã‚²ãƒƒãƒˆãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆ";
-    Text[ korean ] = "ëŒ€ìƒ ë¬¸ì„œ";
-    Text[ chinese_simplified ] = "ç›®æ ‡æ–‡æ¡£";
-    Text[ chinese_traditional ] = "ç›®æ¨™æ–‡ä»¶";
-    Text[ turkish ] = "Hedef belgeler";
-    Text[ arabic ] = "Targetdocuments";
-    Text[ catalan ] = "Documents destí";
-    Text[ thai ] = "à¹€à¸­à¸à¸ªà¸²à¸£à¹€à¸›à¹‰à¸²à¸«à¸¡à¸²à¸¢";
-    Text[ czech ] = "CÃ­lovÃ© dokumenty";
-    Text[ hebrew ] = "â€®××¡××›×™ ×™×¢×“â€¬";
-    Text[ hindi ] = "à¤²à¤•à¥à¤·à¥à¤¯ à¤²à¥‡à¤–à¤ªà¤¤à¥à¤°à¥‡à¤‚";
-    Text[ slovak ] = "CieÄ¾ovÃ© dokumenty";
-    Text[ hungarian ] = "CÃ©ldokumentumok";
-    Text[ slovenian ] = "Ciljni dokumenti";
+    Text [ de ] = "Zieldokumente";
+    Text [ en-US ] = "Target documents";
 };
 
 String sCreateLogfile
 {
-    Text = "Logdatei erstellen";
-    Text[English] = "Create Logfile";
-    Text[ English_us ] = "Create log file";
-    Text[ portuguese ] = "Criar ficheiro de registo";
-    Text[ russian ] = "Ñîçäàòü æóğíàë";
-    Text[ greek ] = "Äçìéïõñãßá áñ÷åßïõ êáôáãñáöŞò";
-    Text[ dutch ] = "Logbestand aanmaken";
-    Text[ french ] = "Créer un fichier journal";
-    Text[ spanish ] = "Crear archivo de operaciones";
-    Text[ finnish ] = "Luo lokitiedosto";
-    Text[ italian ] = "Crea file di log";
-    Text[ danish ] = "Opret logfil";
-    Text[ swedish ] = "Skapa loggfil";
-    Text[ polish ] = "Utwórz plik dziennika";
-    Text[ portuguese_brazilian ] = "Criar arquivo de registro";
-    Text[ japanese ] = "ãƒ­ã‚°ãƒ•ã‚¡ã‚¤ãƒ«ã®ä½œæˆ";
-    Text[ korean ] = "ë¡œê·¸ íŒŒì¼ ë§Œë“¤ê¸°";
-    Text[ chinese_simplified ] = "å»ºç«‹æ—¥å¿—æ–‡ä»¶";
-    Text[ chinese_traditional ] = "è£½ä½œæ—¥èªŒæª”æ¡ˆ";
-    Text[ turkish ] = "Log belgesi yarat";
-    Text[ arabic ] = "Creae Logfile";
-    Text[ catalan ] = "Crea fitxer de registre";
-    Text[ thai ] = "à¸ªà¸£à¹‰à¸²à¸‡à¹à¸Ÿà¹‰à¸¡à¸¥à¸‡à¸šà¸±à¸™à¸—à¸¶à¸à¹€à¸‚à¹‰à¸²-à¸­à¸­à¸";
-    Text[ czech ] = "VytvoÅ™it soubor se zÃ¡znamem";
-    Text[ hebrew ] = "â€®×™×¦×™×¨×ª ×§×•×‘×¥ ××¢×§×‘ ×¤×¢×•×œ×•×ªâ€¬";
-    Text[ hindi ] = "à¤²à¥‰à¤— à¤«à¤¾à¤‡à¤² à¤‰à¤¤à¥à¤ªà¤¨à¥à¤¨ à¤•à¤°à¥‹";
-    Text[ slovak ] = "VytvoriÅ¥ sÃºbor so zÃ¡znamom";
-    Text[ hungarian ] = "NaplÃ³fÃ¡jl kÃ©szÃ­tÃ©se";
-    Text[ slovenian ] = "Ustvari dnevnik";
+    Text [ de ] = "Logdatei erstellen";
+    Text [ en-US ] = "Create log file";
 };
 
 
 String sLogfileSummary
 {
-    Text = "<COUNT> Dokumente konvertiert";
-    Text[English] = "<COUNT> Documents converted";
-    Text[ english_us ] = "<COUNT> documents converted";
-    Text[ portuguese ] = "<COUNT> documents converted";
-    Text[ russian ] = "<COUNT> documents converted";
-    Text[ greek ] = "<COUNT> documents converted";
-    Text[ dutch ] = "<COUNT> documenten geconverteerd";
-    Text[ french ] = "<COUNT> Documents convertis";
-    Text[ spanish ] = "<COUNT> Documentos convertidos";
-    Text[ finnish ] = "<COUNT> documents converted";
-    Text[ italian ] = "<COUNT> documenti convertiti";
-    Text[ danish ] = "<COUNT> dokumenter blev konverteret";
-    Text[ swedish ] = "<COUNT> dokument konverterade";
-    Text[ polish ] = "<COUNT> documents converted";
-    Text[ japanese ] = "<COUNT> ã®ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã‚’å¤‰æ›ã—ã¾ã—ãŸ";
-    Text[ korean ] = "<COUNT> ë¬¸ì„œê°€ ë³€í™˜ë¨";
-    Text[ chinese_simplified ] = "<COUNT> æ–‡ä»¶å·²ç»è½¬æ¢";
-    Text[ chinese_traditional ] = "<COUNT> æ–‡ä»¶å·²è½‰æ›";
-    Text[ turkish ] = "<COUNT> belge çevrildi";
-    Text[ arabic ] = "<COUNT> documents converted";
-    Text[ czech ] = "PÅ™evedenÃ½ch dokumentÅ¯: <COUNT>";
-    Text[ hebrew ] = "â€®<COUNT> ××¡××›×™× ×”×•××¨×•â€¬";
-    Text[ catalan ] = "<COUNT> documents converted";
-    Text[ portuguese_brazilian ] = "<COUNT> documentos convertidos";
-    Text[ thai ] = "<COUNT> documents converted";
-    Text[ hindi ] = "<COUNT> documents converted";
-    Text[ slovak ] = "<COUNT> konvertovanÃ½ch dokumentov";
-    Text[ hungarian ] = "<COUNT> dokumentum Ã¡talakÃ­tva";
-    Text[ slovenian ] = "<COUNT> dokumentov pretvorjenih";
+    Text [ de ] = "<COUNT> Dokumente konvertiert";
+    Text [ en-US ] = "<COUNT> documents converted";
 };
 
 
 
 String sLogfileHelpText
 {
-    Text = "In Ihrem Arbeitsverzeichnis wird eine Logdatei angelegt";
-    Text[English] = "A Logfile will be created within your Working Directory";
-    Text[ English_us ] = "A log file will be created in your work directory";
-    Text[ portuguese ] = "O ficheiro de registo será criado na sua pasta de trabalho.";
-    Text[ russian ] = "Â âàøåì ğàáî÷åì êàòàëîãå áóäåò ñîçäàí æóğíàë";
-    Text[ greek ] = "¸íá áñ÷åßï êáôáãñáöŞò èá äçìéïõñãçèåß óôïí êáôÜëïãï åñãáóßáò";
-    Text[ dutch ] = "In uw werkdirectory wordt een logbestand aangemaakt.";
-    Text[ french ] = "Un fichier journal va être créé dans votre dossier de travail.";
-    Text[ spanish ] = "Se creará un archivo log en el directorio de trabajo.";
-    Text[ finnish ] = "Lokitiedosto luodaan työhakemistoon";
-    Text[ italian ] = "Il programma crea un file di log nella vostra cartella di lavoro.";
-    Text[ danish ] = "Der oprettes en logfil i arbejdsmappen";
-    Text[ swedish ] = "En loggfil kommer att skapas i din arbetskatalog";
-    Text[ polish ] = "W katalogu roboczym zostanie utworzony plik dziennika.";
-    Text[ portuguese_brazilian ] = "Um arquivo de registro será criado no seu diretório de trabalho.";
-    Text[ japanese ] = "ãƒ¯ãƒ¼ã‚­ãƒ³ã‚°ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã«ãƒ­ã‚°ãƒ•ã‚¡ã‚¤ãƒ«ãŒæ ¼ç´ã•ã‚Œã¾ã™ã€‚";
-    Text[ korean ] = "ì‘ì—… ë””ë ‰í† ë¦¬ì—ì„œ ë¡œê·¸ íŒŒì¼ì´ ë§Œë“¤ì–´ì§‘ë‹ˆë‹¤.";
-    Text[ chinese_simplified ] = "åœ¨æ‚¨çš„å·¥ä½œç›®å½•å†…æ–°å»ºä¸€ä¸ªæ—¥å¿—æ–‡ä»¶ã€‚";
-    Text[ chinese_traditional ] = "åœ¨æ‚¨çš„å·¥ä½œç›®éŒ„å…§æ–°å¢ä¸€å€‹æ—¥èªŒæª”æ¡ˆã€‚";
-    Text[ turkish ] = "Log belgesi çalışma dizininizde yaratılacaktır";
-    Text[ arabic ] = "A Logfile will be created within your Working Directory";
-    Text[ catalan ] = "El fitxer de registre es crearà al directori de treball";
-    Text[ thai ] = "à¹à¸Ÿà¹‰à¸¡à¸¥à¸‡à¸šà¸±à¸™à¸—à¸¶à¸à¹€à¸‚à¹‰à¸²-à¸­à¸­à¸à¸ˆà¸°à¸–à¸¹à¸à¸ªà¸£à¹‰à¸²à¸‡à¹ƒà¸™à¹„à¸”à¹€à¸£à¹‡à¸à¸—à¸­à¸£à¸µà¹ˆà¸à¸²à¸£à¸—à¸³à¸‡à¸²à¸™à¸‚à¸­à¸‡à¸„à¸¸à¸“";
-    Text[ czech ] = "Soubor se zÃ¡znamem bude vytvoÅ™en ve vaÅ¡em pracovnÃ­m adresÃ¡Å™i";
-    Text[ hebrew ] = "â€®×§×•×‘×¥ ××¢×§×‘ ×™×•×¦×¨ ×‘×¡×¤×¨×™×” ×”× ×•×›×—×™×ªâ€¬";
-    Text[ hindi ] = "à¤†à¤ªà¤•à¤¾ à¤•à¤¾à¤°à¥à¤¯ à¤¡à¥ˆà¤°à¤•à¥à¤Ÿà¤°à¥€ à¤®à¥‡à¤‚ à¤²à¥‰à¤— à¤«à¤¾à¤‡à¤² à¤•à¥‹ à¤‰à¤¤à¥à¤ªà¤¨à¥à¤¨ à¤•à¤¿à¤¯à¤¾ à¤œà¤¾à¤¯à¥‡à¤—à¤¾";
-    Text[ slovak ] = "SÃºbor so zÃ¡znamom bude vytvorenÃ½ vo VaÅ¡om pracovnom adresÃ¡ri";
-    Text[ hungarian ] = "A munkakÃ¶nyvtÃ¡rba naplÃ³fÃ¡jl kÃ©szÃ¼l.";
-    Text[ slovenian ] = "Dnevnik bo ustvarjen v vaÅ¡i delovni mapi";
+    Text [ de ] = "In Ihrem Arbeitsverzeichnis wird eine Logdatei angelegt";
+    Text [ en-US ] = "A log file will be created in your work directory";
 };
 
 
 String sshowLogfile
 {
-    Text = "Logdatei anzeigen";
-    Text[English] = "Show Logfile";
-    Text[ English_us ] = "Show log file";
-    Text[ portuguese ] = "Show Logfile";
-    Text[ russian ] = "Show Logfile";
-    Text[ greek ] = "Show Logfile";
-    Text[ dutch ] = "Toon Logfile";
-    Text[ french ] = "Afficher le fichier journal";
-    Text[ spanish ] = "Mostrar archivo log";
-    Text[ finnish ] = "Show Logfile";
-    Text[ italian ] = "Mostra file log";
-    Text[ danish ] = "Vis logfil";
-    Text[ swedish ] = "Visa loggfil";
-    Text[ polish ] = "Show Logfile";
-    Text[ portuguese_brazilian ] = "Mostrar o arquivo de log";
-    Text[ japanese ] = "Log file ã®è¡¨ç¤º";
-    Text[ korean ] = "ë¡œê·¸ íŒŒì¼ í‘œì‹œ";
-    Text[ chinese_simplified ] = "æ˜¾ç¤ºæ—¥å¿—æ–‡ä»¶";
-    Text[ chinese_traditional ] = "é¡¯ç¤ºæ—¥èªŒæª”æ¡ˆ";
-    Text[ turkish ] = "Günlük dosyasını göster";
-    Text[ arabic ] = "Show Logfile";
-    Text[ catalan ] = "Show Logfile";
-    Text[ thai ] = "Show Logfile";
-    Text[ czech ] = "Zobrazit soubor se zÃ¡znamem";
-    Text[ hebrew ] = "â€®×”×¦×’ ×§×‘×¦×™ ××¢×§×‘â€¬";
-    Text[ hindi ] = "Show log file";
-    Text[ slovak ] = "ZobraziÅ¥ sÃºbor so zÃ¡znamom (log)";
-    Text[ hungarian ] = "NaplÃ³fÃ¡jl megjelenÃ­tÃ©se";
-    Text[ slovenian ] = "PokaÅ¾i dnevniÅ¡ko datoteko";
+    Text [ de ] = "Logdatei anzeigen";
+    Text [ en-US ] = "Show log file";
 };
 
 
 String sSumInclusiveSubDir
 {
-    Text = "Es werden alle Unterverzeichnisse berücksichtigt";
-    Text[English] = "All directories will be considered";
-    Text[ English_us ] = "All subdirectories will be taken into account";
-    Text[ french ] = "Tous les sous-répertoires seront pris en compte.";
-    Text[ italian ] = "Si terrà conto di tutte le sottocartelle";
-    Text[ spanish ] = "Se tendrán en cuenta todos los subdirectorios";
-    Text[ portuguese ] = "Serão considerados todos os subdirectórios!";
-    Text[ dutch ] = "Er wordt rekening gehouden met alle subdirectory's";
-    Text[ swedish ] = "Det tas hänsyn till alla underordnade kataloger";
-    Text[ greek ] = "Èá åîåôáóôïıí üëïé ïé õğïêáôÜëïãïé";
-    Text[ dutch ] = "Er wordt rekening gehouden met alle subdirectory's";
-    Text[ swedish ] = "Det tas hänsyn till alla underordnade kataloger";
-    Text[ russian ] = "Âêëş÷åíû âñå ïîäïàïêè";
-    Text[ danish ] = "Alle underkataloger medtages";
-    Text[ polish ] = "Uwzglêdnione zostan¹ wszystkie podkatalogi";
-    Text[ portuguese_brazilian ] = "Serão considerados todos os subdiretórios";
-    Text[ japanese ] = "ã™ã¹ã¦ã®ä¸‹ä½ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªãŒå¯¾è±¡ã«ãªã‚Šã¾ã™ã€‚";
-    Text[ korean ] = "ëª¨ë“  í•˜ìœ„ ë””ë ‰í† ë¦¬ê°€ ê³ ë ¤ë©ë‹ˆë‹¤.";
-    Text[ chinese_simplified ] = "åŒ…æ‹¬æ‰€æœ‰å­ç›®å½•";
-    Text[ chinese_traditional ] = "åŒ…å«æ‰€æœ‰å­ç›®éŒ„";
-    Text[ arabic ] = "ÓíÊã ãÑÇÚÇÉ ßá ÇáÏáÇÆá ÇáİÑÚíÉ";
-    Text[ turkish ] = "Bütün alt dizinler göz altında tutulacak";
-    Text[ catalan ] = "Es tindran en compte totes els subdirectoris";
-    Text[ finnish ] = "Kaikki alihakemistot huomioidaan";
-    Text[ thai ] = "à¹„à¸”à¹€à¸£à¹‡à¸à¸—à¸­à¸£à¸µà¹ˆà¸¢à¹ˆà¸­à¸¢à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”à¸ˆà¸°à¸–à¸¹à¸à¸à¸´à¸ˆà¸²à¸£à¸“à¸²";
-    Text[ czech ] = "VÅ¡echny podadresÃ¡Å™e budou vzaty v potaz";
-    Text[ hebrew ] = "â€®×”×¤×¢×•×œ×” ×ª×•×¤×¢×œ ×¢×œ ×›×œ ×ª×ª×™ ×”×¡×¤×¨×™×•×ªâ€¬";
-    Text[ hindi ] = "à¤¸à¤¬ à¤…à¤§à¥€à¤¨ à¤¡à¥ˆà¤°à¤•à¥à¤Ÿà¤°à¤¿à¤¯à¥‹à¤‚ à¤•à¥‹ à¤¹à¤¿à¤¸à¤¾à¤¬ à¤®à¥‡à¤‚ à¤²à¤¿à¤¯à¤¾ à¤œà¤¾à¤à¤—à¤¾";
-    Text[ slovak ] = "VÅ¡etky adresÃ¡re budÃº spracovanÃ©.";
-    Text[ hungarian ] = "Minden alkÃ¶nyvtÃ¡rat szÃ¡mÃ­tÃ¡sba vesz";
-    Text[ slovenian ] = "UpoÅ¡tevane bodo vse podmape";
+    Text [ de ] = "Es werden alle Unterverzeichnisse berücksichtigt";
+    Text [ en-US ] = "All subdirectories will be taken into account";
 };
 
 String sSumSaveDokumente
 {
-    Text = "Exportiert werden sie in das folgende Verzeichnis:";
-    Text[English] = "These will be exported in the following directory:";
-    Text[ English_us ] = "These will be exported to the following directory:";
-    Text[ french ] = "Ils seront exportés vers le répertoire suivant :";
-    Text[ italian ] = "L'esportazione avverà nella seguente cartella:";
-    Text[ spanish ] = "Se exportarán al siguiente directorio:";
-    Text[ portuguese ] = "Estes serão exportados para o seguinte directório:";
-    Text[ dutch ] = "Ze worden geëxporteerd naar de volgende directory:";
-    Text[ swedish ] = "De exporteras till följande katalog:";
-    Text[ greek ] = "Ç åîáãùãŞ ôïõò èá ãßíåé óôïí åîŞò êáôÜëïãï:";
-    Text[ dutch ] = "Ze worden geëxporteerd naar de volgende directory:";
-    Text[ swedish ] = "De exporteras till följande katalog:";
-    Text[ russian ] = "İêñïîğò â ñëåäóşùèé êàòàëîã:";
-    Text[ danish ] = "Disse eksporteres til følgende katalog:";
-    Text[ polish ] = "Zostan¹ wyeksportowane do nastêpuj¹cego katalogu:";
-    Text[ portuguese_brazilian ] = "Estes serão exportados para o seguinte diretório:";
-    Text[ japanese ] = "æ¬¡ã®ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã«ã‚¨ã‚¯ã‚¹ãƒãƒ¼ãƒˆã•ã‚Œã¾ã™ï½¡";
-    Text[ korean ] = "ì´ íŒŒì¼ ë° ë¬¸ì„œëŠ” ë‹¤ìŒì˜ ë””ë ‰í† ë¦¬ë¡œ ë‚´ë³´ë‚´ì§‘ë‹ˆë‹¤:";
-    Text[ chinese_simplified ] = "è¾“å‡ºè‡³ä¸‹åˆ—ç›®å½•ï¼š";
-    Text[ chinese_traditional ] = "åŒ¯å…¥åˆ°ä»¥ä¸‹ç›®éŒ„ï¼š";
-    Text[ arabic ] = "Óæİ íÊã ÊÕÏíÑåÇ Åáì ÇáÏáíá ÇáÊÇáí:";
-    Text[ turkish ] = "Bu dosyaların dışa aktarılacağı hedef dizin:";
-    Text[ catalan ] = "S'exportaran al següent directori:";
-    Text[ finnish ] = "Kohteet viedään seuraavaan hakemistoon:";
-    Text[ thai ] = "à¹€à¸«à¸¥à¹ˆà¸²à¸™à¸µà¹‰à¸ˆà¸°à¸–à¸¹à¸à¸ªà¹ˆà¸‡à¸­à¸­à¸à¹„à¸›à¸¢à¸±à¸‡à¹„à¸”à¹€à¸£à¹‡à¸à¸—à¸­à¸£à¸µà¹ˆà¸•à¹ˆà¸­à¹„à¸›à¸™à¸µà¹‰:";
-    Text[ czech ] = "Budou exportovÃ¡ny do tohoto adresÃ¡Å™e:";
-    Text[ hebrew ] = "â€®××œ×” ×™×™×•×¦××• ×œ×¡×¤×¨×™×” ×”×‘××”:â€¬";
-    Text[ hindi ] = "à¤‡à¤¨à¤•à¥‹ à¤¨à¤¿à¤®à¥à¤¨à¤²à¤¿à¤–à¤¿à¤¤ à¤¡à¥ˆà¤°à¤•à¥à¤Ÿà¤°à¥€ à¤¸à¥‡ à¤¨à¤¿à¤°à¥à¤¯à¤¾à¤¤ à¤•à¤¿à¤¯à¤¾ à¤œà¤¾à¤¯à¥‡à¤—à¤¾:";
-    Text[ slovak ] = "Tieto budÃº exportovanÃ© do nasledujÃºceho adresÃ¡ra:";
-    Text[ hungarian ] = "Ezek a kÃ¶vetkezÅ‘ kÃ¶nyvtÃ¡rba lesznek exportÃ¡lva:";
-    Text[ slovenian ] = "Te datoteke bodo izvoÅ¾ene v naslednjo mapo:";
+    Text [ de ] = "Exportiert werden sie in das folgende Verzeichnis:";
+    Text [ en-US ] = "These will be exported to the following directory:";
 };
 
 
 String sSumSOTextDocuments
 {
-    Text = "Alle %PRODUCTNAME Textdokumente aus dem folgenden Verzeichnis werden importiert:";
-    Text[English] = "All %PRODUCTNAME text documents in the following directory will be imported:";
-    Text[ English_us ] = "All %PRODUCTNAME text documents contained in the following directory will be imported:";
-    Text[ french ] = "Les documents texte %PRODUCTNAME contenus dans le répertoire suivant vont être importés :";
-    Text[ italian ] = "Vengono importati tutti i documenti di testo %PRODUCTNAME dalla cartella seguente:";
-    Text[ spanish ] = "Se importarán todos los documentos de texto de %PRODUCTNAME desde el siguiente directorio:";
-    Text[ portuguese ] = "Todos os documentos de texto do %PRODUCTNAME serão importados do seguinte directório:";
-    Text[ dutch ] = "Alle %PRODUCTNAME teksten uit de volgende directory worden geïmporteerd:";
-    Text[ swedish ] = "Alla %PRODUCTNAME textdokument som finns i följande katalog importeras:";
-    Text[ greek ] = "Èá åéóá÷èïıí üëá ôá İããñáöá êåéìİíïõ %PRODUCTNAME ğïõ ğåñéİ÷ïíôáé óôïí ğáñáêÜôù êáôÜëïãï:";
-    Text[ dutch ] = "Alle %PRODUCTNAME teksten uit de volgende directory worden geïmporteerd:";
-    Text[ swedish ] = "Alla %PRODUCTNAME textdokument som finns i följande katalog importeras:";
-    Text[ russian ] = "Áóäóò èìïîğòèğîâàíû âñå òåêñòîâûå äîêóìåíòû %PRODUCTNAME èç ñëåäóşùåãî êàòàëîãà:";
-    Text[ danish ] = "Alle %PRODUCTNAME-tekstdokumenter i følgende katalog vil blive importeret:";
-    Text[ polish ] = "Importowane bêd¹ wszystkie dokumenty tekstowe programu %PRODUCTNAME z nastêpuj¹cego katalogu:";
-    Text[ portuguese_brazilian ] = "Todos os documentos de texto do %PRODUCTNAME contidos no seguinte diretório serão importados:";
-    Text[ japanese ] = "ã™ã¹ã¦ã® %PRODUCTNAME æ–‡æ›¸ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã¯æ¬¡ã®ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‹ã‚‰ã‚¤ãƒ³ãƒãƒ¼ãƒˆã•ã‚Œã¾ã™ã€‚";
-    Text[ korean ] = "ë‹¤ìŒ ë””ë ‰í† ë¦¬ì—ì„œ ëª¨ë“  %PRODUCTNAMEì„(ë¥¼) ê°€ì ¸ì˜µë‹ˆë‹¤:";
-    Text[ chinese_simplified ] = "ä»ä»¥ä¸‹çš„ç›®å½•ä¸­è¾“å…¥å…¨éƒ¨çš„ %PRODUCTNAME æ–‡æœ¬æ–‡æ¡£ï¼š";
-    Text[ chinese_traditional ] = "å¾ä¸‹åˆ—ç›®éŒ„åŒ¯å…¥å…¨éƒ¨çš„ %PRODUCTNAME æ–‡å­—æ–‡ä»¶ï¼š";
-    Text[ arabic ] = "Óæİ íÊã ÇÓÊíÑÇÏ ßá %1 ãä ÇáÏáíá ÇáÊÇáí:";
-    Text[ turkish ] = "İçe aktarılacak tüm metin şablonlarını içeren dizin:";
-    Text[ catalan ] = "S'importaran tots els documents %PRODUCTNAME Text del següent directori:";
-    Text[ finnish ] = "Kaikki seuraavassa hakemistossa olevat %PRODUCTNAMEn tekstiasiakirjat tuodaan:";
-    Text[ thai ] = "à¹€à¸­à¸à¸ªà¸²à¸£à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡ %PRODUCTNAME à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”à¸—à¸µà¹ˆà¸šà¸£à¸£à¸ˆà¸¸à¹ƒà¸™à¹„à¸”à¹€à¸£à¹‡à¸à¸—à¸­à¸£à¸µà¹ˆà¸•à¹ˆà¸­à¹„à¸›à¸™à¸µà¹‰à¸ˆà¸°à¸–à¸¹à¸à¸™à¸³à¹€à¸‚à¹‰à¸²:";
-    Text[ czech ] = "VÅ¡echny textovÃ© dokumenty %PRODUCTNAME obsaÅ¾enÃ© v tomto adresÃ¡Å™i budou importovÃ¡ny: ";
-    Text[ hebrew ] = "â€®×›×œ ××¡××›×™ ×”×˜×§×¡×˜ ×©×œ %PRODUCTNAME ×‘×¡×¤×¨×™×•×ª ×”×‘××•×ª ×™×™×•×‘××•:â€¬";
-    Text[ hindi ] = "à¤¨à¤¿à¤®à¥à¤¨à¤²à¤¿à¤–à¤¿à¤¤ à¤¡à¥ˆà¤°à¤•à¥à¤Ÿà¤°à¥€ à¤®à¥‡à¤‚ à¤°à¤¹à¤¨à¥‡à¤µà¤¾à¤²à¤¾ à¤¸à¤¬ %PRODUCTNAME à¤Ÿà¥‡à¤•à¥à¤¸à¥à¤Ÿà¥ à¤²à¥‡à¤–à¤ªà¤¤à¥à¤°à¥‹à¤‚ à¤•à¥‹ à¤†à¤¯à¤¾à¤¤ à¤•à¤¿à¤¯à¤¾ à¤œà¤¾à¤¯à¥‡à¤—à¤¾:";
-    Text[ slovak ] = "VÅ¡etky textovÃ© dokumenty %PRODUCTNAME obsiahnutÃ© v nasledujÃºcom adresÃ¡ri budÃº importovanÃ©";
-    Text[ hungarian ] = "A kÃ¶vetkezÅ‘ kÃ¶nyvtÃ¡rban talÃ¡lhatÃ³ Ã¶sszes %PRODUCTNAME-szÃ¶vegesdokumentum importÃ¡lÃ¡sa kÃ¶vetkezik:";
-    Text[ slovenian ] = "UvoÅ¾eni bodo vsi dokumenti z besedilom programa %PRODUCTNAME, ki so v mapi:";
+    Text [ de ] = "Alle %PRODUCTNAME Textdokumente aus dem folgenden Verzeichnis werden importiert:";
+    Text [ en-US ] = "All %PRODUCTNAME text documents contained in the following directory will be imported:";
 };
 
 
 String sSumSOTableDocuments
 {
-    Text = "Alle %PRODUCTNAME Tabellendokumente aus dem folgenden Verzeichnis werden importiert:";
-    Text[English] = "All %PRODUCTNAME table documents in the following directory will be imported:";
-    Text[ English_us ] = "All %PRODUCTNAME spreadsheets contained in the following directory will be imported:";
-    Text[ french ] = "Les classeurs %PRODUCTNAME contenus dans le répertoire suivant vont être importés :";
-    Text[ italian ] = "Vengono importati tutti i fogli elettronici %PRODUCTNAME dalla cartella seguente:";
-    Text[ spanish ] = "Se importarán todas las hojas de cálculo de %PRODUCTNAME del siguiente directorio:";
-    Text[ portuguese ] = "Todas as folhas de cálculo do %PRODUCTNAME serão importadas do seguinte directório:";
-    Text[ dutch ] = "Alle %PRODUCTNAME werkbladen uit de volgende directory worden geïmporteerd:";
-    Text[ swedish ] = "Alla %PRODUCTNAME tabelldokument som finns i följande katalog importeras:";
-    Text[ greek ] = "Èá åéóá÷èïıí üëá ôá õğïëïãéóôéêÜ öıëëá %PRODUCTNAME ğïõ ğåñéİ÷ïíôáé óôïí ğáñáêÜôù êáôÜëïãï:";
-    Text[ dutch ] = "Alle %PRODUCTNAME werkbladen uit de volgende directory worden geïmporteerd:";
-    Text[ swedish ] = "Alla %PRODUCTNAME tabelldokument som finns i följande katalog importeras:";
-    Text[ russian ] = "Áóäóò èìïîğòèğîâàíû âñå äîêóìåíòû ıëåêòğîííûõ òàáëèö %PRODUCTNAME èç ñëåäóşùåãî êàòàëîãà:";
-    Text[ danish ] = "Alle %PRODUCTNAME-regneark i følgende katalog vil blive importeret:";
-    Text[ polish ] = "Importowane bêd¹ wszystkie arkusze kalkulacyjne programu %PRODUCTNAME z nastêpuj¹cego katalogu:";
-    Text[ portuguese_brazilian ] = "Todas as planilhas do %PRODUCTNAME contidas no seguinte diretório serão importadas:";
-    Text[ japanese ] = "ã™ã¹ã¦ã® %PRODUCTNAME è¡¨è¨ˆç®—ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã¯æ¬¡ã®ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‹ã‚‰ã‚¤ãƒ³ãƒãƒ¼ãƒˆã•ã‚Œã¾ã™ã€‚";
-    Text[ korean ] = "ë‹¤ìŒ ë””ë ‰í† ë¦¬ì— ìˆ˜ë¡ëœ ëª¨ë“  %PRODUCTNAME ìŠ¤í”„ë ˆë“œì‹œíŠ¸ë¥¼ ê°€ì ¸ì˜µë‹ˆë‹¤:";
-    Text[ chinese_simplified ] = "ä»ä»¥ä¸‹çš„ç›®å½•ä¸­è¾“å…¥æ‰€æœ‰ %PRODUCTNAME å·¥ä½œè¡¨æ–‡æ¡£ï¼š";
-    Text[ chinese_traditional ] = "å¾ä¸‹åˆ—ç›®éŒ„åŒ¯å…¥å…¨éƒ¨çš„ %PRODUCTNAME å·¥ä½œè¡¨æ–‡ä»¶ï¼š";
-    Text[ arabic ] = "Óæİ íÊã ÇÓÊíÑÇÏ ßá %1 ãä ÇáÏáíá ÇáÊÇáí:";
-    Text[ turkish ] = "İçe aktarılacak tüm tablo şablonlarını içeren dizin:";
-    Text[ catalan ] = "S'importaran tots els documents %PRODUCTNAME Taula del següent directori:";
-    Text[ finnish ] = "Kaikki seuraavassa hakemistossa olevat %PRODUCTNAMEn laskentataulukot tuodaan:";
-    Text[ thai ] = "à¸à¸£à¸°à¸”à¸²à¸©à¸„à¸³à¸™à¸§à¸“ %PRODUCTNAME à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”à¸—à¸µà¹ˆà¸šà¸£à¸£à¸ˆà¸¸à¹ƒà¸™à¹„à¸”à¹€à¸£à¹‡à¸à¸—à¸­à¸£à¸µà¹ˆà¸•à¹ˆà¸­à¹„à¸›à¸™à¸µà¹‰à¸ˆà¸°à¸–à¸¹à¸à¸™à¸³à¹€à¸‚à¹‰à¸²:";
-    Text[ czech ] = "VÅ¡echny tabulky %PRODUCTNAME obsaÅ¾enÃ© v tomto adresÃ¡Å™i budou importovÃ¡ny: ";
-    Text[ hebrew ] = "â€®×›×œ ×”×’×œ×™×•× ×•×ª ×©×œ %PRODUCTNAME ×‘×¡×¤×¨×™×•×ª ×”×‘××•×ª ×™×™×•×‘××•:â€¬";
-    Text[ hindi ] = "à¤¨à¤¿à¤®à¥à¤¨à¤²à¤¿à¤–à¤¿à¤¤ à¤¡à¥ˆà¤°à¤•à¥à¤Ÿà¤°à¥€ à¤®à¥‡à¤‚ à¤°à¤¹à¤¨à¥‡à¤µà¤¾à¤²à¤¾ à¤¸à¤¬ %PRODUCTNAME à¤¸à¥à¤ªà¥à¤°à¥‡à¤¡à¤¶à¥€à¤Ÿà¥à¤¸ à¤•à¥‹ à¤†à¤¯à¤¾à¤¤ à¤•à¤¿à¤¯à¤¾ à¤œà¤¾à¤¯à¥‡à¤—à¤¾:";
-    Text[ slovak ] = " VÅ¡etky zoÅ¡ity %PRODUCTNAME obsiahnutÃ© v nasledujÃºcom adresÃ¡ri budÃº importovanÃ©";
-    Text[ hungarian ] = "A kÃ¶vetkezÅ‘ kÃ¶nyvtÃ¡rban talÃ¡lhatÃ³ Ã¶sszes %PRODUCTNAME-munkafÃ¼zet importÃ¡lÃ¡sa kÃ¶vetkezik:";
-    Text[ slovenian ] = "UvoÅ¾ene bodo vse preglednice programa %PRODUCTNAME, ki so v mapi:";
+    Text [ de ] = "Alle %PRODUCTNAME Tabellendokumente aus dem folgenden Verzeichnis werden importiert:";
+    Text [ en-US ] = "All %PRODUCTNAME spreadsheets contained in the following directory will be imported:";
 };
 
 
 String sSumSODrawDocuments
 {
-    Text = "Alle %PRODUCTNAME Zeichnungs- und Präsentationsdokumente aus dem folgenden Verzeichnis werden importiert:";
-    Text[English] = "All %PRODUCTNAME drawing and impress documents in the following directory will be imported:";
-    Text[ English_us ] = "All %PRODUCTNAME drawing and presentation documents contained in the following directory will be imported:";
-    Text[ french ] = "Les dessins et présentations %PRODUCTNAME contenus dans le répertoire suivant vont être importés :";
-    Text[ italian ] = "Vengono importati tutti i disegni e le presentazioni %PRODUCTNAME dalla cartella seguente:";
-    Text[ spanish ] = "Se importarán todos los documentos de presentación y dibujo de %PRODUCTNAME desde el siguiente directorio:";
-    Text[ portuguese ] = "Todos os desenhos e apresentações do %PRODUCTNAME serão importados do seguinte directório:";
-    Text[ dutch ] = "Alle %PRODUCTNAME tekening- en presentatiedocumenten uit de volgende directory worden geïmporteerd:";
-    Text[ swedish ] = "Alla %PRODUCTNAME tecknings- och presentationsdokument som finns i följande katalog importeras:";
-    Text[ greek ] = "Èá åéóá÷èïıí üëá ôá İããñáöá ó÷åäßáóçò êáé ğáñïõóßáóçò %PRODUCTNAME ğïõ ğåñéİ÷ïíôáé óôïí ğáñáêÜôù êáôÜëïãï:";
-    Text[ dutch ] = "Alle %PRODUCTNAME tekening- en presentatiedocumenten uit de volgende directory worden geïmporteerd:";
-    Text[ swedish ] = "Alla %PRODUCTNAME tecknings- och presentationsdokument som finns i följande katalog importeras:";
-    Text[ russian ] = "Áóäóò èìïîğòèğîâàíû âñå ğèñóíêè è ïğåçåíòàöèè %PRODUCTNAME èç ñëåäóşùåãî êàòàëîãà:";
-    Text[ danish ] = "Alle %PRODUCTNAME-tegnings- og præsentationsdokumenter i følgende katalog vil blive importeret:";
-    Text[ polish ] = "Importowane bêd¹ wszystkie dokumenty rysunkowe i prezentacyjne programu %PRODUCTNAME z nastêpuj¹cego katalogu:";
-    Text[ portuguese_brazilian ] = "Todos os documentos de desenhos e de apresentações do %PRODUCTNAME contidos no seguinte diretório serão importados:";
-    Text[ japanese ] = "ã™ã¹ã¦ã® %PRODUCTNAME å›³å½¢æç”»ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã¨ãƒ—ãƒ¬ã‚¼ãƒ³ãƒ†ãƒ¼ã‚·ãƒ§ãƒ³ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã¯æ¬¡ã®ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‹ã‚‰ã‚¤ãƒ³ãƒãƒ¼ãƒˆã•ã‚Œã¾ã™ã€‚";
-    Text[ korean ] = "ë‹¤ìŒ ë””ë ‰í† ë¦¬ì— ìˆ˜ë¡ëœ ëª¨ë“  %PRODUCTNAMEì˜ ê·¸ë¦¬ê¸° ë° í”„ë ˆì  í…Œì´ì…˜ ë¬¸ì„œë¥¼ ê°€ì ¸ì˜µë‹ˆë‹¤:";
-    Text[ chinese_simplified ] = "ä»ä»¥ä¸‹çš„ç›®å½•ä¸­è¾“å…¥æ‰€æœ‰ %PRODUCTNAME ç»˜å›¾æ–‡æ¡£å’Œæ¼”ç¤ºæ–‡ç¨¿æ–‡æ¡£ï¼š";
-    Text[ chinese_traditional ] = "å¾ä¸‹åˆ—ç›®éŒ„åŒ¯å…¥å…¨éƒ¨çš„ %PRODUCTNAME ç¹ªåœ–åŠç°¡å ±æ–‡ä»¶ï¼š";
-    Text[ arabic ] = "Óæİ íÊã ÇÓÊíÑÇÏ ßá %1 ãä ÇáÏáíá ÇáÊÇáí:";
-    Text[ turkish ] = "İçe aktarılacak tüm çizim/sunu şablonlarını içeren dizin:";
-    Text[ catalan ] = "S'importaran tots els documents %PRODUCTNAME Impress i Dibuix del següent directori:";
-    Text[ finnish ] = "Kaikki seuraavassa hakemistossa olevat %PRODUCTNAMEn piirros- ja esitysasiakirjat tuodaan:";
-    Text[ thai ] = "à¹€à¸­à¸à¸ªà¸²à¸£à¸à¸²à¸£à¸§à¸²à¸”à¸£à¸¹à¸›à¹à¸¥à¸°à¸à¸²à¸£à¸™à¸³à¹€à¸ªà¸™à¸­ %PRODUCTNAME à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”à¸—à¸µà¹ˆà¸šà¸£à¸£à¸ˆà¸¸à¹ƒà¸™à¹„à¸”à¹€à¸£à¹‡à¸à¸—à¸­à¸£à¸µà¹ˆà¸•à¹ˆà¸­à¹„à¸›à¸™à¸µà¹‰à¸ˆà¸°à¸–à¸¹à¸à¸™à¸³à¹€à¸‚à¹‰à¸²:";
-    Text[ czech ] = "VÅ¡echny prezentace a kresby %PRODUCTNAME obsaÅ¾enÃ© v tomto adresÃ¡Å™i budou importovÃ¡ny: ";
-    Text[ hebrew ] = "â€®×›×œ ×”×¦×™×•×¨×™× ×•×”××¦×’×•×ª ×©×œ %PRODUCTNAME  ×‘×¡×¤×¨×™×•×ª ×”×‘××•×ª ×™×™×•×‘××•:â€¬";
-    Text[ hindi ] = "à¤¨à¤¿à¤®à¥à¤¨à¤²à¤¿à¤–à¤¿à¤¤ à¤¡à¥ˆà¤°à¤•à¥à¤Ÿà¤°à¥€ à¤®à¥‡à¤‚ à¤°à¤¹à¤¨à¥‡à¤µà¤¾à¤²à¤¾ à¤¸à¤¬ %PRODUCTNAME à¤°à¥‡à¤–à¤¾à¤šà¤¿à¤¤à¥à¤° à¤”à¤° à¤ªà¥à¤°à¤¸à¥à¤¤à¥à¤¤à¤¿ à¤²à¥‡à¤–à¤ªà¤¤à¥à¤°à¥‹à¤‚ à¤•à¥‹ à¤†à¤¯à¤¾à¤¤ à¤•à¤¿à¤¯à¤¾ à¤œà¤¾à¤¯à¥‡à¤—à¤¾:";
-    Text[ slovak ] = "VÅ¡etky kresby a prezentÃ¡cie %PRODUCTNAME obsiahnutÃ© v nasledujÃºcom adresÃ¡ri budÃº importovanÃ©:";
-    Text[ hungarian ] = "A kÃ¶vetkezÅ‘ kÃ¶nyvtÃ¡rban talÃ¡lhatÃ³ Ã¶sszes %PRODUCTNAME-rajz Ã©s -bemutatÃ³ importÃ¡lÃ¡sa kÃ¶vetkezik:";
-    Text[ slovenian ] = "UvoÅ¾eni bodo vsi dokumenti z risbami in predstavitvami programa %PRODUCTNAME, ki so v mapi:";
+    Text [ de ] = "Alle %PRODUCTNAME Zeichnungs- und Präsentationsdokumente aus dem folgenden Verzeichnis werden importiert:";
+    Text [ en-US ] = "All %PRODUCTNAME drawing and presentation documents contained in the following directory will be imported:";
 };
 
 
 String sSumSOMathDocuments
 {
-    Text = "Alle %PRODUCTNAME Formeldokumente aus dem folgenden Verzeichnis werden importiert:";
-    Text[English] = "All %PRODUCTNAME formula documents in the following directory will be imported:";
-    Text[ English_us ] = "All %PRODUCTNAME formula documents contained in the following directory will be imported:";
-    Text[ french ] = "Les formules %PRODUCTNAME contenues dans le répertoire suivant vont être importées :";
-    Text[ italian ] = "Vengono importate tutte le formule %PRODUCTNAME dalla cartella seguente:";
-    Text[ spanish ] = "Se importarán todos los documentos de fórmula de %PRODUCTNAME desde el siguiente directorio:";
-    Text[ portuguese ] = "Todas as fórmulas do %PRODUCTNAME serão importadas do seguinte directório:";
-    Text[ dutch ] = "Alle %PRODUCTNAME formuledocumenten uit de volgende directory worden geïmporteerd:";
-    Text[ swedish ] = "Alla %PRODUCTNAME formeldokument som finns i följande katalog importeras:";
-    Text[ greek ] = "Èá åéóá÷èïıí üëá ôá İããñáöá ôığùí %PRODUCTNAME ğïõ ğåñéİ÷ïíôáé óôïí ğáñáêÜôù êáôÜëïãï:";
-    Text[ dutch ] = "Alle %PRODUCTNAME formuledocumenten uit de volgende directory worden geïmporteerd:";
-    Text[ swedish ] = "Alla %PRODUCTNAME formeldokument som finns i följande katalog importeras:";
-    Text[ russian ] = "Áóäóò èìïîğòèğîâàíû âñå äîêóìåíòû ôîğìóë %PRODUCTNAME èç ñëåäóşùåãî êàòàëîãà:";
-    Text[ danish ] = "Alle %PRODUCTNAME-formeldokumenter i følgende katalog vil blive importeret:";
-    Text[ polish ] = "Importowane bêd¹ wszystkie dokumenty formu³ programu %PRODUCTNAME z nastêpuj¹cego katalogu:";
-    Text[ portuguese_brazilian ] = "Todos os documentos de fórmulas do %PRODUCTNAME contidos no seguinte diretório serão importados:";
-    Text[ japanese ] = "ã™ã¹ã¦ã® %PRODUCTNAME æ•°å¼ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã¯æ¬¡ã®ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‹ã‚‰ã‚¤ãƒ³ãƒãƒ¼ãƒˆã•ã‚Œã¾ã™ã€‚";
-    Text[ korean ] = "ë‹¤ìŒ ë””ë ‰í† ë¦¬ì—ì„œ ëª¨ë“  %PRODUCTNAMEì„(ë¥¼) ê°€ì ¸ì˜µë‹ˆë‹¤:";
-    Text[ chinese_simplified ] = "ä»ä»¥ä¸‹çš„ç›®å½•ä¸­è¾“å…¥æ‰€æœ‰ %PRODUCTNAME å…¬å¼æ–‡æ¡£ï¼š";
-    Text[ chinese_traditional ] = "å¾ä¸‹åˆ—ç›®éŒ„åŒ¯å…¥å…¨éƒ¨çš„ %PRODUCTNAME å…¬å¼æ–‡ä»¶ï¼š";
-    Text[ arabic ] = "Óæİ íÊã ÇÓÊíÑÇÏ ßá %1 ãä ÇáÏáíá ÇáÊÇáí:";
-    Text[ turkish ] = "İçe aktarılacak tüm formül şablonlarını içeren dizin:";
-    Text[ catalan ] = "S'importaran tots els documents %PRODUCTNAME Fórmula del següent directori:";
-    Text[ finnish ] = "Kaikki seuraavassa hakemistossa olevat %PRODUCTNAMEn kaava-asiakirjat tuodaan:";
-    Text[ thai ] = "à¹€à¸­à¸à¸ªà¸²à¸£à¸ªà¸¹à¸•à¸£à¸„à¸³à¸™à¸§à¸“ %PRODUCTNAME à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”à¸—à¸µà¹ˆà¸šà¸£à¸£à¸ˆà¸¸à¹ƒà¸™à¹„à¸”à¹€à¸£à¹‡à¸à¸—à¸­à¸£à¸µà¹ˆà¸•à¹ˆà¸­à¹„à¸›à¸™à¸µà¹‰à¸ˆà¸°à¸–à¸¹à¸à¸™à¸³à¹€à¸‚à¹‰à¸²:";
-    Text[ czech ] = "VÅ¡echny vzorce %PRODUCTNAME obsaÅ¾enÃ© v tomto adresÃ¡Å™i budou importovÃ¡ny: ";
-    Text[ hebrew ] = "â€®×›×œ ××¡××›×™ ×”× ×•×¡×—×” ×©×œ %PRODUCTNAME ×‘×¡×¤×¨×™×•×ª ×”×‘××•×ª ×™×™×•×‘××•:â€¬";
-    Text[ hindi ] = "à¤¨à¤¿à¤®à¥à¤¨à¤²à¤¿à¤–à¤¿à¤¤ à¤¡à¥ˆà¤°à¤•à¥à¤Ÿà¤°à¥€ à¤®à¥‡à¤‚ à¤°à¤¹à¤¨à¥‡à¤µà¤¾à¤²à¤¾ à¤¸à¤¬ %PRODUCTNAME à¤¸à¥‚à¤¤à¥à¤° à¤²à¥‡à¤–à¤ªà¤¤à¥à¤°à¥‹à¤‚ à¤•à¥‹ à¤†à¤¯à¤¾à¤¤ à¤•à¤¿à¤¯à¤¾ à¤œà¤¾à¤¯à¥‡à¤—à¤¾:";
-    Text[ slovak ] = "VÅ¡etky vzorce %PRODUCTNAME obsiahnutÃ© v nasledujÃºcom adresÃ¡ri budÃº importovanÃ© ";
-    Text[ hungarian ] = "A kÃ¶vetkezÅ‘ kÃ¶nyvtÃ¡rban lÃ©vÅ‘ talÃ¡lhatÃ³ %PRODUCTNAME-kÃ©plet importÃ¡lÃ¡sa kÃ¶vetkezik:";
-    Text[ slovenian ] = "UvoÅ¾eni bodo vsi dokumenti s formulami programa %PRODUCTNAME, ki so v mapi:";
+    Text [ de ] = "Alle %PRODUCTNAME Formeldokumente aus dem folgenden Verzeichnis werden importiert:";
+    Text [ en-US ] = "All %PRODUCTNAME formula documents contained in the following directory will be imported:";
 };
 
 
 String sSumSOTextTemplates
 {
-    Text = "Alle %PRODUCTNAME Textvorlagen aus dem folgenden Verzeichnis werden importiert:";
-    Text[English] = "All %PRODUCTNAME text templates in the following directory will be imported:";
-    Text[ English_us ] = "All %PRODUCTNAME text templates contained in the following directory will be imported:";
-    Text[ french ] = "Les modèles de texte %PRODUCTNAME contenus dans le répertoire suivant vont être importés :";
-    Text[ italian ] = "Vengono importati tutti i modelli di testo %PRODUCTNAME dalla cartella seguente:";
-    Text[ spanish ] = "Se importarán todas las plantillas de %PRODUCTNAME del siguiente directorio:";
-    Text[ portuguese ] = "Todos os modelos de texto do %PRODUCTNAME serão importados do seguinte directório:";
-    Text[ dutch ] = "Alle %PRODUCTNAME tekstsjablonen uit de volgende directory worden geïmporteerd:";
-    Text[ swedish ] = "Alla %PRODUCTNAME textmallar som finns i följande katalog importeras:";
-    Text[ greek ] = "Èá åéóá÷èïıí üëá ôá ğñüôõğá êåéìİíïõ %PRODUCTNAME ğïõ ğåñéİ÷ïíôáé óôïí ğáñáêÜôù êáôÜëïãï:";
-    Text[ dutch ] = "Alle %PRODUCTNAME tekstsjablonen uit de volgende directory worden geïmporteerd:";
-    Text[ swedish ] = "Alla %PRODUCTNAME textmallar som finns i följande katalog importeras:";
-    Text[ russian ] = "Áóäóò èìïîğòèğîâàíû âñå òåêñòîâûå øàáëîíû %PRODUCTNAME èç ñëåäóşùåãî êàòàëîãà:";
-    Text[ danish ] = "Alle %PRODUCTNAME-tekstskabeloner i følgende katalog vil blive importeret:";
-    Text[ polish ] = "Importowane bêd¹ wszystkie szablony tekstów programu %PRODUCTNAME z nastêpuj¹cego katalogu:";
-    Text[ portuguese_brazilian ] = "Todos os modelos de texto do %PRODUCTNAME contidos no seguinte diretório serão importados:";
-    Text[ japanese ] = "ã™ã¹ã¦ã® %PRODUCTNAME æ–‡æ›¸ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆã¯æ¬¡ã®ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‹ã‚‰ã‚¤ãƒ³ãƒãƒ¼ãƒˆã•ã‚Œã¾ã™ã€‚";
-    Text[ korean ] = "ë‹¤ìŒì˜ ë””ë ‰í† ë¦¬ì— ìˆ˜ë¡ëœ ëª¨ë“  %PRODUCTNAME í…ìŠ¤íŠ¸ ë¬¸ì„œ ì„œì‹ íŒŒì¼ì„ ê°€ì ¸ì˜µë‹ˆë‹¤:";
-    Text[ chinese_simplified ] = "ä»ä»¥ä¸‹çš„ç›®å½•ä¸­è¾“å…¥æ‰€æœ‰ %PRODUCTNAME æ–‡æœ¬æ–‡æ¡£çš„æ ·å¼ï¼š";
-    Text[ chinese_traditional ] = "å¾ä¸‹åˆ—ç›®éŒ„åŒ¯å…¥å…¨éƒ¨çš„ %PRODUCTNAME æ–‡å­—æ–‡ä»¶æ¨£å¼ï¼š";
-    Text[ arabic ] = "Óæİ íÊã ÇÓÊíÑÇÏ ßá %1 ãä ÇáÏáíá ÇáÊÇáí:";
-    Text[ turkish ] = "İçe aktarılacak tüm metin şablonlarını içeren dizin:";
-    Text[ catalan ] = "S'importaran tots els documents %PRODUCTNAME Plantilla del següent directori:";
-    Text[ finnish ] = "Kaikki seuraavassa hakemistossa olevat %PRODUCTNAMEn tekstimallit tuodaan:";
-    Text[ thai ] = "à¹à¸¡à¹ˆà¹à¸šà¸šà¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡ %PRODUCTNAME à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”à¸—à¸µà¹ˆà¸šà¸£à¸£à¸ˆà¸¸à¹ƒà¸™à¹„à¸”à¹€à¸£à¹‡à¸à¸—à¸­à¸£à¸µà¹ˆà¸•à¹ˆà¸­à¹„à¸›à¸™à¸µà¹‰à¸ˆà¸°à¸–à¸¹à¸à¸™à¸³à¹€à¸‚à¹‰à¸²:";
-    Text[ czech ] = "VÅ¡echny textovÃ© Å¡ablony %PRODUCTNAME obsaÅ¾enÃ© v tomto adresÃ¡Å™i budou importovÃ¡ny: ";
-    Text[ hebrew ] = "â€®×›×œ ×ª×‘× ×™×•×ª ×”×˜×§×¡×˜ ×©×œ %PRODUCTNAME ×‘×¡×¤×¨×™×•×ª ×”×‘××•×ª ×ª×™×•×‘×× ×”:â€¬";
-    Text[ hindi ] = "à¤¨à¤¿à¤®à¥à¤¨à¤²à¤¿à¤–à¤¿à¤¤ à¤¡à¥ˆà¤°à¤•à¥à¤Ÿà¤°à¥€ à¤®à¥‡à¤‚ à¤°à¤¹à¤¨à¥‡à¤µà¤¾à¤²à¤¾ à¤¸à¤¬ %PRODUCTNAME à¤Ÿà¥‡à¤•à¥à¤¸à¥à¤Ÿà¥ à¤¨à¤®à¥‚à¤¨à¥‹à¤‚ à¤•à¥‹ à¤†à¤¯à¤¾à¤¤ à¤•à¤¿à¤¯à¤¾ à¤œà¤¾à¤¯à¥‡à¤—à¤¾:";
-    Text[ slovak ] = "VÅ¡etky textovÃ© Å¡ablÃ³ny %PRODUCTNAME obsiahnutÃ© v nasledujÃºcom adresÃ¡ri budÃº importovanÃ©:";
-    Text[ hungarian ] = "A kÃ¶vetkezÅ‘ kÃ¶nyvtÃ¡rban talÃ¡lhatÃ³ Ã¶sszes %PRODUCTNAME-szÃ¶vegsablon importÃ¡lÃ¡sa kÃ¶vetkezik:";
-    Text[ slovenian ] = "UvoÅ¾ene bodo vse predloge za besedilo programa %PRODUCTNAME, ki so v mapi:";
+    Text [ de ] = "Alle %PRODUCTNAME Textvorlagen aus dem folgenden Verzeichnis werden importiert:";
+    Text [ en-US ] = "All %PRODUCTNAME text templates contained in the following directory will be imported:";
 };
 
 
 String sSumSOTableTemplates
 {
-    Text = "Alle %PRODUCTNAME Tabellenvorlagen aus dem folgenden Verzeichnis werden importiert:";
-    Text[English] = "All %PRODUCTNAME table templates in the following directory will be imported:";
-    Text[ English_us ] = "All %PRODUCTNAME table templates contained in the following directory will be imported:";
-    Text[ french ] = "Les modèles de classeur %PRODUCTNAME contenus dans le répertoire suivant vont être importés :";
-    Text[ italian ] = "Vengono importati tutti i modelli di fogli elettronici %PRODUCTNAME dalla cartella seguente:";
-    Text[ spanish ] = "Se importarán todas las plantillas de hojas de cálculo de %PRODUCTNAME desde el siguiente directorio:";
-    Text[ portuguese ] = "Todos os modelos de tabelas do %PRODUCTNAME serão importados do seguinte directório:";
-    Text[ dutch ] = "Alle %PRODUCTNAME werkbladsjablonen uit de volgende directory worden geïmporteerd:";
-    Text[ swedish ] = "Alla %PRODUCTNAME tabellmallar som finns i följande katalog importeras:";
-    Text[ greek ] = "Èá åéóá÷èïıí üëá ôá ğñüôõğá ğßíáêá %PRODUCTNAME ğïõ ğåñéİ÷ïíôáé óôïí ğáñáêÜôù êáôÜëïãï:";
-    Text[ dutch ] = "Alle %PRODUCTNAME werkbladsjablonen uit de volgende directory worden geïmporteerd:";
-    Text[ swedish ] = "Alla %PRODUCTNAME tabellmallar som finns i följande katalog importeras:";
-    Text[ russian ] = "Áóäóò èìïîğòèğîâàíû âñå øàáëîíû ıëåêòğîííûõ òàáëèö %PRODUCTNAME èç ñëåäóşùåãî êàòàëîãà:";
-    Text[ danish ] = "Alle %PRODUCTNAME-tabelskabeloner i følgende katalog vil blive importeret:";
-    Text[ polish ] = "Importowane bêd¹ wszystkie szablony tabel programu %PRODUCTNAME z nastêpuj¹cego katalogu:";
-    Text[ portuguese_brazilian ] = "Todos os modelos de tabelas do %PRODUCTNAME contidos no seguinte diretório serão importados:";
-    Text[ japanese ] = "ã™ã¹ã¦ã® %PRODUCTNAME è¡¨è¨ˆç®—ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆã¯æ¬¡ã®ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‹ã‚‰ã‚¤ãƒ³ãƒãƒ¼ãƒˆã•ã‚Œã¾ã™ã€‚";
-    Text[ korean ] = "ë‹¤ìŒì˜ ë””ë ‰í† ë¦¬ì— ìˆ˜ë¡ëœ ëª¨ë“  %PRODUCTNAME ìŠ¤í”„ë ˆë“œì‹œíŠ¸ ì„œì‹ íŒŒì¼ì„ ê°€ì ¸ì˜µë‹ˆë‹¤:";
-    Text[ chinese_simplified ] = "ä»ä»¥ä¸‹çš„ç›®å½•ä¸­è¾“å…¥æ‰€æœ‰ %PRODUCTNAME å·¥ä½œè¡¨æ ·å¼æ–‡æ¡£ï¼š";
-    Text[ chinese_traditional ] = "å¾ä¸‹åˆ—ç›®éŒ„åŒ¯å…¥å…¨éƒ¨çš„ %PRODUCTNAME å·¥ä½œè¡¨æ¨£å¼æ–‡ä»¶ï¼š";
-    Text[ arabic ] = "Óæİ íÊã ÇÓÊíÑÇÏ ßá %1 ãä ÇáÏáíá ÇáÊÇáí:";
-    Text[ turkish ] = "İçe aktarılacak tüm tablo şablonlarını içeren dizin:";
-    Text[ catalan ] = "S'importaran totes les plantilles %PRODUCTNAME Taula del següent directori:";
-    Text[ finnish ] = "Kaikki seuraavassa hakemistossa olevat %PRODUCTNAMEn taulukkomallit tuodaan:";
-    Text[ thai ] = "à¹à¸¡à¹ˆà¹à¸šà¸šà¸•à¸²à¸£à¸²à¸‡ %PRODUCTNAME à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”à¸—à¸µà¹ˆà¸šà¸£à¸£à¸ˆà¸¸à¹ƒà¸™à¹„à¸”à¹€à¸£à¹‡à¸à¸—à¸­à¸£à¸µà¹ˆà¸•à¹ˆà¸­à¹„à¸›à¸™à¸µà¹‰à¸ˆà¸°à¸–à¸¹à¸à¸™à¸³à¹€à¸‚à¹‰à¸²:";
-    Text[ czech ] = "VÅ¡echny Å¡ablony tabulek %PRODUCTNAME obsaÅ¾enÃ© v tomto adresÃ¡Å™i budou importovÃ¡ny: ";
-    Text[ hebrew ] = "â€®×›×œ ×ª×‘× ×™×•×ª ×”×˜×‘×œ× ×©×œ %PRODUCTNAME ×‘×¡×¤×¨×™×•×ª ×”×‘××•×ª ×ª×™×•×‘×× ×”:â€¬";
-    Text[ hindi ] = "à¤¨à¤¿à¤®à¥à¤¨à¤²à¤¿à¤–à¤¿à¤¤ à¤¡à¥ˆà¤°à¤•à¥à¤Ÿà¤°à¥€ à¤®à¥‡à¤‚ à¤°à¤¹à¤¨à¥‡à¤µà¤¾à¤²à¤¾ à¤¸à¤¬ %PRODUCTNAME à¤¸à¤¾à¤°à¤£à¥€ à¤¨à¤®à¥‚à¤¨à¥‹à¤‚ à¤•à¥‹ à¤†à¤¯à¤¾à¤¤ à¤•à¤¿à¤¯à¤¾ à¤œà¤¾à¤¯à¥‡à¤—à¤¾:";
-    Text[ slovak ] = "VÅ¡etky tabuÄ¾kovÃ© Å¡ablÃ³ny %PRODUCTNAME obsiahnutÃ© v nasledujÃºcom adresÃ¡ri budÃº importovanÃ©:";
-    Text[ hungarian ] = "A kÃ¶vetkezÅ‘ kÃ¶nyvtÃ¡rban talÃ¡lhatÃ³ Ã¶sszes %PRODUCTNAME-tÃ¡blÃ¡zatsablon importÃ¡lÃ¡sa kÃ¶vetkezik:";
-    Text[ slovenian ] = "UvoÅ¾ene bodo vse predloge za tabele programa %PRODUCTNAME, ki so v mapi:";
+    Text [ de ] = "Alle %PRODUCTNAME Tabellenvorlagen aus dem folgenden Verzeichnis werden importiert:";
+    Text [ en-US ] = "All %PRODUCTNAME table templates contained in the following directory will be imported:";
 };
 
 
 String sSumSODrawTemplates
 {
-    Text = "Alle %PRODUCTNAME Zeichnungs- und Präsentationsvorlagen aus dem folgenden Verzeichnis werden importiert:";
-    Text[English] = "All %PRODUCTNAME drawing and impress templates in the following directory will be imported:";
-    Text[ English_us ] = "All %PRODUCTNAME drawing and presentation templates contained in the following directory will be imported:";
-    Text[ french ] = "Les modèles de dessin et de présentation %PRODUCTNAME contenus dans le répertoire suivant vont être importés :";
-    Text[ italian ] = "Vengono importati tutti i modelli di disegni e presentazioni %PRODUCTNAME dalla cartella seguente:";
-    Text[ spanish ] = "Todas las plantillas de presentación y dibujo de %PRODUCTNAME se importarán desde el siguiente directorio:";
-    Text[ portuguese ] = "Todos os modelos de desenhos e apresentações do %PRODUCTNAME serão importados do seguinte directório:";
-    Text[ dutch ] = "Alle %PRODUCTNAME Tekening- en Presentatiesjablonen uit de volgende directory worden geïmporteerd:";
-    Text[ swedish ] = "Alla %PRODUCTNAME tecknings- och presentationsmallar som finns i följande katalog importeras:";
-    Text[ greek ] = "Èá åéóá÷èïıí üëá ôá ğñüôõğá ó÷åäßáóçò êáé ğáñïõóßáóçò %PRODUCTNAME ğïõ ğåñéİ÷ïíôáé óôïí ğáñáêÜôù êáôÜëïãï:";
-    Text[ dutch ] = "Alle %PRODUCTNAME Tekening- en Presentatiesjablonen uit de volgende directory worden geïmporteerd:";
-    Text[ swedish ] = "Alla %PRODUCTNAME tecknings- och presentationsmallar som finns i följande katalog importeras:";
-    Text[ russian ] = "Áóäóò èìïîğòèğîâàíû âñå øàáëîíû ğèñóíêîâ è ïğåçåíòàöèé %PRODUCTNAME èç ñëåäóşùåãî êàòàëîãà:";
-    Text[ danish ] = "Alle %PRODUCTNAME-tegnings- og præsentationsskabeloner i følgende katalog vil blive importeret:";
-    Text[ polish ] = "Importowane bêd¹ wszystkie szablony rysunków i prezentacji programu %PRODUCTNAME z nastêpuj¹cego katalogu:";
-    Text[ portuguese_brazilian ] = "Todos os modelos de desenho e de apresentação do %PRODUCTNAME contidos no seguinte diretório serão importados:";
-    Text[ japanese ] = "ã™ã¹ã¦ã® %PRODUCTNAME å›³å½¢æç”»ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆã¨ãƒ—ãƒ¬ã‚¼ãƒ³ãƒ†ãƒ¼ã‚·ãƒ§ãƒ³ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆã¯æ¬¡ã®ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‹ã‚‰ã‚¤ãƒ³ãƒãƒ¼ãƒˆã•ã‚Œã¾ã™ã€‚";
-    Text[ korean ] = "ë‹¤ìŒì˜ ë””ë ‰í† ë¦¬ì— ìˆ˜ë¡ëœ ëª¨ë“  %PRODUCTNAME ê·¸ë¦¬ê¸° ë° í”„ë ˆì  í…Œì´ì…˜ ì„œì‹ íŒŒì¼ì„ ê°€ì ¸ì˜µë‹ˆë‹¤:";
-    Text[ chinese_simplified ] = "ä»ä»¥ä¸‹çš„ç›®å½•ä¸­è¾“å…¥æ‰€æœ‰ %PRODUCTNAME ç»˜å›¾æ ·å¼æ–‡æ¡£å’Œå·¥ä½œè¡¨æ ·å¼æ–‡æ¡£ï¼š";
-    Text[ chinese_traditional ] = "å¾ä¸‹åˆ—ç›®éŒ„åŒ¯å…¥å…¨éƒ¨çš„ %PRODUCTNAME ç¹ªåœ–åŠç°¡å ±æ¨£å¼æ–‡ä»¶ï¼š";
-    Text[ arabic ] = "Óæİ íÊã ÇÓÊíÑÇÏ ßá %1 ãä ÇáÏáíá ÇáÊÇáí:";
-    Text[ turkish ] = "İçe aktarılacak tüm çizim ve sunu şablonlarını içeren dizin:";
-    Text[ catalan ] = "S'importaran totes les plantilles %PRODUCTNAME Impress i Dibuix del següent directori:";
-    Text[ finnish ] = "Kaikki seuraavassa hakemistossa olevat %PRODUCTNAMEn piirros- ja esitysmallit tuodaan:";
-    Text[ thai ] = "à¹à¸¡à¹ˆà¹à¸šà¸šà¸à¸²à¸£à¸§à¸²à¸”à¸£à¸¹à¸›à¹à¸¥à¸°à¸à¸²à¸£à¸™à¸³à¹€à¸ªà¸™à¸­ %PRODUCTNAME à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”à¸—à¸µà¹ˆà¸šà¸£à¸£à¸ˆà¸¸à¹ƒà¸™à¹„à¸”à¹€à¸£à¹‡à¸à¸—à¸­à¸£à¸µà¹ˆà¸•à¹ˆà¸­à¹„à¸›à¸™à¸µà¹‰à¸ˆà¸°à¸–à¸¹à¸à¸™à¸³à¹€à¸‚à¹‰à¸²:";
-    Text[ czech ] = "VÅ¡echny Å¡ablony prezentacÃ­ a kreseb %PRODUCTNAME obsaÅ¾enÃ© v tomto adresÃ¡Å™i budou importovÃ¡ny: ";
-    Text[ hebrew ] = "â€®×›×œ ×ª×‘× ×™×•×ª ×”×¦×™×•×¨ ×•×”××¦×’×•×ª ×©×œ %PRODUCTNAME ×‘×¡×¤×¨×™×” ×”×‘××” ×ª×™×•×‘×× ×”:â€¬";
-    Text[ hindi ] = "à¤¨à¤¿à¤®à¥à¤¨à¤²à¤¿à¤–à¤¿à¤¤ à¤¡à¥ˆà¤°à¤•à¥à¤Ÿà¤°à¥€ à¤®à¥‡à¤‚ à¤°à¤¹à¤¨à¥‡à¤µà¤¾à¤²à¤¾ à¤¸à¤¬ %PRODUCTNAME à¤°à¥‡à¤–à¤¾à¤šà¤¿à¤¤à¥à¤° à¤”à¤° à¤ªà¥à¤°à¤¸à¥à¤¤à¥à¤¤à¤¿ à¤¨à¤®à¥‚à¤¨à¥‹à¤‚ à¤•à¥‹ à¤†à¤¯à¤¾à¤¤ à¤•à¤¿à¤¯à¤¾ à¤œà¤¾à¤¯à¥‡à¤—à¤¾:";
-    Text[ slovak ] = "VÅ¡etky Å¡ablÃ³ny kresieb a prezentÃ¡ciÃ­ %PRODUCTNAME obsiahnutÃ© v nasledujÃºcom adresÃ¡ri budÃº importovanÃ©:";
-    Text[ hungarian ] = "A kÃ¶vetkezÅ‘ kÃ¶nyvtÃ¡rban talÃ¡lhatÃ³ Ã¶sszes %PRODUCTNAME rajz- Ã©s bemutatÃ³sablon importÃ¡lÃ¡sa kÃ¶vetkezik:";
-    Text[ slovenian ] = "UvoÅ¾ene bodo vse predloge za risbe in predstavitve programa %PRODUCTNAME, ki so v mapi:";
+    Text [ de ] = "Alle %PRODUCTNAME Zeichnungs- und Präsentationsvorlagen aus dem folgenden Verzeichnis werden importiert:";
+    Text [ en-US ] = "All %PRODUCTNAME drawing and presentation templates contained in the following directory will be imported:";
 };
 
 String sSumSOGlobalDocuments
 {
-    Text = "Alle %PRODUCTNAME Globaldokumente aus dem folgenden Verzeichnis werden importiert:";
-    Text[English] = "All %PRODUCTNAME global documents in the following directory will be imported:";
-    Text[ English_us ] = "All %PRODUCTNAME master documents contained in the following directory will be imported:";
-    Text[ french ] = "Les documents maîtres %PRODUCTNAME contenus dans le répertoire suivant vont être importés :";
-    Text[ italian ] = "Vengono importati tutti i documenti master %PRODUCTNAME dalla cartella seguente:";
-    Text[ spanish ] = "Se importarán todos los documentos maestros de %PRODUCTNAME contenidos en el siguiente directorio:";
-    Text[ portuguese ] = "Todos os documentos-mestre do %PRODUCTNAME serão importados do seguinte directório:";
-    Text[ dutch ] = "Alle %PRODUCTNAME masterdocumenten uit de volgende directory worden geïmporteerd:";
-    Text[ swedish ] = "Alla %PRODUCTNAME samlingsdokument som finns i följande katalog importeras:";
-    Text[ greek ] = "Èá åéóá÷èïıí üëá ôá êıñéá İããñáöá %PRODUCTNAME ğïõ ğåñéİ÷ïíôáé óôïí ğáñáêÜôù êáôÜëïãï:";
-    Text[ dutch ] = "Alle %PRODUCTNAME masterdocumenten uit de volgende directory worden geïmporteerd:";
-    Text[ swedish ] = "Alla %PRODUCTNAME samlingsdokument som finns i följande katalog importeras:";
-    Text[ russian ] = "Áóäóò èìïîğòèğîâàíû âñå ñîñòàâíûå äîêóìåíòû %PRODUCTNAME èç ñëåäóşùåãî êàòàëîãà:";
-    Text[ danish ] = "Alle %PRODUCTNAME-hoveddokumenter i følgende katalog vil blive importeret:";
-    Text[ polish ] = "Importowane bêd¹ wszystkie dokumenty g³ówne programu %PRODUCTAME z nastêpuj¹cego katalogu:";
-    Text[ portuguese_brazilian ] = "Todos os documentos-mestre do %PRODUCTNAME contidos no seguinte diretório serão importados:";
-    Text[ japanese ] = "ã™ã¹ã¦ã® %PRODUCTNAME ãƒã‚¹ã‚¿ãƒ¼ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã¯æ¬¡ã®ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‹ã‚‰ã‚¤ãƒ³ãƒãƒ¼ãƒˆã•ã‚Œã¾ã™ã€‚";
-    Text[ korean ] = "ë‹¤ìŒ ë””ë ‰í† ë¦¬ì—ì„œ ëª¨ë“  %PRODUCTNAME ë§ˆìŠ¤í„° ë¬¸ì„œë¥¼ ê°€ì ¸ì˜µë‹ˆë‹¤:";
-    Text[ chinese_simplified ] = "ä»ä»¥ä¸‹çš„ç›®å½•ä¸­è¾“å…¥æ‰€æœ‰ %PRODUCTNAME ä¸»æ§æ–‡æ¡£ï¼š";
-    Text[ chinese_traditional ] = "å¾ä¸‹åˆ—ç›®éŒ„åŒ¯å…¥å…¨éƒ¨çš„ %PRODUCTNAME ä¸»æ§æ–‡ä»¶ï¼š";
-    Text[ arabic ] = "Óæİ íÊã ÇÓÊíÑÇÏ ßá %1 ãä ÇáÏáíá ÇáÊÇáí:";
-    Text[ turkish ] = "İçe aktarılacak tüm ana belgeleri içeren dizin:";
-    Text[ catalan ] = "S'importaran tots els documents mestres %PRODUCTNAME del següent directori:";
-    Text[ finnish ] = "Kaikki seuraavassa hakemistossa olevat %PRODUCTNAMEn perusasiakirjat tuodaan:";
-    Text[ finnish ] = "Kaikki seuraavassa hakemistossa olevat %PRODUCTNAMEn perusasiakirjat tuodaan:";
-    Text[ thai ] = "à¸•à¹‰à¸™à¸‰à¸šà¸±à¸šà¹€à¸­à¸à¸ªà¸²à¸£ %PRODUCTNAME à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”à¸—à¸µà¹ˆà¸šà¸£à¸£à¸ˆà¸¸à¹ƒà¸™à¹„à¸”à¹€à¸£à¹‡à¸à¸—à¸­à¸£à¸µà¹ˆà¸•à¹ˆà¸­à¹„à¸›à¸™à¸µà¹‰à¸ˆà¸°à¸–à¸¹à¸à¸™à¸³à¹€à¸‚à¹‰à¸²:";
-    Text[ czech ] = "VÅ¡echny hlavnÃ­ dokumenty %PRODUCTNAME obsaÅ¾enÃ© v tomto adresÃ¡Å™i budou importovÃ¡ny: ";
-    Text[ hebrew ] = "â€®×›×œ ××¡××›×™ ×”××‘ ×©×œ%PRODUCTNAME  ×‘×¡×¤×¨×™×” ×”×‘××” ×™×™×•×‘××•:â€¬";
-    Text[ hindi ] = "à¤¨à¤¿à¤®à¥à¤¨à¤²à¤¿à¤–à¤¿à¤¤ à¤¡à¥ˆà¤°à¤•à¥à¤Ÿà¤°à¥€ à¤®à¥‡à¤‚ à¤°à¤¹à¤¨à¥‡à¤µà¤¾à¤²à¤¾ à¤¸à¤¬ %PRODUCTNAME à¤®à¤¾à¤¸à¥à¤Ÿà¤° à¤²à¥‡à¤–à¤ªà¤¤à¥à¤°à¥‹à¤‚ à¤•à¥‹ à¤†à¤¯à¤¾à¤¤ à¤•à¤¿à¤¯à¤¾ à¤œà¤¾à¤¯à¥‡à¤—à¤¾:";
-    Text[ slovak ] = "VÅ¡etky hlavnÃ© dokumenty %PRODUCTNAME obsiahnutÃ© v nasledujÃºcom adresÃ¡ri budÃº importovanÃ©:";
-    Text[ hungarian ] = "A kÃ¶vetkezÅ‘ kÃ¶nyvtÃ¡rban talÃ¡lhatÃ³ Ã¶sszes %PRODUCTNAME-fÅ‘dokumentum importÃ¡lÃ¡sa kÃ¶vetkezik:";
-    Text[ slovenian ] = "UvoÅ¾eni bodo vsi glavni dokumenti programa %PRODUCTNAME, ki so v mapi:";
+    Text [ de ] = "Alle %PRODUCTNAME Globaldokumente aus dem folgenden Verzeichnis werden importiert:";
+    Text [ en-US ] = "All %PRODUCTNAME master documents contained in the following directory will be imported:";
 };
 
 
 String sSumMSTextDocuments
 {
-    Text = "Alle Word-Dokumente aus dem folgenden Verzeichnis werden importiert:";
-    Text[English] = "All Word documents in the following directory will be imported:";
-    Text[ English_us ] = "All Word documents contained in the following directory will be imported:";
-    Text[ french ] = "Les documents Word contenus dans le répertoire suivant vont être importés :";
-    Text[ italian ] = "Vengono importati tutti i documenti di Word dalla cartella seguente:";
-    Text[ spanish ] = "Se importarán todos los documentos de Word contenidos en el siguiente directorio:";
-    Text[ portuguese ] = "Todos os documentos Word serão importados do seguinte directório:";
-    Text[ dutch ] = "Alle Word-documenten uit de volgende directory worden geïmporteerd:";
-    Text[ swedish ] = "Alla Word-dokument som finns i följande katalog importeras:";
-    Text[ greek ] = "Èá åéóá÷èïıí üëá ôá İããñáöá Word ğïõ ğåñéİ÷ïíôáé óôïí ğáñáêÜôù êáôÜëïãï:";
-    Text[ dutch ] = "Alle Word-documenten uit de volgende directory worden geïmporteerd:";
-    Text[ swedish ] = "Alla Word-dokument som finns i följande katalog importeras:";
-    Text[ russian ] = "Áóäóò èìïîğòèğîâàíû âñå äîêóìåíòû Word èç ñëåäóşùåãî êàòàëîãà:";
-    Text[ danish ] = "Alle Word-dokumenter i følgende katalog vil blive importeret:";
-    Text[ polish ] = "Importowane bêd¹ wszystkie dokumenty programu Word z nastêpuj¹cego katalogu:";
-    Text[ portuguese_brazilian ] = "Todos os documentos Word contidos no seguinte diretório serão importados:";
-    Text[ japanese ] = "ã™ã¹ã¦ã® Word ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã¯æ¬¡ã®ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‹ã‚‰ã‚¤ãƒ³ãƒãƒ¼ãƒˆã•ã‚Œã¾ã™ã€‚";
-    Text[ korean ] = "ë‹¤ìŒ ë””ë ‰í† ë¦¬ì—ì„œ ëª¨ë“  Word ë¬¸ì„œë¥¼ ê°€ì ¸ì˜µë‹ˆë‹¤:";
-    Text[ chinese_simplified ] = "ä»ä»¥ä¸‹çš„ç›®å½•ä¸­è¾“å…¥æ‰€æœ‰ Word æ–‡æ¡£ï¼š";
-    Text[ chinese_traditional ] = "å¾ä¸‹åˆ—ç›®éŒ„åŒ¯å…¥å…¨éƒ¨çš„ Word æ–‡ä»¶ï¼š";
-    Text[ arabic ] = "Óæİ íÊã ÇÓÊíÑÇÏ ßá %1 ãä ÇáÏáíá ÇáÊÇáí:";
-    Text[ turkish ] = "İçe aktarılacak tüm Word belgeleri içeren dizin:";
-    Text[ catalan ] = "S'importaran tots els documents Word del següent directori:";
-    Text[ finnish ] = "Kaikki seuraavassa hakemistossa olevat Word-asiakirjat tuodaan:";
-    Text[ thai ] = "à¹€à¸­à¸à¸ªà¸²à¸£à¹€à¸§à¸´à¸£à¹Œà¸”à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”à¸—à¸µà¹ˆà¸šà¸£à¸£à¸ˆà¸¸à¹ƒà¸™à¹„à¸”à¹€à¸£à¹‡à¸à¸—à¸­à¸£à¸µà¹ˆà¸•à¹ˆà¸­à¹„à¸›à¸™à¸µà¹‰à¸ˆà¸°à¸–à¸¹à¸à¸™à¸³à¹€à¸‚à¹‰à¸²:";
-    Text[ czech ] = "VÅ¡echny WordovskÃ© dokumenty obsaÅ¾enÃ© v tomto adresÃ¡Å™i budou importovÃ¡ny:";
-    Text[ hebrew ] = "â€®×›×œ ××¡××›×™ ×” Word ×‘×¡×¤×¨×™×” ×”×‘××” ×™×™×•×‘××•:â€¬";
-    Text[ hindi ] = "à¤¨à¤¿à¤®à¥à¤¨à¤²à¤¿à¤–à¤¿à¤¤ à¤¡à¥ˆà¤°à¤•à¥à¤Ÿà¤°à¥€ à¤®à¥‡à¤‚ à¤°à¤¹à¤¨à¥‡à¤µà¤¾à¤²à¤¾ à¤¸à¤¬ à¤µà¤°à¥à¤¡ à¤²à¥‡à¤–à¤ªà¤¤à¥à¤°à¥‹à¤‚ à¤•à¥‹ à¤†à¤¯à¤¾à¤¤ à¤•à¤¿à¤¯à¤¾ à¤œà¤¾à¤¯à¥‡à¤—à¤¾:";
-    Text[ slovak ] = "VÅ¡etky dokumenty Word obsiahnutÃ© v nasledujÃºcom adresÃ¡ri budÃº importovanÃ©:";
-    Text[ hungarian ] = "A kÃ¶vetkezÅ‘ kÃ¶nyvtÃ¡rban talÃ¡lhatÃ³ Ã¶sszes Word-dokumentum importÃ¡lÃ¡sa kÃ¶vetkezik:";
-    Text[ slovenian ] = "UvoÅ¾eni bodo vsi dokumenti programa Word, ki so v mapi:";
+    Text [ de ] = "Alle Word-Dokumente aus dem folgenden Verzeichnis werden importiert:";
+    Text [ en-US ] = "All Word documents contained in the following directory will be imported:";
 };
 
 
 String sSumMSTableDocuments
 {
-    Text = "Alle Excel-Dokumente aus dem folgenden Verzeichnis werden importiert:";
-    Text[English] = "All Excel documents in the following directory will be imported:";
-    Text[ English_us ] = "All Excel documents contained in the following directory will be imported:";
-    Text[ french ] = "Les documents Excel contenus dans le répertoire suivant vont être importés :";
-    Text[ italian ] = "Vengono importati tutti i documenti di Excel dalla seguente cartella:";
-    Text[ spanish ] = "Se importarán todos los documentos de Excel del siguiente directorio:";
-    Text[ portuguese ] = "Todos os doumentos Excel serão importados do seguinte directório:";
-    Text[ dutch ] = "Alle Excel-documenten uit de volgende directory worden geïmporteerd:";
-    Text[ swedish ] = "Alla Excel-dokument som finns i följande katalog importeras:";
-    Text[ greek ] = "Èá åéóá÷èïıí üëá ôá İããñáöá ôïõ Excel ğïõ ğåñéİ÷ïíôáé óôïí ğáñáêÜôù êáôÜëïãï:";
-    Text[ dutch ] = "Alle Excel-documenten uit de volgende directory worden geïmporteerd:";
-    Text[ swedish ] = "Alla Excel-dokument som finns i följande katalog importeras:";
-    Text[ russian ] = "Áóäóò èìïîğòèğîâàíû âñå äîêóìåíòû Excel èç ñëåäóşùåãî êàòàëîãà:";
-    Text[ danish ] = "Alle Excel-dokumenter i følgende katalog vil blive importeret:";
-    Text[ polish ] = "Importowane bêd¹ wszystkie dokumenty programu Excel z nastêpuj¹cego katalogu:";
-    Text[ portuguese_brazilian ] = "Todos os documentos Excel contidos no seguinte diretório serão importados:";
-    Text[ japanese ] = "ã™ã¹ã¦ã® Excel ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã¯æ¬¡ã®ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‹ã‚‰ã‚¤ãƒ³ãƒãƒ¼ãƒˆã•ã‚Œã¾ã™ã€‚";
-    Text[ korean ] = "ë‹¤ìŒ ë””ë ‰í† ë¦¬ì—ì„œ ëª¨ë“  Excel ë¬¸ì„œë¥¼ ê°€ì ¸ì˜µë‹ˆë‹¤:";
-    Text[ chinese_simplified ] = "ä»ä¸‹ä¸€ä¸ªç›®å½•è¾“å…¥æ‰€æœ‰çš„ Excel æ–‡æ¡£ï¼š";
-    Text[ chinese_traditional ] = "å¾ä¸‹åˆ—ç›®éŒ„åŒ¯å…¥å…¨éƒ¨çš„ Excel æ–‡ä»¶ï¼š";
-    Text[ arabic ] = "Óæİ íÊã ÇÓÊíÑÇÏ ßá %1 ãä ÇáÏáíá ÇáÊÇáí:";
-    Text[ turkish ] = "İçe aktarılacak tüm Excel belgeleri içeren dizin:";
-    Text[ catalan ] = "S'importaran tots els documents Excel del següent directori:";
-    Text[ finnish ] = "Kaikki seuraavassa hakemistossa olevat Excel-asiakirjat tuodaan:";
-    Text[ thai ] = "à¹€à¸­à¸à¸ªà¸²à¸£à¹€à¸­à¹‡à¸à¹€à¸‹à¸¥à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”à¸—à¸µà¹ˆà¸šà¸£à¸£à¸ˆà¸¸à¹ƒà¸™à¹„à¸”à¹€à¸£à¹‡à¸à¸—à¸­à¸£à¸µà¹ˆà¸•à¹ˆà¸­à¹„à¸›à¸™à¸µà¹‰à¸ˆà¸°à¸–à¸¹à¸à¸™à¸³à¹€à¸‚à¹‰à¸²:";
-    Text[ czech ] = "VÅ¡echny ExcelovÃ© dokumenty obsaÅ¾enÃ© v tomto adresÃ¡Å™i budou importovÃ¡ny:";
-    Text[ hebrew ] = "â€®×›×œ ××¡××›×™ ×” Excel ×‘×¡×¤×¨×™×” ×”×‘××” ×™×™×•×‘××•:â€¬";
-    Text[ hindi ] = "à¤¨à¤¿à¤®à¥à¤¨à¤²à¤¿à¤–à¤¿à¤¤ à¤¡à¥ˆà¤°à¤•à¥à¤Ÿà¤°à¥€ à¤®à¥‡à¤‚ à¤°à¤¹à¤¨à¥‡à¤µà¤¾à¤²à¤¾ à¤¸à¤¬ à¤à¤•à¥à¤¸à¥‡à¤² à¤²à¥‡à¤–à¤ªà¤¤à¥à¤°à¥‹à¤‚ à¤•à¥‹ à¤†à¤¯à¤¾à¤¤ à¤•à¤¿à¤¯à¤¾ à¤œà¤¾à¤¯à¥‡à¤—à¤¾:";
-    Text[ slovak ] = "VÅ¡etky dokumenty Excel obsiahnutÃ© v nasledujÃºcom adresÃ¡ri budÃº importovanÃ©:";
-    Text[ hungarian ] = "A kÃ¶vetkezÅ‘ kÃ¶nyvtÃ¡rban talÃ¡lhatÃ³ Ã¶sszes Excel-dokumentum importÃ¡lÃ¡sa kÃ¶vetkezik:";
-    Text[ slovenian ] = "UvoÅ¾eni bodo vsi dokumenti programa Excel, ki so v mapi:";
+    Text [ de ] = "Alle Excel-Dokumente aus dem folgenden Verzeichnis werden importiert:";
+    Text [ en-US ] = "All Excel documents contained in the following directory will be imported:";
 };
 
 
 String sSumMSDrawDocuments
 {
-    Text = "Alle PowerPoint-Dokumente aus dem folgenden Verzeichnis werden importiert:";
-    Text[English] = "All PowerPoint documents in the following directory will be imported:";
-    Text[ English_us ] = "All PowerPoint documents contained in the following directory will be imported:";
-    Text[ french ] = "Les documents PowerPoint contenus dans le répertoire suivant vont être importés :";
-    Text[ italian ] = "Vengono importati tutti i documenti di PowerPoint dalla seguente cartella:";
-    Text[ spanish ] = "Se importarán todos los documentos de PowerPoint del siguiente directorio:";
-    Text[ portuguese ] = "Todos os documentos PowerPoint serão importados do seguinte directório:";
-    Text[ dutch ] = "Alle PowerPoint-documenten uit de volgende directory worden geïmporteerd:";
-    Text[ swedish ] = "Alla PowerPoint-dokument som finns i följande katalog importeras:";
-    Text[ greek ] = "Èá åéóá÷èïıí üëá ôá İããñáöá ôïõ PowerPoint ğïõ ğåñéİ÷ïíôáé óôïí ğáñáêÜôù êáôÜëïãï:";
-    Text[ dutch ] = "Alle PowerPoint-documenten uit de volgende directory worden geïmporteerd:";
-    Text[ swedish ] = "Alla PowerPoint-dokument som finns i följande katalog importeras:";
-    Text[ russian ] = "Áóäóò èìïîğòèğîâàíû âñå äîêóìåíòû PowerPoint èç ñëåäóşùåãî êàòàëîãà:";
-    Text[ danish ] = "Alle PowerPoint-dokumenter i følgende katalog vil blive importeret:";
-    Text[ polish ] = "Importowane bêd¹ wszystkie dokumenty programu PowerPoint z nastêpuj¹cego katalogu:";
-    Text[ portuguese_brazilian ] = "Todos os documentos PowerPoint contidos no seguinte diretório serão importados:";
-    Text[ japanese ] = "ã™ã¹ã¦ã® PowerPoint ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã¯æ¬¡ã®ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‹ã‚‰ã‚¤ãƒ³ãƒãƒ¼ãƒˆã•ã‚Œã¾ã™ã€‚";
-    Text[ korean ] = "ë‹¤ìŒ ë””ë ‰í† ë¦¬ì—ì„œ ëª¨ë“  PowerPoint ë¬¸ì„œë¥¼ ê°€ì ¸ì˜µë‹ˆë‹¤:";
-    Text[ chinese_simplified ] = "ä»ä¸‹ä¸€ä¸ªç›®å½•è¾“å…¥æ‰€æœ‰çš„ PowerPoint æ–‡æ¡£ï¼š";
-    Text[ chinese_traditional ] = "å¾ä¸‹åˆ—ç›®éŒ„åŒ¯å…¥å…¨éƒ¨çš„ PowerPiont æ–‡ä»¶ï¼š";
-    Text[ arabic ] = "Óæİ íÊã ÇÓÊíÑÇÏ ßá %1 ãä ÇáÏáíá ÇáÊÇáí:";
-    Text[ turkish ] = "İçe aktarılacak tüm Powerpoint belgeleri içeren dizin:";
-    Text[ catalan ] = "S'importaran tots els documents PowerPoint del següent directori:";
-    Text[ finnish ] = "Kaikki seuraavassa hakemistossa olevat PowerPoint-asiakirjat tuodaan:";
-    Text[ thai ] = "à¹€à¸­à¸à¸ªà¸²à¸£à¹€à¸à¸²à¹€à¸§à¸­à¸£à¹Œà¸à¹‰à¸­à¸¢à¸—à¹Œà¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”à¸—à¸µà¹ˆà¸šà¸£à¸£à¸ˆà¸¸à¹ƒà¸™à¹„à¸”à¹€à¸£à¹‡à¸à¸—à¸­à¸£à¸µà¹ˆà¸•à¹ˆà¸­à¹„à¸›à¸™à¸µà¹‰à¸ˆà¸°à¸–à¸¹à¸à¸™à¸³à¹€à¸‚à¹‰à¸²:";
-    Text[ czech ] = "VÅ¡echny dokumenty PowerPointu obsaÅ¾enÃ© v tomto adresÃ¡Å™i budou importovÃ¡ny:";
-    Text[ hebrew ] = "â€®×›×œ ××¡××›×™ ×” PowerPoint ×‘×¡×¤×¨×™×” ×”×‘××” ×™×™×•×‘××•:â€¬";
-    Text[ hindi ] = "à¤¨à¤¿à¤®à¥à¤¨à¤²à¤¿à¤–à¤¿à¤¤ à¤¡à¥ˆà¤°à¤•à¥à¤Ÿà¤°à¥€ à¤®à¥‡à¤‚ à¤°à¤¹à¤¨à¥‡à¤µà¤¾à¤²à¤¾ à¤¸à¤¬ à¤ªà¤µà¤°à¤ªà¥‹à¤‡à¤¨à¥à¤Ÿ à¤²à¥‡à¤–à¤ªà¤¤à¥à¤°à¥‹à¤‚ à¤•à¥‹ à¤†à¤¯à¤¾à¤¤ à¤•à¤¿à¤¯à¤¾ à¤œà¤¾à¤¯à¥‡à¤—à¤¾:";
-    Text[ slovak ] = "VÅ¡etky dokumenty PowerPoint obsiahnutÃ© v nasledujÃºcom adresÃ¡ri budÃº importovanÃ©:";
-    Text[ hungarian ] = "A kÃ¶vetkezÅ‘ kÃ¶nyvtÃ¡rban talÃ¡lhatÃ³ Ã¶sszes PowerPoint-dokumentum importÃ¡lÃ¡sa kÃ¶vetkezik:";
-    Text[ slovenian ] = "UvoÅ¾eni bodo vsi dokumenti programa PowerPoint, ki so v mapi:";
+    Text [ de ] = "Alle PowerPoint-Dokumente aus dem folgenden Verzeichnis werden importiert:";
+    Text [ en-US ] = "All PowerPoint documents contained in the following directory will be imported:";
 };
 
 
 String sSumMSTextTemplates
 {
-    Text = "Alle Word-Vorlagen aus dem folgenden Verzeichnis werden importiert:";
-    Text[English] = "All Word templates in the following directory will be imported:";
-    Text[ English_us ] = "All Word templates contained in the following directory will be imported:";
-    Text[ french ] = "Les modèles Word contenus dans le répertoire suivant vont être importés :";
-    Text[ italian ] = "Vengono importati tutti i modelli di Word dalla cartella seguente:";
-    Text[ spanish ] = "Se importarán todas las plantillas de Word del siguiente directorio:";
-    Text[ portuguese ] = "Todos os modelos Word serão importados do seguinte directório:";
-    Text[ dutch ] = "Alle Word-sjablonen uit de volgende directory worden geïmporteerd:";
-    Text[ swedish ] = "Alla Word-mallar som finns i följande katalog importeras:";
-    Text[ greek ] = "Èá åéóá÷èïıí üëá ôá ğñüôõğá ôïõ Word ğïõ ğåñéİ÷ïíôáé óôïí ğáñáêÜôù êáôÜëïãï:";
-    Text[ dutch ] = "Alle Word-sjablonen uit de volgende directory worden geïmporteerd:";
-    Text[ swedish ] = "Alla Word-mallar som finns i följande katalog importeras:";
-    Text[ russian ] = "Áóäóò èìïîğòèğîâàíû âñå øàáëîíû Word èç ñëåäóşùåãî êàòàëîãà:";
-    Text[ danish ] = "Alle Word-skabeloner i følgende katalog vil blive importeret:";
-    Text[ polish ] = "Importowane bêd¹ wszystkie szablony programu Word z nastêpuj¹cego katalogu:";
-    Text[ portuguese_brazilian ] = "Todos os modelos Word contidos no seguinte diretório serão importados:";
-    Text[ japanese ] = "ã™ã¹ã¦ã® Word ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆã¯æ¬¡ã®ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‹ã‚‰ã‚¤ãƒ³ãƒãƒ¼ãƒˆã•ã‚Œã¾ã™ã€‚";
-    Text[ korean ] = "ë‹¤ìŒì˜ ë””ë ‰í† ë¦¬ì—ì„œ ëª¨ë“  Word ì„œì‹ íŒŒì¼ì„ ê°€ì ¸ì˜µë‹ˆë‹¤:";
-    Text[ chinese_simplified ] = "ä»ä»¥ä¸‹çš„ç›®å½•ä¸­è¾“å…¥æ‰€æœ‰çš„ Word èŒƒæœ¬ï¼š";
-    Text[ chinese_traditional ] = "å¾ä¸‹åˆ—ç›®éŒ„åŒ¯å…¥å…¨éƒ¨çš„ Word ç¯„æœ¬ï¼š";
-    Text[ arabic ] = "Óæİ íÊã ÇÓÊíÑÇÏ ßá %1 ãä ÇáÏáíá ÇáÊÇáí:";
-    Text[ turkish ] = "Bu dizin altındaki bütün Word şablonları içe aktarılacak.";
-    Text[ catalan ] = "S'importaran totes les plantilles Word del següent directori:";
-    Text[ finnish ] = "Kaikki seuraavassa hakemistossa olevat Word-mallit tuodaan:";
-    Text[ thai ] = "à¹à¸¡à¹ˆà¹à¸šà¸šà¹€à¸§à¸´à¸£à¹Œà¸”à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”à¸—à¸µà¹ˆà¸šà¸£à¸£à¸ˆà¸¸à¹ƒà¸™à¹„à¸”à¹€à¸£à¹‡à¸à¸—à¸­à¸£à¸µà¹ˆà¸•à¹ˆà¸­à¹„à¸›à¸™à¸µà¹‰à¸ˆà¸°à¸–à¸¹à¸à¸™à¸³à¹€à¸‚à¹‰à¸²:";
-    Text[ czech ] = "VÅ¡echny WordovskÃ© Å¡ablony obsaÅ¾enÃ© v tomto adresÃ¡Å™i budou importovÃ¡ny:";
-    Text[ hebrew ] = "â€®×›×œ ×ª×‘× ×™×•×ª ×” Word ×‘×¡×¤×¨×™×” ×”×‘××” ×ª×™×•×‘×× ×”:â€¬";
-    Text[ hindi ] = "à¤¨à¤¿à¤®à¥à¤¨à¤²à¤¿à¤–à¤¿à¤¤ à¤¡à¥ˆà¤°à¤•à¥à¤Ÿà¤°à¥€ à¤®à¥‡à¤‚ à¤°à¤¹à¤¨à¥‡à¤µà¤¾à¤²à¤¾ à¤¸à¤¬ à¤µà¤°à¥à¤¡ à¤¨à¤®à¥‚à¤¨à¥‹à¤‚ à¤•à¥‹ à¤†à¤¯à¤¾à¤¤ à¤•à¤¿à¤¯à¤¾ à¤œà¤¾à¤¯à¥‡à¤—à¤¾:";
-    Text[ slovak ] = "VÅ¡etky Å¡ablÃ³ny Word obsiahnutÃ© v nasledujÃºcom adresÃ¡ri budÃº importovanÃ©:";
-    Text[ hungarian ] = "A kÃ¶vetkezÅ‘ kÃ¶nyvtÃ¡rban talÃ¡lhatÃ³ Ã¶sszes Word-sablon importÃ¡lÃ¡sa kÃ¶vetkezik:";
-    Text[ slovenian ] = "UvoÅ¾ene bodo vse predloge programa Word, ki so v mapi:";
+    Text [ de ] = "Alle Word-Vorlagen aus dem folgenden Verzeichnis werden importiert:";
+    Text [ en-US ] = "All Word templates contained in the following directory will be imported:";
 };
 
 
 String sSumMSTableTemplates
 {
-    Text = "Alle Excel-Vorlagen aus dem folgenden Verzeichnis werden importiert:";
-    Text[English] = "All Excel templates in the following directory will be imported:";
-    Text[ English_us ] = "All Excel templates contained in the following directory will be imported:";
-    Text[ french ] = "Les modèles Excel contenus dans le répertoire suivant vont être importés :";
-    Text[ italian ] = "Vengono importati tutti i modelli di Excel dalla seguente cartella:";
-    Text[ spanish ] = "Se importarán todas las plantillas de Excel del siguiente directorio:";
-    Text[ portuguese ] = "Todos os modelos Excel serão importados do seguinte directório:";
-    Text[ dutch ] = "Alle Excel-sjablonen uit de volgende directory worden geïmporteerd:";
-    Text[ swedish ] = "Alla Excel-mallar som finns i följande katalog importeras:";
-    Text[ greek ] = "Èá åéóá÷èïıí üëá ôá ğñüôõğá ôïõ Excel ğïõ ğåñéİ÷ïíôáé óôïí ğáñáêÜôù êáôÜëïãï:";
-    Text[ dutch ] = "Alle Excel-sjablonen uit de volgende directory worden geïmporteerd:";
-    Text[ swedish ] = "Alla Excel-mallar som finns i följande katalog importeras:";
-    Text[ russian ] = "Áóäóò èìïîğòèğîâàíû âñå øàáëîíû Excel èç ñëåäóşùåãî êàòàëîãà:";
-    Text[ danish ] = "Alle Excel-skabeloner i følgende katalog vil blive importeret:";
-    Text[ polish ] = "Importowane bêd¹ wszystkie szablony programu Excel z nastêpuj¹cego katalogu:";
-    Text[ portuguese_brazilian ] = "Todos os modelos Excel contidos no seguinte diretório serão importados:";
-    Text[ japanese ] = "ã™ã¹ã¦ã® Excel ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆã¯æ¬¡ã®ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‹ã‚‰ã‚¤ãƒ³ãƒãƒ¼ãƒˆã•ã‚Œã¾ã™ã€‚";
-    Text[ korean ] = "ë‹¤ìŒì˜ ë””ë ‰í† ë¦¬ì—ì„œ ëª¨ë“  Excel ì„œì‹ íŒŒì¼ì„ ê°€ì ¸ì˜µë‹ˆë‹¤:";
-    Text[ chinese_simplified ] = "ä»ä»¥ä¸‹ä¸€ä¸ªç›®å½•è¾“å…¥æ‰€æœ‰çš„ Excel èŒƒæœ¬ï¼š";
-    Text[ chinese_traditional ] = "å¾ä¸‹åˆ—ç›®éŒ„åŒ¯å…¥å…¨éƒ¨çš„ Excel ç¯„æœ¬ï¼š";
-    Text[ arabic ] = "Óæİ íÊã ÇÓÊíÑÇÏ ßá %1 ãä ÇáÏáíá ÇáÊÇáí:";
-    Text[ turkish ] = "İçe aktarılacak tüm Excel şablonlarını içeren dizin:";
-    Text[ catalan ] = "S'importaran totes les plantilles Excel del següent directori:";
-    Text[ finnish ] = "Kaikki seuraavassa hakemistossa olevat Excel-mallit tuodaan:";
-    Text[ thai ] = "à¹à¸¡à¹ˆà¹à¸šà¸šà¹€à¸­à¹‡à¸à¹€à¸‹à¸¥à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”à¸—à¸µà¹ˆà¸šà¸£à¸£à¸ˆà¸¸à¹ƒà¸™à¹„à¸”à¹€à¸£à¹‡à¸à¸—à¸­à¸£à¸µà¹ˆà¸•à¹ˆà¸­à¹„à¸›à¸™à¸µà¹‰à¸ˆà¸°à¸–à¸¹à¸à¸™à¸³à¹€à¸‚à¹‰à¸²:";
-    Text[ czech ] = "VÅ¡echny ExcelovÃ© Å¡ablony obsaÅ¾enÃ© v tomto adresÃ¡Å™i budou importovÃ¡ny:";
-    Text[ hebrew ] = "â€®×›×œ ×ª×‘× ×™×•×ª ×” Excel ×‘×¡×¤×¨×™×” ×”×‘××” ×ª×™×•×‘×× ×”:â€¬";
-    Text[ hindi ] = "à¤¨à¤¿à¤®à¥à¤¨à¤²à¤¿à¤–à¤¿à¤¤ à¤¡à¥ˆà¤°à¤•à¥à¤Ÿà¤°à¥€ à¤®à¥‡à¤‚ à¤°à¤¹à¤¨à¥‡à¤µà¤¾à¤²à¤¾ à¤¸à¤¬ à¤à¤•à¥à¤¸à¥‡à¤² à¤¨à¤®à¥‚à¤¨à¥‹à¤‚ à¤•à¥‹ à¤†à¤¯à¤¾à¤¤ à¤•à¤¿à¤¯à¤¾ à¤œà¤¾à¤¯à¥‡à¤—à¤¾:";
-    Text[ slovak ] = "VÅ¡etky Å¡ablÃ³ny Excel obsiahnutÃ© v nasledujÃºcom adresÃ¡ri budÃº importovanÃ©:";
-    Text[ hungarian ] = "A kÃ¶vetkezÅ‘ kÃ¶nyvtÃ¡rban talÃ¡lhatÃ³ Ã¶sszes Excel-sablon importÃ¡lÃ¡sa kÃ¶vetkezik:";
-    Text[ slovenian ] = "UvoÅ¾ene bodo vse predloge programa Excel, ki so v mapi:";
+    Text [ de ] = "Alle Excel-Vorlagen aus dem folgenden Verzeichnis werden importiert:";
+    Text [ en-US ] = "All Excel templates contained in the following directory will be imported:";
 };
 
 
 String sSumMSDrawTemplates
 {
-    Text = "Alle PowerPoint-Vorlagen aus dem folgenden Verzeichnis werden importiert:";
-    Text[English] = "All PowerPoint templates in the following directory will be imported:";
-    Text[ English_us ] = "All PowerPoint templates contained in the following directory will be imported:";
-    Text[ french ] = "Les modèles PowerPoint contenus dans le répertoire suivant vont être importés :";
-    Text[ italian ] = "Vengono importati tutti i modelli di PowerPoint dalla seguente cartella:";
-    Text[ spanish ] = "Se importarán todas las plantillas de PowerPoint del siguiente directorio:";
-    Text[ portuguese ] = "Todos os modelos PowerPoint serão importados do seguinte directório:";
-    Text[ dutch ] = "Alle PowerPoint-sjablonen uit de volgende directory worden geïmporteerd:";
-    Text[ swedish ] = "Alla PowerPoint-mallar som finns i följande katalog importeras:";
-    Text[ greek ] = "Èá åéóá÷èïıí üëá ôá ğñüôõğá ôïõ PowerPoint ğïõ ğåñéİ÷ïíôáé óôïí ğáñáêÜôù êáôÜëïãï:";
-    Text[ dutch ] = "Alle PowerPoint-sjablonen uit de volgende directory worden geïmporteerd:";
-    Text[ swedish ] = "Alla PowerPoint-mallar som finns i följande katalog importeras:";
-    Text[ russian ] = "Áóäóò èìïîğòèğîâàíû âñå øàáëîíû PowerPoint èç ñëåäóşùåãî êàòàëîãà:";
-    Text[ danish ] = "Alle PowerPoint-skabeloner i følgende katalog vil blive importeret:";
-    Text[ polish ] = "Importowane bêd¹ wszystkie szablony programu PowerPoint z nastêpuj¹cego katalogu:";
-    Text[ portuguese_brazilian ] = "Todos os modelos PowerPoint contidos no seguinte diretório serão importados:";
-    Text[ japanese ] = "ã™ã¹ã¦ã® PowerPoint ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆã¯æ¬¡ã®ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‹ã‚‰ã‚¤ãƒ³ãƒãƒ¼ãƒˆã•ã‚Œã¾ã™ã€‚";
-    Text[ korean ] = "ë‹¤ìŒì˜ ë””ë ‰í† ë¦¬ì—ì„œ ëª¨ë“  PowerPoint ì„œì‹ íŒŒì¼ì„ ê°€ì ¸ì˜µë‹ˆë‹¤:";
-    Text[ chinese_simplified ] = "ä»ä»¥ä¸‹ä¸€ä¸ªç›®å½•è¾“å…¥æ‰€æœ‰çš„ PowerPoint èŒƒæœ¬ï¼š";
-    Text[ chinese_traditional ] = "å¾ä¸‹åˆ—ç›®éŒ„åŒ¯å…¥å…¨éƒ¨çš„ PowerPoint ç¯„æœ¬ï¼š";
-    Text[ arabic ] = "Óæİ íÊã ÇÓÊíÑÇÏ ßá %1 ãä ÇáÏáíá ÇáÊÇáí:";
-    Text[ turkish ] = "İçe aktarılacak tüm Powerpoint şablonlarını içeren dizin:";
-    Text[ catalan ] = "S'importaran totes les plantilles PowerPoint del següent directori:";
-    Text[ finnish ] = "Kaikki seuraavassa hakemistossa olevat PowerPoint-mallit tuodaan:";
-    Text[ thai ] = "à¹à¸¡à¹ˆà¹à¸šà¸šà¹€à¸à¸²à¹€à¸§à¸­à¸£à¹Œà¸à¹‰à¸­à¸¢à¸—à¹Œà¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”à¸—à¸µà¹ˆà¸šà¸£à¸£à¸ˆà¸¸à¹ƒà¸™à¹„à¸”à¹€à¸£à¹‡à¸à¸—à¸­à¸£à¸µà¹ˆà¸•à¹ˆà¸­à¹„à¸›à¸™à¸µà¹‰à¸ˆà¸°à¸–à¸¹à¸à¸™à¸³à¹€à¸‚à¹‰à¸²:";
-    Text[ czech ] = "VÅ¡echny Å¡ablony PowerPointu obsaÅ¾enÃ© v tomto adresÃ¡Å™i budou importovÃ¡ny:";
-    Text[ hebrew ] = "â€®×›×œ ×ª×‘× ×™×•×ª ×” PowerPoint ×‘×¡×¤×¨×™×” ×”×‘××” ×ª×™×•×‘×× ×”:â€¬";
-    Text[ hindi ] = "à¤¨à¤¿à¤®à¥à¤¨à¤²à¤¿à¤–à¤¿à¤¤ à¤¡à¥ˆà¤°à¤•à¥à¤Ÿà¤°à¥€ à¤®à¥‡à¤‚ à¤°à¤¹à¤¨à¥‡à¤µà¤¾à¤²à¤¾ à¤¸à¤¬ à¤ªà¤µà¤°à¤ªà¥‹à¤‡à¤¨à¥à¤Ÿ à¤¨à¤®à¥‚à¤¨à¥‹à¤‚ à¤•à¥‹ à¤†à¤¯à¤¾à¤¤ à¤•à¤¿à¤¯à¤¾ à¤œà¤¾à¤¯à¥‡à¤—à¤¾:";
-    Text[ slovak ] = "VÅ¡etky Å¡ablÃ³ny PowerPoint obsiahnutÃ© v nasledujÃºcom adresÃ¡ri budÃº importovanÃ©:";
-    Text[ hungarian ] = "A kÃ¶vetkezÅ‘ kÃ¶nyvtÃ¡rban talÃ¡lhatÃ³ Ã¶sszes PowerPoint-sablon importÃ¡lÃ¡sa kÃ¶vetkezik:";
-    Text[ slovenian ] = "UvoÅ¾ene bodo vse predloge programa PowerPoint, ki so v mapi:";
+    Text [ de ] = "Alle PowerPoint-Vorlagen aus dem folgenden Verzeichnis werden importiert:";
+    Text [ en-US ] = "All PowerPoint templates contained in the following directory will be imported:";
 };
 
 
