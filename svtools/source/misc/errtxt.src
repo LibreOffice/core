@@ -2,9 +2,9 @@
  *
  *  $RCSfile: errtxt.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2000-10-27 17:23:11 $
+ *  last change: $Author: kz $ $Date: 2000-11-09 12:03:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -392,7 +392,7 @@ Resource RID_ERRCTX
         Text[ arabic ] = "$(ERR) ΓΛδΗΑ έΚΝ ΓΝΟ ΗαΓΪγΟΙ";
         Text[ dutch ] = "$(ERR) bij openen van een rubriek";
         Text[ chinese_simplified ] = "΄ςΏª·ΦΐΰΜυΔΏΚ±·ΆΙϊ $(ERR)";
-        Text[ greek ] = "$(ERR) κατά το άνοιγμα μιας εγγραφής";
+        Text[ greek ] = "$(ERR) κατά το άνοιγμα μιας κατηγορίας";
         Text[ korean ] = "ΗΧΈρΐ» ΐό°³ΗΟ΄ψ Αί $(ERR)";
         Text[ turkish ] = "Giriώi aηarken $(ERR)";
     };
@@ -432,7 +432,7 @@ Resource RID_ERRCTX
         Text[ dutch ] = "$(ERR) bij zoeken naar een adres";
         Text[ french ] = "$(ERR) lors de la recherche d'adresse";
         Text[ spanish ] = "$(ERR) al buscar una direcciσn";
-        Text[ italian ] = "$(ERR) searching for an address";
+        Text[ italian ] = "$(ERR) nella ricerca d'indirizzo";
         Text[ danish ] = "$(ERR) under adressesψgningen";
         Text[ swedish ] = "$(ERR) vid adressφkning";
         Text[ polish ] = "$(ERR) w trakcie wyszukiwania adresu";
@@ -1983,7 +1983,7 @@ Resource RID_ERRHDL
         Text[ arabic ] = "γΪαζγΗΚ ΗαΕδΚΡδΚ ΗαγΨαζΘΙ ΫνΡ γζΜζΟΙ έν ζΝΟΙ ΗαΚΞÒνδ ΗαγΔήΚΙ΅ ζαΗ νγίδ δήαεΗ΅ ΕΠ Γδ ζΦΪ ΗαΗΚΥΗα ΫνΡ δΤΨ";
         Text[ dutch ] = "De opgevraagde Internetgegevens zijn niet voorhanden in het cachegeheugen en kunnen niet worden getransfereerd daar de Onlinemodus niet actief is";
         Text[ chinese_simplified ] = "ÒςΞªΔϊµΔΌΖΛγ»ϊΊΝ»ΉΓ»ΣΠΊΝΉϊΌΚ»¥ΑªΝψΑ¬½Σ£¬¶ψΗÒΌΖΛγ»ϊµΔ»Ί³εΗψÒ²Γ»ΣΠΔϊΗλΗσµΔΉϊΌΚ»¥ΑªΝψµΔΚύΎέ£¬Òς΄ΛΞή·¨Χ°ΤΨ΄«µέΚύΎέ";
-        Text[ greek ] = "Τα ζητούμενα δεδομένα του Internet δεν βρίσκονται στην κρυφή μνήμη και δεν είναι δυνατόν να μεταδοθούν, επειδή δεν εργάζεστε σε κατάσταση απ΄ ευθείας σύνδεσης";
+        Text[ greek ] = "Τα ζητούμενα δεδομένα του Internet δεν βρίσκονται στην κρυφή μνήμη και δεν είναι δυνατόν να μεταδοθούν, επειδή εργάζεστε σε κατάσταση 'Χωρίς σύνδεση'";
         Text[ korean ] = "ΏδΓ»µΘ ΐΞΕΝ³έ µ¥ΐΜΕΝ°΅ Δ³½ΓΏ΅ ΎψΐΈΈη ΏΒ¶σΐΞ Έπµε°΅ Θ°ΌΊΘ­µΗΎξ ΐΦΑφ ΎΚΎΖ µ¥ΐΜΕΝΈ¦ ΊΈ³Ύ Όφ Ύψΐ½";
         Text[ turkish ] = "έstenen Internet verileri φnbellekte bulunmuyor ve ηevrimiηi kipi etkin olmadύπύ iηin aktarύlamύyor";
     };
@@ -2416,7 +2416,7 @@ Resource RID_ERRHDL
         Text[ arabic ] = "ΚΪΠΡΚ ΪγανΙ ΗΣΚΪΗΟΙ ΗαΕΟΞΗα";
         Text[ dutch ] = "Het item kon niet worden hersteld";
         Text[ chinese_simplified ] = "Ξή·¨ΠήΈ΄ΥβΈφΜυΔΏ";
-        Text[ greek ] = "Δεν ήταν δυνατόν να γίνει επαναφορά της εγγραφής";
+        Text[ greek ] = "Δεν ήταν δυνατόν να γίνει η επαναφορά της καταχώρισης";
         Text[ korean ] = "ΗΧΈρΐ» ΊΉ±ΈΗÒ Όφ Ύψΐ½";
         Text[ turkish ] = "Giriώ geri yόklenemedi";
     };
