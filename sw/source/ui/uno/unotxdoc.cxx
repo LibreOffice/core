@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: os $ $Date: 2001-02-19 08:25:59 $
+ *  last change: $Author: os $ $Date: 2001-02-21 07:38:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2109,6 +2109,7 @@ Reference< XEnumerationAccess > SwXTextDocument::getRedlines(  ) throw(RuntimeEx
   -----------------------------------------------------------------------*/
 void SwXTextDocument::refresh(void) throw( RuntimeException )
 {
+    ::vos::OGuard aGuard(Application::GetSolarMutex());
     if(!IsValid())
         throw RuntimeException();
     SwWrtShell *pWrtShell = pDocShell->GetWrtShell();
