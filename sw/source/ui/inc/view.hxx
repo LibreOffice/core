@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 09:04:17 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 13:30:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -370,15 +370,14 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     SW_DLLPRIVATE void          StartThesaurus();
 
     // text conversion
-    SW_DLLPRIVATE void            ConvertDocument( const String* pStr );
-    SW_DLLPRIVATE void            _ConvertDocument( const String* pStr );
+    SW_DLLPRIVATE void          StartTextConversion( LanguageType nSourceLang, LanguageType nTargetLang, const Font *pTargetFont, sal_Int32 nOptions, sal_Bool bIsInteractive );
 
     // used for spell checking and text conversion
     SW_DLLPRIVATE void          SpellStart( SvxSpellArea eSpell, BOOL bStartDone,
-                                BOOL bEndDone, sal_Bool bIsConversion = sal_False );
-    SW_DLLPRIVATE void            SpellEnd( sal_Bool bIsConversion = sal_False );
+                                        BOOL bEndDone, SwHHCWrapper *pConvWrapper = 0 );
+    SW_DLLPRIVATE void          SpellEnd( SwHHCWrapper *pConvWrapper = 0 );
 
-    SW_DLLPRIVATE void            HyphStart( SvxSpellArea eSpell );
+    SW_DLLPRIVATE void          HyphStart( SvxSpellArea eSpell );
     SW_DLLPRIVATE void          _SpellDocument( const String* pStr, BOOL bAllRight );
     SW_DLLPRIVATE BOOL          CheckSpecialCntnt();
     SW_DLLPRIVATE void          SpellKontext(BOOL bOn = TRUE)
