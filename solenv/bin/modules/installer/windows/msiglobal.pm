@@ -2,9 +2,9 @@
 #
 #   $RCSfile: msiglobal.pm,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: svesik $ $Date: 2004-04-20 12:33:57 $
+#   last change: $Author: kz $ $Date: 2004-06-11 18:19:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,6 +64,7 @@ package installer::windows::msiglobal;
 
 use Cwd;
 use installer::converter;
+use installer::exiter;
 use installer::files;
 use installer::globals;
 use installer::logger;
@@ -114,39 +115,79 @@ sub generate_cab_file_list
 
     installer::logger::include_header_into_logfile("Generating ddf files");
 
-    for ( my $i = 0; $i <= $#{$filesref}; $i++ )
+    if ( $installer::globals::many_cab_files )
     {
-        my $onefile = ${$filesref}[$i];
-        my $cabinetfile = $onefile->{'cabinet'};
-        my $sourcepath =  $onefile->{'sourcepath'};
-        my $uniquename =  $onefile->{'uniquename'};
+        for ( my $i = 0; $i <= $#{$filesref}; $i++ )
+        {
+            my $onefile = ${$filesref}[$i];
+            my $cabinetfile = $onefile->{'cabinet'};
+            my $sourcepath =  $onefile->{'sourcepath'};
+            my $uniquename =  $onefile->{'uniquename'};
 
-        # all files with the same cabinetfile are directly behind each other in the files collector
+            # all files with the same cabinetfile are directly behind each other in the files collector
 
+            my @ddffile = ();
+
+            write_ddf_file_header(\@ddffile, $cabinetfile, $installdir);
+
+            my $ddfline = "\"" . $sourcepath . "\"" . " " . $uniquename . "\n";
+            push(@ddffile, $ddfline);
+
+            my $nextfile = ${$filesref}[$i+1];
+            my $nextcabinetfile = "";
+
+            if ( $nextfile->{'cabinet'} ) { $nextcabinetfile = $nextfile->{'cabinet'}; }
+
+            while ( $nextcabinetfile eq $cabinetfile )
+            {
+                $sourcepath =  $nextfile->{'sourcepath'};
+                $uniquename =  $nextfile->{'uniquename'};
+                $ddfline = "\"" . $sourcepath . "\"" . " " . $uniquename . "\n";
+                push(@ddffile, $ddfline);
+                $i++;                                           # increasing the counter!
+                $nextfile = ${$filesref}[$i+1];
+                $nextcabinetfile = $nextfile->{'cabinet'};
+            }
+
+            # creating the DDF file for each component
+
+            my $ddffilename = $cabinetfile;
+            $ddffilename =~ s/.cab/.ddf/;
+            $ddfdir =~ s/\Q$installer::globals::separator\E\s*$//;
+            $ddffilename = $ddfdir . $installer::globals::separator . $ddffilename;
+
+            installer::files::save_file($ddffilename ,\@ddffile);
+            my $infoline = "Created ddf file: $ddffilename\n";
+            push(@installer::globals::logfileinfo, $infoline);
+
+            # Writing the makecab system call
+
+            my $oneline = "makecab.exe /F " . $ddffilename . "\n";
+
+            push(@cabfilelist, $oneline);
+        }
+    }
+
+    if ( $installer::globals::one_cab_file )
+    {
         my @ddffile = ();
 
-        write_ddf_file_header(\@ddffile, $cabinetfile, $installdir);
+        my $cabinetfile = "";
 
-        my $ddfline = "\"" . $sourcepath . "\"" . " " . $uniquename . "\n";
-        push(@ddffile, $ddfline);
-
-        my $nextfile = ${$filesref}[$i+1];
-        my $nextcabinetfile = "";
-
-        if ( $nextfile->{'cabinet'} ) { $nextcabinetfile = $nextfile->{'cabinet'}; }
-
-        while ( $nextcabinetfile eq $cabinetfile )
+        for ( my $i = 0; $i <= $#{$filesref}; $i++ )
         {
-            $sourcepath =  $nextfile->{'sourcepath'};
-            $uniquename =  $nextfile->{'uniquename'};
-            $ddfline = "\"" . $sourcepath . "\"" . " " . $uniquename . "\n";
+            my $onefile = ${$filesref}[$i];
+            $cabinetfile = $onefile->{'cabinet'};
+            my $sourcepath =  $onefile->{'sourcepath'};
+            my $uniquename =  $onefile->{'uniquename'};
+
+            if ( $i == 0 ) { write_ddf_file_header(\@ddffile, $cabinetfile, $installdir); }
+
+            my $ddfline = "\"" . $sourcepath . "\"" . " " . $uniquename . "\n";
             push(@ddffile, $ddfline);
-            $i++;                                           # increasing the counter!
-            $nextfile = ${$filesref}[$i+1];
-            $nextcabinetfile = $nextfile->{'cabinet'};
         }
 
-        # creating the DDF file for each component
+        # creating the DDF file
 
         my $ddffilename = $cabinetfile;
         $ddffilename =~ s/.cab/.ddf/;
@@ -767,6 +808,36 @@ sub copy_windows_installer_files_into_installset
         $destfile = $installdir . $installer::globals::separator . $destfile;
 
         installer::systemactions::copy_one_file($sourcefile, $destfile);
+    }
+}
+
+#################################################################
+# Copying the child projects into the
+# installation set
+#################################################################
+
+sub copy_child_projects_into_installset
+{
+    my ($installdir) = @_;
+
+    # the source directory is defined with the parameter "-msifiles"
+    # in the variable $installer::globals::msifilespath
+
+    @copydirs = ();
+    push(@copydirs, "java");
+    push(@copydirs, "adabas");
+
+    for ( my $i = 0; $i <= $#copydirs; $i++ )
+    {
+        my $sourcedir = $installer::globals::msifilespath . $installer::globals::separator . $copydirs[$i];
+
+        if ( ! -d $sourcedir ) { installer::exiter::exit_program("ERROR: Child project directory not found: $sourcedir !", "copy_child_projects_into_installset"); }
+
+        my $destdir = $installdir . $installer::globals::separator . $copydirs[$i];
+
+        if ( ! -d $destdir) { installer::systemactions::create_directory($destdir); }
+
+        installer::systemactions::copy_directory($sourcedir, $destdir);
     }
 }
 
