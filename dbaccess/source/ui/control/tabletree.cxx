@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabletree.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 12:27:45 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:10:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,12 +101,16 @@
 #ifndef _COM_SUN_STAR_SDBC_XROW_HPP_
 #include <com/sun/star/sdbc/XRow.hpp>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
+#endif
 #ifndef _DBAUI_COMMON_TYPES_HXX_
 #include "commontypes.hxx"
 #endif
 #ifndef _DBAUI_LISTVIEWITEMS_HXX_
 #include "listviewitems.hxx"
 #endif
+#include <algorithm>
 
 //.........................................................................
 namespace dbaui
@@ -197,22 +201,21 @@ void OTableTreeListBox::UpdateTableList( const Reference< XConnection >& _xConne
             xMetaData = _xConnection->getMetaData();
 
             Reference< XTablesSupplier > xTableSupp(_xConnection,UNO_QUERY);
-            Reference< XViewsSupplier > xViewSupp(_xConnection,UNO_QUERY);
             sCurrentActionError = String(ModuleRes(STR_NOTABLEINFO));
 
-            Reference< XNameAccess > xTables, xViews;
+            Reference< XNameAccess > xTables,xViews;
 
             xTables = xTableSupp->getTables();
-
-            // get the views supplier and the views
-            xViewSupp.set(xTableSupp,UNO_QUERY);
-            if (xViewSupp.is())
+            Reference< XViewsSupplier > xViewSupp(xTableSupp,UNO_QUERY);
+            if ( xViewSupp.is() )
+            {
                 xViews = xViewSupp->getViews();
+                if (xViews.is())
+                    sViews = xViews->getElementNames();
+            }
 
             if (xTables.is())
                 sTables = xTables->getElementNames();
-            if (xViews.is())
-                sViews = xViews->getElementNames();
         }
     }
     catch(RuntimeException&)
@@ -226,11 +229,52 @@ void OTableTreeListBox::UpdateTableList( const Reference< XConnection >& _xConne
         throw aExtendedInfo;
     }
 
-    UpdateTableList(xMetaData, sTables, sViews);
+    UpdateTableList(xMetaData, sTables,sViews);
 }
+// -----------------------------------------------------------------------------
+namespace
+{
+    struct OViewSetter : public ::std::unary_function< OTableTreeListBox::TNames::value_type, bool>
+    {
+        const Sequence< ::rtl::OUString> m_aViews;
+        ::comphelper::TStringMixEqualFunctor m_aEqualFunctor;
 
+        OViewSetter(const Sequence< ::rtl::OUString>& _rViews,sal_Bool _bCase) : m_aViews(_rViews),m_aEqualFunctor(_bCase){}
+        OTableTreeListBox::TNames::value_type operator() (const ::rtl::OUString& lhs)
+        {
+            OTableTreeListBox::TNames::value_type aRet;
+            aRet.first = lhs;
+            const ::rtl::OUString* pIter = m_aViews.getConstArray();
+            const ::rtl::OUString* pEnd = m_aViews.getConstArray() + m_aViews.getLength();
+            aRet.second = (::std::find_if(pIter,pEnd,::std::bind2nd(m_aEqualFunctor,lhs)) != pEnd);
+
+            return aRet;
+        }
+    };
+
+}
+// -----------------------------------------------------------------------------
+void OTableTreeListBox::UpdateTableList(
+                const Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxConnMetaData,
+                const Sequence< ::rtl::OUString>& _rTables,
+                const Sequence< ::rtl::OUString>& _rViews
+            )
+{
+    TNames aTables;
+    aTables.resize(_rTables.getLength());
+    const ::rtl::OUString* pIter = _rTables.getConstArray();
+    const ::rtl::OUString* pEnd = _rTables.getConstArray() + _rTables.getLength();
+    try
+    {
+        ::std::transform(pIter,pEnd,aTables.begin(),OViewSetter(_rViews,_rxConnMetaData.is() ? _rxConnMetaData->storesMixedCaseQuotedIdentifiers() : sal_False));
+    }
+    catch(Exception&)
+    {
+    }
+    UpdateTableList(_rxConnMetaData,aTables);
+}
 //------------------------------------------------------------------------
-void OTableTreeListBox::UpdateTableList(const Reference< XDatabaseMetaData >& _rxConnMetaData, const Sequence< ::rtl::OUString >& _rTables, const Sequence< ::rtl::OUString >& _rViews)
+void OTableTreeListBox::UpdateTableList(const Reference< XDatabaseMetaData >& _rxConnMetaData, const TNames& _rTables)
 {
     // throw away all the old stuff
     Clear();
@@ -242,49 +286,37 @@ void OTableTreeListBox::UpdateTableList(const Reference< XDatabaseMetaData >& _r
         if (haveVirtualRoot())
         {
             String sRootEntryText;
-            if (!_rViews.getLength())
-                sRootEntryText  =String(ModuleRes(STR_ALL_TABLES));
-            else if (!_rTables.getLength())
-                sRootEntryText  =String(ModuleRes(STR_ALL_VIEWS));
+            TNames::const_iterator aViews = ::std::find_if(_rTables.begin(),_rTables.end(),
+            ::std::compose1(::std::bind2nd(::std::equal_to<sal_Bool>(),sal_False),::std::select2nd<TNames::value_type>()));
+            TNames::const_iterator aTables = ::std::find_if(_rTables.begin(),_rTables.end(),
+            ::std::compose1(::std::bind2nd(::std::equal_to<sal_Bool>(),sal_True),::std::select2nd<TNames::value_type>()));
+
+            if ( aViews == _rTables.end() )
+                sRootEntryText  = String(ModuleRes(STR_ALL_TABLES));
+            else if ( aTables == _rTables.end() )
+                sRootEntryText  = String(ModuleRes(STR_ALL_VIEWS));
             else
-                sRootEntryText  =String(ModuleRes(STR_ALL_TABLES_AND_VIEWS));
+                sRootEntryText  = String(ModuleRes(STR_ALL_TABLES_AND_VIEWS));
             pAllObjects = InsertEntry(sRootEntryText,NULL,FALSE,LIST_APPEND,reinterpret_cast<void*>(FOLDER_TYPE));
         }
 
-        if (!_rTables.getLength() && !_rViews.getLength())
+        if ( _rTables.empty() )
             // nothing to do (besides inserting the root entry)
             return;
 
         // get the table/view names
-        const ::rtl::OUString* pTables = NULL;
-        const ::rtl::OUString* pViews = NULL;
-        if(_rTables.getLength())
-            pTables = _rTables.getConstArray();
-        if(_rViews.getLength())
-            pViews = _rViews.getConstArray();
+        TNames::const_iterator aIter = _rTables.begin();
+        TNames::const_iterator aEnd = _rTables.end();
 
-        // loop through both sequences  first the vies and than the tables
-        const ::rtl::OUString* pSwitchSequences = (pTables && pViews) ? pViews + _rViews.getLength() - 1 : NULL;
-
-        sal_Int32 nOverallLen = _rTables.getLength() + _rViews.getLength();
-        const ::rtl::OUString* pCurrentTable = pViews ? pViews : pTables;   // currently handled view or table name
-        sal_Bool bIsView = pViews ? sal_True : sal_False;   // pCurrentTable points to a view name ?
-        for (   sal_Int32 i = 0;
-                i < nOverallLen;
-                ++i                                                                 // inc the counter
-                ,   (   pSwitchSequences == pCurrentTable                           // did we reached the last table ?
-                    ?   bIsView = !((pCurrentTable = pTables) != NULL)                  // yes -> continue with the views, and set bIsView to sal_True
-                    :   ++pCurrentTable != NULL                                         // no -> next table
-                    )                                                                   //  (!= NULL is to make this a boolean expression, so it should work under SUNPRO5, too)
-            )
+        for ( ; aIter != aEnd; ++aIter )
         {
             // add the entry
             implAddEntry(
                 _rxConnMetaData,
-                *pCurrentTable,
-                bIsView ? m_aViewImage : m_aTableImage,
+                aIter->first,
+                aIter->second ? m_aViewImage : m_aTableImage,
                 pAllObjects,
-                bIsView ? VIEW_TYPE : TABLE_TYPE,
+                aIter->second ? VIEW_TYPE : TABLE_TYPE,
                 sal_False
             );
         }
@@ -439,8 +471,17 @@ SvLBoxEntry* OTableTreeListBox::addedTable( const Reference< XConnection >& _rxC
             return NULL;
         }
 
+        sal_Int32 nType = TABLE_TYPE;
+        Reference<XPropertySet> xProp(_rObject,UNO_QUERY);
+        if ( xProp.is() )
+        {
+            ::rtl::OUString sValue;
+            xProp->getPropertyValue(PROPERTY_TYPE) >>= sValue;
+            if ( sValue.equalsAscii("VIEW") )
+                nType = VIEW_TYPE;
+        }
         // add the entry
-        return implAddEntry( xMeta, _rName, m_aTableImage, getAllObjectsEntry(),TABLE_TYPE );
+        return implAddEntry( xMeta, _rName, nType == TABLE_TYPE ? m_aTableImage : m_aViewImage, getAllObjectsEntry(),nType );
             // TODO: the image
     }
     catch( const Exception& )
