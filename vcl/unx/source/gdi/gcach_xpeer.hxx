@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_xpeer.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hdu $ $Date: 2002-02-15 17:00:58 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 17:10:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,9 +64,9 @@
 
 #include <glyphcache.hxx>
 
-#define Region XLIB_Region
+#include <prex.h>
 #include <X11/extensions/Xrender.h>
-#undef Region
+#include <postx.h>
 
 class X11GlyphPeer
 : public GlyphCachePeer
