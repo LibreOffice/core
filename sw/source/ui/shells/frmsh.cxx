@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmsh.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:41:59 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 16:51:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,9 +71,6 @@
 
 #ifndef _SFX_WHITER_HXX //autogen
 #include <svtools/whiter.hxx>
-#endif
-#ifndef _OFF_APP_HXX //autogen
-#include <offmgr/app.hxx>
 #endif
 #ifndef _GOODIES_IMAPOBJ_HXX
 #include <svtools/imapobj.hxx>
