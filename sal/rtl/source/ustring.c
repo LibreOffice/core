@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ustring.c,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: th $ $Date: 2001-05-22 10:21:55 $
+ *  last change: $Author: th $ $Date: 2001-07-27 13:24:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,59 +98,6 @@ static rtl_uString aImplEmpty_rtl_uString =
 
 /* ======================================================================= */
 
-/*************************************************************************
- *  rtl_ustr_ascii_shortenedCompare_WithLength
- */
-sal_Int32 SAL_CALL rtl_ustr_ascii_shortenedCompare_WithLength( const sal_Unicode * first,
-                                                            sal_Int32 firstLen,
-                                                            const sal_Char * second,
-                                                            sal_Int32 shortenedLength )
-{
-    const sal_Unicode * firstEnd = first + firstLen;
-    sal_Int32 nResult = 0;
-    while( shortenedLength--
-        && first < firstEnd
-        && *second // necessary if 0 is allowed in Unicode
-        && (0 == (nResult = (sal_Int32)*first++ - (sal_Int32)*second++ ) ) )
-    {
-        /* Check ASCII range */
-        OSL_ENSURE( (*(second-1) & 0x80) == 0, "Found ASCII char > 127");
-    }
-    if( !nResult && (shortenedLength != -1) )
-    {
-        if( *second )
-        {
-            OSL_ENSURE( first == firstEnd, "first == firstEnd failed" );
-            // first is a substring of the second string => less (negative value)
-            nResult = -1;
-        }
-        else
-            // greater or equal
-            nResult = firstEnd - first;
-    }
-
-    return nResult;
-}
-
-/*************************************************************************
- *  rtl_ustr_asciil_reverseCompare_WithLength
- */
-sal_Int32 SAL_CALL rtl_ustr_asciil_reverseCompare_WithLength( const sal_Unicode * first, sal_Int32 firstLen,
-                                                            const sal_Char * second, sal_Int32 secondLen )
-{
-    const sal_Unicode * firstRun = first + firstLen;
-    const sal_Char * secondRun = second + secondLen;
-    sal_Int32 nResult = 0;
-    while( first < firstRun && second < secondRun
-        && (0 == (nResult = (sal_Int32)*--firstRun - (sal_Int32)*--secondRun ) ) )
-        ;
-    if( nResult )
-        return nResult;
-    return firstLen - secondLen;
-}
-
-/* ======================================================================= */
-
 #define IMPL_RTL_STRCODE            sal_Unicode
 #define IMPL_RTL_USTRCODE( c )      (c)
 #define IMPL_RTL_STRNAME( n )       rtl_ustr_ ## n
@@ -188,7 +135,7 @@ sal_Int32 SAL_CALL rtl_ustr_ascii_compare_WithLength( const sal_Unicode* pStr1,
                                                       sal_Int32 nStr1Len,
                                                       const sal_Char* pStr2 )
 {
-    sal_Int32 nRet = 0;
+    sal_Int32 nRet;
     while( ((nRet = ((sal_Int32)(*pStr1))-
                     ((sal_Int32)((unsigned char)(*pStr2)))) == 0) &&
            nStr1Len && *pStr2 )
@@ -196,6 +143,185 @@ sal_Int32 SAL_CALL rtl_ustr_ascii_compare_WithLength( const sal_Unicode* pStr1,
         pStr1++;
         pStr2++;
         nStr1Len--;
+    }
+
+    return nRet;
+}
+
+/* ----------------------------------------------------------------------- */
+
+sal_Int32 SAL_CALL rtl_ustr_ascii_shortenedCompare_WithLength( const sal_Unicode* pStr1,
+                                                               sal_Int32 nStr1Len,
+                                                               const sal_Char* pStr2,
+                                                               sal_Int32 nShortenedLength )
+{
+    const sal_Unicode*  pStr1End = pStr1 + nStr1Len;
+    sal_Int32           nRet;
+    while ( (nShortenedLength > 0) &&
+            (pStr1 < pStr1End) && *pStr2 )
+    {
+        /* Check ASCII range */
+        OSL_ENSURE( (*pStr2 & 0x80) == 0, "Found ASCII char > 127");
+
+        nRet = ((sal_Int32)*pStr1)-
+               ((sal_Int32)(unsigned char)*pStr2);
+        if ( nRet != 0 )
+            return nRet;
+
+        nShortenedLength--;
+        pStr1++;
+        pStr2++;
+    }
+
+    if ( nShortenedLength <= 0 )
+        return 0;
+
+    if ( *pStr2 )
+    {
+        OSL_ENSURE( pStr1 == pStr1End, "pStr1 == pStr1End failed" );
+        // first is a substring of the second string => less (negative value)
+        nRet = -1;
+    }
+    else
+    {
+        // greater or equal
+        nRet = pStr1End - pStr1;
+    }
+
+    return nRet;
+}
+
+/* ----------------------------------------------------------------------- */
+
+sal_Int32 SAL_CALL rtl_ustr_asciil_reverseCompare_WithLength( const sal_Unicode* pStr1,
+                                                              sal_Int32 nStr1Len,
+                                                              const sal_Char* pStr2,
+                                                              sal_Int32 nStr2Len )
+{
+    const sal_Unicode*  pStr1Run = pStr1+nStr1Len;
+    const sal_Char*     pStr2Run = pStr2+nStr2Len;
+    sal_Int32           nRet;
+    while ( (pStr1 < pStr1Run) && (pStr2 < pStr2Run) )
+    {
+        pStr1Run--;
+        pStr2Run--;
+        nRet = ((sal_Int32)*pStr1Run)-((sal_Int32)*pStr2Run);
+        if ( nRet )
+            return nRet;
+    }
+
+    return nStr1Len - nStr2Len;
+}
+
+/* ----------------------------------------------------------------------- */
+
+sal_Int32 SAL_CALL rtl_ustr_ascii_compareIgnoreAsciiCase( const sal_Unicode* pStr1,
+                                                          const sal_Char* pStr2 )
+{
+    sal_Int32   nRet;
+    sal_Int32   c1;
+    sal_Int32   c2;
+    do
+    {
+        /* If character between 'A' and 'Z', than convert it to lowercase */
+        c1 = (sal_Int32)*pStr1;
+        c2 = (sal_Int32)((unsigned char)*pStr2);
+        if ( (c1 >= 65) && (c1 <= 90) )
+            c1 += 32;
+        if ( (c2 >= 65) && (c2 <= 90) )
+            c2 += 32;
+        nRet = c1-c2;
+        if ( nRet != 0 )
+            break;
+
+        pStr1++;
+        pStr2++;
+    }
+    while ( c2 );
+
+    return nRet;
+}
+
+/* ----------------------------------------------------------------------- */
+
+sal_Int32 SAL_CALL rtl_ustr_ascii_compareIgnoreAsciiCase_WithLength( const sal_Unicode* pStr1,
+                                                                     sal_Int32 nStr1Len,
+                                                                     const sal_Char* pStr2 )
+{
+    sal_Int32   nRet;
+    sal_Int32   c1;
+    sal_Int32   c2;
+    do
+    {
+        if ( !nStr1Len )
+            return 0;
+
+        /* If character between 'A' and 'Z', than convert it to lowercase */
+        c1 = (sal_Int32)*pStr1;
+        c2 = (sal_Int32)((unsigned char)*pStr2);
+        if ( (c1 >= 65) && (c1 <= 90) )
+            c1 += 32;
+        if ( (c2 >= 65) && (c2 <= 90) )
+            c2 += 32;
+        nRet = c1-c2;
+        if ( nRet != 0 )
+            return nRet;
+
+        pStr1++;
+        pStr2++;
+        nStr1Len--;
+    }
+    while( c2 );
+
+    return 0;
+}
+
+/* ----------------------------------------------------------------------- */
+
+sal_Int32 SAL_CALL rtl_ustr_ascii_shortenedCompareIgnoreAsciiCase_WithLength( const sal_Unicode* pStr1,
+                                                                              sal_Int32 nStr1Len,
+                                                                              const sal_Char* pStr2,
+                                                                              sal_Int32 nShortenedLength )
+{
+    const sal_Unicode*  pStr1End = pStr1 + nStr1Len;
+    sal_Int32           nRet;
+    sal_Int32           c1;
+    sal_Int32           c2;
+    while ( (nShortenedLength > 0) &&
+            (pStr1 < pStr1End) && *pStr2 )
+    {
+        /* Check ASCII range */
+        OSL_ENSURE( (*pStr2 & 0x80) == 0, "Found ASCII char > 127");
+
+        /* If character between 'A' and 'Z', than convert it to lowercase */
+        c1 = (sal_Int32)*pStr1;
+        c2 = (sal_Int32)((unsigned char)*pStr2);
+        if ( (c1 >= 65) && (c1 <= 90) )
+            c1 += 32;
+        if ( (c2 >= 65) && (c2 <= 90) )
+            c2 += 32;
+        nRet = c1-c2;
+        if ( nRet != 0 )
+            return nRet;
+
+        nShortenedLength--;
+        pStr1++;
+        pStr2++;
+    }
+
+    if ( nShortenedLength <= 0 )
+        return 0;
+
+    if ( *pStr2 )
+    {
+        OSL_ENSURE( pStr1 == pStr1End, "pStr1 == pStr1End failed" );
+        // first is a substring of the second string => less (negative value)
+        nRet = -1;
+    }
+    else
+    {
+        // greater or equal
+        nRet = pStr1End - pStr1;
     }
 
     return nRet;

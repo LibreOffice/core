@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ustring.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: th $ $Date: 2001-05-09 12:52:35 $
+ *  last change: $Author: th $ $Date: 2001-07-27 13:21:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,41 +128,6 @@ sal_Int32 SAL_CALL rtl_ustr_compare( const sal_Unicode * first, const sal_Unicod
 sal_Int32 SAL_CALL rtl_ustr_compare_WithLength( const sal_Unicode * first, sal_Int32 firstLen, const sal_Unicode * second, sal_Int32 secondLen ) SAL_THROW_EXTERN_C();
 
 /**
-  Compares two strings.
-  The comparison is based on the numeric value of each character in
-  the strings and return a value indicating their relationship.
-  This function can't be used for language specific sorting.
-  Both strings must be NULL-terminated.
-
-  @param    first       the first NULL-terminated string to be compared.
-  @param    second      the second NULL-terminated ASCII string which
-                        is compared with the first param.
-  @return   <code>0</code> - if both strings are equal
-            <code>< 0</code> - if the first string is less than the second string
-            <code>> 0</code> - if the first string is greater than the second string
-*/
-sal_Int32 SAL_CALL rtl_ustr_ascii_compare( const sal_Unicode * first, const sal_Char * second ) SAL_THROW_EXTERN_C();
-
-/**
-  Compares two strings with a maximum count of characters for each string.
-  The comparison is based on the numeric value of each character in
-  the strings and return a value indicating their relationship.
-  This function can't be used for language specific sorting.
-  The string length must be equal or greater as there given length.
-
-  @param    first       the first string to be compared.
-  @param    firstLen    the length of the first string or the number of
-                        characters to compared. The first string length
-                        must be greater or equal than this value.
-  @param    second      the second ASCII string which is compared with
-                        the first param.
-  @return   <code>0</code> - if both substrings are equal
-            <code>< 0</code> - if the first substring is less than the second substring
-            <code>> 0</code> - if the first substring is greater than the second substring
-*/
-sal_Int32 SAL_CALL rtl_ustr_ascii_compare_WithLength( const sal_Unicode * first, sal_Int32 firstLen, const sal_Char * second ) SAL_THROW_EXTERN_C();
-
-/**
   Compares two strings with a maximum count of characters for each string.
   The comparison is based on the numeric value of each character in
   the strings and return a value indicating their relationship.
@@ -178,14 +143,36 @@ sal_Int32 SAL_CALL rtl_ustr_ascii_compare_WithLength( const sal_Unicode * first,
   @param    secondLen   the length of the second string or the number of
                         characters to compared. The second string length
                         must be greater or equal than this value.
-  @param    shortenedLength the number of characters which should be compared.
-                            This length can be longer, shorter or equal than
-                            the both other strings.
+  @param    shortenedLen the number of characters which should be compared.
+                         This length can be longer, shorter or equal than
+                         the both other strings.
   @return   <code>0</code> - if both substrings are equal
             <code>< 0</code> - if the first substring is less than the second substring
             <code>> 0</code> - if the first substring is greater than the second substring
 */
-sal_Int32 SAL_CALL rtl_ustr_shortenedCompare_WithLength( const sal_Unicode * first, sal_Int32 firstLen, const sal_Unicode * second, sal_Int32 secondLen, sal_Int32 shortenedLength ) SAL_THROW_EXTERN_C();
+sal_Int32 SAL_CALL rtl_ustr_shortenedCompare_WithLength( const sal_Unicode * first, sal_Int32 firstLen, const sal_Unicode * second, sal_Int32 secondLen, sal_Int32 shortenedLen ) SAL_THROW_EXTERN_C();
+
+/**
+  Compares two strings in reverse order.
+  The comparison is based on the numeric value of each character in
+  the strings and return a value indicating their relationship.
+  This function can't be used for language specific sorting.
+  The string length must be equal or greater as there given length.
+
+  @param    first       the first string to be compared.
+  @param    firstLen    the length of the first string or the number of
+                        characters to compared. The first string length
+                        must be greater or equal than this value.
+  @param    second      the second string which is compared with
+                        the first param.
+  @param    secondLen   the length of the second string or the number of
+                        characters to compared. The second string length
+                        must be greater or equal than this value.
+  @return   <code>0</code> - if both strings are equal
+            <code>< 0</code> - if the first string is less than the second string
+            <code>> 0</code> - if the first string is greater than the second string
+*/
+sal_Int32 SAL_CALL rtl_ustr_reverseCompare_WithLength( const sal_Unicode * first, sal_Int32 firstLen, const sal_Unicode * second, sal_Int32 secondLen ) SAL_THROW_EXTERN_C();
 
 /**
   Perform a ASCII lowercase comparison of two strings.
@@ -206,9 +193,12 @@ sal_Int32 SAL_CALL rtl_ustr_shortenedCompare_WithLength( const sal_Unicode * fir
 sal_Int32 SAL_CALL rtl_ustr_compareIgnoreAsciiCase( const sal_Unicode * first, const sal_Unicode * second ) SAL_THROW_EXTERN_C();
 
 /**
-  Compares two strings with a maximum count of characters for each string.
+  Perform a ASCII lowercase comparison of two strings with a maximum count
+  of characters for each string.
   The comparison is based on the numeric value of each character in
   the strings and return a value indicating their relationship.
+  Character values between 65 and 90 (ASCII A-Z) are interpreted as
+  values between 97 and 122 (ASCII a-z).
   This function can't be used for language specific sorting.
   Both string lengths must be equal or greater as there given length.
 
@@ -226,6 +216,205 @@ sal_Int32 SAL_CALL rtl_ustr_compareIgnoreAsciiCase( const sal_Unicode * first, c
             <code>> 0</code> - if the first substring is greater than the second substring
 */
 sal_Int32 SAL_CALL rtl_ustr_compareIgnoreAsciiCase_WithLength( const sal_Unicode * first, sal_Int32 firstLen, const sal_Unicode * second, sal_Int32 secondLen ) SAL_THROW_EXTERN_C();
+
+/**
+  Perform a ASCII lowercase comparison of two strings with a maximum count
+  of characters for each string.
+  The comparison is based on the numeric value of each character in
+  the strings and return a value indicating their relationship.
+  Character values between 65 and 90 (ASCII A-Z) are interpreted as
+  values between 97 and 122 (ASCII a-z).
+  This function can't be used for language specific sorting.
+  Both string lengths must be equal or greater as there given length.
+
+  @param    first       the first string to be compared.
+  @param    firstLen    the length of the first string or the number of
+                        characters to compared. The first string length
+                        must be greater or equal than this value.
+  @param    second      the second string which is compared with the first
+                        param.
+  @param    secondLen   the length of the second string or the number of
+                        characters to compared. The second string length
+                        must be greater or equal than this value.
+  @param    shortenedLen the number of characters which should be compared.
+                         This length can be longer, shorter or equal than
+                         the both other strings.
+  @return   <code>0</code> - if both substrings are equal
+            <code>< 0</code> - if the first substring is less than the second substring
+            <code>> 0</code> - if the first substring is greater than the second substring
+*/
+sal_Int32 SAL_CALL rtl_ustr_shortenedCompareIgnoreAsciiCase_WithLength( const sal_Unicode * first, sal_Int32 firstLen, const sal_Unicode * second, sal_Int32 secondLen, sal_Int32 shortenedLen ) SAL_THROW_EXTERN_C();
+
+/**
+  Compares two strings.
+  The comparison is based on the numeric value of each character in
+  the strings and return a value indicating their relationship.
+  This function can't be used for language specific sorting.
+  Both strings must be NULL-terminated.
+  Since this method is optimized for performance, the ASCII character
+  values are not converted in any way. The caller has to make sure that
+  all ASCII characters are in the allowed range between 0 and
+  127.
+
+  @param    first       the first NULL-terminated string to be compared.
+  @param    second      the second NULL-terminated ASCII string which
+                        is compared with the first param.
+  @return   <code>0</code> - if both strings are equal
+            <code>< 0</code> - if the first string is less than the second string
+            <code>> 0</code> - if the first string is greater than the second string
+*/
+sal_Int32 SAL_CALL rtl_ustr_ascii_compare( const sal_Unicode * first, const sal_Char * second ) SAL_THROW_EXTERN_C();
+
+/**
+  Compares two strings with a maximum count of characters for each string.
+  The comparison is based on the numeric value of each character in
+  the strings and return a value indicating their relationship.
+  This function can't be used for language specific sorting.
+  The string length must be equal or greater as there given length.
+  Since this method is optimized for performance, the ASCII character
+  values are not converted in any way. The caller has to make sure that
+  all ASCII characters are in the allowed range between 0 and
+  127.
+
+  @param    first       the first string to be compared.
+  @param    firstLen    the length of the first string or the number of
+                        characters to compared. The first string length
+                        must be greater or equal than this value.
+  @param    second      the second ASCII string which is compared with
+                        the first param.
+  @return   <code>0</code> - if both substrings are equal
+            <code>< 0</code> - if the first substring is less than the second substring
+            <code>> 0</code> - if the first substring is greater than the second substring
+*/
+sal_Int32 SAL_CALL rtl_ustr_ascii_compare_WithLength( const sal_Unicode * first, sal_Int32 firstLen, const sal_Char * second ) SAL_THROW_EXTERN_C();
+
+/**
+  Compares two strings with a maximum count of characters for each string.
+  The comparison is based on the numeric value of each character in
+  the strings and return a value indicating their relationship.
+  This function can't be used for language specific sorting.
+  Both string lengths must be equal or greater as there given length.
+  Since this method is optimized for performance, the ASCII character
+  values are not converted in any way. The caller has to make sure that
+  all ASCII characters are in the allowed range between 0 and
+  127.
+
+  @param    first       the first string to be compared.
+  @param    firstLen    the length of the first string or the number of
+                        characters to compared. The first string length
+                        must be greater or equal than this value.
+  @param    second      the second ASCII string which is compared with
+                        the first param.
+  @param    shortenedLen the number of characters which should be compared.
+                         This length can be longer, shorter or equal than
+                         the both other strings.
+  @return   <code>0</code> - if both substrings are equal
+            <code>< 0</code> - if the first substring is less than the second substring
+            <code>> 0</code> - if the first substring is greater than the second substring
+*/
+sal_Int32 SAL_CALL rtl_ustr_ascii_shortenedCompare_WithLength( const sal_Unicode * first, sal_Int32 firstLen, const sal_Char * second, sal_Int32 shortenedLen ) SAL_THROW_EXTERN_C();
+
+/**
+  Compares two strings in reverse order.
+  The comparison is based on the numeric value of each character in
+  the strings and return a value indicating their relationship.
+  This function can't be used for language specific sorting.
+  The string length must be equal or greater as there given length.
+  Since this method is optimized for performance, the ASCII character
+  values are not converted in any way. The caller has to make sure that
+  all ASCII characters are in the allowed range between 0 and
+  127.
+
+  @param    first       the first string to be compared.
+  @param    firstLen    the length of the first string or the number of
+                        characters to compared. The first string length
+                        must be greater or equal than this value.
+  @param    second      the second ASCII string which is compared with
+                        the first param.
+  @param    secondLen   the length of the second string or the number of
+                        characters to compared. The second string length
+                        must be greater or equal than this value.
+  @return   <code>0</code> - if both strings are equal
+            <code>< 0</code> - if the first string is less than the second string
+            <code>> 0</code> - if the first string is greater than the second string
+*/
+sal_Int32 SAL_CALL rtl_ustr_asciil_reverseCompare_WithLength( const sal_Unicode * first, sal_Int32 firstLen, const sal_Char * second, sal_Int32 secondLen ) SAL_THROW_EXTERN_C();
+
+/**
+  Perform a ASCII lowercase comparison of two strings.
+  The comparison is based on the numeric value of each character in
+  the strings and return a value indicating their relationship.
+  Character values between 65 and 90 (ASCII A-Z) are interpreted as
+  values between 97 and 122 (ASCII a-z).
+  This function can't be used for language specific sorting.
+  Both strings must be NULL-terminated.
+  Since this method is optimized for performance, the ASCII character
+  values are not converted in any way. The caller has to make sure that
+  all ASCII characters are in the allowed range between 0 and
+  127.
+
+  @param    first       the first NULL-terminated string to be compared.
+  @param    second      the second NULL-terminated ASCII string which
+                        is compared with the first param.
+  @return   <code>0</code> - if both strings are equal
+            <code>< 0</code> - if the first string is less than the second string
+            <code>> 0</code> - if the first string is greater than the second string
+*/
+sal_Int32 SAL_CALL rtl_ustr_ascii_compareIgnoreAsciiCase( const sal_Unicode * first, const sal_Char * second ) SAL_THROW_EXTERN_C();
+
+/**
+  Perform a ASCII lowercase comparison of two strings.
+  The comparison is based on the numeric value of each character in
+  the strings and return a value indicating their relationship.
+  Character values between 65 and 90 (ASCII A-Z) are interpreted as
+  values between 97 and 122 (ASCII a-z).
+  This function can't be used for language specific sorting.
+  The string length must be equal or greater as there given length.
+  Since this method is optimized for performance, the ASCII character
+  values are not converted in any way. The caller has to make sure that
+  all ASCII characters are in the allowed range between 0 and
+  127.
+
+  @param    first       the first string to be compared.
+  @param    firstLen    the length of the first string or the number of
+                        characters to compared. The first string length
+                        must be greater or equal than this value.
+  @param    second      the second ASCII string which is compared with
+                        the first param.
+  @return   <code>0</code> - if both substrings are equal
+            <code>< 0</code> - if the first substring is less than the second substring
+            <code>> 0</code> - if the first substring is greater than the second substring
+*/
+sal_Int32 SAL_CALL rtl_ustr_ascii_compareIgnoreAsciiCase_WithLength( const sal_Unicode * first, sal_Int32 firstLen, const sal_Char * second ) SAL_THROW_EXTERN_C();
+
+/**
+  Perform a ASCII lowercase comparison of two strings with a maximum count
+  of characters for each string.
+  The comparison is based on the numeric value of each character in
+  the strings and return a value indicating their relationship.
+  Character values between 65 and 90 (ASCII A-Z) are interpreted as
+  values between 97 and 122 (ASCII a-z).
+  This function can't be used for language specific sorting.
+  Both string lengths must be equal or greater as there given length.
+  Since this method is optimized for performance, the ASCII character
+  values are not converted in any way. The caller has to make sure that
+  all ASCII characters are in the allowed range between 0 and
+  127.
+
+  @param    first       the first string to be compared.
+  @param    firstLen    the length of the first string or the number of
+                        characters to compared. The first string length
+                        must be greater or equal than this value.
+  @param    second      the second ASCII string which is compared with
+                        the first param.
+  @param    shortenedLen the number of characters which should be compared.
+                         This length can be longer, shorter or equal than
+                         the both other strings.
+  @return   <code>0</code> - if both substrings are equal
+            <code>< 0</code> - if the first substring is less than the second substring
+            <code>> 0</code> - if the first substring is greater than the second substring
+*/
+sal_Int32 SAL_CALL rtl_ustr_ascii_shortenedCompareIgnoreAsciiCase_WithLength( const sal_Unicode * first, sal_Int32 firstLen, const sal_Char * second, sal_Int32 shortenedLen ) SAL_THROW_EXTERN_C();
 
 /**
   Returns a hashcode for a string.
@@ -986,58 +1175,6 @@ void SAL_CALL rtl_string2UString( rtl_uString ** newStr, const sal_Char * str, s
 #define RTL_CONSTASCII_USTRINGPARAM( constAsciiStr ) constAsciiStr, sizeof( constAsciiStr )-1, RTL_TEXTENCODING_ASCII_US
 
 /* ======================================================================= */
-/* ======================================================================= */
-
-/**
-    Compares the string reverse lexicographically with a 8-Bit ASCII
-    character string. <STRONG>The secondLength parameter is the length of
-    the ASCII string and not the number of characters which should be
-    compared.</STRONG> The reverse comparison is based on the
-    numerical values of each Unicode/ASCII character in the
-    strings with a 8-Bit ASCII character string. Since this
-    method is optimized for performance. the ASCII character
-    values are not converted in any way. The caller has to
-    ensure that all ASCII characters are in the allowed
-    range between 0 and 127.
-    The ASCII string must be NULL-terminated.
-
-    @param  first   the <code>String</code> to be compared.
-    @param  second  the <code>String</code> to compare first
-                    <code>String</code> against.
-    @param  secondLength the
-
-    @return the value <code>0</code> if the argument string is equal to
-            this string; a value less than <code>0</code> if first string
-            is lexicographically less than the second string; and a
-            value greater than <code>0</code> if first string is
-            lexicographically greater than the second string.
-            <STRONG>The compare order is from the last character to the
-            first one</STRONG>.
- */
-sal_Int32 SAL_CALL rtl_ustr_asciil_reverseCompare_WithLength( const sal_Unicode * first, sal_Int32 firstLen,
-                                                            const sal_Char * second, sal_Int32 secondLength );
-
-/**
-    Compares lexicographically a 16-Bit Unicode character string directly
-    with a 8-Bit ASCII character string. Since this function is optimized
-    for performance. the ASCII character values are not converted in any
-    way. The caller has to make sure that all ASCII characters are in the
-    allowed range between 0 and 127. strings must be NULL-terminated.
-
-    @param  first   the <code>String</code> to be compared.
-    @param  second  the <code>String</code> to compare first
-                    <code>String</code> against.
-    @param  shortenedLength the number of characters which should be compared.
-                    This length can be longer, shorter or equal than the both other strings.
-
-    @return the value <code>0</code> if the argument string is equal to
-            this string; a value less than <code>0</code> if first string
-            is lexicographically less than the second string; and a
-            value greater than <code>0</code> if first string is
-            lexicographically greater than the second string.
- */
-sal_Int32 SAL_CALL rtl_ustr_ascii_shortenedCompare_WithLength( const sal_Unicode * first, sal_Int32 firstLen,
-                                                     const sal_Char * second, sal_Int32 shortenedLength );
 
 #ifdef __cplusplus
 }

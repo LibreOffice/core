@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strtmpl.c,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jbu $ $Date: 2001-06-07 16:31:53 $
+ *  last change: $Author: th $ $Date: 2001-07-27 13:24:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,18 +131,18 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( compare_WithLength )( const IMPL_RTL_STRCOD
 {
     const IMPL_RTL_STRCODE* pStr1End = pStr1 + nStr1Len;
     const IMPL_RTL_STRCODE* pStr2End = pStr2 + nStr2Len;
-    sal_Int32 nRet = 0;
-    while( (pStr1 < pStr1End) &&
-           (pStr2 < pStr2End) &&
-            ((nRet = ((sal_Int32)(IMPL_RTL_USTRCODE( *pStr1 )))-
-                     ((sal_Int32)(IMPL_RTL_USTRCODE( *pStr2 )))) == 0) )
+    sal_Int32 nRet;
+    while ( (pStr1 < pStr1End) && (pStr2 < pStr2End) )
     {
+        nRet = ((sal_Int32)(IMPL_RTL_USTRCODE( *pStr1 )))-
+               ((sal_Int32)(IMPL_RTL_USTRCODE( *pStr2 )));
+        if ( nRet )
+            return nRet;
+
         pStr1++;
         pStr2++;
     }
 
-    if ( nRet )
-        return nRet;
     return nStr1Len - nStr2Len;
 }
 
@@ -156,20 +156,45 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( shortenedCompare_WithLength )( const IMPL_R
 {
     const IMPL_RTL_STRCODE* pStr1End = pStr1 + nStr1Len;
     const IMPL_RTL_STRCODE* pStr2End = pStr2 + nStr2Len;
-    sal_Int32 nRet = 0;
-    while( nShortenedLength &&
-           (pStr1 < pStr1End) &&
-           (pStr2 < pStr2End) &&
-            ((nRet = ((sal_Int32)(IMPL_RTL_USTRCODE( *pStr1 )))-
-                     ((sal_Int32)(IMPL_RTL_USTRCODE( *pStr2 )))) == 0) )
+    sal_Int32               nRet;
+    while ( (nShortenedLength > 0) &&
+            (pStr1 < pStr1End) && (pStr2 < pStr2End) )
     {
+        nRet = ((sal_Int32)(IMPL_RTL_USTRCODE( *pStr1 )))-
+               ((sal_Int32)(IMPL_RTL_USTRCODE( *pStr2 )));
+        if ( nRet )
+            return nRet;
+
         nShortenedLength--;
         pStr1++;
         pStr2++;
     }
 
-    if ( nRet || (nShortenedLength == 0) )
-        return nRet;
+    if ( nShortenedLength <= 0 )
+        return 0;
+    return nStr1Len - nStr2Len;
+}
+
+/* ----------------------------------------------------------------------- */
+
+sal_Int32 SAL_CALL IMPL_RTL_STRNAME( reverseCompare_WithLength )( const IMPL_RTL_STRCODE* pStr1,
+                                                                  sal_Int32 nStr1Len,
+                                                                  const IMPL_RTL_STRCODE* pStr2,
+                                                                  sal_Int32 nStr2Len )
+{
+    const IMPL_RTL_STRCODE* pStr1Run = pStr1+nStr1Len;
+    const IMPL_RTL_STRCODE* pStr2Run = pStr2+nStr2Len;
+    sal_Int32               nRet;
+    while ( (pStr1 < pStr1Run) && (pStr2 < pStr2Run) )
+    {
+        pStr1Run--;
+        pStr2Run--;
+        nRet = ((sal_Int32)(IMPL_RTL_USTRCODE( *pStr1Run )))-
+               ((sal_Int32)(IMPL_RTL_USTRCODE( *pStr2Run )));
+        if ( nRet )
+            return nRet;
+    }
+
     return nStr1Len - nStr2Len;
 }
 
@@ -199,7 +224,7 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( compareIgnoreAsciiCase )( const IMPL_RTL_ST
     }
     while ( c2 );
 
-    return nRet;
+    return 0;
 }
 
 /* ----------------------------------------------------------------------- */
@@ -211,7 +236,7 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( compareIgnoreAsciiCase_WithLength )( const 
 {
     const IMPL_RTL_STRCODE* pStr1End = pStr1 + nStr1Len;
     const IMPL_RTL_STRCODE* pStr2End = pStr2 + nStr2Len;
-    sal_Int32   nRet = 0;
+    sal_Int32   nRet;
     sal_Int32   c1;
     sal_Int32   c2;
     while ( (pStr1 < pStr1End) && (pStr2 < pStr2End) )
@@ -225,14 +250,49 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( compareIgnoreAsciiCase_WithLength )( const 
             c2 += 32;
         nRet = c1-c2;
         if ( nRet != 0 )
-            break;
+            return nRet;
 
         pStr1++;
         pStr2++;
     }
 
-    if ( nRet )
-        return nRet;
+    return nStr1Len - nStr2Len;
+}
+
+/* ----------------------------------------------------------------------- */
+
+sal_Int32 SAL_CALL IMPL_RTL_STRNAME( shortenedCompareIgnoreAsciiCase_WithLength )( const IMPL_RTL_STRCODE* pStr1,
+                                                                                   sal_Int32 nStr1Len,
+                                                                                   const IMPL_RTL_STRCODE* pStr2,
+                                                                                   sal_Int32 nStr2Len,
+                                                                                   sal_Int32 nShortenedLength )
+{
+    const IMPL_RTL_STRCODE* pStr1End = pStr1 + nStr1Len;
+    const IMPL_RTL_STRCODE* pStr2End = pStr2 + nStr2Len;
+    sal_Int32               nRet;
+    sal_Int32               c1;
+    sal_Int32               c2;
+    while ( (nShortenedLength > 0) &&
+            (pStr1 < pStr1End) && (pStr2 < pStr2End) )
+    {
+        /* If character between 'A' and 'Z', than convert it to lowercase */
+        c1 = (sal_Int32)IMPL_RTL_USTRCODE( *pStr1 );
+        c2 = (sal_Int32)IMPL_RTL_USTRCODE( *pStr2 );
+        if ( (c1 >= 65) && (c1 <= 90) )
+            c1 += 32;
+        if ( (c2 >= 65) && (c2 <= 90) )
+            c2 += 32;
+        nRet = c1-c2;
+        if ( nRet != 0 )
+            return nRet;
+
+        nShortenedLength--;
+        pStr1++;
+        pStr2++;
+    }
+
+    if ( nShortenedLength <= 0 )
+        return 0;
     return nStr1Len - nStr2Len;
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: string.h,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: th $ $Date: 2001-05-09 12:50:57 $
+ *  last change: $Author: th $ $Date: 2001-07-27 13:20:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,14 +140,36 @@ sal_Int32 SAL_CALL rtl_str_compare_WithLength( const sal_Char * first, sal_Int32
   @param    secondLen   the length of the second string or the number of
                         characters to compared. The second string length
                         must be greater or equal than this value.
-  @param    shortenedLength the number of characters which should be compared.
-                            This length can be longer, shorter or equal than
-                            the both other strings.
+  @param    shortenedLen the number of characters which should be compared.
+                         This length can be longer, shorter or equal than
+                         the both other strings.
   @return   <code>0</code> - if both substrings are equal
             <code>< 0</code> - if the first substring is less than the second substring
             <code>> 0</code> - if the first substring is greater than the second substring
 */
-sal_Int32 SAL_CALL rtl_str_shortenedCompare_WithLength( const sal_Char * first, sal_Int32 firstLen, const sal_Char * second, sal_Int32 secondLen, sal_Int32 shortenedLength ) SAL_THROW_EXTERN_C();
+sal_Int32 SAL_CALL rtl_str_shortenedCompare_WithLength( const sal_Char * first, sal_Int32 firstLen, const sal_Char * second, sal_Int32 secondLen, sal_Int32 shortenedLen ) SAL_THROW_EXTERN_C();
+
+/**
+  Compares two strings in reverse order.
+  The comparison is based on the numeric value of each character in
+  the strings and return a value indicating their relationship.
+  This function can't be used for language specific sorting.
+  The string length must be equal or greater as there given length.
+
+  @param    first       the first string to be compared.
+  @param    firstLen    the length of the first string or the number of
+                        characters to compared. The first string length
+                        must be greater or equal than this value.
+  @param    second      the second string which is compared with
+                        the first param.
+  @param    secondLen   the length of the second string or the number of
+                        characters to compared. The second string length
+                        must be greater or equal than this value.
+  @return   <code>0</code> - if both strings are equal
+            <code>< 0</code> - if the first string is less than the second string
+            <code>> 0</code> - if the first string is greater than the second string
+*/
+sal_Int32 SAL_CALL rtl_str_reverseCompare_WithLength( const sal_Char * first, sal_Int32 firstLen, const sal_Char * second, sal_Int32 secondLen ) SAL_THROW_EXTERN_C();
 
 /**
   Perform a ASCII lowercase comparison of two strings.
@@ -168,9 +190,12 @@ sal_Int32 SAL_CALL rtl_str_shortenedCompare_WithLength( const sal_Char * first, 
 sal_Int32 SAL_CALL rtl_str_compareIgnoreAsciiCase( const sal_Char * first, const sal_Char * second ) SAL_THROW_EXTERN_C();
 
 /**
-  Compares two strings with a maximum count of characters for each string.
+  Perform a ASCII lowercase comparison of two strings with a maximum count
+  of characters for each string.
   The comparison is based on the numeric value of each character in
   the strings and return a value indicating their relationship.
+  Character values between 65 and 90 (ASCII A-Z) are interpreted as
+  values between 97 and 122 (ASCII a-z).
   This function can't be used for language specific sorting.
   Both string lengths must be equal or greater as there given length.
 
@@ -188,6 +213,34 @@ sal_Int32 SAL_CALL rtl_str_compareIgnoreAsciiCase( const sal_Char * first, const
             <code>> 0</code> - if the first substring is greater than the second substring
 */
 sal_Int32 SAL_CALL rtl_str_compareIgnoreAsciiCase_WithLength( const sal_Char * first, sal_Int32 firstLen, const sal_Char * second, sal_Int32 secondLen ) SAL_THROW_EXTERN_C();
+
+/**
+  Perform a ASCII lowercase comparison of two strings with a maximum count
+  of characters for each string.
+  The comparison is based on the numeric value of each character in
+  the strings and return a value indicating their relationship.
+  Character values between 65 and 90 (ASCII A-Z) are interpreted as
+  values between 97 and 122 (ASCII a-z).
+  This function can't be used for language specific sorting.
+  Both string lengths must be equal or greater as there given length.
+
+  @param    first       the first string to be compared.
+  @param    firstLen    the length of the first string or the number of
+                        characters to compared. The first string length
+                        must be greater or equal than this value.
+  @param    second      the second string which is compared with the first
+                        param.
+  @param    secondLen   the length of the second string or the number of
+                        characters to compared. The second string length
+                        must be greater or equal than this value.
+  @param    shortenedLen the number of characters which should be compared.
+                         This length can be longer, shorter or equal than
+                         the both other strings.
+  @return   <code>0</code> - if both substrings are equal
+            <code>< 0</code> - if the first substring is less than the second substring
+            <code>> 0</code> - if the first substring is greater than the second substring
+*/
+sal_Int32 SAL_CALL rtl_str_shortenedCompareIgnoreAsciiCase_WithLength( const sal_Char * first, sal_Int32 firstLen, const sal_Char * second, sal_Int32 secondLen, sal_Int32 shortenedLen ) SAL_THROW_EXTERN_C();
 
 /**
   Returns a hashcode for a string.
