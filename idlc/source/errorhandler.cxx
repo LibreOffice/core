@@ -2,9 +2,9 @@
  *
  *  $RCSfile: errorhandler.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 11:59:20 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:46:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,7 @@ static sal_Char* errorCodeToMessage(ErrorCode eCode)
     case EIDL_ILLEGAL_USE:
         return "illegal type used in expression, ";
     case EIDL_ILLEGAL_RAISES:
-        return "error in raises(..) clause, ";
+        return "non-exception type in raises(..) clause, ";
     case EIDL_CANT_INHERIT:
         return "cannot inherit ";
     case EIDL_LOOKUP_ERROR:
@@ -145,15 +145,37 @@ static sal_Char* errorCodeToMessage(ErrorCode eCode)
         return "keyword not allowed: ";
     case EIDL_MISSINGATTRIBUTEKEYWORD:
         return "missing keyword: ";
-    case EIDL_ATTRIBUTEREADONLYEXPECTED:
-        return "only the 'attribute'|'readonly' flag is accepted: ";
+    case EIDL_BAD_ATTRIBUTE_FLAGS:
+        return
+            "the 'attribute' flag is mandatory, and only the 'bound' and"
+            " 'readonly' optional flags are accepted: ";
     case EIDL_OPTIONALEXPECTED:
         return "only the 'optional' flag is accepted: ";
     case EIDL_MIXED_INHERITANCE:
         return "interface inheritance declarations cannot appear in both an"
             " interface's header and its body";
     case EIDL_DOUBLE_INHERITANCE:
-        return "interface is inherited more than once: ";
+        return
+            "interface is (directly or indirectly) inherited more than once: ";
+    case EIDL_DOUBLE_MEMBER:
+        return
+            "member is (directly or indirectly) declared more than once: ";
+    case EIDL_CONSTRUCTOR_PARAMETER_NOT_IN:
+        return
+            "a service constructor parameter may not be an out or inout"
+            " parameter";
+    case EIDL_CONSTRUCTOR_REST_PARAMETER_NOT_FIRST:
+        return
+            "no parameters may precede a rest parameter in a service"
+            " constructor";
+    case EIDL_REST_PARAMETER_NOT_LAST:
+        return "no parameters may follow a rest parameter";
+    case EIDL_REST_PARAMETER_NOT_ANY:
+        return "a rest parameter must be of type any";
+    case EIDL_METHOD_HAS_REST_PARAMETER:
+        return "a rest parameter may not be used on an interface method";
+    case EIDL_READONLY_ATTRIBUTE_SET_EXCEPTIONS:
+        return "a readonly attribute may not have a setter raises clause";
     }
     return "unknown errror";
 }
@@ -415,8 +437,6 @@ static sal_Char* parseStateToMessage(ParseState state)
         return "Illegal syntax or missing '(' after operation identifier";
     case PS_OpParsCompleted:
         return "Illegal syntax after operation parameter list";
-    case PS_OpRaiseCompleted:
-        return "Illegal syntax after optional RAISES in operation declaration";
     case PS_OpCompleted:
         return "Illegal syntax after operation declaration";
     case PS_OpSqSeen:
@@ -431,14 +451,14 @@ static sal_Char* parseStateToMessage(ParseState state)
         return "Illegal syntax or missing declarator in parameter declaration";
     case PS_OpParDeclSeen:
         return "Illegal syntax following parameter declarator";
-    case PS_OpRaiseSeen:
-        return "Illegal syntax or missing '(' after RAISES keyword";
-    case PS_OpRaiseSqSeen:
-        return "Illegal syntax after RAISES '(' opener";
-    case PS_OpRaiseQsSeen:
-        return "Illegal syntax after RAISES ')' closer";
     case PS_OpOnewaySeen:
         return "Illegal syntax after ONEWAY keyword";
+    case PS_RaiseSeen:
+        return "Illegal syntax or missing '(' after RAISES keyword";
+    case PS_RaiseSqSeen:
+        return "Illegal syntax after RAISES '(' opener";
+    case PS_RaiseQsSeen:
+        return "Illegal syntax after RAISES ')' closer";
     case PS_DeclsCommaSeen:
         return "Illegal syntax after ',' in declarators list";
     case PS_DeclsDeclSeen:
@@ -514,14 +534,15 @@ void ErrorHandler::error0(ErrorCode e)
     idlc()->incErrorCount();
 }
 
-void ErrorHandler::error1(ErrorCode e, AstDeclaration* d)
+void ErrorHandler::error1(ErrorCode e, AstDeclaration const * d)
 {
     errorHeader(e);
     fprintf(stderr, "'%s'\n", d->getScopedName().getStr());
     idlc()->incErrorCount();
 }
 
-void ErrorHandler::error2(ErrorCode e, AstDeclaration* d1, AstDeclaration* d2)
+void ErrorHandler::error2(
+    ErrorCode e, AstDeclaration const * d1, AstDeclaration const * d2)
 {
     errorHeader(e);
     fprintf(stderr, "'%s', '%s'\n", d1->getScopedName().getStr(),
@@ -618,7 +639,7 @@ void ErrorHandler::flagError(ErrorCode e, sal_uInt32 flag)
     idlc()->incErrorCount();
 }
 
-void ErrorHandler::noTypeError(AstDeclaration* pDecl)
+void ErrorHandler::noTypeError(AstDeclaration const * pDecl)
 {
     errorHeader(EIDL_NOT_A_TYPE);
     fprintf(stderr, "'%s'\n", pDecl->getScopedName().getStr());
