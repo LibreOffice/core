@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.hxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 13:39:35 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 12:26:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -615,7 +615,7 @@ private:
     virtual void                SaveCont( XclExpStream& rStrm );
 
 public:
-                                ExcWindow28( const XclExpRoot& rRoot, UINT16 nTab );
+                                ExcWindow28( const XclExpRoot& rRoot, sal_uInt16 nScTab );
     virtual                     ~ExcWindow28();
 
     virtual void                Save( XclExpStream& rStrm );
