@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XAccessibleComponent.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-20 09:49:36 $
+ *  last change: $Author: kz $ $Date: 2004-05-19 10:31:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,8 +83,8 @@
 #ifndef __com_sun_star_awt_Size_idl__
 #include <com/sun/star/awt/Size.idl>
 #endif
-#ifndef __com_sun_star_util_color_idl__
-#include <com/sun/star/util/color.idl>
+#ifndef __com_sun_star_util_Color_idl__
+#include <com/sun/star/util/Color.idl>
 #endif
 
 module com { module sun { module star { module accessibility {
@@ -253,7 +253,7 @@ interface XAccessibleComponent : ::com::sun::star::uno::XInterface
             The returned color is the foreground color of this object or, if
             that is not supported, the default foreground color.
     */
-    ::com::sun::star::util::color getForeground ();
+    ::com::sun::star::util::Color getForeground ();
 
     /** Returns the background color of this object.
 
@@ -261,7 +261,7 @@ interface XAccessibleComponent : ::com::sun::star::uno::XInterface
             The returned color is the background color of this object or, if
             that is not supported, the default background color.
     */
-    ::com::sun::star::util::color getBackground ();
+    ::com::sun::star::util::Color getBackground ();
 
 };
 
