@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TestServiceProvider.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:14:37 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 16:15:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -37,9 +37,6 @@
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  *************************************************************************/
-
-package JavaComp;
-
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XSingleServiceFactory;
 import com.sun.star.registry.XRegistryKey;
@@ -47,30 +44,34 @@ import com.sun.star.lang.XTypeProvider;
 import com.sun.star.lang.XServiceInfo;
 import com.sun.star.comp.loader.FactoryHelper;
 
-
 public class TestServiceProvider
 {
-  public static XSingleServiceFactory __getServiceFactory(String implName,
-                                                        XMultiServiceFactory multiFactory,
-                                                        XRegistryKey regKey) {
-    XSingleServiceFactory xSingleServiceFactory = null;
+    public static XSingleServiceFactory __getServiceFactory(
+                                                String implName,
+                                                XMultiServiceFactory multiFactory,
+                                                XRegistryKey regKey) {
+        XSingleServiceFactory xSingleServiceFactory = null;
 
-    if (implName.equals( TestComponentA.class.getName()) )
-      xSingleServiceFactory = FactoryHelper.getServiceFactory( TestComponentA.class,
-                              TestComponentA.__serviceName, multiFactory, regKey);
-    else if (implName.equals(TestComponentB.class.getName()))
-        xSingleServiceFactory= FactoryHelper.getServiceFactory( TestComponentB.class,
-                                  TestComponentB.__serviceName, multiFactory, regKey);
-      return xSingleServiceFactory;
-  }
+        if (implName.equals( TestComponentA.class.getName()) )
+            xSingleServiceFactory = FactoryHelper.getServiceFactory(
+                TestComponentA.class, TestComponentA.__serviceName,
+                multiFactory, regKey);
+        else if (implName.equals(TestComponentB.class.getName()))
+            xSingleServiceFactory= FactoryHelper.getServiceFactory(
+                TestComponentB.class, TestComponentB.__serviceName,
+                multiFactory, regKey);
+        return xSingleServiceFactory;
+    }
 
-  public static boolean __writeRegistryServiceInfo(XRegistryKey regKey){
-    boolean bregA= FactoryHelper.writeRegistryServiceInfo( TestComponentA.class.getName(),
-        TestComponentA.__serviceName, regKey);
-    boolean bregB= FactoryHelper.writeRegistryServiceInfo( TestComponentB.class.getName(),
-        TestComponentB.__serviceName, regKey);
-    return bregA && bregB;
-  }
+    public static boolean __writeRegistryServiceInfo(XRegistryKey regKey){
+        boolean bregA= FactoryHelper.writeRegistryServiceInfo(
+            TestComponentA.class.getName(),
+            TestComponentA.__serviceName, regKey);
+        boolean bregB= FactoryHelper.writeRegistryServiceInfo(
+            TestComponentB.class.getName(),
+            TestComponentB.__serviceName, regKey);
+        return bregA && bregB;
+    }
 }
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TestComponentB.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:14:25 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 16:15:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -37,9 +37,6 @@
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  *************************************************************************/
-
-package JavaComp;
-
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.lang.XTypeProvider;
 import com.sun.star.lang.XServiceInfo;
@@ -50,7 +47,7 @@ import com.sun.star.uno.Type;
 // for demonstration. More convenient is to use the impelmentation WeakBase or
 // ComponentBase, see implementation of TestComponentA.
 public class TestComponentB implements XTypeProvider, XServiceInfo, XSomethingB {
-    static final String __serviceName= "JavaTestComponentB";
+    static final String __serviceName= "com.sun.star.test.SomethingB";
 
        static byte[] _implementationId;
     private XComponentContext context;

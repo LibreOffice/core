@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TestComponentA.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:14:13 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 16:15:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -37,9 +37,6 @@
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  *************************************************************************/
-
-package JavaComp;
-
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lib.uno.helper.WeakBase;
 import com.sun.star.lang.XServiceInfo;
@@ -48,7 +45,7 @@ import com.sun.star.uno.Type;
 
 // TestComponentA use the implementation helper WeakBase
 public class TestComponentA extends WeakBase implements XServiceInfo, XSomethingA {
-    static final String __serviceName= "JavaTestComponentA";
+    static final String __serviceName= "com.sun.star.test.SomethingA";
 
        static byte[] _implementationId;
 
