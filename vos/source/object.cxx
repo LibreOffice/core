@@ -2,9 +2,9 @@
  *
  *  $RCSfile: object.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:18:16 $
+ *  last change: $Author: svesik $ $Date: 2000-12-29 12:40:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,7 @@
 #include <windows.h>
 #endif
 
-#if defined(SOLARIS) || defined(MACOS)
+#if defined(SOLARIS) || defined(MACOS) || defined(IRIX) || defined(IRIX64)
 #include <string.h>
 #endif
 
