@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshel2.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: cl $ $Date: 2002-11-29 14:17:23 $
+ *  last change: $Author: cl $ $Date: 2002-12-10 16:37:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -465,13 +465,14 @@ bool SdDrawDocShell::IsNewPageNameValid( String & rInOutPageName, bool bResetStr
     bool bCanUseNewName = false;
 
     // check if name is something like 'Slide n'
-    const String aStrPage( SdResId( STR_SD_PAGE ) );
+    String aStrPage( SdResId( STR_SD_PAGE ) );
+    aStrPage += ' ';
+
     bool bIsStandardName = false;
 
     // prevent also _future_ slide names of the form "'STR_SD_PAGE' + ' ' + '[0-9]+|[a-z]|[A-Z]|[CDILMVX]+|[cdilmvx]+'"
     // (arabic, lower- and upper case single letter, lower- and upper case roman numbers)
-    if( rInOutPageName.Search( aStrPage ) != STRING_NOTFOUND &&
-        rInOutPageName.GetToken( 1, sal_Unicode(' ') ).Len() != 0 )
+    if( 0 == rInOutPageName.Search( aStrPage ) )
     {
         if( rInOutPageName.GetToken( 1, sal_Unicode(' ') ).GetChar(0) >= '0' &&
             rInOutPageName.GetToken( 1, sal_Unicode(' ') ).GetChar(0) <= '9' )
