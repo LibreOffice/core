@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CacheSet.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-18 11:48:25 $
+ *  last change: $Author: oj $ $Date: 2001-05-22 13:08:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -525,6 +525,8 @@ void OCacheSet::setParameter(sal_Int32 nPos,Reference< XParameters > _xParameter
                 break;
         }
     }
+    else
+        _xParameter->setNull(nPos,_rValue.getTypeKind());
 }
 // -------------------------------------------------------------------------
 void OCacheSet::fillValueRow(ORowSetRow& _rRow,sal_Int32 _nPosition)
@@ -591,6 +593,9 @@ void OCacheSet::fillValueRow(ORowSetRow& _rRow,sal_Int32 _nPosition)
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.21  2001/05/18 11:48:25  oj
+    #86528# size changes
+
     Revision 1.20  2001/05/03 07:15:56  oj
     #86526# fetch decimal and numeric as string
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-10 12:17:27 $
+ *  last change: $Author: oj $ $Date: 2001-05-22 13:04:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,6 +136,7 @@ namespace dbaui
         void setColumnProperties(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxColumn,const OFieldDescription* _pFieldDesc);
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess> getKeyColumns() const;
         ::rtl::OUString createUniqueName(const ::rtl::OUString& _rName);
+        void setTitle(const ::rtl::OUString & _rTitle);
 
     protected:
         virtual String          getMenu() const;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: KeySet.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-18 11:48:25 $
+ *  last change: $Author: oj $ $Date: 2001-05-22 13:08:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -995,8 +995,8 @@ namespace dbaccess
                 if(bCase(sRealName,*pTableBegin) && bCase(_rsUpdateTableName,sTableName) && _rColumnNames.find(*pTableBegin) == _rColumnNames.end())
                 {
                     _rColumnNames[sRealName] = nPos;
-                    if((sal_Int32)_rColumnNames.size() == aTableNames.getLength())
-                        return; // early break we found all columns
+//                  if((sal_Int32)_rColumnNames.size() == aTableNames.getLength())
+//                      return; // early break we found all columns
                     break;
                 }
             }
@@ -1007,6 +1007,9 @@ namespace dbaccess
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.16  2001/05/18 11:48:25  oj
+    #86528# size changes
+
     Revision 1.15  2001/05/03 07:15:56  oj
     #86526# fetch decimal and numeric as string
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycomposer.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-18 12:02:50 $
+ *  last change: $Author: oj $ $Date: 2001-05-22 13:08:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,6 +127,9 @@
 #endif
 #ifndef _CONNECTIVITY_DBTOOLS_HXX_
 #include <connectivity/dbtools.hxx>
+#endif
+#ifndef _CONNECTIVITY_SDBCX_COLUMN_HXX_
+#include <connectivity/PColumn.hxx>
 #endif
 
 
@@ -474,8 +477,24 @@ void SAL_CALL OQueryComposer::setQuery( const ::rtl::OUString& command ) throw(S
             else
             { // we can now only look if we found it under the realname propertery
                 aFind = ::connectivity::findRealName(aCols->begin(),aCols->end(),sName,bCase);
-                if(aFind != aCols->end())
+
+                if(i <= aCols->size())
+                {
                     aNames.push_back(sName);
+                    if(aFind == aCols->end())
+                    { // here we have to make the assumption that the postion is correct
+                        OSQLColumns::iterator aFind2 = aCols->begin() + i-1;
+                        Reference<XPropertySet> xProp(*aFind2,UNO_QUERY);
+                        if(xProp.is() && xProp->getPropertySetInfo()->hasPropertyByName(PROPERTY_REALNAME))
+                        {
+                            ::connectivity::parse::OParseColumn* pColumn = new ::connectivity::parse::OParseColumn(xProp,m_xConnection->getMetaData()->storesMixedCaseQuotedIdentifiers());
+                            pColumn->setName(sName);
+                            pColumn->setRealName(::comphelper::getString(xProp->getPropertyValue(PROPERTY_REALNAME)));
+                            pColumn->setTableName(::comphelper::getString(xProp->getPropertyValue(PROPERTY_TABLENAME)));
+                            (*aCols)[i-1] = pColumn;
+                        }
+                    }
+                }
             }
         }
         ::comphelper::disposeComponent(xStmt);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-21 11:24:16 $
+ *  last change: $Author: oj $ $Date: 2001-05-22 13:04:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1131,18 +1131,24 @@ void SbaTableQueryBrowser::removeModelListeners(const Reference< ::com::sun::sta
 // -------------------------------------------------------------------------
 void SbaTableQueryBrowser::RowChanged()
 {
-    SbaGridControl* pControl = getBrowserView()->getVclControl();
-    if (!pControl->IsEditing())
-        InvalidateFeature(ID_BROWSER_COPY);
+    if(getBrowserView())
+    {
+        SbaGridControl* pControl = getBrowserView()->getVclControl();
+        if (!pControl->IsEditing())
+            InvalidateFeature(ID_BROWSER_COPY);
+    }
     SbaXDataBrowserController::RowChanged();
 }
 
 // -------------------------------------------------------------------------
 void SbaTableQueryBrowser::ColumnChanged()
 {
-    SbaGridControl* pControl = getBrowserView()->getVclControl();
-    if (!pControl->IsEditing())
-        InvalidateFeature(ID_BROWSER_COPY);
+    if(getBrowserView())
+    {
+        SbaGridControl* pControl = getBrowserView()->getVclControl();
+        if (!pControl->IsEditing())
+            InvalidateFeature(ID_BROWSER_COPY);
+    }
     SbaXDataBrowserController::ColumnChanged();
 }
 

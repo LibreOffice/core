@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetCache.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-11 06:14:11 $
+ *  last change: $Author: oj $ $Date: 2001-05-22 13:08:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1629,7 +1629,10 @@ void SAL_CALL ORowSetCache::updateRow( ORowSetMatrix::iterator& _rUpdateRow ) th
 
     moveToBookmark((*(*_rUpdateRow))[0].makeAny());
     m_pCacheSet->updateRow(*_rUpdateRow,*m_aMatrixIter,m_aUpdateTable);
-    *(*m_aMatrixIter) = *(*_rUpdateRow);
+    //  *(*m_aMatrixIter) = *(*_rUpdateRow);
+    // refetch the whole row
+    (*m_aMatrixIter) = NULL;
+    moveToBookmark((*(*_rUpdateRow))[0].makeAny());
 
     //  moveToBookmark((*(*m_aInsertRow))[0].makeAny());
 //  if(m_pCacheSet->rowUpdated())
@@ -1816,6 +1819,9 @@ void ORowSetCache::setUpdateIterator(const ORowSetMatrix::iterator& _rOriginalRo
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.34  2001/05/11 06:14:11  oj
+    #86724# clear updaterow after update
+
     Revision 1.33  2001/05/10 14:09:19  oj
     #86724# check null values and you of correct assignment
 

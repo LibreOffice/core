@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: tbe $ $Date: 2001-05-14 09:46:14 $
+ *  last change: $Author: oj $ $Date: 2001-05-22 13:08:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1980,6 +1980,21 @@ void ORowSet::execute_NoApprove_NoNewConn(ClearableMutexGuard& _rClearForNotific
                                 m_xColumns->getByName(sName) >>= xColumn;
                             if (!xColumn.is() && m_xColumns->hasByName(xMeta->getColumnLabel(i)))
                                 m_xColumns->getByName(xMeta->getColumnLabel(i)) >>= xColumn;
+                            if(!xColumn.is())
+                            {
+                                // no column found so we could look at the position i
+                                Reference<XIndexAccess> xIndexAccess(m_xColumns,UNO_QUERY);
+                                if(xIndexAccess.is() && i <= xIndexAccess->getCount())
+                                {
+                                    xIndexAccess->getByIndex(i-1) >>= xColumn;
+                                }
+                                else
+                                {
+                                    Sequence< ::rtl::OUString> aSeq = m_xColumns->getElementNames();
+                                    if( i <= aSeq.getLength())
+                                        m_xColumns->getByName(aSeq.getConstArray()[i-1]) >>= xColumn;
+                                }
+                            }
                             DBG_ASSERT(xColumn.is(), "ORowSet::execute_NoApprove_NoNewConn: invalid column (NULL)!");
 
                             Reference<XPropertySetInfo> xInfo = xColumn.is() ? xColumn->getPropertySetInfo() : Reference<XPropertySetInfo>();
