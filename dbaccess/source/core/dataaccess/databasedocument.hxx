@@ -2,9 +2,9 @@
  *
  *  $RCSfile: databasedocument.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 16:34:06 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 09:46:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,6 +152,7 @@ class ODatabaseDocument : public ::comphelper::OBaseMutex
     ::cppu::OInterfaceContainerHelper                   m_aCloseListener;
     ::cppu::OInterfaceContainerHelper                   m_aDocEventListeners;
     ::rtl::Reference<ODatabaseModelImpl>                m_pImpl;
+    sal_Bool                                            m_bCommitMasterStorage;
 
     void setMeAsParent(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _xName);
 
@@ -160,8 +161,11 @@ class ODatabaseDocument : public ::comphelper::OBaseMutex
             The URL
         @param  lArguments
             The media descriptor
+        @param  _xStorageToSaveTo
+            The storage which should be used for saving
     */
-    void store(const ::rtl::OUString& sURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& lArguments );
+    void store(const ::rtl::OUString& sURL
+             , const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& lArguments);
 
     /** notifies the global event broadcaster
         @param  _sEventName
@@ -188,7 +192,8 @@ class ODatabaseDocument : public ::comphelper::OBaseMutex
         /// output descriptor
         const ::com::sun::star::uno::Sequence<
             ::com::sun::star::beans::PropertyValue> & rMediaDesc,
-        sal_Bool bPlainStream );            /// neither compress nor encrypt
+        sal_Bool bPlainStream
+        , const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& _xStorageToSaveTo);          /// neither compress nor encrypt
 
     /// write a single output stream
     /// (to be called either directly or by WriteThroughComponent(...))
@@ -201,8 +206,19 @@ class ODatabaseDocument : public ::comphelper::OBaseMutex
         const ::com::sun::star::uno::Sequence<
             ::com::sun::star::uno::Any> & rArguments,
         const ::com::sun::star::uno::Sequence<
-            ::com::sun::star::beans::PropertyValue> & rMediaDesc );
-    void writeStorage(const ::rtl::OUString& _sURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& lArguments);
+            ::com::sun::star::beans::PropertyValue> & rMediaDesc);
+
+    /** writes the content and settings
+        @param  sURL
+            The URL
+        @param  lArguments
+            The media descriptor
+        @param  _xStorageToSaveTo
+            The storage which should be used for saving
+    */
+    void writeStorage(const ::rtl::OUString& _sURL
+                    , const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& lArguments
+                    , const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& _xStorageToSaveTo);
 
 
 protected:
