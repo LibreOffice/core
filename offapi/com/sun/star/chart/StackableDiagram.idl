@@ -2,9 +2,9 @@
  *
  *  $RCSfile: StackableDiagram.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:53:24 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 18:01:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@ a helper service for stackable chart types (e.g., charts in
     which the data rows may be displayed stacked on each other or in
     percent relation).
  */
-service StackableDiagram
+published service StackableDiagram
 {
     //-------------------------------------------------------------------------
 
