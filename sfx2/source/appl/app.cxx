@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 15:21:41 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 16:37:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,9 +105,6 @@
 #endif
 #ifndef _EXTATTR_HXX //autogen
 #include <svtools/extattr.hxx>
-#endif
-#ifndef _INET_WRAPPER_HXX
-#include <inet/wrapper.hxx>
 #endif
 #ifndef _SFXECODE_HXX
 #include <svtools/sfxecode.hxx>
