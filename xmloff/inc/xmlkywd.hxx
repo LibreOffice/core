@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-30 09:06:59 $
+ *  last change: $Author: aw $ $Date: 2000-11-30 18:02:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1552,5 +1552,9 @@ XML_CONSTASCII_ACTION( sXML_dots1, "dots1" );
 XML_CONSTASCII_ACTION( sXML_dots1_length, "dots1-length" );
 XML_CONSTASCII_ACTION( sXML_dots2, "dots2" );
 XML_CONSTASCII_ACTION( sXML_dots2_length, "dots2-length" );
+
+XML_CONSTASCII_ACTION( sXML_vrp, "vrp");
+XML_CONSTASCII_ACTION( sXML_vpn, "vpn");
+XML_CONSTASCII_ACTION( sXML_vup, "vup");
 
 #endif

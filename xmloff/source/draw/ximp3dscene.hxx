@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximp3dscene.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-26 19:51:29 $
+ *  last change: $Author: aw $ $Date: 2000-11-30 18:06:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,6 +160,13 @@ class SdXML3DSceneShapeContext : public SdXMLShapeContext
     com::sun::star::drawing::ShadeMode mxShadeMode;
     Color                       maAmbientColor;
     BOOL                        mbLightingMode;
+
+    Vector3D                    maVRP;
+    Vector3D                    maVPN;
+    Vector3D                    maVUP;
+    BOOL                        mbVRPUsed;
+    BOOL                        mbVPNUsed;
+    BOOL                        mbVUPUsed;
 
     const SdXMLImport& GetSdImport() const { return (const SdXMLImport&)GetImport(); }
     SdXMLImport& GetSdImport() { return (SdXMLImport&)GetImport(); }

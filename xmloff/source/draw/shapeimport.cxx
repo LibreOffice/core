@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeimport.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-27 11:15:00 $
+ *  last change: $Author: aw $ $Date: 2000-11-30 18:06:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -459,6 +459,9 @@ static __FAR_DATA SvXMLTokenMapEntry a3DSceneShapeAttrTokenMap[] =
     { XML_NAMESPACE_SVG,    sXML_width,             XML_TOK_3DSCENESHAPE_WIDTH          },
     { XML_NAMESPACE_SVG,    sXML_height,            XML_TOK_3DSCENESHAPE_HEIGHT         },
     { XML_NAMESPACE_DR3D,   sXML_transform,         XML_TOK_3DSCENESHAPE_TRANSFORM      },
+    { XML_NAMESPACE_DR3D,   sXML_vrp,               XML_TOK_3DSCENESHAPE_VRP            },
+    { XML_NAMESPACE_DR3D,   sXML_vpn,               XML_TOK_3DSCENESHAPE_VPN            },
+    { XML_NAMESPACE_DR3D,   sXML_vup,               XML_TOK_3DSCENESHAPE_VUP            },
     { XML_NAMESPACE_DR3D,   sXML_projection,        XML_TOK_3DSCENESHAPE_PROJECTION     },
     { XML_NAMESPACE_DR3D,   sXML_distance,          XML_TOK_3DSCENESHAPE_DISTANCE       },
     { XML_NAMESPACE_DR3D,   sXML_focal_length,      XML_TOK_3DSCENESHAPE_FOCAL_LENGTH   },

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: bm $ $Date: 2000-11-29 16:50:01 $
+ *  last change: $Author: aw $ $Date: 2000-11-30 18:04:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -239,6 +239,10 @@
 
 #ifndef _XMLOFF_PROPERTYSETMERGER_HXX_
 #include "PropertySetMerger.hxx"
+#endif
+
+#ifndef _COM_SUN_STAR_DRAWING_CAMERAGEOMETRY_HPP_
+#include <com/sun/star/drawing/CameraGeometry.hpp>
 #endif
 
 using namespace ::rtl;
@@ -3006,11 +3010,34 @@ void SdXMLExport::ImpExport3DScene(SvXMLExport& rExp,
             if(aTransform.NeedsAction())
                 rExp.AddAttribute(XML_NAMESPACE_DR3D, sXML_transform, aTransform.GetExportString(rExp.GetMM100UnitConverter()));
 
-            // VRP
+            // VRP, VPN, VUP
+            aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DCameraGeometry")));
+            drawing::CameraGeometry aCamGeo;
+            aAny >>= aCamGeo;
 
-            // VPN
+            Vector3D aVRP(aCamGeo.vrp.PositionX, aCamGeo.vrp.PositionY, aCamGeo.vrp.PositionZ);
+            if(aVRP != Vector3D(0.0, 0.0, 1.0)) // write only when not default
+            {
+                rExp.GetMM100UnitConverter().convertVector3D(sStringBuffer, aVRP);
+                aStr = sStringBuffer.makeStringAndClear();
+                rExp.AddAttribute(XML_NAMESPACE_DR3D, sXML_vrp, aStr);
+            }
 
-            // VUP
+            Vector3D aVPN(aCamGeo.vpn.DirectionX, aCamGeo.vpn.DirectionY, aCamGeo.vpn.DirectionZ);
+            if(aVPN != Vector3D(0.0, 0.0, 1.0)) // write only when not default
+            {
+                rExp.GetMM100UnitConverter().convertVector3D(sStringBuffer, aVPN);
+                aStr = sStringBuffer.makeStringAndClear();
+                rExp.AddAttribute(XML_NAMESPACE_DR3D, sXML_vpn, aStr);
+            }
+
+            Vector3D aVUP(aCamGeo.vup.DirectionX, aCamGeo.vup.DirectionY, aCamGeo.vup.DirectionZ);
+            if(aVUP != Vector3D(0.0, 1.0, 0.0)) // write only when not default
+            {
+                rExp.GetMM100UnitConverter().convertVector3D(sStringBuffer, aVUP);
+                aStr = sStringBuffer.makeStringAndClear();
+                rExp.AddAttribute(XML_NAMESPACE_DR3D, sXML_vup, aStr);
+            }
 
             // projection "D3DScenePerspective" drawing::ProjectionMode
             aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DScenePerspective")));

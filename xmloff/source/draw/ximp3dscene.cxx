@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximp3dscene.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-26 19:51:29 $
+ *  last change: $Author: aw $ $Date: 2000-11-30 18:06:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,10 @@
 #include <com/sun/star/drawing/Direction3D.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_DRAWING_CAMERAGEOMETRY_HPP_
+#include <com/sun/star/drawing/CameraGeometry.hpp>
+#endif
+
 using namespace ::rtl;
 using namespace ::com::sun::star;
 
@@ -161,7 +165,13 @@ SdXML3DSceneShapeContext::SdXML3DSceneShapeContext(
     mnShadowSlant(0),
     mxShadeMode(drawing::ShadeMode_SMOOTH),
     maAmbientColor(0x00666666),
-    mbLightingMode(FALSE)
+    mbLightingMode(FALSE),
+    maVRP(0.0, 0.0, 1.0),
+    maVPN(0.0, 0.0, 1.0),
+    maVUP(0.0, 1.0, 0.0),
+    mbVRPUsed(FALSE),
+    mbVPNUsed(FALSE),
+    mbVUPUsed(FALSE)
 {
 }
 
@@ -216,6 +226,42 @@ void SdXML3DSceneShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
                 SdXMLImExTransform3D aTransform(sValue, GetImport().GetMM100UnitConverter());
                 if(aTransform.NeedsAction())
                     mbSetTransform = aTransform.GetFullHomogenTransform(mxHomMat);
+                break;
+            }
+            case XML_TOK_3DSCENESHAPE_VRP:
+            {
+                Vector3D aNewVec;
+                GetImport().GetMM100UnitConverter().convertVector3D(aNewVec, sValue);
+
+                if(aNewVec != maVRP)
+                {
+                    maVRP = aNewVec;
+                    mbVRPUsed = TRUE;
+                }
+                break;
+            }
+            case XML_TOK_3DSCENESHAPE_VPN:
+            {
+                Vector3D aNewVec;
+                GetImport().GetMM100UnitConverter().convertVector3D(aNewVec, sValue);
+
+                if(aNewVec != maVPN)
+                {
+                    maVPN = aNewVec;
+                    mbVPNUsed = TRUE;
+                }
+                break;
+            }
+            case XML_TOK_3DSCENESHAPE_VUP:
+            {
+                Vector3D aNewVec;
+                GetImport().GetMM100UnitConverter().convertVector3D(aNewVec, sValue);
+
+                if(aNewVec != maVUP)
+                {
+                    maVUP = aNewVec;
+                    mbVUPUsed = TRUE;
+                }
                 break;
             }
             case XML_TOK_3DSCENESHAPE_PROJECTION:
@@ -292,6 +338,43 @@ void SdXML3DSceneShapeContext::EndElement()
                 {
                     aAny <<= mxHomMat;
                     xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DTransformMatrix")), aAny);
+                }
+
+                // CameraGeometry
+                if(mbVRPUsed || mbVPNUsed || mbVUPUsed)
+                {
+                    drawing::CameraGeometry aCamGeo;
+
+                    if(!(mbVRPUsed && mbVPNUsed && mbVUPUsed))
+                    {
+                        // get old value and change
+                        aAny = xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DCameraGeometry")));
+                        aAny >>= aCamGeo;
+                    }
+
+                    if(mbVRPUsed)
+                    {
+                        aCamGeo.vrp.PositionX = maVRP.X();
+                        aCamGeo.vrp.PositionY = maVRP.Y();
+                        aCamGeo.vrp.PositionZ = maVRP.Z();
+                    }
+
+                    if(mbVPNUsed)
+                    {
+                        aCamGeo.vpn.DirectionX = maVPN.X();
+                        aCamGeo.vpn.DirectionY = maVPN.Y();
+                        aCamGeo.vpn.DirectionZ = maVPN.Z();
+                    }
+
+                    if(mbVUPUsed)
+                    {
+                        aCamGeo.vup.DirectionX = maVUP.X();
+                        aCamGeo.vup.DirectionY = maVUP.Y();
+                        aCamGeo.vup.DirectionZ = maVUP.Z();
+                    }
+
+                    aAny <<= aCamGeo;
+                    xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("D3DCameraGeometry")), aAny);
                 }
 
                 // projection "D3DScenePerspective" drawing::ProjectionMode
