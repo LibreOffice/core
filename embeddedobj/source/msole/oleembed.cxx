@@ -2,9 +2,9 @@
  *
  *  $RCSfile: oleembed.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:55:06 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 15:10:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,9 @@
 #include <com/sun/star/embed/NeedsRunningStateException.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_IO_XSEEKABLE_HPP_
+#include <com/sun/star/io/XSeekable.hpp>
+#endif
 
 
 #ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
@@ -93,6 +96,8 @@
 #endif
 
 #include <olecomponent.hxx>
+
+#include "ownview.hxx"
 
 using namespace ::com::sun::star;
 
@@ -348,7 +353,33 @@ void SAL_CALL OleEmbeddedObject::doVerb( sal_Int32 nVerbID )
     else
 #endif
     {
-        throw embed::UnreachableStateException();
+        if ( nVerbID == -9 )
+        {
+            // the workaround verb to show the object in case no server is available
+            if ( !m_pOwnView && m_xObjectStream.is() )
+            {
+                try {
+                    uno::Reference< io::XSeekable > xSeekable( m_xObjectStream, uno::UNO_QUERY );
+                    if ( xSeekable.is() )
+                        xSeekable->seek( 0 );
+
+                    m_pOwnView = new OwnView_Impl( m_xFactory, m_xObjectStream->getInputStream() );
+                    m_pOwnView->acquire();
+                }
+                catch( uno::RuntimeException& )
+                {
+                    throw;
+                }
+                catch( uno::Exception& )
+                {
+                }
+            }
+
+            if ( !m_pOwnView || !m_pOwnView->Open() )
+                throw embed::UnreachableStateException();
+        }
+        else
+            throw embed::UnreachableStateException();
     }
 }
 
