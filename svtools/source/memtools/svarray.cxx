@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svarray.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:59:01 $
+ *  last change: $Author: jp $ $Date: 2001-03-20 18:31:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,8 +64,10 @@
 #define _SVSTDARR_BOOLS
 #define _SVSTDARR_BYTES
 #define _SVSTDARR_ULONGS
+#define _SVSTDARR_ULONGSSORT
 #define _SVSTDARR_USHORTS
 #define _SVSTDARR_LONGS
+#define _SVSTDARR_LONGSSORT
 #define _SVSTDARR_SHORTS
 #define _SVSTDARR_STRINGS
 #define _SVSTDARR_STRINGSDTOR
@@ -83,6 +85,7 @@
 #define _SVSTDARR_BYTESTRINGSISORTDTOR
 
 #define _SVSTDARR_XUB_STRLEN
+#define _SVSTDARR_XUB_STRLENSORT
 
 #include <svstdarr.hxx>
 
@@ -121,6 +124,10 @@ SV_IMPL_VARARR( SvUShorts, USHORT )
 SV_IMPL_VARARR( SvLongs, long)
 SV_IMPL_VARARR( SvShorts, short )
 
+SV_IMPL_VARARR_SORT( SvULongsSort, ULONG )
+SV_IMPL_VARARR_SORT( SvLongsSort, long )
+SV_IMPL_VARARR_SORT( SvXub_StrLensSort, xub_StrLen )
+
 SV_IMPL_VARARR( SvXub_StrLens, xub_StrLen )
 
 SV_IMPL_PTRARR( SvStrings, StringPtr )
@@ -132,6 +139,7 @@ SV_IMPL_PTRARR( SvByteStrings, ByteStringPtr )
 SV_IMPL_PTRARR( SvByteStringsDtor, ByteStringPtr )
 SV_IMPL_OP_PTRARR_SORT( SvByteStringsSort, ByteStringPtr )
 SV_IMPL_OP_PTRARR_SORT( SvByteStringsSortDtor, ByteStringPtr )
+
 
 
 // ---------------- strings -------------------------------------
