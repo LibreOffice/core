@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrcrsr.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: fme $ $Date: 2001-12-12 12:43:47 $
+ *  last change: $Author: fme $ $Date: 2001-12-17 14:17:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1272,11 +1272,23 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
                     if( pLower && (pLower->IsTxtFrm() || pLower->IsLayoutFrm()) )
                         bChgNode = sal_True;
                 }
+#ifdef VERTICAL_LAYOUT
+                Point aTmpPoint( rPoint );
+                if ( pFrm->IsVertical() )
+                    pFrm->SwitchHorizontalToVertical( aTmpPoint );
+
+                if( bChgNode && pTmp->Frm().IsInside( aTmpPoint ) &&
+                    !( pTmp->IsProtected() ) )
+                {
+                    nLength = ((SwFlyCntPortion*)pPor)->
+                              GetFlyCrsrOfst( nX, aTmpPoint, pPos, pCMS );
+#else
                 if( bChgNode && pTmp->Frm().IsInside( rPoint ) &&
                     !( pTmp->IsProtected() ) )
                 {
                     nLength = ((SwFlyCntPortion*)pPor)->
                               GetFlyCrsrOfst( nX, rPoint, pPos, pCMS );
+#endif
                     // Sobald der Frame gewechselt wird, muessen wir aufpassen, dass
                     // unser Font wieder im OutputDevice steht.
                     // vgl. Paint und new SwFlyCntPortion !
