@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objserv.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: mba $ $Date: 2002-05-29 15:00:28 $
+ *  last change: $Author: sj $ $Date: 2002-06-06 09:28:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -683,6 +683,7 @@ sal_Bool SfxObjectShell::GUISaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
                                                                  NULL );
                                             pParams->Put( aNewParams );
                                         }
+                                        else return sal_True;   // cancel
                                     }
                                 }
 
