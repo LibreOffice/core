@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlvw.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: mt $ $Date: 2002-08-05 11:37:22 $
+ *  last change: $Author: mt $ $Date: 2002-08-20 13:01:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1250,14 +1250,7 @@ void OutlinerView::RemoveAttribs( BOOL bRemoveParaAttribs, USHORT nWhich )
         for ( USHORT nPara = aSel.nStartPara; nPara <= aSel.nEndPara; nPara++ )
         {
             Paragraph* pPara = pOwner->pParaList->GetParagraph( nPara );
-            pPara->Invalidate();
-
-            SfxItemSet aAttrs( pOwner->pEditEngine->GetParaAttribs( nPara ) );
-            aAttrs.Put( SfxUInt16Item( EE_PARA_OUTLLEVEL, pPara->GetDepth() ) );
-            pOwner->pEditEngine->SetParaAttribs( nPara, aAttrs );
-
-            pOwner->ImplCheckNumBulletItem( (USHORT)nPara );
-            pOwner->ImplCalcBulletText( (USHORT)nPara, FALSE, FALSE );
+            pOwner->ImplInitDepth( nPara, pPara->GetDepth(), FALSE, FALSE );
         }
     }
     pOwner->UndoActionEnd( OLUNDO_ATTR );
