@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: csaba $ $Date: 2000-10-19 12:25:01 $
+#   last change: $Author: svesik $ $Date: 2000-11-21 10:22:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,13 +65,7 @@ MAKEFILERC=yes
 .IF "$(OS)" == "WNT"
 patchsuffix=btm
 .ENDIF
-.IF "$(OS)" == "LINUX"
-patchsuffix=sh
-.ENDIF
-.IF "$(OS)" == "SOLARIS"
-patchsuffix=sh
-.ENDIF
-.IF "$(OS)" == "MACOSX"
+.IF "$(GUI)" == "UNX"
 patchsuffix=sh
 .ENDIF
 
