@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpropls.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-17 22:03:48 $
+ *  last change: $Author: cl $ $Date: 2001-01-23 15:28:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,14 @@
 
 #ifndef _COM_SUN_STAR_DRAWING_CIRCLEKIND_HPP_
 #include <com/sun/star/drawing/CircleKind.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_DRAWING_BitmapMode_HPP_
+#include <com/sun/star/drawing/BitmapMode.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_TEXT_WRITINGMODE_HPP_
+#include <com/sun/star/text/WritingMode.hpp>
 #endif
 
 #ifndef _XMLOFF_ENUMPROPERTYHANDLER_HXX
@@ -486,9 +494,9 @@ SvXMLEnumMapEntry   aXML_ConnectionKind_EnumMap[] =
 
 SvXMLEnumMapEntry   aXML_BitmapMode_EnumMap[] =
 {
-    { sXML_repeat,      0 },
-    { sXML_stretch,     1 },
-    { sXML_background_no_repeat,    2 },
+    { sXML_repeat,                  drawing::BitmapMode_REPEAT },
+    { sXML_stretch,                 drawing::BitmapMode_STRETCH },
+    { sXML_background_no_repeat,    drawing::BitmapMode_NO_REPEAT },
     { NULL, 0 }
 };
 
@@ -555,6 +563,13 @@ SvXMLEnumMapEntry aXML_CircleKind_EnumMap[] =
     { sXML_section,     drawing::CircleKind_SECTION },
     { sXML_cut,         drawing::CircleKind_CUT },
     { sXML_arc,         drawing::CircleKind_ARC },
+    { NULL, 0 }
+};
+
+SvXMLEnumMapEntry aXML_WritingMode_EnumMap[] =
+{
+    { sXML_tb_rl,       text::WritingMode_TB_RL },
+    { sXML_lr_tb,       text::WritingMode_LR_TB },
     { NULL, 0 }
 };
 
@@ -637,9 +652,7 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
             }
             case XML_SD_TYPE_WRITINGMODE :
             {
-                const OUString aTrueStr( OUString::createFromAscii(sXML_tb_rl) );
-                const OUString aFalseStr( OUString::createFromAscii(sXML_lr_tb) );
-                pHdl = new XMLNamedBoolPropertyHdl( aTrueStr, aFalseStr );
+                pHdl = new XMLEnumPropertyHdl( aXML_WritingMode_EnumMap, ::getCppuType((const text::WritingMode*)0) );
                 break;
             }
             case XML_SD_TYPE_PRESPAGE_VISIBILITY :
@@ -712,7 +725,7 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
             }
             case XML_SD_TYPE_BITMAP_MODE:
             {
-                pHdl = new XMLEnumPropertyHdl( aXML_BitmapMode_EnumMap, getCppuType((const sal_Int32*)0) );
+                pHdl = new XMLEnumPropertyHdl( aXML_BitmapMode_EnumMap, getCppuType((const drawing::BitmapMode*)0) );
                 break;
             }
             case XML_SD_TYPE_BITMAPREPOFFSETX:
