@@ -1,5 +1,7 @@
+mkdir: %COMMON_DEST%\bin%_EXT%\hid
 mkdir: %_DEST%\inc%_EXT%\framework
 
+..\%COMMON_OUTDIR%\misc\*.hid %COMMON_DEST%\bin%_EXT%\hid\*.hid
 ..\%__SRC%\bin\*.res %_DEST%\bin%_EXT%\*
 ..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%\*
 ..\%__SRC%\bin\*.exe %_DEST%\bin%_EXT%\*
