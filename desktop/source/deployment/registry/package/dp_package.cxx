@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_package.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 14:12:16 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:14:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -254,9 +254,8 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
         ::ucb::Content ucbContent;
         if (create_ucb_content( &ucbContent, url, xCmdEnv ))
         {
-            OUString title( extract_throw<OUString>(
-                                ucbContent.getPropertyValue(
-                                    StrTitle::get() ) ) );
+            const OUString title( ucbContent.getPropertyValue(
+                                      StrTitle::get() ).get<OUString>() );
             if (title.endsWithIgnoreAsciiCaseAsciiL(
                     RTL_CONSTASCII_STRINGPARAM(".uno.pkg") ))
                 mediaType = OUSTR("application/vnd.sun.star.package-bundle");
@@ -280,17 +279,15 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
             ::ucb::Content ucbContent( url, xCmdEnv );
             if (subType.EqualsIgnoreCaseAscii("vnd.sun.star.package-bundle")) {
                 return new PackageImpl(
-                    this, url,
-                    extract_throw<OUString>(
-                        ucbContent.getPropertyValue( StrTitle::get() ) ),
+                    this, url, ucbContent.getPropertyValue(
+                        StrTitle::get() ).get<OUString>(),
                     m_xBundleTypeInfo, false, xCmdEnv );
             }
             else if (subType.EqualsIgnoreCaseAscii(
                          "vnd.sun.star.legacy-package-bundle")) {
                 return new PackageImpl(
-                    this, url,
-                    extract_throw<OUString>(
-                        ucbContent.getPropertyValue( StrTitle::get() ) ),
+                    this, url, ucbContent.getPropertyValue(
+                        StrTitle::get() ).get<OUString>(),
                     m_xLegacyBundleTypeInfo, true, xCmdEnv );
             }
         }
@@ -392,9 +389,9 @@ void BackendImpl::PackageImpl::processPackage_(
                 // try to handle exception, notify:
                 bool approve = false, abort = false;
                 if (! interactContinuation(
-                        makeAny( lang::WrappedTargetException(
-                                     OUSTR("bundle item registration error!"),
-                                     static_cast<OWeakObject *>(this), exc ) ),
+                        Any( lang::WrappedTargetException(
+                                 OUSTR("bundle item registration error!"),
+                                 static_cast<OWeakObject *>(this), exc ) ),
                         task::XInteractionApprove::static_type(), xCmdEnv,
                         &approve, &abort )) {
                     OSL_ASSERT( !approve && !abort );
@@ -472,9 +469,9 @@ void BackendImpl::PackageImpl::processPackage_(
                 // try to handle exception, notify:
                 bool approve = false, abort = false;
                 if (! interactContinuation(
-                        makeAny( lang::WrappedTargetException(
-                                     OUSTR("bundle item revocation error!"),
-                                     static_cast<OWeakObject *>(this), exc ) ),
+                        Any( lang::WrappedTargetException(
+                                 OUSTR("bundle item revocation error!"),
+                                 static_cast<OWeakObject *>(this), exc ) ),
                         task::XInteractionApprove::static_type(), xCmdEnv,
                         &approve, &abort )) {
                     OSL_ASSERT( !approve && !abort );
@@ -522,11 +519,11 @@ void BackendImpl::PackageImpl::exportTo(
                 0, destURL, xCmdEnv, false /* no throw */ )) {
             bool replace = false, abort = false;
             if (! interactContinuation(
-                    makeAny( NameClashResolveRequest(
-                                 OUSTR("file already exists: ") + title,
-                                 static_cast<OWeakObject *>(this),
-                                 task::InteractionClassification_QUERY,
-                                 destFolderURL, title, OUString() ) ),
+                    Any( NameClashResolveRequest(
+                             OUSTR("file already exists: ") + title,
+                             static_cast<OWeakObject *>(this),
+                             task::InteractionClassification_QUERY,
+                             destFolderURL, title, OUString() ) ),
                     XInteractionReplaceExistingData::static_type(), xCmdEnv,
                     &replace, &abort ) || !replace) {
                 return;
@@ -617,7 +614,7 @@ void BackendImpl::PackageImpl::exportTo(
             if (url_.getLength() > baseURLlen)
                 fullPath = url_.copy( baseURLlen + 1 );
             ::ucb::Content ucbContent( url_, xCmdEnv );
-            if (extract_throw<bool>(ucbContent.getPropertyValue(strIsFolder)))
+            if (ucbContent.getPropertyValue(strIsFolder).get<bool>())
                 fullPath += OUSTR("/");
             Sequence<beans::PropertyValue> attribs( 2 );
             beans::PropertyValue * pattribs = attribs.getArray();
@@ -841,9 +838,9 @@ Reference<deployment::XPackage> BackendImpl::PackageImpl::bindBundleItem(
                                lang::IllegalArgumentException const *>(0) ) ))
         {
             interactContinuation(
-                makeAny( lang::WrappedTargetException(
-                             OUSTR("bundle item error!"),
-                             static_cast<OWeakObject *>(this), exc ) ),
+                Any( lang::WrappedTargetException(
+                         OUSTR("bundle item error!"),
+                         static_cast<OWeakObject *>(this), exc ) ),
                 task::XInteractionApprove::static_type(), xCmdEnv, 0, 0 );
         }
     }
@@ -989,8 +986,8 @@ void BackendImpl::PackageImpl::scanLegacyBundle(
     ::ucb::Content ucbContent( url, xCmdEnv );
 
     // check for platform pathes:
-    OUString title( extract_throw<OUString>(
-                        ucbContent.getPropertyValue( StrTitle::get() ) ) );
+    const OUString title( ucbContent.getPropertyValue(
+                              StrTitle::get() ).get<OUString>() );
     if (title.endsWithIgnoreAsciiCaseAsciiL(
             RTL_CONSTASCII_STRINGPARAM(".plt") ) &&
         !platform_fits( title.copy( 0, title.getLength() - 4 ) )) {
