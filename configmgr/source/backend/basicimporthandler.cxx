@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basicimporthandler.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-10-24 15:33:05 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 13:13:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,6 @@
 
 #include "basicimporthandler.hxx"
 
-#ifndef _COM_SUN_STAR_LANG_WRAPPEDTARGETRUNTIMEEXCEPTION_HPP_
-#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
-#endif
 // -----------------------------------------------------------------------------
 
 namespace configmgr
@@ -89,7 +86,7 @@ BasicImportHandler::~BasicImportHandler()
 
 void SAL_CALL
     BasicImportHandler::startLayer(  )
-        throw (MalformedDataException, uno::RuntimeException)
+        throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     m_aComponentName = OUString();
 }
@@ -97,14 +94,13 @@ void SAL_CALL
 
 void SAL_CALL
     BasicImportHandler::endLayer(  )
-        throw (MalformedDataException, lang::IllegalAccessException, uno::RuntimeException)
+        throw (MalformedDataException, lang::WrappedTargetException, uno::RuntimeException)
 {
     m_aComponentName = OUString();
 }
 // -----------------------------------------------------------------------------
 
 bool BasicImportHandler::startComponent( const OUString& aName )
-        SAL_THROW( ( lang::IllegalArgumentException, uno::RuntimeException) )
 {
     if (hasComponent()) return false;
 
@@ -117,7 +113,7 @@ void BasicImportHandler::raiseMalformedDataException(sal_Char const * pMsg)
 {
     OUString sMsg = OUString::createFromAscii(pMsg);
 
-    throw MalformedDataException(sMsg, *this);
+    throw MalformedDataException(sMsg, *this, uno::Any());
 }
 // -----------------------------------------------------------------------------
 
