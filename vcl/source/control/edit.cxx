@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: sb $ $Date: 2002-09-09 10:31:17 $
+ *  last change: $Author: ssa $ $Date: 2002-09-12 08:35:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -365,6 +365,10 @@ void Edit::ImplInitData()
     mpIMEInfos              = NULL;
     mcEchoChar              = 0;
 
+    // --- RTL --- no default mirroring for Edit controls
+    // note: controls that use a subedit will revert this (SpinField, ComboBox)
+    EnableRTL( FALSE );
+
     vcl::unohelper::DragAndDropWrapper* pDnDWrapper = new vcl::unohelper::DragAndDropWrapper( this );
     mxDnDListener = pDnDWrapper;
 }
@@ -382,6 +386,11 @@ void Edit::ImplInit( Window* pParent, WinBits nStyle )
     mbReadOnly = (nStyle & WB_READONLY) != 0;
 
     mnAlign = EDIT_ALIGN_LEFT;
+
+    // --- RTL --- hack: right align until keyinput and cursor travelling works
+    if( Application::GetSettings().GetLayoutRTL() )
+        mnAlign = EDIT_ALIGN_RIGHT;
+
     if ( nStyle & WB_RIGHT )
         mnAlign = EDIT_ALIGN_RIGHT;
     else if ( nStyle & WB_CENTER )
@@ -1798,6 +1807,11 @@ void Edit::StateChanged( StateChangedType nType )
 
         USHORT nOldAlign = mnAlign;
         mnAlign = EDIT_ALIGN_LEFT;
+
+        // --- RTL --- hack: right align until keyinput and cursor travelling works
+        if( Application::GetSettings().GetLayoutRTL() )
+            mnAlign = EDIT_ALIGN_RIGHT;
+
         if ( nStyle & WB_RIGHT )
             mnAlign = EDIT_ALIGN_RIGHT;
         else if ( nStyle & WB_CENTER )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: combobox.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: mt $ $Date: 2002-08-23 14:34:03 $
+ *  last change: $Author: ssa $ $Date: 2002-09-12 08:35:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,6 +183,8 @@ void ComboBox::ImplInitData()
     mbSyntheticModify   = FALSE;
     mbMatchCase         = FALSE;
     mcMultiSep          = ';';
+
+    EnableRTL( TRUE );
 }
 
 // -----------------------------------------------------------------------
@@ -246,6 +248,7 @@ void ComboBox::ImplInit( Window* pParent, WinBits nStyle )
     }
 
     mpSubEdit = new Edit( this, nEditStyle );
+    mpSubEdit->EnableRTL( FALSE );
     SetSubEdit( mpSubEdit );
     mpSubEdit->SetPosPixel( Point() );
     EnableAutocomplete( TRUE );

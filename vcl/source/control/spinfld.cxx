@@ -2,9 +2,9 @@
  *
  *  $RCSfile: spinfld.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: pl $ $Date: 2002-05-08 16:01:30 $
+ *  last change: $Author: ssa $ $Date: 2002-09-12 08:35:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,6 +197,7 @@ void SpinField::ImplInitData()
     mbInitialDown   = FALSE;
     mbNoSelect      = FALSE;
     mbInDropDown    = FALSE;
+    EnableRTL( TRUE );
 }
 
 // --------------------------------------------------------------------
@@ -209,6 +210,7 @@ void SpinField::ImplInit( Window* pParent, WinBits nWinStyle )
     {
         mbSpin = TRUE;
         mpEdit = new Edit( this, WB_NOBORDER );
+        mpEdit->EnableRTL( FALSE );
         mpEdit->SetPosPixel( Point() );
         mpEdit->Show();
         SetSubEdit( mpEdit );
