@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propmultiplex.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-31 13:56:32 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 12:35:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,16 @@ OPropertyChangeListener::~OPropertyChangeListener()
 void OPropertyChangeListener::_disposing(const EventObject& _rSource) throw( RuntimeException)
 {
     // nothing to do here
+}
+
+//------------------------------------------------------------------
+void OPropertyChangeListener::disposeAdapter()
+{
+    if ( m_pAdapter )
+        m_pAdapter->dispose();
+
+    // will automatically set a new adapter
+    OSL_ENSURE( !m_pAdapter, "OPropertyChangeListener::disposeAdapter: what did dispose do?" );
 }
 
 //------------------------------------------------------------------
