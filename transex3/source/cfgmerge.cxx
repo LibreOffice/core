@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgmerge.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-18 08:16:25 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 18:12:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -741,7 +741,7 @@ void CfgExport::WorkOnRessourceEnd()
         )) ||
             ( bForce &&
                 ( pStackData->sText[ ByteString("de") ].Len() ||
-                    pStackData->sText[ ByteString("én-US") ].Len() )))
+                    pStackData->sText[ ByteString("en-US") ].Len() )))
         {
             pStackData->FillInFallbacks();
 
