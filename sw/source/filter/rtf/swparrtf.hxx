@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swparrtf.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:41:59 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 15:10:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -275,6 +275,7 @@ public:
     bool empty() const { return maSegments.empty(); }
     int size() const { return maSegments.size(); }
     void push_back(const rtfSection &rSect);
+    void pop_back() { maSegments.pop_back(); }
     rtfSection& back() { return maSegments.back(); }
     const rtfSection& back() const { return maSegments.back(); }
     void InsertSegments(bool bIsNewDoc);
