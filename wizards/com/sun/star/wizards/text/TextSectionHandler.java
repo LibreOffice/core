@@ -2,9 +2,9 @@
 *
 *  $RCSfile: TextSectionHandler.java,v $
 *
-*  $Revision: 1.4 $
+*  $Revision: 1.5 $
 *
-*  last change: $Author: vg $ $Date: 2005-02-21 14:02:52 $
+*  last change: $Author: kz $ $Date: 2005-03-18 16:23:31 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -129,7 +129,6 @@ public class TextSectionHandler {
     } catch (Exception exception) {
         exception.printStackTrace(System.out);
     }}
-
 
     public void removeAllTextSections() {
         removeAllTextSections(false);
