@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtftn.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: fme $ $Date: 2001-11-26 17:06:59 $
+ *  last change: $Author: fme $ $Date: 2001-12-05 09:15:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -269,11 +269,8 @@ SwTwips SwTxtFrm::GetFtnLine( const SwTxtFtn *pFtn, sal_Bool bLocked ) const
 #ifdef VERTICAL_LAYOUT
     SwTwips nRet = aLine.Y() + SwTwips(aLine.GetLineHeight());
     if( IsVertical() )
-    {
-        Point aTmp( 0, nRet );
-        SwitchHorizontalToVertical( aTmp );
-        nRet = aTmp.X();
-    }
+        nRet = SwitchHorizontalToVertical( nRet );
+
     UNDO_SWAP( this )
 
     return nRet;
@@ -898,6 +895,10 @@ SwFtnPortion *SwTxtFormatter::NewFtnPortion( SwTxtFormatInfo &rInf,
     if( rInf.IsTest() )
         return new SwFtnPortion( rFtn.GetViewNumStr( *pDoc ), pFrm, pFtn );
 
+#ifdef VERTICAL_LAYOUT
+    SWAP_IF_SWAPPED( pFrm )
+#endif
+
     KSHORT nReal;
     {
         KSHORT nOldReal = pCurr->GetRealHeight();
@@ -918,11 +919,7 @@ SwFtnPortion *SwTxtFormatter::NewFtnPortion( SwTxtFormatInfo &rInf,
     SWRECTFN( pFrm )
 
     if( bVert )
-    {
-        Point aTmp( 0, nLower );
-        pFrm->SwitchHorizontalToVertical( aTmp );
-        nLower = aTmp.X();
-    }
+        nLower = pFrm->SwitchHorizontalToVertical( nLower );
 
     SwTwips nAdd;
 #else
@@ -980,16 +977,8 @@ SwFtnPortion *SwTxtFormatter::NewFtnPortion( SwTxtFormatInfo &rInf,
         //Brauchbares, sondern wuerde stattdessen fuer diesen Fall meist die
         //Ftn wegwerfen und neu erzeugen.
 
-#ifdef VERTICAL_LAYOUT
-    SWAP_IF_SWAPPED( pFrm )
-#endif
-
     if( !rInf.IsQuick() )
         pFrm->ConnectFtn( pFtn, nLower );
-
-#ifdef VERTICAL_LAYOUT
-    UNDO_SWAP( pFrm )
-#endif
 
     SwTxtFrm *pScrFrm = pFrm->FindFtnRef( pFtn );
     SwFtnBossFrm *pBoss = pFrm->FindFtnBossFrm( !rFtn.IsEndNote() );
@@ -1051,6 +1040,9 @@ SwFtnPortion *SwTxtFormatter::NewFtnPortion( SwTxtFormatInfo &rInf,
                 if( !pFtnCont )
                 {
                     rInf.SetStop( sal_True );
+#ifdef VERTICAL_LAYOUT
+                    UNDO_SWAP( pFrm )
+#endif
                     return 0;
                 }
                 else
@@ -1067,6 +1059,9 @@ SwFtnPortion *SwTxtFormatter::NewFtnPortion( SwTxtFormatInfo &rInf,
                             if( pTmp && *pTmp < pFtn )
                             {
                                 rInf.SetStop( sal_True );
+#ifdef VERTICAL_LAYOUT
+                                UNDO_SWAP( pFrm )
+#endif
                                 return 0;
                             }
                         }
@@ -1076,11 +1071,7 @@ SwFtnPortion *SwTxtFormatter::NewFtnPortion( SwTxtFormatInfo &rInf,
                     SwTwips nTmpBot = Y() + nReal * 2;
 
                     if( bVert )
-                    {
-                        Point aTmp( 0, nTmpBot );
-                        pFrm->SwitchHorizontalToVertical( aTmp );
-                        nTmpBot = aTmp.X();
-                    }
+                        nTmpBot = pFrm->SwitchHorizontalToVertical( nTmpBot );
 
                     SWRECTFN( pFtnCont )
 
@@ -1102,6 +1093,9 @@ SwFtnPortion *SwTxtFormatter::NewFtnPortion( SwTxtFormatInfo &rInf,
                                 // ist auf eine andere Seite gewandert, dann wollen
                                 // wir mit ...
                                 rInf.SetStop( sal_True );
+#ifdef VERTICAL_LAYOUT
+                                UNDO_SWAP( pFrm )
+#endif
                                 return 0;
                             }
                         }
@@ -1114,6 +1108,11 @@ SwFtnPortion *SwTxtFormatter::NewFtnPortion( SwTxtFormatInfo &rInf,
     SwFtnPortion *pRet = new SwFtnPortion( rFtn.GetViewNumStr( *pDoc ),
                                             pFrm, pFtn, nReal );
     rInf.SetFtnInside( sal_True );
+
+#ifdef VERTICAL_LAYOUT
+    UNDO_SWAP( pFrm )
+#endif
+
     return pRet;
  }
 
