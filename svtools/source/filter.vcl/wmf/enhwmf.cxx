@@ -2,9 +2,9 @@
  *
  *  $RCSfile: enhwmf.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sj $ $Date: 2001-01-12 12:43:44 $
+ *  last change: $Author: sj $ $Date: 2001-03-15 14:31:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -684,8 +684,14 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
                 pOut->ClosePath();
             break;
             case EMR_FILLPATH :
+                pOut->StrokeAndFillPath( sal_False, sal_True );
+            break;
             case EMR_STROKEANDFILLPATH :
+                pOut->StrokeAndFillPath( sal_True, sal_True );
+            break;
             case EMR_STROKEPATH :
+                pOut->StrokeAndFillPath( sal_True, sal_False );
+            break;
             case EMR_FLATTENPATH :
             case EMR_WIDENPATH :
             break;

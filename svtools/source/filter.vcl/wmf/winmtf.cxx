@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winmtf.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sj $ $Date: 2001-01-30 16:25:09 $
+ *  last change: $Author: sj $ $Date: 2001-03-15 14:36:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,7 @@ void WinMtfPathObj::AddPoint( const Point& rPoint )
     if ( !Count() )
         Insert( Polygon(), POLYPOLY_APPEND );
     Polygon& rPoly = ((PolyPolygon&)*this)[ Count() - 1 ];
-    rPoly.Insert( rPoly.GetSize(), POLY_NORMAL );
+    rPoly.Insert( rPoly.GetSize(), rPoint, POLY_NORMAL );
 }
 
 void WinMtfPathObj::AddPolyLine( const Polygon& rPolyLine )
@@ -862,6 +862,41 @@ UINT32 WinMtfMetaOutput::SetRasterOp( UINT32 nRasterOp )
 
 //-----------------------------------------------------------------------------------
 
+void WinMtfMetaOutput::StrokeAndFillPath( sal_Bool bStroke, sal_Bool bFill )
+{
+    if ( aPathObj.Count() )
+    {
+        if ( aRegionObj.NeedsUpdate() )
+            UpdateClipRegion( aRegionObj.GetRegion() );
+
+        ClosePath();
+        UpdateLineStyle();
+        UpdateFillStyle();
+        if ( bFill )
+        {
+            if ( !bStroke )
+            {
+                mpGDIMetaFile->AddAction( new MetaPushAction( PUSH_LINECOLOR ) );
+                mpGDIMetaFile->AddAction( new MetaLineColorAction( Color(), FALSE ) );
+            }
+
+            mpGDIMetaFile->AddAction( new MetaPolyPolygonAction( aPathObj ) );
+
+            if ( !bStroke )
+                mpGDIMetaFile->AddAction( new MetaPopAction() );
+        }
+        else
+        {
+            sal_uInt16 i, nCount = aPathObj.Count();
+            for ( i = 0; i < nCount; i++ )
+                mpGDIMetaFile->AddAction( new MetaPolyLineAction( aPathObj[ i ], maLineStyle.aLineInfo ) );
+        }
+        ClearPath();
+    }
+}
+
+//-----------------------------------------------------------------------------------
+
 void WinMtfMetaOutput::SelectClipPath( sal_Int32 nClippingMode )
 {
     switch ( nClippingMode )
@@ -896,7 +931,7 @@ void WinMtfMetaOutput::LineTo( const Point& rPoint, sal_Bool bRecordPath )
 
     Point aDest( ImplMap( rPoint ) );
     if ( bRecordPath )
-        aPathObj.AddPoint( rPoint );
+        aPathObj.AddPoint( aDest );
     else
     {
         UpdateLineStyle();

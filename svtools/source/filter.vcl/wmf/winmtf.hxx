@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winmtf.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sj $ $Date: 2001-01-15 18:26:01 $
+ *  last change: $Author: sj $ $Date: 2001-03-15 14:36:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -573,6 +573,7 @@ class WinMtfOutput
 
         void                ClearPath(){ aPathObj.Clear(); };
         void                ClosePath(){ aPathObj.ClosePath(); };
+        virtual void        StrokeAndFillPath( sal_Bool bStroke, sal_Bool bFill ){};
         virtual void        SelectClipPath( sal_Int32 nClipMode ){};
 
         virtual void        DrawPixel( const Point& rSource, const Color& rColor ){};
@@ -631,6 +632,7 @@ class WinMtfMetaOutput : public WinMtfOutput
         virtual void        Pop();
 
         virtual UINT32      SetRasterOp( UINT32 nRasterOp );
+        virtual void        StrokeAndFillPath( sal_Bool bStroke, sal_Bool bFill );
         virtual void        SelectClipPath( sal_Int32 nClipMode );
 
         virtual void        LineTo( const Point& rPoint, sal_Bool bRecordPath = sal_False );
