@@ -11,9 +11,24 @@ import drafts.com.sun.star.script.framework.runtime.XScriptContext;
 
 public class OORhinoDebugger implements OOScriptDebugger {
 
+    public void go(final XScriptContext xsctxt, String filename) {
+        Main sdb = initUI(xsctxt);
+
+        // This is the method we've added to open a file when starting
+        // the Rhino debugger
+        sdb.openFile(filename);
+    }
+
+    public void go(final XScriptContext xsctxt, InputStream in) {
+        Main sdb = initUI(xsctxt);
+
+        // Open a stream in the debugger
+        sdb.openStream(in);
+    }
+
     // This code is based on the main method of the Rhino Debugger Main class
     // We pass in the XScriptContext in the global scope for script execution
-    public void go(final XScriptContext xsctxt, String filename) {
+    private Main initUI(final XScriptContext xsctxt) {
         try {
             final Main sdb = new Main("Rhino JavaScript Debugger");
             swingInvoke(new Runnable() {
@@ -39,15 +54,11 @@ public class OORhinoDebugger implements OOScriptDebugger {
                         return scope;
                     }
                 });
-            // This is the method we've added to open a file when starting
-            // the Rhino debugger
-            sdb.openFile(filename);
+            return sdb;
         } catch (Exception exc) {
             exc.printStackTrace();
         }
-    }
-
-    public void go(final XScriptContext xsctxt, InputStream in) {
+        return null;
     }
 
     static void swingInvoke(Runnable f) {

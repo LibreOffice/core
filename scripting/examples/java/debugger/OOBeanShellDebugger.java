@@ -123,6 +123,10 @@ public class OOBeanShellDebugger implements OOScriptDebugger, ActionListener, Do
             JButton b = new JButton(labels[i]);
             b.addActionListener(this);
             p.add(b);
+
+            if (labels[i].equals("Save") && filename == null) {
+                b.setEnabled(false);
+            }
         }
 
         frame.getContentPane().add(sp, "Center");
