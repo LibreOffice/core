@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hwpreader.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2003-10-15 14:37:24 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 17:05:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,11 @@
 #ifdef WIN32
 #include <malloc.h>
 #else
-#include <alloca.h>
+ #ifndef INCLUDED_SAL_ALLOCA_H
+ #include <sal/alloca.h>
+ #else
+ #include <alloca.h>
+ #endif
 #endif
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
