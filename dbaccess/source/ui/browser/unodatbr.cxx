@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-03 13:59:26 $
+ *  last change: $Author: fs $ $Date: 2001-07-16 14:39:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -558,6 +558,7 @@ sal_Bool SbaTableQueryBrowser::InitializeForm(const Reference< ::com::sun::star:
 {
     if(!m_pCurrentlyDisplayed)
         return sal_True;
+
     // this method set all format settings from the orignal table or query
     try
     {
@@ -2111,6 +2112,67 @@ sal_Bool SbaTableQueryBrowser::implSelect(const ::svx::ODataAccessDescriptor& _r
 }
 
 //------------------------------------------------------------------------------
+sal_Bool SbaTableQueryBrowser::implLoadAnything(const ::rtl::OUString& _rDataSourceName, const ::rtl::OUString& _rCommand,
+    const sal_Int32 _nCommandType, const sal_Bool _bEscapeProcessing, const Reference< XConnection>& _rxConnection)
+{
+    Reference<XPropertySet> xProp(getRowSet(),UNO_QUERY);
+    if(xProp.is())
+    {
+        Reference< ::com::sun::star::form::XLoadable >  xLoadable(xProp,UNO_QUERY);
+        try
+        {
+            // the values allowing the RowSet to re-execute
+            xProp->setPropertyValue(PROPERTY_DATASOURCENAME, makeAny(_rDataSourceName));
+            if(_rxConnection.is())
+                xProp->setPropertyValue(PROPERTY_ACTIVECONNECTION,makeAny(_rxConnection));
+
+                // set this _before_ setting the connection, else the rowset would rebuild it ...
+            xProp->setPropertyValue(PROPERTY_COMMANDTYPE, makeAny(_nCommandType));
+            xProp->setPropertyValue(PROPERTY_COMMAND, makeAny(_rCommand));
+            xProp->setPropertyValue(PROPERTY_USE_ESCAPE_PROCESSING, ::cppu::bool2any(_bEscapeProcessing));
+
+            // the formatter depends on the data source we're working on, so rebuild it here ...
+            initFormatter();
+
+            // switch the grid to design mode while loading
+            getBrowserView()->getGridControl()->setDesignMode(sal_True);
+            InitializeForm(getRowSet());
+
+            sal_Bool bSuccess = sal_True;
+
+            {
+                FormErrorHelper aHelper(this);
+                // load the row set
+                m_bLoadCanceled = sal_False;
+                if (xLoadable->isLoaded())
+                    // reload does not work if not already loaded
+                    xLoadable->reload();
+                else
+                    xLoadable->load();
+
+                // initialize the model
+                InitializeGridModel(getFormComponent());
+
+                FormLoaded(sal_True);
+
+                bSuccess = xLoadable->isLoaded() && !errorOccured();
+            }
+
+            return bSuccess;
+        }
+        catch(SQLException& e)
+        {
+            showError(SQLExceptionInfo(e));
+        }
+        catch(Exception&)
+        {
+            OSL_ENSURE(sal_False, "SbaTableQueryBrowser::implLoadAnything: something strange happended!");
+        }
+    }
+    return sal_False;
+}
+
+//------------------------------------------------------------------------------
 sal_Bool SbaTableQueryBrowser::implSelect(const ::rtl::OUString& _rDataSourceName, const ::rtl::OUString& _rCommand,
                                       const sal_Int32 _nCommandType, const sal_Bool _bEscapeProcessing,
                                       const Reference<XConnection>& _rxConnection)
@@ -2127,55 +2189,8 @@ sal_Bool SbaTableQueryBrowser::implSelect(const ::rtl::OUString& _rDataSourceNam
             if (pCommand)
                m_pTreeView->getListBox()->Select(pCommand);
             else if (!pCommandType)
-            {   // we have a command and need to display this in the rowset
-                Reference<XPropertySet> xProp(getRowSet(),UNO_QUERY);
-                if(xProp.is())
-                {
-                    Reference< ::com::sun::star::form::XLoadable >  xLoadable(xProp,UNO_QUERY);
-                    try
-                    {
-                        // the values allowing the RowSet to re-execute
-                        xProp->setPropertyValue(PROPERTY_DATASOURCENAME, makeAny(_rDataSourceName));
-                        if(_rxConnection.is())
-                            xProp->setPropertyValue(PROPERTY_ACTIVECONNECTION,makeAny(_rxConnection));
-
-                            // set this _before_ setting the connection, else the rowset would rebuild it ...
-                        xProp->setPropertyValue(PROPERTY_COMMANDTYPE, makeAny(_nCommandType));
-                        xProp->setPropertyValue(PROPERTY_COMMAND, makeAny(_rCommand));
-                        xProp->setPropertyValue(PROPERTY_USE_ESCAPE_PROCESSING, ::cppu::bool2any(_bEscapeProcessing));
-
-                        // the formatter depends on the data source we're working on, so rebuild it here ...
-                        initFormatter();
-
-                        // switch the grid to design mode while loading
-                        getBrowserView()->getGridControl()->setDesignMode(sal_True);
-                        InitializeForm(getRowSet());
-
-                        {
-                            FormErrorHelper aHelper(this);
-                            // load the row set
-                            if (xLoadable->isLoaded())
-                                // reload does not work if not already loaded
-                                xLoadable->reload();
-                            else
-                                xLoadable->load();
-                            // initialize the model
-                            InitializeGridModel(getFormComponent());
-                        }
-
-                        FormLoaded(sal_True);
-                        return sal_True;
-                    }
-                    catch(SQLException& e)
-                    {
-                        showError(SQLExceptionInfo(e));
-                    }
-                    catch(Exception&)
-                    {
-                        OSL_ENSURE(sal_False, "SbaTableQueryBrowser::implSelect: something strange happended!");
-                    }
-                }
-            }
+                // we have a command and need to display this in the rowset
+                return implLoadAnything(_rDataSourceName, _rCommand, _nCommandType, _bEscapeProcessing, _rxConnection);
         }
     }
     return sal_False;
@@ -2290,6 +2305,9 @@ IMPL_LINK(SbaTableQueryBrowser, OnSelectEntry, SvLBoxEntry*, _pEntry)
 
             // tell the old entry it has been deselected
             selectPath(m_pCurrentlyDisplayed, sal_False);
+            m_pCurrentlyDisplayed = NULL;
+
+            // not really loaded
             m_pCurrentlyDisplayed = _pEntry;
             // tell the new entry it has been selected
             selectPath(m_pCurrentlyDisplayed, sal_True);
@@ -2311,7 +2329,7 @@ IMPL_LINK(SbaTableQueryBrowser, OnSelectEntry, SvLBoxEntry*, _pEntry)
             }
             if(!xConnection.is())
             {
-                unloadForm(sal_False,sal_False);
+                unloadAndCleanup(sal_False,sal_False);
                 return 0L;
             }
 
@@ -2343,7 +2361,7 @@ IMPL_LINK(SbaTableQueryBrowser, OnSelectEntry, SvLBoxEntry*, _pEntry)
             }
             if(xNameAccess.is() && xNameAccess->hasByName(aName))
             {
-                DBTreeListModel::DBTreeListUserData* pData = static_cast<DBTreeListModel::DBTreeListUserData*>(m_pCurrentlyDisplayed->GetUserData());
+                DBTreeListModel::DBTreeListUserData* pData = static_cast<DBTreeListModel::DBTreeListUserData*>(_pEntry->GetUserData());
                 if(!pData->xObject.is())
                 {
                     Reference<XInterface> xObject;
@@ -2351,41 +2369,19 @@ IMPL_LINK(SbaTableQueryBrowser, OnSelectEntry, SvLBoxEntry*, _pEntry)
                         pData->xObject = xObject;
                 }
             }
-            // the values allowing the RowSet to re-execute
-            xProp->setPropertyValue(PROPERTY_DATASOURCENAME,makeAny(sDataSourceName));
-                // set this _before_ setting the connection, else the rowset would rebuild it ...
-            xProp->setPropertyValue(PROPERTY_ACTIVECONNECTION,makeAny(xConnection));
-            xProp->setPropertyValue(PROPERTY_COMMANDTYPE,makeAny(nCommandType));
-            xProp->setPropertyValue(PROPERTY_COMMAND,makeAny(aName));
-            // the formatter depends on the data source we're working on, so rebuild it here ...
-            initFormatter();
 
             String sStatus(ModuleRes( CommandType::TABLE == nCommandType ? STR_LOADING_TABLE : STR_LOADING_QUERY ));
             sStatus.SearchAndReplaceAscii("$name$", aName);
             BrowserViewStatusDisplay aShowStatus(static_cast<UnoDataBrowserView*>(getView()), sStatus);
 
-            // switch the grid to design mode while loading
-            getBrowserView()->getGridControl()->setDesignMode(sal_True);
-            InitializeForm(getRowSet());
-
-            // load the row set
+            if (implLoadAnything(sDataSourceName, aName, nCommandType, sal_True, xConnection))
+                // set the title of the beamer
+                setTitle(sDataSourceName,aName);
+            else
             {
-                FormErrorHelper aNoticeErrors(this);
-
-                if (xLoadable->isLoaded())
-                    // reload does not work if not already loaded
-                    xLoadable->reload();
-                else
-                    xLoadable->load();
-
-                // initialize the model
-                InitializeGridModel(getFormComponent());
-
-                FormLoaded(sal_True);
+                // clean up
+                unloadAndCleanup(sal_False, sal_False);
             }
-            // set the title of the beamer
-
-            setTitle(sDataSourceName,aName);
         }
         catch(SQLException& e)
         {
@@ -2542,7 +2538,7 @@ void SAL_CALL SbaTableQueryBrowser::elementRemoved( const ContainerEvent& _rEven
             SvLBoxEntry* pTemp = m_pCurrentlyDisplayed;
 
             // unload
-            unloadForm(sal_False, sal_False); // don't dispose the connection, don't flush
+            unloadAndCleanup(sal_False, sal_False); // don't dispose the connection, don't flush
 
             DBTreeListModel::DBTreeListUserData* pData = static_cast<DBTreeListModel::DBTreeListUserData*>(pTemp->GetUserData());
             pTemp->SetUserData(NULL);
@@ -2594,7 +2590,7 @@ void SAL_CALL SbaTableQueryBrowser::elementRemoved( const ContainerEvent& _rEven
             if (isSelected(pDSLoop))
             {   // a table or query belonging to the deleted data source is currently beeing displayed.
                 OSL_ENSURE(m_pTreeView->getListBox()->GetRootLevelParent(m_pCurrentlyDisplayed) == pDSLoop, "SbaTableQueryBrowser::elementRemoved: inconsistence (1)!");
-                unloadForm(sal_True, sal_False); // don't flush
+                unloadAndCleanup(sal_True, sal_False); // don't flush
             }
             else
                 OSL_ENSURE(
@@ -2647,7 +2643,7 @@ void SAL_CALL SbaTableQueryBrowser::elementReplaced( const ContainerEvent& _rEve
 
             // we need to remember the old value
             SvLBoxEntry* pTemp = m_pCurrentlyDisplayed;
-            unloadForm(sal_False); // don't dispose the connection
+            unloadAndCleanup(sal_False); // don't dispose the connection
 
             DBTreeListModel::DBTreeListUserData* pData = static_cast<DBTreeListModel::DBTreeListUserData*>(pTemp->GetUserData());
             if (pData)
@@ -2715,7 +2711,7 @@ void SbaTableQueryBrowser::closeConnection(SvLBoxEntry* _pDSEntry,sal_Bool _bDis
 
     // if one of the entries of the given DS is displayed currently, unload the form
     if (m_pCurrentlyDisplayed && (m_pTreeView->getListBox()->GetRootLevelParent(m_pCurrentlyDisplayed) == _pDSEntry))
-        unloadForm(_bDisposeConnection);
+        unloadAndCleanup(_bDisposeConnection);
 
     // collapse the query/table container
     for (SvLBoxEntry* pContainers = m_pTreeModel->FirstChild(_pDSEntry); pContainers; pContainers= m_pTreeModel->NextSibling(pContainers))
@@ -2751,7 +2747,7 @@ void SbaTableQueryBrowser::closeConnection(SvLBoxEntry* _pDSEntry,sal_Bool _bDis
 }
 
 // -------------------------------------------------------------------------
-void SbaTableQueryBrowser::unloadForm(sal_Bool _bDisposeConnection, sal_Bool _bFlushData)
+void SbaTableQueryBrowser::unloadAndCleanup(sal_Bool _bDisposeConnection, sal_Bool _bFlushData)
 {
     if (!m_pCurrentlyDisplayed)
         // nothing to do
@@ -2776,7 +2772,7 @@ void SbaTableQueryBrowser::unloadForm(sal_Bool _bDisposeConnection, sal_Bool _bF
             }
             catch (RuntimeException&)
             {
-                OSL_ENSURE(sal_False, "SbaTableQueryBrowser::unloadForm: could not flush the data (caught a RuntimeException)!");
+                OSL_ENSURE(sal_False, "SbaTableQueryBrowser::unloadAndCleanup: could not flush the data (caught a RuntimeException)!");
             }
         }
         selectPath(m_pCurrentlyDisplayed, sal_False);
@@ -2798,7 +2794,8 @@ void SbaTableQueryBrowser::unloadForm(sal_Bool _bDisposeConnection, sal_Bool _bF
 
         // unload the form
         Reference< XLoadable > xLoadable(getRowSet(), UNO_QUERY);
-        xLoadable->unload();
+        if (xLoadable->isLoaded())
+            xLoadable->unload();
 
         // clear the grid control
         Reference< XNameContainer >  xColContainer(getControlModel(), UNO_QUERY);
@@ -2834,9 +2831,13 @@ void SbaTableQueryBrowser::unloadForm(sal_Bool _bDisposeConnection, sal_Bool _bF
     }
     catch(Exception&)
     {
-        OSL_ENSURE(sal_False, "SbaTableQueryBrowser::unloadForm: could not reset the form");
+        OSL_ENSURE(sal_False, "SbaTableQueryBrowser::unloadAndCleanup: could not reset the form");
     }
+
+    // set a default title
+    setDefaultTitle();
 }
+
 // -------------------------------------------------------------------------
 void SAL_CALL SbaTableQueryBrowser::initialize( const Sequence< Any >& aArguments ) throw(Exception, RuntimeException)
 {
@@ -2928,8 +2929,7 @@ void SAL_CALL SbaTableQueryBrowser::initialize( const Sequence< Any >& aArgument
     else
     {
         // set a default title
-        ::rtl::OUString sTitle = String(ModuleRes(STR_DSBROWSER_TITLE));
-        setTitle(sTitle,::rtl::OUString());
+        setDefaultTitle();
     }
 }
 
@@ -3701,8 +3701,15 @@ SbaTableQueryBrowser::EntryType SbaTableQueryBrowser::getEntryType( SvLBoxEntry*
 
     return etUnknown;
 }
+
 // -----------------------------------------------------------------------------
-// set the title of the beamer
+void SbaTableQueryBrowser::setDefaultTitle() const
+{
+    ::rtl::OUString sTitle = String(ModuleRes(STR_DSBROWSER_TITLE));
+    setTitle(sTitle, ::rtl::OUString());
+}
+
+// -----------------------------------------------------------------------------
 void SbaTableQueryBrowser::setTitle(const ::rtl::OUString& _rsDataSourceName,const ::rtl::OUString& _rsName)  const
 {
     ::rtl::OUString sTitle = _rsDataSourceName;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.hxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-03 07:46:45 $
+ *  last change: $Author: fs $ $Date: 2001-07-16 14:37:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -286,13 +286,13 @@ namespace dbaui
                 String& _rTableName, Image& _rTableImage,
                 String& _rBookmarkName, Image& _rBookmarkImage);
 
-        /** unloads the form, empties the grid model
+        /** unloads the form, empties the grid model, cleans up anything related to the currently displayed object
             @param _bDisposeConnection
                 <TRUE/> if the connection should be disposed
             @param _bFlushData
                 <TRUE/> if the currently displayed object (if any) should be flushed
         */
-        void unloadForm(sal_Bool _bDisposeConnection = sal_True, sal_Bool _bFlushData = sal_True);
+        void unloadAndCleanup(sal_Bool _bDisposeConnection = sal_True, sal_Bool _bFlushData = sal_True);
 
         /** close the connection (and collapse the list entries) of the given list entries
         */
@@ -346,8 +346,13 @@ namespace dbaui
 
         sal_Bool implSelect(const ::svx::ODataAccessDescriptor& _rDescriptor);
 
+        /// selects the entry given and loads the grid control with the object's data
         sal_Bool implSelect(const ::rtl::OUString& _rDataSourceName, const ::rtl::OUString& _rCommand,
             const sal_Int32 _nCommandType, const sal_Bool _bEscapeProcessing,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _rxConnection=NULL);
+
+        /// loads the grid control with the data object specified (which may be a table, a query or a command)
+        sal_Bool implLoadAnything(const ::rtl::OUString& _rDataSourceName, const ::rtl::OUString& _rCommand,
+            const sal_Int32 _nCommandType, const sal_Bool _bEscapeProcessing, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _rxConnection = NULL);
 
         /** retrieves the tree entry for the object described by <arg>_rDescriptor</arg>
             @param _rDescriptor
@@ -401,6 +406,7 @@ namespace dbaui
 
         // set _rsName as title at the frame
         void setTitle(const ::rtl::OUString& _rsDataSourceName,const ::rtl::OUString& _rsName) const;
+        void setDefaultTitle() const;
     };
 
 // .........................................................................
