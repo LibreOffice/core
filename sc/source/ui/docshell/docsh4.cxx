@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh4.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 16:12:34 $
+ *  last change: $Author: svesik $ $Date: 2004-04-19 22:11:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2001,6 +2001,9 @@ void __EXPORT ScDocShell::Draw( OutputDevice* pDev, const JobSetup & rSetup, USH
     if (!aDocument.HasTable(nVisTab))
         return;
 
+    ULONG nOldLayoutMode = pDev->GetLayoutMode();
+    pDev->SetLayoutMode( TEXT_LAYOUT_DEFAULT );     // even if it's the same, to get the metafile action
+
     if ( nAspect == ASPECT_THUMBNAIL )
     {
         Rectangle aBoundRect = GetVisArea( ASPECT_THUMBNAIL );
@@ -2019,6 +2022,8 @@ void __EXPORT ScDocShell::Draw( OutputDevice* pDev, const JobSetup & rSetup, USH
         aTmpData.SetScreen( aBoundRect );
         ScPrintFunc::DrawToDev( &aDocument, pDev, 1.0, aBoundRect, &aTmpData, TRUE );
     }
+
+    pDev->SetLayoutMode( nOldLayoutMode );
 }
 
 Rectangle __EXPORT ScDocShell::GetVisArea( USHORT nAspect ) const
