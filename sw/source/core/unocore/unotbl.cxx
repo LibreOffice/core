@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: os $ $Date: 2001-06-20 08:59:51 $
+ *  last change: $Author: mtg $ $Date: 2001-06-27 12:03:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,6 +229,7 @@
 #ifndef _VOS_MUTEX_HXX_ //autogen
 #include <vos/mutex.hxx>
 #endif
+#include <float.h> // for DBL_MIN
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -2886,17 +2887,18 @@ void SwXTextTable::removeChartDataChangeEventListener(
  * --------------------------------------------------*/
 sal_Bool SwXTextTable::isNotANumber(double nNumber) throw( uno::RuntimeException )
 {
-    DBG_WARNING("not implemented")
-    return sal_False;
-
+    // We use DBL_MIN because starcalc does (which uses it because chart
+    // wants it that way!)
+    return ( nNumber == DBL_MIN );
 }
 /* -----------------08.03.99 15:34-------------------
  *
  * --------------------------------------------------*/
 double SwXTextTable::getNotANumber(void) throw( uno::RuntimeException )
 {
-    DBG_WARNING("not implemented")
-    return 0.;
+    // We use DBL_MIN because starcalc does (which uses it because chart
+    // wants it that way!)
+    return DBL_MIN;
 }
 /*-- 11.12.98 12:42:48---------------------------------------------------
 
@@ -4600,11 +4602,10 @@ void SwXTableColumns::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
  ---------------------------------------------------------------------------*/
 void SwChartEventListenerContainer::ChartDataChanged()
 {
-    SwEvtLstnrArray* pListenerArr = GetListenerArray();
     if(pListenerArr)
     {
         //TODO: find appropriate settings of the Event
-        lang::EventObject aObj(GetParent());
+        lang::EventObject aObj(pxParent);
         chart::ChartDataChangeEvent aEvent;
         aEvent.Type = chart::ChartDataChangeType_ALL;
         aEvent.StartColumn = 0;
