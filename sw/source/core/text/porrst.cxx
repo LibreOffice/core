@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porrst.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 12:50:58 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 10:09:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -447,6 +446,12 @@ sal_Bool SwTxtFrm::FormatEmpty()
             if( !bFirstFlyCheck &&
                  aTxtFly.IsOn() && aTxtFly.IsAnyObj( aRect ) )
                  return sal_False;
+
+            // --> OD 2004-11-17 #i35635# - call method <HideAndShowObjects()>
+            // to assure that objects anchored at the empty paragraph are
+            // correctly visible resp. invisible.
+            HideAndShowObjects();
+            // <--
             return sal_True;
         }
     }
