@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtree.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 14:20:41 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 13:00:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -638,18 +638,6 @@ void SwDBTreeList::Select(const String& rDBName, const String& rTableName, const
             }
         }
     }
-}
-
-/*------------------------------------------------------------------------
- Beschreibung: Initialisierung verz”gern
-------------------------------------------------------------------------*/
-
-void  SwDBTreeList::Show()
-{
-    if (!bInitialized)
-        InitTreeList();
-
-    SvTreeListBox::Show();
 }
 
 /*------------------------------------------------------------------------
