@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfldi.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-19 12:02:33 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:12:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,7 +187,6 @@ enum XMLTextFieldAttrTokens
 /// abstract class for text field import
 class XMLTextFieldImportContext : public SvXMLImportContext
 {
-    const ::rtl::OUString sServicePrefix;
     const ::rtl::OUString sIsFixed;
 
     // data members
@@ -197,6 +196,7 @@ class XMLTextFieldImportContext : public SvXMLImportContext
     XMLTextImportHelper& rTextImportHelper; /// the import helper
 
 protected:
+    ::rtl::OUString sServicePrefix;
 
     // data members for use in subclasses
     sal_Bool bValid;                        /// ist dieses Feld gültig?
@@ -1506,6 +1506,72 @@ public:
         const ::com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
 protected:
+
+    /// process attribute values
+    virtual void ProcessAttribute( sal_uInt16 nAttrToken,
+                                   const ::rtl::OUString& sAttrValue );
+
+    /// prepare XTextField for insertion into document
+    virtual void PrepareField(
+        const ::com::sun::star::uno::Reference<
+        ::com::sun::star::beans::XPropertySet> & xPropertySet);
+};
+
+/** import header fields (<draw:header>) */
+class XMLHeaderFieldImportContext : public XMLTextFieldImportContext
+{
+public:
+    TYPEINFO();
+
+    XMLHeaderFieldImportContext(
+        SvXMLImport& rImport,                   /// XML Import
+        XMLTextImportHelper& rHlp,              /// Text import helper
+        sal_uInt16 nPrfx,                       /// namespace prefix
+        const ::rtl::OUString& sLocalName);     /// element name w/o prefix
+
+    /// process attribute values
+    virtual void ProcessAttribute( sal_uInt16 nAttrToken,
+                                   const ::rtl::OUString& sAttrValue );
+
+    /// prepare XTextField for insertion into document
+    virtual void PrepareField(
+        const ::com::sun::star::uno::Reference<
+        ::com::sun::star::beans::XPropertySet> & xPropertySet);
+};
+
+/** import footer fields (<draw:footer>) */
+class XMLFooterFieldImportContext : public XMLTextFieldImportContext
+{
+public:
+    TYPEINFO();
+
+    XMLFooterFieldImportContext(
+        SvXMLImport& rImport,                   /// XML Import
+        XMLTextImportHelper& rHlp,              /// Text import helper
+        sal_uInt16 nPrfx,                       /// namespace prefix
+        const ::rtl::OUString& sLocalName);     /// element name w/o prefix
+
+    /// process attribute values
+    virtual void ProcessAttribute( sal_uInt16 nAttrToken,
+                                   const ::rtl::OUString& sAttrValue );
+
+    /// prepare XTextField for insertion into document
+    virtual void PrepareField(
+        const ::com::sun::star::uno::Reference<
+        ::com::sun::star::beans::XPropertySet> & xPropertySet);
+};
+
+/** import footer fields (<draw:date-and-time>) */
+class XMLDateTimeFieldImportContext : public XMLTextFieldImportContext
+{
+public:
+    TYPEINFO();
+
+    XMLDateTimeFieldImportContext(
+        SvXMLImport& rImport,                   /// XML Import
+        XMLTextImportHelper& rHlp,              /// Text import helper
+        sal_uInt16 nPrfx,                       /// namespace prefix
+        const ::rtl::OUString& sLocalName);     /// element name w/o prefix
 
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
