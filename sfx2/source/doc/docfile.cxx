@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: sb $ $Date: 2000-12-08 13:45:27 $
+ *  last change: $Author: mba $ $Date: 2000-12-10 14:34:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1429,7 +1429,9 @@ void SfxMedium::GetMedium_Impl()
 
         ::utl::UcbLockBytesRef xLockBytes;
         ::utl::UcbLockBytesHandler* pHandler = pImp->aHandler;
-
+        INetProtocol eProt = GetURLObject().GetProtocol();
+        if ( eProt != INET_PROT_HTTP && eProt != INET_PROT_FTP )
+            pHandler = NULL;
         BOOL bSynchron = pImp->bForceSynchron || ! pImp->aDoneLink.IsSet();
         SFX_ITEMSET_ARG( pSet, pStreamItem, SfxUsrAnyItem, SID_INPUTSTREAM, sal_False);
         if ( pStreamItem )
@@ -1461,8 +1463,10 @@ void SfxMedium::GetMedium_Impl()
                 pImp->bDownloadDone = sal_False;
                 pImp->bDontCallDoneLinkOnSharingError = sal_False;
                 xLockBytes = ::utl::UcbLockBytes::CreateLockBytes( GetContent(), nStorOpenMode, pHandler );
+                if ( !pHandler && !pImp->bDownloadDone )
+                    Done_Impl( xLockBytes->GetError() );
             }
-            else if ( bIsWritable && !pImp->bDownloadDone )
+            else if ( !pHandler && !pImp->bDownloadDone )
                 // opening readwrite is always done synchronously
                 Done_Impl( xLockBytes->GetError() );
         }
