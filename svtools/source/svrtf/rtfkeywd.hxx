@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfkeywd.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-10 11:23:04 $
+ *  last change: $Author: jp $ $Date: 2000-11-16 17:54:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1036,6 +1036,7 @@ extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_ULDASHD, "\\uldashd" );
 extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_ULDASHDD, "\\uldashdd" );
 extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_ULTH, "\\ulth" );
 extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_ULWAVE, "\\ulwave" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_ULC, "\\ulc" );
 extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_U, "\\u" );
 extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_UPR, "\\upr" );
 extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_USERPROPS, "\\userprops" );
@@ -1068,6 +1069,7 @@ extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_ADEFF,     "\\adeff" );
 extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_ACCNONE,   "\\accnone" );
 extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_ACCDOT,    "\\accdot" );
 extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_ACCCOMMA,  "\\acccomma" );
+extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_TWOINONE,  "\\twoinone" );
 
 // SWG spezifische Attribute
 extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_GRFALIGNV, "\\grfalignv" );
@@ -1135,11 +1137,14 @@ extern sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DECL( sRTF_SOUTLVL, "\\soutlvl" );
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/svtools/source/svrtf/rtfkeywd.hxx,v 1.2 2000-11-10 11:23:04 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/svtools/source/svrtf/rtfkeywd.hxx,v 1.3 2000-11-16 17:54:11 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.2  2000/11/10 11:23:04  jp
+      new Tokens for the CJK-Version
+
       Revision 1.1.1.1  2000/09/18 16:59:05  hr
       initial import
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfkey2.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-10 11:23:04 $
+ *  last change: $Author: jp $ $Date: 2000-11-16 17:54:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1025,6 +1025,7 @@ sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_ULDASHD, "\\uldashd" );
 sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_ULDASHDD, "\\uldashdd" );
 sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_ULTH, "\\ulth" );
 sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_ULWAVE, "\\ulwave" );
+sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_ULC, "\\ulc" );
 sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_U, "\\u" );
 sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_UPR, "\\upr" );
 sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_USERPROPS, "\\userprops" );
@@ -1057,6 +1058,7 @@ sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_ADEFF,     "\\adeff" );
 sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_ACCNONE,   "\\accnone" );
 sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_ACCDOT,    "\\accdot" );
 sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_ACCCOMMA,  "\\acccomma" );
+sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_TWOINONE,  "\\twoinone" );
 
 // SWG spezifische Attribute
 sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sRTF_GRFALIGNV, "\\grfalignv" );

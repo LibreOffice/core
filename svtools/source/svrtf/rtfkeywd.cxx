@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfkeywd.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-10 11:23:04 $
+ *  last change: $Author: jp $ $Date: 2000-11-16 17:54:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1046,6 +1046,7 @@ sRTF_ULDASHD,       RTF_ULDASHD,
 sRTF_ULDASHDD,      RTF_ULDASHDD,
 sRTF_ULTH,          RTF_ULTH,
 sRTF_ULWAVE,        RTF_ULWAVE,
+sRTF_ULC,           RTF_ULC,
 sRTF_U,             RTF_U,
 sRTF_UPR,           RTF_UPR,
 sRTF_USERPROPS,     RTF_USERPROPS,
@@ -1078,6 +1079,7 @@ sRTF_ADEFF,         RTF_ADEFF,
 sRTF_ACCNONE,       RTF_ACCNONE,
 sRTF_ACCDOT,        RTF_ACCDOT,
 sRTF_ACCCOMMA,      RTF_ACCCOMMA,
+sRTF_TWOINONE,      RTF_TWOINONE,
 
 // SWG spezifische Attribute
 sRTF_GRFALIGNV,     RTF_GRF_ALIGNV,

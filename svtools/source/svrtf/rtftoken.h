@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtftoken.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-10 11:23:04 $
+ *  last change: $Author: jp $ $Date: 2000-11-16 17:54:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -742,6 +742,7 @@ enum RTF_TOKEN_IDS {
     RTF_ULDASH,
     RTF_ULDASHDD,
     RTF_ULWAVE,
+    RTF_ULC,
     RTF_ULTH,
     RTF_EMBO,
     RTF_IMPR,
@@ -797,6 +798,7 @@ enum RTF_TOKEN_IDS {
     RTF_ACCNONE,
     RTF_ACCDOT,
     RTF_ACCCOMMA,
+    RTF_TWOINONE,
 
     // Swg-Border-Tokens
     RTF_SWG_ESCPROP     = (RTF_CHRFMT|RTF_SWGDEFS),
@@ -1241,11 +1243,14 @@ enum RTF_TOKEN_IDS {
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/svtools/source/svrtf/rtftoken.h,v 1.2 2000-11-10 11:23:04 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/svtools/source/svrtf/rtftoken.h,v 1.3 2000-11-16 17:54:11 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.2  2000/11/10 11:23:04  jp
+      new Tokens for the CJK-Version
+
       Revision 1.1.1.1  2000/09/18 16:59:05  hr
       initial import
 
