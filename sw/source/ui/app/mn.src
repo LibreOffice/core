@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mn.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-10 06:23:37 $
+ *  last change: $Author: kz $ $Date: 2001-05-17 08:11:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -252,7 +252,7 @@ String MN_DRAW_POPUPMENU
     Text [ English ] = "Graphic" ;
     Text [ norwegian ] = "Graphic" ;
     Text [ italian ] = "Grafico" ;
-    Text [ portuguese_brazilian ] = "Gráfico" ;
+    Text [ portuguese_brazilian ] = "Gr?fico" ;
     Text [ portuguese ] = "Imagem" ;
     Text [ finnish ] = "Kuva" ;
     Text [ danish ] = "Grafik" ;
@@ -384,7 +384,7 @@ String MN_GRF_POPUPMENU
     Text [ English ] = "Graphic" ;
     Text [ norwegian ] = "Graphic" ;
     Text [ italian ] = "Immagine" ;
-    Text [ portuguese_brazilian ] = "Gráfico" ;
+    Text [ portuguese_brazilian ] = "Gr?fico" ;
     Text [ portuguese ] = "Imagem" ;
     Text [ finnish ] = "Kuva" ;
     Text [ danish ] = "Grafik" ;
@@ -538,7 +538,7 @@ Menu MN_PPREVIEW_POPUPMENU
             Text [ french ] = "Page suivante" ;
             Text [ swedish ] = "Nästa sida" ;
             Text [ danish ] = "Næste side" ;
-            Text [ portuguese_brazilian ] = "Nächste Seite" ;
+            Text [ portuguese_brazilian ] = "N?chste Seite" ;
             Text [ portuguese ] = "Página seguinte" ;
             Text[ chinese_simplified ] = "ÏÂÒ»Ò³";
             Text[ russian ] = "Ñëåäóþùàÿ ñòðàíèöà";
