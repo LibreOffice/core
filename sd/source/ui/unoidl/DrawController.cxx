@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DrawController.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2004-12-09 16:12:30 $
+ *  last change: $Author: rt $ $Date: 2005-02-04 14:18:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,12 @@
 #include "Window.hxx"
 #include "DrawDocShell.hxx"
 #include "unomodel.hxx"
+#ifndef SD_PANE_MANAGER_HXX
+#include "PaneManager.hxx"
+#endif
+#ifndef SD_VIEW_SHELL_MANAGER_HXX
+#include "ViewShellManager.hxx"
+#endif
 
 #ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
@@ -204,14 +210,16 @@ void SAL_CALL DrawController::dispose()
         {
             mbDisposing = true;
 
+            // When the controller has not been detached from its view
+            // shell, i.e. mpViewShell is not NULL, then tell PaneManager
+            // and ViewShellManager to clear the shell stack.
+            if (mpViewShell != NULL)
+            {
+                mrBase.GetPaneManager().Shutdown(true);
+                mrBase.GetViewShellManager().Shutdown();
+            }
+
             OPropertySetHelper::disposing();
-            //AF BroadcastHelper is not used anymore.  There is the BroadcastHelperOwner instead.
-//          OInterfaceContainerHelper* pListeners = getContainer(::getCppuType((Reference<view::XSelectionChangeListener>*)0));
-//          if( pListeners )
-//          {
-//              lang::EventObject aEventObj;
-//              pListeners->disposeAndClear(aEventObj);
-//          }
 
             SfxBaseController::dispose();
         }
