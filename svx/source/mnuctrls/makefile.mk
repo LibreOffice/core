@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: tl $ $Date: 2001-03-30 14:23:25 $
+#   last change: $Author: kz $ $Date: 2003-08-25 14:38:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,40 +67,25 @@ PROJECTPCHSOURCE=$(PRJ)$/util$/svxpch
 
 PRJNAME=svx
 TARGET=mnuctrls
-AUTOSEG=true
 VERSION=$(UPD)
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
-.IF "$(GUI)" != "MAC"
 CFLAGS+=-DDG_DLL
-.ELSE
-CFLAGS+=-D DG_DLL
-.ENDIF
 
 # --- Files --------------------------------------------------------
 
-.IF "$(header)" == ""
-
-CXXFILES = \
-        clipboardctl.cxx \
-        fntctl.cxx \
-        fntszctl.cxx
-
-SRCFILES =  \
+SRS1NAME=$(TARGET)
+SRC1FILES =  \
         mnuctrls.src
 
 SLOFILES=	\
         $(SLO)$/clipboardctl.obj \
         $(SLO)$/fntctl.obj \
         $(SLO)$/fntszctl.obj
-
-.ENDIF
 
 HXX1TARGET=mnuctrls
 HXX1EXT=   hxx
@@ -113,11 +98,5 @@ HXX1DEPN=\
 
 # --- Targets -------------------------------------------------------
 
-.IF "$(depend)" == ""
-
-all:    \
-        ALLTAR
-
-.ENDIF
-
 .INCLUDE :  target.mk
+
