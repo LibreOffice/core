@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pormulti.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ama $ $Date: 2000-11-14 11:39:16 $
+ *  last change: $Author: ama $ $Date: 2000-11-15 15:40:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,7 +230,7 @@ SwDoubleLinePortion::SwDoubleLinePortion( const SwTxtAttr& rAttr,
     xub_StrLen nEnd ) : SwMultiPortion( nEnd ), pBracket( new SwBracket() )
 {
     SetDouble();
-    if( RES_TXTATR_TWO_LINES == rAttr.Which() )
+    if( RES_CHRATR_TWO_LINES == rAttr.Which() )
     {
         pBracket->cPre = rAttr.Get2Lines().GetStartBracket();
         pBracket->cPost = rAttr.Get2Lines().GetEndBracket();
@@ -246,7 +246,7 @@ SwDoubleLinePortion::SwDoubleLinePortion( const SwTxtAttr& rAttr,
         {
             const SfxPoolItem* pItem;
             if( SFX_ITEM_SET == pFmt->GetAttrSet().
-                GetItemState( RES_TXTATR_TWO_LINES, TRUE, &pItem ) )
+                GetItemState( RES_CHRATR_TWO_LINES, TRUE, &pItem ) )
             {
                 pBracket->cPre = ((SwFmt2Lines*)pItem)->GetStartBracket();
                 pBracket->cPost = ((SwFmt2Lines*)pItem)->GetEndBracket();
@@ -651,7 +651,7 @@ void SwRubyPortion::CalcRubyOffset()
 sal_Bool lcl_Has2Lines( const SwTxtAttr& rAttr, const SwFmt2Lines* &rpRef,
     sal_Bool &rValue )
 {
-    if( RES_TXTATR_TWO_LINES == rAttr.Which() )
+    if( RES_CHRATR_TWO_LINES == rAttr.Which() )
     {
         rValue = /* rAttr.Get2Lines().GetValue() */ sal_True;
         if( !rpRef )
@@ -670,7 +670,7 @@ sal_Bool lcl_Has2Lines( const SwTxtAttr& rAttr, const SwFmt2Lines* &rpRef,
     {
         const SfxPoolItem* pItem;
         if( SFX_ITEM_SET == pFmt->GetAttrSet().
-            GetItemState( RES_TXTATR_TWO_LINES, TRUE, &pItem ) )
+            GetItemState( RES_CHRATR_TWO_LINES, TRUE, &pItem ) )
         {
             rValue = /* ((SwFmt2Lines*)pItem)->GetValue(); */ sal_True;
             if( !rpRef )
