@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvor.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 15:19:07 $
+ *  last change: $Author: vg $ $Date: 2005-02-25 13:08:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,6 +189,7 @@ inline void SfxOrganizeListBox_Impl::SetBitmaps(
 
 //=========================================================================
 
+#define NO_DROP_ACTION  ((sal_Int8)-1)
 
 class SfxOrganizeDlg_Impl
 {
@@ -204,6 +205,9 @@ friend class SfxOrganizeListBox_Impl;
     // save pointer for asynchronous D&D
     SvLBox*                 pSourceView;
     SvLBoxEntry*            pTargetEntry;
+    SfxOrganizeListBox_Impl* pFinishedBox;
+    sal_Int8                nDropAction;
+    bool                    bExecDropFinished;
 
     SfxOrganizeListBox_Impl aLeftLb;
     ListBox                 aLeftTypLb;
@@ -249,12 +253,15 @@ public:
 SfxOrganizeDlg_Impl::SfxOrganizeDlg_Impl( SfxTemplateOrganizeDlg* pParent,
                                           SfxDocumentTemplates* pTempl ) :
 
-    pSuspend    ( NULL ),
-    pDialog     ( pParent ),
-    pFocusBox   ( NULL ),
-    pPrt        ( NULL ),
-    pSourceView ( NULL ),
-    pTargetEntry( NULL ),
+    pSuspend            ( NULL ),
+    pDialog             ( pParent ),
+    pFocusBox           ( NULL ),
+    pPrt                ( NULL ),
+    pSourceView         ( NULL ),
+    pTargetEntry        ( NULL ),
+    pFinishedBox        ( NULL ),
+    nDropAction         ( NO_DROP_ACTION ),
+    bExecDropFinished   ( true ),
 
     aLeftLb     ( this, pParent, WB_BORDER | WB_TABSTOP | WB_HSCROLL, SfxOrganizeListBox_Impl::VIEW_TEMPLATES ),
     aLeftTypLb  (  pParent, ResId( LB_LEFT_TYP ) ),
@@ -1124,11 +1131,28 @@ sal_Int8 SfxOrganizeListBox_Impl::ExecuteDrop( const ExecuteDropEvent& rEvt )
         // asynchronous, because of MessBoxes
         pDlg->pSourceView = GetSourceView();
         pDlg->pTargetEntry = pTargetEntry;
+        pDlg->pFinishedBox = NULL;
+        pDlg->nDropAction = NO_DROP_ACTION;
         PostUserEvent( LINK( this, SfxOrganizeListBox_Impl, OnAsyncExecuteDrop ),
                        new ExecuteDropEvent( rEvt ) );
     }
 
     return nRet;
+}
+
+//-------------------------------------------------------------------------
+
+void SfxOrganizeListBox_Impl::DragFinished( sal_Int8 nDropAction )
+{
+    if ( pDlg->bExecDropFinished )
+    {
+        if ( pDlg->nDropAction != NO_DROP_ACTION )
+            nDropAction = pDlg->nDropAction;
+        SvTreeListBox::DragFinished( nDropAction );
+        pDlg->nDropAction = NO_DROP_ACTION;
+    }
+    else
+        pDlg->pFinishedBox = this;
 }
 
 //-------------------------------------------------------------------------
@@ -1416,7 +1440,7 @@ SfxOrganizeListBox_Impl::SfxOrganizeListBox_Impl
 
 //-------------------------------------------------------------------------
 
-    IMPL_LINK( SfxOrganizeListBox_Impl, OnAsyncExecuteDrop, ExecuteDropEvent*, pEvent )
+IMPL_LINK( SfxOrganizeListBox_Impl, OnAsyncExecuteDrop, ExecuteDropEvent*, pEvent )
 {
     DBG_ASSERT( pEvent, "invalid DropEvent" );
     if ( pEvent )
@@ -1424,10 +1448,17 @@ SfxOrganizeListBox_Impl::SfxOrganizeListBox_Impl
         SvLBox* pSourceView = GetSourceView();
         if ( !pSourceView )
             pSourceView = pDlg->pSourceView;
-        SvTreeListBox::ExecuteDrop( *pEvent, pSourceView );
+        pDlg->bExecDropFinished = false;
+        pDlg->nDropAction = SvTreeListBox::ExecuteDrop( *pEvent, pSourceView );
         delete pEvent;
         pDlg->pSourceView = NULL;
         pDlg->pTargetEntry = NULL;
+        pDlg->bExecDropFinished = true;
+        if ( pDlg->pFinishedBox )
+        {
+            pDlg->pFinishedBox->DragFinished( pDlg->nDropAction );
+            pDlg->pFinishedBox = NULL;
+        }
     }
     return 0;
 }
