@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbintern.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 13:32:02 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:24:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,7 @@
 #include "symtbl.hxx"               // Symbolverwaltung
 #include "parser.hxx"               // Parser
 #include "codegen.hxx"              // Code-Generator
+#include "basmgr.hxx"
 #pragma hdrstop
 
 SV_IMPL_PTRARR(SbErrorStack, SbErrorStackEntry*)
@@ -102,6 +103,7 @@ SbiGlobals::SbiGlobals()
     pErrStack = NULL;
     pTransliterationWrapper = NULL;
     bBlockCompilerError = FALSE;
+    pAppBasMgr = NULL;
 }
 
 SbiGlobals::~SbiGlobals()
