@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objcont.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: mba $ $Date: 2001-08-24 08:01:18 $
+ *  last change: $Author: mba $ $Date: 2001-08-28 11:37:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -856,8 +856,7 @@ SvEmbeddedInfoObject* SfxObjectShell::InsertObject
     String aName( rName );
     if( !aName.Len() )
     {
-        aName = SfxResId( STR_OBJECT );
-        aName += sal_Unicode(' ');
+        aName = DEFINE_CONST_UNICODE("Object ");
         String aStr;
         USHORT i = 1;
         HACK(Wegen Storage Bug 46033)
