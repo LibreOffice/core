@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdouno.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: aw $ $Date: 2001-02-15 16:11:33 $
+ *  last change: $Author: tbe $ $Date: 2001-02-26 11:52:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,6 +179,21 @@ SdrUnoObj::SdrUnoObj(const String& rModelName, BOOL _bOwnUnoControlModel)
     // nur ein owner darf eigenstaendig erzeugen
     if (rModelName.Len())
         CreateUnoControlModel(rModelName);
+}
+
+SdrUnoObj::SdrUnoObj(const String& rModelName,
+                     const uno::Reference< lang::XMultiServiceFactory >& rxSFac,
+                     BOOL _bOwnUnoControlModel)
+:   bOwnUnoControlModel(_bOwnUnoControlModel)
+{
+    bIsUnoObj = TRUE;
+
+    pEventListener = new SdrControlEventListenerImpl(this);
+    pEventListener->acquire();
+
+    // nur ein owner darf eigenstaendig erzeugen
+    if (rModelName.Len())
+        CreateUnoControlModel(rModelName,rxSFac);
 }
 
 SdrUnoObj::~SdrUnoObj()
@@ -604,6 +619,26 @@ void SdrUnoObj::CreateUnoControlModel(const String& rModelName)
     if (aUnoControlModelTypeName.Len() && xFactory.is() )
     {
         xModel = uno::Reference< awt::XControlModel >(xFactory->createInstance(
+            aUnoControlModelTypeName), uno::UNO_QUERY);
+
+        if (xModel.is())
+            SetChanged();
+    }
+
+    SetUnoControlModel(xModel);
+}
+
+void SdrUnoObj::CreateUnoControlModel(const String& rModelName,
+                                      const uno::Reference< lang::XMultiServiceFactory >& rxSFac)
+{
+    DBG_ASSERT(!xUnoControlModel.is(), "model already exists");
+
+    aUnoControlModelTypeName = rModelName;
+
+    uno::Reference< awt::XControlModel >   xModel;
+    if (aUnoControlModelTypeName.Len() && rxSFac.is() )
+    {
+        xModel = uno::Reference< awt::XControlModel >(rxSFac->createInstance(
             aUnoControlModelTypeName), uno::UNO_QUERY);
 
         if (xModel.is())
