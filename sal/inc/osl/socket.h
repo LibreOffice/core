@@ -2,9 +2,9 @@
  *
  *  $RCSfile: socket.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-14 09:48:09 $
+ *  last change: $Author: jbu $ $Date: 2001-03-14 16:28:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,13 +66,12 @@
 #   include <rtl/ustring.h>
 #endif
 
-#ifndef _OSL_TIME_H_
-#include <osl/time.h>
+#ifndef _RTL_BYTESEQ_H_
+#   include <rtl/byteseq.h>
 #endif
 
-
-#ifndef _OSL_TYPES_H_
-#   include <osl/types.h>
+#ifndef _OSL_TIME_H_
+#include <osl/time.h>
 #endif
 
 #ifndef _RTL_TENCINFO_H
@@ -94,7 +93,7 @@ extern "C" {
 /*
     Opaque datatype SocketAddr.
 */
-typedef void* oslSocketAddr;
+typedef struct oslSocketAddrImpl * oslSocketAddr;
 
 
 /*
@@ -252,7 +251,6 @@ typedef sal_uInt8 oslSocketIpxNodeNumber[6];
 /**@{ begin section oslSocketAddr
 */
 
-
 /** Creates a socket-address for the given family.
     If family == osl_af_inet the address is set to INADDR_ANY
     port 0.
@@ -270,14 +268,12 @@ oslSocketAddr SAL_CALL osl_copySocketAddr(oslSocketAddr Addr);
 sal_Bool SAL_CALL osl_isEqualSocketAddr(
     oslSocketAddr Addr1, oslSocketAddr Addr2);
 
-
 /** Uses the systems name-service interface to find an address for strHostname.
     @param strHostname [in] The name for which you search for an address.
     @return The desired address if one could be found, otherwise 0.
     Don't forget to destroy the address if you don't need it any longer.
 */
 oslSocketAddr SAL_CALL osl_resolveHostname(rtl_uString *strHostname);
-
 
 /** Create an internet address usable for sending broadcast datagrams.
     To limit the broadcast to your subnet, pass your hosts IP address
@@ -357,6 +353,14 @@ oslSocketResult SAL_CALL osl_getHostnameOfSocketAddr(oslSocketAddr Addr, rtl_uSt
 */
 oslSocketResult SAL_CALL osl_getDottedInetAddrOfSocketAddr(oslSocketAddr Addr, rtl_uString **strDottedInetAddr);
 
+/** Sets the addr field in the struct sockaddr with pByteSeq. pByteSeq must be in network byte order.
+ */
+oslSocketResult SAL_CALL osl_setAddrOfSocketAddr( oslSocketAddr Addr, sal_Sequence *pByteSeq );
+
+/** Returns the addr field in the struct sockaddr. ppByteSeq is in network byteorder. *ppByteSeq may
+    either be 0 or contain a constructed sal_Sequence.
+ */
+oslSocketResult SAL_CALL osl_getAddrOfSocketAddr( oslSocketAddr Addr, sal_Sequence **ppByteSeq );
 
 /** Gets the IPX Net-Number of the address.
     @return the (4 bytes long) net-number or 0 if not an IPX address.
@@ -383,7 +387,7 @@ sal_Int32 SAL_CALL osl_getIpxSocketNumber(oslSocketAddr Addr);
 /*
     Opaque datatype HostAddr.
 */
-typedef void* oslHostAddr;
+typedef struct oslHostAddrImpl * oslHostAddr;
 
 
 /** Create an oslHostAddr from given hostname and socket address.
@@ -455,7 +459,18 @@ oslSocketResult SAL_CALL osl_getLocalHostname(rtl_uString **strLocalHostname);
 /* oslSocket */
 /*-***************************************************************************/
 
-typedef void* oslSocket;
+typedef struct oslSocketImpl * oslSocket;
+
+/** increases the refcount of the socket handle by one
+ */
+void SAL_CALL osl_acquireSocket( oslSocket Socket );
+
+/** decreases the refcount of the socket handle by one.
+
+    If the refcount drops to zero, the underlying socket handle
+    is destroyed and becomes invalid.
+ */
+void SAL_CALL osl_releaseSocket( oslSocket Socket );
 
 /** Create a socket of the specified Family and Type. The semantic of
     the Protocol parameter depends on the given family and type.
@@ -467,6 +482,7 @@ oslSocket SAL_CALL osl_createSocket(oslAddrFamily   Family,
                                     oslProtocol     Protocol);
 
 /** Create a socket as a copy of another.
+    @deprecated
     @return 0 if socket could not be created, otherwise you get a handle
     to the allocated socket-datastructure.
 */
@@ -475,6 +491,7 @@ oslSocket SAL_CALL osl_copySocket(oslSocket Socket);
 /** Closes the socket and frees the Socket data-structure.
     For a graceful termination of a connection, you should call
     osl_shutdownSocket() first.
+    @deprecated
     @param Socket [in] The Socket to be closed and destroyed.
 */
 void SAL_CALL osl_destroySocket(oslSocket Socket);
@@ -569,8 +586,9 @@ sal_Int32 SAL_CALL osl_receiveSocket(oslSocket Socket,
     (datagram-)socket, if no error occurs.
 
     @param Socket [in] A bound socket to be used to listen for a datagram.
-    @param SenderAddr [out] An initialized oslSocketAddress. It will be
-    filled with the address of the datagrams sender. If SenderAddr is 0,
+    @param pSenderAddr [out] An pointer to a created oslSocketAddr handle
+    or to a null handle. After the call, it will contain the constructed
+    oslSocketAddr of the datagrams sender. If pSenderAddr itself is 0,
     it is ignored.
     @param pBuffer [out] Points to a buffer that will be filled with the received
     datagram.
@@ -838,7 +856,7 @@ oslSocketError SAL_CALL osl_getLastSocketError(oslSocket Socket);
 
 /** Type for the representation of socket sets.
 */
-typedef void* oslSocketSet;
+typedef struct oslSocketSetImpl * oslSocketSet;
 
 /** Creates a set of sockets to be used with osl_demultiplexSocketEvents().
     @return A oslSocketSet or 0 if creation failed.
@@ -896,6 +914,26 @@ sal_Int32 SAL_CALL osl_demultiplexSocketEvents(oslSocketSet IncomingSet,
 
 void SAL_CALL osl_closeSocket(oslSocket Socket);
 
+
+/** Retrieves n bytes from the stream and copies them into pBuffer.
+    The function avoids incomplete reads due to packet boundaries.
+    @param pBuffer receives the read data.
+    @param n the number of bytes to read. pBuffer must be large enough
+    to hold the n bytes!
+    @return the number of read bytes. The number will only be smaller than
+    n if an exceptional condition (e.g. connection closed) occurs.
+*/
+sal_Int32 SAL_CALL osl_readSocket( oslSocket Socket, void *pBuffer, sal_Int32 nSize );
+
+
+/** Writes n bytes from pBuffer to the stream. The method avoids
+    incomplete writes due to packet boundaries.
+    @param pBuffer contains the data to be written.
+    @param n the number of bytes to write.
+    @return the number of written bytes. The number will only be smaller than
+    n if an exceptional condition (e.g. connection closed) occurs.
+*/
+sal_Int32 SAL_CALL osl_writeSocket( oslSocket Socket, const void *pBuffer, sal_Int32 nSize );
 
 /**@} end section oslSocket
 */

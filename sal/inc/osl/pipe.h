@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pipe.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: martin.maher $ $Date: 2000-09-29 14:40:40 $
+ *  last change: $Author: jbu $ $Date: 2001-03-14 16:28:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,17 +98,48 @@ typedef sal_uInt32 oslPipeOptions;
 #define osl_Pipe_OPEN        0x0000     /* open existing pipe */
 #define osl_Pipe_CREATE      0x0001     /* create pipe and open it, fails if already existst */
 
-typedef void* oslPipe;
+typedef struct oslPipeImpl * oslPipe;
 
+/**
+ */
 oslPipe SAL_CALL osl_createPipe(rtl_uString *strPipeName, oslPipeOptions Options, oslSecurity Security);
+
+/** decreases the refcount of the pipe.
+    If the refcount drops to zero, the handle is destroyed.
+ */
+void    SAL_CALL osl_releasePipe( oslPipe );
+
+/** increases the refcount of the pipe.
+ */
+void    SAL_CALL osl_acquirePipe( oslPipe Pipe );
+
+/** @deprecated  use osl_releasePipe instead
+ */
 void    SAL_CALL osl_destroyPipe(oslPipe Pipe);
 
+/** closes the pipe, any read,write or accept actions stop immeadiatly.
+ */
+void    SAL_CALL osl_closePipe( oslPipe );
+
+
+/** @deprecated use osl_acquirePipe instead
+ */
 oslPipe SAL_CALL osl_copyPipe(oslPipe Pipe);
 
 oslPipe SAL_CALL osl_acceptPipe(oslPipe Pipe);
 
-sal_Int32 SAL_CALL osl_sendPipe(oslPipe Pipe, const void* pBuffer, sal_uInt32 BufferSize);
-sal_Int32 SAL_CALL osl_receivePipe(oslPipe Pipe, void* pBuffer, sal_uInt32 BufferSize);
+sal_Int32 SAL_CALL osl_sendPipe(oslPipe Pipe, const void* pBuffer, sal_Int32 BufferSize);
+sal_Int32 SAL_CALL osl_receivePipe(oslPipe Pipe, void* pBuffer, sal_Int32 BufferSize);
+
+/** Reads blocking from the pipe.
+    @return Number of read bytes. If less than BufferSize, the pipe was closed.
+ */
+sal_Int32 SAL_CALL osl_readPipe( oslPipe Pipe, void *pBuffer, sal_Int32 BufferSize );
+
+/** Writes blocking onto the pipe.
+    @return Number of written bytes. If less than BufferSize, the pipe was closed.
+ */
+sal_Int32 SAL_CALL osl_writePipe( oslPipe Pipe, const void *pBuffer, sal_Int32 BufferSize );
 
 oslPipeError SAL_CALL osl_getLastPipeError(oslPipe Pipe);
 
