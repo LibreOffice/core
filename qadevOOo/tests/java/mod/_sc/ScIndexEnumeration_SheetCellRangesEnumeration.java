@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScIndexEnumeration_SheetCellRangesEnumeration.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:16:23 $
+ *  last change:$Date: 2003-02-03 13:30:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,9 @@ import lib.TestEnvironment;
 import lib.TestParameters;
 import util.SOfficeFactory;
 
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
+
 public class ScIndexEnumeration_SheetCellRangesEnumeration extends TestCase {
     XSpreadsheetDocument xSheetDoc = null;
 
@@ -134,7 +137,8 @@ public class ScIndexEnumeration_SheetCellRangesEnumeration extends TestCase {
             UnoRuntime.queryInterface (XIndexAccess.class, oSheets);
         XSpreadsheet oSheet = null;
         try {
-            oSheet = (XSpreadsheet) oIndSheets.getByIndex(0);
+            oSheet = (XSpreadsheet) AnyConverter.toObject(
+                    new Type(XSpreadsheet.class),oIndSheets.getByIndex(0));
             XNameContainer oRanges = (XNameContainer)
                 UnoRuntime.queryInterface(XNameContainer.class, oObj);
 
