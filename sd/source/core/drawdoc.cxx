@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: dl $ $Date: 2000-12-08 13:30:03 $
+ *  last change: $Author: dl $ $Date: 2000-12-11 14:51:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -343,9 +343,9 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh) :
         DBG_ERROR( "Ill. Type inside linguistic property" );
     }
 #else
-    SetLanguage( System::GetLanguage() );
-    SetLanguageCJK( System::GetLanguage() );
-    SetLanguageCTL( System::GetLanguage() );
+    SetLanguage( eLanguage, EE_CHAR_LANGUAGE );
+    SetLanguage( eLanguage, EE_CHAR_LANGUAGE_CJK );
+    SetLanguage( eLanguage, EE_CHAR_LANGUAGE_CTL );
 #endif // !SVX_LIGHT
 
     // Dem DrawOutliner den StyleSheetPool setzen, damit Textobjekte richtig
