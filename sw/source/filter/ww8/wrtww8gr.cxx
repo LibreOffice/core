@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8gr.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 12:59:40 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 15:04:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,6 @@
 
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
-#ifdef PRECOMPILED
-#include "filt_pch.hxx"
-#endif
 
 #pragma hdrstop
 
