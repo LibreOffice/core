@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svapp.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 15:04:25 $
+ *  last change: $Author: obo $ $Date: 2005-01-03 17:38:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -750,6 +750,7 @@ void Application::SetSettings( const AllSettings& rSettings )
     {
         pSVData->maAppData.mpSettings = new AllSettings();
         *pSVData->maAppData.mpSettings = rSettings;
+        ResMgr::SetDefaultLocale( rSettings.GetUILocale() );
     }
     else
     {
@@ -759,6 +760,7 @@ void Application::SetSettings( const AllSettings& rSettings )
             delete pSVData->mpResMgr;
             pSVData->mpResMgr = NULL;
         }
+        ResMgr::SetDefaultLocale( rSettings.GetUILocale() );
         *pSVData->maAppData.mpSettings = rSettings;
         ULONG nChangeFlags = aOldSettings.GetChangeFlags( *pSVData->maAppData.mpSettings );
         if ( nChangeFlags )
@@ -1536,30 +1538,6 @@ void Application::SetSystemWindowMode( USHORT nMode )
 USHORT Application::GetSystemWindowMode()
 {
     return ImplGetSVData()->maAppData.mnSysWinMode;
-}
-
-// -----------------------------------------------------------------------
-
-void Application::SetResourcePath( const XubString& rPath )
-{
-    ImplSVData* pSVData = ImplGetSVData();
-
-    // if it doesn't exist create a new one
-    if ( !pSVData->maAppData.mpResPath )
-        pSVData->maAppData.mpResPath = new XubString( rPath );
-    else
-        *(pSVData->maAppData.mpResPath) = rPath;
-}
-
-// -----------------------------------------------------------------------
-
-const XubString& Application::GetResourcePath()
-{
-    ImplSVData* pSVData = ImplGetSVData();
-    if ( pSVData->maAppData.mpResPath )
-        return *(pSVData->maAppData.mpResPath);
-    else
-        return ImplGetSVEmptyStr();
 }
 
 // -----------------------------------------------------------------------
