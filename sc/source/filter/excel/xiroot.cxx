@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xiroot.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:04:36 $
+ *  last change: $Author: hr $ $Date: 2003-04-23 17:29:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,10 @@
 
 #ifndef SC_XIROOT_HXX
 #include "xiroot.hxx"
+#endif
+
+#ifndef SC_ADDINCOL_HXX
+#include "addincol.hxx"
 #endif
 
 #ifndef SC_XILINK_HXX
@@ -182,6 +186,14 @@ XclImpWebQueryBuffer& XclImpRoot::GetWebQueryBuffer() const
     if( !mrImpData.mpWebQBuffer.get() )
         mrImpData.mpWebQBuffer.reset( new XclImpWebQueryBuffer( GetRoot() ) );
     return *mrImpData.mpWebQBuffer;
+}
+
+String XclImpRoot::GetScAddInName( const String& rXclName ) const
+{
+    String aScName;
+    if( ScGlobal::GetAddInCollection()->GetCalcName( rXclName, aScName ) )
+        return aScName;
+    return rXclName;
 }
 
 bool XclImpRoot::CheckCellAddress( const ScAddress& rPos ) const
