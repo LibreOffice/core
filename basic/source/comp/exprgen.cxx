@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exprgen.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ab $ $Date: 2000-10-10 13:02:03 $
+ *  last change: $Author: ab $ $Date: 2001-09-04 10:06:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,8 @@ void SbiExprNode::Gen()
             if( pProc && pProc->GetLib().Len() )
                 eOp = pProc->IsCdecl() ? _CALLC : _CALL;
             else
-                eOp = ( aVar.pDef->GetScope() == SbRTL ) ? _RTL : _FIND;
+                eOp = ( aVar.pDef->GetScope() == SbRTL ) ? _RTL :
+                    (aVar.pDef->IsGlobal() ? _FIND_G : _FIND);
         }
 
         for( SbiExprNode* p = this; p; p = p->aVar.pNext )
@@ -164,7 +165,7 @@ void SbiExprNode::Gen()
 void SbiExprNode::GenElement( SbiOpcode eOp )
 {
 #ifndef PRODUCT
-    if( eOp < _RTL || eOp > _CALLC )
+    if( (eOp < _RTL || eOp > _CALLC) && eOp != _FIND_G )
         pGen->GetParser()->Error( SbERR_INTERNAL_ERROR, "Opcode" );
 #endif
     SbiSymDef* pDef = aVar.pDef;
