@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commonembobj.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mav $ $Date: 2003-12-08 12:49:44 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 17:52:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,9 @@
 #ifndef _COM_SUN_STAR_EMBED_XCOMPONENTSUPPLIER_HPP_
 #include <com/sun/star/embed/XComponentSupplier.hpp>
 #endif
+#ifndef _COM_SUN_STAR_EMBED_XSTATECHANGEBROADCASTER_HPP_
+#include <com/sun/star/embed/XStateChangeBroadcaster.hpp>
+#endif
 
 #ifndef _COM_SUN_STAR_DOCUMENT_XEVENTBROADCASTER_HPP_
 #include <com/sun/star/document/XEventBroadcaster.hpp>
@@ -117,6 +120,9 @@ namespace com { namespace sun { namespace star {
     namespace util {
         class XCloseListener;
     }
+    namespace beans {
+        class PropertyValue;
+    }
 }}}
 
 namespace cppu {
@@ -131,13 +137,14 @@ namespace cppu {
 class Interceptor;
 
 class OCommonEmbeddedObject : public ::com::sun::star::embed::XEmbeddedObject
-                            , public ::com::sun::star::embed::XVisualObject
+                            // , public ::com::sun::star::embed::XVisualObject
                             , public ::com::sun::star::embed::XEmbedPersist
                             , public ::com::sun::star::embed::XLinkageSupport
-                            , public ::com::sun::star::embed::XClassifiedObject
-                            , public ::com::sun::star::embed::XComponentSupplier
-                            , public ::com::sun::star::util::XCloseable
-                            , public ::com::sun::star::document::XEventBroadcaster
+                            // , public ::com::sun::star::embed::XClassifiedObject
+                            // , public ::com::sun::star::embed::XComponentSupplier
+                            // , public ::com::sun::star::embed::XStateChangeBroadcaster
+                            // , public ::com::sun::star::util::XCloseable
+                            // , public ::com::sun::star::document::XEventBroadcaster
                             , public ::cppu::OWeakObject
 {
     ::osl::Mutex    m_aMutex;
@@ -155,6 +162,8 @@ class OCommonEmbeddedObject : public ::com::sun::star::embed::XEmbeddedObject
     sal_Int32 m_nUpdateMode;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xFactory;
+
+    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > m_aDocMediaDescriptor;
 
     ::com::sun::star::uno::Sequence< sal_Int8 > m_aClassID;
     ::rtl::OUString m_aClassName;
@@ -205,6 +214,8 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > StoreDocumentToTempStream_Impl();
 
     sal_Int32 ConvertVerbToState_Impl( sal_Int32 nVerb );
+
+    void StateChangeNotification_Impl( sal_Bool bBeforeChange, sal_Int32 nOldState, sal_Int32 nNewState );
 
     void SwitchStateTo_Impl( sal_Int32 nNextState );
 
@@ -289,7 +300,7 @@ public:
                 ::com::sun::star::uno::Exception,
                 ::com::sun::star::uno::RuntimeException );
 
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::embed::VerbDescr > SAL_CALL getSupportedVerbs()
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::embed::VerbDescriptor > SAL_CALL getSupportedVerbs()
         throw ( ::com::sun::star::embed::WrongStateException,
                 ::com::sun::star::uno::RuntimeException );
 
@@ -315,28 +326,27 @@ public:
         throw ( ::com::sun::star::embed::WrongStateException,
                 ::com::sun::star::uno::RuntimeException );
 
-
-// XVisualObject
-
     virtual void SAL_CALL setContainerName( const ::rtl::OUString& sName )
         throw ( ::com::sun::star::uno::RuntimeException );
 
-    virtual void SAL_CALL setVisAreaSize( sal_Int64 nAspect, const ::com::sun::star::awt::Size& aSize )
+
+// XVisualObject
+
+    virtual void SAL_CALL setVisualAreaSize( sal_Int64 nAspect, const ::com::sun::star::awt::Size& aSize )
         throw ( ::com::sun::star::lang::IllegalArgumentException,
                 ::com::sun::star::embed::WrongStateException,
                 ::com::sun::star::uno::Exception,
                 ::com::sun::star::uno::RuntimeException );
 
-    virtual ::com::sun::star::awt::Size SAL_CALL getVisAreaSize( sal_Int64 nAspect )
+    virtual ::com::sun::star::awt::Size SAL_CALL getVisualAreaSize( sal_Int64 nAspect )
         throw ( ::com::sun::star::lang::IllegalArgumentException,
                 ::com::sun::star::embed::WrongStateException,
                 ::com::sun::star::uno::Exception,
                 ::com::sun::star::uno::RuntimeException );
 
-    virtual ::com::sun::star::uno::Any SAL_CALL getVisualCache( sal_Int64 nAspect )
+    virtual sal_Int32 SAL_CALL getMapMode( sal_Int64 nAspect )
         throw ( ::com::sun::star::uno::Exception,
-                ::com::sun::star::uno::RuntimeException );
-
+                ::com::sun::star::uno::RuntimeException);
 
 // XEmbedPersist
 
@@ -439,6 +449,10 @@ public:
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloseable > SAL_CALL getComponent()
         throw ( ::com::sun::star::uno::RuntimeException );
+
+// XStateChangeBroadcaster
+    virtual void SAL_CALL addStateChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStateChangeListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeStateChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStateChangeListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
 
 // XCloseable
 
