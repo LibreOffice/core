@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: dl $ $Date: 2000-12-13 16:04:55 $
+ *  last change: $Author: dl $ $Date: 2000-12-14 11:58:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -343,6 +343,7 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh) :
         DBG_ERROR( "Ill. Type inside linguistic property" );
     }
 #else
+    LanguageType eLang = System::GetLanguage();
     SetLanguage( eLang, EE_CHAR_LANGUAGE );
     SetLanguage( eLang, EE_CHAR_LANGUAGE_CJK );
     SetLanguage( eLang, EE_CHAR_LANGUAGE_CTL );
