@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldui.src,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:18:17 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 11:55:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,7 @@ String STR_FLD_EDIT_DLG
     Text[ czech ] = "Upravit pole";
     Text[ hebrew ] = "Feldbefehl bearbeiten";
     Text[ hindi ] = "क्षेत्रों का संपादन";
+    Text[ slovak ] = "Upraviť pole";
 };
 /*--------------------------------------------------------------------
     Beschreibung: Strings fuer die Types
@@ -132,6 +133,7 @@ String STR_DATEFLD
     TEXT[ czech ] = "Datum";
     TEXT[ hebrew ] = "‮תאריך‬";
     TEXT[ hindi ] = "दिनांक";
+    TEXT[ slovak ] = "Dátum";
 };
 String STR_TIMEFLD
 {
@@ -163,6 +165,7 @@ String STR_TIMEFLD
     TEXT[ czech ] = "Čas";
     TEXT[ hebrew ] = "‮שעה‬";
     TEXT[ hindi ] = "समय";
+    TEXT[ slovak ] = "Čas";
 };
 String STR_FILENAMEFLD
 {
@@ -194,6 +197,7 @@ String STR_FILENAMEFLD
     TEXT[ czech ] = "Název souboru";
     TEXT[ hebrew ] = "‮שם קובץ‬";
     TEXT[ hindi ] = "फाइल नाम";
+    TEXT[ slovak ] = "Názov súboru";
 };
 String STR_DBNAMEFLD
 {
@@ -225,6 +229,7 @@ String STR_DBNAMEFLD
     TEXT[ czech ] = "Název databáze";
     TEXT[ hebrew ] = "Datenbankname";
     TEXT[ hindi ] = "लेखासंचय नाम";
+    TEXT[ slovak ] = "Názov databázy";
 };
 String STR_CHAPTERFLD
 {
@@ -256,6 +261,7 @@ String STR_CHAPTERFLD
     TEXT[ czech ] = "Kapitola";
     TEXT[ hebrew ] = "Kapitel";
     TEXT[ hindi ] = "अध्याय";
+    TEXT[ slovak ] = "Kapitola";
 };
 String STR_PAGENUMBERFLD
 {
@@ -287,6 +293,7 @@ String STR_PAGENUMBERFLD
     TEXT[ czech ] = "Čísla stránky";
     TEXT[ hebrew ] = "‮מספרי עמודים‬";
     TEXT[ hindi ] = "पृष्ठ संख्या";
+    TEXT[ slovak ] = "Čísla stránok";
 };
 String STR_DOCSTATFLD
 {
@@ -318,6 +325,7 @@ String STR_DOCSTATFLD
     TEXT[ czech ] = "Statistika";
     TEXT[ hebrew ] = "סטטיסטיקות";
     TEXT[ hindi ] = "अँकड़े";
+    TEXT[ slovak ] = "Štatistika";
 };
 String STR_AUTHORFLD
 {
@@ -348,6 +356,7 @@ String STR_AUTHORFLD
     Text[ czech ] = "Autor";
     Text[ hebrew ] = "‮מחבר‬";
     Text[ hindi ] = "लेखक";
+    Text[ slovak ] = "Autor";
 };
 String STR_TEMPLNAMEFLD
 {
@@ -379,6 +388,7 @@ String STR_TEMPLNAMEFLD
     TEXT[ czech ] = "Šablony";
     TEXT[ hebrew ] = "‮תבניות‬";
     TEXT[ hindi ] = "नमूनें";
+    TEXT[ slovak ] = "Šablóny";
 };
 String STR_EXTUSERFLD
 {
@@ -410,6 +420,7 @@ String STR_EXTUSERFLD
     TEXT[ czech ] = "Odesilatel";
     TEXT[ hebrew ] = "Absender";
     TEXT[ hindi ] = "भेजनेवाला";
+    TEXT[ slovak ] = "Odosielateľ";
 };
  //
  // Bereich Funktionen
@@ -433,7 +444,7 @@ String STR_SETFLD
     TEXT[ russian ] = "���������� ����������";
     TEXT[ polish ] = "Ustaw zmienn�";
     TEXT[ japanese ] = "変数の設定";
-    TEXT[ chinese_traditional ] = "設定變量";
+    TEXT[ chinese_traditional ] = "設定變數";
     TEXT[ arabic ] = "����� ������";
     TEXT[ greek ] = "���������� ����������";
     TEXT[ korean ] = "변수 설정";
@@ -444,6 +455,7 @@ String STR_SETFLD
     TEXT[ czech ] = "Nastavit proměnnou";
     TEXT[ hebrew ] = "Variable setzen";
     TEXT[ hindi ] = "वेरिऐबल सेट्ट करो";
+    TEXT[ slovak ] = "Nastaviť premennú";
 };
 String STR_GETFLD
 {
@@ -464,7 +476,7 @@ String STR_GETFLD
     TEXT[ russian ] = "�������� ����������";
     TEXT[ polish ] = "Poka� zmienn�";
     TEXT[ japanese ] = "変数の表示";
-    TEXT[ chinese_traditional ] = "顯示變量";
+    TEXT[ chinese_traditional ] = "顯示變數";
     TEXT[ arabic ] = "����� ������";
     TEXT[ greek ] = "�������� ����������";
     TEXT[ korean ] = "변수 표시";
@@ -475,6 +487,7 @@ String STR_GETFLD
     TEXT[ czech ] = "Zobrazit proměnnou";
     TEXT[ hebrew ] = "Variable anzeigen";
     TEXT[ hindi ] = "वेरिऐबल दिखाओ";
+    TEXT[ slovak ] = "Zobraziť premennú";
 };
 String STR_FORMELFLD
 {
@@ -506,6 +519,7 @@ String STR_FORMELFLD
     TEXT[ czech ] = "Vložit vzorec";
     TEXT[ hebrew ] = "Formel einfügen";
     TEXT[ hindi ] = "सूत्र जोड़ो";
+    TEXT[ slovak ] = "Vložiť vzorec";
 };
 String STR_INPUTFLD
 {
@@ -537,6 +551,7 @@ String STR_INPUTFLD
     TEXT[ czech ] = "Vstupní pole";
     TEXT[ hebrew ] = "Eingabefeld";
     TEXT[ hindi ] = "इनपुट् क्षेत्र";
+    TEXT[ slovak ] = "Vstupné pole";
 };
 String STR_SETINPUTFLD
 {
@@ -572,6 +587,7 @@ String STR_SETINPUTFLD
     Text[ czech ] = "Vstupní pole (proměnné)";
     Text[ hebrew ] = "Eingabefeld (Variable)";
     Text[ hindi ] = "इनपुट् क्षेत्र (वेरिऐबल)";
+    Text[ slovak ] = "Vstupné pole (premenné)";
 };
 String STR_USRINPUTFLD
 {
@@ -602,6 +618,7 @@ String STR_USRINPUTFLD
     Text[ czech ] = "Vstupní pole (uživatel)";
     Text[ hebrew ] = "Eingabefeld (Benutzer)";
     Text[ hindi ] = "इनपुट् क्षेत्र (उपभोक्ता)";
+    Text[ slovak ] = "Vstupné pole (užívateľ)";
 };
 String STR_CONDTXTFLD
 {
@@ -633,6 +650,7 @@ String STR_CONDTXTFLD
     TEXT[ czech ] = "Podmíněný text";
     TEXT[ hebrew ] = "Bedingter Text";
     TEXT[ hindi ] = "शर्त के अन्तर्गत टेक्स्ट्";
+    TEXT[ slovak ] = "Podmienený text";
 };
 String STR_DDEFLD
 {
@@ -664,6 +682,7 @@ String STR_DDEFLD
     TEXT[ czech ] = "Pole DDE";
     TEXT[ hebrew ] = "DDE-Feld";
     TEXT[ hindi ] = "DDE क्षेत्र";
+    TEXT[ slovak ] = "Pole DDE";
 };
 String STR_MACROFLD
 {
@@ -695,6 +714,7 @@ String STR_MACROFLD
     TEXT[ czech ] = "Spustit makro";
     TEXT[ hebrew ] = "Makro ausführen";
     TEXT[ hindi ] = "मॉक्रो चलाओ";
+    TEXT[ slovak ] = "Spustiť makro";
 };
 String STR_SEQFLD
 {
@@ -726,6 +746,7 @@ String STR_SEQFLD
     TEXT[ czech ] = "Interval číslování";
     TEXT[ hebrew ] = "Nummernkreis";
     TEXT[ hindi ] = "संख्या फैलाव";
+    TEXT[ slovak ] = "Interval číslovania";
 };
 String STR_SETREFPAGEFLD
 {
@@ -744,7 +765,7 @@ String STR_SETREFPAGEFLD
     Text[ russian ] = "���������� ����������";
     Text[ polish ] = "Ustaw zmienn� strony";
     Text[ japanese ] = "ページ変数の設定";
-    Text[ chinese_traditional ] = "設定頁面變量";
+    Text[ chinese_traditional ] = "設定頁面變數";
     Text[ arabic ] = "����� ������ ����";
     Text[ greek ] = "���������� ���������� �������";
     Text[ korean ] = "페이지 변수 설정";
@@ -756,6 +777,7 @@ String STR_SETREFPAGEFLD
     Text[ czech ] = "Nastavit proměnnou stránky";
     Text[ hebrew ] = "Seitenvariable setzen";
     Text[ hindi ] = "पृष्ठ वेरिऐबल को सेट्ट करो ";
+    Text[ slovak ] = "Nastaviť premennú stránky";
 };
 String STR_GETREFPAGEFLD
 {
@@ -774,7 +796,7 @@ String STR_GETREFPAGEFLD
     Text[ russian ] = "�������� ���������� ��������";
     Text[ polish ] = "Poka� zmienn� strony";
     Text[ japanese ] = "ページ変数の表示";
-    Text[ chinese_traditional ] = "顯示頁面變量";
+    Text[ chinese_traditional ] = "顯示頁面變數";
     Text[ arabic ] = "����� ������ ����";
     Text[ greek ] = "�������� ���������� �������";
     Text[ korean ] = "페이지 변수 표시";
@@ -786,6 +808,7 @@ String STR_GETREFPAGEFLD
     Text[ czech ] = "Zobrazit proměnnou stránky";
     Text[ hebrew ] = "Seitenvariable anzeigen";
     Text[ hindi ] = "पृष्ठ वेरिऐबल को दिखाओ";
+    Text[ slovak ] = "Zobraziť premennú stránky";
 };
 String STR_INTERNETFLD
 {
@@ -816,6 +839,7 @@ String STR_INTERNETFLD
     Text[ czech ] = "Načíst URL";
     Text[ hebrew ] = "URL ‮טען‬";
     Text[ hindi ] = "URL लोड़ करो";
+    Text[ slovak ] = "Načítať URL";
 };
 String STR_JUMPEDITFLD
 {
@@ -846,6 +870,7 @@ String STR_JUMPEDITFLD
     Text[ czech ] = "Zástupný znak";
     Text[ hebrew ] = "Plat~zhalter";
     Text[ hindi ] = "स्थानधारक";
+    Text[ slovak ] = "Zástupný znak";
 };
 String STR_COMBINED_CHARS
 {
@@ -875,6 +900,7 @@ String STR_COMBINED_CHARS
     TEXT[ czech ] = "Srovnat znaky";
     TEXT[ hebrew ] = "Zeichen kombinieren";
     TEXT[ hindi ] = "अक्षरों को मिलाओ";
+    TEXT[ slovak ] = "Zrovnať znaky";
 };
 
  //
@@ -910,6 +936,7 @@ String STR_SETREFFLD
     TEXT[ czech ] = "Nastavit odkaz";
     TEXT[ hebrew ] = "Referenz setzen";
     TEXT[ hindi ] = "रेफरेन्स सेट्ट करो";
+    TEXT[ slovak ] = "Nastaviť odkaz";
 };
 String STR_GETREFFLD
 {
@@ -941,6 +968,7 @@ String STR_GETREFFLD
     TEXT[ czech ] = "Vložit referenci";
     TEXT[ hebrew ] = "Referenz einfügen";
     TEXT[ hindi ] = "रेफरेन्स जोड़ो";
+    TEXT[ slovak ] = "Vložiť referenciu";
 };
  //
  //  Bereich Datenbank
@@ -974,6 +1002,7 @@ String STR_DBFLD
     TEXT[ czech ] = "Pole standardního dopisu";
     TEXT[ hebrew ] = "Serienbrieffeld";
     TEXT[ hindi ] = "फ़ॉर्म पत्र की क्षेत्र";
+    TEXT[ slovak ] = "Pole formulárového listu";
 };
 String STR_DBNEXTSETFLD
 {
@@ -1005,6 +1034,7 @@ String STR_DBNEXTSETFLD
     TEXT[ czech ] = "Další záznam";
     TEXT[ hebrew ] = "Nächster Datensatz";
     TEXT[ hindi ] = "अगला अभिलेख";
+    TEXT[ slovak ] = "Ďalší záznam";
 };
 String STR_DBNUMSETFLD
 {
@@ -1036,6 +1066,7 @@ String STR_DBNUMSETFLD
     TEXT[ czech ] = "Jakýkoliv záznam";
     TEXT[ hebrew ] = "Beliebiger Datensatz";
     TEXT[ hindi ] = "किसी अभिलेख";
+    TEXT[ slovak ] = "Akýkoľvek záznam";
 };
 String STR_DBSETNUMBERFLD
 {
@@ -1067,6 +1098,7 @@ String STR_DBSETNUMBERFLD
     TEXT[ czech ] = "Číslo záznamu";
     TEXT[ hebrew ] = "Datensatznummer";
     TEXT[ hindi ] = "अभिलेख संख्या";
+    TEXT[ slovak ] = "Číslo záznamu";
 };
 String STR_PREVPAGEFLD
 {
@@ -1098,6 +1130,7 @@ String STR_PREVPAGEFLD
     TEXT[ czech ] = "Předchozí stránka";
     TEXT[ hebrew ] = "Vorherige Seite";
     TEXT[ hindi ] = "पिछला पृष्ठ";
+    TEXT[ slovak ] = "Predchádzajúca stránka";
 };
 String STR_NEXTPAGEFLD
 {
@@ -1129,6 +1162,7 @@ String STR_NEXTPAGEFLD
     TEXT[ czech ] = "Další stránka";
     TEXT[ hebrew ] = "Nächste Seite";
     TEXT[ hindi ] = "अगला पृष्ठ";
+    TEXT[ slovak ] = "Ďalšia stránka";
 };
 String STR_HIDDENTXTFLD
 {
@@ -1160,6 +1194,7 @@ String STR_HIDDENTXTFLD
     TEXT[ czech ] = "Skrytý text";
     TEXT[ hebrew ] = "Versteckter Text";
     TEXT[ hindi ] = "छिपा हुआ टेक्सट्";
+    TEXT[ slovak ] = "Skrytý text";
 };
  //
  //  Bereich Benutzerfelder
@@ -1194,6 +1229,7 @@ String STR_USERFLD
     TEXT[ czech ] = "Pole uživatele";
     TEXT[ hebrew ] = "Benutzerfeld";
     TEXT[ hindi ] = "उपभोक्ता क्षेत्र";
+    TEXT[ slovak ] = "Pole užívateľa";
 };
 String STR_POSTITFLD
 {
@@ -1225,6 +1261,7 @@ String STR_POSTITFLD
     TEXT[ czech ] = "Poznámka";
     TEXT[ hebrew ] = "‮הערה‬";
     TEXT[ hindi ] = "सूचना";
+    TEXT[ slovak ] = "Poznámka";
 };
 String STR_SCRIPTFLD
 {
@@ -1255,6 +1292,7 @@ String STR_SCRIPTFLD
     Text[ czech ] = "Skript";
     Text[ hebrew ] = "‮קוד לביצוה‬";
     Text[ hindi ] = "स्क्रिप्ट्";
+    Text[ slovak ] = "Skript";
 };
 String STR_AUTHORITY
 {
@@ -1285,6 +1323,7 @@ String STR_AUTHORITY
     TEXT[ czech ] = "Položka v seznamu použité literatury";
     TEXT[ hebrew ] = "‮שורת בבליוגרפיה‬";
     TEXT[ hindi ] = "ग्रन्थ-सूची प्रविष्टी";
+    TEXT[ slovak ] = "Položka v zozname použitej literatúry";
 };
 String STR_HIDDENPARAFLD
 {
@@ -1316,6 +1355,7 @@ String STR_HIDDENPARAFLD
     TEXT[ czech ] = "Skrytý odstavec";
     TEXT[ hebrew ] = "!";
     TEXT[ hindi ] = "छिपा हुआ परिच्छेद";
+    TEXT[ slovak ] = "Skrytý odstavec";
 };
  //
  // Bereich DokumentInfo
@@ -1350,6 +1390,7 @@ String STR_DOCINFOFLD
     TEXT[ czech ] = "Informace o dokumentu";
     TEXT[ hebrew ] = "Dokumentinfo";
     TEXT[ hindi ] = "DocInformation";
+    TEXT[ slovak ] = "Informácie o dokumente";
 };
 /*--------------------------------------------------------------------
     Beschreibung: SubCmd-Strings
@@ -1383,6 +1424,7 @@ String FLD_DATE_STD
     TEXT[ czech ] = "Datum";
     TEXT[ hebrew ] = "‮תאריך‬";
     TEXT[ hindi ] = "दिनांक";
+    TEXT[ slovak ] = "Dátum";
 };
 String FLD_DATE_FIX
 {
@@ -1414,6 +1456,7 @@ String FLD_DATE_FIX
     TEXT[ czech ] = "Datum (neměnné)";
     TEXT[ hebrew ] = "Datum (fix)";
     TEXT[ hindi ] = "दिनांक (स्थिर)";
+    TEXT[ slovak ] = "Dátum (nemenné)";
 };
 String FLD_TIME_STD
 {
@@ -1444,6 +1487,7 @@ String FLD_TIME_STD
     TEXT[ czech ] = "Čas";
     TEXT[ hebrew ] = "‮שעה‬";
     TEXT[ hindi ] = "समय";
+    TEXT[ slovak ] = "Čas";
 };
 String FLD_TIME_FIX
 {
@@ -1475,6 +1519,7 @@ String FLD_TIME_FIX
     TEXT[ czech ] = "Čas (neměnný)";
     TEXT[ hebrew ] = "Uhrzeit (fix)";
     TEXT[ hindi ] = "समय (स्थिर)";
+    TEXT[ slovak ] = "Čas (nemenný)";
 };
  //
  //  SubCmd Statistik
@@ -1509,6 +1554,7 @@ String FLD_STAT_TABLE
     TEXT[ czech ] = "Tabulky";
     TEXT[ hebrew ] = "‮טבלאות‬";
     TEXT[ hindi ] = "सारणियाँ";
+    TEXT[ slovak ] = "Tabuľky";
 };
 String FLD_STAT_CHAR
 {
@@ -1540,6 +1586,7 @@ String FLD_STAT_CHAR
     TEXT[ czech ] = "Znaky";
     TEXT[ hebrew ] = "‮תוים‬";
     TEXT[ hindi ] = "अक्षरें";
+    TEXT[ slovak ] = "Znaky";
 };
 String FLD_STAT_WORD
 {
@@ -1571,6 +1618,7 @@ String FLD_STAT_WORD
     TEXT[ czech ] = "Slova";
     TEXT[ hebrew ] = "Wörter";
     TEXT[ hindi ] = "शब्दें";
+    TEXT[ slovak ] = "Slová";
 };
 String FLD_STAT_PARA
 {
@@ -1602,6 +1650,7 @@ String FLD_STAT_PARA
     TEXT[ czech ] = "Odstavce";
     TEXT[ hebrew ] = "Absätze";
     TEXT[ hindi ] = "परिच्छेद";
+    TEXT[ slovak ] = "Odstavce";
 };
 String FLD_STAT_GRF
 {
@@ -1633,6 +1682,7 @@ String FLD_STAT_GRF
     TEXT[ czech ] = "Obrázky";
     TEXT[ hebrew ] = "‮גרפיקה‬";
     TEXT[ hindi ] = "सुचित्र";
+    TEXT[ slovak ] = "Obrázky";
 };
 String FLD_STAT_OBJ
 {
@@ -1664,6 +1714,7 @@ String FLD_STAT_OBJ
     TEXT[ czech ] = "Objekty";
     TEXT[ hebrew ] = "Objekte";
     TEXT[ hindi ] = "वस्तु";
+    TEXT[ slovak ] = "Objekty";
 };
 String FLD_STAT_PAGE
 {
@@ -1695,6 +1746,7 @@ String FLD_STAT_PAGE
     TEXT[ czech ] = "Stránky";
     TEXT[ hebrew ] = "‮עמודים‬";
     TEXT[ hindi ] = "पृष्ठ";
+    TEXT[ slovak ] = "Stránky";
 };
  //  SubCmd DDETypen
  //
@@ -1728,6 +1780,7 @@ String FMT_DDE_HOT
     TEXT[ czech ] = "DDE automaticky";
     TEXT[ hebrew ] = "DDE automatisch";
     TEXT[ hindi ] = "DDE स्वचालित";
+    TEXT[ slovak ] = "DDE automaticky";
 };
 String FMT_DDE_NORMAL
 {
@@ -1759,6 +1812,7 @@ String FMT_DDE_NORMAL
     TEXT[ czech ] = "DDE ručně";
     TEXT[ hebrew ] = "DDE manuell";
     TEXT[ hindi ] = "DDE मानुवल";
+    TEXT[ slovak ] = "DDE ručne";
 };
 String FLD_INPUT_TEXT
 {
@@ -1797,6 +1851,7 @@ String FLD_EU_FIRMA
     TEXT[ czech ] = "Společnost";
     TEXT[ hebrew ] = "‮חברה‬";
     TEXT[ hindi ] = "संस्था";
+    TEXT[ slovak ] = "Spoločnosť";
 };
 String FLD_EU_VORNAME
 {
@@ -1828,6 +1883,7 @@ String FLD_EU_VORNAME
     TEXT[ czech ] = "Jméno";
     TEXT[ hebrew ] = "‮שם פקטי‬";
     TEXT[ hindi ] = "पहिला नाम";
+    TEXT[ slovak ] = "Meno";
 };
 String FLD_EU_NAME
 {
@@ -1858,6 +1914,7 @@ String FLD_EU_NAME
     Text[ czech ] = "Příjmení";
     Text[ hebrew ] = "‮שם משפחה‬";
     Text[ hindi ] = "अंतिम नाम";
+    Text[ slovak ] = "Priezvisko";
 };
 String FLD_EU_ABK
 {
@@ -1889,6 +1946,7 @@ String FLD_EU_ABK
     TEXT[ czech ] = "Iniciály";
     TEXT[ hebrew ] = "Kürzel";
     TEXT[ hindi ] = "इनिश्यल";
+    TEXT[ slovak ] = "Iniciále";
 };
 String FLD_EU_STRASSE
 {
@@ -1920,6 +1978,7 @@ String FLD_EU_STRASSE
     TEXT[ czech ] = "Ulice";
     TEXT[ hebrew ] = "‮רחוב‬";
     TEXT[ hindi ] = "सड़क";
+    TEXT[ slovak ] = "Ulica";
 };
 String FLD_EU_LAND
 {
@@ -1951,6 +2010,7 @@ String FLD_EU_LAND
     TEXT[ czech ] = "Země";
     TEXT[ hebrew ] = "‮מחוז‬";
     TEXT[ hindi ] = "देश";
+    TEXT[ slovak ] = "Krajina";
 };
 String FLD_EU_PLZ
 {
@@ -1982,6 +2042,7 @@ String FLD_EU_PLZ
     TEXT[ czech ] = "PSČ";
     TEXT[ hebrew ] = "‮מיקוד‬";
     TEXT[ hindi ] = "Zip कोड";
+    TEXT[ slovak ] = "PSČ";
 };
 String FLD_EU_ORT
 {
@@ -2013,6 +2074,7 @@ String FLD_EU_ORT
     TEXT[ czech ] = "Obec";
     TEXT[ hebrew ] = "‮עיר‬";
     TEXT[ hindi ] = "नगर";
+    TEXT[ slovak ] = "Obec";
 };
 String FLD_EU_TITEL
 {
@@ -2044,6 +2106,7 @@ String FLD_EU_TITEL
     TEXT[ czech ] = "Titul";
     TEXT[ hebrew ] = "‮כותרת‬";
     TEXT[ hindi ] = "शीर्षक";
+    TEXT[ slovak ] = "Nadpis";
 };
 String FLD_EU_POS
 {
@@ -2075,6 +2138,7 @@ String FLD_EU_POS
     TEXT[ czech ] = "Pozice";
     TEXT[ hebrew ] = "‮מיקום‬";
     TEXT[ hindi ] = "स्थान";
+    TEXT[ slovak ] = "Umiestnenie";
 };
 String FLD_EU_TELPRIV
 {
@@ -2106,6 +2170,7 @@ String FLD_EU_TELPRIV
     TEXT[ czech ] = "Tel. (domů)";
     TEXT[ hebrew ] = "Tel. (Privat)";
     TEXT[ hindi ] = "दूरभाष (घर)";
+    TEXT[ slovak ] = "Tel. (domov)";
 };
 String FLD_EU_TELFIRMA
 {
@@ -2137,6 +2202,7 @@ String FLD_EU_TELFIRMA
     TEXT[ czech ] = "Tel. (do práce)";
     TEXT[ hebrew ] = "Tel. (Geschäft)";
     TEXT[ hindi ] = "दूरभाष (काम)";
+    TEXT[ slovak ] = "Tel. (do práce)";
 };
 String FLD_EU_FAX
 {
@@ -2171,6 +2237,7 @@ String FLD_EU_EMAIL
     Text[ czech ] = "E-mail";
     Text[ hebrew ] = "E-mail";
     Text[ hindi ] = "इ-मेइल";
+    Text[ slovak ] = "E-mail";
 };
 String FLD_EU_STATE
 {
@@ -2201,6 +2268,7 @@ String FLD_EU_STATE
     Text[ czech ] = "Stát";
     Text[ hebrew ] = "‮מדינה‬";
     Text[ hindi ] = "राज्य";
+    Text[ slovak ] = "Štát";
 };
 String FLD_PAGEREF_OFF
 {
@@ -2231,6 +2299,7 @@ String FLD_PAGEREF_OFF
     Text[ czech ] = "vypnuto";
     Text[ hebrew ] = "aus";
     Text[ hindi ] = "बंद";
+    Text[ slovak ] = "vypnuté";
 };
 String FLD_PAGEREF_ON
 {
@@ -2261,6 +2330,7 @@ String FLD_PAGEREF_ON
     Text[ czech ] = "zapnuto";
     Text[ hebrew ] = "an";
     Text[ hindi ] = "शुरु";
+    Text[ slovak ] = "zapnúť";
 };
 /*--------------------------------------------------------------------
     Beschreibung: Pfadname
@@ -2296,6 +2366,7 @@ String FMT_FF_NAME
     TEXT[ czech ] = "Název souboru";
     TEXT[ hebrew ] = "‮שם קובץ‬";
     TEXT[ hindi ] = "फाइल नाम";
+    TEXT[ slovak ] = "Názov súboru";
 };
 String FMT_FF_NAME_NOEXT
 {
@@ -2326,6 +2397,7 @@ String FMT_FF_NAME_NOEXT
     Text[ czech ] = "Název souboru bez přípony";
     Text[ hebrew ] = "Dateiname ohne Erweiterung";
     Text[ hindi ] = "विस्तार रहित फाइल नाम";
+    Text[ slovak ] = "Názov súboru bez prípony";
 };
 String FMT_FF_PATHNAME
 {
@@ -2357,6 +2429,7 @@ String FMT_FF_PATHNAME
     TEXT[ czech ] = "Cesta/název souboru";
     TEXT[ hebrew ] = "Pfad/Dateiname";
     TEXT[ hindi ] = "मार्ग/फाइल नाम";
+    TEXT[ slovak ] = "Cesta/názov súboru";
 };
 String FMT_FF_PATH
 {
@@ -2387,6 +2460,7 @@ String FMT_FF_PATH
     TEXT[ czech ] = "Cesta";
     TEXT[ hebrew ] = "Pfad";
     TEXT[ hindi ] = "मार्ग";
+    TEXT[ slovak ] = "Cesta";
 };
 String FMT_FF_UI_NAME
 {
@@ -2417,6 +2491,7 @@ String FMT_FF_UI_NAME
     Text[ czech ] = "Styl";
     Text[ hebrew ] = "Vorlage";
     Text[ hindi ] = "शैली";
+    Text[ slovak ] = "Štýl";
 };
 String FMT_FF_UI_RANGE
 {
@@ -2447,6 +2522,7 @@ String FMT_FF_UI_RANGE
     Text[ czech ] = "Kategorie";
     Text[ hebrew ] = "Bereich";
     Text[ hindi ] = "वर्ग";
+    Text[ slovak ] = "Kategórie";
 };
 /*--------------------------------------------------------------------
     Beschreibung: Format Kapitel
@@ -2481,6 +2557,7 @@ String FMT_CHAPTER_NAME
     TEXT[ czech ] = "Název kapitoly";
     TEXT[ hebrew ] = "Kapitelname";
     TEXT[ hindi ] = "अध्याय नाम";
+    TEXT[ slovak ] = "Názov kapitoly";
 };
 String FMT_CHAPTER_NO
 {
@@ -2511,6 +2588,7 @@ String FMT_CHAPTER_NO
     Text[ czech ] = "Číslo kapitoly";
     Text[ hebrew ] = "Kapitelnummer";
     Text[ hindi ] = "अध्याय संख्या";
+    Text[ slovak ] = "Číslo kapitoly";
 };
 String FMT_CHAPTER_NO_NOSEPARATOR
 {
@@ -2541,6 +2619,7 @@ String FMT_CHAPTER_NO_NOSEPARATOR
     Text[ czech ] = "Číslo kapitoly bez oddělovače";
     Text[ hebrew ] = "Kapitelnummer ohne Trennzeichen";
     Text[ hindi ] = "अलगानेवाला रहित अध्याय संख्या";
+    Text[ slovak ] = "Číslo kapitoly bez oddeľovača";
 };
 String FMT_CHAPTER_NAMENO
 {
@@ -2572,6 +2651,7 @@ String FMT_CHAPTER_NAMENO
     Text[ czech ] = "Číslo a název kapitoly";
     Text[ hebrew ] = "Kapitelnummer und Name";
     Text[ hindi ] = "अध्याय संख्या और नाम";
+    Text[ slovak ] = "Číslo a názov kapitoly";
 };
 /*--------------------------------------------------------------------
     Beschreibung: Formate
@@ -2622,6 +2702,7 @@ String FMT_NUM_ROMAN
     TEXT[ czech ] = "Římské (I II III)";
     TEXT[ hebrew ] = "‮רומי (III II I)‬";
     TEXT[ hindi ] = "रोमन (I II III)";
+    TEXT[ slovak ] = "Rímske (I II III)";
 };
 String FMT_NUM_SROMAN
 {
@@ -2653,6 +2734,7 @@ String FMT_NUM_SROMAN
     TEXT[ czech ] = "Římské (i ii iii)";
     TEXT[ hebrew ] = "‮רומי (iii ii i)‬";
     TEXT[ hindi ] = "रोमन (i ii iii)";
+    TEXT[ slovak ] = "Rímske (i ii iii)";
 };
 String FMT_NUM_ARABIC
 {
@@ -2684,6 +2766,7 @@ String FMT_NUM_ARABIC
     TEXT[ czech ] = "Arabské (1 2 3)";
     TEXT[ hebrew ] = "‮עשרוני (3 2 1)‬";
     TEXT[ hindi ] = "अरेबिक (1 2 3)";
+    TEXT[ slovak ] = "Arabské (1 2 3)";
 };
 String FMT_NUM_PAGEDESC
 {
@@ -2715,6 +2798,7 @@ String FMT_NUM_PAGEDESC
     TEXT[ czech ] = "Jako styl stránky";
     TEXT[ hebrew ] = "Wie Seitenvorlage";
     TEXT[ hindi ] = "पृष्ठ शैली जैसे";
+    TEXT[ slovak ] = "Ako štýl stránky";
 };
 String FMT_NUM_PAGESPECIAL
 {
@@ -2745,6 +2829,7 @@ String FMT_NUM_PAGESPECIAL
     Text[ czech ] = "Text";
     Text[ hebrew ] = "‮טקסט‬";
     Text[ hindi ] = "टेक्स्ट्";
+    Text[ slovak ] = "Text";
 };
 /*--------------------------------------------------------------------
     Beschreibung: Author
@@ -2779,6 +2864,7 @@ String FMT_AUTHOR_NAME
     TEXT[ czech ] = "Název";
     TEXT[ hebrew ] = "Name";
     TEXT[ hindi ] = "नाम";
+    TEXT[ slovak ] = "Názov";
 };
 String FMT_AUTHOR_SCUT
 {
@@ -2810,6 +2896,7 @@ String FMT_AUTHOR_SCUT
     TEXT[ czech ] = "Iniciály";
     TEXT[ hebrew ] = "Kürzel";
     TEXT[ hindi ] = "इनिश्यल";
+    TEXT[ slovak ] = "Iniciále";
 };
 /*--------------------------------------------------------------------
     Beschreibung:   Varibale setzen
@@ -2843,6 +2930,7 @@ String FMT_SETVAR_SYS
     Text[ czech ] = "Systém";
     Text[ hebrew ] = "System";
     Text[ hindi ] = "सिस्टम";
+    Text[ slovak ] = "Systém";
 };
 String FMT_SETVAR_TEXT
 {
@@ -2873,6 +2961,7 @@ String FMT_SETVAR_TEXT
     Text[ czech ] = "Text";
     Text[ hebrew ] = "‮טקסט‬";
     Text[ hindi ] = "टेक्स्ट्";
+    Text[ slovak ] = "Text";
 };
 String FMT_GETVAR_NAME
 {
@@ -2903,6 +2992,7 @@ String FMT_GETVAR_NAME
     Text[ czech ] = "Název";
     Text[ hebrew ] = "Name";
     Text[ hindi ] = "नाम";
+    Text[ slovak ] = "Názov";
 };
 String FMT_GETVAR_TEXT
 {
@@ -2933,6 +3023,7 @@ String FMT_GETVAR_TEXT
     Text[ czech ] = "Text";
     Text[ hebrew ] = "‮טקסט‬";
     Text[ hindi ] = "टेक्स्ट्";
+    Text[ slovak ] = "Text";
 };
 String FMT_USERVAR_CMD
 {
@@ -2963,6 +3054,7 @@ String FMT_USERVAR_CMD
     Text[ czech ] = "Vzorec";
     Text[ hebrew ] = "‮נוסחה‬";
     Text[ hindi ] = "सूत्र";
+    Text[ slovak ] = "Vzorec";
 };
 String FMT_USERVAR_TEXT
 {
@@ -2993,6 +3085,7 @@ String FMT_USERVAR_TEXT
     Text[ czech ] = "Text";
     Text[ hebrew ] = "‮טקסט‬";
     Text[ hindi ] = "टेक्स्ट्";
+    Text[ slovak ] = "Text";
 };
 String FMT_DBFLD_DB
 {
@@ -3023,6 +3116,7 @@ String FMT_DBFLD_DB
     Text[ czech ] = "Databáze";
     Text[ hebrew ] = "Datenbank";
     Text[ hindi ] = "लेखासंचय";
+    Text[ slovak ] = "Databáza";
 };
 String FMT_DBFLD_SYS
 {
@@ -3053,6 +3147,7 @@ String FMT_DBFLD_SYS
     Text[ czech ] = "Systém";
     Text[ hebrew ] = "System";
     Text[ hindi ] = "सिस्टम";
+    Text[ slovak ] = "Systém";
 };
 /*--------------------------------------------------------------------
     Beschreibung: Ablagefelder
@@ -3087,6 +3182,7 @@ String FMT_REG_AUTHOR
     TEXT[ czech ] = "Autor";
     TEXT[ hebrew ] = "‮מחבר‬";
     TEXT[ hindi ] = "लेखक";
+    TEXT[ slovak ] = "Autor";
 };
 String FMT_REG_TIME
 {
@@ -3118,6 +3214,7 @@ String FMT_REG_TIME
     TEXT[ czech ] = "Čas";
     TEXT[ hebrew ] = "‮שעה‬";
     TEXT[ hindi ] = "समय";
+    TEXT[ slovak ] = "Čas";
 };
 String FMT_REG_DATE
 {
@@ -3149,6 +3246,7 @@ String FMT_REG_DATE
     TEXT[ czech ] = "Datum";
     TEXT[ hebrew ] = "‮תאריך‬";
     TEXT[ hindi ] = "दिनांक";
+    TEXT[ slovak ] = "Dátum";
 };
 /*--------------------------------------------------------------------
     Beschreibung: Formate Referenzen
@@ -3183,6 +3281,7 @@ String FMT_REF_TEXT
     TEXT[ czech ] = "Odkaz";
     TEXT[ hebrew ] = "Referenztext";
     TEXT[ hindi ] = "रेफरेन्स";
+    TEXT[ slovak ] = "Odkaz";
 };
 String FMT_REF_PAGE
 {
@@ -3214,6 +3313,7 @@ String FMT_REF_PAGE
     TEXT[ czech ] = "Stránka";
     TEXT[ hebrew ] = "‮דף‬";
     TEXT[ hindi ] = "पृष्ठ";
+    TEXT[ slovak ] = "Stránka";
 };
 String FMT_REF_CHAPTER
 {
@@ -3245,6 +3345,7 @@ String FMT_REF_CHAPTER
     TEXT[ czech ] = "Kapitola";
     TEXT[ hebrew ] = "Kapitel";
     TEXT[ hindi ] = "अध्याय";
+    TEXT[ slovak ] = "Kapitola";
 };
 String FMT_REF_UPDOWN
 {
@@ -3275,6 +3376,7 @@ String FMT_REF_UPDOWN
     Text[ czech ] = "Výše/Níže";
     Text[ hebrew ] = "Oberhalb/Unterhalb";
     Text[ hindi ] = "ऊपर/नीचे";
+    Text[ slovak ] = "Nad/Pod";
 };
 String FMT_REF_PAGE_PGDSC
 {
@@ -3306,6 +3408,7 @@ String FMT_REF_PAGE_PGDSC
     TEXT[ czech ] = "Jako styl stránky";
     TEXT[ hebrew ] = "Wie Seitenvorlage";
     TEXT[ hindi ] = "पृष्ठ शैली जैसे";
+    TEXT[ slovak ] = "Ako štýl stránky";
 };
 String FMT_REF_ONLYNUMBER
 {
@@ -3336,6 +3439,7 @@ String FMT_REF_ONLYNUMBER
     Text[ czech ] = "Kategorie a číslo";
     Text[ hebrew ] = "Kategorie und Nummer";
     Text[ hindi ] = "वर्ग और संख्या";
+    Text[ slovak ] = "Kategórie a číslo";
 };
 String FMT_REF_ONLYCAPTION
 {
@@ -3366,6 +3470,7 @@ String FMT_REF_ONLYCAPTION
     Text[ czech ] = "Text popisku";
     Text[ hebrew ] = "Beschriftungstext";
     Text[ hindi ] = "कॉप्शन् टेक्स्ट्";
+    Text[ slovak ] = "Text popisu";
 };
 String FMT_REF_ONLYSEQNO
 {
@@ -3396,6 +3501,7 @@ String FMT_REF_ONLYSEQNO
     TEXT[ czech ] = "Číslování";
     TEXT[ hebrew ] = "‮מיספור‬";
     TEXT[ hindi ] = "संख्या देना";
+    TEXT[ slovak ] = "Číslovanie";
 };
 /*--------------------------------------------------------------------
     Beschreibung: Platzhalter
@@ -3429,6 +3535,7 @@ String FMT_MARK_TEXT
     Text[ czech ] = "Text";
     Text[ hebrew ] = "‮טקסט‬";
     Text[ hindi ] = "टेक्स्ट्";
+    Text[ slovak ] = "Text";
 };
 String FMT_MARK_TABLE
 {
@@ -3460,6 +3567,7 @@ String FMT_MARK_TABLE
     Text[ czech ] = "Tabulka";
     Text[ hebrew ] = "‮טבלה‬";
     Text[ hindi ] = "सारणी";
+    Text[ slovak ] = "Tabuľka";
 };
 String FMT_MARK_FRAME
 {
@@ -3491,6 +3599,7 @@ String FMT_MARK_FRAME
     Text[ czech ] = "Rámec";
     Text[ hebrew ] = "‮מסגרת‬";
     Text[ hindi ] = "फ्रेम ";
+    Text[ slovak ] = "Rámček";
 };
 String FMT_MARK_GRAFIC
 {
@@ -3522,6 +3631,7 @@ String FMT_MARK_GRAFIC
     Text[ czech ] = "Obrázky";
     Text[ hebrew ] = "‮גרפיקה‬";
     Text[ hindi ] = "सुचित्र";
+    Text[ slovak ] = "Obrázky";
 };
 String FMT_MARK_OLE
 {
@@ -3553,6 +3663,7 @@ String FMT_MARK_OLE
     Text[ czech ] = "Objekt";
     Text[ hebrew ] = "‮אוביקט‬";
     Text[ hindi ] = "वस्तु";
+    Text[ slovak ] = "Objekt";
 };
 /*--------------------------------------------------------------------
     Beschreibung: Nur-Text
@@ -3594,6 +3705,7 @@ String STR_ALL
     Text[ czech ] = "Vše";
     Text[ hebrew ] = "‮הכל‬";
     Text[ hindi ] = "सब";
+    Text[ slovak ] = "Všetko";
 };
 String STR_INSERT
 {
@@ -3625,6 +3737,7 @@ String STR_INSERT
     Text[ czech ] = "Vložit";
     Text[ hebrew ] = "‮הוספה‬";
     Text[ hindi ] = "जोड़ो";
+    Text[ slovak ] = "Vložiť";
 };
 /*--------------------------------------------------------------------
     Beschreibung:   AustauschStrings fuer Edit/NameFT
@@ -3659,6 +3772,7 @@ String STR_COND
     TEXT[ czech ] = "Podmínka";
     TEXT[ hebrew ] = "Bedin~gung";
     TEXT[ hindi ] = "~शर्त";
+    TEXT[ slovak ] = "Pod~mienka";
 };
 String STR_TEXT
 {
@@ -3690,6 +3804,7 @@ String STR_TEXT
     TEXT[ czech ] = "Potom, Jinak";
     TEXT[ hebrew ] = "Dann, Sonst";
     TEXT[ hindi ] = "Then, Else";
+    TEXT[ slovak ] = "Potom, Ináč";
 };
 String STR_DDE_CMD
 {
@@ -3721,6 +3836,7 @@ String STR_DDE_CMD
     TEXT[ czech ] = "Instrukce DDE";
     TEXT[ hebrew ] = "DDE Anweisung";
     TEXT[ hindi ] = "DDE वाक्य";
+    TEXT[ slovak ] = "Inštrukcie DDE";
 };
 String STR_INSTEXT
 {
@@ -3750,6 +3866,7 @@ String STR_INSTEXT
     TEXT[ czech ] = "Vložit text";
     TEXT[ hebrew ] = "~Versteckter Text";
     TEXT[ hindi ] = "~टेक्स्ट् जोड़ो";
+    TEXT[ slovak ] = "Vložiť t~ext";
 };
 String STR_MACNAME
 {
@@ -3781,6 +3898,7 @@ String STR_MACNAME
     TEXT[ czech ] = "Název makra";
     TEXT[ hebrew ] = "~Makroname";
     TEXT[ hindi ] = "~मॉक्रो नाम";
+    TEXT[ slovak ] = "Názov ~makra";
 };
 String STR_PROMPT
 {
@@ -3812,6 +3930,7 @@ String STR_PROMPT
     TEXT[ czech ] = "Odkaz";
     TEXT[ hebrew ] = "H~inweis";
     TEXT[ hindi ] = "~रेफरेन्स";
+    TEXT[ slovak ] = "~Odkaz";
 };
 String STR_COMBCHRS_FT
 {
@@ -3841,6 +3960,7 @@ String STR_COMBCHRS_FT
     TEXT[ czech ] = "Znaky";
     TEXT[ hebrew ] = "Ze~ichen";
     TEXT[ hindi ] = "अ~क्षरें";
+    TEXT[ slovak ] = "Zn~aky";
 };
 String STR_SETNO
 {
@@ -3872,6 +3992,7 @@ String STR_SETNO
     TEXT[ czech ] = "Číslo záznamu";
     TEXT[ hebrew ] = "Satznummer";
     TEXT[ hindi ] = "अभिलेख संख्या";
+    TEXT[ slovak ] = "Číslo záznamu";
 };
 String STR_OFFSET
 {
@@ -3903,6 +4024,7 @@ String STR_OFFSET
     TEXT[ czech ] = "Odchylka";
     TEXT[ hebrew ] = "Ko~rrektur";
     TEXT[ hindi ] = "ऑ~फसेट्ट";
+    TEXT[ slovak ] = "O~dchýlka";
 };
 String STR_VALUE
 {
@@ -3934,6 +4056,7 @@ String STR_VALUE
     Text[ czech ] = "Hodnota";
     Text[ hebrew ] = "~Wert";
     Text[ hindi ] = "मूल्य";
+    Text[ slovak ] = "Hodnota";
 };
 String STR_FORMULA
 {
@@ -3964,6 +4087,7 @@ String STR_FORMULA
     Text[ czech ] = "Vzorec";
     Text[ hebrew ] = "‮נוסחה‬";
     Text[ hindi ] = "सूत्र";
+    Text[ slovak ] = "Vzorec";
 };
 String STR_LEVEL
 {
@@ -3995,6 +4119,7 @@ String STR_LEVEL
     TEXT[ czech ] = "Vrstva";
     TEXT[ hebrew ] = "Ebene";
     TEXT[ hindi ] = "परत ";
+    TEXT[ slovak ] = "Vrstva";
 };
 String STR_URLPROMPT
 {
@@ -4025,6 +4150,7 @@ String STR_URLPROMPT
     Text[ hebrew ] = "~URL";
     Text[ thai ] = "~URL";
     Text[ hindi ] = "~URL";
+    Text[ slovak ] = "~URL";
 };
 String STR_ALL_DATABASE
 {
@@ -4055,6 +4181,7 @@ String STR_ALL_DATABASE
     Text[ czech ] = "<Vše>";
     Text[ hebrew ] = "<Alle>";
     Text[ hindi ] = "<सब>";
+    Text[ slovak ] = "<Vše>";
 };
 ImageButton BTN_FLDEDT_PREV
 {
@@ -4106,7 +4233,10 @@ PushButton PB_FLDEDT_ADDRESS
     Text[ czech ] = "Upravit";
     Text[ hebrew ] = "‮עריכה‬";
     Text[ hindi ] = "संपादन";
+    Text[ slovak ] = "Upraviť";
 };
+
+
 
 
 
