@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xfont.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cp $ $Date: 2000-11-03 15:06:02 $
+ *  last change: $Author: cp $ $Date: 2000-12-04 14:44:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,16 +145,20 @@ class ExtendedFontStruct : public SvRefBase
         Bool                GetFontBoundingBox( XCharStruct *pCharStruct,
                                     int *pAscent, int *pDescent ) ;
 
+        void                GetVerticalCharWidth( rtl_TextEncoding nEncoding,
+                                    sal_Unicode nFrom, sal_Unicode nTo,
+                                    sal_Unicode nOutFrom, sal_Unicode nOutTo,
+                                    long *pWidthArray );
         sal_Size            GetDefaultWidth( SalConverterCache* pCvt );
         sal_Size            GetCharWidth8( sal_Unicode nFrom, sal_Unicode nTo,
                                     long *pWidthArray,
                                     rtl_TextEncoding nEncoding );
         sal_Size            GetCharWidthUTF16(
                                     sal_Unicode nFrom, sal_Unicode nTo,
-                                    long *pWidthArray );
+                                    long *pWidthArray, Bool bVertical );
         sal_Size            GetCharWidth16( SalConverterCache *pCvt,
                                     sal_Unicode nFrom, sal_Unicode nTo,
-                                    long *pWidthArray );
+                                    long *pWidthArray, Bool bVertical );
         XFontStruct*        GetVXFontStruct( rtl_TextEncoding nEncoding, short nVClass );
         int                 GetVTransX( rtl_TextEncoding nEncoding, short nVClass );
         int                 GetVTransY( short );
@@ -181,7 +185,7 @@ class ExtendedFontStruct : public SvRefBase
         rtl_TextEncoding    GetAsciiEncoding( int *pAsciiRange = NULL ) const;
         sal_Size            GetCharWidth( SalConverterCache *pCvt,
                                     sal_Unicode nFrom, sal_Unicode nTo,
-                                    long *pWidthArray  );
+                                    long *pWidthArray, Bool bVertical );
 };
 
 // Declaration and Implementation for ExtendedFontStructRef: Add RefCounting

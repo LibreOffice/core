@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pl $ $Date: 2000-11-29 19:35:55 $
+ *  last change: $Author: cp $ $Date: 2000-12-04 14:41:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1351,7 +1351,8 @@ SalGraphics::GetCharWidth( USHORT nChar1, USHORT nChar2, long  *pWidthAry )
     SalDisplay *pSalDisplay = maGraphicsData.GetDisplay();
 
     nCharWidth = maGraphicsData.xFont_->GetCharWidth(
-            pSalDisplay->GetConverter(), nChar1, nChar2, pWidthAry );
+            pSalDisplay->GetConverter(), nChar1, nChar2, pWidthAry,
+            maGraphicsData.bFontVertical_ );
 
     // XXX sanity check, this may happen if the font cannot be loaded/queried
     // either because of a garbled fontpath or because of invalid fontfile

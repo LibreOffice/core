@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xfont.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cp $ $Date: 2000-12-02 15:58:17 $
+ *  last change: $Author: cp $ $Date: 2000-12-04 14:41:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,31 +81,32 @@
 #include <stdio.h>
 #endif
 
-#define VCLASS_ROTATE       0
+#define VCLASS_ROTATE           0
 #define VCLASS_ROTATE_REVERSE   1
-#define VCLASS_TRANSFORM1   2
-#define VCLASS_TRANSFORM2   3
-#define VCLASS_CJK      4
+#define VCLASS_TRANSFORM1       2
+#define VCLASS_TRANSFORM2       3
+#define VCLASS_CJK              4
 #define VCLASS_DONTKNOW         5
-#define VCLASS_FONT_NUM     2 // Other than rotate and rotate_reverse, don't have spacial font
+#define VCLASS_FONT_NUM         2 // Other than rotate and rotate_reverse,
+                                  // don't have spacial font
 
 ExtendedFontStruct::ExtendedFontStruct( Display* pDisplay,
-        unsigned short nPixelSize, ExtendedXlfd* pXlfd,
-        SalConverterCache* pCvt ) :
-    mpDisplay( pDisplay ),
-    mnPixelSize( nPixelSize ),
-    mpXlfd( pXlfd )
+    unsigned short nPixelSize, ExtendedXlfd* pXlfd, SalConverterCache* pCvt ) :
+        mpDisplay( pDisplay ),
+        mnPixelSize( nPixelSize ),
+        mpXlfd( pXlfd )
 {
     // member functions rely on zero initialized pointer for checking of
     // already loaded fonts
     mpXFontStruct = (XFontStruct**)calloc( mpXlfd->NumEncodings(),
                                             sizeof(XFontStruct*) );
-    mpVXFontStruct = (XFontStruct***)calloc( mpXlfd->NumEncodings(), sizeof(XFontStruct**) );
+    mpVXFontStruct = (XFontStruct***)calloc( mpXlfd->NumEncodings(),
+                                            sizeof(XFontStruct**) );
     for ( int nIdx = 0; nIdx < mpXlfd->NumEncodings(); nIdx++ )
     {
-        mpVXFontStruct[nIdx] = (XFontStruct**)calloc( VCLASS_FONT_NUM, sizeof (XFontStruct*) );
+        mpVXFontStruct[nIdx] = (XFontStruct**)calloc (VCLASS_FONT_NUM,
+                                                        sizeof (XFontStruct*) );
     }
-
     mnDefaultWidth = GetDefaultWidth( pCvt );
 }
 
@@ -381,6 +382,48 @@ ExtendedFontStruct::GetDefaultWidth( SalConverterCache* pCvt )
     return 0;
 }
 
+void
+ExtendedFontStruct::GetVerticalCharWidth( rtl_TextEncoding nEncoding,
+                                          sal_Unicode nFrom, sal_Unicode nTo,
+                                          sal_Unicode nOutFrom, sal_Unicode nOutTo,
+                                          long* pWidthArray )
+{
+    int nLength = nTo - nFrom + 1;
+    sal_Unicode* pStr = new sal_Unicode[nTo - nFrom + 1];
+    for ( int nIdx = 0; nIdx < nLength; nIdx++ )
+    {
+        pStr[nIdx] = nTo + nIdx;
+    }
+    VerticalTextItem** pTextItems;
+    int nNum;
+    if ( nEncoding == RTL_TEXTENCODING_UNICODE )
+    {
+        nNum = GetVerticalTextItems( pStr, nLength, nEncoding, pStr, pTextItems );
+    }
+    else
+    {
+        sal_Unicode* pStr2 = new sal_Unicode[nOutTo - nOutFrom + 1];
+        for ( int nIdx2 = 0; nIdx2 < nLength; nIdx2++ )
+        {
+            pStr2[nIdx2] = nOutTo + nIdx2;
+        }
+        nNum = GetVerticalTextItems( pStr, nLength, nEncoding, pStr2, pTextItems );
+        delete( pStr2 );
+    }
+    delete( pStr );
+
+    int nArrayIdx = 0;
+    for ( int nItemIdx = 0; nItemIdx < nNum; nItemIdx++ )
+    {
+        for ( int nChar = 0; nChar < pTextItems[nItemIdx]->mnLength; nChar++ )
+        {
+            pWidthArray[nArrayIdx++] = pTextItems[nItemIdx]->mbFixed ?
+                pTextItems[nItemIdx]->mnFixedAdvance :
+                pTextItems[nItemIdx]->mpAdvanceAry[nChar];
+        }
+    }
+}
+
 // Handle single byte fonts which do not require conversion, this exploits
 // the fact that unicode equals latin1 or ansi1252 in the range [0..0xff] and
 // is compatible with iso8859-X at least in the range to 0x7f
@@ -429,7 +472,7 @@ ExtendedFontStruct::GetCharWidth8( sal_Unicode nFrom, sal_Unicode nTo,
 // Handle utf16 encoded fonts, which do not require conversion
 sal_Size
 ExtendedFontStruct::GetCharWidthUTF16( sal_Unicode nFrom, sal_Unicode nTo,
-        long *pWidthArray )
+        long *pWidthArray, Bool bVertical )
 {
     if ( !(nFrom <= nTo) )
         return 0;
@@ -441,6 +484,12 @@ ExtendedFontStruct::GetCharWidthUTF16( sal_Unicode nFrom, sal_Unicode nTo,
         return 0;
 
     // query the font metrics
+    if ( bVertical )
+    {
+        GetVerticalCharWidth( RTL_TEXTENCODING_UNICODE, nFrom, nTo, nFrom, nTo,
+                              pWidthArray );
+    }
+    else
     if (   nSpacing == PITCH_VARIABLE
         && pXFontStruct->per_char == NULL)
     {
@@ -471,11 +520,11 @@ ExtendedFontStruct::GetCharWidthUTF16( sal_Unicode nFrom, sal_Unicode nTo,
     return nTo - nFrom + 1;
 }
 
-// handle non unicode fonts that are converted into encoding mathing the
+// handle non unicode fonts that are converted into encoding matching the
 // font in fontstruct, 8 and 16 bit fonts are handled the same way
 sal_Size
 ExtendedFontStruct::GetCharWidth16( SalConverterCache *pCvt,
-        sal_Unicode nFrom, sal_Unicode nTo, long *pWidthArray )
+        sal_Unicode nFrom, sal_Unicode nTo, long *pWidthArray, Bool bVertical )
 {
     if ( !(nFrom <= nTo) )
         return 0;
@@ -510,6 +559,11 @@ ExtendedFontStruct::GetCharWidth16( SalConverterCache *pCvt,
             nChar = nSize == 1 ?  (sal_MultiByte)pBuffer[0] :
                 ((sal_MultiByte)pBuffer[0] << 8) + (sal_MultiByte)pBuffer[1];
 
+            if ( bVertical )
+            {
+                GetVerticalCharWidth( nEncoding, nIdx, nIdx, nChar, nChar, pWidthArray );
+            }
+            else
             if (   nSpacing == PITCH_VARIABLE
                 && pXFontStruct->per_char == NULL)
             {
@@ -545,7 +599,7 @@ ExtendedFontStruct::GetCharWidth16( SalConverterCache *pCvt,
 
 sal_Size
 ExtendedFontStruct::GetCharWidth( SalConverterCache *pCvt,
-        sal_Unicode nFrom, sal_Unicode nTo, long *pWidthArray )
+        sal_Unicode nFrom, sal_Unicode nTo, long *pWidthArray, Bool bVertical )
 {
     int nAsciiRange;
     sal_Size nConverted = 0;
@@ -557,7 +611,7 @@ ExtendedFontStruct::GetCharWidth( SalConverterCache *pCvt,
     {
         // if we have a unicode encoded system font than we get the charwidth
         // straight forward
-        nConverted = GetCharWidthUTF16( nFrom, nTo, pWidthArray );
+        nConverted = GetCharWidthUTF16( nFrom, nTo, pWidthArray, bVertical );
     }
     else
     {
@@ -573,17 +627,14 @@ ExtendedFontStruct::GetCharWidth( SalConverterCache *pCvt,
         // codepoint has to be dispatched to one of the system fonts and
         // converted to this fonts encoding
         nConverted += GetCharWidth16( pCvt, nFrom + nConverted, nTo,
-                            pWidthArray + nConverted );
+                            pWidthArray + nConverted, bVertical );
     }
 
     return nConverted;
 }
 
-#define VINIT_SIZE 256
-#define VGROW_SIZE 64
-static int nMaxItems = VINIT_SIZE;
-
-static short GetVerticalClass( sal_Unicode nChar )
+static short
+GetVerticalClass( sal_Unicode nChar )
 {
     if ( (nChar >= 0x1100 && nChar <= 0x11f9) ||    // Hangul Jamo
          (nChar >= 0x3000 && nChar <= 0xfaff) )     // other CJK
@@ -636,7 +687,8 @@ ExtendedFontStruct::GetVXFontStruct( rtl_TextEncoding nEncoding, short nVClass )
             {
                 ByteString aFontName;
                 mpXlfd->ToString( aFontName, mnPixelSize, "[0 ~%d ~%d 0]", nEncoding );
-                XFontStruct* pXFontStruct = XLoadQueryFont( mpDisplay, aFontName.GetBuffer() );
+                XFontStruct* pXFontStruct = XLoadQueryFont( mpDisplay,
+                                                            aFontName.GetBuffer() );
                 if ( (pXFontStruct != NULL) && (pXFontStruct->fid == 0) )
                     pXFontStruct->fid = XLoadFont( mpDisplay, aFontName.GetBuffer() );
 
@@ -650,7 +702,8 @@ ExtendedFontStruct::GetVXFontStruct( rtl_TextEncoding nEncoding, short nVClass )
             {
                 ByteString aFontName;
                 mpXlfd->ToString( aFontName, mnPixelSize, "[0 ~%d %d 0]", nEncoding );
-                XFontStruct* pXFontStruct = XLoadQueryFont( mpDisplay, aFontName.GetBuffer() );
+                XFontStruct* pXFontStruct = XLoadQueryFont( mpDisplay,
+                                                            aFontName.GetBuffer() );
                 if ( (pXFontStruct != NULL) && (pXFontStruct->fid == 0) )
                     pXFontStruct->fid = XLoadFont( mpDisplay, aFontName.GetBuffer() );
 
@@ -733,28 +786,23 @@ ExtendedFontStruct::GetVTransY( short nVClass )
 }
 
 int
-ExtendedFontStruct::GetVerticalTextItems( const sal_Unicode* pStr, int nLength, rtl_TextEncoding nEncoding,
-                      const sal_Unicode* pOutStr, VerticalTextItem** &pTextItems )
+ExtendedFontStruct::GetVerticalTextItems( const sal_Unicode* pStr, int nLength,
+    rtl_TextEncoding nEncoding, const sal_Unicode* pOutStr,
+    VerticalTextItem** &pTextItems )
 {
     int nNumItem = 0;
     short nCurrentVClass = GetVerticalClass( *pStr );
     short nNextVClass;
-    VerticalTextItem** items = (VerticalTextItem**)calloc( nMaxItems, sizeof(VerticalTextItem*) );
+    VerticalTextItem** items = (VerticalTextItem**)calloc( nLength,
+                                                            sizeof(VerticalTextItem*) );
     int nPrevPtr = 0;
     for ( int nIdx = 0; nIdx < nLength; nIdx++ )
     {
-        nNextVClass = (nIdx == nLength - 1) ? VCLASS_DONTKNOW : GetVerticalClass( *(pStr + nIdx + 1) );
+        nNextVClass = (nIdx == nLength - 1) ?
+                        VCLASS_DONTKNOW : GetVerticalClass( *(pStr + nIdx + 1) );
         if ( nNextVClass != nCurrentVClass )
         {
             int nLen = nIdx - nPrevPtr + 1;
-            if ( nNumItem >= nMaxItems )
-            {
-                nMaxItems += VGROW_SIZE;
-                VerticalTextItem** pTmp = (VerticalTextItem**)calloc( nMaxItems, sizeof(VerticalTextItem*) );
-                memcpy( pTmp, items, nNumItem * sizeof(VerticalTextItem*) );
-                free( items );
-                items = pTmp;
-            }
 
             switch(nCurrentVClass)
             {
@@ -779,10 +827,12 @@ ExtendedFontStruct::GetVerticalTextItems( const sal_Unicode* pStr, int nLength, 
                         {
                             XCharStruct *pChar = GetCharinfo( pXFontStruct,
                                               *(pOutStr + nPrevPtr + nIdx2) );
-                            pAdvanceAry[nIdx2] = CharExists(pChar) ? pChar->width : mnDefaultWidth;
+                            pAdvanceAry[nIdx2] = CharExists(pChar) ?
+                                                    pChar->width : mnDefaultWidth;
                         }
                     }
-                    items[nNumItem++] = new VerticalTextItem( GetVXFontStruct( nEncoding, nCurrentVClass ),
+                    items[nNumItem++] = new VerticalTextItem(
+                                          GetVXFontStruct( nEncoding, nCurrentVClass ),
                                           pOutStr + nPrevPtr,
                                           nLen,
                                           GetVTransX( nEncoding, nCurrentVClass ),
@@ -802,7 +852,8 @@ ExtendedFontStruct::GetVerticalTextItems( const sal_Unicode* pStr, int nLength, 
                     {
                         nHeight = 0;
                     }
-                    items[nNumItem++] = new VerticalTextItem( GetVXFontStruct( nEncoding, nCurrentVClass ),
+                    items[nNumItem++] = new VerticalTextItem(
+                                          GetVXFontStruct( nEncoding, nCurrentVClass ),
                                           pOutStr + nPrevPtr,
                                           nLen,
                                           GetVTransX( nEncoding, nCurrentVClass ),
@@ -815,12 +866,13 @@ ExtendedFontStruct::GetVerticalTextItems( const sal_Unicode* pStr, int nLength, 
         }
     }
 
-    VerticalTextItem** pTmp = (VerticalTextItem**)calloc( nNumItem, sizeof(VerticalTextItem*) );
+    VerticalTextItem** pTmp = (VerticalTextItem**)calloc( nNumItem,
+                                                            sizeof(VerticalTextItem*) );
     memcpy( pTmp, items, nNumItem * sizeof(VerticalTextItem*) );
     free( items );
-    nMaxItems = VINIT_SIZE;
 
     pTextItems = pTmp;
 
     return nNumItem;
 }
+
