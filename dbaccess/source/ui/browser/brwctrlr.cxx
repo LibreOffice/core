@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-19 07:47:21 $
+ *  last change: $Author: oj $ $Date: 2001-03-01 15:16:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -817,9 +817,9 @@ sal_Bool SbaXDataBrowserController::suspend(sal_Bool bSuspend) throw( RuntimeExc
     return bReturn;
 }
 // -----------------------------------------------------------------------
-void SbaXDataBrowserController::dispose()
+void SbaXDataBrowserController::disposing()
 {
-    OGenericUnoController::dispose();
+    OGenericUnoController::disposing();
 
     if (!PendingLoad())
     {

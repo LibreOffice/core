@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbexchange.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-23 15:02:06 $
+ *  last change: $Author: oj $ $Date: 2001-03-01 15:16:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,9 @@
 
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
+#endif
+#ifndef _CPPUHELPER_IMPLBASE2_HXX_
+#include <cppuhelper/implbase2.hxx>
 #endif
 #ifndef _TRANSFER_HXX
 #include <svtools/transfer.hxx>

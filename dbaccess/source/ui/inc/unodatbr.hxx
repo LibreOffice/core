@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-16 15:54:53 $
+ *  last change: $Author: oj $ $Date: 2001-03-01 15:16:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,7 +137,7 @@ namespace dbaui
         virtual void SAL_CALL attachFrame(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > & xFrame) throw( ::com::sun::star::uno::RuntimeException );
 
         // ::com::sun::star::lang::XComponent
-        virtual void        SAL_CALL dispose();
+        virtual void        SAL_CALL disposing();
 
         // XStatusListener
         virtual void SAL_CALL statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw(::com::sun::star::uno::RuntimeException);

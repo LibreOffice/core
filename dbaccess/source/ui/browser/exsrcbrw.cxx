@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exsrcbrw.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-01 11:06:16 $
+ *  last change: $Author: oj $ $Date: 2001-03-01 15:16:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -396,7 +396,7 @@ Reference< ::com::sun::star::frame::XDispatch >  SAL_CALL SbaExternalSourceBrows
 }
 
 //------------------------------------------------------------------
-void SAL_CALL SbaExternalSourceBrowser::dispose()
+void SAL_CALL SbaExternalSourceBrowser::disposing()
 {
     // say our modify listeners goodbye
     ::com::sun::star::lang::EventObject aEvt;
@@ -421,7 +421,7 @@ void SAL_CALL SbaExternalSourceBrowser::dispose()
         m_xCurrentFrame->removeFrameActionListener(xAggListener);
     }
 
-    SbaXDataBrowserController::dispose();
+    SbaXDataBrowserController::disposing();
 }
 
 //------------------------------------------------------------------

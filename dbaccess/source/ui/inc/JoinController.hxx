@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinController.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-01 13:27:03 $
+ *  last change: $Author: oj $ $Date: 2001-03-01 15:17:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,7 +147,7 @@ namespace dbaui
         virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException);
 
         // ::com::sun::star::lang::XComponent
-        virtual void        SAL_CALL dispose();
+        virtual void        SAL_CALL disposing();
 
         //
         virtual void Load(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream>& _rxIn);

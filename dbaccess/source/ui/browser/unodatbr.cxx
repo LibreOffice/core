@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-28 10:01:22 $
+ *  last change: $Author: oj $ $Date: 2001-03-01 15:16:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -379,7 +379,7 @@ SbaTableQueryBrowser::~SbaTableQueryBrowser()
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL SbaTableQueryBrowser::dispose()
+void SAL_CALL SbaTableQueryBrowser::disposing()
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
         // doin' a lot of VCL stuff here -> lock the SolarMutex
@@ -421,7 +421,7 @@ void SAL_CALL SbaTableQueryBrowser::dispose()
     if (xDatasourceContainer.is())
         xDatasourceContainer->removeContainerListener(this);
 
-    SbaXDataBrowserController::dispose();
+    SbaXDataBrowserController::disposing();
 }
 
 //------------------------------------------------------------------------------

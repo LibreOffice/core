@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-01 13:27:38 $
+ *  last change: $Author: oj $ $Date: 2001-03-01 15:17:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,7 +250,7 @@ OQueryController::~OQueryController()
 {
 }
 // -----------------------------------------------------------------------------
-void OQueryController::dispose()
+void OQueryController::disposing()
 {
     if(m_pSqlIterator)
     {
@@ -273,7 +273,7 @@ void OQueryController::dispose()
     m_pWindow   = NULL; // don't delete this window it will be deleted by the frame
 
     ::comphelper::disposeComponent(m_xComposer);
-    OJoinController::dispose();
+    OJoinController::disposing();
 }
 // -----------------------------------------------------------------------------
 FeatureState OQueryController::GetState(sal_uInt16 _nId)

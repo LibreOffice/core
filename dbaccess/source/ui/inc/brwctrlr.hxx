@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-09 16:03:40 $
+ *  last change: $Author: oj $ $Date: 2001-03-01 15:16:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,7 +248,7 @@ namespace dbaui
 //      virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >  > SAL_CALL queryDispatches(const ::com::sun::star::uno::Sequence< ::com::sun::star::frame::DispatchDescriptor >& aDescripts) throw( ::com::sun::star::uno::RuntimeException );
 //
         // ::com::sun::star::lang::XComponent
-        virtual void        SAL_CALL dispose();
+        virtual void        SAL_CALL disposing();
 
         // ::com::sun::star::frame::XFrameActionListener
         virtual void        SAL_CALL frameAction(const ::com::sun::star::frame::FrameActionEvent& aEvent) throw( ::com::sun::star::uno::RuntimeException );

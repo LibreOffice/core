@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-01 13:27:03 $
+ *  last change: $Author: oj $ $Date: 2001-03-01 15:17:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,7 +201,7 @@ namespace dbaui
         // ::com::sun::star::frame::XController
         virtual sal_Bool SAL_CALL suspend(sal_Bool bSuspend) throw( ::com::sun::star::uno::RuntimeException );
         // ::com::sun::star::lang::XComponent
-        virtual void        SAL_CALL dispose();
+        virtual void        SAL_CALL disposing();
 
         // XServiceInfo
         virtual ::rtl::OUString SAL_CALL getImplementationName() throw(::com::sun::star::uno::RuntimeException);

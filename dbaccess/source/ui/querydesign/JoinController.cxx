@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinController.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-01 13:27:54 $
+ *  last change: $Author: oj $ $Date: 2001-03-01 15:17:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,9 +192,9 @@ OJoinController::~OJoinController()
 {
 }
 // -----------------------------------------------------------------------------
-void OJoinController::dispose()
+void OJoinController::disposing()
 {
-    OGenericUnoController::dispose();
+    OGenericUnoController::disposing();
     delete m_pView;
     m_pView         = NULL;
     m_pAddTabDlg    = NULL;

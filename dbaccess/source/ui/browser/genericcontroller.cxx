@@ -2,9 +2,9 @@
  *
  *  $RCSfile: genericcontroller.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-27 15:11:05 $
+ *  last change: $Author: oj $ $Date: 2001-03-01 15:16:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,9 +125,9 @@ using namespace ::comphelper;
 
 // -------------------------------------------------------------------------
 OGenericUnoController::OGenericUnoController(const Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM)
-    :m_aAsyncInvalidateAll(LINK(this, OGenericUnoController, OnAsyncInvalidateAll))
+    :OGenericUnoController_BASE(m_aMutex)
+    ,m_aAsyncInvalidateAll(LINK(this, OGenericUnoController, OnAsyncInvalidateAll))
     ,m_xMultiServiceFacatory(_rM)
-    ,m_aDisposeListeners(m_aPropertyMutex)
     ,m_bCurrentlyModified(sal_False)
     ,m_bFrameUiActive(sal_False)
     ,m_pView(NULL)
@@ -641,13 +641,8 @@ void OGenericUnoController::removeStatusListener(const Reference< ::com::sun::st
 }
 
 // -----------------------------------------------------------------------
-void OGenericUnoController::dispose()
+void OGenericUnoController::disposing()
 {
-    // say our dispose listeners goodbye
-    EventObject aEvt;
-    aEvt.Source = (XWeak*)(::cppu::OWeakObject*)this;
-    m_aDisposeListeners.disposeAndClear(aEvt);
-
     // our status listeners, too
     while (m_arrStatusListener.size() > 0)
     {
@@ -655,7 +650,7 @@ void OGenericUnoController::dispose()
 
         DispatchTarget& rCurrent = *iterCurrent;
         EventObject aDisposeEvent;
-        aDisposeEvent.Source = (XComponent*)this;
+        aDisposeEvent.Source = (XComponent*)(OGenericUnoController_BASE2*)this;
 
 #ifdef DBG_UTIL
         sal_Int32 nSize = m_arrStatusListener.size();
@@ -681,18 +676,37 @@ void OGenericUnoController::dispose()
 // -----------------------------------------------------------------------
 void OGenericUnoController::addEventListener(const Reference< XEventListener > & aListener)
 {
-    m_aDisposeListeners.addInterface(aListener);
+    OGenericUnoController_BASE::addEventListener(aListener);
 }
 
 // -----------------------------------------------------------------------
 void OGenericUnoController::removeEventListener(const Reference< XEventListener > & aListener)
 {
-    m_aDisposeListeners.removeInterface(aListener);
+    OGenericUnoController_BASE::removeEventListener(aListener);
 }
 
 //------------------------------------------------------------------------------
 void OGenericUnoController::frameAction(const ::com::sun::star::frame::FrameActionEvent& aEvent) throw( RuntimeException )
 {
+}
+// -----------------------------------------------------------------------------
+Any SAL_CALL OGenericUnoController::queryInterface(const Type& _rType) throw (RuntimeException)
+{
+    Any aRet = OGenericUnoController_BASE::queryInterface(_rType);
+    if(aRet.hasValue())
+        return aRet;
+    aRet = OGenericUnoController_BASE2::queryInterface(_rType);
+    return aRet;
+}
+// -----------------------------------------------------------------------------
+void SAL_CALL OGenericUnoController::acquire(  ) throw()
+{
+    OGenericUnoController_BASE::acquire();
+}
+// -----------------------------------------------------------------------------
+void SAL_CALL OGenericUnoController::release(  ) throw()
+{
+    OGenericUnoController_BASE::release();
 }
 //------------------------------------------------------------------------------
 void OGenericUnoController::EmptyWindow()

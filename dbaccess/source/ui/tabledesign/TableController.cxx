@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-23 15:11:40 $
+ *  last change: $Author: oj $ $Date: 2001-03-01 15:16:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -247,9 +247,9 @@ OTableController::~OTableController()
     m_aTypeInfo.clear();
 }
 // -----------------------------------------------------------------------------
-void OTableController::dispose()
+void OTableController::disposing()
 {
-    OGenericUnoController::dispose();
+    OGenericUnoController::disposing();
     delete m_pView;
     m_pView     = NULL;
 
