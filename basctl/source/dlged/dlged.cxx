@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlged.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 10:13:51 $
+ *  last change: $Author: rt $ $Date: 2004-12-10 17:01:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -324,7 +324,7 @@ void DlgEditor::SetWindow( Window* pWindow )
 {
     DlgEditor::pWindow = pWindow;
     pWindow->SetMapMode( MapMode( MAP_100TH_MM ) );
-    pDlgEdPage->SetSize( pWindow->PixelToLogic( Size( 1280, 1024 ) ) );
+    pDlgEdPage->SetSize( pWindow->PixelToLogic( Size( DLGED_PAGE_WIDTH_MIN, DLGED_PAGE_HEIGHT_MIN ) ) );
 
     pDlgEdView = new DlgEdView( pDlgEdModel, pWindow, this );
     pDlgEdView->ShowPagePgNum( 0, Point() );
@@ -347,6 +347,18 @@ void DlgEditor::SetScrollBars( ScrollBar* pHS, ScrollBar* pVS )
 {
     pHScroll = pHS;
     pVScroll = pVS;
+
+    InitScrollBars();
+}
+
+//----------------------------------------------------------------------------
+
+void DlgEditor::InitScrollBars()
+{
+    DBG_ASSERT( pHScroll, "DlgEditor::InitScrollBars: no horizontal scroll bar!" );
+    DBG_ASSERT( pVScroll, "DlgEditor::InitScrollBars: no vertical scroll bar!" );
+    if ( !pHScroll || !pVScroll )
+        return;
 
     Size aOutSize = pWindow->GetOutputSize();
     Size aPgSize  = pDlgEdPage->GetSize();
@@ -433,6 +445,7 @@ void DlgEditor::SetDialog( uno::Reference< container::XNameContainer > xUnoContr
     pDlgEdForm->SetDlgEditor( this );
     ((DlgEdPage*)pDlgEdModel->GetPage(0))->SetDlgEdForm( pDlgEdForm );
     pDlgEdModel->GetPage(0)->InsertObject( pDlgEdForm );
+    AdjustPageSize();
     pDlgEdForm->SetRectFromProps();
     pDlgEdForm->UpdateTabIndices();     // for backward compatibility
     pDlgEdForm->StartListening();
@@ -459,7 +472,7 @@ void DlgEditor::SetDialog( uno::Reference< container::XNameContainer > xUnoContr
             Reference< ::com::sun::star::beans::XPropertySet > xPSet;
                aCtrl >>= xPSet;
             if ( xPSet.is() )
-                xPSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TabIndex" ) ) ) >>= nTabIndex;
+                xPSet->getPropertyValue( DLGED_PROP_TABINDEX ) >>= nTabIndex;
 
             // insert into map
             aIndexToNameMap.insert( IndexToNameMap::value_type( nTabIndex, aName ) );
@@ -571,8 +584,8 @@ IMPL_LINK( DlgEditor, PaintTimeout, Timer *, EMPTYARG )
         {
             // get dialog size from properties
             sal_Int32 nWidth, nHeight;
-            xPSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Width" ) ) ) >>= nWidth;
-            xPSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Height" ) ) ) >>= nHeight;
+            xPSet->getPropertyValue( DLGED_PROP_WIDTH ) >>= nWidth;
+            xPSet->getPropertyValue( DLGED_PROP_HEIGHT ) >>= nHeight;
 
             if ( nWidth == 0 && nHeight == 0 )
             {
@@ -774,7 +787,7 @@ void DlgEditor::Copy()
             Reference< beans::XPropertySet >  xMarkPSet(pDlgEdObj->GetUnoControlModel(), uno::UNO_QUERY);
             if (xMarkPSet.is())
             {
-                xMarkPSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Name" ) ) ) >>= aName;
+                xMarkPSet->getPropertyValue( DLGED_PROP_NAME ) >>= aName;
             }
 
             Reference< container::XNameAccess > xNameAcc(m_xUnoControlDialogModel, UNO_QUERY );
@@ -901,14 +914,14 @@ void DlgEditor::Paste()
                         Reference< beans::XPropertySet > xPSet( xCtrlModel , UNO_QUERY );
                         Any aUniqueName;
                         aUniqueName <<= aOUniqueName;
-                        xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Name" ) ), aUniqueName );
+                        xPSet->setPropertyValue( DLGED_PROP_NAME, aUniqueName );
 
                         // set tabindex
                         Reference< container::XNameAccess > xNA( m_xUnoControlDialogModel , UNO_QUERY );
                            Sequence< OUString > aNames = xNA->getElementNames();
                         Any aTabIndex;
                         aTabIndex <<= (sal_Int16) aNames.getLength();
-                        xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "TabIndex" ) ), aTabIndex );
+                        xPSet->setPropertyValue( DLGED_PROP_TABINDEX, aTabIndex );
 
                         // insert control model in editor dialog model
                         Any aCtrlModel;
@@ -965,7 +978,7 @@ void DlgEditor::Delete()
             uno::Reference< beans::XPropertySet >  xPSet(pDlgEdObj->GetUnoControlModel(), uno::UNO_QUERY);
             if (xPSet.is())
             {
-                xPSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Name" ) ) ) >>= aName;
+                xPSet->getPropertyValue( DLGED_PROP_NAME ) >>= aName;
             }
 
             // remove control from dialog model
@@ -1176,6 +1189,63 @@ void DlgEditor::PrintData( Printer* pPrinter, const String& rTitle )    // not w
         pPrinter->SetMapMode( aOldMap );
         pPrinter->SetFont( aOldFont );
     }
+}
+
+//----------------------------------------------------------------------------
+
+bool DlgEditor::AdjustPageSize()
+{
+    bool bAdjustedPageSize = false;
+    Reference< beans::XPropertySet > xPSet( m_xUnoControlDialogModel, UNO_QUERY );
+    if ( xPSet.is() )
+    {
+        sal_Int32 nFormXIn, nFormYIn, nFormWidthIn, nFormHeightIn;
+        xPSet->getPropertyValue( DLGED_PROP_POSITIONX ) >>= nFormXIn;
+        xPSet->getPropertyValue( DLGED_PROP_POSITIONY ) >>= nFormYIn;
+        xPSet->getPropertyValue( DLGED_PROP_WIDTH ) >>= nFormWidthIn;
+        xPSet->getPropertyValue( DLGED_PROP_HEIGHT ) >>= nFormHeightIn;
+
+        sal_Int32 nFormX, nFormY, nFormWidth, nFormHeight;
+        if ( pDlgEdForm && pDlgEdForm->TransformFormToSdrCoordinates( nFormXIn, nFormYIn, nFormWidthIn, nFormHeightIn, nFormX, nFormY, nFormWidth, nFormHeight ) )
+        {
+            Size aPageSizeDelta( 400, 300 );
+            DBG_ASSERT( pWindow, "DlgEditor::AdjustPageSize: no window!" );
+            if ( pWindow )
+                aPageSizeDelta = pWindow->PixelToLogic( aPageSizeDelta, MapMode( MAP_100TH_MM ) );
+
+            sal_Int32 nNewPageWidth = nFormX + nFormWidth + aPageSizeDelta.Width();
+            sal_Int32 nNewPageHeight = nFormY + nFormHeight + aPageSizeDelta.Height();
+
+            Size aPageSizeMin( DLGED_PAGE_WIDTH_MIN, DLGED_PAGE_HEIGHT_MIN );
+            DBG_ASSERT( pWindow, "DlgEditor::AdjustPageSize: no window!" );
+            if ( pWindow )
+                aPageSizeMin = pWindow->PixelToLogic( aPageSizeMin, MapMode( MAP_100TH_MM ) );
+            sal_Int32 nPageWidthMin = aPageSizeMin.Width();
+            sal_Int32 nPageHeightMin = aPageSizeMin.Height();
+
+            if ( nNewPageWidth < nPageWidthMin )
+                nNewPageWidth = nPageWidthMin;
+
+            if ( nNewPageHeight < nPageHeightMin )
+                nNewPageHeight = nPageHeightMin;
+
+            if ( pDlgEdPage )
+            {
+                Size aPageSize = pDlgEdPage->GetSize();
+                if ( nNewPageWidth != aPageSize.Width() || nNewPageHeight != aPageSize.Height() )
+                {
+                    Size aNewPageSize( nNewPageWidth, nNewPageHeight );
+                    pDlgEdPage->SetSize( aNewPageSize );
+                    DBG_ASSERT( pDlgEdView, "DlgEditor::AdjustPageSize: no view!" );
+                    if ( pDlgEdView )
+                        pDlgEdView->SetWorkArea( Rectangle( Point( 0, 0 ), aNewPageSize ) );
+                    bAdjustedPageSize = true;
+                }
+            }
+        }
+    }
+
+    return bAdjustedPageSize;
 }
 
 //----------------------------------------------------------------------------
