@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_shl.mk,v $
 #
-#   $Revision: 1.37 $
+#   $Revision: 1.38 $
 #
-#   last change: $Author: svesik $ $Date: 2001-07-13 18:30:26 $
+#   last change: $Author: hjs $ $Date: 2001-08-14 14:14:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -117,6 +117,27 @@ SHL$(TNR)ARCHIVES=
 .ENDIF
 
 SHL$(TNR)DEF*=$(MISC)$/$(SHL$(TNR)TARGET).def
+
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+#+++++++++++	description fallbak	++++++++++++++++++++++++++++++++++++++++
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+.IF "$(SHL$(TNR)TARGET)"!=""
+.IF "$(COMP$(TNR)TYPELIST)"==""
+
+#fallback
+LOCALDESC=$(shell find . -name {$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL$(TNR)TARGET))}.xml)
+.IF "$(LOCALDESC)"==""
+$(MISC)$/%{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL$(TNR)TARGET))}$($(WINVERSIONNAMES)_MAJOR).xml : $(SOLARENV)$/src$/default_description.xml
+    +$(COPY) $< $@
+.ENDIF
+
+.ENDIF          # "$(COMP$(TNR)TYPELIST)"==""
+.ENDIF			# "$(SHL$(TNR)TARGET)"!="
+
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+#+++++++++++    version object      ++++++++++++++++++++++++++++++++++++++++
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 .IF "$(VERSIONOBJ)"!=""
 .IF "$(UPDATER)"=="YES"

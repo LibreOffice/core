@@ -18,6 +18,27 @@ SHL1ARCHIVES=
 
 SHL1DEF*=$(MISC)$/$(SHL1TARGET).def
 
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+#+++++++++++	description fallbak	++++++++++++++++++++++++++++++++++++++++
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+.IF "$(SHL1TARGET)"!=""
+.IF "$(COMP1TYPELIST)"==""
+
+#fallback
+LOCALDESC=$(shell find . -name {$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL1TARGET))}.xml)
+.IF "$(LOCALDESC)"==""
+$(MISC)$/%{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL1TARGET))}$($(WINVERSIONNAMES)_MAJOR).xml : $(SOLARENV)$/src$/default_description.xml
+    +$(COPY) $< $@
+.ENDIF
+
+.ENDIF          # "$(COMP1TYPELIST)"==""
+.ENDIF			# "$(SHL1TARGET)"!="
+
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+#+++++++++++    version object      ++++++++++++++++++++++++++++++++++++++++
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 .IF "$(VERSIONOBJ)"!=""
 .IF "$(UPDATER)"=="YES"
 SHL1VERSIONOBJ:=$(VERSIONOBJ:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL1TARGET))}$(VERSIONOBJ:f)
@@ -422,6 +443,27 @@ SHL2ARCHIVES=
 .ENDIF
 
 SHL2DEF*=$(MISC)$/$(SHL2TARGET).def
+
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+#+++++++++++	description fallbak	++++++++++++++++++++++++++++++++++++++++
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+.IF "$(SHL2TARGET)"!=""
+.IF "$(COMP2TYPELIST)"==""
+
+#fallback
+LOCALDESC=$(shell find . -name {$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL2TARGET))}.xml)
+.IF "$(LOCALDESC)"==""
+$(MISC)$/%{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL2TARGET))}$($(WINVERSIONNAMES)_MAJOR).xml : $(SOLARENV)$/src$/default_description.xml
+    +$(COPY) $< $@
+.ENDIF
+
+.ENDIF          # "$(COMP2TYPELIST)"==""
+.ENDIF			# "$(SHL2TARGET)"!="
+
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+#+++++++++++    version object      ++++++++++++++++++++++++++++++++++++++++
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 .IF "$(VERSIONOBJ)"!=""
 .IF "$(UPDATER)"=="YES"
@@ -828,6 +870,27 @@ SHL3ARCHIVES=
 
 SHL3DEF*=$(MISC)$/$(SHL3TARGET).def
 
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+#+++++++++++	description fallbak	++++++++++++++++++++++++++++++++++++++++
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+.IF "$(SHL3TARGET)"!=""
+.IF "$(COMP3TYPELIST)"==""
+
+#fallback
+LOCALDESC=$(shell find . -name {$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL3TARGET))}.xml)
+.IF "$(LOCALDESC)"==""
+$(MISC)$/%{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL3TARGET))}$($(WINVERSIONNAMES)_MAJOR).xml : $(SOLARENV)$/src$/default_description.xml
+    +$(COPY) $< $@
+.ENDIF
+
+.ENDIF          # "$(COMP3TYPELIST)"==""
+.ENDIF			# "$(SHL3TARGET)"!="
+
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+#+++++++++++    version object      ++++++++++++++++++++++++++++++++++++++++
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 .IF "$(VERSIONOBJ)"!=""
 .IF "$(UPDATER)"=="YES"
 SHL3VERSIONOBJ:=$(VERSIONOBJ:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL3TARGET))}$(VERSIONOBJ:f)
@@ -1232,6 +1295,27 @@ SHL4ARCHIVES=
 .ENDIF
 
 SHL4DEF*=$(MISC)$/$(SHL4TARGET).def
+
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+#+++++++++++	description fallbak	++++++++++++++++++++++++++++++++++++++++
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+.IF "$(SHL4TARGET)"!=""
+.IF "$(COMP4TYPELIST)"==""
+
+#fallback
+LOCALDESC=$(shell find . -name {$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL4TARGET))}.xml)
+.IF "$(LOCALDESC)"==""
+$(MISC)$/%{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL4TARGET))}$($(WINVERSIONNAMES)_MAJOR).xml : $(SOLARENV)$/src$/default_description.xml
+    +$(COPY) $< $@
+.ENDIF
+
+.ENDIF          # "$(COMP4TYPELIST)"==""
+.ENDIF			# "$(SHL4TARGET)"!="
+
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+#+++++++++++    version object      ++++++++++++++++++++++++++++++++++++++++
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 .IF "$(VERSIONOBJ)"!=""
 .IF "$(UPDATER)"=="YES"
@@ -1638,6 +1722,27 @@ SHL5ARCHIVES=
 
 SHL5DEF*=$(MISC)$/$(SHL5TARGET).def
 
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+#+++++++++++	description fallbak	++++++++++++++++++++++++++++++++++++++++
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+.IF "$(SHL5TARGET)"!=""
+.IF "$(COMP5TYPELIST)"==""
+
+#fallback
+LOCALDESC=$(shell find . -name {$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL5TARGET))}.xml)
+.IF "$(LOCALDESC)"==""
+$(MISC)$/%{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL5TARGET))}$($(WINVERSIONNAMES)_MAJOR).xml : $(SOLARENV)$/src$/default_description.xml
+    +$(COPY) $< $@
+.ENDIF
+
+.ENDIF          # "$(COMP5TYPELIST)"==""
+.ENDIF			# "$(SHL5TARGET)"!="
+
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+#+++++++++++    version object      ++++++++++++++++++++++++++++++++++++++++
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 .IF "$(VERSIONOBJ)"!=""
 .IF "$(UPDATER)"=="YES"
 SHL5VERSIONOBJ:=$(VERSIONOBJ:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL5TARGET))}$(VERSIONOBJ:f)
@@ -2042,6 +2147,27 @@ SHL6ARCHIVES=
 .ENDIF
 
 SHL6DEF*=$(MISC)$/$(SHL6TARGET).def
+
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+#+++++++++++	description fallbak	++++++++++++++++++++++++++++++++++++++++
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+.IF "$(SHL6TARGET)"!=""
+.IF "$(COMP6TYPELIST)"==""
+
+#fallback
+LOCALDESC=$(shell find . -name {$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL6TARGET))}.xml)
+.IF "$(LOCALDESC)"==""
+$(MISC)$/%{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL6TARGET))}$($(WINVERSIONNAMES)_MAJOR).xml : $(SOLARENV)$/src$/default_description.xml
+    +$(COPY) $< $@
+.ENDIF
+
+.ENDIF          # "$(COMP6TYPELIST)"==""
+.ENDIF			# "$(SHL6TARGET)"!="
+
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+#+++++++++++    version object      ++++++++++++++++++++++++++++++++++++++++
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 .IF "$(VERSIONOBJ)"!=""
 .IF "$(UPDATER)"=="YES"
@@ -2448,6 +2574,27 @@ SHL7ARCHIVES=
 
 SHL7DEF*=$(MISC)$/$(SHL7TARGET).def
 
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+#+++++++++++	description fallbak	++++++++++++++++++++++++++++++++++++++++
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+.IF "$(SHL7TARGET)"!=""
+.IF "$(COMP7TYPELIST)"==""
+
+#fallback
+LOCALDESC=$(shell find . -name {$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL7TARGET))}.xml)
+.IF "$(LOCALDESC)"==""
+$(MISC)$/%{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL7TARGET))}$($(WINVERSIONNAMES)_MAJOR).xml : $(SOLARENV)$/src$/default_description.xml
+    +$(COPY) $< $@
+.ENDIF
+
+.ENDIF          # "$(COMP7TYPELIST)"==""
+.ENDIF			# "$(SHL7TARGET)"!="
+
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+#+++++++++++    version object      ++++++++++++++++++++++++++++++++++++++++
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 .IF "$(VERSIONOBJ)"!=""
 .IF "$(UPDATER)"=="YES"
 SHL7VERSIONOBJ:=$(VERSIONOBJ:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL7TARGET))}$(VERSIONOBJ:f)
@@ -2852,6 +2999,27 @@ SHL8ARCHIVES=
 .ENDIF
 
 SHL8DEF*=$(MISC)$/$(SHL8TARGET).def
+
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+#+++++++++++	description fallbak	++++++++++++++++++++++++++++++++++++++++
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+.IF "$(SHL8TARGET)"!=""
+.IF "$(COMP8TYPELIST)"==""
+
+#fallback
+LOCALDESC=$(shell find . -name {$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL8TARGET))}.xml)
+.IF "$(LOCALDESC)"==""
+$(MISC)$/%{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL8TARGET))}$($(WINVERSIONNAMES)_MAJOR).xml : $(SOLARENV)$/src$/default_description.xml
+    +$(COPY) $< $@
+.ENDIF
+
+.ENDIF          # "$(COMP8TYPELIST)"==""
+.ENDIF			# "$(SHL8TARGET)"!="
+
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+#+++++++++++    version object      ++++++++++++++++++++++++++++++++++++++++
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 .IF "$(VERSIONOBJ)"!=""
 .IF "$(UPDATER)"=="YES"
@@ -3258,6 +3426,27 @@ SHL9ARCHIVES=
 
 SHL9DEF*=$(MISC)$/$(SHL9TARGET).def
 
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+#+++++++++++	description fallbak	++++++++++++++++++++++++++++++++++++++++
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+.IF "$(SHL9TARGET)"!=""
+.IF "$(COMP9TYPELIST)"==""
+
+#fallback
+LOCALDESC=$(shell find . -name {$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL9TARGET))}.xml)
+.IF "$(LOCALDESC)"==""
+$(MISC)$/%{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL9TARGET))}$($(WINVERSIONNAMES)_MAJOR).xml : $(SOLARENV)$/src$/default_description.xml
+    +$(COPY) $< $@
+.ENDIF
+
+.ENDIF          # "$(COMP9TYPELIST)"==""
+.ENDIF			# "$(SHL9TARGET)"!="
+
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+#+++++++++++    version object      ++++++++++++++++++++++++++++++++++++++++
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 .IF "$(VERSIONOBJ)"!=""
 .IF "$(UPDATER)"=="YES"
 SHL9VERSIONOBJ:=$(VERSIONOBJ:d){$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL9TARGET))}$(VERSIONOBJ:f)
@@ -3662,6 +3851,27 @@ SHL10ARCHIVES=
 .ENDIF
 
 SHL10DEF*=$(MISC)$/$(SHL10TARGET).def
+
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+#+++++++++++	description fallbak	++++++++++++++++++++++++++++++++++++++++
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+.IF "$(SHL10TARGET)"!=""
+.IF "$(COMP10TYPELIST)"==""
+
+#fallback
+LOCALDESC=$(shell find . -name {$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL10TARGET))}.xml)
+.IF "$(LOCALDESC)"==""
+$(MISC)$/%{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL10TARGET))}$($(WINVERSIONNAMES)_MAJOR).xml : $(SOLARENV)$/src$/default_description.xml
+    +$(COPY) $< $@
+.ENDIF
+
+.ENDIF          # "$(COMP10TYPELIST)"==""
+.ENDIF			# "$(SHL10TARGET)"!="
+
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+#+++++++++++    version object      ++++++++++++++++++++++++++++++++++++++++
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 .IF "$(VERSIONOBJ)"!=""
 .IF "$(UPDATER)"=="YES"
