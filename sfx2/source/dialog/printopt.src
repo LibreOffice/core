@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printopt.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-15 10:02:12 $
+ *  last change: $Author: ka $ $Date: 2001-06-28 13:40:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,11 +193,17 @@ TabPage TP_COMMONPRINTOPTIONS
 
     // -----------
 
+    FixedLine GB_OUTPUT
+    {
+        Pos = MAP_APPFONT ( 12, 27 ) ;
+        Size = MAP_APPFONT ( 242 , 8 ) ;
+    };
+
     CheckBox CB_REDUCETRANSPARENCY
     {
         TabStop = TRUE;
-        Pos = MAP_APPFONT ( 12, 30 ) ;
-        Size = MAP_APPFONT ( 121, 10 ) ;
+        Pos = MAP_APPFONT ( 18, 38 ) ;
+        Size = MAP_APPFONT ( 115, 10 ) ;
         Text = "Transparenz ~reduzieren" ;
         Text [ ENGLISH ] = "~Reduce transparency" ;
         Text[ english_us ] = "~Reduce transparency";
@@ -224,8 +230,8 @@ TabPage TP_COMMONPRINTOPTIONS
     RadioButton RB_REDUCETRANSPARENCY_AUTO
     {
         TabStop = TRUE;
-        Pos = MAP_APPFONT ( 21, 43 ) ;
-        Size = MAP_APPFONT ( 112, 10 ) ;
+        Pos = MAP_APPFONT ( 28, 51 ) ;
+        Size = MAP_APPFONT ( 105, 10 ) ;
         Text = "Auto~matisch" ;
         Text [ ENGLISH ] = "Auto~matic" ;
         Text[ english_us ] = "Auto~matically";
@@ -252,8 +258,8 @@ TabPage TP_COMMONPRINTOPTIONS
     RadioButton RB_REDUCETRANSPARENCY_NONE
     {
         TabStop = TRUE;
-        Pos = MAP_APPFONT ( 21, 56 ) ;
-        Size = MAP_APPFONT ( 112, 10 ) ;
+        Pos = MAP_APPFONT ( 28, 64 ) ;
+        Size = MAP_APPFONT ( 105, 10 ) ;
         Text = "~Keine Transparenz" ;
         Text [ ENGLISH ] = "~No transparency" ;
         Text[ english_us ] = "~No transparency";
@@ -283,7 +289,7 @@ TabPage TP_COMMONPRINTOPTIONS
     CheckBox CB_REDUCEGRADIENTS
     {
         TabStop = TRUE;
-        Pos = MAP_APPFONT ( 136, 30 ) ;
+        Pos = MAP_APPFONT ( 136, 38 ) ;
         Size = MAP_APPFONT ( 121, 10 ) ;
         Text = "Farb~verl‰ufe reduzieren" ;
         Text [ ENGLISH ] = "Reduce ~gradients" ;
@@ -311,8 +317,8 @@ TabPage TP_COMMONPRINTOPTIONS
     RadioButton RB_REDUCEGRADIENTS_STRIPES
     {
         TabStop = TRUE;
-        Pos = MAP_APPFONT ( 145, 43 ) ;
-        Size = MAP_APPFONT ( 78, 10 ) ;
+        Pos = MAP_APPFONT ( 146, 51 ) ;
+        Size = MAP_APPFONT ( 77, 10 ) ;
         Text = "Fabverlauf~sstreifen" ;
         Text [ ENGLISH ] = "Gradient ~stripes" ;
         Text[ english_us ] = "Gradient ~stripes";
@@ -340,7 +346,7 @@ TabPage TP_COMMONPRINTOPTIONS
     {
         TabStop = TRUE;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 224, 43 ) ;
+        Pos = MAP_APPFONT ( 224, 49 ) ;
         Size = MAP_APPFONT ( 24, 12 ) ;
         Minimum = 2;
         Maximum = 256;
@@ -350,8 +356,8 @@ TabPage TP_COMMONPRINTOPTIONS
     RadioButton RB_REDUCEGRADIENTS_COLOR
     {
         TabStop = TRUE;
-        Pos = MAP_APPFONT ( 145, 56 ) ;
-        Size = MAP_APPFONT ( 109, 10 ) ;
+        Pos = MAP_APPFONT ( 146, 64 ) ;
+        Size = MAP_APPFONT ( 108, 10 ) ;
         Text = "~Zwischenfarbe" ;
         Text [ ENGLISH ] = "Medium ~color" ;
         Text[ english_us ] = "Intermediate ~color";
@@ -381,8 +387,8 @@ TabPage TP_COMMONPRINTOPTIONS
     CheckBox CB_REDUCEBITMAPS
     {
         TabStop = TRUE;
-        Pos = MAP_APPFONT ( 12, 72 ) ;
-        Size = MAP_APPFONT ( 121, 10 ) ;
+        Pos = MAP_APPFONT ( 18, 80 ) ;
+        Size = MAP_APPFONT ( 115, 10 ) ;
         Text = "~Bitmaps reduzieren" ;
         Text [ ENGLISH ] = "Reduce ~bitmaps" ;
         Text[ english_us ] = "Reduce ~bitmaps";
@@ -409,36 +415,36 @@ TabPage TP_COMMONPRINTOPTIONS
     RadioButton RB_REDUCEBITMAPS_OPTIMAL
     {
         TabStop = TRUE;
-        Pos = MAP_APPFONT ( 21, 85 ) ;
-        Size = MAP_APPFONT ( 233, 10 ) ;
-        Text = "Gute Druck~qualit‰t" ;
-        Text [ ENGLISH ] = "Good ~quality" ;
-        Text[ english_us ] = "~Good print quality";
+        Pos = MAP_APPFONT ( 28, 93 ) ;
+        Size = MAP_APPFONT ( 226, 10 ) ;
+        Text = "Hohe Druck~qualit‰t" ;
+        Text [ ENGLISH ] = "High ~quality" ;
+        Text[ english_us ] = "~High print quality";
         Text[ portuguese ] = "~Boa qualidade de impress„o";
         Text[ russian ] = "~ÕÓÏ‡Î¸ÌÓÂ Í‡˜ÂÒÚ‚Ó ÔÂ˜‡ÚË";
-        Text[ greek ] = "~Good quality";
-        Text[ dutch ] = "~Good quality";
+        Text[ greek ] = "~High quality";
+        Text[ dutch ] = "~High quality";
         Text[ french ] = "QualitÈ d'impression ~optimale";
         Text[ spanish ] = "~Buena calidad de impresiÛn";
         Text[ italian ] = "Stampa di ~buona qualit‡";
-        Text[ danish ] = "~Good quality";
+        Text[ danish ] = "~High quality";
         Text[ swedish ] = "God utskrifts~kvalitet";
         Text[ polish ] = "Wysoka jakoúÊ wydruku";
-        Text[ portuguese_brazilian ] = "~Good quality";
+        Text[ portuguese_brazilian ] = "~High quality";
         Text[ japanese ] = "çÇìxÇ»àÛç¸ïiéø";
-        Text[ korean ] = "~Good quality";
+        Text[ korean ] = "~High quality";
         Text[ chinese_simplified ] = "”≈¡ºµƒ¥Ú”°÷ ¡ø";
         Text[ chinese_traditional ] = "®}¶n™∫¶C¶L´~ΩË";
-        Text[ turkish ] = "~Good quality";
-        Text[ arabic ] = "~Good quality";
-        Text[ catalan ] = "~Good quality";
-        Text[ finnish ] = "~Gute Druckqualit‰t";
+        Text[ turkish ] = "~High quality";
+        Text[ arabic ] = "~High quality";
+        Text[ catalan ] = "~High quality";
+        Text[ finnish ] = "~Hohe Druckqualit‰t";
     };
     RadioButton RB_REDUCEBITMAPS_NORMAL
     {
         TabStop = TRUE;
-        Pos = MAP_APPFONT ( 21, 98 ) ;
-        Size = MAP_APPFONT ( 233, 10 ) ;
+        Pos = MAP_APPFONT ( 28, 106 ) ;
+        Size = MAP_APPFONT ( 226, 10 ) ;
         Text = "N~ormale Druckqualit‰t" ;
         Text [ ENGLISH ] = "N~ormal quality" ;
         Text[ english_us ] = "N~ormal print quality";
@@ -465,8 +471,8 @@ TabPage TP_COMMONPRINTOPTIONS
     RadioButton RB_REDUCEBITMAPS_RESOLUTION
     {
         TabStop = TRUE;
-        Pos = MAP_APPFONT ( 21, 111 ) ;
-        Size = MAP_APPFONT ( 59, 10 ) ;
+        Pos = MAP_APPFONT ( 28, 119 ) ;
+        Size = MAP_APPFONT ( 52, 10 ) ;
         Text = "Aufl~ˆsung" ;
         Text [ ENGLISH ] = "Reso~lution" ;
         Text[ english_us ] = "Reso~lution";
@@ -494,7 +500,7 @@ TabPage TP_COMMONPRINTOPTIONS
     {
         TabStop = TRUE;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 81, 111 ) ;
+        Pos = MAP_APPFONT ( 81, 117 ) ;
         Size = MAP_APPFONT ( 40, 100 ) ;
         DropDown = TRUE;
 
@@ -709,8 +715,8 @@ TabPage TP_COMMONPRINTOPTIONS
     CheckBox CB_REDUCEBITMAPS_TRANSPARENCY
     {
         TabStop = TRUE;
-        Pos = MAP_APPFONT ( 21, 124 ) ;
-        Size = MAP_APPFONT ( 233, 10 ) ;
+        Pos = MAP_APPFONT ( 28, 132 ) ;
+        Size = MAP_APPFONT ( 226, 10 ) ;
         Text = "Transparente Ob~jekte einschlieﬂen" ;
         Text [ ENGLISH ] = "Include transparent ob~jects" ;
         Text[ english_us ] = "Include transparent ob~jects";
@@ -740,7 +746,7 @@ TabPage TP_COMMONPRINTOPTIONS
     CheckBox CB_CONVERTTOGREYSCALES
     {
         TabStop = TRUE;
-        Pos = MAP_APPFONT ( 136, 72 ) ;
+        Pos = MAP_APPFONT ( 136, 80 ) ;
         Size = MAP_APPFONT ( 123, 10 ) ;
         Text = "Farben in Graustufen um~wandeln" ;
         Text [ ENGLISH ] = "Con~vert colors to greyscales" ;
@@ -770,7 +776,7 @@ TabPage TP_COMMONPRINTOPTIONS
 
     FixedLine GB_PRINT_WARN
     {
-        Pos = MAP_APPFONT ( 6, 140 ) ;
+        Pos = MAP_APPFONT ( 6, 148 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Drucker-Warnungen" ;
         Text [ English ] = "Printer Warnings" ;
@@ -799,7 +805,7 @@ TabPage TP_COMMONPRINTOPTIONS
     CheckBox CB_PAPERSIZE
     {
         TabStop = TRUE;
-        Pos = MAP_APPFONT ( 12, 151 ) ;
+        Pos = MAP_APPFONT ( 12, 159 ) ;
         Size = MAP_APPFONT ( 123, 10 ) ;
         Text = "P~apiergrˆﬂe" ;
         Text [ ENGLISH ] = "P~aper size" ;
@@ -827,7 +833,7 @@ TabPage TP_COMMONPRINTOPTIONS
     CheckBox CB_PAPERORIENTATION
     {
         TabStop = TRUE;
-        Pos = MAP_APPFONT ( 12, 164 ) ;
+        Pos = MAP_APPFONT ( 12, 172 ) ;
         Size = MAP_APPFONT ( 123 , 10 ) ;
         Text = "Papi~erorientierung" ;
         Text [ ENGLISH ] = "Pap~er orientation" ;
@@ -855,7 +861,7 @@ TabPage TP_COMMONPRINTOPTIONS
     CheckBox CB_TRANSPARENCY
     {
         TabStop = TRUE;
-        Pos = MAP_APPFONT ( 136, 151 ) ;
+        Pos = MAP_APPFONT ( 136, 159 ) ;
         Size = MAP_APPFONT ( 123, 10 ) ;
         Text = "~Transparenz" ;
         Text [ ENGLISH ] = "~Transparency" ;

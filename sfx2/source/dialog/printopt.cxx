@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printopt.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2001-05-21 11:45:44 $
+ *  last change: $Author: ka $ $Date: 2001-06-28 13:40:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,8 @@
 // - statics -
 // -----------
 
-static USHORT aDPIArray[] = { 72, 96, 150, 200, 300, 600 };
+static USHORT   aDPIArray[] = { 72, 96, 150, 200, 300, 600 };
+static BOOL     bOutputForPrinter = TRUE;
 
 #define DPI_COUNT (sizeof(aDPIArray)/sizeof(aDPIArray[0 ]))
 
@@ -100,6 +101,7 @@ SfxCommonPrintOptionsTabPage::SfxCommonPrintOptionsTabPage( Window* pParent, con
     aOutputTypeFT( this, ResId( FT_OUTPUTTYPE ) ),
     aPrinterOutputRB( this, ResId( RB_PRINTEROUTPUT ) ),
     aPrintFileOutputRB( this, ResId( RB_PRINTFILEOUTPUT ) ),
+    aOutputGB( this, ResId( GB_OUTPUT ) ),
     aReduceTransparencyCB( this, ResId( CB_REDUCETRANSPARENCY ) ),
     aReduceTransparencyAutoRB( this, ResId( RB_REDUCETRANSPARENCY_AUTO ) ),
     aReduceTransparencyNoneRB( this, ResId( RB_REDUCETRANSPARENCY_NONE ) ),
@@ -121,7 +123,18 @@ SfxCommonPrintOptionsTabPage::SfxCommonPrintOptionsTabPage( Window* pParent, con
 {
     FreeResource();
 
-    aPrinterOutputRB.Check( TRUE );
+    aOutputGB.SetStyle( aOutputGB.GetStyle() | WB_NOLABEL );
+
+    if( bOutputForPrinter )
+    {
+        aPrinterOutputRB.Check( TRUE );
+        aOutputGB.SetText( OutputDevice::GetNonMnemonicString( aPrinterOutputRB.GetText() ) );
+    }
+    else
+    {
+        aPrintFileOutputRB.Check( TRUE );
+        aOutputGB.SetText( OutputDevice::GetNonMnemonicString( aPrintFileOutputRB.GetText() ) );
+    }
 
     aPrinterOutputRB.SetToggleHdl( LINK( this, SfxCommonPrintOptionsTabPage, ToggleOutputPrinterRBHdl ) );
     aPrintFileOutputRB.SetToggleHdl( LINK( this, SfxCommonPrintOptionsTabPage, ToggleOutputPrintFileRBHdl ) );
@@ -367,7 +380,11 @@ IMPL_LINK( SfxCommonPrintOptionsTabPage, ToggleReduceBitmapsResolutionRBHdl, Rad
 IMPL_LINK( SfxCommonPrintOptionsTabPage, ToggleOutputPrinterRBHdl, RadioButton*, pButton )
 {
     if( pButton->IsChecked() )
+    {
+        aOutputGB.SetText( OutputDevice::GetNonMnemonicString( pButton->GetText() ) );
         ImplUpdateControls( &maPrinterOptions );
+        bOutputForPrinter = TRUE;
+    }
     else
         ImplSaveControls( &maPrinterOptions );
 
@@ -379,7 +396,11 @@ IMPL_LINK( SfxCommonPrintOptionsTabPage, ToggleOutputPrinterRBHdl, RadioButton*,
 IMPL_LINK( SfxCommonPrintOptionsTabPage, ToggleOutputPrintFileRBHdl, RadioButton*, pButton )
 {
     if( pButton->IsChecked() )
+    {
+        aOutputGB.SetText( OutputDevice::GetNonMnemonicString( pButton->GetText() ) );
         ImplUpdateControls( &maPrintFileOptions );
+        bOutputForPrinter = FALSE;
+    }
     else
         ImplSaveControls( &maPrintFileOptions );
 

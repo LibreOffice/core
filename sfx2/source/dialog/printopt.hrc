@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printopt.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2001-05-03 08:06:19 $
+ *  last change: $Author: ka $ $Date: 2001-06-28 13:40:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,8 @@
 #define FT_OUTPUTTYPE                   2
 #define RB_PRINTEROUTPUT                3
 #define RB_PRINTFILEOUTPUT              4
+
+#define GB_OUTPUT                       5
 
 #define CB_REDUCETRANSPARENCY           10
 #define RB_REDUCETRANSPARENCY_AUTO      11
