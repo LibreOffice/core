@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configunoreg.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:19:22 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 13:30:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -284,11 +284,9 @@ extern "C" sal_Bool SAL_CALL component_writeInfo(
 
         // backend singletons
         RegisterSingleton(configmgr::backend::getDefaultBackendSingletonInfo(), xKey) ;
-        RegisterSingleton(configmgr::backend::getDefaultSingleBackendSingletonInfo(), xKey) ;
 
         // backends
         RegisterService(configmgr::backend::getDefaultBackendServiceInfo(), xKey) ;
-        RegisterService(configmgr::backend::getDefaultSingleBackendServiceInfo(), xKey) ;
         RegisterService(configmgr::backend::getSingleBackendAdapterServiceInfo(), xKey) ;
         RegisterService(configmgr::localbe::getLocalBackendServiceInfo(), xKey) ;
         RegisterService(configmgr::localbe::getLocalDataImportServiceInfo(), xKey) ;
@@ -365,18 +363,10 @@ extern "C" void* SAL_CALL component_getFactory(
                 configmgr::backend::getDefaultBackendSingletonInfo(),
                 configmgr::backend::getDefaultBackendSingleton)
         ||
-        aReq.CreateSingletonMapperFactory(
-                configmgr::backend::getDefaultSingleBackendSingletonInfo(),
-                configmgr::backend::getDefaultSingleBackendSingleton)
-        ||
         // backends
         aReq.CreateServiceFactory(
                 configmgr::backend::getDefaultBackendServiceInfo(),
                 configmgr::backend::instantiateDefaultBackend)
-        ||
-        aReq.CreateServiceFactory(
-                configmgr::backend::getDefaultSingleBackendServiceInfo(),
-                configmgr::backend::instantiateDefaultSingleBackend)
         ||
         aReq.CreateServiceFactory(
                 configmgr::backend::getSingleBackendAdapterServiceInfo(),
