@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-05 12:44:08 $
+ *  last change: $Author: obo $ $Date: 2004-02-20 08:51:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3571,7 +3571,13 @@ void PDFWriterImpl::drawTextLine( const Point& rPos, long nWidth, FontStrikeout 
             setFont( aFont );
             updateGraphicsState();
         }
+
+        // strikeout string is left aligned non-CTL text
+        ULONG nOrigTLM = m_pReferenceDevice->GetLayoutMode();
+        m_pReferenceDevice->SetLayoutMode( TEXT_LAYOUT_BIDI_STRONG|TEXT_LAYOUT_COMPLEX_DISABLED );
         drawText( rPos, aStrikeout, 0, aStrikeout.Len(), false );
+        m_pReferenceDevice->SetLayoutMode( nOrigTLM );
+
         if( bShadow )
         {
             Font aFont = m_aCurrentPDFState.m_aFont;
