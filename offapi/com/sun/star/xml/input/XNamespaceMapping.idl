@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XNamespaceMapping.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 11:58:52 $
+ *  last change: $Author: kz $ $Date: 2004-06-11 11:53:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,8 @@
 module com { module sun { module star { module xml { module input {
 
 /** Interface to map XML namespace URI strings to ordinals (URI-id, short uid).
+
+    @internal
 */
 interface XNamespaceMapping : com::sun::star::uno::XInterface
 {
