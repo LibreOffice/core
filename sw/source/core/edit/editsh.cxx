@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2005-02-09 14:50:26 $
+ *  last change: $Author: vg $ $Date: 2005-02-22 08:17:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -259,7 +259,7 @@ void SwEditShell::Insert(const String &rStr)
         }
     }
 
-    pTmpCrsr->SetInFrontOfLabel(FALSE); // #i27615#
+    SetInFrontOfLabel( FALSE ); // #i27615#
 
     EndAllAction();
 }
