@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxmacxp.mk,v $
 #
-#   $Revision: 1.52 $
+#   $Revision: 1.53 $
 #
-#   last change: $Author: vg $ $Date: 2005-02-24 14:06:09 $
+#   last change: $Author: obo $ $Date: 2005-03-15 09:57:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -148,20 +148,27 @@ CFLAGSNOOPT=-O0
 # Currently, there is no nas support for OS X...
 CDEFS+= -DNO_AUDIO
 
+STDLIBCPP=-lstdc++
+
 # ---------------------------------
 #  STLport library names
 # ---------------------------------
-LIBSTLPORT=-lstlport_gcc -lstdc++
-LIBSTLPORTST=$(SOLARVERSION)$/$(INPATH)$/lib/libstlport_gcc.a -lstdc++
+LIBSTLPORT=-lstlport_gcc
+LIBSTLPORTST=$(SOLARVERSION)$/$(INPATH)$/lib/libstlport_gcc.a
 
 # ---------------------------------
 #  Link stage flags
 # ---------------------------------
 # always link with gcc since you may be linking c code and don't want -lstdc++ linked in!
-LINK=gcc
-LINKFLAGS=-Wl,-multiply_defined,suppress
 
-# LINKFLAGS=-dynamic -framework System -Wl,-multiply_defined,suppress -lcc_dynamic -lstdc++ -L$(MISC)
+##  ericb 04 mars 2005
+
+LINK*=$(CXX)
+LINKC*=$(CC)
+
+LINKFLAGSDEFS*=-Wl,-multiply_defined,suppress
+LINKFLAGSRUNPATH*=-Wl
+LINKFLAGS=$(LINKFLAGSDEFS) $(LINKFLAGSRUNPATH) 
 
 # [ed] 5/14/02 If we're building for aqua, add in the objc runtime library into our link line
 .IF "$(GUIBASE)" == "aqua"
@@ -208,11 +215,11 @@ STDOBJCUI=
 STDSLOCUI=
 
 STDLIBGUIST=-lm
-STDLIBCUIST=-lX11 -lpthread -lm
-STDLIBGUIMT=-lpthread -lm
-STDLIBCUIMT=-lX11 -lm
-STDSHLGUIMT=-lX11 -lXext -lpthread -lm
-STDSHLCUIMT=-lpthread -lm
+STDLIBCUIST=-lX11 -lpthread CPPRUNTIME -lm
+STDLIBGUIMT=-lpthread CPPRUNTIME -lm
+STDLIBCUIMT=-lX11 CPPRUNTIME -lm
+STDSHLGUIMT=-lX11 -lXext -lpthread CPPRUNTIME -lm
+STDSHLCUIMT=-lpthread CPPRUNTIME -lm
 
 LIBMGR=ar
 LIBFLAGS=-r
