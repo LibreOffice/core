@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragr.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 10:57:42 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 17:00:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@ TabDialog TAB_PARAGRAPH
     Text [ ENGLISH ] = "Paragraph" ;
     Text [ norwegian ] = "Avsnitt" ;
     Text [ italian ] = "Paragrafo" ;
-    Text [ portuguese_brazilian ] = "Par?grafo" ;
+    Text [ portuguese_brazilian ] = "Par�grafo" ;
     Text [ portuguese ] = "Par�grafo" ;
     Text [ finnish ] = "Kappale" ;
     Text [ danish ] = "Afsnit" ;
@@ -96,7 +96,7 @@ TabDialog TAB_PARAGRAPH
                 Text [ ENGLISH ] = "Indent and Spacing" ;
                 Text [ norwegian ] = "Indent and Spacing" ;
                 Text [ italian ] = "Rientro e spaziatura" ;
-                Text [ portuguese_brazilian ] = "Indentar e Espa?ar" ;
+                Text [ portuguese_brazilian ] = "Recuos & Afastamento" ;
                 Text [ portuguese ] = "Avan�os e espa�amento" ;
                 Text [ finnish ] = "Sisennykset ja v�lit" ;
                 Text [ danish ] = "Indrykning og mellemrum" ;
@@ -118,6 +118,9 @@ TabDialog TAB_PARAGRAPH
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Sagnats i espaiat";
                 Text[ thai ] = "ระยะเยื้องและระยะห่าง";
+                Text[ czech ] = "Odsazení a proklad";
+                Text[ hebrew ] = "‮שוליים ורוחים‬";
+                Text[ hindi ] = "इन्डेन्ट्स और अंतर देना";
             };
             PageItem
             {
@@ -133,7 +136,7 @@ TabDialog TAB_PARAGRAPH
                 Text [ spanish ] = "Alineaci�n" ;
                 Text [ french ] = "Alignement" ;
                 Text [ dutch ] = "Uitlijning" ;
-                Text [ portuguese_brazilian ] = "Ausrichtung" ;
+                Text [ portuguese_brazilian ] = "Alinhamento" ;
                 Text[ chinese_simplified ] = "对齐";
                 Text[ russian ] = "������������";
                 Text[ polish ] = "Wyr�wnanie";
@@ -147,6 +150,9 @@ TabDialog TAB_PARAGRAPH
                 Text[ catalan ] = "Alineament";
                 Text[ finnish ] = "Tasaus";
                 Text[ thai ] = "จัดตำแหน่ง";
+                Text[ czech ] = "Zarovnání";
+                Text[ hebrew ] = "‮ישור‬";
+                Text[ hindi ] = "पंक्तिकरण";
             };
             PageItem
             {
@@ -165,16 +171,19 @@ TabDialog TAB_PARAGRAPH
                 Text[ danish ] = "Asiatisk typografi";
                 Text[ swedish ] = "Asiatisk typografi";
                 Text[ polish ] = "Typografia azjatycka";
-                Text[ portuguese_brazilian ] = "Asian typography";
+                Text[ portuguese_brazilian ] = "Tipografia asi�tica";
                 Text[ japanese ] = "日本語文の体裁";
                 Text[ korean ] = "한글 입력 체계";
                 Text[ chinese_simplified ] = "中日韩文字";
                 Text[ chinese_traditional ] = "中日韓文字";
-                Text[ turkish ] = "Asian typography";
+                Text[ turkish ] = "Asya tipi tipografi";
                 Text[ arabic ] = "����� ������� ��������";
                 Text[ catalan ] = "Tipografia asi�tica";
                 Text[ finnish ] = "Aasialaiset merkit";
                 Text[ thai ] = "การพิมพ์แบบเอเชีย";
+                Text[ czech ] = "Asijská typografie";
+                Text[ hebrew ] = "Asiatische Typographie";
+                Text[ hindi ] = "ऐशियन टइपोग्रफी";
             };
             /*
             PageItem  {
@@ -202,7 +211,7 @@ TabDialog TAB_PARAGRAPH
                 Text [ ENGLISH ] = "Paragraph (Tabs)" ;
                 Text [ norwegian ] = "Avsnitt (Tabulatorer)" ;
                 Text [ italian ] = "Tabulazione" ;
-                Text [ portuguese_brazilian ] = "Par?grafo (Tabs)" ;
+                Text [ portuguese_brazilian ] = "Tabula��o" ;
                 Text [ portuguese ] = "Tabula��o" ;
                 Text [ finnish ] = "Sarkaimet" ;
                 Text [ danish ] = "Tabulator" ;
@@ -214,7 +223,7 @@ TabDialog TAB_PARAGRAPH
                 PageResID = RID_SVXPAGE_TABULATOR ;
                 Text[ chinese_simplified ] = "制表符";
                 Text[ russian ] = "���������";
-                Text[ polish ] = "Tabulator";
+                Text[ polish ] = "Tabulatory";
                 Text[ japanese ] = "タブ";
                 Text[ chinese_traditional ] = "定位鍵";
                 Text[ arabic ] = "����� �����";
@@ -224,6 +233,9 @@ TabDialog TAB_PARAGRAPH
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Pestanyes";
                 Text[ thai ] = "ระยะกั้น";
+                Text[ czech ] = "Tabulátory";
+                Text[ hebrew ] = "Tabulator";
+                Text[ hindi ] = "टॉब्स";
             };
         };
     };
@@ -254,7 +266,7 @@ TabDialog TAB_PARAGRAPH
         Text [ ENGLISH ] = "Return" ;
         Text [ norwegian ] = "Return" ;
         Text [ italian ] = "Indietro" ;
-        Text [ portuguese_brazilian ] = "Devolver" ;
+        Text [ portuguese_brazilian ] = "Retornar" ;
         Text [ portuguese ] = "Anterior" ;
         Text [ finnish ] = "Takaisin" ;
         Text [ danish ] = "Tilbage" ;
@@ -276,6 +288,9 @@ TabDialog TAB_PARAGRAPH
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Torna";
         Text[ thai ] = "ส่งกลับ";
+        Text[ czech ] = "Návrat";
+        Text[ hebrew ] = "Zurück";
+        Text[ hindi ] = "लौटना";
     };
     Text[ chinese_simplified ] = "段落";
     Text[ russian ] = "�����";
@@ -289,7 +304,19 @@ TabDialog TAB_PARAGRAPH
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Par�graf";
     Text[ thai ] = "ย่อหน้า";
+    Text[ czech ] = "Odstavec";
+    Text[ hebrew ] = "‮פסקאות‬";
+    Text[ hindi ] = "परिच्छेद";
 };
+
+
+
+
+
+
+
+
+
 
 
 
