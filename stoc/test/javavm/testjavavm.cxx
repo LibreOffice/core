@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testjavavm.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-23 16:15:36 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 19:03:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,9 +64,8 @@
 
 //#include <iostream>
 #include <stdio.h>
+#include <sal/main.h>
 #include <rtl/process.h>
-
-#include <vos/dynload.hxx>
 
 #include <cppuhelper/servicefactory.hxx>
 #include <cppuhelper/weak.hxx>
@@ -84,7 +83,6 @@
 using namespace std;
 using namespace rtl;
 using namespace cppu;
-using namespace vos;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 //using namespace com::sun::star::reflection;
@@ -187,12 +185,7 @@ sal_Bool testJavaVM(const Reference< XMultiServiceFactory > & xMgr )
     return sal_True;
 }
 
-extern
-#if (defined UNX) || (defined OS2)
-int main( int argc, char * argv[] )
-#else
-int __cdecl main( int argc, char * argv[] )
-#endif
+SAL_IMPLEMENT_MAIN()
 {
     Reference<XSimpleRegistry> xreg= createSimpleRegistry();
     xreg->open( OUString( RTL_CONSTASCII_USTRINGPARAM("applicat.rdb")),
