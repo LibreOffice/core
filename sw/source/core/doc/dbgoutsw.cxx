@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbgoutsw.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 14:00:54 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 14:53:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,13 @@
 #include <ndhints.hxx>
 #include <txatbase.hxx>
 #include <pam.hxx>
+#include <docary.hxx>
+#include <swundo.hxx>
+#include <undobj.hxx>
+#include <doc.hxx>
+#include <frmfmt.hxx>
+#include <fmtanchr.hxx>
+#include <swrect.hxx>
 #include <dbgoutsw.hxx>
 
 using namespace std;
@@ -78,6 +85,17 @@ using namespace std;
 static ByteString aDbgOutResult;
 bool bDbgOutStdErr = false;
 bool bDbgOutPrintAttrSet = false;
+
+const char * dbg_out(const void * pVoid)
+{
+    char sBuffer[1024];
+
+    sprintf(sBuffer, "%p", pVoid);
+
+    String aTmpStr(sBuffer, RTL_TEXTENCODING_ASCII_US);
+
+    return dbg_out(aTmpStr);
+}
 
 const char * dbg_out(const String & aStr)
 {
@@ -258,21 +276,21 @@ static const String lcl_dbg_out(const SfxItemSet & rSet)
     bool bFirst = true;
     String aStr = String("[ ", RTL_TEXTENCODING_ASCII_US);
 
-    while (! aIter.IsAtEnd())
+    pItem = aIter.FirstItem();
+
+    while (pItem )
     {
-        pItem = aIter.GetCurItem();
+        if (!bFirst)
+            aStr += String(", ", RTL_TEXTENCODING_ASCII_US);
 
-        if (pItem)
-        {
-            if (!bFirst)
-                aStr += String(", ", RTL_TEXTENCODING_ASCII_US);
-
+        if ((sal_uInt32)pItem != 0xffffffff)
             aStr += lcl_dbg_out(*pItem);
-
-            bFirst = false;
-        }
         else
-            break;
+            aStr += String("invalid", RTL_TEXTENCODING_ASCII_US);
+
+        bFirst = false;
+
+        pItem = aIter.NextItem();
     }
 
     aStr += String(" ]", RTL_TEXTENCODING_ASCII_US);
@@ -400,6 +418,83 @@ const char * dbg_out(const SwNodeNum & rNum)
     return dbg_out(lcl_dbg_out(rNum));
 }
 
+static String lcl_dbg_out(const SwRect & rRect)
+{
+    String aResult("[ [", RTL_TEXTENCODING_ASCII_US);
+
+    aResult += String::CreateFromInt32(rRect.Left());
+    aResult += String(", ", RTL_TEXTENCODING_ASCII_US);
+    aResult += String::CreateFromInt32(rRect.Top());
+    aResult += String("], [", RTL_TEXTENCODING_ASCII_US);
+    aResult += String::CreateFromInt32(rRect.Right());
+    aResult += String(", ", RTL_TEXTENCODING_ASCII_US);
+    aResult += String::CreateFromInt32(rRect.Bottom());
+
+    aResult += String("] ]", RTL_TEXTENCODING_ASCII_US);
+
+    return aResult;
+}
+
+const char * dbg_out(const SwRect & rRect)
+{
+    return dbg_out(lcl_dbg_out(rRect));
+}
+
+static String lcl_dbg_out(const SwFrmFmt & rFrmFmt)
+{
+    String aResult("[ ", RTL_TEXTENCODING_ASCII_US);
+
+    char sBuffer[256];
+    sprintf(sBuffer, "%p", &rFrmFmt);
+
+    aResult += String(sBuffer, RTL_TEXTENCODING_ASCII_US);
+    aResult += String(" ,", RTL_TEXTENCODING_ASCII_US);
+    aResult += lcl_dbg_out(rFrmFmt.FindLayoutRect());
+    aResult += String(" ]", RTL_TEXTENCODING_ASCII_US);
+
+    return aResult;
+}
+
+const char * dbg_out(const SwFrmFmt & rFrmFmt)
+{
+    return dbg_out(lcl_dbg_out(rFrmFmt));
+}
+
+static const String lcl_AnchoredFrames(const SwNode & rNode)
+{
+    String aResult("[", RTL_TEXTENCODING_ASCII_US);
+
+    const SwDoc * pDoc = rNode.GetDoc();
+    if (pDoc)
+    {
+        const SwSpzFrmFmts * pFrmFmts = pDoc->GetSpzFrmFmts();
+
+        if (pFrmFmts)
+        {
+            bool bFirst = true;
+            for (ULONG nI = 0; nI < pFrmFmts->Count(); nI++)
+            {
+                const SwFmtAnchor & rAnchor = (*pFrmFmts)[nI]->GetAnchor();
+                const SwPosition * pPos = rAnchor.GetCntntAnchor();
+
+                if (pPos && &pPos->nNode.GetNode() == &rNode)
+                {
+                    if (! bFirst)
+                        aResult += String(", ", RTL_TEXTENCODING_ASCII_US);
+
+                    if ((*pFrmFmts)[nI])
+                        aResult += lcl_dbg_out(*(*pFrmFmts)[nI]);
+                    bFirst = false;
+                }
+            }
+        }
+    }
+
+    aResult += String("]", RTL_TEXTENCODING_ASCII_US);
+
+    return aResult;
+}
+
 static const String lcl_dbg_out(const SwNode & rNode)
 {
     String aTmpStr;
@@ -500,6 +595,9 @@ static const String lcl_dbg_out(const SwNode & rNode)
             aTmpStr += pColl->GetName();
         }
 
+        aTmpStr += String(", Frms: ", RTL_TEXTENCODING_ASCII_US);
+        aTmpStr += lcl_AnchoredFrames(rNode);
+
         if (bDbgOutPrintAttrSet)
         {
             aTmpStr += String(" Attrs: ", RTL_TEXTENCODING_ASCII_US);
@@ -572,6 +670,57 @@ const char * dbg_out(SwNodes & rNodes)
     return dbg_out(lcl_dbg_out(rNodes));
 }
 
+static String lcl_dbg_out(const SwUndos & rUndos)
+{
+    String aResult;
+    int nIndent = 1;
 
+    aResult += String("[ ", RTL_TEXTENCODING_ASCII_US);
+
+    for (int i = 0; i < rUndos.Count(); i++)
+    {
+        SwUndo * pUndo = rUndos[i];
+
+        if (UNDO_END == pUndo->GetId())
+            nIndent--;
+
+        for (int j = 0; j < nIndent; j++)
+            aResult += String("  ", RTL_TEXTENCODING_ASCII_US);
+
+        aResult += String("[ ", RTL_TEXTENCODING_ASCII_US);
+        aResult += String::CreateFromInt32(i);
+        aResult += String(": ", RTL_TEXTENCODING_ASCII_US);
+        aResult += String::CreateFromInt32(pUndo->GetId());
+        aResult += String(" ", RTL_TEXTENCODING_ASCII_US);
+        aResult += pUndo->GetComment();
+        aResult += String("] \n", RTL_TEXTENCODING_ASCII_US);
+
+        if (UNDO_START == pUndo->GetId())
+            nIndent++;
+    }
+
+    aResult += String("]", RTL_TEXTENCODING_ASCII_US);
+
+    return aResult;
+}
+
+const char * dbg_out(const SwUndos & rUndos)
+{
+    return dbg_out(lcl_dbg_out(rUndos));
+}
+
+const String lcl_dbg_out(const SwRewriter & rRewriter)
+{
+    String aResult;
+
+    aResult = rRewriter.ToString();
+
+    return aResult;
+}
+
+const char * dbg_out(const SwRewriter & rRewriter)
+{
+    return dbg_out(lcl_dbg_out(rRewriter));
+}
 #endif // DEBUG
 
