@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SelectionBrowseBox.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-19 12:56:04 $
+ *  last change: $Author: vg $ $Date: 2003-06-12 10:19:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,8 +155,8 @@ const String g_strZero = String::CreateFromAscii("0");
 #define HANDLE_COLUMN_WITDH 70
 
 #define SQL_ISRULEOR2(pParseNode, e1,e2)    ((pParseNode)->isRule() && (\
-                                            (pParseNode)->getRuleID() == OSQLParser::RuleID(OSQLParseNode::##e1) || \
-                                            (pParseNode)->getRuleID() == OSQLParser::RuleID(OSQLParseNode::##e2)))
+                                            (pParseNode)->getRuleID() == OSQLParser::RuleID(OSQLParseNode::e1) || \
+                                            (pParseNode)->getRuleID() == OSQLParser::RuleID(OSQLParseNode::e2)))
 
 
 // -----------------------------------------------------------------------------
@@ -628,7 +628,7 @@ void OSelectionBrowseBox::clearEntryFunctionField(const String& _sFieldName,OTab
         String sFunctionName;
         GetFunctionName(SQL_TOKEN_COUNT,sFunctionName);
         String sOldLocalizedFunctionName = _pEntry->GetFunction();
-        if ( sOldLocalizedFunctionName != sFunctionName || _pEntry->IsGroupBy() )
+        if ( !sOldLocalizedFunctionName.Equals(sFunctionName) || _pEntry->IsGroupBy() )
         {
             // append undo action for the function field
             ::rtl::OUString sOldLocalizedFunctionName = _pEntry->GetFunction();
@@ -1053,7 +1053,7 @@ sal_Bool OSelectionBrowseBox::SaveModified()
                     String sFunctionName        = m_pFunctionCell->GetEntry(nPos);
                     String sGroupFunctionName   = m_aFunctionStrings.GetToken(m_aFunctionStrings.GetTokenCount()-1);
                     sal_Bool bGroupBy = sal_False;
-                    if ( sGroupFunctionName == sFunctionName ) // check if the function name is GROUP
+                    if ( sGroupFunctionName.Equals(sFunctionName) ) // check if the function name is GROUP
                     {
                         bGroupBy = sal_True;
 
