@@ -2,9 +2,9 @@
  *
  *  $RCSfile: symtbl.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 13:35:29 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-02 11:56:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,9 @@
 #endif
 #ifndef _SBXDEF_HXX //autogen
 #include <svtools/sbxdef.hxx>
+#endif
+#ifndef _SB_SBDEF_HXX
+#include <sbxdef.hxx>
 #endif
 
 class SbiSymDef;                    // Basisklasse
@@ -222,6 +225,8 @@ class SbiProcDef : public SbiSymDef {   // Prozedur-Definition (aus Basic):
     String aLibName;                // LIB "name"
     String aAlias;                  // ALIAS "name"
     USHORT nLine1, nLine2;          // Zeilenbereich
+    PropertyMode mePropMode;        // Marks if this is a property procedure and which
+    String maPropName;              // Property name if property procedure (!= proc name)
     BOOL   bCdecl  : 1;             // TRUE: CDECL angegeben
     BOOL   bPublic : 1;             // TRUE: proc ist PUBLIC
     BOOL   mbProcDecl : 1;          // TRUE: instanciated by SbiParser::ProcDecl
@@ -244,6 +249,9 @@ public:
     USHORT GetLine1() const         { return nLine1;   }
     void SetLine2( USHORT n )       { nLine2 = n;      }
     USHORT GetLine2() const         { return nLine2;   }
+    PropertyMode getPropertyMode()  { return mePropMode; }
+    void setPropertyMode( PropertyMode ePropMode );
+    const String& GetPropName()     { return maPropName; }
 
     // Match mit einer Forward-Deklaration. Die Parameternamen
     // werden abgeglichen und die Forward-Deklaration wird
