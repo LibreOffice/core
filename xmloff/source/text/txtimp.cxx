@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.100 $
+ *  $Revision: 1.101 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:59:45 $
+ *  last change: $Author: vg $ $Date: 2003-07-02 14:09:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1245,7 +1245,17 @@ void XMLTextImportHelper::SetOutlineStyle(
         nLevel > 0 && nLevel <= xChapterNumbering->getCount() )
     {
         if( !pOutlineStyles )
+        {
+#ifdef IRIX
+            /* GCC 2 bug when member function is called as part of an array
+             * initialiser
+             */
+            sal_Int8 count = xChapterNumbering->getCount();
+            pOutlineStyles = new OUString[count];
+#else
             pOutlineStyles = new OUString[xChapterNumbering->getCount()];
+#endif
+        }
         pOutlineStyles[nLevel-1] = rStyleName;
     }
 }
