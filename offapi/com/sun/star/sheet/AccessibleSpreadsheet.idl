@@ -1,0 +1,169 @@
+/*************************************************************************
+ *
+ *  $RCSfile: AccessibleSpreadsheet.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: vg $ $Date: 2003-04-24 17:45:52 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_sheet_AccessibleSpreadsheet_idl__
+#define __com_sun_star_sheet_AccessibleSpreadsheet_idl__
+
+#ifndef __com_sun_star_accessibility_XAccessibleContext_idl__
+#include <com/sun/star/accessibility/XAccessibleContext.idl>
+#endif
+
+#ifndef __com_sun_star_accessibility_XAccessibleComponent_idl__
+#include <com/sun/star/accessibility/XAccessibleComponent.idl>
+#endif
+
+#ifndef __com_sun_star_accessibility_XAccessibleTable_idl__
+#include <com/sun/star/accessibility/XAccessibleTable.idl>
+#endif
+
+#ifndef __com_sun_star_accessibility_XAccessibleSelection_idl__
+#include <com/sun/star/accessibility/XAccessibleSelection.idl>
+#endif
+
+#ifndef __com_sun_star_accessibility_XAccessibleEventBroadcaster_idl__
+#include <com/sun/star/accessibility/XAccessibleEventBroadcaster.idl>
+#endif
+
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
+
+//=============================================================================
+
+/** The accessible view of a spreadsheet document
+
+ */
+service AccessibleSpreadsheet
+{
+    /** This interface gives access to any object in the currently visible table
+        on the desktop.
+
+    <ul>
+        <li>The parent returned by <type>getAccessibleParent</type>
+            is the accessible spreadsheet document view.</li>
+        <li>The children returned by <type>getAccessibleChild</type> all
+            support the interface XAccessible. Calling
+            <type>getAccessibleContext</type> for these children returns
+            an object that supports the following service.</li>
+        <ul>
+            <li><type>com.sun.star.table.AccessibleCell</type>:
+                A child where calling <type>getAccessibleChild</type>
+                an object that supports this service is returned for
+                every cell in this table.</li>
+        </ul>
+        <p>The following rules apply to the children order.</p>
+        <ul>
+            <li>All the children are cells. The order of this cells is to
+            the order on the screen. This means that the first cell is the
+            cell in the left top edge of the table and the last one is the
+            cell in the right bottom edge of the table. The second is the
+            cell in the first row and second xolumn and so on.</li>
+        </ul>
+        <li>The description is ???.</li>
+        <li>The name is the given table name.</li>
+        <li>The role is <type>TABLE</type></li>
+        <li>There are relations between the table and the shapes with an anchor
+            on this table (not with an anchor on a cell in this table).</li>
+        <li>The following states are supported:
+            <ul>
+                <li><type>DEFUNC</type> is always false if the table is not
+                    deleted and the document is open, otherwise it is true.</li>
+                <li><type>EDITABLE</type> is false if the table is protected,
+                    otherwise it is true.</li>
+                <li><type>ENABLED</type> is always true.</li>
+                <li><type>MULTISELECTABLE</type> is always true.</li>
+                <li><type>OPAQUE</type> is always true.</li>
+                <li><type>RESIZEABLE</type>is always false.</li>
+                <li><type>SELECTABLE</type> is always true.</li>
+                <li><type>SELECTED</type> is true if the complete table (all
+                    cells) is selected.</li>
+                <li><type>SHOWING</type>Is true if the Bounding Box lies in
+                    the Bounding Box of the parent. Otherwise it is false.</li>
+                <li><type>VISIBLE</type>Is always true.</li>
+            </ul>
+        </li>
+    </ul>
+     */
+    interface ::com::sun::star::accessibility::XAccessibleContext;
+
+    /** This interface gives access to the visibility of the table.
+    */
+    interface ::com::sun::star::accessibility::XAccessibleComponent;
+
+    /** This interface gives access to any cell that is at least partially
+        visible on the screen. So this interface gives access to the same
+        things like the XAccessibleContext interface. Therefor it use more
+        usable methods. Also it gives access to some table specific data.
+     */
+    interface ::com::sun::star::accessibility::XAccessibleTable;
+
+    /** This interface is for selecting the cells.
+     */
+    interface ::com::sun::star::accessibility::XAccessibleSelection;
+
+    /** This is the interface for listeners */
+    interface ::com::sun::star::accessibility::XAccessibleEventBroadcaster;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
