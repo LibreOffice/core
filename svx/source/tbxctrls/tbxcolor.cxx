@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxcolor.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 10:17:34 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 20:14:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,14 +80,20 @@ namespace svx
     using namespace ::drafts::com::sun::star::frame;
 
     #define DECLARE_ASCII(s)        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(s) )
-    #define TOOLBAR_RESNAME         DECLARE_ASCII("private:resource/toolbar/colorbar")
+    #define TOOLBAR_RESNAME         DECLARE_ASCII("private:resource/toolbar/")
     #define PROPNAME_LAYOUTMANAGER  DECLARE_ASCII("LayoutManager")
 
     //====================================================================
-    //= ColorToolboxAccess
+    //= ToolboxAccess
     //====================================================================
-    ColorToolboxAccess::ColorToolboxAccess()
+    ToolboxAccess::ToolboxAccess( const ::rtl::OUString& rToolboxName ) :
+
+        m_bDocking          ( false ),
+        m_sToolboxResName   ( TOOLBAR_RESNAME )
+
     {
+        m_sToolboxResName += rToolboxName;
+
         // the layout manager
         if ( SfxViewFrame::Current() )
         {
@@ -100,43 +106,47 @@ namespace svx
             }
             catch ( Exception& )
             {
-                DBG_ERRORFILE( "ColorToolboxAccess::Ctor(): exception" );
+                DBG_ERRORFILE( "ToolboxAccess::Ctor(): exception" );
             }
         }
     }
 
     //--------------------------------------------------------------------
-    void ColorToolboxAccess::toggleToolbox() const
+    void ToolboxAccess::toggleToolbox() const
     {
         try
         {
             Reference< XLayoutManager > xManager( m_xLayouter );
-            OSL_ENSURE( xManager. is(), "ColorToolboxAccess::toggleToolbox: couldn't obtain the layout manager!" );
+            OSL_ENSURE( xManager. is(), "ToolboxAccess::toggleToolbox: couldn't obtain the layout manager!" );
             if ( xManager. is() )
             {
-                ::rtl::OUString sToolboxResource( TOOLBAR_RESNAME );
-                if ( xManager->isElementVisible( sToolboxResource ) )
+                if ( xManager->isElementVisible( m_sToolboxResName ) )
                 {
-                    xManager->hideElement( sToolboxResource );
-                    xManager->destroyElement( sToolboxResource );
+                    xManager->hideElement( m_sToolboxResName );
+                    xManager->destroyElement( m_sToolboxResName );
                 }
                 else
                 {
-                    xManager->createElement( sToolboxResource );
-                    xManager->showElement( sToolboxResource );
+                    xManager->createElement( m_sToolboxResName );
+                    xManager->showElement( m_sToolboxResName );
+                    ::com::sun::star::awt::Point aPos;
+
+                    if ( m_bDocking )
+                        xManager->dockWindow( m_sToolboxResName,
+                            ::drafts::com::sun::star::ui::DockingArea_DOCKINGAREA_BOTTOM, aPos );
                 }
             }
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "ColorToolboxAccess::toggleToolbox: caught an exception!" );
+            OSL_ENSURE( sal_False, "ToolboxAccess::toggleToolbox: caught an exception!" );
         }
     }
 
     //--------------------------------------------------------------------
-    bool ColorToolboxAccess::isToolboxVisible() const
+    bool ToolboxAccess::isToolboxVisible() const
     {
-        return ( m_xLayouter.is() && m_xLayouter->isElementVisible( TOOLBAR_RESNAME ) );
+        return ( m_xLayouter.is() && m_xLayouter->isElementVisible( m_sToolboxResName ) );
     }
 
 //........................................................................
