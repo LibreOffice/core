@@ -2,9 +2,9 @@
  *
  *  $RCSfile: floatwin.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ssa $ $Date: 2002-07-17 14:36:39 $
+ *  last change: $Author: mt $ $Date: 2002-08-02 14:05:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -637,6 +637,12 @@ void FloatingWindow::StartPopupMode( const Rectangle& rRect, ULONG nFlags )
         nFlags |= FLOATWIN_POPUPMODE_NOAPPFOCUSCLOSE;
     else
         nFlags &= ~FLOATWIN_POPUPMODE_NOAPPFOCUSCLOSE;
+
+    // #102010# For debugging Accessibility
+    // MT->SSA: I wanted to set that flag in menu.cxx, why do you remove it above???
+    static const char* pEnv = getenv("SAL_FLOATWIN_NOAPPFOCUSCLOSE" );
+    if( pEnv && *pEnv )
+        nFlags |= FLOATWIN_POPUPMODE_NOAPPFOCUSCLOSE;
 
     // Fenster-Position ermitteln und setzen
     USHORT nArrangeIndex;
