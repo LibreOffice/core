@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 16:46:38 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 17:11:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,8 @@
  *
  *
  ************************************************************************/
+
+#include <memory>
 
 #include "macro.hxx"
 
@@ -354,14 +356,13 @@ static void getFromEnvironment( rtl_uString **ppValue, rtl_uString *pName )
 
 }
 
-
-static void getFromList(NameValueList *pNameValueList, rtl_uString **ppValue, rtl_uString *pName)
+static void getFromList(
+    NameValueList const * pNameValueList, rtl_uString **ppValue, rtl_uString *pName )
 {
-    OUString name(pName);
+    OUString const & name = * reinterpret_cast< OUString const * >( &pName );
 
-    for(NameValueList::iterator ii = pNameValueList->begin();
-        ii != pNameValueList->end();
-        ++ii)
+    NameValueList::const_iterator iEnd( pNameValueList->end() );
+    for( NameValueList::const_iterator ii = pNameValueList->begin(); ii != iEnd; ++ii )
     {
         if( (*ii).sName.equals(name) )
         {
@@ -373,67 +374,10 @@ static void getFromList(NameValueList *pNameValueList, rtl_uString **ppValue, rt
 
 static NameValueList s_rtl_bootstrap_set_list;
 
-
-static sal_Bool getValue(NameValueList *pNameValueList, rtl_uString * pName, rtl_uString ** ppValue, rtl_uString * pDefault)
-{
-    sal_Bool result = sal_True;
-
-    getFromList( &s_rtl_bootstrap_set_list, ppValue, pName );
-    if (! *ppValue)
-    {
-        getFromCommandLineArgs(ppValue, pName);
-        if(!*ppValue)
-        {
-            getFromList(pNameValueList, ppValue, pName);
-            if( ! *ppValue )
-            {
-                OUString const & name = *reinterpret_cast< OUString const * >( &pName );
-
-                // fallbacks
-                if (name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("SYSUSERCONFIG") ))
-                {
-                    oslSecurity security = osl_getCurrentSecurity();
-                    osl_getConfigDir(security, ppValue);
-                    osl_freeSecurityHandle(security);
-                }
-                else if (name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("SYSUSERHOME") ))
-                {
-                    oslSecurity security = osl_getCurrentSecurity();
-                    osl_getHomeDir(security, ppValue);
-                    osl_freeSecurityHandle(security);
-                }
-                else if (name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("SYSBINDIR") ))
-                {
-                    getExecutableDirectory(ppValue);
-                }
-                else
-                {
-                    getFromEnvironment( ppValue, pName );
-                    if( ! *ppValue )
-                    {
-                        result = sal_False;
-
-                        if(pDefault)
-                            rtl_uString_assign( ppValue , pDefault );
-                    }
-                }
-            }
-        }
-    }
-
-#ifdef DEBUG
-    OString sName = OUStringToOString(OUString(pName), RTL_TEXTENCODING_ASCII_US);
-    OString sValue;
-    if(*ppValue)
-        sValue = OUStringToOString(OUString(*ppValue), RTL_TEXTENCODING_ASCII_US);
-    OSL_TRACE("bootstrap.cxx::getValue - name:%s value:%s\n", sName.getStr(), sValue.getStr());
-#endif
-
-    return result;
-}
-
 struct Bootstrap_Impl
 {
+    ::std::auto_ptr< Bootstrap_Impl > _base_ini;
+
     NameValueList _nameValueList;
     OUString      _iniName;
 
@@ -441,67 +385,58 @@ struct Bootstrap_Impl
     ~Bootstrap_Impl();
 
     static void * operator new (std::size_t n) SAL_THROW(())
-    {
-        return rtl_allocateMemory (sal_uInt32(n));
-    }
+        { return rtl_allocateMemory (sal_uInt32(n)); }
     static void operator delete (void * p , std::size_t) SAL_THROW(())
-    {
-        rtl_freeMemory (p);
-    }
+        { rtl_freeMemory (p); }
+
+    sal_Bool getValue( rtl_uString * pName, rtl_uString ** ppValue, rtl_uString * pDefault ) const;
 };
 
-Bootstrap_Impl::Bootstrap_Impl (OUString const & rIniName)
+Bootstrap_Impl::Bootstrap_Impl( OUString const & rIniName )
     : _iniName (rIniName)
 {
-}
+    OUString const & base_ini = getIniFileNameImpl();
+    if (! rIniName.equals( base_ini ))
+    {
+        _base_ini.reset( new Bootstrap_Impl( base_ini ) );
+    }
 
-Bootstrap_Impl::~Bootstrap_Impl()
-{
-}
-
-static void fillFromIniFile(Bootstrap_Impl * pBootstrap_Impl, const OUString & iniName)
-{
 #ifdef DEBUG
-    OString sFile = OUStringToOString(iniName, RTL_TEXTENCODING_ASCII_US);
-    OSL_TRACE("bootstrap.cxx::fillFromIniFile - %s\n", sFile.getStr());
+    OString sFile = OUStringToOString(_iniName, RTL_TEXTENCODING_ASCII_US);
+    OSL_TRACE(__FILE__" -- Bootstrap_Impl() - %s\n", sFile.getStr());
 #endif
-
-
     oslFileHandle handle;
-    if(iniName.getLength()
-    && osl_File_E_None == osl_openFile(iniName.pData, &handle, osl_File_OpenFlag_Read))
+    if (_iniName.getLength() &&
+        osl_File_E_None == osl_openFile(_iniName.pData, &handle, osl_File_OpenFlag_Read))
     {
         rtl::ByteSequence seq;
         sal_uInt64 nSize = 0;
 
         getFileSize(handle, &nSize);
-        while( sal_True )
+        while (true)
         {
             sal_uInt64 nPos;
-            if(osl_File_E_None != osl_getFilePos(handle, &nPos)
-            || nPos >= nSize)
+            if (osl_File_E_None != osl_getFilePos(handle, &nPos) || nPos >= nSize)
                 break;
-
-            if(osl_File_E_None != osl_readLine(handle , (sal_Sequence ** ) &seq))
+            if (osl_File_E_None != osl_readLine(handle , (sal_Sequence **) &seq))
                 break;
-
-            OString line((const sal_Char *)seq.getConstArray(), seq.getLength());
+            OString line( (const sal_Char *) seq.getConstArray(), seq.getLength() );
             sal_Int32 nIndex = line.indexOf('=');
             struct rtl_bootstrap_NameValue nameValue;
-            if(nIndex >= 1 && nIndex +1 < line.getLength())
+            if (nIndex >= 1 && nIndex +1 < line.getLength())
             {
-                nameValue.sName = OStringToOUString(line.copy(0,nIndex).trim(),
-                                                    RTL_TEXTENCODING_ASCII_US);
-                nameValue.sValue = OStringToOUString(line.copy(nIndex+1).trim(),
-                                                     RTL_TEXTENCODING_UTF8);
-
+                nameValue.sName = OStringToOUString(
+                    line.copy(0,nIndex).trim(), RTL_TEXTENCODING_ASCII_US );
+                nameValue.sValue = OStringToOUString(
+                    line.copy(nIndex+1).trim(), RTL_TEXTENCODING_UTF8 );
                 OString name_tmp = OUStringToOString(nameValue.sName, RTL_TEXTENCODING_ASCII_US);
                 OString value_tmp = OUStringToOString(nameValue.sValue, RTL_TEXTENCODING_UTF8);
 #ifdef DEBUG
-                OSL_TRACE("bootstrap.cxx: pushing: name=%s value=%s\n", name_tmp.getStr(), value_tmp.getStr());
+                OSL_TRACE(
+                    __FILE__" -- pushing: name=%s value=%s\n",
+                    name_tmp.getStr(), value_tmp.getStr() );
 #endif
-
-                pBootstrap_Impl->_nameValueList.push_back(nameValue);
+                _nameValueList.push_back(nameValue);
             }
         }
         osl_closeFile(handle);
@@ -509,10 +444,116 @@ static void fillFromIniFile(Bootstrap_Impl * pBootstrap_Impl, const OUString & i
 #ifdef DEBUG
     else
     {
-        OString file_tmp = OUStringToOString(iniName, RTL_TEXTENCODING_ASCII_US);
-        OSL_TRACE("bootstrap.cxx: couldn't open file: %s", file_tmp.getStr());
+        OString file_tmp = OUStringToOString(_iniName, RTL_TEXTENCODING_ASCII_US);
+        OSL_TRACE( __FILE__" -- couldn't open file: %s", file_tmp.getStr() );
     }
 #endif
+}
+
+Bootstrap_Impl::~Bootstrap_Impl()
+{
+}
+
+
+sal_Bool Bootstrap_Impl::getValue(
+    rtl_uString * pName, rtl_uString ** ppValue, rtl_uString * pDefault ) const
+{
+    if (0 != _base_ini.get())
+    {
+        if (_base_ini->getValue( pName, ppValue, pDefault ))
+            return sal_True;
+    }
+
+    // lookup this ini
+    sal_Bool result = sal_True;
+    bool further_macro_expansion = true;
+
+    OUString const & name = *reinterpret_cast< OUString const * >( &pName );
+    if (name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("ORIGIN") ))
+    {
+        OUString iniPath;
+        sal_Int32 last_slash = _iniName.lastIndexOf( '/' );
+        if (last_slash >= 0)
+            iniPath = _iniName.copy( 0, last_slash );
+        rtl_uString_assign( ppValue, iniPath.pData );
+        further_macro_expansion = false;
+    }
+    else
+    {
+        if (0 != *ppValue)
+        {
+            rtl_uString_release( *ppValue );
+            *ppValue = 0;
+        }
+        getFromList( &s_rtl_bootstrap_set_list, ppValue, pName );
+        if (! *ppValue)
+        {
+            getFromCommandLineArgs( ppValue, pName );
+            if(!*ppValue)
+            {
+                getFromList( &_nameValueList, ppValue, pName );
+                if( ! *ppValue )
+                {
+                    // fallbacks
+                    if (name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("SYSUSERCONFIG") ))
+                    {
+                        oslSecurity security = osl_getCurrentSecurity();
+                        osl_getConfigDir(security, ppValue);
+                        osl_freeSecurityHandle(security);
+                        further_macro_expansion = false;
+                    }
+                    else if (name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("SYSUSERHOME") ))
+                    {
+                        oslSecurity security = osl_getCurrentSecurity();
+                        osl_getHomeDir(security, ppValue);
+                        osl_freeSecurityHandle(security);
+                        further_macro_expansion = false;
+                    }
+                    else if (name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("SYSBINDIR") ))
+                    {
+                        getExecutableDirectory(ppValue);
+                        further_macro_expansion = false;
+                    }
+                    else
+                    {
+                        getFromEnvironment( ppValue, pName );
+                        if( ! *ppValue )
+                        {
+                            result = sal_False;
+
+                            if(pDefault)
+                                rtl_uString_assign( ppValue, pDefault );
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    if (0 == *ppValue)
+    {
+        rtl_uString_new(ppValue);
+    }
+    else
+    {
+        if (further_macro_expansion)
+        {
+            OUString result = expandMacros(
+                static_cast< rtlBootstrapHandle >( const_cast< Bootstrap_Impl * >( this ) ),
+                * reinterpret_cast< OUString const * >( ppValue ) );
+            rtl_uString_assign( ppValue, result.pData );
+        }
+    }
+
+#ifdef DEBUG
+    OString sName = OUStringToOString(OUString(pName), RTL_TEXTENCODING_ASCII_US);
+    OString sValue = OUStringToOString(OUString(*ppValue), RTL_TEXTENCODING_ASCII_US);
+    OSL_TRACE(
+        __FILE__" -- Bootstrap_Impl::getValue() - name:%s value:%s\n",
+        sName.getStr(), sValue.getStr() );
+#endif
+
+    return result;
 }
 
 extern "C"
@@ -527,11 +568,6 @@ rtlBootstrapHandle SAL_CALL rtl_bootstrap_args_open(rtl_uString * pIniName)
     osl::FileBase::getAbsoluteFileURL(workDir, iniName, iniName);
 
     Bootstrap_Impl * pImpl = new Bootstrap_Impl (iniName);
-    if (pImpl)
-    {
-        fillFromIniFile(pImpl, getIniFileNameImpl());
-        fillFromIniFile(pImpl, iniName);
-    }
     return static_cast<rtlBootstrapHandle>(pImpl);
 }
 
@@ -541,48 +577,43 @@ void SAL_CALL rtl_bootstrap_args_close(rtlBootstrapHandle handle)
     delete static_cast<Bootstrap_Impl*>(handle);
 }
 
-sal_Bool SAL_CALL rtl_bootstrap_get_from_handle(rtlBootstrapHandle handle, rtl_uString *pName, rtl_uString **ppValue, rtl_uString *pDefault)
+sal_Bool SAL_CALL rtl_bootstrap_get_from_handle(
+    rtlBootstrapHandle handle, rtl_uString *pName, rtl_uString **ppValue, rtl_uString *pDefault )
 {
     osl::MutexGuard guard(osl::Mutex::getGlobalMutex());
 
     sal_Bool found = sal_False;
     if(ppValue && pName)
     {
-        if(handle) {
-            if(*ppValue) {
-                rtl_uString_release(*ppValue);
-                *ppValue = 0;
-            }
-
-            found = getValue(&((Bootstrap_Impl *)handle)->_nameValueList, pName, ppValue, pDefault);
-            if(*ppValue)
-            {
-                OUString result = expandMacros(&((Bootstrap_Impl *)handle)->_nameValueList, OUString(*ppValue));
-                rtl_uString_assign(ppValue, result.pData );
-            }
-
-            if(!*ppValue)
-                rtl_uString_new(ppValue);
-
+        if(handle)
+        {
+            found = static_cast< Bootstrap_Impl const * >( handle )->getValue(
+                pName, ppValue, pDefault );
         }
         else
+        {
             found = rtl_bootstrap_get(pName, ppValue, pDefault);
+        }
     }
 
     return found;
 }
 
-void SAL_CALL rtl_bootstrap_get_iniName_from_handle(rtlBootstrapHandle handle, rtl_uString ** ppIniName)
+void SAL_CALL rtl_bootstrap_get_iniName_from_handle(
+    rtlBootstrapHandle handle, rtl_uString ** ppIniName )
 {
     if(ppIniName)
+    {
         if(handle)
-            rtl_uString_assign(ppIniName, ((Bootstrap_Impl *)handle)->_iniName.pData);
-
-        else {
+        {
+            rtl_uString_assign(ppIniName, ((Bootstrap_Impl *) handle)->_iniName.pData);
+        }
+        else
+        {
             const OUString & iniName = getIniFileNameImpl();
-
             rtl_uString_assign(ppIniName, iniName.pData);
         }
+    }
 }
 
 void SAL_CALL rtl_bootstrap_setIniFileName( rtl_uString *pName )
@@ -601,16 +632,14 @@ static rtlBootstrapHandle get_static_bootstrap_handle() SAL_THROW( () )
     if(!pBootstrap_Impl)
     {
         static Bootstrap_Impl g_bootstrap_Impl (getIniFileNameImpl());
-
-        fillFromIniFile(&g_bootstrap_Impl, g_bootstrap_Impl._iniName);
-
         pBootstrap_Impl = &g_bootstrap_Impl;
     }
 
     return pBootstrap_Impl;
 }
 
-sal_Bool SAL_CALL rtl_bootstrap_get( rtl_uString *pName, rtl_uString **ppValue , rtl_uString *pDefault )
+sal_Bool SAL_CALL rtl_bootstrap_get(
+    rtl_uString *pName, rtl_uString **ppValue , rtl_uString *pDefault )
 {
     return rtl_bootstrap_get_from_handle(
         get_static_bootstrap_handle(), pName, ppValue, pDefault);
