@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoScrollBarControl.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2004-01-05 20:59:41 $
+ *  last change:$Date: 2004-12-10 17:06:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,7 @@ package mod._toolkit;
 import com.sun.star.accessibility.XAccessible;
 import com.sun.star.accessibility.XAccessibleComponent;
 import com.sun.star.awt.Point;
+import com.sun.star.awt.Rectangle;
 import com.sun.star.awt.XControl;
 import com.sun.star.awt.XControlModel;
 import com.sun.star.awt.XDevice;
@@ -73,12 +74,17 @@ import com.sun.star.awt.XWindow;
 import com.sun.star.awt.XWindowPeer;
 import com.sun.star.drawing.XControlShape;
 import com.sun.star.drawing.XShape;
+import com.sun.star.frame.XController;
+import com.sun.star.frame.XFrame;
+import com.sun.star.frame.XModel;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.util.XCloseable;
 import com.sun.star.view.XControlAccess;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 
 import java.io.PrintWriter;
 
@@ -103,6 +109,24 @@ public class UnoScrollBarControl extends TestCase {
         try {
             log.println("creating a textdocument");
             xTextDoc = SOF.createTextDoc(null);
+
+            log.println("maximize the window size");
+            XModel xModel = (XModel) UnoRuntime.queryInterface(XModel.class, xTextDoc);
+            XFrame xFrame = xModel.getCurrentController().getFrame();
+            XWindow xWin = xFrame.getContainerWindow();
+
+            Toolkit tk = Toolkit.getDefaultToolkit();
+            Dimension dim = tk.getScreenSize();
+
+            Rectangle newPosSize = xWin.getPosSize();
+            newPosSize.Width = new Double(dim.getWidth()).intValue();
+            newPosSize.Height = new Double(dim.getHeight()).intValue();
+            newPosSize.X = 0;
+            newPosSize.Y = 0;
+
+            xWin.setPosSize(newPosSize.X, newPosSize.Y, newPosSize.Width,
+                            newPosSize.Height, com.sun.star.awt.PosSize.POSSIZE);
+
         } catch (com.sun.star.uno.Exception e) {
             // Some exception occures.FAILED
             e.printStackTrace(log);
