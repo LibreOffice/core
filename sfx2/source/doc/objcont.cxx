@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objcont.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 17:36:15 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 19:23:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,7 +141,7 @@ using namespace ::com::sun::star::uno;
 
 //====================================================================
 
-GDIMetaFile* SfxObjectShell::GetPreviewMetaFile(  ) const
+GDIMetaFile* SfxObjectShell::GetPreviewMetaFile( sal_Bool bFullContent ) const
 {
     // Nur wenn gerade nicht gedruckt wird, darf DoDraw aufgerufen
     // werden, sonst wird u.U. der Printer abgeschossen !
@@ -151,29 +151,43 @@ GDIMetaFile* SfxObjectShell::GetPreviewMetaFile(  ) const
          pFrame->GetViewShell()->GetPrinter()->IsPrinting() )
          return 0;
 
-    Size aTmpSize = ((SfxObjectShell*)this)->GetFirstPageSize();
     GDIMetaFile* pFile = new GDIMetaFile;
-    pFile->SetPrefSize( aTmpSize );
-    DBG_ASSERT( aTmpSize.Height()*aTmpSize.Width(),
-                "size of first page is 0, overload GetFirstPageSize or set vis-area!" );
-#define FRAME 4
 
     VirtualDevice aDevice;
     aDevice.EnableOutput( FALSE );
-    SfxInPlaceObject* pObj = GetInPlaceObject();
-    if( pObj )
-    {
-        MapMode aMode( pObj->GetMapUnit() );
-        aDevice.SetMapMode( aMode );
-    }
-    pFile->Record( &aDevice );
+
     SfxInPlaceObject* pInPlaceObj = GetInPlaceObject();
     DBG_ASSERT( pInPlaceObj, "Ohne Inplace Objekt keine Grafik" );
     if (pInPlaceObj)
+    {
+        MapMode aMode( pInPlaceObj->GetMapUnit() );
+        aDevice.SetMapMode( aMode );
+        pFile->SetPrefMapMode( aMode );
+
+        Size aTmpSize;
+        sal_Int8 nAspect;
+        if ( bFullContent )
+        {
+            nAspect = ASPECT_CONTENT;
+            aTmpSize = pInPlaceObj->GetVisArea( nAspect ).GetSize();
+        }
+        else
+        {
+            nAspect = ASPECT_THUMBNAIL;
+            aTmpSize = ((SfxObjectShell*)this)->GetFirstPageSize();
+        }
+
+        pFile->SetPrefSize( aTmpSize );
+        DBG_ASSERT( aTmpSize.Height()*aTmpSize.Width(),
+                    "size of first page is 0, overload GetFirstPageSize or set vis-area!" );
+
+        pFile->Record( &aDevice );
         pInPlaceObj->DoDraw(
-            &aDevice, Point(0,0), aTmpSize,
-            JobSetup(), ASPECT_THUMBNAIL );
-    pFile->Stop();
+                &aDevice, Point(0,0), aTmpSize,
+                JobSetup(), nAspect );
+        pFile->Stop();
+    }
+
     return pFile;
 }
 
