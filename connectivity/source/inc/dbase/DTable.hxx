@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-16 10:47:23 $
+ *  last change: $Author: oj $ $Date: 2000-11-27 10:28:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,9 @@ namespace connectivity
                                 USHORT  db_size;                        /* Blockgröße: dBase 3 fest     */
                             };
 
+            ::std::vector<sal_Int32> m_aTypes;      // holds all type for columns just to avoid to ask the propertyset
+            ::std::vector<sal_Int32> m_aPrecisions; // same as aboth
+            ::std::vector<sal_Int32> m_aScales;
             DBFHeader       m_aHeader;
             DBFMemoHeader   m_aMemoHeader;
             SvStream*       m_pMemoStream;
@@ -167,7 +170,7 @@ namespace connectivity
 
             virtual sal_Int32 getCurrentLastPos() const {return m_aHeader.db_anz;}
             virtual sal_Bool seekRow(FilePosition eCursorPosition, sal_Int32 nOffset, sal_Int32& nCurPos);
-            virtual sal_Bool fetchRow(file::OValueRow _rRow,const OSQLColumns& _rCols, sal_Bool bRetrieveData);
+            virtual sal_Bool fetchRow(file::OValueRow _rRow,const OSQLColumns& _rCols, sal_Bool _bUseTableDefs,sal_Bool bRetrieveData);
 
             virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
             //XTypeProvider
