@@ -2,9 +2,9 @@
  *
  *  $RCSfile: arealink.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2001-04-05 10:42:48 $
+ *  last change: $Author: er $ $Date: 2001-04-21 20:31:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 #ifndef SC_SCGLOB_HXX
 #include "global.hxx"
 #endif
+#ifndef SC_REFRESHTIMER_HXX
+#include "refreshtimer.hxx"
+#endif
 
 #ifndef _LNKBASE_HXX //autogen
 #include <so3/lnkbase.hxx>
@@ -73,7 +76,7 @@
 class ScDocShell;
 class SfxObjectShell;
 
-class ScAreaLink : public ::so3::SvBaseLink
+class ScAreaLink : public ::so3::SvBaseLink, public ScRefreshTimer
 {
 private:
     ScDocShell* pDocShell;      // Container
@@ -82,7 +85,6 @@ private:
     String      aOptions;
     String      aSourceArea;
     ScRange     aDestArea;
-    ULONG       nRefreshDelay;  // refresh delay in seconds; 0 = off
     BOOL        bAddUndo;
     BOOL        bInCreate;
     BOOL        bDoInsert;      // wird fuer das erste Update auf FALSE gesetzt
@@ -106,7 +108,6 @@ public:
     void    SetInCreate(BOOL bSet)                  { bInCreate = bSet; }
     void    SetDoInsert(BOOL bSet)                  { bDoInsert = bSet; }
     void    SetDestArea(const ScRange& rNew);
-    void    SetRefreshDelay(ULONG nRefresh)         { nRefreshDelay = nRefresh; }
     void    SetSource(const String& rDoc, const String& rFlt, const String& rOpt,
                         const String& rArea);
 
@@ -118,7 +119,9 @@ public:
     const String&   GetOptions() const      { return aOptions;      }
     const String&   GetSource() const       { return aSourceArea;   }
     const ScRange&  GetDestArea() const     { return aDestArea;     }
-    ULONG           GetRefreshDelay() const { return nRefreshDelay; }
+
+    DECL_LINK( RefreshHdl, ScAreaLink* );
+
 };
 
 

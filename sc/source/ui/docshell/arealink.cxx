@@ -2,9 +2,9 @@
  *
  *  $RCSfile: arealink.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dr $ $Date: 2001-04-05 10:48:47 $
+ *  last change: $Author: er $ $Date: 2001-04-21 20:28:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,23 +98,25 @@ ScAreaLink::ScAreaLink( SfxObjectShell* pShell, const String& rFile,
                         const String& rArea, const ScRange& rDest,
                         ULONG nRefresh ) :
     ::so3::SvBaseLink(LINKUPDATE_ONCALL,FORMAT_FILE),
+    ScRefreshTimer  ( nRefresh ),
     pDocShell       ((ScDocShell*)pShell),
     aFileName       (rFile),
     aFilterName     (rFilter),
     aOptions        (rOpt),
     aSourceArea     (rArea),
     aDestArea       (rDest),
-    nRefreshDelay   (nRefresh),
     bAddUndo        (TRUE),
     bInCreate       (FALSE),
     bDoInsert       (TRUE)
 {
     DBG_ASSERT(pShell->ISA(ScDocShell), "ScAreaLink mit falscher ObjectShell");
+    SetRefreshHandler( LINK( this, ScAreaLink, RefreshHdl ) );
+    SetRefreshControl( pDocShell->GetDocument()->GetRefreshTimerControlAddress() );
 }
 
 __EXPORT ScAreaLink::~ScAreaLink()
 {
-    // Verbindung aufheben
+    StopRefreshTimer();
 }
 
 BOOL __EXPORT ScAreaLink::Edit(Window* pParent)
@@ -165,7 +167,7 @@ void __EXPORT ScAreaLink::DataChanged( const String&,
             SetName( aLinkName );
         }
 
-        Refresh( aFile, aFilter, aArea, nRefreshDelay );
+        Refresh( aFile, aFilter, aArea, GetRefreshDelay() );
     }
 }
 
@@ -179,7 +181,7 @@ void __EXPORT ScAreaLink::Closed()
     {
         pDocShell->GetUndoManager()->AddUndoAction( new ScUndoRemoveAreaLink( pDocShell,
                                                         aFileName, aFilterName, aOptions,
-                                                        aSourceArea, aDestArea, nRefreshDelay ) );
+                                                        aSourceArea, aDestArea, GetRefreshDelay() ) );
 
         bAddUndo = FALSE;   // nur einmal
     }
@@ -391,7 +393,7 @@ BOOL ScAreaLink::Refresh( const String& rNewFile, const String& rNewFilter,
             pDocShell->GetUndoManager()->AddUndoAction(
                 new ScUndoUpdateAreaLink( pDocShell,
                                             aFileName, aFilterName, aOptions,
-                                            aSourceArea, aOldRange, nRefreshDelay,
+                                            aSourceArea, aOldRange, GetRefreshDelay(),
                                             aNewUrl, rNewFilter, aNewOpt,
                                             rNewArea, aNewRange, nNewRefresh,
                                             pUndoDoc, pRedoDoc, bDoInsert ) );
@@ -455,4 +457,10 @@ BOOL ScAreaLink::Refresh( const String& rNewFile, const String& rNewFilter,
 }
 
 
+IMPL_LINK( ScAreaLink, RefreshHdl, ScAreaLink*, pCaller )
+{
+    long nRes = Refresh( aFileName, aFilterName, aSourceArea,
+        GetRefreshDelay() ) != 0;
+    return nRes;
+}
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbcolect.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: er $ $Date: 2001-03-14 18:10:21 $
+ *  last change: $Author: er $ $Date: 2001-04-21 20:29:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -402,6 +402,7 @@ BOOL ScDBData::Store( SvStream& rStream, ScMultipleWriteHeader& rHdr ) const
 }
 
 ScDBData::ScDBData( const ScDBData& rData ) :
+    ScRefreshTimer      ( rData ),
     aName               (rData.aName),
     nTable              (rData.nTable),
     nStartCol           (rData.nStartCol),
@@ -495,6 +496,7 @@ ScDBData& ScDBData::operator= (const ScDBData& rData)
     USHORT i;
     USHORT j;
 
+    ScRefreshTimer::operator=( rData );
     aName               = rData.aName;
     nTable              = rData.nTable;
     nStartCol           = rData.nStartCol;
@@ -590,7 +592,9 @@ BOOL ScDBData::operator== (const ScDBData& rData) const
          bDoSize    != rData.bDoSize    ||
          bKeepFmt   != rData.bKeepFmt   ||
          bIsAdvanced!= rData.bIsAdvanced||
-         bStripData != rData.bStripData )
+         bStripData != rData.bStripData ||
+         ScRefreshTimer::operator!=( rData )
+        )
         return FALSE;
 
     if ( bIsAdvanced && aAdvSource != rData.aAdvSource )
@@ -625,6 +629,7 @@ BOOL ScDBData::operator== (const ScDBData& rData) const
 
 ScDBData::~ScDBData()
 {
+    StopRefreshTimer();
     USHORT i;
 
     for (i=0; i<MAXQUERY; i++)
@@ -1003,6 +1008,7 @@ DataObject* ScDBData::Clone() const
     return new ScDBData(*this);
 }
 
+
 //---------------------------------------------------------------------------------------
 //  Compare zum Sortieren
 
@@ -1217,9 +1223,20 @@ ScDBData* ScDBCollection::FindIndex(USHORT nIndex)
 
 BOOL ScDBCollection::Insert(DataObject* pDataObject)
 {
-    if (!((ScDBData*)pDataObject)->GetIndex())      // schon gesetzt?
-        ((ScDBData*)pDataObject)->SetIndex(nEntryIndex++);
-    return SortedCollection::Insert(pDataObject);
+    ScDBData* pData = (ScDBData*) pDataObject;
+    if (!pData->GetIndex())     // schon gesetzt?
+        pData->SetIndex(nEntryIndex++);
+    BOOL bInserted = SortedCollection::Insert(pDataObject);
+    if ( bInserted && pData->HasImportParam() && !pData->HasImportSelection() )
+    {
+//!!!!!!!
+//! TODO: (erAck 21.04.01) we can't access the ScDocShell of ui/inc. Solution?
+//!!!!!!!
+//      pData->SetRefreshHandler(
+//          LINK( pDoc->GetDocumentShell(), ScDocShell, RefreshDBDataHdl ) );
+        pData->SetRefreshControl( pDoc->GetRefreshTimerControlAddress() );
+    }
+    return bInserted;
 }
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablink.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: er $ $Date: 2001-04-18 12:34:53 $
+ *  last change: $Author: er $ $Date: 2001-04-21 20:31:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,10 @@
 #ifndef SC_TABLINK_HXX
 #define SC_TABLINK_HXX
 
+#ifndef SC_REFRESHTIMER_HXX
+#include "refreshtimer.hxx"
+#endif
+
 #ifndef _LNKBASE_HXX //autogen
 #include <so3/lnkbase.hxx>
 #endif
@@ -74,14 +78,13 @@ SO2_DECL_REF(SvEmbeddedObject)
 class ScDocShell;
 class SfxObjectShell;
 
-class ScTableLink : public ::so3::SvBaseLink
+class ScTableLink : public ::so3::SvBaseLink, public ScRefreshTimer
 {
 private:
     ScDocShell* pDocShell;      // Container
     String      aFileName;
     String      aFilterName;
     String      aOptions;
-    ULONG       nRefreshDelay;  // refresh delay in seconds; 0 = off
     BOOL        bInCreate;
     BOOL        bAddUndo;
     BOOL        bDoPaint;
@@ -104,14 +107,15 @@ public:
     void    SetInCreate(BOOL bSet)      { bInCreate = bSet; }
     void    SetAddUndo(BOOL bSet)       { bAddUndo = bSet; }
     void    SetPaint(BOOL bSet)         { bDoPaint = bSet; }
-    void    SetRefreshDelay(ULONG nRefresh)     { nRefreshDelay = nRefresh; }
 
     const String& GetFileName() const   { return aFileName; }
     const String& GetFilterName() const { return aFilterName; }
     const String& GetOptions() const    { return aOptions; }
-    ULONG           GetRefreshDelay() const { return nRefreshDelay; }
 
     BOOL    IsUsed() const;
+
+    DECL_LINK( RefreshHdl, ScTableLink* );
+
 };
 
 

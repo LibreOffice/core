@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh5.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-16 11:48:02 $
+ *  last change: $Author: er $ $Date: 2001-04-21 20:28:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -962,4 +962,26 @@ BOOL ScDocShell::MoveTable( USHORT nSrcTab, USHORT nDestTab, BOOL bCopy, BOOL bR
 }
 
 
+IMPL_LINK( ScDocShell, RefreshDBDataHdl, ScDBData*, pDBData )
+{
+    ScDBDocFunc aFunc(*this);
+
+    BOOL bContinue = TRUE;
+    ScImportParam aImportParam;
+    pDBData->GetImportParam( aImportParam );
+    if (aImportParam.bImport && !pDBData->HasImportSelection())
+    {
+        ScRange aRange;
+        pDBData->GetArea( aRange );
+        bContinue = aFunc.DoImport( aRange.aStart.Tab(), aImportParam, NULL, TRUE, FALSE ); //! Api-Flag as parameter
+        // internal operations (sort, query, subtotal) only if no error
+        if (bContinue)
+        {
+            aFunc.RepeatDB( pDBData->GetName(), TRUE, TRUE );
+            RefreshPivotTables(aRange);
+        }
+    }
+
+    return bContinue != 0;
+}
 

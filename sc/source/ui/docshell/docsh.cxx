@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: sab $ $Date: 2001-04-05 16:14:18 $
+ *  last change: $Author: er $ $Date: 2001-04-21 20:28:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,6 +136,7 @@ SO2_DECL_REF(SvStorageStream)
 #include "hints.hxx"
 #include "xmlwrap.hxx"
 #include "drwlayer.hxx"
+#include "refreshtimer.hxx"
 
 #include "docsh.hxx"
 
@@ -581,6 +582,8 @@ BOOL ScDocShell::SaveXML( SfxMedium* pMedium, SvStorage* pStor )
 
 BOOL __EXPORT ScDocShell::Load( SvStorage* pStor )
 {
+    ScRefreshTimerProtector( aDocument.GetRefreshTimerControlAddress() );
+
     DBG_ASSERT( pStor, "Load without storage?" );
     BOOL bXML = ( pStor->GetVersion() >= SOFFICE_FILEFORMAT_60 );
 
@@ -665,6 +668,8 @@ void __EXPORT ScDocShell::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType
 
 BOOL __EXPORT ScDocShell::LoadFrom( SvStorage* pStor )
 {
+    ScRefreshTimerProtector( aDocument.GetRefreshTimerControlAddress() );
+
     DBG_ASSERT( pStor, "Nanu... LoadFrom ohne Storage?" );
     BOOL bXML = ( pStor->GetVersion() >= SOFFICE_FILEFORMAT_60 );
 
@@ -727,6 +732,8 @@ BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
 {
     BOOL bRet = FALSE;              // FALSE heisst Benutzerabbruch !!
                                     // bei Fehler: Fehler am Stream setzen!!
+
+    ScRefreshTimerProtector( aDocument.GetRefreshTimerControlAddress() );
 
     GetUndoManager()->Clear();
 
@@ -1325,6 +1332,8 @@ void __EXPORT ScDocShell::HandsOff()
 
 BOOL __EXPORT ScDocShell::Save()
 {
+    ScRefreshTimerProtector( aDocument.GetRefreshTimerControlAddress() );
+
     SvStorage* pStor = GetStorage();
     DBG_ASSERT( pStor, "Save: no storage" );
     BOOL bXML = ( pStor->GetVersion() >= SOFFICE_FILEFORMAT_60 );
@@ -1358,6 +1367,8 @@ BOOL __EXPORT ScDocShell::Save()
 
 BOOL __EXPORT ScDocShell::SaveAs( SvStorage* pStor )
 {
+    ScRefreshTimerProtector( aDocument.GetRefreshTimerControlAddress() );
+
     DBG_ASSERT( pStor, "SaveAs without storage?" );
     BOOL bXML = ( pStor->GetVersion() >= SOFFICE_FILEFORMAT_60 );
 
@@ -1614,6 +1625,8 @@ void ScDocShell::AsciiSave( SvStream& rStream, sal_Unicode cDelim, sal_Unicode c
 
 BOOL __EXPORT ScDocShell::ConvertTo( SfxMedium &rMed )
 {
+    ScRefreshTimerProtector( aDocument.GetRefreshTimerControlAddress() );
+
     DoEnterHandler();                                   // nicht abgeschlossene Zelle beenden
     if (pAutoStyleList)
         pAutoStyleList->ExecuteAllNow();                // Vorlagen-Timeouts jetzt ausfuehren
@@ -2279,8 +2292,10 @@ Window* ScDocShell::GetDialogParent()
 
 // --- ScDocShellModificator ------------------------------------------
 
-ScDocShellModificator::ScDocShellModificator( ScDocShell& rDS ) :
-        rDocShell( rDS )
+ScDocShellModificator::ScDocShellModificator( ScDocShell& rDS )
+        :
+        rDocShell( rDS ),
+        aProtector( rDS.GetDocument()->GetRefreshTimerControlAddress() )
 {
     ScDocument* pDoc = rDocShell.GetDocument();
     bAutoCalcShellDisabled = pDoc->IsAutoCalcShellDisabled();
@@ -2295,7 +2310,7 @@ ScDocShellModificator::~ScDocShellModificator()
     ScDocument* pDoc = rDocShell.GetDocument();
     pDoc->SetAutoCalcShellDisabled( bAutoCalcShellDisabled );
     if ( !bAutoCalcShellDisabled && rDocShell.IsDocumentModifiedPending() )
-        rDocShell.SetDocumentModified();    // der letzte macht das Licht aus
+        rDocShell.SetDocumentModified();    // last one shuts off the lights
     pDoc->DisableIdle( bIdleDisabled );
 }
 

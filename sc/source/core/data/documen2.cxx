@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen2.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: nn $ $Date: 2001-04-11 14:36:34 $
+ *  last change: $Author: er $ $Date: 2001-04-21 20:30:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -383,12 +383,14 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
         pTab[0]  = NULL;
         pBASM = new ScBroadcastAreaSlotMachine( this );
         pChartListenerCollection = new ScChartListenerCollection( this );
+        pRefreshTimerControl = new ScRefreshTimerControl;
     }
     else
     {
         pTab[0]     = NULL;
         pBASM       = NULL;
         pChartListenerCollection = NULL;
+        pRefreshTimerControl = NULL;
     }
 
     for (USHORT i=1; i<=MAXTAB; i++)
@@ -471,6 +473,14 @@ ScDocument::~ScDocument()
     DBG_ASSERT( !bInLinkUpdate, "bInLinkUpdate in dtor" );
 
     bInDtorClear = TRUE;
+
+    // first of all disable all refresh timers by deleting the control
+    if ( pRefreshTimerControl )
+    {   // To be sure there isn't anything running do it with a protector,
+        // this ensures also that nothing needs the control anymore.
+        ScRefreshTimerProtector aProt( GetRefreshTimerControlAddress() );
+        delete pRefreshTimerControl, pRefreshTimerControl = NULL;
+    }
 
     // Links aufrauemen
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: er $ $Date: 2001-04-18 12:34:53 $
+ *  last change: $Author: er $ $Date: 2001-04-21 20:31:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,6 +162,7 @@ class ScScriptTypeData;
 class ScPoolHelper;
 class ScImpExpLogMsg;
 struct ScSortParam;
+class ScRefreshTimerControl;
 
 namespace com { namespace sun { namespace star {
     namespace lang {
@@ -362,6 +363,7 @@ private:
     SfxBroadcaster*     pUnoBroadcaster;
     ScChangeViewSettings* pChangeViewSettings;
     ScScriptTypeData*   pScriptTypeData;
+    ScRefreshTimerControl* pRefreshTimerControl;
     vos::ORef<SvxForbiddenCharactersTable> xForbiddenCharacters;
 
     com::sun::star::uno::Sequence<sal_Int8> aProtectPass;
@@ -1488,6 +1490,11 @@ public:
     void            AddToImpExpLog( const ScImpExpLogMsg& rMsg );
     void            AddToImpExpLog( ScImpExpLogMsg* pMsg );
 
+    ScRefreshTimerControl*  GetRefreshTimerControl() const
+        { return pRefreshTimerControl; }
+    ScRefreshTimerControl * const * GetRefreshTimerControlAddress() const
+        { return &pRefreshTimerControl; }
+
 private: // CLOOK-Impl-Methoden
     void    ImplLoadDocOptions( SvStream& rStream );
     void    ImplLoadViewOptions( SvStream& rStream );
@@ -1516,6 +1523,7 @@ private: // CLOOK-Impl-Methoden
                              const ScRange& r, short nDx, short nDy, short nDz );
 
     BOOL    HasPartOfMerged( const ScRange& rRange );
+
 };
 
 

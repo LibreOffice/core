@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbcolect.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-13 09:51:56 $
+ *  last change: $Author: er $ $Date: 2001-04-21 20:31:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,9 @@
 #include "sortparam.hxx"    // MAXSORT
 #endif
 
+#ifndef SC_REFRESHTIMER_HXX
+#include "refreshtimer.hxx"
+#endif
 
 //------------------------------------------------------------------------
 
@@ -83,7 +86,7 @@ class ScMultipleWriteHeader;
 
 //------------------------------------------------------------------------
 
-class ScDBData : public DataObject
+class ScDBData : public DataObject, public ScRefreshTimer
 {
 
 private:
@@ -236,6 +239,7 @@ public:
 
             void        SetExportIndex( USHORT nIdx )   { nExportIndex = nIdx; }
             USHORT      GetExportIndex() const      { return nExportIndex; }
+
 };
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-08 20:50:39 $
+ *  last change: $Author: er $ $Date: 2001-04-21 20:26:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,7 @@
 
 #include "document.hxx"
 #include "shellids.hxx"
+#include "refreshtimer.hxx"
 
 class ScEditEngineDefaulter;
 class FontList;
@@ -376,6 +377,9 @@ public:
     static ScDocShell* GetShellByNum( USHORT nDocNo );
     static String   GetOwnFilterName();
     static BOOL     HasAutomaticTableName( const String& rFilter );
+
+    DECL_LINK( RefreshDBDataHdl, ScDBData* );
+
 };
 
 SO2_DECL_REF(ScDocShell)
@@ -392,6 +396,7 @@ SO2_IMPL_REF(ScDocShell)
 class ScDocShellModificator
 {
             ScDocShell&     rDocShell;
+    ScRefreshTimerProtector aProtector;
             BOOL            bAutoCalcShellDisabled;
             BOOL            bIdleDisabled;
 

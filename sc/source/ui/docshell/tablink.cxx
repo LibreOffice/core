@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablink.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: er $ $Date: 2001-04-18 12:30:51 $
+ *  last change: $Author: er $ $Date: 2001-04-21 20:28:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,11 +103,11 @@ ScTableLink::ScTableLink(ScDocShell* pDocSh, const String& rFile,
                             const String& rFilter, const String& rOpt,
                             ULONG nRefresh ):
     ::so3::SvBaseLink(LINKUPDATE_ONCALL,FORMAT_FILE),
+    ScRefreshTimer( nRefresh ),
     pDocShell(pDocSh),
     aFileName(rFile),
     aFilterName(rFilter),
     aOptions(rOpt),
-    nRefreshDelay(nRefresh),
     bInCreate( FALSE ),
     bAddUndo( TRUE ),
     bDoPaint( TRUE )
@@ -118,21 +118,24 @@ ScTableLink::ScTableLink(SfxObjectShell* pShell, const String& rFile,
                             const String& rFilter, const String& rOpt,
                             ULONG nRefresh ):
     ::so3::SvBaseLink(LINKUPDATE_ONCALL,FORMAT_FILE),
+    ScRefreshTimer( nRefresh ),
     pDocShell((ScDocShell*)pShell),
     aFileName(rFile),
     aFilterName(rFilter),
     aOptions(rOpt),
-    nRefreshDelay(nRefresh),
     bInCreate( FALSE ),
     bAddUndo( TRUE ),
     bDoPaint( TRUE )
 {
+    SetRefreshHandler( LINK( this, ScTableLink, RefreshHdl ) );
+    SetRefreshControl( pDocShell->GetDocument()->GetRefreshTimerControlAddress() );
 }
 
 __EXPORT ScTableLink::~ScTableLink()
 {
     // Verbindung aufheben
 
+    StopRefreshTimer();
     String aEmpty;
     ScDocument* pDoc = pDocShell->GetDocument();
     USHORT nCount = pDoc->GetTableCount();
@@ -172,7 +175,7 @@ void __EXPORT ScTableLink::DataChanged( const String&,
         ScDocumentLoader::RemoveAppPrefix( aFilter );
 
         if (!bInCreate)
-            Refresh( aFile, aFilter, NULL, nRefreshDelay ); // don't load twice
+            Refresh( aFile, aFilter, NULL, GetRefreshDelay() ); // don't load twice
     }
 }
 
@@ -282,7 +285,7 @@ BOOL ScTableLink::Refresh(const String& rNewFile, const String& rNewFilter,
                 pDoc->CopyToDocument(aRange, IDF_ALL, FALSE, pUndoDoc);
                 pUndoDoc->TransferDrawPage( pDoc, nTab, nTab );
                 pUndoDoc->SetLink( nTab, nMode, aFileName, aFilterName,
-                    aOptions, aTabName, nRefreshDelay );
+                    aOptions, aTabName, GetRefreshDelay() );
             }
 
             //  Tabellenname einer ExtDocRef anpassen
@@ -326,7 +329,7 @@ BOOL ScTableLink::Refresh(const String& rNewFile, const String& rNewFilter,
 
             if ( bNewUrlName || rNewFilter != aFilterName ||
                     aNewOpt != aOptions || pNewOptions ||
-                    nNewRefresh != nRefreshDelay )
+                    nNewRefresh != GetRefreshDelay() )
                 pDoc->SetLink( nTab, nMode, aNewUrl, rNewFilter, aNewOpt,
                     aTabName, nNewRefresh );
         }
@@ -376,6 +379,14 @@ BOOL ScTableLink::Refresh(const String& rNewFile, const String& rNewFilter,
 
     return TRUE;
 }
+
+
+IMPL_LINK( ScTableLink, RefreshHdl, ScTableLink*, pCaller )
+{
+    long nRes = Refresh( aFileName, aFilterName, NULL, GetRefreshDelay() ) != 0;
+    return nRes;
+}
+
 
 // === ScDocumentLoader ==================================================
 
