@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipOutputStream.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-27 14:56:06 $
+ *  last change: $Author: mtg $ $Date: 2001-05-08 13:59:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,9 @@
 #ifndef _OSL_TIME_H_
 #include <osl/time.h>
 #endif
+#ifndef _ENCRYPTION_DATA_HXX_
+#include <EncryptionData.hxx>
+#endif
 
 using namespace rtl;
 using namespace com::sun::star;
@@ -90,6 +93,7 @@ ZipOutputStream::ZipOutputStream( uno::Reference < io::XOutputStream > &xOStream
 , bEncryptCurrentEntry(sal_False)
 , aBuffer(nNewBufferSize)
 , aDeflater(DEFAULT_COMPRESSION, sal_True)
+, nCurrentDataBegin ( 0 )
 {
 }
 
@@ -115,24 +119,6 @@ void SAL_CALL ZipOutputStream::setLevel( sal_Int32 nNewLevel )
     aDeflater.setLevel( nNewLevel);
 }
 
-Sequence < sal_Int8 > ZipOutputStream::getInitialisationVector()
-{
-    Sequence < sal_Int8 > aSequence( 8 );
-    TimeValue aTimeVal;
-    sal_Int8 * pVector = aSequence.getArray();
-    osl_getSystemTime( &aTimeVal );
-
-    pVector[0] = static_cast < sal_Int8 > ( (aTimeVal.Seconds >> 0 )  & 0xFF );
-    pVector[1] = static_cast < sal_Int8 > ( (aTimeVal.Seconds >> 8 )  & 0xFF );
-    pVector[2] = static_cast < sal_Int8 > ( (aTimeVal.Seconds >> 16 ) & 0xFF );
-    pVector[3] = static_cast < sal_Int8 > ( (aTimeVal.Seconds >> 24 ) & 0xFF );
-    pVector[4] = static_cast < sal_Int8 > ( (aTimeVal.Nanosec >> 0 )  & 0xFF );
-    pVector[5] = static_cast < sal_Int8 > ( (aTimeVal.Nanosec >> 8 )  & 0xFF );
-    pVector[6] = static_cast < sal_Int8 > ( (aTimeVal.Nanosec >> 16 ) & 0xFF );
-    pVector[7] = static_cast < sal_Int8 > ( (aTimeVal.Nanosec >> 24 ) & 0xFF );
-    return aSequence;
-}
-
 void SAL_CALL ZipOutputStream::putNextEntry( packages::ZipEntry& rEntry,
                         const vos::ORef < EncryptionData > &xEncryptData,
                         sal_Bool bEncrypt)
@@ -154,24 +140,23 @@ void SAL_CALL ZipOutputStream::putNextEntry( packages::ZipEntry& rEntry,
 
     rEntry.nOffset = static_cast < sal_Int32 > (aChucker.getPosition());
     writeLOC(rEntry);
+    nCurrentDataBegin = static_cast < sal_Int32 > (aChucker.getPosition());
     aZipList.push_back( &rEntry );
     pCurrentEntry = &rEntry;
-    /* Don't have encryption code yet...
+
     if (bEncrypt)
     {
-
         bEncryptCurrentEntry = sal_True;
         rtlCipherError aResult;
 
         aCipher = rtl_cipher_create ( rtl_Cipher_AlgorithmBF, rtl_Cipher_ModeStream);
         aResult = rtl_cipher_init( aCipher, rtl_Cipher_DirectionEncode,
-                            reinterpret_cast < const sal_uInt8 *> (rKey.getConstArray()),
-                            rKey.getLength(),
-                            reinterpret_cast < const sal_uInt8 *> (rVector.getConstArray()),
-                            rVector.getLength());
+                            reinterpret_cast < const sal_uInt8 * > (xEncryptData->aKey.getConstArray()),
+                            xEncryptData->aKey.getLength(),
+                            xEncryptData->aInitVector.getConstArray(),
+                            xEncryptData->aInitVector.getLength());
         OSL_ASSERT( aResult == rtl_Cipher_E_None );
     }
-    */
 }
 void SAL_CALL ZipOutputStream::close(  )
     throw(io::IOException, uno::RuntimeException)
@@ -214,7 +199,33 @@ void SAL_CALL ZipOutputStream::closeEntry(  )
                     pEntry->nSize = aDeflater.getTotalIn();
                     pEntry->nCompressedSize = aDeflater.getTotalOut();
                     pEntry->nCrc = aCRC.getValue();
-                    writeEXT(*pEntry);
+                    // writeEXT(*pEntry);
+                    // Let's seek back and re-write the LOC header correctly
+                    // Also, if it's an encrypted stream, we need to flag
+                    // the method type as STORED instead of DEFLATED or
+                    // no standard tools will be able to read them!
+                    // - mtg
+
+                    pEntry->nFlag    =  0;
+                    pEntry->nVersion = 10;
+                    if ( bEncryptCurrentEntry )
+                    {
+                        pEntry->nMethod = STORED;
+                        pEntry->nSize = pEntry->nCompressedSize;
+                    }
+                    sal_Int64 nPos = aChucker.getPosition();
+
+                    aChucker.seek( pEntry->nOffset );
+                    aChucker << LOCSIG;
+                    aChucker << pEntry->nVersion;
+                    aChucker << pEntry->nFlag;
+                    aChucker << pEntry->nMethod;
+                    aChucker << static_cast < sal_uInt32 > (pEntry->nTime);
+                    aChucker << static_cast < sal_uInt32 > (pEntry->nCrc);
+                    aChucker << pEntry->nCompressedSize;
+                    aChucker << pEntry->nSize;
+
+                    aChucker.seek( nPos );
                 }
                 aDeflater.reset();
                 break;
@@ -223,14 +234,16 @@ void SAL_CALL ZipOutputStream::closeEntry(  )
                 pEntry->nCrc = aCRC.getValue();
                 if (!((pEntry->nFlag & 8) == 0))
                 {
-                    //writeEXT(*pEntry);
+                    // writeEXT(*pEntry);
                     // instead of writing a data descriptor (due to the fact
                     // that the 'jar' tool doesn't like data descriptors
                     // for STORED streams), we seek back and update the LOC
-                    // header. We could do this for DEFLATED entries also
+                    // header.
+
                     pEntry->nFlag    =  0;
                     pEntry->nVersion = 10;
-                    sal_Int64 nPos = aChucker.getPosition();
+                    sal_Int64 nPos = aChucker.getPosition(), nSize = aChucker.getPosition() - nCurrentDataBegin;
+                    pEntry->nCompressedSize = pEntry->nSize = static_cast < sal_Int32 > (nSize);
 
                     aChucker.seek( pEntry->nOffset );
                     aChucker << LOCSIG;
@@ -264,8 +277,10 @@ void SAL_CALL ZipOutputStream::closeEntry(  )
         {
             aEncryptionBuffer.realloc ( 0 );
             bEncryptCurrentEntry = sal_False;
+            rtl_cipher_destroy ( aCipher );
         }
         pCurrentEntry = NULL;
+        nCurrentDataBegin = 0;
     }
 }
 
@@ -280,6 +295,8 @@ void SAL_CALL ZipOutputStream::write( const uno::Sequence< sal_Int8 >& rBuffer, 
                 aDeflater.setInputSegment(rBuffer, nNewOffset, nNewLength);
                  while (!aDeflater.needsInput())
                     doDeflate();
+                if (!bEncryptCurrentEntry)
+                    aCRC.updateSegment(rBuffer, nNewOffset, nNewLength);
             }
             break;
         case STORED:
@@ -293,14 +310,18 @@ void SAL_CALL ZipOutputStream::write( const uno::Sequence< sal_Int8 >& rBuffer, 
                 aResult = rtl_cipher_encode ( aCipher, static_cast < const void * > (pBuffer->getConstArray()),
                                               nNewLength, reinterpret_cast < sal_uInt8 * > (aEncryptionBuffer.getArray()),  nNewLength );
                 aChucker.writeBytes ( aEncryptionBuffer );
+                aCRC.updateSegment( aEncryptionBuffer, nNewOffset, nNewLength);
                 aEncryptionBuffer.realloc ( nOldLength );
             }
             else
+            {
                 aChucker.writeBytes( *pBuffer );
+                aCRC.updateSegment(rBuffer, nNewOffset, nNewLength);
+            }
             pBuffer->realloc(nOldLength);
             break;
     }
-    aCRC.updateSegment(rBuffer, nNewOffset, nNewLength);
+
 }
 void SAL_CALL ZipOutputStream::rawWrite( const uno::Sequence< sal_Int8 >& rBuffer)
     throw(io::IOException, uno::RuntimeException)
@@ -348,6 +369,7 @@ void ZipOutputStream::doDeflate()
             aResult = rtl_cipher_encode ( aCipher, static_cast < const void * > (aBuffer.getConstArray()),
                                             nLength, reinterpret_cast < sal_uInt8 * > (aEncryptionBuffer.getArray()),  nLength );
             aChucker.writeBytes ( aEncryptionBuffer );
+            aCRC.update ( aEncryptionBuffer );
             aEncryptionBuffer.realloc ( nOldLength );
         }
         else
