@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xattr.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 13:21:43 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 11:09:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5397,7 +5397,7 @@ SvStream& XFillAttrSetItem::Store( SvStream& rStream, USHORT nItemVersion ) cons
 }
 
 
-TYPEINIT1(XTextAttrSetItem, SfxSetItem);
+//BFS01TYPEINIT1(XTextAttrSetItem, SfxSetItem);
 
 /*************************************************************************
 |*
@@ -5405,33 +5405,33 @@ TYPEINIT1(XTextAttrSetItem, SfxSetItem);
 |*
 \************************************************************************/
 
-XTextAttrSetItem::XTextAttrSetItem( SfxItemSet* pItemSet ) :
-    SfxSetItem( XATTRSET_TEXT, pItemSet)
-{
-}
+//BFS01XTextAttrSetItem::XTextAttrSetItem( SfxItemSet* pItemSet ) :
+//BFS01 SfxSetItem( XATTRSET_TEXT, pItemSet)
+//BFS01{
+//BFS01}
 
 /************************************************************************/
 
-XTextAttrSetItem::XTextAttrSetItem( SfxItemPool* pItemPool ) :
-    SfxSetItem( XATTRSET_TEXT,
-        new SfxItemSet( *pItemPool, XATTR_TEXT_FIRST, XATTR_TEXT_LAST))
-{
-}
+//BFS01XTextAttrSetItem::XTextAttrSetItem( SfxItemPool* pItemPool ) :
+//BFS01 SfxSetItem( XATTRSET_TEXT,
+//BFS01     new SfxItemSet( *pItemPool, XATTR_TEXT_FIRST, XATTR_TEXT_LAST))
+//BFS01{
+//BFS01}
 
 /************************************************************************/
 
-XTextAttrSetItem::XTextAttrSetItem( const XTextAttrSetItem& rTextAttr ) :
-    SfxSetItem( rTextAttr )
-{
-}
+//BFS01XTextAttrSetItem::XTextAttrSetItem( const XTextAttrSetItem& rTextAttr ) :
+//BFS01 SfxSetItem( rTextAttr )
+//BFS01{
+//BFS01}
 
 /************************************************************************/
 
-XTextAttrSetItem::XTextAttrSetItem( const XTextAttrSetItem& rTextAttr,
-                                    SfxItemPool* pItemPool ) :
-    SfxSetItem( rTextAttr, pItemPool )
-{
-}
+//BFS01XTextAttrSetItem::XTextAttrSetItem( const XTextAttrSetItem& rTextAttr,
+//BFS01                                 SfxItemPool* pItemPool ) :
+//BFS01 SfxSetItem( rTextAttr, pItemPool )
+//BFS01{
+//BFS01}
 
 /*************************************************************************
 |*
@@ -5439,10 +5439,10 @@ XTextAttrSetItem::XTextAttrSetItem( const XTextAttrSetItem& rTextAttr,
 |*
 \************************************************************************/
 
-SfxPoolItem* XTextAttrSetItem::Clone( SfxItemPool* pPool ) const
-{
-    return new XTextAttrSetItem( *this, pPool );
-}
+//BFS01SfxPoolItem* XTextAttrSetItem::Clone( SfxItemPool* pPool ) const
+//BFS01{
+//BFS01 return new XTextAttrSetItem( *this, pPool );
+//BFS01}
 
 /*************************************************************************
 |*
@@ -5450,13 +5450,13 @@ SfxPoolItem* XTextAttrSetItem::Clone( SfxItemPool* pPool ) const
 |*
 \************************************************************************/
 
-SfxPoolItem* XTextAttrSetItem::Create( SvStream& rStream, USHORT nVersion ) const
-{
-    SfxItemSet *pSet = new SfxItemSet( *GetItemSet().GetPool(),
-                                    XATTR_TEXT_FIRST, XATTR_TEXT_LAST);
-    pSet->Load( rStream );
-    return new XTextAttrSetItem( pSet );
-}
+//BFS01SfxPoolItem* XTextAttrSetItem::Create( SvStream& rStream, USHORT nVersion ) const
+//BFS01{
+//BFS01 SfxItemSet *pSet = new SfxItemSet( *GetItemSet().GetPool(),
+//BFS01                                 XATTR_TEXT_FIRST, XATTR_TEXT_LAST);
+//BFS01 pSet->Load( rStream );
+//BFS01 return new XTextAttrSetItem( pSet );
+//BFS01}
 
 /*************************************************************************
 |*
@@ -5464,10 +5464,10 @@ SfxPoolItem* XTextAttrSetItem::Create( SvStream& rStream, USHORT nVersion ) cons
 |*
 \************************************************************************/
 
-SvStream& XTextAttrSetItem::Store( SvStream& rStream, USHORT nItemVersion ) const
-{
-    return SfxSetItem::Store( rStream, nItemVersion );
-}
+//BFS01SvStream& XTextAttrSetItem::Store( SvStream& rStream, USHORT nItemVersion ) const
+//BFS01{
+//BFS01 return SfxSetItem::Store( rStream, nItemVersion );
+//BFS01}
 
 
 
