@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtundo.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 14:14:01 $
+ *  last change: $Author: kz $ $Date: 2004-06-11 15:24:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,24 +96,26 @@
 
 void SwWrtShell::Do( DoType eDoType, USHORT nCnt )
 {
-    // #105332# save current state of DoesUndo() and disable undo.
+    // #105332# save current state of DoesUndo()
     sal_Bool bSaveDoesUndo = DoesUndo();
 
-    DoUndo(sal_False);
     StartAllAction();
     switch( eDoType )
     {
         case UNDO:
+            DoUndo(sal_False); // #i21739#
             // Modi zuruecksetzen
             EnterStdMode();
             SwEditShell::Undo(0, nCnt );
             break;
         case REDO:
+            DoUndo(sal_False); // #i21739#
             // Modi zuruecksetzen
             EnterStdMode();
             SwEditShell::Redo( nCnt );
             break;
         case REPEAT:
+            // #i21739# do not touch undo flag here !!!
             SwEditShell::Repeat( nCnt );
             break;
     }
