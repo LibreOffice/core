@@ -3,8 +3,8 @@
 #*    $Workfile:   tg_app.mk  $
 #*
 #*    Ersterstellung    XX  TT.MM.JJ
-#*    Letzte Aenderung  $Author: hjs $ $Date: 2000-12-07 12:14:42 $
-#*    $Revision: 1.10 $
+#*    Letzte Aenderung  $Author: hjs $ $Date: 2000-12-21 20:26:38 $
+#*    $Revision: 1.11 $
 #*
 #*    $Logfile:   T:/solar/inc/tg_app.mkv  $
 #*
@@ -73,7 +73,7 @@ USE_APP$(TNR)DEF=
 .ENDIF
 
 .IF "$(GUI)" == "UNX"
-APP$(TNR)DEPN=
+APP$(TNR)DEPN+:=$(APP$(TNR)DEPNU)
 USE_APP$(TNR)DEF=
 .ENDIF
 
