@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_xpeer.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hdu $ $Date: 2001-11-19 15:09:45 $
+ *  last change: $Author: hdu $ $Date: 2001-11-26 12:06:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,7 +177,7 @@ void X11GlyphPeer::SetDisplay( Display* _pDisplay, Visual* _pVisual )
 
     // the 8bit alpha mask format must be there
     XRenderPictFormat aPictFormat={0,0,8,{0,0,0,0,0,0,0,0xFF},0};
-    mpGlyphFormat = (*pXRenderFindFormat)( mpDisplay, 0, &aPictFormat, 1 );
+    mpGlyphFormat = (*pXRenderFindFormat)( mpDisplay, PictFormatAlphaMask, &aPictFormat, 1 );
 
     if( mpGlyphFormat != NULL )
     {
