@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyids.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-24 15:13:05 $
+ *  last change: $Author: hr $ $Date: 2000-10-31 11:04:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,7 +199,7 @@ namespace connectivity
     // error msg
     DECLARE_CONSTASCII_USTRING(STAT_INVALID_INDEX,CONNECTIVITY_PROPERTY_NAME_SPACE)
     DECLARE_CONSTASCII_USTRING(ERRORMSG_SEQUENCE,CONNECTIVITY_PROPERTY_NAME_SPACE)
-    DECLARE_CONSTASCII_USTRING(SQLSTATE_SEQUENCE,CONNECTIVITY_PROPERTY_NAME_SPACE);
+    DECLARE_CONSTASCII_USTRING(SQLSTATE_SEQUENCE,CONNECTIVITY_PROPERTY_NAME_SPACE)
 
     }
 }
