@@ -2,9 +2,9 @@
  *
  *  $RCSfile: recorder.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 13:43:24 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 11:39:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -356,7 +356,7 @@ IMPL_LINK( MacroRecorder, EventListener, VclSimpleEvent*, pEvent )
                                         ButtonDialog* pBD = (ButtonDialog*)pParent;
 
                                         // we have to find the current Button ID ourselves since it is not generated at this point :-(
-                                        USHORT nCurrentButtonId = 99999;    // Some wild value to wak up people
+                                        USHORT nCurrentButtonId = 0xffff;    // Some wild value to wak up people
                                         int i;
                                         for ( i = 0; i < pBD->GetButtonCount() ; i++ )
                                         {
@@ -725,9 +725,9 @@ IMPL_LINK( MacroRecorder, EventListener, VclSimpleEvent*, pEvent )
                 {
     DBG_TRACE3( "TT_VCLMessage %u %u  %X",nEventID, pWin->GetType(), pWin );
                     FloatingWindow *pFW = ((FloatingWindow*)pWin);
-                    switch( nEventID )
+/*                  switch( nEventID )
                     {
-/*
+
 // M_OpenMenu an einem ToolboxButton
                         case VCLEVENT_WINDOW_SHOW:
                             if ( pActionParent )
@@ -742,9 +742,9 @@ IMPL_LINK( MacroRecorder, EventListener, VclSimpleEvent*, pEvent )
                                 bSendData = TRUE;
                             }
                             break;
-  */
+
                     }
-                }
+  */              }
                 break;
 /*
                     case M_AnimateMouse :
