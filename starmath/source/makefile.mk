@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: mtg $ $Date: 2001-05-16 11:55:01 $
+#   last change: $Author: hjs $ $Date: 2001-11-29 13:16:22 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,13 +75,8 @@ PROJECTPCHSOURCE=math_pch
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
-
-.INCLUDE :  $(UPD)minor.mk
-RSCUPDVER=$(RSCREVISION)(SV$(UPD)$(UPDMINOR))
 
 IMGLST_SRS=$(SRS)$/smres.srs
 
@@ -131,47 +126,24 @@ LIB2ARCHIV =    $(LB)$/libysm.a
 LIB2OBJFILES  =    $(SLO)$/smlib.obj
 
 DEPOBJFILES = $(SLO)$/smlib.obj
-# --- UNO stuff ---------------------------------------------------
-
-CPPUMAKERFLAGS=
-UNOUCRDEP=  $(SOLARBINDIR)$/offapi.rdb
-UNOUCRRDB=  $(SOLARBINDIR)$/offapi.rdb
-
-UNOTYPES=\
-    com.sun.star.formula.SymbolDescriptor
-
 
 # --- Targets -------------------------------------------------------
-
-.IF "$(depend)" == ""
-
-ALL:	\
-        $(INCCOM)$/dllname.hxx	\
-        ALLTAR
 
 .IF "$(GUI)"=="UNX" || "$(GUI)"=="MAC"
 CDEFS+=-DUSE_POLYGON
 .ENDIF
 
+.INCLUDE :  target.mk
+
+$(SLO)$/smlib.obj : $(INCCOM)$/dllname.hxx
+
 $(INCCOM)$/dllname.hxx: makefile.mk
-.IF "$(GUI)"=="OS2"
-    echo #define DLL_NAME "sm$(UPD)$(DLLPOSTFIX)" >$@
-.ELSE
-.IF "$(GUI)"=="MAC"
-    echo "$(HASHMARK)define DLL_NAME ¶"sm$(UPD)$(DLLPOSTFIX).dll¶"" > $@
-.ELSE
 .IF "$(GUI)"=="UNX"
     $(RM) $@
     echo #define DLL_NAME \"libsm$(UPD)$(DLLPOSTFIX)$(DLLPOST)\" >$@
 .ELSE
     echo #define DLL_NAME "sm$(UPD)$(DLLPOSTFIX)$(DLLPOST)" >$@
 .ENDIF
-.ENDIF
-.ENDIF
-
-.ENDIF
-
-.INCLUDE :  target.mk
 
 $(SRS)$/smres.srs: $(SOLARINCDIR)$/svx$/globlmn.hrc
 
