@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpoption.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-09-28 18:03:08 $
+ *  last change: $Author: os $ $Date: 2001-03-22 14:13:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,38 +84,17 @@
 #ifndef _SFXTABDLG_HXX //autogen
 #include <sfx2/tabdlg.hxx>
 #endif
+#ifndef _SVX_OPTGRID_HXX
+#include <svx/optgrid.hxx>
+#endif
 
 /*************************************************************************
 |*
 |* Optionen-Tab-Page: Snap
 |*
 \************************************************************************/
-class SdTpOptionsSnap : public SfxTabPage
+class SdTpOptionsSnap : public SvxGridTabPage
 {
-private:
-    FixedInfo       aFiOrtho;
-    CheckBox        aCbxSnapGrid;
-    CheckBox        aCbxSnapHelplines;
-    CheckBox        aCbxSnapBorder;
-    CheckBox        aCbxSnapFrame;
-    CheckBox        aCbxSnapPoints;
-    FixedText       aFtSnapArea;
-    MetricField     aMtrFldSnapArea;
-    GroupBox        aGrpSnap;
-    FixedInfo       aFiSnap;
-    CheckBox        aCbxOrtho;
-    CheckBox        aCbxBigOrtho;
-    CheckBox        aCbxRotate;
-    MetricField     aMtrFldAngle;
-    FixedText       aFtBezAngle;
-    MetricField     aMtrFldBezAngle;
-    GroupBox        aGrpOrtho;
-
-    const SfxItemSet& rOutAttrs;
-    const SfxItemSet* pExampleSet;
-
-    DECL_LINK( ClickRotateHdl, void * );
-
 public:
             SdTpOptionsSnap( Window* pParent, const SfxItemSet& rInAttrs  );
             ~SdTpOptionsSnap();
@@ -124,48 +103,9 @@ public:
     virtual BOOL FillItemSet( SfxItemSet& );
     virtual void Reset( const SfxItemSet & );
 
-    virtual void ActivatePage( const SfxItemSet& rSet );
-    virtual int  DeactivatePage( SfxItemSet* pSet );
+//    virtual void ActivatePage( const SfxItemSet& rSet );
+//    virtual int  DeactivatePage( SfxItemSet* pSet );
 };
-
-/*************************************************************************
-|*
-|* Optionen-Tab-Page: Layout
-|*
-\************************************************************************/
-class SdTpOptionsLayout : public SfxTabPage
-{
-private:
-    CheckBox    aCbxRuler;
-    CheckBox    aCbxDragStripes;
-    CheckBox    aCbxHandlesBezier;
-    CheckBox    aCbxMoveOutline;
-    //CheckBox  aCbxHelplines;
-    GroupBox    aGrpDisplay;
-
-    ListBox     aLbMetric;
-    GroupBox    aGrpMetric;
-
-    MetricField aMtrFldTabstop;
-    GroupBox    aGrpTabstop;
-
-    const SfxItemSet& rOutAttrs;
-
-    DECL_LINK( SelectMetricHdl_Impl, ListBox * );
-
-protected:
-    virtual void ActivatePage( const SfxItemSet& rSet );
-    virtual int DeactivatePage( SfxItemSet* pSet );
-
-public:
-            SdTpOptionsLayout( Window* pParent, const SfxItemSet& rInAttrs  );
-            ~SdTpOptionsLayout();
-
-    static  SfxTabPage* Create( Window*, const SfxItemSet& );
-    virtual BOOL FillItemSet( SfxItemSet& );
-    virtual void Reset( const SfxItemSet & );
-};
-
 /*************************************************************************
 |*
 |* Optionen-Tab-Page: Contents (Inhalte)
@@ -174,13 +114,18 @@ public:
 class SdTpOptionsContents : public SfxTabPage
 {
 private:
+    FixedLine aGrpViewSubstitute;
     CheckBox aCbxExternGraphic;
     CheckBox aCbxOutlineMode;
     CheckBox aCbxNoText;
     CheckBox aCbxHairlineMode;
-    GroupBox aGrpViewSubstitute;
 
-    const SfxItemSet& rOutAttrs;
+    FixedLine    aGrpDisplay;
+    CheckBox    aCbxRuler;
+    CheckBox    aCbxDragStripes;
+    CheckBox    aCbxHandlesBezier;
+    CheckBox    aCbxMoveOutline;
+
 
 public:
             SdTpOptionsContents( Window* pParent, const SfxItemSet& rInAttrs  );
@@ -203,24 +148,34 @@ class SdTpOptionsMisc : public SfxTabPage
  friend class SdModule;
 
 private:
-    CheckBox aCbxQuickEdit;
-    CheckBox aCbxPickThrough;
-    GroupBox aGrpText;
-    CheckBox aCbxStartWithTemplate;
-    GroupBox aGrpProgramStart;
+    FixedLine   aGrpText;
+    CheckBox    aCbxQuickEdit;
+    CheckBox    aCbxPickThrough;
 
-    CheckBox aCbxMasterPageCache;
-    GroupBox aGrpDisplay;
+    FixedLine   aGrpProgramStart;
+    CheckBox    aCbxStartWithTemplate;
 
-    CheckBox aCbxCopy;
-    CheckBox aCbxMarkedHitMovesAlways;
-    CheckBox aCbxCrookNoContortion;
-    GroupBox aGrpOther;
+    FixedLine   aGrpOther;
+    CheckBox    aCbxMasterPageCache;
+    CheckBox    aCbxCopy;
+    CheckBox    aCbxMarkedHitMovesAlways;
+    CheckBox    aCbxCrookNoContortion;
 
-    CheckBox        aCbxStartWithActualPage;
-    GroupBox        aGrpStartWithActualPage;
+    FixedLine   aGrpStartWithActualPage;
+    CheckBox    aCbxStartWithActualPage;
 
-    const SfxItemSet& rOutAttrs;
+    FixedLine   aGrpSettings;
+    FixedText   aTxtMetric;
+    ListBox     aLbMetric;
+
+    FixedText   aTxtTabstop;
+    MetricField aMtrFldTabstop;
+
+    DECL_LINK( SelectMetricHdl_Impl, ListBox * );
+
+protected:
+    virtual void ActivatePage( const SfxItemSet& rSet );
+    virtual int DeactivatePage( SfxItemSet* pSet );
 
 public:
             SdTpOptionsMisc( Window* pParent, const SfxItemSet& rInAttrs  );
@@ -229,6 +184,9 @@ public:
     static  SfxTabPage* Create( Window*, const SfxItemSet& );
     virtual BOOL FillItemSet( SfxItemSet& );
     virtual void Reset( const SfxItemSet & );
+
+    //hide impress and show draw controls
+    void    SetDrawMode();
 };
 
 

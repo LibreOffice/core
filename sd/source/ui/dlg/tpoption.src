@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpoption.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-21 21:18:33 $
+ *  last change: $Author: os $ $Date: 2001-03-22 14:15:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,811 +61,6 @@
 
 #include "tpoption.hrc"
 #include "helpids.h"
-TabPage TP_OPTIONS_SNAP
-{
-    HelpID = HID_SD_OPTIONS_SNAP ;
-    Pos = MAP_APPFONT ( 0 , 0  ) ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
-    Hide = TRUE;
-    Text = "Fangen/Einrasten" ;
-    Text [ ENGLISH ] = "Fangen/Einrasten" ;
-    Text [ NORWEGIAN ] = "Fangen/Einrasten" ;
-    Text [ DANISH ] = "Indfang/fastgør" ;
-    Text [ ENGLISH_US ] = "Snap To/Snap Position" ;
-    Text [ SPANISH ] = "Capturar/Encajar" ;
-    Text [ FINNISH ] = "Fangen/Einrasten" ;
-    Text [ FRENCH ] = "Capturer/Enclencher" ;
-    Text [ ITALIAN ] = "Cattura/aggancia" ;
-    Text [ DUTCH ] = "Vangen/Inrasteren" ;
-    Text [ PORTUGUESE_BRAZILIAN ] = "Fangen/Einrasten" ;
-    Text [ SWEDISH ] = "Infånga/Anpassa" ;
-    Text [ PORTUGUESE ] = "Captura/Encaixe" ;
-    FixedText FI_SNAP
-    {
-        Pos = MAP_APPFONT ( 12 , 14  ) ;
-        Size = MAP_APPFONT ( 106 , 33 ) ;
-        WordBreak = TRUE ;
-        Text = "Das Fangen bezieht sich sowohl auf das Erzeugen als auch auf das Bewegen von Grafikobjekten." ;
-        Text [ ENGLISH ] = "Snap To refers to the creation and movement of graphic objects." ;
-        Text [ NORWEGIAN ] = "Das Fangen bezieht sich sowohl auf das Erzeugen als auch auf das Bewegen von Grafikobjekten." ;
-        Text [ DANISH ] = "Indfang-funktionen refererer både til oprettelse og bevægelse af grafikobjekter." ;
-        Text [ ENGLISH_US ] = "Snap To refers to the creation and movement of graphic objects." ;
-        Text [ SPANISH ] = "La captura se refiere tanto a la creación como al desplazamiento de objetos gráficos." ;
-        Text [ FINNISH ] = "Das Fangen bezieht sich sowohl auf das Erzeugen als auch auf das Bewegen von Grafikobjekten." ;
-        Text [ FRENCH ] = "\"Capturer\" se réfère à la création et au déplacement d'objets graphiques." ;
-        Text [ ITALIAN ] = "Questa funzione viene applicata sia in fase di creazione che di spostamento degli oggetti grafici." ;
-        Text [ DUTCH ] = "Het vangen heeft betrekking op het creëren en het bewegen van de afbeeldingen." ;
-        Text [ PORTUGUESE_BRAZILIAN ] = "Das Fangen bezieht sich sowohl auf das Erzeugen als auch auf das Bewegen von Grafikobjekten." ;
-        Text [ SWEDISH ] = "Infånga refererar både till uppläggning och rörelse av grafiska objekt." ;
-        Text [ PORTUGUESE ] = "A captura refere-se à criação e ao movimento de objectos gráficos." ;
-        Text[ chinese_simplified ] = "¶ÔÆëÎ»ÖÃ²»½öÊÊÓÃÓÚÉú³ÉÍ¼ĞÎ¶ÔÏó£¬¶øÇÒÒ²ÊÊÓÃÓÚÒÆ¶¯Í¼ĞÎ¶ÔÏó¡£";
-        Text[ russian ] = "Ïğèâÿçêà îòíîñèòñÿ êàê ê ñîçäàíèş, òàê è ê ïåğåäâèæåíèş ãğàôè÷åñêèõ îáúåêòîâ.";
-        Text[ polish ] = "Zaczepianie odnosi siê zarówno do tworzenia jak i do przemieszczania obiektów graficznych.";
-        Text[ japanese ] = "ˆÊ’u‡‚í‚¹‹@”\\‚Í}Œ`•`‰æµÌŞ¼Şª¸Ä‚Ìì¬‚ÆˆÚ“®‚ÅA}Œ`‚Ì’²®‚Ég‚¦‚Ü‚·B";
-        Text[ chinese_traditional ] = "¹ï»ô¦ì¸m¤£¶È¾A¥Î©ó²£¥Í¹Ï§Îª«¥ó¡M¦Ó¥B¤]¾A¥Î©ó²¾°Ê¹Ï§Îª«¥ó¡C";
-        Text[ arabic ] = "íäØÈŞ ÇáÍÈÓ Úáì ßá ãä ÅäÔÇÁ æÊÍÑíß ßÇÆäÇÊ ÇáÑÓã.";
-        Text[ greek ] = "Ç 'ğñïóêüëëçóç' áíáöİñåôáé ôüóï óôç äçìéïõñãßá, üóï êáé óôç ìåôáêßíçóç ôùí áíôéêåéìİíùí ãñáöéêşí.";
-        Text[ korean ] = "¸ÂÃß±â´Â ±×·¡ÇÈ °³Ã¼ ÀÛ¼º/ÀÌµ¿ ¸ğµÎ¿Í °ü·ÃÀÌ ÀÖ½À´Ï´Ù.";
-        Text[ turkish ] = "Kavrama, nesnelerin oluşturulmasını ve taşınma sırasındaki hareketlerini belirler.";
-        Text[ language_user1 ] = " ";
-    };
-    CheckBox CBX_SNAP_GRID
-    {
-        Pos = MAP_APPFONT ( 12 , 51  ) ;
-        Size = MAP_APPFONT ( 106 , 10 ) ;
-        TabStop = TRUE ;
-        Text = "Am ~Raster" ;
-        Text [ ENGLISH ] = "Am Raster" ;
-        Text [ NORWEGIAN ] = "Am Raster" ;
-        Text [ DANISH ] = "På gitteret" ;
-        Text [ ENGLISH_US ] = "~Grid" ;
-        Text [ SPANISH ] = "En la ~cuadrícula" ;
-        Text [ FINNISH ] = "Am Raster" ;
-        Text [ FRENCH ] = "À la ~grille" ;
-        Text [ ITALIAN ] = "Alla griglia" ;
-        Text [ DUTCH ] = "Aan ~raster" ;
-        Text [ PORTUGUESE_BRAZILIAN ] = "Am Raster" ;
-        Text [ SWEDISH ] = "Vid ~raster" ;
-        Text [ PORTUGUESE ] = "Na quadrícula" ;
-        Text[ chinese_simplified ] = "Íø¸ñ(~G)";
-        Text[ russian ] = "Ê ñåòêå";
-        Text[ polish ] = "Przy r~astrze";
-        Text[ japanese ] = "¸ŞØ¯ÄŞ‚É(~G)";
-        Text[ chinese_traditional ] = "ºô®æ(~G)";
-        Text[ arabic ] = "İí ÇáÔÈßÉ";
-        Text[ greek ] = "Óôï ğëİãìá";
-        Text[ korean ] = "±¥¼±(~G)";
-        Text[ turkish ] = "Kılavuz çizgilerde";
-        Text[ language_user1 ] = " ";
-    };
-    CheckBox CBX_SNAP_HELPLINES
-    {
-        Pos = MAP_APPFONT ( 12 , 65  ) ;
-        Size = MAP_APPFONT ( 106 , 10 ) ;
-        TabStop = TRUE ;
-        Text = "An ~Fanglinien" ;
-        Text [ ENGLISH ] = "An Fanglinien" ;
-        Text [ NORWEGIAN ] = "An Fanglinien" ;
-        Text [ DANISH ] = "Til fanglinjer" ;
-        Text [ ENGLISH_US ] = "S~nap lines" ;
-        Text [ SPANISH ] = "En ~líneas de captura" ;
-        Text [ FINNISH ] = "An Fanglinien" ;
-        Text [ FRENCH ] = "Aux lignes de capture" ;
-        Text [ ITALIAN ] = "Alle linee di cattura" ;
-        Text [ DUTCH ] = "Aan ~vanglijnen" ;
-        Text [ PORTUGUESE_BRAZILIAN ] = "An Hilfslinien" ;
-        Text [ SWEDISH ] = "Vid ~stödlinjer" ;
-        Text [ PORTUGUESE ] = "Nas linhas auxiliares" ;
-        Text[ chinese_simplified ] = "×ø±êÏß(~O)";
-        Text[ russian ] = "Ê ëèíèÿì ïğèâÿçêè";
-        Text[ polish ] = "Przy liniach zaczep~u";
-        Text[ japanese ] = "½Å¯Ìß×²İ‚É(~O)";
-        Text[ chinese_traditional ] = "®y¼Ğ½u(~O)";
-        Text[ arabic ] = "İí ÎØæØ ÇáÍÈÓ";
-        Text[ greek ] = "Óå ãñáììİò ğñïóêüëëçóçò";
-        Text[ korean ] = "¸ÂÃã¼±¿¡£¨~N)";
-        Text[ turkish ] = "Kavrama çizgisinde";
-        Text[ language_user1 ] = " ";
-    };
-    CheckBox CBX_SNAP_BORDER
-    {
-        TabStop = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 79  ) ;
-        Size = MAP_APPFONT ( 106 , 10 ) ;
-        Text = "An den ~Seitenrändern" ;
-        Text [ ENGLISH ] = "An den Seitenrändern" ;
-        Text [ english_us ] = "~Page margins" ;
-        Text [ italian ] = "Ai margini delle pagine" ;
-        Text [ spanish ] = "En los ~márgenes de página" ;
-        Text [ french ] = "~Aux marges" ;
-        Text [ dutch ] = "Aan de ~marges" ;
-        Text [ swedish ] = "Vid ~marginalerna" ;
-        Text [ danish ] = "På sidemargenen" ;
-        Text [ portuguese ] = "Nas margens da página" ;
-        Text [ portuguese_brazilian ] = "An den Seitenrändern" ;
-        Text[ chinese_simplified ] = "Ò³±ß(~M)";
-        Text[ russian ] = "Ê ïîëÿì ñòğàíèöû";
-        Text[ polish ] = "Przy marginesach stron";
-        Text[ japanese ] = "Íß°¼Ş‚ÌŠO˜g(~M)";
-        Text[ chinese_traditional ] = "­¶Ãä(~M)";
-        Text[ arabic ] = "İí åæÇãÔ ÇáÕİÍÉ";
-        Text[ greek ] = "Óôá ğåñéèşñéá ôçò óåëßäáò";
-        Text[ korean ] = "ÂÊ ¿©¹é(~P)";
-        Text[ turkish ] = "Sayfa kenarlarında";
-        Text[ language_user1 ] = " ";
-    };
-    CheckBox CBX_SNAP_FRAME
-    {
-        Pos = MAP_APPFONT ( 12 , 93  ) ;
-        Size = MAP_APPFONT ( 106 , 10 ) ;
-        TabStop = TRUE ;
-        Text = "Am ~Objektrahmen" ;
-        Text [ ENGLISH ] = "Am Objektrahmen" ;
-        Text [ NORWEGIAN ] = "Am Objektrahmen" ;
-        Text [ DANISH ] = "På objektrammen" ;
-        Text [ ENGLISH_US ] = "Object ~frame" ;
-        Text [ SPANISH ] = "Al m~arco del objeto" ;
-        Text [ FINNISH ] = "Am Objektrahmen" ;
-        Text [ FRENCH ] = "Au ~cadre de l'objet" ;
-        Text [ ITALIAN ] = "Alla cornice dell'oggetto" ;
-        Text [ DUTCH ] = "Aan object~kader" ;
-        Text [ PORTUGUESE_BRAZILIAN ] = "Am Objektrahmen" ;
-        Text [ SWEDISH ] = "Vid ~objektram" ;
-        Text [ PORTUGUESE ] = "Na moldura do objecto" ;
-        Text[ chinese_simplified ] = "¶ÔÏó¿ò(~F)";
-        Text[ russian ] = "Ê ğàìêå îáúåêòà";
-        Text[ polish ] = "Przy ram~ce obiektu";
-        Text[ japanese ] = "µÌŞ¼Şª¸Ä˜g‚É(~F)";
-        Text[ chinese_traditional ] = "ª«¥ó®Ø(~F)";
-        Text[ arabic ] = "İí ßÇÏÑ ÇáßÇÆä";
-        Text[ greek ] = "Óôï ğëáßóéï áíôéêåéìİíïõ";
-        Text[ korean ] = "°³Ã¼ Æ²(~F)";
-        Text[ turkish ] = "Nesne çerçevesinde";
-        Text[ language_user1 ] = " ";
-    };
-    CheckBox CBX_SNAP_POINTS
-    {
-        Pos = MAP_APPFONT ( 12 , 107  ) ;
-        Size = MAP_APPFONT ( 106 , 10 ) ;
-        TabStop = TRUE ;
-        Text = "~An Objektpunkten" ;
-        Text [ ENGLISH ] = "An Objektpunkten" ;
-        Text [ NORWEGIAN ] = "An Objektpunkten" ;
-        Text [ DANISH ] = "På objektpunkterne" ;
-        Text [ ENGLISH_US ] = "Obje~ct points" ;
-        Text [ SPANISH ] = "En los ~puntos del objeto" ;
-        Text [ FINNISH ] = "An Objektpunkten" ;
-        Text [ FRENCH ] = "~Aux points de l'objet" ;
-        Text [ ITALIAN ] = "Ai punti dell'oggetto" ;
-        Text [ DUTCH ] = "Aan object~punten" ;
-        Text [ PORTUGUESE_BRAZILIAN ] = "An Objektpunkten" ;
-        Text [ SWEDISH ] = "Vid o~bjektpunkterna" ;
-        Text [ PORTUGUESE ] = "Nos ~pontos do objecto" ;
-        Text[ chinese_simplified ] = "¶ÔÏóµã(~P)";
-        Text[ russian ] = "~Ê òî÷êàì îáúåêòà";
-        Text[ polish ] = "Przy punktach obiektu";
-        Text[ japanese ] = "µÌŞ¼Şª¸Ä§Œä“_‚É(~P)";
-        Text[ chinese_traditional ] = "ª«¥óÂI(~P)";
-        Text[ arabic ] = "İí äŞÇØ ÇáßÇÆä";
-        Text[ greek ] = "Óôá óçìåßá áíôéêåéìİíïõ";
-        Text[ korean ] = "°³Ã¼ Á¡(~C)";
-        Text[ turkish ] = "Nesne noktalarında";
-        Text[ language_user1 ] = " ";
-    };
-    FixedText FT_SNAP_AREA
-    {
-        Pos = MAP_APPFONT ( 12 , 123  ) ;
-        Size = MAP_APPFONT ( 54 , 10 ) ;
-        Text = "Fang~bereich" ;
-        Text [ ENGLISH ] = "Fangbereich" ;
-        Text [ NORWEGIAN ] = "Fangbereich" ;
-        Text [ DANISH ] = "Fangområde" ;
-        Text [ ENGLISH_US ] = "~Snap range" ;
-        Text [ SPANISH ] = "Área de c~aptura" ;
-        Text [ FINNISH ] = "Fangbereich" ;
-        Text [ FRENCH ] = "~Zone de capture" ;
-        Text [ ITALIAN ] = "Area di cattura" ;
-        Text [ DUTCH ] = "Vang~bereik" ;
-        Text [ PORTUGUESE_BRAZILIAN ] = "Fangbereich" ;
-        Text [ SWEDISH ] = "Fångområde" ;
-        Text [ PORTUGUESE ] = "Área de captura" ;
-        Text[ chinese_simplified ] = "¶ÔÆë·¶Î§(~S)";
-        Text[ russian ] = "Îáëàñòü ïğèâÿçêè";
-        Text[ polish ] = "Obszar zaczepu";
-        Text[ japanese ] = "½Å¯Ìß”ÍˆÍ(~S)";
-        Text[ chinese_traditional ] = "¹ï»ô­S³ò(~S)";
-        Text[ arabic ] = "äØÇŞ ÇáÍÈÓ";
-        Text[ greek ] = "Åıñïò ğñïóêüëëçóçò";
-        Text[ korean ] = "¸ÂÃã ¹üÀ§(~S)";
-        Text[ turkish ] = "Kavrama aralığı";
-        Text[ language_user1 ] = " ";
-    };
-    MetricField MTR_FLD_SNAP_AREA
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 70 , 121  ) ;
-        Size = MAP_APPFONT ( 48 , 12 ) ;
-        TabStop = TRUE ;
-        Repeat = TRUE ;
-        Spin = TRUE ;
-        Minimum = 1 ;
-        Maximum = 50 ;
-        StrictFormat = TRUE ;
-        Unit = FUNIT_CUSTOM ;
-        First = 1 ;
-        Last = 999 ;
-        CustomUnitText = " Pixel" ;
-        CustomUnitText [ ENGLISH ] = " Pixel" ;
-        CustomUnitText [ NORWEGIAN ] = " Pixel" ;
-        CustomUnitText [ DANISH ] = "pixler" ;
-        CustomUnitText [ ENGLISH_US ] = "Pixels" ;
-        CustomUnitText [ SPANISH ] = "Píxel" ;
-        CustomUnitText [ FINNISH ] = " Pixel" ;
-        CustomUnitText [ FRENCH ] = " Pixels" ;
-        CustomUnitText [ ITALIAN ] = "Pixel" ;
-        CustomUnitText [ DUTCH ] = "Pixels" ;
-        CustomUnitText [ PORTUGUESE_BRAZILIAN ] = "Pixel" ;
-        CustomUnitText [ SWEDISH ] = " pixel" ;
-        CustomUnitText [ PORTUGUESE ] = "Pixel" ;
-        CustomUnitText[ chinese_simplified ] = "ÏñËØ";
-        CustomUnitText[ russian ] = "ïèêñåëü";
-        CustomUnitText[ polish ] = "Piksel";
-        CustomUnitText[ japanese ] = "Ëß¸¾Ù";
-        CustomUnitText[ chinese_traditional ] = "¦ì¹Ï¯À";
-        CustomUnitText[ arabic ] = "ÈßÓá";
-        CustomUnitText[ greek ] = "Pixel";
-        CustomUnitText[ korean ] = "ÇÈ¼¿";
-        CustomUnitText[ turkish ] = "Piksel";
-        CustomUnitText[ language_user1 ] = " ";
-    };
-    GroupBox GRP_SNAP
-    {
-        Pos = MAP_APPFONT ( 6 , 3  ) ;
-        Size = MAP_APPFONT ( 119 , 136 ) ;
-        Text = "Fangen" ;
-        Text [ ENGLISH ] = "Fangen" ;
-        Text [ NORWEGIAN ] = "Fangen" ;
-        Text [ DANISH ] = "Indfang" ;
-        Text [ ENGLISH_US ] = "Snap to" ;
-        Text [ SPANISH ] = "Capturar" ;
-        Text [ FINNISH ] = "Fangen" ;
-        Text [ FRENCH ] = "Capturer" ;
-        Text [ ITALIAN ] = "Cattura" ;
-        Text [ DUTCH ] = "Vangen" ;
-        Text [ PORTUGUESE_BRAZILIAN ] = "Fangen" ;
-        Text [ SWEDISH ] = "Infånga" ;
-        Text [ PORTUGUESE ] = "Captura" ;
-        Text[ chinese_simplified ] = "¶ÔÆë";
-        Text[ russian ] = "Ïğèâÿçàòü";
-        Text[ polish ] = "Zaczep";
-        Text[ japanese ] = "ˆÊ’u‡‚í‚¹";
-        Text[ chinese_traditional ] = "¹ï»ô";
-        Text[ arabic ] = "ÇáÍÈÓ";
-        Text[ greek ] = "Ğñïóêüëëçóç";
-        Text[ korean ] = "¸ÂÃß±â";
-        Text[ turkish ] = "Kavrama";
-        Text[ language_user1 ] = " ";
-    };
-    FixedText FI_ORTHO
-    {
-        Pos = MAP_APPFONT ( 136 , 14  ) ;
-        Size = MAP_APPFONT ( 112 , 59 ) ;
-        WordBreak = TRUE ;
-        Text = "Mit Einrasten legen Sie fest, ob ein Objekt beim Bewegen horizontal, vertikal oder diagonal (45 Grad) festgehalten wird. \nBeim Erzeugen wird aus einem Rechteck ein Quadrat oder aus einer Ellipse ein Kreis." ;
-        Text [ ENGLISH ] = "Mit Einrasten legen Sie fest, ob ein Objekt beim Bewegen horizontal, vertikal oder diagonal (45 Grad) festgehalten wird. \nBeim Erzeugen wird aus einem Rechteck ein Quadrat oder aus einer Ellipse ein Kreis." ;
-        Text [ NORWEGIAN ] = "Mit Einrasten legen Sie fest, ob ein Objekt beim Bewegen horizontal, vertikal oder diagonal (45 Grad) festgehalten wird. \nBeim Erzeugen wird aus einem Rechteck ein Quadrat oder aus einer Ellipse ein Kreis." ;
-        Text [ DANISH ] = "Med Fastgør definerer du, om et objekt skal fastgøres vandret, lodret eller diagonalt (45 grader) under bevægelsen. \nVed oprettelsen bliver et rektangel til et kvadrat og en ellipse til en cirkel." ;
-        Text [ ENGLISH_US ] = "Snap Position determines if an object is to have a fixed movement range; horizontal, vertical and diagonal (45°). \nFurthermore when creating an object, a rectangle will change to a square and an ellipse to a circle." ;
-        Text [ SPANISH ] = "Aquí puede determinar si al mover un objeto este se fija horizontal, vertical o diagonalmente (45 grados).\nAl crear se transforma un rectángulo en un cuadrado o una elipse en un círculo." ;
-        Text [ FINNISH ] = "Mit Einrasten legen Sie fest, ob ein Objekt beim Bewegen horizontal, vertikal oder diagonal (45 Grad) festgehalten wird. \nBeim Erzeugen wird aus einem Rechteck ein Quadrat oder aus einer Ellipse ein Kreis." ;
-        Text [ FRENCH ] = "Cette fonction vous permet de définir si l'enclenchement d'un objet sera horizontal, vertical ou diagonal (45 degrés). \nLors de la création d'un objet, un rectangle sera automatiquement transformé en carré ou une ellipse en cercle." ;
-        Text [ ITALIAN ] = "Con questa funzione stabilite se un oggetto che viene spostato debba essere bloccato in orizzontale, verticale o diagonale (45°).\nNel creare un oggetto si ottiene un quadrato da un rettangolo e un cerchio da un'ellisse." ;
-        Text [ DUTCH ] = "Bij het inrasteren wordt bepaald of een object bij het bewegen horizontaal, verticaal of diagonaal (45 graden) wordt vastgehouden.\nBij het maken van een object verandert een vierhoek in een vierkant of een ellips in een cirkel. " ;
-        Text [ PORTUGUESE_BRAZILIAN ] = "Mit Einrasten legen Sie fest, ob ein Objekt beim Bewegen horizontal, vertikal oder diagonal (45 Grad) festgehalten wird. \nBeim Erzeugen wird aus einem Rechteck ein Quadrat oder aus einer Ellipse ein Kreis." ;
-        Text [ SWEDISH ] = "Med Anpassa till stödraster definierar Du om ett objekt fixeras horisontellt, vertikalt eller diagonalt (45 grader) under rörelse.\nNär en rektangel skapas blir den en kvadrat och en ellips blir en cirkel." ;
-        Text [ PORTUGUESE ] = "O encaixe define se o objecto será alinhado na horizontal, na vertical ou diagonal (45 graus).\nAo criar um rectângulo este será transformado em quadrado e uma elipse será transformada em círculo." ;
-        Text[ chinese_simplified ] = "½èÖú¶ÔÆëÎ»ÖÃÄúÄÜ¹»¶¨ÒåÒ»¸ö¶ÔÏóÊÇ·ñË®Æ½£¬´¹Ö±»òÕß¶Ô½Ç(45¶È)ÒÆ¶¯¡£ÔÚÒÆ¶¯¶ÔÏóÊ±Ò»¸ö³¤·½ĞÎ±ä³ÉÒ»¸öÕı·½ĞÎ»òÕßÒ»¸öÔ²ĞÎ±ä³ÉÒ»¸öÍÖÔ²ĞÎ¡£";
-        Text[ russian ] = "Ñ ïîìîùüş ïğèâÿçêè ê ñåòêå Âû ìîæåòå óñòàíîâèòü, â êàêîé ïîçèöèè ãîğèçîíòàëüíî, âåğòèêàëüíî èëè äèàãîíàëüíî (ïîä óãëîì 45 ãğàäóñîâ) äîëæåí áûòü çàôèêñèğîâàí îáúåêò ïğè ïåğåìåùåíèè. \nÏğè ñîçäàíèè ïğÿìîóãîëüíèê ïğåâğàòèòñÿ â êâàäğàò, à ıëëèïñ ïğåâğàòèòñÿ â êğóã.";
-        Text[ polish ] = "Pozycja Zaskocz okreœla, czy obiekt przy przesuwaniu zachowa po³o¿enie poziome, pionowe lub po przek¹tnej (45 stopni). \nPrzy tworzeniu obiektu z prostok¹ta powstanie kwadrat, a z elipsy ko³o.";
-        Text[ japanese ] = "µÌŞ¼Şª¸Ä‚ğˆÚ“®‚³‚¹‚é‚Æ‚«Aã‰º¶‰EÎ‚ß(45“x)‚ÉŒÅ’è‚³‚¹‚é‚©‚µ‚È‚¢‚©‚ğw’è‚µ‚Ü‚·B\nµÌŞ¼Şª¸Ä‚Ìì¬’†‚ÍAlŠpŒ`‚Í³•ûŒ`‚ÉA‘È‰~Œ`‚Í‰~‚É‚È‚è‚Ü‚·B";
-        Text[ chinese_traditional ] = "³z¹L¹ï»ô¦ì¸m±z¯à°÷©w¸q¤@­Óª«¥ó¬O§_¤ô¥­¡M««ª½©ÎªÌ¹ï¨¤(45«×)²¾°Ê¡C¦b²¾°Ê¤@­Óª«¥ó®É¤@­Óªø¤è§ÎÅÜ¦¨¤@­Ó¥¿¤è§Î©ÎªÌ¤@­Ó¶ê§ÎÅÜ¦¨¤@­Ó¾ò¶ê§Î¡C";
-        Text[ arabic ] = "ÊÍÊ ÚäæÇä ÇáÊÚÔíŞ íãßäß ÊÍÏíÏ ãÇ ÅĞÇ ßäÊ ÊÑíÏ ÅÚÇŞÉ ÇáßÇÆä ÃËäÇÁ ÊÍÑíßå æĞáß ÃİŞíÇğ Ãæ ÑÃÓíÇğ Ãæ ãÇÆáÇğ (45 ÏÑÌÉ). \n ÚäÏ ÇáÅäÔÇÁ ÓíÊÍæá ÇáãÓÊØíá Åáì ãÑÈÚ Ãæ ÇáÔßá ÇáÈíÖæí Åáì ÏÇÆÑÉ.";
-        Text[ greek ] = "Ìå ôç èİóç ğñïóêüëëçóçò êáèïñßæåôå áí İíá áíôéêåßìåíï ìåôáêéíçèåß ïñéæüíôéá, êáôáêüñõöá Ş äéáãùíßùò (45°). \nÊáôÜ ôç äçìéïõñãßá ó÷çìáôßæåôáé áğü İíá ïñèïãşíéï İíá ôåôñÜãùíï êáé áğü ìéá İëëåéøç ó÷çìáôßæåôáé İíáò êıêëïò.";
-        Text[ korean ] = "À§Ä¡ ¸ÂÃß±â¿¡¼­,  ÀÌµ¿½Ã¿¡ °³Ã¼°¡  ¼öÆò, ¼öÁ÷ ¶Ç´Â ´ë°¢¼±(45µµ)À¸·Î °íÁ¤µÉ °ÍÀÎÁö¸¦ °áÁ¤ÇÏ½Ê½Ã¿À. \n°³Ã¼¸¦ ¸¸µé ¶§ Á÷»ç°¢ÇüÀº Á¤»ç°¢ÇüÀ¸·Î, Å¸¿øÇüÀº ¿øÀ¸·Î ¹Ù²ò´Ï´Ù.";
-        Text[ turkish ] = "Kavrama yönü, nesnenin taşıma sırasındaki hareket alanını belirler: Yatay, dikey ya da diyagonal (45 derece). \nOluşturma sırasında bir dikdörtgenden kare, bir elipsten ise daire oluşur.";
-        Text[ language_user1 ] = " ";
-    };
-    CheckBox CBX_ORTHO
-    {
-        Pos = MAP_APPFONT ( 136 , 77  ) ;
-         // 136, 84
-        Size = MAP_APPFONT ( 112 , 10 ) ;
-        TabStop = TRUE ;
-        Text = "Beim ~Erzeugen und Bewegen" ;
-        Text [ ENGLISH ] = "Beim Erzeugen und Bewegen" ;
-        Text [ NORWEGIAN ] = "Beim Erzeugen und Bewegen" ;
-        Text [ DANISH ] = "Ved oprettelse og bevægelse" ;
-        Text [ ENGLISH_US ] = "~When creating or moving objects" ;
-        Text [ SPANISH ] = "Al crear ~y mover" ;
-        Text [ FINNISH ] = "Beim Erzeugen und Bewegen" ;
-        Text [ FRENCH ] = "En ~créant et en déplaçant" ;
-        Text [ ITALIAN ] = "Nella creazione e nel movimento" ;
-        Text [ DUTCH ] = "~Tijdens het maken en bewegen" ;
-        Text [ PORTUGUESE_BRAZILIAN ] = "Beim Erzeugen und Bewegen" ;
-        Text [ SWEDISH ] = "~Vid skapande och flyttning" ;
-        Text [ PORTUGUESE ] = "Ao criar ou mover" ;
-        Text[ chinese_simplified ] = "ÔÚÉú³ÉºÍÒÆ¶¯¶ÔÏóÊ±(~W)";
-        Text[ russian ] = "Ïğè ñîçäàíèè è ïåğåìåùåíèè îáúåêòà";
-        Text[ polish ] = "Przy tworzeniu i przenoszeniu";
-        Text[ japanese ] = "ì¬‚Ü‚½‚ÍˆÚ“®(~W)";
-        Text[ chinese_traditional ] = "²£¥Í©M²¾°Êª«¥ó®É(~W)";
-        Text[ arabic ] = "ÃËäÇÁ ÇáÅäÔÇÁ Ãæ ÇáÊÍÑíß";
-        Text[ greek ] = "ÊáôÜ ôçí äçìéïõñãßá êáé ìåôáêßíçóç";
-        Text[ korean ] = "ÀÛ¼º½Ã¿Í  ÀÌµ¿½Ã¿¡(~W)";
-        Text[ turkish ] = "Oluşturma ve taşıma sırasında";
-        Text[ language_user1 ] = " ";
-    };
-    CheckBox CBX_BIGORTHO
-    {
-        Pos = MAP_APPFONT ( 136 , 91  ) ;
-         // 136, 95
-        Size = MAP_APPFONT ( 112 , 10 ) ;
-        TabStop = TRUE ;
-        Text = "~Längere Kantenlänge" ;
-        Text [ ENGLISH ] = "Längere Kantenlänge" ;
-        Text [ NORWEGIAN ] = "Längere Kantenlänge" ;
-        Text [ DANISH ] = "Længere kantlængde" ;
-        Text [ ENGLISH_US ] = "~Extend edges" ;
-        Text [ SPANISH ] = "Aristas e~xtendidas" ;
-        Text [ FINNISH ] = "Längere Kantenlänge" ;
-        Text [ FRENCH ] = "~Longueur d'arête plus longue" ;
-        Text [ ITALIAN ] = "Bordo più lungo" ;
-        Text [ DUTCH ] = "~Langere zijden" ;
-        Text [ PORTUGUESE_BRAZILIAN ] = "Längere Kantenlänge" ;
-        Text [ SWEDISH ] = "~Längre kantlängd" ;
-        Text [ PORTUGUESE ] = "Alargar comprimento das arestas" ;
-        Text[ chinese_simplified ] = "½Ï³¤µÄÍ¼ĞÎ±ß(~E)";
-        Text[ russian ] = "~Ïî ñàìîìó äëèííîìó êàíòó";
-        Text[ polish ] = "Przed³u¿ona d³ugoœæ krawêdzi";
-        Text[ japanese ] = "’·‚­‚µ‚½Šp‚Ì’·‚³(~E)";
-        Text[ chinese_traditional ] = "¸ûªøªº¹Ï§ÎÃä(~E)";
-        Text[ arabic ] = "ÒíÇÏÉ Øæá ÇáÍæÇİ";
-        Text[ greek ] = "Ìåãáëıôåñï ìŞêïò Üêñïõ";
-        Text[ korean ] = "°¡ÀåÀÚ¸® ±æÀÌ ´ÃÀÓ(~E)";
-        Text[ turkish ] = "Daha uzun kenar";
-        Text[ language_user1 ] = " ";
-    };
-    CheckBox CBX_ROTATE
-    {
-        Pos = MAP_APPFONT ( 136 , 107  ) ;
-         // 136, 111
-        Size = MAP_APPFONT ( 55 , 10 ) ;
-        TabStop = TRUE ;
-        Text = "Beim ~Drehen" ;
-        Text [ ENGLISH ] = "Beim Drehen" ;
-        Text [ NORWEGIAN ] = "Beim Drehen" ;
-        Text [ DANISH ] = "Ved rotation" ;
-        Text [ ENGLISH_US ] = "When ro~tating" ;
-        Text [ SPANISH ] = "Al g~irar" ;
-        Text [ FINNISH ] = "Beim Drehen" ;
-        Text [ FRENCH ] = "Lors de ~rotation" ;
-        Text [ ITALIAN ] = "Nella rotazione" ;
-        Text [ DUTCH ] = "T~ijdens draaien" ;
-        Text [ PORTUGUESE_BRAZILIAN ] = "Beim Drehen" ;
-        Text [ SWEDISH ] = "Vid ~rotation" ;
-        Text [ PORTUGUESE ] = "Na rotação" ;
-        Text[ chinese_simplified ] = "ÔÚĞı×ªÊ±(~T)";
-        Text[ russian ] = "Ïğè âğàùåíèè";
-        Text[ polish ] = "Przy o~bracaniu";
-        Text[ japanese ] = "‰ñ“](~T)";
-        Text[ chinese_traditional ] = "¦b±ÛÂà®É(~T)";
-        Text[ arabic ] = "ÃËäÇÁ ÇáÏæÑÇä";
-        Text[ greek ] = "Óå ğå~ñéóôñïöŞ";
-        Text[ korean ] = "È¸ÀüÇÒ ¶§(~T)";
-        Text[ turkish ] = "Döndürürken";
-        Text[ language_user1 ] = " ";
-    };
-    MetricField MTR_FLD_ANGLE
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 194 , 105  ) ;
-         // 190, 111
-        Size = MAP_APPFONT ( 54 , 12 ) ;
-        TabStop = TRUE ;
-        Repeat = TRUE ;
-        Spin = TRUE ;
-        Maximum = 18000 ;
-        Last = 18000 ;
-        DecimalDigits = 2 ;
-        StrictFormat = TRUE ;
-        Unit = FUNIT_CUSTOM ;
-        SpinSize = 500 ;
-        CustomUnitText = " Grad" ;
-        CustomUnitText [ ENGLISH ] = " degree" ;
-        CustomUnitText [ english_us ] = " degrees" ;
-        CustomUnitText [ italian ] = "gradi" ;
-        CustomUnitText [ spanish ] = "grados" ;
-        CustomUnitText [ french ] = " degrés" ;
-        CustomUnitText [ dutch ] = "graden" ;
-        CustomUnitText [ swedish ] = " grader" ;
-        CustomUnitText [ danish ] = "grader" ;
-        CustomUnitText [ portuguese ] = "grau" ;
-        CustomUnitText [ portuguese_brazilian ] = "Grad" ;
-        CustomUnitText[ chinese_simplified ] = "¶È";
-        CustomUnitText[ russian ] = "Ãğàäóñ";
-        CustomUnitText[ polish ] = "Stopieñ";
-        CustomUnitText[ japanese ] = "“x";
-        CustomUnitText[ chinese_traditional ] = "«×";
-        CustomUnitText[ arabic ] = "ÏÑÌÉ";
-        CustomUnitText[ greek ] = "ìïßñåò";
-        CustomUnitText[ korean ] = "µµ";
-        CustomUnitText[ turkish ] = "Derece";
-        CustomUnitText[ language_user1 ] = " ";
-    };
-    FixedText FT_BEZ_ANGLE
-    {
-        Pos = MAP_APPFONT ( 136 , 123  ) ;
-        Size = MAP_APPFONT ( 55 , 10 ) ;
-        Text = "~Punktreduktion" ;
-        Text [ ENGLISH ] = "Point reduction" ;
-        Text [ dutch ] = "P~untreductie" ;
-        Text [ english_us ] = "Point reductio~n" ;
-        Text [ italian ] = "Riduzione punti" ;
-        Text [ spanish ] = "R~educción de puntos" ;
-        Text [ french ] = "Ré~duction de points" ;
-        Text [ swedish ] = "~Punktreduktion" ;
-        Text [ danish ] = "Punktreduktion" ;
-        Text [ portuguese ] = "Redução de pontos" ;
-        Text [ portuguese_brazilian ] = "Punktreduktion" ;
-        Text[ chinese_simplified ] = "¼õÉÙµãÊı(~N)";
-        Text[ russian ] = "~Ñîêğàùåíèå òî÷åê";
-        Text[ polish ] = "Redukcja punktów";
-        Text[ japanese ] = "“_‚ğŒ¸‚ç‚·(~N)";
-        Text[ chinese_traditional ] = "´î¤ÖÂI¼Æ(~N)";
-        Text[ arabic ] = "ÊŞáíá ÇáäŞÇØ";
-        Text[ greek ] = "Ìåßùóç óçìåßùí";
-        Text[ korean ] = "Á¡ ÁÙÀÓ(~N)";
-        Text[ turkish ] = "Nokta azaltma";
-        Text[ language_user1 ] = " ";
-    };
-    MetricField MTR_FLD_BEZ_ANGLE
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 194 , 121  ) ;
-        Size = MAP_APPFONT ( 54 , 12 ) ;
-        TabStop = TRUE ;
-        Repeat = TRUE ;
-        Spin = TRUE ;
-        Maximum = 9000 ;
-        Last = 9000 ;
-        DecimalDigits = 2 ;
-        StrictFormat = TRUE ;
-        Unit = FUNIT_CUSTOM ;
-        SpinSize = 500 ;
-        CustomUnitText = " Grad" ;
-        CustomUnitText [ ENGLISH ] = " degree" ;
-        CustomUnitText [ english_us ] = " degrees" ;
-        CustomUnitText [ italian ] = "gradi" ;
-        CustomUnitText [ spanish ] = "grados" ;
-        CustomUnitText [ french ] = " degrés" ;
-        CustomUnitText [ dutch ] = "graden" ;
-        CustomUnitText [ swedish ] = " grader" ;
-        CustomUnitText [ danish ] = "grader" ;
-        CustomUnitText [ portuguese ] = "grau" ;
-        CustomUnitText [ portuguese_brazilian ] = "Grad" ;
-        CustomUnitText[ chinese_simplified ] = "¶È";
-        CustomUnitText[ russian ] = "Ãğàäóñ";
-        CustomUnitText[ polish ] = "Stopieñ";
-        CustomUnitText[ japanese ] = "“x";
-        CustomUnitText[ chinese_traditional ] = "«×";
-        CustomUnitText[ arabic ] = "ÏÑÌÉ";
-        CustomUnitText[ greek ] = "ìïßñåò";
-        CustomUnitText[ korean ] = "µµ";
-        CustomUnitText[ turkish ] = "Derece";
-        CustomUnitText[ language_user1 ] = " ";
-    };
-    GroupBox GRP_ORTHO
-    {
-        Pos = MAP_APPFONT ( 130 , 3  ) ;
-        Size = MAP_APPFONT ( 124 , 136 ) ;
-        Text = "Einrasten" ;
-        Text [ ENGLISH ] = "Einrasten" ;
-        Text [ NORWEGIAN ] = "Einrasten" ;
-        Text [ DANISH ] = "Fastgør" ;
-        Text [ ENGLISH_US ] = "Snap position" ;
-        Text [ SPANISH ] = "Encajar" ;
-        Text [ FINNISH ] = "Einrasten" ;
-        Text [ FRENCH ] = "Enclencher" ;
-        Text [ ITALIAN ] = "Aggancio" ;
-        Text [ DUTCH ] = "Inrasteren" ;
-        Text [ PORTUGUESE_BRAZILIAN ] = "Einrasten" ;
-        Text [ SWEDISH ] = "Anpassa till stödraster" ;
-        Text [ PORTUGUESE ] = "Encaixe" ;
-        Text[ chinese_simplified ] = "¶ÔÆëÎ»ÖÃ";
-        Text[ russian ] = "Çàêğåïèòü";
-        Text[ polish ] = "Zaskocz";
-        Text[ japanese ] = "‚©‚İ‡‚í‚¹‚é";
-        Text[ chinese_traditional ] = "¹ï»ô¦ì¸m";
-        Text[ arabic ] = "ÇáÊÚÔíŞ";
-        Text[ greek ] = "Èİóç ğñïóêüëëçóçò";
-        Text[ korean ] = "À§Ä¡ °íÁ¤";
-        Text[ turkish ] = "Kavrama yönü";
-        Text[ language_user1 ] = " ";
-    };
-    Text[ chinese_simplified ] = "¶ÔÆë/¶ÔÆëÎ»ÖÃ";
-    Text[ russian ] = "Ïğèâÿçàòü/Çàêğåïèòü";
-    Text[ polish ] = "Zaczep/Zaskocz";
-    Text[ japanese ] = "½Å¯Ìß‚·‚é/‚©‚İ‡‚í‚¹‚é";
-    Text[ chinese_traditional ] = "¹ï»ô/¹ï»ô¦ì¸m";
-    Text[ arabic ] = "ÇáÍÈÓ/ÇáÊÚÔíŞ";
-    Text[ greek ] = "Ğñïóêüëëçóç";
-    Text[ korean ] = "¸ÂÃß±â/°íÁ¤";
-    Text[ turkish ] = "Kavrama/kavrama yönü";
-    Text[ language_user1 ] = " ";
-};
- // LAYOUT
-TabPage TP_OPTIONS_LAYOUT
-{
-    HelpID = HID_SD_OPTIONS_LAYOUT ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
-    Hide = TRUE;
-    Text = "Layout" ;
-    Text [ ENGLISH ] = "Layout" ;
-    Text [ dutch ] = "Lay-out" ;
-    Text [ english_us ] = "Layout" ;
-    Text [ swedish ] = "Layout" ;
-    Text [ danish ] = "Layout" ;
-    Text [ italian ] = "Layout" ;
-    Text [ spanish ] = "Diseño" ;
-    Text [ french ] = "Mise en page" ;
-    Text [ portuguese_brazilian ] = "Layout" ;
-    Text [ portuguese ] = "Configuração" ;
-    CheckBox CBX_RULER
-    {
-        Pos = MAP_APPFONT ( 12 , 14  ) ;
-        Size = MAP_APPFONT ( 134 , 10 ) ;
-        TabStop = TRUE ;
-        Text = "~Lineale sichtbar" ;
-        Text [ ENGLISH ] = "Lineale" ;
-        Text [ NORWEGIAN ] = "Lineale" ;
-        Text [ DANISH ] = "Linealer synlige" ;
-        Text [ ENGLISH_US ] = "~Rulers visible" ;
-        Text [ SPANISH ] = "Reglas ~visibles" ;
-        Text [ FINNISH ] = "Lineale" ;
-        Text [ FRENCH ] = "~Règles visibles" ;
-        Text [ ITALIAN ] = "Righelli visibili" ;
-        Text [ DUTCH ] = "~Linialen zichbaar" ;
-        Text [ PORTUGUESE_BRAZILIAN ] = "Lineale" ;
-        Text [ SWEDISH ] = "~Linjaler synliga" ;
-        Text [ PORTUGUESE ] = "Réguas visíveis" ;
-        Text[ chinese_simplified ] = "ÏÔÊ¾±ê³ß(~V)";
-        Text[ russian ] = "~Ïîêàçàòü ëèíåéêó";
-        Text[ polish ] = "Widoczne linijki";
-        Text[ japanese ] = "Ù°×‚Ì•\\¦(~V)";
-        Text[ chinese_traditional ] = "Åã¥Ü¼Ğ¤Ø(~V)";
-        Text[ arabic ] = "ÇáãÓÇØÑ ãÑÆíÉ";
-        Text[ greek ] = "×Üñáêåò ïñáôÜ";
-        Text[ korean ] = "´«±İÀÚ Ç¥½Ã";
-        Text[ turkish ] = "Cetvelleri göster";
-        Text[ language_user1 ] = " ";
-    };
-    CheckBox CBX_HELPLINES
-    {
-        Pos = MAP_APPFONT ( 12 , 28  ) ;
-        Size = MAP_APPFONT ( 134 , 10 ) ;
-        TabStop = TRUE ;
-        Text = "Hilfslinien beim ~Verschieben" ;
-        Text [ ENGLISH ] = "Hilfslinien beim Verschieben" ;
-        Text [ dutch ] = "Hulplijnen bij ~verplaatsen" ;
-        Text [ english_us ] = "~Guides when moving" ;
-        Text [ italian ] = "Linee guida durante lo spostamento" ;
-        Text [ spanish ] = "~Guías al desplazar" ;
-        Text [ french ] = "Repères lors du déplacement" ;
-        Text [ swedish ] = "Hjälplinjer vid ~förflyttning" ;
-        Text [ danish ] = "Hjælpelinjer ved flytning" ;
-        Text [ portuguese ] = "Guias ao ~mover objectos" ;
-        Text [ portuguese_brazilian ] = "Hilfslinien beim ~Verschieben" ;
-        Text[ chinese_simplified ] = "ÔÚÒÆ¶¯¶ÔÏóÊ±ÏÔÊ¾¸¨ÖúÏß(~G)";
-        Text[ russian ] = "Íàïğàâ. ëèíèè ïğè ïåğåìåùåíèè îáúåêòà";
-        Text[ polish ] = "Linie pomocnicze przy przesuwaniu obiektu";
-        Text[ japanese ] = "ˆÚ“®‚³‚¹‚é‚Æ‚«‚É•â•ü‚Ì•\\¦(~G)";
-        Text[ chinese_traditional ] = "¦b²¾°Ê®ÉÅã¥Ü»²§U½u(~G)";
-        Text[ arabic ] = "ÇáÎØæØ ÇáãÓÇÚÏÉ ÃËäÇÁ ÇáÅÒÇÍÉ";
-        Text[ greek ] = "Âïçèçôéêİò ãñáììİò êáôÜ ôç ìåôáêßíçóç";
-        Text[ korean ] = "°³Ã¼ ÀÌµ¿½Ã ¾È³»¼±(~G)";
-        Text[ turkish ] = "Taşıma sırasında yardımcı çizgiler";
-        Text[ language_user1 ] = " ";
-    };
-    CheckBox CBX_HANDLES_BEZIER
-    {
-        Pos = MAP_APPFONT ( 12 , 42  ) ;
-        Size = MAP_APPFONT ( 134 , 10 ) ;
-        TabStop = TRUE ;
-        Text = "~Alle Steuerpunkte im Bezier-Editor" ;
-        Text [ ENGLISH ] = "~All handles in Bézier editor" ;
-        Text [ dutch ] = "~Alle besturingspunten in de Bézier-editor" ;
-        Text [ english_us ] = "~All control points in Bézier editor" ;
-        Text [ italian ] = "Tutti i punti di controllo nell'editor Bézier" ;
-        Text [ spanish ] = "~Todos los puntos de control en el editor Bézier" ;
-        Text [ french ] = "~Tous les points de contrôle de l'éditeur Bézier" ;
-        Text [ swedish ] = "~Alla kontrollpunkter i Bézier-editorn" ;
-        Text [ danish ] = "Alle kontrolpunkter i bezier-redigeringen" ;
-        Text [ portuguese_brazilian ] = "~Alle Handles im Bezier-Editor" ;
-        Text [ portuguese ] = "~Todas as guias do editor Bézier" ;
-        Text[ chinese_simplified ] = "ÇúÏß±à¼­Æ÷ÄÚµÄÈ«²¿¿Øµã(~A)";
-        Text[ russian ] = "~Âñå òî÷êè â Ğåäàêòîğå Áåçüå";
-        Text[ polish ] = "~Wszystkie punkty sterown. w edytorze Beziera";
-        Text[ japanese ] = "ÍŞ¼Şª‹Èü•ÒW‚Ì§Œä“_‚ğ‚·‚×‚Ä•\\¦(~A)";
-        Text[ chinese_traditional ] = "¦±½u½s¿èµ{¦¡¤ºªº¥ş³¡±±ÂI(~A)";
-        Text[ arabic ] = "ßá äŞÇØ ÇáÊÍßã İí ãÍÑÑ Bézier";
-        Text[ greek ] = "¼ëåò ôá óçìå~ßá åëİã÷ïõ óå åğåîåñãáóßá Bézier";
-        Text[ korean ] = "º£Áö¿¡ ÆíÁı±âÀÇ ¸ğµç ÇÚµé";
-        Text[ turkish ] = "Bézier düzenleyicisindeki tüm denetim nokt.";
-        Text[ language_user1 ] = " ";
-    };
-    CheckBox CBX_MOVE_OUTLINE
-    {
-        Pos = MAP_APPFONT ( 12 , 56  ) ;
-        Size = MAP_APPFONT ( 134 , 10 ) ;
-        TabStop = TRUE ;
-        Text = "~Umriss jedes einzelnen Objektes" ;
-        Text [ ENGLISH ] = "Umriß jedes einzelnen Objektes" ;
-        Text [ english_us ] = "~Contour of each individual object" ;
-        Text [ italian ] = "Profilo di ogni singolo oggetto" ;
-        Text [ spanish ] = "~Contorno de cada objeto" ;
-        Text [ french ] = "~Contour de chaque objet" ;
-        Text [ dutch ] = "~Contour om ieder object" ;
-        Text [ swedish ] = "Kont~ur för varje enskilt objekt" ;
-        Text [ danish ] = "Hvert enkelt objekts kontur" ;
-        Text [ portuguese ] = "~Contorno de cada um dos objectos" ;
-        Text [ portuguese_brazilian ] = "~Umriß jedes einzelnen Objektes" ;
-        Text[ chinese_simplified ] = "µ¥¸ö¶ÔÏóµÄÂÖÀª(~C)";
-        Text[ russian ] = "Êîíòóğ êàæäîãî îáúåêòà îòäåëüíî";
-        Text[ polish ] = "Kontur ka¿dego oddzielnego obiektu";
-        Text[ japanese ] = "ŠeµÌŞ¼Şª¸Ä‚É“K‚µ‚½—ÖŠs‚Ì•\\¦(~C)";
-        Text[ chinese_traditional ] = "¨C­Óª«¥óªº½ü¹ø(~C)";
-        Text[ arabic ] = "ÇáÎØ ÇáßİÇİí áßá ßÇÆä İÑÏí";
-        Text[ greek ] = "Ğåñßãñáììá êÜèå ìåìïíùìİí. áíôéêåéìİíï~õ";
-        Text[ korean ] = "°¢ °³º° °³Ã¼ÀÇ À±°û(~C)";
-        Text[ turkish ] = "Her bir nesnenin konturu";
-        Text[ language_user1 ] = " ";
-    };
-    GroupBox GRP_DISPLAY
-    {
-        Pos = MAP_APPFONT ( 6 , 3  ) ;
-        Size = MAP_APPFONT ( 146 , 69 ) ;
-        Text = "Anzeigen" ;
-        Text [ ENGLISH ] = "Anzeigen" ;
-        Text [ english_us ] = "Display" ;
-        Text [ italian ] = "Mostra" ;
-        Text [ spanish ] = "Mostrar" ;
-        Text [ french ] = "Afficher" ;
-        Text [ dutch ] = "Weergeven" ;
-        Text [ swedish ] = "Visa" ;
-        Text [ danish ] = "Vis" ;
-        Text [ portuguese ] = "Ver" ;
-        Text [ portuguese_brazilian ] = "Anzeigen" ;
-        Text[ chinese_simplified ] = "ÏÔÊ¾";
-        Text[ russian ] = "Ïîêàçàòü";
-        Text[ polish ] = "Poka¿";
-        Text[ japanese ] = "•\\¦";
-        Text[ chinese_traditional ] = "Åã¥Ü";
-        Text[ arabic ] = "ÅÙåÇÑ";
-        Text[ greek ] = "ÅìöÜíéóç";
-        Text[ korean ] = "Ç¥½Ã";
-        Text[ turkish ] = "Görüntüle";
-        Text[ language_user1 ] = " ";
-    };
-    /*
-    FixedText FT_METRIC
-    {
-        Pos = MAP_APPFONT ( 12 , 115 ) ;
-        Size = MAP_APPFONT ( 43 , 10 ) ;
-        Text = "~Maßeinheit" ;
-        Text [ ENGLISH ] = "~Metric Units" ;
-        Text [ norwegian ] = "~Metriske Enheter" ;
-        Text [ italian ] = "~Unità di misura" ;
-        Text [ portuguese_brazilian ] = "~Unidades métricas" ;
-        Text [ portuguese ] = "~Unidades métricas" ;
-        Text [ finnish ] = "~Metriset yksiköt" ;
-        Text [ danish ] = "~Metriske enheder" ;
-        Text [ french ] = "~Unité d. mesure" ;
-        Text [ swedish ] = "~Metriska enheter" ;
-        Text [ dutch ] = "Maat Eenheid" ;
-        Text [ spanish ] = "Unid. d. medida" ;
-        Text [ english_us ] = "Meas.  ~Units" ;
-        LeftLabel = TRUE ;
-    };
-*/
-    ListBox LB_METRIC
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 86  ) ;
-        Size = MAP_APPFONT ( 60 , 50 ) ;
-        DropDown = TRUE ;
-    };
-    GroupBox GRP_METRIC
-    {
-        Pos = MAP_APPFONT ( 6 , 75  ) ;
-        Size = MAP_APPFONT ( 146 , 30 ) ;
-        Text = "Maßeinheit" ;
-        Text [ ENGLISH ] = "Metric Units" ;
-        Text [ norwegian ] = "Metriske Enheter" ;
-        Text [ italian ] = "Unità di misura" ;
-        Text [ portuguese_brazilian ] = "Unidades métricas" ;
-        Text [ portuguese ] = "Unidades métricas" ;
-        Text [ finnish ] = "Metriset yksiköt" ;
-        Text [ danish ] = "Måleenhed" ;
-        Text [ french ] = "Unité de mesure" ;
-        Text [ swedish ] = "Måttenhet" ;
-        Text [ dutch ] = "Maateenheid" ;
-        Text [ spanish ] = "Unidad de medida" ;
-        Text [ english_us ] = "Meas. units" ;
-        Text[ chinese_simplified ] = "¶ÈÁ¿µ¥Î»";
-        Text[ russian ] = "Åäèíèöà èçìåğåíèÿ";
-        Text[ polish ] = "Jednostka miary";
-        Text[ japanese ] = "g‚¤’PˆÊ";
-        Text[ chinese_traditional ] = "«×¶q³æ¦ì";
-        Text[ arabic ] = "æÍÏÉ ÇáŞíÇÓ";
-        Text[ greek ] = "ÌïíÜäá ìİôñçóçò";
-        Text[ korean ] = "´ÜÀ§";
-        Text[ turkish ] = "Ölçü birimi";
-        Text[ language_user1 ] = " ";
-    };
-    MetricField MTR_FLD_TABSTOP
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 119  ) ;
-        Size = MAP_APPFONT ( 60 , 12 ) ;
-        TabStop = TRUE ;
-        Repeat = TRUE ;
-        Spin = TRUE ;
-        Unit = FUNIT_CM ;
-        SpinSize = 10 ;
-        Minimum = 50 ;
-        Maximum = 9999 ;
-        First = 50 ;
-        Last = 2000 ;
-        StrictFormat = TRUE ;
-        DecimalDigits = 2 ;
-    };
-    GroupBox GRP_TABSTOP
-    {
-        Pos = MAP_APPFONT ( 6 , 108  ) ;
-        Size = MAP_APPFONT ( 146 , 28 ) ;
-        Text = "Tabulatorabstand" ;
-        Text [ ENGLISH ] = "Tab distance" ;
-        Text [ english_us ] = "Tab stops" ;
-        Text [ swedish ] = "Tabulatoravstånd" ;
-        Text [ danish ] = "Tabulatorafstand" ;
-        Text [ italian ] = "Posizione tabulazioni" ;
-        Text [ spanish ] = "Distancia entre tabuladores" ;
-        Text [ french ] = "Espace entre les tabulations" ;
-        Text [ dutch ] = "Tabstops" ;
-        Text [ portuguese ] = "Intervalo entre tabulações" ;
-        Text [ portuguese_brazilian ] = "Tabulatorabstand" ;
-        Text[ chinese_simplified ] = "ÖÆ±í·ûµÄ¼ä¸ô";
-        Text[ russian ] = "Ïîçèöèÿ òàáóëÿöèè";
-        Text[ polish ] = "Odstêp tabulatorów";
-        Text[ japanese ] = "ÀÌŞŠÔŠu";
-        Text[ chinese_traditional ] = "»sªí²Åªº¶¡¹j";
-        Text[ arabic ] = "ÚáÇãÇÊ ÇáÌÏæáÉ";
-        Text[ greek ] = "Áğüóôáóç óôçëïèåôşí";
-        Text[ korean ] = "ÅÇ °£°İ";
-        Text[ turkish ] = "Sekme durakları";
-        Text[ language_user1 ] = " ";
-    };
-    Text[ chinese_simplified ] = "°æÊ½";
-    Text[ russian ] = "Ğàçìåòêà";
-    Text[ polish ] = "Uk³ad";
-    Text[ japanese ] = "Ú²±³Ä";
-    Text[ chinese_traditional ] = "ª©¦¡";
-    Text[ arabic ] = "ÊÎØíØ";
-    Text[ greek ] = "ÄéÜôáîç";
-    Text[ korean ] = "·¹ÀÌ¾Æ¿ô";
-    Text[ turkish ] = "Düzen";
-    Text[ language_user1 ] = " ";
-};
  // Contents (Inhalte)
 TabPage TP_OPTIONS_CONTENTS
 {
@@ -883,6 +78,34 @@ TabPage TP_OPTIONS_CONTENTS
     Text [ dutch ] = "Inhoud" ;
     Text [ portuguese ] = "Conteúdos" ;
     Text [ portuguese_brazilian ] = "Inhalte" ;
+    FixedLine GRP_VIEW_SUBSTITUTE
+    {
+        Pos = MAP_APPFONT ( 6 , 3  ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text = "Ersatzdarstellung" ;
+        Text [ ENGLISH ] = "Ersatzdarstellung" ;
+        Text [ NORWEGIAN ] = "Ersatzdarstellung" ;
+        Text [ DANISH ] = "Erstatningsvisning" ;
+        Text [ ENGLISH_US ] = "Alternative display" ;
+        Text [ SPANISH ] = "Visualización alternativa" ;
+        Text [ FINNISH ] = "Ersatzdarstellung" ;
+        Text [ FRENCH ] = "Affichage de substitution" ;
+        Text [ ITALIAN ] = "Rappresentazione alternativa" ;
+        Text [ DUTCH ] = "Vervangende weergave" ;
+        Text [ PORTUGUESE_BRAZILIAN ] = "Ersatzdarstellung" ;
+        Text [ SWEDISH ] = "Ersättningsvisning" ;
+        Text [ PORTUGUESE ] = "Visualização de substituição" ;
+        Text[ chinese_simplified ] = "Ìæ»»ÏÔÊ¾ÄÚÈİ";
+        Text[ russian ] = "Çàìåíÿşùèé ïîêàç";
+        Text[ polish ] = "Wyœwietlanie zastêpcze";
+        Text[ japanese ] = "‰¼•\\¦";
+        Text[ chinese_traditional ] = "´À¥NÅã¥Ü¤º®e";
+        Text[ arabic ] = "ÇáÚÑÖ ÇáÈÏíá";
+        Text[ greek ] = "ÅíáëëáêôéêŞ åìöÜíéóç";
+        Text[ korean ] = "´ëÃ¼ µğ½ºÇÃ·¹ÀÌ";
+        Text[ turkish ] = "Alternatif görüntü";
+        Text[ language_user1 ] = " ";
+    };
     CheckBox CBX_EXTERN_GRAPHIC
     {
         Pos = MAP_APPFONT ( 12 , 14  ) ;
@@ -995,32 +218,140 @@ TabPage TP_OPTIONS_CONTENTS
         Text[ turkish ] = "Kontur çizgilerini göster";
         Text[ language_user1 ] = " ";
     };
-    GroupBox GRP_VIEW_SUBSTITUTE
+    FixedLine GRP_DISPLAY
     {
-        Pos = MAP_APPFONT ( 6 , 3  ) ;
-        Size = MAP_APPFONT ( 132 , 69 ) ;
-        Text = "Ersatzdarstellung" ;
-        Text [ ENGLISH ] = "Ersatzdarstellung" ;
-        Text [ NORWEGIAN ] = "Ersatzdarstellung" ;
-        Text [ DANISH ] = "Erstatningsvisning" ;
-        Text [ ENGLISH_US ] = "Alternative display" ;
-        Text [ SPANISH ] = "Visualización alternativa" ;
-        Text [ FINNISH ] = "Ersatzdarstellung" ;
-        Text [ FRENCH ] = "Affichage de substitution" ;
-        Text [ ITALIAN ] = "Rappresentazione alternativa" ;
-        Text [ DUTCH ] = "Vervangende weergave" ;
-        Text [ PORTUGUESE_BRAZILIAN ] = "Ersatzdarstellung" ;
-        Text [ SWEDISH ] = "Ersättningsvisning" ;
-        Text [ PORTUGUESE ] = "Visualização de substituição" ;
-        Text[ chinese_simplified ] = "Ìæ»»ÏÔÊ¾ÄÚÈİ";
-        Text[ russian ] = "Çàìåíÿşùèé ïîêàç";
-        Text[ polish ] = "Wyœwietlanie zastêpcze";
-        Text[ japanese ] = "‰¼•\\¦";
-        Text[ chinese_traditional ] = "´À¥NÅã¥Ü¤º®e";
-        Text[ arabic ] = "ÇáÚÑÖ ÇáÈÏíá";
-        Text[ greek ] = "ÅíáëëáêôéêŞ åìöÜíéóç";
-        Text[ korean ] = "´ëÃ¼ µğ½ºÇÃ·¹ÀÌ";
-        Text[ turkish ] = "Alternatif görüntü";
+        Pos = MAP_APPFONT ( 6 , 72  ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text = "Anzeigen" ;
+        Text [ ENGLISH ] = "Anzeigen" ;
+        Text [ english_us ] = "Display" ;
+        Text [ italian ] = "Mostra" ;
+        Text [ spanish ] = "Mostrar" ;
+        Text [ french ] = "Afficher" ;
+        Text [ dutch ] = "Weergeven" ;
+        Text [ swedish ] = "Visa" ;
+        Text [ danish ] = "Vis" ;
+        Text [ portuguese ] = "Ver" ;
+        Text [ portuguese_brazilian ] = "Anzeigen" ;
+        Text[ chinese_simplified ] = "ÏÔÊ¾";
+        Text[ russian ] = "Ïîêàçàòü";
+        Text[ polish ] = "Poka¿";
+        Text[ japanese ] = "•\\¦";
+        Text[ chinese_traditional ] = "Åã¥Ü";
+        Text[ arabic ] = "ÅÙåÇÑ";
+        Text[ greek ] = "ÅìöÜíéóç";
+        Text[ korean ] = "Ç¥½Ã";
+        Text[ turkish ] = "Görüntüle";
+        Text[ language_user1 ] = " ";
+    };
+    CheckBox CBX_RULER
+    {
+        Pos = MAP_APPFONT ( 12 , 83  ) ;
+        Size = MAP_APPFONT ( 134 , 10 ) ;
+        TabStop = TRUE ;
+        Text = "~Lineale sichtbar" ;
+        Text [ ENGLISH ] = "Lineale" ;
+        Text [ NORWEGIAN ] = "Lineale" ;
+        Text [ DANISH ] = "Linealer synlige" ;
+        Text [ ENGLISH_US ] = "~Rulers visible" ;
+        Text [ SPANISH ] = "Reglas ~visibles" ;
+        Text [ FINNISH ] = "Lineale" ;
+        Text [ FRENCH ] = "~Règles visibles" ;
+        Text [ ITALIAN ] = "Righelli visibili" ;
+        Text [ DUTCH ] = "~Linialen zichbaar" ;
+        Text [ PORTUGUESE_BRAZILIAN ] = "Lineale" ;
+        Text [ SWEDISH ] = "~Linjaler synliga" ;
+        Text [ PORTUGUESE ] = "Réguas visíveis" ;
+        Text[ chinese_simplified ] = "ÏÔÊ¾±ê³ß(~V)";
+        Text[ russian ] = "~Ïîêàçàòü ëèíåéêó";
+        Text[ polish ] = "Widoczne linijki";
+        Text[ japanese ] = "Ù°×‚Ì•\\¦(~V)";
+        Text[ chinese_traditional ] = "Åã¥Ü¼Ğ¤Ø(~V)";
+        Text[ arabic ] = "ÇáãÓÇØÑ ãÑÆíÉ";
+        Text[ greek ] = "×Üñáêåò ïñáôÜ";
+        Text[ korean ] = "´«±İÀÚ Ç¥½Ã";
+        Text[ turkish ] = "Cetvelleri göster";
+        Text[ language_user1 ] = " ";
+    };
+    CheckBox CBX_HELPLINES
+    {
+        Pos = MAP_APPFONT ( 12 , 97  ) ;
+        Size = MAP_APPFONT ( 134 , 10 ) ;
+        TabStop = TRUE ;
+        Text = "Hilfslinien beim ~Verschieben" ;
+        Text [ ENGLISH ] = "Hilfslinien beim Verschieben" ;
+        Text [ dutch ] = "Hulplijnen bij ~verplaatsen" ;
+        Text [ english_us ] = "~Guides when moving" ;
+        Text [ italian ] = "Linee guida durante lo spostamento" ;
+        Text [ spanish ] = "~Guías al desplazar" ;
+        Text [ french ] = "Repères lors du déplacement" ;
+        Text [ swedish ] = "Hjälplinjer vid ~förflyttning" ;
+        Text [ danish ] = "Hjælpelinjer ved flytning" ;
+        Text [ portuguese ] = "Guias ao ~mover objectos" ;
+        Text [ portuguese_brazilian ] = "Hilfslinien beim ~Verschieben" ;
+        Text[ chinese_simplified ] = "ÔÚÒÆ¶¯¶ÔÏóÊ±ÏÔÊ¾¸¨ÖúÏß(~G)";
+        Text[ russian ] = "Íàïğàâ. ëèíèè ïğè ïåğåìåùåíèè îáúåêòà";
+        Text[ polish ] = "Linie pomocnicze przy przesuwaniu obiektu";
+        Text[ japanese ] = "ˆÚ“®‚³‚¹‚é‚Æ‚«‚É•â•ü‚Ì•\\¦(~G)";
+        Text[ chinese_traditional ] = "¦b²¾°Ê®ÉÅã¥Ü»²§U½u(~G)";
+        Text[ arabic ] = "ÇáÎØæØ ÇáãÓÇÚÏÉ ÃËäÇÁ ÇáÅÒÇÍÉ";
+        Text[ greek ] = "Âïçèçôéêİò ãñáììİò êáôÜ ôç ìåôáêßíçóç";
+        Text[ korean ] = "°³Ã¼ ÀÌµ¿½Ã ¾È³»¼±(~G)";
+        Text[ turkish ] = "Taşıma sırasında yardımcı çizgiler";
+        Text[ language_user1 ] = " ";
+    };
+    CheckBox CBX_HANDLES_BEZIER
+    {
+        Pos = MAP_APPFONT ( 12 , 111  ) ;
+        Size = MAP_APPFONT ( 134 , 10 ) ;
+        TabStop = TRUE ;
+        Text = "~Alle Steuerpunkte im Bezier-Editor" ;
+        Text [ ENGLISH ] = "~All handles in Bézier editor" ;
+        Text [ dutch ] = "~Alle besturingspunten in de Bézier-editor" ;
+        Text [ english_us ] = "~All control points in Bézier editor" ;
+        Text [ italian ] = "Tutti i punti di controllo nell'editor Bézier" ;
+        Text [ spanish ] = "~Todos los puntos de control en el editor Bézier" ;
+        Text [ french ] = "~Tous les points de contrôle de l'éditeur Bézier" ;
+        Text [ swedish ] = "~Alla kontrollpunkter i Bézier-editorn" ;
+        Text [ danish ] = "Alle kontrolpunkter i bezier-redigeringen" ;
+        Text [ portuguese_brazilian ] = "~Alle Handles im Bezier-Editor" ;
+        Text [ portuguese ] = "~Todas as guias do editor Bézier" ;
+        Text[ chinese_simplified ] = "ÇúÏß±à¼­Æ÷ÄÚµÄÈ«²¿¿Øµã(~A)";
+        Text[ russian ] = "~Âñå òî÷êè â Ğåäàêòîğå Áåçüå";
+        Text[ polish ] = "~Wszystkie punkty sterown. w edytorze Beziera";
+        Text[ japanese ] = "ÍŞ¼Şª‹Èü•ÒW‚Ì§Œä“_‚ğ‚·‚×‚Ä•\\¦(~A)";
+        Text[ chinese_traditional ] = "¦±½u½s¿èµ{¦¡¤ºªº¥ş³¡±±ÂI(~A)";
+        Text[ arabic ] = "ßá äŞÇØ ÇáÊÍßã İí ãÍÑÑ Bézier";
+        Text[ greek ] = "¼ëåò ôá óçìå~ßá åëİã÷ïõ óå åğåîåñãáóßá Bézier";
+        Text[ korean ] = "º£Áö¿¡ ÆíÁı±âÀÇ ¸ğµç ÇÚµé";
+        Text[ turkish ] = "Bézier düzenleyicisindeki tüm denetim nokt.";
+        Text[ language_user1 ] = " ";
+    };
+    CheckBox CBX_MOVE_OUTLINE
+    {
+        Pos = MAP_APPFONT ( 12 , 125  ) ;
+        Size = MAP_APPFONT ( 134 , 10 ) ;
+        TabStop = TRUE ;
+        Text = "~Umriss jedes einzelnen Objektes" ;
+        Text [ ENGLISH ] = "Umriß jedes einzelnen Objektes" ;
+        Text [ english_us ] = "~Contour of each individual object" ;
+        Text [ italian ] = "Profilo di ogni singolo oggetto" ;
+        Text [ spanish ] = "~Contorno de cada objeto" ;
+        Text [ french ] = "~Contour de chaque objet" ;
+        Text [ dutch ] = "~Contour om ieder object" ;
+        Text [ swedish ] = "Kont~ur för varje enskilt objekt" ;
+        Text [ danish ] = "Hvert enkelt objekts kontur" ;
+        Text [ portuguese ] = "~Contorno de cada um dos objectos" ;
+        Text [ portuguese_brazilian ] = "~Umriß jedes einzelnen Objektes" ;
+        Text[ chinese_simplified ] = "µ¥¸ö¶ÔÏóµÄÂÖÀª(~C)";
+        Text[ russian ] = "Êîíòóğ êàæäîãî îáúåêòà îòäåëüíî";
+        Text[ polish ] = "Kontur ka¿dego oddzielnego obiektu";
+        Text[ japanese ] = "ŠeµÌŞ¼Şª¸Ä‚É“K‚µ‚½—ÖŠs‚Ì•\\¦(~C)";
+        Text[ chinese_traditional ] = "¨C­Óª«¥óªº½ü¹ø(~C)";
+        Text[ arabic ] = "ÇáÎØ ÇáßİÇİí áßá ßÇÆä İÑÏí";
+        Text[ greek ] = "Ğåñßãñáììá êÜèå ìåìïíùìİí. áíôéêåéìİíï~õ";
+        Text[ korean ] = "°¢ °³º° °³Ã¼ÀÇ À±°û(~C)";
+        Text[ turkish ] = "Her bir nesnenin konturu";
         Text[ language_user1 ] = " ";
     };
     Text[ chinese_simplified ] = "ÄÚÈİ";
@@ -1051,9 +382,35 @@ TabPage TP_OPTIONS_MISC
     Text [ french ] = "Autres" ;
     Text [ portuguese_brazilian ] = "Sonstiges" ;
     Text [ portuguese ] = "Outros" ;
+    FixedLine GRP_TEXT
+    {
+        Pos = MAP_APPFONT ( 6 , 3  ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text = "Textobjekte" ;
+        Text [ ENGLISH ] = "Text objects" ;
+        Text [ english_us ] = "Text objects" ;
+        Text [ italian ] = "Oggetti di testo" ;
+        Text [ spanish ] = "Objetos de texto" ;
+        Text [ french ] = "Objets de texte" ;
+        Text [ dutch ] = "Tekstobjecten" ;
+        Text [ swedish ] = "Textobjekt" ;
+        Text [ danish ] = "Tekstobjekter" ;
+        Text [ portuguese ] = "Objectos de texto" ;
+        Text [ portuguese_brazilian ] = "Textobjekte" ;
+        Text[ chinese_simplified ] = "ÎÄ×Ö¶ÔÏó";
+        Text[ russian ] = "Îáúåêòû òåêñòà";
+        Text[ polish ] = "Obiekty tekstowe";
+        Text[ japanese ] = "Ã·½ÄµÌŞ¼Şª¸Ä";
+        Text[ chinese_traditional ] = "¤å¦rª«¥ó";
+        Text[ arabic ] = "ßÇÆäÇÊ äÕíÉ";
+        Text[ greek ] = "Áíôéêåßìåíá êåéìİíïõ";
+        Text[ korean ] = "ÅØ½ºÆ® °³Ã¼";
+        Text[ turkish ] = "Metin nesneleri";
+        Text[ language_user1 ] = " ";
+    };
     CheckBox CBX_QUICKEDIT
     {
-        Pos = MAP_APPFONT ( 12 , 13  ) ;
+        Pos = MAP_APPFONT ( 12 , 14  ) ;
         Size = MAP_APPFONT ( 120 , 10 ) ;
         TabStop = TRUE ;
         Text = "~Schnellbearbeitung zulassen" ;
@@ -1105,35 +462,35 @@ TabPage TP_OPTIONS_MISC
         Text[ turkish ] = "Yalnızca metin bölümü seçilebilir";
         Text[ language_user1 ] = " ";
     };
-    GroupBox GRP_TEXT
+    FixedLine GRP_PROGRAMSTART
     {
-        Pos = MAP_APPFONT ( 6 , 3  ) ;
-        Size = MAP_APPFONT ( 132 , 40 ) ;
-        Text = "Textobjekte" ;
-        Text [ ENGLISH ] = "Text objects" ;
-        Text [ english_us ] = "Text objects" ;
-        Text [ italian ] = "Oggetti di testo" ;
-        Text [ spanish ] = "Objetos de texto" ;
-        Text [ french ] = "Objets de texte" ;
-        Text [ dutch ] = "Tekstobjecten" ;
-        Text [ swedish ] = "Textobjekt" ;
-        Text [ danish ] = "Tekstobjekter" ;
-        Text [ portuguese ] = "Objectos de texto" ;
-        Text [ portuguese_brazilian ] = "Textobjekte" ;
-        Text[ chinese_simplified ] = "ÎÄ×Ö¶ÔÏó";
-        Text[ russian ] = "Îáúåêòû òåêñòà";
-        Text[ polish ] = "Obiekty tekstowe";
-        Text[ japanese ] = "Ã·½ÄµÌŞ¼Şª¸Ä";
-        Text[ chinese_traditional ] = "¤å¦rª«¥ó";
-        Text[ arabic ] = "ßÇÆäÇÊ äÕíÉ";
-        Text[ greek ] = "Áíôéêåßìåíá êåéìİíïõ";
-        Text[ korean ] = "ÅØ½ºÆ® °³Ã¼";
-        Text[ turkish ] = "Metin nesneleri";
+        Pos = MAP_APPFONT ( 6 , 42  ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text = "Neues Dokument" ;
+        Text [ ENGLISH ] = "New document" ;
+        Text [ english_us ] = "New document" ;
+        Text [ portuguese_brazilian ] = "Programmstart" ;
+        Text [ swedish ] = "Nytt dokument" ;
+        Text [ danish ] = "Nyt dokument" ;
+        Text [ italian ] = "Nuovo documento" ;
+        Text [ spanish ] = "Nuevo documento" ;
+        Text [ french ] = "Nouveau document" ;
+        Text [ dutch ] = "Nieuw document" ;
+        Text [ portuguese ] = "Novo documento" ;
+        Text[ chinese_simplified ] = "ĞÂÎÄµµ";
+        Text[ russian ] = "Íîâûé äîêóìåíò";
+        Text[ polish ] = "Nowy dokument";
+        Text[ japanese ] = "V‚µ‚¢ÄŞ·­ÒİÄ";
+        Text[ chinese_traditional ] = "·s¤å¥ó";
+        Text[ arabic ] = "ÇáãÓÊäÏ ÇáÌÏíÏ";
+        Text[ greek ] = "Äçìéïõñãßá åããñÜöïõ";
+        Text[ korean ] = "»õ ¹®¼­";
+        Text[ turkish ] = "Yeni belge";
         Text[ language_user1 ] = " ";
     };
     CheckBox CBX_START_WITH_TEMPLATE
     {
-        Pos = MAP_APPFONT ( 12 , 57  ) ;
+        Pos = MAP_APPFONT ( 12 , 53  ) ;
         Size = MAP_APPFONT ( 120 , 10 ) ;
         TabStop = TRUE ;
         Text = "Mit ~Autopiloten starten" ;
@@ -1158,83 +515,37 @@ TabPage TP_OPTIONS_MISC
         Text[ turkish ] = "OtoPilot ile başla";
         Text[ language_user1 ] = " ";
     };
-    GroupBox GRP_PROGRAMSTART
+    FixedLine GRP_OTHER
     {
-        Pos = MAP_APPFONT ( 6 , 46  ) ;
-        Size = MAP_APPFONT ( 132 , 27 ) ;
-        Text = "Neues Dokument" ;
-        Text [ ENGLISH ] = "New document" ;
-        Text [ english_us ] = "New document" ;
-        Text [ portuguese_brazilian ] = "Programmstart" ;
-        Text [ swedish ] = "Nytt dokument" ;
-        Text [ danish ] = "Nyt dokument" ;
-        Text [ italian ] = "Nuovo documento" ;
-        Text [ spanish ] = "Nuevo documento" ;
-        Text [ french ] = "Nouveau document" ;
-        Text [ dutch ] = "Nieuw document" ;
-        Text [ portuguese ] = "Novo documento" ;
-        Text[ chinese_simplified ] = "ĞÂÎÄµµ";
-        Text[ russian ] = "Íîâûé äîêóìåíò";
-        Text[ polish ] = "Nowy dokument";
-        Text[ japanese ] = "V‚µ‚¢ÄŞ·­ÒİÄ";
-        Text[ chinese_traditional ] = "·s¤å¥ó";
-        Text[ arabic ] = "ÇáãÓÊäÏ ÇáÌÏíÏ";
-        Text[ greek ] = "Äçìéïõñãßá åããñÜöïõ";
-        Text[ korean ] = "»õ ¹®¼­";
-        Text[ turkish ] = "Yeni belge";
-        Text[ language_user1 ] = " ";
-    };
-    /*
-    CheckBox CBX_SLANT_BUT_SHEAR
-    {
-        Pos = MAP_APPFONT( 125, 114 );
-        Size = MAP_APPFONT( 120, 12 );
-        TabStop = TRUE;
-        Text = "Gleiche Seitenlänge beim Scheren";
-        Text[ ENGLISH ] = "Gleiche Seitenlänge beim Scheren";
-        Text[ NORWEGIAN ] = "Gleiche Seitenlänge beim Scheren";
-        Text[ DANISH ] = "Gleiche Seitenlänge beim Scheren";
-        Text[ ENGLISH_US ] = "Gleiche Seitenlänge beim Scheren";
-        Text[ SPANISH ] = "Gleiche Seitenlänge beim Scheren";
-        Text[ FINNISH ] = "Gleiche Seitenlänge beim Scheren";
-        Text[ FRENCH ] = "Gleiche Seitenlänge beim Scheren";
-        Text[ ITALIAN ] = "Gleiche Seitenlänge beim Scheren";
-        Text[ DUTCH ] = "Gleiche Seitenlänge beim Scheren";
-        Text[ PORTUGUESE_BRAZILIAN ] = "Gleiche Seitenlänge beim Scheren";
-        Text[ SWEDISH ] = "Gleiche Seitenlänge beim Scheren";
-        Text[ PORTUGUESE ] = "Gleiche Seitenlänge beim Scheren";
-    };
-*/
-    GroupBox GRP_DISPLAY
-    {
-        Pos = MAP_APPFONT ( 124 , 3 ) ;
-        Size = MAP_APPFONT ( 130 , 76 ) ;
-        Hide = TRUE ;
-        Text = "Anzeigen" ;
-        Text [ ENGLISH ] = "Anzeigen" ;
-        Text [ english_us ] = "Display" ;
-        Text [ italian ] = "Mostra" ;
-        Text [ spanish ] = "Mostrar" ;
-        Text [ french ] = "Afficher" ;
-        Text [ dutch ] = "Weergave" ;
-        Text [ swedish ] = "Visa" ;
-        Text [ danish ] = "Vis" ;
-        Text [ portuguese ] = "Ver" ;
-        Text [ portuguese_brazilian ] = "Anzeigen" ;
-        Text[ chinese_simplified ] = "ÏÔÊ¾";
-        Text[ russian ] = "Ïîêàçàòü";
-        Text[ polish ] = "Poka¿";
-        Text[ japanese ] = "•\\¦";
-        Text[ chinese_traditional ] = "Åã¥Ü";
-        Text[ arabic ] = "ÅÙåÇÑ";
-        Text[ greek ] = "ÅìöÜíéóç";
-        Text[ korean ] = "Ç¥½Ã";
-        Text[ turkish ] = "Görüntüle";
+        Pos = MAP_APPFONT ( 6 , 69  ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text = "Sonstiges" ;
+        Text [ ENGLISH ] = "Sonstiges" ;
+        Text [ NORWEGIAN ] = "Sonstiges" ;
+        Text [ DANISH ] = "Andet" ;
+        Text [ ENGLISH_US ] = "Other" ;
+        Text [ SPANISH ] = "Otros" ;
+        Text [ FINNISH ] = "Sonstiges" ;
+        Text [ FRENCH ] = "Autres" ;
+        Text [ ITALIAN ] = "Altro" ;
+        Text [ DUTCH ] = "Overige" ;
+        Text [ PORTUGUESE_BRAZILIAN ] = "Sonstiges" ;
+        Text [ SWEDISH ] = "Övrigt" ;
+        Text [ PORTUGUESE ] = "Outros" ;
+        Text[ chinese_simplified ] = "ÆäËû";
+        Text[ russian ] = "Ïğî÷åå";
+        Text[ polish ] = "Inne";
+        Text[ japanese ] = "‚»‚Ì‘¼";
+        Text[ chinese_traditional ] = "¨ä¥¦";
+        Text[ arabic ] = "ÛíÑ Ğáß";
+        Text[ greek ] = "¢ëëá";
+        Text[ korean ] = "±âÅ¸";
+        Text[ turkish ] = "Diğer";
         Text[ language_user1 ] = " ";
     };
     CheckBox CBX_MASTERPAGE_CACHE
     {
-        Pos = MAP_APPFONT ( 12 , 87  ) ;
+        Pos = MAP_APPFONT ( 12 , 80  ) ;
         Size = MAP_APPFONT ( 120 , 10 ) ;
         TabStop = TRUE ;
         Text = "~Cache für Hintergrund benutzen" ;
@@ -1261,7 +572,7 @@ TabPage TP_OPTIONS_MISC
     };
     CheckBox CBX_COPY
     {
-        Pos = MAP_APPFONT ( 12 , 101  ) ;
+        Pos = MAP_APPFONT ( 12 , 93  ) ;
         Size = MAP_APPFONT ( 120 , 10 ) ;
         TabStop = TRUE ;
         Text = "~Kopie beim Verschieben" ;
@@ -1288,7 +599,7 @@ TabPage TP_OPTIONS_MISC
     };
     CheckBox CBX_MARKED_HIT_MOVES_ALWAYS
     {
-        Pos = MAP_APPFONT ( 12 , 115  ) ;
+        Pos = MAP_APPFONT ( 12 , 106  ) ;
         Size = MAP_APPFONT ( 120 , 10 ) ;
         TabStop = TRUE ;
         Text = "~Objekte immer verschiebbar" ;
@@ -1317,9 +628,10 @@ TabPage TP_OPTIONS_MISC
     };
     CheckBox CBX_CROOK_NO_CONTORTION
     {
-        Pos = MAP_APPFONT ( 12 , 129  ) ;
+        Pos = MAP_APPFONT ( 12 , 119  ) ;
         Size = MAP_APPFONT ( 120 , 10 ) ;
         TabStop = TRUE ;
+        Hide = TRUE;
         Text = "S~etzen auf Kreis: nicht verzerren" ;
         Text [ ENGLISH ] = "Setzen auf Kreis: nicht verzerren" ;
         Text [ NORWEGIAN ] = "Setzen auf Kreis: nicht verzerren" ;
@@ -1344,37 +656,35 @@ TabPage TP_OPTIONS_MISC
         Text[ turkish ] = "Daireye oturt (çarpıtmadan)";
         Text[ language_user1 ] = " ";
     };
-    GroupBox GRP_OTHER
+    FixedLine GRP_START_WITH_ACTUAL_PAGE
     {
-        Pos = MAP_APPFONT ( 6 , 76  ) ;
-        Size = MAP_APPFONT ( 132 , 69 ) ;
-        Text = "Sonstiges" ;
-        Text [ ENGLISH ] = "Sonstiges" ;
-        Text [ NORWEGIAN ] = "Sonstiges" ;
-        Text [ DANISH ] = "Andet" ;
-        Text [ ENGLISH_US ] = "Other" ;
-        Text [ SPANISH ] = "Otros" ;
-        Text [ FINNISH ] = "Sonstiges" ;
-        Text [ FRENCH ] = "Autres" ;
-        Text [ ITALIAN ] = "Altro" ;
-        Text [ DUTCH ] = "Overige" ;
-        Text [ PORTUGUESE_BRAZILIAN ] = "Sonstiges" ;
-        Text [ SWEDISH ] = "Övrigt" ;
-        Text [ PORTUGUESE ] = "Outros" ;
-        Text[ chinese_simplified ] = "ÆäËû";
-        Text[ russian ] = "Ïğî÷åå";
-        Text[ polish ] = "Inne";
-        Text[ japanese ] = "‚»‚Ì‘¼";
-        Text[ chinese_traditional ] = "¨ä¥¦";
-        Text[ arabic ] = "ÛíÑ Ğáß";
-        Text[ greek ] = "¢ëëá";
-        Text[ korean ] = "±âÅ¸";
-        Text[ turkish ] = "Diğer";
+        Pos = MAP_APPFONT ( 6 , 120  ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text = "Starten der Präsentation" ;
+        Text [ ENGLISH ] = "Start presentation" ;
+        Text [ english_us ] = "Start presentation" ;
+        Text [ portuguese_brazilian ] = "Starten der Präsentation" ;
+        Text [ swedish ] = "Starta presentation" ;
+        Text [ danish ] = "Start præsentation" ;
+        Text [ italian ] = "Avvio della presentazione" ;
+        Text [ spanish ] = "Iniciar la presentación" ;
+        Text [ french ] = "Lancement de la présentation" ;
+        Text [ dutch ] = "Presentatie starten" ;
+        Text [ portuguese ] = "Começar apresentação" ;
+        Text[ chinese_simplified ] = "·ÅÓ³ÑİÊ¾ÎÄ¸å";
+        Text[ russian ] = "Çàïóñê ïğåçåíòàöèè";
+        Text[ polish ] = "Pocz¹tek prezentacji";
+        Text[ japanese ] = "ÌßÚ¾ŞİÃ°¼®İ‚ÌŠJn";
+        Text[ chinese_traditional ] = "©ñ¬MÂ²³ø";
+        Text[ arabic ] = "ÈÏÁ ÇáÚÑÖ ÇáÊŞÏíãí";
+        Text[ greek ] = "Åêêßíçóç ğáñïõóßáóçò";
+        Text[ korean ] = "ÇÁ¸®Á¨Å×ÀÌ¼Ç ½ÃÀÛ";
+        Text[ turkish ] = "Sunuyu başlat";
         Text[ language_user1 ] = " ";
     };
     CheckBox CBX_START_WITH_ACTUAL_PAGE
     {
-        Pos = MAP_APPFONT ( 12 , 159  ) ;
+        Pos = MAP_APPFONT ( 12 , 131  ) ;
         Size = MAP_APPFONT ( 120 , 10 ) ;
         TabStop = TRUE ;
         Text = "~Immer mit aktueller Seite" ;
@@ -1399,31 +709,90 @@ TabPage TP_OPTIONS_MISC
         Text[ turkish ] = "Hep güncel sayfa ile";
         Text[ language_user1 ] = " ";
     };
-    GroupBox GRP_START_WITH_ACTUAL_PAGE
+    FixedLine GRP_SETTINGS
     {
-        Pos = MAP_APPFONT ( 6 , 148  ) ;
-        Size = MAP_APPFONT ( 132 , 31 ) ;
-        Text = "Starten der Präsentation" ;
-        Text [ ENGLISH ] = "Start presentation" ;
-        Text [ english_us ] = "Start presentation" ;
-        Text [ portuguese_brazilian ] = "Starten der Präsentation" ;
-        Text [ swedish ] = "Starta presentation" ;
-        Text [ danish ] = "Start præsentation" ;
-        Text [ italian ] = "Avvio della presentazione" ;
-        Text [ spanish ] = "Iniciar la presentación" ;
-        Text [ french ] = "Lancement de la présentation" ;
-        Text [ dutch ] = "Presentatie starten" ;
-        Text [ portuguese ] = "Começar apresentação" ;
-        Text[ chinese_simplified ] = "·ÅÓ³ÑİÊ¾ÎÄ¸å";
-        Text[ russian ] = "Çàïóñê ïğåçåíòàöèè";
-        Text[ polish ] = "Pocz¹tek prezentacji";
-        Text[ japanese ] = "ÌßÚ¾ŞİÃ°¼®İ‚ÌŠJn";
-        Text[ chinese_traditional ] = "©ñ¬MÂ²³ø";
-        Text[ arabic ] = "ÈÏÁ ÇáÚÑÖ ÇáÊŞÏíãí";
-        Text[ greek ] = "Åêêßíçóç ğáñïõóßáóçò";
-        Text[ korean ] = "ÇÁ¸®Á¨Å×ÀÌ¼Ç ½ÃÀÛ";
-        Text[ turkish ] = "Sunuyu başlat";
+        Pos = MAP_APPFONT ( 6 , 146  ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text = "Einstellungen" ;
+        Text [ ENGLISH ] = "Settings" ;
+    };
+    FixedText FT_METRIC
+    {
+        Pos = MAP_APPFONT ( 6 , 159  ) ;
+        Size = MAP_APPFONT ( 50 , 8 ) ;
+        Text = "Maßeinheit" ;
+        Text [ ENGLISH ] = "Metric Units" ;
+        Text [ norwegian ] = "Metriske Enheter" ;
+        Text [ italian ] = "Unità di misura" ;
+        Text [ portuguese_brazilian ] = "Unidades métricas" ;
+        Text [ portuguese ] = "Unidades métricas" ;
+        Text [ finnish ] = "Metriset yksiköt" ;
+        Text [ danish ] = "Måleenhed" ;
+        Text [ french ] = "Unité de mesure" ;
+        Text [ swedish ] = "Måttenhet" ;
+        Text [ dutch ] = "Maateenheid" ;
+        Text [ spanish ] = "Unidad de medida" ;
+        Text [ english_us ] = "Meas. units" ;
+        Text[ chinese_simplified ] = "¶ÈÁ¿µ¥Î»";
+        Text[ russian ] = "Åäèíèöà èçìåğåíèÿ";
+        Text[ polish ] = "Jednostka miary";
+        Text[ japanese ] = "“x—Ê’PˆÊ";
+        Text[ chinese_traditional ] = "«×¶q³æ¦ì";
+        Text[ arabic ] = "æÍÏÉ ÇáŞíÇÓ";
+        Text[ greek ] = "ÌïíÜäá ìİôñçóçò";
+        Text[ korean ] = "´ÜÀ§";
+        Text[ turkish ] = "Ölçü birimi";
         Text[ language_user1 ] = " ";
+    };
+    ListBox LB_METRIC
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 60 , 157  ) ;
+        Size = MAP_APPFONT ( 60 , 50 ) ;
+        DropDown = TRUE ;
+    };
+    FixedText FT_TABSTOP
+    {
+        Pos = MAP_APPFONT ( 130 , 159  ) ;
+        Size = MAP_APPFONT ( 50 , 8 ) ;
+        Text = "Tabulatorabstand" ;
+        Text [ ENGLISH ] = "Tab distance" ;
+        Text [ english_us ] = "Tab stops" ;
+        Text [ swedish ] = "Tabulatoravstånd" ;
+        Text [ danish ] = "Tabulatorafstand" ;
+        Text [ italian ] = "Posizione tabulazioni" ;
+        Text [ spanish ] = "Distancia entre tabuladores" ;
+        Text [ french ] = "Espace entre les tabulations" ;
+        Text [ dutch ] = "Tabstops" ;
+        Text [ portuguese ] = "Intervalo entre tabulações" ;
+        Text [ portuguese_brazilian ] = "Tabulatorabstand" ;
+        Text[ chinese_simplified ] = "ÖÆ±í·ûµÄ¼ä¸ô";
+        Text[ russian ] = "Ïîçèöèÿ òàáóëÿöèè";
+        Text[ polish ] = "Odstêp tabulatorów";
+        Text[ japanese ] = "ÀÌŞŠÔŠu";
+        Text[ chinese_traditional ] = "»sªí²Åªº¶¡¹j";
+        Text[ arabic ] = "ÚáÇãÇÊ ÇáÌÏæáÉ";
+        Text[ greek ] = "Áğüóôáóç óôçëïèåôşí";
+        Text[ korean ] = "ÅÇ °£°İ";
+        Text[ turkish ] = "Sekme durakları";
+        Text[ language_user1 ] = " ";
+    };
+    MetricField MTR_FLD_TABSTOP
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 185 , 157  ) ;
+        Size = MAP_APPFONT ( 60 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Unit = FUNIT_CM ;
+        SpinSize = 10 ;
+        Minimum = 50 ;
+        Maximum = 9999 ;
+        First = 50 ;
+        Last = 2000 ;
+        StrictFormat = TRUE ;
+        DecimalDigits = 2 ;
     };
     Text[ chinese_simplified ] = "ÆäËü";
     Text[ russian ] = "Ïğî÷åå";

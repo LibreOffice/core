@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpoption.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2000-10-24 11:16:24 $
+ *  last change: $Author: os $ $Date: 2001-03-22 14:14:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,33 +88,22 @@
 \************************************************************************/
 
 SdTpOptionsSnap::SdTpOptionsSnap( Window* pParent, const SfxItemSet& rInAttrs  ) :
-        SfxTabPage          ( pParent, SdResId( TP_OPTIONS_SNAP ), rInAttrs ),
-
-        aFiSnap             ( this, SdResId( FI_SNAP ) ),
-        aCbxSnapGrid        ( this, SdResId( CBX_SNAP_GRID ) ),
-        aCbxSnapHelplines   ( this, SdResId( CBX_SNAP_HELPLINES ) ),
-        aCbxSnapBorder      ( this, SdResId( CBX_SNAP_BORDER ) ),
-        aCbxSnapFrame       ( this, SdResId( CBX_SNAP_FRAME ) ),
-        aCbxSnapPoints      ( this, SdResId( CBX_SNAP_POINTS ) ),
-        aFtSnapArea         ( this, SdResId( FT_SNAP_AREA ) ),
-        aMtrFldSnapArea     ( this, SdResId( MTR_FLD_SNAP_AREA ) ),
-        aGrpSnap            ( this, SdResId( GRP_SNAP ) ),
-        aFiOrtho            ( this, SdResId( FI_ORTHO ) ),
-        aCbxOrtho           ( this, SdResId( CBX_ORTHO ) ),
-        aCbxBigOrtho        ( this, SdResId( CBX_BIGORTHO ) ),
-        aCbxRotate          ( this, SdResId( CBX_ROTATE ) ),
-        aMtrFldAngle        ( this, SdResId( MTR_FLD_ANGLE ) ),
-        aFtBezAngle         ( this, SdResId( FT_BEZ_ANGLE ) ),
-        aMtrFldBezAngle     ( this, SdResId( MTR_FLD_BEZ_ANGLE ) ),
-        aGrpOrtho           ( this, SdResId( GRP_ORTHO ) ),
-        rOutAttrs           ( rInAttrs ),
-        pExampleSet         (0)
+        SvxGridTabPage(pParent, rInAttrs)
 {
-    FreeResource();
-
-    SetExchangeSupport();
-
-    aCbxRotate.SetClickHdl( LINK( this, SdTpOptionsSnap, ClickRotateHdl ) );
+    aGrpSnap.Show();
+    aCbxSnapHelplines.Show();
+    aCbxSnapBorder.Show();
+    aCbxSnapFrame.Show();
+    aCbxSnapPoints.Show();
+    aFtSnapArea.Show();
+    aMtrFldSnapArea.Show();
+    aGrpOrtho.Show();
+    aCbxOrtho.Show();
+    aCbxBigOrtho.Show();
+    aCbxRotate.Show();
+    aMtrFldAngle.Show();
+    aFtBezAngle.Show();
+    aMtrFldBezAngle.Show();
 }
 
 // -----------------------------------------------------------------------
@@ -127,9 +116,10 @@ SdTpOptionsSnap::~SdTpOptionsSnap()
 
 BOOL SdTpOptionsSnap::FillItemSet( SfxItemSet& rAttrs )
 {
+    SvxGridTabPage::FillItemSet(rAttrs);
     SdOptionsSnapItem* pOptsItem = NULL;
-    if(SFX_ITEM_SET != rAttrs.GetItemState( ATTR_OPTIONS_SNAP, FALSE, (const SfxPoolItem**)&pOptsItem ))
-        pExampleSet->GetItemState( ATTR_OPTIONS_SNAP, FALSE, (const SfxPoolItem**)&pOptsItem );
+//    if(SFX_ITEM_SET != rAttrs.GetItemState( ATTR_OPTIONS_SNAP, FALSE, (const SfxPoolItem**)&pOptsItem ))
+//        pExampleSet->GetItemState( ATTR_OPTIONS_SNAP, FALSE, (const SfxPoolItem**)&pOptsItem );
 
     SdOptionsSnapItem aOptsItem( ATTR_OPTIONS_SNAP );
 
@@ -150,22 +140,6 @@ BOOL SdTpOptionsSnap::FillItemSet( SfxItemSet& rAttrs )
     // Evtl. vorhandenes GridItem wird geholt, um nicht versehentlich
     // irgendwelche Standardwerte einzustellen
     const SfxPoolItem* pAttr = NULL;
-
-    // der ExampleSet wird im Reset mit dem inputset initialisiert
-    DBG_ASSERT(pExampleSet, "Wo ist der ExampleSet?")
-    if( SFX_ITEM_SET != rAttrs.GetItemState( SID_ATTR_GRID_OPTIONS , FALSE, (const SfxPoolItem**) &pAttr ) )
-        pExampleSet->GetItemState( SID_ATTR_GRID_OPTIONS , FALSE, (const SfxPoolItem**) &pAttr );
-
-    if( pAttr )
-    {
-        SdOptionsGridItem* pGridAttr = (SdOptionsGridItem*) pAttr;
-        if(pGridAttr->GetUseGridSnap() != aCbxSnapGrid.IsChecked())
-        {
-            pGridAttr->SetUseGridSnap( aCbxSnapGrid.IsChecked() );
-            rAttrs.Put( *pGridAttr );
-        }
-    }
-
     return( TRUE );
 }
 
@@ -173,7 +147,7 @@ BOOL SdTpOptionsSnap::FillItemSet( SfxItemSet& rAttrs )
 
 void __EXPORT SdTpOptionsSnap::Reset( const SfxItemSet& rAttrs )
 {
-    pExampleSet = &rAttrs;
+    SvxGridTabPage::Reset(rAttrs);
 
     SdOptionsSnapItem aOptsItem( (const SdOptionsSnapItem&) rAttrs.
                         Get( ATTR_OPTIONS_SNAP ) );
@@ -189,7 +163,7 @@ void __EXPORT SdTpOptionsSnap::Reset( const SfxItemSet& rAttrs )
     aMtrFldAngle.SetValue( aOptsItem.GetAngle() );
     aMtrFldBezAngle.SetValue( aOptsItem.GetEliminatePolyPointLimitAngle() );
 
-    ClickRotateHdl( NULL );
+    aCbxRotate.GetClickHdl().Call(0);
 }
 
 // -----------------------------------------------------------------------
@@ -200,68 +174,152 @@ SfxTabPage* __EXPORT SdTpOptionsSnap::Create( Window* pWindow,
     return( new SdTpOptionsSnap( pWindow, rAttrs ) );
 }
 
-// -----------------------------------------------------------------------
-
-IMPL_LINK( SdTpOptionsSnap, ClickRotateHdl, void *, p )
-{
-    if( aCbxRotate.IsChecked() )
-        aMtrFldAngle.Enable();
-    else
-        aMtrFldAngle.Disable();
-
-    return( 0L );
-}
-
-// -----------------------------------------------------------------------
-
-void SdTpOptionsSnap::ActivatePage( const SfxItemSet& rSet )
-{
-    const SfxPoolItem* pAttr = NULL;
-
-    if( SFX_ITEM_SET != rSet.GetItemState( SID_ATTR_GRID_OPTIONS , FALSE, (const SfxPoolItem**)&pAttr ))
-        if( SFX_ITEM_SET != pExampleSet->GetItemState( SID_ATTR_GRID_OPTIONS, FALSE, (const SfxPoolItem**)&pAttr ))
-            pAttr = NULL;
-
-    if(pAttr)
-    {
-        SdOptionsGridItem* pGridAttr = (SdOptionsGridItem*) pAttr;
-        aCbxSnapGrid.Check( pGridAttr->GetUseGridSnap() );
-    }
-}
-
-// -----------------------------------------------------------------------
-
-int SdTpOptionsSnap::DeactivatePage( SfxItemSet* pSet )
-{
-    FillItemSet( *pSet );
-
-    return( LEAVE_PAGE );
-}
-
 /*************************************************************************
 |*
-|*  TabPage zum Einstellen der Layout-Optionen
+|*  TabPage zum Einstellen der Inhalte-Optionen
 |*
 \************************************************************************/
 
-SdTpOptionsLayout::SdTpOptionsLayout( Window* pParent, const SfxItemSet& rInAttrs  ) :
-        SfxTabPage          ( pParent, SdResId( TP_OPTIONS_LAYOUT ), rInAttrs ),
+SdTpOptionsContents::SdTpOptionsContents( Window* pParent, const SfxItemSet& rInAttrs  ) :
+        SfxTabPage          ( pParent, SdResId( TP_OPTIONS_CONTENTS ), rInAttrs ),
+        aCbxExternGraphic   ( this, SdResId( CBX_EXTERN_GRAPHIC ) ),
+        aCbxOutlineMode     ( this, SdResId( CBX_OUTLINEMODE ) ),
+        aCbxNoText          ( this, SdResId( CBX_NOTEXT ) ),
+        aCbxHairlineMode    ( this, SdResId( CBX_HAIRLINEMODE ) ),
+        aGrpViewSubstitute  ( this, SdResId( GRP_VIEW_SUBSTITUTE ) ),
         aCbxRuler           ( this, SdResId( CBX_RULER ) ),
         aCbxMoveOutline     ( this, SdResId( CBX_MOVE_OUTLINE ) ),
         aCbxDragStripes     ( this, SdResId( CBX_HELPLINES ) ),
         aCbxHandlesBezier   ( this, SdResId( CBX_HANDLES_BEZIER ) ),
-        aGrpDisplay         ( this, SdResId( GRP_DISPLAY ) ),
-
-        aLbMetric           ( this, ResId( LB_METRIC ) ),
-        aGrpMetric          ( this, ResId( GRP_METRIC ) ),
-
-        aMtrFldTabstop      ( this, ResId( MTR_FLD_TABSTOP ) ),
-        aGrpTabstop         ( this, ResId( GRP_TABSTOP ) ),
-
-        rOutAttrs           ( rInAttrs )
+        aGrpDisplay         ( this, SdResId( GRP_DISPLAY ) )
 {
     FreeResource();
+}
 
+// -----------------------------------------------------------------------
+
+SdTpOptionsContents::~SdTpOptionsContents()
+{
+}
+
+// -----------------------------------------------------------------------
+
+BOOL SdTpOptionsContents::FillItemSet( SfxItemSet& rAttrs )
+{
+    BOOL bModified = FALSE;
+
+    if( aCbxExternGraphic.GetSavedValue()   != aCbxExternGraphic.IsChecked() ||
+        aCbxOutlineMode.GetSavedValue()     != aCbxOutlineMode.IsChecked() ||
+        aCbxNoText.GetSavedValue()          != aCbxNoText.IsChecked() ||
+        aCbxHairlineMode.GetSavedValue()    != aCbxHairlineMode.IsChecked() )
+    {
+        SdOptionsContentsItem aOptsItem( ATTR_OPTIONS_CONTENTS );
+
+        aOptsItem.SetExternGraphic( aCbxExternGraphic.IsChecked() );
+        aOptsItem.SetOutlineMode( aCbxOutlineMode.IsChecked() );
+        aOptsItem.SetNoText( aCbxNoText.IsChecked() );
+        aOptsItem.SetHairlineMode( aCbxHairlineMode.IsChecked() );
+
+        rAttrs.Put( aOptsItem );
+
+        bModified = TRUE;
+    }
+
+    if( aCbxRuler.GetSavedValue()           != aCbxRuler.IsChecked() ||
+        aCbxMoveOutline.GetSavedValue()     != aCbxMoveOutline.IsChecked() ||
+        aCbxDragStripes.GetSavedValue()     != aCbxDragStripes.IsChecked() ||
+        //aCbxHelplines.GetSavedValue()     != aCbxHelplines.IsChecked() ||
+        aCbxHandlesBezier.GetSavedValue()   != aCbxHandlesBezier.IsChecked() )
+    {
+        SdOptionsLayoutItem aOptsItem( ATTR_OPTIONS_LAYOUT );
+
+        aOptsItem.SetRulerVisible( aCbxRuler.IsChecked() );
+        aOptsItem.SetMoveOutline( aCbxMoveOutline.IsChecked() );
+        aOptsItem.SetDragStripes( aCbxDragStripes.IsChecked() );
+        aOptsItem.SetHandlesBezier( aCbxHandlesBezier.IsChecked() );
+        //aOptsItem.SetHelplines( aCbxHelplines.IsChecked() );
+
+        rAttrs.Put( aOptsItem );
+        bModified = TRUE;
+    }
+    return( bModified );
+}
+
+// -----------------------------------------------------------------------
+
+void SdTpOptionsContents::Reset( const SfxItemSet& rAttrs )
+{
+    SdOptionsContentsItem aOptsItem( (const SdOptionsContentsItem&) rAttrs.
+                        Get( ATTR_OPTIONS_CONTENTS ) );
+
+    aCbxExternGraphic.Check( aOptsItem.IsExternGraphic() );
+    aCbxOutlineMode.Check(aOptsItem.IsOutlineMode() );
+    aCbxNoText.Check( aOptsItem.IsNoText() );
+    aCbxHairlineMode.Check( aOptsItem.IsHairlineMode() );
+
+    aCbxExternGraphic.SaveValue();
+    aCbxOutlineMode.SaveValue();
+    aCbxNoText.SaveValue();
+    aCbxHairlineMode.SaveValue();
+
+    SdOptionsLayoutItem aLayoutItem( (const SdOptionsLayoutItem&) rAttrs.
+                        Get( ATTR_OPTIONS_LAYOUT ) );
+
+    aCbxRuler.Check( aLayoutItem.IsRulerVisible() );
+    aCbxMoveOutline.Check( aLayoutItem.IsMoveOutline() );
+    aCbxDragStripes.Check( aLayoutItem.IsDragStripes() );
+    aCbxHandlesBezier.Check( aLayoutItem.IsHandlesBezier() );
+    //aCbxHelplines.Check( aLayoutItem.IsHelplines() );
+
+    aCbxRuler.SaveValue();
+    aCbxMoveOutline.SaveValue();
+    aCbxDragStripes.SaveValue();
+    aCbxHandlesBezier.SaveValue();
+    //aCbxHelplines.SaveValue();
+}
+
+// -----------------------------------------------------------------------
+
+SfxTabPage* __EXPORT SdTpOptionsContents::Create( Window* pWindow,
+                const SfxItemSet& rAttrs )
+{
+    return( new SdTpOptionsContents( pWindow, rAttrs ) );
+}
+
+/*************************************************************************
+|*
+|*  TabPage zum Einstellen der Sonstige-Optionen
+|*
+\************************************************************************/
+
+SdTpOptionsMisc::SdTpOptionsMisc( Window* pParent, const SfxItemSet& rInAttrs  ) :
+        SfxTabPage          ( pParent, SdResId( TP_OPTIONS_MISC ), rInAttrs ),
+    aCbxQuickEdit               ( this, SdResId( CBX_QUICKEDIT ) ),
+    aCbxPickThrough             ( this, SdResId( CBX_PICKTHROUGH ) ),
+    aGrpText                    ( this, SdResId( GRP_TEXT ) ),
+
+    // Template & Layout laufen z.Z. synchron!
+    aCbxStartWithTemplate       ( this, SdResId( CBX_START_WITH_TEMPLATE ) ),
+    aGrpProgramStart            ( this, SdResId( GRP_PROGRAMSTART ) ),
+
+    aCbxMasterPageCache         ( this, SdResId( CBX_MASTERPAGE_CACHE ) ),
+
+    aCbxCopy                    ( this, SdResId( CBX_COPY ) ),
+    aCbxMarkedHitMovesAlways    ( this, SdResId( CBX_MARKED_HIT_MOVES_ALWAYS ) ),
+    aCbxCrookNoContortion       ( this, SdResId( CBX_CROOK_NO_CONTORTION ) ),
+    aGrpOther                   ( this, SdResId( GRP_OTHER ) ),
+
+    /// NEU
+    aCbxStartWithActualPage     ( this, SdResId( CBX_START_WITH_ACTUAL_PAGE ) ),
+    aGrpStartWithActualPage     ( this, SdResId( GRP_START_WITH_ACTUAL_PAGE ) ),
+
+    aGrpSettings                ( this, SdResId( GRP_SETTINGS ) ),
+    aTxtMetric                  ( this, SdResId( FT_METRIC ) ),
+    aLbMetric                   ( this, SdResId( LB_METRIC ) ),
+    aTxtTabstop                 ( this, SdResId( FT_TABSTOP ) ),
+    aMtrFldTabstop              ( this, SdResId( MTR_FLD_TABSTOP ) )
+{
+    FreeResource();
     SetExchangeSupport();
 
     // Metrik einstellen
@@ -288,39 +346,62 @@ SdTpOptionsLayout::SdTpOptionsLayout( Window* pParent, const SfxItemSet& rInAttr
         USHORT nPos = aLbMetric.InsertEntry( sMetric );
         aLbMetric.SetEntryData( nPos, (void*)nFieldUnit );
     }
-    aLbMetric.SetSelectHdl( LINK( this, SdTpOptionsLayout, SelectMetricHdl_Impl ) );
+    aLbMetric.SetSelectHdl( LINK( this, SdTpOptionsMisc, SelectMetricHdl_Impl ) );
 }
 
 // -----------------------------------------------------------------------
 
-SdTpOptionsLayout::~SdTpOptionsLayout()
+SdTpOptionsMisc::~SdTpOptionsMisc()
 {
 }
+// -----------------------------------------------------------------------
+void SdTpOptionsMisc::ActivatePage( const SfxItemSet& rSet )
+{
+    // Hier muss noch einmal SaveValue gerufen werden, da sonst u.U.
+    // der Wert in anderen TabPages keine Wirkung hat
+    aLbMetric.SaveValue();
+}
 
 // -----------------------------------------------------------------------
 
-BOOL SdTpOptionsLayout::FillItemSet( SfxItemSet& rAttrs )
+int SdTpOptionsMisc::DeactivatePage( SfxItemSet* pSet )
+{
+    FillItemSet( *pSet );
+
+    return LEAVE_PAGE;
+}
+
+// -----------------------------------------------------------------------
+
+BOOL SdTpOptionsMisc::FillItemSet( SfxItemSet& rAttrs )
 {
     BOOL bModified = FALSE;
 
-    if( aCbxRuler.GetSavedValue()           != aCbxRuler.IsChecked() ||
-        aCbxMoveOutline.GetSavedValue()     != aCbxMoveOutline.IsChecked() ||
-        aCbxDragStripes.GetSavedValue()     != aCbxDragStripes.IsChecked() ||
-        //aCbxHelplines.GetSavedValue()     != aCbxHelplines.IsChecked() ||
-        aCbxHandlesBezier.GetSavedValue()   != aCbxHandlesBezier.IsChecked() )
+    if( aCbxStartWithTemplate.GetSavedValue()   != aCbxStartWithTemplate.IsChecked() ||
+        aCbxMarkedHitMovesAlways.GetSavedValue()!= aCbxMarkedHitMovesAlways.IsChecked() ||
+        aCbxCrookNoContortion.GetSavedValue()   != aCbxCrookNoContortion.IsChecked() ||
+        aCbxQuickEdit.GetSavedValue()           != aCbxQuickEdit.IsChecked() ||
+        aCbxPickThrough.GetSavedValue()         != aCbxPickThrough.IsChecked() ||
+        aCbxMasterPageCache.GetSavedValue()     != aCbxMasterPageCache.IsChecked() ||
+        aCbxCopy.GetSavedValue()                != aCbxCopy.IsChecked() ||
+        /// NEU
+        aCbxStartWithActualPage.GetSavedValue() != aCbxStartWithActualPage.IsChecked() )
     {
+        SdOptionsMiscItem aOptsItem( ATTR_OPTIONS_MISC );
+
+        aOptsItem.SetStartWithTemplate( aCbxStartWithTemplate.IsChecked() );
+        aOptsItem.SetMarkedHitMovesAlways( aCbxMarkedHitMovesAlways.IsChecked() );
+        aOptsItem.SetCrookNoContortion( aCbxCrookNoContortion.IsChecked() );
+        aOptsItem.SetQuickEdit( aCbxQuickEdit.IsChecked() );
+        aOptsItem.SetPickThrough( aCbxPickThrough.IsChecked() );
+        aOptsItem.SetMasterPagePaintCaching( aCbxMasterPageCache.IsChecked() );
+        aOptsItem.SetDragWithCopy( aCbxCopy.IsChecked() );
+        aOptsItem.SetStartWithActualPage( aCbxStartWithActualPage.IsChecked() );
+
+        rAttrs.Put( aOptsItem );
+
         bModified = TRUE;
     }
-
-    SdOptionsLayoutItem aOptsItem( ATTR_OPTIONS_LAYOUT );
-
-    aOptsItem.SetRulerVisible( aCbxRuler.IsChecked() );
-    aOptsItem.SetMoveOutline( aCbxMoveOutline.IsChecked() );
-    aOptsItem.SetDragStripes( aCbxDragStripes.IsChecked() );
-    aOptsItem.SetHandlesBezier( aCbxHandlesBezier.IsChecked() );
-    //aOptsItem.SetHelplines( aCbxHelplines.IsChecked() );
-
-    rAttrs.Put( aOptsItem );
 
     // Metrik
     const USHORT nMPos = aLbMetric.GetSelectEntryPos();
@@ -341,27 +422,33 @@ BOOL SdTpOptionsLayout::FillItemSet( SfxItemSet& rAttrs )
         rAttrs.Put( aDef );
         bModified |= TRUE;
     }
+
     return( bModified );
 }
 
 // -----------------------------------------------------------------------
 
-void SdTpOptionsLayout::Reset( const SfxItemSet& rAttrs )
+void SdTpOptionsMisc::Reset( const SfxItemSet& rAttrs )
 {
-    SdOptionsLayoutItem aOptsItem( (const SdOptionsLayoutItem&) rAttrs.
-                        Get( ATTR_OPTIONS_LAYOUT ) );
+    SdOptionsMiscItem aOptsItem( (const SdOptionsMiscItem&) rAttrs.
+                        Get( ATTR_OPTIONS_MISC ) );
 
-    aCbxRuler.Check( aOptsItem.IsRulerVisible() );
-    aCbxMoveOutline.Check( aOptsItem.IsMoveOutline() );
-    aCbxDragStripes.Check( aOptsItem.IsDragStripes() );
-    aCbxHandlesBezier.Check( aOptsItem.IsHandlesBezier() );
-    //aCbxHelplines.Check( aOptsItem.IsHelplines() );
-
-    aCbxRuler.SaveValue();
-    aCbxMoveOutline.SaveValue();
-    aCbxDragStripes.SaveValue();
-    aCbxHandlesBezier.SaveValue();
-    //aCbxHelplines.SaveValue();
+    aCbxStartWithTemplate.Check( aOptsItem.IsStartWithTemplate() );
+    aCbxMarkedHitMovesAlways.Check( aOptsItem.IsMarkedHitMovesAlways() );
+    aCbxCrookNoContortion.Check( aOptsItem.IsCrookNoContortion() );
+    aCbxQuickEdit.Check( aOptsItem.IsQuickEdit() );
+    aCbxPickThrough.Check( aOptsItem.IsPickThrough() );
+    aCbxMasterPageCache.Check( aOptsItem.IsMasterPagePaintCaching() );
+    aCbxCopy.Check( aOptsItem.IsDragWithCopy() );
+    aCbxStartWithActualPage.Check( aOptsItem.IsStartWithActualPage() );
+    aCbxStartWithTemplate.SaveValue();
+    aCbxMarkedHitMovesAlways.SaveValue();
+    aCbxCrookNoContortion.SaveValue();
+    aCbxQuickEdit.SaveValue();
+    aCbxPickThrough.SaveValue();
+    aCbxMasterPageCache.SaveValue();
+    aCbxCopy.SaveValue();
+    aCbxStartWithActualPage.SaveValue();
 
     // Metrik
     USHORT nWhich = GetWhich( SID_ATTR_METRIC );
@@ -396,33 +483,14 @@ void SdTpOptionsLayout::Reset( const SfxItemSet& rAttrs )
 
 // -----------------------------------------------------------------------
 
-SfxTabPage* __EXPORT SdTpOptionsLayout::Create( Window* pWindow,
+SfxTabPage* __EXPORT SdTpOptionsMisc::Create( Window* pWindow,
                 const SfxItemSet& rAttrs )
 {
-    return( new SdTpOptionsLayout( pWindow, rAttrs ) );
+    return( new SdTpOptionsMisc( pWindow, rAttrs ) );
 }
-
-// -----------------------------------------------------------------------
-
-void SdTpOptionsLayout::ActivatePage( const SfxItemSet& rSet )
-{
-    // Hier muss noch einmal SaveValue gerufen werden, da sonst u.U.
-    // der Wert in anderen TabPages keine Wirkung hat
-    aLbMetric.SaveValue();
-}
-
-// -----------------------------------------------------------------------
-
-int SdTpOptionsLayout::DeactivatePage( SfxItemSet* pSet )
-{
-    FillItemSet( *pSet );
-
-    return LEAVE_PAGE;
-}
-
 //------------------------------------------------------------------------
 
-IMPL_LINK( SdTpOptionsLayout, SelectMetricHdl_Impl, ListBox *, EMPTYARG )
+IMPL_LINK( SdTpOptionsMisc, SelectMetricHdl_Impl, ListBox *, EMPTYARG )
 {
     USHORT nPos = aLbMetric.GetSelectEntryPos();
 
@@ -436,188 +504,41 @@ IMPL_LINK( SdTpOptionsLayout, SelectMetricHdl_Impl, ListBox *, EMPTYARG )
     }
     return 0;
 }
+/* -----------------------------22.03.01 13:03--------------------------------
 
-/*************************************************************************
-|*
-|*  TabPage zum Einstellen der Inhalte-Optionen
-|*
-\************************************************************************/
-
-SdTpOptionsContents::SdTpOptionsContents( Window* pParent, const SfxItemSet& rInAttrs  ) :
-        SfxTabPage          ( pParent, SdResId( TP_OPTIONS_CONTENTS ), rInAttrs ),
-        aCbxExternGraphic   ( this, SdResId( CBX_EXTERN_GRAPHIC ) ),
-        aCbxOutlineMode     ( this, SdResId( CBX_OUTLINEMODE ) ),
-        aCbxNoText          ( this, SdResId( CBX_NOTEXT ) ),
-        aCbxHairlineMode    ( this, SdResId( CBX_HAIRLINEMODE ) ),
-        aGrpViewSubstitute  ( this, SdResId( GRP_VIEW_SUBSTITUTE ) ),
-
-        rOutAttrs           ( rInAttrs )
+ ---------------------------------------------------------------------------*/
+void lcl_MoveWin( Window& rWin, long nDiff )
 {
-    FreeResource();
+    Point aPos(rWin.GetPosPixel());
+    aPos.Y() -= nDiff;
+    rWin.SetPosPixel(aPos);
 }
+/* -----------------------------22.03.01 13:10--------------------------------
 
-// -----------------------------------------------------------------------
-
-SdTpOptionsContents::~SdTpOptionsContents()
+ ---------------------------------------------------------------------------*/
+void    SdTpOptionsMisc::SetDrawMode()
 {
+    aCbxStartWithTemplate.Hide();
+    aGrpProgramStart.Hide();
+    aCbxStartWithActualPage.Hide();
+    aGrpStartWithActualPage.Hide();
+    aCbxCrookNoContortion.Show();
+
+    long nDiff = aGrpOther.GetPosPixel().Y() - aGrpProgramStart.GetPosPixel().Y();
+    lcl_MoveWin( aGrpOther, nDiff );
+    lcl_MoveWin( aCbxMasterPageCache, nDiff );
+    lcl_MoveWin( aCbxCopy, nDiff );
+    lcl_MoveWin( aCbxMarkedHitMovesAlways, nDiff );
+    lcl_MoveWin( aCbxCrookNoContortion, nDiff );
+
+    nDiff += aGrpSettings.GetPosPixel().Y() - aGrpStartWithActualPage.GetPosPixel().Y();
+    nDiff -= aCbxCrookNoContortion.GetPosPixel().Y() - aCbxMarkedHitMovesAlways.GetPosPixel().Y();
+
+    lcl_MoveWin( aGrpSettings, nDiff );
+    lcl_MoveWin( aTxtMetric, nDiff );
+    lcl_MoveWin( aLbMetric, nDiff );
+    lcl_MoveWin( aTxtTabstop, nDiff );
+    lcl_MoveWin( aMtrFldTabstop, nDiff );
 }
-
-// -----------------------------------------------------------------------
-
-BOOL SdTpOptionsContents::FillItemSet( SfxItemSet& rAttrs )
-{
-    BOOL bModified = FALSE;
-
-    if( aCbxExternGraphic.GetSavedValue()   != aCbxExternGraphic.IsChecked() ||
-        aCbxOutlineMode.GetSavedValue()     != aCbxOutlineMode.IsChecked() ||
-        aCbxNoText.GetSavedValue()          != aCbxNoText.IsChecked() ||
-        aCbxHairlineMode.GetSavedValue()    != aCbxHairlineMode.IsChecked() )
-    {
-        SdOptionsContentsItem aOptsItem( ATTR_OPTIONS_CONTENTS );
-
-        aOptsItem.SetExternGraphic( aCbxExternGraphic.IsChecked() );
-        aOptsItem.SetOutlineMode( aCbxOutlineMode.IsChecked() );
-        aOptsItem.SetNoText( aCbxNoText.IsChecked() );
-        aOptsItem.SetHairlineMode( aCbxHairlineMode.IsChecked() );
-
-        rAttrs.Put( aOptsItem );
-
-        bModified = TRUE;
-    }
-    return( bModified );
-}
-
-// -----------------------------------------------------------------------
-
-void SdTpOptionsContents::Reset( const SfxItemSet& rAttrs )
-{
-    SdOptionsContentsItem aOptsItem( (const SdOptionsContentsItem&) rAttrs.
-                        Get( ATTR_OPTIONS_CONTENTS ) );
-
-    aCbxExternGraphic.Check( aOptsItem.IsExternGraphic() );
-    aCbxOutlineMode.Check(aOptsItem.IsOutlineMode() );
-    aCbxNoText.Check( aOptsItem.IsNoText() );
-    aCbxHairlineMode.Check( aOptsItem.IsHairlineMode() );
-
-    aCbxExternGraphic.SaveValue();
-    aCbxOutlineMode.SaveValue();
-    aCbxNoText.SaveValue();
-    aCbxHairlineMode.SaveValue();
-}
-
-// -----------------------------------------------------------------------
-
-SfxTabPage* __EXPORT SdTpOptionsContents::Create( Window* pWindow,
-                const SfxItemSet& rAttrs )
-{
-    return( new SdTpOptionsContents( pWindow, rAttrs ) );
-}
-
-/*************************************************************************
-|*
-|*  TabPage zum Einstellen der Sonstige-Optionen
-|*
-\************************************************************************/
-
-SdTpOptionsMisc::SdTpOptionsMisc( Window* pParent, const SfxItemSet& rInAttrs  ) :
-        SfxTabPage          ( pParent, SdResId( TP_OPTIONS_MISC ), rInAttrs ),
-    aCbxQuickEdit               ( this, SdResId( CBX_QUICKEDIT ) ),
-    aCbxPickThrough             ( this, SdResId( CBX_PICKTHROUGH ) ),
-    aGrpText                    ( this, SdResId( GRP_TEXT ) ),
-
-    // Template & Layout laufen z.Z. synchron!
-    aCbxStartWithTemplate       ( this, SdResId( CBX_START_WITH_TEMPLATE ) ),
-    aGrpProgramStart            ( this, SdResId( GRP_PROGRAMSTART ) ),
-
-    aCbxMasterPageCache         ( this, SdResId( CBX_MASTERPAGE_CACHE ) ),
-    aGrpDisplay                 ( this, SdResId( GRP_DISPLAY ) ),
-
-    aCbxCopy                    ( this, SdResId( CBX_COPY ) ),
-    aCbxMarkedHitMovesAlways    ( this, SdResId( CBX_MARKED_HIT_MOVES_ALWAYS ) ),
-    aCbxCrookNoContortion       ( this, SdResId( CBX_CROOK_NO_CONTORTION ) ),
-    aGrpOther                   ( this, SdResId( GRP_OTHER ) ),
-
-    /// NEU
-    aCbxStartWithActualPage     ( this, SdResId( CBX_START_WITH_ACTUAL_PAGE ) ),
-    aGrpStartWithActualPage     ( this, SdResId( GRP_START_WITH_ACTUAL_PAGE ) ),
-
-    rOutAttrs                   ( rInAttrs )
-{
-    FreeResource();
-}
-
-// -----------------------------------------------------------------------
-
-SdTpOptionsMisc::~SdTpOptionsMisc()
-{
-}
-
-// -----------------------------------------------------------------------
-
-BOOL SdTpOptionsMisc::FillItemSet( SfxItemSet& rAttrs )
-{
-    BOOL bModified = FALSE;
-
-    if( aCbxStartWithTemplate.GetSavedValue()   != aCbxStartWithTemplate.IsChecked() ||
-        aCbxMarkedHitMovesAlways.GetSavedValue()!= aCbxMarkedHitMovesAlways.IsChecked() ||
-        aCbxCrookNoContortion.GetSavedValue()   != aCbxCrookNoContortion.IsChecked() ||
-        aCbxQuickEdit.GetSavedValue()           != aCbxQuickEdit.IsChecked() ||
-        aCbxPickThrough.GetSavedValue()         != aCbxPickThrough.IsChecked() ||
-        aCbxMasterPageCache.GetSavedValue()     != aCbxMasterPageCache.IsChecked() ||
-        aCbxCopy.GetSavedValue()                != aCbxCopy.IsChecked() ||
-        /// NEU
-        aCbxStartWithActualPage.GetSavedValue() != aCbxStartWithActualPage.IsChecked() )
-    {
-        SdOptionsMiscItem aOptsItem( ATTR_OPTIONS_MISC );
-
-        aOptsItem.SetStartWithTemplate( aCbxStartWithTemplate.IsChecked() );
-        aOptsItem.SetMarkedHitMovesAlways( aCbxMarkedHitMovesAlways.IsChecked() );
-        aOptsItem.SetCrookNoContortion( aCbxCrookNoContortion.IsChecked() );
-        aOptsItem.SetQuickEdit( aCbxQuickEdit.IsChecked() );
-        aOptsItem.SetPickThrough( aCbxPickThrough.IsChecked() );
-        aOptsItem.SetMasterPagePaintCaching( aCbxMasterPageCache.IsChecked() );
-        aOptsItem.SetDragWithCopy( aCbxCopy.IsChecked() );
-        aOptsItem.SetStartWithActualPage( aCbxStartWithActualPage.IsChecked() );
-
-        rAttrs.Put( aOptsItem );
-
-        bModified = TRUE;
-    }
-    return( bModified );
-}
-
-// -----------------------------------------------------------------------
-
-void SdTpOptionsMisc::Reset( const SfxItemSet& rAttrs )
-{
-    SdOptionsMiscItem aOptsItem( (const SdOptionsMiscItem&) rAttrs.
-                        Get( ATTR_OPTIONS_MISC ) );
-
-    aCbxStartWithTemplate.Check( aOptsItem.IsStartWithTemplate() );
-    aCbxMarkedHitMovesAlways.Check( aOptsItem.IsMarkedHitMovesAlways() );
-    aCbxCrookNoContortion.Check( aOptsItem.IsCrookNoContortion() );
-    aCbxQuickEdit.Check( aOptsItem.IsQuickEdit() );
-    aCbxPickThrough.Check( aOptsItem.IsPickThrough() );
-    aCbxMasterPageCache.Check( aOptsItem.IsMasterPagePaintCaching() );
-    aCbxCopy.Check( aOptsItem.IsDragWithCopy() );
-    aCbxStartWithActualPage.Check( aOptsItem.IsStartWithActualPage() );
-    aCbxStartWithTemplate.SaveValue();
-    aCbxMarkedHitMovesAlways.SaveValue();
-    aCbxCrookNoContortion.SaveValue();
-    aCbxQuickEdit.SaveValue();
-    aCbxPickThrough.SaveValue();
-    aCbxMasterPageCache.SaveValue();
-    aCbxCopy.SaveValue();
-    aCbxStartWithActualPage.SaveValue();
-}
-
-// -----------------------------------------------------------------------
-
-SfxTabPage* __EXPORT SdTpOptionsMisc::Create( Window* pWindow,
-                const SfxItemSet& rAttrs )
-{
-    return( new SdTpOptionsMisc( pWindow, rAttrs ) );
-}
-
 
 

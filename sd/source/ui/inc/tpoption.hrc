@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpoption.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:41 $
+ *  last change: $Author: os $ $Date: 2001-03-22 14:13:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,13 +63,13 @@
 #define TP_OPTIONS_SNAP 598
 #define TP_OPTIONS_MISC 599
 #define GRP_OTHER 1
-//#define GRP_MOVEMENT 2
-#define GRP_METRIC 2
+#define FT_METRIC 2
 #define GRP_PROGRAMSTART 3
 #define GRP_DISPLAY 4
-#define GRP_VIEW_SUBSTITUTE 5
+#define GRP_SETTINGS  5
 #define GRP_TEXT 6
-#define GRP_TABSTOP 7
+#define FT_TABSTOP 7
+#define GRP_VIEW_SUBSTITUTE 8
 #define CBX_COPY 13
 #define CBX_RULER 14
 #define CBX_HELPLINES 1

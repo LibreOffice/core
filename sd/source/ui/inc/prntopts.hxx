@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prntopts.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:41 $
+ *  last change: $Author: os $ $Date: 2001-03-22 14:13:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,35 +91,32 @@ class SdPrintOptions : public SfxTabPage
  friend class SdModule;
 
 private:
+    FixedLine           aGrpPrint;
     CheckBox            aCbxDraw;
     CheckBox            aCbxNotes;
     CheckBox            aCbxHandout;
     CheckBox            aCbxOutline;
-    GroupBox            aGrpPrint;
 
+    FixedLine           aGrpPrintExt;
     CheckBox            aCbxPagename;
     CheckBox            aCbxDate;
     CheckBox            aCbxTime;
-    GroupBox            aGrpPrintExt;
-
     CheckBox            aCbxHiddenPages;
+
+    FixedLine           aGrpOutput;
+    RadioButton         aRbtColor;
+    RadioButton         aRbtGrayscale;
+    RadioButton         aRbtBlackWhite;
+
+    FixedLine           aGrpPageoptions;
     RadioButton         aRbtDefault;
     RadioButton         aRbtPagesize;
     RadioButton         aRbtPagetile;
     RadioButton         aRbtBooklet;
     CheckBox            aCbxFront;
     CheckBox            aCbxBack;
-    GroupBox            aGrpPageoptions;
-
-/// Neu
-    RadioButton         aRbtColor;
-    RadioButton         aRbtGrayscale;
-    RadioButton         aRbtBlackWhite;
-    GroupBox            aGrpOutput;
-/// Neu
 
     CheckBox            aCbxPaperbin;
-//  GroupBox            aGrpPaperbin;
 
     const SfxItemSet&   rOutAttrs;
 

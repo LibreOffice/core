@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prntopts.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 21:15:25 $
+ *  last change: $Author: os $ $Date: 2001-03-22 14:14:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,425 +80,10 @@ TabPage TP_PRINT_OPTIONS
     Text [ finnish ] = "Options" ;
     Text [ english_us ] = "Options" ;
     Hide = TRUE;
-    RadioButton RBT_DEFAULT
-    {
-        Pos = MAP_APPFONT ( 120 , 14  ) ;
-        Size = MAP_APPFONT ( 128 , 10 ) ;
-        Text = "St~andard" ;
-        Text [ ENGLISH ] = "~Default" ;
-        TabStop = TRUE ;
-        Text [ english_us ] = "~Standard" ;
-        Text [ italian ] = "St~andard" ;
-        Text [ spanish ] = "~Predeterminado" ;
-        Text [ french ] = "St~andard" ;
-        Text [ dutch ] = "Standaar~d" ;
-        Text [ swedish ] = "St~andard" ;
-        Text [ danish ] = "Standard" ;
-        Text [ portuguese ] = "~Padrão" ;
-        Text [ portuguese_brazilian ] = "St~andard" ;
-        Text[ chinese_simplified ] = "±ê×¼(~S)";
-        Text[ russian ] = "Ñòàíäàğò";
-        Text[ polish ] = "Domy~œlnie";
-        Text[ japanese ] = "Šù’è(~S)";
-        Text[ chinese_traditional ] = "¼Ğ·Ç(~S)";
-        Text[ arabic ] = "ŞíÇÓí";
-        Text[ greek ] = "ĞñïåğéëïãŞ";
-        Text[ korean ] = "±âº»(~S)";
-        Text[ turkish ] = "Standart";
-        Text[ language_user1 ] = " ";
-    };
-    RadioButton RBT_PAGESIZE
-    {
-        Pos = MAP_APPFONT ( 120 , 28  ) ;
-        Size = MAP_APPFONT ( 128 , 10 ) ;
-        Text = "An ~Seitengröße anpassen" ;
-        Text [ ENGLISH ] = "~Fit to page size" ;
-        Text [ norwegian ] = "~Tilpass sidestørrelse" ;
-        Text [ italian ] = "Dimensione pagina" ;
-        Text [ portuguese_brazilian ] = "~Encaixar no tamanho da página" ;
-        Text [ portuguese ] = "~Adaptar ao tamanho da página" ;
-        Text [ finnish ] = "~Sovita sivulle" ;
-        Text [ danish ] = "Tilpas til siden" ;
-        Text [ french ] = "Adapter au ~format de la page" ;
-        Text [ swedish ] = "Anpassa till ~sidstorlek" ;
-        Text [ dutch ] = "~Aanpassen aan paginagrootte" ;
-        Text [ spanish ] = "Aj~ustar al tamaño de la página" ;
-        Text [ english_us ] = "~Fit to page" ;
-        TabStop = TRUE ;
-        Text[ chinese_simplified ] = "µ÷Õû³ÉÒ³Ãæ´óĞ¡(~F)";
-        Text[ russian ] = "Ñîãëàñîâàòü ñ ğàçìåğîì ñòğàíèöû";
-        Text[ polish ] = "Dopasuj do rozmiaru stron~y";
-        Text[ japanese ] = "Íß°¼Ş‚É‡‚í‚¹‚é(~F)";
-        Text[ chinese_traditional ] = "½Õ¾ã¦¨­¶­±¤j¤p(~F)";
-        Text[ arabic ] = "ãáÇÁãÉ áÍÌã ÇáÕİÍÉ";
-        Text[ greek ] = "ĞñïóáñìïãŞ óå óåëßäá";
-        Text[ korean ] = "ÂÊ Å©±â¿¡ ¸ÂÃã(~F)";
-        Text[ turkish ] = "Sayfaya sığdır";
-        Text[ language_user1 ] = " ";
-    };
-    RadioButton RBT_PAGETILE
-    {
-        Pos = MAP_APPFONT ( 120 , 42  ) ;
-        Size = MAP_APPFONT ( 128 , 10 ) ;
-        Text = "Seiten ~kacheln" ;
-        Text [ ENGLISH ] = "~Tile pages" ;
-        TabStop = TRUE ;
-        Text [ english_us ] = "~Tile pages" ;
-        Text [ italian ] = "Affianca pagine" ;
-        Text [ spanish ] = "Páginas como a~zulejos" ;
-        Text [ french ] = "Pages en ~mosaïque" ;
-        Text [ dutch ] = "Pagina´s betege~len" ;
-        Text [ swedish ] = "Sidor sida ~vid sida" ;
-        Text [ danish ] = "Sider side om side" ;
-        Text [ portuguese ] = "Páginas em ~mosaico" ;
-        Text [ portuguese_brazilian ] = "Seiten ~kacheln" ;
-        Text[ chinese_simplified ] = "Æ½ÆÌÒ³Ãæ(~T)";
-        Text[ russian ] = "Ğàçìåñòèòü ñòğàíèöû ğÿäîì";
-        Text[ polish ] = "Ustaw strony obo~k siebie";
-        Text[ japanese ] = "Íß°¼Ş‚ÉÀ²Ùó”z’u(~T)";
-        Text[ chinese_traditional ] = "¥­¾Q­¶­±(~T)";
-        Text[ arabic ] = "ÕİÍÇÊ ÈáÇØ";
-        Text[ greek ] = "Óåëßäåò óå ğáñÜèåóç";
-        Text[ korean ] = "ÂÊ ¹ÙµÏÆÇ½Ä ¹è¿­(~T)";
-        Text[ turkish ] = "Sayfaları döşe";
-        Text[ language_user1 ] = " ";
-    };
-    RadioButton RBT_BOOKLET
-    {
-        Pos = MAP_APPFONT ( 120 , 56  ) ;
-        Size = MAP_APPFONT ( 128 , 10 ) ;
-        Text = "~Prospekt" ;
-        Text [ ENGLISH ] = "~Booklet" ;
-        TabStop = TRUE ;
-        Text [ dutch ] = "~Brochure" ;
-        Text [ english_us ] = "B~rochure" ;
-        Text [ italian ] = "Depliant" ;
-        Text [ spanish ] = "~Prospecto" ;
-        Text [ french ] = "~Prospectus" ;
-        Text [ swedish ] = "~Prospekt" ;
-        Text [ danish ] = "Brochure" ;
-        Text [ portuguese ] = "~Prospecto" ;
-        Text [ portuguese_brazilian ] = "~Prospekt" ;
-        Text[ chinese_simplified ] = "ÊÖ²á(~B)";
-        Text[ russian ] = "~Áğîøşğà";
-        Text[ polish ] = "Broszura";
-        Text[ japanese ] = "ÊßİÌÚ¯Ä(~B)";
-        Text[ chinese_traditional ] = "¤â¥U(~B)";
-        Text[ arabic ] = "äÔÑÉ";
-        Text[ greek ] = "Ğñïóğİêôïõò";
-        Text[ korean ] = "ÆÊÇÃ·¿(~R)";
-        Text[ turkish ] = "Broşür";
-        Text[ language_user1 ] = " ";
-    };
-    CheckBox CBX_FRONT
-    {
-        Pos = MAP_APPFONT ( 131 , 70  ) ;
-        Size = MAP_APPFONT ( 59 , 10 ) ;
-        Text = "~Vorderseite" ;
-        Text [ ENGLISH ] = "Front" ;
-        TabStop = TRUE ;
-        Text [ english_us ] = "Fr~ont side" ;
-        Text [ italian ] = "Davanti pagina" ;
-        Text [ spanish ] = "~Anverso" ;
-        Text [ french ] = "~Page recto" ;
-        Text [ dutch ] = "V~oorkant" ;
-        Text [ swedish ] = "~Framsida" ;
-        Text [ danish ] = "Forside" ;
-        Text [ portuguese ] = "~Verso" ;
-        Text [ portuguese_brazilian ] = "~Vorderseite" ;
-        Text[ chinese_simplified ] = "ÕıÃæ(~I)";
-        Text[ russian ] = "Ïåğåäíÿÿ ñòîğîíà";
-        Text[ polish ] = "Przednia st~rona";
-        Text[ japanese ] = "‚¨‚à‚Ä(~I)";
-        Text[ chinese_traditional ] = "¥¿­±(~I)";
-        Text[ arabic ] = "ÇáÕİÍÉ ÇáÃãÇãíÉ";
-        Text[ greek ] = "Ìğñïóô. ğëå~õñÜ";
-        Text[ korean ] = "¾Õ ÂÊ(~O)";
-        Text[ turkish ] = "Ön sayfa";
-        Text[ language_user1 ] = " ";
-    };
-    CheckBox CBX_BACK
-    {
-        Pos = MAP_APPFONT ( 190 , 70  ) ;
-        Size = MAP_APPFONT ( 58 , 10 ) ;
-        Text = "~Rückseite" ;
-        Text [ ENGLISH ] = "Back" ;
-        TabStop = TRUE ;
-        Text [ english_us ] = "Ba~ck side" ;
-        Text [ italian ] = "Retro pagina" ;
-        Text [ spanish ] = "Re~verso" ;
-        Text [ french ] = "~Page verso" ;
-        Text [ dutch ] = "A~chterkant" ;
-        Text [ swedish ] = "~Baksida" ;
-        Text [ danish ] = "Bagside" ;
-        Text [ portuguese ] = "~Verso página" ;
-        Text [ portuguese_brazilian ] = "~Rückseite" ;
-        Text[ chinese_simplified ] = "·´Ãæ(~C)";
-        Text[ russian ] = "Îáğàòíàÿ ñòîğîíà";
-        Text[ polish ] = "Tylna strona";
-        Text[ japanese ] = "‚¤‚ç(~C)";
-        Text[ chinese_traditional ] = "¤Ï­±(~C)";
-        Text[ arabic ] = "ÇáÕİÍÉ ÇáÎáİíÉ";
-        Text[ greek ] = "Ğßóù ğëåõñÜ";
-        Text[ korean ] = "µŞ ÂÊ(~C)";
-        Text[ turkish ] = "Arka sayfa";
-        Text[ language_user1 ] = " ";
-    };
-    GroupBox GRP_PAGE
-    {
-        Pos = MAP_APPFONT ( 114 , 3  ) ;
-        Size = MAP_APPFONT ( 139 , 83 ) ;
-         //98
-        Text = "Seitenoptionen" ;
-        Text [ ENGLISH ] = "Page options" ;
-        Text [ norwegian ] = "Side valg" ;
-        Text [ italian ] = "Opzioni pagina" ;
-        Text [ portuguese_brazilian ] = "Opções da página" ;
-        Text [ portuguese ] = "Opções da página" ;
-        Text [ finnish ] = "Sivumääritykset" ;
-        Text [ danish ] = "Sideindstillinger" ;
-        Text [ french ] = "Options de la page" ;
-        Text [ swedish ] = "Sidalternativ" ;
-        Text [ dutch ] = "Pagina-opties" ;
-        Text [ spanish ] = "Opciones de página" ;
-        Text [ english_us ] = "Page options" ;
-        Text[ chinese_simplified ] = "Ò³ÃæÑ¡Ïî";
-        Text[ russian ] = "Ïàğàìåòğû ñòğàíèöû";
-        Text[ polish ] = "Opcje strony";
-        Text[ japanese ] = "Íß°¼Ş‚ÌµÌß¼®İ";
-        Text[ chinese_traditional ] = "­¶­±¿ï¶µ";
-        Text[ arabic ] = "ÎíÇÑÇÊ ÇáÕİÍÉ";
-        Text[ greek ] = "Åğéëïãİò óåëßäáò";
-        Text[ korean ] = "ÂÊ ¿É¼Ç";
-        Text[ turkish ] = "Sayfa seçenekleri";
-        Text[ language_user1 ] = " ";
-    };
-    RadioButton RBT_COLOR
-    {
-        Pos = MAP_APPFONT ( 120 , 100  ) ;
-        Size = MAP_APPFONT ( 100 , 10 ) ;
-        Text = "Standard" ;
-        Text [ ENGLISH ] = "Default" ;
-        Text [ english_us ] = "Default" ;
-        TabStop = TRUE ;
-        Text [ portuguese_brazilian ] = "Standard" ;
-        Text [ swedish ] = "Standard" ;
-        Text [ danish ] = "Standard" ;
-        Text [ italian ] = "Standard" ;
-        Text [ spanish ] = "Predeterminado" ;
-        Text [ french ] = "Par défaut" ;
-        Text [ dutch ] = "Standaard" ;
-        Text [ portuguese ] = "Padrão" ;
-        Text[ chinese_simplified ] = "±ê×¼";
-        Text[ russian ] = "Ñòàíäàğò";
-        Text[ polish ] = "Domyœlnie";
-        Text[ japanese ] = "•W€";
-        Text[ chinese_traditional ] = "¼Ğ·Ç";
-        Text[ arabic ] = "ÇİÊÑÇÖí";
-        Text[ greek ] = "ĞñïåğéëïãŞ";
-        Text[ korean ] = "±âº»";
-        Text[ turkish ] = "Standart";
-        Text[ language_user1 ] = " ";
-    };
-    RadioButton RBT_GRAYSCALE
-    {
-        Pos = MAP_APPFONT ( 120 , 114  ) ;
-        Size = MAP_APPFONT ( 100 , 10 ) ;
-        Text = "Graustufen" ;
-        Text [ ENGLISH ] = "Grayscale" ;
-        Text [ english_us ] = "Grayscale" ;
-        TabStop = TRUE ;
-        Text [ portuguese_brazilian ] = "Graustufen" ;
-        Text [ swedish ] = "Gråskalor" ;
-        Text [ danish ] = "Gråtoner" ;
-        Text [ italian ] = "Toni di grigio" ;
-        Text [ spanish ] = "Escala de grises" ;
-        Text [ french ] = "Niveaux de gris" ;
-        Text [ dutch ] = "Grijswaarden" ;
-        Text [ portuguese ] = "Tons de cinzento" ;
-        Text[ chinese_simplified ] = "»Ò¶È";
-        Text[ russian ] = "Îòòåíêè ñåğîãî";
-        Text[ polish ] = "Odcienie szaroœci";
-        Text[ japanese ] = "¸ŞÚ°½¹°Ù";
-        Text[ chinese_traditional ] = "¦Ç¶¥";
-        Text[ arabic ] = "ÏÑÌÇÊ ÇáÑãÇÏí";
-        Text[ greek ] = "ÄéáâÜèìéóç ôïõ ãêñé";
-        Text[ korean ] = "È¸»öµµ";
-        Text[ turkish ] = "Gri tonları";
-        Text[ language_user1 ] = " ";
-    };
-    RadioButton RBT_BLACKWHITE
-    {
-        Pos = MAP_APPFONT ( 120 , 128  ) ;
-        Size = MAP_APPFONT ( 100 , 10 ) ;
-        Text = "Schwarzweiß" ;
-        Text [ ENGLISH ] = "Black & White" ;
-        Text [ english_us ] = "Black & White" ;
-        TabStop = TRUE ;
-        Text [ portuguese_brazilian ] = "Schwarzweiß" ;
-        Text [ swedish ] = "Svartvitt" ;
-        Text [ danish ] = "Sort-hvid" ;
-        Text [ italian ] = "Bianco e nero" ;
-        Text [ spanish ] = "Blanco y negro" ;
-        Text [ french ] = "Noir et blanc" ;
-        Text [ dutch ] = "Zwart-wit" ;
-        Text [ portuguese ] = "Preto e branco" ;
-        Text[ chinese_simplified ] = "ºÚ°×";
-        Text[ russian ] = "×åğíî-áåëîå";
-        Text[ polish ] = "Czarno-bia~³y";
-        Text[ japanese ] = "”’•";
-        Text[ chinese_traditional ] = "¶Â¥Õ";
-        Text[ arabic ] = "ÃÈíÖ æÃÓæÏ";
-        Text[ greek ] = "Áóğñüìáõñï";
-        Text[ korean ] = "Èæ¹é";
-        Text[ turkish ] = "Siyah-beyaz";
-        Text[ language_user1 ] = " ";
-    };
-    GroupBox GRP_OUTPUT
-    {
-        Pos = MAP_APPFONT ( 114 , 89  ) ;
-        Size = MAP_APPFONT ( 139 , 55 ) ;
-        Text = "Ausgabequalität" ;
-        Text [ ENGLISH ] = "Output quality" ;
-        Text [ english_us ] = "Quality" ;
-        Text [ portuguese_brazilian ] = "Ausgabequalität" ;
-        Text [ swedish ] = "Utmatningskvalitet" ;
-        Text [ danish ] = "Outputkvalitet" ;
-        Text [ italian ] = "Qualità stampa" ;
-        Text [ spanish ] = "Calidad de impresión" ;
-        Text [ french ] = "Qualité" ;
-        Text [ dutch ] = "Weergavekwaliteit" ;
-        Text [ portuguese ] = "Qualidade de impressão" ;
-        Text[ chinese_simplified ] = "´òÓ¡ÖÊÁ¿";
-        Text[ russian ] = "Êà÷åñòâî ïå÷àòè";
-        Text[ polish ] = "Jakoœæ wyjœciowa";
-        Text[ japanese ] = "ˆóü‰æ‘œ•i¿";
-        Text[ chinese_traditional ] = "¦C¦L«~½è";
-        Text[ arabic ] = "ÇáäæÚíÉ";
-        Text[ greek ] = "Ğïéüôçôá åîáãùãŞò";
-        Text[ korean ] = "Ãâ·Â¡¡Ç°Áú";
-        Text[ turkish ] = "Çıktı kalitesi";
-        Text[ language_user1 ] = " ";
-    };
-    CheckBox CBX_PAGENAME
-    {
-        Pos = MAP_APPFONT ( 12 , 86  ) ;
-        Size = MAP_APPFONT ( 90 , 10 ) ;
-        Text = "Seiten~name" ;
-        Text [ ENGLISH ] = "Page~name" ;
-        Text [ norwegian ] = "Side~navn" ;
-        Text [ italian ] = "Nome pagina" ;
-        Text [ portuguese_brazilian ] = "Nome da ~página" ;
-        Text [ portuguese ] = "Nome da ~página" ;
-        Text [ finnish ] = "Sivun ~nimi" ;
-        Text [ danish ] = "Sidenavn" ;
-        Text [ french ] = "~Nom de la page" ;
-        Text [ swedish ] = "Sid~namn" ;
-        Text [ dutch ] = "~Paginanaam" ;
-        Text [ spanish ] = "No~mbre de página" ;
-        Text [ english_us ] = "~Page name" ;
-        TabStop = TRUE ;
-        Text[ chinese_simplified ] = "Ò³ÃæÃû³Æ(~P)";
-        Text[ russian ] = "Èìÿ ñòğàíèöû";
-        Text[ polish ] = "Nazwa strony";
-        Text[ japanese ] = "Íß°¼Ş–¼(~P)";
-        Text[ chinese_traditional ] = "­¶­±¦WºÙ(~P)";
-        Text[ arabic ] = "ÇÓã ÇáÕİÍÉ";
-        Text[ greek ] = "¼íïìá óåëßäáò";
-        Text[ korean ] = "ÂÊ ÀÌ¸§(~P)";
-        Text[ turkish ] = "Sayfa adı";
-        Text[ language_user1 ] = " ";
-    };
-    CheckBox CBX_DATE
-    {
-        Pos = MAP_APPFONT ( 12 , 100  ) ;
-        Size = MAP_APPFONT ( 90 , 10 ) ;
-        Text = "Dat~um" ;
-        Text [ ENGLISH ] = "~Date" ;
-        Text [ norwegian ] = "~Dato" ;
-        Text [ italian ] = "Data" ;
-        Text [ portuguese_brazilian ] = "~Data" ;
-        Text [ portuguese ] = "~Data" ;
-        Text [ finnish ] = "~Päivämäärä" ;
-        Text [ danish ] = "Dato" ;
-        Text [ french ] = "~Date" ;
-        Text [ swedish ] = "Dat~um" ;
-        Text [ dutch ] = "Dat~um" ;
-        Text [ spanish ] = "~Fecha" ;
-        Text [ english_us ] = "D~ate" ;
-        TabStop = TRUE ;
-        Text[ chinese_simplified ] = "ÈÕÆÚ(~D)";
-        Text[ russian ] = "Äàòà";
-        Text[ polish ] = "Data";
-        Text[ japanese ] = "“ú•t(~D)";
-        Text[ chinese_traditional ] = "¤é´Á(~D)";
-        Text[ arabic ] = "ÇáÊÇÑíÎ";
-        Text[ greek ] = "Çìåñïìçíßá";
-        Text[ korean ] = "³¯Â¥(~A)";
-        Text[ turkish ] = "Tarih";
-        Text[ language_user1 ] = " ";
-    };
-    CheckBox CBX_TIME
-    {
-        Pos = MAP_APPFONT ( 12 , 114  ) ;
-        Size = MAP_APPFONT ( 90 , 10 ) ;
-        Text = "Z~eit" ;
-        Text [ ENGLISH ] = "~Time" ;
-        Text [ norwegian ] = "~Tidspunkt" ;
-        Text [ italian ] = "Orario" ;
-        Text [ portuguese_brazilian ] = "~Hora" ;
-        Text [ portuguese ] = "~Hora" ;
-        Text [ finnish ] = "~Aika" ;
-        Text [ danish ] = "Tid" ;
-        Text [ french ] = "~Heure" ;
-        Text [ swedish ] = "~Tid" ;
-        Text [ dutch ] = "~Tijd" ;
-        Text [ spanish ] = "~Hora" ;
-        Text [ english_us ] = "Ti~me" ;
-        TabStop = TRUE ;
-        Text[ chinese_simplified ] = "Ê±¼ä(~M)";
-        Text[ russian ] = "Âğåìÿ";
-        Text[ polish ] = "Czas";
-        Text[ japanese ] = "(~M)";
-        Text[ chinese_traditional ] = "®É¶¡(~M)";
-        Text[ arabic ] = "ÇáæŞÊ";
-        Text[ greek ] = "¿ñá";
-        Text[ korean ] = "½Ã°£(~M)";
-        Text[ turkish ] = "Saat";
-        Text[ language_user1 ] = " ";
-    };
-    CheckBox CBX_HIDDEN_PAGES
-    {
-        Pos = MAP_APPFONT ( 12 , 128  ) ;
-         // 120 , 14
-        Size = MAP_APPFONT ( 90 , 10 ) ;
-        Text = "Ausge~blendeten Seiten" ;
-        Text [ ENGLISH ] = "H~idden pages" ;
-        TabStop = TRUE ;
-        Text [ english_us ] = "H~idden pages" ;
-        Text [ italian ] = "Pagine nascoste" ;
-        Text [ spanish ] = "Páginas ~ocultas" ;
-        Text [ french ] = "Pages masquées" ;
-        Text [ dutch ] = "~Verborgen pagina's" ;
-        Text [ swedish ] = "D~olda sidor" ;
-        Text [ danish ] = "Skjulte sider" ;
-        Text [ portuguese ] = "Páginas ~ocultas" ;
-        Text [ portuguese_brazilian ] = "Ausge~blendeten Seiten" ;
-        Text[ chinese_simplified ] = "ÒşÈëµÄÒ³Ãæ(~H)";
-        Text[ russian ] = "Ñêğûòûå ñòğàíèöû";
-        Text[ polish ] = "Ukryte strony";
-        Text[ japanese ] = "”ñ•\\¦‚ÌÍß°¼Ş(~H)";
-        Text[ chinese_traditional ] = "Áô¤Jªº­¶­±(~H)";
-        Text[ arabic ] = "ÇáÕİÍÇÊ ÇáãÎİíÉ";
-        Text[ greek ] = "Êñõöİò óåëßäåò";
-        Text[ korean ] = "¼û°ÜÁø ÂÊ(~I)";
-        Text[ turkish ] = "Gizli sayfalar";
-        Text[ language_user1 ] = " ";
-    };
-    GroupBox GRP_PRINT
+    FixedLine GRP_PRINT
     {
         Pos = MAP_APPFONT ( 6 , 3  ) ;
-        Size = MAP_APPFONT ( 102 , 69 ) ;
+        Size = MAP_APPFONT ( 120 , 8 ) ;
         Text = "Inhalt" ;
         Text [ ENGLISH ] = "Contents" ;
         Text [ norwegian ] = "Innhold  " ;
@@ -631,10 +216,117 @@ TabPage TP_PRINT_OPTIONS
         Text[ turkish ] = "Anahat";
         Text[ language_user1 ] = " ";
     };
-    GroupBox GRP_PRINT_EXT
+    FixedLine GRP_OUTPUT
     {
-        Pos = MAP_APPFONT ( 6 , 75  ) ;
-        Size = MAP_APPFONT ( 102 , 69 ) ;
+        Pos = MAP_APPFONT ( 130 , 3  ) ;
+        Size = MAP_APPFONT ( 120 , 8 ) ;
+        Text = "Ausgabequalität" ;
+        Text [ ENGLISH ] = "Output quality" ;
+        Text [ english_us ] = "Quality" ;
+        Text [ portuguese_brazilian ] = "Ausgabequalität" ;
+        Text [ swedish ] = "Utmatningskvalitet" ;
+        Text [ danish ] = "Outputkvalitet" ;
+        Text [ italian ] = "Qualità stampa" ;
+        Text [ spanish ] = "Calidad de impresión" ;
+        Text [ french ] = "Qualité" ;
+        Text [ dutch ] = "Weergavekwaliteit" ;
+        Text [ portuguese ] = "Qualidade de impressão" ;
+        Text[ chinese_simplified ] = "´òÓ¡ÖÊÁ¿";
+        Text[ russian ] = "Êà÷åñòâî ïå÷àòè";
+        Text[ polish ] = "Jakoœæ wyjœciowa";
+        Text[ japanese ] = "ˆóü‰æ‘œ•i¿";
+        Text[ chinese_traditional ] = "¦C¦L«~½è";
+        Text[ arabic ] = "ÇáäæÚíÉ";
+        Text[ greek ] = "Ğïéüôçôá åîáãùãŞò";
+        Text[ korean ] = "Ãâ·Â¡¡Ç°Áú";
+        Text[ turkish ] = "Çıktı kalitesi";
+        Text[ language_user1 ] = " ";
+    };
+    RadioButton RBT_COLOR
+    {
+        Pos = MAP_APPFONT ( 136 , 14  ) ;
+        Size = MAP_APPFONT ( 100 , 10 ) ;
+        Text = "Standard" ;
+        Text [ ENGLISH ] = "Default" ;
+        Text [ english_us ] = "Default" ;
+        TabStop = TRUE ;
+        Text [ portuguese_brazilian ] = "Standard" ;
+        Text [ swedish ] = "Standard" ;
+        Text [ danish ] = "Standard" ;
+        Text [ italian ] = "Standard" ;
+        Text [ spanish ] = "Predeterminado" ;
+        Text [ french ] = "Par défaut" ;
+        Text [ dutch ] = "Standaard" ;
+        Text [ portuguese ] = "Padrão" ;
+        Text[ chinese_simplified ] = "±ê×¼";
+        Text[ russian ] = "Ñòàíäàğò";
+        Text[ polish ] = "Domyœlnie";
+        Text[ japanese ] = "•W€";
+        Text[ chinese_traditional ] = "¼Ğ·Ç";
+        Text[ arabic ] = "ÇİÊÑÇÖí";
+        Text[ greek ] = "ĞñïåğéëïãŞ";
+        Text[ korean ] = "±âº»";
+        Text[ turkish ] = "Standart";
+        Text[ language_user1 ] = " ";
+    };
+    RadioButton RBT_GRAYSCALE
+    {
+        Pos = MAP_APPFONT ( 136 , 28  ) ;
+        Size = MAP_APPFONT ( 100 , 10 ) ;
+        Text = "Graustufen" ;
+        Text [ ENGLISH ] = "Grayscale" ;
+        Text [ english_us ] = "Grayscale" ;
+        TabStop = TRUE ;
+        Text [ portuguese_brazilian ] = "Graustufen" ;
+        Text [ swedish ] = "Gråskalor" ;
+        Text [ danish ] = "Gråtoner" ;
+        Text [ italian ] = "Toni di grigio" ;
+        Text [ spanish ] = "Escala de grises" ;
+        Text [ french ] = "Niveaux de gris" ;
+        Text [ dutch ] = "Grijswaarden" ;
+        Text [ portuguese ] = "Tons de cinzento" ;
+        Text[ chinese_simplified ] = "»Ò¶È";
+        Text[ russian ] = "Îòòåíêè ñåğîãî";
+        Text[ polish ] = "Odcienie szaroœci";
+        Text[ japanese ] = "¸ŞÚ°½¹°Ù";
+        Text[ chinese_traditional ] = "¦Ç¶¥";
+        Text[ arabic ] = "ÏÑÌÇÊ ÇáÑãÇÏí";
+        Text[ greek ] = "ÄéáâÜèìéóç ôïõ ãêñé";
+        Text[ korean ] = "È¸»öµµ";
+        Text[ turkish ] = "Gri tonları";
+        Text[ language_user1 ] = " ";
+    };
+    RadioButton RBT_BLACKWHITE
+    {
+        Pos = MAP_APPFONT ( 136 , 42  ) ;
+        Size = MAP_APPFONT ( 100 , 10 ) ;
+        Text = "Schwarzweiß" ;
+        Text [ ENGLISH ] = "Black & White" ;
+        Text [ english_us ] = "Black & White" ;
+        TabStop = TRUE ;
+        Text [ portuguese_brazilian ] = "Schwarzweiß" ;
+        Text [ swedish ] = "Svartvitt" ;
+        Text [ danish ] = "Sort-hvid" ;
+        Text [ italian ] = "Bianco e nero" ;
+        Text [ spanish ] = "Blanco y negro" ;
+        Text [ french ] = "Noir et blanc" ;
+        Text [ dutch ] = "Zwart-wit" ;
+        Text [ portuguese ] = "Preto e branco" ;
+        Text[ chinese_simplified ] = "ºÚ°×";
+        Text[ russian ] = "×åğíî-áåëîå";
+        Text[ polish ] = "Czarno-bia~³y";
+        Text[ japanese ] = "”’•";
+        Text[ chinese_traditional ] = "¶Â¥Õ";
+        Text[ arabic ] = "ÃÈíÖ æÃÓæÏ";
+        Text[ greek ] = "Áóğñüìáõñï";
+        Text[ korean ] = "Èæ¹é";
+        Text[ turkish ] = "Siyah-beyaz";
+        Text[ language_user1 ] = " ";
+    };
+    FixedLine GRP_PRINT_EXT
+    {
+        Pos = MAP_APPFONT ( 6 , 72  ) ;
+        Size = MAP_APPFONT ( 120 , 8 ) ;
         Text = "Drucken von" ;
         Text [ ENGLISH ] = "Print" ;
         Text [ norwegian ] = "Skriv ut" ;
@@ -659,30 +351,317 @@ TabPage TP_PRINT_OPTIONS
         Text[ turkish ] = "Yazdır";
         Text[ language_user1 ] = " ";
     };
-    /*
-    GroupBox GRP_PAPERBIN
+    CheckBox CBX_PAGENAME
     {
-        Pos = MAP_APPFONT ( 180 , 84 ) ;
-        Size = MAP_APPFONT ( 74 , 45 ) ;
-                //Pos = MAP_APPFONT ( 114 , 104 ) ;
-        //Size = MAP_APPFONT ( 140 , 25 ) ;
-        Text = "Papierschacht" ;
-        Text [ ENGLISH ] = "Paperbin" ;
-        Text [ english_us ] = "Paper tray" ;
-        Text [ portuguese ] = "Tabuleiro de papel" ;
-        Text [ swedish ] = "Pappersfack" ;
-        Text [ danish ] = "Papierschacht" ;
-        Text [ italian ] = "Vassoio carta" ;
-        Text [ spanish ] = "Origen del papel" ;
-        Text [ french ] = "Bac d'alimentation" ;
-        Text [ dutch ] = "Papierlade" ;
-        Text [ portuguese_brazilian ] = "Papierschacht" ;
+        Pos = MAP_APPFONT ( 12 , 83  ) ;
+        Size = MAP_APPFONT ( 90 , 10 ) ;
+        Text = "Seiten~name" ;
+        Text [ ENGLISH ] = "Page~name" ;
+        Text [ norwegian ] = "Side~navn" ;
+        Text [ italian ] = "Nome pagina" ;
+        Text [ portuguese_brazilian ] = "Nome da ~página" ;
+        Text [ portuguese ] = "Nome da ~página" ;
+        Text [ finnish ] = "Sivun ~nimi" ;
+        Text [ danish ] = "Sidenavn" ;
+        Text [ french ] = "~Nom de la page" ;
+        Text [ swedish ] = "Sid~namn" ;
+        Text [ dutch ] = "~Paginanaam" ;
+        Text [ spanish ] = "No~mbre de página" ;
+        Text [ english_us ] = "~Page name" ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "Ò³ÃæÃû³Æ(~P)";
+        Text[ russian ] = "Èìÿ ñòğàíèöû";
+        Text[ polish ] = "Nazwa strony";
+        Text[ japanese ] = "Íß°¼Ş–¼(~P)";
+        Text[ chinese_traditional ] = "­¶­±¦WºÙ(~P)";
+        Text[ arabic ] = "ÇÓã ÇáÕİÍÉ";
+        Text[ greek ] = "¼íïìá óåëßäáò";
+        Text[ korean ] = "ÂÊ ÀÌ¸§(~P)";
+        Text[ turkish ] = "Sayfa adı";
+        Text[ language_user1 ] = " ";
     };
-*/
+    CheckBox CBX_DATE
+    {
+        Pos = MAP_APPFONT ( 12 , 97  ) ;
+        Size = MAP_APPFONT ( 90 , 10 ) ;
+        Text = "Dat~um" ;
+        Text [ ENGLISH ] = "~Date" ;
+        Text [ norwegian ] = "~Dato" ;
+        Text [ italian ] = "Data" ;
+        Text [ portuguese_brazilian ] = "~Data" ;
+        Text [ portuguese ] = "~Data" ;
+        Text [ finnish ] = "~Päivämäärä" ;
+        Text [ danish ] = "Dato" ;
+        Text [ french ] = "~Date" ;
+        Text [ swedish ] = "Dat~um" ;
+        Text [ dutch ] = "Dat~um" ;
+        Text [ spanish ] = "~Fecha" ;
+        Text [ english_us ] = "D~ate" ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "ÈÕÆÚ(~D)";
+        Text[ russian ] = "Äàòà";
+        Text[ polish ] = "Data";
+        Text[ japanese ] = "“ú•t(~D)";
+        Text[ chinese_traditional ] = "¤é´Á(~D)";
+        Text[ arabic ] = "ÇáÊÇÑíÎ";
+        Text[ greek ] = "Çìåñïìçíßá";
+        Text[ korean ] = "³¯Â¥(~A)";
+        Text[ turkish ] = "Tarih";
+        Text[ language_user1 ] = " ";
+    };
+    CheckBox CBX_TIME
+    {
+        Pos = MAP_APPFONT ( 12 , 111  ) ;
+        Size = MAP_APPFONT ( 90 , 10 ) ;
+        Text = "Z~eit" ;
+        Text [ ENGLISH ] = "~Time" ;
+        Text [ norwegian ] = "~Tidspunkt" ;
+        Text [ italian ] = "Orario" ;
+        Text [ portuguese_brazilian ] = "~Hora" ;
+        Text [ portuguese ] = "~Hora" ;
+        Text [ finnish ] = "~Aika" ;
+        Text [ danish ] = "Tid" ;
+        Text [ french ] = "~Heure" ;
+        Text [ swedish ] = "~Tid" ;
+        Text [ dutch ] = "~Tijd" ;
+        Text [ spanish ] = "~Hora" ;
+        Text [ english_us ] = "Ti~me" ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "Ê±¼ä(~M)";
+        Text[ russian ] = "Âğåìÿ";
+        Text[ polish ] = "Czas";
+        Text[ japanese ] = "(~M)";
+        Text[ chinese_traditional ] = "®É¶¡(~M)";
+        Text[ arabic ] = "ÇáæŞÊ";
+        Text[ greek ] = "¿ñá";
+        Text[ korean ] = "½Ã°£(~M)";
+        Text[ turkish ] = "Saat";
+        Text[ language_user1 ] = " ";
+    };
+    CheckBox CBX_HIDDEN_PAGES
+    {
+        Pos = MAP_APPFONT ( 12 , 125  ) ;
+         // 120 , 14
+        Size = MAP_APPFONT ( 90 , 10 ) ;
+        Text = "Ausge~blendeten Seiten" ;
+        Text [ ENGLISH ] = "H~idden pages" ;
+        TabStop = TRUE ;
+        Text [ english_us ] = "H~idden pages" ;
+        Text [ italian ] = "Pagine nascoste" ;
+        Text [ spanish ] = "Páginas ~ocultas" ;
+        Text [ french ] = "Pages masquées" ;
+        Text [ dutch ] = "~Verborgen pagina's" ;
+        Text [ swedish ] = "D~olda sidor" ;
+        Text [ danish ] = "Skjulte sider" ;
+        Text [ portuguese ] = "Páginas ~ocultas" ;
+        Text [ portuguese_brazilian ] = "Ausge~blendeten Seiten" ;
+        Text[ chinese_simplified ] = "ÒşÈëµÄÒ³Ãæ(~H)";
+        Text[ russian ] = "Ñêğûòûå ñòğàíèöû";
+        Text[ polish ] = "Ukryte strony";
+        Text[ japanese ] = "”ñ•\\¦‚ÌÍß°¼Ş(~H)";
+        Text[ chinese_traditional ] = "Áô¤Jªº­¶­±(~H)";
+        Text[ arabic ] = "ÇáÕİÍÇÊ ÇáãÎİíÉ";
+        Text[ greek ] = "Êñõöİò óåëßäåò";
+        Text[ korean ] = "¼û°ÜÁø ÂÊ(~I)";
+        Text[ turkish ] = "Gizli sayfalar";
+        Text[ language_user1 ] = " ";
+    };
+    FixedLine GRP_PAGE
+    {
+        Pos = MAP_APPFONT ( 130 , 72  ) ;
+        Size = MAP_APPFONT ( 120 , 8 ) ;
+        Text = "Seitenoptionen" ;
+        Text [ ENGLISH ] = "Page options" ;
+        Text [ norwegian ] = "Side valg" ;
+        Text [ italian ] = "Opzioni pagina" ;
+        Text [ portuguese_brazilian ] = "Opções da página" ;
+        Text [ portuguese ] = "Opções da página" ;
+        Text [ finnish ] = "Sivumääritykset" ;
+        Text [ danish ] = "Sideindstillinger" ;
+        Text [ french ] = "Options de la page" ;
+        Text [ swedish ] = "Sidalternativ" ;
+        Text [ dutch ] = "Pagina-opties" ;
+        Text [ spanish ] = "Opciones de página" ;
+        Text [ english_us ] = "Page options" ;
+        Text[ chinese_simplified ] = "Ò³ÃæÑ¡Ïî";
+        Text[ russian ] = "Ïàğàìåòğû ñòğàíèöû";
+        Text[ polish ] = "Opcje strony";
+        Text[ japanese ] = "Íß°¼Ş‚ÌµÌß¼®İ";
+        Text[ chinese_traditional ] = "­¶­±¿ï¶µ";
+        Text[ arabic ] = "ÎíÇÑÇÊ ÇáÕİÍÉ";
+        Text[ greek ] = "Åğéëïãİò óåëßäáò";
+        Text[ korean ] = "ÂÊ ¿É¼Ç";
+        Text[ turkish ] = "Sayfa seçenekleri";
+        Text[ language_user1 ] = " ";
+    };
+    RadioButton RBT_DEFAULT
+    {
+        Pos = MAP_APPFONT ( 136 , 83  ) ;
+        Size = MAP_APPFONT ( 110 , 10 ) ;
+        Text = "St~andard" ;
+        Text [ ENGLISH ] = "~Default" ;
+        TabStop = TRUE ;
+        Text [ english_us ] = "~Standard" ;
+        Text [ italian ] = "St~andard" ;
+        Text [ spanish ] = "~Predeterminado" ;
+        Text [ french ] = "St~andard" ;
+        Text [ dutch ] = "Standaar~d" ;
+        Text [ swedish ] = "St~andard" ;
+        Text [ danish ] = "Standard" ;
+        Text [ portuguese ] = "~Padrão" ;
+        Text [ portuguese_brazilian ] = "St~andard" ;
+        Text[ chinese_simplified ] = "±ê×¼(~S)";
+        Text[ russian ] = "Ñòàíäàğò";
+        Text[ polish ] = "Domy~œlnie";
+        Text[ japanese ] = "Šù’è(~S)";
+        Text[ chinese_traditional ] = "¼Ğ·Ç(~S)";
+        Text[ arabic ] = "ŞíÇÓí";
+        Text[ greek ] = "ĞñïåğéëïãŞ";
+        Text[ korean ] = "±âº»(~S)";
+        Text[ turkish ] = "Standart";
+        Text[ language_user1 ] = " ";
+    };
+    RadioButton RBT_PAGESIZE
+    {
+        Pos = MAP_APPFONT ( 136 , 97  ) ;
+        Size = MAP_APPFONT ( 110 , 10 ) ;
+        Text = "An ~Seitengröße anpassen" ;
+        Text [ ENGLISH ] = "~Fit to page size" ;
+        Text [ norwegian ] = "~Tilpass sidestørrelse" ;
+        Text [ italian ] = "Dimensione pagina" ;
+        Text [ portuguese_brazilian ] = "~Encaixar no tamanho da página" ;
+        Text [ portuguese ] = "~Adaptar ao tamanho da página" ;
+        Text [ finnish ] = "~Sovita sivulle" ;
+        Text [ danish ] = "Tilpas til siden" ;
+        Text [ french ] = "Adapter au ~format de la page" ;
+        Text [ swedish ] = "Anpassa till ~sidstorlek" ;
+        Text [ dutch ] = "~Aanpassen aan paginagrootte" ;
+        Text [ spanish ] = "Aj~ustar al tamaño de la página" ;
+        Text [ english_us ] = "~Fit to page" ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "µ÷Õû³ÉÒ³Ãæ´óĞ¡(~F)";
+        Text[ russian ] = "Ñîãëàñîâàòü ñ ğàçìåğîì ñòğàíèöû";
+        Text[ polish ] = "Dopasuj do rozmiaru stron~y";
+        Text[ japanese ] = "Íß°¼Ş‚É‡‚í‚¹‚é(~F)";
+        Text[ chinese_traditional ] = "½Õ¾ã¦¨­¶­±¤j¤p(~F)";
+        Text[ arabic ] = "ãáÇÁãÉ áÍÌã ÇáÕİÍÉ";
+        Text[ greek ] = "ĞñïóáñìïãŞ óå óåëßäá";
+        Text[ korean ] = "ÂÊ Å©±â¿¡ ¸ÂÃã(~F)";
+        Text[ turkish ] = "Sayfaya sığdır";
+        Text[ language_user1 ] = " ";
+    };
+    RadioButton RBT_PAGETILE
+    {
+        Pos = MAP_APPFONT ( 136 , 111 ) ;
+        Size = MAP_APPFONT ( 110 , 10 ) ;
+        Text = "Seiten ~kacheln" ;
+        Text [ ENGLISH ] = "~Tile pages" ;
+        TabStop = TRUE ;
+        Text [ english_us ] = "~Tile pages" ;
+        Text [ italian ] = "Affianca pagine" ;
+        Text [ spanish ] = "Páginas como a~zulejos" ;
+        Text [ french ] = "Pages en ~mosaïque" ;
+        Text [ dutch ] = "Pagina´s betege~len" ;
+        Text [ swedish ] = "Sidor sida ~vid sida" ;
+        Text [ danish ] = "Sider side om side" ;
+        Text [ portuguese ] = "Páginas em ~mosaico" ;
+        Text [ portuguese_brazilian ] = "Seiten ~kacheln" ;
+        Text[ chinese_simplified ] = "Æ½ÆÌÒ³Ãæ(~T)";
+        Text[ russian ] = "Ğàçìåñòèòü ñòğàíèöû ğÿäîì";
+        Text[ polish ] = "Ustaw strony obo~k siebie";
+        Text[ japanese ] = "Íß°¼Ş‚ÉÀ²Ùó”z’u(~T)";
+        Text[ chinese_traditional ] = "¥­¾Q­¶­±(~T)";
+        Text[ arabic ] = "ÕİÍÇÊ ÈáÇØ";
+        Text[ greek ] = "Óåëßäåò óå ğáñÜèåóç";
+        Text[ korean ] = "ÂÊ ¹ÙµÏÆÇ½Ä ¹è¿­(~T)";
+        Text[ turkish ] = "Sayfaları döşe";
+        Text[ language_user1 ] = " ";
+    };
+    RadioButton RBT_BOOKLET
+    {
+        Pos = MAP_APPFONT ( 136, 125  ) ;
+        Size = MAP_APPFONT ( 110 , 10 ) ;
+        Text = "~Prospekt" ;
+        Text [ ENGLISH ] = "~Booklet" ;
+        TabStop = TRUE ;
+        Text [ dutch ] = "~Brochure" ;
+        Text [ english_us ] = "B~rochure" ;
+        Text [ italian ] = "Depliant" ;
+        Text [ spanish ] = "~Prospecto" ;
+        Text [ french ] = "~Prospectus" ;
+        Text [ swedish ] = "~Prospekt" ;
+        Text [ danish ] = "Brochure" ;
+        Text [ portuguese ] = "~Prospecto" ;
+        Text [ portuguese_brazilian ] = "~Prospekt" ;
+        Text[ chinese_simplified ] = "ÊÖ²á(~B)";
+        Text[ russian ] = "~Áğîøşğà";
+        Text[ polish ] = "Broszura";
+        Text[ japanese ] = "ÊßİÌÚ¯Ä(~B)";
+        Text[ chinese_traditional ] = "¤â¥U(~B)";
+        Text[ arabic ] = "äÔÑÉ";
+        Text[ greek ] = "Ğñïóğİêôïõò";
+        Text[ korean ] = "ÆÊÇÃ·¿(~R)";
+        Text[ turkish ] = "Broşür";
+        Text[ language_user1 ] = " ";
+    };
+    CheckBox CBX_FRONT
+    {
+        Pos = MAP_APPFONT ( 142 , 139  ) ;
+        Size = MAP_APPFONT ( 53 , 10 ) ;
+        Text = "~Vorderseite" ;
+        Text [ ENGLISH ] = "Front" ;
+        TabStop = TRUE ;
+        Text [ english_us ] = "Fr~ont side" ;
+        Text [ italian ] = "Davanti pagina" ;
+        Text [ spanish ] = "~Anverso" ;
+        Text [ french ] = "~Page recto" ;
+        Text [ dutch ] = "V~oorkant" ;
+        Text [ swedish ] = "~Framsida" ;
+        Text [ danish ] = "Forside" ;
+        Text [ portuguese ] = "~Verso" ;
+        Text [ portuguese_brazilian ] = "~Vorderseite" ;
+        Text[ chinese_simplified ] = "ÕıÃæ(~I)";
+        Text[ russian ] = "Ïåğåäíÿÿ ñòîğîíà";
+        Text[ polish ] = "Przednia st~rona";
+        Text[ japanese ] = "‚¨‚à‚Ä(~I)";
+        Text[ chinese_traditional ] = "¥¿­±(~I)";
+        Text[ arabic ] = "ÇáÕİÍÉ ÇáÃãÇãíÉ";
+        Text[ greek ] = "Ìğñïóô. ğëå~õñÜ";
+        Text[ korean ] = "¾Õ ÂÊ(~O)";
+        Text[ turkish ] = "Ön sayfa";
+        Text[ language_user1 ] = " ";
+    };
+    CheckBox CBX_BACK
+    {
+        Pos = MAP_APPFONT ( 200 , 139  ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Text = "~Rückseite" ;
+        Text [ ENGLISH ] = "Back" ;
+        TabStop = TRUE ;
+        Text [ english_us ] = "Ba~ck side" ;
+        Text [ italian ] = "Retro pagina" ;
+        Text [ spanish ] = "Re~verso" ;
+        Text [ french ] = "~Page verso" ;
+        Text [ dutch ] = "A~chterkant" ;
+        Text [ swedish ] = "~Baksida" ;
+        Text [ danish ] = "Bagside" ;
+        Text [ portuguese ] = "~Verso página" ;
+        Text [ portuguese_brazilian ] = "~Rückseite" ;
+        Text[ chinese_simplified ] = "·´Ãæ(~C)";
+        Text[ russian ] = "Îáğàòíàÿ ñòîğîíà";
+        Text[ polish ] = "Tylna strona";
+        Text[ japanese ] = "‚¤‚ç(~C)";
+        Text[ chinese_traditional ] = "¤Ï­±(~C)";
+        Text[ arabic ] = "ÇáÕİÍÉ ÇáÎáİíÉ";
+        Text[ greek ] = "Ğßóù ğëåõñÜ";
+        Text[ korean ] = "µŞ ÂÊ(~C)";
+        Text[ turkish ] = "Arka sayfa";
+        Text[ language_user1 ] = " ";
+    };
     CheckBox CBX_PAPERBIN
     {
-        Pos = MAP_APPFONT ( 114 , 150  ) ;
-        Size = MAP_APPFONT ( 120 , 10 ) ;
+        Pos = MAP_APPFONT ( 136 , 153  ) ;
+        Size = MAP_APPFONT ( 100 , 10 ) ;
         Text = "Papierschacht aus ~Druckereinstellung" ;
         Text [ ENGLISH ] = "Paperbin from ~Printer settings" ;
         Text [ english_us ] = "Paper tray from printer s~ettings" ;

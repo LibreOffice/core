@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod2.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-08 11:04:21 $
+ *  last change: $Author: os $ $Date: 2001-03-22 14:12:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -737,20 +737,12 @@ SfxTabPage*  SdModule::CreateTabPage( USHORT nId, Window* pParent, const SfxItem
         case SID_SI_TP_CONTENTS:
             pRet = SdTpOptionsContents::Create(pParent, rSet);
         break;
-        case SID_SD_TP_LAYOUT:
-        case SID_SI_TP_LAYOUT:
-            pRet = SdTpOptionsLayout::Create(pParent, rSet);
-        break;
         case SID_SD_TP_SNAP:
         case SID_SI_TP_SNAP:
             pRet = SdTpOptionsSnap::Create(pParent, rSet);
         break;
         case SID_SD_TP_SCALE:
                pRet = SdTpScale::Create(pParent, rSet);
-        break;
-        case SID_SI_TP_GRID:
-        case SID_SD_TP_GRID:
-            pRet = SvxGridTabPage::Create(pParent, rSet);
         break;
         case SID_SD_TP_PRINT:
         case SID_SI_TP_PRINT:
@@ -770,17 +762,7 @@ SfxTabPage*  SdModule::CreateTabPage( USHORT nId, Window* pParent, const SfxItem
         case SID_SD_TP_MISC:
             pRet = SdTpOptionsMisc::Create(pParent, rSet);
             if(SID_SD_TP_MISC == nId)
-            {
-                ( (SdTpOptionsMisc*) pRet )->aCbxStartWithTemplate.Hide();
-                ( (SdTpOptionsMisc*) pRet )->aGrpProgramStart.Hide();
-
-                ( (SdTpOptionsMisc*) pRet )->aCbxStartWithActualPage.Hide();
-                ( (SdTpOptionsMisc*) pRet )->aGrpStartWithActualPage.Hide();
-            }
-            else
-            {
-                ( (SdTpOptionsMisc*) pRet )->aCbxCrookNoContortion.Hide();
-            }
+                ( (SdTpOptionsMisc*) pRet )->SetDrawMode();
         break;
     }
     DBG_ASSERT(pRet, "Id unbekannt");
