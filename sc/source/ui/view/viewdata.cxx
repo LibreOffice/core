@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewdata.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: nn $ $Date: 2002-08-16 13:09:34 $
+ *  last change: $Author: nn $ $Date: 2002-08-21 17:41:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -900,9 +900,14 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
         {
             DBG_ASSERT(pView,"keine View fuer EditView");
             nSizeXPix = pView->GetGridWidth(eHWhich) - aPixRect.Left();
+
+            if ( nSizeXPix <= 0 )
+                nSizeXPix = aPixRect.GetWidth();    // editing outside to the right of the window -> keep cell width
         }
         DBG_ASSERT(pView,"keine View fuer EditView");
         long nSizeYPix = pView->GetGridHeight(WhichV(eWhich)) - aPixRect.Top();
+        if ( nSizeYPix <= 0 )
+            nSizeYPix = aPixRect.GetHeight();   // editing outside below the window -> keep cell height
 
         pNewEngine->SetPaperSize( pView->GetActiveWin()->PixelToLogic( Size( nSizeXPix, nSizeYPix ),
                                         GetLogicMode() ) );
@@ -1080,7 +1085,8 @@ void ScViewData::EditGrowY()
     long        nTextHeight = pEngine->GetTextHeight();
 
     BOOL bChanged = FALSE;
-    while (aArea.GetHeight() + 100 < nTextHeight && nEditEndRow < nBottom)
+    BOOL bMaxReached = FALSE;
+    while (aArea.GetHeight() + 100 < nTextHeight && nEditEndRow < nBottom && !bMaxReached)
     {
         ++nEditEndRow;
         ScDocument* pDoc = GetDocument();
@@ -1088,7 +1094,10 @@ void ScViewData::EditGrowY()
         aArea.Bottom() += pWin->PixelToLogic(Size(0,nPix)).Height();
 
         if ( aArea.Bottom() > aArea.Top() + aSize.Height() - 1 )
+        {
             aArea.Bottom() = aArea.Top() + aSize.Height() - 1;
+            bMaxReached = TRUE;     // don't occupy more cells beyond paper size
+        }
 
         bChanged = TRUE;
     }
@@ -1097,7 +1106,7 @@ void ScViewData::EditGrowY()
     {
         pCurView->SetOutputArea(aArea);
 
-        if (nEditEndRow >= nBottom)
+        if (nEditEndRow >= nBottom || bMaxReached)
         {
             if ((nControl & EV_CNTRL_AUTOSCROLL) == 0)
                 pCurView->SetControlWord( nControl | EV_CNTRL_AUTOSCROLL );

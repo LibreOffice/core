@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview3.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: sab $ $Date: 2002-07-08 09:36:35 $
+ *  last change: $Author: nn $ $Date: 2002-08-21 17:41:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1681,16 +1681,29 @@ void ScTabView::MakeEditView( ScEditEngineDefaulter* pEngine, USHORT nCol, USHOR
                 USHORT nScrX = aViewData.GetPosX( eHWhich );
                 USHORT nScrY = aViewData.GetPosY( eVWhich );
 
-                if ( nCol >= nScrX && nCol <= nScrX + aViewData.VisibleCellsX(eHWhich) + 1 &&
-                     nRow >= nScrY && nRow <= nScrY + aViewData.VisibleCellsY(eVWhich) + 1 )
+                BOOL bPosVisible =
+                     ( nCol >= nScrX && nCol <= nScrX + aViewData.VisibleCellsX(eHWhich) + 1 &&
+                       nRow >= nScrY && nRow <= nScrY + aViewData.VisibleCellsY(eVWhich) + 1 );
+
+                //  #102421# for the active part, create edit view even if outside the visible area,
+                //  so input isn't lost (and the edit view may be scrolled into the visible area)
+
+                if ( bPosVisible || aViewData.GetActivePart() == (ScSplitPos) i )
                 {
                     pGridWin[i]->HideCursor();
 
-                    // MapMode nach HideCursor setzen
+                    // MapMode must be set after HideCursor
 
                     pGridWin[i]->SetMapMode(aViewData.GetLogicMode());
 
                     aViewData.SetEditEngine( (ScSplitPos) i, pEngine, pGridWin[i], nCol, nRow );
+
+                    if ( !bPosVisible )
+                    {
+                        //  move the edit view area to the real (possibly negative) position,
+                        //  or hide if completely above or left of the window
+                        pGridWin[i]->UpdateEditViewPos();
+                    }
                 }
             }
 
