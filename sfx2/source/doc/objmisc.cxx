@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objmisc.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 14:40:31 $
+ *  last change: $Author: rt $ $Date: 2004-11-09 15:13:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1155,6 +1155,17 @@ void SfxObjectShell::FinishedLoading( sal_uInt16 nFlags )
 
     if ( bSetModifiedTRUE )
         SetModified( sal_True );
+
+    if ( (pImp->nLoadedFlags & SFX_LOADED_MAINDOCUMENT )
+      && (pImp->nLoadedFlags & SFX_LOADED_IMAGES ) )
+    {
+        // closing the streams on loading should be under control of SFX!
+        DBG_ASSERT( pMedium->IsOpen(), "Don't close the medium when loading documents!" );
+        if( !(pMedium->GetOpenMode() & STREAM_WRITE) )
+            // don't lock file opened read only
+            pMedium->CloseInStream();
+    }
+
     if ( pImp->nEventId )
     {
         // Falls noch kein OnLoad ausgel"ost wurde, weil beim Erzeugen der ::com::sun::star::sdbcx::View der Frame nicht aktiv war,
