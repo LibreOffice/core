@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_ooo.scp,v $
 *
-*  $Revision: 1.67 $
+*  $Revision: 1.68 $
 *
-*  last change: $Author: obo $ $Date: 2005-01-25 15:20:52 $
+*  last change: $Author: rt $ $Date: 2005-01-27 19:48:17 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -615,6 +615,12 @@ File gid_File_Help_Common_Zip
     Dir = gid_Dir_Help_Isolanguage;
     ARCHIVE_TXT_FILE_BODY;
     EXTRA_ALL_LANG(shared);
+End
+
+File gid_File_Help_Sdatabase_Zip
+    Dir = gid_Dir_Help_Isolanguage;
+    ARCHIVE_TXT_FILE_BODY;
+    EXTRA_ALL_LANG(sdatabase);
 End
 
 File gid_File_Help_Help_Zip
