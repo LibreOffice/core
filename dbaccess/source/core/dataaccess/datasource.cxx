@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasource.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-12 08:54:23 $
+ *  last change: $Author: oj $ $Date: 2002-08-12 09:21:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -308,8 +308,8 @@ namespace dbaccess
     /** The class OSharedConnectionManager implements a structure to share connections.
         It owns the master connections which will be disposed when the last connection proxy is gone.
     */
-    typedef ::cppu::WeakImplHelper1< XEventListener > OSharedConnectionManager_BASE;
-    class OSharedConnectionManager : public OSharedConnectionManager_BASE
+    typedef ::cppu::WeakImplHelper1< XEventListener > OConnectionHelper_BASE;
+    class OSharedConnectionManager : public OConnectionHelper_BASE
     {
 
          // contains the currently used master connections
@@ -426,6 +426,8 @@ namespace dbaccess
         OSL_ENSURE( m_aConnections.end() != _rIter , "Iterator is end!");
         osl_incrementInterlockedCount(&_rIter->second.nALiveCount);
     }
+
+
 //============================================================
 //= ODatabaseContext
 //============================================================

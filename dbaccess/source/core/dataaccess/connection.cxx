@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connection.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-11 06:52:30 $
+ *  last change: $Author: oj $ $Date: 2002-08-12 09:21:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,9 @@
 #ifndef _COM_SUN_STAR_SDBCX_XDATADEFINITIONSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XDataDefinitionSupplier.hpp>
 #endif
+#ifndef _COM_SUN_STAR_REFLECTION_XPROXYFACTORY_HPP_
+#include <com/sun/star/reflection/XProxyFactory.hpp>
+#endif
 #ifndef _COMPHELPER_SEQUENCE_HXX_
 #include <comphelper/sequence.hxx>
 #endif
@@ -103,6 +106,9 @@
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
 #endif
+#ifndef _COMPHELPER_UNO3_HXX_
+#include <comphelper/uno3.hxx>
+#endif
 #ifndef _DBHELPER_DBEXCEPTION_HXX_
 #include <connectivity/dbexception.hxx>
 #endif
@@ -114,6 +120,7 @@ using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::reflection;
 using namespace ::com::sun::star::container;
 using namespace ::osl;
 using namespace ::comphelper;
@@ -127,48 +134,20 @@ namespace dbaccess
 //........................................................................
 
 //==========================================================================
-//= OConnectionRerouter
-//==========================================================================
-DBG_NAME(OConnectionRerouter)
-//--------------------------------------------------------------------------
-OConnectionRerouter::OConnectionRerouter(const Reference< XConnection >& _rxMaster)
-                    :m_xMasterConnection(_rxMaster)
-{
-    DBG_CTOR(OConnectionRerouter, NULL);
-    DBG_ASSERT(m_xMasterConnection.is(), "OConnectionRerouter::OConnectionRerouter : invalid master connection !");
-    if (!Reference< XWarningsSupplier >::query(m_xMasterConnection).is())
-    {
-        DBG_ERROR("OConnectionRerouter::OConnectionRerouter : the connection is assumed to be a warnings supplier ! Won't use it !");
-        // as we're the owner of the conn and don't want to use it -> dispose
-        Reference< XComponent > xConnComp(m_xMasterConnection, UNO_QUERY);
-        if (xConnComp.is())
-            xConnComp->dispose();
-
-        m_xMasterConnection = NULL;
-    }
-}
-
-//--------------------------------------------------------------------------
-OConnectionRerouter::~OConnectionRerouter()
-{
-    DBG_DTOR(OConnectionRerouter, NULL);
-}
-
 // XServiceInfo
 //------------------------------------------------------------------------------
-rtl::OUString OConnectionRerouter::getImplementationName(  ) throw(RuntimeException)
+rtl::OUString OConnection::getImplementationName(  ) throw(RuntimeException)
 {
-    return rtl::OUString::createFromAscii("com.sun.star.sdb.OConnectionRerouter");
+    return rtl::OUString::createFromAscii("com.sun.star.comp.dbaccess.Connection");
 }
-
 //------------------------------------------------------------------------------
-sal_Bool OConnectionRerouter::supportsService( const ::rtl::OUString& _rServiceName ) throw (RuntimeException)
+sal_Bool OConnection::supportsService( const ::rtl::OUString& _rServiceName ) throw (RuntimeException)
 {
     return findValue(getSupportedServiceNames(), _rServiceName, sal_True).getLength() != 0;
 }
 
 //------------------------------------------------------------------------------
-Sequence< ::rtl::OUString > OConnectionRerouter::getSupportedServiceNames(  ) throw (RuntimeException)
+Sequence< ::rtl::OUString > OConnection::getSupportedServiceNames(  ) throw (RuntimeException)
 {
     Sequence< ::rtl::OUString > aSNS( 2 );
     aSNS[0] = SERVICE_SDBC_CONNECTION;
@@ -178,8 +157,9 @@ Sequence< ::rtl::OUString > OConnectionRerouter::getSupportedServiceNames(  ) th
 
 // XCloseable
 //------------------------------------------------------------------------------
-void OConnectionRerouter::close(void) throw( SQLException, RuntimeException )
+void OConnection::close(void) throw( SQLException, RuntimeException )
 {
+    MutexGuard aGuard(m_aMutex);
     checkDisposed();
     disposing();
     Reference< XComponent > xDerivedComp;
@@ -189,63 +169,40 @@ void OConnectionRerouter::close(void) throw( SQLException, RuntimeException )
 }
 
 //------------------------------------------------------------------------------
-sal_Bool OConnectionRerouter::isClosed(void) throw( SQLException, RuntimeException )
+sal_Bool OConnection::isClosed(void) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
-    return !m_xMasterConnection.is();
-}
-
-// XWarningsSupplier
-//------------------------------------------------------------------------------
-Any OConnectionRerouter::getWarnings(void) throw( SQLException, RuntimeException )
-{
-    MutexGuard aGuard(m_aMutex);
-    checkDisposed();
-
-    Reference< XWarningsSupplier >  xIFace(m_xMasterConnection, UNO_QUERY);
-        // assumed to be non-NULL, checked in the ctor
-    return xIFace->getWarnings();
-}
-
-//------------------------------------------------------------------------------
-void OConnectionRerouter::clearWarnings(void) throw( SQLException, RuntimeException )
-{
-    MutexGuard aGuard(m_aMutex);
-    checkDisposed();
-
-    Reference< XWarningsSupplier >  xIFace(m_xMasterConnection, UNO_QUERY);
-        // assumed to be non-NULL, checked in the ctor
-    xIFace->clearWarnings();
+    return !m_xConnection.is();
 }
 
 // XConnection
 //------------------------------------------------------------------------------
-Reference< XStatement >  OConnectionRerouter::createStatement(void) throw( SQLException, RuntimeException )
+Reference< XStatement >  OConnection::createStatement(void) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
 
-    Reference< XStatement > xMasterStatement = m_xMasterConnection->createStatement();
+    Reference< XStatement > xMasterStatement = m_xConnection->createStatement();
     Reference< XStatement > xStatement = new OStatement(this, xMasterStatement);
     m_aStatements.push_back(WeakReferenceHelper(xStatement));
     return xStatement;
 }
 
 //------------------------------------------------------------------------------
-Reference< XPreparedStatement >  OConnectionRerouter::prepareStatement(const rtl::OUString& sql) throw( SQLException, RuntimeException )
+Reference< XPreparedStatement >  OConnection::prepareStatement(const rtl::OUString& sql) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
 
     // TODO convert the SQL to SQL the driver understands
-    Reference< XPreparedStatement > xMasterStatement = m_xMasterConnection->prepareStatement(sql);
+    Reference< XPreparedStatement > xMasterStatement = m_xConnection->prepareStatement(sql);
     Reference< XPreparedStatement > xStatement = new OPreparedStatement(this, xMasterStatement);
     m_aStatements.push_back(WeakReferenceHelper(xStatement));
     return xStatement;
 }
 
 //------------------------------------------------------------------------------
-Reference< XPreparedStatement >  OConnectionRerouter::prepareCall(const rtl::OUString& sql) throw( SQLException, RuntimeException )
+Reference< XPreparedStatement >  OConnection::prepareCall(const rtl::OUString& sql) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
@@ -257,141 +214,124 @@ Reference< XPreparedStatement >  OConnectionRerouter::prepareCall(const rtl::OUS
 }
 
 //------------------------------------------------------------------------------
-rtl::OUString OConnectionRerouter::nativeSQL(const rtl::OUString& sql) throw( SQLException, RuntimeException )
+rtl::OUString OConnection::nativeSQL(const rtl::OUString& sql) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
-    return m_xMasterConnection->nativeSQL(sql);
+    return m_xConnection->nativeSQL(sql);
 }
 
 //------------------------------------------------------------------------------
-void OConnectionRerouter::setAutoCommit(sal_Bool autoCommit) throw( SQLException, RuntimeException )
+void OConnection::setAutoCommit(sal_Bool autoCommit) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
-    m_xMasterConnection->setAutoCommit(autoCommit);
+    m_xConnection->setAutoCommit(autoCommit);
 }
 
 //------------------------------------------------------------------------------
-sal_Bool OConnectionRerouter::getAutoCommit(void) throw( SQLException, RuntimeException )
+sal_Bool OConnection::getAutoCommit(void) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
-    return m_xMasterConnection->getAutoCommit();
+    return m_xConnection->getAutoCommit();
 }
 
 //------------------------------------------------------------------------------
-void OConnectionRerouter::commit(void) throw( SQLException, RuntimeException )
+void OConnection::commit(void) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
-    m_xMasterConnection->commit();
+    m_xConnection->commit();
 }
 
 //------------------------------------------------------------------------------
-void OConnectionRerouter::rollback(void) throw( SQLException, RuntimeException )
+void OConnection::rollback(void) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
-    m_xMasterConnection->rollback();
+    m_xConnection->rollback();
 }
 
 //------------------------------------------------------------------------------
-Reference< XDatabaseMetaData >  OConnectionRerouter::getMetaData(void) throw( SQLException, RuntimeException )
+Reference< XDatabaseMetaData >  OConnection::getMetaData(void) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
-    return m_xMasterConnection->getMetaData();
+    return m_xConnection->getMetaData();
 }
 
 //------------------------------------------------------------------------------
-void OConnectionRerouter::setReadOnly(sal_Bool readOnly) throw( SQLException, RuntimeException )
+void OConnection::setReadOnly(sal_Bool readOnly) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
-    m_xMasterConnection->setReadOnly(readOnly);
+    m_xConnection->setReadOnly(readOnly);
 }
 
 //------------------------------------------------------------------------------
-sal_Bool OConnectionRerouter::isReadOnly(void) throw( SQLException, RuntimeException )
+sal_Bool OConnection::isReadOnly(void) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
-    return m_xMasterConnection->isReadOnly();
+    return m_xConnection->isReadOnly();
 }
 
 //------------------------------------------------------------------------------
-void OConnectionRerouter::setCatalog(const rtl::OUString& catalog) throw( SQLException, RuntimeException )
+void OConnection::setCatalog(const rtl::OUString& catalog) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
-    m_xMasterConnection->setCatalog(catalog);
+    m_xConnection->setCatalog(catalog);
 }
 
 //------------------------------------------------------------------------------
-rtl::OUString OConnectionRerouter::getCatalog(void) throw( SQLException, RuntimeException )
+rtl::OUString OConnection::getCatalog(void) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
-    return m_xMasterConnection->getCatalog();
+    return m_xConnection->getCatalog();
 }
 
 //------------------------------------------------------------------------------
-void OConnectionRerouter::setTransactionIsolation(sal_Int32 level) throw( SQLException, RuntimeException )
+void OConnection::setTransactionIsolation(sal_Int32 level) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
-    m_xMasterConnection->setTransactionIsolation(level);
+    m_xConnection->setTransactionIsolation(level);
 }
 
 //------------------------------------------------------------------------------
-sal_Int32 OConnectionRerouter::getTransactionIsolation(void) throw( SQLException, RuntimeException )
+sal_Int32 OConnection::getTransactionIsolation(void) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
-    return m_xMasterConnection->getTransactionIsolation();
+    return m_xConnection->getTransactionIsolation();
 }
 
 //------------------------------------------------------------------------------
-Reference< XNameAccess >  OConnectionRerouter::getTypeMap(void) throw( SQLException, RuntimeException )
+Reference< XNameAccess >  OConnection::getTypeMap(void) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
-    return m_xMasterConnection->getTypeMap();
+    return m_xConnection->getTypeMap();
 }
 
 //------------------------------------------------------------------------------
-void OConnectionRerouter::setTypeMap(const Reference< XNameAccess > & typeMap) throw( SQLException, RuntimeException )
+void OConnection::setTypeMap(const Reference< XNameAccess > & typeMap) throw( SQLException, RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
-    m_xMasterConnection->setTypeMap(typeMap);
+    m_xConnection->setTypeMap(typeMap);
 }
-
-//------------------------------------------------------------------------------
-void OConnectionRerouter::disposing()
-{
-    MutexGuard aGuard(m_aMutex);
-
-    for (OWeakRefArrayIterator i = m_aStatements.begin(); m_aStatements.end() != i; i++)
-    {
-        Reference< XComponent > xComp(i->get(), UNO_QUERY);
-        if (xComp.is())
-            xComp->dispose();
-    }
-    m_aStatements.clear();
-    m_xMasterTables = NULL;
-}
-
 //==========================================================================
 //= OConnection
 //==========================================================================
 DBG_NAME(OConnection)
 //--------------------------------------------------------------------------
 OConnection::OConnection(ODatabaseSource& _rDB, const OConfigurationNode& _rTablesConfig,const OConfigurationTreeRoot& _rCommitLocation,
-                         const Reference< XConnection >& _rxMaster, const Reference< XMultiServiceFactory >& _rxORB)
-            :OConnectionRerouter(_rxMaster)
-            ,OSubComponent(m_aMutex, static_cast< OWeakObject* >(&_rDB))
+                         Reference< XConnection >& _rxMaster, const Reference< XMultiServiceFactory >& _rxORB)
+            :OSubComponent(m_aMutex, static_cast< OWeakObject* >(&_rDB))
             ,m_aQueries(*this, m_aMutex, static_cast< XNameContainer* >(&_rDB.m_aCommandDefinitions), _rDB.m_aCommandDefinitions.getConfigLocation().cloneAsRoot(), _rxORB, this)
                 // as the queries reroute their refcounting to us, this m_aMutex is okey. If the queries
                 // container would do it's own refcounting, it would have to aquire m_pMutex
@@ -399,13 +339,30 @@ OConnection::OConnection(ODatabaseSource& _rDB, const OConfigurationNode& _rTabl
             ,m_aTableFilter(_rDB.m_aTableFilter)
             ,m_aTableTypeFilter(_rDB.m_aTableTypeFilter)
             ,m_xORB(_rxORB)
+            ,m_xMasterConnection(_rxMaster)
             ,m_pTables(NULL)
             ,m_pViews(NULL)
             ,m_bSupportsViews(sal_False)
 {
     DBG_CTOR(OConnection,NULL);
-
     osl_incrementInterlockedCount(&m_refCount);
+
+    Reference< XProxyFactory > xProxyFactory(
+            _rxORB->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.reflection.ProxyFactory"))),UNO_QUERY);
+    Reference<XAggregation> xAgg = xProxyFactory->createProxy(_rxMaster.get());
+    setDelegation(xAgg,m_refCount);
+    DBG_ASSERT(m_xConnection.is(), "OConnection::OConnection : invalid master connection !");
+    if (!m_xProxyConnection->queryAggregation(getCppuType( (Reference<XWarningsSupplier>*)0)).hasValue())
+    {
+        DBG_ERROR("OConnection::OConnection : the connection is assumed to be a warnings supplier ! Won't use it !");
+        // as we're the owner of the conn and don't want to use it -> dispose
+        Reference< XComponent > xConnComp;
+        ::comphelper::query_aggregation(m_xProxyConnection,xConnComp);
+        if (xConnComp.is())
+            xConnComp->dispose();
+
+        m_xMasterConnection = NULL;
+    }
     try
     {
         sal_Bool bCase = sal_True;
@@ -418,7 +375,7 @@ OConnection::OConnection(ODatabaseSource& _rDB, const OConfigurationNode& _rTabl
         }
         m_pTables = new OTableContainer(_rTablesConfig,_rCommitLocation,*this, m_aMutex, this,bCase, this);
         // check if we supports types
-        Reference<XResultSet> xRes = _rxMaster->getMetaData()->getTableTypes();
+        Reference<XResultSet> xRes = m_xConnection->getMetaData()->getTableTypes();
         if(xRes.is())
         {
             ::rtl::OUString sView = ::rtl::OUString::createFromAscii("VIEW");
@@ -437,7 +394,7 @@ OConnection::OConnection(ODatabaseSource& _rDB, const OConfigurationNode& _rTabl
         if(!m_bSupportsViews)
         {
             Reference< XDriverAccess> xManager(m_xORB->createInstance(SERVICE_SDBC_DRIVERMANAGER), UNO_QUERY);
-            Reference< XDataDefinitionSupplier > xSupp(xManager->getDriverByURL(m_xMasterConnection->getMetaData()->getURL()),UNO_QUERY);
+            Reference< XDataDefinitionSupplier > xSupp(xManager->getDriverByURL(m_xConnection->getMetaData()->getURL()),UNO_QUERY);
             Reference< XViewsSupplier > xMaster;
             if(xSupp.is())
                 m_xMasterTables = xSupp->getDataDefinitionByConnection(m_xMasterConnection);
@@ -491,9 +448,13 @@ void OConnection::appendWarning(const SQLWarning& _rWarning)
 
 // XWarningsSupplier
 //--------------------------------------------------------------------------
-Any SAL_CALL OConnection::getWarnings(  ) throw(SQLException, RuntimeException)
+Any SAL_CALL OConnection::getWarnings() throw(SQLException, RuntimeException)
 {
-    Any aReturn = OConnectionRerouter::getWarnings();
+    MutexGuard aGuard(m_aMutex);
+    checkDisposed();
+    Reference<XWarningsSupplier> xWarnings;
+    ::comphelper::query_aggregation(m_xProxyConnection,xWarnings);
+    Any aReturn = xWarnings->getWarnings();
     if (!m_aAdditionalWarnings.hasValue())
         return aReturn;
     else
@@ -530,7 +491,11 @@ void OConnection::implConcatWarnings(Any& _rChainLeft, const Any& _rChainRight)
 //--------------------------------------------------------------------------
 void SAL_CALL OConnection::clearWarnings(  ) throw(SQLException, RuntimeException)
 {
-    OConnectionRerouter::clearWarnings();
+    MutexGuard aGuard(m_aMutex);
+    checkDisposed();
+    Reference<XWarningsSupplier> xWarnings;
+    ::comphelper::query_aggregation(m_xProxyConnection,xWarnings);
+    xWarnings->clearWarnings();
     m_aAdditionalWarnings.clear();
 }
 
@@ -538,9 +503,11 @@ void SAL_CALL OConnection::clearWarnings(  ) throw(SQLException, RuntimeExceptio
 //--------------------------------------------------------------------------
 Sequence< Type > OConnection::getTypes() throw (RuntimeException)
 {
-    if(m_bSupportsViews)
-        return concatSequences(OSubComponent::getTypes(), OConnectionRerouter::getTypes(), OConnection_Base::getTypes());
-    Sequence<Type> aTypes = concatSequences(OSubComponent::getTypes(), OConnectionRerouter::getTypes());
+    if ( m_bSupportsViews )
+        return concatSequences(OSubComponent::getTypes(), OConnection_Base::getTypes());
+
+    // here views are supported
+    Sequence<Type> aTypes = OSubComponent::getTypes();
     Sequence<Type> aConTypes = OConnection_Base::getTypes();
     sal_Int32 nSize = aTypes.getLength();
     aTypes.realloc(aTypes.getLength() + aConTypes.getLength() - 1);
@@ -569,9 +536,11 @@ Any OConnection::queryInterface( const Type & rType ) throw (RuntimeException)
         return Any();
     Any aReturn = OSubComponent::queryInterface( rType );
     if (!aReturn.hasValue())
-        aReturn = OConnectionRerouter::queryInterface( rType );
-    if (!aReturn.hasValue())
+    {
         aReturn = OConnection_Base::queryInterface( rType );
+        if (!aReturn.hasValue())
+            aReturn = OConnectionWrapper::queryInterface( rType );
+    }
     return aReturn;
 }
 
@@ -594,7 +563,15 @@ void OConnection::disposing()
     MutexGuard aGuard(m_aMutex);
 
     OSubComponent::disposing();
-    OConnectionRerouter::disposing();
+    for (OWeakRefArrayIterator i = m_aStatements.begin(); m_aStatements.end() != i; i++)
+    {
+        Reference< XComponent > xComp(i->get(), UNO_QUERY);
+        if (xComp.is())
+            xComp->dispose();
+    }
+    m_aStatements.clear();
+    m_xMasterTables = NULL;
+
 
     if(m_pTables)
         m_pTables->disposing();
@@ -611,9 +588,8 @@ void OConnection::disposing()
 
     m_aComposers.clear();
 
-    Reference< XCloseable > xMasterComp(m_xMasterConnection, UNO_QUERY);
-    if (xMasterComp.is())
-        xMasterComp->close();
+    if (m_xMasterConnection.is())
+        m_xMasterConnection->close();
     m_xMasterConnection = NULL;
 }
 
@@ -665,7 +641,7 @@ Reference< XNameAccess >  OConnection::getTables() throw( RuntimeException )
             try
             {
                 Reference< XDriverAccess> xManager(m_xORB->createInstance(SERVICE_SDBC_DRIVERMANAGER), UNO_QUERY);
-                Reference< XDriver > xDriver = xManager->getDriverByURL(m_xMasterConnection->getMetaData()->getURL());
+                Reference< XDriver > xDriver = xManager->getDriverByURL(m_xConnection->getMetaData()->getURL());
                 OSL_ENSURE(xDriver.is(),"NO driver found for url already connected to!");
                 Reference< XDataDefinitionSupplier > xSupp(xDriver,UNO_QUERY);
                 if(xSupp.is())
@@ -704,7 +680,7 @@ Reference< XNameAccess > SAL_CALL OConnection::getViews(  ) throw(RuntimeExcepti
             try
             {
                 Reference< XDriverAccess> xManager(m_xORB->createInstance(SERVICE_SDBC_DRIVERMANAGER), UNO_QUERY);
-                Reference< XDataDefinitionSupplier > xSupp(xManager->getDriverByURL(m_xMasterConnection->getMetaData()->getURL()),UNO_QUERY);
+                Reference< XDataDefinitionSupplier > xSupp(xManager->getDriverByURL(m_xConnection->getMetaData()->getURL()),UNO_QUERY);
 
                 if(xSupp.is())
                     m_xMasterTables = xSupp->getDataDefinitionByConnection(m_xMasterConnection);

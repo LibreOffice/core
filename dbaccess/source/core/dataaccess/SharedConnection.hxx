@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SharedConnection.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-12 08:52:11 $
+ *  last change: $Author: oj $ $Date: 2002-08-12 09:21:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,13 +103,16 @@
 #ifndef _COMPHELPER_SEQUENCE_HXX_
 #include <comphelper/sequence.hxx>
 #endif
-#ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
-#include <cppuhelper/typeprovider.hxx>
-#endif
 
 
 namespace dbaccess
 {
+    //=======================================================================================
+    //= OSharedConnection: This class implements a simple forwarding of connection calls.
+    //= All methods will be forwarded with exception of the set methods, which are not allowed
+    //= to be called on shared connections. Instances of this class will be created when the
+    //= datasource is asked for not isolated connection.
+    //=======================================================================================
     typedef ::cppu::WeakComponentImplHelper1< ::com::sun::star::sdbc::XConnection
                                             > OSharedConnection_BASE;
     typedef ::connectivity::OConnectionWrapper  OSharedConnection_BASE2;
@@ -151,7 +154,7 @@ namespace dbaccess
         }
         // --------------------------------------------------------------------------------
         // XCloseable
-        void SAL_CALL close(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+        virtual void SAL_CALL close(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
         {
             {
                 ::osl::MutexGuard aGuard( m_aMutex );
@@ -197,6 +200,8 @@ namespace dbaccess
         virtual sal_Int32 SAL_CALL getTransactionIsolation(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL getTypeMap(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
     };
+
+    IMPLEMENT_GET_IMPLEMENTATION_ID( OSharedConnection );
 //........................................................................
 }   // namespace dbaccess
 //........................................................................

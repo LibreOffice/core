@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SharedConnection.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-12 08:52:03 $
+ *  last change: $Author: oj $ $Date: 2002-08-12 09:21:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,23 +186,7 @@ Reference< ::com::sun::star::container::XNameAccess > SAL_CALL OSharedConnection
     return m_xConnection->getTypeMap();
 }
 // -----------------------------------------------------------------------------
-#define IMPLEMENT_GET_IMPLEMENTATION_ID( classname ) \
-        ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL classname::getImplementationId(  ) throw (::com::sun::star::uno::RuntimeException) \
-        { \
-            static ::cppu::OImplementationId* pId = NULL; \
-            if (!pId) \
-            { \
-                ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() ); \
-                if (!pId) \
-                { \
-                    static ::cppu::OImplementationId aId; \
-                    pId = &aId; \
-                } \
-            } \
-            return pId->getImplementationId(); \
-        }
 
-    IMPLEMENT_GET_IMPLEMENTATION_ID( OSharedConnection );
 //........................................................................
 }   // namespace dbaccess
 //........................................................................
