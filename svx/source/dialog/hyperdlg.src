@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyperdlg.src,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-04 18:21:22 $
+ *  last change: $Author: kz $ $Date: 2002-11-27 17:10:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         Text[ portuguese ] = "Tipo de hiperligaзгo";
         Text[ russian ] = "“ип гиперссылки";
         Text[ greek ] = "‘эрпт фзт хрес-уэндеузт";
-        Text[ dutch ] = "Hyperlink type";
+        Text[ dutch ] = "Soort hyperlink";
         Text[ french ] = "Type d'hyperlien";
         Text[ spanish ] = "Tipo de hiperenlace";
         Text[ italian ] = "Tipo di hyperlink";
@@ -155,7 +155,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         Text[ turkish ] = "~Internet";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Internet";
-        Text[ finnish ] = "~Internet";
+        Text[ finnish ] = "Internet";
         Text[ thai ] = "~аЄ≠аЄіаЄЩаєАаЄХаЄ≠аЄ£аєМаєАаЄЩаєЗаЄХ";
     };
     RadioButton RB_LINKTYP_FTP
@@ -183,7 +183,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         Text[ arabic ] = "FT~P";
         Text[ turkish ] = "~FTP";
         Text[ catalan ] = "~FTP";
-        Text[ finnish ] = "~FTP";
+        Text[ finnish ] = "FTP";
     };
     RadioButton RB_LINKTYP_TELNET
     {
@@ -210,7 +210,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         Text[ arabic ] = "T~elnet";
         Text[ turkish ] = "~Telnet";
         Text[ catalan ] = "~Telnet";
-        Text[ finnish ] = "~Telnet";
+        Text[ finnish ] = "Telnet";
     };
     FixedText FT_TARGET_HTML
     {
@@ -220,7 +220,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         Text [ ENGLISH ] = "Link tar~get" ;
         Text [ english_us ] = "Tar~get" ;
         Text[ portuguese ] = "~Destino";
-        Text[ russian ] = "÷ель";
+        Text[ russian ] = "јдрес";
         Text[ greek ] = "–сппсйумьт";
         Text[ dutch ] = "D~oel";
         Text[ french ] = "Cible";
@@ -237,7 +237,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         Text[ arabic ] = "«беѕЁ";
         Text[ turkish ] = "~Hedef";
         Text[ catalan ] = "Obj~ectiu";
-        Text[ finnish ] = "K~ohde";
+        Text[ finnish ] = "Kohde";
         Text[ thai ] = "аєАаЄЫаєЙаЄ≤~аЄЂаЄ°аЄ≤аЄҐ";
     };
     FixedText FT_LOGIN
@@ -248,7 +248,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         Text [ ENGLISH ] = "~Loginname" ;
         Text [ english_us ] = "~Login name" ;
         Text[ portuguese ] = "~Login";
-        Text[ russian ] = "»м€ дл€ входа в систему";
+        Text[ russian ] = "»м€ пользовател€";
         Text[ greek ] = "Љнпмб уэндеузт";
         Text[ dutch ] = "~Loginnaam";
         Text[ french ] = "~Login";
@@ -450,7 +450,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         Text[ portuguese ] = "Outros parвmetros";
         Text[ russian ] = "ƒополнительные настройки";
         Text[ greek ] = "–есйууьфесет схимяуейт";
-        Text[ dutch ] = "Verdere instellingen";
+        Text[ dutch ] = "Andere instellingen";
         Text[ french ] = "Paramиtres supplйmentaires";
         Text[ spanish ] = "Otras opciones";
         Text[ italian ] = "Ulteriori impostazioni";
@@ -476,7 +476,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         Text [ ENGLISH ] = "~Frame" ;
         Text [ english_us ] = "F~rame" ;
         Text[ portuguese ] = "F~rame";
-        Text[ russian ] = " адр";
+        Text[ russian ] = "‘рейм";
         Text[ greek ] = "~–лбяуйп";
         Text[ dutch ] = "F~rame";
         Text[ french ] = "F~rame";
@@ -513,7 +513,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         Text [ ENGLISH ] = "F~orm" ;
         Text [ english_us ] = "F~orm" ;
         Text[ portuguese ] = "Ti~po";
-        Text[ russian ] = "‘орма";
+        Text[ russian ] = "Ёлемент";
         Text[ greek ] = "÷ьсмб";
         Text[ dutch ] = "V~orm";
         Text[ french ] = "Forme";
@@ -722,7 +722,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         Text[ arabic ] = "«”г";
         Text[ turkish ] = "~Ad";
         Text[ catalan ] = "N~om";
-        Text[ finnish ] = "N~imi";
+        Text[ finnish ] = "Nimi";
         Text[ thai ] = "аЄКаЄЈаєИ~аЄ≠";
     };
     Edit ED_TEXT
@@ -831,7 +831,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         Text [ ENGLISH ] = "Mail & News" ;
         Text [ english_us ] = "Mail & news" ;
         Text[ portuguese ] = "Mail & News";
-        Text[ russian ] = "ѕисьма и новости";
+        Text[ russian ] = "ѕочта и новости";
         Text[ greek ] = "Ѕллзлпгсбцяб кбй ”хжзфёуейт";
         Text[ dutch ] = "Mail & Nieuws";
         Text[ french ] = "Mail & News";
@@ -877,7 +877,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         Text[ turkish ] = "~E-posta";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Correu electrтnic";
-        Text[ finnish ] = "~Sдhkцposti";
+        Text[ finnish ] = "Sдhkцposti";
         Text[ thai ] = "~аЄ≠аЄµаєАаЄ°аЄ•аєМ";
     };
     RadioButton RB_LINKTYP_NEWS
@@ -906,7 +906,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         Text[ turkish ] = "~Haber gruplarэ";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Notнcies";
-        Text[ finnish ] = "~Uutisryhmдt";
+        Text[ finnish ] = "Uutisryhmдt";
         Text[ thai ] = "~аЄВаєИаЄ≤аЄІаЄ™аЄ≤аЄ£";
     };
     FixedText FT_RECEIVER
@@ -934,7 +934,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         Text[ arabic ] = "«бг” бг";
         Text[ turkish ] = "A~lэcэ";
         Text[ catalan ] = "Des~tinatari";
-        Text[ finnish ] = "Vas~taanottaja";
+        Text[ finnish ] = "Vastaanottaja";
         Text[ thai ] = "аЄЬаЄєаєЙ~аЄ£аЄ±аЄЪ";
     };
     FixedText FT_SUBJECT
@@ -962,7 +962,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         Text[ arabic ] = "«бгж÷жЏ";
         Text[ turkish ] = "~Konu";
         Text[ catalan ] = "~Assumpte";
-        Text[ finnish ] = "~Aihe";
+        Text[ finnish ] = "Aihe";
         Text[ thai ] = "~аЄКаЄЈаєИаЄ≠аєАаЄ£аЄЈаєИаЄ≠аЄЗ";
     };
     Edit ED_SUBJECT
@@ -1033,7 +1033,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         Text[ portuguese ] = "Outros parвmetros";
         Text[ russian ] = "ƒополнительные настройки";
         Text[ greek ] = "–есйууьфесет схимяуейт";
-        Text[ dutch ] = "Verdere instellingen";
+        Text[ dutch ] = "Andere instellingen";
         Text[ french ] = "Paramиtres supplйmentaires";
         Text[ spanish ] = "Otras opciones";
         Text[ italian ] = "Ulteriori impostazioni";
@@ -1059,7 +1059,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         Text [ ENGLISH ] = "~Frame" ;
         Text [ english_us ] = "F~rame" ;
         Text[ portuguese ] = "F~rame";
-        Text[ russian ] = " адр";
+        Text[ russian ] = "‘рейм";
         Text[ greek ] = "~–лбяуйп";
         Text[ dutch ] = "F~rame";
         Text[ french ] = "F~rame";
@@ -1076,7 +1076,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         Text[ arabic ] = "≈Ў«—";
         Text[ turkish ] = "F~rame";
         Text[ catalan ] = "M~arc";
-        Text[ finnish ] = "K~ehys";
+        Text[ finnish ] = "Kehys";
         Text[ thai ] = "аЄБ~аЄ£аЄ≠аЄЪ";
     };
     ComboBox CB_FRAME
@@ -1113,7 +1113,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         Text[ arabic ] = "«б‘яб";
         Text[ turkish ] = "F~orm";
         Text[ catalan ] = "F~ormulari";
-        Text[ finnish ] = "~Lomake";
+        Text[ finnish ] = "Lomake";
         Text[ thai ] = "аєБ~аЄЪаЄЪаЄЯаЄ≠аЄ£аєМаЄ°";
     };
     ListBox LB_FORM
@@ -1271,7 +1271,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         Text[ arabic ] = "«бд’";
         Text[ turkish ] = "~Baрlantэ adэ";
         Text[ catalan ] = "Te~xt";
-        Text[ finnish ] = "Teks~ti";
+        Text[ finnish ] = "Teksti";
         Text[ thai ] = "аЄВаєЙаЄ≠~аЄДаЄІаЄ≤аЄ°";
     };
     Edit ED_INDICATION
@@ -1305,7 +1305,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         Text[ arabic ] = "«”г";
         Text[ turkish ] = "~Ad";
         Text[ catalan ] = "N~om";
-        Text[ finnish ] = "N~imi";
+        Text[ finnish ] = "Nimi";
         Text[ thai ] = "аЄКаЄЈаєИ~аЄ≠";
     };
     Edit ED_TEXT
@@ -1695,7 +1695,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         Text[ portuguese ] = "Outros parвmetros";
         Text[ russian ] = "ƒополнительные настройки";
         Text[ greek ] = "–есйууьфесет схимяуейт";
-        Text[ dutch ] = "Verdere instellingen";
+        Text[ dutch ] = "Andere instellingen";
         Text[ french ] = "Paramиtres supplйmentaires";
         Text[ spanish ] = "Otras opciones";
         Text[ italian ] = "Ulteriori impostazioni";
@@ -1721,7 +1721,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         Text [ ENGLISH ] = "~Frame" ;
         Text [ english_us ] = "F~rame" ;
         Text[ portuguese ] = "F~rame";
-        Text[ russian ] = " адр";
+        Text[ russian ] = "‘рейм";
         Text[ greek ] = "~–лбяуйп";
         Text[ dutch ] = "F~rame";
         Text[ french ] = "F~rame";
@@ -2075,7 +2075,7 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         Text [ ENGLISH ] = "New document" ;
         Text [ english_us ] = "New document" ;
         Text[ portuguese ] = "Novo documento";
-        Text[ russian ] = "Ќовый документ";
+        Text[ russian ] = "—оздать документ";
         Text[ greek ] = "ƒзмйпхсгяб еггс№цпх";
         Text[ dutch ] = "Nieuw document";
         Text[ french ] = "Nouveau document";
@@ -2104,7 +2104,7 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         Text [ ENGLISH ] = "~Edit now";
         Text[ english_us ] = "Edit ~now";
         Text[ portuguese ] = "Editar ~imediatamente";
-        Text[ russian ] = "ѕравить сейчас";
+        Text[ russian ] = "–едактировать сейчас";
         Text[ greek ] = "≈реоес~гбуяб бмЁущт";
         Text[ dutch ] = "~Meteen bewerken";
         Text[ french ] = "…diter tout de suite";
@@ -2132,7 +2132,7 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         Text [ ENGLISH ] = "Edit ~later";
         Text[ english_us ] = "Edit ~later";
         Text[ portuguese ] = "Edi~tar mais tarde";
-        Text[ russian ] = "ѕравить позже";
+        Text[ russian ] = "–едактировать позже";
         Text[ greek ] = "≈реоесгб~уяб бсгьфесб";
         Text[ dutch ] = "~Later bewerken";
         Text[ french ] = "…diter plus tard";
@@ -2177,7 +2177,7 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         Text[ arabic ] = "гбЁ";
         Text[ turkish ] = "~Dosya";
         Text[ catalan ] = "~Fitxer";
-        Text[ finnish ] = "~Tiedosto";
+        Text[ finnish ] = "Tiedosto";
         Text[ thai ] = "аєБ~аЄЯаєЙаЄ°";
     };
     Edit ED_PATH_NEWDOC
@@ -2212,7 +2212,7 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         Text[ turkish ] = "Dosya ~tipi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Tipus de fitxer";
-        Text[ finnish ] = "Tiedosto~tyyppi";
+        Text[ finnish ] = "Tiedostotyyppi";
         Text[ thai ] = "~аЄКаЄЩаЄіаЄФаєБаЄЯаєЙаЄ°";
     };
     ListBox LB_DOCUMENT_TYPES
@@ -2286,7 +2286,7 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         Text[ portuguese ] = "Outros parвmetros";
         Text[ russian ] = "ƒополнительные настройки";
         Text[ greek ] = "–есйууьфесет схимяуейт";
-        Text[ dutch ] = "Verdere instellingen";
+        Text[ dutch ] = "Andere instellingen";
         Text[ french ] = "Paramиtres supplйmentaires";
         Text[ spanish ] = "Otras opciones";
         Text[ italian ] = "Ulteriori impostazioni";
@@ -2312,7 +2312,7 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         Text [ ENGLISH ] = "~Frame" ;
         Text [ english_us ] = "F~rame" ;
         Text[ portuguese ] = "F~rame";
-        Text[ russian ] = " адр";
+        Text[ russian ] = "‘рейм";
         Text[ greek ] = "~–лбяуйп";
         Text[ dutch ] = "F~rame";
         Text[ french ] = "F~rame";
@@ -2329,7 +2329,7 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         Text[ arabic ] = "≈Ў«—";
         Text[ turkish ] = "F~rame";
         Text[ catalan ] = "M~arc";
-        Text[ finnish ] = "K~ehys";
+        Text[ finnish ] = "Kehys";
         Text[ thai ] = "аЄБ~аЄ£аЄ≠аЄЪ";
     };
     ComboBox CB_FRAME
@@ -2366,7 +2366,7 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         Text[ arabic ] = "«б‘яб";
         Text[ turkish ] = "F~orm";
         Text[ catalan ] = "F~ormulari";
-        Text[ finnish ] = "~Lomake";
+        Text[ finnish ] = "Lomake";
         Text[ thai ] = "аєБ~аЄЪаЄЪаЄЯаЄ≠аЄ£аєМаЄ°";
     };
     ListBox LB_FORM
@@ -2524,7 +2524,7 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         Text[ arabic ] = "«бд’";
         Text[ turkish ] = "~Baрlantэ adэ";
         Text[ catalan ] = "Te~xt";
-        Text[ finnish ] = "Teks~ti";
+        Text[ finnish ] = "Teksti";
         Text[ thai ] = "аЄВаєЙаЄ≠~аЄДаЄІаЄ≤аЄ°";
     };
     Edit ED_INDICATION
@@ -2558,7 +2558,7 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         Text[ arabic ] = "«”г";
         Text[ turkish ] = "~Ad";
         Text[ catalan ] = "N~om";
-        Text[ finnish ] = "N~imi";
+        Text[ finnish ] = "Nimi";
         Text[ thai ] = "аЄКаЄЈаєИ~аЄ≠";
     };
     Edit ED_TEXT
@@ -2725,7 +2725,7 @@ String RID_SVXSTR_HYPDLG_MACROACT1
     Text [ ENGLISH ] = "Mouse over object" ;
     Text [ english_us ] = "Mouse over object" ;
     Text[ portuguese ] = "Rato sobre objecto";
-    Text[ russian ] = "ћышь на объекте";
+    Text[ russian ] = "ћышь над объектом";
     Text[ greek ] = "–пнфякй р№нщ брь бнфйкеяменп";
     Text[ dutch ] = "Muis op object";
     Text[ french ] = "Souris sur l'objet";
@@ -2751,7 +2751,7 @@ String RID_SVXSTR_HYPDLG_MACROACT2
     Text [ ENGLISH ] = "Release hyperlink" ;
     Text [ english_us ] = "Trigger hyperlink" ;
     Text[ portuguese ] = "Executar hiperligaзгo";
-    Text[ russian ] = "¬ыполнить гиперссылку";
+    Text[ russian ] = "«апустить гиперссылку";
     Text[ greek ] = "ЅрпдЁумехуз хрес-уэндеузт";
     Text[ dutch ] = "Hyperlink uitvoeren";
     Text[ french ] = "Dйclencher l'hyperlien";
@@ -2778,7 +2778,7 @@ String RID_SVXSTR_HYPDLG_MACROACT3
     Text [ ENGLISH ] = "Mouse leave object" ;
     Text [ english_us ] = "Mouse leaves object" ;
     Text[ portuguese ] = "Rato fora do objecto";
-    Text[ russian ] = "ћышь вне объекта";
+    Text[ russian ] = "ћышь покидает объект";
     Text[ greek ] = "–пнфякй еоЁсчефбй брь бнфйкеяменп";
     Text[ dutch ] = "Muis verlaat object";
     Text[ french ] = "Souris quitte l'objet";
@@ -2805,9 +2805,9 @@ String RID_SVXSTR_HYPDLG_NOVALIDFILENAME
     Text [ ENGLISH ] = "Please type in a valid filename." ;
     Text [ english_us ] = "Please type in a valid file name." ;
     Text[ portuguese ] = "Indique um nome de ficheiro vбlido.";
-    Text[ russian ] = "¬ведите, пожалуйста, правильное им€ файла.";
+    Text[ russian ] = "¬ведите правильное им€ файла.";
     Text[ greek ] = "–бсбкблю ейу№гефе Ёнб брпдекфь ьнпмб бсчеяп.";
-    Text[ dutch ] = "Geef een geldige bestandsnaam aan.";
+    Text[ dutch ] = "Geef een geldige bestandsnaam op.";
     Text[ french ] = "Veuillez saisir un nom de fichier existant.";
     Text[ spanish ] = "Indique por favor un nombre vбlido de archivo.";
     Text[ italian ] = "Inserite un nome di file valido.";
@@ -2882,7 +2882,7 @@ String RID_SVXSTR_HYPERDLG_HLMAILTP
     Text [ ENGLISH ] = "Mail & News" ;
     Text [ english_us ] = "Mail & News" ;
     Text[ portuguese ] = "Mail & News";
-    Text[ russian ] = "ѕисьма и сообщени€";
+    Text[ russian ] = "ѕочта и новости";
     Text[ greek ] = "Ѕллзлпгсбцяб кбй ”хжзфёуейт";
     Text[ dutch ] = "Mail & Nieuws";
     Text[ french ] = "Mail & News";
@@ -2980,7 +2980,7 @@ String RID_SVXSTR_HYPERDLG_HLDOCNTP
     Text [ ENGLISH ] = "New document" ;
     Text [ english_us ] = "New Document" ;
     Text[ portuguese ] = "Novo documento";
-    Text[ russian ] = "Ќовый документ";
+    Text[ russian ] = "—оздать документ";
     Text[ greek ] = "ƒзмйпхсгяб еггс№цпх";
     Text[ dutch ] = "Nieuw document";
     Text[ french ] = "Nouveau document";
