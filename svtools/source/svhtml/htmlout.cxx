@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlout.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mib $ $Date: 2001-11-29 11:41:03 $
+ *  last change: $Author: mib $ $Date: 2002-03-13 08:42:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -237,6 +237,7 @@ const sal_Char *lcl_svhtml_GetEntityForChar( sal_Unicode c )
     case 932:       pStr = sHTML_S_Tau;     break;
     case 933:       pStr = sHTML_S_Upsilon; break;
     case 934:       pStr = sHTML_S_Phi;     break;
+    case 935:       pStr = sHTML_S_Chi;     break;
     case 936:       pStr = sHTML_S_Psi;     break;
     case 937:       pStr = sHTML_S_Omega;   break;
     case 945:       pStr = sHTML_S_alpha;   break;
