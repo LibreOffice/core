@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldlg.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2000-11-27 08:53:00 $
+ *  last change: $Author: kz $ $Date: 2000-11-29 11:39:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -703,7 +703,7 @@ ModalDialog RID_DLG_LIBS
         Text[ chinese_traditional ] = "·ν§@°Ρ·Σ΄΅¤J(°ίΕª)";
         Text[ arabic ] = "ΕΟΡΗΜ ίγΡΜΪ (ααήΡΗΑΙ έήΨ)";
         Text[ greek ] = "Εισαγωγή ως αναφορά (μόνο για ανάγνωση)";
-        Text[ korean ] = "ΒόΑ¶·Ξ »πΐΤ (ΐΠ±βΈΈ)";
+        Text[ korean ] = "ΒόΑ¶·ΞΌ­ »πΐΤ (ΐΠ±β ΐόΏλ)";
         Text[ turkish ] = "Referans olarak ekle (salt okunur)";
     };
     CheckBox RID_CB_SEP
@@ -728,7 +728,7 @@ ModalDialog RID_DLG_LIBS
         Text[ chinese_traditional ] = "¥t¦sΐΙ®Χ";
         Text[ arabic ] = "ΝέΩ ίγαέ γδέΥα";
         Text[ greek ] = "Αποθήκευση ως ξεχωριστό αρχείο";
-        Text[ korean ] = "°³Ί° ΖΔΐΟ·Ξ ΐϊΐε";
+        Text[ korean ] = "Ί°µµ ΖΔΐΟ·ΞΌ­  ΐϊΐε";
         Text[ turkish ] = "Ayrύ dosya olarak kaydet";
     };
     CheckBox RID_CB_REPL
@@ -833,7 +833,7 @@ ModalDialog RID_DLG_NEWLIB
         Text[ chinese_traditional ] = "¥t¶}±Ò·sΐΙ(~A)";
         Text[ arabic ] = "ΕδΤΗΑ γαέ γδέΥα";
         Text[ greek ] = "Δημιουργία ξεχωρι~στού αρχείου";
-        Text[ korean ] = "°³Ί° ΖΔΐΟ Γ·ΊΞ(~A)";
+        Text[ korean ] = "Ί°µµ ΖΔΐΟ »ύΌΊ(~A)";
         Text[ turkish ] = "Ayrύ dosya oluώtur";
     };
 };
