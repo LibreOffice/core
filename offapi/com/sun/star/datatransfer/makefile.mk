@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: tra $ $Date: 2001-01-23 13:28:34 $
+#   last change: $Author: tra $ $Date: 2001-02-27 09:48:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,7 +82,9 @@ IDLFILES=\
     XTransferDataAccess.idl \
     XMimeContentType.idl \
     XMimeContentTypeFactory.idl \
-    MimeContentTypeFactory.idl
+    MimeContentTypeFactory.idl\
+    DataFormatTranslator.idl\
+    XDataFormatTranslator.idl
 
 # ------------------------------------------------------------------
 
