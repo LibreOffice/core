@@ -21642,3 +21642,16 @@ _TI2?AVIllegalAccessibleComponentStateException@accessibility@star@sun@com@draft
 ?DataChanged@SvxLineBox@@MAEXABVDataChangedEvent@@@Z
 ?DataChanged@SvxMetricField@@MAEXABVDataChangedEvent@@@Z
 ?__query@?$Reference@VXAccessibleEventListener@accessibility@star@sun@com@drafts@@@uno@star@sun@com@@CAPAVXAccessibleEventListener@accessibility@345drafts@@PAVXInterface@2345@@Z
+??0DisposedException@lang@star@sun@com@@QAE@ABV01234@@Z
+??0DisposedException@lang@star@sun@com@@QAE@XZ
+??1DisposedException@lang@star@sun@com@@QAE@XZ
+??_R0?AVDisposedException@lang@star@sun@com@@@8
+?ThrowExceptionIfNotAlive@SvxRectCtlAccessibleContext@@IAEXXZ
+?ThrowExceptionIfNotAlive@SvxRectCtlChildAccessibleContext@@IAEXXZ
+?getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXAccessibleValue@accessibility@star@sun@com@drafts@@@2345@@Z
+?getCurrentValue@SvxRectCtlChildAccessibleContext@@UAA?AVAny@uno@star@sun@com@@XZ
+?getMaximumValue@SvxRectCtlChildAccessibleContext@@UAA?AVAny@uno@star@sun@com@@XZ
+?getMinimumValue@SvxRectCtlChildAccessibleContext@@UAA?AVAny@uno@star@sun@com@@XZ
+?s_pType_drafts_com_sun_star_accessibility_XAccessibleValue@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXAccessibleValue@accessibility@star@sun@com@drafts@@@3456@@Z@4PAU_typelib_TypeDescriptionReference@@A
+?setCurrentValue@SvxRectCtlChildAccessibleContext@@UAAEABVAny@uno@star@sun@com@@@Z
+_TI3?AVDisposedException@lang@star@sun@com@@
