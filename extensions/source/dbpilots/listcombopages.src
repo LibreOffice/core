@@ -1,0 +1,390 @@
+/*************************************************************************
+ *
+ *  $RCSfile: listcombopages.src,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: fs $ $Date: 2001-02-23 15:19:54 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc..
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef _EXTENSIONS_DBP_DBPRESID_HRC_
+#include "dbpresid.hrc"
+#endif
+
+TabPage RID_PAGE_LCW_CONTENTSELECTION_TABLE
+{
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
+
+    Text = "Tabellenauswahl";
+    Text [ english ] = "Table Selection";
+    Text [ english_us ] = "Table Selection";
+    Text[ language_user1 ] = "ZL: Datenbank-Tabelle";
+    Text[ portuguese ] = "Selecção de tabela";
+    Text[ russian ] = "Âûáîğ òàáëèöû";
+    Text[ dutch ] = "tabel selecteren";
+    Text[ french ] = "Sélection de table";
+    Text[ spanish ] = "Selección de tabla";
+    Text[ italian ] = "Selezione tabella";
+    Text[ danish ] = "Tabeludvalg";
+    Text[ swedish ] = "Tabellurval";
+    Text[ polish ] = "Wybór tabeli";
+    Text[ portuguese_brazilian ] = "Tabellenauswahl";
+    Text[ japanese ] = "Úº°ÄŞ‚Ì‘I‘ğ";
+    Text[ chinese_simplified ] = "£ºÑ¡Ôñ±í¸ñ";
+    Text[ chinese_traditional ] = "¡G¿ï¾Üªí®æ";
+    Text[ arabic ] = "ÊÍÏíÏ ÇáÌÏæá";
+    Text[ dutch ] = "tabel selecteren";
+    Text[ chinese_simplified ] = "£ºÑ¡Ôñ±í¸ñ";
+    Text[ greek ] = "ÅğéëïãŞ ğßíáêá";
+    Text[ korean ] = " Ç¥¡¡¼±ÅÃ";
+    Text[ turkish ] = "Tablo seçimi";
+
+    FixedLine FL_FRAME
+    {
+        Pos = MAP_APPFONT ( 4 , 3  ) ;
+        Size = MAP_APPFONT ( WINDOW_SIZE_X - 8 , 8 ) ;
+    };
+
+    FixedText FT_SELECTTABLE_LABEL
+    {
+        Pos = MAP_APPFONT ( 7 , 15  ) ;
+        Size = MAP_APPFONT ( 120, WINDOW_SIZE_Y - 21 ) ;
+        WordBreak = TRUE;
+        Group = TRUE;
+        Text = "Auf der rechten Seite sehen Sie alle Tabellen aus der Datenquelle des Formulars.\n\n\n"
+            "Wählen Sie bitte die Tabelle, deren Daten die Grundlage für den Listeninhalt bilden sollen:";
+        Text [ english ]= "On the right hand side, you see all tables of the form's data source.\n\n\n"
+            "Please choose the table, whichs data should be the base for the list content:";
+        Text [ english_us ]= "On the right hand side, you see all tables of the form's data source.\n\n\n"
+            "Please choose the table, whichs data should be the base for the list content:";
+    };
+    ListBox LB_SELECTTABLE
+    {
+        Pos = MAP_APPFONT ( 130 , 15  ) ;
+        Size = MAP_APPFONT ( WINDOW_SIZE_X - 130 - 7, WINDOW_SIZE_Y - 21 ) ;
+        SVLook = TRUE ;
+        Border = TRUE ;
+        AutoHScroll = TRUE ;
+        Sort = FALSE;
+        DropDown = FALSE;
+    };
+};
+
+TabPage RID_PAGE_LCW_CONTENTSELECTION_FIELD
+{
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
+
+    Text = "Feldauswahl";
+    Text [ english ] = "Field Selection";
+    Text [ english_us ] = "Field Selection";
+    Text[ portuguese ] = "Selecção de campo";
+    Text[ russian ] = "Âûáîğ ïîëÿ";
+    Text[ dutch ] = "veld selecteren";
+    Text[ french ] = "Sélection de champ";
+    Text[ spanish ] = "Selección de campo";
+    Text[ italian ] = "Selezione campo";
+    Text[ danish ] = "Feltudvalg";
+    Text[ swedish ] = "Fälturval";
+    Text[ polish ] = "Wybór pola";
+    Text[ portuguese_brazilian ] = "Feldauswahl";
+    Text[ japanese ] = "Ì¨°ÙÄŞ‚Ì‘I‘ğ";
+    Text[ chinese_simplified ] = "£ºÑ¡Ôñ×Ö¶Î";
+    Text[ chinese_traditional ] = "¡G¿ï¾ÜÄæ¦ì";
+    Text[ arabic ] = "ÊÍÏíÏ ÇáÍŞá";
+    Text[ dutch ] = "veld selecteren";
+    Text[ chinese_simplified ] = "£ºÑ¡Ôñ×Ö¶Î";
+    Text[ greek ] = "ÅğéëïãŞ ğåäßïõ";
+    Text[ korean ] = "ÇÊµå ¼±ÅÃ";
+    Text[ turkish ] = "Alan seçimi";
+    Text[ language_user1 ] = " ";
+
+    FixedLine FL_FRAME
+    {
+        Pos = MAP_APPFONT ( 4 , 3  ) ;
+        Size = MAP_APPFONT ( WINDOW_SIZE_X - 8 , 8 ) ;
+    };
+
+    FixedText FT_TABLEFIELDS
+    {
+        Pos = MAP_APPFONT ( 7 , 15  ) ;
+        Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - 3, 8 ) ;
+        WordBreak = TRUE;
+        Group = TRUE;
+        Text = "~Vorhandene Felder";
+        Text [ english_us ] = "Existing Fields";
+        Text [ portuguese ] = "Campos ~disponíveis";
+        Text [ russian ] = "Èìåşùèåñÿ ïîëÿ";
+        Text [ dutch ] = "~Voorhanden velden";
+        Text [ french ] = "~Champs existants";
+        Text [ spanish ] = "~Campos existentes";
+        Text [ italian ] = "~Campi disponibili";
+        Text [ danish ] = "~Eksisterende felter";
+        Text [ swedish ] = "~Existerande fält";
+        Text [ polish ] = "Istniej¹ce pola";
+        Text [ portuguese_brazilian ] = "Should one option button be the default choice?";
+        Text [ japanese ] = "~g—p‚Å‚«‚éÌ¨°ÙÄŞ";
+        Text [ chinese_simplified ] = "ÏÖÓĞµÄ×Ö¶Î(~V)";
+        Text [ chinese_traditional ] = "²{¦sªºÄæ¦ì";
+        Text [ arabic ] = "~ÇáÍŞæá ÇáãæÌæÏÉ";
+        Text [ dutch ] = "~Voorhanden velden";
+        Text [ chinese_simplified ] = "ÏÖÓĞµÄ×Ö¶Î(~V)";
+        Text [ greek ] = "Äéá~èİóéìá ğåäßá";
+        Text [ korean ] = "Á¸ÀçÇÏ´Â ÇÊµå";
+        Text [ turkish ] = "~Mevcut alanlar";
+    };
+    ListBox LB_SELECTFIELD
+    {
+        Pos = MAP_APPFONT ( 7 , 26  ) ;
+        Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - 10, WINDOW_SIZE_Y - 32 ) ;
+        SVLook = TRUE ;
+        Border = TRUE ;
+        AutoHScroll = TRUE ;
+        Sort = FALSE;
+        DropDown = FALSE;
+    };
+    FixedText FT_DISPLAYEDFIELD
+    {
+        Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X + 3 , 15  ) ;
+        Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - 10, 8 ) ;
+        Text = "~Anzeigefeld";
+        Text [ english_us ] = "Display Field";
+        Text [ portuguese ] = "~Campo de visualização";
+        Text [ russian ] = "Ïîëå ïîêàçà";
+        Text [ dutch ] = "~Weergaveveld";
+        Text [ french ] = "~Champ d'affichage";
+        Text [ spanish ] = "~Campo de visualización";
+        Text [ italian ] = "~Campo di visualizzazione";
+        Text [ danish ] = "Vi~sningsfelt";
+        Text [ swedish ] = "~Visningsfält:";
+        Text [ polish ] = "Pole wyœwietlania";
+        Text [ portuguese_brazilian ] = "Yes, the default choice is:";
+        Text [ japanese ] = "~•\\¦Ì¨°ÙÄŞ";
+        Text [ chinese_simplified ] = "ÏÔÊ¾À¸(~A)";
+        Text [ chinese_traditional ] = "Åã¥ÜÄæ¦ì";
+        Text [ arabic ] = "~ÍŞá ÇáÚÑÖ";
+        Text [ dutch ] = "~Weergaveveld";
+        Text [ chinese_simplified ] = "ÏÔÊ¾À¸(~A)";
+        Text [ greek ] = "Ğåäßï åìöÜíéóçò";
+        Text [ korean ] = "³ªÅ¸³»´Â¡¡ÇÊµå";
+        Text [ turkish ] = "~Görüntü alanı";
+    };
+    Edit ET_DISPLAYEDFIELD
+    {
+        Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X + 3 , 26  ) ;
+        Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - 10, 12 ) ;
+        SVLook = TRUE ;
+        Border = TRUE ;
+        ReadOnly = TRUE;
+    };
+    FixedText FT_CONTENTFIELD_INFO
+    {
+        Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X + 3 , 45  ) ;
+        Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - 10, WINDOW_SIZE_Y - 51 ) ;
+        WordBreak = TRUE;
+    };
+    String STR_FIELDINFO_COMBOBOX
+    {
+        Text = "Der Inhalt des ausgewählten Feldes wird in der Liste des Kombinationsfeldes angezeigt.";
+        Text [ english ] = "The contents of the field selected will be shown in the combo box field list.";
+        Text [ english_us ] = "The contents of the field selected will be shown in the combo box field list.";
+        Text [ portuguese ] = "O conteúdo do campo seleccionado será mostrado na lista da caixa de combinação.";
+        Text [ russian ] = "Ñîäåğæèìîå âûáğàííîãî ïîëÿ áóäåò ïîêàçàíî â ñïèñêå ïîëÿ ñî ñïèñêîì";
+        Text [ dutch ] = "De inhoud van het geselecteerde veld wordt in de lijst onder het combinatieveld weergegeven..";
+        Text [ french ] = "Le contenu du champ sélectionné sera affiché dans la liste de la zone combinée.";
+        Text [ spanish ] = "El contenido del campo seleccionado se mostrará en la lista del campo combinado.";
+        Text [ italian ] = "Il contenuto del campo selezionto viene mostrato nell'elenco della casella combinata.";
+        Text [ danish ] = "Det valgte felts indhold bliver vist i kombinationsboksens liste.";
+        Text [ swedish ] = "Innehållet i det utvalda fältet visas i kombinationsfältets lista.";
+        Text [ polish ] = "Zawartoœæ wybranego pola zostanie pokazana na liœcie pola kombinacji.";
+        Text [ portuguese_brazilian ] = "No, no I don't want an option to be the default.";
+        Text [ japanese ] = "‘I‘ğ‚³‚ê‚½Ì¨°ÙÄŞ‚Ì“à—e‚ÍºİÎŞÎŞ¯¸½‚ÌØ½Ä‚É•\\¦‚³‚ê‚Ü‚·B";
+        Text [ chinese_simplified ] = "Ñ¡ÔñµÄ×Ö¶Î»áÏÔÊ¾ÔÚ×éºÏÀ¸µÄÁĞµ¥ÄÚ¡£";
+        Text [ chinese_traditional ] = "¿ï¾ÜªºÄæ¦ìªº¤º®e·|³QÅã¥Ü¦b²Õ¦XÄæ¦ìªº²M³æ¤§¤¤¡C";
+        Text [ arabic ] = "Óæİ íÊã ÅÙåÇÑ ãÍÊæíÇÊ ÇáÍŞá ÇáãõÍÏÏ İí ŞÇÆãÉ ãÑÈÚ ÇáÊÍÑíÑ æÇáÓÑÏ.";
+        Text [ dutch ] = "De inhoud van het geselecteerde veld wordt in de lijst onder het combinatieveld weergegeven..";
+        Text [ chinese_simplified ] = "Ñ¡ÔñµÄ×Ö¶Î»áÏÔÊ¾ÔÚ×éºÏÀ¸µÄÁĞµ¥ÄÚ¡£";
+        Text [ greek ] = "Ôï ğåñéå÷üìåíï ôïõ åğéëåãìİíïõ ğåäßïõ åìöáíßæåôáé óôç ëßóôá ôïõ ğåäßïõ óõíäõáóìïı.";
+        Text [ korean ] = "¼±ÅÃµÈ ÇÊµåÀÇ ³»¿ëÀÌ ÄŞº¸¹Ú½ºÀÇ ¸ñ·Ï¿¡ Ç¥½ÃµË´Ï´Ù.";
+        Text [ turkish ] = "Seçilen alanın içeriği, kombinasyon alanı listesinde görüntülenecek.";
+    };
+
+    String STR_FIELDINFO_LISTBOX
+    {
+        Text = "Der Inhalt des ausgewählten Feldes wird in dem Listenfeld angezeigt, wenn die ver- knüpften Felder überein- stimmen";
+        Text [ english ] = "The contents of the selected field will be shown in the list box if the linked fields are identical.";
+        Text [ english_us ] = "The contents of the selected field will be shown in the list box if the linked fields are identical.";
+    };
+};
+
+TabPage RID_PAGE_LCW_FIELDLINK
+{
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
+
+    Text = "Feldverknüpfung";
+    Text [ english ] = "Field Link";
+    Text [ english_us ] = "Field Link";
+    Text [ portuguese ] = "Ligação de campo";
+    Text [ russian ] = "Ññûëêà ïîëÿ";
+    Text [ dutch ] = "velden koppelen";
+    Text [ french ] = "Liaison de champs";
+    Text [ spanish ] = "Vínculo de campo";
+    Text [ italian ] = "Collegamento campo";
+    Text [ danish ] = "Feltkæde";
+    Text [ swedish ] = "Fältlänk";
+    Text [ polish ] = "Po³¹czenie pola";
+    Text [ portuguese_brazilian ] = "Database Field";
+    Text [ japanese ] = "Øİ¸";
+    Text [ chinese_simplified ] = "£ºÁ´½Ó×Ö¶Î";
+    Text [ chinese_traditional ] = "¡GÄæ¦ì±¶®|";
+    Text [ arabic ] = "ÇÑÊÈÇØ ÇáÍŞá";
+    Text [ dutch ] = "velden koppelen";
+    Text [ chinese_simplified ] = "£ºÁ´½Ó×Ö¶Î";
+    Text [ greek ] = "Óıíäåóç ğåäßïõ";
+    Text [ korean ] = "ÇÊµå ¿¬°á";
+    Text [ turkish ] = "Alan bağlantısı";
+
+    FixedLine FL_FRAME
+    {
+        Pos = MAP_APPFONT ( 4 , 3  ) ;
+        Size = MAP_APPFONT ( WINDOW_SIZE_X - 8 , 8 ) ;
+    };
+    FixedText FT_VALUELISTFIELD
+    {
+        Pos = MAP_APPFONT ( 7 , 15  ) ;
+        Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - 10, 8 ) ;
+        Group = TRUE;
+        Text = "Feld aus der ~Wertetabelle";
+        Text [ english ] = "Field from the Value Table";
+        Text [ english_us ] = "Field from the Value Table";
+        Text [ portuguese ] = "Campo da ~tabela de valores";
+        Text [ russian ] = "Ïîëå èç òàáëèöû çíà÷åíèé";
+        Text [ dutch ] = "Veld uit de ~waardentabel";
+        Text [ french ] = "Champ de la table des ~valeurs";
+        Text [ spanish ] = "Campo de la tabla de ~valores";
+        Text [ italian ] = "Campo dalla tabella dei ~valori";
+        Text [ danish ] = "Felt fra ~værditabellen";
+        Text [ swedish ] = "Fält från ~värdetabellen";
+        Text [ polish ] = "Pole z tabeli wartoœci";
+        Text [ portuguese_brazilian ] = "You can save the option group value in a database field or use it for a later action.";
+        Text [ japanese ] = "’l•\\‚©‚ç‚Ì~Ì¨°ÙÄŞ";
+        Text [ chinese_simplified ] = "´ÓÊıÖµ±í¸ñÉú³É×Ö¶Î";
+        Text [ chinese_traditional ] = "±q¼Æ­Èªí®æ²£¥ÍÄæ¦ì";
+        Text [ arabic ] = "ÍŞá ãä ÌÏæá ~ÇáŞíã";
+        Text [ dutch ] = "Veld uit de ~waardentabel";
+        Text [ chinese_simplified ] = "´ÓÊıÖµ±í¸ñÉú³É×Ö¶Î";
+        Text [ greek ] = "Ğåäßï áğü ôïí ~Ğßíáêá ôéìşí";
+        Text [ korean ] = "°ªÇ¥·Î ºÎÅÍÀÇ ÇÊµå";
+        Text [ turkish ] = "Değer tablosu alanı";
+    };
+    ComboBox CMB_VALUELISTFIELD
+    {
+        Pos = MAP_APPFONT ( 7 , 26  ) ;
+        Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - 10, WINDOW_SIZE_Y - 32 ) ;
+        SVLook = TRUE ;
+        Border = TRUE ;
+        DropDown = FALSE;
+        Sort = FALSE;
+        AutoHScroll = TRUE;
+    };
+    FixedText FT_TABLEFIELD
+    {
+        Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X + 3 , 15 ) ;
+        Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - 10, 8 ) ;
+        Group = TRUE;
+        Text = "Feld aus der &Listentabelle";
+        Text [ english ] = "Field from the List Table";
+        Text [ english_us ] = "Field from the List Table";
+        Text [ portuguese ] = "Campo da &tabela de listagem";
+        Text [ russian ] = "Ïîëå èç ñïèñêà";
+        Text [ dutch ] = "Veld uit de &lijsttabel";
+        Text [ french ] = "Champ de la table de liste";
+        Text [ spanish ] = "Campo del list&ado";
+        Text [ italian ] = "Campo dalla tabella di &elenco";
+        Text [ danish ] = "Felt fra &listetabellen";
+        Text [ swedish ] = "Fält från &listtabellen";
+        Text [ polish ] = "Pole z tabeli listy";
+        Text [ portuguese_brazilian ] = "Do you want to save the value in a database field?";
+        Text [ japanese ] = "Ø½Ä•\\‚©‚ç‚Ì&Ì¨°ÙÄŞ";
+        Text [ chinese_simplified ] = "´ÓÁĞµ¥±í¸ñÉú³É×Ö¶Î";
+        Text [ chinese_traditional ] = "±q²M³æªí®æ²£¥ÍÄæ¦ì";
+        Text [ arabic ] = "ÍŞá ãä ÌÏæá &ÇáŞÇÆãÉ";
+        Text [ dutch ] = "Veld uit de &lijsttabel";
+        Text [ chinese_simplified ] = "´ÓÁĞµ¥±í¸ñÉú³É×Ö¶Î";
+        Text [ greek ] = "Ğåäßï áğü ôïí &Ğßíáêá ëßóôáò";
+        Text [ korean ] = "¸ñ·Ï Ç¥·ÎºÎÅÍÀÇ ÇÊµå";
+        Text [ turkish ] = "Liste tablosu alanı";
+    };
+    ComboBox CMB_TABLEFIELD
+    {
+        Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X + 3 , 26 ) ;
+        Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - 10, WINDOW_SIZE_Y - 32 ) ;
+        SVLook = TRUE ;
+        Border = TRUE ;
+        DropDown = FALSE;
+        Sort = FALSE;
+        AutoHScroll = TRUE;
+    };
+};
+
+/*************************************************************************
+ * history:
+ *  $Log: not supported by cvs2svn $
+ *
+ *  Revision 1.0 21.02.01 16:16:18  fs
+ ************************************************************************/
+
