@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfer.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: ka $ $Date: 2001-11-05 13:01:21 $
+ *  last change: $Author: pl $ $Date: 2002-04-09 14:59:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -974,6 +974,13 @@ void TransferableHelper::StartDrag( Window* pWindow, sal_Int8 nDnDSourceActions,
 
         try
         {
+            /*
+           *    #96792# release mouse before actually starting DnD.
+           *    This is necessary for the X11 DnD implementation to work.
+           */
+            if( pWindow->IsMouseCaptured() )
+                pWindow->ReleaseMouse();
+
             DragGestureEvent    aEvt;
             const Point         aPt( pWindow->GetPointerPosPixel() );
 
