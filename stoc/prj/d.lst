@@ -5,7 +5,10 @@ mkdir: %_DEST%\inc%_EXT%\stoc
 ..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
 
 ..\%__SRC%\bin\*.rdb %_DEST%\rdb%_EXT%\*
-
+..\source\javaconfig\useatjava.txt %_DEST%\bin%_EXT%\useatjava.txt
+..\source\javaconfig\config.xml %_DEST%\xml%_EXT%\javaconfig.uno.xml
+..\source\javadetect\sunjavadetect.xml %_DEST%\xml%_EXT%\sunjavadetect.uno.xml
+..\source\javadetect\unknownjavadetect.xml %_DEST%\xml%_EXT%\unknownjavadetect.uno.xml
 ..\source\module-description.dtd %_DEST%\xml%_EXT%\module-description.dtd
 
 ..\source\corereflection\corefl.xml %_DEST%\xml%_EXT%\reflection.uno.xml
