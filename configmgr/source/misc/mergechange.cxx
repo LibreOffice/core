@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mergechange.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jb $ $Date: 2001-07-05 17:05:47 $
+ *  last change: $Author: jb $ $Date: 2001-07-06 15:28:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,7 +134,7 @@ namespace configmgr
         {
             OUString sElementName = _rChange.getNodeName();
 
-            OSL_ENSURE(isSimpleName(sElementName),"Unexpected: Non-simple name in non-set node");
+        //    OSL_ENSURE(isSimpleName(sElementName),"Unexpected: Non-simple name in non-set node");
 
             return Path::wrapSafeName(sElementName);
         }
@@ -304,17 +304,8 @@ namespace configmgr
                 // In the latter case m_eAction could be set to RemoveCompletely
             }
     };
-
-
     // -----------------------------------------------------------------------------
     // -----------------------------------------------------------------------------
-    // Main class for merging treechangelists
-
-    // CTor
-    OMergeTreeChangeList::OMergeTreeChangeList(TreeChangeList& _aTree)
-            :m_aTreeChangeList(_aTree), m_pCurrentParent(NULL)
-    {
-    }
 
     static
     inline
@@ -342,6 +333,34 @@ namespace configmgr
         Change *pChange = pCurrentParent->getChange(_aName);
 
         return pChange;
+    }
+    // -----------------------------------------------------------------------------
+
+    void adjustElementTemplate(SubtreeChange& _rChange, const rtl::OUString& _rName, const rtl::OUString& _rModule)
+    {
+        if (!_rChange.isSetNodeChange())
+        {
+            _rChange.setElementTemplate(_rName,_rModule);
+        }
+        OSL_POSTCOND(_rChange.getElementTemplateName()   == _rName,   "Adjusting: Template modules do not match");
+        OSL_POSTCOND(_rChange.getElementTemplateModule() == _rModule, "Adjusting: Template modules do not match");
+    }
+    // -----------------------------------------------------------------------------
+
+    inline void adjustElementTemplate(SubtreeChange& _rChange, SubtreeChange const& _rSource)
+    {
+        if (_rSource.isSetNodeChange())
+            adjustElementTemplate(_rChange, _rSource.getElementTemplateName(), _rSource.getElementTemplateModule());
+    }
+
+    // -----------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------
+    // Main class for merging treechangelists
+
+    // CTor
+    OMergeTreeChangeList::OMergeTreeChangeList(TreeChangeList& _aTree)
+            :m_aTreeChangeList(_aTree), m_pCurrentParent(NULL)
+    {
     }
 
     void OMergeTreeChangeList::initRoot(TreeChangeList const& _aChanges)
@@ -529,7 +548,10 @@ namespace configmgr
                 OSL_ASSERT(pSubtreeChange == findExistingChange(m_pCurrentParent,aNodeName));
             }
             else // hard cast(!) to SubtreeChange because we are a SubtreeChange
+            {
                 pSubtreeChange = static_cast<SubtreeChange*>(pChange);
+                adjustElementTemplate(*pSubtreeChange,_rSubtree);
+            }
 
             // save this SubtreeChange so we allways have the last Subtree
             SubtreeChange* pSaveParent = pushTree(*pSubtreeChange);
@@ -794,7 +816,10 @@ namespace configmgr
                 OSL_ASSERT(pSubtreeChange == findExistingChange(m_pCurrentParent,aNodeName));
             }
             else // hard cast(!) to SubtreeChange because we are a SubtreeChange
+            {
                 pSubtreeChange = static_cast<SubtreeChange*>(pChange);
+                adjustElementTemplate(*pSubtreeChange,_rSubtree);
+            }
 
             // save this SubtreeChange so we allways have the last Subtree
             SubtreeChange* pSaveParent = pushTree(*pSubtreeChange);
