@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pptin.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:17:19 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 10:17:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -999,11 +999,11 @@ sal_Bool ImplSdPPTImport::Import()
                         pMasterPersist = (*pPageList)[ nMasterNum ];
                     pPage->SetLayoutName(((SdPage&)pPage->TRG_GetMasterPage()).GetLayoutName());
                 }
-                ImportPage( pPage, pMasterPersist );
+                pSdrModel->InsertPage( pPage );         // SJ: #i29625# because of form controls, the
+                ImportPage( pPage, pMasterPersist );    //  page must be inserted before importing
                 SetHeaderFooterPageSettings( pPage, pMasterPersist );
                 pPage->SetPageKind( PK_STANDARD );
                 ImportPageEffect( (SdPage*)pPage );
-                pSdrModel->InsertPage( pPage );
 
                 // creating the corresponding note page
                 eAktPageKind = PPT_NOTEPAGE;
@@ -1026,12 +1026,12 @@ sal_Bool ImplSdPPTImport::Import()
                             pMasterPersist = (*pPageList)[ nNotesMasterNum ];
                         pNotesPage->SetLayoutName( ((SdPage&)pNotesPage->TRG_GetMasterPage()).GetLayoutName() );
                     }
-                    ImportPage( pNotesPage, pMasterPersist );
+                    pSdrModel->InsertPage( pNotesPage );        // SJ: #i29625# because of form controls, the
+                    ImportPage( pNotesPage, pMasterPersist );   // page must be inserted before importing
                     SetHeaderFooterPageSettings( pNotesPage, pMasterPersist );
                     pNotesPage->SetPageKind( PK_NOTES );
                     pNotesPage->TRG_SetMasterPage(*pSdrModel->GetMasterPage(nNotesMasterNum));
                     pNotesPage->SetAutoLayout( AUTOLAYOUT_NOTES, FALSE );
-                    pSdrModel->InsertPage( pNotesPage );
                 }
                 else
                 {
