@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accimplaccess.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2002-04-17 08:39:28 $
+ *  last change: $Author: fs $ $Date: 2002-04-23 11:03:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,12 @@ namespace comphelper
     }
 
     //---------------------------------------------------------------------
+    sal_Int64 OAccessibleImplementationAccess::implGetForeignControlledStates( ) const
+    {
+        return m_pImpl->m_nForeignControlledStates;
+    }
+
+    //---------------------------------------------------------------------
     void OAccessibleImplementationAccess::setStateBit( const sal_Int16 _nState, const sal_Bool _bSet )
     {
         OSL_ENSURE( _nState < BITFIELDSIZE, "OAccessibleImplementationAccess::setStateBit: no more bits (shutting down the universe now)!" );
@@ -223,6 +229,9 @@ namespace comphelper
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2002/04/17 08:39:28  fs
+ *  initial checkin - helper class for tunneling an XAccessibleContext implementation
+ *
  *
  *  Revision 1.0 16.04.2002 15:34:21  fs
  ************************************************************************/
