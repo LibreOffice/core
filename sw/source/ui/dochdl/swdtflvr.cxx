@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-15 11:26:06 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:28:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,9 @@
 #endif
 #ifndef _SVX_XEXCH_HXX
 #include <svx/xexch.hxx>
+#endif
+#ifndef _SVX_XMLEXCHG_HXX_
+#include <svx/xmlexchg.hxx>
 #endif
 #ifndef _SVX_DBAEXCHANGE_HXX_
 #include <svx/dbaexchange.hxx>
@@ -2692,9 +2695,9 @@ int SwTransferable::_PasteDBData( TransferableDataHelper& rData,
             SdrObject* pObj;
             rSh.MakeDrawView();
             FmFormView* pFmView = PTR_CAST( FmFormView, rSh.GetDrawView() );
-            if ( pFmView )
-            {
-                if ( 0 != (pObj = pFmView->CreateXFormsControl() ) )
+            if(pFmView) {
+                const OXFormsDescriptor &rDesc = OXFormsTransferable::extractDescriptor(rData);
+                if(pObj = pFmView->CreateXFormsControl(rDesc))
                     rSh.SwFEShell::Insert( *pObj, 0, 0, pDragPt );
             }
         }
