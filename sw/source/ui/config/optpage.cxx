@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optpage.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-11-28 08:58:58 $
+ *  last change: $Author: os $ $Date: 2001-01-24 10:15:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1976,6 +1976,9 @@ void SwRedlineOptionsTabPage::Reset( const SfxItemSet& rSet )
     // Attributlistboxen initialisieren
     USHORT nNum = sizeof(aInsertAttr) / sizeof(CharAttr);
 
+    aInsertLB.SelectEntryPos(0);
+    aDeletedLB.SelectEntryPos(0);
+    aChangedLB.SelectEntryPos(0);
     for (i = 0; i < nNum; i++)
     {
         aInsertLB.SetEntryData(i, &aInsertAttr[i]);
