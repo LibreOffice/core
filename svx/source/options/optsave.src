@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsave.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-24 20:35:15 $
+ *  last change: $Author: nf $ $Date: 2001-07-31 13:11:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -531,7 +531,6 @@ TabPage RID_SFXPAGE_SAVE
         < "Präsentation" ;     APP_IMPRESS   ; > ;
         < "Zeichnung" ;        APP_DRAW      ; > ;
         < "Formel" ;           APP_MATH      ; > ;
-        < "Diagramm" ;           APP_MATH      ; > ;
         };
     StringList [ english_us ] =
     {
@@ -541,7 +540,6 @@ TabPage RID_SFXPAGE_SAVE
         < "Presentation" ;     APP_IMPRESS   ; > ;
         < "Drawing" ;        APP_DRAW      ; > ;
         < "Formula" ;           APP_MATH      ; > ;
-        < "Chart" ;           APP_MATH      ; > ;
         };
     StringList [ portuguese ] =
     {
@@ -551,7 +549,6 @@ TabPage RID_SFXPAGE_SAVE
         < "Apresentação" ;     APP_IMPRESS   ; > ;
         < "Desenho" ;        APP_DRAW      ; > ;
         < "Fórmula" ;           APP_MATH      ; > ;
-        < "Gráfico" ;           APP_MATH      ; > ;
         };
     StringList [ russian ] =
     {
@@ -561,7 +558,6 @@ TabPage RID_SFXPAGE_SAVE
         < "Ïðåçåíòàöèÿ" ;     APP_IMPRESS   ; > ;
         < "Ðèñóíîê" ;        APP_DRAW      ; > ;
         < "Ôîðìóëà" ;           APP_MATH      ; > ;
-        < "Äèàãðàììà" ;           APP_MATH      ; > ;
         };
     StringList [ greek ] =
     {
@@ -571,7 +567,6 @@ TabPage RID_SFXPAGE_SAVE
         < "Ðáñïõóßáóç" ;     APP_IMPRESS   ; > ;
         < "Ó÷Ýäéï" ;        APP_DRAW      ; > ;
         < "Ôýðïò" ;           APP_MATH      ; > ;
-        < "ÄéÜãñáììá" ;           APP_MATH      ; > ;
         };
     StringList [ dutch ] =
     {
@@ -581,7 +576,6 @@ TabPage RID_SFXPAGE_SAVE
         < "Presentatie" ;     APP_IMPRESS   ; > ;
         < "Tekening" ;        APP_DRAW      ; > ;
         < "Formule" ;           APP_MATH      ; > ;
-        < "Diagram" ;           APP_MATH      ; > ;
         };
     StringList [ french ] =
     {
@@ -591,7 +585,6 @@ TabPage RID_SFXPAGE_SAVE
         < "Présentation" ;     APP_IMPRESS   ; > ;
         < "Dessin" ;        APP_DRAW      ; > ;
         < "Formule" ;           APP_MATH      ; > ;
-        < "Diagramme" ;           APP_MATH      ; > ;
         };
     StringList [ spanish ] =
     {
@@ -601,7 +594,6 @@ TabPage RID_SFXPAGE_SAVE
         < "Presentación" ;     APP_IMPRESS   ; > ;
         < "Dibujo" ;        APP_DRAW      ; > ;
         < "Fórmula" ;           APP_MATH      ; > ;
-        < "Diagrama" ;           APP_MATH      ; > ;
         };
     StringList [ finnish ] =
     {
@@ -611,7 +603,6 @@ TabPage RID_SFXPAGE_SAVE
         < "Esitys" ;     APP_IMPRESS   ; > ;
         < "Piirros" ;        APP_DRAW      ; > ;
         < "Kaava" ;           APP_MATH      ; > ;
-        < "Kaavio" ;           APP_MATH      ; > ;
         };
     StringList [ italian ] =
     {
@@ -621,7 +612,6 @@ TabPage RID_SFXPAGE_SAVE
         < "Presentazione" ;     APP_IMPRESS   ; > ;
         < "Disegno" ;        APP_DRAW      ; > ;
         < "Formula" ;           APP_MATH      ; > ;
-        < "Diagramma" ;           APP_MATH      ; > ;
         };
     StringList [ danish ] =
     {
@@ -631,7 +621,6 @@ TabPage RID_SFXPAGE_SAVE
         < "Præsentation" ;     APP_IMPRESS   ; > ;
         < "Tegning" ;        APP_DRAW      ; > ;
         < "Formel" ;           APP_MATH      ; > ;
-        < "Diagram" ;           APP_MATH      ; > ;
         };
     StringList [ swedish ] =
     {
@@ -641,7 +630,6 @@ TabPage RID_SFXPAGE_SAVE
         < "Presentation" ;     APP_IMPRESS   ; > ;
         < "Teckning" ;        APP_DRAW      ; > ;
         < "Formel" ;           APP_MATH      ; > ;
-        < "Diagram" ;           APP_MATH      ; > ;
         };
     StringList [ polish ] =
     {
@@ -651,7 +639,6 @@ TabPage RID_SFXPAGE_SAVE
         < "Prezentacja" ;     APP_IMPRESS   ; > ;
         < "Rysunek" ;        APP_DRAW      ; > ;
         < "Formu³a" ;           APP_MATH      ; > ;
-        < "Wykres" ;           APP_MATH      ; > ;
         };
     StringList [ portuguese_brazilian ] =
     {
@@ -661,7 +648,6 @@ TabPage RID_SFXPAGE_SAVE
         < "Pr?sentation" ;     APP_IMPRESS   ; > ;
         < "Zeichnung" ;        APP_DRAW      ; > ;
         < "Formel" ;           APP_MATH      ; > ;
-        < "Diagramm" ;           APP_MATH      ; > ;
         };
     StringList [ japanese ] =
     {
@@ -671,7 +657,6 @@ TabPage RID_SFXPAGE_SAVE
         < "ÌßÚ¾ÞÝÃ°¼®Ý" ;     APP_IMPRESS   ; > ;
         < "}Œ`•`‰æ" ;        APP_DRAW      ; > ;
         < "”Ž®" ;           APP_MATH      ; > ;
-        < "????" ;           APP_MATH      ; > ;
         };
     StringList [ korean ] =
     {
@@ -681,7 +666,6 @@ TabPage RID_SFXPAGE_SAVE
         < "½½¶óÀÌµå¼î" ;     APP_IMPRESS   ; > ;
         < "draw" ;        APP_DRAW      ; > ;
         < "¼ö½Ä" ;           APP_MATH      ; > ;
-        < "Â÷Æ®" ;           APP_MATH      ; > ;
         };
     StringList [ chinese_simplified ] =
     {
@@ -691,7 +675,6 @@ TabPage RID_SFXPAGE_SAVE
         < "ÑÝÊ¾ÎÄ¸å" ;     APP_IMPRESS   ; > ;
         < "»æÍ¼" ;        APP_DRAW      ; > ;
         < "¹«Ê½" ;           APP_MATH      ; > ;
-        < "Í¼±í" ;           APP_MATH      ; > ;
         };
     StringList [ chinese_traditional ] =
     {
@@ -701,7 +684,6 @@ TabPage RID_SFXPAGE_SAVE
         < "Â²³ø" ;     APP_IMPRESS   ; > ;
         < "Ã¸¹Ï" ;        APP_DRAW      ; > ;
         < "¤½¦¡" ;           APP_MATH      ; > ;
-        < "¹Ïªí" ;           APP_MATH      ; > ;
         };
     StringList [ turkish ] =
     {
@@ -711,7 +693,6 @@ TabPage RID_SFXPAGE_SAVE
         < "Sunu" ;     APP_IMPRESS   ; > ;
         < "Çizim" ;        APP_DRAW      ; > ;
         < "Formül" ;           APP_MATH      ; > ;
-        < "Þema" ;           APP_MATH      ; > ;
         };
     StringList [ arabic ] =
     {
@@ -721,7 +702,6 @@ TabPage RID_SFXPAGE_SAVE
         < "ÚÑÖ ÊÞÏíãí" ;     APP_IMPRESS   ; > ;
         < "ÑÓã" ;        APP_DRAW      ; > ;
         < "ÕíÛÉ" ;           APP_MATH      ; > ;
-        < "ÑÓã ÈíÇäí" ;           APP_MATH      ; > ;
         };
     StringList [ catalan ] =
     {
@@ -731,7 +711,6 @@ TabPage RID_SFXPAGE_SAVE
         < "Präsentation" ;     APP_IMPRESS   ; > ;
         < "Zeichnung" ;        APP_DRAW      ; > ;
         < "Formel" ;           APP_MATH      ; > ;
-        < "Diagramm" ;           APP_MATH      ; > ;
         };
     };
     ListBox LB_FILTER
@@ -745,6 +724,7 @@ TabPage RID_SFXPAGE_SAVE
 };
 
 // ********************************************************************** EOF
+
 
 
 
