@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regcompare.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: jsc $ $Date: 2002-11-27 13:47:23 $
+ *  last change: $Author: jsc $ $Date: 2002-11-27 14:19:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -211,7 +211,7 @@ sal_Bool Options::initOptions(int ac, char* av[], sal_Bool bCmdFile)
 
         if (ac < 2)
         {
-            fprintf(stderr, "%s", prepareHelp().getStr());
+            fprintf(stdout, "%s", prepareHelp().getStr());
             bRet = sal_False;
         }
 
@@ -237,7 +237,7 @@ sal_Bool Options::initOptions(int ac, char* av[], sal_Bool bCmdFile)
                         bFirst = sal_False;
                     } else if (av[i][2] != '1')
                     {
-                        fprintf(stderr, "%s: invalid option '%s'\n", m_program.getStr(), av[i]);
+                        fprintf(stdout, "%s: invalid option '%s'\n", m_program.getStr(), av[i]);
                     }
                     if (av[i][3] == '\0')
                     {
@@ -247,7 +247,7 @@ sal_Bool Options::initOptions(int ac, char* av[], sal_Bool bCmdFile)
                             s = av[i];
                         } else
                         {
-                            fprintf(stderr, "%s: invalid option '%s'\n", m_program.getStr(), av[i]);
+                            fprintf(stdout, "%s: invalid option '%s'\n", m_program.getStr(), av[i]);
                             bRet = sal_False;
                             break;
                         }
@@ -275,7 +275,7 @@ sal_Bool Options::initOptions(int ac, char* av[], sal_Bool bCmdFile)
                             s = av[i];
                         } else
                         {
-                            fprintf(stderr, "%s: invalid option '%s'\n", m_program.getStr(), av[i]);
+                            fprintf(stdout, "%s: invalid option '%s'\n", m_program.getStr(), av[i]);
                             bRet = sal_False;
                             break;
                         }
@@ -295,7 +295,7 @@ sal_Bool Options::initOptions(int ac, char* av[], sal_Bool bCmdFile)
                             s = av[i];
                         } else
                         {
-                            fprintf(stderr, "%s: invalid option '%s'\n", m_program.getStr(), av[i]);
+                            fprintf(stdout, "%s: invalid option '%s'\n", m_program.getStr(), av[i]);
                             bRet = sal_False;
                             break;
                         }
@@ -309,7 +309,7 @@ sal_Bool Options::initOptions(int ac, char* av[], sal_Bool bCmdFile)
                 case 'C':
                     if (av[i][2] != '\0')
                     {
-                        fprintf(stderr, "%s: invalid option '%s'\n", m_program.getStr(), av[i]);
+                        fprintf(stdout, "%s: invalid option '%s'\n", m_program.getStr(), av[i]);
                     }
                     m_bFullCheck = sal_True;
                     break;
@@ -317,7 +317,7 @@ sal_Bool Options::initOptions(int ac, char* av[], sal_Bool bCmdFile)
                 case 'F':
                     if (av[i][2] != '\0')
                     {
-                        fprintf(stderr, "%s: invalid option '%s'\n", m_program.getStr(), av[i]);
+                        fprintf(stdout, "%s: invalid option '%s'\n", m_program.getStr(), av[i]);
                         bRet = sal_False;
                     }
                     m_bForceOutput = sal_True;
@@ -326,7 +326,7 @@ sal_Bool Options::initOptions(int ac, char* av[], sal_Bool bCmdFile)
                 case 'T':
                     if (av[i][2] != '\0')
                     {
-                        fprintf(stderr, "%s: invalid option '%s'\n", m_program.getStr(), av[i]);
+                        fprintf(stdout, "%s: invalid option '%s'\n", m_program.getStr(), av[i]);
                     }
                     m_bUnoTypeCheck = sal_True;
                     break;
@@ -334,7 +334,7 @@ sal_Bool Options::initOptions(int ac, char* av[], sal_Bool bCmdFile)
                 case '?':
                     if (av[i][2] != '\0')
                     {
-                        fprintf(stderr, "%s: invalid option '%s'\n", m_program.getStr(), av[i]);
+                        fprintf(stdout, "%s: invalid option '%s'\n", m_program.getStr(), av[i]);
                         bRet = sal_False;
                     } else
                     {
@@ -343,7 +343,7 @@ sal_Bool Options::initOptions(int ac, char* av[], sal_Bool bCmdFile)
                     }
                     break;
                 default:
-                    fprintf(stderr, "%s: unknown option '%s'\n", m_program.getStr(), av[i]);
+                    fprintf(stdout, "%s: unknown option '%s'\n", m_program.getStr(), av[i]);
                     bRet = sal_False;
                     break;
             }
@@ -354,7 +354,7 @@ sal_Bool Options::initOptions(int ac, char* av[], sal_Bool bCmdFile)
                 FILE* cmdFile = fopen(av[i]+1, "r");
                   if( cmdFile == NULL )
                   {
-                    fprintf(stderr, "%s", prepareHelp().getStr());
+                    fprintf(stdout, "%s", prepareHelp().getStr());
                     bRet = sal_False;
                 } else
                 {
@@ -378,7 +378,7 @@ sal_Bool Options::initOptions(int ac, char* av[], sal_Bool bCmdFile)
                 }
             } else
             {
-                fprintf(stderr, "%s: unknown option '%s'\n", m_program.getStr(), av[i]);
+                fprintf(stdout, "%s: unknown option '%s'\n", m_program.getStr(), av[i]);
                 bRet = sal_False;
             }
         }
@@ -388,12 +388,12 @@ sal_Bool Options::initOptions(int ac, char* av[], sal_Bool bCmdFile)
     {
         if ( m_regName1.getLength() == 0 )
         {
-              fprintf(stderr, "%s: missing option '-r1'\n", m_program.getStr());
+              fprintf(stdout, "%s: missing option '-r1'\n", m_program.getStr());
             bRet = sal_False;
         }
         if ( m_regName2.getLength() == 0 )
         {
-              fprintf(stderr, "%s: missing option '-r2'\n", m_program.getStr());
+              fprintf(stdout, "%s: missing option '-r2'\n", m_program.getStr());
             bRet = sal_False;
         }
     }
@@ -585,29 +585,29 @@ static void printConstValue(RTConstValue& constValue)
     switch (constValue.m_type)
     {
         case RT_TYPE_NONE:
-            fprintf(stderr, "none");
+            fprintf(stdout, "none");
         case RT_TYPE_BOOL:
-            fprintf(stderr, "%s", constValue.m_value.aBool ? "TRUE" : "FALSE");
+            fprintf(stdout, "%s", constValue.m_value.aBool ? "TRUE" : "FALSE");
         case RT_TYPE_BYTE:
-            fprintf(stderr, "%d", constValue.m_value.aByte);
+            fprintf(stdout, "%d", constValue.m_value.aByte);
         case RT_TYPE_INT16:
-            fprintf(stderr, "%d", constValue.m_value.aShort);
+            fprintf(stdout, "%d", constValue.m_value.aShort);
         case RT_TYPE_UINT16:
-            fprintf(stderr, "%d", constValue.m_value.aUShort);
+            fprintf(stdout, "%d", constValue.m_value.aUShort);
         case RT_TYPE_INT32:
-            fprintf(stderr, "%d", constValue.m_value.aLong);
+            fprintf(stdout, "%d", constValue.m_value.aLong);
         case RT_TYPE_UINT32:
-            fprintf(stderr, "%d", constValue.m_value.aULong);
+            fprintf(stdout, "%d", constValue.m_value.aULong);
 //      case RT_TYPE_INT64:
-//          fprintf(stderr, "%d", constValue.m_value.aHyper);
+//          fprintf(stdout, "%d", constValue.m_value.aHyper);
 //      case RT_TYPE_UINT64:
-//          fprintf(stderr, "%d", constValue.m_value.aUHyper);
+//          fprintf(stdout, "%d", constValue.m_value.aUHyper);
         case RT_TYPE_FLOAT:
-            fprintf(stderr, "%f", constValue.m_value.aFloat);
+            fprintf(stdout, "%f", constValue.m_value.aFloat);
         case RT_TYPE_DOUBLE:
-            fprintf(stderr, "%f", constValue.m_value.aDouble);
+            fprintf(stdout, "%f", constValue.m_value.aDouble);
         case RT_TYPE_STRING:
-            fprintf(stderr, "%s", constValue.m_value.aString);
+            fprintf(stdout, "%s", constValue.m_value.aString);
     }
 }
 
@@ -628,10 +628,10 @@ static sal_uInt32 checkConstValue(const OUString& keyName,
                 {
                     if ( bDump )
                     {
-                        fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
+                        fprintf(stdout, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
                         bDump = sal_False;
                     }
-                    fprintf(stderr, "  Field %d: Value1 = %s  !=  Value2 = %s\n", index1,
+                    fprintf(stdout, "  Field %d: Value1 = %s  !=  Value2 = %s\n", index1,
                             constValue1.m_value.aBool ? "TRUE" : "FALSE",
                             constValue2.m_value.aBool ? "TRUE" : "FALSE");
                 }
@@ -645,10 +645,10 @@ static sal_uInt32 checkConstValue(const OUString& keyName,
                 {
                     if ( bDump )
                     {
-                        fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
+                        fprintf(stdout, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
                         bDump = sal_False;
                     }
-                    fprintf(stderr, "  Field %d: Value1 = %d  !=  Value2 = %d\n", index1,
+                    fprintf(stdout, "  Field %d: Value1 = %d  !=  Value2 = %d\n", index1,
                             constValue1.m_value.aByte, constValue2.m_value.aByte);
                 }
                 return 1;
@@ -661,10 +661,10 @@ static sal_uInt32 checkConstValue(const OUString& keyName,
                 {
                     if ( bDump )
                     {
-                        fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
+                        fprintf(stdout, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
                         bDump = sal_False;
                     }
-                    fprintf(stderr, "  Field %d: Value1 = %d  !=  Value2 = %d\n", index1,
+                    fprintf(stdout, "  Field %d: Value1 = %d  !=  Value2 = %d\n", index1,
                             constValue1.m_value.aShort, constValue2.m_value.aShort);
                 }
                 return 1;
@@ -677,10 +677,10 @@ static sal_uInt32 checkConstValue(const OUString& keyName,
                 {
                     if ( bDump )
                     {
-                        fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
+                        fprintf(stdout, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
                         bDump = sal_False;
                     }
-                    fprintf(stderr, "  Field %d: Value1 = %d  !=  Value2 = %d\n", index1,
+                    fprintf(stdout, "  Field %d: Value1 = %d  !=  Value2 = %d\n", index1,
                             constValue1.m_value.aUShort, constValue2.m_value.aUShort);
                 }
                 return 1;
@@ -693,10 +693,10 @@ static sal_uInt32 checkConstValue(const OUString& keyName,
                 {
                     if ( bDump )
                     {
-                        fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
+                        fprintf(stdout, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
                         bDump = sal_False;
                     }
-                    fprintf(stderr, "  Field %d: Value1 = %d  !=  Value2 = %d\n", index1,
+                    fprintf(stdout, "  Field %d: Value1 = %d  !=  Value2 = %d\n", index1,
                             constValue1.m_value.aLong, constValue2.m_value.aLong);
                 }
                 return 1;
@@ -709,10 +709,10 @@ static sal_uInt32 checkConstValue(const OUString& keyName,
                 {
                     if ( bDump )
                     {
-                        fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
+                        fprintf(stdout, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
                         bDump = sal_False;
                     }
-                    fprintf(stderr, "  Field %d: Value1 = %d  !=  Value2 = %d\n", index1,
+                    fprintf(stdout, "  Field %d: Value1 = %d  !=  Value2 = %d\n", index1,
                             constValue1.m_value.aULong, constValue2.m_value.aULong);
                 }
                 return 1;
@@ -725,10 +725,10 @@ static sal_uInt32 checkConstValue(const OUString& keyName,
 //              {
 //                  if ( bDump )
 //                  {
-//                      fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
+//                      fprintf(stdout, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
 //                      bDump = sal_False;
 //                  }
-//                  fprintf(stderr, "  Field %d: Value1 = %d  !=  Value2 = %d\n", index1,
+//                  fprintf(stdout, "  Field %d: Value1 = %d  !=  Value2 = %d\n", index1,
 //                          constValue1.m_value.aHyper, constValue2.m_value.aHyper);
 //              }
 //              return 1;
@@ -741,10 +741,10 @@ static sal_uInt32 checkConstValue(const OUString& keyName,
 //              {
 //                  if ( bDump )
 //                  {
-//                      fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
+//                      fprintf(stdout, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
 //                      bDump = sal_False;
 //                  }
-//                  fprintf(stderr, "  Field %d: Value1 = %d  !=  Value2 = %d\n", index1,
+//                  fprintf(stdout, "  Field %d: Value1 = %d  !=  Value2 = %d\n", index1,
 //                          constValue1.m_value.aUHyper, constValue2.m_value.aUHyper);
 //              }
 //              return 1;
@@ -757,10 +757,10 @@ static sal_uInt32 checkConstValue(const OUString& keyName,
                 {
                     if ( bDump )
                     {
-                        fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
+                        fprintf(stdout, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
                         bDump = sal_False;
                     }
-                    fprintf(stderr, "  Field %d: Value1 = %d  !=  Value2 = %d\n", index1,
+                    fprintf(stdout, "  Field %d: Value1 = %d  !=  Value2 = %d\n", index1,
                             constValue1.m_value.aFloat, constValue2.m_value.aFloat);
                 }
                 return 1;
@@ -773,10 +773,10 @@ static sal_uInt32 checkConstValue(const OUString& keyName,
                 {
                     if ( bDump )
                     {
-                        fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
+                        fprintf(stdout, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
                         bDump = sal_False;
                     }
-                    fprintf(stderr, "  Field %d: Value1 = %d  !=  Value2 = %d\n", index1,
+                    fprintf(stdout, "  Field %d: Value1 = %d  !=  Value2 = %d\n", index1,
                             constValue1.m_value.aDouble, constValue2.m_value.aDouble);
                 }
                 return 1;
@@ -789,11 +789,11 @@ static sal_uInt32 checkConstValue(const OUString& keyName,
                 {
                     if ( bDump )
                     {
-                        fprintf(stderr, "%s\n", U2S(keyName));
-                        fprintf(stderr, "  TypeClass = %s\n", getTypeClass(typeClass));
+                        fprintf(stdout, "%s\n", U2S(keyName));
+                        fprintf(stdout, "  TypeClass = %s\n", getTypeClass(typeClass));
                         bDump = sal_False;
                     }
-                    fprintf(stderr, "  Field %d: Value1 = %d  !=  Value2 = %d\n", index1,
+                    fprintf(stdout, "  Field %d: Value1 = %d  !=  Value2 = %d\n", index1,
                             constValue1.m_value.aString, constValue2.m_value.aString);
                 }
                 return 1;
@@ -818,10 +818,10 @@ static sal_uInt32 checkField(const OUString& keyName,
         {
             if ( bDump )
             {
-                fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
+                fprintf(stdout, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
                 bDump = sal_False;
             }
-            fprintf(stderr, "  Field %d: Name1 = %s  !=  Name2 = %s\n", index1,
+            fprintf(stdout, "  Field %d: Name1 = %s  !=  Name2 = %s\n", index1,
                     U2S(reader1.getFieldName(index1)), U2S(reader2.getFieldName(index2)));
         }
         nError++;
@@ -833,10 +833,10 @@ static sal_uInt32 checkField(const OUString& keyName,
         {
             if ( bDump )
             {
-                fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
+                fprintf(stdout, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
                 bDump = sal_False;
             }
-            fprintf(stderr, "  Field %d: Type1 = %s  !=  Type2 = %s\n", index1,
+            fprintf(stdout, "  Field %d: Type1 = %s  !=  Type2 = %s\n", index1,
                     U2S(reader1.getFieldType(index1)), U2S(reader2.getFieldType(index2)));
         }
         nError++;
@@ -850,16 +850,16 @@ static sal_uInt32 checkField(const OUString& keyName,
             {
                 if ( bDump )
                 {
-                    fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
+                    fprintf(stdout, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
                     bDump = sal_False;
                 }
-                fprintf(stderr, "  Field %d: Access1 = %s  !=  Access2 = %s\n", index1,
+                fprintf(stdout, "  Field %d: Access1 = %s  !=  Access2 = %s\n", index1,
                         getConstValueType(constValue1), getConstValueType(constValue2));
-                fprintf(stderr, "  Field %d: Value1 = ", index1);
+                fprintf(stdout, "  Field %d: Value1 = ", index1);
                 printConstValue(constValue1);
-                fprintf(stderr, "  !=  Value2 = ");
+                fprintf(stdout, "  !=  Value2 = ");
                 printConstValue(constValue1);
-                fprintf(stderr, "\n;");
+                fprintf(stdout, "\n;");
             }
             nError++;
         } else
@@ -874,10 +874,10 @@ static sal_uInt32 checkField(const OUString& keyName,
         {
             if ( bDump )
             {
-                fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
+                fprintf(stdout, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
                 bDump = sal_False;
             }
-            fprintf(stderr, "  Field %d: FieldAccess1 = %s  !=  FieldAccess2 = %s\n", index1,
+            fprintf(stdout, "  Field %d: FieldAccess1 = %s  !=  FieldAccess2 = %s\n", index1,
                     getFieldAccess(reader1.getFieldAccess(index1)).getStr(),
                     getFieldAccess(reader1.getFieldAccess(index2)).getStr());
         }
@@ -891,10 +891,10 @@ static sal_uInt32 checkField(const OUString& keyName,
         {
             if ( bDump )
             {
-                fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
+                fprintf(stdout, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
                 bDump = sal_False;
             }
-            fprintf(stderr, "  Field %d: Doku1 = %s\n             Doku2 = %s\n", index1,
+            fprintf(stdout, "  Field %d: Doku1 = %s\n             Doku2 = %s\n", index1,
                     U2S(reader1.getFieldDoku(index1)), U2S(reader2.getFieldDoku(index2)));
         }
         nError++;
@@ -906,10 +906,10 @@ static sal_uInt32 checkField(const OUString& keyName,
         {
             if ( bDump )
             {
-                fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
+                fprintf(stdout, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
                 bDump = sal_False;
             }
-            fprintf(stderr, "  Field %d: FileName1 = %s  !=  FileName2 = %s\n", index1,
+            fprintf(stdout, "  Field %d: FileName1 = %s  !=  FileName2 = %s\n", index1,
                     U2S(reader1.getFieldFileName(index1)), U2S(reader2.getFieldFileName(index2)));
         }
         nError++;
@@ -962,10 +962,10 @@ static sal_uInt32 checkMethod(const OUString& keyName,
         {
             if ( bDump )
             {
-                fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
+                fprintf(stdout, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
                 bDump = sal_False;
             }
-            fprintf(stderr, "  Method1 %d: Name1 = %s  !=  Name2 = %s\n", index,
+            fprintf(stdout, "  Method1 %d: Name1 = %s  !=  Name2 = %s\n", index,
                     U2S(reader1.getMethodName(index)),
                     U2S(reader2.getMethodName(index)));
         }
@@ -979,10 +979,10 @@ static sal_uInt32 checkMethod(const OUString& keyName,
         {
             if ( bDump )
             {
-                fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
+                fprintf(stdout, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
                 bDump = sal_False;
             }
-            fprintf(stderr, "  Method1 %d: ReturnType1 = %s  !=  ReturnType2 = %s\n", index,
+            fprintf(stdout, "  Method1 %d: ReturnType1 = %s  !=  ReturnType2 = %s\n", index,
                     U2S(reader1.getMethodReturnType(index)),
                     U2S(reader2.getMethodReturnType(index)));
         }
@@ -997,10 +997,10 @@ static sal_uInt32 checkMethod(const OUString& keyName,
         {
             if ( bDump )
             {
-                fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
+                fprintf(stdout, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
                 bDump = sal_False;
             }
-            fprintf(stderr, "  Method %d : nParameters1 = %d  !=  nParameters2 = %d\n", index, nParams1, nParams2);
+            fprintf(stdout, "  Method %d : nParameters1 = %d  !=  nParameters2 = %d\n", index, nParams1, nParams2);
         }
         nError++;
     }
@@ -1013,10 +1013,10 @@ static sal_uInt32 checkMethod(const OUString& keyName,
             {
                 if ( bDump )
                 {
-                    fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
+                    fprintf(stdout, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
                     bDump = sal_False;
                 }
-                fprintf(stderr, "  Method %d, Parameter %d: Type1 = %s  !=  Type2 = %s\n", index, i,
+                fprintf(stdout, "  Method %d, Parameter %d: Type1 = %s  !=  Type2 = %s\n", index, i,
                         U2S(reader1.getMethodParamType(index, i)),
                         U2S(reader2.getMethodParamType(index, i)));
             }
@@ -1029,10 +1029,10 @@ static sal_uInt32 checkMethod(const OUString& keyName,
             {
                 if ( bDump )
                 {
-                    fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
+                    fprintf(stdout, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
                     bDump = sal_False;
                 }
-                fprintf(stderr, "  Method %d, Parameter %d: Name1 = %s  !=  Name2 = %s\n", index, i,
+                fprintf(stdout, "  Method %d, Parameter %d: Name1 = %s  !=  Name2 = %s\n", index, i,
                         U2S(reader1.getMethodParamName(index, i)),
                         U2S(reader2.getMethodParamName(index, i)));
             }
@@ -1044,10 +1044,10 @@ static sal_uInt32 checkMethod(const OUString& keyName,
             {
                 if ( bDump )
                 {
-                    fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
+                    fprintf(stdout, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
                     bDump = sal_False;
                 }
-                fprintf(stderr, "  Method %d, Parameter %d: Mode1 = %s  !=  Mode2 = %s\n", index, i,
+                fprintf(stdout, "  Method %d, Parameter %d: Mode1 = %s  !=  Mode2 = %s\n", index, i,
                         getParamMode(reader1.getMethodParamMode(index, i)),
                         getParamMode(reader2.getMethodParamMode(index, i)));
             }
@@ -1058,19 +1058,19 @@ static sal_uInt32 checkMethod(const OUString& keyName,
     {
         if ( bDump )
         {
-            fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
+            fprintf(stdout, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
             bDump = sal_False;
         }
-        fprintf(stderr, "  Registry1: Method %d contains %d more parameters\n", index, nParams1 - i);
+        fprintf(stdout, "  Registry1: Method %d contains %d more parameters\n", index, nParams1 - i);
     }
     if ( i < nParams2 && options.forceOutput() )
     {
         if ( bDump )
         {
-            fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
+            fprintf(stdout, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
             bDump = sal_False;
         }
-        fprintf(stderr, "  Registry2: Method %d contains %d more parameters\n", index, nParams2 - i);
+        fprintf(stdout, "  Registry2: Method %d contains %d more parameters\n", index, nParams2 - i);
     }
 
     sal_uInt16 nExcep1 = (sal_uInt16)reader1.getMethodExcCount(index);
@@ -1081,10 +1081,10 @@ static sal_uInt32 checkMethod(const OUString& keyName,
         {
             if ( bDump )
             {
-                fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
+                fprintf(stdout, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
                 bDump = sal_False;
             }
-            fprintf(stderr, "  nExceptions1 = %d  !=  nExceptions2 = %d\n", nExcep1, nExcep2);
+            fprintf(stdout, "  nExceptions1 = %d  !=  nExceptions2 = %d\n", nExcep1, nExcep2);
         }
         nError++;
     }
@@ -1096,10 +1096,10 @@ static sal_uInt32 checkMethod(const OUString& keyName,
             {
                 if ( bDump )
                 {
-                    fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
+                    fprintf(stdout, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
                     bDump = sal_False;
                 }
-                fprintf(stderr, "  Method %d, Exception %d: Name1 = %s  !=  Name2 = %s\n", index, i,
+                fprintf(stdout, "  Method %d, Exception %d: Name1 = %s  !=  Name2 = %s\n", index, i,
                         U2S(reader1.getMethodExcType(index, i)),
                         U2S(reader2.getMethodExcType(index, i)));
             }
@@ -1110,19 +1110,19 @@ static sal_uInt32 checkMethod(const OUString& keyName,
     {
         if ( bDump )
         {
-            fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
+            fprintf(stdout, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
             bDump = sal_False;
         }
-        fprintf(stderr, "  Registry1: Method %d contains %d more exceptions\n", index, nExcep1 - i);
+        fprintf(stdout, "  Registry1: Method %d contains %d more exceptions\n", index, nExcep1 - i);
     }
     if ( i < nExcep2 && options.forceOutput() )
     {
         if ( bDump )
         {
-            fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
+            fprintf(stdout, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
             bDump = sal_False;
         }
-        fprintf(stderr, "  Registry2: Method %d contains %d more exceptions\n", index, nExcep2 - i);
+        fprintf(stdout, "  Registry2: Method %d contains %d more exceptions\n", index, nExcep2 - i);
     }
 
     if ( reader1.getMethodMode(index) != reader2.getMethodMode(index) )
@@ -1131,10 +1131,10 @@ static sal_uInt32 checkMethod(const OUString& keyName,
         {
             if ( bDump )
             {
-                fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
+                fprintf(stdout, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
                 bDump = sal_False;
             }
-            fprintf(stderr, "  Method %d: Mode1 = %s  !=  Mode2 = %s\n", index,
+            fprintf(stdout, "  Method %d: Mode1 = %s  !=  Mode2 = %s\n", index,
                     getMethodMode(reader1.getMethodMode(index)),
                     getMethodMode(reader2.getMethodMode(index)));
         }
@@ -1148,10 +1148,10 @@ static sal_uInt32 checkMethod(const OUString& keyName,
         {
             if ( bDump )
             {
-                fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
+                fprintf(stdout, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
                 bDump = sal_False;
             }
-            fprintf(stderr, "  Method %d: Doku1 = %s\n              Doku2 = %s\n", index,
+            fprintf(stdout, "  Method %d: Doku1 = %s\n              Doku2 = %s\n", index,
                     U2S(reader1.getMethodDoku(index)),
                     U2S(reader2.getMethodDoku(index)));
         }
@@ -1192,10 +1192,10 @@ static sal_uInt32 checkReference(const OUString& keyName,
         {
             if ( bDump )
             {
-                fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
+                fprintf(stdout, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
                 bDump = sal_False;
             }
-            fprintf(stderr, "  Reference %d: Name1 = %s  !=  Name2 = %s\n", index1,
+            fprintf(stdout, "  Reference %d: Name1 = %s  !=  Name2 = %s\n", index1,
                     U2S(reader1.getReferenceName(index1)),
                     U2S(reader2.getReferenceName(index2)));
         }
@@ -1208,10 +1208,10 @@ static sal_uInt32 checkReference(const OUString& keyName,
         {
             if ( bDump )
             {
-                fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
+                fprintf(stdout, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
                 bDump = sal_False;
             }
-            fprintf(stderr, "  Reference %d: Type1 = %s  !=  Type2 = %s\n", index1,
+            fprintf(stdout, "  Reference %d: Type1 = %s  !=  Type2 = %s\n", index1,
                     getReferenceType(reader1.getReferenceType(index1)),
                     getReferenceType(reader2.getReferenceType(index2)));
         }
@@ -1224,10 +1224,10 @@ static sal_uInt32 checkReference(const OUString& keyName,
         {
             if ( bDump )
             {
-                fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
+                fprintf(stdout, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
                 bDump = sal_False;
             }
-            fprintf(stderr, "  Reference %d: Doku1 = %s\n                 Doku2 = %s\n", index1,
+            fprintf(stdout, "  Reference %d: Doku1 = %s\n                 Doku2 = %s\n", index1,
                     U2S(reader1.getReferenceDoku(index1)),
                     U2S(reader2.getReferenceDoku(index2)));
         }
@@ -1240,10 +1240,10 @@ static sal_uInt32 checkReference(const OUString& keyName,
         {
             if ( bDump )
             {
-                fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
+                fprintf(stdout, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
                 bDump = sal_False;
             }
-            fprintf(stderr, "  Reference %d: Access1 = %s  !=  Access2 = %s\n", index1,
+            fprintf(stdout, "  Reference %d: Access1 = %s  !=  Access2 = %s\n", index1,
                     getFieldAccess(reader1.getReferenceAccess(index1)).getStr(),
                     getFieldAccess(reader1.getReferenceAccess(index2)).getStr());
         }
@@ -1270,10 +1270,10 @@ static sal_uInt32 checkFieldsWithoutOrder(const OUString& keyName,
         {
             if ( bDump )
             {
-                fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
+                fprintf(stdout, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
                 bDump = sal_False;
             }
-           fprintf(stderr, "  %s1 contains %d more properties as %s2\n",
+           fprintf(stdout, "  %s1 contains %d more properties as %s2\n",
                    getTypeClass(typeClass), nFields1-nFields2, getTypeClass(typeClass));
         }
     }
@@ -1298,10 +1298,10 @@ static sal_uInt32 checkFieldsWithoutOrder(const OUString& keyName,
             {
                 if ( bDump )
                 {
-                    fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
+                    fprintf(stdout, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
                     bDump = sal_False;
                 }
-                fprintf(stderr, "  incompatible change: Field %d ('%s') of r1 is not longer a property of this %s in r2\n",
+                fprintf(stdout, "  incompatible change: Field %d ('%s') of r1 is not longer a property of this %s in r2\n",
                         i, U2S(shortName(reader1.getFieldName(i))), getTypeClass(typeClass));
             }
             nError++;
@@ -1323,10 +1323,10 @@ static sal_uInt32 checkFieldsWithoutOrder(const OUString& keyName,
                     {
                         if ( bDump )
                         {
-                            fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
+                            fprintf(stdout, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
                             bDump = sal_False;
                         }
-                        fprintf(stderr, "  incompatible change: Field %d ('%s') of r2 is a new property compared to this %s in r1 and is not 'optional'\n",
+                        fprintf(stdout, "  incompatible change: Field %d ('%s') of r2 is a new property compared to this %s in r1 and is not 'optional'\n",
                                 j, U2S(shortName(reader2.getFieldName(j))), getTypeClass(typeClass));
                     }
                     nError++;
@@ -1348,16 +1348,16 @@ static sal_uInt32 checkBlob(const OUString& keyName, RegistryTypeReader& reader1
     {
         if ( options.forceOutput() )
         {
-            fprintf(stderr, "    Size1 = %d    Size2 = %d\n", size1, size2);
+            fprintf(stdout, "    Size1 = %d    Size2 = %d\n", size1, size2);
         }
     }
     if ( reader1.getTypeClass() != reader2.getTypeClass() )
     {
         if ( options.forceOutput() )
         {
-            fprintf(stderr, "?: %s\n", U2S(keyName));
+            fprintf(stdout, "?: %s\n", U2S(keyName));
             bDump = sal_False;
-            fprintf(stderr, "    TypeClass1 = %s  !=  TypeClass2 = %s\n",
+            fprintf(stdout, "    TypeClass1 = %s  !=  TypeClass2 = %s\n",
                     getTypeClass(reader1.getTypeClass()),
                     getTypeClass(reader2.getTypeClass()));
         }
@@ -1372,10 +1372,10 @@ static sal_uInt32 checkBlob(const OUString& keyName, RegistryTypeReader& reader1
         {
             if ( bDump )
             {
-                fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
+                fprintf(stdout, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
                 bDump = sal_False;
             }
-            fprintf(stderr, "    TypeName1 = %s  !=  TypeName2 = %s\n",
+            fprintf(stdout, "    TypeName1 = %s  !=  TypeName2 = %s\n",
                     U2S(reader1.getTypeName()), U2S(reader2.getTypeName()));
         }
         nError++;
@@ -1389,10 +1389,10 @@ static sal_uInt32 checkBlob(const OUString& keyName, RegistryTypeReader& reader1
         {
             if ( bDump )
             {
-                fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
+                fprintf(stdout, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
                 bDump = sal_False;
             }
-            fprintf(stderr, "    SuperTypeName1 = %s  !=  SuperTypeName2 = %s\n",
+            fprintf(stdout, "    SuperTypeName1 = %s  !=  SuperTypeName2 = %s\n",
                     U2S(reader1.getSuperTypeName()), U2S(reader2.getSuperTypeName()));
         }
         nError++;
@@ -1412,14 +1412,14 @@ static sal_uInt32 checkBlob(const OUString& keyName, RegistryTypeReader& reader1
             {
                 if ( bDump )
                 {
-                    fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
+                    fprintf(stdout, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
                     bDump = sal_False;
                 }
-                fprintf(stderr, "    uik1.m_data1 = %X    uik2.m_data1 = %X\n", uik1.m_Data1, uik2.m_Data1);
-                fprintf(stderr, "    uik1.m_data2 = %X    uik2.m_data2 = %X\n", uik1.m_Data2, uik2.m_Data2);
-                fprintf(stderr, "    uik1.m_data3 = %X    uik2.m_data3 = %X\n", uik1.m_Data3, uik2.m_Data3);
-                fprintf(stderr, "    uik1.m_data4 = %X    uik2.m_data4 = %X\n", uik1.m_Data4, uik2.m_Data4);
-                fprintf(stderr, "    uik1.m_data5 = %X    uik2.m_data5 = %X\n", uik1.m_Data5, uik2.m_Data5);
+                fprintf(stdout, "    uik1.m_data1 = %X    uik2.m_data1 = %X\n", uik1.m_Data1, uik2.m_Data1);
+                fprintf(stdout, "    uik1.m_data2 = %X    uik2.m_data2 = %X\n", uik1.m_Data2, uik2.m_Data2);
+                fprintf(stdout, "    uik1.m_data3 = %X    uik2.m_data3 = %X\n", uik1.m_Data3, uik2.m_Data3);
+                fprintf(stdout, "    uik1.m_data4 = %X    uik2.m_data4 = %X\n", uik1.m_Data4, uik2.m_Data4);
+                fprintf(stdout, "    uik1.m_data5 = %X    uik2.m_data5 = %X\n", uik1.m_Data5, uik2.m_Data5);
             }
             nError++;
         }
@@ -1444,10 +1444,10 @@ static sal_uInt32 checkBlob(const OUString& keyName, RegistryTypeReader& reader1
             {
                 if ( bDump )
                 {
-                    fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
+                    fprintf(stdout, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
                     bDump = sal_False;
                 }
-                fprintf(stderr, "    nFields1 = %d  !=  nFields2 = %d\n", nFields1, nFields2);
+                fprintf(stdout, "    nFields1 = %d  !=  nFields2 = %d\n", nFields1, nFields2);
             }
             nError++;
         }
@@ -1459,19 +1459,19 @@ static sal_uInt32 checkBlob(const OUString& keyName, RegistryTypeReader& reader1
         {
             if ( bDump )
             {
-                fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
+                fprintf(stdout, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
                 bDump = sal_False;
             }
-            fprintf(stderr, "    Registry1 contains %d more fields\n", nFields1 - i);
+            fprintf(stdout, "    Registry1 contains %d more fields\n", nFields1 - i);
         }
         if ( i < nFields2 && options.forceOutput() )
         {
             if ( bDump )
             {
-                fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
+                fprintf(stdout, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
                 bDump = sal_False;
             }
-            fprintf(stderr, "    Registry2 contains %d more fields\n", nFields2 - i);
+            fprintf(stdout, "    Registry2 contains %d more fields\n", nFields2 - i);
         }
     } else
     {
@@ -1488,10 +1488,10 @@ static sal_uInt32 checkBlob(const OUString& keyName, RegistryTypeReader& reader1
             {
                 if ( bDump )
                 {
-                    fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
+                    fprintf(stdout, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
                     bDump = sal_False;
                 }
-                fprintf(stderr, "    nMethods1 = %d  !=  nMethods2 = %d\n", nMethods1, nMethods2);
+                fprintf(stdout, "    nMethods1 = %d  !=  nMethods2 = %d\n", nMethods1, nMethods2);
             }
             nError++;
         }
@@ -1501,11 +1501,11 @@ static sal_uInt32 checkBlob(const OUString& keyName, RegistryTypeReader& reader1
         }
         if ( i < nMethods1 && options.forceOutput() )
         {
-            fprintf(stderr, "    Registry1 contains %d more methods\n", nMethods1 - i);
+            fprintf(stdout, "    Registry1 contains %d more methods\n", nMethods1 - i);
         }
         if ( i < nMethods2 && options.forceOutput() )
         {
-            fprintf(stderr, "    Registry2 contains %d more methods\n", nMethods2 - i);
+            fprintf(stdout, "    Registry2 contains %d more methods\n", nMethods2 - i);
         }
     }
     if ( typeClass == RT_TYPE_SERVICE )
@@ -1523,10 +1523,10 @@ static sal_uInt32 checkBlob(const OUString& keyName, RegistryTypeReader& reader1
                 {
                     if ( bDump )
                     {
-                        fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
+                        fprintf(stdout, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
                         bDump = sal_False;
                     }
-                    fprintf(stderr, "    service1 contains %d more references as service2\n",
+                    fprintf(stdout, "    service1 contains %d more references as service2\n",
                             nReference1-nReference2);
                 }
             }
@@ -1551,10 +1551,10 @@ static sal_uInt32 checkBlob(const OUString& keyName, RegistryTypeReader& reader1
                     {
                         if ( bDump )
                         {
-                            fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
+                            fprintf(stdout, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
                             bDump = sal_False;
                         }
-                        fprintf(stderr, "  incompatible change: Reference %d ('%s') in 'r1' is not longer a reference of this service in 'r2'\n",
+                        fprintf(stdout, "  incompatible change: Reference %d ('%s') in 'r1' is not longer a reference of this service in 'r2'\n",
                                 i, U2S(shortName(reader1.getReferenceName(i))));
                     }
                     nError++;
@@ -1576,10 +1576,10 @@ static sal_uInt32 checkBlob(const OUString& keyName, RegistryTypeReader& reader1
                             {
                                 if ( bDump )
                                 {
-                                    fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
+                                    fprintf(stdout, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
                                     bDump = sal_False;
                                 }
-                                fprintf(stderr, "  incompatible change: Reference %d ('%s') of r2 is a new reference compared to this service in r1 and is not 'optional'\n",
+                                fprintf(stdout, "  incompatible change: Reference %d ('%s') of r2 is a new reference compared to this service in r1 and is not 'optional'\n",
                                         j, U2S(shortName(reader2.getReferenceName(j))));
                             }
                             nError++;
@@ -1595,10 +1595,10 @@ static sal_uInt32 checkBlob(const OUString& keyName, RegistryTypeReader& reader1
                 {
                     if ( bDump )
                     {
-                        fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
+                        fprintf(stdout, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
                         bDump = sal_False;
                     }
-                    fprintf(stderr, "    nReferences1 = %d  !=  nReferences2 = %d\n", nReference1, nReference2);
+                    fprintf(stdout, "    nReferences1 = %d  !=  nReferences2 = %d\n", nReference1, nReference2);
                 }
                 nError++;
             }
@@ -1608,11 +1608,11 @@ static sal_uInt32 checkBlob(const OUString& keyName, RegistryTypeReader& reader1
             }
             if ( i < nReference1 && options.forceOutput() )
             {
-                fprintf(stderr, "    Registry1 contains %d more references\n", nReference1 - i);
+                fprintf(stdout, "    Registry1 contains %d more references\n", nReference1 - i);
             }
             if ( i < nReference2 && options.forceOutput() )
             {
-                fprintf(stderr, "    Registry2 contains %d more references\n", nReference2 - i);
+                fprintf(stdout, "    Registry2 contains %d more references\n", nReference2 - i);
             }
         }
     }
@@ -1623,10 +1623,10 @@ static sal_uInt32 checkBlob(const OUString& keyName, RegistryTypeReader& reader1
         {
             if ( bDump )
             {
-                fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
+                fprintf(stdout, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
                 bDump = sal_False;
             }
-            fprintf(stderr, "    Doku1 = %s\n    Doku2 = %s\n",
+            fprintf(stdout, "    Doku1 = %s\n    Doku2 = %s\n",
                     U2S(reader1.getDoku()), U2S(reader2.getDoku()));
         }
         nError++;
@@ -1637,9 +1637,9 @@ static sal_uInt32 checkBlob(const OUString& keyName, RegistryTypeReader& reader1
         {
             if ( bDump )
             {
-                fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
+                fprintf(stdout, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
             }
-            fprintf(stderr, "    FileName1 = %s  !=  FileName2 = %s\n",
+            fprintf(stdout, "    FileName1 = %s  !=  FileName2 = %s\n",
                     U2S(reader1.getFileName()), U2S(reader2.getFileName()));
         }
         nError++;
@@ -1653,10 +1653,10 @@ static sal_uInt32 checkBlob(const OUString& keyName, RegistryTypeReader& reader1
         {
             if ( bDump )
             {
-                fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
+                fprintf(stdout, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
                 bDump = sal_False;
             }
-            fprintf(stderr, "    Note: \"drafts\" type changed incompatible, no effect to the final API\n");
+            fprintf(stdout, "    Note: \"drafts\" type changed incompatible, no effect to the final API\n");
         }
         return 0;
     }
@@ -1784,7 +1784,7 @@ static sal_uInt32 checkValueDifference(RegistryKey& key1, RegValueType valueType
             {
                 if ( options.forceOutput() )
                 {
-                    fprintf(stderr, "Difference: key values of key \"%s\" are different\n",
+                    fprintf(stdout, "Difference: key values of key \"%s\" are different\n",
                             U2S(key1.getName()));
                 }
                 nError++;
@@ -1797,7 +1797,7 @@ static sal_uInt32 checkValueDifference(RegistryKey& key1, RegValueType valueType
         switch (valueType1)
         {
         case RG_VALUETYPE_NOT_DEFINED:
-            fprintf(stderr, "    Registry 1: key has no value\n");
+            fprintf(stdout, "    Registry 1: key has no value\n");
             break;
         case RG_VALUETYPE_LONG:
         case RG_VALUETYPE_STRING:
@@ -1809,21 +1809,21 @@ static sal_uInt32 checkValueDifference(RegistryKey& key1, RegValueType valueType
             switch (valueType1)
             {
             case RG_VALUETYPE_LONG:
-                fprintf(stderr, "    Registry 1: Value: Type = RG_VALUETYPE_LONG\n");
-                fprintf(stderr, "                       Size = %d\n", size1);
-                fprintf(stderr, "                       Data = %d\n", (sal_Int32)value1);
+                fprintf(stdout, "    Registry 1: Value: Type = RG_VALUETYPE_LONG\n");
+                fprintf(stdout, "                       Size = %d\n", size1);
+                fprintf(stdout, "                       Data = %d\n", (sal_Int32)value1);
                 break;
             case RG_VALUETYPE_STRING:
-                fprintf(stderr, "    Registry 1: Value: Type = RG_VALUETYPE_STRING\n");
-                fprintf(stderr, "                       Size = %d\n", size1);
-                fprintf(stderr, "                       Data = \"%s\"\n", (sal_Char*)value1);
+                fprintf(stdout, "    Registry 1: Value: Type = RG_VALUETYPE_STRING\n");
+                fprintf(stdout, "                       Size = %d\n", size1);
+                fprintf(stdout, "                       Data = \"%s\"\n", (sal_Char*)value1);
                 break;
             case RG_VALUETYPE_UNICODE:
                 {
                 OUString uStrValue((sal_Unicode*)value1);
-                fprintf(stderr, "    Registry 1: Value: Type = RG_VALUETYPE_UNICODE\n");
-                fprintf(stderr, "                       Size = %d\n", size1);
-                fprintf(stderr, "                       Data = \"%s\"\n", U2S(uStrValue));
+                fprintf(stdout, "    Registry 1: Value: Type = RG_VALUETYPE_UNICODE\n");
+                fprintf(stdout, "                       Size = %d\n", size1);
+                fprintf(stdout, "                       Data = \"%s\"\n", U2S(uStrValue));
                 }
                 break;
             }
@@ -1832,18 +1832,18 @@ static sal_uInt32 checkValueDifference(RegistryKey& key1, RegValueType valueType
         }
             break;
         case RG_VALUETYPE_BINARY:
-            fprintf(stderr, "    Registry 1: Value: Type = RG_VALUETYPE_BINARY\n");
+            fprintf(stdout, "    Registry 1: Value: Type = RG_VALUETYPE_BINARY\n");
             break;
         case RG_VALUETYPE_LONGLIST:
             {
             RegistryValueList<sal_Int32> valueList;
             key1.getLongListValue(tmpName, valueList);
-            fprintf(stderr, "    Registry 1: Value: Type = RG_VALUETYPE_LONGLIST\n");
-            fprintf(stderr, "                       Size = %d\n", size1);
+            fprintf(stdout, "    Registry 1: Value: Type = RG_VALUETYPE_LONGLIST\n");
+            fprintf(stdout, "                       Size = %d\n", size1);
             sal_uInt32 length = valueList.getLength();
             for (sal_uInt32 i=0; i<length; i++)
             {
-                fprintf(stderr, "                       Data[%d] = %d\n", i, valueList.getElement(i));
+                fprintf(stdout, "                       Data[%d] = %d\n", i, valueList.getElement(i));
             }
             }
             break;
@@ -1851,12 +1851,12 @@ static sal_uInt32 checkValueDifference(RegistryKey& key1, RegValueType valueType
             {
             RegistryValueList<sal_Char*> valueList;
             key1.getStringListValue(tmpName, valueList);
-            fprintf(stderr, "    Registry 1: Value: Type = RG_VALUETYPE_STRINGLIST\n");
-            fprintf(stderr, "                       Size = %d\n", size1);
+            fprintf(stdout, "    Registry 1: Value: Type = RG_VALUETYPE_STRINGLIST\n");
+            fprintf(stdout, "                       Size = %d\n", size1);
             sal_uInt32 length = valueList.getLength();
             for (sal_uInt32 i=0; i<length; i++)
             {
-                fprintf(stderr, "                       Data[%d] = \"%s\"\n", i, valueList.getElement(i));
+                fprintf(stdout, "                       Data[%d] = \"%s\"\n", i, valueList.getElement(i));
             }
             }
             break;
@@ -1864,14 +1864,14 @@ static sal_uInt32 checkValueDifference(RegistryKey& key1, RegValueType valueType
             {
             RegistryValueList<sal_Unicode*> valueList;
             key1.getUnicodeListValue(tmpName, valueList);
-            fprintf(stderr, "    Registry 1: Value: Type = RG_VALUETYPE_UNICODELIST\n");
-            fprintf(stderr, "                       Size = %d\n", size1);
+            fprintf(stdout, "    Registry 1: Value: Type = RG_VALUETYPE_UNICODELIST\n");
+            fprintf(stdout, "                       Size = %d\n", size1);
             sal_uInt32 length = valueList.getLength();
             OUString uStrValue;
             for (sal_uInt32 i=0; i<length; i++)
             {
                 uStrValue = OUString(valueList.getElement(i));
-                fprintf(stderr, "                       Data[%d] = \"%s\"\n", i, U2S(uStrValue));
+                fprintf(stdout, "                       Data[%d] = \"%s\"\n", i, U2S(uStrValue));
             }
             }
             break;
@@ -1880,7 +1880,7 @@ static sal_uInt32 checkValueDifference(RegistryKey& key1, RegValueType valueType
         switch (valueType2)
         {
         case RG_VALUETYPE_NOT_DEFINED:
-            fprintf(stderr, "    Registry 2: key has no value\n");
+            fprintf(stdout, "    Registry 2: key has no value\n");
             break;
         case RG_VALUETYPE_LONG:
         case RG_VALUETYPE_STRING:
@@ -1892,21 +1892,21 @@ static sal_uInt32 checkValueDifference(RegistryKey& key1, RegValueType valueType
             switch (valueType2)
             {
             case RG_VALUETYPE_LONG:
-                fprintf(stderr, "    Registry 2: Value: Type = RG_VALUETYPE_LONG\n");
-                fprintf(stderr, "                       Size = %d\n", size2);
-                fprintf(stderr, "                       Data = %d\n", (sal_Int32)value2);
+                fprintf(stdout, "    Registry 2: Value: Type = RG_VALUETYPE_LONG\n");
+                fprintf(stdout, "                       Size = %d\n", size2);
+                fprintf(stdout, "                       Data = %d\n", (sal_Int32)value2);
                 break;
             case RG_VALUETYPE_STRING:
-                fprintf(stderr, "    Registry 2: Value: Type = RG_VALUETYPE_STRING\n");
-                fprintf(stderr, "                       Size = %d\n", size2);
-                fprintf(stderr, "                       Data = \"%s\"\n", (sal_Char*)value2);
+                fprintf(stdout, "    Registry 2: Value: Type = RG_VALUETYPE_STRING\n");
+                fprintf(stdout, "                       Size = %d\n", size2);
+                fprintf(stdout, "                       Data = \"%s\"\n", (sal_Char*)value2);
                 break;
             case RG_VALUETYPE_UNICODE:
                 {
                 OUString uStrValue((sal_Unicode*)value2);
-                fprintf(stderr, "    Registry 2: Value: Type = RG_VALUETYPE_UNICODE\n");
-                fprintf(stderr, "                       Size = %d\n", size2);
-                fprintf(stderr, "                       Data = \"%s\"\n", U2S(uStrValue));
+                fprintf(stdout, "    Registry 2: Value: Type = RG_VALUETYPE_UNICODE\n");
+                fprintf(stdout, "                       Size = %d\n", size2);
+                fprintf(stdout, "                       Data = \"%s\"\n", U2S(uStrValue));
                 }
                 break;
             }
@@ -1915,18 +1915,18 @@ static sal_uInt32 checkValueDifference(RegistryKey& key1, RegValueType valueType
         }
             break;
         case RG_VALUETYPE_BINARY:
-            fprintf(stderr, "    Registry 2: Value: Type = RG_VALUETYPE_BINARY\n");
+            fprintf(stdout, "    Registry 2: Value: Type = RG_VALUETYPE_BINARY\n");
             break;
         case RG_VALUETYPE_LONGLIST:
             {
             RegistryValueList<sal_Int32> valueList;
             key2.getLongListValue(tmpName, valueList);
-            fprintf(stderr, "    Registry 2: Value: Type = RG_VALUETYPE_LONGLIST\n");
-            fprintf(stderr, "                       Size = %d\n", size2);
+            fprintf(stdout, "    Registry 2: Value: Type = RG_VALUETYPE_LONGLIST\n");
+            fprintf(stdout, "                       Size = %d\n", size2);
             sal_uInt32 length = valueList.getLength();
             for (sal_uInt32 i=0; i<length; i++)
             {
-                fprintf(stderr, "                       Data[%d] = %d\n", i, valueList.getElement(i));
+                fprintf(stdout, "                       Data[%d] = %d\n", i, valueList.getElement(i));
             }
             }
             break;
@@ -1934,12 +1934,12 @@ static sal_uInt32 checkValueDifference(RegistryKey& key1, RegValueType valueType
             {
             RegistryValueList<sal_Char*> valueList;
             key2.getStringListValue(tmpName, valueList);
-            fprintf(stderr, "    Registry 2: Value: Type = RG_VALUETYPE_STRINGLIST\n");
-            fprintf(stderr, "                       Size = %d\n", size2);
+            fprintf(stdout, "    Registry 2: Value: Type = RG_VALUETYPE_STRINGLIST\n");
+            fprintf(stdout, "                       Size = %d\n", size2);
             sal_uInt32 length = valueList.getLength();
             for (sal_uInt32 i=0; i<length; i++)
             {
-                fprintf(stderr, "                       Data[%d] = \"%s\"\n", i, valueList.getElement(i));
+                fprintf(stdout, "                       Data[%d] = \"%s\"\n", i, valueList.getElement(i));
             }
             }
             break;
@@ -1947,14 +1947,14 @@ static sal_uInt32 checkValueDifference(RegistryKey& key1, RegValueType valueType
             {
             RegistryValueList<sal_Unicode*> valueList;
             key2.getUnicodeListValue(tmpName, valueList);
-            fprintf(stderr, "    Registry 2: Value: Type = RG_VALUETYPE_UNICODELIST\n");
-            fprintf(stderr, "                       Size = %d\n", size2);
+            fprintf(stdout, "    Registry 2: Value: Type = RG_VALUETYPE_UNICODELIST\n");
+            fprintf(stdout, "                       Size = %d\n", size2);
             sal_uInt32 length = valueList.getLength();
             OUString uStrValue;
             for (sal_uInt32 i=0; i<length; i++)
             {
                 uStrValue = OUString(valueList.getElement(i));
-                fprintf(stderr, "                       Data[%d] = \"%s\"\n", i, U2S(uStrValue));
+                fprintf(stdout, "                       Data[%d] = \"%s\"\n", i, U2S(uStrValue));
             }
             }
             break;
@@ -1987,7 +1987,7 @@ static sal_uInt32 checkDifferences(StringSet& keys, RegistryKeyNames& subKeyName
         {
             if ( options.forceOutput() )
             {
-                fprintf(stderr, "EXISTENCE: key \"%s\" exists only in registry \"%s\"\n",
+                fprintf(stdout, "EXISTENCE: key \"%s\" exists only in registry \"%s\"\n",
                         U2S(subKeyNames1.getElement(i)), options.getRegName1().getStr());
             }
             nError++;
@@ -2010,7 +2010,7 @@ static sal_uInt32 checkDifferences(StringSet& keys, RegistryKeyNames& subKeyName
         {
             if ( options.forceOutput() )
             {
-                fprintf(stderr, "EXISTENCE: key \"%s\" exists only in registry \"%s\"\n",
+                fprintf(stdout, "EXISTENCE: key \"%s\" exists only in registry \"%s\"\n",
                         U2S(subKeyNames2.getElement(i)), options.getRegName2().getStr());
             }
             nError++;
@@ -2041,7 +2041,7 @@ static sal_uInt32 compareKeys(RegistryKey& key1, RegistryKey& key2)
         {
             if ( options.forceOutput() )
             {
-                fprintf(stderr, "VALUES: key values of key \"%s\" are different\n", U2S(key1.getName()));
+                fprintf(stdout, "VALUES: key values of key \"%s\" are different\n", U2S(key1.getName()));
             }
             nError++;
         }
@@ -2076,7 +2076,7 @@ static sal_uInt32 compareKeys(RegistryKey& key1, RegistryKey& key2)
         {
             if ( options.forceOutput() )
             {
-                fprintf(stderr, "ERROR: could not open key \"%s\" in registry \"%s\"\n",
+                fprintf(stdout, "ERROR: could not open key \"%s\" in registry \"%s\"\n",
                         U2S(*iter), options.getRegName1().getStr());
             }
             nError++;
@@ -2085,7 +2085,7 @@ static sal_uInt32 compareKeys(RegistryKey& key1, RegistryKey& key2)
         {
             if ( options.forceOutput() )
             {
-                fprintf(stderr, "ERROR: could not open key \"%s\" in registry \"%s\"\n",
+                fprintf(stdout, "ERROR: could not open key \"%s\" in registry \"%s\"\n",
                         U2S(*iter), options.getRegName2().getStr());
             }
             nError++;
@@ -2123,13 +2123,13 @@ void _cdecl main( int argc, char * argv[] )
 
     if ( reg1.open(regName1, REG_READONLY) )
     {
-        fprintf(stderr, "%s: open registry \"%s\" failed\n",
+        fprintf(stdout, "%s: open registry \"%s\" failed\n",
                 options.getProgramName().getStr(), options.getRegName1().getStr());
         exit(2);
     }
     if ( reg2.open(regName2, REG_READONLY) )
     {
-        fprintf(stderr, "%s: open registry \"%s\" failed\n",
+        fprintf(stdout, "%s: open registry \"%s\" failed\n",
                 options.getProgramName().getStr(), options.getRegName2().getStr());
         exit(3);
     }
@@ -2137,13 +2137,13 @@ void _cdecl main( int argc, char * argv[] )
     RegistryKey key1, key2;
     if ( reg1.openRootKey(key1) )
     {
-        fprintf(stderr, "%s: open root key of registry \"%s\" failed\n",
+        fprintf(stdout, "%s: open root key of registry \"%s\" failed\n",
                 options.getProgramName().getStr(), options.getRegName1().getStr());
         exit(4);
     }
     if ( reg2.openRootKey(key2) )
     {
-        fprintf(stderr, "%s: open root key of registry \"%s\" failed\n",
+        fprintf(stdout, "%s: open root key of registry \"%s\" failed\n",
                 options.getProgramName().getStr(), options.getRegName2().getStr());
         exit(5);
     }
@@ -2151,20 +2151,20 @@ void _cdecl main( int argc, char * argv[] )
     {
         if ( options.matchedWithExcludeKey( S2U(options.getStartKey()) ) )
         {
-            fprintf(stderr, "%s: start key is equal to one of the exclude keys\n",
+            fprintf(stdout, "%s: start key is equal to one of the exclude keys\n",
                     options.getProgramName().getStr());
             exit(6);
         }
         RegistryKey sk1, sk2;
         if ( key1.openKey(S2U(options.getStartKey()), sk1) )
         {
-            fprintf(stderr, "%s: open start key of registry \"%s\" failed\n",
+            fprintf(stdout, "%s: open start key of registry \"%s\" failed\n",
                     options.getProgramName().getStr(), options.getRegName1().getStr());
             exit(7);
         }
         if ( key2.openKey(S2U(options.getStartKey()), sk2) )
         {
-            fprintf(stderr, "%s: open start key of registry \"%s\" failed\n",
+            fprintf(stdout, "%s: open start key of registry \"%s\" failed\n",
                     options.getProgramName().getStr(), options.getRegName2().getStr());
             exit(8);
         }
@@ -2178,22 +2178,22 @@ void _cdecl main( int argc, char * argv[] )
     {
         if ( options.unoTypeCheck() )
         {
-            fprintf(stderr, "%s: registries are incompatible: %d differences!\n",
+            fprintf(stdout, "%s: registries are incompatible: %d differences!\n",
                     options.getProgramName().getStr(), nError);
         } else
         {
-            fprintf(stderr, "%s: registries contain %d differences!\n",
+            fprintf(stdout, "%s: registries contain %d differences!\n",
                     options.getProgramName().getStr(), nError);
         }
     } else
     {
         if ( options.unoTypeCheck() )
         {
-            fprintf(stderr, "%s: registries are compatible!\n",
+            fprintf(stdout, "%s: registries are compatible!\n",
                     options.getProgramName().getStr());
         } else
         {
-            fprintf(stderr, "%s: registries are equal!\n",
+            fprintf(stdout, "%s: registries are equal!\n",
                     options.getProgramName().getStr());
         }
     }
@@ -2202,13 +2202,13 @@ void _cdecl main( int argc, char * argv[] )
     key2.closeKey();
     if ( reg1.close() )
     {
-        fprintf(stderr, "%s: closing registry \"%s\" failed\n",
+        fprintf(stdout, "%s: closing registry \"%s\" failed\n",
                 options.getProgramName().getStr(), options.getRegName1().getStr());
         exit(9);
     }
     if ( reg2.close() )
     {
-        fprintf(stderr, "%s: closing registry \"%s\" failed\n",
+        fprintf(stdout, "%s: closing registry \"%s\" failed\n",
                 options.getProgramName().getStr(), options.getRegName2().getStr());
         exit(10);
     }
