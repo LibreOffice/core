@@ -2,9 +2,9 @@
  *
  *  $RCSfile: targuno.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2002-08-14 09:42:52 $
+ *  last change: $Author: kz $ $Date: 2004-05-19 03:25:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -295,7 +295,7 @@ void ScLinkTargetTypeObj::SetLinkTargetBitmap( uno::Any& rRet, sal_uInt16 nType 
         BOOL bHighContrast = Application::GetSettings().GetStyleSettings().GetWindowColor().IsDark();
         ImageList aEntryImages( ScResId( bHighContrast ? RID_IMAGELIST_H_NAVCONT : RID_IMAGELIST_NAVCONT ) );
         const Image& rImage = aEntryImages.GetImage( nImgId );
-        BitmapEx aBitmapEx( rImage.GetBitmap() );
+        BitmapEx aBitmapEx( rImage.GetBitmapEx() );
         uno::Reference< awt::XBitmap > xBmp = VCLUnoHelper::CreateBitmap( aBitmapEx );
         rRet <<= xBmp;
     }
