@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: cl $ $Date: 2000-12-12 17:16:50 $
+#   last change: $Author: cl $ $Date: 2000-12-20 16:26:57 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -153,7 +153,6 @@ CXXFILES = \
         PageMasterImportContext.cxx		\
         PagePropertySetContext.cxx		\
         PageHeaderFooterContext.cxx		\
-        XMLBackgroundRepeatPropertyHandler.cxx	\
         XMLBitmapRepeatOffsetPropertyHandler.cxx \
         XMLFillBitmapSizePropertyHandler.cxx \
         XMLBitmapLogicalSizePropertyHandler.cxx
@@ -235,7 +234,6 @@ SLOFILES =	\
         $(SLO)$/PageMasterImportContext.obj		\
         $(SLO)$/PagePropertySetContext.obj		\
         $(SLO)$/PageHeaderFooterContext.obj		\
-        $(SLO)$/XMLBackgroundRepeatPropertyHandler.obj	\
         $(SLO)$/XMLBitmapRepeatOffsetPropertyHandler.obj \
         $(SLO)$/XMLFillBitmapSizePropertyHandler.obj	\
         $(SLO)$/XMLBitmapLogicalSizePropertyHandler.obj
