@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataPointProperties.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-12 10:44:42 $
+ *  last change: $Author: bm $ $Date: 2003-11-13 09:40:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -249,7 +249,7 @@ void DataPointProperties::AddPropertiesToVector(
 
     // others
     rOutProperties.push_back(
-        Property( C2U( "Symbol" ),
+        Property( C2U( "SymbolProperties" ),
                   PROP_DATAPOINT_SYMBOL_PROP,
                   ::getCppuType( reinterpret_cast< const chart2::SymbolProperties * >(0)),
                   beans::PropertyAttribute::BOUND
