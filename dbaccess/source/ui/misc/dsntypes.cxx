@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsntypes.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-01 08:32:49 $
+ *  last change: $Author: fs $ $Date: 2001-08-07 15:55:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,6 +150,21 @@ String ODsnTypeCollection::cutPrefix(const String& _rDsn)
 String ODsnTypeCollection::getTypeDisplayName(const String& _rDsn)
 {
     return getTypeDisplayName(implDetermineType(_rDsn));
+}
+
+//-------------------------------------------------------------------------
+sal_Bool ODsnTypeCollection::isFileSystemBased(DATASOURCE_TYPE _eType)
+{
+    switch (_eType)
+    {
+        case DST_DBASE:
+        case DST_TEXT:
+        case DST_CALC:
+            return sal_True;
+
+        default:
+            return sal_False;
+    }
 }
 
 //-------------------------------------------------------------------------
@@ -417,6 +432,9 @@ ADDRESSBOOK_TYPE AddressBookTypes::getAddressType( const String& _rAddressURL )
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.10  2001/08/01 08:32:49  fs
+ *  #88530# getAddressType: allow for invalid URLs without assertion
+ *
  *  Revision 1.9  2001/07/31 15:59:13  fs
  *  #88530# +AddressBookType(s)
  *
