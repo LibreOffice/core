@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ErrorBar.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-11 13:52:38 $
+ *  last change: $Author: bm $ $Date: 2003-12-15 15:52:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,10 +164,10 @@ void lcl_AddDefaultsToMap(
         uno::makeAny( 1.0 );
     OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_ERROR_BAR_SHOW_POS_ERROR ));
     rOutMap[ PROP_ERROR_BAR_SHOW_POS_ERROR ] =
-        uno::makeAny( sal_False );
+        uno::makeAny( sal_True );
     OSL_ASSERT( rOutMap.end() == rOutMap.find( PROP_ERROR_BAR_SHOW_NEG_ERROR ));
     rOutMap[ PROP_ERROR_BAR_SHOW_NEG_ERROR ] =
-        uno::makeAny( sal_False );
+        uno::makeAny( sal_True );
 }
 
 const uno::Sequence< Property > & lcl_GetPropertySequence()

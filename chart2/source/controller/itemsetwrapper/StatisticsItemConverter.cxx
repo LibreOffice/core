@@ -2,9 +2,9 @@
  *
  *  $RCSfile: StatisticsItemConverter.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-11 13:54:05 $
+ *  last change: $Author: bm $ $Date: 2003-12-15 15:52:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -741,9 +741,9 @@ void StatisticsItemConverter::FillSpecialItem(
         case SCHATTR_STAT_INDICATE:
         {
             uno::Reference< beans::XPropertySet > xErrorBarProp( lcl_GetYErrorBar( GetPropertySet()));
+            SvxChartIndicate eIndicate = CHINDICATE_BOTH;
             if( xErrorBarProp.is())
             {
-                SvxChartIndicate eIndicate = CHINDICATE_NONE;
                 bool bShowPos, bShowNeg;
                 lcl_getErrorIndicatorValues( xErrorBarProp, bShowPos, bShowNeg );
 
@@ -761,9 +761,8 @@ void StatisticsItemConverter::FillSpecialItem(
                     else
                         eIndicate = CHINDICATE_NONE;
                 }
-
-                rOutItemSet.Put( SvxChartIndicateItem( eIndicate ));
             }
+            rOutItemSet.Put( SvxChartIndicateItem( eIndicate ));
         }
         break;
    }
