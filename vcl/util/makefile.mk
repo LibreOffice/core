@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.24 $
+#   $Revision: 1.25 $
 #
-#   last change: $Author: th $ $Date: 2001-06-21 20:59:08 $
+#   last change: $Author: pl $ $Date: 2001-07-25 14:27:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,15 +86,12 @@ HXXDEPNLST= $(INC)$/accel.hxx       \
             $(INC)$/color.hxx       \
             $(INC)$/config.hxx      \
             $(INC)$/cursor.hxx      \
-            $(INC)$/clip.hxx        \
             $(INC)$/cmdevt.hxx      \
-            $(INC)$/drag.hxx        \
             $(INC)$/decoview.hxx    \
             $(INC)$/dialog.hxx      \
             $(INC)$/dockwin.hxx     \
             $(INC)$/edit.hxx        \
             $(INC)$/event.hxx       \
-            $(INC)$/exchange.hxx    \
             $(INC)$/field.hxx       \
             $(INC)$/fixed.hxx       \
             $(INC)$/floatwin.hxx    \
