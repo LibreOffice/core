@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outleeng.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mt $ $Date: 2002-01-29 08:51:36 $
+ *  last change: $Author: vg $ $Date: 2002-01-29 16:28:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,7 +131,7 @@ void OutlinerEditEng::ParagraphHeightChanged( USHORT nPara )
 {
     pOwner->ParagraphHeightChanged( nPara );
 
-    EditEngine::ParagraphHeightChanged( USHORT nPara );
+    EditEngine::ParagraphHeightChanged( nPara );
 }
 
 BOOL OutlinerEditEng::SpellNextDocument()
