@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bmkmenu.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 18:21:28 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 17:13:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -281,9 +281,7 @@ void BmkMenu::Initialize()
 
             // Store values from configuration to the New and Wizard menu entries to enable
             // sfx2 based code to support high contrast mode correctly!
-            MenuConfiguration::Attributes* pUserAttributes = new MenuConfiguration::Attributes;
-            pUserAttributes->aTargetFrame = aTargetFrame;
-            pUserAttributes->aImageId = aImageId;
+            MenuConfiguration::Attributes* pUserAttributes = new MenuConfiguration::Attributes( aTargetFrame, aImageId );
             SetUserValue( nId, (ULONG)pUserAttributes );
 
             SetItemCommand( nId, aURL );
