@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outline.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2001-04-05 14:37:02 $
+ *  last change: $Author: os $ $Date: 2001-04-22 14:04:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -535,7 +535,8 @@ short SwOutlineTabDialog::Ok()
             }
             else if(aCollNames[i] != sHeadline)
             {
-                SwTxtFmtColl* pTxtColl = rWrtSh.GetParaStyle(aCollNames[i]);
+                SwTxtFmtColl* pTxtColl = rWrtSh.GetParaStyle(
+                                aCollNames[i], SwWrtShell::GETSTYLE_CREATESOME);
                 if(pTxtColl)
                     pTxtColl->SetOutlineLevel(i);
             }
