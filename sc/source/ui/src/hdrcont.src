@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hdrcont.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 17:20:40 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 12:55:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -789,13 +789,17 @@ Menu RID_POPUP_COLHEADER
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Enganxament ~especial...";
             Text[ thai ] = "วาง~พิเศษ...";
-            Text[ czech ] = "Vložit jinak...";
+            Text[ czech ] = "Vložit jako...";
             Text[ hebrew ] = "‮הדבקה מיוחדת...‬";
             Text[ hindi ] = "~विशेष को छिपकाओ...";
             Text[ slovak ] = "Vložiť i~nak...";
         };
     };
 };
+
+
+
+
 
 
 
