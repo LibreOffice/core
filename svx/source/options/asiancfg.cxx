@@ -2,9 +2,9 @@
  *
  *  $RCSfile: asiancfg.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: os $ $Date: 2001-01-17 16:09:04 $
+ *  last change: $Author: os $ $Date: 2001-01-18 12:51:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,7 +233,7 @@ void SvxAsianConfig::Commit()
             pSetValues[nSetValue].Name = sPrefix; pSetValues[nSetValue].Name += sEndChars;
             pSetValues[nSetValue++].Value <<= pImpl->aForbiddenArr[i]->sEndChars;
         }
-        SetSetProperties(sNode, aSetValues);
+        ReplaceSetProperties(sNode, aSetValues);
     }
 }
 /* -----------------------------16.01.01 15:36--------------------------------
