@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasource.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-20 09:52:06 $
+ *  last change: $Author: rt $ $Date: 2000-10-24 15:00:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,7 +141,7 @@ namespace dbaccess
 //============================================================
 //= ODatabaseContext
 //============================================================
-DBG_NAME(ODatabaseSource);
+DBG_NAME(ODatabaseSource)
 //--------------------------------------------------------------------------
 extern "C" void SAL_CALL createRegistryInfo_ODatabaseSource()
 {
