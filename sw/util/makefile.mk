@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: mib $ $Date: 2001-01-22 11:42:12 $
+#   last change: $Author: obo $ $Date: 2001-01-23 12:13:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -236,10 +236,13 @@ SHL2DEPN=   \
 
 SHL2OBJS= \
     $(OUT)$/slo$/swmodule.obj \
-    $(OUT)$/slo$/swdll.obj \
-    $(SLO)$/atrfrm.obj \
-    $(SLO)$/fmtatr2.obj
+    $(OUT)$/slo$/swdll.obj 
 #	$(SLO)$/.obj		  ^ \ nicht vergessen!
+
+.IF "$(OS)"!="LINUX"
+SHL2OBJS+= atrfrm.obj      \
+            $(SLO)$/fmtatr2.obj
+.ENDIF
 
 .IF "$(OS)$(CPU)"=="SOLARISS"
 SHL2OBJS +=  $(SOLARLIBDIR)$/autorec.o
