@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printoptions.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2001-05-04 12:14:38 $
+ *  last change: $Author: mba $ $Date: 2001-09-19 14:44:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,6 +178,7 @@ public:
     sal_Int16   GetReducedBitmapResolution() const { return m_nReducedBitmapResolution; }
     sal_Bool    IsReducedBitmapIncludesTransparency() const { return m_bReducedBitmapIncludesTransparency; }
        sal_Bool IsConvertToGreyscales() const { return m_bConvertToGreyscales; }
+    sal_Bool    IsModifyDocumentOnPrintingAllowed() const { return m_bModifyDocumentOnPrintingAllowed; }
 
     void        SetReduceTransparency( sal_Bool bState ) { m_bReduceTransparency = bState; SetModified(); }
     void        SetReducedTransparencyMode( sal_Int16 nMode ) { m_nReducedTransparencyMode = nMode; SetModified(); }
@@ -189,6 +190,7 @@ public:
     void        SetReducedBitmapResolution( sal_Int16 nResolution ) { m_nReducedBitmapResolution = nResolution; SetModified(); }
     void        SetReducedBitmapIncludesTransparency( sal_Bool bState ) { m_bReducedBitmapIncludesTransparency = bState; SetModified(); }
        void        SetConvertToGreyscales( sal_Bool bState ) { m_bConvertToGreyscales = bState; SetModified(); }
+    void        SetModifyDocumentOnPrintingAllowed( sal_Bool bState ) { m_bModifyDocumentOnPrintingAllowed = bState; SetModified(); }
 
 //-------------------------------------------------------------------------------------------------------------
 //  private methods
@@ -214,6 +216,7 @@ private:
     sal_Int16   m_nReducedBitmapResolution;
     sal_Bool    m_bReducedBitmapIncludesTransparency;
        sal_Bool m_bConvertToGreyscales;
+    sal_Bool    m_bModifyDocumentOnPrintingAllowed;
 };
 
 // -----------------------------------------------------------------------------
@@ -229,7 +232,8 @@ SvtPrintOptions_Impl::SvtPrintOptions_Impl( const OUString& rConfigRoot ) :
     m_nReducedBitmapMode( 1 ),
     m_nReducedBitmapResolution( 3 ),
     m_bReducedBitmapIncludesTransparency( sal_True ),
-       m_bConvertToGreyscales( sal_False )
+    m_bConvertToGreyscales( sal_False ),
+    m_bModifyDocumentOnPrintingAllowed( sal_True )
 {
     Sequence< OUString >    seqNames( impl_GetPropertyNames() );
     Sequence< Any >         seqValues( GetProperties( seqNames ) );
@@ -524,6 +528,22 @@ sal_Bool SvtBasePrintOptions::IsConvertToGreyscales() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->IsConvertToGreyscales();
+}
+
+// -----------------------------------------------------------------------------
+
+sal_Bool SvtBasePrintOptions::IsModifyDocumentOnPrintingAllowed() const
+{
+    MutexGuard aGuard( GetOwnStaticMutex() );
+    return m_pDataContainer->IsModifyDocumentOnPrintingAllowed();
+}
+
+// -----------------------------------------------------------------------------
+
+void SvtBasePrintOptions::SetModifyDocumentOnPrintingAllowed( sal_Bool bState )
+{
+    MutexGuard aGuard( GetOwnStaticMutex() );
+    m_pDataContainer->SetModifyDocumentOnPrintingAllowed( bState ) ;
 }
 
 // -----------------------------------------------------------------------------
