@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: dr $ $Date: 2001-07-02 13:45:05 $
+ *  last change: $Author: dr $ $Date: 2001-07-05 09:19:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2909,6 +2909,12 @@ void XclImpCrnString::SetCell( ScDocument* pDoc, USHORT nTab )
 }
 
 
+
+XclImpCrnFormula::~XclImpCrnFormula()
+{
+    if( pTokArr )
+        delete pTokArr;
+}
 
 void XclImpCrnFormula::SetCell( ScDocument* pDoc, USHORT nTab )
 {

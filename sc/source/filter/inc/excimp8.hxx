@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-06 12:42:15 $
+ *  last change: $Author: dr $ $Date: 2001-07-05 09:18:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -763,7 +763,9 @@ protected:
 
 public:
     inline                      XclImpCrnFormula( USHORT nCol, USHORT nRow, double fVal, const ScTokenArray* pTokenArray ) :
-                                    XclImpCrnDouble( nCol, nRow, fVal ), pTokArr( pTokenArray ) {}
+                                    XclImpCrnDouble( nCol, nRow, fVal ),
+                                    pTokArr( pTokenArray ? new ScTokenArray( *pTokenArray ) : NULL ) {}
+    virtual                     ~XclImpCrnFormula();
 
     virtual void                SetCell( ScDocument* pDoc, USHORT nTab );
 };
