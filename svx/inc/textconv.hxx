@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textconv.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 15:39:44 $
+ *  last change: $Author: rt $ $Date: 2005-04-04 08:28:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,7 @@ class ContentNode;
 class TextConvWrapper : public svx::HangulHanjaConversion
 {
     rtl::OUString   aConvText;      // convertible text part found last time
+    LanguageType    nConvTextLang;  // language of aConvText
     USHORT          nLastPos;       // starting position of the last found text portion (word)
     USHORT          nUnitOffset;    // offset of current unit in the current text portion (word)
 
@@ -88,9 +89,6 @@ class TextConvWrapper : public svx::HangulHanjaConversion
 
     EditView *      pEditView;
     Window *        pWin;
-
-//    LanguageType    nSourceLang;    // Language of text portions to look for
-//    LanguageType    nTargetLang;    // Language of replacement text
 
     sal_Bool        bStartChk;
     sal_Bool        bStartDone;
@@ -115,13 +113,14 @@ class TextConvWrapper : public svx::HangulHanjaConversion
     TextConvWrapper & operator= (const TextConvWrapper &);
 
 protected:
-    virtual void    GetNextPortion( ::rtl::OUString& /* [out] */ rNextPortion );
+    virtual void    GetNextPortion( ::rtl::OUString& /* [out] */ rNextPortion, LanguageType& /* [out] */ rLangOfPortion );
     virtual void    HandleNewUnit( const sal_Int32 nUnitStart,
                                    const sal_Int32 nUnitEnd );
     virtual void    ReplaceUnit(
                         const sal_Int32 nUnitStart, const sal_Int32 nUnitEnd,
                         const ::rtl::OUString& rReplaceWith,
-                        ReplacementAction eAction );
+                        ReplacementAction eAction,
+                        LanguageType *pNewUnitLanguage );
 
    virtual sal_Bool    HasRubySupport() const;
 
