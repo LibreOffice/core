@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OOo2Oasis.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 11:07:07 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:09:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -468,7 +468,7 @@ static XMLTransformerActionInit aActionTable[] =
     ENTRY1( DRAW, CONTOUR_PATH, XML_ETACTION_PROC_ATTRS, OOO_SHAPE_ACTIONS ),
     ENTRY1( DRAW, AREA_RECTANGLE, XML_ETACTION_PROC_ATTRS, OOO_SHAPE_ACTIONS ),
     ENTRY1( DRAW, AREA_CIRCLE, XML_ETACTION_PROC_ATTRS, OOO_SHAPE_ACTIONS ),
-    ENTRY1( DRAW, AREA_POLYGON, XML_ETACTION_PROC_ATTRS, OOO_SHAPE_ACTIONS ),
+    ENTRY1( DRAW, AREA_POLYGON, XML_ETACTION_PROC_ATTRS, OOO_DRAW_AREA_POLYGON_ACTIONS ),
     ENTRY1( DRAW, GLUE_POINT, XML_ETACTION_PROC_ATTRS, OOO_SHAPE_ACTIONS ),
     ENTRY1( DR3D, SCENE, XML_ETACTION_PROC_ATTRS, OOO_SHAPE_ACTIONS ),
     ENTRY1( DR3D, CUBE, XML_ETACTION_PROC_ATTRS, OOO_SHAPE_ACTIONS ),
@@ -614,6 +614,18 @@ static XMLTransformerActionInit aActionTable[] =
     // process table::conversion-mode
     ENTRY1( TABLE, CONVERSION_MODE, XML_ETACTION_PROC_ATTRS,
             OOO_DDE_CONV_MODE_ACTIONS ),
+
+    // process table::data-pilot-member
+    ENTRY1( TABLE, DATA_PILOT_MEMBER, XML_ETACTION_PROC_ATTRS,
+            OOO_DATAPILOT_MEMBER_ACTIONS ),
+
+    // process table::data-pilot-level
+    ENTRY1( TABLE, DATA_PILOT_LEVEL, XML_ETACTION_PROC_ATTRS,
+            OOO_DATAPILOT_LEVEL_ACTIONS ),
+
+    // process table::source-service
+    ENTRY1( TABLE, SOURCE_SERVICE, XML_ETACTION_PROC_ATTRS,
+            OOO_SOURCE_SERVICE_ACTIONS ),
 
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ETACTION_EOT )
 };
@@ -791,6 +803,7 @@ static XMLTransformerActionInit aShapeActionTable[] =
     ENTRY1Q( FORM, ID, XML_ATACTION_RENAME,
                     XML_NAMESPACE_DRAW, XML_CONTROL ),
     ENTRY1( XLINK, HREF, XML_ATACTION_URI_OOO, sal_True ),
+
     // BM: needed by chart:legend.  The legend needs also the draw actions.  As
     // there is no merge mechanism, all actions have to be in the same table
     ENTRY2( CHART, LEGEND_POSITION, XML_ATACTION_RENAME_ATTRIBUTE,
@@ -1038,6 +1051,38 @@ static XMLTransformerActionInit aDDEConvModeActionTable[] =
 {
     ENTRY1Q( TABLE, LET_TEXT, XML_ATACTION_RENAME,
                         XML_NAMESPACE_TABLE, XML_KEEP_TEXT ),
+    ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
+};
+
+// OOO_DATAPILOT_MEMBER_ACTIONS
+static XMLTransformerActionInit aDataPilotMemberActionTable[] =
+{
+    ENTRY1Q( TABLE, DISPLAY_DETAILS, XML_ATACTION_RENAME,
+                        XML_NAMESPACE_TABLE, XML_SHOW_DETAILS ),
+    ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
+};
+
+// OOO_DATAPILOT_LEVEL_ACTIONS
+static XMLTransformerActionInit aDataPilotLevelActionTable[] =
+{
+    ENTRY1Q( TABLE, DISPLAY_EMPTY, XML_ATACTION_RENAME,
+                        XML_NAMESPACE_TABLE, XML_SHOW_EMPTY ),
+    ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
+};
+
+// OOO_SOURCE_SERVICE_ACTIONS
+static XMLTransformerActionInit aSourceServiceActionTable[] =
+{
+    ENTRY1Q( TABLE, USERNAME, XML_ATACTION_RENAME,
+                        XML_NAMESPACE_TABLE, XML_USER_NAME ),
+    ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
+};
+
+// OOO_DRAW_AREA_POLYGON_ACTIONS (to be added to OOO_SHAPE_ACTIONS)
+static XMLTransformerActionInit aDrawAreaPolygonActionTable[] =
+{
+    ENTRY1Q( SVG, POINTS, XML_ATACTION_RENAME,
+             XML_NAMESPACE_DRAW, XML_POINTS ),
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
@@ -1662,6 +1707,10 @@ XMLTransformerActions *OOo2OasisTransformer::GetUserDefinedActions(
                     m_aActions[OOO_FORMULA_ACTIONS] =
                         new XMLTransformerActions( aFormulaActionTable );
                     break;
+                case OOO_CHART_ACTIONS:
+                    m_aActions[OOO_CHART_ACTIONS] =
+                        new XMLTransformerActions( aChartActionTable );
+                    break;
                 case OOO_ERROR_MACRO_ACTIONS:
                     m_aActions[OOO_ERROR_MACRO_ACTIONS] =
                         new XMLTransformerActions( aErrorMacroActionTable );
@@ -1670,9 +1719,20 @@ XMLTransformerActions *OOo2OasisTransformer::GetUserDefinedActions(
                     m_aActions[OOO_DDE_CONV_MODE_ACTIONS] =
                         new XMLTransformerActions( aDDEConvModeActionTable );
                     break;
-                case OOO_CHART_ACTIONS:
-                    m_aActions[OOO_CHART_ACTIONS] =
-                        new XMLTransformerActions( aChartActionTable );
+                case OOO_DATAPILOT_MEMBER_ACTIONS:
+                    m_aActions[OOO_DATAPILOT_MEMBER_ACTIONS] =
+                        new XMLTransformerActions( aDataPilotMemberActionTable );
+                case OOO_DATAPILOT_LEVEL_ACTIONS:
+                    m_aActions[OOO_DATAPILOT_LEVEL_ACTIONS] =
+                        new XMLTransformerActions( aDataPilotLevelActionTable );
+                case OOO_SOURCE_SERVICE_ACTIONS:
+                    m_aActions[OOO_SOURCE_SERVICE_ACTIONS] =
+                        new XMLTransformerActions( aSourceServiceActionTable );
+                case OOO_DRAW_AREA_POLYGON_ACTIONS:
+                    m_aActions[OOO_DRAW_AREA_POLYGON_ACTIONS] =
+                        new XMLTransformerActions( aShapeActionTable );
+                    m_aActions[OOO_DRAW_AREA_POLYGON_ACTIONS]
+                        ->Add( aDrawAreaPolygonActionTable );
                     break;
                 case OOO_SCRIPT_ACTIONS:
                     m_aActions[OOO_SCRIPT_ACTIONS] =
