@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objxtor.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-02 15:30:38 $
+ *  last change: $Author: kz $ $Date: 2003-08-27 16:23:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -237,6 +237,7 @@ SfxObjectShell::SfxObjectShell
     rArr.C40_INSERT( SfxObjectShell, pThis, rArr.Count() );
     pImp->bInList = sal_True;
     pImp->nLoadedFlags = SFX_LOADED_ALL;
+    SetObjectShell( TRUE );
 }
 
 //--------------------------------------------------------------------
@@ -301,6 +302,20 @@ SfxObjectShell::~SfxObjectShell()
     }
 
     delete pImp;
+}
+
+//--------------------------------------------------------------------
+
+void SfxObjectShell::Stamp_SetPrintCancelState(sal_Bool bState)
+{
+    pImp->bIsPrintJobCancelable = bState;
+}
+
+//--------------------------------------------------------------------
+
+sal_Bool SfxObjectShell::Stamp_GetPrintCancelState() const
+{
+    return pImp->bIsPrintJobCancelable;
 }
 
 //--------------------------------------------------------------------
