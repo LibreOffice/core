@@ -39,22 +39,22 @@ while ( $#ARGV >= 0 ) {
         if ( $#SUBDIRS > 1 ) {
             if ( $SUBDIRS[1] eq "" ) {
                 if ( $SUBDIRS[0] =~ /\w/ ) {
-                    chdir "$SUBDIRS[0]:\\" ;
+                    chdir "$SUBDIRS[0]:\\" ; 
                     shift @SUBDIRS ;
                     shift @SUBDIRS ;
                 } ;
             } ;
         }
 
-        while (@SUBDIRS) {
+        while (@SUBDIRS) { 
             if ( -e $SUBDIRS[0] ) {
                 if ( ! -d $SUBDIRS[0] ) {
-                    die "file exists\n"
-                }
+                    die "file exists\n" 
+                } 
             }
             else {
                 mkdir $SUBDIRS[0], $MODE or die "Can't create directory $SUBDIRS[0]"
-            }
+            } 
             chdir $SUBDIRS[0] or die "Can't cd to $SUBDIRS[0]" ;
             shift @SUBDIRS ;
         } ;
@@ -62,4 +62,4 @@ while ( $#ARGV >= 0 ) {
         shift @ARGV ;
     } ;
     chdir $currdir;
-}
+}       
