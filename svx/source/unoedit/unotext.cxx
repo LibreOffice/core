@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotext.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 18:16:40 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 13:22:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,9 @@
 #ifndef _COM_SUN_STAR_TEXT_XTEXTFIELD_HDL_
 #include <com/sun/star/text/XTextField.hdl>
 #endif
+//#ifndef _COM_SUN_STAR_BEANS_TOLERANTPROPERTYSETRESULTTYPE_HPP_
+//#include <com/sun/star/beans/TolerantPropertySetResultType.hpp>
+//#endif
 
 #ifndef _VOS_MUTEX_HXX_ //autogen
 #include <vos/mutex.hxx>
@@ -138,6 +141,9 @@ using namespace ::cppu;
 using namespace ::com::sun::star;
 
 #define QUERYINT( xint ) \
+    if( rType == ::getCppuType((const uno::Reference< xint >*)0) ) \
+        return uno::makeAny(uno::Reference< xint >(this))
+#define QUERYINT2( xint ) \
     if( rType == ::getCppuType((const uno::Reference< xint >*)0) ) \
         aAny <<= uno::Reference< xint >(this)
 
@@ -653,7 +659,6 @@ sal_Bool SvxUnoTextRangeBase::SetPropertyValueHelper( const SfxItemSet& rOldSet,
     }
 
     throw lang::IllegalArgumentException();
-    return sal_False;
 }
 
 uno::Any SAL_CALL SvxUnoTextRangeBase::getPropertyValue(const OUString& PropertyName)
@@ -1010,6 +1015,302 @@ void SAL_CALL SvxUnoTextRangeBase::firePropertiesChangeEvent( const uno::Sequenc
 {
 }
 
+/*
+// XTolerantMultiPropertySet
+uno::Sequence< beans::SetPropertyTolerantFailed > SAL_CALL SvxUnoTextRangeBase::setPropertyValuesTolerant( const uno::Sequence< ::rtl::OUString >& aPropertyNames, const uno::Sequence< uno::Any >& aValues ) throw (lang::IllegalArgumentException, uno::RuntimeException)
+{
+    return _setPropertyValuesTolerant(aPropertyNames, aValues, -1);
+}
+
+uno::Sequence< beans::SetPropertyTolerantFailed > SAL_CALL SvxUnoTextRangeBase::_setPropertyValuesTolerant( const uno::Sequence< ::rtl::OUString >& aPropertyNames, const uno::Sequence< uno::Any >& aValues, sal_Int32 nPara ) throw (lang::IllegalArgumentException, uno::RuntimeException)
+{
+    OGuard aGuard( Application::GetSolarMutex() );
+
+    sal_Int32 nCount(aPropertyNames.getLength());
+
+    if (nCount != aValues.getLength())
+        throw lang::IllegalArgumentException();
+
+    uno::Sequence< beans::SetPropertyTolerantFailed > aResults(nCount);
+    beans::SetPropertyTolerantFailed* pResults = aResults.getArray();
+
+    SvxTextForwarder* pForwarder = pEditSource ? pEditSource->GetTextForwarder() : NULL;
+    if( pForwarder )
+    {
+        CheckSelection( aSelection, pForwarder );
+
+        ESelection aSel( GetSelection() );
+
+        sal_Bool bUnknownProperty = sal_False;
+
+        const OUString* pPropertyNames = aPropertyNames.getConstArray();
+        const uno::Any* pValues = aValues.getConstArray();
+
+        sal_Int32 nEndPara = nPara;
+        sal_Int32 nTempPara = nPara;
+
+        if( nTempPara == -1 )
+        {
+            nTempPara = aSel.nStartPara;
+            nEndPara = aSel.nEndPara;
+        }
+
+        SfxItemSet* pOldAttrSet = NULL;
+        SfxItemSet* pNewAttrSet = NULL;
+
+        SfxItemSet* pOldParaSet = NULL;
+        SfxItemSet* pNewParaSet = NULL;
+
+        const SfxItemPropertyMap* pMap = aPropSet.getPropertyMap();
+        const SfxItemPropertyMap* pTempMap = pMap;
+
+        sal_Int32 nFailed(0);
+
+        for(sal_Int32 i = 0; i < nCount; pPropertyNames++, pValues++ )
+        {
+            pTempMap = pMap;
+            pMap = SfxItemPropertyMap::GetTolerantByName(pMap, *pPropertyNames );
+            if( NULL == pMap )
+            {
+                pResults[nFailed].Name = *pPropertyNames;
+                pResults[nFailed++].Result = beans::TolerantPropertySetResultType::UNKNOWN_PROPERTY;
+            }
+            else
+            {
+                sal_Bool bParaAttrib = (pMap->nWID >= EE_PARA_START) && ( pMap->nWID <= EE_PARA_END );
+
+                if( (nPara == -1) && !bParaAttrib )
+                {
+                    if( NULL == pNewAttrSet )
+                    {
+                        const SfxItemSet aSet( pForwarder->GetAttribs( aSel ) );
+                        pOldAttrSet = new SfxItemSet( aSet );
+                        pNewAttrSet = new SfxItemSet( *pOldAttrSet->GetPool(), pOldAttrSet->GetRanges() );
+                    }
+
+                    setPropertyValue( pMap, *pValues, GetSelection(), *pOldAttrSet, *pNewAttrSet );
+
+                    if( pMap->nWID >= EE_ITEMS_START && pMap->nWID <= EE_ITEMS_END )
+                    {
+                        const SfxPoolItem* pItem;
+                        if( pNewAttrSet->GetItemState( pMap->nWID, sal_True, &pItem ) == SFX_ITEM_SET )
+                        {
+                            pOldAttrSet->Put( *pItem );
+                        }
+                    }
+                }
+                else
+                {
+                    if( NULL == pNewParaSet )
+                    {
+                        const SfxItemSet aSet( pForwarder->GetParaAttribs( (USHORT)nTempPara ) );
+                        pOldParaSet = new SfxItemSet( aSet );
+                        pNewParaSet = new SfxItemSet( *pOldParaSet->GetPool(), pOldParaSet->GetRanges() );
+                    }
+
+                    setPropertyValue( pMap, *pValues, GetSelection(), *pOldParaSet, *pNewParaSet );
+
+                    if( pMap->nWID >= EE_ITEMS_START && pMap->nWID <= EE_ITEMS_END )
+                    {
+                        const SfxPoolItem* pItem;
+                        if( pNewParaSet->GetItemState( pMap->nWID, sal_True, &pItem ) == SFX_ITEM_SET )
+                        {
+                            pOldParaSet->Put( *pItem );
+                        }
+                    }
+
+                }
+            }
+
+            if (pMap)
+                pMap++;
+            else
+                pMap = pTempMap;
+        }
+
+        if( nFailed < nCount )
+        {
+            sal_Bool bNeedsUpdate = sal_False;
+
+            if( pNewParaSet )
+            {
+
+                if( pNewParaSet->Count() )
+                {
+                    while( nTempPara <= nEndPara )
+                    {
+                        SfxItemSet aSet( pForwarder->GetParaAttribs( (USHORT)nTempPara ) );
+                        aSet.Put( *pNewParaSet );
+                        pForwarder->SetParaAttribs( (USHORT)nTempPara, aSet );
+                        nTempPara++;
+                    }
+                    bNeedsUpdate = sal_True;
+                }
+
+                delete pNewParaSet;
+                delete pOldParaSet;
+            }
+
+            if( pNewAttrSet )
+            {
+                if( pNewAttrSet->Count() )
+                {
+                    pForwarder->QuickSetAttribs( *pNewAttrSet, GetSelection() );
+                    bNeedsUpdate = sal_True;
+                }
+                delete pNewAttrSet;
+                delete pOldAttrSet;
+
+            }
+
+            if( bNeedsUpdate )
+                GetEditSource()->UpdateData();
+        }
+        aResults.realloc(nFailed);
+    }
+
+    return aResults;
+}
+
+uno::Sequence< beans::GetPropertyTolerantResult > SAL_CALL SvxUnoTextRangeBase::getPropertyValuesTolerant( const uno::Sequence< ::rtl::OUString >& aPropertyNames ) throw (uno::RuntimeException)
+{
+    return _getPropertyValuesTolerant(aPropertyNames, -1);
+}
+
+uno::Sequence< beans::GetPropertyTolerantResult > SAL_CALL SvxUnoTextRangeBase::_getPropertyValuesTolerant( const uno::Sequence< ::rtl::OUString >& aPropertyNames, sal_Int32 nPara ) throw (uno::RuntimeException)
+{
+    OGuard aGuard( Application::GetSolarMutex() );
+
+    sal_Int32 nCount(aPropertyNames.getLength());
+    uno::Sequence< beans::GetPropertyTolerantResult > aResults(nCount);
+    beans::GetPropertyTolerantResult* pResults = aResults.getArray();
+
+    SvxTextForwarder* pForwarder = pEditSource ? pEditSource->GetTextForwarder() : NULL;
+    if( pForwarder )
+    {
+        SfxItemSet* pAttribs = NULL;
+        if( nPara != -1 )
+            pAttribs = new SfxItemSet(pForwarder->GetParaAttribs( (USHORT)nPara ));
+        else
+            pAttribs = new SfxItemSet(pForwarder->GetAttribs( GetSelection() ));
+
+        pAttribs->ClearInvalidItems();
+
+        const OUString* pPropertyNames = aPropertyNames.getConstArray();
+
+        const SfxItemPropertyMap* pMap = aPropSet.getPropertyMap();
+        const SfxItemPropertyMap* pTempMap = pMap;
+
+        for( ; nCount > 0; --nCount, ++pPropertyNames, ++pResults )
+        {
+            pTempMap = pMap;
+//              pMap = SfxItemPropertyMap::GetTolerantByName(pMap, *pPropertyNames );
+            pMap = SfxItemPropertyMap::GetByName(pMap, *pPropertyNames );
+
+            if (pMap)
+            {
+                if (_getOnePropertyStates(pAttribs, pMap, pResults->State))
+                {
+                    getPropertyValue( pMap, pResults->Value, *pAttribs );
+                    pResults->Result = beans::TolerantPropertySetResultType::SUCCESS;
+                }
+                else
+                    pResults->Result = beans::TolerantPropertySetResultType::UNKNOWN_PROPERTY;
+
+                pMap++;
+            }
+            else
+            {
+                pResults->Result = beans::TolerantPropertySetResultType::UNKNOWN_PROPERTY;
+                pMap = pTempMap;
+            }
+        }
+
+        delete pAttribs;
+
+    }
+
+    return aResults;
+}
+
+uno::Sequence< beans::GetDirectPropertyTolerantResult > SAL_CALL SvxUnoTextRangeBase::getDirectPropertyValuesTolerant( const uno::Sequence< ::rtl::OUString >& aPropertyNames )
+    throw (uno::RuntimeException)
+{
+    return _getDirectPropertyValuesTolerant(aPropertyNames, -1);
+}
+
+uno::Sequence< beans::GetDirectPropertyTolerantResult > SAL_CALL SvxUnoTextRangeBase::_getDirectPropertyValuesTolerant( const uno::Sequence< ::rtl::OUString >& aPropertyNames, sal_Int32 nPara ) throw (uno::RuntimeException)
+{
+    OGuard aGuard( Application::GetSolarMutex() );
+
+    SvxTextForwarder* pForwarder = pEditSource ? pEditSource->GetTextForwarder() : NULL;
+    if( pForwarder )
+    {
+        SfxItemSet* pAttribs = NULL;
+        if( nPara != -1 )
+            pAttribs = new SfxItemSet(pForwarder->GetParaAttribs( (USHORT)nPara ));
+        else
+            pAttribs = new SfxItemSet(pForwarder->GetAttribs( GetSelection() ));
+
+        pAttribs->ClearInvalidItems();
+
+//        USHORT nAttribCount(pAttribs->Count());
+
+//        if (nAttribCount)
+        {
+            sal_Int32 nCount(aPropertyNames.getLength());
+//            uno::Sequence< beans::GetDirectPropertyTolerantResult > aResults(nAttribCount);
+            uno::Sequence< beans::GetDirectPropertyTolerantResult > aResults(nCount);
+            beans::GetDirectPropertyTolerantResult* pResults = aResults.getArray();
+
+            const OUString* pPropertyNames = aPropertyNames.getConstArray();
+
+            const SfxItemPropertyMap* pMap = aPropSet.getPropertyMap();
+            const SfxItemPropertyMap* pTempMap = pMap;
+
+            sal_Int32 nDirectCount = 0;
+
+            for( ; (nCount > 0)
+            //&& (nAttribCount > 0)
+            ; --nCount, ++pPropertyNames )
+            {
+                pTempMap = pMap;
+//              pMap = SfxItemPropertyMap::GetTolerantByName(pMap, *pPropertyNames );
+                pMap = SfxItemPropertyMap::GetByName(pMap, *pPropertyNames );
+
+                if (pMap)
+                {
+                    if (_getOnePropertyStates(pAttribs, pMap, pResults->State))
+                    {
+                        if (pResults->State == beans::PropertyState_DIRECT_VALUE)
+                        {
+//                            --nAttribCount;
+
+                            getPropertyValue( pMap, pResults->Value, *pAttribs );
+                            pResults->Result = beans::TolerantPropertySetResultType::SUCCESS;
+                            pResults->Name = *pPropertyNames;
+
+                            ++pResults;
+                            ++nDirectCount;
+                        }
+                    }
+                    pMap++;
+                }
+                else
+                    pMap = pTempMap;
+            }
+            delete pAttribs;
+            aResults.realloc(nDirectCount);
+            return aResults;
+        }
+//        else
+            delete pAttribs;
+    }
+
+    return uno::Sequence< beans::GetDirectPropertyTolerantResult >();
+}*/
+
+
 // beans::XPropertyState
 beans::PropertyState SAL_CALL SvxUnoTextRangeBase::getPropertyState( const OUString& PropertyName )
     throw(beans::UnknownPropertyException, uno::RuntimeException)
@@ -1021,16 +1322,13 @@ static sal_uInt16 aSvxUnoFontDescriptorWhichMap[] = { EE_CHAR_FONTINFO, EE_CHAR_
                                                   EE_CHAR_UNDERLINE, EE_CHAR_WEIGHT, EE_CHAR_STRIKEOUT,
                                                   EE_CHAR_WLM, 0 };
 
-beans::PropertyState SAL_CALL SvxUnoTextRangeBase::_getPropertyState(const OUString& PropertyName, sal_Int32 nPara /* = -1 */)
+beans::PropertyState SAL_CALL SvxUnoTextRangeBase::_getPropertyState(const SfxItemPropertyMap* pMap, sal_Int32 nPara)
     throw( beans::UnknownPropertyException, uno::RuntimeException )
 {
-    OGuard aGuard( Application::GetSolarMutex() );
-
-    SvxTextForwarder* pForwarder = pEditSource ? pEditSource->GetTextForwarder() : NULL;
-    if( pForwarder )
+    if ( pMap )
     {
-        const SfxItemPropertyMap* pMap = SfxItemPropertyMap::GetByName(aPropSet.getPropertyMap(), PropertyName );
-        if ( pMap )
+        SvxTextForwarder* pForwarder = pEditSource ? pEditSource->GetTextForwarder() : NULL;
+        if( pForwarder )
         {
             SfxItemState eItemState = SFX_ITEM_UNKNOWN;
             sal_uInt16 nWID = 0;
@@ -1106,11 +1404,19 @@ beans::PropertyState SAL_CALL SvxUnoTextRangeBase::_getPropertyState(const OUStr
                 return beans::PropertyState_DIRECT_VALUE;
             case SFX_ITEM_DEFAULT:
                 return beans::PropertyState_DEFAULT_VALUE;
-//          case SFX_ITEM_UNKNOWN:
+//              case SFX_ITEM_UNKNOWN:
             }
         }
     }
     throw beans::UnknownPropertyException();
+}
+
+beans::PropertyState SAL_CALL SvxUnoTextRangeBase::_getPropertyState(const OUString& PropertyName, sal_Int32 nPara /* = -1 */)
+    throw( beans::UnknownPropertyException, uno::RuntimeException )
+{
+    OGuard aGuard( Application::GetSolarMutex() );
+
+    return _getPropertyState(SfxItemPropertyMap::GetByName(aPropSet.getPropertyMap(), PropertyName ), nPara);
 }
 
 uno::Sequence< beans::PropertyState > SAL_CALL SvxUnoTextRangeBase::getPropertyStates( const uno::Sequence< OUString >& aPropertyName )
@@ -1134,15 +1440,13 @@ uno::Sequence< beans::PropertyState > SvxUnoTextRangeBase::_getPropertyStates(co
         SfxItemSet* pSet = NULL;
         if( nPara != -1 )
         {
-            const SfxItemSet aSet( pForwarder->GetParaAttribs( (USHORT)nPara ) );
-            pSet = new SfxItemSet( aSet );
+            pSet = new SfxItemSet( pForwarder->GetParaAttribs( (USHORT)nPara ) );
         }
         else
         {
             ESelection aSel( GetSelection() );
             CheckSelection( aSel, pForwarder );
-            const SfxItemSet aSet(pForwarder->GetAttribs( aSel, EditEngineAttribs_OnlyHard ) );
-            pSet = new SfxItemSet( aSet );
+            pSet = new SfxItemSet( pForwarder->GetAttribs( aSel, EditEngineAttribs_OnlyHard ) );
         }
 
         sal_Bool bUnknownPropertyFound = sal_False;
@@ -1156,81 +1460,7 @@ uno::Sequence< beans::PropertyState > SvxUnoTextRangeBase::_getPropertyStates(co
                 break;
             }
 
-            SfxItemState eItemState = SFX_ITEM_UNKNOWN;
-            sal_uInt16 nWID = 0;
-
-            switch( pMap->nWID )
-            {
-                case WID_FONTDESC:
-                    {
-                        sal_uInt16* pWhichId = aSvxUnoFontDescriptorWhichMap;
-                        SfxItemState eTempItemState;
-                        while( *pWhichId )
-                        {
-                            eTempItemState = pSet->GetItemState( *pWhichId );
-
-                            switch( eTempItemState )
-                            {
-                            case SFX_ITEM_DISABLED:
-                            case SFX_ITEM_DONTCARE:
-                                eItemState = SFX_ITEM_DONTCARE;
-                                break;
-
-                            case SFX_ITEM_DEFAULT:
-                                if( eItemState != SFX_ITEM_DEFAULT )
-                                {
-                                    if( eItemState == SFX_ITEM_UNKNOWN )
-                                        eItemState = SFX_ITEM_DEFAULT;
-                                }
-                                break;
-
-                            case SFX_ITEM_READONLY:
-                            case SFX_ITEM_SET:
-                                if( eItemState != SFX_ITEM_SET )
-                                {
-                                    if( eItemState == SFX_ITEM_UNKNOWN )
-                                        eItemState = SFX_ITEM_SET;
-                                }
-                                break;
-                            default:
-                                bUnknownPropertyFound = sal_True;
-                                break;
-                            }
-
-                            pWhichId++;
-                        }
-                    }
-                    break;
-
-                case WID_NUMLEVEL:
-                    eItemState = SFX_ITEM_SET;
-                    break;
-
-                default:
-                    nWID = pMap->nWID;
-            }
-
-            if( bUnknownPropertyFound )
-                break;
-
-            if( nWID != 0 )
-                eItemState = pSet->GetItemState( nWID, sal_False );
-
-            switch( eItemState )
-            {
-                    case SFX_ITEM_READONLY:
-                    case SFX_ITEM_SET:
-                        *pState++ = beans::PropertyState_DIRECT_VALUE;
-                        break;
-                    case SFX_ITEM_DEFAULT:
-                        *pState++ = beans::PropertyState_DEFAULT_VALUE;
-                        break;
-//                  case SFX_ITEM_UNKNOWN:
-//                  case SFX_ITEM_DONTCARE:
-//                  case SFX_ITEM_DISABLED:
-                    default:
-                        *pState++ = beans::PropertyState_AMBIGUOUS_VALUE;
-            }
+            bUnknownPropertyFound = !_getOnePropertyStates(pSet, pMap, *pState++);
 
             if (pMap)
                 pMap++;
@@ -1245,6 +1475,90 @@ uno::Sequence< beans::PropertyState > SvxUnoTextRangeBase::_getPropertyStates(co
     }
 
     return aRet;
+}
+
+sal_Bool SvxUnoTextRangeBase::_getOnePropertyStates(const SfxItemSet* pSet, const SfxItemPropertyMap* pMap, beans::PropertyState& rState)
+{
+    sal_Bool bUnknownPropertyFound = sal_False;
+    if(pSet && pMap)
+    {
+        SfxItemState eItemState = SFX_ITEM_UNKNOWN;
+        sal_uInt16 nWID = 0;
+
+        switch( pMap->nWID )
+        {
+            case WID_FONTDESC:
+                {
+                    sal_uInt16* pWhichId = aSvxUnoFontDescriptorWhichMap;
+                    SfxItemState eTempItemState;
+                    while( *pWhichId )
+                    {
+                        eTempItemState = pSet->GetItemState( *pWhichId );
+
+                        switch( eTempItemState )
+                        {
+                        case SFX_ITEM_DISABLED:
+                        case SFX_ITEM_DONTCARE:
+                            eItemState = SFX_ITEM_DONTCARE;
+                            break;
+
+                        case SFX_ITEM_DEFAULT:
+                            if( eItemState != SFX_ITEM_DEFAULT )
+                            {
+                                if( eItemState == SFX_ITEM_UNKNOWN )
+                                    eItemState = SFX_ITEM_DEFAULT;
+                            }
+                            break;
+
+                        case SFX_ITEM_READONLY:
+                        case SFX_ITEM_SET:
+                            if( eItemState != SFX_ITEM_SET )
+                            {
+                                if( eItemState == SFX_ITEM_UNKNOWN )
+                                    eItemState = SFX_ITEM_SET;
+                            }
+                            break;
+                        default:
+                            bUnknownPropertyFound = sal_True;
+                            break;
+                        }
+
+                        pWhichId++;
+                    }
+                }
+                break;
+
+            case WID_NUMLEVEL:
+                eItemState = SFX_ITEM_SET;
+                break;
+
+            default:
+                nWID = pMap->nWID;
+        }
+
+        if( bUnknownPropertyFound )
+            return !bUnknownPropertyFound;
+
+        if( nWID != 0 )
+            eItemState = pSet->GetItemState( nWID, sal_False );
+
+        switch( eItemState )
+        {
+                case SFX_ITEM_READONLY:
+                case SFX_ITEM_SET:
+                    rState = beans::PropertyState_DIRECT_VALUE;
+                    break;
+                case SFX_ITEM_DEFAULT:
+                    rState = beans::PropertyState_DEFAULT_VALUE;
+                    break;
+//                  case SFX_ITEM_UNKNOWN:
+//                  case SFX_ITEM_DONTCARE:
+//                  case SFX_ITEM_DISABLED:
+                default:
+                    rState = beans::PropertyState_AMBIGUOUS_VALUE;
+        }
+    }
+    return !bUnknownPropertyFound;
 }
 
 void SAL_CALL SvxUnoTextRangeBase::setPropertyToDefault( const OUString& PropertyName )
@@ -1577,22 +1891,22 @@ SvxUnoTextRange::~SvxUnoTextRange() throw()
 uno::Any SAL_CALL SvxUnoTextRange::queryAggregation( const uno::Type & rType )
     throw(uno::RuntimeException)
 {
-    uno::Any aAny;
-
     QUERYINT( text::XTextRange );
+//  else if( rType == ::getCppuType((const uno::Reference< beans::XTolerantMultiPropertySet >*)0) )
+//      return uno::makeAny(uno::Reference< beans::XTolerantMultiPropertySet >(this));
     else if( rType == ::getCppuType((const uno::Reference< beans::XPropertySet >*)0) )
-        aAny <<= uno::Reference< beans::XPropertySet >(this);
+        return uno::makeAny(uno::Reference< beans::XPropertySet >(this));
     else QUERYINT( beans::XPropertyState );
     else QUERYINT( text::XTextRangeCompare );
     else if( rType == ::getCppuType((const uno::Reference< beans::XMultiPropertySet >*)0) )
-        aAny <<= uno::Reference< beans::XMultiPropertySet >(this);
+        return uno::makeAny(uno::Reference< beans::XMultiPropertySet >(this));
     else QUERYINT( lang::XServiceInfo );
     else QUERYINT( lang::XTypeProvider );
     else QUERYINT( lang::XUnoTunnel );
     else
         return OWeakAggObject::queryAggregation( rType );
 
-    return aAny;
+    return OWeakAggObject::queryAggregation( rType );
 }
 
 uno::Any SAL_CALL SvxUnoTextRange::queryInterface( const uno::Type & rType )
@@ -1626,6 +1940,7 @@ uno::Sequence< uno::Type > SAL_CALL SvxUnoTextRange::getTypes()
         *pTypes++ = ::getCppuType(( const uno::Reference< text::XTextRange >*)0);
         *pTypes++ = ::getCppuType(( const uno::Reference< beans::XPropertySet >*)0);
         *pTypes++ = ::getCppuType(( const uno::Reference< beans::XMultiPropertySet >*)0);
+//      *pTypes++ = ::getCppuType(( const uno::Reference< beans::XTolerantMultiPropertySet >*)0);
         *pTypes++ = ::getCppuType(( const uno::Reference< beans::XPropertyState >*)0);
         *pTypes++ = ::getCppuType(( const uno::Reference< lang::XServiceInfo >*)0);
         *pTypes++ = ::getCppuType(( const uno::Reference< lang::XTypeProvider >*)0);
@@ -1729,20 +2044,21 @@ ESelection SvxUnoTextBase::InsertField( const SvxFieldItem& rField ) throw()
 
 sal_Bool SvxUnoTextBase::queryAggregation( const uno::Type & rType, uno::Any& aAny )
 {
-    QUERYINT( text::XText );
-    else QUERYINT( text::XSimpleText );
+    QUERYINT2( text::XText );
+    else QUERYINT2( text::XSimpleText );
     else if( rType == ::getCppuType((const uno::Reference< text::XTextRange >*)0) )
         aAny <<= uno::Reference< text::XTextRange >((text::XText*)(this));
-    else QUERYINT(container::XEnumerationAccess );
-    else QUERYINT( container::XElementAccess );
-    else QUERYINT( beans::XPropertySet );
-    else QUERYINT( beans::XMultiPropertySet );
-    else QUERYINT( beans::XPropertyState );
-    else QUERYINT( text::XTextRangeCompare );
-    else QUERYINT( lang::XServiceInfo );
-    else QUERYINT( text::XTextRangeMover );
-    else QUERYINT( lang::XTypeProvider );
-    else QUERYINT( lang::XUnoTunnel );
+    else QUERYINT2(container::XEnumerationAccess );
+    else QUERYINT2( container::XElementAccess );
+//  else QUERYINT2( beans::XTolerantMultiPropertySet );
+    else QUERYINT2( beans::XPropertySet );
+    else QUERYINT2( beans::XMultiPropertySet );
+    else QUERYINT2( beans::XPropertyState );
+    else QUERYINT2( text::XTextRangeCompare );
+    else QUERYINT2( lang::XServiceInfo );
+    else QUERYINT2( text::XTextRangeMover );
+    else QUERYINT2( lang::XTypeProvider );
+    else QUERYINT2( lang::XUnoTunnel );
     else
         return sal_False;
 
@@ -1753,9 +2069,22 @@ sal_Bool SvxUnoTextBase::queryAggregation( const uno::Type & rType, uno::Any& aA
 uno::Any SAL_CALL SvxUnoTextBase::queryAggregation( const uno::Type & rType )
     throw(uno::RuntimeException)
 {
-    uno::Any aAny;
-    queryAggregation( rType, aAny );
-    return aAny;
+    QUERYINT( text::XText );
+    QUERYINT( text::XSimpleText );
+    if( rType == ::getCppuType((const uno::Reference< text::XTextRange >*)0) )
+        return uno::makeAny(uno::Reference< text::XTextRange >((text::XText*)(this)));
+    QUERYINT(container::XEnumerationAccess );
+    QUERYINT( container::XElementAccess );
+//  QUERYINT( beans::XTolerantMultiPropertySet );
+    QUERYINT( beans::XPropertySet );
+    QUERYINT( beans::XMultiPropertySet );
+    QUERYINT( beans::XPropertyState );
+    QUERYINT( lang::XServiceInfo );
+    QUERYINT( text::XTextRangeMover );
+    QUERYINT( lang::XTypeProvider );
+    QUERYINT( lang::XUnoTunnel );
+
+    return uno::Any();
 }
 
 // XTypeProvider
@@ -1771,6 +2100,7 @@ uno::Sequence< uno::Type > SAL_CALL SvxUnoTextBase::getStaticTypes() throw()
         *pTypes++ = ::getCppuType(( const uno::Reference< container::XEnumerationAccess >*)0);
         *pTypes++ = ::getCppuType(( const uno::Reference< beans::XPropertySet >*)0);
         *pTypes++ = ::getCppuType(( const uno::Reference< beans::XMultiPropertySet >*)0);
+//      *pTypes++ = ::getCppuType(( const uno::Reference< beans::XTolerantMultiPropertySet >*)0);
         *pTypes++ = ::getCppuType(( const uno::Reference< beans::XPropertyState >*)0);
         *pTypes++ = ::getCppuType(( const uno::Reference< text::XTextRangeMover >*)0);
         *pTypes++ = ::getCppuType(( const uno::Reference< lang::XServiceInfo >*)0);
