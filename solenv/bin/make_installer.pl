@@ -2,9 +2,9 @@
 #
 #   $RCSfile: make_installer.pl,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: rt $ $Date: 2004-08-12 08:55:07 $
+#   last change: $Author: obo $ $Date: 2004-08-17 15:14:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -1062,7 +1062,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
                     {
                         my $newdir = installer::epmfile::create_new_directory_structure($newepmdir);
 
-                        if (($installer::globals::product =~ /office/i ))
+                        if (($installer::globals::product =~ /office/i ) || ($installer::globals::product =~ /suite/i ))
                         {
                             # Copying the cde, kde and gnome packages into the installation set
                             installer::epmfile::put_systemintegration_into_installset($newdir, $includepatharrayref, $allvariableshashref);
@@ -1098,7 +1098,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
                             # determine the destination directory
                             my $newepmdir = installer::epmfile::determine_installdir_ooo();
 
-                            if (($installer::globals::product =~ /office/i ))
+                            if (($installer::globals::product =~ /office/i ) || ($installer::globals::product =~ /suite/i ))
                             {
                                 # Copying the cde, kde and gnome packages into the installation set
                                 installer::epmfile::put_systemintegration_into_installset($newepmdir, $includepatharrayref, $allvariableshashref);
