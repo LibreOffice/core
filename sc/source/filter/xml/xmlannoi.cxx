@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlannoi.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 07:47:27 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 13:50:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,9 @@
 #ifndef SC_XMLCONTI_HXX
 #include "xmlconti.hxx"
 #endif
+#ifndef _SC_XMLTABLESHAPEIMPORTHELPER_HXX
+#include "XMLTableShapeImportHelper.hxx"
+#endif
 
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/nmspmap.hxx>
@@ -81,6 +84,15 @@
 #endif
 #ifndef _XMLOFF_XMLTOKEN_HXX
 #include <xmloff/xmltoken.hxx>
+#endif
+#ifndef _SVX_UNOSHAPE_HXX
+#include <svx/unoshape.hxx>
+#endif
+#ifndef _SVDOBJ_HXX
+#include <svx/svdobj.hxx>
+#endif
+#ifndef _OUTLOBJ_HXX
+#include <svx/outlobj.hxx>
 #endif
 
 using namespace com::sun::star;
@@ -96,8 +108,19 @@ ScXMLAnnotationContext::ScXMLAnnotationContext( ScXMLImport& rImport,
     SvXMLImportContext( rImport, nPrfx, rLName ),
     nParagraphCount(0),
     bDisplay(sal_False),
-    bHasTextP(sal_False)
+    bHasTextP(sal_False),
+    bHasPos(sal_False),
+    pShapeContext(NULL)
 {
+    uno::Reference<drawing::XShapes> xShapes (GetScImport().GetTables().GetCurrentXShapes());
+    if (xShapes.is())
+    {
+        XMLTableShapeImportHelper* pTableShapeImport = (XMLTableShapeImportHelper*)GetScImport().GetShapeImport().get();
+        pTableShapeImport->SetAnnotation(this);
+        pShapeContext = GetScImport().GetShapeImport()->CreateGroupChildContext(
+            GetScImport(), nPrfx, rLName, xAttrList, xShapes);
+    }
+
     pCellContext = pTempCellContext;
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetTableAnnotationAttrTokenMap();
@@ -131,12 +154,28 @@ ScXMLAnnotationContext::ScXMLAnnotationContext( ScXMLImport& rImport,
                 bDisplay = IsXMLToken(sValue, XML_TRUE);
             }
             break;
+            case XML_TOK_TABLE_ANNOTATION_ATTR_X:
+            {
+                bHasPos = sal_True;
+            }
+            break;
+            case XML_TOK_TABLE_ANNOTATION_ATTR_Y:
+            {
+                bHasPos = sal_True;
+            }
+            break;
         }
     }
 }
 
 ScXMLAnnotationContext::~ScXMLAnnotationContext()
 {
+}
+
+void ScXMLAnnotationContext::StartElement(const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList)
+{
+    if (pShapeContext)
+        pShapeContext->StartElement(xAttrList);
 }
 
 SvXMLImportContext *ScXMLAnnotationContext::CreateChildContext( USHORT nPrefix,
@@ -161,7 +200,7 @@ SvXMLImportContext *ScXMLAnnotationContext::CreateChildContext( USHORT nPrefix,
             pContext = new ScXMLContentContext(GetScImport(), nPrefix,
                                             rLName, xAttrList, sCreateDateStringBuffer);
     }
-    else if ((nPrefix == XML_NAMESPACE_TEXT) && IsXMLToken(rLName, XML_P) )
+/*  else if ((nPrefix == XML_NAMESPACE_TEXT) && IsXMLToken(rLName, XML_P) )
     {
         if (!bHasTextP)
         {
@@ -172,7 +211,10 @@ SvXMLImportContext *ScXMLAnnotationContext::CreateChildContext( USHORT nPrefix,
             sOUText.append(static_cast<sal_Unicode>('\n'));
         nParagraphCount++;
         pContext = new ScXMLContentContext( GetScImport(), nPrefix, rLName, xAttrList, sOUText);
-    }
+    }*/
+
+    if( !pContext && pShapeContext )
+        pContext = pShapeContext->CreateChildContext(nPrefix, rLName, xAttrList);
 
     if( !pContext )
         pContext = new SvXMLImportContext( GetImport(), nPrefix, rLName );
@@ -188,6 +230,12 @@ void ScXMLAnnotationContext::Characters( const ::rtl::OUString& rChars )
 
 void ScXMLAnnotationContext::EndElement()
 {
+    if (pShapeContext)
+    {
+        pShapeContext->EndElement();
+        delete pShapeContext;
+    }
+
     ScMyImportAnnotation* pMyAnnotation = new ScMyImportAnnotation();
     pMyAnnotation->sAuthor = sAuthorBuffer.makeStringAndClear();
     pMyAnnotation->sCreateDate = sCreateDateBuffer.makeStringAndClear();
@@ -195,6 +243,34 @@ void ScXMLAnnotationContext::EndElement()
         pMyAnnotation->sCreateDate = sCreateDateStringBuffer.makeStringAndClear();
     pMyAnnotation->sText = sOUText.makeStringAndClear();
     pMyAnnotation->bDisplay = bDisplay;
+
+    if (xShape.is() && xShapes.is())
+    {
+        SvxShape* pShapeImp = SvxShape::getImplementation(xShape);
+        if (pShapeImp)
+        {
+            SdrObject *pSdrObj = pShapeImp->GetSdrObject();
+            if (pSdrObj)
+            {
+                if (bHasPos)
+                {
+                    pMyAnnotation->pItemSet = pSdrObj->GetMergedItemSet().Clone();
+                    awt::Point aPos = xShape->getPosition();
+                    awt::Size aSize = xShape->getSize();
+                    Rectangle aRect(Point(aPos.X, aPos.Y), Size(aSize.Width, aSize.Height));
+                    pMyAnnotation->pRect = new Rectangle(aRect);
+                }
+
+                if((pSdrObj->GetOutlinerParaObject()))
+                    pMyAnnotation->pOPO = new OutlinerParaObject( *(pSdrObj->GetOutlinerParaObject()) );
+
+                xShapes->remove(xShape);
+            }
+        }
+    }
+
+    XMLTableShapeImportHelper* pTableShapeImport = (XMLTableShapeImportHelper*)GetScImport().GetShapeImport().get();
+    pTableShapeImport->SetAnnotation(NULL);
+
     pCellContext->AddAnnotation(pMyAnnotation);
 }
-
