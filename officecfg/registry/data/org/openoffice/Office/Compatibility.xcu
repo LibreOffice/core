@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Compatibility.xcu,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-31 15:15:10 $
+ *  last change: $Author: hr $ $Date: 2004-05-11 11:31:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,9 @@
             <prop oor:name="UseObjectPositioning">
                 <value>false</value>
             </prop>
+            <prop oor:name="UseOurTextWrapping">
+                <value>false</value>
+            </prop>
         </node>
         <node oor:name="_user" oor:op="replace">
             <prop oor:name="Module">
@@ -117,6 +120,9 @@
                 <value>false</value>
             </prop>
             <prop oor:name="UseObjectPositioning">
+                <value>false</value>
+            </prop>
+            <prop oor:name="UseOurTextWrapping">
                 <value>false</value>
             </prop>
         </node>
