@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-15 13:43:54 $
+#   last change: $Author: kz $ $Date: 2004-03-25 14:56:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,7 +74,6 @@ TARGETTYPE=GUI
 
 LIB1TARGET= $(SLB)$/$(TARGET).lib
 LIB1FILES=  \
-    $(SLB)$/java.lib            \
     $(SLB)$/jscpp.lib
 
 SHL1DEPN=   $(L)$/itools.lib $(SVLIBDEPEND) $(LIB1TARGET)
@@ -83,11 +82,13 @@ SHL1TARGET= j$(UPD)$(DLLPOSTFIX)_g
 SHL1IMPLIB= $(TARGET)
 
 SHL1STDLIBS= \
-    $(VCLLIB) \
+        $(VCLLIB) \
     $(UNOTOOLSLIB) \
-    $(TOOLSLIB) \
+        $(TOOLSLIB) \
     $(CPPULIB) \
-    $(SALLIB)
+        $(SALLIB) \
+    $(JVMACCESSLIB)
+    
 
 SHL1LIBS=   $(SLB)$/$(TARGET).lib
 SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
