@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mmaddressblockpage.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:14:30 $
+ *  last change: $Author: vg $ $Date: 2005-03-07 17:35:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,7 @@
 #define ST_INSERTSALUTATIONFIELD 65
 #define ST_REMOVESALUTATIONFIELD 66
 #define ST_DRAGSALUTATION       67
+#define ST_TITLE_EDIT           68
 
 
 #define FI_MATCHING             70
