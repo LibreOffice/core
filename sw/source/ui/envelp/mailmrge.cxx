@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmrge.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: os $ $Date: 2001-07-06 12:09:49 $
+ *  last change: $Author: os $ $Date: 2001-07-11 07:28:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,9 +75,6 @@
 #endif
 #ifndef _MAILENUM_HXX //autogen
 #include <goodies/mailenum.hxx>
-#endif
-#ifndef _IODLG_HXX
-#include <sfx2/iodlg.hxx>
 #endif
 #ifndef _SVX_MULTIFIL_HXX
 #include <svx/multifil.hxx>
