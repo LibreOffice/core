@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mediadescriptor.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 15:56:46 $
+ *  last change: $Author: kz $ $Date: 2005-03-21 13:45:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,6 +156,7 @@ class COMPHELPER_DLLPUBLIC MediaDescriptor : public SequenceAsHashMap
         static const ::rtl::OUString& PROP_REPAIRPACKAGE();
         static const ::rtl::OUString& PROP_DOCUMENTTITLE();
         static const ::rtl::OUString& PROP_MODEL();
+        static const ::rtl::OUString& PROP_VIEWONLY();
 
     //-------------------------------------------
     // interface
