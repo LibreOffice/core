@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: os $ $Date: 2002-11-05 08:40:54 $
+ *  last change: $Author: ab $ $Date: 2002-11-11 15:14:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2813,13 +2813,15 @@ void SAL_CALL SwXTextTable::setDataArray(
                 else
                 {
                     const uno::Any &rAny = pColArray[nCol];
-                    if (TypeClass_DOUBLE == rAny.getValueTypeClass())
-                        lcl_setValue( *pXCell, *(double *) rAny.getValue() );
-                    else if (TypeClass_STRING == rAny.getValueTypeClass())
+                    if (TypeClass_STRING == rAny.getValueTypeClass())
                         lcl_setString( *pXCell, *(rtl::OUString *) rAny.getValue() );
                     else
                     {
-                        throw uno::RuntimeException();
+                        double d;
+                        bool bSuccess = (rAny >>= d);
+                        if( !bSuccess )
+                            throw uno::RuntimeException();
+                        lcl_setValue( *pXCell, d );
                     }
                 }
             }
@@ -4230,13 +4232,15 @@ void SAL_CALL SwXCellRange::setDataArray(
                 else
                 {
                     const uno::Any &rAny = pColArray[nCol];
-                    if (TypeClass_DOUBLE == rAny.getValueTypeClass())
-                        lcl_setValue( *pXCell, *(double *) rAny.getValue() );
-                    else if (TypeClass_STRING == rAny.getValueTypeClass())
+                    if (TypeClass_STRING == rAny.getValueTypeClass())
                         lcl_setString( *pXCell, *(rtl::OUString *) rAny.getValue() );
                     else
                     {
-                        throw uno::RuntimeException();
+                        double d;
+                        bool bSuccess = (rAny >>= d);
+                        if( !bSuccess )
+                            throw uno::RuntimeException();
+                        lcl_setValue( *pXCell, d );
                     }
                 }
             }
