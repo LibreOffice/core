@@ -2,9 +2,9 @@
  *
  *  $RCSfile: invader.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:30:09 $
+ *  last change: $Author: vg $ $Date: 2002-09-05 12:51:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,7 @@ class MessBox;
 class MyApp : public Application
 {
     public:
-        virtual void        Main(int,char*[]);
+        virtual void        Main();
 };
 
 class MyWindow : public FloatingWindow

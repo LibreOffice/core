@@ -2,9 +2,9 @@
  *
  *  $RCSfile: invader.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pb $ $Date: 2000-11-03 14:52:34 $
+ *  last change: $Author: vg $ $Date: 2002-09-05 12:51:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 #include "invader.hrc"
 #include "strings.hrc"
 #include "score.hxx"
+#include <svtools/solar.hrc>
+#include <cppuhelper/servicefactory.hxx>
+#include <comphelper/processfactory.hxx>
 
 #ifndef _SV_MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
@@ -614,11 +617,23 @@ void MyWindow::PlaceDialog(MessBox* pBox)
 }
 
 #ifdef TEST
-void MyApp::Main(int,char*[])
+void MyApp::Main()
 {
-    MyWindow aWindow( NULL, (ResMgr*)NULL);
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
+         xMSF = cppu::createRegistryServiceFactory(
+             rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "applicat.rdb" ) ), sal_True );
+
+    ::comphelper::setProcessServiceFactory( xMSF );
+
+    ByteString aRes = "tfu";
+    aRes += ByteString::CreateFromInt32(SOLARUPD);
+    ResMgr *pMyResMgr = ResMgr::CreateResMgr(aRes.GetBuffer());
+
+    MyWindow aWindow( NULL, pMyResMgr);
 
     Execute();
+
+    delete pMyResMgr;
 }
 
 MyApp aMyApp;

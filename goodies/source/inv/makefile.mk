@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: pb $ $Date: 2000-11-03 14:52:34 $
+#   last change: $Author: vg $ $Date: 2002-09-05 12:51:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,6 +64,7 @@ PRJ=..$/..
 
 PRJNAME=goodies
 TARGET=invader
+TARGETTYPE=GUI
 
 AUTOSEG=true
 
@@ -103,8 +104,16 @@ RESLIB1SRSFILES=$(SRS)$/invader.srs
 .IF "$(TEST)"!=""
 APP1TARGET= $(TARGET)
 APP1OBJS= $(OBJ)$/invader.obj
-APP1STDLIBS= $(TOOLSLIB) $(SVLIB)
-APP1LIBS=$(LIBPRE) invader.lib
+APP1STDLIBS=	$(CPPULIB)			\
+                $(CPPUHELPERLIB)	\
+                $(COMPHELPERLIB)	\
+                $(VCLLIB)			\
+                $(TOOLSLIB) 		\
+                $(SALLIB)			\
+                $(VOSLIB)			\
+                $(SOTLIB)			\
+                $(SVLIB)
+APP1LIBS=$(LIBPRE) $(LB)$/invader.lib
 APP1STACK= 64000
 APP1DEPN= $(LB)$/invader.lib
 
@@ -138,7 +147,18 @@ SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 # --- Targets -------------------------------------------------------
 
 
-.INCLUDE :  target.mk
+.INCLUDE :	target.mk
+
+ALLTAR: \
+    $(BIN)$/applicat.rdb
+
+$(BIN)$/applicat.rdb : makefile.mk $(SOLARBINDIR)$/applicat.rdb
+    rm -f $@
+    $(GNUCOPY) $(SOLARBINDIR)$/applicat.rdb $@
+     +cd $(BIN) && \
+         regcomp -register -r applicat.rdb \
+             -c $(DLLPRE)i18n$(UPD)$(DLLPOSTFIX)$(DLLPOST) \
+             -c $(DLLPRE)i18npool$(UPD)$(DLLPOSTFIX)$(DLLPOST)
 
 .IF "$(GUI)"=="WIN"
 
