@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlideSorterController.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-28 13:29:12 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 15:07:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -531,11 +531,8 @@ IMPL_LINK(SlideSorterController, WindowEventHandler, VclWindowEvent*, pEvent)
     if (pEvent != NULL)
     {
         SlideSorterViewShell& rShell = GetViewShell();
-        DBG_ASSERT(static_cast<VclWindowEvent*>(pEvent)->GetWindow()
-            == rShell.GetParentWindow(),
-            "SlideSorter: received event from unknown window");
-        if (static_cast<VclWindowEvent*>(pEvent)->GetWindow()
-            == rShell.GetParentWindow())
+        ::Window* pWindow = static_cast<VclWindowEvent*>(pEvent)->GetWindow();
+        if (pWindow == rShell.GetParentWindow())
         {
             switch (pEvent->GetId())
             {
@@ -550,7 +547,25 @@ IMPL_LINK(SlideSorterController, WindowEventHandler, VclWindowEvent*, pEvent)
                     break;
             }
         }
+        else if (pWindow == rShell.GetActiveWindow())
+        {
+            switch (pEvent->GetId())
+            {
+                case VCLEVENT_WINDOW_GETFOCUS:
+                    GetFocusManager().ShowFocus();
+                    break;
+
+                case VCLEVENT_WINDOW_LOSEFOCUS:
+                    GetFocusManager().HideFocus();
+                    break;
+            }
+        }
+        else
+        {
+            DBG_ASSERT(FALSE, "SlideSorter: received event from unknown window");
+        }
     }
+
     return TRUE;
 }
 
