@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltfnc.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mba $ $Date: 2001-02-06 12:46:27 $
+ *  last change: $Author: mba $ $Date: 2001-02-08 14:46:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,9 @@
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DATATRANSFER_DATAFLAVOR_HPP_
+#include <com/sun/star/datatransfer/DataFlavor.hpp>
 #endif
 
 #ifndef _EXCHANGE_HXX //autogen
@@ -1169,7 +1172,12 @@ void SfxFilterContainer::RealLoad_Impl()
         nFlags &= ~pArg->nNotFlags;
         sal_uInt32 nClipId = 0;
         if( aClipFormat.Len() )
-            nClipId = Exchange::RegisterFormatName( aClipFormat );
+        {
+            ::com::sun::star::datatransfer::DataFlavor aDataFlavor;
+            aDataFlavor.MimeType = aClipFormat;
+            nClipId = SotExchange::GetFormat( aDataFlavor );
+        }
+
         SfxFilter* pFilter = new SfxFilter(
             aName, aWild, nFlags, nClipId, aMacType, aTypeName, nDocIconId,
             aMimeType, this, aUserData );
