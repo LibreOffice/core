@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:37 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 18:58:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -575,7 +575,7 @@ String STR_EXPLORERVIEW
     Text[ polish ] = "Eksplorator";
     Text[ japanese ] = "΄Έ½ΜίΫ°Χ";
     Text[ chinese_traditional ] = "ΐΙ®ΧΑ`Ίή";
-    Text[ greek ] = "Explorer";
+    Text[ greek ] = "Εξερευνητής";
     Text[ korean ] = "ΐΝ½ΊΗΓ·Ξ·―";
     Text[ arabic ] = "ΗαγΣΚίΤέ";
     Text[ turkish ] = "Explorer";
@@ -766,7 +766,7 @@ ModalDialog RID_MAILATTACHDOC_DLG
         Text [ portuguese_brazilian ] = "~Anhδngen" ;
         Text [ portuguese ] = "A~nexar" ;
         Text[ chinese_simplified ] = "Έ½Όώ(~A)";
-        Text[ russian ] = "Οπθκπεοθςό";
+        Text[ russian ] = "Βλξζθςό";
         Text[ polish ] = "Za³Ήcz";
         Text[ japanese ] = "“Y•t‚·‚ι(~A)";
         Text[ chinese_traditional ] = "ªώ¥[(~A)";
@@ -798,7 +798,7 @@ ModalDialog RID_MAILATTACHDOC_DLG
         Text [ portuguese_brazilian ] = "~Speichern und anhδngen" ;
         Text [ portuguese ] = "~Guardar e anexar" ;
         Text[ chinese_simplified ] = "΄ζΕΜΊΝΌΣΈ½Όώ(~S)";
-        Text[ russian ] = "Ρξυπΰνθςό θ οπθκπεοθςό";
+        Text[ russian ] = "Ρξυπΰνθςό θ βλξζθςό";
         Text[ polish ] = "~Zapisz i za³Ήcz";
         Text[ japanese ] = "•Ϋ‘¶‚µ‚Δ“Y•t(~S)";
         Text[ chinese_traditional ] = "ΐx¦s©Mªώ¥[(~S)";
@@ -850,7 +850,7 @@ ModalDialog RID_MAILATTACHDOC_DLG
         Text [ portuguese ] = "~Guardar e usar como conteϊdo de mensagem" ;
         Text [ english_us ] = "Sa~ve and use as mail content" ;
         Text[ chinese_simplified ] = "΄ζΕΜ²ΆΗÒµ±ΧχµηΧΣΣΚΌώΥύΞΔΚΉΣΓ(~V)";
-        Text[ russian ] = "Ρξυπΰνθςό θ θροξλόηξβΰςό κΰκ ρξδεπζΰνθε ρξξαωενθÿ";
+        Text[ russian ] = "Ρξυπΰνθςό θ θροξλόηξβΰςό κΰκ ρξδεπζθμξε ρξξαωενθÿ";
         Text[ polish ] = "Zapisz i uΏyj jako zawartoci wiadomoci";
         Text[ japanese ] = "•Ϋ‘¶‚µ‚ΔÒ―Ύ°Όή“ΰ—e‚Ζ‚µ‚Δg—p(~V)";
         Text[ chinese_traditional ] = "ΐx¦s©M·ν§@Ήq¤l¶l¥σ¤Ί®e¨Ο¥Ξ(~V)";
@@ -982,7 +982,7 @@ ErrorBox ERRBOX_SFX_INVALID_MERGEOPT
     Message[ polish ] = "Aby wys³aζ wiadomoζ via Internet,\nwymagany jest twσj adres e-mail i serwer SMTP.\nProszκ wprowad te ustawienia w \n\"Narzκdzia\\\\Opcje\\\\Ogσlne...\\\\Dane uΏytkownika\\\\e-mail\" i\n\"Narzκdzia\\\\Opcje\\\\Internet\\\\Poczta/Wiadomoci\\\\Wysy³anie wiadomoci\",\nzanim ponownie wylesz wiadomoζ.";
     Message[ japanese ] = "²έΐ°Θ―Δ‚ΕÒ―Ύ°Όή‚π‘—M‚·‚ι‚Ι‚Ν\nE-mail±ΔήΪ½‚ΖSMTP »°Κή°‚ª•K—v‚Ε‚·B\nÒ―Ύ°Όή‚πΔ‘—M‚·‚ι‘O‚Ι\n‚±‚Μέ’θ‚π\n[Β°Ω\\µΜίΌ®έ\\‘S”Κ...\\Υ°»ή°Γή°ΐ \\E-mail]‚¨‚ζ‚Ρ\n[Β°Ω\\µΜίΌ®έ\\²έΐ°Θ―Δ\\Ò°Ω/Ζ­°½\\Ò―Ύ°Όή‘—M]‚Ι“o^‚µ‚Δ‰Ί‚³‚ΆB";
     Message[ chinese_traditional ] = "³zΉL Internet ¶Η°eΉq¤l¶l¥σ\n»έ­n±zªΊΉq¤l¶l¥σ¦a§}©M¤@­Σ SMTP ¦ψªAΎΉ΅C\n½Π¦b­«·s¶Η°eΉq¤l¶l¥σ¤§«e¦b\n΅§¤u¨γ\\Ώο¶µ\\¤@―λ...\\¨Ο¥ΞªΜΈκ®Ζ΅¨©M΅§¤u¨γ\\Ώο¶µ\\Internet\\Ήq¤l¶l¥σ/·s»D\\¶Η°eΉq¤l¶l¥σ΅¨³B§@¬ΫΓφªΊ³]©w΅C";
-    Message[ greek ] = "Για να έχετε τη δυνατότητα αποστολής μηνύματος μέσω του Internet\nπρέπει να ορίσετε τη δική σας διεύθυνση E-mail και έναν διακομιστή SMTP.\nΠαρακαλώ εισάγετε αυτές τις ρυθμίσεις στο\n\"Εργαλεία\\Επιλογές\\Γενικά...\\Προσωπικά δεδομένα\\E-Mail\" και\n\"Εργαλεία\\Επιλογές\\Internet\\Αλληλογραφία/Μηνύματα\\Αποστολή μηνυμάτων\".\nπριν αποστείλετε ξανά κάποιο μήνυμα.";
+    Message[ greek ] = "Για να έχετε τη δυνατότητα αποστολής μηνύματος μέσω του Internet\nπρέπει να ορίσετε τη δική σας διεύθυνση E-mail και έναν διακομιστή SMTP.\nΠαρακαλώ εισάγετε αυτές τις ρυθμίσεις στο\n\"Εργαλεία\\Επιλογές\\Γενικά...\\Προσωπικά δεδομένα\\E-Mail\" και\n\"Εργαλεία\\Επιλογές\\Internet\\Αλληλογραφία/Συζητήσεις\\Αποστολή μηνυμάτων\".\nπριν αποστείλετε ξανά κάποιο μήνυμα.";
     Message[ korean ] = "Έή½ΓΑφΈ¦ ΐΞΕΝ³έΐΈ·Ξ ΊΈ³»·ΑΈι \nE-Mail ΑΦΌÒΏΝ SMTP Ό­Ήφ°΅ ΗΚΏδΗΥ΄Ο΄Ω. \n»υ·Ξ Έή½ΓΑφΈ¦ ΊΈ³»±β ΐόΏ΅ \n\"µµ±Έ\\ΏΙΌΗ\\ΐΟΉέ...\\»ηΏλΐΪ µ¥ΐΜΕΝ\\E-Mail\"°ϊ \n\"µµ±Έ\\ΏΙΌΗ\\ΐΞΕΝ³έ\\ΈήΐΟ/΄Ί½Ί\\Έή½ΓΑφ ΊΈ³»±β\"Ώ΅ µϋ¶σ Ό³Α¤ΗΟΏ© ΐΤ·ΒΗΟ½Κ½ΓΏΐ.";
     Message[ arabic ] = "ΕΡΣΗα ΡΣΗαΙ γδ ΞαΗα ΗαΕδΚΡδΚ΅\nνΚΨαΘ ζΜζΟ ΪδζΗδ ΘΡνΟ ΕαίΚΡζδν ζγÒζψΟ SMTP.\nΗαΡΜΗΑ ΕΟΡΗΜ εΠε ΗαΕΪΟΗΟΗΚ ΚΝΚ\n\"ΓΟζΗΚ/ΞνΗΡΗΚ/ΪΗγ.../ΘνΗδΗΚ ΗαγΣΚΞΟγ/ΘΡνΟ ΕαίΚΡζδν\"΅ Λγ ΚΝΚ\n\"ΓΟζΗΚ/ΞνΗΡΗΚ/ΕδΚΡδΚ/ΗαΘΡνΟ \\γΜγζΪΗΚ ΗαΓΞΘΗΡ/ΕΡΣΗα ΗαΘΡνΟ\"΅\nΛγ ΝΗζα ΕΡΣΗα εΠε ΗαΡΣΗαΙ γΡΙ ΓΞΡμ.";
     Message[ language_user1 ] = " ";
