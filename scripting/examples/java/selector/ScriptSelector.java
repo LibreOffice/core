@@ -30,6 +30,8 @@ import com.sun.star.lib.uno.helper.PropertySet;
 
 import drafts.com.sun.star.script.browse.XBrowseNode;
 import drafts.com.sun.star.script.browse.BrowseNodeTypes;
+import drafts.com.sun.star.script.browse.XBrowseNodeFactory;
+import drafts.com.sun.star.script.browse.BrowseNodeFactoryViewType;
 import drafts.com.sun.star.script.provider.XScriptContext;
 import drafts.com.sun.star.script.provider.XScript;
 import drafts.com.sun.star.script.provider.XScriptProvider;
@@ -301,25 +303,16 @@ public class ScriptSelector {
 
         XBrowseNode result = null;
 
-        try {
-            String serviceName = "drafts.com.sun.star.script." +
-                "provider.MasterScriptProvider";
 
-            XComponentContext xcc = ctxt.getComponentContext();
-            XMultiComponentFactory xmcf = xcc.getServiceManager();
+        XComponentContext xcc = ctxt.getComponentContext();
+        XMultiComponentFactory xmcf = xcc.getServiceManager();
+        XBrowseNodeFactory xBrowseFac = (XBrowseNodeFactory)
+            UnoRuntime.queryInterface( XBrowseNodeFactory.class, xcc.getValueByName(
+                "/singletons/drafts.com.sun.star.script.browse.theBrowseNodeFactory") );
 
-            Any[] args = new Any[1];
-            args[0] = new Any(new Type(XModel.class), ctxt.getDocument());
 
-            Object serviceObj = xmcf.createInstanceWithArgumentsAndContext(
-                serviceName, args, xcc);
-
-            result = (XBrowseNode)UnoRuntime.queryInterface(
-                XBrowseNode.class, serviceObj);
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
+        result = (XBrowseNode)UnoRuntime.queryInterface(
+           XBrowseNode.class, xBrowseFac.getView( BrowseNodeFactoryViewType.SCRIPTORGANIZER ) );
         return result;
     }
 }
