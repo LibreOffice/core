@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: cd $ $Date: 2001-05-23 14:59:42 $
+#   last change: $Author: cd $ $Date: 2001-06-13 06:02:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -95,8 +95,9 @@ SLOFILES=			$(SLO)$/timerhelper.obj	 						\
                     $(SLO)$/ostatusindicator.obj					\
                     $(SLO)$/ointerceptionhelper.obj					\
                     $(SLO)$/omenudispatcher.obj						\
-                    $(SLO)$/imageproducer.obj					\
-                    $(SLO)$/xmldocproperties.obj
+                    $(SLO)$/imageproducer.obj						\
+                    $(SLO)$/xmldocproperties.obj					\
+                    $(SLO)$/omailtodispatcher.obj
 
 # --- Targets ------------------------------------------------------
 
