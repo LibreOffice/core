@@ -2,9 +2,9 @@
 #
 #   $RCSfile: configuration.pm,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: obo $ $Date: 2004-07-05 13:25:58 $
+#   last change: $Author: rt $ $Date: 2004-07-06 14:55:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -804,7 +804,7 @@ sub save_and_zip_configfile
 
     if ($returnvalue)
     {
-        $infoline = "Error: Could not zip $savefilename to $zipfilename\n";
+        $infoline = "ERROR: Could not zip $savefilename to $zipfilename\n";
     }
     else
     {
