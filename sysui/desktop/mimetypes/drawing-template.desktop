@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Encoding=UTF-8
+Hidden=false
+Icon=drawing-template
+Type=MimeType
+Patterns=*.std
+MimeType=application/vnd.sun.xml.draw.template
+Comment=%PRODUCTNAME Drawing Template

@@ -1,0 +1,12 @@
+[Desktop Entry]
+Version=1.0
+Encoding=UTF-8
+Terminal=false
+Icon=writer
+Type=Application
+Categories=Application;Office;
+Exec=openoffice -writer %U
+TryExec=openoffice-writer
+MimeType=application/vnd.sun.xml.writer;application/vnd.sun.xml.writer.template;application/vnd.sun.xml.writer.global;application/vnd.stardivision.writer;application/msword;application/vnd.ms-word;application/x-doc;text/rtf
+Name=%PRODUCTNAME Writer
+Comment=Create a new text document
